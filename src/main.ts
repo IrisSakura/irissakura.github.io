@@ -1,0 +1,281 @@
+// 在文件顶部导入 GSAP
+import { gsap } from "gsap"
+
+// 类型定义
+interface Project {
+    id: number;
+    title: string;
+    category: string;
+    description: string;
+    tags: string[];
+    year: number;
+    featured: boolean;
+}
+
+interface BlogPost {
+    id: number;
+    title: string;
+    excerpt: string;
+    date: string;
+    category: string;
+    readTime: number;
+}
+
+// 主应用类
+class MainApp {
+    private featuredProjectsContainer: HTMLElement | null;
+    private recentPostsContainer: HTMLElement | null;
+    private currentYearElement: HTMLElement | null;
+    private mobileToggle: HTMLElement | null;
+    private navMenu: HTMLElement | null;
+
+    constructor() {
+        this.featuredProjectsContainer = document.getElementById('featured-projects');
+        this.recentPostsContainer = document.getElementById('recent-posts');
+        this.currentYearElement = document.getElementById('current-year');
+        this.mobileToggle = document.querySelector('.mobile-toggle');
+        this.navMenu = document.querySelector('.nav-menu');
+
+        this.init();
+    }
+
+    private init(): void {
+        // 初始化事件监听器
+        this.setupEventListeners();
+
+        // 加载数据
+        this.loadFeaturedProjects();
+        this.loadRecentPosts();
+
+        // 设置当前年份
+        this.setCurrentYear();
+
+        // 初始化页面动画
+        this.initAnimations();
+    }
+
+    private setupEventListeners(): void {
+        // 移动端菜单切换
+        if (this.mobileToggle && this.navMenu) {
+            this.mobileToggle.addEventListener('click', () => {
+                this.navMenu?.classList.toggle('active');
+            });
+        }
+
+        // 导航链接点击事件
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const target = e.target as HTMLElement;
+                if (target.dataset.page === 'home') {
+                    e.preventDefault();
+                    this.scrollToTop();
+                }
+
+                // 移动端点击后关闭菜单
+                if (window.innerWidth <= 768) {
+                    this.navMenu?.classList.remove('active');
+                }
+            });
+        });
+
+        // 页面滚动时更新导航状态
+        window.addEventListener('scroll', () => {
+            this.updateNavOnScroll();
+        });
+    }
+
+    private async loadFeaturedProjects(): Promise<void> {
+        try {
+            // 实际项目中，这里会从API或JSON文件加载数据
+            const projects: Project[] = [
+                {
+                    id: 1,
+                    title: "星际探险家",
+                    category: "太空冒险游戏",
+                    description: "一款基于物理的太空探索游戏，具有程序生成的行星系统和动态叙事。",
+                    tags: ["Unity", "C#", "Procedural Generation", "3D"],
+                    year: 2023,
+                    featured: true
+                },
+                {
+                    id: 2,
+                    title: "节奏迷宫",
+                    category: "音乐节奏游戏",
+                    description: "结合音乐节奏与解谜元素的2D平台游戏，包含原创音乐和音效。",
+                    tags: ["Godot", "GDScript", "Music", "2D"],
+                    year: 2022,
+                    featured: true
+                },
+                {
+                    id: 3,
+                    title: "像素地牢",
+                    category: "roguelike 地牢探索",
+                    description: "传统roguelike游戏，具有复杂的战斗系统和丰富的物品系统。",
+                    tags: ["TypeScript", "Pixel Art", "Procedural Generation"],
+                    year: 2023,
+                    featured: true
+                }
+            ];
+
+            this.renderFeaturedProjects(projects);
+        } catch (error) {
+            console.error('加载作品数据失败:', error);
+            this.showErrorMessage(this.featuredProjectsContainer, '无法加载作品数据');
+        }
+    }
+
+    private renderFeaturedProjects(projects: Project[]): void {
+        if (!this.featuredProjectsContainer) return;
+
+        this.featuredProjectsContainer.innerHTML = projects.map(project => `
+            <div class="project-card">
+                <div class="project-image"></div>
+                <div class="project-content">
+                    <h3 class="project-title">${project.title}</h3>
+                    <p class="project-category">${project.category} • ${project.year}</p>
+                    <p>${project.description}</p>
+                    <div class="project-tags">
+                        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    private async loadRecentPosts(): Promise<void> {
+        try {
+            // 实际项目中，这里会从API或JSON文件加载数据
+            const posts: BlogPost[] = [
+                {
+                    id: 1,
+                    title: "游戏音乐中的互动音频设计",
+                    excerpt: "探讨如何通过互动音频增强游戏沉浸感，分享使用FMOD和Wwise的实践经验。",
+                    date: "2023-10-15",
+                    category: "音频设计",
+                    readTime: 8
+                },
+                {
+                    id: 2,
+                    title: "TypeScript在游戏开发中的应用",
+                    excerpt: "如何利用TypeScript的类型系统提高游戏代码的可维护性和开发效率。",
+                    date: "2023-09-28",
+                    category: "编程",
+                    readTime: 10
+                },
+                {
+                    id: 3,
+                    title: "独立游戏的视觉风格选择",
+                    excerpt: "从像素艺术到低多边形：如何为你的游戏选择合适的视觉风格。",
+                    date: "2023-09-12",
+                    category: "美术设计",
+                    readTime: 6
+                }
+            ];
+
+            this.renderRecentPosts(posts);
+        } catch (error) {
+            console.error('加载博客数据失败:', error);
+            this.showErrorMessage(this.recentPostsContainer, '无法加载博客文章');
+        }
+    }
+
+    private renderRecentPosts(posts: BlogPost[]): void {
+        if (!this.recentPostsContainer) return;
+
+        this.recentPostsContainer.innerHTML = posts.map(post => `
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <h3 class="blog-title">${post.title}</h3>
+                    <div class="blog-meta">
+                        <span>${post.date}</span> • 
+                        <span>${post.category}</span> • 
+                        <span>${post.readTime} 分钟阅读</span>
+                    </div>
+                    <p>${post.excerpt}</p>
+                    <a href="pages/blog.html#post-${post.id}" class="btn btn-outline" style="margin-top: 1rem;">阅读更多</a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    private setCurrentYear(): void {
+        if (this.currentYearElement) {
+            this.currentYearElement.textContent = new Date().getFullYear().toString();
+        }
+    }
+
+    private initAnimations(): void {
+        // 使用GSAP初始化动画
+        if (typeof gsap !== 'undefined') {
+            // 英雄区域动画
+            gsap.from('.hero-title, .hero-subtitle, .hero-description', {
+                duration: 1,
+                y: 30,
+                opacity: 0,
+                stagger: 0.2,
+                delay: 0.3
+            });
+
+            gsap.from('.hero-buttons', {
+                duration: 1,
+                y: 30,
+                opacity: 0,
+                delay: 0.8
+            });
+
+            gsap.from('.pixel-art', {
+                duration: 1.5,
+                scale: 0.8,
+                opacity: 0,
+                delay: 0.5,
+                ease: "back.out(1.7)"
+            });
+
+            // 技能卡片动画
+            gsap.from('.skill-card', {
+                scrollTrigger: {
+                    trigger: '.skills-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2
+            });
+        }
+    }
+
+    private updateNavOnScroll(): void {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar?.classList.add('scrolled');
+        } else {
+            navbar?.classList.remove('scrolled');
+        }
+    }
+
+    private scrollToTop(): void {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    private showErrorMessage(container: HTMLElement | null, message: string): void {
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="error-message" style="text-align: center; padding: 2rem; color: var(--gray-color);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+// 页面加载完成后初始化应用
+document.addEventListener('DOMContentLoaded', () => {
+    new MainApp();
+});

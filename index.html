@@ -3,109 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IrisSakura | 个人主页</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>全栈游戏开发者 | 个人主页</title>
+    <link rel="stylesheet" href="style/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-- 导航栏 -->
 <nav class="navbar">
-    <div class="container">
-        <a href="/" class="logo">IrisSakura</a>
-        <ul class="nav-links">
-            <li><a href="/" class="active">首页</a></li>
-            <li><a href="/portfolio/">作品集</a></li>
-            <li><a href="/blog/">博客</a></li>
-            <li><a href="/about/">关于我</a></li>
-            <li><a href="#contact">联系</a></li>
-        </ul>
+    <div class="container nav-container">
+        <a href="#" class="logo">
+            <i class="fas fa-gamepad"></i>
+            <span>GameDev</span>Portfolio
+        </a>
+        <div class="nav-menu">
+            <a href="#" class="nav-link active" data-page="home">首页</a>
+            <a href="pages/portfolio.html" class="nav-link" data-page="portfolio">作品集</a>
+            <a href="pages/blog.html" class="nav-link" data-page="blog">博客</a>
+            <a href="pages/contact.html" class="nav-link" data-page="contact">联系我</a>
+        </div>
+        <button class="mobile-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
 </nav>
 
-<!-- 英雄区域 -->
-<section class="hero">
-    <div class="container">
-        <div class="hero-content">
-            <h1>你好，我是 <span class="highlight">IrisSakura</span></h1>
-            <p class="subtitle">职位/专业领域 · 简短介绍</p>
-            <div class="cta-buttons">
-                <a href="/portfolio/" class="btn btn-primary">
-                    <i class="fas fa-briefcase"></i> 查看作品集
-                </a>
-                <a href="/blog/" class="btn btn-secondary">
-                    <i class="fas fa-blog"></i> 阅读博客
-                </a>
-                <a href="#contact" class="btn btn-outline">
-                    <i class="fas fa-envelope"></i> 联系我
-                </a>
+<!-- 主要内容区域 -->
+<main class="main-content">
+    <!-- 首页内容 -->
+    <section id="home-page" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">全栈<span class="highlight">游戏开发者</span></h1>
+                <p class="hero-subtitle">音乐 | 美术 | 程序 | 策划</p>
+                <p class="hero-description">创造沉浸式游戏体验，从概念到实现的完整游戏开发</p>
+                <div class="hero-buttons">
+                    <a href="pages/portfolio.html" class="btn btn-primary">查看作品</a>
+                    <a href="pages/contact.html" class="btn btn-secondary">联系合作</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="pixel-art"></div>
             </div>
         </div>
-        <div class="hero-image">
-            <!-- 可以放头像或插图 -->
+
+        <!-- 技能展示 -->
+        <section class="skills-section">
+            <h2 class="section-title">我的技能</h2>
+            <div class="skills-container">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>音乐与音效</h3>
+                    <p>游戏配乐、音效设计、互动音频编程</p>
+                    <div class="skill-tags">
+                        <span class="tag">FMOD</span>
+                        <span class="tag">Wwise</span>
+                        <span class="tag">Ableton Live</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>美术与设计</h3>
+                    <p>2D/3D美术、UI/UX设计、像素艺术、动画</p>
+                    <div class="skill-tags">
+                        <span class="tag">Blender</span>
+                        <span class="tag">Photoshop</span>
+                        <span class="tag">Aseprite</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>程序开发</h3>
+                    <p>游戏引擎、网络编程、工具开发、AI编程</p>
+                    <div class="skill-tags">
+                        <span class="tag">Unity</span>
+                        <span class="tag">Unreal</span>
+                        <span class="tag">TypeScript</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>游戏策划</h3>
+                    <p>系统设计、关卡设计、叙事设计、平衡调整</p>
+                    <div class="skill-tags">
+                        <span class="tag">Game Design</span>
+                        <span class="tag">Narrative</span>
+                        <span class="tag">Balancing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 精选作品 -->
+        <section class="featured-section">
+            <h2 class="section-title">精选作品</h2>
+            <div class="featured-container" id="featured-projects">
+                <!-- 动态加载精选作品 -->
+            </div>
+            <div class="section-footer">
+                <a href="pages/portfolio.html" class="btn btn-outline">查看全部作品</a>
+            </div>
+        </section>
+
+        <!-- 最新博客 -->
+        <section class="blog-preview">
+            <h2 class="section-title">最新博客</h2>
+            <div class="blog-container" id="recent-posts">
+                <!-- 动态加载最新博客 -->
+            </div>
+            <div class="section-footer">
+                <a href="pages/blog.html" class="btn btn-outline">阅读更多文章</a>
+            </div>
+        </section>
+    </section>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="#" class="footer-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>GameDev</span>Portfolio
+                </a>
+                <p class="footer-description">全栈游戏开发者，致力于创造独特而沉浸的游戏体验。</p>
+            </div>
+            <div class="footer-links">
+                <h4>快速链接</h4>
+                <a href="pages/portfolio.html">作品集</a>
+                <a href="pages/blog.html">博客</a>
+                <a href="pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h4>社交媒体</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> 全栈游戏开发者. 保留所有权利.</p>
+            <p>本网站使用TypeScript动态构建</p>
         </div>
     </div>
-</section>
-
-<!-- 特色区域 -->
-<section class="features">
-    <div class="container">
-        <h2>探索更多</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-palette"></i>
-                </div>
-                <h3>作品集</h3>
-                <p>展示我的项目和作品</p>
-                <a href="/portfolio/" class="feature-link">查看全部 →</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-pen-fancy"></i>
-                </div>
-                <h3>技术博客</h3>
-                <p>分享知识和经验</p>
-                <a href="/blog/" class="feature-link">阅读文章 →</a>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <h3>关于我</h3>
-                <p>了解更多关于我的信息</p>
-                <a href="/about/" class="feature-link">认识我 →</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 联系信息 -->
-<section id="contact" class="contact">
-    <div class="container">
-        <h2>保持联系</h2>
-        <div class="social-links">
-            <a href="https://github.com/你的用户名" class="social-link">
-                <i class="fab fa-github"></i> GitHub
-            </a>
-            <a href="https://linkedin.com/in/你的用户名" class="social-link">
-                <i class="fab fa-linkedin"></i> LinkedIn
-            </a>
-            <a href="mailto:你的邮箱" class="social-link">
-                <i class="fas fa-envelope"></i> Email
-            </a>
-            <a href="/resume.pdf" class="social-link">
-                <i class="fas fa-file-pdf"></i> 简历
-            </a>
-        </div>
-    </div>
-</section>
-
-<footer>
-    <p>© 2024 IrisSakura. 保留所有权利.</p>
 </footer>
 
-<script src="js/script.js"></script>
+<!-- 脚本 -->
+<script src="dist/main.js" type="module"></script>
+<script src="src/main.ts" type="module"></script>
 </body>
 </html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品集 | 全栈游戏开发者</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/portfolio.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- 复用导航栏 -->
+<nav class="navbar">
+    <div class="container nav-container">
+        <a href="../index.html" class="logo">
+            <i class="fas fa-gamepad"></i>
+            <span>GameDev</span>Portfolio
+        </a>
+        <div class="nav-menu">
+            <a href="../index.html" class="nav-link" data-page="home">首页</a>
+            <a href="portfolio.html" class="nav-link active" data-page="portfolio">作品集</a>
+            <a href="blog.html" class="nav-link" data-page="blog">博客</a>
+            <a href="contact.html" class="nav-link" data-page="contact">联系我</a>
+        </div>
+        <button class="mobile-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="portfolio-header">
+        <div class="container">
+            <h1>我的作品集</h1>
+            <p>展示我在游戏开发各个领域的项目，包括完整游戏、工具、美术和音乐作品</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 筛选器 -->
+        <div class="portfolio-filters">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="game">完整游戏</button>
+            <button class="filter-btn" data-filter="art">美术作品</button>
+            <button class="filter-btn" data-filter="music">音乐作品</button>
+            <button class="filter-btn" data-filter="tool">开发工具</button>
+        </div>
+
+        <!-- 作品网格 -->
+        <div class="portfolio-grid" id="portfolio-grid">
+            <!-- 动态加载作品 -->
+        </div>
+
+        <!-- 加载更多 -->
+        <div class="load-more">
+            <button id="load-more-btn" class="btn btn-primary">加载更多作品</button>
+        </div>
+    </div>
+</main>
+
+<!-- 复用页脚 -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../index.html" class="footer-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>GameDev</span>Portfolio
+                </a>
+                <p class="footer-description">全栈游戏开发者，致力于创造独特而沉浸的游戏体验。</p>
+            </div>
+            <div class="footer-links">
+                <h4>快速链接</h4>
+                <a href="portfolio.html">作品集</a>
+                <a href="blog.html">博客</a>
+                <a href="contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h4>社交媒体</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> 全栈游戏开发者. 保留所有权利.</p>
+            <p>本网站使用TypeScript动态构建</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../dist/portfolio.js" type="module"></script>
+</body>
+</html>
