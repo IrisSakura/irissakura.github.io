@@ -3,11 +3,30 @@ import { gsap } from "gsap";
 // 主应用类
 class MainApp {
     constructor() {
+        this.featuredProjectsContainer = null;
+        this.recentPostsContainer = null;
+        this.currentYearElement = null;
+        this.mobileToggle = null;
+        this.navMenu = null;
+        console.log('MainApp constructor called');
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.initElements());
+        }
+        else {
+            this.initElements();
+        }
+    }
+    initElements() {
         this.featuredProjectsContainer = document.getElementById('featured-projects');
         this.recentPostsContainer = document.getElementById('recent-posts');
         this.currentYearElement = document.getElementById('current-year');
         this.mobileToggle = document.querySelector('.mobile-toggle');
         this.navMenu = document.querySelector('.nav-menu');
+        console.log('Elements found:', {
+            featured: this.featuredProjectsContainer,
+            posts: this.recentPostsContainer,
+            year: this.currentYearElement
+        });
         this.init();
     }
     init() {
@@ -53,24 +72,6 @@ class MainApp {
             const projects = [
                 {
                     id: 1,
-                    title: "星际探险家",
-                    category: "太空冒险游戏",
-                    description: "一款基于物理的太空探索游戏，具有程序生成的行星系统和动态叙事。",
-                    tags: ["Unity", "C#", "Procedural Generation", "3D"],
-                    year: 2023,
-                    featured: true
-                },
-                {
-                    id: 2,
-                    title: "节奏迷宫",
-                    category: "音乐节奏游戏",
-                    description: "结合音乐节奏与解谜元素的2D平台游戏，包含原创音乐和音效。",
-                    tags: ["Godot", "GDScript", "Music", "2D"],
-                    year: 2022,
-                    featured: true
-                },
-                {
-                    id: 3,
                     title: "像素地牢",
                     category: "roguelike 地牢探索",
                     description: "传统roguelike游戏，具有复杂的战斗系统和丰富的物品系统。",
@@ -114,22 +115,6 @@ class MainApp {
                     date: "2023-10-15",
                     category: "音频设计",
                     readTime: 8
-                },
-                {
-                    id: 2,
-                    title: "TypeScript在游戏开发中的应用",
-                    excerpt: "如何利用TypeScript的类型系统提高游戏代码的可维护性和开发效率。",
-                    date: "2023-09-28",
-                    category: "编程",
-                    readTime: 10
-                },
-                {
-                    id: 3,
-                    title: "独立游戏的视觉风格选择",
-                    excerpt: "从像素艺术到低多边形：如何为你的游戏选择合适的视觉风格。",
-                    date: "2023-09-12",
-                    category: "美术设计",
-                    readTime: 6
                 }
             ];
             this.renderRecentPosts(posts);
@@ -231,3 +216,5 @@ class MainApp {
 document.addEventListener('DOMContentLoaded', () => {
     new MainApp();
 });
+// 防止重复初始化
+window.MainApp = MainApp;
