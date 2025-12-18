@@ -35,8 +35,44 @@
             <h1>开发者博客</h1>
             <p>分享游戏开发经验、技术教程和行业见解</p>
             <div class="blog-search">
+                <!--
                 <input type="text" placeholder="搜索文章..." id="blog-search">
                 <button class="search-btn"><i class="fas fa-search"></i></button>
+                -->
+
+                <form role="search"
+                      class="blog-search"
+                      action="/blog/search"
+                      method="GET"
+                      aria-label="搜索博客文章">
+
+                    <div class="search-input-group">
+                        <label for="blog-search-field" class="sr-only">搜索关键词</label>
+                        <input type="search"
+                               id="blog-search-field"
+                               name="q"
+                               placeholder="搜索文章..."
+                               aria-describedby="search-hint"
+                               autocomplete="off">
+
+                        <span id="search-hint" class="sr-only">
+            输入游戏开发相关关键词进行搜索
+        </span>
+
+                        <button type="submit"
+                                class="search-btn"
+                                aria-label="执行搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div id="search-suggestions"
+                         class="search-suggestions"
+                         aria-live="polite"
+                         role="listbox">
+                        <!-- 搜索建议 -->
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -71,6 +107,7 @@
                     </div>
                 </div>
 
+                <!--
                 <div class="sidebar-section">
                     <h3>订阅更新</h3>
                     <p>获取最新的游戏开发教程和文章</p>
@@ -79,6 +116,7 @@
                         <button class="btn btn-primary">订阅</button>
                     </div>
                 </div>
+                -->
             </aside>
         </div>
 

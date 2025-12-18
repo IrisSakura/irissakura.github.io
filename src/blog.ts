@@ -57,30 +57,6 @@ class BlogApp {
         try {
             this.allArticles = [
                 {
-                    id: 1,
-                    title: "游戏音乐中的互动音频设计",
-                    excerpt: "探讨如何通过互动音频增强游戏沉浸感，分享使用FMOD和Wwise的实践经验。",
-                    content: "完整文章内容...",
-                    date: "2023-10-15",
-                    category: "音频设计",
-                    tags: ["音频", "FMOD", "Wwise", "沉浸感"],
-                    readTime: 8,
-                    views: 1245,
-                    featured: true
-                },
-                {
-                    id: 2,
-                    title: "TypeScript在游戏开发中的应用",
-                    excerpt: "如何利用TypeScript的类型系统提高游戏代码的可维护性和开发效率。",
-                    content: "完整文章内容...",
-                    date: "2023-09-28",
-                    category: "编程",
-                    tags: ["TypeScript", "编程", "工具", "开发"],
-                    readTime: 10,
-                    views: 1890,
-                    featured: true
-                },
-                {
                     id: 3,
                     title: "独立游戏的视觉风格选择",
                     excerpt: "从像素艺术到低多边形：如何为你的游戏选择合适的视觉风格。",
@@ -91,66 +67,6 @@ class BlogApp {
                     readTime: 6,
                     views: 1567,
                     featured: true
-                },
-                {
-                    id: 4,
-                    title: "Unity Shader Graph入门指南",
-                    excerpt: "学习使用Shader Graph创建自定义着色器效果的基础知识。",
-                    content: "完整文章内容...",
-                    date: "2023-08-25",
-                    category: "编程",
-                    tags: ["Unity", "Shader", "图形", "教程"],
-                    readTime: 12,
-                    views: 2103,
-                    featured: false
-                },
-                {
-                    id: 5,
-                    title: "游戏叙事设计的心理学原理",
-                    excerpt: "了解心理学原理如何影响玩家的游戏体验和情感共鸣。",
-                    content: "完整文章内容...",
-                    date: "2023-08-10",
-                    category: "游戏设计",
-                    tags: ["叙事", "心理学", "设计", "情感"],
-                    readTime: 9,
-                    views: 1321,
-                    featured: false
-                },
-                {
-                    id: 6,
-                    title: "使用Godot引擎开发2D游戏",
-                    excerpt: "Godot引擎在2D游戏开发中的优势和实践技巧分享。",
-                    content: "完整文章内容...",
-                    date: "2023-07-22",
-                    category: "编程",
-                    tags: ["Godot", "2D", "引擎", "教程"],
-                    readTime: 11,
-                    views: 1789,
-                    featured: false
-                },
-                {
-                    id: 7,
-                    title: "游戏角色动画制作流程",
-                    excerpt: "从概念到实现的游戏角色动画完整制作流程详解。",
-                    content: "完整文章内容...",
-                    date: "2023-07-05",
-                    category: "美术设计",
-                    tags: ["动画", "角色", "Blender", "流程"],
-                    readTime: 7,
-                    views: 1456,
-                    featured: false
-                },
-                {
-                    id: 8,
-                    title: "游戏UI/UX设计最佳实践",
-                    excerpt: "创建直观易用的游戏界面，提升玩家体验的关键原则。",
-                    content: "完整文章内容...",
-                    date: "2023-06-18",
-                    category: "游戏设计",
-                    tags: ["UI", "UX", "设计", "界面"],
-                    readTime: 8,
-                    views: 1678,
-                    featured: false
                 }
             ];
 
