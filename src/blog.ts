@@ -1,3 +1,4 @@
+
 // 博客文章类型
 interface BlogArticle {
     id: number;

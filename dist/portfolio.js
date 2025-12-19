@@ -224,5 +224,7 @@ class PortfolioApp {
 }
 // 页面加载完成后初始化应用
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded, initializing PortfolioApp...');
     new PortfolioApp();
 });
+//# sourceMappingURL=portfolio.js.map

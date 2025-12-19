@@ -1,5 +1,4 @@
-// 在文件顶部导入 GSAP
-import { gsap } from "gsap";
+import gsap from 'gsap'; // 类型定义
 // 主应用类
 class MainApp {
     constructor() {
@@ -218,3 +217,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // 防止重复初始化
 window.MainApp = MainApp;
+//# sourceMappingURL=main.js.map

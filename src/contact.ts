@@ -1,4 +1,3 @@
-import gsap from "gsap";
 
 // 联系表单数据类型
 interface ContactFormData {
@@ -15,13 +14,13 @@ class ContactApp {
 
     constructor() {
         console.log('ContactApp constructor called');
-
-        setTimeout(() => {
+        if (document.readyState === 'loading') {
             this.contactForm = document.getElementById('contact-form') as HTMLFormElement;
             this.formMessage = document.getElementById('form-message');
-
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        } else {
             this.init();
-        }, 100);
+        }
     }
 
     private init(): void {
@@ -42,12 +41,33 @@ class ContactApp {
             });
         }
 
+        /*
         // FAQ 展开/收起
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             item.addEventListener('click', () => {
                 item.classList.toggle('active');
             });
+        });
+
+        */
+
+        // 使用事件委托处理FAQ点击
+        document.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const faqItem = target.closest('.faq-item');
+
+            if (faqItem) {
+                console.log('FAQ item clicked');
+                faqItem.classList.toggle('active');
+            }
+
+            // 检查是否点击了FAQ问题（可能点击的是内部的h3或图标）
+            const faqQuestion = target.closest('.faq-question');
+            if (faqQuestion && faqQuestion.parentElement) {
+                console.log('FAQ问题被点击');
+                faqQuestion.parentElement.classList.toggle('active');
+            }
         });
 
         // 移动端菜单切换

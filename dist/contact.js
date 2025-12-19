@@ -1,15 +1,18 @@
-import gsap from "gsap";
+"use strict";
 // 联系应用类
 class ContactApp {
     constructor() {
         this.contactForm = null;
         this.formMessage = null;
         console.log('ContactApp constructor called');
-        setTimeout(() => {
+        if (document.readyState === 'loading') {
             this.contactForm = document.getElementById('contact-form');
             this.formMessage = document.getElementById('form-message');
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        }
+        else {
             this.init();
-        }, 100);
+        }
     }
     init() {
         console.log('Initializing ContactApp...');
@@ -26,12 +29,30 @@ class ContactApp {
                 this.handleFormSubmit();
             });
         }
+        /*
         // FAQ 展开/收起
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             item.addEventListener('click', () => {
                 item.classList.toggle('active');
             });
+        });
+
+        */
+        // 使用事件委托处理FAQ点击
+        document.addEventListener('click', (e) => {
+            const target = e.target;
+            const faqItem = target.closest('.faq-item');
+            if (faqItem) {
+                console.log('FAQ item clicked');
+                faqItem.classList.toggle('active');
+            }
+            // 检查是否点击了FAQ问题（可能点击的是内部的h3或图标）
+            const faqQuestion = target.closest('.faq-question');
+            if (faqQuestion && faqQuestion.parentElement) {
+                console.log('FAQ问题被点击');
+                faqQuestion.parentElement.classList.toggle('active');
+            }
         });
         // 移动端菜单切换
         const mobileToggle = document.querySelector('.mobile-toggle');
@@ -164,3 +185,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded, initializing ContactApp...');
     new ContactApp();
 });
+//# sourceMappingURL=contact.js.map

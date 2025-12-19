@@ -1,7 +1,5 @@
-// 在文件顶部导入 GSAP
-import { gsap } from "gsap"
+import gsap from 'gsap'// 类型定义
 
-// 类型定义
 interface Project {
     id: number;
     title: string;
