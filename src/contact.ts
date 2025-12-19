@@ -41,7 +41,7 @@ class ContactApp {
             });
         }
 
-        /*
+
         // FAQ 展开/收起
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
@@ -50,8 +50,8 @@ class ContactApp {
             });
         });
 
-        */
 
+        /*
         // 使用事件委托处理FAQ点击
         document.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
@@ -69,6 +69,8 @@ class ContactApp {
                 faqQuestion.parentElement.classList.toggle('active');
             }
         });
+
+         */
 
         // 移动端菜单切换
         const mobileToggle = document.querySelector('.mobile-toggle');
