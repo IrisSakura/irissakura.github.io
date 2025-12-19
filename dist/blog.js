@@ -110,30 +110,6 @@ class BlogApp {
                     views: 1789,
                     featured: false
                 },
-                {
-                    id: 7,
-                    title: "游戏角色动画制作流程",
-                    excerpt: "从概念到实现的游戏角色动画完整制作流程详解。",
-                    content: "完整文章内容...",
-                    date: "2023-07-05",
-                    category: "美术设计",
-                    tags: ["动画", "角色", "Blender", "流程"],
-                    readTime: 7,
-                    views: 1456,
-                    featured: false
-                },
-                {
-                    id: 8,
-                    title: "游戏UI/UX设计最佳实践",
-                    excerpt: "创建直观易用的游戏界面，提升玩家体验的关键原则。",
-                    content: "完整文章内容...",
-                    date: "2023-06-18",
-                    category: "游戏设计",
-                    tags: ["UI", "UX", "设计", "界面"],
-                    readTime: 8,
-                    views: 1678,
-                    featured: false
-                }
             ];
             this.filteredArticles = [...this.allArticles];
             console.log('Articles loaded:', this.allArticles.length);
