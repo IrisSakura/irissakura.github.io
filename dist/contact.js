@@ -18,7 +18,8 @@ class ContactApp {
         console.log('Initializing ContactApp...');
         this.setCurrentYear();
         this.setupEventListeners();
-        this.initAnimations();
+        //this.initAnimations();
+        //this.initScrollAnimations();
     }
     setupEventListeners() {
         console.log('Setting up contact event listeners...');
@@ -135,7 +136,40 @@ class ContactApp {
             this.formMessage.style.display = 'none';
         }, 5000);
     }
-    initAnimations() {
+    /*
+    private initAnimations(): void {
+        console.log('Initializing contact animations...');
+
+        setTimeout(() => {
+            // 信息卡片动画
+            Animations.fadeInStagger('.info-card', {
+                duration: 0.8,
+                stagger: 0.2,
+                delay: 0.3
+            });
+
+            // 表单动画
+            Animations.fadeInStagger('.contact-form-container', {
+                duration: 1,
+                delay: 0.5
+            });
+
+            // 社交媒体卡片动画
+            Animations.fadeInStagger('.social-platform', {
+                duration: 0.6,
+                stagger: 0.1,
+                delay: 0.8
+            });
+        }, 300);
+    }
+
+    private initScrollAnimations(): void {
+        // 初始化滚动触发动画
+        Animations.initScrollAnimations();
+    }
+    */
+    /*
+    private initAnimations(): void {
         // 使用GSAP动画
         if (typeof gsap !== 'undefined') {
             // 信息卡片动画
@@ -150,6 +184,7 @@ class ContactApp {
                 opacity: 0,
                 stagger: 0.2
             });
+
             // 表单动画
             gsap.from('.contact-form-container', {
                 scrollTrigger: {
@@ -161,6 +196,7 @@ class ContactApp {
                 y: 50,
                 opacity: 0
             });
+
             // 社交媒体卡片动画
             gsap.from('.social-platform', {
                 scrollTrigger: {
@@ -175,6 +211,8 @@ class ContactApp {
             });
         }
     }
+
+     */
     setCurrentYear() {
         const currentYearElement = document.getElementById('current-year');
         if (currentYearElement) {

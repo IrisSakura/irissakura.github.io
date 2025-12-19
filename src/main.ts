@@ -1,4 +1,4 @@
-import gsap from 'gsap'// 类型定义
+//import { Animations } from './utils/animations';
 
 interface Project {
     id: number;
@@ -65,7 +65,8 @@ class MainApp {
         this.setCurrentYear();
 
         // 初始化页面动画
-        this.initAnimations();
+        //this.initAnimations();
+        //this.initScrollAnimations();
     }
 
     private setupEventListeners(): void {
@@ -97,6 +98,66 @@ class MainApp {
             this.updateNavOnScroll();
         });
     }
+
+    /*
+    private initAnimations(): void {
+        console.log('Initializing animations...');
+
+        // 使用新的动画系统
+        setTimeout(() => {
+            // 英雄区域动画
+            Animations.fadeInStagger('.hero-title, .hero-subtitle, .hero-description', {
+                duration: 0.8,
+                stagger: 0.2,
+                delay: 0.3
+            });
+
+            // 英雄按钮动画
+            Animations.fadeInStagger('.hero-buttons', { duration: 0.8, delay: 0.8 });
+
+            // 像素艺术动画
+            const pixelArt = document.querySelector('.pixel-art');
+            if (pixelArt) {
+                pixelArt.classList.add('scale-in');
+            }
+
+            // 技能卡片添加动画类
+            document.querySelectorAll('.skill-card').forEach((card, index) => {
+                (card as HTMLElement).style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-up');
+            });
+        }, 300);
+    }
+
+    private initScrollAnimations(): void {
+        // 初始化滚动触发动画
+        Animations.initScrollAnimations();
+
+        // 为特定元素添加滚动动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target as HTMLElement;
+
+                    if (element.classList.contains('skill-card')) {
+                        element.classList.add('visible');
+                    }
+
+                    observer.unobserve(element);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // 观察需要滚动动画的元素
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    }
+    */
+
 
     private async loadFeaturedProjects(): Promise<void> {
         try {
@@ -185,6 +246,8 @@ class MainApp {
         }
     }
 
+
+    /*
     private initAnimations(): void {
         // 使用GSAP初始化动画
         if (typeof gsap !== 'undefined') {
@@ -226,6 +289,7 @@ class MainApp {
             });
         }
     }
+     */
 
     private updateNavOnScroll(): void {
         const navbar = document.querySelector('.navbar');

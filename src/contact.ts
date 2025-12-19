@@ -1,4 +1,4 @@
-
+//import { Animations } from './utils/animations';
 // 联系表单数据类型
 interface ContactFormData {
     name: string;
@@ -27,7 +27,8 @@ class ContactApp {
         console.log('Initializing ContactApp...');
         this.setCurrentYear();
         this.setupEventListeners();
-        this.initAnimations();
+        //this.initAnimations();
+        //this.initScrollAnimations();
     }
 
     private setupEventListeners(): void {
@@ -166,6 +167,41 @@ class ContactApp {
         }, 5000);
     }
 
+    /*
+    private initAnimations(): void {
+        console.log('Initializing contact animations...');
+
+        setTimeout(() => {
+            // 信息卡片动画
+            Animations.fadeInStagger('.info-card', {
+                duration: 0.8,
+                stagger: 0.2,
+                delay: 0.3
+            });
+
+            // 表单动画
+            Animations.fadeInStagger('.contact-form-container', {
+                duration: 1,
+                delay: 0.5
+            });
+
+            // 社交媒体卡片动画
+            Animations.fadeInStagger('.social-platform', {
+                duration: 0.6,
+                stagger: 0.1,
+                delay: 0.8
+            });
+        }, 300);
+    }
+
+    private initScrollAnimations(): void {
+        // 初始化滚动触发动画
+        Animations.initScrollAnimations();
+    }
+    */
+
+
+    /*
     private initAnimations(): void {
         // 使用GSAP动画
         if (typeof gsap !== 'undefined') {
@@ -208,6 +244,8 @@ class ContactApp {
             });
         }
     }
+
+     */
 
     private setCurrentYear(): void {
         const currentYearElement = document.getElementById('current-year');

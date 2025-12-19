@@ -1,4 +1,5 @@
 "use strict";
+//import { Animations } from './utils/animations';
 // 作品集应用类
 class PortfolioApp {
     constructor() {
@@ -19,6 +20,7 @@ class PortfolioApp {
         this.setupEventListeners();
         // 渲染作品
         this.renderPortfolioItems();
+        //this.initAnimations();
     }
     async loadPortfolioItems() {
         try {
@@ -195,6 +197,29 @@ class PortfolioApp {
             this.loadMoreBtn.style.display = 'inline-block';
         }
     }
+    /*
+    private initAnimations(): void {
+        console.log('初始化作品集动画');
+
+        setTimeout(() => {
+            // 作品卡片动画
+            document.querySelectorAll('.portfolio-item').forEach((item, index) => {
+                (item as HTMLElement).style.animationDelay = `${index * 0.1}s`;
+                item.classList.add('fade-up');
+            });
+
+            // 筛选按钮动画
+            Animations.fadeInStagger('.filter-btn', {
+                duration: 0.5,
+                stagger: 0.05,
+                delay: 0.2
+            });
+        }, 300);
+
+        // 初始化滚动动画
+        Animations.initScrollAnimations();
+    }
+    */
     setCurrentYear() {
         const currentYearElement = document.getElementById('current-year');
         if (currentYearElement) {

@@ -1,3 +1,4 @@
+//import { Animations } from './utils/animations';
 // 个人简介页面逻辑
 class AboutPage {
     private currentYearElement: HTMLElement | null = null;
@@ -22,8 +23,11 @@ class AboutPage {
 
         this.setCurrentYear();
         this.setupEventListeners();
+        /*
         this.initAnimations();
         this.animateSkillBars();
+        this.initScrollAnimations();
+        */
     }
 
     private setCurrentYear(): void {
@@ -58,6 +62,120 @@ class AboutPage {
         });
     }
 
+    /*
+    private initAnimations(): void {
+        console.log('初始化动画');
+
+        setTimeout(() => {
+            // 英雄区域动画
+            Animations.fadeInStagger('.hero-title, .hero-subtitle, .hero-description', {
+                duration: 1,
+                stagger: 0.2,
+                delay: 0.3
+            });
+
+            // 头像动画
+            const avatar = document.querySelector('.developer-avatar');
+            if (avatar) {
+                avatar.classList.add('scale-in');
+            }
+
+            // 时间线项目添加动画类
+            document.querySelectorAll('.timeline-item').forEach((item, index) => {
+                (item as HTMLElement).style.animationDelay = `${index * 0.3}s`;
+                item.classList.add('fade-up');
+            });
+
+            // 技能矩阵卡片动画
+            document.querySelectorAll('.matrix-category').forEach((card, index) => {
+                (card as HTMLElement).style.animationDelay = `${index * 0.2}s`;
+                card.classList.add('fade-up');
+            });
+
+            // 哲学卡片动画
+            document.querySelectorAll('.philosophy-card').forEach((card, index) => {
+                (card as HTMLElement).style.animationDelay = `${index * 0.15}s`;
+                card.classList.add('fade-up');
+            });
+
+            // 兴趣卡片动画
+            document.querySelectorAll('.interest-card').forEach((card, index) => {
+                (card as HTMLElement).style.animationDelay = `${index * 0.15}s`;
+                card.classList.add('fade-up');
+            });
+        }, 300);
+    }
+
+    private initScrollAnimations(): void {
+        // 初始化滚动触发动画
+        Animations.initScrollAnimations();
+
+        // 为时间线添加滚动观察
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        if (timelineItems.length > 0) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const item = entry.target as HTMLElement;
+                        item.classList.add('visible');
+                        observer.unobserve(item);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            timelineItems.forEach(item => {
+                item.classList.add('animate-on-scroll');
+                observer.observe(item);
+            });
+        }
+    }
+
+    private animateSkillBars(): void {
+        if (!this.skillBars || this.skillBars.length === 0) {
+            console.log('未找到技能条元素');
+            return;
+        }
+
+        console.log(`找到 ${this.skillBars.length} 个技能条`);
+
+        // 使用 Intersection Observer 检测技能条是否进入视口
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const skillBar = entry.target as HTMLElement;
+                    const width = skillBar.style.width;
+
+                    // 重置宽度为0，然后动画到目标宽度
+                    skillBar.style.width = '0%';
+
+                    setTimeout(() => {
+                        skillBar.style.transition = 'width 1.5s ease-in-out';
+                        skillBar.style.width = width;
+                    }, 300);
+
+                    observer.unobserve(skillBar);
+                }
+            });
+        }, {
+            threshold: 0.5,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // 观察所有技能条
+        this.skillBars.forEach(bar => {
+            observer.observe(bar);
+        });
+    }
+
+    */
+
+
+
+
+    /*
     private initAnimations(): void {
         // 使用全局 gsap（通过CDN引入）
         if (typeof gsap !== 'undefined') {
@@ -173,6 +291,8 @@ class AboutPage {
             observer.observe(bar);
         });
     }
+
+    */
 }
 
 // 页面加载完成后初始化

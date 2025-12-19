@@ -18,7 +18,132 @@
     --transition: all 0.3s ease;
     --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     --box-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.2);
+
+    /* 动画相关变量 */
+    --animation-duration: 0.3s;
+    --animation-timing: ease;
+    --animation-stagger: 0.1s;
 }
+/* 基础动画类 */
+.fade-in {
+    animation: fadeIn 0.8s var(--animation-timing) forwards;
+    opacity: 0;
+}
+
+.fade-up {
+    animation: fadeUp 0.8s var(--animation-timing) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.8s var(--animation-timing) forwards;
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.slide-in-right {
+    animation: slideInRight 0.8s var(--animation-timing) forwards;
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.scale-in {
+    animation: scaleIn 0.6s var(--animation-timing) forwards;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+/* 动画关键帧 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* 应用动画的实用类 */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 悬停效果 */
+.hover-lift {
+    transition: transform var(--animation-duration) var(--animation-timing);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.hover-scale {
+    transition: transform var(--animation-duration) var(--animation-timing);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+
 
 /* 重置与基础样式 */
 * {
