@@ -8,7 +8,7 @@ export class ComponentLoader {
             return this.components.get(componentName);
         }
         try {
-            const response = await fetch(`/components/${componentName}.html`);
+            const response = await fetch(`../components/${componentName}.html`);
             if (!response.ok)
                 throw new Error(`Failed to load ${componentName}`);
             const html = await response.text();
