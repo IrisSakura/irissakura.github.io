@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自研游戏开发框架 | 全栈游戏开发者</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/framework.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <div class="container nav-container">
+        <a href="../index.html" class="logo">
+            <i class="fas fa-gamepad"></i>
+            <span>GameDev</span>Portfolio
+        </a>
+        <div class="nav-menu">
+            <a href="../index.html" class="nav-link" data-page="home">首页</a>
+            <a href="about.html" class="nav-link" data-page="about">个人简介</a>
+            <a href="framework.html" class="nav-link active" data-page="framework">开发框架</a>
+            <a href="portfolio.html" class="nav-link" data-page="portfolio">作品集</a>
+            <a href="blog.html" class="nav-link" data-page="blog">博客</a>
+            <a href="contact.html" class="nav-link" data-page="contact">联系我</a>
+        </div>
+        <button class="mobile-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<main class="main-content">
+    <section class="framework-hero">
+        <div class="container framework-hero-grid">
+            <div class="framework-hero-copy">
+                <p class="section-kicker">UNITY GAME FOUNDATION</p>
+                <h1>自研游戏开发框架</h1>
+                <p class="framework-subtitle">把反复出现的工程能力沉淀为可复用模块，让每个新项目更快进入真正的玩法验证。</p>
+                <div class="framework-actions">
+                    <a href="#modules" class="btn btn-primary">查看模块</a>
+                    <a href="contact.html" class="btn btn-secondary">交流合作</a>
+                </div>
+            </div>
+            <div class="framework-stack" aria-label="框架能力堆栈">
+                <div class="stack-layer">Game Project</div>
+                <div class="stack-layer">Unity Adapters</div>
+                <div class="stack-layer highlight-layer">Framework Modules</div>
+                <div class="stack-layer">Pure C# Core</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="framework-overview">
+        <div class="container overview-grid">
+            <div>
+                <h2 class="section-title">框架定位</h2>
+                <p>这是一个服务于长期游戏开发的 Unity 通用框架，不绑定单一游戏类型。它把配置导入、资源加载、事件通信、能力系统、AI 行为、房间运行时等基础设施拆成清晰模块，用于支撑原型、独立游戏和可扩展项目。</p>
+            </div>
+            <div class="overview-stats">
+                <div class="stat-item">
+                    <strong>模块化</strong>
+                    <span>按能力边界拆分</span>
+                </div>
+                <div class="stat-item">
+                    <strong>配置驱动</strong>
+                    <span>降低硬编码成本</span>
+                </div>
+                <div class="stat-item">
+                    <strong>可迁移</strong>
+                    <span>核心逻辑减少引擎耦合</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="module-section" id="modules">
+        <div class="container">
+            <h2 class="section-title">核心模块</h2>
+            <div class="module-grid">
+                <article class="module-card">
+                    <i class="fas fa-table"></i>
+                    <h3>配置与数据</h3>
+                    <p>面向表格配置、运行时数据和 ScriptableObject 工作流，减少重复导入和手写 glue code。</p>
+                </article>
+                <article class="module-card">
+                    <i class="fas fa-box-open"></i>
+                    <h3>资源与加载</h3>
+                    <p>统一封装资源引用、加载入口和资源生命周期，让玩法层少关心底层路径与加载细节。</p>
+                </article>
+                <article class="module-card">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <h3>事件与消息</h3>
+                    <p>提供清晰的事件通信基础，支撑 UI、玩法系统和运行时状态之间的低耦合协作。</p>
+                </article>
+                <article class="module-card">
+                    <i class="fas fa-fire"></i>
+                    <h3>玩法能力系统</h3>
+                    <p>沉淀标签、效果、堆叠、周期触发等能力系统概念，用于角色、道具和战斗规则。</p>
+                </article>
+                <article class="module-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>AI 与行为</h3>
+                    <p>整理行为树、决策权重、黑板数据等可复用 AI 基础设施，便于快速搭建敌人和 NPC。</p>
+                </article>
+                <article class="module-card">
+                    <i class="fas fa-map"></i>
+                    <h3>关卡与运行时</h3>
+                    <p>抽象房间、区域、进度和运行时服务，让不同类型项目复用稳定的流程骨架。</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="principles-section">
+        <div class="container">
+            <h2 class="section-title">设计原则</h2>
+            <div class="principle-list">
+                <div class="principle-item">
+                    <span>01</span>
+                    <div>
+                        <h3>通用优先</h3>
+                        <p>框架不服务于某一个固定玩法，而是沉淀跨项目可复用的工程能力。</p>
+                    </div>
+                </div>
+                <div class="principle-item">
+                    <span>02</span>
+                    <div>
+                        <h3>核心与适配层分离</h3>
+                        <p>尽量把领域规则放在纯 C# 核心中，Unity 相关能力作为适配层接入。</p>
+                    </div>
+                </div>
+                <div class="principle-item">
+                    <span>03</span>
+                    <div>
+                        <h3>先稳定边界，再扩展功能</h3>
+                        <p>每个模块先明确职责、数据流和调用方式，再逐步加入编辑器工具与高级能力。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../index.html" class="footer-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>GameDev</span>Portfolio
+                </a>
+                <p class="footer-description">全栈游戏开发者，致力于创造独特而沉浸的游戏体验。</p>
+            </div>
+            <div class="footer-links">
+                <h4>快速链接</h4>
+                <a href="framework.html">开发框架</a>
+                <a href="portfolio.html">作品集</a>
+                <a href="blog.html">博客</a>
+                <a href="contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h4>社交媒体</h4>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="https://space.bilibili.com/289615178?spm_id_from=333.1007.0.0" class="social-icon"><i class="fab fa-bilibili"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> 全栈游戏开发者. 保留所有权利.</p>
+            <p>本网站使用TypeScript动态构建</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../dist/framework.js" type="module"></script>
+</body>
+</html>
