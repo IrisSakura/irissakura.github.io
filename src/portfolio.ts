@@ -4,12 +4,14 @@
 interface PortfolioItem {
     id: number;
     title: string;
-    category: 'game' | 'art' | 'music' | 'tool';
+    category: 'research' | 'game' | 'art' | 'music' | 'tool';
     description: string;
     tags: string[];
     year: number;
     role: string;
     link?: string;
+    linkLabel?: string;
+    external?: boolean;
 }
 
 // 作品集应用类
@@ -49,6 +51,28 @@ class PortfolioApp {
         try {
             // 模拟从API加载数据
             this.allItems = [
+                {
+                    id: 9,
+                    title: "Sakura Design Journal",
+                    category: "research",
+                    description: "持续积累游戏设计范式、Godot 源码研究与每日审计记录。它保存作品背后的问题、证据和设计判断，也是 Sakura Framework 的研究输入。",
+                    tags: ["Game Design", "Godot Research", "Architecture", "Knowledge Base"],
+                    year: 2026,
+                    role: "研究与系统设计",
+                    link: "journal.html",
+                    linkLabel: "查看学习记录"
+                },
+                {
+                    id: 10,
+                    title: "Sakura Framework",
+                    category: "tool",
+                    description: "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
+                    tags: ["Unity", "C#", "Framework", "Modular Architecture"],
+                    year: 2026,
+                    role: "架构与框架开发",
+                    link: "framework.html",
+                    linkLabel: "查看框架详情"
+                },
                 {
                     id: 1,
                     title: "星际探险家",
@@ -167,7 +191,16 @@ class PortfolioApp {
                     </div>
                     <div class="portfolio-footer">
                         <span class="category-badge">${this.getCategoryLabel(item.category)}</span>
-                        ${item.link ? `<a href="${item.link}" class="btn btn-outline" style="padding: 0.5rem 1rem;">查看详情</a>` : ''}
+                        ${item.link ? `
+                            <a
+                                href="${item.link}"
+                                class="btn btn-outline portfolio-link"
+                                ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ''}
+                            >
+                                ${item.linkLabel ?? '查看详情'}
+                                ${item.external ? '<i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>' : ''}
+                            </a>
+                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -179,6 +212,7 @@ class PortfolioApp {
 
     private getCategoryLabel(category: string): string {
         const labels: Record<string, string> = {
+            'research': '研究与设计',
             'game': '完整游戏',
             'art': '美术作品',
             'music': '音乐作品',

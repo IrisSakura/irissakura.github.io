@@ -1,0 +1,368 @@
+.journal-main {
+    overflow: hidden;
+}
+
+.journal-hero {
+    position: relative;
+    padding: 8.5rem 0 5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        radial-gradient(circle at 76% 38%, rgba(37, 117, 252, 0.26), transparent 25%),
+        radial-gradient(circle at 10% 10%, rgba(106, 17, 203, 0.2), transparent 34%),
+        linear-gradient(145deg, #090d20, #101735 60%, #08101f);
+}
+
+.journal-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, black, transparent 92%);
+}
+
+.journal-hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+    gap: 4rem;
+    align-items: center;
+}
+
+.journal-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 2.4rem;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.journal-back:hover,
+.journal-back:focus-visible {
+    color: white;
+    transform: translateX(-3px);
+}
+
+.journal-kicker {
+    margin: 0 0 0.65rem;
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.journal-hero h1 {
+    max-width: 720px;
+    margin-bottom: 1.25rem;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 0.98;
+}
+
+.journal-lead {
+    max-width: 700px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    line-height: 1.85;
+}
+
+.journal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.journal-dashboard {
+    position: relative;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: calc(var(--border-radius) * 1.2);
+    background: rgba(6, 10, 25, 0.72);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(14px);
+}
+
+.journal-dashboard-label {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.44);
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+}
+
+.journal-metric {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.journal-metric strong {
+    color: white;
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+}
+
+.journal-metric span {
+    color: rgba(255, 255, 255, 0.58);
+}
+
+.journal-dashboard > p {
+    margin: 1.2rem 0 0;
+    color: rgba(255, 255, 255, 0.48);
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+.journal-section {
+    padding: 5rem 0;
+}
+
+.journal-featured {
+    border-block: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.journal-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+    gap: 3rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+}
+
+.journal-section-heading h2 {
+    max-width: 720px;
+    margin: 0;
+    font-size: clamp(2rem, 4.5vw, 3.35rem);
+    line-height: 1.18;
+}
+
+.journal-section-heading > p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.57);
+    line-height: 1.75;
+}
+
+.stream-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.stream-card,
+.note-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+}
+
+.stream-card {
+    min-height: 290px;
+    padding: 1.5rem;
+}
+
+.stream-card-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+}
+
+.stream-card-topline span {
+    color: rgba(255, 255, 255, 0.22);
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 900;
+}
+
+.stream-card-topline i {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+}
+
+.stream-label,
+.note-track {
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.stream-card h3,
+.note-card h3 {
+    margin: 0.55rem 0 0.8rem;
+    font-size: 1.25rem;
+}
+
+.stream-card > p:last-child,
+.note-card > p {
+    color: rgba(255, 255, 255, 0.58);
+    line-height: 1.7;
+}
+
+.note-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.note-card {
+    padding: 1.5rem;
+}
+
+.note-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.3rem;
+}
+
+.note-tags span {
+    padding: 0.35rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.74rem;
+}
+
+.journal-bridge {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    gap: 4rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(121, 93, 255, 0.36);
+    border-radius: calc(var(--border-radius) * 1.4);
+    background:
+        radial-gradient(circle at 82% 14%, rgba(37, 117, 252, 0.18), transparent 28%),
+        linear-gradient(145deg, rgba(106, 17, 203, 0.12), rgba(255, 255, 255, 0.025));
+}
+
+.journal-bridge h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.journal-bridge > div > p:last-child {
+    color: rgba(255, 255, 255, 0.62);
+    line-height: 1.8;
+}
+
+.bridge-actions {
+    display: grid;
+    gap: 1rem;
+}
+
+.bridge-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.45rem 1rem;
+    align-items: center;
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--border-radius);
+    background: rgba(4, 9, 23, 0.64);
+    color: white;
+    transition: var(--transition);
+}
+
+.bridge-card:hover,
+.bridge-card:focus-visible {
+    border-color: var(--accent-color);
+    transform: translateX(4px);
+}
+
+.bridge-card span {
+    grid-column: 1 / -1;
+    color: rgba(255, 255, 255, 0.42);
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+}
+
+.journal-source-note {
+    max-width: 760px;
+    margin: 1.25rem auto 0;
+    color: rgba(255, 255, 255, 0.37);
+    font-size: 0.78rem;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.journal-loading,
+.journal-error {
+    grid-column: 1 / -1;
+    padding: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.journal-error {
+    border: 1px solid rgba(255, 95, 95, 0.25);
+    border-radius: var(--border-radius);
+    color: #ffb3b3;
+}
+
+@media (max-width: 900px) {
+    .journal-hero-grid,
+    .journal-section-heading,
+    .journal-bridge {
+        grid-template-columns: 1fr;
+    }
+
+    .journal-hero-grid,
+    .journal-bridge {
+        gap: 2.5rem;
+    }
+
+    .stream-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stream-card {
+        min-height: auto;
+    }
+
+    .stream-card-topline {
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .journal-hero {
+        padding: 7rem 0 3.5rem;
+    }
+
+    .journal-section {
+        padding: 3.5rem 0;
+    }
+
+    .note-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .journal-bridge {
+        padding: 1.5rem;
+    }
+
+    .journal-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .journal-actions .btn {
+        text-align: center;
+    }
+}
