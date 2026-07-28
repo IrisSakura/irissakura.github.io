@@ -402,6 +402,7 @@ class FrameworkPage {
 
         if (updateHash) {
             history.replaceState(null, '', `${location.pathname}${location.search}#module-${moduleId}`);
+            this.revealDetailOnNarrowLayout('framework-module-detail');
         }
     }
 
@@ -463,6 +464,7 @@ class FrameworkPage {
         if (focusDetail) {
             document.getElementById('framework-layer-detail')?.classList.add('is-emphasized');
             window.setTimeout(() => document.getElementById('framework-layer-detail')?.classList.remove('is-emphasized'), 500);
+            this.revealDetailOnNarrowLayout('framework-layer-detail');
         }
     }
 
@@ -494,7 +496,7 @@ class FrameworkPage {
         this.selectLifecycle(this.selectedLifecycle);
     }
 
-    private selectLifecycle(name: string): void {
+    private selectLifecycle(name: string, revealDetail = false): void {
         if (!(name in this.lifecycleCounts)) return;
         this.selectedLifecycle = name;
         const presentation = LIFECYCLE_PRESENTATIONS[name] ?? {
@@ -517,6 +519,7 @@ class FrameworkPage {
         const detail = document.getElementById('framework-lifecycle-detail');
         if (indicator) indicator.dataset.tone = presentation.tone;
         if (detail) detail.dataset.tone = presentation.tone;
+        if (revealDetail) this.revealDetailOnNarrowLayout('framework-lifecycle-detail');
     }
 
     private moduleDescription(module: FrameworkModule): string {
@@ -573,6 +576,15 @@ class FrameworkPage {
 
         window.requestAnimationFrame(() => {
             document.getElementById(targetId)?.scrollIntoView({ block: 'start' });
+        });
+    }
+
+    private revealDetailOnNarrowLayout(detailId: string): void {
+        if (!window.matchMedia('(max-width: 1100px)').matches) return;
+        const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+        window.requestAnimationFrame(() => {
+            document.getElementById(detailId)?.scrollIntoView({ behavior, block: 'start' });
         });
     }
 
@@ -633,7 +645,7 @@ class FrameworkPage {
             const target = event.target;
             if (!(target instanceof Element)) return;
             const button = target.closest<HTMLButtonElement>('[data-lifecycle-name]');
-            if (button?.dataset.lifecycleName) this.selectLifecycle(button.dataset.lifecycleName);
+            if (button?.dataset.lifecycleName) this.selectLifecycle(button.dataset.lifecycleName, true);
         });
 
         document.getElementById('framework-module-layer-link')?.addEventListener('click', event => {

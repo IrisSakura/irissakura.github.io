@@ -109,10 +109,22 @@ test('framework explorer binds synchronized modules to interactive views', async
     'renderLifecycle',
     'selectLifecycle',
     'restoreSectionHash',
+    'revealDetailOnNarrowLayout',
     'history.replaceState',
     'scrollIntoView'
   ]) {
     assert.ok(source.includes(behavior), `missing explorer behavior ${behavior}`);
+  }
+
+  for (const detailId of [
+    'framework-module-detail',
+    'framework-layer-detail',
+    'framework-lifecycle-detail'
+  ]) {
+    assert.ok(
+      source.includes(`revealDetailOnNarrowLayout('${detailId}')`),
+      `${detailId} should be revealed after a narrow-layout selection`
+    );
   }
 });
 

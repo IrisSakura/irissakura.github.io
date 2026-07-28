@@ -337,6 +337,7 @@ class FrameworkPage {
             layerLink.dataset.layerId = presentation.layerId;
         if (updateHash) {
             history.replaceState(null, '', `${location.pathname}${location.search}#module-${moduleId}`);
+            this.revealDetailOnNarrowLayout('framework-module-detail');
         }
     }
     renderLayers() {
@@ -391,6 +392,7 @@ class FrameworkPage {
         if (focusDetail) {
             document.getElementById('framework-layer-detail')?.classList.add('is-emphasized');
             window.setTimeout(() => document.getElementById('framework-layer-detail')?.classList.remove('is-emphasized'), 500);
+            this.revealDetailOnNarrowLayout('framework-layer-detail');
         }
     }
     renderLifecycle() {
@@ -419,7 +421,7 @@ class FrameworkPage {
         }));
         this.selectLifecycle(this.selectedLifecycle);
     }
-    selectLifecycle(name) {
+    selectLifecycle(name, revealDetail = false) {
         if (!(name in this.lifecycleCounts))
             return;
         this.selectedLifecycle = name;
@@ -442,6 +444,8 @@ class FrameworkPage {
             indicator.dataset.tone = presentation.tone;
         if (detail)
             detail.dataset.tone = presentation.tone;
+        if (revealDetail)
+            this.revealDetailOnNarrowLayout('framework-lifecycle-detail');
     }
     moduleDescription(module) {
         const presentation = MODULE_PRESENTATIONS[module.id];
@@ -494,6 +498,14 @@ class FrameworkPage {
             return;
         window.requestAnimationFrame(() => {
             document.getElementById(targetId)?.scrollIntoView({ block: 'start' });
+        });
+    }
+    revealDetailOnNarrowLayout(detailId) {
+        if (!window.matchMedia('(max-width: 1100px)').matches)
+            return;
+        const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+        window.requestAnimationFrame(() => {
+            document.getElementById(detailId)?.scrollIntoView({ behavior, block: 'start' });
         });
     }
     setText(id, value) {
@@ -554,7 +566,7 @@ class FrameworkPage {
                 return;
             const button = target.closest('[data-lifecycle-name]');
             if (button?.dataset.lifecycleName)
-                this.selectLifecycle(button.dataset.lifecycleName);
+                this.selectLifecycle(button.dataset.lifecycleName, true);
         });
         document.getElementById('framework-module-layer-link')?.addEventListener('click', event => {
             const button = event.currentTarget;
