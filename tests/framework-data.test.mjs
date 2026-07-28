@@ -51,8 +51,25 @@ test('framework page contains one target for each dynamic field', async () => {
     'framework-package-count',
     'framework-module-count',
     'framework-profile-count',
+    'framework-module-search',
+    'framework-module-result-count',
+    'framework-module-list',
+    'framework-module-detail',
+    'framework-module-detail-title',
+    'framework-module-capabilities',
+    'framework-module-use-cases',
+    'framework-module-route',
+    'framework-module-layer-link',
     'framework-layer-list',
+    'framework-layer-detail',
+    'framework-layer-detail-title',
+    'framework-layer-detail-count',
+    'framework-layer-detail-share',
     'framework-lifecycle-list',
+    'framework-lifecycle-detail',
+    'framework-lifecycle-detail-title',
+    'framework-lifecycle-detail-count',
+    'framework-lifecycle-detail-share',
     'framework-source-commit',
     'framework-generated-at',
     'framework-data-status'
@@ -61,6 +78,41 @@ test('framework page contains one target for each dynamic field', async () => {
   for (const id of ids) {
     const matches = html.match(new RegExp(`id=["']${id}["']`, 'g')) ?? [];
     assert.equal(matches.length, 1, `${id} should occur exactly once`);
+  }
+});
+
+test('framework explorer binds synchronized modules to interactive views', async () => {
+  const data = JSON.parse(await readText('data/framework.json'));
+  const html = await readText('pages/framework.html');
+  const source = await readText('src/framework.ts');
+
+  for (const filter of ['all', 'foundation', 'gameplay', 'experience']) {
+    assert.ok(
+      html.includes(`data-module-filter="${filter}"`),
+      `missing ${filter} module filter`
+    );
+  }
+
+  for (const module of data.featuredModules) {
+    assert.match(
+      source,
+      new RegExp(`\\b${module.id}:\\s*\\{`, 'u'),
+      `${module.id} needs website-owned explorer metadata`
+    );
+  }
+
+  for (const behavior of [
+    'renderFeaturedModules',
+    'selectModule',
+    'renderLayers',
+    'selectLayer',
+    'renderLifecycle',
+    'selectLifecycle',
+    'restoreSectionHash',
+    'history.replaceState',
+    'scrollIntoView'
+  ]) {
+    assert.ok(source.includes(behavior), `missing explorer behavior ${behavior}`);
   }
 });
 

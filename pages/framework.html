@@ -77,39 +77,119 @@
 
     <section class="module-section" id="modules">
         <div class="container">
-            <h2 class="section-title">核心模块</h2>
-            <div class="module-grid">
-                <article class="module-card"><i class="fas fa-table"></i><h3>配置与数据</h3><p>面向表格配置、运行时数据和 ScriptableObject 工作流，减少重复导入和手写 glue code。</p></article>
-                <article class="module-card"><i class="fas fa-box-open"></i><h3>资源与加载</h3><p>统一封装资源引用、加载入口和资源生命周期，让玩法层少关心底层路径与加载细节。</p></article>
-                <article class="module-card"><i class="fas fa-broadcast-tower"></i><h3>事件与消息</h3><p>提供清晰的事件通信基础，支撑 UI、玩法系统和运行时状态之间的低耦合协作。</p></article>
-                <article class="module-card"><i class="fas fa-fire"></i><h3>玩法能力系统</h3><p>沉淀标签、效果、堆叠、周期触发等能力系统概念，用于角色、道具和战斗规则。</p></article>
-                <article class="module-card"><i class="fas fa-brain"></i><h3>AI 与行为</h3><p>整理行为树、决策权重、黑板数据等可复用 AI 基础设施，便于快速搭建敌人和 NPC。</p></article>
-                <article class="module-card"><i class="fas fa-map"></i><h3>关卡与运行时</h3><p>抽象房间、区域、进度和运行时服务，让不同类型项目复用稳定的流程骨架。</p></article>
+            <div class="section-heading-row">
+                <div>
+                    <p class="section-kicker">MODULE EXPLORER</p>
+                    <h2 class="section-title">核心模块</h2>
+                    <p class="section-intro">从底层生命周期、跨系统通信到玩法规则与界面呈现，按真实开发职责拆分可复用能力。</p>
+                </div>
+                <p class="module-result-count" id="framework-module-result-count" aria-live="polite">6 个模块</p>
+            </div>
+
+            <div class="module-toolbar" role="search">
+                <label class="module-search" for="framework-module-search">
+                    <span class="sr-only">搜索模块或能力</span>
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input id="framework-module-search" type="search" placeholder="搜索模块或能力" autocomplete="off">
+                </label>
+                <div class="module-filters" role="group" aria-label="模块分类">
+                    <button class="module-filter is-active" type="button" data-module-filter="all" aria-pressed="true">全部</button>
+                    <button class="module-filter" type="button" data-module-filter="foundation" aria-pressed="false">基础</button>
+                    <button class="module-filter" type="button" data-module-filter="gameplay" aria-pressed="false">玩法</button>
+                    <button class="module-filter" type="button" data-module-filter="experience" aria-pressed="false">体验</button>
+                </div>
+            </div>
+
+            <div class="module-explorer">
+                <div class="module-grid" id="framework-module-list" aria-live="polite">
+                    <p class="module-loading">正在读取框架模块快照…</p>
+                </div>
+                <aside class="module-detail" id="framework-module-detail" aria-live="polite" tabindex="-1">
+                    <div class="module-detail-heading">
+                        <span class="module-detail-icon" id="framework-module-detail-icon" aria-hidden="true"><i class="fas fa-cubes"></i></span>
+                        <div>
+                            <p class="module-detail-category" id="framework-module-detail-category">FRAMEWORK MODULE</p>
+                            <h3 id="framework-module-detail-title">模块详情</h3>
+                        </div>
+                    </div>
+                    <p class="module-detail-description" id="framework-module-detail-description">模块数据加载后将在这里呈现职责、使用场景和接入路线。</p>
+                    <div class="module-detail-section">
+                        <h4>核心能力</h4>
+                        <ul class="capability-list" id="framework-module-capabilities"></ul>
+                    </div>
+                    <div class="module-detail-section">
+                        <h4>适用场景</h4>
+                        <ul class="use-case-list" id="framework-module-use-cases"></ul>
+                    </div>
+                    <div class="module-detail-section">
+                        <h4>接入路线</h4>
+                        <ol class="integration-route" id="framework-module-route"></ol>
+                    </div>
+                    <button class="module-layer-link" id="framework-module-layer-link" type="button">
+                        <i class="fas fa-layer-group" aria-hidden="true"></i>
+                        <span>定位所属架构层</span>
+                    </button>
+                </aside>
             </div>
         </div>
     </section>
 
-    <section class="principles-section">
+    <section class="principles-section" id="architecture">
         <div class="container">
+            <p class="section-kicker">ARCHITECTURE MAP</p>
             <h2 class="section-title">架构分层</h2>
-            <div class="principle-list" id="framework-layer-list">
-                <div class="principle-item"><span>13</span><div><h3>Foundation</h3><p>最小基底能力，供多数 Core 复用。</p></div></div>
-                <div class="principle-item"><span>17</span><div><h3>Runtime Service</h3><p>通用运行时服务、数据、输入、存档、本地化、UI 与网络中间件。</p></div></div>
-                <div class="principle-item"><span>37</span><div><h3>Gameplay Kernel</h3><p>可跨玩法复用的玩法内核和规则系统。</p></div></div>
+            <div class="architecture-explorer">
+                <div class="principle-list" id="framework-layer-list" aria-label="框架架构层">
+                    <button class="principle-item is-active" type="button" data-layer-id="foundation" aria-pressed="true">
+                        <span>13</span>
+                        <div><h3>Foundation</h3><p>最小基底能力，供多数 Core 复用。</p></div>
+                    </button>
+                </div>
+                <aside class="layer-detail" id="framework-layer-detail" aria-live="polite">
+                    <p class="module-detail-category">LAYER RESPONSIBILITY</p>
+                    <h3 id="framework-layer-detail-title">Foundation</h3>
+                    <p id="framework-layer-detail-description">最小基底能力，供多数 Core 复用。</p>
+                    <div class="layer-metrics">
+                        <div><strong id="framework-layer-detail-count">13</strong><span>包数量</span></div>
+                        <div><strong id="framework-layer-detail-share">9%</strong><span>仓库占比</span></div>
+                    </div>
+                    <div class="layer-detail-section">
+                        <h4>主要职责</h4>
+                        <p id="framework-layer-detail-role">提供稳定、低依赖、可被上层重复使用的基础契约。</p>
+                    </div>
+                    <div class="layer-detail-section">
+                        <h4>典型决策</h4>
+                        <p id="framework-layer-detail-decision">当能力不应依赖具体玩法或 Unity 场景对象时，优先落在这一层。</p>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
 
-    <section class="principles-section">
+    <section class="lifecycle-section" id="lifecycle">
         <div class="container">
+            <p class="section-kicker">SUPPORT MATRIX</p>
             <h2 class="section-title">支持生命周期</h2>
-            <div class="overview-stats" id="framework-lifecycle-list">
-                <div class="stat-item"><strong>4</strong><span>Supported</span></div>
-                <div class="stat-item"><strong>113</strong><span>Preview</span></div>
-                <div class="stat-item"><strong>6</strong><span>Experimental</span></div>
+            <div class="lifecycle-explorer">
+                <div class="lifecycle-list" id="framework-lifecycle-list" aria-label="框架支持生命周期">
+                    <button class="stat-item is-active" type="button" data-lifecycle-name="Supported" aria-pressed="true">
+                        <strong>4</strong><span>Supported</span>
+                    </button>
+                </div>
+                <div class="lifecycle-detail" id="framework-lifecycle-detail" aria-live="polite">
+                    <div>
+                        <span class="lifecycle-indicator" id="framework-lifecycle-indicator"></span>
+                        <p class="module-detail-category">CURRENT SELECTION</p>
+                        <h3 id="framework-lifecycle-detail-title">Supported</h3>
+                    </div>
+                    <p id="framework-lifecycle-detail-description">已有稳定使用边界、验证证据和维护承诺的框架能力。</p>
+                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">4</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">3%</strong></p>
+                </div>
             </div>
-            <p>来源提交：<code id="framework-source-commit">04ff904</code></p>
-            <p>数据更新时间：<time id="framework-generated-at" datetime="2026-07-15T00:00:00.000Z">2026-07-15</time></p>
+            <div class="framework-source-note">
+                <p>来源提交：<code id="framework-source-commit">04ff904</code></p>
+                <p>数据更新时间：<time id="framework-generated-at" datetime="2026-07-15T00:00:00.000Z">2026-07-15</time></p>
+            </div>
         </div>
     </section>
 </main>
