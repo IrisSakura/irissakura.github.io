@@ -8,6 +8,9 @@ interface Project {
     tags: string[];
     year: number;
     featured: boolean;
+    href: string;
+    image: string;
+    imageAlt: string;
 }
 
 interface BlogPost {
@@ -165,12 +168,15 @@ class MainApp {
             const projects: Project[] = [
                 {
                     id: 1,
-                    title: "像素地牢",
-                    category: "roguelike 地牢探索",
-                    description: "传统roguelike游戏，具有复杂的战斗系统和丰富的物品系统。",
-                    tags: ["TypeScript", "Pixel Art", "Procedural Generation"],
-                    year: 2023,
-                    featured: true
+                    title: "言铸之剑",
+                    category: "2D 动作 Roguelike",
+                    description: "以房间推进、实时战斗和构筑成长为核心，结合技能、潜能、祝福与存档系统形成完整局内循环。",
+                    tags: ["Unity", "C#", "Roguelike", "LLM Gameplay"],
+                    year: 2026,
+                    featured: true,
+                    href: "pages/game.html",
+                    image: "assets/images/sword-of-words/combat-room.png",
+                    imageAlt: "言铸之剑的像素风战斗房间与技能 HUD"
                 }
             ];
 
@@ -185,8 +191,10 @@ class MainApp {
         if (!this.featuredProjectsContainer) return;
 
         this.featuredProjectsContainer.innerHTML = projects.map(project => `
-            <div class="project-card">
-                <div class="project-image"></div>
+            <article class="project-card">
+                <a class="project-image" href="${project.href}" aria-label="查看${project.title}详情">
+                    <img src="${project.image}" alt="${project.imageAlt}">
+                </a>
                 <div class="project-content">
                     <h3 class="project-title">${project.title}</h3>
                     <p class="project-category">${project.category} • ${project.year}</p>
@@ -194,8 +202,12 @@ class MainApp {
                     <div class="project-tags">
                         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
+                    <a class="project-detail-link" href="${project.href}">
+                        查看完整游戏
+                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </a>
                 </div>
-            </div>
+            </article>
         `).join('');
     }
 
