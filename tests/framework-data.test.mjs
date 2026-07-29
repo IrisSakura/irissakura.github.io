@@ -45,6 +45,23 @@ test('framework.json exposes only the public contract', async () => {
   }
 });
 
+test('framework adoption snapshot names the supported packages and stays pinned to the public snapshot', async () => {
+  const framework = JSON.parse(await readText('data/framework.json'));
+  const adoption = JSON.parse(await readText('data/framework-adoption.json'));
+
+  assert.equal(adoption.schemaVersion, 1);
+  assert.equal(adoption.sourceCommit, framework.sourceCommit);
+  assert.deepEqual(
+    adoption.supportedPackages.map((entry) => entry.id),
+    ['core', 'event', 'gamehelper', 'pooling']
+  );
+  assert.deepEqual(adoption.stableRoutes.map((entry) => entry.id), ['core-only', 'bootstrap-lite']);
+  assert.equal(adoption.gameAdoption.length, 4);
+  assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
+  assert.ok(!JSON.stringify(adoption).includes('/Users/'));
+  assert.ok(!JSON.stringify(adoption).includes('git@'));
+});
+
 test('framework page contains one target for each dynamic field', async () => {
   const html = await readText('pages/framework.html');
   const ids = [
@@ -162,12 +179,17 @@ test('framework page presents maturity before scale and documents sync ownership
     'Preview',
     '23',
     'Experimental',
-    '不把同名系统自动宣称'
+    'DocsOnly',
+    'Frozen',
+    'Core Only',
+    'Bootstrap Lite',
+    '《言铸之剑》采用映射'
   ]) {
     assert.ok(html.includes(fragment), `missing maturity disclosure: ${fragment}`);
   }
 
   assert.ok(maintenance.includes('data/framework.json'));
+  assert.ok(maintenance.includes('data/framework-adoption.json'));
   assert.ok(maintenance.includes('白名单公开快照'));
   assert.ok(maintenance.includes('gitea-patch/'));
 });

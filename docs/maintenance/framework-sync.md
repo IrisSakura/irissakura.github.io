@@ -2,6 +2,8 @@
 
 `data/framework.json` 是网站消费的白名单公开快照，不是 Framework 仓库的完整清单，也不是网站侧手工维护的事实源。
 
+`data/framework-adoption.json` 是站点侧的人工策展采用快照，负责公开 4 个 Supported 包、最小稳定 Profile 路线与《言铸之剑》的已验证依赖映射。它的 `sourceCommit` 必须与 `data/framework.json` 完全一致；上游快照变化但采用说明尚未复核时，网站构建应失败而不是继续发布旧口径。
+
 ## 权威边界
 
 - Framework 权威仓库负责从自己的生成清单构建公开快照；

@@ -343,6 +343,125 @@
     text-align: center;
 }
 
+.note-finding {
+    margin: 1.25rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--muted-text-color);
+}
+
+.note-finding strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #8ce7dc;
+}
+
+.note-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 1.25rem;
+    color: #8ce7dc;
+    font-weight: 700;
+}
+
+.journal-detail-main {
+    margin-top: 80px;
+    padding: 5rem 0 7rem;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        #10131a;
+    background-size: 100% 36px;
+}
+
+.journal-detail {
+    max-width: 980px;
+}
+
+.journal-detail > header {
+    max-width: 780px;
+    padding: 3.5rem 0;
+}
+
+.journal-detail h1 {
+    margin: 1rem 0 1.25rem;
+    font-size: clamp(2.5rem, 6vw, 4.6rem);
+    letter-spacing: -0.04em;
+}
+
+.journal-detail > header > p:not(.journal-kicker) {
+    color: var(--muted-text-color);
+    font-size: 1.08rem;
+    line-height: 1.85;
+}
+
+.journal-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.journal-detail-grid section {
+    min-height: 280px;
+    padding: 2rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(5, 11, 20, 0.72);
+}
+
+.journal-detail-grid span {
+    color: var(--accent-color);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.journal-detail-grid h2 {
+    margin: 2.5rem 0 1rem;
+    text-align: left;
+    font-size: 1.55rem;
+}
+
+.journal-detail-grid p,
+.journal-detail-update p {
+    color: var(--muted-text-color);
+    line-height: 1.85;
+}
+
+.journal-detail-update {
+    display: grid;
+    grid-template-columns: 100px 140px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.5rem 0;
+}
+
+.journal-detail-update strong,
+.journal-detail-update time {
+    color: #8ce7dc;
+}
+
+@media (max-width: 680px) {
+    .journal-detail-main {
+        padding: 3rem 0 5rem;
+    }
+
+    .journal-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .journal-detail-grid section {
+        min-height: auto;
+    }
+
+    .journal-detail-update {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+}
+
 .journal-error {
     border: 1px solid rgba(255, 95, 95, 0.25);
     border-radius: var(--border-radius);

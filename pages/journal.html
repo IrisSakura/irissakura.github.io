@@ -11,11 +11,11 @@
     <meta property="og:title" content="研究记录 | Sakura Design Journal">
     <meta property="og:description" content="经过策展的游戏设计、Godot 源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。">
     <meta property="og:url" content="https://irissakura.github.io/pages/journal.html">
-    <meta property="og:image" content="https://irissakura.github.io/assets/images/portfolio-bg.png">
+    <meta property="og:image" content="https://irissakura.github.io/assets/images/home-preview.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="研究记录 | Sakura Design Journal">
     <meta name="twitter:description" content="经过策展的游戏设计、Godot 源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。">
-    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/portfolio-bg.png">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/home-preview.png">
     <!-- indexable page -->
     <meta name="theme-color" content="#6a11cb">
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -38,11 +38,11 @@
         </a>
         <div class="nav-menu" id="main-navigation">
             <a href="../index.html" class="nav-link">首页</a>
-            <a href="about.html" class="nav-link">关于</a>
-            <a href="framework.html" class="nav-link">开发框架</a>
-            <a href="portfolio.html" class="nav-link">作品集</a>
-            <a href="journal.html" class="nav-link active" aria-current="page">研究记录</a>
-            <a href="contact.html" class="nav-link">联系</a>
+            <a href="../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../pages/journal.html" class="nav-link active" aria-current="page">Journal</a>
+            <a href="../pages/about.html" class="nav-link">关于</a>
+            <a href="../pages/contact.html" class="nav-link nav-cta">公开入口</a>
         </div>
         <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
             <i class="fas fa-bars" aria-hidden="true"></i>
@@ -51,90 +51,114 @@
 </nav>
 
 <main id="main-content" class="journal-main">
-    <header class="journal-hero">
+    <!-- journal-content:start -->
+<header class="journal-hero">
         <div class="container journal-hero-grid">
             <div>
-                <a class="journal-back" href="portfolio.html">
-                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
-                    返回作品集
-                </a>
-                <p class="journal-kicker">CURATED LEARNING, EVIDENCE BY DESIGN</p>
-                <h1>学习与设计记录</h1>
-                <p class="journal-lead" id="journal-description">正在读取精选研究摘要…</p>
-                <div class="journal-actions">
-                    <a class="btn btn-primary" href="#featured-notes">浏览精选记录</a>
-                    <a class="btn btn-outline" href="framework.html">查看如何沉淀为框架</a>
-                </div>
+                <a class="journal-back" href="portfolio.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回作品</a>
+                <p class="journal-kicker">CURATED LEARNING · EVIDENCE BY DESIGN</p>
+                <h1>Sakura Design Journal</h1>
+                <p class="journal-lead">持续记录游戏设计范式、Godot 源码研究与日常工程审计，让作品背后的问题、证据和判断可以被追踪。</p>
+                <div class="journal-actions"><a class="btn btn-primary" href="#featured-notes">查看精选主题</a><a class="btn btn-secondary" href="framework.html">查看框架影响</a></div>
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric">
-                    <strong id="journal-design-count">—</strong>
-                    <span>游戏设计范式</span>
-                </div>
-                <div class="journal-metric">
-                    <strong id="journal-stream-count">—</strong>
-                    <span>知识流</span>
-                </div>
-                <p>公开页展示经过策展的摘要；完整研究仓库继续保留原始笔记、证据和工作历史。</p>
+                <div class="journal-metric"><strong>38</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
+                <p>公开页只展示经过策展的摘要；完整研究仓库继续保留原始笔记、证据和工作历史。</p>
             </div>
         </div>
     </header>
-
     <section class="journal-section">
         <div class="container">
-            <div class="journal-section-heading">
-                <div>
-                    <p class="journal-kicker">KNOWLEDGE STREAMS</p>
-                    <h2>不是一条时间线，而是三条相互验证的知识流</h2>
-                </div>
-                <p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p>
-            </div>
-            <div class="stream-grid" id="journal-streams" aria-live="polite">
-                <p class="journal-loading">正在整理研究路线…</p>
+            <div class="journal-section-heading"><div><p class="journal-kicker">KNOWLEDGE STREAMS</p><h2>三条相互验证的知识流</h2></div><p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p></div>
+            <div class="stream-grid">
+                <article class="stream-card" data-stream="source-research">
+                    <div class="stream-card-topline"><span>01</span><i class="fas fa-code-branch" aria-hidden="true"></i></div>
+                    <p class="stream-label">源码研究</p>
+                    <h3>Godot 运行时与引擎设计</h3>
+                    <p>从主循环、对象模型、资源系统到渲染、网络和编辑器，沿真实源码追踪设计边界。</p>
+                </article>
+                <article class="stream-card" data-stream="game-design">
+                    <div class="stream-card-topline"><span>02</span><i class="fas fa-chess-knight" aria-hidden="true"></i></div>
+                    <p class="stream-label">机制研究</p>
+                    <h3>可复查的游戏设计范式</h3>
+                    <p>把玩法循环、状态归属、风险回报和系统因果整理成可比较、可复用的设计事实。</p>
+                </article>
+                <article class="stream-card" data-stream="engineering-diary">
+                    <div class="stream-card-topline"><span>03</span><i class="fas fa-book-open" aria-hidden="true"></i></div>
+                    <p class="stream-label">工作记录</p>
+                    <h3>审计、验证与决策日记</h3>
+                    <p>按时间保留研究过程、验证结果和边界判断，避免只展示完成后的漂亮结论。</p>
+                </article>
             </div>
         </div>
     </section>
-
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
-            <div class="journal-section-heading">
-                <div>
-                    <p class="journal-kicker">SELECTED NOTES</p>
-                    <h2>精选研究主题</h2>
-                </div>
-                <p>这里不是完整目录，而是最能说明研究方法与长期方向的一组入口。</p>
-            </div>
-            <div class="note-grid" id="journal-notes" aria-live="polite">
-                <p class="journal-loading">正在读取精选主题…</p>
+            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2>可独立分享的精选研究主题</h2></div><p>每个主题都包含问题、方法、发现、影响和更新时间。</p></div>
+            <div class="note-grid">
+                <article class="note-card" id="note-rhythm-audio-clock" data-note="rhythm-audio-clock">
+                    <span class="note-track">游戏设计范式</span>
+                    <h3>节奏游戏的音频主时钟与确定性判定</h3>
+                    <p>聚焦音频主时钟、输入时间映射、确定性判定与表现层同步边界。</p>
+                    <div class="note-tags"><span>Audio</span><span>Rhythm</span><span>Timing</span></div>
+                    <p class="note-finding"><strong>核心结论</strong>音频主时钟负责确定性判定，表现层只消费结果并平滑同步。</p>
+                    <a class="note-link" href="journal/rhythm-audio-clock.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="note-card" id="note-metroidvania" data-note="metroidvania">
+                    <span class="note-track">游戏设计范式</span>
+                    <h3>银河城的能力门控世界图</h3>
+                    <p>研究能力获取如何重写世界可达性，并让旧空间在回访中获得新意义。</p>
+                    <div class="note-tags"><span>World Graph</span><span>Ability Gating</span><span>Progression</span></div>
+                    <p class="note-finding"><strong>核心结论</strong>有意义的能力门应让旧空间获得新路线，而不只是延迟一扇门的开启。</p>
+                    <a class="note-link" href="journal/metroidvania.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="note-card" id="note-immersive-sim" data-note="immersive-sim">
+                    <span class="note-track">游戏设计范式</span>
+                    <h3>沉浸式模拟的系统性世界</h3>
+                    <p>以统一世界规则、能力组合和多入口空间支持玩家自主的问题求解。</p>
+                    <div class="note-tags"><span>Systemic</span><span>Emergence</span><span>Level Design</span></div>
+                    <p class="note-finding"><strong>核心结论</strong>涌现依赖可组合规则和可读反馈，不能只靠大量脚本化分支模拟自由。</p>
+                    <a class="note-link" href="journal/immersive-sim.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="note-card" id="note-colony-sim" data-note="colony-sim">
+                    <span class="note-track">游戏设计范式</span>
+                    <h3>聚落生存中的个体代理与工作调度</h3>
+                    <p>分析个体需求、工作分配、资源网络和局部故障如何形成聚落级涌现。</p>
+                    <div class="note-tags"><span>Simulation</span><span>Scheduling</span><span>Survival</span></div>
+                    <p class="note-finding"><strong>核心结论</strong>调度器应协调事实而不是拥有所有领域状态，故障也必须能被玩家追踪。</p>
+                    <a class="note-link" href="journal/colony-sim.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="note-card" id="note-godot-runtime" data-note="godot-runtime">
+                    <span class="note-track">源码研究</span>
+                    <h3>Godot 主循环与 SceneTree 调度</h3>
+                    <p>沿引擎启动和单帧迭代追踪生命周期、消息队列、物理与导航服务的协作边界。</p>
+                    <div class="note-tags"><span>Godot</span><span>Runtime</span><span>Architecture</span></div>
+                    <p class="note-finding"><strong>核心结论</strong>调度边界比单个 API 更值得复用：状态所有权、阶段顺序和延迟队列必须分开。</p>
+                    <a class="note-link" href="journal/godot-runtime.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="note-card" id="note-godot-resource" data-note="godot-resource">
+                    <span class="note-track">源码研究</span>
+                    <h3>ResourceLoader 线程化加载与完成边界</h3>
+                    <p>研究加载任务、等待关系、缓存和主线程完成回调如何共同保证资源生命周期。</p>
+                    <div class="note-tags"><span>Godot</span><span>Resource</span><span>Concurrency</span></div>
+                    <p class="note-finding"><strong>核心结论</strong>完成不是后台任务结束，而是依赖、缓存和主线程可见状态共同收敛。</p>
+                    <a class="note-link" href="journal/godot-resource.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
             </div>
         </div>
     </section>
-
     <section class="journal-section">
         <div class="container">
             <div class="journal-bridge">
-                <div>
-                    <p class="journal-kicker">RESEARCH → SYSTEM → WORK</p>
-                    <h2>记录的价值，在于能够改变下一次实现</h2>
-                    <p>源码研究提供机制证据，设计范式提供产品判断，工程日记保留验证边界。只有能够跨项目复用的结论，才会进入 Sakura Framework；只有被实际作品验证的能力，才会成为作品集的一部分。</p>
-                </div>
-                <div class="bridge-actions">
-                    <a class="bridge-card" href="framework.html">
-                        <span>02 / SYSTEM</span>
-                        <strong>Sakura Framework</strong>
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </a>
-                    <a class="bridge-card" href="portfolio.html">
-                        <span>03 / WORK</span>
-                        <strong>游戏与工具作品</strong>
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </a>
-                </div>
+                <div><p class="journal-kicker">RESEARCH → SYSTEM → WORK</p><h2>记录的价值，在于改变下一次实现</h2><p>只有能够跨项目复用的结论，才进入 Sakura Framework；只有被实际作品验证的能力，才成为作品集证据。</p></div>
+                <div class="bridge-actions"><a class="bridge-card" href="framework.html"><span>02 / SYSTEM</span><strong>Sakura Framework</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="bridge-card" href="game.html"><span>03 / WORK</span><strong>《言铸之剑》</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
             </div>
             <p class="journal-source-note">内容选摘自私有的 Sakura Design Journal；本页只公开经过筛选的摘要，不暴露仓库地址或未整理的工作记录。</p>
         </div>
     </section>
+<!-- journal-content:end -->
 </main>
 
 <footer class="footer">
@@ -149,10 +173,11 @@
             </div>
             <div class="footer-links">
                 <h2>继续浏览</h2>
-                <a href="framework.html">开发框架</a>
-                <a href="portfolio.html">作品集</a>
-                <a href="journal.html">研究记录</a>
-                <a href="contact.html">联系</a>
+                <a href="../pages/portfolio.html">作品</a>
+                <a href="../pages/framework.html">Framework</a>
+                <a href="../pages/journal.html">Journal</a>
+                <a href="../pages/about.html">关于</a>
+                <a href="../pages/contact.html">公开入口</a>
             </div>
             <div class="footer-social">
                 <h2>公开入口</h2>
@@ -169,7 +194,6 @@
     </div>
 </footer>
 
-<script src="../dist/journal.js" type="module"></script>
 <script src="../dist/site.js" type="module"></script>
 </body>
 </html>

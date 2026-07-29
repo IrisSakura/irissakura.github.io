@@ -52,6 +52,19 @@ npm run package:site
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 
+### 研究记录同步
+
+本机有权读取私有 Journal 时，可以检查其**已提交 HEAD**，不会消费未提交日记或草稿：
+
+```bash
+npm run journal:status -- --journal /path/to/sakura-design-journal
+npm run journal:sync -- --journal /path/to/sakura-design-journal
+```
+
+策展白名单位于 `config/journal-curation.json`。当 `journal:status` 报告已提交内容变化时，先审阅新增或变化的稳定 ID，最多选取少量真正影响框架或作品判断的主题，再运行带 `--advance-source` 的同步。同步器只把策展字段写入公开快照，并拒绝本机路径、仓库地址和外部 URL。它不会提交、推送或部署。
+
+夜间检查由能同时访问两个本机仓库的 Codex 本地自动化执行；GitHub Pages CI 只验证和发布已经进入本站仓库的公开快照。
+
 ## 发布流程
 
 `.github/workflows/site-quality-and-pages.yml` 在推送和 PR 时执行构建、测试、浏览器冒烟测试与生成状态检查。`main` 验证通过后，工作流只把 `_site/` 作为 GitHub Pages artifact 发布。

@@ -39,11 +39,11 @@
         </a>
         <div class="nav-menu" id="main-navigation">
             <a href="../index.html" class="nav-link">首页</a>
-            <a href="about.html" class="nav-link">关于</a>
-            <a href="framework.html" class="nav-link">开发框架</a>
-            <a href="portfolio.html" class="nav-link active" aria-current="page">作品集</a>
-            <a href="journal.html" class="nav-link">研究记录</a>
-            <a href="contact.html" class="nav-link">联系</a>
+            <a href="../pages/portfolio.html" class="nav-link active" aria-current="page">作品</a>
+            <a href="../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../pages/journal.html" class="nav-link">Journal</a>
+            <a href="../pages/about.html" class="nav-link">关于</a>
+            <a href="../pages/contact.html" class="nav-link nav-cta">公开入口</a>
         </div>
         <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
             <i class="fas fa-bars" aria-hidden="true"></i>
@@ -52,71 +52,87 @@
 </nav>
 
 <main id="main-content" class="main-content">
-    <div class="portfolio-header">
+    <!-- portfolio-content:start -->
+<div class="portfolio-header">
         <div class="container">
-            <h1>真实项目与证据</h1>
-            <p>每个项目明确展示当前状态、个人职责、可验证成果和已知限制。</p>
+            <p class="section-kicker">WORK BEFORE CLAIMS</p>
+            <h1>真实作品与工程证据</h1>
+            <p>先看做成了什么，再看研究和框架如何支撑这些结果。</p>
         </div>
     </div>
-
     <div class="container">
         <section class="portfolio-journey" aria-labelledby="portfolio-journey-title">
             <div class="journey-heading">
-                <div>
-                    <p class="journey-kicker">FROM LEARNING TO MAKING</p>
-                    <h2 id="portfolio-journey-title">从研究到作品</h2>
-                </div>
-                <a
-                    class="journal-link"
-                    href="journal.html"
-                >
-                    查看学习与设计记录
-                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                </a>
+                <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究 → 范式 → 框架 → 游戏验证</h2></div>
+                <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </div>
-            <p class="journey-intro">Sakura Design Journal 保存学习过程与设计事实；Sakura Framework 将其中可复用的判断沉淀为工程能力；游戏和工具作品再验证这些能力是否真正有效。</p>
+            <p class="journey-intro">展示顺序从游戏开始，因果链仍从研究开始：Journal 保存判断，Framework 沉淀复用能力，《言铸之剑》检验这些能力是否真正服务于玩法。</p>
             <ol class="journey-path">
-                <li>
-                    <span class="journey-index">01</span>
-                    <i class="fas fa-microscope" aria-hidden="true"></i>
-                    <div>
-                        <h3>学习与源码研究</h3>
-                        <p>记录 Godot 源码研究、日常审计和技术判断，保留问题如何被理解的过程。</p>
-                    </div>
-                </li>
-                <li>
-                    <span class="journey-index">02</span>
-                    <i class="fas fa-diagram-project" aria-hidden="true"></i>
-                    <div>
-                        <h3>设计范式提炼</h3>
-                        <p>把机制、循环和系统边界整理为可复查的游戏设计事实，而不是只留下结论。</p>
-                    </div>
-                </li>
-                <li>
-                    <span class="journey-index">03</span>
-                    <i class="fas fa-cubes" aria-hidden="true"></i>
-                    <div>
-                        <h3>框架与作品验证</h3>
-                        <p>将可复用部分沉淀到框架，再通过游戏、工具和交互作品验证实际价值。</p>
-                    </div>
-                </li>
+                <li><span class="journey-index">01</span><h3>研究问题</h3><p>理解引擎机制与游戏设计约束。</p></li>
+                <li><span class="journey-index">02</span><h3>工程抽象</h3><p>只把跨项目复用的结论沉淀为框架。</p></li>
+                <li><span class="journey-index">03</span><h3>作品验证</h3><p>用可玩循环、截图和限制校验价值。</p></li>
             </ol>
         </section>
-
-        <!-- 筛选器 -->
-        <div class="portfolio-filters" aria-label="按作品类型筛选">
-            <button class="filter-btn active" type="button" data-filter="all" aria-pressed="true">全部</button>
-            <button class="filter-btn" type="button" data-filter="research" aria-pressed="false">研究与设计</button>
-            <button class="filter-btn" type="button" data-filter="game" aria-pressed="false">游戏原型</button>
-            <button class="filter-btn" type="button" data-filter="tool" aria-pressed="false">框架与工具</button>
-        </div>
-
-        <!-- 作品网格 -->
-        <div class="portfolio-grid" id="portfolio-grid">
-            <p>正在读取项目事实…</p>
-        </div>
-
+        <section class="portfolio-cases" aria-label="三个真实项目">
+            <article class="portfolio-case portfolio-case-game" id="project-sword-of-words">
+                <div class="portfolio-case-visual"><img src="../assets/images/sword-of-words/combat-room.png" alt="言铸之剑战斗房间：玩家面对两名骷髅敌人，底部显示生命、理智与技能栏"><span class="visual-label">PLAYABLE PROTOTYPE</span></div>
+                <div class="portfolio-case-copy">
+                    <p class="project-status">01 · 完整游戏 · 可玩原型</p>
+                    <h2>言铸之剑</h2>
+                    <p class="portfolio-description">以房间推进、实时动作战斗和构筑成长为核心的 2D Roguelike 原型，技能、潜能、祝福、背包与存档共同形成可运行的局内循环。</p>
+                    <dl class="portfolio-facts">
+                        <div><dt>职责</dt><dd>独立开发 / 系统设计</dd></div>
+                        <div><dt>目标</dt><dd>验证研究结论和框架能力能否支撑一条可反复游玩的真实游戏循环。</dd></div>
+                        <div><dt>证据</dt><dd>实时战斗运行截图；房间分支与潜能构筑；本地模型生成式祝福；Run 快照存档与调试工具</dd></div>
+                        <div><dt>限制</dt><dd>尚未提供公开 Demo；平台、性能与内容量仍以原型验证为主</dd></div>
+                    </dl>
+                    <div class="portfolio-tags"><span class="tag">Unity 2022.3 LTS</span><span class="tag">C#</span><span class="tag">2D Action</span><span class="tag">Roguelike</span><span class="tag">Local LLM</span></div>
+                    <a href="game.html" class="portfolio-link">查看游戏案例<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </article>
+            <article class="portfolio-case portfolio-case-tool" id="project-sakura-framework">
+                <div class="portfolio-case-visual"><div class="framework-proof-visual" aria-label="Framework 生命周期快照">
+        <div><strong>4</strong><span>Supported</span></div>
+        <div><strong>101</strong><span>Preview</span></div>
+        <div><strong>23</strong><span>Experimental</span></div>
+        <p>9 DocsOnly · 3 Frozen</p>
+    </div><span class="visual-label">PUBLIC SNAPSHOT</span></div>
+                <div class="portfolio-case-copy">
+                    <p class="project-status">02 · 框架与工具 · 持续演进</p>
+                    <h2>Sakura Framework</h2>
+                    <p class="portfolio-description">面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。</p>
+                    <dl class="portfolio-facts">
+                        <div><dt>职责</dt><dd>架构与框架开发</dd></div>
+                        <div><dt>目标</dt><dd>让新项目以明确的最小依赖组合进入玩法验证，同时公开区分稳定、预览与实验能力。</dd></div>
+                        <div><dt>证据</dt><dd>140 个 Package 的公开快照；135 个 Catalog Module；4 个 Supported 能力</dd></div>
+                        <div><dt>限制</dt><dd>多数能力仍处于 Preview 或 Experimental；公开站暂未提供完整安装向导</dd></div>
+                    </dl>
+                    <div class="portfolio-tags"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">UPM</span><span class="tag">Modular Architecture</span></div>
+                    <a href="framework.html" class="portfolio-link">查看框架成熟度<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </article>
+            <article class="portfolio-case portfolio-case-research" id="project-sakura-design-journal">
+                <div class="portfolio-case-visual"><div class="journal-proof-visual" aria-label="Journal 精选研究主题">
+      <p>38 个设计主题 · 3 条知识流</p>
+      <div><span>游戏设计范式</span><strong>节奏游戏的音频主时钟与确定性判定</strong></div><div><span>游戏设计范式</span><strong>银河城的能力门控世界图</strong></div><div><span>游戏设计范式</span><strong>沉浸式模拟的系统性世界</strong></div>
+    </div><span class="visual-label">CURATED RESEARCH</span></div>
+                <div class="portfolio-case-copy">
+                    <p class="project-status">03 · 研究与设计 · 持续研究</p>
+                    <h2>Sakura Design Journal</h2>
+                    <p class="portfolio-description">持续积累游戏设计范式、Godot 源码研究与工程审计记录，保存作品背后的问题、证据与设计判断。</p>
+                    <dl class="portfolio-facts">
+                        <div><dt>职责</dt><dd>研究与系统设计</dd></div>
+                        <div><dt>目标</dt><dd>把零散阅读和源码观察整理成能够影响框架与游戏决策的可复查结论。</dd></div>
+                        <div><dt>证据</dt><dd>38 个游戏设计主题概览；3 条知识流；6 个精选研究主题</dd></div>
+                        <div><dt>限制</dt><dd>当前公开内容以精选摘要为主，尚未开放完整研究正文</dd></div>
+                    </dl>
+                    <div class="portfolio-tags"><span class="tag">Game Design</span><span class="tag">Godot Research</span><span class="tag">Architecture</span><span class="tag">Knowledge Base</span></div>
+                    <a href="journal.html" class="portfolio-link">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </article>
+        </section>
     </div>
+<!-- portfolio-content:end -->
 </main>
 
 <!-- 复用页脚 -->
@@ -132,10 +148,11 @@
             </div>
             <div class="footer-links">
                 <h2>继续浏览</h2>
-                <a href="framework.html">开发框架</a>
-                <a href="portfolio.html">作品集</a>
-                <a href="journal.html">研究记录</a>
-                <a href="contact.html">联系</a>
+                <a href="../pages/portfolio.html">作品</a>
+                <a href="../pages/framework.html">Framework</a>
+                <a href="../pages/journal.html">Journal</a>
+                <a href="../pages/about.html">关于</a>
+                <a href="../pages/contact.html">公开入口</a>
             </div>
             <div class="footer-social">
                 <h2>公开入口</h2>
@@ -152,7 +169,6 @@
     </div>
 </footer>
 
-<script src="../dist/portfolio.js" type="module"></script>
 <script src="../dist/site.js" type="module"></script>
 </body>
 </html>

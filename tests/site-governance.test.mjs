@@ -10,8 +10,8 @@ async function readText(path) {
 
 test('site configuration exposes only verified public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
-  assert.equal(site.positioning, 'Unity 游戏系统与框架开发者');
-  assert.equal(site.tagline, '研究 · 框架 · 游戏');
+  assert.equal(site.positioning, '可验证的 Unity 游戏系统开发者');
+  assert.equal(site.tagline, '研究 · 框架 · 游戏验证');
   assert.deepEqual(site.socials.map((social) => social.id), ['github', 'bilibili']);
   for (const social of site.socials) assert.match(social.url, /^https:\/\//);
 });
@@ -20,9 +20,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
   const pages = [
     'index.html',
     '404.html',
-    ...(await readdir(new URL('../pages/', import.meta.url)))
-      .filter((file) => file.endsWith('.html'))
-      .map((file) => `pages/${file}`)
+    ...(await listHtmlFiles(new URL('../pages/', import.meta.url), 'pages'))
   ];
 
   for (const page of pages) {
@@ -49,7 +47,6 @@ test('placeholder blog, simulated form and unsupported template claims are absen
     await readText('pages/about.html'),
     await readText('pages/blog.html'),
     await readText('pages/contact.html'),
-    await readText('src/main.ts'),
     await readText('src/site.ts')
   ].join('\n');
 
@@ -68,6 +65,19 @@ test('placeholder blog, simulated form and unsupported template claims are absen
     assert.ok(!publicFiles.includes(forbidden), `unsupported content remains: ${forbidden}`);
   }
 });
+
+async function listHtmlFiles(directory, prefix) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      files.push(...await listHtmlFiles(new URL(`${entry.name}/`, directory), `${prefix}/${entry.name}`));
+    } else if (entry.name.endsWith('.html')) {
+      files.push(`${prefix}/${entry.name}`);
+    }
+  }
+  return files;
+}
 
 test('repository metadata and publishing policy are explicit', async () => {
   const packageJson = JSON.parse(await readText('package.json'));
@@ -89,6 +99,7 @@ test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
   const css = await readText('style/main.css');
   const secondaryText = readCssHexVariable(css, 'secondary-text-color');
   const mutedText = readCssHexVariable(css, 'muted-text-color');
+  const grayText = readCssHexVariable(css, 'gray-color');
 
   for (const background of ['#29173d', '#2d1b41', '#1e1e1e']) {
     assert.ok(
@@ -97,6 +108,7 @@ test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
     );
   }
   assert.ok(contrastRatio(mutedText, '#040404') >= 4.5);
+  assert.ok(contrastRatio(grayText, '#121212') >= 4.5);
 
   assert.match(css, /\.tag\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);
   assert.match(css, /\.project-status\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "65436576c05b6410d8d4480002ddf9e6dcaf8674",
+  "updatedAt": "2026-07-29",
+  "supportedPackages": [
+    {
+      "id": "core",
+      "displayName": "Core",
+      "packageName": "com.unitygame.framework.core",
+      "role": "低依赖基础契约与生命周期底座"
+    },
+    {
+      "id": "event",
+      "displayName": "Event",
+      "packageName": "com.unitygame.framework.event",
+      "role": "跨系统事件发布与订阅"
+    },
+    {
+      "id": "gamehelper",
+      "displayName": "GameHelper",
+      "packageName": "com.unitygame.framework.gamehelper",
+      "role": "游戏启动与通用运行辅助"
+    },
+    {
+      "id": "pooling",
+      "displayName": "Pooling",
+      "packageName": "com.unitygame.framework.pooling",
+      "role": "对象复用与生命周期回收"
+    }
+  ],
+  "stableRoutes": [
+    {
+      "id": "core-only",
+      "label": "Core Only",
+      "packages": ["core"],
+      "purpose": "先验证 UPM 解析、基础契约和脚本编译。"
+    },
+    {
+      "id": "bootstrap-lite",
+      "label": "Bootstrap Lite",
+      "packages": ["core", "event", "gamehelper", "pooling"],
+      "purpose": "在 Core 上增加事件、对象池与游戏运行辅助，形成最小稳定组合。"
+    }
+  ],
+  "gameAdoption": [
+    {
+      "gameSystem": "技能、潜能与祝福",
+      "frameworkPackages": ["GAS", "Event"],
+      "evidence": "游戏项目依赖清单与战斗、潜能、祝福源码引用"
+    },
+    {
+      "gameSystem": "HUD、房间与成长界面",
+      "frameworkPackages": ["UI", "Event", "Asset"],
+      "evidence": "界面控制器、房间选择和资源展示源码引用"
+    },
+    {
+      "gameSystem": "Run 存档",
+      "frameworkPackages": ["Save"],
+      "evidence": "项目存档测试与 Framework.Save 类型引用"
+    },
+    {
+      "gameSystem": "生成式祝福",
+      "frameworkPackages": ["LLM", "Dialogue", "GAS"],
+      "evidence": "本地模型适配、结构化效果映射与能力执行引用"
+    }
+  ],
+  "disclaimer": "采用映射只证明项目中的实际依赖与使用，不改变任何包的生命周期等级。"
+}

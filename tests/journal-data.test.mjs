@@ -17,6 +17,8 @@ test('journal snapshot exposes a small curated public contract', async () => {
   assert.equal(data.summary.knowledgeStreamCount, 3);
   assert.equal(data.streams.length, 3);
   assert.ok(data.featuredNotes.length >= 6);
+  assert.match(data.sourceSnapshot.catalogDigest, /^[a-f0-9]{64}$/);
+  assert.equal(data.sourceSnapshot.curatedCatalogCount, 4);
 
   for (const note of data.featuredNotes) {
     assert.deepEqual(
@@ -32,26 +34,27 @@ test('journal snapshot exposes a small curated public contract', async () => {
   }
 });
 
-test('journal page binds every curated view and preserves the private boundary', async () => {
+test('journal page statically renders every curated view and preserves the private boundary', async () => {
   const html = await readText('pages/journal.html');
-  const source = await readText('src/journal.ts');
-  const publicFiles = [html, source, await readText('data/journal.json')].join('\n');
+  const data = JSON.parse(await readText('data/journal.json'));
+  const details = await Promise.all(data.featuredNotes.map((note) => readText(`pages/journal/${note.id}.html`)));
+  const publicFiles = [html, ...details, JSON.stringify(data)].join('\n');
 
-  for (const id of [
-    'journal-description',
-    'journal-design-count',
-    'journal-stream-count',
-    'journal-streams',
-    'journal-notes',
-    'featured-notes'
-  ]) {
-    assert.ok(html.includes(`id="${id}"`), `missing journal target ${id}`);
+  assert.ok(html.includes('id="featured-notes"'));
+  assert.ok(!html.includes('正在读取'));
+  for (const stream of data.streams) {
+    assert.ok(html.includes(`data-stream="${stream.id}"`), `missing journal stream ${stream.id}`);
   }
-
-  for (const behavior of ['loadJournalData', 'renderSummary', 'renderStreams', 'renderNotes', 'note-details']) {
-    assert.ok(source.includes(behavior), `missing journal behavior ${behavior}`);
+  for (const note of data.featuredNotes) {
+    assert.ok(html.includes(`journal/${note.id}.html`), `missing journal detail link ${note.id}`);
+    const detail = details.find((page) => page.includes(`<h1>${note.title}</h1>`));
+    assert.ok(detail, `missing generated detail page ${note.id}`);
+    for (const heading of ['问题背景', '研究方法', '核心发现', '对框架或游戏的影响', '更新时间']) {
+      assert.ok(detail.includes(heading), `${note.id} missing ${heading}`);
+    }
   }
 
   assert.ok(!publicFiles.includes('154.37.215.57'));
   assert.ok(!publicFiles.includes('sakura-design-journal.git'));
+  assert.ok(!publicFiles.includes('/Users/'));
 });

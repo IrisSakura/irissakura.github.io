@@ -6,9 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const htmlFiles = [
   'index.html',
   '404.html',
-  ...(await readdir(path.join(root, 'pages')))
-    .filter((file) => file.endsWith('.html'))
-    .map((file) => `pages/${file}`)
+  ...(await listHtmlFiles(path.join(root, 'pages'), 'pages'))
 ].sort();
 const errors = [];
 const forbiddenClaims = [
@@ -62,7 +60,7 @@ for (const relativeFile of htmlFiles) {
   }
 }
 
-for (const required of ['robots.txt', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'data/site.json', 'data/projects.json']) {
+for (const required of ['robots.txt', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json']) {
   try {
     await access(path.join(root, required));
   } catch {
@@ -87,4 +85,17 @@ if (errors.length > 0) {
 function checkCount(file, html, pattern, expected, label) {
   const count = html.match(pattern)?.length ?? 0;
   if (count !== expected) errors.push(`${file}: expected ${expected} ${label}, found ${count}`);
+}
+
+async function listHtmlFiles(directory, prefix) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      files.push(...await listHtmlFiles(path.join(directory, entry.name), `${prefix}/${entry.name}`));
+    } else if (entry.name.endsWith('.html')) {
+      files.push(`${prefix}/${entry.name}`);
+    }
+  }
+  return files;
 }

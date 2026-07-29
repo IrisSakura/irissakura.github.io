@@ -1,8 +1,7 @@
 /* 联系页面专用样式 */
 
 .contact-header {
-    background: linear-gradient(to right, rgba(106, 17, 203, 0.9), rgba(255, 64, 129, 0.9)),
-    url('../assets/images/contact-bg.png') center/cover no-repeat;
+    background: #10131a;
     padding: 5rem 0;
     text-align: center;
     margin-bottom: 3rem;
@@ -330,4 +329,153 @@
 .faq-answer p {
     color: var(--gray-color);
     line-height: 1.7;
+}
+
+/* Public routes page */
+.contact-header {
+    padding: 6.5rem 0 5rem;
+    background:
+        radial-gradient(circle at 78% 18%, rgba(84, 214, 197, 0.11), transparent 24%),
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        #10131a;
+    background-size: auto, 42px 42px, 42px 42px, auto;
+    text-align: left;
+}
+
+.contact-header h1 {
+    max-width: 820px;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    letter-spacing: -0.045em;
+}
+
+.contact-header p:not(.section-kicker) {
+    max-width: 700px;
+    margin: 0;
+    color: rgba(248, 249, 250, 0.8);
+}
+
+.public-routes,
+.discussion-scope,
+.route-boundary {
+    padding: 6rem 0;
+}
+
+.public-route-list {
+    display: grid;
+    gap: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.public-route-card {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 2rem;
+    background: #11161f;
+}
+
+.public-route-card:hover {
+    background: #151d27;
+}
+
+.public-route-card > i:first-child {
+    color: #8ce7dc;
+    font-size: 2rem;
+}
+
+.public-route-card > i:last-child {
+    color: var(--muted-text-color);
+}
+
+.public-route-card span {
+    color: var(--accent-color);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.public-route-card h2 {
+    margin: 0.2rem 0;
+    text-align: left;
+    font-size: 1.65rem;
+}
+
+.public-route-card p {
+    margin: 0;
+    color: var(--muted-text-color);
+}
+
+.discussion-scope {
+    background: #0d1119;
+}
+
+.discussion-grid,
+.route-boundary-inner {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(3rem, 8vw, 7rem);
+}
+
+.discussion-grid h2,
+.route-boundary h2 {
+    text-align: left;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.discussion-grid ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.discussion-grid li {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 1.5rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.discussion-grid strong {
+    color: #8ce7dc;
+}
+
+.discussion-grid span,
+.route-boundary-inner > div:last-child {
+    color: var(--muted-text-color);
+}
+
+@media (max-width: 760px) {
+    .public-routes,
+    .discussion-scope,
+    .route-boundary {
+        padding: 4rem 0;
+    }
+
+    .discussion-grid,
+    .route-boundary-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .discussion-grid li {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .public-route-card {
+        grid-template-columns: 44px minmax(0, 1fr);
+        padding: 1.35rem;
+    }
+
+    .public-route-card > i:last-child {
+        display: none;
+    }
 }

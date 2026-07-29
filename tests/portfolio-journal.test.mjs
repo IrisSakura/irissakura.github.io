@@ -12,11 +12,11 @@ test('portfolio explains the path from research to finished work', async () => {
   const html = await readText('pages/portfolio.html');
 
   for (const fragment of [
-    '从研究到作品',
-    '学习与源码研究',
-    '设计范式提炼',
-    '框架与作品验证',
-    'data-filter="research"',
+    '研究 → 范式 → 框架 → 游戏验证',
+    '研究问题',
+    '工程抽象',
+    '作品验证',
+    'portfolio-case-game',
     'Sakura Design Journal'
   ]) {
     assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
@@ -25,10 +25,8 @@ test('portfolio explains the path from research to finished work', async () => {
 
 test('portfolio data keeps research distinct from finished work', async () => {
   const data = JSON.parse(await readText('data/projects.json'));
-  const source = await readText('src/portfolio.ts');
   const titles = data.projects.map((project) => project.title);
 
-  assert.ok(source.includes("'research' | 'game'"), 'research should be a first-class portfolio category');
   assert.deepEqual(titles, ['Sakura Design Journal', 'Sakura Framework', '言铸之剑']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
@@ -60,27 +58,22 @@ test('public portfolio does not expose the private journal origin', async () => 
   assert.ok(!data.includes('154.37.215.57'));
 });
 
-test('portfolio exposes only categories backed by real projects', async () => {
+test('portfolio renders exactly three fixed evidence-led cases with the game first', async () => {
   const html = await readText('pages/portfolio.html');
-  const source = await readText('src/portfolio.ts');
-
-  for (const filter of ['all', 'research', 'game', 'tool']) {
-    assert.ok(html.includes(`data-filter="${filter}"`), `missing real category: ${filter}`);
-  }
-
-  for (const emptyCategory of ['art', 'music']) {
-    assert.ok(!html.includes(`data-filter="${emptyCategory}"`), `empty category should be removed: ${emptyCategory}`);
-  }
-
-  assert.ok(!html.includes('load-more-btn'));
-  assert.ok(!source.includes('loadMoreBtn'));
+  assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 3);
+  assert.ok(!html.includes('portfolio-filters'));
+  assert.ok(!html.includes('data-filter='));
+  assert.ok(html.indexOf('project-sword-of-words') < html.indexOf('project-sakura-framework'));
+  assert.ok(html.indexOf('project-sakura-framework') < html.indexOf('project-sakura-design-journal'));
+  assert.ok(html.includes('framework-proof-visual'));
+  assert.ok(html.includes('journal-proof-visual'));
 });
 
-test('about page describes only the verified project chain', async () => {
+test('about page explains motivation, current focus and working preferences without unsupported claims', async () => {
   const html = await readText('pages/about.html');
 
-  for (const realProject of ['Sakura Design Journal', 'Sakura Framework', '言铸之剑']) {
-    assert.ok(html.includes(realProject), `missing verified project: ${realProject}`);
+  for (const fragment of ['WHY SAKURA FRAMEWORK', '当前主要开发方向', '我偏好的项目与工作方式', '交流范围', '言铸之剑']) {
+    assert.ok(html.includes(fragment), `missing about-page context: ${fragment}`);
   }
 
   for (const unsupportedClaim of ['像素地牢', '1000次下载', '第一个完整作品发布']) {

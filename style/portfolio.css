@@ -1,8 +1,7 @@
 /* 作品集页面专用样式 */
 
 .portfolio-header {
-    background: linear-gradient(to right, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9)),
-    url('../assets/images/portfolio-bg.png') center/cover no-repeat;
+    background: #10131a;
     padding: 6rem 0;
     text-align: center;
     margin-bottom: 3rem;
@@ -157,35 +156,6 @@
     color: rgba(255, 255, 255, 0.62);
     font-size: 0.92rem;
     line-height: 1.65;
-}
-
-.portfolio-filters {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: var(--border-radius);
-}
-
-.filter-btn {
-    padding: 0.7rem 1.5rem;
-    background: transparent;
-    border: 2px solid var(--gray-color);
-    color: var(--gray-color);
-    border-radius: 30px;
-    font-family: var(--font-heading);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.filter-btn:hover, .filter-btn.active {
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    border-color: transparent;
-    color: white;
 }
 
 .portfolio-grid {
@@ -361,5 +331,247 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 1rem;
+    }
+}
+
+/* Evidence-led three-case portfolio */
+.portfolio-header {
+    margin-bottom: 0;
+    padding: 6.5rem 0 5rem;
+    background:
+        linear-gradient(90deg, rgba(7, 13, 28, 0.96), rgba(7, 13, 28, 0.64)),
+        url('../assets/images/sword-of-words/combat-room.png') center 42% / cover no-repeat;
+    text-align: left;
+}
+
+.portfolio-header h1 {
+    max-width: 760px;
+    font-size: clamp(2.8rem, 7vw, 5.4rem);
+    letter-spacing: -0.045em;
+}
+
+.portfolio-header p:not(.section-kicker) {
+    max-width: 660px;
+    margin: 0;
+}
+
+.portfolio-journey {
+    margin: 4.5rem 0 6rem;
+    border-radius: 4px;
+    background:
+        linear-gradient(90deg, rgba(84, 214, 197, 0.06), transparent 55%),
+        #0e131b;
+}
+
+.journey-kicker,
+.journey-index {
+    font-family: var(--font-display);
+}
+
+.journey-path li {
+    min-height: 160px;
+    border-radius: 2px;
+}
+
+.portfolio-cases {
+    display: grid;
+    gap: 0;
+    margin-bottom: 6rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.portfolio-case {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    align-items: center;
+    padding: 4.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.portfolio-case:nth-child(even) .portfolio-case-visual {
+    order: 2;
+}
+
+.portfolio-case-visual {
+    position: relative;
+    min-height: 380px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #0b111b;
+}
+
+.portfolio-case-visual > img {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    object-fit: cover;
+}
+
+.visual-label {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(5, 11, 23, 0.9);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.portfolio-case-copy h2 {
+    margin: 0.7rem 0 1.1rem;
+    text-align: left;
+    font-size: clamp(2rem, 4vw, 3.35rem);
+    letter-spacing: -0.035em;
+}
+
+.portfolio-description {
+    color: rgba(248, 249, 250, 0.8);
+    font-size: 1.05rem;
+    line-height: 1.85;
+}
+
+.portfolio-facts {
+    margin: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.portfolio-facts > div {
+    display: grid;
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.portfolio-facts dt {
+    color: #8ce7dc;
+    font-weight: 700;
+}
+
+.portfolio-facts dd {
+    margin: 0;
+    color: var(--muted-text-color);
+}
+
+.portfolio-link {
+    margin-top: 1.5rem;
+    padding: 0;
+    color: #8ce7dc;
+    font-weight: 700;
+}
+
+.framework-proof-visual {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    min-height: 380px;
+    padding: 2.5rem;
+    align-content: center;
+    background:
+        linear-gradient(rgba(84, 214, 197, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(84, 214, 197, 0.035) 1px, transparent 1px),
+        #0c151b;
+    background-size: 36px 36px;
+}
+
+.framework-proof-visual > div {
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.2rem;
+    border: 1px solid rgba(84, 214, 197, 0.22);
+    background: rgba(5, 13, 18, 0.88);
+}
+
+.framework-proof-visual strong {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.framework-proof-visual span,
+.framework-proof-visual p {
+    color: #8ce7dc;
+}
+
+.framework-proof-visual p {
+    grid-column: 1 / -1;
+    margin: 1.25rem 0 0;
+    font-family: var(--font-display);
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+}
+
+.journal-proof-visual {
+    display: grid;
+    gap: 0.85rem;
+    min-height: 380px;
+    padding: 2.25rem;
+    align-content: center;
+    background:
+        linear-gradient(120deg, rgba(255, 64, 129, 0.1), transparent 52%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 34px),
+        #16131b;
+}
+
+.journal-proof-visual > p {
+    color: var(--accent-color);
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+}
+
+.journal-proof-visual > div {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.95rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.journal-proof-visual span {
+    color: var(--muted-text-color);
+    font-size: 0.78rem;
+}
+
+.journal-proof-visual strong {
+    font-size: 1.05rem;
+}
+
+@media (max-width: 900px) {
+    .portfolio-case {
+        grid-template-columns: 1fr;
+    }
+
+    .portfolio-case:nth-child(even) .portfolio-case-visual {
+        order: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .portfolio-journey {
+        margin: 3rem 0 4rem;
+    }
+
+    .portfolio-case {
+        padding: 3rem 0;
+    }
+
+    .portfolio-case-visual,
+    .portfolio-case-visual > img,
+    .framework-proof-visual,
+    .journal-proof-visual {
+        min-height: 280px;
+    }
+
+    .framework-proof-visual {
+        grid-template-columns: 1fr;
+        padding: 1.25rem;
+    }
+
+    .framework-proof-visual p {
+        grid-column: 1;
     }
 }
