@@ -84,3 +84,42 @@ test('repository metadata and publishing policy are explicit', async () => {
   assert.ok(workflow.includes('npm run test:smoke'));
   assert.ok(workflow.includes('actions/deploy-pages@v4'));
 });
+
+test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
+  const css = await readText('style/main.css');
+  const secondaryText = readCssHexVariable(css, 'secondary-text-color');
+  const mutedText = readCssHexVariable(css, 'muted-text-color');
+
+  for (const background of ['#29173d', '#2d1b41', '#1e1e1e']) {
+    assert.ok(
+      contrastRatio(secondaryText, background) >= 4.5,
+      `${secondaryText} must reach 4.5:1 on ${background}`
+    );
+  }
+  assert.ok(contrastRatio(mutedText, '#040404') >= 4.5);
+
+  assert.match(css, /\.tag\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);
+  assert.match(css, /\.project-status\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);
+  assert.match(css, /\.footer-description\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
+  assert.match(css, /\.footer-links a\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
+  assert.match(css, /\.footer-bottom\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
+});
+
+function readCssHexVariable(css, name) {
+  const value = css.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1];
+  assert.ok(value, `missing --${name}`);
+  return value;
+}
+
+function contrastRatio(foreground, background) {
+  const luminance = (hex) => {
+    const channels = hex.slice(1).match(/.{2}/g).map((channel) => {
+      const value = Number.parseInt(channel, 16) / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  };
+  const lighter = Math.max(luminance(foreground), luminance(background));
+  const darker = Math.min(luminance(foreground), luminance(background));
+  return (lighter + 0.05) / (darker + 0.05);
+}
