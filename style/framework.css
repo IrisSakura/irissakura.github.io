@@ -73,7 +73,8 @@
 .framework-overview,
 .module-section,
 .principles-section,
-.lifecycle-section {
+.lifecycle-section,
+.maturity-section {
     padding: 5rem 0;
 }
 
@@ -116,6 +117,49 @@
 .overview-stats {
     display: grid;
     gap: 1rem;
+}
+
+.maturity-section {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.maturity-summary,
+.maturity-policy {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.maturity-summary {
+    margin: 2rem 0;
+}
+
+.maturity-summary article,
+.maturity-policy > div {
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.maturity-summary strong {
+    display: block;
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+}
+
+.maturity-summary span,
+.maturity-policy h3 {
+    color: white;
+    font-weight: 700;
+}
+
+.maturity-summary p,
+.maturity-policy p,
+.maturity-policy li {
+    color: var(--gray-color);
+    line-height: 1.7;
 }
 
 .stat-item {
@@ -742,6 +786,11 @@
 }
 
 @media (max-width: 992px) {
+    .maturity-summary,
+    .maturity-policy {
+        grid-template-columns: 1fr;
+    }
+
     .framework-hero-grid,
     .overview-grid {
         grid-template-columns: 1fr;

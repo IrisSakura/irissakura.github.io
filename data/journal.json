@@ -35,42 +35,72 @@
       "title": "节奏游戏的音频主时钟与确定性判定",
       "description": "聚焦音频主时钟、输入时间映射、确定性判定与表现层同步边界。",
       "tags": ["Audio", "Rhythm", "Timing"],
-      "track": "游戏设计范式"
+      "track": "游戏设计范式",
+      "question": "节奏判定应以哪一个时钟为事实源，才能避免帧率波动改变结果？",
+      "method": "比较音频时间、游戏帧时间与输入时间戳的职责，拆分判定事实和视觉反馈。",
+      "finding": "音频主时钟负责确定性判定，表现层只消费结果并平滑同步。",
+      "impact": "约束 Rhythm 类框架能力的时间源、判定接口与测试方式。",
+      "updatedAt": "2026-07-28"
     },
     {
       "id": "metroidvania",
       "title": "银河城的能力门控世界图",
       "description": "研究能力获取如何重写世界可达性，并让旧空间在回访中获得新意义。",
       "tags": ["World Graph", "Ability Gating", "Progression"],
-      "track": "游戏设计范式"
+      "track": "游戏设计范式",
+      "question": "能力成长如何同时改变战斗表达与世界可达性？",
+      "method": "把区域、连接和能力门建模为图，比较获得能力前后的可达集合。",
+      "finding": "有意义的能力门应让旧空间获得新路线，而不只是延迟一扇门的开启。",
+      "impact": "为关卡运行时与进度系统保留能力条件和世界图的分离边界。",
+      "updatedAt": "2026-07-28"
     },
     {
       "id": "immersive-sim",
       "title": "沉浸式模拟的系统性世界",
       "description": "以统一世界规则、能力组合和多入口空间支持玩家自主的问题求解。",
       "tags": ["Systemic", "Emergence", "Level Design"],
-      "track": "游戏设计范式"
+      "track": "游戏设计范式",
+      "question": "怎样让同一目标支持多种由玩家发现的解决路径？",
+      "method": "从统一世界规则、能力组合和空间入口三个维度比较系统性交互。",
+      "finding": "涌现依赖可组合规则和可读反馈，不能只靠大量脚本化分支模拟自由。",
+      "impact": "影响框架中交互规则、感知事实与关卡脚本之间的职责划分。",
+      "updatedAt": "2026-07-28"
     },
     {
       "id": "colony-sim",
       "title": "聚落生存中的个体代理与工作调度",
       "description": "分析个体需求、工作分配、资源网络和局部故障如何形成聚落级涌现。",
       "tags": ["Simulation", "Scheduling", "Survival"],
-      "track": "游戏设计范式"
+      "track": "游戏设计范式",
+      "question": "个体需求与全局工作如何在没有中央脚本的情况下形成稳定聚落？",
+      "method": "拆分代理需求、工作声明、调度优先级与资源网络，观察局部故障传播。",
+      "finding": "调度器应协调事实而不是拥有所有领域状态，故障也必须能被玩家追踪。",
+      "impact": "约束模拟与调度模块的所有权、诊断和可替换策略。",
+      "updatedAt": "2026-07-28"
     },
     {
       "id": "godot-runtime",
       "title": "Godot 主循环与 SceneTree 调度",
       "description": "沿引擎启动和单帧迭代追踪生命周期、消息队列、物理与导航服务的协作边界。",
       "tags": ["Godot", "Runtime", "Architecture"],
-      "track": "源码研究"
+      "track": "源码研究",
+      "question": "SceneTree 如何在一帧中协调节点生命周期、消息队列和引擎服务？",
+      "method": "沿引擎启动与单帧迭代的调用路径阅读源码，记录每一阶段的所有者。",
+      "finding": "调度边界比单个 API 更值得复用：状态所有权、阶段顺序和延迟队列必须分开。",
+      "impact": "用于审视 Sakura Framework 的生命周期与更新调度设计，而不是复制 Godot API。",
+      "updatedAt": "2026-07-28"
     },
     {
       "id": "godot-resource",
       "title": "ResourceLoader 线程化加载与完成边界",
       "description": "研究加载任务、等待关系、缓存和主线程完成回调如何共同保证资源生命周期。",
       "tags": ["Godot", "Resource", "Concurrency"],
-      "track": "源码研究"
+      "track": "源码研究",
+      "question": "线程化资源加载如何保证等待、缓存和完成回调不会破坏生命周期？",
+      "method": "追踪加载任务、依赖等待、缓存命中和主线程完成路径，区分后台工作与主线程提交。",
+      "finding": "完成不是后台任务结束，而是依赖、缓存和主线程可见状态共同收敛。",
+      "impact": "影响框架异步资源服务的完成语义、取消边界和主线程交付约束。",
+      "updatedAt": "2026-07-28"
     }
   ]
 }

@@ -1,3 +1,5 @@
+export {};
+
 interface FrameworkSummary {
     packageCount: number;
     catalogModuleCount: number;
@@ -202,8 +204,6 @@ const LIFECYCLE_PRESENTATIONS: Record<string, LifecyclePresentation> = {
 const LIFECYCLE_ORDER = ['Supported', 'Preview', 'Experimental', 'Research', 'DocsOnly', 'Frozen', 'Deprecated'];
 
 class FrameworkPage {
-    private mobileToggle: HTMLElement | null = null;
-    private navMenu: HTMLElement | null = null;
     private modules: FrameworkModule[] = FALLBACK_MODULES;
     private layers: FrameworkLayer[] = [];
     private lifecycleCounts: Record<string, number> = {};
@@ -223,9 +223,6 @@ class FrameworkPage {
     }
 
     private init(): void {
-        this.mobileToggle = document.querySelector('.mobile-toggle');
-        this.navMenu = document.querySelector('.nav-menu');
-        this.setCurrentYear();
         this.setupEventListeners();
         this.applyModuleHash();
         this.renderFeaturedModules();
@@ -593,22 +590,7 @@ class FrameworkPage {
         if (element) element.textContent = value;
     }
 
-    private setCurrentYear(): void {
-        const currentYearElement = document.getElementById('current-year');
-        if (currentYearElement) currentYearElement.textContent = new Date().getFullYear().toString();
-    }
-
     private setupEventListeners(): void {
-        if (this.mobileToggle && this.navMenu) {
-            this.mobileToggle.addEventListener('click', () => this.navMenu?.classList.toggle('active'));
-        }
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) this.navMenu?.classList.remove('active');
-            });
-        });
-
         document.getElementById('framework-module-search')?.addEventListener('input', event => {
             const input = event.currentTarget as HTMLInputElement;
             this.moduleQuery = input.value.trim().toLocaleLowerCase('zh-CN');

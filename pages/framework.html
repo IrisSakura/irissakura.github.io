@@ -3,34 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自研游戏开发框架 | 全栈游戏开发者</title>
+    <!-- site-meta:start -->
+    <meta name="description" content="查看 Sakura Framework 的真实规模、生命周期成熟度、模块分层与公开快照，区分 Supported、Preview 和 Experimental 能力。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/framework.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Sakura Framework | 成熟度透明的 Unity 模块化框架">
+    <meta property="og:description" content="查看 Sakura Framework 的真实规模、生命周期成熟度、模块分层与公开快照，区分 Supported、Preview 和 Experimental 能力。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/framework.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/images/portfolio-bg.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sakura Framework | 成熟度透明的 Unity 模块化框架">
+    <meta name="twitter:description" content="查看 Sakura Framework 的真实规模、生命周期成熟度、模块分层与公开快照，区分 Supported、Preview 和 Experimental 能力。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/portfolio-bg.png">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#6a11cb">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../site.webmanifest">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"Sakura Framework | 成熟度透明的 Unity 模块化框架","description":"查看 Sakura Framework 的真实规模、生命周期成熟度、模块分层与公开快照，区分 Supported、Preview 和 Experimental 能力。","url":"https://irissakura.github.io/pages/framework.html","creator":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"programmingLanguage":"C#","runtimePlatform":"Unity"}</script>
+    <!-- site-meta:end -->
+    <title>Sakura Framework | 成熟度透明的 Unity 模块化框架</title>
     <link rel="stylesheet" href="../style/main.css">
     <link rel="stylesheet" href="../style/framework.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar">
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
     <div class="container nav-container">
-        <a href="../index.html" class="logo">
-            <i class="fas fa-gamepad"></i>
-            <span>GameDev</span>Portfolio
+        <a href="../index.html" class="logo" aria-label="IrisSakura 首页">
+            <i class="fas fa-gamepad" aria-hidden="true"></i>
+            <span>Iris</span>Sakura
         </a>
-        <div class="nav-menu">
-            <a href="../index.html" class="nav-link" data-page="home">首页</a>
-            <a href="about.html" class="nav-link" data-page="about">个人简介</a>
-            <a href="framework.html" class="nav-link active" data-page="framework">开发框架</a>
-            <a href="portfolio.html" class="nav-link" data-page="portfolio">作品集</a>
-            <a href="blog.html" class="nav-link" data-page="blog">博客</a>
-            <a href="contact.html" class="nav-link" data-page="contact">联系我</a>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../index.html" class="nav-link">首页</a>
+            <a href="about.html" class="nav-link">关于</a>
+            <a href="framework.html" class="nav-link active" aria-current="page">开发框架</a>
+            <a href="portfolio.html" class="nav-link">作品集</a>
+            <a href="journal.html" class="nav-link">研究记录</a>
+            <a href="contact.html" class="nav-link">联系</a>
         </div>
-        <button class="mobile-toggle" aria-label="切换导航菜单">
-            <i class="fas fa-bars"></i>
+        <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+            <i class="fas fa-bars" aria-hidden="true"></i>
         </button>
     </div>
 </nav>
 
-<main class="main-content">
+<main id="main-content" class="main-content">
     <section class="framework-hero">
         <div class="container framework-hero-grid">
             <div class="framework-hero-copy">
@@ -55,21 +75,56 @@
         <div class="container overview-grid">
             <div>
                 <h2 class="section-title">框架定位</h2>
-                <p>这是一个服务于长期游戏开发的 Unity 通用框架，不绑定单一游戏类型。它把配置导入、资源加载、事件通信、能力系统、AI 行为、房间运行时等基础设施拆成清晰模块，用于支撑原型、独立游戏和可扩展项目。</p>
-                <p id="framework-data-status" aria-live="polite">当前展示仓库内置快照；自动同步启用后将由框架清单持续更新。</p>
+                <p>这是一个服务于长期游戏开发的 Unity 模块化框架。规模只说明研究和覆盖范围，不代表所有能力都适合生产采用；生命周期才是当前成熟度事实。</p>
+                <p id="framework-data-status" aria-live="polite">当前展示由框架清单生成的公开快照；加载失败时仍保留同一份构建时回退。</p>
             </div>
             <div class="overview-stats">
                 <div class="stat-item">
-                    <strong id="framework-package-count">135</strong>
+                    <strong id="framework-package-count">140</strong>
                     <span>UPM 包</span>
                 </div>
                 <div class="stat-item">
-                    <strong id="framework-module-count">131</strong>
+                    <strong id="framework-module-count">135</strong>
                     <span>Catalog 模块</span>
                 </div>
                 <div class="stat-item">
-                    <strong id="framework-profile-count">9</strong>
+                    <strong id="framework-profile-count">10</strong>
                     <span>支持 Profile</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="maturity-section" aria-labelledby="maturity-title">
+        <div class="container">
+            <div class="section-heading-row">
+                <div>
+                    <p class="section-kicker">MATURITY BEFORE SCALE</p>
+                    <h2 class="section-title" id="maturity-title">先看成熟度，再看规模</h2>
+                </div>
+                <p class="section-intro">140 个 Package 中只有 4 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
+            </div>
+            <div class="maturity-summary" aria-label="框架成熟度摘要">
+                <article><strong>4</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
+                <article><strong>101</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
+                <article><strong>23</strong><span>Experimental</span><p>用于验证设计假设，不应默认进入生产依赖。</p></article>
+            </div>
+            <div class="maturity-policy">
+                <div>
+                    <h3>升级到 Supported 的公开条件</h3>
+                    <ul>
+                        <li>职责、依赖闭包和兼容边界明确；</li>
+                        <li>具备对应测试、文档和真实采用证据；</li>
+                        <li>破坏性变更、迁移与维护承诺可说明。</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>新项目如何采用</h3>
+                    <p>先从权威 Catalog 中选择 Supported 能力，再按实际需要增加 Preview。当前网站快照没有公开每个模块的完整生命周期映射，因此不在这里凭空给出“最小稳定组合”。</p>
+                </div>
+                <div>
+                    <h3>与《言铸之剑》的关系</h3>
+                    <p>游戏页展示的是已运行的系统事实；在公开采用清单完成前，不把同名系统自动宣称为 Sakura Framework 模块的直接使用证据。</p>
                 </div>
             </div>
         </div>
@@ -187,8 +242,8 @@
                 </div>
             </div>
             <div class="framework-source-note">
-                <p>来源提交：<code id="framework-source-commit">04ff904</code></p>
-                <p>数据更新时间：<time id="framework-generated-at" datetime="2026-07-15T00:00:00.000Z">2026-07-15</time></p>
+                <p>来源提交：<code id="framework-source-commit">daf0e18</code></p>
+                <p>数据更新时间：<time id="framework-generated-at" datetime="2026-07-28T16:39:55+08:00">2026-07-28</time></p>
             </div>
         </div>
     </section>
@@ -198,31 +253,35 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-info">
-                <a href="../index.html" class="footer-logo"><span>GameDev</span>Portfolio</a>
-                <p class="footer-description">全栈游戏开发者，致力于创造独特而沉浸的游戏体验。</p>
+                <a href="../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
             </div>
             <div class="footer-links">
-                <h4>快速链接</h4>
+                <h2>继续浏览</h2>
                 <a href="framework.html">开发框架</a>
                 <a href="portfolio.html">作品集</a>
-                <a href="blog.html">博客</a>
-                <a href="contact.html">联系我</a>
+                <a href="journal.html">研究记录</a>
+                <a href="contact.html">联系</a>
             </div>
             <div class="footer-social">
-                <h4>社交媒体</h4>
+                <h2>公开入口</h2>
                 <div class="social-icons">
-                    <a href="https://github.com/IrisSakura" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="https://space.bilibili.com/289615178?spm_id_from=333.1007.0.0" class="social-icon" aria-label="哔哩哔哩"><i class="fab fa-bilibili"></i></a>
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; <span id="current-year"></span> 全栈游戏开发者. 保留所有权利.</p>
-            <p>本网站使用 TypeScript 动态构建</p>
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
         </div>
     </div>
 </footer>
 
 <script src="../dist/framework.js" type="module"></script>
+<script src="../dist/site.js" type="module"></script>
 </body>
 </html>

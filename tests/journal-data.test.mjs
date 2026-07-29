@@ -21,9 +21,14 @@ test('journal snapshot exposes a small curated public contract', async () => {
   for (const note of data.featuredNotes) {
     assert.deepEqual(
       Object.keys(note).sort(),
-      ['description', 'id', 'tags', 'title', 'track']
+      ['description', 'finding', 'id', 'impact', 'method', 'question', 'tags', 'title', 'track', 'updatedAt']
     );
     assert.ok(note.tags.length > 0);
+    assert.ok(note.question.length > 0);
+    assert.ok(note.method.length > 0);
+    assert.ok(note.finding.length > 0);
+    assert.ok(note.impact.length > 0);
+    assert.match(note.updatedAt, /^\d{4}-\d{2}-\d{2}$/);
   }
 });
 
@@ -43,7 +48,7 @@ test('journal page binds every curated view and preserves the private boundary',
     assert.ok(html.includes(`id="${id}"`), `missing journal target ${id}`);
   }
 
-  for (const behavior of ['loadJournalData', 'renderSummary', 'renderStreams', 'renderNotes']) {
+  for (const behavior of ['loadJournalData', 'renderSummary', 'renderStreams', 'renderNotes', 'note-details']) {
     assert.ok(source.includes(behavior), `missing journal behavior ${behavior}`);
   }
 

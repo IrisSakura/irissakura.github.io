@@ -1,5 +1,7 @@
 # UnityGameFramework Website Sync Implementation Plan
 
+> 历史说明：本计划记录 2026-07-15 的初始交付过程。临时 `gitea-patch/` 已在 2026-07-28 完成使命并从网站仓库移除；当前维护方式以 `docs/maintenance/framework-sync.md` 为准。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Make the public framework page consume a safe generated JSON snapshot and provide Gitea-source files that publish future snapshots automatically after GitHub mirror updates.

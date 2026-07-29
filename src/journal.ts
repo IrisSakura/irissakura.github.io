@@ -1,3 +1,5 @@
+export {};
+
 interface JournalSummary {
     gameDesignCount: number;
     knowledgeStreamCount: number;
@@ -18,6 +20,11 @@ interface JournalNote {
     description: string;
     tags: string[];
     track: string;
+    question: string;
+    method: string;
+    finding: string;
+    impact: string;
+    updatedAt: string;
 }
 
 interface JournalData {
@@ -38,8 +45,6 @@ class JournalPage {
     }
 
     private init(): void {
-        this.setCurrentYear();
-        this.setupNavigation();
         void this.loadJournalData();
     }
 
@@ -88,13 +93,23 @@ class JournalPage {
         if (!container) return;
 
         container.innerHTML = notes.map(note => `
-            <article class="note-card" data-note="${note.id}">
+            <article class="note-card" id="note-${note.id}" data-note="${note.id}">
                 <span class="note-track">${note.track}</span>
                 <h3>${note.title}</h3>
                 <p>${note.description}</p>
                 <div class="note-tags">
                     ${note.tags.map(tag => `<span>${tag}</span>`).join('')}
                 </div>
+                <details class="note-details">
+                    <summary>查看研究方法与影响</summary>
+                    <dl>
+                        <div><dt>问题</dt><dd>${note.question}</dd></div>
+                        <div><dt>方法</dt><dd>${note.method}</dd></div>
+                        <div><dt>核心结论</dt><dd>${note.finding}</dd></div>
+                        <div><dt>影响</dt><dd>${note.impact}</dd></div>
+                        <div><dt>更新时间</dt><dd><time datetime="${note.updatedAt}">${note.updatedAt}</time></dd></div>
+                    </dl>
+                </details>
             </article>
         `).join('');
     }
@@ -106,19 +121,6 @@ class JournalPage {
         if (streams) streams.innerHTML = message;
         if (notes) notes.innerHTML = message;
         this.setText('journal-description', '学习记录摘要暂时无法加载。');
-    }
-
-    private setupNavigation(): void {
-        const mobileToggle = document.querySelector('.mobile-toggle');
-        const navMenu = document.querySelector('.nav-menu');
-
-        mobileToggle?.addEventListener('click', () => {
-            navMenu?.classList.toggle('active');
-        });
-    }
-
-    private setCurrentYear(): void {
-        this.setText('current-year', new Date().getFullYear().toString());
     }
 
     private setText(id: string, value: string): void {

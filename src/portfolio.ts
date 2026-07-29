@@ -1,242 +1,102 @@
-//import { Animations } from './utils/animations';
+export {};
 
-// 作品类型定义
-interface PortfolioItem {
-    id: number;
+type ProjectCategory = 'research' | 'game' | 'tool';
+
+interface PortfolioProject {
+    id: string;
     title: string;
-    category: 'research' | 'game' | 'tool';
-    description: string;
-    tags: string[];
+    category: ProjectCategory;
+    categoryLabel: string;
+    status: string;
     year: number;
     role: string;
-    link?: string;
-    linkLabel?: string;
-    external?: boolean;
+    summary: string;
+    technologies: string[];
+    evidence: string[];
+    href: string;
+    linkLabel: string;
     image?: string;
     imageAlt?: string;
 }
 
-// 作品集应用类
-class PortfolioApp {
-    private portfolioGrid: HTMLElement | null;
-    private filterButtons: NodeListOf<HTMLElement>;
-    private currentFilter: string = 'all';
-    private allItems: PortfolioItem[] = [];
+interface ProjectsData {
+    projects: PortfolioProject[];
+}
+
+class PortfolioPage {
+    private projects: PortfolioProject[] = [];
+    private filter: 'all' | ProjectCategory = 'all';
 
     constructor() {
-        this.portfolioGrid = document.getElementById('portfolio-grid');
-        this.filterButtons = document.querySelectorAll('.filter-btn');
-        this.init();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => void this.init());
+        } else {
+            void this.init();
+        }
     }
 
     private async init(): Promise<void> {
-        // 设置当前年份
-        this.setCurrentYear();
-
-        // 加载作品数据
-        await this.loadPortfolioItems();
-
-        // 初始化事件监听器
-        this.setupEventListeners();
-
-        // 渲染作品
-        this.renderPortfolioItems();
-
-        //this.initAnimations();
+        this.setupFilters();
+        await this.loadProjects();
     }
 
-    private async loadPortfolioItems(): Promise<void> {
-        try {
-            // 模拟从API加载数据
-            this.allItems = [
-                {
-                    id: 9,
-                    title: "Sakura Design Journal",
-                    category: "research",
-                    description: "持续积累游戏设计范式、Godot 源码研究与每日审计记录。它保存作品背后的问题、证据和设计判断，也是 Sakura Framework 的研究输入。",
-                    tags: ["Game Design", "Godot Research", "Architecture", "Knowledge Base"],
-                    year: 2026,
-                    role: "研究与系统设计",
-                    link: "journal.html",
-                    linkLabel: "查看学习记录"
-                },
-                {
-                    id: 10,
-                    title: "Sakura Framework",
-                    category: "tool",
-                    description: "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
-                    tags: ["Unity", "C#", "Framework", "Modular Architecture"],
-                    year: 2026,
-                    role: "架构与框架开发",
-                    link: "framework.html",
-                    linkLabel: "查看框架详情"
-                },
-                {
-                    id: 1,
-                    title: "言铸之剑",
-                    category: "game",
-                    description: "一款以房间推进、实时动作战斗和构筑成长为核心的 2D Roguelike。技能、潜能、祝福、背包与存档共同形成可重复游玩的完整局内循环。",
-                    tags: ["Unity", "C#", "2D Action", "Roguelike", "LLM Gameplay"],
-                    year: 2026,
-                    role: "独立游戏开发 / 系统设计",
-                    link: "game.html",
-                    linkLabel: "查看游戏详情",
-                    image: "../assets/images/sword-of-words/combat-room.png",
-                    imageAlt: "言铸之剑战斗房间：玩家面对两名骷髅敌人，底部显示生命、理智与技能栏"
-                }
-            ];
-
-        } catch (error) {
-            console.error('加载作品数据失败:', error);
-            this.showErrorMessage('无法加载作品数据');
-        }
-    }
-
-    private renderPortfolioItems(): void {
-        if (!this.portfolioGrid) return;
-
-        // 筛选作品
-        const filteredItems = this.currentFilter === 'all'
-            ? this.allItems
-            : this.allItems.filter(item => item.category === this.currentFilter);
-
-        if (filteredItems.length === 0) {
-            this.portfolioGrid.innerHTML = `
-                <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; color: var(--gray-color);"></i>
-                    <h3>未找到作品</h3>
-                    <p>当前筛选条件下没有作品，请尝试其他筛选条件。</p>
-                </div>
-            `;
-            return;
-        }
-
-        // 渲染作品
-        this.portfolioGrid.innerHTML = filteredItems.map(item => `
-            <div class="portfolio-item" data-category="${item.category}">
-                <div class="portfolio-image" data-category="${this.getCategoryLabel(item.category)}">
-                    ${item.image ? `<img src="${item.image}" alt="${item.imageAlt ?? item.title}" loading="lazy">` : ''}
-                </div>
-                <div class="portfolio-content">
-                    <h3 class="portfolio-title">${item.title}</h3>
-                    <div class="portfolio-meta">
-                        <span>${item.year}</span> • 
-                        <span>${item.role}</span>
-                    </div>
-                    <p class="portfolio-description">${item.description}</p>
-                    <div class="portfolio-tags">
-                        ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                    <div class="portfolio-footer">
-                        <span class="category-badge">${this.getCategoryLabel(item.category)}</span>
-                        ${item.link ? `
-                            <a
-                                href="${item.link}"
-                                class="btn btn-outline portfolio-link"
-                                ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ''}
-                            >
-                                ${item.linkLabel ?? '查看详情'}
-                                ${item.external ? '<i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>' : ''}
-                            </a>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-
-    }
-
-    private getCategoryLabel(category: string): string {
-        const labels: Record<string, string> = {
-            'research': '研究与设计',
-            'game': '完整游戏',
-            'tool': '开发工具'
-        };
-        return labels[category] || category;
-    }
-
-    private setupEventListeners(): void {
-        // 筛选按钮点击事件
-        this.filterButtons.forEach(button => {
+    private setupFilters(): void {
+        document.querySelectorAll<HTMLButtonElement>('.filter-btn').forEach((button) => {
             button.addEventListener('click', () => {
-                // 更新激活状态
-                this.filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                // 更新筛选条件
-                this.currentFilter = button.dataset.filter || 'all';
-                // 重新渲染作品
-                this.renderPortfolioItems();
+                const nextFilter = button.dataset.filter as 'all' | ProjectCategory;
+                this.filter = nextFilter;
+                document.querySelectorAll<HTMLButtonElement>('.filter-btn').forEach((candidate) => {
+                    const active = candidate === button;
+                    candidate.classList.toggle('active', active);
+                    candidate.setAttribute('aria-pressed', String(active));
+                });
+                this.renderProjects();
             });
         });
+    }
 
-        // 移动端菜单切换
-        const mobileToggle = document.querySelector('.mobile-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+    private async loadProjects(): Promise<void> {
+        const grid = document.getElementById('portfolio-grid');
+        if (!grid) return;
 
-        if (mobileToggle && navMenu) {
-            mobileToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
+        try {
+            const response = await fetch('../data/projects.json', { cache: 'no-store' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json() as ProjectsData;
+            this.projects = data.projects;
+            this.renderProjects();
+        } catch {
+            grid.innerHTML = '<p class="content-error">项目数据暂时无法加载，请稍后重试。</p>';
         }
     }
 
-    /*
-    private initAnimations(): void {
-        console.log('初始化作品集动画');
+    private renderProjects(): void {
+        const grid = document.getElementById('portfolio-grid');
+        if (!grid) return;
+        const projects = this.filter === 'all'
+            ? this.projects
+            : this.projects.filter((project) => project.category === this.filter);
 
-        setTimeout(() => {
-            // 作品卡片动画
-            document.querySelectorAll('.portfolio-item').forEach((item, index) => {
-                (item as HTMLElement).style.animationDelay = `${index * 0.1}s`;
-                item.classList.add('fade-up');
-            });
-
-            // 筛选按钮动画
-            Animations.fadeInStagger('.filter-btn', {
-                duration: 0.5,
-                stagger: 0.05,
-                delay: 0.2
-            });
-        }, 300);
-
-        // 初始化滚动动画
-        Animations.initScrollAnimations();
-    }
-    */
-
-    private setCurrentYear(): void {
-        const currentYearElement = document.getElementById('current-year');
-        if (currentYearElement) {
-            currentYearElement.textContent = new Date().getFullYear().toString();
-        }
-    }
-
-    private showErrorMessage(message: string): void {
-        if (!this.portfolioGrid) return;
-
-        this.portfolioGrid.innerHTML = `
-            <div class="error-message" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--danger-color);"></i>
-                <h3>加载失败</h3>
-                <p>${message}</p>
-                <button id="retry-btn" class="btn btn-primary" style="margin-top: 1rem;">重试</button>
-            </div>
-        `;
-
-        // 添加重试按钮事件
-        const retryBtn = document.getElementById('retry-btn');
-        if (retryBtn) {
-            retryBtn.addEventListener('click', async () => {
-                await this.loadPortfolioItems();
-                this.renderPortfolioItems();
-            });
-        }
+        grid.innerHTML = projects.map((project) => `
+            <article class="portfolio-item" data-category="${project.category}">
+                <div class="portfolio-image" data-category="${project.categoryLabel}">
+                    ${project.image ? `<img src="${project.image}" alt="${project.imageAlt ?? ''}">` : '<div class="portfolio-placeholder" aria-hidden="true"></div>'}
+                    <span class="portfolio-status">${project.status}</span>
+                </div>
+                <div class="portfolio-content">
+                    <p class="project-status">${project.categoryLabel} · ${project.year}</p>
+                    <h3>${project.title}</h3>
+                    <p>${project.summary}</p>
+                    <p class="portfolio-role"><strong>职责：</strong>${project.role}</p>
+                    <ul class="portfolio-evidence">
+                        ${project.evidence.slice(0, 3).map((item) => `<li>${item}</li>`).join('')}
+                    </ul>
+                    <div class="portfolio-tags">${project.technologies.map((tag) => `<span class="tag">${tag}</span>`).join('')}</div>
+                    <a href="${project.href}" class="portfolio-link">${project.linkLabel}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </article>
+        `).join('');
     }
 }
 
-// 页面加载完成后初始化应用
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded, initializing PortfolioApp...');
-    new PortfolioApp();
-});
+new PortfolioPage();

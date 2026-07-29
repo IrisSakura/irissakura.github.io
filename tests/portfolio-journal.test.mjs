@@ -24,16 +24,20 @@ test('portfolio explains the path from research to finished work', async () => {
 });
 
 test('portfolio data keeps research distinct from finished work', async () => {
+  const data = JSON.parse(await readText('data/projects.json'));
   const source = await readText('src/portfolio.ts');
+  const titles = data.projects.map((project) => project.title);
 
   assert.ok(source.includes("'research' | 'game'"), 'research should be a first-class portfolio category');
-  assert.ok(source.includes('title: "Sakura Design Journal"'));
-  assert.ok(source.includes('title: "Sakura Framework"'));
-  assert.ok(source.includes("'research': '研究与设计'"));
-  assert.ok(source.includes('link: "journal.html"'));
-  assert.ok(source.includes('title: "言铸之剑"'));
-  assert.ok(source.includes('link: "game.html"'));
-  assert.ok(source.includes('assets/images/sword-of-words/combat-room.png'));
+  assert.deepEqual(titles, ['Sakura Design Journal', 'Sakura Framework', '言铸之剑']);
+  assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
+  for (const project of data.projects) {
+    assert.ok(project.status.length > 0, `${project.title} needs a status`);
+    assert.ok(project.role.length > 0, `${project.title} needs a role`);
+    assert.ok(project.evidence.length > 0, `${project.title} needs evidence`);
+    assert.ok(project.limitations.length > 0, `${project.title} needs limitations`);
+    assert.ok(project.next.length > 0, `${project.title} needs next steps`);
+  }
 
   for (const fabricatedTitle of [
     '像素地牢',
@@ -44,16 +48,16 @@ test('portfolio data keeps research distinct from finished work', async () => {
     '环境音效包',
     'UI组件库'
   ]) {
-    assert.ok(!source.includes(fabricatedTitle), `fabricated project should be removed: ${fabricatedTitle}`);
+    assert.ok(!JSON.stringify(data).includes(fabricatedTitle), `fabricated project should be removed: ${fabricatedTitle}`);
   }
 });
 
 test('public portfolio does not expose the private journal origin', async () => {
   const html = await readText('pages/portfolio.html');
-  const source = await readText('src/portfolio.ts');
+  const data = await readText('data/projects.json');
 
   assert.ok(!html.includes('154.37.215.57'));
-  assert.ok(!source.includes('154.37.215.57'));
+  assert.ok(!data.includes('154.37.215.57'));
 });
 
 test('portfolio exposes only categories backed by real projects', async () => {
@@ -86,12 +90,11 @@ test('about page describes only the verified project chain', async () => {
 
 test('finished game page presents the real playable loop and public screenshots', async () => {
   const html = await readText('pages/game.html');
-  const source = await readText('src/game.ts');
-  const publicText = `${html}\n${source}`;
+  const publicText = html;
 
   for (const fragment of [
     '言铸之剑',
-    'COMPLETE GAME',
+    'PLAYABLE PROTOTYPE',
     '选择房间',
     '实时战斗',
     '构筑成长',
@@ -108,4 +111,6 @@ test('finished game page presents the real playable loop and public screenshots'
 
   assert.ok(!publicText.includes('/Users/'));
   assert.ok(!publicText.includes('gitProject'));
+  assert.ok(html.includes('暂无 Demo'));
+  assert.ok(html.includes('已知限制'));
 });

@@ -1,340 +1,106 @@
-//import { Animations } from './utils/animations';
+export {};
 
 interface Project {
-    id: number;
+    id: string;
     title: string;
-    category: string;
-    description: string;
-    tags: string[];
+    categoryLabel: string;
+    status: string;
     year: number;
-    featured: boolean;
+    summary: string;
+    technologies: string[];
     href: string;
-    image: string;
-    imageAlt: string;
+    linkLabel: string;
+    image?: string;
+    homeImage?: string;
+    imageAlt?: string;
+    featured: boolean;
 }
 
-interface BlogPost {
-    id: number;
+interface ProjectsData {
+    projects: Project[];
+}
+
+interface JournalNote {
+    id: string;
     title: string;
-    excerpt: string;
-    date: string;
-    category: string;
-    readTime: number;
+    description: string;
+    track: string;
+    updatedAt?: string;
 }
 
-// 主应用类
-class MainApp {
-    private featuredProjectsContainer: HTMLElement | null=null;
-    private recentPostsContainer: HTMLElement | null=null;
-    private currentYearElement: HTMLElement | null=null;
-    private mobileToggle: HTMLElement | null=null;
-    private navMenu: HTMLElement | null=null;
+interface JournalData {
+    featuredNotes: JournalNote[];
+}
 
+class MainPage {
     constructor() {
-        console.log('MainApp constructor called');
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.initElements());
+            document.addEventListener('DOMContentLoaded', () => void this.init());
         } else {
-            this.initElements();
-        }
-
-    }
-
-    private initElements(): void {
-        this.featuredProjectsContainer = document.getElementById('featured-projects');
-        this.recentPostsContainer = document.getElementById('recent-posts');
-        this.currentYearElement = document.getElementById('current-year');
-        this.mobileToggle = document.querySelector('.mobile-toggle');
-        this.navMenu = document.querySelector('.nav-menu');
-
-        console.log('Elements found:', {
-            featured: this.featuredProjectsContainer,
-            posts: this.recentPostsContainer,
-            year: this.currentYearElement
-        });
-
-        this.init();
-    }
-
-    private init(): void {
-        // 初始化事件监听器
-        this.setupEventListeners();
-
-        // 加载数据
-        this.loadFeaturedProjects();
-        this.loadRecentPosts();
-
-        // 设置当前年份
-        this.setCurrentYear();
-
-        // 初始化页面动画
-        //this.initAnimations();
-        //this.initScrollAnimations();
-    }
-
-    private setupEventListeners(): void {
-        // 移动端菜单切换
-        if (this.mobileToggle && this.navMenu) {
-            this.mobileToggle.addEventListener('click', () => {
-                this.navMenu?.classList.toggle('active');
-            });
-        }
-
-        // 导航链接点击事件
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                const target = e.target as HTMLElement;
-                if (target.dataset.page === 'home') {
-                    e.preventDefault();
-                    this.scrollToTop();
-                }
-
-                // 移动端点击后关闭菜单
-                if (window.innerWidth <= 768) {
-                    this.navMenu?.classList.remove('active');
-                }
-            });
-        });
-
-        // 页面滚动时更新导航状态
-        window.addEventListener('scroll', () => {
-            this.updateNavOnScroll();
-        });
-    }
-
-    /*
-    private initAnimations(): void {
-        console.log('Initializing animations...');
-
-        // 使用新的动画系统
-        setTimeout(() => {
-            // 英雄区域动画
-            Animations.fadeInStagger('.hero-title, .hero-subtitle, .hero-description', {
-                duration: 0.8,
-                stagger: 0.2,
-                delay: 0.3
-            });
-
-            // 英雄按钮动画
-            Animations.fadeInStagger('.hero-buttons', { duration: 0.8, delay: 0.8 });
-
-            // 像素艺术动画
-            const pixelArt = document.querySelector('.pixel-art');
-            if (pixelArt) {
-                pixelArt.classList.add('scale-in');
-            }
-
-            // 技能卡片添加动画类
-            document.querySelectorAll('.skill-card').forEach((card, index) => {
-                (card as HTMLElement).style.animationDelay = `${index * 0.1}s`;
-                card.classList.add('fade-up');
-            });
-        }, 300);
-    }
-
-    private initScrollAnimations(): void {
-        // 初始化滚动触发动画
-        Animations.initScrollAnimations();
-
-        // 为特定元素添加滚动动画
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const element = entry.target as HTMLElement;
-
-                    if (element.classList.contains('skill-card')) {
-                        element.classList.add('visible');
-                    }
-
-                    observer.unobserve(element);
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        // 观察需要滚动动画的元素
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-    }
-    */
-
-
-    private async loadFeaturedProjects(): Promise<void> {
-        try {
-            // 实际项目中，这里会从API或JSON文件加载数据
-            const projects: Project[] = [
-                {
-                    id: 1,
-                    title: "言铸之剑",
-                    category: "2D 动作 Roguelike",
-                    description: "以房间推进、实时战斗和构筑成长为核心，结合技能、潜能、祝福与存档系统形成完整局内循环。",
-                    tags: ["Unity", "C#", "Roguelike", "LLM Gameplay"],
-                    year: 2026,
-                    featured: true,
-                    href: "pages/game.html",
-                    image: "assets/images/sword-of-words/combat-room.png",
-                    imageAlt: "言铸之剑的像素风战斗房间与技能 HUD"
-                }
-            ];
-
-            this.renderFeaturedProjects(projects);
-        } catch (error) {
-            console.error('加载作品数据失败:', error);
-            this.showErrorMessage(this.featuredProjectsContainer, '无法加载作品数据');
+            void this.init();
         }
     }
 
-    private renderFeaturedProjects(projects: Project[]): void {
-        if (!this.featuredProjectsContainer) return;
-
-        this.featuredProjectsContainer.innerHTML = projects.map(project => `
-            <article class="project-card">
-                <a class="project-image" href="${project.href}" aria-label="查看${project.title}详情">
-                    <img src="${project.image}" alt="${project.imageAlt}">
-                </a>
-                <div class="project-content">
-                    <h3 class="project-title">${project.title}</h3>
-                    <p class="project-category">${project.category} • ${project.year}</p>
-                    <p>${project.description}</p>
-                    <div class="project-tags">
-                        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                    <a class="project-detail-link" href="${project.href}">
-                        查看完整游戏
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </article>
-        `).join('');
+    private async init(): Promise<void> {
+        await Promise.all([this.loadProjects(), this.loadResearchUpdates()]);
     }
 
-    private async loadRecentPosts(): Promise<void> {
-        try {
-            // 实际项目中，这里会从API或JSON文件加载数据
-            const posts: BlogPost[] = [
-                {
-                    id: 1,
-                    title: "游戏音乐中的互动音频设计",
-                    excerpt: "探讨如何通过互动音频增强游戏沉浸感，分享使用FMOD和Wwise的实践经验。",
-                    date: "2023-10-15",
-                    category: "音频设计",
-                    readTime: 8
-                }
-            ];
-
-            this.renderRecentPosts(posts);
-        } catch (error) {
-            console.error('加载博客数据失败:', error);
-            this.showErrorMessage(this.recentPostsContainer, '无法加载博客文章');
-        }
-    }
-
-    private renderRecentPosts(posts: BlogPost[]): void {
-        if (!this.recentPostsContainer) return;
-
-        this.recentPostsContainer.innerHTML = posts.map(post => `
-            <div class="blog-card">
-                <div class="blog-image"></div>
-                <div class="blog-content">
-                    <h3 class="blog-title">${post.title}</h3>
-                    <div class="blog-meta">
-                        <span>${post.date}</span> • 
-                        <span>${post.category}</span> • 
-                        <span>${post.readTime} 分钟阅读</span>
-                    </div>
-                    <p>${post.excerpt}</p>
-                    <a href="pages/blog.html#post-${post.id}" class="btn btn-outline" style="margin-top: 1rem;">阅读更多</a>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    private setCurrentYear(): void {
-        if (this.currentYearElement) {
-            this.currentYearElement.textContent = new Date().getFullYear().toString();
-        }
-    }
-
-
-    /*
-    private initAnimations(): void {
-        // 使用GSAP初始化动画
-        if (typeof gsap !== 'undefined') {
-            // 英雄区域动画
-            gsap.from('.hero-title, .hero-subtitle, .hero-description', {
-                duration: 1,
-                y: 30,
-                opacity: 0,
-                stagger: 0.2,
-                delay: 0.3
-            });
-
-            gsap.from('.hero-buttons', {
-                duration: 1,
-                y: 30,
-                opacity: 0,
-                delay: 0.8
-            });
-
-            gsap.from('.pixel-art', {
-                duration: 1.5,
-                scale: 0.8,
-                opacity: 0,
-                delay: 0.5,
-                ease: "back.out(1.7)"
-            });
-
-            // 技能卡片动画
-            gsap.from('.skill-card', {
-                scrollTrigger: {
-                    trigger: '.skills-section',
-                    start: 'top 80%',
-                    toggleActions: 'play none none none'
-                },
-                duration: 0.8,
-                y: 50,
-                opacity: 0,
-                stagger: 0.2
-            });
-        }
-    }
-     */
-
-    private updateNavOnScroll(): void {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar?.classList.add('scrolled');
-        } else {
-            navbar?.classList.remove('scrolled');
-        }
-    }
-
-    private scrollToTop(): void {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
-
-    private showErrorMessage(container: HTMLElement | null, message: string): void {
+    private async loadProjects(): Promise<void> {
+        const container = document.getElementById('featured-projects');
         if (!container) return;
 
-        container.innerHTML = `
-            <div class="error-message" style="text-align: center; padding: 2rem; color: var(--gray-color);">
-                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                <p>${message}</p>
-            </div>
-        `;
+        try {
+            const response = await fetch('data/projects.json', { cache: 'no-store' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json() as ProjectsData;
+            const projects = data.projects.filter((project) => project.featured);
+            container.innerHTML = projects.map((project) => `
+                <article class="project-card">
+                    ${project.homeImage ? `
+                        <a class="project-image" href="pages/${project.href}" aria-label="查看${project.title}案例">
+                            <img src="${project.homeImage}" alt="${project.imageAlt ?? ''}">
+                        </a>
+                    ` : ''}
+                    <div class="project-content">
+                        <p class="project-status">${project.categoryLabel} · ${project.status}</p>
+                        <h3 class="project-title">${project.title}</h3>
+                        <p>${project.summary}</p>
+                        <div class="project-tags">${project.technologies.slice(0, 4).map((tag) => `<span class="tag">${tag}</span>`).join('')}</div>
+                        <a class="project-detail-link" href="pages/${project.href}">
+                            ${project.linkLabel}<i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+            `).join('');
+        } catch {
+            container.innerHTML = '<p class="content-error">项目数据暂时无法加载，请前往作品集查看静态说明。</p>';
+        }
+    }
+
+    private async loadResearchUpdates(): Promise<void> {
+        const container = document.getElementById('recent-posts');
+        if (!container) return;
+
+        try {
+            const response = await fetch('data/journal.json', { cache: 'no-store' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json() as JournalData;
+            container.innerHTML = data.featuredNotes.slice(0, 3).map((note) => `
+                <article class="blog-card">
+                    <div class="blog-content">
+                        <p class="project-status">${note.track}${note.updatedAt ? ` · ${note.updatedAt}` : ''}</p>
+                        <h3 class="blog-title">${note.title}</h3>
+                        <p>${note.description}</p>
+                        <a href="pages/journal.html#note-${note.id}" class="project-detail-link">
+                            查看研究摘要<i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+            `).join('');
+        } catch {
+            container.innerHTML = '<p class="content-error">研究摘要暂时无法加载，请直接进入研究记录页。</p>';
+        }
     }
 }
 
-// 页面加载完成后初始化应用
-document.addEventListener('DOMContentLoaded', () => {
-    new MainApp();
-});
-
-// 防止重复初始化
-(window as any).MainApp = MainApp;
+new MainPage();

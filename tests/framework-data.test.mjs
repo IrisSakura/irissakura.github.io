@@ -128,25 +128,23 @@ test('framework explorer binds synchronized modules to interactive views', async
   }
 });
 
-test('Gitea patch contains a constrained publisher workflow', async () => {
-  const workflow = await readText('gitea-patch/.github/workflows/publish-framework-site.yml');
-  const readme = await readText('gitea-patch/README.md');
+test('framework page presents maturity before scale and documents sync ownership', async () => {
+  const html = await readText('pages/framework.html');
+  const maintenance = await readText('docs/maintenance/framework-sync.md');
 
   for (const fragment of [
-    'workflow_dispatch:',
-    'branches:',
-    '- main',
-    'concurrency:',
-    'contents: read',
-    'generate-public-site-data.mjs',
-    'IrisSakura/irissakura.github.io',
-    'ssh-key: ${{ secrets.WEBSITE_DEPLOY_KEY }}',
-    'git diff --cached --quiet',
-    'git push origin HEAD:main'
+    '先看成熟度，再看规模',
+    '4 个处于 Supported',
+    '101',
+    'Preview',
+    '23',
+    'Experimental',
+    '不把同名系统自动宣称'
   ]) {
-    assert.ok(workflow.includes(fragment), `workflow missing ${fragment}`);
+    assert.ok(html.includes(fragment), `missing maturity disclosure: ${fragment}`);
   }
 
-  assert.ok(readme.includes('WEBSITE_DEPLOY_KEY'));
-  assert.ok(readme.includes('Gitea'));
+  assert.ok(maintenance.includes('data/framework.json'));
+  assert.ok(maintenance.includes('白名单公开快照'));
+  assert.ok(maintenance.includes('gitea-patch/'));
 });

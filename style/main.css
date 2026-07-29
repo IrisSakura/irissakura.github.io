@@ -203,6 +203,27 @@ a {
     transition: var(--transition);
 }
 
+.skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2000;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    background: white;
+    color: #121212;
+    transform: translateY(-180%);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 4px;
+}
+
 .highlight {
     color: var(--accent-color);
 }
@@ -709,6 +730,55 @@ a {
     color: white;
 }
 
+.footer-links h2,
+.footer-social h2 {
+    margin-bottom: 1.5rem;
+    color: white;
+    font-size: 1rem;
+}
+
+.project-status {
+    color: var(--secondary-color);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.content-error {
+    grid-column: 1 / -1;
+    padding: 2rem;
+    color: var(--gray-color);
+    text-align: center;
+}
+
+.route-notice {
+    min-height: calc(100vh - 160px);
+    display: grid;
+    place-items: center;
+    padding: 8rem 0 5rem;
+    text-align: center;
+}
+
+.route-notice .container {
+    max-width: 780px;
+}
+
+.route-notice h1 {
+    margin-bottom: 1.5rem;
+}
+
+.route-notice p {
+    color: var(--gray-color);
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
+
+.route-notice .hero-buttons {
+    justify-content: center;
+}
+
 .footer-links a {
     display: block;
     margin-bottom: 0.8rem;
@@ -802,6 +872,10 @@ a {
         left: 0;
     }
 
+    body.nav-open {
+        overflow: hidden;
+    }
+
     .mobile-toggle {
         display: block;
     }
@@ -838,5 +912,16 @@ a {
     .framework-panel {
         grid-template-columns: 1fr;
         min-height: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
