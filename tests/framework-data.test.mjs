@@ -85,6 +85,20 @@ test('framework explorer binds synchronized modules to interactive views', async
   const data = JSON.parse(await readText('data/framework.json'));
   const html = await readText('pages/framework.html');
   const source = await readText('src/framework.ts');
+  const expectedFeaturedModuleIds = [
+    'ai',
+    'asset',
+    'bootstrap',
+    'core',
+    'ecs-runtime',
+    'event',
+    'gas',
+    'input',
+    'networking',
+    'pooling',
+    'save',
+    'ui'
+  ];
 
   for (const filter of ['all', 'foundation', 'gameplay', 'experience']) {
     assert.ok(
@@ -93,10 +107,19 @@ test('framework explorer binds synchronized modules to interactive views', async
     );
   }
 
+  assert.deepEqual(
+    data.featuredModules.map(module => module.id),
+    expectedFeaturedModuleIds
+  );
+  assert.ok(
+    html.includes(`${expectedFeaturedModuleIds.length} 个模块`),
+    'static module count should match the synchronized featured set'
+  );
+
   for (const module of data.featuredModules) {
     assert.match(
       source,
-      new RegExp(`\\b${module.id}:\\s*\\{`, 'u'),
+      new RegExp(`(?:\\b${module.id}|['"]${module.id}['"]):\\s*\\{`, 'u'),
       `${module.id} needs website-owned explorer metadata`
     );
   }

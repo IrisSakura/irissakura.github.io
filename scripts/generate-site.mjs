@@ -228,6 +228,7 @@ function updateFrameworkFallback(html, data) {
     'framework-package-count': data.summary.packageCount,
     'framework-module-count': data.summary.catalogModuleCount,
     'framework-profile-count': data.summary.profileCount,
+    'framework-module-result-count': `${data.featuredModules.length} 个模块`,
     'framework-source-commit': data.sourceCommit.slice(0, 7)
   };
   for (const [id, value] of Object.entries(replacements)) {

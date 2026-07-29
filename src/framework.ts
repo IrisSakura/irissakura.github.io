@@ -33,6 +33,7 @@ interface FrameworkPublicData {
 type ModuleCategory = 'foundation' | 'gameplay' | 'experience';
 
 interface ModulePresentation {
+    displayName?: string;
     category: ModuleCategory;
     categoryLabel: string;
     icon: string;
@@ -66,6 +67,41 @@ const MODULE_PRESENTATIONS: Record<string, ModulePresentation> = {
         route: ['安装 Core 包', '创建框架 Host', '按需注册上层模块'],
         layerId: 'foundation',
         keywords: ['host', 'scope', 'service', 'bootstrap', '生命周期', '服务']
+    },
+    bootstrap: {
+        displayName: 'Bootstrap / DI',
+        category: 'foundation',
+        categoryLabel: '基础',
+        icon: 'fa-diagram-project',
+        summary: '集中管理项目启动、依赖注入装配和模块作用域，让服务注册、初始化与释放只有一个明确入口。',
+        capabilities: ['组合根与启动顺序', 'VContainer 与服务注册适配', 'App、Scene、Gameplay 作用域'],
+        useCases: ['搭建可替换服务的新项目骨架', '避免模块被多个 Host 重复初始化'],
+        route: ['安装 Core 与 Bootstrap', '定义项目 Installer 或容器', '按作用域注册并启动可选模块'],
+        layerId: 'runtime-service',
+        keywords: ['bootstrap', 'di', 'dependency injection', 'vcontainer', 'installer', '依赖注入', '生命周期', '装配']
+    },
+    'ecs-runtime': {
+        displayName: 'ECS Runtime',
+        category: 'foundation',
+        categoryLabel: '基础',
+        icon: 'fa-network-wired',
+        summary: '提供后端中立的 ECS 会话与宿主边界，可按项目能力选择 Portable Arch 或 Unity Entities。',
+        capabilities: ['后端中立 Session', 'Portable Arch 运行时', 'Unity Entities 条件适配'],
+        useCases: ['高密度单位与数据导向系统', '在不锁定后端的前提下逐步引入 ECS'],
+        route: ['安装 ECS Runtime', '选择 Arch 或 Entities 能力', '接入 Session、Host 与业务系统'],
+        layerId: 'adapter-bridge',
+        keywords: ['ecs', 'entity', 'entities', 'arch', 'dots', 'session', '数据导向', '实体']
+    },
+    pooling: {
+        category: 'foundation',
+        categoryLabel: '基础',
+        icon: 'fa-boxes-stacked',
+        summary: '统一复用 GameObject 与纯 C# 对象，明确获取、归还和清理边界，减少高频分配与实例化成本。',
+        capabilities: ['GameObject 对象池', '纯 C# 对象复用', '容量与释放治理'],
+        useCases: ['弹幕、特效和敌人生成', '高频临时消息与数据对象'],
+        route: ['选择对象池类型', '配置创建与重置策略', '在 Owner 结束时归还或释放'],
+        layerId: 'foundation',
+        keywords: ['pool', 'pooling', 'reuse', 'allocation', '对象池', '复用', '分配']
     },
     event: {
         category: 'foundation',
@@ -111,6 +147,39 @@ const MODULE_PRESENTATIONS: Record<string, ModulePresentation> = {
         layerId: 'gameplay-kernel',
         keywords: ['ai', 'behavior', 'utility', 'blackboard', 'npc', '行为树', '决策']
     },
+    save: {
+        category: 'experience',
+        categoryLabel: '体验',
+        icon: 'fa-floppy-disk',
+        summary: '通过统一存档与序列化边界保存玩家进度，并把版本迁移、读写入口和业务状态解耦。',
+        capabilities: ['存档读写入口', '序列化与版本迁移', '槽位与进度管理'],
+        useCases: ['Run 进度与长期成长', '设置、角色和世界状态持久化'],
+        route: ['定义可持久化数据', '选择存储与序列化实现', '在明确时机提交和恢复快照'],
+        layerId: 'runtime-service',
+        keywords: ['save', 'persistence', 'serialize', 'snapshot', '存档', '持久化', '序列化']
+    },
+    input: {
+        category: 'experience',
+        categoryLabel: '体验',
+        icon: 'fa-gamepad',
+        summary: '把设备输入、动作语义和复杂指令识别分离，让键鼠、手柄与玩法命令共享同一接入边界。',
+        capabilities: ['Input System 抽象', '动作映射与设备切换', '搓招与组合输入'],
+        useCases: ['跨设备角色控制', '格斗指令和快捷操作'],
+        route: ['声明业务动作', '绑定设备输入', '将动作转发到玩法命令'],
+        layerId: 'runtime-service',
+        keywords: ['input', 'action', 'gamepad', 'combo', '输入', '手柄', '搓招']
+    },
+    networking: {
+        category: 'experience',
+        categoryLabel: '体验',
+        icon: 'fa-link',
+        summary: '封装断线重连、心跳与消息序列对齐，为联机玩法提供可观察、可恢复的连接状态。',
+        capabilities: ['重连状态机', '心跳与超时检测', '消息序列对齐'],
+        useCases: ['弱网环境恢复', '客户端状态同步和连接诊断'],
+        route: ['接入传输实现', '配置心跳与重试策略', '订阅连接状态并恢复会话'],
+        layerId: 'runtime-service',
+        keywords: ['network', 'networking', 'reconnect', 'heartbeat', 'sync', '网络', '重连', '同步']
+    },
     ui: {
         category: 'experience',
         categoryLabel: '体验',
@@ -130,10 +199,16 @@ const FALLBACK_MODULES: FrameworkModule[] = Object.entries(MODULE_PRESENTATIONS)
         core: 'Core 核心',
         event: 'Event 事件',
         asset: 'Asset 资源',
+        bootstrap: 'Bootstrap / DI',
+        'ecs-runtime': 'ECS Runtime',
+        pooling: 'Pooling 对象池',
         gas: 'GAS 技能',
         ai: 'AI 决策',
+        save: 'Save 存档',
+        input: 'Input 输入',
+        networking: 'Networking 重连同步',
         ui: 'UI 界面'
-    }[id] ?? id,
+    }[id] ?? presentation.displayName ?? id,
     description: presentation.summary
 }));
 
@@ -303,6 +378,7 @@ class FrameworkPage {
             const searchable = [
                 module.id,
                 module.displayName,
+                presentation.displayName ?? '',
                 module.description,
                 presentation.summary,
                 ...presentation.capabilities,
@@ -358,7 +434,7 @@ class FrameworkPage {
 
         const title = document.createElement('span');
         title.className = 'module-card-title';
-        title.textContent = module.displayName;
+        title.textContent = this.moduleDisplayName(module);
         const description = document.createElement('span');
         description.className = 'module-card-description';
         description.textContent = this.moduleDescription(module);
@@ -387,7 +463,7 @@ class FrameworkPage {
         });
 
         this.setText('framework-module-detail-category', `${presentation.categoryLabel.toUpperCase()} · ${module.id.toUpperCase()}`);
-        this.setText('framework-module-detail-title', module.displayName);
+        this.setText('framework-module-detail-title', this.moduleDisplayName(module));
         this.setText('framework-module-detail-description', this.moduleDescription(module));
         this.replaceIcon('framework-module-detail-icon', presentation.icon);
         this.replaceList('framework-module-capabilities', presentation.capabilities);
@@ -525,6 +601,10 @@ class FrameworkPage {
         return generatedDescription && !/framework module\.?$/iu.test(generatedDescription)
             ? generatedDescription
             : presentation.summary;
+    }
+
+    private moduleDisplayName(module: FrameworkModule): string {
+        return MODULE_PRESENTATIONS[module.id]?.displayName ?? module.displayName;
     }
 
     private layerPresentation(layerId: string): LayerPresentation {
