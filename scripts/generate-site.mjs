@@ -1,15 +1,18 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { marked } from 'marked';
+import sanitizeHtml from 'sanitize-html';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const [site, framework, frameworkAdoption, projects, journal, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, projects, journal, journalSource, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
   readJson('data/projects.json'),
   readJson('data/journal.json'),
+  readJson('data/journal-source.json'),
   readText('components/navbar.html'),
   readText('components/footer.html')
 ]);
@@ -28,8 +31,20 @@ const journalDetailDefinitions = journal.featuredNotes.map((note) => ({
   schemaType: 'Article',
   note
 }));
+const blogDetailDefinitions = await Promise.all(journalSource.blogs.map(async (article) => ({
+  file: `pages/blog/${article.id}.html`,
+  key: 'blog',
+  title: `${article.title} | IrisSakura`,
+  description: article.summary,
+  canonical: `/pages/blog/${article.id}.html`,
+  image: '/assets/images/home-preview.png',
+  schemaType: 'Article',
+  article,
+  markdown: await readText(article.contentPath)
+})));
 
 await writeJournalDetailSources(journalDetailDefinitions);
+await writeBlogDetailSources(blogDetailDefinitions);
 
 const pageDefinitions = [
   {
@@ -92,12 +107,11 @@ const pageDefinitions = [
   },
   {
     file: 'pages/blog.html',
-    key: 'journal',
-    title: '研究记录已迁移 | IrisSakura',
-    description: '原博客入口已收敛为真实的 Sakura Design Journal 研究记录。',
-    canonical: '/pages/journal.html',
-    image: '/assets/images/home-preview.png',
-    noIndex: true
+    key: 'blog',
+    title: '博客 | 游戏系统与工程设计',
+    description: '完整发布 Sakura Design Journal 中经过登记与安全检查的游戏系统设计文章。',
+    canonical: '/pages/blog.html',
+    image: '/assets/images/home-preview.png'
   },
   {
     file: '404.html',
@@ -108,7 +122,8 @@ const pageDefinitions = [
     image: '/assets/images/home-preview.png',
     noIndex: true
   },
-  ...journalDetailDefinitions
+  ...journalDetailDefinitions,
+  ...blogDetailDefinitions
 ];
 
 const navItems = [
@@ -116,6 +131,7 @@ const navItems = [
   ['portfolio', '作品', 'pages/portfolio.html'],
   ['framework', 'Framework', 'pages/framework.html'],
   ['journal', 'Journal', 'pages/journal.html'],
+  ['blog', '博客', 'pages/blog.html'],
   ['about', '关于', 'pages/about.html'],
   ['contact', '公开入口', 'pages/contact.html']
 ];
@@ -185,7 +201,10 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework));
   }
   if (page.file === 'pages/journal.html') {
-    html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(journal));
+    html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(journal, journalSource));
+  }
+  if (page.file === 'pages/blog.html') {
+    html = replaceGeneratedBlock(html, 'blog-content', renderBlogIndex(journalSource));
   }
   if (page.file === 'pages/about.html') {
     html = replaceGeneratedBlock(html, 'about-content', renderAboutContent());
@@ -238,10 +257,11 @@ function buildMeta(page, siteData) {
     structured.programmingLanguage = 'C#';
     structured.runtimePlatform = 'Unity';
   }
-  if (page.schemaType === 'Article' && page.note) {
+  if (page.schemaType === 'Article' && (page.note || page.article)) {
+    const article = page.note ?? page.article;
     structured.author = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
-    structured.dateModified = page.note.updatedAt;
-    structured.about = page.note.tags;
+    structured.dateModified = article.updatedAt;
+    structured.about = article.tags;
   }
 
   return `<!-- site-meta:start -->
@@ -484,7 +504,7 @@ function renderPortfolioVisual(project, journalData, frameworkData) {
     </div><span class="visual-label">CURATED RESEARCH</span>`;
 }
 
-function renderJournalContent(journalData) {
+function renderJournalContent(journalData, sourceData) {
   const streams = journalData.streams.map((stream, index) => `
                 <article class="stream-card" data-stream="${escapeAttribute(stream.id)}">
                     <div class="stream-card-topline"><span>0${index + 1}</span><i class="fas ${escapeAttribute(stream.icon)}" aria-hidden="true"></i></div>
@@ -501,6 +521,19 @@ function renderJournalContent(journalData) {
                     <p class="note-finding"><strong>核心结论</strong>${escapeHtml(note.finding)}</p>
                     <a class="note-link" href="journal/${encodeURIComponent(note.id)}.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>`).join('');
+  const recentAudits = sourceData.audits.slice(0, 6).map((audit) => `
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · ${escapeHtml(audit.updatedAt)}</p>
+                    <h3>${escapeHtml(audit.title)}</h3>
+                    <p>${escapeHtml(audit.summary)}</p>
+                </article>`).join('');
+  const gameDesigns = sourceData.gameDesigns.map((design) => `
+                <article class="design-summary-card" id="design-${escapeAttribute(design.id)}">
+                    <p class="project-status">游戏设计范式 · ${escapeHtml(design.updatedAt)}</p>
+                    <h3>${escapeHtml(design.title)}</h3>
+                    <p>${escapeHtml(design.summary)}</p>
+                    <div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
+                </article>`).join('');
 
   return `<header class="journal-hero">
         <div class="container journal-hero-grid">
@@ -514,8 +547,10 @@ function renderJournalContent(journalData) {
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
                 <div class="journal-metric"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>${journalData.summary.auditCount}</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>${journalData.summary.blogCount}</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.knowledgeStreamCount}</strong><span>知识流</span></div>
-                <p>公开页只展示经过策展的摘要；完整研究仓库继续保留原始笔记、证据和工作历史。</p>
+                <p>审计与设计记录发布公开摘要；登记在册的博客发布完整正文。</p>
             </div>
         </div>
     </header>
@@ -533,13 +568,53 @@ function renderJournalContent(journalData) {
             </div>
         </div>
     </section>
+    <section class="journal-section journal-updates" id="recent-audits">
+        <div class="container">
+            <div class="journal-section-heading"><div><p class="journal-kicker">RECENT FRAMEWORK AUDITS</p><h2>近期框架审计摘要</h2></div><p>按 Journal 固定提交导出；私有路径、凭据和内部运行信息不会进入本站。</p></div>
+            <div class="journal-update-grid">${recentAudits}
+            </div>
+        </div>
+    </section>
+    <section class="journal-section" id="game-design-library">
+        <div class="container">
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2>游戏设计范式索引</h2></div><p>${sourceData.gameDesigns.length} 个确定性目录条目，每个稳定 ID 都可被博客引用。</p></div>
+            <div class="design-summary-grid">${gameDesigns}
+            </div>
+        </div>
+    </section>
     <section class="journal-section">
         <div class="container">
             <div class="journal-bridge">
                 <div><p class="journal-kicker">RESEARCH → SYSTEM → WORK</p><h2>记录的价值，在于改变下一次实现</h2><p>只有能够跨项目复用的结论，才进入 Sakura Framework；只有被实际作品验证的能力，才成为作品集证据。</p></div>
                 <div class="bridge-actions"><a class="bridge-card" href="framework.html"><span>02 / SYSTEM</span><strong>Sakura Framework</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="bridge-card" href="game.html"><span>03 / WORK</span><strong>《言铸之剑》</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
             </div>
-            <p class="journal-source-note">内容选摘自私有的 Sakura Design Journal；本页只公开经过筛选的摘要，不暴露仓库地址或未整理的工作记录。</p>
+            <p class="journal-source-note">同步来源固定为 Journal 提交 ${escapeHtml(sourceData.sourceCommit.slice(0, 8))}；未提交草稿、仓库地址、本机路径和未登记文章不进入本站。</p>
+        </div>
+    </section>`;
+}
+
+function renderBlogIndex(sourceData) {
+  const articles = sourceData.blogs.map((article) => `
+                <article class="blog-card">
+                    <p class="project-status">${escapeHtml(article.series)} · ${escapeHtml(article.updatedAt)}</p>
+                    <h2>${escapeHtml(article.title)}</h2>
+                    <p>${escapeHtml(article.summary)}</p>
+                    <div class="note-tags">${article.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
+                    <a class="note-link" href="blog/${encodeURIComponent(article.id)}.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>`).join('');
+  return `<header class="blog-hero">
+        <div class="container">
+            <p class="section-kicker">COMPLETE ARTICLES · VERIFIED SOURCE</p>
+            <h1>游戏系统与工程设计博客</h1>
+            <p>这里发布 Sakura Design Journal 中已经登记、经过安全检查的完整文章。审计与日常研究继续以摘要形式保留在 Journal。</p>
+            <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a></div>
+        </div>
+    </header>
+    <section class="blog-list-section" id="articles">
+        <div class="container">
+            <div class="journal-section-heading"><div><p class="journal-kicker">PUBLISHED FROM JOURNAL</p><h2>${sourceData.blogs.length} 篇完整文章</h2></div><p>来源提交 ${escapeHtml(sourceData.sourceCommit.slice(0, 8))}</p></div>
+            <div class="blog-card-grid">${articles}
+            </div>
         </div>
     </section>`;
 }
@@ -684,6 +759,69 @@ async function writeJournalDetailSources(definitions) {
   const directory = path.join(root, 'pages/journal');
   await mkdir(directory, { recursive: true });
   await Promise.all(definitions.map(({ file, note }) => writeFile(path.join(root, file), renderJournalDetailSource(note))));
+}
+
+async function writeBlogDetailSources(definitions) {
+  const directory = path.join(root, 'pages/blog');
+  await rm(directory, { recursive: true, force: true });
+  await mkdir(directory, { recursive: true });
+  await Promise.all(definitions.map((definition) => (
+    writeFile(path.join(root, definition.file), renderBlogDetailSource(definition))
+  )));
+}
+
+function renderBlogDetailSource({ article, markdown }) {
+  const bodyMarkdown = markdown.replace(/^#\s+.+?(?:\r?\n){1,2}/u, '');
+  const body = sanitizeHtml(marked.parse(bodyMarkdown), {
+    allowedTags: [
+      ...sanitizeHtml.defaults.allowedTags,
+      'img',
+      'details',
+      'summary'
+    ],
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'title', 'width', 'height'],
+      code: ['class'],
+      th: ['align'],
+      td: ['align']
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+    allowProtocolRelative: false
+  });
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(article.title)} | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker">${escapeHtml(article.series)} · ${escapeHtml(article.updatedAt)}</p>
+            <h1>${escapeHtml(article.title)}</h1>
+            <p class="blog-deck">${escapeHtml(article.summary)}</p>
+            <div class="note-tags">${article.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
+        </header>
+        <div class="blog-prose">${body}</div>
+        <footer class="blog-source-note">本文由 Sakura Design Journal 的固定提交导出并在本站完整发布；站点生成器会清理可执行 HTML。</footer>
+    </article>
+</main>
+<footer class="footer"></footer>
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
+`;
 }
 
 function renderJournalDetailSource(note) {

@@ -10,6 +10,7 @@
 
 - `/`：定位、能力证据、精选项目与研究更新；
 - `/pages/journal.html`：经过策展的研究摘要；
+- `/pages/blog.html`：Journal 中登记并通过安全门禁的完整博客正文；
 - `/pages/framework.html`：框架规模、模块浏览器与生命周期成熟度；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 - `/pages/portfolio.html`：三个真实项目及其状态、职责、证据和限制；
@@ -48,22 +49,28 @@ npm run package:site
 - `data/site.json`：品牌定位和真实社交入口；
 - `data/projects.json`：三个公开项目的状态、职责、证据与限制；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
+- `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
+- `content/blogs/`：获准全文公开、经过链接改写和内容检查的 Markdown；
 - `data/framework.json`：由 Sakura Framework 权威清单生成的白名单公开快照。
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 
 ### 研究记录同步
 
-本机有权读取私有 Journal 时，可以检查其**已提交 HEAD**，不会消费未提交日记或草稿：
+同步采用由 Journal `main` 推送触发的公开导出包，个人站不克隆或读取私有 Journal。
+需要在本地复现时，先在 Journal 生成导出目录，再导入本站：
 
 ```bash
-npm run journal:status -- --journal /path/to/sakura-design-journal
-npm run journal:sync -- --journal /path/to/sakura-design-journal
+npm run journal:import -- --input /path/to/public-export
+npm run journal:check -- --input /path/to/public-export
 ```
 
-策展白名单位于 `config/journal-curation.json`。当 `journal:status` 报告已提交内容变化时，先审阅新增或变化的稳定 ID，最多选取少量真正影响框架或作品判断的主题，再运行带 `--advance-source` 的同步。同步器只把策展字段写入公开快照，并拒绝本机路径、仓库地址和外部 URL。它不会提交、推送或部署。
+策展白名单位于 `config/journal-curation.json`。游戏设计与框架审计只发布摘要；
+`blogs/publication.v1.json` 登记的博客发布完整正文。导入器会再次检查提交 SHA、数量、
+正文哈希、危险 HTML、本机路径和凭据模式。
 
-夜间检查由能同时访问两个本机仓库的 Codex 本地自动化执行；GitHub Pages CI 只验证和发布已经进入本站仓库的公开快照。
+Gitea 到 GitHub 的密钥配置、路径所有权和冲突处理见
+[`docs/maintenance/journal-sync.md`](docs/maintenance/journal-sync.md)。
 
 ## 发布流程
 
@@ -73,7 +80,7 @@ npm run journal:sync -- --journal /path/to/sakura-design-journal
 
 - 规模不等于成熟度；Framework 页面必须同时展示生命周期；
 - 原型不等于正式发布；没有 Demo、视频或平台证据时明确标注缺口；
-- 私有研究只发布经过策展的摘要；
+- 私有研究只发布经过策展的摘要；只有明确登记的 `blogs/` 文章允许全文发布；
 - 联系入口必须真实可访问；
 - 新的公共声明需要对应数据、页面证据或验证记录。
 

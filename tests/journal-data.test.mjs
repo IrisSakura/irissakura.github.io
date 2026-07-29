@@ -10,15 +10,19 @@ async function readText(path) {
 
 test('journal snapshot exposes a small curated public contract', async () => {
   const data = JSON.parse(await readText('data/journal.json'));
+  const source = JSON.parse(await readText('data/journal-source.json'));
 
   assert.equal(data.schemaVersion, 1);
   assert.equal(data.title, 'Sakura Design Journal');
-  assert.equal(data.summary.gameDesignCount, 38);
+  assert.equal(data.summary.gameDesignCount, source.gameDesigns.length);
+  assert.equal(data.summary.auditCount, source.audits.length);
+  assert.equal(data.summary.blogCount, source.blogs.length);
   assert.equal(data.summary.knowledgeStreamCount, 3);
   assert.equal(data.streams.length, 3);
   assert.ok(data.featuredNotes.length >= 6);
   assert.match(data.sourceSnapshot.catalogDigest, /^[a-f0-9]{64}$/);
-  assert.equal(data.sourceSnapshot.curatedCatalogCount, 4);
+  assert.match(data.sourceSnapshot.sourceCommit, /^[a-f0-9]{40}$/);
+  assert.equal(data.sourceSnapshot.sourceCommit, source.sourceCommit);
 
   for (const note of data.featuredNotes) {
     assert.deepEqual(
@@ -37,6 +41,7 @@ test('journal snapshot exposes a small curated public contract', async () => {
 test('journal page statically renders every curated view and preserves the private boundary', async () => {
   const html = await readText('pages/journal.html');
   const data = JSON.parse(await readText('data/journal.json'));
+  const source = JSON.parse(await readText('data/journal-source.json'));
   const details = await Promise.all(data.featuredNotes.map((note) => readText(`pages/journal/${note.id}.html`)));
   const publicFiles = [html, ...details, JSON.stringify(data)].join('\n');
 
@@ -52,6 +57,12 @@ test('journal page statically renders every curated view and preserves the priva
     for (const heading of ['问题背景', '研究方法', '核心发现', '对框架或游戏的影响', '更新时间']) {
       assert.ok(detail.includes(heading), `${note.id} missing ${heading}`);
     }
+  }
+  for (const design of source.gameDesigns) {
+    assert.ok(html.includes(`id="design-${design.id}"`), `missing game design summary ${design.id}`);
+  }
+  for (const audit of source.audits.slice(0, 6)) {
+    assert.ok(html.includes(audit.summary), `missing recent audit ${audit.id}`);
   }
 
   assert.ok(!publicFiles.includes('154.37.215.57'));

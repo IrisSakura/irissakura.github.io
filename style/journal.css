@@ -335,6 +335,32 @@
     text-align: center;
 }
 
+.journal-update-grid,
+.design-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.journal-update-card,
+.design-summary-card {
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.journal-update-card h3,
+.design-summary-card h3 {
+    margin: 0.5rem 0 0.8rem;
+}
+
+.journal-update-card > p:not(.project-status),
+.design-summary-card > p:not(.project-status) {
+    color: var(--secondary-text-color);
+    line-height: 1.7;
+}
+
 .journal-loading,
 .journal-error {
     grid-column: 1 / -1;

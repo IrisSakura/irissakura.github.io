@@ -32,7 +32,7 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  for (const route of ['/', '/pages/about.html', '/pages/framework.html', '/pages/portfolio.html', '/pages/journal.html', '/pages/journal/rhythm-audio-clock.html', '/pages/game.html', '/pages/contact.html']) {
+  for (const route of ['/', '/pages/about.html', '/pages/framework.html', '/pages/portfolio.html', '/pages/journal.html', '/pages/journal/rhythm-audio-clock.html', '/pages/blog.html', '/pages/blog/extraction-transaction-boundary.html', '/pages/game.html', '/pages/contact.html']) {
     const response = await desktop.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
     if (!response?.ok()) throw new Error(`${route} returned ${response?.status()}`);
     if (await desktop.locator('main#main-content').count() !== 1) throw new Error(`${route} lacks one main landmark`);
@@ -48,6 +48,11 @@ try {
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.portfolio-case').count() !== 3) throw new Error('portfolio does not expose exactly three fixed cases');
   if (!await desktop.locator('.portfolio-case').first().filter({ hasText: '言铸之剑' }).isVisible()) throw new Error('game prototype is not the first portfolio case');
+
+  await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
+  if (await desktop.locator('.blog-card').count() !== 3) throw new Error('blog index does not expose the registered complete articles');
+  await desktop.locator('.blog-card').filter({ hasText: '事务提交边界' }).getByRole('link', { name: '阅读全文' }).click();
+  if (!await desktop.locator('.blog-prose').filter({ hasText: '真正到账点' }).isVisible()) throw new Error('complete blog body is not visible');
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await mobile.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
@@ -66,7 +71,7 @@ try {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'contact-mobile.png'), fullPage: true });
   }
 
-  console.log('Browser smoke passed: routes, evidence-led portfolio, mobile navigation and public routes checked.');
+  console.log('Browser smoke passed: routes, complete blog publishing, evidence-led portfolio, mobile navigation and public routes checked.');
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

@@ -1,0 +1,703 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "d35c53ec293f4a41c54ed3d8ba394912a8b5be13",
+  "generatedAt": "2026-07-29T18:08:19+08:00",
+  "summary": {
+    "auditCount": 23,
+    "blogCount": 3,
+    "gameDesignCount": 40
+  },
+  "gameDesignCatalogDigest": "ab91ff2d534fe16bb01af201979fea4eddd7ae61c99ae40fe0dc4cedf5423adb",
+  "audits": [
+    {
+      "id": "audit-2026-07-26",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最重要的变化是 ECS Runtime 后端可选性完成远端证据闭环。 当前 ECS Runtime 已完成： Disabled / Arch / Unity Entities 三种显式后端选择； 根包依赖收敛； Portable Arch 自包含闭包； Unity Entities 条件程序集； Hitbox、RTS 能力级条件 Bridge； Owned/Borrowed World 生命周期； 显式 Tick 与禁止自动加入 PlayerLoop； PlayMode、IL2CPP/AOT 与性能基线验证。 证据闭包提交 af0ab6f4... 的 Gitea CI run 398 已完成常规质量和 Unity Impact；ECS focused run 399 精确选择 ECS Runtime、Hitbox、RTS 三包并通过 113/113，相关 XML 与 Editor Log…",
+      "updatedAt": "2026-07-26",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-25",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮新增的 Sakura Asset Governance 整体方向正确： 没有新增 UPM 包； 归属既有 editor-tools； 分离纯规则 Core、Unity Editor Adapter 和独立测试程序集； 支持目录、扩展名、资源类型、例外、增量扫描、全量扫描、报告、Settings、Doctor、Build Gate 和 Batchmode 入口； 默认不移动、删除或自动修复项目资源。 其实现 SHA ada803be... 已在 Gitea Testbed run 353、354 上取得 Bootstrap 95/95 和 Full 555/555，两个选择清单都包含 Framework.Editor.AssetGovernance.Tests。不过远端 Artifact REST 索引仍返回 0，当前只能证明测试和上传步骤通过，不能声明原始 ZIP 或文件哈希。",
+      "updatedAt": "2026-07-25",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-24",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库继续沿“降低根依赖、明确程序集所有权、补齐通用运行时基础设施”的方向推进，主要完成了六个切片： Core Announcement 迁移至 Ticker； Core VContainer Adapter 迁移至 Bootstrap； 主线程派发 Bridge； Durable Signal Core； Config Snapshot Core； Preferences Store，并接入 Audio、Rhythm。 这些工作均已在 PLAN-INDEX 中标记为 implemented / completed，但证据仍为 local-passed / runner-pending。 总体判断： 所有权收敛和根依赖减负方向正确，但本轮再次同时扩大了包数量、程序集数量和 Stable 公共 API。当前最需要做的是冻结公共面、补同一 SHA 的远端证据和修复新基础设施的失败语义，而不是继续新增“通用基础能力”。",
+      "updatedAt": "2026-07-24",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-23",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最新提交本身主要同步 Domain Optional Bridge 的治理状态；最近最重要的实质代码变更是前一提交： 其核心成果是将大量 Domain Framework 根包中的 Config、GAS、Simulation、Networking、Sensory、Pathfinding 等集成从硬依赖改造成条件程序集，并拆分相应测试程序集。同期还整理了计划文档、建立独立设计日志仓库，并继续压缩主仓库中的非工程事实源。 本轮总体判断： Domain 依赖收敛方向正确，安装闭包已经明显减小；但程序集数量、计划数量和 Runner Evidence Backlog 同时上升。当前应停止继续扩展 Bridge，优先补齐 CI 影响面选择、最新提交远端证据和公开网络传输契约。 与上一轮审计快照相比： 这说明本轮成功降低了根包依赖耦合，但代价是增加了约 23 个条件 Bridge 与测试程序集。",
+      "updatedAt": "2026-07-23",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-22",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库发生了三类实质变化： 治理与证据债务明显收敛：利用既有 Gitea Runner 日志关闭了一批长期 runner-pending 工作，并为 Season Feature 增加正式 CI 入口。 框架能力继续扩展：新增 Semantic Combat 包、GAS 统一伤害事实链、Runtime Starter 综合样例和多个可运行教学 Sample。 日常 CI 与性能资格化已经解耦：合成性能不再阻断普通开发流水线，只保留在显式资格化、手动 Testbed 和 Release 路径中。 当前权威清单已经增长到 137 个 UPM 包、132 个 Catalog 模块、671 个程序集。Supported 仍保持 4 个，但 Preview 降至 99、Experimental 增至 22，说明仓库开始通过生命周期重分类降低“默认可用”的错误预期。",
+      "updatedAt": "2026-07-22",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-21",
+      "title": "Sakura Framework 仓库阶段审计与未来工作计划",
+      "summary": "Sakura Framework 已经从“扩充框架能力”的阶段，进入“治理现有能力、降低维护成本、补齐工程证据”的阶段。 当前项目已经具备： 大规模 UPM 多包结构； 明确的 Foundation、Runtime Service、Gameplay Kernel、Domain Framework、Adapter Bridge 和 Tooling 分层； Gitea CI、Unity Testbed、Server Build/Test、DocFX 和 Release Candidate 工具链； Package Lifecycle、Framework Inventory、Plan Gate 和架构边界校验； Core Only、Bootstrap Lite 等正式消费入口； Typed UI、Feature Module、Server Host、Change Publisher 等较完整的子系统；",
+      "updatedAt": "2026-07-21",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-19",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮近期提交已经从“继续吸收功能”重新收敛到 Stable Profile 性能治理、正式策略迁移和 Public API baseline 同步。 近期提交序列主要包括： 当前总体判断： 仓库的静态真相源已经恢复一致，feature-module 已正式纳入 Package Support Policy 和 Inventory；性能 Stability v2 也已完成正式事务迁移。但当前提交仍缺少新的远端 Runner 证据，性能治理文档的状态机存在滞后，首次 RC 仍不得恢复。 本轮最重要的结论是： UPM 包、支持策略和 Inventory 已从昨日的不一致恢复为一致。 性能 Stability v2 的技术方案合理：本地重复性改用 median+p90，受信 Runner 才使用 p95 CPU 预算。",
+      "updatedAt": "2026-07-19",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-18",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮变化非常密集。最近提交已经不只是完善性能测量，而是同时推进了： Stable Profile 五进程性能稳定性批次； Unity clean-exit 诊断和 Candidate Evidence 性能批次绑定； Core RNG Trace、命名流消费约定与分类诊断日志； Simulation RNG Diff、回放记录、无头验算和指标时间线； CardCore 局内抽牌运行时； 新增 feature-module 0.1.0 UPM 包； Logic-only / Headless 政策与夹具形状校验； CI、Release、Unity Testbed 工作流调整。 这些能力分别具有工程价值，但它们发生在首次 RC 已因性能稳定性问题停止、明确要求保持 baseline 不变和不得创建 rc.6 的阶段。当前出现了明显的治理冲突：",
+      "updatedAt": "2026-07-18",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-17",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "Sakura Framework 当前已经进入明显的发布稳定性治理期，但最近又同时扩展了 Typed UI Phase 3/4 和 Supported Core 的确定性随机 API。 这两个方向本身都有合理设计，但发生在首次 RC 已经被性能门禁阻断的时间窗口，形成了新的治理风险： 仓库一边试图冻结首次 RC，另一边仍在扩大公共 API、编辑器工具和本地验证矩阵。 本轮最重要的结论是： RC 性能失败不能归因于单一代码回归，也不能通过放宽 baseline 解决。 正式性能门禁的测量模型缺少跨进程资格验证。 Typed UI Phase 0–4 已实质完成，不再只是候选；应立即停止继续扩张 Phase 5。 core 0.6.0 已引入经人工批准的破坏性 RNG API，但仍存在计数类型与隐式随机种子语义不统一。",
+      "updatedAt": "2026-07-17",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-16",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库的主要变化是 Typed UI 系统正式落入源仓库，并完成 Core、Unity Adapter、Item Select Golden Sample 和 CI Sample 验证链路。 近期提交依次推进了： Typed UI 设计与实现； UI 运行时适配和生命周期优化； 将导入后的 Typed UI Sample 测试接入 unity-impact； 将样例状态更新为 runner-passed / accepted-complete。 仓库没有新增 UPM 包，但包内程序集数已增至 614，主要来自 Typed UI Core、Adapter、测试程序集和 Sample。当前总体规模仍为 135 个 UPM 包、131 个 Catalog 模块、64 个 Installer 预设。 本轮总体判断： Typed UI 采用“扩展既有 ui-core 与 ui、不创建第二套 UIManager、不新增 UPM…",
+      "updatedAt": "2026-07-16",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-15",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库没有继续新增 UPM 包或玩法域实现。近期变更主要集中在四个方向： 将一台实际 Runner 的 CPU 性能数据按精确指纹和人工审批纳入正式性能基线； 完成仓库及首次 RC 外部依赖的许可证证据； 修复 Gitea 自托管 Runner 上宿主凭据覆盖工作流凭据的问题； 撤销只存在于 GitHub 镜像的 Typed UI 设计规格，恢复镜像与源仓库的一致性。 当前总体判断： 首次 RC 的本地工程门禁已经接近闭环，许可证和性能基线两个主要本地阻塞项已经解除；但新基线尚未在包含这些变更的新 RC 提交上复证，Gitea checkout 修复也尚未获得远端 Runner 结果，Candidate Evidence 与正式 Release 仍然处于阻断状态。 本轮新增发现的最高风险是： ---",
+      "updatedAt": "2026-07-15",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-14",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最新变化集中在 Release Candidate 同 SHA 证据生产链路，而不是继续扩充 UPM 包或玩法域。 最近七个提交完成了以下工作： 新增 Candidate Evidence Producer； 将 Release workflow 重构为不可变候选解析、Unity 证据生产、仓库证据生产、证据组装和 Release 五段式流程； 建立 exact-tree Bundle、文件哈希、大小和候选身份验签； 修复 Consumer Walkthrough 本地 run id； 修正 Stable Public API 差异分类和基线； 完成一次干净提交上的本地完整 dry-run； 将 candidate-evidence.json 加入 Release 必需资产测试。 这是明显的正向进展。此前最大的 RC 工程缺口是：",
+      "updatedAt": "2026-07-14",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-13",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最大的变化不是新增模块，而是 Unity 聚合编译与真实消费验证暴露了此前小型 Profile 测试没有覆盖的一批程序集布局、依赖声明、测试 Fixture 和运行时缺陷。 最新修复覆盖： Guide、ECS Runtime、Life Sim、WorldGen 的测试程序集目录冲突； 缺失或损坏的 Unity .meta GUID； AI GOAP 目标状态副本问题； Life Sim 脏区合并无限循环、稀疏 RLE 坐标丢失、天气和暂停边界； MMO 空间索引换位； Survival World Delta、权重和备份边界； 多个程序集缺少直接引用； Unity Editor 日志在 CI 中的留存与失败诊断。 该切片没有新增 UPM 包或玩法能力，边界仍属于既有实现和测试基础设施修复。原始 CI 选择的 55 包已在本地取得 1554/1554，WorldGen 补充隔离测试取得 31/31；但真实 Gitea…",
+      "updatedAt": "2026-07-13",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-11",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "仓库已经从“扩充模块数量”进入“支持面治理、可复现交付、性能预算和服务端协议闭环”阶段。 当前权威清单显示： |指标|数量| |---|--:| |UPM 包|135| |Catalog 模块|131| |Installer 预设|64| |Supported Profile|9| |包内程序集|610| |noEngineReferences 程序集|354| |内部依赖边|294| 支持生命周期分布为： |生命周期|包数| |---|--:| |Supported|11| |Preview|106| |Experimental|6| |DocsOnly|9| |Frozen|3| 本轮审计的主要结论是： Framework Inventory、Installer V2、Editor Tools 程序集拆分、Public API Snapshot、生命周期策略和 RC/SBOM 工具链已经形成较完整的本地工程闭环。",
+      "updatedAt": "2026-07-11",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-10",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "当前 GitHub 最新可见提交为： 此前两个提交分别是“尝试应用优秀设计理念重构部分模块”和“推进横向能力二期计划”。因此，最近三次提交的主线已经从 Sample Gallery 等横向工具建设，转向： 建立普通 push / PR 的 Unity 影响面测试； 修复 Addressables 加载器的类型错配、取消和异常隔离问题； 收紧运行时诊断开销； 加强内部依赖版本和领域包生命周期校验； 修复 MVVM Unity Adapter； 为 RedDot 增加显式延迟批量提交； 将尚无真实消费条件的 Godot、Save 流式管线和通用代际句柄计划明确标记为 deferred。 仓库当前仍有 135 个 UPM 子包、131 个安装器模块和 64 个预设；其中 61 个属于 domain-framework。这个规模说明项目已经不是“功能不足”，而是进入了稳定性、可信消费和支持面收缩优先的阶段。",
+      "updatedAt": "2026-07-10",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-09",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 34ff740b778f283046dd676ad30e379749981e14，提交信息是 “feat：补充 sample-gallery”。最近提交序列还包括“持续推进横向能力”“改善横向功能”“正确接入 unity-testbed workflow”“修复 testbed yml”“修复认证失败等一系列可能导致工作流失败”等，说明仓库当前主线已经从“新增玩法域包”转向 横向生产力工具、Sample Gallery、Unity Testbed 远端补证、Gitea 工作流接入修复与文档入口压缩。 当前仓库规模仍保持： |项目|当前状态| |---|--:| |UPM 子包|135| |已登记分层包|135| |package.json / README.md / CHANGELOG.md 完整性|135 / 135 / 135|",
+      "updatedAt": "2026-07-09",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-08",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 687f085ad1b5631c7b37565cbcc7770fdb9c82cb，提交信息是 “refactor：清理无用文档，整理部分文档”。最近提交序列显示，仓库当前主线已经从“继续新增玩法域包”转向“归档已闭环路线、压缩文档入口、补齐证据账本、治理 domain-framework 扩张”。 当前仓库规模保持为： |项目|当前状态| |---|--:| |UPM 子包|135| |已登记分层包|135| |package.json / README.md / CHANGELOG.md 完整性|135 / 135 / 135| |至少包含一个 .asmdef 的包|135| |Welcome 安装器模块|131| |Welcome 安装器预设|64| |domain-framework 包|61|",
+      "updatedAt": "2026-07-08",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-07",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 39bcc8473e97d596ce47667668d6435d60fdedfc，提交信息是 “fix：持续推进 domain-framework收敛”。最近提交序列也显示，仓库在连续推进 domain-framework 收敛、冗余清理、Runner 补证、Unity Testbed 产物补齐与易用性治理。 当前仓库规模仍为： 根 README 已将这些数据登记为当前快照，并明确仓库是“单 Git 仓库，多 UPM 子包”的结构，框架不承载具体项目怪物、武器、关卡、数值表、UI 预制体、美术或业务玩法脚本。 本轮核心判断： 最值得肯定的进展： 当前最大风险： ---",
+      "updatedAt": "2026-07-07",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-06",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "当前 GitHub 仓库已经从前几轮的“消费侧易用性提升”继续推进到 重复造轮子与冗余设计收敛。PLAN-INDEX.md 当前明确写明：当前最高优先级路线是复用地图、消息分发边界、版本闭包校验、Domain 成熟度分级，以及 UI Core ownership、GAS/Hitbox Bridge、FlowField/SpatialHash 复用审计与源码收敛等切片；新的 domain-framework 包扩张仍需单独设计与批准。 仓库规模当前为 135 个 UPM 子包、135 个已登记分层包、131 个 Welcome 安装器模块和 64 个预设；其中 domain-framework 已达到 61 个包，是当前维护面最大的层级。 本轮最重要的变化是： 结论： ---",
+      "updatedAt": "2026-07-06",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-05",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 858c70f...，提交信息是 “feat：推进易用性进展”。其后最近提交序列还包括 ff216f8... 的 Courier Delivery Core 与 b404f05... 的 Vessel Systems Management Core。这说明仓库最近一方面继续推进消费侧易用性，另一方面仍有新的玩法域 Core 进入仓库。 当前仓库规模已更新为： 根 README 已将这些数量刷新为 2026-07-04 当前快照。 本轮最重要的结论是： 当前最值得肯定的变化： 当前最需要警惕的风险： ---",
+      "updatedAt": "2026-07-05",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-04",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最新可见提交为 a7490c5...，提交信息是 “feat：完善、推进”。该提交继续推进两个方向：一是将 life-sim 的恋爱养成 Phase 6 从待实施更新为 Core 已落地；二是新增 com.unitygame.framework.journalism-simulation 媒体运营模拟 Core，并同步到计划索引、包、catalog 与推荐预设。 当前仓库仍保持“单 Git 仓库，多 UPM 子包”的定位，根 README 明确：框架只沉淀可迁移、可复用、可组合的基础能力，不承载具体项目怪物、武器、关卡、数值表、UI 预制体、美术资源或业务玩法脚本。 整体判断： 当前最值得肯定的进展： 当前最需要警惕的风险： ---",
+      "updatedAt": "2026-07-04",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-03",
+      "title": "Sakura Framework 仓库审计报告",
+      "summary": "Sakura Framework 当前已经进入一个新的阶段：它不再只是“Unity 多包客户端框架”，而是正在形成一个包含 Unity UPM 包、Gitea CI/CD、Unity Testbed、Server Workspace、Change Publisher、Runtime 生命周期治理 的复合工程平台。 当前 README 记录的工作区状态仍是： Packages/com.unitygame.framework. UPM 子包：132 个； 已登记分层包：132 个； 包级 package.json / README.md / CHANGELOG.md 完整性：132 / 132 / 132； 至少包含一个 .asmdef 的包：132 个； Welcome 安装器模块：128 个； Welcome 安装器预设：61 个。",
+      "updatedAt": "2026-07-03",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-02",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "Sakura Framework 当前已经从“Unity 客户端多包框架”进入“客户端框架 + 服务端配套 workspace + 私有 Gitea 发布链路”的阶段。 当前 README 记录的实时状态是： 132 个 Packages/com.unitygame.framework. UPM 子包； 132 个已登记分层包； 132 / 132 / 132 个包具备 package.json、README.md、CHANGELOG.md； 132 个包均至少包含一个 .asmdef； Welcome 安装器覆盖 128 个模块与 61 个预设。 框架的主要矛盾已经不再是“能力不足”，而是： 如何把大量已落地能力收敛为可信的安装组合、测试闭环、文档站、Release 产物和客户端—服务端协同边界。 最新提交显示，仓库新增了 /Server 顶层 .NET workspace 的初始路线，并将其登记为 P5…",
+      "updatedAt": "2026-07-02",
+      "redacted": false
+    }
+  ],
+  "gameDesigns": [
+    {
+      "id": "jrpg-chapter-party-progression",
+      "title": "JRPG 中的章节驱动、队伍成长与冒险循环",
+      "summary": "以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。",
+      "tags": [
+        "jrpg",
+        "narrative",
+        "party-progression"
+      ],
+      "updatedAt": "2026-07-28",
+      "sha256": "bcee423565f60fe244bd8f86265f19ede82b88121561651af2ee6b9caf8dfb35"
+    },
+    {
+      "id": "soulslike-action-commitment-recovery",
+      "title": "类魂动作角色扮演中的动作承诺、死亡回收与检查点循环",
+      "summary": "以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。",
+      "tags": [
+        "action-rpg",
+        "checkpoint",
+        "soulslike"
+      ],
+      "updatedAt": "2026-07-28",
+      "sha256": "1dec82f6b556f46021a460933a0143038b4dd5ec7163ac3e77be3d4171cda44f"
+    },
+    {
+      "id": "real-time-strategy",
+      "title": "实时战略中的命令群体模拟、生产战争循环与战争迷雾",
+      "summary": "分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。",
+      "tags": [
+        "fog-of-war",
+        "real-time-strategy",
+        "strategy"
+      ],
+      "updatedAt": "2026-07-24",
+      "sha256": "40708ca182b9d8bf428338320f6f97770582b91e54fcf4ab0ad52cb03bd4eacb"
+    },
+    {
+      "id": "alchemy-magical-crafting",
+      "title": "魔法炼金（Alchemy & Magical Crafting Simulation）",
+      "summary": "围绕配方发现、材料性质、工艺步骤与实验风险组织魔法制造循环。",
+      "tags": [
+        "alchemy",
+        "crafting",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "b0efbedb5d642d0eb9ee1a293f193674e6ee116e16c048ee972cc63612212ab8"
+    },
+    {
+      "id": "archaeology-restoration",
+      "title": "考古发掘（Archaeology & Artifact Restoration Simulation）",
+      "summary": "描述勘探、分层发掘、证据记录、文物修复与知识重建的连续工作流。",
+      "tags": [
+        "archaeology",
+        "restoration",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "c8d94d2e51ce8dbc23513828909382094aa6283b8ddf9852c6c9d1c912491c7c"
+    },
+    {
+      "id": "beatmap-timing",
+      "title": "音游判定与谱面系统（Beatmap & Timing Judgement System）",
+      "summary": "聚焦谱面数据、时间窗口、输入判定、连击评分与可复核结果。",
+      "tags": [
+        "beatmap",
+        "rhythm",
+        "timing"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "3710640b03257fd23a72433334e741123e2ec86ae9306b36e56895aa02cf2fa1"
+    },
+    {
+      "id": "causal-weaving",
+      "title": "因果编织类游戏",
+      "summary": "以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。",
+      "tags": [
+        "causality",
+        "narrative",
+        "puzzle"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "8a34d717929cae047468ed9e777cb14c8755443d27269edfba27977d117f4c6f"
+    },
+    {
+      "id": "club-management",
+      "title": "俱乐部经营模拟",
+      "summary": "覆盖成员招募、训练、阵容、赛事、财务与声望共同驱动的长期经营循环。",
+      "tags": [
+        "club",
+        "management",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "474da27a8663e6af82283e92c6fcc221986967b155371d731253005d4aff6988"
+    },
+    {
+      "id": "colony-sim",
+      "title": "聚落生存模拟中的个体代理、工作调度与连锁生存系统",
+      "summary": "分析个体需求、工作分配、资源网络和局部故障如何形成聚落级生存涌现。",
+      "tags": [
+        "colony",
+        "scheduling",
+        "survival"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "9da395e81ff744bbe2adb3f0dda163001125ead8a54f4679f42480ae7ad24ea4"
+    },
+    {
+      "id": "cooperative-hunting-action",
+      "title": "多人共斗狩猎动作游戏中的目标遭遇、部位破坏与协作窗口",
+      "summary": "围绕大型目标、动作承诺、部位状态、团队职责和阶段窗口组织共斗狩猎。",
+      "tags": [
+        "action",
+        "cooperative",
+        "hunting"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "658d93d422ee5c983d6198952f51e5e47f99834266ea5c66ee5fba71840e17bd"
+    },
+    {
+      "id": "courier-delivery",
+      "title": "末端物流模拟（Courier Delivery & Last-Mile Logistics Simulation）",
+      "summary": "围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。",
+      "tags": [
+        "delivery",
+        "logistics",
+        "routing"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "95407fddba299e82f3a24c507c1b2881285a45efe23e9af98dca5e13f5279fa5"
+    },
+    {
+      "id": "courtroom-trial",
+      "title": "法庭辩论（Courtroom Trial）",
+      "summary": "描述证据、证词、论点、反驳与裁决如何构成可审计的庭审对抗。",
+      "tags": [
+        "argumentation",
+        "courtroom",
+        "evidence"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "ce0b95f4f8c68fa5f9b74a6b95eb7533b00489ecea9b698b6f1b02d0c319c80a"
+    },
+    {
+      "id": "deckbuilder-roguelike",
+      "title": "卡牌构筑式 Roguelike 中的牌组演化、效果栈与风险路线",
+      "summary": "分析局内构筑、效果结算、资源曲线和分支路线共同形成的风险经营循环。",
+      "tags": [
+        "cards",
+        "deckbuilding",
+        "roguelike"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "952effadc0777728b3b64d071ee0ac8d79a125b884e0a8285aa9bd829f272047"
+    },
+    {
+      "id": "dress-up",
+      "title": "造型搭配游戏（Dress-Up Game）",
+      "summary": "描述服饰部件、搭配约束、审美标签、收藏成长与展示反馈的组合空间。",
+      "tags": [
+        "collection",
+        "dress-up",
+        "fashion"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "67a0307ec821d1bb90ddd1d5e37b2fefa14c49b9b445b3c938da658be63417aa"
+    },
+    {
+      "id": "expedition-management",
+      "title": "远征队探险管理（Expedition Management Simulation）",
+      "summary": "覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。",
+      "tags": [
+        "expedition",
+        "management",
+        "risk"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "1c48c5d4cfc4b5be4302a3efe83856e61f12d23e8bd62f65dd18f0e3751eca5e"
+    },
+    {
+      "id": "extraction-pvpve",
+      "title": "撤离式 PvPvE 中的风险资产、所有权转移与撤离提交",
+      "summary": "聚焦带入资产、局内拾取、冲突夺取和成功撤离之间的所有权提交边界。",
+      "tags": [
+        "extraction",
+        "pvpve",
+        "survival"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "bbbe07891aafd2139f383f01d9decb6e80b4054f5aea7d42d266176e642cea4c"
+    },
+    {
+      "id": "fishing-aquatic-ecology",
+      "title": "水域生态钓鱼模拟（Fishing & Aquatic Ecology Simulation）",
+      "summary": "将鱼类行为、水域生态、装备选择、捕获过程与资源恢复连接为钓鱼模拟。",
+      "tags": [
+        "ecology",
+        "fishing",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "659fb32cc9e8ac6beddb1632b7f489384077b3c09bb991773bc94c36918793ba"
+    },
+    {
+      "id": "grand-strategy-4x",
+      "title": "大战略与 4X 中的分层世界模拟、长期国策与多尺度因果",
+      "summary": "分析国家、地区和单位层级如何通过长期政策与多尺度反馈共同演化。",
+      "tags": [
+        "4x",
+        "grand-strategy",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "23c4da08605b906f446aac194dd72d6260d95e400a0bcca4893158f39bd459d5"
+    },
+    {
+      "id": "heist-planning",
+      "title": "盗窃计划模拟（Heist Planning & Stealth Infiltration）",
+      "summary": "围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。",
+      "tags": [
+        "heist",
+        "planning",
+        "stealth"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "b08276e8bdd98ed6bd4444457bcbaa648b0edc89ab75835baa8d7e561b5d8295"
+    },
+    {
+      "id": "hospital-triage",
+      "title": "医疗分诊运营（Hospital Emergency & Triage Simulation）",
+      "summary": "描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。",
+      "tags": [
+        "healthcare",
+        "operations",
+        "triage"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "a14d65b7583c07c035ac259c7da67a48922f77d7584203a27baa04841bb542ce"
+    },
+    {
+      "id": "immersive-sim",
+      "title": "沉浸式模拟中的系统性世界、可组合能力与多路径求解",
+      "summary": "以统一世界规则、能力组合和多入口空间支持玩家自主的问题求解。",
+      "tags": [
+        "emergence",
+        "immersive-sim",
+        "systemic"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "cf9515e690df228cba8569246bc5f6b26f77d844cbf006851c156d3ab629789d"
+    },
+    {
+      "id": "interactive-fiction",
+      "title": "交互式文本冒险（Interactive Fiction）",
+      "summary": "围绕叙事状态、选择条件、分支汇合与文本反馈组织可追踪的互动故事。",
+      "tags": [
+        "interactive-fiction",
+        "narrative",
+        "state"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "2a23b653c38f38ec6c69c1049d53a90ea6f37898255b40f8081646eaffcd7aec"
+    },
+    {
+      "id": "journalism-simulation",
+      "title": "媒体运营模拟（Journalism Simulation）",
+      "summary": "覆盖线索获取、事实核验、编辑取舍、发布影响和媒体组织经营。",
+      "tags": [
+        "journalism",
+        "media",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "2662f562fb44bf6d7626ed39287e4878c757a29c71f211c3540a3b2ea40be262"
+    },
+    {
+      "id": "kitchen-time-management",
+      "title": "厨房时间管理模拟（Kitchen Time-Management Simulation）",
+      "summary": "分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。",
+      "tags": [
+        "kitchen",
+        "scheduling",
+        "time-management"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "f58600947d1063d26280f5d3b6e444997c456cc35dd9696eef3b87e0c648237e"
+    },
+    {
+      "id": "metroidvania",
+      "title": "银河城中的能力门控世界图、空间重解释与回访成长",
+      "summary": "描述能力获取如何重写世界可达性，并让旧空间在回访中获得新意义。",
+      "tags": [
+        "ability-gating",
+        "metroidvania",
+        "world-graph"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "5acff69aa70ecdd27c2b30b598ebdb81366bae1a2f8f24c532fc871d281ea21e"
+    },
+    {
+      "id": "nation-management",
+      "title": "国家执政模拟（Nation Management Simulation）",
+      "summary": "围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。",
+      "tags": [
+        "governance",
+        "nation",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "80fb4f79501509a7feb3d42d10074197936ebb784cc6f72a5b29bd3eca2d2445"
+    },
+    {
+      "id": "pet-care",
+      "title": "宠物照护（Pet Care Simulation）",
+      "summary": "将生理需求、情绪、习惯、互动和长期信任连接为宠物照护循环。",
+      "tags": [
+        "care",
+        "life-sim",
+        "pets"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "4ceb08a46b59e1cc33f526dd8aee488e23e33c83f4f905da524bc0cf68861a88"
+    },
+    {
+      "id": "prison-management",
+      "title": "监狱经营模拟（Prison Management Simulation）",
+      "summary": "描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。",
+      "tags": [
+        "management",
+        "operations",
+        "prison"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "b5d51264217273963d8ab78cf348aa3f771004acbe191df169ca8ebb0cefc7d1"
+    },
+    {
+      "id": "racing-fixed-step",
+      "title": "驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定",
+      "summary": "聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。",
+      "tags": [
+        "racing",
+        "simulation",
+        "vehicle"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "5af494ffc5945e41f39ea6443feeb3b9db562161f136c12109e03adca502825e"
+    },
+    {
+      "id": "railway-network-dispatch",
+      "title": "铁路网络模拟（Railway Network & Dispatch Simulation）",
+      "summary": "围绕线路容量、时刻表、信号区段、列车优先级和异常调度模拟铁路网络。",
+      "tags": [
+        "dispatch",
+        "network",
+        "railway"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "b24309ca2ee4b4fbe856aa57beea0bf209195d371c6d52927974cb5a3d5185ef"
+    },
+    {
+      "id": "relationship-simulation",
+      "title": "恋爱养成（Relationship Simulation）",
+      "summary": "描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。",
+      "tags": [
+        "life-sim",
+        "relationship",
+        "simulation"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "757abfa8a5631b4b4500ce515939897decfdb3686dc6def9734860be33fc85e7"
+    },
+    {
+      "id": "rhythm-audio-clock",
+      "title": "节奏游戏的音频主时钟与确定性判定范式",
+      "summary": "聚焦音频主时钟、输入时间映射、确定性判定与表现层同步边界。",
+      "tags": [
+        "audio",
+        "rhythm",
+        "timing"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "4823ecf27529fbf66f5acb1bf7adfd507802ca66c04d3c364a626ae376db8599"
+    },
+    {
+      "id": "social-deduction-hidden-identity",
+      "title": "社交推理与隐藏身份中的不完全信息、可信度与秘密行动",
+      "summary": "分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。",
+      "tags": [
+        "hidden-identity",
+        "social-deduction",
+        "trust"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "32114d4db893f859d23e84ef69872fd127f3abf57c6bdc3ddfb732c9390aca8d"
+    },
+    {
+      "id": "survival-horror",
+      "title": "生存恐怖中的有限资源、威胁不确定性与可恢复压力",
+      "summary": "围绕资源稀缺、威胁感知、探索风险和恢复窗口维持可持续恐怖压力。",
+      "tags": [
+        "horror",
+        "resource-scarcity",
+        "survival"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "523cde9ca9d8db714ca0b756f46b8ee31319588afa7767e2f4f4ed89dea2aa4c"
+    },
+    {
+      "id": "tactical-rpg",
+      "title": "回合制战术角色扮演中的离散战场、行动经济与战术因果",
+      "summary": "描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。",
+      "tags": [
+        "tactical-rpg",
+        "turn-based",
+        "wargame"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "5f6cb876b1b255f4df3300fca3e6d12d8651fd1e53948c2377d44bca46fdef8c"
+    },
+    {
+      "id": "theme-park-management",
+      "title": "游乐园经营模拟（Theme Park Management Simulation）",
+      "summary": "连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。",
+      "tags": [
+        "management",
+        "simulation",
+        "theme-park"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "db6acd3129d29f4b4735d51c3fbe6c151a1175693e6ecd2cadc0e66eeff82cb7"
+    },
+    {
+      "id": "tower-defense",
+      "title": "塔防（Tower Defense）",
+      "summary": "从敌人波次、路径、防御单位、升级和资源循环概述塔防基础结构。",
+      "tags": [
+        "strategy",
+        "tower-defense",
+        "waves"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "ef20ae0b217da61a6516b7d4d8f0a30842afc999baf7dba633b25153f8886dd6"
+    },
+    {
+      "id": "tower-defense-threat-flow",
+      "title": "塔防中的威胁流、路径拓扑与可逆经济布防",
+      "summary": "以威胁流、路径图、防御节点和可回收经济解释塔防运行时范式。",
+      "tags": [
+        "economy",
+        "path-topology",
+        "tower-defense"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "f9bb0c543547b86620ffad8591c51f359af921ef8c91a7ccfdb79754dbad3c11"
+    },
+    {
+      "id": "traditional-fighting-frame-data",
+      "title": "传统对战格斗中的帧数据、动作仲裁与回滚确定性",
+      "summary": "分析帧数据、输入缓冲、动作优先级、命中结算和回滚同步的对抗契约。",
+      "tags": [
+        "fighting",
+        "frame-data",
+        "rollback"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "6ba497e6592c6879fd9982fa39953fc46722422931462fcf94551e617be58a95"
+    },
+    {
+      "id": "vessel-systems-management",
+      "title": "太空飞船系统管理（Vessel Systems Management）",
+      "summary": "围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。",
+      "tags": [
+        "simulation",
+        "spacecraft",
+        "systems-management"
+      ],
+      "updatedAt": "2026-07-23",
+      "sha256": "31162689c3b68398213d6b4f3b041e23fb073ddcb6d4b99b091037d07cb974d0"
+    }
+  ],
+  "blogs": [
+    {
+      "id": "authoritative-time-source",
+      "title": "音游、格斗与竞速的权威时间源：游戏到底应该听谁的钟",
+      "summary": "比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "determinism",
+        "simulation",
+        "timing"
+      ],
+      "updatedAt": "2026-07-29",
+      "sha256": "453bf306e3df21498ae0ac1c9b2ddf99a187acf6f66828c67ace0fe9379fb73b",
+      "bytes": 17908,
+      "contentPath": "content/blogs/authoritative-time-source.md"
+    },
+    {
+      "id": "extraction-transaction-boundary",
+      "title": "撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手”",
+      "summary": "从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "extraction",
+        "pvpve",
+        "transactions"
+      ],
+      "updatedAt": "2026-07-29",
+      "sha256": "556ffa2b4d362691ac5428ba6ddda382fd5882fdcdc80c70bd9f25d3e21612db",
+      "bytes": 14727,
+      "contentPath": "content/blogs/extraction-transaction-boundary.md"
+    },
+    {
+      "id": "stealth-recoverable-exposure",
+      "title": "潜行游戏的可恢复暴露循环：被敌人发现了，为什么不该立刻失败",
+      "summary": "从感知不对称、警戒升级与信息传播解释潜行失败如何成为仍可判断、可补救但有后果的玩法。",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "perception",
+        "recovery",
+        "stealth"
+      ],
+      "updatedAt": "2026-07-29",
+      "sha256": "4324dd39819e78841eee440c99e2aec6f18d0cbcb4e75cb37e207b2bb24adc16",
+      "bytes": 16021,
+      "contentPath": "content/blogs/stealth-recoverable-exposure.md"
+    }
+  ]
+}

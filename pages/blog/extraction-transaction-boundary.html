@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/extraction-transaction-boundary.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手” | IrisSakura">
+    <meta property="og:description" content="从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/extraction-transaction-boundary.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/images/home-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手” | IrisSakura">
+    <meta name="twitter:description" content="从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/home-preview.png">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#6a11cb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手” | IrisSakura","description":"从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。","url":"https://irissakura.github.io/pages/blog/extraction-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"dateModified":"2026-07-29","about":["extraction","pvpve","transactions"]}</script>
+    <!-- site-meta:end -->
+    <title>撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手” | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+            <i class="fas fa-gamepad" aria-hidden="true"></i>
+            <span>Iris</span>Sakura
+        </a>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link">Journal</a>
+            <a href="../../pages/blog.html" class="nav-link active" aria-current="page">博客</a>
+            <a href="../../pages/about.html" class="nav-link">关于</a>
+            <a href="../../pages/contact.html" class="nav-link nav-cta">公开入口</a>
+        </div>
+        <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+            <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+    </div>
+</nav>
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker">游戏系统的共同语言 · 2026-07-29</p>
+            <h1>撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手”</h1>
+            <p class="blog-deck">从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。</p>
+            <div class="note-tags"><span>extraction</span><span>pvpve</span><span>transactions</span></div>
+        </header>
+        <div class="blog-prose"><blockquote>
+<p>系列：游戏系统的共同语言</p>
+<p>状态：可发布候选</p>
+<p>核心问题：为什么玩家明明已经捡到战利品，系统仍不能把它算作长期资产？</p>
+</blockquote>
+<p><a href="../blog.html">系列目录</a> · <a href="./stealth-recoverable-exposure.html">下一篇</a></p>
+<p>玩家在地图里打开箱子、捡起稀有物品、把它装进背包时，画面会告诉他：“你得到了它。”</p>
+<p>但在撤离式 PvPvE 游戏里，这句话只说对了一半。</p>
+<p><strong>PvPvE（玩家对玩家兼玩家对环境，后文简称“多人混合战局”）</strong>：玩家既会与其他玩家竞争，也要面对 AI 和环境威胁的战局结构。</p>
+<p>玩家确实拿到了物品，却还没有真正拥有它。只要尚未成功离开战局，这件物品仍可能因为死亡、掠夺、失联或撤离失败而消失。真正决定收益的并不是拾取动作，而是随后发生的撤离与结算。</p>
+<p>这也是我认为撤离玩法最值得研究的地方：它把“获得奖励”拆成了两个不同的时刻。</p>
+<ul>
+<li>第一个时刻是玩家拿到东西。</li>
+<li>第二个时刻是系统承认东西已经属于玩家。</li>
+</ul>
+<p>两个时刻之间的距离，就是撤离玩法最主要的紧张感来源。</p>
+<h2>先说结论：事务提交边界，就是收益的“真正到账点”</h2>
+<p>这里需要先定义一个正式概念。</p>
+<p><strong>事务提交边界（后文简称“真正到账点”）</strong>：一批局内临时结果经过校验后，被一次性确认并写入长期状态的边界。</p>
+<p>“事务”听起来像数据库术语，但玩家感受到的事情很简单：</p>
+<blockquote>
+<p>只有成功带出来，收益才真正算数。</p>
+</blockquote>
+<p>如果玩家只是拾取了物品，系统只需要在当前战局中承认“它现在由谁拿着”。如果玩家完成撤离，系统才需要进一步确认：</p>
+<ul>
+<li>玩家是否满足撤离条件；</li>
+<li>物品是否确实来自这场战局；</li>
+<li>同一物品是否被重复结算；</li>
+<li>玩家带入的装备应该保留、损坏还是丢失；</li>
+<li>任务、经验和声望是否需要同步更新；</li>
+<li>最终结果是否已经写入长期存档。</li>
+</ul>
+<p>因此，撤离点不是普通传送门。它是整个战局从“临时运行”转向“长期结果”的入口。</p>
+<h2>局内持有权：为什么“拿在手里”还不等于真正拥有</h2>
+<p>为了说清这件事，还要区分三个概念。</p>
+<p><strong>局内持有权（后文简称“拿在手里”）</strong>：物品当前由哪个角色或容器控制。</p>
+<p><strong>局内归属（后文简称“本局算谁的”）</strong>：在当前战局规则中，物品被记录为属于哪个参与者或实体。</p>
+<p><strong>持久所有权（后文简称“真正进仓库”）</strong>：物品已经进入玩家的长期账户，可以在战局外出售、装备、制造或带入下一局。</p>
+<p><strong>资产托管（后文简称“风险寄存处”）</strong>：玩家准备进入战局时，系统先锁定本次携带的长期资产，使它们暂时不能参与其他交易。</p>
+<p>三者并不总是同时变化。</p>
+<p>玩家从箱子里拿起战利品后，已经“拿在手里”，本局也可能“算他的”，但它还没有“真正进仓库”。如果另一名玩家击败他并拿走物品，前两种状态可以继续变化，最后的长期结果仍未确定。</p>
+<p>可以把整个过程画成一条状态链：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["局外仓库&lt;br/&gt;真正属于玩家"] --&gt; B["资产托管&lt;br/&gt;风险寄存处"]
+    B --&gt; C["局内状态&lt;br/&gt;拿在手里但尚未到账"]
+    C --&gt;|"合法撤离"| D["冻结结果并校验来源"]
+    D --&gt;|"确认后只提交一次"| E["局外仓库&lt;br/&gt;真正到账"]
+    C --&gt;|"死亡、失联或撤离失败"| F["失败后的损失处理&lt;br/&gt;丢失、保险或恢复"]
+    D --&gt;|"长期存储暂时失败"| G["待提交结果&lt;br/&gt;使用同一事务重试"]
+</code></pre>
+<p>这张图里最重要的不是某个具体字段，而是状态不能被混在一起。</p>
+<p>如果拾取物品时就直接写入长期仓库，系统随后还要处理死亡扣除、其他玩家掠夺、断线回档和重复结算。每一个异常都可能把局内状态与长期存档撕成两份不同的事实。</p>
+<p>更稳妥的方式是：战局负责记录变化，结算负责确认结果。</p>
+<h2>为什么带入的装备需要先放进“风险寄存处”</h2>
+<p>撤离玩法不仅延迟确认新获得的物品，也会让玩家主动把旧资产带入风险。</p>
+<p>前面定义的资产托管，也就是“风险寄存处”，负责在战局开始前锁定玩家准备携带的长期资产。</p>
+<p>如果一把武器已经被带入战局，它就不应该同时被：</p>
+<ul>
+<li>卖给商人；</li>
+<li>放进另一名角色的装备栏；</li>
+<li>用作制造材料；</li>
+<li>再次带入另一场战局；</li>
+<li>通过市场转移给其他玩家。</li>
+</ul>
+<p>所以“风险寄存处”不是为了制造一个好听的后台名词，而是为了回答一个很实际的问题：</p>
+<blockquote>
+<p>这件物品已经进入风险环境了吗？</p>
+</blockquote>
+<p>只有当战局尚未真正开始，例如匹配失败或角色没有成功生成，系统才适合把托管安全回滚。玩家已经进入有效战局之后，普通断线或主动关闭客户端不能成为无风险取回装备的办法。</p>
+<p>否则玩家面对危险时最合理的操作就不是寻找撤离点，而是拔网线。</p>
+<h2>撤离为什么必须由玩家主动决定</h2>
+<p>普通关卡通常由系统决定结束时间：击败首领、完成目标或者到达终点。</p>
+<p>撤离玩法把结束权交给了玩家。</p>
+<p>玩家需要不断比较：</p>
+<ul>
+<li>当前背包里的收益；</li>
+<li>继续搜索可能得到的额外收益；</li>
+<li>剩余弹药和治疗资源；</li>
+<li>已经承受的伤势；</li>
+<li>撤离路线的距离；</li>
+<li>其他玩家可能出现的位置；</li>
+<li>剩余时间；</li>
+<li>队友状态。</li>
+</ul>
+<p>这可以理解为<strong>继续行动的期望收益（后文简称“再贪一手值不值”）</strong>。</p>
+<p>只要收益尚未抵达真正到账点，玩家每向前走一步，都在同时放大两个东西：</p>
+<ul>
+<li>成功时可以带走的价值；</li>
+<li>失败时可能失去的价值。</li>
+</ul>
+<p>因此，撤离玩法最关键的选择往往不是“能不能打赢眼前的敌人”，而是：</p>
+<blockquote>
+<p>即使能赢，这场战斗还值不值得打？</p>
+</blockquote>
+<p>战斗可能消耗弹药、治疗、时间和位置隐蔽性。玩家赢下遭遇，却可能因为伤势过重、出口关闭或第三方队伍介入而输掉整次行动。</p>
+<p>战斗胜利和行动成功因此被明确分开。</p>
+<h2>不完全信息不是让玩家瞎猜</h2>
+<p>撤离玩法通常不会告诉玩家地图上还剩多少敌人、哪个区域已经被搜过、哪个出口有人埋伏。</p>
+<p>这种设计可以称为<strong>不完全信息（后文简称“只知道一部分真相”）</strong>。</p>
+<p>但“只知道一部分”不等于“什么也不知道”。如果玩家无法通过任何线索判断风险，撤离选择就会从决策变成赌博。</p>
+<p>有用的线索包括：</p>
+<ul>
+<li>远处枪声的方向和频率；</li>
+<li>已经打开的门或容器；</li>
+<li>尸体与掉落物；</li>
+<li>AI 的警戒状态；</li>
+<li>环境机关的变化；</li>
+<li>撤离点的激活反馈；</li>
+<li>时间、天气和地图广播。</li>
+</ul>
+<p>这些痕迹让玩家能够建立一个不完整但可用的局势模型。</p>
+<p>真正好的风险不是完全未知，而是：</p>
+<blockquote>
+<p>信息不够完整，但足以让玩家为自己的判断负责。</p>
+</blockquote>
+<p>这也解释了为什么撤离点常常会变成风险集中区。多个玩家根据有限信息选择少数离场路线，出口自然成为路线交汇点、信息争夺点和最后一次风险判断。</p>
+<h2>失败必须真实，但不能让玩家永远爬不起来</h2>
+<p>如果死亡之后所有装备自动恢复，战利品又在拾取瞬间永久入库，所谓风险就只剩下表面演出。</p>
+<p>但如果连续失败会让玩家永久失去参与核心循环的能力，系统又会形成另一种问题。</p>
+<p>这种问题可以称为<strong>不可恢复死锁（后文简称“输到再也玩不动”）</strong>：玩家越失败，越没有资源取得下一次成功，最终连低风险尝试都无法进行。</p>
+<p>因此，撤离玩法需要同时成立的不是一句“失败有代价”，而是两条看似相反的原则：</p>
+<ol>
+<li>损失必须真实，玩家才会认真考虑是否继续冒险。</li>
+<li>恢复路径必须存在，玩家才有机会重新进入循环。</li>
+</ol>
+<p>恢复路径可以采用不同形式：</p>
+<ul>
+<li>基础补给；</li>
+<li>低成本装备；</li>
+<li>保底任务；</li>
+<li>可重复获取的普通资源；</li>
+<li>保险返还；</li>
+<li>安全容器；</li>
+<li>队友协助；</li>
+<li>面向失败玩家的低风险路线。</li>
+</ul>
+<p>这些机制不应该完全抹掉失败，否则真正到账点会失去意义。它们更像止损装置：保留失败的疼痛，但避免失败变成永久退出。</p>
+<h2>成功撤离后，结算仍可能没有立刻完成</h2>
+<p>玩家体验中的“撤离成功”和后台数据的“持久化成功”也不是同一件事。</p>
+<p>撤离成功后，系统通常还需要生成结果快照，检查物品来源，计算丢失和保险候选，再更新仓库、角色、任务、经验与声望。</p>
+<p>这里还需要一个正式术语。</p>
+<p><strong>幂等结算（后文简称“重复处理也只算一次”）</strong>：同一个战局结果即使因为超时或重试被提交多次，也只能产生一次长期变化。</p>
+<p>如果玩家已经合法撤离，但存储服务暂时不可用，合理的处理不是：</p>
+<ul>
+<li>把玩家改判为死亡；</li>
+<li>让客户端重新发送一份全新的奖励请求；</li>
+<li>重复生成同一批物品；</li>
+<li>重复发放经验。</li>
+</ul>
+<p>系统应保存一份待提交结果，随后使用同一个结算身份重试。</p>
+<p>这看起来是后台可靠性问题，但它直接影响玩家是否相信风险规则。玩家可以接受“我因为没有撤离而失去物品”，却很难接受“我已经撤离，只是服务器保存失败，所以全部没了”。</p>
+<p>规则越强调高风险，结算就越需要可信。</p>
+<h2>和类魂、远征、Roguelike 相比，哪些地方相似</h2>
+<p>“延迟确认收益”并不只存在于撤离式 PvPvE，但不同类型不能被简单写成同一种系统。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>相似之处</th>
+<th>关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>撤离式 PvPvE</td>
+<td>收益要经过离场和结算才能进入长期状态</td>
+<td>强调共享战局、物品来源、跨玩家转移与服务端结算</td>
+</tr>
+<tr>
+<td>类魂动作 RPG</td>
+<td>死亡会把一部分收益转为风险资产</td>
+<td>通常给予一次返回死亡地点的回收机会，二次死亡才造成永久损失</td>
+</tr>
+<tr>
+<td>远征管理</td>
+<td>玩家需要判断继续深入还是带着已有成果撤回</td>
+<td>重点是补给、路线、成员状态和主动止损，不一定需要物品级托管</td>
+</tr>
+<tr>
+<td>卡牌构筑 Roguelike</td>
+<td>路线持续比较生命、构筑成熟度、商店与高风险奖励</td>
+<td>局内构筑和路线选择是重点，不应硬套撤离点或跨玩家所有权</td>
+</tr>
+</tbody></table>
+<p>这些类型共享一个更上层的结构：</p>
+<blockquote>
+<p>玩家已经积累了价值，但价值尚未完全安全。</p>
+</blockquote>
+<p>它们真正不同的是：</p>
+<ul>
+<li>哪个事件确认收益；</li>
+<li>失败时损失什么；</li>
+<li>玩家有没有回收机会；</li>
+<li>长期状态与局内状态如何分层；</li>
+<li>是否存在其他玩家参与所有权转移。</li>
+</ul>
+<p>所以，“真正到账点”是一种分析工具，不是一套可以原封不动复制到所有游戏中的模板。</p>
+<h2>设计一个真正到账点时，我会检查什么</h2>
+<p>如果要判断一个撤离循环是否成立，我会先问以下问题。</p>
+<h3>进入风险</h3>
+<ul>
+<li>玩家带入的资产是否真的被锁定？</li>
+<li>玩家是否清楚哪些资产会承担损失？</li>
+<li>战局尚未开始时，系统能否安全回滚？</li>
+<li>战局已经开始后，断线是否会错误地变成安全退出？</li>
+</ul>
+<h3>局内变化</h3>
+<ul>
+<li>“拿在手里”和“真正进仓库”是否明确分开？</li>
+<li>物品是否有可审计的来源和流转记录？</li>
+<li>玩家能否通过环境痕迹推理风险？</li>
+<li>继续探索是否同时增加潜在收益与潜在损失？</li>
+</ul>
+<h3>提交结果</h3>
+<ul>
+<li>撤离条件是否清晰且能持续验证？</li>
+<li>结果是否会在提交前被冻结？</li>
+<li>重复结算是否只产生一次结果？</li>
+<li>存储暂时失败时，是否能保留待提交结果并安全重试？</li>
+</ul>
+<h3>失败与恢复</h3>
+<ul>
+<li>失败是否产生玩家能够理解的真实损失？</li>
+<li>玩家是否仍有重新进入循环的基础资源？</li>
+<li>恢复机制是在止损，还是已经把风险完全抹掉？</li>
+<li>连续失败会不会让玩家输到再也玩不动？</li>
+</ul>
+<h2>结语：真正有价值的不是高惩罚，而是可信的风险</h2>
+<p>撤离玩法经常被概括成“死亡会掉装备”，但我认为这还没有触及它真正特别的地方。</p>
+<p>它真正改变的是奖励被确认的时机。</p>
+<p>玩家捡到物品时，收益开始存在；玩家完成撤离并通过结算时，收益才真正成立。中间这段尚未确认的状态，让移动、战斗、路线、声音、时间和信息都获得了新的意义。</p>
+<p>也正因为如此，撤离玩法不能只设计损失。它还必须设计：</p>
+<ul>
+<li>风险从什么时候开始；</li>
+<li>玩家如何判断风险；</li>
+<li>什么条件结束风险；</li>
+<li>结果如何可信地提交；</li>
+<li>失败后如何重新站起来。</li>
+</ul>
+<p>高惩罚只能让玩家害怕失去。</p>
+<p>清晰、可推理、可结算、可恢复的风险，才会让玩家愿意再走进下一局。</p>
+<h2>术语对照</h2>
+<table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PvPvE（玩家对玩家兼玩家对环境）</td>
+<td>多人混合战局</td>
+<td>玩家、其他玩家、AI 与环境共同构成威胁</td>
+</tr>
+<tr>
+<td>事务提交边界</td>
+<td>真正到账点</td>
+<td>局内结果被确认并写入长期状态的边界</td>
+</tr>
+<tr>
+<td>局内持有权</td>
+<td>拿在手里</td>
+<td>当前由哪个角色或容器控制物品</td>
+</tr>
+<tr>
+<td>局内归属</td>
+<td>本局算谁的</td>
+<td>当前战局规则记录的临时归属</td>
+</tr>
+<tr>
+<td>持久所有权</td>
+<td>真正进仓库</td>
+<td>已进入长期账户并可在局外使用</td>
+</tr>
+<tr>
+<td>资产托管</td>
+<td>风险寄存处</td>
+<td>入局前锁定持久资产，避免重复使用或交易</td>
+</tr>
+<tr>
+<td>继续行动的期望收益</td>
+<td>再贪一手值不值</td>
+<td>额外收益与新增风险之间的比较</td>
+</tr>
+<tr>
+<td>不完全信息</td>
+<td>只知道一部分真相</td>
+<td>信息不完整，但仍有线索可供推理</td>
+</tr>
+<tr>
+<td>不可恢复死锁</td>
+<td>输到再也玩不动</td>
+<td>连续失败让玩家失去再次参与循环的能力</td>
+</tr>
+<tr>
+<td>幂等结算</td>
+<td>重复处理也只算一次</td>
+<td>同一结果被重试时不会重复发放或扣除</td>
+</tr>
+</tbody></table>
+<h2>内部资料依据</h2>
+<p>以下链接用于仓库内部审稿与追溯，不是公开版最终引用：</p>
+<ul>
+<li><a href="../journal.html#design-extraction-pvpve">撤离式 PvPvE：风险资产托管、局内所有权转移与撤离提交边界</a></li>
+<li><a href="../journal.html#design-soulslike-action-commitment-recovery">类魂动作 RPG：死亡回收与检查点世界循环</a></li>
+<li><a href="../journal.html#design-expedition-management">远征队探险管理：风险投资与主动撤退</a></li>
+<li><a href="../journal.html#design-deckbuilder-roguelike">卡牌构筑式 Roguelike：风险路线经营</a></li>
+</ul>
+<p>公开发布前应补充公开案例或公开设计资料，并把内部路径替换为稳定公开链接。</p>
+</div>
+        <footer class="blog-source-note">本文由 Sakura Design Journal 的固定提交导出并在本站完整发布；站点生成器会清理可执行 HTML。</footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/blog.html">博客</a>
+                <a href="../../pages/about.html">关于</a>
+                <a href="../../pages/contact.html">公开入口</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
