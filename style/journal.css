@@ -342,6 +342,56 @@
     gap: 1.25rem;
 }
 
+.journal-scroll-region {
+    max-height: var(--journal-scroll-height, min(70vh, 720px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: calc(var(--border-radius) * 1.15);
+    background: rgba(4, 9, 23, 0.34);
+    box-shadow:
+        inset 0 1px rgba(255, 255, 255, 0.035),
+        inset 0 -20px 32px -30px rgba(140, 231, 220, 0.75);
+    scrollbar-color: rgba(140, 231, 220, 0.72) rgba(255, 255, 255, 0.06);
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+}
+
+.journal-scroll-region:focus-visible {
+    border-color: #8ce7dc;
+    outline: 3px solid rgba(140, 231, 220, 0.2);
+    outline-offset: 3px;
+}
+
+.journal-scroll-region::-webkit-scrollbar {
+    width: 10px;
+}
+
+.journal-scroll-region::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.journal-scroll-region::-webkit-scrollbar-thumb {
+    border: 2px solid rgba(4, 9, 23, 0.34);
+    border-radius: 999px;
+    background: rgba(140, 231, 220, 0.72);
+}
+
+.journal-scroll-region::-webkit-scrollbar-thumb:hover {
+    background: #8ce7dc;
+}
+
+.journal-featured-scroll,
+.journal-design-scroll {
+    --journal-scroll-height: min(72vh, 760px);
+}
+
+.journal-audit-scroll {
+    --journal-scroll-height: min(62vh, 620px);
+}
+
 .journal-update-card,
 .design-summary-card {
     padding: 1.5rem;
@@ -530,6 +580,11 @@
 
     .note-grid {
         grid-template-columns: 1fr;
+    }
+
+    .journal-scroll-region {
+        --journal-scroll-height: min(68vh, 620px);
+        padding: 0.65rem;
     }
 
     .journal-bridge {

@@ -47,6 +47,16 @@ test('journal page statically renders every curated view and preserves the priva
 
   assert.ok(html.includes('id="featured-notes"'));
   assert.ok(!html.includes('正在读取'));
+  for (const [className, titleId] of [
+    ['journal-featured-scroll', 'featured-notes-title'],
+    ['journal-audit-scroll', 'recent-audits-title'],
+    ['journal-design-scroll', 'game-design-library-title']
+  ]) {
+    assert.ok(
+      html.includes(`class="journal-scroll-region ${className}" role="region" aria-labelledby="${titleId}" tabindex="0"`),
+      `missing accessible scroll region ${className}`
+    );
+  }
   for (const stream of data.streams) {
     assert.ok(html.includes(`data-stream="${stream.id}"`), `missing journal stream ${stream.id}`);
   }

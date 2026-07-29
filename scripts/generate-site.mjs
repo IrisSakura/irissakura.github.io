@@ -563,22 +563,28 @@ function renderJournalContent(journalData, sourceData) {
     </section>
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2>可独立分享的精选研究主题</h2></div><p>每个主题都包含问题、方法、发现、影响和更新时间。</p></div>
-            <div class="note-grid">${notes}
+            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">可独立分享的精选研究主题</h2></div><p>每个主题都包含问题、方法、发现、影响和更新时间；在区域内滚动查看全部 ${journalData.featuredNotes.length} 项。</p></div>
+            <div class="journal-scroll-region journal-featured-scroll" role="region" aria-labelledby="featured-notes-title" tabindex="0">
+                <div class="note-grid">${notes}
+                </div>
             </div>
         </div>
     </section>
     <section class="journal-section journal-updates" id="recent-audits">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">RECENT FRAMEWORK AUDITS</p><h2>近期框架审计摘要</h2></div><p>按 Journal 固定提交导出；私有路径、凭据和内部运行信息不会进入本站。</p></div>
-            <div class="journal-update-grid">${recentAudits}
+            <div class="journal-section-heading"><div><p class="journal-kicker">RECENT FRAMEWORK AUDITS</p><h2 id="recent-audits-title">近期框架审计摘要</h2></div><p>按 Journal 固定提交导出；在区域内滚动查看最近 ${Math.min(sourceData.audits.length, 6)} 条公开摘要。</p></div>
+            <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
+                <div class="journal-update-grid">${recentAudits}
+                </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2>游戏设计范式索引</h2></div><p>${sourceData.gameDesigns.length} 个确定性目录条目，每个稳定 ID 都可被博客引用。</p></div>
-            <div class="design-summary-grid">${gameDesigns}
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div><p>${sourceData.gameDesigns.length} 个确定性目录条目；在区域内滚动浏览，每个稳定 ID 都可被博客引用。</p></div>
+            <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
+                <div class="design-summary-grid">${gameDesigns}
+                </div>
             </div>
         </div>
     </section>
