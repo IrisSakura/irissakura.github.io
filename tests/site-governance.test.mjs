@@ -17,6 +17,7 @@ test('site configuration exposes only verified public routes', async () => {
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
+  const themeConfig = JSON.parse(await readText('data/themes.json'));
   const pages = [
     'index.html',
     '404.html',
@@ -34,43 +35,90 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'id="main-navigation"',
       'aria-controls="main-navigation"',
       'aria-expanded="false"',
+      'theme-styles:start',
       'data-theme-stylesheet',
+      'data-themes=',
       'theme-bootstrap:start',
-      'class="theme-toggle"',
-      'aria-pressed=',
+      'class="theme-select"',
+      'aria-label="选择页面主题"',
+      'option value="system"',
       'dist/site.js'
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
     }
 
     assert.ok(
-      html.indexOf('data-theme-stylesheet') < html.indexOf('theme-bootstrap:start'),
-      `${page} must load the theme stylesheet before applying the stored preference`
+      html.indexOf('theme-styles:start') < html.indexOf('theme-bootstrap:start'),
+      `${page} must load registered theme styles before applying the stored preference`
     );
     assert.ok(
       html.indexOf('theme-bootstrap:start') < html.indexOf('</head>'),
       `${page} must apply the theme before body rendering`
     );
+    for (const theme of themeConfig.themes) {
+      assert.ok(
+        html.includes(`option value="${theme.id}"`),
+        `${page} missing registered theme option ${theme.id}`
+      );
+    }
+    for (const stylesheet of new Set(themeConfig.themes.flatMap((theme) => theme.stylesheets))) {
+      assert.ok(
+        html.includes(stylesheet),
+        `${page} missing registered theme stylesheet ${stylesheet}`
+      );
+    }
   }
 });
 
-test('theme switch follows the system until the visitor stores a preference', async () => {
-  const [siteSource, generator, navbar] = await Promise.all([
+test('theme selector follows the registry and system until the visitor stores a preference', async () => {
+  const [siteSource, generator, navbar, themeConfig] = await Promise.all([
     readText('src/site.ts'),
     readText('scripts/generate-site.mjs'),
-    readText('components/navbar.html')
+    readText('components/navbar.html'),
+    readText('data/themes.json').then(JSON.parse)
   ]);
 
-  for (const source of [siteSource, generator]) {
-    assert.ok(source.includes('irissakura-theme'));
-    assert.ok(source.includes("prefers-color-scheme: dark"));
-    assert.ok(source.includes("'pastoral'"));
-    assert.ok(source.includes("'night'"));
-  }
+  assert.ok(generator.includes("readJson('data/themes.json')"));
+  assert.ok(generator.includes('renderThemeOptions'));
+  assert.ok(generator.includes('renderThemeStyles'));
+  assert.ok(generator.includes("prefers-color-scheme: dark"));
+  assert.ok(siteSource.includes("querySelector<HTMLSelectElement>('.theme-select')"));
   assert.ok(siteSource.includes("window.addEventListener('storage'"));
   assert.ok(siteSource.includes('localStorage.setItem'));
-  assert.ok(navbar.includes('启用夜色深色主题'));
-  assert.ok(navbar.includes('theme-toggle-label'));
+  assert.ok(siteSource.includes('localStorage.removeItem'));
+  assert.ok(navbar.includes('{{themeOptions}}'));
+  assert.ok(navbar.includes('data-default-light="{{defaultLightTheme}}"'));
+  assert.equal(themeConfig.storageKey, 'irissakura-theme');
+});
+
+test('theme registry supports shared layers and the sakura village atmosphere', async () => {
+  const config = JSON.parse(await readText('data/themes.json'));
+  const ids = config.themes.map((theme) => theme.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.deepEqual(ids, ['night', 'pastoral', 'sakura-village']);
+  assert.equal(
+    config.themes.find((theme) => theme.id === config.defaultLight)?.colorScheme,
+    'light'
+  );
+  assert.equal(
+    config.themes.find((theme) => theme.id === config.defaultDark)?.colorScheme,
+    'dark'
+  );
+
+  const registeredStylesheets = new Set(config.themes.flatMap((theme) => theme.stylesheets));
+  for (const stylesheet of registeredStylesheets) {
+    await readText(stylesheet);
+  }
+
+  const sakuraTheme = config.themes.find((theme) => theme.id === 'sakura-village');
+  assert.deepEqual(
+    sakuraTheme.stylesheets,
+    ['style/pastoral.css', 'style/sakura-village.css']
+  );
+  const sakuraCss = await readText('style/sakura-village.css');
+  for (const motif of ['--torii', '--sakura', '.hero-section::before', '.theme-picker']) {
+    assert.ok(sakuraCss.includes(motif), `sakura theme missing motif ${motif}`);
+  }
 });
 
 test('placeholder blog, simulated form and unsupported template claims are absent', async () => {
@@ -147,6 +195,26 @@ test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
   assert.match(css, /\.footer-description\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
   assert.match(css, /\.footer-links a\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
   assert.match(css, /\.footer-bottom\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
+});
+
+test('sakura village text and actions meet WCAG AA contrast', async () => {
+  const css = await readText('style/sakura-village.css');
+  const paper = readCssHexVariable(css, 'paper');
+  const ink = readCssHexVariable(css, 'ink');
+  const inkSoft = readCssHexVariable(css, 'ink-soft');
+  const petalStrong = readCssHexVariable(css, 'petal-strong');
+  const torii = readCssHexVariable(css, 'torii');
+
+  for (const foreground of [ink, inkSoft, petalStrong]) {
+    assert.ok(
+      contrastRatio(foreground, paper) >= 4.5,
+      `${foreground} must reach 4.5:1 on sakura paper ${paper}`
+    );
+  }
+  assert.ok(
+    contrastRatio('#fffaf2', torii) >= 4.5,
+    `primary button text must reach 4.5:1 on torii ${torii}`
+  );
 });
 
 function readCssHexVariable(css, name) {

@@ -8,18 +8,20 @@ import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const [site, framework, frameworkAdoption, projects, journal, journalSource, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, projects, journal, journalSource, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
   readJson('data/projects.json'),
   readJson('data/journal.json'),
   readJson('data/journal-source.json'),
+  readJson('data/themes.json'),
   readText('components/navbar.html'),
   readText('components/footer.html')
 ]);
 
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
+assertThemeConfig(themeConfig);
 
 const journalDetailDefinitions = journal.featuredNotes.map((note) => ({
   file: `pages/journal/${note.id}.html`,
@@ -166,7 +168,11 @@ for (const page of pageDefinitions) {
 
   const navbar = navbarTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
-    .replace('{{navLinks}}', navLinks);
+    .replace('{{navLinks}}', navLinks)
+    .replace('{{themeStorageKey}}', escapeAttribute(themeConfig.storageKey))
+    .replace('{{defaultLightTheme}}', escapeAttribute(themeConfig.defaultLight))
+    .replace('{{defaultDarkTheme}}', escapeAttribute(themeConfig.defaultDark))
+    .replace('{{themeOptions}}', renderThemeOptions(themeConfig));
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
     .replace('{{footerLinks}}', footerLinks)
@@ -178,13 +184,13 @@ for (const page of pageDefinitions) {
     .replace(/<main(?![^>]*\bid="main-content")/, '<main id="main-content"')
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${page.title}</title>`);
 
-  const meta = buildMeta(page, site);
+  const meta = buildMeta(page, site, themeConfig);
   if (/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/.test(html)) {
     html = html.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, meta);
   } else {
     html = html.replace(/(<meta name="viewport"[^>]*>)/, `$1\n    ${meta}`);
   }
-  html = installThemeBootstrap(html);
+  html = installThemeBootstrap(html, prefix, themeConfig);
 
   const siteScript = `<script src="${prefix}dist/site.js" type="module"></script>`;
   if (!html.includes('dist/site.js')) {
@@ -229,18 +235,19 @@ await Promise.all([
     description: site.description,
     start_url: '/',
     display: 'standalone',
-    background_color: '#f8f4ea',
-    theme_color: '#d7e8eb',
+    background_color: themeConfig.themes.find((theme) => theme.id === themeConfig.defaultLight).backgroundColor,
+    theme_color: themeConfig.themes.find((theme) => theme.id === themeConfig.defaultLight).themeColor,
     icons: [
       { src: '/assets/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
     ]
   }, null, 2) + '\n')
 ]);
 
-function buildMeta(page, siteData) {
+function buildMeta(page, siteData, themes) {
   const canonical = `${siteData.siteUrl}${page.canonical}`;
   const image = `${siteData.siteUrl}${page.image}`;
   const prefix = '../'.repeat(page.file.split('/').length - 1);
+  const defaultThemeColor = themes.themes.find((theme) => theme.id === themes.defaultLight).themeColor;
   const structured = {
     '@context': 'https://schema.org',
     '@type': page.schemaType ?? 'WebPage',
@@ -279,51 +286,155 @@ function buildMeta(page, siteData) {
     <meta name="twitter:description" content="${escapeAttribute(page.description)}">
     <meta name="twitter:image" content="${image}">
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
-    <meta name="theme-color" content="#d7e8eb">
+    <meta name="theme-color" content="${defaultThemeColor}">
     <link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <script type="application/ld+json">${JSON.stringify(structured)}</script>
     <!-- site-meta:end -->`;
 }
 
-function installThemeBootstrap(html) {
-  const themeLinkPattern = /<link rel="stylesheet" href="((?:\.\.\/)*style\/pastoral\.css)"(?:\s+data-theme-stylesheet)?\s*>/;
-  const themeLinkMatch = html.match(themeLinkPattern);
-  if (!themeLinkMatch) {
-    throw new Error('missing pastoral theme stylesheet');
+function assertThemeConfig(config) {
+  if (!config || !Array.isArray(config.themes) || config.themes.length < 2) {
+    throw new Error('theme registry must contain at least two themes');
+  }
+  if (!/^[a-z0-9-]+$/.test(config.storageKey ?? '')) {
+    throw new Error('theme registry storageKey must be a stable identifier');
+  }
+  if (typeof config.systemLabel !== 'string' || config.systemLabel.trim() === '') {
+    throw new Error('theme registry requires a system label');
   }
 
-  const themeLink = `<link rel="stylesheet" href="${themeLinkMatch[1]}" data-theme-stylesheet>`;
-  html = html.replace(themeLinkPattern, themeLink);
+  const ids = new Set();
+  for (const theme of config.themes) {
+    if (!/^[a-z0-9-]+$/.test(theme.id ?? '') || theme.id === 'system') {
+      throw new Error(`invalid theme id: ${theme.id}`);
+    }
+    if (ids.has(theme.id)) {
+      throw new Error(`duplicate theme id: ${theme.id}`);
+    }
+    ids.add(theme.id);
+    if (typeof theme.label !== 'string' || theme.label.trim() === '') {
+      throw new Error(`theme ${theme.id} requires a label`);
+    }
+    if (!['light', 'dark'].includes(theme.colorScheme)) {
+      throw new Error(`theme ${theme.id} has invalid colorScheme`);
+    }
+    for (const [name, value] of [
+      ['themeColor', theme.themeColor],
+      ['backgroundColor', theme.backgroundColor]
+    ]) {
+      if (!/^#[0-9a-f]{6}$/i.test(value ?? '')) {
+        throw new Error(`theme ${theme.id} has invalid ${name}`);
+      }
+    }
+    if (!Array.isArray(theme.stylesheets) || theme.stylesheets.some((stylesheet) => (
+      !/^style\/[a-z0-9-]+\.css$/.test(stylesheet)
+    ))) {
+      throw new Error(`theme ${theme.id} has invalid stylesheets`);
+    }
+    if (new Set(theme.stylesheets).size !== theme.stylesheets.length) {
+      throw new Error(`theme ${theme.id} contains duplicate stylesheets`);
+    }
+  }
+  for (const defaultTheme of [config.defaultLight, config.defaultDark]) {
+    if (!ids.has(defaultTheme)) {
+      throw new Error(`theme registry default is not registered: ${defaultTheme}`);
+    }
+  }
+  if (config.themes.find((theme) => theme.id === config.defaultLight).colorScheme !== 'light') {
+    throw new Error('defaultLight must reference a light theme');
+  }
+  if (config.themes.find((theme) => theme.id === config.defaultDark).colorScheme !== 'dark') {
+    throw new Error('defaultDark must reference a dark theme');
+  }
+}
 
+function renderThemeOptions(config) {
+  const options = [
+    `<option value="system">${escapeHtml(config.systemLabel)}</option>`,
+    ...config.themes.map((theme) => (
+      `<option value="${escapeAttribute(theme.id)}" data-color-scheme="${theme.colorScheme}" data-theme-color="${theme.themeColor}">${escapeHtml(theme.label)}</option>`
+    ))
+  ];
+  return options.join('\n                    ');
+}
+
+function renderThemeStyles(prefix, config) {
+  const stylesheetThemes = new Map();
+  for (const theme of config.themes) {
+    for (const stylesheet of theme.stylesheets) {
+      const owners = stylesheetThemes.get(stylesheet) ?? [];
+      owners.push(theme.id);
+      stylesheetThemes.set(stylesheet, owners);
+    }
+  }
+
+  const links = Array.from(stylesheetThemes, ([stylesheet, themeIds]) => {
+    const enabledByDefault = themeIds.includes(config.defaultLight);
+    return `<link rel="stylesheet" href="${prefix}${stylesheet}" data-theme-stylesheet data-themes="${themeIds.join(' ')}"${enabledByDefault ? '' : ' disabled'}>`;
+  });
+  return `<!-- theme-styles:start -->
+    ${links.join('\n    ')}
+    <!-- theme-styles:end -->`;
+}
+
+function installThemeBootstrap(html, prefix, config) {
+  const themeStyles = renderThemeStyles(prefix, config);
+  const themeStylesPattern = /<!-- theme-styles:start -->[\s\S]*?<!-- theme-styles:end -->/;
+  const legacyThemeLinkPattern = /<link rel="stylesheet" href="(?:\.\.\/)*style\/pastoral\.css"(?:\s+data-theme-stylesheet)?\s*>/;
+  if (themeStylesPattern.test(html)) {
+    html = html.replace(themeStylesPattern, themeStyles);
+  } else if (legacyThemeLinkPattern.test(html)) {
+    html = html.replace(legacyThemeLinkPattern, themeStyles);
+  } else {
+    throw new Error('missing generated theme styles block');
+  }
+
+  const browserConfig = {
+    storageKey: config.storageKey,
+    defaultLight: config.defaultLight,
+    defaultDark: config.defaultDark,
+    themes: Object.fromEntries(config.themes.map((theme) => [
+      theme.id,
+      {
+        colorScheme: theme.colorScheme,
+        themeColor: theme.themeColor
+      }
+    ]))
+  };
   const themeBootstrap = `<!-- theme-bootstrap:start -->
     <script>
         (() => {
-            const storageKey = 'irissakura-theme';
+            const config = ${JSON.stringify(browserConfig)};
             let storedTheme = null;
             try {
-                storedTheme = window.localStorage.getItem(storageKey);
+                storedTheme = window.localStorage.getItem(config.storageKey);
             } catch {
                 // 受限存储环境下继续使用系统主题。
             }
-            const hasStoredTheme = storedTheme === 'pastoral' || storedTheme === 'night';
-            const theme = hasStoredTheme
-                ? storedTheme
-                : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'pastoral';
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
             document.documentElement.dataset.theme = theme;
-            document.documentElement.style.colorScheme = theme === 'night' ? 'dark' : 'light';
-            const stylesheet = document.querySelector('[data-theme-stylesheet]');
-            if (stylesheet instanceof HTMLLinkElement) stylesheet.disabled = theme === 'night';
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
             document.querySelector('meta[name="theme-color"]')
-                ?.setAttribute('content', theme === 'night' ? '#121212' : '#d7e8eb');
+                ?.setAttribute('content', config.themes[theme].themeColor);
         })();
     </script>
     <!-- theme-bootstrap:end -->`;
   const themeBootstrapPattern = /<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/;
-
-  return themeBootstrapPattern.test(html)
-    ? html.replace(themeBootstrapPattern, themeBootstrap)
-    : html.replace(themeLink, `${themeLink}\n    ${themeBootstrap}`);
+  html = html.replace(themeBootstrapPattern, '');
+  return html.replace(themeStyles, `${themeStyles}\n    ${themeBootstrap}`);
 }
 
 function updateFrameworkFallback(html, data, adoption) {

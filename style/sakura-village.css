@@ -1,0 +1,442 @@
+/*
+ * 樱里民谣主题
+ * 日式乡村的和纸暖白、樱花粉、鸟居朱红、青黛远山与旧木色。
+ * 本层叠加在东方田园主题之上，只负责改变氛围，不改变真实内容。
+ */
+
+:root {
+    --primary-color: #a8463f;
+    --secondary-color: #667f91;
+    --secondary-text-color: #435b6d;
+    --accent-color: #9f3f56;
+    --dark-color: #f6eee2;
+    --light-color: #332f38;
+    --gray-color: #685f65;
+    --muted-text-color: #625960;
+    --success-color: #647a62;
+    --warning-color: #a9783d;
+    --danger-color: #a8463f;
+
+    --font-display: "Yu Mincho", "Hiragino Mincho ProN", "Songti SC", "STSong", serif;
+    --font-heading: "Yu Mincho", "Hiragino Mincho ProN", "Songti SC", "STSong", serif;
+    --font-body: "Hiragino Kaku Gothic ProN", "Yu Gothic", "PingFang SC", "Microsoft YaHei", sans-serif;
+
+    --paper: #f7f0e6;
+    --paper-deep: #eadfce;
+    --mist-blue: #dce5e5;
+    --water-blue: #d2dfdf;
+    --hill-blue: #718783;
+    --petal-pink: #f1d7df;
+    --petal-strong: #9f3f56;
+    --ink: #332f38;
+    --ink-soft: #625960;
+    --leaf: #6f8068;
+    --line: rgba(91, 70, 72, 0.18);
+    --line-strong: rgba(91, 70, 72, 0.32);
+    --surface: rgba(255, 250, 242, 0.84);
+    --surface-strong: #fffaf2;
+
+    --torii: #aa453d;
+    --torii-deep: #783830;
+    --indigo: #35465a;
+    --wood: #80634f;
+    --sakura: #d991a5;
+    --sakura-soft: #f2dce2;
+
+    --border-radius: 14px;
+    --box-shadow: 0 14px 34px rgba(73, 54, 57, 0.1);
+    --box-shadow-hover: 0 20px 42px rgba(73, 54, 57, 0.16);
+}
+
+html {
+    background: var(--paper);
+}
+
+body {
+    color: var(--ink);
+    background:
+        radial-gradient(circle at 88% 4%, rgba(217, 145, 165, 0.2), transparent 25rem),
+        radial-gradient(circle at 10% 16%, rgba(126, 151, 153, 0.16), transparent 28rem),
+        linear-gradient(180deg, #fbf4eb 0%, var(--paper) 48%, #efe4d5 100%);
+}
+
+body::before {
+    opacity: 0.48;
+    background-image:
+        radial-gradient(ellipse at 45% 45%, rgba(181, 84, 110, 0.32) 0 2px, transparent 2.6px),
+        radial-gradient(ellipse at 60% 55%, rgba(211, 132, 154, 0.26) 0 2.4px, transparent 3px),
+        radial-gradient(circle at 1px 1px, rgba(88, 69, 66, 0.11) 0 0.7px, transparent 0.8px);
+    background-position: 0 0, 42px 24px, 0 0;
+    background-size: 96px 82px, 128px 116px, 21px 21px;
+    mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+::selection {
+    color: var(--ink);
+    background: #edc5d0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--ink);
+    letter-spacing: 0.01em;
+}
+
+.highlight,
+.section-kicker,
+.journey-kicker,
+.journal-kicker,
+.game-kicker,
+.project-status,
+.stream-label,
+.note-track,
+.module-detail-category {
+    color: var(--petal-strong);
+}
+
+.section-title::after {
+    background: linear-gradient(90deg, var(--torii), var(--sakura), var(--indigo));
+}
+
+:focus-visible {
+    outline-color: var(--torii);
+}
+
+/* 像乡间驿站的木窗与薄纸，主题选择器保留清晰的原生键盘行为。 */
+.navbar {
+    border-bottom-color: rgba(120, 78, 75, 0.2);
+    background: rgba(247, 240, 230, 0.9);
+    box-shadow: 0 8px 24px rgba(74, 58, 57, 0.08);
+}
+
+.logo,
+.footer-logo {
+    color: var(--ink);
+}
+
+.logo i,
+.footer-logo i,
+.theme-picker > i {
+    color: var(--torii);
+}
+
+.logo span,
+.footer-logo span {
+    color: var(--petal-strong);
+}
+
+.nav-link {
+    color: #5d555a;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--torii-deep);
+}
+
+.nav-link::after {
+    background: linear-gradient(90deg, var(--torii), var(--sakura));
+}
+
+.nav-link.nav-cta {
+    border-color: rgba(170, 69, 61, 0.34);
+    color: #7a3834;
+    background: rgba(235, 199, 198, 0.42);
+}
+
+.nav-link.nav-cta:hover,
+.nav-link.nav-cta.active {
+    border-color: var(--torii);
+    color: #6f302c;
+    background: rgba(235, 199, 198, 0.7);
+}
+
+.theme-picker {
+    border-color: rgba(128, 99, 79, 0.3);
+    color: var(--ink);
+    background: rgba(255, 250, 242, 0.82);
+    box-shadow: 0 5px 16px rgba(74, 58, 57, 0.08);
+}
+
+.theme-picker:hover,
+.theme-picker:focus-within {
+    border-color: var(--sakura);
+    color: var(--ink);
+    background: var(--sakura-soft);
+}
+
+.theme-select option {
+    color: var(--ink);
+    background: var(--surface-strong);
+}
+
+.mobile-toggle {
+    border-color: rgba(128, 99, 79, 0.3);
+    color: var(--ink);
+    background: rgba(255, 250, 242, 0.82);
+}
+
+.btn-primary {
+    color: #fffaf2;
+    background: var(--torii);
+    box-shadow: 0 10px 24px rgba(170, 69, 61, 0.2);
+}
+
+.btn-primary:hover {
+    background: var(--torii-deep);
+    box-shadow: 0 14px 28px rgba(120, 56, 48, 0.24);
+}
+
+.btn-secondary,
+.btn-outline {
+    border-color: rgba(159, 63, 86, 0.5);
+    color: #873b50;
+    background: rgba(255, 250, 242, 0.5);
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+    color: #6e3041;
+    background: var(--sakura-soft);
+}
+
+.tag,
+.note-tags span,
+.system-tags span,
+.portfolio-tags span {
+    border-color: rgba(159, 63, 86, 0.22);
+    color: #78384b;
+    background: rgba(241, 215, 223, 0.62);
+}
+
+/* 首屏以远山与鸟居剪影定调；真实游戏截图仍保持视觉主角。 */
+.hero-section {
+    background:
+        radial-gradient(circle at 14% 20%, rgba(255, 255, 255, 0.76), transparent 18rem),
+        radial-gradient(circle at 84% 16%, rgba(226, 153, 173, 0.54), transparent 21rem),
+        linear-gradient(180deg, #dbe5e6 0%, #eee5df 62%, var(--paper) 100%);
+}
+
+.hero-section::before {
+    inset: auto 0 0;
+    height: 68%;
+    opacity: 0.5;
+    background:
+        linear-gradient(var(--torii), var(--torii)) 82% 9% / 29% 12px no-repeat,
+        linear-gradient(var(--torii-deep), var(--torii-deep)) 82% 21% / 24% 8px no-repeat,
+        linear-gradient(var(--torii), var(--torii)) 74% 78% / 10px 68% no-repeat,
+        linear-gradient(var(--torii), var(--torii)) 90% 78% / 10px 68% no-repeat,
+        linear-gradient(155deg, transparent 0 38%, rgba(81, 103, 100, 0.7) 38.3% 60%, transparent 60.3%) 0 100% / 52% 86% no-repeat,
+        linear-gradient(205deg, transparent 0 42%, rgba(104, 124, 117, 0.58) 42.3% 64%, transparent 64.3%) 100% 100% / 64% 82% no-repeat;
+    filter: drop-shadow(0 8px 12px rgba(79, 52, 50, 0.08));
+    mask-image: linear-gradient(to top, black 0 82%, transparent 100%);
+}
+
+.hero-section::after {
+    right: -5%;
+    bottom: 3%;
+    width: 66%;
+    height: 24%;
+    opacity: 0.58;
+    background:
+        repeating-linear-gradient(0deg, rgba(89, 118, 108, 0.18) 0 1px, transparent 1px 12px),
+        linear-gradient(170deg, transparent 0 46%, rgba(217, 145, 165, 0.14) 47% 52%, transparent 53%);
+}
+
+.hero-title {
+    color: var(--ink);
+}
+
+.hero-description,
+.flagship-lead,
+.section-heading > p,
+.public-cta p,
+.hero-section .hero-description {
+    color: var(--ink-soft);
+}
+
+.hero-proof {
+    border-color: rgba(255, 250, 242, 0.82);
+    border-radius: 10px 28px 10px 28px;
+    background: var(--surface-strong);
+    box-shadow:
+        0 0 0 2px rgba(128, 99, 79, 0.2),
+        0 26px 56px rgba(74, 58, 57, 0.18);
+    transform: rotate(-0.5deg);
+}
+
+.hero-proof figcaption {
+    background: rgba(255, 250, 242, 0.96);
+}
+
+.method-section,
+.research-section,
+.about-story,
+.about-preferences,
+.discussion-scope,
+.journal-featured,
+.adoption-section,
+.lifecycle-section,
+.game-gallery-section {
+    border-color: var(--line);
+    background:
+        linear-gradient(135deg, rgba(241, 215, 223, 0.34), transparent 54%),
+        rgba(234, 223, 206, 0.5);
+}
+
+.public-cta-inner,
+.about-next-inner,
+.route-boundary-inner {
+    border-color: var(--line);
+    background:
+        radial-gradient(circle at 90% 10%, rgba(241, 215, 223, 0.74), transparent 16rem),
+        rgba(255, 250, 242, 0.78);
+}
+
+.method-chain li,
+.portfolio-case,
+.module-card,
+.module-detail-panel,
+.stream-card,
+.note-card,
+.journal-update-card,
+.design-summary-card,
+.journal-detail-grid section,
+.gallery-card,
+.game-system-card,
+.about-focus-list article,
+.preference-card,
+.discussion-grid article,
+.public-route-card,
+.blog-card {
+    border-color: var(--line);
+    background:
+        linear-gradient(145deg, rgba(255, 250, 242, 0.88), rgba(247, 235, 230, 0.72));
+    box-shadow: 0 10px 26px rgba(74, 58, 57, 0.07);
+}
+
+.method-chain a,
+.text-link,
+.portfolio-facts dt,
+.portfolio-link,
+.note-link,
+.module-card-action,
+.public-route-card > i:first-child,
+.discussion-grid strong {
+    color: #833b42;
+}
+
+.portfolio-header {
+    color: var(--ink);
+    background:
+        linear-gradient(90deg, rgba(247, 240, 230, 0.97) 0%, rgba(237, 220, 222, 0.9) 48%, rgba(220, 229, 229, 0.34) 100%),
+        url("../assets/images/sword-of-words/combat-room.png") center 42% / cover no-repeat;
+}
+
+.portfolio-header::after {
+    background: linear-gradient(175deg, transparent 48%, rgba(170, 69, 61, 0.13) 49%);
+}
+
+.module-card:hover,
+.module-card.is-active,
+.public-route-card:hover {
+    border-color: rgba(170, 69, 61, 0.3);
+    background: rgba(241, 215, 223, 0.68);
+}
+
+.module-detail-header,
+.adoption-hero,
+.game-hero,
+.about-hero,
+.contact-hero,
+.journal-hero,
+.blog-hero {
+    background:
+        radial-gradient(circle at 82% 18%, rgba(217, 145, 165, 0.48), transparent 20rem),
+        radial-gradient(circle at 16% 28%, rgba(255, 255, 255, 0.7), transparent 18rem),
+        linear-gradient(145deg, var(--mist-blue), #efe5df 70%, var(--paper));
+}
+
+.blog-prose {
+    color: #4f4950;
+}
+
+.blog-prose a {
+    color: #873b50;
+    text-decoration-color: rgba(159, 63, 86, 0.42);
+}
+
+.blog-prose blockquote {
+    border-left-color: var(--torii);
+    background: rgba(241, 215, 223, 0.3);
+}
+
+.blog-prose pre {
+    border-color: rgba(91, 70, 72, 0.3);
+    color: #f6eee2;
+    background: var(--indigo);
+}
+
+.blog-prose th {
+    background: rgba(241, 215, 223, 0.58);
+}
+
+.footer {
+    color: rgba(255, 250, 242, 0.88);
+    background:
+        radial-gradient(circle at 82% 0%, rgba(217, 145, 165, 0.2), transparent 24rem),
+        linear-gradient(155deg, #3d4d5f, var(--indigo));
+}
+
+.footer .footer-logo,
+.footer h2,
+.footer a {
+    color: #fff8ef;
+}
+
+.footer .footer-logo span {
+    color: #efcbd4;
+}
+
+.footer-description,
+.footer-bottom {
+    color: rgba(255, 250, 242, 0.74);
+}
+
+.social-icon:hover {
+    color: var(--indigo);
+    background: var(--sakura-soft);
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        border-color: var(--line);
+        background: rgba(247, 240, 230, 0.98);
+    }
+
+    .hero-section::before {
+        opacity: 0.32;
+        background-position:
+            88% 8%,
+            88% 20%,
+            80% 78%,
+            96% 78%,
+            0 100%,
+            100% 100%;
+    }
+
+    .hero-proof {
+        border-radius: 10px 22px 10px 22px;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-proof {
+        transform: none;
+    }
+}

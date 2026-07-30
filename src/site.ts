@@ -1,17 +1,14 @@
 export {};
 
-type SiteTheme = 'pastoral' | 'night';
-
-const THEME_STORAGE_KEY = 'irissakura-theme';
-const PASTORAL_THEME: SiteTheme = 'pastoral';
-const NIGHT_THEME: SiteTheme = 'night';
+const SYSTEM_THEME = 'system';
+const FALLBACK_STORAGE_KEY = 'irissakura-theme';
 
 class SiteShell {
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
     private lastFocused: HTMLElement | null = null;
-    private themeToggle: HTMLButtonElement | null = null;
-    private themeStylesheet: HTMLLinkElement | null = null;
+    private themeSelect: HTMLSelectElement | null = null;
+    private themeStylesheets: HTMLLinkElement[] = [];
     private colorSchemeQuery: MediaQueryList | null = null;
 
     constructor() {
@@ -25,8 +22,10 @@ class SiteShell {
     private init(): void {
         this.toggle = document.querySelector<HTMLButtonElement>('.mobile-toggle');
         this.menu = document.querySelector<HTMLElement>('.nav-menu');
-        this.themeToggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
-        this.themeStylesheet = document.querySelector<HTMLLinkElement>('[data-theme-stylesheet]');
+        this.themeSelect = document.querySelector<HTMLSelectElement>('.theme-select');
+        this.themeStylesheets = Array.from(
+            document.querySelectorAll<HTMLLinkElement>('[data-theme-stylesheet]')
+        );
         this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
@@ -37,89 +36,109 @@ class SiteShell {
     }
 
     private setupTheme(): void {
-        const initialTheme = this.readDocumentTheme()
+        const themeSelect = this.themeSelect;
+        if (!themeSelect) return;
+        const initialPreference = this.readDocumentPreference()
             ?? this.readStoredTheme()
-            ?? this.getSystemTheme();
-        this.applyTheme(initialTheme);
+            ?? SYSTEM_THEME;
+        this.applyThemePreference(initialPreference);
 
-        this.themeToggle?.addEventListener('click', () => {
-            const nextTheme = this.readDocumentTheme() === NIGHT_THEME
-                ? PASTORAL_THEME
-                : NIGHT_THEME;
-            this.applyTheme(nextTheme, true);
+        themeSelect.addEventListener('change', () => {
+            const preference = this.isTheme(themeSelect.value)
+                ? themeSelect.value
+                : SYSTEM_THEME;
+            this.applyThemePreference(preference, true);
         });
 
-        this.colorSchemeQuery?.addEventListener('change', (event) => {
+        this.colorSchemeQuery?.addEventListener('change', () => {
             if (!this.readStoredTheme()) {
-                this.applyTheme(event.matches ? NIGHT_THEME : PASTORAL_THEME);
+                this.applyThemePreference(SYSTEM_THEME);
             }
         });
 
         window.addEventListener('storage', (event) => {
-            if (event.key !== THEME_STORAGE_KEY) return;
-            const theme = this.isTheme(event.newValue)
+            if (event.key !== this.getStorageKey()) return;
+            const preference = this.isTheme(event.newValue)
                 ? event.newValue
-                : this.getSystemTheme();
-            this.applyTheme(theme);
+                : SYSTEM_THEME;
+            this.applyThemePreference(preference);
         });
     }
 
-    private applyTheme(theme: SiteTheme, persist = false): void {
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.style.colorScheme = theme === NIGHT_THEME ? 'dark' : 'light';
-        if (this.themeStylesheet) {
-            this.themeStylesheet.disabled = theme === NIGHT_THEME;
+    private applyThemePreference(preference: string, persist = false): void {
+        if (!this.themeSelect) return;
+        const resolvedTheme = preference === SYSTEM_THEME
+            ? this.getSystemTheme()
+            : preference;
+        const option = this.getThemeOption(resolvedTheme);
+        if (!option) return;
+
+        document.documentElement.dataset.theme = resolvedTheme;
+        document.documentElement.dataset.themePreference = preference;
+        document.documentElement.style.colorScheme = option.dataset.colorScheme ?? 'light';
+        for (const stylesheet of this.themeStylesheets) {
+            const supportedThemes = (stylesheet.dataset.themes ?? '').split(/\s+/);
+            stylesheet.disabled = !supportedThemes.includes(resolvedTheme);
         }
         document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-            ?.setAttribute('content', theme === NIGHT_THEME ? '#121212' : '#d7e8eb');
+            ?.setAttribute('content', option.dataset.themeColor ?? '#d7e8eb');
+        this.themeSelect.value = preference;
 
         if (persist) {
             try {
-                localStorage.setItem(THEME_STORAGE_KEY, theme);
+                if (preference === SYSTEM_THEME) {
+                    localStorage.removeItem(this.getStorageKey());
+                } else {
+                    localStorage.setItem(this.getStorageKey(), preference);
+                }
             } catch {
-                // 隐私模式或受限存储环境下仍保持本次页面切换可用。
+                // 隐私模式或受限存储环境下仍保持本次页面选择可用。
             }
         }
-
-        this.updateThemeToggle(theme);
     }
 
-    private updateThemeToggle(theme: SiteTheme): void {
-        if (!this.themeToggle) return;
-        const nightActive = theme === NIGHT_THEME;
-        const label = this.themeToggle.querySelector<HTMLElement>('.theme-toggle-label');
-        const icon = this.themeToggle.querySelector<HTMLElement>('i');
-
-        this.themeToggle.setAttribute('aria-pressed', String(nightActive));
-        this.themeToggle.setAttribute(
-            'aria-label',
-            nightActive ? '启用田园明亮主题' : '启用夜色深色主题'
-        );
-        if (label) label.textContent = nightActive ? '田园' : '夜色';
-        icon?.classList.toggle('fa-moon', !nightActive);
-        icon?.classList.toggle('fa-sun', nightActive);
+    private readDocumentPreference(): string | null {
+        const preference = document.documentElement.dataset.themePreference;
+        return this.isTheme(preference) ? preference : null;
     }
 
-    private readDocumentTheme(): SiteTheme | null {
-        const theme = document.documentElement.dataset.theme;
-        return this.isTheme(theme) ? theme : null;
-    }
-
-    private readStoredTheme(): SiteTheme | null {
+    private readStoredTheme(): string | null {
         try {
-            const theme = localStorage.getItem(THEME_STORAGE_KEY);
-            return this.isTheme(theme) ? theme : null;
+            const theme = localStorage.getItem(this.getStorageKey());
+            return this.isTheme(theme) && theme !== SYSTEM_THEME ? theme : null;
         } catch {
             return null;
         }
     }
 
-    private getSystemTheme(): SiteTheme {
-        return this.colorSchemeQuery?.matches ? NIGHT_THEME : PASTORAL_THEME;
+    private getSystemTheme(): string {
+        const preferredTheme = this.colorSchemeQuery?.matches
+            ? this.themeSelect?.dataset.defaultDark
+            : this.themeSelect?.dataset.defaultLight;
+        return this.isTheme(preferredTheme) && preferredTheme !== SYSTEM_THEME
+            ? preferredTheme
+            : this.firstRegisteredTheme();
     }
 
-    private isTheme(value: string | null | undefined): value is SiteTheme {
-        return value === PASTORAL_THEME || value === NIGHT_THEME;
+    private getThemeOption(theme: string): HTMLOptionElement | null {
+        if (!this.themeSelect) return null;
+        return Array.from(this.themeSelect.options)
+            .find((option) => option.value === theme) ?? null;
+    }
+
+    private firstRegisteredTheme(): string {
+        if (!this.themeSelect) return '';
+        return Array.from(this.themeSelect.options)
+            .find((option) => option.value !== SYSTEM_THEME)?.value ?? '';
+    }
+
+    private getStorageKey(): string {
+        return this.themeSelect?.dataset.storageKey ?? FALLBACK_STORAGE_KEY;
+    }
+
+    private isTheme(value: string | null | undefined): value is string {
+        if (!value || !this.themeSelect) return false;
+        return Array.from(this.themeSelect.options).some((option) => option.value === value);
     }
 
     private setupNavigation(): void {
