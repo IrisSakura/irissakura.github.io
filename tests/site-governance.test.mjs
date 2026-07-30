@@ -34,11 +34,43 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'id="main-navigation"',
       'aria-controls="main-navigation"',
       'aria-expanded="false"',
+      'data-theme-stylesheet',
+      'theme-bootstrap:start',
+      'class="theme-toggle"',
+      'aria-pressed=',
       'dist/site.js'
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
     }
+
+    assert.ok(
+      html.indexOf('data-theme-stylesheet') < html.indexOf('theme-bootstrap:start'),
+      `${page} must load the theme stylesheet before applying the stored preference`
+    );
+    assert.ok(
+      html.indexOf('theme-bootstrap:start') < html.indexOf('</head>'),
+      `${page} must apply the theme before body rendering`
+    );
   }
+});
+
+test('theme switch follows the system until the visitor stores a preference', async () => {
+  const [siteSource, generator, navbar] = await Promise.all([
+    readText('src/site.ts'),
+    readText('scripts/generate-site.mjs'),
+    readText('components/navbar.html')
+  ]);
+
+  for (const source of [siteSource, generator]) {
+    assert.ok(source.includes('irissakura-theme'));
+    assert.ok(source.includes("prefers-color-scheme: dark"));
+    assert.ok(source.includes("'pastoral'"));
+    assert.ok(source.includes("'night'"));
+  }
+  assert.ok(siteSource.includes("window.addEventListener('storage'"));
+  assert.ok(siteSource.includes('localStorage.setItem'));
+  assert.ok(navbar.includes('启用夜色深色主题'));
+  assert.ok(navbar.includes('theme-toggle-label'));
 });
 
 test('placeholder blog, simulated form and unsupported template claims are absent', async () => {

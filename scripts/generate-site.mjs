@@ -184,6 +184,7 @@ for (const page of pageDefinitions) {
   } else {
     html = html.replace(/(<meta name="viewport"[^>]*>)/, `$1\n    ${meta}`);
   }
+  html = installThemeBootstrap(html);
 
   const siteScript = `<script src="${prefix}dist/site.js" type="module"></script>`;
   if (!html.includes('dist/site.js')) {
@@ -283,6 +284,46 @@ function buildMeta(page, siteData) {
     <link rel="manifest" href="${prefix}site.webmanifest">
     <script type="application/ld+json">${JSON.stringify(structured)}</script>
     <!-- site-meta:end -->`;
+}
+
+function installThemeBootstrap(html) {
+  const themeLinkPattern = /<link rel="stylesheet" href="((?:\.\.\/)*style\/pastoral\.css)"(?:\s+data-theme-stylesheet)?\s*>/;
+  const themeLinkMatch = html.match(themeLinkPattern);
+  if (!themeLinkMatch) {
+    throw new Error('missing pastoral theme stylesheet');
+  }
+
+  const themeLink = `<link rel="stylesheet" href="${themeLinkMatch[1]}" data-theme-stylesheet>`;
+  html = html.replace(themeLinkPattern, themeLink);
+
+  const themeBootstrap = `<!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const storageKey = 'irissakura-theme';
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const hasStoredTheme = storedTheme === 'pastoral' || storedTheme === 'night';
+            const theme = hasStoredTheme
+                ? storedTheme
+                : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'pastoral';
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme === 'night' ? 'dark' : 'light';
+            const stylesheet = document.querySelector('[data-theme-stylesheet]');
+            if (stylesheet instanceof HTMLLinkElement) stylesheet.disabled = theme === 'night';
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', theme === 'night' ? '#121212' : '#d7e8eb');
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->`;
+  const themeBootstrapPattern = /<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/;
+
+  return themeBootstrapPattern.test(html)
+    ? html.replace(themeBootstrapPattern, themeBootstrap)
+    : html.replace(themeLink, `${themeLink}\n    ${themeBootstrap}`);
 }
 
 function updateFrameworkFallback(html, data, adoption) {

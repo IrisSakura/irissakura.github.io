@@ -25,7 +25,30 @@
     <title>沉浸式模拟的系统性世界 | Sakura Design Journal</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/journal.css">
-    <link rel="stylesheet" href="../../style/pastoral.css">
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet>
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const storageKey = 'irissakura-theme';
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const hasStoredTheme = storedTheme === 'pastoral' || storedTheme === 'night';
+            const theme = hasStoredTheme
+                ? storedTheme
+                : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'pastoral';
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme === 'night' ? 'dark' : 'light';
+            const stylesheet = document.querySelector('[data-theme-stylesheet]');
+            if (stylesheet instanceof HTMLLinkElement) stylesheet.disabled = theme === 'night';
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', theme === 'night' ? '#121212' : '#d7e8eb');
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,9 +71,15 @@
             <a href="../../pages/about.html" class="nav-link">关于</a>
             <a href="../../pages/contact.html" class="nav-link nav-cta">公开入口</a>
         </div>
-        <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
-            <i class="fas fa-bars" aria-hidden="true"></i>
-        </button>
+        <div class="nav-actions">
+            <button class="theme-toggle" type="button" aria-label="启用夜色深色主题" aria-pressed="false">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+                <span class="theme-toggle-label">夜色</span>
+            </button>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </nav>
 
