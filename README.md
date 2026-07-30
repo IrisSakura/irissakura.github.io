@@ -13,7 +13,7 @@
 - `/pages/blog.html`：Journal 中登记并通过安全门禁的完整博客正文；
 - `/pages/framework.html`：框架规模、模块浏览器与生命周期成熟度；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
-- `/pages/portfolio.html`：三个真实项目及其状态、职责、证据和限制；
+- `/pages/portfolio.html`：真实项目及其状态、职责、证据和限制；
 - `/pages/about.html`：项目链与能力证据；
 - `/pages/contact.html`：已验证的公开联系入口；
 - `/404.html`：GitHub Pages 自定义错误页。

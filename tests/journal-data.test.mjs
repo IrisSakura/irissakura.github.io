@@ -17,8 +17,8 @@ test('journal snapshot exposes a small curated public contract', async () => {
   assert.equal(data.summary.gameDesignCount, source.gameDesigns.length);
   assert.equal(data.summary.auditCount, source.audits.length);
   assert.equal(data.summary.blogCount, source.blogs.length);
-  assert.equal(data.summary.knowledgeStreamCount, 3);
-  assert.equal(data.streams.length, 3);
+  assert.equal(data.summary.knowledgeStreamCount, data.streams.length);
+  assert.ok(data.streams.length > 0);
   assert.ok(data.featuredNotes.length >= 6);
   assert.match(data.sourceSnapshot.catalogDigest, /^[a-f0-9]{64}$/);
   assert.match(data.sourceSnapshot.sourceCommit, /^[a-f0-9]{40}$/);

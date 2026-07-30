@@ -67,7 +67,7 @@ const pageDefinitions = [
     file: 'pages/framework.html',
     key: 'framework',
     title: 'Sakura Framework | 成熟度透明的 Unity 模块化框架',
-    description: '查看 Sakura Framework 的完整生命周期、4 个 Supported 包、最小稳定采用路线与《言铸之剑》的已验证使用映射。',
+    description: `查看 Sakura Framework 的完整生命周期、${frameworkAdoption.supportedPackages.length} 个 Supported 包、最小稳定采用路线与《言铸之剑》的已验证使用映射。`,
     canonical: '/pages/framework.html',
     image: '/assets/images/home-preview-pastoral.png',
     schemaType: 'SoftwareSourceCode'
@@ -76,7 +76,7 @@ const pageDefinitions = [
     file: 'pages/portfolio.html',
     key: 'portfolio',
     title: '作品集 | Sakura Design Journal、Framework 与言铸之剑',
-    description: '三个真实项目组成从研究、框架到游戏验证的完整链路，并公开说明状态、职责、证据和限制。',
+    description: `${projects.projects.length} 个真实项目组成从研究、框架到游戏验证的完整链路，并公开说明状态、职责、证据和限制。`,
     canonical: '/pages/portfolio.html',
     image: '/assets/images/sword-of-words/combat-room.png'
   },
@@ -522,7 +522,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData) {
                 <li><span class="journey-index">03</span><h3>作品验证</h3><p>用可玩循环、截图和限制校验价值。</p></li>
             </ol>
         </section>
-        <section class="portfolio-cases" aria-label="三个真实项目">
+        <section class="portfolio-cases" aria-label="${ordered.length} 个真实项目">
             ${cases}
         </section>
     </div>`;
@@ -598,7 +598,7 @@ function renderJournalContent(journalData, sourceData) {
     </header>
     <section class="journal-section">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">KNOWLEDGE STREAMS</p><h2>三条相互验证的知识流</h2></div><p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">KNOWLEDGE STREAMS</p><h2>${journalData.streams.length} 条相互验证的知识流</h2></div><p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p></div>
             <div class="stream-grid">${streams}
             </div>
         </div>
@@ -775,7 +775,7 @@ function renderFrameworkAdoption(adoption) {
   return `<section class="adoption-section" id="adoption">
         <div class="container">
             <div class="section-heading-row">
-                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">4 个 Supported 包与最小采用路线</h2></div>
+                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">${adoption.supportedPackages.length} 个 Supported 包与最小采用路线</h2></div>
                 <p class="section-intro">Supported 统计按包计算，不把 Preview 模块包装成稳定能力。新项目应先验证最小闭包，再按需求扩展。</p>
             </div>
             <div class="supported-adoption-grid">
