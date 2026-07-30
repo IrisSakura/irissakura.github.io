@@ -94,9 +94,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>40</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>23</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric"><strong>3</strong><span>完整博客</span></div>
+                <div class="journal-metric"><strong>43</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>26</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>4</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
                 <p>审计与设计记录发布公开摘要；登记在册的博客发布完整正文。</p>
             </div>
@@ -190,6 +190,21 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-07-29</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>与上一轮审计基准相比，默认分支新增了四个主要提交： Guided Recipes 与 Sample → 正式项目向导； 网站静态回退页面同步修复； 网站 Featured Module 从 6 项扩展到 12 项； UI Timer、Choice Group、State View、Hold Progress 首批通用控件。 本轮变更没有增加 UPM 包、Profile、Preset 或程序集总数，而是继续扩展现有 editor-tools、ui-core 和 ui 包。当前权威规模仍为： |指标|数量| |---|--:| |UPM 包|140| |Catalog 模块|135| |Installer Preset|65| |Profile|10| |程序集|750| |noEngineReferences 程序集|402|</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-07-28</p>
+                    <h3>Sakura Framework 仓库最新审计报告</h3>
+                    <p>本轮没有增加新的 UPM 包、Stable Profile 或 Runtime 公共模块，主要推进了两条路线： 新手接入链路收敛：将根 README、Developer Console、Installer V2、Bootstrap Lite、Sample Gallery 和 Beginner 2D Shooter 串联成 Simple 2D Quickstart。 仓库真理源收敛：压缩 README、Release、Performance、Sample 和历史设计文档中的状态副本，强化 Work Status、Inventory、PLAN-INDEX 和 Runner Ledger 的 Owner 边界。 方向总体正确。新 Quickstart 没有建立第二套安装器、第二个 Sample 系统或新的 Runtime 产品，而是编排现有 Owner；发布参考文档也已转为长期稳定合同，不再硬编码当前包数、Run、SHA 或…</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-07-27</p>
+                    <h3>Sakura Framework 仓库最新审计报告</h3>
+                    <p>仓库最新一轮改动已经从单纯增加运行时能力，转向三个并行方向： 建立 Agent Mainline Contract，统一仓库工作模式、可执行工作和自动恢复边界； 改善 Unity Testbed、Player Build、Windows/macOS/Linux 兼容性和本地零配置测试体验； 继续扩展 Typed UI/MVVM、ECS Session、Godot Parallel Adapter 和 Editor Tools 新手入口。 当前正式工作模式为： 只有 active 工作可以自动续作；Evidence Backlog 和 Deferred 工作不得自动恢复，RC、Tag 和 Release 也需要维护者明确启动。 这一治理方向是正确的。但实际仓库状态仍存在明显矛盾： 仓库宣称进入“收敛期”，当前没有 Active 工作，却已有 39 项 Evidence Backlog，并继续增加 Editor…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-07-26</p>
                     <h3>Sakura Framework 仓库最新审计报告</h3>
                     <p>本轮最重要的变化是 ECS Runtime 后端可选性完成远端证据闭环。 当前 ECS Runtime 已完成： Disabled / Arch / Unity Entities 三种显式后端选择； 根包依赖收敛； Portable Arch 自包含闭包； Unity Entities 条件程序集； Hitbox、RTS 能力级条件 Bridge； Owned/Borrowed World 生命周期； 显式 Tick 与禁止自动加入 PlayerLoop； PlayMode、IL2CPP/AOT 与性能基线验证。 证据闭包提交 af0ab6f4... 的 Gitea CI run 398 已完成常规质量和 Unity Impact；ECS focused run 399 精确选择 ECS Runtime、Hitbox、RTS 三包并通过 113/113，相关 XML 与 Editor Log…</p>
@@ -204,30 +219,33 @@
                     <h3>Sakura Framework 仓库最新审计报告</h3>
                     <p>本轮仓库继续沿“降低根依赖、明确程序集所有权、补齐通用运行时基础设施”的方向推进，主要完成了六个切片： Core Announcement 迁移至 Ticker； Core VContainer Adapter 迁移至 Bootstrap； 主线程派发 Bridge； Durable Signal Core； Config Snapshot Core； Preferences Store，并接入 Audio、Rhythm。 这些工作均已在 PLAN-INDEX 中标记为 implemented / completed，但证据仍为 local-passed / runner-pending。 总体判断： 所有权收敛和根依赖减负方向正确，但本轮再次同时扩大了包数量、程序集数量和 Stable 公共 API。当前最需要做的是冻结公共面、补同一 SHA 的远端证据和修复新基础设施的失败语义，而不是继续新增“通用基础能力”。</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-23</p>
-                    <h3>Sakura Framework 仓库最新审计报告</h3>
-                    <p>本轮最新提交本身主要同步 Domain Optional Bridge 的治理状态；最近最重要的实质代码变更是前一提交： 其核心成果是将大量 Domain Framework 根包中的 Config、GAS、Simulation、Networking、Sensory、Pathfinding 等集成从硬依赖改造成条件程序集，并拆分相应测试程序集。同期还整理了计划文档、建立独立设计日志仓库，并继续压缩主仓库中的非工程事实源。 本轮总体判断： Domain 依赖收敛方向正确，安装闭包已经明显减小；但程序集数量、计划数量和 Runner Evidence Backlog 同时上升。当前应停止继续扩展 Bridge，优先补齐 CI 影响面选择、最新提交远端证据和公开网络传输契约。 与上一轮审计快照相比： 这说明本轮成功降低了根包依赖耦合，但代价是增加了约 23 个条件 Bridge 与测试程序集。</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-22</p>
-                    <h3>Sakura Framework 仓库最新审计报告</h3>
-                    <p>本轮仓库发生了三类实质变化： 治理与证据债务明显收敛：利用既有 Gitea Runner 日志关闭了一批长期 runner-pending 工作，并为 Season Feature 增加正式 CI 入口。 框架能力继续扩展：新增 Semantic Combat 包、GAS 统一伤害事实链、Runtime Starter 综合样例和多个可运行教学 Sample。 日常 CI 与性能资格化已经解耦：合成性能不再阻断普通开发流水线，只保留在显式资格化、手动 Testbed 和 Release 路径中。 当前权威清单已经增长到 137 个 UPM 包、132 个 Catalog 模块、671 个程序集。Supported 仍保持 4 个，但 Preview 降至 99、Experimental 增至 22，说明仓库开始通过生命周期重分类降低“默认可用”的错误预期。</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-21</p>
-                    <h3>Sakura Framework 仓库阶段审计与未来工作计划</h3>
-                    <p>Sakura Framework 已经从“扩充框架能力”的阶段，进入“治理现有能力、降低维护成本、补齐工程证据”的阶段。 当前项目已经具备： 大规模 UPM 多包结构； 明确的 Foundation、Runtime Service、Gameplay Kernel、Domain Framework、Adapter Bridge 和 Tooling 分层； Gitea CI、Unity Testbed、Server Build/Test、DocFX 和 Release Candidate 工具链； Package Lifecycle、Framework Inventory、Plan Gate 和架构边界校验； Core Only、Bootstrap Lite 等正式消费入口； Typed UI、Feature Module、Server Host、Change Publisher 等较完整的子系统；</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div><p>40 个确定性目录条目；在区域内滚动浏览，每个稳定 ID 都可被博客引用。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div><p>43 个确定性目录条目；在区域内滚动浏览，每个稳定 ID 都可被博客引用。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-extraction-cross-session-loop">
+                    <p class="project-status">游戏设计范式 · 2026-07-30</p>
+                    <h3>撤离型搜打撤中的风险携带、不完全信息与跨局循环</h3>
+                    <p>围绕局外资产带入、局内动态搜刮、不完全信息决策和成功撤离后的收益提交组织跨局风险循环。</p>
+                    <div class="note-tags"><span>extraction</span><span>incomplete-information</span><span>risk</span></div>
+                </article>
+                <article class="design-summary-card" id="design-metroidvania-research-2">
+                    <p class="project-status">游戏设计范式 · 2026-07-30</p>
+                    <h3>银河城游戏</h3>
+                    <p>将能力门控拓扑、世界状态记忆与探索—受阻—成长—回访组织为可持续重解释的长期循环。</p>
+                    <div class="note-tags"><span>metroidvania</span></div>
+                </article>
+                <article class="design-summary-card" id="design-stealth-perception-alert-recovery">
+                    <p class="project-status">游戏设计范式 · 2026-07-29</p>
+                    <h3>潜行游戏中的感知不对称、警戒升级与可恢复暴露</h3>
+                    <p>以世界真相和敌方认知分离、分级警戒、信息传播与暴露恢复构造可规划的潜行循环。</p>
+                    <div class="note-tags"><span>alert-state</span><span>perception</span><span>stealth</span></div>
+                </article>
                 <article class="design-summary-card" id="design-jrpg-chapter-party-progression">
                     <p class="project-status">游戏设计范式 · 2026-07-28</p>
                     <h3>JRPG 中的章节驱动、队伍成长与冒险循环</h3>
@@ -478,7 +496,7 @@
                 <div><p class="journal-kicker">RESEARCH → SYSTEM → WORK</p><h2>记录的价值，在于改变下一次实现</h2><p>只有能够跨项目复用的结论，才进入 Sakura Framework；只有被实际作品验证的能力，才成为作品集证据。</p></div>
                 <div class="bridge-actions"><a class="bridge-card" href="framework.html"><span>02 / SYSTEM</span><strong>Sakura Framework</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="bridge-card" href="game.html"><span>03 / WORK</span><strong>《言铸之剑》</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
             </div>
-            <p class="journal-source-note">同步来源固定为 Journal 提交 d35c53ec；未提交草稿、仓库地址、本机路径和未登记文章不进入本站。</p>
+            <p class="journal-source-note">同步来源固定为 Journal 提交 cc4971ec；未提交草稿、仓库地址、本机路径和未登记文章不进入本站。</p>
         </div>
     </section>
 <!-- journal-content:end -->
