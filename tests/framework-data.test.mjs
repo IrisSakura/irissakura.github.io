@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
+import { assertFrameworkAdoptionReviewed } from '../scripts/lib/framework-adoption-review.mjs';
+
 const root = new URL('../', import.meta.url);
 
 async function readText(path) {
@@ -11,6 +13,8 @@ async function readText(path) {
 test('framework.json exposes only the public contract', async () => {
   const data = JSON.parse(await readText('data/framework.json'));
   const allowed = [
+    'adoptionReviewContract',
+    'adoptionReviewHash',
     'schemaVersion',
     'sourceCommit',
     'generatedAt',
@@ -23,6 +27,8 @@ test('framework.json exposes only the public contract', async () => {
   assert.deepEqual(Object.keys(data).sort(), allowed.sort());
   assert.equal(data.schemaVersion, 1);
   assert.match(data.sourceCommit, /^[0-9a-f]{7,40}$/);
+  assert.equal(data.adoptionReviewContract, 'supported-stable-v1');
+  assert.match(data.adoptionReviewHash, /^sha256:[0-9a-f]{64}$/);
   assert.ok(!Number.isNaN(Date.parse(data.generatedAt)));
 
   for (const key of ['packageCount', 'catalogModuleCount', 'presetCount', 'profileCount', 'asmdefCount']) {
@@ -45,12 +51,18 @@ test('framework.json exposes only the public contract', async () => {
   }
 });
 
-test('framework adoption snapshot names the supported packages and stays pinned to the public snapshot', async () => {
+test('framework adoption snapshot names the supported packages and pins reviewed facts', async () => {
   const framework = JSON.parse(await readText('data/framework.json'));
   const adoption = JSON.parse(await readText('data/framework-adoption.json'));
 
   assert.equal(adoption.schemaVersion, 1);
-  assert.equal(adoption.sourceCommit, framework.sourceCommit);
+  assert.match(adoption.sourceCommit, /^[0-9a-f]{7,40}$/);
+  assert.equal(adoption.adoptionReviewContract, framework.adoptionReviewContract);
+  assert.equal(adoption.adoptionReviewHash, framework.adoptionReviewHash);
+  assert.doesNotThrow(() => assertFrameworkAdoptionReviewed(
+    { ...framework, sourceCommit: 'a'.repeat(40) },
+    { ...adoption, sourceCommit: 'b'.repeat(40) }
+  ));
   assert.deepEqual(
     adoption.supportedPackages.map((entry) => entry.id),
     ['core', 'event', 'gamehelper', 'pooling']
@@ -60,6 +72,41 @@ test('framework adoption snapshot names the supported packages and stays pinned 
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
   assert.ok(!JSON.stringify(adoption).includes('/Users/'));
   assert.ok(!JSON.stringify(adoption).includes('git@'));
+});
+
+test('framework adoption review fails closed with an actionable fact-drift error', () => {
+  const framework = {
+    adoptionReviewContract: 'supported-stable-v1',
+    adoptionReviewHash: `sha256:${'a'.repeat(64)}`,
+    sourceCommit: '1'.repeat(40)
+  };
+  const adoption = {
+    adoptionReviewContract: 'supported-stable-v1',
+    adoptionReviewHash: `sha256:${'b'.repeat(64)}`,
+    sourceCommit: '2'.repeat(40)
+  };
+
+  assert.throws(
+    () => assertFrameworkAdoptionReviewed(framework, adoption),
+    /adoption review required.*Supported package identities.*stable route closures/u
+  );
+});
+
+test('framework adoption review rejects unsupported or mismatched contract versions', () => {
+  const hash = `sha256:${'a'.repeat(64)}`;
+  const framework = {
+    adoptionReviewContract: 'supported-stable-v2',
+    adoptionReviewHash: hash
+  };
+  const adoption = {
+    adoptionReviewContract: 'supported-stable-v1',
+    adoptionReviewHash: hash
+  };
+
+  assert.throws(
+    () => assertFrameworkAdoptionReviewed(framework, adoption),
+    /adoption review required.*supported-stable-v2/u
+  );
 });
 
 test('framework page contains one target for each dynamic field', async () => {

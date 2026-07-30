@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
+import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const [site, framework, frameworkAdoption, projects, journal, journalSource, navbarTemplate, footerTemplate] = await Promise.all([
@@ -17,9 +19,7 @@ const [site, framework, frameworkAdoption, projects, journal, journalSource, nav
   readText('components/footer.html')
 ]);
 
-if (frameworkAdoption.sourceCommit !== framework.sourceCommit) {
-  throw new Error(`framework adoption snapshot ${frameworkAdoption.sourceCommit} does not match framework snapshot ${framework.sourceCommit}`);
-}
+assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 
 const journalDetailDefinitions = journal.featuredNotes.map((note) => ({
   file: `pages/journal/${note.id}.html`,

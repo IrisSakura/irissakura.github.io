@@ -24,6 +24,8 @@ interface FrameworkPublicData {
     schemaVersion: number;
     sourceCommit: string;
     generatedAt: string;
+    adoptionReviewContract: string;
+    adoptionReviewHash: string;
     summary: FrameworkSummary;
     lifecycleCounts: Record<string, number>;
     layers: FrameworkLayer[];
@@ -312,6 +314,8 @@ class FrameworkPage {
         if (!value || typeof value !== 'object') return false;
         const data = value as Partial<FrameworkPublicData>;
         if (data.schemaVersion !== 1 || typeof data.sourceCommit !== 'string' || Number.isNaN(Date.parse(data.generatedAt ?? ''))) return false;
+        if (data.adoptionReviewContract !== 'supported-stable-v1') return false;
+        if (typeof data.adoptionReviewHash !== 'string' || !/^sha256:[0-9a-f]{64}$/.test(data.adoptionReviewHash)) return false;
         if (!data.summary || typeof data.summary !== 'object') return false;
         const summary = data.summary as Partial<FrameworkSummary>;
         for (const key of ['packageCount', 'catalogModuleCount', 'presetCount', 'profileCount', 'asmdefCount'] as const) {
