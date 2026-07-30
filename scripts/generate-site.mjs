@@ -290,6 +290,7 @@ function updateFrameworkFallback(html, data, adoption) {
     'framework-package-count': data.summary.packageCount,
     'framework-module-count': data.summary.catalogModuleCount,
     'framework-profile-count': data.summary.profileCount,
+    'framework-maturity-summary': `${data.summary.packageCount} 个 Package 中只有 ${data.lifecycleCounts.Supported ?? 0} 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。`,
     'framework-module-result-count': `${data.featuredModules.length} 个模块`,
     'framework-source-commit': data.sourceCommit.slice(0, 7),
     'framework-supported-count': data.lifecycleCounts.Supported ?? 0,

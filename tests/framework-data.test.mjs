@@ -170,14 +170,12 @@ test('framework explorer binds synchronized modules to interactive views', async
 
 test('framework page presents maturity before scale and documents sync ownership', async () => {
   const html = await readText('pages/framework.html');
+  const framework = JSON.parse(await readText('data/framework.json'));
   const maintenance = await readText('docs/maintenance/framework-sync.md');
 
   for (const fragment of [
     '先看成熟度，再看规模',
-    '4 个处于 Supported',
-    '101',
     'Preview',
-    '23',
     'Experimental',
     'DocsOnly',
     'Frozen',
@@ -186,6 +184,25 @@ test('framework page presents maturity before scale and documents sync ownership
     '《言铸之剑》采用映射'
   ]) {
     assert.ok(html.includes(fragment), `missing maturity disclosure: ${fragment}`);
+  }
+
+  assert.ok(
+    html.includes(
+      `${framework.summary.packageCount} 个 Package 中只有 ${framework.lifecycleCounts.Supported} 个处于 Supported`
+    ),
+    'maturity introduction should use the synchronized package and Supported counts'
+  );
+  for (const [id, value] of [
+    ['framework-supported-count', framework.lifecycleCounts.Supported],
+    ['framework-preview-count', framework.lifecycleCounts.Preview],
+    ['framework-experimental-count', framework.lifecycleCounts.Experimental],
+    ['framework-docsonly-count', framework.lifecycleCounts.DocsOnly],
+    ['framework-frozen-count', framework.lifecycleCounts.Frozen]
+  ]) {
+    assert.ok(
+      html.includes(`id="${id}">${value}</strong>`),
+      `${id} should match the synchronized lifecycle count`
+    );
   }
 
   assert.ok(maintenance.includes('data/framework.json'));

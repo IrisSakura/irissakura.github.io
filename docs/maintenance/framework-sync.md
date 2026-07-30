@@ -15,7 +15,9 @@
 
 Framework 仓库的发布工作流生成快照后，只更新网站仓库中的 `data/framework.json`。若内容无变化，不创建空提交。跨仓库写入使用仅面向网站仓库的独立 Deploy Key，不能复用服务器登录密钥。
 
-网站收到新快照后，`npm run generate` 会用同一 JSON 更新 `pages/framework.html` 的静态回退数字、来源提交和更新时间；浏览器中的 TypeScript 加载器再验证并渲染完整交互视图。
+网站收到新快照后，`npm run generate` 会用同一 JSON 更新
+`pages/framework.html` 的静态回退数字、来源提交和更新时间，并同步
+`pages/portfolio.html` 中的生命周期证据摘要；浏览器中的 TypeScript 加载器再验证并渲染完整交互视图。
 
 ## 验证
 
