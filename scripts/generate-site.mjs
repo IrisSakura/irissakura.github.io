@@ -27,7 +27,7 @@ const journalDetailDefinitions = journal.featuredNotes.map((note) => ({
   title: `${note.title} | Sakura Design Journal`,
   description: note.description,
   canonical: `/pages/journal/${note.id}.html`,
-  image: '/assets/images/home-preview.png',
+  image: '/assets/images/home-preview-pastoral.png',
   schemaType: 'Article',
   note
 }));
@@ -37,7 +37,7 @@ const blogDetailDefinitions = await Promise.all(journalSource.blogs.map(async (a
   title: `${article.title} | IrisSakura`,
   description: article.summary,
   canonical: `/pages/blog/${article.id}.html`,
-  image: '/assets/images/home-preview.png',
+  image: '/assets/images/home-preview-pastoral.png',
   schemaType: 'Article',
   article,
   markdown: await readText(article.contentPath)
@@ -53,7 +53,7 @@ const pageDefinitions = [
     title: 'IrisSakura | 构建可验证的 Unity 游戏系统',
     description: site.description,
     canonical: '/',
-    image: '/assets/images/home-preview.png'
+    image: '/assets/images/home-preview-pastoral.png'
   },
   {
     file: 'pages/about.html',
@@ -61,7 +61,7 @@ const pageDefinitions = [
     title: '关于 IrisSakura | 研究、框架与游戏',
     description: '了解 IrisSakura 如何以设计与引擎研究为输入，构建 Sakura Framework，并通过《言铸之剑》验证系统设计与工程能力。',
     canonical: '/pages/about.html',
-    image: '/assets/images/home-preview.png'
+    image: '/assets/images/home-preview-pastoral.png'
   },
   {
     file: 'pages/framework.html',
@@ -69,7 +69,7 @@ const pageDefinitions = [
     title: 'Sakura Framework | 成熟度透明的 Unity 模块化框架',
     description: '查看 Sakura Framework 的完整生命周期、4 个 Supported 包、最小稳定采用路线与《言铸之剑》的已验证使用映射。',
     canonical: '/pages/framework.html',
-    image: '/assets/images/home-preview.png',
+    image: '/assets/images/home-preview-pastoral.png',
     schemaType: 'SoftwareSourceCode'
   },
   {
@@ -86,7 +86,7 @@ const pageDefinitions = [
     title: '研究记录 | Sakura Design Journal',
     description: '经过策展的游戏设计、Godot 源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。',
     canonical: '/pages/journal.html',
-    image: '/assets/images/home-preview.png'
+    image: '/assets/images/home-preview-pastoral.png'
   },
   {
     file: 'pages/game.html',
@@ -103,7 +103,7 @@ const pageDefinitions = [
     title: '联系 IrisSakura | Unity 系统设计与框架交流',
     description: '通过已验证的 GitHub 与哔哩哔哩入口联系 IrisSakura，交流 Unity 游戏系统、框架设计和技术合作。',
     canonical: '/pages/contact.html',
-    image: '/assets/images/home-preview.png'
+    image: '/assets/images/home-preview-pastoral.png'
   },
   {
     file: 'pages/blog.html',
@@ -111,7 +111,7 @@ const pageDefinitions = [
     title: '博客 | 游戏系统与工程设计',
     description: '完整发布 Sakura Design Journal 中经过登记与安全检查的游戏系统设计文章。',
     canonical: '/pages/blog.html',
-    image: '/assets/images/home-preview.png'
+    image: '/assets/images/home-preview-pastoral.png'
   },
   {
     file: '404.html',
@@ -119,7 +119,7 @@ const pageDefinitions = [
     title: '页面未找到 | IrisSakura',
     description: '该页面不存在。返回 IrisSakura 首页、作品集或研究记录。',
     canonical: '/404.html',
-    image: '/assets/images/home-preview.png',
+    image: '/assets/images/home-preview-pastoral.png',
     noIndex: true
   },
   ...journalDetailDefinitions,
@@ -228,8 +228,8 @@ await Promise.all([
     description: site.description,
     start_url: '/',
     display: 'standalone',
-    background_color: '#121212',
-    theme_color: '#6a11cb',
+    background_color: '#f8f4ea',
+    theme_color: '#d7e8eb',
     icons: [
       { src: '/assets/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
     ]
@@ -278,7 +278,7 @@ function buildMeta(page, siteData) {
     <meta name="twitter:description" content="${escapeAttribute(page.description)}">
     <meta name="twitter:image" content="${image}">
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
-    <meta name="theme-color" content="#6a11cb">
+    <meta name="theme-color" content="#d7e8eb">
     <link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <script type="application/ld+json">${JSON.stringify(structured)}</script>
@@ -805,6 +805,7 @@ function renderBlogDetailSource({ article, markdown }) {
     <title>${escapeHtml(article.title)} | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
+    <link rel="stylesheet" href="../../style/pastoral.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -840,6 +841,7 @@ function renderJournalDetailSource(note) {
     <title>${escapeHtml(note.title)} | Sakura Design Journal</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/pastoral.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
