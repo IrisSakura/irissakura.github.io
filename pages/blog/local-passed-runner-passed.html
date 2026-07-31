@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/local-passed-runner-passed.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="证据等级：为什么 local-passed 不能写成 runner-passed | IrisSakura">
+    <meta property="og:description" content="一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/local-passed-runner-passed.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/images/home-preview-pastoral.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="证据等级：为什么 local-passed 不能写成 runner-passed | IrisSakura">
+    <meta name="twitter:description" content="一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/home-preview-pastoral.png">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"证据等级：为什么 local-passed 不能写成 runner-passed | IrisSakura","description":"一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？","url":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"dateModified":"2026-07-31","about":["local","passed","runner"]}</script>
+    <!-- site-meta:end -->
+    <title>证据等级：为什么 local-passed 不能写成 runner-passed | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+            <i class="fas fa-gamepad" aria-hidden="true"></i>
+            <span>Iris</span>Sakura
+        </a>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link">Journal</a>
+            <a href="../../pages/blog.html" class="nav-link active" aria-current="page">博客</a>
+            <a href="../../pages/about.html" class="nav-link">关于</a>
+            <a href="../../pages/contact.html" class="nav-link nav-cta">公开入口</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker">大型 Unity 框架的治理复盘 · 2026-07-31</p>
+            <h1>证据等级：为什么 local-passed 不能写成 runner-passed</h1>
+            <p class="blog-deck">一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？</p>
+            <div class="note-tags"><span>local</span><span>passed</span><span>runner</span></div>
+        </header>
+        <div class="blog-prose"><blockquote>
+<p>系列：大型 Unity 框架的治理复盘</p>
+<p>日期：2026-07-31</p>
+<p>状态：可发布候选</p>
+<p>核心问题：一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？</p>
+</blockquote>
+<p>开发者完成一个功能后，通常会运行一组测试。</p>
+<p>控制台显示全部通过，Unity 没有报错，示例场景也能运行。于是工作记录里出现了一句话：</p>
+<blockquote>
+<p>测试通过。</p>
+</blockquote>
+<p>这句话看起来没有问题，却省略了几个关键条件：</p>
+<ul>
+<li>测试的是哪一份代码？</li>
+<li>使用的是不是干净工作区？</li>
+<li>运行在哪个操作系统和 Unity 版本？</li>
+<li>是否包含未提交文件、本机缓存或本地配置？</li>
+<li>测试覆盖的是纯 C# 模型、Unity Editor，还是最终 Player？</li>
+<li>结果是否由独立 Runner 重新执行？</li>
+<li>CI 验证的提交是否就是准备发布的提交？</li>
+<li>测试结果和日志是否还能被复查？</li>
+</ul>
+<p>只要这些问题没有答案，“测试通过”就不是完整事实，而是一条缺少边界的结论。</p>
+<h2>先说结论：测试通过不是布尔值，而是一条带上下文的证据声明</h2>
+<p><strong>测试证据等级（后文简称“可信台阶”）</strong>：根据被验证代码的身份、执行环境、覆盖范围、独立性和可复现程度，对测试结论划分的可信层级。</p>
+<p><code>local-passed</code> 和 <code>runner-passed</code> 都可以是真实结果。</p>
+<p>问题不在于本地测试没有价值，而在于二者证明的事情不同。</p>
+<ul>
+<li><code>local-passed</code> 证明：在某个开发者当前拥有的本地环境中，一组操作曾经成功。</li>
+<li><code>runner-passed</code> 证明：自动化执行环境按照预定流程重新取得代码并完成了对应验证。</li>
+<li><code>same-SHA runner-passed</code> 进一步证明：Runner 验证的正是被登记或准备交付的那一份提交。</li>
+<li>Release Evidence 还要证明：被发布的产物来源、内容和此前通过验证的代码能够对应起来。</li>
+</ul>
+<p>因此，更准确的表达不是：</p>
+<blockquote>
+<p>这个功能通过了测试。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>这份代码在什么环境中、以什么范围、通过了哪一级验证。</p>
+</blockquote>
+<h2>一条测试证据需要自己的“身份证”</h2>
+<p><strong>证据身份（后文简称“证据身份证”）</strong>：能够唯一说明一次验证测试了什么、在哪里测试、如何测试以及得到什么结果的最小信息集合。</p>
+<p>一条可审计的证据至少应包含：</p>
+<table>
+<thead>
+<tr>
+<th>信息</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Source Commit</td>
+<td>测试的是哪一份代码</td>
+</tr>
+<tr>
+<td>Workspace State</td>
+<td>是否包含未提交或未跟踪改动</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>操作系统、运行时、Unity 和工具版本是什么</td>
+</tr>
+<tr>
+<td>Command / Workflow</td>
+<td>通过什么入口执行</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>覆盖了哪些包、程序集、场景或平台</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>成功、失败、超时还是未执行</td>
+</tr>
+<tr>
+<td>Artifact</td>
+<td>是否保留日志、XML、Player 或报告</td>
+</tr>
+<tr>
+<td>Timestamp</td>
+<td>结果产生于什么时候</td>
+</tr>
+<tr>
+<td>Producer</td>
+<td>由开发者、本地脚本还是远端 Runner 生成</td>
+</tr>
+<tr>
+<td>Evidence Class</td>
+<td>该结果允许支持哪一级结论</td>
+</tr>
+</tbody></table>
+<p>缺少证据身份证时，同一句“通过”可能指向完全不同的事实：</p>
+<pre><code>开发者修改了五个文件
+→ 只提交了其中三个
+→ 本地测试使用完整工作区通过
+→ CI 只检出提交中的三个文件
+→ CI 失败
+</code></pre>
+<p>本地结果和 CI 结果并不矛盾。</p>
+<p>它们测试的根本不是同一份代码。</p>
+<h2><code>local-passed</code> 究竟证明了什么</h2>
+<p><strong>本地验证（后文简称“手边能跑”）</strong>：在开发者当前机器和工作区中完成的构建、测试或运行检查。</p>
+<p>手边能跑非常重要。</p>
+<p>它适合：</p>
+<ul>
+<li>快速发现编译错误；</li>
+<li>验证算法和数据模型；</li>
+<li>调试生命周期；</li>
+<li>运行需要交互或特殊设备的检查；</li>
+<li>在提交前缩短反馈周期；</li>
+<li>验证尚未整理成 CI 的实验性能力。</li>
+</ul>
+<p>但它天然包含一组不完全受控的变量：</p>
+<ul>
+<li>未提交文件；</li>
+<li>未跟踪配置；</li>
+<li>本机安装的软件；</li>
+<li>用户目录中的缓存；</li>
+<li>已存在的 Unity Library；</li>
+<li>本地环境变量；</li>
+<li>手动安装的 SDK；</li>
+<li>曾经执行过的初始化步骤；</li>
+<li>开发者本人对操作流程的隐性知识。</li>
+</ul>
+<p>因此，<code>local-passed</code> 通常只能支持：</p>
+<blockquote>
+<p>当前开发工作区在这台机器上通过了指定验证。</p>
+</blockquote>
+<p>它不能自动支持：</p>
+<ul>
+<li>干净检出可以通过；</li>
+<li>其他开发者可以复现；</li>
+<li>CI Runner 可以通过；</li>
+<li>Windows、Linux 或 macOS 都可以通过；</li>
+<li>Unity Player 可以通过；</li>
+<li>发布候选已经通过；</li>
+<li>正式产物与本地测试对象一致。</li>
+</ul>
+<h2>Runner 的价值不是“换一台电脑再跑一次”</h2>
+<p><strong>独立 Runner 验证（后文简称“异地复验”）</strong>：由自动化执行环境从明确代码身份出发，按照版本化流程重新构建和测试，并保留可追溯结果。</p>
+<p>异地复验的主要价值不是机器位于远端，而是它切断了部分本地隐式依赖。</p>
+<p>典型流程是：</p>
+<p>它可以暴露本地环境长期掩盖的问题：</p>
+<ul>
+<li>文件没有提交；</li>
+<li>路径大小写不一致；</li>
+<li>脚本依赖本地 PATH；</li>
+<li>测试依赖旧缓存；</li>
+<li>生成文件没有同步；</li>
+<li>Windows 和 Unix Shell 行为不同；</li>
+<li>Unity 包依赖没有声明；</li>
+<li>构建脚本需要人工输入；</li>
+<li>测试在干净项目中无法启动；</li>
+<li>测试完成后进程无法退出。</li>
+</ul>
+<p>但 Runner 也不是自动等于完整交付证明。</p>
+<p>它仍然需要回答：</p>
+<ul>
+<li>Runner 测试的是不是目标提交？</li>
+<li>Workflow 是否覆盖目标能力？</li>
+<li>测试是否真的执行，而不是被条件跳过？</li>
+<li>结果文件是否生成？</li>
+<li>Job 是否因为超时或取消而没有结论？</li>
+<li>构建产物是否就是后续发布产物？</li>
+</ul>
+<h2>为什么同一个提交 SHA 如此重要</h2>
+<p><strong>同提交验证（后文简称“同一份代码复验”）</strong>：测试结果、候选版本和发布流程明确绑定到同一个不可变提交身份。</p>
+<p>考虑下面的流程：</p>
+<pre><code>提交 A
+→ CI 通过
+
+继续开发
+→ 产生提交 B
+
+使用当前 main 构建候选版本
+→ 实际内容来自 B
+
+发布说明写：
+→ CI 已通过
+</code></pre>
+<p>这里的“CI 已通过”只对提交 A 成立。</p>
+<p>候选版本来自提交 B，因此提交 A 的结果不能直接为 B 背书。</p>
+<p>正确关系应该是：</p>
+<pre><code>确定候选提交 B
+→ 对 B 执行所需测试
+→ 证据绑定 B
+→ 从 B 组装候选产物
+→ 验证产物仍对应 B
+→ 才能进入后续发布判断
+</code></pre>
+<p>同一份代码复验防止的不是普通测试失败，而是证据和交付对象之间发生身份漂移。</p>
+<h2>“CI 全绿”也可能只证明了很小的范围</h2>
+<p><strong>证据覆盖范围（后文简称“证明范围”）</strong>：一次测试结果实际覆盖的包、平台、场景、配置和行为边界。</p>
+<p>假设一个大型 Unity 框架修改了 UI、Networking 和 ECS，但 Player Smoke 始终只构建 <code>core-only</code> Profile。</p>
+<p>即使 Player Smoke 通过，它也只能证明：</p>
+<blockquote>
+<p>Core Only 闭包可以构建并启动。</p>
+</blockquote>
+<p>它不能证明：</p>
+<ul>
+<li>UI 可以进入 Player；</li>
+<li>Networking 的平台条件编译正确；</li>
+<li>ECS Runtime 的依赖完整；</li>
+<li>新增的 Unity Adapter 没有 Editor-only API；</li>
+<li>完整消费闭包可以启动。</li>
+</ul>
+<p>问题不在于 Core Only Smoke 没有价值。</p>
+<p>问题在于不能把窄范围结果描述成全框架验证。</p>
+<p>更可靠的证据记录应明确写出：</p>
+<table>
+<thead>
+<tr>
+<th>证据</th>
+<th>能证明</th>
+<th>不能证明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>纯 C# 单元测试</td>
+<td>核心模型和算法行为</td>
+<td>Unity 生命周期与序列化</td>
+</tr>
+<tr>
+<td>Unity EditMode</td>
+<td>Editor 环境中的程序集和部分 Unity API</td>
+<td>Player 构建与运行</td>
+</tr>
+<tr>
+<td>Unity PlayMode</td>
+<td>场景和运行时生命周期</td>
+<td>所有目标平台</td>
+</tr>
+<tr>
+<td>Core Only Player Smoke</td>
+<td>最小稳定闭包可构建启动</td>
+<td>受影响 Preview 包</td>
+</tr>
+<tr>
+<td>受影响闭包 Player Build</td>
+<td>指定包可以进入目标 Player</td>
+<td>其他平台和未覆盖场景</td>
+</tr>
+<tr>
+<td>Runner Matrix</td>
+<td>声明平台和命令可复现</td>
+<td>正式发布产物身份</td>
+</tr>
+<tr>
+<td>Candidate Qualification</td>
+<td>候选提交和候选产物通过门禁</td>
+<td>用户环境中的所有组合</td>
+</tr>
+</tbody></table>
+<p>证明范围越窄，结果反馈越快。</p>
+<p>快速验证不是问题；模糊地扩大结论才是问题。</p>
+<h2>“没有结果”不等于失败</h2>
+<p>工程状态里必须区分至少四种结论：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Passed</td>
+<td>验证已执行并满足判定条件</td>
+</tr>
+<tr>
+<td>Failed</td>
+<td>验证已执行并明确不满足条件</td>
+</tr>
+<tr>
+<td>Pending</td>
+<td>验证需要执行，但尚未取得结果</td>
+</tr>
+<tr>
+<td>Not Requested</td>
+<td>当前阶段没有要求执行该验证</td>
+</tr>
+</tbody></table>
+<p>此外还可能存在：</p>
+<ul>
+<li>Skipped：流程执行，但该检查因条件不匹配而跳过；</li>
+<li>Cancelled：执行被外部取消；</li>
+<li>Timed Out：执行超时，无法得到正常完成结果；</li>
+<li>Inconclusive：有输出，但证据不足以作出通过或失败判断；</li>
+<li>Stale：结果曾经有效，但已不对应当前代码或配置。</li>
+</ul>
+<p>这一区分非常重要。</p>
+<p>没有 Workflow Run，不能写成 <code>runner-failed</code>。</p>
+<p>本地测试通过，也不能把 <code>runner-pending</code> 改成 <code>runner-passed</code>。</p>
+<p>当前没有进入候选发布阶段，则 Release Evidence 可以是 <code>not-requested</code>，而不是制造一条虚假的发布阻塞。</p>
+<h2>证据不是一条简单直线</h2>
+<p>可信台阶经常被画成：</p>
+<pre><code>local
+→ runner
+→ candidate
+→ release
+</code></pre>
+<p>这个方向有帮助，但并不完整。</p>
+<p>证据实际包含多个相互独立的维度：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码身份</td>
+<td>工作区、Commit、Tag、Candidate</td>
+</tr>
+<tr>
+<td>执行环境</td>
+<td>本机、容器、自托管 Runner、托管 Runner、真机</td>
+</tr>
+<tr>
+<td>覆盖范围</td>
+<td>单元测试、包闭包、Sample、Player、平台矩阵</td>
+</tr>
+<tr>
+<td>独立性</td>
+<td>开发者手动执行、脚本执行、CI 自动执行</td>
+</tr>
+<tr>
+<td>产物身份</td>
+<td>临时构建、保存 Artifact、候选 Bundle、正式 Release</td>
+</tr>
+<tr>
+<td>可追溯性</td>
+<td>无日志、本地日志、测试报告、固定 Run、签名清单</td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td>开发验证、合并门禁、候选资格化、发布验证</td>
+</tr>
+</tbody></table>
+<p>因此，证据更像一个矩阵，而不是单个数字。</p>
+<p>一个测试可以：</p>
+<ul>
+<li>在 Runner 上执行；</li>
+<li>绑定正确提交；</li>
+<li>但只覆盖纯 C# 单元测试。</li>
+</ul>
+<p>另一个测试可以：</p>
+<ul>
+<li>在本机执行真实 Android Player；</li>
+<li>覆盖目标设备；</li>
+<li>但没有可复现脚本和固定产物。</li>
+</ul>
+<p>二者各自有价值，不能简单地只比较谁“级别更高”。</p>
+<h2>能力正确性、重构安全和发布资格不是同一类证据</h2>
+<p>大型仓库容易把所有未完成验证都放进一个 Evidence Backlog。</p>
+<p>结果是：</p>
+<ul>
+<li>一个小 UI 控件测试；</li>
+<li>一次稳定 API 快照；</li>
+<li>一次跨平台 Player Build；</li>
+<li>一次候选版本完整资格化</li>
+</ul>
+<p>全部被当成同类债务。</p>
+<p>更合理的分类是：</p>
+<h3>能力正确性证据</h3>
+<p>回答：</p>
+<blockquote>
+<p>新增或修改的功能本身是否符合预期？</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>选择组约束测试；</li>
+<li>状态机转换测试；</li>
+<li>安装器失败恢复；</li>
+<li>关键 PlayMode 生命周期；</li>
+<li>网络协议编解码。</li>
+</ul>
+<h3>重构安全证据</h3>
+<p>回答：</p>
+<blockquote>
+<p>后续继续修改时，哪些边界受到自动保护？</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>Stable API Snapshot；</li>
+<li>反向依赖闭包；</li>
+<li>架构边界验证；</li>
+<li>重复类型审计；</li>
+<li>Installer 幂等性测试。</li>
+</ul>
+<h3>发布资格证据</h3>
+<p>回答：</p>
+<blockquote>
+<p>某个不可变候选是否满足交付要求？</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>same-SHA 平台矩阵；</li>
+<li>exact-tree 产物组装；</li>
+<li>候选包完整性；</li>
+<li>签名与哈希；</li>
+<li>严格 Release Readiness。</li>
+</ul>
+<p>当前处于能力开发阶段时，应优先补能力正确性和重构安全证据。</p>
+<p>没有明确候选提交时，不应机械启动完整发布资格化，也不应因此声称项目发布失败。</p>
+<h2>Evidence Backlog 为什么会失控</h2>
+<p>如果每个小计划完成后都永久产生一条独立 Runner 债务，证据列表会迅速膨胀。</p>
+<p>例如：</p>
+<pre><code>Timer 控件
+Choice Group
+State View
+Hold Progress
+Typed Item Select
+MVVM Sample
+Quickstart
+Newcomer Entry
+</code></pre>
+<p>如果每项都维护一套长期独立验证，团队最终管理的是计划历史，而不是产品能力。</p>
+<p>更合理的组织方式是围绕消费边界建立资格化套件：</p>
+<pre><code>UI Runtime Qualification
+→ UI 模型
+→ Unity Adapter
+→ Typed UI Sample
+→ Player 闭包
+
+Editor Consumption Qualification
+→ Installer
+→ Guided Recipe
+→ Sample Promotion
+→ Reload Recovery
+
+Runtime Foundation Qualification
+→ Core
+→ Event
+→ Pooling
+→ Bootstrap Lite
+</code></pre>
+<p>小切片首先进入对应能力套件。</p>
+<p>套件在适当时机统一执行远端或平台验证。</p>
+<p>这样，Evidence Backlog 表达的是哪些产品能力尚未获得资格，而不是仓库曾经完成过多少微型计划。</p>
+<h2>状态记录不应该靠自由文本猜测</h2>
+<p>工作记录中常见这样的描述：</p>
+<pre><code>实现完成，尚未提交、推送和触发 Runner。
+</code></pre>
+<p>几天后代码已经进入默认分支，但这段文本没有更新。</p>
+<p>机器生成状态继续复制它，于是出现：</p>
+<pre><code>Git 事实：文件已经进入默认分支
+状态文本：仍然声称尚未提交
+</code></pre>
+<p>解决方式不是要求维护者永远记得修改一句话，而是将关键事实结构化。</p>
+<p>例如：</p>
+<pre><code>implementationCommit
+mergedToDefaultBranch
+testedCommit
+localEvidence
+runnerEvidence
+runnerEvidenceRun
+candidateCommit
+releaseArtifact
+</code></pre>
+<p>其中：</p>
+<ul>
+<li>Git 负责证明代码是否进入某个提交；</li>
+<li>Runner 负责证明某个提交是否执行远端验证；</li>
+<li>Artifact 负责证明结果是否保留；</li>
+<li>Candidate 负责确定准备交付的不可变身份；</li>
+<li>自由文本只负责解释下一步和异常情况。</li>
+</ul>
+<p>可机器判断的事实，不应长期藏在自然语言里。</p>
+<h2>证据升级必须由新事实触发</h2>
+<p><strong>证据晋级（后文简称“升级盖章”）</strong>：只有当更高层级要求的执行和身份条件真实满足后，才能提升状态。</p>
+<p>正确的晋级流程类似：</p>
+<p>不能使用以下替代逻辑：</p>
+<pre><code>开发者说本地通过
+→ 自动写 runner-passed
+
+旧提交的 CI 通过
+→ 自动写当前 main 已通过
+
+某个最小 Profile 通过
+→ 自动写整个框架 Player 通过
+
+候选之前的构建通过
+→ 自动写正式产物已验证
+</code></pre>
+<p>每次升级都需要新的事实，而不是更乐观的措辞。</p>
+<h2>三个常见误判</h2>
+<h3>误判一：本地全部通过，所以 CI 失败一定是 Runner 问题</h3>
+<p>也可能是：</p>
+<ul>
+<li>未提交文件；</li>
+<li>本机缓存；</li>
+<li>路径大小写；</li>
+<li>本地环境变量；</li>
+<li>隐式安装的工具；</li>
+<li>不可重复的手工步骤。</li>
+</ul>
+<p>CI 失败首先说明环境之间存在差异，不应先假定远端错误。</p>
+<h3>误判二：CI 全绿，所以准备发布</h3>
+<p>CI 可能只运行：</p>
+<ul>
+<li>静态检查；</li>
+<li>单元测试；</li>
+<li>Core Only；</li>
+<li>单一操作系统；</li>
+<li>非候选提交。</li>
+</ul>
+<p>是否可以发布，还取决于候选身份、目标平台、产物和发布门禁。</p>
+<h3>误判三：没有远端结果，所以功能没有完成</h3>
+<p>功能实现和远端交付证明是两个状态。</p>
+<p>更准确的记录可以是：</p>
+<pre><code>implementation: completed
+localEvidence: passed
+runnerEvidence: pending
+releaseEvidence: not-requested
+</code></pre>
+<p>这既不夸大，也不抹杀已经完成的工作。</p>
+<h2>我的证据检查清单</h2>
+<p>在把某项能力登记为“已验证”之前，我会检查：</p>
+<ol>
+<li>结果绑定的是工作区、Commit、Tag 还是 Candidate？</li>
+<li>工作区是否包含未提交或未跟踪内容？</li>
+<li>测试命令是否已进入版本控制？</li>
+<li>执行环境是否可识别和复现？</li>
+<li>测试覆盖的是模型、Editor、PlayMode 还是 Player？</li>
+<li>覆盖的是最小闭包还是受影响包闭包？</li>
+<li>目标操作系统和 Unity 版本是什么？</li>
+<li>测试是否真正执行，还是被条件跳过？</li>
+<li>测试结果是否保留了 XML、日志或构建产物？</li>
+<li>Runner 验证的提交是否等于状态记录中的提交？</li>
+<li>候选版本是否就是同一个已验证提交？</li>
+<li>发布产物是否能追溯到该候选？</li>
+<li>当前状态应是 Passed、Failed、Pending 还是 Not Requested？</li>
+<li>证据是否已经因为新提交或配置变化而过期？</li>
+<li>这条证据具体能证明什么，又明确不能证明什么？</li>
+<li>是否把微型计划证据错误地当成完整产品资格？</li>
+<li>是否存在只有自然语言描述、没有结构化身份的状态？</li>
+<li>更高等级的结论是否真的获得了新的执行事实？</li>
+</ol>
+<p>只要其中一个关键问题没有答案，“测试通过”就仍然需要补充限定条件。</p>
+<p>工程可信度不来自测试数量，而来自团队能够明确回答：</p>
+<blockquote>
+<p>哪一份代码，在什么环境中，以什么范围，获得了什么级别的证明？</p>
+</blockquote>
+</div>
+        <footer class="blog-source-note">本文由 Sakura Design Journal 的固定提交导出并在本站完整发布；站点生成器会清理可执行 HTML。</footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/blog.html">博客</a>
+                <a href="../../pages/about.html">关于</a>
+                <a href="../../pages/contact.html">公开入口</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
