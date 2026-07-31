@@ -65,59 +65,57 @@ test('public navigation presents Contact as an ordinary tab without owner-only b
   }
 });
 
-test('all public pages receive the configured accessible BGM player', async () => {
+test('public pages omit the retired test BGM while persistent navigation remains available', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   const source = await readText('src/site.ts');
   const css = await readText('style/main.css');
+  const navbar = await readText('components/navbar.html');
+  const generator = await readText('scripts/generate-site.mjs');
   const pages = [
     'index.html',
     '404.html',
     ...(await listHtmlFiles(new URL('../pages/', import.meta.url), 'pages'))
   ];
 
-  assert.equal(site.bgm.title, '回留');
-  assert.equal(site.bgm.artist, '方大同');
-  assert.equal(site.bgm.mimeType, 'audio/mpeg');
-  assert.ok(site.bgm.defaultVolume > 0 && site.bgm.defaultVolume <= 1);
-  await access(new URL(`../${site.bgm.source}`, import.meta.url));
+  assert.equal('bgm' in site, false, 'site configuration still exposes the retired BGM');
+  await assert.rejects(
+    access(new URL('../assets/audio/huiliu-fang-datong.mp3', import.meta.url)),
+    { code: 'ENOENT' }
+  );
 
   for (const page of pages) {
     const html = await readText(page);
-    const prefix = page === 'index.html' || page === '404.html'
-      ? ''
-      : '../'.repeat(page.split('/').length - 1);
-    assert.equal(
-      html.match(/\bdata-bgm-player\b/g)?.length ?? 0,
-      1,
-      `${page} must contain exactly one BGM player`
-    );
     for (const fragment of [
       'data-bgm-player',
       'data-bgm-audio',
       'data-bgm-toggle',
       'data-bgm-volume',
       'aria-label="背景音乐播放器"',
-      'preload="none"',
-      `${prefix}${site.bgm.source}`,
-      site.bgm.title,
-      site.bgm.artist
+      'huiliu-fang-datong.mp3'
     ]) {
-      assert.ok(html.includes(fragment), `${page} missing BGM contract ${fragment}`);
+      assert.ok(!html.includes(fragment), `${page} still ships retired BGM markup: ${fragment}`);
     }
-    assert.ok(!/<audio[^>]*\bautoplay\b/i.test(html), `${page} must not autoplay BGM`);
+    assert.ok(!/<audio\b/i.test(html), `${page} still ships an audio element`);
   }
 
-  for (const contract of [
+  for (const fragment of [
     'class BgmPlayer',
-    'BgmPlayer.connect()',
-    "window.addEventListener('pagehide'",
-    "window.addEventListener('storage'",
-    'localStorage.setItem',
-    'audio.play()',
-    "updateUi('blocked')"
+    'FALLBACK_BGM_STORAGE_KEY',
+    'BGM_STATE_VERSION',
+    '[data-bgm-audio]'
   ]) {
-    assert.ok(source.includes(contract), `BGM runtime missing ${contract}`);
+    assert.ok(!source.includes(fragment), `site runtime still contains retired BGM code: ${fragment}`);
   }
+  for (const fragment of ['.bgm-player', '.bgm-toggle', '@keyframes bgm-']) {
+    assert.ok(!css.includes(fragment), `shared CSS still contains retired BGM presentation: ${fragment}`);
+  }
+  for (const fragment of ['data-bgm-player', '{{bgmTitle}}', '{{bgmSource}}']) {
+    assert.ok(!navbar.includes(fragment), `navbar template still contains retired BGM markup: ${fragment}`);
+  }
+  for (const fragment of ['site.bgm', 'assertLocalAudio', '{{bgmStorageKey}}']) {
+    assert.ok(!generator.includes(fragment), `site generator still requires retired BGM data: ${fragment}`);
+  }
+
   for (const contract of [
     'setupSoftNavigation()',
     'history.pushState',
@@ -133,15 +131,6 @@ test('all public pages receive the configured accessible BGM player', async () =
     frameworkSource.includes("document.addEventListener('site:navigation-complete'"),
     'Framework page runtime must reconnect after persistent navigation'
   );
-  for (const contract of [
-    '.bgm-player',
-    '.bgm-toggle',
-    '.bgm-volume-control',
-    '[data-state="playing"]',
-    '@keyframes bgm-pulse'
-  ]) {
-    assert.ok(css.includes(contract), `BGM presentation missing ${contract}`);
-  }
 });
 
 test('public page chrome omits maintainer-only source and implementation hints', async () => {

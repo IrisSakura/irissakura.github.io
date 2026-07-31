@@ -168,51 +168,22 @@ try {
     if (await desktop.locator('main#main-content').count() !== 1) throw new Error(`${route} lacks one main landmark`);
   }
   await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-  const bgmPlayer = desktop.locator('[data-bgm-player]');
-  const bgmAudio = desktop.locator('[data-bgm-audio]');
-  const bgmToggle = desktop.locator('[data-bgm-toggle]');
-  if (!await bgmPlayer.isVisible()) throw new Error('BGM player is not visible on the homepage');
-  if (await bgmAudio.evaluate((audio) => !audio.paused)) throw new Error('BGM must be paused before visitor consent');
-  if (await bgmToggle.getAttribute('aria-pressed') !== 'false') throw new Error('BGM toggle exposes an incorrect initial state');
-  if (!await bgmAudio.evaluate((audio) => audio.canPlayType('audio/mpeg') !== '')) throw new Error('browser cannot play the configured BGM format');
-  await bgmToggle.click();
-  await desktop.waitForFunction(() => document.querySelector('[data-bgm-toggle]')?.getAttribute('aria-pressed') === 'true');
-  await desktop.locator('[data-bgm-volume]').fill('0.2');
-  await desktop.waitForFunction(() => {
-    const audio = document.querySelector('[data-bgm-audio]');
-    return audio instanceof HTMLAudioElement && audio.currentTime > 0.5;
-  });
-  await desktop.evaluate(() => {
-    const audio = document.querySelector('[data-bgm-audio]');
-    if (!(audio instanceof HTMLAudioElement)) throw new Error('BGM audio element is missing');
-    window.dispatchEvent(new PageTransitionEvent('pagehide'));
-  });
-  const storedBgm = await desktop.evaluate((storageKey) => localStorage.getItem(storageKey), siteData.bgm.storageKey);
-  if (!storedBgm) throw new Error('BGM state was not persisted');
-  const parsedBgm = JSON.parse(storedBgm);
-  if (!parsedBgm.enabled || parsedBgm.volume !== 0.2 || parsedBgm.currentTime <= 0.5) {
-    throw new Error(`BGM state does not preserve playback intent, volume and progress: ${storedBgm}`);
+  if (await desktop.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
+    throw new Error('homepage still ships the retired BGM player');
   }
-  const beforeNavigationTime = await bgmAudio.evaluate((audio) => {
-    audio.dataset.smokeInstance = 'persistent-bgm';
-    return audio.currentTime;
+  await desktop.evaluate(() => {
+    document.documentElement.dataset.smokeDocument = 'persistent-navigation';
   });
   await desktop.locator('.nav-menu').getByRole('link', { name: '关于', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/about.html`);
-  if (await desktop.locator('[data-bgm-audio]').getAttribute('data-smoke-instance') !== 'persistent-bgm') {
-    throw new Error('cross-page navigation replaced the active BGM audio instance');
+  if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
+    throw new Error('cross-page navigation replaced the active document');
   }
-  await desktop.waitForFunction((minimumTime) => {
-    const audio = document.querySelector('[data-bgm-audio]');
-    return audio instanceof HTMLAudioElement && !audio.paused && audio.currentTime > minimumTime;
-  }, beforeNavigationTime);
   await desktop.locator('.logo').click();
   await desktop.waitForURL(`${baseUrl}/index.html`);
-  if (await desktop.locator('[data-bgm-audio]').getAttribute('data-smoke-instance') !== 'persistent-bgm') {
-    throw new Error('return navigation replaced the active BGM audio instance');
+  if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
+    throw new Error('return navigation replaced the active document');
   }
-  const beforeFrameworkTime = await desktop.locator('[data-bgm-audio]')
-    .evaluate((audio) => audio.currentTime);
   await desktop.locator('.nav-menu').getByRole('link', { name: 'Framework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
@@ -228,14 +199,9 @@ try {
   if (await desktop.locator('link[href$="/style/framework.css"]').count() !== 0) {
     throw new Error('history navigation retained a stale Framework page stylesheet');
   }
-  if (await desktop.locator('[data-bgm-audio]').getAttribute('data-smoke-instance') !== 'persistent-bgm') {
-    throw new Error('history navigation replaced the persistent BGM audio instance');
+  if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
+    throw new Error('history navigation replaced the active document');
   }
-  await desktop.waitForFunction((minimumTime) => {
-    const audio = document.querySelector('[data-bgm-audio]');
-    return audio instanceof HTMLAudioElement && !audio.paused && audio.currentTime > minimumTime;
-  }, beforeFrameworkTime);
-  await desktop.locator('[data-bgm-toggle]').click();
   await desktop.locator('.hero-content > [data-reveal].is-visible').first().waitFor();
   if (await desktop.locator('.depth-card').count() === 0) throw new Error('shared depth treatment was not applied');
   await desktop.evaluate(() => window.scrollTo(0, 240));
@@ -296,8 +262,9 @@ try {
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await keepSmokeTestLocal(mobile);
   await mobile.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-  if (!await mobile.locator('[data-bgm-toggle]').isVisible()) throw new Error('mobile BGM toggle is not visible');
-  if (await mobile.locator('.bgm-copy').isVisible()) throw new Error('mobile BGM control did not collapse its metadata');
+  if (await mobile.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
+    throw new Error('mobile homepage still ships the retired BGM player');
+  }
   const toggle = mobile.locator('.mobile-toggle');
   if (await toggle.getAttribute('aria-label') !== '打开导航菜单') throw new Error('mobile menu lacks its initial accessible name');
   if (!await toggle.isVisible()) {
@@ -341,7 +308,7 @@ try {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'contact-mobile.png'), fullPage: true });
   }
 
-  console.log('Browser smoke passed: routes, persistent BGM navigation, complete blog publishing, evidence-led portfolio, mobile navigation and contact routes checked.');
+  console.log('Browser smoke passed: routes, persistent navigation, complete blog publishing, evidence-led portfolio, mobile navigation and contact routes checked.');
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

@@ -2,8 +2,6 @@ export {};
 
 const SYSTEM_THEME = 'system';
 const FALLBACK_STORAGE_KEY = 'irissakura-theme';
-const FALLBACK_BGM_STORAGE_KEY = 'irissakura-bgm';
-const BGM_STATE_VERSION = 1;
 const REVEAL_SELECTOR = [
     '.hero-content > *',
     '.hero-proof',
@@ -63,244 +61,6 @@ const DEPTH_SELECTOR = [
     '.method-chain li'
 ].join(',');
 
-interface BgmState {
-    version: number;
-    enabled: boolean;
-    volume: number;
-    currentTime: number;
-}
-
-class BgmPlayer {
-    private wantsPlayback = false;
-    private restoreTime = 0;
-    private lastPersistedSecond = -1;
-
-    private constructor(
-        private readonly root: HTMLElement,
-        private readonly audio: HTMLAudioElement,
-        private readonly toggle: HTMLButtonElement,
-        private readonly volume: HTMLInputElement,
-        private readonly status: HTMLElement | null,
-        private readonly storageKey: string,
-        private readonly title: string,
-        private readonly artist: string,
-        private readonly defaultVolume: number
-    ) {}
-
-    static connect(): BgmPlayer | null {
-        const root = document.querySelector<HTMLElement>('[data-bgm-player]');
-        const audio = root?.querySelector<HTMLAudioElement>('[data-bgm-audio]');
-        const toggle = root?.querySelector<HTMLButtonElement>('[data-bgm-toggle]');
-        const volume = root?.querySelector<HTMLInputElement>('[data-bgm-volume]');
-        if (!root || !audio || !toggle || !volume) return null;
-
-        const configuredVolume = Number(root.dataset.defaultVolume);
-        const defaultVolume = Number.isFinite(configuredVolume)
-            ? BgmPlayer.clampVolume(configuredVolume)
-            : 0.3;
-        const player = new BgmPlayer(
-            root,
-            audio,
-            toggle,
-            volume,
-            root.querySelector<HTMLElement>('[data-bgm-status]'),
-            root.dataset.storageKey ?? FALLBACK_BGM_STORAGE_KEY,
-            root.dataset.trackTitle ?? '背景音乐',
-            root.dataset.trackArtist ?? '',
-            defaultVolume
-        );
-        player.init();
-        return player;
-    }
-
-    private init(): void {
-        const state = this.readState();
-        this.wantsPlayback = state.enabled;
-        this.restoreTime = state.currentTime;
-        this.audio.volume = state.volume;
-        this.volume.value = state.volume.toString();
-        this.updateUi();
-
-        this.toggle.addEventListener('click', () => {
-            if (!this.audio.paused) {
-                this.wantsPlayback = false;
-                this.audio.pause();
-                this.persist();
-                this.announce(`已暂停《${this.title}》`);
-                return;
-            }
-
-            this.wantsPlayback = true;
-            this.persist();
-            void this.tryPlay(false);
-        });
-
-        this.volume.addEventListener('input', () => {
-            this.audio.volume = BgmPlayer.clampVolume(Number(this.volume.value));
-            this.persist();
-        });
-
-        this.audio.addEventListener('loadedmetadata', () => this.restorePosition());
-        this.audio.addEventListener('play', () => {
-            this.wantsPlayback = true;
-            this.updateUi();
-            this.persist();
-        });
-        this.audio.addEventListener('pause', () => this.updateUi());
-        this.audio.addEventListener('timeupdate', () => {
-            const currentSecond = Math.floor(this.audio.currentTime);
-            if (currentSecond === this.lastPersistedSecond) return;
-            this.lastPersistedSecond = currentSecond;
-            this.restoreTime = this.audio.currentTime;
-            this.persist();
-        });
-        this.audio.addEventListener('error', () => {
-            this.updateUi('blocked');
-            this.announce('背景音乐暂时无法加载');
-        });
-
-        window.addEventListener('pagehide', () => this.persist());
-        window.addEventListener('storage', (event) => {
-            if (event.key !== this.storageKey) return;
-            const nextState = this.parseState(event.newValue);
-            this.applyExternalState(nextState);
-        });
-
-        if (this.audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
-            this.restorePosition();
-        }
-        if (this.wantsPlayback) {
-            void this.tryPlay(true);
-        }
-    }
-
-    private async tryPlay(resuming: boolean): Promise<void> {
-        this.updateUi('loading');
-        try {
-            await this.audio.play();
-            this.announce(`${resuming ? '继续播放' : '正在播放'}《${this.title}》`);
-        } catch {
-            this.updateUi('blocked');
-            this.announce(
-                resuming
-                    ? '浏览器阻止了自动续播，请点击播放按钮继续'
-                    : '浏览器暂时无法播放，请再次点击播放按钮'
-            );
-        }
-    }
-
-    private applyExternalState(state: BgmState): void {
-        this.wantsPlayback = state.enabled;
-        this.restoreTime = state.currentTime;
-        this.audio.volume = state.volume;
-        this.volume.value = state.volume.toString();
-        this.restorePosition();
-
-        if (!state.enabled && !this.audio.paused) {
-            this.audio.pause();
-        } else if (state.enabled && this.audio.paused) {
-            void this.tryPlay(true);
-        } else {
-            this.updateUi();
-        }
-    }
-
-    private restorePosition(): void {
-        if (!Number.isFinite(this.audio.duration) || this.audio.duration <= 0) return;
-        const maxTime = Math.max(0, this.audio.duration - 0.25);
-        const targetTime = this.audio.loop
-            ? this.restoreTime % this.audio.duration
-            : Math.min(this.restoreTime, maxTime);
-        if (targetTime > 0 && Math.abs(this.audio.currentTime - targetTime) > 0.75) {
-            this.audio.currentTime = targetTime;
-        }
-    }
-
-    private updateUi(override?: 'loading' | 'blocked'): void {
-        const playing = !this.audio.paused && !this.audio.ended;
-        const state = playing
-            ? 'playing'
-            : override ?? (this.wantsPlayback ? 'ready' : 'paused');
-        this.root.dataset.state = state;
-        this.toggle.setAttribute('aria-pressed', String(playing));
-        this.toggle.setAttribute(
-            'aria-label',
-            `${playing ? '暂停' : '播放'}背景音乐《${this.title}》${this.artist ? `— ${this.artist}` : ''}`
-        );
-        const icon = this.toggle.querySelector<HTMLElement>('i');
-        icon?.classList.toggle('fa-music', !playing);
-        icon?.classList.toggle('fa-pause', playing);
-    }
-
-    private announce(message: string): void {
-        if (this.status) this.status.textContent = message;
-    }
-
-    private readState(): BgmState {
-        try {
-            return this.parseState(localStorage.getItem(this.storageKey));
-        } catch {
-            return this.defaultState();
-        }
-    }
-
-    private parseState(raw: string | null): BgmState {
-        if (!raw) return this.defaultState();
-        try {
-            const state = JSON.parse(raw) as Partial<BgmState>;
-            if (
-                state.version !== BGM_STATE_VERSION
-                || typeof state.enabled !== 'boolean'
-                || typeof state.volume !== 'number'
-                || typeof state.currentTime !== 'number'
-            ) {
-                return this.defaultState();
-            }
-            return {
-                version: BGM_STATE_VERSION,
-                enabled: state.enabled,
-                volume: BgmPlayer.clampVolume(state.volume),
-                currentTime: Number.isFinite(state.currentTime)
-                    ? Math.max(0, state.currentTime)
-                    : 0
-            };
-        } catch {
-            return this.defaultState();
-        }
-    }
-
-    private defaultState(): BgmState {
-        return {
-            version: BGM_STATE_VERSION,
-            enabled: false,
-            volume: this.defaultVolume,
-            currentTime: 0
-        };
-    }
-
-    private persist(): void {
-        const currentTime = Number.isFinite(this.audio.currentTime) && this.audio.currentTime > 0
-            ? this.audio.currentTime
-            : this.restoreTime;
-        this.restoreTime = currentTime;
-        try {
-            localStorage.setItem(this.storageKey, JSON.stringify({
-                version: BGM_STATE_VERSION,
-                enabled: this.wantsPlayback,
-                volume: this.audio.volume,
-                currentTime
-            } satisfies BgmState));
-        } catch {
-            // 隐私模式或受限存储环境下仍保持当前页面的播放器可用。
-        }
-    }
-
-    private static clampVolume(volume: number): number {
-        if (!Number.isFinite(volume)) return 0.3;
-        return Math.min(1, Math.max(0, volume));
-    }
-}
-
 class SiteShell {
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
@@ -308,7 +68,6 @@ class SiteShell {
     private themeSelect: HTMLSelectElement | null = null;
     private themeStylesheets: HTMLLinkElement[] = [];
     private colorSchemeQuery: MediaQueryList | null = null;
-    private bgmPlayer: BgmPlayer | null = null;
     private motionObserver: IntersectionObserver | null = null;
     private navigationAbort: AbortController | null = null;
 
@@ -333,7 +92,6 @@ class SiteShell {
             element.textContent = new Date().getFullYear().toString();
         });
         this.setupTheme();
-        this.bgmPlayer = BgmPlayer.connect();
         this.setupNavigation();
         this.setupSoftNavigation();
         this.setupFaq();
@@ -352,11 +110,6 @@ class SiteShell {
             '.skip-link[href], .navbar a[href], .footer a[href]'
         ).forEach((link) => {
             link.href = link.href;
-        });
-        document.querySelectorAll<HTMLSourceElement>(
-            '[data-bgm-audio] source[src]'
-        ).forEach((source) => {
-            source.src = source.src;
         });
     }
 
