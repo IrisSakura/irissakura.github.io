@@ -79,7 +79,12 @@ try {
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
-  if (await mobile.locator('.public-route-card').count() !== siteData.socials.length) throw new Error('verified public routes are missing');
+  const expectedContactCards = siteData.contacts.length + siteData.socials.length;
+  if (await mobile.locator('.public-route-card').count() !== expectedContactCards) throw new Error('direct contacts or verified public routes are missing');
+  for (const contact of siteData.contacts) {
+    if (!await mobile.getByText(contact.value, { exact: true }).isVisible()) throw new Error(`direct contact is missing: ${contact.id}`);
+    if (contact.href && !await mobile.locator(`.direct-contact-card[href="${contact.href}"]`).isVisible()) throw new Error(`direct contact link is missing: ${contact.id}`);
+  }
   for (const social of siteData.socials) {
     if (!await mobile.locator(`.public-route-card[href="${social.url}"]`).isVisible()) throw new Error(`verified public route is missing: ${social.id}`);
   }
@@ -88,7 +93,7 @@ try {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'contact-mobile.png'), fullPage: true });
   }
 
-  console.log('Browser smoke passed: routes, complete blog publishing, evidence-led portfolio, mobile navigation and public routes checked.');
+  console.log('Browser smoke passed: routes, complete blog publishing, evidence-led portfolio, mobile navigation and contact routes checked.');
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

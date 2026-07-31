@@ -8,12 +8,26 @@ async function readText(path) {
   return readFile(new URL(path, root), 'utf8');
 }
 
-test('site configuration exposes only verified public routes', async () => {
+test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '可验证的 Unity 游戏系统开发者');
   assert.equal(site.tagline, '研究 · 框架 · 游戏验证');
+  assert.deepEqual(site.contacts.map((contact) => contact.id), ['work-email', 'work-qq']);
+  const workEmail = site.contacts.find((contact) => contact.id === 'work-email');
+  const workQq = site.contacts.find((contact) => contact.id === 'work-qq');
+  assert.match(workEmail.value, /^[^@\s]+@[^@\s]+\.[^@\s]+$/);
+  assert.equal(workEmail.href, `mailto:${workEmail.value}`);
+  assert.match(workQq.value, /^\d{5,12}$/);
+  assert.equal(workQq.href, undefined);
   assert.deepEqual(site.socials.map((social) => social.id), ['github', 'bilibili']);
   for (const social of site.socials) assert.match(social.url, /^https:\/\//);
+
+  const contactPage = await readText('pages/contact.html');
+  for (const contact of site.contacts) {
+    for (const fragment of [contact.label, contact.value, contact.description]) {
+      assert.ok(contactPage.includes(fragment), `contact page missing ${fragment}`);
+    }
+  }
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {

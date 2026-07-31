@@ -103,7 +103,7 @@ const pageDefinitions = [
     file: 'pages/contact.html',
     key: 'contact',
     title: '联系 IrisSakura | Unity 系统设计与框架交流',
-    description: '通过已验证的 GitHub 与哔哩哔哩入口联系 IrisSakura，交流 Unity 游戏系统、框架设计和技术合作。',
+    description: '通过工作邮箱、工作 QQ、GitHub 与哔哩哔哩联系 IrisSakura，交流 Unity 游戏系统、框架设计和技术合作。',
     canonical: '/pages/contact.html',
     image: '/assets/images/home-preview-pastoral.png'
   },
@@ -127,6 +127,8 @@ const pageDefinitions = [
   ...journalDetailDefinitions,
   ...blogDetailDefinitions
 ];
+
+await assertSitePresentation(site, pageDefinitions);
 
 const navItems = [
   ['home', '首页', 'index.html'],
@@ -582,7 +584,7 @@ function renderHomeContent(projectData, journalData, frameworkData) {
 
         <section class="public-cta">
             <div class="container public-cta-inner">
-                <div><p class="section-kicker">PUBLIC ROUTES</p><h2>继续查看公开代码与开发记录</h2><p>当前未提供私密联系表单；所有可验证入口都集中在公开入口页。</p></div>
+                <div><p class="section-kicker">CONTACT & PUBLIC ROUTES</p><h2>直接联系或继续查看公开记录</h2><p>工作邮箱、工作 QQ 与公开项目入口都集中在联系页。</p></div>
                 <a href="pages/contact.html" class="btn btn-secondary">查看公开入口</a>
             </div>
         </section>
@@ -835,6 +837,20 @@ function renderAboutContent() {
 }
 
 function renderContactContent(siteData) {
+  const contacts = siteData.contacts.map((contact) => {
+    const content = `
+                    <i class="${escapeAttribute(contact.iconFamily)} ${escapeAttribute(contact.icon)}" aria-hidden="true"></i>
+                    <div><span>DIRECT CONTACT</span><h2>${escapeHtml(contact.label)}</h2><p class="public-route-value">${escapeHtml(contact.value)}</p><p>${escapeHtml(contact.description)}</p></div>`;
+    if (contact.href) {
+      return `
+                <a class="public-route-card direct-contact-card" href="${escapeAttribute(contact.href)}">${content}
+                    <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                </a>`;
+    }
+    return `
+                <article class="public-route-card direct-contact-card">${content}
+                </article>`;
+  }).join('');
   const routes = siteData.socials.map((social) => `
                 <a class="public-route-card" href="${escapeAttribute(social.url)}" target="_blank" rel="noopener noreferrer">
                     <i class="fab ${escapeAttribute(social.icon)}" aria-hidden="true"></i>
@@ -843,13 +859,13 @@ function renderContactContent(siteData) {
                 </a>`).join('');
   return `<header class="contact-header">
         <div class="container">
-            <p class="section-kicker">PUBLIC ROUTES & DISCUSSION SCOPE</p>
-            <h1>公开入口与交流范围</h1>
-            <p>当前没有公开工作邮箱或私密联系表单。这里仅列出已经验证、可以实际访问的公开渠道。</p>
+            <p class="section-kicker">DIRECT CONTACT & PUBLIC ROUTES</p>
+            <h1>联系方式与交流范围</h1>
+            <p>可通过工作邮箱或工作 QQ 直接联系，也可以从公开主页了解代码、开发记录与作品进展。</p>
         </div>
     </header>
     <section class="public-routes">
-        <div class="container public-route-list">${routes}
+        <div class="container public-route-list">${contacts}${routes}
         </div>
     </section>
     <section class="discussion-scope">
@@ -866,7 +882,7 @@ function renderContactContent(siteData) {
     <section class="route-boundary">
         <div class="container route-boundary-inner">
             <div><p class="section-kicker">CURRENT BOUNDARY</p><h2>当前公开沟通边界</h2></div>
-            <div><p>GitHub 与哔哩哔哩更适合公开项目讨论和开发记录，不等同于承诺即时回复的商务联系渠道。</p><p>私有仓库、未整理工作日记、凭据和本机工程路径不在公开范围内。</p></div>
+            <div><p>工作邮箱适合完整事项说明，工作 QQ 适合即时沟通；GitHub 与哔哩哔哩更适合公开项目讨论和开发记录。</p><p>私有仓库、未整理工作日记、凭据和本机工程路径不在公开范围内。</p></div>
         </div>
     </section>`;
 }
@@ -1022,6 +1038,34 @@ function renderJournalDetailSource(note) {
 `;
 }
 
+async function assertSitePresentation(siteData, pages) {
+  const contacts = siteData.contacts;
+  if (!Array.isArray(contacts) || contacts.length === 0) {
+    throw new Error('site contacts configuration is required');
+  }
+  const contactIds = new Set();
+  for (const contact of contacts) {
+    for (const field of ['id', 'label', 'value', 'iconFamily', 'icon', 'description']) {
+      if (typeof contact[field] !== 'string' || contact[field].trim() === '') {
+        throw new Error(`site contact requires ${field}`);
+      }
+    }
+    if (!/^[a-z0-9-]+$/.test(contact.id) || contactIds.has(contact.id)) {
+      throw new Error(`site contact id must be unique and stable: ${contact.id}`);
+    }
+    contactIds.add(contact.id);
+    if (!['fas', 'fab'].includes(contact.iconFamily) || !/^fa-[a-z0-9-]+$/.test(contact.icon)) {
+      throw new Error(`site contact uses an unsupported icon: ${contact.id}`);
+    }
+    if (contact.href !== undefined && !/^(?:mailto:|https:\/\/)/.test(contact.href)) {
+      throw new Error(`site contact uses an unsupported href: ${contact.id}`);
+    }
+    if (contact.href?.startsWith('mailto:') && contact.href !== `mailto:${contact.value}`) {
+      throw new Error(`site mail contact value and href must match: ${contact.id}`);
+    }
+  }
+
+}
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
