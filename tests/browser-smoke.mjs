@@ -6,10 +6,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, projectData, siteData, sitemap] = await Promise.all([
+const [journalSource, projectData, siteData, themeConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('data/projects.json'),
   readJson('data/site.json'),
+  readJson('data/themes.json'),
   readFile(path.join(root, 'sitemap.xml'), 'utf8')
 ]);
 const indexedRoutes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
@@ -19,6 +20,66 @@ const [representativeBlog] = journalSource.blogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.category === 'game');
 if (!gameProject) throw new Error('project registry does not contain a game case');
+const lightThemeContrastRoutes = [
+  {
+    route: '/',
+    checks: [
+      ['homepage project proof title', '.hero-proof figcaption strong'],
+      ['homepage project proof metadata', '.hero-proof figcaption small'],
+      ['homepage method labels', '.method-chain > li > span'],
+      ['homepage case labels', '.case-list > article > span']
+    ]
+  },
+  {
+    route: '/pages/framework.html',
+    readySelector: '#framework-module-list[data-framework-loaded="true"]',
+    checks: [
+      ['Framework module result count', '#framework-module-result-count'],
+      ['Framework stack highlight', '.stack-layer.highlight-layer'],
+      ['Framework active module filter', '.module-filter.is-active'],
+      ['Framework layer metric labels', '.layer-metrics span'],
+      ['Framework lifecycle package count', '#framework-lifecycle-detail-count'],
+      ['Framework lifecycle package share', '#framework-lifecycle-detail-share'],
+      ['Framework adoption column headings', '.adoption-table thead th'],
+      ['Framework adoption row headings', '.adoption-table tbody th']
+    ]
+  },
+  {
+    route: '/pages/journal.html',
+    checks: [
+      ['Journal back link', '.journal-back'],
+      ['Journal dashboard label', '.journal-dashboard-label'],
+      ['Journal dashboard values', '.journal-metric strong'],
+      ['Journal dashboard metric labels', '.journal-metric span']
+    ]
+  },
+  {
+    route: '/pages/game.html',
+    checks: [
+      ['Game back link', '.game-back'],
+      ['Game screenshot caption', '.game-hero-visual figcaption strong'],
+      ['Game fact labels', '.game-facts dt']
+    ]
+  },
+  {
+    route: '/pages/portfolio.html',
+    checks: [
+      ['Portfolio cover description', '.portfolio-header p:not(.section-kicker)']
+    ]
+  },
+  {
+    route: '/pages/blog.html',
+    checks: [
+      ['Blog cover description', '.blog-hero > .container > p:not(.section-kicker)']
+    ]
+  },
+  {
+    route: '/pages/contact.html',
+    checks: [
+      ['Contact cover description', '.contact-header p:not(.section-kicker)']
+    ]
+  }
+];
 const server = createServer(async (request, response) => {
   const requestPath = decodeURIComponent(new URL(request.url ?? '/', 'http://127.0.0.1').pathname);
   let filePath = path.resolve(root, `.${requestPath === '/' ? '/index.html' : requestPath}`);
@@ -44,6 +105,61 @@ const baseUrl = `http://127.0.0.1:${address.port}`;
 const browser = await chromium.launch({ headless: true });
 
 try {
+  const lightThemePage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await keepSmokeTestLocal(lightThemePage);
+  await lightThemePage.emulateMedia({ reducedMotion: 'reduce' });
+  await lightThemePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const lightThemeIds = themeConfig.themes
+    .filter((theme) => theme.colorScheme === 'light')
+    .map((theme) => theme.id);
+  if (lightThemeIds.length === 0) throw new Error('theme registry does not contain a light theme');
+  const contrastViewports = [
+    ['desktop', { width: 1280, height: 900 }],
+    ['mobile', { width: 390, height: 844 }]
+  ];
+  const contrastFailures = [];
+  for (const [viewportName, viewport] of contrastViewports) {
+    await lightThemePage.setViewportSize(viewport);
+    for (const themeId of lightThemeIds) {
+      await lightThemePage.evaluate(
+        ({ storageKey, value }) => localStorage.setItem(storageKey, value),
+        { storageKey: themeConfig.storageKey, value: themeId }
+      );
+      for (const routeContract of lightThemeContrastRoutes) {
+        await lightThemePage.goto(`${baseUrl}${routeContract.route}`, { waitUntil: 'networkidle' });
+        if (await documentTheme(lightThemePage) !== themeId) {
+          throw new Error(`Light-theme contrast test did not activate ${themeId} on ${routeContract.route}`);
+        }
+        if (routeContract.readySelector) {
+          await lightThemePage.locator(routeContract.readySelector).waitFor();
+        }
+        for (const [label, selector] of routeContract.checks) {
+          const measurements = await measureTextContrast(lightThemePage, selector);
+          if (measurements.length === 0) {
+            contrastFailures.push(
+              `${viewportName} ${themeId} ${routeContract.route} ${label}: no visible matches for ${selector}`
+            );
+            continue;
+          }
+          for (const measurement of measurements) {
+            const foreground = compositeColor(measurement.foreground, measurement.background);
+            const ratio = contrastRatio(foreground, measurement.background);
+            if (ratio < 4.5) {
+              contrastFailures.push(
+                `${viewportName} ${themeId} ${routeContract.route} ${label} "${measurement.text}" `
+                + `${ratio.toFixed(2)}:1 (${measurement.foregroundCss} on ${formatColor(measurement.background)})`
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+  if (contrastFailures.length > 0) {
+    throw new Error(`Light-theme text contrast failures:\n${contrastFailures.join('\n')}`);
+  }
+  await lightThemePage.close();
+
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await keepSmokeTestLocal(desktop);
   for (const route of indexedRoutes) {
@@ -254,4 +370,82 @@ async function keepSmokeTestLocal(page) {
       ? route.continue()
       : route.abort('blockedbyclient')
   ));
+}
+
+function compositeColor(foreground, background) {
+  return {
+    red: foreground.red * foreground.alpha + background.red * (1 - foreground.alpha),
+    green: foreground.green * foreground.alpha + background.green * (1 - foreground.alpha),
+    blue: foreground.blue * foreground.alpha + background.blue * (1 - foreground.alpha),
+    alpha: 1
+  };
+}
+
+function contrastRatio(left, right) {
+  const luminance = (color) => {
+    const channels = [color.red, color.green, color.blue].map((channel) => {
+      const normalized = channel / 255;
+      return normalized <= 0.03928
+        ? normalized / 12.92
+        : ((normalized + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  };
+  const brighter = Math.max(luminance(left), luminance(right));
+  const darker = Math.min(luminance(left), luminance(right));
+  return (brighter + 0.05) / (darker + 0.05);
+}
+
+function documentTheme(page) {
+  return page.evaluate(() => document.documentElement.dataset.theme);
+}
+
+async function measureTextContrast(page, selector) {
+  const measurements = await page.locator(selector).evaluateAll((elements) => {
+    const parseColor = (value) => {
+      const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
+      return {
+        red: channels[0] ?? 0,
+        green: channels[1] ?? 0,
+        blue: channels[2] ?? 0,
+        alpha: channels[3] ?? 1
+      };
+    };
+    const composite = (foreground, background) => ({
+      red: foreground.red * foreground.alpha + background.red * (1 - foreground.alpha),
+      green: foreground.green * foreground.alpha + background.green * (1 - foreground.alpha),
+      blue: foreground.blue * foreground.alpha + background.blue * (1 - foreground.alpha),
+      alpha: foreground.alpha + background.alpha * (1 - foreground.alpha)
+    });
+    return elements.flatMap((element) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      if (
+        style.display === 'none'
+        || style.visibility !== 'visible'
+        || Number(style.opacity) < 0.1
+        || rect.width <= 1
+        || rect.height <= 1
+      ) {
+        return [];
+      }
+      const ancestors = [];
+      for (let current = element; current; current = current.parentElement) ancestors.unshift(current);
+      let background = { red: 255, green: 255, blue: 255, alpha: 1 };
+      for (const ancestor of ancestors) {
+        background = composite(parseColor(getComputedStyle(ancestor).backgroundColor), background);
+      }
+      return [{
+        text: (element.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 80),
+        foregroundCss: style.color,
+        foreground: parseColor(style.color),
+        background
+      }];
+    });
+  });
+  return measurements;
+}
+
+function formatColor(color) {
+  return `rgb(${color.red.toFixed(0)}, ${color.green.toFixed(0)}, ${color.blue.toFixed(0)})`;
 }
