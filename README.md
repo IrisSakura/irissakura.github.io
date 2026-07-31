@@ -55,6 +55,37 @@ npm run package:site
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 
+### 设置头像、个人背景图与分页头图
+
+个人信息和主要分页头图都由 `data/site.json` 集中管理，不需要逐页修改 HTML。
+
+1. 把自己的图片放到 `assets/images/profile/`。建议头像使用正方形 JPG、PNG 或 WebP（至少 600×600），个人背景图和分页头图使用横图（建议 1600×700 或更大）。
+2. 在 `data/site.json` 的 `profile` 中修改文字和图片路径：
+
+```json
+{
+  "avatar": "assets/images/profile/avatar.webp",
+  "backgroundImage": "assets/images/profile/profile-cover.webp",
+  "backgroundPosition": "50% 50%"
+}
+```
+
+`avatar` 留空时，首页会显示 `initials` 中的字母占位，不会出现破图。
+
+3. 在同一文件的 `pageCovers` 中分别设置大分页头图：
+
+```json
+{
+  "home": { "image": "assets/images/profile/home-cover.webp", "position": "50% 45%" },
+  "portfolio": { "image": "assets/images/profile/portfolio-cover.webp", "position": "50% 50%" },
+  "framework": { "image": "assets/images/profile/framework-cover.webp", "position": "50% 42%" }
+}
+```
+
+可配置键为 `home`、`portfolio`、`framework`、`journal`、`blog`、`game`、`about` 和 `contact`。`position` 的第一个百分比控制左右焦点，第二个控制上下焦点；例如人物在画面右侧时可尝试 `70% 45%`。
+
+4. 运行 `npm run build`。构建会检查图片路径和文件是否真实存在，并重新生成所有主要页面。图片必须使用站内 `assets/images/` 路径，不要填写本机绝对路径或私有仓库地址。
+
 ### 研究记录同步
 
 同步采用由 Journal `main` 推送触发的公开导出包，个人站不克隆或读取私有 Journal。

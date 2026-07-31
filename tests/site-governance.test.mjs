@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile, readdir } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
 
 const root = new URL('../', import.meta.url);
@@ -27,6 +27,65 @@ test('site configuration exposes verified direct contacts and public routes', as
     for (const fragment of [contact.label, contact.value, contact.description]) {
       assert.ok(contactPage.includes(fragment), `contact page missing ${fragment}`);
     }
+  }
+});
+
+test('profile and major page covers are generated from one local configuration', async () => {
+  const site = JSON.parse(await readText('data/site.json'));
+  const profile = site.profile;
+  assert.equal(profile.displayName, 'IrisSakura');
+  assert.ok(profile.bio.length > 20);
+  assert.ok(profile.focuses.length >= 3);
+  assert.match(profile.backgroundPosition, /^\d{1,3}% \d{1,3}%$/);
+
+  const majorPages = {
+    home: 'index.html',
+    portfolio: 'pages/portfolio.html',
+    framework: 'pages/framework.html',
+    journal: 'pages/journal.html',
+    blog: 'pages/blog.html',
+    game: 'pages/game.html',
+    about: 'pages/about.html',
+    contact: 'pages/contact.html'
+  };
+  assert.deepEqual(Object.keys(site.pageCovers).sort(), Object.keys(majorPages).sort());
+
+  const localImages = [
+    profile.avatar,
+    profile.backgroundImage,
+    ...Object.values(site.pageCovers).map((cover) => cover.image)
+  ].filter(Boolean);
+  for (const imagePath of localImages) {
+    assert.match(imagePath, /^assets\/images\/.+\.(?:avif|jpe?g|png|webp)$/i);
+    await access(new URL(`../${imagePath}`, import.meta.url));
+  }
+
+  const home = await readText('index.html');
+  for (const fragment of [
+    'class="profile-card"',
+    'id="profile-title"',
+    profile.displayName,
+    profile.role,
+    profile.backgroundImage
+  ]) {
+    assert.ok(home.includes(fragment), `home profile missing ${fragment}`);
+  }
+  if (profile.avatar) {
+    assert.ok(home.includes(profile.avatar));
+  } else {
+    assert.ok(home.includes('class="profile-avatar-fallback"'));
+    assert.ok(home.includes(profile.initials));
+  }
+
+  for (const [coverKey, pagePath] of Object.entries(majorPages)) {
+    const html = await readText(pagePath);
+    const prefix = pagePath === 'index.html' ? '' : '../';
+    assert.ok(html.includes('page-cover'), `${pagePath} missing shared page-cover class`);
+    assert.ok(html.includes(`data-page-cover="${coverKey}"`), `${pagePath} missing ${coverKey} cover key`);
+    assert.ok(
+      html.includes(`${prefix}${site.pageCovers[coverKey].image}`),
+      `${pagePath} missing configured ${coverKey} cover image`
+    );
   }
 });
 

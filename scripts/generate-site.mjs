@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
@@ -7,6 +7,16 @@ import sanitizeHtml from 'sanitize-html';
 import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const PAGE_COVER_TARGETS = {
+  home: 'hero-section',
+  portfolio: 'portfolio-header',
+  framework: 'framework-hero',
+  journal: 'journal-hero',
+  blog: 'blog-hero',
+  game: 'game-hero',
+  about: 'about-intro',
+  contact: 'contact-header'
+};
 
 const [site, framework, frameworkAdoption, projects, journal, journalSource, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
@@ -52,6 +62,7 @@ const pageDefinitions = [
   {
     file: 'index.html',
     key: 'home',
+    coverKey: 'home',
     title: 'IrisSakura | 构建可验证的 Unity 游戏系统',
     description: site.description,
     canonical: '/',
@@ -60,6 +71,7 @@ const pageDefinitions = [
   {
     file: 'pages/about.html',
     key: 'about',
+    coverKey: 'about',
     title: '关于 IrisSakura | 研究、框架与游戏',
     description: '了解 IrisSakura 如何以设计与引擎研究为输入，构建 Sakura Framework，并通过《言铸之剑》验证系统设计与工程能力。',
     canonical: '/pages/about.html',
@@ -68,6 +80,7 @@ const pageDefinitions = [
   {
     file: 'pages/framework.html',
     key: 'framework',
+    coverKey: 'framework',
     title: 'Sakura Framework | 成熟度透明的 Unity 模块化框架',
     description: `查看 Sakura Framework 的完整生命周期、${frameworkAdoption.supportedPackages.length} 个 Supported 包、最小稳定采用路线与《言铸之剑》的已验证使用映射。`,
     canonical: '/pages/framework.html',
@@ -77,6 +90,7 @@ const pageDefinitions = [
   {
     file: 'pages/portfolio.html',
     key: 'portfolio',
+    coverKey: 'portfolio',
     title: '作品集 | Sakura Design Journal、Framework 与言铸之剑',
     description: `${projects.projects.length} 个真实项目组成从研究、框架到游戏验证的完整链路，并公开说明状态、职责、证据和限制。`,
     canonical: '/pages/portfolio.html',
@@ -85,6 +99,7 @@ const pageDefinitions = [
   {
     file: 'pages/journal.html',
     key: 'journal',
+    coverKey: 'journal',
     title: '研究记录 | Sakura Design Journal',
     description: '经过策展的游戏设计、Godot 源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。',
     canonical: '/pages/journal.html',
@@ -93,6 +108,7 @@ const pageDefinitions = [
   {
     file: 'pages/game.html',
     key: 'portfolio',
+    coverKey: 'game',
     title: '言铸之剑 | Unity 2D Roguelike 可玩原型',
     description: '《言铸之剑》是一款围绕房间推进、实时战斗、潜能构筑、生成式祝福和 Run 存档展开的 Unity 2D Roguelike 可玩原型。',
     canonical: '/pages/game.html',
@@ -102,6 +118,7 @@ const pageDefinitions = [
   {
     file: 'pages/contact.html',
     key: 'contact',
+    coverKey: 'contact',
     title: '联系 IrisSakura | Unity 系统设计与框架交流',
     description: '通过工作邮箱、工作 QQ、GitHub 与哔哩哔哩联系 IrisSakura，交流 Unity 游戏系统、框架设计和技术合作。',
     canonical: '/pages/contact.html',
@@ -110,6 +127,7 @@ const pageDefinitions = [
   {
     file: 'pages/blog.html',
     key: 'blog',
+    coverKey: 'blog',
     title: '博客 | 游戏系统与工程设计',
     description: '完整发布 Sakura Design Journal 中经过登记与安全检查的游戏系统设计文章。',
     canonical: '/pages/blog.html',
@@ -204,7 +222,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'framework-adoption', renderFrameworkAdoption(frameworkAdoption));
   }
   if (page.file === 'index.html') {
-    html = replaceGeneratedBlock(html, 'home-content', renderHomeContent(projects, journal, framework));
+    html = replaceGeneratedBlock(html, 'home-content', renderHomeContent(projects, journal, framework, site));
   }
   if (page.file === 'pages/portfolio.html') {
     html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework));
@@ -222,6 +240,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
   }
 
+  html = installPageCover(html, page, site, prefix);
   html = html
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n');
@@ -477,7 +496,7 @@ function replaceGeneratedBlock(html, name, content) {
   return html.replace(pattern, `<!-- ${name}:start -->\n${content}\n<!-- ${name}:end -->`);
 }
 
-function renderHomeContent(projectData, journalData, frameworkData) {
+function renderHomeContent(projectData, journalData, frameworkData, siteData) {
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
   const researchCards = journalData.featuredNotes.slice(0, 3).map((note) => `
@@ -512,6 +531,8 @@ function renderHomeContent(projectData, journalData, frameworkData) {
                 </figure>
             </div>
         </section>
+
+${renderProfileSection(siteData)}
 
         <section class="evidence-strip" aria-label="项目证据摘要">
             <div class="container evidence-grid">
@@ -589,6 +610,42 @@ function renderHomeContent(projectData, journalData, frameworkData) {
             </div>
         </section>
     </section>`;
+}
+
+function renderProfileSection(siteData) {
+  const profile = siteData.profile;
+  const avatar = profile.avatar
+    ? `<img src="${escapeAttribute(profile.avatar)}" alt="${escapeAttribute(`${profile.displayName} 的头像`)}">`
+    : `<span class="profile-avatar-fallback" aria-hidden="true">${escapeHtml(profile.initials)}</span><span class="sr-only">尚未设置头像</span>`;
+  const backgroundImage = profile.backgroundImage
+    ? `url('${escapeAttribute(profile.backgroundImage)}')`
+    : 'none';
+  const focuses = profile.focuses.map((focus) => `<li>${escapeHtml(focus)}</li>`).join('');
+  const socialLinks = siteData.socials.map((social) => (
+    `<a href="${escapeAttribute(social.url)}" target="_blank" rel="noopener noreferrer"><i class="fab ${escapeAttribute(social.icon)}" aria-hidden="true"></i>${escapeHtml(social.label)}</a>`
+  )).join('');
+
+  return `        <section class="profile-section" aria-labelledby="profile-title">
+            <div class="container">
+                <article class="profile-card">
+                    <div class="profile-card-cover" aria-hidden="true" style="--profile-cover-image: ${backgroundImage}; --profile-cover-position: ${escapeAttribute(profile.backgroundPosition)};"></div>
+                    <div class="profile-card-body">
+                        <div class="profile-avatar">${avatar}</div>
+                        <div class="profile-copy">
+                            <p class="section-kicker">PERSONAL PROFILE · 个人信息</p>
+                            <h2 id="profile-title">${escapeHtml(profile.displayName)}</h2>
+                            <p class="profile-role">${escapeHtml(profile.role)}</p>
+                            <p class="profile-bio">${escapeHtml(profile.bio)}</p>
+                        </div>
+                        <ul class="profile-focuses" aria-label="当前关注方向">${focuses}</ul>
+                        <div class="profile-actions">
+                            <a class="btn btn-primary" href="pages/about.html">了解我的方向</a>
+                            <div class="profile-socials" aria-label="公开主页">${socialLinks}</div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>`;
 }
 
 function renderPortfolioContent(projectData, journalData, frameworkData) {
@@ -1065,7 +1122,109 @@ async function assertSitePresentation(siteData, pages) {
     }
   }
 
+  const profile = siteData.profile;
+  if (!profile || typeof profile !== 'object') {
+    throw new Error('site profile configuration is required');
+  }
+  for (const field of ['displayName', 'initials', 'role', 'bio']) {
+    if (typeof profile[field] !== 'string' || profile[field].trim() === '') {
+      throw new Error(`site profile requires ${field}`);
+    }
+  }
+  if (profile.initials.length > 4) {
+    throw new Error('site profile initials must contain at most four characters');
+  }
+  if (!Array.isArray(profile.focuses) || profile.focuses.length === 0) {
+    throw new Error('site profile requires at least one focus');
+  }
+  if (profile.focuses.some((focus) => typeof focus !== 'string' || focus.trim() === '')) {
+    throw new Error('site profile focuses must be non-empty strings');
+  }
+  assertFocalPosition(profile.backgroundPosition, 'profile backgroundPosition');
+
+  const requiredCoverKeys = [...new Set(pages.map((page) => page.coverKey).filter(Boolean))];
+  if (!siteData.pageCovers || typeof siteData.pageCovers !== 'object') {
+    throw new Error('site pageCovers configuration is required');
+  }
+  for (const coverKey of requiredCoverKeys) {
+    const cover = siteData.pageCovers[coverKey];
+    if (!cover || typeof cover !== 'object') {
+      throw new Error(`site pageCovers is missing ${coverKey}`);
+    }
+    assertFocalPosition(cover.position, `page cover ${coverKey} position`);
+  }
+
+  const imageEntries = [
+    ['profile avatar', profile.avatar],
+    ['profile backgroundImage', profile.backgroundImage],
+    ...requiredCoverKeys.map((coverKey) => [
+      `page cover ${coverKey}`,
+      siteData.pageCovers[coverKey].image
+    ])
+  ];
+  for (const [label, imagePath] of imageEntries) {
+    await assertLocalImage(imagePath, label);
+  }
 }
+
+async function assertLocalImage(imagePath, label) {
+  if (imagePath === '') return;
+  if (
+    typeof imagePath !== 'string'
+    || !/^assets\/images\/[a-z0-9][a-z0-9._/-]*\.(?:avif|jpe?g|png|webp)$/i.test(imagePath)
+    || imagePath.split('/').includes('..')
+  ) {
+    throw new Error(`${label} must use a local assets/images image path`);
+  }
+  try {
+    await access(path.join(root, imagePath));
+  } catch {
+    throw new Error(`${label} image does not exist: ${imagePath}`);
+  }
+}
+
+function assertFocalPosition(position, label) {
+  const match = /^(\d{1,3})% (\d{1,3})%$/.exec(position ?? '');
+  if (!match || Number(match[1]) > 100 || Number(match[2]) > 100) {
+    throw new Error(`${label} must use two percentages between 0% and 100%`);
+  }
+}
+
+function installPageCover(html, page, siteData, prefix) {
+  if (!page.coverKey) return html;
+  const targetClass = PAGE_COVER_TARGETS[page.coverKey];
+  const cover = siteData.pageCovers[page.coverKey];
+  const pattern = new RegExp(`<([a-z]+)([^>]*class="[^"]*\\b${targetClass}\\b[^"]*"[^>]*)>`, 'i');
+  let installed = false;
+  const result = html.replace(pattern, (fullMatch, tagName, rawAttributes) => {
+    installed = true;
+    const existingStyle = rawAttributes.match(/\sstyle="([^"]*)"/)?.[1] ?? '';
+    const preservedStyle = existingStyle
+      .replace(/--page-cover-image:\s*[^;]+;?/g, '')
+      .replace(/--page-cover-position:\s*[^;]+;?/g, '')
+      .trim();
+    let attributes = rawAttributes
+      .replace(/\sdata-page-cover="[^"]*"/g, '')
+      .replace(/\sstyle="[^"]*"/, '')
+      .replace(/class="([^"]*)"/, (classMatch, classNames) => {
+        const tokens = classNames.split(/\s+/).filter(Boolean);
+        if (!tokens.includes('page-cover')) tokens.push('page-cover');
+        return `class="${tokens.join(' ')}"`;
+      });
+    const image = cover.image
+      ? `url('${escapeAttribute(`${prefix}${cover.image}`)}')`
+      : 'none';
+    const coverStyle = `--page-cover-image: ${image}; --page-cover-position: ${escapeAttribute(cover.position)};`;
+    const style = preservedStyle ? `${preservedStyle}; ${coverStyle}` : coverStyle;
+    attributes += ` data-page-cover="${escapeAttribute(page.coverKey)}" style="${style}"`;
+    return `<${tagName}${attributes}>`;
+  });
+  if (!installed) {
+    throw new Error(`missing page cover target ${targetClass} in ${page.file}`);
+  }
+  return result;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
