@@ -727,10 +727,6 @@ class FrameworkPage {
             this.selectModule(this.selectedModuleId, false);
         });
 
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            navbar?.classList.toggle('scrolled', window.scrollY > 50);
-        });
     }
 }
 

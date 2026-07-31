@@ -45,11 +45,37 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await keepSmokeTestLocal(desktop);
   for (const route of indexedRoutes) {
     const response = await desktop.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
     if (!response?.ok()) throw new Error(`${route} returned ${response?.status()}`);
     if (await desktop.locator('main#main-content').count() !== 1) throw new Error(`${route} lacks one main landmark`);
   }
+  await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  await desktop.locator('.hero-content > [data-reveal].is-visible').first().waitFor();
+  if (await desktop.locator('.depth-card').count() === 0) throw new Error('shared depth treatment was not applied');
+  await desktop.evaluate(() => window.scrollTo(0, 240));
+  await desktop.waitForFunction(() => document.querySelector('.navbar')?.classList.contains('scrolled'));
+  await desktop.locator('.research-row').first().scrollIntoViewIfNeeded();
+  await desktop.locator('.research-row.is-visible').first().waitFor();
+
+  const reducedMotionContext = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    reducedMotion: 'reduce'
+  });
+  const reducedMotionPage = await reducedMotionContext.newPage();
+  await keepSmokeTestLocal(reducedMotionPage);
+  await reducedMotionPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const reducedMotionState = await reducedMotionPage.locator('[data-reveal]').first().evaluate((element) => ({
+    visible: element.classList.contains('is-visible'),
+    opacity: getComputedStyle(element).opacity,
+    motionReady: document.documentElement.classList.contains('motion-ready')
+  }));
+  if (!reducedMotionState.visible || reducedMotionState.opacity !== '1' || reducedMotionState.motionReady) {
+    throw new Error('reduced-motion visitors do not receive immediately visible content');
+  }
+  await reducedMotionContext.close();
+
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mkdir(process.env.SITE_SCREENSHOT_DIR, { recursive: true });
     await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
@@ -65,13 +91,30 @@ try {
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.blog-card').count() !== journalSource.blogs.length) throw new Error('blog index does not expose the registered complete articles');
   await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.id)}.html"]`).click();
-  if (!await desktop.getByRole('heading', { level: 1, name: representativeBlog.title, exact: true }).isVisible()) throw new Error('registered blog title is not visible');
+  await desktop.getByRole('heading', {
+    level: 1,
+    name: representativeBlog.title,
+    exact: true
+  }).waitFor({ state: 'visible' });
   if (!await desktop.locator('.blog-prose').isVisible()) throw new Error('complete blog body is not visible');
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await keepSmokeTestLocal(mobile);
   await mobile.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
   const toggle = mobile.locator('.mobile-toggle');
   if (await toggle.getAttribute('aria-label') !== '打开导航菜单') throw new Error('mobile menu lacks its initial accessible name');
+  if (!await toggle.isVisible()) {
+    const mobileState = await mobile.evaluate(() => {
+      const element = document.querySelector('.mobile-toggle');
+      return {
+        innerWidth: window.innerWidth,
+        mediaMatches: window.matchMedia('(max-width: 768px)').matches,
+        display: element ? getComputedStyle(element).display : 'missing',
+        styleSheets: Array.from(document.styleSheets).map((sheet) => sheet.href)
+      };
+    });
+    throw new Error(`mobile menu is not visible: ${JSON.stringify(mobileState)}`);
+  }
   await toggle.click();
   if (await toggle.getAttribute('aria-expanded') !== 'true') throw new Error('mobile menu did not expose expanded state');
   if (await toggle.getAttribute('aria-label') !== '关闭导航菜单') throw new Error('mobile menu did not update its accessible name');
@@ -113,4 +156,12 @@ function contentType(filePath) {
 
 async function readJson(relativePath) {
   return JSON.parse(await readFile(path.join(root, relativePath), 'utf8'));
+}
+
+async function keepSmokeTestLocal(page) {
+  await page.route('**/*', (route) => (
+    route.request().url().startsWith(baseUrl)
+      ? route.continue()
+      : route.abort('blockedbyclient')
+  ));
 }

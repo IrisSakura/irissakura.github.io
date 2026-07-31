@@ -2,6 +2,65 @@ export {};
 
 const SYSTEM_THEME = 'system';
 const FALLBACK_STORAGE_KEY = 'irissakura-theme';
+const REVEAL_SELECTOR = [
+    '.hero-content > *',
+    '.hero-proof',
+    '.profile-card-body > *',
+    '.evidence-grid > *',
+    '.flagship-grid > *',
+    '.section-heading',
+    '.section-heading-row',
+    '.method-chain > *',
+    '.case-list > *',
+    '.research-list > *',
+    '.portfolio-header .container > *',
+    '.portfolio-cases > *',
+    '.framework-hero-grid > *',
+    '.maturity-summary > *',
+    '.principle-list > *',
+    '.game-hero-grid > *',
+    '.game-gallery > *',
+    '.game-system-grid > *',
+    '.journal-hero-grid > *',
+    '.journal-dashboard',
+    '.stream-grid > *',
+    '.note-grid > *',
+    '.journal-update-grid > *',
+    '.design-summary-grid > *',
+    '.blog-hero .container > *',
+    '.blog-card-grid > *',
+    '.about-intro-grid > *',
+    '.about-story-grid > *',
+    '.about-focus-list > *',
+    '.about-preferences-grid > *',
+    '.discussion-grid > *',
+    '.public-route-list > *',
+    '.route-boundary-inner > *',
+    '.journal-detail > header',
+    '.journal-detail-grid > *',
+    '.blog-article > header',
+    '.footer-content > *'
+].join(',');
+const DEPTH_SELECTOR = [
+    '.project-card',
+    '.profile-card',
+    '.blog-card',
+    '.stream-card',
+    '.note-card',
+    '.journal-update-card',
+    '.design-summary-card',
+    '.principle-item',
+    '.gallery-card',
+    '.game-system-card',
+    '.about-focus-list article',
+    '.preference-card',
+    '.discussion-grid article',
+    '.public-route-card',
+    '.maturity-summary article',
+    '.stable-route-list article',
+    '.research-row',
+    '.method-chain li'
+].join(',');
 
 class SiteShell {
     private toggle: HTMLButtonElement | null = null;
@@ -33,6 +92,8 @@ class SiteShell {
         this.setupTheme();
         this.setupNavigation();
         this.setupFaq();
+        this.setupNavbarDepth();
+        this.setupMotion();
     }
 
     private setupTheme(): void {
@@ -191,6 +252,63 @@ class SiteShell {
                 button.closest('.faq-item')?.classList.toggle('active', !expanded);
             });
         });
+    }
+
+    private setupNavbarDepth(): void {
+        const navbar = document.querySelector<HTMLElement>('.navbar');
+        if (!navbar) return;
+
+        let updateScheduled = false;
+        const update = (): void => {
+            navbar.classList.toggle('scrolled', window.scrollY > 36);
+            updateScheduled = false;
+        };
+        const scheduleUpdate = (): void => {
+            if (updateScheduled) return;
+            updateScheduled = true;
+            window.requestAnimationFrame(update);
+        };
+
+        update();
+        window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    }
+
+    private setupMotion(): void {
+        const revealables = Array.from(
+            document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR)
+        );
+        document.querySelectorAll<HTMLElement>(DEPTH_SELECTOR).forEach((element) => {
+            element.classList.add('depth-card');
+        });
+
+        const orderByParent = new Map<Element, number>();
+        for (const element of revealables) {
+            element.dataset.reveal = '';
+            const parent = element.parentElement;
+            const order = parent ? orderByParent.get(parent) ?? 0 : 0;
+            element.style.setProperty('--reveal-order', String(Math.min(order, 4)));
+            if (parent) orderByParent.set(parent, order + 1);
+        }
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+            revealables.forEach((element) => element.classList.add('is-visible'));
+            return;
+        }
+
+        document.documentElement.classList.add('motion-ready');
+        const observer = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        }, {
+            rootMargin: '0px 0px -8%',
+            threshold: 0.12
+        });
+
+        revealables.forEach((element) => observer.observe(element));
     }
 }
 

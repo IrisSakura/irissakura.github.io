@@ -164,6 +164,42 @@ test('theme selector follows the registry and system until the visitor stores a 
   assert.equal(themeConfig.storageKey, 'irissakura-theme');
 });
 
+test('shared motion adds progressive depth without hiding content for reduced-motion visitors', async () => {
+  const [siteSource, frameworkSource, css] = await Promise.all([
+    readText('src/site.ts'),
+    readText('src/framework.ts'),
+    readText('style/main.css')
+  ]);
+
+  for (const contract of [
+    'setupMotion',
+    'setupNavbarDepth',
+    'IntersectionObserver',
+    "prefers-reduced-motion: reduce",
+    "dataset.reveal = ''",
+    "classList.add('depth-card')"
+  ]) {
+    assert.ok(siteSource.includes(contract), `shared site motion missing ${contract}`);
+  }
+  for (const contract of [
+    '.navbar.scrolled',
+    '.motion-ready [data-reveal]',
+    '[data-reveal].is-visible',
+    '.depth-card',
+    '@media (prefers-reduced-motion: reduce)'
+  ]) {
+    assert.ok(css.includes(contract), `shared motion CSS missing ${contract}`);
+  }
+  assert.match(
+    css,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\[data-reveal\][\s\S]*?opacity:\s*1\s*!important/s
+  );
+  assert.ok(
+    !frameworkSource.includes("classList.toggle('scrolled'"),
+    'navbar depth must have one shared owner instead of a Framework-only scroll listener'
+  );
+});
+
 test('theme registry supports shared layers and the sakura village atmosphere', async () => {
   const config = JSON.parse(await readText('data/themes.json'));
   const ids = config.themes.map((theme) => theme.id);
