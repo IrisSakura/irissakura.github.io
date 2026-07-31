@@ -30,6 +30,70 @@ test('site configuration exposes verified direct contacts and public routes', as
   }
 });
 
+test('all public pages receive the configured accessible BGM player', async () => {
+  const site = JSON.parse(await readText('data/site.json'));
+  const source = await readText('src/site.ts');
+  const css = await readText('style/main.css');
+  const pages = [
+    'index.html',
+    '404.html',
+    ...(await listHtmlFiles(new URL('../pages/', import.meta.url), 'pages'))
+  ];
+
+  assert.equal(site.bgm.title, '回留');
+  assert.equal(site.bgm.artist, '方大同');
+  assert.equal(site.bgm.mimeType, 'audio/mpeg');
+  assert.ok(site.bgm.defaultVolume > 0 && site.bgm.defaultVolume <= 1);
+  await access(new URL(`../${site.bgm.source}`, import.meta.url));
+
+  for (const page of pages) {
+    const html = await readText(page);
+    const prefix = page === 'index.html' || page === '404.html'
+      ? ''
+      : '../'.repeat(page.split('/').length - 1);
+    assert.equal(
+      html.match(/\bdata-bgm-player\b/g)?.length ?? 0,
+      1,
+      `${page} must contain exactly one BGM player`
+    );
+    for (const fragment of [
+      'data-bgm-player',
+      'data-bgm-audio',
+      'data-bgm-toggle',
+      'data-bgm-volume',
+      'aria-label="背景音乐播放器"',
+      'preload="none"',
+      `${prefix}${site.bgm.source}`,
+      site.bgm.title,
+      site.bgm.artist
+    ]) {
+      assert.ok(html.includes(fragment), `${page} missing BGM contract ${fragment}`);
+    }
+    assert.ok(!/<audio[^>]*\bautoplay\b/i.test(html), `${page} must not autoplay BGM`);
+  }
+
+  for (const contract of [
+    'class BgmPlayer',
+    'BgmPlayer.connect()',
+    "window.addEventListener('pagehide'",
+    "window.addEventListener('storage'",
+    'localStorage.setItem',
+    'audio.play()',
+    "updateUi('blocked')"
+  ]) {
+    assert.ok(source.includes(contract), `BGM runtime missing ${contract}`);
+  }
+  for (const contract of [
+    '.bgm-player',
+    '.bgm-toggle',
+    '.bgm-volume-control',
+    '[data-state="playing"]',
+    '@keyframes bgm-pulse'
+  ]) {
+    assert.ok(css.includes(contract), `BGM presentation missing ${contract}`);
+  }
+});
+
 test('profile and major page covers are generated from one local configuration', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   const profile = site.profile;

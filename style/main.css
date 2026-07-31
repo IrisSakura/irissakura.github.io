@@ -416,6 +416,132 @@ a {
     background: var(--dark-color);
 }
 
+/* 全站 BGM：固定在内容层之上，不挤压公共导航。 */
+.bgm-player {
+    position: fixed;
+    right: clamp(0.8rem, 2vw, 1.5rem);
+    bottom: max(0.8rem, env(safe-area-inset-bottom));
+    z-index: 980;
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    color: #f8fbff;
+    background: rgba(12, 20, 27, 0.88);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(16px) saturate(130%);
+    transition:
+        border-color 0.24s ease,
+        background-color 0.24s ease,
+        box-shadow 0.24s ease;
+}
+
+.bgm-player:hover,
+.bgm-player:focus-within {
+    border-color: rgba(140, 231, 220, 0.72);
+    background: rgba(12, 20, 27, 0.96);
+    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
+}
+
+.bgm-toggle {
+    display: inline-flex;
+    gap: 0.6rem;
+    align-items: center;
+    min-width: 0;
+    min-height: 42px;
+    padding: 0.15rem 0.3rem;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.bgm-toggle-icon {
+    display: grid;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 50%;
+    color: #07111a;
+    background: linear-gradient(145deg, #a9eee5, #8fb7d1);
+    box-shadow: 0 5px 16px rgba(84, 214, 197, 0.24);
+}
+
+.bgm-player[data-state="playing"] .bgm-toggle-icon {
+    animation: bgm-pulse 1.8s ease-in-out infinite;
+}
+
+.bgm-player[data-state="loading"] .bgm-toggle-icon {
+    animation: bgm-loading 0.9s linear infinite;
+}
+
+.bgm-player[data-state="blocked"] .bgm-toggle-icon {
+    color: #5d281f;
+    background: linear-gradient(145deg, #ffd8cf, #efa999);
+}
+
+.bgm-copy {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.bgm-kicker {
+    color: #a9eee5;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.bgm-track {
+    max-width: 9.5rem;
+    overflow: hidden;
+    color: #f8fbff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bgm-volume-control {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+    padding: 0 0.25rem 0 0.35rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+    color: rgba(248, 251, 255, 0.76);
+}
+
+.bgm-volume {
+    width: 74px;
+    accent-color: #8ce7dc;
+    cursor: pointer;
+}
+
+@keyframes bgm-pulse {
+    0%,
+    100% {
+        box-shadow: 0 5px 16px rgba(84, 214, 197, 0.24);
+        scale: 1;
+    }
+    50% {
+        box-shadow: 0 7px 24px rgba(84, 214, 197, 0.44);
+        scale: 1.04;
+    }
+}
+
+@keyframes bgm-loading {
+    to {
+        rotate: 360deg;
+    }
+}
+
 .nav-link {
     font-family: var(--font-body);
     font-weight: 600;
@@ -1192,6 +1318,45 @@ a {
         font-size: 2rem;
     }
 
+    .bgm-player {
+        padding: 0.35rem;
+    }
+
+    .bgm-copy {
+        display: none;
+    }
+
+    .bgm-volume-control {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 0.55rem);
+        width: 164px;
+        padding: 0.75rem 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        opacity: 0;
+        visibility: hidden;
+        background: rgba(12, 20, 27, 0.96);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+        pointer-events: none;
+        translate: 0 5px;
+        transition:
+            opacity 0.2s ease,
+            translate 0.2s ease,
+            visibility 0.2s ease;
+    }
+
+    .bgm-player:focus-within .bgm-volume-control {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        translate: 0 0;
+    }
+
+    .bgm-volume {
+        width: 112px;
+    }
+
     .framework-copy .section-title {
         text-align: center;
     }
@@ -1891,7 +2056,8 @@ a {
     }
 
     .hero-section::after,
-    .hero-proof::after {
+    .hero-proof::after,
+    .bgm-toggle-icon {
         animation: none !important;
     }
 }

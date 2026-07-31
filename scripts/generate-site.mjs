@@ -192,14 +192,24 @@ for (const page of pageDefinitions) {
     .replace('{{themeStorageKey}}', escapeAttribute(themeConfig.storageKey))
     .replace('{{defaultLightTheme}}', escapeAttribute(themeConfig.defaultLight))
     .replace('{{defaultDarkTheme}}', escapeAttribute(themeConfig.defaultDark))
-    .replace('{{themeOptions}}', renderThemeOptions(themeConfig));
+    .replace('{{themeOptions}}', renderThemeOptions(themeConfig))
+    .replace('{{bgmStorageKey}}', escapeAttribute(site.bgm.storageKey))
+    .replaceAll('{{bgmDefaultVolume}}', String(site.bgm.defaultVolume))
+    .replaceAll('{{bgmTitle}}', escapeAttribute(site.bgm.title))
+    .replaceAll('{{bgmArtist}}', escapeAttribute(site.bgm.artist))
+    .replace('{{bgmSource}}', escapeAttribute(pageHref(site.bgm.source)))
+    .replace('{{bgmMimeType}}', escapeAttribute(site.bgm.mimeType))
+    .replace('{{bgmLoopAttribute}}', site.bgm.loop ? ' loop' : '');
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
     .replace('{{footerLinks}}', footerLinks)
     .replace('{{socialLinks}}', socialLinks);
 
   html = html
-    .replace(/(?:<a class="skip-link"[\s\S]*?<\/a>\s*)?<nav class="navbar"[\s\S]*?<\/nav>/, navbar)
+    .replace(
+      /(?:<a class="skip-link"[\s\S]*?<\/a>\s*)?<nav class="navbar"[\s\S]*?<\/nav>(?:\s*<aside\b[^>]*\bdata-bgm-player\b[\s\S]*?<\/aside>)*/,
+      navbar
+    )
     .replace(/<footer class="footer">[\s\S]*?<\/footer>/, footer)
     .replace(/<main(?![^>]*\bid="main-content")/, '<main id="main-content"')
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${page.title}</title>`);
@@ -1122,6 +1132,29 @@ async function assertSitePresentation(siteData, pages) {
     }
   }
 
+  const bgm = siteData.bgm;
+  if (!bgm || typeof bgm !== 'object') {
+    throw new Error('site bgm configuration is required');
+  }
+  for (const field of ['title', 'artist', 'source', 'mimeType', 'storageKey']) {
+    if (typeof bgm[field] !== 'string' || bgm[field].trim() === '') {
+      throw new Error(`site bgm requires ${field}`);
+    }
+  }
+  if (!/^[a-z0-9-]+$/.test(bgm.storageKey)) {
+    throw new Error('site bgm storageKey must be a stable identifier');
+  }
+  if (!['audio/mpeg', 'audio/mp4', 'audio/ogg'].includes(bgm.mimeType)) {
+    throw new Error('site bgm mimeType is not supported');
+  }
+  if (typeof bgm.defaultVolume !== 'number' || bgm.defaultVolume < 0 || bgm.defaultVolume > 1) {
+    throw new Error('site bgm defaultVolume must be between 0 and 1');
+  }
+  if (typeof bgm.loop !== 'boolean') {
+    throw new Error('site bgm loop must be a boolean');
+  }
+  await assertLocalAudio(bgm.source, 'site bgm source');
+
   const profile = siteData.profile;
   if (!profile || typeof profile !== 'object') {
     throw new Error('site profile configuration is required');
@@ -1180,6 +1213,21 @@ async function assertLocalImage(imagePath, label) {
     await access(path.join(root, imagePath));
   } catch {
     throw new Error(`${label} image does not exist: ${imagePath}`);
+  }
+}
+
+async function assertLocalAudio(audioPath, label) {
+  if (
+    typeof audioPath !== 'string'
+    || !/^assets\/audio\/[a-z0-9][a-z0-9._/-]*\.(?:m4a|mp3|ogg)$/i.test(audioPath)
+    || audioPath.split('/').includes('..')
+  ) {
+    throw new Error(`${label} must use a local assets/audio path`);
+  }
+  try {
+    await access(path.join(root, audioPath));
+  } catch {
+    throw new Error(`${label} audio does not exist: ${audioPath}`);
   }
 }
 
