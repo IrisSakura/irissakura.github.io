@@ -77,7 +77,49 @@ try {
   if (!parsedBgm.enabled || parsedBgm.volume !== 0.2 || parsedBgm.currentTime <= 0.5) {
     throw new Error(`BGM state does not preserve playback intent, volume and progress: ${storedBgm}`);
   }
-  await bgmToggle.click();
+  const beforeNavigationTime = await bgmAudio.evaluate((audio) => {
+    audio.dataset.smokeInstance = 'persistent-bgm';
+    return audio.currentTime;
+  });
+  await desktop.locator('.nav-menu').getByRole('link', { name: '关于', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/about.html`);
+  if (await desktop.locator('[data-bgm-audio]').getAttribute('data-smoke-instance') !== 'persistent-bgm') {
+    throw new Error('cross-page navigation replaced the active BGM audio instance');
+  }
+  await desktop.waitForFunction((minimumTime) => {
+    const audio = document.querySelector('[data-bgm-audio]');
+    return audio instanceof HTMLAudioElement && !audio.paused && audio.currentTime > minimumTime;
+  }, beforeNavigationTime);
+  await desktop.locator('.logo').click();
+  await desktop.waitForURL(`${baseUrl}/index.html`);
+  if (await desktop.locator('[data-bgm-audio]').getAttribute('data-smoke-instance') !== 'persistent-bgm') {
+    throw new Error('return navigation replaced the active BGM audio instance');
+  }
+  const beforeFrameworkTime = await desktop.locator('[data-bgm-audio]')
+    .evaluate((audio) => audio.currentTime);
+  await desktop.locator('.nav-menu').getByRole('link', { name: 'Framework', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
+  await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
+  if (await desktop.locator('#framework-data-status, #framework-source-commit, #framework-generated-at').count() !== 0) {
+    throw new Error('Framework page still exposes maintainer-only source metadata');
+  }
+  if (await desktop.locator('link[href$="/style/framework.css"]').count() !== 1) {
+    throw new Error('soft navigation did not load the Framework page stylesheet');
+  }
+  await desktop.evaluate(() => history.back());
+  await desktop.waitForURL(`${baseUrl}/index.html`);
+  await desktop.locator('.hero-content').waitFor();
+  if (await desktop.locator('link[href$="/style/framework.css"]').count() !== 0) {
+    throw new Error('history navigation retained a stale Framework page stylesheet');
+  }
+  if (await desktop.locator('[data-bgm-audio]').getAttribute('data-smoke-instance') !== 'persistent-bgm') {
+    throw new Error('history navigation replaced the persistent BGM audio instance');
+  }
+  await desktop.waitForFunction((minimumTime) => {
+    const audio = document.querySelector('[data-bgm-audio]');
+    return audio instanceof HTMLAudioElement && !audio.paused && audio.currentTime > minimumTime;
+  }, beforeFrameworkTime);
+  await desktop.locator('[data-bgm-toggle]').click();
   await desktop.locator('.hero-content > [data-reveal].is-visible').first().waitFor();
   if (await desktop.locator('.depth-card').count() === 0) throw new Error('shared depth treatment was not applied');
   await desktop.evaluate(() => window.scrollTo(0, 240));
@@ -114,8 +156,18 @@ try {
   if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
   if (!await desktop.locator('.portfolio-case').first().filter({ hasText: gameProject.title }).isVisible()) throw new Error('registered game project is not the first portfolio case');
 
+  await desktop.goto(`${baseUrl}/pages/journal.html`, { waitUntil: 'networkidle' });
+  const journalText = await desktop.locator('body').innerText();
+  for (const forbidden of ['确定性目录条目', '稳定 ID', '同步来源固定为 Journal 提交', '按 Journal 固定提交导出']) {
+    if (journalText.includes(forbidden)) throw new Error(`Journal exposes maintainer-only copy: ${forbidden}`);
+  }
+
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.blog-card').count() !== journalSource.blogs.length) throw new Error('blog index does not expose the registered complete articles');
+  const blogIndexText = await desktop.locator('body').innerText();
+  if (blogIndexText.includes('来源提交') || blogIndexText.includes('经过登记与安全检查')) {
+    throw new Error('blog index exposes the internal publication pipeline');
+  }
   await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.id)}.html"]`).click();
   await desktop.getByRole('heading', {
     level: 1,
@@ -123,6 +175,7 @@ try {
     exact: true
   }).waitFor({ state: 'visible' });
   if (!await desktop.locator('.blog-prose').isVisible()) throw new Error('complete blog body is not visible');
+  if (await desktop.locator('.blog-source-note').count() !== 0) throw new Error('blog article exposes a generator source note');
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await keepSmokeTestLocal(mobile);
@@ -150,6 +203,11 @@ try {
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
+  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '联系我', exact: true });
+  if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 联系我');
+  if ((await contactNavLink.getAttribute('class'))?.split(/\s+/).includes('nav-cta')) {
+    throw new Error('Contact navigation still has special CTA styling');
+  }
   const expectedContactCards = siteData.contacts.length + siteData.socials.length;
   if (await mobile.locator('.public-route-card').count() !== expectedContactCards) throw new Error('direct contacts or verified public routes are missing');
   for (const contact of siteData.contacts) {
@@ -160,11 +218,14 @@ try {
     if (!await mobile.locator(`.public-route-card[href="${social.url}"]`).isVisible()) throw new Error(`verified public route is missing: ${social.id}`);
   }
   if (!await mobile.getByRole('heading', { name: '适合交流的主题' }).isVisible()) throw new Error('discussion scope is missing');
+  if (await mobile.getByRole('heading', { name: '当前公开沟通边界' }).count() !== 0) {
+    throw new Error('Contact page exposes the owner-only communication boundary');
+  }
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'contact-mobile.png'), fullPage: true });
   }
 
-  console.log('Browser smoke passed: routes, complete blog publishing, evidence-led portfolio, mobile navigation and contact routes checked.');
+  console.log('Browser smoke passed: routes, persistent BGM navigation, complete blog publishing, evidence-led portfolio, mobile navigation and contact routes checked.');
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

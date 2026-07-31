@@ -129,7 +129,7 @@ const pageDefinitions = [
     key: 'blog',
     coverKey: 'blog',
     title: '博客 | 游戏系统与工程设计',
-    description: '完整发布 Sakura Design Journal 中经过登记与安全检查的游戏系统设计文章。',
+    description: '围绕游戏系统、框架实践与工程决策的完整文章。',
     canonical: '/pages/blog.html',
     image: '/assets/images/home-preview-pastoral.png'
   },
@@ -155,7 +155,7 @@ const navItems = [
   ['journal', 'Journal', 'pages/journal.html'],
   ['blog', '博客', 'pages/blog.html'],
   ['about', '关于', 'pages/about.html'],
-  ['contact', '公开入口', 'pages/contact.html']
+  ['contact', '联系我', 'pages/contact.html']
 ];
 
 for (const page of pageDefinitions) {
@@ -174,8 +174,7 @@ for (const page of pageDefinitions) {
 
   const navLinks = navItems.map(([key, label, target]) => {
     const active = page.key === key;
-    const emphasis = key === 'contact' ? ' nav-cta' : '';
-    return `<a href="${pageHref(target)}" class="nav-link${emphasis}${active ? ' active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`;
+    return `<a href="${pageHref(target)}" class="nav-link${active ? ' active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`;
   }).join('\n            ');
 
   const footerLinks = navItems.slice(1).map(([, label, target]) => (
@@ -475,7 +474,6 @@ function updateFrameworkFallback(html, data, adoption) {
     'framework-profile-count': data.summary.profileCount,
     'framework-maturity-summary': `${data.summary.packageCount} 个 Package 中只有 ${data.lifecycleCounts.Supported ?? 0} 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。`,
     'framework-module-result-count': `${data.featuredModules.length} 个模块`,
-    'framework-source-commit': data.sourceCommit.slice(0, 7),
     'framework-supported-count': data.lifecycleCounts.Supported ?? 0,
     'framework-preview-count': data.lifecycleCounts.Preview ?? 0,
     'framework-experimental-count': data.lifecycleCounts.Experimental ?? 0,
@@ -489,12 +487,6 @@ function updateFrameworkFallback(html, data, adoption) {
       `$1${value}$2`
     );
   }
-
-  const generatedDate = data.generatedAt.slice(0, 10);
-  html = html.replace(
-    /(<time id="framework-generated-at" datetime=")[^"]*("[^>]*>)[\s\S]*?(<\/time>)/,
-    `$1${data.generatedAt}$2${generatedDate}$3`
-  );
   return html;
 }
 
@@ -772,7 +764,6 @@ function renderJournalContent(journalData, sourceData) {
                 <div class="journal-metric"><strong>${journalData.summary.auditCount}</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.blogCount}</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.knowledgeStreamCount}</strong><span>知识流</span></div>
-                <p>审计与设计记录发布公开摘要；登记在册的博客发布完整正文。</p>
             </div>
         </div>
     </header>
@@ -785,7 +776,7 @@ function renderJournalContent(journalData, sourceData) {
     </section>
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">可独立分享的精选研究主题</h2></div><p>每个主题都包含问题、方法、发现、影响和更新时间；在区域内滚动查看全部 ${journalData.featuredNotes.length} 项。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">可独立分享的精选研究主题</h2></div></div>
             <div class="journal-scroll-region journal-featured-scroll" role="region" aria-labelledby="featured-notes-title" tabindex="0">
                 <div class="note-grid">${notes}
                 </div>
@@ -794,7 +785,7 @@ function renderJournalContent(journalData, sourceData) {
     </section>
     <section class="journal-section journal-updates" id="recent-audits">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">RECENT FRAMEWORK AUDITS</p><h2 id="recent-audits-title">近期框架审计摘要</h2></div><p>按 Journal 固定提交导出；在区域内滚动查看最近 ${Math.min(sourceData.audits.length, 6)} 条公开摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">RECENT FRAMEWORK AUDITS</p><h2 id="recent-audits-title">近期框架审计摘要</h2></div></div>
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">${recentAudits}
                 </div>
@@ -803,7 +794,7 @@ function renderJournalContent(journalData, sourceData) {
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div><p>${sourceData.gameDesigns.length} 个确定性目录条目；在区域内滚动浏览，每个稳定 ID 都可被博客引用。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">${gameDesigns}
                 </div>
@@ -816,7 +807,6 @@ function renderJournalContent(journalData, sourceData) {
                 <div><p class="journal-kicker">RESEARCH → SYSTEM → WORK</p><h2>记录的价值，在于改变下一次实现</h2><p>只有能够跨项目复用的结论，才进入 Sakura Framework；只有被实际作品验证的能力，才成为作品集证据。</p></div>
                 <div class="bridge-actions"><a class="bridge-card" href="framework.html"><span>02 / SYSTEM</span><strong>Sakura Framework</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="bridge-card" href="game.html"><span>03 / WORK</span><strong>《言铸之剑》</strong><i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
             </div>
-            <p class="journal-source-note">同步来源固定为 Journal 提交 ${escapeHtml(sourceData.sourceCommit.slice(0, 8))}；未提交草稿、仓库地址、本机路径和未登记文章不进入本站。</p>
         </div>
     </section>`;
 }
@@ -832,15 +822,15 @@ function renderBlogIndex(sourceData) {
                 </article>`).join('');
   return `<header class="blog-hero">
         <div class="container">
-            <p class="section-kicker">COMPLETE ARTICLES · VERIFIED SOURCE</p>
+            <p class="section-kicker">GAME SYSTEMS · ENGINEERING PRACTICE</p>
             <h1>游戏系统与工程设计博客</h1>
-            <p>这里发布 Sakura Design Journal 中已经登记、经过安全检查的完整文章。审计与日常研究继续以摘要形式保留在 Journal。</p>
+            <p>围绕游戏系统、框架实践与工程决策，整理可以独立阅读的完整文章。</p>
             <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a></div>
         </div>
     </header>
     <section class="blog-list-section" id="articles">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">PUBLISHED FROM JOURNAL</p><h2>${sourceData.blogs.length} 篇完整文章</h2></div><p>来源提交 ${escapeHtml(sourceData.sourceCommit.slice(0, 8))}</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>${sourceData.blogs.length} 篇完整文章</h2></div></div>
             <div class="blog-card-grid">${articles}
             </div>
         </div>
@@ -944,12 +934,6 @@ function renderContactContent(siteData) {
                 <li><strong>设计与源码研究</strong><span>游戏设计范式、Godot 运行时与研究策展方法。</span></li>
                 <li><strong>独立开发实践</strong><span>从原型闭环到证据展示、限制披露和持续迭代。</span></li>
             </ul>
-        </div>
-    </section>
-    <section class="route-boundary">
-        <div class="container route-boundary-inner">
-            <div><p class="section-kicker">CURRENT BOUNDARY</p><h2>当前公开沟通边界</h2></div>
-            <div><p>工作邮箱适合完整事项说明，工作 QQ 适合即时沟通；GitHub 与哔哩哔哩更适合公开项目讨论和开发记录。</p><p>私有仓库、未整理工作日记、凭据和本机工程路径不在公开范围内。</p></div>
         </div>
     </section>`;
 }
@@ -1057,7 +1041,6 @@ function renderBlogDetailSource({ article, markdown }) {
             <div class="note-tags">${article.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
         </header>
         <div class="blog-prose">${body}</div>
-        <footer class="blog-source-note">本文由 Sakura Design Journal 的固定提交导出并在本站完整发布；站点生成器会清理可执行 HTML。</footer>
     </article>
 </main>
 <footer class="footer"></footer>
@@ -1095,7 +1078,7 @@ function renderJournalDetailSource(note) {
             <section><span>03 · FINDING</span><h2>核心发现</h2><p>${escapeHtml(note.finding)}</p></section>
             <section><span>04 · IMPACT</span><h2>对框架或游戏的影响</h2><p>${escapeHtml(note.impact)}</p></section>
         </div>
-        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="${escapeAttribute(note.updatedAt)}">${escapeHtml(note.updatedAt)}</time><p>这是经过策展的公开研究结构，不包含私有仓库地址、工作日记或未整理原文。</p></footer>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="${escapeAttribute(note.updatedAt)}">${escapeHtml(note.updatedAt)}</time></footer>
     </article>
 </main>
 <footer class="footer"></footer>

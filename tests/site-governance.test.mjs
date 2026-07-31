@@ -30,6 +30,41 @@ test('site configuration exposes verified direct contacts and public routes', as
   }
 });
 
+test('public navigation presents Contact as an ordinary tab without owner-only boundary copy', async () => {
+  const pages = [
+    'index.html',
+    '404.html',
+    ...(await listHtmlFiles(new URL('../pages/', import.meta.url), 'pages'))
+  ];
+
+  for (const page of pages) {
+    const html = await readText(page);
+    const nav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
+    assert.ok(nav.includes('>联系我</a>'), `${page} navigation is missing the 联系我 tab`);
+    assert.ok(!nav.includes('>公开入口</a>'), `${page} navigation still labels Contact as 公开入口`);
+    assert.ok(!nav.includes('nav-cta'), `${page} gives Contact a special navigation treatment`);
+  }
+
+  const contactPage = await readText('pages/contact.html');
+  for (const fragment of [
+    'route-boundary',
+    'CURRENT BOUNDARY',
+    '当前公开沟通边界',
+    '私有仓库、未整理工作日记、凭据和本机工程路径不在公开范围内'
+  ]) {
+    assert.ok(!contactPage.includes(fragment), `contact page exposes owner-only boundary copy: ${fragment}`);
+  }
+
+  const journalPages = await listHtmlFiles(new URL('../pages/journal/', import.meta.url), 'pages/journal');
+  for (const page of journalPages) {
+    const html = await readText(page);
+    assert.ok(
+      !html.includes('不包含私有仓库地址、工作日记或未整理原文'),
+      `${page} exposes the private publication boundary`
+    );
+  }
+});
+
 test('all public pages receive the configured accessible BGM player', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   const source = await readText('src/site.ts');
@@ -84,6 +119,21 @@ test('all public pages receive the configured accessible BGM player', async () =
     assert.ok(source.includes(contract), `BGM runtime missing ${contract}`);
   }
   for (const contract of [
+    'setupSoftNavigation()',
+    'history.pushState',
+    'main#main-content',
+    'syncLocalStylesheets',
+    "new CustomEvent('site:navigation-complete'",
+    'location.assign(destination.href)'
+  ]) {
+    assert.ok(source.includes(contract), `persistent navigation runtime missing ${contract}`);
+  }
+  const frameworkSource = await readText('src/framework.ts');
+  assert.ok(
+    frameworkSource.includes("document.addEventListener('site:navigation-complete'"),
+    'Framework page runtime must reconnect after persistent navigation'
+  );
+  for (const contract of [
     '.bgm-player',
     '.bgm-toggle',
     '.bgm-volume-control',
@@ -91,6 +141,49 @@ test('all public pages receive the configured accessible BGM player', async () =
     '@keyframes bgm-pulse'
   ]) {
     assert.ok(css.includes(contract), `BGM presentation missing ${contract}`);
+  }
+});
+
+test('public page chrome omits maintainer-only source and implementation hints', async () => {
+  const pageContracts = {
+    'pages/journal.html': [
+      '确定性目录条目',
+      '稳定 ID',
+      '同步来源固定为 Journal 提交',
+      '按 Journal 固定提交导出',
+      '在区域内滚动查看',
+      '未登记文章'
+    ],
+    'pages/blog.html': [
+      '来源提交',
+      '经过登记与安全检查',
+      'VERIFIED SOURCE',
+      'PUBLISHED FROM JOURNAL'
+    ],
+    'pages/framework.html': [
+      'framework-data-status',
+      'framework-source-commit',
+      'framework-generated-at',
+      '构建时回退',
+      '来源提交：'
+    ]
+  };
+
+  for (const [page, forbidden] of Object.entries(pageContracts)) {
+    const html = await readText(page);
+    for (const fragment of forbidden) {
+      assert.ok(!html.includes(fragment), `${page} exposes maintainer-only copy: ${fragment}`);
+    }
+  }
+
+  const blogPages = await listHtmlFiles(new URL('../pages/blog/', import.meta.url), 'pages/blog');
+  for (const page of blogPages) {
+    const html = await readText(page);
+    assert.ok(!html.includes('blog-source-note'), `${page} exposes a generator source note`);
+    assert.ok(
+      !html.includes('站点生成器会清理可执行 HTML'),
+      `${page} explains the internal publication pipeline`
+    );
   }
 });
 

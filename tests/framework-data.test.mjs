@@ -133,10 +133,7 @@ test('framework page contains one target for each dynamic field', async () => {
     'framework-lifecycle-detail',
     'framework-lifecycle-detail-title',
     'framework-lifecycle-detail-count',
-    'framework-lifecycle-detail-share',
-    'framework-source-commit',
-    'framework-generated-at',
-    'framework-data-status'
+    'framework-lifecycle-detail-share'
   ];
 
   for (const id of ids) {

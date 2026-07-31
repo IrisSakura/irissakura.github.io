@@ -290,6 +290,11 @@ class FrameworkPage {
     private selectedModuleId = 'core';
     private selectedLayerId = 'foundation';
     private selectedLifecycle = 'Supported';
+    private readonly lifetime = new AbortController();
+    private readonly handleHashChange = (): void => {
+        this.applyModuleHash();
+        this.selectModule(this.selectedModuleId, false);
+    };
 
     constructor() {
         if (document.readyState === 'loading') {
@@ -304,6 +309,10 @@ class FrameworkPage {
         this.applyModuleHash();
         this.renderFeaturedModules();
         void this.loadFrameworkData();
+    }
+
+    dispose(): void {
+        this.lifetime.abort();
     }
 
     private isNonNegativeInteger(value: unknown): value is number {
@@ -331,16 +340,19 @@ class FrameworkPage {
     }
 
     private async loadFrameworkData(): Promise<void> {
-        const status = document.getElementById('framework-data-status');
         try {
-            const response = await fetch('../data/framework.json', { cache: 'no-cache' });
+            const response = await fetch('../data/framework.json', {
+                cache: 'no-cache',
+                signal: this.lifetime.signal
+            });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const payload: unknown = await response.json();
             if (!this.validateFrameworkData(payload)) throw new Error('invalid public data contract');
             this.renderFrameworkData(payload);
-            if (status) status.textContent = '已加载由框架权威清单生成的公开快照。';
+            document.getElementById('framework-module-list')
+                ?.setAttribute('data-framework-loaded', 'true');
         } catch (error) {
-            if (status) status.textContent = '实时数据暂不可用，当前展示仓库内置的静态快照。';
+            if (this.lifetime.signal.aborted) return;
             console.error('[framework-data] failed to load public framework snapshot', error);
         } finally {
             this.restoreSectionHash();
@@ -357,13 +369,6 @@ class FrameworkPage {
         this.setText('framework-package-count', data.summary.packageCount.toString());
         this.setText('framework-module-count', data.summary.catalogModuleCount.toString());
         this.setText('framework-profile-count', data.summary.profileCount.toString());
-        this.setText('framework-source-commit', data.sourceCommit.slice(0, 7));
-
-        const generatedAt = document.getElementById('framework-generated-at');
-        if (generatedAt) {
-            generatedAt.textContent = new Date(data.generatedAt).toLocaleDateString('zh-CN');
-            generatedAt.setAttribute('datetime', data.generatedAt);
-        }
 
         this.applyModuleHash();
         this.renderFeaturedModules();
@@ -722,12 +727,24 @@ class FrameworkPage {
             document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
-        window.addEventListener('hashchange', () => {
-            this.applyModuleHash();
-            this.selectModule(this.selectedModuleId, false);
+        window.addEventListener('hashchange', this.handleHashChange, {
+            signal: this.lifetime.signal
         });
 
     }
 }
 
-new FrameworkPage();
+let activeFrameworkPage: FrameworkPage | null = null;
+let activeFrameworkRoot: HTMLElement | null = null;
+
+function connectFrameworkPage(): void {
+    const root = document.getElementById('framework-module-list');
+    if (root === activeFrameworkRoot) return;
+    activeFrameworkPage?.dispose();
+    activeFrameworkPage = null;
+    activeFrameworkRoot = root;
+    if (root) activeFrameworkPage = new FrameworkPage();
+}
+
+document.addEventListener('site:navigation-complete', connectFrameworkPage);
+connectFrameworkPage();
