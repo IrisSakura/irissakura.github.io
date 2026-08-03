@@ -43,6 +43,41 @@
     --sakura: #d991a5;
     --sakura-soft: #f2dce2;
 
+    --ui-surface-hover: var(--sakura-soft);
+    --ui-focus-color: var(--torii);
+    --ui-focus-shadow: 0 0 0 3px rgba(170, 69, 61, 0.16);
+    --ui-control-border: rgba(128, 99, 79, 0.3);
+    --ui-control-border-hover: var(--sakura);
+    --ui-control-text: var(--ink);
+    --ui-control-surface: rgba(255, 250, 242, 0.82);
+    --ui-control-surface-hover: var(--sakura-soft);
+    --ui-control-icon: var(--torii);
+    --ui-control-option-text: var(--ink);
+    --ui-control-option-surface: var(--surface-strong);
+    --ui-control-shadow: 0 5px 16px rgba(74, 58, 57, 0.08);
+    --ui-action-radius: 999px;
+    --ui-action-font: var(--font-body);
+    --ui-action-transform: none;
+    --ui-action-letter-spacing: 0.04em;
+    --ui-action-primary-text: #fffaf2;
+    --ui-action-primary-bg: var(--torii);
+    --ui-action-primary-hover-bg: var(--torii-deep);
+    --ui-action-primary-shadow: 0 10px 24px rgba(170, 69, 61, 0.2);
+    --ui-action-primary-hover-shadow: 0 14px 28px rgba(120, 56, 48, 0.24);
+    --ui-action-secondary-text: #873b50;
+    --ui-action-secondary-border: rgba(159, 63, 86, 0.5);
+    --ui-action-secondary-bg: rgba(255, 250, 242, 0.5);
+    --ui-action-secondary-hover-text: #6e3041;
+    --ui-action-secondary-hover-bg: var(--sakura-soft);
+    --ui-action-outline-text: #873b50;
+    --ui-action-outline-border: rgba(159, 63, 86, 0.5);
+    --ui-action-outline-bg: rgba(255, 250, 242, 0.5);
+    --ui-action-outline-hover-text: #6e3041;
+    --ui-action-outline-hover-bg: var(--sakura-soft);
+    --ui-chip-border: rgba(159, 63, 86, 0.22);
+    --ui-chip-surface: rgba(241, 215, 223, 0.62);
+    --ui-chip-text: #78384b;
+
     --border-radius: 14px;
     --box-shadow: 0 14px 34px rgba(73, 54, 57, 0.1);
     --box-shadow-hover: 0 20px 42px rgba(73, 54, 57, 0.16);
@@ -102,10 +137,6 @@ h6 {
     background: linear-gradient(90deg, var(--torii), var(--sakura), var(--indigo));
 }
 
-:focus-visible {
-    outline-color: var(--torii);
-}
-
 /* 像乡间驿站的木窗与薄纸，主题选择器保留清晰的原生键盘行为。 */
 .navbar {
     border-bottom-color: rgba(120, 78, 75, 0.2);
@@ -119,9 +150,7 @@ h6 {
 }
 
 .logo i,
-.footer-logo i,
-.theme-picker > i,
-.layout-picker > i {
+.footer-logo i {
     color: var(--torii);
 }
 
@@ -141,68 +170,6 @@ h6 {
 
 .nav-link::after {
     background: linear-gradient(90deg, var(--torii), var(--sakura));
-}
-
-.theme-picker,
-.layout-picker {
-    border-color: rgba(128, 99, 79, 0.3);
-    color: var(--ink);
-    background: rgba(255, 250, 242, 0.82);
-    box-shadow: 0 5px 16px rgba(74, 58, 57, 0.08);
-}
-
-.theme-picker:hover,
-.theme-picker:focus-within,
-.layout-picker:hover,
-.layout-picker:focus-within {
-    border-color: var(--sakura);
-    color: var(--ink);
-    background: var(--sakura-soft);
-}
-
-.theme-select option,
-.layout-select option {
-    color: var(--ink);
-    background: var(--surface-strong);
-}
-
-.mobile-toggle {
-    border-color: rgba(128, 99, 79, 0.3);
-    color: var(--ink);
-    background: rgba(255, 250, 242, 0.82);
-}
-
-.btn-primary {
-    color: #fffaf2;
-    background: var(--torii);
-    box-shadow: 0 10px 24px rgba(170, 69, 61, 0.2);
-}
-
-.btn-primary:hover {
-    background: var(--torii-deep);
-    box-shadow: 0 14px 28px rgba(120, 56, 48, 0.24);
-}
-
-.btn-secondary,
-.btn-outline {
-    border-color: rgba(159, 63, 86, 0.5);
-    color: #873b50;
-    background: rgba(255, 250, 242, 0.5);
-}
-
-.btn-secondary:hover,
-.btn-outline:hover {
-    color: #6e3041;
-    background: var(--sakura-soft);
-}
-
-.tag,
-.note-tags span,
-.system-tags span,
-.portfolio-tags span {
-    border-color: rgba(159, 63, 86, 0.22);
-    color: #78384b;
-    background: rgba(241, 215, 223, 0.62);
 }
 
 /* 首屏以远山与鸟居剪影定调；真实游戏截图仍保持视觉主角。 */

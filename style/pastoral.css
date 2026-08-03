@@ -35,6 +35,41 @@
     --surface: rgba(255, 253, 247, 0.84);
     --surface-strong: #fffdf7;
 
+    --ui-surface-hover: var(--mist-blue);
+    --ui-focus-color: var(--petal-strong);
+    --ui-focus-shadow: 0 0 0 3px rgba(147, 76, 98, 0.18);
+    --ui-control-border: var(--line-strong);
+    --ui-control-border-hover: var(--hill-blue);
+    --ui-control-text: var(--ink);
+    --ui-control-surface: rgba(255, 253, 247, 0.72);
+    --ui-control-surface-hover: var(--mist-blue);
+    --ui-control-icon: var(--petal-strong);
+    --ui-control-option-text: var(--ink);
+    --ui-control-option-surface: var(--surface-strong);
+    --ui-control-shadow: 0 6px 18px rgba(58, 88, 85, 0.08);
+    --ui-action-radius: 999px;
+    --ui-action-font: var(--font-body);
+    --ui-action-transform: none;
+    --ui-action-letter-spacing: 0.04em;
+    --ui-action-primary-text: #fffdf7;
+    --ui-action-primary-bg: #477f82;
+    --ui-action-primary-hover-bg: #3e7376;
+    --ui-action-primary-shadow: 0 10px 24px rgba(71, 127, 130, 0.18);
+    --ui-action-primary-hover-shadow: 0 14px 28px rgba(71, 127, 130, 0.24);
+    --ui-action-secondary-text: #9a596d;
+    --ui-action-secondary-border: rgba(201, 120, 141, 0.62);
+    --ui-action-secondary-bg: rgba(255, 253, 247, 0.48);
+    --ui-action-secondary-hover-text: #744252;
+    --ui-action-secondary-hover-bg: var(--petal-pink);
+    --ui-action-outline-text: var(--ink);
+    --ui-action-outline-border: rgba(38, 72, 77, 0.44);
+    --ui-action-outline-bg: rgba(255, 253, 247, 0.4);
+    --ui-action-outline-hover-text: var(--ink);
+    --ui-action-outline-hover-bg: var(--surface-strong);
+    --ui-chip-border: rgba(79, 150, 150, 0.24);
+    --ui-chip-surface: rgba(215, 232, 235, 0.58);
+    --ui-chip-text: #3a6869;
+
     --border-radius: 18px;
     --transition: all 0.28s ease;
     --box-shadow: 0 14px 36px rgba(58, 88, 85, 0.1);
@@ -115,10 +150,6 @@ dd {
     background: linear-gradient(90deg, var(--hill-blue), var(--petal-strong));
 }
 
-:focus-visible {
-    outline-color: var(--petal-strong);
-}
-
 .skip-link {
     color: var(--ink);
     background: var(--surface-strong);
@@ -164,90 +195,6 @@ dd {
 .nav-link::after {
     height: 2px;
     background: linear-gradient(90deg, var(--hill-blue), var(--petal-strong));
-}
-
-.mobile-toggle {
-    border-color: var(--line-strong);
-    color: var(--ink);
-    background: rgba(255, 253, 247, 0.72);
-}
-
-.theme-picker,
-.layout-picker {
-    border-color: var(--line-strong);
-    color: var(--ink);
-    background: rgba(255, 253, 247, 0.72);
-    box-shadow: 0 6px 18px rgba(58, 88, 85, 0.08);
-}
-
-.theme-picker:hover,
-.theme-picker:focus-within,
-.layout-picker:hover,
-.layout-picker:focus-within {
-    border-color: var(--hill-blue);
-    color: var(--ink);
-    background: var(--mist-blue);
-}
-
-.theme-picker > i,
-.layout-picker > i {
-    color: var(--petal-strong);
-}
-
-.theme-select option,
-.layout-select option {
-    color: var(--ink);
-    background: var(--surface-strong);
-}
-
-/* 按钮改为温润的印章与湖水色，而非霓虹渐变。 */
-.btn {
-    border-radius: 999px;
-    font-family: var(--font-body);
-    text-transform: none;
-    letter-spacing: 0.04em;
-}
-
-.btn-primary {
-    color: #fffdf7;
-    background: #477f82;
-    box-shadow: 0 10px 24px rgba(71, 127, 130, 0.18);
-}
-
-.btn-primary:hover {
-    background: #3e7376;
-    box-shadow: 0 14px 28px rgba(71, 127, 130, 0.24);
-}
-
-.btn-secondary {
-    border-color: rgba(201, 120, 141, 0.62);
-    color: #9a596d;
-    background: rgba(255, 253, 247, 0.48);
-}
-
-.btn-secondary:hover {
-    color: #744252;
-    background: var(--petal-pink);
-}
-
-.btn-outline {
-    border-color: rgba(38, 72, 77, 0.44);
-    color: var(--ink);
-    background: rgba(255, 253, 247, 0.4);
-}
-
-.btn-outline:hover {
-    color: var(--ink);
-    background: var(--surface-strong);
-}
-
-.tag,
-.note-tags span,
-.system-tags span,
-.portfolio-tags span {
-    border-color: rgba(79, 150, 150, 0.24);
-    background: rgba(215, 232, 235, 0.58);
-    color: #3a6869;
 }
 
 /* 首页：天光、远山、水面和花色，真实截图仍是视觉锚点。 */
@@ -1140,12 +1087,6 @@ dd {
 .gallery-card {
     border-radius: 24px 8px 24px 8px;
     box-shadow: 0 10px 26px rgba(58, 88, 85, 0.07);
-}
-
-.system-tags span {
-    border-color: rgba(113, 158, 185, 0.3);
-    color: #456a77;
-    background: rgba(215, 232, 235, 0.7);
 }
 
 .system-notes article {

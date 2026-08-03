@@ -469,7 +469,12 @@ test('theme registry supports shared layers and the sakura village atmosphere', 
     ['style/pastoral.css', 'style/sakura-village.css']
   );
   const sakuraCss = await readText('style/sakura-village.css');
-  for (const motif of ['--torii', '--sakura', '.hero-section::before', '.theme-picker']) {
+  for (const motif of [
+    '--torii',
+    '--sakura',
+    '.hero-section::before',
+    '--ui-control-icon: var(--torii)'
+  ]) {
     assert.ok(sakuraCss.includes(motif), `sakura theme missing motif ${motif}`);
   }
 });
@@ -613,7 +618,8 @@ test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
   assert.ok(contrastRatio(mutedText, '#040404') >= 4.5);
   assert.ok(contrastRatio(grayText, '#121212') >= 4.5);
 
-  assert.match(css, /\.tag\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);
+  assert.match(css, /--ui-chip-text:\s*var\(--secondary-text-color\)/);
+  assert.match(css, /\.tag,[\s\S]*?\.portfolio-tags span\s*\{[^}]*color:\s*var\(--ui-chip-text\)/s);
   assert.match(css, /\.project-status\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);
   assert.match(css, /\.footer-description\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
   assert.match(css, /\.footer-links a\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);

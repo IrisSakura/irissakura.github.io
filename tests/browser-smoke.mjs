@@ -197,18 +197,32 @@ try {
       throw new Error(`layout selector is missing registered option ${layout.id}`);
     }
   }
+  const selectLayoutAndWait = async (layoutId) => {
+    await layoutSelect.selectOption(layoutId);
+    await layoutPage.waitForFunction((expectedLayout) => {
+      if (document.documentElement.dataset.layout !== expectedLayout) return false;
+      return Array.from(document.querySelectorAll('link[data-layout-stylesheet]')).every((stylesheet) => {
+        const supportedLayouts = (stylesheet.dataset.layouts ?? '').split(/\s+/);
+        const shouldBeActive = supportedLayouts.includes(expectedLayout);
+        return shouldBeActive
+          ? !stylesheet.disabled && Boolean(stylesheet.sheet)
+          : stylesheet.disabled;
+      });
+    }, layoutId);
+    await layoutPage.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => resolve())));
+  };
   await themeSelect.selectOption('sakura-village');
-  await layoutSelect.selectOption('standard');
+  await selectLayoutAndWait('standard');
   const standardGeometry = await layoutPage.locator('.hero-section .hero').evaluate((element) => ({
     width: element.getBoundingClientRect().width,
     height: element.getBoundingClientRect().height
   }));
-  await layoutSelect.selectOption('compact');
+  await selectLayoutAndWait('compact');
   const compactGeometry = await layoutPage.locator('.hero-section .hero').evaluate((element) => ({
     width: element.getBoundingClientRect().width,
     height: element.getBoundingClientRect().height
   }));
-  await layoutSelect.selectOption('wide');
+  await selectLayoutAndWait('wide');
   const wideGeometry = await layoutPage.locator('.hero-section .hero').evaluate((element) => ({
     width: element.getBoundingClientRect().width,
     height: element.getBoundingClientRect().height
@@ -406,6 +420,36 @@ try {
   if (await desktop.locator('.evidence-chain-card').count() !== evidenceChains.chains.length) {
     throw new Error('research page does not expose every reviewed evidence chain');
   }
+  const journalTitleBoundaryFailures = [];
+  for (const [viewportName, viewport] of [
+    ['desktop', { width: 1440, height: 900 }],
+    ['mobile', { width: 390, height: 844 }]
+  ]) {
+    await desktop.setViewportSize(viewport);
+    for (const theme of themeConfig.themes) {
+      await desktop.getByLabel('选择页面主题').selectOption(theme.id);
+      for (const layout of layoutConfig.layouts) {
+        await desktop.getByLabel('选择页面布局').selectOption(layout.id);
+        const overflows = await desktop.locator('.journal-update-card h3, .design-summary-card h3').evaluateAll((headings) => (
+          headings.flatMap((heading) => {
+            const overflow = heading.scrollWidth - heading.clientWidth;
+            return overflow > 1
+              ? [{ text: heading.textContent?.trim(), overflow }]
+              : [];
+          })
+        ));
+        for (const overflow of overflows) {
+          journalTitleBoundaryFailures.push(
+            `${viewportName} ${theme.id} ${layout.id} "${overflow.text}" overflows by ${overflow.overflow}px`
+          );
+        }
+      }
+    }
+  }
+  if (journalTitleBoundaryFailures.length > 0) {
+    throw new Error(`Journal card titles intrude into their horizontal padding:\n${journalTitleBoundaryFailures.join('\n')}`);
+  }
+  await desktop.setViewportSize({ width: 1280, height: 900 });
 
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.blog-card').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
