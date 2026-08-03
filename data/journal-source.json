@@ -1,14 +1,35 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "f4c4b6854dbef6842301ebab0f7c85218d8a41b0",
-  "generatedAt": "2026-07-31T17:50:19+08:00",
+  "sourceCommit": "667307758bb4e97952662462c63bf0ad2c6f80cb",
+  "generatedAt": "2026-08-03T13:41:12+08:00",
   "summary": {
-    "auditCount": 27,
-    "blogCount": 7,
-    "gameDesignCount": 44
+    "auditCount": 30,
+    "blogCount": 8,
+    "gameDesignCount": 47
   },
-  "gameDesignCatalogDigest": "f1b39d32259e16ea6c4218cdfb96568a6f8bc62839c954bbef2016c3e6e25b40",
+  "gameDesignCatalogDigest": "f950ecb716a5cee89f9116edd4703533a4d8e38dd521d865da71aec21452c177",
   "audits": [
+    {
+      "id": "audit-2026-08-02",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮默认分支主要新增三组能力： Constraint Solver Foundation 新增 constraints-core 0.1.0； 提供有限域约束合同、确定性 Managed 回溯求解器和 Sakura 工厂； 接入 Roguelite2D 房间端口匹配； 接入 CardCore 地图节点类型分配。 Verification Failure Evidence 属性测试失败可以写入 canonical JSON； Save、Modding、Simulation 已接入最小失败制品； Gitea Unity Impact 和手动 Testbed 会统一上传 verification-lab； Artifact 保留期为 30 天。 State-machine Testing 与 Fault Injection",
+      "updatedAt": "2026-08-02",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-01",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "自上一轮审计基准以来，默认分支新增了四个主要提交，集中完成三组能力： Artifact Manifest Foundation：建立本地、未签名的 Artifact 完整性清单； Wasm Component Runtime 与隔离编译：加入 Provider-neutral Component 合同、Wasmtime Host、Modding typed session、一次性 helper process 和 Semantic Battle 真实消费链； AI 与 LLM 运行时边界修复：修复行为树生命周期、黑板类型覆盖、GOAP 最低成本保证、非有限数值输入、结构化模型输出和异步 AI Director 生命周期。 最新提交重点修复了： AIBlackboard 同一 Key 同时残留在多种类型存储中的问题；",
+      "updatedAt": "2026-08-01",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-07-31",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮默认分支较上一轮新增了 12 个提交，主要完成了五组能力： Compile-time Contracts P0：引入 Roslyn Analyzer，对 Engine-Agnostic Core 的程序集边界进行编译期检查。 LLM 0.8.0：建立异步主协议、短期凭据、结构化输出、命令事务和可信执行边界。 Verification Laboratory P0：增加确定性属性测试、Shrink 和最小失败制品。 Deterministic Replay Foundation：将 Simulation 回放协议升级为带 Header 和 Typed Records 的 schema v2。 Trace Context / Observability Foundation：在 Core 包内增加引擎无关 Trace Context、Span 和有界内存 Provider。",
+      "updatedAt": "2026-07-31",
+      "redacted": false
+    },
     {
       "id": "audit-2026-07-30",
       "title": "Sakura Framework 仓库最新审计与能力收敛计划",
@@ -200,6 +221,42 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "farming",
+      "title": "农场经营与生活模拟游戏",
+      "summary": "将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。",
+      "tags": [
+        "farm",
+        "farming",
+        "life"
+      ],
+      "updatedAt": "2026-08-03",
+      "sha256": "74fdf9232e4838c07a24c3063ef503977e1e8601d7b84565d463c5619bb2f4fd"
+    },
+    {
+      "id": "roguelike-deckbuilder",
+      "title": "卡组构筑式 Roguelike",
+      "summary": "玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。",
+      "tags": [
+        "deckbuilder",
+        "deckbuilding",
+        "roguelike"
+      ],
+      "updatedAt": "2026-08-03",
+      "sha256": "7fdbd9b3de515f4ad0db1a51d3a49f4ac62b1319fc202ac43fc27c5f03ef9433"
+    },
+    {
+      "id": "tower-defense-c2ed5259",
+      "title": "塔防游戏",
+      "summary": "将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。",
+      "tags": [
+        "defense",
+        "td",
+        "tower"
+      ],
+      "updatedAt": "2026-08-03",
+      "sha256": "a15ca735f82a3bbb4ec7ba7d65d2c9b640a96c27fe98dec5d6da416b4927acb5"
+    },
     {
       "id": "civilization-strategy",
       "title": "4X 文明战略游戏",
@@ -729,17 +786,21 @@
   ],
   "blogs": [
     {
-      "id": "4x",
-      "title": "治理容量：为什么 4X 游戏不能让扩张永远稳赚不赔",
-      "summary": "为什么许多 4X 游戏前期充满战略选择，到了中后期却变成不断占地、点建筑和处理重复事务？",
-      "series": "游戏系统的共同语言",
+      "id": "framework-support-surface-governance",
+      "title": "支持面治理：代码总量为什么不等于产品能力",
+      "summary": "从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。",
+      "series": "大型 Unity 框架的治理复盘",
       "tags": [
-        "4x"
+        "framework",
+        "governance",
+        "lifecycle",
+        "support-surface",
+        "unity"
       ],
-      "updatedAt": "2026-07-31",
-      "sha256": "76f99d42b3d31e28be1f5ef247730747d8f2ccb7c23d3cee8ec8468c94b67fe7",
-      "bytes": 19559,
-      "contentPath": "content/blogs/4x.md"
+      "updatedAt": "2026-08-03",
+      "sha256": "19bf82aa4b51793efe90c6a3d97699a03704f4b3e907e59ca6898e015a5bf289",
+      "bytes": 18894,
+      "contentPath": "content/blogs/framework-support-surface-governance.md"
     },
     {
       "id": "local-passed-runner-passed",
@@ -751,10 +812,23 @@
         "passed",
         "runner"
       ],
-      "updatedAt": "2026-07-31",
+      "updatedAt": "2026-08-03",
       "sha256": "19bbbc32c49463add56a90dd068052db5df5e92384abe04f9dde2ebe7ac08479",
       "bytes": 16288,
       "contentPath": "content/blogs/local-passed-runner-passed.md"
+    },
+    {
+      "id": "4x",
+      "title": "治理容量：为什么 4X 游戏不能让扩张永远稳赚不赔",
+      "summary": "为什么许多 4X 游戏前期充满战略选择，到了中后期却变成不断占地、点建筑和处理重复事务？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "4x"
+      ],
+      "updatedAt": "2026-07-31",
+      "sha256": "76f99d42b3d31e28be1f5ef247730747d8f2ccb7c23d3cee8ec8468c94b67fe7",
+      "bytes": 19559,
+      "contentPath": "content/blogs/4x.md"
     },
     {
       "id": "metroidvania-capability-gated-topology",

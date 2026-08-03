@@ -117,9 +117,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>44</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>27</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric"><strong>7</strong><span>完整博客</span></div>
+                <div class="journal-metric"><strong>47</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>30</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>8</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -212,6 +212,21 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-02</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>本轮默认分支主要新增三组能力： Constraint Solver Foundation 新增 constraints-core 0.1.0； 提供有限域约束合同、确定性 Managed 回溯求解器和 Sakura 工厂； 接入 Roguelite2D 房间端口匹配； 接入 CardCore 地图节点类型分配。 Verification Failure Evidence 属性测试失败可以写入 canonical JSON； Save、Modding、Simulation 已接入最小失败制品； Gitea Unity Impact 和手动 Testbed 会统一上传 verification-lab； Artifact 保留期为 30 天。 State-machine Testing 与 Fault Injection</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-01</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>自上一轮审计基准以来，默认分支新增了四个主要提交，集中完成三组能力： Artifact Manifest Foundation：建立本地、未签名的 Artifact 完整性清单； Wasm Component Runtime 与隔离编译：加入 Provider-neutral Component 合同、Wasmtime Host、Modding typed session、一次性 helper process 和 Semantic Battle 真实消费链； AI 与 LLM 运行时边界修复：修复行为树生命周期、黑板类型覆盖、GOAP 最低成本保证、非有限数值输入、结构化模型输出和异步 AI Director 生命周期。 最新提交重点修复了： AIBlackboard 同一 Key 同时残留在多种类型存储中的问题；</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-07-31</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>本轮默认分支较上一轮新增了 12 个提交，主要完成了五组能力： Compile-time Contracts P0：引入 Roslyn Analyzer，对 Engine-Agnostic Core 的程序集边界进行编译期检查。 LLM 0.8.0：建立异步主协议、短期凭据、结构化输出、命令事务和可信执行边界。 Verification Laboratory P0：增加确定性属性测试、Shrink 和最小失败制品。 Deterministic Replay Foundation：将 Simulation 回放协议升级为带 Header 和 Typed Records 的 schema v2。 Trace Context / Observability Foundation：在 Core 包内增加引擎无关 Trace Context、Span 和有界内存 Provider。</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-07-30</p>
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
                     <p>本轮仓库变化集中在三条主线上： Modding 与热更新能力大幅扩展：原 Modding 包被拆为 Core、Unity、Code、HybridCLR 四个职责包，原包转为兼容聚合入口；同时建立在线更新事务、不可变版本目录、信任校验、Wasm/Lua、受控托管代码、HybridCLR 使用环境和 Editor Guided Recipe。 跨平台工程链继续加固：近期提交集中修复 Runtime、Editor Tools、Server、Node 工具和 CI Workflow 的路径与宿主兼容性，并增强 Unity 失败摘要保留。 Sample 测试选择问题被修复：最新提交修复了环境变量中的普通 Unity Impact 包集合覆盖 Runtime Starter 动态依赖发现的问题，使 Sample 可以重新安装 Save、Config、Audio、UI 等真实闭包。</p>
@@ -226,21 +241,6 @@
                     <h3>Sakura Framework 仓库最新审计报告</h3>
                     <p>本轮没有增加新的 UPM 包、Stable Profile 或 Runtime 公共模块，主要推进了两条路线： 新手接入链路收敛：将根 README、Developer Console、Installer V2、Bootstrap Lite、Sample Gallery 和 Beginner 2D Shooter 串联成 Simple 2D Quickstart。 仓库真理源收敛：压缩 README、Release、Performance、Sample 和历史设计文档中的状态副本，强化 Work Status、Inventory、PLAN-INDEX 和 Runner Ledger 的 Owner 边界。 方向总体正确。新 Quickstart 没有建立第二套安装器、第二个 Sample 系统或新的 Runtime 产品，而是编排现有 Owner；发布参考文档也已转为长期稳定合同，不再硬编码当前包数、Run、SHA 或…</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-27</p>
-                    <h3>Sakura Framework 仓库最新审计报告</h3>
-                    <p>仓库最新一轮改动已经从单纯增加运行时能力，转向三个并行方向： 建立 Agent Mainline Contract，统一仓库工作模式、可执行工作和自动恢复边界； 改善 Unity Testbed、Player Build、Windows/macOS/Linux 兼容性和本地零配置测试体验； 继续扩展 Typed UI/MVVM、ECS Session、Godot Parallel Adapter 和 Editor Tools 新手入口。 当前正式工作模式为： 只有 active 工作可以自动续作；Evidence Backlog 和 Deferred 工作不得自动恢复，RC、Tag 和 Release 也需要维护者明确启动。 这一治理方向是正确的。但实际仓库状态仍存在明显矛盾： 仓库宣称进入“收敛期”，当前没有 Active 工作，却已有 39 项 Evidence Backlog，并继续增加 Editor…</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-26</p>
-                    <h3>Sakura Framework 仓库最新审计报告</h3>
-                    <p>本轮最重要的变化是 ECS Runtime 后端可选性完成远端证据闭环。 当前 ECS Runtime 已完成： Disabled / Arch / Unity Entities 三种显式后端选择； 根包依赖收敛； Portable Arch 自包含闭包； Unity Entities 条件程序集； Hitbox、RTS 能力级条件 Bridge； Owned/Borrowed World 生命周期； 显式 Tick 与禁止自动加入 PlayerLoop； PlayMode、IL2CPP/AOT 与性能基线验证。 证据闭包提交 af0ab6f4... 的 Gitea CI run 398 已完成常规质量和 Unity Impact；ECS focused run 399 精确选择 ECS Runtime、Hitbox、RTS 三包并通过 113/113，相关 XML 与 Editor Log…</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-25</p>
-                    <h3>Sakura Framework 仓库最新审计报告</h3>
-                    <p>本轮新增的 Sakura Asset Governance 整体方向正确： 没有新增 UPM 包； 归属既有 editor-tools； 分离纯规则 Core、Unity Editor Adapter 和独立测试程序集； 支持目录、扩展名、资源类型、例外、增量扫描、全量扫描、报告、Settings、Doctor、Build Gate 和 Batchmode 入口； 默认不移动、删除或自动修复项目资源。 其实现 SHA ada803be... 已在 Gitea Testbed run 353、354 上取得 Bootstrap 95/95 和 Full 555/555，两个选择清单都包含 Framework.Editor.AssetGovernance.Tests。不过远端 Artifact REST 索引仍返回 0，当前只能证明测试和上传步骤通过，不能声明原始 ZIP 或文件哈希。</p>
-                </article>
                 </div>
             </div>
         </div>
@@ -250,6 +250,24 @@
             <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-farming">
+                    <p class="project-status">游戏设计范式 · 2026-08-03</p>
+                    <h3>农场经营与生活模拟游戏</h3>
+                    <p>将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。</p>
+                    <div class="note-tags"><span>farm</span><span>farming</span><span>life</span></div>
+                </article>
+                <article class="design-summary-card" id="design-roguelike-deckbuilder">
+                    <p class="project-status">游戏设计范式 · 2026-08-03</p>
+                    <h3>卡组构筑式 Roguelike</h3>
+                    <p>玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。</p>
+                    <div class="note-tags"><span>deckbuilder</span><span>deckbuilding</span><span>roguelike</span></div>
+                </article>
+                <article class="design-summary-card" id="design-tower-defense-c2ed5259">
+                    <p class="project-status">游戏设计范式 · 2026-08-03</p>
+                    <h3>塔防游戏</h3>
+                    <p>将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。</p>
+                    <div class="note-tags"><span>defense</span><span>td</span><span>tower</span></div>
+                </article>
                 <article class="design-summary-card" id="design-civilization-strategy">
                     <p class="project-status">游戏设计范式 · 2026-07-31</p>
                     <h3>4X 文明战略游戏</h3>
