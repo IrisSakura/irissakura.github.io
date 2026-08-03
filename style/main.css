@@ -317,6 +317,7 @@ a {
     top: 0;
     left: 0;
     width: 100%;
+    border-bottom: 1px solid transparent;
     background-color: rgba(18, 18, 18, 0.95);
     backdrop-filter: blur(10px);
     z-index: 1000;
@@ -359,7 +360,8 @@ a {
     gap: 0.65rem;
 }
 
-.theme-picker {
+.theme-picker,
+.layout-picker {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -372,13 +374,16 @@ a {
 }
 
 .theme-picker:hover,
-.theme-picker:focus-within {
+.theme-picker:focus-within,
+.layout-picker:hover,
+.layout-picker:focus-within {
     border-color: var(--secondary-color);
     color: white;
     background: rgba(37, 117, 252, 0.14);
 }
 
-.theme-picker > i {
+.theme-picker > i,
+.layout-picker > i {
     position: absolute;
     left: 0.7rem;
     z-index: 1;
@@ -386,7 +391,8 @@ a {
     pointer-events: none;
 }
 
-.theme-picker::after {
+.theme-picker::after,
+.layout-picker::after {
     content: "";
     position: absolute;
     right: 0.72rem;
@@ -398,7 +404,8 @@ a {
     transform: translateY(-2px) rotate(45deg);
 }
 
-.theme-select {
+.theme-select,
+.layout-select {
     width: 8.6rem;
     min-height: 40px;
     padding: 0.45rem 1.7rem 0.45rem 2rem;
@@ -411,7 +418,8 @@ a {
     cursor: pointer;
 }
 
-.theme-select option {
+.theme-select option,
+.layout-select option {
     color: var(--light-color);
     background: var(--dark-color);
 }
@@ -978,6 +986,7 @@ a {
 
 /* 页脚 */
 .footer {
+    border-top: 1px solid transparent;
     background-color: rgba(0, 0, 0, 0.8);
     padding: 3rem 0 1.5rem;
     margin-top: 3rem;
@@ -1103,11 +1112,12 @@ a {
 /* 响应式设计 */
 @media (max-width: 992px) {
     .nav-menu {
-        gap: 1rem;
+        gap: 0.75rem;
     }
 
-    .theme-select {
-        width: 7.5rem;
+    .theme-select,
+    .layout-select {
+        width: 6.8rem;
     }
 
     .logo {
@@ -1143,6 +1153,7 @@ a {
         left: -100%;
         width: 100%;
         flex-direction: column;
+        border: 1px solid transparent;
         background-color: var(--dark-color);
         padding: 2rem;
         transition: var(--transition);
@@ -1161,6 +1172,33 @@ a {
     .mobile-toggle {
         display: grid;
         place-items: center;
+    }
+
+    .theme-picker,
+    .layout-picker {
+        width: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        overflow: hidden;
+    }
+
+    .theme-picker > i,
+    .layout-picker > i {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .theme-picker::after,
+    .layout-picker::after {
+        display: none;
+    }
+
+    .theme-select,
+    .layout-select {
+        width: 44px;
+        min-height: 44px;
+        padding: 0;
+        color: transparent;
     }
 
     h1 {

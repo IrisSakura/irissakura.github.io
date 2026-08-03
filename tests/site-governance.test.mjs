@@ -237,6 +237,7 @@ test('profile and major page covers are generated from one local configuration',
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
   const themeConfig = JSON.parse(await readText('data/themes.json'));
+  const layoutConfig = JSON.parse(await readText('data/layouts.json'));
   const pages = [
     'index.html',
     '404.html',
@@ -261,6 +262,12 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'class="theme-select"',
       'aria-label="选择页面主题"',
       'option value="system"',
+      'layout-styles:start',
+      'data-layout-stylesheet',
+      'data-layouts=',
+      'layout-bootstrap:start',
+      'class="layout-select"',
+      'aria-label="选择页面布局"',
       'dist/site.js'
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
@@ -274,6 +281,14 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       html.indexOf('theme-bootstrap:start') < html.indexOf('</head>'),
       `${page} must apply the theme before body rendering`
     );
+    assert.ok(
+      html.indexOf('layout-styles:start') < html.indexOf('layout-bootstrap:start'),
+      `${page} must load layout styles before applying the stored preference`
+    );
+    assert.ok(
+      html.indexOf('layout-bootstrap:start') < html.indexOf('</head>'),
+      `${page} must apply the layout before body rendering`
+    );
     for (const theme of themeConfig.themes) {
       assert.ok(
         html.includes(`option value="${theme.id}"`),
@@ -284,6 +299,18 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       assert.ok(
         html.includes(stylesheet),
         `${page} missing registered theme stylesheet ${stylesheet}`
+      );
+    }
+    for (const layout of layoutConfig.layouts) {
+      assert.ok(
+        html.includes(`option value="${layout.id}"`),
+        `${page} missing registered layout option ${layout.id}`
+      );
+    }
+    for (const stylesheet of new Set(layoutConfig.layouts.flatMap((layout) => layout.stylesheets))) {
+      assert.ok(
+        html.includes(stylesheet),
+        `${page} missing registered layout stylesheet ${stylesheet}`
       );
     }
   }
@@ -308,6 +335,51 @@ test('theme selector follows the registry and system until the visitor stores a 
   assert.ok(navbar.includes('{{themeOptions}}'));
   assert.ok(navbar.includes('data-default-light="{{defaultLightTheme}}"'));
   assert.equal(themeConfig.storageKey, 'irissakura-theme');
+});
+
+test('layout selector follows its own registry and stored preference', async () => {
+  const [siteSource, generator, navbar, layoutConfig] = await Promise.all([
+    readText('src/site.ts'),
+    readText('scripts/generate-site.mjs'),
+    readText('components/navbar.html'),
+    readText('data/layouts.json').then(JSON.parse)
+  ]);
+
+  assert.ok(generator.includes("readJson('data/layouts.json')"));
+  assert.ok(generator.includes('assertLayoutConfig'));
+  assert.ok(generator.includes('renderLayoutOptions'));
+  assert.ok(generator.includes('renderLayoutStyles'));
+  assert.ok(siteSource.includes("querySelector<HTMLSelectElement>('.layout-select')"));
+  assert.ok(siteSource.includes('applyLayoutPreference'));
+  assert.ok(siteSource.includes('localStorage.setItem'));
+  assert.ok(navbar.includes('{{layoutOptions}}'));
+  assert.ok(navbar.includes('data-default-layout="{{defaultLayout}}"'));
+  assert.equal(layoutConfig.storageKey, 'irissakura-layout');
+});
+
+test('layout registry keeps standard geometry as the default and owns layout styles', async () => {
+  const [themeConfig, layoutConfig] = await Promise.all([
+    readText('data/themes.json').then(JSON.parse),
+    readText('data/layouts.json').then(JSON.parse)
+  ]);
+  const ids = layoutConfig.layouts.map((layout) => layout.id);
+  assert.deepEqual(ids, ['standard', 'compact', 'wide']);
+  assert.equal(layoutConfig.default, 'standard');
+  assert.deepEqual(
+    layoutConfig.layouts.find((layout) => layout.id === 'standard')?.stylesheets,
+    []
+  );
+
+  const layoutStylesheets = new Set(layoutConfig.layouts.flatMap((layout) => layout.stylesheets));
+  assert.deepEqual(
+    [...layoutStylesheets].sort(),
+    ['style/layout-compact.css', 'style/layout-wide.css']
+  );
+  const themeStylesheets = new Set(themeConfig.themes.flatMap((theme) => theme.stylesheets));
+  for (const stylesheet of layoutStylesheets) {
+    assert.ok(!themeStylesheets.has(stylesheet), `${stylesheet} must not be owned by a theme`);
+    await readText(stylesheet);
+  }
 });
 
 test('shared motion adds progressive depth without hiding content for reduced-motion visitors', async () => {
@@ -374,6 +446,76 @@ test('theme registry supports shared layers and the sakura village atmosphere', 
   for (const motif of ['--torii', '--sakura', '.hero-section::before', '.theme-picker']) {
     assert.ok(sakuraCss.includes(motif), `sakura theme missing motif ${motif}`);
   }
+});
+
+test('theme styles only change palette, typography and decoration', async () => {
+  const config = JSON.parse(await readText('data/themes.json'));
+  const stylesheets = new Set(config.themes.flatMap((theme) => theme.stylesheets));
+  const presentationProperties = new Set([
+    'backdrop-filter',
+    'background',
+    'background-blend-mode',
+    'background-clip',
+    'background-color',
+    'background-image',
+    'background-origin',
+    'background-position',
+    'background-repeat',
+    'background-size',
+    'border-bottom-color',
+    'border-color',
+    'border-left-color',
+    'border-radius',
+    'border-right-color',
+    'border-top-color',
+    'box-shadow',
+    'color',
+    'filter',
+    'font-family',
+    'font-style',
+    'font-variant',
+    'font-weight',
+    'isolation',
+    'letter-spacing',
+    'mask-image',
+    'mask-position',
+    'mask-repeat',
+    'mask-size',
+    'mix-blend-mode',
+    'opacity',
+    'outline-color',
+    'scrollbar-color',
+    'text-decoration',
+    'text-decoration-color',
+    'text-shadow',
+    'text-transform',
+    'text-underline-offset',
+    'text-wrap'
+  ]);
+  const violations = [];
+
+  for (const stylesheet of stylesheets) {
+    const css = (await readText(stylesheet)).replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const selector = match[1].trim();
+      const selectors = selector.split(',').map((part) => part.trim());
+      const isDecoration = selectors.every((part) => /::(?:before|after|selection)\b/.test(part));
+      if (isDecoration) continue;
+
+      for (const declaration of match[2].matchAll(/(?:^|;)\s*([\w-]+)\s*:/gm)) {
+        const property = declaration[1];
+        if (!property.startsWith('--') && !presentationProperties.has(property)) {
+          violations.push(`${stylesheet}: ${selector} uses ${property}`);
+        }
+      }
+    }
+  }
+
+  assert.deepEqual(
+    violations,
+    [],
+    `theme styles must not override shared layout or positioning:\n${violations.join('\n')}`
+  );
 });
 
 test('placeholder blog, simulated form and unsupported template claims are absent', async () => {

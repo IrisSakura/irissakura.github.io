@@ -6,11 +6,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, projectData, siteData, themeConfig, sitemap] = await Promise.all([
+const [journalSource, projectData, siteData, themeConfig, layoutConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('data/projects.json'),
   readJson('data/site.json'),
   readJson('data/themes.json'),
+  readJson('data/layouts.json'),
   readFile(path.join(root, 'sitemap.xml'), 'utf8')
 ]);
 const indexedRoutes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
@@ -160,6 +161,124 @@ try {
   }
   await lightThemePage.close();
 
+  const layoutContext = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
+  const layoutPage = await layoutContext.newPage();
+  await keepSmokeTestLocal(layoutPage);
+  await layoutPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const layoutSelect = layoutPage.getByLabel('选择页面布局');
+  const themeSelect = layoutPage.getByLabel('选择页面主题');
+  if (await layoutSelect.count() !== 1) throw new Error('layout selector is missing from the shared navigation');
+  for (const layout of layoutConfig.layouts) {
+    if (await layoutSelect.locator(`option[value="${layout.id}"]`).count() !== 1) {
+      throw new Error(`layout selector is missing registered option ${layout.id}`);
+    }
+  }
+  await themeSelect.selectOption('sakura-village');
+  await layoutSelect.selectOption('standard');
+  const standardGeometry = await layoutPage.locator('.hero-section .hero').evaluate((element) => ({
+    width: element.getBoundingClientRect().width,
+    height: element.getBoundingClientRect().height
+  }));
+  await layoutSelect.selectOption('compact');
+  const compactGeometry = await layoutPage.locator('.hero-section .hero').evaluate((element) => ({
+    width: element.getBoundingClientRect().width,
+    height: element.getBoundingClientRect().height
+  }));
+  await layoutSelect.selectOption('wide');
+  const wideGeometry = await layoutPage.locator('.hero-section .hero').evaluate((element) => ({
+    width: element.getBoundingClientRect().width,
+    height: element.getBoundingClientRect().height
+  }));
+  if (!(compactGeometry.width < standardGeometry.width && compactGeometry.height < standardGeometry.height)) {
+    throw new Error(`compact layout did not reduce homepage geometry: ${JSON.stringify({ standardGeometry, compactGeometry })}`);
+  }
+  if (!(wideGeometry.width > standardGeometry.width && wideGeometry.height > standardGeometry.height)) {
+    throw new Error(`wide layout did not expand homepage geometry: ${JSON.stringify({ standardGeometry, wideGeometry })}`);
+  }
+  if (await documentTheme(layoutPage) !== 'sakura-village') {
+    throw new Error('switching layouts changed the active theme');
+  }
+  await themeSelect.selectOption('night');
+  if (await layoutPage.getAttribute('html', 'data-layout') !== 'wide') {
+    throw new Error('switching themes changed the active layout');
+  }
+  const storedPreferences = await layoutPage.evaluate(({ themeKey, layoutKey }) => ({
+    theme: localStorage.getItem(themeKey),
+    layout: localStorage.getItem(layoutKey)
+  }), {
+    themeKey: themeConfig.storageKey,
+    layoutKey: layoutConfig.storageKey
+  });
+  if (storedPreferences.theme !== 'night' || storedPreferences.layout !== 'wide') {
+    throw new Error(`theme and layout preferences were not stored independently: ${JSON.stringify(storedPreferences)}`);
+  }
+  const layoutSyncPage = await layoutContext.newPage();
+  await keepSmokeTestLocal(layoutSyncPage);
+  await layoutSyncPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  if (await layoutSyncPage.getAttribute('html', 'data-layout') !== 'wide') {
+    throw new Error('a second page did not restore the current layout preference');
+  }
+  await layoutSelect.selectOption('compact');
+  await layoutSyncPage.waitForFunction(() => document.documentElement.dataset.layout === 'compact');
+  await layoutSyncPage.getByLabel('选择页面布局').selectOption('wide');
+  await layoutPage.waitForFunction(() => document.documentElement.dataset.layout === 'wide');
+  if (await documentTheme(layoutPage) !== 'night' || await documentTheme(layoutSyncPage) !== 'night') {
+    throw new Error('cross-tab layout synchronization changed the active theme');
+  }
+  await layoutSyncPage.close();
+  await layoutPage.reload({ waitUntil: 'networkidle' });
+  if (
+    await documentTheme(layoutPage) !== 'night'
+    || await layoutPage.getAttribute('html', 'data-layout') !== 'wide'
+    || await layoutPage.getByLabel('选择页面布局').inputValue() !== 'wide'
+  ) {
+    throw new Error('stored theme and layout were not restored before runtime initialization');
+  }
+  await layoutPage.locator('.nav-menu').getByRole('link', { name: '关于', exact: true }).click();
+  await layoutPage.waitForURL(`${baseUrl}/pages/about.html`);
+  if (await layoutPage.getAttribute('html', 'data-layout') !== 'wide') {
+    throw new Error('soft navigation reset the active layout');
+  }
+  const activeLayoutStyles = await layoutPage.locator('[data-layout-stylesheet]').evaluateAll((stylesheets) => (
+    stylesheets.filter((stylesheet) => stylesheet instanceof HTMLLinkElement && !stylesheet.disabled)
+      .map((stylesheet) => stylesheet.getAttribute('href'))
+  ));
+  if (activeLayoutStyles.length !== 1 || !activeLayoutStyles[0]?.endsWith('/style/layout-wide.css')) {
+    throw new Error(`soft navigation did not preserve the wide layout stylesheet: ${JSON.stringify(activeLayoutStyles)}`);
+  }
+  await layoutPage.getByLabel('选择页面布局').selectOption(layoutConfig.default);
+  await layoutPage.getByLabel('选择页面主题').selectOption('system');
+  const intermediateViewportFailures = [];
+  for (const width of [1280, 992, 900, 769]) {
+    await layoutPage.setViewportSize({ width, height: 900 });
+    await layoutPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    const navigationGeometry = await layoutPage.locator('.nav-container').evaluate((container) => {
+      const logo = container.querySelector('.logo')?.getBoundingClientRect();
+      const menu = container.querySelector('.nav-menu')?.getBoundingClientRect();
+      const actions = container.querySelector('.nav-actions')?.getBoundingClientRect();
+      return {
+        logoRight: logo?.right ?? 0,
+        menuLeft: menu?.left ?? 0,
+        menuRight: menu?.right ?? 0,
+        actionsLeft: actions?.left ?? 0,
+        actionsRight: actions?.right ?? 0,
+        viewportWidth: window.innerWidth
+      };
+    });
+    if (
+      navigationGeometry.logoRight > navigationGeometry.menuLeft
+      || navigationGeometry.menuRight > navigationGeometry.actionsLeft
+      || navigationGeometry.actionsRight > navigationGeometry.viewportWidth
+    ) {
+      intermediateViewportFailures.push(`${width}px ${JSON.stringify(navigationGeometry)}`);
+    }
+  }
+  if (intermediateViewportFailures.length > 0) {
+    throw new Error(`layout selector causes intermediate navigation overlap:\n${intermediateViewportFailures.join('\n')}`);
+  }
+  await layoutPage.close();
+  await layoutContext.close();
+
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await keepSmokeTestLocal(desktop);
   for (const route of indexedRoutes) {
@@ -266,6 +385,19 @@ try {
     throw new Error('mobile homepage still ships the retired BGM player');
   }
   const toggle = mobile.locator('.mobile-toggle');
+  const mobileLayoutSelect = mobile.getByLabel('选择页面布局');
+  if (!await mobileLayoutSelect.isVisible()) throw new Error('mobile layout selector is not visible');
+  const mobileLayoutControl = await mobile.locator('.layout-picker').evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
+  if (mobileLayoutControl.width < 44 || mobileLayoutControl.height < 44) {
+    throw new Error(`mobile layout selector is smaller than the touch target: ${JSON.stringify(mobileLayoutControl)}`);
+  }
+  await mobileLayoutSelect.selectOption('compact');
+  if (await mobile.getAttribute('html', 'data-layout') !== 'compact') {
+    throw new Error('mobile layout selector did not apply the selected preset');
+  }
   if (await toggle.getAttribute('aria-label') !== '打开导航菜单') throw new Error('mobile menu lacks its initial accessible name');
   if (!await toggle.isVisible()) {
     const mobileState = await mobile.evaluate(() => {
