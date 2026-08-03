@@ -20,7 +20,7 @@
     <meta name="theme-color" content="#d7e8eb">
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura","description":"从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。","url":"https://irissakura.github.io/pages/blog/unity-hot-update-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"dateModified":"2026-07-30","about":["hot-update","modding","transactions","unity"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura","description":"从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。","url":"https://irissakura.github.io/pages/blog/unity-hot-update-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"dateModified":"2026-08-03","about":["hot-update","modding","transactions","unity"]}</script>
     <!-- site-meta:end -->
     <title>Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -146,7 +146,7 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker">Sakura Framework 工程实践 · 2026-07-30</p>
+            <p class="journal-kicker">Sakura Framework 工程实践 · 2026-08-03</p>
             <h1>Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成</h1>
             <p class="blog-deck">从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。</p>
             <div class="note-tags"><span>hot-update</span><span>modding</span><span>transactions</span><span>unity</span></div>
@@ -173,7 +173,7 @@
 <p>热更新首先是一套跨越磁盘状态与运行时状态的可恢复事务，加载代码只是其中一种内容处理方式。</p>
 </blockquote>
 <h2>先说结论：更新完成，需要磁盘与 Runtime 对同一版本达成一致</h2>
-<p><strong>热更新事务提交边界（后文简称“整套换挡点”）</strong>：新版本的存储指向与运行时状态都已完成切换，失败恢复责任也已经结清的边界。</p>
+<p><strong>热更新事务提交边界（即“整套换挡点”）</strong>：新版本的存储指向与运行时状态都已完成切换，失败恢复责任也已经结清的边界。</p>
 <p>这个定义里有两个不能拆开的事实：</p>
 <ol>
 <li>磁盘需要知道“当前活动版本是谁”。</li>
@@ -184,9 +184,9 @@
 <p>因此，整套换挡点不能等同于下载完成、Hash 校验通过、文件替换成功或 DLL 入口被调用。它必须覆盖整个切换过程。</p>
 <h2>三个基础结构：候选仓、指路牌与进度单</h2>
 <p>为了让更新可恢复，Sakura Framework 当前的严格更新路径使用了三个彼此分离的结构。</p>
-<p><strong>不可变版本目录（后文简称“候选仓”）</strong>：每个已验证版本写入独立目录，已存版本不在原地改写。</p>
-<p><strong>活动版本指针（后文简称“指路牌”）</strong>：一个很小的持久化记录，指出下一次启动应采用哪个版本及其包指纹。</p>
-<p><strong>更新 Journal（后文简称“进度单”）</strong>：记录一次更新的操作身份、旧指针、候选指针与最近完成阶段。</p>
+<p><strong>不可变版本目录（即“候选仓”）</strong>：每个已验证版本写入独立目录，已存版本不在原地改写。</p>
+<p><strong>活动版本指针（即“指路牌”）</strong>：一个很小的持久化记录，指出下一次启动应采用哪个版本及其包指纹。</p>
+<p><strong>更新 Journal（即“进度单”）</strong>：记录一次更新的操作身份、旧指针、候选指针与最近完成阶段。</p>
 <p>它们分别回答三个问题：</p>
 <table>
 <thead>
@@ -228,7 +228,7 @@
     Q --&gt;|"否"| T["Degraded 或 RecoveryRequired：停止继续变更"]
 </code></pre>
 <p>这里最关键的一步是 <code>Prepare</code>。</p>
-<p><strong>Shadow Runtime（后文简称“后台试运行”）</strong>：候选内容已经被解析、编译或组装，但尚未发布为全局可见状态的运行时。</p>
+<p><strong>Shadow Runtime（即“后台试运行”）</strong>：候选内容已经被解析、编译或组装，但尚未发布为全局可见状态的运行时。</p>
 <p>后台试运行阶段允许系统发现问题，却不能提前让一半新状态泄漏给业务层。只有它准备成功，流程才切换指路牌，再提交新的 Runtime。</p>
 <p>这其实是一种很克制的顺序：</p>
 <ol>
@@ -248,7 +248,7 @@
 <li>同一恢复动作可以重复执行，不会因为第二次启动又把状态翻转一次。</li>
 </ul>
 <p>这种策略的重点不是“尽量自动修好”，而是“只做能够证明安全的恢复”。</p>
-<p>我更愿意把它称为<strong>失败封闭（后文简称“看不懂就别继续动”）</strong>：当系统无法确认真实状态时，停止继续更新，把问题暴露给诊断和人工处置。</p>
+<p>我更愿意把它称为<strong>失败封闭（即“看不懂就别继续动”）</strong>：当系统无法确认真实状态时，停止继续更新，把问题暴露给诊断和人工处置。</p>
 <h2>信任校验不能只回答“文件有没有被改过”</h2>
 <p>SHA-256 可以证明下载到的字节是否与发布记录一致，签名可以证明这些字节来自某个密钥，但它们仍没有回答：</p>
 <ul>
