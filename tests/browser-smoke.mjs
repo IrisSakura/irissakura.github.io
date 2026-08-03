@@ -6,9 +6,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, projectData, siteData, themeConfig, layoutConfig, sitemap] = await Promise.all([
+const [journalSource, blogPublication, blogTaxonomy, evidenceChains, projectData, frameworkQuickstart, siteData, themeConfig, layoutConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
+  readJson('config/blog-publication.json'),
+  readJson('data/blog-taxonomy.json'),
+  readJson('data/evidence-chains.json'),
   readJson('data/projects.json'),
+  readJson('data/framework-quickstart.json'),
   readJson('data/site.json'),
   readJson('data/themes.json'),
   readJson('data/layouts.json'),
@@ -17,7 +21,11 @@ const [journalSource, projectData, siteData, themeConfig, layoutConfig, sitemap]
 const indexedRoutes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
   .map(([, location]) => new URL(location).pathname);
 if (indexedRoutes.length === 0) throw new Error('sitemap does not expose any indexable routes');
-const [representativeBlog] = journalSource.blogs;
+const journalBlogsById = new Map(journalSource.blogs.map((article) => [article.id, article]));
+const publishedBlogs = blogPublication.articles
+  .filter((article) => ['approved', 'published'].includes(article.status))
+  .map((article) => ({ ...journalBlogsById.get(article.sourceId), ...article }));
+const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.category === 'game');
 if (!gameProject) throw new Error('project registry does not contain a game case');
@@ -46,12 +54,26 @@ const lightThemeContrastRoutes = [
     ]
   },
   {
+    route: '/pages/framework-quickstart.html',
+    checks: [
+      ['Quickstart hero duration', '.quickstart-hero-summary strong'],
+      ['Quickstart route package names', '.quickstart-package-sequence code'],
+      ['Quickstart timeline markers', '.quickstart-step-marker'],
+      ['Quickstart completion labels', '.quickstart-done strong'],
+      ['Quickstart Preview badge', '.preview-badge']
+    ]
+  },
+  {
     route: '/pages/journal.html',
     checks: [
       ['Journal back link', '.journal-back'],
       ['Journal dashboard label', '.journal-dashboard-label'],
       ['Journal dashboard values', '.journal-metric strong'],
-      ['Journal dashboard metric labels', '.journal-metric span']
+      ['Journal dashboard metric labels', '.journal-metric span'],
+      ['Evidence chain heading', '.evidence-chain-card h3'],
+      ['Evidence chain question', '.evidence-chain-question'],
+      ['Evidence chain path', '.evidence-chain-path strong'],
+      ['Evidence chain boundary', '.evidence-chain-limit']
     ]
   },
   {
@@ -71,7 +93,9 @@ const lightThemeContrastRoutes = [
   {
     route: '/pages/blog.html',
     checks: [
-      ['Blog cover description', '.blog-hero > .container > p:not(.section-kicker)']
+      ['Blog cover description', '.blog-hero > .container > p:not(.section-kicker)'],
+      ['Blog series card', '.blog-series-list > a'],
+      ['Blog tag chip', '.blog-tag-list > a']
     ]
   },
   {
@@ -351,6 +375,23 @@ try {
     await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'home-desktop.png'), fullPage: true });
     await desktop.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
     await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-desktop.png'), fullPage: true });
+    await desktop.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
+    await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-quickstart-desktop.png'), fullPage: true });
+  }
+
+  await desktop.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
+  if (await desktop.locator('.quickstart-step').count() !== frameworkQuickstart.steps.length) {
+    throw new Error('Quickstart does not render every registered step');
+  }
+  if (await desktop.locator('.quickstart-code pre').count() !== frameworkQuickstart.steps.filter((step) => step.code).length) {
+    throw new Error('Quickstart does not render every registered code probe');
+  }
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: 'Framework' }).isVisible()) {
+    throw new Error('Quickstart does not keep the Framework navigation context');
+  }
+  const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  if (quickstartDesktopOverflow > 1) {
+    throw new Error(`Quickstart overflows the desktop viewport by ${quickstartDesktopOverflow}px`);
   }
 
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
@@ -362,14 +403,29 @@ try {
   for (const forbidden of ['确定性目录条目', '稳定 ID', '同步来源固定为 Journal 提交', '按 Journal 固定提交导出']) {
     if (journalText.includes(forbidden)) throw new Error(`Journal exposes maintainer-only copy: ${forbidden}`);
   }
+  if (await desktop.locator('.evidence-chain-card').count() !== evidenceChains.chains.length) {
+    throw new Error('research page does not expose every reviewed evidence chain');
+  }
 
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
-  if (await desktop.locator('.blog-card').count() !== journalSource.blogs.length) throw new Error('blog index does not expose the registered complete articles');
+  if (await desktop.locator('.blog-card').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
+  if (await desktop.locator('.blog-series-list > a').count() !== blogTaxonomy.series.length) throw new Error('blog index series registry is incomplete');
+  if (await desktop.locator('.blog-tag-list > a').count() !== blogTaxonomy.tags.length) throw new Error('blog index tag registry is incomplete');
+  if (await desktop.locator('a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
   const blogIndexText = await desktop.locator('body').innerText();
   if (blogIndexText.includes('来源提交') || blogIndexText.includes('经过登记与安全检查')) {
     throw new Error('blog index exposes the internal publication pipeline');
   }
-  await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.id)}.html"]`).click();
+  const representativeSeries = blogTaxonomy.series.find((entry) => entry.name === representativeBlog.series);
+  await desktop.goto(`${baseUrl}/pages/blog/series/${representativeSeries.slug}.html`, { waitUntil: 'networkidle' });
+  if (!await desktop.getByRole('heading', { level: 1, name: representativeSeries.name }).isVisible()) {
+    throw new Error('representative series route is not visible');
+  }
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '研究与文章' }).isVisible()) {
+    throw new Error('series route does not keep the research navigation context');
+  }
+  await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
+  await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.slug)}.html"]`).click();
   await desktop.getByRole('heading', {
     level: 1,
     name: representativeBlog.title,
@@ -377,6 +433,7 @@ try {
   }).waitFor({ state: 'visible' });
   if (!await desktop.locator('.blog-prose').isVisible()) throw new Error('complete blog body is not visible');
   if (await desktop.locator('.blog-source-note').count() !== 0) throw new Error('blog article exposes a generator source note');
+  if (await desktop.locator('.related-articles a').count() !== 3) throw new Error('complete blog article does not expose three related routes');
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await keepSmokeTestLocal(mobile);
@@ -417,6 +474,25 @@ try {
   await mobile.keyboard.press('Escape');
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 
+  await mobile.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
+  const quickstartMobileState = await mobile.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    steps: document.querySelectorAll('.quickstart-step').length,
+    codeBlocks: document.querySelectorAll('.quickstart-code pre').length
+  }));
+  if (quickstartMobileState.overflow > 1) {
+    throw new Error(`Quickstart overflows the mobile viewport by ${quickstartMobileState.overflow}px`);
+  }
+  if (quickstartMobileState.steps !== frameworkQuickstart.steps.length) {
+    throw new Error('mobile Quickstart does not expose every registered step');
+  }
+  if (quickstartMobileState.codeBlocks !== frameworkQuickstart.steps.filter((step) => step.code).length) {
+    throw new Error('mobile Quickstart does not expose every registered code probe');
+  }
+  if (process.env.SITE_SCREENSHOT_DIR) {
+    await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-quickstart-mobile.png'), fullPage: true });
+  }
+
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
   const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '联系我', exact: true });
   if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 联系我');
@@ -433,6 +509,7 @@ try {
     if (!await mobile.locator(`.public-route-card[href="${social.url}"]`).isVisible()) throw new Error(`verified public route is missing: ${social.id}`);
   }
   if (!await mobile.getByRole('heading', { name: '适合交流的主题' }).isVisible()) throw new Error('discussion scope is missing');
+  if (!await mobile.getByText(siteData.independenceNotice, { exact: true }).isVisible()) throw new Error('personal and employer boundary is missing');
   if (await mobile.getByRole('heading', { name: '当前公开沟通边界' }).count() !== 0) {
     throw new Error('Contact page exposes the owner-only communication boundary');
   }

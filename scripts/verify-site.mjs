@@ -23,6 +23,7 @@ for (const relativeFile of htmlFiles) {
   checkCount(relativeFile, html, /<title>[^<]+<\/title>/g, 1, 'title');
   checkCount(relativeFile, html, /<meta name="description"[^>]+>/g, 1, 'meta description');
   checkCount(relativeFile, html, /<link rel="canonical"[^>]+>/g, 1, 'canonical');
+  checkCount(relativeFile, html, /<meta property="og:image"[^>]+>/g, 1, 'Open Graph image');
   checkCount(relativeFile, html, /<main\b[^>]*id="main-content"[^>]*>/g, 1, 'main landmark');
   checkCount(relativeFile, html, /<nav class="navbar"/g, 1, 'navigation');
   checkCount(relativeFile, html, /<footer class="footer"/g, 1, 'footer');
@@ -60,7 +61,7 @@ for (const relativeFile of htmlFiles) {
   }
 }
 
-for (const required of ['robots.txt', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json']) {
+for (const required of ['robots.txt', 'rss.xml', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json', 'data/framework-quickstart.json', 'data/blog-taxonomy.json', 'data/evidence-chains.json']) {
   try {
     await access(path.join(root, required));
   } catch {

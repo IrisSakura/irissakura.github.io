@@ -9,12 +9,14 @@ import {
   stringifyJson,
   validateJournalSource
 } from './lib/journal-import-model.mjs';
+import { selectPublishedBlogs } from './lib/blog-publication-model.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const options = parseOptions(process.argv.slice(2));
 const input = path.resolve(options.input);
 const source = JSON.parse(await readFile(path.join(input, 'journal-source.json'), 'utf8'));
 const curation = JSON.parse(await readFile(path.join(root, 'config/journal-curation.json'), 'utf8'));
+const publication = JSON.parse(await readFile(path.join(root, 'config/blog-publication.json'), 'utf8'));
 const sourceBlogDirectory = path.join(input, 'blogs');
 const blogFiles = (await readdir(sourceBlogDirectory)).filter((entry) => entry.endsWith('.md')).sort();
 const expectedBlogFiles = source.blogs.map((blog) => `${blog.id}.md`).sort();
@@ -25,6 +27,7 @@ const blogBodies = new Map(await Promise.all(source.blogs.map(async (blog) => (
   [blog.id, await readFile(path.join(sourceBlogDirectory, `${blog.id}.md`))]
 ))));
 validateJournalSource(source, blogBodies);
+selectPublishedBlogs(publication, source, blogBodies);
 const journal = buildJournalSnapshot(curation, source);
 
 const expected = new Map([

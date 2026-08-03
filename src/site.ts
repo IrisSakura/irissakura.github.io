@@ -6,7 +6,6 @@ const FALLBACK_LAYOUT_STORAGE_KEY = 'irissakura-layout';
 const REVEAL_SELECTOR = [
     '.hero-content > *',
     '.hero-proof',
-    '.profile-card-body > *',
     '.evidence-grid > *',
     '.flagship-grid > *',
     '.section-heading',
@@ -14,6 +13,7 @@ const REVEAL_SELECTOR = [
     '.method-chain > *',
     '.case-list > *',
     '.research-list > *',
+    '.evidence-chain-grid > *',
     '.portfolio-header .container > *',
     '.portfolio-cases > *',
     '.framework-hero-grid > *',
@@ -30,6 +30,9 @@ const REVEAL_SELECTOR = [
     '.design-summary-grid > *',
     '.blog-hero .container > *',
     '.blog-card-grid > *',
+    '.blog-series-list > *',
+    '.blog-tag-list > *',
+    '.related-articles a',
     '.about-intro-grid > *',
     '.about-story-grid > *',
     '.about-focus-list > *',
@@ -43,8 +46,9 @@ const REVEAL_SELECTOR = [
 ].join(',');
 const DEPTH_SELECTOR = [
     '.project-card',
-    '.profile-card',
     '.blog-card',
+    '.blog-series-list > a',
+    '.related-articles a',
     '.stream-card',
     '.note-card',
     '.journal-update-card',
@@ -59,7 +63,8 @@ const DEPTH_SELECTOR = [
     '.maturity-summary article',
     '.stable-route-list article',
     '.research-row',
-    '.method-chain li'
+    '.method-chain li',
+    '.evidence-chain-card'
 ].join(',');
 
 class SiteShell {

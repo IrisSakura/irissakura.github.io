@@ -30,12 +30,23 @@ test('portfolio data keeps research distinct from finished work', async () => {
   assert.deepEqual(titles, ['Sakura Design Journal', 'Sakura Framework', '言铸之剑']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
+    assert.match(project.updatedAt, /^\d{4}-\d{2}-\d{2}$/u, `${project.title} needs an update date`);
+    assert.match(project.lastReviewedAt, /^\d{4}-\d{2}-\d{2}$/u, `${project.title} needs a review date`);
     assert.ok(project.status.length > 0, `${project.title} needs a status`);
     assert.ok(project.role.length > 0, `${project.title} needs a role`);
     assert.ok(project.evidence.length > 0, `${project.title} needs evidence`);
     assert.ok(project.limitations.length > 0, `${project.title} needs limitations`);
     assert.ok(project.next.length > 0, `${project.title} needs next steps`);
+    assert.ok(project.milestones.length > 0, `${project.title} needs completed milestones`);
+    assert.deepEqual(
+      project.next.filter((entry) => project.milestones.includes(entry)),
+      [],
+      `${project.title} next steps must not repeat completed milestones`
+    );
   }
+
+  assert.equal(data.updatedAt, data.projects.map((project) => project.updatedAt).sort().at(-1));
+  assert.equal(data.projects.find((project) => project.id === 'sword-of-words').categoryLabel, '独立游戏项目');
 
   for (const fabricatedTitle of [
     '像素地牢',

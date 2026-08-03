@@ -9,8 +9,10 @@ const allowed = [
   /^index\.html$/,
   /^pages\/blog\.html$/,
   /^pages\/blog\/[a-z0-9-]+\.html$/,
+  /^pages\/blog\/(?:series|tag)\/[a-z0-9-]+\.html$/,
   /^pages\/journal\.html$/,
   /^pages\/portfolio\.html$/,
+  /^rss\.xml$/,
   /^sitemap\.xml$/
 ];
 

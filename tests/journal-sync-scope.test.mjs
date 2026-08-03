@@ -9,9 +9,12 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'data/journal-source.json',
     'pages/blog.html',
     'pages/blog/article.html',
+    'pages/blog/series/game-systems.html',
+    'pages/blog/tag/transactions.html',
     'pages/journal.html',
     'pages/portfolio.html',
     'index.html',
+    'rss.xml',
     'sitemap.xml'
   ]) {
     assert.equal(isJournalSyncOwnedPath(owned), true, `missing owned sync path ${owned}`);

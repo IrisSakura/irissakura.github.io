@@ -12,6 +12,7 @@ test('site configuration exposes verified direct contacts and public routes', as
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '可验证的 Unity 游戏系统开发者');
   assert.equal(site.tagline, '研究 · 框架 · 游戏验证');
+  assert.ok(site.independenceNotice.includes('仅代表本人'));
   assert.deepEqual(site.contacts.map((contact) => contact.id), ['work-email', 'work-qq']);
   const workEmail = site.contacts.find((contact) => contact.id === 'work-email');
   const workQq = site.contacts.find((contact) => contact.id === 'work-qq');
@@ -23,6 +24,7 @@ test('site configuration exposes verified direct contacts and public routes', as
   for (const social of site.socials) assert.match(social.url, /^https:\/\//);
 
   const contactPage = await readText('pages/contact.html');
+  assert.ok(contactPage.includes(site.independenceNotice));
   for (const contact of site.contacts) {
     for (const fragment of [contact.label, contact.value, contact.description]) {
       assert.ok(contactPage.includes(fragment), `contact page missing ${fragment}`);
@@ -176,13 +178,13 @@ test('public page chrome omits maintainer-only source and implementation hints',
   }
 });
 
-test('profile and major page covers are generated from one local configuration', async () => {
+test('identity and major page visuals are generated without avatar placeholders or reused category screenshots', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   const profile = site.profile;
   assert.equal(profile.displayName, 'IrisSakura');
   assert.ok(profile.bio.length > 20);
-  assert.ok(profile.focuses.length >= 3);
-  assert.match(profile.backgroundPosition, /^\d{1,3}% \d{1,3}%$/);
+  assert.equal(profile.avatar, undefined);
+  assert.equal(profile.backgroundImage, undefined);
 
   const majorPages = {
     home: 'index.html',
@@ -197,8 +199,6 @@ test('profile and major page covers are generated from one local configuration',
   assert.deepEqual(Object.keys(site.pageCovers).sort(), Object.keys(majorPages).sort());
 
   const localImages = [
-    profile.avatar,
-    profile.backgroundImage,
     ...Object.values(site.pageCovers).map((cover) => cover.image)
   ].filter(Boolean);
   for (const imagePath of localImages) {
@@ -207,32 +207,58 @@ test('profile and major page covers are generated from one local configuration',
   }
 
   const home = await readText('index.html');
-  for (const fragment of [
-    'class="profile-card"',
-    'id="profile-title"',
-    profile.displayName,
-    profile.role,
-    profile.backgroundImage
-  ]) {
-    assert.ok(home.includes(fragment), `home profile missing ${fragment}`);
-  }
-  if (profile.avatar) {
-    assert.ok(home.includes(profile.avatar));
-  } else {
-    assert.ok(home.includes('class="profile-avatar-fallback"'));
-    assert.ok(home.includes(profile.initials));
-  }
+  assert.ok(!home.includes('class="profile-card"'), 'home must not repeat the full identity card after the hero');
+  assert.ok(!home.includes('id="profile-title"'), 'home identity details belong on the About page');
+  const evidenceOffset = home.indexOf('class="evidence-strip"');
+  const flagshipOffset = home.indexOf('class="flagship-section"');
+  const casesOffset = home.indexOf('class="case-section"');
+  const methodOffset = home.indexOf('class="method-section"');
+  assert.ok(evidenceOffset > home.indexOf('class="hero-section"'), 'home evidence must follow the hero');
+  assert.ok(flagshipOffset > evidenceOffset, 'flagship proof must immediately follow the evidence summary');
+  assert.ok(casesOffset > flagshipOffset, 'concrete engineering cases must follow the flagship proof');
+  assert.ok(methodOffset > casesOffset, 'the abstract project chain must follow the concrete cases');
+
+  const cssVisualCovers = ['home', 'framework', 'journal', 'blog', 'about', 'contact'];
+  for (const coverKey of cssVisualCovers) assert.equal(site.pageCovers[coverKey].image, '', `${coverKey} must use a category visual`);
+  assert.notEqual(site.pageCovers.portfolio.image, site.pageCovers.game.image);
 
   for (const [coverKey, pagePath] of Object.entries(majorPages)) {
     const html = await readText(pagePath);
     const prefix = pagePath === 'index.html' ? '' : '../';
     assert.ok(html.includes('page-cover'), `${pagePath} missing shared page-cover class`);
     assert.ok(html.includes(`data-page-cover="${coverKey}"`), `${pagePath} missing ${coverKey} cover key`);
-    assert.ok(
-      html.includes(`${prefix}${site.pageCovers[coverKey].image}`),
-      `${pagePath} missing configured ${coverKey} cover image`
-    );
+    if (site.pageCovers[coverKey].image) {
+      assert.ok(html.includes(`${prefix}${site.pageCovers[coverKey].image}`), `${pagePath} missing configured ${coverKey} cover image`);
+    } else {
+      assert.ok(html.includes('--page-cover-image: none;'), `${pagePath} must use its CSS category cover`);
+    }
   }
+});
+
+test('research and articles share one primary navigation route without changing stable URLs', async () => {
+  for (const page of ['index.html', 'pages/journal.html', 'pages/blog.html']) {
+    const html = await readText(page);
+    const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
+    assert.equal((primaryNav.match(/研究与文章/g) ?? []).length, 1, `${page} must expose one research nav item`);
+    assert.ok(!primaryNav.includes('>Journal<'), `${page} must not expose a separate Journal nav item`);
+    assert.ok(!primaryNav.includes('>博客<'), `${page} must not expose a separate blog nav item`);
+  }
+
+  const journal = await readText('pages/journal.html');
+  const blog = await readText('pages/blog.html');
+  const activeResearchNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">研究与文章<\/a>/;
+  assert.match(journal, activeResearchNav);
+  assert.match(blog, activeResearchNav);
+});
+
+test('home hero and flagship use distinct existing game evidence', async () => {
+  const projects = JSON.parse(await readText('data/projects.json'));
+  const game = projects.projects.find((project) => project.id === 'sword-of-words');
+  const home = await readText('index.html');
+  assert.notEqual(game.homeImage, game.featureImage);
+  assert.equal((home.match(new RegExp(game.homeImage, 'g')) ?? []).length, 1);
+  assert.equal((home.match(new RegExp(game.featureImage, 'g')) ?? []).length, 1);
+  assert.ok(home.includes(game.featureImageAlt));
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {

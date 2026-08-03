@@ -12,6 +12,7 @@ const entries = [
   'dist',
   'pages',
   'robots.txt',
+  'rss.xml',
   'site.webmanifest',
   'sitemap.xml',
   'style'

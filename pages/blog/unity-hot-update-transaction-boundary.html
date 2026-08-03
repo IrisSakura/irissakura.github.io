@@ -11,16 +11,19 @@
     <meta property="og:title" content="Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura">
     <meta property="og:description" content="从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。">
     <meta property="og:url" content="https://irissakura.github.io/pages/blog/unity-hot-update-transaction-boundary.html">
-    <meta property="og:image" content="https://irissakura.github.io/assets/images/home-preview-pastoral.png">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unity-hot-update-transaction-boundary.png">
+    <meta property="og:image:alt" content="Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 的 IrisSakura 分享图">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura">
     <meta name="twitter:description" content="从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。">
-    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/home-preview-pastoral.png">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unity-hot-update-transaction-boundary.png">
+    <meta name="twitter:image:alt" content="Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 的 IrisSakura 分享图">
     <!-- indexable page -->
     <meta name="theme-color" content="#d7e8eb">
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura","description":"从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。","url":"https://irissakura.github.io/pages/blog/unity-hot-update-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"dateModified":"2026-08-03","about":["hot-update","modding","transactions","unity"]}</script>
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura","description":"从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。","url":"https://irissakura.github.io/pages/blog/unity-hot-update-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成","image":"https://irissakura.github.io/assets/social/pages-blog-unity-hot-update-transaction-boundary.png","datePublished":"2026-07-30","dateModified":"2026-08-03","about":["hot-update","modding","transactions","unity"]}</script>
     <!-- site-meta:end -->
     <title>Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -99,8 +102,7 @@
             <a href="../../index.html" class="nav-link">首页</a>
             <a href="../../pages/portfolio.html" class="nav-link">作品</a>
             <a href="../../pages/framework.html" class="nav-link">Framework</a>
-            <a href="../../pages/journal.html" class="nav-link">Journal</a>
-            <a href="../../pages/blog.html" class="nav-link active" aria-current="page">博客</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
             <a href="../../pages/about.html" class="nav-link">关于</a>
             <a href="../../pages/contact.html" class="nav-link">联系我</a>
         </div>
@@ -146,18 +148,12 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker">Sakura Framework 工程实践 · 2026-08-03</p>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-07-30 · 更新于 2026-08-03</p>
             <h1>Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成</h1>
             <p class="blog-deck">从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。</p>
-            <div class="note-tags"><span>hot-update</span><span>modding</span><span>transactions</span><span>unity</span></div>
+            <div class="note-tags"><a href="tag/hot-update.html">hot-update</a><a href="tag/modding.html">modding</a><a href="tag/transactions.html">transactions</a><a href="tag/unity.html">unity</a></div>
         </header>
-        <div class="blog-prose"><blockquote>
-<p>系列：Sakura Framework 工程实践</p>
-<p>日期：2026-07-30</p>
-<p>状态：可发布候选</p>
-<p>核心问题：一次热更新究竟要到哪个时刻，才可以被系统承认为“已经完成”？</p>
-</blockquote>
-<p><a href="../blog.html">系列目录</a></p>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
 <p>开发热更新功能时，人很容易把注意力集中在最后一步：</p>
 <ul>
 <li>新配置能不能读出来；</li>
@@ -386,6 +382,11 @@
 <hr />
 <p>本文是基于 Sakura Framework 在 2026-07-30 的当前源码、规格、测试与本地证据做出的工程复盘，不是版本发布公告，也不把未执行的远程或跨平台验证写成已完成事实。</p>
 </div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="extraction-transaction-boundary.html"><span>共享 transactions</span><strong>撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手”</strong><small>从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。</small></a><a href="local-passed-runner-passed.html"><span>近期正式文章</span><strong>证据等级：为什么 local-passed 不能写成 runner-passed</strong><small>一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？</small></a><a href="metroidvania-capability-gated-topology.html"><span>近期正式文章</span><strong>世界拓扑与能力门控：为什么银河城地图其实是一张权限图</strong><small>从空间、权限与记忆三层解释银河城地图如何用能力门控改变可达范围，并让旧区域在成长后重新产生价值。</small></a></div>
+        </aside>
     </article>
 </main>
 <footer class="footer">
@@ -402,8 +403,7 @@
                 <h2>继续浏览</h2>
                 <a href="../../pages/portfolio.html">作品</a>
                 <a href="../../pages/framework.html">Framework</a>
-                <a href="../../pages/journal.html">Journal</a>
-                <a href="../../pages/blog.html">博客</a>
+                <a href="../../pages/journal.html">研究与文章</a>
                 <a href="../../pages/about.html">关于</a>
                 <a href="../../pages/contact.html">联系我</a>
             </div>

@@ -29,6 +29,78 @@
     padding: 5rem 0 7rem;
 }
 
+.blog-taxonomy {
+    padding: 5rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--light-color), transparent 86%);
+    background: color-mix(in srgb, var(--light-color), transparent 97%);
+}
+
+.blog-series-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.blog-series-list > a {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1.35rem;
+    border: 1px solid color-mix(in srgb, var(--light-color), transparent 84%);
+    border-radius: var(--border-radius);
+    background: color-mix(in srgb, var(--light-color), transparent 96%);
+}
+
+.blog-series-list > a:hover,
+.blog-series-list > a:focus-visible,
+.blog-tag-list > a:hover,
+.blog-tag-list > a:focus-visible {
+    border-color: var(--secondary-color);
+    background: color-mix(in srgb, var(--secondary-color), transparent 90%);
+}
+
+.blog-series-list span,
+.blog-tag-list span {
+    color: var(--secondary-text-color);
+    font-weight: 700;
+}
+
+.blog-series-list small {
+    color: var(--muted-text-color);
+}
+
+.blog-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+}
+
+.blog-tag-list > a,
+.note-tags a {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--light-color), transparent 82%);
+    border-radius: 999px;
+    color: var(--light-color);
+}
+
+.note-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.project-status a,
+.journal-kicker a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor, transparent 55%);
+    text-underline-offset: 0.2em;
+}
+
 .blog-card-grid,
 .journal-update-grid,
 .design-summary-grid {
@@ -144,6 +216,58 @@
     vertical-align: top;
 }
 
+.related-articles {
+    margin-top: 4.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--light-color), transparent 84%);
+}
+
+.related-articles h2 {
+    margin: 0.4rem 0 1.4rem;
+}
+
+.related-articles > div {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.related-articles a {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1.2rem;
+    border: 1px solid color-mix(in srgb, var(--light-color), transparent 84%);
+    border-radius: var(--border-radius);
+    background: color-mix(in srgb, var(--light-color), transparent 96%);
+}
+
+.related-articles a:hover,
+.related-articles a:focus-visible {
+    border-color: var(--secondary-color);
+}
+
+.related-articles span,
+.related-articles small {
+    color: var(--muted-text-color);
+}
+
+.blog-collection-hero {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--light-color), transparent 86%);
+    background: color-mix(in srgb, var(--light-color), transparent 97%);
+}
+
+.blog-collection-hero h1 {
+    margin: 0.65rem 0 1rem;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+}
+
+.blog-collection-hero p:last-child {
+    max-width: 760px;
+    color: var(--muted-text-color);
+    font-size: 1.08rem;
+}
+
 @media (max-width: 720px) {
     .blog-hero {
         padding-top: 5rem;
@@ -151,5 +275,10 @@
 
     .blog-prose {
         font-size: 1rem;
+    }
+
+    .blog-series-list,
+    .related-articles > div {
+        grid-template-columns: 1fr;
     }
 }

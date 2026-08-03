@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "adoptionReviewContract": "supported-stable-v1",
+  "adoptionReviewHash": "sha256:799ba16af4b1f0f653d095f5dabe87f6ed8283ed6da06eab8d20f30e61d545e9",
+  "updatedAt": "2026-08-03",
+  "title": "Sakura Framework 15 分钟快速开始",
+  "durationMinutes": 15,
+  "routeSequence": ["core-only", "bootstrap-lite"],
+  "channel": {
+    "label": "开发 / 评估入口",
+    "packageName": "com.unitygame.framework.editor-tools",
+    "installUrl": "https://github.com/IrisSakura/UnityGameFramework.git?path=/Packages/com.unitygame.framework.editor-tools#main",
+    "stability": "development-evaluation"
+  },
+  "prerequisites": [
+    "准备一个可正常编译的 Unity 项目，并在修改依赖前保留版本控制快照。",
+    "确认能够打开 Package Manager；本教程不要求先安装 Preview 或 Experimental 包。",
+    "把完成标准设为编译、事件往返和对象池计数通过，而不是只看到包出现在列表里。"
+  ],
+  "stableGuidance": [
+    "页面中的 #main 仅用于打开 Developer Console 和评估安装流程，不代表 Stable 发布通道。",
+    "正式项目应回到 Framework 仓库的 Supported Profiles 与 stable manifest snippet，锁定经过审阅的 tag 或 commit。",
+    "教程不复制版本号；路线中的包名从本站已人工复核的 adoption 注册表实时派生。"
+  ],
+  "steps": [
+    {
+      "id": "install-editor-tools",
+      "startMinute": 0,
+      "endMinute": 2,
+      "title": "安装 Developer Console",
+      "summary": "先取得可预览、可确认、失败关闭的图形化入口，不直接手改整份 manifest。",
+      "actions": [
+        "在 Package Manager 中选择 Add package from git URL。",
+        "粘贴页面提供的 Editor Tools 开发 / 评估 URL，等待 Unity 完成解析与编译。",
+        "打开 IrisSakura / Sakura Framework / Developer Console。"
+      ],
+      "completion": "Developer Console 能打开，Console 中没有由包解析产生的新编译错误。"
+    },
+    {
+      "id": "confirm-core-only",
+      "startMinute": 2,
+      "endMinute": 4,
+      "routeId": "core-only",
+      "title": "先验证 Core Only",
+      "summary": "用最小闭包确认 UPM 解析、基础契约和脚本编译，再继续增加运行时服务。",
+      "actions": [
+        "在 Newcomer Guided Entry 中选择 Simple 2D Quickstart。",
+        "预览 Core Only 路线和将要写入的依赖，不在未确认时应用修改。",
+        "显式确认后等待 Unity 完成导入与编译。"
+      ],
+      "completion": "Core Only 路线中的包均已解析，项目仍能无新增错误地完成脚本编译。"
+    },
+    {
+      "id": "install-bootstrap-lite",
+      "startMinute": 4,
+      "endMinute": 7,
+      "routeId": "bootstrap-lite",
+      "title": "扩展到 Bootstrap Lite",
+      "summary": "一次性安装已复核的最小稳定组合，避免手工猜测 Event 的内部依赖。",
+      "actions": [
+        "在同一向导中预览 Bootstrap Lite 的完整包闭包。",
+        "确认清单只包含下方从 adoption 注册表派生的 Supported 包。",
+        "显式确认安装并再次等待脚本编译结束。"
+      ],
+      "completion": "Bootstrap Lite 的四包闭包全部可解析，且没有引入 Preview 或 Experimental 包。"
+    },
+    {
+      "id": "run-first-event",
+      "startMinute": 7,
+      "endMinute": 10,
+      "title": "完成第一次事件往返",
+      "summary": "使用引擎无关 Event Core 做一次订阅、同步派发、退订与清理。",
+      "actions": [
+        "把示例放入项目脚本，并从自己的启动或测试入口调用 QuickstartEventProbe.Run。",
+        "确认返回值为 true；监听器必须同步消费事件，不能保留已被派发流程回收的事件引用。",
+        "保留 RemoveListener 与 Clear，避免把教程探针变成长期订阅。"
+      ],
+      "completion": "事件只被接收一次，监听器已移除，EventService 已清理。",
+      "code": "using System;\nusing Framework.Event;\n\npublic static class QuickstartEventProbe\n{\n    public static bool Run()\n    {\n        var events = new EventService();\n        var received = 0;\n        Action<PingEvent> listener = _ => received++;\n\n        events.AddListener(listener);\n        events.TriggerEvent(new PingEvent());\n        events.RemoveListener(listener);\n        events.Clear();\n        return received == 1;\n    }\n\n    private sealed class PingEvent : IEvent\n    {\n        public string EventName => nameof(PingEvent);\n        public DateTime TriggerTime { get; set; }\n    }\n}"
+    },
+    {
+      "id": "reuse-first-object",
+      "startMinute": 10,
+      "endMinute": 12,
+      "title": "获取并归还第一个对象",
+      "summary": "使用 Pooling Core 验证一次 Get、Release、活动计数归零与 Clear。",
+      "actions": [
+        "把示例放入项目脚本，并从自己的启动或测试入口调用 QuickstartPoolProbe.Run。",
+        "确认对象被使用一次，Release 后 CountActive 为零。",
+        "探针结束时调用 Clear，不把临时对象留给后续场景。"
+      ],
+      "completion": "探针返回 true，对象已归还且活动对象计数为零。",
+      "code": "using Framework.GameHelper;\n\npublic static class QuickstartPoolProbe\n{\n    public static bool Run()\n    {\n        var pool = new ObjectPool<Token>(() => new Token(), defaultCapacity: 1, maxSize: 4);\n        var token = pool.Get();\n        token.UseCount++;\n        pool.Release(token);\n\n        var passed = token.UseCount == 1 && pool.CountActive == 0;\n        pool.Clear();\n        return passed;\n    }\n\n    private sealed class Token\n    {\n        public int UseCount { get; set; }\n    }\n}"
+    },
+    {
+      "id": "verify-and-clean",
+      "startMinute": 12,
+      "endMinute": 15,
+      "title": "验证结果并清理探针",
+      "summary": "以可观察结果收尾；需要更完整的 Preview 诊断时，再导入 Runtime Starter。",
+      "actions": [
+        "重新触发脚本编译，确认 Event 与 Pooling 探针都返回 true。",
+        "如需继续评估，在 Developer Console 中导入 Runtime Starter Sample，先运行 Doctor 再打开 Sample Scene。",
+        "确认 Event、Pooling、Save 必须通过；Config / Audio 仅在项目资源缺失时允许结构化 Skipped。",
+        "完成后删除教程探针；Runtime Starter 只按 owner token 清理自己的临时数据。"
+      ],
+      "completion": "编译通过、事件往返为一次、对象池活动计数为零，所有临时订阅和探针资源均已清理。"
+    }
+  ],
+  "completionChecks": [
+    "UPM 解析完成，脚本编译没有新增错误。",
+    "Event 探针返回 true，并完成退订与 Clear。",
+    "Pooling 探针返回 true，Release 后 CountActive 为零并完成 Clear。",
+    "没有为了跑通教程而安装任何未声明的 Preview 或 Experimental 包。"
+  ],
+  "runtimeStarter": {
+    "maturity": "Preview",
+    "isProfile": false,
+    "isPreset": false,
+    "isStable": false
+  },
+  "runtimeStarterGuide": {
+    "summary": "Runtime Starter 是 Bootstrap Lite 之后的可选文档型 Sample，用于验证适配器发现、Doctor 诊断和 Scene 执行，不是 Stable Profile 或 Preset。",
+    "requiredChecks": [
+      "Event 必须完成订阅、派发与退订。",
+      "Pooling 必须完成获取、归还并回到零活动对象。",
+      "Save 必须完成 owner-token 沙箱往返与清理。"
+    ],
+    "optionalChecks": [
+      "Config / Audio 缺少项目资源时可以结构化 Skipped。",
+      "缺少适配器必须报告 dependency-missing，不能静默记为通过。"
+    ]
+  },
+  "troubleshooting": [
+    {
+      "symptom": "Package Manager 无法解析依赖",
+      "resolution": "先回到 Core Only，检查网络、Git 可用性与 manifest 差异；不要通过补装未知 Preview 包绕过错误。"
+    },
+    {
+      "symptom": "Runtime Starter 显示 dependency-missing",
+      "resolution": "把它视为缺少对应适配器的明确诊断，回到 Developer Console 检查 Sample 与依赖是否完整，不要把缺项记成成功。"
+    },
+    {
+      "symptom": "事件收到多次或离开场景后仍触发",
+      "resolution": "核对 AddListener 与 RemoveListener 是否成对，并在探针或 owner 生命周期结束时调用 Clear。"
+    },
+    {
+      "symptom": "对象池活动计数不为零",
+      "resolution": "确保每次 Get 都有对应 Release；测试结束后调用 Clear，并检查对象是否被其他系统继续持有。"
+    }
+  ],
+  "cleanup": [
+    "删除 QuickstartEventProbe 与 QuickstartPoolProbe，或把验证迁移为项目自己的测试。",
+    "移除仅用于评估的 Runtime Starter Sample；不要删除项目自己创建的 Save 或配置数据。",
+    "如果不继续使用 Framework，先用版本控制检查 manifest 和 lock 文件差异，再按 Package Manager 依赖顺序卸载。"
+  ]
+}

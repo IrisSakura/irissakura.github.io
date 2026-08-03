@@ -4,6 +4,8 @@
 
 `data/framework-adoption.json` 是站点侧的人工策展采用快照，负责公开经人工复核的 Supported 包、最小稳定 Profile 路线与《言铸之剑》的已验证依赖映射。它的 `adoptionReviewHash` 必须与 `data/framework.json` 完全一致；采用相关事实变化但说明尚未复核时，网站构建应失败而不是继续发布旧口径。`sourceCommit` 记录最近一次人工复核所依据的 Framework 提交，可以落后于自动同步的公开快照提交。
 
+`data/framework-quickstart.json` 是站点侧的 15 分钟教程清单。它只保存经编辑复核的路线 ID、步骤、完成标准和故障边界，不复制 Supported 包清单或版本号；生成器通过路线 ID 从 `data/framework-adoption.json` 派生实际包名。Quickstart 同样绑定 `adoptionReviewContract` 与 `adoptionReviewHash`，当稳定路线或 Supported 身份变化时失败关闭，必须先重新核对 Framework 的 15 分钟指南、Supported Profiles 和 stable manifest snippet。
+
 ## 权威边界
 
 - Framework 权威仓库负责从自己的生成清单构建公开快照；
@@ -35,6 +37,8 @@ Framework 仓库的发布工作流生成快照后，只更新网站仓库中的 
 `data/framework-adoption.json` 的 `sourceCommit`、`updatedAt`、
 `adoptionReviewContract` 与 `adoptionReviewHash`。不得只为通过构建而盲目复制
 新 contract/hash。
+
+若生成器报告 Quickstart review contract/hash 过期，或路线 ID、包身份不一致，应在同一次人工复核中更新 `data/framework-quickstart.json`。`#main` 只允许作为 Developer Console 的开发/评估入口；正式项目的版本选择继续由 Framework 仓库中的 stable snippet 负责，网站不自行固定 tag。
 
 ## 验证
 

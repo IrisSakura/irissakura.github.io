@@ -7,12 +7,19 @@ Sakura Design Journal 的 `main` 分支推送负责生成公开导出包，并�
 
 - `game-designs/catalog.v1.json`：公开标题、摘要、标签、稳定 ID、更新时间和内容哈希；
 - `diary/`：只公开执行摘要、总体结论或审计结论；包含私密模式时改用通用摘要；
-- `blogs/publication.v1.json`：登记文章公开完整 Markdown；
+- `blogs/publication.v1.json`：登记允许进入站点安全导出的完整 Markdown；
 - 未提交文件、未登记博客、Godot 笔记、审计全文和设计正文不会进入导出。
 
 Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`。本站导入器随后重新
-校验 SHA、数量、正文哈希和敏感内容，再生成 HTML。Markdown 产生的 HTML 还会经过
-白名单清理。
+校验 SHA、数量、正文哈希和敏感内容。这是“可以安全公开”门禁，不等于编辑上已经可发布。
+
+站点侧的 `config/blog-publication.json` 是第二级出版合同。它必须覆盖全部导入文章，
+并且固定 `status`、语义 `slug`、`publishedAt`、`updatedAt`、标题、摘要、系列、
+标签和 `contentHash`。只有 `approved` 或 `published` 会生成正文页；其他状态只保留
+`noindex` 的旧路由引导页。Markdown 产生的 HTML 仍会经过白名单清理。
+
+该合同不属于 Journal 自动同步的可写路径。新文章或正文哈希变化会让同步失败关闭，
+站点维护者完成编辑复核并手工更新合同后，才能重试同步。
 
 ## Runner 配置
 
@@ -33,8 +40,10 @@ Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`
 
 - `data/journal.json`、`data/journal-source.json`；
 - `content/blogs/`；
-- `pages/blog.html`、`pages/blog/`、`pages/journal.html`；
-- 因计数或链接变化而生成的 `index.html`、`pages/portfolio.html`、`sitemap.xml`。
+- `pages/blog.html`、正文/旧址/系列/标签页、`pages/journal.html`；
+- 因计数或链接变化而生成的 `index.html`、`pages/portfolio.html`、`rss.xml`、`sitemap.xml`。
+
+`data/blog-taxonomy.json`、`data/evidence-chains.json` 和 `config/blog-publication.json` 都是站点维护者事实源，不属于自动同步可写范围。
 
 `scripts/verify-journal-sync-scope.mjs` 会拒绝其他路径。工作流在提交前运行完整站点检查和
 `git diff --cached --check`，只做普通 fast-forward push，绝不 force push。

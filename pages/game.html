@@ -11,15 +11,18 @@
     <meta property="og:title" content="言铸之剑 | Unity 2D Roguelike 可玩原型">
     <meta property="og:description" content="《言铸之剑》是一款围绕房间推进、实时战斗、潜能构筑、生成式祝福和 Run 存档展开的 Unity 2D Roguelike 可玩原型。">
     <meta property="og:url" content="https://irissakura.github.io/pages/game.html">
-    <meta property="og:image" content="https://irissakura.github.io/assets/images/sword-of-words/combat-room.png">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-game.png">
+    <meta property="og:image:alt" content="言铸之剑 | Unity 2D Roguelike 可玩原型 的 IrisSakura 分享图">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="言铸之剑 | Unity 2D Roguelike 可玩原型">
     <meta name="twitter:description" content="《言铸之剑》是一款围绕房间推进、实时战斗、潜能构筑、生成式祝福和 Run 存档展开的 Unity 2D Roguelike 可玩原型。">
-    <meta name="twitter:image" content="https://irissakura.github.io/assets/images/sword-of-words/combat-room.png">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-game.png">
+    <meta name="twitter:image:alt" content="言铸之剑 | Unity 2D Roguelike 可玩原型 的 IrisSakura 分享图">
     <!-- indexable page -->
     <meta name="theme-color" content="#d7e8eb">
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../rss.xml">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"言铸之剑 | Unity 2D Roguelike 可玩原型","description":"《言铸之剑》是一款围绕房间推进、实时战斗、潜能构筑、生成式祝福和 Run 存档展开的 Unity 2D Roguelike 可玩原型。","url":"https://irissakura.github.io/pages/game.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"gamePlatform":"Unity 2022.3 LTS","applicationCategory":"Game"}</script>
     <!-- site-meta:end -->
     <title>言铸之剑 | Unity 2D Roguelike 可玩原型</title>
@@ -101,8 +104,7 @@
             <a href="../index.html" class="nav-link">首页</a>
             <a href="../pages/portfolio.html" class="nav-link active" aria-current="page">作品</a>
             <a href="../pages/framework.html" class="nav-link">Framework</a>
-            <a href="../pages/journal.html" class="nav-link">Journal</a>
-            <a href="../pages/blog.html" class="nav-link">博客</a>
+            <a href="../pages/journal.html" class="nav-link">研究与文章</a>
             <a href="../pages/about.html" class="nav-link">关于</a>
             <a href="../pages/contact.html" class="nav-link">联系我</a>
         </div>
@@ -212,7 +214,7 @@
                 <li><span>01</span><i class="fas fa-door-open" aria-hidden="true"></i><h3>选择房间</h3><p>在战斗、潜能、祝福等房间分支之间做出路线选择。</p></li>
                 <li><span>02</span><i class="fas fa-khanda" aria-hidden="true"></i><h3>实时战斗</h3><p>用移动、冲刺、招架与技能组合应对敌人与房间节奏。</p></li>
                 <li><span>03</span><i class="fas fa-code-branch" aria-hidden="true"></i><h3>构筑成长</h3><p>潜能改变技能分支，祝福与装备继续塑造本局打法。</p></li>
-                <li><span>04</span><i class="fas fa-floppy-disk" aria-hidden="true"></i><h3>推进与保存</h3><p>房间快照维持 Run 的连续性，支持中断后继续探索。</p></li>
+                <li id="system-run-save"><span>04</span><i class="fas fa-floppy-disk" aria-hidden="true"></i><h3>推进与保存</h3><p>房间快照维持 Run 的连续性，支持中断后继续探索。</p></li>
             </ol>
         </div>
     </section>
@@ -231,17 +233,61 @@
                     <img src="../assets/images/sword-of-words/room-selection.png" alt="房间选择面板提供祝福与潜能训练两个分支">
                     <figcaption><span>ROOM PROGRESSION</span><h3>路线不是背景，而是构筑的一部分</h3><p>每次房间选择都会改变接下来面对的风险、奖励与能力成长。</p></figcaption>
                 </figure>
-                <figure class="gallery-card">
+                <figure class="gallery-card" id="system-skills-potentials-blessings">
                     <img src="../assets/images/sword-of-words/potential-tree.png" alt="潜能面板展示多个技能强化节点与晶化幻象说明">
                     <figcaption><span>POTENTIAL BUILD</span><h3>让技能随着选择改变</h3><p>潜能通过分支与标签重塑既有技能，而非只增加固定数值。</p></figcaption>
                 </figure>
-                <figure class="gallery-card">
+                <figure class="gallery-card" id="system-generative-blessing">
                     <img src="../assets/images/sword-of-words/blessing-request.png" alt="低理智状态下的祝福请求面板，玩家输入祈词生成祝福">
                     <figcaption><span>GENERATIVE BLESSING</span><h3>把玩家输入变成本局内容</h3><p>本地模型根据理智状态与祈词返回结构化祝福，再接入游戏能力系统。</p></figcaption>
                 </figure>
             </div>
         </div>
     </section>
+
+    <!-- game-evidence:start -->
+<section class="evidence-chain-section" aria-labelledby="evidence-chain-title">
+        <div class="container">
+            <div class="section-heading">
+                <p class="section-kicker">RESEARCH ↔ FRAMEWORK ↔ GAME</p>
+                <h2 id="evidence-chain-title">从研究判断到游戏验证的公开证据链</h2>
+                <p>同一条链同时指向游戏系统、Framework 采用映射和研究依据；公开证据不足的部分直接写在边界里。</p>
+            </div>
+            <div class="evidence-chain-grid"><article class="evidence-chain-card" id="evidence-chain-capability-gated-combat">
+                    <p class="evidence-chain-index">01 · 技能、潜能与祝福</p>
+                    <h3>能力门控如何进入可玩的战斗构筑</h3>
+                    <p class="evidence-chain-question">研究中的能力门控，怎样落到技能、潜能与祝福共享的能力入口？</p>
+                    <div class="evidence-chain-path" aria-label="游戏、框架与研究证据">
+                        <a href="game.html#system-skills-potentials-blessings"><span>GAME</span><strong>《言铸之剑》</strong><small>技能、潜能与祝福</small></a>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>GAS</code> <code>Event</code></strong><small>游戏项目依赖清单与战斗、潜能、祝福源码引用</small></a>
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/metroidvania-capability-gated-topology.html"><span>正式文章</span><strong>世界拓扑与能力门控：为什么银河城地图其实是一张权限图</strong><small>从能力门控、拓扑变化与回访价值提炼设计判断。</small></a><a href="journal.html#design-metroidvania"><span>设计索引</span><strong>银河城中的能力门控世界图、空间重解释与回访成长</strong><small>保留银河城能力门控世界图的设计范式索引。</small></a></div>
+                    </div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>映射只证明公开游戏实现采用了对应 Framework 包，不把 Preview 能力提升为 Supported。</p>
+                </article><article class="evidence-chain-card" id="evidence-chain-run-snapshot-commit">
+                    <p class="evidence-chain-index">02 · Run 存档</p>
+                    <h3>Run 快照如何获得明确提交边界</h3>
+                    <p class="evidence-chain-question">跨房间推进时，哪些事实应在明确节点提交，哪些对象不应成为持久化事实源？</p>
+                    <div class="evidence-chain-path" aria-label="游戏、框架与研究证据">
+                        <a href="game.html#system-run-save"><span>GAME</span><strong>《言铸之剑》</strong><small>Run 存档</small></a>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>Save</code></strong><small>项目存档测试与 Framework.Save 类型引用</small></a>
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/extraction-transaction-boundary.html"><span>正式文章</span><strong>撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手”</strong><small>用撤离提交中的所有权转移讨论事务边界与失败回滚。</small></a><a href="journal.html#design-extraction-pvpve"><span>设计索引</span><strong>撤离式 PvPvE 中的风险资产、所有权转移与撤离提交</strong><small>追踪风险资产、所有权转移与撤离提交的设计范式。</small></a></div>
+                    </div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>研究提供的是事务边界类比；游戏页公开的仍是 Run 快照实现与已知限制，不等同于撤离玩法。</p>
+                </article><article class="evidence-chain-card" id="evidence-chain-structured-generative-blessing">
+                    <p class="evidence-chain-index">03 · 生成式祝福</p>
+                    <h3>生成式祝福如何安全进入能力执行</h3>
+                    <p class="evidence-chain-question">不稳定的本地模型输出，怎样经过结构化约束、白名单映射与失败回退进入玩法？</p>
+                    <div class="evidence-chain-path" aria-label="游戏、框架与研究证据">
+                        <a href="game.html#system-generative-blessing"><span>GAME</span><strong>《言铸之剑》</strong><small>生成式祝福</small></a>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>LLM</code> <code>Dialogue</code> <code>GAS</code></strong><small>本地模型适配、结构化效果映射与能力执行引用</small></a>
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="journal.html#design-deckbuilder-roguelike"><span>设计索引</span><strong>卡牌构筑式 Roguelike 中的牌组演化、效果栈与风险路线</strong><small>以效果栈与构筑选择作为相邻设计输入，不把它表述为 LLM 实证。</small></a></div>
+                    </div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>当前公开证据只覆盖结构化映射与能力执行；独立 Demo、专门研究文章和外部反馈仍未提供。</p>
+                </article>
+            </div>
+        </div>
+    </section>
+<!-- game-evidence:end -->
 
     <section class="game-section">
         <div class="container game-system-grid">
@@ -298,8 +344,7 @@
                 <h2>继续浏览</h2>
                 <a href="../pages/portfolio.html">作品</a>
                 <a href="../pages/framework.html">Framework</a>
-                <a href="../pages/journal.html">Journal</a>
-                <a href="../pages/blog.html">博客</a>
+                <a href="../pages/journal.html">研究与文章</a>
                 <a href="../pages/about.html">关于</a>
                 <a href="../pages/contact.html">联系我</a>
             </div>
