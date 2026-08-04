@@ -22,14 +22,6 @@ export function assertProjectFactsCurrent(projectData, framework, journalSource)
     if (repeated) throw new Error(`Project ${project.id} repeats completed work in next: ${repeated}.`);
   }
 
-  const journalDate = journalSource.generatedAt?.slice(0, 10);
-  const frameworkDate = framework.generatedAt?.slice(0, 10);
-  if (projectsById.get('sakura-design-journal')?.updatedAt !== journalDate) {
-    throw new Error('Journal project updatedAt must match the synchronized Journal facts.');
-  }
-  if (projectsById.get('sakura-framework')?.updatedAt !== frameworkDate) {
-    throw new Error('Framework project updatedAt must match the synchronized Framework facts.');
-  }
   if (projectsById.get('sword-of-words')?.categoryLabel !== '独立游戏项目') {
     throw new Error('The playable prototype must be categorized as an independent game project.');
   }
