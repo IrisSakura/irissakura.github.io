@@ -13,7 +13,6 @@ const PALETTES = {
   research: ['1d1420', '4a263d', '8b3e62', 'c96f8b', 'efb7c8', 'b6d6d7'],
   article: ['15121d', '382252', '7046a6', 'aa7bd6', 'd8b9ef', '79c7ca'],
   game: ['1b1016', '4d1d2c', '982f45', 'd6656f', 'f3b0a7', 'f2d36d'],
-  about: ['101a18', '294a40', '4f7f6e', '88b6a1', 'd3e6cc', 'd9b780'],
   contact: ['1c1510', '54321f', '9a5a2f', 'd99657', 'f0c992', '7fc4be'],
   site: ['121722', '253047', '47658b', '719eb9', 'd7e8eb', 'c9788d']
 };

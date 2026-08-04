@@ -20,7 +20,6 @@ const PAGE_COVER_TARGETS = {
   journal: 'journal-hero',
   blog: 'blog-hero',
   game: 'game-hero',
-  about: 'about-intro',
   contact: 'contact-header'
 };
 
@@ -137,14 +136,6 @@ const pageDefinitions = [
     canonical: '/',
   },
   {
-    file: 'pages/about.html',
-    key: 'about',
-    coverKey: 'about',
-    title: '关于 IrisSakura | 研究、框架与游戏',
-    description: '了解 IrisSakura 如何以设计与引擎研究为输入，构建 Sakura Framework，并通过《言铸之剑》验证系统设计与工程能力。',
-    canonical: '/pages/about.html',
-  },
-  {
     file: 'pages/framework.html',
     key: 'framework',
     coverKey: 'framework',
@@ -239,7 +230,6 @@ const navItems = [
   ['art-music', '美术音乐', 'pages/art-music.html'],
   ['framework', '框架', 'pages/framework.html'],
   ['research', '研究与文章', 'pages/journal.html'],
-  ['about', '关于', 'pages/about.html'],
   ['contact', '联系我', 'pages/contact.html']
 ];
 
@@ -334,9 +324,6 @@ for (const page of pageDefinitions) {
   }
   if (page.file === 'pages/blog.html') {
     html = replaceGeneratedBlock(html, 'blog-content', renderBlogIndex(publicJournalSource, blogDiscovery));
-  }
-  if (page.file === 'pages/about.html') {
-    html = replaceGeneratedBlock(html, 'about-content', renderAboutContent(site));
   }
   if (page.file === 'pages/contact.html') {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
@@ -752,7 +739,7 @@ function renderHomeContent(projectData, journalData, frameworkData, siteData) {
                 <a href="pages/game.html"><strong>1</strong><span>可玩原型</span></a>
                 <a href="pages/framework.html#maturity"><strong>${frameworkData.lifecycleCounts.Supported}</strong><span>Supported 包</span></a>
                 <a href="pages/journal.html"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></a>
-                <a href="pages/about.html"><strong>独立开发</strong><span>系统设计 / 工程实现</span></a>
+                <a href="pages/contact.html"><strong>独立开发</strong><span>系统设计 / 工程实现</span></a>
             </div>
         </section>
 
@@ -1049,63 +1036,6 @@ function renderBlogIndex(sourceData, discovery) {
             <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>${sourceData.blogs.length} 篇正式文章</h2></div></div>
             <div class="blog-card-grid">${articles}
             </div>
-        </div>
-    </section>`;
-}
-
-function renderAboutContent(siteData) {
-  return `<section class="about-intro">
-        <div class="container about-intro-grid">
-            <div>
-                <p class="section-kicker">ABOUT THE PRACTICE</p>
-                <p class="about-identity">${escapeHtml(siteData.profile.displayName)} · ${escapeHtml(siteData.profile.role)}</p>
-                <h1>我关心的不是模块数量，<span class="highlight">而是系统能否进入真实游戏</span></h1>
-            </div>
-            <div class="about-intro-copy">
-                <p>我从具体游戏功能开发逐渐转向框架与系统研究，因为同一类生命周期、状态同步和玩法边界会在不同项目中反复出现。</p>
-                <p>建立 Sakura Framework 的目的，是把真正能够跨项目复用的判断沉淀下来；《言铸之剑》则持续检验这些抽象有没有改善玩家体验，而不只是让代码看起来更整齐。</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="about-story">
-        <div class="container about-story-grid">
-            <div class="about-story-heading"><p class="section-kicker">WHY SAKURA FRAMEWORK</p><h2>从功能实现到系统边界</h2></div>
-            <div class="about-story-copy">
-                <article><span>01</span><h3>先从游戏问题出发</h3><p>战斗、房间推进、UI、存档与生成内容首先是玩家体验问题，不是为了展示框架而制造的模块。</p></article>
-                <article><span>02</span><h3>研究重复出现的机制</h3><p>通过设计范式、Godot 源码和工程审计理解生命周期、调度、资源与数据事实应该由谁拥有。</p></article>
-                <article><span>03</span><h3>只沉淀可复用部分</h3><p>只有职责、依赖和验证边界足够清晰的结论才进入 Framework；游戏专属内容继续留在项目侧。</p></article>
-            </div>
-        </div>
-    </section>
-
-    <section class="about-focus">
-        <div class="container">
-            <div class="about-section-heading"><p class="section-kicker">CURRENT FOCUS</p><h2>当前主要开发方向</h2></div>
-            <div class="about-focus-list">
-                <article><h3>可验证的游戏系统</h3><p>把战斗、成长、存档和生成式玩法拆成清晰事实，并用运行截图、测试和已知限制说明结果。</p></article>
-                <article><h3>小而稳定的采用路线</h3><p>优先让新项目能够快速采用少量 Supported 能力，再逐步评估 Preview 与 Experimental 模块。</p></article>
-                <article><h3>研究驱动的工程判断</h3><p>持续整理游戏设计与引擎源码研究，让架构选择能够回到问题、方法和影响。</p></article>
-            </div>
-        </div>
-    </section>
-
-    <section class="about-preferences">
-        <div class="container about-preferences-grid">
-            <div><p class="section-kicker">PROJECT PREFERENCES</p><h2>我偏好的项目与工作方式</h2></div>
-            <dl>
-                <div><dt>项目类型</dt><dd>系统驱动的动作、Roguelike、模拟与需要长期演进工具链的 Unity 项目。</dd></div>
-                <div><dt>设计取向</dt><dd>先建立玩家循环和状态事实，再选择能够支撑它们的架构；不以规模代替成熟度。</dd></div>
-                <div><dt>工作方式</dt><dd>明确约束、记录证据、公开限制，让实现、验证和发布拥有可检查边界。</dd></div>
-                <div><dt>交流范围</dt><dd>Unity 游戏系统、模块化框架、运行时生命周期、设计研究策展与独立开发实践。</dd></div>
-            </dl>
-        </div>
-    </section>
-
-    <section class="about-next">
-        <div class="container about-next-inner">
-            <div><p class="section-kicker">SEE THE WORK</p><h2>从真实作品开始了解这套方法</h2></div>
-            <div><a href="game.html" class="btn btn-primary">查看《言铸之剑》</a><a href="contact.html" class="btn btn-secondary">查看公开入口</a></div>
         </div>
     </section>`;
 }
@@ -1561,16 +1491,6 @@ async function assertSitePresentation(siteData, pages) {
     }
   }
 
-  const profile = siteData.profile;
-  if (!profile || typeof profile !== 'object') {
-    throw new Error('site profile configuration is required');
-  }
-  for (const field of ['displayName', 'role', 'bio']) {
-    if (typeof profile[field] !== 'string' || profile[field].trim() === '') {
-      throw new Error(`site profile requires ${field}`);
-    }
-  }
-
   const requiredCoverKeys = [...new Set(pages.map((page) => page.coverKey).filter(Boolean))];
   if (!siteData.pageCovers || typeof siteData.pageCovers !== 'object') {
     throw new Error('site pageCovers configuration is required');
@@ -1631,7 +1551,6 @@ function socialCategory(page) {
   if (page.file === 'index.html') return 'home';
   if (page.file === 'pages/portfolio.html') return 'portfolio';
   if (page.file === 'pages/game.html') return 'game';
-  if (page.file === 'pages/about.html') return 'about';
   if (page.file === 'pages/contact.html') return 'contact';
   if (page.file.startsWith('pages/framework')) return 'framework';
   if (page.file.startsWith('pages/journal') || page.file.startsWith('pages/blog')) return 'research';

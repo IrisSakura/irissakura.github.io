@@ -24,7 +24,7 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'scripts/import-journal-export.mjs',
     'style/blog.css',
     '.github/workflows/site-quality-and-pages.yml',
-    'pages/about.html',
+    'pages/contact.html',
     'content/blogs/../escape.md'
   ]) {
     assert.equal(isJournalSyncOwnedPath(forbidden), false, `sync must not own ${forbidden}`);

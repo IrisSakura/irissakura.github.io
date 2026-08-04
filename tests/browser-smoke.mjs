@@ -272,8 +272,8 @@ try {
   ) {
     throw new Error('stored theme and layout were not restored before runtime initialization');
   }
-  await layoutPage.locator('.nav-menu').getByRole('link', { name: '关于', exact: true }).click();
-  await layoutPage.waitForURL(`${baseUrl}/pages/about.html`);
+  await layoutPage.locator('.nav-menu').getByRole('link', { name: '联系我', exact: true }).click();
+  await layoutPage.waitForURL(`${baseUrl}/pages/contact.html`);
   if (await layoutPage.getAttribute('html', 'data-layout') !== 'wide') {
     throw new Error('soft navigation reset the active layout');
   }
@@ -331,8 +331,8 @@ try {
   await desktop.evaluate(() => {
     document.documentElement.dataset.smokeDocument = 'persistent-navigation';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: '关于', exact: true }).click();
-  await desktop.waitForURL(`${baseUrl}/pages/about.html`);
+  await desktop.locator('.nav-menu').getByRole('link', { name: '联系我', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/contact.html`);
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('cross-page navigation replaced the active document');
   }

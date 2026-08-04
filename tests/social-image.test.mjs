@@ -30,7 +30,6 @@ test('formal articles and major sections expose distinct generated social images
     'pages/journal.html',
     'pages/blog.html',
     'pages/game.html',
-    'pages/about.html',
     'pages/contact.html',
     ...publicArticles.map((entry) => `pages/blog/${entry.slug}.html`)
   ];

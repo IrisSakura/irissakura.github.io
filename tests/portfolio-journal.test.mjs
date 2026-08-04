@@ -95,18 +95,6 @@ test('portfolio renders exactly three fixed evidence-led cases with the game fir
   assert.ok(html.includes('journal-proof-visual'));
 });
 
-test('about page explains motivation, current focus and working preferences without unsupported claims', async () => {
-  const html = await readText('pages/about.html');
-
-  for (const fragment of ['WHY SAKURA FRAMEWORK', '当前主要开发方向', '我偏好的项目与工作方式', '交流范围', '言铸之剑']) {
-    assert.ok(html.includes(fragment), `missing about-page context: ${fragment}`);
-  }
-
-  for (const unsupportedClaim of ['像素地牢', '1000次下载', '第一个完整作品发布']) {
-    assert.ok(!html.includes(unsupportedClaim), `unsupported project claim should be removed: ${unsupportedClaim}`);
-  }
-});
-
 test('finished game page presents the real playable loop and public screenshots', async () => {
   const html = await readText('pages/game.html');
   const publicText = html;

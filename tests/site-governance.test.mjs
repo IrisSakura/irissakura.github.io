@@ -178,13 +178,8 @@ test('public page chrome omits maintainer-only source and implementation hints',
   }
 });
 
-test('identity and major page visuals are generated without avatar placeholders or reused category screenshots', async () => {
+test('major page visuals are generated without reused category screenshots', async () => {
   const site = JSON.parse(await readText('data/site.json'));
-  const profile = site.profile;
-  assert.equal(profile.displayName, 'IrisSakura');
-  assert.ok(profile.bio.length > 20);
-  assert.equal(profile.avatar, undefined);
-  assert.equal(profile.backgroundImage, undefined);
 
   const majorPages = {
     home: 'index.html',
@@ -193,7 +188,6 @@ test('identity and major page visuals are generated without avatar placeholders 
     journal: 'pages/journal.html',
     blog: 'pages/blog.html',
     game: 'pages/game.html',
-    about: 'pages/about.html',
     contact: 'pages/contact.html'
   };
   assert.deepEqual(Object.keys(site.pageCovers).sort(), Object.keys(majorPages).sort());
@@ -207,8 +201,8 @@ test('identity and major page visuals are generated without avatar placeholders 
   }
 
   const home = await readText('index.html');
-  assert.ok(!home.includes('class="profile-card"'), 'home must not repeat the full identity card after the hero');
-  assert.ok(!home.includes('id="profile-title"'), 'home identity details belong on the About page');
+  assert.ok(!home.includes('class="profile-card"'), 'home must not repeat a full identity card after the hero');
+  assert.ok(!home.includes('id="profile-title"'), 'home must not add a redundant identity section');
   const evidenceOffset = home.indexOf('class="evidence-strip"');
   const flagshipOffset = home.indexOf('class="flagship-section"');
   const casesOffset = home.indexOf('class="case-section"');
@@ -218,7 +212,7 @@ test('identity and major page visuals are generated without avatar placeholders 
   assert.ok(casesOffset > flagshipOffset, 'concrete engineering cases must follow the flagship proof');
   assert.ok(methodOffset > casesOffset, 'the abstract project chain must follow the concrete cases');
 
-  const cssVisualCovers = ['home', 'framework', 'journal', 'blog', 'about', 'contact'];
+  const cssVisualCovers = ['home', 'framework', 'journal', 'blog', 'contact'];
   for (const coverKey of cssVisualCovers) assert.equal(site.pageCovers[coverKey].image, '', `${coverKey} must use a category visual`);
   assert.notEqual(site.pageCovers.portfolio.image, site.pageCovers.game.image);
 
@@ -258,6 +252,7 @@ test('primary navigation uses a Chinese framework label and exposes the art and 
     assert.ok(primaryNav.includes('>框架</a>'), `${page} must label the Framework route as 框架`);
     assert.ok(!primaryNav.includes('>Framework</a>'), `${page} keeps an English Framework navigation label`);
     assert.ok(primaryNav.includes('>美术音乐</a>'), `${page} is missing the art and music navigation entry`);
+    assert.ok(!primaryNav.includes('>关于</a>'), `${page} still exposes the retired About navigation entry`);
   }
 
   const artMusic = await readText('pages/art-music.html');
@@ -569,7 +564,6 @@ test('theme styles only change palette, typography and decoration', async () => 
 test('placeholder blog, simulated form and unsupported template claims are absent', async () => {
   const publicFiles = [
     await readText('index.html'),
-    await readText('pages/about.html'),
     await readText('pages/blog.html'),
     await readText('pages/contact.html'),
     await readText('src/site.ts')

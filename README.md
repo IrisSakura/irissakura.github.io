@@ -16,7 +16,6 @@
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 - `/pages/portfolio.html`：真实项目及其状态、职责、证据和限制；
-- `/pages/about.html`：项目链与能力证据；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
 - `/404.html`：GitHub Pages 自定义错误页。
 
@@ -63,23 +62,13 @@ npm run package:site
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 
-### 身份信息、栏目视觉与项目头图
+### 栏目视觉与项目头图
 
-个人身份与主要分页视觉都由 `data/site.json` 集中管理，不需要逐页修改 HTML。站点当前不显示头像占位；姓名与角色只在 About 页出现。
+主要分页视觉由 `data/site.json` 集中管理，不需要逐页修改 HTML。
 
-1. 在 `profile` 中维护姓名、角色和简介：
+1. `home`、`framework`、`journal`、`blog` 和 `contact` 默认使用纯 CSS 栏目视觉，`image` 保持空字符串；它们不会借用游戏截图。
 
-```json
-{
-  "displayName": "IrisSakura",
-  "role": "Unity 游戏系统开发者 · 独立开发者",
-  "bio": "……"
-}
-```
-
-2. `home`、`framework`、`journal`、`blog`、`about` 和 `contact` 默认使用纯 CSS 栏目视觉，`image` 保持空字符串；它们不会借用游戏截图。
-
-3. `portfolio` 与 `game` 可以使用已有真实项目图片，并通过 `position` 设置焦点：
+2. `portfolio` 与 `game` 可以使用已有真实项目图片，并通过 `position` 设置焦点：
 
 ```json
 {
@@ -88,9 +77,9 @@ npm run package:site
 }
 ```
 
-可配置键仍为 `home`、`portfolio`、`framework`、`journal`、`blog`、`game`、`about` 和 `contact`。`position` 的第一个百分比控制左右焦点，第二个控制上下焦点。
+可配置键为 `home`、`portfolio`、`framework`、`journal`、`blog`、`game` 和 `contact`。`position` 的第一个百分比控制左右焦点，第二个控制上下焦点。
 
-4. 运行 `npm run build`。构建会检查项目图片并重建页面，同时在 `assets/social/` 生成每个页面独立的 1200×630 PNG 分享图。不要手工编辑该生成目录，也不要填写本机绝对路径或私有仓库地址。
+3. 运行 `npm run build`。构建会检查项目图片并重建页面，同时在 `assets/social/` 生成每个页面独立的 1200×630 PNG 分享图。不要手工编辑该生成目录，也不要填写本机绝对路径或私有仓库地址。
 
 ### 研究记录同步
 
