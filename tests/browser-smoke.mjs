@@ -341,7 +341,7 @@ try {
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('return navigation replaced the active document');
   }
-  await desktop.locator('.nav-menu').getByRole('link', { name: 'Framework', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '框架', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
   if (await desktop.locator('#framework-data-status, #framework-source-commit, #framework-generated-at').count() !== 0) {
@@ -400,7 +400,7 @@ try {
   if (await desktop.locator('.quickstart-code pre').count() !== frameworkQuickstart.steps.filter((step) => step.code).length) {
     throw new Error('Quickstart does not render every registered code probe');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: 'Framework' }).isVisible()) {
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '框架' }).isVisible()) {
     throw new Error('Quickstart does not keep the Framework navigation context');
   }
   const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -411,6 +411,15 @@ try {
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
   if (!await desktop.locator('.portfolio-case').first().filter({ hasText: gameProject.title }).isVisible()) throw new Error('registered game project is not the first portfolio case');
+
+  await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/art-music.html`);
+  if (!await desktop.getByRole('heading', { name: '美术与音乐作品集', exact: true }).isVisible()) {
+    throw new Error('art and music portfolio entry does not open its public page');
+  }
+  if (!await desktop.getByText('当前尚未公开作品。准备完成后，美术与音乐条目会从这里开始更新。', { exact: true }).isVisible()) {
+    throw new Error('art and music portfolio does not expose its honest empty state');
+  }
 
   await desktop.goto(`${baseUrl}/pages/journal.html`, { waitUntil: 'networkidle' });
   const journalText = await desktop.locator('body').innerText();

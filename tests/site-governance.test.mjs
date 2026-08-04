@@ -251,6 +251,23 @@ test('research and articles share one primary navigation route without changing 
   assert.match(blog, activeResearchNav);
 });
 
+test('primary navigation uses a Chinese framework label and exposes the art and music portfolio', async () => {
+  for (const page of ['index.html', 'pages/framework.html', 'pages/art-music.html']) {
+    const html = await readText(page);
+    const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
+    assert.ok(primaryNav.includes('>框架</a>'), `${page} must label the Framework route as 框架`);
+    assert.ok(!primaryNav.includes('>Framework</a>'), `${page} keeps an English Framework navigation label`);
+    assert.ok(primaryNav.includes('>美术音乐</a>'), `${page} is missing the art and music navigation entry`);
+  }
+
+  const artMusic = await readText('pages/art-music.html');
+  assert.match(
+    artMusic,
+    /class="nav-link active" aria-current="page">美术音乐<\/a>/u
+  );
+  assert.ok(artMusic.includes('当前尚未公开作品'));
+});
+
 test('home hero and flagship use distinct existing game evidence', async () => {
   const projects = JSON.parse(await readText('data/projects.json'));
   const game = projects.projects.find((project) => project.id === 'sword-of-words');

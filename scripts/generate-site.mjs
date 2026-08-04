@@ -172,6 +172,13 @@ const pageDefinitions = [
     canonical: '/pages/portfolio.html',
   },
   {
+    file: 'pages/art-music.html',
+    key: 'art-music',
+    title: '美术与音乐作品集 | IrisSakura',
+    description: 'IrisSakura 的美术与音乐作品集入口；当前尚未公开作品，后续内容将在这里持续更新。',
+    canonical: '/pages/art-music.html',
+  },
+  {
     file: 'pages/journal.html',
     key: 'research',
     coverKey: 'journal',
@@ -229,7 +236,8 @@ await assertSitePresentation(site, pageDefinitions);
 const navItems = [
   ['home', '首页', 'index.html'],
   ['portfolio', '作品', 'pages/portfolio.html'],
-  ['framework', 'Framework', 'pages/framework.html'],
+  ['art-music', '美术音乐', 'pages/art-music.html'],
+  ['framework', '框架', 'pages/framework.html'],
   ['research', '研究与文章', 'pages/journal.html'],
   ['about', '关于', 'pages/about.html'],
   ['contact', '联系我', 'pages/contact.html']
