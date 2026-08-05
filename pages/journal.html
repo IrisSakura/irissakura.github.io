@@ -159,8 +159,8 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>47</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>30</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>49</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>32</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric"><strong>6</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
@@ -254,6 +254,16 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-04</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>与上一轮审计基准 719b8ed2... 相比，默认分支新增了 14 个提交，主要完成了五类工作： 建立 Framework Convergence 0.9 收敛路线； 为 core-only、bootstrap-lite 补充真实 Gitea Runner 消费路径证据； 增加独立、手动、精确 SHA 的 Stable API 与 Analyzer Evidence Workflow； 扩展 Runtime Starter 和 Semantic Battle，形成更完整的纵向消费样例； 将 Wasmtime Host 扩展至 Windows/Linux Desktop，并加入受限的 WASI 0.3 Async Research POC； 修复 Server 加入房间响应与 Snapshot 推送的顺序竞态。</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-03</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>本轮默认分支继续沿“开发基础设施与运行时能力纵深化”方向推进，主要新增或扩展了： Trace/Baggage/Metric 与 Server OpenTelemetry； AI Vector Memory、HTN、Embedding 与 RAG； Contract Schema、Local CAS、Formal Model Checking； Trusted Provenance、Runner Attestation 与 SLSA 合同； Wasm Verified Publisher 和外部来源默认拒绝策略； Networking Authority Snapshot、Trace Carrier 与 Simulation Replay Bridge； Testing Differential、Fault Injection 和状态机验证；</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-02</p>
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
                     <p>本轮默认分支主要新增三组能力： Constraint Solver Foundation 新增 constraints-core 0.1.0； 提供有限域约束合同、确定性 Managed 回溯求解器和 Sakura 工厂； 接入 Roguelite2D 房间端口匹配； 接入 CardCore 地图节点类型分配。 Verification Failure Evidence 属性测试失败可以写入 canonical JSON； Save、Modding、Simulation 已接入最小失败制品； Gitea Unity Impact 和手动 Testbed 会统一上传 verification-lab； Artifact 保留期为 30 天。 State-machine Testing 与 Fault Injection</p>
@@ -273,16 +283,6 @@
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
                     <p>本轮仓库变化集中在三条主线上： Modding 与热更新能力大幅扩展：原 Modding 包被拆为 Core、Unity、Code、HybridCLR 四个职责包，原包转为兼容聚合入口；同时建立在线更新事务、不可变版本目录、信任校验、Wasm/Lua、受控托管代码、HybridCLR 使用环境和 Editor Guided Recipe。 跨平台工程链继续加固：近期提交集中修复 Runtime、Editor Tools、Server、Node 工具和 CI Workflow 的路径与宿主兼容性，并增强 Unity 失败摘要保留。 Sample 测试选择问题被修复：最新提交修复了环境变量中的普通 Unity Impact 包集合覆盖 Runtime Starter 动态依赖发现的问题，使 Sample 可以重新安装 Save、Config、Audio、UI 等真实闭包。</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-29</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>与上一轮审计基准相比，默认分支新增了四个主要提交： Guided Recipes 与 Sample → 正式项目向导； 网站静态回退页面同步修复； 网站 Featured Module 从 6 项扩展到 12 项； UI Timer、Choice Group、State View、Hold Progress 首批通用控件。 本轮变更没有增加 UPM 包、Profile、Preset 或程序集总数，而是继续扩展现有 editor-tools、ui-core 和 ui 包。当前权威规模仍为： |指标|数量| |---|--:| |UPM 包|140| |Catalog 模块|135| |Installer Preset|65| |Profile|10| |程序集|750| |noEngineReferences 程序集|402|</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-07-28</p>
-                    <h3>Sakura Framework 仓库最新审计报告</h3>
-                    <p>本轮没有增加新的 UPM 包、Stable Profile 或 Runtime 公共模块，主要推进了两条路线： 新手接入链路收敛：将根 README、Developer Console、Installer V2、Bootstrap Lite、Sample Gallery 和 Beginner 2D Shooter 串联成 Simple 2D Quickstart。 仓库真理源收敛：压缩 README、Release、Performance、Sample 和历史设计文档中的状态副本，强化 Work Status、Inventory、PLAN-INDEX 和 Runner Ledger 的 Owner 边界。 方向总体正确。新 Quickstart 没有建立第二套安装器、第二个 Sample 系统或新的 Runtime 产品，而是编排现有 Owner；发布参考文档也已转为长期稳定合同，不再硬编码当前包数、Run、SHA 或…</p>
-                </article>
                 </div>
             </div>
         </div>
@@ -292,6 +292,18 @@
             <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-colony">
+                    <p class="project-status">游戏设计范式 · 2026-08-05</p>
+                    <h3>殖民地模拟与聚落生存经营游戏</h3>
+                    <p>玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…</p>
+                    <div class="note-tags"><span>colony</span><span>management</span><span>settlement</span></div>
+                </article>
+                <article class="design-summary-card" id="design-detective">
+                    <p class="project-status">游戏设计范式 · 2026-08-04</p>
+                    <h3>侦探调查与推理游戏</h3>
+                    <p>运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。</p>
+                    <div class="note-tags"><span>detective</span><span>investigation</span><span>mystery</span></div>
+                </article>
                 <article class="design-summary-card" id="design-farming">
                     <p class="project-status">游戏设计范式 · 2026-08-03</p>
                     <h3>农场经营与生活模拟游戏</h3>
@@ -592,7 +604,7 @@
                     <div class="evidence-chain-path" aria-label="游戏、框架与研究证据">
                         <a href="game.html#system-skills-potentials-blessings"><span>GAME</span><strong>《言铸之剑》</strong><small>技能、潜能与祝福</small></a>
                         <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>GAS</code> <code>Event</code></strong><small>游戏项目依赖清单与战斗、潜能、祝福源码引用</small></a>
-                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/metroidvania-capability-gated-topology.html"><span>正式文章</span><strong>世界拓扑与能力门控：为什么银河城地图其实是一张权限图</strong><small>从能力门控、拓扑变化与回访价值提炼设计判断。</small></a><a href="journal.html#design-metroidvania"><span>设计索引</span><strong>银河城中的能力门控世界图、空间重解释与回访成长</strong><small>保留银河城能力门控世界图的设计范式索引。</small></a></div>
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/metroidvania-capability-gated-topology.html"><span>正式文章</span><strong>世界拓扑与能力门控：银河城地图中的权限、可达性与区域重访</strong><small>从能力门控、拓扑变化与回访价值提炼设计判断。</small></a><a href="journal.html#design-metroidvania"><span>设计索引</span><strong>银河城中的能力门控世界图、空间重解释与回访成长</strong><small>保留银河城能力门控世界图的设计范式索引。</small></a></div>
                     </div>
                     <p class="evidence-chain-limit"><strong>证据边界</strong>映射只证明公开游戏实现采用了对应 Framework 包，不把 Preview 能力提升为 Supported。</p>
                 </article><article class="evidence-chain-card" id="evidence-chain-run-snapshot-commit">
@@ -602,7 +614,7 @@
                     <div class="evidence-chain-path" aria-label="游戏、框架与研究证据">
                         <a href="game.html#system-run-save"><span>GAME</span><strong>《言铸之剑》</strong><small>Run 存档</small></a>
                         <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>Save</code></strong><small>项目存档测试与 Framework.Save 类型引用</small></a>
-                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/extraction-transaction-boundary.html"><span>正式文章</span><strong>撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手”</strong><small>用撤离提交中的所有权转移讨论事务边界与失败回滚。</small></a><a href="journal.html#design-extraction-pvpve"><span>设计索引</span><strong>撤离式 PvPvE 中的风险资产、所有权转移与撤离提交</strong><small>追踪风险资产、所有权转移与撤离提交的设计范式。</small></a></div>
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/extraction-transaction-boundary.html"><span>正式文章</span><strong>撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算</strong><small>用撤离提交中的所有权转移讨论事务边界与失败回滚。</small></a><a href="journal.html#design-extraction-pvpve"><span>设计索引</span><strong>撤离式 PvPvE 中的风险资产、所有权转移与撤离提交</strong><small>追踪风险资产、所有权转移与撤离提交的设计范式。</small></a></div>
                     </div>
                     <p class="evidence-chain-limit"><strong>证据边界</strong>研究提供的是事务边界类比；游戏页公开的仍是 Run 快照实现与已知限制，不等同于撤离玩法。</p>
                 </article><article class="evidence-chain-card" id="evidence-chain-structured-generative-blessing">

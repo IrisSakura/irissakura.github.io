@@ -1,4 +1,4 @@
-# 证据等级：为什么 local-passed 不能写成 runner-passed
+# 证据等级：本地验证、Runner 复验与交付结论边界
 > 系列：大型 Unity 框架的治理复盘
 >
 > 日期：2026-07-31

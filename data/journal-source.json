@@ -1,14 +1,28 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "cb20d2d33a54538d995ac6ef6c55037b7813fa91",
-  "generatedAt": "2026-08-03T14:33:28+08:00",
+  "sourceCommit": "cc63ff427f1400ed846c452288f6d4ebb81d4157",
+  "generatedAt": "2026-08-05T15:12:02+08:00",
   "summary": {
-    "auditCount": 30,
-    "blogCount": 9,
-    "gameDesignCount": 47
+    "auditCount": 32,
+    "blogCount": 17,
+    "gameDesignCount": 49
   },
-  "gameDesignCatalogDigest": "f950ecb716a5cee89f9116edd4703533a4d8e38dd521d865da71aec21452c177",
+  "gameDesignCatalogDigest": "9c3c845cdf657afd906f4582d5beed7049a50850757b7a7374363e5e8eb651d5",
   "audits": [
+    {
+      "id": "audit-2026-08-04",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "与上一轮审计基准 719b8ed2... 相比，默认分支新增了 14 个提交，主要完成了五类工作： 建立 Framework Convergence 0.9 收敛路线； 为 core-only、bootstrap-lite 补充真实 Gitea Runner 消费路径证据； 增加独立、手动、精确 SHA 的 Stable API 与 Analyzer Evidence Workflow； 扩展 Runtime Starter 和 Semantic Battle，形成更完整的纵向消费样例； 将 Wasmtime Host 扩展至 Windows/Linux Desktop，并加入受限的 WASI 0.3 Async Research POC； 修复 Server 加入房间响应与 Snapshot 推送的顺序竞态。",
+      "updatedAt": "2026-08-04",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-03",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮默认分支继续沿“开发基础设施与运行时能力纵深化”方向推进，主要新增或扩展了： Trace/Baggage/Metric 与 Server OpenTelemetry； AI Vector Memory、HTN、Embedding 与 RAG； Contract Schema、Local CAS、Formal Model Checking； Trusted Provenance、Runner Attestation 与 SLSA 合同； Wasm Verified Publisher 和外部来源默认拒绝策略； Networking Authority Snapshot、Trace Carrier 与 Simulation Replay Bridge； Testing Differential、Fault Injection 和状态机验证；",
+      "updatedAt": "2026-08-03",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-02",
       "title": "Sakura Framework 仓库最新审计与能力收敛计划",
@@ -221,6 +235,30 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "colony",
+      "title": "殖民地模拟与聚落生存经营游戏",
+      "summary": "玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…",
+      "tags": [
+        "colony",
+        "management",
+        "settlement"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "169a03660e9c2c1e5c8f49a350ab9b9dffba87bebe592307518911599d2e0016"
+    },
+    {
+      "id": "detective",
+      "title": "侦探调查与推理游戏",
+      "summary": "运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。",
+      "tags": [
+        "detective",
+        "investigation",
+        "mystery"
+      ],
+      "updatedAt": "2026-08-04",
+      "sha256": "36774ed74c808eefae8c9eb5ba5acf6be9559f7baaf6ca4a6e97c02f191c21f2"
+    },
     {
       "id": "farming",
       "title": "农场经营与生活模拟游戏",
@@ -787,20 +825,20 @@
   "blogs": [
     {
       "id": "4x",
-      "title": "治理容量：为什么 4X 游戏不能让扩张永远稳赚不赔",
+      "title": "治理容量：4X 扩张中的收益、组织负担与管理约束",
       "summary": "为什么许多 4X 游戏前期充满战略选择，到了中后期却变成不断占地、点建筑和处理重复事务？",
       "series": "游戏系统的共同语言",
       "tags": [
         "4x"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "432fd214fdc4b8d9367f208241c351d2e5b3a24eb3772c503ac5e1866a43484f",
-      "bytes": 19474,
+      "updatedAt": "2026-08-05",
+      "sha256": "7350b164f105d4f242aaace76306cdae62759b43c3fd87b95bdc91ddee978bd2",
+      "bytes": 19502,
       "contentPath": "content/blogs/4x.md"
     },
     {
       "id": "authoritative-time-source",
-      "title": "音游、格斗与竞速的权威时间源：游戏到底应该听谁的钟",
+      "title": "音游、格斗与竞速的权威时间源：输入、模拟、音频与表现层的时钟分工",
       "summary": "比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。",
       "series": "游戏系统的共同语言",
       "tags": [
@@ -808,27 +846,93 @@
         "simulation",
         "timing"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "f1513d1aa872599da609933b49969666b7e6d2c3c2e8ba50f7c452486d1555d2",
-      "bytes": 17818,
+      "updatedAt": "2026-08-05",
+      "sha256": "9661d090ea0ef02e5e7507ba665e30e26bcc813e54daba01f933db1d2ea5afd0",
+      "bytes": 17839,
       "contentPath": "content/blogs/authoritative-time-source.md"
     },
     {
+      "id": "blog-2d6baa70",
+      "title": "房间加入协议中的响应顺序与快照可见性边界",
+      "summary": "多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "b031490b4aada2f840193402c301c7e1fe82d33b9eacb59d4803b307f35c4eec",
+      "bytes": 9046,
+      "contentPath": "content/blogs/blog-2d6baa70.md"
+    },
+    {
+      "id": "blog-75fbb5c2",
+      "title": "语义战斗编排：事件、状态、资格事实与受限动作管线",
+      "summary": "跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "6ca46e8dfa17f0f4dffbb432c757345e0cdf511d10fc565a948128c1036010c7",
+      "bytes": 12754,
+      "contentPath": "content/blogs/blog-75fbb5c2.md"
+    },
+    {
+      "id": "blog-b5472ca4",
+      "title": "未来抽牌质量与构筑收敛：卡组规模、抽取概率与奖励边际价值",
+      "summary": "卡组构筑游戏为什么必须允许玩家拒绝奖励，以及一张单独很强的卡为什么可能让整套卡组变弱？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "a40c61d68a6f6b9b1dd8a54576e9ae5f5cbc71b8ade986916980755682d7eb55",
+      "bytes": 18684,
+      "contentPath": "content/blogs/blog-b5472ca4.md"
+    },
+    {
       "id": "blog-eb1c415c",
-      "title": "劳动瓶颈传播：为什么农场越大，玩家反而越忙",
+      "title": "劳动瓶颈传播：经营规模扩张中的时间、运输与加工压力",
       "summary": "经营模拟中的规模扩张为什么不会自动带来更高效率，反而可能让玩家被浇水、收获、运输和加工等重复劳动彻底占满？",
       "series": "游戏系统的共同语言",
       "tags": [
         "essay"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "3c20a22ea53df974d022aaa37866a58e745b3759fe7052b0252a4446cddc5edf",
-      "bytes": 18272,
+      "updatedAt": "2026-08-05",
+      "sha256": "acb5672424ed1d46cde74e6e2bc4d20c369388adfda150a95001d75cc12b5f5a",
+      "bytes": 18316,
       "contentPath": "content/blogs/blog-eb1c415c.md"
     },
     {
+      "id": "bootstrap",
+      "title": "Bootstrap 组合根：服务装配、生命周期所有权与重复接管隔离",
+      "summary": "框架启动器需要把模块装进同一运行时，同时避免核心依赖膨胀、重复 Host、生命周期冲突和项目覆盖失效。",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "bootstrap"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "903f0206f48a47b35989f6102056311ede8ca4ee9d9d8f6995c3773cd5812462",
+      "bytes": 12022,
+      "contentPath": "content/blogs/bootstrap.md"
+    },
+    {
+      "id": "command-replay",
+      "title": "Command 历史：可逆操作、随机状态回卷与确定性 Replay",
+      "summary": "游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "command",
+        "replay"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "d9525e4ee49d53b9a380eebf2b46dcc67f517c7823d5dea8012a73e67bbeac8a",
+      "bytes": 12517,
+      "contentPath": "content/blogs/command-replay.md"
+    },
+    {
       "id": "extraction-transaction-boundary",
-      "title": "撤离式 PvPvE 的事务提交边界：为什么“成功带出来才算真正到手”",
+      "title": "撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算",
       "summary": "从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。",
       "series": "游戏系统的共同语言",
       "tags": [
@@ -836,14 +940,28 @@
         "pvpve",
         "transactions"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "c399b511d0a3478fe2ab84780e18b43162a4b9dcbf85412b6bda95ec4897dd3a",
-      "bytes": 14637,
+      "updatedAt": "2026-08-05",
+      "sha256": "6c97349890c7c9b3cac367c7d28b0e78c2b0cbd3db4aaf8ad18afc45c7b4b478",
+      "bytes": 14631,
       "contentPath": "content/blogs/extraction-transaction-boundary.md"
     },
     {
+      "id": "facade-scope",
+      "title": "运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯",
+      "summary": "不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "facade",
+        "scope"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "022922027dda3f2ebe7d82fa02e5a032a8e13033e4d01eacdaba959cbcdfb073",
+      "bytes": 11154,
+      "contentPath": "content/blogs/facade-scope.md"
+    },
+    {
       "id": "framework-support-surface-governance",
-      "title": "支持面治理：代码总量为什么不等于产品能力",
+      "title": "支持面治理：实现面、消费面与产品承诺的分离",
       "summary": "从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。",
       "series": "大型 Unity 框架的治理复盘",
       "tags": [
@@ -853,14 +971,14 @@
         "support-surface",
         "unity"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "8f0a8d16a84ab6a127a04a7cac176ee19c244f9424c206b6bd86284d01e4a661",
-      "bytes": 18822,
+      "updatedAt": "2026-08-05",
+      "sha256": "c76742216044ad25778cab0d77e1245cbeec859e196b84fa5a5d230dd993879b",
+      "bytes": 18825,
       "contentPath": "content/blogs/framework-support-surface-governance.md"
     },
     {
       "id": "local-passed-runner-passed",
-      "title": "证据等级：为什么 local-passed 不能写成 runner-passed",
+      "title": "证据等级：本地验证、Runner 复验与交付结论边界",
       "summary": "一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？",
       "series": "大型 Unity 框架的治理复盘",
       "tags": [
@@ -868,14 +986,14 @@
         "passed",
         "runner"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "69fb4d9628c03b5a9f9ba9478ec0d57dd2fcd82d3e6e319c489df42319a84f20",
+      "updatedAt": "2026-08-05",
+      "sha256": "43a914d776a30257e301e6a324a8ed24fdeac1e0332d476a6d036cf241a1f732",
       "bytes": 16225,
       "contentPath": "content/blogs/local-passed-runner-passed.md"
     },
     {
       "id": "metroidvania-capability-gated-topology",
-      "title": "世界拓扑与能力门控：为什么银河城地图其实是一张权限图",
+      "title": "世界拓扑与能力门控：银河城地图中的权限、可达性与区域重访",
       "summary": "从空间、权限与记忆三层解释银河城地图如何用能力门控改变可达范围，并让旧区域在成长后重新产生价值。",
       "series": "游戏系统的共同语言",
       "tags": [
@@ -883,14 +1001,14 @@
         "metroidvania",
         "topology"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "fa921ad93625fa5e8e28310c52517594e66455231b5697d46cc7e02f8e65d425",
-      "bytes": 23547,
+      "updatedAt": "2026-08-05",
+      "sha256": "266109e6f8104553082957d14ce8704a32a60b798a3f9bb0dd6d6550fef9e4dd",
+      "bytes": 23553,
       "contentPath": "content/blogs/metroidvania-capability-gated-topology.md"
     },
     {
       "id": "stealth-recoverable-exposure",
-      "title": "潜行游戏的可恢复暴露循环：被敌人发现了，为什么不该立刻失败",
+      "title": "潜行游戏的可恢复暴露循环：警戒升级、信息传播与补救空间",
       "summary": "从感知不对称、警戒升级与信息传播解释潜行失败如何成为仍可判断、可补救但有后果的玩法。",
       "series": "游戏系统的共同语言",
       "tags": [
@@ -898,14 +1016,14 @@
         "recovery",
         "stealth"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "50c7dc7fc59534d92dc77567e799f827447172e1b186800c4ee09de7f905f653",
-      "bytes": 15931,
+      "updatedAt": "2026-08-05",
+      "sha256": "d128e4525489456eefa192acb6679bbb691de2d457f86a88a2c860d866ce8ed9",
+      "bytes": 15925,
       "contentPath": "content/blogs/stealth-recoverable-exposure.md"
     },
     {
       "id": "unity-hot-update-transaction-boundary",
-      "title": "Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成",
+      "title": "Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复",
       "summary": "从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。",
       "series": "Sakura Framework 工程实践",
       "tags": [
@@ -914,10 +1032,38 @@
         "transactions",
         "unity"
       ],
-      "updatedAt": "2026-08-03",
-      "sha256": "61fca7b0adf7c8511cf0f21633499010a1b51d7d8e211cc044f48f2d809beaba",
-      "bytes": 13090,
+      "updatedAt": "2026-08-05",
+      "sha256": "b0e24cd765648a61497316c29b7ab4dfae3ea6771fc67664a9adef773cb226ef",
+      "bytes": 13087,
       "contentPath": "content/blogs/unity-hot-update-transaction-boundary.md"
+    },
+    {
+      "id": "unity-quickstart",
+      "title": "Unity Quickstart 的可执行接入证据与有界进程治理",
+      "summary": "一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "quickstart",
+        "unity"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "52ec0ae95559466e5d5f975e251770548a20fa5f38af514f88e8772469df8e00",
+      "bytes": 12991,
+      "contentPath": "content/blogs/unity-quickstart.md"
+    },
+    {
+      "id": "unity-sample",
+      "title": "Unity Sample 的条件组合层与渐进式依赖闭包",
+      "summary": "一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "sample",
+        "unity"
+      ],
+      "updatedAt": "2026-08-05",
+      "sha256": "8f2791247106c271197fe446d4364b5b59c6f05330af0ddbd749e82c0f1d42e9",
+      "bytes": 9252,
+      "contentPath": "content/blogs/unity-sample.md"
     }
   ]
 }

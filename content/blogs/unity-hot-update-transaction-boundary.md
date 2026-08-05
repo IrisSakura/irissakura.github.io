@@ -1,4 +1,4 @@
-# Unity 热更新的事务提交边界：为什么“加载 DLL 成功”仍不算更新完成
+# Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复
 
 > 系列：Sakura Framework 工程实践
 >

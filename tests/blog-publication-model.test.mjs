@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
@@ -31,11 +32,27 @@ test('publication validation fails closed when a draft marker is marked as publi
     [article.id, await readFile(new URL(article.contentPath, root))]
   ))));
   const invalid = structuredClone(manifest);
-  const draft = invalid.articles.find((article) => article.sourceId === 'blog-eb1c415c');
+  const invalidSource = structuredClone(source);
+  const invalidBodies = new Map(bodies);
+  const draft = invalid.articles.find((article) => article.status === 'draft');
+  assert.ok(draft);
   draft.status = 'published';
   draft.publishedAt = draft.updatedAt;
+  const body = Buffer.concat([
+    invalidBodies.get(draft.sourceId),
+    Buffer.from('\n> 状态：草稿\n')
+  ]);
+  const contentHash = createHash('sha256').update(body).digest('hex');
+  draft.contentHash = contentHash;
+  const sourceArticle = invalidSource.blogs.find((article) => article.id === draft.sourceId);
+  assert.ok(sourceArticle);
+  sourceArticle.sha256 = contentHash;
+  invalidBodies.set(draft.sourceId, body);
 
-  assert.throws(() => selectPublishedBlogs(invalid, source, bodies), /contains a draft marker/u);
+  assert.throws(
+    () => selectPublishedBlogs(invalid, invalidSource, invalidBodies),
+    /contains a draft marker/u
+  );
 });
 
 test('publication preamble is removed from rendered article prose', () => {
