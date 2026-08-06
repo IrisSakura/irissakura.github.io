@@ -78,9 +78,13 @@ test('RSS contains only formal semantic article routes with contract dates', asy
   const publicationById = new Map(publication.articles.map((article) => [article.sourceId, article]));
   for (const article of source.blogs) {
     const contract = publicationById.get(article.id);
-    const isPublic = ['approved', 'published'].includes(contract.status);
+    const isPublic = ['approved', 'published'].includes(contract?.status);
     assert.equal(rss.includes(`<title>${article.title}</title>`), isPublic, `RSS publication mismatch for ${article.id}`);
-    assert.equal(rss.includes(`/pages/blog/${contract.slug}.html`), isPublic, `RSS route mismatch for ${article.id}`);
+    if (contract) {
+      assert.equal(rss.includes(`/pages/blog/${contract.slug}.html`), isPublic, `RSS route mismatch for ${article.id}`);
+    } else {
+      assert.ok(!rss.includes(article.id), `unregistered blog appears in RSS: ${article.id}`);
+    }
     if (isPublic) assert.ok(rss.includes(new Date(`${contract.publishedAt}T00:00:00Z`).toUTCString()));
   }
 });

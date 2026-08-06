@@ -13,13 +13,16 @@ Sakura Design Journal 的 `main` 分支推送负责生成公开导出包，并�
 Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`。本站导入器随后重新
 校验 SHA、数量、正文哈希和敏感内容。这是“可以安全公开”门禁，不等于编辑上已经可发布。
 
-站点侧的 `config/blog-publication.json` 是第二级出版合同。它必须覆盖全部导入文章，
-并且固定 `status`、语义 `slug`、`publishedAt`、`updatedAt`、标题、摘要、系列、
-标签和 `contentHash`。只有 `approved` 或 `published` 会生成正文页；其他状态只保留
-`noindex` 的旧路由引导页。Markdown 产生的 HTML 仍会经过白名单清理。
+站点侧的 `config/blog-publication.json` 是第二级稀疏出版白名单。它不需要覆盖全部导入文章；
+没有合同的来源文章自动进入隐式待审核状态，只保留安全导入镜像，不生成正文页、旧址引导页、
+社交图、RSS 或 Sitemap 条目。显式合同固定 `status`、语义 `slug`、`publishedAt`、
+`updatedAt`、标题、摘要、系列、标签和 `contentHash`。只有 `approved` 或 `published`
+会生成正式正文页；显式登记的其他状态只保留 `noindex` 的旧路由引导页。Markdown 产生的
+HTML 仍会经过白名单清理。
 
-该合同不属于 Journal 自动同步的可写路径。新文章或正文哈希变化会让同步失败关闭，
-站点维护者完成编辑复核并手工更新合同后，才能重试同步。
+该合同不属于 Journal 自动同步的可写路径。新增未登记文章不会阻塞同步；但任何显式合同的
+来源删除、字段或正文哈希变化仍会失败关闭。站点维护者完成编辑复核并手工新增或更新合同后，
+文章才能获得语义路由并进入正式发布流程。
 
 ## Runner 配置
 

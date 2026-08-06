@@ -7,7 +7,7 @@ import { selectPublishedBlogs, stripBlogPublicationPreamble } from '../scripts/l
 
 const root = new URL('../', import.meta.url);
 
-test('publication manifest is complete and only approved or published entries are selected', async () => {
+test('publication allowlist selects only explicitly approved or published entries', async () => {
   const [manifest, source] = await Promise.all([
     readJson('config/blog-publication.json'),
     readJson('data/journal-source.json')
@@ -21,6 +21,61 @@ test('publication manifest is complete and only approved or published entries ar
   assert.equal(selected.length, 6);
   assert.ok(selected.every((article) => article.publishedAt <= article.updatedAt));
   assert.ok(selected.every((article) => !/^blog-[a-f0-9]{8,}$/u.test(article.slug)));
+});
+
+test('unregistered Journal blogs remain in implicit review without entering publication selection', async () => {
+  const [manifest, source] = await Promise.all([
+    readJson('config/blog-publication.json'),
+    readJson('data/journal-source.json')
+  ]);
+  const bodies = new Map(await Promise.all(source.blogs.map(async (article) => (
+    [article.id, await readFile(new URL(article.contentPath, root))]
+  ))));
+  const omitted = manifest.articles.find((article) => article.status === 'published');
+  assert.ok(omitted);
+  const sparseManifest = structuredClone(manifest);
+  sparseManifest.articles = sparseManifest.articles.filter((article) => article.sourceId !== omitted.sourceId);
+
+  const selected = selectPublishedBlogs(sparseManifest, source, bodies);
+  assert.ok(selected.every((article) => article.id !== omitted.sourceId));
+});
+
+test('explicit publication entries fail closed on source deletion, metadata drift and body drift', async () => {
+  const [manifest, source] = await Promise.all([
+    readJson('config/blog-publication.json'),
+    readJson('data/journal-source.json')
+  ]);
+  const bodies = new Map(await Promise.all(source.blogs.map(async (article) => (
+    [article.id, await readFile(new URL(article.contentPath, root))]
+  ))));
+  const published = manifest.articles.find((article) => article.status === 'published');
+  assert.ok(published);
+
+  const missingSource = structuredClone(source);
+  missingSource.blogs = missingSource.blogs.filter((article) => article.id !== published.sourceId);
+  assert.throws(
+    () => selectPublishedBlogs(manifest, missingSource, bodies),
+    new RegExp(`Publication source no longer exists: ${published.sourceId}`)
+  );
+
+  const driftedSource = structuredClone(source);
+  const driftedArticle = driftedSource.blogs.find((article) => article.id === published.sourceId);
+  assert.ok(driftedArticle);
+  driftedArticle.title = `${driftedArticle.title} drift`;
+  assert.throws(
+    () => selectPublishedBlogs(manifest, driftedSource, bodies),
+    new RegExp(`Blog ${published.sourceId} publication title does not match Journal metadata`)
+  );
+
+  const driftedBodies = new Map(bodies);
+  driftedBodies.set(published.sourceId, Buffer.concat([
+    driftedBodies.get(published.sourceId),
+    Buffer.from('\nbody drift\n')
+  ]));
+  assert.throws(
+    () => selectPublishedBlogs(manifest, source, driftedBodies),
+    new RegExp(`Blog ${published.sourceId} publication content hash does not match its body`)
+  );
 });
 
 test('publication validation fails closed when a draft marker is marked as published', async () => {

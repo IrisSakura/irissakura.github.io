@@ -601,6 +601,7 @@ async function listHtmlFiles(directory, prefix) {
 test('repository metadata and publishing policy are explicit', async () => {
   const packageJson = JSON.parse(await readText('package.json'));
   const readme = await readText('README.md');
+  const journalSync = await readText('docs/maintenance/journal-sync.md');
   const workflow = await readText('.github/workflows/site-quality-and-pages.yml');
 
   assert.equal(packageJson.author, 'IrisSakura');
@@ -609,6 +610,9 @@ test('repository metadata and publishing policy are explicit', async () => {
   assert.ok(!packageJson.dependencies?.gsap);
   assert.ok(readme.includes('内容真实性原则'));
   assert.ok(readme.includes('dist/'));
+  assert.ok(readme.includes('隐式待审核'));
+  assert.ok(journalSync.includes('新增未登记文章不会阻塞同步'));
+  assert.ok(journalSync.includes('任何显式合同'));
   assert.ok(workflow.includes('npm run check'));
   assert.ok(workflow.includes('npm run test:smoke'));
   assert.ok(workflow.includes('actions/deploy-pages@v4'));

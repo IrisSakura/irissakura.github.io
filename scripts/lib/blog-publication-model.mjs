@@ -85,10 +85,6 @@ export function selectPublishedBlogs(manifest, source, blogBodies) {
     }
   }
 
-  const missing = source.blogs.map((article) => article.id).filter((id) => !manifestIds.has(id));
-  if (missing.length > 0 || manifestIds.size !== source.blogs.length) {
-    throw new Error(`Blog publication manifest coverage mismatch: ${missing.join(', ') || 'unexpected entries'}.`);
-  }
   return selected;
 }
 

@@ -107,6 +107,7 @@ const blogCollectionDefinitions = [
 ];
 const blogAliasDefinitions = journalSource.blogs.flatMap((article) => {
   const publication = publicationById.get(article.id);
+  if (!publication) return [];
   const isPublished = ['approved', 'published'].includes(publication.status);
   if (isPublished && publication.slug === article.id) return [];
   return [{

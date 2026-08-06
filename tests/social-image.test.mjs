@@ -18,7 +18,7 @@ test('deterministic social images are valid 1200x630 PNG assets', () => {
   assert.equal(first.readUInt32BE(20), 630);
 });
 
-test('formal articles and major sections expose distinct generated social images', async () => {
+test('formal articles and major sections expose distinct social images while implicit review exposes none', async () => {
   const [source, publication] = await Promise.all([
     JSON.parse(await readText('data/journal-source.json')),
     JSON.parse(await readText('config/blog-publication.json'))
@@ -43,5 +43,13 @@ test('formal articles and major sections expose distinct generated social images
     images.push(image);
   }
   assert.equal(new Set(images).size, images.length, 'major sections and formal articles must not share social images');
-  assert.equal(source.blogs.length, publication.articles.length);
+  const publicationIds = new Set(publication.articles.map((entry) => entry.sourceId));
+  const implicitReview = source.blogs.filter((entry) => !publicationIds.has(entry.id));
+  for (const article of implicitReview) {
+    await assert.rejects(
+      access(new URL(`../assets/social/pages-blog-${article.id}.png`, import.meta.url)),
+      (error) => error?.code === 'ENOENT',
+      `implicit-review blog must not expose a social image: ${article.id}`
+    );
+  }
 });

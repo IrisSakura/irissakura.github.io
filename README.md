@@ -53,7 +53,7 @@ npm run package:site
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
 - `content/blogs/`：通过安全导入的 Markdown 源镜像，不因存在于此而自动公开；
-- `config/blog-publication.json`：站点侧人工出版合同，记录状态、语义 slug、发布/更新日期、标题、摘要、系列、标签与正文哈希；
+- `config/blog-publication.json`：站点侧稀疏出版白名单，只为已经进入人工编辑流程的文章记录状态、语义 slug、发布/更新日期、标题、摘要、系列、标签与正文哈希；
 - `data/blog-taxonomy.json`：正式文章使用的系列与标签语义路由；
 - `data/evidence-chains.json`：研究、Framework 采用映射和游戏系统之间的公开证据链与边界；
 - `data/framework.json`：由 Sakura Framework 权威清单生成的白名单公开快照；
@@ -95,8 +95,9 @@ npm run journal:check -- --input /path/to/public-export
 Journal 的 `blogs/publication.v1.json` 只表示文章可以进入安全导出；本站还要用
 `config/blog-publication.json` 做第二级编辑确认。只有 `approved` 或 `published`
 可生成索引、正文页、系列/标签页、RSS 与 Sitemap；`draft`、`review`、`revised` 和 `archived`
-都不进入公开正文或聚合入口。新文章、字段漂移、哈希变化、草稿标记或非语义 slug
-会让导入/构建失败，必须经过人工复核后更新合同。
+都不进入公开正文或聚合入口。没有站点合同的新文章会作为隐式待审核内容完成安全导入，但不会生成
+公开路由、社交图或聚合入口；显式合同的字段漂移、哈希变化、草稿标记、来源删除或非语义 slug
+仍会让导入/构建失败，必须经过人工复核后更新合同。
 
 导入器同时检查提交 SHA、数量、正文哈希、危险 HTML、本机路径和凭据模式。
 

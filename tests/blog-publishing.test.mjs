@@ -15,7 +15,11 @@ test('only manifest-approved Journal blogs are published as complete indexable a
   ]);
   const publicationById = new Map(publication.articles.map((article) => [article.sourceId, article]));
   const published = source.blogs.filter((article) => ['approved', 'published'].includes(publicationById.get(article.id)?.status));
-  const unpublished = source.blogs.filter((article) => !['approved', 'published'].includes(publicationById.get(article.id)?.status));
+  const unpublished = source.blogs.filter((article) => {
+    const contract = publicationById.get(article.id);
+    return contract && !['approved', 'published'].includes(contract.status);
+  });
+  const unregistered = source.blogs.filter((article) => !publicationById.has(article.id));
   const index = await readText('pages/blog.html');
   const sitemap = await readText('sitemap.xml');
 
@@ -45,6 +49,21 @@ test('only manifest-approved Journal blogs are published as complete indexable a
     const alias = await readText(`pages/blog/${article.id}.html`);
     assert.ok(alias.includes('noindex, follow'), `unpublished legacy route must be noindex: ${article.id}`);
     assert.ok(!alias.includes('class="blog-prose"'), `unpublished legacy route exposes prose: ${article.id}`);
+  }
+  for (const article of unregistered) {
+    await readText(article.contentPath);
+    assert.ok(!index.includes(article.title), `unregistered blog appears in the index: ${article.id}`);
+    assert.ok(!sitemap.includes(`/pages/blog/${article.id}.html`), `unregistered blog appears in sitemap: ${article.id}`);
+    await assert.rejects(
+      readText(`pages/blog/${article.id}.html`),
+      (error) => error?.code === 'ENOENT',
+      `unregistered blog must not have a public route: ${article.id}`
+    );
+    await assert.rejects(
+      readFile(new URL(`assets/social/pages-blog-${article.id}.png`, root)),
+      (error) => error?.code === 'ENOENT',
+      `unregistered blog must not have a social image: ${article.id}`
+    );
   }
 });
 
