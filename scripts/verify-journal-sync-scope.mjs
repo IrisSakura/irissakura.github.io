@@ -7,6 +7,7 @@ const allowed = [
   /^content\/blogs\/[a-z0-9-]+\.md$/,
   /^data\/journal(?:-source)?\.json$/,
   /^index\.html$/,
+  /^pages\/(?:framework|game)\.html$/,
   /^pages\/blog\.html$/,
   /^pages\/blog\/[a-z0-9-]+\.html$/,
   /^pages\/blog\/(?:series|tag)\/[a-z0-9-]+\.html$/,

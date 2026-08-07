@@ -7,6 +7,8 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'content/blogs/article.md',
     'data/journal.json',
     'data/journal-source.json',
+    'pages/framework.html',
+    'pages/game.html',
     'pages/blog.html',
     'pages/blog/article.html',
     'pages/blog/series/game-systems.html',
