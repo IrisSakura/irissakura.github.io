@@ -1,14 +1,21 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "a61247c5ac12cee572fbbc1c138ae6b377b96263",
-  "generatedAt": "2026-08-05T21:18:16+08:00",
+  "sourceCommit": "749d5cefaeb6738bc262398ea366b4148a14fa46",
+  "generatedAt": "2026-08-07T10:19:39+08:00",
   "summary": {
-    "auditCount": 33,
-    "blogCount": 18,
+    "auditCount": 34,
+    "blogCount": 22,
     "gameDesignCount": 49
   },
   "gameDesignCatalogDigest": "9c3c845cdf657afd906f4582d5beed7049a50850757b7a7374363e5e8eb651d5",
   "audits": [
+    {
+      "id": "audit-2026-08-06",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "较上一轮审计基准 77f4f32d...，默认分支又前进了 21 个提交。近期变化高度集中在 RC 流程验证，同时包含两项实际运行时或测试可靠性修复： 修复 RuntimeTaskSupervisor.WhenIdleAsync() 与受监管任务终态之间的时序窗口； 修复 Modding ScriptProxy 的 Unity EditMode 异步测试死锁； 多次重新选择并验证 Candidate； 将 pre-tag、annotated Tag、strict readiness 与 Release mutation 拆分； 将 Candidate 源码与后续 RC 验证工具检出分离； 完成 v0.8.27-rc.6 的 annotated Tag、strict tagged readiness 和 Artifact 回下载验证；",
+      "updatedAt": "2026-08-06",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-05",
       "title": "Sakura Framework 仓库最新审计与能力收敛计划",
@@ -830,6 +837,58 @@
     }
   ],
   "blogs": [
+    {
+      "id": "ai",
+      "title": "开发任务胶囊与项目语义图：AI 协作中的只读上下文、影响分析与证据边界",
+      "summary": "大型代码仓库如何把一个开发任务需要的范围、项目结构、影响关系和验证证据压缩成稳定的机器可读上下文，同时不把“理解仓库”错误地升级成“拥有执行权限”？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "ai"
+      ],
+      "updatedAt": "2026-08-07",
+      "sha256": "c45a15e4349bca0d484422b3680715715d34d754ca27705e1878770e6ea4070a",
+      "bytes": 14007,
+      "contentPath": "content/blogs/ai.md"
+    },
+    {
+      "id": "blog-9c93136e",
+      "title": "框架能力语义目录：能力词表、证据化声明与可解释模块选择",
+      "summary": "大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-07",
+      "sha256": "60b0cea1b7c761ef6e6410f44bb7a403d9d0c570b5f23ff8fb6be94658a0799e",
+      "bytes": 13466,
+      "contentPath": "content/blogs/blog-9c93136e.md"
+    },
+    {
+      "id": "blog-b32aa28b",
+      "title": "候选版本身份治理：发布冻结、失效判定与主线回退",
+      "summary": "一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？",
+      "series": "大型 Unity 框架的治理复盘",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-07",
+      "sha256": "3f78572d449430d89af518ca6158f54ad29f8224ea898edec4bf16b5dee33c3c",
+      "bytes": 18068,
+      "contentPath": "content/blogs/blog-b32aa28b.md"
+    },
+    {
+      "id": "resolver",
+      "title": "本地化文本生命周期：Resolver 所有权、语言状态与原子表写入",
+      "summary": "Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "resolver"
+      ],
+      "updatedAt": "2026-08-07",
+      "sha256": "0e4960e25778a0e8a67cbebe6a3b5e46fae51aabc47a4ae72d163bc690898532",
+      "bytes": 14082,
+      "contentPath": "content/blogs/resolver.md"
+    },
     {
       "id": "4x",
       "title": "治理容量：4X 扩张中的收益、组织负担与管理约束",
