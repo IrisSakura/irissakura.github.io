@@ -303,7 +303,7 @@ flowchart LR
 
 以下链接用于仓库内部审稿与追溯，不是公开版最终引用：
 
-- [撤离式 PvPvE：风险资产托管、局内所有权转移与撤离提交边界](../journal.html#design-extraction-pvpve)
+- [撤离式 PvPvE：风险资产托管、局内所有权转移与撤离提交边界](../journal.html#design-extraction-cross-session-loop)
 - [类魂动作 RPG：死亡回收与检查点世界循环](../journal.html#design-soulslike-action-commitment-recovery)
 - [远征队探险管理：风险投资与主动撤退](../journal.html#design-expedition-management)
 - [卡牌构筑式 Roguelike：风险路线经营](../journal.html#design-deckbuilder-roguelike)
