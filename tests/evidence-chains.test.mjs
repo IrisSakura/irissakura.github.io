@@ -21,7 +21,7 @@ test('evidence chains resolve only reviewed game, framework and public research 
   assert.equal(chains.length, 3);
   assert.ok(chains.every((chain) => chain.research.length > 0));
   assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'blog/metroidvania-capability-gated-topology.html')));
-  assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'journal.html#design-extraction-pvpve')));
+  assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'journal.html#design-extraction-cross-session-loop')));
 
   const unknownSystem = structuredClone(data);
   unknownSystem.chains[0].gameSystem = '不存在的系统';
