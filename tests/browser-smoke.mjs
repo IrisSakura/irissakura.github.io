@@ -324,6 +324,32 @@ try {
   if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
   if (!await desktop.locator('.portfolio-case').first().filter({ hasText: gameProject.title }).isVisible()) throw new Error('registered game project is not the first portfolio case');
 
+  await desktop.getByLabel('选择页面主题').selectOption('sakura-village');
+  const portfolioInsetFailures = [];
+  for (const viewport of [
+    { width: 2048, height: 1200 },
+    { width: 390, height: 844 }
+  ]) {
+    await desktop.setViewportSize(viewport);
+    const caseInsets = await desktop.locator('.portfolio-case').evaluateAll((cases) => cases.map((portfolioCase) => {
+      const caseRect = portfolioCase.getBoundingClientRect();
+      const contentRects = [...portfolioCase.children].map((child) => child.getBoundingClientRect());
+      return {
+        left: Math.min(...contentRects.map((rect) => rect.left)) - caseRect.left,
+        right: caseRect.right - Math.max(...contentRects.map((rect) => rect.right))
+      };
+    }));
+    for (const [index, inset] of caseInsets.entries()) {
+      if (inset.left < 19 || inset.right < 19) {
+        portfolioInsetFailures.push(`${viewport.width}px case ${index + 1} inset ${JSON.stringify(inset)} below 19px`);
+      }
+    }
+  }
+  if (portfolioInsetFailures.length > 0) {
+    throw new Error(`portfolio case content touches its section edge:\n${portfolioInsetFailures.join('\n')}`);
+  }
+  await desktop.setViewportSize({ width: 1280, height: 900 });
+
   await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/art-music.html`);
   if (!await desktop.getByRole('heading', { name: '美术与音乐作品集', exact: true }).isVisible()) {

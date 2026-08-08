@@ -95,6 +95,21 @@ test('portfolio renders exactly three fixed evidence-led cases with the game fir
   assert.ok(html.includes('journal-proof-visual'));
 });
 
+test('portfolio cases preserve responsive inline breathing room', async () => {
+  const css = await readText('style/portfolio.css');
+
+  assert.match(
+    css,
+    /--portfolio-case-inline-inset:\s*clamp\(1\.25rem,\s*3vw,\s*3rem\);/u,
+    'portfolio cases need a responsive internal inset'
+  );
+  assert.match(
+    css,
+    /\.portfolio-case\s*\{[^}]*padding:\s*4\.5rem\s+var\(--portfolio-case-inline-inset\);/su,
+    'portfolio case content must not touch either section edge'
+  );
+});
+
 test('finished game page presents the real playable loop and public screenshots', async () => {
   const html = await readText('pages/game.html');
   const publicText = html;
