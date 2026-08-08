@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { assertFrameworkAdoptionReviewed } from '../scripts/lib/framework-adoption-review.mjs';
+import { updateFrameworkFallback } from '../scripts/lib/framework-fallback.mjs';
 
 const root = new URL('../', import.meta.url);
 
@@ -110,6 +111,34 @@ test('framework adoption review rejects unsupported or mismatched contract versi
     () => assertFrameworkAdoptionReviewed(framework, adoption),
     /adoption review required.*supported-stable-v2/u
   );
+});
+
+test('framework fallback projection refreshes synchronized explorer defaults', () => {
+  const html = `
+    <button data-layer-id="foundation"><span>13</span></button>
+    <p id="framework-layer-detail-description">stale</p>
+    <strong id="framework-layer-detail-count">13</strong>
+    <strong id="framework-layer-detail-share">9%</strong>
+    <button data-lifecycle-name="Supported"><strong>4</strong></button>
+    <strong id="framework-lifecycle-detail-count">4</strong>
+    <strong id="framework-lifecycle-detail-share">2%</strong>
+  `;
+  const data = {
+    summary: { packageCount: 146, catalogModuleCount: 141, profileCount: 10 },
+    lifecycleCounts: { Supported: 5 },
+    layers: [{ id: 'foundation', description: '最小基底能力，供多数 Core 复用。', packageCount: 14 }],
+    featuredModules: []
+  };
+
+  const actual = updateFrameworkFallback(html, data, { supportedPackages: [] });
+
+  assert.match(actual, /data-layer-id="foundation"><span>14<\/span>/);
+  assert.match(actual, /id="framework-layer-detail-description">最小基底能力，供多数 Core 复用。<\/p>/);
+  assert.match(actual, /id="framework-layer-detail-count">14<\/strong>/);
+  assert.match(actual, /id="framework-layer-detail-share">10%<\/strong>/);
+  assert.match(actual, /data-lifecycle-name="Supported"><strong>5<\/strong>/);
+  assert.match(actual, /id="framework-lifecycle-detail-count">5<\/strong>/);
+  assert.match(actual, /id="framework-lifecycle-detail-share">3%<\/strong>/);
 });
 
 test('framework page contains one target for each dynamic field', async () => {
@@ -251,6 +280,51 @@ test('framework page presents maturity before scale and documents sync ownership
       `${id} should match the synchronized lifecycle count`
     );
   }
+
+  const foundationLayer = framework.layers.find((layer) => layer.id === 'foundation');
+  assert.ok(foundationLayer, 'framework snapshot should include the foundation layer');
+  assert.match(
+    html,
+    new RegExp(
+      `data-layer-id="foundation"[\\s\\S]*?<span>${foundationLayer.packageCount}</span>[\\s\\S]*?</button>`
+    ),
+    'static architecture explorer fallback should use the synchronized foundation count'
+  );
+  assert.ok(
+    html.includes(`id="framework-layer-detail-count">${foundationLayer.packageCount}</strong>`),
+    'static architecture detail fallback should use the synchronized foundation count'
+  );
+  assert.ok(
+    html.includes(`id="framework-layer-detail-description">${foundationLayer.description}</p>`),
+    'static architecture detail fallback should use the synchronized foundation description'
+  );
+  const expectedFoundationShare = Math.max(
+    foundationLayer.packageCount > 0 ? 1 : 0,
+    Math.round((foundationLayer.packageCount / framework.summary.packageCount) * 100)
+  );
+  assert.ok(
+    html.includes(`id="framework-layer-detail-share">${expectedFoundationShare}%</strong>`),
+    'static architecture detail fallback should use the synchronized foundation share'
+  );
+  assert.match(
+    html,
+    new RegExp(
+      `data-lifecycle-name="Supported"[\\s\\S]*?<strong>${framework.lifecycleCounts.Supported}</strong>[\\s\\S]*?</button>`
+    ),
+    'static lifecycle explorer fallback should use the synchronized Supported count'
+  );
+  assert.ok(
+    html.includes(`id="framework-lifecycle-detail-count">${framework.lifecycleCounts.Supported}</strong>`),
+    'static lifecycle detail fallback should use the synchronized Supported count'
+  );
+  const expectedSupportedShare = Math.max(
+    framework.lifecycleCounts.Supported > 0 ? 1 : 0,
+    Math.round((framework.lifecycleCounts.Supported / framework.summary.packageCount) * 100)
+  );
+  assert.ok(
+    html.includes(`id="framework-lifecycle-detail-share">${expectedSupportedShare}%</strong>`),
+    'static lifecycle detail fallback should use the synchronized Supported share'
+  );
 
   assert.ok(maintenance.includes('data/framework.json'));
   assert.ok(maintenance.includes('data/framework-adoption.json'));

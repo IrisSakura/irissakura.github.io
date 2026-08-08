@@ -9,6 +9,7 @@ import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framew
 import { resolveBlogDiscovery } from './lib/blog-discovery-model.mjs';
 import { selectPublishedBlogs, stripBlogPublicationPreamble } from './lib/blog-publication-model.mjs';
 import { resolveEvidenceChains } from './lib/evidence-chain-model.mjs';
+import { updateFrameworkFallback } from './lib/framework-fallback.mjs';
 import { assertProjectFactsCurrent } from './lib/project-facts.mjs';
 import { writeSocialImages } from './lib/social-image.mjs';
 
@@ -557,29 +558,6 @@ function installThemeBootstrap(html, prefix, config) {
   const themeBootstrapPattern = /<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/;
   html = html.replace(themeBootstrapPattern, '');
   return html.replace(themeStyles, `${themeStyles}\n    ${themeBootstrap}`);
-}
-
-function updateFrameworkFallback(html, data, adoption) {
-  const replacements = {
-    'framework-package-count': data.summary.packageCount,
-    'framework-module-count': data.summary.catalogModuleCount,
-    'framework-profile-count': data.summary.profileCount,
-    'framework-maturity-summary': `${data.summary.packageCount} 个 Package 中只有 ${data.lifecycleCounts.Supported ?? 0} 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。`,
-    'framework-module-result-count': `${data.featuredModules.length} 个模块`,
-    'framework-supported-count': data.lifecycleCounts.Supported ?? 0,
-    'framework-preview-count': data.lifecycleCounts.Preview ?? 0,
-    'framework-experimental-count': data.lifecycleCounts.Experimental ?? 0,
-    'framework-docsonly-count': data.lifecycleCounts.DocsOnly ?? 0,
-    'framework-frozen-count': data.lifecycleCounts.Frozen ?? 0,
-    'framework-supported-package-list': adoption.supportedPackages.map((entry) => entry.displayName).join('、')
-  };
-  for (const [id, value] of Object.entries(replacements)) {
-    html = html.replace(
-      new RegExp(`(<[^>]+id="${id}"[^>]*>)[\\s\\S]*?(</[^>]+>)`),
-      `$1${value}$2`
-    );
-  }
-  return html;
 }
 
 function replaceGeneratedBlock(html, name, content) {
