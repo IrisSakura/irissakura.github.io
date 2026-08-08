@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "dcf45cdf6d83ec0a335d3b9991d9c91cf60bff24",
+  "sourceCommit": "7e4d9e2ba4f02b1869edae3a46f41d26dd7ac404",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:799ba16af4b1f0f653d095f5dabe87f6ed8283ed6da06eab8d20f30e61d545e9",
-  "updatedAt": "2026-07-30",
+  "adoptionReviewHash": "sha256:c5674186bc4cdc4dab57d1f1af5de05a7a400a2556e50ce20d00eb540963f540",
+  "updatedAt": "2026-08-08",
   "supportedPackages": [
     {
       "id": "core",
@@ -28,6 +28,12 @@
       "displayName": "Pooling",
       "packageName": "com.unitygame.framework.pooling",
       "role": "对象复用与生命周期回收"
+    },
+    {
+      "id": "bootstrap",
+      "displayName": "Bootstrap",
+      "packageName": "com.unitygame.framework.bootstrap",
+      "role": "组合根、Scope 生命周期、可观察启动与任务监管"
     }
   ],
   "stableRoutes": [
@@ -42,6 +48,12 @@
       "label": "Bootstrap Lite",
       "packages": ["core", "event", "gamehelper", "pooling"],
       "purpose": "在 Core 上增加事件、对象池与游戏运行辅助，形成最小稳定组合。"
+    },
+    {
+      "id": "runtime-foundation",
+      "label": "Runtime Foundation",
+      "packages": ["core", "event", "gamehelper", "pooling", "bootstrap"],
+      "purpose": "在 Bootstrap Lite 上增加基础 Scope、可观察启动与任务监管，形成完整稳定运行时基建。"
     }
   ],
   "gameAdoption": [

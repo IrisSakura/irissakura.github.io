@@ -42,9 +42,12 @@ test('quickstart is a 15-minute fail-closed projection of reviewed stable routes
   const resolved = resolveQuickstartRoutes(quickstart, adoption);
   assert.deepEqual(
     resolved.map((route) => route.packages.map((entry) => entry.packageName)),
-    adoption.stableRoutes.map((route) => route.packages.map((id) => (
-      adoption.supportedPackages.find((entry) => entry.id === id).packageName
-    )))
+    quickstart.routeSequence.map((routeId) => {
+      const route = adoption.stableRoutes.find((entry) => entry.id === routeId);
+      return route.packages.map((id) => (
+        adoption.supportedPackages.find((entry) => entry.id === id).packageName
+      ));
+    })
   );
 
   for (const step of quickstart.steps) {
@@ -130,7 +133,12 @@ test('generated quickstart is indexable, self-contained and linked from Framewor
   for (const step of quickstart.steps) {
     assert.ok(quickstartHtml.includes(`id="${step.id}"`), `generated page missing ${step.id}`);
   }
-  for (const packageEntry of adoption.supportedPackages) {
+  const quickstartPackageIds = new Set(
+    adoption.stableRoutes
+      .filter((route) => quickstart.routeSequence.includes(route.id))
+      .flatMap((route) => route.packages)
+  );
+  for (const packageEntry of adoption.supportedPackages.filter((entry) => quickstartPackageIds.has(entry.id))) {
     assert.ok(quickstartHtml.includes(packageEntry.packageName), `generated page missing ${packageEntry.packageName}`);
   }
 

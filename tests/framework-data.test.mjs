@@ -65,9 +65,12 @@ test('framework adoption snapshot names the supported packages and pins reviewed
   ));
   assert.deepEqual(
     adoption.supportedPackages.map((entry) => entry.id),
-    ['core', 'event', 'gamehelper', 'pooling']
+    ['core', 'event', 'gamehelper', 'pooling', 'bootstrap']
   );
-  assert.deepEqual(adoption.stableRoutes.map((entry) => entry.id), ['core-only', 'bootstrap-lite']);
+  assert.deepEqual(
+    adoption.stableRoutes.map((entry) => entry.id),
+    ['core-only', 'bootstrap-lite', 'runtime-foundation']
+  );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
   assert.ok(!JSON.stringify(adoption).includes('/Users/'));
