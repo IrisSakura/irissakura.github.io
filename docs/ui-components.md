@@ -14,7 +14,7 @@
 | 组件 | 语义类 | 统一项 | 页面可变项 |
 | --- | --- | --- | --- |
 | 操作按钮 | `.btn` + `.btn-primary/.btn-secondary/.btn-outline` | 字体、圆角、颜色、边框、hover 阴影 | 排列、宽度 |
-| 选择控件 | `.theme-picker/.layout-picker` | 44px 高度、边框、surface、图标、hover/focus | 导航中的宽度 |
+| 选择控件 | `.theme-picker` | 44px 高度、边框、surface、图标、hover/focus | 导航中的宽度 |
 | 分段筛选 | `.module-filters/.module-filter` | 控件高度、surface、边框、active/focus | 列数 |
 | 标签 | `.tag`、`.note-tags`、`.system-tags`、`.portfolio-tags` | chip 边框、圆角、surface、文字 | 内边距、字号、间距 |
 | 内容表面 | blog/journal/module/game 等语义 card | surface 与弱边框 | 布局、padding、主题形状 |

@@ -32,7 +32,7 @@ test('shared component tokens own common actions, controls, chips, surfaces and 
   }
 
   assert.match(main, /\.btn\s*\{[^}]*var\(--ui-action-radius\)/s);
-  assert.match(main, /\.theme-picker,[\s\S]*?\.layout-picker\s*\{[^}]*var\(--ui-control-border\)[^}]*var\(--ui-pill-radius\)/s);
+  assert.match(main, /\.theme-picker\s*\{[^}]*var\(--ui-control-border\)[^}]*var\(--ui-pill-radius\)/s);
   assert.match(main, /\.tag,[\s\S]*?\.portfolio-tags span\s*\{[^}]*var\(--ui-chip-surface\)/s);
   assert.match(main, /:focus-visible\s*\{[^}]*var\(--ui-focus-color\)/s);
   assert.match(framework, /\.module-search input\s*\{[^}]*var\(--ui-control-border\)/s);
@@ -55,7 +55,7 @@ test('themes configure component tokens instead of re-declaring shared component
     ]) {
       assert.ok(css.includes(`${token}:`), `${themePath} missing ${token}`);
     }
-    for (const selector of ['.btn', '.theme-picker', '.layout-picker', '.tag']) {
+    for (const selector of ['.btn', '.theme-picker', '.tag']) {
       assert.ok(!css.includes(selector), `${themePath} re-declares shared component selector ${selector}`);
     }
   }

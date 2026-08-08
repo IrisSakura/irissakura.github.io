@@ -2,7 +2,6 @@ export {};
 
 const SYSTEM_THEME = 'system';
 const FALLBACK_STORAGE_KEY = 'irissakura-theme';
-const FALLBACK_LAYOUT_STORAGE_KEY = 'irissakura-layout';
 const REVEAL_SELECTOR = [
     '.hero-content > *',
     '.hero-proof',
@@ -68,8 +67,6 @@ class SiteShell {
     private lastFocused: HTMLElement | null = null;
     private themeSelect: HTMLSelectElement | null = null;
     private themeStylesheets: HTMLLinkElement[] = [];
-    private layoutSelect: HTMLSelectElement | null = null;
-    private layoutStylesheets: HTMLLinkElement[] = [];
     private colorSchemeQuery: MediaQueryList | null = null;
     private motionObserver: IntersectionObserver | null = null;
     private navigationAbort: AbortController | null = null;
@@ -90,16 +87,11 @@ class SiteShell {
         this.themeStylesheets = Array.from(
             document.querySelectorAll<HTMLLinkElement>('[data-theme-stylesheet]')
         );
-        this.layoutSelect = document.querySelector<HTMLSelectElement>('.layout-select');
-        this.layoutStylesheets = Array.from(
-            document.querySelectorAll<HTMLLinkElement>('[data-layout-stylesheet]')
-        );
         this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
         });
         this.setupTheme();
-        this.setupLayout();
         this.setupNavigation();
         this.setupSoftNavigation();
         this.setupFaq();
@@ -225,86 +217,6 @@ class SiteShell {
     private isTheme(value: string | null | undefined): value is string {
         if (!value || !this.themeSelect) return false;
         return Array.from(this.themeSelect.options).some((option) => option.value === value);
-    }
-
-    private setupLayout(): void {
-        const layoutSelect = this.layoutSelect;
-        if (!layoutSelect) return;
-        const initialLayout = this.readDocumentLayout()
-            ?? this.readStoredLayout()
-            ?? this.getDefaultLayout();
-        this.applyLayoutPreference(initialLayout);
-
-        layoutSelect.addEventListener('change', () => {
-            const layout = this.isLayout(layoutSelect.value)
-                ? layoutSelect.value
-                : this.getDefaultLayout();
-            this.applyLayoutPreference(layout, true);
-        });
-
-        window.addEventListener('storage', (event) => {
-            if (event.key !== this.getLayoutStorageKey()) return;
-            const layout = this.isLayout(event.newValue)
-                ? event.newValue
-                : this.getDefaultLayout();
-            this.applyLayoutPreference(layout);
-        });
-    }
-
-    private applyLayoutPreference(layout: string, persist = false): void {
-        if (!this.layoutSelect || !this.isLayout(layout)) return;
-        document.documentElement.dataset.layout = layout;
-        for (const stylesheet of this.layoutStylesheets) {
-            const supportedLayouts = (stylesheet.dataset.layouts ?? '').split(/\s+/);
-            stylesheet.disabled = !supportedLayouts.includes(layout);
-        }
-        this.layoutSelect.value = layout;
-
-        if (persist) {
-            try {
-                if (layout === this.getDefaultLayout()) {
-                    localStorage.removeItem(this.getLayoutStorageKey());
-                } else {
-                    localStorage.setItem(this.getLayoutStorageKey(), layout);
-                }
-            } catch {
-                // 隐私模式或受限存储环境下仍保持本次页面选择可用。
-            }
-        }
-    }
-
-    private readDocumentLayout(): string | null {
-        const layout = document.documentElement.dataset.layout;
-        return this.isLayout(layout) ? layout : null;
-    }
-
-    private readStoredLayout(): string | null {
-        try {
-            const layout = localStorage.getItem(this.getLayoutStorageKey());
-            return this.isLayout(layout) ? layout : null;
-        } catch {
-            return null;
-        }
-    }
-
-    private getDefaultLayout(): string {
-        const defaultLayout = this.layoutSelect?.dataset.defaultLayout;
-        return this.isLayout(defaultLayout)
-            ? defaultLayout
-            : this.firstRegisteredLayout();
-    }
-
-    private firstRegisteredLayout(): string {
-        return this.layoutSelect?.options.item(0)?.value ?? '';
-    }
-
-    private getLayoutStorageKey(): string {
-        return this.layoutSelect?.dataset.storageKey ?? FALLBACK_LAYOUT_STORAGE_KEY;
-    }
-
-    private isLayout(value: string | null | undefined): value is string {
-        if (!value || !this.layoutSelect) return false;
-        return Array.from(this.layoutSelect.options).some((option) => option.value === value);
     }
 
     private setupNavigation(): void {
@@ -469,11 +381,6 @@ class SiteShell {
         );
         const preference = document.documentElement.dataset.themePreference ?? SYSTEM_THEME;
         this.applyThemePreference(preference);
-        this.layoutStylesheets = Array.from(
-            document.querySelectorAll<HTMLLinkElement>('[data-layout-stylesheet]')
-        );
-        const layout = document.documentElement.dataset.layout ?? this.getDefaultLayout();
-        this.applyLayoutPreference(layout);
     }
 
     private addStylesheet(
@@ -493,10 +400,6 @@ class SiteShell {
             const activeTheme = document.documentElement.dataset.theme ?? '';
             const supportedThemes = (source.dataset.themes ?? '').split(/\s+/);
             link.disabled = !supportedThemes.includes(activeTheme);
-        } else if (source.hasAttribute('data-layout-stylesheet')) {
-            const activeLayout = document.documentElement.dataset.layout ?? '';
-            const supportedLayouts = (source.dataset.layouts ?? '').split(/\s+/);
-            link.disabled = !supportedLayouts.includes(activeLayout);
         } else {
             link.disabled = source.disabled;
         }

@@ -17,7 +17,7 @@
     --font-body: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', 'Roboto', sans-serif;
 
     --container-width: 1200px;
-    --page-gutter: clamp(1rem, 3vw, 2.25rem);
+    --page-gutter: clamp(1.25rem, 5vw, 5rem);
     --section-space: clamp(4.25rem, 8vw, 6.5rem);
     --story-grid-gap: clamp(1rem, 2.4vw, 2rem);
     --hero-block-size: clamp(32rem, calc(100vh - 5rem), 48rem);
@@ -416,8 +416,7 @@ a {
     gap: 0.65rem;
 }
 
-.theme-picker,
-.layout-picker {
+.theme-picker {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -431,16 +430,13 @@ a {
 }
 
 .theme-picker:hover,
-.theme-picker:focus-within,
-.layout-picker:hover,
-.layout-picker:focus-within {
+.theme-picker:focus-within {
     border-color: var(--ui-control-border-hover);
     color: var(--ui-control-text);
     background: var(--ui-control-surface-hover);
 }
 
-.theme-picker > i,
-.layout-picker > i {
+.theme-picker > i {
     position: absolute;
     left: 0.7rem;
     z-index: 1;
@@ -448,8 +444,7 @@ a {
     pointer-events: none;
 }
 
-.theme-picker::after,
-.layout-picker::after {
+.theme-picker::after {
     content: "";
     position: absolute;
     right: 0.72rem;
@@ -461,8 +456,7 @@ a {
     transform: translateY(-2px) rotate(45deg);
 }
 
-.theme-select,
-.layout-select {
+.theme-select {
     width: 8.6rem;
     min-height: var(--ui-control-height);
     padding: 0.45rem 1.7rem 0.45rem 2rem;
@@ -475,8 +469,7 @@ a {
     cursor: pointer;
 }
 
-.theme-select option,
-.layout-select option {
+.theme-select option {
     color: var(--ui-control-option-text);
     background: var(--ui-control-option-surface);
 }
@@ -1079,8 +1072,7 @@ a {
         gap: 0.75rem;
     }
 
-    .theme-select,
-    .layout-select {
+    .theme-select {
         width: 6.8rem;
     }
 
@@ -1138,27 +1130,23 @@ a {
         place-items: center;
     }
 
-    .theme-picker,
-    .layout-picker {
+    .theme-picker {
         width: 44px;
         min-width: 44px;
         min-height: 44px;
         overflow: hidden;
     }
 
-    .theme-picker > i,
-    .layout-picker > i {
+    .theme-picker > i {
         left: 50%;
         transform: translateX(-50%);
     }
 
-    .theme-picker::after,
-    .layout-picker::after {
+    .theme-picker::after {
         display: none;
     }
 
-    .theme-select,
-    .layout-select {
+    .theme-select {
         width: 44px;
         min-height: 44px;
         padding: 0;

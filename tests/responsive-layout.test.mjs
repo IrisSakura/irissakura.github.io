@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const root = new URL('../', import.meta.url);
@@ -19,6 +19,8 @@ test('shared layout uses fluid viewport-aware geometry tokens', async () => {
   ]) {
     assert.ok(css.includes(`${token}:`), `shared CSS missing ${token}`);
   }
+
+  assert.match(css, /--page-gutter:\s*clamp\(1\.25rem,\s*5vw,\s*5rem\)/);
 
   assert.match(
     css,
@@ -46,14 +48,32 @@ test('home cases and research use asymmetric desktop compositions with linear mo
   assert.match(tabletFallback, /\.case-list\s*>\s*article,[\s\S]*?\.research-row:first-child\s*\{[^}]*grid-column:\s*auto[^}]*grid-row:\s*auto/s);
 });
 
-test('layout presets tune shared geometry instead of re-owning homepage compositions', async () => {
-  for (const path of ['style/layout-compact.css', 'style/layout-wide.css']) {
-    const css = await readText(path);
-    for (const token of ['--container-width', '--page-gutter', '--section-space', '--hero-block-size']) {
-      assert.ok(css.includes(`${token}:`), `${path} missing ${token}`);
-    }
-    for (const selector of ['.case-list', '.research-list', '.research-row']) {
-      assert.ok(!css.includes(selector), `${path} must not re-own ${selector}`);
+test('fluid geometry is the only layout system and obsolete presets are removed', async () => {
+  for (const path of ['data/layouts.json', 'style/layout-compact.css', 'style/layout-wide.css']) {
+    await assert.rejects(
+      access(new URL(path, root)),
+      (error) => error?.code === 'ENOENT',
+      `${path} should be deleted`
+    );
+  }
+
+  const sources = await Promise.all([
+    readText('components/navbar.html'),
+    readText('scripts/generate-site.mjs'),
+    readText('src/site.ts'),
+    readText('style/main.css'),
+    readText('index.html')
+  ]);
+  for (const source of sources) {
+    for (const marker of [
+      'irissakura-layout',
+      'layout-picker',
+      'layout-select',
+      'data-layout',
+      'layout-bootstrap',
+      'layout-styles'
+    ]) {
+      assert.ok(!source.includes(marker), `obsolete layout marker remains: ${marker}`);
     }
   }
 });

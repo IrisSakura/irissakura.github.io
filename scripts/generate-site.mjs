@@ -23,7 +23,7 @@ const PAGE_COVER_TARGETS = {
   contact: 'contact-header'
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, layoutConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, projects, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -35,7 +35,6 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, journa
   readJson('data/blog-taxonomy.json'),
   readJson('data/evidence-chains.json'),
   readJson('data/themes.json'),
-  readJson('data/layouts.json'),
   readText('components/navbar.html'),
   readText('components/footer.html')
 ]);
@@ -44,7 +43,6 @@ assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
 assertProjectFactsCurrent(projects, framework, journalSource);
 assertThemeConfig(themeConfig);
-assertLayoutConfig(layoutConfig);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
   [article.id, await readText(article.contentPath)]
@@ -267,10 +265,7 @@ for (const page of pageDefinitions) {
     .replace('{{themeStorageKey}}', escapeAttribute(themeConfig.storageKey))
     .replace('{{defaultLightTheme}}', escapeAttribute(themeConfig.defaultLight))
     .replace('{{defaultDarkTheme}}', escapeAttribute(themeConfig.defaultDark))
-    .replace('{{themeOptions}}', renderThemeOptions(themeConfig))
-    .replace('{{layoutStorageKey}}', escapeAttribute(layoutConfig.storageKey))
-    .replace('{{defaultLayout}}', escapeAttribute(layoutConfig.default))
-    .replace('{{layoutOptions}}', renderLayoutOptions(layoutConfig));
+    .replace('{{themeOptions}}', renderThemeOptions(themeConfig));
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
     .replace('{{footerLinks}}', footerLinks)
@@ -292,7 +287,6 @@ for (const page of pageDefinitions) {
     html = html.replace(/(<meta name="viewport"[^>]*>)/, `$1\n    ${meta}`);
   }
   html = installThemeBootstrap(html, prefix, themeConfig);
-  html = installLayoutBootstrap(html, prefix, layoutConfig);
 
   const siteScript = `<script src="${prefix}dist/site.js" type="module"></script>`;
   if (!html.includes('dist/site.js')) {
@@ -563,109 +557,6 @@ function installThemeBootstrap(html, prefix, config) {
   const themeBootstrapPattern = /<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/;
   html = html.replace(themeBootstrapPattern, '');
   return html.replace(themeStyles, `${themeStyles}\n    ${themeBootstrap}`);
-}
-
-function assertLayoutConfig(config) {
-  if (!config || !Array.isArray(config.layouts) || config.layouts.length < 2) {
-    throw new Error('layout registry must contain at least two layouts');
-  }
-  if (!/^[a-z0-9-]+$/.test(config.storageKey ?? '')) {
-    throw new Error('layout registry storageKey must be a stable identifier');
-  }
-
-  const ids = new Set();
-  for (const layout of config.layouts) {
-    if (!/^[a-z0-9-]+$/.test(layout.id ?? '')) {
-      throw new Error(`invalid layout id: ${layout.id}`);
-    }
-    if (ids.has(layout.id)) {
-      throw new Error(`duplicate layout id: ${layout.id}`);
-    }
-    ids.add(layout.id);
-    if (typeof layout.label !== 'string' || layout.label.trim() === '') {
-      throw new Error(`layout ${layout.id} requires a label`);
-    }
-    if (!Array.isArray(layout.stylesheets) || layout.stylesheets.some((stylesheet) => (
-      !/^style\/layout-[a-z0-9-]+\.css$/.test(stylesheet)
-    ))) {
-      throw new Error(`layout ${layout.id} has invalid stylesheets`);
-    }
-    if (new Set(layout.stylesheets).size !== layout.stylesheets.length) {
-      throw new Error(`layout ${layout.id} contains duplicate stylesheets`);
-    }
-  }
-  if (!ids.has(config.default)) {
-    throw new Error(`layout registry default is not registered: ${config.default}`);
-  }
-}
-
-function renderLayoutOptions(config) {
-  return config.layouts.map((layout) => (
-    `<option value="${escapeAttribute(layout.id)}">${escapeHtml(layout.label)}</option>`
-  )).join('\n                    ');
-}
-
-function renderLayoutStyles(prefix, config) {
-  const stylesheetLayouts = new Map();
-  for (const layout of config.layouts) {
-    for (const stylesheet of layout.stylesheets) {
-      const owners = stylesheetLayouts.get(stylesheet) ?? [];
-      owners.push(layout.id);
-      stylesheetLayouts.set(stylesheet, owners);
-    }
-  }
-
-  const links = Array.from(stylesheetLayouts, ([stylesheet, layoutIds]) => {
-    const enabledByDefault = layoutIds.includes(config.default);
-    return `<link rel="stylesheet" href="${prefix}${stylesheet}" data-layout-stylesheet data-layouts="${layoutIds.join(' ')}"${enabledByDefault ? '' : ' disabled'}>`;
-  });
-  return `<!-- layout-styles:start -->
-    ${links.join('\n    ')}
-    <!-- layout-styles:end -->`;
-}
-
-function installLayoutBootstrap(html, prefix, config) {
-  const layoutStyles = renderLayoutStyles(prefix, config);
-  const layoutStylesPattern = /<!-- layout-styles:start -->[\s\S]*?<!-- layout-styles:end -->/;
-  if (layoutStylesPattern.test(html)) {
-    html = html.replace(layoutStylesPattern, layoutStyles);
-  } else {
-    const themeBootstrapEnd = '<!-- theme-bootstrap:end -->';
-    if (!html.includes(themeBootstrapEnd)) {
-      throw new Error('missing generated theme bootstrap for layout insertion');
-    }
-    html = html.replace(themeBootstrapEnd, `${themeBootstrapEnd}\n    ${layoutStyles}`);
-  }
-
-  const browserConfig = {
-    storageKey: config.storageKey,
-    defaultLayout: config.default,
-    layouts: config.layouts.map((layout) => layout.id)
-  };
-  const layoutBootstrap = `<!-- layout-bootstrap:start -->
-    <script>
-        (() => {
-            const config = ${JSON.stringify(browserConfig)};
-            let storedLayout = null;
-            try {
-                storedLayout = window.localStorage.getItem(config.storageKey);
-            } catch {
-                // 受限存储环境下继续使用默认布局。
-            }
-            const isLayout = (value) => config.layouts.includes(value);
-            const layout = isLayout(storedLayout) ? storedLayout : config.defaultLayout;
-            document.documentElement.dataset.layout = layout;
-            document.querySelectorAll('[data-layout-stylesheet]').forEach((stylesheet) => {
-                if (!(stylesheet instanceof HTMLLinkElement)) return;
-                const supportedLayouts = (stylesheet.dataset.layouts || '').split(/\\s+/);
-                stylesheet.disabled = !supportedLayouts.includes(layout);
-            });
-        })();
-    </script>
-    <!-- layout-bootstrap:end -->`;
-  const layoutBootstrapPattern = /<!-- layout-bootstrap:start -->[\s\S]*?<!-- layout-bootstrap:end -->/;
-  html = html.replace(layoutBootstrapPattern, '');
-  return html.replace(layoutStyles, `${layoutStyles}\n    ${layoutBootstrap}`);
 }
 
 function updateFrameworkFallback(html, data, adoption) {

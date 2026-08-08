@@ -275,7 +275,6 @@ test('home hero and flagship use distinct existing game evidence', async () => {
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
   const themeConfig = JSON.parse(await readText('data/themes.json'));
-  const layoutConfig = JSON.parse(await readText('data/layouts.json'));
   const pages = [
     'index.html',
     '404.html',
@@ -300,12 +299,6 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'class="theme-select"',
       'aria-label="选择页面主题"',
       'option value="system"',
-      'layout-styles:start',
-      'data-layout-stylesheet',
-      'data-layouts=',
-      'layout-bootstrap:start',
-      'class="layout-select"',
-      'aria-label="选择页面布局"',
       'dist/site.js'
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
@@ -319,14 +312,16 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       html.indexOf('theme-bootstrap:start') < html.indexOf('</head>'),
       `${page} must apply the theme before body rendering`
     );
-    assert.ok(
-      html.indexOf('layout-styles:start') < html.indexOf('layout-bootstrap:start'),
-      `${page} must load layout styles before applying the stored preference`
-    );
-    assert.ok(
-      html.indexOf('layout-bootstrap:start') < html.indexOf('</head>'),
-      `${page} must apply the layout before body rendering`
-    );
+    for (const marker of [
+      'irissakura-layout',
+      'layout-picker',
+      'layout-select',
+      'data-layout',
+      'layout-bootstrap',
+      'layout-styles'
+    ]) {
+      assert.ok(!html.includes(marker), `${page} still contains obsolete layout marker ${marker}`);
+    }
     for (const theme of themeConfig.themes) {
       assert.ok(
         html.includes(`option value="${theme.id}"`),
@@ -337,18 +332,6 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       assert.ok(
         html.includes(stylesheet),
         `${page} missing registered theme stylesheet ${stylesheet}`
-      );
-    }
-    for (const layout of layoutConfig.layouts) {
-      assert.ok(
-        html.includes(`option value="${layout.id}"`),
-        `${page} missing registered layout option ${layout.id}`
-      );
-    }
-    for (const stylesheet of new Set(layoutConfig.layouts.flatMap((layout) => layout.stylesheets))) {
-      assert.ok(
-        html.includes(stylesheet),
-        `${page} missing registered layout stylesheet ${stylesheet}`
       );
     }
   }
@@ -375,48 +358,32 @@ test('theme selector follows the registry and system until the visitor stores a 
   assert.equal(themeConfig.storageKey, 'irissakura-theme');
 });
 
-test('layout selector follows its own registry and stored preference', async () => {
-  const [siteSource, generator, navbar, layoutConfig] = await Promise.all([
+test('obsolete layout selector, registry and runtime are fully removed', async () => {
+  const [siteSource, generator, navbar, mainCss] = await Promise.all([
     readText('src/site.ts'),
     readText('scripts/generate-site.mjs'),
     readText('components/navbar.html'),
-    readText('data/layouts.json').then(JSON.parse)
+    readText('style/main.css')
   ]);
 
-  assert.ok(generator.includes("readJson('data/layouts.json')"));
-  assert.ok(generator.includes('assertLayoutConfig'));
-  assert.ok(generator.includes('renderLayoutOptions'));
-  assert.ok(generator.includes('renderLayoutStyles'));
-  assert.ok(siteSource.includes("querySelector<HTMLSelectElement>('.layout-select')"));
-  assert.ok(siteSource.includes('applyLayoutPreference'));
-  assert.ok(siteSource.includes('localStorage.setItem'));
-  assert.ok(navbar.includes('{{layoutOptions}}'));
-  assert.ok(navbar.includes('data-default-layout="{{defaultLayout}}"'));
-  assert.equal(layoutConfig.storageKey, 'irissakura-layout');
-});
-
-test('layout registry keeps standard geometry as the default and owns layout styles', async () => {
-  const [themeConfig, layoutConfig] = await Promise.all([
-    readText('data/themes.json').then(JSON.parse),
-    readText('data/layouts.json').then(JSON.parse)
-  ]);
-  const ids = layoutConfig.layouts.map((layout) => layout.id);
-  assert.deepEqual(ids, ['standard', 'compact', 'wide']);
-  assert.equal(layoutConfig.default, 'standard');
-  assert.deepEqual(
-    layoutConfig.layouts.find((layout) => layout.id === 'standard')?.stylesheets,
-    []
-  );
-
-  const layoutStylesheets = new Set(layoutConfig.layouts.flatMap((layout) => layout.stylesheets));
-  assert.deepEqual(
-    [...layoutStylesheets].sort(),
-    ['style/layout-compact.css', 'style/layout-wide.css']
-  );
-  const themeStylesheets = new Set(themeConfig.themes.flatMap((theme) => theme.stylesheets));
-  for (const stylesheet of layoutStylesheets) {
-    assert.ok(!themeStylesheets.has(stylesheet), `${stylesheet} must not be owned by a theme`);
-    await readText(stylesheet);
+  for (const source of [siteSource, generator, navbar, mainCss]) {
+    for (const marker of [
+      'irissakura-layout',
+      'layout-picker',
+      'layout-select',
+      'data-layout',
+      'layout-bootstrap',
+      'layout-styles'
+    ]) {
+      assert.ok(!source.includes(marker), `obsolete layout marker remains: ${marker}`);
+    }
+  }
+  for (const path of ['data/layouts.json', 'style/layout-compact.css', 'style/layout-wide.css']) {
+    await assert.rejects(
+      access(new URL(path, root)),
+      (error) => error?.code === 'ENOENT',
+      `${path} should be deleted`
+    );
   }
 });
 

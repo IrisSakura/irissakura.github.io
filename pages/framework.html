@@ -63,32 +63,6 @@
     </script>
     <!-- theme-bootstrap:end -->
 
-    <!-- layout-styles:start -->
-    <link rel="stylesheet" href="../style/layout-compact.css" data-layout-stylesheet data-layouts="compact" disabled>
-    <link rel="stylesheet" href="../style/layout-wide.css" data-layout-stylesheet data-layouts="wide" disabled>
-    <!-- layout-styles:end -->
-    <!-- layout-bootstrap:start -->
-    <script>
-        (() => {
-            const config = {"storageKey":"irissakura-layout","defaultLayout":"standard","layouts":["standard","compact","wide"]};
-            let storedLayout = null;
-            try {
-                storedLayout = window.localStorage.getItem(config.storageKey);
-            } catch {
-                // 受限存储环境下继续使用默认布局。
-            }
-            const isLayout = (value) => config.layouts.includes(value);
-            const layout = isLayout(storedLayout) ? storedLayout : config.defaultLayout;
-            document.documentElement.dataset.layout = layout;
-            document.querySelectorAll('[data-layout-stylesheet]').forEach((stylesheet) => {
-                if (!(stylesheet instanceof HTMLLinkElement)) return;
-                const supportedLayouts = (stylesheet.dataset.layouts || '').split(/\s+/);
-                stylesheet.disabled = !supportedLayouts.includes(layout);
-            });
-        })();
-    </script>
-    <!-- layout-bootstrap:end -->
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -123,20 +97,6 @@
                     <option value="night" data-color-scheme="dark" data-theme-color="#121212">夜色科技</option>
                     <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb">东方田园</option>
                     <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0">樱里民谣</option>
-                </select>
-            </label>
-            <label class="layout-picker">
-                <i class="fas fa-table-columns" aria-hidden="true"></i>
-                <span class="sr-only">选择页面布局</span>
-                <select
-                    class="layout-select"
-                    aria-label="选择页面布局"
-                    data-storage-key="irissakura-layout"
-                    data-default-layout="standard"
-                >
-                    <option value="standard">标准布局</option>
-                    <option value="compact">紧凑布局</option>
-                    <option value="wide">宽幅布局</option>
                 </select>
             </label>
             <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
