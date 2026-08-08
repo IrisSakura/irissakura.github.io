@@ -26,6 +26,11 @@ test('shared layout uses fluid viewport-aware geometry tokens', async () => {
     css,
     /\.container\s*\{[^}]*width:\s*min\([^;]*var\(--page-gutter\)[^;]*var\(--container-width\)[^;]*\)[^}]*padding:\s*0/s
   );
+  assert.doesNotMatch(
+    css,
+    /\[data-page-cover\]\.page-cover\s*>\s*\.container\s*\{[^}]*width:\s*100%/s,
+    'page covers must preserve the shared fluid container width'
+  );
   assert.match(
     css,
     /\.hero-section \.hero\s*\{[^}]*min-height:\s*var\(--hero-block-size\)[^}]*padding-block:\s*clamp\([^;]*svh/s
