@@ -17,6 +17,11 @@
     --font-body: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', 'Roboto', sans-serif;
 
     --container-width: 1200px;
+    --page-gutter: clamp(1rem, 3vw, 2.25rem);
+    --section-space: clamp(4.25rem, 8vw, 6.5rem);
+    --story-grid-gap: clamp(1rem, 2.4vw, 2rem);
+    --hero-block-size: clamp(32rem, calc(100vh - 5rem), 48rem);
+    --hero-block-size: clamp(32rem, calc(100svh - 5rem), 48rem);
     --border-radius: 8px;
     --transition: all 0.3s ease;
     --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -221,10 +226,10 @@ body {
 }
 
 .container {
-    width: 100%;
-    max-width: var(--container-width);
+    width: min(calc(100% - var(--page-gutter) - var(--page-gutter)), var(--container-width));
+    max-width: none;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0;
 }
 
 /* 排版 */
@@ -535,6 +540,7 @@ a {
 .main-content {
     margin-top: 80px;
     min-height: calc(100vh - 80px - 200px);
+    min-height: calc(100svh - 80px - 200px);
 }
 
 /* 主要分页共享头图：背景图片由 data/site.json 生成，渐变层在未配置图片时仍可独立工作。 */
@@ -543,6 +549,7 @@ a {
     isolation: isolate;
     display: flex;
     min-height: clamp(430px, 52vw, 660px);
+    min-height: clamp(430px, 62svh, 660px);
     align-items: center;
     overflow: hidden;
     color: #f8fbff;
@@ -1227,9 +1234,8 @@ a {
 
 .hero-section .hero {
     position: relative;
-    min-height: 660px;
-    padding-top: 5.5rem;
-    padding-bottom: 5.5rem;
+    min-height: var(--hero-block-size);
+    padding-block: clamp(3.5rem, 8svh, 6.5rem);
 }
 
 .hero-section .hero-content {
@@ -1343,7 +1349,7 @@ a {
 .case-section,
 .research-section,
 .public-cta {
-    padding: 6.5rem 0;
+    padding: var(--section-space) 0;
 }
 
 .flagship-section {
@@ -1489,15 +1495,33 @@ a {
 }
 
 .case-list {
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--story-grid-gap);
 }
 
 .case-list > article {
     display: grid;
-    grid-template-columns: 170px minmax(250px, 0.75fr) minmax(0, 1.25fr);
-    gap: 2rem;
-    padding: 2.4rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    min-width: 0;
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: var(--border-radius);
+    background: var(--ui-surface-card);
+    box-shadow: var(--box-shadow);
+}
+
+.case-list > article:first-child {
+    grid-column: span 7;
+}
+
+.case-list > article:nth-child(2) {
+    grid-column: span 5;
+}
+
+.case-list > article:nth-child(3) {
+    grid-column: 3 / span 8;
 }
 
 .case-list h3 {
@@ -1508,6 +1532,7 @@ a {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.1rem 1.5rem;
+    margin-top: 1rem;
 }
 
 .case-list dl > div {
@@ -1620,16 +1645,31 @@ a {
 }
 
 .research-list {
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--story-grid-gap);
 }
 
 .research-row {
     display: grid;
-    grid-template-columns: 180px minmax(220px, 0.85fr) minmax(0, 1.15fr) auto;
-    gap: 1.5rem;
-    align-items: center;
-    padding: 1.8rem 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 0.8rem;
+    min-width: 0;
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: var(--border-radius);
+    background: var(--ui-surface-card);
+    box-shadow: var(--box-shadow);
+}
+
+.research-row:first-child {
+    grid-row: 1 / span 2;
+    align-content: center;
+}
+
+.research-row:first-child h3 {
+    font-size: clamp(1.65rem, 3vw, 2.4rem);
 }
 
 .research-row p,
@@ -1670,21 +1710,18 @@ a {
         max-width: 760px;
     }
 
-    .case-list > article {
-        grid-template-columns: 130px minmax(0, 1fr);
+    .case-list,
+    .research-list {
+        grid-template-columns: 1fr;
     }
 
-    .case-list dl {
-        grid-column: 2;
-    }
-
-    .research-row {
-        grid-template-columns: 150px minmax(0, 1fr);
-    }
-
-    .research-row > p:not(.project-status),
-    .research-row .project-detail-link {
-        grid-column: 2;
+    .case-list > article,
+    .case-list > article:first-child,
+    .case-list > article:nth-child(2),
+    .case-list > article:nth-child(3),
+    .research-row:first-child {
+        grid-column: auto;
+        grid-row: auto;
     }
 }
 
