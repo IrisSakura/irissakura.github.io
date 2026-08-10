@@ -79,7 +79,7 @@ export function buildJournalSnapshot(curation, source) {
     summary: {
       gameDesignCount: source.summary.gameDesignCount,
       auditCount: source.summary.auditCount,
-      blogCount: source.summary.blogCount,
+      importedBlogCount: source.summary.blogCount,
       knowledgeStreamCount: curation.streams.length,
       description: curation.summary.description
     },

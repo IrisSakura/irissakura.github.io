@@ -27,6 +27,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   const data = JSON.parse(await readText('data/projects.json'));
   const titles = data.projects.map((project) => project.title);
 
+  assert.equal(data.schemaVersion, 3);
   assert.deepEqual(titles, ['Sakura Design Journal', 'Sakura Framework', '言铸之剑']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
@@ -47,6 +48,15 @@ test('portfolio data keeps research distinct from finished work', async () => {
 
   assert.equal(data.updatedAt, data.projects.map((project) => project.updatedAt).sort().at(-1));
   assert.equal(data.projects.find((project) => project.id === 'sword-of-words').categoryLabel, '独立游戏项目');
+  assert.match(
+    data.projects.find((project) => project.id === 'sakura-design-journal').reviewedJournalCurationHash,
+    /^sha256:[a-f0-9]{64}$/u
+  );
+  assert.match(
+    data.projects.find((project) => project.id === 'sakura-framework').reviewedFrameworkAdoptionHash,
+    /^sha256:[a-f0-9]{64}$/u
+  );
+  assert.ok(!data.projects.find((project) => project.id === 'sakura-framework').next.includes('公开升级到 Supported 的条件'));
 
   for (const fabricatedTitle of [
     '像素地牢',

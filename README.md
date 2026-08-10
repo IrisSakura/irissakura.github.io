@@ -16,7 +16,9 @@
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 - `/pages/portfolio.html`：真实项目及其状态、职责、证据和限制；
+- `/pages/art-music.html`：保留中的美术音乐地址；在至少有一组真实作品前保持 `noindex`，暂不进入一级导航或 Sitemap；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
+- `/pages/about.html`：旧 About 地址的 `noindex` 首页兼容跳转；
 - `/404.html`：GitHub Pages 自定义错误页。
 
 ## 本地运行
@@ -41,7 +43,7 @@ npm run package:site
 - `npm run test:json`：直接扫描原始 JSON 文本，拒绝 `package.json`、`data/*.json` 和 `config/*.json` 的重复键与语法错误；
 - `npm run build`：生成站点源文件并把 TypeScript 编译到 `dist/`；
 - `npm test`：运行数据契约、内容真实性、链接、资源和 HTML 语义检查；
-- `npm run test:smoke`：用无头 Chromium 检查主要页面、移动导航、FAQ 与作品筛选；
+- `npm run test:smoke`：用无头 Chromium 检查主要路由、响应式留白、主题切换、文章出版、证据链与移动导航；
 - `npm run package:site`：把发布所需文件复制到 `_site/`。
 
 `dist/` 和 `_site/` 都是 CI 产物，不进入主分支。不要直接修改生成文件。

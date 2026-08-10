@@ -42,7 +42,7 @@ test('valid fixed-sha export builds the curated site snapshot', () => {
   assert.deepEqual(snapshot.summary, {
     gameDesignCount: 1,
     auditCount: 1,
-    blogCount: 1,
+    importedBlogCount: 1,
     knowledgeStreamCount: 1,
     description: 'Public research.'
   });

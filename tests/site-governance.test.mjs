@@ -245,22 +245,38 @@ test('research and articles share one primary navigation route without changing 
   assert.match(blog, activeResearchNav);
 });
 
-test('primary navigation uses a Chinese framework label and exposes the art and music portfolio', async () => {
+test('primary navigation keeps proven work primary and preserves retired route compatibility', async () => {
   for (const page of ['index.html', 'pages/framework.html', 'pages/art-music.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
     assert.ok(primaryNav.includes('>框架</a>'), `${page} must label the Framework route as 框架`);
     assert.ok(!primaryNav.includes('>Framework</a>'), `${page} keeps an English Framework navigation label`);
-    assert.ok(primaryNav.includes('>美术音乐</a>'), `${page} is missing the art and music navigation entry`);
+    assert.ok(!primaryNav.includes('>美术音乐</a>'), `${page} promotes an empty art and music route`);
     assert.ok(!primaryNav.includes('>关于</a>'), `${page} still exposes the retired About navigation entry`);
   }
 
+  const sitemap = await readText('sitemap.xml');
   const artMusic = await readText('pages/art-music.html');
-  assert.match(
-    artMusic,
-    /class="nav-link active" aria-current="page">美术音乐<\/a>/u
-  );
+  assert.ok(artMusic.includes('<meta name="robots" content="noindex, follow">'));
   assert.ok(artMusic.includes('当前尚未公开作品'));
+  assert.ok(!artMusic.match(/<footer class="footer">[\s\S]*?>美术音乐<\/a>/u));
+  assert.ok(!sitemap.includes('/pages/art-music.html'));
+
+  const about = await readText('pages/about.html');
+  assert.ok(about.includes('<meta name="robots" content="noindex, follow">'));
+  assert.ok(about.includes('<link rel="canonical" href="https://irissakura.github.io/">'));
+  assert.ok(about.includes('<meta http-equiv="refresh" content="0; url=../index.html">'));
+  assert.ok(!sitemap.includes('/pages/about.html'));
+});
+
+test('home labels curated research honestly and README matches current routes and smoke scope', async () => {
+  const [home, readme] = await Promise.all([readText('index.html'), readText('README.md')]);
+  assert.ok(home.includes('SELECTED RESEARCH'));
+  assert.ok(home.includes('精选研究主题'));
+  assert.ok(!home.includes('LATEST RESEARCH'));
+  assert.ok(readme.includes('/pages/art-music.html'));
+  assert.ok(readme.includes('暂不进入一级导航或 Sitemap'));
+  assert.ok(!readme.includes('FAQ 与作品筛选'));
 });
 
 test('home hero and flagship use distinct existing game evidence', async () => {

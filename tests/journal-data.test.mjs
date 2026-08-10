@@ -16,7 +16,8 @@ test('journal snapshot exposes a small curated public contract', async () => {
   assert.equal(data.title, 'Sakura Design Journal');
   assert.equal(data.summary.gameDesignCount, source.gameDesigns.length);
   assert.equal(data.summary.auditCount, source.audits.length);
-  assert.equal(data.summary.blogCount, source.blogs.length);
+  assert.equal(data.summary.importedBlogCount, source.blogs.length);
+  assert.ok(!Object.hasOwn(data.summary, 'blogCount'));
   assert.equal(data.summary.knowledgeStreamCount, data.streams.length);
   assert.ok(data.streams.length > 0);
   assert.ok(data.featuredNotes.length >= 6);

@@ -24,6 +24,9 @@ const journalBlogsById = new Map(journalSource.blogs.map((article) => [article.i
 const publishedBlogs = blogPublication.articles
   .filter((article) => ['approved', 'published'].includes(article.status))
   .map((article) => ({ ...journalBlogsById.get(article.sourceId), ...article }));
+const routableBlogTags = blogTaxonomy.tags.filter((tag) => (
+  publishedBlogs.filter((article) => article.tags.includes(tag.name)).length >= 2
+));
 const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.category === 'game');
@@ -350,8 +353,13 @@ try {
   }
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
-  await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).click();
-  await desktop.waitForURL(`${baseUrl}/pages/art-music.html`);
+  if (await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).count() !== 0) {
+    throw new Error('empty art and music route is still promoted in primary navigation');
+  }
+  await desktop.goto(`${baseUrl}/pages/art-music.html`, { waitUntil: 'networkidle' });
+  if (await desktop.locator('meta[name="robots"][content="noindex, follow"]').count() !== 1) {
+    throw new Error('art and music holding page must remain noindex');
+  }
   if (!await desktop.getByRole('heading', { name: '美术与音乐作品集', exact: true }).isVisible()) {
     throw new Error('art and music portfolio entry does not open its public page');
   }
@@ -398,7 +406,7 @@ try {
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.blog-card').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
   if (await desktop.locator('.blog-series-list > a').count() !== blogTaxonomy.series.length) throw new Error('blog index series registry is incomplete');
-  if (await desktop.locator('.blog-tag-list > a').count() !== blogTaxonomy.tags.length) throw new Error('blog index tag registry is incomplete');
+  if (await desktop.locator('.blog-tag-list > a').count() !== routableBlogTags.length) throw new Error('blog index exposes the wrong tag route set');
   if (await desktop.locator('a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
   const blogIndexText = await desktop.locator('body').innerText();
   if (blogIndexText.includes('来源提交') || blogIndexText.includes('经过登记与安全检查')) {

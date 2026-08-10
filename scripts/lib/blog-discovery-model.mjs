@@ -38,6 +38,7 @@ export function resolveBlogDiscovery(taxonomy, articles) {
     ...entry,
     articles: articles.filter((article) => article.tags.includes(entry.name)).sort(byNewest)
   }));
+  const routableTags = tags.filter((entry) => entry.articles.length >= 2);
   const relatedBySlug = new Map(articles.map((article) => {
     const related = articles
       .filter((candidate) => candidate.slug !== article.slug)
@@ -61,6 +62,7 @@ export function resolveBlogDiscovery(taxonomy, articles) {
   return {
     series,
     tags,
+    routableTags,
     seriesByName: new Map(series.map((entry) => [entry.name, entry])),
     tagsByName: new Map(tags.map((entry) => [entry.name, entry])),
     relatedBySlug

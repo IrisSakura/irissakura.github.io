@@ -42,7 +42,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, journa
 
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
-assertProjectFactsCurrent(projects, framework, journalSource);
+assertProjectFactsCurrent(projects, framework, journal, blogPublication);
 assertThemeConfig(themeConfig);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
@@ -52,11 +52,11 @@ const publishedBlogs = selectPublishedBlogs(blogPublication, journalSource, blog
 const publicationById = new Map(blogPublication.articles.map((article) => [article.sourceId, article]));
 const publicJournal = {
   ...journal,
-  summary: { ...journal.summary, blogCount: publishedBlogs.length }
+  summary: { ...journal.summary, publishedBlogCount: publishedBlogs.length }
 };
 const publicJournalSource = {
   ...journalSource,
-  summary: { ...journalSource.summary, blogCount: publishedBlogs.length },
+  summary: { ...journalSource.summary, publishedBlogCount: publishedBlogs.length },
   blogs: publishedBlogs
 };
 const blogDiscovery = resolveBlogDiscovery(blogTaxonomy, publishedBlogs);
@@ -94,7 +94,7 @@ const blogCollectionDefinitions = [
     schemaType: 'CollectionPage',
     collection: { ...collection, kind: 'series', kindLabel: '文章系列' }
   })),
-  ...blogDiscovery.tags.map((collection) => ({
+  ...blogDiscovery.routableTags.map((collection) => ({
     file: `pages/blog/tag/${collection.slug}.html`,
     key: 'research',
     title: `标签：${collection.name} | IrisSakura`,
@@ -125,6 +125,7 @@ const blogAliasDefinitions = journalSource.blogs.flatMap((article) => {
 await writeJournalDetailSources(journalDetailDefinitions);
 await writeBlogSources(blogDetailDefinitions, blogAliasDefinitions, blogCollectionDefinitions);
 await writeFrameworkQuickstartSource(frameworkQuickstart);
+await writeCompatibilityRouteSources();
 
 const pageDefinitions = [
   {
@@ -168,6 +169,15 @@ const pageDefinitions = [
     title: '美术与音乐作品集 | IrisSakura',
     description: 'IrisSakura 的美术与音乐作品集入口；当前尚未公开作品，后续内容将在这里持续更新。',
     canonical: '/pages/art-music.html',
+    noIndex: true
+  },
+  {
+    file: 'pages/about.html',
+    key: '',
+    title: '关于页面已迁移 | IrisSakura',
+    description: '原关于页面的内容已经整合到 IrisSakura 首页。',
+    canonical: '/',
+    noIndex: true
   },
   {
     file: 'pages/journal.html',
@@ -227,7 +237,6 @@ await assertSitePresentation(site, pageDefinitions);
 const navItems = [
   ['home', '首页', 'index.html'],
   ['portfolio', '作品', 'pages/portfolio.html'],
-  ['art-music', '美术音乐', 'pages/art-music.html'],
   ['framework', '框架', 'pages/framework.html'],
   ['research', '研究与文章', 'pages/journal.html'],
   ['contact', '联系我', 'pages/contact.html']
@@ -665,7 +674,7 @@ function renderHomeContent(projectData, journalData, frameworkData, siteData) {
         <section class="research-section">
             <div class="container">
                 <div class="section-heading section-heading-row">
-                    <div><p class="section-kicker">LATEST RESEARCH</p><h2>近期研究主题</h2></div>
+                    <div><p class="section-kicker">SELECTED RESEARCH</p><h2>精选研究主题</h2></div>
                     <a href="pages/journal.html" class="text-link">查看全部研究</a>
                 </div>
                 <div class="research-list">${researchCards}
@@ -794,7 +803,7 @@ function renderJournalContent(journalData, sourceData, chains) {
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
                 <div class="journal-metric"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.auditCount}</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric"><strong>${journalData.summary.blogCount}</strong><span>完整博客</span></div>
+                <div class="journal-metric"><strong>${journalData.summary.publishedBlogCount}</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.knowledgeStreamCount}</strong><span>知识流</span></div>
             </div>
         </div>
@@ -880,12 +889,17 @@ function renderBlogIndex(sourceData, discovery) {
                     <p class="project-status"><a href="blog/series/${escapeAttribute(series.slug)}.html">${escapeHtml(article.series)}</a> · ${escapeHtml(article.updatedAt)}</p>
                     <h2>${escapeHtml(article.title)}</h2>
                     <p>${escapeHtml(article.summary)}</p>
-                    <div class="note-tags">${article.tags.map((tag) => `<a href="blog/tag/${escapeAttribute(discovery.tagsByName.get(tag).slug)}.html">${escapeHtml(tag)}</a>`).join('')}</div>
+                    <div class="note-tags">${article.tags.map((tag) => {
+                      const collection = discovery.tagsByName.get(tag);
+                      return collection.articles.length >= 2
+                        ? `<a href="blog/tag/${escapeAttribute(collection.slug)}.html">${escapeHtml(tag)}</a>`
+                        : `<span>${escapeHtml(tag)}</span>`;
+                    }).join('')}</div>
                     <a class="note-link" href="blog/${encodeURIComponent(article.slug)}.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>`;
   }).join('');
   const series = discovery.series.map((entry) => `<a href="blog/series/${escapeAttribute(entry.slug)}.html"><strong>${escapeHtml(entry.name)}</strong><span>${entry.articles.length} 篇</span><small>${escapeHtml(entry.description)}</small></a>`).join('');
-  const tags = discovery.tags.map((entry) => `<a href="blog/tag/${escapeAttribute(entry.slug)}.html">${escapeHtml(entry.name)}<span>${entry.articles.length}</span></a>`).join('');
+  const tags = discovery.routableTags.map((entry) => `<a href="blog/tag/${escapeAttribute(entry.slug)}.html">${escapeHtml(entry.name)}<span>${entry.articles.length}</span></a>`).join('');
   return `<header class="blog-hero">
         <div class="container">
             <p class="section-kicker">GAME SYSTEMS · ENGINEERING PRACTICE</p>
@@ -1138,6 +1152,35 @@ async function writeFrameworkQuickstartSource(quickstart) {
 `);
 }
 
+async function writeCompatibilityRouteSources() {
+  await writeFile(path.join(root, 'pages/about.html'), `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=../index.html">
+    <title>关于页面已迁移 | IrisSakura</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/pastoral.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="not-found-main">
+    <section class="container not-found-card">
+        <p class="section-kicker">ROUTE MOVED</p>
+        <h1>关于内容已整合到首页</h1>
+        <p>这个旧地址会自动前往首页；你也可以使用下方链接继续访问。</p>
+        <a class="btn btn-primary" href="../index.html">前往首页</a>
+    </section>
+</main>
+<footer class="footer"></footer>
+<script src="../dist/site.js" type="module"></script>
+</body>
+</html>
+`);
+}
+
 async function writeJournalDetailSources(definitions) {
   const directory = path.join(root, 'pages/journal');
   await mkdir(directory, { recursive: true });
@@ -1205,7 +1248,11 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
             <p class="journal-kicker"><a href="series/${escapeAttribute(series.slug)}.html">${escapeHtml(article.series)}</a> · 发布于 ${escapeHtml(article.publishedAt)} · 更新于 ${escapeHtml(article.updatedAt)}</p>
             <h1>${escapeHtml(article.title)}</h1>
             <p class="blog-deck">${escapeHtml(article.summary)}</p>
-            <div class="note-tags">${tags.map((tag) => `<a href="tag/${escapeAttribute(tag.slug)}.html">${escapeHtml(tag.name)}</a>`).join('')}</div>
+            <div class="note-tags">${tags.map((tag) => (
+              tag.articles.length >= 2
+                ? `<a href="tag/${escapeAttribute(tag.slug)}.html">${escapeHtml(tag.name)}</a>`
+                : `<span>${escapeHtml(tag.name)}</span>`
+            )).join('')}</div>
         </header>
         <div class="blog-prose">${body}</div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
