@@ -39,7 +39,9 @@
   Journal 的仓库级 Runner 改成全局 `game-ci` 执行面；
 - `WEBSITE_GITHUB_SSH_KEY`：只对 `IrisSakura/irissakura.github.io` 具备写权限的专用 SSH key；
 - `WEBSITE_GITHUB_KNOWN_HOSTS`：预先审核的 `github.com` host key；
-- 私有 checkout 需要时提供 `GITEA_TOKEN` 与 `IRIS_GITEA_USERNAME`；
+- 私有 checkout 使用 Gitea 为当前 job 自动签发的 `${{ secrets.GITEA_TOKEN }}`，工作流以
+  `permissions: contents: read` 将其收紧为当前仓只读，并使用 `${{ gitea.actor }}` 作为用户名；
+  不创建或保存长期用户 PAT；
 - 仅当 Runner 缺少标准 Gitea 仓库上下文时，设置 `CONSUMER_REPOSITORY_URL` 变量。
 
 工作流固定使用 `git@github.com:IrisSakura/irissakura.github.io.git`，不探测 HTTPS 或 GitHub CLI
