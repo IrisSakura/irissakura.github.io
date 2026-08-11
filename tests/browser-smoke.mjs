@@ -376,10 +376,8 @@ try {
   }
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
-  if (await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).count() !== 0) {
-    throw new Error('empty art and music route is still promoted in primary navigation');
-  }
-  await desktop.goto(`${baseUrl}/pages/art-music.html`, { waitUntil: 'networkidle' });
+  await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/art-music.html`);
   if (await desktop.locator('meta[name="robots"][content="noindex, follow"]').count() !== 1) {
     throw new Error('art and music holding page must remain noindex');
   }

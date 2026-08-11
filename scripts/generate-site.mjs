@@ -240,6 +240,7 @@ await assertSitePresentation(site, pageDefinitions);
 const navItems = [
   ['home', '首页', 'index.html'],
   ['portfolio', '作品', 'pages/portfolio.html'],
+  ['art-music', '美术音乐', 'pages/art-music.html'],
   ['framework', '框架', 'pages/framework.html'],
   ['research', '研究与文章', 'pages/journal.html'],
   ['contact', '联系我', 'pages/contact.html']
