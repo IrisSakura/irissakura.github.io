@@ -1,14 +1,21 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "4db492a837923bd3bb8a7a437adfb63ac3685dc0",
-  "generatedAt": "2026-08-10T13:27:23+08:00",
+  "sourceCommit": "d586270cb3db85195145da2ec1d15359c4116a42",
+  "generatedAt": "2026-08-11T15:33:45+08:00",
   "summary": {
-    "auditCount": 37,
-    "blogCount": 25,
-    "gameDesignCount": 46
+    "auditCount": 38,
+    "blogCount": 27,
+    "gameDesignCount": 47
   },
-  "gameDesignCatalogDigest": "ee21f79afd6a57bb4cf700a22761c095a7a5e28fd93ae647df27d6560cdf231c",
+  "gameDesignCatalogDigest": "a8a1502cf0fe32f909f79d388a6832a117d45d94c103ee7ab213f8427ab37145",
   "audits": [
+    {
+      "id": "audit-2026-08-10",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库发生了一次相当明显的阶段变化。 8 月 9 日之前，仓库刚刚建立： 其主要目标是控制 146 个 UPM Package 的继续增长，并开始寻找可以合并、内化和退出 UPM 的能力。 但 8 月 10 日，默认分支连续新增了四个 Gameplay Kernel： 同时还完成了： 其中后三组是在既有 Package 内纵向增强，因此没有增加 Package；四个 Gameplay Kernel 则全部成为新的独立 UPM Package。最新 HEAD 中四个新 Kernel 均已经实现并进入 local-passed / runner-pending，对应本地 Unity Testbed 分别记录了 218/218、123/123、76/76、79/79。 这使仓库规模从上一轮的： 增长到： 当前生命周期分布为：",
+      "updatedAt": "2026-08-10",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-09",
       "title": "Sakura Framework 最新仓库审计与能力收敛计划",
@@ -271,6 +278,30 @@
   ],
   "gameDesigns": [
     {
+      "id": "auto-battler",
+      "title": "自走棋 / Auto Battler",
+      "summary": "玩家主要不直接控制单位战斗动作，而是在有限准备阶段内，通过商店购买、共享棋子池竞争、棋子合成、经济投资、阵容羁绊和空间布阵预先构造一个战斗系统；随后单位根据统一战斗规则自主执行。每一轮战斗结果再反向改变生命、经济、对手信息与下一轮构筑空间，形成“构筑决策与自动验证”交替运行的竞技循环。",
+      "tags": [
+        "auto",
+        "battler",
+        "chess"
+      ],
+      "updatedAt": "2026-08-11",
+      "sha256": "cb0aa8dad002e7e52461b2431400a371e4c83a183984a22fbef1690889734a0a"
+    },
+    {
+      "id": "moba",
+      "title": "MOBA / 线路式英雄团队竞技游戏",
+      "summary": "兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。",
+      "tags": [
+        "moba",
+        "multiplayer",
+        "online"
+      ],
+      "updatedAt": "2026-08-11",
+      "sha256": "89898a30a4b6e50029e12417174c8e164fbd40eb97acd540bf10770f017887f5"
+    },
+    {
       "id": "battle-royale",
       "title": "大逃杀 / Battle Royale",
       "summary": "通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。",
@@ -293,18 +324,6 @@
       ],
       "updatedAt": "2026-08-10",
       "sha256": "59644cc6337429ed6e35fd5292fdd5db0244cb9e7f73723a1272a0f70fccc197"
-    },
-    {
-      "id": "moba",
-      "title": "MOBA / 线路式英雄团队竞技游戏",
-      "summary": "兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。",
-      "tags": [
-        "moba",
-        "multiplayer",
-        "online"
-      ],
-      "updatedAt": "2026-08-08",
-      "sha256": "89898a30a4b6e50029e12417174c8e164fbd40eb97acd540bf10770f017887f5"
     },
     {
       "id": "fighting",
@@ -822,6 +841,32 @@
     }
   ],
   "blogs": [
+    {
+      "id": "ai-ac6e1fb2",
+      "title": "AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界",
+      "summary": "当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "ai"
+      ],
+      "updatedAt": "2026-08-11",
+      "sha256": "ac9d0443df2ccb48699ae8083616a5359fac5d31cecd5e3360a6235ce4a79f19",
+      "bytes": 25450,
+      "contentPath": "content/blogs/ai-ac6e1fb2.md"
+    },
+    {
+      "id": "blog-5d9fccc2",
+      "title": "双重收敛：大逃杀中的有效空间、存活人数与终局密度控制",
+      "summary": "一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-11",
+      "sha256": "d6a69feccc392db0a4d2bcc1f3205731ba97392d14792a077b66f02111065f8d",
+      "bytes": 28277,
+      "contentPath": "content/blogs/blog-5d9fccc2.md"
+    },
     {
       "id": "unreal-engine-ddc-cook-iostore",
       "title": "Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载",

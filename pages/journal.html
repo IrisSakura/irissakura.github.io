@@ -118,8 +118,8 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>46</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>37</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>47</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>38</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric"><strong>6</strong><span>完整博客</span></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
@@ -213,6 +213,11 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-10</p>
+                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
+                    <p>本轮仓库发生了一次相当明显的阶段变化。 8 月 9 日之前，仓库刚刚建立： 其主要目标是控制 146 个 UPM Package 的继续增长，并开始寻找可以合并、内化和退出 UPM 的能力。 但 8 月 10 日，默认分支连续新增了四个 Gameplay Kernel： 同时还完成了： 其中后三组是在既有 Package 内纵向增强，因此没有增加 Package；四个 Gameplay Kernel 则全部成为新的独立 UPM Package。最新 HEAD 中四个新 Kernel 均已经实现并进入 local-passed / runner-pending，对应本地 Unity Testbed 分别记录了 218/218、123/123、76/76、79/79。 这使仓库规模从上一轮的： 增长到： 当前生命周期分布为：</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-09</p>
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
                     <p>当前仓库的主线状态已经保持正确： Evidence Backlog 与 Deferred 工作仍明确禁止自动恢复。 本轮出现了三个值得肯定的变化。 第一，Preferences 已完成独立 Supported 晋级。它没有被强行并入 Runtime Foundation，而是形成单包 preferences-only Stable Profile，最终 SHA 已取得同 SHA 的 Preferences、消费方、Runtime Starter、Host Player、Performance、Stable API / Analyzer 和 Artifact Recovery 证据；v0.8.28 Tag、Release、签名和发布仍明确没有执行。 第二，仓库正式建立了 Package Distribution Boundary。现在 146 个包全部经过 Census 和人工分发复核，新包增长被锁定，需要 E3–E5…</p>
@@ -237,11 +242,6 @@
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
                     <p>本轮仓库没有继续增加 UPM 包、Catalog 模块、Preset 或程序集数量，近期工作主要集中在： 完成 Framework Convergence 0.9 的产品消费闭环； 建立 Quickstart、Roguelite 2D、Runtime Starter、Server Shared Protocol 等独立能力证据 Workflow； 建立无 Tag、无 Release 副作用的 Candidate pre-tag evidence 链路； 修复 SingletonManager 初始化分配、性能校准和 Source Envelope； 修复 Runtime Starter 消费闭包缺少 Audio、Bootstrap、Config、Preferences 的问题； 为共享 Testbed 增加租约、异常残留恢复和 owner-safe Sample 隔离。</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-04</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>与上一轮审计基准 719b8ed2... 相比，默认分支新增了 14 个提交，主要完成了五类工作： 建立 Framework Convergence 0.9 收敛路线； 为 core-only、bootstrap-lite 补充真实 Gitea Runner 消费路径证据； 增加独立、手动、精确 SHA 的 Stable API 与 Analyzer Evidence Workflow； 扩展 Runtime Starter 和 Semantic Battle，形成更完整的纵向消费样例； 将 Wasmtime Host 扩展至 Windows/Linux Desktop，并加入受限的 WASI 0.3 Async Research POC； 修复 Server 加入房间响应与 Snapshot 推送的顺序竞态。</p>
-                </article>
                 </div>
             </div>
         </div>
@@ -251,6 +251,18 @@
             <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-auto-battler">
+                    <p class="project-status">游戏设计范式 · 2026-08-11</p>
+                    <h3>自走棋 / Auto Battler</h3>
+                    <p>玩家主要不直接控制单位战斗动作，而是在有限准备阶段内，通过商店购买、共享棋子池竞争、棋子合成、经济投资、阵容羁绊和空间布阵预先构造一个战斗系统；随后单位根据统一战斗规则自主执行。每一轮战斗结果再反向改变生命、经济、对手信息与下一轮构筑空间，形成“构筑决策与自动验证”交替运行的竞技循环。</p>
+                    <div class="note-tags"><span>auto</span><span>battler</span><span>chess</span></div>
+                </article>
+                <article class="design-summary-card" id="design-moba">
+                    <p class="project-status">游戏设计范式 · 2026-08-11</p>
+                    <h3>MOBA / 线路式英雄团队竞技游戏</h3>
+                    <p>兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。</p>
+                    <div class="note-tags"><span>moba</span><span>multiplayer</span><span>online</span></div>
+                </article>
                 <article class="design-summary-card" id="design-battle-royale">
                     <p class="project-status">游戏设计范式 · 2026-08-10</p>
                     <h3>大逃杀 / Battle Royale</h3>
@@ -262,12 +274,6 @@
                     <h3>怪物收集 / 驯兽育成 RPG</h3>
                     <p>玩家拥有相对稳定的角色队伍，并围绕这些角色进行长期成长。</p>
                     <div class="note-tags"><span>monster</span><span>rpg</span><span>taming</span></div>
-                </article>
-                <article class="design-summary-card" id="design-moba">
-                    <p class="project-status">游戏设计范式 · 2026-08-08</p>
-                    <h3>MOBA / 线路式英雄团队竞技游戏</h3>
-                    <p>兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。</p>
-                    <div class="note-tags"><span>moba</span><span>multiplayer</span><span>online</span></div>
                 </article>
                 <article class="design-summary-card" id="design-fighting">
                     <p class="project-status">游戏设计范式 · 2026-08-07</p>
