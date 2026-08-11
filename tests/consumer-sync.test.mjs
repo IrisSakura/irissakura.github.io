@@ -261,7 +261,10 @@ test('consumer import command verifies an already current projection without rew
       '--input', input,
       '--check'
     ], { cwd: root });
-    assert.match(stdout, /Consumer Lab import matches route-wave-td@60c227c7/u);
+    assert.equal(
+      stdout.trim(),
+      `Consumer Lab import matches ${entry.id}@${entry.consumerCommit.slice(0, 8)}.`
+    );
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

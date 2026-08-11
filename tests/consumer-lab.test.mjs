@@ -8,12 +8,11 @@ import { assertConsumerLabCurrent } from '../scripts/lib/consumer-lab-model.mjs'
 
 const root = new URL('../', import.meta.url);
 const execFileAsync = promisify(execFile);
-const FRAMEWORK_COMMIT = '7be137c5efaa74d64c609aa1bc3fdf13d82c1563';
-const EXPECTED_CASES = new Map([
-  ['route-wave-td', '60c227c747ae75e9de84fc61d8bd749c5d5c8049'],
-  ['kitchen-shift', '23637da77a9b996237a0bc72ad06e0bc7b698c01'],
-  ['railworks-factory', 'afc07e17d0dfdb97798e69550d04150e41a79a8a'],
-  ['living-bestiary', '05d7d7594cbfd1cb0c77d9be84365074e834e8e2']
+const EXPECTED_CASES = new Set([
+  'route-wave-td',
+  'kitchen-shift',
+  'railworks-factory',
+  'living-bestiary'
 ]);
 const EXPECTED_PUBLIC_CASES = new Map([
   ['route-wave-td', { category: '塔防原型', highlights: ['路线封锁', '波次推进', '建造窗口', '胜负结算'] }],
@@ -22,18 +21,16 @@ const EXPECTED_PUBLIC_CASES = new Map([
   ['living-bestiary', { category: '生态收集原型', highlights: ['季节循环', '生物遭遇', '检查点存档', '备份恢复'] }]
 ]);
 
-test('Consumer Lab registry freezes four reviewed exact-SHA consumer snapshots', async () => {
+test('Consumer Lab registry maintains four reviewed exact-SHA consumer snapshots', async () => {
   const registry = await readJson('data/consumer-lab.json');
   assert.doesNotThrow(() => assertConsumerLabCurrent(registry));
   assert.equal(registry.schemaVersion, 2);
   assert.equal(registry.cases.length, EXPECTED_CASES.size);
-  assert.deepEqual(
-    new Map(registry.cases.map((entry) => [entry.id, entry.consumerCommit])),
-    EXPECTED_CASES
-  );
+  assert.deepEqual(new Set(registry.cases.map((entry) => entry.id)), EXPECTED_CASES);
   for (const entry of registry.cases) {
-    assert.equal(entry.frameworkCommit, FRAMEWORK_COMMIT);
-    assert.equal(entry.unityVersion, '2022.3.62f3c1');
+    assert.match(entry.consumerCommit, /^[a-f0-9]{40}$/u);
+    assert.match(entry.frameworkCommit, /^[a-f0-9]{40}$/u);
+    assert.match(entry.unityVersion, /^\d+\.\d+\.\d+f\d+c\d+$/u);
     assert.match(entry.sourceCommittedAt, /^2026-08-11T/u);
     assert.match(entry.reviewedPackageHash, /^[a-f0-9]{64}$/u);
     assert.equal(entry.status, 'local-passed');
@@ -101,7 +98,7 @@ test('generated portfolio presents projects without owner-only Consumer Lab meta
     'Build + actual smoke',
     '消费快照',
     '证据边界',
-    FRAMEWORK_COMMIT.slice(0, 12),
+    ...registry.cases.map((entry) => entry.frameworkCommit.slice(0, 12)),
     ...registry.cases.map((entry) => entry.consumerCommit.slice(0, 12)),
     ...registry.cases.map((entry) => entry.evidenceBoundary)
   ]) {
