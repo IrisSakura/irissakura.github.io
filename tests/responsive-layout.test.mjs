@@ -63,12 +63,12 @@ test('Consumer Lab uses a bounded two-column matrix with readable narrow-screen 
   assert.match(css, /\.consumer-lab-card\s*\{[^}]*min-width:\s*0/s);
   assert.match(
     css,
-    /\.consumer-lab-baseline code,[\s\S]*?\.consumer-lab-commit code\s*\{[^}]*overflow-wrap:\s*anywhere/s
+    /\.consumer-lab-highlights\s*\{[^}]*display:\s*flex[^}]*flex-wrap:\s*wrap/s
   );
   const tabletFallback = css.match(/@media \(max-width: 900px\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
   assert.match(
     tabletFallback,
-    /\.consumer-lab-heading,[\s\S]*?\.consumer-lab-grid\s*\{[^}]*grid-template-columns:\s*1fr/s
+    /\.consumer-lab-grid\s*\{[^}]*grid-template-columns:\s*1fr/s
   );
 });
 

@@ -52,7 +52,7 @@ npm run package:site
 
 - `data/site.json`：品牌定位和真实社交入口；
 - `data/projects.json`：三个公开项目的状态、职责、证据与限制；
-- `data/consumer-lab.json`：四个独立 Unity 消费项目的 exact-SHA 快照、包组合、本地测试证据与 Runner 边界；
+- `data/consumer-lab.json`：四个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
 - `content/blogs/`：通过安全导入的 Markdown 源镜像，不因存在于此而自动公开；
@@ -106,6 +106,23 @@ Journal 的 `blogs/publication.v1.json` 只表示文章可以进入安全导出�
 
 Gitea 到 GitHub 的密钥配置、路径所有权和冲突处理见
 [`docs/maintenance/journal-sync.md`](docs/maintenance/journal-sync.md)。
+
+### Consumer Lab 同步
+
+四个消费者仓库的 `main` 推送会从固定提交生成脱敏技术投影，并由站点导入器更新
+`data/consumer-lab.json`。源仓只能同步提交、Framework/Unity 版本、包集合和通过计数；项目类型、
+摘要与四条核心系统仍由本站策展，且 owner-only 注册表不会打进 Pages artifact。
+
+本地可用以下命令复现单个消费者投影：
+
+```bash
+npm run consumer:export -- --source /path/to/consumer --commit <consumer-sha> --output /tmp/consumer.json
+npm run consumer:import -- --input /tmp/consumer.json
+npm run consumer:check -- --input /tmp/consumer.json
+```
+
+证据新鲜度、包集合复核、Runner Secret 与并发冲突策略见
+[`docs/maintenance/consumer-lab-sync.md`](docs/maintenance/consumer-lab-sync.md)。
 
 ## 发布流程
 

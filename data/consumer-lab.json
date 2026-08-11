@@ -1,24 +1,28 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "updatedAt": "2026-08-11",
-  "title": "Domain Consumer Lab",
-  "description": "四个独立 Unity 消费项目把 Sakura Framework 的玩法域能力放进真实项目结构、生命周期与 Player 闭环中验证。",
-  "frameworkCommit": "7be137c5efaa74d64c609aa1bc3fdf13d82c1563",
-  "unityVersion": "2022.3.62f3c1",
+  "title": "四个独立玩法项目",
+  "description": "四个独立 Unity 项目分别探索塔防、时间管理、工厂物流与生态收集，让 Framework 能力落到可理解的玩法循环里。",
   "evidenceBoundary": "这里只公开已复核的本地 Unity 与 Player 结果；不把本地通过写成远端 Runner、签名、Release 或公开下载。",
   "cases": [
     {
       "id": "route-wave-td",
       "title": "Route-Wave TD",
-      "summary": "以建塔、封路、三波敌人和全新 Session 重开，验证塔防规则能够由消费项目组合成完整玩法循环。",
+      "category": "塔防原型",
+      "summary": "建塔、封锁路线与三波敌人组成一局紧凑的塔防循环；结束后可以清理状态并开启全新战局。",
+      "highlights": ["路线封锁", "波次推进", "建造窗口", "胜负结算"],
       "capability": "Intermission 与 Victory 生命周期、封路可达性、建造窗口和终局清理",
       "consumerCommit": "60c227c747ae75e9de84fc61d8bd749c5d5c8049",
+      "sourceCommittedAt": "2026-08-11T12:58:27+08:00",
+      "frameworkCommit": "7be137c5efaa74d64c609aa1bc3fdf13d82c1563",
+      "unityVersion": "2022.3.62f3c1",
       "packages": [
         "com.unitygame.framework.core",
         "com.unitygame.framework.pathfinding",
         "com.unitygame.framework.swarm",
         "com.unitygame.framework.tower-defense"
       ],
+      "reviewedPackageHash": "b796b2664e6dcaf7d1d76d0c2ecd375af5ad114f09e6bfbcd59972007220128a",
       "status": "local-passed",
       "runnerStatus": "runner-pending",
       "verification": {
@@ -32,19 +36,25 @@
     {
       "id": "kitchen-shift",
       "title": "Kitchen Shift",
-      "summary": "把配方 DAG、工作租约和顾客流组合成短班次，覆盖并行烹饪、严格前置、流失与全新 Shift 重开。",
+      "category": "时间管理原型",
+      "summary": "在一个短班次里安排多道菜并同时服务顾客；配方前置、等待与流失共同形成时间压力。",
+      "highlights": ["并行烹饪", "配方前置", "顾客耐心", "班次结算"],
       "capability": "并行与前置配方、Balk 与 Abandon、Blocked 到 Executing、班次清理",
       "consumerCommit": "23637da77a9b996237a0bc72ad06e0bc7b698c01",
+      "sourceCommittedAt": "2026-08-11T12:55:37+08:00",
+      "frameworkCommit": "7be137c5efaa74d64c609aa1bc3fdf13d82c1563",
+      "unityVersion": "2022.3.62f3c1",
       "packages": [
         "com.unitygame.framework.core",
         "com.unitygame.framework.work-orchestration",
         "com.unitygame.framework.service-flow",
         "com.unitygame.framework.cooking-time-management"
       ],
+      "reviewedPackageHash": "f6db28b959e03b9b69926fe7871a5e0e1aac964d6d9e2cc62602a1ecef3d366f",
       "status": "local-passed",
       "runnerStatus": "runner-pending",
       "verification": {
-        "static": null,
+        "static": "Node 1/1",
         "editMode": { "passed": 5, "total": 5 },
         "playMode": { "passed": 3, "total": 3 },
         "player": "macOS Player Build + actual smoke"
@@ -54,9 +64,14 @@
     {
       "id": "railworks-factory",
       "title": "Railworks Factory",
-      "summary": "用铁路联运工厂闭环验证生产、调度、恢复与清理，并显式限制 Dispatch 和 Work 的终态历史预算。",
+      "category": "工厂物流原型",
+      "summary": "围绕铁路联运组织生产与发运；堵塞出现时恢复调度，并控制持续运行产生的历史记录。",
+      "highlights": ["生产排程", "铁路发运", "堵塞恢复", "历史清理"],
       "capability": "堵塞恢复提案、固定 Tick 发运、bounded-history、active 与 retained 诊断",
       "consumerCommit": "afc07e17d0dfdb97798e69550d04150e41a79a8a",
+      "sourceCommittedAt": "2026-08-11T12:54:54+08:00",
+      "frameworkCommit": "7be137c5efaa74d64c609aa1bc3fdf13d82c1563",
+      "unityVersion": "2022.3.62f3c1",
       "packages": [
         "com.unitygame.framework.core",
         "com.unitygame.framework.command",
@@ -67,6 +82,7 @@
         "com.unitygame.framework.factory-logistics",
         "com.unitygame.framework.work-orchestration"
       ],
+      "reviewedPackageHash": "6a1dbbaa98adf66ddc65022a4731dcf58da6823e43148ad7db6028528699603c",
       "status": "local-passed",
       "runnerStatus": "runner-pending",
       "verification": {
@@ -80,15 +96,21 @@
     {
       "id": "living-bestiary",
       "title": "Living Bestiary",
-      "summary": "把生态模拟、生物遭遇和 Framework Save 组合成季节循环，覆盖持久检查点、备份自愈与无效载荷拒绝。",
+      "category": "生态收集原型",
+      "summary": "在季节推进中模拟生态变化和生物遭遇，并用检查点存档与备份恢复延续探索进度。",
+      "highlights": ["季节循环", "生物遭遇", "检查点存档", "备份恢复"],
       "capability": "4097 次 replay retention 边界、原子槽位存档、备份自愈和事务性恢复",
       "consumerCommit": "05d7d7594cbfd1cb0c77d9be84365074e834e8e2",
+      "sourceCommittedAt": "2026-08-11T12:54:41+08:00",
+      "frameworkCommit": "7be137c5efaa74d64c609aa1bc3fdf13d82c1563",
+      "unityVersion": "2022.3.62f3c1",
       "packages": [
         "com.unitygame.framework.core",
         "com.unitygame.framework.ecosystem-simulation",
         "com.unitygame.framework.creature-collector",
         "com.unitygame.framework.save"
       ],
+      "reviewedPackageHash": "f3b87b99e96cb936d5c8e34953e5d88409ec2a0efeb2ea85890fd17d996f6a22",
       "status": "local-passed",
       "runnerStatus": "runner-pending",
       "verification": {

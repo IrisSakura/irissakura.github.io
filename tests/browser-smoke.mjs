@@ -6,12 +6,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, blogPublication, blogTaxonomy, evidenceChains, projectData, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
+const [journalSource, blogPublication, blogTaxonomy, evidenceChains, projectData, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
   readJson('data/blog-taxonomy.json'),
   readJson('data/evidence-chains.json'),
   readJson('data/projects.json'),
+  readJson('data/consumer-lab.json'),
   readJson('data/framework-quickstart.json'),
   readJson('data/site.json'),
   readJson('data/themes.json'),
@@ -326,6 +327,28 @@ try {
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
   if (!await desktop.locator('.portfolio-case').first().filter({ hasText: gameProject.title }).isVisible()) throw new Error('registered game project is not the first portfolio case');
+  if (await desktop.locator('.consumer-lab-card').count() !== consumerLab.cases.length) {
+    throw new Error('portfolio does not expose every Consumer Lab project');
+  }
+  const consumerLabSection = desktop.locator('.consumer-lab');
+  if (await consumerLabSection.locator('.consumer-lab-category').count() !== consumerLab.cases.length) {
+    throw new Error('Consumer Lab project categories are incomplete');
+  }
+  if (await consumerLabSection.locator('.consumer-lab-highlights li').count() !== consumerLab.cases.length * 4) {
+    throw new Error('Consumer Lab core-system highlights are incomplete');
+  }
+  if (await consumerLabSection.locator([
+    '[data-consumer-commit]',
+    '.consumer-lab-status',
+    '.consumer-lab-baseline',
+    '.consumer-lab-packages',
+    '.consumer-lab-verification',
+    '.consumer-lab-commit',
+    '.consumer-lab-boundary',
+    '.consumer-lab-disclaimer'
+  ].join(', ')).count() !== 0) {
+    throw new Error('Consumer Lab exposes owner-only evidence metadata');
+  }
 
   await desktop.getByLabel('选择页面主题').selectOption('sakura-village');
   const portfolioInsetFailures = [];

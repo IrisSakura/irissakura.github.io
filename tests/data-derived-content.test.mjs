@@ -48,7 +48,7 @@ test('generated public copy derives volatile counts from authoritative registrie
     'portfolio accessibility copy must use the project registry'
   );
   assert.ok(
-    portfolioHtml.includes(`${projects.projects.length} 条真实项目主线与 ${consumerLab.cases.length} 个独立消费项目组成从研究、框架到游戏验证的完整链路`),
+    portfolioHtml.includes(`${projects.projects.length} 条真实作品主线与 ${consumerLab.cases.length} 个独立玩法项目，呈现从研究、框架到游戏实践的完整链路`),
     'portfolio metadata must use the project and Consumer Lab registries'
   );
 });

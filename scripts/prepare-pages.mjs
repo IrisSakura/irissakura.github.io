@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '_site');
+const ownerOnlySources = new Set([
+  path.join(root, 'data', 'consumer-lab.json')
+]);
 const entries = [
   '404.html',
   'index.html',
@@ -23,7 +26,10 @@ await mkdir(output, { recursive: true });
 for (const entry of entries) {
   await cp(path.join(root, entry), path.join(output, entry), {
     recursive: true,
-    filter: (source) => path.basename(source) !== '.DS_Store'
+    filter: (source) => (
+      path.basename(source) !== '.DS_Store'
+      && !ownerOnlySources.has(path.resolve(source))
+    )
   });
 }
 console.log(`Prepared GitHub Pages artifact with ${entries.length} entries.`);

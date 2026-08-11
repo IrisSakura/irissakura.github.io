@@ -162,8 +162,8 @@ const pageDefinitions = [
     file: 'pages/portfolio.html',
     key: 'portfolio',
     coverKey: 'portfolio',
-    title: '作品集 | 游戏、Framework Consumer Lab 与研究',
-    description: `${projects.projects.length} 条真实项目主线与 ${consumerLab.cases.length} 个独立消费项目组成从研究、框架到游戏验证的完整链路。`,
+    title: '作品集 | 游戏、Framework 玩法项目与研究',
+    description: `${projects.projects.length} 条真实作品主线与 ${consumerLab.cases.length} 个独立玩法项目，呈现从研究、框架到游戏实践的完整链路。`,
     canonical: '/pages/portfolio.html',
   },
   {
@@ -747,41 +747,23 @@ function renderPortfolioContent(projectData, journalData, frameworkData, consume
 
 function renderConsumerLab(consumerLabData) {
   const cards = consumerLabData.cases.map((entry, index) => {
-    const packageTags = entry.packages.map((packageName) => (
-      `<code>${escapeHtml(packageName.replace('com.unitygame.framework.', ''))}</code>`
-    )).join('');
-    const staticResult = entry.verification.static
-      ? `<div><dt>静态合同</dt><dd>${escapeHtml(entry.verification.static)}</dd></div>`
-      : '';
-    return `<article class="consumer-lab-card" id="consumer-${escapeAttribute(entry.id)}" data-consumer-commit="${escapeAttribute(entry.consumerCommit)}">
-                    <div class="consumer-lab-card-topline"><span class="consumer-lab-index">0${index + 1}</span><span class="consumer-lab-status">本地通过 · Runner 待验证</span></div>
+    const highlights = entry.highlights
+      .map((highlight) => `<li>${escapeHtml(highlight)}</li>`)
+      .join('');
+    return `<article class="consumer-lab-card" id="consumer-${escapeAttribute(entry.id)}">
+                    <div class="consumer-lab-card-topline"><span class="consumer-lab-index">0${index + 1}</span><span class="consumer-lab-category">${escapeHtml(entry.category)}</span></div>
                     <h3>${escapeHtml(entry.title)}</h3>
                     <p class="consumer-lab-summary">${escapeHtml(entry.summary)}</p>
-                    <p class="consumer-lab-capability"><strong>验证切片</strong>${escapeHtml(entry.capability)}</p>
-                    <div class="consumer-lab-packages" aria-label="Framework packages">${packageTags}</div>
-                    <dl class="consumer-lab-verification">
-                        ${staticResult}
-                        <div><dt>EditMode</dt><dd>${entry.verification.editMode.passed}/${entry.verification.editMode.total}</dd></div>
-                        <div><dt>PlayMode</dt><dd>${entry.verification.playMode.passed}/${entry.verification.playMode.total}</dd></div>
-                        <div><dt>Player</dt><dd>Build + actual smoke</dd></div>
-                    </dl>
-                    <p class="consumer-lab-commit">消费快照 <code>${escapeHtml(entry.consumerCommit.slice(0, 12))}</code></p>
-                    <p class="consumer-lab-boundary">${escapeHtml(entry.evidenceBoundary)}</p>
+                    <div class="consumer-lab-systems"><p>核心系统</p><ul class="consumer-lab-highlights" aria-label="${escapeAttribute(entry.title)} 核心系统">${highlights}</ul></div>
                 </article>`;
   }).join('\n                ');
 
-  return `<section class="consumer-lab" id="consumer-lab" aria-label="${consumerLabData.cases.length} 个独立消费项目">
+  return `<section class="consumer-lab" id="consumer-lab" aria-label="${consumerLabData.cases.length} 个独立玩法项目">
             <div class="consumer-lab-heading">
-                <div><p class="section-kicker">FRAMEWORK IN INDEPENDENT PROJECTS</p><h2>${escapeHtml(consumerLabData.title)}</h2><p class="consumer-lab-intro">${escapeHtml(consumerLabData.description)}</p></div>
-                <dl class="consumer-lab-baseline">
-                    <div><dt>Unity</dt><dd>${escapeHtml(consumerLabData.unityVersion)}</dd></div>
-                    <div><dt>Framework 快照</dt><dd><code>${escapeHtml(consumerLabData.frameworkCommit.slice(0, 12))}</code></dd></div>
-                    <div><dt>项目数</dt><dd>${consumerLabData.cases.length} 个独立仓库</dd></div>
-                </dl>
+                <p class="section-kicker">FRAMEWORK PLAYGROUNDS</p><h2>${escapeHtml(consumerLabData.title)}</h2><p class="consumer-lab-intro">${escapeHtml(consumerLabData.description)}</p>
             </div>
             <div class="consumer-lab-grid">${cards}
             </div>
-            <p class="consumer-lab-disclaimer"><strong>证据边界</strong>${escapeHtml(consumerLabData.evidenceBoundary)}</p>
         </section>`;
 }
 

@@ -2,20 +2,16 @@ const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SHA_PATTERN = /^[a-f0-9]{40}$/;
 const PACKAGE_PATTERN = /^com\.unitygame\.framework\.[a-z0-9-]+$/;
+const HASH_PATTERN = /^[a-f0-9]{64}$/;
+const ISO_INSTANT_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 const PRIVATE_TRANSPORT_PATTERN = /(?:\/Users\/|154\.37\.215\.57|\bGitea\b|git@|https?:\/\/)/iu;
 
 export function assertConsumerLabCurrent(registry) {
-  if (registry?.schemaVersion !== 1 || !Array.isArray(registry.cases)) {
-    throw new Error('Consumer Lab must use schemaVersion 1 and expose cases.');
+  if (registry?.schemaVersion !== 2 || !Array.isArray(registry.cases)) {
+    throw new Error('Consumer Lab must use schemaVersion 2 and expose cases.');
   }
   if (!DATE_PATTERN.test(registry.updatedAt ?? '')) {
     throw new Error('Consumer Lab requires a valid updatedAt date.');
-  }
-  if (!SHA_PATTERN.test(registry.frameworkCommit ?? '')) {
-    throw new Error('Consumer Lab requires one exact Framework commit.');
-  }
-  if (registry.unityVersion !== '2022.3.62f3c1') {
-    throw new Error('Consumer Lab Unity version must match the reviewed consumer baseline.');
   }
   if (registry.cases.length !== 4) {
     throw new Error('Consumer Lab must expose exactly four reviewed consumer cases.');
@@ -32,6 +28,29 @@ export function assertConsumerLabCurrent(registry) {
     ids.add(entry.id);
     if (!SHA_PATTERN.test(entry.consumerCommit ?? '')) {
       throw new Error(`Consumer Lab case ${entry.id} requires an exact consumer commit.`);
+    }
+    if (!SHA_PATTERN.test(entry.frameworkCommit ?? '')) {
+      throw new Error(`Consumer Lab case ${entry.id} requires an exact Framework commit.`);
+    }
+    if (!ISO_INSTANT_PATTERN.test(entry.sourceCommittedAt ?? '') || !Number.isFinite(Date.parse(entry.sourceCommittedAt))) {
+      throw new Error(`Consumer Lab case ${entry.id} requires an exact source commit time.`);
+    }
+    if (typeof entry.unityVersion !== 'string' || !/^\d+\.\d+\.\d+f\d+c\d+$/.test(entry.unityVersion)) {
+      throw new Error(`Consumer Lab case ${entry.id} requires an exact Unity version.`);
+    }
+    if (!HASH_PATTERN.test(entry.reviewedPackageHash ?? '')) {
+      throw new Error(`Consumer Lab case ${entry.id} requires a reviewed package hash.`);
+    }
+    if (typeof entry.category !== 'string' || entry.category.trim().length < 4) {
+      throw new Error(`Consumer Lab case ${entry.id} requires reviewed category copy.`);
+    }
+    if (
+      !Array.isArray(entry.highlights)
+      || entry.highlights.length !== 4
+      || new Set(entry.highlights).size !== entry.highlights.length
+      || entry.highlights.some((highlight) => typeof highlight !== 'string' || highlight.trim().length < 2)
+    ) {
+      throw new Error(`Consumer Lab case ${entry.id} requires four unique visitor-facing highlights.`);
     }
     for (const field of ['title', 'summary', 'capability', 'evidenceBoundary']) {
       if (typeof entry[field] !== 'string' || entry[field].trim().length < 12) {
