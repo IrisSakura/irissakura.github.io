@@ -8,6 +8,7 @@ import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
 import { resolveBlogDiscovery } from './lib/blog-discovery-model.mjs';
 import { selectPublishedBlogs, stripBlogPublicationPreamble } from './lib/blog-publication-model.mjs';
+import { assertConsumerLabCurrent } from './lib/consumer-lab-model.mjs';
 import { resolveEvidenceChains } from './lib/evidence-chain-model.mjs';
 import { updateFrameworkFallback } from './lib/framework-fallback.mjs';
 import { assertProjectFactsCurrent } from './lib/project-facts.mjs';
@@ -24,12 +25,13 @@ const PAGE_COVER_TARGETS = {
   contact: 'contact-header'
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, projects, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
   readJson('data/framework-quickstart.json'),
   readJson('data/projects.json'),
+  readJson('data/consumer-lab.json'),
   readJson('data/journal.json'),
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
@@ -43,6 +45,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, journa
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
 assertProjectFactsCurrent(projects, framework, journal, blogPublication);
+assertConsumerLabCurrent(consumerLab);
 assertThemeConfig(themeConfig);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
@@ -159,8 +162,8 @@ const pageDefinitions = [
     file: 'pages/portfolio.html',
     key: 'portfolio',
     coverKey: 'portfolio',
-    title: '作品集 | Sakura Design Journal、Framework 与言铸之剑',
-    description: `${projects.projects.length} 个真实项目组成从研究、框架到游戏验证的完整链路，并公开说明状态、职责、证据和限制。`,
+    title: '作品集 | 游戏、Framework Consumer Lab 与研究',
+    description: `${projects.projects.length} 条真实项目主线与 ${consumerLab.cases.length} 个独立消费项目组成从研究、框架到游戏验证的完整链路。`,
     canonical: '/pages/portfolio.html',
   },
   {
@@ -319,7 +322,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'home-content', renderHomeContent(projects, publicJournal, framework, site));
   }
   if (page.file === 'pages/portfolio.html') {
-    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework));
+    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, consumerLab));
   }
   if (page.file === 'pages/journal.html') {
     html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(publicJournal, publicJournalSource, evidenceChains));
@@ -691,7 +694,7 @@ function renderHomeContent(projectData, journalData, frameworkData, siteData) {
     </section>`;
 }
 
-function renderPortfolioContent(projectData, journalData, frameworkData) {
+function renderPortfolioContent(projectData, journalData, frameworkData, consumerLabData) {
   const order = ['sword-of-words', 'sakura-framework', 'sakura-design-journal'];
   const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
   if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
@@ -738,7 +741,48 @@ function renderPortfolioContent(projectData, journalData, frameworkData) {
         <section class="portfolio-cases" aria-label="${ordered.length} 个真实项目">
             ${cases}
         </section>
+        ${renderConsumerLab(consumerLabData)}
     </div>`;
+}
+
+function renderConsumerLab(consumerLabData) {
+  const cards = consumerLabData.cases.map((entry, index) => {
+    const packageTags = entry.packages.map((packageName) => (
+      `<code>${escapeHtml(packageName.replace('com.unitygame.framework.', ''))}</code>`
+    )).join('');
+    const staticResult = entry.verification.static
+      ? `<div><dt>静态合同</dt><dd>${escapeHtml(entry.verification.static)}</dd></div>`
+      : '';
+    return `<article class="consumer-lab-card" id="consumer-${escapeAttribute(entry.id)}" data-consumer-commit="${escapeAttribute(entry.consumerCommit)}">
+                    <div class="consumer-lab-card-topline"><span class="consumer-lab-index">0${index + 1}</span><span class="consumer-lab-status">本地通过 · Runner 待验证</span></div>
+                    <h3>${escapeHtml(entry.title)}</h3>
+                    <p class="consumer-lab-summary">${escapeHtml(entry.summary)}</p>
+                    <p class="consumer-lab-capability"><strong>验证切片</strong>${escapeHtml(entry.capability)}</p>
+                    <div class="consumer-lab-packages" aria-label="Framework packages">${packageTags}</div>
+                    <dl class="consumer-lab-verification">
+                        ${staticResult}
+                        <div><dt>EditMode</dt><dd>${entry.verification.editMode.passed}/${entry.verification.editMode.total}</dd></div>
+                        <div><dt>PlayMode</dt><dd>${entry.verification.playMode.passed}/${entry.verification.playMode.total}</dd></div>
+                        <div><dt>Player</dt><dd>Build + actual smoke</dd></div>
+                    </dl>
+                    <p class="consumer-lab-commit">消费快照 <code>${escapeHtml(entry.consumerCommit.slice(0, 12))}</code></p>
+                    <p class="consumer-lab-boundary">${escapeHtml(entry.evidenceBoundary)}</p>
+                </article>`;
+  }).join('\n                ');
+
+  return `<section class="consumer-lab" id="consumer-lab" aria-label="${consumerLabData.cases.length} 个独立消费项目">
+            <div class="consumer-lab-heading">
+                <div><p class="section-kicker">FRAMEWORK IN INDEPENDENT PROJECTS</p><h2>${escapeHtml(consumerLabData.title)}</h2><p class="consumer-lab-intro">${escapeHtml(consumerLabData.description)}</p></div>
+                <dl class="consumer-lab-baseline">
+                    <div><dt>Unity</dt><dd>${escapeHtml(consumerLabData.unityVersion)}</dd></div>
+                    <div><dt>Framework 快照</dt><dd><code>${escapeHtml(consumerLabData.frameworkCommit.slice(0, 12))}</code></dd></div>
+                    <div><dt>项目数</dt><dd>${consumerLabData.cases.length} 个独立仓库</dd></div>
+                </dl>
+            </div>
+            <div class="consumer-lab-grid">${cards}
+            </div>
+            <p class="consumer-lab-disclaimer"><strong>证据边界</strong>${escapeHtml(consumerLabData.evidenceBoundary)}</p>
+        </section>`;
 }
 
 function renderPortfolioVisual(project, journalData, frameworkData) {

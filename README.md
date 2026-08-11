@@ -15,7 +15,7 @@
 - `/pages/framework.html`：框架规模、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
-- `/pages/portfolio.html`：真实项目及其状态、职责、证据和限制；
+- `/pages/portfolio.html`：三条真实项目主线，以及四个 Domain Consumer Lab 独立消费项目的本地验证矩阵；
 - `/pages/art-music.html`：保留中的美术音乐地址；在至少有一组真实作品前保持 `noindex`，暂不进入一级导航或 Sitemap；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
 - `/pages/about.html`：旧 About 地址的 `noindex` 首页兼容跳转；
@@ -52,6 +52,7 @@ npm run package:site
 
 - `data/site.json`：品牌定位和真实社交入口；
 - `data/projects.json`：三个公开项目的状态、职责、证据与限制；
+- `data/consumer-lab.json`：四个独立 Unity 消费项目的 exact-SHA 快照、包组合、本地测试证据与 Runner 边界；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
 - `content/blogs/`：通过安全导入的 Markdown 源镜像，不因存在于此而自动公开；

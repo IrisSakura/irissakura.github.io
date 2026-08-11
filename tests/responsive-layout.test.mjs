@@ -53,6 +53,25 @@ test('home cases and research use asymmetric desktop compositions with linear mo
   assert.match(tabletFallback, /\.case-list\s*>\s*article,[\s\S]*?\.research-row:first-child\s*\{[^}]*grid-column:\s*auto[^}]*grid-row:\s*auto/s);
 });
 
+test('Consumer Lab uses a bounded two-column matrix with readable narrow-screen fallbacks', async () => {
+  const css = await readText('style/portfolio.css');
+
+  assert.match(
+    css,
+    /\.consumer-lab-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s
+  );
+  assert.match(css, /\.consumer-lab-card\s*\{[^}]*min-width:\s*0/s);
+  assert.match(
+    css,
+    /\.consumer-lab-baseline code,[\s\S]*?\.consumer-lab-commit code\s*\{[^}]*overflow-wrap:\s*anywhere/s
+  );
+  const tabletFallback = css.match(/@media \(max-width: 900px\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
+  assert.match(
+    tabletFallback,
+    /\.consumer-lab-heading,[\s\S]*?\.consumer-lab-grid\s*\{[^}]*grid-template-columns:\s*1fr/s
+  );
+});
+
 test('fluid geometry is the only layout system and obsolete presets are removed', async () => {
   for (const path of ['data/layouts.json', 'style/layout-compact.css', 'style/layout-wide.css']) {
     await assert.rejects(
