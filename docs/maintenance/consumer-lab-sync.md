@@ -35,6 +35,8 @@
 
 每个消费者 Gitea 仓库需要：
 
+- 一个仅提供 `consumer-site-sync` 标签的专用 owner/repository Runner；不要把现有 Framework 或
+  Journal 的仓库级 Runner 改成全局 `game-ci` 执行面；
 - `WEBSITE_GITHUB_SSH_KEY`：只对 `IrisSakura/irissakura.github.io` 具备写权限的专用 SSH key；
 - `WEBSITE_GITHUB_KNOWN_HOSTS`：预先审核的 `github.com` host key；
 - 私有 checkout 需要时提供 `GITEA_TOKEN` 与 `IRIS_GITEA_USERNAME`；
