@@ -12,16 +12,20 @@ const EXPECTED_CASES = new Set([
   'route-wave-td',
   'kitchen-shift',
   'railworks-factory',
-  'living-bestiary'
+  'living-bestiary',
+  'ashfall-loot-run',
+  'willow-hearth'
 ]);
 const EXPECTED_PUBLIC_CASES = new Map([
   ['route-wave-td', { category: '塔防原型', highlights: ['路线封锁', '波次推进', '建造窗口', '胜负结算'] }],
   ['kitchen-shift', { category: '时间管理原型', highlights: ['并行烹饪', '配方前置', '顾客耐心', '班次结算'] }],
   ['railworks-factory', { category: '工厂物流原型', highlights: ['生产排程', '铁路发运', '堵塞恢复', '历史清理'] }],
-  ['living-bestiary', { category: '生态收集原型', highlights: ['季节循环', '生物遭遇', '检查点存档', '备份恢复'] }]
+  ['living-bestiary', { category: '生态收集原型', highlights: ['季节循环', '生物遭遇', '检查点存档', '备份恢复'] }],
+  ['ashfall-loot-run', { category: '刷装战斗原型', highlights: ['三段遭遇', '确定性掉落', '伤害预算', '拾取幂等'] }],
+  ['willow-hearth', { category: '生活模拟原型', highlights: ['小时推进', 'NPC 日程', '农田成长', '出货结算'] }]
 ]);
 
-test('Consumer Lab registry maintains four reviewed exact-SHA consumer snapshots', async () => {
+test('Consumer Lab registry maintains six reviewed exact-SHA consumer snapshots', async () => {
   const registry = await readJson('data/consumer-lab.json');
   assert.doesNotThrow(() => assertConsumerLabCurrent(registry));
   assert.equal(registry.schemaVersion, 2);
@@ -70,7 +74,7 @@ test('generated portfolio presents projects without owner-only Consumer Lab meta
     readFile(new URL('pages/portfolio.html', root), 'utf8')
   ]);
   assert.ok(html.includes(`aria-label="${registry.cases.length} 个独立玩法项目"`));
-  assert.ok(html.includes('四个独立玩法项目'));
+  assert.ok(html.includes('六个独立玩法项目'));
   for (const entry of registry.cases) {
     const publicCase = EXPECTED_PUBLIC_CASES.get(entry.id);
     assert.ok(publicCase, `missing public contract for ${entry.id}`);

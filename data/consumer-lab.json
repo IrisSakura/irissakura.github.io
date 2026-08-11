@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "updatedAt": "2026-08-11",
-  "title": "四个独立玩法项目",
-  "description": "四个独立 Unity 项目分别探索塔防、时间管理、工厂物流与生态收集，让 Framework 能力落到可理解的玩法循环里。",
+  "title": "六个独立玩法项目",
+  "description": "六个独立 Unity 项目分别探索塔防、时间管理、工厂物流、生态收集、刷装战斗与生活模拟，让 Framework 能力落到可理解的玩法循环里。",
   "evidenceBoundary": "这里只公开已复核的本地 Unity 与 Player 结果；不把本地通过写成远端 Runner、签名、Release 或公开下载。",
   "cases": [
     {
@@ -120,6 +120,68 @@
         "player": "macOS Player Build + actual smoke"
       },
       "evidenceBoundary": "当前快照没有同提交远端 Runner、签名或 Release 证据。"
+    },
+    {
+      "id": "ashfall-loot-run",
+      "title": "Ashfall Loot Run",
+      "category": "刷装战斗原型",
+      "summary": "在三次遭遇中用确定性掉落和伤害预算完成一轮刷装；权威拾取与重复拒绝让战利品状态保持可信。",
+      "highlights": ["三段遭遇", "确定性掉落", "伤害预算", "拾取幂等"],
+      "capability": "遭遇推进、确定性战利品、伤害预算、装备元数据与重复拾取拒绝",
+      "consumerCommit": "e46315f176f0560fb5808f81b6ded0fdae208aff",
+      "sourceCommittedAt": "2026-08-11T23:10:21+08:00",
+      "frameworkCommit": "2917e915afdfcac58c2ed458ebb81e06481f3b04",
+      "unityVersion": "2022.3.62f3c1",
+      "packages": [
+        "com.unitygame.framework.core",
+        "com.unitygame.framework.arpg-loot-grinder"
+      ],
+      "reviewedPackageHash": "9e911001ce242c7286e9837903f68b1aef43045086fc84798e45a81b7f557c17",
+      "status": "local-passed",
+      "runnerStatus": "runner-pending",
+      "verification": {
+        "static": null,
+        "editMode": { "passed": 3, "total": 3 },
+        "playMode": { "passed": 1, "total": 1 },
+        "player": "macOS Player Build + actual smoke"
+      },
+      "evidenceBoundary": "当前快照没有同提交远端 Runner、签名、Release 或公开下载证据。"
+    },
+    {
+      "id": "willow-hearth",
+      "title": "Willow Hearth",
+      "category": "生活模拟原型",
+      "summary": "把小时推进、NPC 日程、农田成长、天气预报与出货结算串成可重复的一日经营循环。",
+      "highlights": ["小时推进", "NPC 日程", "农田成长", "出货结算"],
+      "capability": "时间推进、日程调度、农田成长、天气预报、出货收益与日结状态清理",
+      "consumerCommit": "a3fcda5853a7ca76f042d1b03cc8c66573f4ea2e",
+      "sourceCommittedAt": "2026-08-11T23:10:21+08:00",
+      "frameworkCommit": "2917e915afdfcac58c2ed458ebb81e06481f3b04",
+      "unityVersion": "2022.3.62f3c1",
+      "packages": [
+        "com.unitygame.framework.ai",
+        "com.unitygame.framework.core",
+        "com.unitygame.framework.gas",
+        "com.unitygame.framework.hitbox",
+        "com.unitygame.framework.life-sim",
+        "com.unitygame.framework.llm",
+        "com.unitygame.framework.localization",
+        "com.unitygame.framework.pathfinding",
+        "com.unitygame.framework.pooling",
+        "com.unitygame.framework.preferences",
+        "com.unitygame.framework.response-rules",
+        "com.unitygame.framework.ui-core"
+      ],
+      "reviewedPackageHash": "86cef7ee3301f767127fb81f57794f176e47bd1508f0e80e4d39e070d6fb97dc",
+      "status": "local-passed",
+      "runnerStatus": "runner-pending",
+      "verification": {
+        "static": null,
+        "editMode": { "passed": 627, "total": 627 },
+        "playMode": { "passed": 1, "total": 1 },
+        "player": "macOS Player Build + actual smoke"
+      },
+      "evidenceBoundary": "当前快照没有同提交远端 Runner、签名、Release 或公开下载证据。"
     }
   ]
 }

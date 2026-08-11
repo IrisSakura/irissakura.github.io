@@ -13,8 +13,8 @@ export function assertConsumerLabCurrent(registry) {
   if (!DATE_PATTERN.test(registry.updatedAt ?? '')) {
     throw new Error('Consumer Lab requires a valid updatedAt date.');
   }
-  if (registry.cases.length !== 4) {
-    throw new Error('Consumer Lab must expose exactly four reviewed consumer cases.');
+  if (registry.cases.length !== 6) {
+    throw new Error('Consumer Lab must expose exactly six reviewed consumer cases.');
   }
   if (PRIVATE_TRANSPORT_PATTERN.test(JSON.stringify(registry))) {
     throw new Error('Consumer Lab public facts contain a private transport or local path.');
