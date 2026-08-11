@@ -1,86 +1,66 @@
 /*
- * 樱里民谣主题
- * 日式乡村的和纸暖白、樱花粉、鸟居朱红、青黛远山与旧木色。
- * 本层叠加在东方田园主题之上，只负责改变氛围，不改变真实内容。
+ * 樱里民谣主题：只覆写配色；排版、几何、组件造型与动效由共享样式统一负责。
+ * 传统色锚点：生成り、胡粉、桜、真紅、蘇芳、藍、濃藍、利休鼠与枯茶。
  */
 
 :root {
-    --primary-color: #a8463f;
-    --secondary-color: #667f91;
-    --secondary-text-color: #435b6d;
-    --accent-color: #9f3f56;
-    --dark-color: #f6eee2;
-    --light-color: #332f38;
-    --gray-color: #685f65;
-    --muted-text-color: #625960;
-    --success-color: #647a62;
-    --warning-color: #a9783d;
-    --danger-color: #a8463f;
-
-    --font-display: "Yu Mincho", "Hiragino Mincho ProN", "Songti SC", "STSong", serif;
-    --font-heading: "Yu Mincho", "Hiragino Mincho ProN", "Songti SC", "STSong", serif;
-    --font-body: "Hiragino Kaku Gothic ProN", "Yu Gothic", "PingFang SC", "Microsoft YaHei", sans-serif;
-
-    --paper: #f7f0e6;
-    --paper-deep: #eadfce;
-    --mist-blue: #dce5e5;
-    --water-blue: #d2dfdf;
-    --hill-blue: #718783;
-    --petal-pink: #f1d7df;
-    --petal-strong: #9f3f56;
-    --ink: #332f38;
-    --ink-soft: #625960;
-    --leaf: #6f8068;
-    --line: rgba(91, 70, 72, 0.18);
-    --line-strong: rgba(91, 70, 72, 0.32);
-    --surface: rgba(255, 250, 242, 0.84);
-    --surface-strong: #fffaf2;
-
-    --torii: #aa453d;
-    --torii-deep: #783830;
-    --indigo: #35465a;
-    --wood: #80634f;
-    --sakura: #d991a5;
-    --sakura-soft: #f2dce2;
-
+    --primary-color: #a22041;
+    --secondary-color: #165e83;
+    --secondary-text-color: #165e83;
+    --accent-color: #9e3d3f;
+    --dark-color: #fbfaf5;
+    --light-color: #3f312b;
+    --gray-color: #5a544b;
+    --muted-text-color: #5a544b;
+    --success-color: #5b6356;
+    --warning-color: #8d6449;
+    --danger-color: #a22041;
+    --paper: #fbfaf5;
+    --paper-deep: #ede4cd;
+    --mist-blue: #c0c6c9;
+    --water-blue: #c8d5bb;
+    --hill-blue: #6c848d;
+    --petal-pink: #e9dfe5;
+    --petal-strong: #a22041;
+    --ink: #3f312b;
+    --ink-soft: #5a544b;
+    --leaf: #888e7e;
+    --line: rgba(63, 49, 43, 0.18);
+    --line-strong: rgba(63, 49, 43, 0.32);
+    --surface: rgba(255, 255, 252, 0.86);
+    --surface-strong: #fffffc;
+    --torii: #9e3d3f;
+    --torii-deep: #6c2c2f;
+    --indigo: #0f2350;
+    --wood: #8d6449;
+    --sakura: #f2a0a1;
+    --sakura-soft: #fef4f4;
     --ui-surface-hover: var(--sakura-soft);
     --ui-focus-color: var(--torii);
-    --ui-focus-shadow: 0 0 0 3px rgba(170, 69, 61, 0.16);
-    --ui-control-border: rgba(128, 99, 79, 0.3);
-    --ui-control-border-hover: var(--sakura);
+    --ui-control-border: rgba(90, 84, 75, 0.32);
+    --ui-control-border-hover: var(--torii);
     --ui-control-text: var(--ink);
-    --ui-control-surface: rgba(255, 250, 242, 0.82);
+    --ui-control-surface: rgba(255, 255, 252, 0.82);
     --ui-control-surface-hover: var(--sakura-soft);
     --ui-control-icon: var(--torii);
     --ui-control-option-text: var(--ink);
     --ui-control-option-surface: var(--surface-strong);
-    --ui-control-shadow: 0 5px 16px rgba(74, 58, 57, 0.08);
-    --ui-action-radius: 999px;
-    --ui-action-font: var(--font-body);
-    --ui-action-transform: none;
-    --ui-action-letter-spacing: 0.04em;
-    --ui-action-primary-text: #fffaf2;
+    --ui-action-primary-text: #fffffc;
     --ui-action-primary-bg: var(--torii);
     --ui-action-primary-hover-bg: var(--torii-deep);
-    --ui-action-primary-shadow: 0 10px 24px rgba(170, 69, 61, 0.2);
-    --ui-action-primary-hover-shadow: 0 14px 28px rgba(120, 56, 48, 0.24);
-    --ui-action-secondary-text: #873b50;
-    --ui-action-secondary-border: rgba(159, 63, 86, 0.5);
-    --ui-action-secondary-bg: rgba(255, 250, 242, 0.5);
-    --ui-action-secondary-hover-text: #6e3041;
+    --ui-action-secondary-text: #9e3d3f;
+    --ui-action-secondary-border: rgba(158, 61, 63, 0.5);
+    --ui-action-secondary-bg: rgba(255, 255, 252, 0.54);
+    --ui-action-secondary-hover-text: #6c2c2f;
     --ui-action-secondary-hover-bg: var(--sakura-soft);
-    --ui-action-outline-text: #873b50;
-    --ui-action-outline-border: rgba(159, 63, 86, 0.5);
-    --ui-action-outline-bg: rgba(255, 250, 242, 0.5);
-    --ui-action-outline-hover-text: #6e3041;
+    --ui-action-outline-text: #9e3d3f;
+    --ui-action-outline-border: rgba(158, 61, 63, 0.5);
+    --ui-action-outline-bg: rgba(255, 255, 252, 0.54);
+    --ui-action-outline-hover-text: #6c2c2f;
     --ui-action-outline-hover-bg: var(--sakura-soft);
-    --ui-chip-border: rgba(159, 63, 86, 0.22);
-    --ui-chip-surface: rgba(241, 215, 223, 0.62);
-    --ui-chip-text: #78384b;
-
-    --border-radius: 14px;
-    --box-shadow: 0 14px 34px rgba(73, 54, 57, 0.1);
-    --box-shadow-hover: 0 20px 42px rgba(73, 54, 57, 0.16);
+    --ui-chip-border: rgba(22, 94, 131, 0.28);
+    --ui-chip-surface: rgba(233, 223, 229, 0.7);
+    --ui-chip-text: #0f2350;
 }
 
 html {
@@ -89,26 +69,12 @@ html {
 
 body {
     color: var(--ink);
-    background:
-        radial-gradient(circle at 88% 4%, rgba(217, 145, 165, 0.2), transparent 25rem),
-        radial-gradient(circle at 10% 16%, rgba(126, 151, 153, 0.16), transparent 28rem),
-        linear-gradient(180deg, #fbf4eb 0%, var(--paper) 48%, #efe4d5 100%);
-}
-
-body::before {
-    opacity: 0.48;
-    background-image:
-        radial-gradient(ellipse at 45% 45%, rgba(181, 84, 110, 0.32) 0 2px, transparent 2.6px),
-        radial-gradient(ellipse at 60% 55%, rgba(211, 132, 154, 0.26) 0 2.4px, transparent 3px),
-        radial-gradient(circle at 1px 1px, rgba(88, 69, 66, 0.11) 0 0.7px, transparent 0.8px);
-    background-position: 0 0, 42px 24px, 0 0;
-    background-size: 96px 82px, 128px 116px, 21px 21px;
-    mask-image: linear-gradient(to bottom, black, transparent 82%);
+    background: radial-gradient(circle at 88% 4%, rgba(242, 160, 161, 0.18), transparent 25rem), radial-gradient(circle at 10% 16%, rgba(136, 142, 126, 0.16), transparent 28rem), linear-gradient(180deg, #fffffc 0%, var(--paper) 48%, #ede4cd 100%);
 }
 
 ::selection {
     color: var(--ink);
-    background: #edc5d0;
+    background: #e9dfe5;
 }
 
 h1,
@@ -118,7 +84,6 @@ h4,
 h5,
 h6 {
     color: var(--ink);
-    letter-spacing: 0.01em;
 }
 
 .highlight,
@@ -133,15 +98,9 @@ h6 {
     color: var(--petal-strong);
 }
 
-.section-title::after {
-    background: linear-gradient(90deg, var(--torii), var(--sakura), var(--indigo));
-}
-
-/* 像乡间驿站的木窗与薄纸，主题选择器保留清晰的原生键盘行为。 */
 .navbar {
-    border-bottom-color: rgba(120, 78, 75, 0.2);
-    background: rgba(247, 240, 230, 0.9);
-    box-shadow: 0 8px 24px rgba(74, 58, 57, 0.08);
+    border-bottom-color: rgba(63, 49, 43, 0.2);
+    background: rgba(251, 250, 245, 0.92);
 }
 
 .logo,
@@ -160,7 +119,7 @@ h6 {
 }
 
 .nav-link {
-    color: #5d555a;
+    color: #5a544b;
 }
 
 .nav-link:hover,
@@ -168,42 +127,8 @@ h6 {
     color: var(--torii-deep);
 }
 
-.nav-link::after {
-    background: linear-gradient(90deg, var(--torii), var(--sakura));
-}
-
-/* 首屏以远山与鸟居剪影定调；真实游戏截图仍保持视觉主角。 */
 .hero-section {
-    background:
-        radial-gradient(circle at 14% 20%, rgba(255, 255, 255, 0.76), transparent 18rem),
-        radial-gradient(circle at 84% 16%, rgba(226, 153, 173, 0.54), transparent 21rem),
-        linear-gradient(180deg, #dbe5e6 0%, #eee5df 62%, var(--paper) 100%);
-}
-
-.hero-section::before {
-    inset: auto 0 0;
-    height: 68%;
-    opacity: 0.5;
-    background:
-        linear-gradient(var(--torii), var(--torii)) 82% 9% / 29% 12px no-repeat,
-        linear-gradient(var(--torii-deep), var(--torii-deep)) 82% 21% / 24% 8px no-repeat,
-        linear-gradient(var(--torii), var(--torii)) 74% 78% / 10px 68% no-repeat,
-        linear-gradient(var(--torii), var(--torii)) 90% 78% / 10px 68% no-repeat,
-        linear-gradient(155deg, transparent 0 38%, rgba(81, 103, 100, 0.7) 38.3% 60%, transparent 60.3%) 0 100% / 52% 86% no-repeat,
-        linear-gradient(205deg, transparent 0 42%, rgba(104, 124, 117, 0.58) 42.3% 64%, transparent 64.3%) 100% 100% / 64% 82% no-repeat;
-    filter: drop-shadow(0 8px 12px rgba(79, 52, 50, 0.08));
-    mask-image: linear-gradient(to top, black 0 82%, transparent 100%);
-}
-
-.hero-section::after {
-    right: -5%;
-    bottom: 3%;
-    width: 66%;
-    height: 24%;
-    opacity: 0.58;
-    background:
-        repeating-linear-gradient(0deg, rgba(89, 118, 108, 0.18) 0 1px, transparent 1px 12px),
-        linear-gradient(170deg, transparent 0 46%, rgba(217, 145, 165, 0.14) 47% 52%, transparent 53%);
+    background: radial-gradient(circle at 14% 20%, rgba(255, 255, 252, 0.78), transparent 18rem), radial-gradient(circle at 84% 16%, rgba(242, 160, 161, 0.36), transparent 21rem), linear-gradient(180deg, #c0c6c9 0%, #e8d3d1 62%, var(--paper) 100%);
 }
 
 .hero-title {
@@ -219,16 +144,12 @@ h6 {
 }
 
 .hero-proof {
-    border-color: rgba(255, 250, 242, 0.82);
-    border-radius: 10px 28px 10px 28px;
+    border-color: rgba(255, 255, 252, 0.84);
     background: var(--surface-strong);
-    box-shadow:
-        0 0 0 2px rgba(128, 99, 79, 0.2),
-        0 26px 56px rgba(74, 58, 57, 0.18);
 }
 
 .hero-proof figcaption {
-    background: rgba(255, 250, 242, 0.96);
+    background: rgba(255, 255, 252, 0.96);
 }
 
 .method-section,
@@ -239,16 +160,12 @@ h6 {
 .lifecycle-section,
 .game-gallery-section {
     border-color: var(--line);
-    background:
-        linear-gradient(135deg, rgba(241, 215, 223, 0.34), transparent 54%),
-        rgba(234, 223, 206, 0.5);
+    background: linear-gradient(135deg, rgba(233, 223, 229, 0.36), transparent 54%), rgba(237, 228, 205, 0.52);
 }
 
 .public-cta-inner {
     border-color: var(--line);
-    background:
-        radial-gradient(circle at 90% 10%, rgba(241, 215, 223, 0.74), transparent 16rem),
-        rgba(255, 250, 242, 0.78);
+    background: radial-gradient(circle at 90% 10%, rgba(233, 223, 229, 0.78), transparent 16rem), rgba(255, 255, 252, 0.8);
 }
 
 .method-chain li,
@@ -267,9 +184,7 @@ h6 {
 .public-route-card,
 .blog-card {
     border-color: var(--line);
-    background:
-        linear-gradient(145deg, rgba(255, 250, 242, 0.88), rgba(247, 235, 230, 0.72));
-    box-shadow: 0 10px 26px rgba(74, 58, 57, 0.07);
+    background: linear-gradient(145deg, rgba(255, 255, 252, 0.9), rgba(232, 211, 209, 0.56));
 }
 
 .method-chain a,
@@ -280,23 +195,19 @@ h6 {
 .module-card-action,
 .public-route-card > i:first-child,
 .discussion-grid strong {
-    color: #833b42;
+    color: #9e3d3f;
 }
 
 .portfolio-header {
     color: var(--ink);
-    background: linear-gradient(90deg, rgba(247, 240, 230, 0.97) 0%, rgba(237, 220, 222, 0.9) 48%, rgba(220, 229, 229, 0.34) 100%);
-}
-
-.portfolio-header::after {
-    background: linear-gradient(175deg, transparent 48%, rgba(170, 69, 61, 0.13) 49%);
+    background: linear-gradient(90deg, rgba(251, 250, 245, 0.97) 0%, rgba(233, 223, 229, 0.9) 48%, rgba(192, 198, 201, 0.34) 100%);
 }
 
 .module-card:hover,
 .module-card.is-active,
 .public-route-card:hover {
-    border-color: rgba(170, 69, 61, 0.3);
-    background: rgba(241, 215, 223, 0.68);
+    border-color: rgba(158, 61, 63, 0.32);
+    background: rgba(233, 223, 229, 0.72);
 }
 
 .module-detail-header,
@@ -305,56 +216,51 @@ h6 {
 .contact-hero,
 .journal-hero,
 .blog-hero {
-    background:
-        radial-gradient(circle at 82% 18%, rgba(217, 145, 165, 0.48), transparent 20rem),
-        radial-gradient(circle at 16% 28%, rgba(255, 255, 255, 0.7), transparent 18rem),
-        linear-gradient(145deg, var(--mist-blue), #efe5df 70%, var(--paper));
+    background: radial-gradient(circle at 82% 18%, rgba(242, 160, 161, 0.38), transparent 20rem), radial-gradient(circle at 16% 28%, rgba(255, 255, 252, 0.72), transparent 18rem), linear-gradient(145deg, var(--mist-blue), #e9dfe5 70%, var(--paper));
 }
 
 .blog-prose {
-    color: #4f4950;
+    color: #5a544b;
 }
 
 .blog-prose a {
-    color: #873b50;
-    text-decoration-color: rgba(159, 63, 86, 0.42);
+    color: #9e3d3f;
+    text-decoration-color: rgba(158, 61, 63, 0.42);
 }
 
 .blog-prose blockquote {
     border-left-color: var(--torii);
-    background: rgba(241, 215, 223, 0.3);
+    background: rgba(233, 223, 229, 0.34);
 }
 
 .blog-prose pre {
-    border-color: rgba(91, 70, 72, 0.3);
-    color: #f6eee2;
+    border-color: rgba(63, 49, 43, 0.3);
+    color: #f3f3f2;
     background: var(--indigo);
 }
 
 .blog-prose th {
-    background: rgba(241, 215, 223, 0.58);
+    background: rgba(233, 223, 229, 0.62);
 }
 
 .footer {
-    color: rgba(255, 250, 242, 0.88);
-    background:
-        radial-gradient(circle at 82% 0%, rgba(217, 145, 165, 0.2), transparent 24rem),
-        linear-gradient(155deg, #3d4d5f, var(--indigo));
+    color: rgba(255, 255, 252, 0.9);
+    background: radial-gradient(circle at 82% 0%, rgba(242, 160, 161, 0.2), transparent 24rem), linear-gradient(155deg, #223a70, var(--indigo));
 }
 
 .footer .footer-logo,
 .footer h2,
 .footer a {
-    color: #fff8ef;
+    color: #fffffc;
 }
 
 .footer .footer-logo span {
-    color: #efcbd4;
+    color: #f2a0a1;
 }
 
 .footer-description,
 .footer-bottom {
-    color: rgba(255, 250, 242, 0.74);
+    color: rgba(255, 255, 252, 0.76);
 }
 
 .social-icon:hover {
@@ -365,21 +271,6 @@ h6 {
 @media (max-width: 768px) {
     .nav-menu {
         border-color: var(--line);
-        background: rgba(247, 240, 230, 0.98);
-    }
-
-    .hero-section::before {
-        opacity: 0.32;
-        background-position:
-            88% 8%,
-            88% 20%,
-            80% 78%,
-            96% 78%,
-            0 100%,
-            100% 100%;
-    }
-
-    .hero-proof {
-        border-radius: 10px 22px 10px 22px;
+        background: rgba(251, 250, 245, 0.98);
     }
 }

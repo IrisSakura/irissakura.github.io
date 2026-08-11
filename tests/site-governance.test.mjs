@@ -444,7 +444,7 @@ test('shared motion adds progressive depth without hiding content for reduced-mo
   );
 });
 
-test('theme registry supports shared layers and the sakura village atmosphere', async () => {
+test('theme registry supports shared layers and the sakura village palette', async () => {
   const config = JSON.parse(await readText('data/themes.json'));
   const ids = config.themes.map((theme) => theme.id);
   assert.equal(new Set(ids).size, ids.length);
@@ -472,56 +472,108 @@ test('theme registry supports shared layers and the sakura village atmosphere', 
   for (const motif of [
     '--torii',
     '--sakura',
-    '.hero-section::before',
-    '--ui-control-icon: var(--torii)'
+    '--indigo',
+    '--ui-control-icon: var(--torii)',
+    '--ui-action-primary-bg: var(--torii)'
   ]) {
-    assert.ok(sakuraCss.includes(motif), `sakura theme missing motif ${motif}`);
+    assert.ok(sakuraCss.includes(motif), `sakura theme missing palette token ${motif}`);
+  }
+
+  const traditionalAnchors = new Map([
+    ['paper', '#fbfaf5'],
+    ['surface-strong', '#fffffc'],
+    ['petal-strong', '#a22041'],
+    ['torii', '#9e3d3f'],
+    ['indigo', '#0f2350'],
+    ['leaf', '#888e7e'],
+    ['wood', '#8d6449'],
+    ['sakura-soft', '#fef4f4']
+  ]);
+  for (const [token, expected] of traditionalAnchors) {
+    assert.equal(readCssHexVariable(sakuraCss, token), expected, `${token} must use its reviewed traditional anchor`);
   }
 });
 
-test('theme styles only change palette, typography and decoration', async () => {
+test('theme styles only change palette colors', async () => {
   const config = JSON.parse(await readText('data/themes.json'));
   const stylesheets = new Set(config.themes.flatMap((theme) => theme.stylesheets));
-  const presentationProperties = new Set([
-    'backdrop-filter',
+  const paletteProperties = new Set([
     'background',
-    'background-blend-mode',
-    'background-clip',
     'background-color',
     'background-image',
-    'background-origin',
-    'background-position',
-    'background-repeat',
-    'background-size',
     'border-bottom-color',
     'border-color',
     'border-left-color',
-    'border-radius',
     'border-right-color',
     'border-top-color',
-    'box-shadow',
     'color',
-    'filter',
-    'font-family',
-    'font-style',
-    'font-variant',
-    'font-weight',
-    'isolation',
-    'letter-spacing',
-    'mask-image',
-    'mask-position',
-    'mask-repeat',
-    'mask-size',
-    'mix-blend-mode',
-    'opacity',
+    'fill',
     'outline-color',
     'scrollbar-color',
-    'text-decoration',
+    'stroke',
     'text-decoration-color',
-    'text-shadow',
-    'text-transform',
-    'text-underline-offset',
-    'text-wrap'
+  ]);
+  const paletteVariables = new Set([
+    '--primary-color',
+    '--secondary-color',
+    '--secondary-text-color',
+    '--accent-color',
+    '--dark-color',
+    '--light-color',
+    '--gray-color',
+    '--muted-text-color',
+    '--success-color',
+    '--warning-color',
+    '--danger-color',
+    '--paper',
+    '--paper-deep',
+    '--mist-blue',
+    '--water-blue',
+    '--hill-blue',
+    '--petal-pink',
+    '--petal-strong',
+    '--ink',
+    '--ink-soft',
+    '--leaf',
+    '--line',
+    '--line-strong',
+    '--surface',
+    '--surface-strong',
+    '--torii',
+    '--torii-deep',
+    '--indigo',
+    '--wood',
+    '--sakura',
+    '--sakura-soft',
+    '--ui-surface-card',
+    '--ui-surface-hover',
+    '--ui-border-subtle',
+    '--ui-border-strong',
+    '--ui-focus-color',
+    '--ui-control-border',
+    '--ui-control-border-hover',
+    '--ui-control-text',
+    '--ui-control-surface',
+    '--ui-control-surface-hover',
+    '--ui-control-icon',
+    '--ui-control-option-text',
+    '--ui-control-option-surface',
+    '--ui-action-primary-text',
+    '--ui-action-primary-bg',
+    '--ui-action-primary-hover-bg',
+    '--ui-action-secondary-text',
+    '--ui-action-secondary-border',
+    '--ui-action-secondary-bg',
+    '--ui-action-secondary-hover-text',
+    '--ui-action-secondary-hover-bg',
+    '--ui-action-outline-text',
+    '--ui-action-outline-border',
+    '--ui-action-outline-bg',
+    '--ui-action-outline-hover-text',
+    '--ui-action-outline-hover-bg',
+    '--ui-chip-border',
+    '--ui-chip-surface',
+    '--ui-chip-text'
   ]);
   const violations = [];
 
@@ -530,13 +582,16 @@ test('theme styles only change palette, typography and decoration', async () => 
     for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
       const selector = match[1].trim();
       const selectors = selector.split(',').map((part) => part.trim());
-      const isDecoration = selectors.every((part) => /::(?:before|after|selection)\b/.test(part));
-      if (isDecoration) continue;
+      if (selectors.some((part) => /::(?:before|after)\b/.test(part))) {
+        violations.push(`${stylesheet}: ${selector} changes shared pseudo-element design`);
+      }
 
       for (const declaration of match[2].matchAll(/(?:^|;)\s*([\w-]+)\s*:/gm)) {
         const property = declaration[1];
-        if (!property.startsWith('--') && !presentationProperties.has(property)) {
-          violations.push(`${stylesheet}: ${selector} uses ${property}`);
+        if (property.startsWith('--') && !paletteVariables.has(property)) {
+          violations.push(`${stylesheet}: ${selector} uses non-palette variable ${property}`);
+        } else if (!property.startsWith('--') && !paletteProperties.has(property)) {
+          violations.push(`${stylesheet}: ${selector} uses non-color property ${property}`);
         }
       }
     }
@@ -545,7 +600,7 @@ test('theme styles only change palette, typography and decoration', async () => 
   assert.deepEqual(
     violations,
     [],
-    `theme styles must not override shared layout or positioning:\n${violations.join('\n')}`
+    `theme styles must only change palette colors:\n${violations.join('\n')}`
   );
 });
 
@@ -636,6 +691,7 @@ test('sakura village text and actions meet WCAG AA contrast', async () => {
   const inkSoft = readCssHexVariable(css, 'ink-soft');
   const petalStrong = readCssHexVariable(css, 'petal-strong');
   const torii = readCssHexVariable(css, 'torii');
+  const primaryButtonText = readCssHexVariable(css, 'ui-action-primary-text');
 
   for (const foreground of [ink, inkSoft, petalStrong]) {
     assert.ok(
@@ -644,7 +700,7 @@ test('sakura village text and actions meet WCAG AA contrast', async () => {
     );
   }
   assert.ok(
-    contrastRatio('#fffaf2', torii) >= 4.5,
+    contrastRatio(primaryButtonText, torii) >= 4.5,
     `primary button text must reach 4.5:1 on torii ${torii}`
   );
 });

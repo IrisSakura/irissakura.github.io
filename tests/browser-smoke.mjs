@@ -186,6 +186,137 @@ try {
   if (contrastFailures.length > 0) {
     throw new Error(`Light-theme text contrast failures:\n${contrastFailures.join('\n')}`);
   }
+
+  const sharedDesignSelectors = [
+    'body',
+    '.navbar',
+    '.logo',
+    '.nav-link',
+    '.hero-title',
+    '.btn-primary',
+    '.hero-proof',
+    '.method-chain li',
+    '.case-list > article'
+  ];
+  const sharedDesignProperties = [
+    'display',
+    'position',
+    'font-family',
+    'font-size',
+    'font-style',
+    'font-weight',
+    'line-height',
+    'letter-spacing',
+    'text-transform',
+    'padding-top',
+    'padding-right',
+    'padding-bottom',
+    'padding-left',
+    'margin-top',
+    'margin-right',
+    'margin-bottom',
+    'margin-left',
+    'gap',
+    'border-top-width',
+    'border-right-width',
+    'border-bottom-width',
+    'border-left-width',
+    'border-top-left-radius',
+    'border-top-right-radius',
+    'border-bottom-right-radius',
+    'border-bottom-left-radius',
+    'box-shadow',
+    'filter',
+    'opacity',
+    'transform',
+    'transition-duration',
+    'transition-timing-function'
+  ];
+  const sharedPseudoProperties = [
+    'content',
+    'display',
+    'position',
+    'top',
+    'right',
+    'bottom',
+    'left',
+    'width',
+    'height',
+    'border-top-left-radius',
+    'border-top-right-radius',
+    'border-bottom-right-radius',
+    'border-bottom-left-radius',
+    'filter',
+    'opacity',
+    'transform'
+  ];
+  const designSnapshots = new Map();
+  await lightThemePage.setViewportSize({ width: 1280, height: 900 });
+  for (const theme of themeConfig.themes) {
+    await lightThemePage.evaluate(
+      ({ storageKey, value }) => localStorage.setItem(storageKey, value),
+      { storageKey: themeConfig.storageKey, value: theme.id }
+    );
+    await lightThemePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    if (await documentTheme(lightThemePage) !== theme.id) {
+      throw new Error(`Shared-design test did not activate ${theme.id}`);
+    }
+    designSnapshots.set(theme.id, await lightThemePage.evaluate(
+      ({ selectors, properties, pseudoProperties }) => {
+        const readProperties = (style, names) => Object.fromEntries(
+          names.map((name) => [name, style.getPropertyValue(name)])
+        );
+        return {
+          elements: Object.fromEntries(selectors.map((selector) => {
+            const element = document.querySelector(selector);
+            if (!element) throw new Error(`Missing shared-design selector ${selector}`);
+            const rect = element.getBoundingClientRect();
+            return [selector, {
+              rect: {
+                width: Number(rect.width.toFixed(3)),
+                height: Number(rect.height.toFixed(3))
+              },
+              style: readProperties(getComputedStyle(element), properties)
+            }];
+          })),
+          pseudoElements: Object.fromEntries([
+            ['.hero-section::before', readProperties(
+              getComputedStyle(document.querySelector('.hero-section'), '::before'),
+              pseudoProperties
+            )],
+            ['.hero-section::after', readProperties(
+              getComputedStyle(document.querySelector('.hero-section'), '::after'),
+              pseudoProperties
+            )],
+            ['.hero-proof::before', readProperties(
+              getComputedStyle(document.querySelector('.hero-proof'), '::before'),
+              pseudoProperties
+            )],
+            ['.hero-proof::after', readProperties(
+              getComputedStyle(document.querySelector('.hero-proof'), '::after'),
+              pseudoProperties
+            )]
+          ])
+        };
+      },
+      {
+        selectors: sharedDesignSelectors,
+        properties: sharedDesignProperties,
+        pseudoProperties: sharedPseudoProperties
+      }
+    ));
+  }
+  const [designBaselineTheme] = themeConfig.themes;
+  const designBaseline = JSON.stringify(designSnapshots.get(designBaselineTheme.id));
+  const designDrift = themeConfig.themes
+    .slice(1)
+    .filter((theme) => JSON.stringify(designSnapshots.get(theme.id)) !== designBaseline)
+    .map((theme) => theme.id);
+  if (designDrift.length > 0) {
+    throw new Error(
+      `Themes must share typography, component geometry and pseudo-element design; drifted: ${designDrift.join(', ')}`
+    );
+  }
   await lightThemePage.close();
 
   const responsiveContext = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
