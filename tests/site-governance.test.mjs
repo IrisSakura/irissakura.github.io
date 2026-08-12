@@ -356,8 +356,9 @@ test('all public pages use generated metadata and shared accessible shell', asyn
 });
 
 test('theme selector follows the registry and system until the visitor stores a preference', async () => {
-  const [siteSource, generator, navbar, themeConfig] = await Promise.all([
+  const [siteSource, mainCss, generator, navbar, themeConfig] = await Promise.all([
     readText('src/site.ts'),
+    readText('style/main.css'),
     readText('scripts/generate-site.mjs'),
     readText('components/navbar.html'),
     readText('data/themes.json').then(JSON.parse)
@@ -371,6 +372,27 @@ test('theme selector follows the registry and system until the visitor stores a 
   assert.ok(siteSource.includes("window.addEventListener('storage'"));
   assert.ok(siteSource.includes('localStorage.setItem'));
   assert.ok(siteSource.includes('localStorage.removeItem'));
+  for (const contract of [
+    'transitionThemePreference',
+    'theme-transition-overlay',
+    'waitForThemeAssets',
+    "window.getComputedStyle(document.body).backgroundColor",
+    "prefers-reduced-motion: reduce"
+  ]) {
+    assert.ok(siteSource.includes(contract), `theme transition runtime missing ${contract}`);
+  }
+  for (const contract of [
+    '--theme-transition-duration',
+    '.theme-transition-overlay',
+    '.theme-transition-overlay.is-covering',
+    '.theme-transitioning .theme-transition-overlay'
+  ]) {
+    assert.ok(mainCss.includes(contract), `theme transition CSS missing ${contract}`);
+  }
+  assert.match(
+    mainCss,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.theme-transition-overlay[\s\S]*?transition-duration:\s*0\.01ms\s*!important/s
+  );
   assert.ok(navbar.includes('{{themeOptions}}'));
   assert.ok(navbar.includes('data-default-light="{{defaultLightTheme}}"'));
   assert.equal(themeConfig.storageKey, 'irissakura-theme');

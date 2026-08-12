@@ -311,6 +311,106 @@ try {
   }
   await lightThemePage.close();
 
+  const transitionPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await keepSmokeTestLocal(transitionPage);
+  await transitionPage.emulateMedia({ reducedMotion: 'no-preference' });
+  await transitionPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const transitionResult = await transitionPage.evaluate(async (registeredThemeIds) => {
+    const root = document.documentElement;
+    const select = document.querySelector('.theme-select');
+    if (!(select instanceof HTMLSelectElement)) throw new Error('theme selector is unavailable');
+    const initialTheme = root.dataset.theme ?? '';
+    const targetTheme = registeredThemeIds.find((themeId) => themeId !== initialTheme);
+    if (!targetTheme) throw new Error('theme transition needs at least two registered themes');
+    const observations = [];
+    const sample = () => {
+      const overlay = document.querySelector('.theme-transition-overlay');
+      observations.push({
+        theme: root.dataset.theme ?? '',
+        covering: overlay?.classList.contains('is-covering') ?? false,
+        transitioning: root.classList.contains('theme-transitioning')
+      });
+    };
+    const observer = new MutationObserver(sample);
+    observer.observe(root, { attributes: true });
+    observer.observe(document.body, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      attributeFilter: ['class']
+    });
+    const waitForSettledTheme = (themeId) => new Promise((resolve, reject) => {
+      const timeout = window.setTimeout(
+        () => {
+          window.clearInterval(poll);
+          reject(new Error(`theme ${themeId} did not settle: ${JSON.stringify({
+            currentTheme: root.dataset.theme,
+            rootClass: root.className,
+            overlayClass: document.querySelector('.theme-transition-overlay')?.className,
+            observations: observations.slice(-8)
+          })}`));
+        },
+        3000
+      );
+      const poll = window.setInterval(() => {
+        if (root.dataset.theme !== themeId || root.classList.contains('theme-transitioning')) return;
+        window.clearTimeout(timeout);
+        window.clearInterval(poll);
+        resolve();
+      }, 10);
+    });
+    const chooseTheme = (themeId) => {
+      select.value = themeId;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+
+    const startedAt = performance.now();
+    chooseTheme(targetTheme);
+    await waitForSettledTheme(targetTheme);
+    const duration = performance.now() - startedAt;
+    const overlay = document.querySelector('.theme-transition-overlay');
+    const normalTransition = {
+      duration,
+      hadCoverBeforeTheme: observations.some((entry) => (
+        entry.theme === initialTheme && entry.covering
+      )),
+      themeChangedWhileCovered: observations.some((entry) => (
+        entry.theme === targetTheme && entry.covering
+      )),
+      endedUncovered: !overlay?.classList.contains('is-covering')
+        && !root.classList.contains('theme-transitioning')
+    };
+
+    chooseTheme(initialTheme);
+    await new Promise((resolve) => window.setTimeout(resolve, 40));
+    chooseTheme(targetTheme);
+    await waitForSettledTheme(targetTheme);
+    await new Promise((resolve) => window.setTimeout(resolve, 450));
+    observer.disconnect();
+
+    return {
+      ...normalTransition,
+      rapidExpectedTheme: targetTheme,
+      rapidFinalTheme: root.dataset.theme,
+      rapidTransitioning: root.classList.contains('theme-transitioning')
+    };
+  }, themeConfig.themes.map((theme) => theme.id));
+  if (
+    transitionResult.duration < 250
+    || !transitionResult.hadCoverBeforeTheme
+    || !transitionResult.themeChangedWhileCovered
+    || !transitionResult.endedUncovered
+  ) {
+    throw new Error(`Theme fade sequence is incomplete: ${JSON.stringify(transitionResult)}`);
+  }
+  if (
+    transitionResult.rapidFinalTheme !== transitionResult.rapidExpectedTheme
+    || transitionResult.rapidTransitioning
+  ) {
+    throw new Error(`Rapid theme switching left stale state: ${JSON.stringify(transitionResult)}`);
+  }
+  await transitionPage.close();
+
   const responsiveContext = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
   const responsivePage = await responsiveContext.newPage();
   await keepSmokeTestLocal(responsivePage);

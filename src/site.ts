@@ -72,6 +72,8 @@ class SiteShell {
     private profileDrawerLastFocused: HTMLElement | null = null;
     private motionObserver: IntersectionObserver | null = null;
     private navigationAbort: AbortController | null = null;
+    private themeTransitionOverlay: HTMLElement | null = null;
+    private themeTransitionSequence = 0;
 
     constructor() {
         if (document.readyState === 'loading') {
@@ -144,12 +146,12 @@ class SiteShell {
             const preference = this.isTheme(themeSelect.value)
                 ? themeSelect.value
                 : SYSTEM_THEME;
-            this.applyThemePreference(preference, true);
+            void this.transitionThemePreference(preference, true);
         });
 
         this.colorSchemeQuery?.addEventListener('change', () => {
             if (!this.readStoredTheme()) {
-                this.applyThemePreference(SYSTEM_THEME);
+                void this.transitionThemePreference(SYSTEM_THEME);
             }
         });
 
@@ -158,7 +160,125 @@ class SiteShell {
             const preference = this.isTheme(event.newValue)
                 ? event.newValue
                 : SYSTEM_THEME;
-            this.applyThemePreference(preference);
+            void this.transitionThemePreference(preference);
+        });
+    }
+
+    private async transitionThemePreference(preference: string, persist = false): Promise<void> {
+        if (!this.themeSelect) return;
+        const resolvedTheme = preference === SYSTEM_THEME
+            ? this.getSystemTheme()
+            : preference;
+        const option = this.getThemeOption(resolvedTheme);
+        if (!option) return;
+
+        const transitionSequence = ++this.themeTransitionSequence;
+        const currentTheme = document.documentElement.dataset.theme;
+        if (
+            currentTheme === resolvedTheme
+            || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+            this.applyThemePreference(preference, persist);
+            this.themeTransitionOverlay?.classList.remove('is-covering');
+            document.documentElement.classList.remove('theme-transitioning');
+            return;
+        }
+
+        const root = document.documentElement;
+        const overlay = this.getThemeTransitionOverlay();
+        const assetsReady = this.waitForThemeAssets(resolvedTheme, option);
+
+        if (!root.classList.contains('theme-transitioning')) {
+            overlay.style.setProperty(
+                '--theme-transition-color',
+                window.getComputedStyle(document.body).backgroundColor
+            );
+            root.classList.add('theme-transitioning');
+            await this.waitForNextPaint();
+            if (transitionSequence !== this.themeTransitionSequence) return;
+            overlay.classList.add('is-covering');
+            await this.waitForThemeTransition(overlay);
+        } else if (!overlay.classList.contains('is-covering')) {
+            overlay.classList.add('is-covering');
+            await this.waitForThemeTransition(overlay);
+        }
+
+        if (transitionSequence !== this.themeTransitionSequence) return;
+        this.applyThemePreference(preference, persist);
+        await assetsReady;
+        await this.waitForNextPaint();
+        if (transitionSequence !== this.themeTransitionSequence) return;
+
+        overlay.classList.remove('is-covering');
+        await this.waitForThemeTransition(overlay);
+        if (transitionSequence !== this.themeTransitionSequence) return;
+        root.classList.remove('theme-transitioning');
+    }
+
+    private getThemeTransitionOverlay(): HTMLElement {
+        if (this.themeTransitionOverlay?.isConnected) return this.themeTransitionOverlay;
+        const overlay = document.createElement('div');
+        overlay.className = 'theme-transition-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.append(overlay);
+        this.themeTransitionOverlay = overlay;
+        return overlay;
+    }
+
+    private waitForThemeAssets(
+        resolvedTheme: string,
+        option: HTMLOptionElement
+    ): Promise<void> {
+        const assets: Promise<unknown>[] = this.themeStylesheets
+            .filter((stylesheet) => (
+                (stylesheet.dataset.themes ?? '').split(/\s+/).includes(resolvedTheme)
+            ))
+            .filter((stylesheet) => !stylesheet.sheet)
+            .map((stylesheet) => new Promise<void>((resolve) => {
+                stylesheet.addEventListener('load', () => resolve(), { once: true });
+                stylesheet.addEventListener('error', () => resolve(), { once: true });
+            }));
+
+        const heroImage = option.dataset.homeHeroImage;
+        if (heroImage) {
+            assets.push(new Promise<void>((resolve) => {
+                const image = new Image();
+                image.addEventListener('load', () => resolve(), { once: true });
+                image.addEventListener('error', () => resolve(), { once: true });
+                image.src = heroImage;
+                if (image.complete) resolve();
+            }));
+        }
+
+        if (document.fonts) assets.push(document.fonts.ready);
+        return Promise.race([
+            Promise.all(assets).then(() => undefined),
+            new Promise<void>((resolve) => window.setTimeout(resolve, 1200))
+        ]);
+    }
+
+    private waitForNextPaint(): Promise<void> {
+        return new Promise((resolve) => {
+            window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(() => resolve());
+            });
+        });
+    }
+
+    private waitForThemeTransition(overlay: HTMLElement): Promise<void> {
+        return new Promise((resolve) => {
+            let settled = false;
+            const finish = (): void => {
+                if (settled) return;
+                settled = true;
+                overlay.removeEventListener('transitionend', onTransitionEnd);
+                resolve();
+            };
+            const onTransitionEnd = (event: TransitionEvent): void => {
+                if (event.target === overlay && event.propertyName === 'opacity') finish();
+            };
+            overlay.addEventListener('transitionend', onTransitionEnd);
+            window.setTimeout(finish, 400);
         });
     }
 

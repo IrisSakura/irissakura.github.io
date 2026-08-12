@@ -84,6 +84,8 @@
     --motion-enter-distance: 26px;
     --motion-stagger: 70ms;
     --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --theme-transition-duration: 180ms;
+    --theme-transition-ease: ease-in-out;
 }
 /* 基础动画类 */
 .fade-in {
@@ -223,6 +225,24 @@ body {
     color: var(--light-color);
     background-color: var(--dark-color);
     overflow-x: hidden;
+}
+
+.theme-transition-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483646;
+    pointer-events: none;
+    opacity: 0;
+    background-color: var(--theme-transition-color, var(--dark-color));
+    transition: opacity var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+.theme-transitioning .theme-transition-overlay {
+    pointer-events: auto;
+}
+
+.theme-transition-overlay.is-covering {
+    opacity: 1;
 }
 
 .container {
@@ -2283,6 +2303,10 @@ body.profile-drawer-open .profile-drawer {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .theme-transition-overlay {
+        transition-duration: 0.01ms !important;
+    }
+
     .motion-ready [data-reveal],
     [data-reveal] {
         opacity: 1 !important;
