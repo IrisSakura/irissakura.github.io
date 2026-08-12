@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/heist-planning.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="盗窃计划模拟（Heist Planning &amp; Stealth Infiltration） | Sakura Design Journal">
+    <meta property="og:description" content="围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/heist-planning.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-heist-planning.png">
+    <meta property="og:image:alt" content="盗窃计划模拟（Heist Planning &amp; Stealth Infiltration） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="盗窃计划模拟（Heist Planning &amp; Stealth Infiltration） | Sakura Design Journal">
+    <meta name="twitter:description" content="围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-heist-planning.png">
+    <meta name="twitter:image:alt" content="盗窃计划模拟（Heist Planning &amp; Stealth Infiltration） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"盗窃计划模拟（Heist Planning & Stealth Infiltration） | Sakura Design Journal","description":"围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。","url":"https://irissakura.github.io/pages/journal/heist-planning.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"盗窃计划模拟（Heist Planning & Stealth Infiltration）","image":"https://irissakura.github.io/assets/social/pages-journal-heist-planning.png","dateModified":"2026-08-12","about":["heist","planning","stealth"]}</script>
+    <!-- site-meta:end -->
+    <title>盗窃计划模拟（Heist Planning & Stealth Infiltration） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-heist-planning"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>盗窃计划模拟（Heist Planning &amp; Stealth Infiltration）</h1><p>围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。</p><div class="note-tags"><span>heist</span><span>planning</span><span>stealth</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何让侦察得到的情报转化为可执行计划，并让行动中的偏差迫使玩家权衡目标、暴露与撤离？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>潜入劫案类游戏的核心不是单纯潜行，也不是普通动作闯关。</p>
+<p>它最有代表性的体验是：玩家在行动前通过侦察、情报、装备、路线、身份伪装和队员分工建立计划；在行动中根据巡逻、摄像头、门禁、声音、痕迹、警戒状态和突发事件不断调整；最后带着目标物或战利品撤离。</p>
+<p>它最适合抽象为：</p>
+<p><strong>侦察—计划—执行—撤离的安防对抗框架</strong></p>
+<p>核心循环是：</p>
+<p>收集情报 → 标记目标与风险 → 制定潜入路线 → 分配装备与角色 → 执行行动 → 避开或干扰安防 → 获取目标物 → 处理暴露与追捕 → 撤离并结算收益、痕迹和后果。</p>
+<p>玩家真正管理的不是“是否被看见”这一件事，而是：</p>
+<p>信息完整度、暴露风险、警戒等级、安防拓扑、时间窗口、队员协作、战利品取舍、痕迹清理和撤离安全。</p>
+<hr />
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>潜入劫案框架可以分为十个核心域。</p>
+<p>第一是目标场所域。
+负责维护建筑结构、房间、通道、门窗、屋顶、地下室、通风管、安保室、金库、监控盲区、撤离点和关键目标位置。</p>
+<p>第二是安防拓扑域。
+负责维护摄像头、门禁、警报器、激光、保险柜、巡逻路线、传感器、锁具、电网、保安岗亭和应急封锁装置之间的连接关系。</p>
+<p>第三是侦察情报域。
+负责记录玩家已知信息、未知信息、错误情报、临时机会、内部线人情报、地图标记和风险预测。</p>
+<p>第四是计划配置域。
+负责制定入口、路线、装备、队员分工、行动时间、预案、撤离方式、是否强攻、是否伪装、是否关闭某个系统。</p>
+<p>第五是角色与技能域。
+负责维护潜入者、黑客、开锁员、司机、伪装者、狙击支援、搬运者等角色的技能、装备、压力、负重和行动能力。</p>
+<p>第六是感知与暴露域。
+负责计算视线、声音、脚印、血迹、尸体、打开的门、丢失物品、监控录像、身份异常和行为异常。</p>
+<p>第七是警戒状态域。
+负责维护敌方从正常、怀疑、搜索、局部警戒、全局警报、封锁、追捕到任务失败或升级战斗的状态变化。</p>
+<p>第八是目标物与战利品域。
+负责管理主目标、可选目标、现金、文件、艺术品、服务器数据、保险箱、钥匙卡、赃物重量、价值和风险。</p>
+<p>第九是撤离与后果域。
+负责撤离点、载具到达时间、警力响应、追捕强度、证据残留、身份暴露、通缉等级和长期世界后果。</p>
+<p>第十是调试与验证域。
+负责检查路线可达性、安防闭环、暴露来源、巡逻死锁、目标可取得性、撤离可行性和失败升级链路。</p>
+<hr />
+<h2 id="三核心模块职责">三、核心模块职责</h2><p>目标场所系统负责回答：“玩家在哪里行动？”</p>
+<p>它不只是普通地图，而是一个有进入权限、视觉遮挡、安防覆盖、通行约束和撤离路径的空间网络。</p>
+<p>安防系统负责回答：“场所如何发现玩家？”</p>
+<p>摄像头负责视觉覆盖。
+门禁负责区域隔离。
+巡逻负责动态检查。
+警报器负责状态升级。
+传感器负责检测异常。
+保险柜和金库负责目标保护。</p>
+<p>侦察系统负责回答：“玩家行动前知道多少？”</p>
+<p>玩家可以提前获得地图、巡逻时间、门禁位置、保险柜型号、值班表、摄像头盲区、内部员工身份、应急电源位置等信息。侦察越充分，计划越可靠。</p>
+<p>计划系统负责回答：“玩家准备怎么做？”</p>
+<p>玩家可以选择从屋顶进入、伪装成维修工、黑入监控、切断电源、收买内应、准备备用车、带轻装备快速潜入，或者带重装备准备应急交火。</p>
+<p>感知系统负责回答：“玩家为什么暴露？”</p>
+<p>暴露不应只来自敌人直接看见玩家。声音、痕迹、异常行为、打开的门、消失的目标物、失联的守卫、监控盲区突然出现，都可以成为暴露来源。</p>
+<p>警戒系统负责回答：“敌人如何逐步反应？”</p>
+<p>潜入失败不应该永远是立即任务失败，而应从怀疑、调查、搜索、封锁、报警、追捕逐级升级。</p>
+<p>撤离系统负责回答：“玩家能否带着收益离开？”</p>
+<p>偷到目标不是结束。玩家还要处理战利品重量、撤离路线、警力响应、载具位置和证据残留。</p>
+<hr />
+<h2 id="四核心数据模型">四、核心数据模型</h2><p>HeistSite 表示目标场所。</p>
+<p>它记录场所ID、楼层结构、房间节点、通道边、入口点、撤离点、禁区、公共区、员工区、高安防区和关键目标区。</p>
+<p>SecurityDevice 表示安防设备。</p>
+<p>它记录设备类型、位置、覆盖范围、当前状态、所属安防网络、是否可干扰、是否有备用电源、触发后果和维修响应。</p>
+<p>PatrolAgent 表示巡逻单位。</p>
+<p>它记录角色类型、巡逻路线、视野范围、听觉范围、警觉度、当前任务、发现规则、战斗能力和通信能力。</p>
+<p>IntelRecord 表示侦察情报。</p>
+<p>它记录情报类型、来源、可信度、关联区域、是否过期、是否完整、是否误导、可用于哪些计划节点。</p>
+<p>HeistPlan 表示行动计划。</p>
+<p>它记录入口、路线、队员分工、装备配置、关键步骤、时间窗口、备用方案、撤离方式和风险评估。</p>
+<p>ExposureSignal 表示暴露信号。</p>
+<p>它记录信号来源、位置、强度、持续时间、被谁感知、是否可清理、是否会升级警戒。</p>
+<p>AlertState 表示警戒状态。</p>
+<p>它记录当前警戒等级、怀疑来源、搜索区域、响应单位、封锁区域、警报传播范围和倒计时。</p>
+<p>LootItem 表示战利品。</p>
+<p>它记录价值、重量、体积、是否主目标、是否有追踪器、是否需要特殊容器、搬运速度影响和撤离结算规则。</p>
+<p>TraceRecord 表示痕迹记录。</p>
+<p>它记录摄像头录像、指纹、脚印、血迹、破坏痕迹、目击记录、尸体、失窃记录和后续追查风险。</p>
+<hr />
+<h2 id="五核心范式一潜入不是关卡路线而是安防拓扑对抗">五、核心范式一：潜入不是关卡路线，而是安防拓扑对抗</h2><p>低级潜行设计通常是：守卫有视野扇形，玩家绕过去即可。</p>
+<p>潜入劫案更适合设计成安防拓扑对抗。</p>
+<p>摄像头连接到监控室。
+门禁连接到安保服务器。
+警报器连接到封锁门。
+金库连接到备用电源。
+巡逻人员通过无线电共享异常。
+值班主管会检查失联保安。</p>
+<p>玩家不是只绕过敌人，而是在理解和拆解整个安防网络。</p>
+<p>例如，关闭电源可以让摄像头失效，但会触发保安前往机房检查。
+黑入门禁可以打开金库路线，但会留下系统日志。
+打晕守卫可以短期解决问题，但尸体或失联会产生新风险。</p>
+<p>这让“潜入”从移动技巧升级为系统解构。</p>
+<hr />
+<h2 id="六核心范式二侦察阶段决定执行阶段的信息边界">六、核心范式二：侦察阶段决定执行阶段的信息边界</h2><p>潜入劫案最重要的特征之一，是行动前的准备会改变行动中的认知。</p>
+<p>如果玩家没有侦察，地图可能是未知的，巡逻路线不可见，安防设备只在接近后出现。
+如果玩家进行了侦察，系统可以提前显示摄像头范围、值班表、门禁等级、撤离路线和备用入口。
+如果情报来源不可靠，某些信息可能错误或过期。</p>
+<p>因此 IntelRecord 应该影响玩家可见信息，而不是只作为剧情文本。</p>
+<p>侦察可以带来：</p>
+<p>地图揭示。
+安防标记。
+巡逻预测。
+目标定位。
+内部身份。
+额外入口。
+特殊弱点。
+备用撤离点。</p>
+<p>这让计划不是装饰，而是执行体验的基础。</p>
+<hr />
+<h2 id="七核心范式三暴露是多通道累积而不是二元发现">七、核心范式三：暴露是多通道累积，而不是二元发现</h2><p>潜行游戏常见问题是“被看见等于失败”。</p>
+<p>更成熟的设计应使用多通道暴露。</p>
+<p>暴露来源可以包括：</p>
+<p>视线。
+声音。
+异常动作。
+禁区停留。
+伪装不匹配。
+打开的门。
+被破坏的设备。
+遗留工具。
+血迹。
+尸体。
+监控录像。
+丢失的钥匙卡。
+目标物消失。</p>
+<p>每个 ExposureSignal 都可以有强度、持续时间、可清理性和感知对象。</p>
+<p>守卫听到声音，可能只是前去查看。
+摄像头拍到玩家，可能先进入监控室异常记录。
+员工发现门被撬，可能报告主管。
+主管发现目标物消失，可能直接触发封锁。</p>
+<p>这使暴露变成逐步累积和传播，而不是单点失败。</p>
+<hr />
+<h2 id="八核心范式四警戒状态应该逐级升级">八、核心范式四：警戒状态应该逐级升级</h2><p>潜入失败不应只有“完美潜入”和“任务失败”两种结果。</p>
+<p>警戒状态可以分为：</p>
+<p>正常。
+轻微怀疑。
+局部调查。
+区域搜索。
+局部警戒。
+全场警戒。
+封锁。
+报警。
+追捕。
+战斗或撤离阶段。</p>
+<p>每个阶段改变系统行为。</p>
+<p>轻微怀疑时，守卫查看声音来源。
+区域搜索时，守卫偏离巡逻路线。
+局部警戒时，摄像头转向敏感区域。
+全场警戒时，门禁升级、出口关闭。
+报警后，警力开始倒计时到达。
+追捕阶段，撤离压力成为核心。</p>
+<p>这让失败成为玩法的一部分。玩家可以临场补救、转入备用路线、放弃部分战利品、提前撤离。</p>
+<hr />
+<h2 id="九核心范式五计划必须支持被破坏后的应急分支">九、核心范式五：计划必须支持被破坏后的应急分支</h2><p>劫案最有趣的部分往往不是计划完美执行，而是计划被打乱以后如何补救。</p>
+<p>因此 HeistPlan 不应是线性脚本，而应包含备用方案。</p>
+<p>例如：</p>
+<p>主入口被封锁，改走地下车库。
+黑客失败，改用保安钥匙卡。
+金库延迟开启，派队员拖住巡逻。
+撤离车暴露，切换备用撤离点。
+警报响起，放弃次要战利品直接撤离。
+队员受伤，重新分配搬运任务。</p>
+<p>计划系统应支持 PlanStep 和 FallbackPlan。</p>
+<p>每个关键步骤都可以有：</p>
+<p>目标。
+所需条件。
+失败后果。
+备用路线。
+可放弃程度。
+时间成本。
+风险变化。</p>
+<p>这样，潜入劫案就不再是背板路线，而是一个具有弹性的行动方案。</p>
+<hr />
+<h2 id="十核心范式六战利品是风险收益取舍">十、核心范式六：战利品是风险收益取舍</h2><p>劫案游戏的目标不应只有一个任务物品。</p>
+<p>真正有张力的是：玩家已经可以撤离，但还可以冒险多拿一些。</p>
+<p>战利品需要具备差异：</p>
+<p>高价值但很重。
+轻便但有追踪器。
+主目标必须带走。
+现金容易搬但价值有限。
+艺术品需要特殊包装。
+服务器数据需要下载时间。
+保险柜需要开锁或爆破。
+某些战利品会增加调查风险。</p>
+<p>LootItem 应该影响移动速度、占用背包、队员负重、撤离时间、后续通缉和结算收益。</p>
+<p>这会形成经典取舍：</p>
+<p>现在撤，安全但收益低。
+多拿，收益高但警戒升级。
+分批搬运，效率高但路径暴露更久。
+让队员搬重物，会削弱其战斗或开锁能力。</p>
+<hr />
+<h2 id="十一事件与执行流程">十一、事件与执行流程</h2><p>一次典型潜入劫案流程如下。</p>
+<p>目标场所系统加载建筑、安防、巡逻、目标物和撤离点。</p>
+<p>侦察阶段生成 IntelRecord，玩家选择收集地图、调查人员、黑入系统或购买内部情报。</p>
+<p>计划阶段创建 HeistPlan，确定入口、角色、装备、路线、时间窗口和撤离方案。</p>
+<p>执行阶段开始，玩家或队员进入场所。</p>
+<p>感知系统持续计算视线、声音、行为异常和痕迹。</p>
+<p>如果产生 ExposureSignal，警戒系统判断是否进入怀疑、搜索、警戒或报警。</p>
+<p>玩家执行开锁、黑客、伪装、搬运、清理痕迹、关闭设备等行动。</p>
+<p>目标物系统处理战利品获取、重量、追踪器和撤离要求。</p>
+<p>如果计划被破坏，系统启用备用方案或允许玩家临时改计划。</p>
+<p>撤离系统判断是否到达撤离点、是否携带目标、是否被追捕、是否留下关键证据。</p>
+<p>结算系统计算收益、损失、声誉、通缉、后续安防升级和世界反应。</p>
+<p>关键事件包括：</p>
+<p>侦察情报获得事件。
+计划创建事件。
+潜入开始事件。
+进入禁区事件。
+安防设备干扰事件。
+声音产生事件。
+视线发现事件。
+痕迹生成事件。
+警戒等级变化事件。
+巡逻路线改变事件。
+目标物取得事件。
+战利品装载事件。
+队员受伤事件。
+备用方案触发事件。
+警报触发事件。
+撤离开始事件。
+撤离成功事件。
+证据追查事件。</p>
+<hr />
+<h2 id="十二模块通信设计">十二、模块通信设计</h2><p>建议采用事件驱动加状态快照。</p>
+<p>目标场所系统维护空间拓扑，不直接判断任务成败。</p>
+<p>安防系统监听玩家行动、设备状态和痕迹事件，产生风险信号。</p>
+<p>感知系统统一计算视线、声音和异常行为，并发布 ExposureSignal。</p>
+<p>警戒系统监听 ExposureSignal，决定敌方响应等级和搜索行为。</p>
+<p>计划系统不直接控制玩家，而是提供路线、步骤和备用方案供执行系统读取。</p>
+<p>角色系统执行移动、开锁、黑客、搬运、战斗、清理痕迹等动作。</p>
+<p>战利品系统维护物品状态、负重和收益，不直接触发撤离成功。</p>
+<p>撤离系统监听角色位置、目标物携带状态和警戒等级，判断撤离结果。</p>
+<p>后果系统监听痕迹、警报、伤亡、收益和录像记录，生成长期影响。</p>
+<p>UI只展示地图、计划、风险、警戒、目标和撤离状态，不直接修改核心状态。</p>
+<p>这种结构可以避免：</p>
+<p>摄像头脚本直接判定任务失败。
+开锁UI直接打开所有相关门。
+警戒系统不知道暴露来自哪里。
+计划路线与实际地图不一致。
+战利品结算绕过撤离系统。
+痕迹系统和后续通缉系统断开。</p>
+<p>核心原则是：</p>
+<p>所有发现都先转化为暴露信号，所有安防反应都经过警戒状态机，所有目标收益都必须通过撤离结算。</p>
+<hr />
+<h2 id="十三可扩展点">十三、可扩展点</h2><p>第一类扩展是不同劫案主题。</p>
+<p>可以支持银行、博物馆、赌场、豪宅、公司大楼、军事基地、太空站、魔法学院、数据中心、移动列车和拍卖会。</p>
+<p>第二类扩展是多人协作。</p>
+<p>一名玩家负责黑客。
+一名负责潜入搬运。
+一名负责伪装社交。
+一名负责远程监控。
+一名负责司机和撤离。</p>
+<p>第三类扩展是社交潜入。</p>
+<p>玩家不一定躲避所有人，也可以通过身份、服装、邀请函、话术、贿赂和礼仪规则进入高权限区域。</p>
+<p>第四类扩展是动态安防学习。</p>
+<p>目标场所会根据玩家过往行为升级安防。例如玩家常切电源，下次场所有备用电源；玩家常从屋顶进入，下次屋顶增加巡逻。</p>
+<p>第五类扩展是后续追查系统。</p>
+<p>即使玩家成功撤离，如果留下录像、指纹、目击者、车牌、交易记录，也可能在后续触发追捕、勒索或黑市风险。</p>
+<p>第六类扩展是程序化劫案生成。</p>
+<p>通过建筑模板、安防组合、目标物价值、巡逻密度、情报质量和撤离点生成不同任务。</p>
+<p>第七类扩展是道德与阵营后果。</p>
+<p>偷公司机密、救出被囚人员、盗取艺术品、抢劫黑帮、揭露政府秘密，都可以对应不同阵营反应和舆论后果。</p>
+<hr />
+<h2 id="十四失败隔离与调试设计">十四、失败隔离与调试设计</h2><p>潜入劫案系统最容易出现的问题包括：</p>
+<p>关键目标不可达。
+巡逻路线造成死锁。
+警戒升级过快，玩家无法理解。
+摄像头覆盖无盲区，导致路线不可行。
+撤离点被封锁后没有替代方案。
+伪装规则过于黑箱。
+痕迹系统导致玩家事后被惩罚但不知道原因。
+战利品重量导致角色无法移动。</p>
+<p>调试工具应至少支持以下能力。</p>
+<p>第一，路线可达性检查。
+验证从所有计划入口到目标物、关键设备和撤离点是否至少存在一条可行路径。</p>
+<p>第二，安防覆盖可视化。
+显示摄像头视野、守卫视野、声音传播范围、禁区边界、门禁等级和警报传播链。</p>
+<p>第三，暴露来源日志。
+当警戒上升时，系统应记录是哪条 ExposureSignal 导致，例如摄像头拍到、脚步声、尸体被发现、禁区停留过久。</p>
+<p>第四，巡逻调试器。
+检查巡逻路线是否互相堵塞，是否造成不可通过的永恒覆盖，是否会在警戒后正常切换搜索路线。</p>
+<p>第五，计划可执行性验证器。
+检查 HeistPlan 的每个步骤是否存在所需装备、技能、权限、时间窗口和备用方案。</p>
+<p>第六，撤离安全阀。
+主撤离点失效时，应支持备用撤离、临时劫车、等待司机、放弃战利品或转入追逃阶段。</p>
+<p>第七，痕迹追查解释器。
+结算后告诉玩家哪些痕迹导致通缉、降声誉或后续风险，例如“监控录像未清除”“使用了带序列号装备”“有目击者认出伪装”。</p>
+<hr />
+<h2 id="十五玩家体验目标">十五、玩家体验目标</h2><p>这一类型最核心的体验不是：</p>
+<p>我没有被发现。</p>
+<p>而是：</p>
+<p>我设计了一个计划，并在计划崩坏时依然把目标带了出来。</p>
+<p>玩家体验通常分为六个阶段。</p>
+<p>第一阶段是观察。
+玩家通过侦察了解建筑、人员、目标和安防。</p>
+<p>第二阶段是计划。
+玩家选择入口、路线、装备、队员和撤离方式。</p>
+<p>第三阶段是执行。
+玩家按计划潜入，利用盲区、伪装、开锁、黑客和时间窗口前进。</p>
+<p>第四阶段是意外。
+巡逻提前出现，摄像头恢复，门禁失效，目标转移，队员受伤，警戒升级。</p>
+<p>第五阶段是补救。
+玩家启动备用方案，改变路线，清理痕迹，放弃部分收益或提前撤离。</p>
+<p>第六阶段是撤离与后果。
+玩家带着目标逃离，同时面对收益、证据、通缉、阵营反应和下次任务难度变化。</p>
+<p>优秀的潜入劫案游戏会让玩家记住：</p>
+<p>“原计划从屋顶进入，但监控提前恢复，我临时切到地下车库路线，虽然少拿了保险柜，但主目标成功撤出。”</p>
+<hr />
+<h2 id="十六可迁移到其他游戏的设计思想">十六、可迁移到其他游戏的设计思想</h2><p>这一类型最值得迁移的思想是：</p>
+<p><strong>将任务从线性执行升级为侦察、计划、暴露、警戒、应急和撤离组成的动态行动系统。</strong></p>
+<p>在Roguelike Shooter中，可以用于潜入房间、偷取核心、救人撤离、基地渗透和敌营破坏。玩家不只是清房间，还可以先侦察、关监控、绕开强敌、偷取奖励后撤离。</p>
+<p>在CRPG中，可以用于盗贼公会任务、贵族宴会潜入、监狱劫人、刺杀、情报窃取和阵营渗透。</p>
+<p>在策略游戏中，可以用于特工行动、破坏任务、情报战、敌后渗透和撤离行动。</p>
+<p>在开放世界中，可以用于动态犯罪系统，让偷窃、目击、摄像头、报警、警力、证据和通缉形成闭环。</p>
+<p>在生存游戏中，可以用于夜间潜入敌方营地，获取物资、救人或破坏设施。</p>
+<p>在模拟经营中，可以反向用于安防设计，让玩家设计场所防止NPC潜入。</p>
+<p>其通用价值在于：</p>
+<p>不要把失败做成立即终止。
+让暴露逐步升级，让计划可以崩坏，让玩家在混乱中补救并撤离。</p>
+<hr />
+<h2 id="十七完整劫案边界与设计支柱">十七、完整劫案边界与设计支柱</h2><p>完整产品应覆盖“选择目标—侦察—获得与验证情报—组建方案—准备资源—执行—撤离—销赃与善后”的全周期，而不是只在潜入关卡前增加装备选择界面。</p>
+<p>核心支柱是情报可兑现、方案可调整、风险会累积、撤离是独立阶段。计划不是预先录制一条完美路径，而是一组带条件和备选项的承诺；执行价值来自玩家能判断何时坚持、何时切换预案。</p>
+<p>赃物价值、团队安全、隐蔽程度和长期热度需要互相冲突。若每次都能无成本拿走全部目标并清除痕迹，计划层就没有必要存在。</p>
+<h2 id="十八合同计划与行动状态">十八、合同、计划与行动状态</h2><p>一次劫案分为目标筛选、开放侦察、方案冻结、渗透、目标获取、撤离和事后处理。冻结方案后仍可临场调整，但更换身份、工具或路线需要消耗已准备的备用资源。</p>
+<p>情报至少区分传闻、已观察、交叉验证和已过时；计划步骤记录前置条件、执行者、时间窗口、失败分支和备用步骤。行动中的门禁、巡逻、警戒与证据状态独立推进，不能被一条全局警报值完全替代。</p>
+<p>警戒应沿可疑迹象、局部调查、区域封锁、全面追捕逐级升级，并记录由谁看见了什么。玩家因此能够阻断传播、制造误导或决定提前撤离。</p>
+<h2 id="十九战役进程内容单元与地下经济">十九、战役进程、内容单元与地下经济</h2><p>长期进程围绕团队专长、联系人信任、安全屋能力、目标档案和执法热度展开。升级提供新方案，而非简单提高隐身数值；熟练开锁与内部接应应改变可行路线及其风险结构。</p>
+<p>内容单元可定义为“目标建筑 + 安保网络 + 时间表 + 关键人物 + 战利品约束 + 逃逸网络”。不同合同通过重新组合这些结构产生计划差异，而不是仅替换战利品价格。</p>
+<p>地下经济需处理准备成本、赃物变现折价、分成、损耗和热度。立即销赃可快速回款但价值低，等待买家会占用仓储并暴露长期风险。</p>
+<h2 id="二十失败前进恢复与公平挑战">二十、失败前进、恢复与公平挑战</h2><p>高难度先增加情报不完整和安保耦合，再增加多目标、团队协作和撤离压力。未验证情报可以失真，但应提供来源可靠性与过期迹象，不能在执行时任意改写规则。</p>
+<p>被发现不必立刻重开。丢弃次要目标、切换身份、制造局部干扰、救回队员和启用备用出口都能把完美潜入转化为代价更高的撤离任务。</p>
+<p>失败后可保留部分侦察、联系人变化和执法反应，让下一次行动面对一个被自己影响过的世界。反复读档不应是理解安保逻辑的唯一方式。</p>
+<h2 id="二十一作者工具最小切片与验收标准">二十一、作者工具、最小切片与验收标准</h2><p>作者工具需要安保网络图、巡逻时间线、视听传播回放、计划条件校验、逃逸可达性检查和情报版本对比。固定种子测试应验证同一方案在情报正确、过时和局部暴露三种情况下都能进入可解释状态。</p>
+<p>最小切片包含一个两层目标、一条主路线和两条备用路径、三种安保节点、两名队员、一个主目标与一个可放弃次要目标。它必须跑通侦察、编排、执行、撤离和善后。</p>
+<p>验收时至少确认：已验证情报能实际改变方案；每个计划步骤有失败分支；局部暴露不会无因升级为全图知情；撤离需要独立决策；事后结算能解释收益、热度和团队后果。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>潜入劫案 / 盗窃计划模拟（Heist Planning &amp; Stealth Infiltration）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>侦察—计划—执行—撤离的安防对抗框架</p>
+</li>
+<li><p>目标场所作为空间、权限、安防、撤离点组成的拓扑网络</p>
+</li>
+<li><p>安防拓扑对抗，而非单纯绕开视野扇形</p>
+</li>
+<li><p>侦察情报决定执行阶段的信息边界</p>
+</li>
+<li><p>暴露作为视线、声音、痕迹、身份、异常行为的多通道累积</p>
+</li>
+<li><p>警戒状态从怀疑、搜索、封锁到追捕逐级升级</p>
+</li>
+<li><p>行动计划支持备用路线和应急分支</p>
+</li>
+<li><p>战利品作为风险收益取舍，而非单纯奖励物</p>
+</li>
+<li><p>事件驱动的情报、计划、暴露、警戒、目标物和撤离流程</p>
+</li>
+<li><p>路线可达性、安防覆盖、暴露来源、痕迹追查的调试体系</p>
+</li>
+<li><p>将任务设计为可侦察、可计划、可暴露、可补救、可撤离的动态行动系统</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

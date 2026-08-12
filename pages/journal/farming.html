@@ -1,0 +1,5191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/farming.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="农场经营与生活模拟游戏 | Sakura Design Journal">
+    <meta property="og:description" content="将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/farming.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-farming.png">
+    <meta property="og:image:alt" content="农场经营与生活模拟游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="农场经营与生活模拟游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-farming.png">
+    <meta name="twitter:image:alt" content="农场经营与生活模拟游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"农场经营与生活模拟游戏 | Sakura Design Journal","description":"将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。","url":"https://irissakura.github.io/pages/journal/farming.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"农场经营与生活模拟游戏","image":"https://irissakura.github.io/assets/social/pages-journal-farming.png","dateModified":"2026-08-12","about":["farm","farming","life"]}</script>
+    <!-- site-meta:end -->
+    <title>农场经营与生活模拟游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-farming"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>农场经营与生活模拟游戏</h1><p>将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。</p><div class="note-tags"><span>farm</span><span>farming</span><span>life</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="日历节律劳动预算与生产社交建设季节演化的长期生活循环">日历节律、劳动预算与“生产—社交—建设—季节演化”的长期生活循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>农场经营与生活模拟游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Farming Simulation；</p>
+</li>
+<li><p>Life Simulation；</p>
+</li>
+<li><p>Farm Life Simulation；</p>
+</li>
+<li><p>农场经营模拟；</p>
+</li>
+<li><p>乡村生活模拟；</p>
+</li>
+<li><p>日历式生活经营游戏。</p>
+</li>
+</ul>
+<p>本文讨论的不是生存游戏中的简单种植模块，也不是城市建设游戏中的农业分区，更不是RPG中用于制作药剂的附属采集系统，而是一种能够独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。</p>
+</blockquote>
+<p>该类型的核心不是“种下种子，等待成熟”，而是持续处理以下关系：</p>
+<ul>
+<li><p>今天有限的时间应该用于生产、探索还是社交；</p>
+</li>
+<li><p>当前季节还剩多少有效生长日；</p>
+</li>
+<li><p>某项投资何时能够回本；</p>
+</li>
+<li><p>是扩大生产规模，还是提高现有生产效率；</p>
+</li>
+<li><p>自动化设施是否值得占用空间和资金；</p>
+</li>
+<li><p>哪些农产品直接出售，哪些应加工后再出售；</p>
+</li>
+<li><p>是否为节庆、委托和角色事件预留资源；</p>
+</li>
+<li><p>玩家如何从高强度手工劳动逐步过渡到稳定经营；</p>
+</li>
+<li><p>长期目标如何避免退化为机械重复；</p>
+</li>
+<li><p>世界如何随着日期、关系和玩家建设持续变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>农场经营与生活模拟游戏，是以周期日历、日常劳动、土地生产、资产建设、居民关系和长期生活演化为核心的模拟经营类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家在清晨开始新的一天；</p>
+</li>
+<li><p>查看天气、邮件、作物、动物和当前任务；</p>
+</li>
+<li><p>使用工具完成浇水、耕地、播种、收获和照料；</p>
+</li>
+<li><p>根据剩余时间选择采集、钓鱼、采矿、加工或探索；</p>
+</li>
+<li><p>与居民交流、送礼、参加活动或推进角色事件；</p>
+</li>
+<li><p>将商品出售、储存、加工或用于任务；</p>
+</li>
+<li><p>在商店购买种子、工具、建筑材料和生活物资；</p>
+</li>
+<li><p>使用收益升级工具、扩建农场和解锁新区域；</p>
+</li>
+<li><p>夜晚结算体力、时间、生产和关系变化；</p>
+</li>
+<li><p>世界日期推进，天气、NPC日程和作物状态更新；</p>
+</li>
+<li><p>季节结束后，部分生产条件重置或改变；</p>
+</li>
+<li><p>玩家调整下一季种植、加工、养殖和经济计划；</p>
+</li>
+<li><p>多个季节和年份逐步形成稳定农场与社区关系；</p>
+</li>
+<li><p>玩家完成复兴农场、修复城镇、建立家庭或实现其他长期目标。</p>
+</li>
+</ol>
+<p>该类型中的主要资源通常包括：</p>
+<ul>
+<li><p>每日时间；</p>
+</li>
+<li><p>体力；</p>
+</li>
+<li><p>土地面积；</p>
+</li>
+<li><p>水源；</p>
+</li>
+<li><p>种子；</p>
+</li>
+<li><p>作物；</p>
+</li>
+<li><p>动物；</p>
+</li>
+<li><p>饲料；</p>
+</li>
+<li><p>工具耐久或效率；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>建筑空间；</p>
+</li>
+<li><p>加工机器容量；</p>
+</li>
+<li><p>储存空间；</p>
+</li>
+<li><p>NPC关系；</p>
+</li>
+<li><p>季节剩余天数；</p>
+</li>
+<li><p>玩家对未来日程的规划能力。</p>
+</li>
+</ul>
+<p>其中最重要的隐性资源是：</p>
+<blockquote>
+<p>有效劳动窗口，即玩家在特定日期、季节和天气条件下，能够将多少时间转化为长期资产与未来收益。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>农场经营与生活模拟最具代表性的设计范式由九个核心支柱构成。</p>
+<h2 id="31-日历既是时间系统也是内容调度器">3.1 日历既是时间系统，也是内容调度器</h2><p>日期不仅用于显示“第几天”，还会决定：</p>
+<ul>
+<li><p>当前季节；</p>
+</li>
+<li><p>作物是否能够生长；</p>
+</li>
+<li><p>商店是否营业；</p>
+</li>
+<li><p>NPC位于哪里；</p>
+</li>
+<li><p>节庆是否开启；</p>
+</li>
+<li><p>特殊鱼类或采集物是否出现；</p>
+</li>
+<li><p>动物状态；</p>
+</li>
+<li><p>天气概率；</p>
+</li>
+<li><p>委托截止日期；</p>
+</li>
+<li><p>剧情和角色事件；</p>
+</li>
+<li><p>建筑施工完成日期。</p>
+</li>
+</ul>
+<p>日历应成为多个系统共享的权威时间源，而不是各模块独立计算天数。</p>
+<hr />
+<h2 id="32-每日时间与体力共同形成劳动预算">3.2 每日时间与体力共同形成劳动预算</h2><p>玩家通常同时受两类限制：</p>
+<h3 id="时间限制">时间限制</h3><p>决定一天能够执行多少行动，以及是否错过：</p>
+<ul>
+<li><p>商店营业；</p>
+</li>
+<li><p>NPC日程；</p>
+</li>
+<li><p>特定天气事件；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>夜间资源；</p>
+</li>
+<li><p>当日任务。</p>
+</li>
+</ul>
+<h3 id="体力限制">体力限制</h3><p>决定玩家能够承担多少高强度劳动，例如：</p>
+<ul>
+<li><p>耕地；</p>
+</li>
+<li><p>浇水；</p>
+</li>
+<li><p>砍树；</p>
+</li>
+<li><p>采矿；</p>
+</li>
+<li><p>钓鱼；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>战斗。</p>
+</li>
+</ul>
+<p>时间和体力不能完全等价。</p>
+<p>某些活动：</p>
+<ul>
+<li><p>消耗时间但不消耗体力；</p>
+</li>
+<li><p>消耗大量体力但时间很短；</p>
+</li>
+<li><p>需要同时消耗；</p>
+</li>
+<li><p>能恢复其中一种但消耗另一种。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-生产行为需要经过生命周期才能形成收益">3.3 生产行为需要经过生命周期才能形成收益</h2><p>作物不是即时资源转换。</p>
+<p>典型生命周期为：</p>
+<p>购买种子
+→ 整理土地
+→ 播种
+→ 每日浇水
+→ 生长阶段推进
+→ 成熟
+→ 收获
+→ 直接出售或加工
+→ 获得货币
+→ 再投资</p>
+<p>养殖则可能形成：</p>
+<p>购买幼体
+→ 喂养与照料
+→ 提高健康和亲密度
+→ 产出基础产品
+→ 加工或繁殖
+→ 扩大生产规模</p>
+<p>这种延迟收益结构使玩家必须进行跨日和跨季规划。</p>
+<hr />
+<h2 id="34-规模扩大必须伴随劳动压力和组织升级">3.4 规模扩大必须伴随劳动压力和组织升级</h2><p>新增土地、作物和动物会提高收益潜力，但也增加：</p>
+<ul>
+<li><p>每日浇水工作；</p>
+</li>
+<li><p>收获时间；</p>
+</li>
+<li><p>饲料消耗；</p>
+</li>
+<li><p>动物照料；</p>
+</li>
+<li><p>运输；</p>
+</li>
+<li><p>加工排队；</p>
+</li>
+<li><p>储存压力；</p>
+</li>
+<li><p>维护成本。</p>
+</li>
+</ul>
+<p>玩家需要通过以下方式解除规模瓶颈：</p>
+<ul>
+<li><p>升级工具；</p>
+</li>
+<li><p>建设灌溉；</p>
+</li>
+<li><p>自动喂食；</p>
+</li>
+<li><p>增加加工设备；</p>
+</li>
+<li><p>扩大仓库；</p>
+</li>
+<li><p>招募助手；</p>
+</li>
+<li><p>使用高价值低维护作物；</p>
+</li>
+<li><p>调整生产结构。</p>
+</li>
+</ul>
+<p>因此，成长不应只是不断增加劳动对象，而应逐步改变劳动组织方式。</p>
+<hr />
+<h2 id="35-原料与加工品形成价值链">3.5 原料与加工品形成价值链</h2><p>基础商品可以拥有多种用途：</p>
+<ul>
+<li><p>直接出售；</p>
+</li>
+<li><p>烹饪；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>送礼；</p>
+</li>
+<li><p>完成委托；</p>
+</li>
+<li><p>作为动物饲料；</p>
+</li>
+<li><p>进入加工机器；</p>
+</li>
+<li><p>保留作为下一季种子或繁殖资源。</p>
+</li>
+</ul>
+<p>例如：</p>
+<p>牛奶
+→ 直接出售
+→ 制作奶酪
+→ 用于烹饪
+→ 作为NPC喜爱礼物
+→ 完成社区委托</p>
+<p>玩家需要判断：</p>
+<ul>
+<li><p>当前现金流；</p>
+</li>
+<li><p>加工时间；</p>
+</li>
+<li><p>机器容量；</p>
+</li>
+<li><p>商品品质；</p>
+</li>
+<li><p>未来任务；</p>
+</li>
+<li><p>节庆需求。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-社交关系与生产经营应相互连接">3.6 社交关系与生产经营应相互连接</h2><p>NPC关系不应完全独立于农场系统。</p>
+<p>关系可以影响：</p>
+<ul>
+<li><p>商店折扣；</p>
+</li>
+<li><p>新种子和配方；</p>
+</li>
+<li><p>工具改造；</p>
+</li>
+<li><p>特殊任务；</p>
+</li>
+<li><p>建筑施工；</p>
+</li>
+<li><p>区域开放；</p>
+</li>
+<li><p>节庆结果；</p>
+</li>
+<li><p>角色协助；</p>
+</li>
+<li><p>家庭系统；</p>
+</li>
+<li><p>结局。</p>
+</li>
+</ul>
+<p>农场产出也可以成为：</p>
+<ul>
+<li><p>礼物；</p>
+</li>
+<li><p>委托物品；</p>
+</li>
+<li><p>节庆参赛品；</p>
+</li>
+<li><p>社区建设材料；</p>
+</li>
+<li><p>剧情触发条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-世界内容应通过周期重复产生熟悉感通过变化避免机械化">3.7 世界内容应通过周期重复产生熟悉感，通过变化避免机械化</h2><p>每日循环会重复：</p>
+<ul>
+<li><p>起床；</p>
+</li>
+<li><p>查看农场；</p>
+</li>
+<li><p>劳动；</p>
+</li>
+<li><p>出门；</p>
+</li>
+<li><p>返回；</p>
+</li>
+<li><p>休息。</p>
+</li>
+</ul>
+<p>重复本身不是问题。</p>
+<p>问题在于重复过程中是否出现：</p>
+<ul>
+<li><p>新作物阶段；</p>
+</li>
+<li><p>新设施；</p>
+</li>
+<li><p>新NPC事件；</p>
+</li>
+<li><p>天气变化；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>新区域；</p>
+</li>
+<li><p>工具升级；</p>
+</li>
+<li><p>订单变化；</p>
+</li>
+<li><p>动物成长；</p>
+</li>
+<li><p>长期项目进展。</p>
+</li>
+</ul>
+<p>高质量生活模拟是在稳定日常框架中持续注入小规模变化。</p>
+<hr />
+<h2 id="38-季节更替应迫使玩家重新规划而不是简单更换贴图">3.8 季节更替应迫使玩家重新规划，而不是简单更换贴图</h2><p>季节变化可以影响：</p>
+<ul>
+<li><p>可种植作物；</p>
+</li>
+<li><p>生长周期；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>水源；</p>
+</li>
+<li><p>动物状态；</p>
+</li>
+<li><p>野外资源；</p>
+</li>
+<li><p>鱼类；</p>
+</li>
+<li><p>NPC日程；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>市场价格；</p>
+</li>
+<li><p>区域开放；</p>
+</li>
+<li><p>能源消耗。</p>
+</li>
+</ul>
+<p>季节应构成经营结构的阶段性重置。</p>
+<p>玩家不能永远使用同一作物和同一路线完成全部年份。</p>
+<hr />
+<h2 id="39-长期目标需要兼容不同生活方式">3.9 长期目标需要兼容不同生活方式</h2><p>玩家可能偏好：</p>
+<ul>
+<li><p>高强度农业；</p>
+</li>
+<li><p>养殖；</p>
+</li>
+<li><p>加工产业；</p>
+</li>
+<li><p>钓鱼；</p>
+</li>
+<li><p>采矿；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>装饰；</p>
+</li>
+<li><p>收集；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>家庭生活。</p>
+</li>
+</ul>
+<p>长期评价不应只承认最高利润农场。</p>
+<p>可以通过：</p>
+<ul>
+<li><p>多路线社区复兴；</p>
+</li>
+<li><p>不同角色结局；</p>
+</li>
+<li><p>多类收藏；</p>
+</li>
+<li><p>多种成就；</p>
+</li>
+<li><p>生活方式评分；</p>
+</li>
+<li><p>自定义终局目标；</p>
+</li>
+</ul>
+<p>承认不同玩法。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与城市建设游戏的区别">4.1 与城市建设游戏的区别</h2><p>城市建设强调：</p>
+<ul>
+<li><p>大规模人口；</p>
+</li>
+<li><p>分区；</p>
+</li>
+<li><p>道路；</p>
+</li>
+<li><p>公共服务；</p>
+</li>
+<li><p>城市财政；</p>
+</li>
+<li><p>自组织发展。</p>
+</li>
+</ul>
+<p>农场生活模拟强调：</p>
+<ul>
+<li><p>玩家个人日程；</p>
+</li>
+<li><p>小规模土地；</p>
+</li>
+<li><p>直接劳动；</p>
+</li>
+<li><p>作物和动物；</p>
+</li>
+<li><p>居民关系；</p>
+</li>
+<li><p>季节生活。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与生存游戏的区别">4.2 与生存游戏的区别</h2><p>生存游戏通常强调：</p>
+<ul>
+<li><p>饥饿和死亡风险；</p>
+</li>
+<li><p>资源匮乏；</p>
+</li>
+<li><p>敌对环境；</p>
+</li>
+<li><p>临时庇护；</p>
+</li>
+<li><p>持续威胁。</p>
+</li>
+</ul>
+<p>农场生活模拟通常允许：</p>
+<ul>
+<li><p>稳定生活；</p>
+</li>
+<li><p>可预测生产；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>装饰；</p>
+</li>
+<li><p>长期积累；</p>
+</li>
+<li><p>较低失败压力。</p>
+</li>
+</ul>
+<p>两者可以共享种植、烹饪和天气系统，但核心情绪目标不同。</p>
+<hr />
+<h2 id="43-与工厂自动化游戏的区别">4.3 与工厂自动化游戏的区别</h2><p>工厂自动化强调：</p>
+<ul>
+<li><p>配方吞吐；</p>
+</li>
+<li><p>机器连接；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>大规模自动生产。</p>
+</li>
+</ul>
+<p>农场生活模拟中的自动化主要用于：</p>
+<ul>
+<li><p>逐步减轻重复劳动；</p>
+</li>
+<li><p>释放时间用于社交和探索；</p>
+</li>
+<li><p>支持农场规模扩大。</p>
+</li>
+</ul>
+<p>它通常不会完全取代玩家的日常参与。</p>
+<hr />
+<h2 id="44-与传统经营模拟的区别">4.4 与传统经营模拟的区别</h2><p>传统经营游戏可能强调：</p>
+<ul>
+<li><p>商店；</p>
+</li>
+<li><p>员工；</p>
+</li>
+<li><p>顾客；</p>
+</li>
+<li><p>定价；</p>
+</li>
+<li><p>财务报表。</p>
+</li>
+</ul>
+<p>农场生活模拟更强调：</p>
+<ul>
+<li><p>日历；</p>
+</li>
+<li><p>土地；
+  -自然生长周期；</p>
+</li>
+<li><p>个人行动；</p>
+</li>
+<li><p>社区关系；</p>
+</li>
+<li><p>生活节奏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-与rpg的区别">4.5 与RPG的区别</h2><p>RPG通常以：</p>
+<ul>
+<li><p>战斗；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>主线剧情；</p>
+</li>
+<li><p>角色能力；</p>
+</li>
+</ul>
+<p>作为主要成长来源。</p>
+<p>农场生活模拟中的成长主要来自：</p>
+<ul>
+<li><p>土地开发；</p>
+</li>
+<li><p>设施；
+  -生产链；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>社区关系；</p>
+</li>
+<li><p>生活选择。</p>
+</li>
+</ul>
+<p>部分作品可以加入战斗和迷宫，但它们通常服务于生活经营循环。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十七个核心域：</p>
+<ol>
+<li><p>世界时间与日历调度域；</p>
+</li>
+<li><p>天气、季节与环境域；</p>
+</li>
+<li><p>玩家行动、体力与日程域；</p>
+</li>
+<li><p>农场地块与土地状态域；</p>
+</li>
+<li><p>作物生命周期域；</p>
+</li>
+<li><p>动物、饲养与产品域；</p>
+</li>
+<li><p>工具、交互与劳动执行域；</p>
+</li>
+<li><p>物品、库存与储存域；</p>
+</li>
+<li><p>加工、制作与烹饪域；</p>
+</li>
+<li><p>商店、订单与经济域；</p>
+</li>
+<li><p>NPC日程与关系域；</p>
+</li>
+<li><p>任务、节庆与社区建设域；</p>
+</li>
+<li><p>建筑、设施与农场扩建域；</p>
+</li>
+<li><p>采集、钓鱼、采矿与探索域；</p>
+</li>
+<li><p>夜间结算、存档与恢复域；</p>
+</li>
+<li><p>局外统计与长期目标域；</p>
+</li>
+<li><p>调试、内容验证和平衡分析域。</p>
+</li>
+</ol>
+<p>总体运行关系如下：</p>
+<p>加载每日快照
+→ 日历系统确定日期、季节和特殊事件
+→ 天气系统应用环境状态
+→ NPC与商店生成当日日程
+→ 农场系统刷新作物、动物和机器状态
+→ 玩家开始自由行动
+→ 每次行动消耗时间、体力或资源
+→ 生产、社交、任务和探索状态持续更新
+→ 玩家休息或达到日终条件
+→ 冻结普通输入
+→ 处理作物生长、动物产出、机器加工和施工进度
+→ 处理关系、订单、邮件和任务
+→ 推进日期
+→ 生成次日天气与日程
+→ 保存新日快照
+→ 开始下一天</p>
+<hr />
+<h2 id="6-世界时间与日历">6. 世界时间与日历</h2><h2 id="61-calendardefinition">6.1 CalendarDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>DaysPerWeek；</p>
+</li>
+<li><p>DaysPerSeason；</p>
+</li>
+<li><p>SeasonsPerYear；</p>
+</li>
+<li><p>HoursPerDay；</p>
+</li>
+<li><p>DayStartTime；</p>
+</li>
+<li><p>ForcedSleepTime；</p>
+</li>
+<li><p>TimeScaleProfile；</p>
+</li>
+<li><p>FestivalCalendar；</p>
+</li>
+<li><p>SpecialDateDefinitions；</p>
+</li>
+<li><p>CalendarVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-calendarruntimestate">6.2 CalendarRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentYear；</p>
+</li>
+<li><p>CurrentSeason；</p>
+</li>
+<li><p>CurrentDayOfSeason；</p>
+</li>
+<li><p>CurrentDayOfWeek；</p>
+</li>
+<li><p>CurrentTimeOfDay；</p>
+</li>
+<li><p>CurrentDateId；</p>
+</li>
+<li><p>ActiveSpecialDateIds；</p>
+</li>
+<li><p>CalendarVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-时间推进方式">6.3 时间推进方式</h2><p>时间可以通过以下方式推进：</p>
+<ul>
+<li><p>连续模拟；</p>
+</li>
+<li><p>玩家移动；</p>
+</li>
+<li><p>工具行动；</p>
+</li>
+<li><p>场景切换；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>睡觉；</p>
+</li>
+<li><p>特殊事件。</p>
+</li>
+</ul>
+<p>建议所有时间推进统一提交TimeAdvanceRequest。</p>
+<p>各模块不能自行直接修改当前时间。</p>
+<hr />
+<h2 id="64-timeadvancerequest">6.4 TimeAdvanceRequest</h2><p>建议字段：</p>
+<ul>
+<li><p>RequestId；</p>
+</li>
+<li><p>SourceActionType；</p>
+</li>
+<li><p>RequestedMinutes；</p>
+</li>
+<li><p>CanCrossScheduleBoundary；</p>
+</li>
+<li><p>CanTriggerForcedSleep；</p>
+</li>
+<li><p>SubmittedCalendarVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="65-时间边界">6.5 时间边界</h2><p>需要处理：</p>
+<ul>
+<li><p>商店开门和关门；</p>
+</li>
+<li><p>NPC离开当前地点；</p>
+</li>
+<li><p>节庆开始；</p>
+</li>
+<li><p>夜间资源出现；</p>
+</li>
+<li><p>强制睡眠；</p>
+</li>
+<li><p>日期切换；</p>
+</li>
+<li><p>季节切换；</p>
+</li>
+<li><p>年份切换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="66-日历事件索引">6.6 日历事件索引</h2><p>可以按日期建立：</p>
+<ul>
+<li><p>节庆；</p>
+</li>
+<li><p>生日；</p>
+</li>
+<li><p>商店休息；</p>
+</li>
+<li><p>剧情；</p>
+</li>
+<li><p>特殊天气；</p>
+</li>
+<li><p>季节结算；</p>
+</li>
+<li><p>工程完成；</p>
+</li>
+<li><p>订单截止。</p>
+</li>
+</ul>
+<p>避免每分钟扫描全部事件。</p>
+<hr />
+<h2 id="7-天气季节与环境">7. 天气、季节与环境</h2><h2 id="71-weatherdefinition">7.1 WeatherDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>WeatherId；</p>
+</li>
+<li><p>AllowedSeasons；</p>
+</li>
+<li><p>ProbabilityWeight；</p>
+</li>
+<li><p>EnvironmentModifiers；</p>
+</li>
+<li><p>CropEffects；</p>
+</li>
+<li><p>AnimalEffects；</p>
+</li>
+<li><p>NPCScheduleOverrides；</p>
+</li>
+<li><p>SpawnOverrides；</p>
+</li>
+<li><p>AudioVisualProfile；</p>
+</li>
+<li><p>ExtremeWeatherRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-weatherruntimestate">7.2 WeatherRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentWeatherId；</p>
+</li>
+<li><p>ForecastWeatherIds；</p>
+</li>
+<li><p>WeatherStartTime；</p>
+</li>
+<li><p>WeatherEndTime；</p>
+</li>
+<li><p>AppliedEnvironmentEffects；</p>
+</li>
+<li><p>WeatherVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-天气类型">7.3 天气类型</h2><p>包括：</p>
+<ul>
+<li><p>晴；</p>
+</li>
+<li><p>多云；</p>
+</li>
+<li><p>雨；</p>
+</li>
+<li><p>暴雨；</p>
+</li>
+<li><p>雪；</p>
+</li>
+<li><p>风暴；</p>
+</li>
+<li><p>雾；</p>
+</li>
+<li><p>高温；</p>
+</li>
+<li><p>寒潮；</p>
+</li>
+<li><p>特殊魔法天气。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-天气作用">7.4 天气作用</h2><p>天气可以影响：</p>
+<ul>
+<li><p>土壤湿度；</p>
+</li>
+<li><p>作物生长；</p>
+</li>
+<li><p>玩家体力；</p>
+</li>
+<li><p>NPC日程；</p>
+</li>
+<li><p>鱼类；</p>
+</li>
+<li><p>野外资源；</p>
+</li>
+<li><p>动物放牧；</p>
+</li>
+<li><p>商店客流；</p>
+</li>
+<li><p>探索区域；</p>
+</li>
+<li><p>能源消耗。</p>
+</li>
+</ul>
+<hr />
+<h2 id="75-天气预报">7.5 天气预报</h2><p>玩家可以通过：</p>
+<ul>
+<li><p>电视；</p>
+</li>
+<li><p>收音机；</p>
+</li>
+<li><p>日历；</p>
+</li>
+<li><p>NPC；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>特殊能力；</p>
+</li>
+</ul>
+<p>获得未来天气。</p>
+<p>预报可以具有：</p>
+<ul>
+<li><p>精确结果；</p>
+</li>
+<li><p>概率；</p>
+</li>
+<li><p>误差；</p>
+</li>
+<li><p>预测范围。</p>
+</li>
+</ul>
+<hr />
+<h2 id="76-季节切换事务">7.6 季节切换事务</h2><p>季节切换时需要：</p>
+<ol>
+<li><p>结束当前季节事件；</p>
+</li>
+<li><p>处理不适应新季节的作物；</p>
+</li>
+<li><p>更新野外资源；</p>
+</li>
+<li><p>替换商店商品；</p>
+</li>
+<li><p>更新NPC日程；</p>
+</li>
+<li><p>更新天气权重；</p>
+</li>
+<li><p>更新动物和建筑规则；</p>
+</li>
+<li><p>切换环境表现；</p>
+</li>
+<li><p>验证任务状态；</p>
+</li>
+<li><p>保存季节快照。</p>
+</li>
+</ol>
+<hr />
+<h2 id="8-玩家行动与劳动预算">8. 玩家行动与劳动预算</h2><h2 id="81-playerdailystate">8.1 PlayerDailyState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentEnergy；</p>
+</li>
+<li><p>MaximumEnergy；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>HungerState；</p>
+</li>
+<li><p>ActiveBuffs；</p>
+</li>
+<li><p>EquippedToolId；</p>
+</li>
+<li><p>CurrentLocationId；</p>
+</li>
+<li><p>PendingAction；</p>
+</li>
+<li><p>DailyStatistics；</p>
+</li>
+<li><p>PlayerStateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-actiondefinition">8.2 ActionDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ActionId；</p>
+</li>
+<li><p>ActionType；</p>
+</li>
+<li><p>TimeCost；</p>
+</li>
+<li><p>EnergyCost；</p>
+</li>
+<li><p>RequiredToolTags；</p>
+</li>
+<li><p>RequiredTargetTags；</p>
+</li>
+<li><p>RequiredItemCosts；</p>
+</li>
+<li><p>OutputEffects；</p>
+</li>
+<li><p>InterruptPolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-常见行动">8.3 常见行动</h2><p>包括：</p>
+<ul>
+<li><p>耕地；</p>
+</li>
+<li><p>浇水；</p>
+</li>
+<li><p>播种；</p>
+</li>
+<li><p>收获；</p>
+</li>
+<li><p>砍伐；</p>
+</li>
+<li><p>挖掘；</p>
+</li>
+<li><p>钓鱼；</p>
+</li>
+<li><p>抚摸动物；</p>
+</li>
+<li><p>喂食；</p>
+</li>
+<li><p>挤奶；</p>
+</li>
+<li><p>剪毛；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>赠礼；</p>
+</li>
+<li><p>烹饪；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>建设；</p>
+</li>
+<li><p>采集；</p>
+</li>
+<li><p>睡觉。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-行动事务">8.4 行动事务</h2><ol>
+<li><p>验证玩家状态；</p>
+</li>
+<li><p>验证时间是否足够；</p>
+</li>
+<li><p>验证体力；</p>
+</li>
+<li><p>验证工具与目标；</p>
+</li>
+<li><p>预留物品；</p>
+</li>
+<li><p>锁定交互目标；</p>
+</li>
+<li><p>播放或开始行动；</p>
+</li>
+<li><p>达到提交节点后扣除资源；</p>
+</li>
+<li><p>应用结果；</p>
+</li>
+<li><p>推进时间；</p>
+</li>
+<li><p>发布ActionCompleted；</p>
+</li>
+<li><p>释放锁。</p>
+</li>
+</ol>
+<hr />
+<h2 id="85-行动中断">8.5 行动中断</h2><p>可能因以下原因中断：</p>
+<ul>
+<li><p>玩家移动；</p>
+</li>
+<li><p>目标消失；</p>
+</li>
+<li><p>场景变化；</p>
+</li>
+<li><p>节庆开始；</p>
+</li>
+<li><p>强制睡眠；</p>
+</li>
+<li><p>工具失效；</p>
+</li>
+<li><p>动画异常。</p>
+</li>
+</ul>
+<p>需要明确：</p>
+<ul>
+<li><p>是否返还体力；</p>
+</li>
+<li><p>是否返还物品；</p>
+</li>
+<li><p>是否保留部分进度；</p>
+</li>
+<li><p>是否推进时间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="86-过度疲劳">8.6 过度疲劳</h2><p>体力不足时可以：</p>
+<ul>
+<li><p>禁止行动；</p>
+</li>
+<li><p>降低效率；</p>
+</li>
+<li><p>损失生命；</p>
+</li>
+<li><p>增加次日疲劳；</p>
+</li>
+<li><p>强制结束当天。</p>
+</li>
+</ul>
+<p>惩罚必须可预测，不能在玩家不知情时永久损失高价值状态。</p>
+<hr />
+<h2 id="9-农场地块与土地状态">9. 农场地块与土地状态</h2><h2 id="91-farmtilestate">9.1 FarmTileState</h2><p>建议字段：</p>
+<ul>
+<li><p>TileId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>TerrainType；</p>
+</li>
+<li><p>TilledState；</p>
+</li>
+<li><p>MoistureState；</p>
+</li>
+<li><p>Fertility；</p>
+</li>
+<li><p>CropInstanceId；</p>
+</li>
+<li><p>FertilizerState；</p>
+</li>
+<li><p>WeedState；</p>
+</li>
+<li><p>DebrisState；</p>
+</li>
+<li><p>IrrigationCoverage；</p>
+</li>
+<li><p>SeasonCompatibility；</p>
+</li>
+<li><p>TileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-土地状态">9.2 土地状态</h2><p>地块可以处于：</p>
+<ul>
+<li><p>原始土地；</p>
+</li>
+<li><p>已清理；</p>
+</li>
+<li><p>已耕作；</p>
+</li>
+<li><p>已播种；</p>
+</li>
+<li><p>已浇水；</p>
+</li>
+<li><p>已施肥；</p>
+</li>
+<li><p>作物占用；</p>
+</li>
+<li><p>枯萎；</p>
+</li>
+<li><p>被杂草占用；</p>
+</li>
+<li><p>建筑占用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-土壤湿度">9.3 土壤湿度</h2><p>湿度来源：</p>
+<ul>
+<li><p>手动浇水；</p>
+</li>
+<li><p>雨；</p>
+</li>
+<li><p>灌溉设施；</p>
+</li>
+<li><p>特殊肥料；</p>
+</li>
+<li><p>地形水源。</p>
+</li>
+</ul>
+<p>湿度可以：</p>
+<ul>
+<li><p>每日重置；</p>
+</li>
+<li><p>按时间衰减；</p>
+</li>
+<li><p>支持多级湿度；</p>
+</li>
+<li><p>影响作物品质和生长速度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="94-肥力与连作">9.4 肥力与连作</h2><p>如果需要更深农业模拟，可以加入：</p>
+<ul>
+<li><p>土壤肥力；</p>
+</li>
+<li><p>作物消耗；</p>
+</li>
+<li><p>轮作；</p>
+</li>
+<li><p>休耕；</p>
+</li>
+<li><p>肥料；</p>
+</li>
+<li><p>土壤类型。</p>
+</li>
+</ul>
+<p>但不应在没有反馈工具时引入复杂隐藏数值。</p>
+<hr />
+<h2 id="95-农场布局">9.5 农场布局</h2><p>农场空间需要同时容纳：</p>
+<ul>
+<li><p>作物；</p>
+</li>
+<li><p>动物建筑；</p>
+</li>
+<li><p>加工设备；</p>
+</li>
+<li><p>道路；</p>
+</li>
+<li><p>水源；</p>
+</li>
+<li><p>储存；</p>
+</li>
+<li><p>装饰；</p>
+</li>
+<li><p>自动化设施；</p>
+</li>
+<li><p>树木；</p>
+</li>
+<li><p>特殊区域。</p>
+</li>
+</ul>
+<p>布局不仅影响美观，还可以影响：</p>
+<ul>
+<li><p>行走距离；</p>
+</li>
+<li><p>每日劳动时间；</p>
+</li>
+<li><p>机器操作；</p>
+</li>
+<li><p>自动化覆盖；</p>
+</li>
+<li><p>动物活动；</p>
+</li>
+<li><p>运输效率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-作物生命周期">10. 作物生命周期</h2><h2 id="101-cropdefinition">10.1 CropDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CropId；</p>
+</li>
+<li><p>SeedItemId；</p>
+</li>
+<li><p>AllowedSeasons；</p>
+</li>
+<li><p>GrowthStageDurations；</p>
+</li>
+<li><p>WaterRequirement；</p>
+</li>
+<li><p>FertilityRequirement；</p>
+</li>
+<li><p>RegrowPolicy；</p>
+</li>
+<li><p>HarvestItemDefinitions；</p>
+</li>
+<li><p>QualityRules；</p>
+</li>
+<li><p>WeatherTolerance；</p>
+</li>
+<li><p>FailureRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-cropruntimestate">10.2 CropRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CropInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>TileId；</p>
+</li>
+<li><p>CurrentGrowthStage；</p>
+</li>
+<li><p>GrowthProgress；</p>
+</li>
+<li><p>ConsecutiveWateredDays；</p>
+</li>
+<li><p>MissedWaterDays；</p>
+</li>
+<li><p>QualityAccumulator；</p>
+</li>
+<li><p>DiseaseState；</p>
+</li>
+<li><p>MatureState；</p>
+</li>
+<li><p>HarvestCount；</p>
+</li>
+<li><p>CropVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-每日生长流程">10.3 每日生长流程</h2><ol>
+<li><p>检查季节兼容；</p>
+</li>
+<li><p>检查水分；</p>
+</li>
+<li><p>检查天气；</p>
+</li>
+<li><p>检查肥料；</p>
+</li>
+<li><p>检查病害；</p>
+</li>
+<li><p>计算当日生长进度；</p>
+</li>
+<li><p>更新品质累积；</p>
+</li>
+<li><p>判断阶段变化；</p>
+</li>
+<li><p>判断成熟；</p>
+</li>
+<li><p>更新表现。</p>
+</li>
+</ol>
+<hr />
+<h2 id="104-生长规则">10.4 生长规则</h2><p>可以采用：</p>
+<ul>
+<li><p>浇水当天计入生长；</p>
+</li>
+<li><p>次日结算生长；</p>
+</li>
+<li><p>连续浇水；</p>
+</li>
+<li><p>允许漏水但延迟；</p>
+</li>
+<li><p>漏水造成枯萎；</p>
+</li>
+<li><p>特定天气加速或减速。</p>
+</li>
+</ul>
+<p>规则必须通过UI和教程明确表达。</p>
+<hr />
+<h2 id="105-再生作物">10.5 再生作物</h2><p>部分作物收获后：</p>
+<ul>
+<li><p>保留植株；</p>
+</li>
+<li><p>经过若干天再次成熟；</p>
+</li>
+<li><p>每季可收获多次。</p>
+</li>
+</ul>
+<p>再生作物通常：</p>
+<ul>
+<li><p>初始投资较高；</p>
+</li>
+<li><p>长期收益较高；</p>
+</li>
+<li><p>更怕季节结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="106-作物品质">10.6 作物品质</h2><p>品质可以受到：</p>
+<ul>
+<li><p>种子等级；</p>
+</li>
+<li><p>肥料；</p>
+</li>
+<li><p>浇水稳定性；</p>
+</li>
+<li><p>土壤；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>玩家技能；</p>
+</li>
+<li><p>收获时机；</p>
+</li>
+</ul>
+<p>影响。</p>
+<p>品质可以改变：</p>
+<ul>
+<li><p>售价；</p>
+</li>
+<li><p>礼物价值；</p>
+</li>
+<li><p>任务资格；</p>
+</li>
+<li><p>加工收益；</p>
+</li>
+<li><p>节庆评分。</p>
+</li>
+</ul>
+<hr />
+<h2 id="107-季末处理">10.7 季末处理</h2><p>季节结束时，作物可以：</p>
+<ul>
+<li><p>立即枯萎；</p>
+</li>
+<li><p>在跨季兼容时保留；</p>
+</li>
+<li><p>进入休眠；</p>
+</li>
+<li><p>转化为残株；</p>
+</li>
+<li><p>允许温室继续生长。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-动物与饲养系统">11. 动物与饲养系统</h2><h2 id="111-animaldefinition">11.1 AnimalDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AnimalTypeId；</p>
+</li>
+<li><p>GrowthStages；</p>
+</li>
+<li><p>FeedRequirement；</p>
+</li>
+<li><p>ProductDefinitions；</p>
+</li>
+<li><p>ProductCycle；</p>
+</li>
+<li><p>HousingRequirements；</p>
+</li>
+<li><p>WeatherTolerance；</p>
+</li>
+<li><p>HealthRules；</p>
+</li>
+<li><p>RelationshipRules；</p>
+</li>
+<li><p>BreedingRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-animalruntimestate">11.2 AnimalRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>AnimalId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>Name；</p>
+</li>
+<li><p>Age；</p>
+</li>
+<li><p>GrowthStage；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>Hunger；</p>
+</li>
+<li><p>Mood；</p>
+</li>
+<li><p>RelationshipValue；</p>
+</li>
+<li><p>HousingId；</p>
+</li>
+<li><p>CurrentLocationId；</p>
+</li>
+<li><p>ProductProgress；</p>
+</li>
+<li><p>PregnancyState；</p>
+</li>
+<li><p>DiseaseState；</p>
+</li>
+<li><p>AnimalVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-每日动物结算">11.3 每日动物结算</h2><p>检查：</p>
+<ul>
+<li><p>是否有饲料；</p>
+</li>
+<li><p>是否获得互动；</p>
+</li>
+<li><p>是否处于安全建筑；</p>
+</li>
+<li><p>天气是否适合放牧；</p>
+</li>
+<li><p>健康状态；</p>
+</li>
+<li><p>亲密度；</p>
+</li>
+<li><p>产品周期；</p>
+</li>
+<li><p>是否生病；</p>
+</li>
+<li><p>是否成长。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-产品生成">11.4 产品生成</h2><p>动物产品可以包括：</p>
+<ul>
+<li><p>蛋；</p>
+</li>
+<li><p>牛奶；</p>
+</li>
+<li><p>羊毛；</p>
+</li>
+<li><p>蜂蜜；</p>
+</li>
+<li><p>羽毛；</p>
+</li>
+<li><p>特殊材料。</p>
+</li>
+</ul>
+<p>产品数量和品质可以受到：</p>
+<ul>
+<li><p>年龄；</p>
+</li>
+<li><p>健康；</p>
+</li>
+<li><p>饲料；</p>
+</li>
+<li><p>心情；</p>
+</li>
+<li><p>亲密度；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>季节；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="115-动物自动化">11.5 动物自动化</h2><p>可以逐步解锁：</p>
+<ul>
+<li><p>自动喂食；</p>
+</li>
+<li><p>自动收集；</p>
+</li>
+<li><p>自动开关门；</p>
+</li>
+<li><p>自动清洁；</p>
+</li>
+<li><p>兽医服务；</p>
+</li>
+<li><p>放牧管理。</p>
+</li>
+</ul>
+<p>自动化应减轻重复劳动，但保留：</p>
+<ul>
+<li><p>养殖规划；</p>
+</li>
+<li><p>动物选择；</p>
+</li>
+<li><p>建筑容量；</p>
+</li>
+<li><p>饲料生产；</p>
+</li>
+<li><p>产品加工。</p>
+</li>
+</ul>
+<hr />
+<h2 id="12-工具系统">12. 工具系统</h2><h2 id="121-tooldefinition">12.1 ToolDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ToolId；</p>
+</li>
+<li><p>ToolType；</p>
+</li>
+<li><p>RequiredActionTags；</p>
+</li>
+<li><p>EnergyCostProfile；</p>
+</li>
+<li><p>TimeCostProfile；</p>
+</li>
+<li><p>RangeShape；</p>
+</li>
+<li><p>ChargeLevels；</p>
+</li>
+<li><p>UpgradePath；</p>
+</li>
+<li><p>DurabilityRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-工具类型">12.2 工具类型</h2><p>包括：</p>
+<ul>
+<li><p>锄头；</p>
+</li>
+<li><p>水壶；</p>
+</li>
+<li><p>斧头；</p>
+</li>
+<li><p>镐；</p>
+</li>
+<li><p>镰刀；</p>
+</li>
+<li><p>钓竿；</p>
+</li>
+<li><p>剪刀；</p>
+</li>
+<li><p>挤奶器；</p>
+</li>
+<li><p>捕虫网；</p>
+</li>
+<li><p>特殊环境工具。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-工具升级">12.3 工具升级</h2><p>升级可以改变：</p>
+<ul>
+<li><p>作用范围；</p>
+</li>
+<li><p>体力消耗；</p>
+</li>
+<li><p>动作时间；</p>
+</li>
+<li><p>可处理材质；</p>
+</li>
+<li><p>蓄力等级；</p>
+</li>
+<li><p>耐久；</p>
+</li>
+<li><p>特殊能力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-工具升级事务">12.4 工具升级事务</h2><p>玩家可能需要将工具交给工匠若干天。</p>
+<p>流程：</p>
+<ol>
+<li><p>验证工具实例；</p>
+</li>
+<li><p>验证材料和货币；</p>
+</li>
+<li><p>将工具标记为UnderUpgrade；</p>
+</li>
+<li><p>从玩家可用工具中移除；</p>
+</li>
+<li><p>创建完成日期；</p>
+</li>
+<li><p>每日推进施工；</p>
+</li>
+<li><p>完成后创建升级结果；</p>
+</li>
+<li><p>通过邮件或领取界面返还。</p>
+</li>
+</ol>
+<hr />
+<h2 id="125-工具缺失保护">12.5 工具缺失保护</h2><p>主线或日常必需工具升级期间，需要：</p>
+<ul>
+<li><p>提供基础替代工具；</p>
+</li>
+<li><p>允许其他活动；</p>
+</li>
+<li><p>提前提示施工时间；</p>
+</li>
+<li><p>避免玩家因工具缺失永久无法推进。</p>
+</li>
+</ul>
+<hr />
+<h2 id="13-物品库存与储存">13. 物品、库存与储存</h2><h2 id="131-itemdefinition">13.1 ItemDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ItemId；</p>
+</li>
+<li><p>ItemType；</p>
+</li>
+<li><p>StackLimit；</p>
+</li>
+<li><p>BasePrice；</p>
+</li>
+<li><p>QualityRules；</p>
+</li>
+<li><p>UsageTags；</p>
+</li>
+<li><p>ProcessingTags；</p>
+</li>
+<li><p>GiftTags；</p>
+</li>
+<li><p>SeasonTags；</p>
+</li>
+<li><p>SpoilagePolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-itemstackstate">13.2 ItemStackState</h2><p>建议字段：</p>
+<ul>
+<li><p>StackId；</p>
+</li>
+<li><p>ItemDefinitionId；</p>
+</li>
+<li><p>Quantity；</p>
+</li>
+<li><p>Quality；</p>
+</li>
+<li><p>Freshness；</p>
+</li>
+<li><p>CustomState；</p>
+</li>
+<li><p>ContainerId；</p>
+</li>
+<li><p>StackVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-储存位置">13.3 储存位置</h2><p>物品可以位于：</p>
+<ul>
+<li><p>玩家背包；</p>
+</li>
+<li><p>农场箱子；</p>
+</li>
+<li><p>冰箱；</p>
+</li>
+<li><p>动物饲料仓；</p>
+</li>
+<li><p>加工机器；</p>
+</li>
+<li><p>商店交付箱；</p>
+</li>
+<li><p>邮件；</p>
+</li>
+<li><p>任务容器；</p>
+</li>
+<li><p>建筑施工预留。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-库存转移">13.4 库存转移</h2><p>物品移动必须检查：</p>
+<ul>
+<li><p>源容器；</p>
+</li>
+<li><p>目标容器；</p>
+</li>
+<li><p>容量；</p>
+</li>
+<li><p>堆叠；</p>
+</li>
+<li><p>品质；</p>
+</li>
+<li><p>锁定状态；</p>
+</li>
+<li><p>任务预留；</p>
+</li>
+<li><p>加工占用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="135-物品合并">13.5 物品合并</h2><p>只有满足以下条件时才可合并：</p>
+<ul>
+<li><p>定义一致；</p>
+</li>
+<li><p>品质一致或规则允许；</p>
+</li>
+<li><p>新鲜度兼容；</p>
+</li>
+<li><p>自定义状态一致；</p>
+</li>
+<li><p>不存在任务绑定；</p>
+</li>
+<li><p>不超过堆叠上限。</p>
+</li>
+</ul>
+<hr />
+<h2 id="136-储存设计">13.6 储存设计</h2><p>储存容量不足可以推动：</p>
+<ul>
+<li><p>建造箱子；</p>
+</li>
+<li><p>扩建房屋；</p>
+</li>
+<li><p>分类；</p>
+</li>
+<li><p>出售；</p>
+</li>
+<li><p>加工；</p>
+</li>
+<li><p>订单交付。</p>
+</li>
+</ul>
+<p>但过度整理会产生低价值操作。</p>
+<p>应提供：</p>
+<ul>
+<li><p>快速转移；</p>
+</li>
+<li><p>自动堆叠；</p>
+</li>
+<li><p>分类；</p>
+</li>
+<li><p>搜索；</p>
+</li>
+<li><p>全局物品查询；</p>
+</li>
+<li><p>制作自动读取附近储存。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-加工与生产机器">14. 加工与生产机器</h2><h2 id="141-processordefinition">14.1 ProcessorDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ProcessorId；</p>
+</li>
+<li><p>AcceptedInputTags；</p>
+</li>
+<li><p>RecipeDefinitions；</p>
+</li>
+<li><p>ProcessingDuration；</p>
+</li>
+<li><p>OutputCapacity；</p>
+</li>
+<li><p>FuelRules；</p>
+</li>
+<li><p>BatchRules；</p>
+</li>
+<li><p>QualityTransferRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-processorruntimestate">14.2 ProcessorRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>ProcessorInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>InputStacks；</p>
+</li>
+<li><p>CurrentRecipeId；</p>
+</li>
+<li><p>ProcessingProgress；</p>
+</li>
+<li><p>CompletionDateTime；</p>
+</li>
+<li><p>OutputStacks；</p>
+</li>
+<li><p>BlockedState；</p>
+</li>
+<li><p>ProcessorVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-加工流程">14.3 加工流程</h2><ol>
+<li><p>玩家提交原料；</p>
+</li>
+<li><p>验证机器和配方；</p>
+</li>
+<li><p>锁定输入；</p>
+</li>
+<li><p>消耗原料；</p>
+</li>
+<li><p>创建加工任务；</p>
+</li>
+<li><p>按游戏时间推进；</p>
+</li>
+<li><p>完成后生成产物；</p>
+</li>
+<li><p>如果输出空间不足，进入OutputBlocked；</p>
+</li>
+<li><p>玩家领取产物；</p>
+</li>
+<li><p>机器恢复空闲。</p>
+</li>
+</ol>
+<hr />
+<h2 id="144-加工类型">14.4 加工类型</h2><p>包括：</p>
+<ul>
+<li><p>奶酪；</p>
+</li>
+<li><p>果酱；</p>
+</li>
+<li><p>酒；</p>
+</li>
+<li><p>面粉；</p>
+</li>
+<li><p>布料；</p>
+</li>
+<li><p>腌制；</p>
+</li>
+<li><p>熔炼；</p>
+</li>
+<li><p>种子制造；</p>
+</li>
+<li><p>饲料制作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="145-加工瓶颈">14.5 加工瓶颈</h2><p>加工价值需要考虑：</p>
+<ul>
+<li><p>原料价值；</p>
+</li>
+<li><p>加工时间；</p>
+</li>
+<li><p>机器成本；</p>
+</li>
+<li><p>机器占地；</p>
+</li>
+<li><p>批量容量；</p>
+</li>
+<li><p>产品售价；</p>
+</li>
+<li><p>任务用途；</p>
+</li>
+<li><p>季节需求。</p>
+</li>
+</ul>
+<hr />
+<h2 id="146-防止加工永远优于直售">14.6 防止加工永远优于直售</h2><p>可以通过：</p>
+<ul>
+<li><p>时间成本；</p>
+</li>
+<li><p>机器数量；</p>
+</li>
+<li><p>原料品质；</p>
+</li>
+<li><p>市场波动；</p>
+</li>
+<li><p>特定商品直售奖励；</p>
+</li>
+<li><p>订单；</p>
+</li>
+<li><p>保质期；</p>
+</li>
+</ul>
+<p>维持不同销售方式的选择空间。</p>
+<hr />
+<h2 id="15-制作与烹饪">15. 制作与烹饪</h2><h2 id="151-recipedefinition">15.1 RecipeDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>RecipeId；</p>
+</li>
+<li><p>RecipeType；</p>
+</li>
+<li><p>IngredientRequirements；</p>
+</li>
+<li><p>ToolRequirements；</p>
+</li>
+<li><p>FacilityRequirements；</p>
+</li>
+<li><p>TimeCost；</p>
+</li>
+<li><p>EnergyCost；</p>
+</li>
+<li><p>OutputDefinitions；</p>
+</li>
+<li><p>UnlockRules；</p>
+</li>
+<li><p>QualityRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-配方来源">15.2 配方来源</h2><p>包括：</p>
+<ul>
+<li><p>NPC关系；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>电视节目；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>书籍。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-烹饪作用">15.3 烹饪作用</h2><p>食物可以：</p>
+<ul>
+<li><p>恢复体力；</p>
+</li>
+<li><p>恢复生命；</p>
+</li>
+<li><p>提供临时增益；</p>
+</li>
+<li><p>作为礼物；</p>
+</li>
+<li><p>参加比赛；</p>
+</li>
+<li><p>完成订单；</p>
+</li>
+<li><p>提高探索效率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-制作事务">15.4 制作事务</h2><p>制作需要原子处理：</p>
+<ul>
+<li><p>原料验证；</p>
+</li>
+<li><p>工具和设施；</p>
+</li>
+<li><p>原料扣除；</p>
+</li>
+<li><p>时间推进；</p>
+</li>
+<li><p>产物创建；</p>
+</li>
+<li><p>库存写入；</p>
+</li>
+<li><p>经验或技能更新。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-经济与销售">16. 经济与销售</h2><h2 id="161-economystate">16.1 EconomyState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentMoney；</p>
+</li>
+<li><p>ReservedMoney；</p>
+</li>
+<li><p>DailyIncome；</p>
+</li>
+<li><p>DailyExpenses；</p>
+</li>
+<li><p>MarketModifiers；</p>
+</li>
+<li><p>ActiveOrders；</p>
+</li>
+<li><p>ShopStates；</p>
+</li>
+<li><p>EconomyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-收入来源">16.2 收入来源</h2><p>包括：</p>
+<ul>
+<li><p>出售农产品；</p>
+</li>
+<li><p>加工品；</p>
+</li>
+<li><p>动物产品；</p>
+</li>
+<li><p>钓鱼；</p>
+</li>
+<li><p>采矿；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>商店经营；</p>
+</li>
+<li><p>特殊活动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-支出来源">16.3 支出来源</h2><p>包括：</p>
+<ul>
+<li><p>种子；</p>
+</li>
+<li><p>动物；</p>
+</li>
+<li><p>饲料；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>工具升级；</p>
+</li>
+<li><p>机器；</p>
+</li>
+<li><p>家具；</p>
+</li>
+<li><p>礼物；</p>
+</li>
+<li><p>交通；</p>
+</li>
+<li><p>社区项目。</p>
+</li>
+</ul>
+<hr />
+<h2 id="164-shippingbin">16.4 ShippingBin</h2><p>典型出货箱流程：</p>
+<ol>
+<li><p>玩家将商品放入出货箱；</p>
+</li>
+<li><p>物品进入PendingSale；</p>
+</li>
+<li><p>当日结束后读取市场价格；</p>
+</li>
+<li><p>计算品质和加成；</p>
+</li>
+<li><p>生成DailySaleResult；</p>
+</li>
+<li><p>次日或当晚增加货币；</p>
+</li>
+<li><p>清空已结算商品；</p>
+</li>
+<li><p>记录销售统计。</p>
+</li>
+</ol>
+<hr />
+<h2 id="165-市场价格">16.5 市场价格</h2><p>价格可以由以下因素影响：</p>
+<ul>
+<li><p>固定基础价；</p>
+</li>
+<li><p>季节；</p>
+</li>
+<li><p>供需；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>商人订单；</p>
+</li>
+<li><p>品质；</p>
+</li>
+<li><p>玩家声望；</p>
+</li>
+<li><p>世界事件。</p>
+</li>
+</ul>
+<p>价格波动必须可观察，避免玩家无依据承担随机损失。</p>
+<hr />
+<h2 id="166-订单系统">16.6 订单系统</h2><p>订单可以要求：</p>
+<ul>
+<li><p>特定物品；</p>
+</li>
+<li><p>特定品质；</p>
+</li>
+<li><p>数量；</p>
+</li>
+<li><p>截止日期；</p>
+</li>
+<li><p>交付地点；</p>
+</li>
+<li><p>连续供货；</p>
+</li>
+<li><p>特定季节。</p>
+</li>
+</ul>
+<p>奖励可以包括：</p>
+<ul>
+<li><p>货币；</p>
+</li>
+<li><p>声望；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>商店升级；</p>
+</li>
+<li><p>区域解锁；</p>
+</li>
+<li><p>关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-npc日程系统">17. NPC日程系统</h2><h2 id="171-npcdefinition">17.1 NPCDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>NPCId；</p>
+</li>
+<li><p>HomeLocationId；</p>
+</li>
+<li><p>WorkLocationId；</p>
+</li>
+<li><p>BaseScheduleId；</p>
+</li>
+<li><p>RelationshipProfile；</p>
+</li>
+<li><p>GiftPreferenceProfile；</p>
+</li>
+<li><p>DialogueProfile；</p>
+</li>
+<li><p>EventDefinitions；</p>
+</li>
+<li><p>ShopBinding；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-npcscheduleentry">17.2 NPCScheduleEntry</h2><p>建议字段：</p>
+<ul>
+<li><p>ScheduleEntryId；</p>
+</li>
+<li><p>DateConditions；</p>
+</li>
+<li><p>WeatherConditions；</p>
+</li>
+<li><p>RelationshipConditions；</p>
+</li>
+<li><p>QuestConditions；</p>
+</li>
+<li><p>StartTime；</p>
+</li>
+<li><p>EndTime；</p>
+</li>
+<li><p>LocationId；</p>
+</li>
+<li><p>ActivityType；</p>
+</li>
+<li><p>TravelPolicy；</p>
+</li>
+<li><p>Priority。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-日程选择">17.3 日程选择</h2><p>NPC每日选择日程时，优先级可以是：</p>
+<ol>
+<li><p>强制剧情；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>极端天气；</p>
+</li>
+<li><p>商店工作；</p>
+</li>
+<li><p>特殊日期；</p>
+</li>
+<li><p>常规日程；</p>
+</li>
+<li><p>保底日程。</p>
+</li>
+</ol>
+<hr />
+<h2 id="174-npc移动">17.4 NPC移动</h2><p>NPC可以：</p>
+<ul>
+<li><p>实时移动；</p>
+</li>
+<li><p>场景切换时离散移动；</p>
+</li>
+<li><p>在玩家附近运行完整导航；</p>
+</li>
+<li><p>在远处使用日程插值。</p>
+</li>
+</ul>
+<hr />
+<h2 id="175-日程失效">17.5 日程失效</h2><p>目标位置不可达时：</p>
+<ul>
+<li><p>尝试替代位置；</p>
+</li>
+<li><p>留在当前位置；</p>
+</li>
+<li><p>返回住所；</p>
+</li>
+<li><p>使用保底日程；</p>
+</li>
+<li><p>记录路径失败。</p>
+</li>
+</ul>
+<p>不能让NPC消失或永久卡在地图外。</p>
+<hr />
+<h2 id="18-关系与社交系统">18. 关系与社交系统</h2><h2 id="181-relationshipstate">18.1 RelationshipState</h2><p>建议包含：</p>
+<ul>
+<li><p>NPCId；</p>
+</li>
+<li><p>RelationshipPoints；</p>
+</li>
+<li><p>RelationshipLevel；</p>
+</li>
+<li><p>DailyTalkState；</p>
+</li>
+<li><p>DailyGiftState；</p>
+</li>
+<li><p>RecentInteractions；</p>
+</li>
+<li><p>EventFlags；</p>
+</li>
+<li><p>RomanceState；</p>
+</li>
+<li><p>FamilyState；</p>
+</li>
+<li><p>RelationshipVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-关系来源">18.2 关系来源</h2><p>包括：</p>
+<ul>
+<li><p>对话；</p>
+</li>
+<li><p>礼物；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>剧情选择；</p>
+</li>
+<li><p>共同活动；</p>
+</li>
+<li><p>帮助社区；</p>
+</li>
+<li><p>负面行为；</p>
+</li>
+<li><p>忘记重要日期。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-礼物偏好">18.3 礼物偏好</h2><p>建议区分：</p>
+<ul>
+<li><p>最喜欢；</p>
+</li>
+<li><p>喜欢；</p>
+</li>
+<li><p>中立；</p>
+</li>
+<li><p>不喜欢；</p>
+</li>
+<li><p>厌恶；</p>
+</li>
+<li><p>过敏或禁忌；</p>
+</li>
+<li><p>季节性偏好；</p>
+</li>
+<li><p>剧情相关偏好。</p>
+</li>
+</ul>
+<hr />
+<h2 id="184-重复行为递减">18.4 重复行为递减</h2><p>同一天反复对话或送礼应受到：</p>
+<ul>
+<li><p>次数限制；</p>
+</li>
+<li><p>收益递减；</p>
+</li>
+<li><p>日冷却；</p>
+</li>
+<li><p>特殊例外。</p>
+</li>
+</ul>
+<p>避免关系成长退化为重复点击。</p>
+<hr />
+<h2 id="185-关系事件">18.5 关系事件</h2><p>事件可以要求：</p>
+<ul>
+<li><p>关系等级；</p>
+</li>
+<li><p>日期；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>地点；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>世界阶段；</p>
+</li>
+<li><p>前置事件；</p>
+</li>
+<li><p>玩家状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="186-关系收益">18.6 关系收益</h2><p>包括：</p>
+<ul>
+<li><p>新对话；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>礼物；</p>
+</li>
+<li><p>商店折扣；</p>
+</li>
+<li><p>协助农场；</p>
+</li>
+<li><p>角色任务；</p>
+</li>
+<li><p>婚恋；</p>
+</li>
+<li><p>家庭；</p>
+</li>
+<li><p>结局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-建筑与农场扩建">19. 建筑与农场扩建</h2><h2 id="191-buildingdefinition">19.1 BuildingDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BuildingId；</p>
+</li>
+<li><p>Footprint；</p>
+</li>
+<li><p>ConstructionCost；</p>
+</li>
+<li><p>MaterialRequirements；</p>
+</li>
+<li><p>ConstructionDuration；</p>
+</li>
+<li><p>CapacityProfile；</p>
+</li>
+<li><p>FunctionalModules；</p>
+</li>
+<li><p>UpgradePath；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-buildingruntimestate">19.2 BuildingRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>BuildingInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>ConstructionState；</p>
+</li>
+<li><p>CompletionDate；</p>
+</li>
+<li><p>OccupantIds；</p>
+</li>
+<li><p>StorageState；</p>
+</li>
+<li><p>FunctionalState；</p>
+</li>
+<li><p>UpgradeState；</p>
+</li>
+<li><p>BuildingVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-建筑类型">19.3 建筑类型</h2><p>包括：</p>
+<ul>
+<li><p>房屋；</p>
+</li>
+<li><p>鸡舍；</p>
+</li>
+<li><p>畜棚；</p>
+</li>
+<li><p>仓库；</p>
+</li>
+<li><p>温室；</p>
+</li>
+<li><p>工坊；</p>
+</li>
+<li><p>筒仓；</p>
+</li>
+<li><p>水井；</p>
+</li>
+<li><p>码头；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>社区设施。</p>
+</li>
+</ul>
+<hr />
+<h2 id="194-建设流程">19.4 建设流程</h2><ol>
+<li><p>玩家选择建筑；</p>
+</li>
+<li><p>验证资金、材料和土地；</p>
+</li>
+<li><p>预览占地；</p>
+</li>
+<li><p>锁定位置；</p>
+</li>
+<li><p>扣除或预留资源；</p>
+</li>
+<li><p>创建ConstructionProject；</p>
+</li>
+<li><p>按日期推进；</p>
+</li>
+<li><p>完成后创建建筑；</p>
+</li>
+<li><p>注册功能模块；</p>
+</li>
+<li><p>更新导航和农场布局；</p>
+</li>
+<li><p>发布BuildingCompleted。</p>
+</li>
+</ol>
+<hr />
+<h2 id="195-施工期间状态">19.5 施工期间状态</h2><p>需要明确：</p>
+<ul>
+<li><p>地块是否不可通行；</p>
+</li>
+<li><p>玩家能否取消；</p>
+</li>
+<li><p>资源返还比例；</p>
+</li>
+<li><p>建筑师NPC日程；</p>
+</li>
+<li><p>季节是否影响施工；</p>
+</li>
+<li><p>能否同时进行多个项目。</p>
+</li>
+</ul>
+<hr />
+<h2 id="196-建筑移动">19.6 建筑移动</h2><p>允许建筑移动可以降低布局失误成本。</p>
+<p>需要决定：</p>
+<ul>
+<li><p>是否收费；</p>
+</li>
+<li><p>是否需要施工时间；</p>
+</li>
+<li><p>内部物品如何处理；</p>
+</li>
+<li><p>动物如何迁移；</p>
+</li>
+<li><p>原位置如何恢复；</p>
+</li>
+<li><p>自动化连接如何更新。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-自动化与劳动替代">20. 自动化与劳动替代</h2><h2 id="201-automationdefinition">20.1 AutomationDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AutomationId；</p>
+</li>
+<li><p>CoverageShape；</p>
+</li>
+<li><p>SupportedActionTags；</p>
+</li>
+<li><p>ResourceRequirements；</p>
+</li>
+<li><p>OperatingCost；</p>
+</li>
+<li><p>ActivationRules；</p>
+</li>
+<li><p>MaintenanceRules；</p>
+</li>
+<li><p>PriorityRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-自动化类型">20.2 自动化类型</h2><p>包括：</p>
+<ul>
+<li><p>洒水器；</p>
+</li>
+<li><p>自动喂食；</p>
+</li>
+<li><p>自动收集；</p>
+</li>
+<li><p>自动播种；</p>
+</li>
+<li><p>温室控制；</p>
+</li>
+<li><p>物流箱；</p>
+</li>
+<li><p>批量加工；</p>
+</li>
+<li><p>农场助手；</p>
+</li>
+<li><p>魔法设备。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-自动化的设计职责">20.3 自动化的设计职责</h2><p>自动化应：</p>
+<ul>
+<li><p>减少重复劳动；</p>
+</li>
+<li><p>支持规模扩大；</p>
+</li>
+<li><p>释放玩家时间；</p>
+</li>
+<li><p>形成新的布局问题；</p>
+</li>
+<li><p>消耗资金、空间或能源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-防止自动化消除全部核心玩法">20.4 防止自动化消除全部核心玩法</h2><p>完全自动化后，玩家仍应进行：</p>
+<ul>
+<li><p>作物选择；</p>
+</li>
+<li><p>季节规划；</p>
+</li>
+<li><p>生产链设计；</p>
+</li>
+<li><p>订单管理；</p>
+</li>
+<li><p>机器容量分配；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>农场美化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="21-采集与野外资源">21. 采集与野外资源</h2><h2 id="211-foragespawndefinition">21.1 ForageSpawnDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SpawnId；</p>
+</li>
+<li><p>RegionId；</p>
+</li>
+<li><p>AllowedSeasons；</p>
+</li>
+<li><p>WeatherRules；</p>
+</li>
+<li><p>ItemPool；</p>
+</li>
+<li><p>SpawnCountRules；</p>
+</li>
+<li><p>RespawnPolicy；</p>
+</li>
+<li><p>CollectionRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-采集物">21.2 采集物</h2><p>包括：</p>
+<ul>
+<li><p>野菜；</p>
+</li>
+<li><p>花；</p>
+</li>
+<li><p>蘑菇；</p>
+</li>
+<li><p>木材；</p>
+</li>
+<li><p>石材；</p>
+</li>
+<li><p>草药；</p>
+</li>
+<li><p>贝壳；</p>
+</li>
+<li><p>特殊季节资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-刷新策略">21.3 刷新策略</h2><p>可以采用：</p>
+<ul>
+<li><p>每日刷新；</p>
+</li>
+<li><p>多日积累；</p>
+</li>
+<li><p>场景加载；</p>
+</li>
+<li><p>天气触发；</p>
+</li>
+<li><p>固定生成点；</p>
+</li>
+<li><p>区域随机点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="214-防止场景反复加载刷新">21.4 防止场景反复加载刷新</h2><p>生成结果必须绑定：</p>
+<ul>
+<li><p>日期；</p>
+</li>
+<li><p>区域；</p>
+</li>
+<li><p>随机种子；</p>
+</li>
+<li><p>SpawnId。</p>
+</li>
+</ul>
+<p>同一天重复进入场景不能重复生成。</p>
+<hr />
+<h2 id="22-钓鱼系统">22. 钓鱼系统</h2><h2 id="221-fishdefinition">22.1 FishDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>FishId；</p>
+</li>
+<li><p>AllowedRegions；</p>
+</li>
+<li><p>AllowedSeasons；</p>
+</li>
+<li><p>AllowedTimes；</p>
+</li>
+<li><p>WeatherRules；</p>
+</li>
+<li><p>DifficultyProfile；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>SizeRules；</p>
+</li>
+<li><p>QualityRules；</p>
+</li>
+<li><p>SellPrice；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-钓鱼流程">22.2 钓鱼流程</h2><ol>
+<li><p>验证钓鱼位置；</p>
+</li>
+<li><p>选择鱼池；</p>
+</li>
+<li><p>根据日期、时间和天气生成候选；</p>
+</li>
+<li><p>消耗时间和体力；</p>
+</li>
+<li><p>进入钓鱼交互；</p>
+</li>
+<li><p>根据玩家表现计算成功；</p>
+</li>
+<li><p>生成鱼实例；</p>
+</li>
+<li><p>写入背包或释放；</p>
+</li>
+<li><p>更新图鉴和任务。</p>
+</li>
+</ol>
+<hr />
+<h2 id="223-钓鱼的经营作用">22.3 钓鱼的经营作用</h2><p>钓鱼可以：</p>
+<ul>
+<li><p>提供早期现金；</p>
+</li>
+<li><p>补充烹饪；</p>
+</li>
+<li><p>完成收藏；</p>
+</li>
+<li><p>参与节庆；</p>
+</li>
+<li><p>填补农闲期；</p>
+</li>
+<li><p>提供稀有资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-采矿与地下探索">23. 采矿与地下探索</h2><h2 id="231-minefloordefinition">23.1 MineFloorDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>FloorId；</p>
+</li>
+<li><p>LayoutProfile；</p>
+</li>
+<li><p>RockSpawnRules；</p>
+</li>
+<li><p>OrePool；</p>
+</li>
+<li><p>EnemyProfile；</p>
+</li>
+<li><p>ExitRules；</p>
+</li>
+<li><p>SpecialRoomRules；</p>
+</li>
+<li><p>ResetPolicy；</p>
+</li>
+<li><p>DifficultyRating。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-采矿资源">23.2 采矿资源</h2><p>包括：</p>
+<ul>
+<li><p>石料；</p>
+</li>
+<li><p>铜铁矿；</p>
+</li>
+<li><p>贵金属；</p>
+</li>
+<li><p>宝石；</p>
+</li>
+<li><p>煤；</p>
+</li>
+<li><p>特殊晶体；</p>
+</li>
+<li><p>建筑材料。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-采矿循环">23.3 采矿循环</h2><p>进入矿区
+→ 消耗体力破坏矿石
+→ 获得材料
+→ 寻找下层入口
+→ 管理时间、生命和背包
+→ 在天黑前返回
+→ 用材料升级工具和建设</p>
+<hr />
+<h2 id="234-矿区重置">23.4 矿区重置</h2><p>需要明确：</p>
+<ul>
+<li><p>每日重置；</p>
+</li>
+<li><p>离开重置；</p>
+</li>
+<li><p>检查点保留；</p>
+</li>
+<li><p>层级永久解锁；</p>
+</li>
+<li><p>特殊资源刷新。</p>
+</li>
+</ul>
+<hr />
+<h2 id="235-战斗边界">23.5 战斗边界</h2><p>如果矿区包含战斗，需要与生活循环协调：</p>
+<ul>
+<li><p>战斗消耗时间和体力；</p>
+</li>
+<li><p>装备和食物提供准备；</p>
+</li>
+<li><p>战斗奖励服务工具升级和建设；</p>
+</li>
+<li><p>不让战斗成长完全压倒农业成长。</p>
+</li>
+</ul>
+<hr />
+<h2 id="24-任务与委托系统">24. 任务与委托系统</h2><h2 id="241-questdefinition">24.1 QuestDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>QuestId；</p>
+</li>
+<li><p>QuestType；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>ObjectiveDefinitions；</p>
+</li>
+<li><p>DeadlinePolicy；</p>
+</li>
+<li><p>FailurePolicy；</p>
+</li>
+<li><p>RewardDefinition；</p>
+</li>
+<li><p>RelationshipEffects；</p>
+</li>
+<li><p>WorldEffects；</p>
+</li>
+<li><p>FollowUpQuestIds。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-任务类型">24.2 任务类型</h2><p>包括：</p>
+<ul>
+<li><p>交付作物；</p>
+</li>
+<li><p>特定品质订单；</p>
+</li>
+<li><p>修复设施；</p>
+</li>
+<li><p>寻找物品；</p>
+</li>
+<li><p>帮助NPC；</p>
+</li>
+<li><p>捕获鱼类；</p>
+</li>
+<li><p>矿区探索；</p>
+</li>
+<li><p>节庆准备；</p>
+</li>
+<li><p>社区建设；</p>
+</li>
+<li><p>长期生产合同。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-截止日期">24.3 截止日期</h2><p>任务截止需要明确：</p>
+<ul>
+<li><p>当日结束；</p>
+</li>
+<li><p>指定日期某时刻；</p>
+</li>
+<li><p>季节结束；</p>
+</li>
+<li><p>无期限；</p>
+</li>
+<li><p>错过后转为其他结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="244-季节任务可达性">24.4 季节任务可达性</h2><p>系统必须验证：</p>
+<ul>
+<li><p>所需作物是否仍有足够生长日；</p>
+</li>
+<li><p>种子是否可获得；</p>
+</li>
+<li><p>任务地点是否开放；</p>
+</li>
+<li><p>天气条件是否可能出现；</p>
+</li>
+<li><p>玩家是否有替代获取方式。</p>
+</li>
+</ul>
+<hr />
+<h2 id="245-任务失败">24.5 任务失败</h2><p>失败可以：</p>
+<ul>
+<li><p>无惩罚结束；</p>
+</li>
+<li><p>降低关系；</p>
+</li>
+<li><p>降低声望；</p>
+</li>
+<li><p>转化为后续剧情；</p>
+</li>
+<li><p>允许下季重试。</p>
+</li>
+</ul>
+<p>避免因错过一次季节任务永久锁死主线。</p>
+<hr />
+<h2 id="25-节庆与特殊日期">25. 节庆与特殊日期</h2><h2 id="251-festivaldefinition">25.1 FestivalDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>FestivalId；</p>
+</li>
+<li><p>DateRule；</p>
+</li>
+<li><p>LocationId；</p>
+</li>
+<li><p>EntryTimeWindow；</p>
+</li>
+<li><p>ParticipationRules；</p>
+</li>
+<li><p>ActivityDefinitions；</p>
+</li>
+<li><p>NPCOverrides；</p>
+</li>
+<li><p>RewardRules；</p>
+</li>
+<li><p>WorldEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-节庆职责">25.2 节庆职责</h2><p>节庆可以：</p>
+<ul>
+<li><p>打破日常节奏；</p>
+</li>
+<li><p>集中展示社区关系；</p>
+</li>
+<li><p>提供竞赛；</p>
+</li>
+<li><p>消耗高品质产物；</p>
+</li>
+<li><p>推进角色事件；</p>
+</li>
+<li><p>提供稀有奖励；</p>
+</li>
+<li><p>标记季节阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-节庆进入">25.3 节庆进入</h2><p>需要明确：</p>
+<ul>
+<li><p>是否自动传送；</p>
+</li>
+<li><p>是否允许迟到；</p>
+</li>
+<li><p>当日农场是否继续运行；</p>
+</li>
+<li><p>商店是否关闭；</p>
+</li>
+<li><p>动物是否自动照料；</p>
+</li>
+<li><p>节庆结束时间；</p>
+</li>
+<li><p>是否消耗整天。</p>
+</li>
+</ul>
+<hr />
+<h2 id="254-节庆评分">25.4 节庆评分</h2><p>可以依据：</p>
+<ul>
+<li><p>商品品质；</p>
+</li>
+<li><p>稀有度；</p>
+</li>
+<li><p>多样性；</p>
+</li>
+<li><p>NPC关系；</p>
+</li>
+<li><p>操作小游戏；</p>
+</li>
+<li><p>任务完成度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="255-跳过节庆">25.5 跳过节庆</h2><p>玩家跳过时：</p>
+<ul>
+<li><p>不应破坏日历；</p>
+</li>
+<li><p>NPC日程需要恢复；</p>
+</li>
+<li><p>强制剧情按规则处理；</p>
+</li>
+<li><p>奖励不得重复；</p>
+</li>
+<li><p>次日状态正常生成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-社区建设与世界变化">26. 社区建设与世界变化</h2><h2 id="261-communityprojectdefinition">26.1 CommunityProjectDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ProjectId；</p>
+</li>
+<li><p>ContributionRequirements；</p>
+</li>
+<li><p>MoneyRequirement；</p>
+</li>
+<li><p>PrerequisiteProjects；</p>
+</li>
+<li><p>ConstructionDuration；</p>
+</li>
+<li><p>WorldEffects；</p>
+</li>
+<li><p>NPCScheduleEffects；</p>
+</li>
+<li><p>ShopEffects；</p>
+</li>
+<li><p>RegionUnlockEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-社区项目">26.2 社区项目</h2><p>包括：</p>
+<ul>
+<li><p>修复桥梁；</p>
+</li>
+<li><p>开放交通；</p>
+</li>
+<li><p>重建商店；</p>
+</li>
+<li><p>修复温泉；</p>
+</li>
+<li><p>恢复矿车；</p>
+</li>
+<li><p>建设学校；</p>
+</li>
+<li><p>改造广场；</p>
+</li>
+<li><p>建设温室。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-项目作用">26.3 项目作用</h2><p>社区项目可以改变：</p>
+<ul>
+<li><p>地图连接；</p>
+</li>
+<li><p>商店库存；</p>
+</li>
+<li><p>NPC日程；</p>
+</li>
+<li><p>新区域；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>生产效率；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>结局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="264-项目提交">26.4 项目提交</h2><p>贡献物品需要进入ProjectContributionState，而不是直接销毁后依赖UI记录。</p>
+<p>必须支持：</p>
+<ul>
+<li><p>分批提交；</p>
+</li>
+<li><p>多类别要求；</p>
+</li>
+<li><p>取消策略；</p>
+</li>
+<li><p>完成事务；</p>
+</li>
+<li><p>重复提交保护。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-夜间结算">27. 夜间结算</h2><h2 id="271-dayendsnapshot">27.1 DayEndSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>DateId；</p>
+</li>
+<li><p>PlayerState；</p>
+</li>
+<li><p>FarmTileChanges；</p>
+</li>
+<li><p>CropStates；</p>
+</li>
+<li><p>AnimalStates；</p>
+</li>
+<li><p>ProcessorStates；</p>
+</li>
+<li><p>ConstructionStates；</p>
+</li>
+<li><p>NPCRelationshipDeltas；</p>
+</li>
+<li><p>QuestDeltas；</p>
+</li>
+<li><p>ShippingItems；</p>
+</li>
+<li><p>DailyStatistics；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>SnapshotVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-日终流程">27.2 日终流程</h2><ol>
+<li><p>锁定普通输入；</p>
+</li>
+<li><p>完成或中断当前行动；</p>
+</li>
+<li><p>结算出货；</p>
+</li>
+<li><p>结算作物生长；</p>
+</li>
+<li><p>结算动物；</p>
+</li>
+<li><p>推进加工；</p>
+</li>
+<li><p>推进建筑施工；</p>
+</li>
+<li><p>处理关系和任务；</p>
+</li>
+<li><p>处理邮件和事件；</p>
+</li>
+<li><p>推进日期；</p>
+</li>
+<li><p>生成天气；</p>
+</li>
+<li><p>生成NPC日程；</p>
+</li>
+<li><p>刷新野外资源；</p>
+</li>
+<li><p>恢复玩家状态；</p>
+</li>
+<li><p>写入新日快照；</p>
+</li>
+<li><p>开始次日。</p>
+</li>
+</ol>
+<hr />
+<h2 id="273-结算顺序的重要性">27.3 结算顺序的重要性</h2><p>例如：</p>
+<ul>
+<li><p>当日雨水是否影响当日还是次日生长；</p>
+</li>
+<li><p>季末收获是否先于季节切换；</p>
+</li>
+<li><p>建筑完成是否在次日可用；</p>
+</li>
+<li><p>生日礼物是否在关系事件前结算；</p>
+</li>
+<li><p>出货收入是否可用于次日商店。</p>
+</li>
+</ul>
+<p>顺序必须固定并可测试。</p>
+<hr />
+<h2 id="274-强制昏倒">27.4 强制昏倒</h2><p>玩家超过最晚时间时：</p>
+<ul>
+<li><p>自动结束当前行动；</p>
+</li>
+<li><p>移动到安全地点；</p>
+</li>
+<li><p>应用金钱、体力或关系惩罚；</p>
+</li>
+<li><p>保留已完成行动；</p>
+</li>
+<li><p>执行正常日终结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-存档与持久化">28. 存档与持久化</h2><h2 id="281-savesnapshot">28.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>CalendarRuntimeState；</p>
+</li>
+<li><p>WeatherRuntimeState；</p>
+</li>
+<li><p>PlayerState；</p>
+</li>
+<li><p>FarmTileStates；</p>
+</li>
+<li><p>CropStates；</p>
+</li>
+<li><p>AnimalStates；</p>
+</li>
+<li><p>ToolStates；</p>
+</li>
+<li><p>InventoryStates；</p>
+</li>
+<li><p>ProcessorStates；</p>
+</li>
+<li><p>BuildingStates；</p>
+</li>
+<li><p>NPCStates；</p>
+</li>
+<li><p>RelationshipStates；</p>
+</li>
+<li><p>QuestStates；</p>
+</li>
+<li><p>CommunityProjectStates；</p>
+</li>
+<li><p>ShopStates；</p>
+</li>
+<li><p>WorldFlags；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="282-保存边界">28.2 保存边界</h2><p>适合保存：</p>
+<ul>
+<li><p>每日开始；</p>
+</li>
+<li><p>每日结束；</p>
+</li>
+<li><p>重要建筑完成；</p>
+</li>
+<li><p>工具升级提交；</p>
+</li>
+<li><p>节庆结束；</p>
+</li>
+<li><p>社区项目完成；</p>
+</li>
+<li><p>关系事件完成；</p>
+</li>
+<li><p>手动保存点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="283-日内保存">28.3 日内保存</h2><p>如果支持任意时间保存，需要保存：</p>
+<ul>
+<li><p>当前时间；</p>
+</li>
+<li><p>NPC当前位置和日程；</p>
+</li>
+<li><p>玩家当前行动；</p>
+</li>
+<li><p>场景资源；</p>
+</li>
+<li><p>加工进度；</p>
+</li>
+<li><p>交互锁；</p>
+</li>
+<li><p>临时天气；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="284-日开始存档">28.4 日开始存档</h2><p>只允许睡觉时保存可以显著简化：</p>
+<ul>
+<li><p>NPC状态；</p>
+</li>
+<li><p>场景状态；</p>
+</li>
+<li><p>随机结果；</p>
+</li>
+<li><p>行动事务；</p>
+</li>
+<li><p>资源刷新。</p>
+</li>
+</ul>
+<p>但会提高玩家重做整天的成本。</p>
+<hr />
+<h2 id="285-存档迁移">28.5 存档迁移</h2><p>内容更新时需要稳定ID：</p>
+<ul>
+<li><p>CropId；</p>
+</li>
+<li><p>AnimalId；</p>
+</li>
+<li><p>ItemId；</p>
+</li>
+<li><p>NPCId；</p>
+</li>
+<li><p>BuildingId；</p>
+</li>
+<li><p>QuestId；</p>
+</li>
+<li><p>RecipeId；</p>
+</li>
+<li><p>FestivalId。</p>
+</li>
+</ul>
+<p>删除内容时应：</p>
+<ul>
+<li><p>转换为等价资源；</p>
+</li>
+<li><p>返还投入；</p>
+</li>
+<li><p>移除非法占用；</p>
+</li>
+<li><p>将NPC移动到安全位置；</p>
+</li>
+<li><p>保留存档可用性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-模块通信设计">29. 模块通信设计</h2><h2 id="291-命令">29.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>TillSoil；</p>
+</li>
+<li><p>WaterTile；</p>
+</li>
+<li><p>PlantSeed；</p>
+</li>
+<li><p>HarvestCrop；</p>
+</li>
+<li><p>FeedAnimal；</p>
+</li>
+<li><p>InteractWithAnimal；</p>
+</li>
+<li><p>StartProcessing；</p>
+</li>
+<li><p>CraftItem；</p>
+</li>
+<li><p>PurchaseItem；</p>
+</li>
+<li><p>SubmitOrder；</p>
+</li>
+<li><p>GiveGift；</p>
+</li>
+<li><p>StartConstruction；</p>
+</li>
+<li><p>SelectFestivalActivity；</p>
+</li>
+<li><p>SleepAndEndDay。</p>
+</li>
+</ul>
+<p>命令必须携带：</p>
+<ul>
+<li><p>发起者；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>当前时间；</p>
+</li>
+<li><p>资源版本；</p>
+</li>
+<li><p>世界版本；</p>
+</li>
+<li><p>输入序列；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-同步查询">29.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>当前作物是否可种植；</p>
+</li>
+<li><p>地块是否需要浇水；</p>
+</li>
+<li><p>作物还需几天成熟；</p>
+</li>
+<li><p>动物是否已喂食；</p>
+</li>
+<li><p>NPC当前在哪里；</p>
+</li>
+<li><p>商店是否营业；</p>
+</li>
+<li><p>配方材料是否足够；</p>
+</li>
+<li><p>建筑位置是否合法；</p>
+</li>
+<li><p>任务是否仍可完成；</p>
+</li>
+<li><p>某产品是否值得加工。</p>
+</li>
+</ul>
+<p>查询不能修改状态或推进时间。</p>
+<hr />
+<h2 id="293-领域事件">29.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>TimeAdvanced；</p>
+</li>
+<li><p>DayStarted；</p>
+</li>
+<li><p>DayEnding；</p>
+</li>
+<li><p>SeasonChanged；</p>
+</li>
+<li><p>WeatherChanged；</p>
+</li>
+<li><p>SoilTilled；</p>
+</li>
+<li><p>CropPlanted；</p>
+</li>
+<li><p>CropStageChanged；</p>
+</li>
+<li><p>CropHarvested；</p>
+</li>
+<li><p>AnimalFed；</p>
+</li>
+<li><p>AnimalProductCreated；</p>
+</li>
+<li><p>ItemProcessed；</p>
+</li>
+<li><p>BuildingCompleted；</p>
+</li>
+<li><p>RelationshipChanged；</p>
+</li>
+<li><p>QuestCompleted；</p>
+</li>
+<li><p>FestivalStarted；</p>
+</li>
+<li><p>CommunityProjectCompleted；</p>
+</li>
+<li><p>DayCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-表现事件">29.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>PlayToolAnimation；</p>
+</li>
+<li><p>ShowCropGrowth；</p>
+</li>
+<li><p>PlayAnimalReaction；</p>
+</li>
+<li><p>ShowRelationshipFeedback；</p>
+</li>
+<li><p>PlayConstructionAnimation；</p>
+</li>
+<li><p>DisplayWeatherTransition；</p>
+</li>
+<li><p>ShowDailyIncome；</p>
+</li>
+<li><p>PlayFestivalPresentation；</p>
+</li>
+<li><p>ShowSeasonTitle。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>作物生长；</p>
+</li>
+<li><p>物品生成；</p>
+</li>
+<li><p>关系数值；</p>
+</li>
+<li><p>建筑完成；</p>
+</li>
+<li><p>日历推进。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-失败隔离">30. 失败隔离</h2><h2 id="301-行动事务失败">30.1 行动事务失败</h2><p>如果行动验证后目标发生变化：</p>
+<ul>
+<li><p>不扣除物品；</p>
+</li>
+<li><p>不消耗体力；</p>
+</li>
+<li><p>不推进时间；</p>
+</li>
+<li><p>释放交互锁；</p>
+</li>
+<li><p>返回明确原因。</p>
+</li>
+</ul>
+<p>达到提交节点后的失败，则保留已提交结果并安全结束表现。</p>
+<hr />
+<h2 id="302-作物状态异常">30.2 作物状态异常</h2><p>检测到：</p>
+<ul>
+<li><p>地块不存在；</p>
+</li>
+<li><p>同一地块多个作物；</p>
+</li>
+<li><p>生长阶段越界；</p>
+</li>
+<li><p>非法季节仍生长；</p>
+</li>
+<li><p>收获重复；</p>
+</li>
+</ul>
+<p>时：</p>
+<ul>
+<li><p>以地块占用为权威；</p>
+</li>
+<li><p>隔离异常作物；</p>
+</li>
+<li><p>使用定义重建阶段；</p>
+</li>
+<li><p>防止重复产出；</p>
+</li>
+<li><p>记录生长历史。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-动物日程异常">30.3 动物日程异常</h2><p>动物无法返回建筑时：</p>
+<ul>
+<li><p>移动到最近合法锚点；</p>
+</li>
+<li><p>保留饲养状态；</p>
+</li>
+<li><p>不直接判定失踪或死亡；</p>
+</li>
+<li><p>记录导航和建筑状态；</p>
+</li>
+<li><p>次日重新生成位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-加工机器异常">30.4 加工机器异常</h2><p>机器完成但无法生成产物时：</p>
+<ul>
+<li><p>保留ProcessingTransaction；</p>
+</li>
+<li><p>不重复消耗原料；</p>
+</li>
+<li><p>将机器标记为OutputBlocked；</p>
+</li>
+<li><p>使用同一事务重试；</p>
+</li>
+<li><p>不允许开始下一批加工。</p>
+</li>
+</ul>
+<hr />
+<h2 id="305-建筑施工异常">30.5 建筑施工异常</h2><p>施工目标位置失效时：</p>
+<ul>
+<li><p>保留ConstructionProject；</p>
+</li>
+<li><p>阻止建筑完成；</p>
+</li>
+<li><p>提供重新选址或退款；</p>
+</li>
+<li><p>不创建重叠建筑；</p>
+</li>
+<li><p>不丢失动物和储存物品。</p>
+</li>
+</ul>
+<hr />
+<h2 id="306-npc日程死锁">30.6 NPC日程死锁</h2><p>NPC无合法日程时：</p>
+<ul>
+<li><p>使用住所或工作地点作为保底位置；</p>
+</li>
+<li><p>保留任务和关系；</p>
+</li>
+<li><p>不影响全局时间推进；</p>
+</li>
+<li><p>输出条件过滤结果；</p>
+</li>
+<li><p>次日重新计算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="307-节庆状态异常">30.7 节庆状态异常</h2><p>玩家在节庆期间退出或跳过时：</p>
+<ul>
+<li><p>保存FestivalState；</p>
+</li>
+<li><p>不重复发放参赛奖励；</p>
+</li>
+<li><p>恢复NPC普通日程；</p>
+</li>
+<li><p>正确推进时间；</p>
+</li>
+<li><p>保证次日世界状态一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="308-日终结算失败">30.8 日终结算失败</h2><p>日终属于关键事务。</p>
+<p>需要：</p>
+<ol>
+<li><p>保留日终前快照；</p>
+</li>
+<li><p>按固定步骤执行；</p>
+</li>
+<li><p>记录每个已完成阶段；</p>
+</li>
+<li><p>失败后从最近阶段重试；</p>
+</li>
+<li><p>不重复销售、生产或关系奖励；</p>
+</li>
+<li><p>仅在全部成功后切换日期。</p>
+</li>
+</ol>
+<hr />
+<h2 id="309-任务不可达">30.9 任务不可达</h2><p>持续检测：</p>
+<ul>
+<li><p>所需作物是否已错过播种窗口；</p>
+</li>
+<li><p>任务物品是否存在替代来源；</p>
+</li>
+<li><p>NPC是否可访问；</p>
+</li>
+<li><p>截止日期是否合理；</p>
+</li>
+<li><p>任务区域是否已开放。</p>
+</li>
+</ul>
+<p>主线任务不得依赖不可恢复的季节单点条件。</p>
+<hr />
+<h2 id="31-调试与可观测性">31. 调试与可观测性</h2><h2 id="311-日历调试器">31.1 日历调试器</h2><p>显示：</p>
+<ul>
+<li><p>当前日期；</p>
+</li>
+<li><p>季节；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>当日事件；</p>
+</li>
+<li><p>明日事件；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>商店休息；</p>
+</li>
+<li><p>生日；</p>
+</li>
+<li><p>截止任务；</p>
+</li>
+<li><p>施工完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-地块状态查看器">31.2 地块状态查看器</h2><p>显示：</p>
+<ul>
+<li><p>耕作；</p>
+</li>
+<li><p>湿度；</p>
+</li>
+<li><p>肥力；</p>
+</li>
+<li><p>作物；</p>
+</li>
+<li><p>肥料；</p>
+</li>
+<li><p>灌溉；</p>
+</li>
+<li><p>杂草；</p>
+</li>
+<li><p>季节兼容；</p>
+</li>
+<li><p>当日生长结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-作物生命周期面板">31.3 作物生命周期面板</h2><p>显示：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>阶段持续时间；</p>
+</li>
+<li><p>已浇水天数；</p>
+</li>
+<li><p>漏水天数；</p>
+</li>
+<li><p>成熟日期预测；</p>
+</li>
+<li><p>季节剩余时间；</p>
+</li>
+<li><p>品质来源；</p>
+</li>
+<li><p>枯萎风险。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-动物状态面板">31.4 动物状态面板</h2><p>显示：</p>
+<ul>
+<li><p>年龄；</p>
+</li>
+<li><p>饥饿；</p>
+</li>
+<li><p>健康；</p>
+</li>
+<li><p>心情；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>产品进度；</p>
+</li>
+<li><p>今日照料；</p>
+</li>
+<li><p>建筑状态；</p>
+</li>
+<li><p>天气影响。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-加工队列查看器">31.5 加工队列查看器</h2><p>显示：</p>
+<ul>
+<li><p>机器；</p>
+</li>
+<li><p>输入；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>开始时间；</p>
+</li>
+<li><p>完成时间；</p>
+</li>
+<li><p>输出；</p>
+</li>
+<li><p>阻塞；</p>
+</li>
+<li><p>原料来源；</p>
+</li>
+<li><p>事务ID。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-npc日程查看器">31.6 NPC日程查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前日程；</p>
+</li>
+<li><p>条件；</p>
+</li>
+<li><p>目标位置；</p>
+</li>
+<li><p>移动路径；</p>
+</li>
+<li><p>替代日程；</p>
+</li>
+<li><p>节庆覆盖；</p>
+</li>
+<li><p>任务覆盖；</p>
+</li>
+<li><p>日程选择原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-关系解释器">31.7 关系解释器</h2><p>显示：</p>
+<ul>
+<li><p>当前关系；</p>
+</li>
+<li><p>今日对话；</p>
+</li>
+<li><p>礼物；</p>
+</li>
+<li><p>生日；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>负面行为；</p>
+</li>
+<li><p>最终变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="318-日终结算时间线">31.8 日终结算时间线</h2><p>显示：</p>
+<ul>
+<li><p>出货；</p>
+</li>
+<li><p>作物；</p>
+</li>
+<li><p>动物；</p>
+</li>
+<li><p>加工；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>邮件；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>日期推进。</p>
+</li>
+</ul>
+<hr />
+<h2 id="319-经济分析面板">31.9 经济分析面板</h2><p>统计：</p>
+<ul>
+<li><p>种子成本；</p>
+</li>
+<li><p>每种作物总收入；</p>
+</li>
+<li><p>每格土地收益；</p>
+</li>
+<li><p>每日劳动时间；</p>
+</li>
+<li><p>加工增值；</p>
+</li>
+<li><p>机器占用率；</p>
+</li>
+<li><p>动物收益；</p>
+</li>
+<li><p>现金流；</p>
+</li>
+<li><p>投资回收期。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3110-玩家日程回放">31.10 玩家日程回放</h2><p>记录：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>工具行动；</p>
+</li>
+<li><p>体力；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>物品；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>睡觉。</p>
+</li>
+</ul>
+<p>用于分析：</p>
+<ul>
+<li><p>玩家为何总是来不及；</p>
+</li>
+<li><p>哪些劳动过度重复；</p>
+</li>
+<li><p>哪些区域访问成本过高；</p>
+</li>
+<li><p>哪些系统长期无人使用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-内容验证工具">32. 内容验证工具</h2><h2 id="321-作物可行性验证">32.1 作物可行性验证</h2><p>检查：</p>
+<ul>
+<li><p>种子何时可购买；</p>
+</li>
+<li><p>生长总天数；</p>
+</li>
+<li><p>季节长度；</p>
+</li>
+<li><p>再生周期；</p>
+</li>
+<li><p>任务需求；</p>
+</li>
+<li><p>季末成熟可能性；</p>
+</li>
+<li><p>温室兼容。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-作物经济验证">32.2 作物经济验证</h2><p>统计：</p>
+<ul>
+<li><p>种子成本；</p>
+</li>
+<li><p>生长时间；</p>
+</li>
+<li><p>收获次数；</p>
+</li>
+<li><p>直接售价；</p>
+</li>
+<li><p>加工售价；</p>
+</li>
+<li><p>每日劳动；</p>
+</li>
+<li><p>每格收益；</p>
+</li>
+<li><p>机器占用。</p>
+</li>
+</ul>
+<p>避免存在无条件支配所有作物的唯一最优选择。</p>
+<hr />
+<h2 id="323-npc日程验证">32.3 NPC日程验证</h2><p>批量模拟全年日历，检查：</p>
+<ul>
+<li><p>NPC始终有合法位置；</p>
+</li>
+<li><p>商店营业期间工作人员存在；</p>
+</li>
+<li><p>节庆覆盖正确；</p>
+</li>
+<li><p>关系事件可触发；</p>
+</li>
+<li><p>雨天和冬季日程完整；</p>
+</li>
+<li><p>不存在地点互斥冲突。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-任务可达性验证">32.4 任务可达性验证</h2><p>检查：</p>
+<ul>
+<li><p>前置；</p>
+</li>
+<li><p>日期；</p>
+</li>
+<li><p>季节；</p>
+</li>
+<li><p>物品；</p>
+</li>
+<li><p>NPC；</p>
+</li>
+<li><p>区域；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>截止日期。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-建筑布局验证">32.5 建筑布局验证</h2><p>检查：</p>
+<ul>
+<li><p>占地；</p>
+</li>
+<li><p>入口；</p>
+</li>
+<li><p>导航；</p>
+</li>
+<li><p>动物活动区；</p>
+</li>
+<li><p>自动化覆盖；</p>
+</li>
+<li><p>与边界冲突；</p>
+</li>
+<li><p>移动后内部状态；</p>
+</li>
+<li><p>拆除返还。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-日终确定性验证">32.6 日终确定性验证</h2><p>使用相同日初状态和命令流，验证：</p>
+<ul>
+<li><p>出货结果；</p>
+</li>
+<li><p>作物生长；</p>
+</li>
+<li><p>动物产出；</p>
+</li>
+<li><p>加工完成；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>次日状态；</p>
+</li>
+</ul>
+<p>完全一致。</p>
+<hr />
+<h2 id="327-年度自动模拟">32.7 年度自动模拟</h2><p>自动运行多个年份，统计：</p>
+<ul>
+<li><p>玩家收入曲线；</p>
+</li>
+<li><p>作物选择；</p>
+</li>
+<li><p>动物规模；</p>
+</li>
+<li><p>自动化速度；</p>
+</li>
+<li><p>任务完成率；</p>
+</li>
+<li><p>关系成长；</p>
+</li>
+<li><p>体力瓶颈；</p>
+</li>
+<li><p>土地利用率；</p>
+</li>
+<li><p>季节闲置率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-极端状态测试">32.8 极端状态测试</h2><p>包括：</p>
+<ul>
+<li><p>全农场同时成熟；</p>
+</li>
+<li><p>大量动物；</p>
+</li>
+<li><p>数百加工机器；</p>
+</li>
+<li><p>季末大量未成熟作物；</p>
+</li>
+<li><p>多个建筑同日完成；</p>
+</li>
+<li><p>节庆与主线事件重叠；</p>
+</li>
+<li><p>NPC全部覆盖日程；</p>
+</li>
+<li><p>背包和仓库全部满；</p>
+</li>
+<li><p>日终过程中退出。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-性能设计">33. 性能设计</h2><h2 id="331-日级结算替代每帧更新">33.1 日级结算替代每帧更新</h2><p>以下状态通常不需要每帧计算：</p>
+<ul>
+<li><p>作物生长；</p>
+</li>
+<li><p>动物关系；</p>
+</li>
+<li><p>建筑施工；</p>
+</li>
+<li><p>商店库存；</p>
+</li>
+<li><p>季节资源；</p>
+</li>
+<li><p>订单。</p>
+</li>
+</ul>
+<p>可以在：</p>
+<ul>
+<li><p>日终；</p>
+</li>
+<li><p>日期变化；</p>
+</li>
+<li><p>特定事件；</p>
+</li>
+</ul>
+<p>集中更新。</p>
+<hr />
+<h2 id="332-远端实体低频模拟">33.2 远端实体低频模拟</h2><p>玩家不在农场或城镇时：</p>
+<ul>
+<li><p>作物无需运行完整表现；</p>
+</li>
+<li><p>动物使用日程状态；</p>
+</li>
+<li><p>NPC按时间插值；</p>
+</li>
+<li><p>加工机器按完成时间判断。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-空间索引">33.3 空间索引</h2><p>用于：</p>
+<ul>
+<li><p>工具范围；</p>
+</li>
+<li><p>作物查询；</p>
+</li>
+<li><p>建筑占位；</p>
+</li>
+<li><p>自动化覆盖；</p>
+</li>
+<li><p>动物导航；</p>
+</li>
+<li><p>采集物；</p>
+</li>
+<li><p>场景交互。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-批量工具操作">33.4 批量工具操作</h2><p>升级工具可能一次处理多个地块。</p>
+<p>应采用：</p>
+<ol>
+<li><p>获取范围内地块；</p>
+</li>
+<li><p>批量验证；</p>
+</li>
+<li><p>统一计算体力和时间；</p>
+</li>
+<li><p>分别应用地块结果；</p>
+</li>
+<li><p>合并表现。</p>
+</li>
+</ol>
+<hr />
+<h2 id="335-作物批处理">33.5 作物批处理</h2><p>同类作物每日生长可以：</p>
+<ul>
+<li><p>共享定义；</p>
+</li>
+<li><p>批量读取天气和季节；</p>
+</li>
+<li><p>分别更新实例状态；</p>
+</li>
+<li><p>只对阶段变化作物更新表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="336-npc分层模拟">33.6 NPC分层模拟</h2><h3 id="玩家附近">玩家附近</h3><p>完整导航、动画和交互。</p>
+<h3 id="同场景远处">同场景远处</h3><p>低频导航。</p>
+<h3 id="其他场景">其他场景</h3><p>只维护当前日程条目和预计位置。</p>
+<hr />
+<h2 id="34-可扩展点">34. 可扩展点</h2><h2 id="341-新作物">34.1 新作物</h2><p>主要提供：</p>
+<ul>
+<li><p>CropDefinition；</p>
+</li>
+<li><p>种子；</p>
+</li>
+<li><p>生长阶段；</p>
+</li>
+<li><p>季节；</p>
+</li>
+<li><p>收获物；</p>
+</li>
+<li><p>品质；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<p>不应修改农业主循环。</p>
+<hr />
+<h2 id="342-新动物">34.2 新动物</h2><p>提供：</p>
+<ul>
+<li><p>AnimalDefinition；</p>
+</li>
+<li><p>建筑要求；</p>
+</li>
+<li><p>饲料；</p>
+</li>
+<li><p>产品；</p>
+</li>
+<li><p>成长；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>繁殖；</p>
+</li>
+<li><p>表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="343-新加工设备">34.3 新加工设备</h2><p>提供：</p>
+<ul>
+<li><p>ProcessorDefinition；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>容量；</p>
+</li>
+<li><p>品质转移；</p>
+</li>
+<li><p>资源需求；</p>
+</li>
+<li><p>表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-新npc">34.4 新NPC</h2><p>提供：</p>
+<ul>
+<li><p>NPCDefinition；</p>
+</li>
+<li><p>日程；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>礼物偏好；</p>
+</li>
+<li><p>关系事件；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>商店或职业绑定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="345-新节庆">34.5 新节庆</h2><p>通过：</p>
+<ul>
+<li><p>日期；</p>
+</li>
+<li><p>场地；</p>
+</li>
+<li><p>NPC覆盖；</p>
+</li>
+<li><p>玩法；</p>
+</li>
+<li><p>评分；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+<li><p>世界效果；</p>
+</li>
+</ul>
+<p>接入日历系统。</p>
+<hr />
+<h2 id="346-新区域">34.6 新区域</h2><p>可以加入：</p>
+<ul>
+<li><p>森林；</p>
+</li>
+<li><p>海滩；</p>
+</li>
+<li><p>沙漠；</p>
+</li>
+<li><p>雪山；</p>
+</li>
+<li><p>矿区；</p>
+</li>
+<li><p>岛屿；</p>
+</li>
+<li><p>魔法区域。</p>
+</li>
+</ul>
+<p>每个区域提供不同：</p>
+<ul>
+<li><p>资源；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>鱼类；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>移动成本；</p>
+</li>
+<li><p>生产条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="347-新生活方式">34.7 新生活方式</h2><p>可以扩展：</p>
+<ul>
+<li><p>花卉园艺；</p>
+</li>
+<li><p>酿造；</p>
+</li>
+<li><p>餐厅；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>养蜂；</p>
+</li>
+<li><p>宠物；</p>
+</li>
+<li><p>旅游；</p>
+</li>
+<li><p>学院；</p>
+</li>
+<li><p>考古；</p>
+</li>
+<li><p>魔法农业。</p>
+</li>
+</ul>
+<p>仍应复用：</p>
+<ul>
+<li><p>日历；</p>
+</li>
+<li><p>行动预算；</p>
+</li>
+<li><p>物品；</p>
+</li>
+<li><p>加工；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>NPC；</p>
+</li>
+<li><p>任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-玩家体验设计">35. 玩家体验设计</h2><h2 id="351-玩家必须知道今天有哪些时间敏感事项">35.1 玩家必须知道今天有哪些时间敏感事项</h2><p>每日开始可以提示：</p>
+<ul>
+<li><p>天气；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>生日；</p>
+</li>
+<li><p>订单截止；</p>
+</li>
+<li><p>建筑完成；</p>
+</li>
+<li><p>工具返还；</p>
+</li>
+<li><p>稀有资源；</p>
+</li>
+<li><p>特殊商店。</p>
+</li>
+</ul>
+<p>提示应分级，避免每日信息过载。</p>
+<hr />
+<h2 id="352-作物信息必须支持跨季规划">35.2 作物信息必须支持跨季规划</h2><p>种子界面应显示：</p>
+<ul>
+<li><p>可种植季节；</p>
+</li>
+<li><p>生长天数；</p>
+</li>
+<li><p>再生周期；</p>
+</li>
+<li><p>当前季节剩余天数；</p>
+</li>
+<li><p>预计可收获次数；</p>
+</li>
+<li><p>单价；</p>
+</li>
+<li><p>是否适合温室。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-重复劳动需要逐步被压缩">35.3 重复劳动需要逐步被压缩</h2><p>早期手动浇水能够建立劳动感。</p>
+<p>中后期应通过：</p>
+<ul>
+<li><p>工具升级；</p>
+</li>
+<li><p>洒水器；</p>
+</li>
+<li><p>批量操作；</p>
+</li>
+<li><p>助手；</p>
+</li>
+<li><p>生产模板；</p>
+</li>
+</ul>
+<p>减少重复。</p>
+<hr />
+<h2 id="354-玩家不应因不查攻略而错过全部角色内容">35.4 玩家不应因不查攻略而错过全部角色内容</h2><p>关系事件可以：</p>
+<ul>
+<li><p>提供日记线索；</p>
+</li>
+<li><p>在地图标记；</p>
+</li>
+<li><p>通过NPC对话暗示；</p>
+</li>
+<li><p>放宽时间窗口；</p>
+</li>
+<li><p>错过后允许再次触发。</p>
+</li>
+</ul>
+<hr />
+<h2 id="355-日程信息应具有合理透明度">35.5 日程信息应具有合理透明度</h2><p>玩家需要查找NPC时，可以提供：</p>
+<ul>
+<li><p>已知日程；</p>
+</li>
+<li><p>住宅；</p>
+</li>
+<li><p>工作地点；</p>
+</li>
+<li><p>地图状态；</p>
+</li>
+<li><p>关系解锁追踪能力。</p>
+</li>
+</ul>
+<p>不必一开始显示所有NPC精确坐标，但也不应迫使玩家无目的搜索。</p>
+<hr />
+<h2 id="356-季末需要清晰风险预警">35.6 季末需要清晰风险预警</h2><p>应提示：</p>
+<ul>
+<li><p>作物来不及成熟；</p>
+</li>
+<li><p>季末会枯萎；</p>
+</li>
+<li><p>商店即将更换种子；</p>
+</li>
+<li><p>季节任务即将截止；</p>
+</li>
+<li><p>动物过冬需要设施。</p>
+</li>
+</ul>
+<hr />
+<h2 id="357-生产链需要可比较">35.7 生产链需要可比较</h2><p>机器界面应显示：</p>
+<ul>
+<li><p>输入；</p>
+</li>
+<li><p>输出；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>增值；</p>
+</li>
+<li><p>品质规则；</p>
+</li>
+<li><p>是否需要燃料；</p>
+</li>
+<li><p>当前队列。</p>
+</li>
+</ul>
+<hr />
+<h2 id="358-不同玩法应具有相对可行的经济价值">35.8 不同玩法应具有相对可行的经济价值</h2><p>种植通常是主线，但：</p>
+<ul>
+<li><p>钓鱼；</p>
+</li>
+<li><p>采矿；</p>
+</li>
+<li><p>养殖；</p>
+</li>
+<li><p>加工；</p>
+</li>
+<li><p>采集；</p>
+</li>
+<li><p>任务；</p>
+</li>
+</ul>
+<p>不能长期全部沦为明显低效玩法。</p>
+<hr />
+<h2 id="359-失败压力应保持在生活模拟目标范围内">35.9 失败压力应保持在生活模拟目标范围内</h2><p>可以有：</p>
+<ul>
+<li><p>作物枯萎；</p>
+</li>
+<li><p>错过订单；</p>
+</li>
+<li><p>动物心情下降；</p>
+</li>
+<li><p>资金不足；</p>
+</li>
+<li><p>节庆失败。</p>
+</li>
+</ul>
+<p>但通常不宜频繁造成：</p>
+<ul>
+<li><p>不可逆破产；</p>
+</li>
+<li><p>大规模永久死亡；</p>
+</li>
+<li><p>整季进度清零；</p>
+</li>
+<li><p>主线永久锁死。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-常见设计失败">36. 常见设计失败</h2><h2 id="361-日历只是界面数字">36.1 日历只是界面数字</h2><p>作物、NPC、商店和事件没有真正共享日历。</p>
+<hr />
+<h2 id="362-中后期劳动量随规模线性增长">36.2 中后期劳动量随规模线性增长</h2><p>玩家农场越大，每天重复操作越多，却没有自动化与工具升级。</p>
+<hr />
+<h2 id="363-作物只比较售价">36.3 作物只比较售价</h2><p>忽略：</p>
+<ul>
+<li><p>生长时间；</p>
+</li>
+<li><p>再生；</p>
+</li>
+<li><p>劳动；</p>
+</li>
+<li><p>加工；</p>
+</li>
+<li><p>季节剩余日；</p>
+</li>
+<li><p>机器容量。</p>
+</li>
+</ul>
+<hr />
+<h2 id="364-季节只是更换场景颜色">36.4 季节只是更换场景颜色</h2><p>没有改变经营结构、资源和日程。</p>
+<hr />
+<h2 id="365-npc使用全局瞬移且没有日程逻辑">36.5 NPC使用全局瞬移且没有日程逻辑</h2><p>玩家无法形成对居民生活的认知。</p>
+<hr />
+<h2 id="366-关系系统退化为每日重复送礼">36.6 关系系统退化为每日重复送礼</h2><p>缺乏共同事件、任务和关系阶段。</p>
+<hr />
+<h2 id="367-所有原料加工后都无条件更值钱">36.7 所有原料加工后都无条件更值钱</h2><p>直接出售失去意义，加工成为机械操作。</p>
+<hr />
+<h2 id="368-仓库管理占据大量时间">36.8 仓库管理占据大量时间</h2><p>缺乏自动堆叠、分类、搜索和附近储存读取。</p>
+<hr />
+<h2 id="369-主线任务依赖唯一季节作物">36.9 主线任务依赖唯一季节作物</h2><p>错过后必须等待整年，且没有替代方案。</p>
+<hr />
+<h2 id="3610-节庆强制占用整天但奖励过低">36.10 节庆强制占用整天但奖励过低</h2><p>玩家将节庆视为生产损失。</p>
+<hr />
+<h2 id="3611-自动化完全移除核心决策">36.11 自动化完全移除核心决策</h2><p>玩家后期只需等待机器产出。</p>
+<hr />
+<h2 id="3612-时间流逝规则不一致">36.12 时间流逝规则不一致</h2><p>对话、菜单、制作和场景切换是否耗时没有统一逻辑。</p>
+<hr />
+<h2 id="3613-日终结算顺序不稳定">36.13 日终结算顺序不稳定</h2><p>造成：</p>
+<ul>
+<li><p>季末作物提前死亡；</p>
+</li>
+<li><p>订单重复；</p>
+</li>
+<li><p>建筑完成日期错误；</p>
+</li>
+<li><p>销售重复；</p>
+</li>
+<li><p>天气影响错位。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3614-玩家只能通过最高利润路线完成长期目标">36.14 玩家只能通过最高利润路线完成长期目标</h2><p>装饰、关系、收集和低利润生活方式无法参与最终评价。</p>
+<hr />
+<h2 id="37-最小可行原型">37. 最小可行原型</h2><p>一个能够验证农场经营与生活模拟核心范式的最小原型可以包含：</p>
+<h3 id="日历">日历</h3><ul>
+<li><p>1年；</p>
+</li>
+<li><p>4个季节；</p>
+</li>
+<li><p>每季14至20天；</p>
+</li>
+<li><p>7日一周；</p>
+</li>
+<li><p>4种基础天气；</p>
+</li>
+<li><p>每季1个节庆。</p>
+</li>
+</ul>
+<h3 id="农业">农业</h3><ul>
+<li><p>12种作物；</p>
+</li>
+<li><p>其中4种再生作物；</p>
+</li>
+<li><p>3种肥料；</p>
+</li>
+<li><p>土壤湿度；</p>
+</li>
+<li><p>基础品质；</p>
+</li>
+<li><p>季末枯萎；</p>
+</li>
+<li><p>1座温室。</p>
+</li>
+</ul>
+<h3 id="动物">动物</h3><ul>
+<li><p>鸡；</p>
+</li>
+<li><p>牛；</p>
+</li>
+<li><p>2类动物建筑；</p>
+</li>
+<li><p>饲料；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>产品品质；</p>
+</li>
+<li><p>自动喂食升级。</p>
+</li>
+</ul>
+<h3 id="加工">加工</h3><ul>
+<li><p>蛋黄酱机；</p>
+</li>
+<li><p>奶酪机；</p>
+</li>
+<li><p>果酱机；</p>
+</li>
+<li><p>熔炉；</p>
+</li>
+<li><p>基础烹饪。</p>
+</li>
+</ul>
+<h3 id="npc">NPC</h3><ul>
+<li><p>8至12名居民；</p>
+</li>
+<li><p>基础日程；</p>
+</li>
+<li><p>天气日程；</p>
+</li>
+<li><p>商店日程；</p>
+</li>
+<li><p>礼物偏好；</p>
+</li>
+<li><p>关系事件；</p>
+</li>
+<li><p>生日。</p>
+</li>
+</ul>
+<h3 id="世界内容">世界内容</h3><ul>
+<li><p>农场；</p>
+</li>
+<li><p>小镇；</p>
+</li>
+<li><p>森林；</p>
+</li>
+<li><p>海滩；</p>
+</li>
+<li><p>矿区；</p>
+</li>
+<li><p>2个社区项目；</p>
+</li>
+<li><p>10至15个任务。</p>
+</li>
+</ul>
+<h3 id="成长">成长</h3><ul>
+<li><p>工具升级；</p>
+</li>
+<li><p>房屋扩建；</p>
+</li>
+<li><p>动物建筑；</p>
+</li>
+<li><p>洒水器；</p>
+</li>
+<li><p>储存扩张；</p>
+</li>
+<li><p>新区域解锁。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>CalendarRuntimeState；</p>
+</li>
+<li><p>WeatherRuntimeState；</p>
+</li>
+<li><p>PlayerDailyState；</p>
+</li>
+<li><p>FarmTileState；</p>
+</li>
+<li><p>CropRuntimeState；</p>
+</li>
+<li><p>AnimalRuntimeState；</p>
+</li>
+<li><p>ItemStackState；</p>
+</li>
+<li><p>ProcessorRuntimeState；</p>
+</li>
+<li><p>NPCScheduleState；</p>
+</li>
+<li><p>RelationshipState；</p>
+</li>
+<li><p>QuestState；</p>
+</li>
+<li><p>ConstructionProject；</p>
+</li>
+<li><p>DayEndSnapshot；</p>
+</li>
+<li><p>SaveSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>日历调试器；</p>
+</li>
+<li><p>地块状态查看器；</p>
+</li>
+<li><p>作物生命周期面板；</p>
+</li>
+<li><p>动物状态面板；</p>
+</li>
+<li><p>加工队列；</p>
+</li>
+<li><p>NPC日程查看器；</p>
+</li>
+<li><p>关系解释器；</p>
+</li>
+<li><p>日终时间线；</p>
+</li>
+<li><p>经济分析面板；</p>
+</li>
+<li><p>玩家日程回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>每日时间和体力是否形成真实取舍；</p>
+</li>
+<li><p>作物是否需要跨日和跨季规划；</p>
+</li>
+<li><p>农场扩大后是否产生可理解的劳动压力；</p>
+</li>
+<li><p>工具和自动化是否能逐步解除重复劳动；</p>
+</li>
+<li><p>加工和直售是否各有适用场景；</p>
+</li>
+<li><p>NPC日程是否能形成稳定生活感；</p>
+</li>
+<li><p>生产、任务和关系是否相互连接；</p>
+</li>
+<li><p>季节变化是否迫使玩家调整经营方式；</p>
+</li>
+<li><p>日终结算是否确定且不会重复；</p>
+</li>
+<li><p>多种生活方式是否都能参与长期进度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-推荐实施顺序">38. 推荐实施顺序</h2><p>第一阶段：日历、时间与每日状态
+第二阶段：玩家行动、体力与工具
+第三阶段：农场地块、播种和作物生长
+第四阶段：物品、库存、储存和出货
+第五阶段：经济、商店和基础订单
+第六阶段：动物、建筑和产品
+第七阶段：加工、制作和烹饪
+第八阶段：NPC日程、对话和关系
+第九阶段：任务、节庆和社区项目
+第十阶段：采集、钓鱼和矿区
+第十一阶段：自动化、农场扩建和长期目标
+第十二阶段：存档迁移、自动模拟和内容验证</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量作物和NPC：</p>
+<ul>
+<li><p>日历；</p>
+</li>
+<li><p>时间推进；</p>
+</li>
+<li><p>日终结算；</p>
+</li>
+<li><p>作物生命周期；</p>
+</li>
+<li><p>库存事务；</p>
+</li>
+<li><p>NPC日程；</p>
+</li>
+<li><p>建筑施工；</p>
+</li>
+<li><p>稳定ID；</p>
+</li>
+<li><p>存档版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-架构验收标准">39. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>所有日期、季节和时间由统一日历系统管理；</p>
+</li>
+<li><p>天气、商店、NPC、作物和节庆共享同一日期上下文；</p>
+</li>
+<li><p>玩家行动统一经过时间、体力、工具和资源验证；</p>
+</li>
+<li><p>行动失败不会产生重复扣除或时间错位；</p>
+</li>
+<li><p>每个农场地块具有稳定状态和唯一占用关系；</p>
+</li>
+<li><p>作物能够按水分、季节和阶段稳定生长；</p>
+</li>
+<li><p>季节结束能够正确处理跨季和不兼容作物；</p>
+</li>
+<li><p>动物拥有饥饿、健康、关系和产品周期；</p>
+</li>
+<li><p>加工机器通过可恢复事务消耗原料并生成产物；</p>
+</li>
+<li><p>物品在背包、箱子、机器和出货箱之间保持唯一归属；</p>
+</li>
+<li><p>工具升级期间不会造成主线死锁；</p>
+</li>
+<li><p>NPC能够根据日期、天气、任务和关系选择合法日程；</p>
+</li>
+<li><p>商店营业和NPC工作状态保持一致；</p>
+</li>
+<li><p>关系变化能够追踪对话、礼物、任务和事件来源；</p>
+</li>
+<li><p>任务系统能够验证季节与物品可达性；</p>
+</li>
+<li><p>建筑施工、完成和移动采用原子状态变更；</p>
+</li>
+<li><p>自动化能够减少重复劳动而不替代全部经营决策；</p>
+</li>
+<li><p>日终结算采用固定顺序并具有幂等性；</p>
+</li>
+<li><p>相同日初状态和玩家命令能够产生相同次日状态；</p>
+</li>
+<li><p>存档能够恢复日期、农场、NPC、加工和任务；</p>
+</li>
+<li><p>调试工具能够解释作物为何未生长、NPC为何不在预期位置；</p>
+</li>
+<li><p>新作物、新动物和新NPC通常不需要修改主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-可迁移到其他游戏的设计思想">40. 可迁移到其他游戏的设计思想</h2><h2 id="401-日历可以作为跨系统内容调度器">40.1 日历可以作为跨系统内容调度器</h2><p>可迁移到：</p>
+<ul>
+<li><p>RPG；</p>
+</li>
+<li><p>经营游戏；</p>
+</li>
+<li><p>社交模拟；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>活动系统。</p>
+</li>
+</ul>
+<p>日期不只是显示信息，还可以统一驱动：</p>
+<ul>
+<li><p>内容开放；</p>
+</li>
+<li><p>角色日程；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>环境；</p>
+</li>
+<li><p>世界变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="402-延迟收益能够自然产生规划">40.2 延迟收益能够自然产生规划</h2><p>可迁移到：</p>
+<ul>
+<li><p>建筑；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>制造；</p>
+</li>
+<li><p>训练；</p>
+</li>
+<li><p>投资；</p>
+</li>
+<li><p>孵化。</p>
+</li>
+</ul>
+<p>投入和产出之间存在时间差时，玩家需要预测未来资源。</p>
+<hr />
+<h2 id="403-规模增长必须伴随劳动组织升级">40.3 规模增长必须伴随劳动组织升级</h2><p>可迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>军队；</p>
+</li>
+<li><p>公会；</p>
+</li>
+<li><p>基地；</p>
+</li>
+<li><p>项目管理。</p>
+</li>
+</ul>
+<p>规模扩大后，应通过：</p>
+<ul>
+<li><p>自动化；</p>
+</li>
+<li><p>模板；</p>
+</li>
+<li><p>委派；</p>
+</li>
+<li><p>批量操作；</p>
+</li>
+</ul>
+<p>降低重复维护。</p>
+<hr />
+<h2 id="404-稳定循环需要周期性变化避免机械化">40.4 稳定循环需要周期性变化避免机械化</h2><p>可迁移到：</p>
+<ul>
+<li><p>日常任务；</p>
+</li>
+<li><p>赛季；</p>
+</li>
+<li><p>战斗波次；</p>
+</li>
+<li><p>经营周期；</p>
+</li>
+<li><p>教学。</p>
+</li>
+</ul>
+<p>固定框架提供熟悉感，周期事件提供变化。</p>
+<hr />
+<h2 id="405-资源价值取决于多种用途而非单一售价">40.5 资源价值取决于多种用途而非单一售价</h2><p>可迁移到：</p>
+<ul>
+<li><p>战利品；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>战略资源；</p>
+</li>
+<li><p>任务物品。</p>
+</li>
+</ul>
+<p>物品可以同时用于：</p>
+<ul>
+<li><p>出售；</p>
+</li>
+<li><p>强化；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>转化；</p>
+</li>
+<li><p>收藏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="406-npc日程使角色成为世界居民而非功能按钮">40.6 NPC日程使角色成为世界居民而非功能按钮</h2><p>可迁移到：</p>
+<ul>
+<li><p>开放世界；</p>
+</li>
+<li><p>RPG；</p>
+</li>
+<li><p>潜行；</p>
+</li>
+<li><p>城市模拟；</p>
+</li>
+<li><p>侦探游戏。</p>
+</li>
+</ul>
+<p>NPC的位置和行为应由：</p>
+<ul>
+<li><p>时间；</p>
+</li>
+<li><p>工作；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>关系；</p>
+</li>
+</ul>
+<p>共同决定。</p>
+<hr />
+<h2 id="407-日终结算适合集中处理低频系统">40.7 日终结算适合集中处理低频系统</h2><p>可迁移到：</p>
+<ul>
+<li><p>回合制经营；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>模拟游戏；</p>
+</li>
+<li><p>资源刷新。</p>
+</li>
+</ul>
+<p>低频状态可以在稳定边界统一结算，降低并发和存档复杂度。</p>
+<hr />
+<h2 id="408-自动化的价值是释放注意力">40.8 自动化的价值是释放注意力</h2><p>可迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>管理系统。</p>
+</li>
+</ul>
+<p>自动化不只提高产量，更重要的是让玩家从低价值重复操作转向高层决策。</p>
+<hr />
+<h2 id="409-季节变化是一种结构性规则切换">40.9 季节变化是一种结构性规则切换</h2><p>可迁移到：</p>
+<ul>
+<li><p>赛季；</p>
+</li>
+<li><p>战争阶段；</p>
+</li>
+<li><p>环境灾害；</p>
+</li>
+<li><p>市场周期；</p>
+</li>
+<li><p>Roguelike区域。</p>
+</li>
+</ul>
+<p>阶段变化应改变：</p>
+<ul>
+<li><p>可用内容；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>策略；</p>
+</li>
+<li><p>风险；</p>
+</li>
+<li><p>最优选择。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4010-多路线长期目标可以保护玩家表达">40.10 多路线长期目标可以保护玩家表达</h2><p>可迁移到：</p>
+<ul>
+<li><p>沙盒；</p>
+</li>
+<li><p>模拟经营；</p>
+</li>
+<li><p>RPG；</p>
+</li>
+<li><p>生活游戏；</p>
+</li>
+<li><p>开放世界。</p>
+</li>
+</ul>
+<p>最终评价可以承认：</p>
+<ul>
+<li><p>财富；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>建设；</p>
+</li>
+<li><p>收藏；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>创作；</p>
+</li>
+</ul>
+<p>等不同投入方式。</p>
+<hr />
+<h2 id="41-本次防重记录">41. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>农场经营与生活模拟游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Farming Simulation；</p>
+</li>
+<li><p>Life Simulation；</p>
+</li>
+<li><p>Farm Life Simulation；</p>
+</li>
+<li><p>农场经营模拟；</p>
+</li>
+<li><p>乡村生活模拟；</p>
+</li>
+<li><p>日历式生活经营游戏。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>将玩家长期生活组织为由日、周、季节和年份构成的周期性日历；玩家每天使用有限时间、体力、土地和资金，在种植、养殖、加工、建设、探索与社交之间分配劳动。作物、动物、加工、商店、NPC、天气、节庆和任务均依赖统一时间推进，使短期行动逐步沉淀为农场资产、稳定生产链、社区关系和个性化生活方式，并通过工具升级与自动化逐步将玩家从重复劳动提升到长期经营决策。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>游戏以每日生活循环和季节周期为主要节奏；</p>
+</li>
+<li><p>时间与体力共同限制玩家每日行动；</p>
+</li>
+<li><p>作物需要经历播种、照料、生长和收获周期；</p>
+</li>
+<li><p>动物需要持续喂养、互动并产生周期性产品；</p>
+</li>
+<li><p>农场扩大后会增加劳动、加工和储存压力；</p>
+</li>
+<li><p>工具升级和自动化逐步减少重复劳动；</p>
+</li>
+<li><p>原料可以用于直售、加工、烹饪、礼物和任务；</p>
+</li>
+<li><p>NPC具有受日期、天气、工作和事件影响的日程；</p>
+</li>
+<li><p>社交关系能够解锁配方、商店、任务和生活结果；</p>
+</li>
+<li><p>季节更替会改变作物、天气、资源、日程和活动；</p>
+</li>
+<li><p>节庆和特殊日期打破稳定日常节奏；</p>
+</li>
+<li><p>建筑和社区项目能够持续改变世界功能；</p>
+</li>
+<li><p>日终结算统一推进作物、动物、加工、施工和关系；</p>
+</li>
+<li><p>长期目标能够兼容生产、社交、探索、装饰等不同生活方式；</p>
+</li>
+<li><p>存档必须同时恢复日期、农场、NPC日程和生产事务。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>世界日历；</p>
+</li>
+<li><p>每日时间和体力；</p>
+</li>
+<li><p>天气与季节；</p>
+</li>
+<li><p>农场地块；</p>
+</li>
+<li><p>土壤湿度；</p>
+</li>
+<li><p>作物生长阶段；</p>
+</li>
+<li><p>再生作物；</p>
+</li>
+<li><p>作物品质；</p>
+</li>
+<li><p>动物饲养；</p>
+</li>
+<li><p>动物产品；</p>
+</li>
+<li><p>工具升级；</p>
+</li>
+<li><p>物品和储存；</p>
+</li>
+<li><p>加工机器；</p>
+</li>
+<li><p>制作与烹饪；</p>
+</li>
+<li><p>出货箱；</p>
+</li>
+<li><p>市场和订单；</p>
+</li>
+<li><p>NPC日程；</p>
+</li>
+<li><p>礼物与关系；</p>
+</li>
+<li><p>建筑施工；</p>
+</li>
+<li><p>农场自动化；</p>
+</li>
+<li><p>野外采集；</p>
+</li>
+<li><p>钓鱼；</p>
+</li>
+<li><p>采矿；</p>
+</li>
+<li><p>节庆；</p>
+</li>
+<li><p>社区项目；</p>
+</li>
+<li><p>日终结算；</p>
+</li>
+<li><p>年度自动模拟。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>农场种植系统；</p>
+</li>
+<li><p>作物生长系统；</p>
+</li>
+<li><p>农场浇水系统；</p>
+</li>
+<li><p>农场动物系统；</p>
+</li>
+<li><p>农产品加工；</p>
+</li>
+<li><p>农场自动化；</p>
+</li>
+<li><p>农场工具升级；</p>
+</li>
+<li><p>农场季节系统；</p>
+</li>
+<li><p>生活模拟日历；</p>
+</li>
+<li><p>NPC日程系统；</p>
+</li>
+<li><p>生活模拟送礼；</p>
+</li>
+<li><p>农场商店与出货；</p>
+</li>
+<li><p>农场建筑扩建；</p>
+</li>
+<li><p>农场节庆；</p>
+</li>
+<li><p>农场社区建设；</p>
+</li>
+<li><p>农场钓鱼；</p>
+</li>
+<li><p>农场矿区；</p>
+</li>
+<li><p>农场任务系统；</p>
+</li>
+<li><p>农场日终结算；</p>
+</li>
+<li><p>农场经济平衡。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

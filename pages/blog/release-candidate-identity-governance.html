@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/release-candidate-identity-governance.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="候选版本身份治理：发布冻结、失效判定与主线回退 | IrisSakura">
+    <meta property="og:description" content="一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/release-candidate-identity-governance.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-release-candidate-identity-governance.png">
+    <meta property="og:image:alt" content="候选版本身份治理：发布冻结、失效判定与主线回退 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="候选版本身份治理：发布冻结、失效判定与主线回退 | IrisSakura">
+    <meta name="twitter:description" content="一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-release-candidate-identity-governance.png">
+    <meta name="twitter:image:alt" content="候选版本身份治理：发布冻结、失效判定与主线回退 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"候选版本身份治理：发布冻结、失效判定与主线回退 | IrisSakura","description":"一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？","url":"https://irissakura.github.io/pages/blog/release-candidate-identity-governance.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"候选版本身份治理：发布冻结、失效判定与主线回退","image":"https://irissakura.github.io/assets/social/pages-blog-release-candidate-identity-governance.png","datePublished":"2026-08-07","dateModified":"2026-08-07","about":["essay"]}</script>
+    <!-- site-meta:end -->
+    <title>候选版本身份治理：发布冻结、失效判定与主线回退 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/large-unity-framework-governance.html">大型 Unity 框架的治理复盘</a> · 发布于 2026-08-07 · 更新于 2026-08-07</p>
+            <h1>候选版本身份治理：发布冻结、失效判定与主线回退</h1>
+            <p class="blog-deck">一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？</p>
+            <div class="note-tags"><a href="tag/essay.html">essay</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>项目准备进入发布阶段时，团队通常会选择一个提交作为候选版本。</p>
+<p>接下来，CI 围绕这份候选执行：</p>
+<ul>
+<li>构建；</li>
+<li>单元测试；</li>
+<li>Unity 测试；</li>
+<li>Player 验证；</li>
+<li>API 兼容检查；</li>
+<li>消费项目演练；</li>
+<li>性能比较；</li>
+<li>制品组装；</li>
+<li>发布前检查。</li>
+</ul>
+<p>验证过程中，团队发现了问题。</p>
+<p>问题可能发生在：</p>
+<ul>
+<li>消费闭包缺少必要包；</li>
+<li>Sample 清理不完整；</li>
+<li>Testbed 残留旧资源；</li>
+<li>构建脚本无法保留失败制品；</li>
+<li>候选安装路径无法在干净项目中运行；</li>
+<li>测试进程可能永久挂起。</li>
+</ul>
+<p>维护者随后把修复合入主分支。</p>
+<p>此时最容易出现一种错误判断：</p>
+<blockquote>
+<p>问题已经修复，可以继续验证原来的候选。</p>
+</blockquote>
+<p>但如果候选是一个固定提交，后续修复并不存在于候选代码中。</p>
+<p>继续验证原候选，只能继续证明旧问题仍然存在；临时从主分支借用修复，又会破坏候选和证据之间的身份一致性。</p>
+<p>候选版本治理首先不是测试数量问题，而是身份问题。</p>
+<h2 id="先说结论候选版本是一份不可变对象不是不断追赶主分支的名称">先说结论：候选版本是一份不可变对象，不是不断追赶主分支的名称</h2><p><strong>候选版本身份（即“这次究竟准备交付哪份代码”）</strong>：由不可变提交、源码树、构建配置和预期产物共同确定的发布候选对象。</p>
+<p>候选版本一旦选定，至少应绑定：</p>
+<ul>
+<li>Commit SHA；</li>
+<li>Git Tree Hash；</li>
+<li>版本号或候选编号；</li>
+<li>构建配置；</li>
+<li>依赖锁定信息；</li>
+<li>目标平台；</li>
+<li>证据要求；</li>
+<li>预期产物清单。</li>
+</ul>
+<p>候选名称不能只表示一种意图，例如：</p>
+<pre><code class="language-text">当前准备发布的 main
+</code></pre>
+<p>因为 <code>main</code> 会继续变化。</p>
+<p>更可靠的表达是：</p>
+<pre><code class="language-text">Candidate C
+→ 固定提交 S
+→ 固定源码树 T
+→ 固定构建合同 B
+→ 固定证据集合 E
+</code></pre>
+<p>任何验证结论都必须能够回答：</p>
+<blockquote>
+<p>它验证的是不是这份候选？</p>
+</blockquote>
+<h2 id="工作分支候选版本和发布产物是三种不同身份">工作分支、候选版本和发布产物是三种不同身份</h2><p>大型项目中至少同时存在三类代码身份。</p>
+<table>
+<thead>
+<tr>
+<th>身份</th>
+<th>主要用途</th>
+<th>是否允许变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发主线</td>
+<td>持续合入功能、修复和文档</td>
+<td>允许持续变化</td>
+</tr>
+<tr>
+<td>发布候选</td>
+<td>接受资格验证的固定源码状态</td>
+<td>不允许静默变化</td>
+</tr>
+<tr>
+<td>发布产物</td>
+<td>由候选生成的可分发制品</td>
+<td>生成后不可变</td>
+</tr>
+</tbody></table>
+<p>三者之间应形成单向关系：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["开发主线 HEAD"] --&gt;|"显式选择"| B["不可变 Candidate"]
+    B --&gt;|"同身份验证"| C["Candidate Evidence"]
+    B --&gt;|"确定性构建"| D["Candidate Artifacts"]
+    C --&gt; E{"资格是否满足"}
+    D --&gt; E
+    E --&gt;|"满足"| F["Release"]
+    E --&gt;|"不满足"| G["Failed 或 Superseded"]
+</code></pre>
+<p>开发主线可以在候选产生之后继续前进。</p>
+<p>但这些后续提交不会自动进入候选。</p>
+<p>如果团队希望新修复进入交付对象，就必须选择新的候选身份，而不是继续沿用旧候选名称。</p>
+<h2 id="same-sha-的意义是防止证据与交付对象分离">Same-SHA 的意义是防止证据与交付对象分离</h2><p><strong>同提交证据（即“证明和交付使用同一份代码”）</strong>：测试、构建、制品组装和发布判断全部绑定到同一个不可变提交。</p>
+<p>假设流程如下：</p>
+<pre><code class="language-text">提交 A
+→ Unity 测试通过
+→ Player 构建通过
+
+提交 B
+→ 修复消费项目
+→ 准备发布 B
+</code></pre>
+<p>提交 A 的证据不能直接证明提交 B。</p>
+<p>即使 B 只修改了一个看似简单的脚本，它仍可能改变：</p>
+<ul>
+<li>包闭包；</li>
+<li>构建参数；</li>
+<li>Sample；</li>
+<li>Testbed；</li>
+<li>Player 内容；</li>
+<li>制品结构；</li>
+<li>安装流程。</li>
+</ul>
+<p>反过来也一样。</p>
+<p>如果候选固定在 A，却在执行验证时从 B 借用测试脚本或修复文件，验证对象就不再清晰：</p>
+<pre><code class="language-text">源码来自 A
+测试工具来自 B
+消费脚本来自 B
+制品部分来自 A
+</code></pre>
+<p>最终团队无法回答：</p>
+<ul>
+<li>测试通过的是哪一份系统；</li>
+<li>修复是否真实存在于交付产物；</li>
+<li>用户安装后是否会遇到已知问题；</li>
+<li>失败应该归因于候选还是验证基础设施。</li>
+</ul>
+<p>Same-SHA 不是形式主义。</p>
+<p>它用于保证：</p>
+<blockquote>
+<p>被证明的对象，就是准备交付的对象。</p>
+</blockquote>
+<h2 id="后续提交不会自动使候选失效但关键路径修改会">后续提交不会自动使候选失效，但关键路径修改会</h2><p>候选选定后，主分支出现新提交是正常现象。</p>
+<p>不是每一个新提交都必须废弃候选。</p>
+<p>例如，以下变化通常可以经过评估后认定不影响候选：</p>
+<ul>
+<li>与发布内容无关的研究文档；</li>
+<li>未来版本设计稿；</li>
+<li>不参与候选构建的内部工具；</li>
+<li>不影响公开产物的拼写修正；</li>
+<li>与候选平台无关的实验分支材料。</li>
+</ul>
+<p>真正需要判断的是：</p>
+<blockquote>
+<p>后续变化是否修改了候选资格结论所依赖的事实？</p>
+</blockquote>
+<p><strong>候选失效条件（即“旧候选已经不值得继续验”）</strong>：候选选定后，出现了会改变其可构建性、可消费性、正确性、安全性或证据有效性的相关变化。</p>
+<p>常见失效路径包括：</p>
+<table>
+<thead>
+<tr>
+<th>修改范围</th>
+<th>失效原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>候选构建脚本</td>
+<td>旧候选无法使用修复后的构建流程</td>
+</tr>
+<tr>
+<td>消费项目或 Walkthrough</td>
+<td>原候选的真实接入路径仍然失败</td>
+</tr>
+<tr>
+<td>Testbed 与 Fixture</td>
+<td>旧证据环境存在已确认缺陷</td>
+</tr>
+<tr>
+<td>Stable Profile 或包闭包</td>
+<td>候选安装内容与当前合同不一致</td>
+</tr>
+<tr>
+<td>发布校验器</td>
+<td>旧验证结果不能满足修正后的判定规则</td>
+</tr>
+<tr>
+<td>安全、数据损坏或恢复修复</td>
+<td>继续交付旧候选风险不可接受</td>
+</tr>
+<tr>
+<td>Player 或平台修复</td>
+<td>候选产物仍包含已知平台问题</td>
+</tr>
+<tr>
+<td>API 或协议修复</td>
+<td>候选与实际消费合同不一致</td>
+</tr>
+</tbody></table>
+<p>候选失效应由规则判断，而不是由维护者凭印象决定。</p>
+<h2 id="候选应该拥有显式状态机">候选应该拥有显式状态机</h2><p>候选状态不应只有“正在准备”和“发布完成”。</p>
+<p>更完整的状态可以包括：</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Proposed
+    Proposed --&gt; Frozen: 显式选择提交
+    Frozen --&gt; Qualifying: 开始生成证据
+    Qualifying --&gt; Qualified: 所需证据满足
+    Qualifying --&gt; Failed: 候选自身不满足要求
+    Frozen --&gt; Superseded: 关键后续修复使身份过时
+    Qualifying --&gt; Superseded: 验证期间候选被后续修复取代
+    Qualified --&gt; Released: 产物身份和发布条件满足
+    Qualified --&gt; Superseded: 发布前发现必须纳入的修复
+    Failed --&gt; [*]
+    Superseded --&gt; [*]
+    Released --&gt; [*]
+</code></pre>
+<p>其中最重要的区别是：</p>
+<ul>
+<li><code>Failed</code>：候选接受验证后，明确不满足要求；</li>
+<li><code>Superseded</code>：候选已经被更新的必要代码取代，不再值得继续验证。</li>
+</ul>
+<p>两者不能混为一谈。</p>
+<p>旧候选被后续关键修复取代，不代表项目失败。</p>
+<p>它只表示：</p>
+<blockquote>
+<p>当前交付对象已经发生变化，原证据链应该停止。</p>
+</blockquote>
+<h2 id="superseded-不是删除历史而是结束错误方向">Superseded 不是删除历史，而是结束错误方向</h2><p>候选失效后，团队常见的错误动作有两种。</p>
+<h3 id="错误一删除失败记录">错误一：删除失败记录</h3><p>为了让下一次候选看起来干净，维护者删除旧 Attempt、日志和失败说明。</p>
+<p>这样会丢失：</p>
+<ul>
+<li>问题首次出现的位置；</li>
+<li>哪个验证发现了问题；</li>
+<li>为什么需要选择新候选；</li>
+<li>新候选应该特别复验什么；</li>
+<li>同类问题是否反复发生。</li>
+</ul>
+<h3 id="错误二继续执行旧候选的全部验证">错误二：继续执行旧候选的全部验证</h3><p>团队认为已经投入了大量 CI 成本，希望先把旧候选流程“跑完”。</p>
+<p>但如果关键修复不在候选中，这些结果很难再支持交付决策。</p>
+<p>正确做法是：</p>
+<ol>
+<li>保留旧候选身份；</li>
+<li>保留已经生成的证据；</li>
+<li>记录失效原因；</li>
+<li>将状态标记为 <code>superseded</code>；</li>
+<li>停止剩余高成本资格化；</li>
+<li>不自动选择新候选；</li>
+<li>在未来真正需要交付时，显式选择新的固定提交。</li>
+</ol>
+<p>历史记录的价值在于解释演进，不在于强行把每次 Attempt 推到终点。</p>
+<h2 id="发布冻结不是让整个仓库停止开发">发布冻结不是让整个仓库停止开发</h2><p><strong>发布冻结（即“固定交付对象，不再偷偷换内容”）</strong>：确定候选后，限制进入该候选的变化，并要求所有修改通过显式失效、重选或例外流程处理。</p>
+<p>冻结不一定意味着：</p>
+<ul>
+<li>主分支停止合并；</li>
+<li>所有新功能都暂停；</li>
+<li>文档不得更新；</li>
+<li>其他实验分支不得继续；</li>
+<li>团队只能处理发布事项。</li>
+</ul>
+<p>它真正冻结的是候选身份。</p>
+<p>团队可以采用两种基本策略。</p>
+<h3 id="策略一主线冻结">策略一：主线冻结</h3><p>适合发布周期短、团队规模较小的项目：</p>
+<pre><code class="language-text">main
+→ 暂停普通功能
+→ 只接收候选阻断修复
+→ 修复后重选 Candidate
+→ 发布后解除冻结
+</code></pre>
+<h3 id="策略二发布旁路">策略二：发布旁路</h3><p>适合主线仍需持续开发的项目：</p>
+<pre><code class="language-text">main
+→ 持续开发收敛
+
+release candidate
+→ 固定提交
+→ 独立资格验证
+→ 只通过显式方式接受必要修复
+</code></pre>
+<p>无论采用哪种方式，都不能让候选一边声明不可变，一边持续从主线吸收未登记修改。</p>
+<h2 id="发布准备应是限时旁路而不是永久占据项目主线">发布准备应是限时旁路，而不是永久占据项目主线</h2><p>大型框架通常长期处于能力建设、整合和验证阶段。</p>
+<p>发布准备与持续开发的目标不同：</p>
+<table>
+<thead>
+<tr>
+<th>开发收敛</th>
+<th>发布准备</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>完善能力</td>
+<td>固定范围</td>
+</tr>
+<tr>
+<td>允许调整 API</td>
+<td>控制变化</td>
+</tr>
+<tr>
+<td>扩充消费证据</td>
+<td>资格化固定对象</td>
+</tr>
+<tr>
+<td>修复架构边界</td>
+<td>只处理发布阻断</td>
+</tr>
+<tr>
+<td>面向未来设计</td>
+<td>面向当前交付</td>
+</tr>
+</tbody></table>
+<p>如果项目实际仍在快速修复消费闭包、Testbed 和 Sample，却把发布准备设为唯一 Active 工作，就会产生冲突：</p>
+<ul>
+<li>修复是否允许进入候选；</li>
+<li>新能力验证是否属于发布；</li>
+<li>失败是能力问题还是候选问题；</li>
+<li>主分支是否应停止；</li>
+<li>自动化 Agent 应继续开发还是继续 RC；</li>
+<li>README、计划和机器状态应该相信哪一个。</li>
+</ul>
+<p><strong>发布旁路（即“临时进入交付模式”）</strong>：由维护者显式启动、绑定固定候选、拥有明确退出条件的限时工作模式。</p>
+<p>合理的发布旁路至少应定义：</p>
+<ul>
+<li>启动人或批准来源；</li>
+<li>候选身份；</li>
+<li>允许的修改类型；</li>
+<li>所需证据；</li>
+<li>最大持续时间；</li>
+<li>失效条件；</li>
+<li>退出条件；</li>
+<li>回到开发主线的方式。</li>
+</ul>
+<p>发布旁路完成或失效后，应主动退出。</p>
+<p>它不应该因为状态文件没有更新，而无限期占据项目主线。</p>
+<h2 id="功能蔓延和必要修复必须分开处理">功能蔓延和必要修复必须分开处理</h2><p>候选期间出现新需求时，维护者需要区分三类变化。</p>
+<h3 id="候选阻断修复">候选阻断修复</h3><p>不修复就无法正确交付：</p>
+<ul>
+<li>数据损坏；</li>
+<li>安全问题；</li>
+<li>安装失败；</li>
+<li>关键平台崩溃；</li>
+<li>候选消费闭包错误；</li>
+<li>测试基础设施无法得到可信结果。</li>
+</ul>
+<p>处理方式：</p>
+<pre><code class="language-text">旧 Candidate 标记 Superseded
+→ 修复进入开发主线
+→ 重新评估是否选择新 Candidate
+</code></pre>
+<h3 id="候选质量改进">候选质量改进</h3><p>有价值，但不影响当前候选基本正确性：</p>
+<ul>
+<li>更详细诊断；</li>
+<li>更快构建；</li>
+<li>更好的编辑器提示；</li>
+<li>非关键性能优化；</li>
+<li>文档体验改善。</li>
+</ul>
+<p>处理方式：</p>
+<ul>
+<li>默认进入下一版本；</li>
+<li>除非维护者明确认定为本次交付要求，否则不重选候选。</li>
+</ul>
+<h3 id="新功能或范围扩大">新功能或范围扩大</h3><p>改变原候选产品范围：</p>
+<ul>
+<li>新模块；</li>
+<li>新平台；</li>
+<li>新 Profile；</li>
+<li>新协议；</li>
+<li>新 Sample；</li>
+<li>新公共 API。</li>
+</ul>
+<p>处理方式：</p>
+<ul>
+<li>不进入当前候选；</li>
+<li>回到开发主线；</li>
+<li>未来重新启动发布旁路。</li>
+</ul>
+<p>冻结阶段最危险的不是修复 Bug，而是把“顺手再补一点”不断包装成发布必要项。</p>
+<h2 id="候选身份必须进入机器真理源">候选身份必须进入机器真理源</h2><p>如果候选信息只存在于 README 或计划文本中，自动化无法可靠判断它是否已经过期。</p>
+<p>机器状态至少应记录：</p>
+<pre><code class="language-text">candidateVersion
+candidateCommit
+candidateTreeHash
+candidateSelectedAt
+sourceCommit
+sourceTreeHash
+generatedAt
+qualificationState
+invalidationState
+invalidationReason
+</code></pre>
+<p>同时还应维护关键路径集合：</p>
+<pre><code class="language-text">Candidate Build
+Release Verification
+Consumer Walkthrough
+Stable Profiles
+Testbed
+Player Qualification
+Artifact Assembly
+</code></pre>
+<p>状态生成时可以执行：</p>
+<pre><code class="language-text">存在 Candidate
+AND Candidate 之后修改了关键路径
+AND 没有显式豁免或失效记录
+→ 状态生成失败
+</code></pre>
+<p>这种失败不是阻止开发。</p>
+<p>它是在迫使仓库回答：</p>
+<blockquote>
+<p>当前候选是否仍然有效？</p>
+</blockquote>
+<h2 id="readme计划和机器状态不能表达三套发布现实">README、计划和机器状态不能表达三套发布现实</h2><p>候选治理通常涉及多个状态来源：</p>
+<ul>
+<li>根 README；</li>
+<li>工作计划；</li>
+<li>Work Status；</li>
+<li>Release Policy；</li>
+<li>Candidate Manifest；</li>
+<li>Workflow 输入；</li>
+<li>Artifact Manifest。</li>
+</ul>
+<p>这些文档可以承担不同职责，但不能对同一个事实给出不同答案。</p>
+<p>例如：</p>
+<pre><code class="language-text">README
+→ 当前仍在开发收敛，未启动发布
+
+Work Status
+→ release-preparation，继续 Active RC
+
+Candidate Manifest
+→ 固定旧提交
+
+main
+→ 已经包含候选相关修复
+</code></pre>
+<p>此时自动化和维护者都无法确定下一步。</p>
+<p>更合理的职责划分是：</p>
+<table>
+<thead>
+<tr>
+<th>信息</th>
+<th>建议真理源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>当前项目工作模式</td>
+<td>Work Status 或明确模式文件</td>
+</tr>
+<tr>
+<td>候选身份</td>
+<td>Candidate Manifest</td>
+</tr>
+<tr>
+<td>发布政策</td>
+<td>Release Policy</td>
+</tr>
+<tr>
+<td>人类入口说明</td>
+<td>README 查询并解释权威状态</td>
+</tr>
+<tr>
+<td>测试结果</td>
+<td>Evidence Manifest</td>
+</tr>
+<tr>
+<td>产物身份</td>
+<td>Artifact Manifest</td>
+</tr>
+</tbody></table>
+<p>README 可以解释状态，但不应独立定义另一套状态。</p>
+<h2 id="新候选不应该被自动选择">新候选不应该被自动选择</h2><p>旧候选失效后，最方便的做法是：</p>
+<pre><code class="language-text">读取最新 main
+→ 自动生成 Candidate 2
+→ 继续跑验证
+</code></pre>
+<p>这种自动推进存在两个风险。</p>
+<p>第一，最新 HEAD 可能仍在变化，没有经过维护者范围确认。</p>
+<p>第二，候选失败可能说明项目尚未真正进入交付阶段，而不是只差一次重试。</p>
+<p>因此，候选重选应是显式动作。</p>
+<p>维护者需要重新确认：</p>
+<ul>
+<li>当前功能范围是否冻结；</li>
+<li>关键修复是否全部进入；</li>
+<li>工作区和主分支是否稳定；</li>
+<li>是否仍然希望交付；</li>
+<li>当前证据成本是否值得投入；</li>
+<li>是否存在尚未关闭的高风险能力问题。</li>
+</ul>
+<p>自动化可以生成候选建议，但不应自行决定：</p>
+<blockquote>
+<p>现在应该发布这份代码。</p>
+</blockquote>
+<h2 id="候选治理中的常见失败">候选治理中的常见失败</h2><h3 id="使用分支名作为候选身份">使用分支名作为候选身份</h3><p><code>main</code>、<code>release</code> 或 <code>develop</code> 都会移动，不能作为不可变证据对象。</p>
+<h3 id="后续修复进入主分支后继续验证旧候选">后续修复进入主分支后继续验证旧候选</h3><p>修复不存在于候选中，验证成本无法支持实际交付对象。</p>
+<h3 id="从新提交借用脚本验证旧源码">从新提交借用脚本验证旧源码</h3><p>源码、测试工具和消费路径不再属于同一身份。</p>
+<h3 id="把-superseded-记录成-failed">把 Superseded 记录成 Failed</h3><p>掩盖了候选被后续必要修改取代的真实原因。</p>
+<h3 id="每次失效后自动选择最新-head">每次失效后自动选择最新 HEAD</h3><p>发布流程开始自行驱动项目，而不是服从维护者的交付意图。</p>
+<h3 id="发布准备永久占用-active-工作">发布准备永久占用 Active 工作</h3><p>项目主线从能力建设被悄然转为 RC 清单处理。</p>
+<h3 id="候选期间不断加入小功能">候选期间不断加入小功能</h3><p>产品范围持续扩大，冻结失去意义。</p>
+<h3 id="readme-与机器状态长期矛盾">README 与机器状态长期矛盾</h3><p>人类和自动化按照不同工作模式执行。</p>
+<h3 id="候选信息不绑定源码树">候选信息不绑定源码树</h3><p>同一提交引用的外部依赖或生成内容变化后，证据仍被错误复用。</p>
+<h3 id="为了保住候选而降低验证标准">为了保住候选而降低验证标准</h3><p>证据要求开始迁就候选，而不是判断候选是否合格。</p>
+<h2 id="我的候选版本治理检查表">我的候选版本治理检查表</h2><p>准备或维护发布候选时，我会检查：</p>
+<ol>
+<li>候选是否绑定不可变 Commit SHA？</li>
+<li>是否同时记录 Git Tree Hash？</li>
+<li>构建配置和依赖是否可重现？</li>
+<li>测试、消费演练和制品是否全部绑定同一候选？</li>
+<li>是否存在从后续提交借用修复或脚本的情况？</li>
+<li>候选之后是否修改过构建、消费、Testbed 或验证关键路径？</li>
+<li>哪些路径变化会自动使候选失效？</li>
+<li>候选失效后是否使用 <code>Superseded</code> 而不是删除历史？</li>
+<li>是否会停止已无交付价值的高成本验证？</li>
+<li>新候选是否必须由维护者显式选择？</li>
+<li>发布准备是否拥有明确开始和结束条件？</li>
+<li>项目主线是否仍然与发布旁路清楚分离？</li>
+<li>候选期间允许进入哪些类型的修复？</li>
+<li>新功能是否被明确推迟到下一版本？</li>
+<li>README、状态文件和 Candidate Manifest 是否表达同一事实？</li>
+<li>状态文件是否记录生成时所依据的提交？</li>
+<li>自动化能否检测 Candidate 与当前关键路径之间的漂移？</li>
+<li>候选产物是否能够追溯到唯一源码身份？</li>
+<li>已通过的证据是否会因为候选身份变化自动过期？</li>
+<li>当前真的需要继续发布，还是应该回到能力收敛？</li>
+</ol>
+<p>发布候选的价值不在于拥有一个 RC 编号。</p>
+<p>它的价值在于把一份明确代码从持续变化的开发主线中分离出来，并围绕这份代码建立完整、可追溯的资格结论。</p>
+<p>一旦必要修复已经进入更晚的主分支，旧候选就不应该继续假装代表项目当前准备交付的状态。</p>
+<p>正确的治理不是强行把每次候选推到发布终点。</p>
+<p>而是始终准确回答：</p>
+<blockquote>
+<p>当前正在验证哪一份代码，这份代码是否仍然值得交付？</p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>候选版本身份</td>
+<td>这次究竟准备交付哪份代码</td>
+</tr>
+<tr>
+<td>同提交证据</td>
+<td>证明和交付使用同一份代码</td>
+</tr>
+<tr>
+<td>候选失效条件</td>
+<td>旧候选已经不值得继续验</td>
+</tr>
+<tr>
+<td>发布冻结</td>
+<td>固定交付对象，不再偷偷换内容</td>
+</tr>
+<tr>
+<td>发布旁路</td>
+<td>临时进入交付模式</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>diary/2026/08/08-05 审计报告.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文是对大型软件仓库候选版本与发布工作流的工程复盘。文中的候选状态机、关键路径失效检测、发布旁路和机器真理源字段属于治理建议，不表示相关框架已经实施了完全相同的候选失效机制或发布状态模型。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="framework-support-surface-governance.html"><span>同属「大型 Unity 框架的治理复盘」</span><strong>支持面治理：实现面、消费面与产品承诺的分离</strong><small>从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。</small></a><a href="local-passed-runner-passed.html"><span>同属「大型 Unity 框架的治理复盘」</span><strong>证据等级：本地验证、Runner 复验与交付结论边界</strong><small>一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？</small></a><a href="battle-royale-dual-convergence.html"><span>共享 essay</span><strong>双重收敛：大逃杀中的有效空间、存活人数与终局密度控制</strong><small>一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

@@ -26,8 +26,8 @@ test('blog taxonomy is explicit, semantic and covers exactly the formal articles
     loadPublishedBlogs()
   ]);
   const discovery = resolveBlogDiscovery(taxonomy, articles);
-  assert.equal(discovery.series.length, 3);
-  assert.equal(discovery.tags.length, 18);
+  assert.equal(discovery.series.length, 5);
+  assert.equal(discovery.tags.length, 43);
   assert.ok(discovery.routableTags.length < discovery.tags.length);
   assert.ok(discovery.routableTags.every((entry) => entry.articles.length >= 2));
   assert.ok(discovery.tags.filter((entry) => entry.articles.length >= 2).every((entry) => discovery.routableTags.includes(entry)));

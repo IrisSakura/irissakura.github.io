@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/localization-resolver-lifecycle.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="本地化文本生命周期：Resolver 所有权、语言状态与原子表写入 | IrisSakura">
+    <meta property="og:description" content="Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/localization-resolver-lifecycle.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-localization-resolver-lifecycle.png">
+    <meta property="og:image:alt" content="本地化文本生命周期：Resolver 所有权、语言状态与原子表写入 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="本地化文本生命周期：Resolver 所有权、语言状态与原子表写入 | IrisSakura">
+    <meta name="twitter:description" content="Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-localization-resolver-lifecycle.png">
+    <meta name="twitter:image:alt" content="本地化文本生命周期：Resolver 所有权、语言状态与原子表写入 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"本地化文本生命周期：Resolver 所有权、语言状态与原子表写入 | IrisSakura","description":"Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？","url":"https://irissakura.github.io/pages/blog/localization-resolver-lifecycle.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"本地化文本生命周期：Resolver 所有权、语言状态与原子表写入","image":"https://irissakura.github.io/assets/social/pages-blog-localization-resolver-lifecycle.png","datePublished":"2026-08-07","dateModified":"2026-08-07","about":["resolver"]}</script>
+    <!-- site-meta:end -->
+    <title>本地化文本生命周期：Resolver 所有权、语言状态与原子表写入 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-07 · 更新于 2026-08-07</p>
+            <h1>本地化文本生命周期：Resolver 所有权、语言状态与原子表写入</h1>
+            <p class="blog-deck">Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？</p>
+            <div class="note-tags"><span>resolver</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>很多项目的本地化系统最初只有一个函数：</p>
+<pre><code class="language-text">GetText("button.confirm")
+</code></pre>
+<p>输入 Key，返回当前语言对应的字符串。</p>
+<p>在功能较少时，这似乎已经足够。</p>
+<p>但真实项目很快会遇到更多问题：</p>
+<ul>
+<li><p>Key 属于哪张 String Table；</p>
+</li>
+<li><p>当前 Locale 谁负责保存；</p>
+</li>
+<li><p>Language 切换后现有 UI 如何得到新文本；</p>
+</li>
+<li><p>Dialogue、UI 和 MVVM 是否各自直接访问 Unity Localization；</p>
+</li>
+<li><p>Key 不存在时返回空字符串、默认文案还是 Key；</p>
+</li>
+<li><p>Resolver 尚未初始化时如何表现；</p>
+</li>
+<li><p>测试结束后全局 Resolver 谁负责清理；</p>
+</li>
+<li><p>CSV 导入失败时会不会把旧表覆盖一半；</p>
+</li>
+<li><p>多行文本和引号如何安全进入 CSV；</p>
+</li>
+<li><p>JSON 出现非法 Unicode 或尾随数据时是否仍然接受；</p>
+</li>
+<li><p>编辑器工具预览的内容与最终写入内容是不是同一份数据。</p>
+</li>
+</ul>
+<p>当这些问题出现以后，“字符串查询函数”已经不足以描述本地化系统。</p>
+<p>真正需要管理的是一条文本生命周期。</p>
+<h2 id="先说结论本地化核心应该是-resolver-合同而不是全局数据库调用">先说结论：本地化核心应该是 Resolver 合同，而不是全局数据库调用</h2><p><strong>Localized Text Resolver（后文简称“文本解析器”）</strong>：接收稳定的 Table、Key 和 Fallback 等请求信息，并返回解析结果的统一只读边界。</p>
+<p>调用方不再直接依赖：</p>
+<pre><code class="language-text">UnityEngine.Localization.Settings
+</code></pre>
+<p>而是依赖：</p>
+<pre><code class="language-text">ILocalizedTextResolver
+</code></pre>
+<p>于是结构变为：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["UI"] --&gt; R["Localized Text Resolver"]
+    B["Dialogue"] --&gt; R
+    C["MVVM"] --&gt; R
+    D["Gameplay"] --&gt; R
+
+    R --&gt; U["Unity Localization Adapter"]
+    U --&gt; T["String Table"]
+</code></pre>
+<p>这样做并不是为了多包一层接口。</p>
+<p>而是为了把几个职责从业务模块中拿出来：</p>
+<ul>
+<li><p>Locale 状态；</p>
+</li>
+<li><p>表选择；</p>
+</li>
+<li><p>Fallback；</p>
+</li>
+<li><p>Diagnostics；</p>
+</li>
+<li><p>Unity API 适配；</p>
+</li>
+<li><p>生命周期所有权。</p>
+</li>
+</ul>
+<h2 id="request-应表达完整查找意图">Request 应表达完整查找意图</h2><p>单独一个 Key 经常缺少足够上下文。</p>
+<p>例如：</p>
+<pre><code class="language-text">confirm
+</code></pre>
+<p>它可能存在于：</p>
+<pre><code class="language-text">UI
+Dialogue
+Tutorial
+System
+</code></pre>
+<p>因此更可靠的请求至少需要表达：</p>
+<pre><code class="language-text">Table
+Key
+Fallback
+</code></pre>
+<p>形成类似：</p>
+<pre><code class="language-text">LocalizedTextRequest(
+    table = "Dialogue",
+    key = "npc.guard.warning",
+    fallback = "Stop!"
+)
+</code></pre>
+<p><strong>本地化请求合同（后文简称“文本地址”）</strong>：把一次翻译查询需要的身份和退化策略显式放入请求，而不是依赖全局隐藏状态。</p>
+<p>未来如果需要增加：</p>
+<ul>
+<li><p>参数；</p>
+</li>
+<li><p>Plural；</p>
+</li>
+<li><p>Gender；</p>
+</li>
+<li><p>Format Culture；</p>
+</li>
+</ul>
+<p>也应继续围绕请求合同扩展，而不是让各业务模块分别实现。</p>
+<h2 id="fallback-是运行时合同的一部分">Fallback 是运行时合同的一部分</h2><p>本地化失败并不罕见。</p>
+<p>可能发生：</p>
+<ul>
+<li><p>Resolver 尚未安装；</p>
+</li>
+<li><p>Table 不存在；</p>
+</li>
+<li><p>Key 缺失；</p>
+</li>
+<li><p>Locale 尚未加载；</p>
+</li>
+<li><p>Adapter 抛出异常；</p>
+</li>
+<li><p>测试环境没有真实 Localization Asset。</p>
+</li>
+</ul>
+<p>业务层需要明确回答：</p>
+<blockquote>
+<p>失败以后画面显示什么？</p>
+</blockquote>
+<p>常见选择包括：</p>
+<ol>
+<li><p>返回空字符串；</p>
+</li>
+<li><p>返回 Key；</p>
+</li>
+<li><p>返回设计时默认文案；</p>
+</li>
+<li><p>抛出异常。</p>
+</li>
+</ol>
+<p>不同场景适合不同策略。</p>
+<p>例如对话系统可以使用：</p>
+<pre><code class="language-text">fallbackText = 原始剧情文案
+</code></pre>
+<p>开发工具则可能更适合直接显示 Key，让缺失内容更明显。</p>
+<p><strong>显式 Fallback（后文简称“失败时显示什么”）</strong>：Fallback 由 Request 或调用边界明确提供，而不是散落在各个 UI 脚本的 <code>try/catch</code> 中。</p>
+<p>这使失败行为也可以被测试。</p>
+<h2 id="resolver-也需要-owner">Resolver 也需要 Owner</h2><p>即使使用接口，如果 Resolver 最终被塞进一个永不清理的静态字段，生命周期问题仍然存在。</p>
+<p>例如 PlayMode：</p>
+<pre><code class="language-text">Run A 安装 Resolver A
+→ 退出
+→ Run B 安装 Resolver B
+→ Resolver A 的静态状态仍存在
+</code></pre>
+<p>或者两个系统同时认为自己拥有 Dialogue 的 Table：</p>
+<pre><code class="language-text">Feature A 安装 Dialogue Resolver
+Feature B 再次覆盖
+</code></pre>
+<p>最终退出顺序稍有变化，就可能把仍在使用的 Resolver 清空。</p>
+<p>因此需要：</p>
+<p><strong>Resolver Owner Lease（后文简称“谁装的谁负责拆”）</strong>：安装 Resolver 时获得唯一 Owner Token / Lease，只有对应 Owner 释放时才能撤销当前绑定。</p>
+<p>典型生命周期：</p>
+<pre><code class="language-text">Install
+→ 获得 Lease
+→ 使用 Resolver
+→ Owner Dispose
+→ Release
+</code></pre>
+<p>这种模式与资源 Lease、Scope、事件 Subscription 的思想一致。</p>
+<p>全局访问并不意味着全局状态没有 Owner。</p>
+<h2 id="bridge-的职责是把业务模块接到同一条文本管线">Bridge 的职责是把业务模块接到同一条文本管线</h2><p>如果 UI、Dialogue 和 MVVM 各自调用 Unity Localization，系统虽然使用同一个插件，却已经形成多个本地化实现。</p>
+<p>例如：</p>
+<pre><code class="language-text">UI        → Unity Localization
+Dialogue  → Unity Localization
+MVVM      → 自己的 Dictionary
+Tutorial  → 硬编码 fallback
+</code></pre>
+<p>切换 Locale 或处理缺失 Key 时，它们可能产生不同结果。</p>
+<p>更稳定的结构是：</p>
+<pre><code class="language-mermaid">flowchart TD
+    R["Localization Runtime"]
+
+    R --&gt; U["UI Bridge"]
+    R --&gt; D["Dialogue Bridge"]
+    R --&gt; M["MVVM Bridge"]
+
+    U --&gt; UI["UI Components"]
+    D --&gt; DG["Dialogue"]
+    M --&gt; VM["ViewModels"]
+</code></pre>
+<p>Bridge 不应该复制翻译规则。</p>
+<p>它只负责把所属模块的数据结构转换成统一 <code>LocalizedTextRequest</code>。</p>
+<p>这样：</p>
+<ul>
+<li><p>Dialogue 不再伪装“已经本地化”后直接返回默认文案；</p>
+</li>
+<li><p>UI 不需要知道 Unity String Database；</p>
+</li>
+<li><p>MVVM 可以继续保持 ViewModel 与 Unity 资源系统解耦。</p>
+</li>
+</ul>
+<h2 id="preferences-负责用户选择localization-负责当前语言">Preferences 负责“用户选择”，Localization 负责“当前语言”</h2><p>Locale 有两个相近但不同的问题：</p>
+<pre><code class="language-text">当前 Runtime 正在使用什么语言？
+</code></pre>
+<p>以及：</p>
+<pre><code class="language-text">用户希望下次启动时使用什么语言？
+</code></pre>
+<p>前者属于 Runtime 状态。</p>
+<p>后者属于 Preferences。</p>
+<p>把两者完全绑死，会让测试和临时语言预览变得困难。</p>
+<p>因此更合理的关系是：</p>
+<pre><code class="language-text">Preferences
+→ 读取用户语言偏好
+→ Localization Owner 应用 Locale
+
+用户切换语言
+→ Runtime 更新
+→ 成功后同步 Preferences
+</code></pre>
+<p>这使语言偏好可以：</p>
+<ul>
+<li><p>使用内存 Store 测试；</p>
+</li>
+<li><p>使用项目持久化实现；</p>
+</li>
+<li><p>在没有 Preferences 包时由项目自行决定。</p>
+</li>
+</ul>
+<p>Localization Core 不需要因此持有具体存档系统。</p>
+<h2 id="diagnostics-应区分成功-fallback和正常命中">Diagnostics 应区分“成功 Fallback”和“正常命中”</h2><p>假设 Key 缺失，但 Resolver 返回了 fallback。</p>
+<p>从玩家角度看，界面没有崩溃。</p>
+<p>从内容生产角度看，这仍然是一个需要修复的问题。</p>
+<p>因此解析结果最好能够区分：</p>
+<pre><code class="language-text">Resolved
+FallbackUsed
+MissingKey
+MissingTable
+ResolverUnavailable
+InvalidRequest
+</code></pre>
+<p><strong>本地化诊断（后文简称“这段文字从哪里来的”）</strong>：除了最终 Text，还能解释本次结果是否真正来自目标 Locale/Table。</p>
+<p>否则 fallback 会把内容缺失长期隐藏起来。</p>
+<p>这对大型项目尤其重要。</p>
+<p>如果所有错误都表现为“界面上还有字”，缺失翻译只能靠玩家人工发现。</p>
+<h2 id="editor-workbench-的-preview-必须审计最终合并结果">Editor Workbench 的 Preview 必须审计最终合并结果</h2><p>本地化工具通常支持：</p>
+<pre><code class="language-text">现有表
++
+导入 CSV / JSON
+=
+新表
+</code></pre>
+<p>一个容易出现的错误是，只审计“这次导入的数据”。</p>
+<p>假设旧表里已经存在：</p>
+<ul>
+<li><p>重复 Key；</p>
+</li>
+<li><p>缺少基准语言；</p>
+</li>
+<li><p>遗留非法项。</p>
+</li>
+</ul>
+<p>新导入内容本身完全正确。</p>
+<p>如果工具只检查 incoming：</p>
+<pre><code class="language-text">Incoming Valid
+→ 显示 Preview 通过
+→ 合并后旧问题仍然存在
+</code></pre>
+<p>因此 Preview 应围绕：</p>
+<pre><code class="language-text">Current
++
+Incoming
+=
+Merged
+→ Audit
+</code></pre>
+<p><strong>合并态审计（后文简称“检查真正准备写进去的表”）</strong>：预览报告检查最终 Candidate，而不是只检查新输入。</p>
+<p>这与配置事务和热更新 Prepare 阶段是相同思想。</p>
+<p>验证对象应该是即将提交的状态。</p>
+<h2 id="文件扩展名也是数据合同">文件扩展名也是数据合同</h2><p>如果用户导入的是：</p>
+<pre><code class="language-text">localization.csv
+</code></pre>
+<p>工具内部可以转成统一模型处理。</p>
+<p>但最终写回时不能悄悄输出 JSON 内容，只因为内部序列化器更方便。</p>
+<p>文件格式本身也是消费合同。</p>
+<p>因此：</p>
+<pre><code class="language-text">.csv → CSV
+.json → JSON
+</code></pre>
+<p>应该保持一致。</p>
+<p>如果未来需要格式迁移，应明确创建新目标，而不是原地改变语义。</p>
+<h2 id="csv-不是按换行-split-就能正确解析">CSV 不是按换行 Split 就能正确解析</h2><p>本地化内容经常出现真正的多行文本：</p>
+<pre><code class="language-text">"Hello,
+traveler."
+</code></pre>
+<p>同时还可能包含：</p>
+<pre><code class="language-text">"He said ""hello""."
+</code></pre>
+<p>因此 CSV Parser 必须正确处理：</p>
+<ul>
+<li><p>Quoted Cell；</p>
+</li>
+<li><p>Cell 内换行；</p>
+</li>
+<li><p>双引号转义；</p>
+</li>
+<li><p>CRLF / LF；</p>
+</li>
+<li><p>空字段；</p>
+</li>
+<li><p>分隔符。</p>
+</li>
+</ul>
+<p>用：</p>
+<pre><code class="language-text">Split('\n')
+</code></pre>
+<p>或者简单的逗号 Regex，迟早会破坏剧情文本。</p>
+<p>本地化工具面对的是内容生产数据，而不是简单配置键值。</p>
+<h2 id="json-parser-也应该严格拒绝异常输入">JSON Parser 也应该严格拒绝异常输入</h2><p>另一端的错误是 JSON 过度宽容。</p>
+<p>例如：</p>
+<pre><code class="language-text">合法对象
+后面还有垃圾字符
+</code></pre>
+<p>或者：</p>
+<ul>
+<li><p>非法 Escape；</p>
+</li>
+<li><p>未转义控制字符；</p>
+</li>
+<li><p>错误 Unicode；</p>
+</li>
+<li><p>非法代理项。</p>
+</li>
+</ul>
+<p>如果 Import 工具仍然接受，最终文件可能在另一个 Parser、平台或 TMS 中失败。</p>
+<p>因此输入阶段应该严格解析。</p>
+<p>“尽量读出来”适合人工恢复工具。</p>
+<p>不适合即将写回正式内容表的 Confirm 流程。</p>
+<h2 id="confirm-写入应该是原子提交">Confirm 写入应该是原子提交</h2><p>即使所有内容都已经验证，最后一步仍然可能失败：</p>
+<ul>
+<li><p>Editor 被终止；</p>
+</li>
+<li><p>磁盘空间不足；</p>
+</li>
+<li><p>进程异常；</p>
+</li>
+<li><p>写入中途崩溃。</p>
+</li>
+</ul>
+<p>直接：</p>
+<pre><code class="language-text">File.WriteAllText(target)
+</code></pre>
+<p>意味着旧文件会先被修改。</p>
+<p>如果写入未完成，项目可能只剩一份损坏表。</p>
+<p><strong>原子文件提交（后文简称“整份写好再换过去”）</strong>：先在目标同目录生成完整临时文件，成功后再通过 replace / move 切换为正式文件。</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Merged Candidate"] --&gt; B["Serialize"]
+    B --&gt; C["同目录 Temporary File"]
+    C --&gt; D["完整写入成功"]
+    D --&gt; E["Replace / Move"]
+    E --&gt; F["Target"]
+</code></pre>
+<p>同目录非常重要。</p>
+<p>跨文件系统 Move 不一定具备相同原子语义。</p>
+<p>成功或失败后，Temporary File 都应被清理。</p>
+<h2 id="utf-8-细节也属于确定性输出">UTF-8 细节也属于确定性输出</h2><p>文本工具还应固定：</p>
+<ul>
+<li><p>UTF-8；</p>
+</li>
+<li><p>是否 BOM；</p>
+</li>
+<li><p>换行策略；</p>
+</li>
+<li><p>Serializer 顺序；</p>
+</li>
+<li><p>Quote 规则。</p>
+</li>
+</ul>
+<p>否则不同机器可能产生语义相同、字节不同的文件。</p>
+<p>这会制造：</p>
+<ul>
+<li><p>Git Diff 噪声；</p>
+</li>
+<li><p>Hash 漂移；</p>
+</li>
+<li><p>Evidence 不一致；</p>
+</li>
+<li><p>不必要的冲突。</p>
+</li>
+</ul>
+<p>对于经常由策划、翻译和自动化共同修改的本地化文件，确定性格式尤其重要。</p>
+<h2 id="runtime-与-workbench-最终应该共享同一内容事实">Runtime 与 Workbench 最终应该共享同一内容事实</h2><p>成熟的本地化流水线应该逐渐形成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["CSV / JSON / 内容源"] --&gt; B["Workbench"]
+    B --&gt; C["Audit + Candidate"]
+    C --&gt; D["Atomic Commit"]
+    D --&gt; E["String Table"]
+    E --&gt; F["Localization Runtime"]
+    F --&gt; G["UI / Dialogue / MVVM"]
+</code></pre>
+<p>当前阶段最重要的是把两端各自的合同建立清楚：</p>
+<p>运行时：</p>
+<ul>
+<li><p>Resolver；</p>
+</li>
+<li><p>Owner；</p>
+</li>
+<li><p>Fallback；</p>
+</li>
+<li><p>Preferences；</p>
+</li>
+<li><p>Diagnostics；</p>
+</li>
+<li><p>Bridge。</p>
+</li>
+</ul>
+<p>编辑器：</p>
+<ul>
+<li><p>Parse；</p>
+</li>
+<li><p>Merge；</p>
+</li>
+<li><p>Audit；</p>
+</li>
+<li><p>Preview；</p>
+</li>
+<li><p>Confirm；</p>
+</li>
+<li><p>Atomic Write。</p>
+</li>
+</ul>
+<p>等这两边稳定之后，再考虑：</p>
+<ul>
+<li><p>Asset Table；</p>
+</li>
+<li><p>远程语言包；</p>
+</li>
+<li><p>TMS；</p>
+</li>
+<li><p>AI 翻译；</p>
+</li>
+</ul>
+<p>会更安全。</p>
+<h2 id="我的判断">我的判断</h2><p>本地化最容易被低估为一种数据查询功能：</p>
+<pre><code class="language-text">Key → String
+</code></pre>
+<p>但真正的工程结构更接近：</p>
+<pre><code class="language-text">内容生产
+→ 校验
+→ 原子提交
+→ Runtime Owner
+→ Locale
+→ Resolver
+→ Bridge
+→ UI / Dialogue / MVVM
+→ Diagnostics
+</code></pre>
+<p>当这条链路完整以后，换语言才不只是“调用 Unity Localization 的一个 API”。</p>
+<p>它成为一个拥有输入、状态、所有权、失败策略和调试能力的正式运行时模块。</p>
+<h2 id="设计检查表">设计检查表</h2><ul>
+<li><p>业务模块是否直接访问 Unity Localization 全局状态；</p>
+</li>
+<li><p>Text Request 是否明确 Table、Key 和 Fallback；</p>
+</li>
+<li><p>Fallback 是否有统一合同；</p>
+</li>
+<li><p>Resolver 是否拥有明确 Owner；</p>
+</li>
+<li><p>Owner 释放是否幂等；</p>
+</li>
+<li><p>UI、Dialogue、MVVM 是否共享同一 Resolver；</p>
+</li>
+<li><p>用户 Locale Preference 与 Runtime Locale 是否解耦；</p>
+</li>
+<li><p>Fallback 是否仍产生可观察 Diagnostics；</p>
+</li>
+<li><p>Import Preview 是否审计最终 Merged Table；</p>
+</li>
+<li><p>CSV 是否正确支持多行与转义引号；</p>
+</li>
+<li><p>JSON 是否严格拒绝尾随内容和非法 Unicode；</p>
+</li>
+<li><p>输出格式是否尊重目标扩展名；</p>
+</li>
+<li><p>Confirm 是否使用同目录原子写入；</p>
+</li>
+<li><p>临时文件是否在成功与失败后都清理；</p>
+</li>
+<li><p>生成文本是否采用稳定编码与格式规则。</p>
+</li>
+</ul>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>通俗称呼</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Localized Text Resolver</td>
+<td>文本解析器</td>
+<td>统一处理 Table、Key、Fallback 的只读查询边界</td>
+</tr>
+<tr>
+<td>Localized Text Request</td>
+<td>文本地址</td>
+<td>一次本地化查询的完整输入合同</td>
+</tr>
+<tr>
+<td>Resolver Owner Lease</td>
+<td>谁装的谁负责拆</td>
+<td>管理 Resolver 注册生命周期的 Owner Token</td>
+</tr>
+<tr>
+<td>Explicit Fallback</td>
+<td>失败时显示什么</td>
+<td>Resolver 未命中时的明确退化策略</td>
+</tr>
+<tr>
+<td>Localization Bridge</td>
+<td>模块接线层</td>
+<td>将 UI、Dialogue、MVVM 接到统一 Runtime</td>
+</tr>
+<tr>
+<td>Merged-state Audit</td>
+<td>检查真正准备写进去的表</td>
+<td>对最终合并 Candidate 做验证</td>
+</tr>
+<tr>
+<td>Atomic File Commit</td>
+<td>整份写好再换过去</td>
+<td>临时完整写入后再替换目标文件</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>资料说明：本文依据 2026-08-06 的 Localization Runtime Phase 2 与后续 Localization Workbench 写入加固整理。当前 Runtime 已覆盖 Core、Unity Owner、Preferences、Diagnostics 以及 UI/Dialogue/MVVM Bridge；Asset Table、远程语言包、AI 翻译与 TMS 集成不应从本文内容中外推。</p>
+</blockquote>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="ai-safe-execution-plane.html"><span>同属「Sakura Framework 工程实践」</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a><a href="ai-task-capsule-semantic-graph.html"><span>同属「Sakura Framework 工程实践」</span><strong>开发任务胶囊与项目语义图：AI 协作中的只读上下文、影响分析与证据边界</strong><small>大型代码仓库如何把一个开发任务需要的范围、项目结构、影响关系和验证证据压缩成稳定的机器可读上下文，同时不把“理解仓库”错误地升级成“拥有执行权限”？</small></a><a href="framework-capability-semantic-catalog.html"><span>同属「Sakura Framework 工程实践」</span><strong>框架能力语义目录：能力词表、证据化声明与可解释模块选择</strong><small>大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

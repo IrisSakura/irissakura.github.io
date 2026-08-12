@@ -1,0 +1,3720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/racing-fixed-step.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定 | Sakura Design Journal">
+    <meta property="og:description" content="聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/racing-fixed-step.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-racing-fixed-step.png">
+    <meta property="og:image:alt" content="驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定 | Sakura Design Journal">
+    <meta name="twitter:description" content="聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-racing-fixed-step.png">
+    <meta name="twitter:image:alt" content="驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定 | Sakura Design Journal","description":"聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。","url":"https://irissakura.github.io/pages/journal/racing-fixed-step.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定","image":"https://irissakura.github.io/assets/social/pages-journal-racing-fixed-step.png","dateModified":"2026-08-12","about":["racing","simulation","vehicle"]}</script>
+    <!-- site-meta:end -->
+    <title>驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-racing-fixed-step"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定</h1><p>聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。</p><div class="note-tags"><span>racing</span><span>simulation</span><span>vehicle</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="固定步长车辆模拟赛道拓扑与连续竞赛裁定">固定步长车辆模拟、赛道拓扑与连续竞赛裁定</h2><hr />
+<h2 id="1-类型定义">1. 类型定义</h2><p>驾驶竞速游戏，是以玩家控制车辆或其他高速载具，在受约束或半开放的路线中竞争时间、名次、路线效率和驾驶稳定性的游戏类型。</p>
+<p>常见子类型包括：</p>
+<ul>
+<li><p>拟真赛车；</p>
+</li>
+<li><p>街机赛车；</p>
+</li>
+<li><p>卡丁车竞速；</p>
+</li>
+<li><p>拉力赛；</p>
+</li>
+<li><p>越野竞速；</p>
+</li>
+<li><p>漂移竞赛；</p>
+</li>
+<li><p>计时挑战；</p>
+</li>
+<li><p>开放道路竞速；</p>
+</li>
+<li><p>团队或接力竞速；</p>
+</li>
+<li><p>带战斗元素的载具竞速。</p>
+</li>
+</ul>
+<p>不同子类型在物理精度、碰撞惩罚、驾驶辅助和规则复杂度上存在显著差异，但其共同核心是：</p>
+<blockquote>
+<p>玩家持续输入转向、加速、制动和换挡意图，运行时以固定步长推进车辆状态；赛道系统根据车辆经过的空间、检查点和路线顺序验证比赛进度，比赛控制系统再将连续运动结果转化为圈速、排名、处罚和最终成绩。</p>
+</blockquote>
+<p>驾驶竞速游戏最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>将驾驶体验拆分为车辆动力学、赛道拓扑、比赛规则和驾驶辅助四个相互独立但连续反馈的系统，使同一条赛道能够通过车辆差异、路线选择、天气、轮胎和玩家技术产生可重复精进的竞赛过程。</p>
+</blockquote>
+<hr />
+<h2 id="2-核心设计支柱">2. 核心设计支柱</h2><h2 id="21-操作输入表达驾驶意图而不是直接修改位置">2.1 操作输入表达驾驶意图，而不是直接修改位置</h2><p>玩家输入通常包括：</p>
+<ul>
+<li><p>转向；</p>
+</li>
+<li><p>油门；</p>
+</li>
+<li><p>制动；</p>
+</li>
+<li><p>手刹；</p>
+</li>
+<li><p>离合；</p>
+</li>
+<li><p>换挡；</p>
+</li>
+<li><p>氮气或增压；</p>
+</li>
+<li><p>车身姿态控制；</p>
+</li>
+<li><p>车辆功能切换。</p>
+</li>
+</ul>
+<p>输入系统不应直接执行：</p>
+<ul>
+<li><p>设置车辆速度；</p>
+</li>
+<li><p>将车辆旋转到目标方向；</p>
+</li>
+<li><p>将车辆吸附到赛道中心；</p>
+</li>
+<li><p>将车辆瞬间移动到下一位置。</p>
+</li>
+</ul>
+<p>输入应先进入车辆控制层，再由以下因素共同决定运动结果：</p>
+<ul>
+<li><p>发动机输出；</p>
+</li>
+<li><p>变速箱；</p>
+</li>
+<li><p>轮胎抓地；</p>
+</li>
+<li><p>车身质量；</p>
+</li>
+<li><p>空气阻力；</p>
+</li>
+<li><p>路面摩擦；</p>
+</li>
+<li><p>车辆姿态；</p>
+</li>
+<li><p>驾驶辅助；</p>
+</li>
+<li><p>碰撞和外力。</p>
+</li>
+</ul>
+<p>即使街机赛车使用强辅助和简化物理，也应保持“输入—车辆响应—空间结果”的链路。</p>
+<hr />
+<h2 id="22-赛道不是美术场景而是竞赛规则图">2.2 赛道不是美术场景，而是竞赛规则图</h2><p>赛道不仅用于展示道路。</p>
+<p>它还需要表达：</p>
+<ul>
+<li><p>起点与终点；</p>
+</li>
+<li><p>合法行驶方向；</p>
+</li>
+<li><p>圈序；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>分段计时；</p>
+</li>
+<li><p>维修区；</p>
+</li>
+<li><p>出界区域；</p>
+</li>
+<li><p>捷径；</p>
+</li>
+<li><p>不同路线分支；</p>
+</li>
+<li><p>重生锚点；</p>
+</li>
+<li><p>AI参考线；</p>
+</li>
+<li><p>观众和镜头区域。</p>
+</li>
+</ul>
+<p>赛道的视觉网格与逻辑路线应相互关联，但不能完全等同。</p>
+<p>单纯依赖车辆穿过终点线判断完成比赛，会产生：</p>
+<ul>
+<li><p>倒车刷圈；</p>
+</li>
+<li><p>跳过大部分赛道；</p>
+</li>
+<li><p>利用传送或碰撞直接到达终点；</p>
+</li>
+<li><p>分支赛道顺序错误；</p>
+</li>
+<li><p>重生后重复计圈。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-比赛进度是连续量不只是检查点编号">2.3 比赛进度是连续量，不只是检查点编号</h2><p>两辆车可能处于同一个检查点区间，但前后距离相差很大。</p>
+<p>因此排名不能只按照：</p>
+<ul>
+<li><p>已完成圈数；</p>
+</li>
+<li><p>已通过检查点数量；</p>
+</li>
+</ul>
+<p>进行排序。</p>
+<p>更可靠的比赛进度应综合：</p>
+<ul>
+<li><p>已完成圈数；</p>
+</li>
+<li><p>当前路线分支；</p>
+</li>
+<li><p>已通过的最后检查点；</p>
+</li>
+<li><p>沿赛道中心线的投影距离；</p>
+</li>
+<li><p>是否处于合法路线；</p>
+</li>
+<li><p>是否正在维修区；</p>
+</li>
+<li><p>时间处罚；</p>
+</li>
+<li><p>完赛状态。</p>
+</li>
+</ul>
+<p>比赛进度需要稳定、连续，并且不能因赛道交叉或空间接近而错误跳变。</p>
+<hr />
+<h2 id="24-驾驶辅助必须帮助表达意图而不是替代决策">2.4 驾驶辅助必须帮助表达意图，而不是替代决策</h2><p>常见辅助包括：</p>
+<ul>
+<li><p>转向辅助；</p>
+</li>
+<li><p>制动辅助；</p>
+</li>
+<li><p>牵引力控制；</p>
+</li>
+<li><p>防抱死制动；</p>
+</li>
+<li><p>稳定控制；</p>
+</li>
+<li><p>自动挡；</p>
+</li>
+<li><p>路线提示；</p>
+</li>
+<li><p>车辆自动回正；</p>
+</li>
+<li><p>防翻滚修正；</p>
+</li>
+<li><p>空中姿态辅助。</p>
+</li>
+</ul>
+<p>好的辅助应：</p>
+<ul>
+<li><p>减少硬件和操作门槛；</p>
+</li>
+<li><p>保留弯道路线选择；</p>
+</li>
+<li><p>保留制动时机差异；</p>
+</li>
+<li><p>保留油门控制空间；</p>
+</li>
+<li><p>允许逐步关闭；</p>
+</li>
+<li><p>在竞技规则中保持透明。</p>
+</li>
+</ul>
+<p>如果辅助自动完成最佳路线、最佳刹车和最佳油门，玩家只剩方向确认，竞速深度会显著降低。</p>
+<hr />
+<h2 id="25-车辆失控必须具有可理解的前兆">2.5 车辆失控必须具有可理解的前兆</h2><p>玩家失控前应能通过以下信号判断车辆状态：</p>
+<ul>
+<li><p>轮胎声；</p>
+</li>
+<li><p>转向变轻或变重；</p>
+</li>
+<li><p>车身侧倾；</p>
+</li>
+<li><p>车尾滑动；</p>
+</li>
+<li><p>方向盘震动；</p>
+</li>
+<li><p>速度变化；</p>
+</li>
+<li><p>牵引力提示；</p>
+</li>
+<li><p>路面材质；</p>
+</li>
+<li><p>镜头与视觉运动；</p>
+</li>
+<li><p>轮胎温度或磨损。</p>
+</li>
+</ul>
+<p>车辆不能在没有可观察状态变化的情况下突然旋转或失去控制。</p>
+<p>可预测性比绝对拟真更重要。</p>
+<hr />
+<h2 id="3-与相近类型的边界">3. 与相近类型的边界</h2><h2 id="31-与载具移动系统的区别">3.1 与载具移动系统的区别</h2><p>载具移动系统可以只是开放世界、射击或动作游戏中的一个功能模块。</p>
+<p>驾驶竞速游戏则要求：</p>
+<ul>
+<li><p>车辆操控本身具有长期学习空间；</p>
+</li>
+<li><p>比赛路线受到正式规则约束；</p>
+</li>
+<li><p>时间和排名具有权威性；</p>
+</li>
+<li><p>相同赛道可以反复挑战；</p>
+</li>
+<li><p>车辆配置和比赛条件形成策略差异；</p>
+</li>
+<li><p>需要回放、计时和成绩验证。</p>
+</li>
+</ul>
+<p>因此，本期讨论的是完整宏观类型，不是单独的车辆控制模块。</p>
+<hr />
+<h2 id="32-与无限跑酷的区别">3.2 与无限跑酷的区别</h2><p>无限跑酷通常强调：</p>
+<ul>
+<li><p>自动前进；</p>
+</li>
+<li><p>即时躲避；</p>
+</li>
+<li><p>随机障碍；</p>
+</li>
+<li><p>生存距离；</p>
+</li>
+<li><p>单轴或少量轨道切换。</p>
+</li>
+</ul>
+<p>驾驶竞速则强调：</p>
+<ul>
+<li><p>连续车辆控制；</p>
+</li>
+<li><p>路线和弯道；</p>
+</li>
+<li><p>速度管理；</p>
+</li>
+<li><p>对手竞争；</p>
+</li>
+<li><p>圈速和名次；</p>
+</li>
+<li><p>车辆动力学。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-与运输模拟的区别">3.3 与运输模拟的区别</h2><p>运输模拟更关注：</p>
+<ul>
+<li><p>货物；</p>
+</li>
+<li><p>路线规划；</p>
+</li>
+<li><p>运营成本；</p>
+</li>
+<li><p>交通法规；</p>
+</li>
+<li><p>长时间驾驶；</p>
+</li>
+<li><p>任务交付。</p>
+</li>
+</ul>
+<p>竞速游戏以极限速度、路线效率和竞争结果为核心。</p>
+<p>两者可以共享车辆和道路系统，但比赛控制层不同。</p>
+<hr />
+<h2 id="4-总体运行时架构">4. 总体运行时架构</h2><p>推荐将运行时划分为以下十二个核心域：</p>
+<ol>
+<li><p>固定步长模拟域；</p>
+</li>
+<li><p>输入与驾驶辅助域；</p>
+</li>
+<li><p>车辆动力学域；</p>
+</li>
+<li><p>轮胎、路面和环境域；</p>
+</li>
+<li><p>赛道拓扑与空间查询域；</p>
+</li>
+<li><p>比赛流程与规则域；</p>
+</li>
+<li><p>检查点、圈速与排名域；</p>
+</li>
+<li><p>对手AI与交通域；</p>
+</li>
+<li><p>碰撞、损伤与重生域；</p>
+</li>
+<li><p>网络同步、回放与幽灵域；</p>
+</li>
+<li><p>车辆配置和长期成长域；</p>
+</li>
+<li><p>调试、遥测与内容验证域。</p>
+</li>
+</ol>
+<p>总体执行关系如下：</p>
+<p>采样驾驶输入
+→ 驾驶辅助修正输入意图
+→ 固定步长推进车辆动力学
+→ 轮胎与路面系统计算抓地和滑移
+→ 碰撞系统处理接触与外力
+→ 赛道系统计算车辆路线投影
+→ 检查点系统验证通过顺序
+→ 比赛系统更新圈数、分段和排名
+→ AI根据赛道、车辆和对手状态重新决策
+→ 表现层接收车辆姿态、轮胎和比赛事件
+→ 网络与回放系统保存输入或状态快照</p>
+<hr />
+<h2 id="5-固定步长模拟">5. 固定步长模拟</h2><h2 id="51-racesimulationclock">5.1 RaceSimulationClock</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>FixedDeltaTime；</p>
+</li>
+<li><p>SimulationRate；</p>
+</li>
+<li><p>RaceElapsedTime；</p>
+</li>
+<li><p>IsPaused；</p>
+</li>
+<li><p>CountdownState；</p>
+</li>
+<li><p>ConfirmedTick；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<p>车辆物理、计时、碰撞和比赛进度应使用统一固定步长。</p>
+<p>不应直接使用渲染帧时间推进：</p>
+<ul>
+<li><p>发动机转速；</p>
+</li>
+<li><p>轮胎磨损；</p>
+</li>
+<li><p>燃料消耗；</p>
+</li>
+<li><p>圈速；</p>
+</li>
+<li><p>检查点冷却；</p>
+</li>
+<li><p>处罚时间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="52-单个模拟步执行顺序">5.2 单个模拟步执行顺序</h2><p>推荐顺序：</p>
+<ol>
+<li><p>采样或读取本Tick输入；</p>
+</li>
+<li><p>应用输入死区、曲线和驾驶辅助；</p>
+</li>
+<li><p>更新发动机和传动系统；</p>
+</li>
+<li><p>计算车轮接地；</p>
+</li>
+<li><p>计算轮胎纵向与横向力；</p>
+</li>
+<li><p>计算空气动力和其他外力；</p>
+</li>
+<li><p>积分车辆速度、角速度和姿态；</p>
+</li>
+<li><p>处理车辆与场景、车辆与车辆碰撞；</p>
+</li>
+<li><p>更新损伤、轮胎和温度；</p>
+</li>
+<li><p>计算车辆相对赛道位置；</p>
+</li>
+<li><p>检查检查点、分段、出界和处罚；</p>
+</li>
+<li><p>更新比赛进度与排名；</p>
+</li>
+<li><p>写入逻辑快照；</p>
+</li>
+<li><p>向表现层发布结果。</p>
+</li>
+</ol>
+<p>同一Tick中，比赛控制系统不能再次主动推进物理。</p>
+<hr />
+<h2 id="53-逻辑时间和显示时间">5.3 逻辑时间和显示时间</h2><p>至少应区分：</p>
+<ul>
+<li><p>SimulationTime：车辆与规则使用的权威时间；</p>
+</li>
+<li><p>DisplayTime：界面展示时间；</p>
+</li>
+<li><p>ReplayTime：回放播放时间；</p>
+</li>
+<li><p>PenaltyAdjustedTime：加入处罚后的成绩时间。</p>
+</li>
+</ul>
+<p>暂停菜单、慢动作和回放不能污染权威圈速。</p>
+<hr />
+<h2 id="6-驾驶输入模型">6. 驾驶输入模型</h2><h2 id="61-driverinputframe">6.1 DriverInputFrame</h2><p>建议字段：</p>
+<ul>
+<li><p>Tick；</p>
+</li>
+<li><p>Steering；</p>
+</li>
+<li><p>Throttle；</p>
+</li>
+<li><p>Brake；</p>
+</li>
+<li><p>Handbrake；</p>
+</li>
+<li><p>Clutch；</p>
+</li>
+<li><p>GearUp；</p>
+</li>
+<li><p>GearDown；</p>
+</li>
+<li><p>Boost；</p>
+</li>
+<li><p>ResetRequest；</p>
+</li>
+<li><p>DeviceType；</p>
+</li>
+<li><p>InputSequence；</p>
+</li>
+<li><p>IsPredicted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-输入归一化">6.2 输入归一化</h2><p>不同设备输入特征不同：</p>
+<h3 id="键盘">键盘</h3><ul>
+<li><p>离散输入；</p>
+</li>
+<li><p>快速满转向；</p>
+</li>
+<li><p>没有自然油门梯度。</p>
+</li>
+</ul>
+<h3 id="手柄">手柄</h3><ul>
+<li><p>模拟摇杆；</p>
+</li>
+<li><p>模拟扳机；</p>
+</li>
+<li><p>死区和回中速度。</p>
+</li>
+</ul>
+<h3 id="方向盘">方向盘</h3><ul>
+<li><p>大范围转向；</p>
+</li>
+<li><p>力反馈；</p>
+</li>
+<li><p>独立踏板；</p>
+</li>
+<li><p>设备校准。</p>
+</li>
+</ul>
+<p>输入层应将设备信号转换为统一驾驶意图，但可以保留设备类型供辅助系统使用。</p>
+<hr />
+<h2 id="63-输入处理">6.3 输入处理</h2><p>常见处理包括：</p>
+<ul>
+<li><p>死区；</p>
+</li>
+<li><p>灵敏度；</p>
+</li>
+<li><p>非线性曲线；</p>
+</li>
+<li><p>转向速度限制；</p>
+</li>
+<li><p>速度相关转向缩放；</p>
+</li>
+<li><p>油门平滑；</p>
+</li>
+<li><p>制动平滑；</p>
+</li>
+<li><p>反向输入保护；</p>
+</li>
+<li><p>设备滤波。</p>
+</li>
+</ul>
+<p>输入滤波不能引入不可预测的额外延迟。</p>
+<hr />
+<h2 id="7-驾驶辅助系统">7. 驾驶辅助系统</h2><h2 id="71-assistprofile">7.1 AssistProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>AssistProfileId；</p>
+</li>
+<li><p>SteeringAssistLevel；</p>
+</li>
+<li><p>BrakeAssistLevel；</p>
+</li>
+<li><p>TractionControlLevel；</p>
+</li>
+<li><p>ABSLevel；</p>
+</li>
+<li><p>StabilityControlLevel；</p>
+</li>
+<li><p>AutoGearPolicy；</p>
+</li>
+<li><p>CounterSteerAssist；</p>
+</li>
+<li><p>AirControlAssist；</p>
+</li>
+<li><p>RecoveryAssist；</p>
+</li>
+<li><p>CompetitiveRestrictions。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-转向辅助">7.2 转向辅助</h2><p>转向辅助可以参考：</p>
+<ul>
+<li><p>当前速度；</p>
+</li>
+<li><p>车辆横向速度；</p>
+</li>
+<li><p>赛道方向；</p>
+</li>
+<li><p>车身偏航；</p>
+</li>
+<li><p>玩家输入；</p>
+</li>
+<li><p>轮胎抓地；</p>
+</li>
+<li><p>目标路线。</p>
+</li>
+</ul>
+<p>辅助输出应是对输入的有限修正，而不是直接设置车辆朝向。</p>
+<hr />
+<h2 id="73-牵引力控制">7.3 牵引力控制</h2><p>牵引力控制检测：</p>
+<ul>
+<li><p>驱动轮滑移率；</p>
+</li>
+<li><p>车轮转速；</p>
+</li>
+<li><p>车辆速度；</p>
+</li>
+<li><p>油门；</p>
+</li>
+<li><p>当前挡位。</p>
+</li>
+</ul>
+<p>然后限制：</p>
+<ul>
+<li><p>发动机扭矩；</p>
+</li>
+<li><p>单轮制动；</p>
+</li>
+<li><p>油门响应。</p>
+</li>
+</ul>
+<p>其强度应允许配置，强辅助更稳定，但可能牺牲加速上限和高级操作空间。</p>
+<hr />
+<h2 id="74-防抱死制动">7.4 防抱死制动</h2><p>ABS通过轮胎滑移判断制动力是否过高。</p>
+<p>它不应简单地保证车辆永远能够转向，而应在：</p>
+<ul>
+<li><p>路面；</p>
+</li>
+<li><p>轮胎；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>制动压力；</p>
+</li>
+</ul>
+<p>约束下减少车轮完全锁死。</p>
+<hr />
+<h2 id="75-辅助透明性">7.5 辅助透明性</h2><p>比赛配置应记录：</p>
+<ul>
+<li><p>哪些辅助开启；</p>
+</li>
+<li><p>辅助等级；</p>
+</li>
+<li><p>是否允许参加排行榜；</p>
+</li>
+<li><p>是否影响奖励或分组。</p>
+</li>
+</ul>
+<p>玩家应能明确知道当前是自己控制车辆，还是系统做出了修正。</p>
+<hr />
+<h2 id="8-车辆定义与运行时状态">8. 车辆定义与运行时状态</h2><h2 id="81-vehicledefinition">8.1 VehicleDefinition</h2><p>描述稳定配置：</p>
+<ul>
+<li><p>VehicleDefinitionId；</p>
+</li>
+<li><p>ChassisDefinitionId；</p>
+</li>
+<li><p>EngineDefinitionId；</p>
+</li>
+<li><p>TransmissionDefinitionId；</p>
+</li>
+<li><p>TireDefinitionIds；</p>
+</li>
+<li><p>SuspensionDefinitionId；</p>
+</li>
+<li><p>AeroDefinitionId；</p>
+</li>
+<li><p>Mass；</p>
+</li>
+<li><p>CenterOfMass；</p>
+</li>
+<li><p>Wheelbase；</p>
+</li>
+<li><p>TrackWidth；</p>
+</li>
+<li><p>CollisionProfile；</p>
+</li>
+<li><p>AssistCompatibility；</p>
+</li>
+<li><p>DamageProfile；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-vehicleruntimestate">8.2 VehicleRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>VehicleEntityId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>LinearVelocity；</p>
+</li>
+<li><p>AngularVelocity；</p>
+</li>
+<li><p>EngineRPM；</p>
+</li>
+<li><p>CurrentGear；</p>
+</li>
+<li><p>ThrottleState；</p>
+</li>
+<li><p>BrakeState；</p>
+</li>
+<li><p>WheelStates；</p>
+</li>
+<li><p>TireStates；</p>
+</li>
+<li><p>SuspensionStates；</p>
+</li>
+<li><p>Fuel；</p>
+</li>
+<li><p>BoostResource；</p>
+</li>
+<li><p>DamageState；</p>
+</li>
+<li><p>SurfaceContacts；</p>
+</li>
+<li><p>TrackProgressState；</p>
+</li>
+<li><p>RaceParticipantState；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-定义与实例分离">8.3 定义与实例分离</h2><p>同一车型的不同实例可能拥有：</p>
+<ul>
+<li><p>不同调校；</p>
+</li>
+<li><p>不同轮胎；</p>
+</li>
+<li><p>不同损伤；</p>
+</li>
+<li><p>不同燃料；</p>
+</li>
+<li><p>不同外观；</p>
+</li>
+<li><p>不同驾驶辅助；</p>
+</li>
+<li><p>不同比赛编号。</p>
+</li>
+</ul>
+<p>VehicleDefinition不应被运行时直接修改。</p>
+<hr />
+<h2 id="9-动力系统">9. 动力系统</h2><h2 id="91-发动机模型">9.1 发动机模型</h2><p>EngineDefinition可以包含：</p>
+<ul>
+<li><p>IdleRPM；</p>
+</li>
+<li><p>RedlineRPM；</p>
+</li>
+<li><p>TorqueCurve；</p>
+</li>
+<li><p>EngineBraking；</p>
+</li>
+<li><p>ThrottleResponse；</p>
+</li>
+<li><p>TurboProfile；</p>
+</li>
+<li><p>HeatProfile；</p>
+</li>
+<li><p>FuelConsumption；</p>
+</li>
+<li><p>DamageSensitivity。</p>
+</li>
+</ul>
+<p>输出扭矩由以下因素决定：</p>
+<ul>
+<li><p>当前转速；</p>
+</li>
+<li><p>油门；</p>
+</li>
+<li><p>增压；</p>
+</li>
+<li><p>发动机温度；</p>
+</li>
+<li><p>损伤；</p>
+</li>
+<li><p>牵引力控制；</p>
+</li>
+<li><p>比赛规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-变速箱">9.2 变速箱</h2><p>TransmissionDefinition建议包含：</p>
+<ul>
+<li><p>GearRatios；</p>
+</li>
+<li><p>FinalDriveRatio；</p>
+</li>
+<li><p>ShiftDuration；</p>
+</li>
+<li><p>AutoShiftPolicy；</p>
+</li>
+<li><p>ReversePolicy；</p>
+</li>
+<li><p>DifferentialProfile；</p>
+</li>
+<li><p>ClutchModel。</p>
+</li>
+</ul>
+<p>换挡不应只改变UI数字。</p>
+<p>它应影响：</p>
+<ul>
+<li><p>轮上扭矩；</p>
+</li>
+<li><p>发动机转速；</p>
+</li>
+<li><p>加速连续性；</p>
+</li>
+<li><p>换挡损失；</p>
+</li>
+<li><p>车辆稳定性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-驱动布局">9.3 驱动布局</h2><p>系统应支持：</p>
+<ul>
+<li><p>前轮驱动；</p>
+</li>
+<li><p>后轮驱动；</p>
+</li>
+<li><p>四轮驱动；</p>
+</li>
+<li><p>动态扭矩分配；</p>
+</li>
+<li><p>独立电机驱动。</p>
+</li>
+</ul>
+<p>驱动布局直接影响：</p>
+<ul>
+<li><p>加速；</p>
+</li>
+<li><p>转向不足；</p>
+</li>
+<li><p>转向过度；</p>
+</li>
+<li><p>漂移；</p>
+</li>
+<li><p>出弯稳定性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-轮胎与抓地模型">10. 轮胎与抓地模型</h2><h2 id="101-wheelruntimestate">10.1 WheelRuntimeState</h2><p>建议字段：</p>
+<ul>
+<li><p>WheelId；</p>
+</li>
+<li><p>IsGrounded；</p>
+</li>
+<li><p>ContactPoint；</p>
+</li>
+<li><p>ContactNormal；</p>
+</li>
+<li><p>SuspensionCompression；</p>
+</li>
+<li><p>WheelAngularVelocity；</p>
+</li>
+<li><p>LongitudinalSlip；</p>
+</li>
+<li><p>LateralSlip；</p>
+</li>
+<li><p>NormalLoad；</p>
+</li>
+<li><p>TireTemperature；</p>
+</li>
+<li><p>TireWear；</p>
+</li>
+<li><p>SurfaceType；</p>
+</li>
+<li><p>AppliedDriveTorque；</p>
+</li>
+<li><p>AppliedBrakeTorque。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-轮胎力">10.2 轮胎力</h2><p>轮胎系统主要计算：</p>
+<ul>
+<li><p>纵向抓地力；</p>
+</li>
+<li><p>横向抓地力；</p>
+</li>
+<li><p>滑移率；</p>
+</li>
+<li><p>侧偏角；</p>
+</li>
+<li><p>载荷变化；</p>
+</li>
+<li><p>温度和磨损修正；</p>
+</li>
+<li><p>路面摩擦修正。</p>
+</li>
+</ul>
+<p>拟真程度可以调整，但纵向与横向力不能完全互不相关。</p>
+<p>车辆在大力制动时，应减少可用于转向的抓地余量。</p>
+<hr />
+<h2 id="103-抓地极限反馈">10.3 抓地极限反馈</h2><p>接近抓地极限时，应通过以下方式反馈：</p>
+<ul>
+<li><p>轮胎声逐渐变化；</p>
+</li>
+<li><p>轮胎烟雾；</p>
+</li>
+<li><p>方向响应变化；</p>
+</li>
+<li><p>车身滑动；</p>
+</li>
+<li><p>力反馈；</p>
+</li>
+<li><p>辅助指示。</p>
+</li>
+</ul>
+<p>不能只在超过阈值后突然切换为完全失控。</p>
+<hr />
+<h2 id="11-悬挂与车身">11. 悬挂与车身</h2><h2 id="111-suspensiondefinition">11.1 SuspensionDefinition</h2><p>建议包含：</p>
+<ul>
+<li><p>RestLength；</p>
+</li>
+<li><p>SpringRate；</p>
+</li>
+<li><p>DamperCompression；</p>
+</li>
+<li><p>DamperRebound；</p>
+</li>
+<li><p>AntiRollStiffness；</p>
+</li>
+<li><p>TravelLimit；</p>
+</li>
+<li><p>GeometryProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-车身状态">11.2 车身状态</h2><p>悬挂和重心影响：</p>
+<ul>
+<li><p>制动点头；</p>
+</li>
+<li><p>加速抬头；</p>
+</li>
+<li><p>转弯侧倾；</p>
+</li>
+<li><p>轮胎载荷；</p>
+</li>
+<li><p>路肩响应；</p>
+</li>
+<li><p>跳跃落地；</p>
+</li>
+<li><p>车辆翻滚。</p>
+</li>
+</ul>
+<p>街机模式可以强化稳定性，但应保持视觉姿态与抓地变化具有基本一致性。</p>
+<hr />
+<h2 id="12-空气动力">12. 空气动力</h2><p>高速车辆可能需要计算：</p>
+<ul>
+<li><p>空气阻力；</p>
+</li>
+<li><p>下压力；</p>
+</li>
+<li><p>尾流；</p>
+</li>
+<li><p>乱流；</p>
+</li>
+<li><p>侧风；</p>
+</li>
+<li><p>动态气动部件；</p>
+</li>
+<li><p>车辆损伤影响。</p>
+</li>
+</ul>
+<h3 id="aerostate">AeroState</h3><p>建议包含：</p>
+<ul>
+<li><p>DragForce；</p>
+</li>
+<li><p>Downforce；</p>
+</li>
+<li><p>DraftFactor；</p>
+</li>
+<li><p>DirtyAirFactor；</p>
+</li>
+<li><p>ActiveAeroState；</p>
+</li>
+<li><p>DamageModifier。</p>
+</li>
+</ul>
+<p>尾流既可以提供追赶机会，也可能降低跟车时的弯道抓地。</p>
+<hr />
+<h2 id="13-路面与环境系统">13. 路面与环境系统</h2><h2 id="131-surfacedefinition">13.1 SurfaceDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SurfaceTypeId；</p>
+</li>
+<li><p>FrictionProfile；</p>
+</li>
+<li><p>RollingResistance；</p>
+</li>
+<li><p>Roughness；</p>
+</li>
+<li><p>WaterRetention；</p>
+</li>
+<li><p>DustEmission；</p>
+</li>
+<li><p>TireWearModifier；</p>
+</li>
+<li><p>DamageRisk；</p>
+</li>
+<li><p>AudioProfile；</p>
+</li>
+<li><p>ParticleProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-常见路面">13.2 常见路面</h2><p>包括：</p>
+<ul>
+<li><p>干燥沥青；</p>
+</li>
+<li><p>湿滑沥青；</p>
+</li>
+<li><p>沙地；</p>
+</li>
+<li><p>泥地；</p>
+</li>
+<li><p>草地；</p>
+</li>
+<li><p>冰雪；</p>
+</li>
+<li><p>路肩；</p>
+</li>
+<li><p>碎石；</p>
+</li>
+<li><p>金属；</p>
+</li>
+<li><p>水面。</p>
+</li>
+</ul>
+<p>不同路面应影响：</p>
+<ul>
+<li><p>抓地；</p>
+</li>
+<li><p>制动距离；</p>
+</li>
+<li><p>方向响应；</p>
+</li>
+<li><p>轮胎温度；</p>
+</li>
+<li><p>车辆损伤；</p>
+</li>
+<li><p>视觉和声音。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-动态天气">13.3 动态天气</h2><p>天气可以改变：</p>
+<ul>
+<li><p>路面湿度；</p>
+</li>
+<li><p>能见度；</p>
+</li>
+<li><p>轮胎选择；</p>
+</li>
+<li><p>制动距离；</p>
+</li>
+<li><p>车辆温度；</p>
+</li>
+<li><p>AI策略；</p>
+</li>
+<li><p>维修站决策。</p>
+</li>
+</ul>
+<p>天气变化应具有过渡过程。</p>
+<p>不能在单个逻辑帧中让整条赛道从干燥变为完全湿滑。</p>
+<hr />
+<h2 id="134-局部路面状态">13.4 局部路面状态</h2><p>同一赛道不同区域可能具有不同状态：</p>
+<ul>
+<li><p>积水；</p>
+</li>
+<li><p>胎屑；</p>
+</li>
+<li><p>沙土；</p>
+</li>
+<li><p>油污；</p>
+</li>
+<li><p>干燥线路；</p>
+</li>
+<li><p>阴影区域；</p>
+</li>
+<li><p>被车辆带出的泥土。</p>
+</li>
+</ul>
+<p>如果实现动态赛道演化，需要控制数据量和网络同步成本。</p>
+<hr />
+<h2 id="14-赛道拓扑模型">14. 赛道拓扑模型</h2><h2 id="141-trackdefinition">14.1 TrackDefinition</h2><p>建议包含：</p>
+<ul>
+<li><p>TrackId；</p>
+</li>
+<li><p>TrackLayoutId；</p>
+</li>
+<li><p>StartGrid；</p>
+</li>
+<li><p>FinishLine；</p>
+</li>
+<li><p>RouteSegments；</p>
+</li>
+<li><p>Checkpoints；</p>
+</li>
+<li><p>Sectors；</p>
+</li>
+<li><p>PitLane；</p>
+</li>
+<li><p>RespawnAnchors；</p>
+</li>
+<li><p>TrackLimits；</p>
+</li>
+<li><p>AIReferenceLines；</p>
+</li>
+<li><p>CameraZones；</p>
+</li>
+<li><p>WeatherZones；</p>
+</li>
+<li><p>ValidationVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-routesegment">14.2 RouteSegment</h2><p>表示赛道的一段逻辑路线。</p>
+<p>建议字段：</p>
+<ul>
+<li><p>SegmentId；</p>
+</li>
+<li><p>StartNode；</p>
+</li>
+<li><p>EndNode；</p>
+</li>
+<li><p>CenterSpline；</p>
+</li>
+<li><p>WidthProfile；</p>
+</li>
+<li><p>ForwardDirection；</p>
+</li>
+<li><p>AllowedVehicleTypes；</p>
+</li>
+<li><p>BranchGroupId；</p>
+</li>
+<li><p>NextSegmentIds；</p>
+</li>
+<li><p>PreviousSegmentIds；</p>
+</li>
+<li><p>ProgressLength；</p>
+</li>
+<li><p>SurfaceZones；</p>
+</li>
+<li><p>RespawnAnchorIds。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-赛道是有向图">14.3 赛道是有向图</h2><p>环形赛道通常是一个闭环有向图。</p>
+<p>存在以下内容时，需要分支图：</p>
+<ul>
+<li><p>捷径；</p>
+</li>
+<li><p>小丑圈；</p>
+</li>
+<li><p>维修区；</p>
+</li>
+<li><p>分叉路线；</p>
+</li>
+<li><p>拉力赛道路选择；</p>
+</li>
+<li><p>动态封路；</p>
+</li>
+<li><p>不同比赛布局。</p>
+</li>
+</ul>
+<p>每个合法路线分支都应明确：</p>
+<ul>
+<li><p>进入条件；</p>
+</li>
+<li><p>离开条件；</p>
+</li>
+<li><p>进度映射；</p>
+</li>
+<li><p>是否影响圈数；</p>
+</li>
+<li><p>是否属于维修区；</p>
+</li>
+<li><p>是否允许排名比较。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-空间投影">14.4 空间投影</h2><p>车辆位置需要投影到合理的RouteSegment上。</p>
+<p>不能简单选择空间距离最近的路段，因为赛道可能：</p>
+<ul>
+<li><p>上下交叉；</p>
+</li>
+<li><p>平行贴近；</p>
+</li>
+<li><p>发卡弯重叠；</p>
+</li>
+<li><p>经过隧道或高架。</p>
+</li>
+</ul>
+<p>投影应综合：</p>
+<ul>
+<li><p>上一有效路段；</p>
+</li>
+<li><p>合法邻接关系；</p>
+</li>
+<li><p>车辆行驶方向；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>当前检查点；</p>
+</li>
+<li><p>最大跳转距离。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-检查点系统">15. 检查点系统</h2><h2 id="151-checkpointdefinition">15.1 CheckpointDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CheckpointId；</p>
+</li>
+<li><p>OrderGroup；</p>
+</li>
+<li><p>TriggerVolume；</p>
+</li>
+<li><p>ForwardDirection；</p>
+</li>
+<li><p>AllowedPreviousIds；</p>
+</li>
+<li><p>AllowedNextIds；</p>
+</li>
+<li><p>RequiredForLap；</p>
+</li>
+<li><p>SectorId；</p>
+</li>
+<li><p>ReverseCrossPolicy；</p>
+</li>
+<li><p>CooldownTicks；</p>
+</li>
+<li><p>BranchPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-检查点通过条件">15.2 检查点通过条件</h2><p>通过检查点时应验证：</p>
+<ul>
+<li><p>车辆从合法一侧进入；</p>
+</li>
+<li><p>移动方向正确；</p>
+</li>
+<li><p>上一检查点合法；</p>
+</li>
+<li><p>车辆未处于无效重生状态；</p>
+</li>
+<li><p>检查点没有在冷却期内重复触发；</p>
+</li>
+<li><p>对应分支条件满足。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-防止终点刷圈">15.3 防止终点刷圈</h2><p>圈数增加通常需要：</p>
+<ol>
+<li><p>通过本圈所有必要检查点；</p>
+</li>
+<li><p>按合法顺序经过；</p>
+</li>
+<li><p>从正确方向穿过终点；</p>
+</li>
+<li><p>当前圈未被标记为无效；</p>
+</li>
+<li><p>车辆未使用非法重生或越界跳转；</p>
+</li>
+<li><p>最小合理圈时已经满足。</p>
+</li>
+</ol>
+<hr />
+<h2 id="16-圈速与分段计时">16. 圈速与分段计时</h2><h2 id="161-timingstate">16.1 TimingState</h2><p>建议包含：</p>
+<ul>
+<li><p>RaceStartTick；</p>
+</li>
+<li><p>CurrentLapStartTick；</p>
+</li>
+<li><p>CurrentSectorStartTick；</p>
+</li>
+<li><p>CompletedLapTimes；</p>
+</li>
+<li><p>CompletedSectorTimes；</p>
+</li>
+<li><p>BestLapTime；</p>
+</li>
+<li><p>BestSectorTimes；</p>
+</li>
+<li><p>PenaltyTime；</p>
+</li>
+<li><p>CurrentLapValidity；</p>
+</li>
+<li><p>FinishTick。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-计时来源">16.2 计时来源</h2><p>所有权威成绩应来自逻辑Tick。</p>
+<p>显示层可以转换为：</p>
+<ul>
+<li><p>分钟；</p>
+</li>
+<li><p>秒；</p>
+</li>
+<li><p>毫秒。</p>
+</li>
+</ul>
+<p>不能使用客户端本地时钟计算排行榜成绩。</p>
+<hr />
+<h2 id="163-无效圈">16.3 无效圈</h2><p>当前圈可以因以下原因失效：</p>
+<ul>
+<li><p>严重越界；</p>
+</li>
+<li><p>跳过检查点；</p>
+</li>
+<li><p>非法重生；</p>
+</li>
+<li><p>逆向穿越；</p>
+</li>
+<li><p>利用禁区；</p>
+</li>
+<li><p>比赛规则禁止的接触或辅助。</p>
+</li>
+</ul>
+<p>系统应立即或尽快向玩家反馈圈速已无效。</p>
+<hr />
+<h2 id="164-理论最佳圈">16.4 理论最佳圈</h2><p>可以根据个人最佳分段计算理论最佳圈，但需要明确：</p>
+<ul>
+<li><p>分段是否来自同一车辆配置；</p>
+</li>
+<li><p>是否来自同一赛道状态；</p>
+</li>
+<li><p>是否使用相同辅助；</p>
+</li>
+<li><p>是否属于合法圈。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-排名与连续比赛进度">17. 排名与连续比赛进度</h2><h2 id="171-trackprogressstate">17.1 TrackProgressState</h2><p>建议字段：</p>
+<ul>
+<li><p>CompletedLaps；</p>
+</li>
+<li><p>LastCheckpointId；</p>
+</li>
+<li><p>CurrentSegmentId；</p>
+</li>
+<li><p>SegmentProgress；</p>
+</li>
+<li><p>TotalProgressDistance；</p>
+</li>
+<li><p>RouteBranchState；</p>
+</li>
+<li><p>IsOffTrack；</p>
+</li>
+<li><p>IsInPitLane；</p>
+</li>
+<li><p>HasFinished；</p>
+</li>
+<li><p>FinishOrder；</p>
+</li>
+<li><p>ProgressConfidence。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-排名排序">17.2 排名排序</h2><p>未完赛车辆可按照以下顺序排序：</p>
+<ol>
+<li><p>完成圈数；</p>
+</li>
+<li><p>已验证检查点进度；</p>
+</li>
+<li><p>当前逻辑路线；</p>
+</li>
+<li><p>当前路段投影距离；</p>
+</li>
+<li><p>必要时使用最近合法进度；</p>
+</li>
+<li><p>最后使用比赛开始顺序作为稳定平局项。</p>
+</li>
+</ol>
+<p>已完赛车辆按：</p>
+<ul>
+<li><p>完赛顺序；</p>
+</li>
+<li><p>最终时间；</p>
+</li>
+<li><p>处罚调整；</p>
+</li>
+</ul>
+<p>排序。</p>
+<hr />
+<h2 id="173-防止排名跳变">17.3 防止排名跳变</h2><p>车辆冲出赛道后，空间上可能接近更后面的路段。</p>
+<p>系统应保留最近可信赛道进度，并降低ProgressConfidence。</p>
+<p>只有车辆重新进入合法邻接路线后，才恢复连续排名。</p>
+<hr />
+<h2 id="18-比赛状态机">18. 比赛状态机</h2><h2 id="181-racephase">18.1 RacePhase</h2><p>推荐阶段：</p>
+<ul>
+<li><p>Loading；</p>
+</li>
+<li><p>GridSetup；</p>
+</li>
+<li><p>Formation；</p>
+</li>
+<li><p>Countdown；</p>
+</li>
+<li><p>Racing；</p>
+</li>
+<li><p>FinalLap；</p>
+</li>
+<li><p>Finishing；</p>
+</li>
+<li><p>PostRace；</p>
+</li>
+<li><p>Aborted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-起跑流程">18.2 起跑流程</h2><ol>
+<li><p>所有车辆加载完成；</p>
+</li>
+<li><p>服务端确认车辆位置和配置；</p>
+</li>
+<li><p>锁定驾驶输入；</p>
+</li>
+<li><p>进入倒计时；</p>
+</li>
+<li><p>记录抢跑检测窗口；</p>
+</li>
+<li><p>起跑信号发布；</p>
+</li>
+<li><p>解锁车辆控制；</p>
+</li>
+<li><p>启动比赛计时。</p>
+</li>
+</ol>
+<hr />
+<h2 id="183-抢跑">18.3 抢跑</h2><p>抢跑可以依据：</p>
+<ul>
+<li><p>车辆位置变化；</p>
+</li>
+<li><p>车轮转动；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>输入；</p>
+</li>
+<li><p>起跑线传感器。</p>
+</li>
+</ul>
+<p>处罚方式包括：</p>
+<ul>
+<li><p>加时；</p>
+</li>
+<li><p>通过维修区；</p>
+</li>
+<li><p>停走；</p>
+</li>
+<li><p>重新起跑；</p>
+</li>
+<li><p>取消资格。</p>
+</li>
+</ul>
+<hr />
+<h2 id="184-比赛结束">18.4 比赛结束</h2><p>需要明确：</p>
+<ul>
+<li><p>第一名完赛后其他车辆还有多少时间；</p>
+</li>
+<li><p>已完赛车辆是否继续存在于赛道；</p>
+</li>
+<li><p>AI是否继续比赛；</p>
+</li>
+<li><p>碰撞是否关闭；</p>
+</li>
+<li><p>最终名次何时锁定；</p>
+</li>
+<li><p>处罚何时结算；</p>
+</li>
+<li><p>断线车辆如何处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-赛道限制与处罚">19. 赛道限制与处罚</h2><h2 id="191-tracklimitstate">19.1 TrackLimitState</h2><p>建议包含：</p>
+<ul>
+<li><p>WheelsOutsideCount；</p>
+</li>
+<li><p>OffTrackDuration；</p>
+</li>
+<li><p>ShortcutGainEstimate；</p>
+</li>
+<li><p>WarningCount；</p>
+</li>
+<li><p>CurrentViolationId；</p>
+</li>
+<li><p>LastLegalPosition；</p>
+</li>
+<li><p>LastLegalProgress。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-出界不等于自动处罚">19.2 出界不等于自动处罚</h2><p>轻微压路肩和真正切弯需要区分。</p>
+<p>处罚可综合：</p>
+<ul>
+<li><p>离开合法区域的车轮数量；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>是否获得明显进度优势；</p>
+</li>
+<li><p>是否超越对手；</p>
+</li>
+<li><p>是否主动减速归还优势；</p>
+</li>
+<li><p>比赛规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-优势归还">19.3 优势归还</h2><p>系统可以要求：</p>
+<ul>
+<li><p>减速；</p>
+</li>
+<li><p>归还位置；</p>
+</li>
+<li><p>在指定时间内回到合法线路；</p>
+</li>
+<li><p>放弃通过非法路线获得的时间。</p>
+</li>
+</ul>
+<p>优势评估不应只依赖固定时间处罚，否则可能过轻或过重。</p>
+<hr />
+<h2 id="194-碰撞处罚">19.4 碰撞处罚</h2><p>竞技比赛中，可以记录：</p>
+<ul>
+<li><p>接触位置；</p>
+</li>
+<li><p>双方速度；</p>
+</li>
+<li><p>方向变化；</p>
+</li>
+<li><p>制动输入；</p>
+</li>
+<li><p>是否明显偏离正常路线；</p>
+</li>
+<li><p>接触前的所有权区域；</p>
+</li>
+<li><p>事故收益。</p>
+</li>
+</ul>
+<p>全自动责任判断难以完全可靠，因此可以用于：</p>
+<ul>
+<li><p>轻度自动处罚；</p>
+</li>
+<li><p>风险评分；</p>
+</li>
+<li><p>赛事审查辅助；</p>
+</li>
+<li><p>玩家行为匹配。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-维修区与比赛策略">20. 维修区与比赛策略</h2><h2 id="201-pitlanedefinition">20.1 PitLaneDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EntryCheckpoint；</p>
+</li>
+<li><p>ExitCheckpoint；</p>
+</li>
+<li><p>SpeedLimit；</p>
+</li>
+<li><p>ServiceSlots；</p>
+</li>
+<li><p>EntryRules；</p>
+</li>
+<li><p>ExitRules；</p>
+</li>
+<li><p>PenaltyRules；</p>
+</li>
+<li><p>QueuePolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-pitstoprequest">20.2 PitStopRequest</h2><p>建议包含：</p>
+<ul>
+<li><p>TireSelection；</p>
+</li>
+<li><p>FuelAmount；</p>
+</li>
+<li><p>RepairSelection；</p>
+</li>
+<li><p>AeroAdjustment；</p>
+</li>
+<li><p>DriverChange；</p>
+</li>
+<li><p>EstimatedServiceTime；</p>
+</li>
+<li><p>Priority。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-维修区流程">20.3 维修区流程</h2><ol>
+<li><p>车辆合法进入维修区；</p>
+</li>
+<li><p>激活限速规则；</p>
+</li>
+<li><p>分配维修位；</p>
+</li>
+<li><p>玩家确认维修计划；</p>
+</li>
+<li><p>车辆停入有效区域；</p>
+</li>
+<li><p>锁定或限制控制；</p>
+</li>
+<li><p>逐项执行维修；</p>
+</li>
+<li><p>更新轮胎、燃料和损伤；</p>
+</li>
+<li><p>释放车辆；</p>
+</li>
+<li><p>验证安全驶出。</p>
+</li>
+</ol>
+<hr />
+<h2 id="204-策略资源">20.4 策略资源</h2><p>长距离比赛可以加入：</p>
+<ul>
+<li><p>燃料；</p>
+</li>
+<li><p>轮胎磨损；</p>
+</li>
+<li><p>轮胎温度；</p>
+</li>
+<li><p>车辆损伤；</p>
+</li>
+<li><p>电池；</p>
+</li>
+<li><p>增压次数；</p>
+</li>
+<li><p>驾驶员疲劳。</p>
+</li>
+</ul>
+<p>策略资源应改变驾驶方式，而不是只形成定时进站要求。</p>
+<hr />
+<h2 id="21-碰撞与损伤系统">21. 碰撞与损伤系统</h2><h2 id="211-contactevent">21.1 ContactEvent</h2><p>建议字段：</p>
+<ul>
+<li><p>ContactId；</p>
+</li>
+<li><p>Tick；</p>
+</li>
+<li><p>EntityA；</p>
+</li>
+<li><p>EntityB；</p>
+</li>
+<li><p>ContactPoint；</p>
+</li>
+<li><p>ContactNormal；</p>
+</li>
+<li><p>RelativeVelocity；</p>
+</li>
+<li><p>Impulse；</p>
+</li>
+<li><p>SurfaceMaterials；</p>
+</li>
+<li><p>ContactType。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-碰撞层级">21.2 碰撞层级</h2><p>可以区分：</p>
+<ul>
+<li><p>车辆与静态场景；</p>
+</li>
+<li><p>车辆与车辆；</p>
+</li>
+<li><p>车辆与动态障碍；</p>
+</li>
+<li><p>车轮与路面；</p>
+</li>
+<li><p>车体刮擦；</p>
+</li>
+<li><p>高速冲击；</p>
+</li>
+<li><p>软体障碍。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-damagestate">21.3 DamageState</h2><p>建议包含：</p>
+<ul>
+<li><p>BodyDamage；</p>
+</li>
+<li><p>EngineDamage；</p>
+</li>
+<li><p>TransmissionDamage；</p>
+</li>
+<li><p>SuspensionDamage；</p>
+</li>
+<li><p>SteeringDamage；</p>
+</li>
+<li><p>AeroDamage；</p>
+</li>
+<li><p>TireDamage；</p>
+</li>
+<li><p>VisualDamage；</p>
+</li>
+<li><p>CriticalFailures。</p>
+</li>
+</ul>
+<p>损伤可以影响：</p>
+<ul>
+<li><p>最大输出；</p>
+</li>
+<li><p>转向；</p>
+</li>
+<li><p>轮胎定位；</p>
+</li>
+<li><p>空气动力；</p>
+</li>
+<li><p>变速；</p>
+</li>
+<li><p>温度；</p>
+</li>
+<li><p>车辆稳定性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="214-街机碰撞保护">21.4 街机碰撞保护</h2><p>街机竞速可以使用：</p>
+<ul>
+<li><p>防翻滚扭矩；</p>
+</li>
+<li><p>碰撞后自动回正；</p>
+</li>
+<li><p>降低小接触冲量；</p>
+</li>
+<li><p>对同向车辆减少碰撞强度；</p>
+</li>
+<li><p>出生保护；</p>
+</li>
+<li><p>高速侧撞限制。</p>
+</li>
+</ul>
+<p>这些修正应集中在碰撞策略层，而不是散布于车辆脚本。</p>
+<hr />
+<h2 id="22-重生与车辆恢复">22. 重生与车辆恢复</h2><h2 id="221-resetrequest">22.1 ResetRequest</h2><p>玩家请求重置时，系统需要判断：</p>
+<ul>
+<li><p>车辆是否失去移动能力；</p>
+</li>
+<li><p>是否正在比赛关键区域；</p>
+</li>
+<li><p>是否可能阻挡其他玩家；</p>
+</li>
+<li><p>最近合法赛道位置；</p>
+</li>
+<li><p>重生是否会跳过进度；</p>
+</li>
+<li><p>是否需要处罚。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-respawnanchor">22.2 RespawnAnchor</h2><p>建议字段：</p>
+<ul>
+<li><p>AnchorId；</p>
+</li>
+<li><p>SegmentId；</p>
+</li>
+<li><p>ProgressDistance；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>SafeBounds；</p>
+</li>
+<li><p>AllowedVehicleTypes；</p>
+</li>
+<li><p>ForwardClearance；</p>
+</li>
+<li><p>BackwardClearance。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-重生流程">22.3 重生流程</h2><ol>
+<li><p>查找最近可信合法进度；</p>
+</li>
+<li><p>选择不会直接与其他车辆重叠的锚点；</p>
+</li>
+<li><p>冻结车辆短暂时间；</p>
+</li>
+<li><p>清除危险角速度；</p>
+</li>
+<li><p>保留或修正合理线速度；</p>
+</li>
+<li><p>应用幽灵保护；</p>
+</li>
+<li><p>标记当前圈或处罚状态；</p>
+</li>
+<li><p>恢复玩家控制。</p>
+</li>
+</ol>
+<p>不能直接将车辆放到空间上最近的道路，因为可能跳到后续路段。</p>
+<hr />
+<h2 id="23-对手ai架构">23. 对手AI架构</h2><p>推荐将AI分为五层：</p>
+<ol>
+<li><p>赛道理解；</p>
+</li>
+<li><p>路线规划；</p>
+</li>
+<li><p>速度规划；</p>
+</li>
+<li><p>对手交互；</p>
+</li>
+<li><p>车辆控制。</p>
+</li>
+</ol>
+<hr />
+<h2 id="231-aireferenceline">23.1 AIReferenceLine</h2><p>建议包含：</p>
+<ul>
+<li><p>SamplePoints；</p>
+</li>
+<li><p>Tangents；</p>
+</li>
+<li><p>Curvature；</p>
+</li>
+<li><p>RecommendedSpeed；</p>
+</li>
+<li><p>BrakingZones；</p>
+</li>
+<li><p>OvertakeZones；</p>
+</li>
+<li><p>DefenseZones；</p>
+</li>
+<li><p>SurfaceRisk；</p>
+</li>
+<li><p>AlternativeLines。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-路线规划">23.2 路线规划</h2><p>AI不应只追踪一条固定中心线。</p>
+<p>可选择：</p>
+<ul>
+<li><p>理想线路；</p>
+</li>
+<li><p>防守线路；</p>
+</li>
+<li><p>超车线路；</p>
+</li>
+<li><p>湿地线路；</p>
+</li>
+<li><p>避障线路；</p>
+</li>
+<li><p>进站线路；</p>
+</li>
+<li><p>恢复线路。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-速度规划">23.3 速度规划</h2><p>目标速度受到：</p>
+<ul>
+<li><p>弯道曲率；</p>
+</li>
+<li><p>车辆性能；</p>
+</li>
+<li><p>轮胎；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>路面；</p>
+</li>
+<li><p>前车；</p>
+</li>
+<li><p>燃料；</p>
+</li>
+<li><p>AI能力；</p>
+</li>
+<li><p>风险偏好；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="234-对手感知">23.4 对手感知</h2><p>AI可以感知：</p>
+<ul>
+<li><p>附近车辆相对位置；</p>
+</li>
+<li><p>预测碰撞时间；</p>
+</li>
+<li><p>前车速度；</p>
+</li>
+<li><p>内外线空间；</p>
+</li>
+<li><p>黄旗或事故；</p>
+</li>
+<li><p>赛道宽度；</p>
+</li>
+<li><p>自身损伤。</p>
+</li>
+</ul>
+<p>AI不能直接使用不可能获得的未来车辆位置。</p>
+<hr />
+<h2 id="235-ai个性">23.5 AI个性</h2><p>可以配置：</p>
+<ul>
+<li><p>进攻性；</p>
+</li>
+<li><p>防守倾向；</p>
+</li>
+<li><p>事故容忍度；</p>
+</li>
+<li><p>制动稳定性；</p>
+</li>
+<li><p>路线误差；</p>
+</li>
+<li><p>轮胎管理；</p>
+</li>
+<li><p>维修策略；</p>
+</li>
+<li><p>雨战能力。</p>
+</li>
+</ul>
+<p>高难AI不应只通过提高车辆物理性能作弊。</p>
+<hr />
+<h2 id="236-ai执行边界">23.6 AI执行边界</h2><p>AI最终也应输出：</p>
+<ul>
+<li><p>Steering；</p>
+</li>
+<li><p>Throttle；</p>
+</li>
+<li><p>Brake；</p>
+</li>
+<li><p>Gear；</p>
+</li>
+<li><p>PitRequest。</p>
+</li>
+</ul>
+<p>而不是直接设置位置和速度。</p>
+<hr />
+<h2 id="24-幽灵车与计时挑战">24. 幽灵车与计时挑战</h2><h2 id="241-ghostrecord">24.1 GhostRecord</h2><p>建议包含：</p>
+<ul>
+<li><p>TrackId；</p>
+</li>
+<li><p>TrackVersion；</p>
+</li>
+<li><p>VehicleConfigHash；</p>
+</li>
+<li><p>AssistProfile；</p>
+</li>
+<li><p>WeatherProfile；</p>
+</li>
+<li><p>InputFrames；</p>
+</li>
+<li><p>PeriodicStateSamples；</p>
+</li>
+<li><p>FinalTime；</p>
+</li>
+<li><p>ValidityProof；</p>
+</li>
+<li><p>GameVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-输入重演与轨迹播放">24.2 输入重演与轨迹播放</h2><p>幽灵可以采用两种方式：</p>
+<h3 id="输入重演">输入重演</h3><p>重新运行车辆模拟。</p>
+<p>优点：</p>
+<ul>
+<li><p>逻辑一致；</p>
+</li>
+<li><p>数据紧凑。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>对版本和确定性要求高。</li>
+</ul>
+<h3 id="轨迹播放">轨迹播放</h3><p>保存位置、旋转和动画状态。</p>
+<p>优点：</p>
+<ul>
+<li><p>对版本更稳定；</p>
+</li>
+<li><p>播放成本低。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><p>数据更大；</p>
+</li>
+<li><p>不能完整重建驾驶逻辑。</p>
+</li>
+</ul>
+<p>可以组合使用：输入用于验证，轨迹用于表现。</p>
+<hr />
+<h2 id="243-幽灵交互">24.3 幽灵交互</h2><p>幽灵通常应：</p>
+<ul>
+<li><p>不参与碰撞；</p>
+</li>
+<li><p>不影响赛道状态；</p>
+</li>
+<li><p>不触发实体检查点奖励；</p>
+</li>
+<li><p>只用于对比；</p>
+</li>
+<li><p>支持透明度和距离提示。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-回放系统">25. 回放系统</h2><p>比赛回放需要记录：</p>
+<ul>
+<li><p>比赛配置；</p>
+</li>
+<li><p>车辆配置；</p>
+</li>
+<li><p>赛道版本；</p>
+</li>
+<li><p>输入；</p>
+</li>
+<li><p>随机流；</p>
+</li>
+<li><p>关键状态快照；</p>
+</li>
+<li><p>比赛事件；</p>
+</li>
+<li><p>镜头标记。</p>
+</li>
+</ul>
+<p>回放可以用于：</p>
+<ul>
+<li><p>玩家观赏；</p>
+</li>
+<li><p>事故审查；</p>
+</li>
+<li><p>排行榜验证；</p>
+</li>
+<li><p>AI训练；</p>
+</li>
+<li><p>Bug复现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="251-回放事件">25.1 回放事件</h2><p>建议记录：</p>
+<ul>
+<li><p>起跑；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>超车；</p>
+</li>
+<li><p>碰撞；</p>
+</li>
+<li><p>出界；</p>
+</li>
+<li><p>处罚；</p>
+</li>
+<li><p>进站；</p>
+</li>
+<li><p>最后一圈；</p>
+</li>
+<li><p>完赛；</p>
+</li>
+<li><p>车辆故障。</p>
+</li>
+</ul>
+<p>自动镜头可以依据事件重要度选择视角。</p>
+<hr />
+<h2 id="26-联机同步架构">26. 联机同步架构</h2><p>竞速游戏需要同步：</p>
+<ul>
+<li><p>车辆位置；</p>
+</li>
+<li><p>姿态；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>输入；</p>
+</li>
+<li><p>轮胎状态；</p>
+</li>
+<li><p>损伤；</p>
+</li>
+<li><p>比赛进度；</p>
+</li>
+<li><p>碰撞；</p>
+</li>
+<li><p>处罚。</p>
+</li>
+</ul>
+<hr />
+<h2 id="261-权威边界">26.1 权威边界</h2><p>推荐由服务端权威维护：</p>
+<ul>
+<li><p>比赛流程；</p>
+</li>
+<li><p>圈数；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>排名；</p>
+</li>
+<li><p>处罚；</p>
+</li>
+<li><p>最终成绩；</p>
+</li>
+<li><p>车辆合法性；</p>
+</li>
+<li><p>关键碰撞结果。</p>
+</li>
+</ul>
+<p>车辆物理可以采用：</p>
+<ul>
+<li><p>服务端权威模拟；</p>
+</li>
+<li><p>客户端预测加服务端校正；</p>
+</li>
+<li><p>主机权威；</p>
+</li>
+<li><p>输入锁步；</p>
+</li>
+<li><p>混合模型。</p>
+</li>
+</ul>
+<p>具体选择取决于玩家数量、物理复杂度和竞技要求。</p>
+<hr />
+<h2 id="262-vehiclesnapshot">26.2 VehicleSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>Tick；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>LinearVelocity；</p>
+</li>
+<li><p>AngularVelocity；</p>
+</li>
+<li><p>Steering；</p>
+</li>
+<li><p>Throttle；</p>
+</li>
+<li><p>Brake；</p>
+</li>
+<li><p>Gear；</p>
+</li>
+<li><p>WheelContactSummary；</p>
+</li>
+<li><p>DamageSummary；</p>
+</li>
+<li><p>TrackProgress；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-远端车辆表现">26.3 远端车辆表现</h2><p>远端车辆通常使用：</p>
+<ul>
+<li><p>快照插值；</p>
+</li>
+<li><p>短时间外推；</p>
+</li>
+<li><p>误差平滑；</p>
+</li>
+<li><p>碰撞前高频同步；</p>
+</li>
+<li><p>碰撞后权威校正。</p>
+</li>
+</ul>
+<p>不能直接瞬移修正，否则会破坏跟车和超车判断。</p>
+<hr />
+<h2 id="264-联机碰撞">26.4 联机碰撞</h2><p>车辆与车辆碰撞存在双边影响。</p>
+<p>需要明确：</p>
+<ul>
+<li><p>碰撞由谁裁定；</p>
+</li>
+<li><p>延迟补偿窗口；</p>
+</li>
+<li><p>双方位置差异如何处理；</p>
+</li>
+<li><p>大误差时是否降级为弱碰撞；</p>
+</li>
+<li><p>是否存在防恶意撞击策略。</p>
+</li>
+</ul>
+<p>普通位置预测不能完全解决高速度接触问题，因此竞技模式通常需要更严格的服务端裁定或共享模拟。</p>
+<hr />
+<h2 id="265-排行榜提交">26.5 排行榜提交</h2><p>排行榜成绩应包含：</p>
+<ul>
+<li><p>玩家；</p>
+</li>
+<li><p>赛道；</p>
+</li>
+<li><p>赛道版本；</p>
+</li>
+<li><p>车辆配置；</p>
+</li>
+<li><p>辅助配置；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>最终时间；</p>
+</li>
+<li><p>处罚；</p>
+</li>
+<li><p>有效性；</p>
+</li>
+<li><p>输入或回放证明；</p>
+</li>
+<li><p>客户端和服务端版本。</p>
+</li>
+</ul>
+<p>不能只接受客户端提交的时间数值。</p>
+<hr />
+<h2 id="27-车辆配置与调校">27. 车辆配置与调校</h2><h2 id="271-setupdefinition">27.1 SetupDefinition</h2><p>建议包含：</p>
+<ul>
+<li><p>TireCompound；</p>
+</li>
+<li><p>TirePressure；</p>
+</li>
+<li><p>GearRatios；</p>
+</li>
+<li><p>DifferentialSettings；</p>
+</li>
+<li><p>SuspensionSettings；</p>
+</li>
+<li><p>BrakeBias；</p>
+</li>
+<li><p>AeroSettings；</p>
+</li>
+<li><p>RideHeight；</p>
+</li>
+<li><p>FuelLoad；</p>
+</li>
+<li><p>AssistOverrides。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-调校边界">27.2 调校边界</h2><p>调校应影响：</p>
+<ul>
+<li><p>车辆行为；</p>
+</li>
+<li><p>赛道适配；</p>
+</li>
+<li><p>轮胎管理；</p>
+</li>
+<li><p>直线与弯道取舍；</p>
+</li>
+<li><p>稳定与极限取舍。</p>
+</li>
+</ul>
+<p>不应出现一个配置在所有赛道和天气中都最优。</p>
+<hr />
+<h2 id="273-配置验证">27.3 配置验证</h2><p>进入比赛前验证：</p>
+<ul>
+<li><p>参数范围；</p>
+</li>
+<li><p>车辆兼容性；</p>
+</li>
+<li><p>比赛规则；</p>
+</li>
+<li><p>最低高度；</p>
+</li>
+<li><p>轮胎类型；</p>
+</li>
+<li><p>性能等级；</p>
+</li>
+<li><p>禁止配件；</p>
+</li>
+<li><p>配置哈希。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-长期成长与车辆解锁">28. 长期成长与车辆解锁</h2><p>竞速游戏可以拥有：</p>
+<ul>
+<li><p>车辆购买；</p>
+</li>
+<li><p>零件升级；</p>
+</li>
+<li><p>赛事资格；</p>
+</li>
+<li><p>驾驶员等级；</p>
+</li>
+<li><p>赞助；</p>
+</li>
+<li><p>车队管理；</p>
+</li>
+<li><p>车辆收藏。</p>
+</li>
+</ul>
+<p>但竞技模式需要控制长期成长对公平性的影响。</p>
+<p>推荐分离：</p>
+<ul>
+<li><p>生涯模式性能成长；</p>
+</li>
+<li><p>同规格竞技；</p>
+</li>
+<li><p>性能指数分组；</p>
+</li>
+<li><p>统一调校比赛；</p>
+</li>
+<li><p>自由改装比赛。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-完整执行流程示例">29. 完整执行流程示例</h2><p>以下以“玩家高速进入弯道，发生轻微出界并被系统判定无需处罚”为例。</p>
+<h3 id="291-输入处理">29.1 输入处理</h3><p>玩家在直道末端：</p>
+<ul>
+<li><p>松开油门；</p>
+</li>
+<li><p>输入80%制动；</p>
+</li>
+<li><p>向右转向。</p>
+</li>
+</ul>
+<p>输入系统生成DriverInputFrame。</p>
+<p>ABS和转向辅助对输入进行有限修正。</p>
+<hr />
+<h3 id="292-车辆模拟">29.2 车辆模拟</h3><p>发动机系统计算发动机制动。</p>
+<p>制动系统向四个车轮分配制动力。</p>
+<p>轮胎系统计算纵向滑移和横向侧偏。</p>
+<p>车辆因制动发生载荷前移。</p>
+<hr />
+<h3 id="293-入弯状态">29.3 入弯状态</h3><p>车辆前轮保持抓地。</p>
+<p>后轮因路肩摩擦变化出现轻微滑动。</p>
+<p>稳定控制施加小幅修正。</p>
+<p>玩家继续调整油门和转向。</p>
+<hr />
+<h3 id="294-赛道边界检测">29.4 赛道边界检测</h3><p>外侧两个车轮短暂离开主赛道。</p>
+<p>TrackLimitSystem创建一次潜在违规记录：</p>
+<ul>
+<li><p>出界持续时间较短；</p>
+</li>
+<li><p>车辆没有跳过检查点；</p>
+</li>
+<li><p>投影进度增益极小；</p>
+</li>
+<li><p>未超越其他车辆；</p>
+</li>
+<li><p>车辆速度反而下降。</p>
+</li>
+</ul>
+<hr />
+<h3 id="295-违规裁定">29.5 违规裁定</h3><p>系统将结果判定为：</p>
+<ul>
+<li><p>无处罚；</p>
+</li>
+<li><p>记录一次轻微警告；</p>
+</li>
+<li><p>当前圈保持有效。</p>
+</li>
+</ul>
+<p>如果玩家通过出界明显缩短路线，则会要求归还优势或判定无效圈。</p>
+<hr />
+<h3 id="296-排名更新">29.6 排名更新</h3><p>车辆仍映射到原RouteSegment。</p>
+<p>TrackProgress没有跳转至空间上接近的后续路段。</p>
+<p>比赛排名继续使用可信进度。</p>
+<hr />
+<h3 id="297-玩家反馈">29.7 玩家反馈</h3><p>表现层播放：</p>
+<ul>
+<li><p>路肩震动；</p>
+</li>
+<li><p>轮胎声变化；</p>
+</li>
+<li><p>少量尘土；</p>
+</li>
+<li><p>轻微警告提示。</p>
+</li>
+</ul>
+<p>玩家能够理解车辆接近极限，但不会因短暂误差遭受不可解释重罚。</p>
+<hr />
+<h2 id="30-模块通信设计">30. 模块通信设计</h2><h2 id="301-输入命令">30.1 输入命令</h2><p>输入域向车辆域提交：</p>
+<ul>
+<li><p>DriverInputFrame；</p>
+</li>
+<li><p>PitRequest；</p>
+</li>
+<li><p>ResetRequest；</p>
+</li>
+<li><p>AssistChangeRequest。</p>
+</li>
+</ul>
+<p>输入域不能直接修改：</p>
+<ul>
+<li><p>车辆位置；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>圈数；</p>
+</li>
+<li><p>排名；</p>
+</li>
+<li><p>处罚。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-同步查询">30.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>车辆当前挡位；</p>
+</li>
+<li><p>当前路面；</p>
+</li>
+<li><p>当前赛道路段；</p>
+</li>
+<li><p>是否允许重生；</p>
+</li>
+<li><p>是否进入维修区；</p>
+</li>
+<li><p>当前圈是否有效；</p>
+</li>
+<li><p>最近合法重生点。</p>
+</li>
+</ul>
+<p>同步查询不得改变车辆或比赛状态。</p>
+<hr />
+<h2 id="303-领域事件">30.3 领域事件</h2><p>典型事件包括：</p>
+<ul>
+<li><p>RaceStarted；</p>
+</li>
+<li><p>VehicleSpawned；</p>
+</li>
+<li><p>CheckpointPassed；</p>
+</li>
+<li><p>SectorCompleted；</p>
+</li>
+<li><p>LapCompleted；</p>
+</li>
+<li><p>TrackLimitViolated；</p>
+</li>
+<li><p>CollisionCommitted；</p>
+</li>
+<li><p>PitEntered；</p>
+</li>
+<li><p>PenaltyApplied；</p>
+</li>
+<li><p>VehicleFinished；</p>
+</li>
+<li><p>RaceCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-表现事件">30.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>TireSkidChanged；</p>
+</li>
+<li><p>EngineRPMChanged；</p>
+</li>
+<li><p>SurfaceEffectChanged；</p>
+</li>
+<li><p>CollisionEffect；</p>
+</li>
+<li><p>LapBanner；</p>
+</li>
+<li><p>PositionChanged；</p>
+</li>
+<li><p>FinalLapNotification；</p>
+</li>
+<li><p>FinishPresentation。</p>
+</li>
+</ul>
+<p>表现事件不能作为比赛规则成立的依据。</p>
+<hr />
+<h2 id="31-失败隔离">31. 失败隔离</h2><h2 id="311-车辆物理异常">31.1 车辆物理异常</h2><p>检测到以下状态时：</p>
+<ul>
+<li><p>位置或速度非数值；</p>
+</li>
+<li><p>角速度异常放大；</p>
+</li>
+<li><p>车辆穿入场景；</p>
+</li>
+<li><p>车轮接触数据无效；</p>
+</li>
+<li><p>车辆超出世界边界；</p>
+</li>
+</ul>
+<p>应：</p>
+<ol>
+<li><p>停止继续积分异常状态；</p>
+</li>
+<li><p>回退到最近稳定车辆快照；</p>
+</li>
+<li><p>清除非法冲量；</p>
+</li>
+<li><p>必要时执行安全重生；</p>
+</li>
+<li><p>记录车辆配置、接触和模拟Tick。</p>
+</li>
+</ol>
+<hr />
+<h2 id="312-赛道投影失败">31.2 赛道投影失败</h2><p>若车辆无法映射到合法路段：</p>
+<ul>
+<li><p>保留最近可信TrackProgress；</p>
+</li>
+<li><p>标记ProgressConfidence降低；</p>
+</li>
+<li><p>不立即改变排名；</p>
+</li>
+<li><p>尝试从相邻路段重新捕获；</p>
+</li>
+<li><p>超时后执行出界或重生规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-检查点配置异常">31.3 检查点配置异常</h2><p>如果检查点缺失、顺序断裂或引用不存在：</p>
+<ul>
+<li><p>阻止赛道进入正式排行榜；</p>
+</li>
+<li><p>在开发环境中直接报告错误；</p>
+</li>
+<li><p>普通离线模式可使用安全顺序或关闭成绩提交；</p>
+</li>
+<li><p>不允许生成不可验证成绩。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-ai失败">31.4 AI失败</h2><p>AI无法生成有效路线时：</p>
+<ul>
+<li><p>降低速度；</p>
+</li>
+<li><p>沿最近参考线恢复；</p>
+</li>
+<li><p>开启安全驾驶；</p>
+</li>
+<li><p>必要时执行重生；</p>
+</li>
+<li><p>不直接传送到领先位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-联机快照异常">31.5 联机快照异常</h2><p>收到：</p>
+<ul>
+<li><p>过期快照；</p>
+</li>
+<li><p>版本不匹配；</p>
+</li>
+<li><p>非法速度；</p>
+</li>
+<li><p>位置跳跃；</p>
+</li>
+<li><p>状态哈希错误；</p>
+</li>
+</ul>
+<p>时，应：</p>
+<ul>
+<li><p>拒绝不合法数据；</p>
+</li>
+<li><p>请求完整权威状态；</p>
+</li>
+<li><p>平滑校正远端表现；</p>
+</li>
+<li><p>标记网络或安全事件；</p>
+</li>
+<li><p>不修改已确认圈速和排名。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-比赛流程失败">31.6 比赛流程失败</h2><p>比赛状态机无法进入下一阶段时：</p>
+<ul>
+<li><p>冻结成绩提交；</p>
+</li>
+<li><p>保留车辆和参与者快照；</p>
+</li>
+<li><p>进入安全结束流程；</p>
+</li>
+<li><p>根据已确认进度生成无结果或降级结果；</p>
+</li>
+<li><p>不重复发放奖励。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-排行榜服务故障">31.7 排行榜服务故障</h2><p>比赛结果可以：</p>
+<ul>
+<li><p>先写入可靠本地或服务端队列；</p>
+</li>
+<li><p>标记为待提交；</p>
+</li>
+<li><p>异步重试；</p>
+</li>
+<li><p>使用幂等结果ID；</p>
+</li>
+<li><p>不要求玩家重新跑圈。</p>
+</li>
+</ul>
+<p>排行榜不可用不应阻止离线比赛结束。</p>
+<hr />
+<h2 id="32-调试与可观测性">32. 调试与可观测性</h2><h2 id="321-车辆遥测面板">32.1 车辆遥测面板</h2><p>实时显示：</p>
+<ul>
+<li><p>速度；</p>
+</li>
+<li><p>加速度；</p>
+</li>
+<li><p>发动机转速；</p>
+</li>
+<li><p>挡位；</p>
+</li>
+<li><p>油门和制动；</p>
+</li>
+<li><p>转向；</p>
+</li>
+<li><p>每轮载荷；</p>
+</li>
+<li><p>轮胎滑移；</p>
+</li>
+<li><p>轮胎温度；</p>
+</li>
+<li><p>悬挂压缩；</p>
+</li>
+<li><p>空气动力；</p>
+</li>
+<li><p>辅助介入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-轮胎力可视化">32.2 轮胎力可视化</h2><p>为每个车轮显示：</p>
+<ul>
+<li><p>接地点；</p>
+</li>
+<li><p>法线；</p>
+</li>
+<li><p>纵向力；</p>
+</li>
+<li><p>横向力；</p>
+</li>
+<li><p>滑移率；</p>
+</li>
+<li><p>侧偏角；</p>
+</li>
+<li><p>抓地使用率；</p>
+</li>
+<li><p>路面类型。</p>
+</li>
+</ul>
+<p>用于定位：</p>
+<ul>
+<li><p>突然失控；</p>
+</li>
+<li><p>左右不对称；</p>
+</li>
+<li><p>制动异常；</p>
+</li>
+<li><p>路面配置错误。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-赛道拓扑查看器">32.3 赛道拓扑查看器</h2><p>显示：</p>
+<ul>
+<li><p>RouteSegment；</p>
+</li>
+<li><p>中心线；</p>
+</li>
+<li><p>分支；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>赛道边界；</p>
+</li>
+<li><p>维修区；</p>
+</li>
+<li><p>重生锚点；</p>
+</li>
+<li><p>当前车辆投影；</p>
+</li>
+<li><p>合法相邻路段；</p>
+</li>
+<li><p>比赛进度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-检查点审计器">32.4 检查点审计器</h2><p>选择车辆后显示：</p>
+<ul>
+<li><p>已通过检查点；</p>
+</li>
+<li><p>当前期待检查点；</p>
+</li>
+<li><p>通过方向；</p>
+</li>
+<li><p>被拒绝原因；</p>
+</li>
+<li><p>当前圈有效性；</p>
+</li>
+<li><p>分支状态；</p>
+</li>
+<li><p>终点计圈条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-排名解释器">32.5 排名解释器</h2><p>显示每辆车：</p>
+<ul>
+<li><p>完成圈数；</p>
+</li>
+<li><p>检查点顺序；</p>
+</li>
+<li><p>当前路段；</p>
+</li>
+<li><p>路段进度；</p>
+</li>
+<li><p>总进度；</p>
+</li>
+<li><p>可信度；</p>
+</li>
+<li><p>处罚；</p>
+</li>
+<li><p>最终排序依据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-碰撞回放">32.6 碰撞回放</h2><p>针对事故保存短窗口：</p>
+<ul>
+<li><p>双方输入；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>接触点；</p>
+</li>
+<li><p>冲量；</p>
+</li>
+<li><p>制动；</p>
+</li>
+<li><p>方向变化；</p>
+</li>
+<li><p>网络延迟；</p>
+</li>
+<li><p>权威修正。</p>
+</li>
+</ul>
+<p>用于分析：</p>
+<ul>
+<li><p>物理问题；</p>
+</li>
+<li><p>网络误差；</p>
+</li>
+<li><p>恶意碰撞；</p>
+</li>
+<li><p>赛道安全设计。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-ai决策查看器">32.7 AI决策查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前路线；</p>
+</li>
+<li><p>目标速度；</p>
+</li>
+<li><p>制动点；</p>
+</li>
+<li><p>超车候选；</p>
+</li>
+<li><p>防守状态；</p>
+</li>
+<li><p>风险评分；</p>
+</li>
+<li><p>感知到的对手；</p>
+</li>
+<li><p>最终控制输入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-状态回放">32.8 状态回放</h2><p>通过输入和关键快照重现：</p>
+<ul>
+<li><p>圈速异常；</p>
+</li>
+<li><p>车辆翻转；</p>
+</li>
+<li><p>错误计圈；</p>
+</li>
+<li><p>排名跳变；</p>
+</li>
+<li><p>重生跳段；</p>
+</li>
+<li><p>联机碰撞。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-内容验证工具">33. 内容验证工具</h2><h2 id="331-赛道闭环验证">33.1 赛道闭环验证</h2><p>自动检查：</p>
+<ul>
+<li><p>起点到终点可达；</p>
+</li>
+<li><p>环形路线能够闭合；</p>
+</li>
+<li><p>必要检查点顺序完整；</p>
+</li>
+<li><p>每个分支有合法回归路径；</p>
+</li>
+<li><p>维修区不会误计为主路线；</p>
+</li>
+<li><p>不存在跳过大段赛道的邻接关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-检查点覆盖验证">33.2 检查点覆盖验证</h2><p>自动驾驶或采样不同路线，检查：</p>
+<ul>
+<li><p>正常路线均能触发检查点；</p>
+</li>
+<li><p>路边合法线路不会漏判；</p>
+</li>
+<li><p>倒车不会计圈；</p>
+</li>
+<li><p>高速穿越不会跳过触发；</p>
+</li>
+<li><p>重生不会重复触发；</p>
+</li>
+<li><p>分支路线按预期工作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-重生点验证">33.3 重生点验证</h2><p>对每个RespawnAnchor检查：</p>
+<ul>
+<li><p>不与场景重叠；</p>
+</li>
+<li><p>朝向正确；</p>
+</li>
+<li><p>前后具有安全距离；</p>
+</li>
+<li><p>不会跳过必要检查点；</p>
+</li>
+<li><p>不会放到错误层级道路；</p>
+</li>
+<li><p>适配不同车辆尺寸。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-ai可驾驶性验证">33.4 AI可驾驶性验证</h2><p>让AI以不同车辆运行赛道，检查：</p>
+<ul>
+<li><p>是否能够完成比赛；</p>
+</li>
+<li><p>是否存在无法恢复的路段；</p>
+</li>
+<li><p>是否频繁撞击；</p>
+</li>
+<li><p>制动点是否合理；</p>
+</li>
+<li><p>分支路线是否可用；</p>
+</li>
+<li><p>雨天路线是否安全。</p>
+</li>
+</ul>
+<hr />
+<h2 id="335-圈速异常检测">33.5 圈速异常检测</h2><p>自动识别：</p>
+<ul>
+<li><p>低于理论物理下限的圈速；</p>
+</li>
+<li><p>检查点时间顺序异常；</p>
+</li>
+<li><p>瞬移式进度变化；</p>
+</li>
+<li><p>重生后获得优势；</p>
+</li>
+<li><p>长时间出界仍保持有效圈；</p>
+</li>
+<li><p>配置或辅助不符合排行榜规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-性能设计">34. 性能设计</h2><h2 id="341-模拟与表现分离">34.1 模拟与表现分离</h2><p>远处车辆可以降低：</p>
+<ul>
+<li><p>轮胎粒子；</p>
+</li>
+<li><p>细节动画；</p>
+</li>
+<li><p>音频声源；</p>
+</li>
+<li><p>车内组件更新；</p>
+</li>
+<li><p>视觉损伤精度。</p>
+</li>
+</ul>
+<p>但权威比赛车辆仍需保持必要的：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>赛道进度；</p>
+</li>
+<li><p>碰撞；</p>
+</li>
+<li><p>比赛规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="342-物理更新等级">34.2 物理更新等级</h2><p>可按重要度划分：</p>
+<ul>
+<li><p>LocalPlayerFull；</p>
+</li>
+<li><p>NearbyOpponentFull；</p>
+</li>
+<li><p>RemoteOpponentReduced；</p>
+</li>
+<li><p>DistantAIApproximate；</p>
+</li>
+<li><p>InactiveDisplayOnly。</p>
+</li>
+</ul>
+<p>降低精度时不能改变正式比赛公平性。</p>
+<p>竞技模式中所有参赛车辆通常需要保持足够一致的物理层级。</p>
+<hr />
+<h2 id="343-赛道空间索引">34.3 赛道空间索引</h2><p>用于加速：</p>
+<ul>
+<li><p>路段投影；</p>
+</li>
+<li><p>路面查询；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>赛道边界；</p>
+</li>
+<li><p>AI路线；</p>
+</li>
+<li><p>重生点；</p>
+</li>
+<li><p>镜头区域。</p>
+</li>
+</ul>
+<p>不要每Tick遍历全部赛道路段。</p>
+<hr />
+<h2 id="344-遥测采样频率">34.4 遥测采样频率</h2><p>调试和数据分析不需要每项数据都逐Tick永久保存。</p>
+<p>可以分为：</p>
+<ul>
+<li><p>高频短窗口；</p>
+</li>
+<li><p>低频全局统计；</p>
+</li>
+<li><p>事件触发快照；</p>
+</li>
+<li><p>玩家主动保存；</p>
+</li>
+<li><p>异常状态完整记录。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-可扩展点">35. 可扩展点</h2><h2 id="351-新车辆">35.1 新车辆</h2><p>新增车辆主要提供：</p>
+<ul>
+<li><p>VehicleDefinition；</p>
+</li>
+<li><p>动力系统配置；</p>
+</li>
+<li><p>轮胎与悬挂；</p>
+</li>
+<li><p>碰撞体；</p>
+</li>
+<li><p>表现资源；</p>
+</li>
+<li><p>AI性能参数；</p>
+</li>
+<li><p>合法赛事标签。</p>
+</li>
+</ul>
+<p>不应修改比赛和检查点主流程。</p>
+<hr />
+<h2 id="352-新赛道">35.2 新赛道</h2><p>新赛道通过：</p>
+<ul>
+<li><p>TrackDefinition；</p>
+</li>
+<li><p>RouteSegment图；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>分段；</p>
+</li>
+<li><p>边界；</p>
+</li>
+<li><p>重生点；</p>
+</li>
+<li><p>AI参考线；</p>
+</li>
+<li><p>环境配置；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="353-新比赛规则">35.3 新比赛规则</h2><p>例如：</p>
+<ul>
+<li><p>淘汰赛；</p>
+</li>
+<li><p>计时赛；</p>
+</li>
+<li><p>漂移积分；</p>
+</li>
+<li><p>小丑圈；</p>
+</li>
+<li><p>团队积分；</p>
+</li>
+<li><p>接力；</p>
+</li>
+<li><p>检查点冲刺；</p>
+</li>
+<li><p>追逐赛。</p>
+</li>
+</ul>
+<p>可通过RaceRuleSet替换：</p>
+<ul>
+<li><p>完成条件；</p>
+</li>
+<li><p>排名策略；</p>
+</li>
+<li><p>计时策略；</p>
+</li>
+<li><p>处罚规则；</p>
+</li>
+<li><p>重生规则；</p>
+</li>
+<li><p>奖励规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="354-新驾驶辅助">35.4 新驾驶辅助</h2><p>通过统一AssistProcessor接入：</p>
+<ul>
+<li><p>输入源；</p>
+</li>
+<li><p>当前车辆状态；</p>
+</li>
+<li><p>赛道状态；</p>
+</li>
+<li><p>修正输出；</p>
+</li>
+<li><p>介入强度；</p>
+</li>
+<li><p>竞技限制；</p>
+</li>
+<li><p>遥测信息。</p>
+</li>
+</ul>
+<hr />
+<h2 id="355-新天气和路面">35.5 新天气和路面</h2><p>新增：</p>
+<ul>
+<li><p>SurfaceDefinition；</p>
+</li>
+<li><p>WeatherProfile；</p>
+</li>
+<li><p>轮胎修正；</p>
+</li>
+<li><p>视觉和声音；</p>
+</li>
+<li><p>AI策略；</p>
+</li>
+<li><p>赛道演化规则。</p>
+</li>
+</ul>
+<p>无需修改比赛进度系统。</p>
+<hr />
+<h2 id="356-新网络模式">35.6 新网络模式</h2><p>可以替换：</p>
+<ul>
+<li><p>VehicleAuthorityPolicy；</p>
+</li>
+<li><p>SnapshotRate；</p>
+</li>
+<li><p>PredictionPolicy；</p>
+</li>
+<li><p>CollisionAuthority；</p>
+</li>
+<li><p>SpectatorDelay；</p>
+</li>
+<li><p>ResultValidation。</p>
+</li>
+</ul>
+<p>比赛规则和车辆内容不应依赖具体传输实现。</p>
+<hr />
+<h2 id="36-玩家体验设计">36. 玩家体验设计</h2><h2 id="361-驾驶反馈必须建立闭环">36.1 驾驶反馈必须建立闭环</h2><p>玩家输入转向后，应通过以下链路感知结果：</p>
+<p>输入
+→ 方向盘或摇杆反馈
+→ 前轮响应
+→ 车身姿态变化
+→ 轮胎抓地变化
+→ 车辆路线变化
+→ 声音和镜头反馈</p>
+<p>如果视觉、声音和物理响应不同步，车辆会显得漂浮或不可控。</p>
+<hr />
+<h2 id="362-速度感不只来自提高视野模糊">36.2 速度感不只来自提高视野模糊</h2><p>速度感可以由以下因素共同产生：</p>
+<ul>
+<li><p>路边参照物；</p>
+</li>
+<li><p>镜头位置；</p>
+</li>
+<li><p>视野变化；</p>
+</li>
+<li><p>悬挂震动；</p>
+</li>
+<li><p>风噪；</p>
+</li>
+<li><p>发动机声音；</p>
+</li>
+<li><p>道路纹理移动；</p>
+</li>
+<li><p>车辆稳定性变化；</p>
+</li>
+<li><p>制动距离。</p>
+</li>
+</ul>
+<p>只增加运动模糊会降低可读性，并不能建立可信速度感。</p>
+<hr />
+<h2 id="363-失败需要能够归因">36.3 失败需要能够归因</h2><p>玩家失误后应能理解：</p>
+<ul>
+<li><p>制动过晚；</p>
+</li>
+<li><p>入弯速度过高；</p>
+</li>
+<li><p>转向过多；</p>
+</li>
+<li><p>油门过早；</p>
+</li>
+<li><p>轮胎温度不足；</p>
+</li>
+<li><p>路面湿滑；</p>
+</li>
+<li><p>与其他车辆接触；</p>
+</li>
+<li><p>车辆损伤；</p>
+</li>
+<li><p>辅助介入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="364-学习路径">36.4 学习路径</h2><p>教学可以按以下顺序展开：</p>
+<ol>
+<li><p>直线加速和制动；</p>
+</li>
+<li><p>视线与弯道方向；</p>
+</li>
+<li><p>制动点；</p>
+</li>
+<li><p>入弯、弯心和出弯；</p>
+</li>
+<li><p>油门控制；</p>
+</li>
+<li><p>失控恢复；</p>
+</li>
+<li><p>超车与防守；</p>
+</li>
+<li><p>轮胎、天气和策略。</p>
+</li>
+</ol>
+<p>不应在开始阶段同时要求玩家理解所有车辆参数。</p>
+<hr />
+<h2 id="365-线路提示">36.5 线路提示</h2><p>路线提示可以表达：</p>
+<ul>
+<li><p>建议方向；</p>
+</li>
+<li><p>制动区；</p>
+</li>
+<li><p>目标速度；</p>
+</li>
+<li><p>路线宽度；</p>
+</li>
+<li><p>当前误差。</p>
+</li>
+</ul>
+<p>高级辅助可以显示精确信息，低辅助只显示道路方向。</p>
+<p>关闭提示后，赛道本身仍应通过：</p>
+<ul>
+<li><p>路标；</p>
+</li>
+<li><p>路肩；</p>
+</li>
+<li><p>刹车牌；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>视觉构图；</p>
+</li>
+</ul>
+<p>提供驾驶信息。</p>
+<hr />
+<h2 id="366-对手公平感">36.6 对手公平感</h2><p>玩家需要相信：</p>
+<ul>
+<li><p>AI遵守同一车辆规则；</p>
+</li>
+<li><p>联机对手位置可信；</p>
+</li>
+<li><p>圈速合法；</p>
+</li>
+<li><p>碰撞结果可解释；</p>
+</li>
+<li><p>处罚一致；</p>
+</li>
+<li><p>排名不会随意跳动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="367-追赶机制">36.7 追赶机制</h2><p>街机竞速可以使用追赶机制，但应限制：</p>
+<ul>
+<li><p>隐藏最高速度修正；</p>
+</li>
+<li><p>AI减速；</p>
+</li>
+<li><p>道具权重；</p>
+</li>
+<li><p>后车增压；</p>
+</li>
+<li><p>前车压力。</p>
+</li>
+</ul>
+<p>追赶机制需要维持比赛悬念，但不能让领先技术完全失去价值。</p>
+<hr />
+<h2 id="37-常见设计失败">37. 常见设计失败</h2><h2 id="371-使用渲染帧推进车辆逻辑">37.1 使用渲染帧推进车辆逻辑</h2><p>导致不同设备上的：</p>
+<ul>
+<li><p>加速；</p>
+</li>
+<li><p>转向；</p>
+</li>
+<li><p>轮胎；</p>
+</li>
+<li><p>圈速；</p>
+</li>
+</ul>
+<p>结果不一致。</p>
+<hr />
+<h2 id="372-车辆直接追随目标方向">37.2 车辆直接追随目标方向</h2><p>车辆像角色移动器一样旋转，轮胎、侧滑和惯性只剩视觉表现。</p>
+<hr />
+<h2 id="373-赛道只依赖终点触发器">37.3 赛道只依赖终点触发器</h2><p>玩家可以倒车、跳跃或利用捷径重复计圈。</p>
+<hr />
+<h2 id="374-排名只按检查点数量">37.4 排名只按检查点数量</h2><p>同一检查点区间内车辆顺序频繁错误。</p>
+<hr />
+<h2 id="375-使用最近空间路段计算进度">37.5 使用最近空间路段计算进度</h2><p>立交、发卡弯和隧道会导致排名跳变。</p>
+<hr />
+<h2 id="376-重生使用最近道路点">37.6 重生使用最近道路点</h2><p>车辆可能被放到更后面的赛道路段，从而获得巨大优势。</p>
+<hr />
+<h2 id="377-驾驶辅助直接覆盖车辆状态">37.7 驾驶辅助直接覆盖车辆状态</h2><p>辅助系统瞬间修改角度和速度，导致玩家无法理解车辆为何恢复。</p>
+<hr />
+<h2 id="378-ai直接设置速度和位置">37.8 AI直接设置速度和位置</h2><p>AI看似稳定，但不能参与公平碰撞，也无法反映车辆差异。</p>
+<hr />
+<h2 id="379-物理和视觉调校相互矛盾">37.9 物理和视觉调校相互矛盾</h2><p>车辆视觉严重侧滑，但逻辑仍保持全抓地；或车辆看似稳定，却突然失控。</p>
+<hr />
+<h2 id="3710-联机只同步位置">37.10 联机只同步位置</h2><p>没有速度、输入和车辆状态，远端车辆会频繁抖动、瞬移和产生错误碰撞。</p>
+<hr />
+<h2 id="3711-处罚只看是否出界">37.11 处罚只看是否出界</h2><p>轻微压线和大幅切弯受到相同处罚，玩家无法形成稳定规则认知。</p>
+<hr />
+<h2 id="3712-排行榜相信客户端时间">37.12 排行榜相信客户端时间</h2><p>成绩容易被修改、暂停或加速作弊。</p>
+<hr />
+<h2 id="38-最小可行原型">38. 最小可行原型</h2><p>一个能够验证驾驶竞速核心范式的最小原型可以包含：</p>
+<h3 id="车辆">车辆</h3><ul>
+<li><p>2种车辆；</p>
+</li>
+<li><p>前轮驱动和后轮驱动各一种；</p>
+</li>
+<li><p>基础发动机、变速箱、轮胎和悬挂；</p>
+</li>
+<li><p>自动挡和牵引力控制。</p>
+</li>
+</ul>
+<h3 id="赛道">赛道</h3><ul>
+<li><p>1条闭环赛道；</p>
+</li>
+<li><p>10至15个逻辑路段；</p>
+</li>
+<li><p>6个检查点；</p>
+</li>
+<li><p>3个分段；</p>
+</li>
+<li><p>1条维修区或替代分支；</p>
+</li>
+<li><p>完整重生锚点。</p>
+</li>
+</ul>
+<h3 id="比赛模式">比赛模式</h3><ul>
+<li><p>三圈比赛；</p>
+</li>
+<li><p>单人计时；</p>
+</li>
+<li><p>6辆AI比赛；</p>
+</li>
+<li><p>本地幽灵对比。</p>
+</li>
+</ul>
+<h3 id="规则">规则</h3><ul>
+<li><p>起跑倒计时；</p>
+</li>
+<li><p>圈速；</p>
+</li>
+<li><p>排名；</p>
+</li>
+<li><p>出界检测；</p>
+</li>
+<li><p>无效圈；</p>
+</li>
+<li><p>重生；</p>
+</li>
+<li><p>简单碰撞处罚。</p>
+</li>
+</ul>
+<h3 id="调试设施">调试设施</h3><ul>
+<li><p>车辆遥测；</p>
+</li>
+<li><p>轮胎力显示；</p>
+</li>
+<li><p>赛道拓扑显示；</p>
+</li>
+<li><p>检查点审计；</p>
+</li>
+<li><p>排名解释器；</p>
+</li>
+<li><p>输入和状态回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>不同帧率下车辆和圈速是否一致；</p>
+</li>
+<li><p>两种驱动布局是否具有可感知差异；</p>
+</li>
+<li><p>车辆冲出赛道后排名是否保持稳定；</p>
+</li>
+<li><p>倒车和跳过路线是否不能刷圈；</p>
+</li>
+<li><p>重生是否不会获得进度优势；</p>
+</li>
+<li><p>AI是否通过正常驾驶输入完成比赛；</p>
+</li>
+<li><p>相同输入是否能够重演相近或一致结果；</p>
+</li>
+<li><p>玩家是否能够理解失控和处罚原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-推荐实施顺序">39. 推荐实施顺序</h2><p>第一阶段：固定步长时钟和基础刚体状态
+第二阶段：统一输入与设备映射
+第三阶段：发动机、传动和基础车辆控制
+第四阶段：车轮接地、轮胎和悬挂
+第五阶段：赛道路段图和空间投影
+第六阶段：检查点、圈速和排名
+第七阶段：出界、处罚和重生
+第八阶段：AI参考线和车辆控制
+第九阶段：碰撞、损伤和驾驶辅助
+第十阶段：幽灵、回放和遥测
+第十一阶段：天气、轮胎磨损和维修策略
+第十二阶段：联机同步和排行榜验证</p>
+<p>不建议先制作大量车辆和赛道。</p>
+<p>如果固定步长、车辆状态、赛道拓扑和计圈验证尚未稳定，内容规模越大，调校和修复成本越高。</p>
+<hr />
+<h2 id="40-架构验收标准">40. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>车辆和比赛规则按固定逻辑步长推进；</p>
+</li>
+<li><p>渲染帧率不会改变圈速和车辆结果；</p>
+</li>
+<li><p>输入经过统一设备归一化；</p>
+</li>
+<li><p>驾驶辅助只修正输入或控制量，不直接传送车辆；</p>
+</li>
+<li><p>VehicleDefinition与VehicleRuntimeState分离；</p>
+</li>
+<li><p>轮胎状态能够解释抓地与失控；</p>
+</li>
+<li><p>赛道由有向RouteSegment图表示；</p>
+</li>
+<li><p>空间投影受到历史路段和拓扑邻接约束；</p>
+</li>
+<li><p>圈数增加需要完成合法检查点顺序；</p>
+</li>
+<li><p>排名使用连续可信的赛道进度；</p>
+</li>
+<li><p>出界后不会错误跳到后续路段；</p>
+</li>
+<li><p>重生不会绕过检查点或获得进度优势；</p>
+</li>
+<li><p>AI通过正常驾驶输入控制车辆；</p>
+</li>
+<li><p>计时来自权威逻辑时钟；</p>
+</li>
+<li><p>排行榜成绩附带车辆、辅助、赛道版本和有效性信息；</p>
+</li>
+<li><p>表现层失败不会改变车辆和比赛状态；</p>
+</li>
+<li><p>调试工具能够解释车辆失控、圈速无效和排名变化；</p>
+</li>
+<li><p>新车辆不需要修改比赛主流程；</p>
+</li>
+<li><p>新比赛模式可以替换规则集接入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-可迁移到其他游戏的设计思想">41. 可迁移到其他游戏的设计思想</h2><h2 id="411-连续空间结果需要离散规则锚点">41.1 连续空间结果需要离散规则锚点</h2><p>车辆在连续空间中移动，但比赛合法性需要通过：</p>
+<ul>
+<li><p>检查点；</p>
+</li>
+<li><p>路段；</p>
+</li>
+<li><p>分段；</p>
+</li>
+<li><p>状态机；</p>
+</li>
+</ul>
+<p>进行验证。</p>
+<p>这一思想可迁移到：</p>
+<ul>
+<li><p>跑酷；</p>
+</li>
+<li><p>飞行竞速；</p>
+</li>
+<li><p>船舶竞赛；</p>
+</li>
+<li><p>开放世界任务路线；</p>
+</li>
+<li><p>护送任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="412-最近空间对象不一定是正确逻辑对象">41.2 最近空间对象不一定是正确逻辑对象</h2><p>在立交、楼层和重叠空间中，不能只选择距离最近的区域。</p>
+<p>还需要考虑：</p>
+<ul>
+<li><p>历史状态；</p>
+</li>
+<li><p>拓扑邻接；</p>
+</li>
+<li><p>移动方向；</p>
+</li>
+<li><p>权限；</p>
+</li>
+<li><p>高度。</p>
+</li>
+</ul>
+<p>可迁移到：</p>
+<ul>
+<li><p>室内导航；</p>
+</li>
+<li><p>地牢；</p>
+</li>
+<li><p>铁路；</p>
+</li>
+<li><p>多层地图；</p>
+</li>
+<li><p>空间音频分区。</p>
+</li>
+</ul>
+<hr />
+<h2 id="413-辅助系统应修改意图而不是修改结果">41.3 辅助系统应修改意图，而不是修改结果</h2><p>可迁移到：</p>
+<ul>
+<li><p>动作瞄准；</p>
+</li>
+<li><p>平台跳跃；</p>
+</li>
+<li><p>飞行控制；</p>
+</li>
+<li><p>射击后坐力；</p>
+</li>
+<li><p>无障碍操作。</p>
+</li>
+</ul>
+<p>辅助应该让玩家更容易表达意图，但保留核心决策。</p>
+<hr />
+<h2 id="414-定义配置与运行时状态分离">41.4 定义、配置与运行时状态分离</h2><p>车辆类型、赛道和规则属于稳定定义。</p>
+<p>燃料、轮胎、损伤和进度属于运行时状态。</p>
+<p>该思想可迁移到所有内容驱动系统。</p>
+<hr />
+<h2 id="415-连续排名需要稳定进度坐标">41.5 连续排名需要稳定进度坐标</h2><p>可迁移到：</p>
+<ul>
+<li><p>长距离比赛；</p>
+</li>
+<li><p>任务竞速；</p>
+</li>
+<li><p>多阶段Boss；</p>
+</li>
+<li><p>生产流程；</p>
+</li>
+<li><p>下载或作业进度。</p>
+</li>
+</ul>
+<p>进度不应只由当前状态编号表达，还需要局部连续进度。</p>
+<hr />
+<h2 id="416-权威时间应独立于显示和设备时间">41.6 权威时间应独立于显示和设备时间</h2><p>可迁移到：</p>
+<ul>
+<li><p>音乐游戏；</p>
+</li>
+<li><p>竞技计时；</p>
+</li>
+<li><p>技能冷却；</p>
+</li>
+<li><p>排行榜；</p>
+</li>
+<li><p>服务端任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="417-重生必须回到最近合法状态而非最近空间位置">41.7 重生必须回到最近合法状态，而非最近空间位置</h2><p>可迁移到：</p>
+<ul>
+<li><p>平台游戏；</p>
+</li>
+<li><p>开放世界；</p>
+</li>
+<li><p>载具；</p>
+</li>
+<li><p>跑酷；</p>
+</li>
+<li><p>解谜空间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="418-玩家体验需要暴露系统接近极限的过程">41.8 玩家体验需要暴露系统接近极限的过程</h2><p>车辆抓地、角色耐力、武器过热和结构稳定性，都不应只在超过阈值后突然失败。</p>
+<p>应提供连续、可观察的前兆。</p>
+<hr />
+<h2 id="419-规则判罚应结合结果优势">41.9 规则判罚应结合结果优势</h2><p>不能只判断玩家是否触碰禁区，还需要判断：</p>
+<ul>
+<li><p>是否获得收益；</p>
+</li>
+<li><p>收益有多大；</p>
+</li>
+<li><p>是否主动归还；</p>
+</li>
+<li><p>是否影响其他玩家。</p>
+</li>
+</ul>
+<p>该思想可迁移到竞技规则、经济风控和任务反作弊。</p>
+<hr />
+<h2 id="42-本次防重记录">42. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>驾驶竞速游戏。</p>
+<p>常见英文名称：</p>
+<ul>
+<li><p>Racing Game；</p>
+</li>
+<li><p>Racing Simulation；</p>
+</li>
+<li><p>Arcade Racing；</p>
+</li>
+<li><p>Motorsport Game。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>玩家输入转向、油门和制动等驾驶意图，运行时以固定步长推进车辆动力学，并通过赛道有向拓扑、检查点顺序和连续路线投影验证圈速与排名；驾驶辅助、天气、轮胎、碰撞和车辆配置在不破坏权威比赛规则的前提下改变车辆响应和策略空间。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>车辆运动由输入、动力、轮胎和环境共同产生；</p>
+</li>
+<li><p>比赛逻辑使用固定步长和权威计时；</p>
+</li>
+<li><p>赛道同时是空间场景和有向规则图；</p>
+</li>
+<li><p>合法完赛依赖检查点与路线顺序；</p>
+</li>
+<li><p>排名基于连续、可信的赛道进度；</p>
+</li>
+<li><p>重生不会带来路线进度优势；</p>
+</li>
+<li><p>驾驶辅助修正操作意图，而非直接修改结果；</p>
+</li>
+<li><p>车辆失控前具有连续反馈；</p>
+</li>
+<li><p>AI通过正常驾驶控制输入参赛；</p>
+</li>
+<li><p>圈速、排行榜、回放和幽灵共享车辆与赛道规则；</p>
+</li>
+<li><p>联机需要同步车辆状态、比赛进度和关键碰撞；</p>
+</li>
+<li><p>调试系统必须能够解释车辆、赛道和比赛裁定。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>固定步长车辆模拟；</p>
+</li>
+<li><p>多设备驾驶输入；</p>
+</li>
+<li><p>转向、制动与稳定辅助；</p>
+</li>
+<li><p>发动机和传动；</p>
+</li>
+<li><p>轮胎抓地和滑移；</p>
+</li>
+<li><p>悬挂与空气动力；</p>
+</li>
+<li><p>路面和天气；</p>
+</li>
+<li><p>赛道有向拓扑；</p>
+</li>
+<li><p>检查点和合法计圈；</p>
+</li>
+<li><p>连续排名；</p>
+</li>
+<li><p>出界与优势归还；</p>
+</li>
+<li><p>维修区和比赛策略；</p>
+</li>
+<li><p>车辆碰撞与损伤；</p>
+</li>
+<li><p>合法重生；</p>
+</li>
+<li><p>AI参考线与速度规划；</p>
+</li>
+<li><p>幽灵车和回放；</p>
+</li>
+<li><p>联机车辆同步；</p>
+</li>
+<li><p>圈速与排行榜验证。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>赛车车辆物理；</p>
+</li>
+<li><p>轮胎抓地模拟；</p>
+</li>
+<li><p>赛车赛道系统；</p>
+</li>
+<li><p>赛车检查点和计圈；</p>
+</li>
+<li><p>赛车排名系统；</p>
+</li>
+<li><p>赛车AI；</p>
+</li>
+<li><p>赛车驾驶辅助；</p>
+</li>
+<li><p>赛车维修区策略；</p>
+</li>
+<li><p>赛车天气和轮胎；</p>
+</li>
+<li><p>赛车幽灵车；</p>
+</li>
+<li><p>赛车回放；</p>
+</li>
+<li><p>赛车联机同步；</p>
+</li>
+<li><p>赛车排行榜防作弊；</p>
+</li>
+<li><p>载具重生与赛道投影。</p>
+</li>
+</ul>
+<p>这些方向可以作为专项模块继续深入，但不能再次作为新的宏观游戏类型计入日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

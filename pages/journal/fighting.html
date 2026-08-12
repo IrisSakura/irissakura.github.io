@@ -1,0 +1,4881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/fighting.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="格斗游戏 | Sakura Design Journal">
+    <meta property="og:description" content="将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/fighting.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-fighting.png">
+    <meta property="og:image:alt" content="格斗游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="格斗游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-fighting.png">
+    <meta name="twitter:image:alt" content="格斗游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"格斗游戏 | Sakura Design Journal","description":"将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。","url":"https://irissakura.github.io/pages/journal/fighting.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"格斗游戏","image":"https://irissakura.github.io/assets/social/pages-journal-fighting.png","dateModified":"2026-08-12","about":["fighting","platform","versus"]}</script>
+    <!-- site-meta:end -->
+    <title>格斗游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-fighting"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>格斗游戏</h1><p>将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。</p><div class="note-tags"><span>fighting</span><span>platform</span><span>versus</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="帧级确定性攻防状态博弈与输入判定命中确认连段重构的对局循环">帧级确定性、攻防状态博弈与“输入—判定—命中确认—连段重构”的对局循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>格斗游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Fighting Game；</p>
+</li>
+<li><p>Versus Fighting；</p>
+</li>
+<li><p>2D Fighter；</p>
+</li>
+<li><p>3D Fighter；</p>
+</li>
+<li><p>Platform Fighter；</p>
+</li>
+<li><p>对战格斗游戏；</p>
+</li>
+<li><p>一对一竞技格斗；</p>
+</li>
+<li><p>平台格斗游戏。</p>
+</li>
+</ul>
+<p>本文讨论的不是动作RPG中的近战系统，也不是清版动作游戏中的多人围攻，更不是普通游戏中的单次Boss战，而是一种能够独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。</p>
+</blockquote>
+<p>格斗游戏的核心不是“谁先把对方生命值打空”，而是持续处理以下关系：</p>
+<ul>
+<li><p>当前距离允许哪些招式命中；</p>
+</li>
+<li><p>某个动作在被格挡后是否安全；</p>
+</li>
+<li><p>玩家是在进攻、试探、诱导还是撤退；</p>
+</li>
+<li><p>对手下一步更可能攻击、投技、防守还是移动；</p>
+</li>
+<li><p>当前命中是否能够确认并转化为连段；</p>
+</li>
+<li><p>连段结束后获得的是伤害、位置、压制还是资源；</p>
+</li>
+<li><p>防守方是否应该格挡、闪避、反击、拆投或消耗资源脱离；</p>
+</li>
+<li><p>网络延迟下双方是否仍在运行同一个确定性战斗；</p>
+</li>
+<li><p>玩家如何理解一帧差异、判定差异和取消规则；</p>
+</li>
+<li><p>新角色如何接入统一运行时，而不依赖大量特例代码。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>格斗游戏，是以有限战斗空间、帧级动作状态、招式判定、攻防预测、资源管理、连段转换和重复对局为核心的竞技动作类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家选择角色、辅助角色、招式配置或战斗风格；</p>
+</li>
+<li><p>对局系统加载场地、规则和双方初始状态；</p>
+</li>
+<li><p>双方通过移动、试探和攻击争夺有利距离；</p>
+</li>
+<li><p>玩家根据对手动作选择攻击、防守、投技或位移；</p>
+</li>
+<li><p>输入系统识别普通技、特殊技、必杀技和组合指令；</p>
+</li>
+<li><p>状态机执行招式的起手、有效和收招阶段；</p>
+</li>
+<li><p>碰撞系统判断攻击框、受击框和投技框关系；</p>
+</li>
+<li><p>命中后进入受击硬直、击飞、倒地或连段状态；</p>
+</li>
+<li><p>格挡后根据双方硬直差形成新的帧优势；</p>
+</li>
+<li><p>进攻方决定继续压制、诱导反击、投技或结束回合；</p>
+</li>
+<li><p>防守方决定继续格挡、抢招、拆投、闪避或使用防御资源；</p>
+</li>
+<li><p>双方在多个局部攻防回合中积累生命、位置和资源优势；</p>
+</li>
+<li><p>一方生命归零或满足特殊胜负条件后结束当前小局；</p>
+</li>
+<li><p>多个小局组成完整比赛；</p>
+</li>
+<li><p>系统生成对局结果、回放、排名和训练数据；</p>
+</li>
+<li><p>玩家根据失败原因调整角色理解、操作和对手策略。</p>
+</li>
+</ol>
+<p>格斗游戏中的主要资源通常包括：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>能量槽；</p>
+</li>
+<li><p>防御槽；</p>
+</li>
+<li><p>爆气或脱离资源；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>屏幕位置；</p>
+</li>
+<li><p>跳跃次数；</p>
+</li>
+<li><p>空中行动次数；</p>
+</li>
+<li><p>取消次数；</p>
+</li>
+<li><p>辅助角色冷却；</p>
+</li>
+<li><p>倒地后的起身选择；</p>
+</li>
+<li><p>对手习惯信息；</p>
+</li>
+<li><p>玩家执行稳定性。</p>
+</li>
+</ul>
+<p>其中最重要的隐性资源是：</p>
+<blockquote>
+<p><strong>行动权与帧优势</strong>，即当前状态下哪一方能够更早完成下一次有效行动。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>格斗游戏最具代表性的设计范式由九个核心支柱构成。</p>
+<h2 id="31-战斗必须运行在统一确定的帧时间轴上">3.1 战斗必须运行在统一、确定的帧时间轴上</h2><p>格斗游戏中的关键规则通常以帧表示：</p>
+<ul>
+<li><p>起手帧；</p>
+</li>
+<li><p>有效帧；</p>
+</li>
+<li><p>收招帧；</p>
+</li>
+<li><p>受击硬直；</p>
+</li>
+<li><p>格挡硬直；</p>
+</li>
+<li><p>无敌帧；</p>
+</li>
+<li><p>取消窗口；</p>
+</li>
+<li><p>投技保护；</p>
+</li>
+<li><p>倒地时间；</p>
+</li>
+<li><p>输入缓冲。</p>
+</li>
+</ul>
+<p>同一个输入序列与随机种子，应当产生相同结果。</p>
+<p>战斗逻辑不能依赖：</p>
+<ul>
+<li><p>渲染帧率；</p>
+</li>
+<li><p>动画实际播放速度；</p>
+</li>
+<li><p>浮点时间累计误差；</p>
+</li>
+<li><p>客户端表现对象；</p>
+</li>
+<li><p>不稳定物理引擎结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-招式是时间空间和风险的组合">3.2 招式是时间、空间和风险的组合</h2><p>一项招式不能只用伤害评价。</p>
+<p>它同时包含：</p>
+<ul>
+<li><p>起手速度；</p>
+</li>
+<li><p>攻击距离；</p>
+</li>
+<li><p>判定强度；</p>
+</li>
+<li><p>攻击高度；</p>
+</li>
+<li><p>有效持续时间；</p>
+</li>
+<li><p>收招风险；</p>
+</li>
+<li><p>命中后收益；</p>
+</li>
+<li><p>格挡后风险；</p>
+</li>
+<li><p>对空能力；</p>
+</li>
+<li><p>取消能力；</p>
+</li>
+<li><p>位移；</p>
+</li>
+<li><p>资源消耗；</p>
+</li>
+<li><p>被反制方式。</p>
+</li>
+</ul>
+<p>例如一个远距离重攻击可能：</p>
+<ul>
+<li><p>覆盖范围大；</p>
+</li>
+<li><p>伤害高；</p>
+</li>
+<li><p>起手慢；</p>
+</li>
+<li><p>收招长；</p>
+</li>
+<li><p>被近距离闪避后风险极高。</p>
+</li>
+</ul>
+<p>这使招式成为情境工具，而不是简单的强弱列表。</p>
+<hr />
+<h2 id="33-攻防并非同时对称而是围绕行动权交替">3.3 攻防并非同时对称，而是围绕行动权交替</h2><p>格斗对局通常由多个局部回合组成：</p>
+<p>中立距离
+→ 一方命中或迫使格挡
+→ 形成优势状态
+→ 进攻方持续施压
+→ 防守方成功脱离或反击
+→ 返回中立</p>
+<p>需要明确区分：</p>
+<ul>
+<li><p>Neutral：中立博弈；</p>
+</li>
+<li><p>Advantage：优势压制；</p>
+</li>
+<li><p>Disadvantage：劣势防守；</p>
+</li>
+<li><p>Knockdown：倒地攻防；</p>
+</li>
+<li><p>Corner：版边状态；</p>
+</li>
+<li><p>Combo：连段执行；</p>
+</li>
+<li><p>Reset：重置博弈。</p>
+</li>
+</ul>
+<p>玩家体验的深度来自不同状态的转换，而不仅是连续输入攻击。</p>
+<hr />
+<h2 id="34-输入识别需要宽容但不能替玩家完成决策">3.4 输入识别需要宽容，但不能替玩家完成决策</h2><p>输入系统通常需要支持：</p>
+<ul>
+<li><p>按键缓冲；</p>
+</li>
+<li><p>方向容错；</p>
+</li>
+<li><p>指令预输入；</p>
+</li>
+<li><p>同帧按键；</p>
+</li>
+<li><p>负边输入；</p>
+</li>
+<li><p>简化指令；</p>
+</li>
+<li><p>长按和松开；</p>
+</li>
+<li><p>多种控制器布局。</p>
+</li>
+</ul>
+<p>输入宽容的目标是：</p>
+<blockquote>
+<p>让玩家想执行的合法动作能够稳定执行。</p>
+</blockquote>
+<p>它不应：</p>
+<ul>
+<li><p>自动选择最优招式；</p>
+</li>
+<li><p>自动确认连段；</p>
+</li>
+<li><p>无条件修正错误方向；</p>
+</li>
+<li><p>在多个可能指令中总是选取高收益动作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-命中格挡和挥空必须产生不同状态">3.5 命中、格挡和挥空必须产生不同状态</h2><p>同一招式需要至少处理三类结果：</p>
+<h3 id="命中">命中</h3><p>可能进入：</p>
+<ul>
+<li><p>受击硬直；</p>
+</li>
+<li><p>击飞；</p>
+</li>
+<li><p>倒地；</p>
+</li>
+<li><p>墙面反弹；</p>
+</li>
+<li><p>地面弹起；</p>
+</li>
+<li><p>连段状态。</p>
+</li>
+</ul>
+<h3 id="格挡">格挡</h3><p>可能进入：</p>
+<ul>
+<li><p>格挡硬直；</p>
+</li>
+<li><p>削减伤害；</p>
+</li>
+<li><p>防御槽消耗；</p>
+</li>
+<li><p>推远；</p>
+</li>
+<li><p>帧优势变化。</p>
+</li>
+</ul>
+<h3 id="挥空">挥空</h3><p>没有与对手发生接触，招式继续进入完整收招。</p>
+<p>这三种结果决定招式风险。</p>
+<p>如果挥空和格挡都可以立即取消，空间判断的重要性会显著下降。</p>
+<hr />
+<h2 id="36-连段是命中后的资源转换过程">3.6 连段是命中后的资源转换过程</h2><p>连段不是单纯追求最高伤害。</p>
+<p>玩家可以将一次命中转换为：</p>
+<ul>
+<li><p>最大伤害；</p>
+</li>
+<li><p>版边位置；</p>
+</li>
+<li><p>倒地压制；</p>
+</li>
+<li><p>能量积累；</p>
+</li>
+<li><p>对手资源消耗；</p>
+</li>
+<li><p>角色切换；</p>
+</li>
+<li><p>特殊状态；</p>
+</li>
+<li><p>更稳定的执行。</p>
+</li>
+</ul>
+<p>连段设计需要在以下因素间平衡：</p>
+<ul>
+<li><p>伤害；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>稳定性；</p>
+</li>
+<li><p>起始招式；</p>
+</li>
+<li><p>资源消耗；</p>
+</li>
+<li><p>场地位置；</p>
+</li>
+<li><p>连段衰减；</p>
+</li>
+<li><p>后续局面。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-防守必须包含主动决策">3.7 防守必须包含主动决策</h2><p>低质量防守只是持续按住后方向。</p>
+<p>完整防守系统可以包含：</p>
+<ul>
+<li><p>站立格挡；</p>
+</li>
+<li><p>蹲下格挡；</p>
+</li>
+<li><p>空中格挡；</p>
+</li>
+<li><p>精准防御；</p>
+</li>
+<li><p>招架；</p>
+</li>
+<li><p>闪避；</p>
+</li>
+<li><p>防御反击；</p>
+</li>
+<li><p>投技拆解；</p>
+</li>
+<li><p>延迟起身；</p>
+</li>
+<li><p>快速起身；</p>
+</li>
+<li><p>消耗资源脱离；</p>
+</li>
+<li><p>防御位移。</p>
+</li>
+</ul>
+<p>防守选项越多，越需要明确：</p>
+<ul>
+<li><p>各自反制什么；</p>
+</li>
+<li><p>风险是什么；</p>
+</li>
+<li><p>失败后果是什么；</p>
+</li>
+<li><p>是否消耗资源；</p>
+</li>
+<li><p>是否存在无条件最优选项。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-对局信息应足够可学习但不能完全消除预测">3.8 对局信息应足够可学习，但不能完全消除预测</h2><p>玩家需要通过：</p>
+<ul>
+<li><p>动画；</p>
+</li>
+<li><p>音效；</p>
+</li>
+<li><p>特效；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>资源状态；</p>
+</li>
+<li><p>对手历史行为；</p>
+</li>
+</ul>
+<p>判断威胁。</p>
+<p>但系统不应直接显示：</p>
+<ul>
+<li><p>对手即将输入什么；</p>
+</li>
+<li><p>所有招式的实时判定框；</p>
+</li>
+<li><p>当前博弈的唯一正确答案。</p>
+</li>
+</ul>
+<p>训练模式可以显示完整技术信息，正式比赛则保留必要不确定性。</p>
+<hr />
+<h2 id="39-网络对战必须保护帧级因果关系">3.9 网络对战必须保护帧级因果关系</h2><p>在线格斗的核心问题不是简单同步位置，而是：</p>
+<ul>
+<li><p>双方是否在同一逻辑帧执行相同输入；</p>
+</li>
+<li><p>延迟输入如何预测；</p>
+</li>
+<li><p>预测错误如何回滚；</p>
+</li>
+<li><p>回滚后表现如何修正；</p>
+</li>
+<li><p>是否存在逻辑分歧；</p>
+</li>
+<li><p>断线和重连如何裁决。</p>
+</li>
+</ul>
+<p>因此，格斗网络架构通常需要围绕：</p>
+<ul>
+<li><p>确定性模拟；</p>
+</li>
+<li><p>输入同步；</p>
+</li>
+<li><p>状态快照；</p>
+</li>
+<li><p>回滚重演；</p>
+</li>
+<li><p>状态哈希；</p>
+</li>
+<li><p>延迟管理；</p>
+</li>
+</ul>
+<p>构建。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与清版动作游戏的区别">4.1 与清版动作游戏的区别</h2><p>清版动作通常强调：</p>
+<ul>
+<li><p>多个敌人；</p>
+</li>
+<li><p>横向推进；</p>
+</li>
+<li><p>关卡；</p>
+</li>
+<li><p>群体控制；</p>
+</li>
+<li><p>PvE节奏。</p>
+</li>
+</ul>
+<p>格斗游戏更强调：</p>
+<ul>
+<li><p>规模较小的对战空间；</p>
+</li>
+<li><p>同等规则对手；</p>
+</li>
+<li><p>帧级攻防；</p>
+</li>
+<li><p>角色对局关系；</p>
+</li>
+<li><p>多轮重复竞技。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与动作rpg的区别">4.2 与动作RPG的区别</h2><p>动作RPG通常包含：</p>
+<ul>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>地图探索；</p>
+</li>
+<li><p>数值成长；</p>
+</li>
+<li><p>AI敌人。</p>
+</li>
+</ul>
+<p>格斗游戏一般要求：</p>
+<ul>
+<li><p>对局起始状态相对公平；</p>
+</li>
+<li><p>角色能力由固定规则定义；</p>
+</li>
+<li><p>胜负主要依赖操作、决策和对局知识；</p>
+</li>
+<li><p>永久数值成长不会直接影响标准竞技结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-与平台动作游戏的区别">4.3 与平台动作游戏的区别</h2><p>平台动作主要关注：</p>
+<ul>
+<li><p>关卡跳跃；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>移动挑战；</p>
+</li>
+<li><p>机关。</p>
+</li>
+</ul>
+<p>平台格斗虽然拥有平台和空中移动，但核心仍是：</p>
+<ul>
+<li><p>击退或生命胜负；</p>
+</li>
+<li><p>对手博弈；</p>
+</li>
+<li><p>攻击判定；</p>
+</li>
+<li><p>资源和位置竞争。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-与竞技场动作游戏的区别">4.4 与竞技场动作游戏的区别</h2><p>竞技场动作通常：</p>
+<ul>
+<li><p>支持自由三维移动；</p>
+</li>
+<li><p>多人混战；</p>
+</li>
+<li><p>技能冷却；</p>
+</li>
+<li><p>更大空间。</p>
+</li>
+</ul>
+<p>传统格斗游戏更强调：</p>
+<ul>
+<li><p>明确相对朝向；</p>
+</li>
+<li><p>有限轴向移动；</p>
+</li>
+<li><p>帧数据；</p>
+</li>
+<li><p>近距离攻防状态；</p>
+</li>
+<li><p>可重复验证的招式关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-与拳击或体育模拟的区别">4.5 与拳击或体育模拟的区别</h2><p>体育模拟通常试图重现：</p>
+<ul>
+<li><p>真实规则；</p>
+</li>
+<li><p>体能；</p>
+</li>
+<li><p>运动技术；</p>
+</li>
+<li><p>判罚。</p>
+</li>
+</ul>
+<p>格斗游戏可以使用现实武术表现，但通常通过：</p>
+<ul>
+<li><p>超现实招式；</p>
+</li>
+<li><p>资源槽；</p>
+</li>
+<li><p>取消；</p>
+</li>
+<li><p>连段；</p>
+</li>
+<li><p>特殊移动；</p>
+</li>
+</ul>
+<p>构建独立竞技规则。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十七个核心域：</p>
+<ol>
+<li><p>对局生命周期与比赛规则域；</p>
+</li>
+<li><p>确定性帧时钟与模拟域；</p>
+</li>
+<li><p>玩家输入采集与指令识别域；</p>
+</li>
+<li><p>角色状态机与行动调度域；</p>
+</li>
+<li><p>招式定义与帧数据域；</p>
+</li>
+<li><p>碰撞体、攻击框与受击框域；</p>
+</li>
+<li><p>命中、格挡、投技与伤害结算域；</p>
+</li>
+<li><p>受击、击飞、倒地与起身域；</p>
+</li>
+<li><p>取消、派生与连段规则域；</p>
+</li>
+<li><p>距离、朝向、版边与场地域；</p>
+</li>
+<li><p>资源槽、状态与角色特性域；</p>
+</li>
+<li><p>AI、训练假人和教学域；</p>
+</li>
+<li><p>网络输入同步与回滚域；</p>
+</li>
+<li><p>回放、观战和比赛裁决域；</p>
+</li>
+<li><p>角色数据、内容扩展与平衡域；</p>
+</li>
+<li><p>音画表现与逻辑事件域；</p>
+</li>
+<li><p>调试、验证与自动测试域。</p>
+</li>
+</ol>
+<p>总体运行流程如下：</p>
+<p>加载比赛规则与角色
+→ 创建确定性初始状态
+→ 采集双方当前输入
+→ 将输入写入帧输入缓冲
+→ 指令识别器生成行动意图
+→ 状态机判断当前是否可执行或缓存
+→ 推进角色动作帧
+→ 更新移动、朝向和碰撞体
+→ 生成命中候选
+→ 结算攻击、格挡、投技和冲突
+→ 应用伤害、硬直、资源和位移
+→ 处理取消、派生和连段状态
+→ 检查小局胜负
+→ 保存回滚快照与状态哈希
+→ 推进下一模拟帧</p>
+<hr />
+<h2 id="6-对局生命周期">6. 对局生命周期</h2><h2 id="61-matchdefinition">6.1 MatchDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>MatchRuleId；</p>
+</li>
+<li><p>RoundCount；</p>
+</li>
+<li><p>RoundTimeLimit；</p>
+</li>
+<li><p>StartingHealthRules；</p>
+</li>
+<li><p>StartingResourceRules；</p>
+</li>
+<li><p>StageRules；</p>
+</li>
+<li><p>CharacterSelectionRules；</p>
+</li>
+<li><p>DrawResolutionRules；</p>
+</li>
+<li><p>DisconnectRules；</p>
+</li>
+<li><p>TournamentRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-matchruntimestate">6.2 MatchRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>CurrentRoundIndex；</p>
+</li>
+<li><p>RoundWinsByPlayer；</p>
+</li>
+<li><p>MatchPhase；</p>
+</li>
+<li><p>RemainingRoundTime；</p>
+</li>
+<li><p>FighterStates；</p>
+</li>
+<li><p>StageState；</p>
+</li>
+<li><p>InputFrameIndex；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-matchphase">6.3 MatchPhase</h2><p>建议状态：</p>
+<ul>
+<li><p>Initializing；</p>
+</li>
+<li><p>CharacterIntro；</p>
+</li>
+<li><p>RoundReady；</p>
+</li>
+<li><p>RoundActive；</p>
+</li>
+<li><p>HitStop；</p>
+</li>
+<li><p>RoundEnding；</p>
+</li>
+<li><p>RoundResult；</p>
+</li>
+<li><p>BetweenRounds；</p>
+</li>
+<li><p>MatchResult；</p>
+</li>
+<li><p>Completed；</p>
+</li>
+<li><p>Aborted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-小局开始流程">6.4 小局开始流程</h2><ol>
+<li><p>清理上局临时状态；</p>
+</li>
+<li><p>根据规则恢复生命和资源；</p>
+</li>
+<li><p>设置出生位置；</p>
+</li>
+<li><p>重置朝向；</p>
+</li>
+<li><p>初始化角色状态机；</p>
+</li>
+<li><p>清空输入缓存；</p>
+</li>
+<li><p>同步随机流；</p>
+</li>
+<li><p>播放开场表现；</p>
+</li>
+<li><p>开放输入；</p>
+</li>
+<li><p>进入RoundActive。</p>
+</li>
+</ol>
+<hr />
+<h2 id="65-小局结束">6.5 小局结束</h2><p>触发条件包括：</p>
+<ul>
+<li><p>一方生命归零；</p>
+</li>
+<li><p>双方同时生命归零；</p>
+</li>
+<li><p>时间耗尽；</p>
+</li>
+<li><p>一方离开合法场地；</p>
+</li>
+<li><p>特殊任务完成；</p>
+</li>
+<li><p>裁判或服务器终止。</p>
+</li>
+</ul>
+<p>需要明确定义：</p>
+<ul>
+<li><p>同归于尽；</p>
+</li>
+<li><p>超时判定；</p>
+</li>
+<li><p>平局重赛；</p>
+</li>
+<li><p>最后一击与持续伤害的优先级；</p>
+</li>
+<li><p>回合结束后未完成投射物如何处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="7-确定性帧模拟">7. 确定性帧模拟</h2><h2 id="71-simulationframestate">7.1 SimulationFrameState</h2><p>建议包含：</p>
+<ul>
+<li><p>FrameNumber；</p>
+</li>
+<li><p>MatchPhase；</p>
+</li>
+<li><p>FighterStates；</p>
+</li>
+<li><p>ProjectileStates；</p>
+</li>
+<li><p>StageObjectStates；</p>
+</li>
+<li><p>InputStates；</p>
+</li>
+<li><p>HitCandidateStates；</p>
+</li>
+<li><p>RandomCursor；</p>
+</li>
+<li><p>StateHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-固定帧率">7.2 固定帧率</h2><p>逻辑通常采用固定模拟频率，例如：</p>
+<ul>
+<li><p>每秒固定若干逻辑帧；</p>
+</li>
+<li><p>所有招式数据使用整数帧；</p>
+</li>
+<li><p>角色速度使用定点数或可控数值格式；</p>
+</li>
+<li><p>不以渲染DeltaTime推进权威状态。</p>
+</li>
+</ul>
+<p>具体频率由产品设计决定，但同一游戏中的规则必须统一。</p>
+<hr />
+<h2 id="73-逻辑帧与渲染帧分离">7.3 逻辑帧与渲染帧分离</h2><p>逻辑层决定：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>动作帧；</p>
+</li>
+<li><p>判定框；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>胜负。</p>
+</li>
+</ul>
+<p>渲染层负责：</p>
+<ul>
+<li><p>插值；</p>
+</li>
+<li><p>动画；</p>
+</li>
+<li><p>摄像机；</p>
+</li>
+<li><p>特效；</p>
+</li>
+<li><p>音效。</p>
+</li>
+</ul>
+<p>高刷新率显示器可以渲染更多画面，但不能改变逻辑招式速度。</p>
+<hr />
+<h2 id="74-hitstop">7.4 HitStop</h2><p>命中停顿通常暂停：</p>
+<ul>
+<li><p>攻击者动作；</p>
+</li>
+<li><p>受击者动作；</p>
+</li>
+<li><p>部分投射物；</p>
+</li>
+<li><p>局部特效。</p>
+</li>
+</ul>
+<p>但可能不暂停：</p>
+<ul>
+<li><p>比赛计时；</p>
+</li>
+<li><p>特定持续物；</p>
+</li>
+<li><p>UI；</p>
+</li>
+<li><p>网络输入采集。</p>
+</li>
+</ul>
+<p>HitStop期间仍可允许输入缓冲，以提高连段操作感。</p>
+<hr />
+<h2 id="75-状态快照">7.5 状态快照</h2><p>每个回滚快照至少需要保存：</p>
+<ul>
+<li><p>双方位置；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>当前状态；</p>
+</li>
+<li><p>状态帧；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>受击状态；</p>
+</li>
+<li><p>连段数据；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>场地对象；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-输入采集与输入历史">8. 输入采集与输入历史</h2><h2 id="81-rawinputframe">8.1 RawInputFrame</h2><p>建议字段：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>FrameNumber；</p>
+</li>
+<li><p>DirectionBits；</p>
+</li>
+<li><p>ButtonBits；</p>
+</li>
+<li><p>AnalogValues；</p>
+</li>
+<li><p>DeviceState；</p>
+</li>
+<li><p>SequenceNumber；</p>
+</li>
+<li><p>InputVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-方向标准化">8.2 方向标准化</h2><p>方向需要根据角色朝向转换为：</p>
+<ul>
+<li><p>前；</p>
+</li>
+<li><p>后；</p>
+</li>
+<li><p>上；</p>
+</li>
+<li><p>下；</p>
+</li>
+<li><p>前上；</p>
+</li>
+<li><p>前下；</p>
+</li>
+<li><p>后上；</p>
+</li>
+<li><p>后下；</p>
+</li>
+<li><p>中立。</p>
+</li>
+</ul>
+<p>角色换边后：</p>
+<ul>
+<li><p>物理摇杆方向不变；</p>
+</li>
+<li><p>相对前后方向需要重新解释。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-inputhistory">8.3 InputHistory</h2><p>建议包含：</p>
+<ul>
+<li><p>最近若干帧输入；</p>
+</li>
+<li><p>方向变化时间；</p>
+</li>
+<li><p>按下事件；</p>
+</li>
+<li><p>松开事件；</p>
+</li>
+<li><p>长按时间；</p>
+</li>
+<li><p>已消费指令；</p>
+</li>
+<li><p>输入版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-输入事件">8.4 输入事件</h2><p>需要区分：</p>
+<ul>
+<li><p>JustPressed；</p>
+</li>
+<li><p>Held；</p>
+</li>
+<li><p>JustReleased；</p>
+</li>
+<li><p>DirectionChanged；</p>
+</li>
+<li><p>SimultaneousPress；</p>
+</li>
+<li><p>NegativeEdge。</p>
+</li>
+</ul>
+<hr />
+<h2 id="85-输入设备差异">8.5 输入设备差异</h2><p>键盘、摇杆和手柄需要统一到逻辑输入层。</p>
+<p>不能让角色逻辑直接读取：</p>
+<ul>
+<li><p>键盘键码；</p>
+</li>
+<li><p>手柄按钮编号；</p>
+</li>
+<li><p>平台设备事件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-指令识别系统">9. 指令识别系统</h2><h2 id="91-commanddefinition">9.1 CommandDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CommandId；</p>
+</li>
+<li><p>DirectionSequence；</p>
+</li>
+<li><p>ButtonSequence；</p>
+</li>
+<li><p>MaximumInputWindow；</p>
+</li>
+<li><p>DirectionLeniency；</p>
+</li>
+<li><p>SimultaneousWindow；</p>
+</li>
+<li><p>ChargeRequirements；</p>
+</li>
+<li><p>NegativeEdgePolicy；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>CharacterStateRequirements；</p>
+</li>
+<li><p>ResourceRequirements。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-指令类型">9.2 指令类型</h2><p>包括：</p>
+<ul>
+<li><p>单键普通技；</p>
+</li>
+<li><p>方向加按键；</p>
+</li>
+<li><p>连续方向指令；</p>
+</li>
+<li><p>蓄力指令；</p>
+</li>
+<li><p>同时按键；</p>
+</li>
+<li><p>长按释放；</p>
+</li>
+<li><p>连打；</p>
+</li>
+<li><p>特定状态派生；</p>
+</li>
+<li><p>简化输入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-指令匹配流程">9.3 指令匹配流程</h2><ol>
+<li><p>读取InputHistory；</p>
+</li>
+<li><p>从最新输入向前匹配；</p>
+</li>
+<li><p>应用方向容错；</p>
+</li>
+<li><p>检查输入时间窗；</p>
+</li>
+<li><p>检查按键关系；</p>
+</li>
+<li><p>检查角色状态；</p>
+</li>
+<li><p>检查资源；</p>
+</li>
+<li><p>生成CommandCandidate；</p>
+</li>
+<li><p>按优先级排序；</p>
+</li>
+<li><p>将最高合法指令交给状态机。</p>
+</li>
+</ol>
+<hr />
+<h2 id="94-指令优先级">9.4 指令优先级</h2><p>例如同一输入可能同时满足：</p>
+<ul>
+<li><p>普通攻击；</p>
+</li>
+<li><p>特殊技；</p>
+</li>
+<li><p>必杀技；</p>
+</li>
+<li><p>超必杀技。</p>
+</li>
+</ul>
+<p>优先级必须稳定。</p>
+<p>常见规则：</p>
+<p>更完整指令
+优先于
+更短指令</p>
+<p>高资源必杀是否优先于普通必杀，需要由设计明确决定。</p>
+<hr />
+<h2 id="95-输入缓冲">9.5 输入缓冲</h2><p>当前动作不能立即执行新指令时，可以将合法指令存入缓冲。</p>
+<p>缓冲条目建议包含：</p>
+<ul>
+<li><p>CommandId；</p>
+</li>
+<li><p>CreatedFrame；</p>
+</li>
+<li><p>ExpirationFrame；</p>
+</li>
+<li><p>SourceInputRange；</p>
+</li>
+<li><p>RequiredTransitionTag；</p>
+</li>
+<li><p>ConsumedState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="96-输入消费">9.6 输入消费</h2><p>同一组输入不应被多个互斥动作重复使用。</p>
+<p>需要明确：</p>
+<ul>
+<li><p>哪些输入帧已经消费；</p>
+</li>
+<li><p>投技和普通攻击冲突时谁优先；</p>
+</li>
+<li><p>连续技派生是否允许复用方向输入；</p>
+</li>
+<li><p>同一按键是否能同时触发系统行为和角色行为。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-角色状态机">10. 角色状态机</h2><h2 id="101-fighterstate">10.1 FighterState</h2><p>建议包含：</p>
+<ul>
+<li><p>FighterId；</p>
+</li>
+<li><p>CharacterId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>FacingDirection；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>CurrentStateId；</p>
+</li>
+<li><p>CurrentStateFrame；</p>
+</li>
+<li><p>PreviousStateId；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>Resources；</p>
+</li>
+<li><p>StatusEffects；</p>
+</li>
+<li><p>ComboState；</p>
+</li>
+<li><p>InputBuffer；</p>
+</li>
+<li><p>FighterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-状态分类">10.2 状态分类</h2><p>包括：</p>
+<h3 id="通用状态">通用状态</h3><ul>
+<li><p>Idle；</p>
+</li>
+<li><p>Walk；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+<li><p>Crouch；</p>
+</li>
+<li><p>Jump；</p>
+</li>
+<li><p>Landing；</p>
+</li>
+<li><p>Turn；</p>
+</li>
+<li><p>Guard；</p>
+</li>
+<li><p>HitStun；</p>
+</li>
+<li><p>Knockdown；</p>
+</li>
+<li><p>Wakeup；</p>
+</li>
+<li><p>ThrowCaptured；</p>
+</li>
+<li><p>Defeated。</p>
+</li>
+</ul>
+<h3 id="招式状态">招式状态</h3><ul>
+<li><p>NormalAttack；</p>
+</li>
+<li><p>CommandNormal；</p>
+</li>
+<li><p>SpecialMove；</p>
+</li>
+<li><p>SuperMove；</p>
+</li>
+<li><p>Throw；</p>
+</li>
+<li><p>Counter；</p>
+</li>
+<li><p>Stance；</p>
+</li>
+<li><p>Install。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-statedefinition">10.3 StateDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StateId；</p>
+</li>
+<li><p>StateTags；</p>
+</li>
+<li><p>DurationFrames；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>InvulnerabilityProfile；</p>
+</li>
+<li><p>CollisionProfile；</p>
+</li>
+<li><p>InputAcceptanceRules；</p>
+</li>
+<li><p>TransitionRules；</p>
+</li>
+<li><p>CancelWindowIds；</p>
+</li>
+<li><p>FrameEventIds；</p>
+</li>
+<li><p>ExitPolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="104-状态转换">10.4 状态转换</h2><p>状态转换来源包括：</p>
+<ul>
+<li><p>玩家指令；</p>
+</li>
+<li><p>动作自然结束；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>被命中；</p>
+</li>
+<li><p>格挡；</p>
+</li>
+<li><p>投技；</p>
+</li>
+<li><p>落地；</p>
+</li>
+<li><p>接触墙壁；</p>
+</li>
+<li><p>资源耗尽；</p>
+</li>
+<li><p>角色特性；</p>
+</li>
+<li><p>比赛阶段变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="105-状态转换优先级">10.5 状态转换优先级</h2><p>建议优先级：</p>
+<ol>
+<li><p>比赛终止；</p>
+</li>
+<li><p>死亡；</p>
+</li>
+<li><p>强制受击或投技；</p>
+</li>
+<li><p>系统脱离；</p>
+</li>
+<li><p>特殊无敌响应；</p>
+</li>
+<li><p>取消与派生；</p>
+</li>
+<li><p>缓冲指令；</p>
+</li>
+<li><p>自然状态结束；</p>
+</li>
+<li><p>普通移动。</p>
+</li>
+</ol>
+<hr />
+<h2 id="106-状态标签">10.6 状态标签</h2><p>例如：</p>
+<ul>
+<li><p>State.Grounded；</p>
+</li>
+<li><p>State.Airborne；</p>
+</li>
+<li><p>State.Attacking；</p>
+</li>
+<li><p>State.Blocking；</p>
+</li>
+<li><p>State.HitStun；</p>
+</li>
+<li><p>State.Knockdown；</p>
+</li>
+<li><p>State.ThrowInvulnerable；</p>
+</li>
+<li><p>State.Cancelable；</p>
+</li>
+<li><p>State.CounterHitVulnerable。</p>
+</li>
+</ul>
+<p>其他系统应优先查询标签，而不是硬编码具体状态名称。</p>
+<hr />
+<h2 id="11-招式与帧数据">11. 招式与帧数据</h2><h2 id="111-movedefinition">11.1 MoveDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>MoveId；</p>
+</li>
+<li><p>CommandId；</p>
+</li>
+<li><p>EntryStateId；</p>
+</li>
+<li><p>StartupFrames；</p>
+</li>
+<li><p>ActiveFrameRanges；</p>
+</li>
+<li><p>RecoveryFrames；</p>
+</li>
+<li><p>DamageProfileId；</p>
+</li>
+<li><p>HitboxTimelineId；</p>
+</li>
+<li><p>HurtboxTimelineId；</p>
+</li>
+<li><p>MovementTimelineId；</p>
+</li>
+<li><p>HitProperties；</p>
+</li>
+<li><p>BlockProperties；</p>
+</li>
+<li><p>CancelWindowIds；</p>
+</li>
+<li><p>ResourceCost；</p>
+</li>
+<li><p>ResourceGain；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-招式阶段">11.2 招式阶段</h2><h3 id="起手">起手</h3><p>指令已经执行，但攻击尚未生效。</p>
+<h3 id="有效">有效</h3><p>攻击框处于活动状态。</p>
+<h3 id="收招">收招</h3><p>攻击失效，但角色尚未恢复普通行动。</p>
+<hr />
+<h2 id="113-多段攻击">11.3 多段攻击</h2><p>多段攻击需要明确：</p>
+<ul>
+<li><p>每段有效帧；</p>
+</li>
+<li><p>是否能重复命中同一目标；</p>
+</li>
+<li><p>命中间隔；</p>
+</li>
+<li><p>每段伤害；</p>
+</li>
+<li><p>每段硬直；</p>
+</li>
+<li><p>取消发生在哪一段；</p>
+</li>
+<li><p>对手能否在段间行动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-招式分支">11.4 招式分支</h2><p>同一招式可以根据：</p>
+<ul>
+<li><p>是否命中；</p>
+</li>
+<li><p>是否格挡；</p>
+</li>
+<li><p>是否挥空；</p>
+</li>
+<li><p>按键长短；</p>
+</li>
+<li><p>方向；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>当前姿态；</p>
+</li>
+</ul>
+<p>进入不同后继状态。</p>
+<hr />
+<h2 id="115-moveruntimestate">11.5 MoveRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>MoveId；</p>
+</li>
+<li><p>StartedFrame；</p>
+</li>
+<li><p>CurrentMoveFrame；</p>
+</li>
+<li><p>HitTargetIds；</p>
+</li>
+<li><p>ConfirmedHitState；</p>
+</li>
+<li><p>CurrentBranch；</p>
+</li>
+<li><p>ResourceCommitted；</p>
+</li>
+<li><p>MoveVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="12-攻击框受击框与碰撞体">12. 攻击框、受击框与碰撞体</h2><h2 id="121-碰撞体分类">12.1 碰撞体分类</h2><h3 id="pushbox">Pushbox</h3><p>角色间实体推挤范围。</p>
+<h3 id="hurtbox">Hurtbox</h3><p>可以被攻击命中的身体范围。</p>
+<h3 id="hitbox">Hitbox</h3><p>招式造成攻击效果的范围。</p>
+<h3 id="throwbox">Throwbox</h3><p>投技捕获范围。</p>
+<h3 id="proximitybox">ProximityBox</h3><p>近距离触发格挡或状态变化的范围。</p>
+<h3 id="interactionbox">InteractionBox</h3><p>特殊接触、反弹或场地互动范围。</p>
+<hr />
+<h2 id="122-hitboxframedefinition">12.2 HitboxFrameDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>FrameRange；</p>
+</li>
+<li><p>Shape；</p>
+</li>
+<li><p>LocalPosition；</p>
+</li>
+<li><p>LocalRotation；</p>
+</li>
+<li><p>HitId；</p>
+</li>
+<li><p>AttackLevel；</p>
+</li>
+<li><p>TargetFilters；</p>
+</li>
+<li><p>DamageProfileId；</p>
+</li>
+<li><p>ClashProfile；</p>
+</li>
+<li><p>HitboxVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-hurtboxframedefinition">12.3 HurtboxFrameDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>FrameRange；</p>
+</li>
+<li><p>BodyPartTag；</p>
+</li>
+<li><p>Shape；</p>
+</li>
+<li><p>LocalPosition；</p>
+</li>
+<li><p>InvulnerabilityTags；</p>
+</li>
+<li><p>CounterHitModifier；</p>
+</li>
+<li><p>HurtboxVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-判定框绑定">12.4 判定框绑定</h2><p>逻辑判定框应绑定：</p>
+<ul>
+<li><p>逻辑骨骼；</p>
+</li>
+<li><p>动作时间线；</p>
+</li>
+<li><p>固定局部坐标。</p>
+</li>
+</ul>
+<p>不能完全依赖动画蒙皮顶点或渲染骨骼的非确定结果。</p>
+<hr />
+<h2 id="125-攻击判定顺序">12.5 攻击判定顺序</h2><p>每帧可以按以下顺序：</p>
+<ol>
+<li><p>更新角色逻辑位置；</p>
+</li>
+<li><p>更新Pushbox；</p>
+</li>
+<li><p>解决角色重叠；</p>
+</li>
+<li><p>更新Hurtbox和Hitbox；</p>
+</li>
+<li><p>生成攻击候选；</p>
+</li>
+<li><p>处理无敌和目标过滤；</p>
+</li>
+<li><p>处理冲突与优先级；</p>
+</li>
+<li><p>提交命中结果。</p>
+</li>
+</ol>
+<hr />
+<h2 id="13-命中冲突与攻击优先级">13. 命中冲突与攻击优先级</h2><h2 id="131-hitcandidate">13.1 HitCandidate</h2><p>建议字段：</p>
+<ul>
+<li><p>AttackerId；</p>
+</li>
+<li><p>DefenderId；</p>
+</li>
+<li><p>MoveId；</p>
+</li>
+<li><p>HitId；</p>
+</li>
+<li><p>HitboxId；</p>
+</li>
+<li><p>HurtboxId；</p>
+</li>
+<li><p>ContactPosition；</p>
+</li>
+<li><p>AttackLevel；</p>
+</li>
+<li><p>CreatedFrame；</p>
+</li>
+<li><p>CandidateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-同帧互相命中">13.2 同帧互相命中</h2><p>双方攻击在同一帧有效时，可以：</p>
+<ul>
+<li><p>双方同时命中；</p>
+</li>
+<li><p>按攻击优先级裁决；</p>
+</li>
+<li><p>发生招式相杀；</p>
+</li>
+<li><p>某类无敌招式获胜；</p>
+</li>
+<li><p>投技与攻击使用特殊规则。</p>
+</li>
+</ul>
+<p>规则需要稳定、可预测并能通过训练模式验证。</p>
+<hr />
+<h2 id="133-相杀">13.3 相杀</h2><p>相杀后可以：</p>
+<ul>
+<li><p>双方攻击失效；</p>
+</li>
+<li><p>产生HitStop；</p>
+</li>
+<li><p>双方恢复；</p>
+</li>
+<li><p>保留投射物；</p>
+</li>
+<li><p>允许特定取消。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-投射物所有权">13.4 投射物所有权</h2><p>投射物需要记录：</p>
+<ul>
+<li><p>创建者；</p>
+</li>
+<li><p>伤害归属；</p>
+</li>
+<li><p>当前阵营；</p>
+</li>
+<li><p>反射状态；</p>
+</li>
+<li><p>是否因角色受击而消失；</p>
+</li>
+<li><p>是否受HitStop影响。</p>
+</li>
+</ul>
+<hr />
+<h2 id="135-重复命中保护">13.5 重复命中保护</h2><p>同一个HitId通常不能在同一有效段重复命中同一目标。</p>
+<p>需要记录：</p>
+<ul>
+<li><p>AttackInstanceId；</p>
+</li>
+<li><p>HitId；</p>
+</li>
+<li><p>TargetId；</p>
+</li>
+<li><p>已命中帧。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-格挡系统">14. 格挡系统</h2><h2 id="141-guardstate">14.1 GuardState</h2><p>建议包含：</p>
+<ul>
+<li><p>GuardDirection；</p>
+</li>
+<li><p>GuardType；</p>
+</li>
+<li><p>GuardGauge；</p>
+</li>
+<li><p>InstantGuardWindow；</p>
+</li>
+<li><p>GuardCrushState；</p>
+</li>
+<li><p>LastBlockedAttackId；</p>
+</li>
+<li><p>GuardVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-攻击高度">14.2 攻击高度</h2><p>包括：</p>
+<ul>
+<li><p>上段；</p>
+</li>
+<li><p>中段；</p>
+</li>
+<li><p>下段；</p>
+</li>
+<li><p>不可防御；</p>
+</li>
+<li><p>空中可防；</p>
+</li>
+<li><p>投技。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-格挡判断">14.3 格挡判断</h2><p>判断输入：</p>
+<ul>
+<li><p>当前方向；</p>
+</li>
+<li><p>当前站立或蹲伏；</p>
+</li>
+<li><p>是否在格挡允许状态；</p>
+</li>
+<li><p>攻击高度；</p>
+</li>
+<li><p>攻击方向；</p>
+</li>
+<li><p>是否处于交叉攻击；</p>
+</li>
+<li><p>是否拥有防御资源；</p>
+</li>
+<li><p>是否被投技。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-blockresult">14.4 BlockResult</h2><p>建议包含：</p>
+<ul>
+<li><p>BlockStunFrames；</p>
+</li>
+<li><p>Pushback；</p>
+</li>
+<li><p>ChipDamage；</p>
+</li>
+<li><p>GuardGaugeDamage；</p>
+</li>
+<li><p>ResourceGain；</p>
+</li>
+<li><p>FrameAdvantage；</p>
+</li>
+<li><p>BlockResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="145-精准防御">14.5 精准防御</h2><p>精准防御可以：</p>
+<ul>
+<li><p>减少格挡硬直；</p>
+</li>
+<li><p>不受削减伤害；</p>
+</li>
+<li><p>增加资源；</p>
+</li>
+<li><p>减少推远；</p>
+</li>
+<li><p>允许特殊反击。</p>
+</li>
+</ul>
+<p>需要明确输入窗口，并防止其成为无风险万能防守。</p>
+<hr />
+<h2 id="15-投技与拆投">15. 投技与拆投</h2><h2 id="151-throwdefinition">15.1 ThrowDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ThrowId；</p>
+</li>
+<li><p>StartupFrames；</p>
+</li>
+<li><p>ActiveFrames；</p>
+</li>
+<li><p>ThrowRange；</p>
+</li>
+<li><p>ValidTargetStates；</p>
+</li>
+<li><p>ThrowInvulnerabilityRules；</p>
+</li>
+<li><p>TechWindow；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>PositionResult；</p>
+</li>
+<li><p>KnockdownResult；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-投技捕获">15.2 投技捕获</h2><p>投技通常需要：</p>
+<ul>
+<li><p>攻击者投技框与目标投技受理范围接触；</p>
+</li>
+<li><p>目标处于可投状态；</p>
+</li>
+<li><p>目标不在投技保护；</p>
+</li>
+<li><p>双方没有更高优先级状态；</p>
+</li>
+<li><p>投技未被拆解。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-投技保护">15.3 投技保护</h2><p>可能来源：</p>
+<ul>
+<li><p>受击硬直结束后的短时保护；</p>
+</li>
+<li><p>格挡硬直；</p>
+</li>
+<li><p>起身；</p>
+</li>
+<li><p>跳跃起始；</p>
+</li>
+<li><p>特定招式；</p>
+</li>
+<li><p>连段保护。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-拆投">15.4 拆投</h2><p>拆投窗口可以从：</p>
+<ul>
+<li><p>投技起手；</p>
+</li>
+<li><p>捕获帧；</p>
+</li>
+<li><p>特定视觉提示；</p>
+</li>
+</ul>
+<p>开始计算。</p>
+<p>拆投成功后：</p>
+<ul>
+<li><p>双方分开；</p>
+</li>
+<li><p>恢复到中立；</p>
+</li>
+<li><p>产生固定硬直；</p>
+</li>
+<li><p>可能奖励资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-伤害与受击结算">16. 伤害与受击结算</h2><h2 id="161-damageprofile">16.1 DamageProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>MinimumDamage；</p>
+</li>
+<li><p>ScalingCategory；</p>
+</li>
+<li><p>CounterHitModifier；</p>
+</li>
+<li><p>PunishCounterModifier；</p>
+</li>
+<li><p>ChipDamage；</p>
+</li>
+<li><p>ResourceGainRules；</p>
+</li>
+<li><p>StunDamage；</p>
+</li>
+<li><p>GuardDamage；</p>
+</li>
+<li><p>DamageVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-hitresult">16.2 HitResult</h2><p>建议包含：</p>
+<ul>
+<li><p>AttackerId；</p>
+</li>
+<li><p>DefenderId；</p>
+</li>
+<li><p>MoveId；</p>
+</li>
+<li><p>HitType；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>HitStunFrames；</p>
+</li>
+<li><p>LaunchVector；</p>
+</li>
+<li><p>Pushback；</p>
+</li>
+<li><p>CounterHitState；</p>
+</li>
+<li><p>ComboScalingState；</p>
+</li>
+<li><p>ResourceDeltas；</p>
+</li>
+<li><p>HitResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-伤害结算顺序">16.3 伤害结算顺序</h2><p>推荐：</p>
+<ol>
+<li><p>招式基础伤害；</p>
+</li>
+<li><p>角色状态修正；</p>
+</li>
+<li><p>Counter Hit或Punish修正；</p>
+</li>
+<li><p>连段伤害衰减；</p>
+</li>
+<li><p>资源强化；</p>
+</li>
+<li><p>最低伤害限制；</p>
+</li>
+<li><p>护盾或特殊减伤；</p>
+</li>
+<li><p>生命扣除；</p>
+</li>
+<li><p>资源变化；</p>
+</li>
+<li><p>受击状态应用；</p>
+</li>
+<li><p>胜负检查。</p>
+</li>
+</ol>
+<hr />
+<h2 id="164-counter-hit">16.4 Counter Hit</h2><p>当目标在特定状态被命中时，可以产生：</p>
+<ul>
+<li><p>更高伤害；</p>
+</li>
+<li><p>更长硬直；</p>
+</li>
+<li><p>特殊击飞；</p>
+</li>
+<li><p>新连段路线；</p>
+</li>
+<li><p>特殊特效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="165-punish">16.5 Punish</h2><p>Punish通常表示：</p>
+<ul>
+<li><p>对手仍处于无法行动的收招；</p>
+</li>
+<li><p>玩家在保证命中的窗口攻击。</p>
+</li>
+</ul>
+<p>系统可以记录Punish状态，用于：</p>
+<ul>
+<li><p>UI反馈；</p>
+</li>
+<li><p>训练分析；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>数据统计。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-受击击飞与倒地">17. 受击、击飞与倒地</h2><h2 id="171-hitreactiondefinition">17.1 HitReactionDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ReactionId；</p>
+</li>
+<li><p>HitStunFrames；</p>
+</li>
+<li><p>AnimationStateId；</p>
+</li>
+<li><p>LaunchRules；</p>
+</li>
+<li><p>GravityRules；</p>
+</li>
+<li><p>GroundBounceRules；</p>
+</li>
+<li><p>WallBounceRules；</p>
+</li>
+<li><p>KnockdownRules；</p>
+</li>
+<li><p>RecoveryRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-受击状态">17.2 受击状态</h2><p>包括：</p>
+<ul>
+<li><p>地面受击；</p>
+</li>
+<li><p>蹲姿受击；</p>
+</li>
+<li><p>空中受击；</p>
+</li>
+<li><p>浮空；</p>
+</li>
+<li><p>吹飞；</p>
+</li>
+<li><p>墙面反弹；</p>
+</li>
+<li><p>地面弹起；</p>
+</li>
+<li><p>滑倒；</p>
+</li>
+<li><p>硬倒地；</p>
+</li>
+<li><p>软倒地。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-空中受身">17.3 空中受身</h2><p>需要明确：</p>
+<ul>
+<li><p>哪些受击允许受身；</p>
+</li>
+<li><p>最早受身帧；</p>
+</li>
+<li><p>可选方向；</p>
+</li>
+<li><p>是否无敌；</p>
+</li>
+<li><p>是否能被追击；</p>
+</li>
+<li><p>是否重置连段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="174-倒地状态">17.4 倒地状态</h2><p>建议包含：</p>
+<ul>
+<li><p>KnockdownType；</p>
+</li>
+<li><p>RemainingFrames；</p>
+</li>
+<li><p>WakeupOptions；</p>
+</li>
+<li><p>InvulnerabilityFrames；</p>
+</li>
+<li><p>ThrowProtectionFrames；</p>
+</li>
+<li><p>WakeupVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="175-起身选项">17.5 起身选项</h2><p>包括：</p>
+<ul>
+<li><p>原地起身；</p>
+</li>
+<li><p>快速起身；</p>
+</li>
+<li><p>延迟起身；</p>
+</li>
+<li><p>前滚；</p>
+</li>
+<li><p>后滚；</p>
+</li>
+<li><p>原地反击；</p>
+</li>
+<li><p>消耗资源起身。</p>
+</li>
+</ul>
+<p>起身选项越多，越需要控制进攻方的覆盖能力，避免单一自动压制。</p>
+<hr />
+<h2 id="18-取消与派生系统">18. 取消与派生系统</h2><h2 id="181-cancelwindowdefinition">18.1 CancelWindowDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CancelWindowId；</p>
+</li>
+<li><p>StartFrame；</p>
+</li>
+<li><p>EndFrame；</p>
+</li>
+<li><p>RequiredOutcome；</p>
+</li>
+<li><p>AllowedCommandTags；</p>
+</li>
+<li><p>ForbiddenStateTags；</p>
+</li>
+<li><p>ResourceCost；</p>
+</li>
+<li><p>HitConfirmPolicy；</p>
+</li>
+<li><p>OncePerMove；</p>
+</li>
+<li><p>CancelVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-requiredoutcome">18.2 RequiredOutcome</h2><p>可以是：</p>
+<ul>
+<li><p>Always；</p>
+</li>
+<li><p>OnHit；</p>
+</li>
+<li><p>OnBlock；</p>
+</li>
+<li><p>OnHitOrBlock；</p>
+</li>
+<li><p>OnWhiff；</p>
+</li>
+<li><p>CounterHitOnly；</p>
+</li>
+<li><p>ResourceStateRequired。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-取消类型">18.3 取消类型</h2><p>包括：</p>
+<ul>
+<li><p>普通技连锁；</p>
+</li>
+<li><p>普通技取消特殊技；</p>
+</li>
+<li><p>特殊技取消必杀；</p>
+</li>
+<li><p>跳跃取消；</p>
+</li>
+<li><p>冲刺取消；</p>
+</li>
+<li><p>姿态派生；</p>
+</li>
+<li><p>资源取消；</p>
+</li>
+<li><p>防御取消；</p>
+</li>
+<li><p>角色切换取消。</p>
+</li>
+</ul>
+<hr />
+<h2 id="184-命中确认">18.4 命中确认</h2><p>命中确认流程：</p>
+<ol>
+<li><p>玩家执行起始招式；</p>
+</li>
+<li><p>系统生成命中或格挡结果；</p>
+</li>
+<li><p>HitStop提供观察窗口；</p>
+</li>
+<li><p>玩家根据反馈输入后续指令；</p>
+</li>
+<li><p>输入在取消窗口内被识别；</p>
+</li>
+<li><p>状态机进入对应后继招式。</p>
+</li>
+</ol>
+<hr />
+<h2 id="185-防止自动确认">18.5 防止自动确认</h2><p>系统不能因为起始招式命中，就自动执行预设最高伤害连段。</p>
+<p>可以提供：</p>
+<ul>
+<li><p>连招辅助；</p>
+</li>
+<li><p>简化模式；</p>
+</li>
+<li><p>训练推荐；</p>
+</li>
+</ul>
+<p>但应作为明确规则，而不是隐藏自动行为。</p>
+<hr />
+<h2 id="19-连段系统">19. 连段系统</h2><h2 id="191-combostate">19.1 ComboState</h2><p>建议包含：</p>
+<ul>
+<li><p>AttackerId；</p>
+</li>
+<li><p>DefenderId；</p>
+</li>
+<li><p>HitCount；</p>
+</li>
+<li><p>TotalDamage；</p>
+</li>
+<li><p>ComboStartFrame；</p>
+</li>
+<li><p>DamageScaling；</p>
+</li>
+<li><p>HitStunScaling；</p>
+</li>
+<li><p>GravityScaling；</p>
+</li>
+<li><p>WallBounceUsage；</p>
+</li>
+<li><p>GroundBounceUsage；</p>
+</li>
+<li><p>ComboResourceGain；</p>
+</li>
+<li><p>ComboVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-连段成立条件">19.2 连段成立条件</h2><p>只要防守方在下一次攻击生效前无法恢复有效防御或行动，就属于连续连段。</p>
+<hr />
+<h2 id="193-连段衰减">19.3 连段衰减</h2><p>可以包含：</p>
+<ul>
+<li><p>伤害衰减；</p>
+</li>
+<li><p>受击硬直衰减；</p>
+</li>
+<li><p>重力增加；</p>
+</li>
+<li><p>最低伤害；</p>
+</li>
+<li><p>资源获得衰减；</p>
+</li>
+<li><p>特殊状态次数限制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="194-连段限制资源">19.4 连段限制资源</h2><p>可以使用：</p>
+<ul>
+<li><p>墙反次数；</p>
+</li>
+<li><p>地弹次数；</p>
+</li>
+<li><p>特殊取消次数；</p>
+</li>
+<li><p>浮空值；</p>
+</li>
+<li><p>连段点数；</p>
+</li>
+<li><p>重复招式衰减。</p>
+</li>
+</ul>
+<hr />
+<h2 id="195-无限连段检测">19.5 无限连段检测</h2><p>需要检测：</p>
+<ul>
+<li><p>状态循环；</p>
+</li>
+<li><p>无资源消耗重复招式；</p>
+</li>
+<li><p>受击硬直永不衰减；</p>
+</li>
+<li><p>墙反和地弹未正确消费；</p>
+</li>
+<li><p>投射物重复重置连段状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="196-连段结束">19.6 连段结束</h2><p>连段可能因：</p>
+<ul>
+<li><p>防守方恢复；</p>
+</li>
+<li><p>受身；</p>
+</li>
+<li><p>倒地；</p>
+</li>
+<li><p>攻击挥空；</p>
+</li>
+<li><p>超出距离；</p>
+</li>
+<li><p>规则强制重置；</p>
+</li>
+<li><p>回合结束；</p>
+</li>
+</ul>
+<p>终止。</p>
+<hr />
+<h2 id="20-移动距离与场地">20. 移动、距离与场地</h2><h2 id="201-movementprofile">20.1 MovementProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>WalkSpeedForward；</p>
+</li>
+<li><p>WalkSpeedBackward；</p>
+</li>
+<li><p>DashProfile；</p>
+</li>
+<li><p>BackdashProfile；</p>
+</li>
+<li><p>JumpProfile；</p>
+</li>
+<li><p>AirMovementProfile；</p>
+</li>
+<li><p>Gravity；</p>
+</li>
+<li><p>LandingRecovery；</p>
+</li>
+<li><p>MovementVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-移动类型">20.2 移动类型</h2><p>包括：</p>
+<ul>
+<li><p>前进；</p>
+</li>
+<li><p>后退；</p>
+</li>
+<li><p>冲刺；</p>
+</li>
+<li><p>后跳；</p>
+</li>
+<li><p>普通跳跃；</p>
+</li>
+<li><p>高跳；</p>
+</li>
+<li><p>二段跳；</p>
+</li>
+<li><p>空中冲刺；</p>
+</li>
+<li><p>侧移；</p>
+</li>
+<li><p>翻滚；</p>
+</li>
+<li><p>特殊传送。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-相对朝向">20.3 相对朝向</h2><p>需要统一处理：</p>
+<ul>
+<li><p>谁在左侧；</p>
+</li>
+<li><p>谁在右侧；</p>
+</li>
+<li><p>双方是否交叉；</p>
+</li>
+<li><p>角色何时转身；</p>
+</li>
+<li><p>背向招式；</p>
+</li>
+<li><p>投射物方向；</p>
+</li>
+<li><p>输入中的前后转换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-pushbox">20.4 Pushbox</h2><p>Pushbox用于：</p>
+<ul>
+<li><p>防止角色重叠；</p>
+</li>
+<li><p>控制穿越；</p>
+</li>
+<li><p>形成版边挤压；</p>
+</li>
+<li><p>决定换边。</p>
+</li>
+</ul>
+<p>需要处理：</p>
+<ul>
+<li><p>跳跃越过；</p>
+</li>
+<li><p>投技演出；</p>
+</li>
+<li><p>瞬移；</p>
+</li>
+<li><p>倒地；</p>
+</li>
+<li><p>大体型角色；</p>
+</li>
+<li><p>场地边界。</p>
+</li>
+</ul>
+<hr />
+<h2 id="205-版边">20.5 版边</h2><p>版边会改变：</p>
+<ul>
+<li><p>推远距离；</p>
+</li>
+<li><p>连段路线；</p>
+</li>
+<li><p>墙面反弹；</p>
+</li>
+<li><p>防守压力；</p>
+</li>
+<li><p>逃离选项。</p>
+</li>
+</ul>
+<p>版边状态是格斗游戏中的重要空间资源。</p>
+<hr />
+<h2 id="206-场地规则">20.6 场地规则</h2><p>场地可能包含：</p>
+<ul>
+<li><p>固定边界；</p>
+</li>
+<li><p>环形边界；</p>
+</li>
+<li><p>可破坏墙壁；</p>
+</li>
+<li><p>多层平台；</p>
+</li>
+<li><p>掉落边界；</p>
+</li>
+<li><p>场地转换；</p>
+</li>
+<li><p>危险物体。</p>
+</li>
+</ul>
+<p>竞技场地的视觉变化不能影响判定可读性。</p>
+<hr />
+<h2 id="21-资源槽与角色机制">21. 资源槽与角色机制</h2><h2 id="211-resourcedefinition">21.1 ResourceDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ResourceId；</p>
+</li>
+<li><p>MaximumValue；</p>
+</li>
+<li><p>StartingValue；</p>
+</li>
+<li><p>GainRules；</p>
+</li>
+<li><p>SpendRules；</p>
+</li>
+<li><p>DecayRules；</p>
+</li>
+<li><p>RoundPersistencePolicy；</p>
+</li>
+<li><p>DisplayPolicy；</p>
+</li>
+<li><p>ResourceVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-常见资源">21.2 常见资源</h2><p>包括：</p>
+<ul>
+<li><p>必杀能量；</p>
+</li>
+<li><p>防御槽；</p>
+</li>
+<li><p>爆气；</p>
+</li>
+<li><p>角色专属计数；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>姿态值；</p>
+</li>
+<li><p>辅助角色冷却；</p>
+</li>
+<li><p>变身时间；</p>
+</li>
+<li><p>连击点数。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-资源获得">21.3 资源获得</h2><p>来源包括：</p>
+<ul>
+<li><p>命中；</p>
+</li>
+<li><p>被命中；</p>
+</li>
+<li><p>格挡；</p>
+</li>
+<li><p>精准防御；</p>
+</li>
+<li><p>移动；</p>
+</li>
+<li><p>特定招式；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>回合开始。</p>
+</li>
+</ul>
+<hr />
+<h2 id="214-资源消费事务">21.4 资源消费事务</h2><p>资源消费应明确：</p>
+<ul>
+<li><p>指令识别时预留；</p>
+</li>
+<li><p>招式进入时提交；</p>
+</li>
+<li><p>招式被中断是否返还；</p>
+</li>
+<li><p>演出失败是否影响；</p>
+</li>
+<li><p>回滚时如何恢复。</p>
+</li>
+</ul>
+<hr />
+<h2 id="215-角色独有机制">21.5 角色独有机制</h2><p>角色专属机制可以通过：</p>
+<ul>
+<li><p>额外资源；</p>
+</li>
+<li><p>姿态；</p>
+</li>
+<li><p>召唤物；</p>
+</li>
+<li><p>安装状态；</p>
+</li>
+<li><p>武器切换；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>标记；</p>
+</li>
+<li><p>伙伴；</p>
+</li>
+</ul>
+<p>接入统一状态与事件接口。</p>
+<hr />
+<h2 id="22-投射物与场上实体">22. 投射物与场上实体</h2><h2 id="221-projectiledefinition">22.1 ProjectileDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ProjectileId；</p>
+</li>
+<li><p>LifetimeFrames；</p>
+</li>
+<li><p>MovementTimeline；</p>
+</li>
+<li><p>HitboxTimeline；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>ClashRules；</p>
+</li>
+<li><p>OwnerHitRules；</p>
+</li>
+<li><p>DespawnRules；</p>
+</li>
+<li><p>HitProperties；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-projectileruntimestate">22.2 ProjectileRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>EntityId；</p>
+</li>
+<li><p>OwnerFighterId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>CurrentFrame；</p>
+</li>
+<li><p>RemainingDurability；</p>
+</li>
+<li><p>HitTargetIds；</p>
+</li>
+<li><p>ReflectedState；</p>
+</li>
+<li><p>ProjectileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-投射物相杀">22.3 投射物相杀</h2><p>可以根据：</p>
+<ul>
+<li><p>投射物等级；</p>
+</li>
+<li><p>耐久；</p>
+</li>
+<li><p>命中次数；</p>
+</li>
+<li><p>特殊标签；</p>
+</li>
+</ul>
+<p>处理相杀。</p>
+<hr />
+<h2 id="224-召唤实体">22.4 召唤实体</h2><p>召唤物可以：</p>
+<ul>
+<li><p>独立移动；</p>
+</li>
+<li><p>接收角色命令；</p>
+</li>
+<li><p>拥有独立生命；</p>
+</li>
+<li><p>占用角色资源；</p>
+</li>
+<li><p>产生攻击；</p>
+</li>
+<li><p>被对手攻击。</p>
+</li>
+</ul>
+<p>需要明确：</p>
+<ul>
+<li><p>是否共享HitStop；</p>
+</li>
+<li><p>是否随主人受击消失；</p>
+</li>
+<li><p>是否计入回滚快照；</p>
+</li>
+<li><p>是否能同时命中。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-状态效果与角色强化">23. 状态效果与角色强化</h2><h2 id="231-combatstatusdefinition">23.1 CombatStatusDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StatusId；</p>
+</li>
+<li><p>StatusTags；</p>
+</li>
+<li><p>DurationFrames；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>TriggerSpecs；</p>
+</li>
+<li><p>RemovalRules；</p>
+</li>
+<li><p>RoundPersistence；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-状态类型">23.2 状态类型</h2><p>包括：</p>
+<ul>
+<li><p>攻击提升；</p>
+</li>
+<li><p>防御下降；</p>
+</li>
+<li><p>中毒；</p>
+</li>
+<li><p>燃烧；</p>
+</li>
+<li><p>冻结；</p>
+</li>
+<li><p>标记；</p>
+</li>
+<li><p>禁止跳跃；</p>
+</li>
+<li><p>输入反转；</p>
+</li>
+<li><p>缓速；</p>
+</li>
+<li><p>霸体；</p>
+</li>
+<li><p>无敌；</p>
+</li>
+<li><p>吸血。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-状态应用顺序">23.3 状态应用顺序</h2><p>需要明确：</p>
+<ul>
+<li><p>命中后何时应用；</p>
+</li>
+<li><p>是否影响本次伤害；</p>
+</li>
+<li><p>是否受连段衰减；</p>
+</li>
+<li><p>是否在HitStop期间计时；</p>
+</li>
+<li><p>回合结束是否清除；</p>
+</li>
+<li><p>回滚后如何恢复。</p>
+</li>
+</ul>
+<hr />
+<h2 id="234-霸体">23.4 霸体</h2><p>霸体通常：</p>
+<ul>
+<li><p>承受伤害；</p>
+</li>
+<li><p>不立即进入普通受击；</p>
+</li>
+<li><p>消耗霸体次数或耐久；</p>
+</li>
+<li><p>可能被投技或特殊攻击破解。</p>
+</li>
+</ul>
+<p>不能将霸体简单实现为完全无敌。</p>
+<hr />
+<h2 id="24-ai对手">24. AI对手</h2><h2 id="241-fighteraistate">24.1 FighterAIState</h2><p>建议包含：</p>
+<ul>
+<li><p>AIProfileId；</p>
+</li>
+<li><p>PerceivedOpponentState；</p>
+</li>
+<li><p>CurrentPlan；</p>
+</li>
+<li><p>ReactionTimer；</p>
+</li>
+<li><p>BehaviorHistory；</p>
+</li>
+<li><p>DifficultyModifiers；</p>
+</li>
+<li><p>AIStateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-ai认知边界">24.2 AI认知边界</h2><p>AI可以读取：</p>
+<ul>
+<li><p>当前可见状态；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>对手动作；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>历史行为。</p>
+</li>
+</ul>
+<p>AI不应无条件读取：</p>
+<ul>
+<li><p>玩家未来输入；</p>
+</li>
+<li><p>尚未生效的指令缓存；</p>
+</li>
+<li><p>回滚后的真实未来；</p>
+</li>
+<li><p>不可见随机结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-ai决策层">24.3 AI决策层</h2><p>可以分为：</p>
+<ol>
+<li><p>状态识别；</p>
+</li>
+<li><p>距离判断；</p>
+</li>
+<li><p>行为候选；</p>
+</li>
+<li><p>风险评分；</p>
+</li>
+<li><p>反应延迟；</p>
+</li>
+<li><p>输入生成；</p>
+</li>
+<li><p>执行误差。</p>
+</li>
+</ol>
+<hr />
+<h2 id="244-难度设计">24.4 难度设计</h2><p>高难度AI可以：</p>
+<ul>
+<li><p>更快反应；</p>
+</li>
+<li><p>更准确确认；</p>
+</li>
+<li><p>更好资源管理；</p>
+</li>
+<li><p>更少执行错误；</p>
+</li>
+<li><p>更强对局适应。</p>
+</li>
+</ul>
+<p>不应仅通过：</p>
+<ul>
+<li><p>读取输入；</p>
+</li>
+<li><p>无视指令难度；</p>
+</li>
+<li><p>自动完美拆投；</p>
+</li>
+<li><p>超越规则的伤害；</p>
+</li>
+</ul>
+<p>提高难度。</p>
+<hr />
+<h2 id="25-训练模式">25. 训练模式</h2><h2 id="251-trainingstate">25.1 TrainingState</h2><p>建议包含：</p>
+<ul>
+<li><p>DummyBehavior；</p>
+</li>
+<li><p>GuardBehavior；</p>
+</li>
+<li><p>RecoveryBehavior；</p>
+</li>
+<li><p>CounterAttackBehavior；</p>
+</li>
+<li><p>ResourceResetRules；</p>
+</li>
+<li><p>PositionResetRules；</p>
+</li>
+<li><p>RecordingSlots；</p>
+</li>
+<li><p>FrameDisplayRules；</p>
+</li>
+<li><p>TrainingVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-训练功能">25.2 训练功能</h2><p>包括：</p>
+<ul>
+<li><p>生命不减；</p>
+</li>
+<li><p>资源固定；</p>
+</li>
+<li><p>一键重置位置；</p>
+</li>
+<li><p>判定框显示；</p>
+</li>
+<li><p>输入历史；</p>
+</li>
+<li><p>帧数据；</p>
+</li>
+<li><p>命中或格挡随机；</p>
+</li>
+<li><p>自动受身；</p>
+</li>
+<li><p>反击录制；</p>
+</li>
+<li><p>连段计数；</p>
+</li>
+<li><p>伤害衰减显示；</p>
+</li>
+<li><p>状态保存与读取。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-假人录制">25.3 假人录制</h2><p>玩家可以录制：</p>
+<ul>
+<li><p>多组行为；</p>
+</li>
+<li><p>随机播放；</p>
+</li>
+<li><p>命中后行为；</p>
+</li>
+<li><p>格挡后行为；</p>
+</li>
+<li><p>起身行为；</p>
+</li>
+<li><p>特定状态反击。</p>
+</li>
+</ul>
+<hr />
+<h2 id="254-帧优势显示">25.4 帧优势显示</h2><p>训练模式可以显示：</p>
+<ul>
+<li><p>攻击命中后优势；</p>
+</li>
+<li><p>格挡后优势；</p>
+</li>
+<li><p>双方最早可行动帧；</p>
+</li>
+<li><p>按键实际执行帧；</p>
+</li>
+<li><p>输入缓冲状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="255-训练目标">25.5 训练目标</h2><p>系统可提供：</p>
+<ul>
+<li><p>基础连段；</p>
+</li>
+<li><p>对空练习；</p>
+</li>
+<li><p>确反练习；</p>
+</li>
+<li><p>拆投练习；</p>
+</li>
+<li><p>防守练习；</p>
+</li>
+<li><p>角色对局练习。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-网络对战与回滚">26. 网络对战与回滚</h2><h2 id="261-网络输入模型">26.1 网络输入模型</h2><p>双方只需交换：</p>
+<ul>
+<li><p>每帧输入；</p>
+</li>
+<li><p>输入序列号；</p>
+</li>
+<li><p>已确认帧；</p>
+</li>
+<li><p>状态哈希；</p>
+</li>
+<li><p>网络质量信息。</p>
+</li>
+</ul>
+<p>不需要每帧直接同步完整角色位置作为权威结果。</p>
+<hr />
+<h2 id="262-预测输入">26.2 预测输入</h2><p>远端输入尚未到达时，可以预测：</p>
+<ul>
+<li><p>延续上一帧方向；</p>
+</li>
+<li><p>按键不再按下；</p>
+</li>
+<li><p>使用最近稳定输入。</p>
+</li>
+</ul>
+<p>预测策略必须固定。</p>
+<hr />
+<h2 id="263-rollbackstate">26.3 RollbackState</h2><p>建议包含：</p>
+<ul>
+<li><p>LocalFrame；</p>
+</li>
+<li><p>RemoteConfirmedFrame；</p>
+</li>
+<li><p>PredictedFrameRange；</p>
+</li>
+<li><p>SnapshotRingBuffer；</p>
+</li>
+<li><p>InputHistoryByPlayer；</p>
+</li>
+<li><p>LastMatchingStateHash；</p>
+</li>
+<li><p>RollbackVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="264-回滚流程">26.4 回滚流程</h2><ol>
+<li><p>本地运行预测帧；</p>
+</li>
+<li><p>收到远端真实输入；</p>
+</li>
+<li><p>比较预测输入；</p>
+</li>
+<li><p>如果一致，继续；</p>
+</li>
+<li><p>如果不一致，恢复到最早分歧帧快照；</p>
+</li>
+<li><p>使用真实输入重新模拟；</p>
+</li>
+<li><p>重新运行至当前帧；</p>
+</li>
+<li><p>修正表现层；</p>
+</li>
+<li><p>更新状态哈希。</p>
+</li>
+</ol>
+<hr />
+<h2 id="265-回滚表现处理">26.5 回滚表现处理</h2><p>逻辑可以瞬间重演，但表现层需要避免：</p>
+<ul>
+<li><p>音效重复；</p>
+</li>
+<li><p>特效重复；</p>
+</li>
+<li><p>摄像机剧烈跳变；</p>
+</li>
+<li><p>UI重复计数；</p>
+</li>
+<li><p>角色明显瞬移。</p>
+</li>
+</ul>
+<p>表现事件应区分：</p>
+<ul>
+<li><p>已确认事件；</p>
+</li>
+<li><p>预测事件；</p>
+</li>
+<li><p>可撤销事件；</p>
+</li>
+<li><p>只在确认后播放的事件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="266-输入延迟">26.6 输入延迟</h2><p>可以使用少量本地输入延迟换取：</p>
+<ul>
+<li><p>更少回滚；</p>
+</li>
+<li><p>更稳定表现。</p>
+</li>
+</ul>
+<p>需要根据：</p>
+<ul>
+<li><p>网络延迟；</p>
+</li>
+<li><p>抖动；</p>
+</li>
+<li><p>设备性能；</p>
+</li>
+</ul>
+<p>动态或固定配置。</p>
+<hr />
+<h2 id="267-状态分歧">26.7 状态分歧</h2><p>双方状态哈希不一致时：</p>
+<ul>
+<li><p>记录最早分歧帧；</p>
+</li>
+<li><p>请求诊断快照；</p>
+</li>
+<li><p>标记对局异常；</p>
+</li>
+<li><p>根据模式继续、重同步或终止；</p>
+</li>
+<li><p>保留回放与输入日志。</p>
+</li>
+</ul>
+<p>竞技比赛中，不能静默忽略逻辑分歧。</p>
+<hr />
+<h2 id="27-观战与回放">27. 观战与回放</h2><h2 id="271-replayrecord">27.1 ReplayRecord</h2><p>建议包含：</p>
+<ul>
+<li><p>GameVersion；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>MatchDefinitionId；</p>
+</li>
+<li><p>CharacterSelections；</p>
+</li>
+<li><p>StageId；</p>
+</li>
+<li><p>InitialSeed；</p>
+</li>
+<li><p>InputFrames；</p>
+</li>
+<li><p>PeriodicStateHashes；</p>
+</li>
+<li><p>MatchResult；</p>
+</li>
+<li><p>ReplayVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-输入回放">27.2 输入回放</h2><p>最轻量的回放方式是保存：</p>
+<ul>
+<li><p>初始状态；</p>
+</li>
+<li><p>双方输入；</p>
+</li>
+<li><p>随机种子；</p>
+</li>
+<li><p>游戏版本。</p>
+</li>
+</ul>
+<p>然后重新模拟完整比赛。</p>
+<hr />
+<h2 id="273-版本兼容">27.3 版本兼容</h2><p>角色平衡更新后，旧输入可能产生不同结果。</p>
+<p>可以：</p>
+<ul>
+<li><p>保存旧规则版本；</p>
+</li>
+<li><p>保存完整关键快照；</p>
+</li>
+<li><p>标记旧回放不可精确播放；</p>
+</li>
+<li><p>仅保留视频式回放；</p>
+</li>
+<li><p>使用兼容运行时。</p>
+</li>
+</ul>
+<hr />
+<h2 id="274-观战延迟">27.4 观战延迟</h2><p>在线比赛观战可以设置延迟，防止：</p>
+<ul>
+<li><p>实时传递信息；</p>
+</li>
+<li><p>比赛作弊；</p>
+</li>
+<li><p>战术泄漏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="275-回放分析">27.5 回放分析</h2><p>支持：</p>
+<ul>
+<li><p>逐帧播放；</p>
+</li>
+<li><p>输入显示；</p>
+</li>
+<li><p>命中框显示；</p>
+</li>
+<li><p>状态显示；</p>
+</li>
+<li><p>距离测量；</p>
+</li>
+<li><p>攻防回合标记；</p>
+</li>
+<li><p>关键错误书签。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-完整事件与执行流程示例">28. 完整事件与执行流程示例</h2><p>以下以“玩家使用中攻击试探，命中后确认特殊技并形成版边压制”为例。</p>
+<h3 id="281-中立状态">28.1 中立状态</h3><p>双方处于中距离。</p>
+<p>玩家A拥有：</p>
+<ul>
+<li><p>中距离站立中攻击；</p>
+</li>
+<li><p>前进特殊技；</p>
+</li>
+<li><p>两格必杀资源。</p>
+</li>
+</ul>
+<p>玩家B正在小幅前后移动。</p>
+<hr />
+<h3 id="282-输入提交">28.2 输入提交</h3><p>玩家A输入中攻击。</p>
+<p>InputSystem记录：</p>
+<ul>
+<li><p>当前帧按键按下；</p>
+</li>
+<li><p>角色当前处于Idle；</p>
+</li>
+<li><p>指令匹配普通中攻击；</p>
+</li>
+<li><p>状态机允许进入该招式。</p>
+</li>
+</ul>
+<hr />
+<h3 id="283-招式起手">28.3 招式起手</h3><p>角色进入StandingMedium状态。</p>
+<p>前若干帧：</p>
+<ul>
+<li><p>Hitbox尚未启用；</p>
+</li>
+<li><p>Hurtbox向前移动；</p>
+</li>
+<li><p>角色无法普通防御；</p>
+</li>
+<li><p>特定资源取消尚未开放。</p>
+</li>
+</ul>
+<hr />
+<h3 id="284-有效帧接触">28.4 有效帧接触</h3><p>攻击框与玩家B的受击框重叠。</p>
+<p>系统检查：</p>
+<ul>
+<li><p>玩家B未格挡；</p>
+</li>
+<li><p>未处于无敌；</p>
+</li>
+<li><p>攻击高度合法；</p>
+</li>
+<li><p>双方没有更高优先级冲突。</p>
+</li>
+</ul>
+<p>生成HitCandidate并提交普通命中。</p>
+<hr />
+<h3 id="285-命中停顿">28.5 命中停顿</h3><p>双方进入HitStop。</p>
+<p>玩家A在停顿中观察到：</p>
+<ul>
+<li><p>命中特效；</p>
+</li>
+<li><p>受击音效；</p>
+</li>
+<li><p>UI确认。</p>
+</li>
+</ul>
+<p>玩家A输入特殊技指令。</p>
+<hr />
+<h3 id="286-指令识别">28.6 指令识别</h3><p>指令系统从InputHistory识别：</p>
+<ul>
+<li><p>方向序列合法；</p>
+</li>
+<li><p>按键在时间窗内；</p>
+</li>
+<li><p>当前招式命中后允许特殊技取消；</p>
+</li>
+<li><p>资源足够。</p>
+</li>
+</ul>
+<p>指令进入CancelBuffer。</p>
+<hr />
+<h3 id="287-取消执行">28.7 取消执行</h3><p>HitStop结束后：</p>
+<ul>
+<li><p>普通中攻击尚未进入完整收招；</p>
+</li>
+<li><p>OnHit取消窗口已开放；</p>
+</li>
+<li><p>状态机消费缓冲指令；</p>
+</li>
+<li><p>进入前进特殊技；</p>
+</li>
+<li><p>扣除对应资源。</p>
+</li>
+</ul>
+<hr />
+<h3 id="288-连段延续">28.8 连段延续</h3><p>特殊技命中玩家B。</p>
+<p>系统更新：</p>
+<ul>
+<li><p>HitCount增加；</p>
+</li>
+<li><p>伤害衰减；</p>
+</li>
+<li><p>受击硬直衰减；</p>
+</li>
+<li><p>推进玩家B向版边移动；</p>
+</li>
+<li><p>玩家A获得少量资源。</p>
+</li>
+</ul>
+<hr />
+<h3 id="289-版边结束技">28.9 版边结束技</h3><p>玩家A使用资源必杀作为连段结束。</p>
+<p>结果：</p>
+<ul>
+<li><p>总伤害不是理论最高；</p>
+</li>
+<li><p>玩家B被击倒在版边；</p>
+</li>
+<li><p>玩家A保持较近距离；</p>
+</li>
+<li><p>玩家A剩余资源降低。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2810-起身攻防">28.10 起身攻防</h3><p>玩家B进入硬倒地。</p>
+<p>玩家A选择靠近并使用延迟攻击。</p>
+<p>玩家B可以选择：</p>
+<ul>
+<li><p>原地格挡；</p>
+</li>
+<li><p>起身反击；</p>
+</li>
+<li><p>延迟起身；</p>
+</li>
+<li><p>投技拆解准备；</p>
+</li>
+<li><p>消耗防御资源脱离。</p>
+</li>
+</ul>
+<p>完整循环体现：</p>
+<p>距离试探
+→ 普通技命中
+→ HitStop确认
+→ 指令缓冲
+→ 取消派生
+→ 连段资源转换
+→ 版边位置收益
+→ 起身攻防</p>
+<hr />
+<h2 id="29-模块通信设计">29. 模块通信设计</h2><h2 id="291-命令">29.1 命令</h2><p>典型逻辑命令包括：</p>
+<ul>
+<li><p>SubmitFrameInput；</p>
+</li>
+<li><p>StartMatch；</p>
+</li>
+<li><p>SelectCharacter；</p>
+</li>
+<li><p>PauseTraining；</p>
+</li>
+<li><p>ResetTrainingState；</p>
+</li>
+<li><p>SaveTrainingRecording；</p>
+</li>
+<li><p>RequestRematch；</p>
+</li>
+<li><p>SurrenderMatch。</p>
+</li>
+</ul>
+<p>角色战斗动作通常不直接以业务命令形式发送，而是从帧输入中确定性推导。</p>
+<hr />
+<h2 id="292-同步查询">29.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>当前状态是否可取消；</p>
+</li>
+<li><p>当前招式第几帧；</p>
+</li>
+<li><p>某输入是否已识别；</p>
+</li>
+<li><p>当前帧优势；</p>
+</li>
+<li><p>某判定框为何未命中；</p>
+</li>
+<li><p>当前连段衰减；</p>
+</li>
+<li><p>当前投技保护；</p>
+</li>
+<li><p>当前网络确认帧。</p>
+</li>
+</ul>
+<p>查询不能：</p>
+<ul>
+<li><p>修改状态；</p>
+</li>
+<li><p>推进随机数；</p>
+</li>
+<li><p>消费输入；</p>
+</li>
+<li><p>触发动作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="293-领域事件">29.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>CommandRecognized；</p>
+</li>
+<li><p>FighterStateChanged；</p>
+</li>
+<li><p>MoveStarted；</p>
+</li>
+<li><p>HitboxActivated；</p>
+</li>
+<li><p>HitConfirmed；</p>
+</li>
+<li><p>AttackBlocked；</p>
+</li>
+<li><p>ThrowConnected；</p>
+</li>
+<li><p>ThrowTeched；</p>
+</li>
+<li><p>FighterLaunched；</p>
+</li>
+<li><p>FighterKnockedDown；</p>
+</li>
+<li><p>ComboStarted；</p>
+</li>
+<li><p>ComboEnded；</p>
+</li>
+<li><p>ResourceChanged；</p>
+</li>
+<li><p>RoundEnded；</p>
+</li>
+<li><p>RollbackOccurred；</p>
+</li>
+<li><p>StateDesyncDetected。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-表现事件">29.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>PlayAttackAnimation；</p>
+</li>
+<li><p>PlayHitEffect；</p>
+</li>
+<li><p>PlayBlockEffect；</p>
+</li>
+<li><p>PlayCounterHitPresentation；</p>
+</li>
+<li><p>ShakeCamera；</p>
+</li>
+<li><p>PlayAnnouncerVoice；</p>
+</li>
+<li><p>ShowComboCounter；</p>
+</li>
+<li><p>ShowRoundResult。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>是否命中；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>状态转换；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>胜负。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-存档与长期数据">30. 存档与长期数据</h2><h2 id="301-profilestate">30.1 ProfileState</h2><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>UnlockedCharacters；</p>
+</li>
+<li><p>ControlSettings；</p>
+</li>
+<li><p>TrainingSettings；</p>
+</li>
+<li><p>CosmeticSelections；</p>
+</li>
+<li><p>RankedStatistics；</p>
+</li>
+<li><p>MatchHistory；</p>
+</li>
+<li><p>ReplayReferences；</p>
+</li>
+<li><p>TutorialProgress；</p>
+</li>
+<li><p>ProfileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-对局内状态">30.2 对局内状态</h2><p>标准竞技对局通常不需要长期保存中途状态。</p>
+<p>但训练、单人剧情和离线比赛可能需要保存：</p>
+<ul>
+<li><p>当前小局；</p>
+</li>
+<li><p>双方状态；</p>
+</li>
+<li><p>输入历史；</p>
+</li>
+<li><p>场上实体；</p>
+</li>
+<li><p>随机状态；</p>
+</li>
+<li><p>比赛计时。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-排名结果">30.3 排名结果</h2><p>RankedResult建议包含：</p>
+<ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>PlayerIds；</p>
+</li>
+<li><p>CharacterSelections；</p>
+</li>
+<li><p>MatchOutcome；</p>
+</li>
+<li><p>DisconnectState；</p>
+</li>
+<li><p>IntegrityState；</p>
+</li>
+<li><p>RatingBefore；</p>
+</li>
+<li><p>RatingAfter；</p>
+</li>
+<li><p>ServerSignature；</p>
+</li>
+<li><p>ResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-幂等结算">30.4 幂等结算</h2><p>同一MatchId只能结算一次：</p>
+<ul>
+<li><p>排名不能重复变化；</p>
+</li>
+<li><p>奖励不能重复发放；</p>
+</li>
+<li><p>断线裁决不能重复覆盖；</p>
+</li>
+<li><p>重试返回已有结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-失败隔离">31. 失败隔离</h2><h2 id="311-非法状态转换">31.1 非法状态转换</h2><p>如果状态机收到非法转换：</p>
+<ul>
+<li><p>保持当前合法状态；</p>
+</li>
+<li><p>不消耗资源；</p>
+</li>
+<li><p>不消费缓冲指令；</p>
+</li>
+<li><p>记录源状态、目标状态和触发来源；</p>
+</li>
+<li><p>下一帧继续模拟。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-招式定义缺失">31.2 招式定义缺失</h2><p>如果MoveDefinition缺失：</p>
+<ul>
+<li><p>使用安全待机或通用恢复状态；</p>
+</li>
+<li><p>不生成攻击框；</p>
+</li>
+<li><p>不扣除资源；</p>
+</li>
+<li><p>标记角色内容异常；</p>
+</li>
+<li><p>防止比赛主循环停止。</p>
+</li>
+</ul>
+<p>正式竞技版本应在内容构建阶段阻止此类配置进入发布包。</p>
+<hr />
+<h2 id="313-判定框异常">31.3 判定框异常</h2><p>检测到：</p>
+<ul>
+<li><p>负尺寸；</p>
+</li>
+<li><p>非法坐标；</p>
+</li>
+<li><p>未知目标过滤；</p>
+</li>
+<li><p>重复HitId；</p>
+</li>
+<li><p>活动帧越界；</p>
+</li>
+</ul>
+<p>时：</p>
+<ul>
+<li><p>禁用异常判定框；</p>
+</li>
+<li><p>保留其他合法判定；</p>
+</li>
+<li><p>输出MoveId和帧号；</p>
+</li>
+<li><p>不直接判定命中。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-连段状态泄漏">31.4 连段状态泄漏</h2><p>如果防守方已恢复行动但ComboState仍存在：</p>
+<ul>
+<li><p>按受击硬直状态重建；</p>
+</li>
+<li><p>结束旧连段；</p>
+</li>
+<li><p>提交最终统计；</p>
+</li>
+<li><p>防止后续攻击继续继承错误衰减。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-资源重复消费">31.5 资源重复消费</h2><p>使用：</p>
+<ul>
+<li><p>ActionInstanceId；</p>
+</li>
+<li><p>ResourceTransactionId；</p>
+</li>
+<li><p>CommittedFrame；</p>
+</li>
+</ul>
+<p>防止回滚重演时将同一资源永久扣除多次。</p>
+<p>回滚恢复快照后，资源状态应由重演自动重建。</p>
+<hr />
+<h2 id="316-投射物孤立">31.6 投射物孤立</h2><p>投射物所有者消失或回合结束时：</p>
+<ul>
+<li><p>根据DespawnPolicy销毁或保留；</p>
+</li>
+<li><p>清理所有目标引用；</p>
+</li>
+<li><p>不继续生成无归属伤害；</p>
+</li>
+<li><p>从回滚状态中移除。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-网络分歧">31.7 网络分歧</h2><p>发现状态哈希不同：</p>
+<ul>
+<li><p>记录双方输入；</p>
+</li>
+<li><p>记录首个分歧帧；</p>
+</li>
+<li><p>保存诊断快照；</p>
+</li>
+<li><p>根据比赛模式尝试重同步或终止；</p>
+</li>
+<li><p>不静默继续排名结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="318-回放失败">31.8 回放失败</h2><p>旧回放无法运行时：</p>
+<ul>
+<li><p>显示版本不兼容；</p>
+</li>
+<li><p>保留元数据和比赛结果；</p>
+</li>
+<li><p>不伪造播放结果；</p>
+</li>
+<li><p>尽可能使用关键帧或视频备份。</p>
+</li>
+</ul>
+<hr />
+<h2 id="319-比赛结果写入失败">31.9 比赛结果写入失败</h2><p>比赛已经结束但服务异常时：</p>
+<ul>
+<li><p>保存SignedMatchResult；</p>
+</li>
+<li><p>标记PendingCommit；</p>
+</li>
+<li><p>不要求玩家重赛；</p>
+</li>
+<li><p>不重复改变排名；</p>
+</li>
+<li><p>使用幂等事务重试。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-调试与可观测性">32. 调试与可观测性</h2><h2 id="321-帧状态检查器">32.1 帧状态检查器</h2><p>显示：</p>
+<ul>
+<li><p>当前逻辑帧；</p>
+</li>
+<li><p>比赛阶段；</p>
+</li>
+<li><p>双方状态；</p>
+</li>
+<li><p>当前状态帧；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>随机游标；</p>
+</li>
+<li><p>状态哈希。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-输入历史查看器">32.2 输入历史查看器</h2><p>显示：</p>
+<ul>
+<li><p>原始方向；</p>
+</li>
+<li><p>相对方向；</p>
+</li>
+<li><p>按键；</p>
+</li>
+<li><p>按下和松开；</p>
+</li>
+<li><p>识别的指令；</p>
+</li>
+<li><p>被消费输入；</p>
+</li>
+<li><p>缓冲指令；</p>
+</li>
+<li><p>缓冲过期原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-招式时间线">32.3 招式时间线</h2><p>显示：</p>
+<ul>
+<li><p>起手；</p>
+</li>
+<li><p>有效；</p>
+</li>
+<li><p>收招；</p>
+</li>
+<li><p>判定框；</p>
+</li>
+<li><p>受击框；</p>
+</li>
+<li><p>无敌；</p>
+</li>
+<li><p>位移；</p>
+</li>
+<li><p>取消窗口；</p>
+</li>
+<li><p>帧事件；</p>
+</li>
+<li><p>资源提交帧。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-判定框查看器">32.4 判定框查看器</h2><p>支持显示：</p>
+<ul>
+<li><p>Pushbox；</p>
+</li>
+<li><p>Hurtbox；</p>
+</li>
+<li><p>Hitbox；</p>
+</li>
+<li><p>Throwbox；</p>
+</li>
+<li><p>ProximityBox；</p>
+</li>
+<li><p>局部坐标；</p>
+</li>
+<li><p>世界坐标；</p>
+</li>
+<li><p>当前HitId。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-命中解释器">32.5 命中解释器</h2><p>显示：</p>
+<ul>
+<li><p>攻击者状态；</p>
+</li>
+<li><p>防守者状态；</p>
+</li>
+<li><p>攻击高度；</p>
+</li>
+<li><p>格挡输入；</p>
+</li>
+<li><p>无敌标签；</p>
+</li>
+<li><p>判定接触；</p>
+</li>
+<li><p>冲突优先级；</p>
+</li>
+<li><p>最终命中、格挡或挥空结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-帧优势分析器">32.6 帧优势分析器</h2><p>显示：</p>
+<ul>
+<li><p>攻击命中后硬直；</p>
+</li>
+<li><p>格挡硬直；</p>
+</li>
+<li><p>攻击者恢复帧；</p>
+</li>
+<li><p>防守者恢复帧；</p>
+</li>
+<li><p>最终帧差；</p>
+</li>
+<li><p>推远后距离；</p>
+</li>
+<li><p>可用反击招式。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-连段分析器">32.7 连段分析器</h2><p>显示：</p>
+<ul>
+<li><p>起始招式；</p>
+</li>
+<li><p>每段伤害；</p>
+</li>
+<li><p>伤害衰减；</p>
+</li>
+<li><p>受击硬直衰减；</p>
+</li>
+<li><p>重力；</p>
+</li>
+<li><p>墙反；</p>
+</li>
+<li><p>地弹；</p>
+</li>
+<li><p>资源变化；</p>
+</li>
+<li><p>断连帧。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-状态转换日志">32.8 状态转换日志</h2><p>记录：</p>
+<ul>
+<li><p>源状态；</p>
+</li>
+<li><p>目标状态；</p>
+</li>
+<li><p>转换帧；</p>
+</li>
+<li><p>触发来源；</p>
+</li>
+<li><p>输入；</p>
+</li>
+<li><p>命中结果；</p>
+</li>
+<li><p>被拒绝转换；</p>
+</li>
+<li><p>拒绝原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="329-回滚可视化">32.9 回滚可视化</h2><p>显示：</p>
+<ul>
+<li><p>预测帧；</p>
+</li>
+<li><p>已确认帧；</p>
+</li>
+<li><p>实际回滚长度；</p>
+</li>
+<li><p>输入分歧；</p>
+</li>
+<li><p>重演耗时；</p>
+</li>
+<li><p>表现修正；</p>
+</li>
+<li><p>状态哈希差异。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3210-对局回放分析">32.10 对局回放分析</h2><p>自动标记：</p>
+<ul>
+<li><p>挥空惩罚；</p>
+</li>
+<li><p>确反失败；</p>
+</li>
+<li><p>对空失败；</p>
+</li>
+<li><p>投技命中；</p>
+</li>
+<li><p>起身被压制；</p>
+</li>
+<li><p>资源未使用；</p>
+</li>
+<li><p>连段失误；</p>
+</li>
+<li><p>版边逃脱；</p>
+</li>
+<li><p>重复行为模式。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-内容验证工具">33. 内容验证工具</h2><h2 id="331-招式定义验证">33.1 招式定义验证</h2><p>检查：</p>
+<ul>
+<li><p>起手、有效和收招总帧数；</p>
+</li>
+<li><p>判定框时间线；</p>
+</li>
+<li><p>取消窗口；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>状态入口；</p>
+</li>
+<li><p>状态出口；</p>
+</li>
+<li><p>动画资源；</p>
+</li>
+<li><p>是否存在无法退出状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-输入指令冲突验证">33.2 输入指令冲突验证</h2><p>批量检查：</p>
+<ul>
+<li><p>一组输入匹配多个指令；</p>
+</li>
+<li><p>优先级是否稳定；</p>
+</li>
+<li><p>简化输入是否吞掉其他动作；</p>
+</li>
+<li><p>蓄力和方向指令是否冲突；</p>
+</li>
+<li><p>换边后识别是否一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-连段合法性验证">33.3 连段合法性验证</h2><p>自动运行招式序列，检查：</p>
+<ul>
+<li><p>每次命中时防守方是否仍在硬直；</p>
+</li>
+<li><p>取消是否发生在合法窗口；</p>
+</li>
+<li><p>资源是否足够；</p>
+</li>
+<li><p>墙反和地弹是否超限；</p>
+</li>
+<li><p>连段衰减是否正确；</p>
+</li>
+<li><p>是否存在无限循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-确反验证">33.4 确反验证</h2><p>根据招式格挡后帧差，计算：</p>
+<ul>
+<li><p>对手哪些招式可以保证反击；</p>
+</li>
+<li><p>距离是否允许；</p>
+</li>
+<li><p>Pushback是否使理论反击无法命中；</p>
+</li>
+<li><p>不同角色是否存在预期差异。</p>
+</li>
+</ul>
+<hr />
+<h2 id="335-判定覆盖验证">33.5 判定覆盖验证</h2><p>检查：</p>
+<ul>
+<li><p>动画与逻辑判定是否严重错位；</p>
+</li>
+<li><p>攻击框是否出现在武器之前；</p>
+</li>
+<li><p>受击框是否异常缺失；</p>
+</li>
+<li><p>无敌区域是否符合设计；</p>
+</li>
+<li><p>大小角色是否存在意外穿透。</p>
+</li>
+</ul>
+<hr />
+<h2 id="336-对局矩阵模拟">33.6 对局矩阵模拟</h2><p>使用不同角色组合自动运行：</p>
+<ul>
+<li><p>移动速度；</p>
+</li>
+<li><p>招式距离；</p>
+</li>
+<li><p>对空覆盖；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>资源生成；</p>
+</li>
+<li><p>版边伤害；</p>
+</li>
+<li><p>防守脱离。</p>
+</li>
+</ul>
+<p>用于发现系统性对局失衡，不直接代替真人平衡测试。</p>
+<hr />
+<h2 id="337-网络确定性测试">33.7 网络确定性测试</h2><p>在不同环境运行相同：</p>
+<ul>
+<li><p>初始状态；</p>
+</li>
+<li><p>输入序列；</p>
+</li>
+<li><p>随机种子。</p>
+</li>
+</ul>
+<p>检查每帧状态哈希是否一致。</p>
+<hr />
+<h2 id="338-回滚压力测试">33.8 回滚压力测试</h2><p>模拟：</p>
+<ul>
+<li><p>高延迟；</p>
+</li>
+<li><p>抖动；</p>
+</li>
+<li><p>丢包；</p>
+</li>
+<li><p>连续预测错误；</p>
+</li>
+<li><p>大量投射物；</p>
+</li>
+<li><p>多角色系统；</p>
+</li>
+<li><p>长连段。</p>
+</li>
+</ul>
+<p>统计：</p>
+<ul>
+<li><p>最大回滚帧数；</p>
+</li>
+<li><p>重演耗时；</p>
+</li>
+<li><p>表现错误；</p>
+</li>
+<li><p>状态分歧。</p>
+</li>
+</ul>
+<hr />
+<h2 id="339-ai规则测试">33.9 AI规则测试</h2><p>检查AI：</p>
+<ul>
+<li><p>是否读取未来输入；</p>
+</li>
+<li><p>是否存在零反应延迟；</p>
+</li>
+<li><p>是否能够执行非法指令；</p>
+</li>
+<li><p>是否在资源不足时使用必杀；</p>
+</li>
+<li><p>是否在不同难度维持规则一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-性能设计">34. 性能设计</h2><h2 id="341-逻辑数据使用紧凑结构">34.1 逻辑数据使用紧凑结构</h2><p>高频状态应避免：</p>
+<ul>
+<li><p>大量动态分配；</p>
+</li>
+<li><p>反射调用；</p>
+</li>
+<li><p>不稳定集合遍历；</p>
+</li>
+<li><p>每帧创建临时对象；</p>
+</li>
+<li><p>依赖场景组件查询。</p>
+</li>
+</ul>
+<hr />
+<h2 id="342-判定框批处理">34.2 判定框批处理</h2><p>同一帧可以：</p>
+<ol>
+<li><p>更新所有逻辑碰撞体；</p>
+</li>
+<li><p>建立空间索引；</p>
+</li>
+<li><p>生成候选对；</p>
+</li>
+<li><p>批量过滤；</p>
+</li>
+<li><p>稳定排序；</p>
+</li>
+<li><p>依次提交结果。</p>
+</li>
+</ol>
+<hr />
+<h2 id="343-快照环形缓冲">34.3 快照环形缓冲</h2><p>回滚快照可以使用固定容量环形缓冲区。</p>
+<p>容量取决于：</p>
+<ul>
+<li><p>最大允许回滚帧；</p>
+</li>
+<li><p>状态大小；</p>
+</li>
+<li><p>平台内存；</p>
+</li>
+<li><p>观战需求。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-表现对象池">34.4 表现对象池</h2><p>适用于：</p>
+<ul>
+<li><p>命中特效；</p>
+</li>
+<li><p>格挡特效；</p>
+</li>
+<li><p>投射物视觉；</p>
+</li>
+<li><p>飘字；</p>
+</li>
+<li><p>角色残影；</p>
+</li>
+<li><p>场地破坏表现。</p>
+</li>
+</ul>
+<p>逻辑实体不能依赖表现对象是否仍存在。</p>
+<hr />
+<h2 id="345-动画采样">34.5 动画采样</h2><p>动画表现可以使用：</p>
+<ul>
+<li><p>逻辑状态帧映射；</p>
+</li>
+<li><p>预采样曲线；</p>
+</li>
+<li><p>固定帧事件；</p>
+</li>
+<li><p>渲染插值。</p>
+</li>
+</ul>
+<p>不能让动画事件直接成为命中和资源消费的唯一权威来源。</p>
+<hr />
+<h2 id="346-回滚重演降级">34.6 回滚重演降级</h2><p>重演历史帧时通常不需要：</p>
+<ul>
+<li><p>播放完整音效；</p>
+</li>
+<li><p>生成所有特效；</p>
+</li>
+<li><p>更新非权威UI；</p>
+</li>
+<li><p>执行摄像机动画。</p>
+</li>
+</ul>
+<p>只运行权威逻辑，最终当前帧再恢复表现。</p>
+<hr />
+<h2 id="35-可扩展点">35. 可扩展点</h2><h2 id="351-新角色">35.1 新角色</h2><p>主要提供：</p>
+<ul>
+<li><p>CharacterDefinition；</p>
+</li>
+<li><p>状态集合；</p>
+</li>
+<li><p>MoveDefinitions；</p>
+</li>
+<li><p>CommandDefinitions；</p>
+</li>
+<li><p>资源定义；</p>
+</li>
+<li><p>专属机制模块；</p>
+</li>
+<li><p>AI配置；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<p>不应修改比赛主循环。</p>
+<hr />
+<h2 id="352-新招式">35.2 新招式</h2><p>提供：</p>
+<ul>
+<li><p>输入指令；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>帧数据；</p>
+</li>
+<li><p>判定框时间线；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>取消；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-新防御机制">35.3 新防御机制</h2><p>通过：</p>
+<ul>
+<li><p>输入规则；</p>
+</li>
+<li><p>状态标签；</p>
+</li>
+<li><p>HitResolutionPolicy；</p>
+</li>
+<li><p>资源成本；</p>
+</li>
+<li><p>后继状态；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="354-新场地规则">35.4 新场地规则</h2><p>可以扩展：</p>
+<ul>
+<li><p>可破坏墙壁；</p>
+</li>
+<li><p>场地转换；</p>
+</li>
+<li><p>平台；</p>
+</li>
+<li><p>掉落边界；</p>
+</li>
+<li><p>环境物体。</p>
+</li>
+</ul>
+<p>竞技模式应明确哪些场地是标准规则，哪些属于娱乐规则。</p>
+<hr />
+<h2 id="355-新组队模式">35.5 新组队模式</h2><p>可以支持：</p>
+<ul>
+<li><p>一对一；</p>
+</li>
+<li><p>轮换队伍；</p>
+</li>
+<li><p>实时换人；</p>
+</li>
+<li><p>辅助角色；</p>
+</li>
+<li><p>多人混战；</p>
+</li>
+<li><p>合作Boss。</p>
+</li>
+</ul>
+<p>仍应复用：</p>
+<ul>
+<li><p>帧模拟；</p>
+</li>
+<li><p>输入；</p>
+</li>
+<li><p>状态机；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>回滚。</p>
+</li>
+</ul>
+<hr />
+<h2 id="356-新控制模式">35.6 新控制模式</h2><p>可以支持：</p>
+<ul>
+<li><p>经典指令；</p>
+</li>
+<li><p>简化指令；</p>
+</li>
+<li><p>触屏；</p>
+</li>
+<li><p>单键必杀；</p>
+</li>
+<li><p>辅助连段。</p>
+</li>
+</ul>
+<p>不同模式需要明确竞技限制和输入优先级，不能让同一输入层产生不可解释差异。</p>
+<hr />
+<h2 id="36-玩家体验设计">36. 玩家体验设计</h2><h2 id="361-动作反馈必须与逻辑结果一致">36.1 动作反馈必须与逻辑结果一致</h2><p>玩家需要通过音画明确区分：</p>
+<ul>
+<li><p>命中；</p>
+</li>
+<li><p>格挡；</p>
+</li>
+<li><p>Counter Hit；</p>
+</li>
+<li><p>Punish；</p>
+</li>
+<li><p>投技；</p>
+</li>
+<li><p>拆投；</p>
+</li>
+<li><p>无敌穿越；</p>
+</li>
+<li><p>相杀。</p>
+</li>
+</ul>
+<hr />
+<h2 id="362-输入失败需要可诊断">36.2 输入失败需要可诊断</h2><p>训练模式应能够说明：</p>
+<ul>
+<li><p>指令未完成；</p>
+</li>
+<li><p>输入过慢；</p>
+</li>
+<li><p>按键过早；</p>
+</li>
+<li><p>当前状态不可取消；</p>
+</li>
+<li><p>资源不足；</p>
+</li>
+<li><p>方向因换边发生变化；</p>
+</li>
+<li><p>输入已被其他指令消费。</p>
+</li>
+</ul>
+<hr />
+<h2 id="363-帧数据不应成为唯一学习方式">36.3 帧数据不应成为唯一学习方式</h2><p>正式体验还需要通过：</p>
+<ul>
+<li><p>动画速度；</p>
+</li>
+<li><p>后坐表现；</p>
+</li>
+<li><p>音效；</p>
+</li>
+<li><p>推远；</p>
+</li>
+<li><p>命中特效；</p>
+</li>
+</ul>
+<p>让玩家直观感知招式风险。</p>
+<hr />
+<h2 id="364-新手需要先理解状态再学习长连段">36.4 新手需要先理解状态，再学习长连段</h2><p>教学顺序建议：</p>
+<ol>
+<li><p>移动和距离；</p>
+</li>
+<li><p>攻击高度；</p>
+</li>
+<li><p>格挡；</p>
+</li>
+<li><p>投技；</p>
+</li>
+<li><p>对空；</p>
+</li>
+<li><p>确反；</p>
+</li>
+<li><p>命中确认；</p>
+</li>
+<li><p>基础连段；</p>
+</li>
+<li><p>版边；</p>
+</li>
+<li><p>资源管理。</p>
+</li>
+</ol>
+<hr />
+<h2 id="365-长连段需要考虑被攻击者体验">36.5 长连段需要考虑被攻击者体验</h2><p>可以通过：</p>
+<ul>
+<li><p>连段长度限制；</p>
+</li>
+<li><p>受身；</p>
+</li>
+<li><p>防御资源；</p>
+</li>
+<li><p>伤害衰减；</p>
+</li>
+<li><p>快速表现；</p>
+</li>
+<li><p>明确剩余资源；</p>
+</li>
+</ul>
+<p>避免长时间完全失去参与感。</p>
+<hr />
+<h2 id="366-角色差异需要建立在规则表达上">36.6 角色差异需要建立在规则表达上</h2><p>角色可以在以下方面形成差异：</p>
+<ul>
+<li><p>有效距离；</p>
+</li>
+<li><p>移动；</p>
+</li>
+<li><p>攻击节奏；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>连段路线；</p>
+</li>
+<li><p>胜利条件。</p>
+</li>
+</ul>
+<p>不能只通过生命和伤害不同区分角色。</p>
+<hr />
+<h2 id="367-在线网络状态应透明">36.7 在线网络状态应透明</h2><p>玩家应能够看到：</p>
+<ul>
+<li><p>延迟；</p>
+</li>
+<li><p>抖动；</p>
+</li>
+<li><p>回滚帧；</p>
+</li>
+<li><p>丢包或连接异常；</p>
+</li>
+<li><p>是否使用无线网络提示；</p>
+</li>
+<li><p>是否发生状态分歧。</p>
+</li>
+</ul>
+<hr />
+<h2 id="368-失败反馈应指向可练习问题">36.8 失败反馈应指向可练习问题</h2><p>例如：</p>
+<ul>
+<li><p>多次被跳跃攻击命中；</p>
+</li>
+<li><p>对手招式被格挡后仍未反击；</p>
+</li>
+<li><p>过度使用高风险招式；</p>
+</li>
+<li><p>版边停留时间过长；</p>
+</li>
+<li><p>资源整局未使用；</p>
+</li>
+<li><p>投技拆解成功率过低。</p>
+</li>
+</ul>
+<hr />
+<h2 id="369-重赛流程应极短">36.9 重赛流程应极短</h2><p>竞技循环需要支持：</p>
+<ul>
+<li><p>快速再战；</p>
+</li>
+<li><p>更换角色；</p>
+</li>
+<li><p>返回训练；</p>
+</li>
+<li><p>保存回放；</p>
+</li>
+<li><p>查看关键数据。</p>
+</li>
+</ul>
+<p>不应让玩家在每局之间重复长时间加载和演出。</p>
+<hr />
+<h2 id="37-常见设计失败">37. 常见设计失败</h2><h2 id="371-战斗逻辑依赖动画事件">37.1 战斗逻辑依赖动画事件</h2><p>不同帧率或动画状态下出现：</p>
+<ul>
+<li><p>判定提前；</p>
+</li>
+<li><p>判定延迟；</p>
+</li>
+<li><p>资源重复扣除；</p>
+</li>
+<li><p>命中丢失。</p>
+</li>
+</ul>
+<hr />
+<h2 id="372-输入系统只检查当前帧">37.2 输入系统只检查当前帧</h2><p>玩家必须在极窄单帧窗口输入，操作极不稳定。</p>
+<hr />
+<h2 id="373-输入缓冲过强">37.3 输入缓冲过强</h2><p>系统自动替玩家保存过多动作，导致角色在局面变化后执行过期指令。</p>
+<hr />
+<h2 id="374-招式只比较伤害">37.4 招式只比较伤害</h2><p>忽略：</p>
+<ul>
+<li><p>距离；</p>
+</li>
+<li><p>起手；</p>
+</li>
+<li><p>收招；</p>
+</li>
+<li><p>判定；</p>
+</li>
+<li><p>帧优势；</p>
+</li>
+<li><p>取消；</p>
+</li>
+<li><p>位置收益。</p>
+</li>
+</ul>
+<hr />
+<h2 id="375-所有普通攻击都能挥空取消">37.5 所有普通攻击都能挥空取消</h2><p>空间试探和挥空惩罚失去意义。</p>
+<hr />
+<h2 id="376-防守只有持续格挡">37.6 防守只有持续格挡</h2><p>压制变为固定循环，缺乏拆投、反击和资源选择。</p>
+<hr />
+<h2 id="377-防御反击无条件安全">37.7 防御反击无条件安全</h2><p>形成单一最优防守选项。</p>
+<hr />
+<h2 id="378-连段系统没有衰减和次数限制">37.8 连段系统没有衰减和次数限制</h2><p>产生无限连段或极端高伤害路线。</p>
+<hr />
+<h2 id="379-角色逻辑硬编码在状态机主类">37.9 角色逻辑硬编码在状态机主类</h2><p>新增角色需要不断修改公共分支。</p>
+<hr />
+<h2 id="3710-判定框完全依赖动画骨骼">37.10 判定框完全依赖动画骨骼</h2><p>出现不稳定、不可调试和网络不一致。</p>
+<hr />
+<h2 id="3711-ai读取玩家输入">37.11 AI读取玩家输入</h2><p>高难度AI通过作弊反应，而不是更合理决策。</p>
+<hr />
+<h2 id="3712-网络只同步角色位置">37.12 网络只同步角色位置</h2><p>无法正确同步：</p>
+<ul>
+<li><p>状态；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>连段；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>胜负。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3713-回滚时重复播放全部表现事件">37.13 回滚时重复播放全部表现事件</h2><p>产生重复音效、特效和UI计数。</p>
+<hr />
+<h2 id="3714-平衡更新破坏全部旧回放">37.14 平衡更新破坏全部旧回放</h2><p>没有版本化和兼容策略。</p>
+<hr />
+<h2 id="38-最小可行原型">38. 最小可行原型</h2><p>一个能够验证格斗游戏核心范式的最小原型可以包含：</p>
+<h3 id="对局">对局</h3><ul>
+<li><p>一对一；</p>
+</li>
+<li><p>三局两胜；</p>
+</li>
+<li><p>固定比赛时间；</p>
+</li>
+<li><p>一张标准场地；</p>
+</li>
+<li><p>本地对战；</p>
+</li>
+<li><p>基础在线回滚测试。</p>
+</li>
+</ul>
+<h3 id="角色">角色</h3><ul>
+<li><p>2名角色；</p>
+</li>
+<li><p>每名角色约10至15个基础招式；</p>
+</li>
+<li><p>普通技；</p>
+</li>
+<li><p>特殊技；</p>
+</li>
+<li><p>投技；</p>
+</li>
+<li><p>对空；</p>
+</li>
+<li><p>一种必杀技；</p>
+</li>
+<li><p>一项角色独有机制。</p>
+</li>
+</ul>
+<h3 id="战斗规则">战斗规则</h3><ul>
+<li><p>站立与蹲下；</p>
+</li>
+<li><p>前后移动；</p>
+</li>
+<li><p>跳跃；</p>
+</li>
+<li><p>格挡；</p>
+</li>
+<li><p>上中下段；</p>
+</li>
+<li><p>投技与拆投；</p>
+</li>
+<li><p>命中与格挡硬直；</p>
+</li>
+<li><p>Counter Hit；</p>
+</li>
+<li><p>连段衰减；</p>
+</li>
+<li><p>倒地与起身；</p>
+</li>
+<li><p>基础资源槽。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>FixedFrameSimulation；</p>
+</li>
+<li><p>InputHistory；</p>
+</li>
+<li><p>CommandRecognizer；</p>
+</li>
+<li><p>FighterStateMachine；</p>
+</li>
+<li><p>MoveDefinition；</p>
+</li>
+<li><p>HitboxTimeline；</p>
+</li>
+<li><p>HurtboxTimeline；</p>
+</li>
+<li><p>HitResolver；</p>
+</li>
+<li><p>GuardResolver；</p>
+</li>
+<li><p>ThrowResolver；</p>
+</li>
+<li><p>ComboState；</p>
+</li>
+<li><p>CancelWindow；</p>
+</li>
+<li><p>RollbackSnapshot；</p>
+</li>
+<li><p>ReplayRecord。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>帧状态检查器；</p>
+</li>
+<li><p>输入历史；</p>
+</li>
+<li><p>招式时间线；</p>
+</li>
+<li><p>判定框显示；</p>
+</li>
+<li><p>命中解释器；</p>
+</li>
+<li><p>帧优势分析器；</p>
+</li>
+<li><p>连段分析器；</p>
+</li>
+<li><p>状态转换日志；</p>
+</li>
+<li><p>回滚可视化；</p>
+</li>
+<li><p>输入回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>相同输入是否始终产生相同结果；</p>
+</li>
+<li><p>逻辑是否完全独立于渲染帧率；</p>
+</li>
+<li><p>指令输入是否兼具稳定性与明确优先级；</p>
+</li>
+<li><p>命中、格挡和挥空是否产生不同风险；</p>
+</li>
+<li><p>取消窗口和命中确认是否正常工作；</p>
+</li>
+<li><p>连段是否能稳定成立并正确衰减；</p>
+</li>
+<li><p>投技、格挡和攻击是否形成基础循环；</p>
+</li>
+<li><p>判定框是否与表现基本一致；</p>
+</li>
+<li><p>回滚后双方状态是否保持一致；</p>
+</li>
+<li><p>调试器是否能解释一次攻击为什么命中或失败。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-推荐实施顺序">39. 推荐实施顺序</h2><p>第一阶段：固定帧模拟与基础角色状态
+第二阶段：输入历史、方向转换和普通指令
+第三阶段：招式帧数据与动作时间线
+第四阶段：Pushbox、Hurtbox和Hitbox
+第五阶段：命中、伤害与受击硬直
+第六阶段：格挡、攻击高度与帧优势
+第七阶段：投技、拆投与投技保护
+第八阶段：取消窗口、命中确认和连段
+第九阶段：击飞、倒地、起身与版边
+第十阶段：资源、特殊技和角色独有机制
+第十一阶段：训练模式、回放和自动验证
+第十二阶段：输入同步、回滚和在线裁决</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量角色：</p>
+<ul>
+<li><p>固定帧时钟；</p>
+</li>
+<li><p>输入历史；</p>
+</li>
+<li><p>指令优先级；</p>
+</li>
+<li><p>状态转换；</p>
+</li>
+<li><p>判定框；</p>
+</li>
+<li><p>命中结算；</p>
+</li>
+<li><p>取消窗口；</p>
+</li>
+<li><p>连段状态；</p>
+</li>
+<li><p>确定性快照；</p>
+</li>
+<li><p>调试工具。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-架构验收标准">40. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>战斗逻辑以固定帧推进，不依赖渲染帧率；</p>
+</li>
+<li><p>相同初始状态、输入和随机种子产生相同结果；</p>
+</li>
+<li><p>输入设备被统一转换为标准逻辑输入；</p>
+</li>
+<li><p>指令识别支持缓冲、容错和稳定优先级；</p>
+</li>
+<li><p>输入缓冲具有明确过期和消费规则；</p>
+</li>
+<li><p>所有角色行为通过统一状态机运行；</p>
+</li>
+<li><p>招式使用可配置的起手、有效和收招帧；</p>
+</li>
+<li><p>攻击框、受击框和推挤框相互分离；</p>
+</li>
+<li><p>判定框不依赖非确定动画结果；</p>
+</li>
+<li><p>命中、格挡和挥空分别进入不同后续状态；</p>
+</li>
+<li><p>格挡系统支持攻击高度和帧优势；</p>
+</li>
+<li><p>投技、拆投和投技保护规则明确；</p>
+</li>
+<li><p>取消只在合法窗口和结果条件下发生；</p>
+</li>
+<li><p>连段状态能够正确处理伤害、硬直和重力衰减；</p>
+</li>
+<li><p>墙反、地弹和特殊取消具有明确次数限制；</p>
+</li>
+<li><p>移动、换边、朝向和版边状态保持一致；</p>
+</li>
+<li><p>资源消费在回滚重演中不会重复提交；</p>
+</li>
+<li><p>AI不能读取玩家未来输入；</p>
+</li>
+<li><p>训练模式能够显示输入、判定框和帧差；</p>
+</li>
+<li><p>网络模式能够保存快照、预测输入和回滚重演；</p>
+</li>
+<li><p>状态哈希可以检测双方模拟分歧；</p>
+</li>
+<li><p>回放能够通过初始状态和输入流重建比赛；</p>
+</li>
+<li><p>新角色通常不需要修改对局主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-可迁移到其他游戏的设计思想">41. 可迁移到其他游戏的设计思想</h2><h2 id="411-将动作拆分为起手有效和收招">41.1 将动作拆分为起手、有效和收招</h2><p>可迁移到：</p>
+<ul>
+<li><p>动作RPG；</p>
+</li>
+<li><p>战术动作；</p>
+</li>
+<li><p>Boss战；</p>
+</li>
+<li><p>体育；</p>
+</li>
+<li><p>射击技能。</p>
+</li>
+</ul>
+<p>动作不应只有冷却时间，还应包含：</p>
+<ul>
+<li><p>承诺阶段；</p>
+</li>
+<li><p>生效阶段；</p>
+</li>
+<li><p>风险阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="412-输入意图与动作执行应分离">41.2 输入意图与动作执行应分离</h2><p>可迁移到：</p>
+<ul>
+<li><p>角色控制；</p>
+</li>
+<li><p>技能系统；</p>
+</li>
+<li><p>连招；</p>
+</li>
+<li><p>网络输入；</p>
+</li>
+<li><p>AI操作。</p>
+</li>
+</ul>
+<p>输入系统负责识别意图，状态机负责判断当前能否执行。</p>
+<hr />
+<h2 id="413-命中结果可以改变后续合法行为">41.3 命中结果可以改变后续合法行为</h2><p>可迁移到：</p>
+<ul>
+<li><p>技能派生；</p>
+</li>
+<li><p>连锁攻击；</p>
+</li>
+<li><p>反击；</p>
+</li>
+<li><p>动作取消；</p>
+</li>
+<li><p>条件技能。</p>
+</li>
+</ul>
+<p>同一动作在命中、格挡和挥空后可以拥有不同转换图。</p>
+<hr />
+<h2 id="414-帧优势是谁先拥有行动权的通用模型">41.4 帧优势是“谁先拥有行动权”的通用模型</h2><p>可迁移到：</p>
+<ul>
+<li><p>回合插队；</p>
+</li>
+<li><p>动作硬直；</p>
+</li>
+<li><p>战术时间轴；</p>
+</li>
+<li><p>技能打断；</p>
+</li>
+<li><p>回合制速度。</p>
+</li>
+</ul>
+<p>重点不是单个动作速度，而是双方恢复行动的相对时间。</p>
+<hr />
+<h2 id="415-hitstop能够提升结果可读性和输入窗口">41.5 HitStop能够提升结果可读性和输入窗口</h2><p>可迁移到：</p>
+<ul>
+<li><p>动作游戏；</p>
+</li>
+<li><p>射击；</p>
+</li>
+<li><p>近战；</p>
+</li>
+<li><p>节奏反馈；</p>
+</li>
+<li><p>Boss战。</p>
+</li>
+</ul>
+<p>短暂视觉停顿可以：</p>
+<ul>
+<li><p>强化命中感；</p>
+</li>
+<li><p>给玩家确认时间；</p>
+</li>
+<li><p>明确状态变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="416-显式取消窗口比任意状态跳转更可控">41.6 显式取消窗口比任意状态跳转更可控</h2><p>可迁移到：</p>
+<ul>
+<li><p>技能系统；</p>
+</li>
+<li><p>动画状态机；</p>
+</li>
+<li><p>任务中断；</p>
+</li>
+<li><p>交互流程；</p>
+</li>
+<li><p>UI操作。</p>
+</li>
+</ul>
+<p>取消应明确：</p>
+<ul>
+<li><p>允许时间；</p>
+</li>
+<li><p>允许目标；</p>
+</li>
+<li><p>允许条件；</p>
+</li>
+<li><p>成本；</p>
+</li>
+<li><p>次数。</p>
+</li>
+</ul>
+<hr />
+<h2 id="417-状态快照与输入重演可用于高精度同步">41.7 状态快照与输入重演可用于高精度同步</h2><p>可迁移到：</p>
+<ul>
+<li><p>实时竞技；</p>
+</li>
+<li><p>战术游戏；</p>
+</li>
+<li><p>物理谜题；</p>
+</li>
+<li><p>回放；</p>
+</li>
+<li><p>调试。</p>
+</li>
+</ul>
+<p>确定性模拟可以显著降低复杂状态同步成本。</p>
+<hr />
+<h2 id="418-预测事件与确认事件需要分层">41.8 预测事件与确认事件需要分层</h2><p>可迁移到：</p>
+<ul>
+<li><p>网络游戏；</p>
+</li>
+<li><p>事务UI；</p>
+</li>
+<li><p>异步操作；</p>
+</li>
+<li><p>客户端预测。</p>
+</li>
+</ul>
+<p>预测阶段可以播放轻量反馈，永久结果应等待权威确认。</p>
+<hr />
+<h2 id="419-训练模式本质上是可观测性工具">41.9 训练模式本质上是可观测性工具</h2><p>可迁移到：</p>
+<ul>
+<li><p>射击训练；</p>
+</li>
+<li><p>战术沙盒；</p>
+</li>
+<li><p>卡牌测试；</p>
+</li>
+<li><p>AI调试；</p>
+</li>
+<li><p>技能编辑器。</p>
+</li>
+</ul>
+<p>复杂系统需要允许玩家或开发者：</p>
+<ul>
+<li><p>固定状态；</p>
+</li>
+<li><p>重复场景；</p>
+</li>
+<li><p>显示隐藏数据；</p>
+</li>
+<li><p>录制行为；</p>
+</li>
+<li><p>对比结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4110-角色差异应建立在规则组合上">41.10 角色差异应建立在规则组合上</h2><p>可迁移到：</p>
+<ul>
+<li><p>英雄游戏；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>RPG职业；</p>
+</li>
+<li><p>战术单位；</p>
+</li>
+<li><p>自动战斗。</p>
+</li>
+</ul>
+<p>角色差异可以来自：</p>
+<ul>
+<li><p>有效距离；</p>
+</li>
+<li><p>资源方式；</p>
+</li>
+<li><p>状态转换；</p>
+</li>
+<li><p>风险；</p>
+</li>
+<li><p>位置需求；</p>
+</li>
+<li><p>后续收益。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-本次防重记录">42. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>格斗游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Fighting Game；</p>
+</li>
+<li><p>Versus Fighting；</p>
+</li>
+<li><p>2D Fighter；</p>
+</li>
+<li><p>3D Fighter；</p>
+</li>
+<li><p>Platform Fighter；</p>
+</li>
+<li><p>对战格斗游戏；</p>
+</li>
+<li><p>一对一竞技格斗。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>以固定、确定的逻辑帧作为战斗时间轴，将玩家原始输入转换为方向和按键历史，再通过指令识别、角色状态机和招式帧数据执行动作。攻击框、受击框、格挡、投技、受击硬直、取消窗口和连段衰减共同决定一次交互的结果；双方围绕距离、行动权、风险、资源和对手习惯持续进行预测与反预测，并通过命中确认、连段转换、倒地压制和防守脱离反复重构对局状态。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>战斗以固定逻辑帧运行；</p>
+</li>
+<li><p>招式具有起手、有效和收招阶段；</p>
+</li>
+<li><p>输入通过历史缓冲和指令识别转化为动作；</p>
+</li>
+<li><p>攻击框、受击框、投技框和推挤框相互分离；</p>
+</li>
+<li><p>命中、格挡和挥空产生不同状态与风险；</p>
+</li>
+<li><p>双方围绕帧优势和行动权交替攻防；</p>
+</li>
+<li><p>攻击高度、投技和防守选项形成基础博弈；</p>
+</li>
+<li><p>命中确认决定玩家是否继续派生；</p>
+</li>
+<li><p>取消窗口限制招式之间的合法转换；</p>
+</li>
+<li><p>连段通过伤害、硬直、重力和次数限制控制；</p>
+</li>
+<li><p>版边、距离和倒地状态属于重要战略资源；</p>
+</li>
+<li><p>角色差异来自移动、招式、资源和状态规则组合；</p>
+</li>
+<li><p>训练模式提供判定框、输入历史和帧数据；</p>
+</li>
+<li><p>在线模式通常依赖输入同步、快照和回滚；</p>
+</li>
+<li><p>相同输入流必须能够确定性重建完整比赛。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>固定帧模拟；</p>
+</li>
+<li><p>输入历史；</p>
+</li>
+<li><p>指令识别；</p>
+</li>
+<li><p>输入缓冲；</p>
+</li>
+<li><p>角色状态机；</p>
+</li>
+<li><p>招式帧数据；</p>
+</li>
+<li><p>起手、有效和收招；</p>
+</li>
+<li><p>Pushbox；</p>
+</li>
+<li><p>Hurtbox；</p>
+</li>
+<li><p>Hitbox；</p>
+</li>
+<li><p>投技判定；</p>
+</li>
+<li><p>命中与格挡；</p>
+</li>
+<li><p>攻击高度；</p>
+</li>
+<li><p>帧优势；</p>
+</li>
+<li><p>Counter Hit；</p>
+</li>
+<li><p>Punish；</p>
+</li>
+<li><p>投技与拆投；</p>
+</li>
+<li><p>受击硬直；</p>
+</li>
+<li><p>击飞与倒地；</p>
+</li>
+<li><p>起身攻防；</p>
+</li>
+<li><p>取消窗口；</p>
+</li>
+<li><p>命中确认；</p>
+</li>
+<li><p>连段与伤害衰减；</p>
+</li>
+<li><p>墙面反弹与地面弹起；</p>
+</li>
+<li><p>资源槽；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>训练假人；</p>
+</li>
+<li><p>回滚网络；</p>
+</li>
+<li><p>输入回放；</p>
+</li>
+<li><p>状态哈希；</p>
+</li>
+<li><p>对局分析。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>格斗游戏输入系统；</p>
+</li>
+<li><p>格斗游戏指令识别；</p>
+</li>
+<li><p>格斗游戏帧数据；</p>
+</li>
+<li><p>格斗游戏状态机；</p>
+</li>
+<li><p>格斗游戏判定框；</p>
+</li>
+<li><p>格斗游戏格挡系统；</p>
+</li>
+<li><p>格斗游戏投技系统；</p>
+</li>
+<li><p>格斗游戏连段系统；</p>
+</li>
+<li><p>格斗游戏取消系统；</p>
+</li>
+<li><p>格斗游戏命中确认；</p>
+</li>
+<li><p>格斗游戏帧优势；</p>
+</li>
+<li><p>格斗游戏倒地起身；</p>
+</li>
+<li><p>格斗游戏版边系统；</p>
+</li>
+<li><p>格斗游戏训练模式；</p>
+</li>
+<li><p>格斗游戏AI；</p>
+</li>
+<li><p>格斗游戏回放；</p>
+</li>
+<li><p>格斗游戏回滚网络；</p>
+</li>
+<li><p>格斗游戏角色平衡；</p>
+</li>
+<li><p>平台格斗击飞系统；</p>
+</li>
+<li><p>格斗游戏自动验证。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

@@ -75,7 +75,7 @@ export function resolveEvidenceChains(data, adoption, journalSource, publication
     research: chain.research.map((reference) => {
       if (reference.type === 'design') {
         const design = designsById.get(reference.id);
-        return { ...reference, title: design.title, href: `journal.html#design-${design.id}` };
+        return { ...reference, title: design.title, href: `journal/${design.id}.html` };
       }
       const article = blogsById.get(reference.id);
       const publicEntry = publicationById.get(reference.id);

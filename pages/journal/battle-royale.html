@@ -1,0 +1,4698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/battle-royale.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="大逃杀 / Battle Royale | Sakura Design Journal">
+    <meta property="og:description" content="通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/battle-royale.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-battle-royale.png">
+    <meta property="og:image:alt" content="大逃杀 / Battle Royale | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="大逃杀 / Battle Royale | Sakura Design Journal">
+    <meta name="twitter:description" content="通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-battle-royale.png">
+    <meta name="twitter:image:alt" content="大逃杀 / Battle Royale | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"大逃杀 / Battle Royale | Sakura Design Journal","description":"通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。","url":"https://irissakura.github.io/pages/journal/battle-royale.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"大逃杀 / Battle Royale","image":"https://irissakura.github.io/assets/social/pages-journal-battle-royale.png","dateModified":"2026-08-12","about":["battle","br","royale"]}</script>
+    <!-- site-meta:end -->
+    <title>大逃杀 / Battle Royale | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-battle-royale"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>大逃杀 / Battle Royale</h1><p>通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。</p><div class="note-tags"><span>battle</span><span>br</span><span>royale</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="1-文档定位">1. 文档定位</h2><p>大逃杀是一种以：</p>
+<ul>
+<li><p>大规模单局玩家；</p>
+</li>
+<li><p>低资源起始；</p>
+</li>
+<li><p>自主落点；</p>
+</li>
+<li><p>地图搜刮；</p>
+</li>
+<li><p>不完全信息；</p>
+</li>
+<li><p>安全区收缩；</p>
+</li>
+<li><p>永久或高代价淘汰；</p>
+</li>
+<li><p>最后一人或最后一队存活；</p>
+</li>
+</ul>
+<p>为核心的多人竞技类型。</p>
+<p>典型代表结构通常可以抽象为：</p>
+<p>大地图分散出生
+→ 玩家自主选择落点
+→ 快速获得基础战斗能力
+→ 搜刮形成临时装备组合
+→ 第一阶段安全区公开
+→ 玩家开始跨区域转移
+→ 不同路线发生遭遇
+→ 玩家数量持续下降
+→ 安全区域继续压缩
+→ 有效空间越来越小
+→ 战斗频率越来越高
+→ 终局位置和剩余资源成为决定因素
+→ 最后一名玩家或最后一支队伍获胜</p>
+<p>大逃杀真正独特的地方，不是：</p>
+<p>“地图很大，玩家很多。”</p>
+<p>而是：</p>
+<blockquote>
+<p><strong>系统本身拥有一套持续把玩家从低密度分散状态压缩到高密度决战状态的收敛机制。</strong></p>
+</blockquote>
+<hr />
+<h2 id="2-类型核心问题">2. 类型核心问题</h2><p>一个完整的大逃杀系统必须持续回答以下问题：</p>
+<ul>
+<li><p>玩家在哪里进入地图；</p>
+</li>
+<li><p>为什么不同玩家不会永远互不接触；</p>
+</li>
+<li><p>玩家多久可以获得最基本的战斗能力；</p>
+</li>
+<li><p>随机搜刮如何产生差异，而不是直接决定胜负；</p>
+</li>
+<li><p>安全区下一阶段在哪里；</p>
+</li>
+<li><p>玩家是否有足够时间抵达；</p>
+</li>
+<li><p>当前应该继续搜刮还是提前转移；</p>
+</li>
+<li><p>发起战斗会暴露多少信息；</p>
+</li>
+<li><p>击杀一个敌人后会不会被第三方攻击；</p>
+</li>
+<li><p>是否值得冒险争夺高价值资源；</p>
+</li>
+<li><p>某个位置是因为装备强还是因为地形强；</p>
+</li>
+<li><p>玩家死亡后是否真正退出比赛；</p>
+</li>
+<li><p>组队模式下倒地、救援和复活如何改变淘汰规则；</p>
+</li>
+<li><p>当只剩少量玩家时，如何避免长时间躲藏造成终局停滞；</p>
+</li>
+<li><p>最终安全区如何避免生成在不可玩地形；</p>
+</li>
+<li><p>服务器如何在几十乃至上百名玩家环境下保持权威状态；</p>
+</li>
+<li><p>战争信息如何避免直接泄露给客户端形成作弊入口。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>大逃杀最具代表性的设计范式可以拆分为十个核心支柱。</p>
+<hr />
+<h3 id="31-有效地图面积是动态资源">3.1 有效地图面积是动态资源</h3><p>传统竞技地图通常在整场比赛中基本保持有效。</p>
+<p>大逃杀不同。</p>
+<p>比赛开始时：</p>
+<ul>
+<li><p>大部分地图都可活动；</p>
+</li>
+<li><p>玩家高度分散；</p>
+</li>
+<li><p>遭遇概率较低。</p>
+</li>
+</ul>
+<p>比赛中后期：</p>
+<ul>
+<li><p>有效生存区域不断缩小；</p>
+</li>
+<li><p>玩家被迫向同一区域集中；</p>
+</li>
+<li><p>遭遇概率不断上升。</p>
+</li>
+</ul>
+<p>因此可以将一个非常重要的宏观指标定义为：</p>
+<p><strong>EffectivePlayerDensity</strong></p>
+<p>即：</p>
+<p>当前存活玩家数量
+÷
+当前有效生存区域面积</p>
+<p>比赛节奏并不是单纯由：</p>
+<ul>
+<li>剩余玩家数；</li>
+</ul>
+<p>决定，而是由：</p>
+<ul>
+<li><p>剩余玩家；</p>
+</li>
+<li><p>有效区域；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>可通行面积；</p>
+</li>
+</ul>
+<p>共同决定。</p>
+<hr />
+<h3 id="32-缩圈是玩家密度控制器而不只是持续伤害区域">3.2 缩圈是玩家密度控制器，而不只是持续伤害区域</h3><p>低质量理解：</p>
+<blockquote>
+<p>圈外掉血，所以玩家必须进圈。</p>
+</blockquote>
+<p>更完整的理解：</p>
+<p>安全区系统承担：</p>
+<ul>
+<li><p>缩小可玩空间；</p>
+</li>
+<li><p>提高玩家密度；</p>
+</li>
+<li><p>迫使长期躲藏玩家移动；</p>
+</li>
+<li><p>改变资源路线；</p>
+</li>
+<li><p>制造提前转移与延迟转移的博弈；</p>
+</li>
+<li><p>周期性重置地图价值；</p>
+</li>
+<li><p>推动比赛从探索阶段进入战斗阶段；</p>
+</li>
+<li><p>最终保证比赛能够结束。</p>
+</li>
+</ul>
+<p>因此 Safe Zone 应被视为：</p>
+<blockquote>
+<p><strong>Match Convergence System / 比赛收敛系统。</strong></p>
+</blockquote>
+<hr />
+<h3 id="33-落点选择是第一项战略决策">3.3 落点选择是第一项战略决策</h3><p>玩家尚未取得任何装备时，比赛已经开始。</p>
+<p>落点会决定：</p>
+<ul>
+<li><p>初期玩家密度；</p>
+</li>
+<li><p>可获得资源数量；</p>
+</li>
+<li><p>建筑结构；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>车辆；</p>
+</li>
+<li><p>未来安全区距离；</p>
+</li>
+<li><p>与其他队伍的初次冲突概率。</p>
+</li>
+</ul>
+<p>典型落点可以形成：</p>
+<h4 id="热点区域">热点区域</h4><p>特点：</p>
+<ul>
+<li><p>战利品丰富；</p>
+</li>
+<li><p>玩家多；</p>
+</li>
+<li><p>初期战斗风险高。</p>
+</li>
+</ul>
+<h4 id="边缘区域">边缘区域</h4><p>特点：</p>
+<ul>
+<li><p>玩家少；</p>
+</li>
+<li><p>搜刮更安全；</p>
+</li>
+<li><p>进入下一安全区的路程可能更长。</p>
+</li>
+</ul>
+<h4 id="战略枢纽">战略枢纽</h4><p>特点：</p>
+<ul>
+<li><p>资源中等；</p>
+</li>
+<li><p>交通便利；</p>
+</li>
+<li><p>后续转移选择更多。</p>
+</li>
+</ul>
+<p>因此落点本质上是：</p>
+<blockquote>
+<p><strong>将早期风险、资源和未来移动成本进行一次预先交换。</strong></p>
+</blockquote>
+<hr />
+<h3 id="34-搜刮形成的是单局临时构筑">3.4 搜刮形成的是单局临时构筑</h3><p>大逃杀通常不会让玩家带着完整最终装备直接进入比赛。</p>
+<p>玩家通过：</p>
+<ul>
+<li><p>武器；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>投掷物；</p>
+</li>
+<li><p>配件；</p>
+</li>
+<li><p>特殊能力；</p>
+</li>
+<li><p>载具资源；</p>
+</li>
+</ul>
+<p>逐渐形成单局构筑。</p>
+<p>典型过程：</p>
+<p>空手
+→ 获得最低战斗能力
+→ 找到主武器
+→ 找到辅助武器
+→ 获得基础护甲
+→ 补充弹药和治疗
+→ 获得高级配件
+→ 构筑趋于成熟</p>
+<p>因此搜刮系统需要支持：</p>
+<blockquote>
+<p><strong>从“寻找任何能用的东西”逐渐转化为“优化已有构筑”。</strong></p>
+</blockquote>
+<hr />
+<h3 id="35-随机性必须受约束而不能直接决定比赛">3.5 随机性必须受约束，而不能直接决定比赛</h3><p>搜刮随机是大逃杀的重要变化来源。</p>
+<p>但如果玩家落地后：</p>
+<p>一个人获得高级武器；</p>
+<p>另一个人连续搜索数间房屋都没有任何武器；</p>
+<p>比赛容易退化为：</p>
+<p>随机数决定早期胜负。</p>
+<p>因此推荐采用：</p>
+<p><strong>Constrained Randomness / 受约束随机。</strong></p>
+<p>例如：</p>
+<ul>
+<li><p>大型兴趣点保证最低武器数量；</p>
+</li>
+<li><p>武器附近提高对应弹药出现概率；</p>
+</li>
+<li><p>高等级装备区域具有明确风险；</p>
+</li>
+<li><p>出生阶段避免连续生成纯低价值物品；</p>
+</li>
+<li><p>同一区域 loot 总价值存在区间预算；</p>
+</li>
+<li><p>稀有物品随机，但基础战斗能力应较稳定。</p>
+</li>
+</ul>
+<p>目标不是取消随机性，而是：</p>
+<blockquote>
+<p>随机改变玩家的解决方案，而不是频繁取消玩家拥有解决方案的资格。</p>
+</blockquote>
+<hr />
+<h3 id="36-开火本身是一种信息泄露">3.6 开火本身是一种信息泄露</h3><p>大逃杀中战斗动作通常会产生：</p>
+<ul>
+<li><p>枪声；</p>
+</li>
+<li><p>爆炸；</p>
+</li>
+<li><p>载具声；</p>
+</li>
+<li><p>技能特效；</p>
+</li>
+<li><p>击杀提示；</p>
+</li>
+<li><p>建筑破坏；</p>
+</li>
+<li><p>空投信号。</p>
+</li>
+</ul>
+<p>这些内容会把信息传播给：</p>
+<ul>
+<li><p>当前对手；</p>
+</li>
+<li><p>附近第三方；</p>
+</li>
+<li><p>更远距离观察者。</p>
+</li>
+</ul>
+<p>因此一次战斗存在两类成本：</p>
+<h4 id="资源成本">资源成本</h4><ul>
+<li><p>弹药；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>时间。</p>
+</li>
+</ul>
+<h4 id="信息成本">信息成本</h4><ul>
+<li><p>暴露当前位置；</p>
+</li>
+<li><p>暴露武器类型；</p>
+</li>
+<li><p>暴露战斗正在发生；</p>
+</li>
+<li><p>暴露可能存在残血玩家。</p>
+</li>
+</ul>
+<p>这直接形成大逃杀非常重要的：</p>
+<p><strong>Third-Party / 第三方介入机制。</strong></p>
+<hr />
+<h3 id="37-击杀不是独立事件而会形成局部信息热点">3.7 击杀不是独立事件，而会形成局部信息热点</h3><p>例如：</p>
+<p>A队与B队发生交火。</p>
+<p>C队在附近听到枪声。</p>
+<p>C队可以判断：</p>
+<ul>
+<li><p>A与B正在消耗资源；</p>
+</li>
+<li><p>至少一方可能残血；</p>
+</li>
+<li><p>双方注意力集中在彼此；</p>
+</li>
+<li><p>战斗结束后可能存在大量战利品。</p>
+</li>
+</ul>
+<p>于是：</p>
+<p>A vs B</p>
+<p>可能迅速变成：</p>
+<p>A vs B vs C</p>
+<p>甚至：</p>
+<p>A vs B vs C vs D</p>
+<p>因此战斗系统需要考虑：</p>
+<blockquote>
+<p><strong>战斗本身会改变附近玩家的行为概率。</strong></p>
+</blockquote>
+<p>这也是大逃杀与普通团队死亡竞赛的重要差异。</p>
+<hr />
+<h3 id="38-淘汰是参与资格收缩机制">3.8 淘汰是参与资格收缩机制</h3><p>在传统 Deathmatch 中：</p>
+<p>死亡
+→ 复活
+→ 继续战斗</p>
+<p>大逃杀通常：</p>
+<p>死亡
+→ 淘汰
+→ 不再参与当前比赛</p>
+<p>因此比赛有两个同时运行的收敛轴：</p>
+<h4 id="空间收敛">空间收敛</h4><p>安全区域越来越小。</p>
+<h4 id="人数收敛">人数收敛</h4><p>存活人数越来越少。</p>
+<p>最终：</p>
+<p>小空间
++
+少量玩家</p>
+<p>形成终局。</p>
+<p>因此可以将大逃杀理解为：</p>
+<blockquote>
+<p><strong>空间和参与者数量同时不断下降的双重收敛系统。</strong></p>
+</blockquote>
+<hr />
+<h3 id="39-地形和位置在后期逐渐取代搜刮成为主要资源">3.9 地形和位置在后期逐渐取代搜刮成为主要资源</h3><p>比赛前期重点：</p>
+<ul>
+<li><p>找武器；</p>
+</li>
+<li><p>找护甲；</p>
+</li>
+<li><p>找治疗。</p>
+</li>
+</ul>
+<p>中期重点：</p>
+<ul>
+<li><p>完善装备；</p>
+</li>
+<li><p>搜集信息；</p>
+</li>
+<li><p>规划路线。</p>
+</li>
+</ul>
+<p>后期重点逐渐变成：</p>
+<ul>
+<li><p>高地；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>安全区边缘；</p>
+</li>
+<li><p>转移路线；</p>
+</li>
+<li><p>对其他玩家的位置判断。</p>
+</li>
+</ul>
+<p>因此比赛自然经历：</p>
+<p><strong>Loot Dominant</strong></p>
+<p>→</p>
+<p><strong>Rotation Dominant</strong></p>
+<p>→</p>
+<p><strong>Position Dominant</strong></p>
+<p>三个主要阶段。</p>
+<hr />
+<h3 id="310-最终阶段必须强制结束无限隐蔽策略">3.10 最终阶段必须强制结束“无限隐蔽”策略</h3><p>如果最终仍存在：</p>
+<ul>
+<li><p>巨大区域；</p>
+</li>
+<li><p>大量安全建筑；</p>
+</li>
+<li><p>无限治疗；</p>
+</li>
+<li><p>不断刷新资源；</p>
+</li>
+</ul>
+<p>比赛可能长期停滞。</p>
+<p>最终安全区应逐渐：</p>
+<ul>
+<li><p>缩小；</p>
+</li>
+<li><p>移动；</p>
+</li>
+<li><p>消失；</p>
+</li>
+<li><p>提高圈外伤害；</p>
+</li>
+<li><p>限制治疗拖延；</p>
+</li>
+<li><p>暴露更多位置。</p>
+</li>
+</ul>
+<p>目标不是强迫玩家正面决斗，而是：</p>
+<blockquote>
+<p>保证所有可行策略最终都必须承担决战风险。</p>
+</blockquote>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><hr />
+<h3 id="41-与撤离型搜打撤的区别">4.1 与撤离型搜打撤的区别</h3><p>仓库现有撤离型范式已经明确给出了两类游戏的重要边界。</p>
+<p>大逃杀通常：</p>
+<ul>
+<li><p>低资源或无资源进入；</p>
+</li>
+<li><p>所有玩家处于近似对等局内起点；</p>
+</li>
+<li><p>最终胜负发生在单局；</p>
+</li>
+<li><p>核心目标是成为最后存活者；</p>
+</li>
+<li><p>安全区域持续收缩；</p>
+</li>
+<li><p>死亡主要意味着当前比赛失败；</p>
+</li>
+<li><p>局外资产通常不决定基础战斗力。</p>
+</li>
+</ul>
+<p>撤离型游戏通常：</p>
+<ul>
+<li><p>允许携带长期仓库装备进入；</p>
+</li>
+<li><p>不要求活到最后；</p>
+</li>
+<li><p>玩家可以主动离场；</p>
+</li>
+<li><p>获取资源后必须成功撤离才能提交；</p>
+</li>
+<li><p>死亡可能损失长期资产；</p>
+</li>
+<li><p>多个 Raid 共同形成长期经济循环。</p>
+</li>
+</ul>
+<p>核心区别可以压缩为：</p>
+<p><strong>Battle Royale：比赛结果收敛。</strong></p>
+<p><strong>Extraction：资产结果提交。</strong></p>
+<hr />
+<h3 id="42-与传统多人-deathmatch-的区别">4.2 与传统多人 Deathmatch 的区别</h3><p>Deathmatch 通常：</p>
+<ul>
+<li><p>地图固定；</p>
+</li>
+<li><p>死亡后复活；</p>
+</li>
+<li><p>通过击杀数量或分数获胜；</p>
+</li>
+<li><p>玩家密度大致稳定。</p>
+</li>
+</ul>
+<p>大逃杀：</p>
+<ul>
+<li><p>有效地图持续缩小；</p>
+</li>
+<li><p>淘汰通常不可逆；</p>
+</li>
+<li><p>玩家数量持续下降；</p>
+</li>
+<li><p>生存本身就是主要目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="43-与生存游戏的区别">4.3 与生存游戏的区别</h3><p>生存游戏通常关注：</p>
+<ul>
+<li><p>长期采集；</p>
+</li>
+<li><p>建造；</p>
+</li>
+<li><p>饥饿；</p>
+</li>
+<li><p>制造；</p>
+</li>
+<li><p>持久世界。</p>
+</li>
+</ul>
+<p>大逃杀中的资源主要服务：</p>
+<ul>
+<li><p>当前单局；</p>
+</li>
+<li><p>当前战斗；</p>
+</li>
+<li><p>当前转移。</p>
+</li>
+</ul>
+<p>比赛结束后世界通常被销毁。</p>
+<hr />
+<h3 id="44-与英雄射击的区别">4.4 与英雄射击的区别</h3><p>英雄射击强调：</p>
+<ul>
+<li><p>角色技能；</p>
+</li>
+<li><p>固定竞技目标；</p>
+</li>
+<li><p>复活循环；</p>
+</li>
+<li><p>团队阵容。</p>
+</li>
+</ul>
+<p>大逃杀可以加入英雄能力，但如果缺少：</p>
+<ul>
+<li><p>大地图分散；</p>
+</li>
+<li><p>搜刮；</p>
+</li>
+<li><p>缩圈；</p>
+</li>
+<li><p>淘汰；</p>
+</li>
+<li><p>最终存活；</p>
+</li>
+</ul>
+<p>其宏观类型仍更接近英雄射击。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十八个核心域：</p>
+<ol>
+<li><p>MatchLifecycleSystem；</p>
+</li>
+<li><p>AuthoritativeSimulationSystem；</p>
+</li>
+<li><p>LobbyInsertionSystem；</p>
+</li>
+<li><p>WorldMapPartitionSystem；</p>
+</li>
+<li><p>SafeZoneConvergenceSystem；</p>
+</li>
+<li><p>LootDistributionSystem；</p>
+</li>
+<li><p>PlayerMatchStateSystem；</p>
+</li>
+<li><p>InventoryLoadoutSystem；</p>
+</li>
+<li><p>CombatResolutionSystem；</p>
+</li>
+<li><p>HealthArmorHealingSystem；</p>
+</li>
+<li><p>InformationAudioSystem；</p>
+</li>
+<li><p>SquadTeamSystem；</p>
+</li>
+<li><p>DownedReviveEliminationSystem；</p>
+</li>
+<li><p>VehicleTraversalSystem；</p>
+</li>
+<li><p>DynamicEventHotspotSystem；</p>
+</li>
+<li><p>SpectatorReconnectSystem；</p>
+</li>
+<li><p>NetworkingAntiCheatSystem；</p>
+</li>
+<li><p>ReplayTelemetryDebugSystem。</p>
+</li>
+</ol>
+<p>总体运行链：</p>
+<p>创建比赛实例
+→ 加载地图
+→ 生成 LootSeed
+→ 生成安全区序列
+→ 玩家进入起始投放阶段
+→ 玩家选择落点
+→ 进入地图
+→ 搜刮最低战斗能力
+→ 区域第一次公开
+→ 玩家开始转移
+→ 遭遇和淘汰发生
+→ 下一阶段区域缩小
+→ 玩家密度增加
+→ 中后期位置价值提高
+→ 终局区域持续压缩
+→ 确认最后存活玩家或队伍
+→ 冻结 MatchResult
+→ 原子提交比赛结果
+→ 销毁比赛实例</p>
+<hr />
+<h2 id="6-比赛生命周期">6. 比赛生命周期</h2><h3 id="61-battleroyalematchdefinition">6.1 BattleRoyaleMatchDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>MatchModeId；</p>
+</li>
+<li><p>MaximumPlayers；</p>
+</li>
+<li><p>SquadSize；</p>
+</li>
+<li><p>MapId；</p>
+</li>
+<li><p>StartingEquipmentProfile；</p>
+</li>
+<li><p>LootProfileId；</p>
+</li>
+<li><p>SafeZoneSequenceId；</p>
+</li>
+<li><p>InsertionRuleId；</p>
+</li>
+<li><p>DownedRules；</p>
+</li>
+<li><p>RespawnRules；</p>
+</li>
+<li><p>VictoryRules；</p>
+</li>
+<li><p>SpectatorRules；</p>
+</li>
+<li><p>DisconnectRules；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="62-battleroyalematchstate">6.2 BattleRoyaleMatchState</h3><p>建议包含：</p>
+<ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>AlivePlayerIds；</p>
+</li>
+<li><p>AliveSquadIds；</p>
+</li>
+<li><p>EliminatedPlayerIds；</p>
+</li>
+<li><p>SafeZoneState；</p>
+</li>
+<li><p>LootWorldState；</p>
+</li>
+<li><p>DynamicEventStates；</p>
+</li>
+<li><p>PlayerStates；</p>
+</li>
+<li><p>SquadStates；</p>
+</li>
+<li><p>MatchTimer；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="63-matchphase">6.3 MatchPhase</h3><p>推荐区分：</p>
+<ul>
+<li><p>Preparing；</p>
+</li>
+<li><p>Lobby；</p>
+</li>
+<li><p>Insertion；</p>
+</li>
+<li><p>Landing；</p>
+</li>
+<li><p>EarlyLoot；</p>
+</li>
+<li><p>FirstConvergence；</p>
+</li>
+<li><p>MidGameRotation；</p>
+</li>
+<li><p>LateGameCompression；</p>
+</li>
+<li><p>FinalZone；</p>
+</li>
+<li><p>VictoryPending；</p>
+</li>
+<li><p>Settling；</p>
+</li>
+<li><p>Completed；</p>
+</li>
+<li><p>Aborted。</p>
+</li>
+</ul>
+<p>这些阶段既可以参与规则，也可以仅用于：</p>
+<ul>
+<li><p>节奏分析；</p>
+</li>
+<li><p>UI；</p>
+</li>
+<li><p>动态事件；</p>
+</li>
+<li><p>统计。</p>
+</li>
+</ul>
+<p>不建议让大量核心逻辑直接硬编码：</p>
+<p><code>if phase == LateGame</code></p>
+<p>而应优先由：</p>
+<ul>
+<li><p>SafeZone；</p>
+</li>
+<li><p>PlayerCount；</p>
+</li>
+<li><p>MatchTime；</p>
+</li>
+</ul>
+<p>等实际状态驱动。</p>
+<hr />
+<h2 id="7-玩家局内状态">7. 玩家局内状态</h2><h3 id="71-playermatchstate">7.1 PlayerMatchState</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>SquadId；</p>
+</li>
+<li><p>LifeState；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>ArmorState；</p>
+</li>
+<li><p>InventoryState；</p>
+</li>
+<li><p>EquippedWeapons；</p>
+</li>
+<li><p>AbilityStates；</p>
+</li>
+<li><p>CurrentVehicleId；</p>
+</li>
+<li><p>CurrentSafeZoneRelation；</p>
+</li>
+<li><p>CurrentCombatState；</p>
+</li>
+<li><p>LastDamageSources；</p>
+</li>
+<li><p>DisconnectState；</p>
+</li>
+<li><p>PlayerVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="72-lifestate">7.2 LifeState</h3><p>推荐：</p>
+<ul>
+<li><p>Alive；</p>
+</li>
+<li><p>Downed；</p>
+</li>
+<li><p>BeingRevived；</p>
+</li>
+<li><p>Revived；</p>
+</li>
+<li><p>RespawnEligible；</p>
+</li>
+<li><p>Respawning；</p>
+</li>
+<li><p>Eliminated；</p>
+</li>
+<li><p>Spectating；</p>
+</li>
+<li><p>Disconnected。</p>
+</li>
+</ul>
+<hr />
+<h3 id="73-为什么不能只用-isdead">7.3 为什么不能只用 IsDead</h3><p>因为组队大逃杀中：</p>
+<p>生命值归零</p>
+<p>可能意味着：</p>
+<p>倒地
+→ 等待救援
+→ 被救起</p>
+<p>也可能：</p>
+<p>倒地
+→ 被补杀
+→ 淘汰</p>
+<p>甚至：</p>
+<p>淘汰
+→ 队友回收信标
+→ 再部署</p>
+<p>因此：</p>
+<p><strong>CombatDeath</strong></p>
+<p>和：</p>
+<p><strong>MatchElimination</strong></p>
+<p>必须分离。</p>
+<hr />
+<h2 id="8-起始投放系统">8. 起始投放系统</h2><h3 id="81-insertiondefinition">8.1 InsertionDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>InsertionType；</p>
+</li>
+<li><p>StartPosition；</p>
+</li>
+<li><p>EndPosition；</p>
+</li>
+<li><p>TravelSpeed；</p>
+</li>
+<li><p>JumpStartTick；</p>
+</li>
+<li><p>ForcedDropTick；</p>
+</li>
+<li><p>DropPhysicsProfile；</p>
+</li>
+<li><p>VisibilityRules；</p>
+</li>
+<li><p>InsertionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="82-常见形式">8.2 常见形式</h3><p>包括：</p>
+<ul>
+<li><p>飞行航线；</p>
+</li>
+<li><p>空投舱；</p>
+</li>
+<li><p>多个固定出生区；</p>
+</li>
+<li><p>自由选择出生点；</p>
+</li>
+<li><p>分批运输。</p>
+</li>
+</ul>
+<hr />
+<h3 id="83-飞行航线的战略作用">8.3 飞行航线的战略作用</h3><p>公开航线会影响：</p>
+<ul>
+<li><p>热门落点；</p>
+</li>
+<li><p>玩家分布；</p>
+</li>
+<li><p>边缘区域价值；</p>
+</li>
+<li><p>首圈转移距离。</p>
+</li>
+</ul>
+<p>因此航线本身就是：</p>
+<blockquote>
+<p>一种公开的初始概率信息。</p>
+</blockquote>
+<hr />
+<h3 id="84-droptrajectory">8.4 DropTrajectory</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>JumpTick；</p>
+</li>
+<li><p>InitialPosition；</p>
+</li>
+<li><p>TargetMarker；</p>
+</li>
+<li><p>HorizontalVelocity；</p>
+</li>
+<li><p>VerticalVelocity；</p>
+</li>
+<li><p>GlideState；</p>
+</li>
+<li><p>EstimatedLandingPosition；</p>
+</li>
+<li><p>DropVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="85-跳伞可预测性">8.5 跳伞可预测性</h3><p>玩家应能逐渐学习：</p>
+<ul>
+<li><p>最远滑翔距离；</p>
+</li>
+<li><p>下降速度；</p>
+</li>
+<li><p>开伞高度；</p>
+</li>
+<li><p>水平速度。</p>
+</li>
+</ul>
+<p>否则落点选择会退化为不稳定操作。</p>
+<hr />
+<h2 id="9-poi-与地图资源层级">9. POI 与地图资源层级</h2><h3 id="91-pointofinterestdefinition">9.1 PointOfInterestDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>PoiId；</p>
+</li>
+<li><p>Bounds；</p>
+</li>
+<li><p>LootBudget；</p>
+</li>
+<li><p>LootTier；</p>
+</li>
+<li><p>CoverDensity；</p>
+</li>
+<li><p>BuildingDensity；</p>
+</li>
+<li><p>VehicleSpawnProfile；</p>
+</li>
+<li><p>TraversalProfile；</p>
+</li>
+<li><p>RiskTag；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="92-poi-的职责">9.2 POI 的职责</h3><p>一个兴趣点同时决定：</p>
+<ul>
+<li><p>资源；</p>
+</li>
+<li><p>落地人数；</p>
+</li>
+<li><p>建筑战斗；</p>
+</li>
+<li><p>转移路线；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>车辆。</p>
+</li>
+</ul>
+<hr />
+<h3 id="93-不同-poi-应形成不同风险结构">9.3 不同 POI 应形成不同风险结构</h3><p>例如：</p>
+<h4 id="城市区">城市区</h4><ul>
+<li><p>Loot丰富；</p>
+</li>
+<li><p>建筑多；</p>
+</li>
+<li><p>近距离战斗频繁。</p>
+</li>
+</ul>
+<h4 id="工业区">工业区</h4><ul>
+<li><p>Loot中高；</p>
+</li>
+<li><p>开放区域较多；</p>
+</li>
+<li><p>中距离战斗明显。</p>
+</li>
+</ul>
+<h4 id="山区">山区</h4><ul>
+<li><p>Loot较少；</p>
+</li>
+<li><p>高地优势；</p>
+</li>
+<li><p>转移困难。</p>
+</li>
+</ul>
+<h4 id="交通节点">交通节点</h4><ul>
+<li><p>Loot一般；</p>
+</li>
+<li><p>车辆多；</p>
+</li>
+<li><p>后续转移能力强。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-loot-distribution-system">10. Loot Distribution System</h2><h3 id="101-loottabledefinition">10.1 LootTableDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>LootTableId；</p>
+</li>
+<li><p>ItemCategoryWeights；</p>
+</li>
+<li><p>RarityWeights；</p>
+</li>
+<li><p>WeaponClassWeights；</p>
+</li>
+<li><p>AmmoCorrelationRules；</p>
+</li>
+<li><p>MinimumGuarantees；</p>
+</li>
+<li><p>MaximumDensity；</p>
+</li>
+<li><p>RegionOverrides；</p>
+</li>
+<li><p>MatchModeOverrides。</p>
+</li>
+</ul>
+<hr />
+<h3 id="102-lootspawnpoint">10.2 LootSpawnPoint</h3><p>建议字段：</p>
+<ul>
+<li><p>SpawnPointId；</p>
+</li>
+<li><p>PoiId；</p>
+</li>
+<li><p>SpawnCategory；</p>
+</li>
+<li><p>LootTableId；</p>
+</li>
+<li><p>SpawnSeed；</p>
+</li>
+<li><p>SpawnedItemIds；</p>
+</li>
+<li><p>LootSpawnVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="103-lootworldstate">10.3 LootWorldState</h3><p>建议包含：</p>
+<ul>
+<li><p>SpawnedLootIds；</p>
+</li>
+<li><p>CollectedLootIds；</p>
+</li>
+<li><p>ContainerStates；</p>
+</li>
+<li><p>AirdropLootStates；</p>
+</li>
+<li><p>LootVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="104-生成流程">10.4 生成流程</h3><p>MatchSeed
+→ MapLootProfile
+→ POI LootBudget
+→ SpawnPoint分类
+→ 抽取物品类别
+→ 应用最低保障
+→ 校验弹药和武器关联
+→ 创建 ItemInstance
+→ 冻结 LootWorldState</p>
+<hr />
+<h3 id="105-推荐使用价值预算而非完全独立随机">10.5 推荐使用价值预算而非完全独立随机</h3><p>例如某 POI LootBudget = 100。</p>
+<p>系统可以分配：</p>
+<ul>
+<li><p>武器；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>配件；</p>
+</li>
+</ul>
+<p>总价值大致处于合理区间。</p>
+<p>这样仍然随机，但不会频繁出现：</p>
+<p>一整片大型区域几乎没有可用战斗资源。</p>
+<hr />
+<h2 id="11-loot-fairness">11. Loot Fairness</h2><p>Loot Fairness 不等于所有玩家得到相同物品。</p>
+<p>应保证的是：</p>
+<blockquote>
+<p>大多数合理落点都能够在短时间内获得最低自卫能力。</p>
+</blockquote>
+<hr />
+<h3 id="111-minimumcombatagency">11.1 MinimumCombatAgency</h3><p>可以定义：</p>
+<p>玩家落地后的前 N 秒内，获得至少一种：</p>
+<ul>
+<li><p>武器；</p>
+</li>
+<li><p>基础弹药；</p>
+</li>
+<li><p>近战能力；</p>
+</li>
+<li><p>防御技能；</p>
+</li>
+</ul>
+<p>的概率。</p>
+<p>这是非常重要的平衡指标。</p>
+<hr />
+<h3 id="112-早期公平与后期差异">11.2 早期公平与后期差异</h3><p>推荐：</p>
+<p>早期：</p>
+<p>降低“完全无法战斗”的概率。</p>
+<p>中后期：</p>
+<p>允许装备品质和组合明显分化。</p>
+<p>这样可以兼顾：</p>
+<ul>
+<li><p>基础公平；</p>
+</li>
+<li><p>单局变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="12-物品与背包">12. 物品与背包</h2><h3 id="121-britemdefinition">12.1 BRItemDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>ItemId；</p>
+</li>
+<li><p>ItemCategory；</p>
+</li>
+<li><p>StackLimit；</p>
+</li>
+<li><p>InventoryCost；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>UseTime；</p>
+</li>
+<li><p>CompatibleWeaponTags；</p>
+</li>
+<li><p>WorldSpawnRules；</p>
+</li>
+<li><p>DropRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="122-inventorystate">12.2 InventoryState</h3><p>建议包含：</p>
+<ul>
+<li><p>WeaponSlots；</p>
+</li>
+<li><p>ArmorSlots；</p>
+</li>
+<li><p>BackpackSlots；</p>
+</li>
+<li><p>AmmoStacks；</p>
+</li>
+<li><p>HealingStacks；</p>
+</li>
+<li><p>UtilityStacks；</p>
+</li>
+<li><p>AttachmentStates；</p>
+</li>
+<li><p>InventoryVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="123-背包的核心取舍">12.3 背包的核心取舍</h3><p>玩家需要在：</p>
+<ul>
+<li><p>弹药；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>投掷物；</p>
+</li>
+<li><p>特殊道具；</p>
+</li>
+</ul>
+<p>之间平衡。</p>
+<p>如果容量几乎无限：</p>
+<p>后期玩家会带满：</p>
+<ul>
+<li><p>弹药；</p>
+</li>
+<li><p>大量治疗；</p>
+</li>
+<li><p>大量投掷物。</p>
+</li>
+</ul>
+<p>资源决策会显著减少。</p>
+<hr />
+<h2 id="13-拾取事务">13. 拾取事务</h2><h3 id="131-pickuptransaction">13.1 PickupTransaction</h3><p>建议字段：</p>
+<ul>
+<li><p>TransactionId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>ItemInstanceId；</p>
+</li>
+<li><p>WorldContainerId；</p>
+</li>
+<li><p>RequestedQuantity；</p>
+</li>
+<li><p>SubmittedInventoryVersion；</p>
+</li>
+<li><p>SubmittedWorldVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h3 id="132-拾取流程">13.2 拾取流程</h3><p>玩家请求拾取
+→ 服务器确认距离
+→ 确认物品仍存在
+→ 锁定 ItemInstance
+→ 检查背包容量
+→ 从世界容器移除
+→ 加入玩家 Inventory
+→ 提交版本
+→ 发布 ItemPickedUp</p>
+<hr />
+<h3 id="133-为什么拾取必须原子化">13.3 为什么拾取必须原子化</h3><p>多人可能同时尝试拾取同一物品。</p>
+<p>如果没有服务器权威锁定：</p>
+<p>可能出现：</p>
+<p>玩家A得到物品；</p>
+<p>玩家B也得到同一物品。</p>
+<p>形成复制漏洞。</p>
+<hr />
+<h2 id="14-武器与战斗构筑">14. 武器与战斗构筑</h2><h3 id="141-weaponruntimestate">14.1 WeaponRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>WeaponInstanceId；</p>
+</li>
+<li><p>WeaponDefinitionId；</p>
+</li>
+<li><p>MagazineAmmo；</p>
+</li>
+<li><p>ReserveAmmoType；</p>
+</li>
+<li><p>AttachmentSlots；</p>
+</li>
+<li><p>CurrentAttachments；</p>
+</li>
+<li><p>DurabilityState；</p>
+</li>
+<li><p>FireMode；</p>
+</li>
+<li><p>WeaponVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="142-武器组合职责">14.2 武器组合职责</h3><p>玩家通常需要在：</p>
+<ul>
+<li><p>近距离；</p>
+</li>
+<li><p>中距离；</p>
+</li>
+<li><p>远距离；</p>
+</li>
+</ul>
+<p>之间建立覆盖。</p>
+<p>例如：</p>
+<p>霰弹枪
++
+突击步枪</p>
+<p>与：</p>
+<p>冲锋枪
++
+狙击步枪</p>
+<p>形成不同战斗范围构筑。</p>
+<hr />
+<h3 id="143-配件系统">14.3 配件系统</h3><p>配件可以影响：</p>
+<ul>
+<li><p>后坐力；</p>
+</li>
+<li><p>瞄准；</p>
+</li>
+<li><p>弹匣；</p>
+</li>
+<li><p>倍镜；</p>
+</li>
+<li><p>消音；</p>
+</li>
+<li><p>换弹；</p>
+</li>
+<li><p>操作速度。</p>
+</li>
+</ul>
+<p>配件主要用于：</p>
+<blockquote>
+<p>优化已经获得的武器，而不是强迫玩家不断更换整把武器。</p>
+</blockquote>
+<hr />
+<h2 id="15-护甲生命与治疗">15. 护甲、生命与治疗</h2><h3 id="151-armorstate">15.1 ArmorState</h3><p>建议包含：</p>
+<ul>
+<li><p>ArmorTier；</p>
+</li>
+<li><p>CurrentDurability；</p>
+</li>
+<li><p>MaximumDurability；</p>
+</li>
+<li><p>PlateStates；</p>
+</li>
+<li><p>DamageReductionRules；</p>
+</li>
+<li><p>ArmorVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="152-治疗资源">15.2 治疗资源</h3><p>可以分为：</p>
+<ul>
+<li><p>生命恢复；</p>
+</li>
+<li><p>护甲恢复；</p>
+</li>
+<li><p>快速低量；</p>
+</li>
+<li><p>慢速高量；</p>
+</li>
+<li><p>战斗强化。</p>
+</li>
+</ul>
+<hr />
+<h3 id="153-usetime-是治疗的重要成本">15.3 UseTime 是治疗的重要成本</h3><p>治疗不能只消耗物品。</p>
+<p>还应消耗：</p>
+<ul>
+<li><p>时间；</p>
+</li>
+<li><p>注意力；</p>
+</li>
+<li><p>行动能力。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p>安全位置
+→ 可以使用高效率慢治疗。</p>
+<p>战斗中
+→ 可能只能使用快速低效治疗。</p>
+<hr />
+<h2 id="16-combat-resolution">16. Combat Resolution</h2><p>战斗系统本身可以是：</p>
+<ul>
+<li><p>FPS；</p>
+</li>
+<li><p>TPS；</p>
+</li>
+<li><p>近战；</p>
+</li>
+<li><p>英雄技能；</p>
+</li>
+<li><p>混合战斗。</p>
+</li>
+</ul>
+<p>大逃杀宏观范式并不依赖具体射击模型。</p>
+<p>但必须满足：</p>
+<ul>
+<li><p>服务器权威；</p>
+</li>
+<li><p>可追踪伤害来源；</p>
+</li>
+<li><p>击倒与淘汰可区分；</p>
+</li>
+<li><p>击杀事务唯一；</p>
+</li>
+<li><p>战斗信息能够形成第三方信号。</p>
+</li>
+</ul>
+<hr />
+<h3 id="161-damagerecord">16.1 DamageRecord</h3><p>建议包含：</p>
+<ul>
+<li><p>DamageEventId；</p>
+</li>
+<li><p>AttackerId；</p>
+</li>
+<li><p>VictimId；</p>
+</li>
+<li><p>WeaponOrAbilityId；</p>
+</li>
+<li><p>DamageType；</p>
+</li>
+<li><p>RawDamage；</p>
+</li>
+<li><p>ArmorDamage；</p>
+</li>
+<li><p>HealthDamage；</p>
+</li>
+<li><p>HitLocation；</p>
+</li>
+<li><p>ServerTick；</p>
+</li>
+<li><p>DamageVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="162-lastdamagehistory">16.2 LastDamageHistory</h3><p>用于：</p>
+<ul>
+<li><p>击杀归属；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>Death Recap；</p>
+</li>
+<li><p>击倒归属；</p>
+</li>
+<li><p>环境击杀判断。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-倒地救援与淘汰">17. 倒地、救援与淘汰</h2><h3 id="171-downedstate">17.1 DownedState</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>DownedByPlayerId；</p>
+</li>
+<li><p>BleedOutRemaining；</p>
+</li>
+<li><p>CrawlState；</p>
+</li>
+<li><p>ReviveProgress；</p>
+</li>
+<li><p>ReviverPlayerId；</p>
+</li>
+<li><p>DownedVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="172-倒地职责">17.2 倒地职责</h3><p>组队模式下倒地可以提供：</p>
+<ul>
+<li><p>队友救援机会；</p>
+</li>
+<li><p>对手补杀决策；</p>
+</li>
+<li><p>战斗目标变化；</p>
+</li>
+<li><p>人数差暂时化。</p>
+</li>
+</ul>
+<hr />
+<h3 id="173-revivetransaction">17.3 ReviveTransaction</h3><p>流程：</p>
+<p>队友开始救援
+→ 验证距离
+→ 锁定目标
+→ 持续 Channel
+→ 任一方移动或受规则打断
+→ 成功则恢复 Alive
+→ 给予短暂保护或最低生命
+→ 发布 PlayerRevived</p>
+<hr />
+<h3 id="174-elimination">17.4 Elimination</h3><p>玩家只有在满足模式规则后才进入：</p>
+<p><strong>Eliminated</strong></p>
+<p>此时：</p>
+<ul>
+<li><p>移除战斗资格；</p>
+</li>
+<li><p>更新存活人数；</p>
+</li>
+<li><p>生成 LootContainer；</p>
+</li>
+<li><p>更新 SquadState；</p>
+</li>
+<li><p>检查比赛胜利条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-二次复活系统">18. 二次复活系统</h2><p>某些大逃杀允许：</p>
+<ul>
+<li><p>复活信标；</p>
+</li>
+<li><p>队友卡；</p>
+</li>
+<li><p>特殊商店；</p>
+</li>
+<li><p>重生阶段；</p>
+</li>
+<li><p>Gulag式单独挑战。</p>
+</li>
+</ul>
+<p>这些系统会弱化永久淘汰。</p>
+<p>因此必须明确：</p>
+<blockquote>
+<p>二次复活是对淘汰规则的例外，而不是完全独立机制。</p>
+</blockquote>
+<hr />
+<h3 id="181-respawneligibilitystate">18.1 RespawnEligibilityState</h3><p>建议包含：</p>
+<ul>
+<li><p>EliminatedPlayerId；</p>
+</li>
+<li><p>RecoveryItemState；</p>
+</li>
+<li><p>RespawnWindow；</p>
+</li>
+<li><p>RespawnPointIds；</p>
+</li>
+<li><p>RespawnCost；</p>
+</li>
+<li><p>RespawnStateVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="182-二次复活的主要作用">18.2 二次复活的主要作用</h3><ul>
+<li><p>降低组队玩家长时间观战；</p>
+</li>
+<li><p>提高队伍恢复能力；</p>
+</li>
+<li><p>减少早期随机失败；</p>
+</li>
+<li><p>增加中期战略目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="183-风险">18.3 风险</h3><p>复活机制过强会导致：</p>
+<ul>
+<li><p>淘汰失去意义；</p>
+</li>
+<li><p>玩家数量下降过慢；</p>
+</li>
+<li><p>比赛终局延迟。</p>
+</li>
+</ul>
+<p>因此通常需要：</p>
+<ul>
+<li><p>时间窗口；</p>
+</li>
+<li><p>特定区域；</p>
+</li>
+<li><p>资源成本；</p>
+</li>
+<li><p>后期关闭。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-safe-zone-convergence-system">19. Safe Zone Convergence System</h2><p>这是大逃杀最核心的领域系统之一。</p>
+<hr />
+<h3 id="191-safezonephasedefinition">19.1 SafeZonePhaseDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>PhaseIndex；</p>
+</li>
+<li><p>WaitDuration；</p>
+</li>
+<li><p>ShrinkDuration；</p>
+</li>
+<li><p>TargetAreaRatio；</p>
+</li>
+<li><p>TargetShapeRule；</p>
+</li>
+<li><p>OutsideDamageProfile；</p>
+</li>
+<li><p>RevealLeadTime；</p>
+</li>
+<li><p>MovementPolicy；</p>
+</li>
+<li><p>TerrainConstraints；</p>
+</li>
+<li><p>PhaseVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="192-safezoneruntimestate">19.2 SafeZoneRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>CurrentPhaseIndex；</p>
+</li>
+<li><p>CurrentShape；</p>
+</li>
+<li><p>TargetShape；</p>
+</li>
+<li><p>CurrentCenter；</p>
+</li>
+<li><p>TargetCenter；</p>
+</li>
+<li><p>ShrinkStartTick；</p>
+</li>
+<li><p>ShrinkEndTick；</p>
+</li>
+<li><p>CurrentOutsideDamage；</p>
+</li>
+<li><p>RevealedNextZone；</p>
+</li>
+<li><p>SafeZoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="193-阶段流程">19.3 阶段流程</h3><p>阶段开始
+→ 公布下一安全区
+→ 给玩家转移准备时间
+→ ShrinkStart
+→ 安全区域连续收缩
+→ ShrinkEnd
+→ 进入短暂稳定期
+→ 生成下一安全区
+→ 重复</p>
+<hr />
+<h2 id="20-下一安全区生成">20. 下一安全区生成</h2><h3 id="201-zonecandidategenerator">20.1 ZoneCandidateGenerator</h3><p>新的安全区必须满足：</p>
+<ul>
+<li><p>位于上一安全区域约束内；</p>
+</li>
+<li><p>足够可通行；</p>
+</li>
+<li><p>不大量覆盖不可进入地形；</p>
+</li>
+<li><p>不完全位于深水、悬崖或无导航区域；</p>
+</li>
+<li><p>能够形成合理终局空间；</p>
+</li>
+<li><p>不违反地图特殊规则。</p>
+</li>
+</ul>
+<hr />
+<h3 id="202-candidatescore">20.2 CandidateScore</h3><p>候选区域可以根据：</p>
+<ul>
+<li><p>PlayableAreaRatio；</p>
+</li>
+<li><p>CoverAvailability；</p>
+</li>
+<li><p>Verticality；</p>
+</li>
+<li><p>BuildingDensity；</p>
+</li>
+<li><p>WaterRatio；</p>
+</li>
+<li><p>TraversalConnectivity；</p>
+</li>
+<li><p>PreviousZoneOffset；</p>
+</li>
+<li><p>FinalCircleSuitability；</p>
+</li>
+</ul>
+<p>评分。</p>
+<hr />
+<h3 id="203-圈不能简单完全随机">20.3 圈不能简单完全随机</h3><p>完全随机可能导致：</p>
+<ul>
+<li><p>最后一圈位于海中；</p>
+</li>
+<li><p>极端悬崖；</p>
+</li>
+<li><p>单一路径高地；</p>
+</li>
+<li><p>某一侧天然无法进入。</p>
+</li>
+</ul>
+<p>因此需要：</p>
+<p>随机候选
+→ 约束过滤
+→ 公平评分
+→ 选择合法结果</p>
+<hr />
+<h2 id="21-圈外伤害">21. 圈外伤害</h2><h3 id="211-outsidezonedamageprofile">21.1 OutsideZoneDamageProfile</h3><p>建议字段：</p>
+<ul>
+<li><p>PhaseIndex；</p>
+</li>
+<li><p>DamagePerSecond；</p>
+</li>
+<li><p>TickInterval；</p>
+</li>
+<li><p>MaxHealthPercentageRule；</p>
+</li>
+<li><p>HealingModifier；</p>
+</li>
+<li><p>VehicleModifier；</p>
+</li>
+<li><p>DownedModifier；</p>
+</li>
+<li><p>OutsideDamageVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="212-圈伤的核心目的">21.2 圈伤的核心目的</h3><p>圈伤不是为了杀死大量玩家。</p>
+<p>而是：</p>
+<blockquote>
+<p>让“待在安全区之外”最终成为不可持续策略。</p>
+</blockquote>
+<hr />
+<h3 id="213-早期圈伤">21.3 早期圈伤</h3><p>通常应：</p>
+<ul>
+<li><p>允许短时间继续搜刮；</p>
+</li>
+<li><p>允许救援；</p>
+</li>
+<li><p>允许绕路。</p>
+</li>
+</ul>
+<hr />
+<h3 id="214-后期圈伤">21.4 后期圈伤</h3><p>需要逐渐提高到：</p>
+<ul>
+<li><p>无法长期治疗抵消；</p>
+</li>
+<li><p>无法依赖药品无限拖延；</p>
+</li>
+<li><p>强迫进入终局区域。</p>
+</li>
+</ul>
+<hr />
+<h2 id="22-移动安全区">22. 移动安全区</h2><p>后期可以使用：</p>
+<p><strong>Moving Zone</strong></p>
+<p>而不仅是：</p>
+<p>固定中心持续缩小。</p>
+<p>移动安全区可以：</p>
+<ul>
+<li><p>防止玩家长期占据最终建筑；</p>
+</li>
+<li><p>迫使双方离开掩体；</p>
+</li>
+<li><p>提高终局移动博弈。</p>
+</li>
+</ul>
+<hr />
+<h3 id="221-movingzonestate">22.1 MovingZoneState</h3><p>建议包含：</p>
+<ul>
+<li><p>CurrentCenter；</p>
+</li>
+<li><p>TargetCenter；</p>
+</li>
+<li><p>MovementStartTick；</p>
+</li>
+<li><p>MovementEndTick；</p>
+</li>
+<li><p>MovementPath；</p>
+</li>
+<li><p>SafeRadius；</p>
+</li>
+<li><p>MovingZoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-转移-rotation">23. 转移 / Rotation</h2><p>Rotation 是大逃杀的核心玩家行为之一。</p>
+<hr />
+<h3 id="231-rotationcontext">23.1 RotationContext</h3><p>可以推导：</p>
+<ul>
+<li><p>PlayerOrSquadId；</p>
+</li>
+<li><p>CurrentPosition；</p>
+</li>
+<li><p>TargetZone；</p>
+</li>
+<li><p>DistanceToZone；</p>
+</li>
+<li><p>EstimatedTravelTime；</p>
+</li>
+<li><p>KnownEnemyAreas；</p>
+</li>
+<li><p>VehicleAvailability；</p>
+</li>
+<li><p>TerrainRisk；</p>
+</li>
+<li><p>ZoneClosureTime；</p>
+</li>
+<li><p>RotationVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="232-提前转移">23.2 提前转移</h3><p>收益：</p>
+<ul>
+<li><p>抢占强势位置；</p>
+</li>
+<li><p>降低被圈追赶风险；</p>
+</li>
+<li><p>有时间观察后续玩家。</p>
+</li>
+</ul>
+<p>代价：</p>
+<ul>
+<li><p>放弃继续搜刮；</p>
+</li>
+<li><p>路途中可能暴露。</p>
+</li>
+</ul>
+<hr />
+<h3 id="233-延迟转移">23.3 延迟转移</h3><p>收益：</p>
+<ul>
+<li><p>更多搜刮；</p>
+</li>
+<li><p>可以攻击其他正在移动的玩家。</p>
+</li>
+</ul>
+<p>风险：</p>
+<ul>
+<li><p>圈逼近；</p>
+</li>
+<li><p>路线被封锁；</p>
+</li>
+<li><p>无法选择安全路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="24-edge-play-与-center-play">24. Edge Play 与 Center Play</h2><p>安全区内部可以形成两类宏观策略。</p>
+<hr />
+<h3 id="241-center-play">24.1 Center Play</h3><p>提前进入圈中心。</p>
+<p>优势：</p>
+<ul>
+<li><p>下一阶段平均移动距离较小；</p>
+</li>
+<li><p>不容易被圈强迫长距离转移。</p>
+</li>
+</ul>
+<p>风险：</p>
+<ul>
+<li><p>多方向可能来敌；</p>
+</li>
+<li><p>需要守住位置。</p>
+</li>
+</ul>
+<hr />
+<h3 id="242-edge-play">24.2 Edge Play</h3><p>沿安全区边缘移动。</p>
+<p>优势：</p>
+<ul>
+<li><p>一侧通常较少敌人；</p>
+</li>
+<li><p>更容易控制后方。</p>
+</li>
+</ul>
+<p>风险：</p>
+<ul>
+<li><p>每次缩圈都可能需要继续移动；</p>
+</li>
+<li><p>路线选择较少。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-信息与声音系统">25. 信息与声音系统</h2><h3 id="251-informationevent">25.1 InformationEvent</h3><p>建议字段：</p>
+<ul>
+<li><p>InformationEventId；</p>
+</li>
+<li><p>EventType；</p>
+</li>
+<li><p>WorldPosition；</p>
+</li>
+<li><p>Intensity；</p>
+</li>
+<li><p>PropagationRadius；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>TeamVisibilityRules；</p>
+</li>
+<li><p>InformationVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="252-信息来源">25.2 信息来源</h3><p>包括：</p>
+<ul>
+<li><p>枪声；</p>
+</li>
+<li><p>脚步；</p>
+</li>
+<li><p>车辆；</p>
+</li>
+<li><p>空投；</p>
+</li>
+<li><p>爆炸；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>击杀信息；</p>
+</li>
+<li><p>区域事件。</p>
+</li>
+</ul>
+<hr />
+<h3 id="253-信息的不完全性">25.3 信息的不完全性</h3><p>玩家通常知道：</p>
+<p>“东北方向有人开枪。”</p>
+<p>但不知道：</p>
+<ul>
+<li><p>具体人数；</p>
+</li>
+<li><p>精确生命；</p>
+</li>
+<li><p>谁占优势；</p>
+</li>
+<li><p>是否还有第三队。</p>
+</li>
+</ul>
+<p>这种有限信息是策略空间的一部分。</p>
+<hr />
+<h2 id="26-第三方介入">26. 第三方介入</h2><h3 id="261-thirdpartycontext">26.1 ThirdPartyContext</h3><p>分析层可以记录：</p>
+<ul>
+<li><p>InitialFightTeams；</p>
+</li>
+<li><p>NewEnteringTeams；</p>
+</li>
+<li><p>FightStartTick；</p>
+</li>
+<li><p>ThirdPartyArrivalTick；</p>
+</li>
+<li><p>OriginalFightDamage；</p>
+</li>
+<li><p>RemainingHealthAtArrival；</p>
+</li>
+<li><p>FinalWinningTeam。</p>
+</li>
+</ul>
+<hr />
+<h3 id="262-第三方介入为什么自然发生">26.2 第三方介入为什么自然发生</h3><p>因为：</p>
+<p>战斗
+→ 产生声音
+→ 暴露位置
+→ 消耗生命和资源
+→ 击杀后产生 Loot
+→ 吸引附近玩家</p>
+<p>因此不需要单独编写：</p>
+<p>“第三方AI系统。”</p>
+<p>它应由：</p>
+<ul>
+<li><p>信息传播；</p>
+</li>
+<li><p>地图距离；</p>
+</li>
+<li><p>玩家决策；</p>
+</li>
+</ul>
+<p>自然产生。</p>
+<hr />
+<h3 id="263-设计风险">26.3 设计风险</h3><p>如果第三方收益过高：</p>
+<p>玩家会倾向：</p>
+<p>不发起任何战斗
+→ 只等待别人交火
+→ 最后收割</p>
+<p>可以通过：</p>
+<ul>
+<li><p>击杀后的快速补充；</p>
+</li>
+<li><p>更快拾取；</p>
+</li>
+<li><p>击倒恢复；</p>
+</li>
+<li><p>战利品护甲交换；</p>
+</li>
+<li><p>地图地形；</p>
+</li>
+<li><p>战斗时间；</p>
+</li>
+</ul>
+<p>控制。</p>
+<hr />
+<h2 id="27-载具与大型地图移动">27. 载具与大型地图移动</h2><p>载具不是大逃杀必需模块，但大型地图常需要它。</p>
+<hr />
+<h3 id="271-vehicledefinition">27.1 VehicleDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>VehicleId；</p>
+</li>
+<li><p>SeatCount；</p>
+</li>
+<li><p>MaximumSpeed；</p>
+</li>
+<li><p>Acceleration；</p>
+</li>
+<li><p>FuelRules；</p>
+</li>
+<li><p>NoiseProfile；</p>
+</li>
+<li><p>DamageProfile；</p>
+</li>
+<li><p>TerrainRules；</p>
+</li>
+<li><p>StorageRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="272-载具价值">27.2 载具价值</h3><p>载具提供：</p>
+<ul>
+<li><p>高速转移；</p>
+</li>
+<li><p>逃离圈外；</p>
+</li>
+<li><p>快速跨越开放地形。</p>
+</li>
+</ul>
+<p>同时付出：</p>
+<ul>
+<li><p>巨大声音；</p>
+</li>
+<li><p>可视性；</p>
+</li>
+<li><p>行动轨迹可预测；</p>
+</li>
+<li><p>爆炸风险。</p>
+</li>
+</ul>
+<p>因此载具本质是：</p>
+<blockquote>
+<p><strong>用信息暴露换取移动速度。</strong></p>
+</blockquote>
+<hr />
+<h2 id="28-空投与公共高价值事件">28. 空投与公共高价值事件</h2><h3 id="281-publiceventdefinition">28.1 PublicEventDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>EventId；</p>
+</li>
+<li><p>TriggerRule；</p>
+</li>
+<li><p>AnnouncementRule；</p>
+</li>
+<li><p>LocationRule；</p>
+</li>
+<li><p>LootProfile；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>VisibilityRules；</p>
+</li>
+<li><p>EventVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="282-空投职责">28.2 空投职责</h3><p>空投并不只是提供稀有装备。</p>
+<p>更重要的是：</p>
+<blockquote>
+<p>创建一个所有附近玩家都知道的临时资源热点。</p>
+</blockquote>
+<p>公开资源
+→ 多队靠近
+→ 玩家密度局部提高
+→ 形成可预测冲突</p>
+<hr />
+<h3 id="283-动态热点">28.3 动态热点</h3><p>可以包括：</p>
+<ul>
+<li><p>空投；</p>
+</li>
+<li><p>高级商店；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>临时宝库；</p>
+</li>
+<li><p>资源列车；</p>
+</li>
+<li><p>移动车队；</p>
+</li>
+<li><p>特殊建筑开启。</p>
+</li>
+</ul>
+<p>这是一种：</p>
+<blockquote>
+<p>不直接生成敌人，也能主动改变玩家分布的方法。</p>
+</blockquote>
+<hr />
+<h2 id="29-squad-system">29. Squad System</h2><h3 id="291-squadstate">29.1 SquadState</h3><p>建议包含：</p>
+<ul>
+<li><p>SquadId；</p>
+</li>
+<li><p>MemberPlayerIds；</p>
+</li>
+<li><p>AliveMemberIds；</p>
+</li>
+<li><p>DownedMemberIds；</p>
+</li>
+<li><p>EliminatedMemberIds；</p>
+</li>
+<li><p>SharedMarkers；</p>
+</li>
+<li><p>RespawnEligibility；</p>
+</li>
+<li><p>SquadVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="292-小队信息">29.2 小队信息</h3><p>队友通常共享：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>Ping；</p>
+</li>
+<li><p>倒地状态；</p>
+</li>
+<li><p>装备请求；</p>
+</li>
+<li><p>敌人标记；</p>
+</li>
+<li><p>安全区信息。</p>
+</li>
+</ul>
+<hr />
+<h3 id="293-小队玩法的核心差异">29.3 小队玩法的核心差异</h3><p>Solo：</p>
+<p>一次死亡通常直接淘汰。</p>
+<p>Squad：</p>
+<p>玩家生命状态更复杂：</p>
+<p>Alive
+→ Downed
+→ Revived</p>
+<p>或：</p>
+<p>Alive
+→ Downed
+→ Eliminated
+→ Respawned</p>
+<p>因此队伍中的：</p>
+<ul>
+<li><p>救援；</p>
+</li>
+<li><p>拖延；</p>
+</li>
+<li><p>掩护；</p>
+</li>
+<li><p>撤退；</p>
+</li>
+</ul>
+<p>成为重要策略。</p>
+<hr />
+<h2 id="30-ping-与低带宽沟通">30. Ping 与低带宽沟通</h2><p>建议至少支持：</p>
+<ul>
+<li><p>Enemy；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>Go；</p>
+</li>
+<li><p>Defend；</p>
+</li>
+<li><p>Danger；</p>
+</li>
+<li><p>Vehicle；</p>
+</li>
+<li><p>NeedAmmo；</p>
+</li>
+<li><p>NeedHealing；</p>
+</li>
+<li><p>NeedEquipment。</p>
+</li>
+</ul>
+<p>Ping 是大逃杀非常重要的：</p>
+<p><strong>非语音团队协议。</strong></p>
+<p>因为玩家需要快速传达：</p>
+<p>“那栋楼二层可能有人。”</p>
+<p>而不是打开聊天框输入完整句子。</p>
+<hr />
+<h2 id="31-淘汰判定">31. 淘汰判定</h2><h3 id="311-eliminationrecord">31.1 EliminationRecord</h3><p>建议包含：</p>
+<ul>
+<li><p>EliminatedPlayerId；</p>
+</li>
+<li><p>SquadId；</p>
+</li>
+<li><p>KillerId；</p>
+</li>
+<li><p>AssistIds；</p>
+</li>
+<li><p>Cause；</p>
+</li>
+<li><p>Location；</p>
+</li>
+<li><p>EliminationTick；</p>
+</li>
+<li><p>PlacementAtElimination；</p>
+</li>
+<li><p>LootContainerId；</p>
+</li>
+<li><p>EliminationVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="312-淘汰流程">31.2 淘汰流程</h3><p>生命条件满足
+→ 判断是否进入 Downed
+→ 判断 Squad 是否仍有可救援成员
+→ 若正式淘汰
+→ 冻结玩家战斗状态
+→ 生成 DeathLoot
+→ 从 AlivePlayers 移除
+→ 更新 AliveSquads
+→ 计算当前名次
+→ 检查胜利条件</p>
+<hr />
+<h3 id="313-淘汰必须幂等">31.3 淘汰必须幂等</h3><p>同一个玩家：</p>
+<p>不能因为：</p>
+<ul>
+<li><p>爆炸；</p>
+</li>
+<li><p>圈伤；</p>
+</li>
+<li><p>枪械伤害；</p>
+</li>
+</ul>
+<p>在同一 Tick 中触发三次：</p>
+<p>Elimination。</p>
+<p>需要唯一：</p>
+<p><strong>EliminationTransactionId。</strong></p>
+<hr />
+<h2 id="32-最终胜利判断">32. 最终胜利判断</h2><h3 id="321-victoryrule">32.1 VictoryRule</h3><p>Solo：</p>
+<p>AlivePlayers == 1</p>
+<p>Squad：</p>
+<p>AliveSquads == 1</p>
+<hr />
+<h3 id="322-特殊情况">32.2 特殊情况</h3><p>需要处理：</p>
+<ul>
+<li><p>最后两人同时死亡；</p>
+</li>
+<li><p>最后两队都死于圈；</p>
+</li>
+<li><p>玩家断线；</p>
+</li>
+<li><p>玩家卡在世界之外；</p>
+</li>
+<li><p>服务器检测到作弊；</p>
+</li>
+<li><p>游戏模式特殊胜利条件。</p>
+</li>
+</ul>
+<hr />
+<h3 id="323-victorypending">32.3 VictoryPending</h3><p>不建议：</p>
+<p>最后一个敌人死亡
+→ 立即客户端自行显示胜利并结算</p>
+<p>推荐：</p>
+<p>可能获胜
+→ 服务端确认 AliveState
+→ 确认不存在 RespawnEligible
+→ 确认没有未处理 Elimination
+→ 冻结 VictorySnapshot
+→ 进入 VictoryPending
+→ 最终提交</p>
+<hr />
+<h2 id="33-完整执行流程示例">33. 完整执行流程示例</h2><p>以下以：</p>
+<p><strong>四人小队从边缘落点搜刮，经过两次缩圈、一次第三方战斗，最终进入决赛圈</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="331-比赛开始">33.1 比赛开始</h3><p>服务器：</p>
+<ul>
+<li><p>创建 MatchId；</p>
+</li>
+<li><p>固定 MapSeed；</p>
+</li>
+<li><p>生成 LootWorld；</p>
+</li>
+<li><p>生成 SafeZoneSequence；</p>
+</li>
+<li><p>初始化100名玩家；</p>
+</li>
+<li><p>创建飞行航线。</p>
+</li>
+</ul>
+<hr />
+<h3 id="332-小队选择边缘落点">33.2 小队选择边缘落点</h3><p>小队判断：</p>
+<p>航线距离某港口较远。</p>
+<p>预计：</p>
+<ul>
+<li><p>玩家较少；</p>
+</li>
+<li><p>Loot中等；</p>
+</li>
+<li><p>车辆较多；</p>
+</li>
+<li><p>第一安全区未知。</p>
+</li>
+</ul>
+<p>小队选择该区域。</p>
+<hr />
+<h3 id="333-落地搜刮">33.3 落地搜刮</h3><p>四名玩家分散搜索建筑。</p>
+<p>系统保证该中型 POI 至少存在若干基础武器。</p>
+<p>最终获得：</p>
+<ul>
+<li><p>两把突击步枪；</p>
+</li>
+<li><p>一把冲锋枪；</p>
+</li>
+<li><p>一把狙击步枪；</p>
+</li>
+<li><p>基础护甲；</p>
+</li>
+<li><p>少量治疗。</p>
+</li>
+</ul>
+<hr />
+<h3 id="334-第一安全区公开">33.4 第一安全区公开</h3><p>安全区位于地图另一侧。</p>
+<p>RotationContext显示：</p>
+<ul>
+<li><p>徒步时间较长；</p>
+</li>
+<li><p>附近存在车辆；</p>
+</li>
+<li><p>当前还有较长准备时间。</p>
+</li>
+</ul>
+<p>团队决定：</p>
+<p>继续搜刮两分钟
+→ 再使用车辆转移。</p>
+<hr />
+<h3 id="335-车辆转移">33.5 车辆转移</h3><p>车辆提供高速移动。</p>
+<p>但附近另一支队伍听到引擎声。</p>
+<p>对方提前占据桥梁。</p>
+<hr />
+<h3 id="336-第一次遭遇">33.6 第一次遭遇</h3><p>双方短暂交火。</p>
+<p>小队没有强行攻击桥梁，而是：</p>
+<ul>
+<li><p>使用烟雾；</p>
+</li>
+<li><p>改走支路；</p>
+</li>
+<li><p>保留资源。</p>
+</li>
+</ul>
+<p>这里的成功不是：</p>
+<p>“击杀敌人。”</p>
+<p>而是：</p>
+<blockquote>
+<p>在低资源成本下完成安全转移。</p>
+</blockquote>
+<hr />
+<h3 id="337-第二阶段安全区">33.7 第二阶段安全区</h3><p>小队进入安全区边缘。</p>
+<p>新的安全区继续向中心缩小。</p>
+<p>团队决定：</p>
+<p>提前占据一座高地建筑。</p>
+<hr />
+<h3 id="338-附近发生交火">33.8 附近发生交火</h3><p>东侧传来长时间枪声。</p>
+<p>InformationSystem产生：</p>
+<p>多个高强度 NoiseEvent。</p>
+<p>队伍判断：</p>
+<p>至少两队正在战斗。</p>
+<hr />
+<h3 id="339-第三方介入">33.9 第三方介入</h3><p>团队移动到交火外围。</p>
+<p>到达时：</p>
+<p>A队只剩两人；</p>
+<p>B队三人残血。</p>
+<p>团队进入战斗并击败双方。</p>
+<hr />
+<h3 id="3310-战斗收益">33.10 战斗收益</h3><p>团队获得：</p>
+<ul>
+<li><p>更高级护甲；</p>
+</li>
+<li><p>更好配件；</p>
+</li>
+<li><p>大量治疗；</p>
+</li>
+<li><p>高级武器。</p>
+</li>
+</ul>
+<p>但同时：</p>
+<ul>
+<li><p>消耗弹药；</p>
+</li>
+<li><p>两名成员护甲破损；</p>
+</li>
+<li><p>战斗声音暴露位置。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3311-第四队赶来">33.11 第四队赶来</h3><p>另一支队伍听到枪声后抵达。</p>
+<p>此时团队必须决定：</p>
+<p>继续搜刮尸体</p>
+<p>或：</p>
+<p>立即占据防守位置。</p>
+<p>队伍选择只快速取：</p>
+<ul>
+<li><p>护甲；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+</ul>
+<p>放弃低价值物品。</p>
+<p>这体现：</p>
+<blockquote>
+<p>战利品价值必须与“停留时间风险”共同评估。</p>
+</blockquote>
+<hr />
+<h3 id="3312-再次转移">33.12 再次转移</h3><p>安全区开始移动。</p>
+<p>队伍提前离开战斗地点。</p>
+<p>另一支队伍因搜刮时间过长，被圈逼迫进入开放地形。</p>
+<hr />
+<h3 id="3313-中后期人数下降">33.13 中后期人数下降</h3><p>当前：</p>
+<p>28名玩家。</p>
+<p>安全面积已经显著缩小。</p>
+<p>EffectivePlayerDensity开始快速提高。</p>
+<hr />
+<h3 id="3314-决赛圈">33.14 决赛圈</h3><p>剩余：</p>
+<p>4支队伍。</p>
+<p>安全区包含：</p>
+<ul>
+<li><p>一片低地；</p>
+</li>
+<li><p>两栋房屋；</p>
+</li>
+<li><p>一段山坡。</p>
+</li>
+</ul>
+<p>团队没有最好装备，但提前获得：</p>
+<p>山坡高地。</p>
+<hr />
+<h3 id="3315-最终移动圈">33.15 最终移动圈</h3><p>下一阶段安全区从山坡向房屋方向移动。</p>
+<p>团队不得不离开高地。</p>
+<p>这防止：</p>
+<p>提前占据最强位置
+→ 永远等待其他玩家死亡。</p>
+<hr />
+<h3 id="3316-最终战斗">33.16 最终战斗</h3><p>两支队伍先发生交火。</p>
+<p>团队利用：</p>
+<ul>
+<li><p>剩余投掷物；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>信息；</p>
+</li>
+</ul>
+<p>延迟参战。</p>
+<p>最后形成：</p>
+<p>4v2。</p>
+<hr />
+<h3 id="3317-最终淘汰">33.17 最终淘汰</h3><p>服务器依次提交：</p>
+<p>EliminationTransaction。</p>
+<p>AliveSquads：</p>
+<p>2
+→ 1</p>
+<hr />
+<h3 id="3318-victorypending">33.18 VictoryPending</h3><p>服务器确认：</p>
+<ul>
+<li><p>没有可复活玩家；</p>
+</li>
+<li><p>没有延迟淘汰事务；</p>
+</li>
+<li><p>没有其他存活小队。</p>
+</li>
+</ul>
+<p>生成 VictorySnapshot。</p>
+<hr />
+<h3 id="3319-matchresult">33.19 MatchResult</h3><p>最终记录：</p>
+<ul>
+<li><p>排名；</p>
+</li>
+<li><p>淘汰数；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>存活时间；</p>
+</li>
+<li><p>行进距离；</p>
+</li>
+<li><p>Loot价值；</p>
+</li>
+<li><p>圈外时间；</p>
+</li>
+<li><p>Revive；</p>
+</li>
+<li><p>ThirdParty参与；</p>
+</li>
+<li><p>MatchDuration。</p>
+</li>
+</ul>
+<p>完整循环形成：</p>
+<p>落点选择
+→ 初期搜刮
+→ 第一圈规划
+→ 转移
+→ 避战
+→ 占位
+→ 第三方战斗
+→ 临时构筑升级
+→ 再转移
+→ 玩家密度提高
+→ 最终移动圈
+→ 淘汰收敛
+→ 唯一胜者</p>
+<hr />
+<h2 id="34-模块通信设计">34. 模块通信设计</h2><h3 id="341-commands">34.1 Commands</h3><p>典型命令：</p>
+<ul>
+<li><p>JumpFromInsertion；</p>
+</li>
+<li><p>MovePlayer；</p>
+</li>
+<li><p>PickupItem；</p>
+</li>
+<li><p>DropItem；</p>
+</li>
+<li><p>EquipWeapon；</p>
+</li>
+<li><p>FireWeapon；</p>
+</li>
+<li><p>UseHealingItem；</p>
+</li>
+<li><p>EnterVehicle；</p>
+</li>
+<li><p>ExitVehicle；</p>
+</li>
+<li><p>StartRevive；</p>
+</li>
+<li><p>PlacePing；</p>
+</li>
+<li><p>InteractRespawnPoint；</p>
+</li>
+<li><p>SpectatePlayer。</p>
+</li>
+</ul>
+<p>命令需要携带：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>ClientTick；</p>
+</li>
+<li><p>InputSequence；</p>
+</li>
+<li><p>TargetId；</p>
+</li>
+<li><p>SubmittedStateVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h3 id="342-queries">34.2 Queries</h3><p>适用于：</p>
+<ul>
+<li><p>当前安全区；</p>
+</li>
+<li><p>下一圈倒计时；</p>
+</li>
+<li><p>当前存活玩家；</p>
+</li>
+<li><p>当前背包容量；</p>
+</li>
+<li><p>物品是否可拾取；</p>
+</li>
+<li><p>队友是否可救援；</p>
+</li>
+<li><p>当前是否在圈内；</p>
+</li>
+<li><p>是否有资格复活。</p>
+</li>
+</ul>
+<p>查询不能：</p>
+<ul>
+<li><p>修改 Loot；</p>
+</li>
+<li><p>推进安全区；</p>
+</li>
+<li><p>发放奖励；</p>
+</li>
+<li><p>改变玩家生命。</p>
+</li>
+</ul>
+<hr />
+<h3 id="343-domain-events">34.3 Domain Events</h3><p>包括：</p>
+<ul>
+<li><p>MatchStarted；</p>
+</li>
+<li><p>PlayerJumped；</p>
+</li>
+<li><p>PlayerLanded；</p>
+</li>
+<li><p>ItemSpawned；</p>
+</li>
+<li><p>ItemPickedUp；</p>
+</li>
+<li><p>SafeZoneRevealed；</p>
+</li>
+<li><p>SafeZoneShrinkStarted；</p>
+</li>
+<li><p>SafeZoneShrinkEnded；</p>
+</li>
+<li><p>DamageResolved；</p>
+</li>
+<li><p>PlayerDowned；</p>
+</li>
+<li><p>PlayerRevived；</p>
+</li>
+<li><p>PlayerEliminated；</p>
+</li>
+<li><p>PlayerRespawned；</p>
+</li>
+<li><p>SquadEliminated；</p>
+</li>
+<li><p>PublicEventSpawned；</p>
+</li>
+<li><p>VictoryConfirmed；</p>
+</li>
+<li><p>MatchCompleted。</p>
+</li>
+</ul>
+<hr />
+<h3 id="344-presentation-events">34.4 Presentation Events</h3><p>包括：</p>
+<ul>
+<li><p>PlayLandingEffect；</p>
+</li>
+<li><p>ShowLootPopup；</p>
+</li>
+<li><p>PlayGunshot；</p>
+</li>
+<li><p>ShowZoneWarning；</p>
+</li>
+<li><p>PlayKnockdownEffect；</p>
+</li>
+<li><p>ShowEliminationFeed；</p>
+</li>
+<li><p>ShowSquadPlacement；</p>
+</li>
+<li><p>ShowVictoryScreen。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>是否命中；</p>
+</li>
+<li><p>Loot所有权；</p>
+</li>
+<li><p>圈伤；</p>
+</li>
+<li><p>淘汰；</p>
+</li>
+<li><p>胜利。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-网络架构">35. 网络架构</h2><p>大逃杀几乎天然需要：</p>
+<p><strong>Server Authoritative Architecture。</strong></p>
+<hr />
+<h3 id="351-客户端负责">35.1 客户端负责</h3><ul>
+<li><p>输入；</p>
+</li>
+<li><p>本地移动预测；</p>
+</li>
+<li><p>瞄准表现；</p>
+</li>
+<li><p>UI；</p>
+</li>
+<li><p>动画；</p>
+</li>
+<li><p>声音；</p>
+</li>
+<li><p>部分视觉弹道。</p>
+</li>
+</ul>
+<hr />
+<h3 id="352-服务器负责">35.2 服务器负责</h3><ul>
+<li><p>玩家位置权威；</p>
+</li>
+<li><p>命中结果；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>拾取；</p>
+</li>
+<li><p>安全区；</p>
+</li>
+<li><p>车辆；</p>
+</li>
+<li><p>倒地；</p>
+</li>
+<li><p>复活；</p>
+</li>
+<li><p>淘汰；</p>
+</li>
+<li><p>存活人数；</p>
+</li>
+<li><p>最终胜负。</p>
+</li>
+</ul>
+<hr />
+<h3 id="353-client-prediction">35.3 Client Prediction</h3><p>本地预测：</p>
+<p>输入
+→ 立即移动</p>
+<p>否则大地图射击游戏的移动体验会明显迟钝。</p>
+<hr />
+<h3 id="354-reconciliation">35.4 Reconciliation</h3><p>服务器返回权威状态。</p>
+<p>客户端：</p>
+<p>比较预测状态
+→ 如果偏差较小则平滑修正
+→ 偏差过大则强制同步</p>
+<hr />
+<h3 id="355-lag-compensation">35.5 Lag Compensation</h3><p>射击命中可以使用服务器历史状态。</p>
+<p>服务器保存短时间：</p>
+<ul>
+<li><p>玩家位置；</p>
+</li>
+<li><p>姿态；</p>
+</li>
+<li><p>Hitbox。</p>
+</li>
+</ul>
+<p>收到射击请求后：</p>
+<p>根据客户端射击时间
+→ 回溯服务器状态
+→ 验证命中</p>
+<p>需要：</p>
+<ul>
+<li><p>最大补偿窗口；</p>
+</li>
+<li><p>延迟限制；</p>
+</li>
+<li><p>防止伪造时间戳。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-interest-management">36. Interest Management</h2><p>100人级比赛无法把所有实体持续高频同步给所有客户端。</p>
+<hr />
+<h3 id="361-interestregion">36.1 InterestRegion</h3><p>可以根据：</p>
+<ul>
+<li><p>距离；</p>
+</li>
+<li><p>区域；</p>
+</li>
+<li><p>可听范围；</p>
+</li>
+<li><p>可视范围；</p>
+</li>
+<li><p>游戏事件；</p>
+</li>
+</ul>
+<p>确定客户端需要的信息。</p>
+<hr />
+<h3 id="362-高频同步">36.2 高频同步</h3><p>附近：</p>
+<ul>
+<li><p>玩家；</p>
+</li>
+<li><p>子弹；</p>
+</li>
+<li><p>车辆；
+  -战斗物体。</p>
+</li>
+</ul>
+<hr />
+<h3 id="363-低频同步">36.3 低频同步</h3><p>远处：</p>
+<ul>
+<li><p>公共事件；</p>
+</li>
+<li><p>空投；</p>
+</li>
+<li><p>区域状态；</p>
+</li>
+<li><p>世界广播。</p>
+</li>
+</ul>
+<hr />
+<h3 id="364-不应向客户端发送不必要的隐藏数据">36.4 不应向客户端发送不必要的隐藏数据</h3><p>客户端原则：</p>
+<blockquote>
+<p>没有合法游戏理由知道的信息，尽量不要发送。</p>
+</blockquote>
+<p>例如远距离完全不可见玩家的：</p>
+<ul>
+<li><p>精确坐标；</p>
+</li>
+<li><p>背包；</p>
+</li>
+<li><p>当前武器；</p>
+</li>
+<li><p>生命。</p>
+</li>
+</ul>
+<p>这同时是：</p>
+<ul>
+<li><p>带宽优化；</p>
+</li>
+<li><p>反作弊边界。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-spectator-system">37. Spectator System</h2><h3 id="371-spectatorstate">37.1 SpectatorState</h3><p>建议包含：</p>
+<ul>
+<li><p>SpectatingPlayerId；</p>
+</li>
+<li><p>TargetPlayerId；</p>
+</li>
+<li><p>SpectatorMode；</p>
+</li>
+<li><p>AllowedInformationScope；</p>
+</li>
+<li><p>DelayRules；</p>
+</li>
+<li><p>SpectatorVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="372-观战模式">37.2 观战模式</h3><p>可以：</p>
+<ul>
+<li><p>仅队友；</p>
+</li>
+<li><p>击杀者；</p>
+</li>
+<li><p>延迟自由视角；</p>
+</li>
+<li><p>比赛官方观察者。</p>
+</li>
+</ul>
+<hr />
+<h3 id="373-观战信息泄露">37.3 观战信息泄露</h3><p>被淘汰玩家不能通过观战：</p>
+<p>获得敌方完整信息
+→ 再通过外部语音告诉队友。</p>
+<p>因此组队比赛通常限制：</p>
+<ul>
+<li><p>只能观战队友；</p>
+</li>
+<li><p>不显示额外敌方信息。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-断线与重连">38. 断线与重连</h2><h3 id="381-disconnectstate">38.1 DisconnectState</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>DisconnectTick；</p>
+</li>
+<li><p>GracePeriod；</p>
+</li>
+<li><p>CharacterPersistenceRule；</p>
+</li>
+<li><p>ReconnectToken；</p>
+</li>
+<li><p>DisconnectVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="382-断线角色处理">38.2 断线角色处理</h3><p>可以：</p>
+<ul>
+<li><p>保持原地；</p>
+</li>
+<li><p>暂时AI控制；</p>
+</li>
+<li><p>自动进入有限防御状态。</p>
+</li>
+</ul>
+<p>不能：</p>
+<p>主动断线
+→ 角色无敌或消失</p>
+<p>否则会被利用。</p>
+<hr />
+<h3 id="383-重连恢复">38.3 重连恢复</h3><p>需要恢复：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>背包；</p>
+</li>
+<li><p>武器；</p>
+</li>
+<li><p>当前圈；</p>
+</li>
+<li><p>Squad状态；</p>
+</li>
+<li><p>LifeState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-match-result">39. Match Result</h2><h3 id="391-battleroyalematchresult">39.1 BattleRoyaleMatchResult</h3><p>建议包含：</p>
+<ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>WinningSquadId；</p>
+</li>
+<li><p>WinningPlayerId；</p>
+</li>
+<li><p>FinalPlacementBySquad；</p>
+</li>
+<li><p>FinalPlacementByPlayer；</p>
+</li>
+<li><p>MatchDuration；</p>
+</li>
+<li><p>EliminationRecords；</p>
+</li>
+<li><p>DamageStatistics；</p>
+</li>
+<li><p>SurvivalStatistics；</p>
+</li>
+<li><p>LootStatistics；</p>
+</li>
+<li><p>RotationStatistics；</p>
+</li>
+<li><p>ZoneStatistics；</p>
+</li>
+<li><p>DisconnectStates；</p>
+</li>
+<li><p>IntegrityState；</p>
+</li>
+<li><p>ResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="392-统计数据">39.2 统计数据</h3><p>不应只关注：</p>
+<p>Kill Count。</p>
+<p>可以同时记录：</p>
+<ul>
+<li><p>Placement；</p>
+</li>
+<li><p>SurvivalTime；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Knockdowns；</p>
+</li>
+<li><p>Revives；</p>
+</li>
+<li><p>DistanceMoved；</p>
+</li>
+<li><p>ZoneDamageTaken；</p>
+</li>
+<li><p>TimeOutsideZone；</p>
+</li>
+<li><p>LootValue；</p>
+</li>
+<li><p>AirdropInteractions；</p>
+</li>
+<li><p>ThirdPartyFights；</p>
+</li>
+<li><p>VehiclesUsed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-失败隔离">40. 失败隔离</h2><hr />
+<h3 id="401-安全区生成失败">40.1 安全区生成失败</h3><p>如果下一安全区无法满足约束：</p>
+<ol>
+<li><p>放宽非关键地形评分；</p>
+</li>
+<li><p>保留可通行性约束；</p>
+</li>
+<li><p>重新生成候选；</p>
+</li>
+<li><p>如果仍失败，使用预定义保底区域；</p>
+</li>
+<li><p>记录 MatchSeed 和 PhaseIndex。</p>
+</li>
+</ol>
+<p>不能生成：</p>
+<p>完全不可进入的终局区域。</p>
+<hr />
+<h3 id="402-loot生成失败">40.2 Loot生成失败</h3><p>某 LootTable 无合法物品时：</p>
+<ul>
+<li><p>使用同类别保底池；</p>
+</li>
+<li><p>保证基础战斗物品；</p>
+</li>
+<li><p>记录过滤条件；</p>
+</li>
+<li><p>不让 SpawnPoint 反复重试造成服务器开销。</p>
+</li>
+</ul>
+<hr />
+<h3 id="403-拾取冲突">40.3 拾取冲突</h3><p>两名玩家同时拾取：</p>
+<ul>
+<li><p>服务器锁定 ItemInstance；</p>
+</li>
+<li><p>第一条合法事务成功；</p>
+</li>
+<li><p>后续返回 ItemAlreadyClaimed；</p>
+</li>
+<li><p>不复制物品。</p>
+</li>
+</ul>
+<hr />
+<h3 id="404-淘汰重复">40.4 淘汰重复</h3><p>同一 Tick：</p>
+<p>枪伤
++
+圈伤
++
+爆炸</p>
+<p>可能同时致死。</p>
+<p>需要：</p>
+<ul>
+<li><p>LifeState CAS；</p>
+</li>
+<li><p>EliminationTransactionId；</p>
+</li>
+<li><p>唯一最终 Cause。</p>
+</li>
+</ul>
+<hr />
+<h3 id="405-倒地和救援竞争">40.5 倒地和救援竞争</h3><p>玩家刚完成 Revive 的同一 Tick 被再次伤害：</p>
+<p>必须定义稳定顺序：</p>
+<p>Damage
+与
+ReviveCommit</p>
+<p>谁先提交。</p>
+<p>不能由线程调度偶然决定。</p>
+<hr />
+<h3 id="406-圈状态异常">40.6 圈状态异常</h3><p>如果客户端显示和服务器圈位置不同：</p>
+<ul>
+<li><p>服务器状态为权威；</p>
+</li>
+<li><p>客户端重新插值；</p>
+</li>
+<li><p>圈伤永远按服务器位置判定。</p>
+</li>
+</ul>
+<hr />
+<h3 id="407-玩家掉出世界">40.7 玩家掉出世界</h3><p>检测：</p>
+<ul>
+<li><p>非法高度；</p>
+</li>
+<li><p>不可导航区域；</p>
+</li>
+<li><p>地图边界外。</p>
+</li>
+</ul>
+<p>根据规则：</p>
+<ul>
+<li><p>恢复到最近合法位置；</p>
+</li>
+<li><p>或判定环境死亡。</p>
+</li>
+</ul>
+<p>不能让玩家卡在不可达区域继续存活到终局。</p>
+<hr />
+<h3 id="408-载具异常">40.8 载具异常</h3><p>载具穿模或翻入非法区域时：</p>
+<ul>
+<li><p>验证乘员状态；</p>
+</li>
+<li><p>重新放置载具或销毁；</p>
+</li>
+<li><p>安全释放乘员；</p>
+</li>
+<li><p>防止玩家被永久锁定在座位。</p>
+</li>
+</ul>
+<hr />
+<h3 id="409-比赛无法结束">40.9 比赛无法结束</h3><p>可能原因：</p>
+<ul>
+<li><p>已断线玩家仍标记 Alive；</p>
+</li>
+<li><p>被销毁实体仍存在 AlivePlayerIds；</p>
+</li>
+<li><p>RespawnEligible永不过期；</p>
+</li>
+<li><p>隐藏测试玩家。</p>
+</li>
+</ul>
+<p>需要：</p>
+<p>PeriodicMatchIntegrityCheck。</p>
+<hr />
+<h3 id="4010-matchresult失败">40.10 MatchResult失败</h3><p>比赛已经产生唯一胜者后：</p>
+<ul>
+<li><p>冻结 ResultSnapshot；</p>
+</li>
+<li><p>标记 PendingCommit；</p>
+</li>
+<li><p>使用 MatchId 幂等写入；</p>
+</li>
+<li><p>不因为服务异常重新运行比赛。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-调试与可观测性">41. 调试与可观测性</h2><hr />
+<h3 id="411-safe-zone-timeline">41.1 Safe Zone Timeline</h3><p>显示：</p>
+<ul>
+<li><p>每一阶段区域；</p>
+</li>
+<li><p>公布时间；</p>
+</li>
+<li><p>收缩开始；</p>
+</li>
+<li><p>收缩结束；</p>
+</li>
+<li><p>面积；</p>
+</li>
+<li><p>圈外伤害；</p>
+</li>
+<li><p>存活人数。</p>
+</li>
+</ul>
+<hr />
+<h3 id="412-player-density-graph">41.2 Player Density Graph</h3><p>按时间绘制：</p>
+<ul>
+<li><p>AlivePlayers；</p>
+</li>
+<li><p>PlayableArea；</p>
+</li>
+<li><p>EffectivePlayerDensity。</p>
+</li>
+</ul>
+<p>这是该类型非常关键的宏观曲线。</p>
+<hr />
+<h3 id="413-landing-heatmap">41.3 Landing Heatmap</h3><p>显示：</p>
+<ul>
+<li><p>玩家跳伞位置；</p>
+</li>
+<li><p>最终落地点；</p>
+</li>
+<li><p>各 POI人数；</p>
+</li>
+<li><p>前两分钟死亡；</p>
+</li>
+<li><p>Loot价值。</p>
+</li>
+</ul>
+<p>用于识别：</p>
+<ul>
+<li><p>过热落点；</p>
+</li>
+<li><p>无人区域；</p>
+</li>
+<li><p>风险收益失衡。</p>
+</li>
+</ul>
+<hr />
+<h3 id="414-loot-heatmap">41.4 Loot Heatmap</h3><p>显示：</p>
+<ul>
+<li><p>WeaponDensity；</p>
+</li>
+<li><p>AmmoDensity；</p>
+</li>
+<li><p>ArmorDensity；</p>
+</li>
+<li><p>HealingDensity；</p>
+</li>
+<li><p>TotalLootValue；</p>
+</li>
+<li><p>AverageLootValuePerPlayer。</p>
+</li>
+</ul>
+<hr />
+<h3 id="415-early-combat-agency">41.5 Early Combat Agency</h3><p>统计：</p>
+<p>落地后：</p>
+<p>5秒
+10秒
+20秒
+30秒</p>
+<p>玩家获得基础武器的概率。</p>
+<hr />
+<h3 id="416-rotation-heatmap">41.6 Rotation Heatmap</h3><p>记录：</p>
+<ul>
+<li><p>转移路径；</p>
+</li>
+<li><p>圈边入口；</p>
+</li>
+<li><p>桥梁；</p>
+</li>
+<li><p>山谷；</p>
+</li>
+<li><p>死亡热点；</p>
+</li>
+<li><p>交通瓶颈。</p>
+</li>
+</ul>
+<hr />
+<h3 id="417-encounter-timeline">41.7 Encounter Timeline</h3><p>记录：</p>
+<ul>
+<li><p>遭遇开始；</p>
+</li>
+<li><p>参与队伍；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>FirstDamage；</p>
+</li>
+<li><p>Knockdowns；</p>
+</li>
+<li><p>Eliminations；</p>
+</li>
+<li><p>第三方加入；</p>
+</li>
+<li><p>战斗结束。</p>
+</li>
+</ul>
+<hr />
+<h3 id="418-third-party-analyzer">41.8 Third-Party Analyzer</h3><p>显示：</p>
+<ul>
+<li><p>原始交战队伍；</p>
+</li>
+<li><p>第三方到达时间；</p>
+</li>
+<li><p>战斗持续时长；</p>
+</li>
+<li><p>第三方获胜概率；</p>
+</li>
+<li><p>原始队伍剩余资源。</p>
+</li>
+</ul>
+<hr />
+<h3 id="419-death-causality">41.9 Death Causality</h3><p>一次死亡可以解释为：</p>
+<p>圈外转移过晚
+→ 必须走桥
+→ 桥头已有敌队
+→ 无其他路线
+→ 交火
+→ 被圈伤和敌方同时压制
+→ 淘汰</p>
+<p>而不是只显示：</p>
+<p>“被某玩家击杀。”</p>
+<hr />
+<h3 id="4110-inventory-evolution-timeline">41.10 Inventory Evolution Timeline</h3><p>显示：</p>
+<ul>
+<li><p>第一把武器获得时间；</p>
+</li>
+<li><p>护甲等级；</p>
+</li>
+<li><p>配件；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>最终构筑。</p>
+</li>
+</ul>
+<hr />
+<h3 id="4111-server-interest-debug">41.11 Server Interest Debug</h3><p>显示某个客户端：</p>
+<ul>
+<li><p>当前同步哪些实体；</p>
+</li>
+<li><p>为什么同步；</p>
+</li>
+<li><p>更新频率；</p>
+</li>
+<li><p>当前带宽；</p>
+</li>
+<li><p>是否存在不应公开的隐藏实体。</p>
+</li>
+</ul>
+<hr />
+<h3 id="4112-full-match-replay">41.12 Full Match Replay</h3><p>需要支持：</p>
+<ul>
+<li><p>任意玩家视角；</p>
+</li>
+<li><p>Squad视角；</p>
+</li>
+<li><p>全知观察者；</p>
+</li>
+<li><p>安全区历史；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>Landing；</p>
+</li>
+<li><p>Kill Timeline；</p>
+</li>
+<li><p>Rotation Path；</p>
+</li>
+<li><p>时间缩放。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-内容验证工具">42. 内容验证工具</h2><hr />
+<h3 id="421-safe-zone-geometry-validation">42.1 Safe Zone Geometry Validation</h3><p>批量生成安全区序列，检查：</p>
+<ul>
+<li><p>是否位于合法地图；</p>
+</li>
+<li><p>可通行面积；</p>
+</li>
+<li><p>水体比例；</p>
+</li>
+<li><p>极端高度差；</p>
+</li>
+<li><p>最终圈可玩性；</p>
+</li>
+<li><p>路线连通性。</p>
+</li>
+</ul>
+<hr />
+<h3 id="422-loot-monte-carlo-test">42.2 Loot Monte Carlo Test</h3><p>使用大量 MatchSeed 统计：</p>
+<ul>
+<li><p>每个 POI平均 Loot；</p>
+</li>
+<li><p>武器缺失概率；</p>
+</li>
+<li><p>弹药匹配率；</p>
+</li>
+<li><p>高等级装备概率；</p>
+</li>
+<li><p>区域价值方差。</p>
+</li>
+</ul>
+<hr />
+<h3 id="423-drop-distribution-simulation">42.3 Drop Distribution Simulation</h3><p>Bot模拟不同：</p>
+<ul>
+<li><p>航线；</p>
+</li>
+<li><p>POI价值；</p>
+</li>
+<li><p>风险偏好。</p>
+</li>
+</ul>
+<p>统计：</p>
+<ul>
+<li><p>玩家落点；</p>
+</li>
+<li><p>初期密度；</p>
+</li>
+<li><p>热区；</p>
+</li>
+<li><p>前五分钟淘汰率。</p>
+</li>
+</ul>
+<hr />
+<h3 id="424-match-duration-test">42.4 Match Duration Test</h3><p>自动比赛统计：</p>
+<ul>
+<li><p>平均比赛时间；</p>
+</li>
+<li><p>P50；</p>
+</li>
+<li><p>P90；</p>
+</li>
+<li><p>FinalZone持续时间；</p>
+</li>
+<li><p>每阶段剩余玩家。</p>
+</li>
+</ul>
+<hr />
+<h3 id="425-player-density-curve-validation">42.5 Player Density Curve Validation</h3><p>理想情况下：</p>
+<p>早期：</p>
+<p>低到中等密度。</p>
+<p>中期：</p>
+<p>持续增加。</p>
+<p>终局：</p>
+<p>高密度。</p>
+<p>如果出现：</p>
+<p>前期大量玩家都集中在极小区域；</p>
+<p>可能说明：</p>
+<p>POI分布或航线存在问题。</p>
+<p>如果中期：</p>
+<p>大量玩家仍长期无法相遇；</p>
+<p>可能说明：</p>
+<p>缩圈节奏过慢。</p>
+<hr />
+<h3 id="426-zone-damage-simulation">42.6 Zone Damage Simulation</h3><p>模拟：</p>
+<ul>
+<li><p>正常跑圈；</p>
+</li>
+<li><p>使用车辆；</p>
+</li>
+<li><p>无车辆；</p>
+</li>
+<li><p>治疗拖圈；</p>
+</li>
+<li><p>被击倒；</p>
+</li>
+<li><p>极端边缘落点。</p>
+</li>
+</ul>
+<p>检查：</p>
+<ul>
+<li><p>玩家是否理论上可到达；</p>
+</li>
+<li><p>圈伤是否过低；</p>
+</li>
+<li><p>后期是否存在无限治疗策略。</p>
+</li>
+</ul>
+<hr />
+<h3 id="427-loot-to-combat-balance">42.7 Loot-to-Combat Balance</h3><p>统计：</p>
+<p>获得基础战斗能力前死亡的比例。</p>
+<p>如果过高：</p>
+<p>早期结果可能过于随机。</p>
+<hr />
+<h3 id="428-third-party-frequency">42.8 Third-Party Frequency</h3><p>统计：</p>
+<ul>
+<li><p>2队战斗；</p>
+</li>
+<li><p>3队战斗；</p>
+</li>
+<li><p>4队以上战斗；</p>
+</li>
+</ul>
+<p>占比。</p>
+<p>如果第三方比例极高：</p>
+<p>主动交战可能变成明显错误行为。</p>
+<hr />
+<h3 id="429-bot-match">42.9 Bot Match</h3><p>自动 Agent 可以拥有：</p>
+<ul>
+<li><p>LootPriority；</p>
+</li>
+<li><p>RiskTolerance；</p>
+</li>
+<li><p>RotationStyle；</p>
+</li>
+<li><p>CombatAggression；</p>
+</li>
+<li><p>ZonePreference。</p>
+</li>
+</ul>
+<p>用于模拟不同策略。</p>
+<hr />
+<h3 id="4210-anti-cheat-information-test">42.10 Anti-Cheat Information Test</h3><p>验证客户端是否收到：</p>
+<ul>
+<li><p>远程隐藏玩家精确位置；</p>
+</li>
+<li><p>不可见 LootContainer；</p>
+</li>
+<li><p>未公开空投内容；</p>
+</li>
+<li><p>隐藏玩家生命；</p>
+</li>
+<li><p>不应知道的队伍信息。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-性能设计">43. 性能设计</h2><hr />
+<h3 id="431-world-partition">43.1 World Partition</h3><p>大型地图不应整体高精度运行。</p>
+<p>建议按：</p>
+<ul>
+<li><p>Grid；</p>
+</li>
+<li><p>Region；</p>
+</li>
+<li><p>Sector；</p>
+</li>
+</ul>
+<p>进行空间分区。</p>
+<hr />
+<h3 id="432-entity-update-frequency">43.2 Entity Update Frequency</h3><h4 id="高频">高频</h4><p>附近：</p>
+<ul>
+<li><p>玩家；</p>
+</li>
+<li><p>子弹；</p>
+</li>
+<li><p>载具；</p>
+</li>
+<li><p>战斗实体。</p>
+</li>
+</ul>
+<h4 id="中频">中频</h4><p>中距离玩家和车辆。</p>
+<h4 id="低频">低频</h4><p>远距离静态 Loot、未激活世界对象。</p>
+<hr />
+<h3 id="433-loot休眠">43.3 Loot休眠</h3><p>未被玩家接近的 Loot：</p>
+<p>无需持续运行：</p>
+<ul>
+<li><p>Tick；</p>
+</li>
+<li><p>物理；</p>
+</li>
+<li><p>动画。</p>
+</li>
+</ul>
+<p>只需保存：</p>
+<p>ItemInstanceState。</p>
+<hr />
+<h3 id="434-大地图音频事件">43.4 大地图音频事件</h3><p>NoiseEvent 可以通过：</p>
+<p>SpatialEventIndex</p>
+<p>传播。</p>
+<p>不需要让每个玩家扫描：</p>
+<p>所有枪声。</p>
+<hr />
+<h3 id="435-final-zone性能风险">43.5 Final Zone性能风险</h3><p>终局虽然剩余玩家少，但：</p>
+<ul>
+<li><p>玩家密度高；</p>
+</li>
+<li><p>投掷物多；</p>
+</li>
+<li><p>技能多；</p>
+</li>
+<li><p>建筑破坏多；</p>
+</li>
+<li><p>观战者多。</p>
+</li>
+</ul>
+<p>因此最终阶段反而可能出现：</p>
+<p>单位面积服务器负载最高。</p>
+<hr />
+<h2 id="44-可扩展点">44. 可扩展点</h2><hr />
+<h3 id="441-新地图">44.1 新地图</h3><p>主要提供：</p>
+<ul>
+<li><p>Terrain；</p>
+</li>
+<li><p>POI；</p>
+</li>
+<li><p>LootProfile；</p>
+</li>
+<li><p>TraversalGraph；</p>
+</li>
+<li><p>SafeZoneConstraints；</p>
+</li>
+<li><p>VehicleProfile；</p>
+</li>
+<li><p>PublicEventLocations。</p>
+</li>
+</ul>
+<hr />
+<h3 id="442-新安全区规则">44.2 新安全区规则</h3><p>可以支持：</p>
+<ul>
+<li><p>圆形；</p>
+</li>
+<li><p>多边形；</p>
+</li>
+<li><p>多安全区；</p>
+</li>
+<li><p>移动圈；</p>
+</li>
+<li><p>环形安全带；</p>
+</li>
+<li><p>灾害扩散；</p>
+</li>
+<li><p>毒气推进。</p>
+</li>
+</ul>
+<p>只需要实现统一：</p>
+<p><strong>PlayableAreaPolicy。</strong></p>
+<hr />
+<h3 id="443-新-loot-模式">44.3 新 Loot 模式</h3><p>可以支持：</p>
+<ul>
+<li><p>纯地面 Loot；</p>
+</li>
+<li><p>箱子；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>配装购买；</p>
+</li>
+<li><p>随机能力；</p>
+</li>
+<li><p>固定武器模式。</p>
+</li>
+</ul>
+<hr />
+<h3 id="444-新复活规则">44.4 新复活规则</h3><p>可以扩展：</p>
+<ul>
+<li><p>不允许复活；</p>
+</li>
+<li><p>队友救援；</p>
+</li>
+<li><p>复活信标；</p>
+</li>
+<li><p>单独复活战；</p>
+</li>
+<li><p>定时集体复活。</p>
+</li>
+</ul>
+<hr />
+<h3 id="445-新公共事件">44.5 新公共事件</h3><p>例如：</p>
+<ul>
+<li><p>空投；</p>
+</li>
+<li><p>火车；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>宝库；</p>
+</li>
+<li><p>移动商店；</p>
+</li>
+<li><p>临时安全屋。</p>
+</li>
+</ul>
+<hr />
+<h3 id="446-hero-battle-royale">44.6 Hero Battle Royale</h3><p>如果引入英雄：</p>
+<p>增加：</p>
+<ul>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>CharacterRole；</p>
+</li>
+<li><p>TeamComposition。</p>
+</li>
+</ul>
+<p>但仍应保持：</p>
+<ul>
+<li><p>落点；
+  -搜刮；</p>
+</li>
+<li><p>缩圈；</p>
+</li>
+<li><p>淘汰；</p>
+</li>
+</ul>
+<p>作为宏观核心。</p>
+<hr />
+<h3 id="447-pvpve-扩展">44.7 PvPvE 扩展</h3><p>可以加入：</p>
+<ul>
+<li><p>野怪；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>NPC据点。</p>
+</li>
+</ul>
+<p>但需要警惕：</p>
+<p>如果主要目标逐渐变成：</p>
+<p>击杀PvE
+→ 收集长期资产
+→ 主动撤离</p>
+<p>就会开始向：</p>
+<p>Extraction</p>
+<p>迁移。</p>
+<hr />
+<h2 id="45-玩家体验设计">45. 玩家体验设计</h2><hr />
+<h3 id="451-落点必须提供可理解的风险信息">45.1 落点必须提供可理解的风险信息</h3><p>玩家通过地图应大致知道：</p>
+<ul>
+<li><p>POI规模；</p>
+</li>
+<li><p>资源等级；</p>
+</li>
+<li><p>航线；</p>
+</li>
+<li><p>交通；</p>
+</li>
+<li><p>地形。</p>
+</li>
+</ul>
+<p>不应要求玩家完全依赖外部攻略判断落点价值。</p>
+<hr />
+<h3 id="452-落地后应尽快获得基础行动权">45.2 落地后应尽快获得基础行动权</h3><p>玩家可以接受：</p>
+<p>装备不理想。</p>
+<p>但很难接受：</p>
+<p>连续搜索多个建筑后仍完全无法战斗。</p>
+<hr />
+<h3 id="453-第一圈不能过早取消落点选择">45.3 第一圈不能过早取消落点选择</h3><p>如果玩家刚落地：</p>
+<p>立刻发现必须横跨整张地图。</p>
+<p>落点策略会被过度随机化。</p>
+<p>需要给：</p>
+<ul>
+<li><p>基本搜刮窗口；</p>
+</li>
+<li><p>合理转移时间。</p>
+</li>
+</ul>
+<hr />
+<h3 id="454-圈信息必须极其清晰">45.4 圈信息必须极其清晰</h3><p>玩家应快速知道：</p>
+<ul>
+<li><p>当前圈；</p>
+</li>
+<li><p>下一圈；</p>
+</li>
+<li><p>缩圈时间；</p>
+</li>
+<li><p>自己距离；</p>
+</li>
+<li><p>圈伤强度；</p>
+</li>
+<li><p>是否可能赶到。</p>
+</li>
+</ul>
+<hr />
+<h3 id="455-loot比较要低摩擦">45.5 Loot比较要低摩擦</h3><p>玩家需要快速判断：</p>
+<ul>
+<li><p>是否更强；</p>
+</li>
+<li><p>是否兼容；</p>
+</li>
+<li><p>当前弹药；</p>
+</li>
+<li><p>配件；</p>
+</li>
+<li><p>背包空间。</p>
+</li>
+</ul>
+<p>高压比赛中不能要求玩家阅读大量复杂属性表。</p>
+<hr />
+<h3 id="456-战斗后的搜刮需要快速完成">45.6 战斗后的搜刮需要快速完成</h3><p>因为：</p>
+<p>战斗后正是第三方最危险的阶段。</p>
+<p>因此可以提供：</p>
+<ul>
+<li><p>快速替换护甲；</p>
+</li>
+<li><p>快速补弹；</p>
+</li>
+<li><p>自动整理；</p>
+</li>
+<li><p>高优先级物品排序。</p>
+</li>
+</ul>
+<hr />
+<h3 id="457-death-recap必须帮助玩家理解失败">45.7 Death Recap必须帮助玩家理解失败</h3><p>推荐展示：</p>
+<ul>
+<li><p>攻击者；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>武器；</p>
+</li>
+<li><p>最后几秒伤害；</p>
+</li>
+<li><p>第三方参与；</p>
+</li>
+<li><p>圈状态；</p>
+</li>
+<li><p>是否存在多个攻击者。</p>
+</li>
+</ul>
+<hr />
+<h3 id="458-观战时间不能成为组队模式主要惩罚">45.8 观战时间不能成为组队模式主要惩罚</h3><p>如果玩家：</p>
+<p>开局两分钟死亡
+→ 只能观看队友二十五分钟</p>
+<p>会严重损害队伍体验。</p>
+<p>可以通过：</p>
+<ul>
+<li><p>Downed；</p>
+</li>
+<li><p>Respawn；</p>
+</li>
+<li><p>快速重排；</p>
+</li>
+<li><p>有限复活；</p>
+</li>
+</ul>
+<p>降低。</p>
+<hr />
+<h3 id="459-最终圈必须保持空间可读性">45.9 最终圈必须保持空间可读性</h3><p>终局玩家需要快速辨认：</p>
+<ul>
+<li><p>安全区域；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>高低差；</p>
+</li>
+<li><p>圈外边界；</p>
+</li>
+<li><p>可走路线。</p>
+</li>
+</ul>
+<p>视觉效果不能遮蔽核心空间信息。</p>
+<hr />
+<h2 id="46-常见设计失败">46. 常见设计失败</h2><hr />
+<h3 id="461-缩圈只是定时伤害墙">46.1 缩圈只是定时伤害墙</h3><p>没有真正调节：</p>
+<ul>
+<li><p>玩家密度；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>冲突节奏。</p>
+</li>
+</ul>
+<hr />
+<h3 id="462-loot完全独立随机">46.2 Loot完全独立随机</h3><p>产生大量：</p>
+<p>有人落地高级装备；</p>
+<p>有人完全没有武器。</p>
+<hr />
+<h3 id="463-所有高价值物品平均分布">46.3 所有高价值物品平均分布</h3><p>地图不同 POI 缺乏风险收益差异。</p>
+<hr />
+<h3 id="464-初期-loot-时间过长">46.4 初期 Loot 时间过长</h3><p>玩家长时间没有战斗能力或目标。</p>
+<hr />
+<h3 id="465-地图过大但缩圈过慢">46.5 地图过大但缩圈过慢</h3><p>中期大量时间用于无事件跑图。</p>
+<hr />
+<h3 id="466-圈缩得过快">46.6 圈缩得过快</h3><p>落点和搜刮策略失去意义。</p>
+<hr />
+<h3 id="467-圈外伤害前期过高">46.7 圈外伤害前期过高</h3><p>边缘落点几乎不可行。</p>
+<hr />
+<h3 id="468-圈外伤害后期过低">46.8 圈外伤害后期过低</h3><p>玩家可以依靠治疗长期待在圈外。</p>
+<hr />
+<h3 id="469-第三方收益过高">46.9 第三方收益过高</h3><p>主动开战成为错误策略。</p>
+<hr />
+<h3 id="4610-战斗后恢复过强">46.10 战斗后恢复过强</h3><p>第三方几乎没有意义。</p>
+<hr />
+<h3 id="4611-战斗后恢复过弱">46.11 战斗后恢复过弱</h3><p>所有战斗都会使胜者成为下一队的免费资源。</p>
+<hr />
+<h3 id="4612-载具只有速度收益">46.12 载具只有速度收益</h3><p>没有：</p>
+<ul>
+<li><p>噪声；</p>
+</li>
+<li><p>可见性；</p>
+</li>
+<li><p>燃料；</p>
+</li>
+<li><p>被攻击风险。</p>
+</li>
+</ul>
+<hr />
+<h3 id="4613-复活系统无限使用">46.13 复活系统无限使用</h3><p>淘汰数量无法正常收敛。</p>
+<hr />
+<h3 id="4614-最终圈静态停在强势建筑">46.14 最终圈静态停在强势建筑</h3><p>先占据建筑的一队可以长期等待。</p>
+<hr />
+<h3 id="4615-客户端拥有完整敌人数据">46.15 客户端拥有完整敌人数据</h3><p>产生严重透视和雷达作弊风险。</p>
+<hr />
+<h3 id="4616-matchresult非幂等">46.16 MatchResult非幂等</h3><p>服务器重试导致：</p>
+<ul>
+<li><p>排名重复；</p>
+</li>
+<li><p>奖励重复；</p>
+</li>
+<li><p>战绩重复。</p>
+</li>
+</ul>
+<hr />
+<h2 id="47-最小可行原型">47. 最小可行原型</h2><p>一个能够验证大逃杀核心范式的 MVP 不需要立即做100人比赛。</p>
+<p>推荐：</p>
+<p><strong>24～32 人。</strong></p>
+<hr />
+<h3 id="471-地图">47.1 地图</h3><ul>
+<li><p>1张完整地图；</p>
+</li>
+<li><p>6～8个主要 POI；</p>
+</li>
+<li><p>4～6个小型资源点；</p>
+</li>
+<li><p>明确道路和高低差；</p>
+</li>
+<li><p>1种基础载具可暂缓到第二阶段。</p>
+</li>
+</ul>
+<hr />
+<h3 id="472-玩家模式">47.2 玩家模式</h3><p>第一阶段优先：</p>
+<p><strong>Solo。</strong></p>
+<p>这样先验证：</p>
+<ul>
+<li><p>缩圈；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>淘汰；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>胜负。</p>
+</li>
+</ul>
+<p>之后再增加：</p>
+<ul>
+<li><p>Duo；</p>
+</li>
+<li><p>Squad；</p>
+</li>
+<li><p>Downed；</p>
+</li>
+<li><p>Revive。</p>
+</li>
+</ul>
+<hr />
+<h3 id="473-loot">47.3 Loot</h3><p>基础：</p>
+<ul>
+<li><p>4～6把武器；</p>
+</li>
+<li><p>3级护甲；</p>
+</li>
+<li><p>2种治疗；</p>
+</li>
+<li><p>2种投掷物；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>少量配件。</p>
+</li>
+</ul>
+<hr />
+<h3 id="474-安全区">47.4 安全区</h3><p>建议：</p>
+<ul>
+<li><p>5～6个阶段；</p>
+</li>
+<li><p>至少1个移动终局阶段；</p>
+</li>
+<li><p>不同阶段不同圈伤。</p>
+</li>
+</ul>
+<hr />
+<h3 id="475-公共事件">47.5 公共事件</h3><p>至少：</p>
+<ul>
+<li>1种空投。</li>
+</ul>
+<p>验证：</p>
+<p>公开高价值资源
+→ 是否能形成自然冲突热点。</p>
+<hr />
+<h3 id="476-必要基础设施">47.6 必要基础设施</h3><ul>
+<li><p>BattleRoyaleMatchState；</p>
+</li>
+<li><p>PlayerMatchState；</p>
+</li>
+<li><p>LifeState；</p>
+</li>
+<li><p>LootWorldState；</p>
+</li>
+<li><p>InventoryState；</p>
+</li>
+<li><p>PickupTransaction；</p>
+</li>
+<li><p>SafeZoneState；</p>
+</li>
+<li><p>SafeZonePhaseDefinition；</p>
+</li>
+<li><p>DamageRecord；</p>
+</li>
+<li><p>EliminationRecord；</p>
+</li>
+<li><p>SpectatorState；</p>
+</li>
+<li><p>MatchResultSnapshot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="477-必要调试工具">47.7 必要调试工具</h3><ul>
+<li><p>Landing Heatmap；</p>
+</li>
+<li><p>Loot Heatmap；</p>
+</li>
+<li><p>Safe Zone Timeline；</p>
+</li>
+<li><p>Player Density Graph；</p>
+</li>
+<li><p>Rotation Heatmap；</p>
+</li>
+<li><p>Encounter Timeline；</p>
+</li>
+<li><p>Third-Party Analyzer；</p>
+</li>
+<li><p>Death Causality；</p>
+</li>
+<li><p>Match Replay；</p>
+</li>
+<li><p>Server Interest Debug。</p>
+</li>
+</ul>
+<hr />
+<h3 id="478-mvp核心验收问题">47.8 MVP核心验收问题</h3><p>必须回答：</p>
+<ul>
+<li><p>不缩圈时玩家是否长期无法相遇；</p>
+</li>
+<li><p>缩圈后玩家密度是否按预期上升；</p>
+</li>
+<li><p>玩家落地多久能获得最低战斗能力；</p>
+</li>
+<li><p>不同 POI 是否具有明显风险收益差；</p>
+</li>
+<li><p>玩家是否会主动选择提前或延迟转移；</p>
+</li>
+<li><p>战斗声音是否会自然吸引第三方；</p>
+</li>
+<li><p>主动战斗是否仍然值得；</p>
+</li>
+<li><p>最终圈是否会稳定产生决战；</p>
+</li>
+<li><p>是否存在依赖治疗长期拖圈的策略；</p>
+</li>
+<li><p>服务器能否唯一确认淘汰和胜负。</p>
+</li>
+</ul>
+<p>在这些问题没有成立之前，不建议优先开发：</p>
+<ul>
+<li><p>大量皮肤；</p>
+</li>
+<li><p>100人规模；</p>
+</li>
+<li><p>排位；</p>
+</li>
+<li><p>英雄系统；</p>
+</li>
+<li><p>大量武器；</p>
+</li>
+<li><p>复杂载具。</p>
+</li>
+</ul>
+<hr />
+<h2 id="48-推荐实施顺序">48. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li><p>MatchLifecycle；</p>
+</li>
+<li><p>ServerAuthoritativeSimulation；</p>
+</li>
+<li><p>基础玩家移动与战斗。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>大地图；</p>
+</li>
+<li><p>WorldPartition；</p>
+</li>
+<li><p>起始投放；</p>
+</li>
+<li><p>落点。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Loot生成；</p>
+</li>
+<li><p>拾取事务；</p>
+</li>
+<li><p>Inventory；</p>
+</li>
+<li><p>基础构筑。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>SafeZone；</p>
+</li>
+<li><p>圈伤；</p>
+</li>
+<li><p>区域收缩。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Elimination；</p>
+</li>
+<li><p>Placement；</p>
+</li>
+<li><p>Spectator；</p>
+</li>
+<li><p>Victory。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>多阶段缩圈；</p>
+</li>
+<li><p>MovingZone；</p>
+</li>
+<li><p>ZoneConstraintValidation。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>音频信息；</p>
+</li>
+<li><p>第三方行为统计；</p>
+</li>
+<li><p>公共空投。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Squad；</p>
+</li>
+<li><p>Downed；</p>
+</li>
+<li><p>Revive。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Respawn；</p>
+</li>
+<li><p>Reconnect；</p>
+</li>
+<li><p>观战权限。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Vehicle；</p>
+</li>
+<li><p>大地图转移。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>MatchReplay；</p>
+</li>
+<li><p>Density分析；</p>
+</li>
+<li><p>Loot Monte Carlo。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Interest Management；</p>
+</li>
+<li><p>Anti-Cheat；</p>
+</li>
+<li><p>高人数压力测试。</p>
+</li>
+</ul>
+<hr />
+<h2 id="49-架构验收标准">49. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>每场比赛拥有唯一 MatchId；</p>
+</li>
+<li><p>Loot 和 SafeZone 均由确定 MatchSeed 或受控随机生成；</p>
+</li>
+<li><p>玩家从低资源状态进入比赛；</p>
+</li>
+<li><p>玩家能够自主选择落点；</p>
+</li>
+<li><p>中大型 POI 能稳定提供最低战斗能力；</p>
+</li>
+<li><p>Loot随机性存在但受到区域预算和最低保障约束；</p>
+</li>
+<li><p>物品实例具有唯一权威所有者；</p>
+</li>
+<li><p>多玩家同时拾取不会复制物品；</p>
+</li>
+<li><p>安全区域通过统一 SafeZoneSystem 管理；</p>
+</li>
+<li><p>下一安全区一定满足基础可玩性约束；</p>
+</li>
+<li><p>每次缩圈都会显著减少有效游戏面积；</p>
+</li>
+<li><p>圈外状态完全由服务器判定；</p>
+</li>
+<li><p>后期圈外伤害无法通过无限治疗长期抵消；</p>
+</li>
+<li><p>玩家密度随比赛推进总体上升；</p>
+</li>
+<li><p>玩家死亡与正式淘汰是不同状态；</p>
+</li>
+<li><p>Squad模式支持Downed、Revive和Elimination；</p>
+</li>
+<li><p>正式淘汰只能提交一次；</p>
+</li>
+<li><p>存活玩家和存活小队索引保持一致；</p>
+</li>
+<li><p>公共事件可以形成局部玩家密度热点；</p>
+</li>
+<li><p>开火和载具等行为能够产生信息暴露；</p>
+</li>
+<li><p>服务器不向客户端发送无必要的隐藏玩家精确状态；</p>
+</li>
+<li><p>断线不会让玩家获得无敌或隐身优势；</p>
+</li>
+<li><p>重连不会复制装备或恢复错误LifeState；</p>
+</li>
+<li><p>最终圈能够消除无限等待策略；</p>
+</li>
+<li><p>胜负只能由服务器确认；</p>
+</li>
+<li><p>MatchResult使用幂等事务；</p>
+</li>
+<li><p>回放可以重现Loot、圈、淘汰和胜负；</p>
+</li>
+<li><p>调试工具可以解释一名玩家为什么死亡；</p>
+</li>
+<li><p>调试工具可以解释某阶段为什么玩家密度异常；</p>
+</li>
+<li><p>新地图和新Loot规则通常无需修改比赛主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="50-可迁移到其他游戏的设计思想">50. 可迁移到其他游戏的设计思想</h2><hr />
+<h3 id="501-缩小有效状态空间可以自然提高参与者交互频率">50.1 缩小有效状态空间可以自然提高参与者交互频率</h3><p>可迁移到：</p>
+<ul>
+<li><p>战术游戏；</p>
+</li>
+<li><p>PvP活动；</p>
+</li>
+<li><p>生存模式；</p>
+</li>
+<li><p>战场；</p>
+</li>
+<li><p>社交竞争游戏。</p>
+</li>
+</ul>
+<p>不一定要主动：</p>
+<p>把敌人生成在玩家旁边。</p>
+<p>也可以：</p>
+<p>逐步减少合法活动空间。</p>
+<hr />
+<h3 id="502-玩家密度比单纯玩家数量更能描述遭遇压力">50.2 玩家密度比单纯玩家数量更能描述遭遇压力</h3><p>100人分布在巨大地图：</p>
+<p>可能很少发生战斗。</p>
+<p>20人集中在小区域：</p>
+<p>可能极其危险。</p>
+<p>因此很多系统应考虑：</p>
+<blockquote>
+<p>单位有效空间中的参与者数量。</p>
+</blockquote>
+<hr />
+<h3 id="503-公开高价值资源能够主动制造冲突热点">50.3 公开高价值资源能够主动制造冲突热点</h3><p>可迁移到：</p>
+<ul>
+<li><p>MMO；</p>
+</li>
+<li><p>开放世界PvP；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>RTS；</p>
+</li>
+<li><p>生存。</p>
+</li>
+</ul>
+<p>公开：</p>
+<p>Boss、空投、资源节点</p>
+<p>会让玩家自主聚集。</p>
+<p>不需要脚本强制他们战斗。</p>
+<hr />
+<h3 id="504-行动可以具有信息成本">50.4 行动可以具有“信息成本”</h3><p>可迁移到：</p>
+<ul>
+<li><p>潜行；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>恐怖；</p>
+</li>
+<li><p>PvP。</p>
+</li>
+</ul>
+<p>例如：</p>
+<p>开枪虽然造成伤害，</p>
+<p>同时也暴露位置。</p>
+<p>因此动作不只是：</p>
+<p>资源 → 效果</p>
+<p>还可以是：</p>
+<p>资源</p>
+<ul>
+<li>信息暴露
+  → 效果。</li>
+</ul>
+<hr />
+<h3 id="505-随机内容适合使用约束随机而不是纯随机">50.5 随机内容适合使用约束随机，而不是纯随机</h3><p>可迁移到：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>战利品；</p>
+</li>
+<li><p>地牢；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>程序生成。</p>
+</li>
+</ul>
+<p>推荐结构：</p>
+<p>随机生成
+→ 约束验证
+→ 保底补偿
+→ 最终结果。</p>
+<hr />
+<h3 id="506-淘汰是一种比赛参与资格资源">50.6 淘汰是一种比赛参与资格资源</h3><p>可迁移到：</p>
+<ul>
+<li><p>锦标赛；</p>
+</li>
+<li><p>生存竞技；</p>
+</li>
+<li><p>社交游戏；</p>
+</li>
+<li><p>战术模式。</p>
+</li>
+</ul>
+<p>死亡并不一定只是损失生命。</p>
+<p>也可以直接改变：</p>
+<blockquote>
+<p>是否仍有资格继续参与该局系统。</p>
+</blockquote>
+<hr />
+<h3 id="507-地图资源价值应随着比赛阶段变化">50.7 地图资源价值应随着比赛阶段变化</h3><p>前期：</p>
+<p>Loot区价值高。</p>
+<p>后期：</p>
+<p>高地、掩体和圈中心价值更高。</p>
+<p>这种：</p>
+<p><strong>Dynamic Spatial Value</strong></p>
+<p>可以迁移到：</p>
+<ul>
+<li><p>RTS；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>开放世界事件；</p>
+</li>
+<li><p>战术地图。</p>
+</li>
+</ul>
+<hr />
+<h3 id="508-公共约束可以生成宏观节奏而不依赖脚本遭遇">50.8 公共约束可以生成宏观节奏而不依赖脚本遭遇</h3><p>大逃杀不需要：</p>
+<p>第10分钟生成一次Boss战；</p>
+<p>第15分钟生成一次玩家战。</p>
+<p>缩圈本身就能让：</p>
+<p>玩家位置</p>
+<ul>
+<li>玩家选择</li>
+</ul>
+<p>自然产生节奏。</p>
+<p>这可以迁移到大量系统型游戏。</p>
+<hr />
+<h3 id="509-双重收敛适合设计有限时长竞技">50.9 双重收敛适合设计有限时长竞技</h3><p>大逃杀同时减少：</p>
+<ul>
+<li><p>可玩空间；</p>
+</li>
+<li><p>参与玩家。</p>
+</li>
+</ul>
+<p>这比只设置倒计时更自然地推动比赛走向终点。</p>
+<hr />
+<h3 id="5010-终局规则需要专门对付长期拖延策略">50.10 终局规则需要专门对付长期拖延策略</h3><p>可迁移到：</p>
+<ul>
+<li><p>PvP；</p>
+</li>
+<li><p>Boss战；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>战术竞技。</p>
+</li>
+</ul>
+<p>一种在中期合理的策略：</p>
+<p>隐蔽、等待、防守</p>
+<p>到了终局可能造成系统无法结束。</p>
+<p>因此终局可以主动改变规则：</p>
+<ul>
+<li><p>空间继续压缩；</p>
+</li>
+<li><p>资源停止刷新；</p>
+</li>
+<li><p>安全区移动；</p>
+</li>
+<li><p>信息逐渐公开。</p>
+</li>
+</ul>
+<hr />
+<h2 id="51-本次防重记录">51. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>大逃杀 / Battle Royale。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Battle Royale；</p>
+</li>
+<li><p>BR；</p>
+</li>
+<li><p>大逃杀；</p>
+</li>
+<li><p>生存竞技；</p>
+</li>
+<li><p>缩圈式多人淘汰竞技。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>通过不断缩小的有效生存空间，将开局分散在大地图中的大量玩家逐渐压缩到越来越高的空间密度；玩家从低资源状态开始，自主选择落点并通过受约束随机搜刮形成单局临时构筑，再在安全区变化、不完全信息、战斗信息泄露和第三方介入风险下持续进行搜刮、转移、战斗与规避。与此同时，永久或高代价淘汰持续减少比赛参与者，最终形成：</p>
+<p>**空间面积下降</p>
+<ul>
+<li>存活人数下降
+  → 玩家密度持续上升
+  → 终局强制决战
+  → 唯一玩家或唯一队伍获胜。**</li>
+</ul>
+<p>核心循环可以压缩为：</p>
+<p><strong>选择落点
+→ 快速获得基础战斗能力
+→ 搜刮形成临时构筑
+→ 安全区公开
+→ 规划转移
+→ 遭遇、战斗或规避
+→ 淘汰减少参与者
+→ 安全区域再次缩小
+→ 空间密度提高
+→ 位置逐渐取代Loot成为核心资源
+→ 最终圈决战
+→ 唯一胜者。</strong></p>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>大规模玩家进入同一个单局地图；</p>
+</li>
+<li><p>玩家通常从低资源或无资源状态开始；</p>
+</li>
+<li><p>玩家拥有初始落点选择；</p>
+</li>
+<li><p>地图通过POI表达风险与资源差异；</p>
+</li>
+<li><p>玩家通过局内搜刮形成临时构筑；</p>
+</li>
+<li><p>Loot存在随机性但需要约束和保底；</p>
+</li>
+<li><p>安全区域会周期性缩小；</p>
+</li>
+<li><p>缩圈承担玩家密度收敛职责；</p>
+</li>
+<li><p>圈外长期停留最终不可持续；</p>
+</li>
+<li><p>战斗会通过声音和表现暴露信息；</p>
+</li>
+<li><p>战斗容易吸引第三方；</p>
+</li>
+<li><p>淘汰通常会减少当前比赛参与者；</p>
+</li>
+<li><p>Squad模式可能存在倒地、救援和有限复活；</p>
+</li>
+<li><p>中后期地图位置价值逐渐超过Loot价值；</p>
+</li>
+<li><p>公共高价值事件可以制造局部冲突热点；</p>
+</li>
+<li><p>最终安全区需要消灭长期拖延策略；</p>
+</li>
+<li><p>服务器负责最终命中、拾取、淘汰与胜负；</p>
+</li>
+<li><p>隐藏玩家数据不应无条件发送到客户端；</p>
+</li>
+<li><p>比赛以最后一人或最后一队存活为典型胜利条件；</p>
+</li>
+<li><p>MatchResult必须幂等提交。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与仓库现有撤离型搜打撤的防重边界">与仓库现有撤离型搜打撤的防重边界</h3><p>仓库中已经存在：</p>
+<p><strong>撤离型搜打撤中的风险携带、不完全信息与跨局循环。</strong></p>
+<p>其重点是：</p>
+<ul>
+<li><p>带入长期资产；</p>
+</li>
+<li><p>局内资产处于风险；</p>
+</li>
+<li><p>主动选择撤离；</p>
+</li>
+<li><p>成功撤离才提交收益；</p>
+</li>
+<li><p>长期仓库；</p>
+</li>
+<li><p>跨局经济。</p>
+</li>
+</ul>
+<p>本次大逃杀重点固定为：</p>
+<ul>
+<li><p>低资源共同起点；</p>
+</li>
+<li><p>落点选择；</p>
+</li>
+<li><p>局内随机构筑；</p>
+</li>
+<li><p>缩圈；</p>
+</li>
+<li><p>玩家密度控制；</p>
+</li>
+<li><p>不可逆淘汰；</p>
+</li>
+<li><p>第三方介入；</p>
+</li>
+<li><p>最终存活；</p>
+</li>
+<li><p>单局结果收敛。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>撤离型的核心是“什么时候把收益安全提交出去”。</strong></p>
+<p><strong>大逃杀的核心是“如何让空间和参与者同时不断收敛，最终得到唯一胜者”。</strong></p>
+<p>两者虽然共享：</p>
+<ul>
+<li><p>大地图；</p>
+</li>
+<li><p>搜刮；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>不完全信息；</p>
+</li>
+</ul>
+<p>但属于不同宏观范式。</p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>大逃杀比赛生命周期；</p>
+</li>
+<li><p>起始投放；</p>
+</li>
+<li><p>飞行航线；</p>
+</li>
+<li><p>落点选择；</p>
+</li>
+<li><p>POI；</p>
+</li>
+<li><p>Loot预算；</p>
+</li>
+<li><p>受约束随机；</p>
+</li>
+<li><p>最低战斗能力保障；</p>
+</li>
+<li><p>局内装备构筑；</p>
+</li>
+<li><p>背包；</p>
+</li>
+<li><p>拾取事务；</p>
+</li>
+<li><p>安全区；</p>
+</li>
+<li><p>多阶段缩圈；</p>
+</li>
+<li><p>圈外伤害；</p>
+</li>
+<li><p>移动终局圈；</p>
+</li>
+<li><p>玩家密度；</p>
+</li>
+<li><p>提前转移；</p>
+</li>
+<li><p>延迟转移；</p>
+</li>
+<li><p>Edge Play；</p>
+</li>
+<li><p>Center Play；</p>
+</li>
+<li><p>战斗信息泄露；</p>
+</li>
+<li><p>声音事件；</p>
+</li>
+<li><p>第三方介入；</p>
+</li>
+<li><p>空投；</p>
+</li>
+<li><p>动态资源热点；</p>
+</li>
+<li><p>载具转移；</p>
+</li>
+<li><p>Squad；</p>
+</li>
+<li><p>Downed；</p>
+</li>
+<li><p>Revive；</p>
+</li>
+<li><p>Respawn；</p>
+</li>
+<li><p>Elimination；</p>
+</li>
+<li><p>Placement；</p>
+</li>
+<li><p>Spectator；</p>
+</li>
+<li><p>Server Authority；</p>
+</li>
+<li><p>Lag Compensation；</p>
+</li>
+<li><p>Interest Management；</p>
+</li>
+<li><p>Anti-Cheat信息边界；</p>
+</li>
+<li><p>Match Replay；</p>
+</li>
+<li><p>Landing Heatmap；</p>
+</li>
+<li><p>Loot Heatmap；</p>
+</li>
+<li><p>Rotation Heatmap；</p>
+</li>
+<li><p>Player Density Graph；</p>
+</li>
+<li><p>Third-Party Analyzer；</p>
+</li>
+<li><p>Death Causality。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次大逃杀范式的子系统，不应再作为新的完整宏观游戏类型计入日报：</p>
+<ul>
+<li><p>大逃杀缩圈系统；</p>
+</li>
+<li><p>大逃杀安全区；</p>
+</li>
+<li><p>大逃杀落点选择；</p>
+</li>
+<li><p>大逃杀跳伞系统；</p>
+</li>
+<li><p>大逃杀POI；</p>
+</li>
+<li><p>大逃杀Loot；</p>
+</li>
+<li><p>大逃杀随机掉落；</p>
+</li>
+<li><p>大逃杀背包；</p>
+</li>
+<li><p>大逃杀武器搜刮；</p>
+</li>
+<li><p>大逃杀圈伤；</p>
+</li>
+<li><p>大逃杀转移；</p>
+</li>
+<li><p>大逃杀跑圈；</p>
+</li>
+<li><p>大逃杀第三方；</p>
+</li>
+<li><p>大逃杀空投；</p>
+</li>
+<li><p>大逃杀载具；</p>
+</li>
+<li><p>大逃杀倒地；</p>
+</li>
+<li><p>大逃杀救援；</p>
+</li>
+<li><p>大逃杀复活；</p>
+</li>
+<li><p>大逃杀淘汰；</p>
+</li>
+<li><p>大逃杀观战；</p>
+</li>
+<li><p>大逃杀服务器权威；</p>
+</li>
+<li><p>大逃杀Lag Compensation；</p>
+</li>
+<li><p>大逃杀Interest Management；</p>
+</li>
+<li><p>大逃杀反作弊；</p>
+</li>
+<li><p>大逃杀决赛圈；</p>
+</li>
+<li><p>大逃杀Loot平衡；</p>
+</li>
+<li><p>大逃杀落点热图；</p>
+</li>
+<li><p>大逃杀玩家密度；</p>
+</li>
+<li><p>大逃杀Match Replay；</p>
+</li>
+<li><p>大逃杀最终胜负结算。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入 <code>game-designs</code> 的日报防重集合。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

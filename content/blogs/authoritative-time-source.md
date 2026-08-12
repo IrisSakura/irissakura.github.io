@@ -346,10 +346,9 @@
 
 以下链接用于仓库内部审稿与追溯，不是公开版最终引用：
 
-- [节奏游戏：音频主时钟与确定性判定](../journal.html#design-rhythm-audio-clock)
-- [音游判定与谱面系统：判定窗口、生命周期与回放](../journal.html#design-beatmap-timing)
-- [传统对战格斗：帧数据、动作仲裁与回滚](../journal.html#design-fighting)
-- [驾驶竞速：固定步长、赛道拓扑与连续裁定](../journal.html#design-racing-fixed-step)
+- [节奏游戏：音频主时钟、谱面编译与确定性判定](../journal/rhythm-audio-clock.html)
+- [传统对战格斗：帧数据、动作仲裁与回滚](../journal/fighting.html)
+- [驾驶竞速：固定步长、赛道拓扑与连续裁定](../journal/racing-fixed-step.html)
 - Godot 主循环物理步进与查询回传时间线（内部研究材料）
 
 公开发布前应补充公开案例或公开设计资料，并把内部路径替换为稳定公开链接。

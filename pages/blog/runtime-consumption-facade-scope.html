@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯 | IrisSakura">
+    <meta property="og:description" content="不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-runtime-consumption-facade-scope.png">
+    <meta property="og:image:alt" content="运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯 | IrisSakura">
+    <meta name="twitter:description" content="不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-runtime-consumption-facade-scope.png">
+    <meta name="twitter:image:alt" content="运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯 | IrisSakura","description":"不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。","url":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯","image":"https://irissakura.github.io/assets/social/pages-blog-runtime-consumption-facade-scope.png","datePublished":"2026-08-05","dateModified":"2026-08-05","about":["facade","scope"]}</script>
+    <!-- site-meta:end -->
+    <title>运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-05</p>
+            <h1>运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯</h1>
+            <p class="blog-deck">不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。</p>
+            <div class="note-tags"><span>facade</span><span>scope</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>Unity 框架在服务访问方式上经常走向两个极端。</p>
+<p>一种做法是让所有系统都通过全局单例访问：</p>
+<ul>
+<li><p><code>AudioManager.Instance</code>；</p>
+</li>
+<li><p><code>UIManager.Instance</code>；</p>
+</li>
+<li><p><code>SaveManager.Instance</code>；</p>
+</li>
+<li><p><code>EventManager.Instance</code>。</p>
+</li>
+</ul>
+<p>这种方式接入迅速，适合原型，但随着场景、团队和模块增加，服务由谁创建、何时销毁、测试时如何替换，会逐渐失去明确答案。</p>
+<p>另一种做法是在项目开始阶段就要求所有业务使用严格构造注入、显式 Scope 和完整组合根。边界更清楚，却也可能让小型项目为尚未出现的问题承担过高复杂度。</p>
+<p>Sakura Framework 当前采用的不是二选一，而是一条可以逐步收紧的运行时消费路径。</p>
+<h2 id="先说结论访问方式应随所有权复杂度升级">先说结论：访问方式应随所有权复杂度升级</h2><p><strong>运行时消费模式（后文简称“框架使用档位”）</strong>：项目访问框架服务、登记模块和管理生命周期时采用的一组统一规则。</p>
+<p>框架使用档位不是代码质量排名，也不是团队人数达到某个数字后必须执行的升级流程。</p>
+<p>它回答的是三个更具体的问题：</p>
+<ol>
+<li><p>服务是否只有一个清晰 Owner；</p>
+</li>
+<li><p>服务是否需要跨场景、跨团队或跨玩法共享；</p>
+</li>
+<li><p>项目是否必须禁止所有隐式创建与兼容回退。</p>
+</li>
+</ol>
+<p>当前存在三种正式方式。</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>主要入口</th>
+<th>适用状态</th>
+<th>生命周期要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>simple-facade</code></td>
+<td><code>Sakura.*</code> Facade</td>
+<td>原型、小型项目、单一 Owner</td>
+<td>Owner 自行管理，允许受限兼容创建</td>
+</tr>
+<tr>
+<td><code>modular-installer</code></td>
+<td><code>IProjectInstaller</code> + <code>TryGet</code></td>
+<td>多场景服务、多人协作、模块化项目</td>
+<td>区分 App 与 Gameplay 生命周期</td>
+</tr>
+<tr>
+<td><code>strict-scoped-di</code></td>
+<td>构造注入纯接口 + 显式 Scope</td>
+<td>大型项目、发布加固、严格边界</td>
+<td>所有 Owner 和释放点显式声明</td>
+</tr>
+</tbody></table>
+<p>这三种方式共享同一套服务合同。</p>
+<p>项目迁移时，不需要把 Audio、Event、UI、Save 等模块替换成另一套实现，只需要逐步改变它们的注册、解析和所有权规则。</p>
+<h2 id="simple把-facade-当作稳定入口">Simple：把 Facade 当作稳定入口</h2><p>Simple 模式的目标是降低第一次接入成本。</p>
+<p>业务代码可以从以下门面进入：</p>
+<ul>
+<li><p><code>SakuraEvent</code>；</p>
+</li>
+<li><p><code>SakuraPooling</code>；</p>
+</li>
+<li><p><code>SakuraAudio</code>；</p>
+</li>
+<li><p><code>SakuraUi</code>；</p>
+</li>
+<li><p><code>SakuraSave</code>；</p>
+</li>
+<li><p><code>SakuraCommand</code>。</p>
+</li>
+</ul>
+<p>Facade 在调用方和具体实现之间增加了一层策略边界：</p>
+<pre><code class="language-text">业务代码
+→ Sakura.* Facade
+→ 当前 Runtime Service Context
+→ 容器服务或受控兼容实例
+</code></pre>
+<p>当项目还没有组合根时，Simple 模式允许强制入口使用受限兼容创建，以便旧项目渐进迁移。</p>
+<p>但 <code>TryGet*</code> 始终只查询现有服务，不创建 Manager、<code>GameObject</code> 或其他隐藏状态。</p>
+<p>这条规则很重要：</p>
+<blockquote>
+<p>“尝试获取”应保持观察语义，不能因为一次查询改变运行时结构。</p>
+</blockquote>
+<p>因此，Simple 并不等于任何地方都可以随意创建单例。</p>
+<p>它只是允许框架在没有 Root 的小型项目里保留一条明确、可诊断的兼容通道。</p>
+<h2 id="modular把跨场景服务交给项目组合根">Modular：把跨场景服务交给项目组合根</h2><p>当项目出现以下情况时，Simple 模式开始接近边界：</p>
+<ul>
+<li><p>多个场景共享同一服务；</p>
+</li>
+<li><p>不同团队分别维护 UI、战斗、存档和资源模块；</p>
+</li>
+<li><p>服务需要在测试中替换；</p>
+</li>
+<li><p>项目必须说明某个实现由谁注册；</p>
+</li>
+<li><p>同一接口存在默认实现和项目覆盖实现。</p>
+</li>
+</ul>
+<p>这时更合适的是 Modular 模式。</p>
+<p>项目通过 <code>IProjectInstaller</code> 或等效入口，把服务登记到组合根中。业务仍可使用 <code>Sakura.*.TryGet*</code>，但服务身份来自当前 Resolver，而不是场景搜索或隐式创建。</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["项目 Installer"] --&gt; B["组合根"]
+    B --&gt; C["Runtime Service Context"]
+    C --&gt; D["Sakura.* Facade"]
+    C --&gt; E["接口注入"]
+    D --&gt; F["业务模块"]
+    E --&gt; F
+</code></pre>
+<p>Modular 模式下，无 Root 时只允许读取已经存在的兼容实例，不再创建缺失 Manager。</p>
+<p>这使项目能够按以下顺序迁移：</p>
+<ol>
+<li><p>为跨场景服务建立正式注册；</p>
+</li>
+<li><p>观察哪些调用仍然使用兼容路径；</p>
+</li>
+<li><p>替换不明确的服务访问；</p>
+</li>
+<li><p>把回退数量降到可控范围。</p>
+</li>
+</ol>
+<p>它没有要求业务立即全部改成构造注入，却已经把“服务从哪里来”交给了统一组合根。</p>
+<h2 id="strict把隐式回退视为组合错误">Strict：把隐式回退视为组合错误</h2><p>Strict 模式不是默认答案。</p>
+<p>它适合服务注册已经完整、生命周期边界已经建立，并且项目准备把隐式行为全部转化为错误的阶段。</p>
+<p>在 Strict 模式中：</p>
+<ul>
+<li><p>Root 中未注册的服务不会回退到场景单例；</p>
+</li>
+<li><p>无 Root 时不会查询 Legacy Manager；</p>
+</li>
+<li><p>强制属性不会创建缺失对象；</p>
+</li>
+<li><p>业务对象优先通过构造函数接收接口；</p>
+</li>
+<li><p>Scene、Battle、UI 等临时模块使用显式 Scope；</p>
+</li>
+<li><p>兼容路径触发时记录 <code>StrictProfileViolation</code>。</p>
+</li>
+</ul>
+<p>Strict 真正增加的不是 DI 语法，而是可证明性。</p>
+<p>当一个对象能够运行时，团队可以回答：</p>
+<ul>
+<li><p>谁创建了它；</p>
+</li>
+<li><p>它属于哪个 Scope；</p>
+</li>
+<li><p>哪些对象依赖它；</p>
+</li>
+<li><p>Scope 结束时谁负责释放；</p>
+</li>
+<li><p>如果未注册，系统在哪里失败。</p>
+</li>
+</ul>
+<p>只有当这些答案已经存在时，切换 Strict 才是在收紧边界。</p>
+<p>否则，它只会把尚未完成的迁移一次性暴露为大量空引用。</p>
+<h2 id="root-就绪后所有模式都应以-resolver-为准">Root 就绪后，所有模式都应以 Resolver 为准</h2><p>三种档位的差异主要发生在“没有 Root”时。</p>
+<p>一旦组合根就绪，Facade 必须只认当前 Resolver。</p>
+<table>
+<thead>
+<tr>
+<th>运行状态</th>
+<th><code>TryGet*</code></th>
+<th>强制入口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Root ready</td>
+<td>只查询 Resolver，缺项失败</td>
+<td>只返回 Resolver 中的身份，缺项为空</td>
+</tr>
+<tr>
+<td>无 Root + Simple</td>
+<td>读取现有兼容实例</td>
+<td>可返回现有实例或受限创建</td>
+</tr>
+<tr>
+<td>无 Root + Modular</td>
+<td>读取现有兼容实例</td>
+<td>只返回现有实例，不创建</td>
+</tr>
+<tr>
+<td>无 Root + Strict</td>
+<td>不查询兼容实例</td>
+<td>返回空并记录拒绝</td>
+</tr>
+</tbody></table>
+<p>假设 Root 中缺少 Audio 服务，Facade 却自动找到了场景里的旧 <code>AudioManager</code>，项目便会进入分裂状态：</p>
+<ul>
+<li><p>一部分模块使用容器身份；</p>
+</li>
+<li><p>一部分模块使用场景身份；</p>
+</li>
+<li><p>测试与正式运行可能得到不同对象；</p>
+</li>
+<li><p>Root 重建后，旧对象仍可能被继续访问。</p>
+</li>
+</ul>
+<p>因此，Root ready 后的 Resolver miss 应被视为组合缺口，而不是触发“寻找一个能用的对象”。</p>
+<h2 id="迁移信号比团队规模更可靠">迁移信号比团队规模更可靠</h2><p>框架使用档位不应根据项目人数机械选择。</p>
+<p>更可靠的是观察迁移信号。</p>
+<h3 id="从-simple-迁移到-modular">从 Simple 迁移到 Modular</h3><ul>
+<li><p>多个场景需要共享服务；</p>
+</li>
+<li><p>团队需要明确模块 Owner；</p>
+</li>
+<li><p>服务需要项目自定义实现；</p>
+</li>
+<li><p>测试需要替换依赖；</p>
+</li>
+<li><p>场景中开始出现重复 Manager。</p>
+</li>
+</ul>
+<h3 id="从-modular-迁移到-strict">从 Modular 迁移到 Strict</h3><ul>
+<li><p>非预期 Facade 回退已经接近零；</p>
+</li>
+<li><p>App、Scene、Battle、UI Scope 已有明确创建与释放点；</p>
+</li>
+<li><p>所有关键服务都已正式登记；</p>
+</li>
+<li><p>发布前需要禁止隐式创建；</p>
+</li>
+<li><p>团队需要把组合错误提前暴露。</p>
+</li>
+</ul>
+<p>没有这些信号时，提前升级不会自动让架构更好，只会增加注册、Scope 和测试样板。</p>
+<h2 id="runtime-monitor-是迁移仪表盘">Runtime Monitor 是迁移仪表盘</h2><p>消费模式不能只靠文档约定。</p>
+<p>项目还需要观察实际运行时发生了什么：</p>
+<ul>
+<li><p>当前 Profile；</p>
+</li>
+<li><p>Resolver 是否绑定；</p>
+</li>
+<li><p>服务解析成功与失败次数；</p>
+</li>
+<li><p>Facade 回退次数；</p>
+</li>
+<li><p>最近一次访问来源；</p>
+</li>
+<li><p>当前活动 Scope；</p>
+</li>
+<li><p>模块生命周期摘要。</p>
+</li>
+</ul>
+<p><strong>回退预算（后文简称“还剩多少旧路”）</strong>：项目允许保留的兼容服务访问数量和范围。</p>
+<p>从 Simple 迁移到 Modular 时，目标不是立即让回退为零，而是让它可见、可分类、可逐步减少。</p>
+<p>从 Modular 迁移到 Strict 前，目标才是把关键路径上的回退预算归零。</p>
+<h2 id="scope-解决的是所有权">Scope 解决的是所有权</h2><p>大型项目通常至少需要四类生命周期。</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>典型服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>App</td>
+<td>配置、事件、资源、对象池、音频、存档</td>
+</tr>
+<tr>
+<td>Scene</td>
+<td>场景导航、局部资源句柄、房间状态</td>
+</tr>
+<tr>
+<td>Battle</td>
+<td>战斗编排、临时实体、技能上下文、随机流</td>
+</tr>
+<tr>
+<td>UI</td>
+<td>页面 ViewModel、窗口路由、输入拦截、页面任务</td>
+</tr>
+</tbody></table>
+<p>Scope 的价值不只是统一调用 <code>Dispose()</code>。</p>
+<p>它还建立了任务、事件订阅、资源 Lease 和临时状态的共同 Owner。</p>
+<p>当 Battle Scope 结束时，释放它应同时意味着：</p>
+<ul>
+<li><p>取消战斗任务；</p>
+</li>
+<li><p>注销事件监听；</p>
+</li>
+<li><p>归还对象池实例；</p>
+</li>
+<li><p>释放资源句柄；</p>
+</li>
+<li><p>清理命令历史；</p>
+</li>
+<li><p>关闭战斗专用 UI；</p>
+</li>
+<li><p>阻止旧回调继续写入下一局。</p>
+</li>
+</ul>
+<h2 id="legacy-manager-是迁移通道">Legacy Manager 是迁移通道</h2><p>旧 <code>XxxManager.Instance</code>、<code>MonoSingleton</code> 和兼容包装器仍可能需要保留。</p>
+<p>但它们的身份应明确为 Compatibility，而不是第四种正式架构选择。</p>
+<p>如果 Legacy 被描述为第四种模式，项目会永远缺少退出条件：</p>
+<ul>
+<li><p>新代码继续使用旧入口；</p>
+</li>
+<li><p>Modular 只负责新模块；</p>
+</li>
+<li><p>Strict 因兼容调用无法启用；</p>
+</li>
+<li><p>最终同时维护两套访问模型。</p>
+</li>
+</ul>
+<p>合理策略是：</p>
+<blockquote>
+<p>允许旧路存在，但要求它有适用范围、观测方式和迁移触发条件。</p>
+</blockquote>
+<h2 id="我的判断">我的判断</h2><p>一套可长期使用的 Unity 框架，不应强迫所有项目从同一个复杂度起点出发。</p>
+<p>更重要的是提供一条不更换核心服务合同的升级路径：</p>
+<pre><code class="language-text">方便接入
+→ 明确注册
+→ 显式所有权
+→ 禁止隐式回退
+</code></pre>
+<p>Facade、Installer 和严格 DI 不是互相竞争的信仰。</p>
+<p>它们是项目在不同生命周期阶段，对同一组框架能力采用的不同治理强度。</p>
+<h2 id="设计检查表">设计检查表</h2><ul>
+<li><p>服务是否只有一个清晰 Owner；</p>
+</li>
+<li><p><code>TryGet*</code> 是否保持无创建副作用；</p>
+</li>
+<li><p>Root ready 后是否仍可能回退到场景单例；</p>
+</li>
+<li><p>跨场景服务是否进入项目 Installer；</p>
+</li>
+<li><p>默认实现与项目覆盖是否声明注册意图；</p>
+</li>
+<li><p>Facade 回退是否可观测；</p>
+</li>
+<li><p>Scene、Battle、UI 临时对象是否属于显式 Scope；</p>
+</li>
+<li><p>Strict 启用前关键路径回退是否归零；</p>
+</li>
+<li><p>Legacy 入口是否被明确标记为迁移通道；</p>
+</li>
+<li><p>模式升级是否由实际边界问题触发。</p>
+</li>
+</ul>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>通俗称呼</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>运行时消费模式</td>
+<td>框架使用档位</td>
+<td>服务访问、注册和生命周期的统一规则</td>
+</tr>
+<tr>
+<td>组合根</td>
+<td>服务总装入口</td>
+<td>统一登记并创建项目运行时服务的位置</td>
+</tr>
+<tr>
+<td>回退预算</td>
+<td>还剩多少旧路</td>
+<td>项目仍允许存在的兼容访问范围</td>
+</tr>
+<tr>
+<td>显式 Scope</td>
+<td>有名字的生命周期</td>
+<td>由明确 Owner 创建和释放的一组服务与任务</td>
+</tr>
+<tr>
+<td>Legacy Compatibility</td>
+<td>迁移通道</td>
+<td>为存量项目保留但不鼓励新代码采用的旧入口</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>资料说明：本文依据 2026-08-05 的运行时消费模式身份、访问迁移指南与 Bootstrap 实现整理。三种模式属于当前正式推荐路径，具体包生命周期和发布状态仍以对应版本清单为准。</p>
+</blockquote>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="ai-safe-execution-plane.html"><span>同属「Sakura Framework 工程实践」</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a><a href="ai-task-capsule-semantic-graph.html"><span>同属「Sakura Framework 工程实践」</span><strong>开发任务胶囊与项目语义图：AI 协作中的只读上下文、影响分析与证据边界</strong><small>大型代码仓库如何把一个开发任务需要的范围、项目结构、影响关系和验证证据压缩成稳定的机器可读上下文，同时不把“理解仓库”错误地升级成“拥有执行权限”？</small></a><a href="framework-capability-semantic-catalog.html"><span>同属「Sakura Framework 工程实践」</span><strong>框架能力语义目录：能力词表、证据化声明与可解释模块选择</strong><small>大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

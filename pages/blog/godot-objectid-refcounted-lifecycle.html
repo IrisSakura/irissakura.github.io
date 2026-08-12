@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/godot-objectid-refcounted-lifecycle.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura">
+    <meta property="og:description" content="跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/godot-objectid-refcounted-lifecycle.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-godot-objectid-refcounted-lifecycle.png">
+    <meta property="og:image:alt" content="身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura">
+    <meta name="twitter:description" content="跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-godot-objectid-refcounted-lifecycle.png">
+    <meta name="twitter:image:alt" content="身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura","description":"跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？","url":"https://irissakura.github.io/pages/blog/godot-objectid-refcounted-lifecycle.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型","image":"https://irissakura.github.io/assets/social/pages-blog-godot-objectid-refcounted-lifecycle.png","datePublished":"2026-08-07","dateModified":"2026-08-07","about":["godot","objectid","refcounted"]}</script>
+    <!-- site-meta:end -->
+    <title>身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/godot-source-research.html">从 Godot 源码理解引擎设计</a> · 发布于 2026-08-07 · 更新于 2026-08-07</p>
+            <h1>身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型</h1>
+            <p class="blog-deck">跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？</p>
+            <div class="note-tags"><span>godot</span><span>objectid</span><span>refcounted</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>游戏引擎中很多生命周期问题并不是发生在对象创建时，而是发生在“稍后再使用它”的那一刻。</p>
+<p>例如：</p>
+<ul>
+<li>一个 Tween 需要在未来几帧继续修改某个目标；</li>
+<li>一个异步加载任务要在结束时回调原对象；</li>
+<li>一个事件订阅者保存了另一模块的对象；</li>
+<li>一个子系统需要记住某个 Node，但并不应该因此阻止 Node 被销毁；</li>
+<li>一个资源正在参与后台任务，任务结束前又不能提前析构。</li>
+</ul>
+<p>最直接的做法是保存一个指针。</p>
+<p>但指针只回答：</p>
+<blockquote>
+<p>那块内存在哪里？</p>
+</blockquote>
+<p>它没有回答：</p>
+<blockquote>
+<p>那个对象现在还是不是原来的对象？</p>
+</blockquote>
+<p>更没有回答：</p>
+<blockquote>
+<p>我保存这个关系之后，是否应该阻止它被销毁？</p>
+</blockquote>
+<p>这三个问题如果使用同一种引用关系表达，系统最终通常会在两个方向之一失控：</p>
+<ul>
+<li>引用太弱，跨帧访问出现悬空目标；</li>
+<li>引用太强，对象之间形成无法释放的所有权环。</li>
+</ul>
+<p>Godot 的对象系统值得研究的地方，就在于它没有试图用一种“万能引用”解决所有问题，而是把身份和所有权拆成了不同机制。</p>
+<h2 id="先说结论能够找到对象与有权让对象继续存活是两种不同能力">先说结论：能够找到对象，与有权让对象继续存活，是两种不同能力</h2><p><strong>身份引用（即“记住它是谁”）</strong>：保存一个稳定身份，在使用时重新判断该身份当前是否仍然对应有效对象，但本身不延长目标生命周期。</p>
+<p><strong>强所有权（即“保证它继续活着”）</strong>：只要这份引用仍然存在，目标就不能进入最终析构。</p>
+<p>Godot 中大致可以看到四层职责：</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>主要职责</th>
+<th>是否保活</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ObjectID</code></td>
+<td>保存对象身份</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>ObjectDB</code></td>
+<td>验证身份当前是否仍有效</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>Ref&lt;T&gt;</code></td>
+<td>持有 <code>RefCounted</code> 强引用</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>WeakRef</code></td>
+<td>保存弱身份，需要时重新解析</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<p>而 <code>RefCounted</code> 本身负责定义：</p>
+<blockquote>
+<p>强引用增加和减少时，什么时候对象仍然活着，什么时候可以进入最终销毁。</p>
+</blockquote>
+<p>这种分层的核心价值，不只是防止崩溃。</p>
+<p>它让代码可以准确表达关系：</p>
+<pre><code class="language-text">我只需要以后重新找到你
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">只要这个任务没有结束，你就必须继续存在
+</code></pre>
+<p>并不是同一句话。</p>
+<h2 id="objectid-解决的是身份陈旧而不是对象所有权">ObjectID 解决的是身份陈旧，而不是对象所有权</h2><p>普通裸指针最大的跨帧风险，是地址和逻辑身份被混在了一起。</p>
+<p>对象已经销毁后：</p>
+<pre><code class="language-text">Object *target
+</code></pre>
+<p>仍然可能保留原地址。</p>
+<p>如果内存之后被重新利用，这个地址甚至可能对应另一份完全不同的数据。</p>
+<p>Godot 的 <code>ObjectID</code> 不直接把裸指针作为长期身份，而是通过 ObjectDB 中的槽位和校验值重新解析对象。</p>
+<p>可以把它近似理解为：</p>
+<pre><code class="language-text">ObjectID
+=
+槽位位置
++
+这一代对象的校验身份
+</code></pre>
+<p>当对象被删除时，对应槽位会失效。</p>
+<p>即使同一个槽位以后分配给新对象，新对象也拥有新的 validator。</p>
+<p>因此旧 ID 再去解析时：</p>
+<pre><code class="language-text">槽位相同
+但 validator 不同
+→ 返回无效
+</code></pre>
+<p>这是一种典型的**代际身份（即“地址能复用，身份证不能冒用”）**设计。</p>
+<p>它解决的问题是：</p>
+<blockquote>
+<p>我保存的那个身份，现在是否仍然代表原来的对象？</p>
+</blockquote>
+<p>但 ObjectID 本身不会增加引用计数。</p>
+<p>保存一个 ObjectID，并不会阻止目标被销毁。</p>
+<p>这正是它有价值的地方。</p>
+<p>如果一个观察者只是需要：</p>
+<ul>
+<li>下次 Tick 检查对象是否仍存在；</li>
+<li>回调时重新找目标；</li>
+<li>保存父对象身份；</li>
+<li>在编辑器或调试工具中记录实例；</li>
+</ul>
+<p>那么它通常没有理由仅仅因为“记住了目标”就取得目标生命周期所有权。</p>
+<h2 id="身份解析成功也不等于后续操作期间一定安全">身份解析成功，也不等于后续操作期间一定安全</h2><p>这里还有一个容易被忽略的时间窗口。</p>
+<p>假设逻辑是：</p>
+<pre><code class="language-text">通过 ObjectID 找到目标
+→ 执行一组后续操作
+</code></pre>
+<p>如果目标是普通 Object，身份解析成功只能说明：</p>
+<blockquote>
+<p>在解析的那个时刻，它仍然有效。</p>
+</blockquote>
+<p>它并不会自动为后续所有操作创建强生命周期保证。</p>
+<p>因此需要区分两个语义。</p>
+<h3 id="瞬时观察">瞬时观察</h3><p>只需要：</p>
+<pre><code class="language-text">现在对象还在吗？
+</code></pre>
+<p>可以使用身份验证。</p>
+<h3 id="跨操作稳定持有">跨操作稳定持有</h3><p>需要：</p>
+<pre><code class="language-text">从现在到这段操作结束，对象必须一直存在。
+</code></pre>
+<p>对于 <code>RefCounted</code> 对象，应把身份提升成强 <code>Ref</code>。</p>
+<p>这形成了一条重要设计原则：</p>
+<blockquote>
+<p>Handle 用来重新找到对象，Lease/Ref 用来跨越时间保护对象。</p>
+</blockquote>
+<p>很多框架把这两个能力都塞进一个 <code>EntityHandle</code>、<code>ServiceHandle</code> 或裸对象引用中，后续就很难判断一个调用者究竟只是观察者，还是生命周期 Owner。</p>
+<h2 id="refcounted-使用的是侵入式引用计数">RefCounted 使用的是侵入式引用计数</h2><p>Godot 的 <code>Ref&lt;T&gt;</code> 和 <code>std::shared_ptr</code> 在使用体验上有相似之处，但内部模型不同。</p>
+<p><strong>侵入式引用计数（即“计数器就在对象自己身上”）</strong>：强引用计数属于目标对象本身，而不是由一个独立 control block 保存。</p>
+<p>因此只有继承 <code>RefCounted</code> 的类型才参与这一协议。</p>
+<p>结构可以简化为：</p>
+<pre><code class="language-text">RefCounted
+├─ refcount
+├─ 首次认领状态
+└─ 释放临界状态
+
+Ref&lt;T&gt;
+└─ T*
+   └─ 通过 RefCounted 协议增减强引用
+</code></pre>
+<p><code>Ref&lt;T&gt;</code> 本身并不单独决定对象是否 delete。</p>
+<p>它只负责成对调用引用协议。</p>
+<p>真正的最终释放条件仍由 RefCounted 的生命周期逻辑决定。</p>
+<p>这使“引用包装”和“对象生命协议”保持了清晰分工。</p>
+<h2 id="第一个-ref-不是普通的加一操作">第一个 Ref 不是普通的加一操作</h2><p>新创建的 RefCounted 对象有一个很特殊的阶段：</p>
+<blockquote>
+<p>对象已经存在，但第一份正式强所有权尚未完成接管。</p>
+</blockquote>
+<p>如果新对象一创建，计数就简单从零开始，那么并发环境下会出现一个危险问题：</p>
+<pre><code class="language-text">对象刚创建
+→ 还没建立第一份正式 Ref
+→ 另一个线程看见 count == 0
+→ 把它判断为不可再引用
+</code></pre>
+<p>Godot 因此使用了一个首次认领协议。</p>
+<p>可以把过程理解为：</p>
+<pre><code class="language-text">对象出生
+→ 处于临时生命状态
+→ 第一份 Ref 完成认领
+→ 进入普通引用计数阶段
+</code></pre>
+<p>它不只是一个实现技巧。</p>
+<p>它揭示了生命周期系统中经常被忽略的第四个阶段：</p>
+<pre><code class="language-text">未创建
+→ 已创建但尚未正式接管
+→ 正常持有
+→ 最终释放
+</code></pre>
+<p>如果自己的框架允许对象先由工厂创建，再由 Scope、容器或 Lease 系统接管，就同样需要定义：</p>
+<blockquote>
+<p>创建完成到正式 Owner 建立之间，谁负责让对象保持有效？</p>
+</blockquote>
+<h2 id="引用计数归零之后不能再复活">引用计数归零之后不能再复活</h2><p>引用计数系统最危险的竞态之一是：</p>
+<pre><code class="language-text">线程 A：
+最后一个强引用释放
+→ count 变为 0
+→ 开始析构
+
+线程 B：
+同时尝试增加引用
+</code></pre>
+<p>如果线程 B 可以把 0 再加回 1，就会得到一个正在销毁过程中的“复活对象”。</p>
+<p>这类对象可能已经：</p>
+<ul>
+<li>清理了脚本绑定；</li>
+<li>释放了内部资源；</li>
+<li>从全局注册表摘除；</li>
+<li>断开了事件；</li>
+<li>处于部分析构状态。</li>
+</ul>
+<p>Godot 的安全引用计数把零作为终态：</p>
+<pre><code class="language-text">count &gt; 0
+→ 可以增加
+
+count == 0
+→ 新 reference 失败
+</code></pre>
+<p>**零后不可复活（即“进入死亡流程后不能抢救回来”）**是一条非常值得迁移的原则。</p>
+<p>类似规则同样适用于：</p>
+<ul>
+<li>代际 Entity Handle；</li>
+<li>Session Lease；</li>
+<li>Asset Lease；</li>
+<li>异步任务 Token；</li>
+<li>网络连接 Handle；</li>
+<li>运行时服务 Scope。</li>
+</ul>
+<p>如果一个资源已经越过最终释放边界，新 acquire 应失败，而不是重新把旧身份拉回活动状态。</p>
+<h2 id="替换所有权时应先保护新对象再释放旧对象">替换所有权时，应先保护新对象，再释放旧对象</h2><p>生命周期 Bug 不只来自“忘记引用”。</p>
+<p>引用替换顺序也很重要。</p>
+<p>假设一个 Owner 当前持有 A，现在要改成 B。</p>
+<p>危险顺序是：</p>
+<pre><code class="language-text">先释放 A
+→ A 触发一串析构
+→ 析构间接影响 B
+→ 再尝试持有 B
+</code></pre>
+<p>Godot <code>Ref&lt;T&gt;</code> 的替换策略更接近：</p>
+<pre><code class="language-text">确认并取得 B 的新强引用
+→ 当前引用切换到 B
+→ 最后释放旧的 A
+</code></pre>
+<p>**先获取后释放（即“先抓住新的，再松开旧的”）**降低了替换过程中对象图提前坍塌的风险。</p>
+<p>这条原则并不限于智能指针。</p>
+<p>在框架设计中，下列操作也适合遵循相同顺序：</p>
+<ul>
+<li>Runtime Service 热切换；</li>
+<li>Scene Scope 迁移；</li>
+<li>Asset 版本切换；</li>
+<li>当前 Session 更换；</li>
+<li>配置快照更新；</li>
+<li>活动 Controller 替换。</li>
+</ul>
+<p>如果新 Owner 尚未建立，就先销毁旧 Owner，系统会人为制造一个没有合法拥有者的中间状态。</p>
+<h2 id="弱引用真正解决的是关系存在但不拥有">弱引用真正解决的是“关系存在，但不拥有”</h2><p>对象图中最容易形成强引用环的关系是：</p>
+<pre><code class="language-text">Parent
+→ strong Child
+
+Child
+→ strong Parent
+</code></pre>
+<p>如果 Parent 和 Child 都是引用计数对象：</p>
+<pre><code class="language-text">Parent 等 Child 释放
+Child 等 Parent 释放
+→ 两边都无法归零
+</code></pre>
+<p>引用计数并不是追踪式 GC。</p>
+<p>它不会自动分析整张对象图并发现循环。</p>
+<p>因此，关系本身需要携带所有权语义。</p>
+<p>一个常见规则是：</p>
+<pre><code class="language-text">Owner → Child
+使用强引用
+
+Child → Owner
+使用 ObjectID / WeakRef
+</code></pre>
+<p>这并不是说“父子关系永远如此”。</p>
+<p>真正原则是：</p>
+<blockquote>
+<p>决定生命周期的边使用强引用，只用于导航或回查的反向边使用弱身份。</p>
+</blockquote>
+<p>例如：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["SceneTree"] --&gt;|"strong Ref"| B["Tween"]
+    B --&gt;|"strong Ref"| C["Tweener"]
+    C -. "ObjectID" .-&gt; B
+    B -. "ObjectID" .-&gt; D["Bound Node"]
+    C --&gt;|"语义需要时 optional Ref"| E["RefCounted Target"]
+</code></pre>
+<p>图中每条边表达不同责任。</p>
+<p>这比“所有地方都用智能指针”更重要。</p>
+<p>真正决定系统能否正确释放的，不是智能指针数量，而是对象图中哪一条边拥有谁。</p>
+<h2 id="weakref-不是更安全的裸指针">WeakRef 不是更安全的裸指针</h2><p>Godot 的 WeakRef 本质上保存的是目标 ObjectID。</p>
+<p>它自己可以被正常持有，但不会替目标续命。</p>
+<p>读取 WeakRef 时，会重新去 ObjectDB 判断身份。</p>
+<p>如果目标是 RefCounted，并且调用方需要稳定使用，就可以在那一刻形成一个新的强 Ref 快照。</p>
+<p>因此它的语义更像：</p>
+<pre><code class="language-text">我记得你是谁
+但我没有权利要求你一直活着
+
+需要使用时
+→ 再看看你是否还存在
+→ 必要时临时取得强所有权
+</code></pre>
+<p>这与裸指针最大的区别在于：</p>
+<p>裸指针通常隐含一种危险假设：</p>
+<blockquote>
+<p>我保存了地址，所以以后还能用。</p>
+</blockquote>
+<p>WeakRef/ObjectID 的默认假设恰好相反：</p>
+<blockquote>
+<p>目标随时可能已经不存在，必须重新验证。</p>
+</blockquote>
+<p>这是一种更适合跨帧、异步和事件系统的默认心智模型。</p>
+<h2 id="scenetreetimer-和-tween-展示了三种引用如何同时存在">SceneTreeTimer 和 Tween 展示了三种引用如何同时存在</h2><p>新增加的 SceneTreeTimer/Tween 源码研究提供了一个非常清楚的真实案例。</p>
+<p>SceneTree 持有：</p>
+<pre><code class="language-text">strong Ref → SceneTreeTimer
+strong Ref → Tween
+</code></pre>
+<p>这表示：</p>
+<blockquote>
+<p>只要任务还登记在 SceneTree 调度列表中，它必须继续存在。</p>
+</blockquote>
+<p>Tween 内部又持有：</p>
+<pre><code class="language-text">strong Ref → Tweener
+</code></pre>
+<p>表示 Tweener 的生命周期属于 Tween。</p>
+<p>但 Tweener 反过来访问父 Tween 时，不再建立另一条强边，而是：</p>
+<pre><code class="language-text">ObjectID → parent Tween
+</code></pre>
+<p>需要时再解析。</p>
+<p>绑定普通 Node 时，同样只保存 ObjectID。</p>
+<p>原因是：</p>
+<blockquote>
+<p>一个 Tween 观察或操作某个 Node，不应默认意味着 Tween 有权阻止 Node 被场景系统销毁。</p>
+</blockquote>
+<p>如果目标是 RefCounted，且某类 Tweener 的语义确实要求目标在任务期间存活，则可以额外保存强 Ref。</p>
+<p>这里不是统一使用一种引用，而是根据关系选择：</p>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>适合的表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>调度器必须保证任务存在</td>
+<td>强 Ref</td>
+</tr>
+<tr>
+<td>父流程必须拥有子步骤</td>
+<td>强 Ref</td>
+</tr>
+<tr>
+<td>子步骤只需回查父流程</td>
+<td>ObjectID</td>
+</tr>
+<tr>
+<td>Tween 绑定普通场景 Node</td>
+<td>ObjectID</td>
+</tr>
+<tr>
+<td>异步任务必须保住资源对象</td>
+<td>可选强 Ref</td>
+</tr>
+</tbody></table>
+<p>这是一种非常成熟的对象图设计：</p>
+<blockquote>
+<p>引用类型跟随责任，而不是跟随编码习惯。</p>
+</blockquote>
+<h2 id="暂时离开场景树也不等于对象已经死亡">暂时离开场景树，也不等于对象已经死亡</h2><p>Tween 绑定 Node 的处理还有一个值得注意的细节。</p>
+<p>目标可能处于三种不同状态：</p>
+<pre><code class="language-text">ObjectDB 已找不到
+→ 对象已经失效
+
+对象还存在，但暂时不在 SceneTree
+→ 生命周期仍然有效，只是当前不能推进
+
+对象存在且在 Tree 中
+→ 按暂停和 Process 规则继续
+</code></pre>
+<p>如果只使用一个：</p>
+<pre><code class="language-text">target == null
+</code></pre>
+<p>很容易把“暂时不可参与运行”和“已经不存在”混在一起。</p>
+<p>这说明生命周期状态往往不是简单的：</p>
+<pre><code class="language-text">alive / dead
+</code></pre>
+<p>而至少可能包含：</p>
+<pre><code class="language-text">存在
+可解析
+已挂载
+可处理
+正在运行
+已完成
+等待清理
+已销毁
+</code></pre>
+<p>对框架来说，这是一条很重要的设计提醒：</p>
+<blockquote>
+<p>存活状态、激活状态和调度状态应当分开表达。</p>
+</blockquote>
+<p>GameObject Active、Service Installed、Session Connected、Task Running、Asset Loaded 都不应该被粗暴压成同一个布尔值。</p>
+<h2 id="原子引用计数并不等于对象线程安全">原子引用计数并不等于对象线程安全</h2><p><code>SafeRefCount</code> 使用原子协议处理引用数量。</p>
+<p>这保证的是：</p>
+<ul>
+<li>增减引用不会因为普通数据竞争直接破坏计数；</li>
+<li>归零之后不能重新增加；</li>
+<li>最终释放过程拥有明确临界边界。</li>
+</ul>
+<p>但它并不保证：</p>
+<pre><code class="language-text">两个线程可以同时修改 Resource 的业务字段
+</code></pre>
+<p>也不保证：</p>
+<pre><code class="language-text">普通 Object 通过 ObjectID 找到后
+可以无约束跨线程长期使用
+</code></pre>
+<p>**引用线程安全（即“生命票数算得准”）<strong>和</strong>对象线程安全（即“对象内容可以并发访问”）**是两个不同问题。</p>
+<p>这一点非常容易在框架设计中被混淆。</p>
+<p>例如一个线程安全的 <code>SharedHandle&lt;T&gt;</code> 只能证明：</p>
+<blockquote>
+<p>Handle 的 acquire/release 没有竞争错误。</p>
+</blockquote>
+<p>它不能自动证明：</p>
+<blockquote>
+<p>T 的 Update、Dispose、Reload 和事件回调可以并发执行。</p>
+</blockquote>
+<p>生命周期协议只解决生命周期问题。</p>
+<p>业务并发仍然需要自己的锁、Actor、Job、主线程约束或不可变数据策略。</p>
+<h2 id="跨语言对象的最终销毁还需要统一裁决">跨语言对象的最终销毁还需要统一裁决</h2><p>Godot 的 RefCounted 并不只面对 C++。</p>
+<p>一个对象还可能关联：</p>
+<ul>
+<li>ScriptInstance；</li>
+<li>GDExtension；</li>
+<li>语言绑定；</li>
+<li>托管运行时对象。</li>
+</ul>
+<p>因此最终一次 <code>unreference()</code> 不能简单理解为：</p>
+<pre><code class="language-text">count == 0
+→ delete
+</code></pre>
+<p>底层还需要处理跨语言绑定的生命周期转换，并确保其他释放临界段已经退出。</p>
+<p>这暴露了另一个通用问题：</p>
+<blockquote>
+<p>一个对象可能拥有多个生命周期系统，但最终只能有一个销毁事实。</p>
+</blockquote>
+<p>Unity 框架中也经常存在类似情况：</p>
+<pre><code class="language-text">C# Service
++
+Native Handle
++
+UnityEngine.Object
++
+异步任务
++
+事件订阅
+</code></pre>
+<p>如果各层分别认为自己拥有最终释放权，就容易出现：</p>
+<ul>
+<li>Native 已释放，Managed 仍持有；</li>
+<li>Managed Dispose 完成，异步回调再次访问；</li>
+<li>Unity Object 已 Destroy，但普通 C# 引用仍非 null；</li>
+<li>事件总线继续保留旧订阅者；</li>
+<li>热更新卸载后旧 Delegate 仍然存在。</li>
+</ul>
+<p>跨运行时生命周期必须在某个明确边界统一收敛。</p>
+<h2 id="这套模型与几种常见方案的区别">这套模型与几种常见方案的区别</h2><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>身份稳定性</th>
+<th>自动保活</th>
+<th>强环风险</th>
+<th>跨帧观察</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>裸指针</td>
+<td>低</td>
+<td>否</td>
+<td>低</td>
+<td>风险高</td>
+</tr>
+<tr>
+<td>全部强智能指针</td>
+<td>高</td>
+<td>是</td>
+<td>高</td>
+<td>安全但容易过度拥有</td>
+</tr>
+<tr>
+<td>纯代际 Handle</td>
+<td>高</td>
+<td>否</td>
+<td>低</td>
+<td>需要重新解析</td>
+</tr>
+<tr>
+<td>Godot 式混合模型</td>
+<td>身份与所有权分开</td>
+<td>按关系选择</td>
+<td>可主动弱化</td>
+<td>适合复杂对象图</td>
+</tr>
+</tbody></table>
+<p>Godot 的价值并不在于：</p>
+<blockquote>
+<p>每个项目都应该复制 ObjectDB 和 RefCounted。</p>
+</blockquote>
+<p>真正值得迁移的是分型思想：</p>
+<pre><code class="language-text">身份
+≠
+所有权
+≠
+运行状态
+≠
+线程安全
+</code></pre>
+<p>只要这四件事在类型和 API 中被明确区分，很多生命周期 Bug 会在设计阶段就变得更容易发现。</p>
+<h2 id="对一般游戏框架的迁移方式">对一般游戏框架的迁移方式</h2><p>一个自研框架不需要直接复制 <code>Ref&lt;T&gt;</code>。</p>
+<p>可以把相同原则映射成自己的结构。</p>
+<p>例如 ECS：</p>
+<pre><code class="language-text">EntityHandle
+→ index + generation
+→ 只表达身份
+
+EntityLease
+→ 在异步操作期间阻止实体资源提前回收
+</code></pre>
+<p>例如服务系统：</p>
+<pre><code class="language-text">ServiceId
+→ 查找服务身份
+
+ServiceScope
+→ 决定服务由谁创建和销毁
+</code></pre>
+<p>例如资源系统：</p>
+<pre><code class="language-text">AssetHandle
+→ 定位逻辑资源
+
+AssetLease
+→ 保证加载结果在消费者使用期间不被卸载
+</code></pre>
+<p>例如网络：</p>
+<pre><code class="language-text">SessionId
+→ 表示连接身份
+
+SessionLease / ConnectionOwner
+→ 决定连接的真实生命周期
+</code></pre>
+<p>它们都遵循同一条规则：</p>
+<blockquote>
+<p>“我知道你是谁”和“我负责让你活着”必须是两种不同权限。</p>
+</blockquote>
+<h2 id="几种常见设计失败">几种常见设计失败</h2><h3 id="所有跨模块关系都保存对象引用">所有跨模块关系都保存对象引用</h3><p>短期方便，但最终无法判断哪个模块真正拥有生命周期。</p>
+<h3 id="所有关系都改成强引用">所有关系都改成强引用</h3><p>消除了悬空访问，却制造大量对象环和无法释放的问题。</p>
+<h3 id="handle-被当成强生命周期保证">Handle 被当成强生命周期保证</h3><p>代际 ID 只能验证身份，不能自动保证解析后的对象一直存活。</p>
+<h3 id="弱引用解析一次后长期保存裸指针">弱引用解析一次后长期保存裸指针</h3><p>第一次检查有效，不代表后续帧仍然有效。</p>
+<h3 id="引用计数归零后允许重新-acquire">引用计数归零后允许重新 acquire</h3><p>对象可能已经开始析构，形成危险复活。</p>
+<h3 id="强引用计数使用原子操作后就宣称对象线程安全">强引用计数使用原子操作后，就宣称对象线程安全</h3><p>计数安全与业务状态并发安全完全不同。</p>
+<h3 id="一个-isalive-表达所有状态">一个 <code>isAlive</code> 表达所有状态</h3><p>无法区分存在、挂载、运行、完成、等待清理和最终销毁。</p>
+<h3 id="双向对象关系全部使用强引用">双向对象关系全部使用强引用</h3><p>引用计数系统无法自动回收环。</p>
+<h3 id="创建者和真正-owner-之间没有接管协议">创建者和真正 Owner 之间没有接管协议</h3><p>对象在初始化阶段可能处于无人负责或重复负责状态。</p>
+<h3 id="managednative-与引擎对象各自独立释放">Managed、Native 与引擎对象各自独立释放</h3><p>最终生命周期没有统一裁决点。</p>
+<h2 id="我的生命周期设计检查表">我的生命周期设计检查表</h2><p>设计跨帧对象关系时，我会至少检查：</p>
+<ol>
+<li>这个引用表达身份，还是表达所有权？</li>
+<li>保存它是否应该阻止目标被销毁？</li>
+<li>如果只需要观察，能否使用代际 Handle 或弱引用？</li>
+<li>ID 被重新解析后，后续操作是否需要临时 Lease？</li>
+<li>对象销毁后，旧 ID 是否一定无法命中新对象？</li>
+<li>最后一个强 Owner 释放后，是否禁止重新 acquire？</li>
+<li>创建到第一 Owner 接管之间是否有明确生命协议？</li>
+<li>替换 Owner 时是否先取得新所有权，再释放旧所有权？</li>
+<li>对象图中的反向边是否真的需要强引用？</li>
+<li>是否存在 RefCounted/SharedPtr 强引用环？</li>
+<li>回调、Signal 和异步任务是否会偷偷形成强环？</li>
+<li>目标暂时停用与真正销毁是否被区分？</li>
+<li>完成、停止、失效和等待清理是否拥有独立状态？</li>
+<li>引用计数线程安全是否被错误扩大成对象线程安全？</li>
+<li>跨线程使用时，业务字段是否有独立并发协议？</li>
+<li>Managed、Native 和引擎对象最终由谁裁决销毁？</li>
+<li>Scope 退出时是否能够确定性断开所有强边？</li>
+<li>调试工具能否解释“谁现在还在持有这个对象”？</li>
+<li>弱身份解析失败时，调用方是否能够安全退化？</li>
+<li>当前关系是否真的需要生命周期耦合？</li>
+</ol>
+<p>复杂系统的生命周期问题，很多时候并不是“忘了释放”。</p>
+<p>更常见的根因是：</p>
+<blockquote>
+<p>一段代码保存了一个关系，却没有明确这个关系究竟意味着什么。</p>
+</blockquote>
+<p>Godot 的 ObjectID、RefCounted、Ref 和 WeakRef 最值得借鉴的地方，就是把这些不同含义拆开。</p>
+<p>ObjectID 负责回答：</p>
+<blockquote>
+<p>这个身份现在还有效吗？</p>
+</blockquote>
+<p>Ref 负责回答：</p>
+<blockquote>
+<p>谁正在保证这个对象继续存在？</p>
+</blockquote>
+<p>WeakRef 负责表达：</p>
+<blockquote>
+<p>我记得这个对象，但我并不拥有它。</p>
+</blockquote>
+<p>而对象图真正稳定之后，生命周期管理也就不再只是“哪里调用 free”的问题。</p>
+<p>它变成了一套可以被类型、结构和工具共同验证的所有权协议。</p>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>身份引用</td>
+<td>记住它是谁</td>
+</tr>
+<tr>
+<td>强所有权</td>
+<td>保证它继续活着</td>
+</tr>
+<tr>
+<td>代际身份</td>
+<td>地址能复用，身份证不能冒用</td>
+</tr>
+<tr>
+<td>侵入式引用计数</td>
+<td>计数器就在对象自己身上</td>
+</tr>
+<tr>
+<td>零后不可复活</td>
+<td>进入死亡流程后不能抢救回来</td>
+</tr>
+<tr>
+<td>先获取后释放</td>
+<td>先抓住新的，再松开旧的</td>
+</tr>
+<tr>
+<td>引用线程安全</td>
+<td>生命票数算得准</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下研究材料整理：</p>
+<ul>
+<li><code>notes/GODOT源码研究/02_对象系统/12_RefCounted与Ref强弱所有权及并发销毁边界.md</code></li>
+<li><code>notes/GODOT源码研究/02_对象系统/03_ObjectDB内存管理与生命周期.md</code></li>
+<li><code>notes/GODOT源码研究/01_运行时调度/16_SceneTreeTimer与Tween轻量调度及生命周期边界.md</code></li>
+<li><code>blogs/README.md</code></li>
+</ul>
+<p>本文基于当前 Godot 源码研究笔记进行工程化整理。关于 RefCounted 首次认领、零后不可复活、跨语言释放裁决和部分并发销毁边界，目前主要属于源码审计结论，而不是已经通过独立专项测试全面验证的行为保证；文中迁移到其他游戏框架的 Handle、Lease 和 Scope 设计属于工程建议，不表示相关项目已经采用完全相同的实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="ai-safe-execution-plane.html"><span>近期正式文章</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a><a href="battle-royale-dual-convergence.html"><span>近期正式文章</span><strong>双重收敛：大逃杀中的有效空间、存活人数与终局密度控制</strong><small>一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？</small></a><a href="unreal-engine-ddc-cook-iostore.html"><span>近期正式文章</span><strong>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</strong><small>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

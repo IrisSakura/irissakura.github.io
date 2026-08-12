@@ -1,0 +1,4826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/jrpg-chapter-party-progression.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="JRPG 中的章节驱动、队伍成长与冒险循环 | Sakura Design Journal">
+    <meta property="og:description" content="以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/jrpg-chapter-party-progression.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-jrpg-chapter-party-progression.png">
+    <meta property="og:image:alt" content="JRPG 中的章节驱动、队伍成长与冒险循环 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JRPG 中的章节驱动、队伍成长与冒险循环 | Sakura Design Journal">
+    <meta name="twitter:description" content="以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-jrpg-chapter-party-progression.png">
+    <meta name="twitter:image:alt" content="JRPG 中的章节驱动、队伍成长与冒险循环 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"JRPG 中的章节驱动、队伍成长与冒险循环 | Sakura Design Journal","description":"以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。","url":"https://irissakura.github.io/pages/journal/jrpg-chapter-party-progression.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"JRPG 中的章节驱动、队伍成长与冒险循环","image":"https://irissakura.github.io/assets/social/pages-journal-jrpg-chapter-party-progression.png","dateModified":"2026-08-12","about":["jrpg","narrative","party-progression"]}</script>
+    <!-- site-meta:end -->
+    <title>JRPG 中的章节驱动、队伍成长与冒险循环 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-jrpg-chapter-party-progression"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>JRPG 中的章节驱动、队伍成长与冒险循环</h1><p>以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。</p><div class="note-tags"><span>jrpg</span><span>narrative</span><span>party-progression</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="叙事章节驱动队伍中心成长与城镇迷宫战斗结算循环">叙事章节驱动、队伍中心成长与“城镇—迷宫—战斗—结算”循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>JRPG。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Japanese Role-Playing Game；</p>
+</li>
+<li><p>日式角色扮演游戏；</p>
+</li>
+<li><p>队伍制叙事RPG；</p>
+</li>
+<li><p>指令式角色扮演游戏。</p>
+</li>
+</ul>
+<p>JRPG并不是严格由开发地区或单一战斗机制定义的类型。</p>
+<p>它更接近一组长期形成的设计传统，通常具有以下特征：</p>
+<ul>
+<li><p>以作者塑造的固定主角团为核心；</p>
+</li>
+<li><p>通过章节化剧情推动世界和系统逐步展开；</p>
+</li>
+<li><p>以队伍组合、角色成长和装备构筑承载长期玩法；</p>
+</li>
+<li><p>在城镇、野外、迷宫、战斗和剧情演出之间形成稳定节奏；</p>
+</li>
+<li><p>通过明确的角色职业、技能和战斗职责建立可读性；</p>
+</li>
+<li><p>通过持续升级、解锁和关系变化强化角色陪伴感；</p>
+</li>
+<li><p>通常拥有较强的主线目标和相对明确的内容顺序；</p>
+</li>
+<li><p>允许一定支线探索，但不会完全依赖无边界沙盒系统。</p>
+</li>
+</ul>
+<p>本文讨论的不是所有JRPG都必须采用的固定模板，而是其中最具代表性的工程化设计范式：</p>
+<blockquote>
+<p>以叙事章节作为宏观进度边界，以玩家队伍作为持续成长主体，将城镇整备、地图探索、迷宫消耗、队伍战斗和战后结算串联成稳定循环；运行时通过章节状态、队伍状态、角色成长、战斗规则和世界变体共同推动角色、系统与剧情同步演化。</p>
+</blockquote>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>JRPG是一类以固定或半固定主角团、长线剧情、队伍成长和阶段性冒险为核心的角色扮演游戏类型。</p>
+<p>其典型流程为：</p>
+<ol>
+<li><p>剧情提出当前章节目标；</p>
+</li>
+<li><p>玩家在城镇与NPC交流、购买装备并整备队伍；</p>
+</li>
+<li><p>前往野外、世界地图或任务区域；</p>
+</li>
+<li><p>探索迷宫、收集资源、解决机关并遭遇敌人；</p>
+</li>
+<li><p>通过指令式、ATB式或动作式战斗推进；</p>
+</li>
+<li><p>管理生命、法力、状态、消耗品和队伍阵容；</p>
+</li>
+<li><p>击败精英或章节首领；</p>
+</li>
+<li><p>获得经验、货币、装备、素材和剧情信息；</p>
+</li>
+<li><p>触发章节结算、队伍变化或世界阶段变化；</p>
+</li>
+<li><p>返回新的城镇、区域或剧情节点；</p>
+</li>
+<li><p>解锁新角色、职业、技能、交通方式和系统；</p>
+</li>
+<li><p>进入下一轮冒险。</p>
+</li>
+</ol>
+<p>JRPG的主要长期资源通常包括：</p>
+<ul>
+<li><p>角色等级；</p>
+</li>
+<li><p>职业或成长路线；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>素材；</p>
+</li>
+<li><p>消耗品；</p>
+</li>
+<li><p>队伍成员；</p>
+</li>
+<li><p>角色关系；</p>
+</li>
+<li><p>世界地图权限；</p>
+</li>
+<li><p>主线与支线进度；</p>
+</li>
+<li><p>玩家对敌人机制和队伍组合的理解。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>JRPG最具代表性的设计范式由六个核心支柱构成。</p>
+<h2 id="31-章节驱动的宏观进度">3.1 章节驱动的宏观进度</h2><p>世界内容通常不是一次性全部开放，而是根据章节逐步展开。</p>
+<p>章节可以控制：</p>
+<ul>
+<li><p>当前主线目标；</p>
+</li>
+<li><p>可访问区域；</p>
+</li>
+<li><p>城镇和NPC状态；</p>
+</li>
+<li><p>队伍成员；</p>
+</li>
+<li><p>可用交通工具；</p>
+</li>
+<li><p>商店商品；</p>
+</li>
+<li><p>敌人等级；</p>
+</li>
+<li><p>支线任务；</p>
+</li>
+<li><p>战斗系统功能；</p>
+</li>
+<li><p>世界地图变化；</p>
+</li>
+<li><p>最终可进入的迷宫和首领。</p>
+</li>
+</ul>
+<p>章节不仅是叙事标签，也是运行时世界状态的高层边界。</p>
+<hr />
+<h2 id="32-队伍是主要成长主体">3.2 队伍是主要成长主体</h2><p>玩家控制的不是一个孤立角色，而是一支具有内部差异的队伍。</p>
+<p>队伍设计需要处理：</p>
+<ul>
+<li><p>前排和后排；</p>
+</li>
+<li><p>当前参战成员；</p>
+</li>
+<li><p>替补成员；</p>
+</li>
+<li><p>临时客串成员；</p>
+</li>
+<li><p>职业职责；</p>
+</li>
+<li><p>技能协同；</p>
+</li>
+<li><p>属性克制；</p>
+</li>
+<li><p>关系效果；</p>
+</li>
+<li><p>共享资源；</p>
+</li>
+<li><p>战斗外能力。</p>
+</li>
+</ul>
+<p>队伍成长不仅是所有角色数值增加，还包括：</p>
+<ul>
+<li><p>新成员加入；</p>
+</li>
+<li><p>角色离队或回归；</p>
+</li>
+<li><p>职业变化；</p>
+</li>
+<li><p>技能组合扩展；</p>
+</li>
+<li><p>角色关系深化；</p>
+</li>
+<li><p>阵容结构成熟。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-城镇迷宫与战斗形成资源循环">3.3 城镇、迷宫与战斗形成资源循环</h2><p>城镇通常提供：</p>
+<ul>
+<li><p>恢复；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>锻造；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>NPC信息；</p>
+</li>
+<li><p>队伍调整；</p>
+</li>
+<li><p>剧情推进。</p>
+</li>
+</ul>
+<p>迷宫通常消耗：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>法力；</p>
+</li>
+<li><p>道具；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>探索注意力。</p>
+</li>
+</ul>
+<p>战斗提供：</p>
+<ul>
+<li><p>经验；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>素材；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>技能成长；</p>
+</li>
+<li><p>剧情进度。</p>
+</li>
+</ul>
+<p>完整循环为：</p>
+<p>城镇整备
+→ 进入迷宫
+→ 持续资源消耗
+→ 战斗和探索收益
+→ 击败首领
+→ 返回或进入新城镇
+→ 强化队伍
+→ 挑战更高难度内容</p>
+<hr />
+<h2 id="34-系统与剧情按节奏逐步解锁">3.4 系统与剧情按节奏逐步解锁</h2><p>JRPG通常不会在游戏开始时开放全部系统。</p>
+<p>常见解锁顺序包括：</p>
+<ul>
+<li><p>基础攻击与技能；</p>
+</li>
+<li><p>状态和属性克制；</p>
+</li>
+<li><p>队伍替换；</p>
+</li>
+<li><p>装备强化；</p>
+</li>
+<li><p>职业；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>合体技；</p>
+</li>
+<li><p>战斗中换人；</p>
+</li>
+<li><p>特殊资源；</p>
+</li>
+<li><p>高级移动能力；</p>
+</li>
+<li><p>飞空艇或世界旅行。</p>
+</li>
+</ul>
+<p>逐步解锁具有两个作用：</p>
+<ol>
+<li><p>降低早期认知负担；</p>
+</li>
+<li><p>让剧情成长与玩法成长同步发生。</p>
+</li>
+</ol>
+<hr />
+<h2 id="35-角色成长与叙事身份相互关联">3.5 角色成长与叙事身份相互关联</h2><p>角色的战斗能力最好能够反映其：</p>
+<ul>
+<li><p>性格；</p>
+</li>
+<li><p>身份；</p>
+</li>
+<li><p>出身；</p>
+</li>
+<li><p>剧情经历；</p>
+</li>
+<li><p>人际关系；</p>
+</li>
+<li><p>内在冲突。</p>
+</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li><p>防御型角色承担保护职责；</p>
+</li>
+<li><p>复仇角色拥有高风险爆发技能；</p>
+</li>
+<li><p>学者型角色擅长分析敌人；</p>
+</li>
+<li><p>关系深化后解锁合体技；</p>
+</li>
+<li><p>角色完成个人剧情后获得新职业或终极技能。</p>
+</li>
+</ul>
+<p>成长不只是数值奖励，也是角色弧线的系统表达。</p>
+<hr />
+<h2 id="36-长期体验依赖稳定的内容节奏">3.6 长期体验依赖稳定的内容节奏</h2><p>JRPG通常具有较长游戏时长。</p>
+<p>需要在以下内容之间持续切换：</p>
+<ul>
+<li><p>剧情；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>普通战斗；</p>
+</li>
+<li><p>解谜；</p>
+</li>
+<li><p>城镇休息；</p>
+</li>
+<li><p>队伍构筑；</p>
+</li>
+<li><p>精英挑战；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>支线故事。</p>
+</li>
+</ul>
+<p>如果任何一种内容连续持续过久，都会产生疲劳。</p>
+<p>因此，JRPG的节奏设计本质上是多个内容系统的编排问题。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与西式角色扮演游戏的区别">4.1 与西式角色扮演游戏的区别</h2><p>西式RPG通常更强调：</p>
+<ul>
+<li><p>玩家自定义主角；</p>
+</li>
+<li><p>对话选择；</p>
+</li>
+<li><p>阵营；</p>
+</li>
+<li><p>开放任务顺序；</p>
+</li>
+<li><p>系统性世界；</p>
+</li>
+<li><p>多结果角色扮演。</p>
+</li>
+</ul>
+<p>JRPG通常更强调：</p>
+<ul>
+<li><p>作者定义的主角团；</p>
+</li>
+<li><p>清晰主线；</p>
+</li>
+<li><p>章节化推进；</p>
+</li>
+<li><p>角色关系；</p>
+</li>
+<li><p>队伍成长；</p>
+</li>
+<li><p>精心编排的剧情高潮。</p>
+</li>
+</ul>
+<p>这是设计传统上的侧重点差异，不是绝对边界。</p>
+<hr />
+<h2 id="42-与战术角色扮演游戏的区别">4.2 与战术角色扮演游戏的区别</h2><p>战术RPG主要关注：</p>
+<ul>
+<li><p>离散战场；</p>
+</li>
+<li><p>单位位置；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>行动顺序。</p>
+</li>
+</ul>
+<p>JRPG的代表性战斗通常更加抽象，重点是：</p>
+<ul>
+<li><p>队伍职责；</p>
+</li>
+<li><p>技能选择；</p>
+</li>
+<li><p>属性克制；</p>
+</li>
+<li><p>资源管理；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>连携；</p>
+</li>
+<li><p>行动时机。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-与动作rpg的区别">4.3 与动作RPG的区别</h2><p>动作RPG强调：</p>
+<ul>
+<li><p>直接移动；</p>
+</li>
+<li><p>闪避；</p>
+</li>
+<li><p>攻击判定；</p>
+</li>
+<li><p>动作执行。</p>
+</li>
+</ul>
+<p>部分JRPG也使用动作战斗，但JRPG的宏观结构仍通常保留：</p>
+<ul>
+<li><p>主角团；</p>
+</li>
+<li><p>章节推进；</p>
+</li>
+<li><p>城镇迷宫循环；</p>
+</li>
+<li><p>队伍成长；</p>
+</li>
+<li><p>剧情驱动的系统解锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-与类魂动作rpg的区别">4.4 与类魂动作RPG的区别</h2><p>类魂游戏强调：</p>
+<ul>
+<li><p>动作承诺；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>死亡资产回收；</p>
+</li>
+<li><p>敌人模式学习；</p>
+</li>
+<li><p>世界回环。</p>
+</li>
+</ul>
+<p>JRPG通常更强调：</p>
+<ul>
+<li><p>主角团叙事；</p>
+</li>
+<li><p>战斗结算成长；</p>
+</li>
+<li><p>城镇和迷宫；</p>
+</li>
+<li><p>队伍职业；</p>
+</li>
+<li><p>长篇章节；</p>
+</li>
+<li><p>更稳定的失败恢复。</p>
+</li>
+</ul>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十五个核心域：</p>
+<ol>
+<li><p>游戏流程与章节编排域；</p>
+</li>
+<li><p>世界地图与场景导航域；</p>
+</li>
+<li><p>队伍、角色与阵容域；</p>
+</li>
+<li><p>属性、等级与成长域；</p>
+</li>
+<li><p>装备、物品与经济域；</p>
+</li>
+<li><p>遭遇生成与战斗入口域；</p>
+</li>
+<li><p>战斗状态机与行动调度域；</p>
+</li>
+<li><p>技能、伤害与状态效果域；</p>
+</li>
+<li><p>敌人、Boss与战斗AI域；</p>
+</li>
+<li><p>城镇、商店与强化域；</p>
+</li>
+<li><p>迷宫、机关与探索资源域；</p>
+</li>
+<li><p>任务、NPC与对话域；</p>
+</li>
+<li><p>剧情演出与世界阶段域；</p>
+</li>
+<li><p>存档、检查点与继续游戏域；</p>
+</li>
+<li><p>调试、内容验证与数据分析域。</p>
+</li>
+</ol>
+<p>总体运行关系如下：</p>
+<p>章节状态加载
+→ 世界和NPC生成对应变体
+→ 玩家在城镇进行整备
+→ 选择区域或任务
+→ 加载探索场景
+→ 遭遇系统创建战斗
+→ 战斗系统读取当前队伍快照
+→ 玩家和敌人依次执行行动
+→ 结算生命、法力、状态和奖励
+→ 战斗结果写回队伍与世界
+→ 探索继续或触发首领
+→ 章节条件满足
+→ 剧情系统推进世界阶段
+→ 新角色、区域和系统解锁
+→ 在稳定边界保存进度</p>
+<hr />
+<h2 id="6-游戏流程与章节状态机">6. 游戏流程与章节状态机</h2><h2 id="61-gameflowphase">6.1 GameFlowPhase</h2><p>建议阶段：</p>
+<ul>
+<li><p>Boot；</p>
+</li>
+<li><p>Title；</p>
+</li>
+<li><p>LoadGame；</p>
+</li>
+<li><p>StoryScene；</p>
+</li>
+<li><p>TownExploration；</p>
+</li>
+<li><p>FieldExploration；</p>
+</li>
+<li><p>DungeonExploration；</p>
+</li>
+<li><p>BattleTransition；</p>
+</li>
+<li><p>Battle；</p>
+</li>
+<li><p>BattleResult；</p>
+</li>
+<li><p>ChapterTransition；</p>
+</li>
+<li><p>SavePoint；</p>
+</li>
+<li><p>GameOver；</p>
+</li>
+<li><p>Ending。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-chapterdefinition">6.2 ChapterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ChapterId；</p>
+</li>
+<li><p>DisplayName；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>MainObjectiveIds；</p>
+</li>
+<li><p>AvailableRegionIds；</p>
+</li>
+<li><p>AvailableCharacterIds；</p>
+</li>
+<li><p>NPCStateOverrides；</p>
+</li>
+<li><p>ShopStateOverrides；</p>
+</li>
+<li><p>EncounterSetIds；</p>
+</li>
+<li><p>RequiredBossIds；</p>
+</li>
+<li><p>WorldStageId；</p>
+</li>
+<li><p>CompletionConditions；</p>
+</li>
+<li><p>CompletionEffects；</p>
+</li>
+<li><p>NextChapterIds。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-chapterruntimestate">6.3 ChapterRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentChapterId；</p>
+</li>
+<li><p>CurrentStageId；</p>
+</li>
+<li><p>CompletedObjectiveIds；</p>
+</li>
+<li><p>TriggeredStoryEventIds；</p>
+</li>
+<li><p>UnlockedRegionIds；</p>
+</li>
+<li><p>PartyChangeHistory；</p>
+</li>
+<li><p>ChapterVariables；</p>
+</li>
+<li><p>ChapterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-章节切换流程">6.4 章节切换流程</h2><ol>
+<li><p>锁定玩家普通输入；</p>
+</li>
+<li><p>检查完成条件；</p>
+</li>
+<li><p>提交当前世界状态；</p>
+</li>
+<li><p>播放章节结算演出；</p>
+</li>
+<li><p>应用队伍成员变化；</p>
+</li>
+<li><p>修改世界阶段；</p>
+</li>
+<li><p>解锁区域、商店和任务；</p>
+</li>
+<li><p>初始化新章节目标；</p>
+</li>
+<li><p>保存稳定快照；</p>
+</li>
+<li><p>将控制权交还玩家。</p>
+</li>
+</ol>
+<hr />
+<h2 id="65-防止章节逻辑散落">6.5 防止章节逻辑散落</h2><p>错误方式是让：</p>
+<ul>
+<li><p>NPC对话；</p>
+</li>
+<li><p>Boss脚本；</p>
+</li>
+<li><p>场景入口；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>队伍系统；</p>
+</li>
+</ul>
+<p>分别修改当前章节。</p>
+<p>推荐所有章节变化统一通过：</p>
+<ul>
+<li><p>StoryCommand；</p>
+</li>
+<li><p>ChapterTransition；</p>
+</li>
+<li><p>WorldStageUpdate；</p>
+</li>
+</ul>
+<p>提交。</p>
+<hr />
+<h2 id="7-世界地图与场景模型">7. 世界地图与场景模型</h2><h2 id="71-worldregion">7.1 WorldRegion</h2><p>建议字段：</p>
+<ul>
+<li><p>RegionId；</p>
+</li>
+<li><p>RegionType；</p>
+</li>
+<li><p>SceneIds；</p>
+</li>
+<li><p>NeighborRegionIds；</p>
+</li>
+<li><p>EntryRequirements；</p>
+</li>
+<li><p>RecommendedLevel；</p>
+</li>
+<li><p>EncounterProfileId；</p>
+</li>
+<li><p>StoryAvailabilityRules；</p>
+</li>
+<li><p>TravelRules；</p>
+</li>
+<li><p>RegionStateId；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-场景类型">7.2 场景类型</h2><p>包括：</p>
+<ul>
+<li><p>城镇；</p>
+</li>
+<li><p>村庄；</p>
+</li>
+<li><p>世界地图；</p>
+</li>
+<li><p>野外区域；</p>
+</li>
+<li><p>迷宫；</p>
+</li>
+<li><p>特殊剧情场景；</p>
+</li>
+<li><p>战斗场景；</p>
+</li>
+<li><p>Boss竞技场；</p>
+</li>
+<li><p>交通工具内部；</p>
+</li>
+<li><p>隐藏区域。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-scenedefinition">7.3 SceneDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SceneId；</p>
+</li>
+<li><p>RegionId；</p>
+</li>
+<li><p>SceneAssetId；</p>
+</li>
+<li><p>SpawnAnchors；</p>
+</li>
+<li><p>ExitDefinitions；</p>
+</li>
+<li><p>NPCSpawnRules；</p>
+</li>
+<li><p>EncounterZones；</p>
+</li>
+<li><p>TreasureDefinitions；</p>
+</li>
+<li><p>PuzzleDefinitions；</p>
+</li>
+<li><p>StoryTriggerDefinitions；</p>
+</li>
+<li><p>SavePointIds；</p>
+</li>
+<li><p>SceneVariantRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-场景变体">7.4 场景变体</h2><p>同一场景可以根据世界阶段产生不同状态：</p>
+<ul>
+<li><p>白天与夜晚；</p>
+</li>
+<li><p>战前与战后；</p>
+</li>
+<li><p>被摧毁前后；</p>
+</li>
+<li><p>节庆期间；</p>
+</li>
+<li><p>敌军占领；</p>
+</li>
+<li><p>NPC离开；</p>
+</li>
+<li><p>商店关闭；</p>
+</li>
+<li><p>新入口开启。</p>
+</li>
+</ul>
+<p>不建议为每个阶段复制完整场景。</p>
+<p>应使用：</p>
+<ul>
+<li><p>SceneVariant；</p>
+</li>
+<li><p>NPCState；</p>
+</li>
+<li><p>ObjectState；</p>
+</li>
+<li><p>LightingProfile；</p>
+</li>
+<li><p>EnvironmentProfile；</p>
+</li>
+</ul>
+<p>组合。</p>
+<hr />
+<h2 id="75-世界地图旅行">7.5 世界地图旅行</h2><p>旅行系统可以采用：</p>
+<ul>
+<li><p>节点式地图；</p>
+</li>
+<li><p>自由探索地图；</p>
+</li>
+<li><p>区域选择；</p>
+</li>
+<li><p>交通工具；</p>
+</li>
+<li><p>快速移动。</p>
+</li>
+</ul>
+<p>旅行需要检查：</p>
+<ul>
+<li><p>区域是否已解锁；</p>
+</li>
+<li><p>当前剧情是否允许离开；</p>
+</li>
+<li><p>队伍是否完整；</p>
+</li>
+<li><p>是否存在强制事件；</p>
+</li>
+<li><p>是否需要交通工具；</p>
+</li>
+<li><p>是否触发途中遭遇。</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-队伍与角色模型">8. 队伍与角色模型</h2><h2 id="81-characterdefinition">8.1 CharacterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CharacterId；</p>
+</li>
+<li><p>DisplayName；</p>
+</li>
+<li><p>StoryIdentity；</p>
+</li>
+<li><p>BaseStatProfile；</p>
+</li>
+<li><p>GrowthProfileId；</p>
+</li>
+<li><p>DefaultJobId；</p>
+</li>
+<li><p>AvailableJobIds；</p>
+</li>
+<li><p>AbilitySetId；</p>
+</li>
+<li><p>EquipmentRules；</p>
+</li>
+<li><p>RelationshipProfile；</p>
+</li>
+<li><p>NarrativeFlags；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-characterruntimestate">8.2 CharacterRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CharacterId；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>Experience；</p>
+</li>
+<li><p>CurrentJobId；</p>
+</li>
+<li><p>JobLevels；</p>
+</li>
+<li><p>BaseAttributes；</p>
+</li>
+<li><p>DerivedAttributes；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentMana；</p>
+</li>
+<li><p>EquipmentInstances；</p>
+</li>
+<li><p>LearnedAbilities；</p>
+</li>
+<li><p>StatusInstances；</p>
+</li>
+<li><p>RelationshipStates；</p>
+</li>
+<li><p>NarrativeState；</p>
+</li>
+<li><p>AvailabilityState；</p>
+</li>
+<li><p>CharacterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-partystate">8.3 PartyState</h2><p>建议包含：</p>
+<ul>
+<li><p>ActiveMemberIds；</p>
+</li>
+<li><p>ReserveMemberIds；</p>
+</li>
+<li><p>GuestMemberIds；</p>
+</li>
+<li><p>LeaderCharacterId；</p>
+</li>
+<li><p>FormationState；</p>
+</li>
+<li><p>SharedInventory；</p>
+</li>
+<li><p>SharedCurrency；</p>
+</li>
+<li><p>PartyAbilities；</p>
+</li>
+<li><p>PartyRelationshipState；</p>
+</li>
+<li><p>PartyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-队伍成员状态">8.4 队伍成员状态</h2><p>角色可以处于：</p>
+<ul>
+<li><p>Available；</p>
+</li>
+<li><p>Active；</p>
+</li>
+<li><p>Reserve；</p>
+</li>
+<li><p>Guest；</p>
+</li>
+<li><p>TemporarilyUnavailable；</p>
+</li>
+<li><p>StoryLocked；</p>
+</li>
+<li><p>Injured；</p>
+</li>
+<li><p>Captured；</p>
+</li>
+<li><p>LeftParty；</p>
+</li>
+<li><p>PermanentlyRemoved。</p>
+</li>
+</ul>
+<hr />
+<h2 id="85-参战与替补">8.5 参战与替补</h2><p>需要明确：</p>
+<ul>
+<li><p>参战人数上限；</p>
+</li>
+<li><p>战斗中是否可以换人；</p>
+</li>
+<li><p>替补是否获得经验；</p>
+</li>
+<li><p>替补状态是否恢复；</p>
+</li>
+<li><p>队伍失败时如何处理替补；</p>
+</li>
+<li><p>临时角色能否修改装备；</p>
+</li>
+<li><p>离队角色的装备如何处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="86-角色身份与战斗职责">8.6 角色身份与战斗职责</h2><p>每名角色至少应在以下方面具有差异：</p>
+<ul>
+<li><p>主要属性；</p>
+</li>
+<li><p>技能资源；</p>
+</li>
+<li><p>职业职责；</p>
+</li>
+<li><p>攻击范围；</p>
+</li>
+<li><p>属性类型；</p>
+</li>
+<li><p>状态能力；</p>
+</li>
+<li><p>队伍增益；</p>
+</li>
+<li><p>成长方式。</p>
+</li>
+</ul>
+<p>不能只通过基础伤害不同区分角色。</p>
+<hr />
+<h2 id="9-属性与派生数值">9. 属性与派生数值</h2><h2 id="91-baseattributes">9.1 BaseAttributes</h2><p>常见基础属性：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>法力；</p>
+</li>
+<li><p>力量；</p>
+</li>
+<li><p>魔力；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>魔防；</p>
+</li>
+<li><p>敏捷；</p>
+</li>
+<li><p>幸运；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>闪避。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-derivedattributes">9.2 DerivedAttributes</h2><p>派生数值可以包括：</p>
+<ul>
+<li><p>物理攻击；</p>
+</li>
+<li><p>魔法攻击；</p>
+</li>
+<li><p>行动速度；</p>
+</li>
+<li><p>暴击率；</p>
+</li>
+<li><p>状态命中；</p>
+</li>
+<li><p>状态抗性；</p>
+</li>
+<li><p>治疗强度；</p>
+</li>
+<li><p>元素抗性；</p>
+</li>
+<li><p>先制概率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-modifierpipeline">9.3 ModifierPipeline</h2><p>推荐固定修正顺序：</p>
+<ol>
+<li><p>角色基础属性；</p>
+</li>
+<li><p>等级成长；</p>
+</li>
+<li><p>职业修正；</p>
+</li>
+<li><p>装备固定值；</p>
+</li>
+<li><p>被动技能；</p>
+</li>
+<li><p>临时状态；</p>
+</li>
+<li><p>队伍光环；</p>
+</li>
+<li><p>难度修正；</p>
+</li>
+<li><p>上下限；</p>
+</li>
+<li><p>最终值。</p>
+</li>
+</ol>
+<hr />
+<h2 id="94-数值来源解释">9.4 数值来源解释</h2><p>UI和调试器应能够显示：</p>
+<p>物理攻击：</p>
+<ul>
+<li><p>角色基础：80；</p>
+</li>
+<li><p>等级成长：+24；</p>
+</li>
+<li><p>战士职业：+15%；</p>
+</li>
+<li><p>武器：+42；</p>
+</li>
+<li><p>饰品：+8；</p>
+</li>
+<li><p>临时强化：+20%；</p>
+</li>
+<li><p>最终：184。</p>
+</li>
+</ul>
+<p>复杂数值必须可以追踪来源。</p>
+<hr />
+<h2 id="10-等级与成长系统">10. 等级与成长系统</h2><h2 id="101-growthprofile">10.1 GrowthProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>GrowthProfileId；</p>
+</li>
+<li><p>ExperienceCurve；</p>
+</li>
+<li><p>AttributeGrowthRules；</p>
+</li>
+<li><p>LevelCap；</p>
+</li>
+<li><p>SkillUnlockRules；</p>
+</li>
+<li><p>JobPointRules；</p>
+</li>
+<li><p>CatchUpPolicy；</p>
+</li>
+<li><p>ReserveExperiencePolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-经验来源">10.2 经验来源</h2><p>包括：</p>
+<ul>
+<li><p>普通战斗；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>角色事件；</p>
+</li>
+<li><p>训练；</p>
+</li>
+<li><p>特殊道具。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-追赶机制">10.3 追赶机制</h2><p>后加入角色或长期替补角色需要追赶机制：</p>
+<ul>
+<li><p>替补经验；</p>
+</li>
+<li><p>等级下限；</p>
+</li>
+<li><p>经验加成；</p>
+</li>
+<li><p>共享职业点；</p>
+</li>
+<li><p>快速训练；</p>
+</li>
+<li><p>按主角等级同步；</p>
+</li>
+<li><p>装备补偿。</p>
+</li>
+</ul>
+<p>否则玩家会因培养成本不愿更换队伍。</p>
+<hr />
+<h2 id="104-成长曲线">10.4 成长曲线</h2><p>成长曲线应控制：</p>
+<ul>
+<li><p>每个章节预期等级；</p>
+</li>
+<li><p>普通战斗数量；</p>
+</li>
+<li><p>Boss挑战强度；</p>
+</li>
+<li><p>装备价值；</p>
+</li>
+<li><p>过度练级收益；</p>
+</li>
+<li><p>后期数值膨胀。</p>
+</li>
+</ul>
+<hr />
+<h2 id="105-防止练级成为唯一解法">10.5 防止练级成为唯一解法</h2><p>可以通过以下方式限制纯数值压制：</p>
+<ul>
+<li><p>等级收益递减；</p>
+</li>
+<li><p>Boss机制；</p>
+</li>
+<li><p>属性抗性；</p>
+</li>
+<li><p>状态和行动规则；</p>
+</li>
+<li><p>等级同步；</p>
+</li>
+<li><p>动态经验；</p>
+</li>
+<li><p>章节等级建议。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-职业与构筑系统">11. 职业与构筑系统</h2><h2 id="111-jobdefinition">11.1 JobDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>JobId；</p>
+</li>
+<li><p>JobTags；</p>
+</li>
+<li><p>AttributeModifiers；</p>
+</li>
+<li><p>AbilityUnlocks；</p>
+</li>
+<li><p>EquipmentPermissions；</p>
+</li>
+<li><p>JobResourceDefinition；</p>
+</li>
+<li><p>JobLevelCurve；</p>
+</li>
+<li><p>PrerequisiteJobs；</p>
+</li>
+<li><p>ExclusiveRules；</p>
+</li>
+<li><p>MasteryRewards；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-职业类型">11.2 职业类型</h2><p>可以包括：</p>
+<ul>
+<li><p>固定角色职业；</p>
+</li>
+<li><p>可切换职业；</p>
+</li>
+<li><p>主副职业；</p>
+</li>
+<li><p>职业树；</p>
+</li>
+<li><p>装备决定职业；</p>
+</li>
+<li><p>技能盘；</p>
+</li>
+<li><p>混合职业。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-职业切换边界">11.3 职业切换边界</h2><p>需要明确：</p>
+<ul>
+<li><p>是否只能在城镇切换；</p>
+</li>
+<li><p>是否可以战斗中切换；</p>
+</li>
+<li><p>属性如何重新计算；</p>
+</li>
+<li><p>装备不合法时如何处理；</p>
+</li>
+<li><p>技能是否永久学习；</p>
+</li>
+<li><p>职业等级是否独立；</p>
+</li>
+<li><p>当前法力和生命如何调整。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-职业身份">11.4 职业身份</h2><p>每个职业应在以下方面形成差异：</p>
+<ul>
+<li><p>行动资源；</p>
+</li>
+<li><p>队伍职责；</p>
+</li>
+<li><p>技能目标；</p>
+</li>
+<li><p>伤害类型；</p>
+</li>
+<li><p>生存方式；</p>
+</li>
+<li><p>装备限制；</p>
+</li>
+<li><p>成长节奏；</p>
+</li>
+<li><p>战斗操作。</p>
+</li>
+</ul>
+<p>职业不能只提供属性百分比。</p>
+<hr />
+<h2 id="12-装备道具与经济">12. 装备、道具与经济</h2><h2 id="121-itemdefinition">12.1 ItemDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ItemId；</p>
+</li>
+<li><p>ItemType；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>StackLimit；</p>
+</li>
+<li><p>PurchasePrice；</p>
+</li>
+<li><p>SellPrice；</p>
+</li>
+<li><p>UsageRules；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>EquipmentSlot；</p>
+</li>
+<li><p>AttributeRequirements；</p>
+</li>
+<li><p>StoryFlags；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-equipmentinstance">12.2 EquipmentInstance</h2><p>建议包含：</p>
+<ul>
+<li><p>EquipmentInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>UpgradeLevel；</p>
+</li>
+<li><p>EnhancementState；</p>
+</li>
+<li><p>GrantedAbilities；</p>
+</li>
+<li><p>RandomModifiers；</p>
+</li>
+<li><p>BoundCharacterId；</p>
+</li>
+<li><p>DurabilityState；</p>
+</li>
+<li><p>EquipmentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-装备槽">12.3 装备槽</h2><p>常见槽位：</p>
+<ul>
+<li><p>武器；</p>
+</li>
+<li><p>副手；</p>
+</li>
+<li><p>头部；</p>
+</li>
+<li><p>身体；</p>
+</li>
+<li><p>手部；</p>
+</li>
+<li><p>腿部；</p>
+</li>
+<li><p>饰品；</p>
+</li>
+<li><p>魔石或符文；</p>
+</li>
+<li><p>特殊剧情装备。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-消耗品">12.4 消耗品</h2><p>消耗品可以覆盖：</p>
+<ul>
+<li><p>恢复生命；</p>
+</li>
+<li><p>恢复法力；</p>
+</li>
+<li><p>解除状态；</p>
+</li>
+<li><p>复活；</p>
+</li>
+<li><p>造成伤害；</p>
+</li>
+<li><p>逃离战斗；</p>
+</li>
+<li><p>探索机关；</p>
+</li>
+<li><p>战斗增益。</p>
+</li>
+</ul>
+<hr />
+<h2 id="125-经济循环">12.5 经济循环</h2><p>金钱来源：</p>
+<ul>
+<li><p>战斗；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>出售；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>小游戏。</p>
+</li>
+</ul>
+<p>金钱消耗：</p>
+<ul>
+<li><p>装备；</p>
+</li>
+<li><p>道具；</p>
+</li>
+<li><p>住宿；</p>
+</li>
+<li><p>强化；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>交通；</p>
+</li>
+<li><p>支线投入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="126-防止商店装备立即淘汰">12.6 防止商店装备立即淘汰</h2><p>需要协调：</p>
+<ul>
+<li><p>商店装备；</p>
+</li>
+<li><p>宝箱装备；</p>
+</li>
+<li><p>Boss掉落；</p>
+</li>
+<li><p>制作装备；</p>
+</li>
+<li><p>支线奖励。</p>
+</li>
+</ul>
+<p>不同来源应具有不同价值：</p>
+<ul>
+<li><p>商店提供稳定基础；</p>
+</li>
+<li><p>宝箱奖励探索；</p>
+</li>
+<li><p>Boss提供机制性装备；</p>
+</li>
+<li><p>制作允许定向追求；</p>
+</li>
+<li><p>支线提供独特能力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="13-城镇与整备系统">13. 城镇与整备系统</h2><h2 id="131-towndefinition">13.1 TownDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TownId；</p>
+</li>
+<li><p>SceneIds；</p>
+</li>
+<li><p>NPCDefinitions；</p>
+</li>
+<li><p>ShopDefinitions；</p>
+</li>
+<li><p>InnDefinition；</p>
+</li>
+<li><p>CraftingDefinitions；</p>
+</li>
+<li><p>QuestHubDefinitions；</p>
+</li>
+<li><p>StoryStageRules；</p>
+</li>
+<li><p>TravelConnections；</p>
+</li>
+<li><p>TownVariantRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-城镇功能">13.2 城镇功能</h2><p>包括：</p>
+<ul>
+<li><p>恢复；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>酒馆；</p>
+</li>
+<li><p>锻造；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>队伍调整；</p>
+</li>
+<li><p>情报；</p>
+</li>
+<li><p>剧情；</p>
+</li>
+<li><p>小游戏；</p>
+</li>
+<li><p>快速移动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-城镇节奏职责">13.3 城镇节奏职责</h2><p>城镇应提供：</p>
+<ul>
+<li><p>战斗后的恢复；</p>
+</li>
+<li><p>新章节信息；</p>
+</li>
+<li><p>新装备；</p>
+</li>
+<li><p>角色互动；</p>
+</li>
+<li><p>系统教学；</p>
+</li>
+<li><p>下一目标；</p>
+</li>
+<li><p>情绪缓冲。</p>
+</li>
+</ul>
+<p>它不仅是功能菜单的3D包装。</p>
+<hr />
+<h2 id="134-商店状态">13.4 商店状态</h2><p>商店商品可以受：</p>
+<ul>
+<li><p>章节；</p>
+</li>
+<li><p>世界阶段；</p>
+</li>
+<li><p>商人任务；</p>
+</li>
+<li><p>城镇经济；</p>
+</li>
+<li><p>玩家声望；</p>
+</li>
+<li><p>特殊材料；</p>
+</li>
+<li><p>难度；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="14-迷宫与探索循环">14. 迷宫与探索循环</h2><h2 id="141-dungeondefinition">14.1 DungeonDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>DungeonId；</p>
+</li>
+<li><p>SceneIds；</p>
+</li>
+<li><p>EntryRequirements；</p>
+</li>
+<li><p>EncounterProfileId；</p>
+</li>
+<li><p>ResourceDistribution；</p>
+</li>
+<li><p>PuzzleDefinitions；</p>
+</li>
+<li><p>TreasureDefinitions；</p>
+</li>
+<li><p>RestPointDefinitions；</p>
+</li>
+<li><p>ShortcutDefinitions；</p>
+</li>
+<li><p>BossDefinitionId；</p>
+</li>
+<li><p>CompletionEffects；</p>
+</li>
+<li><p>RecommendedPartyProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-迷宫资源压力">14.2 迷宫资源压力</h2><p>迷宫中的主要持续资源：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>法力；</p>
+</li>
+<li><p>道具；</p>
+</li>
+<li><p>异常状态；</p>
+</li>
+<li><p>战斗次数；</p>
+</li>
+<li><p>探索时间；</p>
+</li>
+<li><p>存档点距离。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-探索奖励">14.3 探索奖励</h2><p>包括：</p>
+<ul>
+<li><p>宝箱；</p>
+</li>
+<li><p>隐藏装备；</p>
+</li>
+<li><p>素材；</p>
+</li>
+<li><p>支线角色；</p>
+</li>
+<li><p>世界观文本；</p>
+</li>
+<li><p>快捷通道；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>特殊战斗；</p>
+</li>
+<li><p>收集品。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-迷宫节奏">14.4 迷宫节奏</h2><p>推荐结构：</p>
+<p>入口教学
+→ 基础战斗
+→ 路线分支
+→ 新敌人组合
+→ 机关
+→ 中途恢复点
+→ 精英
+→ 最终解谜
+→ Boss
+→ 剧情结算</p>
+<hr />
+<h2 id="145-避免迷宫成为走廊和随机战斗堆叠">14.5 避免迷宫成为走廊和随机战斗堆叠</h2><p>每个迷宫应至少拥有一项独特结构：</p>
+<ul>
+<li><p>环境规则；</p>
+</li>
+<li><p>空间主题；</p>
+</li>
+<li><p>机关；</p>
+</li>
+<li><p>路线变化；</p>
+</li>
+<li><p>战斗限制；</p>
+</li>
+<li><p>场景事件；</p>
+</li>
+<li><p>队伍能力运用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-遭遇系统">15. 遭遇系统</h2><h2 id="151-encounterdefinition">15.1 EncounterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EncounterId；</p>
+</li>
+<li><p>EnemyGroupDefinitions；</p>
+</li>
+<li><p>FormationDefinition；</p>
+</li>
+<li><p>EnvironmentModifiers；</p>
+</li>
+<li><p>EscapePolicy；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>StoryFlags；</p>
+</li>
+<li><p>DifficultyRating；</p>
+</li>
+<li><p>EncounterTags。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-遭遇方式">15.2 遭遇方式</h2><p>包括：</p>
+<ul>
+<li><p>随机遇敌；</p>
+</li>
+<li><p>地图可见敌人；</p>
+</li>
+<li><p>固定触发；</p>
+</li>
+<li><p>伏击；</p>
+</li>
+<li><p>连战；</p>
+</li>
+<li><p>剧情战；</p>
+</li>
+<li><p>精英战；</p>
+</li>
+<li><p>Boss战。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-可见敌人">15.3 可见敌人</h2><p>地图敌人需要明确：</p>
+<ul>
+<li><p>追击范围；</p>
+</li>
+<li><p>重生规则；</p>
+</li>
+<li><p>接触方向；</p>
+</li>
+<li><p>先制和被偷袭；</p>
+</li>
+<li><p>是否可绕过；</p>
+</li>
+<li><p>击败后是否永久消失；</p>
+</li>
+<li><p>与场景加载的关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-随机遇敌">15.4 随机遇敌</h2><p>随机遇敌需要控制：</p>
+<ul>
+<li><p>步数或时间；</p>
+</li>
+<li><p>遇敌率；</p>
+</li>
+<li><p>连续遇敌保护；</p>
+</li>
+<li><p>安全区域；</p>
+</li>
+<li><p>低等级压制；</p>
+</li>
+<li><p>道具或技能影响；</p>
+</li>
+<li><p>首领前压力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="155-遭遇预算">15.5 遭遇预算</h2><p>每段迷宫应预估：</p>
+<ul>
+<li><p>战斗次数；</p>
+</li>
+<li><p>平均资源消耗；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>道具掉落；</p>
+</li>
+<li><p>到恢复点距离。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-战斗状态机">16. 战斗状态机</h2><p>JRPG的战斗可以是：</p>
+<ul>
+<li><p>纯回合制；</p>
+</li>
+<li><p>速度时间轴；</p>
+</li>
+<li><p>ATB；</p>
+</li>
+<li><p>半即时；</p>
+</li>
+<li><p>动作指令混合。</p>
+</li>
+</ul>
+<p>本范式以“队伍指令战斗核心”描述共通结构。</p>
+<hr />
+<h2 id="161-battlephase">16.1 BattlePhase</h2><p>建议阶段：</p>
+<ul>
+<li><p>Initializing；</p>
+</li>
+<li><p>Intro；</p>
+</li>
+<li><p>RoundStarting；</p>
+</li>
+<li><p>CommandSelection；</p>
+</li>
+<li><p>ActionQueueBuilding；</p>
+</li>
+<li><p>ActionResolving；</p>
+</li>
+<li><p>ReactionResolving；</p>
+</li>
+<li><p>RoundEnding；</p>
+</li>
+<li><p>VictoryResolving；</p>
+</li>
+<li><p>DefeatResolving；</p>
+</li>
+<li><p>Result；</p>
+</li>
+<li><p>Completed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-battlestate">16.2 BattleState</h2><p>建议包含：</p>
+<ul>
+<li><p>BattleInstanceId；</p>
+</li>
+<li><p>EncounterId；</p>
+</li>
+<li><p>CurrentRound；</p>
+</li>
+<li><p>CombatantStates；</p>
+</li>
+<li><p>ActivePartyMembers；</p>
+</li>
+<li><p>ReserveMembers；</p>
+</li>
+<li><p>ActionTimeline；</p>
+</li>
+<li><p>PendingCommands；</p>
+</li>
+<li><p>PendingActions；</p>
+</li>
+<li><p>ReactionStack；</p>
+</li>
+<li><p>EnvironmentState；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>BattleVersion；</p>
+</li>
+<li><p>ResultState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-战斗初始化">16.3 战斗初始化</h2><ol>
+<li><p>读取队伍快照；</p>
+</li>
+<li><p>生成敌人实例；</p>
+</li>
+<li><p>应用场景环境；</p>
+</li>
+<li><p>确定先制或偷袭；</p>
+</li>
+<li><p>初始化行动资源；</p>
+</li>
+<li><p>计算初始顺序；</p>
+</li>
+<li><p>播放战斗开场；</p>
+</li>
+<li><p>进入指令阶段。</p>
+</li>
+</ol>
+<hr />
+<h2 id="164-战斗稳定边界">16.4 战斗稳定边界</h2><p>只在以下状态允许普通指令：</p>
+<ul>
+<li><p>当前没有未完成动作；</p>
+</li>
+<li><p>没有待处理死亡；</p>
+</li>
+<li><p>没有待处理反应；</p>
+</li>
+<li><p>没有战斗结束判定；</p>
+</li>
+<li><p>当前角色拥有决策权。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-战斗行动与命令">17. 战斗行动与命令</h2><h2 id="171-battlecommandintent">17.1 BattleCommandIntent</h2><p>建议字段：</p>
+<ul>
+<li><p>CommandId；</p>
+</li>
+<li><p>ActorId；</p>
+</li>
+<li><p>AbilityId；</p>
+</li>
+<li><p>ItemInstanceId；</p>
+</li>
+<li><p>TargetIds；</p>
+</li>
+<li><p>SelectedOptions；</p>
+</li>
+<li><p>SubmittedBattleVersion；</p>
+</li>
+<li><p>InputSequence；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-常见命令">17.2 常见命令</h2><p>包括：</p>
+<ul>
+<li><p>Attack；</p>
+</li>
+<li><p>Defend；</p>
+</li>
+<li><p>Ability；</p>
+</li>
+<li><p>Magic；</p>
+</li>
+<li><p>Item；</p>
+</li>
+<li><p>SwapMember；</p>
+</li>
+<li><p>ChangeStance；</p>
+</li>
+<li><p>Summon；</p>
+</li>
+<li><p>Escape；</p>
+</li>
+<li><p>Analyze；</p>
+</li>
+<li><p>Charge；</p>
+</li>
+<li><p>LimitSkill。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-命令验证">17.3 命令验证</h2><p>检查：</p>
+<ul>
+<li><p>行动者是否可行动；</p>
+</li>
+<li><p>是否沉默或眩晕；</p>
+</li>
+<li><p>法力或资源是否足够；</p>
+</li>
+<li><p>技能是否冷却；</p>
+</li>
+<li><p>目标是否合法；</p>
+</li>
+<li><p>物品是否存在；</p>
+</li>
+<li><p>是否满足装备和职业条件；</p>
+</li>
+<li><p>是否基于过期战斗版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="174-资源预留">17.4 资源预留</h2><p>技能命令验证成功后：</p>
+<ol>
+<li><p>预留法力、物品或特殊资源；</p>
+</li>
+<li><p>创建ActionPlan；</p>
+</li>
+<li><p>进入行动队列；</p>
+</li>
+<li><p>达到提交点后正式消耗；</p>
+</li>
+<li><p>被合法取消时按策略返还。</p>
+</li>
+</ol>
+<hr />
+<h2 id="175-行动顺序">17.5 行动顺序</h2><p>行动顺序可以依据：</p>
+<ul>
+<li><p>速度；</p>
+</li>
+<li><p>技能优先级；</p>
+</li>
+<li><p>当前状态；</p>
+</li>
+<li><p>随机修正；</p>
+</li>
+<li><p>蓄力时间；</p>
+</li>
+<li><p>延迟；</p>
+</li>
+<li><p>先制；</p>
+</li>
+<li><p>强制插队技能。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-技能与效果系统">18. 技能与效果系统</h2><h2 id="181-abilitydefinition">18.1 AbilityDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>AbilityTags；</p>
+</li>
+<li><p>ResourceCosts；</p>
+</li>
+<li><p>TargetingRule；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>CastTime；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>AccuracyProfile；</p>
+</li>
+<li><p>CriticalProfile；</p>
+</li>
+<li><p>ElementTags；</p>
+</li>
+<li><p>StatusTags；</p>
+</li>
+<li><p>AnimationProfile；</p>
+</li>
+<li><p>AIHints；</p>
+</li>
+<li><p>UpgradeRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-effectspec">18.2 EffectSpec</h2><p>基础效果包括：</p>
+<ul>
+<li><p>DealDamage；</p>
+</li>
+<li><p>Heal；</p>
+</li>
+<li><p>Revive；</p>
+</li>
+<li><p>ApplyStatus；</p>
+</li>
+<li><p>RemoveStatus；</p>
+</li>
+<li><p>ModifyAttribute；</p>
+</li>
+<li><p>ModifyTimeline；</p>
+</li>
+<li><p>ChangeFormation；</p>
+</li>
+<li><p>SwapMember；</p>
+</li>
+<li><p>CreateBarrier；</p>
+</li>
+<li><p>AbsorbDamage；</p>
+</li>
+<li><p>ReflectDamage；</p>
+</li>
+<li><p>StealResource；</p>
+</li>
+<li><p>SummonEntity；</p>
+</li>
+<li><p>AnalyzeTarget。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-复杂技能组合">18.3 复杂技能组合</h2><p>例如“对敌方全体造成火焰伤害，并对燃烧目标追加爆炸”：</p>
+<ol>
+<li><p>选择敌方全体；</p>
+</li>
+<li><p>分别计算火焰伤害；</p>
+</li>
+<li><p>检查目标是否具有燃烧；</p>
+</li>
+<li><p>对符合条件的目标生成追加动作；</p>
+</li>
+<li><p>结算爆炸；</p>
+</li>
+<li><p>处理死亡和连锁。</p>
+</li>
+</ol>
+<hr />
+<h2 id="184-技能文本">18.4 技能文本</h2><p>技能文本应尽量由运行时数据生成或校验：</p>
+<ul>
+<li><p>目标；</p>
+</li>
+<li><p>费用；</p>
+</li>
+<li><p>威力；</p>
+</li>
+<li><p>属性；</p>
+</li>
+<li><p>状态概率；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>特殊条件。</p>
+</li>
+</ul>
+<p>防止文本和实际配置不一致。</p>
+<hr />
+<h2 id="19-属性克制与弱点系统">19. 属性克制与弱点系统</h2><h2 id="191-elementdefinition">19.1 ElementDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ElementId；</p>
+</li>
+<li><p>ElementTags；</p>
+</li>
+<li><p>InteractionRules；</p>
+</li>
+<li><p>VisualProfile；</p>
+</li>
+<li><p>StatusInteractions。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-resistanceprofile">19.2 ResistanceProfile</h2><p>目标可以对元素具有：</p>
+<ul>
+<li><p>Absorb；</p>
+</li>
+<li><p>Immune；</p>
+</li>
+<li><p>StrongResist；</p>
+</li>
+<li><p>Resist；</p>
+</li>
+<li><p>Neutral；</p>
+</li>
+<li><p>Weak；</p>
+</li>
+<li><p>CriticalWeakness。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-弱点收益">19.3 弱点收益</h2><p>命中弱点可以产生：</p>
+<ul>
+<li><p>额外伤害；</p>
+</li>
+<li><p>行动延迟；</p>
+</li>
+<li><p>击倒；</p>
+</li>
+<li><p>额外回合；</p>
+</li>
+<li><p>资源恢复；</p>
+</li>
+<li><p>连携机会；</p>
+</li>
+<li><p>阶段变化。</p>
+</li>
+</ul>
+<p>弱点不应永远只等于伤害倍率。</p>
+<hr />
+<h2 id="194-情报获取">19.4 情报获取</h2><p>玩家可以通过：</p>
+<ul>
+<li><p>试探攻击；</p>
+</li>
+<li><p>分析技能；</p>
+</li>
+<li><p>图鉴；</p>
+</li>
+<li><p>NPC情报；</p>
+</li>
+<li><p>敌人视觉设计；</p>
+</li>
+<li><p>剧情；</p>
+</li>
+<li><p>装备效果；</p>
+</li>
+</ul>
+<p>了解弱点。</p>
+<hr />
+<h2 id="195-防止属性系统成为机械试错">19.5 防止属性系统成为机械试错</h2><p>可以提供：</p>
+<ul>
+<li><p>图标反馈；</p>
+</li>
+<li><p>已知弱点记录；</p>
+</li>
+<li><p>敌人材质和生态暗示；</p>
+</li>
+<li><p>分析技能；</p>
+</li>
+<li><p>无效攻击保护；</p>
+</li>
+<li><p>低成本试探手段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-状态效果系统">20. 状态效果系统</h2><h2 id="201-statusdefinition">20.1 StatusDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StatusId；</p>
+</li>
+<li><p>StatusTags；</p>
+</li>
+<li><p>DurationType；</p>
+</li>
+<li><p>DurationValue；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>MaxStacks；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>TriggerSpecs；</p>
+</li>
+<li><p>ResistanceTags；</p>
+</li>
+<li><p>RemovalRules；</p>
+</li>
+<li><p>PersistenceScope；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-常见状态">20.2 常见状态</h2><p>包括：</p>
+<ul>
+<li><p>中毒；</p>
+</li>
+<li><p>燃烧；</p>
+</li>
+<li><p>冰冻；</p>
+</li>
+<li><p>麻痹；</p>
+</li>
+<li><p>睡眠；</p>
+</li>
+<li><p>混乱；</p>
+</li>
+<li><p>沉默；</p>
+</li>
+<li><p>失明；</p>
+</li>
+<li><p>恐惧；</p>
+</li>
+<li><p>狂暴；</p>
+</li>
+<li><p>加速；</p>
+</li>
+<li><p>减速；</p>
+</li>
+<li><p>攻击提升；</p>
+</li>
+<li><p>防御下降；</p>
+</li>
+<li><p>再生；</p>
+</li>
+<li><p>反射；</p>
+</li>
+<li><p>护盾。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-持续时间">20.3 持续时间</h2><p>可以按：</p>
+<ul>
+<li><p>目标行动次数；</p>
+</li>
+<li><p>施加者行动次数；</p>
+</li>
+<li><p>回合；</p>
+</li>
+<li><p>全局时间轴；</p>
+</li>
+<li><p>受击次数；</p>
+</li>
+<li><p>战斗结束；</p>
+</li>
+</ul>
+<p>计时。</p>
+<p>必须在UI中明确。</p>
+<hr />
+<h2 id="204-boss状态抗性">20.4 Boss状态抗性</h2><p>Boss不应对所有控制状态完全免疫。</p>
+<p>可以使用：</p>
+<ul>
+<li><p>较高阈值；</p>
+</li>
+<li><p>持续时间缩短；</p>
+</li>
+<li><p>状态递减；</p>
+</li>
+<li><p>特定阶段免疫；</p>
+</li>
+<li><p>状态转化；</p>
+</li>
+<li><p>首次生效奖励。</p>
+</li>
+</ul>
+<p>这样状态职业在Boss战中仍有价值。</p>
+<hr />
+<h2 id="21-连携与队伍协同">21. 连携与队伍协同</h2><h2 id="211-synergydefinition">21.1 SynergyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SynergyId；</p>
+</li>
+<li><p>RequiredCharacterIds；</p>
+</li>
+<li><p>RequiredRoleTags；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>ResourceCosts；</p>
+</li>
+<li><p>GeneratedAction；</p>
+</li>
+<li><p>RelationshipRequirements；</p>
+</li>
+<li><p>UsageLimits；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-连携来源">21.2 连携来源</h2><p>包括：</p>
+<ul>
+<li><p>角色组合；</p>
+</li>
+<li><p>属性组合；</p>
+</li>
+<li><p>职业组合；</p>
+</li>
+<li><p>前后行动顺序；</p>
+</li>
+<li><p>状态组合；</p>
+</li>
+<li><p>关系等级；</p>
+</li>
+<li><p>同一目标集火；</p>
+</li>
+<li><p>防御与反击。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-连携作用">21.3 连携作用</h2><p>可以提供：</p>
+<ul>
+<li><p>合体攻击；</p>
+</li>
+<li><p>追击；</p>
+</li>
+<li><p>援护防御；</p>
+</li>
+<li><p>共享治疗；</p>
+</li>
+<li><p>自动解除状态；</p>
+</li>
+<li><p>交换行动顺序；</p>
+</li>
+<li><p>追加弱点打击。</p>
+</li>
+</ul>
+<hr />
+<h2 id="214-避免固定唯一队伍">21.4 避免固定唯一队伍</h2><p>角色协同应形成多种有效组合。</p>
+<p>避免只有：</p>
+<ul>
+<li><p>固定坦克；</p>
+</li>
+<li><p>固定治疗；</p>
+</li>
+<li><p>固定输出；</p>
+</li>
+</ul>
+<p>才能完成主线。</p>
+<hr />
+<h2 id="22-敌人与战斗ai">22. 敌人与战斗AI</h2><h2 id="221-enemydefinition">22.1 EnemyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EnemyId；</p>
+</li>
+<li><p>EnemyTags；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>ResistanceProfile；</p>
+</li>
+<li><p>AIProfileId；</p>
+</li>
+<li><p>DropProfile；</p>
+</li>
+<li><p>ExperienceReward；</p>
+</li>
+<li><p>CurrencyReward；</p>
+</li>
+<li><p>FormationRules；</p>
+</li>
+<li><p>StoryFlags；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-aiknowledgestate">22.2 AIKnowledgeState</h2><p>敌人可以知道：</p>
+<ul>
+<li><p>当前可见队伍；</p>
+</li>
+<li><p>已经使用过的玩家技能；</p>
+</li>
+<li><p>当前生命；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>仇恨；</p>
+</li>
+<li><p>战斗阶段。</p>
+</li>
+</ul>
+<p>敌人不应无条件读取：</p>
+<ul>
+<li><p>玩家尚未提交的指令；</p>
+</li>
+<li><p>背包完整内容；</p>
+</li>
+<li><p>未来随机结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-ai候选行动">22.3 AI候选行动</h2><p>AI先生成合法候选：</p>
+<ul>
+<li><p>普通攻击；</p>
+</li>
+<li><p>属性技能；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>增益；</p>
+</li>
+<li><p>减益；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>阶段技能。</p>
+</li>
+</ul>
+<p>再根据以下因素评分：</p>
+<ul>
+<li><p>目标生命；</p>
+</li>
+<li><p>弱点；</p>
+</li>
+<li><p>威胁；</p>
+</li>
+<li><p>队伍状态；</p>
+</li>
+<li><p>当前阶段；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>最近行动；</p>
+</li>
+<li><p>重复惩罚。</p>
+</li>
+</ul>
+<hr />
+<h2 id="224-敌人职责">22.4 敌人职责</h2><p>普通敌人可以承担：</p>
+<ul>
+<li><p>教学属性；</p>
+</li>
+<li><p>测试群攻；</p>
+</li>
+<li><p>测试状态解除；</p>
+</li>
+<li><p>消耗法力；</p>
+</li>
+<li><p>保护后排；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>阻止治疗；</p>
+</li>
+<li><p>强制换人。</p>
+</li>
+</ul>
+<hr />
+<h2 id="225-敌人组合">22.5 敌人组合</h2><p>敌人编队应通过职责组合产生难度：</p>
+<ul>
+<li><p>防御单位保护施法者；</p>
+</li>
+<li><p>治疗单位维持高生命单位；</p>
+</li>
+<li><p>快速单位打断低速角色；</p>
+</li>
+<li><p>元素单位制造弱点压力；</p>
+</li>
+<li><p>召唤单位扩大行动经济。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-boss与阶段系统">23. Boss与阶段系统</h2><h2 id="231-bossdefinition">23.1 BossDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BossId；</p>
+</li>
+<li><p>EncounterId；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>PhaseDefinitions；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>ResistanceProfile；</p>
+</li>
+<li><p>BreakRules；</p>
+</li>
+<li><p>ScriptedEvents；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>DefeatEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-bossphasedefinition">23.2 BossPhaseDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>PhaseId；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>ExitConditions；</p>
+</li>
+<li><p>AbilityOverrides；</p>
+</li>
+<li><p>StatModifiers；</p>
+</li>
+<li><p>ResistanceOverrides；</p>
+</li>
+<li><p>SummonRules；</p>
+</li>
+<li><p>EnvironmentChanges；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-阶段切换">23.3 阶段切换</h2><p>可以由以下因素触发：</p>
+<ul>
+<li><p>生命阈值；</p>
+</li>
+<li><p>回合数；</p>
+</li>
+<li><p>弱点破坏；</p>
+</li>
+<li><p>召唤物；</p>
+</li>
+<li><p>玩家使用特定能力；</p>
+</li>
+<li><p>剧情事件；</p>
+</li>
+<li><p>特殊资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="234-boss机制职责">23.4 Boss机制职责</h2><p>Boss应测试：</p>
+<ul>
+<li><p>队伍构筑；</p>
+</li>
+<li><p>资源管理；</p>
+</li>
+<li><p>状态处理；</p>
+</li>
+<li><p>属性覆盖；</p>
+</li>
+<li><p>行动顺序；</p>
+</li>
+<li><p>防御时机；</p>
+</li>
+<li><p>连携；</p>
+</li>
+<li><p>替补成员。</p>
+</li>
+</ul>
+<p>不能只依赖高生命和高伤害。</p>
+<hr />
+<h2 id="235-boss失败恢复">23.5 Boss失败恢复</h2><p>失败后需要明确：</p>
+<ul>
+<li><p>返回哪个节点；</p>
+</li>
+<li><p>消耗品是否回滚；</p>
+</li>
+<li><p>经验和奖励是否回滚；</p>
+</li>
+<li><p>剧情演出是否重播；</p>
+</li>
+<li><p>是否允许快速重试；</p>
+</li>
+<li><p>是否允许调整队伍。</p>
+</li>
+</ul>
+<p>挑战应来自战斗，而非反复观看长演出。</p>
+<hr />
+<h2 id="24-战斗结算">24. 战斗结算</h2><h2 id="241-battleresultsnapshot">24.1 BattleResultSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>BattleInstanceId；</p>
+</li>
+<li><p>VictoryState；</p>
+</li>
+<li><p>DefeatedEnemyIds；</p>
+</li>
+<li><p>SurvivingCharacterStates；</p>
+</li>
+<li><p>ExperienceRewards；</p>
+</li>
+<li><p>CurrencyRewards；</p>
+</li>
+<li><p>ItemRewards；</p>
+</li>
+<li><p>JobPointRewards；</p>
+</li>
+<li><p>QuestProgressDeltas；</p>
+</li>
+<li><p>BattleStatistics；</p>
+</li>
+<li><p>RandomProof；</p>
+</li>
+<li><p>ResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-结算流程">24.2 结算流程</h2><ol>
+<li><p>锁定战斗输入；</p>
+</li>
+<li><p>处理剩余死亡；</p>
+</li>
+<li><p>清理临时状态；</p>
+</li>
+<li><p>计算胜负；</p>
+</li>
+<li><p>生成经验和掉落；</p>
+</li>
+<li><p>应用角色成长；</p>
+</li>
+<li><p>处理升级和技能学习；</p>
+</li>
+<li><p>更新任务；</p>
+</li>
+<li><p>写回队伍生命和资源；</p>
+</li>
+<li><p>生成BattleResultSnapshot；</p>
+</li>
+<li><p>播放结算表现；</p>
+</li>
+<li><p>返回探索场景。</p>
+</li>
+</ol>
+<hr />
+<h2 id="243-状态跨战斗策略">24.3 状态跨战斗策略</h2><p>需要明确：</p>
+<h3 id="战斗后清除">战斗后清除</h3><ul>
+<li><p>临时攻击提升；</p>
+</li>
+<li><p>战斗姿态；</p>
+</li>
+<li><p>短时护盾；</p>
+</li>
+<li><p>战斗专用召唤物。</p>
+</li>
+</ul>
+<h3 id="战斗后保留">战斗后保留</h3><ul>
+<li><p>当前生命；</p>
+</li>
+<li><p>当前法力；</p>
+</li>
+<li><p>中毒；</p>
+</li>
+<li><p>诅咒；</p>
+</li>
+<li><p>装备损坏；</p>
+</li>
+<li><p>特殊剧情状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="244-结算幂等性">24.4 结算幂等性</h2><p>防止：</p>
+<ul>
+<li><p>经验重复；</p>
+</li>
+<li><p>掉落重复；</p>
+</li>
+<li><p>任务重复推进；</p>
+</li>
+<li><p>Boss奖励重复；</p>
+</li>
+<li><p>角色重复升级。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-任务与npc系统">25. 任务与NPC系统</h2><h2 id="251-questdefinition">25.1 QuestDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>QuestId；</p>
+</li>
+<li><p>QuestType；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>ObjectiveDefinitions；</p>
+</li>
+<li><p>FailureConditions；</p>
+</li>
+<li><p>AvailabilityRules；</p>
+</li>
+<li><p>NPCBindings；</p>
+</li>
+<li><p>RewardDefinition；</p>
+</li>
+<li><p>WorldEffects；</p>
+</li>
+<li><p>FollowUpQuestIds。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-questruntimestate">25.2 QuestRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>QuestId；</p>
+</li>
+<li><p>QuestState；</p>
+</li>
+<li><p>ObjectiveStates；</p>
+</li>
+<li><p>AcceptedChapterId；</p>
+</li>
+<li><p>ProgressVariables；</p>
+</li>
+<li><p>ChoiceHistory；</p>
+</li>
+<li><p>FailureReason；</p>
+</li>
+<li><p>QuestVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-任务类型">25.3 任务类型</h2><p>包括：</p>
+<ul>
+<li><p>主线；</p>
+</li>
+<li><p>角色支线；</p>
+</li>
+<li><p>城镇任务；</p>
+</li>
+<li><p>狩猎；</p>
+</li>
+<li><p>收集；</p>
+</li>
+<li><p>护送；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>解谜；</p>
+</li>
+<li><p>竞技场；</p>
+</li>
+<li><p>隐藏任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="254-状态目标式判定">25.4 状态目标式判定</h2><p>例如“帮助村庄恢复水源”可以检查：</p>
+<ul>
+<li><p>水源机关已修复；</p>
+</li>
+<li><p>污染已清除；</p>
+</li>
+<li><p>村庄NPC仍存活；</p>
+</li>
+<li><p>玩家已返回报告。</p>
+</li>
+</ul>
+<p>而不是只依赖固定事件顺序。</p>
+<hr />
+<h2 id="255-npc状态">25.5 NPC状态</h2><p>NPC可以根据：</p>
+<ul>
+<li><p>章节；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>队伍成员；</p>
+</li>
+<li><p>角色关系；</p>
+</li>
+<li><p>世界阶段；</p>
+</li>
+</ul>
+<p>改变：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>队伍加入；</p>
+</li>
+<li><p>敌对状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-对话与剧情演出系统">26. 对话与剧情演出系统</h2><h2 id="261-dialoguedefinition">26.1 DialogueDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>DialogueId；</p>
+</li>
+<li><p>SpeakerIds；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>DialogueNodes；</p>
+</li>
+<li><p>ChoiceDefinitions；</p>
+</li>
+<li><p>VariableEffects；</p>
+</li>
+<li><p>QuestEffects；</p>
+</li>
+<li><p>RelationshipEffects；</p>
+</li>
+<li><p>ExitTransitions；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-cutscenedefinition">26.2 CutsceneDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CutsceneId；</p>
+</li>
+<li><p>TimelineAssetId；</p>
+</li>
+<li><p>RequiredCharacterStates；</p>
+</li>
+<li><p>SceneRequirements；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>SkippablePolicy；</p>
+</li>
+<li><p>ResumePolicy；</p>
+</li>
+<li><p>GameplayCommands；</p>
+</li>
+<li><p>CompletionEffects。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-演出与逻辑分离">26.3 演出与逻辑分离</h2><p>剧情演出不能直接成为世界状态的唯一来源。</p>
+<p>推荐流程：</p>
+<ol>
+<li><p>验证演出条件；</p>
+</li>
+<li><p>预提交必要世界状态；</p>
+</li>
+<li><p>播放演出；</p>
+</li>
+<li><p>在逻辑节点执行StoryCommand；</p>
+</li>
+<li><p>演出完成或跳过；</p>
+</li>
+<li><p>验证最终世界状态；</p>
+</li>
+<li><p>保存结果。</p>
+</li>
+</ol>
+<hr />
+<h2 id="264-跳过剧情">26.4 跳过剧情</h2><p>跳过演出必须仍然正确提交：</p>
+<ul>
+<li><p>角色加入；</p>
+</li>
+<li><p>任务更新；</p>
+</li>
+<li><p>世界变化；</p>
+</li>
+<li><p>物品奖励；</p>
+</li>
+<li><p>场景转移；</p>
+</li>
+<li><p>Boss状态；</p>
+</li>
+<li><p>队伍变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="265-演出中断恢复">26.5 演出中断恢复</h2><p>游戏在演出期间退出或崩溃时，可以：</p>
+<ul>
+<li><p>从演出起点恢复；</p>
+</li>
+<li><p>从最近逻辑检查点恢复；</p>
+</li>
+<li><p>跳过已提交部分；</p>
+</li>
+<li><p>保证奖励不会重复；</p>
+</li>
+<li><p>保证角色不会丢失。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-角色关系与个人剧情">27. 角色关系与个人剧情</h2><h2 id="271-relationshipstate">27.1 RelationshipState</h2><p>建议字段：</p>
+<ul>
+<li><p>SourceCharacterId；</p>
+</li>
+<li><p>TargetCharacterId；</p>
+</li>
+<li><p>RelationshipLevel；</p>
+</li>
+<li><p>RelationshipPoints；</p>
+</li>
+<li><p>UnlockedEvents；</p>
+</li>
+<li><p>SynergyUnlocks；</p>
+</li>
+<li><p>NarrativeFlags；</p>
+</li>
+<li><p>RelationshipVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-关系来源">27.2 关系来源</h2><p>包括：</p>
+<ul>
+<li><p>主线事件；</p>
+</li>
+<li><p>对话选择；</p>
+</li>
+<li><p>共同战斗；</p>
+</li>
+<li><p>队伍编成；</p>
+</li>
+<li><p>角色支线；</p>
+</li>
+<li><p>礼物；</p>
+</li>
+<li><p>营地互动；</p>
+</li>
+<li><p>合体技使用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="273-关系收益">27.3 关系收益</h2><p>可以解锁：</p>
+<ul>
+<li><p>合体技；</p>
+</li>
+<li><p>援护；</p>
+</li>
+<li><p>被动增益；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>角色结局；</p>
+</li>
+<li><p>职业；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>关键剧情选择。</p>
+</li>
+</ul>
+<hr />
+<h2 id="274-防止关系系统成为刷点数">27.4 防止关系系统成为刷点数</h2><p>应提供：</p>
+<ul>
+<li><p>阶段事件；</p>
+</li>
+<li><p>角色冲突；</p>
+</li>
+<li><p>价值观；</p>
+</li>
+<li><p>关系上限条件；</p>
+</li>
+<li><p>叙事选择。</p>
+</li>
+</ul>
+<p>关系成长应与角色经历相关，而非只依靠重复送礼。</p>
+<hr />
+<h2 id="28-完整事件与执行流程示例">28. 完整事件与执行流程示例</h2><p>以下以“主角团进入遗迹迷宫、发现新同伴并击败章节Boss”为例。</p>
+<h3 id="281-章节目标建立">28.1 章节目标建立</h3><p>ChapterSystem设置目标：</p>
+<ul>
+<li><p>前往古代遗迹；</p>
+</li>
+<li><p>寻找失踪调查队；</p>
+</li>
+<li><p>取得遗迹核心。</p>
+</li>
+</ul>
+<p>解锁：</p>
+<ul>
+<li><p>遗迹区域；</p>
+</li>
+<li><p>新商店装备；</p>
+</li>
+<li><p>相关支线。</p>
+</li>
+</ul>
+<hr />
+<h3 id="282-城镇整备">28.2 城镇整备</h3><p>玩家：</p>
+<ul>
+<li><p>购买恢复药；</p>
+</li>
+<li><p>强化武器；</p>
+</li>
+<li><p>调整职业；</p>
+</li>
+<li><p>将雷属性角色编入队伍；</p>
+</li>
+<li><p>接受调查队支线。</p>
+</li>
+</ul>
+<p>所有调整提交到PartyState。</p>
+<hr />
+<h3 id="283-进入迷宫">28.3 进入迷宫</h3><p>DungeonSystem加载：</p>
+<ul>
+<li><p>场景变体；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>谜题；</p>
+</li>
+<li><p>遭遇配置；</p>
+</li>
+<li><p>中途恢复点；</p>
+</li>
+<li><p>Boss入口。</p>
+</li>
+</ul>
+<hr />
+<h3 id="284-普通战斗">28.4 普通战斗</h3><p>玩家遭遇机械敌人。</p>
+<p>分析技能发现：</p>
+<ul>
+<li><p>弱雷；</p>
+</li>
+<li><p>抗物理；</p>
+</li>
+<li><p>可被麻痹。</p>
+</li>
+</ul>
+<p>玩家使用雷属性攻击触发弱点：</p>
+<ul>
+<li><p>造成额外伤害；</p>
+</li>
+<li><p>延迟敌人行动；</p>
+</li>
+<li><p>为队伍获得连携机会。</p>
+</li>
+</ul>
+<hr />
+<h3 id="285-资源消耗">28.5 资源消耗</h3><p>连续战斗后：</p>
+<ul>
+<li><p>主角生命偏低；</p>
+</li>
+<li><p>法师法力消耗过半；</p>
+</li>
+<li><p>恢复药剩余较少。</p>
+</li>
+</ul>
+<p>玩家决定探索支路寻找恢复点，而不是直接挑战Boss。</p>
+<hr />
+<h3 id="286-发现新角色">28.6 发现新角色</h3><p>支路触发剧情，发现失踪调查员。</p>
+<p>演出完成后：</p>
+<ul>
+<li><p>调查员以Guest状态加入；</p>
+</li>
+<li><p>提供破解遗迹机关的PartyAbility；</p>
+</li>
+<li><p>解锁新路线；</p>
+</li>
+<li><p>增加角色支线变量。</p>
+</li>
+</ul>
+<hr />
+<h3 id="287-进入boss战">28.7 进入Boss战</h3><p>Boss战初始化：</p>
+<ul>
+<li><p>主动成员3人；</p>
+</li>
+<li><p>Guest参与剧情但不直接受玩家控制；</p>
+</li>
+<li><p>Boss拥有物理护甲；</p>
+</li>
+<li><p>场景存在三个能量节点。</p>
+</li>
+</ul>
+<hr />
+<h3 id="288-boss阶段一">28.8 Boss阶段一</h3><p>Boss主要使用：</p>
+<ul>
+<li><p>单体物理攻击；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>召唤机械单位。</p>
+</li>
+</ul>
+<p>玩家需要：</p>
+<ul>
+<li><p>使用雷属性；</p>
+</li>
+<li><p>清理召唤物；</p>
+</li>
+<li><p>攻击能量节点；</p>
+</li>
+<li><p>保留法力。</p>
+</li>
+</ul>
+<hr />
+<h3 id="289-阶段切换">28.9 阶段切换</h3><p>全部能量节点被破坏后：</p>
+<ul>
+<li><p>Boss护盾解除；</p>
+</li>
+<li><p>弱点改变；</p>
+</li>
+<li><p>调查员触发剧情技能；</p>
+</li>
+<li><p>队伍解锁临时合体技；</p>
+</li>
+<li><p>战斗进入第二阶段。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2810-战斗胜利">28.10 战斗胜利</h3><p>系统生成BattleResultSnapshot：</p>
+<ul>
+<li><p>Boss经验；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>遗迹核心；</p>
+</li>
+<li><p>武器素材；</p>
+</li>
+<li><p>调查员角色点；</p>
+</li>
+<li><p>支线目标完成。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2811-章节结算">28.11 章节结算</h3><p>剧情系统：</p>
+<ul>
+<li><p>将调查员从Guest改为Available；</p>
+</li>
+<li><p>解锁其正式职业；</p>
+</li>
+<li><p>更新城镇NPC；</p>
+</li>
+<li><p>开放新大陆路线；</p>
+</li>
+<li><p>将遗迹切换为战后变体；</p>
+</li>
+<li><p>保存章节状态。</p>
+</li>
+</ul>
+<p>完整循环实现：</p>
+<p>剧情目标
+→ 城镇准备
+→ 迷宫消耗
+→ 战斗学习
+→ 新角色加入
+→ Boss机制
+→ 队伍成长
+→ 世界扩展</p>
+<hr />
+<h2 id="29-模块通信设计">29. 模块通信设计</h2><h2 id="291-命令">29.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>ChangePartyFormation；</p>
+</li>
+<li><p>EquipItem；</p>
+</li>
+<li><p>ChangeJob；</p>
+</li>
+<li><p>UseFieldItem；</p>
+</li>
+<li><p>EnterRegion；</p>
+</li>
+<li><p>StartEncounter；</p>
+</li>
+<li><p>SubmitBattleCommand；</p>
+</li>
+<li><p>AcceptQuest；</p>
+</li>
+<li><p>AdvanceDialogue；</p>
+</li>
+<li><p>TriggerStoryEvent；</p>
+</li>
+<li><p>PurchaseItem；</p>
+</li>
+<li><p>CraftItem；</p>
+</li>
+<li><p>SaveGame。</p>
+</li>
+</ul>
+<p>命令必须包含：</p>
+<ul>
+<li><p>发起者；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>当前状态版本；</p>
+</li>
+<li><p>资源上下文；</p>
+</li>
+<li><p>输入序列；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-同步查询">29.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>角色是否可加入队伍；</p>
+</li>
+<li><p>装备是否满足要求；</p>
+</li>
+<li><p>区域是否已开放；</p>
+</li>
+<li><p>技能目标是否合法；</p>
+</li>
+<li><p>任务是否可接受；</p>
+</li>
+<li><p>商店商品是否可购买；</p>
+</li>
+<li><p>当前章节条件；</p>
+</li>
+<li><p>是否允许保存。</p>
+</li>
+</ul>
+<p>查询不能修改状态或消费随机数。</p>
+<hr />
+<h2 id="293-领域事件">29.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>ChapterStarted；</p>
+</li>
+<li><p>PartyMemberJoined；</p>
+</li>
+<li><p>PartyMemberLeft；</p>
+</li>
+<li><p>JobChanged；</p>
+</li>
+<li><p>EquipmentChanged；</p>
+</li>
+<li><p>RegionEntered；</p>
+</li>
+<li><p>EncounterStarted；</p>
+</li>
+<li><p>BattleCompleted；</p>
+</li>
+<li><p>CharacterLeveledUp；</p>
+</li>
+<li><p>AbilityLearned；</p>
+</li>
+<li><p>QuestAccepted；</p>
+</li>
+<li><p>QuestCompleted；</p>
+</li>
+<li><p>BossDefeated；</p>
+</li>
+<li><p>WorldStageChanged；</p>
+</li>
+<li><p>CutsceneCompleted；</p>
+</li>
+<li><p>SaveCommitted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-表现事件">29.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>PlayLevelUpPresentation；</p>
+</li>
+<li><p>ShowItemAcquired；</p>
+</li>
+<li><p>PlayPartyJoinAnimation；</p>
+</li>
+<li><p>ShowWeaknessHit；</p>
+</li>
+<li><p>PlayLimitSkill；</p>
+</li>
+<li><p>ShowQuestUpdate；</p>
+</li>
+<li><p>PlayChapterTitle；</p>
+</li>
+<li><p>ShowBattleResult；</p>
+</li>
+<li><p>TransitionToNewRegion。</p>
+</li>
+</ul>
+<p>表现事件不能决定权威奖励、队伍和章节状态。</p>
+<hr />
+<h2 id="30-存档与继续游戏">30. 存档与继续游戏</h2><h2 id="301-savesnapshot">30.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>CurrentChapterState；</p>
+</li>
+<li><p>PlayerLocation；</p>
+</li>
+<li><p>PartyState；</p>
+</li>
+<li><p>CharacterStates；</p>
+</li>
+<li><p>Inventory；</p>
+</li>
+<li><p>EquipmentInstances；</p>
+</li>
+<li><p>QuestStates；</p>
+</li>
+<li><p>NPCStates；</p>
+</li>
+<li><p>WorldStage；</p>
+</li>
+<li><p>SceneObjectStates；</p>
+</li>
+<li><p>DefeatedBosses；</p>
+</li>
+<li><p>OpenedChests；</p>
+</li>
+<li><p>ShopStates；</p>
+</li>
+<li><p>RelationshipStates；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-保存边界">30.2 保存边界</h2><p>适合保存：</p>
+<ul>
+<li><p>城镇；</p>
+</li>
+<li><p>世界地图；</p>
+</li>
+<li><p>迷宫恢复点；</p>
+</li>
+<li><p>战斗结束；</p>
+</li>
+<li><p>Boss胜利；</p>
+</li>
+<li><p>章节切换；</p>
+</li>
+<li><p>角色加入；</p>
+</li>
+<li><p>重要任务选择；</p>
+</li>
+<li><p>唯一物品获得。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-战斗中保存">30.3 战斗中保存</h2><p>如果支持战斗中保存，需要保存：</p>
+<ul>
+<li><p>战斗阶段；</p>
+</li>
+<li><p>角色生命和法力；</p>
+</li>
+<li><p>行动队列；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>敌人；</p>
+</li>
+<li><p>随机游标；</p>
+</li>
+<li><p>已预留资源。</p>
+</li>
+</ul>
+<p>如果不支持，应保证玩家在长迷宫中拥有合理恢复点。</p>
+<hr />
+<h2 id="304-存档兼容">30.4 存档兼容</h2><p>必须使用稳定ID：</p>
+<ul>
+<li><p>CharacterId；</p>
+</li>
+<li><p>ItemId；</p>
+</li>
+<li><p>JobId；</p>
+</li>
+<li><p>QuestId；</p>
+</li>
+<li><p>ChapterId；</p>
+</li>
+<li><p>SceneObjectId；</p>
+</li>
+<li><p>AbilityId。</p>
+</li>
+</ul>
+<p>不能依赖：</p>
+<ul>
+<li><p>数组下标；</p>
+</li>
+<li><p>资源加载顺序；</p>
+</li>
+<li><p>显示名称；</p>
+</li>
+<li><p>枚举顺序。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-失败隔离">31. 失败隔离</h2><h2 id="311-章节状态异常">31.1 章节状态异常</h2><p>如果章节无法找到合法下一阶段：</p>
+<ul>
+<li><p>保留当前已提交章节；</p>
+</li>
+<li><p>阻止重复结算；</p>
+</li>
+<li><p>使用安全剧情节点；</p>
+</li>
+<li><p>记录缺失条件；</p>
+</li>
+<li><p>不让主线永久停留在演出状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-队伍成员异常">31.2 队伍成员异常</h2><p>角色引用缺失时：</p>
+<ul>
+<li><p>从活动队伍安全移除；</p>
+</li>
+<li><p>使用替补；</p>
+</li>
+<li><p>保留角色持久数据；</p>
+</li>
+<li><p>将装备返回共享库存；</p>
+</li>
+<li><p>记录角色和章节状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-战斗行动异常">31.3 战斗行动异常</h2><p>技能配置错误时：</p>
+<ul>
+<li><p>取消尚未提交效果；</p>
+</li>
+<li><p>释放预留资源；</p>
+</li>
+<li><p>保留此前已提交结果；</p>
+</li>
+<li><p>将行动者恢复到安全状态；</p>
+</li>
+<li><p>防止战斗状态机永久停滞。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-战斗奖励异常">31.4 战斗奖励异常</h2><p>奖励生成失败时：</p>
+<ul>
+<li><p>保存BattleResultSnapshot；</p>
+</li>
+<li><p>使用基础奖励保底；</p>
+</li>
+<li><p>不重复经验和掉落；</p>
+</li>
+<li><p>后台重试；</p>
+</li>
+<li><p>记录掉落池过滤过程。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-剧情跳过异常">31.5 剧情跳过异常</h2><p>跳过演出时：</p>
+<ul>
+<li><p>执行全部必要StoryCommand；</p>
+</li>
+<li><p>跳过纯表现节点；</p>
+</li>
+<li><p>检查角色、任务和世界状态；</p>
+</li>
+<li><p>不重复发放奖励；</p>
+</li>
+<li><p>保存最终状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-任务死锁">31.6 任务死锁</h2><p>持续检测：</p>
+<ul>
+<li><p>必需NPC是否存在；</p>
+</li>
+<li><p>必需区域是否可访问；</p>
+</li>
+<li><p>必需物品是否仍可获得；</p>
+</li>
+<li><p>章节变化是否错误关闭任务；</p>
+</li>
+<li><p>队伍成员离开是否使任务无法完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-存档失败">31.7 存档失败</h2><p>需要：</p>
+<ul>
+<li><p>保留旧快照；</p>
+</li>
+<li><p>原子写入；</p>
+</li>
+<li><p>临时文件；</p>
+</li>
+<li><p>完整性校验；</p>
+</li>
+<li><p>后台重试；</p>
+</li>
+<li><p>不覆盖最后有效存档。</p>
+</li>
+</ul>
+<hr />
+<h2 id="318-数值异常隔离">31.8 数值异常隔离</h2><p>检测：</p>
+<ul>
+<li><p>非法生命；</p>
+</li>
+<li><p>负经验；</p>
+</li>
+<li><p>属性溢出；</p>
+</li>
+<li><p>负物品数量；</p>
+</li>
+<li><p>重复装备实例；</p>
+</li>
+<li><p>无限伤害；</p>
+</li>
+<li><p>不可结束状态。</p>
+</li>
+</ul>
+<p>异常数据应隔离到具体角色、物品或战斗，不应污染完整存档。</p>
+<hr />
+<h2 id="32-调试与可观测性">32. 调试与可观测性</h2><h2 id="321-章节状态查看器">32.1 章节状态查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前章节；</p>
+</li>
+<li><p>当前阶段；</p>
+</li>
+<li><p>已完成条件；</p>
+</li>
+<li><p>未满足条件；</p>
+</li>
+<li><p>世界阶段；</p>
+</li>
+<li><p>可访问区域；</p>
+</li>
+<li><p>队伍成员；</p>
+</li>
+<li><p>待触发剧情；</p>
+</li>
+<li><p>下一合法阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-队伍检查器">32.2 队伍检查器</h2><p>显示：</p>
+<ul>
+<li><p>活动成员；</p>
+</li>
+<li><p>替补；</p>
+</li>
+<li><p>Guest；</p>
+</li>
+<li><p>职业；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>角色可用状态；</p>
+</li>
+<li><p>派生属性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-战斗行动时间线">32.3 战斗行动时间线</h2><p>显示：</p>
+<ul>
+<li><p>行动者；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>费用；</p>
+</li>
+<li><p>行动顺序；</p>
+</li>
+<li><p>追加行动；</p>
+</li>
+<li><p>状态触发；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>死亡；</p>
+</li>
+<li><p>战斗结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-数值解释器">32.4 数值解释器</h2><p>针对伤害或治疗显示：</p>
+<ul>
+<li><p>技能基础值；</p>
+</li>
+<li><p>攻击属性；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>职业；</p>
+</li>
+<li><p>元素；</p>
+</li>
+<li><p>暴击；</p>
+</li>
+<li><p>目标防御；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>最终结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-遭遇模拟器">32.5 遭遇模拟器</h2><p>输入：</p>
+<ul>
+<li><p>队伍；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>敌人编队；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>随机种子。</p>
+</li>
+</ul>
+<p>输出：</p>
+<ul>
+<li><p>胜率；</p>
+</li>
+<li><p>平均回合；</p>
+</li>
+<li><p>生命消耗；</p>
+</li>
+<li><p>法力消耗；</p>
+</li>
+<li><p>道具消耗；</p>
+</li>
+<li><p>经验收益；</p>
+</li>
+<li><p>失败原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-成长曲线面板">32.6 成长曲线面板</h2><p>显示：</p>
+<ul>
+<li><p>章节预期等级；</p>
+</li>
+<li><p>实际玩家等级；</p>
+</li>
+<li><p>装备强度；</p>
+</li>
+<li><p>经验曲线；</p>
+</li>
+<li><p>技能解锁；</p>
+</li>
+<li><p>Boss难度；</p>
+</li>
+<li><p>练级需求；</p>
+</li>
+<li><p>替补落后程度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-任务可达性工具">32.7 任务可达性工具</h2><p>检查：</p>
+<ul>
+<li><p>任务条件；</p>
+</li>
+<li><p>NPC位置；</p>
+</li>
+<li><p>区域权限；</p>
+</li>
+<li><p>关键物品；</p>
+</li>
+<li><p>章节锁定；</p>
+</li>
+<li><p>多结局路径；</p>
+</li>
+<li><p>是否存在死锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-场景对象状态查看器">32.8 场景对象状态查看器</h2><p>显示：</p>
+<ul>
+<li><p>宝箱；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>谜题；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>采集点；</p>
+</li>
+<li><p>NPC；</p>
+</li>
+<li><p>场景变体；</p>
+</li>
+<li><p>持久化策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="329-对话流程查看器">32.9 对话流程查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前节点；</p>
+</li>
+<li><p>条件；</p>
+</li>
+<li><p>角色状态；</p>
+</li>
+<li><p>选项；</p>
+</li>
+<li><p>变量修改；</p>
+</li>
+<li><p>任务影响；</p>
+</li>
+<li><p>关系影响；</p>
+</li>
+<li><p>下一节点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3210-存档差异工具">32.10 存档差异工具</h2><p>比较两个存档中的：</p>
+<ul>
+<li><p>章节；</p>
+</li>
+<li><p>队伍；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>NPC；</p>
+</li>
+<li><p>世界阶段；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-内容验证工具">33. 内容验证工具</h2><h2 id="331-章节可达性验证">33.1 章节可达性验证</h2><p>检查：</p>
+<ul>
+<li><p>每个章节有合法入口；</p>
+</li>
+<li><p>主线条件可满足；</p>
+</li>
+<li><p>必需角色可加入；</p>
+</li>
+<li><p>必需区域可访问；</p>
+</li>
+<li><p>必需Boss存在；</p>
+</li>
+<li><p>章节不会形成循环死锁；</p>
+</li>
+<li><p>所有结局均有可达路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-队伍合法性验证">33.2 队伍合法性验证</h2><p>检查：</p>
+<ul>
+<li><p>主线期间至少存在可用战斗角色；</p>
+</li>
+<li><p>强制角色离队后仍有合法阵容；</p>
+</li>
+<li><p>Guest不会持有不可返回装备；</p>
+</li>
+<li><p>队伍人数满足剧情演出；</p>
+</li>
+<li><p>替补规则一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-装备与职业验证">33.3 装备与职业验证</h2><p>检查：</p>
+<ul>
+<li><p>装备槽合法；</p>
+</li>
+<li><p>属性需求可达到；</p>
+</li>
+<li><p>职业前置无循环；</p>
+</li>
+<li><p>技能解锁存在；</p>
+</li>
+<li><p>装备不会引用缺失能力；</p>
+</li>
+<li><p>强化路径完整。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-遭遇强度验证">33.4 遭遇强度验证</h2><p>自动模拟：</p>
+<ul>
+<li><p>低等级队伍；</p>
+</li>
+<li><p>推荐等级队伍；</p>
+</li>
+<li><p>高等级队伍；</p>
+</li>
+<li><p>不同职业；</p>
+</li>
+<li><p>不同装备；</p>
+</li>
+<li><p>不使用消耗品；</p>
+</li>
+<li><p>使用自动战斗。</p>
+</li>
+</ul>
+<p>检查：</p>
+<ul>
+<li><p>是否出现必须练级；</p>
+</li>
+<li><p>是否存在无解敌人组合；</p>
+</li>
+<li><p>Boss资源需求；</p>
+</li>
+<li><p>状态职业是否有价值；</p>
+</li>
+<li><p>战斗时长是否合理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="335-迷宫资源验证">33.5 迷宫资源验证</h2><p>统计：</p>
+<ul>
+<li><p>预计战斗次数；</p>
+</li>
+<li><p>平均法力消耗；</p>
+</li>
+<li><p>治疗消耗；</p>
+</li>
+<li><p>宝箱资源；</p>
+</li>
+<li><p>恢复点距离；</p>
+</li>
+<li><p>Boss前资源状态；</p>
+</li>
+<li><p>失败返回成本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="336-剧情跳过验证">33.6 剧情跳过验证</h2><p>自动跳过所有可跳过演出，检查：</p>
+<ul>
+<li><p>队伍；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>物品；</p>
+</li>
+<li><p>区域；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>世界阶段；</p>
+</li>
+<li><p>下一剧情；</p>
+</li>
+</ul>
+<p>是否正确。</p>
+<hr />
+<h2 id="337-本地化验证">33.7 本地化验证</h2><p>JRPG通常拥有大量：</p>
+<ul>
+<li><p>对话；</p>
+</li>
+<li><p>技能文本；</p>
+</li>
+<li><p>装备描述；</p>
+</li>
+<li><p>图鉴；</p>
+</li>
+<li><p>任务文本。</p>
+</li>
+</ul>
+<p>需要检查：</p>
+<ul>
+<li><p>文本缺失；</p>
+</li>
+<li><p>占位符；</p>
+</li>
+<li><p>性别和角色引用；</p>
+</li>
+<li><p>UI溢出；</p>
+</li>
+<li><p>语音与字幕；</p>
+</li>
+<li><p>分支对话；</p>
+</li>
+<li><p>术语一致性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-性能设计">34. 性能设计</h2><h2 id="341-场景流式加载">34.1 场景流式加载</h2><p>根据：</p>
+<ul>
+<li><p>当前城镇；</p>
+</li>
+<li><p>当前迷宫区域；</p>
+</li>
+<li><p>相邻区域；</p>
+</li>
+<li><p>即将进入战斗；</p>
+</li>
+<li><p>剧情演出；</p>
+</li>
+</ul>
+<p>预加载资源。</p>
+<hr />
+<h2 id="342-战斗资源缓存">34.2 战斗资源缓存</h2><p>可以预加载：</p>
+<ul>
+<li><p>当前队伍动画；</p>
+</li>
+<li><p>敌人模型；</p>
+</li>
+<li><p>技能特效；</p>
+</li>
+<li><p>战斗UI；</p>
+</li>
+<li><p>音频；</p>
+</li>
+<li><p>Boss阶段资源。</p>
+</li>
+</ul>
+<p>避免每次技能首次使用时产生明显卡顿。</p>
+<hr />
+<h2 id="343-对象池">34.3 对象池</h2><p>适用于：</p>
+<ul>
+<li><p>战斗特效；</p>
+</li>
+<li><p>飘字；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>临时召唤；</p>
+</li>
+<li><p>掉落表现；</p>
+</li>
+<li><p>遭遇敌人表现。</p>
+</li>
+</ul>
+<p>对象池实例不能替代稳定EntityId。</p>
+<hr />
+<h2 id="344-事件索引">34.4 事件索引</h2><p>按事件类型索引：</p>
+<ul>
+<li><p>OnBattleCompleted；</p>
+</li>
+<li><p>OnCharacterJoined；</p>
+</li>
+<li><p>OnChapterChanged；</p>
+</li>
+<li><p>OnQuestUpdated；</p>
+</li>
+<li><p>OnItemObtained；</p>
+</li>
+<li><p>OnBossDefeated；</p>
+</li>
+<li><p>OnRelationshipChanged。</p>
+</li>
+</ul>
+<p>避免每次事件遍历全部任务、对话和NPC。</p>
+<hr />
+<h2 id="345-场景持久状态和表现分离">34.5 场景持久状态和表现分离</h2><p>场景卸载后只保留：</p>
+<ul>
+<li><p>宝箱状态；</p>
+</li>
+<li><p>谜题；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>NPC阶段；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>采集点；</p>
+</li>
+<li><p>任务对象。</p>
+</li>
+</ul>
+<p>不保留可重新生成的表现对象。</p>
+<hr />
+<h2 id="35-可扩展点">35. 可扩展点</h2><h2 id="351-新角色">35.1 新角色</h2><p>主要提供：</p>
+<ul>
+<li><p>CharacterDefinition；</p>
+</li>
+<li><p>GrowthProfile；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>JobRules；</p>
+</li>
+<li><p>EquipmentRules；</p>
+</li>
+<li><p>RelationshipProfile；</p>
+</li>
+<li><p>剧情状态；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="352-新职业">35.2 新职业</h2><p>通过：</p>
+<ul>
+<li><p>属性修正；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>装备权限；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>成长；</p>
+</li>
+<li><p>UI；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="353-新战斗模式">35.3 新战斗模式</h2><p>可以替换：</p>
+<ul>
+<li><p>TurnScheduler；</p>
+</li>
+<li><p>CommandSelectionPolicy；</p>
+</li>
+<li><p>TimelinePolicy；</p>
+</li>
+<li><p>ActionExecutionPolicy；</p>
+</li>
+<li><p>InputWindowPolicy。</p>
+</li>
+</ul>
+<p>队伍、技能、属性、装备和结算系统保持复用。</p>
+<hr />
+<h2 id="354-新迷宫">35.4 新迷宫</h2><p>提供：</p>
+<ul>
+<li><p>DungeonDefinition；</p>
+</li>
+<li><p>场景；</p>
+</li>
+<li><p>遭遇；</p>
+</li>
+<li><p>机关；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>恢复点；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>章节规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="355-新任务类型">35.5 新任务类型</h2><p>通过：</p>
+<ul>
+<li><p>ObjectiveDefinition；</p>
+</li>
+<li><p>进入条件；</p>
+</li>
+<li><p>失败条件；</p>
+</li>
+<li><p>世界效果；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="356-新关系机制">35.6 新关系机制</h2><p>可以扩展：</p>
+<ul>
+<li><p>队伍协同；</p>
+</li>
+<li><p>营地对话；</p>
+</li>
+<li><p>礼物；</p>
+</li>
+<li><p>冲突；</p>
+</li>
+<li><p>恋爱；</p>
+</li>
+<li><p>师徒；</p>
+</li>
+<li><p>羁绊战斗。</p>
+</li>
+</ul>
+<p>仍应复用RelationshipState和事件系统。</p>
+<hr />
+<h2 id="36-玩家体验设计">36. 玩家体验设计</h2><h2 id="361-主线目标必须清晰">36.1 主线目标必须清晰</h2><p>即使游戏允许支线探索，玩家仍应知道：</p>
+<ul>
+<li><p>当前目标；</p>
+</li>
+<li><p>应前往哪个区域；</p>
+</li>
+<li><p>为什么前往；</p>
+</li>
+<li><p>当前是否需要整备；</p>
+</li>
+<li><p>哪些内容是可选的。</p>
+</li>
+</ul>
+<hr />
+<h2 id="362-队伍差异必须易于理解">36.2 队伍差异必须易于理解</h2><p>玩家应能快速判断：</p>
+<ul>
+<li><p>谁擅长治疗；</p>
+</li>
+<li><p>谁擅长防御；</p>
+</li>
+<li><p>谁能攻击群体；</p>
+</li>
+<li><p>谁能处理状态；</p>
+</li>
+<li><p>谁速度快；</p>
+</li>
+<li><p>谁能克制当前敌人。</p>
+</li>
+</ul>
+<hr />
+<h2 id="363-普通战斗不能只是重复确认攻击">36.3 普通战斗不能只是重复确认攻击</h2><p>普通战斗需要通过以下因素维持决策：</p>
+<ul>
+<li><p>弱点；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>敌人组合；</p>
+</li>
+<li><p>行动顺序；</p>
+</li>
+<li><p>法力消耗；</p>
+</li>
+<li><p>队伍连携；</p>
+</li>
+<li><p>快速结束奖励；</p>
+</li>
+<li><p>自动战斗策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="364-自动战斗与加速">36.4 自动战斗与加速</h2><p>长篇JRPG通常需要：</p>
+<ul>
+<li><p>战斗加速；</p>
+</li>
+<li><p>动画跳过；</p>
+</li>
+<li><p>自动普通攻击；</p>
+</li>
+<li><p>自动策略；</p>
+</li>
+<li><p>重复技能；</p>
+</li>
+<li><p>快速结算低等级敌人。</p>
+</li>
+</ul>
+<p>这些功能应减少重复操作，但不能自动解决Boss和高难战斗。</p>
+<hr />
+<h2 id="365-boss重试应快捷">36.5 Boss重试应快捷</h2><p>失败后应尽量允许：</p>
+<ul>
+<li><p>快速重试；</p>
+</li>
+<li><p>跳过已看演出；</p>
+</li>
+<li><p>调整装备和队伍；</p>
+</li>
+<li><p>恢复消耗品到战前状态，或清晰说明不恢复；</p>
+</li>
+<li><p>查看失败原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="366-角色加入应具有玩法价值">36.6 角色加入应具有玩法价值</h2><p>新角色加入后应尽快提供：</p>
+<ul>
+<li><p>教学战斗；</p>
+</li>
+<li><p>专属技能展示；</p>
+</li>
+<li><p>队伍协同；</p>
+</li>
+<li><p>个人剧情；</p>
+</li>
+<li><p>对现有阵容的补充。</p>
+</li>
+</ul>
+<p>不能让新角色加入后长期没有使用场景。</p>
+<hr />
+<h2 id="367-内容节奏应持续变化">36.7 内容节奏应持续变化</h2><p>推荐交替安排：</p>
+<ul>
+<li><p>剧情；</p>
+</li>
+<li><p>城镇；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>解谜；</p>
+</li>
+<li><p>角色事件；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="368-失败反馈">36.8 失败反馈</h2><p>战斗失败后可以展示：</p>
+<ul>
+<li><p>主要伤害来源；</p>
+</li>
+<li><p>未处理状态；</p>
+</li>
+<li><p>属性抗性；</p>
+</li>
+<li><p>法力消耗；</p>
+</li>
+<li><p>倒下顺序；</p>
+</li>
+<li><p>未使用道具；</p>
+</li>
+<li><p>推荐等级差异；</p>
+</li>
+<li><p>可调整队伍成员。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-常见设计失败">37. 常见设计失败</h2><h2 id="371-章节逻辑散落在场景脚本中">37.1 章节逻辑散落在场景脚本中</h2><p>修改剧情后出现：</p>
+<ul>
+<li><p>NPC状态不一致；</p>
+</li>
+<li><p>队伍成员错误；</p>
+</li>
+<li><p>区域未开放；</p>
+</li>
+<li><p>商店商品错误；</p>
+</li>
+<li><p>存档死锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="372-队伍成员只是外观不同">37.2 队伍成员只是外观不同</h2><p>角色技能和职责高度重复。</p>
+<hr />
+<h2 id="373-后加入角色无法追赶">37.3 后加入角色无法追赶</h2><p>玩家因等级和装备差距永久放弃新角色。</p>
+<hr />
+<h2 id="374-普通战斗缺乏决策">37.4 普通战斗缺乏决策</h2><p>玩家始终选择普通攻击或同一个群体技能。</p>
+<hr />
+<h2 id="375-状态技能对boss全部无效">37.5 状态技能对Boss全部无效</h2><p>辅助、控制和异常职业失去价值。</p>
+<hr />
+<h2 id="376-迷宫只靠长度消耗时间">37.6 迷宫只靠长度消耗时间</h2><p>缺少：</p>
+<ul>
+<li><p>独特规则；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>机关；</p>
+</li>
+<li><p>环境主题；</p>
+</li>
+<li><p>战斗变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="377-剧情演出直接修改关键状态">37.7 剧情演出直接修改关键状态</h2><p>跳过或中断后出现：</p>
+<ul>
+<li><p>角色未加入；</p>
+</li>
+<li><p>奖励未获得；</p>
+</li>
+<li><p>任务未推进；</p>
+</li>
+<li><p>世界阶段错误。</p>
+</li>
+</ul>
+<hr />
+<h2 id="378-商店宝箱和制作奖励相互覆盖">37.8 商店、宝箱和制作奖励相互覆盖</h2><p>玩家获得新装备后立即在下一商店看到更强版本。</p>
+<hr />
+<h2 id="379-练级成为唯一难度调节方式">37.9 练级成为唯一难度调节方式</h2><p>玩家不能通过：</p>
+<ul>
+<li><p>构筑；</p>
+</li>
+<li><p>弱点；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>阵容；</p>
+</li>
+<li><p>战术；</p>
+</li>
+</ul>
+<p>改善结果。</p>
+<hr />
+<h2 id="3710-游戏后期数值无限膨胀">37.10 游戏后期数值无限膨胀</h2><p>导致：</p>
+<ul>
+<li><p>早期技能完全淘汰；</p>
+</li>
+<li><p>伤害数字失去意义；</p>
+</li>
+<li><p>平衡难以维护；</p>
+</li>
+<li><p>状态和防御系统失效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3711-支线任务因章节推进无提示失败">37.11 支线任务因章节推进无提示失败</h2><p>玩家无法判断任务锁定条件。</p>
+<hr />
+<h2 id="3712-对话量大但状态信息不可查询">37.12 对话量大但状态信息不可查询</h2><p>玩家忘记主线目标后只能反复寻找NPC。</p>
+<hr />
+<h2 id="3713-boss失败后需要重复长演出">37.13 Boss失败后需要重复长演出</h2><p>重试成本主要来自等待，而不是战斗。</p>
+<hr />
+<h2 id="38-最小可行原型">38. 最小可行原型</h2><p>一个能够验证JRPG核心范式的最小原型可以包含：</p>
+<h3 id="故事结构">故事结构</h3><ul>
+<li><p>3个章节；</p>
+</li>
+<li><p>2座城镇；</p>
+</li>
+<li><p>1张区域地图；</p>
+</li>
+<li><p>3个迷宫；</p>
+</li>
+<li><p>3个章节Boss；</p>
+</li>
+<li><p>1个最终Boss；</p>
+</li>
+<li><p>4条角色支线。</p>
+</li>
+</ul>
+<h3 id="队伍">队伍</h3><ul>
+<li><p>4名正式角色；</p>
+</li>
+<li><p>3人参战；</p>
+</li>
+<li><p>1名替补；</p>
+</li>
+<li><p>1名临时Guest；</p>
+</li>
+<li><p>支持战斗外换人。</p>
+</li>
+</ul>
+<h3 id="角色职责">角色职责</h3><ul>
+<li><p>物理输出；</p>
+</li>
+<li><p>魔法输出；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>治疗与支援。</p>
+</li>
+</ul>
+<h3 id="战斗">战斗</h3><ul>
+<li><p>指令式回合；</p>
+</li>
+<li><p>属性弱点；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>行动顺序；</p>
+</li>
+<li><p>换人；</p>
+</li>
+<li><p>合体技；</p>
+</li>
+<li><p>Boss阶段；</p>
+</li>
+<li><p>战斗加速。</p>
+</li>
+</ul>
+<h3 id="成长">成长</h3><ul>
+<li><p>角色等级；</p>
+</li>
+<li><p>职业等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>技能学习；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>武器强化。</p>
+</li>
+</ul>
+<h3 id="城镇与迷宫">城镇与迷宫</h3><ul>
+<li><p>商店；</p>
+</li>
+<li><p>旅店；</p>
+</li>
+<li><p>锻造；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>谜题；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>中途恢复点；</p>
+</li>
+<li><p>地图可见敌人。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>ChapterState；</p>
+</li>
+<li><p>WorldStage；</p>
+</li>
+<li><p>PartyState；</p>
+</li>
+<li><p>CharacterRuntimeState；</p>
+</li>
+<li><p>BattleState；</p>
+</li>
+<li><p>AbilityDefinition；</p>
+</li>
+<li><p>QuestState；</p>
+</li>
+<li><p>DialogueState；</p>
+</li>
+<li><p>SceneVariant；</p>
+</li>
+<li><p>BattleResultSnapshot；</p>
+</li>
+<li><p>SaveSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>章节状态查看器；</p>
+</li>
+<li><p>队伍检查器；</p>
+</li>
+<li><p>战斗行动时间线；</p>
+</li>
+<li><p>数值解释器；</p>
+</li>
+<li><p>遭遇模拟器；</p>
+</li>
+<li><p>成长曲线；</p>
+</li>
+<li><p>任务可达性工具；</p>
+</li>
+<li><p>剧情跳过验证；</p>
+</li>
+<li><p>存档差异工具。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>章节、世界和队伍变化是否一致；</p>
+</li>
+<li><p>每名角色是否拥有清晰职责；</p>
+</li>
+<li><p>新角色是否能够快速进入有效阵容；</p>
+</li>
+<li><p>普通战斗是否具有资源和弱点决策；</p>
+</li>
+<li><p>Boss是否会测试队伍构筑；</p>
+</li>
+<li><p>迷宫资源压力是否合理；</p>
+</li>
+<li><p>战斗结果是否能正确写回世界；</p>
+</li>
+<li><p>跳过剧情是否不会破坏进度；</p>
+</li>
+<li><p>支线是否不会因单点状态形成死锁；</p>
+</li>
+<li><p>存档能否恢复完整队伍和世界阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-推荐实施顺序">39. 推荐实施顺序</h2><p>第一阶段：GameFlow与ChapterState
+第二阶段：世界区域、场景和SceneVariant
+第三阶段：角色、队伍和基础属性
+第四阶段：战斗状态机和普通攻击
+第五阶段：技能、元素和状态
+第六阶段：敌人、遭遇和Boss阶段
+第七阶段：经验、职业和装备
+第八阶段：城镇、商店和强化
+第九阶段：迷宫、宝箱和机关
+第十阶段：任务、NPC和对话
+第十一阶段：剧情演出、关系和世界阶段
+第十二阶段：存档、内容验证和性能优化</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量剧情和角色：</p>
+<ul>
+<li><p>章节状态；</p>
+</li>
+<li><p>队伍状态；</p>
+</li>
+<li><p>战斗结算；</p>
+</li>
+<li><p>任务条件；</p>
+</li>
+<li><p>演出命令；</p>
+</li>
+<li><p>存档版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-架构验收标准">40. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>主线进度由统一章节状态管理；</p>
+</li>
+<li><p>世界、NPC、商店和队伍都能依据章节生成正确变体；</p>
+</li>
+<li><p>角色定义与运行时成长状态相互分离；</p>
+</li>
+<li><p>活动成员、替补和Guest具有明确规则；</p>
+</li>
+<li><p>新成员存在追赶和快速投入使用机制；</p>
+</li>
+<li><p>角色和职业具有清晰战斗职责；</p>
+</li>
+<li><p>战斗命令统一经过验证和资源预留；</p>
+</li>
+<li><p>技能效果通过可组合EffectSpec执行；</p>
+</li>
+<li><p>元素弱点不仅能影响伤害，也能影响行动结构；</p>
+</li>
+<li><p>状态技能在Boss战中仍具有合理价值；</p>
+</li>
+<li><p>普通战斗能产生资源管理和队伍选择；</p>
+</li>
+<li><p>Boss拥有阶段、机制和明确反制；</p>
+</li>
+<li><p>战斗结果通过幂等快照写回长期状态；</p>
+</li>
+<li><p>剧情演出跳过不会遗漏关键逻辑；</p>
+</li>
+<li><p>任务和章节不会依赖脆弱的单一场景事件；</p>
+</li>
+<li><p>场景变体无需复制完整场景；</p>
+</li>
+<li><p>商店、宝箱、制作和Boss奖励具有差异化价值；</p>
+</li>
+<li><p>相同队伍和随机流可以复现战斗结果；</p>
+</li>
+<li><p>存档能够恢复章节、队伍、任务和世界阶段；</p>
+</li>
+<li><p>调试器能够解释章节卡点、数值来源和战斗失败。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-可迁移到其他游戏的设计思想">41. 可迁移到其他游戏的设计思想</h2><h2 id="411-章节是跨系统状态边界">41.1 章节是跨系统状态边界</h2><p>可迁移到：</p>
+<ul>
+<li><p>剧情游戏；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>任务系统；</p>
+</li>
+<li><p>活动系统；</p>
+</li>
+<li><p>赛季内容。</p>
+</li>
+</ul>
+<p>章节可以统一控制：</p>
+<ul>
+<li><p>内容；</p>
+</li>
+<li><p>角色；</p>
+</li>
+<li><p>世界；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="412-队伍是可持续成长主体">41.2 队伍是可持续成长主体</h2><p>可迁移到：</p>
+<ul>
+<li><p>战术游戏；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>小队动作；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>体育管理。</p>
+</li>
+</ul>
+<p>成长不只属于单个角色，还属于：</p>
+<ul>
+<li><p>阵容；</p>
+</li>
+<li><p>职责覆盖；</p>
+</li>
+<li><p>协同；</p>
+</li>
+<li><p>替补；</p>
+</li>
+<li><p>关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="413-城镇与危险区域构成资源循环">41.3 城镇与危险区域构成资源循环</h2><p>可迁移到：</p>
+<ul>
+<li><p>生存游戏；</p>
+</li>
+<li><p>地牢；</p>
+</li>
+<li><p>狩猎；</p>
+</li>
+<li><p>撤离游戏；</p>
+</li>
+<li><p>Roguelike。</p>
+</li>
+</ul>
+<p>安全区域负责整备，危险区域负责消耗和收益。</p>
+<hr />
+<h2 id="414-系统解锁可以与叙事成长同步">41.4 系统解锁可以与叙事成长同步</h2><p>可迁移到：</p>
+<ul>
+<li><p>教学；</p>
+</li>
+<li><p>长线动作游戏；</p>
+</li>
+<li><p>模拟经营；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>角色成长。</p>
+</li>
+</ul>
+<p>新能力在剧情上获得原因，会比纯菜单解锁更有意义。</p>
+<hr />
+<h2 id="415-guest角色需要独立生命周期">41.5 Guest角色需要独立生命周期</h2><p>可迁移到：</p>
+<ul>
+<li><p>护送任务；</p>
+</li>
+<li><p>临时AI队友；</p>
+</li>
+<li><p>剧情角色；</p>
+</li>
+<li><p>联机支援；</p>
+</li>
+<li><p>召唤物。</p>
+</li>
+</ul>
+<p>需要明确：</p>
+<ul>
+<li><p>控制权；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>离队；</p>
+</li>
+<li><p>死亡；</p>
+</li>
+<li><p>奖励。</p>
+</li>
+</ul>
+<hr />
+<h2 id="416-战斗结果应该通过快照提交">41.6 战斗结果应该通过快照提交</h2><p>可迁移到：</p>
+<ul>
+<li><p>关卡奖励；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>联机副本；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>战棋。</p>
+</li>
+</ul>
+<p>先冻结结果，再将经验、掉落和任务进度原子写回长期状态。</p>
+<hr />
+<h2 id="417-表现时间线不应成为权威逻辑">41.7 表现时间线不应成为权威逻辑</h2><p>可迁移到所有剧情和战斗游戏。</p>
+<p>动画、镜头和语音可以跳过，但关键状态必须由独立命令提交。</p>
+<hr />
+<h2 id="418-内容节奏本身是一种系统">41.8 内容节奏本身是一种系统</h2><p>可迁移到：</p>
+<ul>
+<li><p>长篇剧情；</p>
+</li>
+<li><p>开放世界；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>动作冒险；</p>
+</li>
+<li><p>在线活动。</p>
+</li>
+</ul>
+<p>需要管理不同活动的连续时长和切换频率。</p>
+<hr />
+<h2 id="419-新内容需要追赶机制">41.9 新内容需要追赶机制</h2><p>可迁移到：</p>
+<ul>
+<li><p>新角色；</p>
+</li>
+<li><p>新职业；</p>
+</li>
+<li><p>后期解锁系统；</p>
+</li>
+<li><p>DLC；</p>
+</li>
+<li><p>赛季角色。</p>
+</li>
+</ul>
+<p>否则玩家会因为沉没成本拒绝使用新内容。</p>
+<hr />
+<h2 id="4110-角色机制可以表达叙事身份">41.10 角色机制可以表达叙事身份</h2><p>可迁移到：</p>
+<ul>
+<li><p>英雄游戏；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>格斗；</p>
+</li>
+<li><p>团队射击；</p>
+</li>
+<li><p>战术游戏。</p>
+</li>
+</ul>
+<p>角色性格和经历可以通过技能风险、资源和协同方式表达。</p>
+<hr />
+<h2 id="42-本次防重记录">42. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>JRPG。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Japanese Role-Playing Game；</p>
+</li>
+<li><p>日式角色扮演游戏；</p>
+</li>
+<li><p>队伍制叙事RPG；</p>
+</li>
+<li><p>指令式角色扮演游戏。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>以叙事章节作为宏观世界状态边界，以主角团队作为持续成长主体，通过城镇整备、区域探索、迷宫资源消耗、队伍战斗和战后结算形成稳定循环；运行时由章节状态、队伍状态、角色成长、战斗规则、任务进度和场景变体共同推动角色、世界与玩法系统同步演化。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>以作者塑造的固定或半固定主角团为中心；</p>
+</li>
+<li><p>主线通常采用章节化推进；</p>
+</li>
+<li><p>世界、NPC、商店和队伍随章节变化；</p>
+</li>
+<li><p>队伍成员具有明确角色身份和战斗职责；</p>
+</li>
+<li><p>城镇、迷宫、战斗和结算构成稳定循环；</p>
+</li>
+<li><p>成长同时包含等级、职业、装备、技能和关系；</p>
+</li>
+<li><p>战斗强调队伍组合、属性克制、状态和资源管理；</p>
+</li>
+<li><p>系统通常随剧情逐步解锁；</p>
+</li>
+<li><p>角色剧情可以直接改变其战斗能力；</p>
+</li>
+<li><p>普通战斗、探索和Boss共同控制长期资源节奏；</p>
+</li>
+<li><p>剧情演出和逻辑状态相互分离；</p>
+</li>
+<li><p>战斗结果通过快照写回长期世界；</p>
+</li>
+<li><p>长篇内容依赖稳定的剧情、探索和战斗节奏；</p>
+</li>
+<li><p>存档必须同时恢复章节、队伍、任务和世界阶段。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>章节驱动世界；</p>
+</li>
+<li><p>固定主角团队；</p>
+</li>
+<li><p>活动成员、替补和Guest；</p>
+</li>
+<li><p>角色等级与追赶；</p>
+</li>
+<li><p>职业与技能成长；</p>
+</li>
+<li><p>装备和经济；</p>
+</li>
+<li><p>城镇整备；</p>
+</li>
+<li><p>迷宫资源循环；</p>
+</li>
+<li><p>遭遇系统；</p>
+</li>
+<li><p>指令式队伍战斗；</p>
+</li>
+<li><p>属性弱点；</p>
+</li>
+<li><p>状态效果；</p>
+</li>
+<li><p>连携与关系；</p>
+</li>
+<li><p>敌人编队；</p>
+</li>
+<li><p>Boss阶段；</p>
+</li>
+<li><p>战斗结果快照；</p>
+</li>
+<li><p>任务和NPC；</p>
+</li>
+<li><p>剧情演出与跳过；</p>
+</li>
+<li><p>场景变体；</p>
+</li>
+<li><p>长篇内容节奏；</p>
+</li>
+<li><p>JRPG存档兼容。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>JRPG战斗系统；</p>
+</li>
+<li><p>JRPG队伍系统；</p>
+</li>
+<li><p>JRPG职业系统；</p>
+</li>
+<li><p>JRPG属性克制；</p>
+</li>
+<li><p>JRPG状态效果；</p>
+</li>
+<li><p>JRPG城镇；</p>
+</li>
+<li><p>JRPG迷宫；</p>
+</li>
+<li><p>JRPG随机遇敌；</p>
+</li>
+<li><p>JRPG角色成长；</p>
+</li>
+<li><p>JRPG装备系统；</p>
+</li>
+<li><p>JRPG合体技；</p>
+</li>
+<li><p>JRPG角色关系；</p>
+</li>
+<li><p>JRPG章节系统；</p>
+</li>
+<li><p>JRPG剧情演出；</p>
+</li>
+<li><p>JRPG任务系统；</p>
+</li>
+<li><p>JRPG场景变体；</p>
+</li>
+<li><p>JRPG Boss设计；</p>
+</li>
+<li><p>JRPG战斗结算；</p>
+</li>
+<li><p>JRPG存档系统。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

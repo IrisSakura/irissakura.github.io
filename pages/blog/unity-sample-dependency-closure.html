@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura">
+    <meta property="og:description" content="一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unity-sample-dependency-closure.png">
+    <meta property="og:image:alt" content="Unity Sample 的条件组合层与渐进式依赖闭包 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura">
+    <meta name="twitter:description" content="一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unity-sample-dependency-closure.png">
+    <meta name="twitter:image:alt" content="Unity Sample 的条件组合层与渐进式依赖闭包 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura","description":"一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？","url":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unity Sample 的条件组合层与渐进式依赖闭包","image":"https://irissakura.github.io/assets/social/pages-blog-unity-sample-dependency-closure.png","datePublished":"2026-08-05","dateModified":"2026-08-05","about":["sample","unity"]}</script>
+    <!-- site-meta:end -->
+    <title>Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-05</p>
+            <h1>Unity Sample 的条件组合层与渐进式依赖闭包</h1>
+            <p class="blog-deck">一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？</p>
+            <div class="note-tags"><span>sample</span><a href="tag/unity.html">unity</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a>
+开发框架 Sample 时，很容易出现一种扩张路径。</p>
+<p>最初，示例只需要展示战斗主循环：</p>
+<ul>
+<li><p>接收一次命中；</p>
+</li>
+<li><p>解析语义信号；</p>
+</li>
+<li><p>执行伤害；</p>
+</li>
+<li><p>更新生命值；</p>
+</li>
+<li><p>判断胜负。</p>
+</li>
+</ul>
+<p>随后，为了让示例更像一款真正的游戏，又不断加入：</p>
+<ul>
+<li><p>输入录制；</p>
+</li>
+<li><p>Command、Undo、Redo 与 Replay；</p>
+</li>
+<li><p>Event 与公告；</p>
+</li>
+<li><p>MVVM 和正式 UGUI；</p>
+</li>
+<li><p>对象池、资源引用和音效；</p>
+</li>
+<li><p>Save、Preferences、RedDot 与 Localization。</p>
+</li>
+</ul>
+<p>最后，示例确实更完整了，但父包也可能被迫依赖十几个模块。任何只想使用战斗编排内核的项目，都要承担整套 UI、音频、存档和本地化依赖。</p>
+<p>这时，Sample 不再只是展示能力，而开始反向改变产品边界。</p>
+<h2 id="先说结论综合展示应该向上组合而不是向下污染核心">先说结论：综合展示应该向上组合，而不是向下污染核心</h2><p><strong>条件组合层（后文简称“够包才升级”）</strong>：只有当一组可选依赖形成完整闭包时，才装配对应展示能力；否则保持较低档位，而不扩大核心包的硬依赖。</p>
+<p>“够包才升级”解决的不是某一个 <code>#if</code>。</p>
+<p>它解决的是三个同时存在的问题：</p>
+<ol>
+<li><p>核心包只承诺最小职责。</p>
+</li>
+<li><p>综合 Sample 可以展示真实的跨模块协作。</p>
+</li>
+<li><p>消费项目缺少可选包时，仍然可以编译、导入和运行基础路径。</p>
+</li>
+</ol>
+<p>近期的 Semantic Battle Final Showcase 采用了四档结构。</p>
+<table>
+<thead>
+<tr>
+<th>档位</th>
+<th>条件能力</th>
+<th>展示内容</th>
+<th>缺失时的行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Baseline</td>
+<td>Core、GAS、Hitbox 等父包基础闭包</td>
+<td>命中语义、伤害、状态与基础操作</td>
+<td>始终保留</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>再满足 Bootstrap、Input、Command、Event、Config、Ticker、UI、MVVM</td>
+<td>正式 UGUI、命令按钮、撤销重做、Replay、公告与诊断</td>
+<td>任一条件不足时回到 Baseline</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>在 P1 上再满足 Rendering、Pooling、Asset、Audio</td>
+<td>反馈队列、池化命中闪光、资源引用计数、程序化音效</td>
+<td>条件不足时保持 P1</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>在 P2 上再满足 Preferences、Save、RedDot、Localization</td>
+<td>语言、检查点、未读状态与双语操作面板</td>
+<td>条件不足时保持 P2</td>
+</tr>
+</tbody></table>
+<p>这里最重要的不是“总共接了十六个包”。</p>
+<p>真正重要的是：</p>
+<blockquote>
+<p>十六个包只存在于 Sample 的最高展示档位，没有被写进战斗编排父包的产品合同。</p>
+</blockquote>
+<h2 id="sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</h2><p>综合 Sample 的价值，在于把已经存在的模块放进同一条真实链路。</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Hitbox 命中事实"] --&gt; B["Semantic Combat 语义处理"]
+    B --&gt; C["GAS 动作执行"]
+    C --&gt; D["Command 历史与 Replay"]
+    C --&gt; E["Durable Event 与 Ticker"]
+    D --&gt; F["MVVM / UGUI 投影"]
+    E --&gt; F
+    C --&gt; G["Rendering 反馈队列"]
+    G --&gt; H["Pooling / Asset / Audio"]
+    D --&gt; I["Save Replay Payload"]
+    I --&gt; J["Preferences / RedDot / Localization"]
+</code></pre>
+<p>这条链路应该尽量复用各模块的公开合同。</p>
+<p>例如：</p>
+<ul>
+<li><p>战斗状态通过 Command 记录，而不是另写一套 Sample 专用历史系统；</p>
+</li>
+<li><p>存档保存可重演的命令序列，而不是直接修改战斗对象内部字段；</p>
+</li>
+<li><p>命中反馈先进入有界队列，再由表现消费者处理；</p>
+</li>
+<li><p>资源通过引用计数管理，而不是把 Sample 的 Sprite 和 AudioClip 变成全局单例；</p>
+</li>
+<li><p>UI 按钮和键盘输入进入同一条命令管线，而不是各写一套行为。</p>
+</li>
+</ul>
+<p>一旦 Sample 为了方便而绕过正式合同，它展示的就不再是框架用法，而是维护者知道内部细节时才能成立的特殊路径。</p>
+<h2 id="为什么不能有几个包就开几个功能">为什么不能“有几个包就开几个功能”</h2><p>看起来最灵活的方案，是逐项检测：</p>
+<ul>
+<li><p>有 Command 就开撤销；</p>
+</li>
+<li><p>有 UI 就开界面；</p>
+</li>
+<li><p>有 Audio 就播放声音；</p>
+</li>
+<li><p>有 Save 就显示存档；</p>
+</li>
+<li><p>有 Localization 就切语言。</p>
+</li>
+</ul>
+<p>但这种逐项启用会制造大量半成品状态。</p>
+<p>例如：</p>
+<ul>
+<li><p>有 Save，没有 Command Replay，存档到底保存什么；</p>
+</li>
+<li><p>有 RedDot，没有 Save revision，未读依据从哪里来；</p>
+</li>
+<li><p>有 Rendering，没有 Pooling，反馈对象由谁回收；</p>
+</li>
+<li><p>有 UI，没有 MVVM，展示层从哪里读取稳定状态；</p>
+</li>
+<li><p>有 Preferences，没有 Localization，语言偏好写入后由谁消费。</p>
+</li>
+</ul>
+<p><strong>能力闭包（后文简称“整套才成立”）</strong>：一组模块只有在其依赖、所有者、数据来源和清理责任全部存在时，才构成可以对外启用的能力。</p>
+<p>因此，P1、P2、P3 都不应被理解为若干独立开关。</p>
+<p>它们更像逐层建立的合同：</p>
+<pre><code class="language-text">Baseline
+  └─ P1：交互与可视化合同完整
+       └─ P2：表现反馈合同完整
+            └─ P3：跨会话连续性合同完整
+</code></pre>
+<p>任何一层不完整，都保持上一层，而不是进入无法解释的部分启用状态。</p>
+<h2 id="运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</h2><p>综合 Sample 常见的另一个问题，是把演示资源偷偷变成项目依赖。</p>
+<p>例如，示例要求项目预先存在：</p>
+<ul>
+<li><p>指定 Canvas；</p>
+</li>
+<li><p>特定 Prefab；</p>
+</li>
+<li><p>Addressables Group；</p>
+</li>
+<li><p>AudioMixer；</p>
+</li>
+<li><p>Input Actions；</p>
+</li>
+<li><p>本地化表；</p>
+</li>
+<li><p>PlayerPrefs 键；</p>
+</li>
+<li><p>固定存档目录。</p>
+</li>
+</ul>
+<p>这种示例在维护者工程里可以运行，导入干净项目后却会立即失效。</p>
+<p>因此，近期展示层采用了更克制的所有权策略：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>Sample 的处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UGUI 舞台</td>
+<td>运行时创建，Host 销毁时释放</td>
+</tr>
+<tr>
+<td>命中闪光</td>
+<td>运行时生成并由对象池复用</td>
+</tr>
+<tr>
+<td>Sprite / AudioClip</td>
+<td>Sample 自有瞬态资源，通过引用计数核销</td>
+</tr>
+<tr>
+<td>Preferences</td>
+<td>命名空间隔离的内存 Store</td>
+</tr>
+<tr>
+<td>Save</td>
+<td>唯一系统临时目录中的 Replay Payload</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>Sample 自己的 ActionId 与 Recorder</td>
+</tr>
+<tr>
+<td>清理</td>
+<td>只删除自己拥有的对象、监听器、槽位和临时目录</td>
+</tr>
+</tbody></table>
+<p>这不是生产方案。</p>
+<p>它是一种 Sample 边界声明：</p>
+<blockquote>
+<p>我可以证明模块如何协作，但不会擅自替消费项目决定资源、输入、持久化和发布策略。</p>
+</blockquote>
+<h2 id="dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</h2><p>模块组合越多，清理顺序越重要。</p>
+<p>创建路径通常很显眼：</p>
+<pre><code class="language-text">创建 Command
+→ 订阅 Event
+→ 创建 View
+→ 注册按钮
+→ 创建反馈池
+→ 持有资源
+→ 打开存档与偏好
+</code></pre>
+<p>真正容易被忽略的是反向路径：</p>
+<pre><code class="language-text">停止观察
+→ 注销监听
+→ 清空未读树
+→ 释放扩展层
+→ 回收池对象
+→ 核销资源引用
+→ 销毁 View
+→ 关闭 UI 状态机
+→ 从 Controller 脱离
+</code></pre>
+<p><strong>对称生命周期（后文简称“怎么装上就怎么拆下”）</strong>：每一项注册、持有、订阅和创建，都存在唯一且可重复执行的反向动作。</p>
+<p>综合 Sample 必须验证：</p>
+<ul>
+<li><p>Host 销毁后没有残留监听；</p>
+</li>
+<li><p>重复 Dispose 不会二次释放；</p>
+</li>
+<li><p>重复运行不会累积按钮回调；</p>
+</li>
+<li><p>对象池 active 数归零；</p>
+</li>
+<li><p>AssetRef 引用归零；</p>
+</li>
+<li><p>临时存档和偏好不泄漏到下一次运行；</p>
+</li>
+<li><p>降级档位不会残留高阶对象。</p>
+</li>
+</ul>
+<p>如果一个组合层只能启动，不能完整退出，它证明的只是“Demo 曾经亮起来”，不是模块能够安全协作。</p>
+<h2 id="这套方式的代价">这套方式的代价</h2><p>条件组合层并不是免费方案。</p>
+<p>它会增加：</p>
+<ul>
+<li><p>条件程序集；</p>
+</li>
+<li><p>最低版本约束；</p>
+</li>
+<li><p>档位识别；</p>
+</li>
+<li><p>组合测试；</p>
+</li>
+<li><p>降级路径；</p>
+</li>
+<li><p>文档说明；</p>
+</li>
+<li><p>清理矩阵。</p>
+</li>
+</ul>
+<p>但这些复杂度本来就存在。</p>
+<p>区别只在于，是把它们显式放在 Sample 私有组合层，还是隐式转嫁给每一个消费项目。</p>
+<p>我的判断是：</p>
+<blockquote>
+<p>对大型框架而言，Sample 的职责不是展示最多功能，而是展示最小核心如何在不改变产品边界的前提下，被逐层组合成完整体验。</p>
+</blockquote>
+<h2 id="设计检查表">设计检查表</h2><p>准备为一个 Sample 继续增加模块前，可以检查：</p>
+<ul>
+<li><p>新能力属于核心合同，还是只属于展示；</p>
+</li>
+<li><p>是否会扩大父包硬依赖；</p>
+</li>
+<li><p>是否存在完整的条件闭包，而不是若干随意开关；</p>
+</li>
+<li><p>缺少依赖时能否回到明确档位；</p>
+</li>
+<li><p>是否依赖消费项目已有 Prefab、设置或持久化目录；</p>
+</li>
+<li><p>输入、Command、Event 和 UI 是否走同一事实源；</p>
+</li>
+<li><p>每项资源、监听和临时文件是否有明确 Owner；</p>
+</li>
+<li><p>Host 销毁与重复 Dispose 是否有回归测试；</p>
+</li>
+<li><p>Sample 通过是否被错误描述为正式产品成熟度提升。</p>
+</li>
+</ul>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>通俗称呼</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>条件组合层</td>
+<td>够包才升级</td>
+<td>完整依赖闭包满足后才装配对应能力</td>
+</tr>
+<tr>
+<td>能力闭包</td>
+<td>整套才成立</td>
+<td>依赖、数据、Owner 与清理责任共同完整</td>
+</tr>
+<tr>
+<td>对称生命周期</td>
+<td>怎么装上就怎么拆下</td>
+<td>创建和注册均有幂等反向动作</td>
+</tr>
+<tr>
+<td>渐进降级</td>
+<td>保住上一档</td>
+<td>高阶条件不足时稳定回到已成立档位</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>资料说明：本文依据 2026-08-04 至 2026-08-05 的仓库实现与测试记录整理。文中档位描述是该时间点的工程快照，不等同于相关包已升级为 Supported 或已完成正式发布。</p>
+</blockquote>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unity-quickstart-executable-evidence.html"><span>同属「Sakura Framework 工程实践」，共享 unity</span><strong>Unity Quickstart 的可执行接入证据与有界进程治理</strong><small>一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？</small></a><a href="unity-hot-update-transaction-boundary.html"><span>同属「Sakura Framework 工程实践」，共享 unity</span><strong>Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复</strong><small>从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。</small></a><a href="ai-safe-execution-plane.html"><span>同属「Sakura Framework 工程实践」</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

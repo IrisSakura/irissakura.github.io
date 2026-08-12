@@ -679,7 +679,7 @@ flowchart TD
 
 本文主要基于以下材料整理：
 
-- `game-designs/游戏设计范式记录：殖民地模拟与聚落生存经营游戏中自主居民、工作订单与“需求—生产—分配—危机—恢复”的聚落演化循环.md`
+- `game-designs/殖民地模拟游戏设计范式.md`
 - `blogs/README.md`
 - `blogs/publication.v1.json`
 

@@ -1,0 +1,5025 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/colony.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="殖民地模拟与聚落生存经营游戏 | Sakura Design Journal">
+    <meta property="og:description" content="玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/colony.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-colony.png">
+    <meta property="og:image:alt" content="殖民地模拟与聚落生存经营游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="殖民地模拟与聚落生存经营游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-colony.png">
+    <meta name="twitter:image:alt" content="殖民地模拟与聚落生存经营游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"殖民地模拟与聚落生存经营游戏 | Sakura Design Journal","description":"玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…","url":"https://irissakura.github.io/pages/journal/colony.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"殖民地模拟与聚落生存经营游戏","image":"https://irissakura.github.io/assets/social/pages-journal-colony.png","dateModified":"2026-08-12","about":["colony","management","settlement"]}</script>
+    <!-- site-meta:end -->
+    <title>殖民地模拟与聚落生存经营游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-colony"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>殖民地模拟与聚落生存经营游戏</h1><p>玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…</p><div class="note-tags"><span>colony</span><span>management</span><span>settlement</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="自主居民工作订单与需求生产分配危机恢复的聚落演化循环">自主居民、工作订单与“需求—生产—分配—危机—恢复”的聚落演化循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>殖民地模拟与聚落生存经营游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Colony Simulation；</p>
+</li>
+<li><p>Colony Management；</p>
+</li>
+<li><p>Settlement Survival；</p>
+</li>
+<li><p>Colony Builder；</p>
+</li>
+<li><p>聚落模拟；</p>
+</li>
+<li><p>殖民地经营；</p>
+</li>
+<li><p>居民自治经营；</p>
+</li>
+<li><p>聚落生存模拟。</p>
+</li>
+</ul>
+<p>本文讨论的不是城市建设游戏中的人口统计模块，也不是生存游戏中的基地建造功能，更不是农场生活模拟中增加几名自动工作的助手，而是一种能够独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长期演化。</p>
+</blockquote>
+<p>该类型的核心不是“建造越来越多建筑”，而是持续处理以下问题：</p>
+<ul>
+<li><p>聚落当前真正缺少什么；</p>
+</li>
+<li><p>缺少的是生产能力、劳动力、运输能力，还是储存能力；</p>
+</li>
+<li><p>某项任务为什么长期无人执行；</p>
+</li>
+<li><p>某个工作台为什么停产；</p>
+</li>
+<li><p>食物已经生产出来，为什么居民仍然挨饿；</p>
+</li>
+<li><p>是否应该继续扩张，还是优先修复现有瓶颈；</p>
+</li>
+<li><p>哪些工作必须立即执行，哪些工作可以延后；</p>
+</li>
+<li><p>居民的技能、健康、情绪和关系如何影响系统效率；</p>
+</li>
+<li><p>局部故障如何沿生产链扩散为聚落危机；</p>
+</li>
+<li><p>玩家如何通过制度和空间设计影响自主居民，而不是持续手动纠错。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>殖民地模拟与聚落生存经营游戏，是以自主居民、间接指挥、生产物流、需求满足、聚落建设、危机管理和长期社会演化为核心的模拟经营类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家带领少量居民进入陌生区域；</p>
+</li>
+<li><p>划定初始储存区、居住区和资源采集区；</p>
+</li>
+<li><p>发布砍伐、挖掘、搬运、建造和生产订单；</p>
+</li>
+<li><p>居民根据工作优先级和自身状态自主选择任务；</p>
+</li>
+<li><p>原材料被采集、运输、加工并转化为生活物资；</p>
+</li>
+<li><p>居民消耗食物、休息、治疗、娱乐并建立社会关系；</p>
+</li>
+<li><p>聚落通过住房、生产设施、仓库和防御系统逐步扩张；</p>
+</li>
+<li><p>新人口、动物、俘虏或访客进入聚落；</p>
+</li>
+<li><p>天气、疾病、袭击、火灾、资源枯竭和内部冲突制造危机；</p>
+</li>
+<li><p>玩家调整任务、配给、制度、区域和建筑布局；</p>
+</li>
+<li><p>聚落从危机中恢复，形成更强的冗余和组织能力；</p>
+</li>
+<li><p>新技术和社会结构解锁更复杂的生产与治理；</p>
+</li>
+<li><p>聚落进入更大规模，同时面临更高管理复杂度；</p>
+</li>
+<li><p>最终完成长期生存、撤离、发展、征服或文明重建目标。</p>
+</li>
+</ol>
+<p>该类型中的主要资源通常包括：</p>
+<ul>
+<li><p>居民劳动力；</p>
+</li>
+<li><p>可工作时间；</p>
+</li>
+<li><p>食物；</p>
+</li>
+<li><p>饮水；</p>
+</li>
+<li><p>建材；</p>
+</li>
+<li><p>燃料；</p>
+</li>
+<li><p>药品；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>住房；</p>
+</li>
+<li><p>储存空间；</p>
+</li>
+<li><p>运输距离；</p>
+</li>
+<li><p>电力或热量；</p>
+</li>
+<li><p>技能人口；</p>
+</li>
+<li><p>医疗能力；</p>
+</li>
+<li><p>防御能力；</p>
+</li>
+<li><p>社会稳定；</p>
+</li>
+<li><p>管理者注意力。</p>
+</li>
+</ul>
+<p>其中最重要但最容易被忽略的资源是：</p>
+<blockquote>
+<p><strong>可调度劳动能力</strong>，即在正确时间、正确地点、由具备正确技能和状态的居民完成关键工作的能力。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>殖民地模拟最具代表性的设计范式由九个核心支柱构成。</p>
+<h2 id="31-玩家发布意图居民执行行为">3.1 玩家发布意图，居民执行行为</h2><p>玩家通常不直接命令某名居民：</p>
+<ul>
+<li><p>走到树旁；</p>
+</li>
+<li><p>砍三次；</p>
+</li>
+<li><p>拾取木材；</p>
+</li>
+<li><p>送到仓库；</p>
+</li>
+<li><p>再前往工地。</p>
+</li>
+</ul>
+<p>玩家表达的是更高层意图：</p>
+<ul>
+<li><p>砍伐这片区域；</p>
+</li>
+<li><p>保持木材库存不少于100；</p>
+</li>
+<li><p>建造这间房屋；</p>
+</li>
+<li><p>优先治疗重伤者；</p>
+</li>
+<li><p>禁止普通居民进入危险区；</p>
+</li>
+<li><p>夜间关闭非必要生产。</p>
+</li>
+</ul>
+<p>运行时负责将意图拆解为可执行任务。</p>
+<p>这种间接控制形成该类型最核心的交互关系：</p>
+<blockquote>
+<p>玩家负责组织系统，居民负责在系统中行动。</p>
+</blockquote>
+<hr />
+<h2 id="32-聚落需求必须被转换为工作订单">3.2 聚落需求必须被转换为工作订单</h2><p>需求本身不能直接改变世界。</p>
+<p>“聚落缺少食物”需要进一步转化为：</p>
+<ul>
+<li><p>播种；</p>
+</li>
+<li><p>收获；</p>
+</li>
+<li><p>狩猎；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>烹饪；</p>
+</li>
+<li><p>补充燃料；</p>
+</li>
+<li><p>清理厨房；</p>
+</li>
+<li><p>将餐食送入可访问仓库。</p>
+</li>
+</ul>
+<p>因此需要独立的工作生成系统，将：</p>
+<ul>
+<li><p>建筑蓝图；</p>
+</li>
+<li><p>生产配方；</p>
+</li>
+<li><p>库存阈值；</p>
+</li>
+<li><p>居民需求；</p>
+</li>
+<li><p>医疗状态；</p>
+</li>
+<li><p>环境故障；</p>
+</li>
+<li><p>玩家区域命令；</p>
+</li>
+</ul>
+<p>转换为WorkOrder。</p>
+<hr />
+<h2 id="33-生产问题往往不是产量问题而是链路问题">3.3 生产问题往往不是产量问题，而是链路问题</h2><p>例如聚落拥有大量谷物，但居民仍然饥饿，可能是因为：</p>
+<ul>
+<li><p>谷物在远端仓库；</p>
+</li>
+<li><p>没有搬运人员；</p>
+</li>
+<li><p>厨房缺少燃料；</p>
+</li>
+<li><p>厨师正在睡觉；</p>
+</li>
+<li><p>厨房被划为禁止区域；</p>
+</li>
+<li><p>成品存储已满；</p>
+</li>
+<li><p>配方被暂停；</p>
+</li>
+<li><p>门被锁住；</p>
+</li>
+<li><p>生病居民无法进食普通食物。</p>
+</li>
+</ul>
+<p>因此调试和玩家反馈必须覆盖完整链路：</p>
+<p>原料存在
+→ 原料可访问
+→ 原料已预留
+→ 工作台可用
+→ 工作者可用
+→ 配方可执行
+→ 产物有储存空间
+→ 消费者能够获得产物</p>
+<hr />
+<h2 id="34-空间布局决定实际系统效率">3.4 空间布局决定实际系统效率</h2><p>同样数量的建筑和居民，布局不同会产生完全不同的效率。</p>
+<p>空间会影响：</p>
+<ul>
+<li><p>通勤；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>工作切换；</p>
+</li>
+<li><p>食物获取；</p>
+</li>
+<li><p>医疗响应；</p>
+</li>
+<li><p>火灾扩散；</p>
+</li>
+<li><p>温度；</p>
+</li>
+<li><p>防守；</p>
+</li>
+<li><p>社交频率；</p>
+</li>
+<li><p>噪声；</p>
+</li>
+<li><p>污染；</p>
+</li>
+<li><p>电网和管线。</p>
+</li>
+</ul>
+<p>常见空间结构包括：</p>
+<ul>
+<li><p>中央仓储；</p>
+</li>
+<li><p>分布式仓储；</p>
+</li>
+<li><p>生产区；</p>
+</li>
+<li><p>居住区；</p>
+</li>
+<li><p>医疗区；</p>
+</li>
+<li><p>防御区；</p>
+</li>
+<li><p>农业区；</p>
+</li>
+<li><p>危险品区；</p>
+</li>
+<li><p>隔离区。</p>
+</li>
+</ul>
+<p>殖民地模拟中的地图不是建筑画布，而是物流和居民行为发生的运行网络。</p>
+<hr />
+<h2 id="35-居民既是生产单位也是需要被维护的个体">3.5 居民既是生产单位，也是需要被维护的个体</h2><p>每名居民同时具有：</p>
+<h3 id="生产属性">生产属性</h3><ul>
+<li><p>技能；</p>
+</li>
+<li><p>工作速度；</p>
+</li>
+<li><p>搬运能力；</p>
+</li>
+<li><p>工具熟练度；</p>
+</li>
+<li><p>工作偏好；</p>
+</li>
+<li><p>可执行职业。</p>
+</li>
+</ul>
+<h3 id="生存属性">生存属性</h3><ul>
+<li><p>饥饿；</p>
+</li>
+<li><p>口渴；</p>
+</li>
+<li><p>睡眠；</p>
+</li>
+<li><p>温度；</p>
+</li>
+<li><p>疼痛；</p>
+</li>
+<li><p>疾病；</p>
+</li>
+<li><p>伤势。</p>
+</li>
+</ul>
+<h3 id="心理属性">心理属性</h3><ul>
+<li><p>情绪；</p>
+</li>
+<li><p>压力；</p>
+</li>
+<li><p>娱乐；</p>
+</li>
+<li><p>安全感；</p>
+</li>
+<li><p>尊严；</p>
+</li>
+<li><p>环境满意度。</p>
+</li>
+</ul>
+<h3 id="社会属性">社会属性</h3><ul>
+<li><p>关系；</p>
+</li>
+<li><p>家庭；</p>
+</li>
+<li><p>冲突；</p>
+</li>
+<li><p>派系；</p>
+</li>
+<li><p>地位；</p>
+</li>
+<li><p>价值观。</p>
+</li>
+</ul>
+<p>因此不能把居民只当作可以无限工作的生产速率。</p>
+<hr />
+<h2 id="36-规模扩大必须提高组织复杂度">3.6 规模扩大必须提高组织复杂度</h2><p>新增居民会带来：</p>
+<ul>
+<li><p>更多劳动力；</p>
+</li>
+<li><p>更多技能；</p>
+</li>
+<li><p>更高生产潜力。</p>
+</li>
+</ul>
+<p>同时也会增加：</p>
+<ul>
+<li><p>食物消耗；</p>
+</li>
+<li><p>住房需求；</p>
+</li>
+<li><p>通勤；</p>
+</li>
+<li><p>医疗压力；</p>
+</li>
+<li><p>社会冲突；</p>
+</li>
+<li><p>工作调度复杂度；</p>
+</li>
+<li><p>防守负担；</p>
+</li>
+<li><p>物流流量。</p>
+</li>
+</ul>
+<p>如果人口增长只有收益，玩家会无条件接纳所有人口。</p>
+<p>如果人口增长只有压力，扩张又会失去意义。</p>
+<p>高质量设计要求人口增长改变聚落的组织方式：</p>
+<ul>
+<li><p>从全员多能工转向职业分工；</p>
+</li>
+<li><p>从单一仓库转向物流节点；</p>
+</li>
+<li><p>从手工生产转向批量生产；</p>
+</li>
+<li><p>从玩家逐项设置转向制度和模板管理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-危机应由已有系统状态共同放大">3.7 危机应由已有系统状态共同放大</h2><p>高质量危机不是随机扣除资源，而是利用现有系统弱点。</p>
+<p>例如寒潮到来：</p>
+<p>温度下降
+→ 住房需要更多燃料
+→ 搬运工作增加
+→ 居民户外工作效率下降
+→ 食物生产减少
+→ 医疗需求提高
+→ 燃料库存耗尽
+→ 居民失温
+→ 可工作人口进一步下降</p>
+<p>危机的危险性来自链式传播，而不是单一高额伤害。</p>
+<hr />
+<h2 id="38-冗余与韧性是中后期成长核心">3.8 冗余与韧性是中后期成长核心</h2><p>早期聚落追求：</p>
+<ul>
+<li><p>能够生产；</p>
+</li>
+<li><p>能够吃饭；</p>
+</li>
+<li><p>能够睡觉。</p>
+</li>
+</ul>
+<p>中后期聚落应追求：</p>
+<ul>
+<li><p>多种食物来源；</p>
+</li>
+<li><p>备用电力；</p>
+</li>
+<li><p>分布式仓库；</p>
+</li>
+<li><p>替补医生；</p>
+</li>
+<li><p>备用路线；</p>
+</li>
+<li><p>隔离病房；</p>
+</li>
+<li><p>安全库存；</p>
+</li>
+<li><p>多层防线；</p>
+</li>
+<li><p>应急政策。</p>
+</li>
+</ul>
+<p>成长不能只表现为更高产量，还应表现为：</p>
+<blockquote>
+<p>系统在局部故障后仍能继续运行。</p>
+</blockquote>
+<hr />
+<h2 id="39-玩家注意力必须从局部操作升级到制度管理">3.9 玩家注意力必须从局部操作升级到制度管理</h2><p>随着聚落扩大，玩家不应持续：</p>
+<ul>
+<li><p>手动指定每个搬运任务；</p>
+</li>
+<li><p>逐人切换工作；</p>
+</li>
+<li><p>检查每个库存；</p>
+</li>
+<li><p>逐台补充原料。</p>
+</li>
+</ul>
+<p>系统应逐步提供：</p>
+<ul>
+<li><p>工作模板；</p>
+</li>
+<li><p>优先级策略；</p>
+</li>
+<li><p>库存目标；</p>
+</li>
+<li><p>区域权限；</p>
+</li>
+<li><p>班次；</p>
+</li>
+<li><p>配给制度；</p>
+</li>
+<li><p>自动补货；</p>
+</li>
+<li><p>警报；</p>
+</li>
+<li><p>管理岗位；</p>
+</li>
+<li><p>生产政策。</p>
+</li>
+</ul>
+<p>否则后期复杂度只会增加操作量，而不会增加战略深度。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与城市建设游戏的区别">4.1 与城市建设游戏的区别</h2><p>城市建设游戏通常强调：</p>
+<ul>
+<li><p>大规模人口统计；</p>
+</li>
+<li><p>道路；</p>
+</li>
+<li><p>分区；</p>
+</li>
+<li><p>公共服务；</p>
+</li>
+<li><p>税收；</p>
+</li>
+<li><p>宏观城市发展。</p>
+</li>
+</ul>
+<p>殖民地模拟更强调：</p>
+<ul>
+<li><p>个体居民；</p>
+</li>
+<li><p>具体工作；</p>
+</li>
+<li><p>具体物品；</p>
+</li>
+<li><p>局部物流；</p>
+</li>
+<li><p>生存需求；</p>
+</li>
+<li><p>居民关系；</p>
+</li>
+<li><p>可追踪的因果链。</p>
+</li>
+</ul>
+<p>城市建设中的一千名居民可以被聚合为人口数据。</p>
+<p>殖民地模拟中的二十名居民通常都具有独立状态和行为。</p>
+<hr />
+<h2 id="42-与农场生活模拟的区别">4.2 与农场生活模拟的区别</h2><p>农场生活模拟以玩家个人日程和手工生活为核心。</p>
+<p>殖民地模拟主要通过：</p>
+<ul>
+<li><p>居民自治；</p>
+</li>
+<li><p>工作调度；</p>
+</li>
+<li><p>生产链；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>聚落制度；</p>
+</li>
+</ul>
+<p>管理集体。</p>
+<p>玩家通常不亲自完成每一项劳动。</p>
+<hr />
+<h2 id="43-与即时战略游戏的区别">4.3 与即时战略游戏的区别</h2><p>即时战略强调：</p>
+<ul>
+<li><p>直接选择单位；</p>
+</li>
+<li><p>即时战斗控制；</p>
+</li>
+<li><p>资源采集；</p>
+</li>
+<li><p>军队生产；</p>
+</li>
+<li><p>击败对手。</p>
+</li>
+</ul>
+<p>殖民地模拟中的居民拥有更复杂的：</p>
+<ul>
+<li><p>需求；</p>
+</li>
+<li><p>日程；</p>
+</li>
+<li><p>工作选择；</p>
+</li>
+<li><p>情绪；</p>
+</li>
+<li><p>社会关系；</p>
+</li>
+<li><p>长期个体状态。</p>
+</li>
+</ul>
+<p>战斗通常只是聚落运行的一部分。</p>
+<hr />
+<h2 id="44-与生存游戏的区别">4.4 与生存游戏的区别</h2><p>生存游戏通常以单个玩家或小队的直接操作为主。</p>
+<p>殖民地模拟中，玩家主要设计：</p>
+<ul>
+<li><p>劳动组织；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>空间；</p>
+</li>
+<li><p>制度；</p>
+</li>
+<li><p>应急策略。</p>
+</li>
+</ul>
+<p>生存压力作用于整个聚落网络，而不是只作用于玩家角色。</p>
+<hr />
+<h2 id="45-与工厂自动化游戏的区别">4.5 与工厂自动化游戏的区别</h2><p>工厂自动化中的机器通常：</p>
+<ul>
+<li><p>无情绪；</p>
+</li>
+<li><p>无睡眠；</p>
+</li>
+<li><p>无社会关系；</p>
+</li>
+<li><p>行为确定；</p>
+</li>
+<li><p>输入输出稳定。</p>
+</li>
+</ul>
+<p>殖民地模拟中的生产节点常由居民驱动。</p>
+<p>居民会因为：</p>
+<ul>
+<li><p>饥饿；</p>
+</li>
+<li><p>路径；</p>
+</li>
+<li><p>心情；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>伤病；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+</ul>
+<p>改变生产结果。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十七个核心域：</p>
+<ol>
+<li><p>世界时间与模拟时钟域；</p>
+</li>
+<li><p>地图、区域与导航域；</p>
+</li>
+<li><p>居民实体与生命周期域；</p>
+</li>
+<li><p>需求、健康与情绪域；</p>
+</li>
+<li><p>工作定义、生成与调度域；</p>
+</li>
+<li><p>任务预留与执行域；</p>
+</li>
+<li><p>物品、库存与仓储域；</p>
+</li>
+<li><p>搬运、物流与运输域；</p>
+</li>
+<li><p>建筑、房间与设施域；</p>
+</li>
+<li><p>配方、生产与加工域；</p>
+</li>
+<li><p>能源、温度与基础网络域；</p>
+</li>
+<li><p>农业、动物与可再生资源域；</p>
+</li>
+<li><p>社交、制度与聚落关系域；</p>
+</li>
+<li><p>战斗、防御与威胁域；</p>
+</li>
+<li><p>事件、灾害与危机传播域；</p>
+</li>
+<li><p>存档、回放与状态恢复域；</p>
+</li>
+<li><p>调试、验证与平衡分析域。</p>
+</li>
+</ol>
+<p>总体运行关系如下：</p>
+<p>模拟时钟推进
+→ 居民需求和环境状态更新
+→ 各模块生成工作订单
+→ 调度器查询可用居民
+→ 为居民匹配任务
+→ 任务预留目标、物品和工作台
+→ 居民导航到目标
+→ 执行搬运、生产、建造、治疗等工作
+→ 结果写回库存、建筑和居民状态
+→ 系统重新评估需求与任务
+→ 事件和威胁改变局部状态
+→ 危机沿物流、健康和人员网络传播
+→ 玩家调整优先级、制度和空间结构
+→ 聚落进入新的稳定或失衡状态</p>
+<hr />
+<h2 id="6-模拟时钟与更新分层">6. 模拟时钟与更新分层</h2><h2 id="61-simulationclock">6.1 SimulationClock</h2><p>建议字段：</p>
+<ul>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>FixedDeltaTime；</p>
+</li>
+<li><p>CurrentDay；</p>
+</li>
+<li><p>CurrentTimeOfDay；</p>
+</li>
+<li><p>SimulationSpeed；</p>
+</li>
+<li><p>IsPaused；</p>
+</li>
+<li><p>UpdateBudget；</p>
+</li>
+<li><p>ClockVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-更新频率分层">6.2 更新频率分层</h2><h3 id="高频更新">高频更新</h3><p>适用于：</p>
+<ul>
+<li><p>居民移动；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>火灾传播；</p>
+</li>
+<li><p>当前工作动作；</p>
+</li>
+<li><p>实时危险。</p>
+</li>
+</ul>
+<h3 id="中频更新">中频更新</h3><p>适用于：</p>
+<ul>
+<li><p>需求增长；</p>
+</li>
+<li><p>工作选择；</p>
+</li>
+<li><p>房间温度；</p>
+</li>
+<li><p>电力负载；</p>
+</li>
+<li><p>情绪修正。</p>
+</li>
+</ul>
+<h3 id="低频更新">低频更新</h3><p>适用于：</p>
+<ul>
+<li><p>社会关系；</p>
+</li>
+<li><p>技能成长；</p>
+</li>
+<li><p>农业生长；</p>
+</li>
+<li><p>贸易刷新；</p>
+</li>
+<li><p>长期疾病；</p>
+</li>
+<li><p>世界事件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-倍速一致性">6.3 倍速一致性</h2><p>改变模拟速度不能改变：</p>
+<ul>
+<li><p>任务完成顺序；</p>
+</li>
+<li><p>资源消耗；</p>
+</li>
+<li><p>居民需求；</p>
+</li>
+<li><p>火灾结果；</p>
+</li>
+<li><p>战斗伤害；</p>
+</li>
+<li><p>生产数量。</p>
+</li>
+</ul>
+<p>所有权威逻辑应基于模拟时间，而不是渲染帧数。</p>
+<hr />
+<h2 id="64-暂停模式">6.4 暂停模式</h2><p>暂停时通常允许：</p>
+<ul>
+<li><p>建造规划；</p>
+</li>
+<li><p>区域划分；</p>
+</li>
+<li><p>工作优先级调整；</p>
+</li>
+<li><p>居民检查；</p>
+</li>
+<li><p>制度修改；</p>
+</li>
+<li><p>查看因果链。</p>
+</li>
+</ul>
+<p>是否允许直接发布即时战术命令，应由模式决定。</p>
+<hr />
+<h2 id="7-地图空间与区域">7. 地图、空间与区域</h2><h2 id="71-worldmapstate">7.1 WorldMapState</h2><p>建议包含：</p>
+<ul>
+<li><p>CellStates；</p>
+</li>
+<li><p>TerrainStates；</p>
+</li>
+<li><p>RoomStates；</p>
+</li>
+<li><p>ZoneStates；</p>
+</li>
+<li><p>BuildingStates；</p>
+</li>
+<li><p>NavigationGraph；</p>
+</li>
+<li><p>HazardStates；</p>
+</li>
+<li><p>VisibilityStates；</p>
+</li>
+<li><p>MapVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-cellstate">7.2 CellState</h2><p>建议字段：</p>
+<ul>
+<li><p>CellId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>TerrainType；</p>
+</li>
+<li><p>MovementCost；</p>
+</li>
+<li><p>OccupancyState；</p>
+</li>
+<li><p>RoofState；</p>
+</li>
+<li><p>FloorState；</p>
+</li>
+<li><p>Temperature；</p>
+</li>
+<li><p>LightLevel；</p>
+</li>
+<li><p>Contamination；</p>
+</li>
+<li><p>FireState；</p>
+</li>
+<li><p>ZoneIds；</p>
+</li>
+<li><p>CellVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-区域类型">7.3 区域类型</h2><p>包括：</p>
+<ul>
+<li><p>储存区；</p>
+</li>
+<li><p>垃圾区；</p>
+</li>
+<li><p>医疗区；</p>
+</li>
+<li><p>居住区；</p>
+</li>
+<li><p>监狱区；</p>
+</li>
+<li><p>农业区；</p>
+</li>
+<li><p>动物区；</p>
+</li>
+<li><p>安全区；</p>
+</li>
+<li><p>禁止进入区；</p>
+</li>
+<li><p>紧急集合区；</p>
+</li>
+<li><p>防御区。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-zonedefinition">7.4 ZoneDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ZoneId；</p>
+</li>
+<li><p>ZoneType；</p>
+</li>
+<li><p>CellIds；</p>
+</li>
+<li><p>AllowedItemTags；</p>
+</li>
+<li><p>AllowedResidentIds；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>CapacityRules；</p>
+</li>
+<li><p>AccessRules；</p>
+</li>
+<li><p>AutomationRules；</p>
+</li>
+<li><p>ZoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="75-房间检测">7.5 房间检测</h2><p>RoomState可以包含：</p>
+<ul>
+<li><p>CellIds；</p>
+</li>
+<li><p>EnclosedState；</p>
+</li>
+<li><p>DoorIds；</p>
+</li>
+<li><p>BedIds；</p>
+</li>
+<li><p>WorkstationIds；</p>
+</li>
+<li><p>Temperature；</p>
+</li>
+<li><p>AirQuality；</p>
+</li>
+<li><p>Cleanliness；</p>
+</li>
+<li><p>Beauty；</p>
+</li>
+<li><p>Noise；</p>
+</li>
+<li><p>RoomRole；</p>
+</li>
+<li><p>RoomVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="76-导航状态变化">7.6 导航状态变化</h2><p>以下操作需要使导航局部失效：</p>
+<ul>
+<li><p>新墙体；</p>
+</li>
+<li><p>新门；</p>
+</li>
+<li><p>建筑拆除；</p>
+</li>
+<li><p>火灾；</p>
+</li>
+<li><p>洪水；</p>
+</li>
+<li><p>坍塌；</p>
+</li>
+<li><p>禁止区域；</p>
+</li>
+<li><p>门禁权限变化。</p>
+</li>
+</ul>
+<p>不应每次变化都重建全图导航。</p>
+<hr />
+<h2 id="8-居民实体与生命周期">8. 居民实体与生命周期</h2><h2 id="81-residentdefinition">8.1 ResidentDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SpeciesId；</p>
+</li>
+<li><p>BaseNeedsProfile；</p>
+</li>
+<li><p>BodyProfile；</p>
+</li>
+<li><p>SkillProfile；</p>
+</li>
+<li><p>TraitPool；</p>
+</li>
+<li><p>WorkCapabilityRules；</p>
+</li>
+<li><p>SocialRules；</p>
+</li>
+<li><p>LifeStageRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-residentruntimestate">8.2 ResidentRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>ResidentId；</p>
+</li>
+<li><p>Name；</p>
+</li>
+<li><p>Age；</p>
+</li>
+<li><p>LifeStage；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>CurrentActivity；</p>
+</li>
+<li><p>CurrentWorkOrderId；</p>
+</li>
+<li><p>NeedStates；</p>
+</li>
+<li><p>HealthState；</p>
+</li>
+<li><p>MoodState；</p>
+</li>
+<li><p>SkillStates；</p>
+</li>
+<li><p>TraitIds；</p>
+</li>
+<li><p>RelationshipStates；</p>
+</li>
+<li><p>EquipmentState；</p>
+</li>
+<li><p>ScheduleState；</p>
+</li>
+<li><p>AccessPolicyId；</p>
+</li>
+<li><p>ResidentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-居民生命周期">8.3 居民生命周期</h2><p>包括：</p>
+<ul>
+<li><p>到达；</p>
+</li>
+<li><p>加入；</p>
+</li>
+<li><p>成长；</p>
+</li>
+<li><p>工作；</p>
+</li>
+<li><p>学习；</p>
+</li>
+<li><p>受伤；</p>
+</li>
+<li><p>生病；</p>
+</li>
+<li><p>恢复；</p>
+</li>
+<li><p>建立关系；</p>
+</li>
+<li><p>衰老；</p>
+</li>
+<li><p>离开；</p>
+</li>
+<li><p>死亡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-居民能力">8.4 居民能力</h2><p>居民是否能够执行某项工作，需要考虑：</p>
+<ul>
+<li><p>生理结构；</p>
+</li>
+<li><p>年龄；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>当前伤势；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>禁止工作；</p>
+</li>
+<li><p>社会身份；</p>
+</li>
+<li><p>玩家政策；</p>
+</li>
+<li><p>工作台权限。</p>
+</li>
+</ul>
+<hr />
+<h2 id="85-特质系统">8.5 特质系统</h2><p>特质可以影响：</p>
+<ul>
+<li><p>工作偏好；</p>
+</li>
+<li><p>睡眠；</p>
+</li>
+<li><p>食物；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>压力；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>学习；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>价值观。</p>
+</li>
+</ul>
+<p>特质不应只提供属性加减，也应改变行为倾向。</p>
+<hr />
+<h2 id="9-需求系统">9. 需求系统</h2><h2 id="91-needdefinition">9.1 NeedDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>NeedId；</p>
+</li>
+<li><p>DecayRate；</p>
+</li>
+<li><p>Thresholds；</p>
+</li>
+<li><p>SatisfactionActions；</p>
+</li>
+<li><p>MoodEffects；</p>
+</li>
+<li><p>HealthEffects；</p>
+</li>
+<li><p>PriorityRules；</p>
+</li>
+<li><p>EmergencyThreshold；</p>
+</li>
+<li><p>NeedVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-常见需求">9.2 常见需求</h2><p>包括：</p>
+<ul>
+<li><p>饥饿；</p>
+</li>
+<li><p>口渴；</p>
+</li>
+<li><p>睡眠；</p>
+</li>
+<li><p>休息；</p>
+</li>
+<li><p>温度；</p>
+</li>
+<li><p>卫生；</p>
+</li>
+<li><p>娱乐；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>安全；</p>
+</li>
+<li><p>尊严；</p>
+</li>
+<li><p>精神；</p>
+</li>
+<li><p>私密空间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-needstate">9.3 NeedState</h2><p>建议包含：</p>
+<ul>
+<li><p>NeedId；</p>
+</li>
+<li><p>CurrentValue；</p>
+</li>
+<li><p>CurrentThresholdState；</p>
+</li>
+<li><p>LastSatisfiedTime；</p>
+</li>
+<li><p>PendingSatisfactionTarget；</p>
+</li>
+<li><p>EmergencyState；</p>
+</li>
+<li><p>NeedStateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="94-需求优先级">9.4 需求优先级</h2><p>居民在以下行为之间切换：</p>
+<ul>
+<li><p>当前工作；</p>
+</li>
+<li><p>吃饭；</p>
+</li>
+<li><p>睡觉；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>逃离危险；</p>
+</li>
+<li><p>娱乐；</p>
+</li>
+<li><p>社交。</p>
+</li>
+</ul>
+<p>紧急需求可以中断普通工作。</p>
+<p>但如果所有需求都频繁中断任务，会造成严重抖动。</p>
+<p>应使用：</p>
+<ul>
+<li><p>阈值迟滞；</p>
+</li>
+<li><p>最短行为持续时间；</p>
+</li>
+<li><p>紧急等级；</p>
+</li>
+<li><p>当前任务承诺；</p>
+</li>
+<li><p>路径成本；</p>
+</li>
+</ul>
+<p>稳定决策。</p>
+<hr />
+<h2 id="95-需求满足链">9.5 需求满足链</h2><p>例如吃饭需要：</p>
+<ol>
+<li><p>居民感到饥饿；</p>
+</li>
+<li><p>搜索可食用物；</p>
+</li>
+<li><p>判断权限和配给；</p>
+</li>
+<li><p>预留食物；</p>
+</li>
+<li><p>导航到食物位置；</p>
+</li>
+<li><p>取得食物；</p>
+</li>
+<li><p>寻找进食位置；</p>
+</li>
+<li><p>执行进食；</p>
+</li>
+<li><p>修改饥饿和情绪；</p>
+</li>
+<li><p>释放预留。</p>
+</li>
+</ol>
+<p>任一步失败都需要重新规划。</p>
+<hr />
+<h2 id="10-健康伤病与医疗">10. 健康、伤病与医疗</h2><h2 id="101-healthstate">10.1 HealthState</h2><p>建议包含：</p>
+<ul>
+<li><p>BodyPartStates；</p>
+</li>
+<li><p>DiseaseStates；</p>
+</li>
+<li><p>InjuryStates；</p>
+</li>
+<li><p>PainLevel；</p>
+</li>
+<li><p>BloodLevel；</p>
+</li>
+<li><p>Consciousness；</p>
+</li>
+<li><p>MobilityModifier；</p>
+</li>
+<li><p>WorkModifier；</p>
+</li>
+<li><p>TreatmentState；</p>
+</li>
+<li><p>HealthVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-伤势类型">10.2 伤势类型</h2><p>包括：</p>
+<ul>
+<li><p>擦伤；</p>
+</li>
+<li><p>出血；</p>
+</li>
+<li><p>骨折；</p>
+</li>
+<li><p>烧伤；</p>
+</li>
+<li><p>感染；</p>
+</li>
+<li><p>中毒；</p>
+</li>
+<li><p>冻伤；</p>
+</li>
+<li><p>慢性疾病；</p>
+</li>
+<li><p>心理创伤。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-treatmentorder">10.3 TreatmentOrder</h2><p>建议字段：</p>
+<ul>
+<li><p>PatientId；</p>
+</li>
+<li><p>TreatmentType；</p>
+</li>
+<li><p>RequiredMedicineTags；</p>
+</li>
+<li><p>RequiredDoctorSkill；</p>
+</li>
+<li><p>RequiredFacilityTags；</p>
+</li>
+<li><p>Urgency；</p>
+</li>
+<li><p>EstimatedDuration；</p>
+</li>
+<li><p>TreatmentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="104-医疗流程">10.4 医疗流程</h2><ol>
+<li><p>健康系统识别治疗需求；</p>
+</li>
+<li><p>生成医疗工作；</p>
+</li>
+<li><p>预留病床；</p>
+</li>
+<li><p>预留药品；</p>
+</li>
+<li><p>调度医生；</p>
+</li>
+<li><p>患者移动或被搬运；</p>
+</li>
+<li><p>执行治疗；</p>
+</li>
+<li><p>计算治疗质量；</p>
+</li>
+<li><p>更新伤势；</p>
+</li>
+<li><p>安排恢复和复诊。</p>
+</li>
+</ol>
+<hr />
+<h2 id="105-医疗危机">10.5 医疗危机</h2><p>医疗系统可能因以下因素崩溃：</p>
+<ul>
+<li><p>医生受伤；</p>
+</li>
+<li><p>药品不足；</p>
+</li>
+<li><p>病床不足；</p>
+</li>
+<li><p>患者无法运输；</p>
+</li>
+<li><p>医院断电；</p>
+</li>
+<li><p>感染扩散；</p>
+</li>
+<li><p>医疗优先级错误。</p>
+</li>
+</ul>
+<p>医疗状态需要独立总览，而不能只在居民面板显示。</p>
+<hr />
+<h2 id="11-情绪与精神状态">11. 情绪与精神状态</h2><h2 id="111-moodstate">11.1 MoodState</h2><p>建议包含：</p>
+<ul>
+<li><p>BaseMood；</p>
+</li>
+<li><p>ActiveThoughts；</p>
+</li>
+<li><p>StressLevel；</p>
+</li>
+<li><p>MentalBreakRisk；</p>
+</li>
+<li><p>CurrentMentalState；</p>
+</li>
+<li><p>MoodVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-thoughtdefinition">11.2 ThoughtDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ThoughtId；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>MoodValue；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>MemoryPolicy；</p>
+</li>
+<li><p>SocialEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-情绪来源">11.3 情绪来源</h2><p>包括：</p>
+<ul>
+<li><p>食物品质；</p>
+</li>
+<li><p>房间环境；</p>
+</li>
+<li><p>睡眠；</p>
+</li>
+<li><p>疼痛；</p>
+</li>
+<li><p>朋友；</p>
+</li>
+<li><p>家人；</p>
+</li>
+<li><p>死亡；</p>
+</li>
+<li><p>工作；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>制度；</p>
+</li>
+<li><p>仪式；</p>
+</li>
+<li><p>娱乐。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-精神崩溃">11.4 精神崩溃</h2><p>压力过高时，居民可能：</p>
+<ul>
+<li><p>拒绝工作；</p>
+</li>
+<li><p>暴饮暴食；</p>
+</li>
+<li><p>攻击他人；</p>
+</li>
+<li><p>破坏设备；</p>
+</li>
+<li><p>逃跑；</p>
+</li>
+<li><p>自我隔离；</p>
+</li>
+<li><p>消极怠工。</p>
+</li>
+</ul>
+<p>精神崩溃应是长期状态积累的结果，而不是纯随机惩罚。</p>
+<hr />
+<h2 id="115-恢复路径">11.5 恢复路径</h2><p>可以通过：</p>
+<ul>
+<li><p>休息；</p>
+</li>
+<li><p>娱乐；</p>
+</li>
+<li><p>社交；</p>
+</li>
+<li><p>心理治疗；</p>
+</li>
+<li><p>改善房间；</p>
+</li>
+<li><p>调整工作；</p>
+</li>
+<li><p>仪式；</p>
+</li>
+<li><p>特殊食物；</p>
+</li>
+</ul>
+<p>帮助居民恢复。</p>
+<hr />
+<h2 id="12-工作定义与工作订单">12. 工作定义与工作订单</h2><h2 id="121-worktypedefinition">12.1 WorkTypeDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>WorkTypeId；</p>
+</li>
+<li><p>WorkCategory；</p>
+</li>
+<li><p>RequiredSkillId；</p>
+</li>
+<li><p>RequiredCapabilityTags；</p>
+</li>
+<li><p>DefaultPriority；</p>
+</li>
+<li><p>InterruptPolicy；</p>
+</li>
+<li><p>ReservationPolicy；</p>
+</li>
+<li><p>ExperienceGainRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-workorder">12.2 WorkOrder</h2><p>建议字段：</p>
+<ul>
+<li><p>WorkOrderId；</p>
+</li>
+<li><p>WorkTypeId；</p>
+</li>
+<li><p>IssuerEntityId；</p>
+</li>
+<li><p>TargetEntityIds；</p>
+</li>
+<li><p>TargetCellIds；</p>
+</li>
+<li><p>RequiredItemSpecs；</p>
+</li>
+<li><p>RequiredToolTags；</p>
+</li>
+<li><p>RequiredFacilityTags；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>Urgency；</p>
+</li>
+<li><p>ReservationState；</p>
+</li>
+<li><p>ExecutionState；</p>
+</li>
+<li><p>CreatedTick；</p>
+</li>
+<li><p>WorkOrderVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-工作来源">12.3 工作来源</h2><p>包括：</p>
+<ul>
+<li><p>玩家命令；</p>
+</li>
+<li><p>建造蓝图；</p>
+</li>
+<li><p>生产配方；</p>
+</li>
+<li><p>库存目标；</p>
+</li>
+<li><p>居民需求；</p>
+</li>
+<li><p>医疗需求；</p>
+</li>
+<li><p>清洁；</p>
+</li>
+<li><p>维修；</p>
+</li>
+<li><p>火灾；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>动物照料；</p>
+</li>
+<li><p>尸体处理；</p>
+</li>
+<li><p>制度要求。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-工作状态">12.4 工作状态</h2><p>建议状态：</p>
+<ul>
+<li><p>Proposed；</p>
+</li>
+<li><p>Available；</p>
+</li>
+<li><p>Reserved；</p>
+</li>
+<li><p>Assigned；</p>
+</li>
+<li><p>InProgress；</p>
+</li>
+<li><p>Suspended；</p>
+</li>
+<li><p>Blocked；</p>
+</li>
+<li><p>Completed；</p>
+</li>
+<li><p>Cancelled；</p>
+</li>
+<li><p>Failed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="125-工作拆解">12.5 工作拆解</h2><p>例如建造床铺可能拆解为：</p>
+<ol>
+<li><p>创建建造蓝图；</p>
+</li>
+<li><p>计算所需材料；</p>
+</li>
+<li><p>生成材料搬运任务；</p>
+</li>
+<li><p>材料到达后生成施工任务；</p>
+</li>
+<li><p>调度建筑工；</p>
+</li>
+<li><p>完成施工；</p>
+</li>
+<li><p>注册床铺功能；</p>
+</li>
+<li><p>更新房间状态。</p>
+</li>
+</ol>
+<hr />
+<h2 id="13-工作调度器">13. 工作调度器</h2><h2 id="131-workschedulerstate">13.1 WorkSchedulerState</h2><p>建议包含：</p>
+<ul>
+<li><p>AvailableWorkOrderIds；</p>
+</li>
+<li><p>AssignedWorkOrderIds；</p>
+</li>
+<li><p>BlockedWorkOrderIds；</p>
+</li>
+<li><p>ResidentAvailabilityIndex；</p>
+</li>
+<li><p>WorkCategoryBudgets；</p>
+</li>
+<li><p>SchedulerVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-调度候选过滤">13.2 调度候选过滤</h2><p>居民选择工作时，先过滤：</p>
+<ul>
+<li><p>是否允许该工作类型；</p>
+</li>
+<li><p>是否具备身体能力；</p>
+</li>
+<li><p>是否具备技能；</p>
+</li>
+<li><p>是否有可用工具；</p>
+</li>
+<li><p>目标是否可达；</p>
+</li>
+<li><p>资源是否可预留；</p>
+</li>
+<li><p>工作台是否可用；</p>
+</li>
+<li><p>区域是否允许进入；</p>
+</li>
+<li><p>当前需求是否允许继续工作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-工作评分">13.3 工作评分</h2><p>合法候选可以根据以下因素评分：</p>
+<ul>
+<li><p>玩家优先级；</p>
+</li>
+<li><p>紧急程度；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>工作偏好；</p>
+</li>
+<li><p>当前携带物；</p>
+</li>
+<li><p>当前区域；</p>
+</li>
+<li><p>是否能够顺路搬运；</p>
+</li>
+<li><p>工作等待时间；</p>
+</li>
+<li><p>聚落全局缺口。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-防止居民频繁换工作">13.4 防止居民频繁换工作</h2><p>可以使用：</p>
+<ul>
+<li><p>工作承诺时间；</p>
+</li>
+<li><p>切换成本；</p>
+</li>
+<li><p>路径已经完成的比例；</p>
+</li>
+<li><p>预留状态；</p>
+</li>
+<li><p>紧急中断等级；</p>
+</li>
+<li><p>同类工作批处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="135-全局优先级与个人优先级">13.5 全局优先级与个人优先级</h2><p>需要区分：</p>
+<h3 id="聚落级优先级">聚落级优先级</h3><p>例如：</p>
+<ul>
+<li><p>医疗高于建造；</p>
+</li>
+<li><p>消防高于生产；</p>
+</li>
+<li><p>食物生产高于装饰。</p>
+</li>
+</ul>
+<h3 id="居民级优先级">居民级优先级</h3><p>例如：</p>
+<ul>
+<li><p>某居民专职医生；</p>
+</li>
+<li><p>某居民禁止烹饪；</p>
+</li>
+<li><p>某居民优先研究。</p>
+</li>
+</ul>
+<p>两层共同决定最终评分。</p>
+<hr />
+<h2 id="14-任务预留系统">14. 任务预留系统</h2><h2 id="141-reservationstate">14.1 ReservationState</h2><p>建议包含：</p>
+<ul>
+<li><p>ReservationId；</p>
+</li>
+<li><p>ReservingResidentId；</p>
+</li>
+<li><p>ReservedEntityIds；</p>
+</li>
+<li><p>ReservedItemQuantities；</p>
+</li>
+<li><p>ReservedCellIds；</p>
+</li>
+<li><p>ExpirationTick；</p>
+</li>
+<li><p>ReservationPurpose；</p>
+</li>
+<li><p>ReservationVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-需要预留的对象">14.2 需要预留的对象</h2><p>包括：</p>
+<ul>
+<li><p>物品；</p>
+</li>
+<li><p>工作台；</p>
+</li>
+<li><p>病床；</p>
+</li>
+<li><p>床铺；</p>
+</li>
+<li><p>动物；</p>
+</li>
+<li><p>建造位置；</p>
+</li>
+<li><p>运输目的地；</p>
+</li>
+<li><p>食物；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>门口和狭窄空间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-预留职责">14.3 预留职责</h2><p>预留用于防止：</p>
+<ul>
+<li><p>两名居民拾取同一物品；</p>
+</li>
+<li><p>多名医生同时治疗同一患者；</p>
+</li>
+<li><p>多个工作同时占用同一机器；</p>
+</li>
+<li><p>建筑材料被其他配方消耗；</p>
+</li>
+<li><p>居民走到目标后才发现目标失效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-预留释放">14.4 预留释放</h2><p>以下情况需要释放：</p>
+<ul>
+<li><p>工作完成；</p>
+</li>
+<li><p>工作取消；</p>
+</li>
+<li><p>居民昏迷；</p>
+</li>
+<li><p>路径不可达；</p>
+</li>
+<li><p>超时；</p>
+</li>
+<li><p>目标销毁；</p>
+</li>
+<li><p>玩家修改订单；</p>
+</li>
+<li><p>紧急工作中断。</p>
+</li>
+</ul>
+<hr />
+<h2 id="145-预留泄漏检测">14.5 预留泄漏检测</h2><p>系统应定期检查：</p>
+<ul>
+<li><p>居民已死亡但预留仍存在；</p>
+</li>
+<li><p>工作已取消但物品仍锁定；</p>
+</li>
+<li><p>预留对象已不存在；</p>
+</li>
+<li><p>预留持续时间异常；</p>
+</li>
+<li><p>同一对象存在非法多重独占。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-工作执行状态机">15. 工作执行状态机</h2><h2 id="151-workexecutionphase">15.1 WorkExecutionPhase</h2><p>建议状态：</p>
+<ul>
+<li><p>AcquireOrder；</p>
+</li>
+<li><p>ReserveTargets；</p>
+</li>
+<li><p>GatherTools；</p>
+</li>
+<li><p>GatherMaterials；</p>
+</li>
+<li><p>NavigateToTarget；</p>
+</li>
+<li><p>PerformWork；</p>
+</li>
+<li><p>DeliverOutputs；</p>
+</li>
+<li><p>Finalize；</p>
+</li>
+<li><p>Completed；</p>
+</li>
+<li><p>Interrupted；</p>
+</li>
+<li><p>Failed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-工作执行上下文">15.2 工作执行上下文</h2><p>建议包含：</p>
+<ul>
+<li><p>WorkOrderId；</p>
+</li>
+<li><p>ResidentId；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>ReservedResources；</p>
+</li>
+<li><p>CurrentPath；</p>
+</li>
+<li><p>CarriedItems；</p>
+</li>
+<li><p>WorkProgress；</p>
+</li>
+<li><p>InterruptionReason；</p>
+</li>
+<li><p>ExecutionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-失败恢复">15.3 失败恢复</h2><p>例如居民搬运木材途中被迫就医：</p>
+<ul>
+<li><p>木材仍由居民携带；</p>
+</li>
+<li><p>搬运任务进入Suspended；</p>
+</li>
+<li><p>预留根据策略保留或释放；</p>
+</li>
+<li><p>居民恢复后可以继续；</p>
+</li>
+<li><p>或将木材放到附近临时区域；</p>
+</li>
+<li><p>调度器重新生成剩余任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-原子提交边界">15.4 原子提交边界</h2><p>工作执行期间不应不断修改最终结果。</p>
+<p>例如制作药品：</p>
+<ol>
+<li><p>预留原料；</p>
+</li>
+<li><p>搬运原料；</p>
+</li>
+<li><p>开始工作；</p>
+</li>
+<li><p>到达配方提交点；</p>
+</li>
+<li><p>消耗原料；</p>
+</li>
+<li><p>创建产物；</p>
+</li>
+<li><p>完成工作。</p>
+</li>
+</ol>
+<p>提交点之前中断，可以保留原料。</p>
+<p>提交点之后失败，不能再次生成产物。</p>
+<hr />
+<h2 id="16-物品堆叠与库存">16. 物品、堆叠与库存</h2><h2 id="161-itemdefinition">16.1 ItemDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ItemId；</p>
+</li>
+<li><p>ItemTags；</p>
+</li>
+<li><p>StackLimit；</p>
+</li>
+<li><p>Mass；</p>
+</li>
+<li><p>Volume；</p>
+</li>
+<li><p>QualityRules；</p>
+</li>
+<li><p>DurabilityRules；</p>
+</li>
+<li><p>SpoilageRules；</p>
+</li>
+<li><p>StorageRules；</p>
+</li>
+<li><p>UsageRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-itemstackstate">16.2 ItemStackState</h2><p>建议包含：</p>
+<ul>
+<li><p>StackId；</p>
+</li>
+<li><p>ItemDefinitionId；</p>
+</li>
+<li><p>Quantity；</p>
+</li>
+<li><p>Quality；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>Freshness；</p>
+</li>
+<li><p>Contamination；</p>
+</li>
+<li><p>CurrentHolderId；</p>
+</li>
+<li><p>CurrentCellId；</p>
+</li>
+<li><p>CurrentContainerId；</p>
+</li>
+<li><p>ReservationState；</p>
+</li>
+<li><p>ItemVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-物品位置">16.3 物品位置</h2><p>物品可以处于：</p>
+<ul>
+<li><p>地面；</p>
+</li>
+<li><p>仓储区；</p>
+</li>
+<li><p>容器；</p>
+</li>
+<li><p>居民背包；</p>
+</li>
+<li><p>工作台输入；</p>
+</li>
+<li><p>工作台输出；</p>
+</li>
+<li><p>建造蓝图；</p>
+</li>
+<li><p>运输工具；</p>
+</li>
+<li><p>尸体；</p>
+</li>
+<li><p>商队。</p>
+</li>
+</ul>
+<p>每件物品在同一时刻只能有一个权威位置。</p>
+<hr />
+<h2 id="164-堆叠条件">16.4 堆叠条件</h2><p>物品只有在以下条件兼容时才能合并：</p>
+<ul>
+<li><p>定义相同；</p>
+</li>
+<li><p>品质兼容；</p>
+</li>
+<li><p>耐久兼容；</p>
+</li>
+<li><p>新鲜度兼容；</p>
+</li>
+<li><p>污染状态兼容；</p>
+</li>
+<li><p>所有权一致；</p>
+</li>
+<li><p>无独立任务绑定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="165-腐坏">16.5 腐坏</h2><p>腐坏速度可以受到：</p>
+<ul>
+<li><p>温度；</p>
+</li>
+<li><p>湿度；</p>
+</li>
+<li><p>室内外；</p>
+</li>
+<li><p>冷藏；</p>
+</li>
+<li><p>容器；</p>
+</li>
+<li><p>污染；</p>
+</li>
+<li><p>物品类型；</p>
+</li>
+</ul>
+<p>影响。</p>
+<p>腐坏应以时间状态结算，而不是依赖场景对象持续存在。</p>
+<hr />
+<h2 id="17-仓储系统">17. 仓储系统</h2><h2 id="171-storagepolicy">17.1 StoragePolicy</h2><p>建议字段：</p>
+<ul>
+<li><p>AllowedItemTags；</p>
+</li>
+<li><p>ForbiddenItemTags；</p>
+</li>
+<li><p>MinimumQuality；</p>
+</li>
+<li><p>MaximumQuality；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>Capacity；</p>
+</li>
+<li><p>TemperatureRequirements；</p>
+</li>
+<li><p>OwnershipRules；</p>
+</li>
+<li><p>StorageVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-仓储任务">17.2 仓储任务</h2><p>当物品位于非法或低优先级位置时，系统可以生成：</p>
+<ul>
+<li><p>HaulToStorage；</p>
+</li>
+<li><p>ConsolidateStack；</p>
+</li>
+<li><p>MoveToHigherPriorityStorage；</p>
+</li>
+<li><p>RemoveForbiddenItem；</p>
+</li>
+<li><p>MoveToColdStorage；</p>
+</li>
+<li><p>MoveToEmergencyStockpile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-仓储优先级">17.3 仓储优先级</h2><p>高优先级仓库会从低优先级仓库吸引物品。</p>
+<p>需要防止物品在两个仓库间反复搬运。</p>
+<p>可以使用：</p>
+<ul>
+<li><p>仅向更高优先级搬运；</p>
+</li>
+<li><p>最小价值差；</p>
+</li>
+<li><p>搬运冷却；</p>
+</li>
+<li><p>满载阈值；</p>
+</li>
+<li><p>区域归属。</p>
+</li>
+</ul>
+<hr />
+<h2 id="174-储存空间不是总容量数字">17.4 储存空间不是总容量数字</h2><p>实际储存效率受到：</p>
+<ul>
+<li><p>地块；</p>
+</li>
+<li><p>堆叠；</p>
+</li>
+<li><p>物品体积；</p>
+</li>
+<li><p>货架；</p>
+</li>
+<li><p>通道；</p>
+</li>
+<li><p>搬运路径；</p>
+</li>
+<li><p>环境条件；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="18-搬运与物流">18. 搬运与物流</h2><h2 id="181-haulorder">18.1 HaulOrder</h2><p>建议字段：</p>
+<ul>
+<li><p>SourceLocation；</p>
+</li>
+<li><p>DestinationLocation；</p>
+</li>
+<li><p>ItemSpec；</p>
+</li>
+<li><p>Quantity；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>DeliveryReason；</p>
+</li>
+<li><p>PartialDeliveryPolicy；</p>
+</li>
+<li><p>HaulVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-搬运类型">18.2 搬运类型</h2><p>包括：</p>
+<ul>
+<li><p>仓储搬运；</p>
+</li>
+<li><p>建筑供料；</p>
+</li>
+<li><p>生产供料；</p>
+</li>
+<li><p>成品清运；</p>
+</li>
+<li><p>医疗运输；</p>
+</li>
+<li><p>尸体搬运；</p>
+</li>
+<li><p>紧急资源转移；</p>
+</li>
+<li><p>商队装卸。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-搬运能力">18.3 搬运能力</h2><p>居民搬运效率取决于：</p>
+<ul>
+<li><p>负重；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>车辆；</p>
+</li>
+<li><p>路径；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>楼梯；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>路面。</p>
+</li>
+</ul>
+<hr />
+<h2 id="184-顺路搬运">18.4 顺路搬运</h2><p>调度系统可以支持：</p>
+<ul>
+<li><p>居民前往工作地点时顺路带材料；</p>
+</li>
+<li><p>返回仓库时带走成品；</p>
+</li>
+<li><p>相邻任务批量搬运。</p>
+</li>
+</ul>
+<p>但需要限制复杂度，避免过高规划成本。</p>
+<hr />
+<h2 id="185-物流瓶颈">18.5 物流瓶颈</h2><p>生产停滞可能是因为：</p>
+<ul>
+<li><p>原料产量不足；</p>
+</li>
+<li><p>原料未搬运；</p>
+</li>
+<li><p>仓库过远；</p>
+</li>
+<li><p>搬运者不足；</p>
+</li>
+<li><p>路径拥堵；</p>
+</li>
+<li><p>成品没有空间；</p>
+</li>
+<li><p>运输优先级过低。</p>
+</li>
+</ul>
+<p>UI应区分这些原因。</p>
+<hr />
+<h2 id="19-建筑设施与房间功能">19. 建筑、设施与房间功能</h2><h2 id="191-buildingdefinition">19.1 BuildingDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BuildingId；</p>
+</li>
+<li><p>Footprint；</p>
+</li>
+<li><p>MaterialRequirements；</p>
+</li>
+<li><p>ConstructionWork；</p>
+</li>
+<li><p>FunctionalModuleIds；</p>
+</li>
+<li><p>PowerProfile；</p>
+</li>
+<li><p>TemperatureProfile；</p>
+</li>
+<li><p>MaintenanceRules；</p>
+</li>
+<li><p>DamageProfile；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-buildingruntimestate">19.2 BuildingRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>BuildingInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>ConstructionState；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>FunctionalStates；</p>
+</li>
+<li><p>PowerState；</p>
+</li>
+<li><p>MaintenanceState；</p>
+</li>
+<li><p>OccupantIds；</p>
+</li>
+<li><p>BuildingVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-建筑状态">19.3 建筑状态</h2><p>包括：</p>
+<ul>
+<li><p>Blueprint；</p>
+</li>
+<li><p>AwaitingMaterials；</p>
+</li>
+<li><p>UnderConstruction；</p>
+</li>
+<li><p>Operational；</p>
+</li>
+<li><p>Disabled；</p>
+</li>
+<li><p>Damaged；</p>
+</li>
+<li><p>UnderRepair；</p>
+</li>
+<li><p>Deconstructed；</p>
+</li>
+<li><p>Destroyed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="194-建筑模块">19.4 建筑模块</h2><p>同一建筑可以组合：</p>
+<ul>
+<li><p>床铺；</p>
+</li>
+<li><p>工作台；</p>
+</li>
+<li><p>储存；</p>
+</li>
+<li><p>发电；</p>
+</li>
+<li><p>照明；</p>
+</li>
+<li><p>供暖；</p>
+</li>
+<li><p>制冷；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>娱乐。</p>
+</li>
+</ul>
+<p>建筑实体与功能模块分离，便于升级和损坏。</p>
+<hr />
+<h2 id="195-维护">19.5 维护</h2><p>建筑可能需要：</p>
+<ul>
+<li><p>清洁；</p>
+</li>
+<li><p>修理；</p>
+</li>
+<li><p>燃料；</p>
+</li>
+<li><p>零件；</p>
+</li>
+<li><p>润滑；</p>
+</li>
+<li><p>检查。</p>
+</li>
+</ul>
+<p>维护不足会：</p>
+<ul>
+<li><p>降低效率；</p>
+</li>
+<li><p>增加故障；</p>
+</li>
+<li><p>引发事故；</p>
+</li>
+<li><p>最终停机。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-生产与配方系统">20. 生产与配方系统</h2><h2 id="201-recipedefinition">20.1 RecipeDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>RecipeId；</p>
+</li>
+<li><p>WorkstationTags；</p>
+</li>
+<li><p>InputSpecs；</p>
+</li>
+<li><p>OutputSpecs；</p>
+</li>
+<li><p>RequiredSkillId；</p>
+</li>
+<li><p>WorkAmount；</p>
+</li>
+<li><p>FuelCost；</p>
+</li>
+<li><p>PowerCost；</p>
+</li>
+<li><p>QualityRules；</p>
+</li>
+<li><p>ByproductRules；</p>
+</li>
+<li><p>FailureRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-productionorder">20.2 ProductionOrder</h2><p>建议字段：</p>
+<ul>
+<li><p>ProductionOrderId；</p>
+</li>
+<li><p>WorkstationId；</p>
+</li>
+<li><p>RecipeId；</p>
+</li>
+<li><p>TargetQuantity；</p>
+</li>
+<li><p>RepeatPolicy；</p>
+</li>
+<li><p>StockCondition；</p>
+</li>
+<li><p>WorkerRestrictions；</p>
+</li>
+<li><p>InputPolicy；</p>
+</li>
+<li><p>OutputPolicy；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>ProductionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-生产策略">20.3 生产策略</h2><p>支持：</p>
+<ul>
+<li><p>制作指定次数；</p>
+</li>
+<li><p>持续生产；</p>
+</li>
+<li><p>生产到库存上限；</p>
+</li>
+<li><p>低于库存下限时补充；</p>
+</li>
+<li><p>仅使用指定品质原料；</p>
+</li>
+<li><p>仅由高技能居民执行；</p>
+</li>
+<li><p>保留特定原料。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-库存目标生产">20.4 库存目标生产</h2><p>例如：</p>
+<ul>
+<li><p>熟食少于20份时开始烹饪；</p>
+</li>
+<li><p>达到50份时停止；</p>
+</li>
+<li><p>再次低于20份时恢复。</p>
+</li>
+</ul>
+<p>应使用上下限迟滞，避免工作订单反复创建和取消。</p>
+<hr />
+<h2 id="205-品质生成">20.5 品质生成</h2><p>产物品质可以受到：</p>
+<ul>
+<li><p>工作者技能；</p>
+</li>
+<li><p>工作台质量；</p>
+</li>
+<li><p>原料品质；</p>
+</li>
+<li><p>环境；</p>
+</li>
+<li><p>工具；</p>
+</li>
+<li><p>工作速度；</p>
+</li>
+<li><p>居民状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="206-副产品">20.6 副产品</h2><p>配方可以生成：</p>
+<ul>
+<li><p>废料；</p>
+</li>
+<li><p>热量；</p>
+</li>
+<li><p>污染；</p>
+</li>
+<li><p>噪声；</p>
+</li>
+<li><p>副产品；</p>
+</li>
+<li><p>经验。</p>
+</li>
+</ul>
+<p>这些结果也要进入正式物流和环境系统。</p>
+<hr />
+<h2 id="21-能源与基础网络">21. 能源与基础网络</h2><h2 id="211-networkdefinition">21.1 NetworkDefinition</h2><p>网络类型可以包括：</p>
+<ul>
+<li><p>电力；</p>
+</li>
+<li><p>水；</p>
+</li>
+<li><p>热量；</p>
+</li>
+<li><p>气体；</p>
+</li>
+<li><p>数据；</p>
+</li>
+<li><p>物流管线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-powernetworkstate">21.2 PowerNetworkState</h2><p>建议包含：</p>
+<ul>
+<li><p>ProducerIds；</p>
+</li>
+<li><p>ConsumerIds；</p>
+</li>
+<li><p>StorageIds；</p>
+</li>
+<li><p>ConnectionEdges；</p>
+</li>
+<li><p>CurrentGeneration；</p>
+</li>
+<li><p>CurrentDemand；</p>
+</li>
+<li><p>StoredEnergy；</p>
+</li>
+<li><p>PriorityGroups；</p>
+</li>
+<li><p>FaultStates；</p>
+</li>
+<li><p>NetworkVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-供电优先级">21.3 供电优先级</h2><p>电力不足时，可以优先保障：</p>
+<ol>
+<li><p>医疗；</p>
+</li>
+<li><p>生命维持；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>冷藏；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>娱乐；</p>
+</li>
+<li><p>装饰。</p>
+</li>
+</ol>
+<hr />
+<h2 id="214-网络故障">21.4 网络故障</h2><p>故障包括：</p>
+<ul>
+<li><p>线路断裂；</p>
+</li>
+<li><p>过载；</p>
+</li>
+<li><p>燃料不足；</p>
+</li>
+<li><p>发电机损坏；</p>
+</li>
+<li><p>电池耗尽；</p>
+</li>
+<li><p>局部孤岛。</p>
+</li>
+</ul>
+<hr />
+<h2 id="215-故障传播">21.5 故障传播</h2><p>例如：</p>
+<p>发电机故障
+→ 冷库断电
+→ 食物腐坏
+→ 食物库存下降
+→ 烹饪停产
+→ 居民饥饿
+→ 工作效率降低</p>
+<p>网络状态需要能够追踪上游和下游影响。</p>
+<hr />
+<h2 id="22-温度空气与环境">22. 温度、空气与环境</h2><h2 id="221-environmentcellstate">22.1 EnvironmentCellState</h2><p>建议包含：</p>
+<ul>
+<li><p>Temperature；</p>
+</li>
+<li><p>Humidity；</p>
+</li>
+<li><p>AirQuality；</p>
+</li>
+<li><p>Pressure；</p>
+</li>
+<li><p>Pollution；</p>
+</li>
+<li><p>Light；</p>
+</li>
+<li><p>Radiation；</p>
+</li>
+<li><p>Fire；</p>
+</li>
+<li><p>EnvironmentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-环境传播">22.2 环境传播</h2><p>温度和空气可以通过：</p>
+<ul>
+<li><p>墙体；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>通风口；</p>
+</li>
+<li><p>室外环境；</p>
+</li>
+<li><p>加热设备；</p>
+</li>
+<li><p>制冷设备；</p>
+</li>
+<li><p>火灾；</p>
+</li>
+<li><p>居民和机器；</p>
+</li>
+</ul>
+<p>传播。</p>
+<hr />
+<h2 id="223-居民环境需求">22.3 居民环境需求</h2><p>不同居民可能具有不同：</p>
+<ul>
+<li><p>舒适温度；</p>
+</li>
+<li><p>氧气需求；</p>
+</li>
+<li><p>辐射抗性；</p>
+</li>
+<li><p>光照需求；</p>
+</li>
+<li><p>污染抗性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="224-环境调试">22.4 环境调试</h2><p>玩家需要知道：</p>
+<ul>
+<li><p>某房间为什么过冷；</p>
+</li>
+<li><p>热量从哪里损失；</p>
+</li>
+<li><p>哪个设备产生污染；</p>
+</li>
+<li><p>通风为何无效；</p>
+</li>
+<li><p>哪些门导致气体泄漏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-农业动物与可再生资源">23. 农业、动物与可再生资源</h2><h2 id="231-cropplotstate">23.1 CropPlotState</h2><p>建议包含：</p>
+<ul>
+<li><p>CellIds；</p>
+</li>
+<li><p>CropTypeId；</p>
+</li>
+<li><p>GrowthProgress；</p>
+</li>
+<li><p>Moisture；</p>
+</li>
+<li><p>Fertility；</p>
+</li>
+<li><p>TemperatureSuitability；</p>
+</li>
+<li><p>LightSuitability；</p>
+</li>
+<li><p>DiseaseState；</p>
+</li>
+<li><p>HarvestState；</p>
+</li>
+<li><p>CropVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-农业工作">23.2 农业工作</h2><p>包括：</p>
+<ul>
+<li><p>播种；</p>
+</li>
+<li><p>浇水；</p>
+</li>
+<li><p>施肥；</p>
+</li>
+<li><p>除草；</p>
+</li>
+<li><p>收获；</p>
+</li>
+<li><p>清理；</p>
+</li>
+<li><p>温室维护。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-animalstate">23.3 AnimalState</h2><p>建议包含：</p>
+<ul>
+<li><p>AnimalId；</p>
+</li>
+<li><p>SpeciesId；</p>
+</li>
+<li><p>Hunger；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>Tameness；</p>
+</li>
+<li><p>Training；</p>
+</li>
+<li><p>ProductProgress；</p>
+</li>
+<li><p>PregnancyState；</p>
+</li>
+<li><p>AssignedZoneId；</p>
+</li>
+<li><p>AnimalVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="234-动物工作">23.4 动物工作</h2><p>包括：</p>
+<ul>
+<li><p>喂养；</p>
+</li>
+<li><p>驯服；</p>
+</li>
+<li><p>训练；</p>
+</li>
+<li><p>挤奶；</p>
+</li>
+<li><p>剪毛；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>屠宰。</p>
+</li>
+</ul>
+<hr />
+<h2 id="235-可再生与不可再生资源">23.5 可再生与不可再生资源</h2><p>资源应区分：</p>
+<h3 id="可再生">可再生</h3><ul>
+<li><p>农作物；</p>
+</li>
+<li><p>木材；</p>
+</li>
+<li><p>动物产品；</p>
+</li>
+<li><p>水；</p>
+</li>
+<li><p>太阳能。</p>
+</li>
+</ul>
+<h3 id="有限资源">有限资源</h3><ul>
+<li><p>矿物；</p>
+</li>
+<li><p>遗迹；</p>
+</li>
+<li><p>地下燃料；</p>
+</li>
+<li><p>特殊材料。</p>
+</li>
+</ul>
+<p>长期经营需要从消耗库存转向可再生生产。</p>
+<hr />
+<h2 id="24-社交关系与聚落制度">24. 社交关系与聚落制度</h2><h2 id="241-relationshipstate">24.1 RelationshipState</h2><p>建议包含：</p>
+<ul>
+<li><p>SourceResidentId；</p>
+</li>
+<li><p>TargetResidentId；</p>
+</li>
+<li><p>Affinity；</p>
+</li>
+<li><p>Trust；</p>
+</li>
+<li><p>Fear；</p>
+</li>
+<li><p>Respect；</p>
+</li>
+<li><p>ConflictHistory；</p>
+</li>
+<li><p>SharedEvents；</p>
+</li>
+<li><p>RelationshipVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-社交行为">24.2 社交行为</h2><p>包括：</p>
+<ul>
+<li><p>闲聊；</p>
+</li>
+<li><p>合作；</p>
+</li>
+<li><p>用餐；</p>
+</li>
+<li><p>娱乐；</p>
+</li>
+<li><p>争吵；</p>
+</li>
+<li><p>安慰；</p>
+</li>
+<li><p>恋爱；</p>
+</li>
+<li><p>家庭；</p>
+</li>
+<li><p>派系活动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-社交影响">24.3 社交影响</h2><p>关系会影响：</p>
+<ul>
+<li><p>工作协同；</p>
+</li>
+<li><p>情绪；</p>
+</li>
+<li><p>冲突；</p>
+</li>
+<li><p>医疗信任；</p>
+</li>
+<li><p>领导支持；</p>
+</li>
+<li><p>居民离开；</p>
+</li>
+<li><p>派系形成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="244-policydefinition">24.4 PolicyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>PolicyId；</p>
+</li>
+<li><p>PolicyCategory；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>PopulationScope；</p>
+</li>
+<li><p>RuleModifiers；</p>
+</li>
+<li><p>MoodEffects；</p>
+</li>
+<li><p>EnforcementRules；</p>
+</li>
+<li><p>TransitionCost；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="245-制度类型">24.5 制度类型</h2><p>包括：</p>
+<ul>
+<li><p>工作时间；</p>
+</li>
+<li><p>配给；</p>
+</li>
+<li><p>医疗优先级；</p>
+</li>
+<li><p>住房分配；</p>
+</li>
+<li><p>武器权限；</p>
+</li>
+<li><p>囚犯政策；</p>
+</li>
+<li><p>夜间管制；</p>
+</li>
+<li><p>紧急劳动；</p>
+</li>
+<li><p>食物标准；</p>
+</li>
+<li><p>娱乐政策。</p>
+</li>
+</ul>
+<hr />
+<h2 id="246-制度成本">24.6 制度成本</h2><p>制度不能只提供收益。</p>
+<p>例如延长工作时间可能：</p>
+<ul>
+<li><p>提高短期产量；</p>
+</li>
+<li><p>增加疲劳；</p>
+</li>
+<li><p>降低情绪；</p>
+</li>
+<li><p>增加事故；</p>
+</li>
+<li><p>引发反对。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-威胁与防御">25. 威胁与防御</h2><h2 id="251-threatdefinition">25.1 ThreatDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ThreatId；</p>
+</li>
+<li><p>ThreatType；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>SpawnRules；</p>
+</li>
+<li><p>TargetingRules；</p>
+</li>
+<li><p>EscalationRules；</p>
+</li>
+<li><p>ResolutionRules；</p>
+</li>
+<li><p>RewardRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-威胁类型">25.2 威胁类型</h2><p>包括：</p>
+<ul>
+<li><p>袭击；</p>
+</li>
+<li><p>野兽；</p>
+</li>
+<li><p>疾病；</p>
+</li>
+<li><p>火灾；</p>
+</li>
+<li><p>洪水；</p>
+</li>
+<li><p>风暴；</p>
+</li>
+<li><p>极端温度；</p>
+</li>
+<li><p>资源枯竭；</p>
+</li>
+<li><p>内部叛乱；</p>
+</li>
+<li><p>设备事故；</p>
+</li>
+<li><p>食物污染。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-防御准备">25.3 防御准备</h2><p>包括：</p>
+<ul>
+<li><p>城墙；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>炮塔；</p>
+</li>
+<li><p>武器；</p>
+</li>
+<li><p>战斗岗位；</p>
+</li>
+<li><p>医疗点；</p>
+</li>
+<li><p>撤离路线；</p>
+</li>
+<li><p>安全室；</p>
+</li>
+<li><p>应急物资。</p>
+</li>
+</ul>
+<hr />
+<h2 id="254-战斗岗位">25.4 战斗岗位</h2><p>平时工作的居民在危机中可能切换到：</p>
+<ul>
+<li><p>战斗；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>消防；</p>
+</li>
+<li><p>搬运伤员；</p>
+</li>
+<li><p>修理；</p>
+</li>
+<li><p>疏散；</p>
+</li>
+<li><p>后勤。</p>
+</li>
+</ul>
+<p>需要独立的EmergencyRole配置。</p>
+<hr />
+<h2 id="255-威胁后的恢复">25.5 威胁后的恢复</h2><p>战斗结束不代表危机结束。</p>
+<p>还需处理：</p>
+<ul>
+<li><p>伤员；</p>
+</li>
+<li><p>尸体；</p>
+</li>
+<li><p>火灾；</p>
+</li>
+<li><p>破损建筑；</p>
+</li>
+<li><p>防线缺口；</p>
+</li>
+<li><p>情绪；</p>
+</li>
+<li><p>食物损失；</p>
+</li>
+<li><p>劳动力下降；</p>
+</li>
+<li><p>葬礼。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-事件与危机传播">26. 事件与危机传播</h2><h2 id="261-incidentdefinition">26.1 IncidentDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>IncidentId；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>TargetSelectionRules；</p>
+</li>
+<li><p>InitialEffects；</p>
+</li>
+<li><p>EscalationStages；</p>
+</li>
+<li><p>ResponseOptions；</p>
+</li>
+<li><p>ResolutionConditions；</p>
+</li>
+<li><p>FailureEffects；</p>
+</li>
+<li><p>IncidentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-事件来源">26.2 事件来源</h2><p>事件可以由：</p>
+<ul>
+<li><p>时间；</p>
+</li>
+<li><p>季节；</p>
+</li>
+<li><p>聚落财富；</p>
+</li>
+<li><p>人口；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>情绪；</p>
+</li>
+<li><p>污染；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>玩家制度；</p>
+</li>
+<li><p>随机导演；</p>
+</li>
+</ul>
+<p>触发。</p>
+<hr />
+<h2 id="263-危机阶段">26.3 危机阶段</h2><p>例如疾病：</p>
+<p>接触
+→ 潜伏
+→ 出现症状
+→ 传播
+→ 医疗过载
+→ 社会恐慌
+→ 控制或失控</p>
+<hr />
+<h2 id="264-危机导演">26.4 危机导演</h2><p>动态导演可以根据：</p>
+<ul>
+<li><p>聚落规模；</p>
+</li>
+<li><p>当前资源；</p>
+</li>
+<li><p>最近损失；</p>
+</li>
+<li><p>玩家表现；</p>
+</li>
+<li><p>防御能力；</p>
+</li>
+<li><p>故事阶段；</p>
+</li>
+</ul>
+<p>选择事件。</p>
+<p>导演不应直接读取玩家将要做的操作，也不应持续针对最弱环节制造无法恢复的惩罚。</p>
+<hr />
+<h2 id="265-恢复窗口">26.5 恢复窗口</h2><p>重大危机后应提供：</p>
+<ul>
+<li><p>较低事件强度；</p>
+</li>
+<li><p>贸易机会；</p>
+</li>
+<li><p>新居民；</p>
+</li>
+<li><p>资源事件；</p>
+</li>
+<li><p>修复时间；</p>
+</li>
+<li><p>情绪恢复。</p>
+</li>
+</ul>
+<p>否则多个事件连续发生会形成不可逆崩溃。</p>
+<hr />
+<h2 id="27-完整事件与执行流程示例">27. 完整事件与执行流程示例</h2><p>以下以“冬季寒潮导致聚落食物与医疗系统连锁失衡”为例。</p>
+<h3 id="271-寒潮预警">27.1 寒潮预警</h3><p>天气系统预测三天后出现极端低温。</p>
+<p>系统提示：</p>
+<ul>
+<li><p>户外作物将停止生长；</p>
+</li>
+<li><p>住房燃料消耗将上升；</p>
+</li>
+<li><p>居民户外工作速度下降；</p>
+</li>
+<li><p>冻伤风险增加。</p>
+</li>
+</ul>
+<hr />
+<h3 id="272-玩家准备">27.2 玩家准备</h3><p>玩家发布：</p>
+<ul>
+<li><p>提高燃料库存目标；</p>
+</li>
+<li><p>暂停装饰建造；</p>
+</li>
+<li><p>增加砍伐优先级；</p>
+</li>
+<li><p>将非必要生产设备降为低供电；</p>
+</li>
+<li><p>扩大室内食物仓储。</p>
+</li>
+</ul>
+<hr />
+<h3 id="273-工作生成">27.3 工作生成</h3><p>库存系统发现燃料低于目标，生成：</p>
+<ul>
+<li><p>砍伐订单；</p>
+</li>
+<li><p>木材搬运；</p>
+</li>
+<li><p>燃料加工；</p>
+</li>
+<li><p>燃料入库；</p>
+</li>
+<li><p>住房补充燃料。</p>
+</li>
+</ul>
+<hr />
+<h3 id="274-调度异常">27.4 调度异常</h3><p>大量居民被分配到砍伐和搬运。</p>
+<p>厨房的烹饪优先级较低，厨师转而搬运木材。</p>
+<p>结果：</p>
+<ul>
+<li><p>燃料库存增加；</p>
+</li>
+<li><p>熟食库存开始下降。</p>
+</li>
+</ul>
+<hr />
+<h3 id="275-寒潮到达">27.5 寒潮到达</h3><p>外部温度骤降。</p>
+<p>住房开始大量消耗燃料。</p>
+<p>部分远端宿舍因为搬运距离过长未及时补充。</p>
+<p>居民出现：</p>
+<ul>
+<li><p>睡眠质量下降；</p>
+</li>
+<li><p>轻度失温；</p>
+</li>
+<li><p>工作效率下降。</p>
+</li>
+</ul>
+<hr />
+<h3 id="276-医疗压力增加">27.6 医疗压力增加</h3><p>两名居民冻伤，需要治疗。</p>
+<p>医生正在远端执行普通制药任务。</p>
+<p>医疗系统生成高紧急度治疗订单，中断制药并调度医生。</p>
+<hr />
+<h3 id="277-食物链失衡">27.7 食物链失衡</h3><p>厨师因饥饿离开工作岗位寻找食物。</p>
+<p>但现有食物主要是未经烹饪的原料。</p>
+<p>系统状态：</p>
+<ul>
+<li><p>原料充足；</p>
+</li>
+<li><p>厨房有燃料；</p>
+</li>
+<li><p>厨师可用；</p>
+</li>
+<li><p>但厨师个人需求中断了工作；</p>
+</li>
+<li><p>熟食库存已清空。</p>
+</li>
+</ul>
+<hr />
+<h3 id="278-玩家诊断">27.8 玩家诊断</h3><p>食物面板显示：</p>
+<ul>
+<li><p>食物原料：充足；</p>
+</li>
+<li><p>可食成品：不足；</p>
+</li>
+<li><p>厨房生产：停滞；</p>
+</li>
+<li><p>停滞原因：厨师满足紧急饥饿需求；</p>
+</li>
+<li><p>次要原因：厨房工作优先级过低。</p>
+</li>
+</ul>
+<hr />
+<h3 id="279-应急调整">27.9 应急调整</h3><p>玩家：</p>
+<ol>
+<li><p>将烹饪提升为紧急工作；</p>
+</li>
+<li><p>启用简易生食配给；</p>
+</li>
+<li><p>将一名备用居民临时设为厨师；</p>
+</li>
+<li><p>禁止普通居民进入室外林区；</p>
+</li>
+<li><p>将燃料搬运切换为室内库存优先；</p>
+</li>
+<li><p>关闭娱乐区供暖。</p>
+</li>
+</ol>
+<hr />
+<h3 id="2710-系统恢复">27.10 系统恢复</h3><p>备用厨师生产基础餐食。</p>
+<p>医生完成冻伤治疗。</p>
+<p>燃料搬运距离缩短，住房温度稳定。</p>
+<p>聚落在资源受损的情况下恢复运行。</p>
+<hr />
+<h3 id="2711-危机后结果">27.11 危机后结果</h3><p>寒潮结束后：</p>
+<ul>
+<li><p>木材库存偏低；</p>
+</li>
+<li><p>两名居民仍需恢复；</p>
+</li>
+<li><p>农业生产延迟；</p>
+</li>
+<li><p>情绪下降；</p>
+</li>
+<li><p>但无人死亡；</p>
+</li>
+<li><p>玩家解锁新的保温建筑方案。</p>
+</li>
+</ul>
+<p>完整循环体现：</p>
+<p>风险预警
+→ 资源准备
+→ 劳动力重分配
+→ 次生瓶颈出现
+→ 环境压力放大
+→ 医疗与食物系统失衡
+→ 玩家定位根因
+→ 调整制度和优先级
+→ 聚落恢复
+→ 建立更强韧性</p>
+<hr />
+<h2 id="28-模块通信设计">28. 模块通信设计</h2><h2 id="281-命令">28.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>CreateBlueprint；</p>
+</li>
+<li><p>DesignateArea；</p>
+</li>
+<li><p>SetWorkPriority；</p>
+</li>
+<li><p>AssignResidentWork；</p>
+</li>
+<li><p>SetStoragePolicy；</p>
+</li>
+<li><p>CreateProductionOrder；</p>
+</li>
+<li><p>SetStockTarget；</p>
+</li>
+<li><p>ChangeAccessPolicy；</p>
+</li>
+<li><p>EnactPolicy；</p>
+</li>
+<li><p>DraftResident；</p>
+</li>
+<li><p>DeclareEmergency；</p>
+</li>
+<li><p>CancelWorkOrder。</p>
+</li>
+</ul>
+<p>命令必须携带：</p>
+<ul>
+<li><p>发起者；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>当前世界版本；</p>
+</li>
+<li><p>资源上下文；</p>
+</li>
+<li><p>模拟Tick；</p>
+</li>
+<li><p>输入序列；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="282-同步查询">28.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>某居民为什么不执行工作；</p>
+</li>
+<li><p>工作台为什么停产；</p>
+</li>
+<li><p>某物品是否可访问；</p>
+</li>
+<li><p>某房间为什么过冷；</p>
+</li>
+<li><p>某工作缺少什么条件；</p>
+</li>
+<li><p>当前食物能维持多少天；</p>
+</li>
+<li><p>某建筑是否获得电力；</p>
+</li>
+<li><p>当前搬运瓶颈在哪里；</p>
+</li>
+<li><p>某居民为什么情绪低落。</p>
+</li>
+</ul>
+<p>查询不能修改状态或创建工作。</p>
+<hr />
+<h2 id="283-领域事件">28.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>WorkOrderCreated；</p>
+</li>
+<li><p>WorkOrderReserved；</p>
+</li>
+<li><p>WorkStarted；</p>
+</li>
+<li><p>WorkInterrupted；</p>
+</li>
+<li><p>WorkCompleted；</p>
+</li>
+<li><p>ItemProduced；</p>
+</li>
+<li><p>ItemHauled；</p>
+</li>
+<li><p>BuildingCompleted；</p>
+</li>
+<li><p>NeedThresholdReached；</p>
+</li>
+<li><p>ResidentInjured；</p>
+</li>
+<li><p>TreatmentRequested；</p>
+</li>
+<li><p>PowerNetworkChanged；</p>
+</li>
+<li><p>RoomTemperatureChanged；</p>
+</li>
+<li><p>PolicyChanged；</p>
+</li>
+<li><p>IncidentStarted；</p>
+</li>
+<li><p>ResidentDied；</p>
+</li>
+<li><p>ColonyRecovered。</p>
+</li>
+</ul>
+<hr />
+<h2 id="284-表现事件">28.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>ShowWorkIndicator；</p>
+</li>
+<li><p>PlayConstructionAnimation；</p>
+</li>
+<li><p>ShowLowStockWarning；</p>
+</li>
+<li><p>DisplayResidentThought；</p>
+</li>
+<li><p>PlayIncidentAlert；</p>
+</li>
+<li><p>ShowNetworkFailure；</p>
+</li>
+<li><p>AnimateProduction；</p>
+</li>
+<li><p>DisplayColonySummary。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>工作是否完成；</p>
+</li>
+<li><p>资源是否产生；</p>
+</li>
+<li><p>居民是否死亡；</p>
+</li>
+<li><p>建筑是否通电；</p>
+</li>
+<li><p>危机是否结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-存档与确定性">29. 存档与确定性</h2><h2 id="291-savesnapshot">29.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>SimulationClock；</p>
+</li>
+<li><p>WorldMapState；</p>
+</li>
+<li><p>ResidentStates；</p>
+</li>
+<li><p>NeedStates；</p>
+</li>
+<li><p>HealthStates；</p>
+</li>
+<li><p>MoodStates；</p>
+</li>
+<li><p>WorkOrderStates；</p>
+</li>
+<li><p>ReservationStates；</p>
+</li>
+<li><p>ItemStates；</p>
+</li>
+<li><p>StorageStates；</p>
+</li>
+<li><p>BuildingStates；</p>
+</li>
+<li><p>ProductionStates；</p>
+</li>
+<li><p>NetworkStates；</p>
+</li>
+<li><p>RelationshipStates；</p>
+</li>
+<li><p>PolicyStates；</p>
+</li>
+<li><p>IncidentStates；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-保存边界">29.2 保存边界</h2><p>适合保存：</p>
+<ul>
+<li><p>手动保存；</p>
+</li>
+<li><p>新一天开始；</p>
+</li>
+<li><p>重大危机开始；</p>
+</li>
+<li><p>危机结束；</p>
+</li>
+<li><p>居民加入；</p>
+</li>
+<li><p>制度修改；</p>
+</li>
+<li><p>长期目标完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="293-保存中的进行中工作">29.3 保存中的进行中工作</h2><p>必须保存：</p>
+<ul>
+<li><p>当前工作阶段；</p>
+</li>
+<li><p>已预留物品；</p>
+</li>
+<li><p>当前携带物；</p>
+</li>
+<li><p>工作进度；</p>
+</li>
+<li><p>当前路径；</p>
+</li>
+<li><p>提交状态；</p>
+</li>
+<li><p>中断状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-派生状态">29.4 派生状态</h2><p>以下内容可以加载后重建：</p>
+<ul>
+<li><p>路径缓存；</p>
+</li>
+<li><p>工作候选索引；</p>
+</li>
+<li><p>房间图；</p>
+</li>
+<li><p>网络连接分区；</p>
+</li>
+<li><p>仓储候选缓存；</p>
+</li>
+<li><p>情绪总值；</p>
+</li>
+<li><p>聚落统计。</p>
+</li>
+</ul>
+<hr />
+<h2 id="295-随机流分离">29.5 随机流分离</h2><p>建议分离：</p>
+<ul>
+<li><p>IncidentRandom；</p>
+</li>
+<li><p>SocialRandom；</p>
+</li>
+<li><p>CombatRandom；</p>
+</li>
+<li><p>QualityRandom；</p>
+</li>
+<li><p>DiseaseRandom；</p>
+</li>
+<li><p>WorldRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-失败隔离">30. 失败隔离</h2><h2 id="301-工作订单失效">30.1 工作订单失效</h2><p>目标被删除或条件变化时：</p>
+<ul>
+<li><p>将订单标记为Invalid；</p>
+</li>
+<li><p>释放预留；</p>
+</li>
+<li><p>保留已搬运材料；</p>
+</li>
+<li><p>重新评估是否生成替代订单；</p>
+</li>
+<li><p>不让居民停留在永久执行状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-居民路径失败">30.2 居民路径失败</h2><p>无法到达目标时：</p>
+<ol>
+<li><p>检查门禁和禁区；</p>
+</li>
+<li><p>检查动态障碍；</p>
+</li>
+<li><p>尝试替代目标；</p>
+</li>
+<li><p>标记工作Blocked；</p>
+</li>
+<li><p>释放或保留预留；</p>
+</li>
+<li><p>返回安全位置；</p>
+</li>
+<li><p>记录完整路径过滤原因。</p>
+</li>
+</ol>
+<p>不能直接传送居民到目标。</p>
+<hr />
+<h2 id="303-搬运物品丢失">30.3 搬运物品丢失</h2><p>居民中断搬运时：</p>
+<ul>
+<li><p>物品仍归属于居民背包；</p>
+</li>
+<li><p>或明确放置在当前地块；</p>
+</li>
+<li><p>更新权威位置；</p>
+</li>
+<li><p>释放原目的地容量预留；</p>
+</li>
+<li><p>重新创建剩余搬运任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-生产提交异常">30.4 生产提交异常</h2><p>配方进入提交点后：</p>
+<ul>
+<li><p>输入原料只能消耗一次；</p>
+</li>
+<li><p>输出产物只能创建一次；</p>
+</li>
+<li><p>使用ProductionTransactionId防重；</p>
+</li>
+<li><p>表现失败不回滚逻辑产物；</p>
+</li>
+<li><p>输出空间不足时进入BlockedOutput。</p>
+</li>
+</ul>
+<hr />
+<h2 id="305-预留死锁">30.5 预留死锁</h2><p>检测到两个任务相互等待资源时：</p>
+<ul>
+<li><p>识别等待图循环；</p>
+</li>
+<li><p>按优先级取消较低订单；</p>
+</li>
+<li><p>释放其预留；</p>
+</li>
+<li><p>重新调度；</p>
+</li>
+<li><p>输出死锁链。</p>
+</li>
+</ul>
+<hr />
+<h2 id="306-房间状态异常">30.6 房间状态异常</h2><p>房间图计算失败时：</p>
+<ul>
+<li><p>使用上一有效房间状态；</p>
+</li>
+<li><p>局部重新扫描；</p>
+</li>
+<li><p>不将全图误判为室外；</p>
+</li>
+<li><p>保留温度和空气状态；</p>
+</li>
+<li><p>记录拓扑变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="307-网络系统异常">30.7 网络系统异常</h2><p>电力或管线计算失败时：</p>
+<ul>
+<li><p>保留上一有效分区；</p>
+</li>
+<li><p>隔离发生变化的局部区域；</p>
+</li>
+<li><p>不让全部设备瞬间断电；</p>
+</li>
+<li><p>重新构建受影响连接；</p>
+</li>
+<li><p>输出断点位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="308-居民ai无合法行为">30.8 居民AI无合法行为</h2><p>居民没有合法工作或需求行为时：</p>
+<ul>
+<li><p>执行Idle或前往安全休息点；</p>
+</li>
+<li><p>清理失效预留；</p>
+</li>
+<li><p>重新评估紧急需求；</p>
+</li>
+<li><p>不停留在空状态；</p>
+</li>
+<li><p>记录候选行为过滤结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="309-危机脚本失败">30.9 危机脚本失败</h2><p>事件阶段无法推进时：</p>
+<ul>
+<li><p>保留当前阶段；</p>
+</li>
+<li><p>运行保底结束条件；</p>
+</li>
+<li><p>不重复生成奖励或敌人；</p>
+</li>
+<li><p>隔离事件专属实体；</p>
+</li>
+<li><p>不阻塞整个模拟时钟。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-调试与可观测性">31. 调试与可观测性</h2><h2 id="311-居民决策检查器">31.1 居民决策检查器</h2><p>显示：</p>
+<ul>
+<li><p>当前行为；</p>
+</li>
+<li><p>当前需求；</p>
+</li>
+<li><p>候选工作；</p>
+</li>
+<li><p>被过滤原因；</p>
+</li>
+<li><p>工作评分；</p>
+</li>
+<li><p>路径成本；</p>
+</li>
+<li><p>当前预留；</p>
+</li>
+<li><p>工作切换原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-工作订单面板">31.2 工作订单面板</h2><p>显示：</p>
+<ul>
+<li><p>工作来源；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>所需物品；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>分配居民；</p>
+</li>
+<li><p>阻塞原因；</p>
+</li>
+<li><p>等待时间；</p>
+</li>
+<li><p>预留对象。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-生产链追踪器">31.3 生产链追踪器</h2><p>选择某种物品后显示：</p>
+<ul>
+<li><p>原料来源；</p>
+</li>
+<li><p>采集任务；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>仓储；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>工作者；</p>
+</li>
+<li><p>成品位置；</p>
+</li>
+<li><p>消费者；</p>
+</li>
+<li><p>当前瓶颈。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-物流热图">31.4 物流热图</h2><p>显示：</p>
+<ul>
+<li><p>居民行走密度；</p>
+</li>
+<li><p>物品搬运路径；</p>
+</li>
+<li><p>通道拥堵；</p>
+</li>
+<li><p>仓储访问量；</p>
+</li>
+<li><p>工作台供料距离；</p>
+</li>
+<li><p>无效往返；</p>
+</li>
+<li><p>高成本门和楼梯。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-预留检查器">31.5 预留检查器</h2><p>显示：</p>
+<ul>
+<li><p>被预留对象；</p>
+</li>
+<li><p>预留居民；</p>
+</li>
+<li><p>预留用途；</p>
+</li>
+<li><p>创建时间；</p>
+</li>
+<li><p>超时时间；</p>
+</li>
+<li><p>当前工作；</p>
+</li>
+<li><p>异常多重预留。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-房间与环境查看器">31.6 房间与环境查看器</h2><p>显示：</p>
+<ul>
+<li><p>房间边界；</p>
+</li>
+<li><p>室内外；</p>
+</li>
+<li><p>温度；</p>
+</li>
+<li><p>热源；</p>
+</li>
+<li><p>冷源；</p>
+</li>
+<li><p>空气；</p>
+</li>
+<li><p>污染；</p>
+</li>
+<li><p>光照；</p>
+</li>
+<li><p>环境泄漏路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-网络查看器">31.7 网络查看器</h2><p>显示：</p>
+<ul>
+<li><p>发电；</p>
+</li>
+<li><p>消耗；</p>
+</li>
+<li><p>储能；</p>
+</li>
+<li><p>连接；</p>
+</li>
+<li><p>过载；</p>
+</li>
+<li><p>断点；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>孤立网络；</p>
+</li>
+<li><p>供电失败原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="318-居民状态总览">31.8 居民状态总览</h2><p>统计：</p>
+<ul>
+<li><p>空闲；</p>
+</li>
+<li><p>工作；</p>
+</li>
+<li><p>睡眠；</p>
+</li>
+<li><p>饥饿；</p>
+</li>
+<li><p>生病；</p>
+</li>
+<li><p>受伤；</p>
+</li>
+<li><p>情绪低落；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>无法到达目标；</p>
+</li>
+<li><p>无合法任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="319-危机因果链">31.9 危机因果链</h2><p>例如：</p>
+<p>寒潮
+→ 燃料需求增加
+→ 搬运压力上升
+→ 烹饪人手下降
+→ 熟食不足
+→ 居民饥饿
+→ 工作效率下降</p>
+<p>用于区分事件原因与表面结果。</p>
+<hr />
+<h2 id="3110-模拟回放">31.10 模拟回放</h2><p>记录：</p>
+<ul>
+<li><p>玩家命令；</p>
+</li>
+<li><p>任务创建；</p>
+</li>
+<li><p>调度结果；</p>
+</li>
+<li><p>工作执行；</p>
+</li>
+<li><p>资源转移；</p>
+</li>
+<li><p>居民状态；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>随机流；</p>
+</li>
+<li><p>周期快照。</p>
+</li>
+</ul>
+<p>用于重现：</p>
+<ul>
+<li><p>居民饿死但仓库有食物；</p>
+</li>
+<li><p>工作长期无人执行；</p>
+</li>
+<li><p>物品重复；</p>
+</li>
+<li><p>预留泄漏；</p>
+</li>
+<li><p>电网异常；</p>
+</li>
+<li><p>倍速结果不一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-内容验证工具">32. 内容验证工具</h2><h2 id="321-配方图验证">32.1 配方图验证</h2><p>检查：</p>
+<ul>
+<li><p>每种输入是否可获得；</p>
+</li>
+<li><p>配方是否存在循环依赖；</p>
+</li>
+<li><p>必需工具是否可制造；</p>
+</li>
+<li><p>产物是否有用途；</p>
+</li>
+<li><p>不可再生资源是否会导致主线死锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-建筑可达性验证">32.2 建筑可达性验证</h2><p>检查：</p>
+<ul>
+<li><p>建筑入口；</p>
+</li>
+<li><p>工作位；</p>
+</li>
+<li><p>材料交付位；</p>
+</li>
+<li><p>成品输出位；</p>
+</li>
+<li><p>维修位置；</p>
+</li>
+<li><p>消防可达性；</p>
+</li>
+<li><p>动物和居民通行。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-工作可执行性验证">32.3 工作可执行性验证</h2><p>对每种工作测试：</p>
+<ul>
+<li><p>至少一种居民可以执行；</p>
+</li>
+<li><p>所需物品存在合法来源；</p>
+</li>
+<li><p>目标可达；</p>
+</li>
+<li><p>工具可获得；</p>
+</li>
+<li><p>预留可建立；</p>
+</li>
+<li><p>工作可以完成并提交。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-生产链自动模拟">32.4 生产链自动模拟</h2><p>模拟：</p>
+<ul>
+<li><p>原料采集；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>加工；</p>
+</li>
+<li><p>消费；</p>
+</li>
+<li><p>腐坏；</p>
+</li>
+<li><p>库存目标。</p>
+</li>
+</ul>
+<p>统计：</p>
+<ul>
+<li><p>理论吞吐；</p>
+</li>
+<li><p>实际吞吐；</p>
+</li>
+<li><p>搬运占比；</p>
+</li>
+<li><p>工作台利用率；</p>
+</li>
+<li><p>缺货频率；</p>
+</li>
+<li><p>库存波动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-人口承载力模拟">32.5 人口承载力模拟</h2><p>输入：</p>
+<ul>
+<li><p>居民数量；</p>
+</li>
+<li><p>食物产量；</p>
+</li>
+<li><p>住房；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>工作时间；</p>
+</li>
+<li><p>地图距离。</p>
+</li>
+</ul>
+<p>输出：</p>
+<ul>
+<li><p>可持续人口；</p>
+</li>
+<li><p>食物安全天数；</p>
+</li>
+<li><p>平均通勤；</p>
+</li>
+<li><p>医疗风险；</p>
+</li>
+<li><p>劳动力缺口。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-危机恢复验证">32.6 危机恢复验证</h2><p>自动测试：</p>
+<ul>
+<li><p>火灾；</p>
+</li>
+<li><p>寒潮；</p>
+</li>
+<li><p>疫病；</p>
+</li>
+<li><p>断电；</p>
+</li>
+<li><p>医生死亡；</p>
+</li>
+<li><p>主仓库被毁；</p>
+</li>
+<li><p>水源污染；</p>
+</li>
+<li><p>关键生产者受伤。</p>
+</li>
+</ul>
+<p>检查聚落是否存在：</p>
+<ul>
+<li><p>替代生产；</p>
+</li>
+<li><p>应急库存；</p>
+</li>
+<li><p>恢复工作；</p>
+</li>
+<li><p>保底路径；</p>
+</li>
+<li><p>不可恢复死锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-ai压力测试">32.7 AI压力测试</h2><p>使用大量居民运行：</p>
+<ul>
+<li><p>无工作状态；</p>
+</li>
+<li><p>高任务压力；</p>
+</li>
+<li><p>多重紧急事件；</p>
+</li>
+<li><p>大量路径失败；</p>
+</li>
+<li><p>复杂门禁；</p>
+</li>
+<li><p>多层建筑；</p>
+</li>
+<li><p>频繁预留冲突。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-经济长期模拟">32.8 经济长期模拟</h2><p>运行多个季节或年份，统计：</p>
+<ul>
+<li><p>人口变化；</p>
+</li>
+<li><p>食物生产；</p>
+</li>
+<li><p>库存；</p>
+</li>
+<li><p>生产结构；</p>
+</li>
+<li><p>资源枯竭；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>居民死亡；</p>
+</li>
+<li><p>危机频率；</p>
+</li>
+<li><p>聚落恢复时间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-性能设计">33. 性能设计</h2><h2 id="331-居民思考分频">33.1 居民思考分频</h2><p>不需要所有居民每Tick完整重新决策。</p>
+<p>可以按状态分频：</p>
+<ul>
+<li><p>危险状态：高频；</p>
+</li>
+<li><p>当前任务结束：立即；</p>
+</li>
+<li><p>普通工作：中频；</p>
+</li>
+<li><p>睡眠：低频；</p>
+</li>
+<li><p>远端居民：低频。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-候选任务索引">33.2 候选任务索引</h2><p>按以下维度建立索引：</p>
+<ul>
+<li><p>工作类型；</p>
+</li>
+<li><p>区域；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>紧急程度；</p>
+</li>
+<li><p>可用目标；</p>
+</li>
+<li><p>所需工具。</p>
+</li>
+</ul>
+<p>避免居民每次选择工作都扫描全部任务。</p>
+<hr />
+<h2 id="333-路径缓存">33.3 路径缓存</h2><p>缓存：</p>
+<ul>
+<li><p>居民到工作区域；</p>
+</li>
+<li><p>仓库到工作台；</p>
+</li>
+<li><p>房间连接；</p>
+</li>
+<li><p>网络维护路线。</p>
+</li>
+</ul>
+<p>地图变化后局部失效。</p>
+<hr />
+<h2 id="334-远端实体抽象">33.4 远端实体抽象</h2><p>玩家远离某区域时，可以降低：</p>
+<ul>
+<li><p>居民动画；</p>
+</li>
+<li><p>动物动画；</p>
+</li>
+<li><p>物品表现；</p>
+</li>
+<li><p>机器粒子；</p>
+</li>
+<li><p>细粒度碰撞。</p>
+</li>
+</ul>
+<p>权威工作、需求和资源仍需继续模拟。</p>
+<hr />
+<h2 id="335-物品聚合">33.5 物品聚合</h2><p>大量同类物品可以在仓储中聚合为堆叠，而不是保持单个实体。</p>
+<p>只有在：</p>
+<ul>
+<li><p>被搬运；</p>
+</li>
+<li><p>被装备；</p>
+</li>
+<li><p>品质不同；</p>
+</li>
+<li><p>独立任务绑定；</p>
+</li>
+</ul>
+<p>时拆分。</p>
+<hr />
+<h2 id="336-网络局部重算">33.6 网络局部重算</h2><p>电力、温度和房间系统应根据脏区域局部更新，避免每次建墙都重算整个地图。</p>
+<hr />
+<h2 id="337-统计数据异步聚合">33.7 统计数据异步聚合</h2><p>聚落报表、热图和历史趋势可以使用低频聚合，不参与核心模拟决策。</p>
+<hr />
+<h2 id="34-可扩展点">34. 可扩展点</h2><h2 id="341-新居民种族或类型">34.1 新居民种族或类型</h2><p>主要提供：</p>
+<ul>
+<li><p>需求配置；</p>
+</li>
+<li><p>身体结构；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>特质；</p>
+</li>
+<li><p>环境适应；</p>
+</li>
+<li><p>社交规则；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="342-新工作类型">34.2 新工作类型</h2><p>提供：</p>
+<ul>
+<li><p>WorkTypeDefinition；</p>
+</li>
+<li><p>前置条件；</p>
+</li>
+<li><p>预留规则；</p>
+</li>
+<li><p>执行阶段；</p>
+</li>
+<li><p>结果；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>失败策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="343-新建筑">34.3 新建筑</h2><p>提供：</p>
+<ul>
+<li><p>BuildingDefinition；</p>
+</li>
+<li><p>建造材料；</p>
+</li>
+<li><p>功能模块；</p>
+</li>
+<li><p>网络接口；</p>
+</li>
+<li><p>维护；</p>
+</li>
+<li><p>损坏；</p>
+</li>
+<li><p>表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-新生产链">34.4 新生产链</h2><p>提供：</p>
+<ul>
+<li><p>原料；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>工作台；</p>
+</li>
+<li><p>工作者技能；</p>
+</li>
+<li><p>产物；</p>
+</li>
+<li><p>副产品；</p>
+</li>
+<li><p>库存策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="345-新危机">34.5 新危机</h2><p>通过：</p>
+<ul>
+<li><p>触发条件；</p>
+</li>
+<li><p>初始效果；</p>
+</li>
+<li><p>传播规则；</p>
+</li>
+<li><p>阶段；</p>
+</li>
+<li><p>玩家应对；</p>
+</li>
+<li><p>结束条件；</p>
+</li>
+</ul>
+<p>接入统一事件系统。</p>
+<hr />
+<h2 id="346-新社会制度">34.6 新社会制度</h2><p>提供：</p>
+<ul>
+<li><p>适用人口；</p>
+</li>
+<li><p>行为修正；</p>
+</li>
+<li><p>情绪影响；</p>
+</li>
+<li><p>执行方式；</p>
+</li>
+<li><p>变更成本；</p>
+</li>
+<li><p>冲突规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="347-新世界环境">34.7 新世界环境</h2><p>可以加入：</p>
+<ul>
+<li><p>冰原；</p>
+</li>
+<li><p>沙漠；</p>
+</li>
+<li><p>地下；</p>
+</li>
+<li><p>海底；</p>
+</li>
+<li><p>太空；</p>
+</li>
+<li><p>毒气行星；</p>
+</li>
+<li><p>魔法荒野。</p>
+</li>
+</ul>
+<p>核心变化主要体现在：</p>
+<ul>
+<li><p>环境网络；</p>
+</li>
+<li><p>生存需求；</p>
+</li>
+<li><p>资源链；</p>
+</li>
+<li><p>建筑规则；</p>
+</li>
+<li><p>危机类型。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-玩家体验设计">35. 玩家体验设计</h2><h2 id="351-玩家必须知道为什么没有执行">35.1 玩家必须知道“为什么没有执行”</h2><p>对于长期未完成工作，系统应明确显示：</p>
+<ul>
+<li><p>无可用居民；</p>
+</li>
+<li><p>居民技能不足；</p>
+</li>
+<li><p>目标不可达；</p>
+</li>
+<li><p>原料不足；</p>
+</li>
+<li><p>原料被预留；</p>
+</li>
+<li><p>工作台无电；</p>
+</li>
+<li><p>输出已满；</p>
+</li>
+<li><p>工作优先级过低；</p>
+</li>
+<li><p>居民正在满足紧急需求。</p>
+</li>
+</ul>
+<hr />
+<h2 id="352-警报需要指向根因而非只报告结果">35.2 警报需要指向根因，而非只报告结果</h2><p>低质量警报：</p>
+<ul>
+<li>居民饥饿。</li>
+</ul>
+<p>高质量警报：</p>
+<ul>
+<li><p>可食用餐食不足；</p>
+</li>
+<li><p>厨房因缺少燃料停产；</p>
+</li>
+<li><p>燃料位于不可访问仓库；</p>
+</li>
+<li><p>当前没有居民负责搬运。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-默认自动化必须合理">35.3 默认自动化必须合理</h2><p>新玩家不应在开始游戏后立即配置：</p>
+<ul>
+<li><p>所有居民职业；</p>
+</li>
+<li><p>所有仓储规则；</p>
+</li>
+<li><p>所有食物标准；</p>
+</li>
+<li><p>所有班次。</p>
+</li>
+</ul>
+<p>系统应提供可运行的默认策略，再允许逐步精细化。</p>
+<hr />
+<h2 id="354-居民个体需要可记忆">35.4 居民个体需要可记忆</h2><p>可以通过：</p>
+<ul>
+<li><p>名称；</p>
+</li>
+<li><p>外观；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>特质；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>重要事件；</p>
+</li>
+<li><p>历史贡献；</p>
+</li>
+</ul>
+<p>让居民成为角色，而不是无名劳动力。</p>
+<hr />
+<h2 id="355-后期管理应依赖模板和制度">35.5 后期管理应依赖模板和制度</h2><p>需要提供：</p>
+<ul>
+<li><p>新居民工作模板；</p>
+</li>
+<li><p>房间模板；</p>
+</li>
+<li><p>生产模板；</p>
+</li>
+<li><p>库存模板；</p>
+</li>
+<li><p>区域权限模板；</p>
+</li>
+<li><p>应急方案；</p>
+</li>
+<li><p>班次复制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="356-空间效率需要可视化">35.6 空间效率需要可视化</h2><p>提供：</p>
+<ul>
+<li><p>通勤热图；</p>
+</li>
+<li><p>搬运距离；</p>
+</li>
+<li><p>工作台利用率；</p>
+</li>
+<li><p>仓库覆盖；</p>
+</li>
+<li><p>食堂服务范围；</p>
+</li>
+<li><p>医疗响应时间；</p>
+</li>
+<li><p>电力网络。</p>
+</li>
+</ul>
+<hr />
+<h2 id="357-危机需要预兆和恢复空间">35.7 危机需要预兆和恢复空间</h2><p>危机可以突然发生，但系统应通过：</p>
+<ul>
+<li><p>天气预报；</p>
+</li>
+<li><p>敌情；</p>
+</li>
+<li><p>疾病趋势；</p>
+</li>
+<li><p>设备警告；</p>
+</li>
+<li><p>库存安全天数；</p>
+</li>
+</ul>
+<p>给出部分准备机会。</p>
+<hr />
+<h2 id="358-失败应具有因果故事">35.8 失败应具有因果故事</h2><p>聚落失败后可以生成：</p>
+<ul>
+<li><p>资源曲线；</p>
+</li>
+<li><p>第一个关键故障；</p>
+</li>
+<li><p>连锁影响；</p>
+</li>
+<li><p>最大劳动力缺口；</p>
+</li>
+<li><p>死亡和离开原因；</p>
+</li>
+<li><p>未解决警报。</p>
+</li>
+</ul>
+<p>这既是复盘工具，也是叙事结果。</p>
+<hr />
+<h2 id="36-常见设计失败">36. 常见设计失败</h2><h2 id="361-居民直接读取全局最优任务">36.1 居民直接读取全局最优任务</h2><p>居民无视：</p>
+<ul>
+<li><p>距离；</p>
+</li>
+<li><p>知识；</p>
+</li>
+<li><p>权限；</p>
+</li>
+<li><p>预留；</p>
+</li>
+<li><p>当前状态；</p>
+</li>
+</ul>
+<p>瞬间选择最优工作，使空间和组织失去意义。</p>
+<hr />
+<h2 id="362-玩家必须持续手动指定每项劳动">36.2 玩家必须持续手动指定每项劳动</h2><p>间接管理退化为高频微操。</p>
+<hr />
+<h2 id="363-工作优先级只有一个整数">36.3 工作优先级只有一个整数</h2><p>无法表达：</p>
+<ul>
+<li><p>聚落紧急度；</p>
+</li>
+<li><p>居民专长；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>库存需求；</p>
+</li>
+<li><p>当前行为承诺。</p>
+</li>
+</ul>
+<hr />
+<h2 id="364-物品没有唯一权威位置">36.4 物品没有唯一权威位置</h2><p>造成：</p>
+<ul>
+<li><p>复制；</p>
+</li>
+<li><p>丢失；</p>
+</li>
+<li><p>居民争抢；</p>
+</li>
+<li><p>库存统计错误。</p>
+</li>
+</ul>
+<hr />
+<h2 id="365-预留只存在于个别工作脚本">36.5 预留只存在于个别工作脚本</h2><p>不同系统仍会竞争同一：</p>
+<ul>
+<li><p>物品；</p>
+</li>
+<li><p>床位；</p>
+</li>
+<li><p>工作台；</p>
+</li>
+<li><p>患者；</p>
+</li>
+<li><p>位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="366-生产停滞原因不可见">36.6 生产停滞原因不可见</h2><p>玩家只能通过逐项检查猜测问题。</p>
+<hr />
+<h2 id="367-人口增长只有收益">36.7 人口增长只有收益</h2><p>接收居民成为无条件正确选择。</p>
+<hr />
+<h2 id="368-危机只是随机扣除资源">36.8 危机只是随机扣除资源</h2><p>没有利用空间、物流、健康和制度产生连锁影响。</p>
+<hr />
+<h2 id="369-高倍速改变模拟结果">36.9 高倍速改变模拟结果</h2><p>居民在不同倍速下完成不同数量的工作或产生不同需求。</p>
+<hr />
+<h2 id="3610-居民频繁切换工作">36.10 居民频繁切换工作</h2><p>每次需求轻微变化就取消任务，造成大量无效移动。</p>
+<hr />
+<h2 id="3611-搬运系统被视为无成本">36.11 搬运系统被视为无成本</h2><p>生产建筑之间距离不影响效率。</p>
+<hr />
+<h2 id="3612-所有仓库使用统一策略">36.12 所有仓库使用统一策略</h2><p>关键药品、食物、燃料和原料无法进行分布式管理。</p>
+<hr />
+<h2 id="3613-后期只增加人口和建筑数量">36.13 后期只增加人口和建筑数量</h2><p>没有制度、自动化和管理层级升级。</p>
+<hr />
+<h2 id="3614-故障没有恢复路径">36.14 故障没有恢复路径</h2><p>关键医生、工作台或资源失去后，聚落永久死锁。</p>
+<hr />
+<h2 id="37-最小可行原型">37. 最小可行原型</h2><p>一个能够验证殖民地模拟核心范式的最小原型可以包含：</p>
+<h3 id="居民">居民</h3><ul>
+<li><p>8至12名居民；</p>
+</li>
+<li><p>5项基础需求；</p>
+</li>
+<li><p>6种技能；</p>
+</li>
+<li><p>8至12种特质；</p>
+</li>
+<li><p>关系与情绪；</p>
+</li>
+<li><p>伤病与治疗；</p>
+</li>
+<li><p>工作优先级。</p>
+</li>
+</ul>
+<h3 id="地图">地图</h3><ul>
+<li><p>可建造网格；</p>
+</li>
+<li><p>房间检测；</p>
+</li>
+<li><p>门和墙；</p>
+</li>
+<li><p>储存区；</p>
+</li>
+<li><p>禁区；</p>
+</li>
+<li><p>温度；</p>
+</li>
+<li><p>基础导航。</p>
+</li>
+</ul>
+<h3 id="生产">生产</h3><ul>
+<li><p>木材；</p>
+</li>
+<li><p>石料；</p>
+</li>
+<li><p>食物原料；</p>
+</li>
+<li><p>熟食；</p>
+</li>
+<li><p>药品；</p>
+</li>
+<li><p>燃料；</p>
+</li>
+<li><p>建筑材料。</p>
+</li>
+</ul>
+<h3 id="建筑">建筑</h3><ul>
+<li><p>住房；</p>
+</li>
+<li><p>仓库；</p>
+</li>
+<li><p>厨房；</p>
+</li>
+<li><p>工作台；</p>
+</li>
+<li><p>医疗床；</p>
+</li>
+<li><p>农田；</p>
+</li>
+<li><p>发电设备；</p>
+</li>
+<li><p>防御设施。</p>
+</li>
+</ul>
+<h3 id="工作">工作</h3><ul>
+<li><p>采集；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>建造；</p>
+</li>
+<li><p>烹饪；</p>
+</li>
+<li><p>农业；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>清洁；</p>
+</li>
+<li><p>修理；</p>
+</li>
+<li><p>防御。</p>
+</li>
+</ul>
+<h3 id="危机">危机</h3><ul>
+<li><p>寒潮；</p>
+</li>
+<li><p>火灾；</p>
+</li>
+<li><p>袭击；</p>
+</li>
+<li><p>疾病；</p>
+</li>
+<li><p>电力故障。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>ResidentRuntimeState；</p>
+</li>
+<li><p>NeedState；</p>
+</li>
+<li><p>HealthState；</p>
+</li>
+<li><p>MoodState；</p>
+</li>
+<li><p>WorkOrder；</p>
+</li>
+<li><p>WorkScheduler；</p>
+</li>
+<li><p>ReservationState；</p>
+</li>
+<li><p>WorkExecutionContext；</p>
+</li>
+<li><p>ItemStackState；</p>
+</li>
+<li><p>StoragePolicy；</p>
+</li>
+<li><p>ProductionOrder；</p>
+</li>
+<li><p>BuildingRuntimeState；</p>
+</li>
+<li><p>PowerNetworkState；</p>
+</li>
+<li><p>IncidentState；</p>
+</li>
+<li><p>SaveSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>居民决策检查器；</p>
+</li>
+<li><p>工作订单面板；</p>
+</li>
+<li><p>生产链追踪器；</p>
+</li>
+<li><p>物流热图；</p>
+</li>
+<li><p>预留检查器；</p>
+</li>
+<li><p>房间与环境查看器；</p>
+</li>
+<li><p>网络查看器；</p>
+</li>
+<li><p>危机因果链；</p>
+</li>
+<li><p>模拟回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>玩家发布意图后，居民是否能够自主完成完整工作链；</p>
+</li>
+<li><p>工作为何无法执行是否始终可解释；</p>
+</li>
+<li><p>物品是否保持唯一权威位置；</p>
+</li>
+<li><p>多个居民是否不会争抢同一工作和资源；</p>
+</li>
+<li><p>搬运距离是否真实影响生产效率；</p>
+</li>
+<li><p>居民需求是否会合理中断工作而不持续抖动；</p>
+</li>
+<li><p>聚落扩大后是否产生组织复杂度；</p>
+</li>
+<li><p>危机是否能通过已有系统产生连锁影响；</p>
+</li>
+<li><p>玩家是否能通过优先级、区域和制度恢复聚落；</p>
+</li>
+<li><p>相同状态和命令流是否能稳定回放。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-推荐实施顺序">38. 推荐实施顺序</h2><p>第一阶段：模拟时钟、地图和居民实体
+第二阶段：需求、日程与基础自主行为
+第三阶段：工作订单、调度和预留
+第四阶段：物品、仓储和搬运
+第五阶段：建筑蓝图、施工和房间
+第六阶段：配方、工作台和库存目标
+第七阶段：健康、医疗和情绪
+第八阶段：能源、温度和基础网络
+第九阶段：农业、动物和可再生资源
+第十阶段：战斗、防御和应急岗位
+第十一阶段：社会关系、制度和长期事件
+第十二阶段：回放、压力测试和内容验证</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量建筑和生产配方：</p>
+<ul>
+<li><p>物品唯一位置；</p>
+</li>
+<li><p>工作订单；</p>
+</li>
+<li><p>任务预留；</p>
+</li>
+<li><p>居民决策；</p>
+</li>
+<li><p>路径失败恢复；</p>
+</li>
+<li><p>生产事务；</p>
+</li>
+<li><p>仓储策略；</p>
+</li>
+<li><p>调试因果链；</p>
+</li>
+<li><p>存档版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-架构验收标准">39. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>玩家通过工作、区域和制度表达高层意图；</p>
+</li>
+<li><p>居民能够根据需求和优先级自主选择行为；</p>
+</li>
+<li><p>所有生产、建造、医疗和搬运行为都通过统一工作订单接入；</p>
+</li>
+<li><p>工作分配同时考虑合法性、优先级、技能和路径成本；</p>
+</li>
+<li><p>居民不会因轻微状态变化频繁切换工作；</p>
+</li>
+<li><p>所有独占资源都通过统一预留系统管理；</p>
+</li>
+<li><p>每件物品在任意时刻只有一个权威位置；</p>
+</li>
+<li><p>工作中断后，携带物和预留不会丢失；</p>
+</li>
+<li><p>生产配方使用明确原子提交点；</p>
+</li>
+<li><p>仓储能够按标签、品质、优先级和环境配置；</p>
+</li>
+<li><p>搬运距离和通道拥堵会真实影响生产效率；</p>
+</li>
+<li><p>居民同时具有生产、健康、情绪和社会状态；</p>
+</li>
+<li><p>人口增长同时增加劳动力和系统负担；</p>
+</li>
+<li><p>建筑功能、能源和房间状态相互分离；</p>
+</li>
+<li><p>电力、温度和物流故障能够沿系统传播；</p>
+</li>
+<li><p>危机由现有聚落状态放大，而不是只进行随机扣除；</p>
+</li>
+<li><p>聚落存在安全库存、替代生产和人员冗余等恢复手段；</p>
+</li>
+<li><p>倍速不会改变权威模拟结果；</p>
+</li>
+<li><p>存档能够恢复进行中的工作、预留、物品和事件；</p>
+</li>
+<li><p>调试工具能够解释居民为何不工作、工作台为何停产；</p>
+</li>
+<li><p>新工作、新建筑和新危机通常不需要修改模拟主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-可迁移到其他游戏的设计思想">40. 可迁移到其他游戏的设计思想</h2><h2 id="401-将玩家意图与具体执行分离">40.1 将玩家意图与具体执行分离</h2><p>可迁移到：</p>
+<ul>
+<li><p>RTS；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>队伍AI；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>项目管理；</p>
+</li>
+<li><p>城市模拟。</p>
+</li>
+</ul>
+<p>玩家可以描述目标和约束，由系统规划具体行为。</p>
+<hr />
+<h2 id="402-需求必须通过工作链才能改变世界">40.2 需求必须通过工作链才能改变世界</h2><p>可迁移到：</p>
+<ul>
+<li><p>任务；</p>
+</li>
+<li><p>制造；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>维修；</p>
+</li>
+<li><p>经营。</p>
+</li>
+</ul>
+<p>“缺少某物”不应直接生成结果，而应产生一条可执行、可失败和可调试的工作链。</p>
+<hr />
+<h2 id="403-预留系统是并发实体交互的基础设施">40.3 预留系统是并发实体交互的基础设施</h2><p>可迁移到：</p>
+<ul>
+<li><p>拾取；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>工作台；</p>
+</li>
+<li><p>交易；</p>
+</li>
+<li><p>医疗；</p>
+</li>
+<li><p>座位；</p>
+</li>
+<li><p>多角色交互。</p>
+</li>
+</ul>
+<p>先预留再行动，可以避免多个代理竞争同一对象。</p>
+<hr />
+<h2 id="404-实际吞吐由生产和物流共同决定">40.4 实际吞吐由生产和物流共同决定</h2><p>可迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>塔防；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>仓储；</p>
+</li>
+<li><p>战争补给。</p>
+</li>
+</ul>
+<p>产能充足不代表产物能够及时抵达消费者。</p>
+<hr />
+<h2 id="405-故障应沿依赖图传播">40.5 故障应沿依赖图传播</h2><p>可迁移到：</p>
+<ul>
+<li><p>电网；</p>
+</li>
+<li><p>任务链；</p>
+</li>
+<li><p>服务架构；</p>
+</li>
+<li><p>战斗状态；</p>
+</li>
+<li><p>经济系统。</p>
+</li>
+</ul>
+<p>局部问题可以通过明确依赖关系产生次生影响。</p>
+<hr />
+<h2 id="406-韧性比峰值效率更适合长期系统">40.6 韧性比峰值效率更适合长期系统</h2><p>可迁移到：</p>
+<ul>
+<li><p>基地；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>网络服务。</p>
+</li>
+</ul>
+<p>高效率系统可能非常脆弱。</p>
+<p>长期成长应允许玩家投资：</p>
+<ul>
+<li><p>冗余；</p>
+</li>
+<li><p>备用；</p>
+</li>
+<li><p>安全库存；</p>
+</li>
+<li><p>分布式结构；</p>
+</li>
+<li><p>恢复能力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="407-个体状态能够为宏观系统提供叙事">40.7 个体状态能够为宏观系统提供叙事</h2><p>可迁移到：</p>
+<ul>
+<li><p>战术游戏；</p>
+</li>
+<li><p>体育管理；</p>
+</li>
+<li><p>公会；</p>
+</li>
+<li><p>船员系统；</p>
+</li>
+<li><p>队伍RPG。</p>
+</li>
+</ul>
+<p>宏观失败可以通过具体角色的经历被玩家理解和记忆。</p>
+<hr />
+<h2 id="408-高层模板用于压缩重复管理">40.8 高层模板用于压缩重复管理</h2><p>可迁移到：</p>
+<ul>
+<li><p>装备；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>队伍配置。</p>
+</li>
+</ul>
+<p>系统规模扩大后，应允许玩家复制策略，而不是复制操作。</p>
+<hr />
+<h2 id="409-根因反馈比状态警报更有价值">40.9 根因反馈比状态警报更有价值</h2><p>可迁移到所有复杂系统。</p>
+<p>不要只告诉玩家“结果异常”，还应显示：</p>
+<ul>
+<li><p>上游依赖；</p>
+</li>
+<li><p>阻塞节点；</p>
+</li>
+<li><p>权限问题；</p>
+</li>
+<li><p>缺少资源；</p>
+</li>
+<li><p>路径问题；</p>
+</li>
+<li><p>优先级问题。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4010-危机可以作为系统完整性的压力测试">40.10 危机可以作为系统完整性的压力测试</h2><p>可迁移到：</p>
+<ul>
+<li><p>生存；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>塔防；</p>
+</li>
+<li><p>城市模拟。</p>
+</li>
+</ul>
+<p>危机不只提高数值压力，还可以验证：</p>
+<ul>
+<li><p>冗余；</p>
+</li>
+<li><p>调度；</p>
+</li>
+<li><p>库存；</p>
+</li>
+<li><p>恢复；</p>
+</li>
+<li><p>制度；</p>
+</li>
+<li><p>空间设计。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-本次防重记录">41. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>殖民地模拟与聚落生存经营游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Colony Simulation；</p>
+</li>
+<li><p>Colony Management；</p>
+</li>
+<li><p>Settlement Survival；</p>
+</li>
+<li><p>Colony Builder；</p>
+</li>
+<li><p>聚落模拟；</p>
+</li>
+<li><p>殖民地经营；</p>
+</li>
+<li><p>居民自治经营。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>玩家通过区域、工作优先级、库存目标、建筑规划和社会制度表达聚落级意图；运行时将生存、生产、医疗、建设和维护需求转化为工作订单，再由调度系统依据居民技能、需求、路径、权限和资源预留进行自主执行。物品生产、搬运、消费、居民状态、环境网络和外部危机共同构成持续运行的依赖网络，使聚落在扩张、失衡、危机、恢复和制度升级之间长期演化。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>玩家主要进行间接指挥而非逐动作控制居民；</p>
+</li>
+<li><p>居民依据工作、需求和自身状态自主行动；</p>
+</li>
+<li><p>聚落需求通过工作订单转化为具体行为；</p>
+</li>
+<li><p>工作调度同时考虑优先级、技能、距离、权限和资源；</p>
+</li>
+<li><p>物品、工作台、病床和目标通过预留机制避免竞争；</p>
+</li>
+<li><p>每件物品具有唯一权威位置；</p>
+</li>
+<li><p>生产效率同时取决于原料、工作、搬运和储存；</p>
+</li>
+<li><p>空间布局会影响通勤、物流、环境和防御；</p>
+</li>
+<li><p>居民同时具有生产、健康、情绪和社会属性；</p>
+</li>
+<li><p>人口增长会同时增加劳动力和组织成本；</p>
+</li>
+<li><p>电力、温度、医疗和物流可以形成连锁故障；</p>
+</li>
+<li><p>危机通过已有系统弱点放大；</p>
+</li>
+<li><p>中后期成长从峰值产能转向冗余、制度和韧性；</p>
+</li>
+<li><p>玩家注意力通过模板、政策和自动化逐步上移；</p>
+</li>
+<li><p>调试系统需要解释工作为何不执行以及生产链在哪里阻塞。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>自主居民；</p>
+</li>
+<li><p>居民需求；</p>
+</li>
+<li><p>健康与医疗；</p>
+</li>
+<li><p>情绪与精神状态；</p>
+</li>
+<li><p>社会关系；</p>
+</li>
+<li><p>工作订单；</p>
+</li>
+<li><p>工作调度；</p>
+</li>
+<li><p>工作预留；</p>
+</li>
+<li><p>工作执行状态机；</p>
+</li>
+<li><p>物品唯一位置；</p>
+</li>
+<li><p>仓储策略；</p>
+</li>
+<li><p>搬运与物流；</p>
+</li>
+<li><p>建筑与房间；</p>
+</li>
+<li><p>配方与生产；</p>
+</li>
+<li><p>库存目标；</p>
+</li>
+<li><p>能源网络；</p>
+</li>
+<li><p>温度与空气；</p>
+</li>
+<li><p>农业与动物；</p>
+</li>
+<li><p>聚落制度；</p>
+</li>
+<li><p>防御和应急岗位；</p>
+</li>
+<li><p>动态事件；</p>
+</li>
+<li><p>危机传播；</p>
+</li>
+<li><p>聚落韧性；</p>
+</li>
+<li><p>居民决策检查器；</p>
+</li>
+<li><p>生产链追踪；</p>
+</li>
+<li><p>物流热图；</p>
+</li>
+<li><p>模拟回放。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>殖民地居民AI；</p>
+</li>
+<li><p>聚落工作调度；</p>
+</li>
+<li><p>工作优先级系统；</p>
+</li>
+<li><p>居民需求系统；</p>
+</li>
+<li><p>殖民地情绪系统；</p>
+</li>
+<li><p>聚落医疗系统；</p>
+</li>
+<li><p>工作预留系统；</p>
+</li>
+<li><p>聚落搬运系统；</p>
+</li>
+<li><p>殖民地仓储；</p>
+</li>
+<li><p>聚落生产链；</p>
+</li>
+<li><p>殖民地建筑系统；</p>
+</li>
+<li><p>殖民地房间检测；</p>
+</li>
+<li><p>聚落电力系统；</p>
+</li>
+<li><p>聚落温度系统；</p>
+</li>
+<li><p>聚落社会关系；</p>
+</li>
+<li><p>聚落政策系统；</p>
+</li>
+<li><p>殖民地防御；</p>
+</li>
+<li><p>聚落危机导演；</p>
+</li>
+<li><p>聚落物流热图；</p>
+</li>
+<li><p>殖民地模拟回放。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

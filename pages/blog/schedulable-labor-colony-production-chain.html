@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/schedulable-labor-colony-production-chain.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="可调度劳动能力：自主居民调度与聚落生产链 | IrisSakura">
+    <meta property="og:description" content="殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/schedulable-labor-colony-production-chain.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-schedulable-labor-colony-production-chain.png">
+    <meta property="og:image:alt" content="可调度劳动能力：自主居民调度与聚落生产链 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="可调度劳动能力：自主居民调度与聚落生产链 | IrisSakura">
+    <meta name="twitter:description" content="殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-schedulable-labor-colony-production-chain.png">
+    <meta name="twitter:image:alt" content="可调度劳动能力：自主居民调度与聚落生产链 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"可调度劳动能力：自主居民调度与聚落生产链 | IrisSakura","description":"殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？","url":"https://irissakura.github.io/pages/blog/schedulable-labor-colony-production-chain.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"可调度劳动能力：自主居民调度与聚落生产链","image":"https://irissakura.github.io/assets/social/pages-blog-schedulable-labor-colony-production-chain.png","datePublished":"2026-08-05","dateModified":"2026-08-12","about":["essay"]}</script>
+    <!-- site-meta:end -->
+    <title>可调度劳动能力：自主居民调度与聚落生产链 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-08-05 · 更新于 2026-08-12</p>
+            <h1>可调度劳动能力：自主居民调度与聚落生产链</h1>
+            <p class="blog-deck">殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？</p>
+            <div class="note-tags"><a href="tag/essay.html">essay</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>殖民地的仓库里还有大量谷物。</p>
+<p>厨房没有损坏，也没有停电。聚落里有会烹饪的居民，附近甚至还存放着足够的燃料。</p>
+<p>但熟食库存仍然归零了。</p>
+<p>居民开始饥饿，工作效率下降；厨师因为自身饥饿离开岗位寻找食物；搬运者忙于处理另一项高优先级任务；病人得不到餐食，医生也被迫中断制药。</p>
+<p>玩家看到的结果是：</p>
+<blockquote>
+<p>聚落明明有粮，为什么所有人还是快饿死了？</p>
+</blockquote>
+<p>这类问题不能只用“食物产量不足”解释。</p>
+<p>在殖民地模拟中，资源存在并不等于资源能够在需要的时候被转化、运输和消费。</p>
+<p>真正稀缺的往往不是人口总数，也不是仓库里的原料，而是把正确居民、正确工作和正确资源及时组合起来的能力。</p>
+<h2 id="先说结论居民数量不是劳动力能够完成关键工作才是">先说结论：居民数量不是劳动力，能够完成关键工作才是</h2><p><strong>可调度劳动能力（即“真正派得上用场的人手”）</strong>：在给定时间和空间条件下，可以由具备合法权限、技能、健康状态和资源条件的居民完成关键工作的有效劳动能力。</p>
+<p>假设聚落拥有二十名居民。</p>
+<p>这并不意味着当前拥有二十份可用劳动力。</p>
+<p>其中可能有人：</p>
+<ul>
+<li>正在睡觉；</li>
+<li>因伤无法移动；</li>
+<li>没有对应技能；</li>
+<li>被禁止从事某项职业；</li>
+<li>无法进入目标区域；</li>
+<li>距离工作地点过远；</li>
+<li>正在执行已经承诺的高优先级任务；</li>
+<li>因饥饿或精神状态中断工作；</li>
+<li>缺少工具；</li>
+<li>无法预留所需资源。</li>
+</ul>
+<p>因此，人口统计只能回答：</p>
+<blockquote>
+<p>聚落里一共有多少居民？</p>
+</blockquote>
+<p>可调度劳动能力回答的是：</p>
+<blockquote>
+<p>此时此地究竟有谁能够把这件事做完？</p>
+</blockquote>
+<p>这也是殖民地模拟与普通城市建设最大的差异之一。</p>
+<p>城市建设可以把大量人口聚合成统计数字；殖民地模拟通常必须解释具体是谁、为什么没有工作，以及哪个条件阻止了他完成任务。</p>
+<h2 id="玩家表达意图系统负责把意图变成行为">玩家表达意图，系统负责把意图变成行为</h2><p>玩家通常不会逐步命令居民：</p>
+<ol>
+<li>走到仓库；</li>
+<li>拿起五份谷物；</li>
+<li>前往厨房；</li>
+<li>把谷物放到输入区；</li>
+<li>找到燃料；</li>
+<li>启动炉灶；</li>
+<li>烹饪餐食；</li>
+<li>把成品搬到食堂。</li>
+</ol>
+<p>玩家表达的通常是更高层意图：</p>
+<ul>
+<li>熟食库存低于二十份时自动烹饪；</li>
+<li>医疗工作优先于普通生产；</li>
+<li>冬季提高燃料储备；</li>
+<li>禁止普通居民进入污染区；</li>
+<li>指定某名高技能居民主要负责研究；</li>
+<li>暂停装饰建设，将劳动力投入应急物资。</li>
+</ul>
+<p><strong>间接指挥（即“发布目标而不是遥控动作”）</strong>：玩家通过区域、订单、库存阈值、优先级和制度表达目标，由运行时负责拆分和分配具体行为。</p>
+<p>这一交互方式决定了殖民地模拟的核心不是操作居民，而是组织系统。</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["玩家意图&lt;br/&gt;保持20份熟食"] --&gt; B["需求检测"]
+    B --&gt; C["生成烹饪工作订单"]
+    C --&gt; D["检查原料、燃料和输出空间"]
+    D --&gt; E["寻找合法居民"]
+    E --&gt; F["预留厨房与物资"]
+    F --&gt; G["导航、搬运与执行"]
+    G --&gt; H["提交产物"]
+    H --&gt; I["送入可访问仓库"]
+    I --&gt; J["居民取得并消费"]
+</code></pre>
+<p>其中任何一步失败，最终表现都可能是“居民没有食物”。</p>
+<p>但不同失败需要完全不同的解决方式。</p>
+<h2 id="工作订单是意图与行为之间的合同">工作订单是意图与行为之间的合同</h2><p><strong>工作订单（即“系统里真正等待完成的事”）</strong>：由玩家命令、库存目标、居民需求、建筑蓝图或环境故障生成，包含目标、资源、权限、优先级和执行状态的可调度任务。</p>
+<p>工作订单可能来自：</p>
+<ul>
+<li>建造蓝图；</li>
+<li>生产配方；</li>
+<li>库存上下限；</li>
+<li>医疗需求；</li>
+<li>火灾；</li>
+<li>清洁和维修；</li>
+<li>居民饥饿；</li>
+<li>农作物收获；</li>
+<li>动物照料；</li>
+<li>防御警报；</li>
+<li>玩家划定的采集区域。</li>
+</ul>
+<p>一个工作订单不应该只是“类型加坐标”。</p>
+<p>它至少需要回答：</p>
+<table>
+<thead>
+<tr>
+<th>信息</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工作类型</td>
+<td>要做什么</td>
+</tr>
+<tr>
+<td>目标</td>
+<td>对谁或在哪里执行</td>
+</tr>
+<tr>
+<td>所需资源</td>
+<td>需要哪些物品、工具和设施</td>
+</tr>
+<tr>
+<td>合法条件</td>
+<td>谁有资格执行</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>与其他工作相比有多重要</td>
+</tr>
+<tr>
+<td>紧急度</td>
+<td>是否允许中断当前行为</td>
+</tr>
+<tr>
+<td>预留状态</td>
+<td>资源是否已经被其他工作占用</td>
+</tr>
+<tr>
+<td>执行状态</td>
+<td>当前进行到哪一步</td>
+</tr>
+<tr>
+<td>创建时间</td>
+<td>已经等待了多久</td>
+</tr>
+<tr>
+<td>失败原因</td>
+<td>为什么暂时无法继续</td>
+</tr>
+</tbody></table>
+<p>合理的订单状态可以包括：</p>
+<pre><code class="language-text">Proposed
+→ Available
+→ Reserved
+→ Assigned
+→ InProgress
+→ Completed
+</code></pre>
+<p>异常路径则可能进入：</p>
+<pre><code class="language-text">Suspended
+Blocked
+Cancelled
+Failed
+</code></pre>
+<p>只有状态明确，系统才能区分：</p>
+<ul>
+<li>尚未找到执行者；</li>
+<li>找到了执行者但资源不足；</li>
+<li>资源已预留但路径失效；</li>
+<li>工作已开始但被紧急需求中断；</li>
+<li>工作已经完成，只是产物尚未送达。</li>
+</ul>
+<h2 id="调度不是找最优居民而是分层排除和评分">调度不是找“最优居民”，而是分层排除和评分</h2><p>居民选择工作时，不应该直接在全地图中寻找理论收益最高的任务。</p>
+<p>合理调度通常分为两个阶段。</p>
+<h3 id="第一阶段合法性过滤">第一阶段：合法性过滤</h3><p>先排除根本无法执行的候选：</p>
+<ul>
+<li>居民是否允许该工作；</li>
+<li>身体状态是否支持；</li>
+<li>技能是否达到要求；</li>
+<li>工具是否存在；</li>
+<li>目标是否可达；</li>
+<li>区域权限是否允许；</li>
+<li>资源是否能够预留；</li>
+<li>工作台是否可用；</li>
+<li>当前紧急需求是否允许继续工作。</li>
+</ul>
+<h3 id="第二阶段候选评分">第二阶段：候选评分</h3><p>对合法工作进行比较：</p>
+<ul>
+<li>玩家设置的优先级；</li>
+<li>聚落当前紧急度；</li>
+<li>居民技能；</li>
+<li>工作偏好；</li>
+<li>距离；</li>
+<li>已经等待的时间；</li>
+<li>当前携带的物品；</li>
+<li>是否可以顺路完成；</li>
+<li>聚落当前全局缺口；</li>
+<li>切换任务需要付出的成本。</li>
+</ul>
+<pre><code class="language-mermaid">flowchart TD
+    A["可用工作订单"] --&gt; B["资格过滤"]
+    B --&gt; C["路径与权限检查"]
+    C --&gt; D["资源和设施预留检查"]
+    D --&gt; E["优先级与紧急度评分"]
+    E --&gt; F["距离、技能和切换成本评分"]
+    F --&gt; G["选择工作"]
+    G --&gt; H["进入工作承诺期"]
+</code></pre>
+<p>这种结构能够避免两类极端。</p>
+<p>第一类是居民无视距离和权限，瞬间选择全局最优任务，使空间布局失去意义。</p>
+<p>第二类是居民只看一个优先级整数，导致低效居民跨越整张地图执行并不适合自己的工作。</p>
+<h2 id="工作承诺用于避免所有人都在路上什么都没完成">工作承诺用于避免“所有人都在路上，什么都没完成”</h2><p>居民状态会不断变化：</p>
+<ul>
+<li>饥饿值上升；</li>
+<li>新任务出现；</li>
+<li>距离变化；</li>
+<li>工作优先级调整；</li>
+<li>其他居民完成部分工作；</li>
+<li>路径暂时受阻。</li>
+</ul>
+<p>如果居民每次发现一个评分更高的任务就立刻切换，聚落会出现严重抖动：</p>
+<pre><code class="language-text">前往砍树
+→ 发现搬运评分更高
+→ 转身搬运
+→ 饥饿值上升
+→ 转身吃饭
+→ 医疗任务出现
+→ 再次转身
+</code></pre>
+<p>最终，大量时间消耗在移动和切换上，没有任何工作到达完成点。</p>
+<p><strong>工作承诺（即“接了活就先做一段”）</strong>：居民选定工作后，在没有高等级中断的情况下，保持最低执行时间或完成既定阶段的稳定机制。</p>
+<p>工作承诺可以考虑：</p>
+<ul>
+<li>最短执行时间；</li>
+<li>已完成路径比例；</li>
+<li>已搬运资源；</li>
+<li>当前工作阶段；</li>
+<li>预留成本；</li>
+<li>紧急中断等级；</li>
+<li>相同工作批处理。</li>
+</ul>
+<p>它并不意味着居民不能处理中断。</p>
+<p>火灾、重伤和紧急饥饿仍可打断普通工作。</p>
+<p>但系统需要区分：</p>
+<blockquote>
+<p>有新任务出现。</p>
+</blockquote>
+<p>和：</p>
+<blockquote>
+<p>当前工作必须立刻停止。</p>
+</blockquote>
+<h2 id="预留系统防止多名居民争抢同一份资源">预留系统防止多名居民争抢同一份资源</h2><p>假设两名厨师同时发现最后一堆谷物。</p>
+<p>如果系统只在居民真正拾取物品时修改库存，两人都可能认为原料可用，并同时前往仓库。</p>
+<p>到达之后，其中一人才能发现目标已经消失。</p>
+<p>更严重的情况还包括：</p>
+<ul>
+<li>两名医生同时前往治疗同一患者；</li>
+<li>多个生产任务同时承诺使用同一批材料；</li>
+<li>多名居民同时占用一个工作台；</li>
+<li>两个建筑蓝图争抢最后一批建材；</li>
+<li>多人前往同一个狭窄位置并互相阻塞。</li>
+</ul>
+<p><strong>资源预留（即“先声明这份东西归哪个工作”）</strong>：工作开始前，对物品、工作台、床位、位置和输出容量建立临时独占或配额关系。</p>
+<p>预留系统需要覆盖：</p>
+<ul>
+<li>物品数量；</li>
+<li>工作台；</li>
+<li>病床；</li>
+<li>建筑位置；</li>
+<li>工具；</li>
+<li>患者；</li>
+<li>运输目的地；</li>
+<li>输出仓位；</li>
+<li>狭窄通道。</li>
+</ul>
+<p>同时，预留必须能够可靠释放。</p>
+<p>触发释放的情况包括：</p>
+<ul>
+<li>工作完成；</li>
+<li>工作取消；</li>
+<li>居民死亡或昏迷；</li>
+<li>路径不可达；</li>
+<li>目标销毁；</li>
+<li>玩家修改订单；</li>
+<li>工作超时；</li>
+<li>紧急事件中断。</li>
+</ul>
+<p>如果释放逻辑不完整，聚落可能出现另一种隐形故障：</p>
+<blockquote>
+<p>资源明明存在，却永远显示正在被占用。</p>
+</blockquote>
+<p>因此，预留泄漏需要成为可检测错误，而不是让玩家自行猜测。</p>
+<h2 id="有粮不等于有饭生产是一条条件链">有粮不等于有饭：生产是一条条件链</h2><p>假设仓库中有一百份谷物，但居民没有可吃的餐食。</p>
+<p>完整链路至少需要成立：</p>
+<pre><code class="language-text">原料存在
+→ 原料位于合法位置
+→ 居民可以访问
+→ 原料未被其他工作预留
+→ 厨房拥有燃料或电力
+→ 厨房没有损坏
+→ 存在合法配方
+→ 有居民能够烹饪
+→ 居民当前可以工作
+→ 输出区域还有空间
+→ 成品被及时搬运
+→ 消费者可以到达成品
+</code></pre>
+<p><strong>生产可达链（即“资源真正走到消费者手里的路”）</strong>：资源从存在、可访问、可加工、可运输到最终可消费所需的完整条件集合。</p>
+<p>生产停滞可能来自完全不同的层次：</p>
+<table>
+<thead>
+<tr>
+<th>表面问题</th>
+<th>可能根因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>厨房没有生产</td>
+<td>厨师、燃料、原料、权限或输出空间不足</td>
+</tr>
+<tr>
+<td>居民没有吃饭</td>
+<td>餐食不可访问、被预留或不符合配给</td>
+</tr>
+<tr>
+<td>建筑迟迟不完成</td>
+<td>材料未搬运、施工者不足或位置不可达</td>
+</tr>
+<tr>
+<td>医疗没有执行</td>
+<td>病床、药品、医生技能或患者运输失败</td>
+</tr>
+<tr>
+<td>工作台反复停机</td>
+<td>成品无人清运，输出格已满</td>
+</tr>
+<tr>
+<td>仓库显示资源充足</td>
+<td>资源距离过远或位于禁止区域</td>
+</tr>
+</tbody></table>
+<p>如果界面只显示最终结果，玩家只能逐项打开面板排查。</p>
+<p>这不是策略深度，而是信息缺失。</p>
+<h2 id="空间布局不是装饰而是调度系统的输入">空间布局不是装饰，而是调度系统的输入</h2><p>两个拥有相同建筑和居民数量的聚落，可能产生完全不同的效率。</p>
+<p>空间会影响：</p>
+<ul>
+<li>通勤时间；</li>
+<li>搬运距离；</li>
+<li>工作切换成本；</li>
+<li>医疗响应；</li>
+<li>食物获取；</li>
+<li>火灾传播；</li>
+<li>温度；</li>
+<li>门口拥堵；</li>
+<li>防御路径；</li>
+<li>居民社交频率。</li>
+</ul>
+<p>例如，将厨房放在农田旁边不一定高效。</p>
+<p>原料距离变短了，但如果：</p>
+<ul>
+<li>食堂和居民宿舍很远；</li>
+<li>成品仓库位于另一侧；</li>
+<li>燃料需要从远端运输；</li>
+<li>狭窄门口限制搬运；</li>
+</ul>
+<p>最终总物流成本仍可能更高。</p>
+<p>因此，殖民地模拟中的地图不是建筑摆放画布。</p>
+<p>它是一张持续运行的物流和行为网络。</p>
+<p>有意义的空间反馈应包括：</p>
+<ul>
+<li>通勤热图；</li>
+<li>搬运距离；</li>
+<li>工作台利用率；</li>
+<li>仓库服务范围；</li>
+<li>食堂覆盖；</li>
+<li>医疗响应时间；</li>
+<li>门口和通道拥堵；</li>
+<li>燃料及电力网络。</li>
+</ul>
+<h2 id="居民的需求既创造生命感也会打断生产">居民的需求既创造生命感，也会打断生产</h2><p>自主居民不是不会疲劳的机器。</p>
+<p>他们可能因为：</p>
+<ul>
+<li>饥饿；</li>
+<li>睡眠；</li>
+<li>疼痛；</li>
+<li>温度；</li>
+<li>娱乐；</li>
+<li>安全；</li>
+<li>社交；</li>
+<li>精神压力；</li>
+</ul>
+<p>离开当前工作。</p>
+<p>这种中断让居民成为需要维护的个体，而不是纯粹生产速率。</p>
+<p>但需求系统同样需要稳定规则。</p>
+<p>如果饥饿值每变化一点，居民就重新规划行为，工作系统会持续抖动。</p>
+<p>常见稳定手段包括：</p>
+<ul>
+<li>阈值迟滞；</li>
+<li>最短行为持续时间；</li>
+<li>紧急等级；</li>
+<li>工作承诺；</li>
+<li>路径成本；</li>
+<li>当前任务阶段。</li>
+</ul>
+<p>例如，居民在饥饿度达到普通阈值后，可以完成手头短工作再去进食；达到紧急阈值时，则允许立即中断。</p>
+<p>这样，需求既能影响居民，又不会让聚落陷入行为混乱。</p>
+<h2 id="危机不是随机扣资源而是利用已有弱点">危机不是随机扣资源，而是利用已有弱点</h2><p>殖民地危机最有价值的地方，不是一次性制造高额损失。</p>
+<p>它应该让聚落现有结构接受压力测试。</p>
+<p>寒潮可以沿以下链路传播：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["极端低温"] --&gt; B["燃料消耗上升"]
+    B --&gt; C["搬运工作增加"]
+    C --&gt; D["其他生产缺少劳动力"]
+    D --&gt; E["熟食产量下降"]
+    A --&gt; F["户外工作效率下降"]
+    F --&gt; D
+    B --&gt; G["远端住房补给延迟"]
+    G --&gt; H["居民失温和生病"]
+    H --&gt; I["医疗工作增加"]
+    I --&gt; J["可工作人口进一步下降"]
+    J --&gt; C
+</code></pre>
+<p>寒潮本身没有直接删除食物。</p>
+<p>它通过燃料、搬运、生产、健康和劳动力网络放大聚落原有缺陷。</p>
+<p>这使玩家可以从失败中得到明确判断：</p>
+<ul>
+<li>燃料安全库存不足；</li>
+<li>住房过于分散；</li>
+<li>只有一名厨师；</li>
+<li>仓库位置不合理；</li>
+<li>医疗系统没有替补；</li>
+<li>紧急工作优先级设计错误。</li>
+</ul>
+<p>高质量危机应该允许玩家使用已经存在的管理工具恢复：</p>
+<ul>
+<li>调整优先级；</li>
+<li>临时改变配给；</li>
+<li>启用备用岗位；</li>
+<li>关闭非必要设施；</li>
+<li>修改区域权限；</li>
+<li>启用紧急仓库；</li>
+<li>暂停低价值建设。</li>
+</ul>
+<p>危机的意义不是宣告玩家失败，而是迫使聚落暴露真实结构。</p>
+<h2 id="警报必须解释根因而不是重复结果">警报必须解释根因，而不是重复结果</h2><p>低质量警报是：</p>
+<blockquote>
+<p>居民正在挨饿。</p>
+</blockquote>
+<p>玩家已经可以从画面上看到这一点。</p>
+<p>更有价值的警报应该告诉玩家：</p>
+<pre><code class="language-text">可食用餐食不足
+└─ 厨房停止生产
+   ├─ 烹饪优先级低于燃料搬运
+   ├─ 当前厨师正在满足紧急饥饿需求
+   └─ 备用厨师未启用烹饪工作
+</code></pre>
+<p><strong>因果诊断（即“系统告诉玩家为什么”）</strong>：从最终异常反向追踪工作、资源、路径、权限、预留和居民状态，给出可采取行动的原因链。</p>
+<p>长期未执行的工作至少应显示：</p>
+<ul>
+<li>没有合法居民；</li>
+<li>技能不足；</li>
+<li>目标不可达；</li>
+<li>原料不足；</li>
+<li>原料已被预留；</li>
+<li>工作台无电；</li>
+<li>输出空间已满；</li>
+<li>优先级过低；</li>
+<li>居民正在处理紧急需求。</li>
+</ul>
+<p>如果玩家不能知道任务为什么失败，间接管理就会退化为盲目调整数字。</p>
+<h2 id="后期成长应该升级管理层级">后期成长应该升级管理层级</h2><p>早期聚落人口较少时，玩家可以逐项调整：</p>
+<ul>
+<li>谁负责烹饪；</li>
+<li>哪块区域存放木材；</li>
+<li>哪个工作优先；</li>
+<li>哪间屋子允许进入。</li>
+</ul>
+<p>但人口和生产链扩大后，继续要求同样粒度的操作，只会增加微操。</p>
+<p>后期系统应逐步提供：</p>
+<ul>
+<li>新居民工作模板；</li>
+<li>生产模板；</li>
+<li>仓储模板；</li>
+<li>班次；</li>
+<li>库存目标；</li>
+<li>区域权限模板；</li>
+<li>配给制度；</li>
+<li>自动补货；</li>
+<li>应急方案；</li>
+<li>管理岗位。</li>
+</ul>
+<p>成长过程应表现为：</p>
+<pre><code class="language-text">逐项指定工作
+→ 设置居民职业
+→ 设置聚落优先级
+→ 设置库存和生产规则
+→ 使用模板和制度管理
+</code></pre>
+<p>玩家仍然需要作出决策，但决策对象从单个动作升级为组织结构。</p>
+<p>这与农场经营中的自动化类似，却存在一个关键区别：</p>
+<p>农场工具主要压缩玩家本人的重复劳动。</p>
+<p>殖民地制度则改变多个自主居民如何选择和协作。</p>
+<h2 id="与相近类型的边界">与相近类型的边界</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>玩家主要控制方式</th>
+<th>劳动力特征</th>
+<th>核心问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>殖民地模拟</td>
+<td>订单、区域、制度和优先级</td>
+<td>独立需求、技能、路径和情绪</td>
+<td>如何将人口转化为有效组织</td>
+</tr>
+<tr>
+<td>即时战略</td>
+<td>直接选择和命令单位</td>
+<td>多以战斗与采集能力为主</td>
+<td>如何即时控制战场和资源</td>
+</tr>
+<tr>
+<td>城市建设</td>
+<td>分区、道路和宏观政策</td>
+<td>常被聚合为人口统计</td>
+<td>如何维持城市服务和财政</td>
+</tr>
+<tr>
+<td>工厂自动化</td>
+<td>建造机器和物流线路</td>
+<td>行为通常确定且无需求</td>
+<td>如何优化吞吐和比例</td>
+</tr>
+<tr>
+<td>农场生活模拟</td>
+<td>玩家直接执行日常劳动</td>
+<td>玩家本人是主要劳动者</td>
+<td>如何分配个人时间与体力</td>
+</tr>
+</tbody></table>
+<p>这些类型可以组合。</p>
+<p>但殖民地模拟的关键不只是存在自动单位，而是居民的需求、路径、技能和社会状态会持续改变生产结果。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="居民直接读取全局最优任务">居民直接读取全局最优任务</h3><p>居民无视距离、知识和权限，使空间设计失去意义。</p>
+<h3 id="玩家必须手动指定每项劳动">玩家必须手动指定每项劳动</h3><p>间接管理退化为高频单位微操。</p>
+<h3 id="优先级只有一个整数">优先级只有一个整数</h3><p>无法表达聚落紧急度、居民专长、距离和任务承诺。</p>
+<h3 id="没有统一预留系统">没有统一预留系统</h3><p>多个工作争抢同一物品、工作台、床位或患者。</p>
+<h3 id="资源没有唯一位置">资源没有唯一位置</h3><p>物品在居民背包、地面和仓库中重复存在或突然丢失。</p>
+<h3 id="居民频繁切换任务">居民频繁切换任务</h3><p>大量时间花在移动和重新规划上，没有工作完成。</p>
+<h3 id="生产停滞不可解释">生产停滞不可解释</h3><p>玩家只能逐个检查设施、居民和仓库猜测根因。</p>
+<h3 id="搬运被视为免费">搬运被视为免费</h3><p>建筑间距离不影响产能，仓库布局失去价值。</p>
+<h3 id="人口增长只有收益">人口增长只有收益</h3><p>接纳居民成为无条件正确选择，组织复杂度没有增加。</p>
+<h3 id="危机只是随机扣除资源">危机只是随机扣除资源</h3><p>危机没有通过已有物流、健康和劳动力网络传播。</p>
+<h3 id="后期只增加人口和建筑">后期只增加人口和建筑</h3><p>没有模板、制度和管理层级升级。</p>
+<h3 id="故障没有恢复路径">故障没有恢复路径</h3><p>关键居民或设施失效后，聚落永久进入死锁。</p>
+<h2 id="我的设计检查表聚落为什么没有把事情做完">我的设计检查表：聚落为什么没有把事情做完</h2><p>设计自主居民和工作系统时，我会检查：</p>
+<ol>
+<li>玩家表达的是高层意图，还是仍需遥控每个动作？</li>
+<li>所有生产、搬运、医疗和建造是否进入统一工作订单？</li>
+<li>工作订单是否保留明确状态和失败原因？</li>
+<li>工作候选是否先过滤合法性，再进行评分？</li>
+<li>调度是否同时考虑技能、距离、权限和紧急度？</li>
+<li>居民是否拥有合理的工作承诺，避免频繁切换？</li>
+<li>所有独占物品、设施和位置是否经过统一预留？</li>
+<li>订单取消和居民中断后，预留是否能够可靠释放？</li>
+<li>每件物品是否只有一个权威位置？</li>
+<li>工作中断时，居民携带的资源是否仍可解释？</li>
+<li>生产提交点是否防止重复消耗或重复生成产物？</li>
+<li>搬运距离和通道拥堵是否真实影响生产？</li>
+<li>居民需求是否能够中断工作，却不会持续造成行为抖动？</li>
+<li>系统能否解释一项工作为什么没有执行？</li>
+<li>警报能否从结果追踪到可操作的根因？</li>
+<li>危机是否利用已有弱点产生连锁影响？</li>
+<li>聚落是否拥有替补人员、安全库存和备用路线？</li>
+<li>人口增长是否同时增加组织复杂度？</li>
+<li>后期是否提供模板、制度和应急方案？</li>
+<li>聚落失败后，玩家能否还原第一个关键故障及其传播链？</li>
+</ol>
+<p>殖民地模拟的核心成长，并不是让居民数量不断增加。</p>
+<p>它是让玩家逐渐理解：</p>
+<ul>
+<li>资源为什么没有流动；</li>
+<li>工作为什么没有完成；</li>
+<li>哪些居民真正可以承担关键岗位；</li>
+<li>空间、制度和优先级如何影响自主行为；</li>
+<li>如何让聚落在某个局部节点失效后仍能继续运行。</li>
+</ul>
+<p>仓库里有粮，只能说明聚落曾经完成了生产。</p>
+<p>居民最终吃到饭，才说明整个组织真正运转了起来。</p>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>可调度劳动能力</td>
+<td>真正派得上用场的人手</td>
+</tr>
+<tr>
+<td>间接指挥</td>
+<td>发布目标而不是遥控动作</td>
+</tr>
+<tr>
+<td>工作订单</td>
+<td>系统里真正等待完成的事</td>
+</tr>
+<tr>
+<td>工作承诺</td>
+<td>接了活就先做一段</td>
+</tr>
+<tr>
+<td>资源预留</td>
+<td>先声明这份东西归哪个工作</td>
+</tr>
+<tr>
+<td>生产可达链</td>
+<td>资源真正走到消费者手里的路</td>
+</tr>
+<tr>
+<td>因果诊断</td>
+<td>系统告诉玩家为什么</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>game-designs/殖民地模拟游戏设计范式.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文是对殖民地模拟与聚落生存经营设计范式的个人综述。文中的工作订单、调度评分、资源预留、危机传播和管理层级属于可选设计方法，不表示所有殖民地模拟作品都必须采用完全相同的居民粒度、需求模型、任务状态机或失败强度。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="battle-royale-dual-convergence.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>双重收敛：大逃杀中的有效空间、存活人数与终局密度控制</strong><small>一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？</small></a><a href="future-draw-quality-deck-convergence.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>未来抽牌质量与构筑收敛：卡组规模、抽取概率与奖励边际价值</strong><small>卡组构筑游戏为什么必须允许玩家拒绝奖励，以及一张单独很强的卡为什么可能让整套卡组变弱？</small></a><a href="labor-bottleneck-propagation.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>劳动瓶颈传播：经营规模扩张中的时间、运输与加工压力</strong><small>经营模拟中的规模扩张为什么不会自动带来更高效率，反而可能让玩家被浇水、收获、运输和加工等重复劳动彻底占满？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

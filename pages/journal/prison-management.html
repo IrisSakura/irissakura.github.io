@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/prison-management.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="监狱经营模拟（Prison Management Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/prison-management.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-prison-management.png">
+    <meta property="og:image:alt" content="监狱经营模拟（Prison Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="监狱经营模拟（Prison Management Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-prison-management.png">
+    <meta name="twitter:image:alt" content="监狱经营模拟（Prison Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"监狱经营模拟（Prison Management Simulation） | Sakura Design Journal","description":"描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。","url":"https://irissakura.github.io/pages/journal/prison-management.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"监狱经营模拟（Prison Management Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-prison-management.png","dateModified":"2026-08-12","about":["management","operations","prison"]}</script>
+    <!-- site-meta:end -->
+    <title>监狱经营模拟（Prison Management Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-prison-management"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>监狱经营模拟（Prison Management Simulation）</h1><p>描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。</p><div class="note-tags"><span>management</span><span>operations</span><span>prison</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何在封闭机构中同时表达安全、秩序、基本需求、程序正当性和长期改造，使强化控制始终伴随可解释的代价。</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>监狱经营 / 管控模拟是一个宏观独立品类。</p>
+<p>它的核心不是普通建筑经营，也不是单纯安保塔防，而是在一个封闭、高压力、高风险的人群系统中，平衡安全、秩序、改造、人权、成本和突发事件。</p>
+<p>它最适合抽象为：</p>
+<p><strong>封闭机构、风险分级与秩序管控框架</strong></p>
+<p>核心循环是：</p>
+<p>接收囚犯 → 风险评估 → 分配牢房与区域权限 → 制定作息制度 → 提供餐饮、医疗、劳动、教育和改造 → 管控违禁品、帮派、冲突和越狱风险 → 应对暴动、火灾、疾病、检查和舆论 → 评估再犯率、秩序、安全和财政。</p>
+<p>玩家真正管理的是：</p>
+<p>空间隔离、人员风险、制度强度、守卫覆盖、需求满足、惩戒改造、暴力风险和长期再社会化结果。</p>
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>框架可以分为十个核心域。</p>
+<p>第一是监狱空间域。
+负责维护牢房、食堂、操场、医疗室、工坊、教室、探视区、禁闭室、安检点、围墙、监控、门禁和巡逻路线。</p>
+<p>第二是囚犯个体域。
+负责维护囚犯犯罪类型、刑期、风险等级、需求、性格、健康、压力、帮派关系、服从度、改造进度和逃跑倾向。</p>
+<p>第三是制度与作息域。
+负责维护起床、点名、吃饭、劳动、学习、放风、探视、休息、封锁、搜查和禁闭等日程制度。</p>
+<p>第四是安保与权限域。
+负责区域权限、门禁等级、钥匙、摄像头、巡逻、搜身、违禁品侦测和警戒状态。</p>
+<p>第五是员工与岗位域。
+负责狱警、医生、心理咨询师、教师、厨师、维修工、行政人员、武装响应队等。</p>
+<p>第六是需求与心理域。
+负责囚犯饥饿、睡眠、卫生、娱乐、社交、自由感、尊严、恐惧、愤怒、压力和安全感。</p>
+<p>第七是帮派与冲突域。
+负责帮派势力、地盘、仇恨、交易、勒索、斗殴、谋杀、报复和群体事件。</p>
+<p>第八是改造与再社会化域。
+负责教育、职业培训、心理治疗、劳动、宗教活动、家庭探视、假释评估和再犯率。</p>
+<p>第九是事件与危机域。
+负责暴动、越狱、火灾、疾病传播、违禁品流入、媒体调查、上级检查、预算削减和囚犯死亡。</p>
+<p>第十是复盘与调试域。
+负责查看冲突来源、越狱路径、守卫覆盖、需求压力、制度效果、帮派网络和事故时间线。</p>
+<h2 id="三核心数据模型">三、核心数据模型</h2><p>PrisonerProfile 表示囚犯。
+记录身份、刑期、犯罪类型、风险等级、需求状态、性格、帮派、仇敌、健康、压力、服从度、改造进度和再犯风险。</p>
+<p>CellBlock 表示牢区。
+记录牢房数量、安全等级、容量、当前居住者、隔离规则、门禁状态、监控覆盖和环境质量。</p>
+<p>RegimeSchedule 表示作息制度。
+记录每个时间段的活动类型、适用囚犯群体、允许区域、员工需求、风险修正和满意度影响。</p>
+<p>SecurityZone 表示安保区域。
+记录区域权限、危险等级、监控覆盖、巡逻频率、违禁品风险、出口路径和紧急封锁规则。</p>
+<p>StaffMember 表示员工。
+记录岗位、技能、疲劳、位置、任务、响应速度、武力等级、工资和士气。</p>
+<p>ContrabandItem 表示违禁品。
+记录类型、来源、流通路径、危险等级、持有人、藏匿位置和被发现概率。</p>
+<p>GangState 表示帮派状态。
+记录成员、领导者、地盘、敌对关系、交易网络、影响力、冲突倾向和目标。</p>
+<p>IncidentRecord 表示事故记录。
+记录事件类型、起因、参与者、地点、响应时间、损失、后果和可预防因素。</p>
+<h2 id="四核心范式一囚犯不是人口数字而是高风险个体">四、核心范式一：囚犯不是人口数字，而是高风险个体</h2><p>监狱模拟不能只维护“囚犯数量”。</p>
+<p>每个囚犯都应有个体状态：</p>
+<p>风险等级。
+暴力倾向。
+逃跑倾向。
+精神状态。
+帮派关系。
+需求压力。
+改造动机。
+健康问题。
+仇敌关系。
+服从度。</p>
+<p>一个低风险囚犯长期被高压管理，可能逐渐激化。
+一个高风险囚犯如果分配到错误牢区，可能带动冲突。
+一个帮派头目即使不亲自动手，也可能组织交易和暴力。</p>
+<p>因此，玩家管理的是人群风险结构，而不是库存人口。</p>
+<h2 id="五核心范式二空间隔离是秩序的基础">五、核心范式二：空间隔离是秩序的基础</h2><p>监狱管理的核心是空间权限。</p>
+<p>不同风险等级囚犯应进入不同区域。
+帮派敌对成员不能随意混住。
+厨房、工坊、医疗室、探视区都可能成为违禁品流动点。
+门禁、巡逻和监控决定事故响应速度。</p>
+<p>空间设计不只是建筑美观，而是风险控制。</p>
+<p>如果高风险囚犯要穿过低安保区去食堂，冲突风险就会增加。
+如果工坊离安检点太远，工具可能变成武器。
+如果探视区管理差，违禁品可能流入。</p>
+<p>因此 Prison Map 必须支持权限、路径、监控和隔离分析。</p>
+<h2 id="六核心范式三制度强度影响秩序与压力">六、核心范式三：制度强度影响秩序与压力</h2><p>玩家可以制定严格制度：</p>
+<p>高频点名。
+限制自由活动。
+增加搜查。
+延长禁闭。
+减少集体活动。</p>
+<p>这会提高短期安全，但也可能增加压力、降低尊严感、提高暴动风险。</p>
+<p>玩家也可以制定宽松制度：</p>
+<p>更多放风。
+更多教育。
+更多探视。
+更多娱乐。
+更多自主时间。</p>
+<p>这能改善长期情绪和改造，但对安保要求更高。</p>
+<p>因此 RegimeSchedule 是核心系统。制度不是背景设定，而是对囚犯需求、员工负担、安全风险和改造效果的持续干预。</p>
+<h2 id="七核心范式四违禁品是流通网络不是随机物品">七、核心范式四：违禁品是流通网络，不是随机物品</h2><p>违禁品不应随机出现在牢房。</p>
+<p>它应有来源、路径和需求。</p>
+<p>来源可能是探视、厨房、工坊、员工腐败、外部投掷、医疗药品、走私通道。
+流通可能通过帮派、交易、勒索、藏匿和运输。
+需求来自压力、成瘾、保护、攻击或逃跑计划。</p>
+<p>ContrabandItem 需要记录来源和流通路径。</p>
+<p>这样玩家可以通过安检、监控、员工审查、区域隔离、搜查和减少囚犯压力来控制违禁品，而不是只靠随机抓取。</p>
+<h2 id="八核心范式五改造与安保是长期张力">八、核心范式五：改造与安保是长期张力</h2><p>监狱模拟如果只追求“没人逃跑”，会变成安保游戏。</p>
+<p>更完整的监狱经营应同时关注改造。</p>
+<p>教育降低再犯率。
+职业培训提高出狱适应。
+心理治疗降低暴力倾向。
+家庭探视提高稳定性。
+劳动提供收入和技能，但也可能带来工具风险。</p>
+<p>玩家需要在安全和改造之间取舍。</p>
+<p>高压监狱可能短期秩序好，但再犯率高、舆论差、暴动风险积累。
+改造型监狱成本高、管理复杂，但长期评分更好。</p>
+<p>这使该类型具备独立深度。</p>
+<h2 id="九事件与执行流程">九、事件与执行流程</h2><p>典型流程如下。</p>
+<p>新囚犯入狱，系统生成 PrisonerProfile。</p>
+<p>风险评估系统根据犯罪类型、性格、帮派、健康和历史记录决定安全等级。</p>
+<p>分配系统将囚犯安排到牢区、床位、日程和改造项目。</p>
+<p>作息系统按时间推进，囚犯前往食堂、工坊、教室、操场或牢房。</p>
+<p>需求系统持续更新饥饿、卫生、娱乐、自由、社交和压力。</p>
+<p>安保系统监控区域、巡逻、搜身和门禁。</p>
+<p>帮派系统更新关系、地盘、交易和冲突。</p>
+<p>如果压力、敌对关系或违禁品达到条件，事件系统生成斗殴、谋杀、越狱、暴动或自伤事件。</p>
+<p>员工系统响应事件，执行镇压、医疗、维修、禁闭或调查。</p>
+<p>改造系统根据参与情况更新教育、技能、心理状态和再犯风险。</p>
+<p>运营系统结算成本、安全评分、改造评分、事故记录和舆论反馈。</p>
+<p>关键事件包括：</p>
+<p>囚犯入狱事件。
+风险评估事件。
+牢房分配事件。
+作息切换事件。
+需求压力上升事件。
+违禁品流入事件。
+搜查发现事件。
+帮派冲突事件。
+斗殴事件。
+禁闭事件。
+医疗事件。
+越狱尝试事件。
+暴动事件。
+改造课程完成事件。
+假释评估事件。</p>
+<h2 id="十模块通信设计">十、模块通信设计</h2><p>建议事件驱动。</p>
+<p>作息系统发布时间段变化。
+囚犯AI根据作息和需求选择行为。
+安保系统监听囚犯移动、违禁品和区域权限。
+帮派系统监听囚犯互动和区域控制。
+事件系统根据压力、关系、安保漏洞生成事故。
+员工系统响应事故和日常任务。
+改造系统监听课程、劳动、治疗和行为表现。
+运营系统监听成本、事故、改造成果和再犯预测。
+UI展示风险、需求、安保、帮派、员工和事故，不直接修改结果。</p>
+<p>核心原则是：</p>
+<p>制度改变行为，行为产生风险，安保控制风险，改造改变长期人格与再犯概率。</p>
+<h2 id="十一可扩展点">十一、可扩展点</h2><p>可以扩展为不同制度主题：</p>
+<p>高安保监狱。
+女子监狱。
+少年矫正所。
+精神病院式管控机构。
+战俘营。
+科幻太空监狱。
+魔法封印学院。
+反乌托邦监控设施。</p>
+<p>可以加入司法系统、法院判决、假释委员会、律师探访、媒体调查、囚犯家属、政治犯、腐败员工和地下交易。</p>
+<p>可以支持多目标路线：高利润私营监狱、改造型公共监狱、极权控制机构、人道主义矫正中心。</p>
+<h2 id="十二失败隔离与调试设计">十二、失败隔离与调试设计</h2><p>常见问题包括囚犯路径卡死、暴动原因不明、违禁品凭空出现、守卫不响应、压力系统过快崩溃、改造效果不可见。</p>
+<p>调试工具应支持：</p>
+<p>囚犯行为日志。
+需求压力来源。
+帮派关系图。
+违禁品流通路径。
+员工响应时间线。
+安保覆盖热力图。
+越狱路径模拟。
+暴动触发原因。
+改造效果追踪。</p>
+<p>失败隔离上，应允许紧急封锁、外部支援、谈判、转移囚犯、提高预算、临时宵禁、暂停工坊、隔离帮派头目，避免一次暴动直接毁档。</p>
+<h2 id="十三玩家体验目标">十三、玩家体验目标</h2><p>该类型最核心的体验不是：</p>
+<p>我建了很多牢房。</p>
+<p>而是：</p>
+<p>我在一个高压封闭机构中维持秩序，同时决定它究竟是惩罚机器还是改造系统。</p>
+<p>玩家体验通常是：</p>
+<p>接收第一批囚犯。
+建立基础安保。
+发现需求不足带来冲突。
+扩建食堂、医疗、教育和安检。
+处理帮派、违禁品和暴动。
+在高压管理与人道改造之间选择方向。
+最终形成稳定但有代价的制度。</p>
+<h2 id="十四可迁移设计思想">十四、可迁移设计思想</h2><p>最值得迁移的是：</p>
+<p>将封闭空间中的人群管理设计为需求、权限、风险、制度和冲突网络。</p>
+<p>在基地建设中，可用于居民秩序、宿舍管理、派系冲突。
+在生存游戏中，可用于营地制度、资源分配、纪律和叛乱。
+在RPG领地管理中，可用于城市治安、囚犯、奴隶、难民、军营管理。
+在太空站游戏中，可用于船员权限、舱室控制、心理压力和事故风险。</p>
+<p>通用思想是：</p>
+<p>不要只管理人口数量。
+要管理个体风险、空间权限、制度压力和群体冲突。</p>
+<h2 id="十五完整机构边界与设计支柱">十五、完整机构边界与设计支柱</h2><p>监狱经营能够独立成品，不只是因为有建筑和守卫，而是因为所有人群、空间、制度和风险都在同一封闭系统中长期反馈。</p>
+<p>完整体验至少包含四个支柱：</p>
+<ol>
+<li><strong>分类与安置。</strong> 风险、健康、帮派、法律状态和保护需求共同决定空间安排。</li>
+<li><strong>制度与执行。</strong> 作息、搜查、探视、劳动和惩戒必须经过人员与设施执行，不能只是全局开关。</li>
+<li><strong>需求与合法性。</strong> 饮食、医疗、安全和程序公平影响压力、合作与外部审查。</li>
+<li><strong>改造与再入。</strong> 教育、治疗、劳动技能和释放准备提供超越“压低暴力值”的长期目标。</li>
+</ol>
+<p>主题涉及现实中的强制权力，设计应避免把虐待、过度拥挤或任意惩罚包装成无代价效率解。系统可以允许强硬路线，但必须显示其对伤害、合法性、员工和长期再犯的后果。</p>
+<h2 id="十六收容生命周期与风险状态">十六、收容生命周期与风险状态</h2><p>个体生命周期可表示为：</p>
+<p><code>Intake → Assessment → Classification → Housing → Routine → Review → Release/Transfer</code></p>
+<p>期间可能进入医疗隔离、保护性安置、纪律程序、诉讼、改造项目或危机响应。每次转移必须释放旧床位与权限、申请新区域容量，并保留理由和审批记录。</p>
+<p>机构状态不应只有“平静/暴动”。更有策略意义的梯度包括稳定、紧张、局部冲突、组织化拒绝、封锁和恢复。压力来源需要按区域、人群和制度追踪，使玩家能够处理根因，而不是永远增加守卫。</p>
+<h2 id="十七长期进程内容生产与财政约束">十七、长期进程、内容生产与财政约束</h2><p>长期进程围绕设施质量、员工训练、分类能力、医疗与教育项目、外部监督和再入网络展开。扩建会增加容量，也会增加通行距离、盲区、人员需求和维护负担。</p>
+<p>内容生产的基本单位包括：</p>
+<ul>
+<li>具有风险、需求、法律期限和关系网络的个体模板；</li>
+<li>区域权限、作息和人员配置方案；</li>
+<li>帮派、违禁品和地下交易网络；</li>
+<li>审查、疾病、火灾、停电与集体事件；</li>
+<li>教育、治疗、劳动和释放准备项目；</li>
+<li>法规、预算、合同和公众评价情景。</li>
+</ul>
+<p>财政不能只奖励收容人数。拨款应与安全、合规、项目完成、医疗结果和再入质量相关，廉价但过度拥挤的路线会在事故、诉讼、员工流失和长期结果上付出成本。</p>
+<h2 id="十八危机恢复难度与因果解释">十八、危机恢复、难度与因果解释</h2><p>难度应通过人群结构、空间约束、人员短缺和制度冲突提升，而不是简单提高暴力概率。系统需要允许调停、调整作息、分离冲突群体、开放临时医疗、补充员工、暂停高风险活动和请求外部支援。</p>
+<p>危机结束后要有恢复阶段：清点人员、治疗伤者、修复设施、调查原因、调整制度并处理外部问责。若暴动结束后所有压力立即归零，前面的经营选择就失去长期意义。</p>
+<p>所有惩罚、搜查和强制措施应留下可审计事件，说明授权、目标、执行者、发现和后果。这样既支持调试，也让玩家理解秩序指标背后的真实代价。</p>
+<h2 id="十九验证工具最小切片与验收标准">十九、验证工具、最小切片与验收标准</h2><p>最小切片可包含 40 名个体、3 个风险等级、2 个生活单元、食堂/医疗/探视/教育四类设施、10 名员工和一个 14 天运行周期。</p>
+<p>作者工具至少包括：</p>
+<ul>
+<li>人群分类冲突与床位可达性检查；</li>
+<li>区域权限、门禁和守卫覆盖热图；</li>
+<li>作息容量、队列和人员需求仿真；</li>
+<li>违禁品来源—运输—消费网络追踪；</li>
+<li>压力、冲突和危机因果时间线；</li>
+<li>项目容量、释放日期和长期结果验证。</li>
+</ul>
+<p>验收时应证明：个体不会被分配到不兼容区域；制度调整会通过可解释路径改变压力；一次危机可以恢复但会留下后果；员工和设施占用不会泄漏；保存恢复后法律期限和作息状态一致。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>监狱经营 / 管控模拟（Prison Management Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>封闭机构、风险分级与秩序管控框架</p>
+</li>
+<li><p>囚犯作为高风险个体，而非人口数字</p>
+</li>
+<li><p>空间隔离、门禁、巡逻和监控作为秩序基础</p>
+</li>
+<li><p>作息制度同时影响安全、压力和改造</p>
+</li>
+<li><p>违禁品作为有来源、路径和需求的流通网络</p>
+</li>
+<li><p>安保与改造形成长期张力</p>
+</li>
+<li><p>事件驱动的囚犯、作息、需求、安保、帮派、员工和事故流程</p>
+</li>
+<li><p>行为日志、违禁品路径、帮派网络、越狱路径和暴动原因调试</p>
+</li>
+<li><p>将封闭空间人群管理设计为需求、权限、风险和制度网络</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

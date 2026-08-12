@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/hospital-triage.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="医疗分诊运营（Hospital Emergency &amp; Triage Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/hospital-triage.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-hospital-triage.png">
+    <meta property="og:image:alt" content="医疗分诊运营（Hospital Emergency &amp; Triage Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="医疗分诊运营（Hospital Emergency &amp; Triage Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-hospital-triage.png">
+    <meta name="twitter:image:alt" content="医疗分诊运营（Hospital Emergency &amp; Triage Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"医疗分诊运营（Hospital Emergency & Triage Simulation） | Sakura Design Journal","description":"描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。","url":"https://irissakura.github.io/pages/journal/hospital-triage.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"医疗分诊运营（Hospital Emergency & Triage Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-hospital-triage.png","dateModified":"2026-08-12","about":["healthcare","operations","triage"]}</script>
+    <!-- site-meta:end -->
+    <title>医疗分诊运营（Hospital Emergency & Triage Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-hospital-triage"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>医疗分诊运营（Hospital Emergency &amp; Triage Simulation）</h1><p>描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。</p><div class="note-tags"><span>healthcare</span><span>operations</span><span>triage</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何在信息不完整、患者持续变化且资源组合受限的条件下，让优先级调整成为可解释、可复盘的运营决策。</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>医院急诊与医疗分诊运营类游戏的核心不是普通经营，也不是灾害救援现场，而是在持续涌入患者、资源有限、病情会变化、信息不完整的医疗系统中，决定“谁先看、送到哪里、用什么资源、承担什么风险”。</p>
+<p>它与灾害应急指挥不同。灾害应急重心在事故现场、救援单位和外部风险扩散；医院急诊重心在院内流程、患者路径、分诊优先级、诊断不确定性、床位周转、科室协作和医疗资源瓶颈。</p>
+<p>它最适合抽象为：</p>
+<p>患者流、分诊优先级与医疗资源调度框架。</p>
+<p>核心循环是：</p>
+<p>患者进入 → 初步分诊 → 分配等待队列 → 诊断检查 → 治疗或转科 → 状态监测 → 出院、住院、手术或恶化 → 结算医疗质量、效率、成本与声誉。</p>
+<p>玩家管理的是：</p>
+<p>时间、床位、医生、护士、检查设备、诊断准确度、治疗优先级、病情恶化风险和系统拥堵。</p>
+<h2 id="二运行时架构">二、运行时架构</h2><p>框架可以分为九个核心域。</p>
+<p>第一是患者生成域，负责生成患者、主诉、严重程度、隐藏病因、年龄、基础疾病、支付能力、心理状态和陪同人员。</p>
+<p>第二是分诊域，负责根据生命体征、症状、风险指标和分诊规则，将患者划分为不同优先级。</p>
+<p>第三是诊断域，负责处理问诊、体检、化验、影像、心电、观察和复查，并逐步揭示患者真实病因。</p>
+<p>第四是治疗域，负责药物、输液、急救、手术准备、清创、缝合、观察、转运、康复和出院。</p>
+<p>第五是资源域，负责医生、护士、床位、抢救室、检查设备、手术室、药品、耗材、救护车和清洁周转。</p>
+<p>第六是患者流域，负责患者从入口、候诊区、诊室、检查室、治疗区、观察区、病房、手术室、出院口之间移动。</p>
+<p>第七是病情演化域，负责病情自然变化、等待恶化、治疗反应、误诊后果、并发症和突发抢救。</p>
+<p>第八是运营评价域，负责等待时间、死亡率、误诊率、患者满意度、资源利用率、成本、收入、医护疲劳和医院声誉。</p>
+<p>第九是调试与验证域，负责检查患者路径是否可达、资源是否死锁、病情演化是否合理、分诊是否失效。</p>
+<h2 id="三核心数据模型">三、核心数据模型</h2><p>PatientCase 表示一个患者病例，包含患者ID、主诉、隐藏真实病因、当前生命体征、分诊等级、当前状态、等待时间、已完成检查、已接受治疗、风险标签和最终结果。</p>
+<p>TriageRecord 表示分诊记录，包含到院时间、初步症状、生命体征、分诊等级、分诊理由、是否需要复评。</p>
+<p>MedicalResource 表示医疗资源，包含资源类型、数量、当前位置、占用状态、处理能力、疲劳或维护状态。</p>
+<p>CareTask 表示一项医疗任务，包含任务类型、目标患者、所需人员、所需设备、预计耗时、优先级、可中断性、失败后果。</p>
+<p>DiagnosisState 表示诊断进度，包含候选疾病、已排除疾病、支持证据、矛盾信息、确诊程度和下一步推荐检查。</p>
+<p>PatientFlowState 表示患者当前路径，包含所在区域、等待队列、目标科室、是否可移动、是否需要陪护、是否占用床位。</p>
+<p>HospitalMetrics 表示医院运行指标，包含平均等待时间、床位占用率、抢救成功率、误诊事件、患者满意度、医护压力、收入成本和声誉。</p>
+<h2 id="四核心范式一分诊是动态优先级而不是固定排队">四、核心范式一：分诊是动态优先级，而不是固定排队</h2><p>医院急诊最核心的机制是分诊。</p>
+<p>患者不能简单按先来后到处理。</p>
+<p>胸痛患者可能需要立即处理。
+轻微擦伤可以等待。
+看似普通腹痛可能隐藏严重问题。
+已经等待很久的中危患者可能逐渐恶化。</p>
+<p>因此，分诊等级应是动态状态。</p>
+<p>患者初次进入时获得一个 TriageRecord，但随着等待时间、症状变化、检查结果和生命体征变化，分诊等级可以上升或下降。</p>
+<p>这让玩家不断面对核心问题：</p>
+<p>现在最需要处理谁？</p>
+<p>分诊系统应综合：</p>
+<p>生命危险。
+恶化速度。
+治疗窗口。
+资源需求。
+等待时间。
+诊断不确定性。
+患者是否稳定。</p>
+<p>这比普通经营游戏的排队系统更复杂，也更有类型特色。</p>
+<h2 id="五核心范式二诊断是逐步缩小不确定性">五、核心范式二：诊断是逐步缩小不确定性</h2><p>医院游戏不能把诊断做成“患者头上显示疾病名”。</p>
+<p>真正的医疗流程是从症状出发，通过检查逐步缩小可能性。</p>
+<p>患者说“胸痛”，可能是胃食管反流、焦虑、肋骨问题，也可能是心梗。
+患者说“头痛”，可能是疲劳，也可能是脑出血。
+患者说“腹痛”，可能是普通肠胃炎，也可能是阑尾炎或宫外孕。</p>
+<p>框架应维护 DiagnosisState，而不是直接暴露真实疾病。</p>
+<p>每次问诊、体检、化验、影像都会增加证据，改变候选疾病置信度。</p>
+<p>玩家需要决定：</p>
+<p>是否先做快速检查。
+是否直接抢救。
+是否等待完整报告。
+是否转专科。
+是否先做低风险处理。</p>
+<p>这使诊断成为资源和风险之间的决策。</p>
+<h2 id="六核心范式三患者流比建筑数量更重要">六、核心范式三：患者流比建筑数量更重要</h2><p>医院运营的瓶颈通常不是“没有房间”，而是患者流动不畅。</p>
+<p>挂号慢会堵入口。
+分诊慢会堵候诊。
+诊室不足会积压轻症。
+检查设备不足会拖慢确诊。
+治疗区满了会导致患者滞留。
+病房没床会导致急诊观察区被占满。
+清洁慢会让空床无法立即使用。</p>
+<p>因此框架要重点模拟患者路径，而不是只建更多房间。</p>
+<p>PatientFlowState 应记录患者当前在哪、等待什么、占用什么、下一步去哪、是否可移动。</p>
+<p>这样玩家能看到真正瓶颈：</p>
+<p>不是医生少，而是影像检查排队太长。
+不是床位少，而是出院流程太慢。
+不是收入低，而是高价值设备闲置。</p>
+<h2 id="七核心范式四治疗行为必须占用人员设备和时间窗口">七、核心范式四：治疗行为必须占用人员、设备和时间窗口</h2><p>治疗不能是瞬间按钮。</p>
+<p>例如抢救一个患者可能需要医生、护士、抢救床、监护仪、药品和持续数分钟操作。</p>
+<p>手术需要术前准备、手术室、麻醉、医生团队、术后恢复床位。</p>
+<p>输液需要护士执行、座位或床位、药品和观察时间。</p>
+<p>因此 CareTask 应绑定资源组合，并在执行期间占用资源。</p>
+<p>这会产生真实取舍：</p>
+<p>把抢救室用于一个危重患者，就无法同时处理另一个急症。
+医生去做复杂诊断，轻症队列会变长。
+检查设备用于低优先级患者，可能延误高风险病例。</p>
+<p>运营深度来自资源被占用，而不是资源是否拥有。</p>
+<h2 id="八核心范式五等待本身会改变病情">八、核心范式五：等待本身会改变病情</h2><p>普通排队游戏中，顾客等待只是满意度下降。</p>
+<p>医院急诊中，等待可能导致病情恶化。</p>
+<p>低风险患者等待太久可能只是抱怨。
+中风险患者可能升级为高风险。
+高风险患者可能进入休克、昏迷或死亡。
+误诊患者如果被送错路径，也可能延误最佳治疗窗口。</p>
+<p>因此 PatientCase 应有病情演化曲线。</p>
+<p>不同疾病有不同恶化模式。有的突然恶化，有的缓慢加重，有的对初步治疗响应明显，有的必须确诊后才能有效处理。</p>
+<p>这让玩家的每次等待决策都有真实后果。</p>
+<h2 id="九事件与执行流程">九、事件与执行流程</h2><p>一次完整患者流程如下。</p>
+<p>患者生成系统创建 PatientCase。
+患者进入急诊入口。
+分诊系统读取症状和生命体征，生成初始分诊等级。
+患者进入对应等待队列。
+调度系统根据优先级、资源和等待时间生成 CareTask。
+医生或护士执行问诊、检查或治疗。
+诊断系统更新候选疾病和确诊程度。
+病情演化系统持续根据时间和治疗状态更新风险。
+治疗完成后，患者可能出院、观察、住院、手术、转院或恶化。
+运营系统结算等待时间、医疗质量、资源消耗和声誉变化。</p>
+<p>关键事件包括：</p>
+<p>患者到院事件。
+分诊完成事件。
+分诊等级变化事件。
+患者等待超时事件。
+检查开始事件。
+检查结果返回事件。
+诊断更新事件。
+治疗开始事件。
+治疗完成事件。
+病情恶化事件。
+抢救事件。
+转科事件。
+出院事件。
+死亡或严重事故事件。
+医院指标变化事件。</p>
+<h2 id="十模块通信">十、模块通信</h2><p>推荐事件驱动。</p>
+<p>患者生成系统只创建病例。
+分诊系统监听患者到院并生成优先级。
+调度系统读取分诊、资源和队列状态，创建任务。
+资源系统负责占用和释放医生、护士、床位、设备。
+诊断系统监听检查结果，更新诊断状态。
+治疗系统监听任务执行，改变患者状态。
+病情演化系统持续监听时间和治疗状态。
+运营系统监听所有结果事件并更新指标。
+UI只展示患者、队列、资源、风险和指标，不直接修改病情。</p>
+<p>这样可以避免“按钮直接治好患者”“医生脚本直接改医院声誉”“检查结果和诊断状态不同步”等问题。</p>
+<h2 id="十一可扩展点">十一、可扩展点</h2><p>可以扩展为多科室医院，包括急诊、内科、外科、儿科、妇产科、ICU、影像、检验、手术室和住院部。</p>
+<p>可以扩展为传染病模式，使隔离、传播、接触追踪、防护用品和院感控制成为核心玩法。</p>
+<p>可以扩展为灾害联动，大量伤员同时涌入，要求医院启动应急预案。</p>
+<p>可以扩展为医生成长系统，让医生积累专科经验、疲劳、压力、技能和误诊风险。</p>
+<p>可以扩展为伦理决策，例如稀缺资源分配、昂贵治疗、家属沟通、风险告知和抢救优先级。</p>
+<h2 id="十二失败隔离与调试">十二、失败隔离与调试</h2><p>常见问题包括患者路径卡死、资源永远不释放、诊断无法完成、病情恶化过快、分诊等级不合理、医院指标不可解释。</p>
+<p>调试工具应支持：</p>
+<p>患者路径回放。
+分诊等级变化原因。
+诊断证据链查看。
+资源占用表。
+床位周转分析。
+等待队列热力图。
+病情恶化时间线。
+治疗任务失败原因。</p>
+<p>失败隔离上，关键患者不能只依赖唯一设备路径。设备故障时应允许转院、临时处理、降级治疗或紧急优先通道。</p>
+<h2 id="十三玩家体验目标">十三、玩家体验目标</h2><p>这个类型最核心的体验不是：</p>
+<p>我的医院赚了多少钱。</p>
+<p>而是：</p>
+<p>我在混乱、拥堵和不确定中，让更多患者及时得到正确处理。</p>
+<p>玩家体验通常是：</p>
+<p>患者不断涌入。
+队列开始堆积。
+玩家识别真正高危病例。
+资源开始紧张。
+某些患者恶化。
+玩家重新调整流程。
+最终通过更合理的分诊、检查、治疗和转运，让系统重新稳定。</p>
+<p>优秀体验来自“恢复秩序”，而不是单纯扩大规模。</p>
+<h2 id="十四可迁移设计思想">十四、可迁移设计思想</h2><p>最值得迁移的是：</p>
+<p>将任务队列升级为会随等待时间变化风险的动态分诊系统。</p>
+<p>在Roguelike Shooter中，可以用于基地伤员救治、战后维修、队友救援和资源抢修优先级。
+在灾害应急游戏中，可以用于现场分诊和医院承接。
+在策略游戏中，可以用于损伤单位维修、补给优先级和战线救援。
+在模拟经营中，可以用于顾客服务、故障处理、客服工单和危机管理。</p>
+<p>通用思想是：</p>
+<p>不要让队列只是排队。
+让队列中的对象随时间变化风险，并迫使玩家动态调整优先级。</p>
+<h2 id="十五完整班次边界与设计支柱">十五、完整班次边界与设计支柱</h2><p>医疗分诊运营能够独立成品，关键不在于建筑数量，而在于一整个班次内患者风险、诊断信息和资源占用持续变化。若系统只要求玩家把病人拖到空床位，它仍是普通排队经营。</p>
+<p>完整体验由四个支柱构成：</p>
+<ol>
+<li><strong>风险排序。</strong> 优先级依据生命体征、症状和恶化速度动态变化。</li>
+<li><strong>诊断不确定性。</strong> 检查可以缩小病因范围，但会消耗时间、设备和人员。</li>
+<li><strong>资源组合。</strong> 一项治疗往往同时需要床位、合格人员、设备和药品。</li>
+<li><strong>患者流。</strong> 入口、检查、观察、治疗、转科和出院组成网络，任何局部堵塞都会向上游传播。</li>
+</ol>
+<p>单个患者的最优选择与整个急诊系统的最优选择可能冲突。游戏的伦理张力来自有限信息下的责任分配，而不应通过故意隐藏必需规则制造陷阱。</p>
+<h2 id="十六班次生命周期与患者状态机">十六、班次生命周期与患者状态机</h2><p>一个完整班次可分为开班准备、稳定接诊、峰值涌入、能力恢复和交班结算。玩家需要在开班时安排岗位和预留容量，在峰值前识别可能成为瓶颈的影像、化验、手术或住院床位，并在交班时处理未完成患者和责任移交。</p>
+<p>患者状态建议显式建模为：</p>
+<p><code>Arrived → Triaged → Waiting → Assessing → Testing → Diagnosed → Treating → Observing → Discharged/Admitted/Transferred</code></p>
+<p>任何阶段都可能进入 <code>Deteriorating</code>、<code>Critical</code> 或 <code>LeftWithoutCare</code>。状态变化必须记录原因、发生时间和当时可见信息，避免玩家被事后真相不公平地评价。</p>
+<p>分诊调整应生成审计记录：谁在什么时刻依据哪些观察把优先级从何值改为何值；如果患者恶化，复盘能够区分合理判断、漏查症状、资源不足和执行延误。</p>
+<h2 id="十七长期进程内容生产与伦理评价">十七、长期进程、内容生产与伦理评价</h2><p>跨班次进程可以围绕科室能力、人员培训、流程协议、设备维护和公众信任展开。升级不应只是缩短所有时间，而应提供新的诊断路径、专科能力和调度选项，同时带来维护、人员资格和运营成本。</p>
+<p>内容生产的基本单位是患者模板与涌入场景：</p>
+<ul>
+<li>主诉、真实病因和危险鉴别诊断；</li>
+<li>可见症状、隐藏症状与检查证据；</li>
+<li>自然病程和不同治疗的响应；</li>
+<li>年龄、基础疾病、沟通障碍与风险修饰；</li>
+<li>到达分布、群体事件和科室占用背景；</li>
+<li>教学目标与允许的替代处理路径。</li>
+</ul>
+<p>评价应同时观察死亡和恶化、等待公平性、误诊、过度检查、资源利用、患者离院和员工过载，不能把“处理数量最大”当作唯一正确答案。</p>
+<h2 id="十八难度恢复路径与安全边界">十八、难度、恢复路径与安全边界</h2><p>难度应通过到达率、病例混合、信息噪声、资源故障和交接复杂度逐步提升。高难度不是把所有患者都设为危重，而是让不同风险竞争同一组资源。</p>
+<p>系统需要提供真实的恢复手段：重新分诊、开放临时观察区、调入支援、推迟低风险检查、启动转院协议、取消非紧急占用和请求上级会诊。每种手段都应有代价，但能避免一次拥堵直接演化为无解状态。</p>
+<p>医疗主题需要保持抽象和教育边界。游戏规则可借鉴分诊原则，但不应伪装成现实医疗建议；病例、用药和程序应声明其虚构化与简化范围。</p>
+<h2 id="十九验证工具最小切片与验收标准">十九、验证工具、最小切片与验收标准</h2><p>最小切片可包含一个急诊区域、20 个患者模板、4 类人员、床位/化验/影像三类资源和一个 30 分钟峰值班次。必须证明患者会随等待变化，并且玩家能通过动态调度恢复拥堵。</p>
+<p>建议工具包括：</p>
+<ul>
+<li>患者时间线与恶化原因回放；</li>
+<li>资源甘特图和等待队列热力；</li>
+<li>分诊准确度、重新分诊和漏诊审计；</li>
+<li>病例路径可达性与资源需求检查；</li>
+<li>到达率压力测试和批量仿真；</li>
+<li>员工资格、占用冲突与交接完整性验证。</li>
+</ul>
+<p>验收时应证明：同一患者在不同可见信息阶段得到不同合理决策；患者不会因队列重排丢失；资源释放与状态转换是原子的；高峰后系统能够恢复；存档恢复不会改变病程时间线。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>医院急诊 / 医疗分诊运营（Hospital Emergency &amp; Triage Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>患者流、分诊优先级与医疗资源调度框架</p>
+</li>
+<li><p>动态分诊系统，而非固定排队</p>
+</li>
+<li><p>诊断作为逐步缩小不确定性的证据过程</p>
+</li>
+<li><p>患者路径与床位周转作为核心运营瓶颈</p>
+</li>
+<li><p>治疗任务占用人员、设备与时间窗口</p>
+</li>
+<li><p>等待时间驱动病情恶化</p>
+</li>
+<li><p>医生、护士、床位、设备组成的资源组合模型</p>
+</li>
+<li><p>事件驱动的患者、分诊、诊断、治疗与运营流程</p>
+</li>
+<li><p>患者路径、分诊原因、诊断证据链和资源占用调试</p>
+</li>
+<li><p>将普通任务队列升级为动态风险分诊系统的通用范式</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

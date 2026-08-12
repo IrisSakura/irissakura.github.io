@@ -73,6 +73,7 @@ const lightThemeContrastRoutes = [
       ['Journal dashboard label', '.journal-dashboard-label'],
       ['Journal dashboard values', '.journal-metric strong'],
       ['Journal dashboard metric labels', '.journal-metric span'],
+      ['Journal dashboard publication note', '.journal-metric small'],
       ['Evidence chain heading', '.evidence-chain-card h3'],
       ['Evidence chain question', '.evidence-chain-question'],
       ['Evidence chain path', '.evidence-chain-path strong'],

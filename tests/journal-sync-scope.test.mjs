@@ -5,6 +5,7 @@ import { isJournalSyncOwnedPath } from '../scripts/verify-journal-sync-scope.mjs
 test('push-driven Journal sync owns only generated public projections', () => {
   for (const owned of [
     'content/blogs/article.md',
+    'content/game-designs/design.md',
     'data/journal.json',
     'data/journal-source.json',
     'pages/framework.html',
@@ -14,6 +15,7 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'pages/blog/series/game-systems.html',
     'pages/blog/tag/transactions.html',
     'pages/journal.html',
+    'pages/journal/design.html',
     'pages/portfolio.html',
     'index.html',
     'rss.xml',
@@ -27,7 +29,8 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'style/blog.css',
     '.github/workflows/site-quality-and-pages.yml',
     'pages/contact.html',
-    'content/blogs/../escape.md'
+    'content/blogs/../escape.md',
+    'content/game-designs/../escape.md'
   ]) {
     assert.equal(isJournalSyncOwnedPath(forbidden), false, `sync must not own ${forbidden}`);
   }

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 
 import {
@@ -7,6 +8,7 @@ import {
 } from '../scripts/lib/journal-import-model.mjs';
 
 const body = Buffer.from('# Article\n\nComplete body.');
+const designBody = Buffer.from('## Runtime model\n\nComplete design body.\n');
 const source = {
   schemaVersion: 1,
   sourceCommit: 'a'.repeat(40),
@@ -14,7 +16,17 @@ const source = {
   summary: { auditCount: 1, blogCount: 1, gameDesignCount: 1 },
   gameDesignCatalogDigest: 'b'.repeat(64),
   audits: [{ id: 'audit-2026-07-29', title: 'Audit', summary: 'Safe.', updatedAt: '2026-07-29', redacted: false }],
-  gameDesigns: [{ id: 'design', title: 'Design', summary: 'Safe.', tags: ['design'], updatedAt: '2026-07-29', sha256: 'c'.repeat(64) }],
+  gameDesigns: [{
+    id: 'design',
+    title: 'Design',
+    summary: 'Safe.',
+    tags: ['design'],
+    updatedAt: '2026-07-29',
+    sha256: 'c'.repeat(64),
+    contentSha256: createHash('sha256').update(designBody).digest('hex'),
+    bytes: designBody.length,
+    contentPath: 'content/game-designs/design.md'
+  }],
   blogs: [{
     id: 'article',
     title: 'Article',
@@ -36,7 +48,7 @@ const curation = {
 };
 
 test('valid fixed-sha export builds the curated site snapshot', () => {
-  validateJournalSource(source, new Map([['article', body]]));
+  validateJournalSource(source, new Map([['article', body]]), new Map([['design', designBody]]));
   const snapshot = buildJournalSnapshot(curation, source);
 
   assert.deepEqual(snapshot.summary, {
@@ -58,7 +70,15 @@ test('tampered bodies and private content fail closed', () => {
   const unsafe = structuredClone(source);
   unsafe.audits[0].summary = '/Users/example/private';
   assert.throws(
-    () => validateJournalSource(unsafe, new Map([['article', body]])),
+    () => validateJournalSource(unsafe, new Map([['article', body]]), new Map([['design', designBody]])),
     /private or credential-bearing/
+  );
+  assert.throws(
+    () => validateJournalSource(
+      source,
+      new Map([['article', body]]),
+      new Map([['design', Buffer.from('tampered')]])
+    ),
+    /Design body digest mismatch/
   );
 });

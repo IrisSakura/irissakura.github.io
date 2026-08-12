@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/expedition-management.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="远征队探险管理（Expedition Management Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/expedition-management.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-expedition-management.png">
+    <meta property="og:image:alt" content="远征队探险管理（Expedition Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="远征队探险管理（Expedition Management Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-expedition-management.png">
+    <meta name="twitter:image:alt" content="远征队探险管理（Expedition Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"远征队探险管理（Expedition Management Simulation） | Sakura Design Journal","description":"覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。","url":"https://irissakura.github.io/pages/journal/expedition-management.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"远征队探险管理（Expedition Management Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-expedition-management.png","dateModified":"2026-08-12","about":["expedition","management","risk"]}</script>
+    <!-- site-meta:end -->
+    <title>远征队探险管理（Expedition Management Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-expedition-management"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>远征队探险管理（Expedition Management Simulation）</h1><p>覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。</p><div class="note-tags"><span>expedition</span><span>management</span><span>risk</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何让准备、路线、队员状态、补给与未知情报共同决定一次远征该继续、转向还是撤回？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>远征队探索类游戏是宏观独立品类。</p>
+<p>它的核心不是单个角色冒险，也不是开放世界自由探索，而是玩家管理一支有限队伍，在未知地图、恶劣环境、补给压力、成员状态和不确定事件中推进探索目标。</p>
+<p>它与生存沙盒不同。生存沙盒强调玩家长期驻留、采集建造和环境存活；远征队探索强调路线选择、队伍构成、补给规划、风险判断、发现成果和是否撤回。</p>
+<p>它最适合抽象为：</p>
+<p><strong>未知地图、队伍状态与补给风险管理框架</strong></p>
+<p>核心循环是：</p>
+<p>确定远征目标 → 组建队伍 → 准备补给与装备 → 选择路线 → 探索未知区域 → 遭遇环境、遗迹、敌对生物或随机事件 → 消耗资源与成员状态 → 收集发现与样本 → 判断继续深入或撤回 → 回到营地结算成果、伤亡和知识。</p>
+<p>玩家真正管理的是：</p>
+<p>路线风险、补给消耗、成员能力、士气、伤病、负重、发现价值、撤退窗口和未知信息。</p>
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>框架可以分为十个核心域。</p>
+<p>第一是远征目标域。
+负责主目标、支线目标、样本采集、地图测绘、遗迹调查、救援、贸易开路、科学发现和撤回条件。</p>
+<p>第二是未知地图域。
+负责迷雾、地形、气候、危险区、资源点、遗迹、营地、路径成本和探索进度。</p>
+<p>第三是队伍成员域。
+负责探险家、向导、医生、猎人、科学家、搬运工、工程师、翻译、士兵等成员。</p>
+<p>第四是补给与负重域。
+负责食物、水、药品、燃料、弹药、工具、帐篷、样本箱、绳索、载具和可携带重量。</p>
+<p>第五是环境风险域。
+负责暴风雪、沙尘暴、雨林疾病、高原缺氧、寒冷、炎热、沼泽、塌方、野兽、敌对势力和迷路。</p>
+<p>第六是事件与抉择域。
+负责未知遭遇、队员争执、遗迹谜题、道德选择、资源交换、疾病爆发、设备损坏、路线坍塌等事件。</p>
+<p>第七是发现与知识域。
+负责地图记录、生物样本、矿物样本、古代文字、遗迹结构、地方传说、科学价值和报告成果。</p>
+<p>第八是营地与恢复域。
+负责临时营地、休息、治疗、修理、补给缓存、标记路线、等待天气和撤离点。</p>
+<p>第九是声望与资助域。
+负责研究机构、赞助人、国家、商会、博物馆、新闻媒体和探险声望。</p>
+<p>第十是复盘与调试域。
+负责路线回放、资源消耗来源、事件概率、队员状态变化、死亡原因和探索收益评估。</p>
+<h2 id="三核心数据模型">三、核心数据模型</h2><p>ExpeditionPlan 表示远征计划。
+记录目标、目的地、预计天数、队伍成员、装备清单、路线方案、风险等级和撤退条件。</p>
+<p>ExplorerMember 表示队员。
+记录姓名、职业、技能、体力、健康、士气、忠诚、伤病、恐惧、负重、关系和特殊能力。</p>
+<p>RegionTile 表示地图区域。
+记录地形、气候、通行成本、危险等级、资源、可见状态、发现物、环境标签和已探索程度。</p>
+<p>SupplyInventory 表示补给库存。
+记录物资类型、数量、重量、消耗速度、保存状态、关键程度和可替代性。</p>
+<p>ExpeditionEvent 表示远征事件。
+记录事件类型、触发条件、参与成员、可选决策、风险、收益、后续影响和重复性。</p>
+<p>DiscoveryRecord 表示发现成果。
+记录发现类型、地点、价值、证据质量、样本状态、是否已带回、研究进度和声望奖励。</p>
+<p>CampState 表示营地状态。
+记录位置、安全性、补给缓存、休息效率、医疗条件、维修条件、是否可作为撤退点。</p>
+<p>RiskForecast 表示风险预测。
+记录天气趋势、资源余量、预计返回天数、成员疲劳、病情风险、路线危险和是否建议撤回。</p>
+<h2 id="四核心范式一探索不是开图而是风险投资">四、核心范式一：探索不是开图，而是风险投资</h2><p>远征队探索不能只把地图从黑变亮。</p>
+<p>每前进一步都要付出代价：</p>
+<p>消耗食物。
+消耗水。
+消耗体力。
+增加伤病风险。
+降低士气。
+增加迷路概率。
+远离撤退点。</p>
+<p>玩家每次深入都是在下注。</p>
+<p>前方可能有重大发现，也可能只是消耗补给。
+继续前进可能完成主目标，但可能失去返程资源。
+撤回保住成果，但可能错过核心遗迹。</p>
+<p>因此探索进度必须和回撤成本绑定。</p>
+<h2 id="五核心范式二队伍构成决定远征能力边界">五、核心范式二：队伍构成决定远征能力边界</h2><p>远征队不是一组战斗单位，而是一组能力组合。</p>
+<p>向导降低迷路概率。
+医生降低疾病和伤亡风险。
+猎人提高野外补给能力。
+科学家提高发现价值。
+工程师修复设备和开辟道路。
+翻译帮助理解遗迹和本地人。
+士兵提高战斗安全。
+搬运工提高负重。</p>
+<p>玩家不能带所有人，因为预算、补给和人数有限。</p>
+<p>这使队伍构成成为战略决策：</p>
+<p>带更多专家，发现价值高但生存能力弱。
+带更多护卫，安全高但研究能力弱。
+带更多搬运工，能带回更多样本但消耗更多补给。</p>
+<h2 id="六核心范式三补给是时间与空间的约束">六、核心范式三：补给是时间与空间的约束</h2><p>远征游戏的核心资源不是金币，而是补给。</p>
+<p>食物和水决定能走多远。
+药品决定能否承受疾病和受伤。
+燃料决定载具或取暖能力。
+工具决定能否跨越障碍。
+样本箱决定能否带回发现。
+负重决定速度和疲劳。</p>
+<p>补给管理应同时考虑去程和返程。</p>
+<p>一个常见失败不是“走不过去”，而是“走到了但回不来”。</p>
+<p>因此 RiskForecast 必须持续计算：</p>
+<p>按当前消耗，还能前进几天？
+返回最近营地需要几天？
+天气恶化后还能否返回？
+若有人受伤，负重是否还能承受？</p>
+<h2 id="七核心范式四未知信息是压力来源">七、核心范式四：未知信息是压力来源</h2><p>远征队探索的魅力来自未知。</p>
+<p>玩家不应提前知道所有风险。</p>
+<p>前方地形可能是山脉、沼泽、遗迹或断路。
+天气可能变化。
+地图可能不准。
+本地传闻可能夸大或误导。
+遗迹入口可能需要特殊工具。</p>
+<p>未知信息要求玩家准备冗余方案。</p>
+<p>如果所有信息都透明，远征会变成最短路径规划。
+如果所有信息都随机，玩家会觉得不公平。</p>
+<p>好的系统应提供部分可推断信息：</p>
+<p>地形轮廓。
+传闻。
+旧地图。
+当地向导建议。
+天气趋势。
+动物迁徙迹象。
+前人营地遗迹。</p>
+<p>玩家在不完整信息中做规划，这才是远征感。</p>
+<h2 id="八核心范式五撤退是正式玩法不是失败">八、核心范式五：撤退是正式玩法，不是失败</h2><p>远征类游戏最重要的设计原则之一：</p>
+<p>撤退不是失败，而是决策。</p>
+<p>玩家可能带回部分样本、地图、情报和幸存队员。
+下一次远征可以利用已知路线、缓存营地和更好装备继续推进。</p>
+<p>如果系统只奖励一次深入到底，就会变成赌博。</p>
+<p>更合理的结构是：</p>
+<p>短途侦察。
+建立营地。
+带回地图。
+筹集资金。
+再次出发。
+逐步深入。</p>
+<p>这让远征成为多次推进的长期计划，而不是一次性冲刺。</p>
+<h2 id="九事件与执行流程">九、事件与执行流程</h2><p>一次典型远征流程如下。</p>
+<p>玩家选择目标，例如寻找古城、测绘山脉、采集样本或救援失踪队伍。</p>
+<p>计划系统创建 ExpeditionPlan。</p>
+<p>玩家招募队员并准备补给。</p>
+<p>地图系统显示已知区域和未知区域。</p>
+<p>玩家选择路线并开始推进。</p>
+<p>每进入 RegionTile，系统结算通行成本、天气、资源消耗和发现概率。</p>
+<p>事件系统根据地形、队伍、补给和风险触发遭遇。</p>
+<p>玩家选择处理方式，例如绕路、消耗工具、冒险通过、休息、交易、牺牲物资或撤退。</p>
+<p>队员系统更新健康、士气、关系和伤病。</p>
+<p>发现系统生成 DiscoveryRecord。</p>
+<p>风险预测系统持续评估是否还能安全返回。</p>
+<p>玩家决定继续深入、建立营地、分队行动或撤回。</p>
+<p>返回后，结算发现价值、伤亡、声望、资金和下一次远征准备。</p>
+<p>关键事件包括：</p>
+<p>远征出发事件。
+进入未知区域事件。
+地图揭示事件。
+资源消耗事件。
+天气变化事件。
+队员受伤事件。
+疾病事件。
+士气下降事件。
+发现记录事件。
+营地建立事件。
+路线中断事件。
+撤退决策事件。
+成功返回事件。
+队员死亡事件。
+研究报告提交事件。</p>
+<h2 id="十模块通信设计">十、模块通信设计</h2><p>建议事件驱动。</p>
+<p>远征计划系统只定义目标和初始条件。
+地图系统维护区域状态和未知信息。
+队伍系统维护成员能力与状态。
+补给系统根据时间、地形和人数消耗资源。
+事件系统读取区域、队伍和资源状态生成遭遇。
+发现系统监听探索行为生成成果。
+风险系统持续读取补给、距离、队员状态和天气生成预测。
+营地系统提供恢复与补给节点。
+声望系统监听成功返回和发现提交。
+UI展示路线、补给、队员、风险和发现，不直接决定结果。</p>
+<p>核心原则是：</p>
+<p>探索推进消耗资源，资源约束路线，队员能力改变风险，发现只有成功带回才真正转化为收益。</p>
+<h2 id="十一可扩展点">十一、可扩展点</h2><p>可以扩展为极地探险、雨林探险、沙漠商路、深海远征、太空星球勘探、地下洞窟探索、末日废土调查、魔法大陆远征。</p>
+<p>可以加入动态基地，玩家从营地逐步扩展补给线。</p>
+<p>可以加入科研竞争，多支队伍争夺首次发现权。</p>
+<p>可以加入殖民与外交，远征队与本地文明、部落、公司或国家互动。</p>
+<p>可以加入分队系统，让一部分成员建立营地，一部分继续深入。</p>
+<p>可以加入长期伤病和队员心理创伤，让每次远征都有后果。</p>
+<h2 id="十二失败隔离与调试设计">十二、失败隔离与调试设计</h2><p>常见问题包括远征无解、补给消耗过快、事件过于随机、撤退路线被封死、队员死亡原因不明、发现价值不透明。</p>
+<p>调试工具应支持：</p>
+<p>路线成本预估。
+补给消耗时间线。
+风险预测分解。
+事件触发原因。
+队员状态变化日志。
+发现价值来源。
+返程可达性检查。
+营地覆盖范围。
+死亡原因回放。</p>
+<p>失败隔离上，应支持紧急撤离、丢弃负重、建立临时营地、呼叫救援、牺牲部分成果、绕路、等待天气、分队求援等机制。</p>
+<h2 id="十三玩家体验目标">十三、玩家体验目标</h2><p>该类型最核心的体验不是：</p>
+<p>我走到了地图尽头。</p>
+<p>而是：</p>
+<p>我在未知和风险中规划了一次远征，并决定何时继续、何时撤回。</p>
+<p>玩家体验通常是：</p>
+<p>准备充分。
+初期顺利。
+中途发现重要线索。
+补给开始紧张。
+有人受伤。
+前方出现更大诱惑。
+玩家决定冒险或撤退。
+最终带回成果，或付出惨重代价。</p>
+<p>优秀体验来自“继续前进的诱惑”和“安全返回的理性”之间的冲突。</p>
+<h2 id="十四可迁移设计思想">十四、可迁移设计思想</h2><p>最值得迁移的是：</p>
+<p>将探索设计为带补给、成员状态、未知风险和撤退窗口的远征决策。</p>
+<p>在RPG中，可用于地下城探索、荒野旅行、遗迹调查。
+在Roguelike中，可用于局外远征任务和资源风险。
+在生存游戏中，可用于离开基地的长途探索。
+在策略游戏中，可用于斥候、殖民队、科考队和远征军。
+在开放世界中，可用于把普通开图升级为规划路线、建立营地和分阶段推进。</p>
+<p>通用思想是：</p>
+<p>不要让探索只是移动到新区域。
+让探索消耗资源、改变队员状态，并要求玩家判断何时撤回。</p>
+<h2 id="十五完整远征边界与设计支柱">十五、完整远征边界与设计支柱</h2><p>完整产品应覆盖“确定目标—招募与筹备—规划路线—分段推进—建立发现—撤回或救援—成果结算—准备下一次远征”的循环，而非一张不断前进的随机事件地图。</p>
+<p>核心支柱是准备兑现、未知可推断、队伍有个体、撤退有价值。前期选择要在途中显现影响，未知区域也应通过地貌、传闻和天气迹象提供风险范围，避免玩家只能盲猜事件表。</p>
+<p>完成远征不等于走到最远处。安全带回人员、样本、地图和故事，才把短期冒险转化为长期进程。</p>
+<h2 id="十六阶段推进与队伍状态">十六、阶段推进与队伍状态</h2><p>一次远征分为基地筹备、外向推进、目标作业、返程和恢复。返程不是跳过动画的结算按钮，它消耗同一批补给并可能经过已经恶化的路线。</p>
+<p>队员至少记录体力、伤病、士气、信任、专长负荷和携带责任。队伍能力来自具体成员能否执行，而不是一个无来源的综合战力；关键专家受伤会改变路线与目标选择。</p>
+<p>地点状态包括未知、传闻、侦察、通过、扎营、耗竭和封锁。地图知识有来源与时效，旧路线可能因季节变化失效，但应保留为何改变的记录。</p>
+<h2 id="十七长期进程内容单元与补给经济">十七、长期进程、内容单元与补给经济</h2><p>长期进程围绕基地设施、队员经验、区域地图、赞助关系和研究成果展开。失败远征带回的路线知识也应创造价值，使玩家积累认知，而不是只积累更高装备数值。</p>
+<p>内容单元可定义为“区域拓扑 + 环境压力 + 发现目标 + 队员需求 + 事件条件 + 返程约束”。事件依赖地点和队伍状态触发，避免所有地形只是共用随机卡池。</p>
+<p>补给经济要处理重量、消耗速率、冗余和机会成本。多带食物提高安全却减少样本容量；专业设备占据运输资源，但能降低目标作业的不确定性。</p>
+<h2 id="十八撤退失败前进与公平性">十八、撤退、失败前进与公平性</h2><p>难度从单一环境和稳定路线开始，逐步叠加天气窗口、队员冲突、携带伤员和多目标竞争。风险提高前需要给出迹象，让侦察和专业知识真正产生价值。</p>
+<p>撤退应保存地图、部分成果与队员关系，并根据撤退时机形成不同成本。救援、丢弃物资、改走安全路线和临时扎营都是恢复工具；它们牺牲进度，却防止一次坏事件直接摧毁整个档案。</p>
+<p>玩家可因贪进而失败，但系统需明确显示返程预算和最坏情况余量。隐藏返程成本会把战略风险变成信息陷阱。</p>
+<h2 id="十九作者工具最小切片与验收标准">十九、作者工具、最小切片与验收标准</h2><p>作者工具需要区域图编辑、队伍状态模拟、补给消耗预测、条件事件检查、固定种子回放和返程可达性验证。验证器应发现无解路线、必需专家缺席却不可替代的目标以及无法返回的默认任务。</p>
+<p>最小切片包含一个基地、五段路线、四名专长不同的队员、三类补给、一个主目标和一次迫使玩家改变计划的天气事件。它必须跑通筹备、推进、目标作业、返程与复盘。</p>
+<p>验收时至少确认：准备选择在途中兑现；队员个体状态改变能力；继续与撤退都有合理收益；失败会留下知识；返程压力从出发时就可估算。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>远征队探索 / 探险管理（Expedition Management Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>未知地图、队伍状态与补给风险管理框架</p>
+</li>
+<li><p>探索作为风险投资，而非单纯开图</p>
+</li>
+<li><p>队伍构成决定远征能力边界</p>
+</li>
+<li><p>补给作为时间、空间和返程约束</p>
+</li>
+<li><p>未知信息作为压力来源，而非纯随机</p>
+</li>
+<li><p>撤退作为正式玩法，而非失败</p>
+</li>
+<li><p>事件驱动的路线、补给、队员、发现、营地和返回流程</p>
+</li>
+<li><p>路线成本、补给时间线、风险预测、事件触发和死亡原因调试</p>
+</li>
+<li><p>将探索设计为补给、成员状态、未知风险和撤退窗口共同约束的远征系统</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

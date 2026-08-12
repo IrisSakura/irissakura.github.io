@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unreal-engine-first-frame-pipeline.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura">
+    <meta property="og:description" content="一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unreal-engine-first-frame-pipeline.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-engine-first-frame-pipeline.png">
+    <meta property="og:image:alt" content="Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura">
+    <meta name="twitter:description" content="一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-engine-first-frame-pipeline.png">
+    <meta name="twitter:image:alt" content="Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura","description":"一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？","url":"https://irissakura.github.io/pages/blog/unreal-engine-first-frame-pipeline.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-first-frame-pipeline.png","datePublished":"2026-08-08","dateModified":"2026-08-08","about":["engine-loop","lifecycle","render-thread","unreal-engine","world-tick"]}</script>
+    <!-- site-meta:end -->
+    <title>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-08 · 更新于 2026-08-08</p>
+            <h1>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</h1>
+            <p class="blog-deck">一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</p>
+            <div class="note-tags"><span>engine-loop</span><a href="tag/lifecycle.html">lifecycle</a><span>render-thread</span><span>unreal-engine</span><span>world-tick</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>第一次阅读 Unreal Engine 源码时，很容易试图寻找一个熟悉的入口：</p>
+<pre><code class="language-text">main()
+→ 初始化
+→ Update()
+→ Render()
+</code></pre>
+<p>但顺着源码真正往下读，很快就会发现事情并不是这样。</p>
+<p>进程入口在 Launch 层。</p>
+<p>模块由 ModuleManager 管理。</p>
+<p><code>GEngine</code> 要到更后的 Init 阶段才真正创建。</p>
+<p>World 还有自己的初始化和 BeginPlay 边界。</p>
+<p>Actor 已经构造出来，也不代表它已经进入玩法状态。</p>
+<p>Component 注册成功，也不代表渲染线程已经拥有它的可见表示。</p>
+<p>游戏线程修改 Transform，更不意味着 Render Thread 此刻已经看到了最新数据。</p>
+<p>所以，如果把 Unreal 的“第一帧”理解成：</p>
+<blockquote>
+<p>某个大函数被调用了一次。</p>
+</blockquote>
+<p>就会错过整个引擎最重要的一条设计原则。</p>
+<h2 id="先说结论第一帧不是一个函数而是一串就绪状态完成后的跨线程提交">先说结论：第一帧不是一个函数，而是一串就绪状态完成后的跨线程提交</h2><p><strong>第一帧提交链（后文简称“第一帧接力”）</strong>：进程经过启动阶段、模块就绪、Engine/World 生命周期建立、游戏线程模拟和渲染状态同步后，把第一批合法场景数据提交给渲染线程的连续过程。</p>
+<p>可以先把整体结构压缩成下面这张图：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["Platform Entry"] --&gt; B["GuardedMain"]
+    B --&gt; C["FEngineLoop::PreInit"]
+    C --&gt; D["Core / Engine / Plugin Modules"]
+    D --&gt; E["FEngineLoop::Init"]
+    E --&gt; F["创建并初始化 GEngine"]
+    F --&gt; G["建立 GameInstance / World"]
+    G --&gt; H["World / Actor / Component 进入合法运行状态"]
+    H --&gt; I["FEngineLoop::Tick"]
+    I --&gt; J["UWorld::Tick + Tick Groups"]
+    J --&gt; K["End-of-Frame Component Updates"]
+    K --&gt; L["Viewport / ViewFamily"]
+    L --&gt; M["SceneRenderer 构建"]
+    M --&gt; N["Render Command 入队"]
+    N --&gt; O["Render Thread / RDG / RHI"]
+</code></pre>
+<p>这条链最值得记住的不是函数名，而是每一段之间的状态边界。</p>
+<p>Unreal 并不是：</p>
+<pre><code class="language-text">对象存在
+=
+对象已经可运行
+=
+对象已经可渲染
+</code></pre>
+<p>而更接近：</p>
+<pre><code class="language-text">进程存在
+→ 引擎基础设施 ready
+→ 模块 ready
+→ Engine ready
+→ World ready
+→ Gameplay ready
+→ Component render state ready
+→ Render submission ready
+</code></pre>
+<p>每一个箭头都拥有自己的失败条件和生命周期责任。</p>
+<h2 id="guardedmain-首先建立的是受保护的进程生命周期">GuardedMain 首先建立的是受保护的进程生命周期</h2><p>平台入口并不会直接开始 Tick 世界。</p>
+<p>进入 <code>GuardedMain</code> 后，Launch 层首先要建立一套受保护的运行环境。</p>
+<p>其中一个重要职责是明确当前游戏线程身份，并把整个 EngineLoop 放在可以统一退出和清理的保护边界内。</p>
+<p>可以近似理解为：</p>
+<pre><code class="language-text">Platform Entry
+→ 进入 GuardedMain
+→ 标记 Game Thread
+→ PreInit
+→ Init
+→ Tick Loop
+→ Exit
+</code></pre>
+<p>这里值得注意的是退出路径。</p>
+<p>正常主循环退出并不是唯一结束方式。</p>
+<p>初始化失败、请求退出以及异常路径都可能提前离开。</p>
+<p>因此，引擎不能依赖：</p>
+<pre><code class="language-text">while 循环正常 break
+→ 再执行 cleanup
+</code></pre>
+<p>来保证资源释放。</p>
+<p>启动和退出本身就是一套状态机。</p>
+<p>这一思想可以迁移到任何大型 Runtime：</p>
+<blockquote>
+<p>初始化阶段越多，就越不能把清理逻辑放在“正常运行结束之后”才考虑。</p>
+</blockquote>
+<h2 id="preinit-的职责是把普通进程变成可装载引擎模块的运行时">PreInit 的职责是把普通进程变成可装载引擎模块的运行时</h2><p><strong>阶段化启动（后文简称“分段开机”）</strong>：把引擎初始化拆成多个具有明确前置条件、失败出口和扩展时机的阶段，而不是依赖一个巨大的初始化函数。</p>
+<p>Unreal 的 PreInit 不是简单的：</p>
+<pre><code class="language-text">LoadEverything()
+</code></pre>
+<p>它包含不同层次：</p>
+<pre><code class="language-text">早期环境
+→ CoreUObject
+→ Engine
+→ Renderer / RenderCore / RHI 等基础模块
+→ Project / Plugin 不同 Loading Phase
+</code></pre>
+<p>这件事非常重要。</p>
+<p>一个成熟引擎拥有大量模块：</p>
+<ul>
+<li>对象系统；</li>
+<li>引擎主体；</li>
+<li>渲染；</li>
+<li>Slate；</li>
+<li>网络；</li>
+<li>插件；</li>
+<li>编辑器；</li>
+<li>平台适配；</li>
+<li>项目模块。</li>
+</ul>
+<p>它们不应该在完全相同的时刻进入运行时。</p>
+<p>有些模块需要 UObject 系统已经存在。</p>
+<p>有些插件要求 Engine 主体初始化以后才能启动。</p>
+<p>有些 Editor 模块根本不应该进入 Shipping Game。</p>
+<p>所以 Loading Phase 表达的是：</p>
+<blockquote>
+<p>在整个启动序列中的哪个时点，请求这个模块进入运行时？</p>
+</blockquote>
+<p>它不是单纯的加载性能优化。</p>
+<p>它实际定义了模块允许依赖哪些前置环境。</p>
+<h2 id="模块被找到模块被加载和模块可以使用是三种状态">模块被找到、模块被加载和模块可以使用是三种状态</h2><p><strong>模块就绪边界（后文简称“真的能用了”）</strong>：模块不仅已经存在于模块表或被操作系统映射，而且已经完成初始化，可以安全向其他调用者提供能力的时刻。</p>
+<p>可以把 ModuleManager 中的重要过程抽象为：</p>
+<pre><code class="language-text">Known
+→ Loading
+→ Initializing
+→ Ready
+→ ShuttingDown
+</code></pre>
+<p>模块信息可能在 <code>StartupModule()</code> 之前就已经登记。</p>
+<p>这样做有一个现实原因：</p>
+<p><code>StartupModule()</code> 自己可能再次触发模块查询或模块依赖。</p>
+<p>如果系统直到初始化结束才知道这个模块存在，就无法正确处理初始化阶段的递归关系。</p>
+<p>但反过来，如果模块一登记就被认为完全可用，其他线程又可能看到一个半初始化对象。</p>
+<p>因此需要同时表达：</p>
+<pre><code class="language-text">这个模块已经被系统知道
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">这个模块已经完成 StartupModule
+</code></pre>
+<p>这两个事实。</p>
+<p>这是一个非常值得框架开发借鉴的模式：</p>
+<pre><code class="language-text">registered
+≠
+ready
+</code></pre>
+<p>Service Container、插件系统、网络会话和资源加载器同样经常需要这种中间态。</p>
+<h2 id="init-阶段才真正把-engine-实例建立起来">Init 阶段才真正把 Engine 实例建立起来</h2><p>PreInit 完成后，进程已经拥有大量基础设施，但还不能直接称为“游戏正在运行”。</p>
+<p><code>FEngineLoop::Init</code> 会进一步建立真正的 Engine Runtime。</p>
+<p>主线可以概括为：</p>
+<pre><code class="language-text">选择 Engine Class
+→ 创建 GEngine
+→ GEngine-&gt;Init(...)
+→ 建立更高层运行时
+→ 加载 PostEngineInit 模块
+→ GEngine-&gt;Start()
+→ 进入 Running
+</code></pre>
+<p>这里有一个很重要的认知边界：</p>
+<blockquote>
+<p>Engine 模块已经加载，不等于 GEngine 已经存在。</p>
+</blockquote>
+<p>模块提供类型、代码和基础能力。</p>
+<p>Engine 实例才开始承载具体运行时会话。</p>
+<p>这种“类型已经可用，但系统实例尚未启动”的分层，在大型框架中非常常见。</p>
+<p>例如：</p>
+<pre><code class="language-text">程序集已加载
+≠
+Service Scope 已建立
+
+模块已安装
+≠
+Runtime Host 已运行
+
+资源系统已注册
+≠
+当前 Session 已拥有资源上下文
+</code></pre>
+<p>把这些状态分开，才能避免初始化逻辑依赖偶然调用顺序。</p>
+<h2 id="world-还有自己的运行生命周期">World 还有自己的运行生命周期</h2><p>Engine 建立后，游戏世界依然不是一个简单的对象指针。</p>
+<p><strong>世界运行状态（后文简称“世界开机状态”）</strong>：World 是否已经完成子系统初始化、是否已经进入玩法、以及是否正在撕毁的显式生命周期。</p>
+<p>至少需要区分：</p>
+<pre><code class="language-text">World Object 存在
+→ World Initialized
+→ World BegunPlay
+→ World Running
+→ World TearingDown
+→ World Cleanup
+</code></pre>
+<p><code>InitWorld</code> 会建立：</p>
+<ul>
+<li>World Subsystem；</li>
+<li>Scene；</li>
+<li>物理；</li>
+<li>导航；</li>
+<li>AI；</li>
+<li>Persistent Level 等运行基础。</li>
+</ul>
+<p>而 <code>BeginPlay</code> 才意味着玩法层真正开始。</p>
+<p>这带来一个非常重要的工程规律：</p>
+<blockquote>
+<p>世界对象已经存在，不代表玩法代码已经获得合法执行时机。</p>
+</blockquote>
+<p>创建 Editor Preview World、测试 World、PIE World 和正式 Game World 时，这种分层尤其重要。</p>
+<p>它允许不同运行环境复用同一套 World 基础类型，却选择不同初始化能力。</p>
+<h2 id="actor-被-spawn-出来也不代表玩法已经开始">Actor 被 Spawn 出来也不代表玩法已经开始</h2><p>同样的原则继续向下延伸到 Actor。</p>
+<p><code>SpawnActor</code> 并不是：</p>
+<pre><code class="language-text">new Actor
+→ BeginPlay
+</code></pre>
+<p>而更接近：</p>
+<pre><code class="language-text">检查 World / Class / Network Context
+→ NewObject
+→ 加入 Level
+→ PostSpawnInitialize
+→ Construction
+→ 初始化 Components
+→ 满足条件时 DispatchBeginPlay
+</code></pre>
+<p>如果使用 Deferred Spawn，Construction 甚至可以被显式推迟。</p>
+<p>这意味着 Actor 生命周期至少存在：</p>
+<pre><code class="language-text">对象身份已建立
+→ Construction 完成
+→ Component 初始化
+→ BeginPlay
+→ Tick 注册
+</code></pre>
+<p>Tick 默认也不是对象构造后立即开始。</p>
+<p>Actor 真正进入 BeginPlay 路径后，Tick Function 才进入正式调度体系。</p>
+<p>因此：</p>
+<pre><code class="language-text">Spawn 成功
+≠
+Gameplay Ready
+</code></pre>
+<p>这一边界能解释很多引擎 Bug。</p>
+<p>例如，一个系统在 Construction 阶段错误假定：</p>
+<ul>
+<li>其他组件已经 BeginPlay；</li>
+<li>World 所有子系统已经开始运行；</li>
+<li>网络复制初始状态已经稳定；</li>
+<li>Tick 已经注册；</li>
+</ul>
+<p>最终就会制造初始化顺序依赖。</p>
+<h2 id="一帧首先由游戏线程推进世界状态">一帧首先由游戏线程推进世界状态</h2><p>当 Engine 初始化完成并进入主循环后，<code>FEngineLoop::Tick</code> 才开始持续产生真正的运行帧。</p>
+<p>但 Unreal 的一帧同样不是：</p>
+<pre><code class="language-text">for actor in actors:
+    actor.Tick()
+</code></pre>
+<p>Engine Tick 需要处理：</p>
+<ul>
+<li>时间；</li>
+<li>平台消息；</li>
+<li>输入；</li>
+<li>Engine 状态；</li>
+<li>World；</li>
+<li>渲染线程 BeginFrame；</li>
+<li>帧结束相关工作。</li>
+</ul>
+<p>World 内部则进一步使用 Tick Group 组织游戏逻辑。</p>
+<p><strong>Tick Group（后文简称“帧内阶段”）</strong>：在同一帧中按照物理和数据依赖，把 Tick Function 分配到具有明确先后关系的执行阶段。</p>
+<p>可以简化为：</p>
+<pre><code class="language-text">PrePhysics
+→ StartPhysics
+→ DuringPhysics
+→ EndPhysics
+→ PostPhysics
+→ PostUpdateWork
+→ LastDemotable
+</code></pre>
+<p>这种设计解决的问题不是代码排版。</p>
+<p>它表达的是数据时序。</p>
+<p>例如：</p>
+<ul>
+<li>某逻辑必须读取物理模拟之前的状态；</li>
+<li>某逻辑必须等待物理结果；</li>
+<li>某些工作可以在 Physics During 阶段异步推进；</li>
+<li>本帧较晚创建的新 Tick 不能偷偷插回已经结束的阶段。</li>
+</ul>
+<p>因此 Tick Group 本质上是一种帧内依赖协议。</p>
+<h2 id="component-注册运行和可见也不是同一个状态">Component 注册、运行和可见也不是同一个状态</h2><p>从 Actor 再进入 Component，生命周期继续被细分。</p>
+<p>对于一个可渲染的 Primitive Component，可以看到类似链路：</p>
+<pre><code class="language-text">Component 存在
+→ RegisterComponentWithWorld
+→ bRegistered
+→ CreateRenderState
+→ 创建 SceneProxy
+→ 加入 FScene
+→ Render Thread 建立资源
+</code></pre>
+<p>这里特别容易产生一个错误直觉：</p>
+<blockquote>
+<p>Component 已注册，所以渲染线程应该已经能画它。</p>
+</blockquote>
+<p>实际上并非如此。</p>
+<p>至少存在三层状态：</p>
+<pre><code class="language-text">Component Registered
+Render State Created
+Primitive 已进入 Scene / Render Thread
+</code></pre>
+<p>这三层不能合并成一个 <code>isActive</code>。</p>
+<h2 id="sceneproxy-是游戏对象与渲染对象之间的重要隔离层">SceneProxy 是游戏对象与渲染对象之间的重要隔离层</h2><p><strong>渲染代理（后文简称“渲染快照”）</strong>：从游戏线程 Component 中提取渲染所需信息，形成可以由 Renderer 独立管理的非 UObject 表示。</p>
+<p>例如 <code>UPrimitiveComponent</code> 本身属于游戏线程对象世界。</p>
+<p>它拥有：</p>
+<ul>
+<li>Owner；</li>
+<li>World；</li>
+<li>Transform；</li>
+<li>Component 生命周期；</li>
+<li>UObject 身份；</li>
+<li>Gameplay 状态。</li>
+</ul>
+<p>Renderer 并不应该在渲染线程直接遍历并访问这整棵可变对象图。</p>
+<p>所以 Unreal 会建立：</p>
+<pre><code class="language-text">UPrimitiveComponent
+→ FPrimitiveSceneProxy
+→ FPrimitiveSceneInfo
+→ FScene
+</code></pre>
+<p>SceneProxy 可以理解为：</p>
+<blockquote>
+<p>游戏线程向渲染系统提交的一份专用表示。</p>
+</blockquote>
+<p>这有几个重要收益。</p>
+<p>第一，Renderer 不需要理解完整 Gameplay Object Graph。</p>
+<p>第二，渲染线程不必随意读取不断变化的 UObject。</p>
+<p>第三，生命周期责任更加清楚：</p>
+<pre><code class="language-text">Gameplay Object Lifetime
+和
+Rendering Representation Lifetime
+</code></pre>
+<p>是两本不同的账。</p>
+<h2 id="transform-改变也不会立即写入-render-thread">Transform 改变也不会立即写入 Render Thread</h2><p>玩家移动 Actor 时，游戏线程首先修改的是 Gameplay/Component 状态。</p>
+<p>它不会直接跨线程改写正在被 Renderer 使用的 SceneProxy。</p>
+<p>变化会先被记录为 Dirty：</p>
+<pre><code class="language-text">Transform Dirty
+Dynamic Data Dirty
+Render State Dirty
+</code></pre>
+<p>不同 Dirty 类型对应不同成本。</p>
+<h3 id="transform-dirty">Transform Dirty</h3><p>对象还是同一个渲染表示。</p>
+<p>只需要更新：</p>
+<ul>
+<li>Transform；</li>
+<li>Bounds；</li>
+<li>SceneInfo 中对应状态。</li>
+</ul>
+<h3 id="dynamic-data-dirty">Dynamic Data Dirty</h3><p>Proxy 仍然可以复用。</p>
+<p>只更新材质参数、实例数据等动态内容。</p>
+<h3 id="render-state-dirty">Render State Dirty</h3><p>原有 Proxy 表示已经不再足够。</p>
+<p>需要：</p>
+<pre><code class="language-text">Destroy Render State
+→ Create Render State
+</code></pre>
+<p>这比所有变化都“重建一次”更精确。</p>
+<h2 id="end-of-frame-update-是游戏线程到渲染提交的重要关口">End-of-Frame Update 是游戏线程到渲染提交的重要关口</h2><p><strong>帧末同步边界（后文简称“交卷前整理”）</strong>：在真正提交 ViewFamily 进行渲染之前，把游戏线程本帧积累的 Component 和 Render State 变化集中整理到合法渲染表示中的阶段。</p>
+<p>这个阶段非常关键。</p>
+<p>如果游戏线程：</p>
+<pre><code class="language-text">修改 Component
+→ 立刻开始 Render
+</code></pre>
+<p>Renderer 可能看到的是：</p>
+<ul>
+<li>一半更新后的 Transform；</li>
+<li>旧 Bounds；</li>
+<li>新材质状态；</li>
+<li>尚未重建的 Proxy。</li>
+</ul>
+<p>因此，在 BeginRenderingViewFamily 之前，World 会先处理 End-of-Frame Updates。</p>
+<p>可以把它理解成：</p>
+<blockquote>
+<p>游戏线程在交卷给 Renderer 之前，把本帧所有应当生效的渲染状态整理完。</p>
+</blockquote>
+<p>这与事务系统中的 Commit Boundary 很相似。</p>
+<p>不是每次字段修改都跨线程立即生效。</p>
+<p>而是在明确边界统一提交一致状态。</p>
+<h2 id="viewport-才把游戏世界真正转成一帧渲染请求">Viewport 才把游戏世界真正转成一帧渲染请求</h2><p>游戏线程完成世界推进和渲染状态整理后，Viewport 路径会构造当前帧需要的 ViewFamily。</p>
+<p>随后进入 Renderer：</p>
+<pre><code class="language-text">BeginRenderingViewFamily
+→ Scene / ViewFamily 校验
+→ End-of-Frame Updates
+→ Canvas Flush
+→ 创建 SceneRenderer
+→ 注册 Render 工作
+→ Execute
+</code></pre>
+<p>这里仍然主要运行在游戏线程。</p>
+<p>游戏线程负责决定：</p>
+<ul>
+<li>当前从哪里看；</li>
+<li>使用哪个 Scene；</li>
+<li>哪些 View；</li>
+<li>当前帧有哪些渲染上下文；</li>
+<li>需要提交哪一批 Render 工作。</li>
+</ul>
+<p>然后才把真正的 Render 放到 Render Thread。</p>
+<p>所以更准确的描述不是：</p>
+<blockquote>
+<p>游戏线程负责游戏，渲染线程负责画画。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>游戏线程拥有 Gameplay 状态，并负责构造一次合法渲染请求；渲染线程消费已经准备好的渲染表示并执行真正的 Render Pipeline。</p>
+</blockquote>
+<h2 id="enqueuerendercommand-是线程所有权的显式边界">ENQUEUE_RENDER_COMMAND 是线程所有权的显式边界</h2><p><strong>渲染命令队列（后文简称“跨线程投递箱”）</strong>：游戏线程不直接修改渲染线程正在使用的状态，而是把需要执行的操作作为命令投递到渲染执行域。</p>
+<p>典型关系可以表示为：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Game Thread&lt;br/&gt;UWorld / Components"] --&gt; B["SceneProxy / Scene State"]
+    B --&gt; C["ENQUEUE_RENDER_COMMAND"]
+    C --&gt; D["Render Thread"]
+    D --&gt; E["SceneRenderer / RDG"]
+    E --&gt; F["RHI Command List"]
+    F --&gt; G["Platform RHI"]
+</code></pre>
+<p>这种模式最重要的不是“多线程更快”。</p>
+<p>而是所有权更清楚。</p>
+<p>游戏线程可以说：</p>
+<pre><code class="language-text">我要提交这个变化
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">我要现在直接修改渲染线程正在访问的数据
+</code></pre>
+<p>只要跨线程边界保持清晰，系统就更容易处理：</p>
+<ul>
+<li>并行执行；</li>
+<li>生命周期；</li>
+<li>Flush；</li>
+<li>帧延迟；</li>
+<li>资源释放；</li>
+<li>渲染线程关闭。</li>
+</ul>
+<h2 id="enqueue-完成不等于-render-已经完成">Enqueue 完成不等于 Render 已经完成</h2><p>这里同样存在一个需要明确区分的状态：</p>
+<pre><code class="language-text">命令已经提交
+≠
+渲染线程已经执行
+</code></pre>
+<p>如果游戏线程在某些特殊场景必须确认此前渲染工作已经完成，需要显式的同步屏障，例如 <code>FlushRenderingCommands</code>。</p>
+<p>这类 API 成本通常很高，所以不能作为普通数据访问手段。</p>
+<p>它的存在反而说明：</p>
+<blockquote>
+<p>默认模型是异步拥有，而不是共享同步修改。</p>
+</blockquote>
+<p>因此一个好的跨线程系统应该让：</p>
+<pre><code class="language-text">异步提交
+</code></pre>
+<p>成为默认路径，让：</p>
+<pre><code class="language-text">同步等待
+</code></pre>
+<p>成为明确而昂贵的特殊行为。</p>
+<h2 id="专用服务器再次说明第一帧不是固定渲染模板">专用服务器再次说明“第一帧”不是固定渲染模板</h2><p>Unreal 的 World 并不要求所有运行环境都拥有完整 Renderer。</p>
+<p>Dedicated Server、Commandlet 或 NullRHI 环境可以使用空 Scene 实现。</p>
+<p>这是一种非常重要的架构边界。</p>
+<p>如果高层 World 代码假定：</p>
+<pre><code class="language-text">只要有世界
+→ 就一定有真实 GPU Scene
+</code></pre>
+<p>大量 Server 和 Tool 路径就需要散布：</p>
+<pre><code class="language-cpp">#if SERVER
+#endif
+</code></pre>
+<p>通过 Scene Interface 和 Null Scene，高层仍然可以维护统一生命周期：</p>
+<pre><code class="language-text">World 初始化
+→ 获得 Scene Interface
+</code></pre>
+<p>但真正是否存在 GPU 渲染能力由底层决定。</p>
+<p>这是一种典型的 Null Object / Capability Boundary：</p>
+<blockquote>
+<p>高层依赖稳定合同，底层允许某项能力为空实现。</p>
+</blockquote>
+<h2 id="第一帧可以被理解为多本状态账终于对齐">第一帧可以被理解为多本状态账终于对齐</h2><p>顺着这条链阅读后，我认为 Unreal 的第一帧可以拆成至少四本账。</p>
+<h3 id="模块账">模块账</h3><p>需要的 Runtime 模块已经：</p>
+<pre><code class="language-text">Known
+→ Initialized
+→ Ready
+</code></pre>
+<h3 id="gameplay-账">Gameplay 账</h3><p>Engine、World、Actor 和 Component 已进入对应合法生命周期。</p>
+<h3 id="帧调度账">帧调度账</h3><p>当前帧的 Gameplay 状态已经按照 Tick Group 推进。</p>
+<h3 id="渲染账">渲染账</h3><p>Component 本帧产生的变化已经转成 Scene/Proxy 状态，并形成合法 Render Request。</p>
+<p>只有这些状态共同成立，才真正得到：</p>
+<blockquote>
+<p>第一批能够代表当前游戏世界的渲染工作。</p>
+</blockquote>
+<p>这也解释了很多常见源码误判。</p>
+<h2 id="几组不能混淆的状态">几组不能混淆的状态</h2><p>阅读 Unreal 源码时，下面这些关系尤其值得单独记住：</p>
+<table>
+<thead>
+<tr>
+<th>看起来相似</th>
+<th>实际含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DLL 已加载</td>
+<td>不等于 Module Ready</td>
+</tr>
+<tr>
+<td>Engine 模块存在</td>
+<td>不等于 GEngine 已初始化</td>
+</tr>
+<tr>
+<td>UWorld 对象存在</td>
+<td>不等于 World 已 BeginPlay</td>
+</tr>
+<tr>
+<td>Actor 已 Spawn</td>
+<td>不等于 Actor 已 BeginPlay</td>
+</tr>
+<tr>
+<td>Actor 已 BeginPlay</td>
+<td>也仍需满足 Tick 注册条件</td>
+</tr>
+<tr>
+<td>Component 已注册</td>
+<td>不等于 Render State 已创建</td>
+</tr>
+<tr>
+<td>Render State 已创建</td>
+<td>不等于 Render Thread 已完成处理</td>
+</tr>
+<tr>
+<td>Transform 已改变</td>
+<td>不等于 SceneProxy 已立即更新</td>
+</tr>
+<tr>
+<td>Render Command 已 Enqueue</td>
+<td>不等于 GPU 工作已完成</td>
+</tr>
+<tr>
+<td>UObject 已 Destroy</td>
+<td>不等于底层内存已经即时回收</td>
+</tr>
+</tbody></table>
+<p>Unreal 大量复杂性，本质上来自：</p>
+<blockquote>
+<p>一个大型运行时不能再用“存在 / 不存在”两个状态描述所有生命周期。</p>
+</blockquote>
+<h2 id="这种设计的代价">这种设计的代价</h2><p>阶段化和多线程边界当然不是没有成本。</p>
+<p>它会带来：</p>
+<ul>
+<li>更多状态字段；</li>
+<li>更多生命周期回调；</li>
+<li>更多 Deferred 操作；</li>
+<li>更复杂的调试时间线；</li>
+<li>更难追踪的跨线程延迟；</li>
+<li>更高的源码阅读门槛。</li>
+</ul>
+<p>一个简单引擎完全可以选择更直接的模型。</p>
+<p>例如：</p>
+<pre><code class="language-text">单线程 Gameplay + Rendering
+</code></pre>
+<p>对于小型项目可能更加容易维护。</p>
+<p>所以值得迁移的并不是：</p>
+<blockquote>
+<p>每个框架都应该复制 Unreal 的 FEngineLoop、TickGroup 和 SceneProxy。</p>
+</blockquote>
+<p>而是更抽象的原则：</p>
+<blockquote>
+<p>当系统复杂到需要跨阶段、跨模块和跨线程协作时，把中间状态显式化，比依赖隐式调用顺序更可靠。</p>
+</blockquote>
+<h2 id="对一般游戏框架的迁移启示">对一般游戏框架的迁移启示</h2><h3 id="1-bootstrap-使用阶段而不是一个-startall">1. Bootstrap 使用阶段，而不是一个 StartAll</h3><p>例如：</p>
+<pre><code class="language-text">Core
+→ Runtime Services
+→ Project Modules
+→ Game Session
+→ Running
+</code></pre>
+<p>每阶段都定义：</p>
+<ul>
+<li>前置条件；</li>
+<li>Ready 条件；</li>
+<li>失败清理；</li>
+<li>可以加载的插件。</li>
+</ul>
+<h3 id="2-注册状态与可用状态分开">2. 注册状态与可用状态分开</h3><p>模块、Service 和 Runtime Feature 可以使用：</p>
+<pre><code class="language-text">Registered
+Initializing
+Ready
+Stopping
+Stopped
+</code></pre>
+<p>不要：</p>
+<pre><code class="language-text">Dictionary 里存在
+→ 默认已经可用
+</code></pre>
+<h3 id="3-实体生命周期不要直接绑定构造函数">3. 实体生命周期不要直接绑定构造函数</h3><p>实体可以分成：</p>
+<pre><code class="language-text">Constructed
+Registered
+Initialized
+Started
+Active
+Stopping
+Destroyed
+</code></pre>
+<p>从而支持：</p>
+<ul>
+<li>Deferred Construction；</li>
+<li>网络初始状态；</li>
+<li>场景加载；</li>
+<li>编辑器预览；</li>
+<li>测试环境。</li>
+</ul>
+<h3 id="4-帧循环使用有名阶段">4. 帧循环使用有名阶段</h3><p>即使不需要 Unreal 这么多 Tick Group，也可以明确：</p>
+<pre><code class="language-text">Input
+→ Simulation
+→ Physics
+→ PostPhysics
+→ Presentation Sync
+→ Render Submit
+</code></pre>
+<p>这样插件和系统可以知道自己应该挂在哪个阶段。</p>
+<h3 id="5-gameplay-object-与-render-object-分开">5. Gameplay Object 与 Render Object 分开</h3><p>不要让 Render Thread 直接消费整棵可变业务对象树。</p>
+<p>可以设计：</p>
+<pre><code class="language-text">Game Component
+→ Render Snapshot / Render Proxy
+→ Render Queue
+</code></pre>
+<h3 id="6-跨线程修改使用命令而不是共享可变对象">6. 跨线程修改使用命令，而不是共享可变对象</h3><p>通过：</p>
+<pre><code class="language-text">Command
+Message
+Snapshot
+Handle
+</code></pre>
+<p>表达所有权交接。</p>
+<p>必要时再使用明确的 Flush/Fence，而不是到处加锁同步。</p>
+<h2 id="我的第一帧架构检查清单">我的第一帧架构检查清单</h2><p>如果要为自己的引擎或框架设计类似启动和帧循环，我会检查：</p>
+<ol>
+<li>进程启动是否具有明确的阶段状态机？</li>
+<li>初始化中途失败时，已经建立的资源由谁清理？</li>
+<li>模块“已登记”和“已经 Ready”是否是两个状态？</li>
+<li>插件能否声明自己应在哪个启动阶段加载？</li>
+<li>Editor、Game、Server 是否能够使用不同模块闭包？</li>
+<li>Runtime Host 的建立是否与程序集加载分开？</li>
+<li>World 是否明确区分 Initialized、Running 和 TearingDown？</li>
+<li>Entity 构造完成是否与 Gameplay Start 分开？</li>
+<li>Tick 注册是否有明确生命周期边界？</li>
+<li>帧内是否存在可解释的阶段顺序？</li>
+<li>异步工作是否明确在哪个阶段必须完成？</li>
+<li>新创建的 Tick 是否有明确的本帧插入规则？</li>
+<li>Component 注册和 Render 可见性是否被分开？</li>
+<li>Gameplay 对象是否拥有独立的 Render Proxy？</li>
+<li>Transform 和结构性渲染变化是否采用不同更新成本？</li>
+<li>是否存在统一的帧末 Presentation Sync？</li>
+<li>Render Thread 是否只消费自己的表示和命令？</li>
+<li>跨线程操作是否默认异步？</li>
+<li>强制同步是否通过显式 Fence / Flush 表达？</li>
+<li>无渲染环境是否可以通过 Null Capability 使用同一高层合同？</li>
+<li>Debugger 能否回答某个对象当前究竟处于哪个生命周期阶段？</li>
+<li>一次 Frame Capture 能否解释 Gameplay 状态何时提交到 Renderer？</li>
+</ol>
+<p>理解 Unreal 第一帧之后，最重要的收获并不是记住 <code>GuardedMain</code>、<code>FEngineLoop::Tick</code> 或 <code>BeginRenderingViewFamily</code> 的具体位置。</p>
+<p>真正值得保留的模型是：</p>
+<pre><code class="language-text">阶段产生就绪状态
+就绪状态允许下一阶段
+游戏线程拥有世界事实
+帧阶段推进这些事实
+渲染表示在明确边界同步
+跨线程通过命令完成所有权交接
+</code></pre>
+<p>于是，“第一帧”也不再只是屏幕终于亮起来的那个瞬间。</p>
+<p>它是整个引擎第一次证明：</p>
+<blockquote>
+<p>模块、世界、调度和渲染已经按照各自的生命周期合同完成了一次完整接力。</p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一帧提交链</td>
+<td>第一帧接力</td>
+</tr>
+<tr>
+<td>阶段化启动</td>
+<td>分段开机</td>
+</tr>
+<tr>
+<td>模块就绪边界</td>
+<td>真的能用了</td>
+</tr>
+<tr>
+<td>世界运行状态</td>
+<td>世界开机状态</td>
+</tr>
+<tr>
+<td>Tick Group</td>
+<td>帧内阶段</td>
+</tr>
+<tr>
+<td>渲染代理</td>
+<td>渲染快照</td>
+</tr>
+<tr>
+<td>帧末同步边界</td>
+<td>交卷前整理</td>
+</tr>
+<tr>
+<td>渲染命令队列</td>
+<td>跨线程投递箱</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下研究材料整理：</p>
+<ul>
+<li><code>notes/UnrealEngine源码研究/01_Launch与ModuleManager启动及停机边界.md</code></li>
+<li><code>notes/UnrealEngine源码研究/05_UWorld与AActor生命周期及Tick调度.md</code></li>
+<li><code>notes/UnrealEngine源码研究/07_游戏线程到渲染线程的Scene与帧提交.md</code></li>
+<li><code>notes/UnrealEngine源码研究/11_进程启动到第一帧_GuardedMain到Tick与Present.md</code></li>
+<li><code>notes/UnrealEngine源码研究/12_Component从注册到SceneProxy_世界附着与线程提交.md</code></li>
+<li><code>notes/UnrealEngine源码研究/README.md</code></li>
+</ul>
+<p>本文基于当前 Unreal Engine 5.8.1 release 源码研究笔记整理，重点覆盖 Launch、ModuleManager、World/Actor/Component 生命周期以及游戏线程到 Render Thread 的基础帧提交路径。</p>
+<p>本文不声称已经完整覆盖 RDG Pass 构建、Nanite、Lumen、具体 RHI 后端、交换链 Present、完整 Gameplay Framework、网络复制或 World Partition；这些仍属于后续源码研究范围。文中的 Bootstrap 阶段、Render Proxy 和跨线程命令等迁移方案属于工程设计建议，不表示其他框架必须采用与 Unreal 完全相同的实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unreal-engine-ddc-cook-iostore.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</strong><small>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</small></a><a href="framework-support-surface-governance.html"><span>共享 lifecycle</span><strong>支持面治理：实现面、消费面与产品承诺的分离</strong><small>从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。</small></a><a href="ai-safe-execution-plane.html"><span>近期正式文章</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

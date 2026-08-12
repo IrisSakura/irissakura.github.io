@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/nation-management.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="国家执政模拟（Nation Management Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/nation-management.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-nation-management.png">
+    <meta property="og:image:alt" content="国家执政模拟（Nation Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="国家执政模拟（Nation Management Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-nation-management.png">
+    <meta name="twitter:image:alt" content="国家执政模拟（Nation Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"国家执政模拟（Nation Management Simulation） | Sakura Design Journal","description":"围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。","url":"https://irissakura.github.io/pages/journal/nation-management.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"国家执政模拟（Nation Management Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-nation-management.png","dateModified":"2026-08-12","about":["governance","nation","simulation"]}</script>
+    <!-- site-meta:end -->
+    <title>国家执政模拟（Nation Management Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-nation-management"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>国家执政模拟（Nation Management Simulation）</h1><p>围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。</p><div class="note-tags"><span>governance</span><span>nation</span><span>simulation</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何让玩家在制度、财政、公共服务、利益集团和社会反应之间实施政策，并理解结果为何跨时间、跨群体地产生？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>政治治理 / 国家执政模拟是一个足以独立支撑完整游戏的宏观类型。</p>
+<p>它的核心不是战斗、建设或单纯经济经营，而是让玩家作为政府、执政党、内阁、城市议会、国家元首或改革者，在财政、民意、利益集团、法律制度、公共服务、外交关系和社会稳定之间做长期权衡。</p>
+<p>它与4X大战略不同。4X强调扩张、探索、征服和宏观文明竞争；政治治理更关注“如何维持一个复杂社会的可运转性”。</p>
+<p>它与城市建造不同。城市建造强调空间规划、基础设施和人口服务；政治治理强调政策选择、社会群体反应、合法性、制度约束和长期后果。</p>
+<p>它最适合抽象为：</p>
+<p><strong>政策组合、社会群体反馈与合法性治理框架</strong></p>
+<p>核心循环是：</p>
+<p>识别社会问题 → 制定政策组合 → 分配财政预算 → 平衡利益集团 → 通过制度程序 → 执行政策 → 等待滞后效果 → 接收民意、经济、社会稳定和合法性反馈 → 应对危机与选举 → 调整治理路线。</p>
+<p>玩家真正管理的是：</p>
+<p>财政空间、政策方向、社会信任、合法性、阶层利益、公共服务能力、短期稳定和长期改革收益。</p>
+<hr />
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>政治治理框架可以分为十一个核心域。</p>
+<p>第一是国家状态域。
+负责维护人口、GDP、财政收入、债务、失业率、通胀、治安、教育、医疗、住房、环境、幸福度、贫富差距、社会信任、腐败程度和国际声望。</p>
+<p>第二是政策域。
+负责维护税收、福利、教育、医疗、住房、治安、环保、产业、移民、军事、外交、媒体、司法、劳工、科技等政策。</p>
+<p>第三是社会群体域。
+负责维护工人、中产、富人、企业家、农民、青年、老人、公务员、移民、军方、宗教团体、环保派、民族主义者、自由派、保守派等群体。</p>
+<p>第四是利益集团域。
+负责维护工会、商会、军方、媒体集团、金融资本、地方政府、环保组织、宗教组织、科技巨头、国际机构等具有组织能力的力量。</p>
+<p>第五是财政预算域。
+负责税收、支出、赤字、债务、利息、补贴、公共投资、部门预算和财政可持续性。</p>
+<p>第六是制度与程序域。
+负责议会、选举、法院、宪法、行政命令、地方自治、党派联盟、官僚执行力、腐败审查和政策通过门槛。</p>
+<p>第七是民意与合法性域。
+负责总体支持率、群体支持率、抗议风险、媒体舆论、信任度、政治极化、合法性、选举预期和执政稳定性。</p>
+<p>第八是政策效果模拟域。
+负责处理政策的直接效果、间接效果、滞后效果、副作用、预算消耗、群体反应和长期结构性影响。</p>
+<p>第九是危机与事件域。
+负责经济衰退、能源危机、战争威胁、疫情、腐败丑闻、罢工、移民潮、金融崩盘、自然灾害、国际制裁、社会运动等外部或内部冲击。</p>
+<p>第十是外交与国际环境域。
+负责盟友、敌对国家、贸易伙伴、国际组织、制裁、援助、战争风险、外交信誉、供应链依赖和地缘政治压力。</p>
+<p>第十一是复盘与调试域。
+负责记录政策链、预算流向、群体满意度变化、危机触发原因、选举结果来源、合法性变化和社会指标因果链。</p>
+<hr />
+<h2 id="三核心模块职责">三、核心模块职责</h2><p>国家状态系统负责回答：“这个国家现在运行得怎么样？”</p>
+<p>它不是单一分数，而是一组互相影响的社会指标。经济增长可能提高就业，但也可能提高污染和房价；福利支出可能降低贫困，但增加财政压力；强力治安可能降低犯罪，但损害自由派支持和社会信任。</p>
+<p>政策系统负责回答：“玩家能用什么手段干预社会？”</p>
+<p>政策不应只是按钮。每项政策都应有成本、目标群体、执行部门、通过难度、生效延迟、副作用和反对者。</p>
+<p>社会群体系统负责回答：“谁支持，谁反对，为什么？”</p>
+<p>同一政策对不同群体的影响不同。提高最低工资可能受到工人欢迎，但被部分企业反对；提高燃油税可能改善环境，却伤害低收入通勤者和运输行业；削减军费可能释放财政空间，但损害军方和安全派支持。</p>
+<p>利益集团系统负责回答：“哪些组织有能力放大或阻碍政策？”</p>
+<p>普通民意是分散的，利益集团是有组织的。一个政策即使总体支持率高，也可能因为强大利益集团阻挠而难以通过或执行。</p>
+<p>财政系统负责回答：“国家有没有钱承担理想政策？”</p>
+<p>玩家不能无限发福利、建学校、扩军和减税。财政预算迫使玩家做取舍。赤字可以短期刺激经济，但债务利息会挤压未来预算。</p>
+<p>制度系统负责回答：“政策能不能合法通过和执行？”</p>
+<p>独裁、民主、联邦、议会制、总统制、地方自治强弱，会导致完全不同的治理难度。玩家不是绝对神明，而是在制度框架内执政。</p>
+<p>民意系统负责回答：“社会是否仍然愿意接受玩家治理？”</p>
+<p>政策有效但短期痛苦，可能引发抗议。短期讨好选民可能破坏长期财政。合法性不是单纯支持率，还包括制度信任、程序正当性和社会服从度。</p>
+<p>危机系统负责回答：“外部冲击如何打断治理计划？”</p>
+<p>一个长期改革计划可能被金融危机、战争、疫情或腐败丑闻打断。政治治理类型的核心张力，就是长期目标与短期危机持续冲突。</p>
+<hr />
+<h2 id="四核心数据模型">四、核心数据模型</h2><p>NationState 表示国家总体状态。</p>
+<p>它记录人口、经济规模、财政收入、债务、失业、通胀、贫困、治安、教育、医疗、环境、住房、幸福度、社会信任、腐败、军事实力、国际声望和总体稳定度。</p>
+<p>PolicyDefinition 表示政策模板。</p>
+<p>它记录政策ID、政策领域、政策等级、预算成本、目标指标、影响群体、通过条件、执行部门、生效延迟、维护成本和副作用。</p>
+<p>ActivePolicy 表示已实施政策。</p>
+<p>它记录政策ID、当前强度、实施时间、执行效率、预算拨款、执行阻力、当前效果、滞后效果和修改历史。</p>
+<p>SocialGroup 表示社会群体。</p>
+<p>它记录群体ID、人口占比、收入水平、意识形态、核心诉求、政策敏感度、组织能力、满意度、抗议倾向和投票倾向。</p>
+<p>InterestGroup 表示利益集团。</p>
+<p>它记录组织ID、资源、影响力、游说能力、媒体能力、动员能力、支持政策、反对政策、与政府关系和施压手段。</p>
+<p>BudgetState 表示财政预算。</p>
+<p>它记录税收收入、部门支出、赤字、债务、利息、可用财政空间、紧急储备、公共投资和预算约束。</p>
+<p>LegitimacyState 表示合法性状态。</p>
+<p>它记录支持率、政府信任、制度信任、抗议风险、媒体风向、政治极化、选举周期、议会支持和司法压力。</p>
+<p>CrisisEvent 表示危机事件。</p>
+<p>它记录事件类型、触发条件、影响范围、持续时间、紧急程度、可选应对、失败后果和长期影响。</p>
+<p>PolicyEffectTrace 表示政策效果链。</p>
+<p>它记录某项政策如何影响预算、群体满意度、社会指标、危机概率、利益集团关系和选举结果。</p>
+<hr />
+<h2 id="五核心范式一政策不是按钮而是有滞后和副作用的社会干预">五、核心范式一：政策不是按钮，而是有滞后和副作用的社会干预</h2><p>政治治理游戏最常见的浅层设计是：</p>
+<p>点一个政策，某个数值立刻上升。</p>
+<p>这会让治理退化成数值按钮。</p>
+<p>更成熟的设计应让政策具有滞后效果和副作用。</p>
+<p>例如，投资教育不会下个月立刻提高GDP，但会在多年后提高生产力、社会流动和科技能力。
+提高警力可以短期降低犯罪，但若执行粗暴，可能降低自由派满意度和社会信任。
+减税可以刺激企业投资，但会减少财政收入，压缩公共服务。
+环保政策能降低污染和长期健康成本，但可能短期打击重工业就业。</p>
+<p>政策的价值不应只看即时收益，而应看它在时间中的展开。</p>
+<p>因此 ActivePolicy 需要记录：</p>
+<p>短期效果。
+长期效果。
+副作用。
+执行成本。
+群体反应。
+政策滞后。
+维护成本。</p>
+<p>这能让玩家理解“治理不是施法”，而是干预复杂系统。</p>
+<hr />
+<h2 id="六核心范式二社会不是整体数值而是多群体利益网络">六、核心范式二：社会不是整体数值，而是多群体利益网络</h2><p>政治治理不能只看“全国满意度”。</p>
+<p>一个政策可能让总体满意度略升，但激怒某个高组织能力群体，从而引发严重政治风险。</p>
+<p>例如：</p>
+<p>养老金改革可能被年轻人支持，但老人强烈反对。
+土地改革可能提高农民支持，但激怒地主和地方官僚。
+金融监管可能获得公众好感，但遭遇金融资本游说。
+能源转型可能获得环保派支持，但打击煤炭工人和相关地区。</p>
+<p>因此，SocialGroup 和 InterestGroup 必须分开。</p>
+<p>社会群体代表人口结构。
+利益集团代表组织力量。</p>
+<p>普通群体人数多，但未必能高效动员。
+利益集团人数少，但资源、媒体、资金和政治影响力强。</p>
+<p>玩家真正面对的是利益网络，而不是一条民意数值。</p>
+<hr />
+<h2 id="七核心范式三财政预算是治理边界">七、核心范式三：财政预算是治理边界</h2><p>政治模拟中的理想政策往往很多，但财政能力有限。</p>
+<p>玩家不能同时大幅减税、提高福利、扩建医院、增加军费、补贴能源、降低债务。</p>
+<p>BudgetState 应成为核心约束。</p>
+<p>每项政策不仅有一次性成本，还可能有长期维护成本。</p>
+<p>例如：</p>
+<p>建设医院是一次性投资。
+医生工资、药品、设备维护是长期支出。
+扩军不仅需要购买装备，还需要训练、补给和退役保障。
+补贴能源可以压低民生成本，但可能形成财政黑洞。</p>
+<p>财政系统要让玩家看到：</p>
+<p>现在负担得起，不代表未来负担得起。
+短期赤字可以接受，但债务利息会改变长期政策空间。
+经济衰退会减少税收，使原本可持续的政策突然不可持续。</p>
+<p>这让政治治理拥有长期战略深度。</p>
+<hr />
+<h2 id="八核心范式四合法性比支持率更深">八、核心范式四：合法性比支持率更深</h2><p>支持率是“现在有多少人喜欢你”。</p>
+<p>合法性是“社会是否承认你有权治理”。</p>
+<p>一个政府可能支持率不高，但制度合法性强，仍然能稳定运转。
+一个政府可能短期民调高，但如果被认为腐败、违宪、操纵媒体，合法性会下降。
+合法性低时，小危机也可能引发大规模抗议。</p>
+<p>LegitimacyState 应同时考虑：</p>
+<p>选举授权。
+程序正义。
+法治信任。
+腐败程度。
+媒体自由。
+抗议处理。
+制度稳定。
+政策兑现率。</p>
+<p>这让玩家不能只追求短期支持率。</p>
+<p>例如，强行绕过议会可以快速通过改革，但会损害制度信任。长期看，社会更难接受后续政策。</p>
+<hr />
+<h2 id="九核心范式五改革阻力是系统设计重点">九、核心范式五：改革阻力是系统设计重点</h2><p>政治治理游戏的核心不是“知道正确政策”，而是“正确政策为什么难以实施”。</p>
+<p>改革会遇到阻力：</p>
+<p>既得利益者反对。
+预算不足。
+官僚执行不力。
+地方政府阳奉阴违。
+媒体扭曲。
+短期受损群体抗议。
+反对党利用不满。
+司法机构阻止。
+外部势力施压。</p>
+<p>因此，政策通过和执行应分成两步。</p>
+<p>通过政策不代表执行成功。
+执行成功也不代表效果完全释放。</p>
+<p>ActivePolicy 应记录执行效率。</p>
+<p>执行效率受官僚能力、腐败、地方合作、利益集团阻挠、预算到位率和社会配合度影响。</p>
+<p>这能让玩家体验真实的治理阻力。</p>
+<hr />
+<h2 id="十核心范式六危机是政策压力测试">十、核心范式六：危机是政策压力测试</h2><p>危机不应只是随机惩罚。</p>
+<p>它应测试玩家过去的治理结构。</p>
+<p>如果医疗体系薄弱，疫情会更严重。
+如果财政储备不足，经济危机时缺乏刺激能力。
+如果社会信任低，灾害中谣言更容易扩散。
+如果能源结构单一，国际油价冲击更危险。
+如果贫富差距过高，经济下行更容易引发抗议。</p>
+<p>因此 CrisisEvent 应读取 NationState 和 ActivePolicy，而不是纯随机触发。</p>
+<p>优秀设计会让玩家在危机中意识到：</p>
+<p>这不是突然倒霉，而是过去治理选择的结果。</p>
+<hr />
+<h2 id="十一事件与执行流程">十一、事件与执行流程</h2><p>一次典型治理回合可以这样运行。</p>
+<p>时间系统进入新月份或新季度。</p>
+<p>国家状态系统根据已有政策、经济环境和社会结构更新基础指标。</p>
+<p>财政系统结算税收、支出、赤字、债务和利息。</p>
+<p>政策效果系统处理已实施政策的即时效果和滞后效果。</p>
+<p>社会群体系统根据收入、服务质量、意识形态和政策影响更新满意度。</p>
+<p>利益集团系统根据政策变化决定支持、游说、抗议、施压或合作。</p>
+<p>民意系统更新支持率、制度信任、抗议风险和选举趋势。</p>
+<p>危机系统检查触发条件，可能生成突发事件。</p>
+<p>玩家在内阁阶段选择新政策、调整预算、回应危机、谈判联盟或发布公开声明。</p>
+<p>制度系统检查政策是否能通过议会、法院、地方政府或行政程序。</p>
+<p>执行系统根据预算、官僚能力、腐败和阻力更新政策执行效率。</p>
+<p>媒体与舆论系统结算公众反馈。</p>
+<p>进入下一回合。</p>
+<p>关键事件包括：</p>
+<p>财政结算事件。
+政策提出事件。
+政策通过事件。
+政策受阻事件。
+预算调整事件。
+群体满意度变化事件。
+利益集团施压事件。
+抗议事件。
+选举事件。
+危机爆发事件。
+腐败丑闻事件。
+国际制裁事件。
+政策效果释放事件。
+合法性变化事件。</p>
+<hr />
+<h2 id="十二模块通信设计">十二、模块通信设计</h2><p>建议采用事件驱动加因果追踪。</p>
+<p>政策系统不直接修改最终胜负，而是生成 PolicyChangeEvent。</p>
+<p>财政系统监听政策变化，计算预算成本。</p>
+<p>社会群体系统监听政策变化和国家指标变化，更新满意度。</p>
+<p>利益集团系统监听相关政策，决定支持或反对。</p>
+<p>制度系统判断政策是否能通过和执行。</p>
+<p>政策效果系统根据执行效率、时间延迟和领域规则逐步改变 NationState。</p>
+<p>民意系统监听群体满意度、危机处理和媒体事件，更新支持率与合法性。</p>
+<p>危机系统读取国家脆弱性和外部环境，生成 CrisisEvent。</p>
+<p>复盘系统记录每次指标变化来自哪些政策、事件和群体反应。</p>
+<p>UI只展示政策、预算、民意、危机、国家指标和因果解释，不直接修改核心状态。</p>
+<p>核心原则是：</p>
+<p>政策改变社会条件，社会群体产生反馈，反馈影响合法性和制度能力，制度能力再反过来影响政策执行。</p>
+<hr />
+<h2 id="十三可扩展点">十三、可扩展点</h2><p>第一类扩展是不同政体。</p>
+<p>可以支持民主制、威权制、君主制、议会制、联邦制、革命政府、殖民地政府、城市议会、企业城邦等。不同制度拥有不同政策通过方式和合法性来源。</p>
+<p>第二类扩展是选举系统。</p>
+<p>选区、政党、竞选承诺、辩论、媒体广告、丑闻、联盟组阁都可以成为玩法。</p>
+<p>第三类扩展是意识形态系统。</p>
+<p>自由主义、保守主义、社会主义、民族主义、环保主义、技术官僚、宗教政治等可以影响政策可接受度。</p>
+<p>第四类扩展是国际关系。</p>
+<p>贸易协定、边境冲突、援助、债务、制裁、联盟、移民、战争威胁会限制国内政策空间。</p>
+<p>第五类扩展是地方治理。</p>
+<p>中央政策需要地方执行，地方政府可能配合、抵制或扭曲政策。</p>
+<p>第六类扩展是政治人物系统。</p>
+<p>部长、议员、党魁、地方领袖、媒体人物、企业家、活动家可以有个人声望、丑闻、能力和派系。</p>
+<p>第七类扩展是长期历史模式。</p>
+<p>玩家可以治理十年、五十年甚至一个世纪，观察人口结构、产业结构和制度信任的长期变化。</p>
+<hr />
+<h2 id="十四失败隔离与调试设计">十四、失败隔离与调试设计</h2><p>政治治理系统最容易出现的问题包括：</p>
+<p>玩家不知道某个指标为什么变化。
+政策效果太慢，导致玩家觉得无反馈。
+财政突然崩溃但原因不清楚。
+民意变化不可解释。
+利益集团反应像随机事件。
+改革永远无法通过。
+危机过于随机，破坏长期策略。
+正反馈滚雪球导致无法逆转。</p>
+<p>因此需要以下调试与解释机制。</p>
+<p>第一，政策效果链追踪。
+每个指标变化应能追溯到政策、预算、危机、群体反应或外部环境。</p>
+<p>第二，预算流向图。
+显示税收来源、支出部门、债务利息、补贴、投资和赤字来源。</p>
+<p>第三，群体满意度解释器。
+说明某个群体为什么支持或反对政府，例如税负上升、福利改善、失业增加、文化政策冲突。</p>
+<p>第四，合法性变化日志。
+记录合法性因选举、腐败、抗议处理、违宪行为、政策兑现或危机应对而变化。</p>
+<p>第五，改革可行性检查。
+显示政策为什么无法通过，是议会票数不足、法院阻止、预算不足、利益集团反对，还是执行能力不足。</p>
+<p>第六，危机触发解释。
+危机不应只显示“发生了金融危机”。系统应解释其风险积累来源，例如债务过高、监管不足、外部冲击、失业率上升。</p>
+<p>第七，恢复路径设计。
+财政崩溃后应允许削减支出、增税、借款、国际援助、出售资产、债务重组。
+民意崩溃后应允许改组内阁、撤回政策、公开道歉、举行选举、谈判妥协。
+社会动荡后应允许对话、镇压、改革、让步或地方自治。</p>
+<p>这类游戏允许严重失败，但失败必须可解释、可复盘、可尝试挽回。</p>
+<hr />
+<h2 id="十五玩家体验目标">十五、玩家体验目标</h2><p>政治治理类型最核心的体验不是：</p>
+<p>我点了一个政策，数值变好了。</p>
+<p>而是：</p>
+<p>我在复杂社会约束中推进自己的治理路线，并承担它的长期后果。</p>
+<p>玩家体验通常分为六个阶段。</p>
+<p>第一阶段是诊断。
+玩家观察国家当前问题：失业、犯罪、债务、医疗不足、腐败、教育落后或社会撕裂。</p>
+<p>第二阶段是立场选择。
+玩家决定治理路线：市场化、福利国家、强安全、绿色转型、工业扩张、财政紧缩或技术官僚改革。</p>
+<p>第三阶段是政策推进。
+玩家制定预算、说服议会、安抚群体、压制阻力或交换利益。</p>
+<p>第四阶段是反馈承受。
+政策生效后，有人受益，有人受损。支持率、财政、社会稳定和长期指标开始变化。</p>
+<p>第五阶段是危机检验。
+经济、灾害、外交、腐败、抗议或安全事件检验玩家过去的结构性选择。</p>
+<p>第六阶段是历史评价。
+玩家不只看是否连任，还看国家是否变得更稳定、更公平、更富裕、更自由、更强大，或者只是短期维持了权力。</p>
+<p>优秀政治治理游戏会让玩家记住：</p>
+<p>“我不是因为缺钱失败，而是因为连续三年用补贴压低能源价格，推迟了改革，最终在外部油价冲击下财政和民意一起崩盘。”</p>
+<hr />
+<h2 id="十六可迁移到其他游戏的设计思想">十六、可迁移到其他游戏的设计思想</h2><p>这一类型最值得迁移的思想是：</p>
+<p><strong>将管理决策设计为政策干预，让它通过社会群体、预算、制度、合法性和滞后效果产生复杂反馈。</strong></p>
+<p>在RPG中，可以用于领地治理、城市声望、阵营政策和主角成为统治者后的管理系统。</p>
+<p>在策略游戏中，可以用于国内政治，避免国家只是战争机器。玩家不仅要打赢战争，还要维持社会承受力。</p>
+<p>在MMORPG或服务型游戏中，可以用于公会城市、阵营战争、玩家议会和服务器级政策投票。</p>
+<p>在模拟经营中，可以用于公司政策、员工群体、公众形象和监管压力。</p>
+<p>在开放世界中，可以让玩家改变地区制度，例如税收、治安、福利、贸易规则，进而影响NPC生活和任务生态。</p>
+<p>在生存游戏中，可以用于营地治理。玩家制定食物分配、劳动制度、医疗优先级和纪律政策，不同成员会产生支持或反抗。</p>
+<p>其通用价值在于：</p>
+<p>不要让管理决策只改变单个数值。
+让决策作用于群体、资源、制度和时间，形成可解释的长期反馈链。</p>
+<hr />
+<h2 id="十七完整执政周期与设计支柱">十七、完整执政周期与设计支柱</h2><p>完整产品应覆盖“识别议题—形成议程—协商方案—立法或行政实施—配置预算与机构—社会执行—评估修正—进入下一政治周期”的治理闭环，而不是连续选择事件卡。</p>
+<p>核心支柱是制度限制权力、政策需要执行、影响分布不均、后果跨期显现。玩家不能直接拖动全国指标；必须通过有权限、有能力也有自身利益的机构与群体改变现实。</p>
+<p>胜利条件需要明确任期、改革目标、社会底线和制度延续之间的关系。高支持率不自动等于良好治理，短期稳定也可能透支财政、信任或环境。</p>
+<h2 id="十八政策生命周期与制度状态">十八、政策生命周期与制度状态</h2><p>政策分为议题形成、方案设计、联盟协商、通过、实施、覆盖扩张、评估、修订和废止。每个阶段受不同主体影响，议会通过只是获得实施授权，不代表服务已经抵达目标人群。</p>
+<p>政策状态至少记录法律依据、预算、执行机构、覆盖范围、服从程度、受益与受损群体以及预期时滞。社会指标变化应能追溯到政策组合、外部环境和群体行为，而非显示模糊的“治理效果”。</p>
+<p>制度状态包含权限、任期、监督、司法审查、地方自治和紧急措施。改变制度可以提高当前行动速度，也会修改未来政府与反对者使用权力的方式。</p>
+<h2 id="十九长期进程内容单元与财政闭环">十九、长期进程、内容单元与财政闭环</h2><p>长期进程围绕国家能力、行政专业化、公共信任、基础设施、人口结构和国际关系展开。能力建设见效慢，却决定后期政策是否可执行；它不能被一次性升级立即填满。</p>
+<p>内容单元可定义为“公共议题 + 受影响群体 + 制度通道 + 政策工具 + 执行瓶颈 + 时间滞后 + 外部冲击”。事件从当前社会状态生成，不以固定选择题孤立出现。</p>
+<p>财政要区分一次性支出、持续承诺、税基、债务成本和地方配套。削减预算可能当期平衡账面，却通过服务退化、人才流失和未来维护形成延迟成本。</p>
+<h2 id="二十危机政策失败与信息公平">二十、危机、政策失败与信息公平</h2><p>难度从单议题和稳定联盟开始，逐步加入交叉群体、多级政府、政策时滞、外部冲击和选举压力。复杂度来自系统互动，不是让每个群体同时随机改变立场。</p>
+<p>失败恢复包括试点、延期、修正案、预算重排、跨党派协商、独立调查和提前止损。它们会消耗信誉或时间，但允许玩家承认政策失败并重建执行路径。</p>
+<p>民意调查、行政报告和媒体信息可以带偏差，但要标明样本、来源和时效。玩家可能因为信任了狭窄信息而误判，不能因为系统隐藏所有群体变化而失败。</p>
+<h2 id="二十一作者工具最小切片与验收标准">二十一、作者工具、最小切片与验收标准</h2><p>作者工具需要政策因果图、群体分布编辑、机构权限校验、预算时滞模拟、固定种子社会回放和政策组合敏感性分析。验证器应发现没有执行机构的政策、永续无成本承诺和无法通过任何制度通道解决的强制目标。</p>
+<p>最小切片包含一个任期、三项相互竞争的公共议题、四个群体、议会与地方两级机构、一份受限预算和一次可修正的实施失败。玩家要经历从议程到评估的完整政策周期。</p>
+<p>验收时至少确认：政策必须经制度实施；收益与成本分布到具体群体；时滞可观察；危机措施留下长期制度后果；任期总结能解释关键指标为何变化以及哪些问题被转移到未来。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>政治治理 / 国家执政模拟（Political Governance / Nation Management Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>政策组合、社会群体反馈与合法性治理框架</p>
+</li>
+<li><p>政策作为具有滞后效果、副作用和执行阻力的社会干预</p>
+</li>
+<li><p>社会由多群体与利益集团组成，而非单一满意度数值</p>
+</li>
+<li><p>财政预算作为治理边界与长期约束</p>
+</li>
+<li><p>合法性区别于短期支持率，体现制度信任和程序正当性</p>
+</li>
+<li><p>改革阻力来自既得利益、官僚执行、预算、法律和社会反弹</p>
+</li>
+<li><p>危机作为过去治理结构的压力测试，而非纯随机惩罚</p>
+</li>
+<li><p>事件驱动的财政、政策、群体、利益集团、民意、危机流程</p>
+</li>
+<li><p>政策效果链、预算流向、群体满意度、合法性和危机触发调试体系</p>
+</li>
+<li><p>将管理决策升级为通过群体、资源、制度和时间产生长期反馈的政策干预系统</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/semantic-battle-orchestration.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="语义战斗编排：事件、状态、资格事实与受限动作管线 | IrisSakura">
+    <meta property="og:description" content="跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/semantic-battle-orchestration.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-semantic-battle-orchestration.png">
+    <meta property="og:image:alt" content="语义战斗编排：事件、状态、资格事实与受限动作管线 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="语义战斗编排：事件、状态、资格事实与受限动作管线 | IrisSakura">
+    <meta name="twitter:description" content="跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-semantic-battle-orchestration.png">
+    <meta name="twitter:image:alt" content="语义战斗编排：事件、状态、资格事实与受限动作管线 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"语义战斗编排：事件、状态、资格事实与受限动作管线 | IrisSakura","description":"跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。","url":"https://irissakura.github.io/pages/blog/semantic-battle-orchestration.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"语义战斗编排：事件、状态、资格事实与受限动作管线","image":"https://irissakura.github.io/assets/social/pages-blog-semantic-battle-orchestration.png","datePublished":"2026-08-05","dateModified":"2026-08-05","about":["essay"]}</script>
+    <!-- site-meta:end -->
+    <title>语义战斗编排：事件、状态、资格事实与受限动作管线 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-05</p>
+            <h1>语义战斗编排：事件、状态、资格事实与受限动作管线</h1>
+            <p class="blog-deck">跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。</p>
+            <div class="note-tags"><a href="tag/essay.html">essay</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>战斗系统规模较小时，事件直连通常足够有效。</p>
+<pre><code>命中
+→ 扣血
+→ 播放特效
+→ 检查被动
+→ 触发技能
+</code></pre>
+<p>随着内容增加，同一个命中还可能需要处理：</p>
+<ul>
+<li>元素反应；</li>
+<li>武器词条；</li>
+<li>状态叠加；</li>
+<li>连击次数；</li>
+<li>受击反应；</li>
+<li>AI 记忆；</li>
+<li>任务统计；</li>
+<li>Mod 规则；</li>
+<li>服务器权威校验。</li>
+</ul>
+<p>如果每个模块都直接订阅命中事件，并自行判断其他模块状态，系统会逐渐形成隐式调用网。</p>
+<p>一个新效果可能需要知道：</p>
+<ul>
+<li>当前目标是否燃烧；</li>
+<li>攻击是否来自金属武器；</li>
+<li>这是本回合第三次命中还是全局第三次；</li>
+<li>该状态由哪个来源授予；</li>
+<li>某个扩展是否有权执行对应技能。</li>
+</ul>
+<p>问题不再是怎样发出一个事件，而是如何把战斗事实转换成可控、可解释的动作。</p>
+<h2 id="先说结论先描述事实再生成动作请求">先说结论：先描述事实，再生成动作请求</h2><p><strong>语义战斗编排（后文简称“战斗事实管线”）</strong>：把一次性事件、持续状态和资格事实输入确定性规则处理器，生成受限动作请求与结构化 Trace，再由明确 Adapter 执行实际效果。</p>
+<p>战斗事实管线不直接替代：</p>
+<ul>
+<li>Hitbox；</li>
+<li>GAS；</li>
+<li>ECS；</li>
+<li>Simulation；</li>
+<li>服务器权威；</li>
+<li>具体技能和数值内容。</li>
+</ul>
+<p>它位于这些模块之间，负责回答：</p>
+<blockquote>
+<p>已经发生了什么，当前具备什么状态，哪些规则因此成立，以及允许提出哪些动作。</p>
+</blockquote>
+<pre><code>flowchart LR
+    A["Hitbox / Simulation 事实"] --&gt; B["Signal Mapper"]
+    B --&gt; C["Semantic Combat Processor"]
+    D["持续 State"] --&gt; C
+    E["Semantic 资格事实"] --&gt; C
+    C --&gt; F["受限 Action Request"]
+    C --&gt; G["结构化 Trace"]
+    F --&gt; H["GAS / Project Adapter"]
+    H --&gt; I["实际状态变更"]
+</code></pre>
+<h2 id="三类-tag-承担不同语义">三类 Tag 承担不同语义</h2><p>统一使用 Tag，不等于所有 Tag 都是同一种东西。</p>
+<p>战斗编排至少需要区分三类语义。</p>
+<h3 id="event一次性发生的事实">Event：一次性发生的事实</h3><p>例如：</p>
+<ul>
+<li><code>Event.Hit.Semantic</code>；</li>
+<li><code>Event.Damage.Fire</code>；</li>
+<li><code>Event.Skill.Cast.Completed</code>；</li>
+<li><code>Event.Unit.Died</code>。</li>
+</ul>
+<p>Event 表示某件事发生了一次，通常只在本次处理或单 Tick 内有效。</p>
+<h3 id="state持续存在的状态">State：持续存在的状态</h3><p>例如：</p>
+<ul>
+<li><code>State.Burning</code>；</li>
+<li><code>State.Staggered</code>；</li>
+<li><code>State.Shielded</code>；</li>
+<li><code>State.Combo.Active</code>。</li>
+</ul>
+<p>State 表示对象当前仍处于某种状态，需要明确授予来源、撤销来源和作用域。</p>
+<h3 id="semantic资格或解释事实">Semantic：资格或解释事实</h3><p>例如：</p>
+<ul>
+<li><code>Semantic.Material.Metal</code>；</li>
+<li><code>Semantic.Element.Water</code>；</li>
+<li><code>Semantic.Target.Boss</code>；</li>
+<li><code>Semantic.Attack.Melee</code>。</li>
+</ul>
+<p>Semantic 表示规则解释所需的稳定事实。</p>
+<p>它未必直接对应一个 Buff，也不一定由 GAS 持有。它可以来自装备、材质、环境、目标分类或项目自己的语义目录。</p>
+<p>三类信息放在同一规则语言中，可以表达：</p>
+<pre><code>发生金属武器命中
++ 目标当前处于潮湿状态
++ 攻击具备近战资格
+→ 提出施加感电与硬直的动作请求
+</code></pre>
+<p>但它们的生命周期和 Owner 仍然不同，不能因为都使用 Tag 就混为一类。</p>
+<h2 id="signal-应保持不可变且受限">Signal 应保持不可变且受限</h2><p>如果事件载荷允许携带任意对象引用，规则层会重新耦合到具体项目类型。</p>
+<p>例如 Signal 直接带入：</p>
+<ul>
+<li><code>GameObject</code>；</li>
+<li><code>AbilitySystemComponent</code>；</li>
+<li>具体敌人类；</li>
+<li>Prefab；</li>
+<li>任意脚本回调。</li>
+</ul>
+<p>规则处理器便无法保持引擎无关，也难以序列化、测试和跨进程验证。</p>
+<p><strong>受限结构化载荷（后文简称“只带规则需要的事实”）</strong>：Signal 只包含规则判断所需的稳定值、标识和有限字段，不携带可任意执行或修改世界的对象。</p>
+<p>常见字段包括：</p>
+<ul>
+<li>source / target 稳定 ID；</li>
+<li>sequence；</li>
+<li>generation；</li>
+<li>damage category；</li>
+<li>ability key；</li>
+<li>rule context revision；</li>
+<li>少量数值参数。</li>
+</ul>
+<p>规则层看到的是事实快照，而不是对战斗世界的直接控制权。</p>
+<h2 id="rule-输出动作模板而不是任意代码">Rule 输出动作模板，而不是任意代码</h2><p>一条语义规则通常包含：</p>
+<ul>
+<li>RuleId；</li>
+<li>触发 Event；</li>
+<li>必需 State；</li>
+<li>禁止 State；</li>
+<li>必需 Semantic；</li>
+<li>优先级；</li>
+<li>动作模板；</li>
+<li>幂等与预算策略。</li>
+</ul>
+<p>关键边界在于：规则不应保存任意反射类型、程序集入口或脚本函数。</p>
+<p><strong>白名单动作模板（后文简称“只能申请已登记动作”）</strong>：规则输出固定动作类型和项目登记的 Handler Key，由执行层解析到明确实现。</p>
+<p>动作类型可以包括：</p>
+<ul>
+<li>AddStateTag；</li>
+<li>RemoveStateTag；</li>
+<li>RequestAbility；</li>
+<li>EmitSignal；</li>
+<li>ApplyModifier；</li>
+<li>RecordSemanticFact。</li>
+</ul>
+<p>Handler Key 只允许映射到项目注册目录。</p>
+<p>这使配置表、Mod 或脚本规则只能提出被允许的动作，而不能通过字符串获得任意代码执行权限。</p>
+<h2 id="处理器负责确定性不负责业务效果">处理器负责确定性，不负责业务效果</h2><p>语义处理器的职责应保持克制：</p>
+<ol>
+<li>接收 Signal 与当前事实；</li>
+<li>按稳定规则排序；</li>
+<li>检查条件；</li>
+<li>应用幂等作用域；</li>
+<li>消耗处理预算；</li>
+<li>生成动作请求；</li>
+<li>写入 Trace。</li>
+</ol>
+<p>它不应：</p>
+<ul>
+<li>直接读取 Unity <code>Time</code>；</li>
+<li>持有具体 ASC；</li>
+<li>加载资源；</li>
+<li>查找场景对象；</li>
+<li>播放音效；</li>
+<li>修改敌人生命；</li>
+<li>创建 Prefab。</li>
+</ul>
+<p>这样，规则判断可以在纯 C# 环境中重复执行。</p>
+<p>同一输入、同一状态和同一规则集合，应产生相同动作序列和原因码。</p>
+<h2 id="稳定排序防止内容顺序变成隐藏规则">稳定排序防止内容顺序变成隐藏规则</h2><p>多个规则同时命中时，执行顺序会影响结果。</p>
+<p>例如：</p>
+<ul>
+<li>先移除护盾再结算伤害；</li>
+<li>先施加湿润再检查感电；</li>
+<li>先触发死亡再触发受击；</li>
+<li>先消费连击层数再计算奖励。</li>
+</ul>
+<p>如果顺序依赖配置文件读取顺序、Dictionary 枚举或程序集扫描，同一内容可能在不同环境中产生不同结果。</p>
+<p>因此，规则需要显式优先级，必要时再以 RuleId 作为稳定排序键。</p>
+<p><strong>稳定规则顺序（后文简称“相同输入按同一顺序判”）</strong>：规则集合不依赖运行时容器和文件自然顺序，任何环境都能得到一致处理次序。</p>
+<p>稳定排序不能自动解决所有规则冲突，但至少能让冲突可复现、可测试、可记录。</p>
+<h2 id="幂等作用域防止同一事实重复消费">幂等作用域防止同一事实重复消费</h2><p>网络重发、事件桥接和多层 Adapter 都可能让同一 Signal 被处理多次。</p>
+<p>如果每次都重复：</p>
+<ul>
+<li>增加状态；</li>
+<li>触发技能；</li>
+<li>发放奖励；</li>
+<li>记录死亡；</li>
+</ul>
+<p>系统会产生难以定位的重复副作用。</p>
+<p>语义处理器需要根据 generation、sequence、rule、source 和 battle scope 建立幂等键。</p>
+<p><strong>幂等消费（后文简称“同一事实只算一次”）</strong>：同一个业务事实在规定作用域内重复进入时，不再生成第二组动作。</p>
+<p>幂等不是永久去重。</p>
+<p>新一局战斗、下一代实体或新的合法 sequence 应重新允许规则执行，因此战斗结束时需要显式重置处理器或关闭对应 Scope。</p>
+<h2 id="单-tick-预算是内容安全边界">单 Tick 预算是内容安全边界</h2><p>规则可以继续发出事件，事件又可能触发更多规则。</p>
+<pre><code>命中
+→ 施加燃烧
+→ 燃烧触发元素反应
+→ 反应发出范围命中
+→ 范围命中再次触发被动
+</code></pre>
+<p>如果没有预算，一个配置错误便可能形成无限链。</p>
+<p><strong>语义处理预算（后文简称“这一 Tick 最多处理多少”）</strong>：限制单次调用中的规则检查数、动作数和派生深度。</p>
+<p>预算耗尽时，系统应：</p>
+<ul>
+<li>停止继续派生；</li>
+<li>返回明确状态；</li>
+<li>在 Trace 中记录预算原因；</li>
+<li>不隐式扩大上限；</li>
+<li>不执行未被完整验证的尾部动作。</li>
+</ul>
+<p>预算不是单纯的性能优化参数，而是防止内容错误和扩展规则拖垮主线程的安全合同。</p>
+<h2 id="state-store-应记录授予来源">State Store 应记录授予来源</h2><p>持续状态不能只保存一个布尔值。</p>
+<p>假设 <code>State.Burning</code> 同时来自：</p>
+<ul>
+<li>地面火焰；</li>
+<li>武器词条；</li>
+<li>Boss 光环。</li>
+</ul>
+<p>其中一个来源结束时，不能直接把 Burning 全局移除。</p>
+<p><strong>来源聚合状态（后文简称“谁加的就由谁撤”）</strong>：State Tag 按 grant source 记录，只有最后一个有效来源被撤销后，状态才真正消失。</p>
+<p>同一结构也适用于：</p>
+<ul>
+<li>无敌；</li>
+<li>沉默；</li>
+<li>输入锁定；</li>
+<li>UI 遮罩；</li>
+<li>移动减速；</li>
+<li>临时阵营关系。</li>
+</ul>
+<p>来源身份使状态生命周期能够与 Battle、Ability、Zone 或 Mod Session 绑定。</p>
+<h2 id="action-request-与实际执行分层">Action Request 与实际执行分层</h2><p>规则处理器输出动作请求后，仍需要 Adapter 做最终执行。</p>
+<p>以 GAS 为例，Adapter 可以负责：</p>
+<ul>
+<li>解析 Handler Key；</li>
+<li>查找项目 Ability Catalog；</li>
+<li>验证目标与权限；</li>
+<li>调用公开 GAS API；</li>
+<li>返回成功或拒绝原因；</li>
+<li>把执行结果写入 Trace。</li>
+</ul>
+<p>“规则成立”和“动作执行成功”是两个不同事实。</p>
+<p>Trace 应分别记录，避免把执行层拒绝误认为规则未匹配。</p>
+<h2 id="trace-是战斗编排的解释接口">Trace 是战斗编排的解释接口</h2><p>复杂战斗 Bug 常见的描述是：</p>
+<blockquote>
+<p>这个被动有时没有触发。</p>
+</blockquote>
+<p>如果系统只保存最终状态，排查时需要猜测：</p>
+<ul>
+<li>Signal 是否进入；</li>
+<li>Tag 是否缺失；</li>
+<li>Rule 是否被禁止状态挡住；</li>
+<li>是否命中幂等；</li>
+<li>是否预算耗尽；</li>
+<li>Action 是否生成；</li>
+<li>Handler 是否存在；</li>
+<li>GAS 是否拒绝。</li>
+</ul>
+<p><strong>结构化 Trace（后文简称“每一步都留下原因”）</strong>：为规则检查、动作生成和执行边界记录稳定原因码与关键身份。</p>
+<p>一条 Trace 至少应允许回答：</p>
+<pre><code>Signal accepted
+→ Rule matched
+→ Required semantic satisfied
+→ Action requested
+→ Handler resolved
+→ Execution rejected: target-invalid
+</code></pre>
+<p>Trace 可以同时服务于 Runtime Monitor、自动测试、战斗回放、服务器审计和 Mod 调试。</p>
+<h2 id="边界比功能数量更重要">边界比功能数量更重要</h2><p>语义战斗编排很容易继续扩张成统一战斗框架。</p>
+<p>但它应明确不负责：</p>
+<ul>
+<li>完整帧同步；</li>
+<li>物理碰撞；</li>
+<li>ECS 调度；</li>
+<li>具体数值公式；</li>
+<li>资产加载；</li>
+<li>UI 和音效；</li>
+<li>网络复制；</li>
+<li>项目内容目录。</li>
+</ul>
+<p>这些能力通过 Bridge 接入，而不是进入 Core。</p>
+<p>即使 Sample 同时展示 Command、Save、UI、Audio 和脚本规则，也不应扩大 Semantic Combat 父包的硬依赖或稳定 API。</p>
+<h2 id="我的判断">我的判断</h2><p>战斗系统的可扩展性，不取决于事件总线能连接多少模块。</p>
+<p>更关键的是建立一条受约束的转换链：</p>
+<pre><code>事实
+→ 条件
+→ 受限请求
+→ 权威执行
+→ 可解释结果
+</code></pre>
+<p>当事件、状态和语义资格被分开表达，规则判断与动作执行被分层，预算、幂等和 Trace 成为正式合同后，战斗内容才能在增加组合能力的同时保持可控。</p>
+<h2 id="设计检查表">设计检查表</h2><ul>
+<li>Event、State 和 Semantic 是否被明确区分；</li>
+<li>Signal 是否携带不必要的引擎对象或回调；</li>
+<li>Rule 是否输出白名单动作，而不是任意类型名；</li>
+<li>规则集合是否有稳定排序；</li>
+<li>同一事实是否存在幂等键；</li>
+<li>State 是否按 grant source 聚合；</li>
+<li>单 Tick 是否有规则、动作和深度预算；</li>
+<li>预算耗尽是否产生明确 Trace；</li>
+<li>规则匹配与动作执行结果是否分别记录；</li>
+<li>GAS、Hitbox、Simulation 和 Server 是否通过 Bridge 接入；</li>
+<li>Battle 结束时是否重置处理器和状态来源；</li>
+<li>Sample 扩展是否被误写进父包硬依赖。</li>
+</ul>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>通俗称呼</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语义战斗编排</td>
+<td>战斗事实管线</td>
+<td>把事件、状态和资格事实转换为动作请求</td>
+</tr>
+<tr>
+<td>受限结构化载荷</td>
+<td>只带规则需要的事实</td>
+<td>不携带任意对象和执行能力的 Signal 数据</td>
+</tr>
+<tr>
+<td>白名单动作模板</td>
+<td>只能申请已登记动作</td>
+<td>规则只能输出项目允许的动作类型和 Key</td>
+</tr>
+<tr>
+<td>稳定规则顺序</td>
+<td>相同输入按同一顺序判</td>
+<td>规则处理不依赖容器或文件自然顺序</td>
+</tr>
+<tr>
+<td>幂等消费</td>
+<td>同一事实只算一次</td>
+<td>重复 Signal 不产生重复副作用</td>
+</tr>
+<tr>
+<td>语义处理预算</td>
+<td>这一 Tick 最多处理多少</td>
+<td>限制规则、动作和派生深度</td>
+</tr>
+<tr>
+<td>来源聚合状态</td>
+<td>谁加的就由谁撤</td>
+<td>State 按授予来源维护生命周期</td>
+</tr>
+<tr>
+<td>结构化 Trace</td>
+<td>每一步都留下原因</td>
+<td>记录规则和执行边界的稳定原因码</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>资料说明：本文依据 2026-08-05 的 Semantic Combat 包边界、核心 API 与综合参考实例整理。该模块属于战斗编排层，不代表完整 Simulation、网络权威或项目战斗内容已经由框架统一实现。</p>
+</blockquote>
+<hr />
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="framework-capability-semantic-catalog.html"><span>同属「Sakura Framework 工程实践」，共享 essay</span><strong>框架能力语义目录：能力词表、证据化声明与可解释模块选择</strong><small>大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？</small></a><a href="room-join-response-snapshot-ordering.html"><span>同属「Sakura Framework 工程实践」，共享 essay</span><strong>房间加入协议中的响应顺序与快照可见性边界</strong><small>多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？</small></a><a href="ai-safe-execution-plane.html"><span>同属「Sakura Framework 工程实践」</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

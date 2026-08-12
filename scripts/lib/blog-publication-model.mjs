@@ -70,7 +70,7 @@ export function selectPublishedBlogs(manifest, source, blogBodies) {
       if (entry.publishedAt > entry.updatedAt) {
         throw new Error(`Published blog ${entry.sourceId} cannot be updated before it was published.`);
       }
-      const markdown = body.toString('utf8');
+      const markdown = stripBlogPublicationPreamble(body.toString('utf8'));
       for (const marker of FORBIDDEN_PUBLIC_MARKERS) {
         if (marker.test(markdown)) throw new Error(`Published blog ${entry.sourceId} contains a draft marker.`);
       }

@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/causal-weaving.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="因果编织类游戏 | Sakura Design Journal">
+    <meta property="og:description" content="以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/causal-weaving.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-causal-weaving.png">
+    <meta property="og:image:alt" content="因果编织类游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="因果编织类游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-causal-weaving.png">
+    <meta name="twitter:image:alt" content="因果编织类游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"因果编织类游戏 | Sakura Design Journal","description":"以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。","url":"https://irissakura.github.io/pages/journal/causal-weaving.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"因果编织类游戏","image":"https://irissakura.github.io/assets/social/pages-journal-causal-weaving.png","dateModified":"2026-08-12","about":["causality","narrative","puzzle"]}</script>
+    <!-- site-meta:end -->
+    <title>因果编织类游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-causal-weaving"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>因果编织类游戏</h1><p>以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。</p><div class="note-tags"><span>causality</span><span>narrative</span><span>puzzle</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p><strong>代表范式：</strong> 可执行承诺操作系统</p>
+</blockquote>
+<blockquote>
+<p><strong>核心闭环：</strong> 承诺 → 竞标 → 实现 → 见证 → 债务</p>
+</blockquote>
+<h3 id="目录">目录</h3><ul>
+<li><a href="#0-%E6%96%87%E6%A1%A3%E5%AE%9A%E4%BD%8D%E4%B8%8E%E5%8E%9F%E5%88%9B%E6%80%A7%E8%BE%B9%E7%95%8C">0. 文档定位与原创性边界</a></li>
+<li><a href="#1-%E5%93%81%E7%B1%BB%E5%AE%9A%E4%B9%89">1. 品类定义</a></li>
+<li><a href="#2-%E4%BB%A3%E8%A1%A8%E6%80%A7%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%89%BF%E8%AF%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">2. 代表性设计范式：可执行承诺操作系统</a></li>
+<li><a href="#3-%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%9F%B1">3. 设计支柱</a></li>
+<li><a href="#4-%E6%A0%B8%E5%BF%83%E6%B8%B8%E6%88%8F%E5%AF%B9%E8%B1%A1%E6%89%BF%E8%AF%BA">4. 核心游戏对象：承诺</a></li>
+<li><a href="#5-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84">5. 运行时总体架构</a></li>
+<li><a href="#6-%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E8%81%8C%E8%B4%A3">6. 核心模块职责</a></li>
+<li><a href="#7-%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B">7. 关键数据模型</a></li>
+<li><a href="#8-%E5%8D%95%E6%97%B6%E7%89%87%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B">8. 单时片执行流程</a></li>
+<li><a href="#9-%E4%B8%80%E6%AC%A1%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%E7%A4%BA%E4%BE%8B">9. 一次完整流程示例</a></li>
+<li><a href="#10-%E6%A8%A1%E5%9D%97%E9%80%9A%E4%BF%A1%E4%B8%8E%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B">10. 模块通信与并发模型</a></li>
+<li><a href="#11-%E5%8F%AF%E6%89%A9%E5%B1%95%E7%82%B9">11. 可扩展点</a></li>
+<li><a href="#12-%E5%A4%B1%E8%B4%A5%E9%9A%94%E7%A6%BB">12. 失败隔离</a></li>
+<li><a href="#13-%E8%B0%83%E8%AF%95%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E4%B8%8E%E6%B5%8B%E8%AF%95">13. 调试、可观测性与测试</a></li>
+<li><a href="#14-%E7%8E%A9%E5%AE%B6%E4%BD%93%E9%AA%8C%E8%AE%BE%E8%AE%A1">14. 玩家体验设计</a></li>
+<li><a href="#15-%E8%83%9C%E5%88%A9%E5%A4%B1%E8%B4%A5%E4%B8%8E%E9%95%BF%E6%9C%9F%E8%BF%9B%E7%A8%8B">15. 胜利、失败与长期进程</a></li>
+<li><a href="#16-%E9%98%B2%E6%AD%A2%E9%80%80%E5%8C%96%E4%B8%BA%E5%85%B6%E4%BB%96%E5%93%81%E7%B1%BB">16. 防止退化为其他品类</a></li>
+<li><a href="#17-%E4%B8%BB%E8%A6%81%E9%80%80%E5%8C%96%E7%AD%96%E7%95%A5%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%BA%A6%E6%9D%9F">17. 主要退化策略与系统约束</a></li>
+<li><a href="#18-%E5%86%85%E5%AE%B9%E7%94%9F%E4%BA%A7%E8%8C%83%E5%BC%8F">18. 内容生产范式</a></li>
+<li><a href="#19-%E6%9C%80%E5%B0%8F%E5%8F%AF%E8%A1%8C%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87">19. 最小可行垂直切片</a></li>
+<li><a href="#20-%E5%8F%AF%E8%BF%81%E7%A7%BB%E5%88%B0%E5%85%B6%E4%BB%96%E6%B8%B8%E6%88%8F%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3">20. 可迁移到其他游戏的设计思想</a></li>
+<li><a href="#21-%E6%80%BB%E7%BB%93">21. 总结</a></li>
+</ul>
+<hr />
+<h3 id="0-文档定位与原创性边界">0. 文档定位与原创性边界</h3><p>“全球从未有人记录过某种游戏类型”无法被严格证明，因为不存在覆盖全部游戏、原型、论文和内部设计文档的完备数据库。</p>
+<p>因此，本提案采用更可审计的判断标准：该类型必须具有独立的核心动词、完整的胜负结构、可持续扩张的内容单元，以及不依附于战斗、建造、探索或分支叙事的运行时闭环。</p>
+<p>本文提出的“因果编织类游戏”应被视为一个原创宏观品类提案，而不是对绝对历史首创性的无依据声明。</p>
+<hr />
+<h2 id="1-品类定义">1. 品类定义</h2><h3 id="11-名称">1.1 名称</h3><p><strong>因果编织类游戏，Causal Weaving Game</strong></p>
+<p>玩家不是直接操纵角色、单位、城市或生产线，而是向一个由自治主体组成的世界发布“未来承诺”。</p>
+<p>一项未来承诺描述：</p>
+<ul>
+<li><p>当什么条件出现；</p>
+</li>
+<li><p>谁负有实现责任；</p>
+</li>
+<li><p>必须在何时产生什么结果；</p>
+</li>
+<li><p>哪些资源可用于履约；</p>
+</li>
+<li><p>谁必须见证或承认结果；</p>
+</li>
+<li><p>无法履约时应执行什么替代方案；</p>
+</li>
+<li><p>违约应产生什么长期代价。</p>
+</li>
+</ul>
+<p>世界不会机械执行玩家指令。角色、机构、生态过程或其他自治系统会评估承诺，提出履约方案，争夺资源，拒绝不利义务，钻取条款漏洞，传播或压制证据，并最终使承诺被履行、被曲解、被争议或被违反。</p>
+<p>玩家的根本目标不是“控制现在”，而是：</p>
+<blockquote>
+<p>使自己希望发生的未来，成为世界中最容易执行、最难否认、违背成本最高的未来。</p>
+</blockquote>
+<h3 id="12-核心玩家动词">1.2 核心玩家动词</h3><p>该品类的一级动词不是移动、攻击、建造或选择对话，而是：</p>
+<p><strong>发布、绑定、担保、授权、委托、修订、见证、追认、豁免、重组、转移和结算承诺。</strong></p>
+<p>地图、角色、经济、外交、战斗和剧情都可以存在，但它们只是履约环境，不是品类本体。</p>
+<h3 id="13-独立成类的最低判定条件">1.3 独立成类的最低判定条件</h3><p>一款游戏只有同时满足以下条件，才属于因果编织类：</p>
+<ol>
+<li><p>大部分有意义的玩家行为都在修改承诺、权限、证据、优先级或违约责任，而不是直接改变世界对象。</p>
+</li>
+<li><p>同一承诺可以被多个主体以不同方法履行，具体执行方案不是预先固定的。</p>
+</li>
+<li><p>“事情在物理上发生”与“事情被相关主体承认为已经发生”是两个不同状态。</p>
+</li>
+<li><p>承诺失败不会只返回一个错误状态，而会生成持久的因果债务并改变后续世界。</p>
+</li>
+<li><p>胜利取决于建立可抵御扰动的未来保证，而不仅是完成一次性任务。</p>
+</li>
+</ol>
+<p>只要这五点成立，即使游戏没有战斗、地图探索、资源生产或分支剧情，也能独立形成完整产品。</p>
+<hr />
+<h2 id="2-代表性设计范式可执行承诺操作系统">2. 代表性设计范式：可执行承诺操作系统</h2><h3 id="21-承诺不是脚本">2.1 承诺不是脚本</h3><p>普通规则的形式是：</p>
+<blockquote>
+<p>若 X，则系统保证执行 Y。</p>
+</blockquote>
+<p>因果承诺的形式是：</p>
+<blockquote>
+<p>若 X 成立，发行者承诺在时间窗口 W 内使 Y 成立，并为此抵押资源、权威或信誉；世界中的主体可以接受、拒绝、变通或争议这一承诺。</p>
+</blockquote>
+<p>因此，承诺具备以下性质：</p>
+<ul>
+<li><p>描述目标结果，而不是固定操作序列；</p>
+</li>
+<li><p>必须有发行者和责任归属；</p>
+</li>
+<li><p>可能因资源、知识、权限或主体意愿而失败；</p>
+</li>
+<li><p>可以被不同计划实现；</p>
+</li>
+<li><p>需要满足特定的证据和承认条件；</p>
+</li>
+<li><p>违约后继续影响世界，而不是从任务列表中消失。</p>
+</li>
+</ul>
+<p>这使其区别于自动化编程、单位命令、任务系统和预制剧情分支。</p>
+<h3 id="22-五阶段闭环">2.2 五阶段闭环</h3><h4 id="阶段一承诺">阶段一：承诺</h4><p>玩家构造一个结构化的未来约束，包括触发条件、目标状态、责任主体、时间窗口、抵押物、见证条件和退路。</p>
+<h4 id="阶段二竞标">阶段二：竞标</h4><p>符合条件的自治主体评估该义务。</p>
+<p>“竞标”不一定意味着货币拍卖。它可以表现为：</p>
+<ul>
+<li><p>角色提出所需报酬；</p>
+</li>
+<li><p>机构要求获得某项权限；</p>
+</li>
+<li><p>派系要求交换政治让步；</p>
+</li>
+<li><p>生态过程要求特定环境条件；</p>
+</li>
+<li><p>自动系统报告其执行成本和失败风险。</p>
+</li>
+</ul>
+<h4 id="阶段三实现">阶段三：实现</h4><p>系统将被选中的履约方案编译成具有前置条件、资源预留、持续时间和失败模式的执行计划。计划在世界中实际运行，而不是瞬间结算。</p>
+<h4 id="阶段四见证">阶段四：见证</h4><p>物理结果发生后，相关观察者接收信息，并依据证据、信任和解释规则判断承诺是否成立。</p>
+<p>“完成”至少分为两层：</p>
+<ul>
+<li><p><strong>物质完成：</strong> 目标世界状态已经形成；</p>
+</li>
+<li><p><strong>承认完成：</strong> 规定的见证者接受该状态足以满足承诺。</p>
+</li>
+</ul>
+<h4 id="阶段五债务">阶段五：债务</h4><p>未完成、部分完成、逾期完成、以禁止方式完成或未被承认的承诺都会产生因果债务。</p>
+<p>债务可能表现为：</p>
+<ul>
+<li><p>信誉下降；</p>
+</li>
+<li><p>后续承诺抵押要求上升；</p>
+</li>
+<li><p>主体拒绝再次参与；</p>
+</li>
+<li><p>原有承诺失去优先级；</p>
+</li>
+<li><p>机构合法性受损；</p>
+</li>
+<li><p>依赖该承诺的其他计划连锁失效；</p>
+</li>
+<li><p>对手获得重新解释事实的机会。</p>
+</li>
+</ul>
+<p>债务不是单纯惩罚，而是下一轮玩法的输入。</p>
+<hr />
+<h2 id="3-设计支柱">3. 设计支柱</h2><h3 id="31-未来是可执行合同不是预测结果">3.1 未来是可执行合同，不是预测结果</h3><p>玩家不能直接选择结局，只能构造一个使结局更易成立的约束网络。</p>
+<h3 id="32-所有行动都会形成责任">3.2 所有行动都会形成责任</h3><p>传统策略游戏中，下错命令主要损失资源。在因果编织中，每次发行承诺都会制造潜在负债。越有力的承诺，违约后果越严重。</p>
+<h3 id="33-自治主体履约而不是服从">3.3 自治主体履约，而不是服从</h3><p>主体必须拥有能力、知识、利益和风险判断。玩家可以设计激励和权力结构，但不能把主体降格为无条件执行器。</p>
+<h3 id="34-事实与承认分离">3.4 事实与承认分离</h3><p>港口被疏散，不代表所有机构都承认疏散合法；协议被签署，不代表边境部队已经收到消息；目标人物死亡，不代表继承机构接受其死亡证明。</p>
+<p>这层分离是本品类最重要的内容生成器之一。</p>
+<h3 id="35-失败必须继续运行">3.5 失败必须继续运行</h3><p>正常玩法失败包括无人接单、资源冲突、计划中断、证据不足、见证者拒绝和期限逾期。这些都是领域事件，不是程序异常，也不应强制玩家读档。</p>
+<hr />
+<h2 id="4-核心游戏对象承诺">4. 核心游戏对象：承诺</h2><h3 id="41-字段组成">4.1 字段组成</h3><h4 id="身份信息">身份信息</h4><ul>
+<li><p>承诺 ID；</p>
+</li>
+<li><p>发行者；</p>
+</li>
+<li><p>所属机构；</p>
+</li>
+<li><p>创建时间；</p>
+</li>
+<li><p>当前版本；</p>
+</li>
+<li><p>可见范围。</p>
+</li>
+</ul>
+<h4 id="触发条款">触发条款</h4><ul>
+<li><p>触发谓词；</p>
+</li>
+<li><p>触发观察来源；</p>
+</li>
+<li><p>最早生效时间；</p>
+</li>
+<li><p>防重复触发策略；</p>
+</li>
+<li><p>撤销条件。</p>
+</li>
+</ul>
+<h4 id="角色绑定">角色绑定</h4><ul>
+<li><p>责任主体；</p>
+</li>
+<li><p>受益主体；</p>
+</li>
+<li><p>受影响主体；</p>
+</li>
+<li><p>可替代履约者；</p>
+</li>
+<li><p>有否决权的主体。</p>
+</li>
+</ul>
+<h4 id="目标结果">目标结果</h4><ul>
+<li><p>必须成立的世界谓词；</p>
+</li>
+<li><p>可接受的结果范围；</p>
+</li>
+<li><p>禁止采用的实现方式；</p>
+</li>
+<li><p>结果持续时间。</p>
+</li>
+</ul>
+<h4 id="时间约束">时间约束</h4><ul>
+<li><p>开始窗口；</p>
+</li>
+<li><p>完成期限；</p>
+</li>
+<li><p>宽限期；</p>
+</li>
+<li><p>争议期；</p>
+</li>
+<li><p>最终确认时间。</p>
+</li>
+</ul>
+<h4 id="经济与权力">经济与权力</h4><ul>
+<li><p>可动用资源；</p>
+</li>
+<li><p>可授予权限；</p>
+</li>
+<li><p>对履约者的激励；</p>
+</li>
+<li><p>发行者抵押物；</p>
+</li>
+<li><p>最大可接受附带损失。</p>
+</li>
+</ul>
+<h4 id="见证条款">见证条款</h4><ul>
+<li><p>哪些主体必须观察；</p>
+</li>
+<li><p>什么证据有效；</p>
+</li>
+<li><p>是否需要法定人数；</p>
+</li>
+<li><p>是否允许代理见证；</p>
+</li>
+<li><p>对相互冲突证言的处理方式。</p>
+</li>
+</ul>
+<h4 id="弹性与退路">弹性与退路</h4><ul>
+<li><p>哪些条款可以放宽；</p>
+</li>
+<li><p>放宽顺序；</p>
+</li>
+<li><p>替代目标；</p>
+</li>
+<li><p>失败时的补偿方案；</p>
+</li>
+<li><p>是否允许转移责任。</p>
+</li>
+</ul>
+<h4 id="违约策略">违约策略</h4><ul>
+<li><p>债务类型；</p>
+</li>
+<li><p>债务规模计算；</p>
+</li>
+<li><p>责任归属；</p>
+</li>
+<li><p>对依赖承诺的传播规则；</p>
+</li>
+<li><p>是否允许追认或补救。</p>
+</li>
+</ul>
+<h3 id="42-承诺状态机">4.2 承诺状态机</h3><p>推荐状态序列：</p>
+<p><strong>草拟 → 已验证 → 休眠 → 已武装 → 已触发 → 已绑定 → 规划中 → 已预留 → 执行中 → 物质完成 → 待承认 → 已履约</strong></p>
+<p>异常或分支状态包括：</p>
+<ul>
+<li><p>有争议；</p>
+</li>
+<li><p>部分履约；</p>
+</li>
+<li><p>已逾期；</p>
+</li>
+<li><p>已违约；</p>
+</li>
+<li><p>已豁免；</p>
+</li>
+<li><p>已取代；</p>
+</li>
+<li><p>已撤销；</p>
+</li>
+<li><p>无可行计划。</p>
+</li>
+</ul>
+<p>必须保留“物质完成”和“已履约”之间的独立状态，不能直接合并。</p>
+<h3 id="43-示例承诺">4.3 示例承诺</h3><h4 id="承诺-c-104北港撤离">承诺 C-104：北港撤离</h4><p>| 字段 | 内容 |</p>
+<p>|---|---|</p>
+<p>| 触发 | 潮位模型报告未来六小时内超过警戒值 |</p>
+<p>| 对象 | 北港常住人口 |</p>
+<p>| 目标 | 第十二时片结束前，所有对象离开危险区域 |</p>
+<p>| 禁止方式 | 不得以强制拘押方式迁移 |</p>
+<p>| 见证 | 港务局和码头工会必须分别确认 |</p>
+<p>| 资源 | 运输预算 200，临时征用权 2 级 |</p>
+<p>| 抵押 | 发行机构信誉 30 |</p>
+<p>| 弹性 | 可以改变运输方式，不得改变安全区标准 |</p>
+<p>| 退路 | 主要道路关闭时允许调用水路撤离 |</p>
+<p>| 违约 | 生成公共安全债务和劳资信任债务 |</p>
+<p>同一个承诺可能由轮渡、私人车辆、临时铁路、步行通道或分区撤离实现。承诺定义结果边界，不指定唯一答案。</p>
+<hr />
+<h2 id="5-运行时总体架构">5. 运行时总体架构</h2><p>推荐采用“逻辑离散、表现连续”的可暂停实时架构。模拟以固定时片推进，界面以更高帧率插值表现。</p>
+<p>主数据流：</p>
+<p><strong>玩家意图 → 命令网关 → 承诺编译器 → 触发网络 → 义务市场 → 有界规划器 → 冲突仲裁与资源预留 → 事务执行器 → 观察与见证层 → 履约结算与债务账本 → 事件日志与投影模型 → 玩家界面</strong></p>
+<h3 id="51-分层结构">5.1 分层结构</h3><h4 id="第一层权威模拟内核">第一层：权威模拟内核</h4><p>负责时间、实体、物理资源、事务提交和确定性事件顺序。只有这一层能够最终改写权威世界状态。</p>
+<h4 id="第二层因果操作系统">第二层：因果操作系统</h4><p>负责承诺、义务、依赖、优先级、冲突、预留、违约和债务传播。</p>
+<h4 id="第三层自治主体生态">第三层：自治主体生态</h4><p>负责角色、机构、群体和环境过程的目标、能力、知识、信任、竞标和履约行为。</p>
+<h4 id="第四层认知与见证层">第四层：认知与见证层</h4><p>负责信息传播、观察权限、证据质量、主体信念、争议和最终承认。</p>
+<h4 id="第五层预测与解释层">第五层：预测与解释层</h4><p>负责影子模拟、风险等级、因果解释、瓶颈分析和玩家可读的未来投影。</p>
+<h4 id="第六层内容与扩展层">第六层：内容与扩展层</h4><p>负责条款类型、动作算子、角色原型、场景规则、主题包和版本迁移。</p>
+<h3 id="52-状态所有权原则">5.2 状态所有权原则</h3><p>系统必须遵守以下不变量：</p>
+<ol>
+<li><p>只有事务执行器可以改写权威世界状态。</p>
+</li>
+<li><p>每次状态变化都必须对应一个不可变领域事件。</p>
+</li>
+<li><p>每个领域事件都必须带有原因 ID 和关联 ID。</p>
+</li>
+<li><p>规划器、竞标器和预测器只能读取不可变快照。</p>
+</li>
+<li><p>工作线程只能返回提案，不能自行提交结果。</p>
+</li>
+<li><p>物质完成不能自动等同于承诺履约。</p>
+</li>
+<li><p>同一资源在重叠时间窗内不得被重复预留。</p>
+</li>
+<li><p>所有随机决策必须来自可重放的分区随机流。</p>
+</li>
+<li><p>次级触发默认推迟到下一时片，防止同一时片无限递归。</p>
+</li>
+<li><p>界面状态不得反向成为模拟事实。</p>
+</li>
+</ol>
+<hr />
+<h2 id="6-核心模块职责">6. 核心模块职责</h2><h3 id="61-命令网关">6.1 命令网关</h3><p>接收玩家的发布、修订、撤销、授权、拨款、豁免和证据提交操作。</p>
+<p>职责：</p>
+<ul>
+<li><p>验证结构是否完整；</p>
+</li>
+<li><p>验证发行者是否具有相应权限；</p>
+</li>
+<li><p>计算抵押和发行成本；</p>
+</li>
+<li><p>识别明显的循环引用；</p>
+</li>
+<li><p>返回可定位到具体条款的错误。</p>
+</li>
+</ul>
+<p>命令网关只验证命令是否合法，不判断承诺是否一定能够完成。一个困难甚至近乎不可能的承诺可以合法发行，但必须明确展示其风险和抵押成本。</p>
+<h3 id="62-承诺编译器">6.2 承诺编译器</h3><p>把高层承诺转换成运行时可执行结构：</p>
+<ul>
+<li><p>触发订阅；</p>
+</li>
+<li><p>角色绑定查询；</p>
+</li>
+<li><p>目标谓词；</p>
+</li>
+<li><p>权限要求；</p>
+</li>
+<li><p>资源需求；</p>
+</li>
+<li><p>见证要求；</p>
+</li>
+<li><p>违约与退路分支；</p>
+</li>
+<li><p>依赖图边。</p>
+</li>
+</ul>
+<p>结构化编辑器是权威输入。自然语言可用于显示或辅助填写，但不能直接作为模拟真值，以免产生不可重放的语义漂移。</p>
+<h3 id="63-增量触发网络">6.3 增量触发网络</h3><p>跟踪可能影响承诺的事实变化。</p>
+<p>不应每个时片全量扫描所有承诺。应为谓词建立依赖索引：</p>
+<ul>
+<li><p>哪些事实字段变化会使谓词重新求值；</p>
+</li>
+<li><p>哪些实体类型可能成为绑定对象；</p>
+</li>
+<li><p>哪些时间边界需要唤醒承诺；</p>
+</li>
+<li><p>哪些证据事件可能结束争议。</p>
+</li>
+</ul>
+<p>适合采用增量匹配网络或编译后的谓词有向无环图。</p>
+<h3 id="64-义务生命周期管理器">6.4 义务生命周期管理器</h3><p>承诺触发后，生成具体义务实例。</p>
+<p>同一承诺可以因不同时间、区域或对象触发多个义务。生命周期管理器负责：</p>
+<ul>
+<li><p>父子义务关系；</p>
+</li>
+<li><p>义务拆分和合并；</p>
+</li>
+<li><p>委托深度；</p>
+</li>
+<li><p>期限；</p>
+</li>
+<li><p>当前履约者；</p>
+</li>
+<li><p>完成比例；</p>
+</li>
+<li><p>争议状态；</p>
+</li>
+<li><p>终止状态。</p>
+</li>
+</ul>
+<h3 id="65-主体资格与竞标模块">6.5 主体资格与竞标模块</h3><p>从世界中筛选可能履约的主体，然后生成竞标。</p>
+<p>主体资格由以下因素决定：</p>
+<ul>
+<li><p>能力；</p>
+</li>
+<li><p>所在位置；</p>
+</li>
+<li><p>已知信息；</p>
+</li>
+<li><p>可用时间；</p>
+</li>
+<li><p>权限；</p>
+</li>
+<li><p>当前承诺；</p>
+</li>
+<li><p>资源和装备；</p>
+</li>
+<li><p>与发行者的关系；</p>
+</li>
+<li><p>是否认同承诺目标。</p>
+</li>
+</ul>
+<p>内部竞标评分可以采用：</p>
+<p><strong>预期收益 + 目标一致度 + 合法性收益 − 资源成本 − 风险 − 机会成本 − 信任惩罚</strong></p>
+<p>模拟关键评分应采用定点数或量化值，以避免跨平台浮点差异。</p>
+<p>每个竞标必须附带解释向量，例如：</p>
+<ul>
+<li><p>能够在期限内完成；</p>
+</li>
+<li><p>要求额外运输权；</p>
+</li>
+<li><p>与现有义务冲突；</p>
+</li>
+<li><p>不接受禁止强制迁移条款；</p>
+</li>
+<li><p>对发行者信任过低。</p>
+</li>
+</ul>
+<h3 id="66-有界计划编译器">6.6 有界计划编译器</h3><p>规划器根据目标结果反向寻找可执行动作。</p>
+<p>推荐采用受限的分层任务网络与目标导向动作规划混合模型：</p>
+<ul>
+<li><p>动作算子声明前置条件、效果、持续时间、资源需求、观察特征和失败模式；</p>
+</li>
+<li><p>从目标谓词反向检索能够产生该结果的算子；</p>
+</li>
+<li><p>为算子绑定主体、位置和资源；</p>
+</li>
+<li><p>形成有向无环执行计划；</p>
+</li>
+<li><p>根据成本、风险、时间和冲突排序；</p>
+</li>
+<li><p>只保留有限数量候选计划。</p>
+</li>
+</ul>
+<p>规划必须有明确预算：</p>
+<ul>
+<li><p>最大搜索深度；</p>
+</li>
+<li><p>最大展开节点数；</p>
+</li>
+<li><p>最大候选计划数；</p>
+</li>
+<li><p>单义务最大处理时间；</p>
+</li>
+<li><p>单时片总规划额度。</p>
+</li>
+</ul>
+<p>预算耗尽时，产生“规划预算耗尽”领域结果，而不是卡死模拟线程。</p>
+<h3 id="67-冲突仲裁器">6.7 冲突仲裁器</h3><p>不同承诺可能争夺同一主体、资源、地点、时间窗口或事实解释。</p>
+<p>推荐仲裁顺序：</p>
+<ol>
+<li><p>世界硬性不变量；</p>
+</li>
+<li><p>已生效的安全规则；</p>
+</li>
+<li><p>权限与法定优先级；</p>
+</li>
+<li><p>已确认的资源预留；</p>
+</li>
+<li><p>明示的承诺先后关系；</p>
+</li>
+<li><p>抵押和违约代价；</p>
+</li>
+<li><p>综合计划效用；</p>
+</li>
+<li><p>稳定、确定的最终排序键。</p>
+</li>
+</ol>
+<p>不能只使用一个“优先级数字”，否则玩家最终会把所有重要事项设为最高级。</p>
+<p>仲裁结果必须生成可解释事件，指出哪些计划因何种资源、权限或事实冲突被拒绝。</p>
+<h3 id="68-资源预留系统">6.8 资源预留系统</h3><p>资源不只包括物资，也包括：</p>
+<ul>
+<li><p>主体时间；</p>
+</li>
+<li><p>空间容量；</p>
+</li>
+<li><p>通行窗口；</p>
+</li>
+<li><p>权限额度；</p>
+</li>
+<li><p>信息渠道；</p>
+</li>
+<li><p>公众注意力；</p>
+</li>
+<li><p>政治资本；</p>
+</li>
+<li><p>见证者可用性；</p>
+</li>
+<li><p>信用和信誉抵押。</p>
+</li>
+</ul>
+<p>预留应具备时间区间、所有者、用途、可抢占性和释放条件。</p>
+<p>执行前先预留，可以把“已保证”和“仅可能”明确区分。</p>
+<h3 id="69-事务执行器">6.9 事务执行器</h3><p>事务执行器是唯一有权提交世界状态变更的模块。</p>
+<p>每个计划步骤应经过：</p>
+<p><strong>读取版本 → 验证前置条件 → 检查预留 → 计算效果 → 验证不变量 → 写入事件批次 → 原子应用状态差异 → 增加世界版本</strong></p>
+<p>若任一步失败：</p>
+<ul>
+<li><p>原子步骤完全回滚；</p>
+</li>
+<li><p>可分割步骤只保留已明确提交的子步骤；</p>
+</li>
+<li><p>释放未消耗预留；</p>
+</li>
+<li><p>生成对应的执行失败事件；</p>
+</li>
+<li><p>触发退路或重新规划。</p>
+</li>
+</ul>
+<h3 id="610-观察知识与见证模块">6.10 观察、知识与见证模块</h3><p>权威世界只保存“实际发生了什么”。不同主体拥有各自的信念视图。</p>
+<p>为避免给每个主体复制完整世界，可使用认知分区：</p>
+<ul>
+<li><p>直接观察范围；</p>
+</li>
+<li><p>所属机构共享频道；</p>
+</li>
+<li><p>地区公共信息；</p>
+</li>
+<li><p>私密通信；</p>
+</li>
+<li><p>传闻网络；</p>
+</li>
+<li><p>法定记录；</p>
+</li>
+<li><p>传感器或证据链。</p>
+</li>
+</ul>
+<p>一次事件首先产生物理事实，然后依据可见性路由为不同主体生成观察记录。主体再根据信任、知识和解释规则形成信念事实。</p>
+<p>见证策略可包括：</p>
+<ul>
+<li><p>直接观察；</p>
+</li>
+<li><p>可信代理；</p>
+</li>
+<li><p>多方见证；</p>
+</li>
+<li><p>法定人数；</p>
+</li>
+<li><p>权威机构确认；</p>
+</li>
+<li><p>证据链完整；</p>
+</li>
+<li><p>多个相互独立来源一致。</p>
+</li>
+</ul>
+<p>争议必须有终止机制。推荐设置“挑战窗口”：窗口内可推翻承认；最终确认后不回滚物理世界，只能产生新的赔偿、追责或合法性债务。</p>
+<h3 id="611-因果债务账本">6.11 因果债务账本</h3><p>债务至少分为：</p>
+<ul>
+<li><p><strong>资源债务：</strong> 消耗或占用了尚未补偿的物资和时间；</p>
+</li>
+<li><p><strong>信任债务：</strong> 主体对发行者未来承诺要求更高抵押；</p>
+</li>
+<li><p><strong>合法性债务：</strong> 机构的授权范围和优先级下降；</p>
+</li>
+<li><p><strong>语义债务：</strong> 条款解释存在未解决矛盾；</p>
+</li>
+<li><p><strong>时间债务：</strong> 将未完成义务推迟给后续时片；</p>
+</li>
+<li><p><strong>依赖债务：</strong> 下游承诺因上游违约变得脆弱。</p>
+</li>
+</ul>
+<p>债务会沿承诺依赖图传播，但传播应具有衰减、上限和类型转换规则，避免一次小失败无限放大。</p>
+<p>玩家可以通过补偿、重新谈判、公开承认、替代履约、债务转移或机构改革处理债务。</p>
+<h3 id="612-预测与解释模块">6.12 预测与解释模块</h3><p>预测器不能修改世界，只能从不可变快照运行有限影子模拟。</p>
+<p>不推荐直接显示伪精确概率。更适合展示以下等级：</p>
+<p>| 等级 | 含义 |</p>
+<p>|---|---|</p>
+<p>| 锁定 | 必要资源已预留，已知冲突已解决 |</p>
+<p>| 有支撑 | 存在可行计划，但仍依赖可变条件 |</p>
+<p>| 脆弱 | 计划存在未预留依赖或单点故障 |</p>
+<p>| 有争议 | 物质计划可行，但承认或权限存在冲突 |</p>
+<p>| 无绑定 | 没有主体、资源或算子能够形成计划 |</p>
+<p>| 硬性不可能 | 违反世界不变量或明确禁令 |</p>
+<p>解释模块必须能回答：</p>
+<ol>
+<li><p>为什么发生了？</p>
+</li>
+<li><p>为什么没有发生？</p>
+</li>
+<li><p>哪个条件改变了结果？</p>
+</li>
+<li><p>接下来最可能在哪个依赖点断裂？</p>
+</li>
+</ol>
+<h3 id="613-事件日志与回放模块">6.13 事件日志与回放模块</h3><p>事件日志保存：</p>
+<ul>
+<li><p>事件 ID；</p>
+</li>
+<li><p>世界时片；</p>
+</li>
+<li><p>事件类型；</p>
+</li>
+<li><p>发起者；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>原因事件 ID；</p>
+</li>
+<li><p>关联流程 ID；</p>
+</li>
+<li><p>输入世界版本；</p>
+</li>
+<li><p>输出世界版本；</p>
+</li>
+<li><p>状态差异摘要；</p>
+</li>
+<li><p>可见范围；</p>
+</li>
+<li><p>随机流位置。</p>
+</li>
+</ul>
+<p>存档采用“周期快照 + 追加事件日志”。加载时从最后一个有效快照重放日志尾部。</p>
+<hr />
+<h2 id="7-关键数据模型">7. 关键数据模型</h2><h3 id="71-模型总览">7.1 模型总览</h3><p>| 模型 | 核心职责 |</p>
+<p>|---|---|</p>
+<p>| 世界实体 | 表示人物、机构、资源、地区与环境对象 |</p>
+<p>| 权威事实 | 保存客观世界实际发生的状态 |</p>
+<p>| 信念事实 | 保存主体或认知分区对世界的认知 |</p>
+<p>| 承诺 | 描述尚未完成的未来责任结构 |</p>
+<p>| 义务实例 | 表示承诺触发后的具体执行责任 |</p>
+<p>| 计划 | 表示履约所需的步骤有向无环图 |</p>
+<p>| 预留 | 锁定资源、主体时间、权限与容量 |</p>
+<p>| 见证记录 | 表示观察者对履约证据的接受或拒绝 |</p>
+<p>| 因果边 | 表示承诺与义务之间的依赖、互斥和替代关系 |</p>
+<p>| 债务条目 | 表示违约后的长期资源、信任和合法性后果 |</p>
+<h3 id="72-世界实体">7.2 世界实体</h3><p>实体采用组件化结构。典型组件包括：</p>
+<ul>
+<li><p>身份；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>库存；</p>
+</li>
+<li><p>能力；</p>
+</li>
+<li><p>权限；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>风险偏好；</p>
+</li>
+<li><p>当前承诺；</p>
+</li>
+<li><p>信任关系；</p>
+</li>
+<li><p>机构成员关系；</p>
+</li>
+<li><p>知识订阅；</p>
+</li>
+<li><p>观察能力。</p>
+</li>
+</ul>
+<h3 id="73-权威事实">7.3 权威事实</h3><p>权威事实描述实际世界：</p>
+<ul>
+<li><p>主体；</p>
+</li>
+<li><p>谓词；</p>
+</li>
+<li><p>对象或数值；</p>
+</li>
+<li><p>生效时间；</p>
+</li>
+<li><p>失效时间；</p>
+</li>
+<li><p>来源事件；</p>
+</li>
+<li><p>当前版本。</p>
+</li>
+</ul>
+<p>权威事实中不存放“某角色认为的概率”。</p>
+<h3 id="74-信念事实">7.4 信念事实</h3><p>信念事实属于特定观察者或认知分区：</p>
+<ul>
+<li><p>观察者；</p>
+</li>
+<li><p>对应命题；</p>
+</li>
+<li><p>接收来源；</p>
+</li>
+<li><p>可信度；</p>
+</li>
+<li><p>接收时间；</p>
+</li>
+<li><p>是否被其他事实反驳；</p>
+</li>
+<li><p>是否已成为法定记录。</p>
+</li>
+</ul>
+<h3 id="75-义务实例">7.5 义务实例</h3><p>义务是承诺触发后的具体运行对象：</p>
+<ul>
+<li><p>来源承诺；</p>
+</li>
+<li><p>已绑定主体；</p>
+</li>
+<li><p>目标谓词；</p>
+</li>
+<li><p>截止时间；</p>
+</li>
+<li><p>当前状态；</p>
+</li>
+<li><p>父义务；</p>
+</li>
+<li><p>子义务；</p>
+</li>
+<li><p>当前履约计划；</p>
+</li>
+<li><p>物质完成度；</p>
+</li>
+<li><p>承认完成度；</p>
+</li>
+<li><p>当前债务暴露。</p>
+</li>
+</ul>
+<h3 id="76-计划">7.6 计划</h3><p>计划应表示为步骤有向无环图，而不是简单线性队列。</p>
+<p>每个步骤包含：</p>
+<ul>
+<li><p>动作算子；</p>
+</li>
+<li><p>执行主体；</p>
+</li>
+<li><p>输入条件；</p>
+</li>
+<li><p>预期效果；</p>
+</li>
+<li><p>时间区间；</p>
+</li>
+<li><p>资源预留；</p>
+</li>
+<li><p>可见性；</p>
+</li>
+<li><p>失败分支；</p>
+</li>
+<li><p>补偿步骤；</p>
+</li>
+<li><p>对其他义务的影响。</p>
+</li>
+</ul>
+<h3 id="77-预留">7.7 预留</h3><p>预留记录：</p>
+<ul>
+<li><p>资源；</p>
+</li>
+<li><p>数量或容量；</p>
+</li>
+<li><p>起止时间；</p>
+</li>
+<li><p>所属计划；</p>
+</li>
+<li><p>所属承诺；</p>
+</li>
+<li><p>是否允许抢占；</p>
+</li>
+<li><p>抢占代价；</p>
+</li>
+<li><p>当前状态。</p>
+</li>
+</ul>
+<h3 id="78-见证记录">7.8 见证记录</h3><p>见证记录包含：</p>
+<ul>
+<li><p>观察者；</p>
+</li>
+<li><p>被观察事件；</p>
+</li>
+<li><p>接收到的证据；</p>
+</li>
+<li><p>观察方式；</p>
+</li>
+<li><p>解释结果；</p>
+</li>
+<li><p>是否接受为履约证据；</p>
+</li>
+<li><p>可挑战期限；</p>
+</li>
+<li><p>可信度来源。</p>
+</li>
+</ul>
+<h3 id="79-因果边">7.9 因果边</h3><p>承诺和义务之间需要显式依赖边：</p>
+<ul>
+<li><p>前置依赖；</p>
+</li>
+<li><p>资源依赖；</p>
+</li>
+<li><p>权限依赖；</p>
+</li>
+<li><p>信息依赖；</p>
+</li>
+<li><p>见证依赖；</p>
+</li>
+<li><p>互斥关系；</p>
+</li>
+<li><p>补偿关系；</p>
+</li>
+<li><p>替代关系。</p>
+</li>
+</ul>
+<p>依赖图应支持强连通分量检测。循环承诺不是一律禁止，但循环必须存在外部启动资源，否则应标记为“无初始驱动力”。</p>
+<hr />
+<h2 id="8-单时片执行流程">8. 单时片执行流程</h2><p>每个模拟时片按固定阶段运行。</p>
+<h3 id="阶段-1接收命令">阶段 1：接收命令</h3><p>冻结本时片玩家命令。命令按稳定顺序验证，不允许界面调用直接穿透模拟状态。</p>
+<h3 id="阶段-2推进环境">阶段 2：推进环境</h3><p>处理时间、天气、自然衰减、移动完成和上一时片已安排的外部效果。</p>
+<h3 id="阶段-3增量求值触发条件">阶段 3：增量求值触发条件</h3><p>只重新计算受变化事实影响的承诺谓词。</p>
+<h3 id="阶段-4生成和更新义务">阶段 4：生成和更新义务</h3><p>为新触发承诺实例化义务；处理期限、取消、豁免和替代关系。</p>
+<h3 id="阶段-5确定候选履约者">阶段 5：确定候选履约者</h3><p>根据能力、知识、权限、位置和可用性筛选主体。</p>
+<h3 id="阶段-6生成竞标">阶段 6：生成竞标</h3><p>主体评估义务并提交有解释的履约条件。</p>
+<h3 id="阶段-7编译候选计划">阶段 7：编译候选计划</h3><p>规划器从竞标和动作算子中生成有限计划集合。</p>
+<h3 id="阶段-8仲裁冲突">阶段 8：仲裁冲突</h3><p>处理资源、主体、时间、权限和目标冲突。</p>
+<h3 id="阶段-9提交预留">阶段 9：提交预留</h3><p>为被选中计划锁定必要资源。无法预留时，计划不得被显示为“锁定”。</p>
+<h3 id="阶段-10执行到期计划步骤">阶段 10：执行到期计划步骤</h3><p>事务执行器验证并原子提交效果。</p>
+<h3 id="阶段-11传播观察">阶段 11：传播观察</h3><p>将事件路由到能够观察或接收消息的主体。</p>
+<h3 id="阶段-12履约结算">阶段 12：履约结算</h3><p>分别求值物质条件和承认条件。</p>
+<h3 id="阶段-13更新债务信任和合法性">阶段 13：更新债务、信任和合法性</h3><p>处理违约、部分履约、争议和补偿。</p>
+<h3 id="阶段-14生成投影视图">阶段 14：生成投影视图</h3><p>更新未来状态、冲突摘要、解释链和界面读取模型。</p>
+<p>次级事件默认进入下一时片。只有明确注册为即时反应的事件可以在当前时片继续传播，并受最大因果深度和事件预算限制。</p>
+<hr />
+<h2 id="9-一次完整流程示例">9. 一次完整流程示例</h2><p>玩家发布“北港撤离承诺”。</p>
+<ol>
+<li><p>潮位事实变化，触发网络激活承诺。</p>
+</li>
+<li><p>系统生成“撤离全部居民”“保证非强制”“获得双机构见证”三个相互关联的义务。</p>
+</li>
+<li><p>轮渡公司、运输工会和地方守备队提交竞标。</p>
+</li>
+<li><p>守备队方案最快，但会违反非强制条款。</p>
+</li>
+<li><p>轮渡方案合法，但轮渡同时被补给承诺预留。</p>
+</li>
+<li><p>仲裁器决定保留部分补给船，释放两艘轮渡，并调用私人车辆补足容量。</p>
+</li>
+<li><p>规划器形成分区撤离计划。</p>
+</li>
+<li><p>执行中，一条道路塌方，原计划步骤失败。</p>
+</li>
+<li><p>事务执行器保留已完成撤离结果，回滚未执行的道路运输步骤，并触发水路退路。</p>
+</li>
+<li><p>所有居民最终离开危险区，物质条件完成。</p>
+</li>
+<li><p>港务局接受证据，但工会认为部分工人受到隐性胁迫，拒绝见证。</p>
+</li>
+<li><p>承诺进入“物质完成、承认有争议”状态。</p>
+</li>
+<li><p>玩家可以支付补偿、公开调查、修改认定标准，或接受部分违约。</p>
+</li>
+<li><p>处理方式将影响工会以后是否愿意参与玩家发布的承诺。</p>
+</li>
+</ol>
+<p>这里没有传统意义上的唯一正确路线。核心玩法是构造一个能在环境变化、资源冲突和解释争议中仍然成立的承诺网络。</p>
+<hr />
+<h2 id="10-模块通信与并发模型">10. 模块通信与并发模型</h2><h3 id="101-四类消息">10.1 四类消息</h3><h4 id="命令">命令</h4><p>表达玩家或外部系统希望发生什么，例如：</p>
+<ul>
+<li><p>发布承诺；</p>
+</li>
+<li><p>修订条款；</p>
+</li>
+<li><p>增加抵押；</p>
+</li>
+<li><p>委托机构；</p>
+</li>
+<li><p>提交证据；</p>
+</li>
+<li><p>豁免债务。</p>
+</li>
+</ul>
+<p>命令可以被拒绝，不具有既成事实效力。</p>
+<h4 id="领域事件">领域事件</h4><p>表示已经发生的事实，例如：</p>
+<ul>
+<li><p>承诺已发行；</p>
+</li>
+<li><p>触发已命中；</p>
+</li>
+<li><p>义务已激活；</p>
+</li>
+<li><p>竞标已提交；</p>
+</li>
+<li><p>计划已选择；</p>
+</li>
+<li><p>资源已预留；</p>
+</li>
+<li><p>步骤已执行；</p>
+</li>
+<li><p>见证已接受；</p>
+</li>
+<li><p>承诺已违约。</p>
+</li>
+</ul>
+<p>领域事件不可修改。</p>
+<h4 id="查询">查询</h4><p>只读获取当前状态、历史、解释或投影。查询不得产生副作用。</p>
+<h4 id="提案">提案</h4><p>规划器、竞标器和预测器在工作线程中产生的临时结果。</p>
+<p>提案必须包含：</p>
+<ul>
+<li><p>基于哪个世界版本；</p>
+</li>
+<li><p>输入哈希；</p>
+</li>
+<li><p>生成模块；</p>
+</li>
+<li><p>有效时限；</p>
+</li>
+<li><p>稳定排序键。</p>
+</li>
+</ul>
+<p>主模拟线程在提交前重新验证。版本过期的提案直接废弃或重新计算。</p>
+<h3 id="102-并发模型">10.2 并发模型</h3><ul>
+<li><p>主模拟线程独占权威状态；</p>
+</li>
+<li><p>规划、竞标和预测可以并行读取冻结快照；</p>
+</li>
+<li><p>工作结果统一在阶段边界合并；</p>
+</li>
+<li><p>合并顺序由稳定键决定，不能依赖线程完成先后；</p>
+</li>
+<li><p>随机流按“场景种子、时片、承诺 ID、模块阶段”分区；</p>
+</li>
+<li><p>界面只读取投影模型，不能直接遍历正在修改的世界状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-可扩展点">11. 可扩展点</h2><h3 id="111-条款扩展">11.1 条款扩展</h3><p>可以新增：</p>
+<ul>
+<li><p>触发谓词；</p>
+</li>
+<li><p>角色绑定条件；</p>
+</li>
+<li><p>时间窗口类型；</p>
+</li>
+<li><p>结果接受策略；</p>
+</li>
+<li><p>见证政策；</p>
+</li>
+<li><p>违约策略；</p>
+</li>
+<li><p>弹性规则；</p>
+</li>
+<li><p>抵押类型。</p>
+</li>
+</ul>
+<p>条款计算应尽量是纯函数：输入快照和参数，输出求值结果与解释，不直接修改状态。</p>
+<h3 id="112-动作算子扩展">11.2 动作算子扩展</h3><p>每个新算子必须声明：</p>
+<ul>
+<li><p>能产生什么效果；</p>
+</li>
+<li><p>需要什么前置条件；</p>
+</li>
+<li><p>哪些主体可以执行；</p>
+</li>
+<li><p>持续多久；</p>
+</li>
+<li><p>消耗和占用什么资源；</p>
+</li>
+<li><p>事件是否可被观察；</p>
+</li>
+<li><p>可能如何失败；</p>
+</li>
+<li><p>失败后是否需要补偿。</p>
+</li>
+</ul>
+<p>扩展不能绕过事务执行器直接写世界组件。</p>
+<h3 id="113-仲裁政策扩展">11.3 仲裁政策扩展</h3><p>不同题材可以使用不同优先规则：</p>
+<ul>
+<li><p>法律优先；</p>
+</li>
+<li><p>军事命令链；</p>
+</li>
+<li><p>宗教誓约；</p>
+</li>
+<li><p>市场出价；</p>
+</li>
+<li><p>家族继承；</p>
+</li>
+<li><p>生态承载力；</p>
+</li>
+<li><p>机器权限层级。</p>
+</li>
+</ul>
+<p>仲裁策略必须输出原因，不允许只返回一个获胜计划 ID。</p>
+<h3 id="114-见证体系扩展">11.4 见证体系扩展</h3><p>主题可以把“见证”替换为：</p>
+<ul>
+<li><p>法律签章；</p>
+</li>
+<li><p>新闻传播；</p>
+</li>
+<li><p>神灵认可；</p>
+</li>
+<li><p>传感器证明；</p>
+</li>
+<li><p>群体共识；</p>
+</li>
+<li><p>科学复现；</p>
+</li>
+<li><p>区块记录；</p>
+</li>
+<li><p>祖先记忆。</p>
+</li>
+</ul>
+<p>底层仍然保持“事件发生”和“相关系统承认事件”分离。</p>
+<h3 id="115-主体模型扩展">11.5 主体模型扩展</h3><p>履约主体不必都是人物。它可以是：</p>
+<ul>
+<li><p>公司；</p>
+</li>
+<li><p>家族；</p>
+</li>
+<li><p>国家机关；</p>
+</li>
+<li><p>群体；</p>
+</li>
+<li><p>物种；</p>
+</li>
+<li><p>自动机器；</p>
+</li>
+<li><p>天气系统；</p>
+</li>
+<li><p>交通网络；</p>
+</li>
+<li><p>分布式算法。</p>
+</li>
+</ul>
+<p>非人格化系统中的“竞标”可以理解为系统报告其可实现条件和成本。</p>
+<h3 id="116-内容包与版本管理">11.6 内容包与版本管理</h3><p>内容包需要声明：</p>
+<ul>
+<li><p>包 ID；</p>
+</li>
+<li><p>依赖关系；</p>
+</li>
+<li><p>模型版本；</p>
+</li>
+<li><p>新增条款；</p>
+</li>
+<li><p>新增算子；</p>
+</li>
+<li><p>新增事件；</p>
+</li>
+<li><p>存档迁移器；</p>
+</li>
+<li><p>确定性兼容等级。</p>
+</li>
+</ul>
+<p>脚本扩展应运行在受限沙箱中，禁止文件、网络和非确定性时钟访问。核心规则优先使用声明式数据。</p>
+<hr />
+<h2 id="12-失败隔离">12. 失败隔离</h2><h3 id="121-区分玩法失败与引擎失败">12.1 区分玩法失败与引擎失败</h3><h4 id="玩法失败">玩法失败</h4><p>包括：</p>
+<ul>
+<li><p>无人竞标；</p>
+</li>
+<li><p>计划不可行；</p>
+</li>
+<li><p>期限逾期；</p>
+</li>
+<li><p>资源被抢占；</p>
+</li>
+<li><p>见证拒绝；</p>
+</li>
+<li><p>债务爆发。</p>
+</li>
+</ul>
+<p>这些必须转化为可继续游玩的领域状态。</p>
+<h4 id="引擎失败">引擎失败</h4><p>包括：</p>
+<ul>
+<li><p>脚本异常；</p>
+</li>
+<li><p>非法空引用；</p>
+</li>
+<li><p>事件模式不匹配；</p>
+</li>
+<li><p>存档损坏；</p>
+</li>
+<li><p>事务不变量被破坏。</p>
+</li>
+</ul>
+<p>这些必须被回滚、隔离或中止当前提交，不能伪装成玩法结果。</p>
+<h3 id="122-隔离措施">12.2 隔离措施</h3><h4 id="承诺预检沙箱">承诺预检沙箱</h4><p>新承诺在激活前可运行一次不提交状态的预检，报告硬冲突、无可用算子、无可能见证者和明显循环。</p>
+<p>预检只能报告当前已知条件，不能保证未来一定成功。</p>
+<h4 id="事务边界">事务边界</h4><p>每个动作步骤或明确声明的原子步骤组具有独立事务边界。异常时回滚到边界前状态。</p>
+<h4 id="规划熔断">规划熔断</h4><p>规划器达到搜索预算后立即停止，返回当前最佳候选或无计划结果。</p>
+<h4 id="因果深度限制">因果深度限制</h4><p>每个事件携带因果深度。超过上限的即时事件进入下一时片，防止触发器互相递归。</p>
+<h4 id="每时片事件预算">每时片事件预算</h4><p>超过预算的非关键事件排入后续队列。关键事务事件不得静默丢弃。</p>
+<h4 id="扩展包隔离">扩展包隔离</h4><p>某扩展算子异常时：</p>
+<ol>
+<li><p>当前事务回滚；</p>
+</li>
+<li><p>记录包 ID 和算子 ID；</p>
+</li>
+<li><p>禁用该算子；</p>
+</li>
+<li><p>将相关义务标记为需要重新规划；</p>
+</li>
+<li><p>核心模拟继续运行。</p>
+</li>
+</ol>
+<h4 id="非关键模块降级">非关键模块降级</h4><p>预测器、图形化因果视图或统计模块崩溃时，权威模拟不应停止。界面可退化为基础状态列表和事件日志。</p>
+<h4 id="存档恢复">存档恢复</h4><p>快照和日志段应带校验和。加载失败时：</p>
+<ol>
+<li><p>定位最后一个有效快照；</p>
+</li>
+<li><p>重放有效日志段；</p>
+</li>
+<li><p>截止到第一个损坏事件；</p>
+</li>
+<li><p>明确报告丢失范围；</p>
+</li>
+<li><p>不静默生成替代状态。</p>
+</li>
+</ol>
+<hr />
+<h2 id="13-调试可观测性与测试">13. 调试、可观测性与测试</h2><h3 id="131-因果追踪器">13.1 因果追踪器</h3><p>开发者和玩家都需要看到一条可读链路：</p>
+<p><strong>承诺为何触发 → 谁被绑定 → 谁提交竞标 → 为什么选择该计划 → 哪个资源被预留 → 哪一步失败 → 谁观察到什么 → 为什么接受或拒绝 → 债务如何传播</strong></p>
+<p>每个节点应支持跳转到对应实体、事实、事件和条款。</p>
+<h3 id="132-为什么没有发生查询">13.2 “为什么没有发生”查询</h3><p>普通日志擅长解释已发生事件，却不擅长解释缺失事件。系统应显式记录候选被淘汰的原因：</p>
+<ul>
+<li><p>没有匹配主体；</p>
+</li>
+<li><p>主体不知道该义务；</p>
+</li>
+<li><p>权限不足；</p>
+</li>
+<li><p>前置事实不成立；</p>
+</li>
+<li><p>资源时间窗冲突；</p>
+</li>
+<li><p>计划搜索预算不足；</p>
+</li>
+<li><p>竞标效用低于阈值；</p>
+</li>
+<li><p>仲裁失败；</p>
+</li>
+<li><p>见证条件未满足。</p>
+</li>
+</ul>
+<h3 id="133-规划器检查器">13.3 规划器检查器</h3><p>显示：</p>
+<ul>
+<li><p>展开的目标；</p>
+</li>
+<li><p>使用的动作算子；</p>
+</li>
+<li><p>被剪枝的分支；</p>
+</li>
+<li><p>剪枝原因；</p>
+</li>
+<li><p>搜索预算消耗；</p>
+</li>
+<li><p>候选计划排名；</p>
+</li>
+<li><p>预期与实际执行差异。</p>
+</li>
+</ul>
+<h3 id="134-资源时间线">13.4 资源时间线</h3><p>展示资源在不同时间窗中的预留、占用、释放和抢占关系。它是定位双重预留和隐性瓶颈的主要工具。</p>
+<h3 id="135-确定性回放">13.5 确定性回放</h3><p>同一场景种子、命令流和内容版本必须生成相同状态哈希。</p>
+<p>回放检查点应保存：</p>
+<ul>
+<li><p>世界状态哈希；</p>
+</li>
+<li><p>活跃承诺哈希；</p>
+</li>
+<li><p>预留表哈希；</p>
+</li>
+<li><p>债务账本哈希；</p>
+</li>
+<li><p>随机流位置。</p>
+</li>
+</ul>
+<h3 id="136-自动测试">13.6 自动测试</h3><p>最低测试集合包括：</p>
+<ul>
+<li><p>条款求值单元测试；</p>
+</li>
+<li><p>动作算子前置与效果测试；</p>
+</li>
+<li><p>事务回滚测试；</p>
+</li>
+<li><p>资源不可重复预留性质测试；</p>
+</li>
+<li><p>承诺状态机性质测试；</p>
+</li>
+<li><p>事件循环模糊测试；</p>
+</li>
+<li><p>存档迁移测试；</p>
+</li>
+<li><p>长时间债务传播稳定性测试；</p>
+</li>
+<li><p>多线程提案合并确定性测试；</p>
+</li>
+<li><p>固定场景黄金回放测试。</p>
+</li>
+</ul>
+<p>关键性质示例：</p>
+<ul>
+<li><p>未发生物质效果时，承诺不能进入物质完成；</p>
+</li>
+<li><p>未满足见证策略时，承诺不能进入已履约；</p>
+</li>
+<li><p>已提交的原子事务不得处于部分应用状态；</p>
+</li>
+<li><p>被取消的已激活承诺必须结算取消责任；</p>
+</li>
+<li><p>投影模拟不得改变权威世界版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-玩家体验设计">14. 玩家体验设计</h2><h3 id="141-核心感受">14.1 核心感受</h3><p>玩家应感到自己不是“操控一群棋子”，而是在建造一种未来秩序。</p>
+<p>成熟阶段的满足感来自：</p>
+<ul>
+<li><p>一个承诺即使遭遇意外仍能通过退路完成；</p>
+</li>
+<li><p>不同机构自发承担义务；</p>
+</li>
+<li><p>早期建立的信誉降低后续协调成本；</p>
+</li>
+<li><p>一个原本脆弱的目标逐渐变成不需要玩家干预的稳定惯例；</p>
+</li>
+<li><p>对手即使不愿配合，也发现违背承诺比履行更昂贵。</p>
+</li>
+</ul>
+<h3 id="142-每分钟循环">14.2 每分钟循环</h3><p>典型短循环：</p>
+<ol>
+<li><p>查看未来压力和即将到期义务；</p>
+</li>
+<li><p>找出最脆弱的依赖；</p>
+</li>
+<li><p>发布或修订一项承诺；</p>
+</li>
+<li><p>检查竞标和反对意见；</p>
+</li>
+<li><p>增加资源、调整见证条件或重新分配责任；</p>
+</li>
+<li><p>观察计划在世界中执行；</p>
+</li>
+<li><p>处理意外、争议和债务；</p>
+</li>
+<li><p>将一次性成功固化为长期制度。</p>
+</li>
+</ol>
+<h3 id="143-界面必须呈现的信息">14.3 界面必须呈现的信息</h3><p>每张承诺卡至少显示：</p>
+<ul>
+<li><p>当前状态；</p>
+</li>
+<li><p>触发条件；</p>
+</li>
+<li><p>剩余时间；</p>
+</li>
+<li><p>物质完成度；</p>
+</li>
+<li><p>承认完成度；</p>
+</li>
+<li><p>当前履约者；</p>
+</li>
+<li><p>已预留资源；</p>
+</li>
+<li><p>未解决依赖；</p>
+</li>
+<li><p>可能否决者；</p>
+</li>
+<li><p>抵押物；</p>
+</li>
+<li><p>最大违约暴露；</p>
+</li>
+<li><p>当前预测等级。</p>
+</li>
+</ul>
+<p>未来视图不应只画一棵庞大分支树。更适合使用：</p>
+<ul>
+<li><p>承诺时间线；</p>
+</li>
+<li><p>因果依赖图；</p>
+</li>
+<li><p>资源冲突带；</p>
+</li>
+<li><p>主体竞标列表；</p>
+</li>
+<li><p>争议与证据面板；</p>
+</li>
+<li><p>债务热区；</p>
+</li>
+<li><p>“保持不变时将发生什么”基线投影。</p>
+</li>
+</ul>
+<h3 id="144-信息公平">14.4 信息公平</h3><p>失败可以来自未知信息，但系统必须明确区分：</p>
+<ul>
+<li><p>已知安全；</p>
+</li>
+<li><p>已知风险；</p>
+</li>
+<li><p>明确未知；</p>
+</li>
+<li><p>被某主体隐瞒；</p>
+</li>
+<li><p>玩家本可通过调查发现。</p>
+</li>
+</ul>
+<p>不能把尚未模拟的内容伪装成角色隐瞒。</p>
+<h3 id="145-教学顺序">14.5 教学顺序</h3><ol>
+<li><p><strong>单一承诺：</strong> 一个发行者、一个履约者、一个结果、一个期限；</p>
+</li>
+<li><p><strong>资源冲突：</strong> 两个承诺争夺同一主体或资源；</p>
+</li>
+<li><p><strong>多方案履约：</strong> 同一目标出现不同执行计划；</p>
+</li>
+<li><p><strong>见证与争议：</strong> 物质完成不再自动结算；</p>
+</li>
+<li><p><strong>债务与补救：</strong> 玩家学习处理违约，而不是读档；</p>
+</li>
+<li><p><strong>制度化：</strong> 玩家创建能自行发行、委托和追认承诺的机构；</p>
+</li>
+<li><p><strong>自维持网络：</strong> 玩家从处理单个事件，转向设计可承受持续扰动的因果宪法。</p>
+</li>
+</ol>
+<h3 id="146-难度增长方式">14.6 难度增长方式</h3><p>难度不应主要通过提高数值或缩短倒计时实现，而应通过增加：</p>
+<ul>
+<li><p>相互依赖的承诺；</p>
+</li>
+<li><p>权限重叠；</p>
+</li>
+<li><p>信息不对称；</p>
+</li>
+<li><p>见证者意见分裂；</p>
+</li>
+<li><p>资源时间窗冲突；</p>
+</li>
+<li><p>主体机会成本；</p>
+</li>
+<li><p>对手对条款的策略性解释；</p>
+</li>
+<li><p>长期债务传播；</p>
+</li>
+<li><p>突发环境扰动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-胜利失败与长期进程">15. 胜利、失败与长期进程</h2><h3 id="151-胜利条件">15.1 胜利条件</h3><p>最终胜利不是让某个目标瞬间成立，而是建立一个稳定包络：</p>
+<ul>
+<li><p>指定世界不变量持续成立；</p>
+</li>
+<li><p>关键承诺得到有效承认；</p>
+</li>
+<li><p>债务低于上限；</p>
+</li>
+<li><p>系统面对预定扰动仍能恢复；</p>
+</li>
+<li><p>玩家不需要持续微观修补。</p>
+</li>
+</ul>
+<p>示例：</p>
+<blockquote>
+<p>北港在连续四个风暴周期中保持无人伤亡，撤离制度被三个互不隶属的机构承认，且公共信任债务不超过 20。</p>
+</blockquote>
+<h3 id="152-软失败">15.2 软失败</h3><p>软失败包括：</p>
+<ul>
+<li><p>一项承诺违约；</p>
+</li>
+<li><p>某机构退出；</p>
+</li>
+<li><p>见证被否决；</p>
+</li>
+<li><p>债务大幅增长；</p>
+</li>
+<li><p>原有制度需要重组。</p>
+</li>
+</ul>
+<p>软失败继续产生新局面。</p>
+<h3 id="153-硬失败">15.3 硬失败</h3><p>硬失败只应在系统性条件下发生：</p>
+<ul>
+<li><p>玩家失去发行任何有效承诺的权威；</p>
+</li>
+<li><p>因果债务进入不可恢复的连锁违约；</p>
+</li>
+<li><p>所有关键主体拒绝与玩家建立责任关系；</p>
+</li>
+<li><p>场景核心不变量永久不可恢复；</p>
+</li>
+<li><p>世界进入明确终局状态。</p>
+</li>
+</ul>
+<h3 id="154-进程结构">15.4 进程结构</h3><p>长期成长不宜表现为单纯数值升级。更适合解锁：</p>
+<ul>
+<li><p>更复杂的条款；</p>
+</li>
+<li><p>更可靠的证据机制；</p>
+</li>
+<li><p>新的机构形式；</p>
+</li>
+<li><p>委托和责任转移能力；</p>
+</li>
+<li><p>多级见证制度；</p>
+</li>
+<li><p>债务重组工具；</p>
+</li>
+<li><p>跨区域承诺；</p>
+</li>
+<li><p>能自动发行子承诺的制度模板。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-防止退化为其他品类">16. 防止退化为其他品类</h2><h3 id="161-防止退化为自动化编程">16.1 防止退化为自动化编程</h3><p>承诺不能保证执行，主体能够拒绝或提出条件；完成还依赖权限、资源、信任和见证。</p>
+<h3 id="162-防止退化为传统任务系统">16.2 防止退化为传统任务系统</h3><p>任务通常由系统发布、玩家执行。这里的承诺主要由玩家构造，且可以由任何符合条件的主体以不同方式完成。</p>
+<h3 id="163-防止退化为即时战略">16.3 防止退化为即时战略</h3><p>玩家不能绕过承诺系统直接连续下达单位动作。紧急命令也应建模为高成本、短期限、强制性的特殊承诺。</p>
+<h3 id="164-防止退化为互动小说">16.4 防止退化为互动小说</h3><p>结果不是从预写分支中选择，而是由事实、资源、主体决策、动作算子和见证规则动态生成。</p>
+<h3 id="165-防止退化为城市经营">16.5 防止退化为城市经营</h3><p>经济和机构可以存在，但玩家主要优化的是责任、依赖、认可和违约结构，而不是建筑布局或产量。</p>
+<hr />
+<h2 id="17-主要退化策略与系统约束">17. 主要退化策略与系统约束</h2><h3 id="171-承诺刷屏">17.1 承诺刷屏</h3><p>约束方式：</p>
+<ul>
+<li><p>发行占用有限权威容量；</p>
+</li>
+<li><p>每项承诺需要抵押；</p>
+</li>
+<li><p>同时活跃承诺增加协调成本；</p>
+</li>
+<li><p>无意义承诺不会产生等额信誉收益。</p>
+</li>
+</ul>
+<h3 id="172-在失败前撤销">17.2 在失败前撤销</h3><p>承诺一旦触发，撤销必须生成取消债务。越接近期限，责任越高。</p>
+<h3 id="173-所有事项设最高优先级">17.3 所有事项设最高优先级</h3><p>优先级不能独立决定仲裁。还需考虑权限来源、既有预留、抵押、承诺年龄和违约传播。</p>
+<h3 id="174-循环委托">17.4 循环委托</h3><p>委托深度必须有上限。原始发行者不能通过无限转包完全逃避责任。</p>
+<h3 id="175-伪造见证">17.5 伪造见证</h3><p>证据需要来源、传递链和挑战窗口。被揭穿的伪证应产生比普通违约更高的信任和合法性债务。</p>
+<h3 id="176-用低价值承诺刷信誉">17.6 用低价值承诺刷信誉</h3><p>信誉收益应与承诺影响、真实风险、履约独立性和重复程度相关，并具有递减收益。</p>
+<h3 id="177-依赖预测器寻找完美答案">17.7 依赖预测器寻找完美答案</h3><p>预测只展示有限视野和已知条件。对未知主体意图、未来扰动和争议信息使用明确的不确定标记，不提供全知解。</p>
+<hr />
+<h2 id="18-内容生产范式">18. 内容生产范式</h2><p>该品类的基础内容单元不是“关卡”，而是一个<strong>压力生态</strong>：</p>
+<ul>
+<li><p>一组具有不同目标和权限的主体；</p>
+</li>
+<li><p>一组稀缺资源；</p>
+</li>
+<li><p>一套动作算子；</p>
+</li>
+<li><p>一套见证规则；</p>
+</li>
+<li><p>一组相互冲突的初始承诺；</p>
+</li>
+<li><p>若干动态扰动；</p>
+</li>
+<li><p>一个需要长期维持的稳定目标。</p>
+</li>
+</ul>
+<p>场景设计者不必预写所有解决路径。主要工作是确保：</p>
+<ul>
+<li><p>目标至少有三种结构明显不同的实现网络；</p>
+</li>
+<li><p>每种网络有不同债务暴露；</p>
+</li>
+<li><p>关键主体之间不存在单一万能关系；</p>
+</li>
+<li><p>物质完成与承认完成会在至少一个节点分离；</p>
+</li>
+<li><p>意外事件能迫使玩家使用退路或重组责任。</p>
+</li>
+</ul>
+<p>可适配题材包括：</p>
+<ul>
+<li><p>神话誓约；</p>
+</li>
+<li><p>外交条约；</p>
+</li>
+<li><p>企业治理；</p>
+</li>
+<li><p>灾害协调；</p>
+</li>
+<li><p>星际殖民；</p>
+</li>
+<li><p>家族继承；</p>
+</li>
+<li><p>生态修复；</p>
+</li>
+<li><p>司法调查；</p>
+</li>
+<li><p>分布式机器社会。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-最小可行垂直切片">19. 最小可行垂直切片</h2><h3 id="191-原型范围">19.1 原型范围</h3><p>建议首个原型严格控制为：</p>
+<ul>
+<li><p>一个港口聚落；</p>
+</li>
+<li><p>四个机构；</p>
+</li>
+<li><p>二十四个重点主体；</p>
+</li>
+<li><p>三个聚合人口群体；</p>
+</li>
+<li><p>六类资源；</p>
+</li>
+<li><p>十二类结构化条款；</p>
+</li>
+<li><p>十八个动作算子；</p>
+</li>
+<li><p>三种见证策略；</p>
+</li>
+<li><p>三类因果债务；</p>
+</li>
+<li><p>一个四十五至六十分钟场景；</p>
+</li>
+<li><p>四十八个逻辑时片；</p>
+</li>
+<li><p>两类外部扰动。</p>
+</li>
+</ul>
+<h3 id="192-原型暂不包含">19.2 原型暂不包含</h3><ul>
+<li><p>自然语言直接生成权威承诺；</p>
+</li>
+<li><p>开放式动作生成；</p>
+</li>
+<li><p>无限规划深度；</p>
+</li>
+<li><p>多人同步；</p>
+</li>
+<li><p>大规模个体级人群模拟；</p>
+</li>
+<li><p>可随意修改底层状态的脚本模组。</p>
+</li>
+</ul>
+<h3 id="193-原型验收标准">19.3 原型验收标准</h3><ul>
+<li><p> 移除直接单位控制后，游戏仍然完整可玩。</p>
+</li>
+<li><p> 同一核心目标至少存在三种不同履约网络。</p>
+</li>
+<li><p> 至少一种成功方案不是设计者预先指定的固定序列。</p>
+</li>
+<li><p> 所有失败都能追踪到具体事实、资源、主体或见证条件。</p>
+</li>
+<li><p> 承诺违约后产生新的可玩决策，而不是只能重开。</p>
+</li>
+<li><p> 相同种子与命令流能够稳定重放。</p>
+</li>
+<li><p> 规划器超时不会阻塞模拟。</p>
+</li>
+<li><p> 预测模块停用后，核心游戏仍能运行。</p>
+</li>
+<li><p> 玩家能够区分物质完成、承认完成和最终履约。</p>
+</li>
+<li><p> 游戏后期的主要挑战来自承诺网络，而不是数值膨胀。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-可迁移到其他游戏的设计思想">20. 可迁移到其他游戏的设计思想</h2><h3 id="201-将意图保存为持久数据">20.1 将意图保存为持久数据</h3><p>传统输入通常执行后即消失。把玩家意图保存为带期限、责任和状态的实体，可以为策略、角色扮演和经营游戏提供更强的因果连续性。</p>
+<h3 id="202-分离事实与被相信的事实">20.2 分离事实与被相信的事实</h3><p>该思想可以迁移到：</p>
+<ul>
+<li><p>潜行游戏中的敌人认知；</p>
+</li>
+<li><p>推理游戏中的证据接受；</p>
+</li>
+<li><p>战略游戏中的外交认知；</p>
+</li>
+<li><p>角色扮演中的声誉和传闻；</p>
+</li>
+<li><p>生存游戏中的群体恐慌。</p>
+</li>
+</ul>
+<h3 id="203-用责任约束替代直接控制">20.3 用责任约束替代直接控制</h3><p>玩家不直接命令角色，而是设定目标、权限、激励和责任。这能显著增强自治角色的可信度。</p>
+<h3 id="204-将失败设计成债务">20.4 将失败设计成债务</h3><p>失败不必删除进度。它可以留下未来成本、关系裂痕、资源缺口和制度负担，使失败本身成为内容。</p>
+<h3 id="205-让自治决策产生解释">20.5 让自治决策产生解释</h3><p>AI 不只输出“做什么”，还应输出：</p>
+<ul>
+<li><p>为什么愿意做；</p>
+</li>
+<li><p>为什么拒绝；</p>
+</li>
+<li><p>需要什么条件；</p>
+</li>
+<li><p>什么因素会改变决定。</p>
+</li>
+</ul>
+<p>这对任何含自治角色的游戏都适用。</p>
+<h3 id="206-将计划视为提案而不是状态修改">20.6 将计划视为提案，而不是状态修改</h3><p>异步规划、寻路、AI 和预测模块都只返回带版本的提案，由权威线程重新验证后提交。这种模式可迁移到大型模拟、多人同步和可回放游戏。</p>
+<h3 id="207-为复杂系统设计为什么没有发生">20.7 为复杂系统设计“为什么没有发生”</h3><p>缺失事件通常比已发生事件更难调试。系统性记录候选淘汰原因，可以同时改善开发调试和玩家理解。</p>
+<h3 id="208-用最终确认窗口限制无限追溯">20.8 用最终确认窗口限制无限追溯</h3><p>允许事实在短期内被争议，但在明确窗口后进入最终状态。该方法能在动态叙事与系统稳定之间取得平衡。</p>
+<h3 id="209-用韧性而不是瞬时完成衡量胜利">20.9 用韧性而不是瞬时完成衡量胜利</h3><p>要求玩家构建能吸收扰动、自我修复的系统，比单次达到数值目标更能体现长期策略质量。</p>
+<h3 id="2010-让非关键系统可降级">20.10 让非关键系统可降级</h3><p>预测、可视化和统计工具可以失效，但核心模拟仍继续。这种失败隔离原则适用于所有复杂运行时。</p>
+<hr />
+<h2 id="21-总结">21. 总结</h2><p><strong>因果编织类游戏</strong>的独立性来自一个现有宏观品类通常不具备的基本关系：</p>
+<blockquote>
+<p>玩家编辑的不是对象，也不是动作序列，而是世界对未来结果承担责任的方式。</p>
+</blockquote>
+<p>其代表性设计范式“可执行承诺操作系统”以结构化承诺为输入，以自治主体竞标和有界计划为执行机制，以物质事实与社会承认的双重结算为结果，以因果债务作为持续反馈。</p>
+<p>完整闭环为：</p>
+<p><strong>定义未来责任 → 寻找可能履约者 → 编译可执行方案 → 在真实世界中承担冲突与失败 → 让结果被观察和承认 → 结算债务 → 将临时成功固化为稳定制度</strong></p>
+<p>该品类最重要的玩家体验不是“我赢得了一次行动”，而是：</p>
+<blockquote>
+<p>我构造了一种即使世界反抗，也会继续把目标推向成立的秩序。</p>
+</blockquote>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

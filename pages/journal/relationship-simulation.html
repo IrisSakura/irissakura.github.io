@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/relationship-simulation.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="恋爱养成（Relationship Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/relationship-simulation.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-relationship-simulation.png">
+    <meta property="og:image:alt" content="恋爱养成（Relationship Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="恋爱养成（Relationship Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-relationship-simulation.png">
+    <meta name="twitter:image:alt" content="恋爱养成（Relationship Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"恋爱养成（Relationship Simulation） | Sakura Design Journal","description":"描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。","url":"https://irissakura.github.io/pages/journal/relationship-simulation.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"恋爱养成（Relationship Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-relationship-simulation.png","dateModified":"2026-08-12","about":["life-sim","relationship","simulation"]}</script>
+    <!-- site-meta:end -->
+    <title>恋爱养成（Relationship Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-relationship-simulation"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>恋爱养成（Relationship Simulation）</h1><p>描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。</p><div class="note-tags"><span>life-sim</span><span>relationship</span><span>simulation</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何让时间投入、共同经历、边界尊重、冲突与修复塑造一段有个体记忆的关系，而不是累积同一条好感度？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>恋爱养成与角色关系模拟的核心不是简单的“好感度加减”，也不是视觉小说中的固定角色路线。</p>
+<p>视觉小说更关注叙事分支、文本演出和结局结构；恋爱养成更关注玩家在一个持续流动的时间系统中，如何通过日常行动、互动选择、礼物、承诺、陪伴、冲突和修复，逐步建立或破坏与角色之间的关系。</p>
+<p>它最适合被抽象为：</p>
+<p><strong>多维关系状态与社交行动调度框架</strong></p>
+<p>核心循环是：</p>
+<p>了解角色 → 安排时间 → 选择互动 → 影响关系状态 → 触发记忆、事件或冲突 → 解锁更深层互动 → 在多角色、多目标、多时间压力之间做取舍。</p>
+<p>玩家真正管理的不是单一好感度，而是：</p>
+<p>时间、注意力、信任、亲密度、承诺、边界、记忆、角色需求与长期关系稳定性。</p>
+<hr />
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>恋爱养成框架可以分为九个核心域。</p>
+<p>第一是角色资料域。
+负责维护角色身份、性格、兴趣、作息、价值观、偏好、禁忌、关系需求、情绪倾向和成长线。</p>
+<p>第二是关系状态域。
+负责维护玩家与每个角色之间的多维关系，例如熟悉度、信任、亲密、依赖、尊重、压力、误解、承诺、嫉妒、疏远和安全感。</p>
+<p>第三是时间日程域。
+负责维护日期、星期、季节、节日、工作日、空闲时段、角色可见时间、地点开放时间和事件期限。</p>
+<p>第四是社交行动域。
+负责管理聊天、约会、送礼、帮助、邀约、道歉、承诺、共同活动、节日互动、冲突处理等行为。</p>
+<p>第五是记忆与承诺域。
+负责记录玩家说过什么、做过什么、错过什么、答应过什么、违背过什么，以及角色如何长期记住这些行为。</p>
+<p>第六是事件触发域。
+负责根据关系状态、时间、地点、记忆、角色心情和剧情阶段，触发日常事件、特殊事件、冲突事件、告白事件、分手事件、和解事件或共同成长事件。</p>
+<p>第七是社交网络域。
+负责处理角色之间的关系。恋爱养成不应只存在“玩家—角色”的单线关系，还应支持角色之间的朋友、竞争、亲属、误会、三角关系、派系和共同事件。</p>
+<p>第八是反馈表现域。
+负责将关系变化转化为文本、表情、语音、动作、短信、日记、礼物反馈、社交媒体、约会演出和UI提示。</p>
+<p>第九是调试与验证域。
+负责检查事件是否可达、关系是否卡死、承诺是否过期、角色日程是否冲突、好感增长是否失控、多角色路线是否互斥合理。</p>
+<p>整体流程可以概括为：</p>
+<p>时间推进 → 角色根据日程移动或进入状态 → 玩家选择社交行动 → 行动系统根据上下文结算关系变化 → 记忆系统记录行为 → 事件系统检查是否触发新事件 → 角色反馈系统表现态度变化 → 关系图谱更新 → 下一个时间段继续推进。</p>
+<hr />
+<h2 id="三核心模块职责">三、核心模块职责</h2><p>角色系统负责定义“这个人是谁”。</p>
+<p>它不应只包含姓名、头像和喜好物品，还应包含角色的价值观、社交边界、关系节奏、主动性、敏感点和长期成长方向。</p>
+<p>关系系统负责定义“玩家与这个人现在是什么关系”。</p>
+<p>它不能只维护一个 affection 数值，而应维护多个维度。例如，熟悉度高不代表信任高；亲密高不代表关系稳定；依赖高不一定是健康关系；承诺高但信任低，可能产生强烈冲突。</p>
+<p>时间系统负责定义“玩家有没有机会经营关系”。</p>
+<p>恋爱养成最重要的资源通常不是金币，而是时间。一次约会占用一个晚上，帮助一个角色可能错过另一个角色的生日，准备考试可能导致连续几天无法社交。时间让关系选择产生代价。</p>
+<p>行动系统负责定义“玩家能做什么”。</p>
+<p>聊天、送礼、邀约、道歉、倾听、陪伴、拒绝、解释、承诺、保持距离，都应该是不同类型的社交动作，而不是统一的“增加好感”。</p>
+<p>记忆系统负责定义“角色为什么会改变看法”。</p>
+<p>如果玩家昨天答应周末见面，周末却没有出现，角色不应只扣几点好感，而应生成“失约记忆”。这个记忆可能在后续争吵、冷淡、拒绝邀约或和解事件中被引用。</p>
+<p>事件系统负责定义“关系何时进入新阶段”。</p>
+<p>事件不应只由好感度阈值触发，而应由状态组合触发。例如，信任足够、熟悉度足够、没有未解决冲突、近期有共同经历，并且当前时间是角色空闲日，才触发深入谈心事件。</p>
+<p>社交网络系统负责定义“关系不是孤立的”。</p>
+<p>如果玩家只关注一个角色，其他角色可能有反应；如果两个角色之间本来就有矛盾，玩家同时推进两边关系可能产生新的事件；如果玩家帮助某个角色，也可能提高其朋友对玩家的评价。</p>
+<hr />
+<h2 id="四核心数据模型">四、核心数据模型</h2><p>CharacterProfile 表示角色模板。</p>
+<p>它记录角色ID、姓名、性格标签、兴趣、讨厌事项、生活目标、关系需求、可互动地点、常规日程、特殊日期、礼物偏好、社交边界和剧情主题。</p>
+<p>RelationshipState 表示玩家与某个角色的当前关系。</p>
+<p>它可以包含熟悉度、信任、亲密、尊重、依赖、压力、误解、承诺、疏远、嫉妒、安全感、当前关系阶段和未解决冲突。</p>
+<p>SocialAction 表示一次社交行动。</p>
+<p>它记录行动类型、目标角色、发生时间、发生地点、消耗资源、前置条件、关系影响、可能生成的记忆、可能触发的事件和失败反馈。</p>
+<p>MemoryRecord 表示角色记住的一件事。</p>
+<p>它记录记忆类型、关联角色、发生时间、强度、情绪倾向、是否已被提及、是否已被修复、是否会随时间衰减，以及可被哪些事件引用。</p>
+<p>ScheduleBlock 表示一个时间段。</p>
+<p>它记录日期、起止时间、角色位置、角色状态、是否可邀约、是否可打断、是否存在特殊事件、是否与节日或主线进度有关。</p>
+<p>RelationshipEvent 表示关系事件。</p>
+<p>它记录事件ID、目标角色、触发条件、参与角色、事件阶段、结果分支、关系影响、记忆引用、后续事件和是否可重复。</p>
+<p>SocialGraph 表示角色关系网络。</p>
+<p>它记录角色与角色之间的友情、竞争、亲属、误解、合作、嫉妒、共同秘密、阵营关系和事件传播规则。</p>
+<hr />
+<h2 id="五核心范式一关系进度不是单一好感度而是多维状态图谱">五、核心范式一：关系进度不是单一好感度，而是多维状态图谱</h2><p>恋爱养成最常见的低级实现是：</p>
+<p>送礼物，好感度加10。
+好感度到100，触发告白。</p>
+<p>这种实现简单，但很快会让玩家把角色当成数值容器。</p>
+<p>更成熟的设计应该使用多维关系状态。</p>
+<p>例如：</p>
+<p>熟悉度代表彼此是否经常接触。
+信任代表角色是否愿意透露真实想法。
+亲密代表关系是否具有情感靠近。
+尊重代表角色是否认可玩家的选择和能力。
+安全感代表角色是否觉得这段关系稳定。
+压力代表角色是否因为玩家行为感到负担。
+误解代表双方是否存在未解决的信息偏差。
+承诺代表玩家是否做出过明确关系声明。</p>
+<p>这样，一个角色可能对玩家很熟，但并不信任；也可能很亲近，但压力很高；也可能信任玩家，却因为价值观不同而无法进入恋爱关系。</p>
+<p>这能让关系模拟从“刷满数值”变成“理解角色”。</p>
+<hr />
+<h2 id="六核心范式二社交行动必须绑定上下文">六、核心范式二：社交行动必须绑定上下文</h2><p>同一句话、同一份礼物、同一次邀约，在不同上下文下应产生不同结果。</p>
+<p>例如，在角色生日当天送礼物，意义很强；在角色压力很大时送昂贵礼物，可能不如认真倾听；在刚失约后立刻邀约，可能被视为逃避问题；在冲突未解决时强行亲密互动，可能增加压力。</p>
+<p>因此 SocialAction 的结算必须读取上下文：</p>
+<p>当前时间。
+当前地点。
+角色心情。
+近期记忆。
+当前关系阶段。
+是否存在未解决冲突。
+行动是否符合角色偏好。
+行动是否触碰角色边界。
+是否有其他角色在场。</p>
+<p>框架层面不应写成“送花固定加5好感”。</p>
+<p>更合理的是：</p>
+<p>送花这个行动产生“表达关注”的社交意图。
+系统再根据角色偏好、当前关系、场景和记忆决定它是加深亲密、产生尴尬、缓解冲突，还是被礼貌拒绝。</p>
+<hr />
+<h2 id="七核心范式三时间是社交资源">七、核心范式三：时间是社交资源</h2><p>恋爱养成与视觉小说最大的差异之一，是时间调度。</p>
+<p>视觉小说通常由剧情节点推进；恋爱养成更像一个社交日历。</p>
+<p>玩家每天可能只有上午、下午、晚上三个行动段。
+每个角色有自己的日程。
+特殊节日和生日不会等玩家。
+某些事件只在特定季节或天气出现。
+连续冷落某个角色会产生关系衰减。
+同时答应两个邀约会导致冲突。</p>
+<p>因此，时间系统不是装饰，而是核心资源系统。</p>
+<p>它迫使玩家做取舍：</p>
+<p>今天是去打工赚钱，还是陪角色参加活动？
+是推进主线，还是修复上次争吵？
+是和新角色建立关系，还是维护旧关系？
+是准备节日礼物，还是把时间留给考试和成长？</p>
+<p>关系模拟的重量，来自这些无法同时满足的时间选择。</p>
+<hr />
+<h2 id="八核心范式四记忆系统让关系具备连续性">八、核心范式四：记忆系统让关系具备连续性</h2><p>如果角色只根据当前好感度反应，关系会显得很假。</p>
+<p>真正让角色“像人”的，是他们会记得关键行为。</p>
+<p>记忆可以分为：</p>
+<p>积极记忆：帮助、陪伴、守约、理解、共同完成困难。
+消极记忆：失约、忽视、欺骗、冒犯、越界、错误选择。
+中性记忆：第一次见面、共同去过某地、聊过某个话题。
+承诺记忆：约定、告白、保密、未来计划。
+冲突记忆：争吵、误解、冷战、未解决问题。</p>
+<p>记忆不一定永远有效。它可以随时间衰减，也可以在特定事件中被重新激活。</p>
+<p>例如，角色原本已经原谅玩家一次失约，但在玩家第二次失约时，旧记忆会被重新引用，使冲突更严重。</p>
+<p>这比简单扣数值更自然，也更适合长期关系模拟。</p>
+<hr />
+<h2 id="九核心范式五关系阶段是状态机而不是阈值奖励">九、核心范式五：关系阶段是状态机，而不是阈值奖励</h2><p>关系阶段可以包括：</p>
+<p>陌生。
+认识。
+熟人。
+朋友。
+亲密朋友。
+暧昧。
+恋人。
+稳定关系。
+冲突关系。
+疏远。
+分手或断联。
+修复中。</p>
+<p>阶段变化不应只看一个数值，而应看多维条件。</p>
+<p>例如，从朋友进入暧昧，可能需要：</p>
+<p>熟悉度达到要求。
+信任达到要求。
+亲密达到要求。
+角色没有强烈压力。
+近期有一次关键共同事件。
+玩家没有未处理的失约记忆。
+当前角色愿意进入下一阶段。</p>
+<p>从恋人进入稳定关系，可能需要承诺、共同经历和冲突修复能力，而不只是继续送礼物。</p>
+<p>这让关系阶段成为真正的系统状态，而不是UI称号。</p>
+<hr />
+<h2 id="十核心范式六边界与拒绝是关系系统的一部分">十、核心范式六：边界与拒绝是关系系统的一部分</h2><p>恋爱养成如果只有“推进关系”，会很容易变成单向攻略。</p>
+<p>更成熟的关系模拟必须允许角色拒绝、设定边界、表达不适和要求空间。</p>
+<p>例如：</p>
+<p>关系不足时拒绝过度亲密互动。
+压力过高时拒绝邀约。
+价值观不合时拒绝进入恋爱关系。
+玩家连续越界时触发疏远。
+角色处于低谷时可能需要陪伴，但不一定需要浪漫推进。</p>
+<p>这不是削弱玩家体验，而是让角色拥有主体性。</p>
+<p>框架中应为每个角色设置 BoundaryRule。</p>
+<p>它定义：</p>
+<p>哪些行为当前可接受。
+哪些行为需要更高信任。
+哪些行为会增加压力。
+哪些行为会造成不可逆后果。
+哪些行为可以通过道歉和时间修复。</p>
+<p>这样，玩家需要理解角色，而不是用固定套路攻略所有人。</p>
+<hr />
+<h2 id="十一核心范式七冲突与修复比单纯增长更重要">十一、核心范式七：冲突与修复比单纯增长更重要</h2><p>好的关系模拟不应只让数值一直上涨。</p>
+<p>真正有记忆点的关系往往来自冲突、误解、选择和修复。</p>
+<p>冲突可以来自：</p>
+<p>玩家失约。
+价值观冲突。
+误会。
+第三方影响。
+角色过去创伤。
+玩家同时推进多段关系。
+未能在关键事件中支持角色。
+过度干涉角色选择。</p>
+<p>冲突系统不应等于“好感扣除”。</p>
+<p>它应生成 ConflictState。</p>
+<p>ConflictState 记录：</p>
+<p>冲突来源。
+涉及角色。
+严重程度。
+当前阶段。
+是否已沟通。
+是否需要道歉。
+是否需要行动补偿。
+是否会随时间恶化。
+是否会影响其他事件。</p>
+<p>修复关系也不应只靠送礼。</p>
+<p>可能需要：</p>
+<p>解释。
+等待。
+道歉。
+完成承诺。
+第三方调解。
+尊重边界。
+在后续事件中做出一致行动。</p>
+<p>这能让关系更有层次，也更适合做成长叙事。</p>
+<hr />
+<h2 id="十二事件与执行流程">十二、事件与执行流程</h2><p>一次典型社交行动流程如下。</p>
+<p>时间系统推进到当前行动段。</p>
+<p>角色日程系统更新每个角色的位置、状态和可互动性。</p>
+<p>玩家选择目标角色和行动类型，例如聊天、送礼、邀约、帮助、道歉或陪伴。</p>
+<p>社交行动系统检查行动是否合法：角色是否可见、是否有时间、当前关系是否允许、是否存在未解决冲突、是否触碰边界。</p>
+<p>如果行动合法，系统生成 SocialActionEvent。</p>
+<p>关系系统根据角色偏好、上下文、记忆和行动类型计算多维关系变化。</p>
+<p>记忆系统记录此次行为，必要时生成承诺、冲突或特殊记忆。</p>
+<p>事件系统检查是否满足某个关系事件的触发条件。</p>
+<p>角色反馈系统播放对应表现，例如表情变化、短信、对话、沉默、拒绝、感谢或邀请。</p>
+<p>时间系统消耗行动段，并进入下一个时间点。</p>
+<p>关键事件包括：</p>
+<p>时间段开始事件。
+角色日程更新事件。
+角色可互动事件。
+社交行动开始事件。
+社交行动成功事件。
+社交行动失败事件。
+关系状态变化事件。
+记忆生成事件。
+承诺创建事件。
+承诺违背事件。
+冲突生成事件。
+冲突修复事件。
+关系阶段变化事件。
+特殊关系事件触发事件。</p>
+<hr />
+<h2 id="十三模块通信设计">十三、模块通信设计</h2><p>建议采用事件驱动架构。</p>
+<p>时间系统只负责推进日期和行动段，不直接修改关系。</p>
+<p>角色日程系统监听时间变化，更新角色位置和状态。</p>
+<p>社交行动系统读取当前上下文，发布行动结果事件。</p>
+<p>关系系统监听社交行动事件，修改 RelationshipState。</p>
+<p>记忆系统监听行动、承诺、失约、冲突等事件，生成 MemoryRecord。</p>
+<p>事件系统监听关系状态和记忆变化，判断是否触发关系事件。</p>
+<p>UI系统只展示状态、提示和反馈，不直接推动关系。</p>
+<p>任务系统或主线系统可以监听关系事件，但不应直接改写底层好感。</p>
+<p>这样可以避免常见问题：</p>
+<p>送礼UI直接加好感。
+约会事件直接跳过日程。
+剧情脚本强行覆盖关系状态。
+角色位置和事件触发条件不同步。
+承诺系统和记忆系统各记一套，导致冲突。</p>
+<hr />
+<h2 id="十四可扩展点">十四、可扩展点</h2><p>第一类扩展是多角色社交网络。</p>
+<p>角色之间也有关系。玩家的行为会在社交网络中传播。例如，一个角色知道玩家欺骗了另一个角色，会改变对玩家的态度。</p>
+<p>第二类扩展是群体事件。</p>
+<p>生日会、社团活动、节日、旅行、团队任务可以同时影响多个角色关系。</p>
+<p>第三类扩展是角色主动行为。</p>
+<p>角色不只是等待玩家互动，也可以主动邀约、发消息、冷淡、求助、表白、拒绝、离开或修复关系。</p>
+<p>第四类扩展是长期人生阶段。</p>
+<p>从校园、职场、同居、异地、家庭、事业压力等阶段扩展关系系统，使关系面对不同主题考验。</p>
+<p>第五类扩展是非恋爱关系。</p>
+<p>同一套框架可以支持友情、师徒、亲情、同伴、队友情、阵营信任和NPC忠诚。</p>
+<p>第六类扩展是AI生成对话。</p>
+<p>在规则层仍由关系状态和记忆控制，文本层可由模板、脚本或AI生成，但不能让文本生成直接决定系统状态。</p>
+<hr />
+<h2 id="十五失败隔离与调试设计">十五、失败隔离与调试设计</h2><p>恋爱养成系统最容易出现的问题包括：</p>
+<p>关系事件无法触发。
+角色日程冲突。
+好感刷太快。
+某个角色永久无法进入下一阶段。
+承诺过期但没有结算。
+冲突无法修复。
+多角色路线互相覆盖。
+玩家错过唯一事件导致软锁。</p>
+<p>调试工具应至少支持以下能力。</p>
+<p>第一，关系状态查看器。
+显示每个角色的熟悉、信任、亲密、压力、误解、承诺、冲突和当前阶段。</p>
+<p>第二，事件可达性检查器。
+显示某个事件还缺哪些条件，例如缺少信任、缺少前置记忆、时间不对、地点不对、冲突未修复。</p>
+<p>第三，日程冲突检查器。
+检测角色是否在同一时间被多个事件占用，或者关键事件是否出现在角色不可达地点。</p>
+<p>第四，承诺与失约追踪器。
+列出玩家当前答应过的事项、截止时间、是否完成、失败后果和关联角色。</p>
+<p>第五，关系增长曲线分析器。
+查看玩家在多少天内能达到关键阶段，防止过快或过慢。</p>
+<p>第六，软锁保护机制。
+主线或关键关系事件不能只依赖一次不可重复的选择。可以提供替代触发、补救事件、延迟触发、节日重开或关系修复路径。</p>
+<p>第七，记忆引用日志。
+当角色因为旧事件产生反应时，系统应能追踪是哪条记忆导致了这个结果。</p>
+<hr />
+<h2 id="十六玩家体验目标">十六、玩家体验目标</h2><p>这一类型最核心的体验不是：</p>
+<p>“我把好感度刷满了。”</p>
+<p>而是：</p>
+<p>“我理解了这个人，并通过持续选择建立了一段关系。”</p>
+<p>玩家体验通常分为六个阶段。</p>
+<p>第一阶段是认识。
+玩家通过外表、初始对话和日常行为形成第一印象。</p>
+<p>第二阶段是理解。
+玩家发现角色的兴趣、压力、目标、价值观和边界。</p>
+<p>第三阶段是投入。
+玩家开始主动分配时间，做出陪伴、帮助、邀约或承诺。</p>
+<p>第四阶段是考验。
+关系遭遇误会、冲突、错过、第三方影响或价值观分歧。</p>
+<p>第五阶段是修复或分化。
+玩家通过行动证明自己，或者关系逐渐疏远、改变方向。</p>
+<p>第六阶段是认同。
+角色不再只是系统目标，而成为玩家记忆中有独特经历的关系对象。</p>
+<p>优秀的关系模拟，会让玩家记住的不是“某个选项加了多少好感”，而是“我当时为什么选择陪她 / 支持他 / 放手 / 道歉 / 遵守承诺”。</p>
+<hr />
+<h2 id="十七可迁移到其他游戏的设计思想">十七、可迁移到其他游戏的设计思想</h2><p>这一类型最值得迁移的思想是：</p>
+<p><strong>把NPC关系从单一好感值升级为多维状态、记忆、承诺、冲突与修复组成的长期系统。</strong></p>
+<p>在Roguelike Shooter中，可以用于基地NPC、队友、商人、阵营联系人和任务发布者。玩家是否救过某个角色、是否遵守约定、是否在关键时刻支援，会影响商店库存、支援技能、隐藏房间、结局和战斗援助。</p>
+<p>在CRPG中，可以让队友关系不只是赞同/反对，而是信任、尊重、理念一致性、压力和承诺共同作用。</p>
+<p>在生存游戏中，可以用于营地成员管理。忽视、失约、资源分配不公或长期危险，会导致冲突、离队、背叛或互助。</p>
+<p>在策略游戏中，可以用于将领忠诚、派系关系、外交信任和联盟稳定度。</p>
+<p>在模拟经营中，可以用于员工关系、顾客关系、社区声望和长期合作伙伴。</p>
+<p>其通用价值在于：</p>
+<p>不要让NPC只根据一次选择改变态度。</p>
+<p>让他们记住玩家的长期行为，并根据多维关系状态做出可信反应。</p>
+<hr />
+<h2 id="十八完整关系产品边界与设计支柱">十八、完整关系产品边界与设计支柱</h2><p>完整产品应覆盖“相识—了解—建立信任—表达期待—协商关系—经历冲突—修复或分开—形成结局”的关系历程，并把玩家自己的时间、生活目标和社交网络纳入选择。</p>
+<p>核心支柱是角色有自主性、记忆有上下文、亲密需要协商、结果允许多样。恋爱成功不是所有内容的唯一正确答案；友谊、拒绝、暂缓和体面结束也应是完整且被承认的关系结果。</p>
+<p>所有互动都应改变具体认知、承诺或边界，而不是无来源地增加通用好感。角色喜欢礼物，不等于认同玩家在冲突中的行为。</p>
+<h2 id="十九日历关系与记忆状态">十九、日历、关系与记忆状态</h2><p>长期流程可按周或章节推进，每个周期包括安排时间、发生互动、角色自主行动、消息反馈和关系复盘。玩家同时受精力、工作、朋友和个人目标约束，避免恋爱对象成为随叫随到的任务节点。</p>
+<p>关系状态至少区分熟悉、信任、吸引、舒适、承诺和未解决冲突。记忆条目保存事件、双方解释、情绪强度和是否得到回应；同一行为因前置关系与边界不同，可以产生不同结果。</p>
+<p>明确邀请、拒绝与同意是状态转换，不是随机检定。角色拒绝后，系统应更新可用互动和关系语境，而不是允许玩家重复点击直到概率成功。</p>
+<h2 id="二十长期进程内容生产与角色自主性">二十、长期进程、内容生产与角色自主性</h2><p>长期进程围绕双方生活变化、共同计划、关系网络和自我成长展开。新阶段会带来新的责任与分歧，而不是仅解锁更高等级约会地点。</p>
+<p>内容单元可定义为“情境 + 双方目标 + 边界条件 + 记忆引用 + 冲突或靠近机会 + 后续承诺”。事件由当前状态筛选，并在后续对话中引用结果，使角色路线保持连贯。</p>
+<p>角色需要独立日程、价值偏好和不可协商目标。其自主选择可以令玩家失望，但必须能从既有经历中理解，不能只为制造戏剧性突然换人格。</p>
+<h2 id="二十一冲突修复失败前进与公平性">二十一、冲突修复、失败前进与公平性</h2><p>难度来自时间冲突、价值差异、误解和不完整信息，而非把正确台词藏在不可见数值后。对话前可不知道对方答案，但应能通过既往表达推断其边界和关切。</p>
+<p>冲突后可选择倾听、澄清、道歉、提出补偿、暂时冷静或结束关系。修复需要后续行动兑现，不是一句完美选项立即清空负面状态。</p>
+<p>错过事件、遭到拒绝或结束恋爱仍应推进人物成长和其他关系。系统避免以永久内容损失迫使玩家讨好所有角色，也不以嫉妒惩罚取代明确协商。</p>
+<h2 id="二十二作者工具最小切片与验收标准">二十二、作者工具、最小切片与验收标准</h2><p>作者工具需要日历冲突检查、关系状态图、记忆引用追踪、对话条件预览、边界与同意审计以及跨章节角色一致性检查。验证器应发现永远不可达的修复路径和拒绝后仍错误开放的亲密选项。</p>
+<p>最小切片包含两名拥有独立目标的角色、四周日历、三类互动、一次明确邀请、一次分歧和两种有效关系结果。它应展示关系建立、记忆引用与修复，而非用结局插画替代过程。</p>
+<p>验收时至少确认：角色会主动行动；同一选择因上下文产生不同但可解释结果；拒绝被系统尊重；冲突不能用单次礼物消除；非恋爱结局同样完成主题表达。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>恋爱养成 / 角色关系模拟（Relationship Simulation / Dating Sim）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>多维关系状态图谱，而非单一好感度</p>
+</li>
+<li><p>社交行动与时间、地点、心情、记忆、边界绑定的上下文结算</p>
+</li>
+<li><p>时间日程作为核心社交资源</p>
+</li>
+<li><p>角色记忆、承诺、失约与长期反应系统</p>
+</li>
+<li><p>关系阶段状态机，而非简单数值阈值</p>
+</li>
+<li><p>角色边界、拒绝与主体性规则</p>
+</li>
+<li><p>冲突生成、修复路径与关系恢复机制</p>
+</li>
+<li><p>玩家—角色—角色之间的社交网络传播</p>
+</li>
+<li><p>事件可达性、日程冲突、承诺追踪与关系曲线调试</p>
+</li>
+<li><p>将NPC关系升级为记忆驱动的长期互动系统</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

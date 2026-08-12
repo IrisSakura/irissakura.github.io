@@ -10,11 +10,12 @@ const FORBIDDEN_PUBLIC_PATTERNS = [
   /154\.37\.215\.57/,
   /(?:git@|ssh:\/\/)/i,
   /https?:\/\/[^\s)]*\.git(?:\b|\/)/i,
-  /(?:GITEA_TOKEN|WEBSITE_GITHUB_SSH_KEY|PASSWORD\s*=)/
+  /(?:GITEA_TOKEN|WEBSITE_GITHUB_SSH_KEY|PASSWORD\s*=)/,
+  /IrisSakura\/IrisSakura-Document-Archive/i
 ];
-const FORBIDDEN_HTML = /<(?:script|iframe|object|embed|form)\b|on[a-z]+\s*=/i;
+const FORBIDDEN_HTML = /<(?:script|iframe|object|embed|form)\b|\bon[a-z]+\s*=/i;
 
-export function validateJournalSource(source, blogBodies) {
+export function validateJournalSource(source, blogBodies, gameDesignBodies) {
   if (source?.schemaVersion !== 1) throw new Error('Journal source schemaVersion must be 1.');
   if (!SHA_PATTERN.test(source.sourceCommit ?? '')) throw new Error('Journal sourceCommit must be a full Git SHA.');
   if (Number.isNaN(Date.parse(source.generatedAt))) throw new Error('Journal generatedAt must be an ISO date-time.');
@@ -56,6 +57,27 @@ export function validateJournalSource(source, blogBodies) {
     const markdown = body.toString('utf8');
     assertPublicSafe(markdown, `blog.${blog.id}`);
     if (FORBIDDEN_HTML.test(markdown)) throw new Error(`Blog ${blog.id} contains executable or form HTML.`);
+  }
+  if (!(gameDesignBodies instanceof Map) || gameDesignBodies.size !== source.gameDesigns.length) {
+    throw new Error('Design body set does not match Journal game design metadata.');
+  }
+  for (const design of source.gameDesigns) {
+    if (design.contentPath !== `content/game-designs/${design.id}.md`) {
+      throw new Error(`Unexpected game design content path for ${design.id}.`);
+    }
+    if (!DIGEST_PATTERN.test(design.contentSha256 ?? '')) {
+      throw new Error(`Invalid game design content digest for ${design.id}.`);
+    }
+    const body = gameDesignBodies.get(design.id);
+    if (!Buffer.isBuffer(body)) throw new Error(`Missing game design body for ${design.id}.`);
+    if (body.length !== design.bytes || sha256(body) !== design.contentSha256) {
+      throw new Error(`Design body digest mismatch for ${design.id}.`);
+    }
+    const markdown = body.toString('utf8');
+    assertPublicSafe(markdown, `design.${design.id}`);
+    if (FORBIDDEN_HTML.test(markdown)) {
+      throw new Error(`Game design ${design.id} contains executable or form HTML.`);
+    }
   }
 }
 

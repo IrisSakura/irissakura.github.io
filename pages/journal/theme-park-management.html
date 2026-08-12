@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/theme-park-management.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="游乐园经营模拟（Theme Park Management Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/theme-park-management.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-theme-park-management.png">
+    <meta property="og:image:alt" content="游乐园经营模拟（Theme Park Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="游乐园经营模拟（Theme Park Management Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-theme-park-management.png">
+    <meta name="twitter:image:alt" content="游乐园经营模拟（Theme Park Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"游乐园经营模拟（Theme Park Management Simulation） | Sakura Design Journal","description":"连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。","url":"https://irissakura.github.io/pages/journal/theme-park-management.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"游乐园经营模拟（Theme Park Management Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-theme-park-management.png","dateModified":"2026-08-12","about":["management","simulation","theme-park"]}</script>
+    <!-- site-meta:end -->
+    <title>游乐园经营模拟（Theme Park Management Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-theme-park-management"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>游乐园经营模拟（Theme Park Management Simulation）</h1><p>连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。</p><div class="note-tags"><span>management</span><span>simulation</span><span>theme-park</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何把设施组合、游客动线、等待体验、安全维护与经营收益组织成一座可持续运转、可被玩家读懂的主题公园？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>主题公园经营类游戏的核心不是简单建造设施、收门票、赚金币。</p>
+<p>它真正关注的是：玩家如何通过游乐设施、道路、排队区、商店、景观、员工、维修、安全、票价和主题分区，构建一个能持续吸引游客、承载客流、制造情绪体验并稳定盈利的空间系统。</p>
+<p>它与普通模拟经营不同。普通经营更关注生产、销售、库存和收益；主题公园经营更关注游客在空间中的移动、等待、游玩、消费、疲劳、满意和离园全过程。</p>
+<p>它最适合抽象为：</p>
+<p><strong>游客体验流线、设施容量与园区满意度框架</strong></p>
+<p>核心循环是：</p>
+<p>设计园区布局 → 建造游乐设施与服务点 → 游客入园 → 选择目标设施 → 移动与排队 → 体验设施 → 产生情绪反馈 → 消费、休息或继续游玩 → 设施维护与员工调度 → 结算满意度、收入、口碑和安全风险 → 扩建园区。</p>
+<p>玩家真正管理的是：</p>
+<p>游客流线、设施吸引力、排队容量、等待体验、消费路径、安全维护、主题沉浸、服务覆盖和空间拥堵。</p>
+<hr />
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>主题公园经营框架可以分为十个核心域。</p>
+<p>第一是园区空间域。
+负责维护地图、道路、入口、出口、区域边界、主题分区、地形、景观、服务半径、可达性和拥堵情况。</p>
+<p>第二是游客个体域。
+负责维护游客的预算、兴趣、耐心、疲劳、饥饿、口渴、厕所需求、恐惧阈值、眩晕阈值、游玩偏好、同行关系和当前满意度。</p>
+<p>第三是设施吸引力域。
+负责维护过山车、旋转木马、鬼屋、摩天轮、水上项目、剧场、互动项目等设施的刺激度、恐惧度、眩晕度、容量、运行周期、可靠性和主题适配度。</p>
+<p>第四是队列与等待域。
+负责处理游客排队、队列长度、等待时间、排队区容量、快速通道、队列装饰、等待满意度衰减和弃队行为。</p>
+<p>第五是服务消费域。
+负责商店、餐饮、饮品、纪念品、厕所、休息区、医疗点、ATM、信息亭等服务设施。</p>
+<p>第六是员工运营域。
+负责清洁工、维修工、安保、演员、服务员、救护人员、检票员等员工的巡逻、任务、疲劳、效率、覆盖范围和工资。</p>
+<p>第七是安全与维护域。
+负责设施磨损、故障、停运、事故风险、游客受伤、投诉、保险、安全检查和紧急疏散。</p>
+<p>第八是主题与沉浸域。
+负责不同区域的主题风格、装饰一致性、音乐、演出、角色演员、夜间灯光和游客沉浸评分。</p>
+<p>第九是经营与口碑域。
+负责门票、设施单独收费、商店收益、维护成本、员工工资、广告、评分、游客口碑、客流增长和投资回报。</p>
+<p>第十是调试与分析域。
+负责显示游客路径、拥堵热点、排队瓶颈、设施利用率、满意度来源、消费转化、安全风险和员工覆盖漏洞。</p>
+<p>完整运行流程可以概括为：</p>
+<p>游客生成 → 游客根据兴趣、预算、距离和排队时间选择目标 → 沿道路移动 → 进入队列 → 等待并消耗耐心 → 体验设施 → 获得情绪反馈 → 更新需求和满意度 → 决定消费、休息、继续游玩或离园 → 园区系统根据设施负载、卫生、安全和口碑更新长期状态。</p>
+<hr />
+<h2 id="三核心模块职责">三、核心模块职责</h2><p>游客系统负责回答：“游客为什么来、想玩什么、为什么不开心？”</p>
+<p>游客不能只是人流贴图。他们应有不同预算、兴趣、耐心、体力、恐惧承受力、同行目标和消费倾向。有的人喜欢刺激项目，有的人只想拍照，有的人带孩子更偏好温和设施，有的人预算高但对等待极其敏感。</p>
+<p>设施系统负责回答：“这个项目为什么吸引人，又能承载多少人？”</p>
+<p>一个设施不只是收益点，而是体验节点。它有吸引力、容量、运行周期、排队速度、刺激度、恐惧度、眩晕度、安全风险和维护成本。高吸引力设施如果容量太低，会造成长队和不满；容量大但吸引力低的设施可能长期空转。</p>
+<p>队列系统负责回答：“游客等待时发生了什么？”</p>
+<p>排队不是单纯暂停。等待会消耗耐心、增加饥饿和疲劳，也可能受到遮阳、装饰、队列娱乐、快速通道和信息提示影响。队列本身是主题公园中非常重要的空间系统。</p>
+<p>道路与流线系统负责回答：“游客能否顺畅到达目标？”</p>
+<p>再好的设施，如果道路狭窄、入口隐藏、服务点太远、热门设施集中在死角，也会导致游客体验下降。主题公园经营的空间设计本质上是客流设计。</p>
+<p>服务系统负责回答：“游客除了游玩，还需要什么？”</p>
+<p>游客会饿、渴、累、想上厕所、想买纪念品、需要医疗帮助。服务设施的位置、价格、容量和覆盖范围会直接影响满意度与收益。</p>
+<p>员工系统负责回答：“园区能否维持正常运作？”</p>
+<p>垃圾没人清会降低满意度；设施没人维护会故障；事故没人处理会扩大负面影响；演员和巡游能提高主题沉浸。员工不是简单成本，而是园区稳定性的保障。</p>
+<p>主题系统负责回答：“这个区域是否有整体体验？”</p>
+<p>主题公园不是杂乱设施堆叠。游客对区域风格、装饰、音乐、景观和设施主题一致性会产生沉浸评价。一个“未来科幻区”中突然放古典木马，会破坏主题一致性。</p>
+<hr />
+<h2 id="四核心数据模型">四、核心数据模型</h2><p>ParkMap 表示园区地图。</p>
+<p>它记录道路节点、可建设区域、入口、出口、地形、主题分区、拥堵热力、服务半径和游客可达性。</p>
+<p>GuestProfile 表示游客个体。</p>
+<p>它记录游客ID、预算、兴趣标签、耐心、疲劳、饥饿、口渴、厕所需求、恐惧阈值、眩晕阈值、同行组、当前目标、满意度和离园意愿。</p>
+<p>AttractionData 表示设施模板。</p>
+<p>它记录设施类型、基础吸引力、容量、运行周期、刺激度、恐惧度、眩晕度、可靠性、维护成本、占地、主题标签和适龄范围。</p>
+<p>AttractionInstance 表示已建造设施。</p>
+<p>它记录设施ID、位置、当前状态、排队人数、当前运行周期、磨损度、故障风险、票价、满意度反馈、维护状态和利用率。</p>
+<p>QueueState 表示队列状态。</p>
+<p>它记录关联设施、队列容量、当前人数、预计等待时间、弃队概率、队列装饰评分、快速通道比例和拥堵风险。</p>
+<p>ServiceFacility 表示服务设施。</p>
+<p>它记录设施类型、容量、价格、服务速度、库存、员工需求、服务半径、当前排队人数和顾客满意度影响。</p>
+<p>StaffMember 表示员工。</p>
+<p>它记录员工ID、岗位、技能、当前任务、巡逻区域、疲劳、工资、效率、路径、是否空闲和任务优先级。</p>
+<p>ThemeZone 表示主题分区。</p>
+<p>它记录区域ID、主题标签、装饰评分、设施主题匹配度、音乐、灯光、演出配置和沉浸度。</p>
+<p>ParkMetrics 表示园区经营指标。</p>
+<p>它记录入园人数、平均满意度、平均等待时间、设施利用率、消费转化率、卫生评分、安全评分、主题评分、日收入、维护成本和口碑变化。</p>
+<hr />
+<h2 id="五核心范式一游客不是客流数字而是带有需求与偏好的体验主体">五、核心范式一：游客不是客流数字，而是带有需求与偏好的体验主体</h2><p>主题公园游戏如果只维护“当前游客数量”，就会退化成普通经营数值。</p>
+<p>游客应当是会做决策的个体。</p>
+<p>他们会根据兴趣选择设施。
+根据距离决定是否前往。
+根据排队时间决定是否放弃。
+根据疲劳决定是否休息。
+根据饥饿和口渴决定是否消费。
+根据设施体验决定是否满意。
+根据预算决定是否购买纪念品。
+根据整体体验决定是否推荐园区。</p>
+<p>这意味着游客系统需要拥有目标选择逻辑，而不是随机走路。</p>
+<p>一个游客可能先想玩刺激项目，但看到排队超过60分钟后改去附近商店；另一个游客可能因为带孩子，优先选择低恐惧项目；还有游客可能只为了拍照和看演出，对过山车没有兴趣。</p>
+<p>这种个体差异是主题公园经营的核心。</p>
+<hr />
+<h2 id="六核心范式二设施价值由吸引力容量和吞吐共同决定">六、核心范式二：设施价值由吸引力、容量和吞吐共同决定</h2><p>一个设施不能只看吸引力。</p>
+<p>高吸引力但容量低，会造成排队爆炸。
+容量高但吸引力低，会空转浪费。
+运行周期太长，会降低吞吐。
+票价太高，会降低转化率。
+恐惧度太高，会排除低胆量游客。
+眩晕度太高，会影响游客后续消费与满意度。</p>
+<p>因此设施价值应由多维因素决定：</p>
+<p>吸引力决定有多少人想来。
+容量决定一次能服务多少人。
+运行周期决定每小时吞吐。
+位置决定到达概率。
+价格决定消费转化。
+主题匹配决定区域沉浸。
+可靠性决定长期稳定。</p>
+<p>这让玩家不能只建造最高级项目，而必须考虑园区整体结构。</p>
+<hr />
+<h2 id="七核心范式三排队是体验系统而不是等待数字">七、核心范式三：排队是体验系统，而不是等待数字</h2><p>主题公园的排队系统非常关键。</p>
+<p>排队会消耗游客耐心，但也可以被设计优化。</p>
+<p>玩家可以通过以下方式影响排队体验：</p>
+<p>增加队列容量。
+设置快速通道。
+在队列旁放装饰。
+提供遮阳与休息。
+显示预计等待时间。
+在队列中加入小演出或互动。
+提高设施吞吐。
+调整票价控制客流。
+建设替代设施分流。</p>
+<p>如果队列只是一条人数数字，玩家很难做空间设计。</p>
+<p>更好的设计是让 QueueState 与道路、装饰、设施容量和游客耐心共同作用。这样，排队区本身也成为可设计空间。</p>
+<hr />
+<h2 id="八核心范式四道路流线决定园区效率">八、核心范式四：道路流线决定园区效率</h2><p>主题公园经营很大一部分乐趣来自布局。</p>
+<p>道路不是装饰，而是游客行为的基础网络。</p>
+<p>道路过窄会拥堵。
+热门设施入口太集中会形成瓶颈。
+服务设施离主路太远会无人使用。
+死胡同会降低游客探索效率。
+出口路径太长会影响离园体验。
+主题分区之间缺少过渡会破坏沉浸。</p>
+<p>因此 ParkMap 应支持路径可达性、拥堵热力、流量分析和服务覆盖。</p>
+<p>玩家应该能通过热力图看到：</p>
+<p>哪里人太多。
+哪里设施无人问津。
+哪里游客常常折返。
+哪里厕所覆盖不足。
+哪里餐饮排队过长。
+哪里员工巡逻不到。</p>
+<p>这让园区布局从美术摆放变成系统设计。</p>
+<hr />
+<h2 id="九核心范式五刺激恐惧与眩晕应分离建模">九、核心范式五：刺激、恐惧与眩晕应分离建模</h2><p>许多游乐园经营游戏会把项目简单分为“刺激度”。</p>
+<p>但更好的模型应至少拆成三种体验指标：</p>
+<p>刺激度代表兴奋和速度感。
+恐惧度代表心理压力和惊吓。
+眩晕度代表身体不适风险。</p>
+<p>游客偏好也应对应这三个维度。</p>
+<p>有些游客喜欢高刺激，但不喜欢高恐惧。
+有些游客能接受恐怖主题，但容易眩晕。
+有些儿童游客适合低恐惧、低眩晕、轻刺激项目。
+有些极限玩家追求高刺激、高恐惧。</p>
+<p>这样，玩家设计设施组合时要考虑目标客群。</p>
+<p>过山车不是越刺激越好。过高的眩晕度可能让游客玩完后不想消费、去医疗点，甚至降低整体满意。</p>
+<hr />
+<h2 id="十核心范式六安全维护是长期稳定系统">十、核心范式六：安全维护是长期稳定系统</h2><p>主题公园不能只追求收入。</p>
+<p>设施会磨损。
+员工会疲劳。
+安全检查需要时间。
+维修会导致设施停运。
+故障会影响排队游客。
+事故会造成口碑和法律后果。</p>
+<p>因此维护系统不应只是“设施坏了点维修”。</p>
+<p>更好的模型是：</p>
+<p>设施随着运行次数积累磨损。
+磨损提高故障概率。
+故障可能造成停运、游客不满或安全事故。
+定期维护降低风险但牺牲营业时间。
+维修工路线和优先级影响处理速度。
+高负载设施需要更频繁检查。</p>
+<p>这会让玩家面临经营取舍：</p>
+<p>继续运行热门设施赚更多钱，还是提前维护避免事故？</p>
+<p>维护是主题公园经营中非常重要的风险管理。</p>
+<hr />
+<h2 id="十一核心范式七主题分区提供长期表达和差异化">十一、核心范式七：主题分区提供长期表达和差异化</h2><p>主题公园不是设施仓库，而是体验空间。</p>
+<p>主题分区可以包括：</p>
+<p>西部牛仔区。
+未来科幻区。
+童话城堡区。
+海盗港湾区。
+恐龙丛林区。
+魔法学院区。
+水上乐园区。
+恐怖鬼屋区。</p>
+<p>每个区域不仅影响视觉，还可以影响游客期待。</p>
+<p>喜欢幻想的游客更愿意去魔法区。
+喜欢刺激的游客会被极限过山车区吸引。
+亲子游客偏好童话和温和设施。
+主题一致性高会提升拍照、消费和口碑。</p>
+<p>ThemeZone 应影响设施吸引力、商品销量、游客满意、社交传播和活动效果。</p>
+<p>这让园区建设不只是优化数值，也能表达风格。</p>
+<hr />
+<h2 id="十二事件与执行流程">十二、事件与执行流程</h2><p>一次典型游客游玩流程如下。</p>
+<p>游客生成系统创建 GuestProfile，并根据广告、口碑、票价和目标客群决定入园。</p>
+<p>游客进入园区后，目标选择系统根据兴趣、距离、排队时间、预算、需求状态和设施吸引力选择目标。</p>
+<p>路径系统为游客生成前往路线，并在移动过程中更新拥堵和疲劳。</p>
+<p>游客到达设施后，队列系统判断是否加入队列、放弃或寻找替代目标。</p>
+<p>游客排队时，QueueState 持续更新等待时间、耐心衰减和队列体验。</p>
+<p>设施运行周期开始，游客进入设施体验。</p>
+<p>设施系统根据刺激、恐惧、眩晕、主题匹配和游客偏好计算体验反馈。</p>
+<p>游客离开设施后更新满意度、疲劳、眩晕、饥饿、口渴和消费意愿。</p>
+<p>游客选择下一目标，可能去餐饮、厕所、休息区、商店、演出或出口。</p>
+<p>园区经营系统根据游客行为更新收入、口碑、设施利用率和服务压力。</p>
+<p>关键事件包括：</p>
+<p>游客入园事件。
+目标选择事件。
+路径拥堵事件。
+加入队列事件。
+弃队事件。
+设施运行开始事件。
+设施体验完成事件。
+游客满意度变化事件。
+游客眩晕事件。
+服务消费事件。
+垃圾生成事件。
+设施磨损事件。
+设施故障事件。
+维修任务生成事件。
+安全事故事件。
+游客离园事件。
+口碑变化事件。</p>
+<hr />
+<h2 id="十三模块通信设计">十三、模块通信设计</h2><p>建议采用事件驱动加空间状态快照。</p>
+<p>游客系统只维护个体状态和决策，不直接修改园区收入。</p>
+<p>设施系统维护设施运行、容量、磨损和体验结果。</p>
+<p>队列系统监听游客加入和设施吞吐，更新等待时间。</p>
+<p>道路系统监听游客移动，更新拥堵热力和路径成本。</p>
+<p>服务系统监听游客需求，处理消费、排队和满意度。</p>
+<p>员工系统监听垃圾、故障、安全、维修等任务，分配人员行动。</p>
+<p>维护系统监听设施运行和故障事件，更新风险。</p>
+<p>主题系统监听区域设施和装饰变化，计算沉浸度。</p>
+<p>经营系统监听消费、离园、事故、口碑事件，结算长期指标。</p>
+<p>UI系统只展示热力图、排队、满意度、收入、故障和主题评分，不直接修改核心数据。</p>
+<p>这种结构可以避免：</p>
+<p>设施脚本直接增加总收入。
+游客满意度被商店按钮直接修改。
+维修工没有到达设施但故障被修好。
+道路拥堵只表现不影响行为。
+队列等待和设施吞吐不同步。
+主题评分与实际区域布置无关。</p>
+<p>核心原则是：</p>
+<p>游客行为驱动消费和反馈，设施容量驱动排队，空间流线驱动效率，维护与员工保障长期稳定。</p>
+<hr />
+<h2 id="十四可扩展点">十四、可扩展点</h2><p>第一类扩展是自定义过山车建造。</p>
+<p>玩家可以设计轨道、坡度、速度、转弯、翻滚、刹车区、站台和安全参数，再由系统计算刺激、恐惧、眩晕和吞吐。</p>
+<p>第二类扩展是节日活动。</p>
+<p>万圣节鬼屋季、夏季水上节、圣诞灯光节、烟花大会、巡游演出都可以改变客群和消费结构。</p>
+<p>第三类扩展是游客群体差异。</p>
+<p>亲子家庭、青少年、情侣、游客团、极限玩家、本地居民、拍照型游客可以有不同偏好和消费行为。</p>
+<p>第四类扩展是园区品牌系统。</p>
+<p>玩家可以定位为亲子乐园、极限乐园、沉浸式主题园、文化公园、水上乐园或高端度假区。</p>
+<p>第五类扩展是员工成长。</p>
+<p>员工可以提升维修速度、清洁范围、安保处理、演出质量和服务效率。</p>
+<p>第六类扩展是天气系统。</p>
+<p>雨天影响室外项目吸引力，炎热天气提升饮料和水上项目需求，寒冷天气降低排队耐心。</p>
+<p>第七类扩展是动态事故与危机公关。</p>
+<p>设施事故、游客投诉、食品安全、停电、暴雨、社交媒体差评都可以形成经营危机。</p>
+<p>第八类扩展是多人共建。</p>
+<p>多个玩家分别负责设施设计、园区布局、财务定价、员工运营和主题装饰。</p>
+<hr />
+<h2 id="十五失败隔离与调试设计">十五、失败隔离与调试设计</h2><p>主题公园系统最容易出现的问题包括：</p>
+<p>游客卡路。
+设施排队无限增长。
+热门设施收益高但游客满意反而下降且原因不明。
+服务设施无人使用。
+员工巡逻不到故障点。
+设施吞吐和队列计算不一致。
+主题评分不可解释。
+事故触发过于随机。
+园区收入与游客行为脱节。</p>
+<p>因此需要以下调试能力。</p>
+<p>第一，游客路径回放。
+可以查看某个游客入园后选择了哪些目标、为什么放弃、在哪里拥堵、因为什么不满意。</p>
+<p>第二，队列瓶颈分析。
+显示每个设施的每小时吞吐、平均等待、弃队率、队列容量和等待满意度变化。</p>
+<p>第三，设施利用率热力图。
+显示设施空转、满载、过载和低吸引状态。</p>
+<p>第四，道路拥堵热力图。
+显示游客密度、移动速度、堵塞点和路径选择问题。</p>
+<p>第五，满意度原因解释器。
+游客不满应能解释是排队太久、太累、太饿、厕所太远、设施太恐怖、眩晕过高、票价太贵还是园区太脏。</p>
+<p>第六，员工覆盖检查。
+显示维修工、清洁工、安保的巡逻范围、任务响应时间和未覆盖区域。</p>
+<p>第七，主题评分解释器。
+显示区域中哪些设施和装饰贡献主题分，哪些部件破坏一致性。</p>
+<p>第八，安全风险日志。
+设施事故应能追溯到磨损、维护延迟、过载运行、天气影响或员工不足，而不是纯随机惩罚。</p>
+<p>失败隔离方面，系统应提供恢复路径，例如暂停设施、临时关闭园区区域、退还票价、派遣维修、疏导游客、提高服务覆盖、发布公关补偿等，避免一次事故直接导致不可恢复崩盘。</p>
+<hr />
+<h2 id="十六玩家体验目标">十六、玩家体验目标</h2><p>这一类型最核心的体验不是：</p>
+<p>我建了很多游乐设施。</p>
+<p>而是：</p>
+<p>我设计了一个游客愿意进入、愿意等待、愿意消费、愿意停留、愿意推荐的体验空间。</p>
+<p>玩家体验通常分为六个阶段。</p>
+<p>第一阶段是规划。
+玩家决定入口、主路、主题分区、核心设施和服务点布局。</p>
+<p>第二阶段是开园。
+游客进入，开始形成真实流线和排队压力。</p>
+<p>第三阶段是观察。
+玩家通过热力图和反馈发现哪里拥堵、哪里无聊、哪里服务不足。</p>
+<p>第四阶段是优化。
+玩家调整道路、票价、队列、设施容量、服务点和员工巡逻。</p>
+<p>第五阶段是扩张。
+玩家新增主题区、高级设施、演出活动和高价值消费点。</p>
+<p>第六阶段是稳定运营。
+园区形成自己的节奏，游客体验、收入、口碑和安全保持在健康状态。</p>
+<p>优秀的主题公园经营游戏会让玩家记住：</p>
+<p>“不是我建了最贵的过山车，而是我把它放在合适区域，设计了足够有趣的排队区，还用周边商店和休息区承接了它带来的客流。”</p>
+<hr />
+<h2 id="十七可迁移到其他游戏的设计思想">十七、可迁移到其他游戏的设计思想</h2><p>这一类型最值得迁移的思想是：</p>
+<p><strong>将空间中的用户行为设计为目标选择、路径移动、等待、体验、反馈和再选择的闭环。</strong></p>
+<p>在RPG主城中，可以用于NPC与玩家基地的人流系统。商店、任务点、休息区、训练场和演出区可以像园区设施一样吸引不同NPC。</p>
+<p>在Roguelike Shooter中，可以用于基地建设。不同设施吸引不同NPC或玩家行为，路径拥堵、服务覆盖和设施维护影响基地效率。</p>
+<p>在模拟经营中，可以用于商场、动物园、博物馆、医院、学校、机场、车站等任何“人群在空间中寻找服务”的系统。</p>
+<p>在策略游戏中，可以用于城市公共设施布局，居民根据需求选择学校、医院、市场、公园、交通站点。</p>
+<p>在开放世界中，可以用于节日、集市、城市活动，让NPC不是随机走路，而是被设施、事件和需求吸引。</p>
+<p>在多人游戏大厅中，可以用于设计社交空间，引导玩家从入口、公告、活动、商店、展示区、组队区自然移动。</p>
+<p>其通用价值在于：</p>
+<p>不要把建筑只当成静态功能按钮。
+让它们成为吸引个体、承载排队、制造体验、产生反馈、影响空间流线的服务节点。</p>
+<hr />
+<h2 id="十八完整产品边界与设计支柱">十八、完整产品边界与设计支柱</h2><p>完整游戏应覆盖“规划园区—建设设施—开放营业—观察客流—处理事故—闭园结算—扩建迭代”的连续循环，而不是只提供自由摆放设施的沙盒。</p>
+<p>可以用四根支柱约束功能取舍：</p>
+<ol>
+<li><strong>空间可达</strong>：入口、道路、排队区、服务设施和出口必须形成可解释的游客路径。</li>
+<li><strong>容量匹配</strong>：设施吞吐、排队长度、员工覆盖和公共服务需要共同承受高峰客流。</li>
+<li><strong>体验起伏</strong>：刺激、休息、景观、餐饮和主题叙事共同构成一次游园旅程，而非独立满意度加分项。</li>
+<li><strong>安全经营</strong>：维护、培训、应急与利润相互争夺预算，安全不能被设计成无代价的固定开关。</li>
+</ol>
+<p>任何新系统至少应改变游客行为、园区布局或经营决策之一；只增加装饰数量而不改变决策的内容，属于表现扩展而非核心玩法扩展。</p>
+<h2 id="十九营业日生命周期与关键状态">十九、营业日生命周期与关键状态</h2><p>一个营业日可分为准备、入园、客流爬升、高峰、回落和闭园六段。票价、员工班次、设施检修和活动排期在准备阶段确定，营业后允许有限度调整，但应付出退款、口碑或调度成本。</p>
+<p>游客状态至少区分到达、寻路、排队、游玩、消费、休息、求助与离园；设施状态至少区分停运、试运行、开放、降载、故障和疏散。状态转换必须给出原因，例如“因等待超出耐心离队”，不能只让满意度悄悄下降。</p>
+<p>事故不是一个随机扣款事件，而应沿“隐患—告警—停运—处置—复检—恢复”传播。这样玩家能在事故发生前看到风险，也能在事后通过调整维护策略避免重复失败。</p>
+<h2 id="二十长期进程内容生产与经济闭环">二十、长期进程、内容生产与经济闭环</h2><p>长期进程应围绕园区规模、主题分区、游客客群与运营能力展开。新设施不仅拥有价格和刺激度，还应带来新的占地形态、吞吐瓶颈、维护需求和目标客群。</p>
+<p>内容生产的最小单元可定义为“设施蓝图 + 目标客群 + 服务半径 + 维护曲线 + 主题标签”。季节活动和剧情委托则是在既有单元上改变客流时间、消费倾向和口碑目标，避免每次活动都创建一套孤立规则。</p>
+<p>经济闭环需要同时计算建设资本、日常现金流和长期折旧。高人气设施可能制造排队拥堵与维护赤字；低利润的厕所、长椅和医务室则通过降低离园率间接创造价值。</p>
+<h2 id="二十一难度曲线失败恢复与信息公平">二十一、难度曲线、失败恢复与信息公平</h2><p>难度应先增加可观察的客流压力，再增加多点耦合：前期只考查单一区域的容量，中期加入跨区流动与员工调度，后期再引入天气、设备老化和大型活动的叠加冲击。</p>
+<p>失败恢复应提供停运检修、限流、临时员工、退款安抚和紧急贷款等工具。它们可以牺牲当日利润或口碑，但应允许玩家保存园区的长期价值，不因一次拥堵直接进入不可逆破产螺旋。</p>
+<p>热力图、排队原因、寻路失败、服务覆盖和设施停机原因必须可追溯。玩家输掉经营判断可以接受，但不能因为系统隐藏了游客为何离园而失败。</p>
+<h2 id="二十二作者工具最小切片与验收标准">二十二、作者工具、最小切片与验收标准</h2><p>作者工具至少需要设施参数编辑器、道路与寻路校验、游客画像编辑器、营业日回放以及客流热力图。自动化压力测试应能在固定种子下重复制造开园高峰、设施停机和出口拥堵。</p>
+<p>最小可玩切片是一座单入口小型公园：两类设施、两类服务点、一个员工系统、三种游客画像和一次可恢复的故障。它必须完整跑通建设、营业、结算与改造，而不是用无限资金展示建造功能。</p>
+<p>验收时至少确认：游客路径有因果解释；设施容量会形成真实取舍；事故有预警和恢复过程；闭园报表能指出利润、口碑与离园原因；玩家第二天能够据此做出不同布局或排期。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>主题公园 / 游乐园经营模拟（Theme Park Management Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>游客体验流线、设施容量与园区满意度框架</p>
+</li>
+<li><p>游客作为带需求、兴趣、预算、耐心和偏好的体验主体</p>
+</li>
+<li><p>设施价值由吸引力、容量、运行周期、吞吐、价格和主题共同决定</p>
+</li>
+<li><p>队列作为等待体验系统，而非单纯人数数字</p>
+</li>
+<li><p>道路流线、拥堵热力和服务覆盖决定园区效率</p>
+</li>
+<li><p>刺激、恐惧、眩晕三维体验模型</p>
+</li>
+<li><p>设施磨损、维护、安全事故与长期风险管理</p>
+</li>
+<li><p>主题分区、装饰一致性和沉浸度作为经营价值</p>
+</li>
+<li><p>事件驱动的游客、设施、队列、服务、员工、维护和口碑流程</p>
+</li>
+<li><p>游客路径、排队瓶颈、满意度原因、员工覆盖和安全风险调试体系</p>
+</li>
+<li><p>将空间服务节点设计为吸引个体、承载等待、制造体验并影响流线的通用框架</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

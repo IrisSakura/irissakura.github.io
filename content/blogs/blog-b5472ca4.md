@@ -598,7 +598,7 @@ flowchart TD
 
 本文主要基于以下材料整理：
 
-- `game-designs/游戏设计范式记录：卡组构筑式 Roguelike 游戏中受限抽取、构筑收敛与“选择—战斗—重组—风险升级”的单局演化循环.md`
+- `game-designs/卡组构筑式 Roguelike 游戏设计范式.md`
 - `blogs/README.md`
 - `blogs/publication.v1.json`
 

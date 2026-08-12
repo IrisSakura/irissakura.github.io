@@ -1308,7 +1308,7 @@ TraversalDistance
 
 本文主要基于以下材料整理：
 
-- `game-designs/游戏设计范式记录：大逃杀游戏中缩圈驱动的玩家密度收敛、局内临场构筑与“落点—搜刮—转移—遭遇—淘汰—终局”的单局生存竞争循环.md`
+- `game-designs/大逃杀游戏设计范式.md`
 - `blogs/README.md`
 - `blogs/publication.v1.json`
 

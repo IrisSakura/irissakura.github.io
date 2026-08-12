@@ -51,6 +51,9 @@ assertThemeConfig(themeConfig);
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
   [article.id, await readText(article.contentPath)]
 ))));
+const gameDesignBodies = new Map(await Promise.all(journalSource.gameDesigns.map(async (design) => (
+  [design.id, await readText(design.contentPath)]
+))));
 const publishedBlogs = selectPublishedBlogs(blogPublication, journalSource, blogBodies);
 const publicationById = new Map(blogPublication.articles.map((article) => [article.sourceId, article]));
 const publicJournal = {
@@ -65,7 +68,20 @@ const publicJournalSource = {
 const blogDiscovery = resolveBlogDiscovery(blogTaxonomy, publishedBlogs);
 const evidenceChains = resolveEvidenceChains(evidenceChainData, frameworkAdoption, journalSource, blogPublication);
 
-const journalDetailDefinitions = journal.featuredNotes.map((note) => ({
+const featuredNoteById = new Map(journal.featuredNotes.map((note) => [note.id, note]));
+const gameDesignIds = new Set(journalSource.gameDesigns.map((design) => design.id));
+const gameDesignDetailDefinitions = journalSource.gameDesigns.map((design) => ({
+  file: `pages/journal/${design.id}.html`,
+  key: 'research',
+  title: `${design.title} | Sakura Design Journal`,
+  description: design.summary,
+  canonical: `/pages/journal/${design.id}.html`,
+  schemaType: 'Article',
+  design,
+  markdown: gameDesignBodies.get(design.id),
+  note: featuredNoteById.get(design.id)
+}));
+const curatedOnlyDetailDefinitions = journal.featuredNotes.filter((note) => !gameDesignIds.has(note.id)).map((note) => ({
   file: `pages/journal/${note.id}.html`,
   key: 'research',
   title: `${note.title} | Sakura Design Journal`,
@@ -74,6 +90,7 @@ const journalDetailDefinitions = journal.featuredNotes.map((note) => ({
   schemaType: 'Article',
   note
 }));
+const journalDetailDefinitions = [...gameDesignDetailDefinitions, ...curatedOnlyDetailDefinitions];
 const blogDetailDefinitions = publishedBlogs.map((article) => ({
   file: `pages/blog/${article.slug}.html`,
   key: 'research',
@@ -406,8 +423,8 @@ function buildMeta(page, siteData, themes) {
       url: `${canonical}#${step.id}`
     }));
   }
-  if (page.schemaType === 'Article' && (page.note || page.article)) {
-    const article = page.note ?? page.article;
+  if (page.schemaType === 'Article' && (page.note || page.article || page.design)) {
+    const article = page.article ?? page.design ?? page.note;
     structured.author = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
     structured.headline = article.title;
     structured.image = image;
@@ -829,6 +846,7 @@ function renderJournalContent(journalData, sourceData, chains) {
                     <h3>${escapeHtml(design.title)}</h3>
                     <p>${escapeHtml(design.summary)}</p>
                     <div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
+                    <a class="note-link" href="journal/${encodeURIComponent(design.id)}.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>`).join('');
 
   return `<header class="journal-hero">
@@ -844,7 +862,7 @@ function renderJournalContent(journalData, sourceData, chains) {
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
                 <div class="journal-metric"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.auditCount}</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric"><strong>${journalData.summary.publishedBlogCount}</strong><span>完整博客</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>${journalData.summary.importedBlogCount}</strong><span>完整博客</span><small>${journalData.summary.publishedBlogCount} 篇已公开</small></div>
                 <div class="journal-metric"><strong>${journalData.summary.knowledgeStreamCount}</strong><span>知识流</span></div>
             </div>
         </div>
@@ -876,7 +894,7 @@ function renderJournalContent(journalData, sourceData, chains) {
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">游戏设计范式索引</h2></div></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>${sourceData.gameDesigns.length} 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">${gameDesigns}
                 </div>
@@ -1224,8 +1242,12 @@ async function writeCompatibilityRouteSources() {
 
 async function writeJournalDetailSources(definitions) {
   const directory = path.join(root, 'pages/journal');
+  await rm(directory, { recursive: true, force: true });
   await mkdir(directory, { recursive: true });
-  await Promise.all(definitions.map(({ file, note }) => writeFile(path.join(root, file), renderJournalDetailSource(note))));
+  await Promise.all(definitions.map((definition) => writeFile(
+    path.join(root, definition.file),
+    definition.design ? renderGameDesignDetailSource(definition) : renderJournalDetailSource(definition.note)
+  )));
 }
 
 async function writeBlogSources(definitions, aliases, collections) {
@@ -1249,24 +1271,7 @@ async function writeBlogSources(definitions, aliases, collections) {
 
 function renderBlogDetailSource({ article, markdown, series, tags, related }) {
   const bodyMarkdown = stripBlogPublicationPreamble(markdown);
-  const body = sanitizeHtml(marked.parse(bodyMarkdown), {
-    allowedTags: [
-      ...sanitizeHtml.defaults.allowedTags,
-      'img',
-      'details',
-      'summary'
-    ],
-    allowedAttributes: {
-      ...sanitizeHtml.defaults.allowedAttributes,
-      a: ['href', 'name', 'target', 'rel'],
-      img: ['src', 'alt', 'title', 'width', 'height'],
-      code: ['class'],
-      th: ['align'],
-      td: ['align']
-    },
-    allowedSchemes: ['http', 'https', 'mailto'],
-    allowProtocolRelative: false
-  });
+  const body = renderPublicMarkdown(bodyMarkdown);
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1308,6 +1313,99 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
 </body>
 </html>
 `;
+}
+
+function renderGameDesignDetailSource({ design, markdown, note }) {
+  const body = renderPublicMarkdown(markdown);
+  const curatedSummary = note ? `<section class="journal-research-summary" aria-labelledby="curated-summary-title">
+            <p class="journal-kicker">SELECTED RESEARCH SUMMARY</p>
+            <h2 id="curated-summary-title">精选研究结构摘要</h2>
+            <div class="journal-detail-grid">
+                <section><span>01 · QUESTION</span><h3>问题背景</h3><p>${escapeHtml(note.question)}</p></section>
+                <section><span>02 · METHOD</span><h3>研究方法</h3><p>${escapeHtml(note.method)}</p></section>
+                <section><span>03 · FINDING</span><h3>核心发现</h3><p>${escapeHtml(note.finding)}</p></section>
+                <section><span>04 · IMPACT</span><h3>对框架或游戏的影响</h3><p>${escapeHtml(note.impact)}</p></section>
+            </div>
+        </section>` : '';
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(design.title)} | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <link rel="stylesheet" href="../../style/pastoral.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-${escapeAttribute(design.id)}"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · ${escapeHtml(design.updatedAt)}</p><h1>${escapeHtml(design.title)}</h1><p>${escapeHtml(design.summary)}</p><div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div></header>
+        ${curatedSummary}
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose">${body}</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="${escapeAttribute(design.updatedAt)}">${escapeHtml(design.updatedAt)}</time></footer>
+    </article>
+</main>
+<footer class="footer"></footer>
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
+`;
+}
+
+function renderPublicMarkdown(markdown) {
+  const headingCounts = new Map();
+  const renderer = new marked.Renderer();
+  renderer.heading = ({ depth, text }) => {
+    const base = markdownHeadingId(text) || 'section';
+    const count = headingCounts.get(base) ?? 0;
+    headingCounts.set(base, count + 1);
+    const id = count === 0 ? base : `${base}-${count}`;
+    return `<h${depth} id="${escapeAttribute(id)}">${marked.parseInline(text)}</h${depth}>`;
+  };
+  return sanitizeHtml(marked.parse(markdown, { renderer }), {
+    allowedTags: [
+      ...sanitizeHtml.defaults.allowedTags,
+      'img',
+      'details',
+      'summary'
+    ],
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'title', 'width', 'height'],
+      code: ['class'],
+      h2: ['id'],
+      h3: ['id'],
+      h4: ['id'],
+      h5: ['id'],
+      h6: ['id'],
+      th: ['align'],
+      td: ['align']
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+    allowProtocolRelative: false
+  });
+}
+
+function markdownHeadingId(text) {
+  return text
+    .toLocaleLowerCase('zh-CN')
+    .replace(/<[^>]*>/gu, '')
+    .replace(/[^\p{Letter}\p{Number}\s-]/gu, '')
+    .trim()
+    .replace(/[\s-]+/gu, '-');
 }
 
 function renderBlogCollectionSource({ collection }) {

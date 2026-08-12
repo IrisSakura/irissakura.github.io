@@ -21,7 +21,7 @@ test('evidence chains resolve only reviewed game, framework and public research 
   assert.equal(chains.length, 3);
   assert.ok(chains.every((chain) => chain.research.length > 0));
   assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'blog/metroidvania-capability-gated-topology.html')));
-  assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'journal.html#design-extraction-cross-session-loop')));
+  assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'journal/extraction-cross-session-loop.html')));
 
   const unknownSystem = structuredClone(data);
   unknownSystem.chains[0].gameSystem = '不存在的系统';
@@ -30,10 +30,14 @@ test('evidence chains resolve only reviewed game, framework and public research 
     /unknown game adoption system/
   );
 
-  const draftArticle = structuredClone(data);
-  draftArticle.chains[0].research[0].id = 'framework-support-surface-governance';
+  const referencedArticleId = data.chains
+    .flatMap((chain) => chain.research)
+    .find((reference) => reference.type === 'article')?.id;
+  assert.ok(referencedArticleId, 'fixture requires a referenced public article');
+  const draftPublication = structuredClone(publication);
+  draftPublication.articles.find((article) => article.sourceId === referencedArticleId).status = 'draft';
   assert.throws(
-    () => assertEvidenceChains(draftArticle, adoption, journalSource, publication),
+    () => assertEvidenceChains(data, adoption, journalSource, draftPublication),
     /is not a published article/
   );
 });

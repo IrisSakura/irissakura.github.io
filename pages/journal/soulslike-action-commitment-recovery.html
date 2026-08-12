@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/soulslike-action-commitment-recovery.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="类魂动作角色扮演中的动作承诺、死亡回收与检查点循环 | Sakura Design Journal">
+    <meta property="og:description" content="以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/soulslike-action-commitment-recovery.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-soulslike-action-commitment-recovery.png">
+    <meta property="og:image:alt" content="类魂动作角色扮演中的动作承诺、死亡回收与检查点循环 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="类魂动作角色扮演中的动作承诺、死亡回收与检查点循环 | Sakura Design Journal">
+    <meta name="twitter:description" content="以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-soulslike-action-commitment-recovery.png">
+    <meta name="twitter:image:alt" content="类魂动作角色扮演中的动作承诺、死亡回收与检查点循环 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"类魂动作角色扮演中的动作承诺、死亡回收与检查点循环 | Sakura Design Journal","description":"以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。","url":"https://irissakura.github.io/pages/journal/soulslike-action-commitment-recovery.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"类魂动作角色扮演中的动作承诺、死亡回收与检查点循环","image":"https://irissakura.github.io/assets/social/pages-journal-soulslike-action-commitment-recovery.png","dateModified":"2026-08-12","about":["action-rpg","checkpoint","soulslike"]}</script>
+    <!-- site-meta:end -->
+    <title>类魂动作角色扮演中的动作承诺、死亡回收与检查点循环 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-soulslike-action-commitment-recovery"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>类魂动作角色扮演中的动作承诺、死亡回收与检查点循环</h1><p>以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。</p><div class="note-tags"><span>action-rpg</span><span>checkpoint</span><span>soulslike</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="动作承诺死亡回收与检查点世界循环">动作承诺、死亡回收与检查点世界循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>类魂动作角色扮演游戏。</strong></p>
+<p>常见英文名称包括：</p>
+<ul>
+<li>Soulslike；</li>
+<li>Souls-like Action RPG；</li>
+<li>Hardcore Action RPG；</li>
+<li>Checkpoint-Based Action RPG。</li>
+</ul>
+<p>本文讨论的不是单独的“高难度Boss战”“翻滚无敌帧”或“死亡掉落经验”模块，而是一种可以独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>通过具有明确动作承诺的实时战斗、有限恢复资源、检查点驱动的世界重置、死亡后的风险资产回收，以及依赖观察与重复学习的敌人设计，让玩家在探索收益、继续深入和安全返回之间持续作出风险决策。</p>
+</blockquote>
+<p>该品类的核心不是单纯提高敌人伤害，而是建立一套稳定、可学习、可追责的规则，使玩家能够明确理解：</p>
+<ul>
+<li>自己为什么受到攻击；</li>
+<li>哪个动作导致失误；</li>
+<li>当前资源是否足以继续深入；</li>
+<li>死亡后将损失什么；</li>
+<li>返回死亡地点需要承担什么风险；</li>
+<li>掌握敌人规则后如何稳定提高成功率。</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>类魂动作角色扮演游戏，是以动作承诺、资源管理、敌人模式学习、检查点循环、死亡惩罚和空间回访为核心的动作RPG类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li>玩家从检查点出发；</li>
+<li>探索未知区域并遭遇敌人；</li>
+<li>消耗生命、治疗、法力、弹药或武器耐久；</li>
+<li>获取用于成长的风险资产；</li>
+<li>解锁门、梯子、电梯或其他捷径；</li>
+<li>判断继续深入、返回检查点还是挑战首领；</li>
+<li>死亡后在检查点复活；</li>
+<li>普通敌人与部分世界状态重置；</li>
+<li>玩家尝试返回死亡位置回收风险资产；</li>
+<li>使用积累资源提升属性、装备或能力；</li>
+<li>依靠世界认知和战斗熟练度推进更深区域；</li>
+<li>最终击败区域首领并进入下一阶段。</li>
+</ol>
+<p>该类型的主要成长资源通常包括：</p>
+<ul>
+<li>角色等级；</li>
+<li>武器强化；</li>
+<li>装备；</li>
+<li>法术或战技；</li>
+<li>消耗品；</li>
+<li>检查点；</li>
+<li>捷径；</li>
+<li>地图认知；</li>
+<li>敌人动作认知；</li>
+<li>玩家操作熟练度。</li>
+</ul>
+<p>其中最重要的一项成长并不存储在角色数据中，而存在于玩家自身：</p>
+<blockquote>
+<p>玩家对空间、敌人、动作窗口和风险边界的理解。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>类魂动作RPG的代表性范式由六个核心支柱构成。</p>
+<h2 id="31-动作具有承诺">3.1 动作具有承诺</h2><p>玩家执行攻击、治疗、闪避、格挡、施法和使用道具时，通常不能在任意时刻无成本取消。</p>
+<p>一个动作可以包含：</p>
+<ul>
+<li>输入缓冲；</li>
+<li>启动阶段；</li>
+<li>有效阶段；</li>
+<li>恢复阶段；</li>
+<li>位移；</li>
+<li>转向限制；</li>
+<li>体力消耗；</li>
+<li>取消窗口；</li>
+<li>无敌区间；</li>
+<li>霸体区间；</li>
+<li>命中停顿；</li>
+<li>受击中断。</li>
+</ul>
+<p>动作承诺让以下决策具有意义：</p>
+<ul>
+<li>当前是否真的存在攻击窗口；</li>
+<li>是否有足够时间治疗；</li>
+<li>应该轻攻击还是重攻击；</li>
+<li>是否需要保留体力撤退；</li>
+<li>是否能在敌人恢复前完成处决；</li>
+<li>当前距离是否适合释放高风险技能。</li>
+</ul>
+<hr />
+<h2 id="32-失败必须可归因">3.2 失败必须可归因</h2><p>高难度只有在失败可解释时才具有学习价值。</p>
+<p>玩家受到伤害后，通常应能够判断：</p>
+<ul>
+<li>攻击前兆没有识别；</li>
+<li>闪避方向错误；</li>
+<li>体力耗尽；</li>
+<li>贪图额外攻击；</li>
+<li>锁定目标不当；</li>
+<li>被环境限制；</li>
+<li>同时激活了多个敌人；</li>
+<li>使用了恢复过长的动作；</li>
+<li>未观察敌人的延迟攻击。</li>
+</ul>
+<p>系统不应主要依赖：</p>
+<ul>
+<li>无前兆攻击；</li>
+<li>视野外必杀；</li>
+<li>不稳定碰撞；</li>
+<li>随机取消；</li>
+<li>追踪角度突然变化；</li>
+<li>与视觉完全不符的命中范围；</li>
+</ul>
+<p>制造困难。</p>
+<hr />
+<h2 id="33-检查点既是恢复点也是世界重置边界">3.3 检查点既是恢复点，也是世界重置边界</h2><p>检查点通常承担：</p>
+<ul>
+<li>保存进度；</li>
+<li>恢复生命；</li>
+<li>补充治疗；</li>
+<li>调整技能；</li>
+<li>传送；</li>
+<li>升级；</li>
+<li>重置普通敌人；</li>
+<li>提交世界状态；</li>
+<li>设置复活位置。</li>
+</ul>
+<p>因此，检查点并不是普通存档点，而是连接以下系统的事务边界：</p>
+<ul>
+<li>玩家状态；</li>
+<li>敌人生命周期；</li>
+<li>资源恢复；</li>
+<li>世界持久化；</li>
+<li>复活；</li>
+<li>快速移动；</li>
+<li>风险资产；</li>
+<li>任务状态。</li>
+</ul>
+<hr />
+<h2 id="34-死亡形成风险回收循环">3.4 死亡形成风险回收循环</h2><p>玩家死亡后通常不会完全清空进度，而是产生一种处于风险状态的资产：</p>
+<ul>
+<li>经验；</li>
+<li>货币；</li>
+<li>特殊能量；</li>
+<li>连续击杀收益；</li>
+<li>临时增益。</li>
+</ul>
+<p>玩家获得一次返回死亡地点的机会。</p>
+<p>如果在回收前再次死亡，旧资产永久丢失。</p>
+<p>该机制将死亡后的流程转化为：</p>
+<p>复活
+→ 重新穿越已知危险
+→ 判断是否快速冲刺
+→ 是否处理沿途敌人
+→ 是否改变路线
+→ 回收资产
+→ 决定继续深入或返回</p>
+<p>死亡因此不是简单读档，而是生成了新的局部目标。</p>
+<hr />
+<h2 id="35-世界通过回访和捷径逐渐被掌握">3.5 世界通过回访和捷径逐渐被掌握</h2><p>类魂世界通常不是完全线性，也不一定是完全开放。</p>
+<p>典型结构包括：</p>
+<ul>
+<li>主路径；</li>
+<li>支路；</li>
+<li>单向门；</li>
+<li>电梯；</li>
+<li>梯子；</li>
+<li>环形连接；</li>
+<li>区域间捷径；</li>
+<li>隐藏通路；</li>
+<li>检查点；</li>
+<li>首领门；</li>
+<li>高风险奖励区。</li>
+</ul>
+<p>玩家进度不仅表现为到达更远的位置，还表现为：</p>
+<ul>
+<li>缩短死亡后的重返距离；</li>
+<li>建立稳定资源路线；</li>
+<li>识别安全点；</li>
+<li>掌握敌人分布；</li>
+<li>打通区域循环。</li>
+</ul>
+<hr />
+<h2 id="36-成长不能完全替代学习">3.6 成长不能完全替代学习</h2><p>角色成长可以降低难度，但不应彻底覆盖规则学习。</p>
+<p>属性和装备可以提供：</p>
+<ul>
+<li>更高生命；</li>
+<li>更高伤害；</li>
+<li>更强防御；</li>
+<li>更多体力；</li>
+<li>更高异常抗性；</li>
+<li>更大的法力池；</li>
+<li>更好的恢复效率。</li>
+</ul>
+<p>但玩家仍然需要掌握：</p>
+<ul>
+<li>敌人攻击节奏；</li>
+<li>闪避时机；</li>
+<li>距离；</li>
+<li>体力管理；</li>
+<li>攻击窗口；</li>
+<li>地形；</li>
+<li>多敌人控制。</li>
+</ul>
+<p>如果数值成长可以完全绕过这些系统，游戏会退化为普通刷级RPG。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与传统动作rpg的区别">4.1 与传统动作RPG的区别</h2><p>传统动作RPG通常允许玩家通过：</p>
+<ul>
+<li>等级压制；</li>
+<li>高频技能；</li>
+<li>大量恢复；</li>
+<li>装备数值；</li>
+<li>持续连击；</li>
+</ul>
+<p>解决大部分敌人。</p>
+<p>类魂动作RPG更强调：</p>
+<ul>
+<li>动作承诺；</li>
+<li>敌人威胁；</li>
+<li>恢复窗口；</li>
+<li>体力；</li>
+<li>死亡风险；</li>
+<li>路线与检查点；</li>
+<li>行为学习。</li>
+</ul>
+<hr />
+<h2 id="42-与多人狩猎动作游戏的区别">4.2 与多人狩猎动作游戏的区别</h2><p>多人狩猎动作游戏通常围绕：</p>
+<ul>
+<li>大型目标；</li>
+<li>部位破坏；</li>
+<li>多人协作窗口；</li>
+<li>任务实例；</li>
+<li>素材制造。</li>
+</ul>
+<p>类魂动作RPG通常更强调：</p>
+<ul>
+<li>连续世界；</li>
+<li>检查点；</li>
+<li>普通敌人配置；</li>
+<li>死亡回收；</li>
+<li>空间捷径；</li>
+<li>单人或小规模入侵式互动；</li>
+<li>整体区域推进。</li>
+</ul>
+<hr />
+<h2 id="43-与传统格斗游戏的区别">4.3 与传统格斗游戏的区别</h2><p>传统格斗游戏强调：</p>
+<ul>
+<li>对称竞技；</li>
+<li>帧数据；</li>
+<li>命中与防御帧差；</li>
+<li>回滚网络；</li>
+<li>对局重置。</li>
+</ul>
+<p>类魂动作RPG虽然也强调动作承诺，但还包含：</p>
+<ul>
+<li>世界探索；</li>
+<li>敌人AI；</li>
+<li>长期成长；</li>
+<li>检查点；</li>
+<li>装备；</li>
+<li>任务；</li>
+<li>PvE关卡。</li>
+</ul>
+<hr />
+<h2 id="44-与生存恐怖游戏的区别">4.4 与生存恐怖游戏的区别</h2><p>生存恐怖强调：</p>
+<ul>
+<li>资源匮乏；</li>
+<li>信息不完整；</li>
+<li>规避威胁；</li>
+<li>安全区；</li>
+<li>压力节奏。</li>
+</ul>
+<p>类魂动作RPG通常允许玩家通过学习和战斗稳定击败绝大多数敌人。</p>
+<p>其压力核心更偏向：</p>
+<ul>
+<li>动作执行；</li>
+<li>风险资产；</li>
+<li>敌人重置；</li>
+<li>路线熟练；</li>
+<li>首领挑战。</li>
+</ul>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十五个核心域：</p>
+<ol>
+<li>固定步长角色战斗域；</li>
+<li>输入缓冲与动作仲裁域；</li>
+<li>玩家属性、装备与资源域；</li>
+<li>敌人感知、AI和动作域；</li>
+<li>命中、伤害与受击反应域；</li>
+<li>体力、架势和韧性域；</li>
+<li>锁定、相机和目标选择域；</li>
+<li>世界区域与流式加载域；</li>
+<li>检查点与世界重置域；</li>
+<li>死亡、复活和资产回收域；</li>
+<li>捷径、门锁和区域进度域；</li>
+<li>首领、阶段和竞技场域；</li>
+<li>任务、NPC和世界阶段域；</li>
+<li>存档、回放和持久化域；</li>
+<li>调试、遥测和内容验证域。</li>
+</ol>
+<p>总体运行关系如下：</p>
+<p>玩家输入
+→ 输入缓冲记录候选动作
+→ 动作仲裁器检查当前状态
+→ 提交攻击、闪避、格挡或交互
+→ 固定步长推进动作
+→ 更新位移、体力和碰撞区域
+→ 生成命中候选
+→ 结算伤害、架势和状态
+→ 敌人AI根据感知和受击重新决策
+→ 世界系统更新敌人、门、捷径和任务状态
+→ 玩家死亡时创建风险资产
+→ 玩家在检查点复活并触发局部世界重置
+→ 玩家回收资产或产生永久损失
+→ 在稳定边界保存持久进度</p>
+<hr />
+<h2 id="6-固定步长战斗模拟">6. 固定步长战斗模拟</h2><h2 id="61-combatclock">6.1 CombatClock</h2><p>建议字段：</p>
+<ul>
+<li>CurrentTick；</li>
+<li>FixedDeltaTime；</li>
+<li>SimulationRate；</li>
+<li>HitStopTicks；</li>
+<li>IsPaused；</li>
+<li>WorldVersion；</li>
+<li>RandomStreamState。</li>
+</ul>
+<p>以下逻辑应使用固定步长推进：</p>
+<ul>
+<li>攻击帧；</li>
+<li>闪避无敌；</li>
+<li>格挡；</li>
+<li>体力恢复；</li>
+<li>敌人动作；</li>
+<li>投射物；</li>
+<li>状态持续时间；</li>
+<li>命中停顿；</li>
+<li>架势恢复；</li>
+<li>首领阶段。</li>
+</ul>
+<hr />
+<h2 id="62-单tick执行顺序">6.2 单Tick执行顺序</h2><p>推荐顺序：</p>
+<ol>
+<li>采样输入；</li>
+<li>更新输入缓冲；</li>
+<li>处理强制状态；</li>
+<li>仲裁动作切换；</li>
+<li>推进当前动作；</li>
+<li>更新位移和朝向；</li>
+<li>处理地面与角色碰撞；</li>
+<li>更新攻击框和受击框；</li>
+<li>收集命中候选；</li>
+<li>结算闪避、格挡、招架和命中；</li>
+<li>提交生命、体力、架势和状态；</li>
+<li>处理死亡和处决；</li>
+<li>更新敌人AI意图；</li>
+<li>更新任务与世界事件；</li>
+<li>发布表现事件。</li>
+</ol>
+<hr />
+<h2 id="63-逻辑与表现分离">6.3 逻辑与表现分离</h2><p>逻辑层负责：</p>
+<ul>
+<li>动作阶段；</li>
+<li>位移；</li>
+<li>命中；</li>
+<li>无敌；</li>
+<li>体力；</li>
+<li>伤害；</li>
+<li>状态；</li>
+<li>死亡。</li>
+</ul>
+<p>表现层负责：</p>
+<ul>
+<li>动画；</li>
+<li>特效；</li>
+<li>音效；</li>
+<li>镜头；</li>
+<li>震动；</li>
+<li>受击表现；</li>
+<li>UI。</li>
+</ul>
+<p>动画事件不应决定权威伤害和资源消耗。</p>
+<hr />
+<h2 id="7-玩家运行时模型">7. 玩家运行时模型</h2><h2 id="71-playerruntimestate">7.1 PlayerRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>PlayerEntityId；</li>
+<li>Position；</li>
+<li>Rotation；</li>
+<li>CurrentRegionId；</li>
+<li>CurrentActionId；</li>
+<li>CurrentActionTick；</li>
+<li>HealthState；</li>
+<li>StaminaState；</li>
+<li>PostureState；</li>
+<li>FocusState；</li>
+<li>StatusInstances；</li>
+<li>EquipmentState；</li>
+<li>WeaponStates；</li>
+<li>InventoryState；</li>
+<li>LockOnState；</li>
+<li>DeathState；</li>
+<li>RecoveryAssetReference；</li>
+<li>LastCheckpointId；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="72-核心资源">7.2 核心资源</h2><p>常见资源包括：</p>
+<ul>
+<li>生命；</li>
+<li>体力；</li>
+<li>法力或专注值；</li>
+<li>架势；</li>
+<li>异常积累；</li>
+<li>武器耐久；</li>
+<li>弹药；</li>
+<li>治疗次数；</li>
+<li>特殊技能槽。</li>
+</ul>
+<p>每项资源都应回答：</p>
+<ul>
+<li>如何消耗；</li>
+<li>如何恢复；</li>
+<li>是否在检查点重置；</li>
+<li>死亡后是否保留；</li>
+<li>是否受装备影响；</li>
+<li>是否进入存档。</li>
+</ul>
+<hr />
+<h2 id="73-playerpersistentstate">7.3 PlayerPersistentState</h2><p>建议包含：</p>
+<ul>
+<li>PersistentPlayerId；</li>
+<li>Level；</li>
+<li>BaseAttributes；</li>
+<li>LearnedAbilities；</li>
+<li>Inventory；</li>
+<li>EquipmentInventory；</li>
+<li>WeaponUpgradeStates；</li>
+<li>KeyItems；</li>
+<li>QuestFlags；</li>
+<li>ActivatedCheckpoints；</li>
+<li>OpenedShortcuts；</li>
+<li>DefeatedBosses；</li>
+<li>WorldStage；</li>
+<li>CurrencyState；</li>
+<li>SaveVersion。</li>
+</ul>
+<hr />
+<h2 id="8-输入缓冲与动作仲裁">8. 输入缓冲与动作仲裁</h2><h2 id="81-inputframe">8.1 InputFrame</h2><p>建议字段：</p>
+<ul>
+<li>Tick；</li>
+<li>MovementInput；</li>
+<li>CameraInput；</li>
+<li>LightAttackPressed；</li>
+<li>HeavyAttackPressed；</li>
+<li>DodgePressed；</li>
+<li>GuardPressed；</li>
+<li>InteractPressed；</li>
+<li>ItemPressed；</li>
+<li>AbilityPressed；</li>
+<li>LockOnPressed；</li>
+<li>InputSequence。</li>
+</ul>
+<hr />
+<h2 id="82-输入缓冲">8.2 输入缓冲</h2><p>输入缓冲允许玩家在当前动作恢复结束前提前提交：</p>
+<ul>
+<li>下一段攻击；</li>
+<li>闪避；</li>
+<li>格挡；</li>
+<li>使用道具；</li>
+<li>战技；</li>
+<li>交互。</li>
+</ul>
+<h3 id="bufferedaction">BufferedAction</h3><p>建议字段：</p>
+<ul>
+<li>ActionRequestId；</li>
+<li>RecognizedTick；</li>
+<li>ExpireTick；</li>
+<li>RequiredStateTags；</li>
+<li>Priority；</li>
+<li>Consumed；</li>
+<li>SourceInputSequence。</li>
+</ul>
+<hr />
+<h2 id="83-动作仲裁器">8.3 动作仲裁器</h2><p>动作仲裁器统一处理：</p>
+<ul>
+<li>受击；</li>
+<li>死亡；</li>
+<li>抓取；</li>
+<li>攻击；</li>
+<li>连段；</li>
+<li>闪避；</li>
+<li>格挡；</li>
+<li>施法；</li>
+<li>道具；</li>
+<li>交互；</li>
+<li>落地；</li>
+<li>攀爬；</li>
+<li>处决。</li>
+</ul>
+<p>任何模块都不应直接覆盖CurrentActionId。</p>
+<hr />
+<h2 id="84-动作优先级">8.4 动作优先级</h2><p>推荐优先级：</p>
+<ol>
+<li>死亡和剧情锁定；</li>
+<li>抓取与强制演出；</li>
+<li>受击、击飞和倒地；</li>
+<li>招架与处决；</li>
+<li>合法防御取消；</li>
+<li>合法闪避取消；</li>
+<li>连段和技能取消；</li>
+<li>普通动作；</li>
+<li>待机和移动。</li>
+</ol>
+<hr />
+<h2 id="9-动作定义">9. 动作定义</h2><h2 id="91-actiondefinition">9.1 ActionDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ActionId；</li>
+<li>ActionTags；</li>
+<li>EntryConditions；</li>
+<li>StartupTicks；</li>
+<li>ActiveTicks；</li>
+<li>RecoveryTicks；</li>
+<li>MovementTrack；</li>
+<li>RotationTrack；</li>
+<li>HitboxTrack；</li>
+<li>HurtboxTrack；</li>
+<li>InvulnerabilityTrack；</li>
+<li>HyperArmorTrack；</li>
+<li>CancelWindows；</li>
+<li>StaminaCost；</li>
+<li>FocusCost；</li>
+<li>DamageProfiles；</li>
+<li>PoiseDamage；</li>
+<li>GuardDamage；</li>
+<li>PresentationProfile。</li>
+</ul>
+<hr />
+<h2 id="92-动作轨道">9.2 动作轨道</h2><p>动作可以由多个轨道组成：</p>
+<ul>
+<li>位移轨道；</li>
+<li>转向轨道；</li>
+<li>攻击框轨道；</li>
+<li>受击框轨道；</li>
+<li>无敌轨道；</li>
+<li>霸体轨道；</li>
+<li>资源消耗轨道；</li>
+<li>取消窗口轨道；</li>
+<li>表现事件轨道。</li>
+</ul>
+<hr />
+<h2 id="93-动作提交节点">9.3 动作提交节点</h2><p>部分资源可在不同阶段提交：</p>
+<h3 id="动作开始时">动作开始时</h3><p>适用于：</p>
+<ul>
+<li>闪避体力；</li>
+<li>法术消耗；</li>
+<li>道具使用次数。</li>
+</ul>
+<h3 id="攻击生效时">攻击生效时</h3><p>适用于：</p>
+<ul>
+<li>弹药；</li>
+<li>投射物；</li>
+<li>特殊充能。</li>
+</ul>
+<h3 id="动作结束时">动作结束时</h3><p>适用于少量持续引导行为。</p>
+<p>提交时机必须统一，避免通过被打断复制资源。</p>
+<hr />
+<h2 id="94-动作承诺控制">9.4 动作承诺控制</h2><p>高收益动作应付出至少一种成本：</p>
+<ul>
+<li>长启动；</li>
+<li>长恢复；</li>
+<li>高体力；</li>
+<li>有限次数；</li>
+<li>低转向能力；</li>
+<li>较差追踪；</li>
+<li>更近距离；</li>
+<li>被打断风险；</li>
+<li>需要蓄力。</li>
+</ul>
+<hr />
+<h2 id="10-体力系统">10. 体力系统</h2><h2 id="101-staminastate">10.1 StaminaState</h2><p>建议包含：</p>
+<ul>
+<li>CurrentStamina；</li>
+<li>MaximumStamina；</li>
+<li>RegenerationRate；</li>
+<li>RegenerationDelay；</li>
+<li>ReservedStamina；</li>
+<li>ExhaustionState；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="102-体力消耗">10.2 体力消耗</h2><p>常见消耗来源：</p>
+<ul>
+<li>攻击；</li>
+<li>闪避；</li>
+<li>格挡；</li>
+<li>冲刺；</li>
+<li>跳跃；</li>
+<li>攀爬；</li>
+<li>特殊技能。</li>
+</ul>
+<hr />
+<h2 id="103-体力设计目标">10.3 体力设计目标</h2><p>体力迫使玩家在以下事项间取舍：</p>
+<ul>
+<li>继续攻击；</li>
+<li>保留闪避；</li>
+<li>持续格挡；</li>
+<li>拉开距离；</li>
+<li>追击敌人；</li>
+<li>使用高消耗动作。</li>
+</ul>
+<hr />
+<h2 id="104-体力耗尽">10.4 体力耗尽</h2><p>体力耗尽可以导致：</p>
+<ul>
+<li>无法攻击；</li>
+<li>无法闪避；</li>
+<li>格挡崩溃；</li>
+<li>恢复延迟；</li>
+<li>移动能力下降；</li>
+<li>受击惩罚增加。</li>
+</ul>
+<p>但系统应避免玩家进入完全无法恢复的无限压制状态。</p>
+<hr />
+<h2 id="11-架势韧性与硬直">11. 架势、韧性与硬直</h2><h2 id="111-概念分离">11.1 概念分离</h2><h3 id="韧性">韧性</h3><p>单位在执行动作时抵抗轻度受击中断的能力。</p>
+<h3 id="架势">架势</h3><p>持续承受攻击或格挡后，进入失衡状态的资源。</p>
+<h3 id="硬直">硬直</h3><p>一次攻击造成的即时控制结果。</p>
+<h3 id="霸体">霸体</h3><p>某个动作时间段内提高受击抵抗。</p>
+<hr />
+<h2 id="112-posturestate">11.2 PostureState</h2><p>建议字段：</p>
+<ul>
+<li>CurrentPosture；</li>
+<li>MaximumPosture；</li>
+<li>RecoveryRate；</li>
+<li>RecoveryDelay；</li>
+<li>GuardPostureModifier；</li>
+<li>BreakState；</li>
+<li>BreakCooldown；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="113-架势破坏">11.3 架势破坏</h2><p>架势清空或达到阈值时：</p>
+<ol>
+<li>验证目标是否允许失衡；</li>
+<li>中断当前动作；</li>
+<li>进入架势崩溃；</li>
+<li>开放处决或高伤窗口；</li>
+<li>重置或部分恢复架势；</li>
+<li>增加短时保护；</li>
+<li>发布PostureBroken。</li>
+</ol>
+<hr />
+<h2 id="114-防止永久压制">11.4 防止永久压制</h2><p>可以采用：</p>
+<ul>
+<li>失衡后短时保护；</li>
+<li>韧性增长；</li>
+<li>同类硬直递减；</li>
+<li>强制脱离动作；</li>
+<li>最低行动保障；</li>
+<li>Boss阶段保护。</li>
+</ul>
+<hr />
+<h2 id="12-闪避格挡与招架">12. 闪避、格挡与招架</h2><h2 id="121-闪避">12.1 闪避</h2><p>DodgeDefinition建议包含：</p>
+<ul>
+<li>StartupTicks；</li>
+<li>InvulnerableTicks；</li>
+<li>RecoveryTicks；</li>
+<li>MovementCurve；</li>
+<li>StaminaCost；</li>
+<li>DirectionRules；</li>
+<li>EquipmentWeightModifiers；</li>
+<li>CancelPolicy。</li>
+</ul>
+<hr />
+<h2 id="122-无敌帧">12.2 无敌帧</h2><p>无敌帧需要明确：</p>
+<ul>
+<li>从动作第几Tick开始；</li>
+<li>持续多久；</li>
+<li>是否对所有伤害有效；</li>
+<li>是否仍受环境影响；</li>
+<li>是否对抓取有效；</li>
+<li>是否受装备重量影响。</li>
+</ul>
+<p>无敌窗口应与视觉动作保持合理一致。</p>
+<hr />
+<h2 id="123-格挡">12.3 格挡</h2><p>GuardProfile建议包含：</p>
+<ul>
+<li>GuardAngles；</li>
+<li>DamageReduction；</li>
+<li>ElementReduction；</li>
+<li>StaminaDamageMultiplier；</li>
+<li>GuardStability；</li>
+<li>GuardBreakAction；</li>
+<li>ParryCompatibility。</li>
+</ul>
+<hr />
+<h2 id="124-招架">12.4 招架</h2><p>招架通常具有：</p>
+<ul>
+<li>较短有效窗口；</li>
+<li>高失败风险；</li>
+<li>高成功收益；</li>
+<li>对特定攻击无效；</li>
+<li>成功后开放处决。</li>
+</ul>
+<p>招架判定必须明确：</p>
+<ul>
+<li>使用攻击命中时刻还是动作开始时刻；</li>
+<li>是否允许投射物；</li>
+<li>是否允许多段攻击；</li>
+<li>是否消耗体力；</li>
+<li>失败时是否转为普通格挡。</li>
+</ul>
+<hr />
+<h2 id="13-锁定相机与目标选择">13. 锁定、相机与目标选择</h2><h2 id="131-lockonstate">13.1 LockOnState</h2><p>建议包含：</p>
+<ul>
+<li>CurrentTargetId；</li>
+<li>CandidateTargetIds；</li>
+<li>LockDistance；</li>
+<li>LockAngle；</li>
+<li>OcclusionState；</li>
+<li>TargetSwitchCooldown；</li>
+<li>LockMode；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="132-锁定候选评分">13.2 锁定候选评分</h2><p>可以考虑：</p>
+<ul>
+<li>屏幕位置；</li>
+<li>世界距离；</li>
+<li>观察方向；</li>
+<li>当前威胁；</li>
+<li>可见性；</li>
+<li>目标是否存活；</li>
+<li>目标是否在遮挡后；</li>
+<li>当前攻击目标；</li>
+<li>玩家输入方向。</li>
+</ul>
+<hr />
+<h2 id="133-锁定丢失条件">13.3 锁定丢失条件</h2><p>包括：</p>
+<ul>
+<li>目标死亡；</li>
+<li>距离过远；</li>
+<li>遮挡持续过久；</li>
+<li>目标进入不可锁定状态；</li>
+<li>玩家手动取消；</li>
+<li>剧情切换；</li>
+<li>相机无法维持。</li>
+</ul>
+<hr />
+<h2 id="134-大型目标锁定点">13.4 大型目标锁定点</h2><p>大型敌人可以提供多个锁定点：</p>
+<ul>
+<li>头部；</li>
+<li>躯干；</li>
+<li>手臂；</li>
+<li>腿；</li>
+<li>弱点。</li>
+</ul>
+<p>锁定点是相机和瞄准辅助，不应直接等同于独立部位生命系统。</p>
+<hr />
+<h2 id="135-相机失败保护">13.5 相机失败保护</h2><p>需要防止：</p>
+<ul>
+<li>墙体遮挡；</li>
+<li>相机进入模型；</li>
+<li>大型目标占满画面；</li>
+<li>狭窄空间高速旋转；</li>
+<li>锁定切换方向异常；</li>
+<li>玩家失去自己位置判断。</li>
+</ul>
+<p>相机不应成为高难度的主要来源。</p>
+<hr />
+<h2 id="14-命中与伤害系统">14. 命中与伤害系统</h2><h2 id="141-hitcandidate">14.1 HitCandidate</h2><p>建议字段：</p>
+<ul>
+<li>AttackerId；</li>
+<li>DefenderId；</li>
+<li>SourceActionId；</li>
+<li>HitboxId；</li>
+<li>HurtboxId；</li>
+<li>ContactPoint；</li>
+<li>ContactNormal；</li>
+<li>CollisionTick；</li>
+<li>AttackSequenceId；</li>
+<li>DamageProfileId。</li>
+</ul>
+<hr />
+<h2 id="142-hitrecord">14.2 HitRecord</h2><p>同一攻击需要记录已命中的目标：</p>
+<ul>
+<li>AttackSequenceId；</li>
+<li>TargetId；</li>
+<li>HitboxId；</li>
+<li>HitTick；</li>
+<li>MultiHitIndex；</li>
+<li>HitResult。</li>
+</ul>
+<p>防止同一攻击框在连续Tick中重复造成非预期伤害。</p>
+<hr />
+<h2 id="143-damagespec">14.3 DamageSpec</h2><p>建议字段：</p>
+<ul>
+<li>PhysicalDamage；</li>
+<li>ElementDamage；</li>
+<li>StatusBuildUp；</li>
+<li>PoiseDamage；</li>
+<li>PostureDamage；</li>
+<li>GuardDamage；</li>
+<li>CriticalModifier；</li>
+<li>BackstabModifier；</li>
+<li>DamageTags；</li>
+<li>FriendlyFirePolicy。</li>
+</ul>
+<hr />
+<h2 id="144-damagecontext">14.4 DamageContext</h2><p>建议包含：</p>
+<ul>
+<li>SourceEntityId；</li>
+<li>TargetEntityId；</li>
+<li>WeaponInstanceId；</li>
+<li>ActionId；</li>
+<li>DamageType；</li>
+<li>BaseDamage；</li>
+<li>AttributeScaling；</li>
+<li>WeaponUpgradeModifier；</li>
+<li>BuffModifiers；</li>
+<li>DefenseModifiers；</li>
+<li>CriticalState；</li>
+<li>FinalHealthDamage；</li>
+<li>FinalPostureDamage；</li>
+<li>AppliedStatuses；</li>
+<li>ModifierTrace。</li>
+</ul>
+<hr />
+<h2 id="145-伤害顺序">14.5 伤害顺序</h2><p>推荐流程：</p>
+<ol>
+<li>动作基础伤害；</li>
+<li>武器基础值；</li>
+<li>属性补正；</li>
+<li>武器强化；</li>
+<li>临时增益；</li>
+<li>弱点或背刺；</li>
+<li>目标防御；</li>
+<li>元素抗性；</li>
+<li>固定减伤；</li>
+<li>生命伤害；</li>
+<li>架势伤害；</li>
+<li>异常积累；</li>
+<li>死亡或失衡检查。</li>
+</ol>
+<hr />
+<h2 id="15-异常状态系统">15. 异常状态系统</h2><h2 id="151-statusbuildupstate">15.1 StatusBuildUpState</h2><p>建议字段：</p>
+<ul>
+<li>StatusId；</li>
+<li>CurrentBuildUp；</li>
+<li>TriggerThreshold；</li>
+<li>ThresholdGrowth；</li>
+<li>DecayRate；</li>
+<li>ActiveDuration；</li>
+<li>TriggerCount；</li>
+<li>ResistanceModifier。</li>
+</ul>
+<hr />
+<h2 id="152-常见异常">15.2 常见异常</h2><p>包括：</p>
+<ul>
+<li>中毒；</li>
+<li>出血；</li>
+<li>冻伤；</li>
+<li>燃烧；</li>
+<li>腐败；</li>
+<li>疯狂；</li>
+<li>睡眠；</li>
+<li>诅咒；</li>
+<li>减速；</li>
+<li>沉默。</li>
+</ul>
+<hr />
+<h2 id="153-积累与生效分离">15.3 积累与生效分离</h2><p>每次命中增加异常积累。</p>
+<p>达到阈值后才产生正式效果。</p>
+<p>触发后可以：</p>
+<ul>
+<li>清空积累；</li>
+<li>提高下次阈值；</li>
+<li>进入免疫期；</li>
+<li>施加持续效果；</li>
+<li>播放明确反馈。</li>
+</ul>
+<hr />
+<h2 id="16-敌人运行时模型">16. 敌人运行时模型</h2><h2 id="161-enemydefinition">16.1 EnemyDefinition</h2><p>建议字段：</p>
+<ul>
+<li>EnemyDefinitionId；</li>
+<li>EnemyTags；</li>
+<li>BaseStats；</li>
+<li>MovementProfileId；</li>
+<li>VisionProfileId；</li>
+<li>HearingProfileId；</li>
+<li>ActionSetId；</li>
+<li>AIProfileId；</li>
+<li>ResistanceProfileId；</li>
+<li>PoiseProfileId；</li>
+<li>LootProfileId；</li>
+<li>ResetPolicy；</li>
+<li>PresentationProfileId。</li>
+</ul>
+<hr />
+<h2 id="162-enemyruntimestate">16.2 EnemyRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>EnemyEntityId；</li>
+<li>DefinitionId；</li>
+<li>Position；</li>
+<li>CurrentRegionId；</li>
+<li>CurrentHealth；</li>
+<li>CurrentPosture；</li>
+<li>CurrentActionId；</li>
+<li>CurrentActionTick；</li>
+<li>CurrentIntent；</li>
+<li>KnowledgeState；</li>
+<li>CurrentTargetId；</li>
+<li>StatusInstances；</li>
+<li>AggroState；</li>
+<li>LeashState；</li>
+<li>DeathState；</li>
+<li>ResetState；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="163-普通敌人的设计职责">16.3 普通敌人的设计职责</h2><p>普通敌人不仅用于消耗生命。</p>
+<p>它们还可以承担：</p>
+<ul>
+<li>教学某种攻击节奏；</li>
+<li>制造位置压力；</li>
+<li>配合其他敌人；</li>
+<li>阻挡捷径；</li>
+<li>守卫资源；</li>
+<li>惩罚冲刺；</li>
+<li>测试体力管理；</li>
+<li>暴露玩家过度自信。</li>
+</ul>
+<hr />
+<h2 id="164-敌人组合">16.4 敌人组合</h2><p>不同敌人组合可以形成：</p>
+<ul>
+<li>近战压迫加远程射击；</li>
+<li>高韧性单位加快速单位；</li>
+<li>狭窄空间加范围攻击；</li>
+<li>诱饵敌人加伏击敌人；</li>
+<li>治疗单位加重型单位；</li>
+<li>盾兵加投射物单位。</li>
+</ul>
+<p>组合难度应来自职责互补，而不是单纯堆叠数量。</p>
+<hr />
+<h2 id="17-敌人感知与仇恨">17. 敌人感知与仇恨</h2><h2 id="171-感知通道">17.1 感知通道</h2><p>包括：</p>
+<ul>
+<li>视觉；</li>
+<li>听觉；</li>
+<li>受击；</li>
+<li>同伴警报；</li>
+<li>特殊感知；</li>
+<li>区域触发。</li>
+</ul>
+<hr />
+<h2 id="172-enemyknowledgestate">17.2 EnemyKnowledgeState</h2><p>建议字段：</p>
+<ul>
+<li>LastKnownPlayerPosition；</li>
+<li>LastSeenTick；</li>
+<li>LastHeardPosition；</li>
+<li>SuspicionLevel；</li>
+<li>AggroTargetId；</li>
+<li>SearchState；</li>
+<li>Confidence；</li>
+<li>SharedAlertState。</li>
+</ul>
+<hr />
+<h2 id="173-警戒阶段">17.3 警戒阶段</h2><p>推荐：</p>
+<ul>
+<li>Idle；</li>
+<li>Suspicious；</li>
+<li>Investigating；</li>
+<li>Alerted；</li>
+<li>Pursuing；</li>
+<li>Attacking；</li>
+<li>Searching；</li>
+<li>Returning；</li>
+<li>Resetting。</li>
+</ul>
+<hr />
+<h2 id="174-仇恨范围">17.4 仇恨范围</h2><p>需要区分：</p>
+<ul>
+<li>感知范围；</li>
+<li>追击范围；</li>
+<li>战斗区域；</li>
+<li>最大脱离距离；</li>
+<li>返回路径；</li>
+<li>重置条件。</li>
+</ul>
+<p>敌人不应：</p>
+<ul>
+<li>无限追击跨越整个世界；</li>
+<li>瞬间满血传送返回；</li>
+<li>在脱离后立即遗忘玩家；</li>
+<li>穿过不合法区域。</li>
+</ul>
+<hr />
+<h2 id="175-敌人重置">17.5 敌人重置</h2><p>重置可以包含：</p>
+<ol>
+<li>停止追击；</li>
+<li>返回出生区或巡逻点；</li>
+<li>逐步恢复生命；</li>
+<li>清理异常；</li>
+<li>恢复行为状态；</li>
+<li>重新参与检查点重置系统。</li>
+</ol>
+<p>重置过程必须避免玩家在返回途中反复无风险攻击。</p>
+<hr />
+<h2 id="18-敌人动作ai">18. 敌人动作AI</h2><h2 id="181-ai分层">18.1 AI分层</h2><p>推荐：</p>
+<ol>
+<li>感知层；</li>
+<li>战术意图层；</li>
+<li>动作候选层；</li>
+<li>动作评分层；</li>
+<li>动作仲裁层；</li>
+<li>移动执行层。</li>
+</ol>
+<hr />
+<h2 id="182-enemyactioncandidate">18.2 EnemyActionCandidate</h2><p>建议字段：</p>
+<ul>
+<li>ActionId；</li>
+<li>BaseWeight；</li>
+<li>DistanceRange；</li>
+<li>AngleRange；</li>
+<li>RequiredSelfTags；</li>
+<li>RequiredTargetTags；</li>
+<li>Cooldown；</li>
+<li>RepeatPenalty；</li>
+<li>EnvironmentRequirements；</li>
+<li>HealthRequirements；</li>
+<li>RandomWeight；</li>
+<li>CommitmentLevel。</li>
+</ul>
+<hr />
+<h2 id="183-动作评分">18.3 动作评分</h2><p>可以综合：</p>
+<ul>
+<li>距离；</li>
+<li>角度；</li>
+<li>玩家状态；</li>
+<li>自身状态；</li>
+<li>最近动作；</li>
+<li>当前体力或架势；</li>
+<li>环境；</li>
+<li>阶段；</li>
+<li>是否处于狭窄空间；</li>
+<li>当前攻击窗口；</li>
+<li>难度修正。</li>
+</ul>
+<hr />
+<h2 id="184-敌人动作承诺">18.4 敌人动作承诺</h2><p>敌人进入攻击后，不应在玩家改变位置时无限修正。</p>
+<p>动作可以拥有：</p>
+<ul>
+<li>前兆转向；</li>
+<li>启动追踪；</li>
+<li>有效阶段锁定；</li>
+<li>特殊延迟；</li>
+<li>攻击后恢复。</li>
+</ul>
+<p>追踪能力应被动作数据明确描述。</p>
+<hr />
+<h2 id="19-检查点系统">19. 检查点系统</h2><h2 id="191-checkpointdefinition">19.1 CheckpointDefinition</h2><p>建议字段：</p>
+<ul>
+<li>CheckpointId；</li>
+<li>RegionId；</li>
+<li>ActivationRules；</li>
+<li>RestRules；</li>
+<li>RespawnAnchor；</li>
+<li>RecoveryRules；</li>
+<li>EnemyResetProfileId；</li>
+<li>FastTravelPolicy；</li>
+<li>UpgradePolicy；</li>
+<li>StoragePolicy；</li>
+<li>PresentationProfile。</li>
+</ul>
+<hr />
+<h2 id="192-checkpointruntimestate">19.2 CheckpointRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>CheckpointId；</li>
+<li>IsDiscovered；</li>
+<li>IsActivated；</li>
+<li>LastRestTick；</li>
+<li>AvailableServices；</li>
+<li>FastTravelState；</li>
+<li>WorldStageOverrides；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="193-激活与休息分离">19.3 激活与休息分离</h2><p>玩家可以：</p>
+<ul>
+<li>发现检查点；</li>
+<li>激活检查点；</li>
+<li>在检查点休息。</li>
+</ul>
+<p>这三者不一定等价。</p>
+<p>例如：</p>
+<ul>
+<li>激活后成为复活点；</li>
+<li>休息才恢复治疗；</li>
+<li>休息才重置敌人；</li>
+<li>发现后才允许传送。</li>
+</ul>
+<hr />
+<h2 id="194-resttransaction">19.4 RestTransaction</h2><p>休息时推荐按稳定事务处理：</p>
+<ol>
+<li>锁定玩家交互；</li>
+<li>提交当前持久状态；</li>
+<li>恢复玩家资源；</li>
+<li>补充有限恢复品；</li>
+<li>更新法术或道具；</li>
+<li>重置符合规则的敌人；</li>
+<li>重置部分环境对象；</li>
+<li>更新任务与NPC；</li>
+<li>设置复活点；</li>
+<li>保存快照；</li>
+<li>返回控制权。</li>
+</ol>
+<hr />
+<h2 id="20-世界重置系统">20. 世界重置系统</h2><h2 id="201-resetpolicy">20.1 ResetPolicy</h2><p>对象可以配置为：</p>
+<ul>
+<li>NeverReset；</li>
+<li>ResetOnRest；</li>
+<li>ResetOnDeath；</li>
+<li>ResetOnRegionReload；</li>
+<li>ResetOnWorldStage；</li>
+<li>ResetAfterCooldown。</li>
+</ul>
+<hr />
+<h2 id="202-通常不重置的内容">20.2 通常不重置的内容</h2><p>包括：</p>
+<ul>
+<li>首领死亡；</li>
+<li>关键门；</li>
+<li>捷径；</li>
+<li>唯一物品；</li>
+<li>任务进度；</li>
+<li>重要NPC状态；</li>
+<li>世界阶段；</li>
+<li>已激活检查点。</li>
+</ul>
+<hr />
+<h2 id="203-通常可重置的内容">20.3 通常可重置的内容</h2><p>包括：</p>
+<ul>
+<li>普通敌人；</li>
+<li>部分陷阱；</li>
+<li>普通可破坏物；</li>
+<li>部分低价值采集物；</li>
+<li>敌人巡逻状态；</li>
+<li>临时投射物；</li>
+<li>短期区域效果。</li>
+</ul>
+<hr />
+<h2 id="204-重置顺序">20.4 重置顺序</h2><p>推荐：</p>
+<ol>
+<li>清理临时实体；</li>
+<li>恢复普通敌人定义状态；</li>
+<li>重新生成符合条件的敌人；</li>
+<li>恢复巡逻和感知；</li>
+<li>重置部分环境；</li>
+<li>保留永久世界变化；</li>
+<li>重建区域索引；</li>
+<li>发布WorldResetCompleted。</li>
+</ol>
+<hr />
+<h2 id="21-死亡复活与风险资产">21. 死亡、复活与风险资产</h2><h2 id="211-deathrecord">21.1 DeathRecord</h2><p>建议字段：</p>
+<ul>
+<li>DeathRecordId；</li>
+<li>PlayerId；</li>
+<li>DeathPosition；</li>
+<li>DeathRegionId；</li>
+<li>CauseEntityId；</li>
+<li>CauseType；</li>
+<li>LostAssetAmount；</li>
+<li>CreatedTick；</li>
+<li>RecoveryAssetId；</li>
+<li>RespawnCheckpointId；</li>
+<li>DeathCommitted。</li>
+</ul>
+<hr />
+<h2 id="212-recoveryasset">21.2 RecoveryAsset</h2><p>建议字段：</p>
+<ul>
+<li>RecoveryAssetId；</li>
+<li>OwnerPlayerId；</li>
+<li>AssetType；</li>
+<li>Amount；</li>
+<li>Position；</li>
+<li>RegionId；</li>
+<li>SpawnAnchorId；</li>
+<li>CreatedFromDeathId；</li>
+<li>RecoveryState；</li>
+<li>ExpirationPolicy；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="213-recoverystate">21.3 RecoveryState</h2><p>推荐：</p>
+<ul>
+<li>PendingSpawn；</li>
+<li>Active；</li>
+<li>Recovered；</li>
+<li>ReplacedByNewDeath；</li>
+<li>Lost；</li>
+<li>RemovedByWorldEvent。</li>
+</ul>
+<hr />
+<h2 id="214-死亡流程">21.4 死亡流程</h2><ol>
+<li>检测玩家生命归零；</li>
+<li>锁定DeathState；</li>
+<li>停止普通输入；</li>
+<li>清理当前动作；</li>
+<li>计算风险资产；</li>
+<li>创建RecoveryAsset；</li>
+<li>保存永久世界进度；</li>
+<li>选择复活检查点；</li>
+<li>重置符合条件的世界内容；</li>
+<li>恢复玩家基础状态；</li>
+<li>将玩家移动到复活点；</li>
+<li>发布PlayerRespawned。</li>
+</ol>
+<hr />
+<h2 id="215-二次死亡">21.5 二次死亡</h2><p>玩家存在未回收资产时再次死亡：</p>
+<ol>
+<li>将旧RecoveryAsset标记为Lost；</li>
+<li>创建新的RecoveryAsset；</li>
+<li>新资产只包含本次死亡时当前携带的可掉落资产；</li>
+<li>记录永久损失；</li>
+<li>向玩家提供清晰反馈。</li>
+</ol>
+<hr />
+<h2 id="216-资产生成位置修正">21.6 资产生成位置修正</h2><p>玩家可能死在：</p>
+<ul>
+<li>深坑；</li>
+<li>移动平台；</li>
+<li>Boss演出区域；</li>
+<li>不可返回区域；</li>
+<li>场景边界；</li>
+<li>电梯中。</li>
+</ul>
+<p>系统需要选择合法回收锚点：</p>
+<ol>
+<li>当前稳定地面；</li>
+<li>最近合法导航位置；</li>
+<li>最近区域入口；</li>
+<li>特殊Boss门外；</li>
+<li>预定义安全锚点。</li>
+</ol>
+<p>不能将资产生成在不可回收位置。</p>
+<hr />
+<h2 id="22-世界区域与捷径">22. 世界区域与捷径</h2><h2 id="221-regiondefinition">22.1 RegionDefinition</h2><p>建议字段：</p>
+<ul>
+<li>RegionId；</li>
+<li>NeighborRegionIds；</li>
+<li>StreamingGroupId；</li>
+<li>EnemySpawnGroups；</li>
+<li>CheckpointIds；</li>
+<li>ShortcutIds；</li>
+<li>BossArenaIds；</li>
+<li>WorldStageVariants；</li>
+<li>NavigationProfile；</li>
+<li>PersistenceProfile。</li>
+</ul>
+<hr />
+<h2 id="222-shortcutdefinition">22.2 ShortcutDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ShortcutId；</li>
+<li>SourceRegionId；</li>
+<li>TargetRegionId；</li>
+<li>ShortcutType；</li>
+<li>UnlockConditions；</li>
+<li>InitialState；</li>
+<li>PersistencePolicy；</li>
+<li>TraversalRules；</li>
+<li>ResetPolicy。</li>
+</ul>
+<hr />
+<h2 id="223-捷径职责">22.3 捷径职责</h2><p>捷径可以：</p>
+<ul>
+<li>缩短检查点到Boss的距离；</li>
+<li>减少重复敌人；</li>
+<li>连接前后区域；</li>
+<li>提供撤退路线；</li>
+<li>形成世界回环；</li>
+<li>证明玩家已经掌握区域；</li>
+<li>降低后续死亡成本。</li>
+</ul>
+<hr />
+<h2 id="224-捷径不应过早失去价值">22.4 捷径不应过早失去价值</h2><p>如果检查点过密，捷径可能没有意义。</p>
+<p>如果检查点过少且捷径隐蔽，重复路线可能过长。</p>
+<p>需要综合控制：</p>
+<ul>
+<li>检查点距离；</li>
+<li>敌人密度；</li>
+<li>捷径位置；</li>
+<li>Boss重试距离；</li>
+<li>加载时间；</li>
+<li>玩家熟练后的跑图速度。</li>
+</ul>
+<hr />
+<h2 id="23-首领与竞技场">23. 首领与竞技场</h2><h2 id="231-bossdefinition">23.1 BossDefinition</h2><p>建议字段：</p>
+<ul>
+<li>BossId；</li>
+<li>ArenaDefinitionId；</li>
+<li>BaseStats；</li>
+<li>ActionSetId；</li>
+<li>PhaseDefinitions；</li>
+<li>ResistanceProfile；</li>
+<li>RewardProfile；</li>
+<li>EntryRules；</li>
+<li>DefeatWorldEffects；</li>
+<li>MultiplayerScaling；</li>
+<li>PresentationProfile。</li>
+</ul>
+<hr />
+<h2 id="232-bossarenastate">23.2 BossArenaState</h2><p>建议包含：</p>
+<ul>
+<li>ArenaId；</li>
+<li>BarrierState；</li>
+<li>ParticipantIds；</li>
+<li>BossEntityIds；</li>
+<li>EntryCommitted；</li>
+<li>ExitState；</li>
+<li>RecoveryAssetRules；</li>
+<li>MultiplayerState；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="233-进入竞技场">23.3 进入竞技场</h2><p>推荐流程：</p>
+<ol>
+<li>玩家触发Boss门；</li>
+<li>验证任务和世界状态；</li>
+<li>预加载竞技场；</li>
+<li>锁定参与者；</li>
+<li>设置Boss门状态；</li>
+<li>激活Boss；</li>
+<li>初始化音乐和UI；</li>
+<li>提交ArenaEntered；</li>
+<li>开始战斗。</li>
+</ol>
+<hr />
+<h2 id="234-boss死亡">23.4 Boss死亡</h2><ol>
+<li>锁定Boss死亡；</li>
+<li>停止Boss动作；</li>
+<li>清理投射物或危险区域；</li>
+<li>解除竞技场封锁；</li>
+<li>发放唯一奖励；</li>
+<li>更新世界阶段；</li>
+<li>激活新检查点或连接；</li>
+<li>更新NPC和任务；</li>
+<li>保存持久结果；</li>
+<li>发布BossDefeated。</li>
+</ol>
+<p>必须保证Boss奖励和世界变化具有幂等性。</p>
+<hr />
+<h2 id="235-boss失败重试">23.5 Boss失败重试</h2><p>玩家死亡后：</p>
+<ul>
+<li>Boss恢复到初始战斗状态；</li>
+<li>竞技场临时状态清理；</li>
+<li>消耗品通常保持已消耗；</li>
+<li>风险资产在合法位置生成；</li>
+<li>Boss门重新允许进入；</li>
+<li>世界永久进度保持不变。</li>
+</ul>
+<hr />
+<h2 id="236-boss设计原则">23.6 Boss设计原则</h2><p>Boss不应只通过：</p>
+<ul>
+<li>更高生命；</li>
+<li>更高攻击；</li>
+<li>更快速度；</li>
+</ul>
+<p>制造难度。</p>
+<p>还应测试：</p>
+<ul>
+<li>距离控制；</li>
+<li>延迟攻击识别；</li>
+<li>体力管理；</li>
+<li>治疗窗口；</li>
+<li>多段攻击；</li>
+<li>相机控制；</li>
+<li>环境位置；</li>
+<li>阶段切换；</li>
+<li>贪刀控制。</li>
+</ul>
+<hr />
+<h2 id="24-装备属性与负重">24. 装备、属性与负重</h2><h2 id="241-attributedefinition">24.1 AttributeDefinition</h2><p>常见属性包括：</p>
+<ul>
+<li>生命；</li>
+<li>体力；</li>
+<li>力量；</li>
+<li>敏捷；</li>
+<li>智力；</li>
+<li>信仰；</li>
+<li>装备负重；</li>
+<li>异常抗性；</li>
+<li>法力；</li>
+<li>幸运。</li>
+</ul>
+<hr />
+<h2 id="242-属性职责">24.2 属性职责</h2><p>属性可以影响：</p>
+<ul>
+<li>基础资源；</li>
+<li>武器使用条件；</li>
+<li>伤害补正；</li>
+<li>施法；</li>
+<li>装备选择；</li>
+<li>防御；</li>
+<li>状态抗性。</li>
+</ul>
+<p>不建议让所有属性都只增加伤害百分比。</p>
+<hr />
+<h2 id="243-equipmentinstance">24.3 EquipmentInstance</h2><p>建议字段：</p>
+<ul>
+<li>EquipmentInstanceId；</li>
+<li>DefinitionId；</li>
+<li>UpgradeLevel；</li>
+<li>InfusionState；</li>
+<li>Durability；</li>
+<li>GrantedAbilities；</li>
+<li>AttributeScaling；</li>
+<li>Weight；</li>
+<li>TemporaryModifiers；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="244-装备负重">24.4 装备负重</h2><p>负重可以影响：</p>
+<ul>
+<li>闪避距离；</li>
+<li>闪避恢复；</li>
+<li>体力恢复；</li>
+<li>移动速度；</li>
+<li>韧性；</li>
+<li>防御；</li>
+<li>声音。</li>
+</ul>
+<p>它应形成：</p>
+<p>轻装机动
+与
+重装防御</p>
+<p>之间的结构取舍，而不是单一最优阈值。</p>
+<hr />
+<h2 id="25-武器强化与成长">25. 武器强化与成长</h2><h2 id="251-weaponupgradestate">25.1 WeaponUpgradeState</h2><p>建议包含：</p>
+<ul>
+<li>WeaponInstanceId；</li>
+<li>UpgradePath；</li>
+<li>UpgradeLevel；</li>
+<li>InfusionType；</li>
+<li>ScalingProfile；</li>
+<li>GrantedSkill；</li>
+<li>MaterialHistory；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="252-强化作用">25.2 强化作用</h2><p>武器强化可以改变：</p>
+<ul>
+<li>基础伤害；</li>
+<li>属性补正；</li>
+<li>元素；</li>
+<li>异常；</li>
+<li>战技；</li>
+<li>防御；</li>
+<li>资源消耗。</li>
+</ul>
+<hr />
+<h2 id="253-强化材料">25.3 强化材料</h2><p>强化材料可以通过：</p>
+<ul>
+<li>固定探索；</li>
+<li>精英敌人；</li>
+<li>Boss；</li>
+<li>商人；</li>
+<li>支线任务；</li>
+<li>后期无限购买；</li>
+</ul>
+<p>获得。</p>
+<p>早期强化资源应避免完全不可逆地把角色培养锁死。</p>
+<p>可以提供：</p>
+<ul>
+<li>多把基础武器资源；</li>
+<li>后期材料商店；</li>
+<li>重置或转化；</li>
+<li>清晰强化预览。</li>
+</ul>
+<hr />
+<h2 id="26-任务npc与世界阶段">26. 任务、NPC与世界阶段</h2><h2 id="261-npcstate">26.1 NPCState</h2><p>建议包含：</p>
+<ul>
+<li>NPCId；</li>
+<li>CurrentRegionId；</li>
+<li>DialogueStage；</li>
+<li>QuestStage；</li>
+<li>AliveState；</li>
+<li>HostilityState；</li>
+<li>InventoryState；</li>
+<li>ScheduleState；</li>
+<li>WorldStageRequirements；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="262-任务设计">26.2 任务设计</h2><p>类魂任务通常可以保持一定隐晦，但运行时仍应使用明确状态：</p>
+<ul>
+<li>未接触；</li>
+<li>已相识；</li>
+<li>条件满足；</li>
+<li>等待玩家行动；</li>
+<li>已迁移；</li>
+<li>成功；</li>
+<li>失败；</li>
+<li>NPC死亡；</li>
+<li>世界阶段锁定。</li>
+</ul>
+<hr />
+<h2 id="263-隐晦不等于任意失败">26.3 隐晦不等于任意失败</h2><p>任务可以不提供传统任务箭头，但应通过：</p>
+<ul>
+<li>NPC对话；</li>
+<li>环境；</li>
+<li>物品描述；</li>
+<li>地图位置；</li>
+<li>世界变化；</li>
+<li>角色迁移；</li>
+</ul>
+<p>提供可追踪线索。</p>
+<p>任务失败条件不应完全无法推断。</p>
+<hr />
+<h2 id="264-世界阶段">26.4 世界阶段</h2><p>世界阶段变化可以影响：</p>
+<ul>
+<li>敌人；</li>
+<li>NPC；</li>
+<li>门；</li>
+<li>地图；</li>
+<li>天气；</li>
+<li>检查点；</li>
+<li>商人；</li>
+<li>任务；</li>
+<li>Boss。</li>
+</ul>
+<p>阶段变化应显式记录，而不是依赖场景脚本执行顺序。</p>
+<hr />
+<h2 id="27-多人协作与入侵扩展">27. 多人协作与入侵扩展</h2><p>多人不是所有类魂游戏的必要条件，但该品类常见以下模式：</p>
+<ul>
+<li>召唤协作者；</li>
+<li>敌对入侵；</li>
+<li>异步留言；</li>
+<li>死亡幻影；</li>
+<li>血迹回放；</li>
+<li>共享Boss挑战。</li>
+</ul>
+<hr />
+<h2 id="271-sessionstate">27.1 SessionState</h2><p>建议包含：</p>
+<ul>
+<li>SessionId；</li>
+<li>HostPlayerId；</li>
+<li>ParticipantIds；</li>
+<li>InvaderIds；</li>
+<li>WorldOwnerId；</li>
+<li>RegionId；</li>
+<li>BossState；</li>
+<li>ConnectionState；</li>
+<li>ScalingProfile；</li>
+<li>SessionVersion。</li>
+</ul>
+<hr />
+<h2 id="272-世界所有权">27.2 世界所有权</h2><p>需要明确由谁的世界状态作为权威：</p>
+<ul>
+<li>门状态；</li>
+<li>Boss死亡；</li>
+<li>任务；</li>
+<li>检查点；</li>
+<li>资源；</li>
+<li>NPC。</li>
+</ul>
+<p>协作者通常不应直接推进自己的世界任务，除非规则明确允许。</p>
+<hr />
+<h2 id="273-多人缩放">27.3 多人缩放</h2><p>多人可以调整：</p>
+<ul>
+<li>Boss生命；</li>
+<li>架势；</li>
+<li>敌人数量；</li>
+<li>敌人目标选择；</li>
+<li>奖励；</li>
+<li>治疗限制。</li>
+</ul>
+<p>不应只线性增加生命，导致多人战斗单纯变长。</p>
+<hr />
+<h2 id="274-入侵边界">27.4 入侵边界</h2><p>需要定义：</p>
+<ul>
+<li>哪些区域允许；</li>
+<li>Boss战是否允许；</li>
+<li>检查点如何处理；</li>
+<li>死亡资产如何处理；</li>
+<li>敌人与入侵者关系；</li>
+<li>断线和退出；</li>
+<li>网络延迟；</li>
+<li>反作弊。</li>
+</ul>
+<hr />
+<h2 id="28-存档与持久化">28. 存档与持久化</h2><h2 id="281-savesnapshot">28.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li>SaveVersion；</li>
+<li>PlayerPersistentState；</li>
+<li>Inventory；</li>
+<li>EquipmentStates；</li>
+<li>ActivatedCheckpoints；</li>
+<li>OpenedShortcuts；</li>
+<li>DefeatedBosses；</li>
+<li>NPCStates；</li>
+<li>QuestStates；</li>
+<li>WorldStage；</li>
+<li>PersistentWorldObjects；</li>
+<li>RecoveryAsset；</li>
+<li>LastCheckpointId；</li>
+<li>RandomStreamStates；</li>
+<li>ContentVersion；</li>
+<li>IntegrityHash。</li>
+</ul>
+<hr />
+<h2 id="282-保存边界">28.2 保存边界</h2><p>适合保存：</p>
+<ul>
+<li>检查点休息后；</li>
+<li>门和捷径解锁后；</li>
+<li>Boss死亡后；</li>
+<li>唯一物品拾取后；</li>
+<li>NPC任务状态变化后；</li>
+<li>玩家死亡提交后；</li>
+<li>区域切换时。</li>
+</ul>
+<hr />
+<h2 id="283-高频自动保存">28.3 高频自动保存</h2><p>类魂游戏通常需要高频自动保存，以防玩家通过强制退出撤销：</p>
+<ul>
+<li>资源消费；</li>
+<li>死亡；</li>
+<li>NPC死亡；</li>
+<li>唯一物品；</li>
+<li>任务选择；</li>
+<li>世界阶段。</li>
+</ul>
+<p>但高频保存必须使用：</p>
+<ul>
+<li>增量写入；</li>
+<li>事务；</li>
+<li>旧快照保护；</li>
+<li>校验；</li>
+<li>原子替换。</li>
+</ul>
+<hr />
+<h2 id="284-防止退出回滚">28.4 防止退出回滚</h2><p>关键状态一旦提交，应立即进入持久化：</p>
+<ul>
+<li>消耗品使用；</li>
+<li>商店购买；</li>
+<li>角色死亡；</li>
+<li>风险资产替换；</li>
+<li>Boss奖励；</li>
+<li>任务选择。</li>
+</ul>
+<p>不能只在正常退出时保存。</p>
+<hr />
+<h2 id="29-完整事件与执行流程示例">29. 完整事件与执行流程示例</h2><p>以下以“玩家从检查点出发、击败敌人后死亡并回收资产”为例。</p>
+<h3 id="291-检查点休息">29.1 检查点休息</h3><p>玩家在检查点休息。</p>
+<p>系统：</p>
+<ul>
+<li>恢复生命；</li>
+<li>恢复治疗次数；</li>
+<li>重置普通敌人；</li>
+<li>保留已打开捷径；</li>
+<li>设置复活点；</li>
+<li>提交存档。</li>
+</ul>
+<hr />
+<h3 id="292-区域探索">29.2 区域探索</h3><p>玩家沿主路击败三名敌人并获得成长货币。</p>
+<p>每次敌人死亡：</p>
+<ul>
+<li>提交死亡状态；</li>
+<li>增加玩家携带货币；</li>
+<li>更新区域敌人集合；</li>
+<li>产生掉落；</li>
+<li>不立即进入长期属性成长。</li>
+</ul>
+<hr />
+<h3 id="293-打开捷径">29.3 打开捷径</h3><p>玩家从另一侧打开升降梯。</p>
+<p>系统：</p>
+<ul>
+<li>更新ShortcutState；</li>
+<li>重建区域连接；</li>
+<li>保存永久状态；</li>
+<li>缩短检查点到当前区域的距离。</li>
+</ul>
+<hr />
+<h3 id="294-继续深入">29.4 继续深入</h3><p>玩家没有返回检查点，而是继续进入高风险区域。</p>
+<p>此时：</p>
+<ul>
+<li>治疗仅剩一次；</li>
+<li>体力和生命可恢复；</li>
+<li>携带货币持续增加；</li>
+<li>死亡风险资产价值提高。</li>
+</ul>
+<hr />
+<h3 id="295-玩家死亡">29.5 玩家死亡</h3><p>玩家因体力耗尽无法闪避而死亡。</p>
+<p>系统：</p>
+<ol>
+<li>锁定死亡状态；</li>
+<li>记录死亡位置；</li>
+<li>将当前可掉落货币转入RecoveryAsset；</li>
+<li>玩家携带货币归零；</li>
+<li>保存旧捷径和任务进度；</li>
+<li>重置普通敌人；</li>
+<li>在检查点复活玩家。</li>
+</ol>
+<hr />
+<h3 id="296-返回路线">29.6 返回路线</h3><p>玩家利用刚开启的升降梯快速返回。</p>
+<p>该捷径降低了：</p>
+<ul>
+<li>重复战斗数量；</li>
+<li>回收时间；</li>
+<li>二次死亡风险；</li>
+<li>Boss重试成本。</li>
+</ul>
+<hr />
+<h3 id="297-回收过程">29.7 回收过程</h3><p>玩家接近死亡地点。</p>
+<p>系统显示RecoveryAsset。</p>
+<p>玩家与其交互或进入回收范围：</p>
+<ul>
+<li>验证所有权；</li>
+<li>验证资产仍为Active；</li>
+<li>将货币返还玩家；</li>
+<li>将资产标记为Recovered；</li>
+<li>保存结果。</li>
+</ul>
+<hr />
+<h3 id="298-风险决策">29.8 风险决策</h3><p>玩家回收成功后需要再次选择：</p>
+<ul>
+<li>返回检查点升级；</li>
+<li>继续探索；</li>
+<li>挑战首领；</li>
+<li>寻找更多资源。</li>
+</ul>
+<p>循环重新开始，但玩家已经获得：</p>
+<ul>
+<li>更短路线；</li>
+<li>更强区域认知；</li>
+<li>对死亡敌人的动作经验；</li>
+<li>恢复后的风险资产。</li>
+</ul>
+<hr />
+<h2 id="30-模块通信设计">30. 模块通信设计</h2><h2 id="301-命令">30.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li>ExecuteAction；</li>
+<li>UseItem；</li>
+<li>EquipItem；</li>
+<li>InteractObject；</li>
+<li>ActivateCheckpoint；</li>
+<li>RestAtCheckpoint；</li>
+<li>TravelToCheckpoint；</li>
+<li>RecoverAsset；</li>
+<li>EnterBossArena；</li>
+<li>PurchaseItem；</li>
+<li>UpgradeWeapon；</li>
+<li>LevelUpAttribute。</li>
+</ul>
+<p>命令必须包含：</p>
+<ul>
+<li>Actor；</li>
+<li>目标；</li>
+<li>状态版本；</li>
+<li>输入序列；</li>
+<li>幂等键；</li>
+<li>权限和资源上下文。</li>
+</ul>
+<hr />
+<h2 id="302-同步查询">30.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li>当前动作是否可取消；</li>
+<li>体力是否足够；</li>
+<li>门是否可以打开；</li>
+<li>检查点是否可使用；</li>
+<li>目标是否可锁定；</li>
+<li>武器是否满足属性要求；</li>
+<li>风险资产是否仍存在；</li>
+<li>当前世界阶段。</li>
+</ul>
+<p>查询不能修改状态或消费随机数。</p>
+<hr />
+<h2 id="303-领域事件">30.3 领域事件</h2><p>典型事件：</p>
+<ul>
+<li>ActionStarted；</li>
+<li>AttackCommitted；</li>
+<li>HitResolved；</li>
+<li>GuardBroken；</li>
+<li>PostureBroken；</li>
+<li>EnemyDefeated；</li>
+<li>PlayerDied；</li>
+<li>RecoveryAssetCreated；</li>
+<li>RecoveryAssetRecovered；</li>
+<li>CheckpointActivated；</li>
+<li>WorldResetStarted；</li>
+<li>ShortcutOpened；</li>
+<li>BossDefeated；</li>
+<li>WorldStageChanged；</li>
+<li>SaveCommitted。</li>
+</ul>
+<hr />
+<h2 id="304-表现事件">30.4 表现事件</h2><p>包括：</p>
+<ul>
+<li>PlayActionAnimation；</li>
+<li>SpawnHitEffect；</li>
+<li>PlayGuardEffect；</li>
+<li>ShowDamageNumber；</li>
+<li>ShowDeathPresentation；</li>
+<li>ShowRecoveryAsset；</li>
+<li>PlayCheckpointRest；</li>
+<li>UpdateBossHealthBar；</li>
+<li>ShowShortcutMessage；</li>
+<li>TriggerCameraShake。</li>
+</ul>
+<p>表现事件不能成为逻辑成立的前提。</p>
+<hr />
+<h2 id="31-失败隔离">31. 失败隔离</h2><h2 id="311-动作数据异常">31.1 动作数据异常</h2><p>动作无法执行时：</p>
+<ul>
+<li>禁止进入非法动作；</li>
+<li>回退到Idle、Fall或受击状态；</li>
+<li>释放未提交资源；</li>
+<li>记录ActionId和当前Tick；</li>
+<li>不让角色永久失去控制。</li>
+</ul>
+<hr />
+<h2 id="312-敌人ai异常">31.2 敌人AI异常</h2><p>AI无法选择动作时：</p>
+<ul>
+<li>进入安全待机；</li>
+<li>保留感知和仇恨；</li>
+<li>尝试重新定位；</li>
+<li>使用基础攻击或后退；</li>
+<li>超时后重置；</li>
+<li>记录候选动作和失败条件。</li>
+</ul>
+<hr />
+<h2 id="313-敌人返回路径失败">31.3 敌人返回路径失败</h2><p>敌人脱离战斗但无法返回时：</p>
+<ol>
+<li>寻找最近合法导航点；</li>
+<li>重新计算出生区路径；</li>
+<li>暂时禁用攻击；</li>
+<li>在不可观察区域进行合法重定位；</li>
+<li>重置状态；</li>
+<li>记录导航版本。</li>
+</ol>
+<hr />
+<h2 id="314-风险资产生成失败">31.4 风险资产生成失败</h2><p>死亡位置不合法时：</p>
+<ul>
+<li>使用最近稳定地面；</li>
+<li>使用最近导航位置；</li>
+<li>使用Boss门外锚点；</li>
+<li>使用区域入口；</li>
+<li>最终使用检查点附近保底位置。</li>
+</ul>
+<p>不得直接丢失资产。</p>
+<hr />
+<h2 id="315-风险资产重复回收">31.5 风险资产重复回收</h2><p>RecoveryAsset回收必须幂等。</p>
+<p>重复请求时：</p>
+<ul>
+<li>不重复返还货币；</li>
+<li>返回已回收状态；</li>
+<li>可以重新同步表现；</li>
+<li>记录重复请求。</li>
+</ul>
+<hr />
+<h2 id="316-检查点重置异常">31.6 检查点重置异常</h2><p>若部分敌人重置失败：</p>
+<ul>
+<li>保留永久状态；</li>
+<li>重新创建合法普通敌人；</li>
+<li>清除旧引用；</li>
+<li>防止同时存在两个实例；</li>
+<li>重建区域敌人索引；</li>
+<li>记录ResetProfile。</li>
+</ul>
+<hr />
+<h2 id="317-boss结算冲突">31.7 Boss结算冲突</h2><p>Boss可能在同一Tick：</p>
+<ul>
+<li>生命归零；</li>
+<li>进入阶段转换；</li>
+<li>击杀玩家；</li>
+<li>触发环境事件。</li>
+</ul>
+<p>需要固定优先级，例如：</p>
+<ol>
+<li>已提交Boss死亡；</li>
+<li>已提交玩家死亡；</li>
+<li>强制阶段事件；</li>
+<li>普通动作和环境事件。</li>
+</ol>
+<hr />
+<h2 id="318-存档失败">31.8 存档失败</h2><p>存档失败时：</p>
+<ul>
+<li>保留旧快照；</li>
+<li>不覆盖有效数据；</li>
+<li>保存临时事务；</li>
+<li>后台重试；</li>
+<li>阻止重复奖励；</li>
+<li>向玩家提供明确提示；</li>
+<li>关键操作不得被回滚利用。</li>
+</ul>
+<hr />
+<h2 id="32-调试与可观测性">32. 调试与可观测性</h2><h2 id="321-玩家动作检查器">32.1 玩家动作检查器</h2><p>显示：</p>
+<ul>
+<li>当前动作；</li>
+<li>当前Tick；</li>
+<li>输入缓冲；</li>
+<li>可用取消窗口；</li>
+<li>体力；</li>
+<li>霸体；</li>
+<li>无敌；</li>
+<li>被拒绝动作；</li>
+<li>拒绝原因。</li>
+</ul>
+<hr />
+<h2 id="322-命中追踪器">32.2 命中追踪器</h2><p>显示：</p>
+<ul>
+<li>攻击来源；</li>
+<li>攻击框；</li>
+<li>目标受击框；</li>
+<li>命中Tick；</li>
+<li>闪避状态；</li>
+<li>格挡状态；</li>
+<li>伤害修正；</li>
+<li>架势伤害；</li>
+<li>异常积累；</li>
+<li>最终结果。</li>
+</ul>
+<hr />
+<h2 id="323-敌人ai面板">32.3 敌人AI面板</h2><p>显示：</p>
+<ul>
+<li>当前感知；</li>
+<li>仇恨目标；</li>
+<li>当前意图；</li>
+<li>动作候选；</li>
+<li>距离和角度；</li>
+<li>冷却；</li>
+<li>重复惩罚；</li>
+<li>最终评分；</li>
+<li>返回或重置状态。</li>
+</ul>
+<hr />
+<h2 id="324-检查点重置查看器">32.4 检查点重置查看器</h2><p>显示：</p>
+<ul>
+<li>哪些实体重置；</li>
+<li>哪些实体保留；</li>
+<li>重置来源；</li>
+<li>当前世界阶段；</li>
+<li>新生成实例；</li>
+<li>重复实例；</li>
+<li>失效引用。</li>
+</ul>
+<hr />
+<h2 id="325-风险资产审计器">32.5 风险资产审计器</h2><p>显示：</p>
+<ul>
+<li>创建死亡记录；</li>
+<li>原金额；</li>
+<li>生成位置；</li>
+<li>当前状态；</li>
+<li>是否被替换；</li>
+<li>是否已回收；</li>
+<li>永久损失原因；</li>
+<li>持久化记录。</li>
+</ul>
+<hr />
+<h2 id="326-世界图查看器">32.6 世界图查看器</h2><p>显示：</p>
+<ul>
+<li>区域；</li>
+<li>检查点；</li>
+<li>门；</li>
+<li>捷径；</li>
+<li>Boss门；</li>
+<li>流式加载状态；</li>
+<li>当前世界阶段；</li>
+<li>玩家位置；</li>
+<li>敌人激活范围。</li>
+</ul>
+<hr />
+<h2 id="327-boss状态面板">32.7 Boss状态面板</h2><p>显示：</p>
+<ul>
+<li>当前阶段；</li>
+<li>当前动作；</li>
+<li>生命；</li>
+<li>架势；</li>
+<li>异常；</li>
+<li>候选动作；</li>
+<li>竞技场状态；</li>
+<li>参与者；</li>
+<li>死亡和奖励提交状态。</li>
+</ul>
+<hr />
+<h2 id="328-存档差异工具">32.8 存档差异工具</h2><p>比较两个快照中的：</p>
+<ul>
+<li>玩家属性；</li>
+<li>装备；</li>
+<li>风险资产；</li>
+<li>检查点；</li>
+<li>捷径；</li>
+<li>Boss；</li>
+<li>NPC；</li>
+<li>任务；</li>
+<li>世界阶段；</li>
+<li>唯一物品；</li>
+<li>随机游标。</li>
+</ul>
+<hr />
+<h2 id="329-确定性战斗回放">32.9 确定性战斗回放</h2><p>记录：</p>
+<ul>
+<li>初始状态；</li>
+<li>玩家输入；</li>
+<li>敌人AI随机流；</li>
+<li>动作事件；</li>
+<li>命中事件；</li>
+<li>世界事件；</li>
+<li>关键快照。</li>
+</ul>
+<p>用于重现：</p>
+<ul>
+<li>命中异常；</li>
+<li>无敌帧异常；</li>
+<li>敌人无限追击；</li>
+<li>风险资产丢失；</li>
+<li>Boss奖励重复；</li>
+<li>世界重置错误。</li>
+</ul>
+<hr />
+<h2 id="33-内容验证工具">33. 内容验证工具</h2><h2 id="331-动作数据验证">33.1 动作数据验证</h2><p>检查：</p>
+<ul>
+<li>动作总长度；</li>
+<li>攻击框轨道；</li>
+<li>取消窗口；</li>
+<li>无敌区间；</li>
+<li>体力提交点；</li>
+<li>霸体；</li>
+<li>转向；</li>
+<li>后继动作；</li>
+<li>不会永久卡死。</li>
+</ul>
+<hr />
+<h2 id="332-敌人行为验证">33.2 敌人行为验证</h2><p>检查：</p>
+<ul>
+<li>每个距离区间存在合法动作；</li>
+<li>没有全部动作同时冷却；</li>
+<li>动作不会无限重复；</li>
+<li>脱离战斗后能返回；</li>
+<li>狭窄空间中可正常行动；</li>
+<li>无法到达目标时有保底行为。</li>
+</ul>
+<hr />
+<h2 id="333-区域可达性验证">33.3 区域可达性验证</h2><p>检查：</p>
+<ul>
+<li>检查点到Boss门可达；</li>
+<li>捷径打开后连接合法；</li>
+<li>单向落差不会形成死锁；</li>
+<li>死亡资产存在合法回收点；</li>
+<li>世界阶段变化不会封锁主线；</li>
+<li>NPC迁移位置有效。</li>
+</ul>
+<hr />
+<h2 id="334-boss重试验证">33.4 Boss重试验证</h2><p>自动执行：</p>
+<ul>
+<li>进入竞技场；</li>
+<li>玩家死亡；</li>
+<li>世界重置；</li>
+<li>再次进入；</li>
+<li>Boss死亡；</li>
+<li>奖励提交；</li>
+<li>加载存档。</li>
+</ul>
+<p>检查：</p>
+<ul>
+<li>Boss状态重置；</li>
+<li>竞技场门；</li>
+<li>风险资产；</li>
+<li>消耗品；</li>
+<li>世界奖励；</li>
+<li>重复结算。</li>
+</ul>
+<hr />
+<h2 id="335-资源曲线模拟">33.5 资源曲线模拟</h2><p>模拟不同水平玩家的：</p>
+<ul>
+<li>平均死亡次数；</li>
+<li>治疗消耗；</li>
+<li>货币获得；</li>
+<li>升级频率；</li>
+<li>武器强化；</li>
+<li>风险资产永久损失；</li>
+<li>Boss尝试次数。</li>
+</ul>
+<hr />
+<h2 id="336-存档回归测试">33.6 存档回归测试</h2><p>在以下状态保存并加载：</p>
+<ul>
+<li>普通敌人死亡；</li>
+<li>风险资产未回收；</li>
+<li>捷径刚打开；</li>
+<li>Boss刚死亡；</li>
+<li>NPC迁移；</li>
+<li>世界阶段刚变化；</li>
+<li>商店交易完成；</li>
+<li>武器升级完成。</li>
+</ul>
+<hr />
+<h2 id="34-性能设计">34. 性能设计</h2><h2 id="341-区域激活等级">34.1 区域激活等级</h2><p>区域可分为：</p>
+<ul>
+<li>ActiveCombat；</li>
+<li>NearbySimulated；</li>
+<li>WarmLoaded；</li>
+<li>DormantPersistent；</li>
+<li>Unloaded。</li>
+</ul>
+<hr />
+<h2 id="342-敌人更新等级">34.2 敌人更新等级</h2><p>近处敌人运行：</p>
+<ul>
+<li>完整感知；</li>
+<li>AI；</li>
+<li>动作；</li>
+<li>碰撞；</li>
+<li>动画。</li>
+</ul>
+<p>远处敌人仅保留：</p>
+<ul>
+<li>区域；</li>
+<li>生命；</li>
+<li>重置状态；</li>
+<li>巡逻意图；</li>
+<li>持久状态。</li>
+</ul>
+<hr />
+<h2 id="343-碰撞分层">34.3 碰撞分层</h2><p>可使用：</p>
+<ul>
+<li>玩家和近处敌人高精度碰撞；</li>
+<li>远端敌人简化碰撞；</li>
+<li>服务端或逻辑层代理碰撞；</li>
+<li>表现骨骼插值；</li>
+<li>攻击框按动作轨道更新。</li>
+</ul>
+<hr />
+<h2 id="344-事件索引">34.4 事件索引</h2><p>按事件类型索引：</p>
+<ul>
+<li>OnHit；</li>
+<li>OnDeath；</li>
+<li>OnCheckpointRest；</li>
+<li>OnShortcutOpened；</li>
+<li>OnBossDefeated；</li>
+<li>OnWorldStageChanged。</li>
+</ul>
+<p>避免每个事件遍历全部任务、装备和NPC。</p>
+<hr />
+<h2 id="345-表现降级">34.5 表现降级</h2><p>远端或低重要度内容可以降低：</p>
+<ul>
+<li>动画；</li>
+<li>粒子；</li>
+<li>音频；</li>
+<li>阴影；</li>
+<li>布料；</li>
+<li>尸体细节。</li>
+</ul>
+<p>逻辑状态必须继续正确。</p>
+<hr />
+<h2 id="35-可扩展点">35. 可扩展点</h2><h2 id="351-新武器">35.1 新武器</h2><p>主要提供：</p>
+<ul>
+<li>WeaponDefinition；</li>
+<li>ActionSet；</li>
+<li>伤害配置；</li>
+<li>属性补正；</li>
+<li>强化路径；</li>
+<li>战技；</li>
+<li>表现资源。</li>
+</ul>
+<p>复用统一：</p>
+<ul>
+<li>动作；</li>
+<li>体力；</li>
+<li>命中；</li>
+<li>架势；</li>
+<li>状态；</li>
+<li>存档；</li>
+</ul>
+<p>基础设施。</p>
+<hr />
+<h2 id="352-新敌人">35.2 新敌人</h2><p>主要提供：</p>
+<ul>
+<li>EnemyDefinition；</li>
+<li>ActionSet；</li>
+<li>AIProfile；</li>
+<li>感知；</li>
+<li>抗性；</li>
+<li>韧性；</li>
+<li>掉落；</li>
+<li>重置策略；</li>
+<li>表现资源。</li>
+</ul>
+<hr />
+<h2 id="353-新检查点服务">35.3 新检查点服务</h2><p>可以通过CheckpointService扩展：</p>
+<ul>
+<li>升级；</li>
+<li>调整法术；</li>
+<li>传送；</li>
+<li>仓库；</li>
+<li>制作；</li>
+<li>时间推进；</li>
+<li>难度选择。</li>
+</ul>
+<hr />
+<h2 id="354-新风险资产">35.4 新风险资产</h2><p>风险资产不一定只能是货币。</p>
+<p>还可以是：</p>
+<ul>
+<li>临时经验；</li>
+<li>连杀奖励；</li>
+<li>特殊能量；</li>
+<li>任务进度；</li>
+<li>装备耐久恢复权；</li>
+<li>临时增益。</li>
+</ul>
+<p>应复用统一的：</p>
+<ul>
+<li>创建；</li>
+<li>替换；</li>
+<li>回收；</li>
+<li>丢失；</li>
+<li>持久化；</li>
+</ul>
+<p>流程。</p>
+<hr />
+<h2 id="355-新世界阶段">35.5 新世界阶段</h2><p>通过：</p>
+<ul>
+<li>WorldStage；</li>
+<li>RegionVariant；</li>
+<li>EnemySpawnProfile；</li>
+<li>NPCState；</li>
+<li>ShortcutState；</li>
+<li>BossState；</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="356-新多人模式">35.6 新多人模式</h2><p>替换：</p>
+<ul>
+<li>SessionPolicy；</li>
+<li>世界所有权；</li>
+<li>缩放；</li>
+<li>复活；</li>
+<li>奖励；</li>
+<li>入侵；</li>
+<li>断线恢复。</li>
+</ul>
+<p>单人战斗核心保持不变。</p>
+<hr />
+<h2 id="36-玩家体验设计">36. 玩家体验设计</h2><h2 id="361-输入必须响应动作可以沉重">36.1 输入必须响应，动作可以沉重</h2><p>动作启动较慢并不代表输入反馈可以延迟。</p>
+<p>玩家按键后应立即获得：</p>
+<ul>
+<li>角色起手反馈；</li>
+<li>音效；</li>
+<li>武器动作；</li>
+<li>UI或体力反馈；</li>
+<li>输入缓冲确认。</li>
+</ul>
+<hr />
+<h2 id="362-攻击前兆必须稳定">36.2 攻击前兆必须稳定</h2><p>敌人可以使用：</p>
+<ul>
+<li>延迟攻击；</li>
+<li>连段；</li>
+<li>假动作；</li>
+<li>范围变化；</li>
+<li>快慢组合。</li>
+</ul>
+<p>但动作语言必须可学习。</p>
+<hr />
+<h2 id="363-治疗必须是战术动作">36.3 治疗必须是战术动作</h2><p>治疗不应成为瞬时菜单恢复。</p>
+<p>需要考虑：</p>
+<ul>
+<li>动作时间；</li>
+<li>移动限制；</li>
+<li>可否中断；</li>
+<li>生效时机；</li>
+<li>恢复量；</li>
+<li>使用次数；</li>
+<li>敌人压迫。</li>
+</ul>
+<hr />
+<h2 id="364-boss重试成本需要合理">36.4 Boss重试成本需要合理</h2><p>重试成本由以下因素组成：</p>
+<ul>
+<li>检查点距离；</li>
+<li>沿途敌人；</li>
+<li>加载时间；</li>
+<li>过场；</li>
+<li>风险资产位置；</li>
+<li>消耗品；</li>
+<li>多人重新连接。</li>
+</ul>
+<p>挑战应主要来自Boss，而不是重复通勤。</p>
+<hr />
+<h2 id="365-死亡惩罚不能导致长期死锁">36.5 死亡惩罚不能导致长期死锁</h2><p>风险资产损失可以制造紧张感，但玩家仍应有：</p>
+<ul>
+<li>基础敌人收益；</li>
+<li>可重复资源；</li>
+<li>低风险区域；</li>
+<li>其他探索路线；</li>
+<li>不依赖资产的技术成长。</li>
+</ul>
+<hr />
+<h2 id="366-捷径需要清晰反馈">36.6 捷径需要清晰反馈</h2><p>打开捷径后，应通过：</p>
+<ul>
+<li>空间位置；</li>
+<li>地图关系；</li>
+<li>电梯运动；</li>
+<li>门后熟悉区域；</li>
+<li>检查点距离；</li>
+</ul>
+<p>让玩家明确理解其价值。</p>
+<hr />
+<h2 id="367-数值必须可解释">36.7 数值必须可解释</h2><p>属性和装备界面应说明：</p>
+<ul>
+<li>当前伤害；</li>
+<li>属性补正；</li>
+<li>武器需求；</li>
+<li>负重；</li>
+<li>闪避等级；</li>
+<li>异常抗性；</li>
+<li>强化收益。</li>
+</ul>
+<p>避免大量数值只有模糊名称而没有实际规则解释。</p>
+<hr />
+<h2 id="368-失败后的反馈">36.8 失败后的反馈</h2><p>系统可以帮助玩家识别：</p>
+<ul>
+<li>死亡攻击；</li>
+<li>体力耗尽时间；</li>
+<li>未使用治疗；</li>
+<li>当前装备负重；</li>
+<li>受到的异常；</li>
+<li>风险资产状态；</li>
+<li>是否已开启更短路线。</li>
+</ul>
+<p>不应直接给出完整攻略，但应保证规则可追责。</p>
+<hr />
+<h2 id="37-常见设计失败">37. 常见设计失败</h2><h2 id="371-通过输入延迟制造沉重感">37.1 通过输入延迟制造沉重感</h2><p>玩家按键后角色迟迟没有反应，形成操作失控，而非动作承诺。</p>
+<hr />
+<h2 id="372-敌人追踪无明确边界">37.2 敌人追踪无明确边界</h2><p>敌人在攻击即将命中前大幅旋转，走位失去价值。</p>
+<hr />
+<h2 id="373-攻击视觉与判定不一致">37.3 攻击视觉与判定不一致</h2><p>武器未接触却命中，或明显穿过目标却无伤害。</p>
+<hr />
+<h2 id="374-体力系统只限制玩家">37.4 体力系统只限制玩家</h2><p>敌人无限攻击、无限追踪、无限移动，双方规则完全不对称。</p>
+<p>敌人可以不显示体力，但仍应存在动作恢复和攻击预算。</p>
+<hr />
+<h2 id="375-检查点只承担存档功能">37.5 检查点只承担存档功能</h2><p>敌人重置、资源恢复和世界状态由其他脚本分别处理，导致状态不一致。</p>
+<hr />
+<h2 id="376-风险资产可能生成在不可回收位置">37.6 风险资产可能生成在不可回收位置</h2><p>深坑、Boss门内或场景外的资产会把惩罚变成系统错误。</p>
+<hr />
+<h2 id="377-boss门距离过长">37.7 Boss门距离过长</h2><p>每次失败都需要大量无决策跑图。</p>
+<hr />
+<h2 id="378-普通敌人只靠数量增加难度">37.8 普通敌人只靠数量增加难度</h2><p>没有职责组合、位置设计和攻击互补。</p>
+<hr />
+<h2 id="379-属性和装备存在明显唯一最优解">37.9 属性和装备存在明显唯一最优解</h2><p>负重、武器、属性和防具没有真实取舍。</p>
+<hr />
+<h2 id="3710-数值成长完全覆盖动作学习">37.10 数值成长完全覆盖动作学习</h2><p>玩家刷级后可以无视所有敌人规则。</p>
+<hr />
+<h2 id="3711-npc任务失败完全不可推断">37.11 NPC任务失败完全不可推断</h2><p>玩家因不可见内部状态永久错过任务。</p>
+<hr />
+<h2 id="3712-世界重置遗漏持久对象">37.12 世界重置遗漏持久对象</h2><p>休息后出现：</p>
+<ul>
+<li>捷径关闭；</li>
+<li>唯一物品复活；</li>
+<li>Boss复活；</li>
+<li>NPC倒退；</li>
+<li>风险资产消失。</li>
+</ul>
+<hr />
+<h2 id="3713-动画事件决定伤害和资源">37.13 动画事件决定伤害和资源</h2><p>帧率、动画中断或资源缺失导致逻辑错误。</p>
+<hr />
+<h2 id="3714-高频自动保存覆盖有效快照">37.14 高频自动保存覆盖有效快照</h2><p>写入中断后同时损坏当前存档和备份。</p>
+<hr />
+<h2 id="38-最小可行原型">38. 最小可行原型</h2><p>一个能够验证类魂动作RPG核心范式的最小原型可以包含：</p>
+<h3 id="世界">世界</h3><ul>
+<li>3个相连区域；</li>
+<li>3个检查点；</li>
+<li>2条永久捷径；</li>
+<li>1个单向落差；</li>
+<li>1个Boss竞技场；</li>
+<li>1个世界阶段变化。</li>
+</ul>
+<h3 id="玩家">玩家</h3><ul>
+<li>基础移动；</li>
+<li>轻攻击；</li>
+<li>重攻击；</li>
+<li>闪避；</li>
+<li>格挡；</li>
+<li>招架；</li>
+<li>治疗；</li>
+<li>锁定；</li>
+<li>体力；</li>
+<li>架势；</li>
+<li>风险货币。</li>
+</ul>
+<h3 id="武器">武器</h3><ul>
+<li>快速轻武器；</li>
+<li>重型武器；</li>
+<li>防御型武器；</li>
+<li>简单远程武器。</li>
+</ul>
+<h3 id="敌人">敌人</h3><ul>
+<li>基础近战敌人；</li>
+<li>盾牌敌人；</li>
+<li>远程敌人；</li>
+<li>快速敌人；</li>
+<li>精英敌人；</li>
+<li>1个双阶段Boss。</li>
+</ul>
+<h3 id="系统">系统</h3><ul>
+<li>固定步长战斗；</li>
+<li>输入缓冲；</li>
+<li>动作仲裁；</li>
+<li>命中；</li>
+<li>体力；</li>
+<li>架势；</li>
+<li>敌人感知；</li>
+<li>检查点；</li>
+<li>世界重置；</li>
+<li>死亡回收；</li>
+<li>捷径；</li>
+<li>Boss重试；</li>
+<li>武器强化；</li>
+<li>自动保存。</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li>玩家动作检查器；</li>
+<li>命中追踪器；</li>
+<li>敌人AI评分；</li>
+<li>风险资产审计；</li>
+<li>检查点重置查看器；</li>
+<li>世界连接图；</li>
+<li>Boss状态面板；</li>
+<li>存档差异工具。</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li>动作是否具有承诺但输入仍然响应；</li>
+<li>敌人攻击是否可学习；</li>
+<li>体力是否迫使玩家保留防御资源；</li>
+<li>检查点是否可靠地重置世界；</li>
+<li>捷径是否明显降低死亡成本；</li>
+<li>风险资产是否始终可回收；</li>
+<li>Boss失败后是否能稳定重试；</li>
+<li>相同输入是否能够重放相同战斗结果；</li>
+<li>玩家死亡是否能够明确归因。</li>
+</ul>
+<hr />
+<h2 id="39-推荐实施顺序">39. 推荐实施顺序</h2><p>第一阶段：固定步长角色移动与基础状态
+第二阶段：输入缓冲和动作仲裁
+第三阶段：攻击框、受击框与伤害
+第四阶段：体力、闪避、格挡和招架
+第五阶段：架势、韧性和受击反应
+第六阶段：敌人感知、仇恨和动作AI
+第七阶段：区域、检查点和敌人重置
+第八阶段：死亡、复活和风险资产
+第九阶段：门、捷径和世界持久化
+第十阶段：Boss竞技场和阶段
+第十一阶段：属性、装备和武器强化
+第十二阶段：任务、NPC、多人和回放</p>
+<p>不建议在以下底层机制尚未稳定前制作大量敌人和Boss：</p>
+<ul>
+<li>动作承诺；</li>
+<li>输入缓冲；</li>
+<li>命中；</li>
+<li>体力；</li>
+<li>检查点重置；</li>
+<li>死亡事务；</li>
+<li>存档。</li>
+</ul>
+<hr />
+<h2 id="40-架构验收标准">40. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li>战斗使用稳定固定步长；</li>
+<li>输入能够进入缓冲，角色动作仍具有承诺；</li>
+<li>所有动作通过统一仲裁器切换；</li>
+<li>攻击、闪避、格挡和招架具有明确Tick窗口；</li>
+<li>动画表现不决定权威伤害；</li>
+<li>体力同时约束进攻、防御和机动；</li>
+<li>敌人具有动作承诺和可学习前兆；</li>
+<li>敌人追击、脱离和重置具有稳定规则；</li>
+<li>检查点统一管理恢复、复活、敌人重置和保存；</li>
+<li>普通敌人与永久世界状态采用不同ResetPolicy；</li>
+<li>死亡能够创建唯一风险资产；</li>
+<li>二次死亡能够正确替换旧资产；</li>
+<li>风险资产始终拥有合法回收位置；</li>
+<li>捷径永久保存并实际降低重复路线成本；</li>
+<li>Boss失败后能够恢复到可重试状态；</li>
+<li>Boss死亡奖励和世界变化具有幂等性；</li>
+<li>高频自动保存不会破坏旧快照；</li>
+<li>新武器能够复用统一动作和伤害系统；</li>
+<li>新敌人能够通过动作集和AI配置接入；</li>
+<li>调试工具能够解释攻击、动作拒绝、敌人选择和世界重置。</li>
+</ul>
+<hr />
+<h2 id="41-可迁移到其他游戏的设计思想">41. 可迁移到其他游戏的设计思想</h2><h2 id="411-动作承诺制造决策重量">41.1 动作承诺制造决策重量</h2><p>可迁移到：</p>
+<ul>
+<li>动作游戏；</li>
+<li>格斗；</li>
+<li>狩猎；</li>
+<li>技能系统；</li>
+<li>战术交互。</li>
+</ul>
+<p>动作不能被任意撤销，时机判断才具有价值。</p>
+<hr />
+<h2 id="412-检查点是世界事务边界">41.2 检查点是世界事务边界</h2><p>可迁移到：</p>
+<ul>
+<li>Roguelike；</li>
+<li>生存游戏；</li>
+<li>大型关卡；</li>
+<li>地牢；</li>
+<li>战役系统。</li>
+</ul>
+<p>检查点可以统一处理：</p>
+<ul>
+<li>保存；</li>
+<li>恢复；</li>
+<li>重置；</li>
+<li>复活；</li>
+<li>快速移动；</li>
+<li>世界刷新。</li>
+</ul>
+<hr />
+<h2 id="413-死亡可以生成新任务而不是简单回档">41.3 死亡可以生成新任务，而不是简单回档</h2><p>可迁移到：</p>
+<ul>
+<li>撤离游戏；</li>
+<li>Roguelike；</li>
+<li>生存游戏；</li>
+<li>开放世界；</li>
+<li>高风险副本。</li>
+</ul>
+<p>死亡后保留部分进度，同时产生需要回收或处理的局部目标。</p>
+<hr />
+<h2 id="414-风险资产需要独立生命周期">41.4 风险资产需要独立生命周期</h2><p>适用于：</p>
+<ul>
+<li>战利品回收；</li>
+<li>押金；</li>
+<li>任务货物；</li>
+<li>死亡掉落；</li>
+<li>临时奖励。</li>
+</ul>
+<p>需要明确：</p>
+<ul>
+<li>创建；</li>
+<li>激活；</li>
+<li>替换；</li>
+<li>回收；</li>
+<li>丢失；</li>
+<li>持久化。</li>
+</ul>
+<hr />
+<h2 id="415-世界重置与永久状态必须分层">41.5 世界重置与永久状态必须分层</h2><p>可迁移到：</p>
+<ul>
+<li>地牢；</li>
+<li>开放世界；</li>
+<li>生存；</li>
+<li>关卡重试；</li>
+<li>动态敌人系统。</li>
+</ul>
+<p>普通实体可以重置，关键进度必须保留。</p>
+<hr />
+<h2 id="416-敌人也需要行为预算和承诺">41.6 敌人也需要行为预算和承诺</h2><p>可迁移到所有动作AI。</p>
+<p>即使敌人没有可见体力，也不能：</p>
+<ul>
+<li>无限攻击；</li>
+<li>无限追踪；</li>
+<li>任意取消；</li>
+<li>无恢复连续行动。</li>
+</ul>
+<hr />
+<h2 id="417-捷径是空间化进度">41.7 捷径是空间化进度</h2><p>可迁移到：</p>
+<ul>
+<li>银河城；</li>
+<li>开放世界；</li>
+<li>地牢；</li>
+<li>生存恐怖；</li>
+<li>任务地图。</li>
+</ul>
+<p>成长不只来自属性，也来自路线成本下降。</p>
+<hr />
+<h2 id="418-高频保存需要事务和幂等">41.8 高频保存需要事务和幂等</h2><p>可迁移到：</p>
+<ul>
+<li>在线游戏；</li>
+<li>交易；</li>
+<li>战利品；</li>
+<li>任务；</li>
+<li>开放世界。</li>
+</ul>
+<p>关键操作完成后立即保存，但必须保护旧快照并防止重复提交。</p>
+<hr />
+<h2 id="419-困难应来自规则组合而非规则不透明">41.9 困难应来自规则组合，而非规则不透明</h2><p>可迁移到所有高难度游戏。</p>
+<p>玩家可以接受高要求，但必须能够理解：</p>
+<ul>
+<li>攻击何时生效；</li>
+<li>为什么失败；</li>
+<li>如何改进；</li>
+<li>哪些风险可以控制。</li>
+</ul>
+<hr />
+<h2 id="4110-技术成长与数值成长应共同存在">41.10 技术成长与数值成长应共同存在</h2><p>可迁移到：</p>
+<ul>
+<li>动作RPG；</li>
+<li>射击；</li>
+<li>战术游戏；</li>
+<li>卡牌；</li>
+<li>竞速。</li>
+</ul>
+<p>数值降低压力，技术决定稳定性和上限。</p>
+<hr />
+<h2 id="42-本次防重记录">42. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>类魂动作角色扮演游戏。</p>
+<p>常见英文名称：</p>
+<ul>
+<li>Soulslike；</li>
+<li>Souls-like Action RPG；</li>
+<li>Hardcore Action RPG；</li>
+<li>Checkpoint-Based Action RPG。</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>通过具有明确启动、有效和恢复阶段的动作承诺，结合体力、闪避、格挡、架势与敌人模式学习，构建可归因的高风险实时战斗；再以检查点作为恢复、保存和世界重置边界，通过死亡风险资产、复活和路线回收形成持续风险循环，并利用捷径、装备和玩家认知共同推进世界探索。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li>玩家和敌人的动作都具有承诺；</li>
+<li>输入响应与动作取消受到明确规则控制；</li>
+<li>体力约束攻击、防御和机动；</li>
+<li>闪避、格挡、招架和架势形成多层防御；</li>
+<li>敌人攻击具有可学习前兆；</li>
+<li>检查点同时承担恢复、复活、保存和世界重置；</li>
+<li>普通敌人与永久世界状态采用不同重置策略；</li>
+<li>死亡产生可回收风险资产；</li>
+<li>二次死亡会造成旧资产永久损失；</li>
+<li>捷径会降低重复探索和Boss重试成本；</li>
+<li>数值成长可以降低难度，但不能完全替代动作学习；</li>
+<li>高频自动保存防止通过退出撤销已提交后果；</li>
+<li>世界、Boss、任务和NPC状态能够跨死亡保持；</li>
+<li>玩家成长同时发生在角色数据和玩家知识中。</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li>动作承诺；</li>
+<li>输入缓冲；</li>
+<li>动作仲裁；</li>
+<li>体力；</li>
+<li>闪避无敌帧；</li>
+<li>格挡与招架；</li>
+<li>架势与韧性；</li>
+<li>敌人动作AI；</li>
+<li>仇恨、追击与重置；</li>
+<li>检查点；</li>
+<li>世界重置；</li>
+<li>死亡与复活；</li>
+<li>风险资产回收；</li>
+<li>捷径；</li>
+<li>Boss竞技场与重试；</li>
+<li>属性、负重与装备；</li>
+<li>武器强化；</li>
+<li>高频自动保存；</li>
+<li>多人协作与入侵扩展。</li>
+</ul>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

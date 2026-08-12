@@ -1,0 +1,4200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/tactical-rpg.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="回合制战术角色扮演中的离散战场、行动经济与战术因果 | Sakura Design Journal">
+    <meta property="og:description" content="描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/tactical-rpg.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-tactical-rpg.png">
+    <meta property="og:image:alt" content="回合制战术角色扮演中的离散战场、行动经济与战术因果 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="回合制战术角色扮演中的离散战场、行动经济与战术因果 | Sakura Design Journal">
+    <meta name="twitter:description" content="描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-tactical-rpg.png">
+    <meta name="twitter:image:alt" content="回合制战术角色扮演中的离散战场、行动经济与战术因果 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"回合制战术角色扮演中的离散战场、行动经济与战术因果 | Sakura Design Journal","description":"描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。","url":"https://irissakura.github.io/pages/journal/tactical-rpg.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"回合制战术角色扮演中的离散战场、行动经济与战术因果","image":"https://irissakura.github.io/assets/social/pages-journal-tactical-rpg.png","dateModified":"2026-08-12","about":["tactical-rpg","turn-based","wargame"]}</script>
+    <!-- site-meta:end -->
+    <title>回合制战术角色扮演中的离散战场、行动经济与战术因果 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-tactical-rpg"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>回合制战术角色扮演中的离散战场、行动经济与战术因果</h1><p>描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。</p><div class="note-tags"><span>tactical-rpg</span><span>turn-based</span><span>wargame</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="离散战场行动经济与可验证战术因果链">离散战场、行动经济与可验证战术因果链</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本文讨论一种足以独立支撑完整游戏的宏观品类：</p>
+<p><strong>回合制战术角色扮演游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Tactical RPG；</p>
+</li>
+<li><p>Strategy RPG；</p>
+</li>
+<li><p>SRPG；</p>
+</li>
+<li><p>Turn-Based Tactics；</p>
+</li>
+<li><p>回合制战棋；</p>
+</li>
+<li><p>战术角色扮演游戏。</p>
+</li>
+</ul>
+<p>本文重点不在具体职业、技能或数值设计，而在于该品类最具代表性的工程化设计范式：</p>
+<blockquote>
+<p>将战场建模为离散位置、单位状态、视野关系和任务条件组成的权威快照；玩家或AI仅提交行动意图，系统统一验证行动资源、路径、目标、视线和环境规则，再通过可中断的行动序列、反应栈和状态系统生成可追溯的战术结果。</p>
+</blockquote>
+<p>该范式需要同时解决：</p>
+<ul>
+<li><p>战场空间建模；</p>
+</li>
+<li><p>回合与行动调度；</p>
+</li>
+<li><p>行动合法性验证；</p>
+</li>
+<li><p>路径、占用和视野；</p>
+</li>
+<li><p>掩体、侧翼与控制区；</p>
+</li>
+<li><p>攻击、伤害和状态结算；</p>
+</li>
+<li><p>反应与中断；</p>
+</li>
+<li><p>战术AI；</p>
+</li>
+<li><p>任务目标；</p>
+</li>
+<li><p>战后成长；</p>
+</li>
+<li><p>回放、调试和内容验证。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>回合制战术角色扮演游戏，是以离散战场、有限行动资源、单位差异、空间控制和长期角色成长为核心的策略游戏类型。</p>
+<p>其典型流程为：</p>
+<ol>
+<li><p>玩家查看任务目标、敌情、地形和部署区域；</p>
+</li>
+<li><p>选择参战单位、职业、技能、装备与消耗品；</p>
+</li>
+<li><p>将单位部署到合法位置；</p>
+</li>
+<li><p>战斗系统建立单位顺序、阵营回合或时间轴；</p>
+</li>
+<li><p>当前单位移动并执行攻击、技能、交互或防御；</p>
+</li>
+<li><p>敌方AI依据自己能够获得的信息采取行动；</p>
+</li>
+<li><p>地形、控制区、掩体、视野和状态持续改变战术空间；</p>
+</li>
+<li><p>单位可能受伤、倒地、撤退或永久死亡；</p>
+</li>
+<li><p>任务根据战场目标状态判定成功、失败或部分完成；</p>
+</li>
+<li><p>战后结算经验、伤势、战利品和剧情后果；</p>
+</li>
+<li><p>玩家重新组织队伍并进入后续任务。</p>
+</li>
+</ol>
+<p>该类型的核心并不是“双方轮流攻击”，而是：</p>
+<blockquote>
+<p>玩家在位置、信息和行动资源均受限制的情况下，通过单位组合、空间交换与行动顺序安排，将有限行动转化为局部优势，并承担这些决策对当前任务和长期队伍状态产生的后果。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计支柱">3. 核心设计支柱</h2><h2 id="31-战场必须是可查询的权威状态">3.1 战场必须是可查询的权威状态</h2><p>战场不能只是一组场景对象和角色动画。</p>
+<p>系统需要维护唯一可信的逻辑状态，包括：</p>
+<ul>
+<li><p>单位位于哪个位置；</p>
+</li>
+<li><p>哪些位置已被占用；</p>
+</li>
+<li><p>哪些单位能够互相看见；</p>
+</li>
+<li><p>哪些路径可以通过；</p>
+</li>
+<li><p>哪些掩体仍然有效；</p>
+</li>
+<li><p>哪些环境区域正在生效；</p>
+</li>
+<li><p>当前由谁行动；</p>
+</li>
+<li><p>哪些反应正在等待结算；</p>
+</li>
+<li><p>当前任务目标处于什么状态。</p>
+</li>
+</ul>
+<p>UI、AI、存档和回放都必须基于同一个权威状态运行。</p>
+<hr />
+<h2 id="32-行动资源迫使玩家作出取舍">3.2 行动资源迫使玩家作出取舍</h2><p>单位不能在一个决策周期内无限执行：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>攻击；</p>
+</li>
+<li><p>使用技能；</p>
+</li>
+<li><p>使用道具；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>反应；</p>
+</li>
+<li><p>交互。</p>
+</li>
+</ul>
+<p>行动经济决定玩家是否需要在以下选择之间取舍：</p>
+<ul>
+<li><p>接近敌人还是保持安全；</p>
+</li>
+<li><p>攻击还是占领目标；</p>
+</li>
+<li><p>输出伤害还是救援队友；</p>
+</li>
+<li><p>当前行动还是保留反应；</p>
+</li>
+<li><p>使用高成本技能还是维持后续行动空间。</p>
+</li>
+</ul>
+<p>行动经济是回合制战术游戏的节奏基础。</p>
+<hr />
+<h2 id="33-位置必须产生多维价值">3.3 位置必须产生多维价值</h2><p>位置不能只影响攻击距离。</p>
+<p>一个位置的价值可以同时来自：</p>
+<ul>
+<li><p>掩体；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>攻击范围；</p>
+</li>
+<li><p>侧翼角度；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>友军支援；</p>
+</li>
+<li><p>环境风险；</p>
+</li>
+<li><p>任务目标；</p>
+</li>
+<li><p>后续撤退路径。</p>
+</li>
+</ul>
+<p>如果位置只改变移动距离，战场就会退化为一张装饰性棋盘。</p>
+<hr />
+<h2 id="34-玩家提交意图系统裁定结果">3.4 玩家提交意图，系统裁定结果</h2><p>玩家或AI提交的应当是：</p>
+<ul>
+<li><p>移动到某个位置；</p>
+</li>
+<li><p>使用某项技能；</p>
+</li>
+<li><p>攻击某个单位；</p>
+</li>
+<li><p>与某个对象交互；</p>
+</li>
+<li><p>进入警戒状态；</p>
+</li>
+<li><p>结束当前回合。</p>
+</li>
+</ul>
+<p>系统负责验证：</p>
+<ul>
+<li><p>当前阶段是否允许；</p>
+</li>
+<li><p>单位是否能够行动；</p>
+</li>
+<li><p>资源是否足够；</p>
+</li>
+<li><p>路径是否存在；</p>
+</li>
+<li><p>目标是否有效；</p>
+</li>
+<li><p>目标是否可见；</p>
+</li>
+<li><p>是否满足射程和视线；</p>
+</li>
+<li><p>行动是否与当前状态冲突。</p>
+</li>
+</ul>
+<p>玩家不能直接修改：</p>
+<ul>
+<li><p>单位位置；</p>
+</li>
+<li><p>目标生命；</p>
+</li>
+<li><p>行动点；</p>
+</li>
+<li><p>状态效果；</p>
+</li>
+<li><p>任务进度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-行动可以触发反应但必须回到稳定状态">3.5 行动可以触发反应，但必须回到稳定状态</h2><p>一个普通行动可能触发：</p>
+<ul>
+<li><p>警戒射击；</p>
+</li>
+<li><p>机会攻击；</p>
+</li>
+<li><p>援护；</p>
+</li>
+<li><p>反击；</p>
+</li>
+<li><p>伤害转移；</p>
+</li>
+<li><p>陷阱；</p>
+</li>
+<li><p>环境效果；</p>
+</li>
+<li><p>死亡触发；</p>
+</li>
+<li><p>任务事件。</p>
+</li>
+</ul>
+<p>这些结果不能通过任意递归调用处理。</p>
+<p>系统需要维护：</p>
+<ul>
+<li><p>根行动；</p>
+</li>
+<li><p>反应优先级；</p>
+</li>
+<li><p>反应深度；</p>
+</li>
+<li><p>触发去重；</p>
+</li>
+<li><p>资源消耗；</p>
+</li>
+<li><p>循环保护；</p>
+</li>
+<li><p>最终稳定状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-战斗后果应进入长期队伍状态">3.6 战斗后果应进入长期队伍状态</h2><p>战斗结果可以跨任务保留：</p>
+<ul>
+<li><p>单位经验；</p>
+</li>
+<li><p>职业成长；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>疲劳；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>永久死亡；</p>
+</li>
+<li><p>战利品；</p>
+</li>
+<li><p>剧情后果。</p>
+</li>
+</ul>
+<p>这使玩家不仅需要赢得当前战斗，还需要控制长期代价。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与传统回合制rpg的区别">4.1 与传统回合制RPG的区别</h2><p>传统回合制RPG通常从抽象阵列中选择：</p>
+<ul>
+<li><p>攻击；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>道具。</p>
+</li>
+</ul>
+<p>战术RPG还需要处理：</p>
+<ul>
+<li><p>单位位置；</p>
+</li>
+<li><p>路径；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>侧翼；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>任务对象。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与即时战术游戏的区别">4.2 与即时战术游戏的区别</h2><p>即时战术强调：</p>
+<ul>
+<li><p>时间持续推进；</p>
+</li>
+<li><p>多单位同时行动；</p>
+</li>
+<li><p>暂停或慢速指挥；</p>
+</li>
+<li><p>实时反应。</p>
+</li>
+</ul>
+<p>回合制战术游戏则通过离散回合和稳定决策点，为玩家提供明确的思考边界。</p>
+<hr />
+<h2 id="43-与大战略和4x的区别">4.3 与大战略和4X的区别</h2><p>大战略主要控制：</p>
+<ul>
+<li><p>国家；</p>
+</li>
+<li><p>文明；</p>
+</li>
+<li><p>领土；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>军团。</p>
+</li>
+</ul>
+<p>战术RPG主要控制：</p>
+<ul>
+<li><p>单个角色；</p>
+</li>
+<li><p>小队；</p>
+</li>
+<li><p>战场位置；</p>
+</li>
+<li><p>单次行动；</p>
+</li>
+<li><p>局部任务目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-与棋类游戏的区别">4.4 与棋类游戏的区别</h2><p>棋类通常具有：</p>
+<ul>
+<li><p>高度对称的规则；</p>
+</li>
+<li><p>固定单位能力；</p>
+</li>
+<li><p>完全信息；</p>
+</li>
+<li><p>无长期成长。</p>
+</li>
+</ul>
+<p>战术RPG通常包含：</p>
+<ul>
+<li><p>非对称职业；</p>
+</li>
+<li><p>技能和装备；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>随机结果；</p>
+</li>
+<li><p>剧情单位；</p>
+</li>
+<li><p>持久伤势和成长。</p>
+</li>
+</ul>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十四个核心域：</p>
+<ol>
+<li><p>战场拓扑与位置域；</p>
+</li>
+<li><p>战斗时钟与回合调度域；</p>
+</li>
+<li><p>单位实体与能力域；</p>
+</li>
+<li><p>行动经济与指令域；</p>
+</li>
+<li><p>路径、移动与占用域；</p>
+</li>
+<li><p>视野、感知与战争迷雾域；</p>
+</li>
+<li><p>目标选择与攻击解析域；</p>
+</li>
+<li><p>伤害、状态与资源域；</p>
+</li>
+<li><p>反应、控制区与中断域；</p>
+</li>
+<li><p>环境、机关与可破坏物域；</p>
+</li>
+<li><p>AI评估与战术规划域；</p>
+</li>
+<li><p>任务目标、增援与胜负域；</p>
+</li>
+<li><p>战后成长与持久化域；</p>
+</li>
+<li><p>回放、调试与内容验证域。</p>
+</li>
+</ol>
+<p>完整运行流程为：</p>
+<p>战斗实例创建
+→ 加载地图、单位和任务
+→ 初始化行动顺序
+→ 当前单位获得决策权
+→ 玩家或AI提交行动意图
+→ 验证行动资源、路径、视线和目标
+→ 生成行动解析计划
+→ 执行移动、攻击、状态或交互步骤
+→ 处理反应、中断和环境事件
+→ 提交稳定战场状态
+→ 检查单位死亡与任务进度
+→ 更新行动资源和时间轴
+→ 进入下一稳定决策点
+→ 战斗结束后提交长期结果</p>
+<hr />
+<h2 id="6-权威战场状态">6. 权威战场状态</h2><h2 id="61-battlestate">6.1 BattleState</h2><p>推荐结构：</p>
+<ul>
+<li><p>BattleInstanceId；</p>
+</li>
+<li><p>BattleDefinitionId；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>CurrentRound；</p>
+</li>
+<li><p>CurrentTurnIndex；</p>
+</li>
+<li><p>ActiveUnitId；</p>
+</li>
+<li><p>InitiativeTimeline；</p>
+</li>
+<li><p>UnitStates；</p>
+</li>
+<li><p>MapState；</p>
+</li>
+<li><p>ObjectiveStates；</p>
+</li>
+<li><p>ReinforcementStates；</p>
+</li>
+<li><p>EnvironmentStates；</p>
+</li>
+<li><p>PendingActions；</p>
+</li>
+<li><p>ReactionStack；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>BattleVersion；</p>
+</li>
+<li><p>BattleResult。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-战斗阶段">6.2 战斗阶段</h2><p>建议显式划分：</p>
+<ul>
+<li><p>Initializing；</p>
+</li>
+<li><p>Deployment；</p>
+</li>
+<li><p>WaitingForPlayerDecision；</p>
+</li>
+<li><p>WaitingForAIDecision；</p>
+</li>
+<li><p>ValidatingAction；</p>
+</li>
+<li><p>ExecutingAction；</p>
+</li>
+<li><p>ResolvingReactions；</p>
+</li>
+<li><p>ResolvingTurnEnd；</p>
+</li>
+<li><p>ResolvingObjectives；</p>
+</li>
+<li><p>BattleCompleted。</p>
+</li>
+</ul>
+<p>只有在稳定决策阶段，系统才允许提交普通行动。</p>
+<hr />
+<h2 id="63-稳定决策点">6.3 稳定决策点</h2><p>稳定决策点是指：</p>
+<ul>
+<li><p>没有未完成的移动；</p>
+</li>
+<li><p>没有未提交的伤害；</p>
+</li>
+<li><p>没有待处理的反应；</p>
+</li>
+<li><p>没有未完成的环境事件；</p>
+</li>
+<li><p>没有正在修改的任务状态。</p>
+</li>
+</ul>
+<p>适合执行以下操作：</p>
+<ul>
+<li><p>接收玩家指令；</p>
+</li>
+<li><p>运行AI规划；</p>
+</li>
+<li><p>保存战斗；</p>
+</li>
+<li><p>生成行动预览；</p>
+</li>
+<li><p>同步网络状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="7-战场拓扑">7. 战场拓扑</h2><h2 id="71-战场表示方式">7.1 战场表示方式</h2><p>可以采用：</p>
+<ul>
+<li><p>方格网格；</p>
+</li>
+<li><p>六边形网格；</p>
+</li>
+<li><p>节点图；</p>
+</li>
+<li><p>离散区域加自由位置；</p>
+</li>
+<li><p>多高度层网格；</p>
+</li>
+<li><p>混合型拓扑。</p>
+</li>
+</ul>
+<p>无论采用哪种方案，都必须提供稳定的逻辑位置标识。</p>
+<hr />
+<h2 id="72-battlecell">7.2 BattleCell</h2><p>建议字段：</p>
+<ul>
+<li><p>CellId；</p>
+</li>
+<li><p>WorldPosition；</p>
+</li>
+<li><p>HeightLevel；</p>
+</li>
+<li><p>TerrainType；</p>
+</li>
+<li><p>MovementCostProfile；</p>
+</li>
+<li><p>OccupantEntityId；</p>
+</li>
+<li><p>CoverEdges；</p>
+</li>
+<li><p>VisibilityModifiers；</p>
+</li>
+<li><p>HazardTags；</p>
+</li>
+<li><p>InteractionObjectIds；</p>
+</li>
+<li><p>NeighborCellIds；</p>
+</li>
+<li><p>RegionIds；</p>
+</li>
+<li><p>DestructionState；</p>
+</li>
+<li><p>CellVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-地形职责">7.3 地形职责</h2><p>地形可以影响：</p>
+<ul>
+<li><p>移动成本；</p>
+</li>
+<li><p>可通行单位；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>状态效果；</p>
+</li>
+<li><p>环境反应；</p>
+</li>
+<li><p>技能范围；</p>
+</li>
+<li><p>跌落；</p>
+</li>
+<li><p>高度优势。</p>
+</li>
+</ul>
+<p>建议通过标签表达，例如：</p>
+<ul>
+<li><p>Terrain.Ground；</p>
+</li>
+<li><p>Terrain.Water；</p>
+</li>
+<li><p>Terrain.Mud；</p>
+</li>
+<li><p>Terrain.Fire；</p>
+</li>
+<li><p>Terrain.Ice；</p>
+</li>
+<li><p>Terrain.HighGround；</p>
+</li>
+<li><p>Terrain.Difficult；</p>
+</li>
+<li><p>Terrain.Impassable；</p>
+</li>
+<li><p>Terrain.Destructible。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-高度系统">7.4 高度系统</h2><p>高度可以分别影响：</p>
+<ul>
+<li><p>视线；</p>
+</li>
+<li><p>射程；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>跳跃和攀爬；</p>
+</li>
+<li><p>坠落风险；</p>
+</li>
+<li><p>击退结果；</p>
+</li>
+<li><p>掩体有效性。</p>
+</li>
+</ul>
+<p>不建议将高度简化为单一的命中率加成。</p>
+<hr />
+<h2 id="75-占用模型">7.5 占用模型</h2><p>一个位置可以同时关联：</p>
+<ul>
+<li><p>主单位；</p>
+</li>
+<li><p>尸体；</p>
+</li>
+<li><p>道具；</p>
+</li>
+<li><p>陷阱；</p>
+</li>
+<li><p>环境状态；</p>
+</li>
+<li><p>临时召唤物。</p>
+</li>
+</ul>
+<p>需要分别定义：</p>
+<ul>
+<li><p>是否能经过；</p>
+</li>
+<li><p>是否能停留；</p>
+</li>
+<li><p>是否阻挡视线；</p>
+</li>
+<li><p>是否阻挡攻击；</p>
+</li>
+<li><p>是否参与控制区；</p>
+</li>
+<li><p>是否允许推拉。</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-单位模型">8. 单位模型</h2><h2 id="81-unitdefinition">8.1 UnitDefinition</h2><p>稳定定义建议包含：</p>
+<ul>
+<li><p>UnitDefinitionId；</p>
+</li>
+<li><p>UnitCategory；</p>
+</li>
+<li><p>FactionCompatibility；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>MovementProfileId；</p>
+</li>
+<li><p>AbilitySetId；</p>
+</li>
+<li><p>EquipmentSlots；</p>
+</li>
+<li><p>ReactionProfileId；</p>
+</li>
+<li><p>VisionProfileId；</p>
+</li>
+<li><p>SizeProfile；</p>
+</li>
+<li><p>ResistanceProfile；</p>
+</li>
+<li><p>DeathPolicy；</p>
+</li>
+<li><p>PresentationProfileId。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-unitruntimestate">8.2 UnitRuntimeState</h2><p>运行时状态建议包含：</p>
+<ul>
+<li><p>UnitEntityId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>FactionId；</p>
+</li>
+<li><p>ControllerId；</p>
+</li>
+<li><p>CurrentCellId；</p>
+</li>
+<li><p>Facing；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentShield；</p>
+</li>
+<li><p>ActionResources；</p>
+</li>
+<li><p>AbilityCooldowns；</p>
+</li>
+<li><p>StatusInstances；</p>
+</li>
+<li><p>EquipmentInstances；</p>
+</li>
+<li><p>ReactionStates；</p>
+</li>
+<li><p>VisionState；</p>
+</li>
+<li><p>DetectionState；</p>
+</li>
+<li><p>MoraleState；</p>
+</li>
+<li><p>InjuryState；</p>
+</li>
+<li><p>DeathState；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-定义与实例分离">8.3 定义与实例分离</h2><p>稳定定义描述“这个单位类型是什么”。</p>
+<p>运行时实例描述：</p>
+<ul>
+<li><p>当前在哪里；</p>
+</li>
+<li><p>还剩多少生命；</p>
+</li>
+<li><p>有哪些装备；</p>
+</li>
+<li><p>当前有什么状态；</p>
+</li>
+<li><p>还剩多少行动资源；</p>
+</li>
+<li><p>是否已经受伤或死亡。</p>
+</li>
+</ul>
+<p>战斗内不应直接修改UnitDefinition。</p>
+<hr />
+<h2 id="9-行动经济">9. 行动经济</h2><h2 id="91-常见模型">9.1 常见模型</h2><h3 id="单一行动点制">单一行动点制</h3><p>移动、攻击和技能统一消耗行动点。</p>
+<h3 id="主副行动制">主副行动制</h3><p>分别拥有：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>主行动；</p>
+</li>
+<li><p>副行动；</p>
+</li>
+<li><p>反应；</p>
+</li>
+<li><p>免费行动。</p>
+</li>
+</ul>
+<h3 id="时间轴成本制">时间轴成本制</h3><p>行动增加单位的下一次行动等待值。</p>
+<h3 id="阵营回合制">阵营回合制</h3><p>同一阵营单位可自行决定顺序。</p>
+<h3 id="单位轮次制">单位轮次制</h3><p>所有单位按速度或先攻单独行动。</p>
+<hr />
+<h2 id="92-actionresourcestate">9.2 ActionResourceState</h2><p>建议字段：</p>
+<ul>
+<li><p>ActionPoints；</p>
+</li>
+<li><p>MovementPoints；</p>
+</li>
+<li><p>MainActionAvailable；</p>
+</li>
+<li><p>MinorActionAvailable；</p>
+</li>
+<li><p>ReactionPoints；</p>
+</li>
+<li><p>FreeActionCounters；</p>
+</li>
+<li><p>TimeCostAccumulator；</p>
+</li>
+<li><p>OncePerTurnFlags；</p>
+</li>
+<li><p>ResourceVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-行动成本计算">9.3 行动成本计算</h2><p>成本可以受到：</p>
+<ul>
+<li><p>技能；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>连续使用次数；</p>
+</li>
+</ul>
+<p>影响。</p>
+<p>提交行动时必须重新计算。</p>
+<p>UI预览只能作为预测。</p>
+<hr />
+<h2 id="94-资源预留">9.4 资源预留</h2><p>推荐流程：</p>
+<ol>
+<li><p>玩家提交行动；</p>
+</li>
+<li><p>验证行动资源；</p>
+</li>
+<li><p>预留行动点、弹药或法力；</p>
+</li>
+<li><p>创建行动计划；</p>
+</li>
+<li><p>行动达到提交节点后正式扣除；</p>
+</li>
+<li><p>提交前失败则释放预留；</p>
+</li>
+<li><p>被合法中断时按技能策略决定是否返还。</p>
+</li>
+</ol>
+<hr />
+<h2 id="95-免费行动保护">9.5 免费行动保护</h2><p>免费行动需要限制：</p>
+<ul>
+<li><p>每回合次数；</p>
+</li>
+<li><p>每技能次数；</p>
+</li>
+<li><p>同类共享次数；</p>
+</li>
+<li><p>触发深度；</p>
+</li>
+<li><p>资源下限；</p>
+</li>
+<li><p>标签互斥。</p>
+</li>
+</ul>
+<p>否则容易形成无限行为链。</p>
+<hr />
+<h2 id="10-回合与时间轴">10. 回合与时间轴</h2><h2 id="101-turnscheduler职责">10.1 TurnScheduler职责</h2><ul>
+<li><p>生成初始行动顺序；</p>
+</li>
+<li><p>分配当前决策权；</p>
+</li>
+<li><p>处理速度变化；</p>
+</li>
+<li><p>插入额外行动；</p>
+</li>
+<li><p>延迟单位；</p>
+</li>
+<li><p>跳过失能单位；</p>
+</li>
+<li><p>处理回合开始和结束；</p>
+</li>
+<li><p>插入增援单位。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-initiativeentry">10.2 InitiativeEntry</h2><p>建议字段：</p>
+<ul>
+<li><p>UnitEntityId；</p>
+</li>
+<li><p>InitiativeValue；</p>
+</li>
+<li><p>ScheduledTick；</p>
+</li>
+<li><p>PriorityBand；</p>
+</li>
+<li><p>DelayValue；</p>
+</li>
+<li><p>ExtraTurnSource；</p>
+</li>
+<li><p>IsInterrupted；</p>
+</li>
+<li><p>EntryVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-动态时间轴风险">10.3 动态时间轴风险</h2><p>需要防止：</p>
+<ul>
+<li><p>单位无限连续行动；</p>
+</li>
+<li><p>速度加成指数增长；</p>
+</li>
+<li><p>时间轴修改不可解释；</p>
+</li>
+<li><p>相同优先级排序不稳定；</p>
+</li>
+<li><p>回放时顺序不同。</p>
+</li>
+</ul>
+<hr />
+<h2 id="104-回合开始流程">10.4 回合开始流程</h2><ol>
+<li><p>检查单位是否存活；</p>
+</li>
+<li><p>恢复行动资源；</p>
+</li>
+<li><p>处理回合开始状态；</p>
+</li>
+<li><p>处理持续伤害；</p>
+</li>
+<li><p>更新冷却；</p>
+</li>
+<li><p>更新视野；</p>
+</li>
+<li><p>检查控制状态；</p>
+</li>
+<li><p>判断是否获得决策权；</p>
+</li>
+<li><p>发布TurnStarted；</p>
+</li>
+<li><p>进入决策阶段。</p>
+</li>
+</ol>
+<hr />
+<h2 id="105-回合结束流程">10.5 回合结束流程</h2><ol>
+<li><p>关闭普通输入；</p>
+</li>
+<li><p>处理回合结束状态；</p>
+</li>
+<li><p>处理区域效果；</p>
+</li>
+<li><p>清理临时修正；</p>
+</li>
+<li><p>更新反应资源；</p>
+</li>
+<li><p>检查任务；</p>
+</li>
+<li><p>重新插入时间轴；</p>
+</li>
+<li><p>检查轮次结束；</p>
+</li>
+<li><p>选择下一单位；</p>
+</li>
+<li><p>发布TurnEnded。</p>
+</li>
+</ol>
+<hr />
+<h2 id="11-行动意图与验证">11. 行动意图与验证</h2><h2 id="111-actionintent">11.1 ActionIntent</h2><p>建议字段：</p>
+<ul>
+<li><p>IntentId；</p>
+</li>
+<li><p>ActorUnitId；</p>
+</li>
+<li><p>AbilityId；</p>
+</li>
+<li><p>TargetUnitIds；</p>
+</li>
+<li><p>TargetCellIds；</p>
+</li>
+<li><p>PathProposal；</p>
+</li>
+<li><p>FacingProposal；</p>
+</li>
+<li><p>OptionalChoices；</p>
+</li>
+<li><p>SubmittedBattleVersion；</p>
+</li>
+<li><p>InputSequence；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-行动类型">11.2 行动类型</h2><p>包括：</p>
+<ul>
+<li><p>Move；</p>
+</li>
+<li><p>Attack；</p>
+</li>
+<li><p>CastAbility；</p>
+</li>
+<li><p>UseItem；</p>
+</li>
+<li><p>Interact；</p>
+</li>
+<li><p>Overwatch；</p>
+</li>
+<li><p>Defend；</p>
+</li>
+<li><p>Wait；</p>
+</li>
+<li><p>Reload；</p>
+</li>
+<li><p>SwapWeapon；</p>
+</li>
+<li><p>Revive；</p>
+</li>
+<li><p>Carry；</p>
+</li>
+<li><p>Throw；</p>
+</li>
+<li><p>Retreat；</p>
+</li>
+<li><p>EndTurn。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-验证结果">11.3 验证结果</h2><p>建议使用结构化结果：</p>
+<ul>
+<li><p>Success；</p>
+</li>
+<li><p>InvalidPhase；</p>
+</li>
+<li><p>ActorUnavailable；</p>
+</li>
+<li><p>InsufficientActionResource；</p>
+</li>
+<li><p>InvalidTarget；</p>
+</li>
+<li><p>TargetNotVisible；</p>
+</li>
+<li><p>OutOfRange；</p>
+</li>
+<li><p>PathBlocked；</p>
+</li>
+<li><p>CellOccupied；</p>
+</li>
+<li><p>CooldownActive；</p>
+</li>
+<li><p>MissingEquipment；</p>
+</li>
+<li><p>LineOfSightBlocked；</p>
+</li>
+<li><p>StaleBattleVersion；</p>
+</li>
+<li><p>RuleConflict。</p>
+</li>
+</ul>
+<p>失败时不得修改战场状态或消费随机数。</p>
+<hr />
+<h2 id="12-能力系统">12. 能力系统</h2><h2 id="121-abilitydefinition">12.1 AbilityDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>AbilityTags；</p>
+</li>
+<li><p>ActivationType；</p>
+</li>
+<li><p>ActionCost；</p>
+</li>
+<li><p>ResourceCosts；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>TargetingDefinition；</p>
+</li>
+<li><p>RangeDefinition；</p>
+</li>
+<li><p>AreaDefinition；</p>
+</li>
+<li><p>LineOfSightPolicy；</p>
+</li>
+<li><p>PathRequirement；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>ReactionPolicy；</p>
+</li>
+<li><p>InterruptPolicy；</p>
+</li>
+<li><p>AnimationProfile；</p>
+</li>
+<li><p>AIHints；</p>
+</li>
+<li><p>UpgradeDefinitionId。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-基础效果">12.2 基础效果</h2><p>建议提供可组合的基础效果：</p>
+<ul>
+<li><p>DealDamage；</p>
+</li>
+<li><p>Heal；</p>
+</li>
+<li><p>ApplyStatus；</p>
+</li>
+<li><p>RemoveStatus；</p>
+</li>
+<li><p>MoveUnit；</p>
+</li>
+<li><p>PushUnit；</p>
+</li>
+<li><p>PullUnit；</p>
+</li>
+<li><p>Teleport；</p>
+</li>
+<li><p>CreateAreaEffect；</p>
+</li>
+<li><p>DestroyTerrain；</p>
+</li>
+<li><p>ModifyCover；</p>
+</li>
+<li><p>SummonUnit；</p>
+</li>
+<li><p>GrantReaction；</p>
+</li>
+<li><p>ModifyInitiative；</p>
+</li>
+<li><p>RevealUnit；</p>
+</li>
+<li><p>HideUnit；</p>
+</li>
+<li><p>InteractObject。</p>
+</li>
+</ul>
+<p>复杂能力应由基础效果组合，而不是为每项技能编写独立主流程。</p>
+<hr />
+<h2 id="123-目标规则">12.3 目标规则</h2><p>能力可以限制：</p>
+<ul>
+<li><p>自身；</p>
+</li>
+<li><p>友军；</p>
+</li>
+<li><p>敌军；</p>
+</li>
+<li><p>空位置；</p>
+</li>
+<li><p>可见目标；</p>
+</li>
+<li><p>已发现目标；</p>
+</li>
+<li><p>特定标签；</p>
+</li>
+<li><p>倒地单位；</p>
+</li>
+<li><p>机械目标；</p>
+</li>
+<li><p>环境对象。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-范围规则">12.4 范围规则</h2><p>常见范围包括：</p>
+<ul>
+<li><p>单格；</p>
+</li>
+<li><p>相邻格；</p>
+</li>
+<li><p>圆形；</p>
+</li>
+<li><p>菱形；</p>
+</li>
+<li><p>直线；</p>
+</li>
+<li><p>锥形；</p>
+</li>
+<li><p>十字；</p>
+</li>
+<li><p>环形；</p>
+</li>
+<li><p>路径范围；</p>
+</li>
+<li><p>链式目标；</p>
+</li>
+<li><p>高度限制范围。</p>
+</li>
+</ul>
+<p>范围预览与最终计算必须复用同一规则来源。</p>
+<hr />
+<h2 id="13-移动与路径">13. 移动与路径</h2><h2 id="131-movementprofile">13.1 MovementProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>BaseMovementPoints；</p>
+</li>
+<li><p>AllowedTerrainTags；</p>
+</li>
+<li><p>TerrainCostModifiers；</p>
+</li>
+<li><p>ClimbHeight；</p>
+</li>
+<li><p>DropHeight；</p>
+</li>
+<li><p>JumpCapability；</p>
+</li>
+<li><p>CanPassAllies；</p>
+</li>
+<li><p>CanPassEnemies；</p>
+</li>
+<li><p>ZoneOfControlPolicy；</p>
+</li>
+<li><p>MovementAbilities；</p>
+</li>
+<li><p>SizeRequirements。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-路径成本">13.2 路径成本</h2><p>路径成本可以包括：</p>
+<ul>
+<li><p>地形；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>环境伤害；</p>
+</li>
+<li><p>单位体型；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>门和机关；</p>
+</li>
+<li><p>反应攻击风险；</p>
+</li>
+<li><p>战争迷雾信息。</p>
+</li>
+</ul>
+<p>系统可以提供：</p>
+<ul>
+<li><p>最短路径；</p>
+</li>
+<li><p>最安全路径；</p>
+</li>
+<li><p>最少反应路径；</p>
+</li>
+<li><p>保持掩体路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-movementactionplan">13.3 MovementActionPlan</h2><p>建议字段：</p>
+<ul>
+<li><p>ActorUnitId；</p>
+</li>
+<li><p>SourceCellId；</p>
+</li>
+<li><p>PathCells；</p>
+</li>
+<li><p>MovementCosts；</p>
+</li>
+<li><p>TriggerPoints；</p>
+</li>
+<li><p>ReactionCheckpoints；</p>
+</li>
+<li><p>FinalFacing；</p>
+</li>
+<li><p>CommitPolicy；</p>
+</li>
+<li><p>InterruptPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-逐位置执行">13.4 逐位置执行</h2><p>即使玩家只指定最终位置，系统也需要逐节点处理：</p>
+<ul>
+<li><p>离开原位置；</p>
+</li>
+<li><p>进入控制区；</p>
+</li>
+<li><p>触发警戒；</p>
+</li>
+<li><p>踩中陷阱；</p>
+</li>
+<li><p>发现敌人；</p>
+</li>
+<li><p>进入环境区域；</p>
+</li>
+<li><p>最终占用位置。</p>
+</li>
+</ul>
+<p>不能直接瞬移后再补算中间事件。</p>
+<hr />
+<h2 id="135-移动中断">13.5 移动中断</h2><p>移动可能因以下原因中断：</p>
+<ul>
+<li><p>受到反应攻击；</p>
+</li>
+<li><p>被定身；</p>
+</li>
+<li><p>被击退；</p>
+</li>
+<li><p>陷阱触发；</p>
+</li>
+<li><p>路径被阻挡；</p>
+</li>
+<li><p>单位倒地；</p>
+</li>
+<li><p>任务事件；</p>
+</li>
+<li><p>玩家取消。</p>
+</li>
+</ul>
+<p>中断后需要确定：</p>
+<ul>
+<li><p>停止位置；</p>
+</li>
+<li><p>已消耗移动资源；</p>
+</li>
+<li><p>是否返还剩余资源；</p>
+</li>
+<li><p>是否取消后续行动；</p>
+</li>
+<li><p>是否释放目标位置预留。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-控制区">14. 控制区</h2><h2 id="141-zoneofcontroldefinition">14.1 ZoneOfControlDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AreaPattern；</p>
+</li>
+<li><p>AffectedRelation；</p>
+</li>
+<li><p>StopMovementPolicy；</p>
+</li>
+<li><p>AdditionalMovementCost；</p>
+</li>
+<li><p>ReactionAbilityId；</p>
+</li>
+<li><p>IgnoreTags；</p>
+</li>
+<li><p>FacingPolicy；</p>
+</li>
+<li><p>HeightPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-控制区效果">14.2 控制区效果</h2><p>可以包括：</p>
+<ul>
+<li><p>进入后停止移动；</p>
+</li>
+<li><p>增加移动成本；</p>
+</li>
+<li><p>触发机会攻击；</p>
+</li>
+<li><p>禁止自由撤离；</p>
+</li>
+<li><p>降低防御；</p>
+</li>
+<li><p>阻止施法；</p>
+</li>
+<li><p>保护友军。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-预览要求">14.3 预览要求</h2><p>路径预览必须显示：</p>
+<ul>
+<li><p>进入控制区的位置；</p>
+</li>
+<li><p>可能触发的敌人；</p>
+</li>
+<li><p>是否会停止移动；</p>
+</li>
+<li><p>预计受到的反应；</p>
+</li>
+<li><p>可替代路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-视野与战争迷雾">15. 视野与战争迷雾</h2><h2 id="151-真实状态与玩家知识分离">15.1 真实状态与玩家知识分离</h2><p>需要区分：</p>
+<ul>
+<li><p>实际位置；</p>
+</li>
+<li><p>当前可见；</p>
+</li>
+<li><p>已发现但不可见；</p>
+</li>
+<li><p>最后已知位置；</p>
+</li>
+<li><p>推测位置；</p>
+</li>
+<li><p>完全未知；</p>
+</li>
+<li><p>虚假信息。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-visionprofile">15.2 VisionProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>BaseVisionRange；</p>
+</li>
+<li><p>HeightBonus；</p>
+</li>
+<li><p>TerrainOcclusionPolicy；</p>
+</li>
+<li><p>ConcealmentDetection；</p>
+</li>
+<li><p>NightVision；</p>
+</li>
+<li><p>PeripheralPolicy；</p>
+</li>
+<li><p>SharedVisionPolicy；</p>
+</li>
+<li><p>DetectionTags。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-visibilitystate">15.3 VisibilityState</h2><p>建议包含：</p>
+<ul>
+<li><p>VisibleCells；</p>
+</li>
+<li><p>ExploredCells；</p>
+</li>
+<li><p>VisibleEntityIds；</p>
+</li>
+<li><p>DetectedEntityIds；</p>
+</li>
+<li><p>LastKnownEntityStates；</p>
+</li>
+<li><p>SuspicionMarkers；</p>
+</li>
+<li><p>VisionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-视线因素">15.4 视线因素</h2><p>视线可以受到：</p>
+<ul>
+<li><p>距离；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>墙体；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>烟雾；</p>
+</li>
+<li><p>植被；</p>
+</li>
+<li><p>黑暗；</p>
+</li>
+<li><p>姿态；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>观察方向；</p>
+</li>
+</ul>
+<p>影响。</p>
+<p>规则必须稳定并可被预览。</p>
+<hr />
+<h2 id="155-隐蔽状态">15.5 隐蔽状态</h2><p>隐蔽单位可以处于：</p>
+<ul>
+<li><p>未发现；</p>
+</li>
+<li><p>可疑；</p>
+</li>
+<li><p>已发现；</p>
+</li>
+<li><p>已锁定；</p>
+</li>
+<li><p>再次失去视野。</p>
+</li>
+</ul>
+<p>发现行为可以来自：</p>
+<ul>
+<li><p>接近；</p>
+</li>
+<li><p>移动；</p>
+</li>
+<li><p>攻击；</p>
+</li>
+<li><p>发声；</p>
+</li>
+<li><p>标记；</p>
+</li>
+<li><p>照明；</p>
+</li>
+<li><p>侦察技能。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-掩体与侧翼">16. 掩体与侧翼</h2><h2 id="161-coveredge">16.1 CoverEdge</h2><p>掩体建议绑定在位置边缘：</p>
+<ul>
+<li><p>SourceCellId；</p>
+</li>
+<li><p>Direction；</p>
+</li>
+<li><p>CoverType；</p>
+</li>
+<li><p>Height；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>MaterialTags；</p>
+</li>
+<li><p>DestructionState；</p>
+</li>
+<li><p>ProtectionArc；</p>
+</li>
+<li><p>CoverVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-掩体作用">16.2 掩体作用</h2><p>掩体可以影响：</p>
+<ul>
+<li><p>命中率；</p>
+</li>
+<li><p>暴击率；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>可见性；</p>
+</li>
+<li><p>爆炸防护；</p>
+</li>
+<li><p>压制效果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-侧翼判定">16.3 侧翼判定</h2><p>侧翼可以基于：</p>
+<ul>
+<li><p>攻击方向；</p>
+</li>
+<li><p>掩体保护方向；</p>
+</li>
+<li><p>目标朝向；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>攻击线；</p>
+</li>
+<li><p>特殊技能。</p>
+</li>
+</ul>
+<p>不能只判断攻击者是否站在目标旁边。</p>
+<hr />
+<h2 id="164-掩体破坏">16.4 掩体破坏</h2><p>掩体被破坏后可能：</p>
+<ul>
+<li><p>降级；</p>
+</li>
+<li><p>失效；</p>
+</li>
+<li><p>暴露单位；</p>
+</li>
+<li><p>改变视线；</p>
+</li>
+<li><p>改变路径；</p>
+</li>
+<li><p>产生碎片伤害；</p>
+</li>
+<li><p>触发环境反应。</p>
+</li>
+</ul>
+<p>需要使以下缓存失效：</p>
+<ul>
+<li><p>路径；</p>
+</li>
+<li><p>视线；</p>
+</li>
+<li><p>攻击预览；</p>
+</li>
+<li><p>AI位置评分。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-攻击与命中">17. 攻击与命中</h2><h2 id="171-attackcontext">17.1 AttackContext</h2><p>建议包含：</p>
+<ul>
+<li><p>AttackerId；</p>
+</li>
+<li><p>TargetId；</p>
+</li>
+<li><p>AbilityId；</p>
+</li>
+<li><p>SourceCellId；</p>
+</li>
+<li><p>TargetCellId；</p>
+</li>
+<li><p>Distance；</p>
+</li>
+<li><p>HeightDifference；</p>
+</li>
+<li><p>LineOfSightResult；</p>
+</li>
+<li><p>CoverResult；</p>
+</li>
+<li><p>FlankingState；</p>
+</li>
+<li><p>WeaponState；</p>
+</li>
+<li><p>StatusModifiers；</p>
+</li>
+<li><p>HitChance；</p>
+</li>
+<li><p>CriticalChance；</p>
+</li>
+<li><p>RandomRolls；</p>
+</li>
+<li><p>ModifierTrace。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-命中因素">17.2 命中因素</h2><p>命中率可以由以下因素组成：</p>
+<ul>
+<li><p>武器基础精度；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>侧翼；</p>
+</li>
+<li><p>攻击者状态；</p>
+</li>
+<li><p>目标状态；</p>
+</li>
+<li><p>光照；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>反应射击修正。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-随机与确定性">17.3 随机与确定性</h2><p>可以采用：</p>
+<ul>
+<li><p>完全随机命中；</p>
+</li>
+<li><p>确定性命中；</p>
+</li>
+<li><p>混合模型；</p>
+</li>
+<li><p>伪随机；</p>
+</li>
+<li><p>显式重掷；</p>
+</li>
+<li><p>命运资源。</p>
+</li>
+</ul>
+<p>无论采用哪种方式，都需要保证：</p>
+<ul>
+<li><p>UI表达可信；</p>
+</li>
+<li><p>长期统计与显示一致；</p>
+</li>
+<li><p>玩家拥有风险管理手段；</p>
+</li>
+<li><p>随机不能替代战术决策。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-伤害与生命状态">18. 伤害与生命状态</h2><h2 id="181-damagespec">18.1 DamageSpec</h2><p>建议字段：</p>
+<ul>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>DamageType；</p>
+</li>
+<li><p>ArmorPenetration；</p>
+</li>
+<li><p>ShieldDamage；</p>
+</li>
+<li><p>CriticalModifier；</p>
+</li>
+<li><p>MinimumDamage；</p>
+</li>
+<li><p>MaximumDamage；</p>
+</li>
+<li><p>StatusEffects；</p>
+</li>
+<li><p>PushEffect；</p>
+</li>
+<li><p>DestructionDamage；</p>
+</li>
+<li><p>FriendlyFirePolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-防御结算顺序">18.2 防御结算顺序</h2><p>推荐固定顺序：</p>
+<ol>
+<li><p>命中；</p>
+</li>
+<li><p>闪避或格挡；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>护甲与穿透；</p>
+</li>
+<li><p>抗性；</p>
+</li>
+<li><p>固定减伤；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>倒地或死亡。</p>
+</li>
+</ol>
+<hr />
+<h2 id="183-倒地与死亡">18.3 倒地与死亡</h2><p>生命归零后可以：</p>
+<ul>
+<li><p>立即死亡；</p>
+</li>
+<li><p>进入倒地；</p>
+</li>
+<li><p>等待救援；</p>
+</li>
+<li><p>开始流血；</p>
+</li>
+<li><p>被俘虏；</p>
+</li>
+<li><p>撤退；</p>
+</li>
+<li><p>永久死亡。</p>
+</li>
+</ul>
+<p>DeathPolicy应由：</p>
+<ul>
+<li><p>单位类型；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>战役规则；</p>
+</li>
+</ul>
+<p>共同决定。</p>
+<hr />
+<h2 id="184-永久死亡与中间风险">18.4 永久死亡与中间风险</h2><p>若采用永久死亡，应提供：</p>
+<ul>
+<li><p>明确预警；</p>
+</li>
+<li><p>倒地救援；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>替补；</p>
+</li>
+<li><p>伤势系统；</p>
+</li>
+<li><p>队伍重建路径。</p>
+</li>
+</ul>
+<p>永久死亡和完全无损之间可以增加：</p>
+<ul>
+<li><p>轻伤；</p>
+</li>
+<li><p>重伤；</p>
+</li>
+<li><p>疲劳；</p>
+</li>
+<li><p>装备损坏；</p>
+</li>
+<li><p>暂时离队。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-状态效果">19. 状态效果</h2><h2 id="191-statusdefinition">19.1 StatusDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StatusId；</p>
+</li>
+<li><p>StatusTags；</p>
+</li>
+<li><p>DurationType；</p>
+</li>
+<li><p>DurationValue；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>MaxStacks；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>TriggerSpecs；</p>
+</li>
+<li><p>RemovalConditions；</p>
+</li>
+<li><p>DispelTags；</p>
+</li>
+<li><p>VisibilityPolicy；</p>
+</li>
+<li><p>PersistenceScope。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-状态类型">19.2 状态类型</h2><p>包括：</p>
+<ul>
+<li><p>中毒；</p>
+</li>
+<li><p>燃烧；</p>
+</li>
+<li><p>流血；</p>
+</li>
+<li><p>眩晕；</p>
+</li>
+<li><p>定身；</p>
+</li>
+<li><p>缴械；</p>
+</li>
+<li><p>沉默；</p>
+</li>
+<li><p>失明；</p>
+</li>
+<li><p>恐惧；</p>
+</li>
+<li><p>压制；</p>
+</li>
+<li><p>隐身；</p>
+</li>
+<li><p>标记；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>反击姿态；</p>
+</li>
+<li><p>蓄力；</p>
+</li>
+<li><p>伤势。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-持续时间">19.3 持续时间</h2><p>状态持续时间必须明确按照：</p>
+<ul>
+<li><p>施加者回合；</p>
+</li>
+<li><p>目标回合；</p>
+</li>
+<li><p>全局轮次；</p>
+</li>
+<li><p>行动次数；</p>
+</li>
+<li><p>受到攻击次数；</p>
+</li>
+<li><p>离开区域；</p>
+</li>
+<li><p>战斗结束；</p>
+</li>
+<li><p>永久状态；</p>
+</li>
+</ul>
+<p>中的哪一种计算。</p>
+<hr />
+<h2 id="194-堆叠策略">19.4 堆叠策略</h2><p>常见方式：</p>
+<ul>
+<li><p>增加层数；</p>
+</li>
+<li><p>刷新时间；</p>
+</li>
+<li><p>增加时间；</p>
+</li>
+<li><p>保留最强；</p>
+</li>
+<li><p>独立实例；</p>
+</li>
+<li><p>唯一状态；</p>
+</li>
+<li><p>达到阈值后转换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-反应与中断">20. 反应与中断</h2><h2 id="201-reactiondefinition">20.1 ReactionDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ReactionId；</p>
+</li>
+<li><p>TriggerEventType；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>RangePolicy；</p>
+</li>
+<li><p>ResourceCost；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>MaxUsesPerTurn；</p>
+</li>
+<li><p>InterruptLevel；</p>
+</li>
+<li><p>GeneratedAction；</p>
+</li>
+<li><p>ConflictPolicy；</p>
+</li>
+<li><p>VisibilityPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-常见反应">20.2 常见反应</h2><p>包括：</p>
+<ul>
+<li><p>警戒射击；</p>
+</li>
+<li><p>机会攻击；</p>
+</li>
+<li><p>反击；</p>
+</li>
+<li><p>格挡；</p>
+</li>
+<li><p>援护；</p>
+</li>
+<li><p>拦截；</p>
+</li>
+<li><p>伤害转移；</p>
+</li>
+<li><p>施法打断；</p>
+</li>
+<li><p>区域陷阱；</p>
+</li>
+<li><p>友军倒地响应。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-reactionstack">20.3 ReactionStack</h2><p>建议字段：</p>
+<ul>
+<li><p>RootActionId；</p>
+</li>
+<li><p>PendingReactionIds；</p>
+</li>
+<li><p>CurrentReactionId；</p>
+</li>
+<li><p>ReactionDepth；</p>
+</li>
+<li><p>ProcessedTriggerKeys；</p>
+</li>
+<li><p>ReactionBudget；</p>
+</li>
+<li><p>StackState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-反应解析">20.4 反应解析</h2><ol>
+<li><p>主行动进入触发节点；</p>
+</li>
+<li><p>收集合法反应；</p>
+</li>
+<li><p>排序；</p>
+</li>
+<li><p>验证资源；</p>
+</li>
+<li><p>决定自动或询问；</p>
+</li>
+<li><p>执行最高优先级反应；</p>
+</li>
+<li><p>更新主行动；</p>
+</li>
+<li><p>重新验证剩余反应；</p>
+</li>
+<li><p>清空反应栈；</p>
+</li>
+<li><p>继续或中止主行动。</p>
+</li>
+</ol>
+<hr />
+<h2 id="205-循环保护">20.5 循环保护</h2><p>必须提供：</p>
+<ul>
+<li><p>最大反应深度；</p>
+</li>
+<li><p>同一单位触发上限；</p>
+</li>
+<li><p>同一反应重复限制；</p>
+</li>
+<li><p>根行动ID；</p>
+</li>
+<li><p>触发去重键；</p>
+</li>
+<li><p>单根行动预算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="21-环境与区域效果">21. 环境与区域效果</h2><h2 id="211-areaeffectdefinition">21.1 AreaEffectDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AreaEffectId；</p>
+</li>
+<li><p>Shape；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>TerrainRequirements；</p>
+</li>
+<li><p>EntryEffects；</p>
+</li>
+<li><p>StayEffects；</p>
+</li>
+<li><p>ExitEffects；</p>
+</li>
+<li><p>VisibilityEffects；</p>
+</li>
+<li><p>MovementModifiers；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>DestructionPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-常见区域效果">21.2 常见区域效果</h2><ul>
+<li><p>火焰；</p>
+</li>
+<li><p>毒气；</p>
+</li>
+<li><p>烟雾；</p>
+</li>
+<li><p>冰面；</p>
+</li>
+<li><p>油；</p>
+</li>
+<li><p>黑暗；</p>
+</li>
+<li><p>治疗区域；</p>
+</li>
+<li><p>禁魔区域；</p>
+</li>
+<li><p>压制区域；</p>
+</li>
+<li><p>水；</p>
+</li>
+<li><p>电场。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-元素组合">21.3 元素组合</h2><p>例如：</p>
+<ul>
+<li><p>油与火形成燃烧；</p>
+</li>
+<li><p>水与电形成导电；</p>
+</li>
+<li><p>火融化冰；</p>
+</li>
+<li><p>强风推动毒气；</p>
+</li>
+<li><p>爆炸驱散烟雾；</p>
+</li>
+<li><p>冰面受到冲击后破裂。</p>
+</li>
+</ul>
+<p>应通过标签和反应规则组合，而不是地图特例脚本。</p>
+<hr />
+<h2 id="214-环境结算时机">21.4 环境结算时机</h2><p>必须明确在何时触发：</p>
+<ul>
+<li><p>进入区域；</p>
+</li>
+<li><p>停留；</p>
+</li>
+<li><p>行动结束；</p>
+</li>
+<li><p>单位回合开始；</p>
+</li>
+<li><p>全局轮次结束；</p>
+</li>
+<li><p>离开区域。</p>
+</li>
+</ul>
+<hr />
+<h2 id="22-可破坏环境">22. 可破坏环境</h2><h2 id="221-destructibleobjectstate">22.1 DestructibleObjectState</h2><p>建议字段：</p>
+<ul>
+<li><p>ObjectId；</p>
+</li>
+<li><p>CurrentIntegrity；</p>
+</li>
+<li><p>DestructionStage；</p>
+</li>
+<li><p>CoverState；</p>
+</li>
+<li><p>PathBlockingState；</p>
+</li>
+<li><p>VisibilityBlockingState；</p>
+</li>
+<li><p>HazardState；</p>
+</li>
+<li><p>LootState；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-破坏结果">22.2 破坏结果</h2><p>环境破坏可以：</p>
+<ul>
+<li><p>移除掩体；</p>
+</li>
+<li><p>创建路径；</p>
+</li>
+<li><p>封锁路径；</p>
+</li>
+<li><p>产生坠落；</p>
+</li>
+<li><p>造成范围伤害；</p>
+</li>
+<li><p>改变视野；</p>
+</li>
+<li><p>释放危险物；</p>
+</li>
+<li><p>改变任务状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-结构连锁">22.3 结构连锁</h2><p>破坏地板、桥梁或支柱时需要处理：</p>
+<ul>
+<li><p>上方单位；</p>
+</li>
+<li><p>坠落目标；</p>
+</li>
+<li><p>高度伤害；</p>
+</li>
+<li><p>物品；</p>
+</li>
+<li><p>路径更新；</p>
+</li>
+<li><p>任务对象；</p>
+</li>
+<li><p>大型单位；</p>
+</li>
+<li><p>连锁破坏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-战术ai">23. 战术AI</h2><h2 id="231-ai层级">23.1 AI层级</h2><p>推荐划分：</p>
+<ol>
+<li><p>感知与知识；</p>
+</li>
+<li><p>生存与任务目标；</p>
+</li>
+<li><p>战术态势评估；</p>
+</li>
+<li><p>合法候选生成；</p>
+</li>
+<li><p>行动序列规划；</p>
+</li>
+<li><p>风险收益评分；</p>
+</li>
+<li><p>行动提交。</p>
+</li>
+</ol>
+<hr />
+<h2 id="232-ai知识状态">23.2 AI知识状态</h2><p>AI不应读取全部真实状态。</p>
+<p>建议记录：</p>
+<ul>
+<li><p>已发现敌人；</p>
+</li>
+<li><p>最后已知位置；</p>
+</li>
+<li><p>已知危险；</p>
+</li>
+<li><p>已知地形；</p>
+</li>
+<li><p>友军状态；</p>
+</li>
+<li><p>当前任务；</p>
+</li>
+<li><p>推测区域；</p>
+</li>
+<li><p>情报置信度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-候选行动生成">23.3 候选行动生成</h2><p>先生成合法候选：</p>
+<ul>
+<li><p>可达位置；</p>
+</li>
+<li><p>可攻击目标；</p>
+</li>
+<li><p>可用技能；</p>
+</li>
+<li><p>可交互对象；</p>
+</li>
+<li><p>可用道具；</p>
+</li>
+<li><p>可执行反应；</p>
+</li>
+<li><p>可完成任务行为。</p>
+</li>
+</ul>
+<p>再进行评分。</p>
+<hr />
+<h2 id="234-位置评分">23.4 位置评分</h2><p>可以考虑：</p>
+<ul>
+<li><p>掩体；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>攻击目标；</p>
+</li>
+<li><p>被攻击风险；</p>
+</li>
+<li><p>友军支援；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>环境风险；</p>
+</li>
+<li><p>任务价值；</p>
+</li>
+<li><p>撤退路径；</p>
+</li>
+<li><p>下一回合价值。</p>
+</li>
+</ul>
+<hr />
+<h2 id="235-行动评分">23.5 行动评分</h2><p>可以考虑：</p>
+<ul>
+<li><p>预期伤害；</p>
+</li>
+<li><p>击杀概率；</p>
+</li>
+<li><p>状态价值；</p>
+</li>
+<li><p>目标优先级；</p>
+</li>
+<li><p>资源成本；</p>
+</li>
+<li><p>暴露风险；</p>
+</li>
+<li><p>任务推进；</p>
+</li>
+<li><p>友军协同；</p>
+</li>
+<li><p>反应风险；</p>
+</li>
+<li><p>后续行动空间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="236-阵营级协调">23.6 阵营级协调</h2><p>需要避免：</p>
+<ul>
+<li><p>过度攻击同一残血目标；</p>
+</li>
+<li><p>抢占同一位置；</p>
+</li>
+<li><p>重复控制；</p>
+</li>
+<li><p>无人完成任务；</p>
+</li>
+<li><p>友军相互阻塞。</p>
+</li>
+</ul>
+<p>可由阵营协调器进行：</p>
+<ul>
+<li><p>目标预留；</p>
+</li>
+<li><p>位置预留；</p>
+</li>
+<li><p>伤害预估；</p>
+</li>
+<li><p>状态预留；</p>
+</li>
+<li><p>任务分工。</p>
+</li>
+</ul>
+<hr />
+<h2 id="24-任务目标">24. 任务目标</h2><h2 id="241-objectivedefinition">24.1 ObjectiveDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ObjectiveId；</p>
+</li>
+<li><p>ObjectiveType；</p>
+</li>
+<li><p>RequiredConditions；</p>
+</li>
+<li><p>OptionalConditions；</p>
+</li>
+<li><p>FailureConditions；</p>
+</li>
+<li><p>VisibilityPolicy；</p>
+</li>
+<li><p>ProgressPolicy；</p>
+</li>
+<li><p>CompletionEffects；</p>
+</li>
+<li><p>RewardPolicy；</p>
+</li>
+<li><p>DependencyIds。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-常见任务">24.2 常见任务</h2><ul>
+<li><p>消灭敌人；</p>
+</li>
+<li><p>击败指定目标；</p>
+</li>
+<li><p>占领区域；</p>
+</li>
+<li><p>防守；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>护送；</p>
+</li>
+<li><p>营救；</p>
+</li>
+<li><p>获取物品；</p>
+</li>
+<li><p>摧毁设施；</p>
+</li>
+<li><p>阻止逃跑；</p>
+</li>
+<li><p>保持潜行；</p>
+</li>
+<li><p>不杀死指定单位；</p>
+</li>
+<li><p>限时完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-状态式任务判定">24.3 状态式任务判定</h2><p>任务应检查结果状态。</p>
+<p>例如“营救俘虏”应判断：</p>
+<ul>
+<li><p>俘虏存活；</p>
+</li>
+<li><p>束缚解除；</p>
+</li>
+<li><p>到达撤离区；</p>
+</li>
+<li><p>战斗尚未失败。</p>
+</li>
+</ul>
+<p>不能强制玩家必须按照唯一脚本路径完成。</p>
+<hr />
+<h2 id="244-部分成功">24.4 部分成功</h2><p>战斗结果可以包含：</p>
+<ul>
+<li><p>主目标完成；</p>
+</li>
+<li><p>可选目标失败；</p>
+</li>
+<li><p>单位受伤；</p>
+</li>
+<li><p>战利品丢失；</p>
+</li>
+<li><p>目标逃走；</p>
+</li>
+<li><p>平民损失；</p>
+</li>
+<li><p>环境损毁。</p>
+</li>
+</ul>
+<p>这使任务结果形成连续后果，而不是简单二元判定。</p>
+<hr />
+<h2 id="25-增援与动态事件">25. 增援与动态事件</h2><h2 id="251-reinforcementdefinition">25.1 ReinforcementDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ReinforcementId；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>SpawnUnits；</p>
+</li>
+<li><p>SpawnZoneIds；</p>
+</li>
+<li><p>Delay；</p>
+</li>
+<li><p>WarningPolicy；</p>
+</li>
+<li><p>DifficultyScaling；</p>
+</li>
+<li><p>CancellationConditions；</p>
+</li>
+<li><p>NarrativeContext。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-增援预警">25.2 增援预警</h2><p>增援应通过以下方式提供信息：</p>
+<ul>
+<li><p>通讯提示；</p>
+</li>
+<li><p>地图标记；</p>
+</li>
+<li><p>脚步；</p>
+</li>
+<li><p>飞行器；</p>
+</li>
+<li><p>传送准备；</p>
+</li>
+<li><p>倒计时；</p>
+</li>
+<li><p>出生区域变化。</p>
+</li>
+</ul>
+<p>不应在玩家身后无提示生成敌人。</p>
+<hr />
+<h2 id="253-动态变化">25.3 动态变化</h2><p>战斗中可以出现：</p>
+<ul>
+<li><p>敌人撤退；</p>
+</li>
+<li><p>第三方介入；</p>
+</li>
+<li><p>新任务目标；</p>
+</li>
+<li><p>地形坍塌；</p>
+</li>
+<li><p>阵营变化；</p>
+</li>
+<li><p>时间压力；</p>
+</li>
+<li><p>平民出现；</p>
+</li>
+<li><p>天气变化。</p>
+</li>
+</ul>
+<p>这些变化应通过事件和状态推进，而不是直接覆盖BattleState。</p>
+<hr />
+<h2 id="26-战后成长与持久化">26. 战后成长与持久化</h2><h2 id="261-campaignunitstate">26.1 CampaignUnitState</h2><p>建议包含：</p>
+<ul>
+<li><p>PersistentUnitId；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>Experience；</p>
+</li>
+<li><p>ClassState；</p>
+</li>
+<li><p>LearnedAbilities；</p>
+</li>
+<li><p>EquipmentInventory；</p>
+</li>
+<li><p>Injuries；</p>
+</li>
+<li><p>Relationships；</p>
+</li>
+<li><p>Morale；</p>
+</li>
+<li><p>Fatigue；</p>
+</li>
+<li><p>DeploymentHistory；</p>
+</li>
+<li><p>DeathState；</p>
+</li>
+<li><p>NarrativeFlags。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-battleresultsnapshot">26.2 BattleResultSnapshot</h2><p>战斗结束后生成：</p>
+<ul>
+<li><p>任务结果；</p>
+</li>
+<li><p>单位存活状态；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>战利品；</p>
+</li>
+<li><p>装备耐久；</p>
+</li>
+<li><p>消耗品；</p>
+</li>
+<li><p>俘虏；</p>
+</li>
+<li><p>剧情标记；</p>
+</li>
+<li><p>环境后果；</p>
+</li>
+<li><p>评价。</p>
+</li>
+</ul>
+<p>随后由长期进度系统进行原子提交。</p>
+<hr />
+<h2 id="263-战后结算原则">26.3 战后结算原则</h2><p>需要保证：</p>
+<ul>
+<li><p>同一战斗结果不能重复发放；</p>
+</li>
+<li><p>部分成功正确进入战役状态；</p>
+</li>
+<li><p>永久死亡和伤势不会重复应用；</p>
+</li>
+<li><p>战利品和消耗品保持守恒；</p>
+</li>
+<li><p>结算失败可以安全重试。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-随机性与确定性">27. 随机性与确定性</h2><h2 id="271-随机流分离">27.1 随机流分离</h2><p>建议分离：</p>
+<ul>
+<li><p>HitRandom；</p>
+</li>
+<li><p>CriticalRandom；</p>
+</li>
+<li><p>DamageRandom；</p>
+</li>
+<li><p>AIChoiceRandom；</p>
+</li>
+<li><p>ReinforcementRandom；</p>
+</li>
+<li><p>LootRandom；</p>
+</li>
+<li><p>EnvironmentRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-随机调用记录">27.2 随机调用记录</h2><p>建议记录：</p>
+<ul>
+<li><p>RandomStreamId；</p>
+</li>
+<li><p>ConsumptionIndex；</p>
+</li>
+<li><p>RequestReason；</p>
+</li>
+<li><p>CandidateCount；</p>
+</li>
+<li><p>SelectedValue；</p>
+</li>
+<li><p>RootActionId。</p>
+</li>
+</ul>
+<hr />
+<h2 id="273-确定性回放">27.3 确定性回放</h2><p>在相同：</p>
+<ul>
+<li><p>初始BattleState；</p>
+</li>
+<li><p>玩家命令；</p>
+</li>
+<li><p>AI配置；</p>
+</li>
+<li><p>随机流；</p>
+</li>
+<li><p>内容版本；</p>
+</li>
+</ul>
+<p>下，应得到相同结果。</p>
+<p>适用于：</p>
+<ul>
+<li><p>战斗回放；</p>
+</li>
+<li><p>Bug复现；</p>
+</li>
+<li><p>自动测试；</p>
+</li>
+<li><p>网络同步；</p>
+</li>
+<li><p>存档验证；</p>
+</li>
+<li><p>版本比较。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-完整行动执行示例">28. 完整行动执行示例</h2><p>以下以“单位移动到侧翼位置，触发警戒射击，再攻击掩体后的目标”为例。</p>
+<h3 id="281-提交移动">28.1 提交移动</h3><p>玩家为单位A规划路径，路径会经过敌方B的警戒区域，并最终到达敌方C的侧翼位置。</p>
+<hr />
+<h3 id="282-移动验证">28.2 移动验证</h3><p>系统检查：</p>
+<ul>
+<li><p>移动点；</p>
+</li>
+<li><p>路径连通；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>占用；</p>
+</li>
+<li><p>目标位置；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>反应风险。</p>
+</li>
+</ul>
+<p>成功后预留移动资源。</p>
+<hr />
+<h3 id="283-逐格移动">28.3 逐格移动</h3><p>A沿路径逐格移动。</p>
+<p>进入B的警戒区域时，移动暂停，并产生ReactionTrigger。</p>
+<hr />
+<h3 id="284-警戒验证">28.4 警戒验证</h3><p>检查B是否：</p>
+<ul>
+<li><p>存活；</p>
+</li>
+<li><p>拥有反应点；</p>
+</li>
+<li><p>有弹药；</p>
+</li>
+<li><p>看得见A；</p>
+</li>
+<li><p>射线未被阻挡；</p>
+</li>
+<li><p>尚未使用警戒。</p>
+</li>
+</ul>
+<p>合法后生成OverwatchAttack。</p>
+<hr />
+<h3 id="285-警戒结算">28.5 警戒结算</h3><p>若命中：</p>
+<ul>
+<li><p>A受到伤害；</p>
+</li>
+<li><p>可能获得压制；</p>
+</li>
+<li><p>可能倒地并中止移动。</p>
+</li>
+</ul>
+<p>若未命中：</p>
+<ul>
+<li><p>A继续移动；</p>
+</li>
+<li><p>B消耗反应资源和弹药。</p>
+</li>
+</ul>
+<hr />
+<h3 id="286-到达侧翼">28.6 到达侧翼</h3><p>A到达目标格。</p>
+<p>系统更新：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>剩余行动；</p>
+</li>
+<li><p>朝向；</p>
+</li>
+<li><p>新视野；</p>
+</li>
+<li><p>侧翼状态。</p>
+</li>
+</ul>
+<hr />
+<h3 id="287-攻击预览">28.7 攻击预览</h3><p>系统计算：</p>
+<ul>
+<li><p>距离；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>视线；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>侧翼；</p>
+</li>
+<li><p>压制；</p>
+</li>
+<li><p>命中预测。</p>
+</li>
+</ul>
+<hr />
+<h3 id="288-攻击提交">28.8 攻击提交</h3><p>系统重新验证，消耗主行动和弹药，生成攻击动作。</p>
+<hr />
+<h3 id="289-结算">28.9 结算</h3><p>依次处理：</p>
+<ol>
+<li><p>命中；</p>
+</li>
+<li><p>暴击；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>倒地或死亡；</p>
+</li>
+<li><p>新反应；</p>
+</li>
+<li><p>任务进度。</p>
+</li>
+</ol>
+<hr />
+<h3 id="2810-返回稳定状态">28.10 返回稳定状态</h3><p>当所有反应和事件完成后，战斗重新进入稳定决策点。</p>
+<hr />
+<h2 id="29-模块通信">29. 模块通信</h2><h2 id="291-命令">29.1 命令</h2><p>典型命令：</p>
+<ul>
+<li><p>SubmitMove；</p>
+</li>
+<li><p>SubmitAbility；</p>
+</li>
+<li><p>SubmitAttack；</p>
+</li>
+<li><p>SubmitReactionChoice；</p>
+</li>
+<li><p>UseItem；</p>
+</li>
+<li><p>InteractObject；</p>
+</li>
+<li><p>EndUnitTurn；</p>
+</li>
+<li><p>EndFactionTurn；</p>
+</li>
+<li><p>RetreatUnit；</p>
+</li>
+<li><p>ConfirmDeployment。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-同步查询">29.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>位置是否可达；</p>
+</li>
+<li><p>技能是否合法；</p>
+</li>
+<li><p>单位是否可见；</p>
+</li>
+<li><p>命中预测；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>行动资源；</p>
+</li>
+<li><p>任务状态；</p>
+</li>
+<li><p>反应候选。</p>
+</li>
+</ul>
+<p>查询不能修改状态或消费随机数。</p>
+<hr />
+<h2 id="293-领域事件">29.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>UnitTurnStarted；</p>
+</li>
+<li><p>UnitMoved；</p>
+</li>
+<li><p>UnitEnteredZoneOfControl；</p>
+</li>
+<li><p>ReactionTriggered；</p>
+</li>
+<li><p>AttackResolved；</p>
+</li>
+<li><p>DamageCommitted；</p>
+</li>
+<li><p>StatusApplied；</p>
+</li>
+<li><p>UnitDowned；</p>
+</li>
+<li><p>UnitKilled；</p>
+</li>
+<li><p>TerrainDestroyed；</p>
+</li>
+<li><p>ObjectiveProgressed；</p>
+</li>
+<li><p>ReinforcementArrived；</p>
+</li>
+<li><p>BattleCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-表现事件">29.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>PlayMoveAnimation；</p>
+</li>
+<li><p>PlayAttackAnimation；</p>
+</li>
+<li><p>ShowHitChance；</p>
+</li>
+<li><p>ShowDamageNumber；</p>
+</li>
+<li><p>ShowReactionPrompt；</p>
+</li>
+<li><p>UpdateFogOfWar；</p>
+</li>
+<li><p>PlayTerrainDestruction；</p>
+</li>
+<li><p>ShowObjectiveUpdate；</p>
+</li>
+<li><p>PlayUnitDeathPresentation。</p>
+</li>
+</ul>
+<p>表现事件不能决定逻辑结果。</p>
+<hr />
+<h2 id="30-失败隔离">30. 失败隔离</h2><h2 id="301-行动验证失败">30.1 行动验证失败</h2><p>验证失败时：</p>
+<ul>
+<li><p>不消耗资源；</p>
+</li>
+<li><p>不修改位置；</p>
+</li>
+<li><p>不调用随机数；</p>
+</li>
+<li><p>不播放提交表现；</p>
+</li>
+<li><p>返回明确原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-多步骤行动失败">30.2 多步骤行动失败</h2><p>应区分：</p>
+<h3 id="原子行动">原子行动</h3><p>失败时整体回滚。</p>
+<p>适用于：</p>
+<ul>
+<li><p>交换；</p>
+</li>
+<li><p>传送；</p>
+</li>
+<li><p>双单位同步动作。</p>
+</li>
+</ul>
+<h3 id="渐进提交">渐进提交</h3><p>保留已完成步骤，取消剩余步骤。</p>
+<p>适用于：</p>
+<ul>
+<li><p>逐格移动；</p>
+</li>
+<li><p>连续攻击；</p>
+</li>
+<li><p>环境交互。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-路径失效">30.3 路径失效</h2><p>路径执行中失效时：</p>
+<ol>
+<li><p>停在最后合法位置；</p>
+</li>
+<li><p>释放目标位置预留；</p>
+</li>
+<li><p>按策略返还剩余资源；</p>
+</li>
+<li><p>取消后续步骤；</p>
+</li>
+<li><p>记录路径版本和阻塞来源。</p>
+</li>
+</ol>
+<hr />
+<h2 id="304-反应栈异常">30.4 反应栈异常</h2><p>超过深度或预算时：</p>
+<ul>
+<li><p>停止新反应；</p>
+</li>
+<li><p>保留已提交结果；</p>
+</li>
+<li><p>清除非法反应；</p>
+</li>
+<li><p>记录完整反应链；</p>
+</li>
+<li><p>在开发环境报告规则循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="305-ai失败">30.5 AI失败</h2><p>AI没有合法行为时：</p>
+<ul>
+<li><p>防御；</p>
+</li>
+<li><p>等待；</p>
+</li>
+<li><p>移动到安全位置；</p>
+</li>
+<li><p>结束回合；</p>
+</li>
+<li><p>记录原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="306-任务异常">30.6 任务异常</h2><p>若任务不可完成：</p>
+<ul>
+<li><p>开发环境阻止发布；</p>
+</li>
+<li><p>测试环境显示缺失条件；</p>
+</li>
+<li><p>正式环境进入安全完成或失败策略；</p>
+</li>
+<li><p>保存战斗快照；</p>
+</li>
+<li><p>防止重复奖励。</p>
+</li>
+</ul>
+<hr />
+<h2 id="307-战后结算失败">30.7 战后结算失败</h2><p>需要：</p>
+<ul>
+<li><p>保存BattleResultSnapshot；</p>
+</li>
+<li><p>使用幂等结果ID；</p>
+</li>
+<li><p>后台重试；</p>
+</li>
+<li><p>防止重复发放；</p>
+</li>
+<li><p>允许玩家离开战斗界面；</p>
+</li>
+<li><p>保留完整日志。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-调试与可观测性">31. 调试与可观测性</h2><h2 id="311-战场状态查看器">31.1 战场状态查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>当前单位；</p>
+</li>
+<li><p>回合；</p>
+</li>
+<li><p>时间轴；</p>
+</li>
+<li><p>单位状态；</p>
+</li>
+<li><p>地图占用；</p>
+</li>
+<li><p>任务状态；</p>
+</li>
+<li><p>随机游标；</p>
+</li>
+<li><p>BattleVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-行动验证解释器">31.2 行动验证解释器</h2><p>显示：</p>
+<ul>
+<li><p>行动成本；</p>
+</li>
+<li><p>路径；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>射程；</p>
+</li>
+<li><p>视线；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>状态条件；</p>
+</li>
+<li><p>被拒绝原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-路径和控制区查看器">31.3 路径和控制区查看器</h2><p>显示：</p>
+<ul>
+<li><p>移动成本；</p>
+</li>
+<li><p>可达范围；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>反应位置；</p>
+</li>
+<li><p>环境危险；</p>
+</li>
+<li><p>位置预留；</p>
+</li>
+<li><p>高度变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-视野调试器">31.4 视野调试器</h2><p>支持查看任一阵营的：</p>
+<ul>
+<li><p>可见位置；</p>
+</li>
+<li><p>已探索位置；</p>
+</li>
+<li><p>隐藏单位；</p>
+</li>
+<li><p>最后已知位置；</p>
+</li>
+<li><p>阻挡来源；</p>
+</li>
+<li><p>视野共享。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-命中解释器">31.5 命中解释器</h2><p>显示：</p>
+<ul>
+<li><p>基础精度；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>侧翼；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>武器；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>最终命中率；</p>
+</li>
+<li><p>随机结果；</p>
+</li>
+<li><p>最终伤害。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-反应链浏览器">31.6 反应链浏览器</h2><p>显示：</p>
+<ul>
+<li><p>根行动；</p>
+</li>
+<li><p>触发事件；</p>
+</li>
+<li><p>反应候选；</p>
+</li>
+<li><p>排除原因；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>中断结果；</p>
+</li>
+<li><p>反应深度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-ai评分面板">31.7 AI评分面板</h2><p>显示：</p>
+<ul>
+<li><p>候选位置；</p>
+</li>
+<li><p>候选目标；</p>
+</li>
+<li><p>候选能力；</p>
+</li>
+<li><p>风险；</p>
+</li>
+<li><p>收益；</p>
+</li>
+<li><p>任务价值；</p>
+</li>
+<li><p>协同；</p>
+</li>
+<li><p>资源成本；</p>
+</li>
+<li><p>最终计划。</p>
+</li>
+</ul>
+<hr />
+<h2 id="318-战斗时间线">31.8 战斗时间线</h2><p>记录：</p>
+<ul>
+<li><p>回合；</p>
+</li>
+<li><p>移动；</p>
+</li>
+<li><p>攻击；</p>
+</li>
+<li><p>反应；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>环境；</p>
+</li>
+<li><p>增援；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>死亡；</p>
+</li>
+<li><p>战斗结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="319-确定性回放">31.9 确定性回放</h2><p>支持：</p>
+<ul>
+<li><p>单步执行；</p>
+</li>
+<li><p>跳转行动；</p>
+</li>
+<li><p>比较版本；</p>
+</li>
+<li><p>查找首个差异；</p>
+</li>
+<li><p>重现任务死锁；</p>
+</li>
+<li><p>检查随机调用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-内容验证">32. 内容验证</h2><h2 id="321-地图连通性">32.1 地图连通性</h2><p>检查：</p>
+<ul>
+<li><p>部署区；</p>
+</li>
+<li><p>任务目标；</p>
+</li>
+<li><p>撤离点；</p>
+</li>
+<li><p>大小单位路径；</p>
+</li>
+<li><p>高度连接；</p>
+</li>
+<li><p>可破坏环境；</p>
+</li>
+<li><p>增援出生区。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-技能验证">32.2 技能验证</h2><p>检查：</p>
+<ul>
+<li><p>ID唯一；</p>
+</li>
+<li><p>目标规则；</p>
+</li>
+<li><p>范围；</p>
+</li>
+<li><p>效果；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>反应策略；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>AI提示；</p>
+</li>
+<li><p>循环风险。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-反应循环测试">32.3 反应循环测试</h2><p>自动构造：</p>
+<ul>
+<li><p>反击；</p>
+</li>
+<li><p>援护；</p>
+</li>
+<li><p>警戒；</p>
+</li>
+<li><p>伤害转移；</p>
+</li>
+<li><p>死亡触发；</p>
+</li>
+<li><p>区域触发。</p>
+</li>
+</ul>
+<p>检测：</p>
+<ul>
+<li><p>无限递归；</p>
+</li>
+<li><p>重复消费；</p>
+</li>
+<li><p>重复伤害；</p>
+</li>
+<li><p>死亡单位继续反应；</p>
+</li>
+<li><p>栈无法清空。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-任务可完成性">32.4 任务可完成性</h2><p>检查：</p>
+<ul>
+<li><p>主目标是否存在完成路径；</p>
+</li>
+<li><p>可选目标是否冲突；</p>
+</li>
+<li><p>任务对象是否初始化失效；</p>
+</li>
+<li><p>增援是否永久阻塞；</p>
+</li>
+<li><p>撤离条件是否可达；</p>
+</li>
+<li><p>非致命任务是否有对应能力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-自动战斗模拟">32.5 自动战斗模拟</h2><p>统计：</p>
+<ul>
+<li><p>胜率；</p>
+</li>
+<li><p>回合数；</p>
+</li>
+<li><p>单位伤亡；</p>
+</li>
+<li><p>技能使用率；</p>
+</li>
+<li><p>地图使用率；</p>
+</li>
+<li><p>AI无行动率；</p>
+</li>
+<li><p>反应率；</p>
+</li>
+<li><p>任务失败原因；</p>
+</li>
+<li><p>长期资源损耗。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-性能设计">33. 性能设计</h2><h2 id="331-缓存内容">33.1 缓存内容</h2><p>适合缓存：</p>
+<ul>
+<li><p>地图邻接；</p>
+</li>
+<li><p>基础移动成本；</p>
+</li>
+<li><p>静态视线；</p>
+</li>
+<li><p>范围模板；</p>
+</li>
+<li><p>掩体方向；</p>
+</li>
+<li><p>高度关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-缓存失效">33.2 缓存失效</h2><p>以下变化应使缓存失效：</p>
+<ul>
+<li><p>环境破坏；</p>
+</li>
+<li><p>门开关；</p>
+</li>
+<li><p>烟雾；</p>
+</li>
+<li><p>单位占用；</p>
+</li>
+<li><p>地形状态；</p>
+</li>
+<li><p>大型单位移动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-增量视野">33.3 增量视野</h2><p>视野可根据以下变化局部更新：</p>
+<ul>
+<li><p>观察者移动；</p>
+</li>
+<li><p>掩体变化；</p>
+</li>
+<li><p>烟雾变化；</p>
+</li>
+<li><p>门变化；</p>
+</li>
+<li><p>高度变化；</p>
+</li>
+<li><p>发现状态变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-ai预算">33.4 AI预算</h2><p>限制：</p>
+<ul>
+<li><p>候选位置数量；</p>
+</li>
+<li><p>候选技能；</p>
+</li>
+<li><p>规划深度；</p>
+</li>
+<li><p>协调次数；</p>
+</li>
+<li><p>每帧计算量。</p>
+</li>
+</ul>
+<p>回合制允许分帧计算，但不应长时间阻塞玩家。</p>
+<hr />
+<h2 id="335-预览复用权威规则">33.5 预览复用权威规则</h2><p>预览系统需要：</p>
+<ul>
+<li><p>使用只读状态；</p>
+</li>
+<li><p>不调用随机数；</p>
+</li>
+<li><p>不修改缓存版本；</p>
+</li>
+<li><p>复用权威计算；</p>
+</li>
+<li><p>标记预测与最终结果的差异来源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-可扩展点">34. 可扩展点</h2><h2 id="341-新职业">34.1 新职业</h2><p>主要提供：</p>
+<ul>
+<li><p>属性成长；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>EquipmentRules；</p>
+</li>
+<li><p>ReactionProfile；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>AIHints；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="342-新技能">34.2 新技能</h2><p>优先使用：</p>
+<ul>
+<li><p>TargetingDefinition；</p>
+</li>
+<li><p>AreaDefinition；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>ReactionPolicy；</p>
+</li>
+<li><p>ModifierSpecs。</p>
+</li>
+</ul>
+<hr />
+<h2 id="343-新地形">34.3 新地形</h2><p>提供：</p>
+<ul>
+<li><p>移动成本；</p>
+</li>
+<li><p>视野规则；</p>
+</li>
+<li><p>高度规则；</p>
+</li>
+<li><p>环境标签；</p>
+</li>
+<li><p>元素交互；</p>
+</li>
+<li><p>AI评分修正；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-新反应">34.4 新反应</h2><p>通过：</p>
+<ul>
+<li><p>触发事件；</p>
+</li>
+<li><p>条件；</p>
+</li>
+<li><p>生成行动；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>循环限制；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="345-新任务类型">34.5 新任务类型</h2><p>通过：</p>
+<ul>
+<li><p>完成条件；</p>
+</li>
+<li><p>失败条件；</p>
+</li>
+<li><p>目标状态；</p>
+</li>
+<li><p>动态事件；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="346-战役规则替换">34.6 战役规则替换</h2><p>战役层可以配置：</p>
+<ul>
+<li><p>永久死亡；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>疲劳；</p>
+</li>
+<li><p>装备损耗；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>时间压力；</p>
+</li>
+<li><p>区域控制。</p>
+</li>
+</ul>
+<p>战术战斗核心保持统一。</p>
+<hr />
+<h2 id="35-玩家体验">35. 玩家体验</h2><h2 id="351-行动预览必须可信">35.1 行动预览必须可信</h2><p>预览应展示：</p>
+<ul>
+<li><p>路径；</p>
+</li>
+<li><p>成本；</p>
+</li>
+<li><p>命中率；</p>
+</li>
+<li><p>范围；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>视线；</p>
+</li>
+<li><p>反应风险；</p>
+</li>
+<li><p>环境效果；</p>
+</li>
+<li><p>目标状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="352-信息分层">35.2 信息分层</h2><p>默认展示：</p>
+<ul>
+<li><p>当前单位；</p>
+</li>
+<li><p>可达范围；</p>
+</li>
+<li><p>主要敌人；</p>
+</li>
+<li><p>任务目标；</p>
+</li>
+<li><p>高风险区域；</p>
+</li>
+<li><p>关键状态。</p>
+</li>
+</ul>
+<p>高级面板展示：</p>
+<ul>
+<li><p>修正来源；</p>
+</li>
+<li><p>时间轴；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>反应；</p>
+</li>
+<li><p>地形细节；</p>
+</li>
+<li><p>AI威胁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-高风险确认">35.3 高风险确认</h2><p>以下行为可以要求额外确认：</p>
+<ul>
+<li><p>进入多个警戒范围；</p>
+</li>
+<li><p>造成友军伤害；</p>
+</li>
+<li><p>放弃任务目标；</p>
+</li>
+<li><p>使用稀有物品；</p>
+</li>
+<li><p>结束仍有行动资源的回合；</p>
+</li>
+<li><p>触发不可逆环境破坏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="354-随机风险管理">35.4 随机风险管理</h2><p>玩家应可以通过以下方式降低风险：</p>
+<ul>
+<li><p>接近；</p>
+</li>
+<li><p>高地；</p>
+</li>
+<li><p>侧翼；</p>
+</li>
+<li><p>标记；</p>
+</li>
+<li><p>破坏掩体；</p>
+</li>
+<li><p>增益；</p>
+</li>
+<li><p>重掷；</p>
+</li>
+<li><p>备用单位；</p>
+</li>
+<li><p>保底技能；</p>
+</li>
+<li><p>后续补救。</p>
+</li>
+</ul>
+<hr />
+<h2 id="355-节奏控制">35.5 节奏控制</h2><p>可以提供：</p>
+<ul>
+<li><p>动画加速；</p>
+</li>
+<li><p>跳过镜头；</p>
+</li>
+<li><p>AI行动批量表现；</p>
+</li>
+<li><p>反应自动策略；</p>
+</li>
+<li><p>同类事件合并；</p>
+</li>
+<li><p>清晰行动队列。</p>
+</li>
+</ul>
+<hr />
+<h2 id="356-单位身份感">35.6 单位身份感</h2><p>单位身份可以来自：</p>
+<ul>
+<li><p>职业；</p>
+</li>
+<li><p>动作；</p>
+</li>
+<li><p>语音；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>战斗记录；</p>
+</li>
+<li><p>特性；</p>
+</li>
+<li><p>个人目标。</p>
+</li>
+</ul>
+<p>只有当玩家重视具体单位时，长期后果才具有意义。</p>
+<hr />
+<h2 id="357-失败反馈">35.7 失败反馈</h2><p>失败后应说明：</p>
+<ul>
+<li><p>哪个任务目标被忽略；</p>
+</li>
+<li><p>哪条路线暴露；</p>
+</li>
+<li><p>哪些行动资源被浪费；</p>
+</li>
+<li><p>哪些警戒被触发；</p>
+</li>
+<li><p>哪个掩体失效；</p>
+</li>
+<li><p>哪个敌人获得关键行动；</p>
+</li>
+<li><p>失败条件何时达成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-常见设计失败">36. 常见设计失败</h2><h2 id="361-战场只影响距离">36.1 战场只影响距离</h2><p>位置不影响：</p>
+<ul>
+<li><p>视野；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>后续撤退。</p>
+</li>
+</ul>
+<hr />
+<h2 id="362-预览与实际规则分离">36.2 预览与实际规则分离</h2><p>UI显示可执行，但实际逻辑使用另一套判断。</p>
+<hr />
+<h2 id="363-ai读取完整真实状态">36.3 AI读取完整真实状态</h2><p>AI知道所有隐藏单位和陷阱，战争迷雾失去意义。</p>
+<hr />
+<h2 id="364-反应无限连锁">36.4 反应无限连锁</h2><p>反击触发反击，援护触发援护，系统无法回到稳定状态。</p>
+<hr />
+<h2 id="365-技能全部使用独立脚本">36.5 技能全部使用独立脚本</h2><p>导致：</p>
+<ul>
+<li><p>AI无法理解；</p>
+</li>
+<li><p>目标规则不统一；</p>
+</li>
+<li><p>回放不稳定；</p>
+</li>
+<li><p>组合错误；</p>
+</li>
+<li><p>主流程不断增加特例。</p>
+</li>
+</ul>
+<hr />
+<h2 id="366-掩体不考虑方向">36.6 掩体不考虑方向</h2><p>只要站在掩体旁就获得全部收益，侧翼失去意义。</p>
+<hr />
+<h2 id="367-增援无预警">36.7 增援无预警</h2><p>敌人在玩家背后直接生成，战术规划失去可信度。</p>
+<hr />
+<h2 id="368-永久死亡过度依赖随机">36.8 永久死亡过度依赖随机</h2><p>角色因难以控制的极端随机结果永久丢失，却没有救援和恢复手段。</p>
+<hr />
+<h2 id="369-命中率不可信">36.9 命中率不可信</h2><p>系统使用隐藏修正，但UI仍显示未经修正的概率。</p>
+<hr />
+<h2 id="3610-ai只追求伤害">36.10 AI只追求伤害</h2><p>AI不会：</p>
+<ul>
+<li><p>占领；</p>
+</li>
+<li><p>救援；</p>
+</li>
+<li><p>防守；</p>
+</li>
+<li><p>撤退；</p>
+</li>
+<li><p>破坏掩体；</p>
+</li>
+<li><p>使用控制；</p>
+</li>
+<li><p>完成任务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3611-任务依赖固定步骤">36.11 任务依赖固定步骤</h2><p>玩家已经达成实际目标，但因没有触发指定脚本而无法完成。</p>
+<hr />
+<h2 id="3612-动画控制逻辑">36.12 动画控制逻辑</h2><p>动画中断导致：</p>
+<ul>
+<li><p>伤害不提交；</p>
+</li>
+<li><p>行动点异常；</p>
+</li>
+<li><p>位置错误；</p>
+</li>
+<li><p>战斗卡死。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-最小可行原型">37. 最小可行原型</h2><h2 id="371-战场">37.1 战场</h2><ul>
+<li><p>12×16方格地图；</p>
+</li>
+<li><p>两个高度层；</p>
+</li>
+<li><p>半掩体和全掩体；</p>
+</li>
+<li><p>可破坏墙体；</p>
+</li>
+<li><p>一处火焰区域；</p>
+</li>
+<li><p>一个任务交互对象；</p>
+</li>
+<li><p>一个撤离区域。</p>
+</li>
+</ul>
+<hr />
+<h2 id="372-玩家单位">37.2 玩家单位</h2><p>四名单位：</p>
+<ul>
+<li><p>近战；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>射击；</p>
+</li>
+<li><p>支援。</p>
+</li>
+</ul>
+<p>每名单位拥有：</p>
+<ul>
+<li><p>3至4个主动能力；</p>
+</li>
+<li><p>1个反应能力；</p>
+</li>
+<li><p>基础装备；</p>
+</li>
+<li><p>移动与行动资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="373-敌方单位">37.3 敌方单位</h2><ul>
+<li><p>普通射手；</p>
+</li>
+<li><p>近战突击；</p>
+</li>
+<li><p>支援单位；</p>
+</li>
+<li><p>精英指挥者；</p>
+</li>
+<li><p>延迟增援。</p>
+</li>
+</ul>
+<hr />
+<h2 id="374-核心规则">37.4 核心规则</h2><ul>
+<li><p>单位轮次；</p>
+</li>
+<li><p>移动点加主行动；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>侧翼；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>警戒射击；</p>
+</li>
+<li><p>机会攻击；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>倒地与救援；</p>
+</li>
+<li><p>战争迷雾。</p>
+</li>
+</ul>
+<hr />
+<h2 id="375-任务">37.5 任务</h2><p>主目标：</p>
+<ul>
+<li>营救目标并撤离。</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>指定轮次内完成。</li>
+</ul>
+<p>可选目标：</p>
+<ul>
+<li>摧毁敌方通讯设施。</li>
+</ul>
+<hr />
+<h2 id="376-必要基础设施">37.6 必要基础设施</h2><ul>
+<li><p>BattleState；</p>
+</li>
+<li><p>BattleCell；</p>
+</li>
+<li><p>ActionIntent；</p>
+</li>
+<li><p>路径和占用；</p>
+</li>
+<li><p>视线；</p>
+</li>
+<li><p>能力效果；</p>
+</li>
+<li><p>ReactionStack；</p>
+</li>
+<li><p>AI评分；</p>
+</li>
+<li><p>任务状态；</p>
+</li>
+<li><p>确定性回放；</p>
+</li>
+<li><p>行动验证调试器。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-推荐实施顺序">38. 推荐实施顺序</h2><p>第一阶段：BattleState与稳定决策点
+第二阶段：地图网格、邻接和占用
+第三阶段：单位状态和行动经济
+第四阶段：移动路径和逐格执行
+第五阶段：能力目标、范围和效果
+第六阶段：视野、战争迷雾和掩体
+第七阶段：攻击、伤害和状态
+第八阶段：反应、控制区和中断
+第九阶段：任务、增援和胜负
+第十阶段：AI候选生成和评分
+第十一阶段：环境破坏和动态地图
+第十二阶段：战后成长、回放和自动验证</p>
+<p>不建议在底层规则尚未稳定时先制作大量职业、技能和地图。</p>
+<hr />
+<h2 id="39-架构验收标准">39. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>战场拥有唯一权威状态；</p>
+</li>
+<li><p>普通行动只在稳定决策点提交；</p>
+</li>
+<li><p>地图位置拥有稳定CellId；</p>
+</li>
+<li><p>所有行动先验证再执行；</p>
+</li>
+<li><p>行动资源具有预留和提交时机；</p>
+</li>
+<li><p>移动按路径逐步执行；</p>
+</li>
+<li><p>移动中可触发反应与环境；</p>
+</li>
+<li><p>真实状态与玩家视图分离；</p>
+</li>
+<li><p>掩体根据攻击方向生效；</p>
+</li>
+<li><p>侧翼结果可解释；</p>
+</li>
+<li><p>反应具有优先级和循环保护；</p>
+</li>
+<li><p>环境变化会使路径和视野缓存失效；</p>
+</li>
+<li><p>AI依据自身知识行动；</p>
+</li>
+<li><p>任务根据世界状态判定；</p>
+</li>
+<li><p>战斗结果通过幂等快照提交；</p>
+</li>
+<li><p>相同输入和随机流可以重放；</p>
+</li>
+<li><p>UI预览与权威规则共享计算来源；</p>
+</li>
+<li><p>新技能通常无需修改战斗主循环；</p>
+</li>
+<li><p>新任务类型可以通过条件配置接入；</p>
+</li>
+<li><p>调试器可以解释行动拒绝、命中结果和AI选择。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-可迁移到其他游戏的设计思想">40. 可迁移到其他游戏的设计思想</h2><h2 id="401-稳定决策点">40.1 稳定决策点</h2><p>复杂流程不应在任意中间状态接受新命令。</p>
+<p>适用于：</p>
+<ul>
+<li><p>卡牌；</p>
+</li>
+<li><p>战斗服务器；</p>
+</li>
+<li><p>交易；</p>
+</li>
+<li><p>制造；</p>
+</li>
+<li><p>工作流；</p>
+</li>
+<li><p>模拟系统。</p>
+</li>
+</ul>
+<hr />
+<h2 id="402-行动意图与结果分离">40.2 行动意图与结果分离</h2><p>玩家表达想做什么，系统决定是否允许以及产生什么结果。</p>
+<p>适用于：</p>
+<ul>
+<li><p>技能；</p>
+</li>
+<li><p>交易；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>服务端操作；</p>
+</li>
+<li><p>交互系统。</p>
+</li>
+</ul>
+<hr />
+<h2 id="403-离散拓扑承载复杂空间规则">40.3 离散拓扑承载复杂空间规则</h2><p>位置不仅可以表示坐标，还能承载：</p>
+<ul>
+<li><p>权限；</p>
+</li>
+<li><p>占用；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>路径；</p>
+</li>
+<li><p>环境；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>任务。</p>
+</li>
+</ul>
+<p>适用于：</p>
+<ul>
+<li><p>塔防；</p>
+</li>
+<li><p>地牢；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>城市交通；</p>
+</li>
+<li><p>导航；</p>
+</li>
+<li><p>流程编排。</p>
+</li>
+</ul>
+<hr />
+<h2 id="404-位置价值由多系统共同形成">40.4 位置价值由多系统共同形成</h2><p>位置价值不是固定分数，而是：</p>
+<ul>
+<li><p>掩体；</p>
+</li>
+<li><p>高度；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>攻击；</p>
+</li>
+<li><p>支援；</p>
+</li>
+<li><p>环境；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>后续路线；</p>
+</li>
+</ul>
+<p>共同产生的结果。</p>
+<hr />
+<h2 id="405-反应系统需要独立的栈">40.5 反应系统需要独立的栈</h2><p>所有事件驱动动作都需要：</p>
+<ul>
+<li><p>根事件；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>去重；</p>
+</li>
+<li><p>深度；</p>
+</li>
+<li><p>预算；</p>
+</li>
+<li><p>结束条件。</p>
+</li>
+</ul>
+<p>适用于：</p>
+<ul>
+<li><p>GAS；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>规则引擎。</p>
+</li>
+</ul>
+<hr />
+<h2 id="406-玩家视图不等于世界真相">40.6 玩家视图不等于世界真相</h2><p>适用于：</p>
+<ul>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>潜行；</p>
+</li>
+<li><p>社交推理；</p>
+</li>
+<li><p>隐藏任务；</p>
+</li>
+<li><p>战略情报。</p>
+</li>
+</ul>
+<hr />
+<h2 id="407-预览复用权威规则">40.7 预览复用权威规则</h2><p>UI、AI和逻辑不应分别维护三套：</p>
+<ul>
+<li><p>路径计算；</p>
+</li>
+<li><p>命中计算；</p>
+</li>
+<li><p>目标规则；</p>
+</li>
+<li><p>技能范围。</p>
+</li>
+</ul>
+<hr />
+<h2 id="408-部分成功比二元结果更有表现力">40.8 部分成功比二元结果更有表现力</h2><p>任务可以产生：</p>
+<ul>
+<li><p>主目标成功；</p>
+</li>
+<li><p>支线失败；</p>
+</li>
+<li><p>单位受伤；</p>
+</li>
+<li><p>环境受损；</p>
+</li>
+<li><p>战利品损失；</p>
+</li>
+<li><p>目标逃跑。</p>
+</li>
+</ul>
+<hr />
+<h2 id="409-长期投入需要中间风险状态">40.9 长期投入需要中间风险状态</h2><p>永久死亡和无损之间可以加入：</p>
+<ul>
+<li><p>倒地；</p>
+</li>
+<li><p>伤势；</p>
+</li>
+<li><p>疲劳；</p>
+</li>
+<li><p>装备损坏；</p>
+</li>
+<li><p>临时离队。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4010-ai应先生成合法行动再进行评分">40.10 AI应先生成合法行动，再进行评分</h2><p>先调用规则系统生成候选，再由AI比较战术价值。</p>
+<p>适用于：</p>
+<ul>
+<li><p>战斗AI；</p>
+</li>
+<li><p>工作调度；</p>
+</li>
+<li><p>经营AI；</p>
+</li>
+<li><p>自动化代理；</p>
+</li>
+<li><p>任务规划。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-本次防重记录">41. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>回合制战术角色扮演游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Tactical RPG；</p>
+</li>
+<li><p>Strategy RPG；</p>
+</li>
+<li><p>SRPG；</p>
+</li>
+<li><p>Turn-Based Tactics；</p>
+</li>
+<li><p>回合制战棋；</p>
+</li>
+<li><p>战术角色扮演游戏。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>将战场建模为离散位置、单位状态、视野关系和任务条件组成的权威快照；玩家或AI在稳定决策点提交行动意图，系统验证行动资源、路径、目标、视线和环境规则后，生成可中断的行动解析序列，并通过反应栈、状态效果和任务系统，将局部行动转化为可追溯的战术后果与长期角色结果。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>战斗发生在离散或半离散空间；</p>
+</li>
+<li><p>单位拥有有限行动经济；</p>
+</li>
+<li><p>位置影响路径、视野、掩体、射程和控制区；</p>
+</li>
+<li><p>行动由意图提交并由规则系统裁定；</p>
+</li>
+<li><p>移动沿真实路径执行；</p>
+</li>
+<li><p>单位可在敌方行动期间触发反应；</p>
+</li>
+<li><p>真实状态与玩家知识分离；</p>
+</li>
+<li><p>任务根据世界状态判定；</p>
+</li>
+<li><p>单位伤亡和伤势可以跨战斗保留；</p>
+</li>
+<li><p>AI依据自身知识和任务目标行动；</p>
+</li>
+<li><p>战斗可通过命令和随机流确定性重放；</p>
+</li>
+<li><p>UI预览、AI与权威逻辑共享规则来源。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>离散战场拓扑；</p>
+</li>
+<li><p>行动点和时间轴；</p>
+</li>
+<li><p>行动意图与验证；</p>
+</li>
+<li><p>逐格移动；</p>
+</li>
+<li><p>控制区；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>掩体和侧翼；</p>
+</li>
+<li><p>命中与伤害；</p>
+</li>
+<li><p>状态效果；</p>
+</li>
+<li><p>警戒、反击和反应栈；</p>
+</li>
+<li><p>环境区域；</p>
+</li>
+<li><p>可破坏地形；</p>
+</li>
+<li><p>战术AI；</p>
+</li>
+<li><p>状态式任务目标；</p>
+</li>
+<li><p>动态增援；</p>
+</li>
+<li><p>永久死亡与伤势；</p>
+</li>
+<li><p>战斗结果快照；</p>
+</li>
+<li><p>确定性回放。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>回合制战棋；</p>
+</li>
+<li><p>SRPG战斗系统；</p>
+</li>
+<li><p>战术网格；</p>
+</li>
+<li><p>战棋行动点；</p>
+</li>
+<li><p>战棋时间轴；</p>
+</li>
+<li><p>战棋战争迷雾；</p>
+</li>
+<li><p>战棋掩体；</p>
+</li>
+<li><p>战棋侧翼；</p>
+</li>
+<li><p>战棋警戒射击；</p>
+</li>
+<li><p>战棋机会攻击；</p>
+</li>
+<li><p>战棋AI；</p>
+</li>
+<li><p>战棋技能范围；</p>
+</li>
+<li><p>战棋地图破坏；</p>
+</li>
+<li><p>战棋任务目标；</p>
+</li>
+<li><p>战棋永久死亡；</p>
+</li>
+<li><p>战棋战斗回放；</p>
+</li>
+<li><p>战棋行动预览。</p>
+</li>
+</ul>
+<p>这些方向可以作为专项模块进一步展开，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

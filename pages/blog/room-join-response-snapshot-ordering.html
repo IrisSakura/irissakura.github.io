@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/room-join-response-snapshot-ordering.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="房间加入协议中的响应顺序与快照可见性边界 | IrisSakura">
+    <meta property="og:description" content="多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/room-join-response-snapshot-ordering.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-room-join-response-snapshot-ordering.png">
+    <meta property="og:image:alt" content="房间加入协议中的响应顺序与快照可见性边界 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="房间加入协议中的响应顺序与快照可见性边界 | IrisSakura">
+    <meta name="twitter:description" content="多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-room-join-response-snapshot-ordering.png">
+    <meta name="twitter:image:alt" content="房间加入协议中的响应顺序与快照可见性边界 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"房间加入协议中的响应顺序与快照可见性边界 | IrisSakura","description":"多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？","url":"https://irissakura.github.io/pages/blog/room-join-response-snapshot-ordering.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"房间加入协议中的响应顺序与快照可见性边界","image":"https://irissakura.github.io/assets/social/pages-blog-room-join-response-snapshot-ordering.png","datePublished":"2026-08-05","dateModified":"2026-08-05","about":["essay"]}</script>
+    <!-- site-meta:end -->
+    <title>房间加入协议中的响应顺序与快照可见性边界 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-05</p>
+            <h1>房间加入协议中的响应顺序与快照可见性边界</h1>
+            <p class="blog-deck">多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？</p>
+            <div class="note-tags"><a href="tag/essay.html">essay</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>客户端发送 <code>JoinRoomRequest</code> 后，通常期待看到这样的顺序：</p>
+<pre><code class="language-text">JoinRoomRequest
+→ JoinRoomResponse
+→ 后续 SnapshotPush
+</code></pre>
+<p>这个顺序看起来理所当然。</p>
+<p>服务器已经收到请求，完成校验，把玩家加入房间，然后回复成功。加入成功以后，TickLoop 再向房间成员推送快照。</p>
+<p>但在并发服务器中，“代码按这个顺序写”不等于“消息按这个顺序进入客户端队列”。</p>
+<p>如果处理线程先公开房间成员关系，TickLoop 就可能立即发现这个新成员，并向同一会话排入 <code>SnapshotPush</code>。而请求处理线程仍在准备或等待 <code>JoinRoomResponse</code>。</p>
+<p>最终，同一名客户端可能先看到房间快照，后看到加入成功响应。</p>
+<p>客户端明明还没有收到“你已经进房”的确认，却已经开始接收房间状态。</p>
+<h2 id="先说结论先排入响应再公开订阅资格">先说结论：先排入响应，再公开订阅资格</h2><p><strong>会话可见性提交点（后文简称“正式进房点”）</strong>：会话从“请求正在处理”切换为“可以被房间广播和 TickLoop 观察”的唯一时刻。</p>
+<p>修复这类问题的关键，不是让响应发送得更快。</p>
+<p>而是重新定义正式进房点：</p>
+<pre><code class="language-text">完成认证与请求校验
+→ 将 JoinRoomResponse 排入该会话 FIFO
+→ 再公开房间成员关系
+→ TickLoop 才能把后续 SnapshotPush 排入同一 FIFO
+</code></pre>
+<p>这里保证的是<strong>入队顺序</strong>。</p>
+<p>它不要求响应已经穿过网络到达客户端，只要求响应先于快照进入同一会话的有序发送队列。</p>
+<p>只要发送器遵守 FIFO，客户端观察到的协议顺序就稳定下来。</p>
+<h2 id="旧顺序的问题不在-joinroom-本身">旧顺序的问题，不在 JoinRoom 本身</h2><p>旧流程可以画成：</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant C as Client
+    participant R as Request Router
+    participant M as Room Manager
+    participant T as TickLoop
+    participant Q as Session FIFO
+
+    C-&gt;&gt;R: JoinRoomRequest
+    R-&gt;&gt;M: 公开成员关系
+    T-&gt;&gt;M: 读取房间成员
+    M--&gt;&gt;T: 包含新会话
+    T-&gt;&gt;Q: 排入 SnapshotPush
+    R-&gt;&gt;Q: 排入 JoinRoomResponse
+    Q--&gt;&gt;C: SnapshotPush
+    Q--&gt;&gt;C: JoinRoomResponse
+</code></pre>
+<p>每个局部动作都可能是正确的：</p>
+<ul>
+<li><p>Room Manager 正确保存了成员；</p>
+</li>
+<li><p>TickLoop 正确向成员生成快照；</p>
+</li>
+<li><p>Router 正确创建了成功响应；</p>
+</li>
+<li><p>Session FIFO 正确保持入队顺序。</p>
+</li>
+</ul>
+<p>错误来自它们之间的可见性边界。</p>
+<p>Router 在“响应尚未排队”时，就把会话公开给另一个异步生产者。</p>
+<p>这是一种典型的并发协议问题：</p>
+<blockquote>
+<p>状态变更不仅改变数据，也会改变其他线程从什么时候开始拥有发送资格。</p>
+</blockquote>
+<h2 id="新顺序把成功响应变成协议屏障">新顺序把成功响应变成协议屏障</h2><p>修复后的流程是：</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant C as Client
+    participant R as Request Router
+    participant M as Room Manager
+    participant T as TickLoop
+    participant Q as Session FIFO
+
+    C-&gt;&gt;R: JoinRoomRequest
+    R-&gt;&gt;Q: 排入 JoinRoomResponse
+    R-&gt;&gt;M: 公开成员关系
+    T-&gt;&gt;M: 读取房间成员
+    M--&gt;&gt;T: 包含新会话
+    T-&gt;&gt;Q: 排入 SnapshotPush
+    Q--&gt;&gt;C: JoinRoomResponse
+    Q--&gt;&gt;C: SnapshotPush
+</code></pre>
+<p><strong>协议屏障（后文简称“先确认再开流”）</strong>：在会话进入持续推送流之前，先把建立该流所需的确认消息放入同一有序队列。</p>
+<p>成功响应在这里承担了两个职责：</p>
+<ol>
+<li><p>告诉客户端，请求已被服务器接受。</p>
+</li>
+<li><p>划定从请求—响应阶段进入持续快照阶段的顺序边界。</p>
+</li>
+</ol>
+<p>这和数据库事务中的提交点很相似。</p>
+<p>房间成员关系不是普通字段。它会让 TickLoop、广播器、房间事件和其他异步生产者开始对该会话工作。</p>
+<p>因此，“把玩家放进集合”实际上也是在发布一项并发权限。</p>
+<h2 id="为什么不能只在客户端忽略早到快照">为什么不能只在客户端忽略早到快照</h2><p>一种表面修复是让客户端这样做：</p>
+<pre><code class="language-text">如果还没有收到 JoinRoomResponse：
+    暂存或丢弃 SnapshotPush
+</code></pre>
+<p>这种方案可以作为防御，但不应替代服务器顺序保证。</p>
+<p>原因包括：</p>
+<ul>
+<li><p>每个客户端都要复制同一套协议补丁；</p>
+</li>
+<li><p>快照可能包含初始化所需的第一份状态，丢弃后无法恢复；</p>
+</li>
+<li><p>暂存需要容量、超时和重放策略；</p>
+</li>
+<li><p>其他消息类型仍可能发生类似抢跑；</p>
+</li>
+<li><p>服务端日志会继续呈现“业务已生效但响应未确认”的分裂状态。</p>
+</li>
+</ul>
+<p>客户端可以拒绝非法顺序，但服务器仍应尽量不产生非法顺序。</p>
+<p>更合理的责任划分是：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>责任</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务器 Router</td>
+<td>定义请求响应与状态公开的顺序</td>
+</tr>
+<tr>
+<td>Session FIFO</td>
+<td>保持同一会话消息的入队顺序</td>
+</tr>
+<tr>
+<td>TickLoop</td>
+<td>只向已经公开的成员生成快照</td>
+</tr>
+<tr>
+<td>客户端</td>
+<td>对异常顺序做保护和诊断，而不是承担主修复</td>
+</tr>
+</tbody></table>
+<h2 id="线性化点必须能被测试观察">线性化点必须能被测试观察</h2><p><strong>线性化点（后文简称“这一刻算完成”）</strong>：一个并发操作可以被视为瞬间生效的单一位置，所有参与者对操作前后顺序得到一致解释。</p>
+<p>加入房间操作的线性化点不应模糊地写成：</p>
+<blockquote>
+<p><code>HandleJoinRoomAsync</code> 返回时。</p>
+</blockquote>
+<p>因为在函数执行期间，其他线程已经可能观察到中间状态。</p>
+<p>更强的测试应该直接观察关键时刻：</p>
+<ol>
+<li><p>捕获 <code>JoinRoomResponse</code> 被发送器接收的瞬间；</p>
+</li>
+<li><p>在该回调中查询 Room Manager；</p>
+</li>
+<li><p>断言玩家此时还没有公开房间关系；</p>
+</li>
+<li><p>请求处理完成后，再断言玩家已经属于目标房间。</p>
+</li>
+</ol>
+<p>这类测试验证的不是最终结果。</p>
+<p>最终结果“玩家在房间里”即使旧实现也能通过。</p>
+<p>它验证的是：</p>
+<blockquote>
+<p>成功响应入队时，快照生产资格仍未公开。</p>
+</blockquote>
+<p>这正是竞态修复真正需要保护的合同。</p>
+<h2 id="这种顺序依赖一个重要前提">这种顺序依赖一个重要前提</h2><p>把成功响应放在成员提交之前，并不适用于所有实现。</p>
+<p>它要求：</p>
+<ul>
+<li><p>房间存在性、权限、容量等可失败校验已经完成；</p>
+</li>
+<li><p>响应入队成功后，成员提交不会再产生普通业务失败；</p>
+</li>
+<li><p>或者成员提交本身是可证明不会失败的内存操作。</p>
+</li>
+</ul>
+<p>如果未来 <code>JoinRoom</code> 需要：</p>
+<ul>
+<li><p>分布式租约；</p>
+</li>
+<li><p>数据库写入；</p>
+</li>
+<li><p>跨服确认；</p>
+</li>
+<li><p>房间容量竞争；</p>
+</li>
+<li><p>付费或资格扣除；</p>
+</li>
+</ul>
+<p>那么“先回复成功，再提交成员”就可能引入相反问题：客户端收到成功，但后续提交失败。</p>
+<p>这时需要更完整的状态机。</p>
+<pre><code class="language-text">Validated
+→ ResponseQueued
+→ MembershipCommitted
+→ SnapshotEligible
+</code></pre>
+<p>或者引入：</p>
+<ul>
+<li><p><code>Joining</code> 中间状态；</p>
+</li>
+<li><p>原子房间事务；</p>
+</li>
+<li><p>单线程房间 Actor；</p>
+</li>
+<li><p>服务器生成的 Join revision；</p>
+</li>
+<li><p>可重试且幂等的提交协议。</p>
+</li>
+</ul>
+<p>当前修复成立，是因为它把“响应入队”和“公开快照资格”之间的本地顺序明确了，而不是声称所有加入房间流程都只需要交换两行代码。</p>
+<h2 id="这个问题可以迁移到更多系统">这个问题可以迁移到更多系统</h2><p>同类竞态经常出现在：</p>
+<ul>
+<li><p>订阅频道后立即开始推送事件；</p>
+</li>
+<li><p>登录成功后开始同步玩家状态；</p>
+</li>
+<li><p>进入副本后开始广播战斗帧；</p>
+</li>
+<li><p>观察者注册后开始发送增量更新；</p>
+</li>
+<li><p>匹配成功后开始下发对局数据；</p>
+</li>
+<li><p>热更新激活后开始向新 Runtime 路由请求。</p>
+</li>
+</ul>
+<p>它们共同拥有一个结构：</p>
+<pre><code class="language-text">一次请求
+→ 一条确认消息
+→ 一项新的持续可见性或推送资格
+</code></pre>
+<p>只要“推送资格”先于“确认消息入队”公开，就可能发生抢跑。</p>
+<h2 id="设计检查表">设计检查表</h2><p>实现类似协议时，可以检查：</p>
+<ul>
+<li><p>哪个状态变更会让异步生产者开始向会话发送消息；</p>
+</li>
+<li><p>请求响应和后续推送是否进入同一有序队列；</p>
+</li>
+<li><p>成功响应是“创建完成”“开始发送”还是“已排入 FIFO”；</p>
+</li>
+<li><p>状态公开前，所有可能失败的业务校验是否已经结束；</p>
+</li>
+<li><p>响应入队失败时，成员关系是否保持未提交；</p>
+</li>
+<li><p>TickLoop 是否只读取正式公开的成员；</p>
+</li>
+<li><p>测试是否观察了线性化点，而不只是最终状态；</p>
+</li>
+<li><p>客户端是否会记录异常顺序，帮助发现未来回归；</p>
+</li>
+<li><p>多房间、重连、重复请求和断线清理是否遵守同一边界。</p>
+</li>
+</ul>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>通俗称呼</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>会话可见性提交点</td>
+<td>正式进房点</td>
+<td>会话开始对房间广播与 TickLoop 可见的时刻</td>
+</tr>
+<tr>
+<td>协议屏障</td>
+<td>先确认再开流</td>
+<td>确认消息先进入同一 FIFO，持续推送随后开放</td>
+</tr>
+<tr>
+<td>线性化点</td>
+<td>这一刻算完成</td>
+<td>并发操作被视为原子生效的唯一位置</td>
+</tr>
+<tr>
+<td>入队顺序</td>
+<td>谁先排队</td>
+<td>同一会话发送队列中的确定消息顺序</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>资料说明：本文依据 2026-08-04 的服务器路由修复与回归测试整理。文章讨论的是同一会话 FIFO 中的消息入队顺序，不等同于跨网络的物理到达时间保证。</p>
+</blockquote>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="framework-capability-semantic-catalog.html"><span>同属「Sakura Framework 工程实践」，共享 essay</span><strong>框架能力语义目录：能力词表、证据化声明与可解释模块选择</strong><small>大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？</small></a><a href="semantic-battle-orchestration.html"><span>同属「Sakura Framework 工程实践」，共享 essay</span><strong>语义战斗编排：事件、状态、资格事实与受限动作管线</strong><small>跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。</small></a><a href="ai-safe-execution-plane.html"><span>同属「Sakura Framework 工程实践」</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

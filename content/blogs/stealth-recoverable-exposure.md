@@ -314,9 +314,9 @@ stateDiagram-v2
 
 以下链接用于仓库内部审稿与追溯，不是公开版最终引用：
 
-- [生存恐怖：有限资源、威胁不确定性与压力循环](../journal.html#design-survival-horror)
-- [沉浸式模拟：系统性世界、可组合能力与多路径解题](../journal.html#design-immersive-sim)
-- [盗窃计划模拟：侦察、安防拓扑与应急分支](../journal.html#design-heist-planning)
-- [社交推理：个人知识、公开叙事与证据](../journal.html#design-social-deduction-hidden-identity)
+- [生存恐怖：有限资源、威胁不确定性与压力循环](../journal/survival-horror.html)
+- [沉浸式模拟：系统性世界、可组合能力与多路径解题](../journal/immersive-sim.html)
+- [盗窃计划模拟：侦察、安防拓扑与应急分支](../journal/heist-planning.html)
+- [社交推理：个人知识、公开叙事与证据](../journal/social-deduction-hidden-identity.html)
 
 公开发布前应补充公开案例或公开设计资料，并把内部路径替换为稳定公开链接。

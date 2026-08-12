@@ -1,0 +1,4573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/deckbuilder-roguelike.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="卡组构筑式 Roguelike | Sakura Design Journal">
+    <meta property="og:description" content="玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/deckbuilder-roguelike.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-deckbuilder-roguelike.png">
+    <meta property="og:image:alt" content="卡组构筑式 Roguelike | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="卡组构筑式 Roguelike | Sakura Design Journal">
+    <meta name="twitter:description" content="玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-deckbuilder-roguelike.png">
+    <meta name="twitter:image:alt" content="卡组构筑式 Roguelike | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"卡组构筑式 Roguelike | Sakura Design Journal","description":"玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。","url":"https://irissakura.github.io/pages/journal/deckbuilder-roguelike.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"卡组构筑式 Roguelike","image":"https://irissakura.github.io/assets/social/pages-journal-deckbuilder-roguelike.png","dateModified":"2026-08-12","about":["deckbuilder","deckbuilding","roguelike"]}</script>
+    <!-- site-meta:end -->
+    <title>卡组构筑式 Roguelike | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-deckbuilder-roguelike"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>卡组构筑式 Roguelike</h1><p>玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。</p><div class="note-tags"><span>deckbuilder</span><span>deckbuilding</span><span>roguelike</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="受限抽取构筑收敛与选择战斗重组风险升级的单局演化循环">受限抽取、构筑收敛与“选择—战斗—重组—风险升级”的单局演化循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>卡组构筑式 Roguelike。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Roguelike Deckbuilder；</p>
+</li>
+<li><p>Deckbuilding Roguelike；</p>
+</li>
+<li><p>卡牌构筑 Roguelike；</p>
+</li>
+<li><p>单局卡组构筑游戏；</p>
+</li>
+<li><p>路线式卡牌冒险游戏。</p>
+</li>
+</ul>
+<p>本文讨论的不是传统集换式卡牌游戏中的预先组牌，也不是普通RPG中附带的卡牌战斗小游戏，而是一种足以独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。</p>
+</blockquote>
+<p>该品类的核心不是“拥有大量卡牌”，而是：</p>
+<ul>
+<li><p>玩家每回合只能使用抽到的部分能力；</p>
+</li>
+<li><p>获得新卡既是增强，也是对抽牌概率的污染；</p>
+</li>
+<li><p>卡组强度取决于结构，而非卡牌稀有度简单相加；</p>
+</li>
+<li><p>战斗奖励会持续改变后续战斗；</p>
+</li>
+<li><p>路线和资源决策决定构筑能否最终收敛；</p>
+</li>
+<li><p>玩家需要在立即生存与长期成型之间权衡；</p>
+</li>
+<li><p>随机性应制造适应性决策，而不是替代决策；</p>
+</li>
+<li><p>单局失败应能解释为构筑、路线、资源或执行问题。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>卡组构筑式Roguelike，是以单局卡组演化、受限抽取、节点式路线、程序化遭遇、资源风险和失败重开为核心的策略游戏类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家选择角色、初始职业或基础套牌；</p>
+</li>
+<li><p>系统生成本局地图、敌人、事件和奖励池；</p>
+</li>
+<li><p>玩家选择下一路线节点；</p>
+</li>
+<li><p>进入战斗并从卡组中抽取有限手牌；</p>
+</li>
+<li><p>使用能量、行动点或其他资源打出卡牌；</p>
+</li>
+<li><p>通过攻击、防御、状态、召唤和资源循环击败敌人；</p>
+</li>
+<li><p>获得卡牌、货币、遗物或消耗品；</p>
+</li>
+<li><p>决定接受新卡、跳过奖励、升级旧卡或删除弱卡；</p>
+</li>
+<li><p>在商店、营地和事件中调整构筑；</p>
+</li>
+<li><p>随着区域推进，敌人强度和机制复杂度提高；</p>
+</li>
+<li><p>玩家尝试让卡组围绕若干核心协同逐渐收敛；</p>
+</li>
+<li><p>击败区域首领并进入下一层；</p>
+</li>
+<li><p>最终击败终局首领或完成特殊胜利条件；</p>
+</li>
+<li><p>失败后结束本次Run，并更新有限局外记录或解锁；</p>
+</li>
+<li><p>使用新的角色、卡池和规则再次开始。</p>
+</li>
+</ol>
+<p>该类型中的主要资源通常包括：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>每回合能量；</p>
+</li>
+<li><p>抽牌数量；</p>
+</li>
+<li><p>手牌上限；</p>
+</li>
+<li><p>卡组规模；</p>
+</li>
+<li><p>卡牌升级；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>消耗品；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>路线信息；</p>
+</li>
+<li><p>休息点；</p>
+</li>
+<li><p>卡牌删除机会；</p>
+</li>
+<li><p>卡牌出现概率；</p>
+</li>
+<li><p>本局剩余容错空间。</p>
+</li>
+</ul>
+<p>其中最重要的隐性资源是：</p>
+<blockquote>
+<p>未来抽牌质量，即玩家的卡组在后续回合中稳定提供正确行动的概率。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>卡组构筑式Roguelike最具代表性的设计范式由八个核心支柱构成。</p>
+<h2 id="31-卡组既是能力集合也是概率分布">3.1 卡组既是能力集合，也是概率分布</h2><p>玩家拥有一张强力卡牌，不代表每回合都能使用它。</p>
+<p>卡组决定：</p>
+<ul>
+<li><p>能抽到哪些行为；</p>
+</li>
+<li><p>行为出现的频率；</p>
+</li>
+<li><p>核心组件能否同时出现；</p>
+</li>
+<li><p>防御是否及时；</p>
+</li>
+<li><p>资源引擎是否稳定启动；</p>
+</li>
+<li><p>无效卡牌会占用多少抽牌机会。</p>
+</li>
+</ul>
+<p>因此，向卡组加入一张牌会同时产生：</p>
+<ul>
+<li><p>新能力；</p>
+</li>
+<li><p>新协同；</p>
+</li>
+<li><p>新的抽牌概率；</p>
+</li>
+<li><p>新的卡组膨胀；</p>
+</li>
+<li><p>潜在的节奏损失。</p>
+</li>
+</ul>
+<p>卡牌奖励不能只按“获得即增强”设计。</p>
+<hr />
+<h2 id="32-每场战斗都在测试构筑的某个维度">3.2 每场战斗都在测试构筑的某个维度</h2><p>不同敌人应测试不同问题：</p>
+<ul>
+<li><p>爆发伤害；</p>
+</li>
+<li><p>持续防御；</p>
+</li>
+<li><p>多目标处理；</p>
+</li>
+<li><p>状态解除；</p>
+</li>
+<li><p>卡牌消耗；</p>
+</li>
+<li><p>长期成长；</p>
+</li>
+<li><p>资源循环；</p>
+</li>
+<li><p>牌序适应；</p>
+</li>
+<li><p>反制高频出牌；</p>
+</li>
+<li><p>反制无限循环。</p>
+</li>
+</ul>
+<p>敌人不是独立谜题，而是构筑压力测试。</p>
+<hr />
+<h2 id="33-构筑成长依赖选择收敛而不是无条件增加内容">3.3 构筑成长依赖选择收敛，而不是无条件增加内容</h2><p>单局初期，玩家的卡组通常较弱且方向不明确。</p>
+<p>随着奖励出现，玩家需要逐渐确定：</p>
+<ul>
+<li><p>主要伤害来源；</p>
+</li>
+<li><p>防御方式；</p>
+</li>
+<li><p>资源引擎；</p>
+</li>
+<li><p>抽牌方式；</p>
+</li>
+<li><p>状态体系；</p>
+</li>
+<li><p>终结手段。</p>
+</li>
+</ul>
+<p>高质量构筑会逐步减少不相关方向。</p>
+<p>成长手段不仅包括加牌，还包括：</p>
+<ul>
+<li><p>跳过奖励；</p>
+</li>
+<li><p>删除基础牌；</p>
+</li>
+<li><p>升级核心牌；</p>
+</li>
+<li><p>改变卡牌出现规则；</p>
+</li>
+<li><p>获得遗物；</p>
+</li>
+<li><p>调整卡牌费用；</p>
+</li>
+<li><p>转化卡牌；</p>
+</li>
+<li><p>增加特定标签牌比例。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-战斗资源与长期资源必须相互制约">3.4 战斗资源与长期资源必须相互制约</h2><p>战斗内资源包括：</p>
+<ul>
+<li><p>能量；</p>
+</li>
+<li><p>手牌；</p>
+</li>
+<li><p>抽牌；</p>
+</li>
+<li><p>状态层数；</p>
+</li>
+<li><p>召唤位；</p>
+</li>
+<li><p>弃牌次数。</p>
+</li>
+</ul>
+<p>单局长期资源包括：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>药剂；</p>
+</li>
+<li><p>休息机会；</p>
+</li>
+<li><p>卡牌删除机会；</p>
+</li>
+<li><p>路线选择；</p>
+</li>
+<li><p>关键奖励。</p>
+</li>
+</ul>
+<p>例如玩家可以：</p>
+<ul>
+<li><p>在战斗中损失生命换取更快击杀；</p>
+</li>
+<li><p>保留药剂以应对首领；</p>
+</li>
+<li><p>放弃营地恢复，选择升级核心牌；</p>
+</li>
+<li><p>挑战精英以获取遗物；</p>
+</li>
+<li><p>绕开高风险战斗，牺牲构筑成长。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-随机性应制造适应问题而不是决定胜负">3.5 随机性应制造适应问题，而不是决定胜负</h2><p>合理随机性可以影响：</p>
+<ul>
+<li><p>卡牌奖励；</p>
+</li>
+<li><p>敌人组合；</p>
+</li>
+<li><p>路线节点；</p>
+</li>
+<li><p>抽牌顺序；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>商店商品；</p>
+</li>
+<li><p>遗物。</p>
+</li>
+</ul>
+<p>但玩家应能通过以下方式管理随机性：</p>
+<ul>
+<li><p>抽牌；</p>
+</li>
+<li><p>检索；</p>
+</li>
+<li><p>保留；</p>
+</li>
+<li><p>预见敌人意图；</p>
+</li>
+<li><p>调整卡组规模；</p>
+</li>
+<li><p>提高特定卡牌出现率；</p>
+</li>
+<li><p>选择路线；</p>
+</li>
+<li><p>保留消耗品；</p>
+</li>
+<li><p>使用替代战术。</p>
+</li>
+</ul>
+<p>随机结果可以改变最优方案，但不应频繁造成无决策空间的必败局面。</p>
+<hr />
+<h2 id="36-路线选择是构筑的一部分">3.6 路线选择是构筑的一部分</h2><p>地图节点通常包括：</p>
+<ul>
+<li><p>普通战斗；</p>
+</li>
+<li><p>精英；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>营地；</p>
+</li>
+<li><p>随机事件；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>特殊挑战；</p>
+</li>
+<li><p>首领。</p>
+</li>
+</ul>
+<p>路线选择决定：</p>
+<ul>
+<li><p>卡牌获得数量；</p>
+</li>
+<li><p>遗物数量；</p>
+</li>
+<li><p>生命消耗；</p>
+</li>
+<li><p>金钱使用机会；</p>
+</li>
+<li><p>构筑调整机会；</p>
+</li>
+<li><p>最终强度；</p>
+</li>
+<li><p>当前风险。</p>
+</li>
+</ul>
+<p>玩家不是单纯选择“更安全”或“更危险”，而是在评估：</p>
+<blockquote>
+<p>当前构筑最缺少哪一种成长机会。</p>
+</blockquote>
+<hr />
+<h2 id="37-单局失败必须能够被复盘">3.7 单局失败必须能够被复盘</h2><p>失败可能来自：</p>
+<ul>
+<li><p>卡组过度膨胀；</p>
+</li>
+<li><p>伤害成长不足；</p>
+</li>
+<li><p>缺乏持续防御；</p>
+</li>
+<li><p>路线过于保守；</p>
+</li>
+<li><p>精英挑战过多；</p>
+</li>
+<li><p>金钱未有效使用；</p>
+</li>
+<li><p>关键卡升级过晚；</p>
+</li>
+<li><p>资源使用错误；</p>
+</li>
+<li><p>战斗中牌序处理不当；</p>
+</li>
+<li><p>对敌人机制理解不足。</p>
+</li>
+</ul>
+<p>系统应尽量让玩家能够判断主要失败原因，而不是只归因于“运气不好”。</p>
+<hr />
+<h2 id="38-局外成长应扩展内容空间而非持续增加基础战斗力">3.8 局外成长应扩展内容空间，而非持续增加基础战斗力</h2><p>局外可以解锁：</p>
+<ul>
+<li><p>新角色；</p>
+</li>
+<li><p>新卡牌；</p>
+</li>
+<li><p>新遗物；</p>
+</li>
+<li><p>新事件；</p>
+</li>
+<li><p>新Boss；</p>
+</li>
+<li><p>新难度；</p>
+</li>
+<li><p>新规则；</p>
+</li>
+<li><p>新初始套牌。</p>
+</li>
+</ul>
+<p>不建议主要通过永久增加：</p>
+<ul>
+<li><p>初始生命；</p>
+</li>
+<li><p>初始攻击；</p>
+</li>
+<li><p>初始能量；</p>
+</li>
+<li><p>伤害倍率；</p>
+</li>
+</ul>
+<p>降低失败成本。</p>
+<p>否则长期游玩会逐渐削弱单局构筑的重要性。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与传统集换式卡牌游戏的区别">4.1 与传统集换式卡牌游戏的区别</h2><p>传统卡牌游戏通常强调：</p>
+<ul>
+<li><p>局外组牌；</p>
+</li>
+<li><p>固定牌库；</p>
+</li>
+<li><p>对人竞技；</p>
+</li>
+<li><p>卡牌收藏；</p>
+</li>
+<li><p>赛制环境。</p>
+</li>
+</ul>
+<p>卡组构筑式Roguelike强调：</p>
+<ul>
+<li><p>单局内构筑；</p>
+</li>
+<li><p>受限随机奖励；</p>
+</li>
+<li><p>PvE遭遇；</p>
+</li>
+<li><p>路线和资源管理；</p>
+</li>
+<li><p>失败重开；</p>
+</li>
+<li><p>构筑随Run演化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与普通roguelike的区别">4.2 与普通Roguelike的区别</h2><p>传统Roguelike可能通过：</p>
+<ul>
+<li><p>装备；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>地图；</p>
+</li>
+<li><p>实时动作；</p>
+</li>
+<li><p>网格移动；</p>
+</li>
+</ul>
+<p>形成单局变化。</p>
+<p>卡组构筑式Roguelike的主要行动集合和随机性被集中表达在：</p>
+<ul>
+<li><p>抽牌堆；</p>
+</li>
+<li><p>手牌；</p>
+</li>
+<li><p>弃牌堆；</p>
+</li>
+<li><p>消耗区；</p>
+</li>
+<li><p>卡牌升级；</p>
+</li>
+<li><p>构筑协同。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-与固定牌组关卡游戏的区别">4.3 与固定牌组关卡游戏的区别</h2><p>固定牌组游戏通常要求玩家：</p>
+<ul>
+<li><p>关卡前组牌；</p>
+</li>
+<li><p>使用稳定卡组反复挑战；</p>
+</li>
+<li><p>通过收集扩大牌池。</p>
+</li>
+</ul>
+<p>卡组构筑式Roguelike则要求玩家在Run中根据有限选项动态适应。</p>
+<hr />
+<h2 id="44-与自动战斗游戏的区别">4.4 与自动战斗游戏的区别</h2><p>自动战斗游戏主要由：</p>
+<ul>
+<li><p>单位阵容；</p>
+</li>
+<li><p>站位；</p>
+</li>
+<li><p>自动行为；</p>
+</li>
+<li><p>经济刷新；</p>
+</li>
+</ul>
+<p>驱动。</p>
+<p>卡组构筑式Roguelike通常要求玩家逐回合：</p>
+<ul>
+<li><p>观察敌人；</p>
+</li>
+<li><p>管理能量；</p>
+</li>
+<li><p>安排牌序；</p>
+</li>
+<li><p>决定保留资源；</p>
+</li>
+<li><p>选择目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-与jrpg指令战斗的区别">4.5 与JRPG指令战斗的区别</h2><p>JRPG通常围绕：</p>
+<ul>
+<li><p>固定角色技能；</p>
+</li>
+<li><p>队伍；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>长线剧情；</p>
+</li>
+</ul>
+<p>展开。</p>
+<p>卡组构筑式Roguelike中，角色本回合可执行的行为主要由抽到的手牌决定，且卡组在单局内持续变化。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十六个核心域：</p>
+<ol>
+<li><p>局外档案与内容解锁域；</p>
+</li>
+<li><p>Run创建与随机种子域；</p>
+</li>
+<li><p>路线地图与节点生成域；</p>
+</li>
+<li><p>玩家角色与Run持久状态域；</p>
+</li>
+<li><p>卡牌定义、实例和升级域；</p>
+</li>
+<li><p>抽牌堆、手牌、弃牌堆与消耗区域；</p>
+</li>
+<li><p>战斗状态机与回合调度域；</p>
+</li>
+<li><p>卡牌命令、目标和效果执行域；</p>
+</li>
+<li><p>能量、抽牌和行动经济域；</p>
+</li>
+<li><p>状态、能力与遗物触发域；</p>
+</li>
+<li><p>敌人意图、行为与遭遇域；</p>
+</li>
+<li><p>奖励、选牌和卡组调整域；</p>
+</li>
+<li><p>商店、营地、事件与特殊节点域；</p>
+</li>
+<li><p>首领、区域和难度进阶域；</p>
+</li>
+<li><p>存档、继续、回放和确定性域；</p>
+</li>
+<li><p>调试、内容验证和平衡分析域。</p>
+</li>
+</ol>
+<p>总体运行关系如下：</p>
+<p>读取局外档案
+→ 选择角色和初始配置
+→ 使用种子创建Run
+→ 生成区域路线
+→ 玩家选择节点
+→ 节点创建战斗、商店或事件
+→ 战斗读取当前卡组和遗物
+→ 初始化抽牌堆和敌人
+→ 按回合抽牌、行动和结算
+→ 生成奖励
+→ 玩家选择加牌、跳过或其他成长
+→ 更新Run状态
+→ 继续选择路线
+→ 击败区域首领
+→ 进入下一区域并提高难度
+→ 胜利或死亡后生成RunResult
+→ 更新局外解锁和统计</p>
+<hr />
+<h2 id="6-状态分层">6. 状态分层</h2><p>建议将状态分为四层。</p>
+<h2 id="61-profilestate">6.1 ProfileState</h2><p>局外档案状态：</p>
+<ul>
+<li><p>已解锁角色；</p>
+</li>
+<li><p>已解锁卡牌；</p>
+</li>
+<li><p>已解锁遗物；</p>
+</li>
+<li><p>已解锁事件；</p>
+</li>
+<li><p>难度进度；</p>
+</li>
+<li><p>历史统计；</p>
+</li>
+<li><p>教程状态；</p>
+</li>
+<li><p>成就；</p>
+</li>
+<li><p>档案版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-runstate">6.2 RunState</h2><p>当前单局长期状态：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>随机种子；</p>
+</li>
+<li><p>当前区域；</p>
+</li>
+<li><p>当前节点；</p>
+</li>
+<li><p>当前生命；</p>
+</li>
+<li><p>最大生命；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>卡组；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>消耗品；</p>
+</li>
+<li><p>路线状态；</p>
+</li>
+<li><p>区域Boss状态；</p>
+</li>
+<li><p>难度修正；</p>
+</li>
+<li><p>RunVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-encounterstate">6.3 EncounterState</h2><p>当前节点状态：</p>
+<ul>
+<li><p>节点类型；</p>
+</li>
+<li><p>遭遇定义；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+<li><p>事件分支；</p>
+</li>
+<li><p>商店商品；</p>
+</li>
+<li><p>营地选项；</p>
+</li>
+<li><p>EncounterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-battlestate">6.4 BattleState</h2><p>当前战斗状态：</p>
+<ul>
+<li><p>战斗实例；</p>
+</li>
+<li><p>当前回合；</p>
+</li>
+<li><p>玩家战斗状态；</p>
+</li>
+<li><p>敌人状态；</p>
+</li>
+<li><p>抽牌堆；</p>
+</li>
+<li><p>手牌；</p>
+</li>
+<li><p>弃牌堆；</p>
+</li>
+<li><p>消耗区；</p>
+</li>
+<li><p>待执行效果；</p>
+</li>
+<li><p>随机游标；</p>
+</li>
+<li><p>BattleVersion。</p>
+</li>
+</ul>
+<p>战斗结果必须通过明确结算写回RunState。</p>
+<hr />
+<h2 id="7-run生命周期">7. Run生命周期</h2><h2 id="71-rundefinition">7.1 RunDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>RunModeId；</p>
+</li>
+<li><p>RegionSequence；</p>
+</li>
+<li><p>MapGenerationProfile；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>DifficultyProfile；</p>
+</li>
+<li><p>BossPool；</p>
+</li>
+<li><p>EventPool；</p>
+</li>
+<li><p>ShopRules；</p>
+</li>
+<li><p>VictoryConditions；</p>
+</li>
+<li><p>FailureConditions。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-runruntimestate">7.2 RunRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>CharacterId；</p>
+</li>
+<li><p>CurrentRegionIndex；</p>
+</li>
+<li><p>CurrentNodeId；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>MaximumHealth；</p>
+</li>
+<li><p>Currency；</p>
+</li>
+<li><p>DeckState；</p>
+</li>
+<li><p>RelicStates；</p>
+</li>
+<li><p>ConsumableStates；</p>
+</li>
+<li><p>MapStates；</p>
+</li>
+<li><p>RunFlags；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>RunStatus；</p>
+</li>
+<li><p>RunVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-run状态">7.3 Run状态</h2><p>包括：</p>
+<ul>
+<li><p>Creating；</p>
+</li>
+<li><p>Active；</p>
+</li>
+<li><p>InEncounter；</p>
+</li>
+<li><p>AwaitingReward；</p>
+</li>
+<li><p>RegionCompleted；</p>
+</li>
+<li><p>Victory；</p>
+</li>
+<li><p>Defeat；</p>
+</li>
+<li><p>Abandoned；</p>
+</li>
+<li><p>Invalidated。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-run创建流程">7.4 Run创建流程</h2><ol>
+<li><p>验证角色和模式；</p>
+</li>
+<li><p>生成RunId；</p>
+</li>
+<li><p>冻结随机种子；</p>
+</li>
+<li><p>创建初始卡组；</p>
+</li>
+<li><p>初始化生命和货币；</p>
+</li>
+<li><p>添加初始遗物；</p>
+</li>
+<li><p>生成第一区域地图；</p>
+</li>
+<li><p>初始化随机流；</p>
+</li>
+<li><p>保存Run快照；</p>
+</li>
+<li><p>进入起始节点。</p>
+</li>
+</ol>
+<hr />
+<h2 id="75-run结束流程">7.5 Run结束流程</h2><ol>
+<li><p>锁定Run状态；</p>
+</li>
+<li><p>记录最终卡组；</p>
+</li>
+<li><p>记录遗物和路线；</p>
+</li>
+<li><p>记录击败敌人和Boss；</p>
+</li>
+<li><p>计算局外解锁；</p>
+</li>
+<li><p>更新统计；</p>
+</li>
+<li><p>生成RunResult；</p>
+</li>
+<li><p>将Run标记为Completed；</p>
+</li>
+<li><p>防止重复结算。</p>
+</li>
+</ol>
+<hr />
+<h2 id="8-路线地图系统">8. 路线地图系统</h2><h2 id="81-runmapdefinition">8.1 RunMapDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>RegionId；</p>
+</li>
+<li><p>LayerCount；</p>
+</li>
+<li><p>NodesPerLayer；</p>
+</li>
+<li><p>NodeTypeWeights；</p>
+</li>
+<li><p>ConnectionRules；</p>
+</li>
+<li><p>EliteRules；</p>
+</li>
+<li><p>ShopRules；</p>
+</li>
+<li><p>RestRules；</p>
+</li>
+<li><p>TreasureRules；</p>
+</li>
+<li><p>BossNodeRule；</p>
+</li>
+<li><p>GenerationConstraints。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-runmapnode">8.2 RunMapNode</h2><p>建议字段：</p>
+<ul>
+<li><p>NodeId；</p>
+</li>
+<li><p>LayerIndex；</p>
+</li>
+<li><p>NodeType；</p>
+</li>
+<li><p>IncomingNodeIds；</p>
+</li>
+<li><p>OutgoingNodeIds；</p>
+</li>
+<li><p>EncounterDefinitionId；</p>
+</li>
+<li><p>VisitState；</p>
+</li>
+<li><p>RevealedState；</p>
+</li>
+<li><p>NodeSeed；</p>
+</li>
+<li><p>NodeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-节点类型">8.3 节点类型</h2><p>包括：</p>
+<ul>
+<li><p>普通战斗；</p>
+</li>
+<li><p>精英；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>营地；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>特殊挑战；</p>
+</li>
+<li><p>剧情节点；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-地图生成约束">8.4 地图生成约束</h2><p>应检查：</p>
+<ul>
+<li><p>起点到Boss至少存在一条路径；</p>
+</li>
+<li><p>不存在无法离开的节点；</p>
+</li>
+<li><p>商店和营地分布合理；</p>
+</li>
+<li><p>精英不会全部集中在必经路线；</p>
+</li>
+<li><p>不能连续出现过多无战斗节点；</p>
+</li>
+<li><p>每条路线具有不同风险结构；</p>
+</li>
+<li><p>节点类型与区域主题匹配。</p>
+</li>
+</ul>
+<hr />
+<h2 id="85-路线信息透明度">8.5 路线信息透明度</h2><p>系统可以选择：</p>
+<h3 id="完全公开">完全公开</h3><p>显示全部节点类型和连接。</p>
+<h3 id="部分公开">部分公开</h3><p>显示附近层级，远端节点模糊。</p>
+<h3 id="风险公开">风险公开</h3><p>显示节点类型，不显示具体遭遇。</p>
+<p>无论采用哪种方式，玩家都应具备足够信息进行路线决策。</p>
+<hr />
+<h2 id="9-卡牌定义与实例">9. 卡牌定义与实例</h2><h2 id="91-carddefinition">9.1 CardDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CardDefinitionId；</p>
+</li>
+<li><p>CharacterPoolId；</p>
+</li>
+<li><p>CardType；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>CostDefinition；</p>
+</li>
+<li><p>TargetingRule；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>CardTags；</p>
+</li>
+<li><p>UpgradeDefinitionId；</p>
+</li>
+<li><p>ExhaustPolicy；</p>
+</li>
+<li><p>RetainPolicy；</p>
+</li>
+<li><p>InnatePolicy；</p>
+</li>
+<li><p>EtherealPolicy；</p>
+</li>
+<li><p>RewardWeight；</p>
+</li>
+<li><p>AIValueHints；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-cardinstance">9.2 CardInstance</h2><p>建议字段：</p>
+<ul>
+<li><p>CardInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>UpgradeLevel；</p>
+</li>
+<li><p>TemporaryModifiers；</p>
+</li>
+<li><p>CostOverride；</p>
+</li>
+<li><p>CreatedByEffectId；</p>
+</li>
+<li><p>OwnershipScope；</p>
+</li>
+<li><p>CardInstanceVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-定义与实例分离">9.3 定义与实例分离</h2><p>CardDefinition描述稳定内容。</p>
+<p>CardInstance描述本局中的具体状态：</p>
+<ul>
+<li><p>是否升级；</p>
+</li>
+<li><p>是否被永久修改；</p>
+</li>
+<li><p>是否临时降费；</p>
+</li>
+<li><p>是否由其他卡生成；</p>
+</li>
+<li><p>是否只存在于当前战斗；</p>
+</li>
+<li><p>是否在战斗结束后保留。</p>
+</li>
+</ul>
+<hr />
+<h2 id="94-卡牌类型">9.4 卡牌类型</h2><p>常见类型包括：</p>
+<ul>
+<li><p>攻击；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>能力；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>诅咒；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>特殊剧情卡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="95-卡牌标签">9.5 卡牌标签</h2><p>例如：</p>
+<ul>
+<li><p>Attack；</p>
+</li>
+<li><p>Block；</p>
+</li>
+<li><p>Draw；</p>
+</li>
+<li><p>Discard；</p>
+</li>
+<li><p>Exhaust；</p>
+</li>
+<li><p>Poison；</p>
+</li>
+<li><p>Strength；</p>
+</li>
+<li><p>Summon；</p>
+</li>
+<li><p>ZeroCost；</p>
+</li>
+<li><p>Generated；</p>
+</li>
+<li><p>Starter。</p>
+</li>
+</ul>
+<p>标签用于：</p>
+<ul>
+<li><p>遗物触发；</p>
+</li>
+<li><p>卡牌检索；</p>
+</li>
+<li><p>奖励过滤；</p>
+</li>
+<li><p>敌人反制；</p>
+</li>
+<li><p>统计分析；</p>
+</li>
+<li><p>构筑识别。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-牌区与区域转移">10. 牌区与区域转移</h2><h2 id="101-deckzonestate">10.1 DeckZoneState</h2><p>建议包含：</p>
+<ul>
+<li><p>DrawPile；</p>
+</li>
+<li><p>Hand；</p>
+</li>
+<li><p>DiscardPile；</p>
+</li>
+<li><p>ExhaustPile；</p>
+</li>
+<li><p>RetainZone；</p>
+</li>
+<li><p>LimboZone；</p>
+</li>
+<li><p>RemovedFromBattleZone；</p>
+</li>
+<li><p>ZoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-牌区职责">10.2 牌区职责</h2><h3 id="drawpile">DrawPile</h3><p>尚未抽取的卡。</p>
+<h3 id="hand">Hand</h3><p>当前可使用卡。</p>
+<h3 id="discardpile">DiscardPile</h3><p>已使用或回合结束弃置的卡。</p>
+<h3 id="exhaustpile">ExhaustPile</h3><p>本场战斗通常无法再次使用的卡。</p>
+<h3 id="limbozone">LimboZone</h3><p>正在执行、等待目标或效果未结束的卡。</p>
+<hr />
+<h2 id="103-抽牌流程">10.3 抽牌流程</h2><ol>
+<li><p>请求抽取N张牌；</p>
+</li>
+<li><p>检查手牌上限；</p>
+</li>
+<li><p>从DrawPile顶部取牌；</p>
+</li>
+<li><p>若牌堆不足，则将DiscardPile洗入DrawPile；</p>
+</li>
+<li><p>使用稳定随机流洗牌；</p>
+</li>
+<li><p>将卡牌移动到Hand；</p>
+</li>
+<li><p>处理OnDraw触发；</p>
+</li>
+<li><p>处理状态牌和诅咒；</p>
+</li>
+<li><p>发布CardsDrawn。</p>
+</li>
+</ol>
+<hr />
+<h2 id="104-洗牌">10.4 洗牌</h2><p>洗牌需要：</p>
+<ul>
+<li><p>使用战斗随机流；</p>
+</li>
+<li><p>记录洗牌次数；</p>
+</li>
+<li><p>保证回放一致；</p>
+</li>
+<li><p>不改变卡牌实例；</p>
+</li>
+<li><p>防止卡牌重复或丢失。</p>
+</li>
+</ul>
+<hr />
+<h2 id="105-区域守恒">10.5 区域守恒</h2><p>任意卡牌实例在同一时刻只能位于一个权威区域。</p>
+<p>需要持续验证：</p>
+<ul>
+<li><p>抽牌堆与弃牌堆没有重复实例；</p>
+</li>
+<li><p>Limbo中的卡不会再次抽到；</p>
+</li>
+<li><p>消耗卡不会回到弃牌堆；</p>
+</li>
+<li><p>战斗结束时临时卡被正确删除；</p>
+</li>
+<li><p>永久卡全部返回Run卡组。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-战斗状态机">11. 战斗状态机</h2><h2 id="111-battlephase">11.1 BattlePhase</h2><p>推荐阶段：</p>
+<ul>
+<li><p>Initializing；</p>
+</li>
+<li><p>BattleStart；</p>
+</li>
+<li><p>RoundStart；</p>
+</li>
+<li><p>PlayerTurnStart；</p>
+</li>
+<li><p>PlayerCommand；</p>
+</li>
+<li><p>EffectResolving；</p>
+</li>
+<li><p>PlayerTurnEnd；</p>
+</li>
+<li><p>EnemyTurnStart；</p>
+</li>
+<li><p>EnemyActionResolving；</p>
+</li>
+<li><p>EnemyTurnEnd；</p>
+</li>
+<li><p>RoundEnd；</p>
+</li>
+<li><p>VictoryResolving；</p>
+</li>
+<li><p>DefeatResolving；</p>
+</li>
+<li><p>RewardPending；</p>
+</li>
+<li><p>Completed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-battleruntimestate">11.2 BattleRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>BattleId；</p>
+</li>
+<li><p>EncounterId；</p>
+</li>
+<li><p>CurrentRound；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>PlayerCombatState；</p>
+</li>
+<li><p>EnemyCombatStates；</p>
+</li>
+<li><p>DeckZoneState；</p>
+</li>
+<li><p>EnergyState；</p>
+</li>
+<li><p>PendingActions；</p>
+</li>
+<li><p>EffectQueue；</p>
+</li>
+<li><p>TriggerQueue；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>BattleFlags；</p>
+</li>
+<li><p>BattleVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-回合开始流程">11.3 回合开始流程</h2><ol>
+<li><p>增加回合数；</p>
+</li>
+<li><p>清理上一回合临时状态；</p>
+</li>
+<li><p>重置能量；</p>
+</li>
+<li><p>处理RoundStart效果；</p>
+</li>
+<li><p>处理玩家TurnStart效果；</p>
+</li>
+<li><p>抽取基础手牌；</p>
+</li>
+<li><p>处理OnDraw效果；</p>
+</li>
+<li><p>检查强制状态；</p>
+</li>
+<li><p>开放玩家命令。</p>
+</li>
+</ol>
+<hr />
+<h2 id="114-回合结束流程">11.4 回合结束流程</h2><ol>
+<li><p>关闭新命令；</p>
+</li>
+<li><p>处理保留牌；</p>
+</li>
+<li><p>处理虚无牌；</p>
+</li>
+<li><p>弃置普通手牌；</p>
+</li>
+<li><p>处理TurnEnd状态；</p>
+</li>
+<li><p>清理临时护盾；</p>
+</li>
+<li><p>检查死亡；</p>
+</li>
+<li><p>进入敌人阶段。</p>
+</li>
+</ol>
+<hr />
+<h2 id="115-战斗结束判定">11.5 战斗结束判定</h2><p>在以下时机检查：</p>
+<ul>
+<li><p>效果完成后；</p>
+</li>
+<li><p>触发链完成后；</p>
+</li>
+<li><p>敌人死亡后；</p>
+</li>
+<li><p>玩家死亡后；</p>
+</li>
+<li><p>特殊胜利条件变化后。</p>
+</li>
+</ul>
+<p>不能在效果队列中途结束并丢弃尚未提交的结果。</p>
+<hr />
+<h2 id="12-能量与行动经济">12. 能量与行动经济</h2><h2 id="121-energystate">12.1 EnergyState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentEnergy；</p>
+</li>
+<li><p>MaximumEnergy；</p>
+</li>
+<li><p>TemporaryEnergy；</p>
+</li>
+<li><p>ReservedEnergy；</p>
+</li>
+<li><p>CarryOverEnergy；</p>
+</li>
+<li><p>EnergyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-能量规则">12.2 能量规则</h2><p>需要明确：</p>
+<ul>
+<li><p>每回合恢复多少；</p>
+</li>
+<li><p>是否允许保留；</p>
+</li>
+<li><p>是否存在负能量；</p>
+</li>
+<li><p>卡牌费用何时扣除；</p>
+</li>
+<li><p>变费何时生效；</p>
+</li>
+<li><p>X费卡如何结算；</p>
+</li>
+<li><p>临时能量何时清除。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-卡牌费用">12.3 卡牌费用</h2><p>费用可以由以下因素决定：</p>
+<ul>
+<li><p>卡牌基础费用；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>临时状态；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>本回合已打出的卡；</p>
+</li>
+<li><p>手牌数量；</p>
+</li>
+<li><p>目标状态；</p>
+</li>
+<li><p>卡牌所在区域；</p>
+</li>
+<li><p>随机效果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-费用计算顺序">12.4 费用计算顺序</h2><p>建议固定为：</p>
+<ol>
+<li><p>基础费用；</p>
+</li>
+<li><p>永久卡牌修改；</p>
+</li>
+<li><p>本场战斗修改；</p>
+</li>
+<li><p>本回合修改；</p>
+</li>
+<li><p>条件式修改；</p>
+</li>
+<li><p>最低和最高限制；</p>
+</li>
+<li><p>最终费用。</p>
+</li>
+</ol>
+<hr />
+<h2 id="125-行动经济膨胀">12.5 行动经济膨胀</h2><p>需要监控：</p>
+<ul>
+<li><p>每回合平均打牌数；</p>
+</li>
+<li><p>平均抽牌数；</p>
+</li>
+<li><p>平均能量；</p>
+</li>
+<li><p>无限循环出现率；</p>
+</li>
+<li><p>单回合动画时长；</p>
+</li>
+<li><p>玩家等待时间。</p>
+</li>
+</ul>
+<p>高频出牌构筑需要明确终止条件和性能预算。</p>
+<hr />
+<h2 id="13-卡牌命令与目标选择">13. 卡牌命令与目标选择</h2><h2 id="131-playcardcommand">13.1 PlayCardCommand</h2><p>建议字段：</p>
+<ul>
+<li><p>CommandId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>CardInstanceId；</p>
+</li>
+<li><p>TargetIds；</p>
+</li>
+<li><p>OptionalSelections；</p>
+</li>
+<li><p>SubmittedBattleVersion；</p>
+</li>
+<li><p>SubmittedZoneVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-命令验证">13.2 命令验证</h2><p>检查：</p>
+<ul>
+<li><p>卡牌是否在Hand；</p>
+</li>
+<li><p>玩家是否拥有行动权；</p>
+</li>
+<li><p>费用是否足够；</p>
+</li>
+<li><p>目标是否合法；</p>
+</li>
+<li><p>卡牌是否被禁用；</p>
+</li>
+<li><p>当前状态是否允许使用；</p>
+</li>
+<li><p>战斗版本是否有效；</p>
+</li>
+<li><p>卡牌是否已被其他事务锁定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-卡牌提交流程">13.3 卡牌提交流程</h2><ol>
+<li><p>锁定卡牌实例；</p>
+</li>
+<li><p>验证费用；</p>
+</li>
+<li><p>预留能量；</p>
+</li>
+<li><p>将卡牌移动至Limbo；</p>
+</li>
+<li><p>创建CardAction；</p>
+</li>
+<li><p>达到提交节点后扣除费用；</p>
+</li>
+<li><p>生成EffectSpec；</p>
+</li>
+<li><p>执行效果；</p>
+</li>
+<li><p>处理触发；</p>
+</li>
+<li><p>将卡牌移入弃牌堆或消耗区；</p>
+</li>
+<li><p>释放锁；</p>
+</li>
+<li><p>发布CardPlayed。</p>
+</li>
+</ol>
+<hr />
+<h2 id="134-目标规则">13.4 目标规则</h2><p>包括：</p>
+<ul>
+<li><p>自身；</p>
+</li>
+<li><p>单体敌人；</p>
+</li>
+<li><p>敌方全体；</p>
+</li>
+<li><p>随机敌人；</p>
+</li>
+<li><p>任意角色；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>弃牌堆；</p>
+</li>
+<li><p>消耗区；</p>
+</li>
+<li><p>召唤位；</p>
+</li>
+<li><p>无目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="135-无目标与取消">13.5 无目标与取消</h2><p>如果玩家开始选牌后取消：</p>
+<ul>
+<li><p>卡牌仍在手牌；</p>
+</li>
+<li><p>不扣除能量；</p>
+</li>
+<li><p>不触发OnPlay；</p>
+</li>
+<li><p>不调用随机数；</p>
+</li>
+<li><p>释放临时锁定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-效果系统">14. 效果系统</h2><h2 id="141-effectspec">14.1 EffectSpec</h2><p>常见效果类型：</p>
+<ul>
+<li><p>DealDamage；</p>
+</li>
+<li><p>GainBlock；</p>
+</li>
+<li><p>DrawCards；</p>
+</li>
+<li><p>GainEnergy；</p>
+</li>
+<li><p>ApplyStatus；</p>
+</li>
+<li><p>RemoveStatus；</p>
+</li>
+<li><p>DiscardCards；</p>
+</li>
+<li><p>ExhaustCards；</p>
+</li>
+<li><p>CreateCard；</p>
+</li>
+<li><p>TransformCard；</p>
+</li>
+<li><p>ModifyCardCost；</p>
+</li>
+<li><p>AddCardToDeck；</p>
+</li>
+<li><p>RemoveCardFromDeck；</p>
+</li>
+<li><p>SummonEntity；</p>
+</li>
+<li><p>ModifyIntent；</p>
+</li>
+<li><p>RepeatEffect；</p>
+</li>
+<li><p>ConditionalEffect。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-effectcontext">14.2 EffectContext</h2><p>建议包含：</p>
+<ul>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>SourceCardInstanceId；</p>
+</li>
+<li><p>TargetIds；</p>
+</li>
+<li><p>EffectDefinitionId；</p>
+</li>
+<li><p>RootActionId；</p>
+</li>
+<li><p>ParentEffectId；</p>
+</li>
+<li><p>RandomStreamId；</p>
+</li>
+<li><p>CurrentBattleVersion；</p>
+</li>
+<li><p>EffectDepth。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-效果执行顺序">14.3 效果执行顺序</h2><p>推荐：</p>
+<ol>
+<li><p>验证目标；</p>
+</li>
+<li><p>解析效果参数；</p>
+</li>
+<li><p>计算修正；</p>
+</li>
+<li><p>提交核心数值变化；</p>
+</li>
+<li><p>发布结果事件；</p>
+</li>
+<li><p>收集触发；</p>
+</li>
+<li><p>执行后继效果；</p>
+</li>
+<li><p>检查死亡；</p>
+</li>
+<li><p>检查战斗结束。</p>
+</li>
+</ol>
+<hr />
+<h2 id="144-效果队列与触发队列分离">14.4 效果队列与触发队列分离</h2><p>EffectQueue处理主动效果。</p>
+<p>TriggerQueue处理：</p>
+<ul>
+<li><p>OnCardPlayed；</p>
+</li>
+<li><p>OnDamageTaken；</p>
+</li>
+<li><p>OnBlockGained；</p>
+</li>
+<li><p>OnEnemyDied；</p>
+</li>
+<li><p>OnTurnStart；</p>
+</li>
+<li><p>OnCardExhausted。</p>
+</li>
+</ul>
+<p>这样可以避免触发递归直接打穿调用栈。</p>
+<hr />
+<h2 id="145-效果深度限制">14.5 效果深度限制</h2><p>需要限制：</p>
+<ul>
+<li><p>最大触发深度；</p>
+</li>
+<li><p>单动作最大效果数；</p>
+</li>
+<li><p>单回合最大自动行动数；</p>
+</li>
+<li><p>同一触发重复次数。</p>
+</li>
+</ul>
+<p>防止：</p>
+<ul>
+<li><p>无限遗物触发；</p>
+</li>
+<li><p>状态相互递归；</p>
+</li>
+<li><p>自动生成卡无限打出；</p>
+</li>
+<li><p>单回合永久无法结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-伤害防御与生命">15. 伤害、防御与生命</h2><h2 id="151-damagecontext">15.1 DamageContext</h2><p>建议字段：</p>
+<ul>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>TargetEntityId；</p>
+</li>
+<li><p>SourceCardId；</p>
+</li>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>StrengthModifier；</p>
+</li>
+<li><p>WeakModifier；</p>
+</li>
+<li><p>VulnerableModifier；</p>
+</li>
+<li><p>TargetDefense；</p>
+</li>
+<li><p>BlockAbsorption；</p>
+</li>
+<li><p>HealthDamage；</p>
+</li>
+<li><p>DamageTags；</p>
+</li>
+<li><p>ModifierTrace。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-伤害结算顺序">15.2 伤害结算顺序</h2><p>推荐：</p>
+<ol>
+<li><p>卡牌基础伤害；</p>
+</li>
+<li><p>攻击者属性；</p>
+</li>
+<li><p>卡牌条件加成；</p>
+</li>
+<li><p>攻击者负面状态；</p>
+</li>
+<li><p>目标易伤或抗性；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>受伤触发；</p>
+</li>
+<li><p>死亡检查。</p>
+</li>
+</ol>
+<hr />
+<h2 id="153-blockstate">15.3 BlockState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentBlock；</p>
+</li>
+<li><p>PersistentBlock；</p>
+</li>
+<li><p>TemporaryBlock；</p>
+</li>
+<li><p>BlockDecayPolicy；</p>
+</li>
+<li><p>BlockVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-防御流派">15.4 防御流派</h2><p>可以包括：</p>
+<ul>
+<li><p>每回合重建护盾；</p>
+</li>
+<li><p>保留护盾；</p>
+</li>
+<li><p>反击；</p>
+</li>
+<li><p>闪避概率；</p>
+</li>
+<li><p>减伤；</p>
+</li>
+<li><p>吸血；</p>
+</li>
+<li><p>伤害转移；</p>
+</li>
+<li><p>延迟伤害；</p>
+</li>
+<li><p>召唤物承伤。</p>
+</li>
+</ul>
+<hr />
+<h2 id="155-生命作为跨战斗资源">15.5 生命作为跨战斗资源</h2><p>生命通常不会在普通战斗后完全恢复。</p>
+<p>因此战斗策略同时影响：</p>
+<ul>
+<li><p>当前胜利；</p>
+</li>
+<li><p>后续路线；</p>
+</li>
+<li><p>是否需要营地；</p>
+</li>
+<li><p>是否能挑战精英；</p>
+</li>
+<li><p>是否应使用消耗品。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-状态与能力">16. 状态与能力</h2><h2 id="161-statusdefinition">16.1 StatusDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StatusId；</p>
+</li>
+<li><p>StatusTags；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>DurationPolicy；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>TriggerSpecs；</p>
+</li>
+<li><p>DecayRules；</p>
+</li>
+<li><p>RemovalRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-常见状态">16.2 常见状态</h2><p>包括：</p>
+<ul>
+<li><p>力量；</p>
+</li>
+<li><p>敏捷；</p>
+</li>
+<li><p>虚弱；</p>
+</li>
+<li><p>易伤；</p>
+</li>
+<li><p>中毒；</p>
+</li>
+<li><p>燃烧；</p>
+</li>
+<li><p>再生；</p>
+</li>
+<li><p>荆棘；</p>
+</li>
+<li><p>无实体；</p>
+</li>
+<li><p>沉默；</p>
+</li>
+<li><p>缠绕；</p>
+</li>
+<li><p>人工制品；</p>
+</li>
+<li><p>能量锁定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-状态持续时间">16.3 状态持续时间</h2><p>可以按：</p>
+<ul>
+<li><p>回合；</p>
+</li>
+<li><p>玩家回合；</p>
+</li>
+<li><p>敌人回合；</p>
+</li>
+<li><p>触发次数；</p>
+</li>
+<li><p>永久；</p>
+</li>
+<li><p>战斗结束；</p>
+</li>
+</ul>
+<p>处理。</p>
+<hr />
+<h2 id="164-abilitystate">16.4 AbilityState</h2><p>能力牌、遗物或角色机制可以创建持续能力：</p>
+<ul>
+<li><p>每打出三张攻击牌触发效果；</p>
+</li>
+<li><p>每回合首次消耗卡抽一张牌；</p>
+</li>
+<li><p>受到伤害时获得能量；</p>
+</li>
+<li><p>生成的卡费用降低。</p>
+</li>
+</ul>
+<p>持续能力应使用统一触发系统，而不是卡牌脚本持续监听所有事件。</p>
+<hr />
+<h2 id="17-遗物系统">17. 遗物系统</h2><h2 id="171-relicdefinition">17.1 RelicDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>RelicId；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>RelicTags；</p>
+</li>
+<li><p>TriggerDefinitions；</p>
+</li>
+<li><p>PassiveModifiers；</p>
+</li>
+<li><p>CounterRules；</p>
+</li>
+<li><p>CharacterRestrictions；</p>
+</li>
+<li><p>AcquisitionRules；</p>
+</li>
+<li><p>RewardWeight；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-relicruntimestate">17.2 RelicRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>RelicInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>CounterValues；</p>
+</li>
+<li><p>ChargeState；</p>
+</li>
+<li><p>DisabledState；</p>
+</li>
+<li><p>AcquiredNodeId；</p>
+</li>
+<li><p>RelicVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-遗物作用">17.3 遗物作用</h2><p>遗物可以：</p>
+<ul>
+<li><p>修改初始资源；</p>
+</li>
+<li><p>提供持续触发；</p>
+</li>
+<li><p>改变卡牌奖励；</p>
+</li>
+<li><p>改变商店；</p>
+</li>
+<li><p>修改地图；</p>
+</li>
+<li><p>提供特殊胜利路线；</p>
+</li>
+<li><p>强化特定标签；</p>
+</li>
+<li><p>改变敌人行为。</p>
+</li>
+</ul>
+<hr />
+<h2 id="174-遗物与卡组协同">17.4 遗物与卡组协同</h2><p>遗物不应只提供通用数值。</p>
+<p>高价值遗物可以鼓励：</p>
+<ul>
+<li><p>高频出牌；</p>
+</li>
+<li><p>大卡组；</p>
+</li>
+<li><p>小卡组；</p>
+</li>
+<li><p>消耗；</p>
+</li>
+<li><p>弃牌；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>低费用；</p>
+</li>
+<li><p>诅咒；</p>
+</li>
+<li><p>召唤。</p>
+</li>
+</ul>
+<hr />
+<h2 id="175-遗物互斥与冲突">17.5 遗物互斥与冲突</h2><p>需要验证：</p>
+<ul>
+<li><p>两件遗物是否产生无限循环；</p>
+</li>
+<li><p>是否修改同一规则；</p>
+</li>
+<li><p>是否存在执行优先级；</p>
+</li>
+<li><p>是否互斥；</p>
+</li>
+<li><p>是否需要禁用特定组合。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-敌人意图系统">18. 敌人意图系统</h2><h2 id="181-enemydefinition">18.1 EnemyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EnemyId；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>BehaviorProfileId；</p>
+</li>
+<li><p>AbilityDefinitions；</p>
+</li>
+<li><p>IntentDefinitions；</p>
+</li>
+<li><p>StatusImmunities；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>EncounterTags；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-enemycombatstate">18.2 EnemyCombatState</h2><p>建议包含：</p>
+<ul>
+<li><p>EnemyInstanceId；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>MaximumHealth；</p>
+</li>
+<li><p>StatusStates；</p>
+</li>
+<li><p>CurrentIntent；</p>
+</li>
+<li><p>IntentHistory；</p>
+</li>
+<li><p>BehaviorState；</p>
+</li>
+<li><p>PhaseState；</p>
+</li>
+<li><p>EnemyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-intentdefinition">18.3 IntentDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>IntentId；</p>
+</li>
+<li><p>IntentType；</p>
+</li>
+<li><p>TelegraphPolicy；</p>
+</li>
+<li><p>TargetingRule；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>SelectionConditions；</p>
+</li>
+<li><p>Weight；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>RepeatLimit；</p>
+</li>
+<li><p>PhaseRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="184-意图可见度">18.4 意图可见度</h2><p>可以显示：</p>
+<ul>
+<li><p>具体伤害；</p>
+</li>
+<li><p>大致类型；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>是否施加状态；</p>
+</li>
+<li><p>是否防御；</p>
+</li>
+<li><p>是否召唤。</p>
+</li>
+</ul>
+<p>信息透明度决定战斗重心：</p>
+<ul>
+<li><p>高透明度强调资源规划；</p>
+</li>
+<li><p>低透明度强调风险判断；</p>
+</li>
+<li><p>混合模式强调行为学习。</p>
+</li>
+</ul>
+<hr />
+<h2 id="185-敌人行为规则">18.5 敌人行为规则</h2><p>敌人选择意图可以考虑：</p>
+<ul>
+<li><p>当前回合；</p>
+</li>
+<li><p>玩家状态；</p>
+</li>
+<li><p>自身生命；</p>
+</li>
+<li><p>已使用意图；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>阶段；</p>
+</li>
+<li><p>随机权重；</p>
+</li>
+<li><p>构筑反制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="186-防止敌人无条件读取手牌">18.6 防止敌人无条件读取手牌</h2><p>敌人可以根据：</p>
+<ul>
+<li><p>玩家历史行为；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>卡组标签；</p>
+</li>
+<li><p>当前战斗阶段；</p>
+</li>
+</ul>
+<p>做出反应。</p>
+<p>不应直接根据玩家当前手牌选择完美反制，除非这是明确机制。</p>
+<hr />
+<h2 id="19-遭遇设计">19. 遭遇设计</h2><h2 id="191-encounterdefinition">19.1 EncounterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EncounterId；</p>
+</li>
+<li><p>RegionId；</p>
+</li>
+<li><p>EnemyComposition；</p>
+</li>
+<li><p>FormationRules；</p>
+</li>
+<li><p>DifficultyRating；</p>
+</li>
+<li><p>EncounterTags；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>UnlockConditions；</p>
+</li>
+<li><p>SelectionWeight。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-遭遇职责">19.2 遭遇职责</h2><p>不同遭遇应测试：</p>
+<ul>
+<li><p>单体爆发；</p>
+</li>
+<li><p>多目标；</p>
+</li>
+<li><p>长期成长；</p>
+</li>
+<li><p>快速防御；</p>
+</li>
+<li><p>状态管理；</p>
+</li>
+<li><p>牌堆污染；</p>
+</li>
+<li><p>资源生成；</p>
+</li>
+<li><p>构筑稳定性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-普通敌人">19.3 普通敌人</h2><p>普通战斗主要承担：</p>
+<ul>
+<li><p>提供卡牌奖励；</p>
+</li>
+<li><p>让玩家识别构筑问题；</p>
+</li>
+<li><p>消耗少量生命；</p>
+</li>
+<li><p>教学区域机制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="194-精英敌人">19.4 精英敌人</h2><p>精英通常：</p>
+<ul>
+<li><p>风险更高；</p>
+</li>
+<li><p>奖励遗物；</p>
+</li>
+<li><p>测试构筑成熟度；</p>
+</li>
+<li><p>迫使玩家使用药剂；</p>
+</li>
+<li><p>决定路线收益上限。</p>
+</li>
+</ul>
+<hr />
+<h2 id="195-区域敌人池">19.5 区域敌人池</h2><p>每个区域应具有：</p>
+<ul>
+<li><p>独特压力；</p>
+</li>
+<li><p>新状态；</p>
+</li>
+<li><p>新敌人组合；</p>
+</li>
+<li><p>对早期构筑的不同要求；</p>
+</li>
+<li><p>逐步升级的机制语言。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-boss系统">20. Boss系统</h2><h2 id="201-bossdefinition">20.1 BossDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BossId；</p>
+</li>
+<li><p>RegionId；</p>
+</li>
+<li><p>PhaseDefinitions；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>IntentRules；</p>
+</li>
+<li><p>TransitionConditions；</p>
+</li>
+<li><p>CounterBuildRules；</p>
+</li>
+<li><p>RewardDefinition；</p>
+</li>
+<li><p>VictoryEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-boss职责">20.2 Boss职责</h2><p>Boss应测试：</p>
+<ul>
+<li><p>构筑是否具有终结能力；</p>
+</li>
+<li><p>防御是否可持续；</p>
+</li>
+<li><p>能否处理状态；</p>
+</li>
+<li><p>是否过度依赖单一套路；</p>
+</li>
+<li><p>是否能应对阶段变化；</p>
+</li>
+<li><p>资源能否维持足够回合。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-boss反制">20.3 Boss反制</h2><p>Boss可以反制：</p>
+<ul>
+<li><p>过度叠加能力；</p>
+</li>
+<li><p>无限防御；</p>
+</li>
+<li><p>高频小伤害；</p>
+</li>
+<li><p>单次爆发；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>状态层数。</p>
+</li>
+</ul>
+<p>但不应无条件使某类构筑完全失效。</p>
+<p>更合理的方式是：</p>
+<ul>
+<li><p>提高成本；</p>
+</li>
+<li><p>要求调整节奏；</p>
+</li>
+<li><p>提供阶段窗口；</p>
+</li>
+<li><p>要求备用方案。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-boss阶段">20.4 Boss阶段</h2><p>阶段切换可以改变：</p>
+<ul>
+<li><p>意图池；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>卡牌污染；</p>
+</li>
+<li><p>伤害节奏；</p>
+</li>
+<li><p>玩家资源；</p>
+</li>
+<li><p>战斗目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="21-战斗结算">21. 战斗结算</h2><h2 id="211-battleresult">21.1 BattleResult</h2><p>建议包含：</p>
+<ul>
+<li><p>BattleId；</p>
+</li>
+<li><p>ResultType；</p>
+</li>
+<li><p>RemainingHealth；</p>
+</li>
+<li><p>ConsumedItems；</p>
+</li>
+<li><p>RewardSeed；</p>
+</li>
+<li><p>DefeatedEnemyIds；</p>
+</li>
+<li><p>BattleStatistics；</p>
+</li>
+<li><p>RunStateDeltas；</p>
+</li>
+<li><p>BattleResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-战斗胜利流程">21.2 战斗胜利流程</h2><ol>
+<li><p>锁定玩家输入；</p>
+</li>
+<li><p>处理剩余死亡事件；</p>
+</li>
+<li><p>清理战斗临时卡牌；</p>
+</li>
+<li><p>清理战斗状态；</p>
+</li>
+<li><p>保存当前生命；</p>
+</li>
+<li><p>计算奖励；</p>
+</li>
+<li><p>创建RewardOffer；</p>
+</li>
+<li><p>将Run标记为AwaitingReward；</p>
+</li>
+<li><p>保存快照；</p>
+</li>
+<li><p>展示奖励选择。</p>
+</li>
+</ol>
+<hr />
+<h2 id="213-战斗失败流程">21.3 战斗失败流程</h2><ol>
+<li><p>确认玩家生命归零；</p>
+</li>
+<li><p>停止新效果；</p>
+</li>
+<li><p>完成当前原子效果；</p>
+</li>
+<li><p>记录失败来源；</p>
+</li>
+<li><p>冻结最终卡组和路线；</p>
+</li>
+<li><p>生成RunResult；</p>
+</li>
+<li><p>更新局外解锁；</p>
+</li>
+<li><p>标记Run结束。</p>
+</li>
+</ol>
+<hr />
+<h2 id="214-防止奖励重复">21.4 防止奖励重复</h2><p>战斗奖励必须绑定：</p>
+<ul>
+<li><p>BattleId；</p>
+</li>
+<li><p>NodeId；</p>
+</li>
+<li><p>RewardOfferId；</p>
+</li>
+<li><p>RunId。</p>
+</li>
+</ul>
+<p>同一奖励只能完成一次选择。</p>
+<hr />
+<h2 id="22-卡牌奖励与选牌">22. 卡牌奖励与选牌</h2><h2 id="221-cardrewardoffer">22.1 CardRewardOffer</h2><p>建议字段：</p>
+<ul>
+<li><p>RewardOfferId；</p>
+</li>
+<li><p>CandidateCardDefinitionIds；</p>
+</li>
+<li><p>CandidateModifiers；</p>
+</li>
+<li><p>SkipReward；</p>
+</li>
+<li><p>RerollRules；</p>
+</li>
+<li><p>SourceNodeId；</p>
+</li>
+<li><p>RewardSeed；</p>
+</li>
+<li><p>OfferState；</p>
+</li>
+<li><p>OfferVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-奖励生成输入">22.2 奖励生成输入</h2><p>包括：</p>
+<ul>
+<li><p>角色卡池；</p>
+</li>
+<li><p>已解锁内容；</p>
+</li>
+<li><p>当前区域；</p>
+</li>
+<li><p>卡牌稀有度；</p>
+</li>
+<li><p>卡组标签；</p>
+</li>
+<li><p>遗物修正；</p>
+</li>
+<li><p>最近奖励；</p>
+</li>
+<li><p>去重规则；</p>
+</li>
+<li><p>随机种子。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-奖励不应完全迎合当前构筑">22.3 奖励不应完全迎合当前构筑</h2><p>如果系统只提供完美协同牌：</p>
+<ul>
+<li><p>构筑决策失去不确定性；</p>
+</li>
+<li><p>不同Run趋同；</p>
+</li>
+<li><p>适应性降低。</p>
+</li>
+</ul>
+<p>可以适度提高相关标签权重，但仍保留：</p>
+<ul>
+<li><p>通用牌；</p>
+</li>
+<li><p>替代方向；</p>
+</li>
+<li><p>高风险转型牌；</p>
+</li>
+<li><p>跳过选项。</p>
+</li>
+</ul>
+<hr />
+<h2 id="224-跳过奖励">22.4 跳过奖励</h2><p>跳过必须是合法且有价值的决策。</p>
+<p>如果所有奖励都无条件强于不选，卡组膨胀问题就不存在。</p>
+<hr />
+<h2 id="225-奖励公平性">22.5 奖励公平性</h2><p>需要避免：</p>
+<ul>
+<li><p>长时间不给任何防御；</p>
+</li>
+<li><p>核心机制只有一张极低概率卡；</p>
+</li>
+<li><p>某角色必须依赖单一遗物才能运行；</p>
+</li>
+<li><p>高难度中出现无法弥补的功能缺口。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-卡牌升级删除与转化">23. 卡牌升级、删除与转化</h2><h2 id="231-cardupgradedefinition">23.1 CardUpgradeDefinition</h2><p>升级可以改变：</p>
+<ul>
+<li><p>数值；</p>
+</li>
+<li><p>费用；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>抽牌；</p>
+</li>
+<li><p>消耗属性；</p>
+</li>
+<li><p>保留属性；</p>
+</li>
+<li><p>触发条件；</p>
+</li>
+<li><p>卡牌标签。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-升级职责">23.2 升级职责</h2><p>升级应形成选择：</p>
+<ul>
+<li><p>强化核心输出；</p>
+</li>
+<li><p>改善资源；</p>
+</li>
+<li><p>提高稳定性；</p>
+</li>
+<li><p>解除消耗；</p>
+</li>
+<li><p>降低费用；</p>
+</li>
+<li><p>扩大目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-删除卡牌">23.3 删除卡牌</h2><p>删除会：</p>
+<ul>
+<li><p>提高核心卡抽取率；</p>
+</li>
+<li><p>减少基础牌污染；</p>
+</li>
+<li><p>强化循环；</p>
+</li>
+<li><p>提高构筑稳定性。</p>
+</li>
+</ul>
+<p>因此删除通常是高价值服务，价格可以随次数增长。</p>
+<hr />
+<h2 id="234-卡牌转化">23.4 卡牌转化</h2><p>转化可以：</p>
+<ul>
+<li><p>将牌替换为随机同稀有度牌；</p>
+</li>
+<li><p>将基础牌变为角色专属牌；</p>
+</li>
+<li><p>将诅咒变为收益牌；</p>
+</li>
+<li><p>将两张牌合并；</p>
+</li>
+<li><p>改变标签。</p>
+</li>
+</ul>
+<hr />
+<h2 id="235-卡组变更事务">23.5 卡组变更事务</h2><p>所有永久卡组修改需要：</p>
+<ol>
+<li><p>验证卡牌实例；</p>
+</li>
+<li><p>锁定DeckState；</p>
+</li>
+<li><p>执行添加、删除或升级；</p>
+</li>
+<li><p>更新DeckVersion；</p>
+</li>
+<li><p>记录来源节点；</p>
+</li>
+<li><p>保存Run状态；</p>
+</li>
+<li><p>发布DeckChanged。</p>
+</li>
+</ol>
+<hr />
+<h2 id="24-商店系统">24. 商店系统</h2><h2 id="241-shopstate">24.1 ShopState</h2><p>建议包含：</p>
+<ul>
+<li><p>ShopId；</p>
+</li>
+<li><p>CardOffers；</p>
+</li>
+<li><p>RelicOffers；</p>
+</li>
+<li><p>ConsumableOffers；</p>
+</li>
+<li><p>ServiceOffers；</p>
+</li>
+<li><p>PriceModifiers；</p>
+</li>
+<li><p>PurchasedOfferIds；</p>
+</li>
+<li><p>ShopVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-商店服务">24.2 商店服务</h2><p>包括：</p>
+<ul>
+<li><p>买卡；</p>
+</li>
+<li><p>买遗物；</p>
+</li>
+<li><p>买药剂；</p>
+</li>
+<li><p>删除卡牌；</p>
+</li>
+<li><p>升级卡牌；</p>
+</li>
+<li><p>转化卡牌；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>情报。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-商品生成">24.3 商品生成</h2><p>受以下因素影响：</p>
+<ul>
+<li><p>区域；</p>
+</li>
+<li><p>角色；</p>
+</li>
+<li><p>当前卡池；</p>
+</li>
+<li><p>已有遗物；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>随机种子；</p>
+</li>
+<li><p>商店类型。</p>
+</li>
+</ul>
+<hr />
+<h2 id="244-价格体系">24.4 价格体系</h2><p>价格可以受到：</p>
+<ul>
+<li><p>稀有度；</p>
+</li>
+<li><p>当前区域；</p>
+</li>
+<li><p>已购买数量；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>删除次数；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="245-商店经济决策">24.5 商店经济决策</h2><p>玩家需要在以下事项间权衡：</p>
+<ul>
+<li><p>立即购买强卡；</p>
+</li>
+<li><p>保存金钱等待遗物；</p>
+</li>
+<li><p>删除基础牌；</p>
+</li>
+<li><p>购买药剂保命；</p>
+</li>
+<li><p>保留资金应对未来事件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-营地系统">25. 营地系统</h2><h2 id="251-restsitedefinition">25.1 RestSiteDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>RestSiteId；</p>
+</li>
+<li><p>AvailableActions；</p>
+</li>
+<li><p>ActionCosts；</p>
+</li>
+<li><p>ActionLimits；</p>
+</li>
+<li><p>CharacterOverrides；</p>
+</li>
+<li><p>RelicOverrides；</p>
+</li>
+<li><p>DifficultyOverrides。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-常见行动">25.2 常见行动</h2><p>包括：</p>
+<ul>
+<li><p>恢复生命；</p>
+</li>
+<li><p>升级卡牌；</p>
+</li>
+<li><p>移除卡牌；</p>
+</li>
+<li><p>制作药剂；</p>
+</li>
+<li><p>搜索遗物；</p>
+</li>
+<li><p>获得临时增益；</p>
+</li>
+<li><p>查看下一区域；</p>
+</li>
+<li><p>触发角色能力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-营地核心取舍">25.3 营地核心取舍</h2><p>最典型决策是：</p>
+<p>恢复生命
+与
+提高长期强度</p>
+<p>之间的选择。</p>
+<p>如果恢复无成本且升级另有来源，营地决策会变得机械化。</p>
+<hr />
+<h2 id="26-事件系统">26. 事件系统</h2><h2 id="261-eventdefinition">26.1 EventDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EventId；</p>
+</li>
+<li><p>RegionRules；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>EventNodes；</p>
+</li>
+<li><p>ChoiceDefinitions；</p>
+</li>
+<li><p>RandomOutcomes；</p>
+</li>
+<li><p>RunStateEffects；</p>
+</li>
+<li><p>DeckEffects；</p>
+</li>
+<li><p>RelicEffects；</p>
+</li>
+<li><p>ExitRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-事件结果">26.2 事件结果</h2><p>可以影响：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>最大生命；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>诅咒；</p>
+</li>
+<li><p>未来事件；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>特殊胜利。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-风险事件">26.3 风险事件</h2><p>事件选择应明确表达：</p>
+<ul>
+<li><p>可能收益；</p>
+</li>
+<li><p>已知成本；</p>
+</li>
+<li><p>不确定部分；</p>
+</li>
+<li><p>长期影响。</p>
+</li>
+</ul>
+<p>不建议频繁使用完全无法推断的随机惩罚。</p>
+<hr />
+<h2 id="264-事件链">26.4 事件链</h2><p>某次事件选择可以写入RunFlag，影响：</p>
+<ul>
+<li><p>后续事件；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>特殊遗物；</p>
+</li>
+<li><p>结局；</p>
+</li>
+<li><p>隐藏区域。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-消耗品系统">27. 消耗品系统</h2><h2 id="271-consumabledefinition">27.1 ConsumableDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ConsumableId；</p>
+</li>
+<li><p>UsageScope；</p>
+</li>
+<li><p>TargetingRule；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>StackLimit；</p>
+</li>
+<li><p>DropWeight；</p>
+</li>
+<li><p>UseRestrictions；</p>
+</li>
+<li><p>RetentionPolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-消耗品职责">27.2 消耗品职责</h2><p>包括：</p>
+<ul>
+<li><p>紧急伤害；</p>
+</li>
+<li><p>紧急防御；</p>
+</li>
+<li><p>恢复生命；</p>
+</li>
+<li><p>抽牌；</p>
+</li>
+<li><p>获得能量；</p>
+</li>
+<li><p>移除状态；</p>
+</li>
+<li><p>修改敌人意图；</p>
+</li>
+<li><p>逃离战斗。</p>
+</li>
+</ul>
+<hr />
+<h2 id="273-容量限制">27.3 容量限制</h2><p>限制携带数量可以迫使玩家：</p>
+<ul>
+<li><p>及时使用；</p>
+</li>
+<li><p>丢弃低价值药剂；</p>
+</li>
+<li><p>为Boss保留资源；</p>
+</li>
+<li><p>调整路线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="274-使用时机">27.4 使用时机</h2><p>需要明确：</p>
+<ul>
+<li><p>玩家回合可用；</p>
+</li>
+<li><p>是否消耗行动；</p>
+</li>
+<li><p>能否在效果队列中使用；</p>
+</li>
+<li><p>能否在敌人行动间使用；</p>
+</li>
+<li><p>战斗外是否可用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-构筑识别与标签分析">28. 构筑识别与标签分析</h2><h2 id="281-buildprofile">28.1 BuildProfile</h2><p>系统可以根据当前卡组推导：</p>
+<ul>
+<li><p>攻击牌比例；</p>
+</li>
+<li><p>防御牌比例；</p>
+</li>
+<li><p>平均费用；</p>
+</li>
+<li><p>抽牌能力；</p>
+</li>
+<li><p>能量生成；</p>
+</li>
+<li><p>消耗能力；</p>
+</li>
+<li><p>弃牌能力；</p>
+</li>
+<li><p>状态标签；</p>
+</li>
+<li><p>伤害类型；</p>
+</li>
+<li><p>构筑成熟度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="282-构筑识别用途">28.2 构筑识别用途</h2><p>可以用于：</p>
+<ul>
+<li><p>调试；</p>
+</li>
+<li><p>平衡分析；</p>
+</li>
+<li><p>奖励权重轻微调整；</p>
+</li>
+<li><p>新手提示；</p>
+</li>
+<li><p>Run复盘；</p>
+</li>
+<li><p>自动代理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="283-不应完全自动决定构筑">28.3 不应完全自动决定构筑</h2><p>系统不能因为检测到中毒牌较多，就只提供中毒牌。</p>
+<p>否则玩家只是顺着系统预设轨道前进。</p>
+<hr />
+<h2 id="29-难度进阶">29. 难度进阶</h2><h2 id="291-difficultydefinition">29.1 DifficultyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>DifficultyLevel；</p>
+</li>
+<li><p>EnemyModifiers；</p>
+</li>
+<li><p>EncounterPoolOverrides；</p>
+</li>
+<li><p>MapModifiers；</p>
+</li>
+<li><p>RewardModifiers；</p>
+</li>
+<li><p>HealingModifiers；</p>
+</li>
+<li><p>BossModifiers；</p>
+</li>
+<li><p>AdditionalRules；</p>
+</li>
+<li><p>UnlockConditions。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-难度提升方式">29.2 难度提升方式</h2><p>可以包括：</p>
+<ul>
+<li><p>敌人更强；</p>
+</li>
+<li><p>生命恢复减少；</p>
+</li>
+<li><p>精英更多；</p>
+</li>
+<li><p>初始卡组加入负面牌；</p>
+</li>
+<li><p>Boss增加阶段；</p>
+</li>
+<li><p>路线信息减少；</p>
+</li>
+<li><p>商店价格提高；</p>
+</li>
+<li><p>新敌人加入；</p>
+</li>
+<li><p>新规则叠加。</p>
+</li>
+</ul>
+<hr />
+<h2 id="293-防止纯数值膨胀">29.3 防止纯数值膨胀</h2><p>高难度应同时引入：</p>
+<ul>
+<li><p>新行为；</p>
+</li>
+<li><p>新组合；</p>
+</li>
+<li><p>新路线约束；</p>
+</li>
+<li><p>新资源压力；</p>
+</li>
+<li><p>构筑反制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-难度解锁">29.4 难度解锁</h2><p>通常要求：</p>
+<ul>
+<li><p>使用指定角色通关；</p>
+</li>
+<li><p>完成前一难度；</p>
+</li>
+<li><p>完成特殊挑战。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-确定性存档与继续游戏">30. 确定性、存档与继续游戏</h2><h2 id="301-随机流分离">30.1 随机流分离</h2><p>建议分离：</p>
+<ul>
+<li><p>MapRandom；</p>
+</li>
+<li><p>EncounterRandom；</p>
+</li>
+<li><p>RewardRandom；</p>
+</li>
+<li><p>BattleShuffleRandom；</p>
+</li>
+<li><p>EnemyIntentRandom；</p>
+</li>
+<li><p>EventRandom；</p>
+</li>
+<li><p>ShopRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-savesnapshot">30.2 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>ProfileReference；</p>
+</li>
+<li><p>RunState；</p>
+</li>
+<li><p>RunMapState；</p>
+</li>
+<li><p>DeckState；</p>
+</li>
+<li><p>RelicStates；</p>
+</li>
+<li><p>ConsumableStates；</p>
+</li>
+<li><p>CurrentEncounterState；</p>
+</li>
+<li><p>BattleState；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-保存边界">30.3 保存边界</h2><p>适合保存：</p>
+<ul>
+<li><p>进入节点前；</p>
+</li>
+<li><p>战斗开始；</p>
+</li>
+<li><p>回合结束；</p>
+</li>
+<li><p>战斗结算；</p>
+</li>
+<li><p>奖励选择后；</p>
+</li>
+<li><p>商店交易后；</p>
+</li>
+<li><p>营地行动后；</p>
+</li>
+<li><p>区域切换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-战斗中继续">30.4 战斗中继续</h2><p>如果支持战斗中退出，需要恢复：</p>
+<ul>
+<li><p>牌区；</p>
+</li>
+<li><p>卡牌实例；</p>
+</li>
+<li><p>当前费用；</p>
+</li>
+<li><p>当前回合；</p>
+</li>
+<li><p>敌人意图；</p>
+</li>
+<li><p>效果队列；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>遗物计数；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="305-防止保存重抽">30.5 防止保存重抽</h2><p>如果退出并加载能够改变：</p>
+<ul>
+<li><p>抽牌顺序；</p>
+</li>
+<li><p>敌人意图；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+<li><p>事件结果；</p>
+</li>
+</ul>
+<p>玩家可以通过反复读取操纵随机结果。</p>
+<p>应保存或稳定重建对应随机流。</p>
+<hr />
+<h2 id="31-模块通信设计">31. 模块通信设计</h2><h2 id="311-命令">31.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>StartRun；</p>
+</li>
+<li><p>SelectMapNode；</p>
+</li>
+<li><p>PlayCard；</p>
+</li>
+<li><p>EndTurn；</p>
+</li>
+<li><p>UseConsumable；</p>
+</li>
+<li><p>SelectCardReward；</p>
+</li>
+<li><p>SkipReward；</p>
+</li>
+<li><p>PurchaseShopOffer；</p>
+</li>
+<li><p>UpgradeCard；</p>
+</li>
+<li><p>RemoveCard；</p>
+</li>
+<li><p>SelectEventChoice；</p>
+</li>
+<li><p>SelectRestAction；</p>
+</li>
+<li><p>AbandonRun。</p>
+</li>
+</ul>
+<p>命令必须包含：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>发起者；</p>
+</li>
+<li><p>目标实例；</p>
+</li>
+<li><p>当前版本；</p>
+</li>
+<li><p>输入序列；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-同步查询">31.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>卡牌是否可打出；</p>
+</li>
+<li><p>目标是否合法；</p>
+</li>
+<li><p>当前费用；</p>
+</li>
+<li><p>当前卡组；</p>
+</li>
+<li><p>当前牌区；</p>
+</li>
+<li><p>敌人意图；</p>
+</li>
+<li><p>节点是否可进入；</p>
+</li>
+<li><p>商品是否可购买；</p>
+</li>
+<li><p>卡牌是否可升级；</p>
+</li>
+<li><p>Run是否可继续。</p>
+</li>
+</ul>
+<p>查询不能修改状态或推进随机流。</p>
+<hr />
+<h2 id="313-领域事件">31.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>RunStarted；</p>
+</li>
+<li><p>MapNodeSelected；</p>
+</li>
+<li><p>BattleStarted；</p>
+</li>
+<li><p>TurnStarted；</p>
+</li>
+<li><p>CardDrawn；</p>
+</li>
+<li><p>CardPlayed；</p>
+</li>
+<li><p>CardDiscarded；</p>
+</li>
+<li><p>CardExhausted；</p>
+</li>
+<li><p>DamageResolved；</p>
+</li>
+<li><p>StatusApplied；</p>
+</li>
+<li><p>EnemyIntentSelected；</p>
+</li>
+<li><p>EnemyDefeated；</p>
+</li>
+<li><p>BattleCompleted；</p>
+</li>
+<li><p>RewardOffered；</p>
+</li>
+<li><p>DeckChanged；</p>
+</li>
+<li><p>RelicAcquired；</p>
+</li>
+<li><p>RegionCompleted；</p>
+</li>
+<li><p>RunCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-表现事件">31.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>AnimateCardDraw；</p>
+</li>
+<li><p>PlayCardAnimation；</p>
+</li>
+<li><p>ShowDamage；</p>
+</li>
+<li><p>UpdateIntentIcon；</p>
+</li>
+<li><p>PlayRelicTrigger；</p>
+</li>
+<li><p>ShowRewardScreen；</p>
+</li>
+<li><p>AnimateMapTravel；</p>
+</li>
+<li><p>ShowRunResult。</p>
+</li>
+</ul>
+<p>表现事件不能决定卡牌区域、伤害、奖励和Run状态。</p>
+<hr />
+<h2 id="32-失败隔离">32. 失败隔离</h2><h2 id="321-卡牌执行异常">32.1 卡牌执行异常</h2><p>卡牌效果无法执行时：</p>
+<ul>
+<li><p>保留已提交的合法效果；</p>
+</li>
+<li><p>取消尚未提交效果；</p>
+</li>
+<li><p>将卡牌移入配置指定区域；</p>
+</li>
+<li><p>释放预留能量；</p>
+</li>
+<li><p>记录CardInstanceId和EffectContext；</p>
+</li>
+<li><p>不让战斗停留在Limbo。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-卡牌区域冲突">32.2 卡牌区域冲突</h2><p>发现同一卡牌存在于多个区域时：</p>
+<ul>
+<li><p>冻结战斗命令；</p>
+</li>
+<li><p>根据区域转移日志恢复最后合法位置；</p>
+</li>
+<li><p>重建ZoneState；</p>
+</li>
+<li><p>记录重复来源；</p>
+</li>
+<li><p>防止继续抽取该卡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-效果递归">32.3 效果递归</h2><p>达到最大效果深度时：</p>
+<ul>
+<li><p>停止新增递归效果；</p>
+</li>
+<li><p>保留此前合法结果；</p>
+</li>
+<li><p>标记触发链异常；</p>
+</li>
+<li><p>输出完整RootActionId；</p>
+</li>
+<li><p>允许战斗继续或安全结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-敌人无合法意图">32.4 敌人无合法意图</h2><p>如果敌人行为池为空：</p>
+<ul>
+<li><p>使用基础攻击或防御；</p>
+</li>
+<li><p>保留当前阶段；</p>
+</li>
+<li><p>不跳过整个敌人回合；</p>
+</li>
+<li><p>记录条件过滤结果；</p>
+</li>
+<li><p>防止战斗软锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-奖励生成失败">32.5 奖励生成失败</h2><p>卡牌奖励池为空时：</p>
+<ul>
+<li><p>提供跳过；</p>
+</li>
+<li><p>提供货币；</p>
+</li>
+<li><p>使用保底通用牌池；</p>
+</li>
+<li><p>不重复结算战斗；</p>
+</li>
+<li><p>记录过滤链。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-商店事务失败">32.6 商店事务失败</h2><p>购买失败时：</p>
+<ul>
+<li><p>不扣除金钱；</p>
+</li>
+<li><p>不移除商品；</p>
+</li>
+<li><p>不修改卡组；</p>
+</li>
+<li><p>返回版本冲突或资源不足；</p>
+</li>
+<li><p>使用幂等事务重试。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-地图生成失败">32.7 地图生成失败</h2><p>如果地图不满足约束：</p>
+<ol>
+<li><p>使用相同种子重试不同生成分支；</p>
+</li>
+<li><p>降低非关键约束；</p>
+</li>
+<li><p>使用预定义保底模板；</p>
+</li>
+<li><p>验证Boss可达；</p>
+</li>
+<li><p>记录失败种子。</p>
+</li>
+</ol>
+<hr />
+<h2 id="328-run状态损坏">32.8 Run状态损坏</h2><p>检测到：</p>
+<ul>
+<li><p>当前节点不存在；</p>
+</li>
+<li><p>卡组为空；</p>
+</li>
+<li><p>角色定义缺失；</p>
+</li>
+<li><p>Boss节点不可达；</p>
+</li>
+<li><p>随机流缺失；</p>
+</li>
+</ul>
+<p>时：</p>
+<ul>
+<li><p>使用最近稳定快照；</p>
+</li>
+<li><p>重建派生状态；</p>
+</li>
+<li><p>使用迁移规则；</p>
+</li>
+<li><p>不直接结算为失败。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-调试与可观测性">33. 调试与可观测性</h2><h2 id="331-battlestate查看器">33.1 BattleState查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>当前回合；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>能量；</p>
+</li>
+<li><p>手牌；</p>
+</li>
+<li><p>抽牌堆；</p>
+</li>
+<li><p>弃牌堆；</p>
+</li>
+<li><p>消耗区；</p>
+</li>
+<li><p>效果队列；</p>
+</li>
+<li><p>触发队列；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-卡牌区域审计器">33.2 卡牌区域审计器</h2><p>选择CardInstanceId后显示：</p>
+<ul>
+<li><p>初始来源；</p>
+</li>
+<li><p>抽取；</p>
+</li>
+<li><p>打出；</p>
+</li>
+<li><p>Limbo；</p>
+</li>
+<li><p>弃牌；</p>
+</li>
+<li><p>消耗；</p>
+</li>
+<li><p>生成；</p>
+</li>
+<li><p>变形；</p>
+</li>
+<li><p>战斗结束归属。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-效果追踪器">33.3 效果追踪器</h2><p>显示：</p>
+<ul>
+<li><p>RootAction；</p>
+</li>
+<li><p>EffectSpec；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>修正；</p>
+</li>
+<li><p>结果；</p>
+</li>
+<li><p>触发；</p>
+</li>
+<li><p>子效果；</p>
+</li>
+<li><p>执行深度；</p>
+</li>
+<li><p>中断原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-伤害解释器">33.4 伤害解释器</h2><p>显示：</p>
+<ul>
+<li><p>卡牌基础值；</p>
+</li>
+<li><p>力量；</p>
+</li>
+<li><p>虚弱；</p>
+</li>
+<li><p>易伤；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>最终生命伤害。</p>
+</li>
+</ul>
+<hr />
+<h2 id="335-敌人意图查看器">33.5 敌人意图查看器</h2><p>显示：</p>
+<ul>
+<li><p>候选意图；</p>
+</li>
+<li><p>条件；</p>
+</li>
+<li><p>权重；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>重复限制；</p>
+</li>
+<li><p>随机值；</p>
+</li>
+<li><p>最终选择。</p>
+</li>
+</ul>
+<hr />
+<h2 id="336-构筑分析面板">33.6 构筑分析面板</h2><p>显示：</p>
+<ul>
+<li><p>卡组规模；</p>
+</li>
+<li><p>平均费用；</p>
+</li>
+<li><p>攻击和防御比例；</p>
+</li>
+<li><p>抽牌；</p>
+</li>
+<li><p>能量；</p>
+</li>
+<li><p>核心标签；</p>
+</li>
+<li><p>无效卡；</p>
+</li>
+<li><p>核心卡出现概率；</p>
+</li>
+<li><p>预计循环长度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="337-路线分析器">33.7 路线分析器</h2><p>显示：</p>
+<ul>
+<li><p>各路线节点；</p>
+</li>
+<li><p>预计普通战斗；</p>
+</li>
+<li><p>精英数量；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>营地；</p>
+</li>
+<li><p>预期奖励；</p>
+</li>
+<li><p>当前生命风险；</p>
+</li>
+<li><p>可调整构筑机会。</p>
+</li>
+</ul>
+<hr />
+<h2 id="338-run时间线">33.8 Run时间线</h2><p>记录：</p>
+<ul>
+<li><p>路线；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>获得卡牌；</p>
+</li>
+<li><p>跳过卡牌；</p>
+</li>
+<li><p>删除；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>遗物；</p>
+</li>
+<li><p>生命变化；</p>
+</li>
+<li><p>金钱变化；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>失败原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="339-奖励生成解释器">33.9 奖励生成解释器</h2><p>显示：</p>
+<ul>
+<li><p>候选牌池；</p>
+</li>
+<li><p>解锁过滤；</p>
+</li>
+<li><p>角色过滤；</p>
+</li>
+<li><p>稀有度；</p>
+</li>
+<li><p>标签权重；</p>
+</li>
+<li><p>去重；</p>
+</li>
+<li><p>随机值；</p>
+</li>
+<li><p>最终候选。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3310-回放工具">33.10 回放工具</h2><p>使用：</p>
+<ul>
+<li><p>Run种子；</p>
+</li>
+<li><p>玩家命令；</p>
+</li>
+<li><p>奖励选择；</p>
+</li>
+<li><p>战斗随机流；</p>
+</li>
+<li><p>周期快照；</p>
+</li>
+</ul>
+<p>重现完整单局。</p>
+<hr />
+<h2 id="34-内容验证工具">34. 内容验证工具</h2><h2 id="341-卡牌定义验证">34.1 卡牌定义验证</h2><p>检查：</p>
+<ul>
+<li><p>费用；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>效果；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>文本；</p>
+</li>
+<li><p>标签；</p>
+</li>
+<li><p>卡池；</p>
+</li>
+<li><p>是否存在空效果；</p>
+</li>
+<li><p>是否能造成非法递归。</p>
+</li>
+</ul>
+<hr />
+<h2 id="342-卡牌守恒验证">34.2 卡牌守恒验证</h2><p>自动运行战斗并检查：</p>
+<ul>
+<li><p>卡牌总数；</p>
+</li>
+<li><p>区域唯一性；</p>
+</li>
+<li><p>临时卡清理；</p>
+</li>
+<li><p>变形；</p>
+</li>
+<li><p>消耗；</p>
+</li>
+<li><p>洗牌；</p>
+</li>
+<li><p>战斗结束归还。</p>
+</li>
+</ul>
+<hr />
+<h2 id="343-无限循环检测">34.3 无限循环检测</h2><p>分析：</p>
+<ul>
+<li><p>零费卡；</p>
+</li>
+<li><p>抽牌；</p>
+</li>
+<li><p>能量生成；</p>
+</li>
+<li><p>卡牌生成；</p>
+</li>
+<li><p>回收；</p>
+</li>
+<li><p>遗物触发。</p>
+</li>
+</ul>
+<p>检查是否存在：</p>
+<ul>
+<li><p>无资源损耗无限循环；</p>
+</li>
+<li><p>自动触发死循环；</p>
+</li>
+<li><p>单回合无限伤害；</p>
+</li>
+<li><p>UI无法结束的长循环。</p>
+</li>
+</ul>
+<p>无限循环可以被设计允许，但必须：</p>
+<ul>
+<li><p>明确支持；</p>
+</li>
+<li><p>保证性能；</p>
+</li>
+<li><p>提供快速结算；</p>
+</li>
+<li><p>在高难度中有对应规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-遭遇覆盖验证">34.4 遭遇覆盖验证</h2><p>检查敌人池是否能测试：</p>
+<ul>
+<li><p>爆发；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>多目标；</p>
+</li>
+<li><p>持续战；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>牌组污染；</p>
+</li>
+<li><p>高频出牌；</p>
+</li>
+<li><p>能力叠加。</p>
+</li>
+</ul>
+<hr />
+<h2 id="345-奖励池验证">34.5 奖励池验证</h2><p>模拟大量奖励，统计：</p>
+<ul>
+<li><p>卡牌出现率；</p>
+</li>
+<li><p>稀有度；</p>
+</li>
+<li><p>各标签覆盖；</p>
+</li>
+<li><p>角色功能覆盖；</p>
+</li>
+<li><p>防御牌缺失概率；</p>
+</li>
+<li><p>核心机制出现率；</p>
+</li>
+<li><p>重复率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="346-地图生成验证">34.6 地图生成验证</h2><p>批量生成地图，检查：</p>
+<ul>
+<li><p>Boss可达；</p>
+</li>
+<li><p>路线差异；</p>
+</li>
+<li><p>节点分布；</p>
+</li>
+<li><p>连续精英；</p>
+</li>
+<li><p>商店密度；</p>
+</li>
+<li><p>营地密度；</p>
+</li>
+<li><p>不可达节点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="347-自动战斗代理">34.7 自动战斗代理</h2><p>使用不同策略：</p>
+<ul>
+<li><p>随机出牌；</p>
+</li>
+<li><p>贪心伤害；</p>
+</li>
+<li><p>防御优先；</p>
+</li>
+<li><p>构筑标签策略；</p>
+</li>
+<li><p>搜索最优行动。</p>
+</li>
+</ul>
+<p>统计：</p>
+<ul>
+<li><p>卡牌胜率；</p>
+</li>
+<li><p>遭遇难度；</p>
+</li>
+<li><p>回合数；</p>
+</li>
+<li><p>生命损失；</p>
+</li>
+<li><p>构筑强度；</p>
+</li>
+<li><p>异常组合。</p>
+</li>
+</ul>
+<hr />
+<h2 id="348-完整run模拟">34.8 完整Run模拟</h2><p>自动运行大量Run，统计：</p>
+<ul>
+<li><p>通关率；</p>
+</li>
+<li><p>角色胜率；</p>
+</li>
+<li><p>路线选择；</p>
+</li>
+<li><p>精英挑战率；</p>
+</li>
+<li><p>卡牌选择率；</p>
+</li>
+<li><p>跳过率；</p>
+</li>
+<li><p>遗物胜率；</p>
+</li>
+<li><p>平均卡组规模；</p>
+</li>
+<li><p>失败区域；</p>
+</li>
+<li><p>失败原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-性能设计">35. 性能设计</h2><h2 id="351-事件队列而非深层递归">35.1 事件队列而非深层递归</h2><p>卡牌和遗物触发应进入显式队列。</p>
+<p>这样可以：</p>
+<ul>
+<li><p>控制执行顺序；</p>
+</li>
+<li><p>支持暂停；</p>
+</li>
+<li><p>支持动画；</p>
+</li>
+<li><p>限制深度；</p>
+</li>
+<li><p>记录回放；</p>
+</li>
+<li><p>隔离异常。</p>
+</li>
+</ul>
+<hr />
+<h2 id="352-表现与逻辑分离">35.2 表现与逻辑分离</h2><p>逻辑可以快速完成：</p>
+<ul>
+<li><p>抽牌；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>敌人死亡。</p>
+</li>
+</ul>
+<p>表现层按队列播放：</p>
+<ul>
+<li><p>动画；</p>
+</li>
+<li><p>粒子；</p>
+</li>
+<li><p>数字；</p>
+</li>
+<li><p>卡牌移动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-快速模式">35.3 快速模式</h2><p>应支持：</p>
+<ul>
+<li><p>动画加速；</p>
+</li>
+<li><p>批量伤害表现；</p>
+</li>
+<li><p>跳过重复触发；</p>
+</li>
+<li><p>自动结束无决策阶段；</p>
+</li>
+<li><p>无限循环快速结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="354-对象池">35.4 对象池</h2><p>适用于：</p>
+<ul>
+<li><p>卡牌视觉对象；</p>
+</li>
+<li><p>数值飘字；</p>
+</li>
+<li><p>状态图标；</p>
+</li>
+<li><p>粒子；</p>
+</li>
+<li><p>敌人意图表现。</p>
+</li>
+</ul>
+<p>逻辑卡牌实例不能依赖表现对象生命周期。</p>
+<hr />
+<h2 id="355-派生缓存">35.5 派生缓存</h2><p>可以缓存：</p>
+<ul>
+<li><p>卡牌最终费用；</p>
+</li>
+<li><p>当前构筑标签；</p>
+</li>
+<li><p>奖励候选池；</p>
+</li>
+<li><p>状态修正。</p>
+</li>
+</ul>
+<p>在相关状态变化时使缓存失效。</p>
+<hr />
+<h2 id="36-可扩展点">36. 可扩展点</h2><h2 id="361-新角色">36.1 新角色</h2><p>主要提供：</p>
+<ul>
+<li><p>初始卡组；</p>
+</li>
+<li><p>角色卡池；</p>
+</li>
+<li><p>初始遗物；</p>
+</li>
+<li><p>专属资源；</p>
+</li>
+<li><p>专属规则；</p>
+</li>
+<li><p>动画和表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="362-新卡牌">36.2 新卡牌</h2><p>主要提供：</p>
+<ul>
+<li><p>CardDefinition；</p>
+</li>
+<li><p>目标规则；</p>
+</li>
+<li><p>EffectSpec；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>标签；</p>
+</li>
+<li><p>奖励权重；</p>
+</li>
+<li><p>表现。</p>
+</li>
+</ul>
+<p>不应修改战斗主循环。</p>
+<hr />
+<h2 id="363-新遗物">36.3 新遗物</h2><p>通过：</p>
+<ul>
+<li><p>被动修正；</p>
+</li>
+<li><p>触发定义；</p>
+</li>
+<li><p>计数器；</p>
+</li>
+<li><p>获取规则；</p>
+</li>
+</ul>
+<p>接入统一事件系统。</p>
+<hr />
+<h2 id="364-新敌人">36.4 新敌人</h2><p>提供：</p>
+<ul>
+<li><p>属性；</p>
+</li>
+<li><p>意图；</p>
+</li>
+<li><p>行为；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+<li><p>区域权重。</p>
+</li>
+</ul>
+<hr />
+<h2 id="365-新区域">36.5 新区域</h2><p>提供：</p>
+<ul>
+<li><p>地图生成规则；</p>
+</li>
+<li><p>敌人池；</p>
+</li>
+<li><p>事件池；</p>
+</li>
+<li><p>商店规则；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>视觉主题；</p>
+</li>
+<li><p>区域机制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="366-新模式">36.6 新模式</h2><p>可以支持：</p>
+<ul>
+<li><p>每日挑战；</p>
+</li>
+<li><p>固定种子；</p>
+</li>
+<li><p>无尽模式；</p>
+</li>
+<li><p>自定义规则；</p>
+</li>
+<li><p>双角色；</p>
+</li>
+<li><p>选秀模式；</p>
+</li>
+<li><p>Boss Rush；</p>
+</li>
+<li><p>剧情模式。</p>
+</li>
+</ul>
+<p>仍应复用：</p>
+<ul>
+<li><p>RunState；</p>
+</li>
+<li><p>卡牌区域；</p>
+</li>
+<li><p>战斗状态机；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+<li><p>结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-玩家体验设计">37. 玩家体验设计</h2><h2 id="371-卡牌文本必须精确">37.1 卡牌文本必须精确</h2><p>文本应明确：</p>
+<ul>
+<li><p>费用；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>数值；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>消耗；</p>
+</li>
+<li><p>保留；</p>
+</li>
+<li><p>触发时机；</p>
+</li>
+<li><p>升级变化。</p>
+</li>
+</ul>
+<p>避免使用与实际结算顺序不一致的模糊描述。</p>
+<hr />
+<h2 id="372-牌区必须始终可查询">37.2 牌区必须始终可查询</h2><p>玩家应能够查看：</p>
+<ul>
+<li><p>抽牌堆；</p>
+</li>
+<li><p>弃牌堆；</p>
+</li>
+<li><p>消耗区；</p>
+</li>
+<li><p>当前卡组；</p>
+</li>
+<li><p>当前临时卡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="373-敌人意图需要支持决策">37.3 敌人意图需要支持决策</h2><p>如果玩家无法判断下一回合风险，防御和资源规划会退化为猜测。</p>
+<p>即使不显示精确数字，也应提供：</p>
+<ul>
+<li><p>攻击；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>增益；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>状态；</p>
+</li>
+</ul>
+<p>等类别信息。</p>
+<hr />
+<h2 id="374-奖励选择必须展示卡组影响">37.4 奖励选择必须展示卡组影响</h2><p>选牌界面应允许玩家：</p>
+<ul>
+<li><p>查看当前卡组；</p>
+</li>
+<li><p>查看升级版本；</p>
+</li>
+<li><p>查看标签；</p>
+</li>
+<li><p>查看遗物协同；</p>
+</li>
+<li><p>选择跳过。</p>
+</li>
+</ul>
+<hr />
+<h2 id="375-构筑方向不能只靠隐藏知识">37.5 构筑方向不能只靠隐藏知识</h2><p>玩家应能通过：</p>
+<ul>
+<li><p>卡牌标签；</p>
+</li>
+<li><p>角色说明；</p>
+</li>
+<li><p>遗物文本；</p>
+</li>
+<li><p>敌人机制；</p>
+</li>
+<li><p>卡牌池结构；</p>
+</li>
+</ul>
+<p>推断潜在协同。</p>
+<hr />
+<h2 id="376-战斗失败反馈">37.6 战斗失败反馈</h2><p>可以展示：</p>
+<ul>
+<li><p>最大单回合伤害；</p>
+</li>
+<li><p>平均防御；</p>
+</li>
+<li><p>卡组规模；</p>
+</li>
+<li><p>关键卡抽取率；</p>
+</li>
+<li><p>无效手牌次数；</p>
+</li>
+<li><p>生命损失来源；</p>
+</li>
+<li><p>未使用药剂；</p>
+</li>
+<li><p>失败敌人机制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="377-长动画不能惩罚高频构筑">37.7 长动画不能惩罚高频构筑</h2><p>如果一套构筑每回合需要打出二十张牌，表现系统必须：</p>
+<ul>
+<li><p>自动加速；</p>
+</li>
+<li><p>合并重复效果；</p>
+</li>
+<li><p>支持快速模式；</p>
+</li>
+<li><p>保证输入响应。</p>
+</li>
+</ul>
+<hr />
+<h2 id="378-单局重新开始应快捷">37.8 单局重新开始应快捷</h2><p>失败后应允许：</p>
+<ul>
+<li><p>快速查看复盘；</p>
+</li>
+<li><p>保存种子；</p>
+</li>
+<li><p>立即重开；</p>
+</li>
+<li><p>更换角色；</p>
+</li>
+<li><p>查看新解锁内容。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-常见设计失败">38. 常见设计失败</h2><h2 id="381-获得新卡永远是正收益">38.1 获得新卡永远是正收益</h2><p>玩家无需考虑卡组膨胀和抽牌概率。</p>
+<hr />
+<h2 id="382-核心构筑依赖唯一稀有卡">38.2 核心构筑依赖唯一稀有卡</h2><p>没有抽到该卡时，整个角色无法正常运行。</p>
+<hr />
+<h2 id="383-奖励完全迎合当前构筑">38.3 奖励完全迎合当前构筑</h2><p>每次Run都快速形成相同套路。</p>
+<hr />
+<h2 id="384-奖励完全不考虑功能覆盖">38.4 奖励完全不考虑功能覆盖</h2><p>玩家长时间得不到基本防御、抽牌或资源卡。</p>
+<hr />
+<h2 id="385-敌人只提高生命和伤害">38.5 敌人只提高生命和伤害</h2><p>没有测试不同构筑维度。</p>
+<hr />
+<h2 id="386-boss完全封锁某种构筑">38.6 Boss完全封锁某种构筑</h2><p>玩家在最终阶段才发现自己的路线无效。</p>
+<hr />
+<h2 id="387-状态与遗物直接递归调用">38.7 状态与遗物直接递归调用</h2><p>复杂组合导致无限循环或调用栈溢出。</p>
+<hr />
+<h2 id="388-卡牌区域管理分散">38.8 卡牌区域管理分散</h2><p>抽牌、消耗、复制和变形分别修改列表，造成重复牌和丢牌。</p>
+<hr />
+<h2 id="389-存档不保存随机游标">38.9 存档不保存随机游标</h2><p>退出重进可以反复改变抽牌、奖励和事件结果。</p>
+<hr />
+<h2 id="3810-地图路线没有真实区别">38.10 地图路线没有真实区别</h2><p>不同路线只是节点排列不同，风险和成长机会相同。</p>
+<hr />
+<h2 id="3811-跳过卡牌没有价值">38.11 跳过卡牌没有价值</h2><p>系统奖励迫使玩家不断扩大卡组。</p>
+<hr />
+<h2 id="3812-营地选择缺乏取舍">38.12 营地选择缺乏取舍</h2><p>玩家总能同时恢复并升级。</p>
+<hr />
+<h2 id="3813-局外成长持续增加初始数值">38.13 局外成长持续增加初始数值</h2><p>游玩时间越长，单局基础难度越低。</p>
+<hr />
+<h2 id="3814-卡牌文本与执行顺序不一致">38.14 卡牌文本与执行顺序不一致</h2><p>玩家无法预测触发、伤害和状态结果。</p>
+<hr />
+<h2 id="39-最小可行原型">39. 最小可行原型</h2><p>一个能够验证卡组构筑式Roguelike核心范式的最小原型可以包含：</p>
+<h3 id="角色">角色</h3><ul>
+<li><p>2名角色；</p>
+</li>
+<li><p>每名角色1套初始卡组；</p>
+</li>
+<li><p>每名角色约30张可获取卡牌；</p>
+</li>
+<li><p>每名角色1种专属资源或机制。</p>
+</li>
+</ul>
+<h3 id="区域">区域</h3><ul>
+<li><p>3个区域；</p>
+</li>
+<li><p>每区1套节点地图；</p>
+</li>
+<li><p>每区6种普通遭遇；</p>
+</li>
+<li><p>每区3种精英；</p>
+</li>
+<li><p>每区1至2个Boss；</p>
+</li>
+<li><p>每区6至8个事件。</p>
+</li>
+</ul>
+<h3 id="卡牌系统">卡牌系统</h3><ul>
+<li><p>攻击；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>抽牌；</p>
+</li>
+<li><p>能量；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>消耗；</p>
+</li>
+<li><p>弃牌；</p>
+</li>
+<li><p>卡牌生成；</p>
+</li>
+<li><p>卡牌升级；</p>
+</li>
+<li><p>卡牌删除。</p>
+</li>
+</ul>
+<h3 id="遗物">遗物</h3><ul>
+<li><p>20至30件；</p>
+</li>
+<li><p>包含通用、流派和规则型遗物；</p>
+</li>
+<li><p>支持触发计数和被动修正。</p>
+</li>
+</ul>
+<h3 id="路线节点">路线节点</h3><ul>
+<li><p>普通战斗；</p>
+</li>
+<li><p>精英；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>营地；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>ProfileState；</p>
+</li>
+<li><p>RunState；</p>
+</li>
+<li><p>RunMapState；</p>
+</li>
+<li><p>CardDefinition；</p>
+</li>
+<li><p>CardInstance；</p>
+</li>
+<li><p>DeckZoneState；</p>
+</li>
+<li><p>BattleState；</p>
+</li>
+<li><p>EffectQueue；</p>
+</li>
+<li><p>TriggerQueue；</p>
+</li>
+<li><p>EnemyIntent；</p>
+</li>
+<li><p>RewardOffer；</p>
+</li>
+<li><p>RelicState；</p>
+</li>
+<li><p>SaveSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>BattleState查看器；</p>
+</li>
+<li><p>卡牌区域审计器；</p>
+</li>
+<li><p>效果追踪器；</p>
+</li>
+<li><p>伤害解释器；</p>
+</li>
+<li><p>敌人意图查看器；</p>
+</li>
+<li><p>构筑分析面板；</p>
+</li>
+<li><p>奖励生成解释器；</p>
+</li>
+<li><p>Run时间线；</p>
+</li>
+<li><p>完整Run回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>加牌是否同时具有收益和概率成本；</p>
+</li>
+<li><p>跳过卡牌是否为合法决策；</p>
+</li>
+<li><p>不同遭遇是否测试不同构筑维度；</p>
+</li>
+<li><p>玩家是否能通过路线修复当前构筑缺口；</p>
+</li>
+<li><p>卡牌区域是否始终保持守恒；</p>
+</li>
+<li><p>遗物和状态触发是否不会无限递归；</p>
+</li>
+<li><p>随机结果是否能通过构筑和路线管理；</p>
+</li>
+<li><p>失败是否能被解释为构筑、路线或执行问题；</p>
+</li>
+<li><p>同一种子和命令是否能够完整回放；</p>
+</li>
+<li><p>局外解锁是否扩展内容而不直接增加基础战斗力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-推荐实施顺序">40. 推荐实施顺序</h2><p>第一阶段：RunState、卡牌定义与卡牌实例
+第二阶段：抽牌堆、手牌、弃牌堆和消耗区
+第三阶段：战斗状态机与基础攻击、防御
+第四阶段：EffectQueue和TriggerQueue
+第五阶段：状态、能力与遗物
+第六阶段：敌人意图和遭遇
+第七阶段：战斗奖励与选牌
+第八阶段：地图、路线和节点
+第九阶段：商店、营地和事件
+第十阶段：Boss、区域和难度进阶
+第十一阶段：存档、回放和确定性
+第十二阶段：自动模拟、平衡分析和内容验证</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量卡牌：</p>
+<ul>
+<li><p>卡牌实例；</p>
+</li>
+<li><p>区域转移；</p>
+</li>
+<li><p>效果队列；</p>
+</li>
+<li><p>触发顺序；</p>
+</li>
+<li><p>随机流；</p>
+</li>
+<li><p>奖励生成；</p>
+</li>
+<li><p>存档；</p>
+</li>
+<li><p>回放。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-架构验收标准">41. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>局外档案、Run状态和战斗状态相互分离；</p>
+</li>
+<li><p>每张卡牌具有稳定实例ID；</p>
+</li>
+<li><p>每张卡在任意时刻只属于一个牌区；</p>
+</li>
+<li><p>抽牌不足时能稳定洗入弃牌堆；</p>
+</li>
+<li><p>洗牌使用可回放的随机流；</p>
+</li>
+<li><p>卡牌使用统一经过费用、目标和版本验证；</p>
+</li>
+<li><p>卡牌执行期间进入Limbo区；</p>
+</li>
+<li><p>主动效果和被动触发使用独立队列；</p>
+</li>
+<li><p>复杂触发链具有深度和数量限制；</p>
+</li>
+<li><p>伤害、护盾和状态具有固定结算顺序；</p>
+</li>
+<li><p>敌人意图能够被玩家理解并参与决策；</p>
+</li>
+<li><p>敌人不能无条件读取玩家当前手牌；</p>
+</li>
+<li><p>战斗结束后临时卡和临时状态被正确清理；</p>
+</li>
+<li><p>战斗奖励与节点绑定并具有幂等性；</p>
+</li>
+<li><p>玩家可以合法跳过卡牌奖励；</p>
+</li>
+<li><p>卡组支持添加、删除、升级和转化；</p>
+</li>
+<li><p>遗物通过统一事件接口接入；</p>
+</li>
+<li><p>地图生成保证Boss可达和路线差异；</p>
+</li>
+<li><p>存档能够恢复牌区、意图、随机游标和效果状态；</p>
+</li>
+<li><p>同一种子和命令流能够重现完整Run；</p>
+</li>
+<li><p>调试工具能够解释卡牌去向、伤害、意图和奖励生成；</p>
+</li>
+<li><p>新卡牌通常不需要修改战斗主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-可迁移到其他游戏的设计思想">42. 可迁移到其他游戏的设计思想</h2><h2 id="421-能力集合可以同时被建模为概率分布">42.1 能力集合可以同时被建模为概率分布</h2><p>可迁移到：</p>
+<ul>
+<li><p>技能轮盘；</p>
+</li>
+<li><p>随机道具；</p>
+</li>
+<li><p>AI行为池；</p>
+</li>
+<li><p>战术指令；</p>
+</li>
+<li><p>随机装备。</p>
+</li>
+</ul>
+<p>玩家拥有什么，与玩家何时能使用它，是两个不同问题。</p>
+<hr />
+<h2 id="422-增加内容也可能降低系统稳定性">42.2 增加内容也可能降低系统稳定性</h2><p>可迁移到：</p>
+<ul>
+<li><p>技能槽；</p>
+</li>
+<li><p>装备词条；</p>
+</li>
+<li><p>自动化流程；</p>
+</li>
+<li><p>AI决策；</p>
+</li>
+<li><p>生产队列。</p>
+</li>
+</ul>
+<p>新增选项可能稀释核心行为出现的概率。</p>
+<hr />
+<h2 id="423-跳过奖励可以是高价值决策">42.3 跳过奖励可以是高价值决策</h2><p>可迁移到：</p>
+<ul>
+<li><p>装备掉落；</p>
+</li>
+<li><p>天赋；</p>
+</li>
+<li><p>招募；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>制造。</p>
+</li>
+</ul>
+<p>奖励系统不应默认“获得越多越强”。</p>
+<hr />
+<h2 id="424-单局成长应逐渐收敛而非无限发散">42.4 单局成长应逐渐收敛而非无限发散</h2><p>可迁移到：</p>
+<ul>
+<li><p>Roguelike构筑；</p>
+</li>
+<li><p>天赋树；</p>
+</li>
+<li><p>装备搭配；</p>
+</li>
+<li><p>技能组合；</p>
+</li>
+<li><p>自动战斗阵容。</p>
+</li>
+</ul>
+<p>成长过程需要从探索方向转向强化核心。</p>
+<hr />
+<h2 id="425-主动效果与被动触发应使用显式队列">42.5 主动效果与被动触发应使用显式队列</h2><p>可迁移到：</p>
+<ul>
+<li><p>技能系统；</p>
+</li>
+<li><p>战斗事件；</p>
+</li>
+<li><p>连锁反应；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>装备特效。</p>
+</li>
+</ul>
+<p>显式队列有利于：</p>
+<ul>
+<li><p>排序；</p>
+</li>
+<li><p>回放；</p>
+</li>
+<li><p>动画；</p>
+</li>
+<li><p>调试；</p>
+</li>
+<li><p>防递归。</p>
+</li>
+</ul>
+<hr />
+<h2 id="426-敌人意图是可解释ai的一种形式">42.6 敌人意图是可解释AI的一种形式</h2><p>可迁移到：</p>
+<ul>
+<li><p>战术游戏；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>回合制RPG；</p>
+</li>
+<li><p>塔防。</p>
+</li>
+</ul>
+<p>系统可以在保留挑战的同时，让玩家理解AI下一步计划。</p>
+<hr />
+<h2 id="427-路线节点可以表达资源机会成本">42.7 路线节点可以表达资源机会成本</h2><p>可迁移到：</p>
+<ul>
+<li><p>战役地图；</p>
+</li>
+<li><p>远征；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>任务链。</p>
+</li>
+</ul>
+<p>不同节点提供不同类型的成长机会，而非单纯不同奖励数值。</p>
+<hr />
+<h2 id="428-随机性需要配套控制手段">42.8 随机性需要配套控制手段</h2><p>可迁移到所有使用随机系统的游戏。</p>
+<p>随机性应同时提供：</p>
+<ul>
+<li><p>信息；</p>
+</li>
+<li><p>调整；</p>
+</li>
+<li><p>检索；</p>
+</li>
+<li><p>重选；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>保底；</p>
+</li>
+<li><p>替代方案。</p>
+</li>
+</ul>
+<hr />
+<h2 id="429-单局失败可以作为结构诊断">42.9 单局失败可以作为结构诊断</h2><p>可迁移到：</p>
+<ul>
+<li><p>战术任务；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>策略；</p>
+</li>
+<li><p>竞技训练。</p>
+</li>
+</ul>
+<p>失败复盘应区分：</p>
+<ul>
+<li><p>计划问题；</p>
+</li>
+<li><p>资源问题；</p>
+</li>
+<li><p>执行问题；</p>
+</li>
+<li><p>信息问题；</p>
+</li>
+<li><p>系统理解问题。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4210-局外成长适合扩展可能性而非直接削弱挑战">42.10 局外成长适合扩展可能性，而非直接削弱挑战</h2><p>可迁移到：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>竞技模式；</p>
+</li>
+<li><p>长期战役；</p>
+</li>
+<li><p>解锁系统；</p>
+</li>
+<li><p>角色收集。</p>
+</li>
+</ul>
+<p>长期游玩可以提供更多选择，但不必永久提高所有局内数值。</p>
+<hr />
+<h2 id="43-本次防重记录">43. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>卡组构筑式Roguelike。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Roguelike Deckbuilder；</p>
+</li>
+<li><p>Deckbuilding Roguelike；</p>
+</li>
+<li><p>卡牌构筑Roguelike；</p>
+</li>
+<li><p>单局卡组构筑游戏；</p>
+</li>
+<li><p>路线式卡牌冒险游戏。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>玩家以一套基础卡组进入单局流程，通过节点路线、战斗奖励、删牌、升级、遗物、商店和事件，持续修改未来行动的概率分布；战斗以抽牌、能量、牌区转移、效果队列和敌人意图为核心，构筑则从早期方向探索逐步收敛为能够应对高强度遭遇和Boss机制的完整系统。失败会结束本次构筑，但局外主要解锁新的内容与可能性，而非持续增加基础战斗力。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>卡组既是能力集合，也是行动概率分布；</p>
+</li>
+<li><p>玩家每回合只能使用抽到的有限手牌；</p>
+</li>
+<li><p>加入新卡可能增强能力，也可能污染抽牌结构；</p>
+</li>
+<li><p>跳过卡牌奖励属于合法且重要的选择；</p>
+</li>
+<li><p>卡组在单局中通过添加、删除、升级和转化持续演化；</p>
+</li>
+<li><p>路线决定战斗、商店、营地、精英和事件等成长机会；</p>
+</li>
+<li><p>普通敌人、精英和Boss测试不同构筑维度；</p>
+</li>
+<li><p>敌人通常通过意图系统向玩家预告行为；</p>
+</li>
+<li><p>卡牌效果和遗物触发使用显式执行队列；</p>
+</li>
+<li><p>生命、药剂、金钱和营地机会是跨战斗资源；</p>
+</li>
+<li><p>单局构筑应逐渐收敛，而非无条件扩张；</p>
+</li>
+<li><p>随机性需要配套抽牌、检索、路线和跳过等控制手段；</p>
+</li>
+<li><p>失败可以从构筑、路线、资源和执行层面复盘；</p>
+</li>
+<li><p>同一种子和命令流应能够重现完整单局；</p>
+</li>
+<li><p>局外成长主要扩展卡池、角色、事件和难度规则。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>单局卡组构筑；</p>
+</li>
+<li><p>抽牌堆、手牌、弃牌堆和消耗区；</p>
+</li>
+<li><p>卡牌实例与区域守恒；</p>
+</li>
+<li><p>卡牌费用和行动经济；</p>
+</li>
+<li><p>卡牌命令与目标验证；</p>
+</li>
+<li><p>主动效果队列；</p>
+</li>
+<li><p>被动触发队列；</p>
+</li>
+<li><p>伤害、护盾和状态；</p>
+</li>
+<li><p>遗物与计数器；</p>
+</li>
+<li><p>敌人意图；</p>
+</li>
+<li><p>普通遭遇、精英和Boss；</p>
+</li>
+<li><p>战斗奖励和卡牌三选一；</p>
+</li>
+<li><p>跳过卡牌；</p>
+</li>
+<li><p>卡牌升级、删除和转化；</p>
+</li>
+<li><p>路线地图；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>营地；</p>
+</li>
+<li><p>随机事件；</p>
+</li>
+<li><p>消耗品；</p>
+</li>
+<li><p>构筑识别；</p>
+</li>
+<li><p>难度进阶；</p>
+</li>
+<li><p>确定性随机流；</p>
+</li>
+<li><p>完整Run回放；</p>
+</li>
+<li><p>无限循环检测；</p>
+</li>
+<li><p>自动Run模拟。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>Roguelike卡组构筑；</p>
+</li>
+<li><p>卡牌抽牌与弃牌；</p>
+</li>
+<li><p>卡牌消耗系统；</p>
+</li>
+<li><p>卡牌能量系统；</p>
+</li>
+<li><p>卡牌效果队列；</p>
+</li>
+<li><p>卡牌遗物系统；</p>
+</li>
+<li><p>敌人意图系统；</p>
+</li>
+<li><p>卡牌三选一奖励；</p>
+</li>
+<li><p>卡牌删除与升级；</p>
+</li>
+<li><p>Roguelike路线地图；</p>
+</li>
+<li><p>卡牌商店；</p>
+</li>
+<li><p>卡牌营地；</p>
+</li>
+<li><p>卡牌随机事件；</p>
+</li>
+<li><p>卡牌Boss；</p>
+</li>
+<li><p>卡牌无限循环；</p>
+</li>
+<li><p>卡牌构筑平衡；</p>
+</li>
+<li><p>卡牌Run存档；</p>
+</li>
+<li><p>卡牌固定种子回放；</p>
+</li>
+<li><p>卡牌自动对局；</p>
+</li>
+<li><p>卡牌奖励池验证。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

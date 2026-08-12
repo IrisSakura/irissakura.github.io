@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const allowed = [
   /^content\/blogs\/[a-z0-9-]+\.md$/,
+  /^content\/game-designs\/[a-z0-9-]+\.md$/,
   /^data\/journal(?:-source)?\.json$/,
   /^index\.html$/,
   /^pages\/(?:framework|game)\.html$/,
@@ -12,6 +13,7 @@ const allowed = [
   /^pages\/blog\/[a-z0-9-]+\.html$/,
   /^pages\/blog\/(?:series|tag)\/[a-z0-9-]+\.html$/,
   /^pages\/journal\.html$/,
+  /^pages\/journal\/[a-z0-9-]+\.html$/,
   /^pages\/portfolio\.html$/,
   /^rss\.xml$/,
   /^sitemap\.xml$/

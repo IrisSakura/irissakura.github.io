@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/vessel-systems-management.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="太空飞船系统管理（Vessel Systems Management） | Sakura Design Journal">
+    <meta property="og:description" content="围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/vessel-systems-management.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-vessel-systems-management.png">
+    <meta property="og:image:alt" content="太空飞船系统管理（Vessel Systems Management） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="太空飞船系统管理（Vessel Systems Management） | Sakura Design Journal">
+    <meta name="twitter:description" content="围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-vessel-systems-management.png">
+    <meta name="twitter:image:alt" content="太空飞船系统管理（Vessel Systems Management） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"太空飞船系统管理（Vessel Systems Management） | Sakura Design Journal","description":"围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。","url":"https://irissakura.github.io/pages/journal/vessel-systems-management.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"太空飞船系统管理（Vessel Systems Management）","image":"https://irissakura.github.io/assets/social/pages-journal-vessel-systems-management.png","dateModified":"2026-08-12","about":["simulation","spacecraft","systems-management"]}</script>
+    <!-- site-meta:end -->
+    <title>太空飞船系统管理（Vessel Systems Management） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-vessel-systems-management"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>太空飞船系统管理（Vessel Systems Management）</h1><p>围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。</p><div class="note-tags"><span>simulation</span><span>spacecraft</span><span>systems-management</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何让玩家在任务压力下分配船员、能量、时间和舱室安全，使一个相互依赖的封闭系统维持可控而非完美的运行？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>舰船或太空飞船系统管理类游戏的核心，不是“开船”或“开飞机”。</p>
+<p>它真正关注的是：玩家管理一个封闭载体内部的多个相互依赖系统，在航行、战斗、灾害、探索和资源短缺中维持整体运行。</p>
+<p>这个类型与硬核飞行模拟不同。飞行模拟关注真实驾驶、空气动力、仪表和操控；舰船系统管理关注的是载体内部系统：电力、氧气、舱室、船员、武器、护盾、引擎、损伤、火灾、入侵、维修和任务目标之间的耦合。</p>
+<p>它也不同于灾害应急指挥。灾害应急通常是外部事故现场救援；舰船系统管理则是玩家自己的载体正在承受持续风险，内部空间有限，系统互相依赖，错误调度会让整艘船进入连锁崩溃。</p>
+<p>它最适合抽象为：</p>
+<p><strong>封闭载体系统网络与损伤控制框架</strong></p>
+<p>核心循环是：</p>
+<p>航行或进入任务区域 → 外部威胁或内部故障发生 → 船体系统状态变化 → 玩家分配电力、船员、舱门、维修、武器、防御和航线 → 控制损伤扩散 → 保持关键系统运行 → 完成战斗、逃离、探索或救援目标 → 回收资源并升级船体系统。</p>
+<p>玩家真正管理的不是一个角色，而是一整个“会受伤、会缺氧、会着火、会失压、会被入侵、会降级运行”的复杂载体。</p>
+<hr />
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>舰船系统管理框架建议分为十个核心域。</p>
+<p>第一是船体结构域。
+负责维护船体、舱室、通道、舱门、外壳完整度、装甲、气密性、可通行路径、舱室连接关系和外部破口。</p>
+<p>第二是核心资源网络域。
+负责维护电力、氧气、燃料、热量、冷却液、弹药、护盾能量、维修材料和备用电池等资源，并控制它们如何在不同系统之间分配、传输和消耗。</p>
+<p>第三是舰船子系统域。
+负责维护引擎、武器、护盾、生命维持、导航、传感器、医疗舱、跃迁装置、货舱、炮塔、无人机舱、反应堆、冷却系统等功能模块。</p>
+<p>第四是船员与岗位域。
+负责维护船员属性、技能、生命状态、氧气需求、岗位效率、移动路径、当前任务、恐慌状态、受伤、修理能力、战斗能力和疲劳。</p>
+<p>第五是舱室环境域。
+负责维护每个舱室的氧气浓度、温度、火势、烟雾、压力、辐射、污染、积水、重力状态和危险等级。</p>
+<p>第六是损伤与故障域。
+负责处理外部攻击、内部故障、过载、火灾、短路、泄漏、系统瘫痪、舱门卡死、管线断裂、武器失灵、传感器盲区等问题。</p>
+<p>第七是战斗与外部威胁域。
+负责敌舰、导弹、陨石、海怪、太空风暴、登船部队、电子干扰、鱼雷、环境压力和任务区域威胁。</p>
+<p>第八是指令与调度域。
+负责玩家命令，例如移动船员、分配电力、关闭舱门、开启排气、切换武器、修理系统、封锁区域、转移资源、改变航线。</p>
+<p>第九是任务与事件域。
+负责探索、运输、护航、逃离、打捞、救援、战斗、外交、异常调查和随机事件。</p>
+<p>第十是调试与回放域。
+负责记录系统故障链、船员行动、资源流向、舱室状态变化、战斗命中结果、玩家指令和失败原因。</p>
+<p>完整运行流程可以概括为：</p>
+<p>世界事件或战斗触发 → 船体或系统受影响 → 舱室环境与资源网络变化 → 玩家做出调度命令 → 船员移动并执行任务 → 子系统根据资源与损伤状态输出能力 → 外部威胁继续施压 → 损伤控制系统判断扩散或恢复 → 任务系统检查目标进度 → 船体状态进入稳定、胜利、撤离或崩溃。</p>
+<hr />
+<h2 id="三核心模块职责">三、核心模块职责</h2><p>船体结构系统负责回答“船在哪里受损，哪里还能通行”。</p>
+<p>它必须记录舱室连接关系、舱门状态、破口位置、封锁区域和路径可达性。舰船内部不是普通地图，而是一个会因为损伤、火灾、失压和舱门控制而不断变化的空间网络。</p>
+<p>资源网络系统负责回答“哪些系统还能获得资源”。</p>
+<p>电力不应只是一个总数。更好的设计是让电力通过系统优先级、线路、反应堆输出和备用电池分配。氧气也不应只是全船统一数值，而应在舱室之间流动、泄漏、补充和被火灾消耗。</p>
+<p>子系统系统负责回答“船现在还能做什么”。</p>
+<p>武器损坏会降低攻击能力；引擎损坏会降低闪避和逃跑能力；传感器损坏会让玩家看不到敌舰内部或本舰部分状态；生命维持损坏会导致氧气下降；舱门控制损坏会让火灾和登船入侵更难隔离。</p>
+<p>船员系统负责回答“谁能去处理问题”。</p>
+<p>船员不是普通单位，他们受到空间、氧气、火灾、敌人、医疗、技能和任务优先级约束。一个高维修技能船员在机房能提高引擎效率，但如果武器舱着火，他是否离岗去救火，会直接影响战斗输出。</p>
+<p>舱室环境系统负责回答“当前位置是否安全”。</p>
+<p>同一舱室可能同时存在低氧、高温、火势、敌人和系统损坏。船员进入该舱室前，系统要能评估风险，并在执行过程中持续更新伤害、效率和中断条件。</p>
+<p>损伤系统负责回答“问题是否正在扩散”。</p>
+<p>火灾会蔓延，破口会造成失压，电力过载可能导致短路，敌人登船后会破坏系统，冷却失败可能让反应堆过热。损伤不是一次性扣血，而是一条会继续演化的故障链。</p>
+<p>调度系统负责回答“玩家的命令是否可执行”。</p>
+<p>移动船员需要路径可达；修理需要材料和安全环境；启动武器需要电力、弹药和冷却；关闭舱门需要舱门控制在线；排空舱室需要外部连通或气闸。命令必须经过统一规则验证，而不是由UI直接修改结果。</p>
+<hr />
+<h2 id="四核心数据模型">四、核心数据模型</h2><p>ShipLayout 表示舰船布局。</p>
+<p>它记录船体ID、舱室列表、舱门连接、通道连接、外壳区域、系统安装点、可通行区域、气密分区和关键结构节点。</p>
+<p>RoomState 表示舱室状态。</p>
+<p>它记录舱室ID、氧气浓度、压力、温度、火势等级、烟雾、是否失压、是否有破口、是否有敌人、是否有船员、当前危险标签和可通行状态。</p>
+<p>ShipSystemState 表示舰船子系统状态。</p>
+<p>它记录系统ID、系统类型、所在舱室、最大等级、当前生命值、当前效率、所需电力、分配电力、损坏状态、是否过载、是否正在维修、当前输出能力。</p>
+<p>ResourceNetworkState 表示资源网络状态。</p>
+<p>它记录电力总量、可用电力、已分配电力、氧气生产率、氧气消耗率、燃料、弹药、维修材料、冷却容量、热量积累和备用资源。</p>
+<p>CrewMemberState 表示船员状态。</p>
+<p>它记录船员ID、位置、生命值、氧气状态、技能、岗位、当前任务、移动目标、情绪、疲劳、是否受伤、是否正在战斗、是否正在维修。</p>
+<p>DamageEvent 表示损伤事件。</p>
+<p>它记录损伤来源、影响舱室、影响系统、伤害类型、初始强度、持续效果、扩散规则、是否可修复、修复需求和失败后果。</p>
+<p>ShipCommand 表示玩家命令。</p>
+<p>它记录命令类型、目标对象、执行者、优先级、前置条件、资源需求、预计耗时、可中断性、成功效果和失败反馈。</p>
+<p>MissionState 表示当前任务。</p>
+<p>它记录任务目标、危险等级、外部环境、敌方状态、撤离条件、可选目标、奖励、失败条件和后续影响。</p>
+<hr />
+<h2 id="五核心范式一舰船不是角色而是系统网络">五、核心范式一：舰船不是角色，而是系统网络</h2><p>很多游戏会把载具当成一个大角色：有血条、有武器、有速度。</p>
+<p>舰船系统管理不能这样简化。</p>
+<p>一艘船应该是一个系统网络。</p>
+<p>引擎影响移动、闪避、航行和逃跑。
+反应堆影响所有用电系统。
+护盾保护船体，但消耗大量电力。
+武器需要电力、弹药、冷却和操作员。
+生命维持影响船员生存。
+舱门控制影响火灾隔离、入侵防御和失压处理。
+传感器影响玩家认知。</p>
+<p>因此，战斗中受到一次命中，不应该只是“船体血量 -10”。</p>
+<p>更有价值的结果是：</p>
+<p>武器舱受损，主炮离线。
+舱室破口导致失压。
+氧气下降迫使船员撤离。
+火灾蔓延到舱门控制室。
+舱门失效导致玩家无法隔离火势。
+电力不足迫使玩家关闭医疗舱来恢复护盾。</p>
+<p>这才是该类型最核心的体验：系统之间互相牵连。</p>
+<hr />
+<h2 id="六核心范式二舱室化状态管理是核心空间模型">六、核心范式二：舱室化状态管理是核心空间模型</h2><p>舰船内部空间不应只是平面地图。</p>
+<p>它应被划分为一个个舱室，每个舱室都有独立状态。</p>
+<p>舱室状态包括：</p>
+<p>氧气。
+压力。
+温度。
+火势。
+烟雾。
+积水。
+敌人。
+船员。
+系统设备。
+破口。
+通行状态。
+危险等级。</p>
+<p>舱室化设计有三个重要价值。</p>
+<p>第一，它让空间状态可控。
+系统可以精确判断火势在哪个舱室、氧气从哪里泄漏、船员能否通过、维修是否安全。</p>
+<p>第二，它让战术决策明确。
+玩家可以关闭某几扇门，让敌人窒息；也可以打开外舱门排空氧气灭火；也可以封锁受损区，保护核心区域。</p>
+<p>第三，它让故障具备局部性。
+不是全船一起着火，而是某个舱室先出事，再通过连接关系扩散。</p>
+<p>这使舰船管理具有独特的“内部战场”感。</p>
+<hr />
+<h2 id="七核心范式三资源分配不是升级数值而是实时取舍">七、核心范式三：资源分配不是升级数值，而是实时取舍</h2><p>舰船系统管理中，资源分配应持续发生。</p>
+<p>最典型的是电力。</p>
+<p>玩家可能有8点电力，但所有系统满负荷需要12点。于是必须选择：</p>
+<p>给武器供电，尽快击毁敌人。
+给护盾供电，承受攻击。
+给引擎供电，提高闪避和逃跑速度。
+给医疗舱供电，救治受伤船员。
+给氧气系统供电，防止低氧。
+给传感器供电，获得更多情报。</p>
+<p>这不是传统升级，而是实时策略。</p>
+<p>资源系统应支持：</p>
+<p>分配。
+撤回。
+过载。
+备用电池。
+优先级。
+降级运行。
+局部断线。
+应急模式。</p>
+<p>例如，玩家可以短时间过载武器，但会产生热量和故障风险；也可以关闭氧气系统，把电力转给护盾，但如果战斗拖太久，船员会陷入危险。</p>
+<p>这类资源取舍是该类型的核心张力之一。</p>
+<hr />
+<h2 id="八核心范式四损伤控制比单纯回血更重要">八、核心范式四：损伤控制比单纯回血更重要</h2><p>舰船类游戏的修理不应该只是“恢复血量”。</p>
+<p>更重要的是损伤控制。</p>
+<p>损伤可能包括：</p>
+<p>船体破口。
+系统损坏。
+火灾。
+短路。
+管线泄漏。
+舱门故障。
+武器卡壳。
+反应堆过热。
+氧气不足。
+敌人登船。
+船员昏迷。</p>
+<p>这些问题优先级不同，且会互相影响。</p>
+<p>例如：</p>
+<p>火灾如果不处理，会烧毁系统。
+破口如果不处理，会造成低氧。
+低氧会让船员无法维修。
+船员无法维修会让火势继续扩大。
+火势扩大可能烧毁舱门控制。
+舱门失效又会让隔离火灾变得更难。</p>
+<p>这就是损伤链。</p>
+<p>玩家的任务不是“看到哪里红就修哪里”，而是判断：</p>
+<p>哪个问题会最快扩散？</p>
+<p>哪个问题会影响关键系统？</p>
+<p>哪个问题威胁船员生命？</p>
+<p>哪个问题可以暂时隔离？</p>
+<p>哪个问题必须冒险处理？</p>
+<p>因此，损伤系统需要有扩散逻辑、危险等级、修复条件和可暂缓策略。</p>
+<hr />
+<h2 id="九核心范式五船员既是劳动力也是风险载体">九、核心范式五：船员既是劳动力，也是风险载体</h2><p>船员不是普通资源点。</p>
+<p>他们会移动、受伤、缺氧、疲劳、恐慌、成长、死亡，也会因为岗位不同影响系统效率。</p>
+<p>例如：</p>
+<p>工程师在引擎室提高引擎效率。
+炮手在武器室提高充能速度。
+医疗员可以更快治疗伤员。
+安保人员适合处理登船敌人。
+机器人不需要氧气，但可能怕电磁干扰。
+外星船员耐火但修理慢。</p>
+<p>船员调度应同时影响：</p>
+<p>系统输出。
+维修速度。
+战斗防御。
+危机处理。
+医疗恢复。
+长期士气。</p>
+<p>关键是，船员行动必须受空间和环境限制。</p>
+<p>玩家不能简单点击“修理武器”。必须有人能到达武器舱，并在火灾、低氧、敌人或失压条件下存活足够时间。</p>
+<p>这会让“人”成为舰船系统的一部分，而不是外部按钮。</p>
+<hr />
+<h2 id="十核心范式六外部战斗与内部管理必须强耦合">十、核心范式六：外部战斗与内部管理必须强耦合</h2><p>如果外部战斗只是炮弹互射，内部管理只是修理小游戏，两者会割裂。</p>
+<p>成熟的舰船系统管理应让外部战斗直接改变内部状态。</p>
+<p>敌方导弹命中可能造成破口。
+激光武器可能点燃舱室。
+电磁武器可能瘫痪护盾或传感器。
+登船舱可能把敌人送入关键系统舱。
+鱼雷可能造成积水或结构损坏。
+辐射风暴可能让船员持续受伤。</p>
+<p>同时，内部管理也应影响外部战斗。</p>
+<p>武器舱没人操作，武器充能变慢。
+引擎受损，闪避降低。
+护盾室着火，护盾恢复变慢。
+传感器损坏，无法锁定敌方弱点。
+船员去灭火，导致火炮无人值守。</p>
+<p>这让玩家始终处在双层压力中：</p>
+<p>外部威胁要求你攻击、防御、机动。
+内部危机要求你灭火、修理、救人、封舱。</p>
+<p>两者互相争夺同一批资源和船员，这就是该类型的核心深度。</p>
+<hr />
+<h2 id="十一核心范式七系统冗余与降级运行创造策略空间">十一、核心范式七：系统冗余与降级运行创造策略空间</h2><p>一个系统损坏后，如果只能完全失效，游戏会很容易进入不可逆失败。</p>
+<p>更好的框架应支持降级运行。</p>
+<p>例如：</p>
+<p>引擎损坏50%，仍可低速航行。
+传感器损坏后，只能看到本舰内部，无法扫描敌舰。
+武器部分损坏后，充能变慢但仍能发射。
+生命维持受损后，氧气缓慢下降，而不是立刻归零。
+舱门控制损坏后，玩家仍可手动开关局部舱门，但速度较慢。</p>
+<p>同时，船体可以有冗余系统：</p>
+<p>备用电池。
+应急氧气罐。
+辅助反应堆。
+备用控制台。
+手动舱门。
+临时补丁材料。
+无人机维修。</p>
+<p>这使游戏不会变成“某关键系统一坏就失败”，而是进入“应急模式”。</p>
+<p>玩家的乐趣来自在残破状态下维持最低可运行能力。</p>
+<hr />
+<h2 id="十二事件与执行流程">十二、事件与执行流程</h2><p>一次典型的舰船战斗或危机流程如下。</p>
+<p>任务系统触发外部事件，例如敌舰遭遇、陨石带、海怪袭击、引擎故障、火灾、失压或登船入侵。</p>
+<p>战斗或事件系统生成 DamageEvent。</p>
+<p>损伤系统根据命中位置、伤害类型、防御状态和船体结构，决定影响哪些舱室和系统。</p>
+<p>舱室环境系统更新火势、氧气、压力、破口、温度或敌人状态。</p>
+<p>资源系统重新计算电力、氧气、冷却和系统输出。</p>
+<p>玩家通过指令系统下达命令，例如调电、移动船员、关闭舱门、维修、灭火、排气、攻击、撤离。</p>
+<p>船员系统检查路径、环境风险和任务可行性，开始执行行动。</p>
+<p>子系统根据当前状态输出效果，例如武器充能、护盾恢复、引擎闪避、生命维持供氧。</p>
+<p>损伤系统在每个时间步更新扩散，例如火势蔓延、氧气泄漏、系统继续损坏。</p>
+<p>任务系统检查战斗胜利、跃迁完成、撤离成功、船体崩溃或船员全灭等结果。</p>
+<p>关键事件包括：</p>
+<p>舰船进入危险区事件。
+敌方攻击命中事件。
+舱室破口事件。
+火灾生成事件。
+氧气下降事件。
+系统离线事件。
+电力重新分配事件。
+船员移动事件。
+船员受伤事件。
+维修开始事件。
+维修完成事件。
+舱门关闭事件。
+舱室排气事件。
+登船入侵事件。
+武器发射事件。
+护盾恢复事件。
+跃迁完成事件。
+船体毁坏事件。</p>
+<hr />
+<h2 id="十三模块通信设计">十三、模块通信设计</h2><p>建议采用事件驱动加状态快照的结构。</p>
+<p>战斗系统只发布命中和伤害事件，不直接修改所有舱室。</p>
+<p>损伤系统接收伤害事件，决定船体、舱室和系统损坏。</p>
+<p>舱室环境系统根据损伤事件更新氧气、火势、压力和危险状态。</p>
+<p>资源网络系统监听系统损坏和玩家调度，重新计算输出。</p>
+<p>船员系统读取舱室状态和玩家命令，决定是否能移动和执行任务。</p>
+<p>子系统系统读取资源分配、船员岗位和损伤状态，输出当前能力。</p>
+<p>任务系统监听关键事件，判断胜利、失败或阶段变化。</p>
+<p>UI系统只读取状态快照和事件日志，不直接改变船体状态。</p>
+<p>这种结构能避免常见耦合问题：</p>
+<p>武器脚本直接点燃舱室。
+舱门UI直接修改氧气。
+船员脚本直接修好系统而不消耗资源。
+任务脚本绕过船体状态直接判定失败。
+战斗和内部舱室状态不同步。</p>
+<p>核心原则是：</p>
+<p>所有外部威胁都先转化为损伤事件，所有玩家操作都先转化为指令事件，再由统一规则系统结算。</p>
+<hr />
+<h2 id="十四可扩展点">十四、可扩展点</h2><p>第一类扩展是不同载体主题。</p>
+<p>可以是太空飞船、潜艇、蒸汽飞艇、海盗船、移动基地、列车、巨型机甲、地下钻探车、末日方舟、魔法浮空城。底层都可以使用舱室、系统、资源、船员、损伤控制框架。</p>
+<p>第二类扩展是船员职业与心理系统。</p>
+<p>船员可以拥有技能、性格、恐惧、忠诚、疲劳、创伤、关系、专长和成长。长期航行中，心理状态也会成为管理对象。</p>
+<p>第三类扩展是模块化改装。</p>
+<p>玩家可以改变船体布局、安装新系统、更换武器、扩展舱室、强化装甲、增加冗余管线、优化通道，形成不同船型。</p>
+<p>第四类扩展是外部航行层。</p>
+<p>可以加入星图、航线、燃料、风险区域、贸易、任务节点、追兵、空间异常和探索事件。</p>
+<p>第五类扩展是登船与内部战斗。</p>
+<p>敌人可以进入本舰，玩家也可以派船员登上敌舰，形成双向内部空间作战。</p>
+<p>第六类扩展是多人协作。</p>
+<p>一名玩家负责驾驶。
+一名负责武器。
+一名负责工程。
+一名负责损伤控制。
+一名负责医疗和内部安保。</p>
+<p>第七类扩展是程序化事件生成。</p>
+<p>通过舰船状态、航线环境、敌人类型、资源短缺和船员关系动态生成危机事件。</p>
+<hr />
+<h2 id="十五失败隔离与调试设计">十五、失败隔离与调试设计</h2><p>舰船系统管理最容易出现的问题包括：</p>
+<p>关键系统损坏后无修复路径。
+船员被困在失压舱室且无法救援。
+火灾无限蔓延导致必死。
+氧气系统损坏后过快崩溃。
+电力分配状态与系统输出不一致。
+舱门连接错误导致路径不可达。
+船员AI卡在通道或危险区。
+任务要求某系统在线，但该系统已永久摧毁。</p>
+<p>因此需要以下保护与调试机制。</p>
+<p>第一，关键系统应支持最低恢复路径。
+例如生命维持系统损坏后，可以通过备用氧气、维修材料、临时补丁、外部补给或应急舱室维持一段时间。</p>
+<p>第二，船员路径必须支持可达性检测。
+当玩家下达维修命令时，系统应判断路径是否被火灾、失压、敌人、舱门或破口阻断，并明确给出原因。</p>
+<p>第三，损伤扩散应有上限和预警。
+火灾、失压、过热等可以非常危险，但应提供可预测的扩散速度、危险提示和至少一种合理处理方式。</p>
+<p>第四，所有资源流动需要可视化。
+开发者和玩家应能看到电力分配、氧气流动、冷却不足、热量积累和系统降级原因。</p>
+<p>第五，系统状态应有故障链日志。
+例如“护盾离线”应能追溯到：反应堆受损 → 可用电力下降 → 玩家优先供电给武器 → 护盾供电不足 → 护盾离线。</p>
+<p>第六，程序化舰船布局需要验证。
+验证内容包括：所有关键舱室可达、舱门连接正确、氧气网络连通、火灾隔离可行、至少存在一个可修复路径。</p>
+<p>第七，任务系统应允许撤退或降级目标。
+如果主要目标因系统损坏不可达，可以允许玩家选择撤离、放弃奖励、呼叫救援、转入生存模式，避免直接软锁。</p>
+<hr />
+<h2 id="十六玩家体验目标">十六、玩家体验目标</h2><p>这一类型最核心的体验不是：</p>
+<p>“我打赢了一场战斗。”</p>
+<p>而是：</p>
+<p>“我的船快散架了，但我靠调度和取舍把它救回来了。”</p>
+<p>玩家体验通常分为六个阶段。</p>
+<p>第一阶段是正常运行。
+船体系统稳定，玩家按计划航行、探索或战斗。</p>
+<p>第二阶段是突发受损。
+某个系统被击中，某个舱室起火，或资源突然不足。</p>
+<p>第三阶段是局势恶化。
+损伤开始扩散，船员受伤，关键系统离线，玩家被迫重新分配资源。</p>
+<p>第四阶段是优先级判断。
+玩家决定先修护盾还是先灭火，先救船员还是先开武器，先封舱还是先恢复氧气。</p>
+<p>第五阶段是应急恢复。
+船员冒险进入危险区域，备用系统启动，火势被隔离，关键系统重新上线。</p>
+<p>第六阶段是带伤继续。
+船没有恢复完美状态，但重新获得最低可运行能力，并完成逃离、反击或任务目标。</p>
+<p>优秀的舰船系统管理游戏会让玩家记住的不是数值胜利，而是：</p>
+<p>“那次氧气只剩20%，武器舱还在着火，但工程师修好了引擎，我们刚好跳走。”</p>
+<hr />
+<h2 id="十七可迁移到其他游戏的设计思想">十七、可迁移到其他游戏的设计思想</h2><p>这一类型最值得迁移的思想是：</p>
+<p><strong>将一个大型实体拆解为多个互相依赖、可局部损坏、可降级运行、可被人员维护的系统网络。</strong></p>
+<p>在Roguelike Shooter中，可以用于玩家基地、移动载具、机甲、母舰或据点防守。Boss攻击不只是扣基地血，而是打坏电力、医疗、炮塔、氧气、仓库或传送系统，迫使玩家在战斗中修复和取舍。</p>
+<p>在生存游戏中，可以用于基地内部系统。发电机、通风、供水、温控、储藏、医疗和防御系统互相影响，让基地像一艘固定的船。</p>
+<p>在策略游戏中，可以用于巨型单位、城堡、空间站、战舰和战争机器，使它们不再是单一血条单位，而是可局部瘫痪的系统集合。</p>
+<p>在恐怖游戏中，可以用于空间站或潜艇场景。玩家不仅躲避怪物，还要管理氧气、舱门、电力、灯光和传感器。</p>
+<p>在多人合作游戏中，可以制造清晰岗位分工：驾驶、武器、维修、医疗、资源调度和安全防卫。</p>
+<p>其通用价值在于：</p>
+<p>不要把大型对象做成“一个血条”。</p>
+<p>把它做成一个会因为局部损伤而改变功能、路线、风险和策略的系统网络。</p>
+<hr />
+<h2 id="十八完整航次边界与系统支柱">十八、完整航次边界与系统支柱</h2><p>完整产品应覆盖“选择任务—配置船体与船员—规划航线—巡航值守—应对事件或战斗—完成作业—返航维修—升级下一航次”的闭环，而不是连续生成舱室事故的生存模式。</p>
+<p>核心支柱是资源相互耦合、故障可传播、船员有职责、任务迫使取舍。供能、氧气、温控、推进与武器不能各自成为独立进度条；它们通过舱室、管线和人员形成可被玩家理解的依赖网络。</p>
+<p>“保持船不沉”只是底线。任务载荷、时间窗口、乘员安全和返回能力共同定义成功，玩家有时需要带着损伤放弃次要目标。</p>
+<h2 id="十九航次阶段与关键状态机">十九、航次阶段与关键状态机</h2><p>航次分为整备、离港、巡航、任务接近、关键作业、脱离、返航和检修。不同阶段改变可用维修、冗余和撤退手段，使出港前的配置真正影响途中选择。</p>
+<p>子系统至少区分离线、启动、稳定、过载、降级、故障和隔离；舱室记录压力、温度、空气质量、火灾、结构与可达性。故障传播必须沿明确连接发生，并保留首因与处置时间线。</p>
+<p>船员状态包含岗位、当前任务、移动路径、疲劳、伤情和环境防护。下达维修命令时，界面要同时展示到达时间与沿途风险，而不是瞬间消费一个人力数值。</p>
+<h2 id="二十长期进程内容单元与维护经济">二十、长期进程、内容单元与维护经济</h2><p>长期进程围绕船体模块、冗余设计、船员专长、航路知识、备件供应和机构关系展开。升级改变系统拓扑和应急选项，例如增加旁路、隔离门或备用电源，而非只提高耐久。</p>
+<p>内容单元可定义为“任务目标 + 航路环境 + 船体压力 + 事件链 + 可选成果 + 返航约束”。事件应查询当前拓扑和船员状态，让同一外部威胁在不同配置下产生不同事故链。</p>
+<p>经济需要计算燃料、耗材、备件、船员恢复、停港时间与任务收益。延后彻底检修可更快接任务，却把隐患带入下一航次；可靠性因此成为长期经营资产。</p>
+<h2 id="二十一灾害恢复难度与信息公平">二十一、灾害恢复、难度与信息公平</h2><p>难度先引入单点故障，再加入资源竞争、路径阻断、多点事故与任务时限。高难度应缩小余量并增加耦合，不应隐藏系统连接或让事故无首因地产生。</p>
+<p>恢复工具包括隔离舱段、卸载非关键系统、重路由能量、排空灭火、应急封堵、撤离人员和放弃任务。它们保存船体的方式不同，并给后续航程留下明确损伤。</p>
+<p>告警按征兆、异常、故障和危急分级。玩家可配置告警优先级，但任何致命传播都应能从日志和拓扑图追溯，避免在多条声音提示中猜测真正原因。</p>
+<h2 id="二十二作者工具最小切片与验收标准">二十二、作者工具、最小切片与验收标准</h2><p>作者工具需要船体拓扑编辑、资源流可视化、故障注入、船员寻路回放、固定种子事故模拟和任务可返回性验证。验证器应发现单点无解致命故障、不可达关键舱室和负载下永远不足的基础生命维持。</p>
+<p>最小切片包含六个舱室、四个耦合系统、三名船员、一个主任务、一次火灾与一次供能不足。玩家要完成整备、巡航、处置、目标取舍和返航检修。</p>
+<p>验收时至少确认：资源变化沿拓扑传播；船员执行需要时间与路径；隔离能阻断事故也会损失能力；带伤返航可行；事后报告能重建首因、传播与处置效果。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>舰船 / 太空飞船系统管理（Starship / Vessel Systems Management）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>封闭载体系统网络与损伤控制框架</p>
+</li>
+<li><p>舰船作为系统网络，而非单一大角色</p>
+</li>
+<li><p>舱室化状态管理与局部环境模拟</p>
+</li>
+<li><p>电力、氧气、燃料、冷却等核心资源实时分配</p>
+</li>
+<li><p>损伤控制链：火灾、失压、破口、系统离线与扩散</p>
+</li>
+<li><p>船员作为劳动力、岗位加成与风险载体</p>
+</li>
+<li><p>外部战斗与内部系统管理强耦合</p>
+</li>
+<li><p>系统冗余、降级运行与应急恢复机制</p>
+</li>
+<li><p>事件驱动的命中、损伤、舱室、资源、船员和任务流程</p>
+</li>
+<li><p>可视化故障链、资源流动、路径可达性与软锁隔离调试</p>
+</li>
+<li><p>将大型实体设计为可局部损坏、可维护、可降级运行的系统网络</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

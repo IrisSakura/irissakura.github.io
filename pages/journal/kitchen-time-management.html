@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/kitchen-time-management.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="厨房时间管理模拟（Kitchen Time-Management Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/kitchen-time-management.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-kitchen-time-management.png">
+    <meta property="og:image:alt" content="厨房时间管理模拟（Kitchen Time-Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="厨房时间管理模拟（Kitchen Time-Management Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-kitchen-time-management.png">
+    <meta name="twitter:image:alt" content="厨房时间管理模拟（Kitchen Time-Management Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"厨房时间管理模拟（Kitchen Time-Management Simulation） | Sakura Design Journal","description":"分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。","url":"https://irissakura.github.io/pages/journal/kitchen-time-management.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"厨房时间管理模拟（Kitchen Time-Management Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-kitchen-time-management.png","dateModified":"2026-08-12","about":["kitchen","scheduling","time-management"]}</script>
+    <!-- site-meta:end -->
+    <title>厨房时间管理模拟（Kitchen Time-Management Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-kitchen-time-management"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>厨房时间管理模拟（Kitchen Time-Management Simulation）</h1><p>分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。</p><div class="note-tags"><span>kitchen</span><span>scheduling</span><span>time-management</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何把订单承诺、工序依赖、火候窗口和共享工位组织成可读、可优化、会传播瓶颈的实时生产服务循环。</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>烹饪餐厅类游戏的核心不是“做菜”这个动作本身，也不是普通经营游戏中的“买设备、赚金币”。</p>
+<p>它真正关注的是：玩家在持续涌入的订单、有限的厨房工位、复杂的菜品工序、食材库存、顾客耐心和出餐质量之间，建立一条高效且稳定的服务管线。</p>
+<p>它与普通工厂流水线不同。工厂流水线通常追求稳定批量生产；餐厅厨房则强调小批量、多品类、强时效、订单差异、火候窗口、临场插单和前厅反馈。</p>
+<p>它最适合抽象为：</p>
+<p><strong>订单—配方—工序—出餐的服务履约框架</strong></p>
+<p>核心循环是：</p>
+<p>顾客到店或订单进入 → 系统生成菜品需求 → 玩家准备食材 → 分配工位 → 执行烹饪工序 → 组装菜品 → 检查质量 → 出餐交付 → 结算顾客满意、收入、口碑和厨房压力 → 继续优化菜单、设备和人员。</p>
+<p>玩家真正管理的不是单个菜品，而是：</p>
+<p>时间窗口、工序依赖、工位占用、食材库存、火候质量、厨师协作、顾客耐心、桌台周转和服务节奏。</p>
+<hr />
+<h2 id="二整体运行时架构">二、整体运行时架构</h2><p>烹饪餐厅框架可以分为十个核心域。</p>
+<p>第一是订单域。
+负责生成堂食订单、外卖订单、预约订单、团体订单、加急订单、特殊口味订单和退改单。</p>
+<p>第二是配方域。
+负责维护菜品结构，包括食材、预处理、烹饪步骤、火候要求、组装顺序、摆盘规则、出餐时限和质量评分。</p>
+<p>第三是食材与库存域。
+负责维护原材料、半成品、库存数量、保鲜状态、采购、补货、浪费、过期和预制品。</p>
+<p>第四是工位与设备域。
+负责维护炉灶、烤箱、煎台、切菜台、洗菜台、备餐台、饮品机、炸锅、蒸箱、冰柜、出餐口等厨房节点。</p>
+<p>第五是烹饪状态域。
+负责处理生、预处理、加热中、最佳火候、过熟、烧焦、冷却、变质、已组装、待出餐等菜品状态。</p>
+<p>第六是厨师与岗位域。
+负责维护厨师、服务员、洗碗工、收银员、配送员等角色的技能、速度、疲劳、岗位、路径和当前任务。</p>
+<p>第七是前厅服务域。
+负责维护顾客到店、排队、入座、点餐、等待、用餐、结账、离席、桌台清理和满意度。</p>
+<p>第八是节奏与拥堵域。
+负责模拟高峰期、订单堆积、工位瓶颈、前厅拥堵、外卖插单、设备故障和服务节奏变化。</p>
+<p>第九是经营成长域。
+负责菜单扩展、设备升级、员工培养、餐厅评级、口碑、收入成本、装修、活动和分店扩张。</p>
+<p>第十是调试与回放域。
+负责记录订单流、工序链、瓶颈来源、食材浪费、顾客流失、菜品失败原因和员工路径问题。</p>
+<hr />
+<h2 id="三核心模块职责">三、核心模块职责</h2><p>订单系统负责回答：“现在要做什么？”</p>
+<p>订单不只是一个菜名，而是一份带有时间、顾客、质量和特殊要求的履约对象。例如“牛排七分熟、不要洋葱、十分钟内出餐、堂食桌号3”。订单系统应记录菜品需求、优先级、剩余耐心、是否可拆分、是否允许部分出餐。</p>
+<p>配方系统负责回答：“这道菜怎么做？”</p>
+<p>它将菜品拆解为多个工序。例如汉堡可能需要烤面包、煎肉饼、切生菜、加酱、组装、包装。每个步骤有前置条件、所需工位、执行时间、质量窗口和失败状态。</p>
+<p>工位系统负责回答：“厨房哪里能处理这一步？”</p>
+<p>炉灶不能切菜，切菜台不能油炸，烤箱可并行处理多份但有容量限制。工位是厨房生产管线的核心资源。</p>
+<p>烹饪状态系统负责回答：“这份食物现在处于什么火候？”</p>
+<p>它不应只记录完成或未完成，而应记录从生到熟、从最佳到过熟、从热菜到冷菜的连续变化。火候窗口越清晰，玩家的时间管理压力越明确。</p>
+<p>食材库存系统负责回答：“能不能开始做？”</p>
+<p>如果没有番茄，披萨无法完整制作；如果只有半成品，可以跳过部分预处理；如果食材过期，菜品质量下降甚至引发投诉。</p>
+<p>厨师系统负责回答：“谁去做、需要多久、会不会出错？”</p>
+<p>不同厨师可以擅长不同工位。高级厨师切配更快，甜品师烘焙更稳定，服务员端菜更快但不能做复杂烹饪。人员不是单纯加速器，而是任务执行者。</p>
+<p>前厅系统负责回答：“顾客还能等多久？”</p>
+<p>顾客耐心、桌台周转、排队长度、用餐时间和结账速度会反向影响厨房压力。厨房慢会导致前厅差评，前厅拥堵也会导致订单节奏失控。</p>
+<hr />
+<h2 id="四核心数据模型">四、核心数据模型</h2><p>RestaurantOrder 表示订单。</p>
+<p>它记录订单ID、顾客ID、桌号或外卖渠道、菜品列表、下单时间、期望出餐时间、优先级、特殊要求、当前状态、满意度影响和失败后果。</p>
+<p>RecipeData 表示配方。</p>
+<p>它记录菜品ID、菜品名称、所需食材、工序列表、组装规则、火候窗口、基础价值、难度、出餐温度要求和质量评价规则。</p>
+<p>CookingStep 表示一道工序。</p>
+<p>它记录步骤ID、步骤类型、所需工位、所需食材或半成品、前置步骤、执行时间、最佳时间窗、可中断性、失败状态和产出物。</p>
+<p>IngredientStack 表示食材库存。</p>
+<p>它记录食材ID、数量、保鲜度、存放位置、是否已预处理、过期时间、采购成本和替代品关系。</p>
+<p>KitchenStation 表示厨房工位。</p>
+<p>它记录工位ID、类型、容量、处理速度、当前占用任务、维护状态、可处理步骤类型、升级等级和故障风险。</p>
+<p>DishInstance 表示正在制作的一份菜。</p>
+<p>它记录所属订单、当前步骤、已完成步骤、当前火候、温度、质量分、是否可出餐、是否缺少组件、是否已报废。</p>
+<p>StaffMember 表示员工。</p>
+<p>它记录员工ID、岗位、技能、速度、疲劳、当前位置、当前任务、可用工位、错误率、经验和情绪状态。</p>
+<p>CustomerState 表示顾客状态。</p>
+<p>它记录顾客ID、人数、耐心、预算、口味偏好、等待时间、满意度、是否已点餐、是否已用餐、是否投诉或离店。</p>
+<p>ServiceMetrics 表示经营指标。</p>
+<p>它记录平均出餐时间、订单完成率、菜品质量、顾客满意度、投诉率、食材浪费、工位利用率、员工疲劳、收入成本和餐厅口碑。</p>
+<hr />
+<h2 id="五核心范式一菜品不是结果而是工序链">五、核心范式一：菜品不是结果，而是工序链</h2><p>烹饪游戏不能把菜品简化为“点击后等待几秒生成”。</p>
+<p>一道菜应被设计为工序链。</p>
+<p>例如一份炸鸡套餐可能包含：</p>
+<p>解冻鸡肉。
+裹粉。
+油炸。
+沥油。
+装盒。
+加入配菜。
+加入饮品。
+交付。</p>
+<p>每个步骤都可能占用不同工位，并且有不同时间窗口。</p>
+<p>这会让玩家的核心决策从“做不做这道菜”变成：</p>
+<p>先做哪个步骤？
+哪些菜可以共享预处理？
+哪些工位正在成为瓶颈？
+是否提前准备半成品？
+是否冒险同时处理多个火候窗口？</p>
+<p>工序链是烹饪餐厅框架的底层骨架。</p>
+<hr />
+<h2 id="六核心范式二火候窗口创造时间管理张力">六、核心范式二：火候窗口创造时间管理张力</h2><p>烹饪系统最独特的地方是“完成”并不是唯一目标。</p>
+<p>食材可能处于：</p>
+<p>未处理。
+正在加热。
+刚熟。
+最佳火候。
+过熟。
+烧焦。
+冷掉。
+废弃。</p>
+<p>这意味着菜品质量是一个时间窗口问题。</p>
+<p>牛排提前取出可能太生。
+晚取出可能过熟。
+炸物放太久会变软。
+汤品出餐太慢会变凉。
+甜品烤过头会焦。</p>
+<p>因此 CookingStep 需要支持最佳时间窗，而不是只有固定完成时刻。</p>
+<p>这会带来强烈的操作张力：</p>
+<p>玩家不只是让工位一直工作，还要在正确时刻取出、转移、组装和出餐。</p>
+<hr />
+<h2 id="七核心范式三订单履约需要拆分与合单">七、核心范式三：订单履约需要拆分与合单</h2><p>餐厅订单通常不是一道菜，而是一桌人的多项需求。</p>
+<p>一桌顾客点了三道主菜、两杯饮品和一个甜点。
+主菜不能相差太久出餐。
+饮品可以先上。
+甜点应在主菜后上。
+外卖订单可能要求全部打包后一起交付。</p>
+<p>因此订单系统必须支持：</p>
+<p>单菜独立制作。
+同桌合单出餐。
+部分先出。
+整单等待。
+菜品之间的时序关系。
+订单拆分给不同工位。
+最终按顾客或渠道结算。</p>
+<p>这区别于普通生产系统。餐厅服务不是只要把所有物品做完，而是要按照正确服务节奏交付。</p>
+<hr />
+<h2 id="八核心范式四厨房瓶颈会向前厅传播">八、核心范式四：厨房瓶颈会向前厅传播</h2><p>厨房慢，不只是菜品慢。</p>
+<p>它会导致：</p>
+<p>顾客等待增加。
+桌台无法周转。
+排队变长。
+新顾客离开。
+服务员拥堵。
+外卖超时。
+口碑下降。</p>
+<p>同样，前厅也会影响厨房。</p>
+<p>服务员点餐慢会让厨房突然断单。
+高峰期同时入座会造成订单峰值。
+桌台清理慢会减少新订单进入。
+外卖平台活动会突然插入大量订单。</p>
+<p>因此，前厅与厨房不能拆成两个互不相关的系统。它们应通过订单节奏、桌台周转和顾客耐心互相耦合。</p>
+<p>成熟的餐厅框架关注的不是单点效率，而是服务流的整体稳定。</p>
+<hr />
+<h2 id="九核心范式五预处理与半成品是效率策略">九、核心范式五：预处理与半成品是效率策略</h2><p>烹饪游戏中，提前准备非常重要。</p>
+<p>玩家可以提前切菜、腌肉、煮饭、备汤底、做面团、预热烤箱、准备酱料。</p>
+<p>这些半成品能缩短出餐时间，但也带来风险：</p>
+<p>占用库存空间。
+可能过期。
+可能做多浪费。
+可能无法应对突然变化的订单。
+高峰前准备不足会崩盘。
+低峰期准备过多会亏损。</p>
+<p>因此 IngredientStack 不应只表示原材料，还应支持预处理状态。</p>
+<p>例如：</p>
+<p>生土豆。
+已削皮土豆。
+已切条土豆。
+冷冻薯条。
+炸好的薯条。
+冷掉的薯条。</p>
+<p>这让玩家可以设计厨房节奏，而不是被动响应每一单。</p>
+<hr />
+<h2 id="十核心范式六员工岗位协作影响服务节奏">十、核心范式六：员工岗位协作影响服务节奏</h2><p>员工不应只是全局生产速度加成。</p>
+<p>他们应该是占据空间、执行任务、受技能影响、会疲劳、会路径拥堵的实体。</p>
+<p>厨师负责高复杂度烹饪。
+帮厨负责切配和预处理。
+服务员负责点餐、端菜、结账和清桌。
+洗碗工负责餐具回收。
+店长负责安抚顾客和调度。
+配送员负责外卖交付。</p>
+<p>这会让餐厅管理出现清晰岗位协作。</p>
+<p>如果服务员不足，菜做好了也没人端。
+如果帮厨不足，主厨会被迫处理低价值切配工作。
+如果洗碗慢，餐具不足会让出餐停滞。
+如果配送员不足，外卖会卡在出餐口。</p>
+<p>人员系统的关键不是数量，而是岗位是否匹配服务流。</p>
+<hr />
+<h2 id="十一事件与执行流程">十一、事件与执行流程</h2><p>一次典型餐厅服务流程如下。</p>
+<p>顾客生成系统创建 CustomerState，并让顾客排队或入座。</p>
+<p>前厅系统完成点餐，生成 RestaurantOrder。</p>
+<p>订单系统拆解菜品需求，并从 RecipeData 获取工序链。</p>
+<p>调度系统根据订单优先级、工位可用性、食材库存和员工状态创建任务。</p>
+<p>员工系统移动到对应工位，执行 CookingStep。</p>
+<p>工位系统占用设备并推进烹饪时间。</p>
+<p>烹饪状态系统根据时间更新 DishInstance 的火候、温度和质量。</p>
+<p>当某个组件完成后，系统检查是否可进入下一步骤或组装阶段。</p>
+<p>组装系统将多个组件合成为可出餐菜品。</p>
+<p>出餐系统判断是否满足订单节奏，例如单菜先上、整桌同上或外卖打包。</p>
+<p>前厅系统交付菜品，更新顾客满意度、用餐状态和桌台周转。</p>
+<p>经营系统结算收入、成本、口碑、员工经验和食材浪费。</p>
+<p>关键事件包括：</p>
+<p>顾客到店事件。
+顾客入座事件。
+点餐完成事件。
+订单创建事件。
+订单拆解事件。
+食材消耗事件。
+工序开始事件。
+工序完成事件。
+火候进入最佳窗口事件。
+过熟或烧焦事件。
+菜品组装事件。
+菜品出餐事件。
+顾客满意度变化事件。
+顾客投诉事件。
+桌台释放事件。
+员工疲劳变化事件。
+设备故障事件。
+库存不足事件。
+营业日结算事件。</p>
+<hr />
+<h2 id="十二模块通信设计">十二、模块通信设计</h2><p>建议采用事件驱动加任务队列结构。</p>
+<p>前厅系统只生成需求，不直接制作菜品。</p>
+<p>订单系统将顾客需求转化为可执行订单。</p>
+<p>配方系统负责把订单拆成工序链。</p>
+<p>调度系统读取订单、工位、库存和员工状态，生成任务。</p>
+<p>员工系统执行任务，但不直接决定菜品质量。</p>
+<p>工位系统推进工序时间，并通知烹饪状态系统更新火候。</p>
+<p>烹饪状态系统维护 DishInstance 的质量、温度和完成状态。</p>
+<p>出餐系统检查菜品、订单和服务规则，决定是否交付。</p>
+<p>顾客系统根据等待、质量和服务更新满意度。</p>
+<p>经营系统监听所有服务结果，更新收入、口碑和长期成长。</p>
+<p>UI只展示订单、工位、火候、库存、员工和顾客状态，不直接篡改核心数据。</p>
+<p>这种结构可以避免：</p>
+<p>点击订单直接完成菜品。
+工位脚本绕过库存消耗。
+员工脚本直接修改顾客满意度。
+菜品完成但订单状态未更新。
+出餐成功但桌台周转没有释放。
+库存不足却仍然能生产。</p>
+<p>核心原则是：</p>
+<p>订单产生需求，配方拆解工序，工位执行过程，出餐完成履约，顾客反馈结算质量。</p>
+<hr />
+<h2 id="十三可扩展点">十三、可扩展点</h2><p>第一类扩展是不同餐饮主题。</p>
+<p>可以支持快餐店、拉面店、咖啡馆、寿司店、烧烤店、火锅店、甜品店、高级餐厅、食堂、酒馆、外卖厨房、移动餐车。</p>
+<p>第二类扩展是菜单工程。</p>
+<p>玩家可以设计菜单结构，平衡高利润菜、快出餐菜、复杂菜、招牌菜、季节菜和限时活动菜。</p>
+<p>第三类扩展是食材供应链。</p>
+<p>加入采购、供应商、价格波动、季节性、冷链、库存损耗和突发断供。</p>
+<p>第四类扩展是员工成长。</p>
+<p>员工可以学习工位技能、形成特长、产生疲劳、离职、晋升、情绪变化和团队协作加成。</p>
+<p>第五类扩展是顾客画像。</p>
+<p>顾客可以有口味偏好、耐心差异、预算差异、评价习惯、过敏要求和回头客关系。</p>
+<p>第六类扩展是厨房布局设计。</p>
+<p>工位位置、路径长度、出餐口位置、冰箱距离、洗碗区位置会影响效率，形成空间优化玩法。</p>
+<p>第七类扩展是实时合作。</p>
+<p>多人分别负责切配、烹饪、组装、前厅、配送和调度，形成厨房协作压力。</p>
+<p>第八类扩展是剧情与事件。</p>
+<p>可加入美食比赛、卫生检查、网红探店、节日高峰、差评危机、设备故障、员工请假、食材涨价等事件。</p>
+<hr />
+<h2 id="十四失败隔离与调试设计">十四、失败隔离与调试设计</h2><p>烹饪餐厅系统最容易出现的问题包括：</p>
+<p>订单无法完成。
+菜品工序链缺少前置产物。
+工位类型配置错误。
+食材库存扣除与菜品状态不一致。
+员工路径被阻塞。
+菜品已经做好但无法出餐。
+顾客满意度变化不可解释。
+厨房瓶颈难以定位。
+高峰期订单堆积后不可恢复。</p>
+<p>因此需要以下调试与保护机制。</p>
+<p>第一，配方合法性检查。
+验证每个 RecipeData 的工序链是否完整，所有前置步骤是否存在，产出物是否能被后续步骤使用。</p>
+<p>第二，订单可履约检查。
+订单生成时检查当前餐厅是否具备制作条件，包括食材、工位、员工技能和出餐规则。</p>
+<p>第三，工位瓶颈可视化。
+显示每个工位的占用率、等待任务数、平均等待时间和失败订单关联。</p>
+<p>第四，菜品状态追踪。
+每个 DishInstance 应能回放从食材消耗、工序执行、火候变化、组装到出餐的全过程。</p>
+<p>第五，顾客满意度解释器。
+当顾客差评时，应能说明原因：等待太久、菜品冷掉、火候失败、缺少菜品、服务慢、价格过高。</p>
+<p>第六，员工路径与任务调试。
+显示员工为什么不执行任务：路径不可达、工位被占用、缺少食材、技能不足、任务优先级较低或疲劳过高。</p>
+<p>第七，库存一致性检查。
+确保食材消耗、半成品生成、报废、退回和盘点之间没有重复扣除或凭空生成。</p>
+<p>第八，高峰恢复保护。
+当订单过载时，系统应允许暂停接单、拒绝外卖、缩减菜单、临时加班、转为简化服务，避免彻底软锁。</p>
+<hr />
+<h2 id="十五玩家体验目标">十五、玩家体验目标</h2><p>这一类型最核心的体验不是：</p>
+<p>我完成了一道菜。</p>
+<p>而是：</p>
+<p>我在混乱的订单和厨房压力中，维持了一条稳定、高质量、高效率的服务流。</p>
+<p>玩家体验通常分为六个阶段。</p>
+<p>第一阶段是准备。
+玩家采购食材、预处理半成品、安排员工、检查设备。</p>
+<p>第二阶段是接单。
+顾客进入，订单生成，厨房开始运转。</p>
+<p>第三阶段是排程。
+玩家判断哪些菜先做、哪些步骤并行、哪些工位优先使用。</p>
+<p>第四阶段是高压。
+多个订单同时进入，火候窗口重叠，顾客耐心下降，外卖插单。</p>
+<p>第五阶段是补救。
+玩家调整工位、放弃复杂订单、加速出餐、安抚顾客或重新调度员工。</p>
+<p>第六阶段是复盘。
+营业结束后查看瓶颈、浪费、差评、收入和升级方向。</p>
+<p>优秀的烹饪餐厅游戏会让玩家记住：</p>
+<p>“晚高峰差点崩盘，但提前准备的汤底救了全场，最后只丢了一单外卖。”</p>
+<hr />
+<h2 id="十六可迁移到其他游戏的设计思想">十六、可迁移到其他游戏的设计思想</h2><p>这一类型最值得迁移的思想是：</p>
+<p><strong>将任务目标拆解为有前置依赖、工位占用、时间窗口、质量状态和服务承诺的生产履约链。</strong></p>
+<p>在Roguelike Shooter中，可以用于基地制造、战斗前备弹、药剂调配、陷阱组装和临时修理。玩家不是点按钮获得道具，而是在有限工位和时间内排程生产。</p>
+<p>在CRPG中，可以用于炼金、锻造、烹饪、附魔和营地后勤。复杂物品可由多个步骤和材料状态组成。</p>
+<p>在策略游戏中，可以用于军工生产、补给加工、伤员处理、战车维修和城市订单。</p>
+<p>在生存游戏中，可以用于食物加工、药品制作、建筑预制、净水和储备管理。</p>
+<p>在模拟经营中，可以用于工厂、医院、仓库、客服和维修中心等所有“服务履约”场景。</p>
+<p>其通用价值在于：</p>
+<p>不要把生产做成单一进度条。
+把它拆成订单、配方、工序、工位、状态、质量和交付的完整链路。</p>
+<hr />
+<h2 id="十七完整营业日边界与设计支柱">十七、完整营业日边界与设计支柱</h2><p>厨房时间管理能够独立成品，需要让接单、备料、烹饪、装盘、出餐和清洁构成一个持续营业循环，而不是一组彼此独立的按键小游戏。</p>
+<p>完整产品依赖四个支柱：</p>
+<ol>
+<li><strong>工序网络。</strong> 菜品由可并行、可等待、会过期的步骤组成。</li>
+<li><strong>共享容量。</strong> 炉灶、烤箱、刀台、员工和盛具都是互相竞争的资源。</li>
+<li><strong>时间窗口。</strong> 订单耐心、火候和保温让过早与过晚都可能产生损失。</li>
+<li><strong>服务恢复。</strong> 错单、烧焦和设备故障会扰乱节奏，但玩家应能降级菜单、重排工位或补救订单。</li>
+</ol>
+<p>操作强度可以存在，但成功不应只取决于点击速度。玩家必须能够通过预处理、批量加工、菜单设计和岗位分工获得结构性效率。</p>
+<h2 id="十八营业日生命周期与订单状态机">十八、营业日生命周期与订单状态机</h2><p>一个营业日可分为备餐、开门、常规客流、峰值、收尾和复盘。备餐阶段允许以保鲜期换取峰值容量；收尾阶段必须处理浪费、清洁、库存和设备状态，使下一天受到今天决策影响。</p>
+<p>订单状态建议为：</p>
+<p><code>Queued → Accepted → Planned → Cooking → Plating → Ready → Served</code></p>
+<p>并允许进入 <code>Blocked</code>、<code>Remake</code>、<code>Cancelled</code> 或 <code>Compensated</code>。菜品工序则独立维护 <code>NotStarted</code>、<code>Processing</code>、<code>Holding</code>、<code>Overcooked</code> 和 <code>Discarded</code>，避免一个订单字段承载所有局部状态。</p>
+<p>合单优化必须可解释：两份订单可以共享一锅基础酱汁，但不能因为系统自动合批而突破锅具容量、过敏隔离或出餐时限。</p>
+<h2 id="十九长期经营菜单内容与经济闭环">十九、长期经营、菜单内容与经济闭环</h2><p>长期进程围绕菜单、厨房布局、员工技能、设备可靠性、供应商和客群展开。新设备不应只提供更高速度，也可以改变可并行工序、批量容量、温控精度和清洁成本。</p>
+<p>内容生产的基本单位是完整菜单生态：</p>
+<ul>
+<li>菜品的工序图、原料、设备、火候与保鲜；</li>
+<li>菜品之间可共享的半成品和冲突工位；</li>
+<li>客群偏好、价格敏感和到达分布；</li>
+<li>峰值事件、团体订单和特殊要求；</li>
+<li>员工岗位、熟练度和协作加成；</li>
+<li>设备故障、供应短缺和卫生约束。</li>
+</ul>
+<p>经济需要同时结算收入、原料、浪费、人工、维护和赔偿。高价复杂菜不一定优于稳定菜单；玩家应能从订单结构和厨房能力推导菜单策略。</p>
+<h2 id="二十难度曲线失败恢复与可读性">二十、难度曲线、失败恢复与可读性</h2><p>难度应先增加订单组合，再增加数量。早期让玩家掌握单条工序；中期引入共享半成品和设备竞争；后期再加入错峰出餐、特殊需求和故障。</p>
+<p>恢复手段包括暂停接单、临时下架菜品、改用替代设备、赠送补偿、拆分合单、提前报废占用工位的失败产物，以及把员工从非关键岗位调往瓶颈。恢复会损失声誉或收入，但不能让一次烧焦永久锁死整条厨房。</p>
+<p>UI 必须区分“马上超时”“工序等待”“设备阻塞”和“原料缺失”。只用大量倒计时会制造噪声，不能帮助玩家理解瓶颈。</p>
+<h2 id="二十一作者工具最小切片与验收标准">二十一、作者工具、最小切片与验收标准</h2><p>最小切片可采用 8 道菜、6 类原料、4 个工位、2 名员工和一个 12 分钟营业日。必须包含备餐、峰值、错单恢复和日终经济结算。</p>
+<p>工具至少包括：</p>
+<ul>
+<li>菜品工序图与循环依赖检查；</li>
+<li>工位利用率、阻塞时间和队列热力；</li>
+<li>订单履约时间线与失败原因；</li>
+<li>菜单在给定设备/员工下的可生产性验证；</li>
+<li>到达分布、峰值强度和批量模拟；</li>
+<li>原料消耗、浪费和利润分解。</li>
+</ul>
+<p>验收时应证明：不同菜单组合产生不同瓶颈；批处理不会复制或丢失原料；暂停和恢复不改变火候时间；失败订单能退出所有资源占用；玩家通过布局和预处理可以稳定提高吞吐，而不是只能更快点击。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>烹饪餐厅 / 厨房时间管理模拟（Cooking Restaurant / Kitchen Time-Management Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>订单—配方—工序—出餐的服务履约框架</p>
+</li>
+<li><p>菜品作为工序链，而非单次点击结果</p>
+</li>
+<li><p>火候窗口与温度状态创造时间管理张力</p>
+</li>
+<li><p>订单支持拆分、合单、部分出餐和整单交付</p>
+</li>
+<li><p>厨房瓶颈向前厅顾客耐心、桌台周转和口碑传播</p>
+</li>
+<li><p>食材库存、预处理和半成品作为效率策略</p>
+</li>
+<li><p>厨师、服务员、洗碗工、配送员形成岗位协作网络</p>
+</li>
+<li><p>事件驱动的顾客、订单、配方、工位、菜品、出餐和经营结算流程</p>
+</li>
+<li><p>配方合法性、订单可履约性、工位瓶颈、菜品状态和满意度原因调试体系</p>
+</li>
+<li><p>将普通生产任务升级为带前置依赖、工位占用、时间窗口、质量状态和服务承诺的履约链</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

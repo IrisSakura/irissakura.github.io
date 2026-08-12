@@ -1,0 +1,4542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/tower-defense.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="塔防游戏 | Sakura Design Journal">
+    <meta property="og:description" content="将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/tower-defense.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-tower-defense.png">
+    <meta property="og:image:alt" content="塔防游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="塔防游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-tower-defense.png">
+    <meta name="twitter:image:alt" content="塔防游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"塔防游戏 | Sakura Design Journal","description":"将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。","url":"https://irissakura.github.io/pages/journal/tower-defense.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"塔防游戏","image":"https://irissakura.github.io/assets/social/pages-journal-tower-defense.png","dateModified":"2026-08-12","about":["defense","td","tower"]}</script>
+    <!-- site-meta:end -->
+    <title>塔防游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-tower-defense"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>塔防游戏</h1><p>将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。</p><div class="note-tags"><span>defense</span><span>td</span><span>tower</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="路径承压空间部署与防守结算再投资的波次循环">路径承压、空间部署与“防守—结算—再投资”的波次循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>塔防游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Tower Defense；</p>
+</li>
+<li><p>TD；</p>
+</li>
+<li><p>路径防守游戏；</p>
+</li>
+<li><p>阵地防御游戏；</p>
+</li>
+<li><p>波次防守策略游戏。</p>
+</li>
+</ul>
+<p>本文讨论的不是动作游戏中的单次守点任务，也不是RTS中的静态炮塔模块，而是一种足以独立支撑完整游戏的宏观品类。</p>
+<p>塔防游戏最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。</p>
+</blockquote>
+<p>塔防游戏的核心并不是“塔自动攻击敌人”，而是持续处理以下问题：</p>
+<ul>
+<li><p>敌人将从哪里出现；</p>
+</li>
+<li><p>会沿哪些路线推进；</p>
+</li>
+<li><p>哪些位置能够覆盖更长路径；</p>
+</li>
+<li><p>当前缺少单体伤害、群体伤害还是控制；</p>
+</li>
+<li><p>资源应当用于新建防御还是升级旧塔；</p>
+</li>
+<li><p>是否需要为后续波次保留资金；</p>
+</li>
+<li><p>不同塔之间能否形成协同；</p>
+</li>
+<li><p>敌人如何突破当前防线；</p>
+</li>
+<li><p>玩家如何快速定位防线失效的原因；</p>
+</li>
+<li><p>关卡如何在不依赖纯数值膨胀的前提下持续增加压力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>塔防游戏，是以敌人波次、路径推进、空间部署、自动战斗、资源再投资和防线完整性为核心的策略游戏类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家查看地图、路线和下一波敌人信息；</p>
+</li>
+<li><p>使用初始资源建造防御塔、陷阱、阻挡物或支援设施；</p>
+</li>
+<li><p>启动敌人波次；</p>
+</li>
+<li><p>敌人沿路径向核心、基地或出口移动；</p>
+</li>
+<li><p>防御单位依据射程、目标优先级和攻击规则自动行动；</p>
+</li>
+<li><p>敌人死亡后提供资源、能量或其他收益；</p>
+</li>
+<li><p>漏过的敌人削减基地生命、增加污染或达成敌方目标；</p>
+</li>
+<li><p>玩家在波次间或战斗中建造、升级、出售和重组防线；</p>
+</li>
+<li><p>新敌人逐步引入护甲、飞行、分裂、隐身、治疗和Boss机制；</p>
+</li>
+<li><p>玩家调整伤害类型、控制链和空间覆盖；</p>
+</li>
+<li><p>击败最终波次或Boss后完成关卡；</p>
+</li>
+<li><p>获得局外解锁、评分、科技或新的防御单位；</p>
+</li>
+<li><p>在新地图和新规则下重新构建防御体系。</p>
+</li>
+</ol>
+<p>塔防游戏中的主要资源通常包括：</p>
+<ul>
+<li><p>建造货币；</p>
+</li>
+<li><p>波次奖励；</p>
+</li>
+<li><p>基地生命；</p>
+</li>
+<li><p>建造格；</p>
+</li>
+<li><p>防御塔数量上限；</p>
+</li>
+<li><p>塔位覆盖面积；</p>
+</li>
+<li><p>主动技能能量；</p>
+</li>
+<li><p>升级材料；</p>
+</li>
+<li><p>波次准备时间；</p>
+</li>
+<li><p>敌人路径信息；</p>
+</li>
+<li><p>临时增益；</p>
+</li>
+<li><p>局外科技点。</p>
+</li>
+</ul>
+<p>其中最重要的隐性资源是：</p>
+<blockquote>
+<p>有效路径覆盖时间，即防御系统能够对敌人持续输出、控制和重新锁定的总时间。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>塔防游戏最具代表性的设计范式由八个核心支柱构成。</p>
+<h2 id="31-敌人是沿空间拓扑移动的压力流">3.1 敌人是沿空间拓扑移动的压力流</h2><p>敌人不是普通战斗单位的简单集合，而是一股持续经过防区的动态流量。</p>
+<p>防守系统需要处理：</p>
+<ul>
+<li><p>敌人出现频率；</p>
+</li>
+<li><p>路径长度；</p>
+</li>
+<li><p>速度差异；</p>
+</li>
+<li><p>敌人密度；</p>
+</li>
+<li><p>单位体积；</p>
+</li>
+<li><p>编队间隔；</p>
+</li>
+<li><p>路线分叉；</p>
+</li>
+<li><p>不同路线的到达时间；</p>
+</li>
+<li><p>特殊敌人对队伍结构的影响。</p>
+</li>
+</ul>
+<p>因此，塔防中的敌人强度不能只看单个单位属性，还需要看：</p>
+<ul>
+<li><p>单位数量；</p>
+</li>
+<li><p>时间密度；</p>
+</li>
+<li><p>阵型；</p>
+</li>
+<li><p>重叠程度；</p>
+</li>
+<li><p>能否使防御塔反复切换目标；</p>
+</li>
+<li><p>是否突破控制和群伤能力的处理上限。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-防御塔的价值高度依赖位置">3.2 防御塔的价值高度依赖位置</h2><p>同一座塔放置在不同位置，实际价值可能存在巨大差异。</p>
+<p>位置会影响：</p>
+<ul>
+<li><p>路径覆盖长度；</p>
+</li>
+<li><p>能够同时覆盖的路线数量；</p>
+</li>
+<li><p>敌人首次进入射程的时间；</p>
+</li>
+<li><p>敌人离开射程的时间；</p>
+</li>
+<li><p>与减速、聚怪和阻挡设施的组合；</p>
+</li>
+<li><p>是否能攻击飞行单位；</p>
+</li>
+<li><p>是否容易被敌人攻击或干扰；</p>
+</li>
+<li><p>是否占用关键地形。</p>
+</li>
+</ul>
+<p>塔的强弱不能脱离：</p>
+<ul>
+<li><p>地图拓扑；</p>
+</li>
+<li><p>建造格；</p>
+</li>
+<li><p>射程形状；</p>
+</li>
+<li><p>路径曲率；</p>
+</li>
+<li><p>视线；</p>
+</li>
+<li><p>高低差；</p>
+</li>
+</ul>
+<p>单独评价。</p>
+<hr />
+<h2 id="33-建造升级和出售构成资源机会成本">3.3 建造、升级和出售构成资源机会成本</h2><p>玩家拥有有限资源，需要在以下选择间权衡：</p>
+<ul>
+<li><p>增加一座新塔；</p>
+</li>
+<li><p>升级已有核心塔；</p>
+</li>
+<li><p>建造低级补漏塔；</p>
+</li>
+<li><p>购买控制能力；</p>
+</li>
+<li><p>保留资源应对未知波次；</p>
+</li>
+<li><p>出售错误部署并承担损失；</p>
+</li>
+<li><p>投资长期经济设施。</p>
+</li>
+</ul>
+<p>新建防御通常增加：</p>
+<ul>
+<li><p>覆盖范围；</p>
+</li>
+<li><p>目标数量；</p>
+</li>
+<li><p>战线冗余；</p>
+</li>
+<li><p>多路线适应能力。</p>
+</li>
+</ul>
+<p>升级已有塔通常增加：</p>
+<ul>
+<li><p>单点强度；</p>
+</li>
+<li><p>技能效果；</p>
+</li>
+<li><p>射程或伤害；</p>
+</li>
+<li><p>特殊机制；</p>
+</li>
+<li><p>单位空间效率。</p>
+</li>
+</ul>
+<p>二者不能存在无条件最优选项。</p>
+<hr />
+<h2 id="34-自动攻击不等于没有战术控制">3.4 自动攻击不等于没有战术控制</h2><p>防御塔可以自动攻击，但玩家仍应通过以下内容影响结果：</p>
+<ul>
+<li><p>建造位置；</p>
+</li>
+<li><p>塔型组合；</p>
+</li>
+<li><p>升级路线；</p>
+</li>
+<li><p>目标优先级；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>阻挡和路径改变；</p>
+</li>
+<li><p>卖塔重建；</p>
+</li>
+<li><p>波次提前启动；</p>
+</li>
+<li><p>英雄移动；</p>
+</li>
+<li><p>临时增益分配。</p>
+</li>
+</ul>
+<p>玩家主要进行的是：</p>
+<blockquote>
+<p>战斗前的系统设计与战斗中的局部干预。</p>
+</blockquote>
+<hr />
+<h2 id="35-每个波次都是一次结构性压力测试">3.5 每个波次都是一次结构性压力测试</h2><p>波次不应只是敌人生命和数量持续增加。</p>
+<p>不同波次可以测试：</p>
+<ul>
+<li><p>单体持续输出；</p>
+</li>
+<li><p>群体伤害；</p>
+</li>
+<li><p>快速目标；</p>
+</li>
+<li><p>高护甲目标；</p>
+</li>
+<li><p>魔法抗性；</p>
+</li>
+<li><p>飞行单位；</p>
+</li>
+<li><p>隐身单位；</p>
+</li>
+<li><p>分裂单位；</p>
+</li>
+<li><p>治疗和增益单位；</p>
+</li>
+<li><p>多路线同时推进；</p>
+</li>
+<li><p>Boss和小怪混合；</p>
+</li>
+<li><p>长时间持续压力。</p>
+</li>
+</ul>
+<p>玩家失败时，应能够判断：</p>
+<ul>
+<li><p>当前防线缺少什么；</p>
+</li>
+<li><p>哪一段路径发生拥堵；</p>
+</li>
+<li><p>哪种敌人突破；</p>
+</li>
+<li><p>是伤害不足、控制不足还是目标选择错误。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-塔之间的组合价值应高于单塔数值叠加">3.6 塔之间的组合价值应高于单塔数值叠加</h2><p>高质量塔防通常依赖防御协同。</p>
+<p>常见协同包括：</p>
+<p>减速
+→ 延长敌人在射程内的时间
+→ 提高持续伤害塔总输出</p>
+<p>聚怪
+→ 增加敌人重叠
+→ 提高范围伤害效率</p>
+<p>破甲
+→ 降低敌方防御
+→ 提高高攻速塔收益</p>
+<p>标记
+→ 提高对特定目标的伤害
+→ 帮助单体塔处理精英</p>
+<p>阻挡
+→ 将敌人集中在固定区域
+→ 形成火力杀伤区</p>
+<p>经济设施
+→ 降低短期战力
+→ 提高后续波次投资能力</p>
+<p>塔的价值应部分来自其在体系中的角色，而不是只比较每秒伤害。</p>
+<hr />
+<h2 id="37-敌人需要突破防御体系而不是只吸收伤害">3.7 敌人需要突破防御体系，而不是只吸收伤害</h2><p>敌人可以通过以下方式挑战玩家：</p>
+<ul>
+<li><p>高速移动；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>魔抗；</p>
+</li>
+<li><p>飞行；</p>
+</li>
+<li><p>隐身；</p>
+</li>
+<li><p>分裂；</p>
+</li>
+<li><p>复活；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>暂时无敌；</p>
+</li>
+<li><p>干扰塔；</p>
+</li>
+<li><p>改变路径；</p>
+</li>
+<li><p>传送；</p>
+</li>
+<li><p>偷取资源；</p>
+</li>
+<li><p>击毁阻挡设施。</p>
+</li>
+</ul>
+<p>敌人机制应针对防御结构的不同薄弱点，而不是单纯提高生命值。</p>
+<hr />
+<h2 id="38-波次间经济将局部战斗连接为长期防线演化">3.8 波次间经济将局部战斗连接为长期防线演化</h2><p>每一波的结果会影响：</p>
+<ul>
+<li><p>可用资金；</p>
+</li>
+<li><p>基地剩余生命；</p>
+</li>
+<li><p>可获得的评分；</p>
+</li>
+<li><p>下一波准备能力；</p>
+</li>
+<li><p>是否能提前投资高级塔；</p>
+</li>
+<li><p>是否需要修复防线；</p>
+</li>
+<li><p>是否有资格挑战额外波次。</p>
+</li>
+</ul>
+<p>因此，玩家并不是每波重新开始，而是在维护一套持续演化的防御系统。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与即时战略游戏的区别">4.1 与即时战略游戏的区别</h2><p>即时战略通常强调：</p>
+<ul>
+<li><p>单位生产；</p>
+</li>
+<li><p>资源采集；</p>
+</li>
+<li><p>基地扩张；</p>
+</li>
+<li><p>主动控制军队；</p>
+</li>
+<li><p>多方向进攻。</p>
+</li>
+</ul>
+<p>塔防更强调：</p>
+<ul>
+<li><p>敌方沿路径主动推进；</p>
+</li>
+<li><p>防御单位多数自动行动；</p>
+</li>
+<li><p>空间部署；</p>
+</li>
+<li><p>波次压力；</p>
+</li>
+<li><p>阵地和火力覆盖。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与自动战斗游戏的区别">4.2 与自动战斗游戏的区别</h2><p>自动战斗游戏通常强调：</p>
+<ul>
+<li><p>阵容；</p>
+</li>
+<li><p>单位购买；</p>
+</li>
+<li><p>随机商店；</p>
+</li>
+<li><p>站位；</p>
+</li>
+<li><p>回合对战。</p>
+</li>
+</ul>
+<p>塔防更强调：</p>
+<ul>
+<li><p>地图路径；</p>
+</li>
+<li><p>射程覆盖；</p>
+</li>
+<li><p>连续敌人流；</p>
+</li>
+<li><p>建造位置；</p>
+</li>
+<li><p>波次节奏；</p>
+</li>
+<li><p>基地防守。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-与生存建造防守的区别">4.3 与生存建造防守的区别</h2><p>生存建造防守通常还包括：</p>
+<ul>
+<li><p>开放世界采集；</p>
+</li>
+<li><p>基地建设；</p>
+</li>
+<li><p>长周期生产；</p>
+</li>
+<li><p>角色生存需求；</p>
+</li>
+<li><p>昼夜循环。</p>
+</li>
+</ul>
+<p>塔防的核心更加集中于：</p>
+<ul>
+<li><p>路径；</p>
+</li>
+<li><p>波次；</p>
+</li>
+<li><p>防御节点；</p>
+</li>
+<li><p>资源循环；</p>
+</li>
+<li><p>自动战斗。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-与固定炮塔射击游戏的区别">4.4 与固定炮塔射击游戏的区别</h2><p>固定炮塔射击主要依赖玩家直接瞄准和射击。</p>
+<p>塔防中的玩家重点是：</p>
+<ul>
+<li><p>防线设计；</p>
+</li>
+<li><p>塔型组合；</p>
+</li>
+<li><p>资源投资；</p>
+</li>
+<li><p>路线覆盖；</p>
+</li>
+<li><p>自动目标规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-与工厂自动化游戏的区别">4.5 与工厂自动化游戏的区别</h2><p>工厂自动化处理确定性生产物流。</p>
+<p>塔防虽然也存在流量和吞吐概念，但其流动对象是：</p>
+<ul>
+<li><p>具有生命；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>抗性；</p>
+</li>
+<li><p>行为；</p>
+</li>
+<li><p>技能；</p>
+</li>
+</ul>
+<p>的敌人，并且系统目标是阻止其通过，而非提高物料产出。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十六个核心域：</p>
+<ol>
+<li><p>关卡与地图拓扑域；</p>
+</li>
+<li><p>路径、导航和路线变更域；</p>
+</li>
+<li><p>波次定义与生成调度域；</p>
+</li>
+<li><p>敌人单位与推进域；</p>
+</li>
+<li><p>防御塔建造与占位域；</p>
+</li>
+<li><p>塔目标搜索与攻击调度域；</p>
+</li>
+<li><p>投射物、命中与伤害域；</p>
+</li>
+<li><p>控制、状态与抗性域；</p>
+</li>
+<li><p>阻挡、陷阱与路径交互域；</p>
+</li>
+<li><p>资源、奖励与经济域；</p>
+</li>
+<li><p>升级、分支与出售域；</p>
+</li>
+<li><p>主动技能、英雄和支援域；</p>
+</li>
+<li><p>基地生命、漏怪和关卡结算域；</p>
+</li>
+<li><p>局外科技、解锁与战役域；</p>
+</li>
+<li><p>存档、回放和确定性域；</p>
+</li>
+<li><p>调试、内容验证和平衡分析域。</p>
+</li>
+</ol>
+<p>总体运行流程如下：</p>
+<p>加载关卡定义
+→ 构建路径图和建造区域
+→ 初始化基地生命与玩家资源
+→ 玩家部署初始防御
+→ 波次调度器创建生成计划
+→ 敌人按时间和路线进入地图
+→ 防御塔搜索目标并创建攻击行为
+→ 投射物和效果系统执行伤害与控制
+→ 敌人死亡产生奖励
+→ 漏过敌人削减基地状态
+→ 波次完成后进入整备
+→ 玩家建造、升级、出售和调整优先级
+→ 下一波提高压力或改变敌人结构
+→ 最终Boss或最后波次完成
+→ 生成关卡结果
+→ 更新局外进度和评分</p>
+<hr />
+<h2 id="6-时间与模拟时钟">6. 时间与模拟时钟</h2><h2 id="61-defensesimulationclock">6.1 DefenseSimulationClock</h2><p>建议字段：</p>
+<ul>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>FixedDeltaTime；</p>
+</li>
+<li><p>SimulationSpeed；</p>
+</li>
+<li><p>IsPaused；</p>
+</li>
+<li><p>CurrentWaveTime；</p>
+</li>
+<li><p>CurrentPreparationTime；</p>
+</li>
+<li><p>SimulationVersion；</p>
+</li>
+<li><p>RandomStreamStates。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-固定步长职责">6.2 固定步长职责</h2><p>以下系统建议使用固定步长：</p>
+<ul>
+<li><p>敌人移动；</p>
+</li>
+<li><p>塔攻击冷却；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>状态持续时间；</p>
+</li>
+<li><p>周期伤害；</p>
+</li>
+<li><p>波次生成；</p>
+</li>
+<li><p>阻挡；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>Boss阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-时间倍率">6.3 时间倍率</h2><p>通常支持：</p>
+<ul>
+<li><p>暂停；</p>
+</li>
+<li><p>正常速度；</p>
+</li>
+<li><p>二倍速；</p>
+</li>
+<li><p>更高倍速。</p>
+</li>
+</ul>
+<p>改变时间倍率不能改变：</p>
+<ul>
+<li><p>攻击次数；</p>
+</li>
+<li><p>波次生成；</p>
+</li>
+<li><p>状态持续；</p>
+</li>
+<li><p>敌人到达顺序；</p>
+</li>
+<li><p>随机结果；</p>
+</li>
+<li><p>最终伤害。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-波次准备阶段">6.4 波次准备阶段</h2><p>准备阶段可以支持：</p>
+<ul>
+<li><p>自由建造；</p>
+</li>
+<li><p>有限倒计时；</p>
+</li>
+<li><p>手动提前开始；</p>
+</li>
+<li><p>查看敌人预告；</p>
+</li>
+<li><p>调整目标优先级；</p>
+</li>
+<li><p>使用预部署技能。</p>
+</li>
+</ul>
+<p>提前开始可以奖励：</p>
+<ul>
+<li><p>额外货币；</p>
+</li>
+<li><p>能量；</p>
+</li>
+<li><p>评分；</p>
+</li>
+<li><p>连胜倍率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="7-地图与路径拓扑">7. 地图与路径拓扑</h2><h2 id="71-defensemapdefinition">7.1 DefenseMapDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>MapId；</p>
+</li>
+<li><p>PathGraphId；</p>
+</li>
+<li><p>SpawnPointIds；</p>
+</li>
+<li><p>GoalPointIds；</p>
+</li>
+<li><p>BuildZoneIds；</p>
+</li>
+<li><p>BlockerZoneIds；</p>
+</li>
+<li><p>HeightLayerIds；</p>
+</li>
+<li><p>EnvironmentalRuleIds；</p>
+</li>
+<li><p>WaveProfileId；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-pathgraph">7.2 PathGraph</h2><p>建议包含：</p>
+<ul>
+<li><p>PathNodeIds；</p>
+</li>
+<li><p>PathEdgeIds；</p>
+</li>
+<li><p>SpawnConnections；</p>
+</li>
+<li><p>GoalConnections；</p>
+</li>
+<li><p>BranchRules；</p>
+</li>
+<li><p>DynamicConnectionRules；</p>
+</li>
+<li><p>PathGraphVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-pathnode">7.3 PathNode</h2><p>建议字段：</p>
+<ul>
+<li><p>NodeId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>HeightLayer；</p>
+</li>
+<li><p>NodeType；</p>
+</li>
+<li><p>ConnectedEdgeIds；</p>
+</li>
+<li><p>OccupancyRules；</p>
+</li>
+<li><p>NavigationTags；</p>
+</li>
+<li><p>NodeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-pathedge">7.4 PathEdge</h2><p>建议字段：</p>
+<ul>
+<li><p>EdgeId；</p>
+</li>
+<li><p>SourceNodeId；</p>
+</li>
+<li><p>TargetNodeId；</p>
+</li>
+<li><p>Length；</p>
+</li>
+<li><p>MovementCost；</p>
+</li>
+<li><p>Width；</p>
+</li>
+<li><p>AllowedEnemyTags；</p>
+</li>
+<li><p>DynamicState；</p>
+</li>
+<li><p>BlockPolicy；</p>
+</li>
+<li><p>EdgeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="75-路径类型">7.5 路径类型</h2><p>包括：</p>
+<ul>
+<li><p>地面路线；</p>
+</li>
+<li><p>飞行路线；</p>
+</li>
+<li><p>地下路线；</p>
+</li>
+<li><p>水上路线；</p>
+</li>
+<li><p>传送路线；</p>
+</li>
+<li><p>Boss专用路线；</p>
+</li>
+<li><p>动态开放路线；</p>
+</li>
+<li><p>玩家可阻挡路线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="76-多路线地图">7.6 多路线地图</h2><p>多路线可以形成：</p>
+<ul>
+<li><p>同时防守；</p>
+</li>
+<li><p>共享火力点；</p>
+</li>
+<li><p>路线优先级；</p>
+</li>
+<li><p>资源分散；</p>
+</li>
+<li><p>跨路线塔位；</p>
+</li>
+<li><p>路线切换。</p>
+</li>
+</ul>
+<p>关键塔位通常是能够：</p>
+<ul>
+<li><p>覆盖多个入口；</p>
+</li>
+<li><p>覆盖路径回环；</p>
+</li>
+<li><p>配合阻挡；</p>
+</li>
+<li><p>提供长时间射程；</p>
+</li>
+</ul>
+<p>的位置。</p>
+<hr />
+<h2 id="77-动态路径">7.7 动态路径</h2><p>关卡中可以出现：</p>
+<ul>
+<li><p>门开启；</p>
+</li>
+<li><p>桥梁断裂；</p>
+</li>
+<li><p>路线分流；</p>
+</li>
+<li><p>Boss破坏地形；</p>
+</li>
+<li><p>玩家设置路障；</p>
+</li>
+<li><p>环境机关改变道路。</p>
+</li>
+</ul>
+<p>任何路径变化都必须重新验证：</p>
+<ul>
+<li><p>所有敌人仍有合法目标路径；</p>
+</li>
+<li><p>不会生成导航死锁；</p>
+</li>
+<li><p>已在路径中的敌人可以迁移；</p>
+</li>
+<li><p>路径缓存正确失效；</p>
+</li>
+<li><p>玩家无法完全永久封死所有路线，除非规则允许。</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-敌人模型">8. 敌人模型</h2><h2 id="81-enemydefinition">8.1 EnemyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EnemyDefinitionId；</p>
+</li>
+<li><p>EnemyTags；</p>
+</li>
+<li><p>MaximumHealth；</p>
+</li>
+<li><p>MovementProfileId；</p>
+</li>
+<li><p>DefenseProfileId；</p>
+</li>
+<li><p>AbilitySetId；</p>
+</li>
+<li><p>RewardProfileId；</p>
+</li>
+<li><p>GoalDamageProfileId；</p>
+</li>
+<li><p>TargetingRules；</p>
+</li>
+<li><p>SpawnCost；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-enemyruntimestate">8.2 EnemyRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>EnemyEntityId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentShield；</p>
+</li>
+<li><p>CurrentPathId；</p>
+</li>
+<li><p>CurrentPathProgress；</p>
+</li>
+<li><p>CurrentNodeId；</p>
+</li>
+<li><p>MovementSpeed；</p>
+</li>
+<li><p>StatusInstances；</p>
+</li>
+<li><p>AbilityStates；</p>
+</li>
+<li><p>BlockState；</p>
+</li>
+<li><p>TargetGoalId；</p>
+</li>
+<li><p>DeathState；</p>
+</li>
+<li><p>EnemyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-敌人核心属性">8.3 敌人核心属性</h2><p>包括：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>移动速度；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>魔抗；</p>
+</li>
+<li><p>体积；</p>
+</li>
+<li><p>飞行状态；</p>
+</li>
+<li><p>隐身状态；</p>
+</li>
+<li><p>控制抗性；</p>
+</li>
+<li><p>基地伤害；</p>
+</li>
+<li><p>击杀奖励；</p>
+</li>
+<li><p>路线类型。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-敌人职责分类">8.4 敌人职责分类</h2><h3 id="基础单位">基础单位</h3><p>用于测试常规输出。</p>
+<h3 id="高速单位">高速单位</h3><p>测试反应、射程和控制。</p>
+<h3 id="重甲单位">重甲单位</h3><p>测试破甲和高单次伤害。</p>
+<h3 id="群体单位">群体单位</h3><p>测试范围伤害和吞吐。</p>
+<h3 id="飞行单位">飞行单位</h3><p>绕过地面阻挡，要求专门防空。</p>
+<h3 id="隐身单位">隐身单位</h3><p>要求侦测、范围伤害或特殊塔。</p>
+<h3 id="治疗单位">治疗单位</h3><p>延长敌群生存时间。</p>
+<h3 id="增益单位">增益单位</h3><p>提高周围敌人速度、抗性或攻击。</p>
+<h3 id="分裂单位">分裂单位</h3><p>死亡后生成多个小单位。</p>
+<h3 id="攻城单位">攻城单位</h3><p>攻击塔、阻挡物或设施。</p>
+<h3 id="boss">Boss</h3><p>改变路线、禁用防御或进入多阶段。</p>
+<hr />
+<h2 id="85-敌人路径进度">8.5 敌人路径进度</h2><p>建议使用标准化路径进度：</p>
+<ul>
+<li><p>0表示出生点；</p>
+</li>
+<li><p>1表示目标点。</p>
+</li>
+</ul>
+<p>可用于：</p>
+<ul>
+<li><p>目标优先级；</p>
+</li>
+<li><p>漏怪风险判断；</p>
+</li>
+<li><p>UI显示；</p>
+</li>
+<li><p>波次调试；</p>
+</li>
+<li><p>塔的“最接近终点”选择。</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-波次系统">9. 波次系统</h2><h2 id="91-wavedefinition">9.1 WaveDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>WaveId；</p>
+</li>
+<li><p>WaveIndex；</p>
+</li>
+<li><p>SpawnGroupDefinitions；</p>
+</li>
+<li><p>StartDelay；</p>
+</li>
+<li><p>InterGroupDelay；</p>
+</li>
+<li><p>CompletionRules；</p>
+</li>
+<li><p>RewardDefinition；</p>
+</li>
+<li><p>PreviewPolicy；</p>
+</li>
+<li><p>DifficultyRating；</p>
+</li>
+<li><p>WaveTags。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-spawngroupdefinition">9.2 SpawnGroupDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SpawnGroupId；</p>
+</li>
+<li><p>EnemyDefinitionId；</p>
+</li>
+<li><p>Count；</p>
+</li>
+<li><p>SpawnPointId；</p>
+</li>
+<li><p>PathSelectionRule；</p>
+</li>
+<li><p>StartOffset；</p>
+</li>
+<li><p>SpawnInterval；</p>
+</li>
+<li><p>FormationRule；</p>
+</li>
+<li><p>GroupModifiers；</p>
+</li>
+<li><p>TriggerConditions。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-波次调度">9.3 波次调度</h2><ol>
+<li><p>进入波次准备阶段；</p>
+</li>
+<li><p>加载WaveDefinition；</p>
+</li>
+<li><p>展示预告；</p>
+</li>
+<li><p>玩家确认或倒计时结束；</p>
+</li>
+<li><p>创建SpawnSchedule；</p>
+</li>
+<li><p>按Tick生成敌人；</p>
+</li>
+<li><p>追踪存活、未生成和已漏过敌人；</p>
+</li>
+<li><p>所有生成完成且场上敌人清空；</p>
+</li>
+<li><p>提交波次结果；</p>
+</li>
+<li><p>发放波次奖励；</p>
+</li>
+<li><p>进入下一准备阶段。</p>
+</li>
+</ol>
+<hr />
+<h2 id="94-波次完成条件">9.4 波次完成条件</h2><p>通常要求：</p>
+<ul>
+<li><p>所有生成组完成；</p>
+</li>
+<li><p>场上无存活敌人；</p>
+</li>
+<li><p>无延迟生成单位；</p>
+</li>
+<li><p>无待分裂单位；</p>
+</li>
+<li><p>无Boss召唤单位；</p>
+</li>
+<li><p>特殊目标已处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="95-波次预算">9.5 波次预算</h2><p>可以为每波分配威胁预算：</p>
+<ul>
+<li><p>敌人SpawnCost；</p>
+</li>
+<li><p>路线数量；</p>
+</li>
+<li><p>生成密度；</p>
+</li>
+<li><p>特殊单位组合；</p>
+</li>
+<li><p>波次持续时间；</p>
+</li>
+<li><p>玩家理论经济。</p>
+</li>
+</ul>
+<p>预算不是最终难度，但有助于防止内容配置失控。</p>
+<hr />
+<h2 id="96-波次结构">9.6 波次结构</h2><p>常见结构包括：</p>
+<ul>
+<li><p>单一敌人教学；</p>
+</li>
+<li><p>混合基础单位；</p>
+</li>
+<li><p>高速测试；</p>
+</li>
+<li><p>重甲测试；</p>
+</li>
+<li><p>多路线分压；</p>
+</li>
+<li><p>特殊敌人加入；</p>
+</li>
+<li><p>精英波；</p>
+</li>
+<li><p>资源缓冲波；</p>
+</li>
+<li><p>Boss前消耗波；</p>
+</li>
+<li><p>Boss波。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-防御塔模型">10. 防御塔模型</h2><h2 id="101-towerdefinition">10.1 TowerDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TowerDefinitionId；</p>
+</li>
+<li><p>TowerTags；</p>
+</li>
+<li><p>BuildCost；</p>
+</li>
+<li><p>FootprintDefinition；</p>
+</li>
+<li><p>TargetingProfileId；</p>
+</li>
+<li><p>AttackProfileId；</p>
+</li>
+<li><p>UpgradeBranchIds；</p>
+</li>
+<li><p>SellPolicy；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>SupportAuraDefinitions；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-towerruntimestate">10.2 TowerRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>TowerEntityId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>CurrentUpgradeNodeId；</p>
+</li>
+<li><p>CurrentTargetId；</p>
+</li>
+<li><p>AttackCooldown；</p>
+</li>
+<li><p>ChargeState；</p>
+</li>
+<li><p>AmmunitionState；</p>
+</li>
+<li><p>BuffStates；</p>
+</li>
+<li><p>DisabledState；</p>
+</li>
+<li><p>TotalInvestment；</p>
+</li>
+<li><p>TowerVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-塔的职责分类">10.3 塔的职责分类</h2><h3 id="单体输出塔">单体输出塔</h3><p>处理精英和Boss。</p>
+<h3 id="群体伤害塔">群体伤害塔</h3><p>处理高密度敌群。</p>
+<h3 id="高频低伤塔">高频低伤塔</h3><p>处理高速、低甲或需要多次命中的敌人。</p>
+<h3 id="控制塔">控制塔</h3><p>减速、眩晕、击退或束缚。</p>
+<h3 id="破甲塔">破甲塔</h3><p>降低防御，提高其他塔收益。</p>
+<h3 id="防空塔">防空塔</h3><p>专门攻击飞行单位。</p>
+<h3 id="侦测塔">侦测塔</h3><p>揭露隐身或提供情报。</p>
+<h3 id="支援塔">支援塔</h3><p>提高射程、攻速、暴击或资源收益。</p>
+<h3 id="经济塔">经济塔</h3><p>牺牲即时火力换取长期资源。</p>
+<h3 id="阻挡单位">阻挡单位</h3><p>延缓或重定向地面敌人。</p>
+<hr />
+<h2 id="104-塔定义与攻击行为分离">10.4 塔定义与攻击行为分离</h2><p>TowerDefinition描述：</p>
+<ul>
+<li><p>建造；</p>
+</li>
+<li><p>占地；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>基础职责。</p>
+</li>
+</ul>
+<p>AttackProfile描述：</p>
+<ul>
+<li><p>攻击方式；</p>
+</li>
+<li><p>射程；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>命中效果。</p>
+</li>
+</ul>
+<p>这样同一塔可以通过升级切换攻击方式，而不需要复制完整塔定义。</p>
+<hr />
+<h2 id="11-建造与占位系统">11. 建造与占位系统</h2><h2 id="111-buildzonedefinition">11.1 BuildZoneDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BuildZoneId；</p>
+</li>
+<li><p>Bounds；</p>
+</li>
+<li><p>AllowedTowerTags；</p>
+</li>
+<li><p>MaximumOccupancy；</p>
+</li>
+<li><p>HeightLayer；</p>
+</li>
+<li><p>TerrainModifiers；</p>
+</li>
+<li><p>ExclusiveRules；</p>
+</li>
+<li><p>ZoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-buildcommand">11.2 BuildCommand</h2><p>建议字段：</p>
+<ul>
+<li><p>CommandId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>TowerDefinitionId；</p>
+</li>
+<li><p>BuildZoneId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>SubmittedResourceVersion；</p>
+</li>
+<li><p>SubmittedMapVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-建造验证">11.3 建造验证</h2><p>检查：</p>
+<ul>
+<li><p>资源是否足够；</p>
+</li>
+<li><p>位置是否属于建造区；</p>
+</li>
+<li><p>占地是否重叠；</p>
+</li>
+<li><p>塔类型是否允许；</p>
+</li>
+<li><p>是否超过数量上限；</p>
+</li>
+<li><p>是否遮挡非法路线；</p>
+</li>
+<li><p>高度层是否匹配；</p>
+</li>
+<li><p>当前阶段是否允许建造；</p>
+</li>
+<li><p>地图版本是否有效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-建造事务">11.4 建造事务</h2><ol>
+<li><p>预留资源；</p>
+</li>
+<li><p>锁定建造位置；</p>
+</li>
+<li><p>再次验证占位；</p>
+</li>
+<li><p>创建TowerEntity；</p>
+</li>
+<li><p>扣除资源；</p>
+</li>
+<li><p>注册目标搜索和攻击模块；</p>
+</li>
+<li><p>更新建造区占用；</p>
+</li>
+<li><p>发布TowerBuilt；</p>
+</li>
+<li><p>释放锁。</p>
+</li>
+</ol>
+<hr />
+<h2 id="115-战斗中建造">11.5 战斗中建造</h2><p>如果允许战斗中建造，需要决定：</p>
+<ul>
+<li><p>是否暂停；</p>
+</li>
+<li><p>是否需要建造时间；</p>
+</li>
+<li><p>塔是否立即攻击；</p>
+</li>
+<li><p>建造过程是否可被敌人打断；</p>
+</li>
+<li><p>是否允许堵住敌人当前位置；</p>
+</li>
+<li><p>是否改变当前敌人路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="12-射程与空间查询">12. 射程与空间查询</h2><h2 id="121-rangeshape">12.1 RangeShape</h2><p>可以包括：</p>
+<ul>
+<li><p>圆形；</p>
+</li>
+<li><p>扇形；</p>
+</li>
+<li><p>直线；</p>
+</li>
+<li><p>矩形；</p>
+</li>
+<li><p>环形；</p>
+</li>
+<li><p>多边形；</p>
+</li>
+<li><p>路径区段；</p>
+</li>
+<li><p>全图范围。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-rangecontext">12.2 RangeContext</h2><p>建议包含：</p>
+<ul>
+<li><p>TowerId；</p>
+</li>
+<li><p>Origin；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>RangeShape；</p>
+</li>
+<li><p>HeightRules；</p>
+</li>
+<li><p>LineOfSightRules；</p>
+</li>
+<li><p>AllowedTargetTags；</p>
+</li>
+<li><p>CandidateEntityIds；</p>
+</li>
+<li><p>RangeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-视线规则">12.3 视线规则</h2><p>部分塔可以：</p>
+<ul>
+<li><p>穿墙；</p>
+</li>
+<li><p>跨越地形；</p>
+</li>
+<li><p>受高差影响；</p>
+</li>
+<li><p>被障碍遮挡；</p>
+</li>
+<li><p>只能攻击同层目标；</p>
+</li>
+<li><p>只能攻击路径上的敌人。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-射程预览">12.4 射程预览</h2><p>建造和升级界面应显示：</p>
+<ul>
+<li><p>基础射程；</p>
+</li>
+<li><p>实际可攻击路径段；</p>
+</li>
+<li><p>被遮挡区域；</p>
+</li>
+<li><p>可覆盖路线；</p>
+</li>
+<li><p>升级后的变化；</p>
+</li>
+<li><p>支援塔影响范围。</p>
+</li>
+</ul>
+<p>只显示圆形范围不足以表达真实覆盖价值。</p>
+<hr />
+<h2 id="13-目标选择系统">13. 目标选择系统</h2><h2 id="131-targetingprofile">13.1 TargetingProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>AllowedTargetTags；</p>
+</li>
+<li><p>SelectionStrategy；</p>
+</li>
+<li><p>MaximumTargets；</p>
+</li>
+<li><p>RetargetPolicy；</p>
+</li>
+<li><p>LockDuration；</p>
+</li>
+<li><p>LineOfSightPolicy；</p>
+</li>
+<li><p>PriorityModifiers；</p>
+</li>
+<li><p>TargetingVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-常见目标策略">13.2 常见目标策略</h2><p>包括：</p>
+<ul>
+<li><p>最接近终点；</p>
+</li>
+<li><p>最接近出生点；</p>
+</li>
+<li><p>生命最高；</p>
+</li>
+<li><p>生命最低；</p>
+</li>
+<li><p>护甲最高；</p>
+</li>
+<li><p>移动最快；</p>
+</li>
+<li><p>当前被标记；</p>
+</li>
+<li><p>随机；</p>
+</li>
+<li><p>优先飞行；</p>
+</li>
+<li><p>优先Boss；</p>
+</li>
+<li><p>当前目标保持。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-目标评分">13.3 目标评分</h2><p>目标评分可以综合：</p>
+<ul>
+<li><p>路径进度；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>敌人类型；</p>
+</li>
+<li><p>威胁等级；</p>
+</li>
+<li><p>当前状态；</p>
+</li>
+<li><p>是否已经被其他塔过度集火；</p>
+</li>
+<li><p>塔的职业倾向。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-重新锁定策略">13.4 重新锁定策略</h2><p>需要避免塔在多个敌人之间频繁切换。</p>
+<p>可以使用：</p>
+<ul>
+<li><p>最短锁定时间；</p>
+</li>
+<li><p>目标离开射程后再切换；</p>
+</li>
+<li><p>当前目标死亡后切换；</p>
+</li>
+<li><p>新目标威胁高于阈值时切换；</p>
+</li>
+<li><p>蓄力攻击期间不切换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="135-过度集火">13.5 过度集火</h2><p>如果所有单体塔同时攻击一个即将死亡的敌人，可能浪费大量伤害。</p>
+<p>可以选择：</p>
+<ul>
+<li><p>不进行协调，保留传统塔防特征；</p>
+</li>
+<li><p>预估投射物伤害；</p>
+</li>
+<li><p>降低已被覆盖目标评分；</p>
+</li>
+<li><p>仅让智能塔进行伤害预留。</p>
+</li>
+</ul>
+<p>协调程度越高，系统越高效，但也可能削弱玩家对塔位和攻速的判断。</p>
+<hr />
+<h2 id="14-攻击与投射物系统">14. 攻击与投射物系统</h2><h2 id="141-attackprofile">14.1 AttackProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>AttackType；</p>
+</li>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>DamageTags；</p>
+</li>
+<li><p>AttackInterval；</p>
+</li>
+<li><p>AttackRange；</p>
+</li>
+<li><p>TargetCount；</p>
+</li>
+<li><p>ProjectileDefinitionId；</p>
+</li>
+<li><p>HitEffectIds；</p>
+</li>
+<li><p>CriticalProfile；</p>
+</li>
+<li><p>SplashProfile；</p>
+</li>
+<li><p>ChargeRules；</p>
+</li>
+<li><p>AnimationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-攻击类型">14.2 攻击类型</h2><p>包括：</p>
+<ul>
+<li><p>瞬时命中；</p>
+</li>
+<li><p>直线投射物；</p>
+</li>
+<li><p>追踪投射物；</p>
+</li>
+<li><p>抛物线；</p>
+</li>
+<li><p>光束；</p>
+</li>
+<li><p>持续喷射；</p>
+</li>
+<li><p>范围爆炸；</p>
+</li>
+<li><p>连锁攻击；</p>
+</li>
+<li><p>地面持续区域；</p>
+</li>
+<li><p>路径攻击。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-projectilestate">14.3 ProjectileState</h2><p>建议包含：</p>
+<ul>
+<li><p>ProjectileId；</p>
+</li>
+<li><p>SourceTowerId；</p>
+</li>
+<li><p>TargetEntityId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>RemainingLifetime；</p>
+</li>
+<li><p>DamageContext；</p>
+</li>
+<li><p>HomingState；</p>
+</li>
+<li><p>PiercingState；</p>
+</li>
+<li><p>ProjectileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-投射物目标死亡">14.4 投射物目标死亡</h2><p>目标在投射物抵达前死亡时，可以：</p>
+<ul>
+<li><p>投射物消失；</p>
+</li>
+<li><p>继续飞向死亡位置；</p>
+</li>
+<li><p>重新选择目标；</p>
+</li>
+<li><p>转化为范围伤害；</p>
+</li>
+<li><p>返还能量。</p>
+</li>
+</ul>
+<p>规则应由投射物类型决定。</p>
+<hr />
+<h2 id="145-穿透与连锁">14.5 穿透与连锁</h2><p>需要明确：</p>
+<ul>
+<li><p>最大命中次数；</p>
+</li>
+<li><p>同一目标是否可重复命中；</p>
+</li>
+<li><p>每次命中衰减；</p>
+</li>
+<li><p>连锁距离；</p>
+</li>
+<li><p>连锁目标排序；</p>
+</li>
+<li><p>目标死亡后的处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-伤害与防御">15. 伤害与防御</h2><h2 id="151-damagespec">15.1 DamageSpec</h2><p>建议字段：</p>
+<ul>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>DamageType；</p>
+</li>
+<li><p>ArmorPenetration；</p>
+</li>
+<li><p>ResistancePenetration；</p>
+</li>
+<li><p>CriticalRules；</p>
+</li>
+<li><p>SplashRules；</p>
+</li>
+<li><p>BonusAgainstTags；</p>
+</li>
+<li><p>StatusBuildUp；</p>
+</li>
+<li><p>DamageVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-defenseprofile">15.2 DefenseProfile</h2><p>建议包含：</p>
+<ul>
+<li><p>Armor；</p>
+</li>
+<li><p>MagicResistance；</p>
+</li>
+<li><p>DamageReduction；</p>
+</li>
+<li><p>Shield；</p>
+</li>
+<li><p>ImmunityTags；</p>
+</li>
+<li><p>VulnerabilityTags；</p>
+</li>
+<li><p>DefenseVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-伤害结算顺序">15.3 伤害结算顺序</h2><p>推荐：</p>
+<ol>
+<li><p>塔基础伤害；</p>
+</li>
+<li><p>升级修正；</p>
+</li>
+<li><p>支援塔和全局增益；</p>
+</li>
+<li><p>目标标签加成；</p>
+</li>
+<li><p>暴击；</p>
+</li>
+<li><p>破甲和穿透；</p>
+</li>
+<li><p>护甲或魔抗；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>最终生命伤害；</p>
+</li>
+<li><p>状态积累；</p>
+</li>
+<li><p>受击触发；</p>
+</li>
+<li><p>死亡检查。</p>
+</li>
+</ol>
+<hr />
+<h2 id="154-伤害类型">15.4 伤害类型</h2><p>可以包括：</p>
+<ul>
+<li><p>物理；</p>
+</li>
+<li><p>魔法；</p>
+</li>
+<li><p>真实；</p>
+</li>
+<li><p>火焰；</p>
+</li>
+<li><p>冰霜；</p>
+</li>
+<li><p>毒素；</p>
+</li>
+<li><p>电击；</p>
+</li>
+<li><p>爆炸；</p>
+</li>
+<li><p>对空；</p>
+</li>
+<li><p>对建筑。</p>
+</li>
+</ul>
+<p>不同类型应与敌人和塔的职责形成可理解关系。</p>
+<hr />
+<h2 id="155-过度复杂的抗性">15.5 过度复杂的抗性</h2><p>如果敌人拥有过多不可见抗性，玩家难以判断防线问题。</p>
+<p>应通过：</p>
+<ul>
+<li><p>图标；</p>
+</li>
+<li><p>颜色；</p>
+</li>
+<li><p>敌人图鉴；</p>
+</li>
+<li><p>波次预告；</p>
+</li>
+<li><p>命中反馈；</p>
+</li>
+<li><p>伤害解释器；</p>
+</li>
+</ul>
+<p>明确展示。</p>
+<hr />
+<h2 id="16-状态与控制系统">16. 状态与控制系统</h2><h2 id="161-statusdefinition">16.1 StatusDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StatusId；</p>
+</li>
+<li><p>StatusTags；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>MaximumStacks；</p>
+</li>
+<li><p>DurationPolicy；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>PeriodicEffectSpecs；</p>
+</li>
+<li><p>ControlCategory；</p>
+</li>
+<li><p>ResistanceRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-常见控制">16.2 常见控制</h2><p>包括：</p>
+<ul>
+<li><p>减速；</p>
+</li>
+<li><p>定身；</p>
+</li>
+<li><p>眩晕；</p>
+</li>
+<li><p>击退；</p>
+</li>
+<li><p>拉拽；</p>
+</li>
+<li><p>恐惧；</p>
+</li>
+<li><p>冻结；</p>
+</li>
+<li><p>路径重置；</p>
+</li>
+<li><p>时间停止。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-控制递减">16.3 控制递减</h2><p>Boss和精英可以使用：</p>
+<ul>
+<li><p>控制持续时间缩短；</p>
+</li>
+<li><p>同类控制递减；</p>
+</li>
+<li><p>控制阈值；</p>
+</li>
+<li><p>控制后短时免疫；</p>
+</li>
+<li><p>只允许减速不允许眩晕。</p>
+</li>
+</ul>
+<p>不能让Boss完全免疫所有控制，否则控制塔在核心关卡中失去价值。</p>
+<hr />
+<h2 id="164-控制链">16.4 控制链</h2><p>多个控制塔可能形成永久控制。</p>
+<p>需要检测：</p>
+<ul>
+<li><p>平均减速率；</p>
+</li>
+<li><p>眩晕覆盖率；</p>
+</li>
+<li><p>击退距离；</p>
+</li>
+<li><p>控制免疫窗口；</p>
+</li>
+<li><p>最大允许路径回退。</p>
+</li>
+</ul>
+<hr />
+<h2 id="165-状态组合">16.5 状态组合</h2><p>例如：</p>
+<p>潮湿</p>
+<ul>
+<li>电击
+  → 连锁伤害增加</li>
+</ul>
+<p>燃烧</p>
+<ul>
+<li>风
+  → 扩散到附近敌人</li>
+</ul>
+<p>冻结</p>
+<ul>
+<li>重击
+  → 造成破碎伤害</li>
+</ul>
+<p>状态组合应接入统一标签和事件系统。</p>
+<hr />
+<h2 id="17-阻挡与近战防御">17. 阻挡与近战防御</h2><h2 id="171-blockerdefinition">17.1 BlockerDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BlockerId；</p>
+</li>
+<li><p>MaximumBlockedEnemies；</p>
+</li>
+<li><p>BlockerHealth；</p>
+</li>
+<li><p>BlockRules；</p>
+</li>
+<li><p>AttackProfile；</p>
+</li>
+<li><p>RecoveryRules；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>PathInteractionRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-blockstate">17.2 BlockState</h2><p>建议包含：</p>
+<ul>
+<li><p>BlockingEntityId；</p>
+</li>
+<li><p>BlockedEnemyIds；</p>
+</li>
+<li><p>MaximumCapacity；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>DisabledState；</p>
+</li>
+<li><p>BlockVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-阻挡流程">17.3 阻挡流程</h2><ol>
+<li><p>敌人进入阻挡范围；</p>
+</li>
+<li><p>验证敌人是否可被阻挡；</p>
+</li>
+<li><p>检查阻挡容量；</p>
+</li>
+<li><p>将敌人绑定至阻挡实体；</p>
+</li>
+<li><p>停止或限制敌人路径推进；</p>
+</li>
+<li><p>双方进入攻击状态；</p>
+</li>
+<li><p>敌人死亡、阻挡单位失效或主动释放；</p>
+</li>
+<li><p>恢复敌人路径移动。</p>
+</li>
+</ol>
+<hr />
+<h2 id="174-不可阻挡单位">17.4 不可阻挡单位</h2><p>可以包括：</p>
+<ul>
+<li><p>飞行；</p>
+</li>
+<li><p>巨型Boss；</p>
+</li>
+<li><p>幽灵；</p>
+</li>
+<li><p>冲锋状态；</p>
+</li>
+<li><p>传送单位。</p>
+</li>
+</ul>
+<hr />
+<h2 id="175-阻挡与路径修改的区别">17.5 阻挡与路径修改的区别</h2><p>阻挡通常临时停止单位。</p>
+<p>路径修改会改变导航图。</p>
+<p>二者需要不同系统处理，避免每次阻挡都重建全图路径。</p>
+<hr />
+<h2 id="18-陷阱与一次性设施">18. 陷阱与一次性设施</h2><h2 id="181-trapdefinition">18.1 TrapDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TrapId；</p>
+</li>
+<li><p>TriggerShape；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>ChargeCount；</p>
+</li>
+<li><p>ResetTime；</p>
+</li>
+<li><p>VisibilityRules；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>SellPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-陷阱职责">18.2 陷阱职责</h2><p>包括：</p>
+<ul>
+<li><p>爆炸；</p>
+</li>
+<li><p>减速；</p>
+</li>
+<li><p>传送；</p>
+</li>
+<li><p>击退；</p>
+</li>
+<li><p>破甲；</p>
+</li>
+<li><p>标记；</p>
+</li>
+<li><p>路径封锁；</p>
+</li>
+<li><p>敌人分流。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-陷阱与塔的区别">18.3 陷阱与塔的区别</h2><p>陷阱通常：</p>
+<ul>
+<li><p>作用范围固定；</p>
+</li>
+<li><p>依赖敌人进入；</p>
+</li>
+<li><p>具有次数或冷却；</p>
+</li>
+<li><p>不持续搜索目标；</p>
+</li>
+<li><p>更依赖精确路径位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-支援塔与光环">19. 支援塔与光环</h2><h2 id="191-auradefinition">19.1 AuraDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AuraId；</p>
+</li>
+<li><p>Radius；</p>
+</li>
+<li><p>AffectedTowerTags；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>UpdatePolicy；</p>
+</li>
+<li><p>AuraVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-支援效果">19.2 支援效果</h2><p>包括：</p>
+<ul>
+<li><p>提高攻速；</p>
+</li>
+<li><p>提高射程；</p>
+</li>
+<li><p>提高伤害；</p>
+</li>
+<li><p>降低建造费用；</p>
+</li>
+<li><p>增加暴击；</p>
+</li>
+<li><p>提供侦测；</p>
+</li>
+<li><p>增加击杀收益；</p>
+</li>
+<li><p>降低技能冷却。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-光环叠加">19.3 光环叠加</h2><p>必须明确：</p>
+<ul>
+<li><p>相同光环是否叠加；</p>
+</li>
+<li><p>取最高值还是累计；</p>
+</li>
+<li><p>不同来源优先级；</p>
+</li>
+<li><p>塔离开范围后的处理；</p>
+</li>
+<li><p>出售支援塔时的更新。</p>
+</li>
+</ul>
+<hr />
+<h2 id="194-防止支援塔成为必选">19.4 防止支援塔成为必选</h2><p>如果支援塔对所有塔提供无条件高倍率加成，玩家会围绕固定中心堆塔。</p>
+<p>可以通过：</p>
+<ul>
+<li><p>标签限制；</p>
+</li>
+<li><p>光环不叠加；</p>
+</li>
+<li><p>占地；</p>
+</li>
+<li><p>覆盖范围；</p>
+</li>
+<li><p>建造上限；</p>
+</li>
+<li><p>位置机会成本；</p>
+</li>
+</ul>
+<p>保持取舍。</p>
+<hr />
+<h2 id="20-资源与经济系统">20. 资源与经济系统</h2><h2 id="201-defenseeconomystate">20.1 DefenseEconomyState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentCurrency；</p>
+</li>
+<li><p>ReservedCurrency；</p>
+</li>
+<li><p>WaveRewardPreview；</p>
+</li>
+<li><p>KillRewardAccumulator；</p>
+</li>
+<li><p>InterestState；</p>
+</li>
+<li><p>ResourceGenerationStates；</p>
+</li>
+<li><p>EconomyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-资源来源">20.2 资源来源</h2><p>包括：</p>
+<ul>
+<li><p>初始资源；</p>
+</li>
+<li><p>击杀奖励；</p>
+</li>
+<li><p>波次奖励；</p>
+</li>
+<li><p>提前开波奖励；</p>
+</li>
+<li><p>经济塔；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>无漏怪奖励；</p>
+</li>
+<li><p>挑战条件；</p>
+</li>
+<li><p>出售返还。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-资源消耗">20.3 资源消耗</h2><p>包括：</p>
+<ul>
+<li><p>建塔；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>修复；</p>
+</li>
+<li><p>重建；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>英雄部署；</p>
+</li>
+<li><p>购买临时增益；</p>
+</li>
+<li><p>路障。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-击杀归属">20.4 击杀归属</h2><p>需要明确奖励属于：</p>
+<ul>
+<li><p>最终击杀塔；</p>
+</li>
+<li><p>造成伤害的所有塔；</p>
+</li>
+<li><p>全局玩家；</p>
+</li>
+<li><p>特定经济效果。</p>
+</li>
+</ul>
+<p>多人合作塔防中，还需要决定：</p>
+<ul>
+<li><p>共享资源；</p>
+</li>
+<li><p>独立资源；</p>
+</li>
+<li><p>建造区所有权；</p>
+</li>
+<li><p>击杀分配。</p>
+</li>
+</ul>
+<hr />
+<h2 id="205-经济滚雪球">20.5 经济滚雪球</h2><p>早期强势可能带来：</p>
+<p>更多击杀
+→ 更多资源
+→ 更强防线
+→ 更低损失
+→ 更快增长</p>
+<p>需要通过：</p>
+<ul>
+<li><p>波次固定奖励；</p>
+</li>
+<li><p>漏怪不直接扣资源；</p>
+</li>
+<li><p>保底收入；</p>
+</li>
+<li><p>高级升级成本；</p>
+</li>
+<li><p>收益递减；</p>
+</li>
+</ul>
+<p>避免一次小失误永久决定整局。</p>
+<hr />
+<h2 id="21-升级与分支">21. 升级与分支</h2><h2 id="211-upgradenodedefinition">21.1 UpgradeNodeDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>UpgradeNodeId；</p>
+</li>
+<li><p>ParentNodeId；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>AttributeModifiers；</p>
+</li>
+<li><p>AttackProfileOverride；</p>
+</li>
+<li><p>GrantedAbilityIds；</p>
+</li>
+<li><p>TargetingOverrides；</p>
+</li>
+<li><p>ExclusiveBranchIds；</p>
+</li>
+<li><p>RefundPolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-升级类型">21.2 升级类型</h2><p>包括：</p>
+<ul>
+<li><p>数值升级；</p>
+</li>
+<li><p>射程升级；</p>
+</li>
+<li><p>攻速升级；</p>
+</li>
+<li><p>攻击方式变化；</p>
+</li>
+<li><p>目标数量变化；</p>
+</li>
+<li><p>伤害类型变化；</p>
+</li>
+<li><p>新状态；</p>
+</li>
+<li><p>新主动技能；</p>
+</li>
+<li><p>专精分支。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-分支升级">21.3 分支升级</h2><p>同一基础塔可以发展为：</p>
+<ul>
+<li><p>单体狙击；</p>
+</li>
+<li><p>群体爆炸；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>破甲；</p>
+</li>
+<li><p>防空；</p>
+</li>
+<li><p>经济支援。</p>
+</li>
+</ul>
+<p>分支应改变职责，而不只是外观和数值。</p>
+<hr />
+<h2 id="214-升级事务">21.4 升级事务</h2><ol>
+<li><p>验证塔实例；</p>
+</li>
+<li><p>验证前置节点；</p>
+</li>
+<li><p>验证互斥分支；</p>
+</li>
+<li><p>预留资源；</p>
+</li>
+<li><p>应用UpgradeNode；</p>
+</li>
+<li><p>重建派生属性；</p>
+</li>
+<li><p>更新目标和攻击模块；</p>
+</li>
+<li><p>扣除资源；</p>
+</li>
+<li><p>发布TowerUpgraded。</p>
+</li>
+</ol>
+<hr />
+<h2 id="215-升级后冷却处理">21.5 升级后冷却处理</h2><p>需要明确：</p>
+<ul>
+<li><p>保留当前攻击冷却比例；</p>
+</li>
+<li><p>完全重置；</p>
+</li>
+<li><p>立即可攻击；</p>
+</li>
+<li><p>蓄力状态是否保留；</p>
+</li>
+<li><p>当前投射物是否继续存在。</p>
+</li>
+</ul>
+<hr />
+<h2 id="22-出售与重组">22. 出售与重组</h2><h2 id="221-sellpolicy">22.1 SellPolicy</h2><p>建议字段：</p>
+<ul>
+<li><p>BaseRefundRate；</p>
+</li>
+<li><p>UpgradeRefundRate；</p>
+</li>
+<li><p>CombatSellPenalty；</p>
+</li>
+<li><p>MinimumRefund；</p>
+</li>
+<li><p>SpecialRefundRules；</p>
+</li>
+<li><p>SellCooldown。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-出售职责">22.2 出售职责</h2><p>出售允许玩家：</p>
+<ul>
+<li><p>修正错误塔位；</p>
+</li>
+<li><p>适应新敌人；</p>
+</li>
+<li><p>将早期塔转化为后期投资；</p>
+</li>
+<li><p>在Boss前调整构筑；</p>
+</li>
+<li><p>处理路线变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-出售成本">22.3 出售成本</h2><p>如果全额返还且随时可卖，塔位决策失去风险。</p>
+<p>如果返还过低，玩家不敢实验。</p>
+<p>常见方案：</p>
+<ul>
+<li><p>波次间较高返还；</p>
+</li>
+<li><p>战斗中较低返还；</p>
+</li>
+<li><p>特殊模式禁售；</p>
+</li>
+<li><p>某些塔可以无损迁移。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-基地与漏怪系统">23. 基地与漏怪系统</h2><h2 id="231-goaldefinition">23.1 GoalDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>GoalId；</p>
+</li>
+<li><p>MaximumIntegrity；</p>
+</li>
+<li><p>FailureThreshold；</p>
+</li>
+<li><p>DamageRules；</p>
+</li>
+<li><p>AllowedEnemyTags；</p>
+</li>
+<li><p>SpecialFailureRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="232-goalruntimestate">23.2 GoalRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>GoalId；</p>
+</li>
+<li><p>CurrentIntegrity；</p>
+</li>
+<li><p>LeakedEnemyCount；</p>
+</li>
+<li><p>DamageHistory；</p>
+</li>
+<li><p>GoalVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-漏怪流程">23.3 漏怪流程</h2><ol>
+<li><p>敌人到达目标节点；</p>
+</li>
+<li><p>验证目标和敌人状态；</p>
+</li>
+<li><p>计算GoalDamage；</p>
+</li>
+<li><p>扣除基地生命或完整度；</p>
+</li>
+<li><p>将敌人标记为Escaped；</p>
+</li>
+<li><p>清理其状态和引用；</p>
+</li>
+<li><p>发布EnemyLeaked；</p>
+</li>
+<li><p>检查关卡失败。</p>
+</li>
+</ol>
+<hr />
+<h2 id="234-漏怪惩罚">23.4 漏怪惩罚</h2><p>可以表现为：</p>
+<ul>
+<li><p>扣除生命；</p>
+</li>
+<li><p>降低评分；</p>
+</li>
+<li><p>失去资源；</p>
+</li>
+<li><p>增加敌方阶段；</p>
+</li>
+<li><p>污染累积；</p>
+</li>
+<li><p>目标被破坏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="235-不同敌人不同伤害">23.5 不同敌人不同伤害</h2><p>Boss和重型单位可以造成更多基地伤害。</p>
+<p>但需要清晰预告，避免玩家误以为所有敌人等价。</p>
+<hr />
+<h2 id="24-主动技能与战术干预">24. 主动技能与战术干预</h2><h2 id="241-activeabilitydefinition">24.1 ActiveAbilityDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>EnergyCost；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>TargetingRule；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>ChargeRules；</p>
+</li>
+<li><p>UsagePhaseRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-主动技能类型">24.2 主动技能类型</h2><p>包括：</p>
+<ul>
+<li><p>全图伤害；</p>
+</li>
+<li><p>区域轰炸；</p>
+</li>
+<li><p>临时减速；</p>
+</li>
+<li><p>冻结；</p>
+</li>
+<li><p>增益塔；</p>
+</li>
+<li><p>紧急阻挡；</p>
+</li>
+<li><p>资源补充；</p>
+</li>
+<li><p>召唤支援；</p>
+</li>
+<li><p>修复基地。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-主动技能职责">24.3 主动技能职责</h2><p>主动技能主要用于：</p>
+<ul>
+<li><p>处理意外漏口；</p>
+</li>
+<li><p>应对特殊波次；</p>
+</li>
+<li><p>弥补构筑暂时缺陷；</p>
+</li>
+<li><p>提供操作上限；</p>
+</li>
+<li><p>增加战斗中决策。</p>
+</li>
+</ul>
+<hr />
+<h2 id="244-防止主动技能替代布防">24.4 防止主动技能替代布防</h2><p>如果主动技能伤害过高且频繁使用，玩家可以忽略塔位和构筑。</p>
+<p>应通过：</p>
+<ul>
+<li><p>冷却；</p>
+</li>
+<li><p>能量；</p>
+</li>
+<li><p>使用次数；</p>
+</li>
+<li><p>目标限制；</p>
+</li>
+<li><p>波次保留压力；</p>
+</li>
+</ul>
+<p>维持其补充职责。</p>
+<hr />
+<h2 id="25-英雄单位扩展">25. 英雄单位扩展</h2><p>部分塔防允许玩家控制英雄。</p>
+<h2 id="251-herodefinition">25.1 HeroDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>HeroId；</p>
+</li>
+<li><p>MovementRules；</p>
+</li>
+<li><p>CombatProfile；</p>
+</li>
+<li><p>AbilityDefinitions；</p>
+</li>
+<li><p>RespawnRules；</p>
+</li>
+<li><p>UpgradeProfile；</p>
+</li>
+<li><p>DeploymentRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-heroruntimestate">25.2 HeroRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>HeroEntityId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentTarget；</p>
+</li>
+<li><p>AbilityCooldowns；</p>
+</li>
+<li><p>Experience；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>DeathState；</p>
+</li>
+<li><p>HeroVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-英雄职责">25.3 英雄职责</h2><p>英雄可以：</p>
+<ul>
+<li><p>机动补漏；</p>
+</li>
+<li><p>阻挡；</p>
+</li>
+<li><p>提供主动技能；</p>
+</li>
+<li><p>支援关键塔位；</p>
+</li>
+<li><p>对抗Boss；</p>
+</li>
+<li><p>提高操作密度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="254-英雄与塔的边界">25.4 英雄与塔的边界</h2><p>英雄不能使固定防线失去价值。</p>
+<p>其移动和输出通常应受到：</p>
+<ul>
+<li><p>路径；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>复活时间；</p>
+</li>
+<li><p>目标数量；</p>
+</li>
+<li><p>操作成本；</p>
+</li>
+</ul>
+<p>限制。</p>
+<hr />
+<h2 id="26-boss系统">26. Boss系统</h2><h2 id="261-bossdefinition">26.1 BossDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BossId；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>PhaseDefinitions；</p>
+</li>
+<li><p>PathBehaviorRules；</p>
+</li>
+<li><p>TowerInteractionAbilities；</p>
+</li>
+<li><p>SummonRules；</p>
+</li>
+<li><p>ImmunityRules；</p>
+</li>
+<li><p>GoalDamageProfile；</p>
+</li>
+<li><p>RewardDefinition；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-boss机制">26.2 Boss机制</h2><p>Boss可以：</p>
+<ul>
+<li><p>进入多个阶段；</p>
+</li>
+<li><p>召唤小怪；</p>
+</li>
+<li><p>改变路线；</p>
+</li>
+<li><p>暂时禁用塔；</p>
+</li>
+<li><p>摧毁阻挡物；</p>
+</li>
+<li><p>提供周围增益；</p>
+</li>
+<li><p>获得护盾；</p>
+</li>
+<li><p>分裂；</p>
+</li>
+<li><p>传送；</p>
+</li>
+<li><p>倒退后再次推进；</p>
+</li>
+<li><p>攻击基地。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-boss阶段">26.3 Boss阶段</h2><p>阶段切换可由：</p>
+<ul>
+<li><p>生命阈值；</p>
+</li>
+<li><p>路径节点；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>护盾破坏；</p>
+</li>
+<li><p>召唤物死亡；</p>
+</li>
+<li><p>机关状态；</p>
+</li>
+</ul>
+<p>触发。</p>
+<hr />
+<h2 id="264-boss对防线的测试">26.4 Boss对防线的测试</h2><p>Boss应测试：</p>
+<ul>
+<li><p>持续单体输出；</p>
+</li>
+<li><p>控制合理性；</p>
+</li>
+<li><p>塔位冗余；</p>
+</li>
+<li><p>主动技能保留；</p>
+</li>
+<li><p>对塔干扰后的恢复；</p>
+</li>
+<li><p>多路线处理。</p>
+</li>
+</ul>
+<hr />
+<h2 id="265-boss不应完全否定某类塔">26.5 Boss不应完全否定某类塔</h2><p>更合理的设计是：</p>
+<ul>
+<li><p>降低控制效果；</p>
+</li>
+<li><p>阶段性免疫；</p>
+</li>
+<li><p>要求交替输出；</p>
+</li>
+<li><p>需要处理召唤物；</p>
+</li>
+<li><p>让范围塔仍能负责附属敌人。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-完整事件与执行流程示例">27. 完整事件与执行流程示例</h2><p>以下以“玩家面对包含护甲先锋、治疗单位和高速小怪的双路线波次”为例。</p>
+<h3 id="271-波次预告">27.1 波次预告</h3><p>系统显示：</p>
+<ul>
+<li><p>左路出现重甲先锋；</p>
+</li>
+<li><p>右路出现高速小怪；</p>
+</li>
+<li><p>两路中后段会出现治疗单位；</p>
+</li>
+<li><p>波次总持续时间较长。</p>
+</li>
+</ul>
+<hr />
+<h3 id="272-玩家评估防线">27.2 玩家评估防线</h3><p>当前防线：</p>
+<ul>
+<li><p>左路有单体物理塔；</p>
+</li>
+<li><p>中央交叉点有范围法术塔；</p>
+</li>
+<li><p>右路只有低级速射塔；</p>
+</li>
+<li><p>缺少稳定控制；</p>
+</li>
+<li><p>资源不足以同时升级两路。</p>
+</li>
+</ul>
+<hr />
+<h3 id="273-波前调整">27.3 波前调整</h3><p>玩家选择：</p>
+<ul>
+<li><p>在中央交叉点建造减速塔；</p>
+</li>
+<li><p>保留部分资源；</p>
+</li>
+<li><p>不升级左路物理塔；</p>
+</li>
+<li><p>将范围法术塔目标策略改为“敌人密度最高”。</p>
+</li>
+</ul>
+<hr />
+<h3 id="274-波次开始">27.4 波次开始</h3><p>重甲先锋沿左路推进。</p>
+<p>物理塔伤害受到护甲压制，但减速延长其停留时间。</p>
+<p>范围法术塔能够攻击左路转弯段。</p>
+<hr />
+<h3 id="275-高速单位进入右路">27.5 高速单位进入右路</h3><p>高速小怪迅速穿过低级速射塔射程。</p>
+<p>进入中央交叉点后被减速。</p>
+<p>两路敌人在中央区域形成短暂重叠。</p>
+<hr />
+<h3 id="276-治疗单位出现">27.6 治疗单位出现</h3><p>治疗单位位于敌群后方。</p>
+<p>当前目标策略使部分塔持续攻击前排先锋，治疗单位开始恢复敌群。</p>
+<p>玩家发现：</p>
+<ul>
+<li><p>伤害总量并非完全不足；</p>
+</li>
+<li><p>主要问题是治疗目标没有被优先击杀。</p>
+</li>
+</ul>
+<hr />
+<h3 id="277-战斗中干预">27.7 战斗中干预</h3><p>玩家：</p>
+<ol>
+<li><p>将单体塔改为“优先支援单位”；</p>
+</li>
+<li><p>使用一次区域冻结；</p>
+</li>
+<li><p>快速建造一座低级魔法塔补充左路破甲不足；</p>
+</li>
+<li><p>暂不升级减速塔。</p>
+</li>
+</ol>
+<hr />
+<h3 id="278-防线稳定">27.8 防线稳定</h3><p>治疗单位被优先击杀。</p>
+<p>失去治疗后，重甲先锋在中央杀伤区被消灭。</p>
+<p>右路高速小怪因减速和冻结未能突破。</p>
+<hr />
+<h3 id="279-波次结算">27.9 波次结算</h3><p>系统记录：</p>
+<ul>
+<li><p>无漏怪；</p>
+</li>
+<li><p>冻结技能已进入冷却；</p>
+</li>
+<li><p>新魔法塔造成有效补充；</p>
+</li>
+<li><p>单体塔目标切换显著提高成功率；</p>
+</li>
+<li><p>玩家获得波次奖励和提前开波奖励。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2710-下一轮决策">27.10 下一轮决策</h3><p>下一波预告包含飞行单位。</p>
+<p>玩家需要决定：</p>
+<ul>
+<li><p>建造专门防空塔；</p>
+</li>
+<li><p>升级现有速射塔获得对空能力；</p>
+</li>
+<li><p>依赖主动技能临时处理；</p>
+</li>
+<li><p>出售左路临时魔法塔回收资源。</p>
+</li>
+</ul>
+<p>完整循环体现：</p>
+<p>威胁预告
+→ 防线评估
+→ 资源投资
+→ 自动战斗
+→ 漏洞识别
+→ 战斗中调整
+→ 波次结算
+→ 面向新威胁重组</p>
+<hr />
+<h2 id="28-模块通信设计">28. 模块通信设计</h2><h2 id="281-命令">28.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>BuildTower；</p>
+</li>
+<li><p>UpgradeTower；</p>
+</li>
+<li><p>SellTower；</p>
+</li>
+<li><p>ChangeTargetingPolicy；</p>
+</li>
+<li><p>ActivateAbility；</p>
+</li>
+<li><p>DeployHero；</p>
+</li>
+<li><p>StartWaveEarly；</p>
+</li>
+<li><p>PlaceBlocker；</p>
+</li>
+<li><p>RepairGoal；</p>
+</li>
+<li><p>PauseSimulation。</p>
+</li>
+</ul>
+<p>命令必须包含：</p>
+<ul>
+<li><p>发起者；</p>
+</li>
+<li><p>目标实例；</p>
+</li>
+<li><p>地图版本；</p>
+</li>
+<li><p>资源版本；</p>
+</li>
+<li><p>模拟Tick；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="282-同步查询">28.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>某位置是否可建造；</p>
+</li>
+<li><p>塔是否可升级；</p>
+</li>
+<li><p>当前资源；</p>
+</li>
+<li><p>当前射程覆盖；</p>
+</li>
+<li><p>某敌人为何未被攻击；</p>
+</li>
+<li><p>当前波次剩余敌人；</p>
+</li>
+<li><p>下一波组成；</p>
+</li>
+<li><p>某塔总投资；</p>
+</li>
+<li><p>当前出售返还。</p>
+</li>
+</ul>
+<p>查询不能修改状态或推进随机流。</p>
+<hr />
+<h2 id="283-领域事件">28.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>TowerBuilt；</p>
+</li>
+<li><p>TowerUpgraded；</p>
+</li>
+<li><p>TowerSold；</p>
+</li>
+<li><p>EnemySpawned；</p>
+</li>
+<li><p>EnemyEnteredRange；</p>
+</li>
+<li><p>TargetAcquired；</p>
+</li>
+<li><p>AttackCommitted；</p>
+</li>
+<li><p>ProjectileHit；</p>
+</li>
+<li><p>DamageResolved；</p>
+</li>
+<li><p>StatusApplied；</p>
+</li>
+<li><p>EnemyBlocked；</p>
+</li>
+<li><p>EnemyDefeated；</p>
+</li>
+<li><p>EnemyLeaked；</p>
+</li>
+<li><p>WaveStarted；</p>
+</li>
+<li><p>WaveCompleted；</p>
+</li>
+<li><p>GoalDamaged；</p>
+</li>
+<li><p>BossPhaseChanged；</p>
+</li>
+<li><p>LevelCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="284-表现事件">28.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>ShowRangePreview；</p>
+</li>
+<li><p>PlayBuildAnimation；</p>
+</li>
+<li><p>PlayUpgradeAnimation；</p>
+</li>
+<li><p>ShowDamageNumber；</p>
+</li>
+<li><p>PlayProjectileEffect；</p>
+</li>
+<li><p>DisplayWaveWarning；</p>
+</li>
+<li><p>ShowGoalDamage；</p>
+</li>
+<li><p>PlayBossEntrance；</p>
+</li>
+<li><p>DisplayLevelResult。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>建造是否成功；</p>
+</li>
+<li><p>敌人死亡；</p>
+</li>
+<li><p>资源变化；</p>
+</li>
+<li><p>波次完成；</p>
+</li>
+<li><p>关卡结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-存档确定性与回放">29. 存档、确定性与回放</h2><h2 id="291-savesnapshot">29.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>LevelId；</p>
+</li>
+<li><p>SimulationClock；</p>
+</li>
+<li><p>CurrentWaveState；</p>
+</li>
+<li><p>EconomyState；</p>
+</li>
+<li><p>GoalStates；</p>
+</li>
+<li><p>TowerStates；</p>
+</li>
+<li><p>EnemyStates；</p>
+</li>
+<li><p>ProjectileStates；</p>
+</li>
+<li><p>StatusStates；</p>
+</li>
+<li><p>HeroStates；</p>
+</li>
+<li><p>PathGraphState；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-保存边界">29.2 保存边界</h2><p>适合保存：</p>
+<ul>
+<li><p>波次准备阶段；</p>
+</li>
+<li><p>波次完成后；</p>
+</li>
+<li><p>关卡暂停时；</p>
+</li>
+<li><p>检查点波次；</p>
+</li>
+<li><p>关卡完成；</p>
+</li>
+<li><p>重要剧情阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="293-战斗中存档">29.3 战斗中存档</h2><p>如果支持波次中存档，需要完整保存：</p>
+<ul>
+<li><p>敌人路径进度；</p>
+</li>
+<li><p>塔冷却；</p>
+</li>
+<li><p>当前目标；</p>
+</li>
+<li><p>投射物；</p>
+</li>
+<li><p>状态持续时间；</p>
+</li>
+<li><p>波次生成游标；</p>
+</li>
+<li><p>主动技能冷却；</p>
+</li>
+<li><p>随机流。</p>
+</li>
+</ul>
+<hr />
+<h2 id="294-随机流分离">29.4 随机流分离</h2><p>建议分离：</p>
+<ul>
+<li><p>WaveSpawnRandom；</p>
+</li>
+<li><p>EnemyAbilityRandom；</p>
+</li>
+<li><p>TowerCriticalRandom；</p>
+</li>
+<li><p>TargetSelectionRandom；</p>
+</li>
+<li><p>LootRandom；</p>
+</li>
+<li><p>EventRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="295-确定性回放">29.5 确定性回放</h2><p>记录：</p>
+<ul>
+<li><p>初始地图和关卡版本；</p>
+</li>
+<li><p>玩家命令；</p>
+</li>
+<li><p>命令执行Tick；</p>
+</li>
+<li><p>随机流；</p>
+</li>
+<li><p>周期快照；</p>
+</li>
+<li><p>状态哈希。</p>
+</li>
+</ul>
+<p>用于重现：</p>
+<ul>
+<li><p>塔未攻击；</p>
+</li>
+<li><p>敌人卡住；</p>
+</li>
+<li><p>波次无法结束；</p>
+</li>
+<li><p>重复奖励；</p>
+</li>
+<li><p>Boss阶段异常；</p>
+</li>
+<li><p>倍速结果不一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-失败隔离">30. 失败隔离</h2><h2 id="301-建造事务失败">30.1 建造事务失败</h2><p>如果建造过程中发现：</p>
+<ul>
+<li><p>资源不足；</p>
+</li>
+<li><p>位置冲突；</p>
+</li>
+<li><p>地图版本变化；</p>
+</li>
+<li><p>塔定义缺失；</p>
+</li>
+</ul>
+<p>则：</p>
+<ul>
+<li><p>不扣除资源；</p>
+</li>
+<li><p>不保留占位；</p>
+</li>
+<li><p>不创建半完成塔；</p>
+</li>
+<li><p>返回明确失败原因；</p>
+</li>
+<li><p>允许玩家立即重新操作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-目标搜索失败">30.2 目标搜索失败</h2><p>塔无法找到合法目标时：</p>
+<ul>
+<li><p>保持待机；</p>
+</li>
+<li><p>清理已失效目标；</p>
+</li>
+<li><p>下一搜索周期重新查询；</p>
+</li>
+<li><p>记录射程、标签和视线过滤过程；</p>
+</li>
+<li><p>不让塔进入永久锁死。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-投射物目标失效">30.3 投射物目标失效</h2><p>目标死亡或离开世界时：</p>
+<ul>
+<li><p>按投射物策略销毁、重定向或命中原位置；</p>
+</li>
+<li><p>释放目标引用；</p>
+</li>
+<li><p>不重复结算伤害；</p>
+</li>
+<li><p>记录原目标和处理策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-敌人导航失败">30.4 敌人导航失败</h2><p>敌人无法继续前进时：</p>
+<ol>
+<li><p>检查当前路径是否失效；</p>
+</li>
+<li><p>请求最近合法路径；</p>
+</li>
+<li><p>尝试迁移到最近路径节点；</p>
+</li>
+<li><p>临时禁用碰撞以解除局部重叠；</p>
+</li>
+<li><p>超时后安全移除并按规则处理；</p>
+</li>
+<li><p>记录地图、阻挡和敌人状态。</p>
+</li>
+</ol>
+<p>不能直接将敌人传送到终点。</p>
+<hr />
+<h2 id="305-波次无法结束">30.5 波次无法结束</h2><p>定期检测：</p>
+<ul>
+<li><p>未生成敌人计数；</p>
+</li>
+<li><p>场上敌人；</p>
+</li>
+<li><p>待分裂敌人；</p>
+</li>
+<li><p>待召唤敌人；</p>
+</li>
+<li><p>已失效但未清理实体；</p>
+</li>
+<li><p>Boss阶段任务。</p>
+</li>
+</ul>
+<p>异常实体可以：</p>
+<ul>
+<li><p>重建；</p>
+</li>
+<li><p>安全清理；</p>
+</li>
+<li><p>标记为无奖励移除；</p>
+</li>
+<li><p>保留审计记录。</p>
+</li>
+</ul>
+<hr />
+<h2 id="306-升级失败">30.6 升级失败</h2><p>升级事务必须：</p>
+<ul>
+<li><p>同时更新资源、升级节点和派生属性；</p>
+</li>
+<li><p>任一失败时整体回滚；</p>
+</li>
+<li><p>不出现已扣钱但塔未升级；</p>
+</li>
+<li><p>不出现表现升级但逻辑仍是旧塔。</p>
+</li>
+</ul>
+<hr />
+<h2 id="307-状态触发递归">30.7 状态触发递归</h2><p>状态组合导致无限触发时：</p>
+<ul>
+<li><p>使用显式触发队列；</p>
+</li>
+<li><p>限制最大深度；</p>
+</li>
+<li><p>限制同一根事件的重复次数；</p>
+</li>
+<li><p>中止后续异常触发；</p>
+</li>
+<li><p>保留此前合法结果；</p>
+</li>
+<li><p>输出完整触发链。</p>
+</li>
+</ul>
+<hr />
+<h2 id="308-关卡结算异常">30.8 关卡结算异常</h2><p>关卡已经完成但奖励提交失败时：</p>
+<ul>
+<li><p>保存LevelResultSnapshot；</p>
+</li>
+<li><p>不重复发放奖励；</p>
+</li>
+<li><p>不要求玩家重新完成关卡；</p>
+</li>
+<li><p>使用幂等结果ID重试；</p>
+</li>
+<li><p>将结果标记为PendingCommit。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-调试与可观测性">31. 调试与可观测性</h2><h2 id="311-路径图查看器">31.1 路径图查看器</h2><p>显示：</p>
+<ul>
+<li><p>出生点；</p>
+</li>
+<li><p>目标点；</p>
+</li>
+<li><p>路径节点；</p>
+</li>
+<li><p>分叉；</p>
+</li>
+<li><p>动态边；</p>
+</li>
+<li><p>阻挡；</p>
+</li>
+<li><p>当前敌人路径；</p>
+</li>
+<li><p>不可达节点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-塔覆盖分析器">31.2 塔覆盖分析器</h2><p>显示：</p>
+<ul>
+<li><p>射程；</p>
+</li>
+<li><p>实际路径覆盖长度；</p>
+</li>
+<li><p>预计停留时间；</p>
+</li>
+<li><p>路线重叠；</p>
+</li>
+<li><p>视线遮挡；</p>
+</li>
+<li><p>高度影响；</p>
+</li>
+<li><p>支援光环；</p>
+</li>
+<li><p>无效覆盖区域。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-目标选择检查器">31.3 目标选择检查器</h2><p>显示：</p>
+<ul>
+<li><p>候选敌人；</p>
+</li>
+<li><p>被过滤原因；</p>
+</li>
+<li><p>路径进度；</p>
+</li>
+<li><p>威胁评分；</p>
+</li>
+<li><p>当前目标；</p>
+</li>
+<li><p>重锁条件；</p>
+</li>
+<li><p>目标切换历史。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-伤害解释器">31.4 伤害解释器</h2><p>显示：</p>
+<ul>
+<li><p>基础伤害；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>光环；</p>
+</li>
+<li><p>标签加成；</p>
+</li>
+<li><p>暴击；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>抗性；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>最终伤害；</p>
+</li>
+<li><p>状态积累。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-波次时间线">31.5 波次时间线</h2><p>显示：</p>
+<ul>
+<li><p>生成组；</p>
+</li>
+<li><p>生成时间；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>敌人类型；</p>
+</li>
+<li><p>死亡时间；</p>
+</li>
+<li><p>漏怪时间；</p>
+</li>
+<li><p>波次峰值密度；</p>
+</li>
+<li><p>玩家操作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-防线吞吐分析器">31.6 防线吞吐分析器</h2><p>统计：</p>
+<ul>
+<li><p>每秒输出；</p>
+</li>
+<li><p>每条路线承伤；</p>
+</li>
+<li><p>敌人平均存活时间；</p>
+</li>
+<li><p>控制覆盖率；</p>
+</li>
+<li><p>同时目标数量；</p>
+</li>
+<li><p>过量伤害；</p>
+</li>
+<li><p>漏怪类型；</p>
+</li>
+<li><p>杀伤区效率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-经济时间线">31.7 经济时间线</h2><p>记录：</p>
+<ul>
+<li><p>初始资源；</p>
+</li>
+<li><p>击杀收入；</p>
+</li>
+<li><p>波次奖励；</p>
+</li>
+<li><p>建造；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>出售；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>最终资源；</p>
+</li>
+<li><p>总投资分布。</p>
+</li>
+</ul>
+<hr />
+<h2 id="318-状态与控制面板">31.8 状态与控制面板</h2><p>显示：</p>
+<ul>
+<li><p>当前状态；</p>
+</li>
+<li><p>来源；</p>
+</li>
+<li><p>层数；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>抗性；</p>
+</li>
+<li><p>递减；</p>
+</li>
+<li><p>控制覆盖；</p>
+</li>
+<li><p>触发链。</p>
+</li>
+</ul>
+<hr />
+<h2 id="319-boss状态面板">31.9 Boss状态面板</h2><p>显示：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>路径；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>免疫；</p>
+</li>
+<li><p>召唤物；</p>
+</li>
+<li><p>对塔干扰；</p>
+</li>
+<li><p>阶段切换条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3110-关卡回放">31.10 关卡回放</h2><p>用于重现：</p>
+<ul>
+<li><p>防线崩溃；</p>
+</li>
+<li><p>漏怪；</p>
+</li>
+<li><p>导航错误；</p>
+</li>
+<li><p>波次卡死；</p>
+</li>
+<li><p>塔位价值异常；</p>
+</li>
+<li><p>倍速差异；</p>
+</li>
+<li><p>控制无限循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-内容验证工具">32. 内容验证工具</h2><h2 id="321-路径可达性验证">32.1 路径可达性验证</h2><p>检查：</p>
+<ul>
+<li><p>所有出生点均能到达目标；</p>
+</li>
+<li><p>动态路线切换后仍可达；</p>
+</li>
+<li><p>阻挡物不会非法永久封路；</p>
+</li>
+<li><p>飞行和地面路线正确分离；</p>
+</li>
+<li><p>Boss拥有合法路径；</p>
+</li>
+<li><p>路径长度和节点顺序有效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-塔定义验证">32.2 塔定义验证</h2><p>检查：</p>
+<ul>
+<li><p>建造费用；</p>
+</li>
+<li><p>攻击配置；</p>
+</li>
+<li><p>射程；</p>
+</li>
+<li><p>目标标签；</p>
+</li>
+<li><p>升级树；</p>
+</li>
+<li><p>出售策略；</p>
+</li>
+<li><p>表现资源；</p>
+</li>
+<li><p>是否存在无攻击能力但未标记支援的塔。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-升级树验证">32.3 升级树验证</h2><p>检查：</p>
+<ul>
+<li><p>前置节点；</p>
+</li>
+<li><p>循环依赖；</p>
+</li>
+<li><p>互斥分支；</p>
+</li>
+<li><p>费用递增；</p>
+</li>
+<li><p>无法到达的升级；</p>
+</li>
+<li><p>升级后攻击配置；</p>
+</li>
+<li><p>职责是否发生预期变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="324-波次预算验证">32.4 波次预算验证</h2><p>统计：</p>
+<ul>
+<li><p>总SpawnCost；</p>
+</li>
+<li><p>峰值单位数；</p>
+</li>
+<li><p>单位密度；</p>
+</li>
+<li><p>各路线压力；</p>
+</li>
+<li><p>特殊敌人组合；</p>
+</li>
+<li><p>理论生命总量；</p>
+</li>
+<li><p>基地潜在伤害；</p>
+</li>
+<li><p>预计击杀收益。</p>
+</li>
+</ul>
+<hr />
+<h2 id="325-自动防线代理">32.5 自动防线代理</h2><p>可以使用：</p>
+<ul>
+<li><p>随机建造；</p>
+</li>
+<li><p>伤害优先；</p>
+</li>
+<li><p>覆盖优先；</p>
+</li>
+<li><p>协同构筑；</p>
+</li>
+<li><p>经济优先；</p>
+</li>
+<li><p>搜索最优塔位。</p>
+</li>
+</ul>
+<p>统计：</p>
+<ul>
+<li><p>通关率；</p>
+</li>
+<li><p>常用塔；</p>
+</li>
+<li><p>无用塔；</p>
+</li>
+<li><p>关键塔位；</p>
+</li>
+<li><p>资源曲线；</p>
+</li>
+<li><p>漏怪波次；</p>
+</li>
+<li><p>Boss失败原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-控制链验证">32.6 控制链验证</h2><p>自动模拟：</p>
+<ul>
+<li><p>多减速塔；</p>
+</li>
+<li><p>多眩晕塔；</p>
+</li>
+<li><p>击退；</p>
+</li>
+<li><p>Boss控制抗性；</p>
+</li>
+<li><p>不同攻速。</p>
+</li>
+</ul>
+<p>检测：</p>
+<ul>
+<li><p>永久控制；</p>
+</li>
+<li><p>路径倒退循环；</p>
+</li>
+<li><p>状态无限叠加；</p>
+</li>
+<li><p>控制免疫失效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-经济守恒验证">32.7 经济守恒验证</h2><p>检查：</p>
+<ul>
+<li><p>所有收入来源；</p>
+</li>
+<li><p>所有资源消耗；</p>
+</li>
+<li><p>出售返还；</p>
+</li>
+<li><p>提前开波奖励；</p>
+</li>
+<li><p>重复波次奖励；</p>
+</li>
+<li><p>重复击杀奖励；</p>
+</li>
+<li><p>负资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-极端负载测试">32.8 极端负载测试</h2><p>包括：</p>
+<ul>
+<li><p>数千低生命敌人；</p>
+</li>
+<li><p>高攻速塔；</p>
+</li>
+<li><p>大量追踪投射物；</p>
+</li>
+<li><p>大范围持续伤害；</p>
+</li>
+<li><p>多层状态；</p>
+</li>
+<li><p>全图光环；</p>
+</li>
+<li><p>多路线同时Boss；</p>
+</li>
+<li><p>最高倍速。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-性能设计">33. 性能设计</h2><h2 id="331-空间索引">33.1 空间索引</h2><p>用于加速：</p>
+<ul>
+<li><p>塔目标搜索；</p>
+</li>
+<li><p>范围伤害；</p>
+</li>
+<li><p>光环；</p>
+</li>
+<li><p>控制区域；</p>
+</li>
+<li><p>敌人密度；</p>
+</li>
+<li><p>投射物碰撞。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-目标搜索分频">33.2 目标搜索分频</h2><p>不同塔无需每Tick搜索目标。</p>
+<p>可以根据：</p>
+<ul>
+<li><p>攻击间隔；</p>
+</li>
+<li><p>当前目标状态；</p>
+</li>
+<li><p>塔类型；</p>
+</li>
+<li><p>敌人进入和离开事件；</p>
+</li>
+</ul>
+<p>决定搜索频率。</p>
+<hr />
+<h2 id="333-路径进度替代高成本查询">33.3 路径进度替代高成本查询</h2><p>目标优先级可以直接读取标准化PathProgress，而不必频繁计算到终点的完整路径距离。</p>
+<hr />
+<h2 id="334-投射物分层">33.4 投射物分层</h2><h3 id="关键投射物">关键投射物</h3><p>运行完整轨迹和碰撞。</p>
+<h3 id="普通追踪弹">普通追踪弹</h3><p>使用简化位置更新。</p>
+<h3 id="远端或高速弹">远端或高速弹</h3><p>直接使用逻辑命中并播放表现插值。</p>
+<hr />
+<h2 id="335-敌人模拟分层">33.5 敌人模拟分层</h2><p>附近或关键敌人运行：</p>
+<ul>
+<li><p>完整动画；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>碰撞。</p>
+</li>
+</ul>
+<p>大量普通敌人可以：</p>
+<ul>
+<li><p>共享路径采样；</p>
+</li>
+<li><p>简化转向；</p>
+</li>
+<li><p>聚合部分状态更新；</p>
+</li>
+<li><p>降低远端动画频率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="336-范围伤害批处理">33.6 范围伤害批处理</h2><p>对同一区域的周期伤害可以：</p>
+<ul>
+<li><p>批量查询敌人；</p>
+</li>
+<li><p>统一计算公共修正；</p>
+</li>
+<li><p>分别提交结果；</p>
+</li>
+<li><p>合并表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="337-表现降级">33.7 表现降级</h2><p>高倍速或高负载时可以降低：</p>
+<ul>
+<li><p>飘字；</p>
+</li>
+<li><p>粒子；</p>
+</li>
+<li><p>尸体；</p>
+</li>
+<li><p>投射物表现；</p>
+</li>
+<li><p>次要动画；</p>
+</li>
+<li><p>音效密度。</p>
+</li>
+</ul>
+<p>逻辑结果必须保持一致。</p>
+<hr />
+<h2 id="34-可扩展点">34. 可扩展点</h2><h2 id="341-新防御塔">34.1 新防御塔</h2><p>主要提供：</p>
+<ul>
+<li><p>TowerDefinition；</p>
+</li>
+<li><p>AttackProfile；</p>
+</li>
+<li><p>TargetingProfile；</p>
+</li>
+<li><p>UpgradeTree；</p>
+</li>
+<li><p>SupportAura；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<p>不应修改波次和关卡主循环。</p>
+<hr />
+<h2 id="342-新敌人">34.2 新敌人</h2><p>提供：</p>
+<ul>
+<li><p>EnemyDefinition；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>DefenseProfile；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>SpawnCost；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="343-新地图">34.3 新地图</h2><p>提供：</p>
+<ul>
+<li><p>PathGraph；</p>
+</li>
+<li><p>BuildZones；</p>
+</li>
+<li><p>SpawnPoints；</p>
+</li>
+<li><p>GoalPoints；</p>
+</li>
+<li><p>环境规则；</p>
+</li>
+<li><p>波次配置；</p>
+</li>
+<li><p>动态路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-新波次模式">34.4 新波次模式</h2><p>可以支持：</p>
+<ul>
+<li><p>固定波次；</p>
+</li>
+<li><p>无尽模式；</p>
+</li>
+<li><p>动态导演；</p>
+</li>
+<li><p>玩家自选波次；</p>
+</li>
+<li><p>多人对抗送怪；</p>
+</li>
+<li><p>生存计时；</p>
+</li>
+<li><p>Boss Rush。</p>
+</li>
+</ul>
+<hr />
+<h2 id="345-新资源类型">34.5 新资源类型</h2><p>可以扩展：</p>
+<ul>
+<li><p>普通货币；</p>
+</li>
+<li><p>魔力；</p>
+</li>
+<li><p>建造点；</p>
+</li>
+<li><p>人口容量；</p>
+</li>
+<li><p>塔位能源；</p>
+</li>
+<li><p>波次专属资源。</p>
+</li>
+</ul>
+<p>需要明确来源、消耗和跨波次保留策略。</p>
+<hr />
+<h2 id="346-新路径交互">34.6 新路径交互</h2><p>可以增加：</p>
+<ul>
+<li><p>可建造路障；</p>
+</li>
+<li><p>传送门；</p>
+</li>
+<li><p>分流阀；</p>
+</li>
+<li><p>开关门；</p>
+</li>
+<li><p>单向道路；</p>
+</li>
+<li><p>水位；</p>
+</li>
+<li><p>可破坏桥梁。</p>
+</li>
+</ul>
+<p>所有路径交互必须接入统一PathGraph和可达性验证。</p>
+<hr />
+<h2 id="347-多人合作扩展">34.7 多人合作扩展</h2><p>需要明确：</p>
+<ul>
+<li><p>资源共享；</p>
+</li>
+<li><p>建造区所有权；</p>
+</li>
+<li><p>塔控制权；</p>
+</li>
+<li><p>出售权限；</p>
+</li>
+<li><p>波次启动权限；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>掉线恢复；</p>
+</li>
+<li><p>结算。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-局外成长与战役">35. 局外成长与战役</h2><h2 id="351-metaprogressionstate">35.1 MetaProgressionState</h2><p>建议包含：</p>
+<ul>
+<li><p>UnlockedTowerIds；</p>
+</li>
+<li><p>TowerUpgradeTrees；</p>
+</li>
+<li><p>PlayerAbilityIds；</p>
+</li>
+<li><p>CampaignProgress；</p>
+</li>
+<li><p>ChallengeProgress；</p>
+</li>
+<li><p>DifficultyUnlocks；</p>
+</li>
+<li><p>CosmeticUnlocks；</p>
+</li>
+<li><p>MetaVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="352-局外成长类型">35.2 局外成长类型</h2><p>可以包括：</p>
+<ul>
+<li><p>新塔；</p>
+</li>
+<li><p>新升级分支；</p>
+</li>
+<li><p>新英雄；</p>
+</li>
+<li><p>新主动技能；</p>
+</li>
+<li><p>新地图；</p>
+</li>
+<li><p>新挑战；</p>
+</li>
+<li><p>外观；</p>
+</li>
+<li><p>战役规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-防止局外成长压倒关卡策略">35.3 防止局外成长压倒关卡策略</h2><p>如果局外数值持续永久增加：</p>
+<ul>
+<li><p>早期关卡失去挑战；</p>
+</li>
+<li><p>塔位和构筑选择被数值覆盖；</p>
+</li>
+<li><p>新玩家与老玩家平衡困难。</p>
+</li>
+</ul>
+<p>推荐优先解锁：</p>
+<ul>
+<li><p>新选择；</p>
+</li>
+<li><p>新玩法；</p>
+</li>
+<li><p>新构筑；</p>
+</li>
+<li><p>横向能力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="354-关卡评级">35.4 关卡评级</h2><p>可以根据：</p>
+<ul>
+<li><p>剩余基地生命；</p>
+</li>
+<li><p>使用资源；</p>
+</li>
+<li><p>波次启动速度；</p>
+</li>
+<li><p>塔数量；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>特殊目标；</p>
+</li>
+<li><p>难度；</p>
+</li>
+</ul>
+<p>进行评分。</p>
+<p>评级不应只奖励单一最优打法。</p>
+<hr />
+<h2 id="36-玩家体验设计">36. 玩家体验设计</h2><h2 id="361-下一波威胁必须可读">36.1 下一波威胁必须可读</h2><p>预告可以展示：</p>
+<ul>
+<li><p>敌人类型；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>数量级；</p>
+</li>
+<li><p>飞行；</p>
+</li>
+<li><p>护甲；</p>
+</li>
+<li><p>特殊能力；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<p>不一定显示精确数量，但应支持合理准备。</p>
+<hr />
+<h2 id="362-玩家必须知道敌人为什么漏过">36.2 玩家必须知道敌人为什么漏过</h2><p>失败反馈应说明：</p>
+<ul>
+<li><p>哪条路线；</p>
+</li>
+<li><p>哪种敌人；</p>
+</li>
+<li><p>当时速度；</p>
+</li>
+<li><p>是否隐身；</p>
+</li>
+<li><p>哪些塔未攻击；</p>
+</li>
+<li><p>是否缺少防空；</p>
+</li>
+<li><p>是否被Boss干扰；</p>
+</li>
+<li><p>当前伤害是否被护甲克制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="363-塔位价值需要可视化">36.3 塔位价值需要可视化</h2><p>建造前应显示：</p>
+<ul>
+<li><p>射程；</p>
+</li>
+<li><p>路径覆盖；</p>
+</li>
+<li><p>目标类型；</p>
+</li>
+<li><p>预计受益路线；</p>
+</li>
+<li><p>地形影响；</p>
+</li>
+<li><p>光环；</p>
+</li>
+<li><p>阻挡关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="364-塔的职责必须容易理解">36.4 塔的职责必须容易理解</h2><p>玩家应快速判断：</p>
+<ul>
+<li><p>单体；</p>
+</li>
+<li><p>群伤；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>破甲；</p>
+</li>
+<li><p>防空；</p>
+</li>
+<li><p>侦测；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>支援。</p>
+</li>
+</ul>
+<hr />
+<h2 id="365-升级分支要表达玩法变化">36.5 升级分支要表达玩法变化</h2><p>升级界面应明确：</p>
+<ul>
+<li><p>伤害类型；</p>
+</li>
+<li><p>目标数量；</p>
+</li>
+<li><p>攻击方式；</p>
+</li>
+<li><p>新状态；</p>
+</li>
+<li><p>职责变化；</p>
+</li>
+<li><p>对哪些敌人有效。</p>
+</li>
+</ul>
+<hr />
+<h2 id="366-战斗中信息不能过载">36.6 战斗中信息不能过载</h2><p>高密度战斗中应优先显示：</p>
+<ul>
+<li><p>漏怪风险；</p>
+</li>
+<li><p>Boss技能；</p>
+</li>
+<li><p>塔失效；</p>
+</li>
+<li><p>基地受损；</p>
+</li>
+<li><p>主动技能状态；</p>
+</li>
+<li><p>新敌人能力。</p>
+</li>
+</ul>
+<p>普通伤害数字可以合并或关闭。</p>
+<hr />
+<h2 id="367-倍速不应降低可操作性">36.7 倍速不应降低可操作性</h2><p>在高倍速下：</p>
+<ul>
+<li><p>警报需要提前；</p>
+</li>
+<li><p>玩家应能快速暂停；</p>
+</li>
+<li><p>建造和技能操作应可靠；</p>
+</li>
+<li><p>Boss阶段转换应提供提示。</p>
+</li>
+</ul>
+<hr />
+<h2 id="368-实验成本要合理">36.8 实验成本要合理</h2><p>玩家需要通过：</p>
+<ul>
+<li><p>出售返还；</p>
+</li>
+<li><p>关卡重试；</p>
+</li>
+<li><p>塔信息预览；</p>
+</li>
+<li><p>沙盒测试；</p>
+</li>
+<li><p>低成本早期关卡；</p>
+</li>
+</ul>
+<p>学习防御组合。</p>
+<hr />
+<h2 id="37-常见设计失败">37. 常见设计失败</h2><h2 id="371-塔只按dps排序">37.1 塔只按DPS排序</h2><p>低DPS的控制、支援和破甲塔没有独立价值。</p>
+<hr />
+<h2 id="372-地图塔位差异不明显">37.2 地图塔位差异不明显</h2><p>所有位置的覆盖和收益近似，空间决策失去意义。</p>
+<hr />
+<h2 id="373-波次只增加生命和数量">37.3 波次只增加生命和数量</h2><p>没有引入新的结构性压力。</p>
+<hr />
+<h2 id="374-敌人特殊能力没有预告">37.4 敌人特殊能力没有预告</h2><p>玩家在波次开始后才发现需要防空、侦测或魔法伤害。</p>
+<hr />
+<h2 id="375-boss完全免疫控制和状态">37.5 Boss完全免疫控制和状态</h2><p>控制、减益和辅助塔在最终挑战中全部失效。</p>
+<hr />
+<h2 id="376-出售返还过高">37.6 出售返还过高</h2><p>玩家可以无成本随时重构，不需要承担部署决策。</p>
+<hr />
+<h2 id="377-出售返还过低">37.7 出售返还过低</h2><p>玩家一旦放错塔位就只能重开。</p>
+<hr />
+<h2 id="378-所有塔自动选择相同目标">37.8 所有塔自动选择相同目标</h2><p>造成严重过量伤害和大量漏怪，但玩家无法调整。</p>
+<hr />
+<h2 id="379-路径修改没有可达性验证">37.9 路径修改没有可达性验证</h2><p>玩家封死道路后敌人卡住或停止波次。</p>
+<hr />
+<h2 id="3710-支援塔无条件叠加">37.10 支援塔无条件叠加</h2><p>形成固定光环堆叠中心，其他塔位失去价值。</p>
+<hr />
+<h2 id="3711-战斗倍速改变结算结果">37.11 战斗倍速改变结算结果</h2><p>不同速度下出现攻击次数、控制时间或波次生成差异。</p>
+<hr />
+<h2 id="3712-波次完成依赖场上对象数量">37.12 波次完成依赖场上对象数量</h2><p>隐藏、失效或未清理实体导致关卡永久无法继续。</p>
+<hr />
+<h2 id="3713-防线崩溃缺乏原因解释">37.13 防线崩溃缺乏原因解释</h2><p>玩家只看到基地突然大量掉血，不知道哪种敌人突破。</p>
+<hr />
+<h2 id="3714-局外数值成长覆盖关卡策略">37.14 局外数值成长覆盖关卡策略</h2><p>玩家只靠永久加成通关，不再需要理解塔位和组合。</p>
+<hr />
+<h2 id="38-最小可行原型">38. 最小可行原型</h2><p>一个能够验证塔防核心范式的最小原型可以包含：</p>
+<h3 id="地图">地图</h3><ul>
+<li><p>3张正式地图；</p>
+</li>
+<li><p>1张单路线教学图；</p>
+</li>
+<li><p>1张双路线交叉图；</p>
+</li>
+<li><p>1张动态路径图；</p>
+</li>
+<li><p>6至10个有明显差异的塔位；</p>
+</li>
+<li><p>1个基地目标。</p>
+</li>
+</ul>
+<h3 id="防御塔">防御塔</h3><ul>
+<li><p>单体物理塔；</p>
+</li>
+<li><p>群体魔法塔；</p>
+</li>
+<li><p>高频防空塔；</p>
+</li>
+<li><p>减速塔；</p>
+</li>
+<li><p>破甲支援塔；</p>
+</li>
+<li><p>阻挡单位；</p>
+</li>
+<li><p>1种主动技能。</p>
+</li>
+</ul>
+<h3 id="敌人">敌人</h3><ul>
+<li><p>基础单位；</p>
+</li>
+<li><p>高速单位；</p>
+</li>
+<li><p>重甲单位；</p>
+</li>
+<li><p>群体小怪；</p>
+</li>
+<li><p>飞行单位；</p>
+</li>
+<li><p>治疗单位；</p>
+</li>
+<li><p>分裂单位；</p>
+</li>
+<li><p>1个Boss。</p>
+</li>
+</ul>
+<h3 id="波次">波次</h3><ul>
+<li><p>每关10至15波；</p>
+</li>
+<li><p>包含教学波、组合波、精英波和Boss波；</p>
+</li>
+<li><p>支持波次预告和提前开波。</p>
+</li>
+</ul>
+<h3 id="经济">经济</h3><ul>
+<li><p>初始资源；</p>
+</li>
+<li><p>击杀奖励；</p>
+</li>
+<li><p>波次奖励；</p>
+</li>
+<li><p>建造；</p>
+</li>
+<li><p>升级；</p>
+</li>
+<li><p>出售；</p>
+</li>
+<li><p>提前开波奖励。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>PathGraph；</p>
+</li>
+<li><p>WaveDefinition；</p>
+</li>
+<li><p>SpawnGroupDefinition；</p>
+</li>
+<li><p>EnemyRuntimeState；</p>
+</li>
+<li><p>TowerRuntimeState；</p>
+</li>
+<li><p>TargetingProfile；</p>
+</li>
+<li><p>AttackProfile；</p>
+</li>
+<li><p>ProjectileState；</p>
+</li>
+<li><p>StatusState；</p>
+</li>
+<li><p>EconomyState；</p>
+</li>
+<li><p>GoalState；</p>
+</li>
+<li><p>LevelResultSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>路径图查看器；</p>
+</li>
+<li><p>塔覆盖分析器；</p>
+</li>
+<li><p>目标选择检查器；</p>
+</li>
+<li><p>伤害解释器；</p>
+</li>
+<li><p>波次时间线；</p>
+</li>
+<li><p>防线吞吐分析器；</p>
+</li>
+<li><p>经济时间线；</p>
+</li>
+<li><p>关卡回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>不同塔位是否具有明显空间价值；</p>
+</li>
+<li><p>新建与升级是否形成真实取舍；</p>
+</li>
+<li><p>单体、群伤、控制和防空是否分别有使用场景；</p>
+</li>
+<li><p>波次是否测试不同防线能力；</p>
+</li>
+<li><p>目标优先级是否能够影响结果；</p>
+</li>
+<li><p>倍速是否保持相同逻辑结果；</p>
+</li>
+<li><p>动态路径是否不会导致敌人卡死；</p>
+</li>
+<li><p>控制组合是否不会形成永久锁定；</p>
+</li>
+<li><p>玩家是否能解释每次漏怪原因；</p>
+</li>
+<li><p>同一命令和随机种子是否能够重现完整关卡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-推荐实施顺序">39. 推荐实施顺序</h2><p>第一阶段：固定步长模拟、地图和PathGraph
+第二阶段：敌人生成、路径移动和基地漏怪
+第三阶段：建造区域、塔实例和基础攻击
+第四阶段：目标搜索、投射物和伤害
+第五阶段：波次调度、奖励和经济
+第六阶段：升级、出售和目标优先级
+第七阶段：范围伤害、状态和控制
+第八阶段：飞行、隐身、治疗和特殊敌人
+第九阶段：阻挡、陷阱和支援光环
+第十阶段：Boss、主动技能和动态路径
+第十一阶段：局外解锁、评分和战役
+第十二阶段：回放、自动模拟和内容验证</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量塔和敌人：</p>
+<ul>
+<li><p>PathGraph；</p>
+</li>
+<li><p>目标搜索；</p>
+</li>
+<li><p>攻击调度；</p>
+</li>
+<li><p>伤害顺序；</p>
+</li>
+<li><p>状态队列；</p>
+</li>
+<li><p>波次完成条件；</p>
+</li>
+<li><p>经济守恒；</p>
+</li>
+<li><p>确定性回放。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-架构验收标准">40. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>敌人通过独立PathGraph向目标推进；</p>
+</li>
+<li><p>地面、飞行和特殊路线具有明确规则；</p>
+</li>
+<li><p>所有出生点均存在合法目标路径；</p>
+</li>
+<li><p>建造命令使用空间、资源和版本验证；</p>
+</li>
+<li><p>建造、升级和出售采用原子事务；</p>
+</li>
+<li><p>防御塔通过统一目标搜索系统获得目标；</p>
+</li>
+<li><p>目标选择支持多种可配置优先级；</p>
+</li>
+<li><p>攻击、投射物、伤害和状态相互分离；</p>
+</li>
+<li><p>相同塔在不同位置能产生明显不同覆盖价值；</p>
+</li>
+<li><p>新建塔和升级旧塔不存在全局唯一最优解；</p>
+</li>
+<li><p>单体、群体、控制、支援和防空均具有独立职责；</p>
+</li>
+<li><p>敌人特殊能力能够针对不同防线薄弱点；</p>
+</li>
+<li><p>Boss不会完全使整类防御塔失效；</p>
+</li>
+<li><p>波次完成不依赖不可靠的场景对象计数；</p>
+</li>
+<li><p>控制系统具有递减、免疫或覆盖限制；</p>
+</li>
+<li><p>倍速不会改变攻击次数、状态时间和最终结果；</p>
+</li>
+<li><p>动态路径改变后会重新进行可达性验证；</p>
+</li>
+<li><p>关卡结果和局外奖励具有幂等性；</p>
+</li>
+<li><p>调试工具能够解释某座塔为什么没有攻击；</p>
+</li>
+<li><p>调试工具能够解释某种敌人为什么突破防线；</p>
+</li>
+<li><p>新塔和新敌人通常不需要修改关卡主循环；</p>
+</li>
+<li><p>同一随机种子和玩家命令能够确定性回放关卡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-可迁移到其他游戏的设计思想">41. 可迁移到其他游戏的设计思想</h2><h2 id="411-空间覆盖时间比静态射程更能表达设施价值">41.1 空间覆盖时间比静态射程更能表达设施价值</h2><p>可迁移到：</p>
+<ul>
+<li><p>战术游戏；</p>
+</li>
+<li><p>安防系统；</p>
+</li>
+<li><p>雷达；</p>
+</li>
+<li><p>支援技能；</p>
+</li>
+<li><p>区域控制。</p>
+</li>
+</ul>
+<p>一个设施的价值不仅取决于覆盖面积，也取决于目标会在覆盖区停留多久。</p>
+<hr />
+<h2 id="412-流量密度与吞吐共同决定系统压力">41.2 流量、密度与吞吐共同决定系统压力</h2><p>可迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>交通；</p>
+</li>
+<li><p>网络服务；</p>
+</li>
+<li><p>敌群战斗；</p>
+</li>
+<li><p>队列系统。</p>
+</li>
+</ul>
+<p>单个对象强度不足以表达系统负载，还需要考虑单位到达频率和并发数量。</p>
+<hr />
+<h2 id="413-自动系统仍需要允许玩家控制策略参数">41.3 自动系统仍需要允许玩家控制策略参数</h2><p>可迁移到：</p>
+<ul>
+<li><p>自动战斗；</p>
+</li>
+<li><p>AI队友；</p>
+</li>
+<li><p>生产系统；</p>
+</li>
+<li><p>防御设施；</p>
+</li>
+<li><p>工作调度。</p>
+</li>
+</ul>
+<p>玩家不必逐次控制动作，但应能调整：</p>
+<ul>
+<li><p>目标；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>策略；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="414-波次是渐进式压力测试框架">41.4 波次是渐进式压力测试框架</h2><p>可迁移到：</p>
+<ul>
+<li><p>生存模式；</p>
+</li>
+<li><p>教学；</p>
+</li>
+<li><p>性能测试；</p>
+</li>
+<li><p>竞技挑战；</p>
+</li>
+<li><p>Boss Rush。</p>
+</li>
+</ul>
+<p>每一波可以针对系统的不同维度进行测试，而不是只线性提高数值。</p>
+<hr />
+<h2 id="415-新建与升级是广度和深度投资的通用取舍">41.5 新建与升级是广度和深度投资的通用取舍</h2><p>可迁移到：</p>
+<ul>
+<li><p>城市建设；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>技能树；</p>
+</li>
+<li><p>军队；</p>
+</li>
+<li><p>基地经营。</p>
+</li>
+</ul>
+<p>新建提高覆盖和冗余，升级提高单位空间效率和专业强度。</p>
+<hr />
+<h2 id="416-支援能力的价值来自改变其他模块效率">41.6 支援能力的价值来自改变其他模块效率</h2><p>可迁移到：</p>
+<ul>
+<li><p>团队RPG；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>RTS；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>MMO职业。</p>
+</li>
+</ul>
+<p>辅助单位不必直接产生高伤害，其价值可以通过被增强对象的增量表现。</p>
+<hr />
+<h2 id="417-目标优先级是连接自动执行与玩家意图的接口">41.7 目标优先级是连接自动执行与玩家意图的接口</h2><p>可迁移到：</p>
+<ul>
+<li><p>AI控制；</p>
+</li>
+<li><p>防御系统；</p>
+</li>
+<li><p>自动治疗；</p>
+</li>
+<li><p>生产调度；</p>
+</li>
+<li><p>单位战术。</p>
+</li>
+</ul>
+<p>系统自动执行动作，但优先级由玩家或策略层定义。</p>
+<hr />
+<h2 id="418-动态路径变化必须伴随可达性验证">41.8 动态路径变化必须伴随可达性验证</h2><p>可迁移到：</p>
+<ul>
+<li><p>物流；</p>
+</li>
+<li><p>地牢；</p>
+</li>
+<li><p>银河城；</p>
+</li>
+<li><p>城市交通；</p>
+</li>
+<li><p>战术地图。</p>
+</li>
+</ul>
+<p>任何封路、开路和传送变化都需要检查核心目标仍然可达。</p>
+<hr />
+<h2 id="419-失败解释器是复杂策略系统的重要组成部分">41.9 失败解释器是复杂策略系统的重要组成部分</h2><p>可迁移到：</p>
+<ul>
+<li><p>经营；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>交通；</p>
+</li>
+<li><p>AI系统。</p>
+</li>
+</ul>
+<p>玩家需要知道：</p>
+<ul>
+<li><p>哪个环节失败；</p>
+</li>
+<li><p>失败发生在哪里；</p>
+</li>
+<li><p>上游原因是什么；</p>
+</li>
+<li><p>可通过什么策略修复。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4110-波次间结算可以连接短期执行和长期演化">41.10 波次间结算可以连接短期执行和长期演化</h2><p>可迁移到：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>竞技轮次；</p>
+</li>
+<li><p>经营周期。</p>
+</li>
+</ul>
+<p>每个阶段的结果既结束当前压力，也为下一阶段提供资源和状态输入。</p>
+<hr />
+<h2 id="42-本次防重记录">42. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>塔防游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Tower Defense；</p>
+</li>
+<li><p>TD；</p>
+</li>
+<li><p>路径防守游戏；</p>
+</li>
+<li><p>阵地防御游戏；</p>
+</li>
+<li><p>波次防守策略游戏。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>将敌人的推进建模为沿路径拓扑持续流动的压力，玩家使用有限经济在关键空间位置部署、升级、出售和重组防御节点，使射程覆盖、目标优先级、伤害类型、控制效果、阻挡能力和支援光环共同形成防线；每个波次对当前防御体系的不同维度进行压力测试，并通过击杀收益、基地损失和波次奖励驱动下一轮投资，形成“威胁预告—空间布防—自动执行—漏洞识别—经济再投资”的长期循环。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>敌人按波次从出生点向目标点推进；</p>
+</li>
+<li><p>地图路径和塔位共同决定防御价值；</p>
+</li>
+<li><p>防御塔多数自动搜索和攻击目标；</p>
+</li>
+<li><p>玩家主要控制位置、塔型、升级和优先级；</p>
+</li>
+<li><p>新建防御与升级旧塔形成广度和深度投资取舍；</p>
+</li>
+<li><p>波次通过敌人密度、路线和能力测试不同防线维度；</p>
+</li>
+<li><p>单体、群伤、控制、支援、防空和阻挡具有独立职责；</p>
+</li>
+<li><p>塔之间通过减速、聚怪、破甲、标记和光环形成协同；</p>
+</li>
+<li><p>敌人通过飞行、隐身、护甲、治疗、分裂和Boss技能突破防线；</p>
+</li>
+<li><p>敌人死亡提供资源，漏怪损害基地或关卡目标；</p>
+</li>
+<li><p>波次间结算推动防线持续演化；</p>
+</li>
+<li><p>目标优先级连接自动战斗与玩家战术意图；</p>
+</li>
+<li><p>动态路径必须经过可达性验证；</p>
+</li>
+<li><p>倍速不能改变逻辑结果；</p>
+</li>
+<li><p>调试系统需要解释塔为什么未攻击以及敌人为什么漏过。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>路径图与敌人推进；</p>
+</li>
+<li><p>单路线和多路线地图；</p>
+</li>
+<li><p>动态路径；</p>
+</li>
+<li><p>波次调度；</p>
+</li>
+<li><p>敌人生成组；</p>
+</li>
+<li><p>塔建造与占位；</p>
+</li>
+<li><p>射程和路径覆盖；</p>
+</li>
+<li><p>目标优先级；</p>
+</li>
+<li><p>攻击与投射物；</p>
+</li>
+<li><p>伤害和抗性；</p>
+</li>
+<li><p>减速、眩晕和击退；</p>
+</li>
+<li><p>阻挡单位；</p>
+</li>
+<li><p>陷阱；</p>
+</li>
+<li><p>支援光环；</p>
+</li>
+<li><p>防空与隐身侦测；</p>
+</li>
+<li><p>建造、升级和出售经济；</p>
+</li>
+<li><p>主动技能；</p>
+</li>
+<li><p>英雄单位；</p>
+</li>
+<li><p>Boss阶段；</p>
+</li>
+<li><p>基地生命与漏怪；</p>
+</li>
+<li><p>防线吞吐分析；</p>
+</li>
+<li><p>波次预算；</p>
+</li>
+<li><p>路径可达性验证；</p>
+</li>
+<li><p>自动防线模拟；</p>
+</li>
+<li><p>确定性关卡回放。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>塔防路径系统；</p>
+</li>
+<li><p>塔防波次系统；</p>
+</li>
+<li><p>塔防建造系统；</p>
+</li>
+<li><p>塔防目标选择；</p>
+</li>
+<li><p>塔防射程覆盖；</p>
+</li>
+<li><p>塔防投射物；</p>
+</li>
+<li><p>塔防伤害和抗性；</p>
+</li>
+<li><p>塔防减速和控制；</p>
+</li>
+<li><p>塔防阻挡；</p>
+</li>
+<li><p>塔防陷阱；</p>
+</li>
+<li><p>塔防支援光环；</p>
+</li>
+<li><p>塔防升级树；</p>
+</li>
+<li><p>塔防出售系统；</p>
+</li>
+<li><p>塔防防空；</p>
+</li>
+<li><p>塔防隐身敌人；</p>
+</li>
+<li><p>塔防Boss；</p>
+</li>
+<li><p>塔防动态路径；</p>
+</li>
+<li><p>塔防经济平衡；</p>
+</li>
+<li><p>塔防自动模拟；</p>
+</li>
+<li><p>塔防关卡回放。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,2731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/real-time-strategy.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="实时战略中的命令群体模拟、生产战争循环与战争迷雾 | Sakura Design Journal">
+    <meta property="og:description" content="分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/real-time-strategy.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-real-time-strategy.png">
+    <meta property="og:image:alt" content="实时战略中的命令群体模拟、生产战争循环与战争迷雾 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="实时战略中的命令群体模拟、生产战争循环与战争迷雾 | Sakura Design Journal">
+    <meta name="twitter:description" content="分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-real-time-strategy.png">
+    <meta name="twitter:image:alt" content="实时战略中的命令群体模拟、生产战争循环与战争迷雾 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"实时战略中的命令群体模拟、生产战争循环与战争迷雾 | Sakura Design Journal","description":"分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。","url":"https://irissakura.github.io/pages/journal/real-time-strategy.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"实时战略中的命令群体模拟、生产战争循环与战争迷雾","image":"https://irissakura.github.io/assets/social/pages-journal-real-time-strategy.png","dateModified":"2026-08-12","about":["fog-of-war","real-time-strategy","strategy"]}</script>
+    <!-- site-meta:end -->
+    <title>实时战略中的命令群体模拟、生产战争循环与战争迷雾 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-real-time-strategy"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>实时战略中的命令群体模拟、生产战争循环与战争迷雾</h1><p>分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。</p><div class="note-tags"><span>fog-of-war</span><span>real-time-strategy</span><span>strategy</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="命令驱动的群体模拟生产战争循环与战争迷雾">命令驱动的群体模拟、生产战争循环与战争迷雾</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>实时战略游戏。</strong></p>
+<p>常见英文名称包括：</p>
+<ul>
+<li>Real-Time Strategy；</li>
+<li>RTS；</li>
+<li>Base-Building RTS；</li>
+<li>Tactical RTS；</li>
+<li>Economy RTS。</li>
+</ul>
+<p>本文讨论的不是游戏中单独存在的“基地建设”“单位寻路”或“资源采集”模块，而是一种能够独立支撑完整游戏的宏观品类。</p>
+<p>实时战略游戏最具代表性的工程范式可以概括为：</p>
+<blockquote>
+<p>玩家不直接控制单位的每一步运动，而是在持续推进的世界中下达移动、攻击、生产、建造和战术命令；运行时由权威模拟、命令队列、单位自治、空间查询、战争迷雾和生产经济共同将战略意图转化为群体行为及战场结果。</p>
+</blockquote>
+<p>该类型的核心挑战不是让大量单位“能够移动和攻击”，而是同时保证：</p>
+<ul>
+<li>玩家命令响应及时；</li>
+<li>多单位行为可预测；</li>
+<li>单位能够在复杂空间中协同执行；</li>
+<li>经济、生产与战争形成闭环；</li>
+<li>信息受到战争迷雾约束；</li>
+<li>大规模战斗仍可读、可控；</li>
+<li>联机结果保持一致；</li>
+<li>AI能够执行跨阶段战略；</li>
+<li>战斗结果可以回放和调试。</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>实时战略游戏，是以持续时间推进、群体单位控制、资源经济、生产建设、空间争夺和信息不完全为核心的战略游戏类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li>玩家从有限单位、基地或资源点开始；</li>
+<li>侦察地图并建立战争迷雾下的局部认知；</li>
+<li>采集资源或控制经济节点；</li>
+<li>建造生产设施和科技设施；</li>
+<li>生产作战单位与支援单位；</li>
+<li>组织部队、设定控制编组并规划进攻方向；</li>
+<li>与敌方争夺资源、视野和战略位置；</li>
+<li>根据敌方兵种和战术调整生产结构；</li>
+<li>摧毁敌方关键设施、控制目标或迫使对方失去继续作战能力；</li>
+<li>根据比赛结果进入下一关卡、下一局或长期战役。</li>
+</ol>
+<p>实时战略游戏的主要战略资源通常包括：</p>
+<ul>
+<li>矿物、木材、能源或货币；</li>
+<li>人口上限；</li>
+<li>生产时间；</li>
+<li>建筑空间；</li>
+<li>科技阶段；</li>
+<li>视野；</li>
+<li>控制区域；</li>
+<li>部队机动时间；</li>
+<li>玩家注意力。</li>
+</ul>
+<p>其中“玩家注意力”是一种重要但容易被忽略的资源。</p>
+<p>玩家不能同时精确管理：</p>
+<ul>
+<li>所有生产队列；</li>
+<li>所有采集单位；</li>
+<li>所有战斗单位；</li>
+<li>所有侦察单位；</li>
+<li>所有科技升级；</li>
+<li>所有战场方向。</li>
+</ul>
+<p>因此，实时战略的核心体验也可以概括为：</p>
+<blockquote>
+<p>在时间持续流逝的条件下，玩家通过命令、优先级和信息判断，将有限注意力分配给经济发展、军事生产、侦察和战场操作。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计支柱">3. 核心设计支柱</h2><h2 id="31-命令与执行分离">3.1 命令与执行分离</h2><p>玩家提交的通常是：</p>
+<ul>
+<li>移动到某区域；</li>
+<li>攻击某个目标；</li>
+<li>攻击移动到某处；</li>
+<li>巡逻一条路线；</li>
+<li>防守一个位置；</li>
+<li>跟随某个单位；</li>
+<li>建造某个建筑；</li>
+<li>生产某类单位；</li>
+<li>使用某个能力。</li>
+</ul>
+<p>玩家不应直接持续设置：</p>
+<ul>
+<li>单位每一帧的位置；</li>
+<li>单位每一帧的朝向；</li>
+<li>每个单位具体绕过哪个障碍；</li>
+<li>每个单位选择哪个局部站位；</li>
+<li>每个采集单位具体将资源放到哪个格子。</li>
+</ul>
+<p>运行时需要将一个高层命令分解为：</p>
+<ol>
+<li>命令验证；</li>
+<li>目标解析；</li>
+<li>路径规划；</li>
+<li>局部移动；</li>
+<li>队形分配；</li>
+<li>目标选择；</li>
+<li>攻击或工作执行；</li>
+<li>失败恢复；</li>
+<li>命令完成。</li>
+</ol>
+<hr />
+<h2 id="32-世界时间持续推进">3.2 世界时间持续推进</h2><p>实时战略没有稳定的“等待玩家决策点”。</p>
+<p>当玩家查看某个区域时，其他区域仍可能发生：</p>
+<ul>
+<li>敌人进攻；</li>
+<li>资源采集；</li>
+<li>单位生产；</li>
+<li>建筑施工；</li>
+<li>科技完成；</li>
+<li>侦察单位被击杀；</li>
+<li>对手转移主力；</li>
+<li>控制点失守。</li>
+</ul>
+<p>系统必须支持：</p>
+<ul>
+<li>固定步长模拟；</li>
+<li>多命令并行执行；</li>
+<li>持续状态变化；</li>
+<li>玩家随时打断并重新下令；</li>
+<li>暂停、加速或回放；</li>
+<li>联机同步。</li>
+</ul>
+<hr />
+<h2 id="33-经济生产和战争相互依赖">3.3 经济、生产和战争相互依赖</h2><p>完整的RTS通常形成以下闭环：</p>
+<p>资源控制
+→ 经济收入
+→ 建筑和生产能力
+→ 单位与科技
+→ 军事控制力
+→ 扩张和资源控制</p>
+<p>如果战争不影响资源，经济会变成独立成长面板。</p>
+<p>如果资源只影响单位数量，不影响：</p>
+<ul>
+<li>科技；</li>
+<li>兵种结构；</li>
+<li>生产速度；</li>
+<li>防御设施；</li>
+<li>地图控制；</li>
+</ul>
+<p>经济决策会缺少层次。</p>
+<hr />
+<h2 id="34-信息本身具有战略价值">3.4 信息本身具有战略价值</h2><p>战争迷雾意味着玩家不能自动知道：</p>
+<ul>
+<li>敌方基地位置；</li>
+<li>当前兵种结构；</li>
+<li>科技进度；</li>
+<li>部队移动方向；</li>
+<li>防御薄弱点；</li>
+<li>资源储备；</li>
+<li>是否正在扩张。</li>
+</ul>
+<p>因此侦察并非附属功能，而是战略循环的一部分：</p>
+<p>侦察
+→ 形成判断
+→ 调整生产
+→ 采取行动
+→ 敌方反制
+→ 再次侦察</p>
+<hr />
+<h2 id="35-单位需要局部自治">3.5 单位需要局部自治</h2><p>如果每个单位都必须由玩家逐步纠正：</p>
+<ul>
+<li>绕障碍；</li>
+<li>选择攻击目标；</li>
+<li>保持射程；</li>
+<li>返回队形；</li>
+<li>寻找采集点；</li>
+<li>寻找资源存放点；</li>
+</ul>
+<p>玩家会被低价值微操淹没。</p>
+<p>但如果单位自治过强，系统会替玩家决定：</p>
+<ul>
+<li>集火目标；</li>
+<li>走位；</li>
+<li>撤退；</li>
+<li>技能使用；</li>
+<li>战术方向。</li>
+</ul>
+<p>RTS需要在“单位自行完成命令”和“玩家保留战术控制权”之间建立边界。</p>
+<hr />
+<h2 id="36-群体控制必须保留个体规则">3.6 群体控制必须保留个体规则</h2><p>玩家经常同时控制几十个甚至数百个单位。</p>
+<p>系统需要提供：</p>
+<ul>
+<li>框选；</li>
+<li>多选；</li>
+<li>控制组；</li>
+<li>同类选择；</li>
+<li>全军选择；</li>
+<li>队形；</li>
+<li>命令队列；</li>
+<li>集结点；</li>
+<li>编队移动。</li>
+</ul>
+<p>但每个单位仍需要独立处理：</p>
+<ul>
+<li>体型；</li>
+<li>速度；</li>
+<li>射程；</li>
+<li>转向；</li>
+<li>碰撞；</li>
+<li>当前状态；</li>
+<li>武器；</li>
+<li>目标；</li>
+<li>路径。</li>
+</ul>
+<p>群体控制不能通过把所有单位合并成一个逻辑实体实现。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与大战略和4x的区别">4.1 与大战略和4X的区别</h2><p>大战略和4X通常强调：</p>
+<ul>
+<li>国家或文明；</li>
+<li>长期历史；</li>
+<li>多时间尺度；</li>
+<li>外交；</li>
+<li>领土；</li>
+<li>宏观人口和经济。</li>
+</ul>
+<p>实时战略更强调：</p>
+<ul>
+<li>分钟级比赛；</li>
+<li>单位和建筑的直接命令；</li>
+<li>局部战场操作；</li>
+<li>高频生产与军事决策；</li>
+<li>即时攻防转换。</li>
+</ul>
+<hr />
+<h2 id="42-与回合制战术游戏的区别">4.2 与回合制战术游戏的区别</h2><p>回合制战术游戏在稳定决策点中逐次执行行动。</p>
+<p>实时战略中：</p>
+<ul>
+<li>所有单位持续行动；</li>
+<li>多场战斗可同时发生；</li>
+<li>玩家不能无限思考；</li>
+<li>命令时机本身具有价值；</li>
+<li>注意力分配是玩法组成部分。</li>
+</ul>
+<hr />
+<h2 id="43-与moba的区别">4.3 与MOBA的区别</h2><p>MOBA通常强调：</p>
+<ul>
+<li>少量英雄；</li>
+<li>角色技能操作；</li>
+<li>固定兵线；</li>
+<li>团队对抗；</li>
+<li>单角色成长。</li>
+</ul>
+<p>RTS通常强调：</p>
+<ul>
+<li>多单位控制；</li>
+<li>基地和生产；</li>
+<li>资源经济；</li>
+<li>兵种组合；</li>
+<li>多线作战；</li>
+<li>整体战略布局。</li>
+</ul>
+<hr />
+<h2 id="44-与塔防的区别">4.4 与塔防的区别</h2><p>塔防中防御设施通常：</p>
+<ul>
+<li>固定部署；</li>
+<li>自动攻击；</li>
+<li>面对预定威胁路径；</li>
+<li>以拦截为核心。</li>
+</ul>
+<p>RTS中的单位通常可以：</p>
+<ul>
+<li>主动移动；</li>
+<li>进攻；</li>
+<li>撤退；</li>
+<li>侦察；</li>
+<li>占领；</li>
+<li>绕后；</li>
+<li>调整阵型；</li>
+<li>攻击敌方经济。</li>
+</ul>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十五个核心域：</p>
+<ol>
+<li>固定步长世界模拟域；</li>
+<li>玩家输入与单位选择域；</li>
+<li>命令验证与命令队列域；</li>
+<li>单位状态与行为执行域；</li>
+<li>群体移动、队形和局部避障域；</li>
+<li>导航网格与路径规划域；</li>
+<li>战斗、伤害和目标选择域；</li>
+<li>资源采集与经济域；</li>
+<li>建筑、生产和科技域；</li>
+<li>战争迷雾与情报投影域；</li>
+<li>控制区域与地图目标域；</li>
+<li>战略AI与战术AI域；</li>
+<li>联机同步、回放与确定性域；</li>
+<li>任务、胜负和战役结果域；</li>
+<li>调试、遥测和内容验证域。</li>
+</ol>
+<p>总体运行流程如下：</p>
+<p>采样玩家命令
+→ 验证控制权、资源和目标
+→ 将命令写入单位或生产队列
+→ 固定步长推进世界
+→ 单位行为执行器处理当前命令
+→ 路径和局部移动系统更新位置
+→ 感知系统更新可见目标
+→ 战斗系统生成攻击与伤害
+→ 经济和生产系统更新资源与进度
+→ 战争迷雾系统生成各玩家视图
+→ AI评估世界并提交新命令
+→ 胜负系统检查关键条件
+→ 保存逻辑快照并发布表现事件</p>
+<hr />
+<h2 id="6-固定步长世界模拟">6. 固定步长世界模拟</h2><h2 id="61-simulationclock">6.1 SimulationClock</h2><p>建议字段：</p>
+<ul>
+<li>CurrentTick；</li>
+<li>FixedDeltaTime；</li>
+<li>SimulationRate；</li>
+<li>IsPaused；</li>
+<li>ConfirmedTick；</li>
+<li>PredictedTick；</li>
+<li>WorldVersion；</li>
+<li>RandomStreamStates。</li>
+</ul>
+<p>所有关键逻辑应基于固定Tick推进：</p>
+<ul>
+<li>单位移动；</li>
+<li>攻击冷却；</li>
+<li>资源采集；</li>
+<li>建筑施工；</li>
+<li>单位生产；</li>
+<li>科技升级；</li>
+<li>状态持续时间；</li>
+<li>战争迷雾；</li>
+<li>胜负判定。</li>
+</ul>
+<hr />
+<h2 id="62-单tick执行顺序">6.2 单Tick执行顺序</h2><p>推荐使用稳定顺序：</p>
+<ol>
+<li>接收本Tick命令；</li>
+<li>验证并写入命令队列；</li>
+<li>更新全局规则和状态效果；</li>
+<li>更新生产、建造和资源；</li>
+<li>更新高层行为状态；</li>
+<li>执行路径请求；</li>
+<li>更新单位移动意图；</li>
+<li>处理局部避障和队形；</li>
+<li>提交位置和朝向；</li>
+<li>更新感知与战争迷雾；</li>
+<li>更新目标选择；</li>
+<li>执行攻击、技能与伤害；</li>
+<li>处理死亡和实体移除；</li>
+<li>更新任务、控制点和胜负条件；</li>
+<li>生成状态哈希和表现事件。</li>
+</ol>
+<p>执行顺序必须稳定，不能依赖对象创建顺序或容器遍历顺序。</p>
+<hr />
+<h2 id="63-逻辑与表现分离">6.3 逻辑与表现分离</h2><p>逻辑系统负责：</p>
+<ul>
+<li>单位位置；</li>
+<li>行为状态；</li>
+<li>攻击结果；</li>
+<li>生产结果；</li>
+<li>资源变化；</li>
+<li>战争迷雾；</li>
+<li>胜负。</li>
+</ul>
+<p>表现系统负责：</p>
+<ul>
+<li>动画；</li>
+<li>粒子；</li>
+<li>音效；</li>
+<li>插值；</li>
+<li>镜头；</li>
+<li>UI反馈。</li>
+</ul>
+<p>动画事件不能决定：</p>
+<ul>
+<li>何时造成伤害；</li>
+<li>何时完成生产；</li>
+<li>何时扣除资源；</li>
+<li>何时单位死亡。</li>
+</ul>
+<hr />
+<h2 id="7-玩家选择与控制模型">7. 玩家选择与控制模型</h2><h2 id="71-selectionstate">7.1 SelectionState</h2><p>建议包含：</p>
+<ul>
+<li>SelectedEntityIds；</li>
+<li>PrimaryEntityId；</li>
+<li>SelectionMode；</li>
+<li>ControlGroupBindings；</li>
+<li>CurrentCommandMode；</li>
+<li>HoveredEntityId；</li>
+<li>HoveredWorldPosition；</li>
+<li>SelectionVersion。</li>
+</ul>
+<p>SelectionState属于玩家界面状态，不应直接进入权威战斗状态。</p>
+<hr />
+<h2 id="72-选择方式">7.2 选择方式</h2><p>系统可以支持：</p>
+<ul>
+<li>单击选择；</li>
+<li>框选；</li>
+<li>双击选择同类；</li>
+<li>选择屏幕内同类；</li>
+<li>选择全地图同类；</li>
+<li>按职业或类型过滤；</li>
+<li>控制组；</li>
+<li>选择空闲工人；</li>
+<li>选择受损单位；</li>
+<li>选择当前军队。</li>
+</ul>
+<hr />
+<h2 id="73-选择语义">7.3 选择语义</h2><p>当选中多个不同单位时，UI需要决定：</p>
+<ul>
+<li>展示共同命令；</li>
+<li>展示主要单位信息；</li>
+<li>是否允许混合编队；</li>
+<li>技能按钮如何聚合；</li>
+<li>不同移动类型如何处理；</li>
+<li>命令是否发送给全部合法单位。</li>
+</ul>
+<hr />
+<h2 id="74-控制组">7.4 控制组</h2><p>控制组应保存：</p>
+<ul>
+<li>单位实体ID；</li>
+<li>组编号；</li>
+<li>创建时间；</li>
+<li>失效单位处理；</li>
+<li>是否包含生产建筑；</li>
+<li>相机定位策略。</li>
+</ul>
+<p>单位死亡后应从组中安全移除。</p>
+<p>如果组为空，可以保留空组或自动释放，规则需一致。</p>
+<hr />
+<h2 id="8-命令系统">8. 命令系统</h2><h2 id="81-commandintent">8.1 CommandIntent</h2><p>建议字段：</p>
+<ul>
+<li>CommandId；</li>
+<li>IssuerPlayerId；</li>
+<li>SelectedEntityIds；</li>
+<li>CommandType；</li>
+<li>TargetEntityId；</li>
+<li>TargetPosition；</li>
+<li>TargetArea；</li>
+<li>QueuePolicy；</li>
+<li>FormationPolicy；</li>
+<li>SubmittedTick；</li>
+<li>ClientSequence；</li>
+<li>WorldVersion；</li>
+<li>IdempotencyKey。</li>
+</ul>
+<hr />
+<h2 id="82-常见命令">8.2 常见命令</h2><p>包括：</p>
+<ul>
+<li>Move；</li>
+<li>Attack；</li>
+<li>AttackMove；</li>
+<li>Patrol；</li>
+<li>HoldPosition；</li>
+<li>Stop；</li>
+<li>Follow；</li>
+<li>Guard；</li>
+<li>Gather；</li>
+<li>ReturnResource；</li>
+<li>Repair；</li>
+<li>Build；</li>
+<li>Produce；</li>
+<li>Research；</li>
+<li>UseAbility；</li>
+<li>SetRallyPoint；</li>
+<li>Garrison；</li>
+<li>Ungarrison；</li>
+<li>Capture；</li>
+<li>CancelQueue。</li>
+</ul>
+<hr />
+<h2 id="83-命令验证">8.3 命令验证</h2><p>系统需要检查：</p>
+<ul>
+<li>玩家是否拥有单位控制权；</li>
+<li>单位是否存活；</li>
+<li>单位是否支持该命令；</li>
+<li>目标是否存在；</li>
+<li>目标是否在当前玩家可用信息中；</li>
+<li>资源是否足够；</li>
+<li>当前状态是否允许；</li>
+<li>建造位置是否合法；</li>
+<li>命令是否基于过期世界版本；</li>
+<li>是否为重复命令。</li>
+</ul>
+<hr />
+<h2 id="84-命令结果">8.4 命令结果</h2><p>建议使用结构化结果：</p>
+<ul>
+<li>Accepted；</li>
+<li>PartiallyAccepted；</li>
+<li>InvalidController；</li>
+<li>InvalidEntity；</li>
+<li>UnsupportedCommand；</li>
+<li>InvalidTarget；</li>
+<li>InsufficientResource；</li>
+<li>InvalidPlacement；</li>
+<li>QueueFull；</li>
+<li>StateConflict；</li>
+<li>StaleWorldVersion；</li>
+<li>DuplicateCommand。</li>
+</ul>
+<p>当选中混合单位时，可以部分接受命令。</p>
+<p>例如：</p>
+<ul>
+<li>战斗单位执行攻击；</li>
+<li>工人不具备攻击能力则忽略；</li>
+<li>UI显示实际响应单位数量。</li>
+</ul>
+<hr />
+<h2 id="9-单位命令队列">9. 单位命令队列</h2><h2 id="91-unitcommandqueue">9.1 UnitCommandQueue</h2><p>建议包含：</p>
+<ul>
+<li>CurrentCommand；</li>
+<li>QueuedCommands；</li>
+<li>SuspendedCommand；</li>
+<li>CommandHistory；</li>
+<li>InterruptPolicy；</li>
+<li>QueueCapacity；</li>
+<li>QueueVersion。</li>
+</ul>
+<hr />
+<h2 id="92-替换与追加">9.2 替换与追加</h2><p>玩家普通下令通常替换当前命令。</p>
+<p>按住队列键时可以追加：</p>
+<p>移动A
+→ 移动B
+→ 巡逻C
+→ 攻击目标D</p>
+<p>需要明确：</p>
+<ul>
+<li>当前动作何时可中断；</li>
+<li>旧路径是否取消；</li>
+<li>已占用资源是否释放；</li>
+<li>生产命令是否适用同一队列规则；</li>
+<li>队列中的目标失效如何处理。</li>
+</ul>
+<hr />
+<h2 id="93-命令状态">9.3 命令状态</h2><p>每条命令可以处于：</p>
+<ul>
+<li>Pending；</li>
+<li>Validating；</li>
+<li>Planning；</li>
+<li>Executing；</li>
+<li>Suspended；</li>
+<li>Completed；</li>
+<li>Failed；</li>
+<li>Cancelled；</li>
+<li>Superseded。</li>
+</ul>
+<hr />
+<h2 id="94-命令失败策略">9.4 命令失败策略</h2><p>例如移动目标不可达时，可以：</p>
+<ul>
+<li>移动到最近可达点；</li>
+<li>原地停止；</li>
+<li>重新寻路；</li>
+<li>保留命令等待路径变化；</li>
+<li>返回失败并进入Idle。</li>
+</ul>
+<p>策略应由命令类型和单位配置决定。</p>
+<hr />
+<h2 id="10-单位运行时模型">10. 单位运行时模型</h2><h2 id="101-unitdefinition">10.1 UnitDefinition</h2><p>建议字段：</p>
+<ul>
+<li>UnitDefinitionId；</li>
+<li>UnitTags；</li>
+<li>BaseStats；</li>
+<li>MovementProfileId；</li>
+<li>VisionProfileId；</li>
+<li>WeaponSetId；</li>
+<li>AbilitySetId；</li>
+<li>CommandSetId；</li>
+<li>ProductionCost；</li>
+<li>ProductionTime；</li>
+<li>PopulationCost；</li>
+<li>PrerequisiteTags；</li>
+<li>AIProfileId；</li>
+<li>PresentationProfileId。</li>
+</ul>
+<hr />
+<h2 id="102-unitruntimestate">10.2 UnitRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>UnitEntityId；</li>
+<li>DefinitionId；</li>
+<li>OwnerPlayerId；</li>
+<li>FactionId；</li>
+<li>Position；</li>
+<li>Rotation；</li>
+<li>Velocity；</li>
+<li>CurrentHealth；</li>
+<li>ShieldState；</li>
+<li>EnergyState；</li>
+<li>CurrentCommand；</li>
+<li>BehaviorState；</li>
+<li>MovementState；</li>
+<li>CombatState；</li>
+<li>AbilityCooldowns；</li>
+<li>StatusInstances；</li>
+<li>CurrentTargetId；</li>
+<li>CurrentPathState；</li>
+<li>FormationState；</li>
+<li>VisibilityState；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="103-行为层级">10.3 行为层级</h2><p>单位行为可以分为：</p>
+<h3 id="命令层">命令层</h3><p>玩家希望单位完成什么。</p>
+<h3 id="战术执行层">战术执行层</h3><p>为了完成命令，单位当前应该：</p>
+<ul>
+<li>移动；</li>
+<li>接敌；</li>
+<li>停止；</li>
+<li>追击；</li>
+<li>返回射程；</li>
+<li>寻找资源；</li>
+<li>交付资源。</li>
+</ul>
+<h3 id="运动层">运动层</h3><p>计算：</p>
+<ul>
+<li>目标速度；</li>
+<li>转向；</li>
+<li>路径节点；</li>
+<li>局部避障；</li>
+<li>最终位置。</li>
+</ul>
+<h3 id="表现层">表现层</h3><p>播放：</p>
+<ul>
+<li>行走；</li>
+<li>攻击；</li>
+<li>采集；</li>
+<li>建造；</li>
+<li>受击；</li>
+<li>死亡。</li>
+</ul>
+<hr />
+<h2 id="11-导航与路径规划">11. 导航与路径规划</h2><h2 id="111-navigationstate">11.1 NavigationState</h2><p>建议包含：</p>
+<ul>
+<li>NavigationVersion；</li>
+<li>TraversableRegions；</li>
+<li>DynamicObstacles；</li>
+<li>ReservedAreas；</li>
+<li>TerrainCosts；</li>
+<li>MovementLayerGraphs；</li>
+<li>PathCacheVersion。</li>
+</ul>
+<hr />
+<h2 id="112-移动类型">11.2 移动类型</h2><p>可能包括：</p>
+<ul>
+<li>地面；</li>
+<li>空中；</li>
+<li>水上；</li>
+<li>水下；</li>
+<li>两栖；</li>
+<li>攀爬；</li>
+<li>传送；</li>
+<li>隧道。</li>
+</ul>
+<p>不同移动类型应使用独立或部分共享的导航层。</p>
+<hr />
+<h2 id="113-路径层级">11.3 路径层级</h2><p>大规模RTS可以使用分层路径规划：</p>
+<ol>
+<li>战略区域路径；</li>
+<li>导航区块路径；</li>
+<li>局部网格路径；</li>
+<li>单位避障；</li>
+<li>最终速度和转向。</li>
+</ol>
+<p>每个单位独立运行完整全图寻路会造成高昂性能成本。</p>
+<hr />
+<h2 id="114-路径请求">11.4 路径请求</h2><p>PathRequest建议包含：</p>
+<ul>
+<li>RequestId；</li>
+<li>UnitId或GroupId；</li>
+<li>StartPosition；</li>
+<li>TargetPosition；</li>
+<li>MovementProfile；</li>
+<li>NavigationVersion；</li>
+<li>CostPolicy；</li>
+<li>FormationPolicy；</li>
+<li>Urgency；</li>
+<li>RequestTick。</li>
+</ul>
+<hr />
+<h2 id="115-路径缓存">11.5 路径缓存</h2><p>适合缓存：</p>
+<ul>
+<li>区域间路径；</li>
+<li>基地到资源点路径；</li>
+<li>集结点路径；</li>
+<li>高频攻击方向；</li>
+<li>不同移动类型的连通关系。</li>
+</ul>
+<p>以下变化应使缓存失效：</p>
+<ul>
+<li>新建筑；</li>
+<li>建筑摧毁；</li>
+<li>桥梁状态；</li>
+<li>地形变化；</li>
+<li>临时封锁；</li>
+<li>导航版本变化。</li>
+</ul>
+<hr />
+<h2 id="12-群体移动与队形">12. 群体移动与队形</h2><h2 id="121-formationdefinition">12.1 FormationDefinition</h2><p>建议字段：</p>
+<ul>
+<li>FormationId；</li>
+<li>SlotPattern；</li>
+<li>Spacing；</li>
+<li>OrientationPolicy；</li>
+<li>RoleAssignmentPolicy；</li>
+<li>CompressionPolicy；</li>
+<li>TerrainAdaptation；</li>
+<li>SpeedPolicy；</li>
+<li>ReformationPolicy。</li>
+</ul>
+<hr />
+<h2 id="122-队形槽位分配">12.2 队形槽位分配</h2><p>选中多个单位并下达移动命令时：</p>
+<ol>
+<li>计算群体中心；</li>
+<li>确定目标朝向；</li>
+<li>生成队形槽位；</li>
+<li>根据单位类型分配槽位；</li>
+<li>将槽位投影到合法地形；</li>
+<li>为每个单位生成局部目标；</li>
+<li>移动途中动态压缩和恢复队形。</li>
+</ol>
+<hr />
+<h2 id="123-异构部队">12.3 异构部队</h2><p>混合部队可能包含：</p>
+<ul>
+<li>步兵；</li>
+<li>远程单位；</li>
+<li>重型单位；</li>
+<li>医疗单位；</li>
+<li>载具；</li>
+<li>空中单位。</li>
+</ul>
+<p>槽位可以按职责分配：</p>
+<ul>
+<li>近战在前；</li>
+<li>远程在后；</li>
+<li>支援居中；</li>
+<li>大型单位占用宽槽位；</li>
+<li>空中单位使用独立层。</li>
+</ul>
+<hr />
+<h2 id="124-群体速度">12.4 群体速度</h2><p>可以采用：</p>
+<ul>
+<li>所有单位跟随最慢单位；</li>
+<li>快速单位先行；</li>
+<li>保持最大拉伸距离；</li>
+<li>允许队形分裂；</li>
+<li>分批到达。</li>
+</ul>
+<p>不同策略适用于不同命令。</p>
+<p>巡逻更适合保持队形。</p>
+<p>紧急撤退可以允许快速单位先走。</p>
+<hr />
+<h2 id="125-局部避障">12.5 局部避障</h2><p>局部避障需要处理：</p>
+<ul>
+<li>单位之间；</li>
+<li>建筑；</li>
+<li>地形边缘；</li>
+<li>狭窄通道；</li>
+<li>对向部队；</li>
+<li>战斗接触。</li>
+</ul>
+<p>但避障不能使单位：</p>
+<ul>
+<li>无限绕圈；</li>
+<li>远离原路径；</li>
+<li>挤入不可达区域；</li>
+<li>持续阻塞队友；</li>
+<li>违反固定步长确定性。</li>
+</ul>
+<hr />
+<h2 id="13-战斗与目标选择">13. 战斗与目标选择</h2><h2 id="131-weapondefinition">13.1 WeaponDefinition</h2><p>建议字段：</p>
+<ul>
+<li>WeaponId；</li>
+<li>TargetFilters；</li>
+<li>AttackRange；</li>
+<li>MinimumRange；</li>
+<li>AttackCooldown；</li>
+<li>WindupTime；</li>
+<li>ProjectileDefinitionId；</li>
+<li>DamageSpec；</li>
+<li>BurstProfile；</li>
+<li>LineOfSightPolicy；</li>
+<li>TrackingPolicy；</li>
+<li>OverkillPolicy；</li>
+<li>FriendlyFirePolicy。</li>
+</ul>
+<hr />
+<h2 id="132-自动攻击边界">13.2 自动攻击边界</h2><p>单位在以下情况下可以自动寻找目标：</p>
+<ul>
+<li>AttackMove；</li>
+<li>Guard；</li>
+<li>HoldPosition；</li>
+<li>Patrol；</li>
+<li>空闲警戒；</li>
+<li>受到攻击。</li>
+</ul>
+<p>不同命令可以限制：</p>
+<ul>
+<li>追击距离；</li>
+<li>目标类型；</li>
+<li>是否离开原位置；</li>
+<li>是否使用技能；</li>
+<li>是否攻击建筑。</li>
+</ul>
+<hr />
+<h2 id="133-目标评分">13.3 目标评分</h2><p>目标评分可以考虑：</p>
+<ul>
+<li>玩家显式指定；</li>
+<li>距离；</li>
+<li>威胁；</li>
+<li>剩余生命；</li>
+<li>单位克制；</li>
+<li>是否正在攻击自己；</li>
+<li>是否属于关键单位；</li>
+<li>是否已经被其他单位集火；</li>
+<li>追击成本；</li>
+<li>视线；</li>
+<li>当前命令。</li>
+</ul>
+<hr />
+<h2 id="134-攻击移动">13.4 攻击移动</h2><p>AttackMove通常表示：</p>
+<blockquote>
+<p>向目标位置前进，并对路径附近符合条件的敌人进行交战。</p>
+</blockquote>
+<p>需要明确：</p>
+<ul>
+<li>多大范围内发现敌人；</li>
+<li>交战后是否继续前进；</li>
+<li>追击距离；</li>
+<li>目标死亡后如何恢复原命令；</li>
+<li>是否攻击建筑；</li>
+<li>是否忽略低价值目标。</li>
+</ul>
+<hr />
+<h2 id="135-集火与过度伤害">13.5 集火与过度伤害</h2><p>大量单位攻击同一残血目标时可能产生严重溢出。</p>
+<p>系统可以选择：</p>
+<ul>
+<li>完全保留溢出，强调玩家微操；</li>
+<li>单位预估已分配伤害；</li>
+<li>自动分散部分火力；</li>
+<li>投射物重新锁定；</li>
+<li>溢出伤害转移。</li>
+</ul>
+<p>单位自动化越智能，玩家集火控制的价值越低。</p>
+<hr />
+<h2 id="14-伤害与状态系统">14. 伤害与状态系统</h2><h2 id="141-damagespec">14.1 DamageSpec</h2><p>建议字段：</p>
+<ul>
+<li>BaseDamage；</li>
+<li>DamageType；</li>
+<li>ArmorInteraction；</li>
+<li>ShieldInteraction；</li>
+<li>BonusAgainstTags；</li>
+<li>SplashProfile；</li>
+<li>StatusEffects；</li>
+<li>MinimumDamage；</li>
+<li>MaximumDamage；</li>
+<li>FriendlyFirePolicy。</li>
+</ul>
+<hr />
+<h2 id="142-damagecontext">14.2 DamageContext</h2><p>建议包含：</p>
+<ul>
+<li>SourceEntityId；</li>
+<li>TargetEntityId；</li>
+<li>WeaponId；</li>
+<li>ProjectileId；</li>
+<li>BaseDamage；</li>
+<li>AttackModifiers；</li>
+<li>TargetArmor；</li>
+<li>ResistanceModifiers；</li>
+<li>BonusModifiers；</li>
+<li>FinalDamage；</li>
+<li>AppliedStatuses；</li>
+<li>ModifierTrace；</li>
+<li>RootActionId。</li>
+</ul>
+<hr />
+<h2 id="143-伤害结算顺序">14.3 伤害结算顺序</h2><p>推荐固定顺序：</p>
+<ol>
+<li>基础武器伤害；</li>
+<li>攻击者升级；</li>
+<li>阵营和光环增益；</li>
+<li>单位标签克制；</li>
+<li>护盾；</li>
+<li>护甲与穿透；</li>
+<li>抗性；</li>
+<li>固定减伤；</li>
+<li>生命；</li>
+<li>状态效果；</li>
+<li>死亡检查。</li>
+</ol>
+<hr />
+<h2 id="144-状态效果">14.4 状态效果</h2><p>常见状态包括：</p>
+<ul>
+<li>减速；</li>
+<li>定身；</li>
+<li>眩晕；</li>
+<li>中毒；</li>
+<li>燃烧；</li>
+<li>标记；</li>
+<li>护甲削弱；</li>
+<li>隐形；</li>
+<li>侦测；</li>
+<li>沉默；</li>
+<li>能力禁用；</li>
+<li>士气下降。</li>
+</ul>
+<p>需要定义：</p>
+<ul>
+<li>堆叠；</li>
+<li>持续时间；</li>
+<li>来源；</li>
+<li>抗性；</li>
+<li>驱散；</li>
+<li>网络同步；</li>
+<li>死亡清理。</li>
+</ul>
+<hr />
+<h2 id="15-资源采集与经济">15. 资源采集与经济</h2><h2 id="151-resourcedefinition">15.1 ResourceDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ResourceId；</li>
+<li>ResourceTags；</li>
+<li>StoragePolicy；</li>
+<li>GatheringProfile；</li>
+<li>DropOffRules；</li>
+<li>MaximumStockpile；</li>
+<li>PresentationProfile。</li>
+</ul>
+<hr />
+<h2 id="152-resourcenodestate">15.2 ResourceNodeState</h2><p>建议包含：</p>
+<ul>
+<li>ResourceNodeId；</li>
+<li>ResourceType；</li>
+<li>RemainingAmount；</li>
+<li>GatherSlots；</li>
+<li>AssignedWorkerIds；</li>
+<li>RegenerationPolicy；</li>
+<li>ControllerId；</li>
+<li>DepletionState；</li>
+<li>StateVersion。</li>
+</ul>
+<hr />
+<h2 id="153-工人采集流程">15.3 工人采集流程</h2><ol>
+<li>玩家或自动系统分配采集命令；</li>
+<li>工人选择资源节点；</li>
+<li>预留采集槽位；</li>
+<li>前往资源点；</li>
+<li>执行采集；</li>
+<li>增加携带资源；</li>
+<li>寻找合法存放建筑；</li>
+<li>返回并交付；</li>
+<li>增加玩家库存；</li>
+<li>重复或重新选择资源点。</li>
+</ol>
+<hr />
+<h2 id="154-采集不是全局计时器">15.4 采集不是全局计时器</h2><p>资源收入应受到：</p>
+<ul>
+<li>工人数量；</li>
+<li>资源距离；</li>
+<li>路径；</li>
+<li>采集槽位；</li>
+<li>运输时间；</li>
+<li>敌人骚扰；</li>
+<li>存放建筑位置；</li>
+<li>单位移动速度；</li>
+<li>资源枯竭；</li>
+</ul>
+<p>影响。</p>
+<p>这样攻击敌方经济才具有空间和战术意义。</p>
+<hr />
+<h2 id="155-经济风险">15.5 经济风险</h2><p>经济单位通常：</p>
+<ul>
+<li>战斗能力低；</li>
+<li>位于资源外围；</li>
+<li>占用人口；</li>
+<li>决定长期收入；</li>
+<li>容易被突袭。</li>
+</ul>
+<p>玩家需要在以下事项间取舍：</p>
+<ul>
+<li>增加工人；</li>
+<li>提前生产军队；</li>
+<li>建造防御；</li>
+<li>扩张新资源；</li>
+<li>升级科技。</li>
+</ul>
+<hr />
+<h2 id="16-建筑与建造系统">16. 建筑与建造系统</h2><h2 id="161-buildingdefinition">16.1 BuildingDefinition</h2><p>建议字段：</p>
+<ul>
+<li>BuildingId；</li>
+<li>BuildingTags；</li>
+<li>Footprint；</li>
+<li>BuildCost；</li>
+<li>BuildTime；</li>
+<li>ConstructionProfile；</li>
+<li>ProductionCapabilities；</li>
+<li>ResearchCapabilities；</li>
+<li>StorageCapabilities；</li>
+<li>VisionProfile；</li>
+<li>DefensiveProfile；</li>
+<li>Prerequisites；</li>
+<li>PlacementRules；</li>
+<li>PowerRequirements；</li>
+<li>PresentationProfile。</li>
+</ul>
+<hr />
+<h2 id="162-placementrequest">16.2 PlacementRequest</h2><p>建议字段：</p>
+<ul>
+<li>BuildingDefinitionId；</li>
+<li>DesiredPosition；</li>
+<li>DesiredRotation；</li>
+<li>BuilderIds；</li>
+<li>SubmittedWorldVersion；</li>
+<li>RequestId；</li>
+<li>IdempotencyKey。</li>
+</ul>
+<hr />
+<h2 id="163-建造验证">16.3 建造验证</h2><p>检查：</p>
+<ul>
+<li>资源；</li>
+<li>地形；</li>
+<li>占用；</li>
+<li>坡度；</li>
+<li>与其他建筑距离；</li>
+<li>科技前置；</li>
+<li>建造范围；</li>
+<li>电力或领土；</li>
+<li>导航影响；</li>
+<li>数量限制；</li>
+<li>战争迷雾规则。</li>
+</ul>
+<hr />
+<h2 id="164-建筑施工状态">16.4 建筑施工状态</h2><p>建议状态：</p>
+<ul>
+<li>Blueprint；</li>
+<li>Reserved；</li>
+<li>Foundation；</li>
+<li>UnderConstruction；</li>
+<li>Operational；</li>
+<li>Disabled；</li>
+<li>Damaged；</li>
+<li>Destroyed；</li>
+<li>Cancelled。</li>
+</ul>
+<hr />
+<h2 id="165-建造资源事务">16.5 建造资源事务</h2><p>推荐流程：</p>
+<ol>
+<li>验证资源；</li>
+<li>预留资源；</li>
+<li>创建蓝图；</li>
+<li>工人开始施工；</li>
+<li>达到提交阈值后正式消耗资源；</li>
+<li>建筑逐步增加完成度；</li>
+<li>完成后启用功能；</li>
+<li>取消时按策略返还。</li>
+</ol>
+<hr />
+<h2 id="166-建筑影响导航">16.6 建筑影响导航</h2><p>建筑放置后可能：</p>
+<ul>
+<li>阻挡单位；</li>
+<li>创建狭窄通道；</li>
+<li>封锁基地入口；</li>
+<li>改变采集路线；</li>
+<li>影响队形；</li>
+<li>形成城墙。</li>
+</ul>
+<p>导航更新必须版本化，并支持正在移动单位重新规划。</p>
+<hr />
+<h2 id="17-单位生产系统">17. 单位生产系统</h2><h2 id="171-productionqueue">17.1 ProductionQueue</h2><p>建议包含：</p>
+<ul>
+<li>ProducerEntityId；</li>
+<li>QueueEntries；</li>
+<li>QueueCapacity；</li>
+<li>CurrentEntryId；</li>
+<li>ProductionModifiers；</li>
+<li>RallyPoint；</li>
+<li>QueueVersion。</li>
+</ul>
+<hr />
+<h2 id="172-productionqueueentry">17.2 ProductionQueueEntry</h2><p>建议字段：</p>
+<ul>
+<li>QueueEntryId；</li>
+<li>ProductDefinitionId；</li>
+<li>ResourceCost；</li>
+<li>PopulationCost；</li>
+<li>ProductionTime；</li>
+<li>Progress；</li>
+<li>ReservedResources；</li>
+<li>QueueState；</li>
+<li>RequestingPlayerId；</li>
+<li>CreationTick。</li>
+</ul>
+<hr />
+<h2 id="173-生产流程">17.3 生产流程</h2><ol>
+<li>玩家提交生产命令；</li>
+<li>验证科技、资源和人口；</li>
+<li>预留资源和人口容量；</li>
+<li>创建队列项；</li>
+<li>生产进度持续推进；</li>
+<li>完成时寻找合法出生位置；</li>
+<li>创建单位实体；</li>
+<li>正式占用人口；</li>
+<li>应用集结点命令；</li>
+<li>发布生产完成事件。</li>
+</ol>
+<hr />
+<h2 id="174-出生位置阻塞">17.4 出生位置阻塞</h2><p>如果生产建筑出口被阻挡：</p>
+<ul>
+<li>暂停最终生成；</li>
+<li>尝试其他出口；</li>
+<li>推迟完成；</li>
+<li>将单位放入内部驻扎状态；</li>
+<li>超时后报告阻塞。</li>
+</ul>
+<p>不能直接将单位生成到建筑或其他单位内部。</p>
+<hr />
+<h2 id="175-取消生产">17.5 取消生产</h2><p>取消时需要明确：</p>
+<ul>
+<li>资源返还比例；</li>
+<li>人口预留释放；</li>
+<li>当前生产进度；</li>
+<li>队列后续项目是否前移；</li>
+<li>是否允许瞬时切换生产策略。</li>
+</ul>
+<hr />
+<h2 id="18-科技与升级系统">18. 科技与升级系统</h2><h2 id="181-technologydefinition">18.1 TechnologyDefinition</h2><p>建议字段：</p>
+<ul>
+<li>TechnologyId；</li>
+<li>Prerequisites；</li>
+<li>ResearchCost；</li>
+<li>ResearchTime；</li>
+<li>ResearchFacilityTags；</li>
+<li>GrantedModifiers；</li>
+<li>UnlockedUnits；</li>
+<li>UnlockedBuildings；</li>
+<li>UnlockedAbilities；</li>
+<li>ExclusiveGroup；</li>
+<li>RepeatPolicy。</li>
+</ul>
+<hr />
+<h2 id="182-科技作用">18.2 科技作用</h2><p>科技可以改变：</p>
+<ul>
+<li>单位数值；</li>
+<li>新兵种；</li>
+<li>新建筑；</li>
+<li>新能力；</li>
+<li>资源效率；</li>
+<li>人口；</li>
+<li>视野；</li>
+<li>装甲类型；</li>
+<li>生产方式；</li>
+<li>战术选择。</li>
+</ul>
+<hr />
+<h2 id="183-科技阶段">18.3 科技阶段</h2><p>科技阶段可以形成：</p>
+<ul>
+<li>早期经济扩张；</li>
+<li>中期兵种组合；</li>
+<li>后期高价值单位；</li>
+<li>特殊终局能力。</li>
+</ul>
+<p>阶段升级应有：</p>
+<ul>
+<li>资源成本；</li>
+<li>时间成本；</li>
+<li>生产机会成本；</li>
+<li>被敌方侦察和攻击的风险。</li>
+</ul>
+<hr />
+<h2 id="19-战争迷雾与玩家视图">19. 战争迷雾与玩家视图</h2><h2 id="191-信息状态">19.1 信息状态</h2><p>地图位置可以处于：</p>
+<ul>
+<li>Unexplored；</li>
+<li>Explored；</li>
+<li>CurrentlyVisible；</li>
+<li>Detected；</li>
+<li>LastKnown；</li>
+<li>HiddenAgain。</li>
+</ul>
+<hr />
+<h2 id="192-playervisionstate">19.2 PlayerVisionState</h2><p>建议包含：</p>
+<ul>
+<li>VisibleCells；</li>
+<li>ExploredCells；</li>
+<li>VisibleEntityIds；</li>
+<li>DetectedEntityIds；</li>
+<li>LastKnownEntitySnapshots；</li>
+<li>RadarContacts；</li>
+<li>VisionVersion。</li>
+</ul>
+<hr />
+<h2 id="193-视野来源">19.3 视野来源</h2><p>包括：</p>
+<ul>
+<li>单位；</li>
+<li>建筑；</li>
+<li>侦察技能；</li>
+<li>雷达；</li>
+<li>高地；</li>
+<li>观察塔；</li>
+<li>临时信号；</li>
+<li>盟友共享；</li>
+<li>控制区域。</li>
+</ul>
+<hr />
+<h2 id="194-隐形与侦测">19.4 隐形与侦测</h2><p>需要区分：</p>
+<ul>
+<li>普通可见性；</li>
+<li>伪装；</li>
+<li>隐形；</li>
+<li>地下；</li>
+<li>雷达信号；</li>
+<li>探测范围；</li>
+<li>攻击暴露；</li>
+<li>暂时显形。</li>
+</ul>
+<hr />
+<h2 id="195-最后已知信息">19.5 最后已知信息</h2><p>玩家失去视野后，可以保留：</p>
+<ul>
+<li>建筑最后状态；</li>
+<li>单位最后位置；</li>
+<li>最后出现时间；</li>
+<li>最后已知生命；</li>
+<li>移动方向；</li>
+<li>信息置信度。</li>
+</ul>
+<p>这些信息必须标记为过期，而不能继续实时更新。</p>
+<hr />
+<h2 id="196-信息最小化">19.6 信息最小化</h2><p>联机客户端不应收到：</p>
+<ul>
+<li>战争迷雾中的单位精确位置；</li>
+<li>未侦察建筑；</li>
+<li>敌方生产队列；</li>
+<li>隐形单位状态；</li>
+<li>敌方资源数量；</li>
+<li>未公开科技。</li>
+</ul>
+<p>不要将完整状态发送到客户端后仅在画面上隐藏。</p>
+<hr />
+<h2 id="20-地图控制与战略目标">20. 地图控制与战略目标</h2><h2 id="201-controlpointdefinition">20.1 ControlPointDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ControlPointId；</li>
+<li>CaptureArea；</li>
+<li>CaptureTime；</li>
+<li>ContestPolicy；</li>
+<li>OwnershipEffects；</li>
+<li>ResourceEffects；</li>
+<li>VisionEffects；</li>
+<li>VictoryEffects；</li>
+<li>NeutralizationPolicy。</li>
+</ul>
+<hr />
+<h2 id="202-控制点作用">20.2 控制点作用</h2><p>可以提供：</p>
+<ul>
+<li>持续资源；</li>
+<li>视野；</li>
+<li>增援；</li>
+<li>生产加速；</li>
+<li>胜利分数；</li>
+<li>地图传送；</li>
+<li>防御设施；</li>
+<li>特殊能力。</li>
+</ul>
+<hr />
+<h2 id="203-区域控制">20.3 区域控制</h2><p>控制区域可以由以下因素共同决定：</p>
+<ul>
+<li>建筑；</li>
+<li>单位；</li>
+<li>控制点；</li>
+<li>视野；</li>
+<li>补给；</li>
+<li>任务状态。</li>
+</ul>
+<p>区域控制不应只是一张静态颜色图。</p>
+<hr />
+<h2 id="21-战略ai架构">21. 战略AI架构</h2><p>实时战略AI需要同时处理：</p>
+<ul>
+<li>经济；</li>
+<li>生产；</li>
+<li>科技；</li>
+<li>侦察；</li>
+<li>防御；</li>
+<li>进攻；</li>
+<li>单位战术；</li>
+<li>多线响应。</li>
+</ul>
+<p>推荐分为五层。</p>
+<hr />
+<h2 id="211-世界认知层">21.1 世界认知层</h2><p>AI只使用自己能够获得的信息：</p>
+<ul>
+<li>已发现敌人；</li>
+<li>最后已知基地；</li>
+<li>已知兵种；</li>
+<li>推测科技；</li>
+<li>已知资源点；</li>
+<li>当前控制区域；</li>
+<li>侦察置信度。</li>
+</ul>
+<hr />
+<h2 id="212-战略目标层">21.2 战略目标层</h2><p>生成目标：</p>
+<ul>
+<li>扩张经济；</li>
+<li>防守基地；</li>
+<li>骚扰资源；</li>
+<li>提升科技；</li>
+<li>生产反制兵种；</li>
+<li>控制地图；</li>
+<li>发起主攻；</li>
+<li>拖延时间；</li>
+<li>保护关键单位。</li>
+</ul>
+<hr />
+<h2 id="213-预算层">21.3 预算层</h2><p>AI将资源分配给：</p>
+<ul>
+<li>工人；</li>
+<li>军队；</li>
+<li>建筑；</li>
+<li>科技；</li>
+<li>防御；</li>
+<li>扩张；</li>
+<li>修理。</li>
+</ul>
+<p>各系统不能独立无限申请资源。</p>
+<hr />
+<h2 id="214-生产计划层">21.4 生产计划层</h2><p>生产计划需要根据：</p>
+<ul>
+<li>当前军队；</li>
+<li>敌方已知兵种；</li>
+<li>地图；</li>
+<li>资源；</li>
+<li>科技；</li>
+<li>生产建筑；</li>
+<li>战略目标；</li>
+</ul>
+<p>决定生产队列。</p>
+<hr />
+<h2 id="215-战术执行层">21.5 战术执行层</h2><p>战术AI负责：</p>
+<ul>
+<li>编组；</li>
+<li>路线；</li>
+<li>目标选择；</li>
+<li>进攻；</li>
+<li>撤退；</li>
+<li>集火；</li>
+<li>技能；</li>
+<li>侧翼；</li>
+<li>保持射程；</li>
+<li>保护支援单位。</li>
+</ul>
+<hr />
+<h2 id="216-ai计划承诺">21.6 AI计划承诺</h2><p>AI不能每个Tick完全改变战略。</p>
+<p>计划应包含：</p>
+<ul>
+<li>最短承诺时间；</li>
+<li>已投入资源；</li>
+<li>放弃条件；</li>
+<li>风险阈值；</li>
+<li>重新评估事件；</li>
+<li>当前进度。</li>
+</ul>
+<p>否则会出现：</p>
+<ul>
+<li>建筑频繁取消；</li>
+<li>军队来回移动；</li>
+<li>科技反复切换；</li>
+<li>攻击部队不断撤退。</li>
+</ul>
+<hr />
+<h2 id="22-完整事件与执行流程示例">22. 完整事件与执行流程示例</h2><p>以下以“玩家侦察到敌方重甲单位，并调整生产后发动侧翼进攻”为例。</p>
+<h3 id="221-侦察">22.1 侦察</h3><p>玩家派出侦察单位进入敌方外围。</p>
+<p>侦察单位视野发现：</p>
+<ul>
+<li>一座重型生产建筑；</li>
+<li>两个重甲单位；</li>
+<li>敌方主力尚未出现。</li>
+</ul>
+<p>战争迷雾系统更新玩家视图。</p>
+<hr />
+<h3 id="222-信息判断">22.2 信息判断</h3><p>玩家推测敌方正在转向重甲体系。</p>
+<p>这只是基于当前信息的判断，并非系统直接告知完整生产计划。</p>
+<hr />
+<h3 id="223-生产调整">22.3 生产调整</h3><p>玩家选择反重甲单位生产建筑并提交建造命令。</p>
+<p>系统：</p>
+<ol>
+<li>验证科技；</li>
+<li>验证资源；</li>
+<li>验证位置；</li>
+<li>预留资源；</li>
+<li>创建施工蓝图；</li>
+<li>分配工人。</li>
+</ol>
+<hr />
+<h3 id="224-敌方反侦察">22.4 敌方反侦察</h3><p>敌方单位发现并击杀侦察单位。</p>
+<p>玩家失去当前视野，但保留敌方建筑的最后已知信息。</p>
+<hr />
+<h3 id="225-生产完成">22.5 生产完成</h3><p>反重甲单位陆续完成生产。</p>
+<p>系统自动将新单位移动至玩家设置的集结点。</p>
+<hr />
+<h3 id="226-部队编组">22.6 部队编组</h3><p>玩家将：</p>
+<ul>
+<li>前排单位；</li>
+<li>反重甲单位；</li>
+<li>远程支援；</li>
+<li>侦察单位；</li>
+</ul>
+<p>加入同一控制组。</p>
+<p>随后下达队形移动命令。</p>
+<hr />
+<h3 id="227-路线规划">22.7 路线规划</h3><p>群体移动系统：</p>
+<ul>
+<li>计算主路径；</li>
+<li>分配队形槽位；</li>
+<li>将大型单位放置在前方；</li>
+<li>将远程单位置于后方；</li>
+<li>对狭窄通道压缩队形。</li>
+</ul>
+<hr />
+<h3 id="228-侧翼进攻">22.8 侧翼进攻</h3><p>玩家避开敌方正面防御，从资源区侧面发动攻击。</p>
+<p>AttackMove命令使部队：</p>
+<ul>
+<li>前往目标区域；</li>
+<li>自动攻击路径附近敌人；</li>
+<li>保持有限追击距离。</li>
+</ul>
+<hr />
+<h3 id="229-战斗结算">22.9 战斗结算</h3><p>反重甲单位优先攻击重甲目标。</p>
+<p>伤害系统应用：</p>
+<ul>
+<li>单位攻击；</li>
+<li>反重甲标签加成；</li>
+<li>敌方装甲；</li>
+<li>科技修正；</li>
+<li>阵营光环。</li>
+</ul>
+<hr />
+<h3 id="2210-战略结果">22.10 战略结果</h3><p>敌方重甲部队被击败，但玩家也暴露了反制兵种。</p>
+<p>敌方可能：</p>
+<ul>
+<li>转为轻型单位；</li>
+<li>攻击玩家生产建筑；</li>
+<li>绕后袭击经济；</li>
+<li>增加侦察；</li>
+<li>暂时撤退。</li>
+</ul>
+<p>完整过程形成：</p>
+<p>侦察
+→ 判断
+→ 经济投入
+→ 生产延迟
+→ 部队组织
+→ 空间机动
+→ 兵种克制
+→ 新一轮信息与反制</p>
+<hr />
+<h2 id="23-模块通信设计">23. 模块通信设计</h2><h2 id="231-命令">23.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li>IssueMove；</li>
+<li>IssueAttack；</li>
+<li>IssueAttackMove；</li>
+<li>IssuePatrol；</li>
+<li>IssueGather；</li>
+<li>IssueBuild；</li>
+<li>QueueProduction；</li>
+<li>QueueResearch；</li>
+<li>CancelQueue；</li>
+<li>SetRallyPoint；</li>
+<li>ActivateAbility；</li>
+<li>CapturePoint。</li>
+</ul>
+<p>命令必须携带：</p>
+<ul>
+<li>玩家；</li>
+<li>单位或建筑；</li>
+<li>目标；</li>
+<li>提交Tick；</li>
+<li>世界版本；</li>
+<li>输入序列；</li>
+<li>幂等键。</li>
+</ul>
+<hr />
+<h2 id="232-同步查询">23.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li>单位是否可被控制；</li>
+<li>目标是否可攻击；</li>
+<li>建筑位置是否合法；</li>
+<li>当前资源；</li>
+<li>科技是否满足；</li>
+<li>路径是否可达；</li>
+<li>当前可见信息；</li>
+<li>生产队列状态。</li>
+</ul>
+<p>查询不能修改世界或消耗随机数。</p>
+<hr />
+<h2 id="233-领域事件">23.3 领域事件</h2><p>典型事件：</p>
+<ul>
+<li>CommandAccepted；</li>
+<li>UnitMoved；</li>
+<li>TargetAcquired；</li>
+<li>AttackCommitted；</li>
+<li>UnitDamaged；</li>
+<li>UnitDestroyed；</li>
+<li>ResourceGathered；</li>
+<li>ResourceDelivered；</li>
+<li>ConstructionStarted；</li>
+<li>BuildingCompleted；</li>
+<li>ProductionCompleted；</li>
+<li>TechnologyResearched；</li>
+<li>ControlPointCaptured；</li>
+<li>PlayerDefeated；</li>
+<li>MatchCompleted。</li>
+</ul>
+<hr />
+<h2 id="234-表现事件">23.4 表现事件</h2><p>包括：</p>
+<ul>
+<li>PlayMoveAnimation；</li>
+<li>PlayAttackAnimation；</li>
+<li>SpawnProjectileVisual；</li>
+<li>ShowCommandMarker；</li>
+<li>PlayConstructionEffect；</li>
+<li>ShowProductionComplete；</li>
+<li>UpdateFogOfWar；</li>
+<li>ShowResourceChange；</li>
+<li>PlayUnitDeath；</li>
+<li>ShowVictoryPresentation。</li>
+</ul>
+<p>表现事件不能成为逻辑结果成立的前提。</p>
+<hr />
+<h2 id="24-联机同步与确定性">24. 联机同步与确定性</h2><p>RTS常用的同步模式包括：</p>
+<ul>
+<li>输入锁步；</li>
+<li>确定性锁步；</li>
+<li>服务端权威状态同步；</li>
+<li>客户端预测加服务端校正；</li>
+<li>混合模式。</li>
+</ul>
+<hr />
+<h2 id="241-输入锁步">24.1 输入锁步</h2><p>所有玩家只交换：</p>
+<ul>
+<li>玩家命令；</li>
+<li>命令Tick；</li>
+<li>随机种子；</li>
+<li>校验哈希。</li>
+</ul>
+<p>每个客户端运行相同模拟。</p>
+<p>优点：</p>
+<ul>
+<li>网络带宽低；</li>
+<li>适合大量单位；</li>
+<li>易于回放。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>对确定性要求极高；</li>
+<li>慢客户端可能拖慢全局；</li>
+<li>作弊防护难度较高；</li>
+<li>失步问题复杂。</li>
+</ul>
+<hr />
+<h2 id="242-服务端权威">24.2 服务端权威</h2><p>服务器运行完整模拟，并向客户端同步：</p>
+<ul>
+<li>单位状态；</li>
+<li>建筑状态；</li>
+<li>战争迷雾投影；</li>
+<li>战斗结果；</li>
+<li>资源和生产。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>权威性高；</li>
+<li>信息隔离更可靠；</li>
+<li>反作弊更容易。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>服务器成本更高；</li>
+<li>大规模实体同步复杂；</li>
+<li>客户端需要预测与插值。</li>
+</ul>
+<hr />
+<h2 id="243-worldsnapshot">24.3 WorldSnapshot</h2><p>建议包含：</p>
+<ul>
+<li>Tick；</li>
+<li>EntityStates；</li>
+<li>BuildingStates；</li>
+<li>ResourceStates；</li>
+<li>ProductionStates；</li>
+<li>FogStateVersion；</li>
+<li>ObjectiveStates；</li>
+<li>RandomCursors；</li>
+<li>WorldHash。</li>
+</ul>
+<hr />
+<h2 id="244-状态哈希">24.4 状态哈希</h2><p>应定期计算：</p>
+<ul>
+<li>单位；</li>
+<li>建筑；</li>
+<li>资源；</li>
+<li>命令队列；</li>
+<li>生产；</li>
+<li>科技；</li>
+<li>随机流；</li>
+<li>任务状态。</li>
+</ul>
+<p>用于发现：</p>
+<ul>
+<li>遍历顺序差异；</li>
+<li>浮点误差；</li>
+<li>随机调用不一致；</li>
+<li>快照遗漏；</li>
+<li>内容版本不一致。</li>
+</ul>
+<hr />
+<h2 id="245-确定性要求">24.5 确定性要求</h2><p>需要固定：</p>
+<ul>
+<li>Tick顺序；</li>
+<li>命令排序；</li>
+<li>碰撞候选排序；</li>
+<li>目标选择平局规则；</li>
+<li>随机流；</li>
+<li>路径结果排序；</li>
+<li>单位创建顺序；</li>
+<li>数值取整；</li>
+<li>集合遍历顺序。</li>
+</ul>
+<hr />
+<h2 id="25-回放与观战">25. 回放与观战</h2><h2 id="251-replayrecord">25.1 ReplayRecord</h2><p>建议包含：</p>
+<ul>
+<li>GameVersion；</li>
+<li>ContentHash；</li>
+<li>MapDefinitionId；</li>
+<li>PlayerConfigurations；</li>
+<li>InitialRandomSeeds；</li>
+<li>CommandStream；</li>
+<li>PeriodicSnapshots；</li>
+<li>ResultState；</li>
+<li>HashCheckpoints。</li>
+</ul>
+<hr />
+<h2 id="252-回放能力">25.2 回放能力</h2><p>支持：</p>
+<ul>
+<li>暂停；</li>
+<li>加速；</li>
+<li>降速；</li>
+<li>跳转；</li>
+<li>切换玩家视角；</li>
+<li>切换战争迷雾视角；</li>
+<li>自由镜头；</li>
+<li>资源曲线；</li>
+<li>单位生产时间线；</li>
+<li>关键战斗标记。</li>
+</ul>
+<hr />
+<h2 id="253-观战信息">25.3 观战信息</h2><p>观战模式需要明确：</p>
+<ul>
+<li>是否显示全部地图；</li>
+<li>是否延迟；</li>
+<li>是否允许查看双方资源；</li>
+<li>是否显示生产队列；</li>
+<li>是否允许教练视角；</li>
+<li>是否防止向参赛玩家泄露信息。</li>
+</ul>
+<hr />
+<h2 id="26-失败隔离">26. 失败隔离</h2><h2 id="261-命令失败">26.1 命令失败</h2><p>命令验证失败时：</p>
+<ul>
+<li>不修改单位队列；</li>
+<li>不扣除资源；</li>
+<li>不调用随机数；</li>
+<li>返回明确原因；</li>
+<li>保留原命令状态。</li>
+</ul>
+<hr />
+<h2 id="262-路径规划失败">26.2 路径规划失败</h2><p>路径失败时：</p>
+<ul>
+<li>保留当前合法位置；</li>
+<li>尝试最近可达点；</li>
+<li>释放队形槽位；</li>
+<li>降低重算频率；</li>
+<li>等待导航版本变化；</li>
+<li>记录请求和导航状态。</li>
+</ul>
+<p>不能让单位永久停留在PathPlanning状态。</p>
+<hr />
+<h2 id="263-局部避障死锁">26.3 局部避障死锁</h2><p>单位长时间无法前进时：</p>
+<ol>
+<li>提高局部避让优先级；</li>
+<li>暂时放弃队形；</li>
+<li>重新规划局部路径；</li>
+<li>与低优先级友军交换通行权；</li>
+<li>超时后返回上一个合法节点；</li>
+<li>记录阻塞群体。</li>
+</ol>
+<hr />
+<h2 id="264-生产完成但无法出生">26.4 生产完成但无法出生</h2><p>需要：</p>
+<ul>
+<li>尝试备用出口；</li>
+<li>等待出口清空；</li>
+<li>将单位放入内部队列；</li>
+<li>允许玩家设置新集结点；</li>
+<li>不重复扣除资源；</li>
+<li>不重复占用人口。</li>
+</ul>
+<hr />
+<h2 id="265-建筑施工异常">26.5 建筑施工异常</h2><p>如果工人死亡或路径失效：</p>
+<ul>
+<li>保留建筑进度；</li>
+<li>释放失效工人引用；</li>
+<li>允许其他工人接手；</li>
+<li>保留已消耗资源；</li>
+<li>不让建筑永久锁定为Working。</li>
+</ul>
+<hr />
+<h2 id="266-资源预留泄漏">26.6 资源预留泄漏</h2><p>定期检测：</p>
+<ul>
+<li>队列项不存在；</li>
+<li>建筑已销毁；</li>
+<li>命令已取消；</li>
+<li>玩家已退出；</li>
+<li>预留资源超过库存；</li>
+<li>人口预留无对应产品。</li>
+</ul>
+<p>异常预留应自动释放并写入审计日志。</p>
+<hr />
+<h2 id="267-ai规划失败">26.7 AI规划失败</h2><p>AI无法生成战略计划时：</p>
+<ul>
+<li>使用当前安全计划；</li>
+<li>维持经济；</li>
+<li>防守基地；</li>
+<li>继续已有生产；</li>
+<li>降低规划复杂度；</li>
+<li>记录失败原因。</li>
+</ul>
+<p>不能让AI停止所有操作。</p>
+<hr />
+<h2 id="268-失步处理">26.8 失步处理</h2><p>检测到联机失步时：</p>
+<ul>
+<li>停止继续确认结果；</li>
+<li>保存命令流和哈希；</li>
+<li>请求权威快照；</li>
+<li>尝试重新同步；</li>
+<li>无法恢复时安全结束比赛；</li>
+<li>不允许双方继续运行不同世界状态。</li>
+</ul>
+<hr />
+<h2 id="269-非核心服务降级">26.9 非核心服务降级</h2><p>以下服务故障不应终止比赛：</p>
+<ul>
+<li>战绩；</li>
+<li>成就；</li>
+<li>聊天；</li>
+<li>语音；</li>
+<li>推荐；</li>
+<li>数据分析；</li>
+<li>回放上传。</li>
+</ul>
+<p>核心模拟、命令和胜负必须保持独立。</p>
+<hr />
+<h2 id="27-调试与可观测性">27. 调试与可观测性</h2><h2 id="271-世界状态查看器">27.1 世界状态查看器</h2><p>显示：</p>
+<ul>
+<li>CurrentTick；</li>
+<li>WorldVersion；</li>
+<li>玩家资源；</li>
+<li>单位数量；</li>
+<li>建筑；</li>
+<li>生产队列；</li>
+<li>科技；</li>
+<li>任务；</li>
+<li>随机游标；</li>
+<li>状态哈希。</li>
+</ul>
+<hr />
+<h2 id="272-单位命令检查器">27.2 单位命令检查器</h2><p>选择单位后显示：</p>
+<ul>
+<li>当前命令；</li>
+<li>命令队列；</li>
+<li>行为状态；</li>
+<li>路径；</li>
+<li>局部目标；</li>
+<li>当前攻击目标；</li>
+<li>追击范围；</li>
+<li>命令失败历史。</li>
+</ul>
+<hr />
+<h2 id="273-路径与导航查看器">27.3 路径与导航查看器</h2><p>显示：</p>
+<ul>
+<li>导航区域；</li>
+<li>不可通行区域；</li>
+<li>动态障碍；</li>
+<li>路径请求；</li>
+<li>路径缓存；</li>
+<li>导航版本；</li>
+<li>拥堵热图；</li>
+<li>局部避障向量。</li>
+</ul>
+<hr />
+<h2 id="274-队形查看器">27.4 队形查看器</h2><p>显示：</p>
+<ul>
+<li>群体中心；</li>
+<li>队形方向；</li>
+<li>槽位；</li>
+<li>单位槽位分配；</li>
+<li>被压缩槽位；</li>
+<li>无法到达槽位；</li>
+<li>队形恢复状态。</li>
+</ul>
+<hr />
+<h2 id="275-目标选择解释器">27.5 目标选择解释器</h2><p>显示：</p>
+<ul>
+<li>候选目标；</li>
+<li>距离；</li>
+<li>威胁；</li>
+<li>克制；</li>
+<li>当前命令；</li>
+<li>追击成本；</li>
+<li>目标评分；</li>
+<li>最终选择原因。</li>
+</ul>
+<hr />
+<h2 id="276-经济流面板">27.6 经济流面板</h2><p>显示：</p>
+<ul>
+<li>资源节点；</li>
+<li>工人数量；</li>
+<li>采集时间；</li>
+<li>运输时间；</li>
+<li>每分钟收入；</li>
+<li>资源闲置；</li>
+<li>建筑投入；</li>
+<li>生产投入；</li>
+<li>科技投入；</li>
+<li>军事损失。</li>
+</ul>
+<hr />
+<h2 id="277-战争迷雾调试器">27.7 战争迷雾调试器</h2><p>可切换到任一玩家视角查看：</p>
+<ul>
+<li>当前可见区域；</li>
+<li>已探索区域；</li>
+<li>隐形单位；</li>
+<li>探测范围；</li>
+<li>最后已知信息；</li>
+<li>盟友共享视野；</li>
+<li>信息更新时间。</li>
+</ul>
+<hr />
+<h2 id="278-ai战略面板">27.8 AI战略面板</h2><p>显示：</p>
+<ul>
+<li>当前目标；</li>
+<li>资源预算；</li>
+<li>已知敌情；</li>
+<li>生产计划；</li>
+<li>进攻计划；</li>
+<li>防御需求；</li>
+<li>计划承诺；</li>
+<li>放弃条件；</li>
+<li>重新评估原因。</li>
+</ul>
+<hr />
+<h2 id="279-战斗时间线">27.9 战斗时间线</h2><p>记录：</p>
+<ul>
+<li>命令；</li>
+<li>生产；</li>
+<li>科技；</li>
+<li>资源；</li>
+<li>接敌；</li>
+<li>单位死亡；</li>
+<li>建筑摧毁；</li>
+<li>控制点；</li>
+<li>关键视野变化；</li>
+<li>胜负事件。</li>
+</ul>
+<hr />
+<h2 id="2710-失步差异工具">27.10 失步差异工具</h2><p>比较两个模拟中的：</p>
+<ul>
+<li>首个不同Tick；</li>
+<li>首个不同实体；</li>
+<li>位置；</li>
+<li>命令；</li>
+<li>路径；</li>
+<li>目标；</li>
+<li>资源；</li>
+<li>随机游标；</li>
+<li>生产进度；</li>
+<li>科技状态。</li>
+</ul>
+<hr />
+<h2 id="28-内容验证工具">28. 内容验证工具</h2><h2 id="281-地图连通性验证">28.1 地图连通性验证</h2><p>检查：</p>
+<ul>
+<li>各出生点；</li>
+<li>资源点；</li>
+<li>基地位置；</li>
+<li>不同移动类型；</li>
+<li>控制点；</li>
+<li>关键路线；</li>
+<li>狭窄通道；</li>
+<li>可建造区域。</li>
+</ul>
+<hr />
+<h2 id="282-建筑放置验证">28.2 建筑放置验证</h2><p>自动检查：</p>
+<ul>
+<li>建筑Footprint；</li>
+<li>坡度；</li>
+<li>导航影响；</li>
+<li>出生出口；</li>
+<li>工人施工位置；</li>
+<li>资源存放点；</li>
+<li>大型单位通行；</li>
+<li>城墙闭合规则。</li>
+</ul>
+<hr />
+<h2 id="283-生产依赖验证">28.3 生产依赖验证</h2><p>检查：</p>
+<ul>
+<li>所有单位具有合法生产建筑；</li>
+<li>所有建筑可通过科技解锁；</li>
+<li>科技前置无循环；</li>
+<li>资源类型存在；</li>
+<li>人口要求合法；</li>
+<li>不存在永远无法生产的单位。</li>
+</ul>
+<hr />
+<h2 id="284-ai自动比赛">28.4 AI自动比赛</h2><p>通过大量自动对局统计：</p>
+<ul>
+<li>胜率；</li>
+<li>比赛时长；</li>
+<li>资源曲线；</li>
+<li>扩张时间；</li>
+<li>首次进攻时间；</li>
+<li>兵种使用率；</li>
+<li>科技阶段；</li>
+<li>地图控制率；</li>
+<li>AI停滞率；</li>
+<li>路径失败率。</li>
+</ul>
+<hr />
+<h2 id="285-确定性回归测试">28.5 确定性回归测试</h2><p>在不同设备或构建中运行相同命令流，比较：</p>
+<ul>
+<li>状态哈希；</li>
+<li>单位位置；</li>
+<li>生产完成Tick；</li>
+<li>资源；</li>
+<li>战斗结果；</li>
+<li>胜负时间。</li>
+</ul>
+<hr />
+<h2 id="29-性能设计">29. 性能设计</h2><h2 id="291-分层更新频率">29.1 分层更新频率</h2><p>不同实体不必使用完全相同的高频更新。</p>
+<h3 id="高频">高频</h3><ul>
+<li>附近战斗；</li>
+<li>投射物；</li>
+<li>局部避障；</li>
+<li>技能。</li>
+</ul>
+<h3 id="中频">中频</h3><ul>
+<li>目标搜索；</li>
+<li>队形恢复；</li>
+<li>工人采集；</li>
+<li>生产进度。</li>
+</ul>
+<h3 id="低频">低频</h3><ul>
+<li>战略AI；</li>
+<li>远端单位；</li>
+<li>地图控制；</li>
+<li>经济评估。</li>
+</ul>
+<p>核心逻辑频率降级必须保持确定性和规则一致性。</p>
+<hr />
+<h2 id="292-空间索引">29.2 空间索引</h2><p>用于加速：</p>
+<ul>
+<li>感知；</li>
+<li>攻击目标；</li>
+<li>范围伤害；</li>
+<li>光环；</li>
+<li>局部避障；</li>
+<li>建筑放置；</li>
+<li>资源查询；</li>
+<li>控制区域。</li>
+</ul>
+<p>可以采用：</p>
+<ul>
+<li>网格；</li>
+<li>四叉树；</li>
+<li>空间哈希；</li>
+<li>导航区块；</li>
+<li>分层索引。</li>
+</ul>
+<hr />
+<h2 id="293-事件驱动">29.3 事件驱动</h2><p>以下状态不应持续全量扫描：</p>
+<ul>
+<li>资源节点枯竭；</li>
+<li>建筑完成；</li>
+<li>科技完成；</li>
+<li>单位进入视野；</li>
+<li>控制点改变；</li>
+<li>出生位置解除阻塞。</li>
+</ul>
+<hr />
+<h2 id="294-对象池">29.4 对象池</h2><p>适用于：</p>
+<ul>
+<li>投射物；</li>
+<li>特效；</li>
+<li>飘字；</li>
+<li>临时标记；</li>
+<li>表现单位；</li>
+<li>建筑施工特效。</li>
+</ul>
+<p>对象池实例不能作为逻辑实体ID。</p>
+<hr />
+<h2 id="295-表现降级">29.5 表现降级</h2><p>远处单位可以降低：</p>
+<ul>
+<li>动画频率；</li>
+<li>骨骼更新；</li>
+<li>粒子；</li>
+<li>音频；</li>
+<li>阴影；</li>
+<li>血条。</li>
+</ul>
+<p>但逻辑位置、生命、命令和战争迷雾必须正确。</p>
+<hr />
+<h2 id="30-可扩展点">30. 可扩展点</h2><h2 id="301-新单位">30.1 新单位</h2><p>新增单位主要提供：</p>
+<ul>
+<li>UnitDefinition；</li>
+<li>MovementProfile；</li>
+<li>WeaponSet；</li>
+<li>AbilitySet；</li>
+<li>CommandSet；</li>
+<li>AIHints；</li>
+<li>生产配置；</li>
+<li>表现资源。</li>
+</ul>
+<p>不应修改世界主循环。</p>
+<hr />
+<h2 id="302-新建筑">30.2 新建筑</h2><p>新增：</p>
+<ul>
+<li>BuildingDefinition；</li>
+<li>Footprint；</li>
+<li>放置规则；</li>
+<li>生产能力；</li>
+<li>科技能力；</li>
+<li>资源能力；</li>
+<li>视野；</li>
+<li>防御；</li>
+<li>表现。</li>
+</ul>
+<hr />
+<h2 id="303-新资源">30.3 新资源</h2><p>提供：</p>
+<ul>
+<li>ResourceDefinition；</li>
+<li>采集方式；</li>
+<li>存放规则；</li>
+<li>使用范围；</li>
+<li>UI；</li>
+<li>AI价值；</li>
+<li>地图生成规则。</li>
+</ul>
+<hr />
+<h2 id="304-新科技">30.4 新科技</h2><p>通过：</p>
+<ul>
+<li>前置条件；</li>
+<li>研究成本；</li>
+<li>修正器；</li>
+<li>解锁内容；</li>
+<li>排他组；</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="305-新命令">30.5 新命令</h2><p>新增命令需要提供：</p>
+<ul>
+<li>验证器；</li>
+<li>队列策略；</li>
+<li>行为执行器；</li>
+<li>失败策略；</li>
+<li>AI支持；</li>
+<li>UI交互；</li>
+<li>回放序列化。</li>
+</ul>
+<hr />
+<h2 id="306-新阵营">30.6 新阵营</h2><p>新阵营主要配置：</p>
+<ul>
+<li>单位；</li>
+<li>建筑；</li>
+<li>科技；</li>
+<li>资源规则；</li>
+<li>战术特色；</li>
+<li>AI策略；</li>
+<li>表现资源。</li>
+</ul>
+<p>所有阵营应复用统一的：</p>
+<ul>
+<li>命令；</li>
+<li>路径；</li>
+<li>战斗；</li>
+<li>经济；</li>
+<li>战争迷雾；</li>
+<li>联机；</li>
+</ul>
+<p>基础设施。</p>
+<hr />
+<h2 id="307-新胜利模式">30.7 新胜利模式</h2><p>可以通过RuleSet定义：</p>
+<ul>
+<li>摧毁基地；</li>
+<li>控制区域；</li>
+<li>达到分数；</li>
+<li>护送；</li>
+<li>生存；</li>
+<li>收集资源；</li>
+<li>限时占领；</li>
+<li>击杀关键单位。</li>
+</ul>
+<hr />
+<h2 id="31-玩家体验设计">31. 玩家体验设计</h2><h2 id="311-命令反馈必须及时">31.1 命令反馈必须及时</h2><p>玩家下令后应立即看到：</p>
+<ul>
+<li>命令标记；</li>
+<li>单位语音；</li>
+<li>路径方向；</li>
+<li>目标高亮；</li>
+<li>无法执行提示；</li>
+<li>实际响应单位数量。</li>
+</ul>
+<p>即使路径尚未计算完成，也应先确认命令已经被系统接收。</p>
+<hr />
+<h2 id="312-单位行为必须可解释">31.2 单位行为必须可解释</h2><p>玩家需要知道单位为什么：</p>
+<ul>
+<li>没有移动；</li>
+<li>没有攻击；</li>
+<li>放弃追击；</li>
+<li>绕了远路；</li>
+<li>停在通道；</li>
+<li>没有采集；</li>
+<li>没有生产；</li>
+<li>无法使用技能。</li>
+</ul>
+<p>复杂自治必须提供可解释反馈。</p>
+<hr />
+<h2 id="313-信息密度分层">31.3 信息密度分层</h2><p>默认界面优先展示：</p>
+<ul>
+<li>当前选择；</li>
+<li>资源；</li>
+<li>人口；</li>
+<li>小地图；</li>
+<li>生产；</li>
+<li>警报；</li>
+<li>当前任务。</li>
+</ul>
+<p>详细信息按需展开：</p>
+<ul>
+<li>伤害公式；</li>
+<li>目标评分；</li>
+<li>资源效率；</li>
+<li>科技修正；</li>
+<li>路径；</li>
+<li>战争迷雾状态。</li>
+</ul>
+<hr />
+<h2 id="314-警报系统">31.4 警报系统</h2><p>应根据重要度区分：</p>
+<ul>
+<li>基地遭到攻击；</li>
+<li>资源区遭到攻击；</li>
+<li>单位完成生产；</li>
+<li>科技完成；</li>
+<li>人口上限；</li>
+<li>工人空闲；</li>
+<li>建筑出口阻塞；</li>
+<li>控制点失守。</li>
+</ul>
+<p>警报过多会使玩家忽略真正重要的信息。</p>
+<hr />
+<h2 id="315-微操与宏观控制平衡">31.5 微操与宏观控制平衡</h2><p>高水平玩家可以通过：</p>
+<ul>
+<li>集火；</li>
+<li>拉扯；</li>
+<li>技能；</li>
+<li>阵型；</li>
+<li>侧翼；</li>
+<li>多线骚扰；</li>
+</ul>
+<p>提高效率。</p>
+<p>但普通玩家也应能够通过：</p>
+<ul>
+<li>合理兵种；</li>
+<li>经济；</li>
+<li>队形；</li>
+<li>AttackMove；</li>
+<li>自动施法策略；</li>
+</ul>
+<p>完成基本操作。</p>
+<p>游戏深度不应完全建立在高频重复点击上。</p>
+<hr />
+<h2 id="316-战争迷雾应提供可推理信息">31.6 战争迷雾应提供可推理信息</h2><p>即使看不到敌方，也可以通过：</p>
+<ul>
+<li>最后已知位置；</li>
+<li>声音；</li>
+<li>地图目标；</li>
+<li>资源点变化；</li>
+<li>建筑残骸；</li>
+<li>侦察失联；</li>
+<li>雷达信号；</li>
+</ul>
+<p>推测敌方行动。</p>
+<hr />
+<h2 id="317-失败反馈">31.7 失败反馈</h2><p>对局结束后可以展示：</p>
+<ul>
+<li>资源曲线；</li>
+<li>工人数量；</li>
+<li>军队价值；</li>
+<li>科技时间；</li>
+<li>地图控制；</li>
+<li>关键战斗；</li>
+<li>兵种交换；</li>
+<li>空闲生产时间；</li>
+<li>侦察信息；</li>
+<li>建筑损失。</li>
+</ul>
+<p>帮助玩家判断失败来自：</p>
+<ul>
+<li>经济；</li>
+<li>生产；</li>
+<li>科技；</li>
+<li>侦察；</li>
+<li>战术；</li>
+<li>注意力分配。</li>
+</ul>
+<hr />
+<h2 id="32-常见设计失败">32. 常见设计失败</h2><h2 id="321-单位需要持续人工纠正">32.1 单位需要持续人工纠正</h2><p>单位无法完成简单命令，玩家被迫反复点击。</p>
+<hr />
+<h2 id="322-单位自治替代玩家策略">32.2 单位自治替代玩家策略</h2><p>单位自动选择最优目标、技能和撤退，玩家只负责生产。</p>
+<hr />
+<h2 id="323-所有单位使用完整独立全图寻路">32.3 所有单位使用完整独立全图寻路</h2><p>单位数量增加后性能迅速崩溃。</p>
+<hr />
+<h2 id="324-队形只是视觉排列">32.4 队形只是视觉排列</h2><p>进入狭窄区域后队伍彻底堵塞，无法压缩或恢复。</p>
+<hr />
+<h2 id="325-工人收入是全局数字增长">32.5 工人收入是全局数字增长</h2><p>资源距离、运输和骚扰失去意义。</p>
+<hr />
+<h2 id="326-兵种只有数值差异">32.6 兵种只有数值差异</h2><p>所有单位最终只比较：</p>
+<ul>
+<li>生命；</li>
+<li>攻击；</li>
+<li>价格。</li>
+</ul>
+<p>兵种组合和反制失去意义。</p>
+<hr />
+<h2 id="327-战争迷雾只隐藏画面">32.7 战争迷雾只隐藏画面</h2><p>客户端仍然接收全部敌人数据，容易被外挂读取。</p>
+<hr />
+<h2 id="328-ai读取完整世界状态">32.8 AI读取完整世界状态</h2><p>AI无需侦察即可精确反制玩家生产。</p>
+<hr />
+<h2 id="329-ai每个tick重新制定战略">32.9 AI每个Tick重新制定战略</h2><p>导致部队来回移动、生产不断取消。</p>
+<hr />
+<h2 id="3210-建筑完成依赖动画事件">32.10 建筑完成依赖动画事件</h2><p>动画丢失或加速导致建筑无法启用。</p>
+<hr />
+<h2 id="3211-生产完成后单位生成在非法位置">32.11 生产完成后单位生成在非法位置</h2><p>建筑出口堵塞导致重叠、卡死或单位消失。</p>
+<hr />
+<h2 id="3212-命令和逻辑不确定">32.12 命令和逻辑不确定</h2><p>相同命令在不同机器上产生不同目标、路径或攻击顺序。</p>
+<hr />
+<h2 id="3213-警报数量过多">32.13 警报数量过多</h2><p>玩家持续收到低价值通知，忽略基地遭袭等关键事件。</p>
+<hr />
+<h2 id="3214-宏观决策被重复维护操作淹没">32.14 宏观决策被重复维护操作淹没</h2><p>玩家需要持续：</p>
+<ul>
+<li>重新分配工人；</li>
+<li>重新设置集结点；</li>
+<li>重复施放无决策技能；</li>
+<li>修正相同路径问题。</li>
+</ul>
+<hr />
+<h2 id="33-最小可行原型">33. 最小可行原型</h2><p>一个能够验证实时战略核心范式的最小原型可以包含：</p>
+<h3 id="地图">地图</h3><ul>
+<li>1张双人地图；</li>
+<li>2个主基地出生点；</li>
+<li>4个基础资源区；</li>
+<li>2个高价值资源区；</li>
+<li>1个中央控制点；</li>
+<li>2条主进攻路线；</li>
+<li>1条侧翼路线。</li>
+</ul>
+<h3 id="资源">资源</h3><ul>
+<li>基础资源；</li>
+<li>高级资源；</li>
+<li>人口容量。</li>
+</ul>
+<h3 id="单位">单位</h3><ul>
+<li>工人；</li>
+<li>近战单位；</li>
+<li>远程单位；</li>
+<li>反重甲单位；</li>
+<li>侦察单位；</li>
+<li>支援单位。</li>
+</ul>
+<h3 id="建筑">建筑</h3><ul>
+<li>主基地；</li>
+<li>资源存放建筑；</li>
+<li>基础兵营；</li>
+<li>高级生产建筑；</li>
+<li>科技建筑；</li>
+<li>防御塔。</li>
+</ul>
+<h3 id="科技">科技</h3><ul>
+<li>基础攻击升级；</li>
+<li>基础防御升级；</li>
+<li>反重甲单位解锁；</li>
+<li>高级视野升级。</li>
+</ul>
+<h3 id="命令">命令</h3><ul>
+<li>移动；</li>
+<li>攻击；</li>
+<li>攻击移动；</li>
+<li>巡逻；</li>
+<li>停止；</li>
+<li>采集；</li>
+<li>建造；</li>
+<li>生产；</li>
+<li>研究；</li>
+<li>集结点；</li>
+<li>控制组。</li>
+</ul>
+<h3 id="系统">系统</h3><ul>
+<li>固定步长；</li>
+<li>战争迷雾；</li>
+<li>资源采集；</li>
+<li>建造；</li>
+<li>生产；</li>
+<li>科技；</li>
+<li>队形；</li>
+<li>兵种克制；</li>
+<li>战略AI；</li>
+<li>回放；</li>
+<li>状态哈希。</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li>世界状态查看器；</li>
+<li>命令检查器；</li>
+<li>导航查看器；</li>
+<li>队形查看器；</li>
+<li>目标选择解释器；</li>
+<li>经济曲线；</li>
+<li>战争迷雾视图；</li>
+<li>AI战略面板；</li>
+<li>失步差异工具。</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li>单位是否能可靠完成玩家命令；</li>
+<li>群体是否能通过狭窄区域而不永久堵塞；</li>
+<li>资源距离是否真实影响经济；</li>
+<li>侦察是否能够改变生产决策；</li>
+<li>兵种克制是否要求玩家调整组合；</li>
+<li>AI是否需要侦察而非读取全局状态；</li>
+<li>相同命令流是否能够确定性回放；</li>
+<li>玩家是否能理解单位不执行命令的原因。</li>
+</ul>
+<hr />
+<h2 id="34-推荐实施顺序">34. 推荐实施顺序</h2><p>第一阶段：固定步长世界与实体状态
+第二阶段：单位选择、命令和命令队列
+第三阶段：基础导航、移动和局部避障
+第四阶段：队形和群体移动
+第五阶段：感知、目标选择和基础战斗
+第六阶段：战争迷雾和玩家信息投影
+第七阶段：工人、资源和运输
+第八阶段：建筑放置和施工
+第九阶段：生产、人口和集结点
+第十阶段：科技、升级和兵种克制
+第十一阶段：战略AI和战术AI
+第十二阶段：联机同步、回放和确定性验证</p>
+<p>不建议先制作大量阵营和单位。</p>
+<p>如果以下基础设施尚未稳定：</p>
+<ul>
+<li>命令；</li>
+<li>路径；</li>
+<li>群体移动；</li>
+<li>战争迷雾；</li>
+<li>资源事务；</li>
+<li>确定性；</li>
+</ul>
+<p>内容越多，后续修复和联机同步成本越高。</p>
+<hr />
+<h2 id="35-架构验收标准">35. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li>世界以固定逻辑Tick推进；</li>
+<li>渲染帧率不会改变比赛结果；</li>
+<li>玩家通过命令而非直接修改单位状态；</li>
+<li>单位能够完成基础移动、攻击和工作命令；</li>
+<li>命令具有替换、追加、中断和失败策略；</li>
+<li>群体移动支持队形分配、压缩和恢复；</li>
+<li>路径规划和局部避障职责分离；</li>
+<li>工人采集包含真实移动和交付过程；</li>
+<li>建筑放置在资源扣除前完成合法性验证；</li>
+<li>单位生产拥有资源和人口预留；</li>
+<li>生产出口阻塞不会复制或丢失单位；</li>
+<li>战争迷雾生成每名玩家独立信息投影；</li>
+<li>AI根据自身已知信息规划；</li>
+<li>战略AI具有预算和计划承诺；</li>
+<li>兵种差异包含射程、机动、目标和克制关系；</li>
+<li>表现失败不会影响攻击、生产和资源结果；</li>
+<li>相同命令和随机流可以确定性回放；</li>
+<li>状态哈希能够检测模拟失步；</li>
+<li>调试工具能够解释单位的命令、路径和目标选择；</li>
+<li>新单位通常不需要修改世界主循环；</li>
+<li>新阵营能够复用命令、经济、战斗和战争迷雾基础设施。</li>
+</ul>
+<hr />
+<h2 id="36-可迁移到其他游戏的设计思想">36. 可迁移到其他游戏的设计思想</h2><h2 id="361-高层命令与局部自治分离">36.1 高层命令与局部自治分离</h2><p>可迁移到：</p>
+<ul>
+<li>AI队友；</li>
+<li>聚落模拟；</li>
+<li>战术游戏；</li>
+<li>自动战斗；</li>
+<li>任务代理。</li>
+</ul>
+<p>玩家表达目标，执行者负责局部实现。</p>
+<hr />
+<h2 id="362-命令队列是持续行为的标准接口">36.2 命令队列是持续行为的标准接口</h2><p>可迁移到：</p>
+<ul>
+<li>单位AI；</li>
+<li>工作流；</li>
+<li>制造；</li>
+<li>NPC日程；</li>
+<li>服务端任务。</li>
+</ul>
+<p>命令需要：</p>
+<ul>
+<li>状态；</li>
+<li>中断；</li>
+<li>失败；</li>
+<li>完成；</li>
+<li>替换；</li>
+<li>追加。</li>
+</ul>
+<hr />
+<h2 id="363-玩家注意力是一种系统资源">36.3 玩家注意力是一种系统资源</h2><p>可迁移到：</p>
+<ul>
+<li>经营游戏；</li>
+<li>多线战斗；</li>
+<li>团队管理；</li>
+<li>生存模拟；</li>
+<li>多角色控制。</li>
+</ul>
+<p>系统应减少没有决策价值的重复操作，将注意力留给真正的取舍。</p>
+<hr />
+<h2 id="364-群体行为需要层级规划">36.4 群体行为需要层级规划</h2><p>可迁移到：</p>
+<ul>
+<li>人群模拟；</li>
+<li>队伍移动；</li>
+<li>交通；</li>
+<li>编队飞行；</li>
+<li>大规模NPC。</li>
+</ul>
+<p>先规划群体，再处理个体局部避障，比每个个体独立规划完整行为更稳定。</p>
+<hr />
+<h2 id="365-经济必须具有空间成本">36.5 经济必须具有空间成本</h2><p>可迁移到：</p>
+<ul>
+<li>物流；</li>
+<li>生存；</li>
+<li>大战略；</li>
+<li>聚落；</li>
+<li>工厂。</li>
+</ul>
+<p>资源不应只是一组全局数字，还应考虑：</p>
+<ul>
+<li>位置；</li>
+<li>路线；</li>
+<li>运输；</li>
+<li>暴露；</li>
+<li>控制权。</li>
+</ul>
+<hr />
+<h2 id="366-信息投影是多人策略的基础设施">36.6 信息投影是多人策略的基础设施</h2><p>可迁移到：</p>
+<ul>
+<li>战争迷雾；</li>
+<li>社交推理；</li>
+<li>潜行；</li>
+<li>隐藏任务；</li>
+<li>非对称对抗。</li>
+</ul>
+<p>服务端维护真实状态，为不同参与者生成不同视图。</p>
+<hr />
+<h2 id="367-ai需要预算而不是模块自由竞争">36.7 AI需要预算而不是模块自由竞争</h2><p>可迁移到：</p>
+<ul>
+<li>国家AI；</li>
+<li>经营AI；</li>
+<li>殖民地AI；</li>
+<li>自动生产；</li>
+<li>项目管理模拟。</li>
+</ul>
+<p>各子系统不能各自无限申请资源，需要先进行全局预算分配。</p>
+<hr />
+<h2 id="368-计划需要承诺与放弃条件">36.8 计划需要承诺与放弃条件</h2><p>可迁移到：</p>
+<ul>
+<li>战略AI；</li>
+<li>角色AI；</li>
+<li>自动化流程；</li>
+<li>生产调度；</li>
+<li>长期任务。</li>
+</ul>
+<p>没有承诺的计划会反复变化，无法产生完整行为。</p>
+<hr />
+<h2 id="369-预留机制保护资源一致性">36.9 预留机制保护资源一致性</h2><p>可迁移到：</p>
+<ul>
+<li>生产队列；</li>
+<li>建筑施工；</li>
+<li>制造；</li>
+<li>库存；</li>
+<li>商店；</li>
+<li>工作任务。</li>
+</ul>
+<p>先预留，再提交，失败时释放。</p>
+<hr />
+<h2 id="3610-确定性回放可以同时服务玩家和开发">36.10 确定性回放可以同时服务玩家和开发</h2><p>可迁移到：</p>
+<ul>
+<li>竞技游戏；</li>
+<li>自动测试；</li>
+<li>Bug复现；</li>
+<li>AI评估；</li>
+<li>作弊审计；</li>
+<li>比赛观战。</li>
+</ul>
+<p>保存命令和随机状态通常比保存完整世界视频更高效。</p>
+<hr />
+<h2 id="37-本次防重记录">37. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>实时战略游戏。</p>
+<p>常见英文名称：</p>
+<ul>
+<li>Real-Time Strategy；</li>
+<li>RTS；</li>
+<li>Base-Building RTS；</li>
+<li>Tactical RTS；</li>
+<li>Economy RTS。</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>在持续推进的权威世界中，玩家通过选择、控制组和命令队列向大量单位与建筑提交战略意图；运行时由单位自治、分层路径规划、群体队形、资源采集、生产建设、战斗系统和战争迷雾共同将命令转化为群体行为，并通过确定性同步和回放保证比赛结果可验证。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li>世界时间持续推进；</li>
+<li>玩家同时控制大量单位与建筑；</li>
+<li>玩家通过命令而非逐帧控制单位；</li>
+<li>单位拥有局部自治和命令队列；</li>
+<li>群体移动需要队形、路径和局部避障；</li>
+<li>资源采集包含空间和运输成本；</li>
+<li>建筑、生产、科技和军事形成实时闭环；</li>
+<li>侦察与战争迷雾决定玩家能够使用的信息；</li>
+<li>兵种组合和反制影响生产决策；</li>
+<li>战略AI需要同时处理经济、生产、侦察和战争；</li>
+<li>玩家注意力是重要的隐性资源；</li>
+<li>联机和回放依赖固定步长、命令流和状态一致性。</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li>固定步长RTS模拟；</li>
+<li>单位选择与控制组；</li>
+<li>命令意图与命令队列；</li>
+<li>分层路径规划；</li>
+<li>群体队形和局部避障；</li>
+<li>自动目标选择；</li>
+<li>攻击移动；</li>
+<li>资源采集和交付；</li>
+<li>建筑放置与施工；</li>
+<li>单位生产队列；</li>
+<li>科技与升级；</li>
+<li>战争迷雾；</li>
+<li>隐形与侦测；</li>
+<li>地图控制；</li>
+<li>战略AI与资源预算；</li>
+<li>输入锁步；</li>
+<li>状态哈希；</li>
+<li>确定性回放。</li>
+</ul>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

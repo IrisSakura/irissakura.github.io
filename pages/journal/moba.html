@@ -1,0 +1,4637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/moba.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="MOBA / 线路式英雄团队竞技游戏 | Sakura Design Journal">
+    <meta property="og:description" content="兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/moba.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-moba.png">
+    <meta property="og:image:alt" content="MOBA / 线路式英雄团队竞技游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MOBA / 线路式英雄团队竞技游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-moba.png">
+    <meta name="twitter:image:alt" content="MOBA / 线路式英雄团队竞技游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"MOBA / 线路式英雄团队竞技游戏 | Sakura Design Journal","description":"兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。","url":"https://irissakura.github.io/pages/journal/moba.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"MOBA / 线路式英雄团队竞技游戏","image":"https://irissakura.github.io/assets/social/pages-journal-moba.png","dateModified":"2026-08-12","about":["moba","multiplayer","online"]}</script>
+    <!-- site-meta:end -->
+    <title>MOBA / 线路式英雄团队竞技游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-moba"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>MOBA / 线路式英雄团队竞技游戏</h1><p>兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。</p><div class="note-tags"><span>moba</span><span>multiplayer</span><span>online</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="1-文档定位">1. 文档定位</h2><p>MOBA 是一种以固定团队、长期单局、英雄角色、周期兵线、局内经济、战争迷雾、地图目标和基地摧毁为核心的多人竞技游戏类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>地图持续生成沿固定线路自动推进的兵线，兵线同时承担资源供给、视野载体、建筑压力和时间节拍职责；玩家控制具有独立技能和局内成长曲线的英雄，通过对线、补刀、游走、击杀、中立资源争夺和团队协作获得阶段性优势，再将这种临时优势转换为防御塔、地图视野、中立目标、兵线位置或最终基地推进等更持久的地图状态。</p>
+</blockquote>
+<p>一场 MOBA 并不是：</p>
+<p>“双方英雄不断打架，最后强的一边获胜。”</p>
+<p>其核心更接近：</p>
+<p>兵线到达
+→ 玩家获得局部资源机会
+→ 双方争夺空间和补刀权
+→ 一方制造血量、视野或人数优势
+→ 优势方获得短暂行动窗口
+→ 选择推塔、打野区资源、击杀大型目标、回城补给或换线
+→ 地图结构发生变化
+→ 下一轮兵线到达
+→ 双方重新评估局势</p>
+<p>因此，MOBA 真正反复运行的是：</p>
+<blockquote>
+<p><strong>局部优势 → 时间窗口 → 地图资源转换 → 新局面。</strong></p>
+</blockquote>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>一个典型 MOBA 对局可以抽象为：</p>
+<ol>
+<li><p>两个或多个阵营进入共享地图；</p>
+</li>
+<li><p>玩家选择或分配英雄；</p>
+</li>
+<li><p>每个英雄获得初始等级、技能和少量资源；</p>
+</li>
+<li><p>基地产生周期性兵线；</p>
+</li>
+<li><p>兵线沿一条或多条线路自动推进；</p>
+</li>
+<li><p>玩家进入不同路线或野区；</p>
+</li>
+<li><p>通过击杀兵线、野怪和敌方英雄获得经验与货币；</p>
+</li>
+<li><p>英雄升级并购买局内装备；</p>
+</li>
+<li><p>玩家通过游走、伏击和抱团制造局部人数差；</p>
+</li>
+<li><p>击杀或逼退敌方英雄后形成短暂行动窗口；</p>
+</li>
+<li><p>团队选择攻击建筑、中立目标、野区资源或深层视野；</p>
+</li>
+<li><p>防御塔被摧毁后地图安全边界发生变化；</p>
+</li>
+<li><p>中立大型目标提供团队级临时或永久强化；</p>
+</li>
+<li><p>兵线逐步深入敌方阵营；</p>
+</li>
+<li><p>英雄死亡后的复活时间逐渐增加；</p>
+</li>
+<li><p>后期一次团战可能产生足以结束比赛的推进窗口；</p>
+</li>
+<li><p>一方摧毁核心建筑或满足特殊胜利条件；</p>
+</li>
+<li><p>服务器提交完整比赛结果。</p>
+</li>
+</ol>
+<p>该类型中的主要资源包括：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>法力或技能资源；</p>
+</li>
+<li><p>技能冷却；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>装备栏；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>野区资源；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>召唤师技能；</p>
+</li>
+<li><p>终极技能；</p>
+</li>
+<li><p>复活时间；</p>
+</li>
+<li><p>路线优先权；</p>
+</li>
+<li><p>地图移动时间；</p>
+</li>
+<li><p>队伍人数状态。</p>
+</li>
+</ul>
+<p>其中最重要但最容易被低估的资源是：</p>
+<blockquote>
+<p><strong>可行动时间窗口。</strong></p>
+</blockquote>
+<p>例如敌方核心角色死亡 35 秒，并不只是：</p>
+<p>“对方少一个英雄。”</p>
+<p>而意味着：</p>
+<p>你的团队在未来约 35 秒中获得了一段：</p>
+<ul>
+<li><p>更安全的地图移动时间；</p>
+</li>
+<li><p>更高概率的中立目标控制权；</p>
+</li>
+<li><p>更强的推塔能力；</p>
+</li>
+<li><p>更深的视野布置机会；</p>
+</li>
+<li><p>更安全的回城和资源重组机会。</p>
+</li>
+</ul>
+<p>因此 MOBA 可以理解为：</p>
+<blockquote>
+<p>一种持续争夺“谁拥有下一段地图行动权”的实时策略游戏。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>MOBA 最具代表性的设计范式由十个核心支柱构成。</p>
+<hr />
+<h3 id="31-兵线是整场比赛的基础时钟">3.1 兵线是整场比赛的基础时钟</h3><p>兵线不是普通 AI 小怪。</p>
+<p>兵线同时承担：</p>
+<ul>
+<li><p>固定经济来源；</p>
+</li>
+<li><p>固定经验来源；</p>
+</li>
+<li><p>防御塔攻击目标；</p>
+</li>
+<li><p>推线压力；</p>
+</li>
+<li><p>视野推进；</p>
+</li>
+<li><p>建筑攻击；</p>
+</li>
+<li><p>路线时间节拍；</p>
+</li>
+<li><p>玩家转线机会成本。</p>
+</li>
+</ul>
+<p>典型兵线循环为：</p>
+<p>基地生成兵线
+→ 沿 LanePath 推进
+→ 双方兵线接触
+→ 形成局部战斗区域
+→ 英雄获得补刀和经验机会
+→ 一方兵线剩余更多单位
+→ 兵线继续向敌方移动
+→ 接触下一建筑或下一批兵线</p>
+<p>因此兵线是一种：</p>
+<blockquote>
+<p><strong>自动运行的周期压力系统。</strong></p>
+</blockquote>
+<p>即使所有玩家都停止行动，兵线仍会不断改变地图状态。</p>
+<hr />
+<h3 id="32-线路是资源空间不只是道路">3.2 线路是资源空间，不只是道路</h3><p>一条线路同时意味着：</p>
+<ul>
+<li><p>周期经验；</p>
+</li>
+<li><p>周期金钱；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>推进方向；</p>
+</li>
+<li><p>回城距离；</p>
+</li>
+<li><p>野区入口；</p>
+</li>
+<li><p>支援路线；</p>
+</li>
+<li><p>被伏击风险。</p>
+</li>
+</ul>
+<p>控制线路通常意味着：</p>
+<ul>
+<li><p>能够安全获得兵线资源；</p>
+</li>
+<li><p>能够限制敌方获取资源；</p>
+</li>
+<li><p>能够更早离开线路支援其他区域；</p>
+</li>
+<li><p>能够迫使敌方英雄留在线上处理兵线。</p>
+</li>
+</ul>
+<p>因此所谓“线权”可以抽象为：</p>
+<blockquote>
+<p>当前兵线状态允许哪一方更早离开路线而不付出严重经济或建筑损失。</p>
+</blockquote>
+<hr />
+<h3 id="33-英雄成长是局内相对且时机敏感的">3.3 英雄成长是局内、相对且时机敏感的</h3><p>英雄成长主要来自：</p>
+<ul>
+<li><p>等级；</p>
+</li>
+<li><p>技能等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>临时增益；</p>
+</li>
+<li><p>特殊目标奖励。</p>
+</li>
+</ul>
+<p>关键问题不是：</p>
+<p>“我的英雄现在有多强？”</p>
+<p>而是：</p>
+<blockquote>
+<p>“我的英雄相对于当前时间点和敌方英雄有多强？”</p>
+</blockquote>
+<p>例如某英雄可能：</p>
+<ul>
+<li><p>一级极强；</p>
+</li>
+<li><p>六级获得关键终极技能；</p>
+</li>
+<li><p>第一件装备形成强势期；</p>
+</li>
+<li><p>三件装备后进入完全不同的战斗模式；</p>
+</li>
+<li><p>后期成长低于其他英雄。</p>
+</li>
+</ul>
+<p>因此每个英雄都应存在：</p>
+<p><strong>Power Spike / 强势窗口模型。</strong></p>
+<hr />
+<h3 id="34-击杀本身不是终点而是资源转换起点">3.4 击杀本身不是终点，而是资源转换起点</h3><p>击杀敌方英雄获得：</p>
+<ul>
+<li><p>直接金钱；</p>
+</li>
+<li><p>助攻收益；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>对方死亡时间。</p>
+</li>
+</ul>
+<p>但击杀真正重要的部分通常是：</p>
+<blockquote>
+<p>对方暂时从地图上消失。</p>
+</blockquote>
+<p>随后团队可以利用人数差：</p>
+<ul>
+<li><p>推塔；</p>
+</li>
+<li><p>入侵野区；</p>
+</li>
+<li><p>控制中立目标；</p>
+</li>
+<li><p>深入布置视野；</p>
+</li>
+<li><p>抢夺兵线；</p>
+</li>
+<li><p>回城；</p>
+</li>
+<li><p>换线。</p>
+</li>
+</ul>
+<p>如果击杀没有进一步产生地图收益，那么击杀收益通常只是短期经济优势。</p>
+<p>因此需要明确区分：</p>
+<p><strong>Combat Advantage</strong></p>
+<p>与：</p>
+<p><strong>Map Conversion</strong></p>
+<hr />
+<h3 id="35-人数差是最重要的临时战斗状态之一">3.5 人数差是最重要的临时战斗状态之一</h3><p>MOBA 中很多战斗并不是公平人数交战。</p>
+<p>例如：</p>
+<p>2v1
+3v2
+4v3
+5v4</p>
+<p>往往来自：</p>
+<ul>
+<li><p>游走；</p>
+</li>
+<li><p>传送；</p>
+</li>
+<li><p>视野缺失；</p>
+</li>
+<li><p>复活时间；</p>
+</li>
+<li><p>回城时间；</p>
+</li>
+<li><p>兵线牵制；</p>
+</li>
+<li><p>移动速度；</p>
+</li>
+<li><p>地图目标。</p>
+</li>
+</ul>
+<p>团队的一个重要战略目标是：</p>
+<blockquote>
+<p>在有限时间和空间中制造局部人数差。</p>
+</blockquote>
+<p>因此地图系统必须支持：</p>
+<ul>
+<li><p>支援路径；</p>
+</li>
+<li><p>到达时间预测；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>传送；</p>
+</li>
+<li><p>位移；</p>
+</li>
+<li><p>信号沟通。</p>
+</li>
+</ul>
+<hr />
+<h3 id="36-视野决定哪些行动可以安全执行">3.6 视野决定“哪些行动可以安全执行”</h3><p>战争迷雾并不只是隐藏敌人。</p>
+<p>它决定玩家是否能判断：</p>
+<ul>
+<li><p>是否可以推进兵线；</p>
+</li>
+<li><p>是否可以进入野区；</p>
+</li>
+<li><p>是否可以攻击大型目标；</p>
+</li>
+<li><p>是否可能被埋伏；</p>
+</li>
+<li><p>哪个敌人正在其他路线出现；</p>
+</li>
+<li><p>当前团战是否真的形成人数优势。</p>
+</li>
+</ul>
+<p>可以将视野理解为：</p>
+<blockquote>
+<p><strong>降低行动不确定性的资源。</strong></p>
+</blockquote>
+<p>视野优势不会直接造成伤害，但能够提高：</p>
+<ul>
+<li><p>决策成功率；</p>
+</li>
+<li><p>埋伏成功率；</p>
+</li>
+<li><p>目标控制率；</p>
+</li>
+<li><p>逃生率；</p>
+</li>
+<li><p>资源效率。</p>
+</li>
+</ul>
+<hr />
+<h3 id="37-防御塔是地图安全边界而不仅是建筑生命值">3.7 防御塔是地图安全边界，而不仅是建筑生命值</h3><p>防御塔承担：</p>
+<ul>
+<li><p>攻击敌人；</p>
+</li>
+<li><p>保护兵线；</p>
+</li>
+<li><p>保护英雄；</p>
+</li>
+<li><p>提供视野；</p>
+</li>
+<li><p>定义安全区域；</p>
+</li>
+<li><p>延缓推进；</p>
+</li>
+<li><p>限制敌方进入。</p>
+</li>
+</ul>
+<p>防御塔被摧毁之后，真正改变的是：</p>
+<ul>
+<li><p>可安全站位区域；</p>
+</li>
+<li><p>野区入口安全性；</p>
+</li>
+<li><p>兵线推进深度；</p>
+</li>
+<li><p>回城路线；</p>
+</li>
+<li><p>视野布置边界。</p>
+</li>
+</ul>
+<p>因此：</p>
+<blockquote>
+<p>摧毁建筑是在永久修改地图的风险结构。</p>
+</blockquote>
+<hr />
+<h3 id="38-中立大型目标用于把团队优势放大成全局状态">3.8 中立大型目标用于把团队优势放大成全局状态</h3><p>中立目标可以提供：</p>
+<ul>
+<li><p>团队经济；</p>
+</li>
+<li><p>团队经验；</p>
+</li>
+<li><p>临时属性；</p>
+</li>
+<li><p>强化兵线；</p>
+</li>
+<li><p>推塔能力；</p>
+</li>
+<li><p>地图效果；</p>
+</li>
+<li><p>特殊复活或增益；</p>
+</li>
+<li><p>最终推进能力。</p>
+</li>
+</ul>
+<p>中立目标的核心职责是：</p>
+<blockquote>
+<p>让团队能够将一次局部优势转化为更大范围的全局优势。</p>
+</blockquote>
+<p>如果中立目标只是：</p>
+<p>“击杀一个高生命 Boss 获得一些金币”</p>
+<p>其战略价值会非常有限。</p>
+<hr />
+<h3 id="39-死亡是一种时间惩罚">3.9 死亡是一种时间惩罚</h3><p>英雄死亡通常不会永久失去角色。</p>
+<p>其主要损失包括：</p>
+<ul>
+<li><p>当前地图存在权；</p>
+</li>
+<li><p>兵线经验；</p>
+</li>
+<li><p>兵线金钱；</p>
+</li>
+<li><p>中立目标控制权；</p>
+</li>
+<li><p>建筑防守能力；</p>
+</li>
+<li><p>队伍人数；</p>
+</li>
+<li><p>节奏。</p>
+</li>
+</ul>
+<p>因此死亡可以抽象为：</p>
+<blockquote>
+<p><strong>暂时冻结该玩家的地图行动能力。</strong></p>
+</blockquote>
+<p>随着游戏推进，复活时间增加，会导致：</p>
+<p>早期死亡：</p>
+<p>丢失少量资源</p>
+<p>后期死亡：</p>
+<p>可能直接失去大型目标、基地甚至整场比赛。</p>
+<hr />
+<h3 id="310-比赛必须允许优势积累但不能过早进入确定结局">3.10 比赛必须允许优势积累，但不能过早进入确定结局</h3><p>MOBA 天然具有滚雪球：</p>
+<p>击杀
+→ 更多金钱
+→ 更强装备
+→ 更容易击杀
+→ 更多建筑
+→ 更大地图控制
+→ 更多资源</p>
+<p>如果没有任何负反馈，比赛可能在前期就事实上结束。</p>
+<p>但如果翻盘机制过强：</p>
+<p>领先方的优势又会失去意义。</p>
+<p>因此系统需要在：</p>
+<p><strong>Reward the Lead</strong></p>
+<p>和：</p>
+<p><strong>Preserve Comeback Space</strong></p>
+<p>之间保持平衡。</p>
+<p>常见机制包括：</p>
+<ul>
+<li><p>连杀赏金；</p>
+</li>
+<li><p>终结奖励；</p>
+</li>
+<li><p>防御塔资源；</p>
+</li>
+<li><p>高地防守优势；</p>
+</li>
+<li><p>大型目标争夺风险；</p>
+</li>
+<li><p>后期复活时间；</p>
+</li>
+<li><p>兵线推进距离；</p>
+</li>
+<li><p>装备槽上限。</p>
+</li>
+</ul>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h3 id="41-与实时战略游戏的区别">4.1 与实时战略游戏的区别</h3><p>实时战略通常：</p>
+<ul>
+<li><p>同时控制大量单位；</p>
+</li>
+<li><p>建设生产设施；</p>
+</li>
+<li><p>采集资源；</p>
+</li>
+<li><p>生产军队；</p>
+</li>
+<li><p>玩家承担宏观与微观命令。</p>
+</li>
+</ul>
+<p>MOBA 通常：</p>
+<ul>
+<li><p>每位玩家主要控制一个英雄；</p>
+</li>
+<li><p>普通兵线自动生成；</p>
+</li>
+<li><p>局内资源用于英雄成长；</p>
+</li>
+<li><p>团队依靠多名独立玩家协作；</p>
+</li>
+<li><p>建筑通常不可主动建造；</p>
+</li>
+<li><p>兵线承担自动推进职责。</p>
+</li>
+</ul>
+<hr />
+<h3 id="42-与英雄射击游戏的区别">4.2 与英雄射击游戏的区别</h3><p>英雄射击主要强调：</p>
+<ul>
+<li><p>FPS/TPS 瞄准；</p>
+</li>
+<li><p>小地图或竞技场；</p>
+</li>
+<li><p>短复活；</p>
+</li>
+<li><p>据点或护送；</p>
+</li>
+<li><p>技能冷却。</p>
+</li>
+</ul>
+<p>MOBA 更强调：</p>
+<ul>
+<li><p>兵线；</p>
+</li>
+<li><p>局内等级；</p>
+</li>
+<li><p>局内装备；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>野区；</p>
+</li>
+<li><p>长期地图推进；</p>
+</li>
+<li><p>资源滚雪球。</p>
+</li>
+</ul>
+<hr />
+<h3 id="43-与格斗游戏的区别">4.3 与格斗游戏的区别</h3><p>格斗游戏主要围绕：</p>
+<ul>
+<li><p>单一对手；</p>
+</li>
+<li><p>帧优势；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>连段；</p>
+</li>
+<li><p>对局知识。</p>
+</li>
+</ul>
+<p>MOBA 的核心则是：</p>
+<ul>
+<li><p>多玩家；</p>
+</li>
+<li><p>地图；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>多位置；</p>
+</li>
+<li><p>局内经济；</p>
+</li>
+<li><p>团队资源。</p>
+</li>
+</ul>
+<hr />
+<h3 id="44-与塔防游戏的区别">4.4 与塔防游戏的区别</h3><p>塔防中的兵线通常：</p>
+<ul>
+<li><p>玩家负责防守；</p>
+</li>
+<li><p>敌人是威胁流；</p>
+</li>
+<li><p>防御塔自动攻击。</p>
+</li>
+</ul>
+<p>MOBA 中双方都拥有：</p>
+<ul>
+<li><p>兵线；</p>
+</li>
+<li><p>英雄；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>主动推进能力。</p>
+</li>
+</ul>
+<p>兵线不是敌方专属威胁，而是双方共享的战略节拍。</p>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十八个核心域：</p>
+<ol>
+<li><p>MatchLifecycleSystem；</p>
+</li>
+<li><p>AuthoritativeSimulationSystem；</p>
+</li>
+<li><p>TeamFactionSystem；</p>
+</li>
+<li><p>HeroRuntimeSystem；</p>
+</li>
+<li><p>AbilityExecutionSystem；</p>
+</li>
+<li><p>LaneTopologySystem；</p>
+</li>
+<li><p>MinionWaveSystem；</p>
+</li>
+<li><p>StructureSystem；</p>
+</li>
+<li><p>CombatResolutionSystem；</p>
+</li>
+<li><p>GoldExperienceSystem；</p>
+</li>
+<li><p>ItemInventorySystem；</p>
+</li>
+<li><p>VisionFogOfWarSystem；</p>
+</li>
+<li><p>JungleNeutralSystem；</p>
+</li>
+<li><p>ObjectiveSystem；</p>
+</li>
+<li><p>DeathRespawnSystem；</p>
+</li>
+<li><p>TeamCommunicationSystem；</p>
+</li>
+<li><p>NetworkingAntiCheatSystem；</p>
+</li>
+<li><p>ReplayTelemetryDebugSystem。</p>
+</li>
+</ol>
+<p>整体循环：</p>
+<p>创建比赛
+→ 初始化英雄与地图
+→ 生成首批兵线
+→ 英雄进入线路和野区
+→ 获得经验与经济
+→ 技能和装备逐步形成
+→ 发生游走、伏击和小规模战斗
+→ 形成局部人数差
+→ 击杀或逼退敌人
+→ 攻击建筑或中立目标
+→ 地图安全边界改变
+→ 新一轮兵线到来
+→ 团队重新分配路线
+→ 进入中期团战和资源争夺
+→ 高地结构被破坏
+→ 超级兵线或高级推进状态出现
+→ 最终基地被摧毁
+→ MatchResult 原子提交</p>
+<hr />
+<h2 id="6-比赛生命周期">6. 比赛生命周期</h2><h3 id="61-matchdefinition">6.1 MatchDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>MatchModeId；</p>
+</li>
+<li><p>TeamCount；</p>
+</li>
+<li><p>PlayersPerTeam；</p>
+</li>
+<li><p>MapDefinitionId；</p>
+</li>
+<li><p>StartingGold；</p>
+</li>
+<li><p>StartingLevel；</p>
+</li>
+<li><p>HeroSelectionRules；</p>
+</li>
+<li><p>ItemRules；</p>
+</li>
+<li><p>RespawnRules；</p>
+</li>
+<li><p>ObjectiveRules；</p>
+</li>
+<li><p>VictoryConditions；</p>
+</li>
+<li><p>MatchTimeLimit；</p>
+</li>
+<li><p>SurrenderRules；</p>
+</li>
+<li><p>DisconnectRules；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="62-matchruntimestate">6.2 MatchRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>TeamStates；</p>
+</li>
+<li><p>HeroStates；</p>
+</li>
+<li><p>LaneStates；</p>
+</li>
+<li><p>MinionStates；</p>
+</li>
+<li><p>StructureStates；</p>
+</li>
+<li><p>NeutralStates；</p>
+</li>
+<li><p>ObjectiveStates；</p>
+</li>
+<li><p>VisionStates；</p>
+</li>
+<li><p>MatchTimer；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="63-matchphase">6.3 MatchPhase</h3><p>推荐：</p>
+<ul>
+<li><p>Creating；</p>
+</li>
+<li><p>HeroSelection；</p>
+</li>
+<li><p>Loading；</p>
+</li>
+<li><p>Countdown；</p>
+</li>
+<li><p>EarlyGame；</p>
+</li>
+<li><p>MidGame；</p>
+</li>
+<li><p>LateGame；</p>
+</li>
+<li><p>Ending；</p>
+</li>
+<li><p>Settling；</p>
+</li>
+<li><p>Completed；</p>
+</li>
+<li><p>Aborted。</p>
+</li>
+</ul>
+<p>这些阶段不一定直接改变全部规则，但可以用于：</p>
+<ul>
+<li><p>复活时间；</p>
+</li>
+<li><p>兵线强化；</p>
+</li>
+<li><p>中立目标；</p>
+</li>
+<li><p>特殊事件；</p>
+</li>
+<li><p>UI；</p>
+</li>
+<li><p>数据分析。</p>
+</li>
+</ul>
+<hr />
+<h2 id="7-团队与阵营状态">7. 团队与阵营状态</h2><h3 id="71-teamruntimestate">7.1 TeamRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>TeamId；</p>
+</li>
+<li><p>PlayerIds；</p>
+</li>
+<li><p>HeroIds；</p>
+</li>
+<li><p>BaseStructureIds；</p>
+</li>
+<li><p>TeamGoldStatistics；</p>
+</li>
+<li><p>TeamExperienceStatistics；</p>
+</li>
+<li><p>VisionState；</p>
+</li>
+<li><p>ObjectiveBuffs；</p>
+</li>
+<li><p>StructureLosses；</p>
+</li>
+<li><p>KillStatistics；</p>
+</li>
+<li><p>TeamVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="72-阵营职责">7.2 阵营职责</h3><p>TeamSystem负责：</p>
+<ul>
+<li><p>友军识别；</p>
+</li>
+<li><p>敌军识别；</p>
+</li>
+<li><p>建筑归属；</p>
+</li>
+<li><p>视野共享；</p>
+</li>
+<li><p>助攻关系；</p>
+</li>
+<li><p>团队增益；</p>
+</li>
+<li><p>胜负判断。</p>
+</li>
+</ul>
+<hr />
+<h3 id="73-不建议将队伍只实现成-teamid">7.3 不建议将“队伍”只实现成 TeamId</h3><p>队伍还拥有自己的：</p>
+<ul>
+<li><p>知识；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>地图状态；</p>
+</li>
+<li><p>建筑状态；</p>
+</li>
+<li><p>大型目标收益。</p>
+</li>
+</ul>
+<p>因此应存在独立 TeamRuntimeState。</p>
+<hr />
+<h2 id="8-英雄运行时">8. 英雄运行时</h2><h3 id="81-herodefinition">8.1 HeroDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>HeroId；</p>
+</li>
+<li><p>RoleTags；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>GrowthStats；</p>
+</li>
+<li><p>AbilityIds；</p>
+</li>
+<li><p>ResourceType；</p>
+</li>
+<li><p>AttackProfile；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>LevelCurve；</p>
+</li>
+<li><p>RecommendedItems；</p>
+</li>
+<li><p>CollisionProfile；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="82-heroruntimestate">8.2 HeroRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>HeroEntityId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>TeamId；</p>
+</li>
+<li><p>CurrentLevel；</p>
+</li>
+<li><p>CurrentExperience；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentResource；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>MovementState；</p>
+</li>
+<li><p>AbilityStates；</p>
+</li>
+<li><p>ItemStates；</p>
+</li>
+<li><p>BuffStates；</p>
+</li>
+<li><p>Gold；</p>
+</li>
+<li><p>CurrentVisionState；</p>
+</li>
+<li><p>DeathState；</p>
+</li>
+<li><p>HeroVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="83-英雄角色定位">8.3 英雄角色定位</h3><p>可以使用标签而非硬编码职业：</p>
+<ul>
+<li><p>Frontline；</p>
+</li>
+<li><p>Tank；</p>
+</li>
+<li><p>Fighter；</p>
+</li>
+<li><p>Assassin；</p>
+</li>
+<li><p>Mage；</p>
+</li>
+<li><p>Marksman；</p>
+</li>
+<li><p>Support；</p>
+</li>
+<li><p>Controller；</p>
+</li>
+<li><p>SplitPusher；</p>
+</li>
+<li><p>Jungler。</p>
+</li>
+</ul>
+<p>同一个英雄可以拥有多个标签。</p>
+<hr />
+<h3 id="84-英雄成长">8.4 英雄成长</h3><p>每次升级可以：</p>
+<ul>
+<li><p>增加基础属性；</p>
+</li>
+<li><p>解锁技能；</p>
+</li>
+<li><p>提升技能等级；</p>
+</li>
+<li><p>解锁终极技能；</p>
+</li>
+<li><p>改变战斗节奏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-技能系统">9. 技能系统</h2><h3 id="91-abilitydefinition">9.1 AbilityDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>AbilityTags；</p>
+</li>
+<li><p>CastType；</p>
+</li>
+<li><p>TargetingRule；</p>
+</li>
+<li><p>Range；</p>
+</li>
+<li><p>CastTime；</p>
+</li>
+<li><p>ChannelTime；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>ResourceCost；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>InterruptRules；</p>
+</li>
+<li><p>VisionRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="92-abilityruntimestate">9.2 AbilityRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>CurrentLevel；</p>
+</li>
+<li><p>CooldownRemaining；</p>
+</li>
+<li><p>ChargeCount；</p>
+</li>
+<li><p>CastingState；</p>
+</li>
+<li><p>ChannelState；</p>
+</li>
+<li><p>TemporaryModifiers；</p>
+</li>
+<li><p>AbilityVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="93-技能执行流程">9.3 技能执行流程</h3><p>玩家输入
+→ 验证英雄状态
+→ 验证目标
+→ 验证距离
+→ 验证资源
+→ 验证冷却
+→ 创建 AbilityExecution
+→ 提交消耗
+→ 执行前摇
+→ 生成技能效果
+→ 命中判定
+→ 应用伤害、控制或移动
+→ 触发后续效果
+→ 进入冷却</p>
+<hr />
+<h3 id="94-技能与服务器权威">9.4 技能与服务器权威</h3><p>客户端可以预测：</p>
+<ul>
+<li><p>动画；</p>
+</li>
+<li><p>指示器；</p>
+</li>
+<li><p>移动；</p>
+</li>
+</ul>
+<p>但服务器必须决定：</p>
+<ul>
+<li><p>技能是否真正释放；</p>
+</li>
+<li><p>是否命中；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>位移；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-线路拓扑">10. 线路拓扑</h2><h3 id="101-lanedefinition">10.1 LaneDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>LaneId；</p>
+</li>
+<li><p>TeamStartNodeIds；</p>
+</li>
+<li><p>TeamGoalNodeIds；</p>
+</li>
+<li><p>PathNodeIds；</p>
+</li>
+<li><p>StructureIds；</p>
+</li>
+<li><p>MinionMeetingProfile；</p>
+</li>
+<li><p>LaneWidth；</p>
+</li>
+<li><p>AdjacentJungleEntryIds；</p>
+</li>
+<li><p>LaneVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="102-laneruntimestate">10.2 LaneRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>LaneId；</p>
+</li>
+<li><p>CurrentWaveIds；</p>
+</li>
+<li><p>PushState；</p>
+</li>
+<li><p>PressureByTeam；</p>
+</li>
+<li><p>FurthestControlledNodeByTeam；</p>
+</li>
+<li><p>StructureState；</p>
+</li>
+<li><p>LaneVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="103-线路不需要领土所有权">10.3 线路不需要“领土所有权”</h3><p>更实用的是维护：</p>
+<ul>
+<li><p>兵线位置；</p>
+</li>
+<li><p>建筑状态；</p>
+</li>
+<li><p>当前英雄数量；</p>
+</li>
+<li><p>当前视野；</p>
+</li>
+<li><p>当前危险度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-兵线系统">11. 兵线系统</h2><h3 id="111-minionwavedefinition">11.1 MinionWaveDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>WaveId；</p>
+</li>
+<li><p>SpawnInterval；</p>
+</li>
+<li><p>UnitComposition；</p>
+</li>
+<li><p>SpawnOffset；</p>
+</li>
+<li><p>LaneSelectionRule；</p>
+</li>
+<li><p>SiegeUnitRule；</p>
+</li>
+<li><p>ScalingRule；</p>
+</li>
+<li><p>SpecialWaveRules；</p>
+</li>
+<li><p>WaveVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="112-minionruntimestate">11.2 MinionRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>MinionId；</p>
+</li>
+<li><p>TeamId；</p>
+</li>
+<li><p>LaneId；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentTargetId；</p>
+</li>
+<li><p>PathProgress；</p>
+</li>
+<li><p>AggroState；</p>
+</li>
+<li><p>CombatState；</p>
+</li>
+<li><p>RewardState；</p>
+</li>
+<li><p>MinionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="113-兵线生成流程">11.3 兵线生成流程</h3><p>比赛时钟
+→ 到达 WaveSpawnTick
+→ 为每条线路生成 WaveInstance
+→ 创建兵线单位
+→ 绑定 LanePath
+→ 向对方基地移动
+→ 搜索敌对目标
+→ 英雄或兵线介入战斗
+→ 兵线死亡或继续推进</p>
+<hr />
+<h3 id="114-兵线必须尽量确定">11.4 兵线必须尽量确定</h3><p>兵线行为应具有较高可预测性。</p>
+<p>玩家需要能够学习：</p>
+<ul>
+<li><p>什么时候到线；</p>
+</li>
+<li><p>在哪里相遇；</p>
+</li>
+<li><p>哪一方会自然推线；</p>
+</li>
+<li><p>什么时候到塔下。</p>
+</li>
+</ul>
+<p>如果兵线目标选择高度随机，会破坏：</p>
+<ul>
+<li><p>补刀；</p>
+</li>
+<li><p>控线；</p>
+</li>
+<li><p>推线；</p>
+</li>
+<li><p>游走时机。</p>
+</li>
+</ul>
+<hr />
+<h3 id="115-兵线压力值">11.5 兵线压力值</h3><p>可以派生：</p>
+<p>LanePressure =</p>
+<p>己方存活兵线战斗力
+减去
+敌方存活兵线战斗力</p>
+<p>并结合：</p>
+<ul>
+<li><p>位置；</p>
+</li>
+<li><p>下一波距离；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>英雄；</p>
+</li>
+</ul>
+<p>用于 AI、观战和分析。</p>
+<hr />
+<h2 id="12-补刀与经济归属">12. 补刀与经济归属</h2><h3 id="121-killrewarddefinition">12.1 KillRewardDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>BaseGold；</p>
+</li>
+<li><p>ExperienceReward；</p>
+</li>
+<li><p>LastHitRule；</p>
+</li>
+<li><p>AssistRule；</p>
+</li>
+<li><p>NearbyExperienceRadius；</p>
+</li>
+<li><p>TeamRewardRule；</p>
+</li>
+<li><p>BountyRule；</p>
+</li>
+<li><p>RewardVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="122-经济来源">12.2 经济来源</h3><p>包括：</p>
+<ul>
+<li><p>自然增长；</p>
+</li>
+<li><p>兵线补刀；</p>
+</li>
+<li><p>英雄击杀；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>大型目标；</p>
+</li>
+<li><p>特殊装备；</p>
+</li>
+<li><p>地图机制。</p>
+</li>
+</ul>
+<hr />
+<h3 id="123-lasthit">12.3 LastHit</h3><p>补刀机制的价值在于：</p>
+<ul>
+<li><p>为线路交互增加精确时间窗口；</p>
+</li>
+<li><p>让玩家暴露攻击动作；</p>
+</li>
+<li><p>制造压线与控线区别；</p>
+</li>
+<li><p>形成经济技术差。</p>
+</li>
+</ul>
+<hr />
+<h3 id="124-经验分配">12.4 经验分配</h3><p>经验可以采用：</p>
+<ul>
+<li><p>最后击杀者；</p>
+</li>
+<li><p>周围友军共享；</p>
+</li>
+<li><p>团队共享；</p>
+</li>
+<li><p>特殊辅助补偿。</p>
+</li>
+</ul>
+<p>需要明确多人共享经验时的：</p>
+<ul>
+<li><p>总量是否变化；</p>
+</li>
+<li><p>范围；</p>
+</li>
+<li><p>死亡英雄是否获得；</p>
+</li>
+<li><p>召唤物是否影响。</p>
+</li>
+</ul>
+<hr />
+<h3 id="125-rewardtransaction">12.5 RewardTransaction</h3><p>奖励必须使用：</p>
+<ul>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>VictimEntityId；</p>
+</li>
+<li><p>RewardEventId；</p>
+</li>
+<li><p>ParticipantIds；</p>
+</li>
+<li><p>RewardVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<p>防止：</p>
+<ul>
+<li><p>重复击杀奖励；</p>
+</li>
+<li><p>多次助攻结算；</p>
+</li>
+<li><p>断线重连重复经济。</p>
+</li>
+</ul>
+<hr />
+<h2 id="13-英雄击杀助攻与赏金">13. 英雄击杀、助攻与赏金</h2><h3 id="131-herodeathrecord">13.1 HeroDeathRecord</h3><p>建议字段：</p>
+<ul>
+<li><p>VictimHeroId；</p>
+</li>
+<li><p>KillerHeroId；</p>
+</li>
+<li><p>AssistHeroIds；</p>
+</li>
+<li><p>DamageContribution；</p>
+</li>
+<li><p>ControlContribution；</p>
+</li>
+<li><p>DeathPosition；</p>
+</li>
+<li><p>DeathTick；</p>
+</li>
+<li><p>CurrentKillStreak；</p>
+</li>
+<li><p>BountyValue；</p>
+</li>
+<li><p>DeathVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="132-助攻判定">13.2 助攻判定</h3><p>不要只按：</p>
+<p>“最近造成过伤害”</p>
+<p>判断。</p>
+<p>可以考虑：</p>
+<ul>
+<li><p>伤害；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>增益；</p>
+</li>
+<li><p>护盾；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>视野贡献；</p>
+</li>
+<li><p>时间窗口。</p>
+</li>
+</ul>
+<hr />
+<h3 id="133-赏金系统">13.3 赏金系统</h3><p>赏金可以根据：</p>
+<ul>
+<li><p>连杀；</p>
+</li>
+<li><p>经济领先；</p>
+</li>
+<li><p>连续死亡；</p>
+</li>
+<li><p>等级差；</p>
+</li>
+<li><p>比赛阶段；</p>
+</li>
+</ul>
+<p>动态调整。</p>
+<hr />
+<h3 id="134-赏金职责">13.4 赏金职责</h3><p>赏金属于负反馈。</p>
+<p>目标是：</p>
+<ul>
+<li><p>给落后方创造高价值反击机会；</p>
+</li>
+<li><p>增加保护核心英雄的重要性；</p>
+</li>
+<li><p>限制单一英雄无限滚雪球。</p>
+</li>
+</ul>
+<p>但不能让一次击杀完全抹除长期优势。</p>
+<hr />
+<h2 id="14-装备与商店">14. 装备与商店</h2><h3 id="141-itemdefinition">14.1 ItemDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>ItemId；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>BuildComponents；</p>
+</li>
+<li><p>StatModifiers；</p>
+</li>
+<li><p>PassiveEffectIds；</p>
+</li>
+<li><p>ActiveAbilityId；</p>
+</li>
+<li><p>UniqueGroupId；</p>
+</li>
+<li><p>SellValue；</p>
+</li>
+<li><p>PurchaseRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="142-heroinventorystate">14.2 HeroInventoryState</h3><p>建议包含：</p>
+<ul>
+<li><p>ItemSlots；</p>
+</li>
+<li><p>ConsumableSlots；</p>
+</li>
+<li><p>TemporaryItemStates；</p>
+</li>
+<li><p>InventoryVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="143-装备构筑">14.3 装备构筑</h3><p>装备应支持：</p>
+<ul>
+<li><p>基础组件；</p>
+</li>
+<li><p>中间组件；</p>
+</li>
+<li><p>完成装备；</p>
+</li>
+<li><p>分支路线。</p>
+</li>
+</ul>
+<hr />
+<h3 id="144-purchasetransaction">14.4 PurchaseTransaction</h3><p>流程：</p>
+<p>进入合法商店状态
+→ 验证金钱
+→ 验证装备栏
+→ 验证组件
+→ 预留金钱
+→ 消耗组件
+→ 创建装备
+→ 更新英雄属性
+→ 提交交易</p>
+<hr />
+<h3 id="145-装备强势窗口">14.5 装备强势窗口</h3><p>装备系统需要支持：</p>
+<p>第一件装备
+→ 形成第一次重大强势期</p>
+<p>第二件装备
+→ 构筑形成</p>
+<p>三件以上
+→ 核心战斗模式成熟</p>
+<p>而不是每个小组件都只提供均匀数值成长。</p>
+<hr />
+<h2 id="15-防御塔与结构系统">15. 防御塔与结构系统</h2><h3 id="151-structuredefinition">15.1 StructureDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>StructureId；</p>
+</li>
+<li><p>StructureType；</p>
+</li>
+<li><p>TeamId；</p>
+</li>
+<li><p>MaximumHealth；</p>
+</li>
+<li><p>ArmorProfile；</p>
+</li>
+<li><p>AttackProfile；</p>
+</li>
+<li><p>VisionProfile；</p>
+</li>
+<li><p>ProtectionRules；</p>
+</li>
+<li><p>DestructionEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="152-structureruntimestate">15.2 StructureRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>StructureEntityId；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentTargetId；</p>
+</li>
+<li><p>CurrentAttackCooldown；</p>
+</li>
+<li><p>InvulnerabilityState；</p>
+</li>
+<li><p>ProtectionState；</p>
+</li>
+<li><p>DestroyedState；</p>
+</li>
+<li><p>StructureVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="153-建筑层级">15.3 建筑层级</h3><p>典型：</p>
+<p>外塔
+→ 内塔
+→ 高地塔
+→ 抑制器或兵营
+→ 核心建筑</p>
+<p>每一级建筑被摧毁后都应改变：</p>
+<ul>
+<li><p>推线能力；</p>
+</li>
+<li><p>地图安全；</p>
+</li>
+<li><p>野区控制；</p>
+</li>
+<li><p>兵线状态。</p>
+</li>
+</ul>
+<hr />
+<h3 id="154-防御塔目标选择">15.4 防御塔目标选择</h3><p>典型优先级可以考虑：</p>
+<ul>
+<li><p>攻击友军英雄的敌方英雄；</p>
+</li>
+<li><p>敌方兵线；</p>
+</li>
+<li><p>召唤物；</p>
+</li>
+<li><p>普通英雄。</p>
+</li>
+</ul>
+<p>必须具有清晰规则。</p>
+<p>否则玩家无法预测越塔风险。</p>
+<hr />
+<h2 id="16-高地与超级兵线">16. 高地与超级兵线</h2><h3 id="161-inhibitorstate">16.1 InhibitorState</h3><p>建议包含：</p>
+<ul>
+<li><p>StructureId；</p>
+</li>
+<li><p>DestroyedState；</p>
+</li>
+<li><p>RespawnTick；</p>
+</li>
+<li><p>AffectedLaneId；</p>
+</li>
+<li><p>SuperMinionState；</p>
+</li>
+<li><p>InhibitorVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="162-超级兵线职责">16.2 超级兵线职责</h3><p>抑制器被摧毁后：</p>
+<ul>
+<li><p>对应线路周期生成强化单位；</p>
+</li>
+<li><p>防守方需要投入更多时间清线；</p>
+</li>
+<li><p>进攻方获得其他地图目标的行动窗口。</p>
+</li>
+</ul>
+<p>因此超级兵线本质上不是单纯更强小兵，而是：</p>
+<blockquote>
+<p><strong>迫使敌方持续支付注意力和人员成本的自动地图压力。</strong></p>
+</blockquote>
+<hr />
+<h2 id="17-野区系统">17. 野区系统</h2><h3 id="171-junglecampdefinition">17.1 JungleCampDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>CampId；</p>
+</li>
+<li><p>SpawnPoint；</p>
+</li>
+<li><p>MonsterDefinitions；</p>
+</li>
+<li><p>InitialSpawnTick；</p>
+</li>
+<li><p>RespawnDuration；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>BuffDefinitionIds；</p>
+</li>
+<li><p>LeashRules；</p>
+</li>
+<li><p>VisionRules；</p>
+</li>
+<li><p>CampVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="172-junglecampstate">17.2 JungleCampState</h3><p>建议包含：</p>
+<ul>
+<li><p>CampId；</p>
+</li>
+<li><p>CurrentMonsterIds；</p>
+</li>
+<li><p>AliveState；</p>
+</li>
+<li><p>LastKilledTick；</p>
+</li>
+<li><p>RespawnTick；</p>
+</li>
+<li><p>CurrentAggroState；</p>
+</li>
+<li><p>CampVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="173-野区职责">17.3 野区职责</h3><p>野区提供：</p>
+<ul>
+<li><p>不依赖兵线的经济；</p>
+</li>
+<li><p>游走路径；</p>
+</li>
+<li><p>伏击空间；</p>
+</li>
+<li><p>特殊增益；</p>
+</li>
+<li><p>视野博弈；</p>
+</li>
+<li><p>线路支援。</p>
+</li>
+</ul>
+<hr />
+<h3 id="174-野区资源刷新">17.4 野区资源刷新</h3><p>刷新时间应可预测或部分预测。</p>
+<p>这允许玩家进行：</p>
+<ul>
+<li><p>反野；</p>
+</li>
+<li><p>资源计时；</p>
+</li>
+<li><p>入侵；</p>
+</li>
+<li><p>线路与野区资源交换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-大型中立目标">18. 大型中立目标</h2><h3 id="181-neutralobjectivedefinition">18.1 NeutralObjectiveDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>ObjectiveId；</p>
+</li>
+<li><p>SpawnRules；</p>
+</li>
+<li><p>RespawnRules；</p>
+</li>
+<li><p>CombatProfile；</p>
+</li>
+<li><p>TeamRewardProfile；</p>
+</li>
+<li><p>BuffProfile；</p>
+</li>
+<li><p>MapEffects；</p>
+</li>
+<li><p>VisionRules；</p>
+</li>
+<li><p>ContestRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="182-objectiveruntimestate">18.2 ObjectiveRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>ObjectiveId；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>CurrentAggroTarget；</p>
+</li>
+<li><p>SpawnState；</p>
+</li>
+<li><p>CurrentContestingTeams；</p>
+</li>
+<li><p>LastDamageTeam；</p>
+</li>
+<li><p>KillTeamId；</p>
+</li>
+<li><p>RespawnTick；</p>
+</li>
+<li><p>ObjectiveVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="183-目标争夺">18.3 目标争夺</h3><p>典型流程：</p>
+<p>发现目标机会
+→ 清理附近兵线
+→ 布置视野
+→ 控制区域入口
+→ 开始攻击目标
+→ 敌方接近
+→ 决定继续目标或先团战
+→ 目标生命进入抢夺区间
+→ 击杀归属判定
+→ 团队奖励提交</p>
+<hr />
+<h3 id="184-目标抢夺必须服务器权威">18.4 目标抢夺必须服务器权威</h3><p>大型目标最终击杀必须由服务器根据：</p>
+<ul>
+<li><p>最终有效伤害；</p>
+</li>
+<li><p>Tick顺序；</p>
+</li>
+<li><p>伤害规则；</p>
+</li>
+</ul>
+<p>唯一确定。</p>
+<p>不能依赖：</p>
+<ul>
+<li><p>客户端显示血量；</p>
+</li>
+<li><p>谁先播放击杀动画。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-战争迷雾与视野">19. 战争迷雾与视野</h2><h3 id="191-visionsource">19.1 VisionSource</h3><p>建议字段：</p>
+<ul>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>TeamId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>VisionRadius；</p>
+</li>
+<li><p>TrueSightRadius；</p>
+</li>
+<li><p>TerrainRules；</p>
+</li>
+<li><p>ObstructionRules；</p>
+</li>
+<li><p>VisionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="192-teamvisionstate">19.2 TeamVisionState</h3><p>建议包含：</p>
+<ul>
+<li><p>VisibleCells；</p>
+</li>
+<li><p>RevealedEntityIds；</p>
+</li>
+<li><p>LastKnownEntitySnapshots；</p>
+</li>
+<li><p>WardStates；</p>
+</li>
+<li><p>VisionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="193-视野来源">19.3 视野来源</h3><p>包括：</p>
+<ul>
+<li><p>英雄；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>守卫；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>特殊目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="194-lastknownstate">19.4 LastKnownState</h3><p>敌人离开视野后可以保留：</p>
+<ul>
+<li><p>最后位置；</p>
+</li>
+<li><p>最后生命；</p>
+</li>
+<li><p>最后朝向；</p>
+</li>
+<li><p>最后装备信息；</p>
+</li>
+<li><p>信息时间。</p>
+</li>
+</ul>
+<p>但不能继续实时更新。</p>
+<hr />
+<h3 id="195-服务端信息裁剪">19.5 服务端信息裁剪</h3><p>客户端不应接收：</p>
+<ul>
+<li><p>完整敌人实时位置；</p>
+</li>
+<li><p>隐藏守卫；</p>
+</li>
+<li><p>未发现陷阱；</p>
+</li>
+<li><p>战争迷雾中的实时技能状态；</p>
+</li>
+</ul>
+<p>然后只在渲染层隐藏。</p>
+<p>否则极易产生透视作弊。</p>
+<hr />
+<h2 id="20-守卫与反视野">20. 守卫与反视野</h2><h3 id="201-warddefinition">20.1 WardDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>WardId；</p>
+</li>
+<li><p>VisionRadius；</p>
+</li>
+<li><p>Lifetime；</p>
+</li>
+<li><p>StealthState；</p>
+</li>
+<li><p>DetectionRules；</p>
+</li>
+<li><p>PlacementRules；</p>
+</li>
+<li><p>DestroyReward；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="202-wardruntimestate">20.2 WardRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>WardEntityId；</p>
+</li>
+<li><p>TeamId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>RemainingLifetime；</p>
+</li>
+<li><p>RevealedState；</p>
+</li>
+<li><p>CurrentHealth；</p>
+</li>
+<li><p>WardVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="203-视野控制循环">20.3 视野控制循环</h3><p>布置视野
+→ 获取信息
+→ 安全推进
+→ 敌方扫描和排眼
+→ 信息重新变得不确定
+→ 再次投入视野资源</p>
+<p>因此视野是：</p>
+<blockquote>
+<p>可被争夺和摧毁的信息基础设施。</p>
+</blockquote>
+<hr />
+<h2 id="21-移动时间与支援">21. 移动时间与支援</h2><h3 id="211-travelestimate">21.1 TravelEstimate</h3><p>系统可推导：</p>
+<ul>
+<li><p>HeroId；</p>
+</li>
+<li><p>FromPosition；</p>
+</li>
+<li><p>TargetPosition；</p>
+</li>
+<li><p>EstimatedArrivalTick；</p>
+</li>
+<li><p>AvailableMobilitySkills；</p>
+</li>
+<li><p>TerrainContext；</p>
+</li>
+<li><p>TravelVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="212-支援窗口">21.2 支援窗口</h3><p>某次战斗实际是否为：</p>
+<p>2v2</p>
+<p>可能取决于未来数秒：</p>
+<p>当前：</p>
+<p>2v2</p>
+<p>三秒后：</p>
+<p>己方打野到达
+→ 3v2</p>
+<p>五秒后：</p>
+<p>敌方中路到达
+→ 3v3</p>
+<p>因此玩家判断的是：</p>
+<blockquote>
+<p>未来短时间内的局部人数变化。</p>
+</blockquote>
+<hr />
+<h2 id="22-回城系统">22. 回城系统</h2><h3 id="221-recalldefinition">22.1 RecallDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>ChannelDuration；</p>
+</li>
+<li><p>InterruptRules；</p>
+</li>
+<li><p>DestinationId；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>AllowedStates；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="222-回城职责">22.2 回城职责</h3><p>回城允许玩家：</p>
+<ul>
+<li><p>将金钱转换为装备；</p>
+</li>
+<li><p>恢复生命；</p>
+</li>
+<li><p>调整资源；</p>
+</li>
+<li><p>更换战略路线。</p>
+</li>
+</ul>
+<p>但其成本是：</p>
+<ul>
+<li><p>离开地图；</p>
+</li>
+<li><p>损失兵线；</p>
+</li>
+<li><p>放弃局部支援。</p>
+</li>
+</ul>
+<hr />
+<h3 id="223-recallwindow">22.3 RecallWindow</h3><p>高水平线路博弈的一部分就是寻找：</p>
+<blockquote>
+<p>不会损失大量兵线或建筑的安全回城窗口。</p>
+</blockquote>
+<p>因此 Recall 不是纯便利功能，而是经济节奏的一部分。</p>
+<hr />
+<h2 id="23-死亡与复活">23. 死亡与复活</h2><h3 id="231-respawnstate">23.1 RespawnState</h3><p>建议包含：</p>
+<ul>
+<li><p>HeroId；</p>
+</li>
+<li><p>DeathTick；</p>
+</li>
+<li><p>RespawnDuration；</p>
+</li>
+<li><p>RespawnTick；</p>
+</li>
+<li><p>RespawnLocation；</p>
+</li>
+<li><p>SpecialRespawnRules；</p>
+</li>
+<li><p>RespawnVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="232-复活时间">23.2 复活时间</h3><p>可以根据：</p>
+<ul>
+<li><p>英雄等级；</p>
+</li>
+<li><p>比赛时间；</p>
+</li>
+<li><p>特殊状态；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>地图目标；</p>
+</li>
+</ul>
+<p>计算。</p>
+<hr />
+<h3 id="233-为什么后期死亡更危险">23.3 为什么后期死亡更危险</h3><p>后期：</p>
+<ul>
+<li><p>复活时间更长；</p>
+</li>
+<li><p>建筑更少；</p>
+</li>
+<li><p>英雄推塔能力更强；</p>
+</li>
+<li><p>兵线更强；</p>
+</li>
+<li><p>大型目标收益更高。</p>
+</li>
+</ul>
+<p>因此同样一次死亡在不同阶段拥有不同战略价值。</p>
+<hr />
+<h2 id="24-团战系统视角">24. 团战系统视角</h2><p>团战不需要单独存在一个“TeamFightSystem”。</p>
+<p>它可以通过多个领域事件推导。</p>
+<hr />
+<h3 id="241-teamfightcontext">24.1 TeamFightContext</h3><p>分析层可以包含：</p>
+<ul>
+<li><p>FightId；</p>
+</li>
+<li><p>ParticipantHeroIds；</p>
+</li>
+<li><p>StartTick；</p>
+</li>
+<li><p>EndTick；</p>
+</li>
+<li><p>Location；</p>
+</li>
+<li><p>InitialTeamResources；</p>
+</li>
+<li><p>DeathSequence；</p>
+</li>
+<li><p>MajorAbilityUsage；</p>
+</li>
+<li><p>DamageStatistics；</p>
+</li>
+<li><p>ControlStatistics；</p>
+</li>
+<li><p>PositionOutcome；</p>
+</li>
+<li><p>ObjectiveOutcome。</p>
+</li>
+</ul>
+<hr />
+<h3 id="242-团战阶段">24.2 团战阶段</h3><p>典型：</p>
+<p>Poke
+→ Engage
+→ Burst
+→ Sustain
+→ Chase
+→ Cleanup</p>
+<p>不同阵容可能主动追求不同阶段。</p>
+<hr />
+<h3 id="243-团战资源">24.3 团战资源</h3><p>包括：</p>
+<ul>
+<li><p>生命；</p>
+</li>
+<li><p>大招；</p>
+</li>
+<li><p>位移；</p>
+</li>
+<li><p>防御技能；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>召唤师技能；</p>
+</li>
+<li><p>装备主动技能；</p>
+</li>
+<li><p>视野。</p>
+</li>
+</ul>
+<hr />
+<h3 id="244-团战前资源状态">24.4 团战前资源状态</h3><p>因此系统和 UI 必须允许快速判断：</p>
+<ul>
+<li><p>谁有终极技能；</p>
+</li>
+<li><p>谁没有闪现；</p>
+</li>
+<li><p>谁已经残血；</p>
+</li>
+<li><p>哪些目标技能仍在冷却。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-地图优势转换">25. 地图优势转换</h2><p>MOBA 最重要的宏观问题之一是：</p>
+<p><strong>如何把一场战斗胜利变成长期优势。</strong></p>
+<hr />
+<h3 id="251-advantagewindow">25.1 AdvantageWindow</h3><p>建议包含：</p>
+<ul>
+<li><p>WinningTeamId；</p>
+</li>
+<li><p>MissingEnemyHeroes；</p>
+</li>
+<li><p>EstimatedRespawnTimes；</p>
+</li>
+<li><p>NearbyObjectives；</p>
+</li>
+<li><p>CurrentLanePressures；</p>
+</li>
+<li><p>AvailableStructures；</p>
+</li>
+<li><p>TeamHealthState；</p>
+</li>
+<li><p>TeamResourceState；</p>
+</li>
+<li><p>WindowVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="252-常见转换">25.2 常见转换</h3><p>一次击杀后可以选择：</p>
+<h4 id="推塔">推塔</h4><p>收益：</p>
+<ul>
+<li><p>永久地图变化；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>安全边界推进。</p>
+</li>
+</ul>
+<h4 id="中立目标">中立目标</h4><p>收益：</p>
+<ul>
+<li><p>团队 Buff；</p>
+</li>
+<li><p>后续推进能力。</p>
+</li>
+</ul>
+<h4 id="入侵野区">入侵野区</h4><p>收益：</p>
+<ul>
+<li><p>剥夺敌方资源；</p>
+</li>
+<li><p>建立深层视野。</p>
+</li>
+</ul>
+<h4 id="回城">回城</h4><p>收益：</p>
+<ul>
+<li>把已有金钱转换为即时战力。</li>
+</ul>
+<h4 id="推兵线">推兵线</h4><p>收益：</p>
+<ul>
+<li><p>迫使敌方复活后处理兵线；</p>
+</li>
+<li><p>制造未来时间窗口。</p>
+</li>
+</ul>
+<hr />
+<h3 id="253-不存在永远正确的转换">25.3 不存在永远正确的转换</h3><p>需要结合：</p>
+<ul>
+<li><p>复活时间；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>技能冷却；</p>
+</li>
+<li><p>中立目标；</p>
+</li>
+<li><p>敌方剩余英雄；</p>
+</li>
+</ul>
+<p>判断。</p>
+<hr />
+<h2 id="26-推线控线与兵线状态">26. 推线、控线与兵线状态</h2><h3 id="261-wavestate">26.1 WaveState</h3><p>可以派生：</p>
+<ul>
+<li><p>Frozen；</p>
+</li>
+<li><p>SlowPush；</p>
+</li>
+<li><p>FastPush；</p>
+</li>
+<li><p>Neutral；</p>
+</li>
+<li><p>Crashing；</p>
+</li>
+<li><p>Rebounding。</p>
+</li>
+</ul>
+<hr />
+<h3 id="262-freeze">26.2 Freeze</h3><p>通过维持敌方兵线略强，使兵线长期停在安全位置附近。</p>
+<p>收益：</p>
+<ul>
+<li><p>安全补刀；</p>
+</li>
+<li><p>限制敌方经济；</p>
+</li>
+<li><p>提高伏击机会。</p>
+</li>
+</ul>
+<p>代价：</p>
+<ul>
+<li><p>地图支援能力下降；</p>
+</li>
+<li><p>推塔能力下降。</p>
+</li>
+</ul>
+<hr />
+<h3 id="263-fastpush">26.3 FastPush</h3><p>快速清理兵线。</p>
+<p>目的：</p>
+<ul>
+<li><p>推塔；</p>
+</li>
+<li><p>回城；</p>
+</li>
+<li><p>游走；</p>
+</li>
+<li><p>抢目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="264-slowpush">26.4 SlowPush</h3><p>积累多批己方兵线。</p>
+<p>可以制造：</p>
+<ul>
+<li><p>长期线路压力；</p>
+</li>
+<li><p>强建筑推进；</p>
+</li>
+<li><p>迫使敌方派人处理。</p>
+</li>
+</ul>
+<p>这是后期地图人数差的重要来源。</p>
+<hr />
+<h2 id="27-team-communication">27. Team Communication</h2><p>MOBA 是高频团队协作游戏，但语音并不总是可靠存在。</p>
+<p>因此需要低带宽通信系统。</p>
+<hr />
+<h3 id="271-pingdefinition">27.1 PingDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>PingType；</p>
+</li>
+<li><p>TargetType；</p>
+</li>
+<li><p>WorldPositionRule；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>SpamProtection；</p>
+</li>
+<li><p>VisibilityRule；</p>
+</li>
+<li><p>AudioProfile；</p>
+</li>
+<li><p>UIProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="272-常用信号">27.2 常用信号</h3><p>包括：</p>
+<ul>
+<li><p>敌人消失；</p>
+</li>
+<li><p>危险；</p>
+</li>
+<li><p>前往；</p>
+</li>
+<li><p>撤退；</p>
+</li>
+<li><p>请求协助；</p>
+</li>
+<li><p>攻击目标；</p>
+</li>
+<li><p>防守目标；</p>
+</li>
+<li><p>技能冷却；</p>
+</li>
+<li><p>装备状态。</p>
+</li>
+</ul>
+<hr />
+<h3 id="273-ping的核心价值">27.3 Ping的核心价值</h3><p>Ping 是：</p>
+<blockquote>
+<p>将复杂战术意图压缩成极低交互成本的共享信息。</p>
+</blockquote>
+<p>例如：</p>
+<p>Danger + 河道位置</p>
+<p>就可以表达：</p>
+<p>“敌方可能正在从这里游走，请撤退。”</p>
+<hr />
+<h3 id="274-防止信号滥用">27.4 防止信号滥用</h3><p>需要：</p>
+<ul>
+<li><p>频率限制；</p>
+</li>
+<li><p>屏蔽；</p>
+</li>
+<li><p>重复信号聚合；</p>
+</li>
+<li><p>恶意行为检测。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-网络架构">28. 网络架构</h2><p>MOBA 通常采用服务器权威模型。</p>
+<hr />
+<h3 id="281-客户端提交">28.1 客户端提交</h3><p>客户端主要提交：</p>
+<ul>
+<li><p>移动输入；</p>
+</li>
+<li><p>技能输入；</p>
+</li>
+<li><p>目标选择；</p>
+</li>
+<li><p>购买请求；</p>
+</li>
+<li><p>Ping；</p>
+</li>
+<li><p>回城请求。</p>
+</li>
+</ul>
+<hr />
+<h3 id="282-服务器权威">28.2 服务器权威</h3><p>服务器决定：</p>
+<ul>
+<li><p>英雄位置；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>击杀；</p>
+</li>
+<li><p>胜负。</p>
+</li>
+</ul>
+<hr />
+<h3 id="283-客户端预测">28.3 客户端预测</h3><p>可以预测：</p>
+<ul>
+<li><p>自己移动；</p>
+</li>
+<li><p>技能前摇；</p>
+</li>
+<li><p>UI；</p>
+</li>
+<li><p>特效。</p>
+</li>
+</ul>
+<hr />
+<h3 id="284-reconciliation">28.4 Reconciliation</h3><p>服务器返回权威状态后：</p>
+<p>客户端比较预测
+→ 存在偏差
+→ 修正位置或技能状态
+→ 尽量平滑表现</p>
+<hr />
+<h3 id="285-interest-management">28.5 Interest Management</h3><p>玩家不需要接收整张地图全部实体的高频状态。</p>
+<p>可以根据：</p>
+<ul>
+<li><p>视野；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>重要事件；</p>
+</li>
+</ul>
+<p>决定同步。</p>
+<hr />
+<h2 id="29-断线与重连">29. 断线与重连</h2><h3 id="291-disconnectstate">29.1 DisconnectState</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>HeroId；</p>
+</li>
+<li><p>DisconnectTick；</p>
+</li>
+<li><p>LastConfirmedInput；</p>
+</li>
+<li><p>ReconnectToken；</p>
+</li>
+<li><p>AIControlState；</p>
+</li>
+<li><p>GracePeriod；</p>
+</li>
+<li><p>DisconnectVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="292-断线后的英雄">29.2 断线后的英雄</h3><p>可以：</p>
+<ul>
+<li><p>原地停留；</p>
+</li>
+<li><p>返回基地；</p>
+</li>
+<li><p>AI接管；</p>
+</li>
+<li><p>按预设策略行动。</p>
+</li>
+</ul>
+<p>规则必须避免玩家通过主动断线获得收益。</p>
+<hr />
+<h3 id="293-重连恢复">29.3 重连恢复</h3><p>需要恢复：</p>
+<ul>
+<li><p>英雄状态；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>当前地图；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>比赛时间；</p>
+</li>
+<li><p>近期事件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-match-result">30. Match Result</h2><h3 id="301-matchresultsnapshot">30.1 MatchResultSnapshot</h3><p>建议包含：</p>
+<ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>WinningTeamId；</p>
+</li>
+<li><p>VictoryReason；</p>
+</li>
+<li><p>MatchDuration；</p>
+</li>
+<li><p>HeroResults；</p>
+</li>
+<li><p>TeamStatistics；</p>
+</li>
+<li><p>ObjectiveStatistics；</p>
+</li>
+<li><p>EconomyStatistics；</p>
+</li>
+<li><p>DisconnectStates；</p>
+</li>
+<li><p>IntegrityState；</p>
+</li>
+<li><p>ResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="302-heromatchresult">30.2 HeroMatchResult</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>HeroId；</p>
+</li>
+<li><p>Kills；</p>
+</li>
+<li><p>Deaths；</p>
+</li>
+<li><p>Assists；</p>
+</li>
+<li><p>GoldEarned；</p>
+</li>
+<li><p>ExperienceEarned；</p>
+</li>
+<li><p>DamageStatistics；</p>
+</li>
+<li><p>VisionStatistics；</p>
+</li>
+<li><p>StructureDamage；</p>
+</li>
+<li><p>ObjectiveParticipation；</p>
+</li>
+<li><p>ItemBuild；</p>
+</li>
+<li><p>RoleStatistics。</p>
+</li>
+</ul>
+<hr />
+<h3 id="303-结果提交">30.3 结果提交</h3><p>MatchEnded
+→ 冻结最终状态
+→ 生成结果快照
+→ 验证完整性
+→ 结算排名
+→ 结算任务和奖励
+→ 写入幂等记录
+→ 结束服务器实例</p>
+<hr />
+<h2 id="31-完整事件与执行流程示例">31. 完整事件与执行流程示例</h2><p>以下以：</p>
+<p><strong>中路取得击杀后，团队利用人数差控制大型目标并摧毁外塔</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="311-初始状态">31.1 初始状态</h3><p>比赛进入中期。</p>
+<p>当前：</p>
+<p>蓝队中路和打野位于河道附近。</p>
+<p>红队中路在线上清兵。</p>
+<p>大型中立目标将在附近刷新。</p>
+<p>双方其他英雄状态：</p>
+<ul>
+<li><p>蓝队上路正在处理兵线；</p>
+</li>
+<li><p>红队上路同样在线；</p>
+</li>
+<li><p>双方下路英雄都在较远位置。</p>
+</li>
+</ul>
+<hr />
+<h3 id="312-兵线到达">31.2 兵线到达</h3><p>双方新一批中路兵线接触。</p>
+<p>红队中路需要清理兵线，否则防御塔将受到攻击。</p>
+<hr />
+<h3 id="313-视野准备">31.3 视野准备</h3><p>蓝队打野在河道入口部署视野。</p>
+<p>发现红队没有附近支援。</p>
+<hr />
+<h3 id="314-gank">31.4 Gank</h3><p>蓝队中路故意与红队英雄交换技能。</p>
+<p>红队英雄生命下降。</p>
+<p>蓝队打野从战争迷雾中进入。</p>
+<p>形成：</p>
+<p>2v1</p>
+<hr />
+<h3 id="315-击杀">31.5 击杀</h3><p>红队中路死亡。</p>
+<p>服务器提交：</p>
+<p>HeroKilled</p>
+<p>并记录：</p>
+<ul>
+<li><p>Killer；</p>
+</li>
+<li><p>Assists；</p>
+</li>
+<li><p>Gold；</p>
+</li>
+<li><p>Experience；</p>
+</li>
+<li><p>DeathTick；</p>
+</li>
+<li><p>RespawnTick。</p>
+</li>
+</ul>
+<hr />
+<h3 id="316-advantagewindow创建">31.6 AdvantageWindow创建</h3><p>分析系统推导：</p>
+<p>红队中路将在约25秒后复活。</p>
+<p>附近大型目标已刷新。</p>
+<p>蓝队获得：</p>
+<p>短暂 5v4 地图窗口。</p>
+<hr />
+<h3 id="317-第一种错误选择">31.7 第一种错误选择</h3><p>如果蓝队中路继续留在线上清兵，而打野回野区：</p>
+<p>本次击杀最终只获得：</p>
+<ul>
+<li><p>击杀金钱；</p>
+</li>
+<li><p>少量经验。</p>
+</li>
+</ul>
+<p>地图状态基本不变。</p>
+<hr />
+<h3 id="318-蓝队选择转换优势">31.8 蓝队选择转换优势</h3><p>蓝队中路和打野立即移动到大型目标区域。</p>
+<p>同时发送：</p>
+<p>AttackObjective Ping。</p>
+<hr />
+<h3 id="319-兵线作用">31.9 兵线作用</h3><p>红队中路死亡后无法处理兵线。</p>
+<p>蓝队中路兵线进入红队防御塔。</p>
+<p>红队必须决定：</p>
+<ul>
+<li><p>派其他英雄守塔；</p>
+</li>
+<li><p>放弃兵线参与大型目标争夺。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3110-人数差扩大">31.10 人数差扩大</h3><p>红队上路选择继续处理自己的兵线。</p>
+<p>红队下路距离目标较远。</p>
+<p>大型目标附近形成：</p>
+<p>蓝队3人
+对
+红队2人</p>
+<hr />
+<h3 id="3111-目标控制">31.11 目标控制</h3><p>蓝队：</p>
+<ul>
+<li><p>清除敌方守卫；</p>
+</li>
+<li><p>建立视野；</p>
+</li>
+<li><p>开始攻击大型目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3112-红队尝试抢夺">31.12 红队尝试抢夺</h3><p>红队打野进入目标区域。</p>
+<p>服务器根据：</p>
+<p>目标生命
+→ 技能伤害
+→ Tick顺序</p>
+<p>唯一判定最终击杀归属。</p>
+<hr />
+<h3 id="3113-蓝队获得目标">31.13 蓝队获得目标</h3><p>目标死亡。</p>
+<p>蓝队获得团队强化。</p>
+<hr />
+<h3 id="3114-二次地图转换">31.14 二次地图转换</h3><p>红队中路刚刚复活。</p>
+<p>但此前中路兵线已经将防御塔生命压低。</p>
+<p>蓝队利用目标 Buff：</p>
+<p>返回中路
+→ 推进强化兵线
+→ 摧毁中路外塔</p>
+<hr />
+<h3 id="3115-地图状态改变">31.15 地图状态改变</h3><p>中路外塔被摧毁后：</p>
+<ul>
+<li><p>红队河道入口变得更危险；</p>
+</li>
+<li><p>蓝队可以更深布置视野；</p>
+</li>
+<li><p>红队野区更容易被入侵；</p>
+</li>
+<li><p>中路英雄拥有更大游走空间。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3116-完整因果链">31.16 完整因果链</h3><p>一次击杀：</p>
+<p>中路击杀
+→ 红方暂时少一人
+→ 蓝方获得目标控制窗口
+→ 获取大型目标
+→ 强化兵线
+→ 摧毁防御塔
+→ 修改地图安全边界
+→ 提高未来野区控制</p>
+<p>这就是 MOBA 最典型的：</p>
+<blockquote>
+<p><strong>短暂战斗优势 → 持久地图优势转换链。</strong></p>
+</blockquote>
+<hr />
+<h2 id="32-模块通信设计">32. 模块通信设计</h2><h3 id="321-commands">32.1 Commands</h3><p>典型命令：</p>
+<ul>
+<li><p>MoveHero；</p>
+</li>
+<li><p>CastAbility；</p>
+</li>
+<li><p>AttackTarget；</p>
+</li>
+<li><p>PurchaseItem；</p>
+</li>
+<li><p>SellItem；</p>
+</li>
+<li><p>Recall；</p>
+</li>
+<li><p>PlaceWard；</p>
+</li>
+<li><p>UseItem；</p>
+</li>
+<li><p>LevelAbility；</p>
+</li>
+<li><p>SendPing。</p>
+</li>
+</ul>
+<p>命令需要携带：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>HeroId；</p>
+</li>
+<li><p>ClientTick；</p>
+</li>
+<li><p>InputSequence；</p>
+</li>
+<li><p>Target；</p>
+</li>
+<li><p>SubmittedVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h3 id="322-queries">32.2 Queries</h3><p>适用于：</p>
+<ul>
+<li><p>当前技能是否可用；</p>
+</li>
+<li><p>当前金钱；</p>
+</li>
+<li><p>当前经验；</p>
+</li>
+<li><p>当前视野；</p>
+</li>
+<li><p>某目标是否可见；</p>
+</li>
+<li><p>某装备是否可购买；</p>
+</li>
+<li><p>某大型目标还有多久刷新；</p>
+</li>
+<li><p>某英雄还有多久复活。</p>
+</li>
+</ul>
+<p>Query 不允许：</p>
+<ul>
+<li><p>修改状态；</p>
+</li>
+<li><p>生成经济；</p>
+</li>
+<li><p>推进随机流。</p>
+</li>
+</ul>
+<hr />
+<h3 id="323-domain-events">32.3 Domain Events</h3><p>包括：</p>
+<ul>
+<li><p>HeroSpawned；</p>
+</li>
+<li><p>HeroLeveledUp；</p>
+</li>
+<li><p>AbilityCast；</p>
+</li>
+<li><p>DamageResolved；</p>
+</li>
+<li><p>HeroKilled；</p>
+</li>
+<li><p>AssistGranted；</p>
+</li>
+<li><p>GoldGranted；</p>
+</li>
+<li><p>ItemPurchased；</p>
+</li>
+<li><p>MinionWaveSpawned；</p>
+</li>
+<li><p>StructureDestroyed；</p>
+</li>
+<li><p>WardPlaced；</p>
+</li>
+<li><p>WardDestroyed；</p>
+</li>
+<li><p>NeutralObjectiveSpawned；</p>
+</li>
+<li><p>NeutralObjectiveKilled；</p>
+</li>
+<li><p>HeroRespawned；</p>
+</li>
+<li><p>MatchEnded。</p>
+</li>
+</ul>
+<hr />
+<h3 id="324-presentation-events">32.4 Presentation Events</h3><p>包括：</p>
+<ul>
+<li><p>PlayAbilityAnimation；</p>
+</li>
+<li><p>ShowDamageNumber；</p>
+</li>
+<li><p>ShowKillAnnouncement；</p>
+</li>
+<li><p>ShowObjectiveBanner；</p>
+</li>
+<li><p>PlayStructureDestruction；</p>
+</li>
+<li><p>ShowLevelUp；</p>
+</li>
+<li><p>UpdateScoreboard；</p>
+</li>
+<li><p>ShowPing。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>击杀；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>目标归属；</p>
+</li>
+<li><p>胜负。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-失败隔离">33. 失败隔离</h2><h3 id="331-兵线路径异常">33.1 兵线路径异常</h3><p>兵线无法找到合法路径时：</p>
+<ol>
+<li><p>检查 LanePath；</p>
+</li>
+<li><p>检查动态结构；</p>
+</li>
+<li><p>回退到最近合法 LaneNode；</p>
+</li>
+<li><p>重新计算路径；</p>
+</li>
+<li><p>超时后安全销毁异常单位；</p>
+</li>
+<li><p>不重复给予击杀收益；</p>
+</li>
+<li><p>记录 LaneId、WaveId、NodeId。</p>
+</li>
+</ol>
+<p>不能让异常兵线：</p>
+<ul>
+<li><p>停在路中央永久阻塞；</p>
+</li>
+<li><p>直接瞬移攻击基地。</p>
+</li>
+</ul>
+<hr />
+<h3 id="332-波次重复生成">33.2 波次重复生成</h3><p>必须使用：</p>
+<ul>
+<li><p>WaveSequenceId；</p>
+</li>
+<li><p>LaneId；</p>
+</li>
+<li><p>SpawnTick；</p>
+</li>
+</ul>
+<p>组成稳定波次身份。</p>
+<p>同一波次只能提交一次。</p>
+<hr />
+<h3 id="333-英雄奖励重复">33.3 英雄奖励重复</h3><p>HeroDeathRecord 只能生成一组奖励事务。</p>
+<p>重复网络事件或服务器重试：</p>
+<p>返回已有 RewardTransaction。</p>
+<hr />
+<h3 id="334-防御塔目标失效">33.4 防御塔目标失效</h3><p>当前目标：</p>
+<ul>
+<li><p>死亡；</p>
+</li>
+<li><p>离开范围；</p>
+</li>
+<li><p>进入不可攻击状态；</p>
+</li>
+</ul>
+<p>时：</p>
+<p>清理目标
+→ 下一次搜索周期重新选择</p>
+<p>不能让防御塔永久停火。</p>
+<hr />
+<h3 id="335-中立目标结算冲突">33.5 中立目标结算冲突</h3><p>大型目标同一 Tick 收到多个致死攻击时：</p>
+<ul>
+<li><p>按服务器权威事件顺序处理；</p>
+</li>
+<li><p>第一条有效致死事务完成击杀；</p>
+</li>
+<li><p>后续伤害被标记目标已死亡；</p>
+</li>
+<li><p>不重复发放团队 Buff。</p>
+</li>
+</ul>
+<hr />
+<h3 id="336-装备购买失败">33.6 装备购买失败</h3><p>必须保证：</p>
+<p>扣除组件
++
+扣除金币
++
+生成装备</p>
+<p>为同一事务。</p>
+<p>不能出现：</p>
+<ul>
+<li><p>金币扣了装备没得到；</p>
+</li>
+<li><p>组件消失；</p>
+</li>
+<li><p>网络重试重复装备。</p>
+</li>
+</ul>
+<hr />
+<h3 id="337-复活状态异常">33.7 复活状态异常</h3><p>如果：</p>
+<ul>
+<li><p>Hero 已复活；</p>
+</li>
+<li><p>RespawnState仍在运行；</p>
+</li>
+</ul>
+<p>需要根据 HeroLifeState 重建。</p>
+<p>同一死亡记录只能触发一次复活。</p>
+<hr />
+<h3 id="338-视野状态错误">33.8 视野状态错误</h3><p>VisionGraph异常时：</p>
+<ul>
+<li><p>不应直接回退为全图可见；</p>
+</li>
+<li><p>使用上一合法视野快照；</p>
+</li>
+<li><p>局部重新计算；</p>
+</li>
+<li><p>记录受影响 Cell。</p>
+</li>
+</ul>
+<hr />
+<h3 id="339-服务器结果写入失败">33.9 服务器结果写入失败</h3><p>比赛已经结束：</p>
+<ul>
+<li><p>保留 MatchResultSnapshot；</p>
+</li>
+<li><p>标记 PendingCommit；</p>
+</li>
+<li><p>不要求玩家重赛；</p>
+</li>
+<li><p>排名结算使用 MatchId 幂等提交。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-调试与可观测性">34. 调试与可观测性</h2><h3 id="341-lane-wave-timeline">34.1 Lane Wave Timeline</h3><p>显示：</p>
+<ul>
+<li><p>每批兵线生成时间；</p>
+</li>
+<li><p>相遇位置；</p>
+</li>
+<li><p>清线时间；</p>
+</li>
+<li><p>到塔时间；</p>
+</li>
+<li><p>当前压力；</p>
+</li>
+<li><p>异常单位。</p>
+</li>
+</ul>
+<hr />
+<h3 id="342-gold-timeline">34.2 Gold Timeline</h3><p>显示每个英雄：</p>
+<ul>
+<li><p>自然金钱；</p>
+</li>
+<li><p>补刀；</p>
+</li>
+<li><p>击杀；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>装备支出。</p>
+</li>
+</ul>
+<p>用于解释：</p>
+<p>“为什么这个英雄领先了两千经济？”</p>
+<hr />
+<h3 id="343-experience-timeline">34.3 Experience Timeline</h3><p>显示：</p>
+<ul>
+<li><p>兵线经验；</p>
+</li>
+<li><p>英雄击杀；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>共享经验；</p>
+</li>
+<li><p>等级提升时点。</p>
+</li>
+</ul>
+<hr />
+<h3 id="344-power-spike-graph">34.4 Power Spike Graph</h3><p>根据：</p>
+<ul>
+<li><p>等级；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>资源；</p>
+</li>
+</ul>
+<p>显示角色强势窗口。</p>
+<p>用于平衡：</p>
+<ul>
+<li><p>第一件装备；</p>
+</li>
+<li><p>六级；</p>
+</li>
+<li><p>三件套；</p>
+</li>
+<li><p>后期。</p>
+</li>
+</ul>
+<hr />
+<h3 id="345-vision-heatmap">34.5 Vision Heatmap</h3><p>显示：</p>
+<ul>
+<li><p>团队可见区域；</p>
+</li>
+<li><p>守卫覆盖；</p>
+</li>
+<li><p>盲区；</p>
+</li>
+<li><p>视野持续时间；</p>
+</li>
+<li><p>排眼区域；</p>
+</li>
+<li><p>击杀发生位置。</p>
+</li>
+</ul>
+<hr />
+<h3 id="346-objective-timeline">34.6 Objective Timeline</h3><p>记录：</p>
+<ul>
+<li><p>Spawn；</p>
+</li>
+<li><p>FirstContact；</p>
+</li>
+<li><p>Contest；</p>
+</li>
+<li><p>Kill；</p>
+</li>
+<li><p>Team；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>之后产生的建筑收益。</p>
+</li>
+</ul>
+<hr />
+<h3 id="347-team-fight-timeline">34.7 Team Fight Timeline</h3><p>记录：</p>
+<ul>
+<li><p>参与者；</p>
+</li>
+<li><p>初始位置；</p>
+</li>
+<li><p>首个控制；</p>
+</li>
+<li><p>首个死亡；</p>
+</li>
+<li><p>大招使用；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>退出；</p>
+</li>
+<li><p>最终地图收益。</p>
+</li>
+</ul>
+<hr />
+<h3 id="348-death-causality">34.8 Death Causality</h3><p>一次死亡可以解释为：</p>
+<p>进入无视野区域
+→ 敌方三人埋伏
+→ 位移技能已在冷却
+→ 未及时撤退
+→ 死亡
+→ 大型目标丢失</p>
+<p>而不是只显示：</p>
+<p>“受到 1830 点伤害。”</p>
+<hr />
+<h3 id="349-structure-pressure-view">34.9 Structure Pressure View</h3><p>显示：</p>
+<ul>
+<li><p>各线路兵线；</p>
+</li>
+<li><p>当前推进位置；</p>
+</li>
+<li><p>建筑受压；</p>
+</li>
+<li><p>英雄支援；</p>
+</li>
+<li><p>预计下一波到达时间。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3410-network-debug">34.10 Network Debug</h3><p>显示：</p>
+<ul>
+<li><p>RTT；</p>
+</li>
+<li><p>Packet Loss；</p>
+</li>
+<li><p>Input Delay；</p>
+</li>
+<li><p>Server Tick；</p>
+</li>
+<li><p>Client Prediction Error；</p>
+</li>
+<li><p>State Correction；</p>
+</li>
+<li><p>Disconnect；</p>
+</li>
+<li><p>Reconnect。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3411-match-replay">34.11 Match Replay</h3><p>支持：</p>
+<ul>
+<li><p>任意玩家视角；</p>
+</li>
+<li><p>队伍战争迷雾视角；</p>
+</li>
+<li><p>全知观察者视角；</p>
+</li>
+<li><p>时间缩放；</p>
+</li>
+<li><p>跳转击杀；</p>
+</li>
+<li><p>跳转大型目标；</p>
+</li>
+<li><p>经济图；</p>
+</li>
+<li><p>视野图。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-内容验证工具">35. 内容验证工具</h2><h3 id="351-兵线对称性测试">35.1 兵线对称性测试</h3><p>在无玩家干预时验证：</p>
+<ul>
+<li><p>双方兵线相遇位置一致；</p>
+</li>
+<li><p>时间一致；</p>
+</li>
+<li><p>伤害结果稳定；</p>
+</li>
+<li><p>不产生天然阵营优势。</p>
+</li>
+</ul>
+<hr />
+<h3 id="352-lane-path-validation">35.2 Lane Path Validation</h3><p>检查：</p>
+<ul>
+<li><p>兵线出生点到基地可达；</p>
+</li>
+<li><p>防御塔位置合法；</p>
+</li>
+<li><p>不存在路径死角；</p>
+</li>
+<li><p>动态地图状态不会断路。</p>
+</li>
+</ul>
+<hr />
+<h3 id="353-economy-conservation">35.3 Economy Conservation</h3><p>验证：</p>
+<ul>
+<li><p>每类经济来源；</p>
+</li>
+<li><p>每类经济支出；</p>
+</li>
+<li><p>击杀奖励；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>赏金。</p>
+</li>
+</ul>
+<p>防止金币凭空重复生成。</p>
+<hr />
+<h3 id="354-experience-distribution-test">35.4 Experience Distribution Test</h3><p>模拟：</p>
+<ul>
+<li><p>单人吃线；</p>
+</li>
+<li><p>双人吃线；</p>
+</li>
+<li><p>多人吃线；</p>
+</li>
+<li><p>英雄死亡；</p>
+</li>
+<li><p>超出经验范围；</p>
+</li>
+</ul>
+<p>检查经验分配。</p>
+<hr />
+<h3 id="355-item-build-graph-validation">35.5 Item Build Graph Validation</h3><p>检查：</p>
+<ul>
+<li><p>组件前置；</p>
+</li>
+<li><p>循环；</p>
+</li>
+<li><p>总成本；</p>
+</li>
+<li><p>售价；</p>
+</li>
+<li><p>唯一被动；</p>
+</li>
+<li><p>装备槽；</p>
+</li>
+<li><p>不可购买组合。</p>
+</li>
+</ul>
+<hr />
+<h3 id="356-objective-spawn-validation">35.6 Objective Spawn Validation</h3><p>检查：</p>
+<ul>
+<li><p>出生时间；</p>
+</li>
+<li><p>重生时间；</p>
+</li>
+<li><p>多目标冲突；</p>
+</li>
+<li><p>击杀事务；</p>
+</li>
+<li><p>Buff结束；</p>
+</li>
+<li><p>世界状态。</p>
+</li>
+</ul>
+<hr />
+<h3 id="357-structure-dependency">35.7 Structure Dependency</h3><p>检查：</p>
+<ul>
+<li><p>是否必须先摧毁外层建筑；</p>
+</li>
+<li><p>保护状态；</p>
+</li>
+<li><p>高地结构；</p>
+</li>
+<li><p>核心；</p>
+</li>
+<li><p>重生结构。</p>
+</li>
+</ul>
+<hr />
+<h3 id="358-fog-of-war-security-test">35.8 Fog of War Security Test</h3><p>测试客户端是否能读取：</p>
+<ul>
+<li><p>不可见英雄坐标；</p>
+</li>
+<li><p>隐形单位；</p>
+</li>
+<li><p>隐藏守卫；</p>
+</li>
+<li><p>未知野怪状态。</p>
+</li>
+</ul>
+<hr />
+<h3 id="359-bot-match-simulation">35.9 Bot Match Simulation</h3><p>自动运行大量比赛统计：</p>
+<ul>
+<li><p>平均比赛时间；</p>
+</li>
+<li><p>一血时间；</p>
+</li>
+<li><p>首塔时间；</p>
+</li>
+<li><p>大型目标获取率；</p>
+</li>
+<li><p>经济差；</p>
+</li>
+<li><p>翻盘率；</p>
+</li>
+<li><p>不同英雄胜率；</p>
+</li>
+<li><p>不同路线胜率；</p>
+</li>
+<li><p>雪球速度。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3510-极端场景测试">35.10 极端场景测试</h3><p>包括：</p>
+<ul>
+<li><p>十名英雄同时在一个区域；</p>
+</li>
+<li><p>大量召唤物；</p>
+</li>
+<li><p>所有兵线同时到高地；</p>
+</li>
+<li><p>多个大型目标事件；</p>
+</li>
+<li><p>英雄死亡与目标击杀同 Tick；</p>
+</li>
+<li><p>比赛结束瞬间重新连接；</p>
+</li>
+<li><p>核心建筑与英雄同时死亡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-性能设计">36. 性能设计</h2><h3 id="361-服务端固定-tick">36.1 服务端固定 Tick</h3><p>权威逻辑以稳定 Tick 更新：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>视野。</p>
+</li>
+</ul>
+<p>客户端可以更高帧率渲染。</p>
+<hr />
+<h3 id="362-ai-分频">36.2 AI 分频</h3><h4 id="高频">高频</h4><ul>
+<li><p>战斗中的兵线；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>召唤物。</p>
+</li>
+</ul>
+<h4 id="中频">中频</h4><ul>
+<li><p>正常推进兵线；</p>
+</li>
+<li><p>远离玩家的野怪。</p>
+</li>
+</ul>
+<h4 id="低频">低频</h4><ul>
+<li><p>未激活野怪；</p>
+</li>
+<li><p>远端非关键单位。</p>
+</li>
+</ul>
+<hr />
+<h3 id="363-vision-spatial-index">36.3 Vision Spatial Index</h3><p>使用空间索引处理：</p>
+<ul>
+<li><p>VisionSource；</p>
+</li>
+<li><p>Ward；</p>
+</li>
+<li><p>Stealth；</p>
+</li>
+<li><p>TrueSight。</p>
+</li>
+</ul>
+<p>不能每 Tick 进行：</p>
+<p>所有视野源 × 所有实体</p>
+<p>完整遍历。</p>
+<hr />
+<h3 id="364-interest-management">36.4 Interest Management</h3><p>玩家客户端主要接收：</p>
+<ul>
+<li><p>当前可见单位；</p>
+</li>
+<li><p>邻近关键事件；</p>
+</li>
+<li><p>已知建筑；</p>
+</li>
+<li><p>战争迷雾允许的信息。</p>
+</li>
+</ul>
+<hr />
+<h3 id="365-minion-simulation">36.5 Minion Simulation</h3><p>普通兵线可以：</p>
+<ul>
+<li><p>共享路径采样；</p>
+</li>
+<li><p>简化远端移动；</p>
+</li>
+<li><p>低频目标评估；</p>
+</li>
+<li><p>进入英雄附近后恢复高精度。</p>
+</li>
+</ul>
+<hr />
+<h3 id="366-combat-object-pool">36.6 Combat Object Pool</h3><p>适用于：</p>
+<ul>
+<li><p>投射物；</p>
+</li>
+<li><p>技能区域；</p>
+</li>
+<li><p>临时召唤物；</p>
+</li>
+<li><p>Buff表现；</p>
+</li>
+<li><p>伤害表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-可扩展点">37. 可扩展点</h2><h3 id="371-新英雄">37.1 新英雄</h3><p>主要提供：</p>
+<ul>
+<li><p>HeroDefinition；</p>
+</li>
+<li><p>AbilityDefinitions；</p>
+</li>
+<li><p>ResourceDefinition；</p>
+</li>
+<li><p>GrowthCurve；</p>
+</li>
+<li><p>Collision；</p>
+</li>
+<li><p>动画与表现。</p>
+</li>
+</ul>
+<p>不应修改 MatchLoop。</p>
+<hr />
+<h3 id="372-新装备">37.2 新装备</h3><p>主要提供：</p>
+<ul>
+<li><p>ItemDefinition；</p>
+</li>
+<li><p>BuildPath；</p>
+</li>
+<li><p>StatModifier；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>PurchaseRules。</p>
+</li>
+</ul>
+<hr />
+<h3 id="373-新地图">37.3 新地图</h3><p>提供：</p>
+<ul>
+<li><p>LaneGraph；</p>
+</li>
+<li><p>JungleGraph；</p>
+</li>
+<li><p>Structures；</p>
+</li>
+<li><p>SpawnPoints；</p>
+</li>
+<li><p>NeutralObjectives；</p>
+</li>
+<li><p>VisionTerrain；</p>
+</li>
+<li><p>VictoryCondition。</p>
+</li>
+</ul>
+<hr />
+<h3 id="374-新大型目标">37.4 新大型目标</h3><p>提供：</p>
+<ul>
+<li><p>ObjectiveDefinition；</p>
+</li>
+<li><p>SpawnRules；</p>
+</li>
+<li><p>Reward；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>MapEffect；</p>
+</li>
+<li><p>Respawn。</p>
+</li>
+</ul>
+<hr />
+<h3 id="375-新比赛模式">37.5 新比赛模式</h3><p>例如：</p>
+<ul>
+<li><p>标准三路；</p>
+</li>
+<li><p>双路；</p>
+</li>
+<li><p>单路；</p>
+</li>
+<li><p>快速模式；</p>
+</li>
+<li><p>随机技能；</p>
+</li>
+<li><p>无装备；</p>
+</li>
+<li><p>特殊目标模式。</p>
+</li>
+</ul>
+<p>仍应尽量复用：</p>
+<ul>
+<li><p>Hero；</p>
+</li>
+<li><p>Ability；</p>
+</li>
+<li><p>Combat；</p>
+</li>
+<li><p>Team；</p>
+</li>
+<li><p>MatchResult。</p>
+</li>
+</ul>
+<hr />
+<h3 id="376-新兵线类型">37.6 新兵线类型</h3><p>可以添加：</p>
+<ul>
+<li><p>攻城单位；</p>
+</li>
+<li><p>超级兵；</p>
+</li>
+<li><p>魔法单位；</p>
+</li>
+<li><p>空中兵；</p>
+</li>
+<li><p>特殊赛季单位。</p>
+</li>
+</ul>
+<p>通过 MinionWaveDefinition 接入。</p>
+<hr />
+<h2 id="38-玩家体验设计">38. 玩家体验设计</h2><h3 id="381-玩家必须快速知道为什么现在不能做这件事">38.1 玩家必须快速知道“为什么现在不能做这件事”</h3><p>例如技能无法释放，应明确：</p>
+<ul>
+<li><p>冷却；</p>
+</li>
+<li><p>法力不足；</p>
+</li>
+<li><p>被沉默；</p>
+</li>
+<li><p>距离不足；</p>
+</li>
+<li><p>没有目标；</p>
+</li>
+<li><p>当前状态不可施法。</p>
+</li>
+</ul>
+<hr />
+<h3 id="382-兵线信息必须足够可读">38.2 兵线信息必须足够可读</h3><p>玩家应能快速识别：</p>
+<ul>
+<li><p>当前兵线数量；</p>
+</li>
+<li><p>攻城单位；</p>
+</li>
+<li><p>超级兵；</p>
+</li>
+<li><p>哪条线正在推进；</p>
+</li>
+<li><p>哪条线即将到塔。</p>
+</li>
+</ul>
+<hr />
+<h3 id="383-中立目标计时必须透明到合理程度">38.3 中立目标计时必须透明到合理程度</h3><p>至少提供：</p>
+<ul>
+<li><p>是否存活；</p>
+</li>
+<li><p>大致刷新时间；</p>
+</li>
+<li><p>已获得目标 Buff。</p>
+</li>
+</ul>
+<p>是否显示精确倒计时可以由模式决定。</p>
+<hr />
+<h3 id="384-小地图是核心运行时界面">38.4 小地图是核心运行时界面</h3><p>小地图不是辅助 UI。</p>
+<p>它承担：</p>
+<ul>
+<li><p>队友位置；</p>
+</li>
+<li><p>敌方已知位置；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>Ping；</p>
+</li>
+<li><p>视野理解。</p>
+</li>
+</ul>
+<hr />
+<h3 id="385-击杀反馈不能压倒地图目标">38.5 击杀反馈不能压倒地图目标</h3><p>UI 和音效可以奖励击杀。</p>
+<p>但长期教学需要不断强调：</p>
+<blockquote>
+<p>击杀的意义在于它允许团队做什么。</p>
+</blockquote>
+<hr />
+<h3 id="386-death-recap">38.6 Death Recap</h3><p>死亡复盘应显示：</p>
+<ul>
+<li><p>主要伤害来源；</p>
+</li>
+<li><p>控制来源；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>进入战斗时状态；</p>
+</li>
+<li><p>是否处于无视野区域；</p>
+</li>
+<li><p>是否存在附近队友；</p>
+</li>
+<li><p>关键技能冷却。</p>
+</li>
+</ul>
+<hr />
+<h3 id="387-scoreboard">38.7 Scoreboard</h3><p>除 K/D/A 外，应显示：</p>
+<ul>
+<li><p>金钱；</p>
+</li>
+<li><p>补刀；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>视野。</p>
+</li>
+</ul>
+<p>避免将玩家行为全部导向追求人头。</p>
+<hr />
+<h3 id="388-ping必须低摩擦">38.8 Ping必须低摩擦</h3><p>使用信号应：</p>
+<ul>
+<li><p>快；</p>
+</li>
+<li><p>清晰；</p>
+</li>
+<li><p>不要求打开复杂菜单；</p>
+</li>
+<li><p>支持地图和世界空间。</p>
+</li>
+</ul>
+<hr />
+<h3 id="389-新手教学顺序">38.9 新手教学顺序</h3><p>建议：</p>
+<ol>
+<li><p>移动与攻击；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>补刀和经验；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>回城与装备；</p>
+</li>
+<li><p>小地图；</p>
+</li>
+<li><p>野区；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>中立目标；</p>
+</li>
+<li><p>游走；</p>
+</li>
+<li><p>人数差；</p>
+</li>
+<li><p>团战；</p>
+</li>
+<li><p>优势转换。</p>
+</li>
+</ol>
+<hr />
+<h2 id="39-常见设计失败">39. 常见设计失败</h2><h3 id="391-兵线只是定时生成的小怪">39.1 兵线只是定时生成的小怪</h3><p>没有承担：</p>
+<ul>
+<li><p>资源；</p>
+</li>
+<li><p>推进；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>时间节拍。</p>
+</li>
+</ul>
+<hr />
+<h3 id="392-击杀收益远高于地图收益">39.2 击杀收益远高于地图收益</h3><p>玩家只追求人头，而不关心：</p>
+<ul>
+<li><p>塔；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>视野。</p>
+</li>
+</ul>
+<hr />
+<h3 id="393-击杀几乎没有地图转换能力">39.3 击杀几乎没有地图转换能力</h3><p>一方赢下战斗却无法获得建筑或目标。</p>
+<p>比赛会陷入无意义反复团战。</p>
+<hr />
+<h3 id="394-英雄成长只靠击杀">39.4 英雄成长只靠击杀</h3><p>弱化：</p>
+<ul>
+<li><p>补刀；</p>
+</li>
+<li><p>野区；</p>
+</li>
+<li><p>线路经济；</p>
+</li>
+<li><p>资源运营。</p>
+</li>
+</ul>
+<hr />
+<h3 id="395-所有路线资源完全相同">39.5 所有路线资源完全相同</h3><p>角色定位和地图分工难以形成。</p>
+<hr />
+<h3 id="396-视野只在客户端隐藏模型">39.6 视野只在客户端隐藏模型</h3><p>服务器仍向客户端同步完整敌方状态。</p>
+<p>造成严重作弊风险。</p>
+<hr />
+<h3 id="397-野区只是额外金币区">39.7 野区只是额外金币区</h3><p>没有：</p>
+<ul>
+<li><p>游走；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>中立目标；</p>
+</li>
+<li><p>路线连接；</p>
+</li>
+</ul>
+<p>战略意义。</p>
+<hr />
+<h3 id="398-防御塔只是高生命单位">39.8 防御塔只是高生命单位</h3><p>摧毁后地图安全结构基本不变。</p>
+<hr />
+<h3 id="399-大型目标只有数值奖励">39.9 大型目标只有数值奖励</h3><p>没有改变：</p>
+<ul>
+<li><p>推线；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>地图控制；</p>
+</li>
+<li><p>战术优先级。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3910-赏金过强">39.10 赏金过强</h3><p>落后方一次击杀即可完全逆转长期运营优势。</p>
+<hr />
+<h3 id="3911-赏金过弱">39.11 赏金过弱</h3><p>优势方能够无风险持续扩大差距。</p>
+<hr />
+<h3 id="3912-后期复活时间过短">39.12 后期复活时间过短</h3><p>团战获胜后没有足够时间推进或结束比赛。</p>
+<hr />
+<h3 id="3913-后期复活时间过长">39.13 后期复活时间过长</h3><p>任何单次失误都直接结束比赛，缺乏防御空间。</p>
+<hr />
+<h3 id="3914-小地图信息层次混乱">39.14 小地图信息层次混乱</h3><p>玩家无法快速判断：</p>
+<ul>
+<li><p>队友；</p>
+</li>
+<li><p>敌人；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>Ping。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3915-ping系统交互成本过高">39.15 Ping系统交互成本过高</h3><p>团队沟通完全依赖语音。</p>
+<hr />
+<h3 id="3916-英雄逻辑大量硬编码">39.16 英雄逻辑大量硬编码</h3><p>每新增英雄都修改：</p>
+<ul>
+<li><p>战斗系统；</p>
+</li>
+<li><p>MatchSystem；</p>
+</li>
+<li><p>DamageSystem；</p>
+</li>
+<li><p>UI。</p>
+</li>
+</ul>
+<p>最终导致角色扩展成本失控。</p>
+<hr />
+<h3 id="3917-比赛结算非幂等">39.17 比赛结算非幂等</h3><p>断线或服务器重试导致：</p>
+<ul>
+<li><p>排名重复变化；</p>
+</li>
+<li><p>奖励重复；</p>
+</li>
+<li><p>任务重复。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-最小可行原型">40. 最小可行原型</h2><p>一个能够验证 MOBA 核心范式的最小原型可以包含：</p>
+<h3 id="地图">地图</h3><ul>
+<li><p>2个阵营基地；</p>
+</li>
+<li><p>1条主线路；</p>
+</li>
+<li><p>1片小型野区；</p>
+</li>
+<li><p>每方2座防御塔；</p>
+</li>
+<li><p>1个大型中立目标；</p>
+</li>
+<li><p>基础战争迷雾。</p>
+</li>
+</ul>
+<p>先使用单线路，而不是立即开发完整三路地图。</p>
+<hr />
+<h3 id="玩家">玩家</h3><p>推荐：</p>
+<ul>
+<li>3v3；</li>
+</ul>
+<p>比 5v5 更适合早期验证。</p>
+<hr />
+<h3 id="英雄">英雄</h3><ul>
+<li><p>4至6名英雄；</p>
+</li>
+<li><p>每名英雄3个基础技能；</p>
+</li>
+<li><p>1个终极技能；</p>
+</li>
+<li><p>基础等级成长；</p>
+</li>
+<li><p>1种技能资源。</p>
+</li>
+</ul>
+<hr />
+<h3 id="兵线">兵线</h3><ul>
+<li><p>固定周期生成；</p>
+</li>
+<li><p>近战单位；</p>
+</li>
+<li><p>远程单位；</p>
+</li>
+<li><p>周期攻城单位；</p>
+</li>
+<li><p>补刀奖励；</p>
+</li>
+<li><p>周围经验。</p>
+</li>
+</ul>
+<hr />
+<h3 id="经济">经济</h3><ul>
+<li><p>自然金钱；</p>
+</li>
+<li><p>兵线；</p>
+</li>
+<li><p>英雄击杀；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>野怪；</p>
+</li>
+<li><p>大型目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="装备">装备</h3><p>约：</p>
+<ul>
+<li><p>10至15件完整装备；</p>
+</li>
+<li><p>简单组件树；</p>
+</li>
+<li><p>6格装备栏。</p>
+</li>
+</ul>
+<hr />
+<h3 id="野区">野区</h3><ul>
+<li><p>2至3个普通营地；</p>
+</li>
+<li><p>1个大型目标；</p>
+</li>
+<li><p>基础刷新计时。</p>
+</li>
+</ul>
+<hr />
+<h3 id="视野">视野</h3><ul>
+<li><p>英雄视野；</p>
+</li>
+<li><p>兵线视野；</p>
+</li>
+<li><p>防御塔视野；</p>
+</li>
+<li><p>基础守卫。</p>
+</li>
+</ul>
+<hr />
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>MatchRuntimeState；</p>
+</li>
+<li><p>HeroRuntimeState；</p>
+</li>
+<li><p>AbilityRuntimeState；</p>
+</li>
+<li><p>LaneState；</p>
+</li>
+<li><p>MinionWaveState；</p>
+</li>
+<li><p>StructureState；</p>
+</li>
+<li><p>TeamVisionState；</p>
+</li>
+<li><p>EconomyState；</p>
+</li>
+<li><p>HeroDeathRecord；</p>
+</li>
+<li><p>ItemInventoryState；</p>
+</li>
+<li><p>JungleCampState；</p>
+</li>
+<li><p>ObjectiveState；</p>
+</li>
+<li><p>RespawnState；</p>
+</li>
+<li><p>MatchResultSnapshot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>Lane Wave Timeline；</p>
+</li>
+<li><p>Gold Timeline；</p>
+</li>
+<li><p>Experience Timeline；</p>
+</li>
+<li><p>Vision Heatmap；</p>
+</li>
+<li><p>Objective Timeline；</p>
+</li>
+<li><p>Team Fight Timeline；</p>
+</li>
+<li><p>Death Causality；</p>
+</li>
+<li><p>Structure Pressure View；</p>
+</li>
+<li><p>Network Debug；</p>
+</li>
+<li><p>Match Replay。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心验证目标">核心验证目标</h3><p>原型需要回答：</p>
+<ul>
+<li><p>玩家是否会为了兵线资源留在线上；</p>
+</li>
+<li><p>推线是否真实影响游走时间；</p>
+</li>
+<li><p>击杀后是否存在明显的目标转换选择；</p>
+</li>
+<li><p>防御塔被摧毁后地图风险是否真正变化；</p>
+</li>
+<li><p>大型目标是否能改变后续战局；</p>
+</li>
+<li><p>战争迷雾是否产生合理伏击；</p>
+</li>
+<li><p>英雄成长是否产生可感知强势窗口；</p>
+</li>
+<li><p>死亡是否同时产生经济和地图损失；</p>
+</li>
+<li><p>团队是否能通过 Ping 完成基础协作；</p>
+</li>
+<li><p>服务端是否能唯一决定击杀、经济和目标归属。</p>
+</li>
+</ul>
+<p>如果这些问题仍不成立，就不应急于增加：</p>
+<ul>
+<li><p>更多英雄；</p>
+</li>
+<li><p>更多装备；</p>
+</li>
+<li><p>更大地图；</p>
+</li>
+<li><p>更复杂排位。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-推荐实施顺序">41. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li><p>服务端权威模拟；</p>
+</li>
+<li><p>英雄移动；</p>
+</li>
+<li><p>基础战斗。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>单线路径；</p>
+</li>
+<li><p>兵线生成；</p>
+</li>
+<li><p>防御塔。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>金钱；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>补刀。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>技能系统；</p>
+</li>
+<li><p>死亡；</p>
+</li>
+<li><p>复活。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>商店；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>回城。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>守卫；</p>
+</li>
+<li><p>小地图。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>野区；</p>
+</li>
+<li><p>普通野怪；</p>
+</li>
+<li><p>大型目标。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>击杀；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>赏金；</p>
+</li>
+<li><p>优势转换统计。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>多线路；</p>
+</li>
+<li><p>游走；</p>
+</li>
+<li><p>传送或全图支援。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Ping；</p>
+</li>
+<li><p>断线重连；</p>
+</li>
+<li><p>观战。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>回放；</p>
+</li>
+<li><p>MatchResult；</p>
+</li>
+<li><p>排名结算。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>自动 Bot；</p>
+</li>
+<li><p>经济模拟；</p>
+</li>
+<li><p>平衡分析；</p>
+</li>
+<li><p>反作弊。</p>
+</li>
+</ul>
+<p>不建议在以下基础系统稳定前大规模制作英雄：</p>
+<ul>
+<li><p>AbilityExecution；</p>
+</li>
+<li><p>DamageResolution；</p>
+</li>
+<li><p>GoldExperience；</p>
+</li>
+<li><p>Vision；</p>
+</li>
+<li><p>DeathRespawn；</p>
+</li>
+<li><p>ItemTransaction；</p>
+</li>
+<li><p>MatchReplay。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-架构验收标准">42. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>比赛拥有独立 MatchRuntimeState；</p>
+</li>
+<li><p>双方拥有独立 TeamRuntimeState；</p>
+</li>
+<li><p>英雄成长只存在于当前比赛；</p>
+</li>
+<li><p>英雄技能使用统一 AbilityExecution；</p>
+</li>
+<li><p>兵线由统一时钟周期生成；</p>
+</li>
+<li><p>兵线沿稳定 LanePath 推进；</p>
+</li>
+<li><p>无玩家干预时双方兵线行为基本对称；</p>
+</li>
+<li><p>兵线同时影响经济、经验和建筑推进；</p>
+</li>
+<li><p>补刀奖励能够唯一结算；</p>
+</li>
+<li><p>经验共享规则能够稳定验证；</p>
+</li>
+<li><p>英雄击杀只能生成一次奖励事务；</p>
+</li>
+<li><p>助攻能够根据统一参与规则生成；</p>
+</li>
+<li><p>赏金系统不会产生重复经济；</p>
+</li>
+<li><p>装备购买、组件消耗和金币扣除是原子事务；</p>
+</li>
+<li><p>防御塔被摧毁后修改地图安全结构；</p>
+</li>
+<li><p>大型目标击杀由服务器唯一判定；</p>
+</li>
+<li><p>野怪拥有稳定刷新状态；</p>
+</li>
+<li><p>战争迷雾由服务端信息权限参与，而不仅是客户端渲染；</p>
+</li>
+<li><p>守卫拥有生命周期和反视野规则；</p>
+</li>
+<li><p>英雄死亡产生明确复活时间；</p>
+</li>
+<li><p>后期复活时间能够产生有效地图推进窗口；</p>
+</li>
+<li><p>比赛结算使用 MatchId 幂等提交；</p>
+</li>
+<li><p>断线重连不会复制金币、装备和技能状态；</p>
+</li>
+<li><p>回放能够重建完整经济、兵线和目标状态；</p>
+</li>
+<li><p>调试工具能够解释一个英雄为何产生经济领先；</p>
+</li>
+<li><p>调试工具能够解释一次击杀最终转化成了什么地图收益；</p>
+</li>
+<li><p>新英雄通常不需要修改 Match 主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-可迁移到其他游戏的设计思想">43. 可迁移到其他游戏的设计思想</h2><h3 id="431-自动实体流可以作为全局节拍器">43.1 自动实体流可以作为全局节拍器</h3><p>兵线的设计可以迁移到：</p>
+<ul>
+<li><p>塔防；</p>
+</li>
+<li><p>RTS；</p>
+</li>
+<li><p>战略地图；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>战场模拟。</p>
+</li>
+</ul>
+<p>周期实体不仅提供内容，还可以同步：</p>
+<ul>
+<li><p>经济；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>决策窗口。</p>
+</li>
+</ul>
+<hr />
+<h3 id="432-短期优势需要有长期转换接口">43.2 短期优势需要有长期转换接口</h3><p>可迁移到：</p>
+<ul>
+<li><p>战术；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>体育；</p>
+</li>
+<li><p>PvP。</p>
+</li>
+</ul>
+<p>一次击杀或局部胜利之后，应明确：</p>
+<blockquote>
+<p>玩家能将它转换为什么？</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li><p>地图；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>信息。</p>
+</li>
+</ul>
+<hr />
+<h3 id="433-死亡可以被设计成行动权冻结">43.3 死亡可以被设计成“行动权冻结”</h3><p>可迁移到：</p>
+<ul>
+<li><p>竞技射击；</p>
+</li>
+<li><p>团队战术；</p>
+</li>
+<li><p>副本；</p>
+</li>
+<li><p>PvPvE。</p>
+</li>
+</ul>
+<p>死亡不仅是扣生命，还意味着：</p>
+<p>该单位在一段时间内无法参与地图。</p>
+<hr />
+<h3 id="434-信息优势本身就是可消费资源">43.4 信息优势本身就是可消费资源</h3><p>可迁移到：</p>
+<ul>
+<li><p>战术；</p>
+</li>
+<li><p>潜行；</p>
+</li>
+<li><p>侦探；</p>
+</li>
+<li><p>RTS；</p>
+</li>
+<li><p>撤离。</p>
+</li>
+</ul>
+<p>视野不会直接制造伤害，但会改变：</p>
+<ul>
+<li>哪些行动可以安全执行。</li>
+</ul>
+<hr />
+<h3 id="435-地图建筑可以作为安全边界">43.5 地图建筑可以作为安全边界</h3><p>可迁移到：</p>
+<ul>
+<li><p>战略；</p>
+</li>
+<li><p>防守；</p>
+</li>
+<li><p>领土战争；</p>
+</li>
+<li><p>开放世界据点。</p>
+</li>
+</ul>
+<p>建筑价值不一定来自自身输出，而可以来自：</p>
+<ul>
+<li>它保护了哪些空间。</li>
+</ul>
+<hr />
+<h3 id="436-周期刷新能够形成争夺日程">43.6 周期刷新能够形成争夺日程</h3><p>可迁移到：</p>
+<ul>
+<li><p>世界 Boss；</p>
+</li>
+<li><p>副本；</p>
+</li>
+<li><p>资源点；</p>
+</li>
+<li><p>PvP战场；</p>
+</li>
+<li><p>活动。</p>
+</li>
+</ul>
+<p>固定或半固定刷新时间会自然形成：</p>
+<p>准备
+→ 争夺
+→ 结算
+→ 冷却</p>
+<p>循环。</p>
+<hr />
+<h3 id="437-局部人数差是一种空间化资源">43.7 局部人数差是一种空间化资源</h3><p>可迁移到：</p>
+<ul>
+<li><p>RTS；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>射击；</p>
+</li>
+<li><p>战场模拟。</p>
+</li>
+</ul>
+<p>总人口相等，并不代表每个局部战场人数相等。</p>
+<p>关键是：</p>
+<blockquote>
+<p>如何让更多己方单位在正确时间抵达正确位置。</p>
+</blockquote>
+<hr />
+<h3 id="438-power-spike-是时间维度的构筑强度">43.8 Power Spike 是时间维度的构筑强度</h3><p>可迁移到：</p>
+<ul>
+<li><p>RPG；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>Roguelike；</p>
+</li>
+<li><p>装备系统。</p>
+</li>
+</ul>
+<p>角色强度不能只看终局数值。</p>
+<p>还应考虑：</p>
+<ul>
+<li><p>什么时候完成关键能力；</p>
+</li>
+<li><p>强势期持续多久；</p>
+</li>
+<li><p>对手能否规避该窗口。</p>
+</li>
+</ul>
+<hr />
+<h3 id="439-ping-是低带宽团队协议">43.9 Ping 是低带宽团队协议</h3><p>可迁移到：</p>
+<ul>
+<li><p>合作游戏；</p>
+</li>
+<li><p>Raid；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>战术射击；</p>
+</li>
+<li><p>大型副本。</p>
+</li>
+</ul>
+<p>一个成熟 Ping 系统本质上是一套：</p>
+<blockquote>
+<p>高压实时环境中的压缩式团队通信协议。</p>
+</blockquote>
+<hr />
+<h3 id="4310-滚雪球与翻盘是一组反馈控制问题">43.10 滚雪球与翻盘是一组反馈控制问题</h3><p>可以抽象为：</p>
+<p>正反馈：</p>
+<p>优势
+→ 更多资源
+→ 更强战力
+→ 更大优势</p>
+<p>负反馈：</p>
+<p>领先
+→ 更高赏金
+→ 更长风险暴露
+→ 落后方获得高价值反击机会</p>
+<p>这类结构可迁移到：</p>
+<ul>
+<li><p>经营竞争；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>体育；</p>
+</li>
+<li><p>战略；</p>
+</li>
+<li><p>自动战斗。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-本次防重记录">44. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>MOBA / 线路式英雄团队竞技游戏。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>MOBA；</p>
+</li>
+<li><p>Multiplayer Online Battle Arena；</p>
+</li>
+<li><p>Lane-Based Hero Arena；</p>
+</li>
+<li><p>多人在线战术竞技；</p>
+</li>
+<li><p>线路式英雄竞技；</p>
+</li>
+<li><p>英雄团队竞技。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>地图持续生成沿固定线路自动推进的兵线，兵线同时承担经济、经验、建筑压力和比赛时间节拍；玩家控制拥有局内成长和独立技能体系的英雄，通过对线、补刀、游走、野区、击杀和视野争夺制造局部人数差，再将短期战斗优势转换为防御塔、中立大型目标、野区控制、深层视野和兵线压力等更持久的地图优势，最终通过不断压缩敌方安全空间完成基地推进。</p>
+<p>核心循环可以压缩为：</p>
+<p><strong>兵线到达
+→ 线路资源争夺
+→ 制造血量、视野或人数优势
+→ 获得行动窗口
+→ 转换为建筑、目标或地图资源
+→ 地图状态变化
+→ 下一批兵线到达
+→ 重新分配团队行动。</strong></p>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>多名玩家组成固定团队；</p>
+</li>
+<li><p>每名玩家主要长期控制一个英雄；</p>
+</li>
+<li><p>英雄在单局中获得等级和装备成长；</p>
+</li>
+<li><p>兵线按照统一时钟周期生成；</p>
+</li>
+<li><p>兵线自动沿线路推进；</p>
+</li>
+<li><p>兵线提供主要经验、经济和建筑压力；</p>
+</li>
+<li><p>玩家围绕线路资源进行对线；</p>
+</li>
+<li><p>补刀、推线、控线和回城形成经济节奏；</p>
+</li>
+<li><p>游走的核心目标之一是制造局部人数差；</p>
+</li>
+<li><p>战争迷雾决定地图行动安全度；</p>
+</li>
+<li><p>野区提供独立资源和支援路线；</p>
+</li>
+<li><p>防御塔构成地图安全边界；</p>
+</li>
+<li><p>中立目标将局部优势扩大为团队优势；</p>
+</li>
+<li><p>英雄死亡主要造成时间、经济和地图存在权损失；</p>
+</li>
+<li><p>后期复活时间使一次团战能够转化为终局推进；</p>
+</li>
+<li><p>赏金等机制用于限制无限滚雪球；</p>
+</li>
+<li><p>Ping承担低摩擦团队沟通；</p>
+</li>
+<li><p>在线比赛通常采用服务器权威；</p>
+</li>
+<li><p>比赛结果需要幂等结算；</p>
+</li>
+<li><p>回放必须能够还原兵线、视野、经济和目标状态。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与已记录实时战略的防重边界">与已记录实时战略的防重边界</h3><p>已记录的实时战略重点在：</p>
+<ul>
+<li><p>群体单位；</p>
+</li>
+<li><p>命令系统；</p>
+</li>
+<li><p>建筑生产；</p>
+</li>
+<li><p>资源采集；</p>
+</li>
+<li><p>军队生产；</p>
+</li>
+<li><p>群体战争；</p>
+</li>
+<li><p>战争迷雾。</p>
+</li>
+</ul>
+<p>本次 MOBA 的独立核心则固定在：</p>
+<ul>
+<li><p>单英雄长期控制；</p>
+</li>
+<li><p>自动周期兵线；</p>
+</li>
+<li><p>局内个人经济；</p>
+</li>
+<li><p>英雄局内等级；</p>
+</li>
+<li><p>装备强势窗口；</p>
+</li>
+<li><p>防御塔安全边界；</p>
+</li>
+<li><p>野区；</p>
+</li>
+<li><p>大型中立目标；</p>
+</li>
+<li><p>复活时间；</p>
+</li>
+<li><p>局部人数差；</p>
+</li>
+<li><p>击杀后的地图转换；</p>
+</li>
+<li><p>团队视野；</p>
+</li>
+<li><p>Ping协作。</p>
+</li>
+</ul>
+<p>因此本期不视为实时战略子模块，而视为独立宏观游戏类型。</p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>MOBA比赛生命周期；</p>
+</li>
+<li><p>英雄运行时；</p>
+</li>
+<li><p>英雄局内成长；</p>
+</li>
+<li><p>技能系统；</p>
+</li>
+<li><p>线路拓扑；</p>
+</li>
+<li><p>周期兵线；</p>
+</li>
+<li><p>兵线压力；</p>
+</li>
+<li><p>补刀；</p>
+</li>
+<li><p>经验共享；</p>
+</li>
+<li><p>英雄击杀；</p>
+</li>
+<li><p>助攻；</p>
+</li>
+<li><p>赏金；</p>
+</li>
+<li><p>装备与商店；</p>
+</li>
+<li><p>防御塔；</p>
+</li>
+<li><p>高地；</p>
+</li>
+<li><p>超级兵线；</p>
+</li>
+<li><p>野区；</p>
+</li>
+<li><p>野怪刷新；</p>
+</li>
+<li><p>大型中立目标；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>守卫；</p>
+</li>
+<li><p>反视野；</p>
+</li>
+<li><p>游走；</p>
+</li>
+<li><p>人数差；</p>
+</li>
+<li><p>回城；</p>
+</li>
+<li><p>死亡与复活；</p>
+</li>
+<li><p>团战；</p>
+</li>
+<li><p>优势转换；</p>
+</li>
+<li><p>控线；</p>
+</li>
+<li><p>快推；</p>
+</li>
+<li><p>慢推；</p>
+</li>
+<li><p>Ping；</p>
+</li>
+<li><p>服务器权威；</p>
+</li>
+<li><p>断线重连；</p>
+</li>
+<li><p>MatchResult；</p>
+</li>
+<li><p>经济时间线；</p>
+</li>
+<li><p>Vision Heatmap；</p>
+</li>
+<li><p>Team Fight Timeline；</p>
+</li>
+<li><p>Match Replay。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观游戏类型记录：</p>
+<ul>
+<li><p>MOBA兵线系统；</p>
+</li>
+<li><p>MOBA对线系统；</p>
+</li>
+<li><p>MOBA补刀系统；</p>
+</li>
+<li><p>MOBA推线与控线；</p>
+</li>
+<li><p>MOBA野区；</p>
+</li>
+<li><p>MOBA打野；</p>
+</li>
+<li><p>MOBA游走；</p>
+</li>
+<li><p>MOBA防御塔；</p>
+</li>
+<li><p>MOBA高地；</p>
+</li>
+<li><p>MOBA超级兵；</p>
+</li>
+<li><p>MOBA装备系统；</p>
+</li>
+<li><p>MOBA英雄成长；</p>
+</li>
+<li><p>MOBA击杀经济；</p>
+</li>
+<li><p>MOBA助攻；</p>
+</li>
+<li><p>MOBA赏金；</p>
+</li>
+<li><p>MOBA战争迷雾；</p>
+</li>
+<li><p>MOBA守卫；</p>
+</li>
+<li><p>MOBA大型目标；</p>
+</li>
+<li><p>MOBA团战；</p>
+</li>
+<li><p>MOBA人数差；</p>
+</li>
+<li><p>MOBA回城；</p>
+</li>
+<li><p>MOBA复活；</p>
+</li>
+<li><p>MOBA Ping；</p>
+</li>
+<li><p>MOBA服务器权威；</p>
+</li>
+<li><p>MOBA断线重连；</p>
+</li>
+<li><p>MOBA比赛回放；</p>
+</li>
+<li><p>MOBA滚雪球；</p>
+</li>
+<li><p>MOBA翻盘机制；</p>
+</li>
+<li><p>MOBA经济平衡；</p>
+</li>
+<li><p>MOBA目标转换。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

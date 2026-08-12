@@ -1,0 +1,4501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/detective.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="侦探调查与推理游戏 | Sakura Design Journal">
+    <meta property="og:description" content="运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/detective.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-detective.png">
+    <meta property="og:image:alt" content="侦探调查与推理游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="侦探调查与推理游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-detective.png">
+    <meta name="twitter:image:alt" content="侦探调查与推理游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"侦探调查与推理游戏 | Sakura Design Journal","description":"运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。","url":"https://irissakura.github.io/pages/journal/detective.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"侦探调查与推理游戏","image":"https://irissakura.github.io/assets/social/pages-journal-detective.png","dateModified":"2026-08-12","about":["detective","investigation","mystery"]}</script>
+    <!-- site-meta:end -->
+    <title>侦探调查与推理游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-detective"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>侦探调查与推理游戏</h1><p>运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。</p><div class="note-tags"><span>detective</span><span>investigation</span><span>mystery</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="信息不对称证据溯源与调查建模质疑定案的案件闭环">信息不对称、证据溯源与“调查—建模—质疑—定案”的案件闭环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>侦探调查与推理游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Detective Game；</p>
+</li>
+<li><p>Investigation Game；</p>
+</li>
+<li><p>Mystery Game；</p>
+</li>
+<li><p>Deduction Game；</p>
+</li>
+<li><p>侦探推理游戏；</p>
+</li>
+<li><p>案件调查游戏；</p>
+</li>
+<li><p>证据推演游戏。</p>
+</li>
+</ul>
+<p>本文讨论的不是普通RPG中的“寻找三个线索”任务，也不是视觉小说中的单次选项判定，更不是社交推理游戏中依赖真人玩家欺骗的对局玩法，而是一种能够独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。</p>
+</blockquote>
+<p>该类型的核心不是“找到所有高亮物体”，而是持续处理以下问题：</p>
+<ul>
+<li><p>实际发生了什么；</p>
+</li>
+<li><p>玩家目前知道什么；</p>
+</li>
+<li><p>某条信息来自哪里；</p>
+</li>
+<li><p>信息是否可靠；</p>
+</li>
+<li><p>哪些信息相互支持；</p>
+</li>
+<li><p>哪些证据存在矛盾；</p>
+</li>
+<li><p>某个推论是否缺少必要前提；</p>
+</li>
+<li><p>玩家能否区分事实、证言、推测与结论；</p>
+</li>
+<li><p>错误推理如何产生后果而不立即终止游戏；</p>
+</li>
+<li><p>系统如何判断玩家是真正完成推理，而不是碰巧选中正确答案。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>侦探调查与推理游戏，是以案件真相、信息收集、证据关系、假设构建、矛盾验证和结论提交为核心的叙事或系统型游戏类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家接触案件、失踪事件、异常现象或历史谜团；</p>
+</li>
+<li><p>系统建立初始案件目标和已知事实；</p>
+</li>
+<li><p>玩家进入现场进行观察、搜查和记录；</p>
+</li>
+<li><p>获得物证、证言、档案、时间记录和环境痕迹；</p>
+</li>
+<li><p>将信息归入人物、地点、时间、事件和物品；</p>
+</li>
+<li><p>对证言进行追问、质疑和交叉比对；</p>
+</li>
+<li><p>发现矛盾、缺口或新的调查方向；</p>
+</li>
+<li><p>建立一个或多个案件假设；</p>
+</li>
+<li><p>使用证据支持或推翻假设；</p>
+</li>
+<li><p>重建事件发生顺序；</p>
+</li>
+<li><p>确认嫌疑人的动机、能力、机会和行为；</p>
+</li>
+<li><p>提交阶段性推论或最终定案；</p>
+</li>
+<li><p>系统根据推理链完整度结算案件结果；</p>
+</li>
+<li><p>错误判断可能导致嫌疑人逃脱、证据消失或案件进入新阶段；</p>
+</li>
+<li><p>完成案件后解锁后续案件、长期主线或角色关系变化。</p>
+</li>
+</ol>
+<p>该类型中的主要资源包括：</p>
+<ul>
+<li><p>调查时间；</p>
+</li>
+<li><p>可访问地点；</p>
+</li>
+<li><p>证据；</p>
+</li>
+<li><p>证人信任；</p>
+</li>
+<li><p>审讯机会；</p>
+</li>
+<li><p>司法或组织权限；</p>
+</li>
+<li><p>线索完整度；</p>
+</li>
+<li><p>案件预算；</p>
+</li>
+<li><p>专家分析次数；</p>
+</li>
+<li><p>未被破坏的证据链；</p>
+</li>
+<li><p>玩家注意力；</p>
+</li>
+<li><p>已验证的推理节点。</p>
+</li>
+</ul>
+<p>其中最重要的隐性资源是：</p>
+<blockquote>
+<p>信息可信度，即玩家掌握的内容中，有多少已经经过来源确认、交叉验证和逻辑约束。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>侦探调查与推理游戏最具代表性的设计范式由九个核心支柱构成。</p>
+<h2 id="31-案件真相与玩家知识必须分离">3.1 案件真相与玩家知识必须分离</h2><p>运行时需要同时维护：</p>
+<h3 id="案件真实状态">案件真实状态</h3><ul>
+<li><p>实际参与者；</p>
+</li>
+<li><p>真实时间线；</p>
+</li>
+<li><p>真实行为；</p>
+</li>
+<li><p>真实动机；</p>
+</li>
+<li><p>物品实际归属；</p>
+</li>
+<li><p>证人真实所见；</p>
+</li>
+<li><p>伪造和隐瞒行为；</p>
+</li>
+<li><p>最终结果。</p>
+</li>
+</ul>
+<h3 id="玩家知识状态">玩家知识状态</h3><ul>
+<li><p>已发现证据；</p>
+</li>
+<li><p>已知人物；</p>
+</li>
+<li><p>已知地点；</p>
+</li>
+<li><p>已听取证言；</p>
+</li>
+<li><p>已验证事实；</p>
+</li>
+<li><p>当前假设；</p>
+</li>
+<li><p>尚未解决的矛盾；</p>
+</li>
+<li><p>玩家错误认知。</p>
+</li>
+</ul>
+<p>案件真相不能随着玩家选择临时改变，除非游戏明确采用动态生成案件或多真相结构。</p>
+<hr />
+<h2 id="32-信息必须区分事实陈述推测和结论">3.2 信息必须区分事实、陈述、推测和结论</h2><p>玩家获得的信息不应全部作为同等可信的“线索”。</p>
+<p>推荐区分：</p>
+<ul>
+<li><p>客观事实；</p>
+</li>
+<li><p>物理证据；</p>
+</li>
+<li><p>系统记录；</p>
+</li>
+<li><p>证人陈述；</p>
+</li>
+<li><p>嫌疑人陈述；</p>
+</li>
+<li><p>专家意见；</p>
+</li>
+<li><p>玩家推测；</p>
+</li>
+<li><p>已验证结论；</p>
+</li>
+<li><p>被推翻结论。</p>
+</li>
+</ul>
+<p>例如：</p>
+<p>“门在22:00后锁闭”可能是门禁系统记录。</p>
+<p>“我22:00已经离开”可能只是嫌疑人陈述。</p>
+<p>两者不能在推理系统中拥有相同可信度。</p>
+<hr />
+<h2 id="33-证据价值来自关系而不只是收集数量">3.3 证据价值来自关系，而不只是收集数量</h2><p>单条证据通常只能说明局部事实。</p>
+<p>真正的推理来自多条信息之间的关系：</p>
+<p>门禁记录显示嫌疑人未离开
++
+证人声称嫌疑人已经离开
+→
+证言存在矛盾</p>
+<p>鞋印尺寸与嫌疑人相符
++
+鞋底磨损方向不符
+→
+鞋印可能被伪造或来自另一双鞋</p>
+<p>因此，系统应重点维护：</p>
+<ul>
+<li><p>支持关系；</p>
+</li>
+<li><p>反驳关系；</p>
+</li>
+<li><p>条件关系；</p>
+</li>
+<li><p>时间关系；</p>
+</li>
+<li><p>来源关系；</p>
+</li>
+<li><p>排他关系；</p>
+</li>
+<li><p>因果关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-假设必须能够被验证或推翻">3.4 假设必须能够被验证或推翻</h2><p>玩家可以建立：</p>
+<ul>
+<li><p>某人是凶手；</p>
+</li>
+<li><p>某证据被伪造；</p>
+</li>
+<li><p>某人曾进入房间；</p>
+</li>
+<li><p>死亡时间判断错误；</p>
+</li>
+<li><p>两起事件由同一人实施；</p>
+</li>
+<li><p>某证人隐瞒了关系。</p>
+</li>
+</ul>
+<p>一个假设不能只是玩家写在笔记上的文本。</p>
+<p>它需要明确：</p>
+<ul>
+<li><p>要解释哪些事实；</p>
+</li>
+<li><p>需要哪些前提；</p>
+</li>
+<li><p>当前支持证据；</p>
+</li>
+<li><p>当前反对证据；</p>
+</li>
+<li><p>尚未调查的缺口；</p>
+</li>
+<li><p>可执行的验证方法；</p>
+</li>
+<li><p>可信度状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-调查行为需要成本和机会窗口">3.5 调查行为需要成本和机会窗口</h2><p>如果玩家可以：</p>
+<ul>
+<li><p>无限重复审讯；</p>
+</li>
+<li><p>无限调用鉴定；</p>
+</li>
+<li><p>随时进入任何地点；</p>
+</li>
+<li><p>无成本等待；</p>
+</li>
+<li><p>不承担证据污染风险；</p>
+</li>
+</ul>
+<p>调查将退化为穷举。</p>
+<p>可以引入：</p>
+<ul>
+<li><p>时间推进；</p>
+</li>
+<li><p>地点开放时间；</p>
+</li>
+<li><p>证人耐心；</p>
+</li>
+<li><p>嫌疑人警觉；</p>
+</li>
+<li><p>搜查令；</p>
+</li>
+<li><p>鉴定预算；</p>
+</li>
+<li><p>证据保存期限；</p>
+</li>
+<li><p>媒体或组织压力；</p>
+</li>
+<li><p>案件截止日期。</p>
+</li>
+</ul>
+<p>这些限制应促使玩家确定调查优先级，而不是机械增加惩罚。</p>
+<hr />
+<h2 id="36-证人应拥有有限视角和主观偏差">3.6 证人应拥有有限视角和主观偏差</h2><p>证人陈述可能受到：</p>
+<ul>
+<li><p>观察角度；</p>
+</li>
+<li><p>光照；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>时间间隔；</p>
+</li>
+<li><p>情绪；</p>
+</li>
+<li><p>认知偏差；</p>
+</li>
+<li><p>利益；</p>
+</li>
+<li><p>恐惧；</p>
+</li>
+<li><p>记忆衰减；</p>
+</li>
+<li><p>故意隐瞒；</p>
+</li>
+</ul>
+<p>影响。</p>
+<p>证人不一定：</p>
+<ul>
+<li><p>完全诚实；</p>
+</li>
+<li><p>完全撒谎；</p>
+</li>
+<li><p>准确理解自己看见的事物。</p>
+</li>
+</ul>
+<p>高质量证言系统允许玩家区分：</p>
+<ul>
+<li><p>陈述内容错误；</p>
+</li>
+<li><p>证人记忆错误；</p>
+</li>
+<li><p>证人主动隐瞒；</p>
+</li>
+<li><p>证人对事实理解错误。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-错误推理应产生新状态而不只是回答错误">3.7 错误推理应产生新状态，而不只是“回答错误”</h2><p>玩家提交错误判断后，可以发生：</p>
+<ul>
+<li><p>证人失去信任；</p>
+</li>
+<li><p>嫌疑人改变证词；</p>
+</li>
+<li><p>真正犯人转移证据；</p>
+</li>
+<li><p>组织拒绝进一步搜查；</p>
+</li>
+<li><p>玩家需要寻找新证据翻案；</p>
+</li>
+<li><p>案件进入不完整结局；</p>
+</li>
+<li><p>后续案件受到影响。</p>
+</li>
+</ul>
+<p>错误可以推进游戏，但应保留：</p>
+<ul>
+<li><p>纠错路径；</p>
+</li>
+<li><p>复查证据；</p>
+</li>
+<li><p>重新审讯；</p>
+</li>
+<li><p>上诉或补充调查；</p>
+</li>
+<li><p>不同结局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-结论必须由推理链支撑">3.8 结论必须由推理链支撑</h2><p>最终定案不应只要求玩家选择：</p>
+<ul>
+<li><p>犯人是谁；</p>
+</li>
+<li><p>凶器是什么；</p>
+</li>
+<li><p>动机是什么。</p>
+</li>
+</ul>
+<p>更合理的提交结构包括：</p>
+<ol>
+<li><p>事件如何发生；</p>
+</li>
+<li><p>谁实施了关键行为；</p>
+</li>
+<li><p>行为发生在何时；</p>
+</li>
+<li><p>使用了什么手段；</p>
+</li>
+<li><p>为什么能够完成；</p>
+</li>
+<li><p>为什么其他解释不成立；</p>
+</li>
+<li><p>哪些证据支持这些结论。</p>
+</li>
+</ol>
+<p>系统评价的是完整解释能力，而不是单点答案。</p>
+<hr />
+<h2 id="39-调查界面本身是核心玩法系统">3.9 调查界面本身是核心玩法系统</h2><p>案件板、笔记本或关系图不是普通菜单。</p>
+<p>它承担：</p>
+<ul>
+<li><p>信息分类；</p>
+</li>
+<li><p>证据浏览；</p>
+</li>
+<li><p>关系连线；</p>
+</li>
+<li><p>时间线排列；</p>
+</li>
+<li><p>假设构建；</p>
+</li>
+<li><p>矛盾标记；</p>
+</li>
+<li><p>调查方向管理；</p>
+</li>
+<li><p>最终推理提交。</p>
+</li>
+</ul>
+<p>如果所有推理都由系统自动完成，玩家只负责寻找高亮物体，类型核心就会丢失。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与社交推理游戏的区别">4.1 与社交推理游戏的区别</h2><p>社交推理主要依赖真人玩家：</p>
+<ul>
+<li><p>欺骗；</p>
+</li>
+<li><p>发言；</p>
+</li>
+<li><p>投票；</p>
+</li>
+<li><p>身份隐藏；</p>
+</li>
+<li><p>群体判断。</p>
+</li>
+</ul>
+<p>侦探调查游戏主要依赖：</p>
+<ul>
+<li><p>预设或生成案件；</p>
+</li>
+<li><p>证据；</p>
+</li>
+<li><p>证言；</p>
+</li>
+<li><p>时间线；</p>
+</li>
+<li><p>逻辑验证；</p>
+</li>
+<li><p>玩家与系统交互。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与视觉小说的区别">4.2 与视觉小说的区别</h2><p>视觉小说主要以：</p>
+<ul>
+<li><p>文本；</p>
+</li>
+<li><p>角色关系；</p>
+</li>
+<li><p>分支选择；</p>
+</li>
+<li><p>叙事体验；</p>
+</li>
+</ul>
+<p>为核心。</p>
+<p>侦探推理游戏可以使用视觉小说表现，但其核心还需要：</p>
+<ul>
+<li><p>调查空间；</p>
+</li>
+<li><p>信息结构；</p>
+</li>
+<li><p>证据关系；</p>
+</li>
+<li><p>假设验证；</p>
+</li>
+<li><p>推理提交。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-与点击式冒险游戏的区别">4.3 与点击式冒险游戏的区别</h2><p>点击式冒险主要强调：</p>
+<ul>
+<li><p>物品组合；</p>
+</li>
+<li><p>场景谜题；</p>
+</li>
+<li><p>对话；</p>
+</li>
+<li><p>探索。</p>
+</li>
+</ul>
+<p>侦探推理游戏更强调：</p>
+<ul>
+<li><p>信息可信度；</p>
+</li>
+<li><p>事件重建；</p>
+</li>
+<li><p>证言矛盾；</p>
+</li>
+<li><p>人物行为解释；</p>
+</li>
+<li><p>案件结论。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-与解谜游戏的区别">4.4 与解谜游戏的区别</h2><p>传统解谜通常存在：</p>
+<ul>
+<li><p>明确规则；</p>
+</li>
+<li><p>局部问题；</p>
+</li>
+<li><p>唯一解法；</p>
+</li>
+<li><p>状态空间。</p>
+</li>
+</ul>
+<p>案件推理同时需要处理：</p>
+<ul>
+<li><p>不完整信息；</p>
+</li>
+<li><p>信息来源；</p>
+</li>
+<li><p>证人可靠性；</p>
+</li>
+<li><p>多个竞争假设；</p>
+</li>
+<li><p>叙事后果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-与潜行游戏的区别">4.5 与潜行游戏的区别</h2><p>潜行游戏关注：</p>
+<ul>
+<li><p>感知；</p>
+</li>
+<li><p>警戒；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>信息传播；</p>
+</li>
+<li><p>渗透。</p>
+</li>
+</ul>
+<p>侦探游戏可以包含跟踪和潜入，但其宏观循环围绕：</p>
+<ul>
+<li><p>获取信息；</p>
+</li>
+<li><p>解释信息；</p>
+</li>
+<li><p>验证假设；</p>
+</li>
+<li><p>提交结论。</p>
+</li>
+</ul>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十六个核心域：</p>
+<ol>
+<li><p>案件定义与真相状态域；</p>
+</li>
+<li><p>玩家知识与信息投影域；</p>
+</li>
+<li><p>场景、地点与调查入口域；</p>
+</li>
+<li><p>证物、痕迹与证据保管域；</p>
+</li>
+<li><p>人物、嫌疑人与关系域；</p>
+</li>
+<li><p>证言、对话与审讯域；</p>
+</li>
+<li><p>时间线与事件重建域；</p>
+</li>
+<li><p>假设、推论与逻辑验证域；</p>
+</li>
+<li><p>矛盾、支持与反驳关系域；</p>
+</li>
+<li><p>调查行动、权限与成本域；</p>
+</li>
+<li><p>任务、案件阶段与剧情演出域；</p>
+</li>
+<li><p>定案、指控与结果结算域；</p>
+</li>
+<li><p>案件板、笔记和玩家标记域；</p>
+</li>
+<li><p>存档、回放与案件恢复域；</p>
+</li>
+<li><p>内容验证与逻辑可解性域；</p>
+</li>
+<li><p>调试、分析与作者工具域。</p>
+</li>
+</ol>
+<p>总体运行流程如下：</p>
+<p>加载案件真相
+→ 创建玩家初始知识
+→ 开放初始地点和人物
+→ 玩家执行搜查、观察和问询
+→ 生成证据与陈述信息
+→ 信息写入玩家知识图
+→ 玩家建立假设或标记矛盾
+→ 系统检查假设缺口
+→ 解锁新的调查行动
+→ 玩家交叉验证证据、证言和时间线
+→ 提交阶段性推论
+→ 案件阶段发生变化
+→ 进入最终推理
+→ 系统验证推理链
+→ 生成案件结果与长期后果</p>
+<hr />
+<h2 id="6-案件生命周期">6. 案件生命周期</h2><h2 id="61-casedefinition">6.1 CaseDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CaseId；</p>
+</li>
+<li><p>DisplayName；</p>
+</li>
+<li><p>CaseType；</p>
+</li>
+<li><p>TruthModelId；</p>
+</li>
+<li><p>InitialKnowledgeIds；</p>
+</li>
+<li><p>LocationIds；</p>
+</li>
+<li><p>CharacterIds；</p>
+</li>
+<li><p>EvidenceDefinitionIds；</p>
+</li>
+<li><p>TestimonyDefinitionIds；</p>
+</li>
+<li><p>InvestigationActionIds；</p>
+</li>
+<li><p>PhaseDefinitions；</p>
+</li>
+<li><p>ResolutionDefinitions；</p>
+</li>
+<li><p>FailurePolicies；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-caseruntimestate">6.2 CaseRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CaseInstanceId；</p>
+</li>
+<li><p>CurrentPhaseId；</p>
+</li>
+<li><p>CurrentCaseTime；</p>
+</li>
+<li><p>PlayerKnowledgeState；</p>
+</li>
+<li><p>EvidenceStates；</p>
+</li>
+<li><p>CharacterStates；</p>
+</li>
+<li><p>TestimonyStates；</p>
+</li>
+<li><p>InvestigationStates；</p>
+</li>
+<li><p>HypothesisStates；</p>
+</li>
+<li><p>UnlockedLocationIds；</p>
+</li>
+<li><p>SubmittedConclusionIds；</p>
+</li>
+<li><p>CaseFlags；</p>
+</li>
+<li><p>CaseVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-案件阶段">6.3 案件阶段</h2><p>建议状态：</p>
+<ul>
+<li><p>Intake；</p>
+</li>
+<li><p>InitialSurvey；</p>
+</li>
+<li><p>ActiveInvestigation；</p>
+</li>
+<li><p>SuspectIdentification；</p>
+</li>
+<li><p>EvidenceVerification；</p>
+</li>
+<li><p>Reconstruction；</p>
+</li>
+<li><p>AccusationReady；</p>
+</li>
+<li><p>Adjudication；</p>
+</li>
+<li><p>Reopened；</p>
+</li>
+<li><p>Resolved；</p>
+</li>
+<li><p>Failed；</p>
+</li>
+<li><p>Archived。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-阶段职责">6.4 阶段职责</h2><h3 id="initialsurvey">InitialSurvey</h3><p>目标：</p>
+<ul>
+<li><p>了解案件基本情况；</p>
+</li>
+<li><p>确认现场和人物；</p>
+</li>
+<li><p>建立初步时间范围。</p>
+</li>
+</ul>
+<h3 id="activeinvestigation">ActiveInvestigation</h3><p>目标：</p>
+<ul>
+<li><p>搜集证据；</p>
+</li>
+<li><p>访问地点；</p>
+</li>
+<li><p>获取证言；</p>
+</li>
+<li><p>建立候选假设。</p>
+</li>
+</ul>
+<h3 id="evidenceverification">EvidenceVerification</h3><p>目标：</p>
+<ul>
+<li><p>鉴定物证；</p>
+</li>
+<li><p>交叉审问；</p>
+</li>
+<li><p>验证时间；</p>
+</li>
+<li><p>排除伪证。</p>
+</li>
+</ul>
+<h3 id="reconstruction">Reconstruction</h3><p>目标：</p>
+<ul>
+<li><p>建立完整时间线；</p>
+</li>
+<li><p>确认事件因果；</p>
+</li>
+<li><p>排除竞争解释。</p>
+</li>
+</ul>
+<h3 id="adjudication">Adjudication</h3><p>目标：</p>
+<ul>
+<li><p>提交最终推论；</p>
+</li>
+<li><p>处理辩护和反驳；</p>
+</li>
+<li><p>生成案件结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="7-案件真相模型">7. 案件真相模型</h2><h2 id="71-truthmodel">7.1 TruthModel</h2><p>建议包含：</p>
+<ul>
+<li><p>TruthEventIds；</p>
+</li>
+<li><p>TruthCharacterRoles；</p>
+</li>
+<li><p>TruthObjectStates；</p>
+</li>
+<li><p>TruthTimeline；</p>
+</li>
+<li><p>HiddenRelationships；</p>
+</li>
+<li><p>DeceptionDefinitions；</p>
+</li>
+<li><p>EvidenceGenerationRules；</p>
+</li>
+<li><p>AlternativeInterpretationRules；</p>
+</li>
+<li><p>TruthVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-truthevent">7.2 TruthEvent</h2><p>建议字段：</p>
+<ul>
+<li><p>TruthEventId；</p>
+</li>
+<li><p>EventType；</p>
+</li>
+<li><p>ActorIds；</p>
+</li>
+<li><p>TargetIds；</p>
+</li>
+<li><p>LocationId；</p>
+</li>
+<li><p>StartTime；</p>
+</li>
+<li><p>EndTime；</p>
+</li>
+<li><p>UsedObjectIds；</p>
+</li>
+<li><p>Preconditions；</p>
+</li>
+<li><p>Effects；</p>
+</li>
+<li><p>VisibilityRules；</p>
+</li>
+<li><p>WitnessIds；</p>
+</li>
+<li><p>EventVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-真相事件类型">7.3 真相事件类型</h2><p>包括：</p>
+<ul>
+<li><p>到达；</p>
+</li>
+<li><p>离开；</p>
+</li>
+<li><p>会面；</p>
+</li>
+<li><p>争执；</p>
+</li>
+<li><p>交易；</p>
+</li>
+<li><p>偷窃；</p>
+</li>
+<li><p>伪造；</p>
+</li>
+<li><p>袭击；</p>
+</li>
+<li><p>杀害；</p>
+</li>
+<li><p>搬运；</p>
+</li>
+<li><p>清理；</p>
+</li>
+<li><p>通信；</p>
+</li>
+<li><p>销毁证据；</p>
+</li>
+<li><p>制造不在场证明。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-真相与表现分离">7.4 真相与表现分离</h2><p>真相状态不应依赖：</p>
+<ul>
+<li><p>演出是否播放；</p>
+</li>
+<li><p>玩家是否到达现场；</p>
+</li>
+<li><p>对话节点是否执行；</p>
+</li>
+<li><p>场景对象是否加载。</p>
+</li>
+</ul>
+<p>真相是案件逻辑层。</p>
+<p>场景和演出只是其可观察投影。</p>
+<hr />
+<h2 id="75-多解案件">7.5 多解案件</h2><p>若游戏支持多个合法真相，可以在案件创建时：</p>
+<ol>
+<li><p>从真相模板选择变体；</p>
+</li>
+<li><p>生成参与者角色；</p>
+</li>
+<li><p>生成事件时间线；</p>
+</li>
+<li><p>根据真相生成物证；</p>
+</li>
+<li><p>生成对应证言；</p>
+</li>
+<li><p>验证案件可解；</p>
+</li>
+<li><p>冻结CaseSeed。</p>
+</li>
+</ol>
+<p>不能在玩家指控后再临时决定真正犯人。</p>
+<hr />
+<h2 id="8-玩家知识模型">8. 玩家知识模型</h2><h2 id="81-knowledgenode">8.1 KnowledgeNode</h2><p>建议字段：</p>
+<ul>
+<li><p>KnowledgeNodeId；</p>
+</li>
+<li><p>KnowledgeType；</p>
+</li>
+<li><p>SubjectEntityIds；</p>
+</li>
+<li><p>ContentKey；</p>
+</li>
+<li><p>SourceIds；</p>
+</li>
+<li><p>ReliabilityState；</p>
+</li>
+<li><p>VerificationState；</p>
+</li>
+<li><p>DiscoveryTime；</p>
+</li>
+<li><p>RelatedCasePhase；</p>
+</li>
+<li><p>PlayerNotes；</p>
+</li>
+<li><p>KnowledgeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-knowledgetype">8.2 KnowledgeType</h2><p>包括：</p>
+<ul>
+<li><p>Fact；</p>
+</li>
+<li><p>Observation；</p>
+</li>
+<li><p>PhysicalEvidence；</p>
+</li>
+<li><p>Testimony；</p>
+</li>
+<li><p>Record；</p>
+</li>
+<li><p>ExpertOpinion；</p>
+</li>
+<li><p>Rumor；</p>
+</li>
+<li><p>Hypothesis；</p>
+</li>
+<li><p>Conclusion；</p>
+</li>
+<li><p>Contradiction；</p>
+</li>
+<li><p>UnknownQuestion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-verificationstate">8.3 VerificationState</h2><p>建议状态：</p>
+<ul>
+<li><p>Unverified；</p>
+</li>
+<li><p>PartiallySupported；</p>
+</li>
+<li><p>Verified；</p>
+</li>
+<li><p>Disputed；</p>
+</li>
+<li><p>Contradicted；</p>
+</li>
+<li><p>Disproven；</p>
+</li>
+<li><p>Inconclusive。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-玩家知识投影">8.4 玩家知识投影</h2><p>同一真相事件可能投影为：</p>
+<ul>
+<li><p>一个现场痕迹；</p>
+</li>
+<li><p>两份相互矛盾的证言；</p>
+</li>
+<li><p>一条门禁记录；</p>
+</li>
+<li><p>一张照片；</p>
+</li>
+<li><p>一个缺失物品。</p>
+</li>
+</ul>
+<p>玩家不会直接获得TruthEvent。</p>
+<p>玩家获得的是由真相产生的可观察信息。</p>
+<hr />
+<h2 id="85-信息揭示">8.5 信息揭示</h2><p>信息可以通过以下方式解锁：</p>
+<ul>
+<li><p>直接观察；</p>
+</li>
+<li><p>使用工具；</p>
+</li>
+<li><p>询问人物；</p>
+</li>
+<li><p>提交证据；</p>
+</li>
+<li><p>获得权限；</p>
+</li>
+<li><p>专家鉴定；</p>
+</li>
+<li><p>时间推进；</p>
+</li>
+<li><p>假设验证；</p>
+</li>
+<li><p>其他案件关联。</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-证据系统">9. 证据系统</h2><h2 id="91-evidencedefinition">9.1 EvidenceDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EvidenceDefinitionId；</p>
+</li>
+<li><p>EvidenceType；</p>
+</li>
+<li><p>PhysicalForm；</p>
+</li>
+<li><p>OriginTruthEventId；</p>
+</li>
+<li><p>DiscoveryRules；</p>
+</li>
+<li><p>CollectionRules；</p>
+</li>
+<li><p>AnalysisRules；</p>
+</li>
+<li><p>ContaminationRules；</p>
+</li>
+<li><p>ChainOfCustodyRules；</p>
+</li>
+<li><p>KnowledgeOutputs；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-evidenceruntimestate">9.2 EvidenceRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>EvidenceInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>CurrentLocationId；</p>
+</li>
+<li><p>DiscoveryState；</p>
+</li>
+<li><p>CollectionState；</p>
+</li>
+<li><p>PreservationState；</p>
+</li>
+<li><p>ContaminationState；</p>
+</li>
+<li><p>AnalysisStates；</p>
+</li>
+<li><p>CustodianHistory；</p>
+</li>
+<li><p>LinkedKnowledgeNodeIds；</p>
+</li>
+<li><p>EvidenceVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-证据类型">9.3 证据类型</h2><p>包括：</p>
+<ul>
+<li><p>生物痕迹；</p>
+</li>
+<li><p>指纹；</p>
+</li>
+<li><p>足迹；</p>
+</li>
+<li><p>凶器；</p>
+</li>
+<li><p>文件；</p>
+</li>
+<li><p>通信记录；</p>
+</li>
+<li><p>监控；</p>
+</li>
+<li><p>时间记录；</p>
+</li>
+<li><p>财务记录；</p>
+</li>
+<li><p>药物；</p>
+</li>
+<li><p>碎片；</p>
+</li>
+<li><p>环境痕迹；</p>
+</li>
+<li><p>数字设备；</p>
+</li>
+<li><p>个人物品。</p>
+</li>
+</ul>
+<hr />
+<h2 id="94-证据生命周期">9.4 证据生命周期</h2><ol>
+<li><p>真相事件产生潜在证据；</p>
+</li>
+<li><p>证据进入场景或记录系统；</p>
+</li>
+<li><p>玩家发现；</p>
+</li>
+<li><p>玩家判断是否收集；</p>
+</li>
+<li><p>执行采集；</p>
+</li>
+<li><p>建立保管链；</p>
+</li>
+<li><p>送往分析；</p>
+</li>
+<li><p>生成分析结果；</p>
+</li>
+<li><p>与人物、地点和时间关联；</p>
+</li>
+<li><p>在定案阶段提交。</p>
+</li>
+</ol>
+<hr />
+<h2 id="95-证据污染">9.5 证据污染</h2><p>证据可能因为：</p>
+<ul>
+<li><p>玩家错误操作；</p>
+</li>
+<li><p>时间流逝；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>NPC移动；</p>
+</li>
+<li><p>嫌疑人清理；</p>
+</li>
+<li><p>非法保管；</p>
+</li>
+<li><p>多人接触；</p>
+</li>
+</ul>
+<p>降低可信度。</p>
+<p>污染不一定使证据完全失效，但可能改变：</p>
+<ul>
+<li><p>可分析项目；</p>
+</li>
+<li><p>结论置信度；</p>
+</li>
+<li><p>法律有效性；</p>
+</li>
+<li><p>嫌疑人辩护空间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="96-证据保管链">9.6 证据保管链</h2><p>ChainOfCustodyEntry建议包含：</p>
+<ul>
+<li><p>CustodianId；</p>
+</li>
+<li><p>ReceivedTime；</p>
+</li>
+<li><p>ReleasedTime；</p>
+</li>
+<li><p>TransferReason；</p>
+</li>
+<li><p>StorageLocation；</p>
+</li>
+<li><p>IntegrityState；</p>
+</li>
+<li><p>SignatureState。</p>
+</li>
+</ul>
+<p>这适合：</p>
+<ul>
+<li><p>法证题材；</p>
+</li>
+<li><p>警察程序；</p>
+</li>
+<li><p>法庭游戏；</p>
+</li>
+<li><p>高真实性调查。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-证据来源与溯源">10. 证据来源与溯源</h2><h2 id="101-informationsource">10.1 InformationSource</h2><p>每条信息都应能够追溯到：</p>
+<ul>
+<li><p>现场观察；</p>
+</li>
+<li><p>具体证物；</p>
+</li>
+<li><p>某名证人；</p>
+</li>
+<li><p>某条系统记录；</p>
+</li>
+<li><p>某次鉴定；</p>
+</li>
+<li><p>玩家自行推导；</p>
+</li>
+<li><p>匿名情报；</p>
+</li>
+<li><p>其他案件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-sourcereliability">10.2 SourceReliability</h2><p>建议维度：</p>
+<ul>
+<li><p>Authenticity；</p>
+</li>
+<li><p>Accuracy；</p>
+</li>
+<li><p>Completeness；</p>
+</li>
+<li><p>Timeliness；</p>
+</li>
+<li><p>BiasRisk；</p>
+</li>
+<li><p>TamperingRisk；</p>
+</li>
+<li><p>LegalValidity。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-来源合并">10.3 来源合并</h2><p>两条内容相同的信息不应直接视为两份独立支持。</p>
+<p>例如两名证人都听取同一人的转述，其实际来源仍然只有一个。</p>
+<p>系统需要区分：</p>
+<ul>
+<li><p>独立来源；</p>
+</li>
+<li><p>共享上游来源；</p>
+</li>
+<li><p>转述；</p>
+</li>
+<li><p>复制记录；</p>
+</li>
+<li><p>派生分析。</p>
+</li>
+</ul>
+<hr />
+<h2 id="104-来源污染传播">10.4 来源污染传播</h2><p>如果原始文件被证明伪造，那么基于该文件产生的：</p>
+<ul>
+<li><p>专家分析；</p>
+</li>
+<li><p>时间推断；</p>
+</li>
+<li><p>证人确认；</p>
+</li>
+<li><p>玩家假设；</p>
+</li>
+</ul>
+<p>都应重新评估。</p>
+<hr />
+<h2 id="11-人物与嫌疑人模型">11. 人物与嫌疑人模型</h2><h2 id="111-characterdefinition">11.1 CharacterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CharacterId；</p>
+</li>
+<li><p>IdentityProfile；</p>
+</li>
+<li><p>Occupation；</p>
+</li>
+<li><p>RelationshipDefinitions；</p>
+</li>
+<li><p>PersonalityProfile；</p>
+</li>
+<li><p>KnowledgeProfile；</p>
+</li>
+<li><p>MotivationProfile；</p>
+</li>
+<li><p>DeceptionProfile；</p>
+</li>
+<li><p>ScheduleProfile；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-characterruntimestate">11.2 CharacterRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CharacterId；</p>
+</li>
+<li><p>CurrentLocationId；</p>
+</li>
+<li><p>AvailabilityState；</p>
+</li>
+<li><p>TrustState；</p>
+</li>
+<li><p>StressState；</p>
+</li>
+<li><p>SuspicionState；</p>
+</li>
+<li><p>KnownInformationIds；</p>
+</li>
+<li><p>HiddenInformationIds；</p>
+</li>
+<li><p>TestimonyStates；</p>
+</li>
+<li><p>RelationshipStates；</p>
+</li>
+<li><p>InvestigationAwareness；</p>
+</li>
+<li><p>CharacterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-嫌疑人分析维度">11.3 嫌疑人分析维度</h2><p>建议至少包含：</p>
+<ul>
+<li><p>Motive：动机；</p>
+</li>
+<li><p>Means：手段；</p>
+</li>
+<li><p>Opportunity：机会；</p>
+</li>
+<li><p>Access：权限；</p>
+</li>
+<li><p>Knowledge：必要知识；</p>
+</li>
+<li><p>Behavior：事后行为；</p>
+</li>
+<li><p>Contradictions：证言矛盾；</p>
+</li>
+<li><p>EvidenceLinks：证据关联。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-嫌疑人不等于犯人候选标签">11.4 嫌疑人不等于犯人候选标签</h2><p>一个人物可以：</p>
+<ul>
+<li><p>与案件有关但不是犯人；</p>
+</li>
+<li><p>隐瞒无关秘密；</p>
+</li>
+<li><p>提供错误证言；</p>
+</li>
+<li><p>保护他人；</p>
+</li>
+<li><p>被栽赃；</p>
+</li>
+<li><p>参与次要违法行为；</p>
+</li>
+<li><p>对核心案件完全无知。</p>
+</li>
+</ul>
+<p>这样可以避免所有撒谎者必然是犯人的简单模式。</p>
+<hr />
+<h2 id="12-证言系统">12. 证言系统</h2><h2 id="121-testimonydefinition">12.1 TestimonyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TestimonyId；</p>
+</li>
+<li><p>SpeakerId；</p>
+</li>
+<li><p>TopicId；</p>
+</li>
+<li><p>StatementNodes；</p>
+</li>
+<li><p>AvailabilityRules；</p>
+</li>
+<li><p>TruthReferences；</p>
+</li>
+<li><p>MemoryDistortionRules；</p>
+</li>
+<li><p>DeceptionRules；</p>
+</li>
+<li><p>FollowUpTopics；</p>
+</li>
+<li><p>ContradictionLinks；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-statementnode">12.2 StatementNode</h2><p>建议字段：</p>
+<ul>
+<li><p>StatementNodeId；</p>
+</li>
+<li><p>SpeakerId；</p>
+</li>
+<li><p>StatementContentKey；</p>
+</li>
+<li><p>ClaimedTimeRange；</p>
+</li>
+<li><p>ClaimedLocationId；</p>
+</li>
+<li><p>ClaimedActorIds；</p>
+</li>
+<li><p>ReliabilityState；</p>
+</li>
+<li><p>HiddenIntent；</p>
+</li>
+<li><p>AvailableChallenges；</p>
+</li>
+<li><p>StatementVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-证言状态">12.3 证言状态</h2><p>包括：</p>
+<ul>
+<li><p>NotAsked；</p>
+</li>
+<li><p>Stated；</p>
+</li>
+<li><p>Clarified；</p>
+</li>
+<li><p>Challenged；</p>
+</li>
+<li><p>Revised；</p>
+</li>
+<li><p>Retracted；</p>
+</li>
+<li><p>ProvenFalse；</p>
+</li>
+<li><p>Confirmed；</p>
+</li>
+<li><p>Withheld。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-追问">12.4 追问</h2><p>追问可以针对：</p>
+<ul>
+<li><p>时间；</p>
+</li>
+<li><p>地点；</p>
+</li>
+<li><p>人物；</p>
+</li>
+<li><p>行为；</p>
+</li>
+<li><p>信息来源；</p>
+</li>
+<li><p>模糊表达；</p>
+</li>
+<li><p>情绪反应。</p>
+</li>
+</ul>
+<hr />
+<h2 id="125-质疑">12.5 质疑</h2><p>玩家可以使用：</p>
+<ul>
+<li><p>物证；</p>
+</li>
+<li><p>其他证言；</p>
+</li>
+<li><p>时间线；</p>
+</li>
+<li><p>系统记录；</p>
+</li>
+<li><p>人物关系；</p>
+</li>
+<li><p>行为不一致；</p>
+</li>
+</ul>
+<p>质疑证言。</p>
+<hr />
+<h2 id="126-证言变化">12.6 证言变化</h2><p>被质疑后，角色可能：</p>
+<ul>
+<li><p>解释；</p>
+</li>
+<li><p>修正；</p>
+</li>
+<li><p>承认错误；</p>
+</li>
+<li><p>暴露新信息；</p>
+</li>
+<li><p>拒绝回答；</p>
+</li>
+<li><p>终止对话；</p>
+</li>
+<li><p>反过来质疑玩家证据；</p>
+</li>
+<li><p>增加警觉。</p>
+</li>
+</ul>
+<hr />
+<h2 id="127-审讯压力">12.7 审讯压力</h2><p>可以使用：</p>
+<ul>
+<li><p>信任；</p>
+</li>
+<li><p>压力；</p>
+</li>
+<li><p>法律权限；</p>
+</li>
+<li><p>证据强度；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>时间限制；</p>
+</li>
+</ul>
+<p>控制审讯状态。</p>
+<p>不能将审讯简单设计为不断选择“强硬”直到对方招供。</p>
+<hr />
+<h2 id="13-时间线与事件重建">13. 时间线与事件重建</h2><h2 id="131-timelineeventnode">13.1 TimelineEventNode</h2><p>建议字段：</p>
+<ul>
+<li><p>TimelineNodeId；</p>
+</li>
+<li><p>EventType；</p>
+</li>
+<li><p>EstimatedStartTime；</p>
+</li>
+<li><p>EstimatedEndTime；</p>
+</li>
+<li><p>TimePrecision；</p>
+</li>
+<li><p>ActorIds；</p>
+</li>
+<li><p>LocationId；</p>
+</li>
+<li><p>SupportingKnowledgeIds；</p>
+</li>
+<li><p>ContradictingKnowledgeIds；</p>
+</li>
+<li><p>VerificationState；</p>
+</li>
+<li><p>TimelineVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-时间精度">13.2 时间精度</h2><p>时间信息可以是：</p>
+<ul>
+<li><p>精确时刻；</p>
+</li>
+<li><p>时间范围；</p>
+</li>
+<li><p>相对顺序；</p>
+</li>
+<li><p>早于某事件；</p>
+</li>
+<li><p>晚于某事件；</p>
+</li>
+<li><p>同时发生；</p>
+</li>
+<li><p>无法确定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-时间约束">13.3 时间约束</h2><p>例如：</p>
+<ul>
+<li><p>A发生在B之前；</p>
+</li>
+<li><p>C和D不能同时发生；</p>
+</li>
+<li><p>嫌疑人从地点X到Y至少需要十五分钟；</p>
+</li>
+<li><p>门只在21:00至21:10开启；</p>
+</li>
+<li><p>通话持续了六分钟。</p>
+</li>
+</ul>
+<p>时间线系统应支持：</p>
+<ul>
+<li><p>顺序约束；</p>
+</li>
+<li><p>距离约束；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>重叠；</p>
+</li>
+<li><p>不可能区间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-时间线冲突">13.4 时间线冲突</h2><p>系统可以发现：</p>
+<ul>
+<li><p>同一人在不可能同时位于两个地点；</p>
+</li>
+<li><p>行程时间不足；</p>
+</li>
+<li><p>死亡时间与证言不符；</p>
+</li>
+<li><p>设备记录晚于物品销毁；</p>
+</li>
+<li><p>证人声称顺序错误。</p>
+</li>
+</ul>
+<hr />
+<h2 id="135-时间线推理">13.5 时间线推理</h2><p>玩家完成时间线后，可以解锁：</p>
+<ul>
+<li><p>某人的不在场证明无效；</p>
+</li>
+<li><p>某事件必须有第二名参与者；</p>
+</li>
+<li><p>监控时间被修改；</p>
+</li>
+<li><p>死亡时间被错误判断；</p>
+</li>
+<li><p>某证人实际看见的是事后现场。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-假设系统">14. 假设系统</h2><h2 id="141-hypothesisdefinition">14.1 HypothesisDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>HypothesisType；</p>
+</li>
+<li><p>AllowedSubjectTypes；</p>
+</li>
+<li><p>RequiredArgumentSlots；</p>
+</li>
+<li><p>ValidationRuleId；</p>
+</li>
+<li><p>PossibleEvidenceRoles；</p>
+</li>
+<li><p>CompletionPolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-hypothesisruntimestate">14.2 HypothesisRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>HypothesisId；</p>
+</li>
+<li><p>HypothesisType；</p>
+</li>
+<li><p>SubjectEntityIds；</p>
+</li>
+<li><p>ArgumentValues；</p>
+</li>
+<li><p>SupportingKnowledgeIds；</p>
+</li>
+<li><p>OpposingKnowledgeIds；</p>
+</li>
+<li><p>MissingRequirementIds；</p>
+</li>
+<li><p>ConfidenceState；</p>
+</li>
+<li><p>ValidationState；</p>
+</li>
+<li><p>HypothesisVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-假设类型">14.3 假设类型</h2><p>包括：</p>
+<ul>
+<li><p>人物实施行为；</p>
+</li>
+<li><p>物品属于人物；</p>
+</li>
+<li><p>证据被伪造；</p>
+</li>
+<li><p>证言不可靠；</p>
+</li>
+<li><p>某事件发生在特定时间；</p>
+</li>
+<li><p>某人存在共犯；</p>
+</li>
+<li><p>某地点并非第一现场；</p>
+</li>
+<li><p>某行为用于制造假象；</p>
+</li>
+<li><p>某人物具有动机。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-假设置信状态">14.4 假设置信状态</h2><p>建议状态：</p>
+<ul>
+<li><p>Speculative；</p>
+</li>
+<li><p>Plausible；</p>
+</li>
+<li><p>Supported；</p>
+</li>
+<li><p>StronglySupported；</p>
+</li>
+<li><p>Contradicted；</p>
+</li>
+<li><p>Disproven；</p>
+</li>
+<li><p>Confirmed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="145-假设验证">14.5 假设验证</h2><p>验证不应直接读取案件真相并告诉玩家正确与否。</p>
+<p>系统可以反馈：</p>
+<ul>
+<li><p>当前证据不足；</p>
+</li>
+<li><p>存在未解释矛盾；</p>
+</li>
+<li><p>缺少时间依据；</p>
+</li>
+<li><p>无法证明人物有机会；</p>
+</li>
+<li><p>某证据来源不可靠；</p>
+</li>
+<li><p>该假设与已验证事实冲突。</p>
+</li>
+</ul>
+<hr />
+<h2 id="146-竞争假设">14.6 竞争假设</h2><p>同一事实可以存在多个解释。</p>
+<p>例如：</p>
+<ul>
+<li><p>嫌疑人进入房间；</p>
+</li>
+<li><p>嫌疑人的钥匙被盗；</p>
+</li>
+<li><p>门禁记录被伪造；</p>
+</li>
+<li><p>另一人使用嫌疑人身份。</p>
+</li>
+</ul>
+<p>玩家需要比较哪种假设：</p>
+<ul>
+<li><p>解释事实更多；</p>
+</li>
+<li><p>需要额外假设更少；</p>
+</li>
+<li><p>与可靠证据冲突更少；</p>
+</li>
+<li><p>具有可验证预测。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-推理关系图">15. 推理关系图</h2><h2 id="151-reasoningedge">15.1 ReasoningEdge</h2><p>建议字段：</p>
+<ul>
+<li><p>EdgeId；</p>
+</li>
+<li><p>SourceKnowledgeNodeIds；</p>
+</li>
+<li><p>TargetKnowledgeNodeId或HypothesisId；</p>
+</li>
+<li><p>RelationType；</p>
+</li>
+<li><p>Strength；</p>
+</li>
+<li><p>ConditionIds；</p>
+</li>
+<li><p>ValidationState；</p>
+</li>
+<li><p>EdgeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-relationtype">15.2 RelationType</h2><p>包括：</p>
+<ul>
+<li><p>Supports；</p>
+</li>
+<li><p>Contradicts；</p>
+</li>
+<li><p>Requires；</p>
+</li>
+<li><p>Explains；</p>
+</li>
+<li><p>CausedBy；</p>
+</li>
+<li><p>OccurredBefore；</p>
+</li>
+<li><p>OccurredAfter；</p>
+</li>
+<li><p>SameSource；</p>
+</li>
+<li><p>MutuallyExclusive；</p>
+</li>
+<li><p>Weakens；</p>
+</li>
+<li><p>Corroborates。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-推理链">15.3 推理链</h2><p>一个完整推理链可以是：</p>
+<p>门禁记录证明嫌疑人仍在建筑内
+→
+嫌疑人关于离开的证言不成立
+→
+其不在场证明被推翻
+→
+嫌疑人在案发时具备机会</p>
+<p>但这仍不能单独证明其实施犯罪。</p>
+<p>还需要：</p>
+<ul>
+<li><p>动机；</p>
+</li>
+<li><p>手段；</p>
+</li>
+<li><p>行为证据；</p>
+</li>
+<li><p>排除其他解释。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-循环推理检测">15.4 循环推理检测</h2><p>系统应识别：</p>
+<ul>
+<li><p>A支持B；</p>
+</li>
+<li><p>B又被用来证明A；</p>
+</li>
+</ul>
+<p>这类循环论证。</p>
+<p>例如：</p>
+<p>“他是犯人，所以证言是假的。”</p>
+<p>“证言是假的，所以他是犯人。”</p>
+<hr />
+<h2 id="16-矛盾系统">16. 矛盾系统</h2><h2 id="161-contradictionstate">16.1 ContradictionState</h2><p>建议包含：</p>
+<ul>
+<li><p>ContradictionId；</p>
+</li>
+<li><p>KnowledgeNodeAId；</p>
+</li>
+<li><p>KnowledgeNodeBId；</p>
+</li>
+<li><p>ContradictionType；</p>
+</li>
+<li><p>Severity；</p>
+</li>
+<li><p>ResolutionState；</p>
+</li>
+<li><p>PossibleExplanations；</p>
+</li>
+<li><p>UnlockEffects；</p>
+</li>
+<li><p>ContradictionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-矛盾类型">16.2 矛盾类型</h2><p>包括：</p>
+<ul>
+<li><p>时间矛盾；</p>
+</li>
+<li><p>地点矛盾；</p>
+</li>
+<li><p>身份矛盾；</p>
+</li>
+<li><p>数量矛盾；</p>
+</li>
+<li><p>物理不可能；</p>
+</li>
+<li><p>来源矛盾；</p>
+</li>
+<li><p>行为矛盾；</p>
+</li>
+<li><p>动机矛盾；</p>
+</li>
+<li><p>记录与证言矛盾。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-矛盾不一定意味着有人撒谎">16.3 矛盾不一定意味着有人撒谎</h2><p>可能原因包括：</p>
+<ul>
+<li><p>记忆偏差；</p>
+</li>
+<li><p>时间记录错误；</p>
+</li>
+<li><p>设备损坏；</p>
+</li>
+<li><p>误认；</p>
+</li>
+<li><p>转述；</p>
+</li>
+<li><p>证据污染；</p>
+</li>
+<li><p>故意伪造；</p>
+</li>
+<li><p>多个事件被混为一谈。</p>
+</li>
+</ul>
+<hr />
+<h2 id="164-矛盾解决">16.4 矛盾解决</h2><p>玩家可以通过：</p>
+<ul>
+<li><p>获取第三条证据；</p>
+</li>
+<li><p>重新鉴定；</p>
+</li>
+<li><p>追问；</p>
+</li>
+<li><p>调查时间设备；</p>
+</li>
+<li><p>现场复现；</p>
+</li>
+<li><p>测试行程时间；</p>
+</li>
+<li><p>获取原始记录；</p>
+</li>
+</ul>
+<p>解决矛盾。</p>
+<hr />
+<h2 id="17-场景调查系统">17. 场景调查系统</h2><h2 id="171-investigationlocationdefinition">17.1 InvestigationLocationDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>LocationId；</p>
+</li>
+<li><p>SceneAssetId；</p>
+</li>
+<li><p>EntryRules；</p>
+</li>
+<li><p>SearchZoneDefinitions；</p>
+</li>
+<li><p>EvidenceSpawnDefinitions；</p>
+</li>
+<li><p>ObservationDefinitions；</p>
+</li>
+<li><p>CharacterPresenceRules；</p>
+</li>
+<li><p>TimeRules；</p>
+</li>
+<li><p>ContaminationRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-searchzone">17.2 SearchZone</h2><p>建议字段：</p>
+<ul>
+<li><p>SearchZoneId；</p>
+</li>
+<li><p>Bounds；</p>
+</li>
+<li><p>SearchMode；</p>
+</li>
+<li><p>RequiredToolTags；</p>
+</li>
+<li><p>SearchCost；</p>
+</li>
+<li><p>DiscoverableEvidenceIds；</p>
+</li>
+<li><p>ObservationKnowledgeIds；</p>
+</li>
+<li><p>CompletionPolicy；</p>
+</li>
+<li><p>ZoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-调查方式">17.3 调查方式</h2><p>包括：</p>
+<ul>
+<li><p>自由视角观察；</p>
+</li>
+<li><p>热点调查；</p>
+</li>
+<li><p>区域搜索；</p>
+</li>
+<li><p>工具扫描；</p>
+</li>
+<li><p>拍照；</p>
+</li>
+<li><p>测量；</p>
+</li>
+<li><p>采样；</p>
+</li>
+<li><p>复现场景；</p>
+</li>
+<li><p>跟踪痕迹。</p>
+</li>
+</ul>
+<hr />
+<h2 id="174-现场信息层级">17.4 现场信息层级</h2><h3 id="明显信息">明显信息</h3><p>进入现场即可观察。</p>
+<h3 id="需要主动检查">需要主动检查</h3><p>需要选择对象或区域。</p>
+<h3 id="需要工具">需要工具</h3><p>例如：</p>
+<ul>
+<li><p>紫外线；</p>
+</li>
+<li><p>指纹；</p>
+</li>
+<li><p>化学分析；</p>
+</li>
+<li><p>金属探测；</p>
+</li>
+<li><p>数字恢复。</p>
+</li>
+</ul>
+<h3 id="需要先验知识">需要先验知识</h3><p>玩家必须先知道要寻找什么。</p>
+<hr />
+<h2 id="175-避免像素狩猎">17.5 避免像素狩猎</h2><p>可以通过：</p>
+<ul>
+<li><p>逻辑搜索区；</p>
+</li>
+<li><p>工具提示；</p>
+</li>
+<li><p>观察模式；</p>
+</li>
+<li><p>已完成区域标记；</p>
+</li>
+<li><p>基于假设的调查方向；</p>
+</li>
+</ul>
+<p>避免玩家因为一个极小热点而无法推进。</p>
+<hr />
+<h2 id="18-调查行动与成本">18. 调查行动与成本</h2><h2 id="181-investigationactiondefinition">18.1 InvestigationActionDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ActionId；</p>
+</li>
+<li><p>ActionType；</p>
+</li>
+<li><p>TargetType；</p>
+</li>
+<li><p>RequiredPermissionIds；</p>
+</li>
+<li><p>RequiredToolIds；</p>
+</li>
+<li><p>TimeCost；</p>
+</li>
+<li><p>BudgetCost；</p>
+</li>
+<li><p>RiskRules；</p>
+</li>
+<li><p>OutputKnowledgeIds；</p>
+</li>
+<li><p>FailureEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-调查行动">18.2 调查行动</h2><p>包括：</p>
+<ul>
+<li><p>搜查地点；</p>
+</li>
+<li><p>申请搜查令；</p>
+</li>
+<li><p>调取记录；</p>
+</li>
+<li><p>询问证人；</p>
+</li>
+<li><p>跟踪；</p>
+</li>
+<li><p>监视；</p>
+</li>
+<li><p>法证分析；</p>
+</li>
+<li><p>通信恢复；</p>
+</li>
+<li><p>财务调查；</p>
+</li>
+<li><p>行程复现；</p>
+</li>
+<li><p>专家咨询。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-调查事务">18.3 调查事务</h2><ol>
+<li><p>验证案件阶段；</p>
+</li>
+<li><p>验证权限；</p>
+</li>
+<li><p>验证目标；</p>
+</li>
+<li><p>验证资源和时间；</p>
+</li>
+<li><p>预留成本；</p>
+</li>
+<li><p>创建InvestigationTransaction；</p>
+</li>
+<li><p>推进案件时间；</p>
+</li>
+<li><p>处理成功、部分成功或失败；</p>
+</li>
+<li><p>生成知识节点；</p>
+</li>
+<li><p>更新人物警觉或世界状态；</p>
+</li>
+<li><p>发布InvestigationCompleted。</p>
+</li>
+</ol>
+<hr />
+<h2 id="184-部分成功">18.4 部分成功</h2><p>调查不一定只有成功或失败。</p>
+<p>例如：</p>
+<ul>
+<li><p>只恢复部分删除文件；</p>
+</li>
+<li><p>证人只愿意回答一个问题；</p>
+</li>
+<li><p>样本受到污染；</p>
+</li>
+<li><p>监控缺少关键十分钟；</p>
+</li>
+<li><p>跟踪中途失去目标。</p>
+</li>
+</ul>
+<p>部分成功可以生成：</p>
+<ul>
+<li><p>新信息；</p>
+</li>
+<li><p>新缺口；</p>
+</li>
+<li><p>新调查方向；</p>
+</li>
+<li><p>降低可信度的证据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-权限与法律边界">19. 权限与法律边界</h2><h2 id="191-permissionstate">19.1 PermissionState</h2><p>建议包含：</p>
+<ul>
+<li><p>PermissionId；</p>
+</li>
+<li><p>PermissionType；</p>
+</li>
+<li><p>Scope；</p>
+</li>
+<li><p>IssuerId；</p>
+</li>
+<li><p>ValidFrom；</p>
+</li>
+<li><p>ValidUntil；</p>
+</li>
+<li><p>AllowedActions；</p>
+</li>
+<li><p>EvidenceAdmissibilityRules；</p>
+</li>
+<li><p>PermissionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-权限类型">19.2 权限类型</h2><p>包括：</p>
+<ul>
+<li><p>现场访问；</p>
+</li>
+<li><p>搜查令；</p>
+</li>
+<li><p>数据调取；</p>
+</li>
+<li><p>扣押；</p>
+</li>
+<li><p>审讯；</p>
+</li>
+<li><p>监听；</p>
+</li>
+<li><p>逮捕；</p>
+</li>
+<li><p>专家分析；</p>
+</li>
+<li><p>跨区域调查。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-非法调查">19.3 非法调查</h2><p>玩家可以选择越权调查，但可能导致：</p>
+<ul>
+<li><p>证据不可采信；</p>
+</li>
+<li><p>组织处分；</p>
+</li>
+<li><p>嫌疑人警觉；</p>
+</li>
+<li><p>后续搜查令被拒；</p>
+</li>
+<li><p>关系恶化；</p>
+</li>
+<li><p>特殊路线解锁。</p>
+</li>
+</ul>
+<p>违法行为不应只提供无成本捷径。</p>
+<hr />
+<h2 id="20-对话与审讯流程">20. 对话与审讯流程</h2><h2 id="201-interrogationstate">20.1 InterrogationState</h2><p>建议包含：</p>
+<ul>
+<li><p>InterrogationId；</p>
+</li>
+<li><p>SubjectCharacterId；</p>
+</li>
+<li><p>AvailableTopicIds；</p>
+</li>
+<li><p>AskedTopicIds；</p>
+</li>
+<li><p>PresentedEvidenceIds；</p>
+</li>
+<li><p>TrustLevel；</p>
+</li>
+<li><p>PressureLevel；</p>
+</li>
+<li><p>CooperationState；</p>
+</li>
+<li><p>LegalState；</p>
+</li>
+<li><p>InterrogationVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-话题解锁">20.2 话题解锁</h2><p>话题可以来自：</p>
+<ul>
+<li><p>已知人物；</p>
+</li>
+<li><p>已发现地点；</p>
+</li>
+<li><p>证物；</p>
+</li>
+<li><p>证言；</p>
+</li>
+<li><p>假设；</p>
+</li>
+<li><p>矛盾；</p>
+</li>
+<li><p>关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-出示证据">20.3 出示证据</h2><p>玩家出示证据前应考虑：</p>
+<ul>
+<li><p>是否足以反驳；</p>
+</li>
+<li><p>是否会暴露调查方向；</p>
+</li>
+<li><p>是否会让对方销毁其他证据；</p>
+</li>
+<li><p>是否能换取更多信息；</p>
+</li>
+<li><p>是否应留到正式审讯。</p>
+</li>
+</ul>
+<hr />
+<h2 id="204-情绪反应">20.4 情绪反应</h2><p>角色可以根据：</p>
+<ul>
+<li><p>性格；</p>
+</li>
+<li><p>与玩家关系；</p>
+</li>
+<li><p>证据强度；</p>
+</li>
+<li><p>当前压力；</p>
+</li>
+<li><p>被揭露秘密；</p>
+</li>
+<li><p>法律风险；</p>
+</li>
+</ul>
+<p>产生不同反应。</p>
+<hr />
+<h2 id="205-审讯失败">20.5 审讯失败</h2><p>审讯失败可能：</p>
+<ul>
+<li><p>终止本次会谈；</p>
+</li>
+<li><p>降低信任；</p>
+</li>
+<li><p>修改后续证言；</p>
+</li>
+<li><p>增加嫌疑人警觉；</p>
+</li>
+<li><p>迫使玩家寻找其他证据。</p>
+</li>
+</ul>
+<p>不应让一次错误选项永久锁死主线，除非存在明确替代路线。</p>
+<hr />
+<h2 id="21-推论提交">21. 推论提交</h2><h2 id="211-deductionsubmission">21.1 DeductionSubmission</h2><p>建议字段：</p>
+<ul>
+<li><p>SubmissionId；</p>
+</li>
+<li><p>CaseId；</p>
+</li>
+<li><p>SubmissionType；</p>
+</li>
+<li><p>SelectedHypothesisIds；</p>
+</li>
+<li><p>SelectedKnowledgeIds；</p>
+</li>
+<li><p>TimelineConfiguration；</p>
+</li>
+<li><p>ActorAssignments；</p>
+</li>
+<li><p>ObjectAssignments；</p>
+</li>
+<li><p>SubmittedCaseVersion；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-提交类型">21.2 提交类型</h2><p>包括：</p>
+<ul>
+<li><p>阶段性推论；</p>
+</li>
+<li><p>矛盾指认；</p>
+</li>
+<li><p>嫌疑人排除；</p>
+</li>
+<li><p>时间线提交；</p>
+</li>
+<li><p>搜查令申请；</p>
+</li>
+<li><p>正式指控；</p>
+</li>
+<li><p>最终案件报告。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-阶段性推论">21.3 阶段性推论</h2><p>阶段性推论可以用于：</p>
+<ul>
+<li><p>解锁新地点；</p>
+</li>
+<li><p>获得权限；</p>
+</li>
+<li><p>推进案件阶段；</p>
+</li>
+<li><p>触发嫌疑人反应；</p>
+</li>
+<li><p>暴露推理缺口。</p>
+</li>
+</ul>
+<hr />
+<h2 id="214-最终指控结构">21.4 最终指控结构</h2><p>建议包含：</p>
+<ul>
+<li><p>被指控人物；</p>
+</li>
+<li><p>犯罪或行为类型；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>地点；</p>
+</li>
+<li><p>手段；</p>
+</li>
+<li><p>动机；</p>
+</li>
+<li><p>关键证据；</p>
+</li>
+<li><p>证言矛盾；</p>
+</li>
+<li><p>其他嫌疑人的排除依据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="215-推理评价">21.5 推理评价</h2><p>系统可以分别评价：</p>
+<ul>
+<li><p>事实正确性；</p>
+</li>
+<li><p>证据充分性；</p>
+</li>
+<li><p>时间线完整性；</p>
+</li>
+<li><p>因果解释；</p>
+</li>
+<li><p>证据合法性；</p>
+</li>
+<li><p>是否排除替代解释；</p>
+</li>
+<li><p>是否指控了正确人物。</p>
+</li>
+</ul>
+<hr />
+<h2 id="216-碰巧选对答案">21.6 碰巧选对答案</h2><p>若玩家选对人物但证据链不足，可以产生：</p>
+<ul>
+<li><p>无法起诉；</p>
+</li>
+<li><p>不完整结局；</p>
+</li>
+<li><p>嫌疑人暂时逃脱；</p>
+</li>
+<li><p>案件继续调查；</p>
+</li>
+<li><p>玩家获得低评价。</p>
+</li>
+</ul>
+<hr />
+<h2 id="22-案件结算">22. 案件结算</h2><h2 id="221-caseresultsnapshot">22.1 CaseResultSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>CaseId；</p>
+</li>
+<li><p>ResolutionType；</p>
+</li>
+<li><p>AccusedCharacterIds；</p>
+</li>
+<li><p>TruthMatchState；</p>
+</li>
+<li><p>EvidenceSufficiency；</p>
+</li>
+<li><p>LegalValidity；</p>
+</li>
+<li><p>TimelineAccuracy；</p>
+</li>
+<li><p>UnresolvedContradictionIds；</p>
+</li>
+<li><p>InnocentImpact；</p>
+</li>
+<li><p>CharacterConsequences；</p>
+</li>
+<li><p>WorldConsequences；</p>
+</li>
+<li><p>RewardDeltas；</p>
+</li>
+<li><p>ResultVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-结果类型">22.2 结果类型</h2><p>包括：</p>
+<ul>
+<li><p>FullySolved；</p>
+</li>
+<li><p>CorrectButInsufficient；</p>
+</li>
+<li><p>PartialResolution；</p>
+</li>
+<li><p>WrongAccusation；</p>
+</li>
+<li><p>SuspectEscaped；</p>
+</li>
+<li><p>CaseDismissed；</p>
+</li>
+<li><p>Reopened；</p>
+</li>
+<li><p>ColdCase；</p>
+</li>
+<li><p>AlternativeResolution。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-不同层面的成功">22.3 不同层面的成功</h2><p>玩家可能：</p>
+<ul>
+<li><p>找到真凶但证据不足；</p>
+</li>
+<li><p>没找到真凶但阻止下一次犯罪；</p>
+</li>
+<li><p>指认了共犯但主犯逃脱；</p>
+</li>
+<li><p>发现官方案件结论错误；</p>
+</li>
+<li><p>找到事实但选择隐瞒；</p>
+</li>
+<li><p>完成法律结案但未发现完整真相。</p>
+</li>
+</ul>
+<hr />
+<h2 id="224-长期后果">22.4 长期后果</h2><p>案件结果可以影响：</p>
+<ul>
+<li><p>组织信任；</p>
+</li>
+<li><p>媒体评价；</p>
+</li>
+<li><p>NPC关系；</p>
+</li>
+<li><p>城市状态；</p>
+</li>
+<li><p>后续案件；</p>
+</li>
+<li><p>可用权限；</p>
+</li>
+<li><p>玩家职业路线；</p>
+</li>
+<li><p>长期主线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-完整事件与执行流程示例">23. 完整事件与执行流程示例</h2><p>以下以“博物馆保管员死亡，珍贵文物失踪”为例。</p>
+<h3 id="231-初始案件">23.1 初始案件</h3><p>已知情况：</p>
+<ul>
+<li><p>保管员被发现死于地下档案室；</p>
+</li>
+<li><p>一件文物失踪；</p>
+</li>
+<li><p>档案室门从内部反锁；</p>
+</li>
+<li><p>监控显示没有外人进入；</p>
+</li>
+<li><p>三名工作人员拥有内部权限。</p>
+</li>
+</ul>
+<hr />
+<h3 id="232-初始现场调查">23.2 初始现场调查</h3><p>玩家发现：</p>
+<ul>
+<li><p>尸体附近有碎玻璃；</p>
+</li>
+<li><p>门锁没有强行破坏；</p>
+</li>
+<li><p>保管员手表停在22:15；</p>
+</li>
+<li><p>通风口存在新划痕；</p>
+</li>
+<li><p>档案柜中缺少一份运输记录。</p>
+</li>
+</ul>
+<p>这些信息进入KnowledgeState，但尚未自动形成结论。</p>
+<hr />
+<h3 id="233-获取证言">23.3 获取证言</h3><p>馆长声称：</p>
+<ul>
+<li>21:30已经离开。</li>
+</ul>
+<p>警卫声称：</p>
+<ul>
+<li>22:00巡逻时档案室仍然亮灯。</li>
+</ul>
+<p>修复师声称：</p>
+<ul>
+<li>当晚没有进入地下层。</li>
+</ul>
+<hr />
+<h3 id="234-调取记录">23.4 调取记录</h3><p>门禁系统显示：</p>
+<ul>
+<li><p>馆长的卡在21:28离开；</p>
+</li>
+<li><p>修复师的卡在21:50进入地下层；</p>
+</li>
+<li><p>22:20出现一次未识别的维护权限访问。</p>
+</li>
+</ul>
+<p>修复师的证言与门禁记录矛盾。</p>
+<hr />
+<h3 id="235-质疑修复师">23.5 质疑修复师</h3><p>玩家出示门禁记录。</p>
+<p>修复师承认：</p>
+<ul>
+<li><p>曾进入地下层；</p>
+</li>
+<li><p>但只是取回个人工具；</p>
+</li>
+<li><p>隐瞒是因为未经许可加班。</p>
+</li>
+</ul>
+<p>这揭露了一个秘密，但不能证明其杀人或盗窃。</p>
+<hr />
+<h3 id="236-法证分析">23.6 法证分析</h3><p>手表分析显示：</p>
+<ul>
+<li><p>手表因撞击停止；</p>
+</li>
+<li><p>停止时间不等于死亡时间。</p>
+</li>
+</ul>
+<p>碎玻璃分析显示：</p>
+<ul>
+<li><p>来自楼上修复室的展示柜；</p>
+</li>
+<li><p>并非档案室原有物品。</p>
+</li>
+</ul>
+<hr />
+<h3 id="237-建立竞争假设">23.7 建立竞争假设</h3><p>玩家建立三个假设：</p>
+<ol>
+<li><p>修复师进入档案室并实施盗窃；</p>
+</li>
+<li><p>馆长使用他人权限返回；</p>
+</li>
+<li><p>警卫通过维护权限进入。</p>
+</li>
+</ol>
+<p>当前修复师假设受到门禁记录支持，但缺少：</p>
+<ul>
+<li><p>动机；</p>
+</li>
+<li><p>文物转移路径；</p>
+</li>
+<li><p>死亡行为证据。</p>
+</li>
+</ul>
+<hr />
+<h3 id="238-时间线重建">23.8 时间线重建</h3><p>玩家确认：</p>
+<ul>
+<li><p>修复师21:50进入；</p>
+</li>
+<li><p>22:05离开；</p>
+</li>
+<li><p>警卫22:00声称看到灯光；</p>
+</li>
+<li><p>维护权限22:20访问；</p>
+</li>
+<li><p>尸体最早22:30被发现。</p>
+</li>
+</ul>
+<p>这说明：</p>
+<ul>
+<li><p>修复师和警卫在22:00附近可能同时位于地下层；</p>
+</li>
+<li><p>警卫证言中没有提到修复师；</p>
+</li>
+<li><p>维护权限发生在修复师离开后。</p>
+</li>
+</ul>
+<hr />
+<h3 id="239-调查维护权限">23.9 调查维护权限</h3><p>玩家发现：</p>
+<ul>
+<li><p>维护权限由警卫室终端生成；</p>
+</li>
+<li><p>警卫知道如何关闭部分监控；</p>
+</li>
+<li><p>通风口划痕来自从内部搬运大型硬箱。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2310-证言矛盾">23.10 证言矛盾</h3><p>玩家质疑警卫：</p>
+<ul>
+<li><p>如果22:00巡逻时档案室亮灯，他应当遇见刚离开的修复师；</p>
+</li>
+<li><p>但他声称地下层没有其他人；</p>
+</li>
+<li><p>监控关闭和维护权限都来自其岗位。</p>
+</li>
+</ul>
+<p>警卫修改证言，称自己“记错了时间”。</p>
+<hr />
+<h3 id="2311-动机调查">23.11 动机调查</h3><p>财务记录显示：</p>
+<ul>
+<li><p>警卫存在大量债务；</p>
+</li>
+<li><p>曾与地下文物交易人通信；</p>
+</li>
+<li><p>通信时间为案发前一周。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2312-完整假设">23.12 完整假设</h3><p>玩家建立推理链：</p>
+<p>警卫利用维护权限关闭监控
+→
+使用内部通道进入档案室
+→
+与保管员发生冲突
+→
+撞击导致手表停止
+→
+使用修复室硬箱搬运文物
+→
+通过通风维护通道离开
+→
+伪造“无人进入”的密室假象</p>
+<hr />
+<h3 id="2313-排除修复师">23.13 排除修复师</h3><p>修复师虽然撒谎，但：</p>
+<ul>
+<li><p>在22:05已离开；</p>
+</li>
+<li><p>其工具上没有文物包装残留；</p>
+</li>
+<li><p>没有维护权限；</p>
+</li>
+<li><p>其隐瞒原因与未授权工作有关。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2314-最终提交">23.14 最终提交</h3><p>玩家提交：</p>
+<ul>
+<li><p>警卫为主犯；</p>
+</li>
+<li><p>盗窃是主要动机；</p>
+</li>
+<li><p>保管员死亡发生在冲突中；</p>
+</li>
+<li><p>修复师证言不实但并非凶手；</p>
+</li>
+<li><p>馆长无直接参与。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2315-结算">23.15 结算</h3><p>系统评价：</p>
+<ul>
+<li><p>人物正确；</p>
+</li>
+<li><p>时间线完整；</p>
+</li>
+<li><p>手段解释完整；</p>
+</li>
+<li><p>关键证据合法；</p>
+</li>
+<li><p>已排除主要替代假设。</p>
+</li>
+</ul>
+<p>案件结果为FullySolved。</p>
+<p>完整循环体现：</p>
+<p>现场观察
+→ 证言获取
+→ 记录比对
+→ 矛盾发现
+→ 假设竞争
+→ 时间线重建
+→ 动机确认
+→ 排除替代解释
+→ 最终定案</p>
+<hr />
+<h2 id="24-模块通信设计">24. 模块通信设计</h2><h2 id="241-命令">24.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>SearchLocation；</p>
+</li>
+<li><p>CollectEvidence；</p>
+</li>
+<li><p>AnalyzeEvidence；</p>
+</li>
+<li><p>InterviewCharacter；</p>
+</li>
+<li><p>AskTopic；</p>
+</li>
+<li><p>PresentEvidence；</p>
+</li>
+<li><p>CreateHypothesis；</p>
+</li>
+<li><p>LinkKnowledgeNodes；</p>
+</li>
+<li><p>SubmitContradiction；</p>
+</li>
+<li><p>RequestPermission；</p>
+</li>
+<li><p>ReconstructTimeline；</p>
+</li>
+<li><p>SubmitDeduction；</p>
+</li>
+<li><p>AccuseCharacter。</p>
+</li>
+</ul>
+<p>命令必须携带：</p>
+<ul>
+<li><p>CaseId；</p>
+</li>
+<li><p>发起者；</p>
+</li>
+<li><p>目标；</p>
+</li>
+<li><p>当前案件阶段；</p>
+</li>
+<li><p>知识版本；</p>
+</li>
+<li><p>资源和权限上下文；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-同步查询">24.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>当前地点是否可进入；</p>
+</li>
+<li><p>证据是否可采集；</p>
+</li>
+<li><p>某角色是否可访问；</p>
+</li>
+<li><p>某话题是否已解锁；</p>
+</li>
+<li><p>假设缺少哪些条件；</p>
+</li>
+<li><p>某两条信息是否矛盾；</p>
+</li>
+<li><p>当前案件时间；</p>
+</li>
+<li><p>当前权限；</p>
+</li>
+<li><p>某证据来源是否可靠。</p>
+</li>
+</ul>
+<p>查询不能：</p>
+<ul>
+<li><p>推进案件时间；</p>
+</li>
+<li><p>自动发现证据；</p>
+</li>
+<li><p>修改角色状态；</p>
+</li>
+<li><p>消费随机流。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-领域事件">24.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>CaseStarted；</p>
+</li>
+<li><p>LocationUnlocked；</p>
+</li>
+<li><p>EvidenceDiscovered；</p>
+</li>
+<li><p>EvidenceCollected；</p>
+</li>
+<li><p>EvidenceAnalyzed；</p>
+</li>
+<li><p>TestimonyRecorded；</p>
+</li>
+<li><p>TestimonyChallenged；</p>
+</li>
+<li><p>KnowledgeVerified；</p>
+</li>
+<li><p>ContradictionDiscovered；</p>
+</li>
+<li><p>HypothesisCreated；</p>
+</li>
+<li><p>HypothesisUpdated；</p>
+</li>
+<li><p>InvestigationCompleted；</p>
+</li>
+<li><p>PermissionGranted；</p>
+</li>
+<li><p>TimelineReconstructed；</p>
+</li>
+<li><p>DeductionSubmitted；</p>
+</li>
+<li><p>CasePhaseChanged；</p>
+</li>
+<li><p>CaseResolved。</p>
+</li>
+</ul>
+<hr />
+<h2 id="244-表现事件">24.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>ShowEvidenceCloseUp；</p>
+</li>
+<li><p>PlayInterviewReaction；</p>
+</li>
+<li><p>DisplayContradiction；</p>
+</li>
+<li><p>AnimateCaseBoardLink；</p>
+</li>
+<li><p>ShowTimelineUpdate；</p>
+</li>
+<li><p>PlayReconstructionScene；</p>
+</li>
+<li><p>DisplayAccusation；</p>
+</li>
+<li><p>ShowCaseResult。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>证据是否有效；</p>
+</li>
+<li><p>证言是否为真；</p>
+</li>
+<li><p>假设是否成立；</p>
+</li>
+<li><p>案件是否完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-存档与持久化">25. 存档与持久化</h2><h2 id="251-savesnapshot">25.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>CaseRuntimeState；</p>
+</li>
+<li><p>PlayerKnowledgeState；</p>
+</li>
+<li><p>EvidenceStates；</p>
+</li>
+<li><p>CharacterStates；</p>
+</li>
+<li><p>TestimonyStates；</p>
+</li>
+<li><p>HypothesisStates；</p>
+</li>
+<li><p>ContradictionStates；</p>
+</li>
+<li><p>TimelineStates；</p>
+</li>
+<li><p>PermissionStates；</p>
+</li>
+<li><p>InvestigationTransactionStates；</p>
+</li>
+<li><p>CaseBoardState；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-保存边界">25.2 保存边界</h2><p>适合保存：</p>
+<ul>
+<li><p>进入调查地点前；</p>
+</li>
+<li><p>证据采集后；</p>
+</li>
+<li><p>证言完成后；</p>
+</li>
+<li><p>鉴定提交后；</p>
+</li>
+<li><p>案件阶段变化；</p>
+</li>
+<li><p>推论提交前；</p>
+</li>
+<li><p>案件结算后。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-调查中存档">25.3 调查中存档</h2><p>如果支持任意存档，需要保存：</p>
+<ul>
+<li><p>当前对话节点；</p>
+</li>
+<li><p>当前审讯压力；</p>
+</li>
+<li><p>未完成调查事务；</p>
+</li>
+<li><p>场景证据位置；</p>
+</li>
+<li><p>当前案件时间；</p>
+</li>
+<li><p>角色日程；</p>
+</li>
+<li><p>证据污染状态；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="254-稳定id">25.4 稳定ID</h2><p>必须使用：</p>
+<ul>
+<li><p>CaseId；</p>
+</li>
+<li><p>TruthEventId；</p>
+</li>
+<li><p>EvidenceInstanceId；</p>
+</li>
+<li><p>KnowledgeNodeId；</p>
+</li>
+<li><p>TestimonyId；</p>
+</li>
+<li><p>HypothesisId；</p>
+</li>
+<li><p>ContradictionId；</p>
+</li>
+<li><p>TimelineNodeId；</p>
+</li>
+<li><p>CharacterId；</p>
+</li>
+<li><p>LocationId。</p>
+</li>
+</ul>
+<p>不能依赖：</p>
+<ul>
+<li><p>对话数组下标；</p>
+</li>
+<li><p>场景对象层级路径；</p>
+</li>
+<li><p>显示文本；</p>
+</li>
+<li><p>当前加载顺序。</p>
+</li>
+</ul>
+<hr />
+<h2 id="255-存档迁移">25.5 存档迁移</h2><p>案件内容更新时，可以：</p>
+<ul>
+<li><p>将旧证据映射到新证据；</p>
+</li>
+<li><p>重建玩家知识图；</p>
+</li>
+<li><p>保留已验证结论；</p>
+</li>
+<li><p>将无效假设标记为Legacy；</p>
+</li>
+<li><p>将玩家移动到安全阶段；</p>
+</li>
+<li><p>防止已完成案件重新发奖。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-失败隔离">26. 失败隔离</h2><h2 id="261-证据采集失败">26.1 证据采集失败</h2><p>如果采集过程异常：</p>
+<ul>
+<li><p>不销毁现场证据；</p>
+</li>
+<li><p>不生成重复证据实例；</p>
+</li>
+<li><p>保留发现状态；</p>
+</li>
+<li><p>释放采集锁；</p>
+</li>
+<li><p>允许重新采集；</p>
+</li>
+<li><p>记录场景和工具上下文。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-鉴定事务失败">26.2 鉴定事务失败</h2><p>鉴定提交后系统异常时：</p>
+<ul>
+<li><p>保留样本；</p>
+</li>
+<li><p>保留AnalysisTransactionId；</p>
+</li>
+<li><p>不重复扣除预算；</p>
+</li>
+<li><p>使用同一事务继续；</p>
+</li>
+<li><p>不随机生成不同结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-证言节点缺失">26.3 证言节点缺失</h2><p>如果对话引用缺失：</p>
+<ul>
+<li><p>使用保底回答；</p>
+</li>
+<li><p>保留人物状态；</p>
+</li>
+<li><p>不自动视为角色拒绝合作；</p>
+</li>
+<li><p>记录缺失节点；</p>
+</li>
+<li><p>不阻塞案件主线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="264-假设关系损坏">26.4 假设关系损坏</h2><p>检测到：</p>
+<ul>
+<li><p>引用不存在证据；</p>
+</li>
+<li><p>循环论证；</p>
+</li>
+<li><p>同一关系重复；</p>
+</li>
+<li><p>已推翻事实仍作为强支持；</p>
+</li>
+</ul>
+<p>时：</p>
+<ul>
+<li><p>冻结该假设；</p>
+</li>
+<li><p>重建关系图；</p>
+</li>
+<li><p>标记无效关系；</p>
+</li>
+<li><p>保留玩家笔记；</p>
+</li>
+<li><p>不影响其他假设。</p>
+</li>
+</ul>
+<hr />
+<h2 id="265-时间线非法">26.5 时间线非法</h2><p>如果出现：</p>
+<ul>
+<li><p>同一人物不可能位置重叠；</p>
+</li>
+<li><p>事件结束早于开始；</p>
+</li>
+<li><p>必需事件缺失；</p>
+</li>
+<li><p>时间范围为空；</p>
+</li>
+</ul>
+<p>则：</p>
+<ul>
+<li><p>阻止提交；</p>
+</li>
+<li><p>标记具体冲突；</p>
+</li>
+<li><p>不清空玩家当前排列；</p>
+</li>
+<li><p>保留其他合法节点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="266-案件阶段死锁">26.6 案件阶段死锁</h2><p>系统应持续检查：</p>
+<ul>
+<li><p>当前阶段是否存在可执行调查；</p>
+</li>
+<li><p>必需证据是否仍可获得；</p>
+</li>
+<li><p>必需人物是否可访问；</p>
+</li>
+<li><p>权限是否可以申请；</p>
+</li>
+<li><p>截止时间是否已造成不可恢复状态。</p>
+</li>
+</ul>
+<p>如果主线调查不可达，可以：</p>
+<ul>
+<li><p>解锁替代调查；</p>
+</li>
+<li><p>提供补充证言；</p>
+</li>
+<li><p>恢复关键证据；</p>
+</li>
+<li><p>进入案件复查流程。</p>
+</li>
+</ul>
+<hr />
+<h2 id="267-错误指控事务">26.7 错误指控事务</h2><p>正式指控提交后：</p>
+<ul>
+<li><p>冻结所用证据版本；</p>
+</li>
+<li><p>生成AccusationSnapshot；</p>
+</li>
+<li><p>防止重复提交；</p>
+</li>
+<li><p>若结算失败，使用同一快照重试；</p>
+</li>
+<li><p>不因重试改变案件真相。</p>
+</li>
+</ul>
+<hr />
+<h2 id="268-案件结算失败">26.8 案件结算失败</h2><p>案件已完成但长期结果写入失败时：</p>
+<ul>
+<li><p>保存CaseResultSnapshot；</p>
+</li>
+<li><p>标记PendingCommit；</p>
+</li>
+<li><p>不要求玩家重新推理；</p>
+</li>
+<li><p>不重复发放奖励；</p>
+</li>
+<li><p>使用幂等结果ID重试。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-调试与可观测性">27. 调试与可观测性</h2><h2 id="271-真相时间线查看器">27.1 真相时间线查看器</h2><p>显示：</p>
+<ul>
+<li><p>全部真实事件；</p>
+</li>
+<li><p>实际参与者；</p>
+</li>
+<li><p>地点；</p>
+</li>
+<li><p>使用物品；</p>
+</li>
+<li><p>产生证据；</p>
+</li>
+<li><p>被哪些人观察；</p>
+</li>
+<li><p>玩家是否已知。</p>
+</li>
+</ul>
+<p>仅供开发环境使用。</p>
+<hr />
+<h2 id="272-玩家知识查看器">27.2 玩家知识查看器</h2><p>显示：</p>
+<ul>
+<li><p>已知节点；</p>
+</li>
+<li><p>来源；</p>
+</li>
+<li><p>可靠性；</p>
+</li>
+<li><p>验证状态；</p>
+</li>
+<li><p>关联人物；</p>
+</li>
+<li><p>关联地点；</p>
+</li>
+<li><p>玩家笔记；</p>
+</li>
+<li><p>未解锁信息。</p>
+</li>
+</ul>
+<hr />
+<h2 id="273-证据溯源图">27.3 证据溯源图</h2><p>选择一条证据后显示：</p>
+<ul>
+<li><p>产生真相事件；</p>
+</li>
+<li><p>发现地点；</p>
+</li>
+<li><p>采集者；</p>
+</li>
+<li><p>保管链；</p>
+</li>
+<li><p>鉴定；</p>
+</li>
+<li><p>派生知识；</p>
+</li>
+<li><p>支持假设；</p>
+</li>
+<li><p>反驳假设。</p>
+</li>
+</ul>
+<hr />
+<h2 id="274-证言检查器">27.4 证言检查器</h2><p>显示：</p>
+<ul>
+<li><p>原始陈述；</p>
+</li>
+<li><p>角色真实所知；</p>
+</li>
+<li><p>记忆偏差；</p>
+</li>
+<li><p>故意隐瞒；</p>
+</li>
+<li><p>当前版本；</p>
+</li>
+<li><p>已被出示证据；</p>
+</li>
+<li><p>可解锁追问；</p>
+</li>
+<li><p>矛盾关系。</p>
+</li>
+</ul>
+<hr />
+<h2 id="275-假设分析器">27.5 假设分析器</h2><p>显示：</p>
+<ul>
+<li><p>假设参数；</p>
+</li>
+<li><p>支持证据；</p>
+</li>
+<li><p>反对证据；</p>
+</li>
+<li><p>缺失条件；</p>
+</li>
+<li><p>循环论证；</p>
+</li>
+<li><p>当前可信度；</p>
+</li>
+<li><p>可执行验证行动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="276-时间线约束查看器">27.6 时间线约束查看器</h2><p>显示：</p>
+<ul>
+<li><p>时间范围；</p>
+</li>
+<li><p>前后关系；</p>
+</li>
+<li><p>旅行时间；</p>
+</li>
+<li><p>冲突；</p>
+</li>
+<li><p>未确定区间；</p>
+</li>
+<li><p>支持来源；</p>
+</li>
+<li><p>当前重建结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="277-案件阶段查看器">27.7 案件阶段查看器</h2><p>显示：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>进入条件；</p>
+</li>
+<li><p>完成条件；</p>
+</li>
+<li><p>可用地点；</p>
+</li>
+<li><p>可用人物；</p>
+</li>
+<li><p>可用行动；</p>
+</li>
+<li><p>尚未满足条件；</p>
+</li>
+<li><p>保底推进路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="278-调查成本时间线">27.8 调查成本时间线</h2><p>记录：</p>
+<ul>
+<li><p>时间；</p>
+</li>
+<li><p>预算；</p>
+</li>
+<li><p>权限；</p>
+</li>
+<li><p>证人信任；</p>
+</li>
+<li><p>证据状态；</p>
+</li>
+<li><p>调查结果；</p>
+</li>
+<li><p>错误行动成本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="279-玩家推理回放">27.9 玩家推理回放</h2><p>记录：</p>
+<ul>
+<li><p>证据发现顺序；</p>
+</li>
+<li><p>对话选择；</p>
+</li>
+<li><p>出示证据；</p>
+</li>
+<li><p>假设建立；</p>
+</li>
+<li><p>关系连线；</p>
+</li>
+<li><p>时间线排列；</p>
+</li>
+<li><p>指控内容；</p>
+</li>
+<li><p>案件结果。</p>
+</li>
+</ul>
+<p>用于分析：</p>
+<ul>
+<li><p>玩家何时误判；</p>
+</li>
+<li><p>哪条证据被忽略；</p>
+</li>
+<li><p>哪个提示过强；</p>
+</li>
+<li><p>哪个逻辑跳跃难以理解；</p>
+</li>
+<li><p>哪个错误假设长期未被推翻。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2710-作者调试面板">27.10 作者调试面板</h2><p>作者可以：</p>
+<ul>
+<li><p>强制解锁证据；</p>
+</li>
+<li><p>切换玩家知识状态；</p>
+</li>
+<li><p>模拟证言版本；</p>
+</li>
+<li><p>调整案件时间；</p>
+</li>
+<li><p>验证任意假设；</p>
+</li>
+<li><p>跳转案件阶段；</p>
+</li>
+<li><p>执行可解性测试；</p>
+</li>
+<li><p>生成案件流程报告。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-内容验证工具">28. 内容验证工具</h2><h2 id="281-案件可解性验证">28.1 案件可解性验证</h2><p>检查：</p>
+<ul>
+<li><p>真相是否能够由可获得信息唯一或合理确定；</p>
+</li>
+<li><p>关键证据是否可访问；</p>
+</li>
+<li><p>必需人物是否可访谈；</p>
+</li>
+<li><p>必需权限是否可获得；</p>
+</li>
+<li><p>截止时间是否合理；</p>
+</li>
+<li><p>是否存在合法推理链。</p>
+</li>
+</ul>
+<hr />
+<h2 id="282-必需信息覆盖验证">28.2 必需信息覆盖验证</h2><p>每个最终结论都应拥有：</p>
+<ul>
+<li><p>至少一个支持来源；</p>
+</li>
+<li><p>必要时多个独立来源；</p>
+</li>
+<li><p>对竞争假设的排除信息；</p>
+</li>
+<li><p>合法的获取路径。</p>
+</li>
+</ul>
+<hr />
+<h2 id="283-矛盾验证">28.3 矛盾验证</h2><p>检查：</p>
+<ul>
+<li><p>所有设计矛盾都可被玩家发现；</p>
+</li>
+<li><p>矛盾双方信息均可获得；</p>
+</li>
+<li><p>矛盾存在合理解释；</p>
+</li>
+<li><p>解开矛盾后能够产生有效推进。</p>
+</li>
+</ul>
+<hr />
+<h2 id="284-时间线验证">28.4 时间线验证</h2><p>自动检查：</p>
+<ul>
+<li><p>事件时间范围；</p>
+</li>
+<li><p>人物移动速度；</p>
+</li>
+<li><p>地点距离；</p>
+</li>
+<li><p>行为持续时间；</p>
+</li>
+<li><p>同时性；</p>
+</li>
+<li><p>不在场证明；</p>
+</li>
+<li><p>关键事件顺序。</p>
+</li>
+</ul>
+<hr />
+<h2 id="285-证据来源验证">28.5 证据来源验证</h2><p>检查：</p>
+<ul>
+<li><p>每条证据存在真相来源；</p>
+</li>
+<li><p>每个分析结果有输入；</p>
+</li>
+<li><p>派生知识不会凭空生成；</p>
+</li>
+<li><p>被销毁证据不会再次出现；</p>
+</li>
+<li><p>共享来源不会错误算作独立佐证。</p>
+</li>
+</ul>
+<hr />
+<h2 id="286-证言一致性验证">28.6 证言一致性验证</h2><p>模拟角色在不同案件状态下的回答，检查：</p>
+<ul>
+<li><p>前置条件；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>关系；</p>
+</li>
+<li><p>已出示证据；</p>
+</li>
+<li><p>证言修改；</p>
+</li>
+<li><p>话题解锁；</p>
+</li>
+<li><p>矛盾链接。</p>
+</li>
+</ul>
+<hr />
+<h2 id="287-错误路线恢复验证">28.7 错误路线恢复验证</h2><p>测试：</p>
+<ul>
+<li><p>过早指控；</p>
+</li>
+<li><p>错误质疑；</p>
+</li>
+<li><p>证人拒绝合作；</p>
+</li>
+<li><p>证据污染；</p>
+</li>
+<li><p>错过时间窗口；</p>
+</li>
+<li><p>非法调查；</p>
+</li>
+<li><p>错误时间线。</p>
+</li>
+</ul>
+<p>确保主线存在：</p>
+<ul>
+<li><p>替代证据；</p>
+</li>
+<li><p>重新调查；</p>
+</li>
+<li><p>翻案；</p>
+</li>
+<li><p>不完整结局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="288-自动调查代理">28.8 自动调查代理</h2><p>代理可以采用：</p>
+<ul>
+<li><p>穷举调查；</p>
+</li>
+<li><p>高价值信息优先；</p>
+</li>
+<li><p>嫌疑人优先；</p>
+</li>
+<li><p>时间线优先；</p>
+</li>
+<li><p>最小调查成本；</p>
+</li>
+<li><p>随机调查。</p>
+</li>
+</ul>
+<p>统计：</p>
+<ul>
+<li><p>最短解案路径；</p>
+</li>
+<li><p>平均调查成本；</p>
+</li>
+<li><p>无效行动；</p>
+</li>
+<li><p>必经证据；</p>
+</li>
+<li><p>容易遗漏的节点；</p>
+</li>
+<li><p>案件软锁概率。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-性能设计">29. 性能设计</h2><h2 id="291-知识图事件驱动更新">29.1 知识图事件驱动更新</h2><p>不需要每帧重算全部推理关系。</p>
+<p>只在以下事件发生后更新：</p>
+<ul>
+<li><p>EvidenceDiscovered；</p>
+</li>
+<li><p>EvidenceAnalyzed；</p>
+</li>
+<li><p>TestimonyRecorded；</p>
+</li>
+<li><p>KnowledgeVerified；</p>
+</li>
+<li><p>HypothesisChanged；</p>
+</li>
+<li><p>ContradictionResolved。</p>
+</li>
+</ul>
+<hr />
+<h2 id="292-关系图局部失效">29.2 关系图局部失效</h2><p>证据可靠性发生变化时，只重新计算：</p>
+<ul>
+<li><p>引用该证据的推理边；</p>
+</li>
+<li><p>相关假设；</p>
+</li>
+<li><p>派生结论；</p>
+</li>
+<li><p>相关矛盾。</p>
+</li>
+</ul>
+<hr />
+<h2 id="293-场景与案件状态分离">29.3 场景与案件状态分离</h2><p>场景卸载后只保留：</p>
+<ul>
+<li><p>证据状态；</p>
+</li>
+<li><p>搜查状态；</p>
+</li>
+<li><p>污染状态；</p>
+</li>
+<li><p>人物状态；</p>
+</li>
+<li><p>地点开放状态。</p>
+</li>
+</ul>
+<p>粒子、临时动画和装饰对象可重新生成。</p>
+<hr />
+<h2 id="294-npc远端模拟">29.4 NPC远端模拟</h2><p>玩家不在当前地点时，人物可以只维护：</p>
+<ul>
+<li><p>当前地点；</p>
+</li>
+<li><p>日程；</p>
+</li>
+<li><p>调查警觉；</p>
+</li>
+<li><p>证言状态；</p>
+</li>
+<li><p>关键行为。</p>
+</li>
+</ul>
+<hr />
+<h2 id="295-案件板派生缓存">29.5 案件板派生缓存</h2><p>可以缓存：</p>
+<ul>
+<li><p>人物关系图；</p>
+</li>
+<li><p>时间线布局；</p>
+</li>
+<li><p>未解决矛盾；</p>
+</li>
+<li><p>假设支持度；</p>
+</li>
+<li><p>可用调查方向。</p>
+</li>
+</ul>
+<p>相关知识更新后再局部重建。</p>
+<hr />
+<h2 id="30-可扩展点">30. 可扩展点</h2><h2 id="301-新案件">30.1 新案件</h2><p>提供：</p>
+<ul>
+<li><p>CaseDefinition；</p>
+</li>
+<li><p>TruthModel；</p>
+</li>
+<li><p>地点；</p>
+</li>
+<li><p>人物；</p>
+</li>
+<li><p>证据；</p>
+</li>
+<li><p>证言；</p>
+</li>
+<li><p>假设；</p>
+</li>
+<li><p>结局；</p>
+</li>
+<li><p>演出资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-新证据类型">30.2 新证据类型</h2><p>提供：</p>
+<ul>
+<li><p>发现方式；</p>
+</li>
+<li><p>采集规则；</p>
+</li>
+<li><p>污染规则；</p>
+</li>
+<li><p>分析方法；</p>
+</li>
+<li><p>生成知识；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="303-新调查工具">30.3 新调查工具</h2><p>例如：</p>
+<ul>
+<li><p>指纹；</p>
+</li>
+<li><p>DNA；</p>
+</li>
+<li><p>紫外线；</p>
+</li>
+<li><p>数字恢复；</p>
+</li>
+<li><p>声纹；</p>
+</li>
+<li><p>轨迹分析；</p>
+</li>
+<li><p>心理分析；</p>
+</li>
+<li><p>超自然感知。</p>
+</li>
+</ul>
+<p>通过统一InvestigationAction和EvidenceAnalysis接口接入。</p>
+<hr />
+<h2 id="304-新审讯机制">30.4 新审讯机制</h2><p>可以扩展：</p>
+<ul>
+<li><p>压力审讯；</p>
+</li>
+<li><p>建立信任；</p>
+</li>
+<li><p>谈判；</p>
+</li>
+<li><p>法庭交叉询问；</p>
+</li>
+<li><p>心理观察；</p>
+</li>
+<li><p>多人对质。</p>
+</li>
+</ul>
+<p>仍应复用：</p>
+<ul>
+<li><p>TestimonyState；</p>
+</li>
+<li><p>KnowledgeNode；</p>
+</li>
+<li><p>Contradiction；</p>
+</li>
+<li><p>PresentedEvidence。</p>
+</li>
+</ul>
+<hr />
+<h2 id="305-新案件结构">30.5 新案件结构</h2><p>可以支持：</p>
+<ul>
+<li><p>单一真相；</p>
+</li>
+<li><p>多个共犯；</p>
+</li>
+<li><p>连环案件；</p>
+</li>
+<li><p>动态生成案件；</p>
+</li>
+<li><p>开放式真相；</p>
+</li>
+<li><p>无法完全定案；</p>
+</li>
+<li><p>玩家决定是否公开真相。</p>
+</li>
+</ul>
+<hr />
+<h2 id="306-多案件主线">30.6 多案件主线</h2><p>多个案件可以共享：</p>
+<ul>
+<li><p>人物；</p>
+</li>
+<li><p>组织；</p>
+</li>
+<li><p>证据类型；</p>
+</li>
+<li><p>未解决线索；</p>
+</li>
+<li><p>长期嫌疑人；</p>
+</li>
+<li><p>城市状态；</p>
+</li>
+<li><p>玩家声誉。</p>
+</li>
+</ul>
+<p>需要区分：</p>
+<ul>
+<li><p>案件内知识；</p>
+</li>
+<li><p>跨案件知识；</p>
+</li>
+<li><p>已公开信息；</p>
+</li>
+<li><p>玩家私人推测。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-玩家体验设计">31. 玩家体验设计</h2><h2 id="311-玩家必须知道信息的来源">31.1 玩家必须知道信息的来源</h2><p>笔记界面应显示：</p>
+<ul>
+<li><p>谁说的；</p>
+</li>
+<li><p>在哪里发现；</p>
+</li>
+<li><p>何时获得；</p>
+</li>
+<li><p>是否验证；</p>
+</li>
+<li><p>是否存在争议；</p>
+</li>
+<li><p>是否来自转述。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-系统不能替玩家完成全部推理">31.2 系统不能替玩家完成全部推理</h2><p>可以自动：</p>
+<ul>
+<li><p>记录信息；</p>
+</li>
+<li><p>整理人物；</p>
+</li>
+<li><p>保存证据；</p>
+</li>
+<li><p>标记明确矛盾。</p>
+</li>
+</ul>
+<p>但不应自动：</p>
+<ul>
+<li><p>选出犯人；</p>
+</li>
+<li><p>自动连接全部因果；</p>
+</li>
+<li><p>自动排列正确时间线；</p>
+</li>
+<li><p>自动排除所有假设。</p>
+</li>
+</ul>
+<hr />
+<h2 id="313-提示应指出问题类型而不是直接给答案">31.3 提示应指出问题类型，而不是直接给答案</h2><p>合理提示：</p>
+<ul>
+<li><p>当前时间线存在冲突；</p>
+</li>
+<li><p>某证言缺少独立来源；</p>
+</li>
+<li><p>该假设尚未解释某项证据；</p>
+</li>
+<li><p>某地点仍有未完成调查。</p>
+</li>
+</ul>
+<p>不合理提示：</p>
+<ul>
+<li><p>直接指出犯人；</p>
+</li>
+<li><p>直接高亮唯一正确证据；</p>
+</li>
+<li><p>自动完成关系连线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-证据数量必须可管理">31.4 证据数量必须可管理</h2><p>案件不应仅通过增加大量文档制造复杂度。</p>
+<p>需要提供：</p>
+<ul>
+<li><p>分类；</p>
+</li>
+<li><p>搜索；</p>
+</li>
+<li><p>标签；</p>
+</li>
+<li><p>人物关联；</p>
+</li>
+<li><p>地点关联；</p>
+</li>
+<li><p>时间关联；</p>
+</li>
+<li><p>重要程度；</p>
+</li>
+<li><p>玩家收藏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-错误假设需要可视化缺口">31.5 错误假设需要可视化缺口</h2><p>玩家应能看见：</p>
+<ul>
+<li><p>哪些事实支持；</p>
+</li>
+<li><p>哪些事实反驳；</p>
+</li>
+<li><p>哪些条件尚未证明；</p>
+</li>
+<li><p>哪个结论属于推测；</p>
+</li>
+<li><p>哪个来源不可靠。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-现场调查需要避免穷举点击">31.6 现场调查需要避免穷举点击</h2><p>可以通过：</p>
+<ul>
+<li><p>调查方向；</p>
+</li>
+<li><p>工具选择；</p>
+</li>
+<li><p>搜索区域；</p>
+</li>
+<li><p>假设驱动调查；</p>
+</li>
+<li><p>现场完成度；</p>
+</li>
+</ul>
+<p>让玩家进行有目的的搜查。</p>
+<hr />
+<h2 id="317-证人撒谎不能拥有固定视觉标记">31.7 证人撒谎不能拥有固定视觉标记</h2><p>如果所有撒谎者都会：</p>
+<ul>
+<li><p>眼神闪烁；</p>
+</li>
+<li><p>出汗；</p>
+</li>
+<li><p>音乐变化；</p>
+</li>
+<li><p>特定UI提示；</p>
+</li>
+</ul>
+<p>推理会退化为观察提示。</p>
+<p>行为反馈可以存在，但不能成为绝对真值探测器。</p>
+<hr />
+<h2 id="318-案件结果应反映推理质量">31.8 案件结果应反映推理质量</h2><p>结算应区分：</p>
+<ul>
+<li><p>找到真相；</p>
+</li>
+<li><p>能否证明；</p>
+</li>
+<li><p>是否使用合法证据；</p>
+</li>
+<li><p>是否伤害无辜者；</p>
+</li>
+<li><p>是否发现完整动机；</p>
+</li>
+<li><p>是否解决相关秘密。</p>
+</li>
+</ul>
+<hr />
+<h2 id="319-重玩价值">31.9 重玩价值</h2><p>重复游玩可以来自：</p>
+<ul>
+<li><p>不同调查顺序；</p>
+</li>
+<li><p>不同权限路线；</p>
+</li>
+<li><p>不同人物关系；</p>
+</li>
+<li><p>不同案件真相变体；</p>
+</li>
+<li><p>不同公开或隐瞒选择；</p>
+</li>
+<li><p>更低调查成本；</p>
+</li>
+<li><p>更完整结局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-常见设计失败">32. 常见设计失败</h2><h2 id="321-案件真相随着玩家选择改变">32.1 案件真相随着玩家选择改变</h2><p>玩家选谁，谁就临时变成犯人，导致证据链失去意义。</p>
+<hr />
+<h2 id="322-所有获得信息都是客观事实">32.2 所有获得信息都是客观事实</h2><p>证言、流言和推测没有可信度区别。</p>
+<hr />
+<h2 id="323-推理只是三选一答题">32.3 推理只是三选一答题</h2><p>不要求证据、时间线和因果链。</p>
+<hr />
+<h2 id="324-找齐线索后系统自动解案">32.4 找齐线索后系统自动解案</h2><p>玩家没有真正组织和验证信息。</p>
+<hr />
+<h2 id="325-证人撒谎就等于犯人">32.5 证人撒谎就等于犯人</h2><p>缺乏无关秘密、记忆错误和保护行为。</p>
+<hr />
+<h2 id="326-关键证据隐藏在极小热点中">32.6 关键证据隐藏在极小热点中</h2><p>玩家因交互困难而非推理困难卡关。</p>
+<hr />
+<h2 id="327-错误答案立即游戏结束">32.7 错误答案立即游戏结束</h2><p>不允许重新调查、翻案或产生不完整结局。</p>
+<hr />
+<h2 id="328-时间线只是一组文本列表">32.8 时间线只是一组文本列表</h2><p>无法表达：</p>
+<ul>
+<li><p>时间范围；</p>
+</li>
+<li><p>重叠；</p>
+</li>
+<li><p>行程时间；</p>
+</li>
+<li><p>前后关系；</p>
+</li>
+<li><p>不可能区间。</p>
+</li>
+</ul>
+<hr />
+<h2 id="329-证据来源不可追踪">32.9 证据来源不可追踪</h2><p>玩家不知道某项结论是：</p>
+<ul>
+<li><p>事实；</p>
+</li>
+<li><p>证言；</p>
+</li>
+<li><p>推测；</p>
+</li>
+<li><p>系统自动生成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3210-矛盾只允许作者预设的一对信息">32.10 矛盾只允许作者预设的一对信息</h2><p>玩家无法通过其他合理证据证明同一问题。</p>
+<hr />
+<h2 id="3211-出示证据没有策略成本">32.11 出示证据没有策略成本</h2><p>玩家可以对所有话题穷举所有证据。</p>
+<hr />
+<h2 id="3212-案件复杂度主要来自人物和文本数量">32.12 案件复杂度主要来自人物和文本数量</h2><p>信息关系很少，只是阅读负担很大。</p>
+<hr />
+<h2 id="3213-指控正确人物即可获得完美结局">32.13 指控正确人物即可获得完美结局</h2><p>忽略证据充分性、合法性和替代解释。</p>
+<hr />
+<h2 id="3214-提示系统直接给出推理链">32.14 提示系统直接给出推理链</h2><p>玩家失去发现矛盾和建立假设的体验。</p>
+<hr />
+<h2 id="33-最小可行原型">33. 最小可行原型</h2><p>一个能够验证侦探调查与推理核心范式的最小原型可以包含：</p>
+<h3 id="案件">案件</h3><ul>
+<li><p>1个完整案件；</p>
+</li>
+<li><p>1个固定真相；</p>
+</li>
+<li><p>4名主要人物；</p>
+</li>
+<li><p>3个调查地点；</p>
+</li>
+<li><p>1条完整事件时间线；</p>
+</li>
+<li><p>2个竞争假设；</p>
+</li>
+<li><p>3种案件结局。</p>
+</li>
+</ul>
+<h3 id="证据">证据</h3><ul>
+<li><p>5件物证；</p>
+</li>
+<li><p>3条系统记录；</p>
+</li>
+<li><p>4份主要证言；</p>
+</li>
+<li><p>2项专家分析；</p>
+</li>
+<li><p>3组关键矛盾；</p>
+</li>
+<li><p>1件受到污染的证据。</p>
+</li>
+</ul>
+<h3 id="调查能力">调查能力</h3><ul>
+<li><p>现场搜索；</p>
+</li>
+<li><p>证物采集；</p>
+</li>
+<li><p>文件调取；</p>
+</li>
+<li><p>证人询问；</p>
+</li>
+<li><p>出示证据；</p>
+</li>
+<li><p>时间线重建；</p>
+</li>
+<li><p>建立假设；</p>
+</li>
+<li><p>最终指控。</p>
+</li>
+</ul>
+<h3 id="约束">约束</h3><ul>
+<li><p>有限案件时间；</p>
+</li>
+<li><p>一项需要权限的调查；</p>
+</li>
+<li><p>一名可能拒绝合作的证人；</p>
+</li>
+<li><p>一条错误调查路线；</p>
+</li>
+<li><p>一种可恢复失败。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>CaseDefinition；</p>
+</li>
+<li><p>TruthModel；</p>
+</li>
+<li><p>CaseRuntimeState；</p>
+</li>
+<li><p>KnowledgeNode；</p>
+</li>
+<li><p>EvidenceRuntimeState；</p>
+</li>
+<li><p>TestimonyState；</p>
+</li>
+<li><p>HypothesisState；</p>
+</li>
+<li><p>ReasoningEdge；</p>
+</li>
+<li><p>ContradictionState；</p>
+</li>
+<li><p>TimelineEventNode；</p>
+</li>
+<li><p>InvestigationTransaction；</p>
+</li>
+<li><p>DeductionSubmission；</p>
+</li>
+<li><p>CaseResultSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>真相时间线查看器；</p>
+</li>
+<li><p>玩家知识查看器；</p>
+</li>
+<li><p>证据溯源图；</p>
+</li>
+<li><p>证言检查器；</p>
+</li>
+<li><p>假设分析器；</p>
+</li>
+<li><p>时间线约束工具；</p>
+</li>
+<li><p>案件阶段查看器；</p>
+</li>
+<li><p>玩家推理回放。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>案件真相是否独立于玩家选择；</p>
+</li>
+<li><p>玩家能否区分事实、证言和推测；</p>
+</li>
+<li><p>证据是否能通过来源和关系形成推理；</p>
+</li>
+<li><p>玩家是否能建立并比较竞争假设；</p>
+</li>
+<li><p>时间线是否能发现实际矛盾；</p>
+</li>
+<li><p>错误判断是否会产生可理解后果；</p>
+</li>
+<li><p>案件是否存在合法恢复路径；</p>
+</li>
+<li><p>选对犯人但证据不足时是否能得到不同结果；</p>
+</li>
+<li><p>内容是否能够通过自动可解性验证；</p>
+</li>
+<li><p>调试器是否能够解释玩家为什么无法推进。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-推荐实施顺序">34. 推荐实施顺序</h2><p>第一阶段：案件真相模型与玩家知识状态
+第二阶段：证据定义、发现和采集
+第三阶段：人物、证言和话题系统
+第四阶段：案件板与信息分类
+第五阶段：支持、反驳和矛盾关系
+第六阶段：假设系统和验证规则
+第七阶段：时间线与事件重建
+第八阶段：调查行动、成本和权限
+第九阶段：阶段性推论和最终指控
+第十阶段：案件结果与长期后果
+第十一阶段：存档、回放和内容迁移
+第十二阶段：自动可解性验证与作者工具</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量案件：</p>
+<ul>
+<li><p>真相与知识分离；</p>
+</li>
+<li><p>证据来源；</p>
+</li>
+<li><p>证言状态；</p>
+</li>
+<li><p>假设验证；</p>
+</li>
+<li><p>时间线约束；</p>
+</li>
+<li><p>矛盾关系；</p>
+</li>
+<li><p>案件阶段；</p>
+</li>
+<li><p>存档稳定ID。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-架构验收标准">35. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>案件真实状态与玩家知识状态完全分离；</p>
+</li>
+<li><p>玩家不会直接读取TruthModel；</p>
+</li>
+<li><p>每条信息具有类型、来源和验证状态；</p>
+</li>
+<li><p>证言与客观记录拥有不同可信度；</p>
+</li>
+<li><p>证据能够追踪发现、采集、分析和保管过程；</p>
+</li>
+<li><p>共享上游来源不会被错误视为独立佐证；</p>
+</li>
+<li><p>假设能够记录支持、反对和缺失条件；</p>
+</li>
+<li><p>系统能够检测基础循环论证；</p>
+</li>
+<li><p>时间线支持精确时间、范围和相对顺序；</p>
+</li>
+<li><p>人物不可能同时出现在多个地点时能够产生冲突；</p>
+</li>
+<li><p>证言可以被追问、质疑、修改或撤回；</p>
+</li>
+<li><p>错误证言不必然代表证人是犯人；</p>
+</li>
+<li><p>调查行为统一经过时间、权限和资源验证；</p>
+</li>
+<li><p>案件关键证据存在至少一条合法获取路径；</p>
+</li>
+<li><p>错误调查和错误指控存在明确后果；</p>
+</li>
+<li><p>主线案件不能因为单个非必要错误永久死锁；</p>
+</li>
+<li><p>最终定案同时验证人物、时间、手段、动机和证据；</p>
+</li>
+<li><p>选对人物但证据不足不会自动获得完整成功；</p>
+</li>
+<li><p>案件结果提交具有幂等性；</p>
+</li>
+<li><p>存档能够恢复知识图、证言、假设和时间线；</p>
+</li>
+<li><p>作者工具能够验证案件是否可解；</p>
+</li>
+<li><p>调试工具能够解释一项结论由哪些信息支持或反驳。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-可迁移到其他游戏的设计思想">36. 可迁移到其他游戏的设计思想</h2><h2 id="361-世界真相与角色认知应分离">36.1 世界真相与角色认知应分离</h2><p>可迁移到：</p>
+<ul>
+<li><p>潜行；</p>
+</li>
+<li><p>战术AI；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>社交模拟；</p>
+</li>
+<li><p>叙事RPG。</p>
+</li>
+</ul>
+<p>系统中“实际发生了什么”和“某角色认为发生了什么”应使用不同状态。</p>
+<hr />
+<h2 id="362-信息必须携带来源和可信度">36.2 信息必须携带来源和可信度</h2><p>可迁移到：</p>
+<ul>
+<li><p>情报系统；</p>
+</li>
+<li><p>战略游戏；</p>
+</li>
+<li><p>市场预测；</p>
+</li>
+<li><p>任务系统；</p>
+</li>
+<li><p>NPC传闻。</p>
+</li>
+</ul>
+<p>信息不应只保存内容，还应保存：</p>
+<ul>
+<li><p>来源；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>独立性；</p>
+</li>
+<li><p>可靠性；</p>
+</li>
+<li><p>是否被验证。</p>
+</li>
+</ul>
+<hr />
+<h2 id="363-假设应具有支持反驳和缺失条件">36.3 假设应具有支持、反驳和缺失条件</h2><p>可迁移到：</p>
+<ul>
+<li><p>AI规划；</p>
+</li>
+<li><p>医疗诊断；</p>
+</li>
+<li><p>故障排查；</p>
+</li>
+<li><p>战术判断；</p>
+</li>
+<li><p>任务推理。</p>
+</li>
+</ul>
+<p>系统不应只保存“当前猜测”，还应保存为什么相信以及还缺什么。</p>
+<hr />
+<h2 id="364-矛盾是推动系统深入调查的入口">36.4 矛盾是推动系统深入调查的入口</h2><p>可迁移到：</p>
+<ul>
+<li><p>对话；</p>
+</li>
+<li><p>数据验证；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>剧情；</p>
+</li>
+<li><p>经营异常。</p>
+</li>
+</ul>
+<p>两个状态不一致时，不一定立即判定错误，也可以生成新的调查或处理流程。</p>
+<hr />
+<h2 id="365-时间线约束可以验证复杂事件">36.5 时间线约束可以验证复杂事件</h2><p>可迁移到：</p>
+<ul>
+<li><p>日程系统；</p>
+</li>
+<li><p>战斗回放；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>任务链；</p>
+</li>
+<li><p>犯罪模拟；</p>
+</li>
+<li><p>多角色剧情。</p>
+</li>
+</ul>
+<p>通过：</p>
+<ul>
+<li><p>前后；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>旅行时间；</p>
+</li>
+<li><p>重叠；</p>
+</li>
+</ul>
+<p>可以发现普通条件判断难以发现的问题。</p>
+<hr />
+<h2 id="366-正确答案与可证明答案应分离">36.6 正确答案与可证明答案应分离</h2><p>可迁移到：</p>
+<ul>
+<li><p>法庭；</p>
+</li>
+<li><p>科研；
+  -任务；</p>
+</li>
+<li><p>战略决策；</p>
+</li>
+<li><p>风险管理。</p>
+</li>
+</ul>
+<p>知道某事为真，不代表已经拥有足够证据让系统或其他角色接受它。</p>
+<hr />
+<h2 id="367-错误决策可以改变状态而不必结束流程">36.7 错误决策可以改变状态，而不必结束流程</h2><p>可迁移到：</p>
+<ul>
+<li><p>经营；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>潜行；</p>
+</li>
+<li><p>社交系统。</p>
+</li>
+</ul>
+<p>错误可以带来：</p>
+<ul>
+<li><p>新成本；</p>
+</li>
+<li><p>新状态；</p>
+</li>
+<li><p>新限制；</p>
+</li>
+<li><p>新恢复路线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="368-关系图比扁平任务列表更适合复杂问题">36.8 关系图比扁平任务列表更适合复杂问题</h2><p>可迁移到：</p>
+<ul>
+<li><p>科技树；</p>
+</li>
+<li><p>任务依赖；</p>
+</li>
+<li><p>配方；</p>
+</li>
+<li><p>因果系统；</p>
+</li>
+<li><p>项目管理。</p>
+</li>
+</ul>
+<p>复杂内容的价值通常来自节点关系，而不是节点数量。</p>
+<hr />
+<h2 id="369-派生信息应随上游来源失效">36.9 派生信息应随上游来源失效</h2><p>可迁移到：</p>
+<ul>
+<li><p>缓存；</p>
+</li>
+<li><p>AI知识；</p>
+</li>
+<li><p>数据管线；</p>
+</li>
+<li><p>战略情报；</p>
+</li>
+<li><p>推荐系统。</p>
+</li>
+</ul>
+<p>上游信息被推翻后，应重新评估所有依赖结论。</p>
+<hr />
+<h2 id="3610-可解性验证应成为内容生产基础设施">36.10 可解性验证应成为内容生产基础设施</h2><p>可迁移到：</p>
+<ul>
+<li><p>谜题；</p>
+</li>
+<li><p>银河城；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>程序生成；</p>
+</li>
+<li><p>剧情分支。</p>
+</li>
+</ul>
+<p>内容不仅要能被作者完成，还应通过工具验证：</p>
+<ul>
+<li><p>是否存在合法路径；</p>
+</li>
+<li><p>是否存在死锁；</p>
+</li>
+<li><p>是否依赖不可获得信息；</p>
+</li>
+<li><p>是否存在循环前置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-本次防重记录">37. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>侦探调查与推理游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>Detective Game；</p>
+</li>
+<li><p>Investigation Game；</p>
+</li>
+<li><p>Mystery Game；</p>
+</li>
+<li><p>Deduction Game；</p>
+</li>
+<li><p>侦探推理游戏；</p>
+</li>
+<li><p>案件调查游戏；</p>
+</li>
+<li><p>证据推演游戏。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>运行时同时维护案件真实状态与玩家知识状态；玩家通过现场调查、证物采集、证言比对、时间线重建和人物关系分析，将离散信息组织为一个或多个可验证假设。证据通过来源、可信度、支持关系、反驳关系和时间约束参与推理，系统最终依据推理链完整度、证据充分性、替代解释排除程度与调查合法性生成案件结果，形成“调查—建模—质疑—验证—定案”的完整循环。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>案件真相与玩家已知信息相互分离；</p>
+</li>
+<li><p>信息区分事实、证言、推测和结论；</p>
+</li>
+<li><p>每条信息拥有来源和可信度；</p>
+</li>
+<li><p>证据价值主要来自信息之间的关系；</p>
+</li>
+<li><p>玩家能够建立、验证和推翻假设；</p>
+</li>
+<li><p>证言可能因记忆、利益或欺骗而不可靠；</p>
+</li>
+<li><p>时间线可以验证人物位置和事件顺序；</p>
+</li>
+<li><p>矛盾会解锁新的调查方向；</p>
+</li>
+<li><p>调查行动会消耗时间、权限或其他资源；</p>
+</li>
+<li><p>错误推理可以产生后果，但通常存在恢复路径；</p>
+</li>
+<li><p>最终定案要求完整解释，而非单独选择犯人；</p>
+</li>
+<li><p>正确人物与充分证据是两个不同评价维度；</p>
+</li>
+<li><p>案件板和推理图属于核心玩法系统；</p>
+</li>
+<li><p>系统需要验证案件内容是否可解；</p>
+</li>
+<li><p>存档必须恢复知识、证言、假设、时间线和案件阶段。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>案件真相模型；</p>
+</li>
+<li><p>玩家知识投影；</p>
+</li>
+<li><p>证据定义与实例；</p>
+</li>
+<li><p>证据保管链；</p>
+</li>
+<li><p>信息来源与可信度；</p>
+</li>
+<li><p>人物与嫌疑人；</p>
+</li>
+<li><p>证言和追问；</p>
+</li>
+<li><p>出示证据与质疑；</p>
+</li>
+<li><p>时间线重建；</p>
+</li>
+<li><p>时间范围与行程约束；</p>
+</li>
+<li><p>假设系统；</p>
+</li>
+<li><p>支持与反驳关系；</p>
+</li>
+<li><p>矛盾系统；</p>
+</li>
+<li><p>现场调查；</p>
+</li>
+<li><p>调查权限；</p>
+</li>
+<li><p>审讯；</p>
+</li>
+<li><p>阶段性推论；</p>
+</li>
+<li><p>最终指控；</p>
+</li>
+<li><p>案件结果；</p>
+</li>
+<li><p>错误路线恢复；</p>
+</li>
+<li><p>案件可解性验证；</p>
+</li>
+<li><p>玩家推理回放；</p>
+</li>
+<li><p>作者调试工具。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>侦探证据系统；</p>
+</li>
+<li><p>侦探案件板；</p>
+</li>
+<li><p>证言质疑系统；</p>
+</li>
+<li><p>证据保管链；</p>
+</li>
+<li><p>推理假设系统；</p>
+</li>
+<li><p>侦探时间线；</p>
+</li>
+<li><p>案件矛盾检测；</p>
+</li>
+<li><p>嫌疑人动机分析；</p>
+</li>
+<li><p>现场勘查；</p>
+</li>
+<li><p>法证鉴定；</p>
+</li>
+<li><p>审讯系统；</p>
+</li>
+<li><p>侦探对话；</p>
+</li>
+<li><p>案件指控；</p>
+</li>
+<li><p>案件多结局；</p>
+</li>
+<li><p>动态案件生成；</p>
+</li>
+<li><p>案件可解性验证；</p>
+</li>
+<li><p>侦探推理回放；</p>
+</li>
+<li><p>证据来源图；</p>
+</li>
+<li><p>侦探任务权限；</p>
+</li>
+<li><p>错误指控恢复。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

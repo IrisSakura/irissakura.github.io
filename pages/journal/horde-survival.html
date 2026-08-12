@@ -1,0 +1,4298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/horde-survival.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="幸存者类 / Horde Survival / Bullet Heaven | Sakura Design Journal">
+    <meta property="og:description" content="玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/horde-survival.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-horde-survival.png">
+    <meta property="og:image:alt" content="幸存者类 / Horde Survival / Bullet Heaven | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="幸存者类 / Horde Survival / Bullet Heaven | Sakura Design Journal">
+    <meta name="twitter:description" content="玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-horde-survival.png">
+    <meta name="twitter:image:alt" content="幸存者类 / Horde Survival / Bullet Heaven | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"幸存者类 / Horde Survival / Bullet Heaven | Sakura Design Journal","description":"玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。","url":"https://irissakura.github.io/pages/journal/horde-survival.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"幸存者类 / Horde Survival / Bullet Heaven","image":"https://irissakura.github.io/assets/social/pages-journal-horde-survival.png","dateModified":"2026-08-12","about":["bullet","horde","survival"]}</script>
+    <!-- site-meta:end -->
+    <title>幸存者类 / Horde Survival / Bullet Heaven | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-horde-survival"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>幸存者类 / Horde Survival / Bullet Heaven</h1><p>玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。</p><div class="note-tags"><span>bullet</span><span>horde</span><span>survival</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="1-类型定位">1. 类型定位</h2><p>幸存者类游戏通常具有以下核心特征：</p>
+<ul>
+<li><p>单局制；</p>
+</li>
+<li><p>单角色或极少量直接控制单位；</p>
+</li>
+<li><p>玩家主要控制移动；</p>
+</li>
+<li><p>攻击高度自动化；</p>
+</li>
+<li><p>同屏大量敌人；</p>
+</li>
+<li><p>随运行时间持续提高压力；</p>
+</li>
+<li><p>击杀敌人产生经验；</p>
+</li>
+<li><p>经验通常以空间物体形式存在；</p>
+</li>
+<li><p>升级时从有限随机候选中选择能力；</p>
+</li>
+<li><p>单局构筑快速膨胀；</p>
+</li>
+<li><p>伤害范围、投射物数量和技能联动逐渐指数式增加；</p>
+</li>
+<li><p>Boss或精英作为构筑检查点；</p>
+</li>
+<li><p>单局结束后可能获得有限局外成长；</p>
+</li>
+<li><p>下一局重新进行构筑。</p>
+</li>
+</ul>
+<p>其典型流程为：</p>
+<p>进入Arena
+→ 获得一个基础攻击能力
+→ 少量敌人生成
+→ 自动攻击开始工作
+→ 玩家移动规避并收集经验
+→ 首次升级
+→ 获得第二能力或强化现有能力
+→ 敌人生成速度提高
+→ 玩家逐渐形成区域火力
+→ 敌人数量进入数十乃至数百级
+→ 技能发生进化或组合
+→ 精英出现
+→ 玩家利用高密度敌人快速获取经验
+→ 构筑接近成熟
+→ 高强度终局波次
+→ Boss或时间终点
+→ 单局结算
+→ 解锁新的角色、武器或内容池
+→ 下一局重新构筑</p>
+<p>与传统动作 Roguelite 相比，这类游戏一个非常关键的区别是：</p>
+<blockquote>
+<p><strong>玩家操作复杂度并不会随着战斗单位数量等比例增加。</strong></p>
+</blockquote>
+<p>敌人可能从：</p>
+<p>10个</p>
+<p>增加到：</p>
+<p>1000个。</p>
+<p>但玩家输入仍然主要是：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>少量主动技能；</p>
+</li>
+<li><p>少量方向控制。</p>
+</li>
+</ul>
+<p>复杂度主要转移到了：</p>
+<ul>
+<li><p>构筑；</p>
+</li>
+<li><p>空间；</p>
+</li>
+<li><p>密度；</p>
+</li>
+<li><p>自动执行系统。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-最核心的系统抽象">2. 最核心的系统抽象</h2><p>可以把整个类型抽象为三个互相耦合的系统：</p>
+<p><strong>Pressure System</strong></p>
+<p>负责：</p>
+<p>敌人越来越多。</p>
+<p><strong>Power System</strong></p>
+<p>负责：</p>
+<p>玩家越来越强。</p>
+<p><strong>Spatial Economy System</strong></p>
+<p>负责：</p>
+<p>玩家必须进入危险空间才能回收击杀产生的成长资源。</p>
+<p>三者形成：</p>
+<p>敌人密度提高
+→ 击杀机会增加
+→ 经验生成增加
+→ 玩家升级更快
+→ 火力提高
+→ 可以处理更高敌人密度</p>
+<p>但如果玩家无法安全拾取经验：</p>
+<p>击杀数量高
+≠
+成长效率高。</p>
+<p>因此真正核心的循环不是简单：</p>
+<p><strong>Kill → XP。</strong></p>
+<p>而是：</p>
+<p><strong>Kill
+→ XP进入世界空间
+→ 玩家承担移动风险回收
+→ XP提交
+→ LevelUp
+→ Build增强
+→ Kill Capacity提高。</strong></p>
+<hr />
+<h2 id="3-时间是主要难度轴">3. 时间是主要难度轴</h2><p>传统 RPG 常通过：</p>
+<p>地图区域</p>
+<p>决定敌人强度。</p>
+<p>幸存者类通常更依赖：</p>
+<p><strong>RunTime。</strong></p>
+<p>例如：</p>
+<p>00:00
+基础敌人。</p>
+<p>03:00
+快速单位。</p>
+<p>05:00
+第一精英。</p>
+<p>08:00
+高生命敌人。</p>
+<p>10:00
+Boss。</p>
+<p>15:00
+高密度单位。</p>
+<p>20:00
+特殊终局敌人。</p>
+<p>因此运行时需要一个权威：</p>
+<p><strong>RunClock。</strong></p>
+<hr />
+<h2 id="4-runclock">4. RunClock</h2><p>建议状态包含：</p>
+<ul>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>RunElapsedTime；</p>
+</li>
+<li><p>CurrentPressurePhase；</p>
+</li>
+<li><p>TimeScale；</p>
+</li>
+<li><p>IsPaused；</p>
+</li>
+<li><p>IsLevelUpPaused；</p>
+</li>
+<li><p>BossSchedule；</p>
+</li>
+<li><p>EventSchedule；</p>
+</li>
+<li><p>RunClockVersion。</p>
+</li>
+</ul>
+<p>所有：</p>
+<ul>
+<li><p>Spawn；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>地图事件；</p>
+</li>
+<li><p>难度；</p>
+</li>
+<li><p>奖励；</p>
+</li>
+<li><p>终局；</p>
+</li>
+</ul>
+<p>都应使用同一时钟。</p>
+<p>不要让：</p>
+<p>EnemySpawner自己计时；</p>
+<p>BossSpawner自己计时；</p>
+<p>UI再维护一套时间。</p>
+<hr />
+<h2 id="5-难度不是简单提高敌人生命值">5. 难度不是简单提高敌人生命值</h2><p>时间推进后，可以同时改变：</p>
+<ul>
+<li><p>SpawnRate；</p>
+</li>
+<li><p>SpawnBudget；</p>
+</li>
+<li><p>EnemyTier；</p>
+</li>
+<li><p>EnemySpeed；</p>
+</li>
+<li><p>EnemyHealth；</p>
+</li>
+<li><p>EnemyDamage；</p>
+</li>
+<li><p>EliteProbability；</p>
+</li>
+<li><p>SpawnDistance；</p>
+</li>
+<li><p>Formation；</p>
+</li>
+<li><p>特殊能力；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>环境事件。</p>
+</li>
+</ul>
+<p>更推荐：</p>
+<p><strong>结构性压力升级</strong></p>
+<p>而不是：</p>
+<p>HP × 2
+HP × 4
+HP × 8。</p>
+<p>例如：</p>
+<p>早期：</p>
+<p>慢速近战敌人。</p>
+<p>中期：</p>
+<p>快速敌人开始穿透外围。</p>
+<p>之后：</p>
+<p>远程敌人迫使玩家移动。</p>
+<p>再之后：</p>
+<p>高生命敌人形成阻塞。</p>
+<p>终局：</p>
+<p>多种敌人组合。</p>
+<p>这样构筑需要处理：</p>
+<ul>
+<li><p>单体；</p>
+</li>
+<li><p>群体；</p>
+</li>
+<li><p>环绕；</p>
+</li>
+<li><p>穿透；</p>
+</li>
+<li><p>远程；</p>
+</li>
+<li><p>控制；</p>
+</li>
+</ul>
+<p>多个压力维度。</p>
+<hr />
+<h2 id="6-总体运行时架构">6. 总体运行时架构</h2><p>推荐将运行时划分为以下核心域：</p>
+<ol>
+<li><p>RunLifecycleSystem；</p>
+</li>
+<li><p>FixedSimulationClock；</p>
+</li>
+<li><p>PlayerMotorSystem；</p>
+</li>
+<li><p>PlayerStatSystem；</p>
+</li>
+<li><p>AbilityLoadoutSystem；</p>
+</li>
+<li><p>AutoCastScheduler；</p>
+</li>
+<li><p>TargetSelectionSystem；</p>
+</li>
+<li><p>ProjectileSimulationSystem；</p>
+</li>
+<li><p>AreaEffectSystem；</p>
+</li>
+<li><p>EnemyDefinitionSystem；</p>
+</li>
+<li><p>HordeSpawnDirector；</p>
+</li>
+<li><p>EnemyCrowdSimulationSystem；</p>
+</li>
+<li><p>SpatialQuerySystem；</p>
+</li>
+<li><p>DamageResolutionSystem；</p>
+</li>
+<li><p>StatusEffectSystem；</p>
+</li>
+<li><p>ExperienceDropSystem；</p>
+</li>
+<li><p>PickupMagnetSystem；</p>
+</li>
+<li><p>LevelProgressionSystem；</p>
+</li>
+<li><p>UpgradeDraftSystem；</p>
+</li>
+<li><p>BuildSynergySystem；</p>
+</li>
+<li><p>EliteBossSystem；</p>
+</li>
+<li><p>RewardChestSystem；</p>
+</li>
+<li><p>RunTerminationSystem；</p>
+</li>
+<li><p>MetaProgressionSystem；</p>
+</li>
+<li><p>ReplayTelemetryDebugSystem。</p>
+</li>
+</ol>
+<p>总体运行关系：</p>
+<p>创建Run
+→ 初始化角色与基础能力
+→ 启动RunClock
+→ SpawnDirector生成第一批敌人
+→ 玩家移动
+→ AutoCastScheduler执行攻击
+→ DamageSystem处理伤害
+→ Enemy死亡
+→ ExperienceDrop生成经验
+→ 玩家移动拾取
+→ Experience提交
+→ 等级提升
+→ 暂停或减速Run
+→ UpgradeDraft生成候选
+→ 玩家选择能力
+→ Build重新计算
+→ AutoCast获得更高火力
+→ SpawnDirector提高压力预算
+→ 精英进入
+→ Boss进入
+→ 构筑继续增长
+→ 终局压力
+→ Run完成或玩家死亡
+→ 结算。</p>
+<hr />
+<h2 id="7-run-生命周期">7. Run 生命周期</h2><h3 id="71-rundefinition">7.1 RunDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>RunModeId；</p>
+</li>
+<li><p>MapId；</p>
+</li>
+<li><p>InitialPlayerProfile；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>PressureProfileId；</p>
+</li>
+<li><p>SpawnScheduleId；</p>
+</li>
+<li><p>BossScheduleId；</p>
+</li>
+<li><p>UpgradePoolId；</p>
+</li>
+<li><p>RewardProfileId；</p>
+</li>
+<li><p>TerminationRuleId；</p>
+</li>
+<li><p>RunVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="72-runruntimestate">7.2 RunRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>CurrentTick；</p>
+</li>
+<li><p>ElapsedTime；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>PlayerState；</p>
+</li>
+<li><p>AbilityStates；</p>
+</li>
+<li><p>EnemyPopulationState；</p>
+</li>
+<li><p>ProjectileStates；</p>
+</li>
+<li><p>ExperienceState；</p>
+</li>
+<li><p>LevelState；</p>
+</li>
+<li><p>CurrentBuildState；</p>
+</li>
+<li><p>BossStates；</p>
+</li>
+<li><p>EventStates；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>RunVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="73-runphase">7.3 RunPhase</h3><p>推荐区分：</p>
+<ul>
+<li><p>Initializing；</p>
+</li>
+<li><p>EarlySurvival；</p>
+</li>
+<li><p>BuildFormation；</p>
+</li>
+<li><p>MidPressure；</p>
+</li>
+<li><p>Escalation；</p>
+</li>
+<li><p>LateBuild；</p>
+</li>
+<li><p>FinalPressure；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>VictoryPending；</p>
+</li>
+<li><p>Failed；</p>
+</li>
+<li><p>Settling；</p>
+</li>
+<li><p>Completed。</p>
+</li>
+</ul>
+<p>这些阶段可以用于分析和内容调度。</p>
+<p>但核心难度最好仍然由：</p>
+<p>RunElapsedTime</p>
+<p>驱动，而不是到处出现：</p>
+<p><code>if Phase == MidPressure</code>。</p>
+<hr />
+<h2 id="8-玩家直接控制必须保持简洁">8. 玩家直接控制必须保持简洁</h2><p>该类型的输入预算通常故意很低。</p>
+<p>最典型的是：</p>
+<p><strong>MoveVector。</strong></p>
+<p>可扩展为：</p>
+<ul>
+<li><p>AimDirection；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+<li><p>Ultimate；</p>
+</li>
+<li><p>Interact；</p>
+</li>
+<li><p>ManualAbility。</p>
+</li>
+</ul>
+<p>但必须谨慎。</p>
+<p>如果增加：</p>
+<ul>
+<li><p>6个主动技能；</p>
+</li>
+<li><p>精确瞄准；</p>
+</li>
+<li><p>复杂换武器；</p>
+</li>
+<li><p>频繁格挡；</p>
+</li>
+</ul>
+<p>游戏可能逐渐变成：</p>
+<p>普通Twin-Stick Shooter。</p>
+<p>本品类最独特的体验来自：</p>
+<blockquote>
+<p>战斗复杂度主要来自“我构造了什么系统”，而不是“我每秒按了多少按钮”。</p>
+</blockquote>
+<hr />
+<h2 id="9-playerruntimestate">9. PlayerRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>PlayerEntityId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>MaximumHealth；</p>
+</li>
+<li><p>Armor；</p>
+</li>
+<li><p>MoveSpeed；</p>
+</li>
+<li><p>PickupRadius；</p>
+</li>
+<li><p>Luck；</p>
+</li>
+<li><p>ExperienceMultiplier；</p>
+</li>
+<li><p>CooldownMultiplier；</p>
+</li>
+<li><p>AreaMultiplier；</p>
+</li>
+<li><p>ProjectileMultiplier；</p>
+</li>
+<li><p>DurationMultiplier；</p>
+</li>
+<li><p>DamageMultiplier；</p>
+</li>
+<li><p>EquippedAbilityIds；</p>
+</li>
+<li><p>PassiveIds；</p>
+</li>
+<li><p>StatusStates；</p>
+</li>
+<li><p>PlayerVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-能力定义与能力实例分离">10. 能力定义与能力实例分离</h2><p>与大量可成长系统一样，需要区分：</p>
+<p><strong>AbilityDefinition</strong></p>
+<p>和：</p>
+<p><strong>AbilityRuntimeState。</strong></p>
+<hr />
+<h3 id="101-abilitydefinition">10.1 AbilityDefinition</h3><p>描述能力类型：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>AbilityTags；</p>
+</li>
+<li><p>CastPattern；</p>
+</li>
+<li><p>BaseCooldown；</p>
+</li>
+<li><p>DamageProfile；</p>
+</li>
+<li><p>TargetingProfileId；</p>
+</li>
+<li><p>ProjectileDefinitionId；</p>
+</li>
+<li><p>AreaDefinitionId；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>UpgradeTrack；</p>
+</li>
+<li><p>EvolutionRuleIds；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="102-abilityruntimestate">10.2 AbilityRuntimeState</h3><p>描述当前Run中这一项能力：</p>
+<ul>
+<li><p>AbilityId；</p>
+</li>
+<li><p>CurrentLevel；</p>
+</li>
+<li><p>CurrentCooldown；</p>
+</li>
+<li><p>CurrentCharges；</p>
+</li>
+<li><p>RuntimeModifiers；</p>
+</li>
+<li><p>EvolutionState；</p>
+</li>
+<li><p>TemporaryEffects；</p>
+</li>
+<li><p>AbilityVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-autocast-scheduler">11. AutoCast Scheduler</h2><p>这是该类型最核心的运行时模块之一。</p>
+<p>职责：</p>
+<blockquote>
+<p>在玩家不逐次输入攻击命令的情况下，稳定地将当前构筑转换成实际攻击行为。</p>
+</blockquote>
+<hr />
+<h3 id="111-autocast流程">11.1 AutoCast流程</h3><p>Ability进入Ready
+→ 查询CastCondition
+→ 查询TargetingProfile
+→ 生成合法目标
+→ 计算最终参数
+→ 创建AbilityExecution
+→ 提交Cooldown
+→ 创建Projectile或AreaEffect
+→ 发布AbilityCast。</p>
+<hr />
+<h3 id="112-autocast不能完全依赖update轮询">11.2 AutoCast不能完全依赖Update轮询</h3><p>低效实现：</p>
+<p>每个技能
+每帧：</p>
+<p>检查Cooldown。</p>
+<p>如果玩家最终拥有：</p>
+<p>数十个触发器；</p>
+<p>再加：</p>
+<p>几千敌人；</p>
+<p>很容易形成高频脚本开销。</p>
+<p>推荐：</p>
+<ul>
+<li><p>CooldownWheel；</p>
+</li>
+<li><p>TimerQueue；</p>
+</li>
+<li><p>ScheduledTick；</p>
+</li>
+<li><p>Event Trigger；</p>
+</li>
+</ul>
+<p>混合调度。</p>
+<hr />
+<h2 id="12-castpattern">12. CastPattern</h2><p>能力可以抽象为不同攻击范式：</p>
+<ul>
+<li><p>NearestTarget；</p>
+</li>
+<li><p>RandomTarget；</p>
+</li>
+<li><p>ForwardCone；</p>
+</li>
+<li><p>RadialBurst；</p>
+</li>
+<li><p>Orbit；</p>
+</li>
+<li><p>FixedDirection；</p>
+</li>
+<li><p>Chain；</p>
+</li>
+<li><p>GroundArea；</p>
+</li>
+<li><p>ReturningProjectile；</p>
+</li>
+<li><p>Aura；</p>
+</li>
+<li><p>PeriodicGlobal；</p>
+</li>
+<li><p>Summon；</p>
+</li>
+<li><p>Trail；</p>
+</li>
+<li><p>CounterAttack。</p>
+</li>
+</ul>
+<p>新增技能应尽量通过：</p>
+<p>CastPattern</p>
+<ul>
+<li><p>Projectile</p>
+</li>
+<li><p>Effect</p>
+</li>
+</ul>
+<p>组合，</p>
+<p>而不是每个技能写一套独立Behaviour。</p>
+<hr />
+<h2 id="13-targetselectionsystem">13. TargetSelectionSystem</h2><h3 id="131-targetingprofile">13.1 TargetingProfile</h3><p>建议字段：</p>
+<ul>
+<li><p>ValidTargetTags；</p>
+</li>
+<li><p>SearchRadius；</p>
+</li>
+<li><p>SelectionRule；</p>
+</li>
+<li><p>MaximumTargets；</p>
+</li>
+<li><p>LineOfSightRule；</p>
+</li>
+<li><p>DistanceWeight；</p>
+</li>
+<li><p>HealthWeight；</p>
+</li>
+<li><p>EliteWeight；</p>
+</li>
+<li><p>RetargetPolicy；</p>
+</li>
+<li><p>TargetVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="132-常见目标策略">13.2 常见目标策略</h3><p>包括：</p>
+<ul>
+<li><p>最近敌人；</p>
+</li>
+<li><p>最远敌人；</p>
+</li>
+<li><p>随机敌人；</p>
+</li>
+<li><p>生命最高；</p>
+</li>
+<li><p>精英优先；</p>
+</li>
+<li><p>玩家移动方向；</p>
+</li>
+<li><p>最大密度区域；</p>
+</li>
+<li><p>无需目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="133-自动攻击必须可预测">13.3 自动攻击必须可预测</h3><p>如果一个技能：</p>
+<p>上一秒攻击最近敌人；</p>
+<p>下一秒莫名攻击屏幕另一侧；</p>
+<p>玩家无法学习行为。</p>
+<p>因此目标规则必须：</p>
+<ul>
+<li><p>稳定；</p>
+</li>
+<li><p>有可解释性；</p>
+</li>
+<li><p>能在Tooltip和Debug中表达。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-构筑的核心不是技能数量而是参数空间联动">14. 构筑的核心不是技能数量，而是参数空间联动</h2><p>幸存者类非常典型的一点是：</p>
+<p>一个全局属性可能影响多个技能。</p>
+<p>例如：</p>
+<p>ProjectileCount +1</p>
+<p>可能同时强化：</p>
+<ul>
+<li><p>飞刀；</p>
+</li>
+<li><p>火球；</p>
+</li>
+<li><p>冰刺。</p>
+</li>
+</ul>
+<p>Area +30%</p>
+<p>同时强化：</p>
+<ul>
+<li><p>Aura；</p>
+</li>
+<li><p>Explosion；</p>
+</li>
+<li><p>GroundZone。</p>
+</li>
+</ul>
+<p>Duration +20%</p>
+<p>强化：</p>
+<ul>
+<li><p>Beam；</p>
+</li>
+<li><p>PoisonArea；</p>
+</li>
+<li><p>Summon。</p>
+</li>
+</ul>
+<p>因此构筑不是：</p>
+<p>技能A Level 5。</p>
+<p>而是：</p>
+<blockquote>
+<p>多个能力共同读取一套玩家级战斗参数。</p>
+</blockquote>
+<hr />
+<h2 id="15-buildmodifiersystem">15. BuildModifierSystem</h2><p>建议区分：</p>
+<ul>
+<li><p>AdditiveModifier；</p>
+</li>
+<li><p>MultiplicativeModifier；</p>
+</li>
+<li><p>OverrideModifier；</p>
+</li>
+<li><p>ConditionalModifier；</p>
+</li>
+<li><p>ConversionModifier。</p>
+</li>
+</ul>
+<hr />
+<h3 id="151-modifiercontext">15.1 ModifierContext</h3><p>例如：</p>
+<p>Damage：</p>
+<p>BaseDamage
+→ AbilityLevelModifier
+→ PlayerDamageMultiplier
+→ ElementModifier
+→ Critical
+→ EnemyResistance
+→ FinalDamage。</p>
+<p>需要统一顺序。</p>
+<p>否则不同技能会各自实现一套乘区。</p>
+<hr />
+<h2 id="16-被动能力">16. 被动能力</h2><p>PassiveDefinition可以修改：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Area；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>ProjectileCount；</p>
+</li>
+<li><p>MoveSpeed；</p>
+</li>
+<li><p>Armor；</p>
+</li>
+<li><p>Luck；</p>
+</li>
+<li><p>PickupRadius；</p>
+</li>
+<li><p>ExperienceGain。</p>
+</li>
+</ul>
+<p>其重要作用是：</p>
+<blockquote>
+<p>让玩家在“增加新攻击模式”和“放大已有系统”之间做选择。</p>
+</blockquote>
+<hr />
+<h2 id="17-ability-evolution">17. Ability Evolution</h2><p>本品类常见高价值机制：</p>
+<p>基础技能达到特定等级</p>
+<p>拥有特定Passive</p>
+<p>→</p>
+<p>进化为高级技能。</p>
+<hr />
+<h3 id="171-evolutionrule">17.1 EvolutionRule</h3><p>建议字段：</p>
+<ul>
+<li><p>EvolutionRuleId；</p>
+</li>
+<li><p>SourceAbilityId；</p>
+</li>
+<li><p>RequiredAbilityLevel；</p>
+</li>
+<li><p>RequiredPassiveIds；</p>
+</li>
+<li><p>RequiredPassiveLevels；</p>
+</li>
+<li><p>AdditionalConditions；</p>
+</li>
+<li><p>TargetAbilityId；</p>
+</li>
+<li><p>ConsumeSourcePolicy；</p>
+</li>
+<li><p>RewardSourceRule；</p>
+</li>
+<li><p>EvolutionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="172-进化职责">17.2 进化职责</h3><p>进化用于：</p>
+<ul>
+<li><p>奖励提前规划；</p>
+</li>
+<li><p>强化构筑身份；</p>
+</li>
+<li><p>提供中后期明显Power Spike；</p>
+</li>
+<li><p>减少技能只是线性加数字的单调感。</p>
+</li>
+</ul>
+<hr />
+<h3 id="173-进化应该改变行为">17.3 进化应该改变行为</h3><p>低质量：</p>
+<p>Fireball：</p>
+<p>Damage 100</p>
+<p>进化后：</p>
+<p>Damage 160。</p>
+<p>更好的进化：</p>
+<p>Fireball</p>
+<p>→</p>
+<p>命中爆炸</p>
+<ul>
+<li><p>穿透</p>
+</li>
+<li><p>返回</p>
+</li>
+<li><p>点燃区域。</p>
+</li>
+</ul>
+<p>让玩家感受到：</p>
+<p>系统规则发生改变。</p>
+<hr />
+<h2 id="18-enemydefinition">18. EnemyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EnemyId；</p>
+</li>
+<li><p>EnemyTags；</p>
+</li>
+<li><p>BaseHealth；</p>
+</li>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>MoveSpeed；</p>
+</li>
+<li><p>CollisionProfile；</p>
+</li>
+<li><p>AttackProfile；</p>
+</li>
+<li><p>AIProfile；</p>
+</li>
+<li><p>ExperienceReward；</p>
+</li>
+<li><p>DropProfile；</p>
+</li>
+<li><p>SpawnCost；</p>
+</li>
+<li><p>SpawnRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-enemy-archetype">19. Enemy Archetype</h2><p>敌人应承担不同压力职责。</p>
+<p>例如：</p>
+<h3 id="chaser">Chaser</h3><p>持续追逐玩家。</p>
+<p>测试：</p>
+<p>基础移动与持续输出。</p>
+<h3 id="swarm">Swarm</h3><p>低生命、大量出现。</p>
+<p>测试：</p>
+<p>AoE和密度处理。</p>
+<h3 id="tank">Tank</h3><p>高生命。</p>
+<p>测试：</p>
+<p>持续DPS。</p>
+<h3 id="runner">Runner</h3><p>高速。</p>
+<p>测试：</p>
+<p>外围防御。</p>
+<h3 id="ranged">Ranged</h3><p>远程攻击。</p>
+<p>迫使玩家改变路径。</p>
+<h3 id="splitter">Splitter</h3><p>死亡分裂。</p>
+<p>测试：</p>
+<p>清怪链。</p>
+<h3 id="buffer">Buffer</h3><p>强化附近敌人。</p>
+<p>产生优先目标。</p>
+<h3 id="elite">Elite</h3><p>拥有明显独立机制。</p>
+<h3 id="boss">Boss</h3><p>阶段性构筑检查。</p>
+<hr />
+<h2 id="20-horde-spawn-director">20. Horde Spawn Director</h2><p>这是类型的第二个核心运行时模块。</p>
+<p>职责：</p>
+<blockquote>
+<p>根据Run时间和当前压力规则持续制造“玩家刚好能够处理但必须持续移动”的敌群。</p>
+</blockquote>
+<hr />
+<h3 id="201-spawndirectorstate">20.1 SpawnDirectorState</h3><p>建议包含：</p>
+<ul>
+<li><p>CurrentSpawnBudget；</p>
+</li>
+<li><p>BudgetRegenerationRate；</p>
+</li>
+<li><p>CurrentPhaseProfile；</p>
+</li>
+<li><p>ActiveEnemyCount；</p>
+</li>
+<li><p>MaximumEnemyCount；</p>
+</li>
+<li><p>EliteBudget；</p>
+</li>
+<li><p>SpawnRingState；</p>
+</li>
+<li><p>SpawnQueue；</p>
+</li>
+<li><p>DirectorVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="21-spawn-budget">21. Spawn Budget</h2><p>不要简单：</p>
+<p>每秒Spawn 10个敌人。</p>
+<p>推荐给敌人定义：</p>
+<p>SpawnCost。</p>
+<p>例如：</p>
+<p>Swarm = 1；</p>
+<p>Runner = 2；</p>
+<p>Tank = 5；</p>
+<p>Elite = 20。</p>
+<p>每秒获得：</p>
+<p>SpawnBudget。</p>
+<p>Director决定：</p>
+<p>如何消费Budget。</p>
+<p>这样可以较容易控制：</p>
+<p>总体压力。</p>
+<hr />
+<h2 id="22-pressureprofile">22. PressureProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>TimeRange；</p>
+</li>
+<li><p>BudgetPerSecond；</p>
+</li>
+<li><p>EnemyPool；</p>
+</li>
+<li><p>EliteRate；</p>
+</li>
+<li><p>DensityTarget；</p>
+</li>
+<li><p>SpawnDistanceRange；</p>
+</li>
+<li><p>FormationRules；</p>
+</li>
+<li><p>SpecialEvents；</p>
+</li>
+<li><p>PressureVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-spawn位置">23. Spawn位置</h2><p>不能随意在玩家视野中央生成。</p>
+<p>推荐使用：</p>
+<p><strong>SpawnRing。</strong></p>
+<p>例如：</p>
+<p>MinSpawnDistance</p>
+<p>到：</p>
+<p>MaxSpawnDistance</p>
+<p>之间。</p>
+<hr />
+<h3 id="231-spawn候选检查">23.1 Spawn候选检查</h3><p>检查：</p>
+<ul>
+<li><p>与玩家距离；</p>
+</li>
+<li><p>相机可见性；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>障碍；</p>
+</li>
+<li><p>可导航区域；</p>
+</li>
+<li><p>Boss区域；</p>
+</li>
+<li><p>当前敌人密度；</p>
+</li>
+<li><p>特殊Spawn规则。</p>
+</li>
+</ul>
+<hr />
+<h3 id="232-生成失败">23.2 生成失败</h3><p>如果没有合法位置：</p>
+<p>不要无限随机重试。</p>
+<p>使用：</p>
+<ul>
+<li><p>CandidateBatch；</p>
+</li>
+<li><p>FallbackRing；</p>
+</li>
+<li><p>SpawnQueueDelay。</p>
+</li>
+</ul>
+<hr />
+<h2 id="24-spawn-fairness">24. Spawn Fairness</h2><p>敌人应该形成压力。</p>
+<p>但不能：</p>
+<p>在玩家脚底瞬间生成。</p>
+<p>特别是：</p>
+<p>Runner；</p>
+<p>Elite；</p>
+<p>Boss。</p>
+<p>需要：</p>
+<ul>
+<li><p>Telegraph；</p>
+</li>
+<li><p>SpawnVFX；</p>
+</li>
+<li><p>边缘提示；</p>
+</li>
+<li><p>最短反应距离。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-crowd-simulation">25. Crowd Simulation</h2><p>同屏：</p>
+<p>500；</p>
+<p>1000；</p>
+<p>甚至更多敌人时，</p>
+<p>不能让所有敌人使用：</p>
+<p>完整NavMeshAgent</p>
+<ul>
+<li><p>完整Animator</p>
+</li>
+<li><p>每帧AI树。</p>
+</li>
+</ul>
+<p>需要专门的Crowd模型。</p>
+<hr />
+<h2 id="26-enemy-movement">26. Enemy Movement</h2><p>最基础的敌人可以使用：</p>
+<p>DesiredDirection = PlayerPosition - EnemyPosition。</p>
+<p>再叠加：</p>
+<ul>
+<li><p>Separation；</p>
+</li>
+<li><p>ObstacleAvoidance；</p>
+</li>
+<li><p>FlowField；</p>
+</li>
+<li><p>LocalSteering。</p>
+</li>
+</ul>
+<hr />
+<h3 id="261-不必让所有敌人拥有完整路径规划">26.1 不必让所有敌人拥有完整路径规划</h3><p>大部分群潮单位只需要：</p>
+<p>朝玩家移动。</p>
+<p>复杂导航仅用于：</p>
+<ul>
+<li><p>特殊敌人；</p>
+</li>
+<li><p>地图障碍；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-crowd-separation">27. Crowd Separation</h2><p>没有分离时：</p>
+<p>数百敌人会堆成一个点。</p>
+<p>可能造成：</p>
+<ul>
+<li><p>碰撞异常；</p>
+</li>
+<li><p>DPS异常；</p>
+</li>
+<li><p>视觉问题。</p>
+</li>
+</ul>
+<p>可以使用：</p>
+<p>SpatialGrid</p>
+<p>查询邻近单位，</p>
+<p>施加：</p>
+<p>LocalSeparation。</p>
+<hr />
+<h2 id="28-敌人碰撞策略">28. 敌人碰撞策略</h2><p>通常不建议：</p>
+<p>所有敌人使用完整刚体碰撞。</p>
+<p>可以使用：</p>
+<ul>
+<li><p>SoftCollision；</p>
+</li>
+<li><p>LocalRepulsion；</p>
+</li>
+<li><p>DensityConstraint；</p>
+</li>
+<li><p>OverlapResolution。</p>
+</li>
+</ul>
+<p>目标不是：</p>
+<p>真实物理模拟。</p>
+<p>而是：</p>
+<p>保持群体可读和移动稳定。</p>
+<hr />
+<h2 id="29-spatial-query-infrastructure">29. Spatial Query Infrastructure</h2><p>这是整个类型最重要的底层性能基础设施之一。</p>
+<p>可以使用：</p>
+<ul>
+<li><p>UniformGrid；</p>
+</li>
+<li><p>SpatialHash；</p>
+</li>
+<li><p>Quadtree；</p>
+</li>
+<li><p>FixedCellGrid。</p>
+</li>
+</ul>
+<p>主要服务：</p>
+<ul>
+<li><p>找最近敌人；</p>
+</li>
+<li><p>AoE；</p>
+</li>
+<li><p>Pickup；</p>
+</li>
+<li><p>Aura；</p>
+</li>
+<li><p>Separation；</p>
+</li>
+<li><p>ChainAttack；</p>
+</li>
+<li><p>DensityTargeting。</p>
+</li>
+</ul>
+<hr />
+<h2 id="30-禁止技能直接findobjectsoftype所有敌人">30. 禁止技能直接FindObjectsOfType所有敌人</h2><p>典型错误：</p>
+<p>技能释放时：</p>
+<p>扫描整个Enemy列表</p>
+<p>找到最近目标。</p>
+<p>敌人1000个；</p>
+<p>技能20个；</p>
+<p>高频释放；</p>
+<p>会迅速形成性能问题。</p>
+<p>TargetingSystem必须走：</p>
+<p>统一空间索引。</p>
+<hr />
+<h2 id="31-damage-system">31. Damage System</h2><h3 id="311-damagecontext">31.1 DamageContext</h3><p>建议包含：</p>
+<ul>
+<li><p>DamageEventId；</p>
+</li>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>SourceAbilityId；</p>
+</li>
+<li><p>TargetEntityId；</p>
+</li>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>DamageTags；</p>
+</li>
+<li><p>CriticalState；</p>
+</li>
+<li><p>RuntimeModifiers；</p>
+</li>
+<li><p>HitTick；</p>
+</li>
+<li><p>DamageVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="312-damage流程">31.2 Damage流程</h3><p>HitCandidate
+→ 验证目标Alive
+→ 检查Immunity
+→ 计算SourceModifier
+→ 计算Critical
+→ 计算Resistance
+→ ApplyHealthDamage
+→ 检查Death
+→ 发布DamageResolved。</p>
+<hr />
+<h2 id="32-damage不能直接写在projectile脚本中">32. Damage不能直接写在Projectile脚本中</h2><p>否则：</p>
+<p>Projectile；</p>
+<p>Aura；</p>
+<p>DoT；</p>
+<p>Explosion；</p>
+<p>Chain；</p>
+<p>全部拥有不同伤害流程。</p>
+<p>应统一走：</p>
+<p>DamageResolver。</p>
+<hr />
+<h2 id="33-hit-memory">33. Hit Memory</h2><p>持续性技能尤其需要：</p>
+<p><strong>HitMemory。</strong></p>
+<p>例如旋转武器：</p>
+<p>不应该在60 FPS下：</p>
+<p>每帧攻击一次敌人，</p>
+<p>除非设计如此。</p>
+<hr />
+<h3 id="331-hitpolicy">33.1 HitPolicy</h3><p>可以定义：</p>
+<ul>
+<li><p>OncePerProjectile；</p>
+</li>
+<li><p>OncePerTarget；</p>
+</li>
+<li><p>OncePerInterval；</p>
+</li>
+<li><p>Unlimited；</p>
+</li>
+<li><p>OncePerPass。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-projectile-system">34. Projectile System</h2><h3 id="341-projectiledefinition">34.1 ProjectileDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>ProjectileId；</p>
+</li>
+<li><p>Speed；</p>
+</li>
+<li><p>Lifetime；</p>
+</li>
+<li><p>Radius；</p>
+</li>
+<li><p>PierceCount；</p>
+</li>
+<li><p>BounceCount；</p>
+</li>
+<li><p>HomingRule；</p>
+</li>
+<li><p>ReturnRule；</p>
+</li>
+<li><p>HitPolicy；</p>
+</li>
+<li><p>OnHitEffectIds；</p>
+</li>
+<li><p>OnExpireEffectIds；</p>
+</li>
+<li><p>ProjectileVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="342-projectileruntimestate">34.2 ProjectileRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>ProjectileInstanceId；</p>
+</li>
+<li><p>OwnerId；</p>
+</li>
+<li><p>AbilityId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>RemainingLifetime；</p>
+</li>
+<li><p>RemainingPierce；</p>
+</li>
+<li><p>RemainingBounce；</p>
+</li>
+<li><p>HitMemory；</p>
+</li>
+<li><p>ProjectileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-投射物数量本身是玩法资源也是性能资源">35. 投射物数量本身是玩法资源，也是性能资源</h2><p>玩家后期可能同时生成：</p>
+<p>数百个Projectile。</p>
+<p>因此构筑设计必须理解：</p>
+<p>ProjectileCount × AttackSpeed × Lifetime</p>
+<p>大致决定：</p>
+<p>同时存在投射物数量。</p>
+<p>如果三者都可以无限成长：</p>
+<p>运行时数量可能呈乘法爆炸。</p>
+<hr />
+<h2 id="36-areaeffectsystem">36. AreaEffectSystem</h2><p>区域能力可以包括：</p>
+<ul>
+<li><p>Aura；</p>
+</li>
+<li><p>GroundZone；</p>
+</li>
+<li><p>Explosion；</p>
+</li>
+<li><p>Trail；</p>
+</li>
+<li><p>Beam；</p>
+</li>
+<li><p>RotatingArea。</p>
+</li>
+</ul>
+<p>AreaEffect需要独立于Projectile。</p>
+<p>否则所有无投射物技能都会被迫伪装成Projectile。</p>
+<hr />
+<h2 id="37-experiencedropsystem">37. ExperienceDropSystem</h2><p>这是类型的第三个核心系统。</p>
+<p>敌人死亡后通常不是：</p>
+<p>XP立即加到玩家。</p>
+<p>而是：</p>
+<p>生成ExperiencePickup。</p>
+<p>这非常重要。</p>
+<hr />
+<h3 id="371-为什么xp要落在地上">37.1 为什么XP要落在地上</h3><p>因为它把：</p>
+<p>战斗收益</p>
+<p>转化为：</p>
+<p>空间决策。</p>
+<p>玩家可能击杀大量敌人，</p>
+<p>但经验落在：</p>
+<p>敌群中央。</p>
+<p>要获得成长：</p>
+<p>必须移动过去。</p>
+<p>因此：</p>
+<blockquote>
+<p>XP不是简单数值，而是一种散布在危险空间中的待提交资产。</p>
+</blockquote>
+<hr />
+<h2 id="38-experiencepickupstate">38. ExperiencePickupState</h2><p>建议包含：</p>
+<ul>
+<li><p>PickupId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>ExperienceValue；</p>
+</li>
+<li><p>OwnerRule；</p>
+</li>
+<li><p>MagnetState；</p>
+</li>
+<li><p>MergeGroup；</p>
+</li>
+<li><p>LifetimeRule；</p>
+</li>
+<li><p>PickupVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-xp碎片数量必须控制">39. XP碎片数量必须控制</h2><p>如果每个敌人死亡：</p>
+<p>生成一个GameObject经验球。</p>
+<p>每秒死亡500敌人：</p>
+<p>很快产生数千对象。</p>
+<p>建议支持：</p>
+<p><strong>XP Merge。</strong></p>
+<hr />
+<h3 id="391-experience-aggregation">39.1 Experience Aggregation</h3><p>邻近小经验：</p>
+<p>1
+1
+1
+1
+1</p>
+<p>可以合并为：</p>
+<p>5。</p>
+<p>通过：</p>
+<ul>
+<li><p>SpatialBucket；</p>
+</li>
+<li><p>ValueTier；</p>
+</li>
+<li><p>MergeRadius；</p>
+</li>
+</ul>
+<p>减少实体数量。</p>
+<hr />
+<h2 id="40-pickup-magnet">40. Pickup Magnet</h2><p>玩家进入：</p>
+<p>PickupRadius</p>
+<p>后：</p>
+<p>ExperiencePickup开始吸附。</p>
+<hr />
+<h3 id="401-magnetstate">40.1 MagnetState</h3><p>推荐：</p>
+<p>Idle
+→ Attracted
+→ FlyingToPlayer
+→ Collected。</p>
+<hr />
+<h3 id="402-一旦进入attracted可以取消碰撞查询">40.2 一旦进入Attracted可以取消碰撞查询</h3><p>之后直接：</p>
+<p>追踪玩家位置。</p>
+<p>减少高频空间检测。</p>
+<hr />
+<h2 id="41-全屏吸取">41. 全屏吸取</h2><p>特殊Pickup可以：</p>
+<p>收集场上全部XP。</p>
+<p>其价值不只是：</p>
+<p>经验奖励。</p>
+<p>而是：</p>
+<blockquote>
+<p>把之前因安全原因暂未拾取的空间资源一次性提交。</p>
+</blockquote>
+<hr />
+<h2 id="42-experience提交">42. Experience提交</h2><p>Pickup接触玩家
+→ 标记Collected
+→ 从World移除
+→ ExperienceSystem增加XP
+→ 检查LevelThreshold
+→ 可能触发多个LevelUp。</p>
+<hr />
+<h2 id="43-多级连续升级">43. 多级连续升级</h2><p>后期一次全屏吸收可能产生：</p>
+<p>5级；</p>
+<p>10级；</p>
+<p>甚至更多升级。</p>
+<p>系统不能：</p>
+<p>一次只处理一级</p>
+<p>并丢弃超额经验。</p>
+<p>应该：</p>
+<p>Experience += value
+→ while Experience &gt;= Threshold
+→ 创建PendingLevelUps。</p>
+<hr />
+<h2 id="44-levelprogressionstate">44. LevelProgressionState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentLevel；</p>
+</li>
+<li><p>CurrentExperience；</p>
+</li>
+<li><p>ExperienceToNextLevel；</p>
+</li>
+<li><p>PendingLevelUps；</p>
+</li>
+<li><p>LevelCurveId；</p>
+</li>
+<li><p>LevelVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-upgrade-draft">45. Upgrade Draft</h2><p>每次升级：</p>
+<p>系统生成有限候选。</p>
+<p>例如：</p>
+<p>3选1。</p>
+<p>这是单局构筑最重要的决策入口。</p>
+<hr />
+<h3 id="451-upgradepoolentry">45.1 UpgradePoolEntry</h3><p>建议字段：</p>
+<ul>
+<li><p>UpgradeId；</p>
+</li>
+<li><p>UpgradeType；</p>
+</li>
+<li><p>Weight；</p>
+</li>
+<li><p>Prerequisites；</p>
+</li>
+<li><p>ExclusionRules；</p>
+</li>
+<li><p>MaximumLevel；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>Tags；</p>
+</li>
+<li><p>UpgradeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="46-候选生成">46. 候选生成</h2><p>LevelUp
+→ 获取所有合法Upgrade
+→ 过滤已满级
+→ 检查前置
+→ 检查互斥
+→ 应用角色权重
+→ 应用Luck
+→ WeightedSampleWithoutReplacement
+→ 生成Draft。</p>
+<hr />
+<h2 id="47-draft必须先生成结果再展示">47. Draft必须先生成结果再展示</h2><p>不要：</p>
+<p>UI打开后</p>
+<p>每次刷新界面都重新随机。</p>
+<p>应该：</p>
+<p>创建：</p>
+<p>UpgradeDraftInstance。</p>
+<p>保存：</p>
+<ul>
+<li><p>DraftId；</p>
+</li>
+<li><p>CandidateIds；</p>
+</li>
+<li><p>RandomCursor；</p>
+</li>
+<li><p>RerollState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="48-reroll-banish-skip">48. Reroll / Banish / Skip</h2><p>高级构筑可以提供：</p>
+<h3 id="reroll">Reroll</h3><p>重新抽取候选。</p>
+<h3 id="banish">Banish</h3><p>将某Upgrade从本局池中移除。</p>
+<h3 id="skip">Skip</h3><p>放弃当前升级换其他收益。</p>
+<p>这些能力的核心意义是：</p>
+<blockquote>
+<p>给玩家一定程度控制随机池。</p>
+</blockquote>
+<hr />
+<h2 id="49-upgrade-pool-control">49. Upgrade Pool Control</h2><p>如果完全随机：</p>
+<p>玩家无法构筑。</p>
+<p>如果完全自由选择：</p>
+<p>随机适应性消失。</p>
+<p>需要维持：</p>
+<p><strong>Bounded Choice。</strong></p>
+<p>即：</p>
+<p>不是完整菜单。</p>
+<p>而是：</p>
+<p>有限候选中的可控决策。</p>
+<hr />
+<h2 id="50-新技能与技能强化竞争">50. 新技能与技能强化竞争</h2><p>一次Draft可能同时出现：</p>
+<ul>
+<li><p>新Ability；</p>
+</li>
+<li><p>AbilityLevelUp；</p>
+</li>
+<li><p>Passive；</p>
+</li>
+<li><p>Utility；</p>
+</li>
+<li><p>Recovery。</p>
+</li>
+</ul>
+<p>这会形成：</p>
+<p><strong>Build Width</strong></p>
+<p>和：</p>
+<p><strong>Build Depth</strong></p>
+<p>取舍。</p>
+<hr />
+<h3 id="501-build-width">50.1 Build Width</h3><p>增加更多技能。</p>
+<p>优势：</p>
+<ul>
+<li><p>更多攻击模式；</p>
+</li>
+<li><p>更广覆盖。</p>
+</li>
+</ul>
+<hr />
+<h3 id="502-build-depth">50.2 Build Depth</h3><p>升级已有技能。</p>
+<p>优势：</p>
+<ul>
+<li><p>更快形成Power Spike；</p>
+</li>
+<li><p>更容易满足Evolution。</p>
+</li>
+</ul>
+<hr />
+<h2 id="51-ability-slot-limit">51. Ability Slot Limit</h2><p>限制最多：</p>
+<p>例如6个Weapon。</p>
+<p>意义：</p>
+<blockquote>
+<p>强迫构筑最终收敛。</p>
+</blockquote>
+<p>否则后期玩家：</p>
+<p>所有能力全拿。</p>
+<p>每局都会变成相同“全技能”构筑。</p>
+<hr />
+<h2 id="52-passive-slot-limit">52. Passive Slot Limit</h2><p>同理可以限制：</p>
+<p>Passive数量。</p>
+<p>玩家必须选择：</p>
+<ul>
+<li><p>Area；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>Movement；</p>
+</li>
+<li><p>Defense。</p>
+</li>
+</ul>
+<hr />
+<h2 id="53-build-synergy">53. Build Synergy</h2><p>真正优秀的幸存者类不是：</p>
+<p>找到六个最高DPS技能。</p>
+<p>而是形成：</p>
+<p>系统联动。</p>
+<p>例如：</p>
+<p>高ProjectileCount</p>
+<ul>
+<li><p>Pierce</p>
+</li>
+<li><p>OnHitBurn</p>
+</li>
+</ul>
+<p>或者：</p>
+<p>大Area</p>
+<ul>
+<li><p>LongDuration</p>
+</li>
+<li><p>Slow</p>
+</li>
+</ul>
+<p>或者：</p>
+<p>SummonCount</p>
+<ul>
+<li><p>AttackSpeed</p>
+</li>
+<li><p>Crit。</p>
+</li>
+</ul>
+<hr />
+<h2 id="54-buildsynergygraph">54. BuildSynergyGraph</h2><p>开发工具可以维护：</p>
+<p>UpgradeTag</p>
+<p>之间的关联。</p>
+<p>例如：</p>
+<p>Projectile</p>
+<p>关联：</p>
+<ul>
+<li><p>ProjectileCount；</p>
+</li>
+<li><p>Pierce；</p>
+</li>
+<li><p>Bounce；</p>
+</li>
+<li><p>Homing。</p>
+</li>
+</ul>
+<p>Area：</p>
+<ul>
+<li><p>Radius；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>TickRate。</p>
+</li>
+</ul>
+<p>用于：</p>
+<ul>
+<li><p>Draft推荐；</p>
+</li>
+<li><p>AI测试；</p>
+</li>
+<li><p>Build分析。</p>
+</li>
+</ul>
+<hr />
+<h2 id="55-不建议直接硬编码套装答案">55. 不建议直接硬编码“套装答案”</h2><p>如果游戏明确告诉：</p>
+<p>拿A+B+C</p>
+<p>就是官方组合，</p>
+<p>构筑容易变成背公式。</p>
+<p>更好的方式：</p>
+<p>通过统一Tag和Modifier规则</p>
+<p>产生可组合关系。</p>
+<hr />
+<h2 id="56-elite-system">56. Elite System</h2><p>精英应该：</p>
+<ul>
+<li><p>数量少；</p>
+</li>
+<li><p>明显更强；</p>
+</li>
+<li><p>有独特攻击；</p>
+</li>
+<li><p>有高价值奖励。</p>
+</li>
+</ul>
+<p>其核心职责是：</p>
+<blockquote>
+<p>在普通群潮无法真正威胁成熟构筑时，对玩家进行局部压力测试。</p>
+</blockquote>
+<hr />
+<h2 id="57-elitedefinition">57. EliteDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EliteId；</p>
+</li>
+<li><p>BaseEnemyId；</p>
+</li>
+<li><p>ModifierSet；</p>
+</li>
+<li><p>AbilityIds；</p>
+</li>
+<li><p>SpawnRule；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>TelegraphProfile；</p>
+</li>
+<li><p>EliteVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="58-boss-system">58. Boss System</h2><p>Boss不应只是：</p>
+<p>一个生命值特别高的普通敌人。</p>
+<p>Boss应该测试：</p>
+<ul>
+<li><p>单体DPS；</p>
+</li>
+<li><p>走位；</p>
+</li>
+<li><p>空间占用；</p>
+</li>
+<li><p>构筑短板；</p>
+</li>
+<li><p>爆发窗口。</p>
+</li>
+</ul>
+<hr />
+<h3 id="581-boss与群潮的组合">58.1 Boss与群潮的组合</h3><p>Boss存在时：</p>
+<p>可以选择：</p>
+<p>暂停普通敌人；</p>
+<p>降低普通敌人；</p>
+<p>继续保持群潮。</p>
+<p>不同方案产生不同体验。</p>
+<p>很多情况下：</p>
+<p>Boss</p>
+<ul>
+<li>有控制的普通群潮</li>
+</ul>
+<p>比：</p>
+<p>纯Boss</p>
+<p>更符合类型特征。</p>
+<hr />
+<h2 id="59-reward-chest">59. Reward Chest</h2><p>精英或Boss死亡后可以生成：</p>
+<p>Chest。</p>
+<p>Chest的主要作用：</p>
+<ul>
+<li><p>提供高品质Upgrade；</p>
+</li>
+<li><p>触发Evolution；</p>
+</li>
+<li><p>给玩家阶段性高价值奖励；</p>
+</li>
+<li><p>创建短暂安全目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="60-reward-transaction">60. Reward Transaction</h2><p>EliteDeath
+→ 创建RewardSource
+→ PlayerInteract/Pickup
+→ 生成RewardDraft
+→ 确认Reward
+→ 提交BuildChange。</p>
+<p>不要：</p>
+<p>播放宝箱动画时直接修改Build。</p>
+<hr />
+<h2 id="61-health与恢复">61. Health与恢复</h2><p>玩家生命通常相对有限。</p>
+<p>恢复来源可以包括：</p>
+<ul>
+<li><p>掉落食物；</p>
+</li>
+<li><p>Lifesteal；</p>
+</li>
+<li><p>Regeneration；</p>
+</li>
+<li><p>LevelReward；</p>
+</li>
+<li><p>EliteReward。</p>
+</li>
+</ul>
+<hr />
+<h3 id="611-恢复资源不能过于稳定">61.1 恢复资源不能过于稳定</h3><p>如果玩家每次受伤：</p>
+<p>都能快速无限恢复。</p>
+<p>群潮压力会失去长期意义。</p>
+<hr />
+<h2 id="62-接触伤害">62. 接触伤害</h2><p>大量敌人靠近时最容易出现一个问题：</p>
+<p>数十个敌人同帧接触玩家</p>
+<p>→ 瞬间死亡。</p>
+<p>需要明确：</p>
+<ul>
+<li><p>DamageCooldown；</p>
+</li>
+<li><p>InvulnerabilityWindow；</p>
+</li>
+<li><p>PerEnemyHitCooldown；</p>
+</li>
+<li><p>GlobalContactCooldown。</p>
+</li>
+</ul>
+<p>否则死亡可能变成：</p>
+<p>难以理解的单帧爆炸。</p>
+<hr />
+<h2 id="63-playerdamagecontext">63. PlayerDamageContext</h2><p>建议记录：</p>
+<ul>
+<li><p>SourceEnemyId；</p>
+</li>
+<li><p>DamageType；</p>
+</li>
+<li><p>RawDamage；</p>
+</li>
+<li><p>Mitigation；</p>
+</li>
+<li><p>InvulnerabilityState；</p>
+</li>
+<li><p>AppliedDamage；</p>
+</li>
+<li><p>HitTick。</p>
+</li>
+</ul>
+<p>Death Recap需要能够回答：</p>
+<p>玩家为什么突然死了。</p>
+<hr />
+<h2 id="64-移动本身是最核心战术资源">64. 移动本身是最核心战术资源</h2><p>由于攻击自动，</p>
+<p>玩家大部分注意力都集中于：</p>
+<p>Position。</p>
+<p>玩家需要判断：</p>
+<ul>
+<li><p>敌群哪里最薄；</p>
+</li>
+<li><p>XP哪里最多；</p>
+</li>
+<li><p>是否值得穿过危险区域；</p>
+</li>
+<li><p>Boss攻击方向；</p>
+</li>
+<li><p>地图障碍；</p>
+</li>
+<li><p>是否进入敌人密度中心。</p>
+</li>
+</ul>
+<p>因此这个类型本质上具有非常强的：</p>
+<p><strong>Spatial Risk Management。</strong></p>
+<hr />
+<h2 id="65-kiting">65. Kiting</h2><p>经典循环：</p>
+<p>敌人靠近
+→ 玩家移动拉扯
+→ 自动火力持续输出
+→ 敌群形成尾流
+→ 玩家改变方向
+→ 穿过火力区域
+→ 收集经验。</p>
+<hr />
+<h2 id="66-地图不能完全没有意义">66. 地图不能完全没有意义</h2><p>如果地图只是：</p>
+<p>无限平面。</p>
+<p>每局空间策略可能趋于相同。</p>
+<p>可以加入：</p>
+<ul>
+<li><p>墙体；</p>
+</li>
+<li><p>通道；</p>
+</li>
+<li><p>障碍；</p>
+</li>
+<li><p>危险区；</p>
+</li>
+<li><p>资源区；</p>
+</li>
+<li><p>Shrine；</p>
+</li>
+<li><p>Treasure；</p>
+</li>
+<li><p>Boss区域。</p>
+</li>
+</ul>
+<p>但不能让地形过度复杂，</p>
+<p>否则千单位导航成本会快速上升。</p>
+<hr />
+<h2 id="67-时间阶段">67. 时间阶段</h2><p>推荐显式设计：</p>
+<h3 id="020">0～20%</h3><p>建立基础构筑。</p>
+<h3 id="2050">20～50%</h3><p>构筑方向确定。</p>
+<h3 id="5075">50～75%</h3><p>形成主要Evolution。</p>
+<h3 id="7590">75～90%</h3><p>高密度压力。</p>
+<h3 id="90100">90～100%</h3><p>终局能力检查。</p>
+<p>这样Content Designer可以明确回答：</p>
+<p>“这个敌人为什么在12分钟出现？”</p>
+<hr />
+<h2 id="68-时间压力与构筑速度必须匹配">68. 时间压力与构筑速度必须匹配</h2><p>非常重要的平衡指标：</p>
+<p><strong>PlayerPowerCurve</strong></p>
+<p>和：</p>
+<p><strong>EnemyPressureCurve。</strong></p>
+<hr />
+<h3 id="681-playerpowercurve">68.1 PlayerPowerCurve</h3><p>来源：</p>
+<ul>
+<li><p>Level；</p>
+</li>
+<li><p>Ability；</p>
+</li>
+<li><p>Passive；</p>
+</li>
+<li><p>Evolution；</p>
+</li>
+<li><p>Loot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="682-enemypressurecurve">68.2 EnemyPressureCurve</h3><p>来源：</p>
+<ul>
+<li><p>Count；</p>
+</li>
+<li><p>HP；</p>
+</li>
+<li><p>Speed；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Archetype；</p>
+</li>
+<li><p>Elite；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<hr />
+<h3 id="683-两条曲线的关系">68.3 两条曲线的关系</h3><p>如果：</p>
+<p>Power远高于Pressure：</p>
+<p>玩家无聊。</p>
+<p>如果：</p>
+<p>Pressure远高于Power：</p>
+<p>玩家觉得RNG不公平。</p>
+<p>理想情况是：</p>
+<p>两者不断接近，</p>
+<p>再通过Build质量产生差异。</p>
+<hr />
+<h2 id="69-kill-capacity">69. Kill Capacity</h2><p>一个非常适合本品类的内部指标：</p>
+<p><strong>KillCapacityPerSecond。</strong></p>
+<p>表示：</p>
+<p>当前构筑单位时间理论可以处理多少敌人价值。</p>
+<hr />
+<h2 id="70-spawn-pressure">70. Spawn Pressure</h2><p>对应：</p>
+<p><strong>SpawnCostPerSecond。</strong></p>
+<p>如果：</p>
+<p>SpawnPressure</p>
+<p>持续远高于：</p>
+<p>KillCapacity：</p>
+<p>敌群会越来越多。</p>
+<p>最终形成：</p>
+<p>地图拥堵。</p>
+<p>这本身可以成为失败机制。</p>
+<hr />
+<h2 id="71-正反馈与失控">71. 正反馈与失控</h2><p>本品类存在非常明显的正反馈：</p>
+<p>强Build
+→ 更多击杀
+→ 更多XP
+→ 更快升级
+→ 更强Build。</p>
+<p>弱Build：</p>
+<p>清怪慢
+→ XP少
+→ 升级慢
+→ 更难处理后续敌人。</p>
+<p>因此需要防止：</p>
+<p>早期一次差选择
+→ 整局不可恢复。</p>
+<hr />
+<h2 id="72-追赶机制">72. 追赶机制</h2><p>可以使用：</p>
+<ul>
+<li><p>XP需求曲线；</p>
+</li>
+<li><p>高密度敌人更高XP；</p>
+</li>
+<li><p>精英奖励；</p>
+</li>
+<li><p>宝箱；</p>
+</li>
+<li><p>低等级时经验倍率；</p>
+</li>
+<li><p>地图高价值Pickup。</p>
+</li>
+</ul>
+<p>但不能让：</p>
+<p>落后玩家自动追平。</p>
+<p>目标是：</p>
+<p>保留修复机会。</p>
+<hr />
+<h2 id="73-升级暂停策略">73. 升级暂停策略</h2><p>LevelUp时可以：</p>
+<h3 id="完全暂停世界">完全暂停世界</h3><p>优点：</p>
+<p>玩家可以思考。</p>
+<h3 id="时间减速">时间减速</h3><p>保留压力。</p>
+<h3 id="不暂停">不暂停</h3><p>适合高强度动作。</p>
+<p>幸存者类通常更适合：</p>
+<p>暂停或大幅减速。</p>
+<p>因为构筑决策本身是主要策略内容。</p>
+<hr />
+<h2 id="74-连续多级升级">74. 连续多级升级</h2><p>如果PendingLevelUps很多：</p>
+<p>可以：</p>
+<p>一次显示多轮Draft；</p>
+<p>或者：</p>
+<p>批量升级UI。</p>
+<p>但不能：</p>
+<p>世界每升一级恢复一帧</p>
+<p>再暂停，</p>
+<p>造成闪烁式体验。</p>
+<hr />
+<h2 id="75-run-termination">75. Run Termination</h2><p>胜利条件可以是：</p>
+<ul>
+<li><p>生存指定时间；</p>
+</li>
+<li><p>击败终局Boss；</p>
+</li>
+<li><p>完成目标后撤离；</p>
+</li>
+<li><p>清除最终群潮。</p>
+</li>
+</ul>
+<hr />
+<h3 id="751-时间到达不应立刻无条件胜利">75.1 时间到达不应立刻无条件胜利</h3><p>如果：</p>
+<p>20:00到达</p>
+<p>但Boss刚出现，</p>
+<p>可以：</p>
+<p>进入FinalPhase</p>
+<p>→ Boss死亡</p>
+<p>→ Victory。</p>
+<hr />
+<h2 id="76-完整事件与执行流程示例">76. 完整事件与执行流程示例</h2><p>以下以：</p>
+<p><strong>玩家从基础飞刀构筑逐步形成“高投射物数量 + 穿透 + 燃烧”的清屏Build，并在12分钟Boss阶段接受单体DPS检查</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="761-run开始">76.1 Run开始</h3><p>玩家选择角色：</p>
+<p>基础能力：</p>
+<p>ThrowingKnife Lv1。</p>
+<p>初始属性：</p>
+<ul>
+<li><p>Damage 100%；</p>
+</li>
+<li><p>ProjectileCount 1；</p>
+</li>
+<li><p>Area 100%；</p>
+</li>
+<li><p>Cooldown 100%。</p>
+</li>
+</ul>
+<hr />
+<h3 id="762-第一波敌人">76.2 第一波敌人</h3><p>SpawnDirector：</p>
+<p>BudgetPerSecond = 4。</p>
+<p>EnemyPool：</p>
+<p>SlowChaser。</p>
+<p>玩家只需要：</p>
+<p>围绕敌群移动。</p>
+<p>ThrowingKnife自动寻找最近敌人。</p>
+<hr />
+<h3 id="763-第一批击杀">76.3 第一批击杀</h3><p>Enemy死亡：</p>
+<p>生成XP Gem。</p>
+<p>经验并没有立即加入玩家。</p>
+<p>而是散落在敌群周围。</p>
+<hr />
+<h3 id="764-玩家绕圈">76.4 玩家绕圈</h3><p>玩家先拉开敌群，</p>
+<p>再从侧面穿过：</p>
+<p>XP区域。</p>
+<p>PickupMagnet吸收经验。</p>
+<hr />
+<h3 id="765-level-2">76.5 Level 2</h3><p>系统创建：</p>
+<p>UpgradeDraft。</p>
+<p>候选：</p>
+<ul>
+<li><p>ThrowingKnife Lv2；</p>
+</li>
+<li><p>MoveSpeed；</p>
+</li>
+<li><p>FireAura。</p>
+</li>
+</ul>
+<p>玩家选择：</p>
+<p>ThrowingKnife Lv2。</p>
+<p>获得：</p>
+<p>ProjectileCount +1。</p>
+<hr />
+<h3 id="766-火力提高">76.6 火力提高</h3><p>现在每次攻击：</p>
+<p>2个Knife。</p>
+<p>KillCapacity提升。</p>
+<p>敌人开始更快死亡。</p>
+<p>XP生成速度提高。</p>
+<hr />
+<h3 id="767-3分钟阶段">76.7 3分钟阶段</h3><p>SpawnDirector切换PressureProfile。</p>
+<p>加入：</p>
+<p>SwarmEnemy。</p>
+<p>数量显著增加。</p>
+<hr />
+<h3 id="768-第一次build分叉">76.8 第一次Build分叉</h3><p>升级候选：</p>
+<ul>
+<li><p>Pierce Passive；</p>
+</li>
+<li><p>FireAura；</p>
+</li>
+<li><p>Armor。</p>
+</li>
+</ul>
+<p>玩家选择：</p>
+<p>Pierce。</p>
+<p>Knife现在：</p>
+<p>能够穿过第二个敌人。</p>
+<hr />
+<h3 id="769-协同出现">76.9 协同出现</h3><p>ProjectileCount 2</p>
+<p>Pierce 1</p>
+<p>导致：</p>
+<p>单次攻击潜在命中数量</p>
+<p>从：</p>
+<p>2</p>
+<p>提高到：</p>
+<p>4。</p>
+<p>这不是简单：</p>
+<p>Damage +20%。</p>
+<p>而是：</p>
+<p>机制乘法。</p>
+<hr />
+<h3 id="7610-敌群密度上升">76.10 敌群密度上升</h3><p>SpawnPressure继续提高。</p>
+<p>屏幕上同时存在：</p>
+<p>100+敌人。</p>
+<p>SpatialQuery系统仍通过UniformGrid寻找目标。</p>
+<hr />
+<h3 id="7611-5分钟elite出现">76.11 5分钟Elite出现</h3><p>Elite拥有：</p>
+<p>高生命；</p>
+<p>冲锋技能。</p>
+<p>玩家普通清怪能力很强，</p>
+<p>但单体伤害一般。</p>
+<p>因此需要持续移动拉扯。</p>
+<hr />
+<h3 id="7612-elite死亡">76.12 Elite死亡</h3><p>生成Chest。</p>
+<p>玩家获得：</p>
+<p>ThrowingKnife免费升级一级。</p>
+<hr />
+<h3 id="7613-进化条件逐渐满足">76.13 进化条件逐渐满足</h3><p>ThrowingKnife达到MaxLevel。</p>
+<p>玩家已经拥有：</p>
+<p>PiercePassive。</p>
+<p>EvolutionRule满足大部分条件。</p>
+<hr />
+<h3 id="7614-8分钟boss前精英">76.14 8分钟Boss前精英</h3><p>玩家获得第二个Chest。</p>
+<p>触发：</p>
+<p>WeaponEvolution。</p>
+<p>ThrowingKnife</p>
+<p>进化为：</p>
+<p>InfernoBladeStorm。</p>
+<p>行为变化：</p>
+<ul>
+<li><p>ProjectileCount进一步增加；</p>
+</li>
+<li><p>命中产生Burn；</p>
+</li>
+<li><p>Projectile穿透；</p>
+</li>
+<li><p>最后一个目标产生小爆炸。</p>
+</li>
+</ul>
+<hr />
+<h3 id="7615-build进入成熟期">76.15 Build进入成熟期</h3><p>当前构筑形成：</p>
+<p>高ProjectileCount
+→ 多目标命中</p>
+<p>Pierce
+→ 提高单位投射物利用率</p>
+<p>Burn
+→ 对高生命目标持续伤害</p>
+<p>Explosion
+→ 利用Swarm密度扩大AoE价值。</p>
+<hr />
+<h3 id="7616-10分钟压力上升">76.16 10分钟压力上升</h3><p>SpawnDirector加入：</p>
+<p>TankEnemy。</p>
+<p>普通Swarm仍然很快死亡。</p>
+<p>Tank开始不断积累。</p>
+<hr />
+<h3 id="7617-玩家发现构筑短板">76.17 玩家发现构筑短板</h3><p>清杂能力极强，</p>
+<p>但Tank死亡速度较慢。</p>
+<p>说明：</p>
+<p>Build AoE充足，</p>
+<p>单体DPS不足。</p>
+<hr />
+<h3 id="7618-11分钟draft">76.18 11分钟Draft</h3><p>出现：</p>
+<ul>
+<li><p>Crit Passive；</p>
+</li>
+<li><p>Area；</p>
+</li>
+<li><p>MoveSpeed。</p>
+</li>
+</ul>
+<p>玩家选择：</p>
+<p>Crit。</p>
+<p>补充单体输出。</p>
+<hr />
+<h3 id="7619-12分钟boss出现">76.19 12分钟Boss出现</h3><p>Boss拥有：</p>
+<p>较高生命；</p>
+<p>冲锋；</p>
+<p>区域攻击。</p>
+<p>SpawnDirector同时：</p>
+<p>降低普通Swarm生成速度，</p>
+<p>但并未完全停止。</p>
+<hr />
+<h3 id="7620-战斗形成双重压力">76.20 战斗形成双重压力</h3><p>玩家必须：</p>
+<p>躲Boss技能</p>
+<p>同时：</p>
+<p>清理外围敌人</p>
+<p>同时：</p>
+<p>回收经验。</p>
+<hr />
+<h3 id="7621-build验证">76.21 Build验证</h3><p>Burn：</p>
+<p>持续对Boss产生伤害。</p>
+<p>Crit：</p>
+<p>提高单体输出。</p>
+<p>Projectile：</p>
+<p>仍然能够处理外围小怪。</p>
+<p>构筑完整覆盖：</p>
+<p>SingleTarget</p>
+<ul>
+<li>HordeClear。</li>
+</ul>
+<hr />
+<h3 id="7622-boss死亡">76.22 Boss死亡</h3><p>Run进入：</p>
+<p>VictoryPending。</p>
+<p>停止新增敌人。</p>
+<p>提交剩余战斗事件。</p>
+<hr />
+<h3 id="7623-runresult">76.23 RunResult</h3><p>记录：</p>
+<ul>
+<li><p>Duration；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>Kills；</p>
+</li>
+<li><p>DamageByAbility；</p>
+</li>
+<li><p>Evolution；</p>
+</li>
+<li><p>DamageTaken；</p>
+</li>
+<li><p>EliteKills；</p>
+</li>
+<li><p>BossKill；</p>
+</li>
+<li><p>XPCollected；</p>
+</li>
+<li><p>XPLeftOnGround；</p>
+</li>
+<li><p>BuildSnapshot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="7624-完整核心循环">76.24 完整核心循环</h3><p>移动规避
+→ 自动攻击
+→ 击杀
+→ XP进入危险空间
+→ 回收XP
+→ Draft
+→ 技能成长
+→ 协同形成
+→ KillCapacity提高
+→ Director提高SpawnPressure
+→ Build弱点显现
+→ 玩家修正Build
+→ Boss进行能力检查。</p>
+<p>这就是幸存者类最具代表性的：</p>
+<blockquote>
+<p><strong>压力增长与构筑增长互相追逐的反馈系统。</strong></p>
+</blockquote>
+<hr />
+<h2 id="77-模块通信设计">77. 模块通信设计</h2><h3 id="771-commands">77.1 Commands</h3><p>由于自动战斗占比高，业务Command数量通常不多。</p>
+<p>典型：</p>
+<ul>
+<li><p>MovePlayer；</p>
+</li>
+<li><p>ActivateManualAbility；</p>
+</li>
+<li><p>SelectUpgrade；</p>
+</li>
+<li><p>RerollUpgradeDraft；</p>
+</li>
+<li><p>BanishUpgrade；</p>
+</li>
+<li><p>OpenChest；</p>
+</li>
+<li><p>SelectChestReward；</p>
+</li>
+<li><p>PauseRun。</p>
+</li>
+</ul>
+<hr />
+<h3 id="772-queries">77.2 Queries</h3><p>适用于：</p>
+<ul>
+<li><p>当前Level；</p>
+</li>
+<li><p>当前XP；</p>
+</li>
+<li><p>下一等级需求；</p>
+</li>
+<li><p>当前Build；</p>
+</li>
+<li><p>当前AbilityLevel；</p>
+</li>
+<li><p>某Evolution是否满足条件；</p>
+</li>
+<li><p>当前RunTime；</p>
+</li>
+<li><p>当前EnemyCount；</p>
+</li>
+<li><p>当前Boss状态。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>生成XP；</p>
+</li>
+<li><p>消费随机数；</p>
+</li>
+<li><p>刷新Draft；</p>
+</li>
+<li><p>修改Cooldown。</p>
+</li>
+</ul>
+<hr />
+<h3 id="773-domain-events">77.3 Domain Events</h3><p>包括：</p>
+<ul>
+<li><p>RunStarted；</p>
+</li>
+<li><p>EnemySpawned；</p>
+</li>
+<li><p>AbilityCast；</p>
+</li>
+<li><p>ProjectileCreated；</p>
+</li>
+<li><p>DamageResolved；</p>
+</li>
+<li><p>EnemyKilled；</p>
+</li>
+<li><p>ExperienceDropped；</p>
+</li>
+<li><p>ExperienceCollected；</p>
+</li>
+<li><p>PlayerLeveledUp；</p>
+</li>
+<li><p>UpgradeDraftCreated；</p>
+</li>
+<li><p>UpgradeSelected；</p>
+</li>
+<li><p>AbilityLeveled；</p>
+</li>
+<li><p>AbilityEvolved；</p>
+</li>
+<li><p>EliteSpawned；</p>
+</li>
+<li><p>BossSpawned；</p>
+</li>
+<li><p>PlayerDamaged；</p>
+</li>
+<li><p>PlayerDied；</p>
+</li>
+<li><p>BossKilled；</p>
+</li>
+<li><p>RunCompleted。</p>
+</li>
+</ul>
+<hr />
+<h3 id="774-presentation-events">77.4 Presentation Events</h3><p>包括：</p>
+<ul>
+<li><p>PlayAbilityEffect；</p>
+</li>
+<li><p>PlayHitEffect；</p>
+</li>
+<li><p>ShowDamageNumber；</p>
+</li>
+<li><p>ShowExperienceGem；</p>
+</li>
+<li><p>PlayLevelUpEffect；</p>
+</li>
+<li><p>ShowUpgradeUI；</p>
+</li>
+<li><p>PlayEvolutionAnimation；</p>
+</li>
+<li><p>ShowBossWarning；</p>
+</li>
+<li><p>ShowVictoryScreen。</p>
+</li>
+</ul>
+<p>表现事件不能决定：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>XP；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>Spawn；</p>
+</li>
+<li><p>Evolution。</p>
+</li>
+</ul>
+<hr />
+<h2 id="78-随机流">78. 随机流</h2><p>建议至少分离：</p>
+<ul>
+<li><p>SpawnRandom；</p>
+</li>
+<li><p>UpgradeDraftRandom；</p>
+</li>
+<li><p>LootRandom；</p>
+</li>
+<li><p>CriticalRandom；</p>
+</li>
+<li><p>TargetRandom；</p>
+</li>
+<li><p>EventRandom。</p>
+</li>
+</ul>
+<hr />
+<h3 id="781-为什么要分流">78.1 为什么要分流</h3><p>假设：</p>
+<p>加入一个新的随机装饰特效。</p>
+<p>如果所有系统共享一个Random：</p>
+<p>可能改变：</p>
+<p>之后所有LevelUp候选。</p>
+<p>导致：</p>
+<p>同一Seed无法复现。</p>
+<hr />
+<h2 id="79-replay">79. Replay</h2><p>幸存者类非常适合：</p>
+<p>Input Replay。</p>
+<p>因为玩家输入通常很少。</p>
+<p>记录：</p>
+<ul>
+<li><p>InitialSeed；</p>
+</li>
+<li><p>MoveInput；</p>
+</li>
+<li><p>UpgradeChoices；</p>
+</li>
+<li><p>ManualAbility；</p>
+</li>
+<li><p>ChestChoices。</p>
+</li>
+</ul>
+<p>即可重现大量Run状态。</p>
+<p>前提：</p>
+<ul>
+<li><p>Spawn确定性；</p>
+</li>
+<li><p>Combat确定性；</p>
+</li>
+<li><p>RandomStream稳定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="80-save-suspend-run">80. Save / Suspend Run</h2><p>如果单局较长，</p>
+<p>可以支持：</p>
+<p>中途Suspend。</p>
+<p>需要保存：</p>
+<ul>
+<li><p>PlayerState；</p>
+</li>
+<li><p>Build；</p>
+</li>
+<li><p>AbilityCooldown；</p>
+</li>
+<li><p>EnemyPopulation；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Projectiles；</p>
+</li>
+<li><p>XP Pickups；</p>
+</li>
+<li><p>RunClock；</p>
+</li>
+<li><p>SpawnDirector；</p>
+</li>
+<li><p>RandomStreams。</p>
+</li>
+</ul>
+<p>如果不能完整保存敌群：</p>
+<p>可以限制：</p>
+<p>只在阶段检查点Suspend。</p>
+<hr />
+<h2 id="81-失败隔离">81. 失败隔离</h2><hr />
+<h3 id="811-spawn位置生成失败">81.1 Spawn位置生成失败</h3><p>如果没有合法SpawnPoint：</p>
+<ul>
+<li><p>扩大SpawnRing；</p>
+</li>
+<li><p>延迟Spawn；</p>
+</li>
+<li><p>使用FallbackCandidate；</p>
+</li>
+<li><p>记录地图区域。</p>
+</li>
+</ul>
+<p>不能：</p>
+<p>无限while随机。</p>
+<hr />
+<h3 id="812-enemy超出合法世界">81.2 Enemy超出合法世界</h3><p>敌人掉出地图：</p>
+<ul>
+<li><p>尝试恢复到最近合法位置；</p>
+</li>
+<li><p>如果无法恢复则安全销毁；</p>
+</li>
+<li><p>不生成XP；</p>
+</li>
+<li><p>不计入Kill。</p>
+</li>
+</ul>
+<hr />
+<h3 id="813-enemycount泄漏">81.3 EnemyCount泄漏</h3><p>Enemy对象销毁</p>
+<p>但ActiveEnemyCount没有减少</p>
+<p>会导致Director停止生成。</p>
+<p>因此Enemy生命周期应由：</p>
+<p>EnemyRegistry</p>
+<p>统一维护。</p>
+<hr />
+<h3 id="814-projectile失去目标">81.4 Projectile失去目标</h3><p>Homing目标死亡：</p>
+<p>根据规则：</p>
+<ul>
+<li><p>Reacquire；</p>
+</li>
+<li><p>ContinueStraight；</p>
+</li>
+<li><p>Expire。</p>
+</li>
+</ul>
+<p>不能保持：</p>
+<p>DestroyedEntity引用。</p>
+<hr />
+<h3 id="815-hitmemory无限增长">81.5 HitMemory无限增长</h3><p>长期Projectile可能记录：</p>
+<p>几千TargetId。</p>
+<p>需要：</p>
+<ul>
+<li><p>生命周期清理；</p>
+</li>
+<li><p>IntervalHit使用小型Hash；</p>
+</li>
+<li><p>分段重置。</p>
+</li>
+</ul>
+<hr />
+<h3 id="816-xp对象爆炸">81.6 XP对象爆炸</h3><p>如果ExperiencePickup数量超过阈值：</p>
+<p>启动：</p>
+<p>AggregationPolicy。</p>
+<p>不能继续无上限创建。</p>
+<hr />
+<h3 id="817-多级升级重入">81.7 多级升级重入</h3><p>ExperienceCollected</p>
+<p>触发：</p>
+<p>LevelUp</p>
+<p>而LevelUp UI尚未处理，</p>
+<p>再次ExperienceCollected又触发。</p>
+<p>需要：</p>
+<p>PendingLevelUpQueue。</p>
+<hr />
+<h3 id="818-draft无合法候选">81.8 Draft无合法候选</h3><p>可能原因：</p>
+<p>所有技能满级；</p>
+<p>所有Passive满级；</p>
+<p>前置条件过滤。</p>
+<p>需要Fallback：</p>
+<ul>
+<li><p>Gold；</p>
+</li>
+<li><p>Heal；</p>
+</li>
+<li><p>StatBoost；</p>
+</li>
+<li><p>RerollCurrency。</p>
+</li>
+</ul>
+<p>不能阻塞Run。</p>
+<hr />
+<h3 id="819-evolution事务失败">81.9 Evolution事务失败</h3><p>如果Evolution满足：</p>
+<p>但TargetAbility缺失：</p>
+<p>保持SourceAbility。</p>
+<p>返回：</p>
+<p>EvolutionContentError。</p>
+<p>不能删除原技能。</p>
+<hr />
+<h3 id="8110-boss状态异常">81.10 Boss状态异常</h3><p>Boss被销毁但DeathEvent未提交：</p>
+<p>Run可能永远无法结束。</p>
+<p>需要：</p>
+<p>BossRegistryIntegrityCheck。</p>
+<hr />
+<h3 id="8111-runcompletion重复">81.11 RunCompletion重复</h3><p>Boss死亡</p>
+<p>和：</p>
+<p>时间结束</p>
+<p>可能同Tick触发。</p>
+<p>必须使用：</p>
+<p>RunTerminationTransaction。</p>
+<p>只允许一个FinalResult。</p>
+<hr />
+<h2 id="82-调试与可观测性">82. 调试与可观测性</h2><hr />
+<h3 id="821-spawn-pressure-graph">82.1 Spawn Pressure Graph</h3><p>时间轴显示：</p>
+<ul>
+<li><p>SpawnBudget；</p>
+</li>
+<li><p>SpawnCostPerSecond；</p>
+</li>
+<li><p>ActiveEnemies；</p>
+</li>
+<li><p>EliteCount；</p>
+</li>
+<li><p>EnemyArchetypes。</p>
+</li>
+</ul>
+<hr />
+<h3 id="822-player-power-graph">82.2 Player Power Graph</h3><p>显示：</p>
+<ul>
+<li><p>DamagePerSecond；</p>
+</li>
+<li><p>EffectiveArea；</p>
+</li>
+<li><p>ProjectileRate；</p>
+</li>
+<li><p>CrowdClearRate；</p>
+</li>
+<li><p>SingleTargetDPS；</p>
+</li>
+<li><p>Survivability。</p>
+</li>
+</ul>
+<hr />
+<h3 id="823-pressure-vs-power-graph">82.3 Pressure vs Power Graph</h3><p>同时绘制：</p>
+<p>EnemyPressure</p>
+<p>与：</p>
+<p>PlayerPower。</p>
+<p>这是该品类最有价值的平衡工具之一。</p>
+<hr />
+<h3 id="824-kill-rate-timeline">82.4 Kill Rate Timeline</h3><p>显示：</p>
+<p>每10秒击杀数量。</p>
+<p>可以明显看到：</p>
+<p>某次Evolution后：</p>
+<p>KillRate突然提高。</p>
+<hr />
+<h3 id="825-xp-economy-timeline">82.5 XP Economy Timeline</h3><p>显示：</p>
+<ul>
+<li><p>XPGenerated；</p>
+</li>
+<li><p>XPCollected；</p>
+</li>
+<li><p>XPOnGround；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>PendingLevels。</p>
+</li>
+</ul>
+<p>如果：</p>
+<p>Generated远高于Collected，</p>
+<p>说明玩家：</p>
+<p>不是杀不动，</p>
+<p>而是无法回收资源。</p>
+<hr />
+<h3 id="826-upgrade-draft-trace">82.6 Upgrade Draft Trace</h3><p>每一级记录：</p>
+<ul>
+<li><p>合法候选池；</p>
+</li>
+<li><p>权重；</p>
+</li>
+<li><p>Luck；</p>
+</li>
+<li><p>抽取结果；</p>
+</li>
+<li><p>玩家选择；</p>
+</li>
+<li><p>Reroll。</p>
+</li>
+</ul>
+<p>用于分析：</p>
+<p>“为什么某Evolution前置整局没出现？”</p>
+<hr />
+<h3 id="827-build-timeline">82.7 Build Timeline</h3><p>例如：</p>
+<p>00:00 Knife1
+01:12 Knife2
+02:04 ProjectilePassive
+05:30 Knife5
+08:22 Evolution</p>
+<p>非常适合Run复盘。</p>
+<hr />
+<h3 id="828-ability-damage-breakdown">82.8 Ability Damage Breakdown</h3><p>统计：</p>
+<ul>
+<li><p>TotalDamage；</p>
+</li>
+<li><p>DPS；</p>
+</li>
+<li><p>Overkill；</p>
+</li>
+<li><p>EnemyHits；</p>
+</li>
+<li><p>EliteDamage；</p>
+</li>
+<li><p>BossDamage。</p>
+</li>
+</ul>
+<hr />
+<h3 id="829-spatial-density-heatmap">82.9 Spatial Density Heatmap</h3><p>显示：</p>
+<ul>
+<li><p>敌人密度；</p>
+</li>
+<li><p>玩家路径；</p>
+</li>
+<li><p>XP密度；</p>
+</li>
+<li><p>玩家受伤位置；</p>
+</li>
+<li><p>Boss技能区域。</p>
+</li>
+</ul>
+<hr />
+<h3 id="8210-death-causality">82.10 Death Causality</h3><p>不要只显示：</p>
+<p>受到132点伤害。</p>
+<p>应能解释：</p>
+<p>Tank单位开始堆积
+→ 玩家清怪速度低于Spawn速度
+→ 左侧密度持续升高
+→ 玩家被迫向右移动
+→ Runner从前方切入
+→ 接触伤害
+→ 无安全路径
+→ 死亡。</p>
+<hr />
+<h3 id="8211-targeting-inspector">82.11 Targeting Inspector</h3><p>针对一次AutoCast显示：</p>
+<ul>
+<li><p>Candidate数量；</p>
+</li>
+<li><p>SearchRadius；</p>
+</li>
+<li><p>SelectionRule；</p>
+</li>
+<li><p>FinalTarget；</p>
+</li>
+<li><p>为什么其他目标未被选择。</p>
+</li>
+</ul>
+<hr />
+<h3 id="8212-projectile-inspector">82.12 Projectile Inspector</h3><p>显示：</p>
+<ul>
+<li><p>SourceAbility；</p>
+</li>
+<li><p>SpawnTick；</p>
+</li>
+<li><p>HitCount；</p>
+</li>
+<li><p>Pierce；</p>
+</li>
+<li><p>Bounce；</p>
+</li>
+<li><p>Lifetime；</p>
+</li>
+<li><p>Damage。</p>
+</li>
+</ul>
+<hr />
+<h3 id="8213-crowd-performance-panel">82.13 Crowd Performance Panel</h3><p>显示：</p>
+<ul>
+<li><p>ActiveEnemyCount；</p>
+</li>
+<li><p>FullAIEnemyCount；</p>
+</li>
+<li><p>SimplifiedEnemyCount；</p>
+</li>
+<li><p>SpatialGridQueries；</p>
+</li>
+<li><p>ProjectileCount；</p>
+</li>
+<li><p>PickupCount；</p>
+</li>
+<li><p>DamageEventsPerSecond。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-内容验证工具">83. 内容验证工具</h2><hr />
+<h3 id="831-spawnschedule-simulation">83.1 SpawnSchedule Simulation</h3><p>不用真正渲染，</p>
+<p>模拟完整30分钟。</p>
+<p>输出：</p>
+<ul>
+<li><p>EnemyCount；</p>
+</li>
+<li><p>SpawnCost；</p>
+</li>
+<li><p>Elite；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>理论压力。</p>
+</li>
+</ul>
+<hr />
+<h3 id="832-build-monte-carlo">83.2 Build Monte Carlo</h3><p>Bot自动选择：</p>
+<p>随机；</p>
+<p>Damage优先；</p>
+<p>Evolution优先；</p>
+<p>Defense优先。</p>
+<p>运行：</p>
+<p>数千Run。</p>
+<p>统计：</p>
+<ul>
+<li><p>通关率；</p>
+</li>
+<li><p>平均Level；</p>
+</li>
+<li><p>Evolution率；</p>
+</li>
+<li><p>Ability选择率。</p>
+</li>
+</ul>
+<hr />
+<h3 id="833-upgrade-pool-reachability">83.3 Upgrade Pool Reachability</h3><p>检查每个Evolution：</p>
+<p>其所有前置能力</p>
+<p>是否能够在同一Run合法获得。</p>
+<hr />
+<h3 id="834-ability-scaling-test">83.4 Ability Scaling Test</h3><p>对每个Ability计算：</p>
+<p>Level 1</p>
+<p>到：</p>
+<p>MaxLevel</p>
+<p>在：</p>
+<p>不同PlayerModifier</p>
+<p>条件下的输出。</p>
+<p>检测：</p>
+<p>乘法爆炸。</p>
+<hr />
+<h3 id="835-projectile-explosion-test">83.5 Projectile Explosion Test</h3><p>自动测试：</p>
+<p>最大ProjectileCount
+× 最低Cooldown
+× 最大Duration。</p>
+<p>计算：</p>
+<p>理论同时存在Projectile数量。</p>
+<hr />
+<h3 id="836-crowd-stress-test">83.6 Crowd Stress Test</h3><p>模拟：</p>
+<p>100；</p>
+<p>500；</p>
+<p>1000；</p>
+<p>3000；</p>
+<p>5000敌人。</p>
+<p>统计：</p>
+<ul>
+<li><p>CPU；</p>
+</li>
+<li><p>Memory；</p>
+</li>
+<li><p>SpatialQuery；</p>
+</li>
+<li><p>DamageEvent；</p>
+</li>
+<li><p>FrameTime。</p>
+</li>
+</ul>
+<hr />
+<h3 id="837-xp-stress-test">83.7 XP Stress Test</h3><p>每秒击杀：</p>
+<p>1000单位。</p>
+<p>确认：</p>
+<p>XP Aggregation能够保持实体数量上限。</p>
+<hr />
+<h3 id="838-infinite-sustain-test">83.8 Infinite Sustain Test</h3><p>自动组合：</p>
+<p>Armor；</p>
+<p>Regen；</p>
+<p>Lifesteal；</p>
+<p>Shield。</p>
+<p>检查：</p>
+<p>是否存在玩家完全不需要移动的无风险构筑。</p>
+<hr />
+<h3 id="839-afk-build-test">83.9 AFK Build Test</h3><p>这是该类型非常重要的测试：</p>
+<p>玩家完全不移动。</p>
+<p>如果大量普通Build都能稳定通关：</p>
+<p>空间玩法可能已经失效。</p>
+<hr />
+<h3 id="8310-no-damage-test">83.10 No-Damage Test</h3><p>相反：</p>
+<p>如果即使优秀Build也几乎无法通过走位避免伤害，</p>
+<p>敌人密度可能已经高到只剩数值检查。</p>
+<hr />
+<h2 id="84-性能设计">84. 性能设计</h2><p>这是幸存者类必须从早期就纳入核心架构的部分。</p>
+<hr />
+<h3 id="841-不要让每个敌人拥有完整monobehaviour生命周期">84.1 不要让每个敌人拥有完整MonoBehaviour生命周期</h3><p>大量独立：</p>
+<p>Update；</p>
+<p>Animator；</p>
+<p>Collider；</p>
+<p>NavMeshAgent；</p>
+<p>会很快成为瓶颈。</p>
+<p>更合理的是：</p>
+<p>EnemySimulationManager</p>
+<p>批量更新。</p>
+<hr />
+<h3 id="842-data-oriented-enemy-state">84.2 Data-Oriented Enemy State</h3><p>高频数据可以集中：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>State；</p>
+</li>
+<li><p>Target；</p>
+</li>
+<li><p>Archetype。</p>
+</li>
+</ul>
+<p>使用：</p>
+<p>SoA；</p>
+<p>Native Container；</p>
+<p>ECS；</p>
+<p>Job；</p>
+<p>或者普通批处理数组。</p>
+<p>具体技术不重要。</p>
+<p>核心原则是：</p>
+<blockquote>
+<p>千单位模拟应该按“数据批量”设计，而不是按“每个敌人是一个复杂对象”设计。</p>
+</blockquote>
+<hr />
+<h3 id="843-ai分层">84.3 AI分层</h3><h4 id="tier-0">Tier 0</h4><p>Boss、Elite：</p>
+<p>完整AI。</p>
+<h4 id="tier-1">Tier 1</h4><p>玩家附近敌人：</p>
+<p>高频Movement + Combat。</p>
+<h4 id="tier-2">Tier 2</h4><p>中距离普通敌人：</p>
+<p>降低更新频率。</p>
+<h4 id="tier-3">Tier 3</h4><p>远端敌人：</p>
+<p>低频近似移动。</p>
+<hr />
+<h3 id="844-animation分层">84.4 Animation分层</h3><p>远端敌人：</p>
+<p>不需要完整Animator。</p>
+<p>可以：</p>
+<ul>
+<li><p>降采样；</p>
+</li>
+<li><p>GPU animation；</p>
+</li>
+<li><p>shared clip；</p>
+</li>
+<li><p>static approximation。</p>
+</li>
+</ul>
+<hr />
+<h3 id="845-damage-batch">84.5 Damage Batch</h3><p>Aura每0.1秒命中：</p>
+<p>200敌人。</p>
+<p>不要创建：</p>
+<p>200个高成本对象事件。</p>
+<p>可以：</p>
+<p>批量生成DamageRecords</p>
+<p>再统一提交。</p>
+<hr />
+<h3 id="846-damage-number-aggregation">84.6 Damage Number Aggregation</h3><p>玩家后期每秒可能造成：</p>
+<p>数千次命中。</p>
+<p>UI不能：</p>
+<p>每次都生成一个飘字。</p>
+<p>可以：</p>
+<ul>
+<li><p>合并；</p>
+</li>
+<li><p>降采样；</p>
+</li>
+<li><p>Elite/Boss优先；</p>
+</li>
+<li><p>普通敌人隐藏。</p>
+</li>
+</ul>
+<hr />
+<h3 id="847-object-pool">84.7 Object Pool</h3><p>必须考虑Pool：</p>
+<ul>
+<li><p>Enemy；</p>
+</li>
+<li><p>Projectile；</p>
+</li>
+<li><p>VFX；</p>
+</li>
+<li><p>Pickup；</p>
+</li>
+<li><p>DamageIndicator。</p>
+</li>
+</ul>
+<p>但Pool不是全部解决方案。</p>
+<p>如果同时Active对象仍然有5000个，</p>
+<p>仍需要批量架构。</p>
+<hr />
+<h3 id="848-spatial-grid更新">84.8 Spatial Grid更新</h3><p>只有移动跨Cell时：</p>
+<p>更新索引。</p>
+<p>不要每帧：</p>
+<p>移除
+再插入</p>
+<p>所有敌人。</p>
+<hr />
+<h2 id="85-可扩展点">85. 可扩展点</h2><hr />
+<h3 id="851-新ability">85.1 新Ability</h3><p>主要提供：</p>
+<ul>
+<li><p>AbilityDefinition；</p>
+</li>
+<li><p>CastPattern；</p>
+</li>
+<li><p>Targeting；</p>
+</li>
+<li><p>Projectile/Area；</p>
+</li>
+<li><p>Modifier；</p>
+</li>
+<li><p>Presentation。</p>
+</li>
+</ul>
+<p>不修改RunLoop。</p>
+<hr />
+<h3 id="852-新enemy">85.2 新Enemy</h3><p>提供：</p>
+<ul>
+<li><p>EnemyDefinition；</p>
+</li>
+<li><p>AIProfile；</p>
+</li>
+<li><p>SpawnCost；</p>
+</li>
+<li><p>Drop；</p>
+</li>
+<li><p>Presentation。</p>
+</li>
+</ul>
+<hr />
+<h3 id="853-新pressureprofile">85.3 新PressureProfile</h3><p>可以快速创建：</p>
+<ul>
+<li><p>Swarm-heavy；</p>
+</li>
+<li><p>Elite-heavy；</p>
+</li>
+<li><p>Fast-enemy；</p>
+</li>
+<li><p>Ranged-heavy；</p>
+</li>
+<li><p>Boss-rush。</p>
+</li>
+</ul>
+<hr />
+<h3 id="854-新run模式">85.4 新Run模式</h3><p>可以支持：</p>
+<ul>
+<li><p>固定20分钟；</p>
+</li>
+<li><p>Endless；</p>
+</li>
+<li><p>Boss Rush；</p>
+</li>
+<li><p>Objective Survival；</p>
+</li>
+<li><p>Moving Arena；</p>
+</li>
+<li><p>Extraction Ending。</p>
+</li>
+</ul>
+<hr />
+<h3 id="855-新升级选择系统">85.5 新升级选择系统</h3><p>可以替换：</p>
+<p>3选1</p>
+<p>为：</p>
+<ul>
+<li><p>商店；</p>
+</li>
+<li><p>技能树；</p>
+</li>
+<li><p>随机骰子；</p>
+</li>
+<li><p>Draft；</p>
+</li>
+<li><p>CardReward。</p>
+</li>
+</ul>
+<p>只要最终输出统一：</p>
+<p>BuildModifier。</p>
+<hr />
+<h3 id="856-新角色">85.6 新角色</h3><p>角色主要定义：</p>
+<ul>
+<li><p>BaseStats；</p>
+</li>
+<li><p>StartingAbility；</p>
+</li>
+<li><p>CharacterPassive；</p>
+</li>
+<li><p>UpgradeBias；</p>
+</li>
+<li><p>Presentation。</p>
+</li>
+</ul>
+<hr />
+<h3 id="857-多人合作">85.7 多人合作</h3><p>如果加入Co-op：</p>
+<p>需要扩展：</p>
+<ul>
+<li><p>XP归属；</p>
+</li>
+<li><p>Pickup；</p>
+</li>
+<li><p>Revive；</p>
+</li>
+<li><p>EnemyScaling；</p>
+</li>
+<li><p>SharedLevel或IndividualLevel；</p>
+</li>
+<li><p>Draft暂停规则。</p>
+</li>
+</ul>
+<p>特别要处理：</p>
+<p>一个玩家升级时：</p>
+<p>是否暂停所有玩家。</p>
+<hr />
+<h2 id="86-玩家体验设计">86. 玩家体验设计</h2><hr />
+<h3 id="861-玩家必须迅速进入第一次成长">86.1 玩家必须迅速进入第一次成长</h3><p>第一轮LevelUp通常应该非常快。</p>
+<p>目标是：</p>
+<p>尽早让玩家理解：</p>
+<p>击杀
+→ XP
+→ Build。</p>
+<hr />
+<h3 id="862-前几级应该让构筑方向快速形成">86.2 前几级应该让构筑方向快速形成</h3><p>如果前5分钟都只是：</p>
+<p>Damage +5%</p>
+<p>体验会非常弱。</p>
+<p>早期应该较快获得：</p>
+<ul>
+<li><p>第二技能；</p>
+</li>
+<li><p>多投射物；</p>
+</li>
+<li><p>Aura；</p>
+</li>
+<li><p>Pierce；</p>
+</li>
+</ul>
+<p>等明显行为变化。</p>
+<hr />
+<h3 id="863-后期视觉要强但规则仍需可读">86.3 后期视觉要“强”，但规则仍需可读</h3><p>玩家应该感觉：</p>
+<p>自己已经成为移动火力中心。</p>
+<p>但仍需要看清：</p>
+<ul>
+<li><p>Player；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>高危险敌人；</p>
+</li>
+<li><p>危险区域；</p>
+</li>
+<li><p>XP；</p>
+</li>
+<li><p>地图边界。</p>
+</li>
+</ul>
+<hr />
+<h3 id="864-vfx层级必须分级">86.4 VFX层级必须分级</h3><p>最高优先级：</p>
+<p>玩家受伤提示；</p>
+<p>Boss危险技能。</p>
+<p>其次：</p>
+<p>精英。</p>
+<p>最低：</p>
+<p>普通伤害特效。</p>
+<p>不能让自己的武器特效遮住：</p>
+<p>敌人攻击。</p>
+<hr />
+<h3 id="865-xp-pickup需要具有节奏反馈">86.5 XP Pickup需要具有节奏反馈</h3><p>大量经验被磁吸时：</p>
+<p>应该提供：</p>
+<ul>
+<li><p>声音；</p>
+</li>
+<li><p>粒子；</p>
+</li>
+<li><p>Level Bar变化；</p>
+</li>
+</ul>
+<p>强化：</p>
+<p>“刚才的大量击杀正在变成成长。”</p>
+<hr />
+<h3 id="866-draft描述必须表达机制变化">86.6 Draft描述必须表达机制变化</h3><p>不要只显示：</p>
+<p>Damage +15%。</p>
+<p>如果升级会改变：</p>
+<p>Projectile +1；</p>
+<p>Pierce；</p>
+<p>Bounce；</p>
+<p>应明确展示。</p>
+<hr />
+<h3 id="867-evolution必须是明显power-spike">86.7 Evolution必须是明显Power Spike</h3><p>应该通过：</p>
+<ul>
+<li><p>名称；</p>
+</li>
+<li><p>图标；</p>
+</li>
+<li><p>音效；</p>
+</li>
+<li><p>效果；</p>
+</li>
+<li><p>行为变化；</p>
+</li>
+</ul>
+<p>让玩家明确：</p>
+<p>构筑跨入新阶段。</p>
+<hr />
+<h3 id="868-玩家死亡必须能理解为什么突然撑不住了">86.8 玩家死亡必须能理解“为什么突然撑不住了”</h3><p>Death Recap应该至少提示：</p>
+<ul>
+<li><p>最近伤害；</p>
+</li>
+<li><p>最危险敌人；</p>
+</li>
+<li><p>当前敌人密度；</p>
+</li>
+<li><p>当前Build主要输出；</p>
+</li>
+<li><p>是否SpawnPressure超过清怪能力。</p>
+</li>
+</ul>
+<hr />
+<h3 id="869-高密度不等于视觉噪音">86.9 高密度不等于视觉噪音</h3><p>好的后期体验应该是：</p>
+<p>敌人很多，</p>
+<p>但玩家仍然能够读取：</p>
+<p>空间结构。</p>
+<hr />
+<h3 id="8610-build应该让玩家产生这一局就是这个玩法的身份感">86.10 Build应该让玩家产生“这一局就是这个玩法”的身份感</h3><p>例如：</p>
+<p>旋转近身Build；</p>
+<p>全屏雷电Build；</p>
+<p>召唤Build；</p>
+<p>燃烧Projectile Build；</p>
+<p>高移动碰撞Build。</p>
+<p>而不是：</p>
+<p>每局都是六个最高等级技能同时工作。</p>
+<hr />
+<h2 id="87-常见设计失败">87. 常见设计失败</h2><hr />
+<h3 id="871-只增加敌人生命不增加压力结构">87.1 只增加敌人生命，不增加压力结构</h3><p>后期只是数字变大。</p>
+<hr />
+<h3 id="872-敌人数量很多但行为完全相同">87.2 敌人数量很多，但行为完全相同</h3><p>大量单位只是视觉复制。</p>
+<hr />
+<h3 id="873-spawn直接出现在玩家身边">87.3 Spawn直接出现在玩家身边</h3><p>死亡没有反应空间。</p>
+<hr />
+<h3 id="874-xp直接自动进入玩家">87.4 XP直接自动进入玩家</h3><p>移动回收资源这一层空间决策消失。</p>
+<hr />
+<h3 id="875-xp对象没有聚合">87.5 XP对象没有聚合</h3><p>后期生成数万个Pickup。</p>
+<hr />
+<h3 id="876-所有upgrade只是百分比数值">87.6 所有Upgrade只是百分比数值</h3><p>构筑缺乏机制变化。</p>
+<hr />
+<h3 id="877-ability-slot无限">87.7 Ability Slot无限</h3><p>玩家最终把所有技能全部拿到。</p>
+<p>每局Build趋同。</p>
+<hr />
+<h3 id="878-evolution过于隐蔽">87.8 Evolution过于隐蔽</h3><p>玩家必须查外部Wiki才能知道组合。</p>
+<hr />
+<h3 id="879-evolution条件过于确定">87.9 Evolution条件过于确定</h3><p>玩家每局机械背固定Build。</p>
+<hr />
+<h3 id="8710-自动攻击目标完全随机">87.10 自动攻击目标完全随机</h3><p>玩家无法利用站位。</p>
+<hr />
+<h3 id="8711-autocast使用完整敌人扫描">87.11 AutoCast使用完整敌人扫描</h3><p>后期性能严重下降。</p>
+<hr />
+<h3 id="8712-每个enemy独立使用复杂ai">87.12 每个Enemy独立使用复杂AI</h3><p>千单位模拟不可扩展。</p>
+<hr />
+<h3 id="8713-玩家成长速度低于敌人压力且没有恢复空间">87.13 玩家成长速度低于敌人压力且没有恢复空间</h3><p>早期一次错误选择导致整局必败。</p>
+<hr />
+<h3 id="8714-玩家成长速度远高于压力">87.14 玩家成长速度远高于压力</h3><p>后半局变成挂机。</p>
+<hr />
+<h3 id="8715-防御构筑可以完全afk通关">87.15 防御构筑可以完全AFK通关</h3><p>移动失去意义。</p>
+<hr />
+<h3 id="8716-纯移动操作也无法避免伤害">87.16 纯移动操作也无法避免伤害</h3><p>战斗退化为纯数值检查。</p>
+<hr />
+<h3 id="8717-boss只增加生命">87.17 Boss只增加生命</h3><p>无法检查构筑短板。</p>
+<hr />
+<h3 id="8718-特效遮挡危险信息">87.18 特效遮挡危险信息</h3><p>玩家不是被敌人击败，而是被自己的视觉效果击败。</p>
+<hr />
+<h3 id="8719-damage-number无限生成">87.19 Damage Number无限生成</h3><p>UI成为主要性能瓶颈。</p>
+<hr />
+<h3 id="8720-随机系统共享一个randomstream">87.20 随机系统共享一个RandomStream</h3><p>新增一个随机事件导致整个Run不可重放。</p>
+<hr />
+<h2 id="88-最小可行原型">88. 最小可行原型</h2><p>一个能够验证幸存者类核心范式的MVP可以非常小。</p>
+<p>建议：</p>
+<p><strong>1张地图 + 1个角色 + 8种能力 + 8种敌人 + 1个Boss。</strong></p>
+<hr />
+<h3 id="881-run长度">88.1 Run长度</h3><p>第一版：</p>
+<p>10～15分钟。</p>
+<p>不建议一开始做：</p>
+<p>30分钟以上。</p>
+<p>这样更利于快速平衡。</p>
+<hr />
+<h3 id="882-玩家">88.2 玩家</h3><p>只需要：</p>
+<ul>
+<li><p>Movement；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>XP；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>6 Ability Slots；</p>
+</li>
+<li><p>6 Passive Slots。</p>
+</li>
+</ul>
+<hr />
+<h3 id="883-ability">88.3 Ability</h3><p>建议：</p>
+<ul>
+<li><p>最近目标Projectile；</p>
+</li>
+<li><p>径向Projectile；</p>
+</li>
+<li><p>Aura；</p>
+</li>
+<li><p>GroundArea；</p>
+</li>
+<li><p>Orbit；</p>
+</li>
+<li><p>Chain；</p>
+</li>
+<li><p>Summon；</p>
+</li>
+<li><p>ReturningProjectile。</p>
+</li>
+</ul>
+<p>这样基本覆盖主要Cast范式。</p>
+<hr />
+<h3 id="884-enemy">88.4 Enemy</h3><p>建议：</p>
+<ul>
+<li><p>SlowChaser；</p>
+</li>
+<li><p>Swarm；</p>
+</li>
+<li><p>Runner；</p>
+</li>
+<li><p>Tank；</p>
+</li>
+<li><p>Ranged；</p>
+</li>
+<li><p>Splitter；</p>
+</li>
+<li><p>Elite；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<hr />
+<h3 id="885-upgrade">88.5 Upgrade</h3><p>支持：</p>
+<ul>
+<li><p>Ability新增；</p>
+</li>
+<li><p>Ability升级；</p>
+</li>
+<li><p>Passive；</p>
+</li>
+<li><p>2～3条Evolution。</p>
+</li>
+</ul>
+<hr />
+<h3 id="886-spawn">88.6 Spawn</h3><p>至少：</p>
+<p>4个PressurePhase。</p>
+<hr />
+<h3 id="887-必要基础设施">88.7 必要基础设施</h3><ul>
+<li><p>RunRuntimeState；</p>
+</li>
+<li><p>RunClock；</p>
+</li>
+<li><p>PlayerRuntimeState；</p>
+</li>
+<li><p>AbilityRuntimeState；</p>
+</li>
+<li><p>AutoCastScheduler；</p>
+</li>
+<li><p>EnemyRegistry；</p>
+</li>
+<li><p>HordeSpawnDirector；</p>
+</li>
+<li><p>SpatialGrid；</p>
+</li>
+<li><p>ProjectileState；</p>
+</li>
+<li><p>DamageResolver；</p>
+</li>
+<li><p>ExperiencePickupState；</p>
+</li>
+<li><p>LevelProgressionState；</p>
+</li>
+<li><p>UpgradeDraftInstance；</p>
+</li>
+<li><p>BuildModifierState；</p>
+</li>
+<li><p>EvolutionRule；</p>
+</li>
+<li><p>BossState；</p>
+</li>
+<li><p>RunResultSnapshot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="888-必要调试工具">88.8 必要调试工具</h3><ul>
+<li><p>SpawnPressureGraph；</p>
+</li>
+<li><p>PlayerPowerGraph；</p>
+</li>
+<li><p>PressureVsPowerGraph；</p>
+</li>
+<li><p>KillRateTimeline；</p>
+</li>
+<li><p>XPEconomyTimeline；</p>
+</li>
+<li><p>UpgradeDraftTrace；</p>
+</li>
+<li><p>BuildTimeline；</p>
+</li>
+<li><p>AbilityDamageBreakdown；</p>
+</li>
+<li><p>DensityHeatmap；</p>
+</li>
+<li><p>DeathCausality；</p>
+</li>
+<li><p>CrowdPerformancePanel；</p>
+</li>
+<li><p>RunReplay。</p>
+</li>
+</ul>
+<hr />
+<h2 id="89-mvp核心验收问题">89. MVP核心验收问题</h2><p>原型至少必须回答：</p>
+<ul>
+<li><p>玩家只控制移动时，是否仍然存在足够策略；</p>
+</li>
+<li><p>自动攻击目标是否可理解；</p>
+</li>
+<li><p>玩家是否需要主动回收经验；</p>
+</li>
+<li><p>XP空间分布是否真的影响移动；</p>
+</li>
+<li><p>Upgrade是否能显著改变战斗行为；</p>
+</li>
+<li><p>玩家能否在一局中形成明确Build身份；</p>
+</li>
+<li><p>EnemyPressure是否会随时间明显提高；</p>
+</li>
+<li><p>PlayerPower能否通过升级合理追上压力；</p>
+</li>
+<li><p>SpawnRate高于KillRate时是否自然形成危险；</p>
+</li>
+<li><p>Boss是否能暴露AoE Build的单体短板；</p>
+</li>
+<li><p>同屏1000敌人时运行时是否稳定；</p>
+</li>
+<li><p>相同Seed和选择是否可以重现Run；</p>
+</li>
+<li><p>玩家死亡后是否能够解释失败因果链；</p>
+</li>
+<li><p>视觉高峰时是否仍然能看清危险信息。</p>
+</li>
+</ul>
+<p>这些没有成立前，不建议优先增加：</p>
+<ul>
+<li><p>数十角色；</p>
+</li>
+<li><p>数百升级；</p>
+</li>
+<li><p>复杂Meta；</p>
+</li>
+<li><p>联机；</p>
+</li>
+<li><p>大量地图。</p>
+</li>
+</ul>
+<hr />
+<h2 id="90-推荐实施顺序">90. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li><p>FixedClock；</p>
+</li>
+<li><p>PlayerMovement；</p>
+</li>
+<li><p>EnemyMovement。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>EnemyRegistry；</p>
+</li>
+<li><p>SpatialGrid；</p>
+</li>
+<li><p>基础AutoAttack。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Projectile；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>EnemyDeath。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>XP Drop；</p>
+</li>
+<li><p>Pickup；</p>
+</li>
+<li><p>Level。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>UpgradeDraft；</p>
+</li>
+<li><p>AbilityLevel。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>SpawnDirector；</p>
+</li>
+<li><p>PressureCurve。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>多EnemyArchetype；</p>
+</li>
+<li><p>Elite。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Passive；</p>
+</li>
+<li><p>GlobalModifier；</p>
+</li>
+<li><p>BuildSynergy。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Evolution；</p>
+</li>
+<li><p>Chest；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>PickupAggregation；</p>
+</li>
+<li><p>EnemyAI分层；</p>
+</li>
+<li><p>Projectile优化。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Telemetry；</p>
+</li>
+<li><p>AutoSimulation。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>MetaProgression；</p>
+</li>
+<li><p>新角色；</p>
+</li>
+<li><p>多地图。</p>
+</li>
+</ul>
+<hr />
+<h2 id="91-架构验收标准">91. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>整个Run拥有唯一权威RunClock；</p>
+</li>
+<li><p>Spawn、Boss和事件都使用统一时间；</p>
+</li>
+<li><p>玩家直接控制输入保持有限；</p>
+</li>
+<li><p>自动攻击由统一AutoCastScheduler运行；</p>
+</li>
+<li><p>AbilityDefinition与AbilityRuntimeState分离；</p>
+</li>
+<li><p>技能目标搜索统一使用SpatialQuery；</p>
+</li>
+<li><p>普通技能不允许自行全量扫描敌人；</p>
+</li>
+<li><p>Player全局Modifier拥有稳定乘区顺序；</p>
+</li>
+<li><p>Ability能够通过组合规则产生机制协同；</p>
+</li>
+<li><p>Ability Evolution通过数据规则驱动；</p>
+</li>
+<li><p>EnemyDefinition具有SpawnCost；</p>
+</li>
+<li><p>SpawnDirector通过预算而非简单数量生成敌人；</p>
+</li>
+<li><p>Spawn位置满足最小安全距离和地形合法性；</p>
+</li>
+<li><p>普通敌人不依赖完整NavMeshAgent；</p>
+</li>
+<li><p>EnemyRegistry统一维护ActiveEnemy；</p>
+</li>
+<li><p>Damage统一通过DamageResolver；</p>
+</li>
+<li><p>持续攻击具有明确HitPolicy；</p>
+</li>
+<li><p>Projectile、Area和Aura属于不同执行模型；</p>
+</li>
+<li><p>XP不会直接由EnemyDeath立即提交给Player；</p>
+</li>
+<li><p>ExperiencePickup作为独立空间资源存在；</p>
+</li>
+<li><p>大量XP能够进行聚合；</p>
+</li>
+<li><p>Pickup系统支持Magnet；</p>
+</li>
+<li><p>Level系统支持一次经验触发多级；</p>
+</li>
+<li><p>UpgradeDraft实例生成后结果稳定；</p>
+</li>
+<li><p>Draft支持有限随机而不是完全自由菜单；</p>
+</li>
+<li><p>Ability和Passive拥有槽位上限；</p>
+</li>
+<li><p>Build能够形成宽度与深度取舍；</p>
+</li>
+<li><p>PressureCurve和PowerCurve可以被独立分析；</p>
+</li>
+<li><p>Boss能够进行构筑能力检查；</p>
+</li>
+<li><p>RunTermination只能提交一次；</p>
+</li>
+<li><p>RandomStream按系统隔离；</p>
+</li>
+<li><p>相同Seed、输入和Upgrade选择可以重放Run；</p>
+</li>
+<li><p>同屏高敌人数时CPU和内存仍在预算内；</p>
+</li>
+<li><p>调试器能够解释为什么某一时间点敌人突然失控；</p>
+</li>
+<li><p>调试器能够解释某个Ability为什么没有攻击；</p>
+</li>
+<li><p>新Ability通常不需要修改Run主循环；</p>
+</li>
+<li><p>新Enemy通常不需要修改SpawnDirector主循环。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-可迁移到其他游戏的设计思想">92. 可迁移到其他游戏的设计思想</h2><hr />
+<h3 id="921-把玩家操作预算固定可以让系统复杂度大幅扩张">92.1 把玩家操作预算固定，可以让系统复杂度大幅扩张</h3><p>幸存者类的重要思想是：</p>
+<p>敌人从10个增长到1000个，</p>
+<p>玩家输入复杂度仍然近似不变。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>自动战斗；</p>
+</li>
+<li><p>RTS宏观模式；</p>
+</li>
+<li><p>塔防；</p>
+</li>
+<li><p>召唤流；</p>
+</li>
+<li><p>管理游戏。</p>
+</li>
+</ul>
+<p>这是一种：</p>
+<blockquote>
+<p><strong>Simulation Complexity与Input Complexity解耦。</strong></p>
+</blockquote>
+<hr />
+<h3 id="922-把奖励留在世界中可以把数值奖励变成空间决策">92.2 把奖励留在世界中，可以把数值奖励变成空间决策</h3><p>Enemy死亡后：</p>
+<p>不是直接获得XP，</p>
+<p>而是生成Pickup。</p>
+<p>这一思想可以迁移到：</p>
+<ul>
+<li><p>Loot；</p>
+</li>
+<li><p>Souls；</p>
+</li>
+<li><p>资源采集；</p>
+</li>
+<li><p>战术补给；</p>
+</li>
+<li><p>PvP。</p>
+</li>
+</ul>
+<p>从：</p>
+<p>RewardEvent</p>
+<p>变成：</p>
+<p>RewardClaimOpportunity。</p>
+<hr />
+<h3 id="923-压力和成长可以设计成互相追逐的两条曲线">92.3 压力和成长可以设计成互相追逐的两条曲线</h3><p>可以迁移到：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>塔防；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>Boss Rush。</p>
+</li>
+</ul>
+<p>系统不断提高压力，</p>
+<p>玩家不断提高能力。</p>
+<p>真正的难度来自：</p>
+<p>两条曲线之间的距离。</p>
+<hr />
+<h3 id="924-spawn-budget比固定敌人数更容易扩展">92.4 Spawn Budget比固定敌人数更容易扩展</h3><p>把不同敌人统一映射到：</p>
+<p>Pressure Cost。</p>
+<p>就可以用：</p>
+<p>同一预算系统</p>
+<p>组合：</p>
+<p>弱敌；</p>
+<p>强敌；</p>
+<p>精英。</p>
+<p>这一思想可以迁移到：</p>
+<ul>
+<li><p>AI Director；</p>
+</li>
+<li><p>战役增援；</p>
+</li>
+<li><p>塔防波次；</p>
+</li>
+<li><p>动态遭遇。</p>
+</li>
+</ul>
+<hr />
+<h3 id="925-有限随机候选比完全随机和完全自由更容易产生适应性">92.5 有限随机候选比完全随机和完全自由更容易产生适应性</h3><p>3选1Upgrade本质是：</p>
+<p><strong>Bounded Choice。</strong></p>
+<p>可以迁移到：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>天赋；</p>
+</li>
+<li><p>商店。</p>
+</li>
+</ul>
+<hr />
+<h3 id="926-大候选池与有限槽位天然产生构筑">92.6 大候选池与有限槽位天然产生构筑</h3><p>玩家可能有：</p>
+<p>50种Upgrade。</p>
+<p>但只能：</p>
+<p>6 Weapon</p>
+<ul>
+<li>6 Passive。</li>
+</ul>
+<p>这会自然形成：</p>
+<p>Build Identity。</p>
+<hr />
+<h3 id="927-自动系统越复杂越需要可解释性">92.7 自动系统越复杂，越需要可解释性</h3><p>玩家没有逐次控制攻击，</p>
+<p>因此必须能理解：</p>
+<ul>
+<li><p>目标选择；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Build效果。</p>
+</li>
+</ul>
+<p>这一原则同样适用于：</p>
+<ul>
+<li><p>AI队友；</p>
+</li>
+<li><p>自走棋；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>Colony AI。</p>
+</li>
+</ul>
+<hr />
+<h3 id="928-大规模群体不一定需要个体级高精度">92.8 大规模群体不一定需要个体级高精度</h3><p>数千普通敌人的战略职责可能只是：</p>
+<p>形成密度。</p>
+<p>因此可以使用：</p>
+<p>低成本局部规则。</p>
+<p>把高精度AI预算留给：</p>
+<p>Elite和Boss。</p>
+<hr />
+<h3 id="929-单位时间处理能力和单位时间压力输入是一组通用吞吐模型">92.9 “单位时间处理能力”和“单位时间压力输入”是一组通用吞吐模型</h3><p>KillCapacityPerSecond</p>
+<p>对比：</p>
+<p>SpawnCostPerSecond。</p>
+<p>可以迁移到：</p>
+<ul>
+<li><p>塔防；</p>
+</li>
+<li><p>物流；</p>
+</li>
+<li><p>网络；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>战斗波次。</p>
+</li>
+</ul>
+<p>当输入长期大于处理能力：</p>
+<p>积压自然出现。</p>
+<hr />
+<h3 id="9210-正反馈系统必须预留恢复窗口">92.10 正反馈系统必须预留恢复窗口</h3><p>幸存者类天然存在：</p>
+<p>强者越来越强；</p>
+<p>弱者越来越弱。</p>
+<p>任何正反馈构筑系统都应该考虑：</p>
+<ul>
+<li><p>保底；</p>
+</li>
+<li><p>追赶；</p>
+</li>
+<li><p>高价值事件；</p>
+</li>
+<li><p>Recovery Opportunity。</p>
+</li>
+</ul>
+<p>但不能完全取消早期选择后果。</p>
+<hr />
+<h2 id="93-本次防重记录">93. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>幸存者类 / Horde Survival / Bullet Heaven。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Horde Survival；</p>
+</li>
+<li><p>Bullet Heaven；</p>
+</li>
+<li><p>Survivors-like；</p>
+</li>
+<li><p>Arena Survival；</p>
+</li>
+<li><p>群潮生存；</p>
+</li>
+<li><p>幸存者类；</p>
+</li>
+<li><p>自动火力生存 Roguelite。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>玩家主要持续控制移动，而装备和技能通过统一AutoCast系统自动执行攻击；Horde Spawn Director以运行时间为主要难度轴，不断提高敌人生成预算、敌群密度和敌人结构。敌人死亡后不会直接把经验写入玩家，而是在世界中生成需要主动回收的经验资源，使“击杀收益”重新进入空间风险。经验提交后触发有限随机Upgrade Draft，玩家在技能宽度、技能深度、被动强化和Evolution条件之间构造单局Build。构筑成长提高单位时间Kill Capacity，而系统继续提高Spawn Pressure，使二者持续互相追逐，并最终通过Elite、Boss和终局群潮验证构筑。</p>
+<p>其核心循环可以压缩为：</p>
+<p><strong>移动规避
+→ 自动火力
+→ 群体击杀
+→ XP散落
+→ 空间回收
+→ 升级Draft
+→ 构筑强化
+→ Kill Capacity提高
+→ Spawn Pressure继续增长
+→ 敌群密度上升
+→ Elite/Boss暴露构筑短板
+→ 修正Build
+→ 终局能力检查。</strong></p>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>玩家主要直接控制移动；</p>
+</li>
+<li><p>大部分攻击行为自动执行；</p>
+</li>
+<li><p>单局通常以时间为主要难度推进轴；</p>
+</li>
+<li><p>敌人数量会从低密度逐渐增长为高密度群潮；</p>
+</li>
+<li><p>Enemy Spawn使用动态预算或阶段化生成；</p>
+</li>
+<li><p>敌人死亡持续产生经验资源；</p>
+</li>
+<li><p>XP通常作为世界空间物体存在；</p>
+</li>
+<li><p>玩家必须主动移动回收成长资源；</p>
+</li>
+<li><p>LevelUp通过有限随机候选产生构筑；</p>
+</li>
+<li><p>新技能和已有技能强化形成Build Width / Depth取舍；</p>
+</li>
+<li><p>Ability与Passive通常存在槽位上限；</p>
+</li>
+<li><p>多个技能共同受到Damage、Area、Cooldown、ProjectileCount等全局参数影响；</p>
+</li>
+<li><p>技能协同可以产生乘法级Power Spike；</p>
+</li>
+<li><p>Evolution通过前置组合将基础能力转化为高级行为；</p>
+</li>
+<li><p>Spawn Pressure随时间持续提高；</p>
+</li>
+<li><p>Kill Capacity不足时敌人会自然积压；</p>
+</li>
+<li><p>Elite用于局部能力检查；</p>
+</li>
+<li><p>Boss用于验证构筑短板；</p>
+</li>
+<li><p>同屏敌人规模要求专门Crowd架构；</p>
+</li>
+<li><p>普通敌人通常使用低成本局部移动规则；</p>
+</li>
+<li><p>SpatialQuery是Targeting、AoE、Pickup和Crowd的共享基础设施；</p>
+</li>
+<li><p>ExperiencePickup需要聚合以限制实体数量；</p>
+</li>
+<li><p>高密度战斗需要Damage、Projectile和VFX批处理；</p>
+</li>
+<li><p>随机系统需要隔离RandomStream以支持Run重放；</p>
+</li>
+<li><p>玩家死亡应能够通过Pressure、Build和空间状态解释，而不是只显示最终伤害。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与仓库现有自走棋的防重边界">与仓库现有自走棋的防重边界</h3><p>仓库已有 <code>auto-battler</code>，其核心是：</p>
+<ul>
+<li><p>Planning Phase；</p>
+</li>
+<li><p>商店；</p>
+</li>
+<li><p>共享棋池；</p>
+</li>
+<li><p>合成；</p>
+</li>
+<li><p>羁绊；</p>
+</li>
+<li><p>布阵；</p>
+</li>
+<li><p>战斗快照；</p>
+</li>
+<li><p>Unit AI自动执行。</p>
+</li>
+</ul>
+<p>本次幸存者类虽然同样具有大量自动攻击，但玩家仍然：</p>
+<p><strong>持续实时控制自己的角色位置。</strong></p>
+<p>核心差异是：</p>
+<p><strong>Auto Battler：</strong></p>
+<p>构筑
+→ 冻结阵容
+→ 玩家停止战斗控制
+→ AI自动验证。</p>
+<p><strong>Horde Survival：</strong></p>
+<p>构筑</p>
+<ul>
+<li><p>玩家持续移动</p>
+</li>
+<li><p>自动火力</p>
+</li>
+<li><p>群潮压力</p>
+</li>
+</ul>
+<p>三者同时持续运行。</p>
+<p>因此自动攻击只是共同技术点，不属于同一宏观范式。</p>
+<hr />
+<h3 id="与仓库现有生存恐怖的防重边界">与仓库现有生存恐怖的防重边界</h3><p>当前仓库已有 <code>survival-horror</code>，其重点是：</p>
+<ul>
+<li><p>有限弹药；</p>
+</li>
+<li><p>治疗；</p>
+</li>
+<li><p>背包；</p>
+</li>
+<li><p>安全屋；</p>
+</li>
+<li><p>回访；</p>
+</li>
+<li><p>不确定威胁；</p>
+</li>
+<li><p>资源耗损；</p>
+</li>
+<li><p>探索压力。</p>
+</li>
+</ul>
+<p>本次幸存者类则恰好采用几乎相反的宏观压力结构：</p>
+<p>生存恐怖：</p>
+<blockquote>
+<p>玩家能力有限，敌人必须被谨慎处理。</p>
+</blockquote>
+<p>幸存者类：</p>
+<blockquote>
+<p>玩家能力在单局中快速膨胀，最终需要同时消灭巨量敌人。</p>
+</blockquote>
+<p>其核心并非资源稀缺，而是：</p>
+<p><strong>火力成长速度是否能够跟上敌群压力增长速度。</strong></p>
+<hr />
+<h3 id="与仓库现有卡组构筑式-roguelike-的防重边界">与仓库现有卡组构筑式 Roguelike 的防重边界</h3><p>卡组构筑式 Roguelike 的核心对象是：</p>
+<p>Deck。</p>
+<p>玩家通过：</p>
+<p>奖励
+→ 加牌
+→ 删牌
+→ 升级</p>
+<p>修改：</p>
+<p>未来抽牌概率。</p>
+<p>幸存者类虽然同样使用：</p>
+<p>随机升级候选；</p>
+<p>但其核心构筑对象是：</p>
+<p><strong>持续运行的实时Ability System。</strong></p>
+<p>玩家不是：</p>
+<p>抽到能力才使用。</p>
+<p>而是：</p>
+<p>获得能力后，该能力持续成为自动战斗系统的一部分。</p>
+<p>因此：</p>
+<p>Deckbuilder：</p>
+<p><strong>Build → Future Draw Distribution。</strong></p>
+<p>Horde Survival：</p>
+<p><strong>Build → Continuous Combat Execution Graph。</strong></p>
+<hr />
+<h3 id="与仓库现有塔防范式的防重边界">与仓库现有塔防范式的防重边界</h3><p>二者都可能出现：</p>
+<p>大量敌人和压力曲线。</p>
+<p>但塔防中：</p>
+<ul>
+<li><p>玩家部署固定防御节点；</p>
+</li>
+<li><p>敌人沿路线推进；</p>
+</li>
+<li><p>核心空间问题是火力覆盖和路径压力。</p>
+</li>
+</ul>
+<p>幸存者类中：</p>
+<ul>
+<li><p>玩家本身就是移动火力中心；</p>
+</li>
+<li><p>敌群从多方向围绕玩家；</p>
+</li>
+<li><p>核心空间问题是玩家移动、敌人密度、XP回收和安全路径。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>Tower Defense：空间防御网络抵抗流量。</strong></p>
+<p><strong>Horde Survival：移动Build在不断收缩的安全空间中处理群体密度。</strong></p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>Survivors-like；</p>
+</li>
+<li><p>Horde Survival；</p>
+</li>
+<li><p>Bullet Heaven；</p>
+</li>
+<li><p>Run Clock；</p>
+</li>
+<li><p>时间难度曲线；</p>
+</li>
+<li><p>Pressure Profile；</p>
+</li>
+<li><p>Horde Spawn Director；</p>
+</li>
+<li><p>Spawn Budget；</p>
+</li>
+<li><p>Spawn Cost；</p>
+</li>
+<li><p>Spawn Ring；</p>
+</li>
+<li><p>Crowd Simulation；</p>
+</li>
+<li><p>Enemy Registry；</p>
+</li>
+<li><p>Enemy Archetype；</p>
+</li>
+<li><p>Spatial Grid；</p>
+</li>
+<li><p>AutoCast；</p>
+</li>
+<li><p>Target Selection；</p>
+</li>
+<li><p>Ability Runtime；</p>
+</li>
+<li><p>Projectile；</p>
+</li>
+<li><p>Aura；</p>
+</li>
+<li><p>Area Effect；</p>
+</li>
+<li><p>Damage Resolver；</p>
+</li>
+<li><p>Hit Memory；</p>
+</li>
+<li><p>Experience Drop；</p>
+</li>
+<li><p>XP Pickup；</p>
+</li>
+<li><p>XP Aggregation；</p>
+</li>
+<li><p>Pickup Magnet；</p>
+</li>
+<li><p>Level Progression；</p>
+</li>
+<li><p>Upgrade Draft；</p>
+</li>
+<li><p>Reroll；</p>
+</li>
+<li><p>Banish；</p>
+</li>
+<li><p>Ability Slot；</p>
+</li>
+<li><p>Passive Slot；</p>
+</li>
+<li><p>Build Width；</p>
+</li>
+<li><p>Build Depth；</p>
+</li>
+<li><p>Global Modifier；</p>
+</li>
+<li><p>Build Synergy；</p>
+</li>
+<li><p>Ability Evolution；</p>
+</li>
+<li><p>Elite；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Reward Chest；</p>
+</li>
+<li><p>Kill Capacity；</p>
+</li>
+<li><p>Spawn Pressure；</p>
+</li>
+<li><p>Power Curve；</p>
+</li>
+<li><p>Pressure Curve；</p>
+</li>
+<li><p>Crowd性能分层；</p>
+</li>
+<li><p>Deterministic Run；</p>
+</li>
+<li><p>Run Replay；</p>
+</li>
+<li><p>Death Causality；</p>
+</li>
+<li><p>Build Timeline；</p>
+</li>
+<li><p>XP Economy Timeline；</p>
+</li>
+<li><p>Crowd Stress Test。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次幸存者类 / Horde Survival / Bullet Heaven范式内部系统，不应再作为新的独立宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>幸存者类自动攻击系统；</p>
+</li>
+<li><p>Survivors-like AutoCast；</p>
+</li>
+<li><p>Horde Spawn；</p>
+</li>
+<li><p>群潮生成；</p>
+</li>
+<li><p>敌人密度系统；</p>
+</li>
+<li><p>幸存者类时间难度；</p>
+</li>
+<li><p>Spawn Budget；</p>
+</li>
+<li><p>幸存者类经验球；</p>
+</li>
+<li><p>XP Pickup；</p>
+</li>
+<li><p>全屏吸取；</p>
+</li>
+<li><p>幸存者类升级三选一；</p>
+</li>
+<li><p>Upgrade Draft；</p>
+</li>
+<li><p>幸存者类武器槽；</p>
+</li>
+<li><p>幸存者类被动槽；</p>
+</li>
+<li><p>幸存者类技能升级；</p>
+</li>
+<li><p>Weapon Evolution；</p>
+</li>
+<li><p>幸存者类技能进化；</p>
+</li>
+<li><p>幸存者类Build Synergy；</p>
+</li>
+<li><p>群潮敌人AI；</p>
+</li>
+<li><p>Crowd Simulation；</p>
+</li>
+<li><p>幸存者类Spatial Grid；</p>
+</li>
+<li><p>幸存者类Projectile；</p>
+</li>
+<li><p>幸存者类AoE；</p>
+</li>
+<li><p>幸存者类Elite；</p>
+</li>
+<li><p>幸存者类Boss；</p>
+</li>
+<li><p>幸存者类压力曲线；</p>
+</li>
+<li><p>Kill Capacity；</p>
+</li>
+<li><p>Spawn Pressure；</p>
+</li>
+<li><p>幸存者类性能优化；</p>
+</li>
+<li><p>XP Aggregation；</p>
+</li>
+<li><p>Damage Number Aggregation；</p>
+</li>
+<li><p>幸存者类Run Replay；</p>
+</li>
+<li><p>幸存者类Build Timeline；</p>
+</li>
+<li><p>幸存者类自动平衡模拟。</p>
+</li>
+</ul>
+<p>这些方向仍可以作为后续专项模块范式深入研究，但不再作为新的完整宏观游戏类型计入日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

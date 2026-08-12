@@ -7,7 +7,7 @@ import { selectPublishedBlogs, stripBlogPublicationPreamble } from '../scripts/l
 
 const root = new URL('../', import.meta.url);
 
-test('publication allowlist selects only explicitly approved or published entries', async () => {
+test('publication contract selects every imported article for public reading', async () => {
   const [manifest, source] = await Promise.all([
     readJson('config/blog-publication.json'),
     readJson('data/journal-source.json')
@@ -18,7 +18,12 @@ test('publication allowlist selects only explicitly approved or published entrie
   const selected = selectPublishedBlogs(manifest, source, bodies);
 
   assert.deepEqual(new Set(selected.map((article) => article.status)), new Set(['published']));
-  assert.equal(selected.length, 6);
+  assert.equal(manifest.articles.length, source.blogs.length);
+  assert.deepEqual(
+    new Set(manifest.articles.map((article) => article.sourceId)),
+    new Set(source.blogs.map((article) => article.id))
+  );
+  assert.equal(selected.length, source.blogs.length);
   assert.ok(selected.every((article) => article.publishedAt <= article.updatedAt));
   assert.ok(selected.every((article) => !/^blog-[a-f0-9]{8,}$/u.test(article.slug)));
 });
@@ -78,7 +83,7 @@ test('explicit publication entries fail closed on source deletion, metadata drif
   );
 });
 
-test('publication validation fails closed when a draft marker is marked as published', async () => {
+test('publication validation ignores stripped editorial preambles but rejects draft markers in prose', async () => {
   const [manifest, source] = await Promise.all([
     readJson('config/blog-publication.json'),
     readJson('data/journal-source.json')
@@ -89,10 +94,8 @@ test('publication validation fails closed when a draft marker is marked as publi
   const invalid = structuredClone(manifest);
   const invalidSource = structuredClone(source);
   const invalidBodies = new Map(bodies);
-  const draft = invalid.articles.find((article) => article.status === 'draft');
+  const draft = invalid.articles.find((article) => article.status === 'published');
   assert.ok(draft);
-  draft.status = 'published';
-  draft.publishedAt = draft.updatedAt;
   const body = Buffer.concat([
     invalidBodies.get(draft.sourceId),
     Buffer.from('\n> 状态：草稿\n')

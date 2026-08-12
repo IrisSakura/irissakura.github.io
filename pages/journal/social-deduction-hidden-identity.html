@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/social-deduction-hidden-identity.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="社交推理与隐藏身份中的不完全信息、可信度与秘密行动 | Sakura Design Journal">
+    <meta property="og:description" content="分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/social-deduction-hidden-identity.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-social-deduction-hidden-identity.png">
+    <meta property="og:image:alt" content="社交推理与隐藏身份中的不完全信息、可信度与秘密行动 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="社交推理与隐藏身份中的不完全信息、可信度与秘密行动 | Sakura Design Journal">
+    <meta name="twitter:description" content="分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-social-deduction-hidden-identity.png">
+    <meta name="twitter:image:alt" content="社交推理与隐藏身份中的不完全信息、可信度与秘密行动 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"社交推理与隐藏身份中的不完全信息、可信度与秘密行动 | Sakura Design Journal","description":"分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。","url":"https://irissakura.github.io/pages/journal/social-deduction-hidden-identity.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"社交推理与隐藏身份中的不完全信息、可信度与秘密行动","image":"https://irissakura.github.io/assets/social/pages-journal-social-deduction-hidden-identity.png","dateModified":"2026-08-12","about":["hidden-identity","social-deduction","trust"]}</script>
+    <!-- site-meta:end -->
+    <title>社交推理与隐藏身份中的不完全信息、可信度与秘密行动 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-social-deduction-hidden-identity"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>社交推理与隐藏身份中的不完全信息、可信度与秘密行动</h1><p>分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。</p><div class="note-tags"><span>hidden-identity</span><span>social-deduction</span><span>trust</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="不完全信息可信度博弈与可审计秘密行动">不完全信息、可信度博弈与可审计秘密行动</h2><hr />
+<h2 id="1-类型定义">1. 类型定义</h2><p>社交推理与隐藏身份游戏，是以玩家掌握的信息不对称、身份或目标不完全公开、行为需要被他人解释和判断为核心的多人游戏类型。</p>
+<p>该类型可以独立支撑完整游戏，其主要乐趣不来自传统意义上的操作强度或数值成长，而来自以下循环：</p>
+<ol>
+<li><p>玩家获得不完整且彼此不同的信息；</p>
+</li>
+<li><p>玩家执行公开或秘密行动；</p>
+</li>
+<li><p>系统产生可被观察、误读或伪造的结果；</p>
+</li>
+<li><p>玩家通过讨论构建对局叙事；</p>
+</li>
+<li><p>玩家判断他人的身份、动机和可信度；</p>
+</li>
+<li><p>集体通过投票、审判、交易、结盟或行动作出决策；</p>
+</li>
+<li><p>决策改变存活人数、信息结构和阵营优势；</p>
+</li>
+<li><p>对局进入更高压、更少信息冗余的下一阶段。</p>
+</li>
+</ol>
+<p>其核心不是单纯地“找出坏人”，而是：</p>
+<blockquote>
+<p>让每名玩家在信息不完整、表达不完全可信、合作对象不确定的条件下，通过行动、证据和叙事影响集体判断。</p>
+</blockquote>
+<p>社交推理游戏中的主要竞争资源通常不是金币、装备或等级，而是：</p>
+<ul>
+<li><p>信息；</p>
+</li>
+<li><p>可信度；</p>
+</li>
+<li><p>发言权；</p>
+</li>
+<li><p>行动权；</p>
+</li>
+<li><p>解释权；</p>
+</li>
+<li><p>投票权；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>玩家之间的关系网络。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-核心设计范式">2. 核心设计范式</h2><p>该类型的代表性设计范式可以概括为：</p>
+<blockquote>
+<p>由权威服务器维护唯一真实世界状态，将真实状态按玩家身份、位置、能力和事件上下文裁剪为不同的个人视图；玩家依据个人视图执行行动并发表声明，系统只验证行动是否合法，不验证声明是否真实；公开决策系统再根据玩家集体选择改变世界状态。</p>
+</blockquote>
+<p>这一范式包含四个相互分离的层次：</p>
+<h3 id="21-客观事实层">2.1 客观事实层</h3><p>服务器实际维护的真实状态，例如：</p>
+<ul>
+<li><p>每名玩家的真实身份；</p>
+</li>
+<li><p>谁执行了某个秘密行动；</p>
+</li>
+<li><p>某个角色是否真的受到攻击；</p>
+</li>
+<li><p>某项任务是否真实完成；</p>
+</li>
+<li><p>某个证据是否被伪造；</p>
+</li>
+<li><p>某名玩家当前所在位置。</p>
+</li>
+</ul>
+<p>客观事实层不应直接完整下发给客户端。</p>
+<hr />
+<h3 id="22-个人认知层">2.2 个人认知层</h3><p>每名玩家实际知道的内容，例如：</p>
+<ul>
+<li><p>自己的身份；</p>
+</li>
+<li><p>自己看见的玩家；</p>
+</li>
+<li><p>自己收到的调查结果；</p>
+</li>
+<li><p>自己参与的私密频道；</p>
+</li>
+<li><p>自己记忆中的历史事件；</p>
+</li>
+<li><p>由角色能力获得的额外信息。</p>
+</li>
+</ul>
+<p>个人认知并不一定等于客观事实。</p>
+<p>调查结果可能：</p>
+<ul>
+<li><p>准确；</p>
+</li>
+<li><p>模糊；</p>
+</li>
+<li><p>受到干扰；</p>
+</li>
+<li><p>被角色能力篡改；</p>
+</li>
+<li><p>因目标伪装而错误；</p>
+</li>
+<li><p>因观察者状态异常而不可靠。</p>
+</li>
+</ul>
+<hr />
+<h3 id="23-公开叙事层">2.3 公开叙事层</h3><p>玩家通过发言、标记、指控、辩护和证词构建的公开信息。</p>
+<p>系统通常不判断玩家所说的话是否真实。</p>
+<p>例如玩家可以声称：</p>
+<ul>
+<li><p>“我昨晚调查了三号，他是好人。”</p>
+</li>
+<li><p>“我在机房看到五号。”</p>
+</li>
+<li><p>“我完成了左侧任务。”</p>
+</li>
+<li><p>“二号和四号一直一起行动。”</p>
+</li>
+<li><p>“刚才的警报不是我触发的。”</p>
+</li>
+</ul>
+<p>公开叙事层是玩家主动制造的社会信息。</p>
+<hr />
+<h3 id="24-集体裁决层">2.4 集体裁决层</h3><p>玩家通过投票或公共机制，将公开叙事转化为游戏结果。</p>
+<p>常见形式包括：</p>
+<ul>
+<li><p>放逐；</p>
+</li>
+<li><p>审判；</p>
+</li>
+<li><p>处决；</p>
+</li>
+<li><p>选举；</p>
+</li>
+<li><p>队伍提名；</p>
+</li>
+<li><p>任务批准；</p>
+</li>
+<li><p>资源分配；</p>
+</li>
+<li><p>领导权转移；</p>
+</li>
+<li><p>结盟确认；</p>
+</li>
+<li><p>是否触发紧急行动。</p>
+</li>
+</ul>
+<p>系统不负责判断集体裁决是否正确，只负责可靠地执行裁决结果。</p>
+<hr />
+<h2 id="3-类型成立所需的最小结构">3. 类型成立所需的最小结构</h2><p>一个最小可行的社交推理游戏至少需要：</p>
+<ul>
+<li><p>两个或以上目标冲突的阵营；</p>
+</li>
+<li><p>部分不公开的身份、目标或行动；</p>
+</li>
+<li><p>玩家间不完全一致的信息；</p>
+</li>
+<li><p>至少一种秘密行动；</p>
+</li>
+<li><p>至少一种公开讨论机制；</p>
+</li>
+<li><p>至少一种集体决策机制；</p>
+</li>
+<li><p>明确的胜负条件；</p>
+</li>
+<li><p>能够改变后续信息结构的阶段性结果。</p>
+</li>
+</ul>
+<p>如果所有玩家都能获得完全相同的信息，该游戏会退化为普通合作解谜。</p>
+<p>如果秘密阵营没有制造信息差或叙事冲突的能力，该游戏会退化为概率猜测。</p>
+<p>如果讨论不会影响任何实际决策，社交行为只会成为装饰。</p>
+<hr />
+<h2 id="4-总体运行时架构">4. 总体运行时架构</h2><p>推荐将运行时划分为以下十个核心域：</p>
+<ol>
+<li><p>对局权威域；</p>
+</li>
+<li><p>身份与阵营域；</p>
+</li>
+<li><p>阶段状态机；</p>
+</li>
+<li><p>行动解析域；</p>
+</li>
+<li><p>可见性与信息裁剪域；</p>
+</li>
+<li><p>认知与证据域；</p>
+</li>
+<li><p>通讯与讨论域；</p>
+</li>
+<li><p>投票与公共决策域；</p>
+</li>
+<li><p>胜负裁定域；</p>
+</li>
+<li><p>审计、回放与异常恢复域。</p>
+</li>
+</ol>
+<p>总体执行关系如下：</p>
+<p>玩家提交意图
+→ 权威服务器验证玩家状态与当前阶段
+→ 行动解析器验证目标、资源和冲突
+→ 服务器提交真实状态变化
+→ 信息裁剪器为不同玩家生成不同结果
+→ 客户端更新个人认知视图
+→ 公开讨论阶段形成玩家叙事
+→ 投票系统收集并结算公共决策
+→ 阶段状态机进入下一阶段
+→ 胜负系统检查阵营目标
+→ 审计系统记录完整因果链</p>
+<hr />
+<h2 id="5-服务端权威模型">5. 服务端权威模型</h2><p>社交推理游戏不能信任客户端持有关键秘密。</p>
+<p>客户端不应完整持有：</p>
+<ul>
+<li><p>所有玩家身份；</p>
+</li>
+<li><p>未公开行动；</p>
+</li>
+<li><p>隐藏阵营关系；</p>
+</li>
+<li><p>真实调查结果生成逻辑；</p>
+</li>
+<li><p>未触发角色能力；</p>
+</li>
+<li><p>其他玩家不可见的位置；</p>
+</li>
+<li><p>未揭露的胜负进度。</p>
+</li>
+</ul>
+<p>客户端只应获得当前玩家有权知道的投影数据。</p>
+<p>推荐结构：</p>
+<h3 id="matchstate">MatchState</h3><ul>
+<li><p>MatchId；</p>
+</li>
+<li><p>RuleSetId；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>RoundIndex；</p>
+</li>
+<li><p>PhaseSequence；</p>
+</li>
+<li><p>PlayerStates；</p>
+</li>
+<li><p>WorldState；</p>
+</li>
+<li><p>PublicState；</p>
+</li>
+<li><p>HiddenState；</p>
+</li>
+<li><p>PendingActions；</p>
+</li>
+<li><p>ResolvedEvents；</p>
+</li>
+<li><p>VictoryState；</p>
+</li>
+<li><p>RandomSeedReference；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<p>其中：</p>
+<ul>
+<li><p>PublicState可以下发给全部玩家；</p>
+</li>
+<li><p>HiddenState仅保存在权威服务端；</p>
+</li>
+<li><p>PlayerPrivateState按玩家分别生成；</p>
+</li>
+<li><p>StateVersion用于防止客户端基于过期状态提交行动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="6-身份阵营与目标模型">6. 身份、阵营与目标模型</h2><h2 id="61-身份与阵营分离">6.1 身份与阵营分离</h2><p>角色身份不应直接等同于阵营。</p>
+<p>推荐拆分为：</p>
+<ul>
+<li><p>Faction：胜负归属；</p>
+</li>
+<li><p>Role：能力与行为权限；</p>
+</li>
+<li><p>Alignment：公开或隐藏的立场特征；</p>
+</li>
+<li><p>PersonalObjective：个人附加目标；</p>
+</li>
+<li><p>Status：对局中动态变化的身份状态。</p>
+</li>
+</ul>
+<p>例如一名玩家可能是：</p>
+<ul>
+<li><p>阵营：平民；</p>
+</li>
+<li><p>角色：调查员；</p>
+</li>
+<li><p>公开身份：普通成员；</p>
+</li>
+<li><p>个人目标：保证某名玩家存活；</p>
+</li>
+<li><p>当前状态：被感染但尚未转化。</p>
+</li>
+</ul>
+<p>这样可以支持：</p>
+<ul>
+<li><p>中途转换阵营；</p>
+</li>
+<li><p>双重身份；</p>
+</li>
+<li><p>独立获胜者；</p>
+</li>
+<li><p>主阵营胜利但个人目标失败；</p>
+</li>
+<li><p>公开身份与真实能力不一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-factiondefinition">6.2 FactionDefinition</h2><p>建议包含：</p>
+<ul>
+<li><p>FactionId；</p>
+</li>
+<li><p>DisplayPolicy；</p>
+</li>
+<li><p>KnownMembersPolicy；</p>
+</li>
+<li><p>CommunicationPolicy；</p>
+</li>
+<li><p>WinConditionSet；</p>
+</li>
+<li><p>LossConditionSet；</p>
+</li>
+<li><p>DefaultRelationship；</p>
+</li>
+<li><p>ConversionRules；</p>
+</li>
+<li><p>SharedResources；</p>
+</li>
+<li><p>SharedKnowledgePolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-roledefinition">6.3 RoleDefinition</h2><p>建议包含：</p>
+<ul>
+<li><p>RoleId；</p>
+</li>
+<li><p>FactionCompatibility；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>ActionPriority；</p>
+</li>
+<li><p>TargetRestrictions；</p>
+</li>
+<li><p>InformationPrivileges；</p>
+</li>
+<li><p>CommunicationPrivileges；</p>
+</li>
+<li><p>DeathBehavior；</p>
+</li>
+<li><p>RevealPolicy；</p>
+</li>
+<li><p>UniqueLimit；</p>
+</li>
+<li><p>ConflictTags。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-personalobjective">6.4 PersonalObjective</h2><p>个人目标用于制造阵营内部的不完全一致。</p>
+<p>建议包含：</p>
+<ul>
+<li><p>ObjectiveId；</p>
+</li>
+<li><p>OwnerPlayerId；</p>
+</li>
+<li><p>Visibility；</p>
+</li>
+<li><p>CompletionConditions；</p>
+</li>
+<li><p>FailureConditions；</p>
+</li>
+<li><p>RewardPolicy；</p>
+</li>
+<li><p>RelationToFactionVictory。</p>
+</li>
+</ul>
+<p>个人目标不能过度破坏主阵营协作，否则会使玩家无法建立任何可靠联盟。</p>
+<hr />
+<h2 id="7-阶段状态机">7. 阶段状态机</h2><p>社交推理游戏应使用显式阶段状态机，不建议依赖分散的布尔变量控制流程。</p>
+<p>典型阶段包括：</p>
+<ul>
+<li><p>Lobby；</p>
+</li>
+<li><p>RoleAssignment；</p>
+</li>
+<li><p>Preparation；</p>
+</li>
+<li><p>FreeAction；</p>
+</li>
+<li><p>SecretAction；</p>
+</li>
+<li><p>Resolution；</p>
+</li>
+<li><p>Discussion；</p>
+</li>
+<li><p>Nomination；</p>
+</li>
+<li><p>Voting；</p>
+</li>
+<li><p>Judgment；</p>
+</li>
+<li><p>Transition；</p>
+</li>
+<li><p>Victory；</p>
+</li>
+<li><p>PostMatch。</p>
+</li>
+</ul>
+<p>不同子类型可以使用不同循环。</p>
+<hr />
+<h2 id="71-阶段定义">7.1 阶段定义</h2><h3 id="phasedefinition">PhaseDefinition</h3><ul>
+<li><p>PhaseId；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>AllowedActions；</p>
+</li>
+<li><p>AllowedCommunicationChannels；</p>
+</li>
+<li><p>VisibilityPolicy；</p>
+</li>
+<li><p>EntryEffects；</p>
+</li>
+<li><p>ExitConditions；</p>
+</li>
+<li><p>TimeoutPolicy；</p>
+</li>
+<li><p>RequiredParticipants；</p>
+</li>
+<li><p>SkipConditions；</p>
+</li>
+<li><p>NextPhaseResolver。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-阶段切换原则">7.2 阶段切换原则</h2><p>阶段切换必须由服务端决定。</p>
+<p>客户端只能：</p>
+<ul>
+<li><p>请求结束个人操作；</p>
+</li>
+<li><p>标记准备完毕；</p>
+</li>
+<li><p>提交阶段内行动；</p>
+</li>
+<li><p>提交投票；</p>
+</li>
+<li><p>请求使用能力。</p>
+</li>
+</ul>
+<p>客户端不能自行决定：</p>
+<ul>
+<li><p>当前阶段已经结束；</p>
+</li>
+<li><p>所有人已经提交行动；</p>
+</li>
+<li><p>投票已经结算；</p>
+</li>
+<li><p>对局已经胜利。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-超时处理">7.3 超时处理</h2><p>每个阶段应有明确的超时策略：</p>
+<ul>
+<li><p>自动跳过；</p>
+</li>
+<li><p>使用默认目标；</p>
+</li>
+<li><p>保持上一轮行动；</p>
+</li>
+<li><p>随机选择合法目标；</p>
+</li>
+<li><p>视为弃权；</p>
+</li>
+<li><p>取消整个复合行动；</p>
+</li>
+<li><p>进入托管；</p>
+</li>
+<li><p>标记玩家暂时掉线。</p>
+</li>
+</ul>
+<p>超时结果必须可预测，不能让玩家通过不操作阻塞整场对局。</p>
+<hr />
+<h2 id="8-行动系统">8. 行动系统</h2><h2 id="81-行动是意图不是结果">8.1 行动是意图，不是结果</h2><p>客户端提交的应是ActionIntent，而不是直接提交状态变化。</p>
+<p>例如客户端提交：</p>
+<ul>
+<li><p>使用调查能力；</p>
+</li>
+<li><p>目标为四号玩家；</p>
+</li>
+<li><p>消耗一次能力次数。</p>
+</li>
+</ul>
+<p>而不是提交：</p>
+<ul>
+<li><p>四号玩家是某阵营；</p>
+</li>
+<li><p>将调查结果设置为“敌对”。</p>
+</li>
+</ul>
+<p>服务器负责：</p>
+<ol>
+<li><p>判断当前阶段是否允许；</p>
+</li>
+<li><p>判断玩家是否存活或具备行动权；</p>
+</li>
+<li><p>判断角色是否具有对应能力；</p>
+</li>
+<li><p>判断目标是否合法；</p>
+</li>
+<li><p>判断资源是否足够；</p>
+</li>
+<li><p>记录行动意图；</p>
+</li>
+<li><p>在正确时机解析结果。</p>
+</li>
+</ol>
+<hr />
+<h2 id="82-actionintent">8.2 ActionIntent</h2><p>推荐字段：</p>
+<ul>
+<li><p>IntentId；</p>
+</li>
+<li><p>MatchId；</p>
+</li>
+<li><p>ActorPlayerId；</p>
+</li>
+<li><p>AbilityId；</p>
+</li>
+<li><p>TargetReferences；</p>
+</li>
+<li><p>SubmittedStateVersion；</p>
+</li>
+<li><p>ClientSequence；</p>
+</li>
+<li><p>SubmissionTime；</p>
+</li>
+<li><p>OptionalParameters；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-actionresolution">8.3 ActionResolution</h2><p>推荐字段：</p>
+<ul>
+<li><p>ResolutionId；</p>
+</li>
+<li><p>SourceIntentId；</p>
+</li>
+<li><p>ActorPlayerId；</p>
+</li>
+<li><p>TargetPlayerIds；</p>
+</li>
+<li><p>ResolutionType；</p>
+</li>
+<li><p>ObjectiveResult；</p>
+</li>
+<li><p>PrivateResults；</p>
+</li>
+<li><p>PublicResults；</p>
+</li>
+<li><p>AppliedEffects；</p>
+</li>
+<li><p>PreventedEffects；</p>
+</li>
+<li><p>FailureReason；</p>
+</li>
+<li><p>CausalEventIds。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-行动优先级">8.4 行动优先级</h2><p>秘密行动往往同时提交、顺序结算。</p>
+<p>必须提供确定性的优先级规则。</p>
+<p>可采用：</p>
+<ol>
+<li><p>强制阶段效果；</p>
+</li>
+<li><p>角色变更；</p>
+</li>
+<li><p>保护与免疫；</p>
+</li>
+<li><p>干扰与封锁；</p>
+</li>
+<li><p>信息类行动；</p>
+</li>
+<li><p>攻击与处决；</p>
+</li>
+<li><p>治疗与复活；</p>
+</li>
+<li><p>移动与资源操作；</p>
+</li>
+<li><p>被动触发；</p>
+</li>
+<li><p>结果公开。</p>
+</li>
+</ol>
+<p>优先级不能只依赖角色编号，否则新增角色时容易产生隐式冲突。</p>
+<p>推荐为行动配置：</p>
+<ul>
+<li><p>PriorityBand；</p>
+</li>
+<li><p>PriorityValue；</p>
+</li>
+<li><p>DependencyTags；</p>
+</li>
+<li><p>InterruptTags；</p>
+</li>
+<li><p>ConflictPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-复合行动与冲突裁定">9. 复合行动与冲突裁定</h2><h2 id="91-常见冲突">9.1 常见冲突</h2><p>例如：</p>
+<ul>
+<li><p>玩家A攻击玩家B；</p>
+</li>
+<li><p>玩家C保护玩家B；</p>
+</li>
+<li><p>玩家D封锁玩家C；</p>
+</li>
+<li><p>玩家B调查玩家A；</p>
+</li>
+<li><p>玩家A同时被另一角色转换阵营。</p>
+</li>
+</ul>
+<p>系统需要明确：</p>
+<ul>
+<li><p>保护是否先于攻击；</p>
+</li>
+<li><p>封锁是否使保护失效；</p>
+</li>
+<li><p>死亡前是否仍能完成调查；</p>
+</li>
+<li><p>阵营转换在攻击前还是攻击后生效；</p>
+</li>
+<li><p>被杀死玩家是否还能留下遗言。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-解析图">9.2 解析图</h2><p>复杂行动建议构建ResolutionGraph。</p>
+<p>节点表示：</p>
+<ul>
+<li><p>行动；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>前置条件；</p>
+</li>
+<li><p>触发效果。</p>
+</li>
+</ul>
+<p>边表示：</p>
+<ul>
+<li><p>依赖；</p>
+</li>
+<li><p>阻断；</p>
+</li>
+<li><p>修改；</p>
+</li>
+<li><p>触发；</p>
+</li>
+<li><p>替代。</p>
+</li>
+</ul>
+<p>解析过程：</p>
+<ol>
+<li><p>收集本阶段全部行动；</p>
+</li>
+<li><p>标准化目标和参数；</p>
+</li>
+<li><p>构建依赖图；</p>
+</li>
+<li><p>检测循环依赖；</p>
+</li>
+<li><p>按优先级执行；</p>
+</li>
+<li><p>记录每个行动的生效、部分生效或失败；</p>
+</li>
+<li><p>生成不同可见范围的结果；</p>
+</li>
+<li><p>一次性提交阶段结果。</p>
+</li>
+</ol>
+<hr />
+<h2 id="93-循环冲突">9.3 循环冲突</h2><p>例如：</p>
+<ul>
+<li><p>A的能力使B的能力无效；</p>
+</li>
+<li><p>B的能力使C的能力无效；</p>
+</li>
+<li><p>C的能力又使A的能力无效。</p>
+</li>
+</ul>
+<p>需要预先定义：</p>
+<ul>
+<li><p>优先级打破循环；</p>
+</li>
+<li><p>全部取消；</p>
+</li>
+<li><p>首个提交者生效；</p>
+</li>
+<li><p>角色固定优先级；</p>
+</li>
+<li><p>同步冲突转为特殊结果。</p>
+</li>
+</ul>
+<p>最稳妥的方式是通过规则校验禁止设计不可判定的循环，而不是在运行时随机处理。</p>
+<hr />
+<h2 id="10-信息可见性系统">10. 信息可见性系统</h2><p>这是该类型最关键的基础设施之一。</p>
+<p>每个事件应同时定义：</p>
+<ul>
+<li><p>客观发生了什么；</p>
+</li>
+<li><p>谁可以知道；</p>
+</li>
+<li><p>每个人知道到什么程度；</p>
+</li>
+<li><p>何时知道；</p>
+</li>
+<li><p>以什么形式知道；</p>
+</li>
+<li><p>是否知道信息来源；</p>
+</li>
+<li><p>是否允许信息被篡改。</p>
+</li>
+</ul>
+<hr />
+<h2 id="101-visibilityscope">10.1 VisibilityScope</h2><p>推荐支持：</p>
+<ul>
+<li><p>ServerOnly；</p>
+</li>
+<li><p>ActorOnly；</p>
+</li>
+<li><p>TargetOnly；</p>
+</li>
+<li><p>FactionOnly；</p>
+</li>
+<li><p>NearbyPlayers；</p>
+</li>
+<li><p>ChannelMembers；</p>
+</li>
+<li><p>AlivePlayers；</p>
+</li>
+<li><p>DeadPlayers；</p>
+</li>
+<li><p>Public；</p>
+</li>
+<li><p>CustomRecipients。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-信息粒度">10.2 信息粒度</h2><p>同一事件可以产生不同粒度的视图。</p>
+<p>例如某玩家在夜间遭到袭击：</p>
+<p>攻击者看到：</p>
+<ul>
+<li><p>行动已执行；</p>
+</li>
+<li><p>目标是谁；</p>
+</li>
+<li><p>是否被阻挡可能未知。</p>
+</li>
+</ul>
+<p>目标看到：</p>
+<ul>
+<li><p>自己遭到袭击；</p>
+</li>
+<li><p>可能不知道攻击者；</p>
+</li>
+<li><p>可能只知道伤害类型。</p>
+</li>
+</ul>
+<p>保护者看到：</p>
+<ul>
+<li><p>自己触发了保护；</p>
+</li>
+<li><p>可能不知道攻击来源。</p>
+</li>
+</ul>
+<p>普通玩家看到：</p>
+<ul>
+<li><p>下一阶段某人受伤或死亡；</p>
+</li>
+<li><p>不知道具体过程。</p>
+</li>
+</ul>
+<p>调查者可能看到：</p>
+<ul>
+<li><p>现场残留某类证据；</p>
+</li>
+<li><p>但证据可能受能力干扰。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-playerviewprojection">10.3 PlayerViewProjection</h2><p>服务端应为每名玩家生成独立投影：</p>
+<ul>
+<li><p>VisiblePlayers；</p>
+</li>
+<li><p>VisibleStatuses；</p>
+</li>
+<li><p>PrivateRoleInfo；</p>
+</li>
+<li><p>KnownFactionRelations；</p>
+</li>
+<li><p>PersonalActionResults；</p>
+</li>
+<li><p>AvailableActions；</p>
+</li>
+<li><p>CommunicationPermissions；</p>
+</li>
+<li><p>KnownEvidence；</p>
+</li>
+<li><p>PublicTimeline；</p>
+</li>
+<li><p>PrivateTimeline；</p>
+</li>
+<li><p>CurrentPrompt。</p>
+</li>
+</ul>
+<p>客户端只能基于该投影渲染，不应自行推导隐藏信息。</p>
+<hr />
+<h2 id="11-认知与知识模型">11. 认知与知识模型</h2><p>玩家知道的内容需要与服务端真实状态区分。</p>
+<h2 id="111-knowledgerecord">11.1 KnowledgeRecord</h2><p>建议包含：</p>
+<ul>
+<li><p>KnowledgeId；</p>
+</li>
+<li><p>OwnerPlayerId；</p>
+</li>
+<li><p>SubjectReference；</p>
+</li>
+<li><p>KnowledgeType；</p>
+</li>
+<li><p>PresentedValue；</p>
+</li>
+<li><p>GroundTruthReference；</p>
+</li>
+<li><p>Confidence；</p>
+</li>
+<li><p>SourceType；</p>
+</li>
+<li><p>SourcePlayerId；</p>
+</li>
+<li><p>AcquiredAtRound；</p>
+</li>
+<li><p>ExpirationPolicy；</p>
+</li>
+<li><p>CanBeShared；</p>
+</li>
+<li><p>TamperState。</p>
+</li>
+</ul>
+<p>其中GroundTruthReference只在服务端审计层存在，不下发客户端。</p>
+<hr />
+<h2 id="112-知识类型">11.2 知识类型</h2><p>可以分为：</p>
+<ul>
+<li><p>Verified：系统保证准确；</p>
+</li>
+<li><p>Observed：玩家直接观察；</p>
+</li>
+<li><p>Investigated：能力产生；</p>
+</li>
+<li><p>Reported：由其他玩家口述；</p>
+</li>
+<li><p>Inferred：由多个信息推断；</p>
+</li>
+<li><p>Fabricated：系统或能力生成的伪造信息；</p>
+</li>
+<li><p>Ambiguous：只提供范围或概率；</p>
+</li>
+<li><p>Outdated：曾经正确但可能已变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="113-信息可靠性">11.3 信息可靠性</h2><p>并非所有能力都应提供绝对身份答案。</p>
+<p>绝对答案过多会使游戏快速收敛为“报结果”。</p>
+<p>更适合的结果包括：</p>
+<ul>
+<li><p>目标属于两种阵营之一；</p>
+</li>
+<li><p>目标昨晚访问了某区域；</p>
+</li>
+<li><p>目标与某次事件存在关联；</p>
+</li>
+<li><p>两名玩家中至少一人属于敌对阵营；</p>
+</li>
+<li><p>目标的声明与系统记录存在冲突；</p>
+</li>
+<li><p>某个证据可能被篡改；</p>
+</li>
+<li><p>某名玩家的阵营在本轮发生过变化。</p>
+</li>
+</ul>
+<p>这类信息需要玩家结合叙事进行推理。</p>
+<hr />
+<h2 id="12-证据系统">12. 证据系统</h2><p>证据是连接客观行动与公开讨论的重要中介。</p>
+<h2 id="121-evidencerecord">12.1 EvidenceRecord</h2><p>建议包含：</p>
+<ul>
+<li><p>EvidenceId；</p>
+</li>
+<li><p>EvidenceType；</p>
+</li>
+<li><p>RelatedEventId；</p>
+</li>
+<li><p>RelatedEntities；</p>
+</li>
+<li><p>SpawnLocation；</p>
+</li>
+<li><p>CreatedAt；</p>
+</li>
+<li><p>VisibilityRule；</p>
+</li>
+<li><p>Reliability；</p>
+</li>
+<li><p>Tamperability；</p>
+</li>
+<li><p>DecayPolicy；</p>
+</li>
+<li><p>DiscoveredBy；</p>
+</li>
+<li><p>PublicState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-证据类型">12.2 证据类型</h2><p>包括：</p>
+<ul>
+<li><p>位置记录；</p>
+</li>
+<li><p>行动残留；</p>
+</li>
+<li><p>任务日志；</p>
+</li>
+<li><p>访问日志；</p>
+</li>
+<li><p>通讯记录；</p>
+</li>
+<li><p>伤害类型；</p>
+</li>
+<li><p>投票历史；</p>
+</li>
+<li><p>时间戳；</p>
+</li>
+<li><p>目击证词；</p>
+</li>
+<li><p>角色能力结果；</p>
+</li>
+<li><p>物品转移记录；</p>
+</li>
+<li><p>系统异常记录。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-证据不应自动等于结论">12.3 证据不应自动等于结论</h2><p>好的证据通常只能缩小可能性。</p>
+<p>例如：</p>
+<ul>
+<li><p>某玩家出现在案发区域；</p>
+</li>
+<li><p>某玩家拥有与事件相符的能力；</p>
+</li>
+<li><p>某个任务进度发生变化；</p>
+</li>
+<li><p>某名玩家的发言与日志冲突。</p>
+</li>
+</ul>
+<p>证据应该支持推理，而不是直接替代推理。</p>
+<hr />
+<h2 id="13-通讯与讨论系统">13. 通讯与讨论系统</h2><p>通讯系统不是普通聊天组件，而是游戏规则的一部分。</p>
+<h2 id="131-通讯维度">13.1 通讯维度</h2><p>每个通讯频道需要定义：</p>
+<ul>
+<li><p>ChannelId；</p>
+</li>
+<li><p>ChannelType；</p>
+</li>
+<li><p>Members；</p>
+</li>
+<li><p>SpeakerPolicy；</p>
+</li>
+<li><p>ListenerPolicy；</p>
+</li>
+<li><p>MessageVisibility；</p>
+</li>
+<li><p>HistoryPolicy；</p>
+</li>
+<li><p>DeadPlayerPolicy；</p>
+</li>
+<li><p>ModerationPolicy；</p>
+</li>
+<li><p>PhaseAvailability；</p>
+</li>
+<li><p>IdentityPresentation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-常见频道">13.2 常见频道</h2><ul>
+<li><p>全体讨论；</p>
+</li>
+<li><p>阵营私聊；</p>
+</li>
+<li><p>邻近语音；</p>
+</li>
+<li><p>死亡玩家频道；</p>
+</li>
+<li><p>角色专属频道；</p>
+</li>
+<li><p>一对一秘密通讯；</p>
+</li>
+<li><p>临时会议频道；</p>
+</li>
+<li><p>匿名频道；</p>
+</li>
+<li><p>延迟消息频道。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-发言权作为资源">13.3 发言权作为资源</h2><p>可以将发言权机制化：</p>
+<ul>
+<li><p>限时发言；</p>
+</li>
+<li><p>顺序发言；</p>
+</li>
+<li><p>发言令牌；</p>
+</li>
+<li><p>每轮有限陈述次数；</p>
+</li>
+<li><p>只有被提名者可以辩护；</p>
+</li>
+<li><p>领导者决定发言顺序；</p>
+</li>
+<li><p>某些角色可以打断或封禁发言。</p>
+</li>
+</ul>
+<p>这能够减少多人语音中的抢话问题，也可以成为策略资源。</p>
+<hr />
+<h2 id="134-系统声明与玩家声明分离">13.4 系统声明与玩家声明分离</h2><p>系统生成的信息必须具有明确视觉标识。</p>
+<p>例如：</p>
+<ul>
+<li><p>系统确认的死亡；</p>
+</li>
+<li><p>玩家自称的调查结果；</p>
+</li>
+<li><p>系统公开的投票结果；</p>
+</li>
+<li><p>玩家提交的证词；</p>
+</li>
+<li><p>自动生成的事件日志。</p>
+</li>
+</ul>
+<p>不能让玩家无法区分“系统事实”和“玩家说法”。</p>
+<hr />
+<h2 id="14-投票与公共决策系统">14. 投票与公共决策系统</h2><h2 id="141-votesession">14.1 VoteSession</h2><p>建议包含：</p>
+<ul>
+<li><p>VoteId；</p>
+</li>
+<li><p>VoteType；</p>
+</li>
+<li><p>EligibleVoters；</p>
+</li>
+<li><p>EligibleTargets；</p>
+</li>
+<li><p>VoteWeightPolicy；</p>
+</li>
+<li><p>VisibilityPolicy；</p>
+</li>
+<li><p>AbstainPolicy；</p>
+</li>
+<li><p>ChangeVotePolicy；</p>
+</li>
+<li><p>TiePolicy；</p>
+</li>
+<li><p>Deadline；</p>
+</li>
+<li><p>QuorumPolicy；</p>
+</li>
+<li><p>ResultEffect；</p>
+</li>
+<li><p>AuditRecord。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-投票类型">14.2 投票类型</h2><p>除放逐投票外，还可以包括：</p>
+<ul>
+<li><p>队伍组建批准；</p>
+</li>
+<li><p>领导者选举；</p>
+</li>
+<li><p>任务执行许可；</p>
+</li>
+<li><p>资源分配；</p>
+</li>
+<li><p>是否封锁区域；</p>
+</li>
+<li><p>是否公开证据；</p>
+</li>
+<li><p>是否处决嫌疑人；</p>
+</li>
+<li><p>是否接受停战；</p>
+</li>
+<li><p>是否改变对局规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-投票可见性">14.3 投票可见性</h2><p>可配置为：</p>
+<ul>
+<li><p>完全公开；</p>
+</li>
+<li><p>仅公开最终结果；</p>
+</li>
+<li><p>仅公开每人的投票对象；</p>
+</li>
+<li><p>延迟公开；</p>
+</li>
+<li><p>仅在对局结束后公开；</p>
+</li>
+<li><p>某些角色可见；</p>
+</li>
+<li><p>可被特殊能力调查。</p>
+</li>
+</ul>
+<p>投票可见性会直接改变叙事空间。</p>
+<p>公开投票强调立场承诺。</p>
+<p>秘密投票强调猜测、交易和背叛。</p>
+<hr />
+<h2 id="144-平票处理">14.4 平票处理</h2><p>必须显式定义：</p>
+<ul>
+<li><p>无人被选中；</p>
+</li>
+<li><p>进入二轮投票；</p>
+</li>
+<li><p>领导者决胜；</p>
+</li>
+<li><p>随机选择；</p>
+</li>
+<li><p>所有平票目标受罚；</p>
+</li>
+<li><p>对局进入特殊危机阶段。</p>
+</li>
+</ul>
+<p>平票不能依赖客户端先后顺序。</p>
+<hr />
+<h2 id="15-胜负条件系统">15. 胜负条件系统</h2><p>胜负条件应数据化，并由服务端统一检查。</p>
+<h2 id="151-victorycondition">15.1 VictoryCondition</h2><p>建议包含：</p>
+<ul>
+<li><p>ConditionId；</p>
+</li>
+<li><p>OwnerFactionId；</p>
+</li>
+<li><p>ConditionType；</p>
+</li>
+<li><p>RequiredPredicates；</p>
+</li>
+<li><p>EvaluationTiming；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>ExclusivePolicy；</p>
+</li>
+<li><p>DrawCompatibility；</p>
+</li>
+<li><p>RevealPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-常见胜利条件">15.2 常见胜利条件</h2><ul>
+<li><p>敌对阵营全部被淘汰；</p>
+</li>
+<li><p>敌对阵营人数达到或超过其他阵营；</p>
+</li>
+<li><p>完成若干公共任务；</p>
+</li>
+<li><p>破坏指定设施；</p>
+</li>
+<li><p>保护某名角色至指定回合；</p>
+</li>
+<li><p>控制关键投票席位；</p>
+</li>
+<li><p>成功完成秘密仪式；</p>
+</li>
+<li><p>维持伪装直到终局；</p>
+</li>
+<li><p>独立角色达成个人目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-同时满足多个胜利条件">15.3 同时满足多个胜利条件</h2><p>需要明确：</p>
+<ul>
+<li><p>优先级更高者获胜；</p>
+</li>
+<li><p>多阵营共同获胜；</p>
+</li>
+<li><p>主阵营胜利后再检查个人胜利；</p>
+</li>
+<li><p>形成平局；</p>
+</li>
+<li><p>特殊角色窃取胜利。</p>
+</li>
+</ul>
+<p>胜负检查应在固定结算点执行，避免同一阶段中因事件回调顺序产生不同结果。</p>
+<hr />
+<h2 id="16-完整事件与执行流程示例">16. 完整事件与执行流程示例</h2><p>以下以“夜间秘密行动—白天讨论—投票放逐”为例。</p>
+<h3 id="161-秘密行动阶段开始">16.1 秘密行动阶段开始</h3><p>阶段系统：</p>
+<ul>
+<li><p>锁定公开聊天；</p>
+</li>
+<li><p>根据角色生成可用行动；</p>
+</li>
+<li><p>向每名玩家下发个人操作面板；</p>
+</li>
+<li><p>创建阶段截止时间；</p>
+</li>
+<li><p>记录当前StateVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="162-玩家提交行动">16.2 玩家提交行动</h3><p>玩家A提交攻击玩家B。</p>
+<p>玩家C提交保护玩家B。</p>
+<p>玩家D提交封锁玩家C。</p>
+<p>服务器分别验证：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>行动次数；</p>
+</li>
+<li><p>目标合法性；</p>
+</li>
+<li><p>角色状态；</p>
+</li>
+<li><p>StateVersion；</p>
+</li>
+<li><p>重复提交策略。</p>
+</li>
+</ul>
+<hr />
+<h3 id="163-行动解析">16.3 行动解析</h3><p>解析顺序：</p>
+<ol>
+<li><p>D的封锁先执行；</p>
+</li>
+<li><p>C的保护能力被阻断；</p>
+</li>
+<li><p>A的攻击执行；</p>
+</li>
+<li><p>B受到致命状态；</p>
+</li>
+<li><p>B的死亡被延迟到阶段结算；</p>
+</li>
+<li><p>被动能力检查；</p>
+</li>
+<li><p>生成现场证据。</p>
+</li>
+</ol>
+<hr />
+<h3 id="164-信息裁剪">16.4 信息裁剪</h3><p>玩家A收到：</p>
+<ul>
+<li><p>攻击行动已执行；</p>
+</li>
+<li><p>不一定知道目标最终是否死亡。</p>
+</li>
+</ul>
+<p>玩家C收到：</p>
+<ul>
+<li><p>行动未成功；</p>
+</li>
+<li><p>可能只知道“受到干扰”，不知道干扰者。</p>
+</li>
+</ul>
+<p>玩家D收到：</p>
+<ul>
+<li>封锁成功。</li>
+</ul>
+<p>玩家B收到：</p>
+<ul>
+<li><p>自己受到袭击；</p>
+</li>
+<li><p>可能获得有限遗言窗口。</p>
+</li>
+</ul>
+<p>其他玩家暂不收到夜间细节。</p>
+<hr />
+<h3 id="165-白天结算">16.5 白天结算</h3><p>服务器公开：</p>
+<ul>
+<li><p>玩家B死亡；</p>
+</li>
+<li><p>发现某类伤害痕迹；</p>
+</li>
+<li><p>某区域出现异常记录。</p>
+</li>
+</ul>
+<p>服务器不公开：</p>
+<ul>
+<li><p>攻击者；</p>
+</li>
+<li><p>保护者；</p>
+</li>
+<li><p>封锁者；</p>
+</li>
+<li><p>完整行动链。</p>
+</li>
+</ul>
+<hr />
+<h3 id="166-讨论阶段">16.6 讨论阶段</h3><p>玩家开始构建公开叙事：</p>
+<ul>
+<li><p>玩家C声称自己保护了B；</p>
+</li>
+<li><p>玩家D可以指控C撒谎；</p>
+</li>
+<li><p>玩家A可以伪造自己整晚没有行动；</p>
+</li>
+<li><p>其他玩家结合上一轮投票和位置记录进行判断。</p>
+</li>
+</ul>
+<p>系统只记录声明，不判断声明真假。</p>
+<hr />
+<h3 id="167-投票阶段">16.7 投票阶段</h3><p>服务器：</p>
+<ul>
+<li><p>创建VoteSession；</p>
+</li>
+<li><p>计算有效投票者；</p>
+</li>
+<li><p>锁定已死亡玩家的投票权；</p>
+</li>
+<li><p>接收选票；</p>
+</li>
+<li><p>处理弃权和平票；</p>
+</li>
+<li><p>执行放逐；</p>
+</li>
+<li><p>检查被放逐角色的死亡能力；</p>
+</li>
+<li><p>检查胜负条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-模块通信设计">17. 模块通信设计</h2><h2 id="171-同步查询">17.1 同步查询</h2><p>用于需要立即返回结果的局部操作：</p>
+<ul>
+<li><p>当前阶段是否允许某行动；</p>
+</li>
+<li><p>玩家是否具备能力；</p>
+</li>
+<li><p>目标是否有效；</p>
+</li>
+<li><p>玩家是否有投票权；</p>
+</li>
+<li><p>某信息是否对玩家可见。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-命令">17.2 命令</h2><p>用于改变权威状态：</p>
+<ul>
+<li><p>SubmitActionIntent；</p>
+</li>
+<li><p>SubmitVote；</p>
+</li>
+<li><p>PublishEvidence；</p>
+</li>
+<li><p>OpenDiscussion；</p>
+</li>
+<li><p>ResolvePhase；</p>
+</li>
+<li><p>ApplyRoleChange；</p>
+</li>
+<li><p>RemovePlayerFromMatch。</p>
+</li>
+</ul>
+<p>命令必须：</p>
+<ul>
+<li><p>可验证；</p>
+</li>
+<li><p>可幂等；</p>
+</li>
+<li><p>可审计；</p>
+</li>
+<li><p>不直接由客户端决定结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-领域事件">17.3 领域事件</h2><p>用于跨域通知：</p>
+<ul>
+<li><p>PhaseStarted；</p>
+</li>
+<li><p>ActionSubmitted；</p>
+</li>
+<li><p>ActionResolved；</p>
+</li>
+<li><p>PlayerKilled；</p>
+</li>
+<li><p>RoleChanged；</p>
+</li>
+<li><p>EvidenceCreated；</p>
+</li>
+<li><p>VoteStarted；</p>
+</li>
+<li><p>VoteResolved；</p>
+</li>
+<li><p>VictoryAchieved。</p>
+</li>
+</ul>
+<p>领域事件应来自已经成功提交的状态变化。</p>
+<hr />
+<h2 id="174-私有通知">17.4 私有通知</h2><p>私有通知不是公共领域事件的简单广播。</p>
+<p>它需要经过信息裁剪：</p>
+<p>客观事件
+→ VisibilityResolver
+→ PlayerSpecificMessage
+→ 私有消息队列
+→ 对应客户端</p>
+<hr />
+<h2 id="18-随机性与可复现性">18. 随机性与可复现性</h2><p>社交推理游戏常涉及：</p>
+<ul>
+<li><p>随机分配身份；</p>
+</li>
+<li><p>随机调查误差；</p>
+</li>
+<li><p>随机事件；</p>
+</li>
+<li><p>随机目标；</p>
+</li>
+<li><p>平票随机结果。</p>
+</li>
+</ul>
+<p>推荐由服务端使用可记录的随机流。</p>
+<p>需要保存：</p>
+<ul>
+<li><p>RandomStreamId；</p>
+</li>
+<li><p>SeedReference；</p>
+</li>
+<li><p>ConsumptionIndex；</p>
+</li>
+<li><p>RequestReason；</p>
+</li>
+<li><p>Result。</p>
+</li>
+</ul>
+<p>不要只保存初始随机种子而不保存随机调用顺序。</p>
+<p>如果后续代码增加了一次随机调用，仅靠初始种子可能无法重现旧对局。</p>
+<hr />
+<h2 id="19-断线重连与托管">19. 断线、重连与托管</h2><p>社交推理游戏对断线极为敏感，因为单个玩家通常拥有不可替代的隐藏信息。</p>
+<h2 id="191-重连恢复">19.1 重连恢复</h2><p>重连时不能直接下发完整MatchState。</p>
+<p>应重建：</p>
+<ul>
+<li><p>当前公开状态；</p>
+</li>
+<li><p>玩家私有身份；</p>
+</li>
+<li><p>玩家已知信息；</p>
+</li>
+<li><p>当前可用行动；</p>
+</li>
+<li><p>当前阶段剩余时间；</p>
+</li>
+<li><p>未确认私有通知；</p>
+</li>
+<li><p>通讯频道权限；</p>
+</li>
+<li><p>玩家个人事件历史。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-托管策略">19.2 托管策略</h2><p>断线后可选择：</p>
+<ul>
+<li><p>暂停对局；</p>
+</li>
+<li><p>AI托管；</p>
+</li>
+<li><p>自动跳过；</p>
+</li>
+<li><p>角色失去特殊行动；</p>
+</li>
+<li><p>使用安全默认目标；</p>
+</li>
+<li><p>延迟若干秒等待重连；</p>
+</li>
+<li><p>由房主决定处理方式。</p>
+</li>
+</ul>
+<p>对于秘密行动，AI托管不应读取超出该玩家权限的信息。</p>
+<hr />
+<h2 id="193-重复提交">19.3 重复提交</h2><p>重连可能导致同一行动重复发送。</p>
+<p>需要通过：</p>
+<ul>
+<li><p>IntentId；</p>
+</li>
+<li><p>IdempotencyKey；</p>
+</li>
+<li><p>ClientSequence；</p>
+</li>
+<li><p>StateVersion；</p>
+</li>
+</ul>
+<p>避免重复消耗能力或重复投票。</p>
+<hr />
+<h2 id="20-作弊防护">20. 作弊防护</h2><h2 id="201-防止客户端读取隐藏状态">20.1 防止客户端读取隐藏状态</h2><p>关键措施：</p>
+<ul>
+<li><p>不向客户端发送其他玩家身份；</p>
+</li>
+<li><p>不发送不可见行动；</p>
+</li>
+<li><p>不发送隐藏对象再通过前端隐藏；</p>
+</li>
+<li><p>不在资源名称、网络字段或日志中暴露角色；</p>
+</li>
+<li><p>不让客户端生成调查结果；</p>
+</li>
+<li><p>不让客户端计算胜负。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-防止非法行动">20.2 防止非法行动</h2><p>服务端验证：</p>
+<ul>
+<li><p>行动所属角色；</p>
+</li>
+<li><p>当前阶段；</p>
+</li>
+<li><p>玩家生存状态；</p>
+</li>
+<li><p>目标范围；</p>
+</li>
+<li><p>行动次数；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>是否已经提交；</p>
+</li>
+<li><p>是否基于最新状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-防止通讯绕过">20.3 防止通讯绕过</h2><p>技术系统无法完全阻止玩家使用外部通讯工具，但可以：</p>
+<ul>
+<li><p>提供足够好用的内置通讯；</p>
+</li>
+<li><p>在公开匹配中限制组队玩家；</p>
+</li>
+<li><p>标记疑似串通行为；</p>
+</li>
+<li><p>将死亡玩家与存活玩家频道隔离；</p>
+</li>
+<li><p>对高风险模式设置行为规则；</p>
+</li>
+<li><p>提供举报与回放审查。</p>
+</li>
+</ul>
+<hr />
+<h2 id="21-失败隔离">21. 失败隔离</h2><h2 id="211-行动失败隔离">21.1 行动失败隔离</h2><p>单个行动失败不应阻止整个阶段结算。</p>
+<p>结果应结构化为：</p>
+<ul>
+<li><p>Success；</p>
+</li>
+<li><p>InvalidTarget；</p>
+</li>
+<li><p>ActorDisabled；</p>
+</li>
+<li><p>Blocked；</p>
+</li>
+<li><p>ResourceUnavailable；</p>
+</li>
+<li><p>PhaseMismatch；</p>
+</li>
+<li><p>StaleState；</p>
+</li>
+<li><p>DuplicateIntent；</p>
+</li>
+<li><p>RuleConflict；</p>
+</li>
+<li><p>PartialSuccess。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-阶段结算失败">21.2 阶段结算失败</h2><p>阶段解析应使用事务或可回滚快照。</p>
+<p>建议过程：</p>
+<ol>
+<li><p>读取阶段起始快照；</p>
+</li>
+<li><p>构建临时解析状态；</p>
+</li>
+<li><p>执行所有行动；</p>
+</li>
+<li><p>运行不变量检查；</p>
+</li>
+<li><p>成功后一次性提交；</p>
+</li>
+<li><p>失败则回滚并进入安全解析模式。</p>
+</li>
+</ol>
+<p>不得出现一半行动已经提交、另一半因异常未执行的状态。</p>
+<hr />
+<h2 id="213-通讯失败隔离">21.3 通讯失败隔离</h2><p>聊天、语音或讨论服务故障不应破坏核心对局状态。</p>
+<p>需要将：</p>
+<ul>
+<li><p>游戏状态服务；</p>
+</li>
+<li><p>文本聊天；</p>
+</li>
+<li><p>语音通讯；</p>
+</li>
+<li><p>录像服务；</p>
+</li>
+</ul>
+<p>分离部署或至少分离故障域。</p>
+<hr />
+<h2 id="214-投票失败隔离">21.4 投票失败隔离</h2><p>投票系统应保存每张选票的幂等记录。</p>
+<p>如果结算中断，可以从已接收选票重新计算，而不是要求玩家重新投票。</p>
+<hr />
+<h2 id="215-非法配置隔离">21.5 非法配置隔离</h2><p>角色或规则配置加载时应检测：</p>
+<ul>
+<li><p>无法达到的胜利条件；</p>
+</li>
+<li><p>没有合法目标的能力；</p>
+</li>
+<li><p>行动优先级循环；</p>
+</li>
+<li><p>身份数量超过玩家数量；</p>
+</li>
+<li><p>阵营人数配置非法；</p>
+</li>
+<li><p>投票规则没有平票策略；</p>
+</li>
+<li><p>阶段没有退出条件。</p>
+</li>
+</ul>
+<p>非法规则集不得进入正式匹配。</p>
+<hr />
+<h2 id="22-调试与可观测性">22. 调试与可观测性</h2><p>该类型最难调试的问题通常不是单一系统错误，而是：</p>
+<ul>
+<li><p>某玩家为什么看到了不该看到的信息；</p>
+</li>
+<li><p>某行动为什么没有生效；</p>
+</li>
+<li><p>某投票为什么得到这一结果；</p>
+</li>
+<li><p>某阵营为什么提前胜利；</p>
+</li>
+<li><p>同一对局中不同客户端为何显示不一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="221-权威状态检查器">22.1 权威状态检查器</h2><p>应支持查看：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>完整真实身份；</p>
+</li>
+<li><p>全部行动意图；</p>
+</li>
+<li><p>全部待结算效果；</p>
+</li>
+<li><p>每名玩家私有状态；</p>
+</li>
+<li><p>胜负条件进度；</p>
+</li>
+<li><p>当前StateVersion。</p>
+</li>
+</ul>
+<p>正式客户端不能访问该面板。</p>
+<hr />
+<h2 id="222-玩家视角模拟器">22.2 玩家视角模拟器</h2><p>可以选择任一玩家，查看服务器理论上下发给该玩家的完整视图：</p>
+<ul>
+<li><p>能看到谁；</p>
+</li>
+<li><p>知道哪些身份；</p>
+</li>
+<li><p>收到哪些结果；</p>
+</li>
+<li><p>可以使用哪些行动；</p>
+</li>
+<li><p>可加入哪些频道；</p>
+</li>
+<li><p>可查看哪些证据。</p>
+</li>
+</ul>
+<p>这是发现信息泄漏最重要的工具。</p>
+<hr />
+<h2 id="223-行动解析追踪器">22.3 行动解析追踪器</h2><p>对每个ActionIntent显示：</p>
+<ul>
+<li><p>验证结果；</p>
+</li>
+<li><p>优先级；</p>
+</li>
+<li><p>依赖行动；</p>
+</li>
+<li><p>阻断来源；</p>
+</li>
+<li><p>修改前状态；</p>
+</li>
+<li><p>修改后状态；</p>
+</li>
+<li><p>私有结果；</p>
+</li>
+<li><p>公开结果；</p>
+</li>
+<li><p>关联证据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="224-阶段时间线">22.4 阶段时间线</h2><p>按顺序显示：</p>
+<ul>
+<li><p>阶段切换；</p>
+</li>
+<li><p>玩家提交；</p>
+</li>
+<li><p>超时；</p>
+</li>
+<li><p>断线；</p>
+</li>
+<li><p>行动解析；</p>
+</li>
+<li><p>状态提交；</p>
+</li>
+<li><p>私有通知；</p>
+</li>
+<li><p>投票；</p>
+</li>
+<li><p>胜负检查。</p>
+</li>
+</ul>
+<hr />
+<h2 id="225-可见性审计">22.5 可见性审计</h2><p>系统应记录每条敏感信息：</p>
+<ul>
+<li><p>原始事件；</p>
+</li>
+<li><p>接收玩家；</p>
+</li>
+<li><p>可见性规则；</p>
+</li>
+<li><p>裁剪结果；</p>
+</li>
+<li><p>下发时间；</p>
+</li>
+<li><p>客户端确认状态。</p>
+</li>
+</ul>
+<p>这样才能追踪“某玩家为何知道该信息”。</p>
+<hr />
+<h2 id="226-确定性回放">22.6 确定性回放</h2><p>回放应基于：</p>
+<ul>
+<li><p>初始对局配置；</p>
+</li>
+<li><p>身份分配结果；</p>
+</li>
+<li><p>玩家命令；</p>
+</li>
+<li><p>随机调用记录；</p>
+</li>
+<li><p>阶段切换；</p>
+</li>
+<li><p>服务端状态事件。</p>
+</li>
+</ul>
+<p>语音和自由文本可以作为旁路媒体记录，不应成为恢复权威状态所必需的数据。</p>
+<hr />
+<h2 id="23-性能与扩展性">23. 性能与扩展性</h2><p>社交推理游戏的玩家规模通常不如大型动作游戏，但对一致性和隐私隔离要求更高。</p>
+<h2 id="231-房间级隔离">23.1 房间级隔离</h2><p>每场对局作为独立Actor或MatchInstance运行。</p>
+<p>每个对局实例拥有：</p>
+<ul>
+<li><p>独立状态；</p>
+</li>
+<li><p>独立命令队列；</p>
+</li>
+<li><p>独立随机流；</p>
+</li>
+<li><p>独立计时器；</p>
+</li>
+<li><p>独立事件日志。</p>
+</li>
+</ul>
+<p>一个房间的异常不应影响其他房间。</p>
+<hr />
+<h2 id="232-单线程顺序提交">23.2 单线程顺序提交</h2><p>单场对局推荐采用逻辑单线程或串行命令队列。</p>
+<p>这可以避免：</p>
+<ul>
+<li><p>两个行动同时修改玩家状态；</p>
+</li>
+<li><p>投票结算和阶段结束竞争；</p>
+</li>
+<li><p>重连恢复与状态推进竞争；</p>
+</li>
+<li><p>胜负检查重复执行。</p>
+</li>
+</ul>
+<p>不同房间之间可以并行。</p>
+<hr />
+<h2 id="233-增量投影">23.3 增量投影</h2><p>不必每次向客户端发送完整个人视图。</p>
+<p>可以发送：</p>
+<ul>
+<li><p>StateVersion；</p>
+</li>
+<li><p>PublicDelta；</p>
+</li>
+<li><p>PrivateDelta；</p>
+</li>
+<li><p>AvailableActionDelta；</p>
+</li>
+<li><p>TimerUpdate；</p>
+</li>
+<li><p>CommunicationPermissionDelta。</p>
+</li>
+</ul>
+<p>但敏感增量必须经过服务端可见性过滤。</p>
+<hr />
+<h2 id="24-可扩展点">24. 可扩展点</h2><h2 id="241-新角色">24.1 新角色</h2><p>新增角色主要配置：</p>
+<ul>
+<li><p>阵营兼容性；</p>
+</li>
+<li><p>可用行动；</p>
+</li>
+<li><p>行动优先级；</p>
+</li>
+<li><p>目标规则；</p>
+</li>
+<li><p>可见性规则；</p>
+</li>
+<li><p>被动触发；</p>
+</li>
+<li><p>死亡行为；</p>
+</li>
+<li><p>胜负修正。</p>
+</li>
+</ul>
+<p>不应修改核心阶段系统和投票系统。</p>
+<hr />
+<h2 id="242-新阵营">24.2 新阵营</h2><p>新增阵营需要提供：</p>
+<ul>
+<li><p>成员认知规则；</p>
+</li>
+<li><p>私聊规则；</p>
+</li>
+<li><p>胜负条件；</p>
+</li>
+<li><p>转化规则；</p>
+</li>
+<li><p>与其他阵营关系；</p>
+</li>
+<li><p>身份公开策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-新行动">24.3 新行动</h2><p>新增行动通过：</p>
+<ul>
+<li><p>ActionDefinition；</p>
+</li>
+<li><p>Validator；</p>
+</li>
+<li><p>Resolver；</p>
+</li>
+<li><p>VisibilityPolicy；</p>
+</li>
+<li><p>EvidencePolicy；</p>
+</li>
+<li><p>ResultProjection；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="244-新投票机制">24.4 新投票机制</h2><p>投票系统应支持替换：</p>
+<ul>
+<li><p>权重算法；</p>
+</li>
+<li><p>可见性；</p>
+</li>
+<li><p>平票策略；</p>
+</li>
+<li><p>选民范围；</p>
+</li>
+<li><p>候选目标；</p>
+</li>
+<li><p>结算效果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="245-新阶段结构">24.5 新阶段结构</h2><p>应允许规则集定义：</p>
+<ul>
+<li><p>是否存在昼夜；</p>
+</li>
+<li><p>是否自由移动；</p>
+</li>
+<li><p>是否每轮都有讨论；</p>
+</li>
+<li><p>是否允许连续投票；</p>
+</li>
+<li><p>是否存在领导者提名；</p>
+</li>
+<li><p>是否存在私密谈判阶段。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-玩家体验设计">25. 玩家体验设计</h2><h2 id="251-玩家必须知道自己能做什么">25.1 玩家必须知道自己能做什么</h2><p>秘密规则不等于操作规则不清楚。</p>
+<p>玩家界面应清楚说明：</p>
+<ul>
+<li><p>当前阶段；</p>
+</li>
+<li><p>可执行行动；</p>
+</li>
+<li><p>合法目标；</p>
+</li>
+<li><p>剩余时间；</p>
+</li>
+<li><p>是否允许修改选择；</p>
+</li>
+<li><p>行动结果何时公布；</p>
+</li>
+<li><p>哪些信息可以公开分享。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-信息必须具有来源感">25.2 信息必须具有来源感</h2><p>玩家应能区分：</p>
+<ul>
+<li><p>自己亲眼看到；</p>
+</li>
+<li><p>系统确认；</p>
+</li>
+<li><p>角色能力获得；</p>
+</li>
+<li><p>其他玩家声称；</p>
+</li>
+<li><p>公开日志显示；</p>
+</li>
+<li><p>自己推断。</p>
+</li>
+</ul>
+<p>不同来源应使用不同的视觉语义。</p>
+<hr />
+<h2 id="253-允许撒谎但不制造界面误导">25.3 允许撒谎，但不制造界面误导</h2><p>游戏应允许玩家在叙事层撒谎。</p>
+<p>但系统界面不能通过模糊设计使玩家误认为：</p>
+<ul>
+<li><p>玩家声明是系统事实；</p>
+</li>
+<li><p>非法行动已经成功；</p>
+</li>
+<li><p>投票已经提交但实际未提交；</p>
+</li>
+<li><p>私密频道消息发到了公开频道。</p>
+</li>
+</ul>
+<p>玩家欺骗和系统欺骗必须严格分离。</p>
+<hr />
+<h2 id="254-淘汰玩家仍应有参与感">25.4 淘汰玩家仍应有参与感</h2><p>过早淘汰会产生长时间等待。</p>
+<p>可采用：</p>
+<ul>
+<li><p>死亡玩家专属任务；</p>
+</li>
+<li><p>幽灵观察与有限干预；</p>
+</li>
+<li><p>死亡阵营私聊；</p>
+</li>
+<li><p>预测剩余玩家身份；</p>
+</li>
+<li><p>提供结算竞猜；</p>
+</li>
+<li><p>缩短单局时间；</p>
+</li>
+<li><p>延迟揭示身份，保持观察乐趣。</p>
+</li>
+</ul>
+<p>死亡玩家的能力不能破坏仍在进行的推理公平性。</p>
+<hr />
+<h2 id="255-对局应产生可复述故事">25.5 对局应产生可复述故事</h2><p>优秀的社交推理对局通常能被玩家复述：</p>
+<ul>
+<li><p>某人如何伪造身份；</p>
+</li>
+<li><p>某次投票如何反转；</p>
+</li>
+<li><p>某条证据如何被误读；</p>
+</li>
+<li><p>某个盟友何时背叛；</p>
+</li>
+<li><p>某名玩家如何用真实信息完成错误引导。</p>
+</li>
+</ul>
+<p>系统应支持形成因果明确、责任可归属的对局故事。</p>
+<hr />
+<h2 id="26-平衡设计">26. 平衡设计</h2><h2 id="261-不只平衡胜率">26.1 不只平衡胜率</h2><p>需要同时观察：</p>
+<ul>
+<li><p>阵营胜率；</p>
+</li>
+<li><p>角色胜率；</p>
+</li>
+<li><p>首轮淘汰率；</p>
+</li>
+<li><p>信息产出量；</p>
+</li>
+<li><p>发言影响力；</p>
+</li>
+<li><p>被指控率；</p>
+</li>
+<li><p>能力使用率；</p>
+</li>
+<li><p>平均存活时间；</p>
+</li>
+<li><p>单局时长；</p>
+</li>
+<li><p>玩家掉线率；</p>
+</li>
+<li><p>同角色重复游玩的体验差异。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-信息强度预算">26.2 信息强度预算</h2><p>每个阵营每轮能产生的信息应有预算。</p>
+<p>信息能力可以分为：</p>
+<ul>
+<li><p>确认型；</p>
+</li>
+<li><p>排除型；</p>
+</li>
+<li><p>关联型；</p>
+</li>
+<li><p>位置型；</p>
+</li>
+<li><p>行为型；</p>
+</li>
+<li><p>概率型；</p>
+</li>
+<li><p>反信息型；</p>
+</li>
+<li><p>伪造型。</p>
+</li>
+</ul>
+<p>如果好人阵营拥有过多确认型信息，对局会迅速被解出。</p>
+<p>如果敌对阵营拥有过多完全不可验证的干扰，对局会变成随机投票。</p>
+<hr />
+<h2 id="263-行动权与发言权平衡">26.3 行动权与发言权平衡</h2><p>某角色即使能力较弱，也可能因：</p>
+<ul>
+<li><p>公开身份可信；</p>
+</li>
+<li><p>信息容易证明；</p>
+</li>
+<li><p>发言阶段具有额外权力；</p>
+</li>
+<li><p>投票权重更高；</p>
+</li>
+</ul>
+<p>而成为强势角色。</p>
+<p>因此角色平衡不能只计算秘密行动效果。</p>
+<hr />
+<h2 id="27-常见设计失败">27. 常见设计失败</h2><h2 id="271-信息过于确定">27.1 信息过于确定</h2><p>调查能力直接给出完整身份，且无法干扰。</p>
+<p>结果是玩家只需依次报答案，讨论退化为验证发言者真假。</p>
+<hr />
+<h2 id="272-信息过于随机">27.2 信息过于随机</h2><p>所有调查都可能随机错误，且玩家无法判断可靠程度。</p>
+<p>此时推理失去基础，玩家只能依赖直觉。</p>
+<hr />
+<h2 id="273-谎言没有成本">27.3 谎言没有成本</h2><p>玩家可以每轮随意改变说法，系统不保留任何声明历史。</p>
+<p>这会使叙事缺少可追责性。</p>
+<p>可以保留：</p>
+<ul>
+<li><p>公开指控记录；</p>
+</li>
+<li><p>角色声明；</p>
+</li>
+<li><p>投票立场；</p>
+</li>
+<li><p>玩家主动公开的证据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="274-秘密阵营只能杀人">27.4 秘密阵营只能杀人</h2><p>如果敌对阵营只有淘汰能力，没有：</p>
+<ul>
+<li><p>伪装；</p>
+</li>
+<li><p>干扰；</p>
+</li>
+<li><p>误导；</p>
+</li>
+<li><p>篡改；</p>
+</li>
+<li><p>分化；</p>
+</li>
+<li><p>交易；</p>
+</li>
+</ul>
+<p>游戏会退化为简单人数竞赛。</p>
+<hr />
+<h2 id="275-角色数量过多但交互很少">27.5 角色数量过多但交互很少</h2><p>大量角色各自运行独立规则，彼此无法产生组合关系。</p>
+<p>这会增加记忆负担，却不增加推理深度。</p>
+<hr />
+<h2 id="276-客户端持有完整秘密">27.6 客户端持有完整秘密</h2><p>即使界面没有显示，客户端内存或网络数据中存在所有身份，也会造成严重作弊风险。</p>
+<hr />
+<h2 id="277-淘汰时间过长">27.7 淘汰时间过长</h2><p>首轮被淘汰的玩家需要等待二三十分钟，且没有任何参与内容。</p>
+<p>这会显著增加退出率和消极游戏行为。</p>
+<hr />
+<h2 id="278-胜负突然触发且无法解释">27.8 胜负突然触发且无法解释</h2><p>玩家不知道为何某阵营获胜。</p>
+<p>结算界面应说明：</p>
+<ul>
+<li><p>哪项胜利条件被满足；</p>
+</li>
+<li><p>何时满足；</p>
+</li>
+<li><p>哪些关键事件导致结果；</p>
+</li>
+<li><p>是否存在个人胜利者。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-最小可行原型">28. 最小可行原型</h2><p>一个可验证该范式的最小版本可以包含：</p>
+<h3 id="玩家数量">玩家数量</h3><p>8名玩家。</p>
+<h3 id="阵营">阵营</h3><ul>
+<li><p>6名调查阵营；</p>
+</li>
+<li><p>2名潜伏阵营。</p>
+</li>
+</ul>
+<h3 id="角色">角色</h3><ul>
+<li><p>普通成员；</p>
+</li>
+<li><p>调查员；</p>
+</li>
+<li><p>守卫；</p>
+</li>
+<li><p>潜伏者；</p>
+</li>
+<li><p>干扰者。</p>
+</li>
+</ul>
+<h3 id="阶段">阶段</h3><ul>
+<li><p>夜间行动；</p>
+</li>
+<li><p>白天结算；</p>
+</li>
+<li><p>公开讨论；</p>
+</li>
+<li><p>放逐投票。</p>
+</li>
+</ul>
+<h3 id="行动">行动</h3><ul>
+<li><p>攻击；</p>
+</li>
+<li><p>保护；</p>
+</li>
+<li><p>调查；</p>
+</li>
+<li><p>干扰；</p>
+</li>
+<li><p>弃权。</p>
+</li>
+</ul>
+<h3 id="信息">信息</h3><ul>
+<li><p>调查结果只提供阵营倾向；</p>
+</li>
+<li><p>保护结果不公开；</p>
+</li>
+<li><p>干扰者可以让一次调查结果变为模糊；</p>
+</li>
+<li><p>死亡只公开角色类别，不公开完整身份。</p>
+</li>
+</ul>
+<h3 id="胜负">胜负</h3><ul>
+<li><p>调查阵营淘汰全部潜伏者；</p>
+</li>
+<li><p>潜伏阵营人数达到其他存活玩家人数。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>服务端权威身份；</p>
+</li>
+<li><p>显式阶段状态机；</p>
+</li>
+<li><p>行动优先级；</p>
+</li>
+<li><p>玩家独立视图；</p>
+</li>
+<li><p>投票系统；</p>
+</li>
+<li><p>完整对局审计日志；</p>
+</li>
+<li><p>重连恢复。</p>
+</li>
+</ul>
+<p>该原型已经能够验证：</p>
+<ul>
+<li><p>身份隐藏；</p>
+</li>
+<li><p>信息差；</p>
+</li>
+<li><p>行动冲突；</p>
+</li>
+<li><p>公开叙事；</p>
+</li>
+<li><p>集体裁决；</p>
+</li>
+<li><p>阵营胜负。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-推荐实施顺序">29. 推荐实施顺序</h2><p>第一阶段：对局状态与服务端权威模型
+第二阶段：身份、阵营与胜负条件
+第三阶段：显式阶段状态机
+第四阶段：行动意图、验证与解析
+第五阶段：信息裁剪与玩家视图投影
+第六阶段：讨论频道与投票
+第七阶段：断线重连与幂等提交
+第八阶段：事件日志与确定性回放
+第九阶段：角色、证据和干扰能力扩展
+第十阶段：匹配、举报、行为治理与数据分析</p>
+<p>不建议在信息裁剪和审计机制尚未稳定时，先制作大量角色。</p>
+<p>角色数量越多，行动冲突、信息泄漏和规则歧义越难修复。</p>
+<hr />
+<h2 id="30-架构验收标准">30. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>客户端无法获得无权限的身份和行动信息；</p>
+</li>
+<li><p>所有关键行动都由服务端验证；</p>
+</li>
+<li><p>同一阶段的行动结果具有确定性；</p>
+</li>
+<li><p>每条私有信息都能追踪其可见性依据；</p>
+</li>
+<li><p>玩家断线后能够恢复完整个人视图；</p>
+</li>
+<li><p>重复提交不会重复消耗资源；</p>
+</li>
+<li><p>投票结果可以从审计记录重新计算；</p>
+</li>
+<li><p>胜负条件具有明确触发原因；</p>
+</li>
+<li><p>新增角色不需要修改核心阶段流程；</p>
+</li>
+<li><p>新增阵营可通过配置接入胜负系统；</p>
+</li>
+<li><p>玩家声明与系统事实在界面上明确区分；</p>
+</li>
+<li><p>淘汰玩家不会获得影响存活玩家的非法信息；</p>
+</li>
+<li><p>对局能够通过事件日志进行确定性回放；</p>
+</li>
+<li><p>单个对局异常不会影响其他对局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="31-可迁移到其他游戏的设计思想">31. 可迁移到其他游戏的设计思想</h2><h2 id="311-真实状态与玩家视图分离">31.1 真实状态与玩家视图分离</h2><p>可迁移到：</p>
+<ul>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>潜行游戏；</p>
+</li>
+<li><p>策略游戏；</p>
+</li>
+<li><p>卡牌游戏；</p>
+</li>
+<li><p>非对称竞技；</p>
+</li>
+<li><p>剧情调查游戏。</p>
+</li>
+</ul>
+<p>服务端维护真实状态，为不同玩家生成不同投影，而不是向所有客户端发送完整状态。</p>
+<hr />
+<h2 id="312-系统验证行为不验证叙事">31.2 系统验证行为，不验证叙事</h2><p>可迁移到：</p>
+<ul>
+<li><p>外交系统；</p>
+</li>
+<li><p>玩家交易；</p>
+</li>
+<li><p>阵营谈判；</p>
+</li>
+<li><p>沙盒政治；</p>
+</li>
+<li><p>公会战争。</p>
+</li>
+</ul>
+<p>系统确保行为规则合法，但允许玩家在规则内欺骗、承诺和背叛。</p>
+<hr />
+<h2 id="313-信息是一种可设计资源">31.3 信息是一种可设计资源</h2><p>信息可以具有：</p>
+<ul>
+<li><p>获取成本；</p>
+</li>
+<li><p>精度；</p>
+</li>
+<li><p>时效；</p>
+</li>
+<li><p>来源；</p>
+</li>
+<li><p>可验证性；</p>
+</li>
+<li><p>可传播性；</p>
+</li>
+<li><p>可篡改性。</p>
+</li>
+</ul>
+<p>这一思想可以用于几乎所有包含侦察、探索或决策的游戏。</p>
+<hr />
+<h2 id="314-集体决策是实际玩法系统">31.4 集体决策是实际玩法系统</h2><p>投票、提名和审判不只是UI。</p>
+<p>它们需要：</p>
+<ul>
+<li><p>资格；</p>
+</li>
+<li><p>权重；</p>
+</li>
+<li><p>可见性；</p>
+</li>
+<li><p>平票规则；</p>
+</li>
+<li><p>结算效果；</p>
+</li>
+<li><p>审计记录。</p>
+</li>
+</ul>
+<p>可迁移到：</p>
+<ul>
+<li><p>战略游戏；</p>
+</li>
+<li><p>公会治理；</p>
+</li>
+<li><p>合作生存；</p>
+</li>
+<li><p>多人剧情；</p>
+</li>
+<li><p>阵营战争。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-认知状态不等于世界状态">31.5 认知状态不等于世界状态</h2><p>角色应该依据自己知道的信息行动。</p>
+<p>该思想同样适用于AI：</p>
+<ul>
+<li><p>AI可能记错；</p>
+</li>
+<li><p>AI可能被欺骗；</p>
+</li>
+<li><p>AI可能只知道最后位置；</p>
+</li>
+<li><p>AI可能从他人处获得二手情报。</p>
+</li>
+</ul>
+<hr />
+<h2 id="316-使用个人投影保护复杂状态">31.6 使用个人投影保护复杂状态</h2><p>当一个系统包含大量权限和隐私时，不应让客户端自行判断隐藏哪些字段。</p>
+<p>应在服务端生成面向具体接收者的投影。</p>
+<p>该设计可以迁移到：</p>
+<ul>
+<li><p>企业权限系统；</p>
+</li>
+<li><p>多租户平台；</p>
+</li>
+<li><p>战术游戏观战；</p>
+</li>
+<li><p>玩家私人任务；</p>
+</li>
+<li><p>隐藏库存和秘密目标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="317-公开事实个人知识与玩家声明三层分离">31.7 公开事实、个人知识与玩家声明三层分离</h2><p>这是该类型最有迁移价值的思想之一。</p>
+<p>公开事实：</p>
+<ul>
+<li>系统确认发生的内容。</li>
+</ul>
+<p>个人知识：</p>
+<ul>
+<li>某个角色通过观察或能力知道的内容。</li>
+</ul>
+<p>玩家声明：</p>
+<ul>
+<li>玩家选择向他人表达的内容。</li>
+</ul>
+<p>三者分离后，游戏才能同时支持：</p>
+<ul>
+<li><p>推理；</p>
+</li>
+<li><p>欺骗；</p>
+</li>
+<li><p>误解；</p>
+</li>
+<li><p>证据；</p>
+</li>
+<li><p>责任追踪；</p>
+</li>
+<li><p>社会博弈。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-本次防重记录">32. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>社交推理与隐藏身份游戏。</p>
+<h3 id="核心范式">核心范式</h3><p>由权威服务器维护唯一真实状态，并依据身份、位置、能力和事件上下文，为每名玩家生成不同的个人信息投影；玩家在不完全信息条件下执行秘密行动、公开发表声明，再通过投票或其他公共机制将社会判断转化为实际世界状态变化。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>隐藏身份或隐藏目标；</p>
+</li>
+<li><p>玩家掌握的信息不一致；</p>
+</li>
+<li><p>客观事实、个人知识和公开声明相互分离；</p>
+</li>
+<li><p>秘密行动与公开讨论交替进行；</p>
+</li>
+<li><p>玩家可以在规则允许范围内撒谎；</p>
+</li>
+<li><p>集体判断会改变对局状态；</p>
+</li>
+<li><p>信息来源、可靠性和可验证性构成核心资源；</p>
+</li>
+<li><p>服务器需要执行严格的信息裁剪；</p>
+</li>
+<li><p>行动冲突需要确定性结算；</p>
+</li>
+<li><p>对局必须具备完整审计和回放能力。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>隐藏身份与阵营分配；</p>
+</li>
+<li><p>昼夜阶段循环；</p>
+</li>
+<li><p>秘密行动解析；</p>
+</li>
+<li><p>信息可见性裁剪；</p>
+</li>
+<li><p>认知与证据系统；</p>
+</li>
+<li><p>公开讨论；</p>
+</li>
+<li><p>投票与集体裁决；</p>
+</li>
+<li><p>断线重连；</p>
+</li>
+<li><p>隐藏信息防作弊；</p>
+</li>
+<li><p>对局审计与确定性回放。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>狼人杀式昼夜系统；</p>
+</li>
+<li><p>身份调查系统；</p>
+</li>
+<li><p>玩家投票放逐系统；</p>
+</li>
+<li><p>秘密阵营通讯；</p>
+</li>
+<li><p>社交推理证据系统；</p>
+</li>
+<li><p>隐藏身份信息同步；</p>
+</li>
+<li><p>社交推理角色能力框架；</p>
+</li>
+<li><p>多人讨论与发言权系统；</p>
+</li>
+<li><p>社交推理断线重连机制。</p>
+</li>
+</ul>
+<p>这些主题可以作为专项模块进一步深入，但不能再次作为新的宏观游戏类型计入日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

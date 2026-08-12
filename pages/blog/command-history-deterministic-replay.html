@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/command-history-deterministic-replay.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Command 历史：可逆操作、随机状态回卷与确定性 Replay | IrisSakura">
+    <meta property="og:description" content="游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/command-history-deterministic-replay.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-command-history-deterministic-replay.png">
+    <meta property="og:image:alt" content="Command 历史：可逆操作、随机状态回卷与确定性 Replay 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Command 历史：可逆操作、随机状态回卷与确定性 Replay | IrisSakura">
+    <meta name="twitter:description" content="游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-command-history-deterministic-replay.png">
+    <meta name="twitter:image:alt" content="Command 历史：可逆操作、随机状态回卷与确定性 Replay 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Command 历史：可逆操作、随机状态回卷与确定性 Replay | IrisSakura","description":"游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。","url":"https://irissakura.github.io/pages/blog/command-history-deterministic-replay.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Command 历史：可逆操作、随机状态回卷与确定性 Replay","image":"https://irissakura.github.io/assets/social/pages-blog-command-history-deterministic-replay.png","datePublished":"2026-08-05","dateModified":"2026-08-05","about":["command","replay"]}</script>
+    <!-- site-meta:end -->
+    <title>Command 历史：可逆操作、随机状态回卷与确定性 Replay | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-05</p>
+            <h1>Command 历史：可逆操作、随机状态回卷与确定性 Replay</h1>
+            <p class="blog-deck">游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。</p>
+            <div class="note-tags"><span>command</span><span>replay</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>很多游戏在实现撤销时，会先想到保存一份状态快照。</p>
+<p>玩家每行动一次，就复制当前数据；需要回退时，再把上一份快照覆盖回来。</p>
+<p>这种方式简单直接，但很快会遇到问题：</p>
+<ul>
+<li>快照应该包含哪些对象；</li>
+<li>引用关系如何深拷贝；</li>
+<li>随机数状态如何恢复；</li>
+<li>撤销后执行新操作时，旧的重做分支怎么办；</li>
+<li>存档是否需要保存整个世界；</li>
+<li>Bug 回放如何知道玩家做过什么；</li>
+<li>版本升级后旧快照能否继续读取。</li>
+</ul>
+<p>另一种方案是只记录输入。</p>
+<p>但原始按键并不总能稳定重建业务动作：</p>
+<ul>
+<li>输入映射可能变化；</li>
+<li>同一按键在不同状态下含义不同；</li>
+<li>UI、网络和 AI 可能不经过玩家输入；</li>
+<li>帧率和时间源会影响操作解释。</li>
+</ul>
+<p>Sakura Framework 的 Command 模块选择记录业务命令历史，并用快照、随机状态和工厂重建补足可逆性。</p>
+<h2 id="先说结论保存动作语义而不是只保存按键或最终状态">先说结论：保存动作语义，而不是只保存按键或最终状态</h2><p><strong>业务命令历史（后文简称“做过什么的账本”）</strong>：按确定顺序记录已经执行的可逆业务动作、参数和随机状态边界，并维护当前历史指针。</p>
+<p>做过什么的账本位于输入和最终状态之间：</p>
+<pre><code>flowchart LR
+    A["玩家 / AI / 网络意图"] --&gt; B["业务 Command"]
+    B --&gt; C["Execute"]
+    C --&gt; D["游戏状态"]
+    B --&gt; E["Command History"]
+    E --&gt; F["Undo / Redo"]
+    E --&gt; G["Replay Export"]
+    G --&gt; H["Save / 调试 / 重演"]
+</code></pre>
+<p>它适合：</p>
+<ul>
+<li>回合制战斗；</li>
+<li>棋盘与卡牌；</li>
+<li>解谜；</li>
+<li>建造编辑；</li>
+<li>战术规划；</li>
+<li>局内回退；</li>
+<li>确定性测试；</li>
+<li>轻量级操作录像。</li>
+</ul>
+<p>对于高度连续的物理模拟，它通常需要与状态快照或专门 Rollback 系统结合。</p>
+<h2 id="commandid-是持久化合同">CommandId 是持久化合同</h2><p>一个可序列化命令至少需要：</p>
+<ul>
+<li>稳定 <code>CommandId</code>；</li>
+<li><code>Execute()</code>；</li>
+<li><code>Undo()</code>；</li>
+<li>Payload 序列化；</li>
+<li>Payload 反序列化。</li>
+</ul>
+<p><code>CommandId</code> 不应直接使用运行时类型全名。</p>
+<p>类型名会随着命名空间调整、程序集拆分、代码重构和引擎迁移发生变化。</p>
+<p><strong>稳定命令标识（后文简称“动作身份证”）</strong>：由项目长期维护、独立于具体类名的 Command Key，用于 Replay 和存档中的工厂映射。</p>
+<p>例如：</p>
+<pre><code>battle.attack
+inventory.move-item
+map.place-building
+dialogue.choose-option
+</code></pre>
+<p>动作身份证一旦进入持久化数据，就应受到版本和迁移策略保护。</p>
+<p>它不是为了让反射更方便，而是为了避免 Replay 获得任意类型创建能力。</p>
+<h2 id="工厂注册控制可重建动作集合">工厂注册控制可重建动作集合</h2><p>加载 Replay 时，系统需要根据 <code>CommandId</code> 创建命令实例。</p>
+<p>如果直接反射实例化任意类型，外部数据便可能要求运行未授权代码。</p>
+<p>因此 Command Service 使用显式工厂目录：</p>
+<pre><code>CommandId
+→ 已登记 Factory
+→ 创建命令
+→ 反序列化 Payload
+→ 加入待重演历史
+</code></pre>
+<p><strong>命令工厂白名单（后文简称“只重建项目认识的动作”）</strong>：只有项目当前 Scope 明确登记的 CommandId 才能从 Replay 恢复。</p>
+<p>缺少工厂时，应整体拒绝本次加载并清空半成品历史。</p>
+<p>不能跳过未知命令后继续播放，因为后续状态可能建立在被跳过的动作之上。</p>
+<h2 id="历史指针统一-undoredo-和分支">历史指针统一 Undo、Redo 和分支</h2><p>Command 历史不是两个互相独立的栈。</p>
+<p>更容易解释的模型是：</p>
+<pre><code>[C0, C1, C2, C3]
+         ↑
+     当前指针
+</code></pre>
+<ul>
+<li>指针左侧和当前位置是已执行分支；</li>
+<li>指针右侧是可 Redo 分支；</li>
+<li>Undo 让指针左移；</li>
+<li>Redo 让指针右移并重新执行；</li>
+<li>在中间位置执行新命令时，右侧旧分支被擦除。</li>
+</ul>
+<pre><code>flowchart LR
+    A["执行 C0、C1、C2"] --&gt; B["Undo C2"]
+    B --&gt; C["Undo C1"]
+    C --&gt; D["执行新命令 N"]
+    D --&gt; E["删除旧 C1、C2 的 Redo 分支"]
+</code></pre>
+<p>系统不应保留一条已经被新行动否定的隐形未来，除非产品明确设计了多时间线。</p>
+<h2 id="snapshot-负责恢复对象command-负责表达动作">Snapshot 负责恢复对象，Command 负责表达动作</h2><p>单纯依靠反向逻辑实现 <code>Undo()</code>，很容易遗漏状态。</p>
+<p>例如一次攻击可能同时修改：</p>
+<ul>
+<li>生命；</li>
+<li>护盾；</li>
+<li>Buff；</li>
+<li>连击；</li>
+<li>行动点；</li>
+<li>任务计数。</li>
+</ul>
+<p>要求每个命令手写完整反向操作，维护成本很高。</p>
+<p><strong>状态自愈快照（后文简称“行动前留底”）</strong>：命令执行前捕获目标状态，撤销时恢复前置快照。</p>
+<p>Command 与 Memento 的分工是：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>结构</td>
+<td>负责内容</td>
+</tr>
+<tr>
+<td>Command</td>
+<td>描述执行了什么、参数是什么、如何进入历史</td>
+</tr>
+<tr>
+<td>Snapshot</td>
+<td>保存目标在执行前的可恢复状态</td>
+</tr>
+<tr>
+<td>CommandService</td>
+<td>管理顺序、指针、分支和 Replay</td>
+</tr>
+<tr>
+<td>Adapter</td>
+<td>提供引擎时间、版本和随机状态</td>
+</tr>
+</tbody></table>
+<p>行动前留底不意味着复制整个游戏世界。</p>
+<p>更合适的是按可逆边界捕获：</p>
+<ul>
+<li>单个棋盘；</li>
+<li>一组战斗状态；</li>
+<li>当前建造事务；</li>
+<li>一个编辑文档；</li>
+<li>某个业务聚合根。</li>
+</ul>
+<p>快照过大会增加内存和序列化成本，过小则无法保证撤销完整。</p>
+<h2 id="随机数也属于前置状态">随机数也属于前置状态</h2><p>假设一个命令执行时进行了三次随机抽取。</p>
+<p>撤销命令只恢复生命和手牌，却没有恢复随机流。下一次重新执行时，结果会不同。</p>
+<p>这会破坏：</p>
+<ul>
+<li>Redo；</li>
+<li>Replay；</li>
+<li>Bug 复现；</li>
+<li>确定性测试；</li>
+<li>回合回退。</li>
+</ul>
+<p>因此，Command Service 在执行前记录当前随机抽取次数，并允许 Adapter 注入：</p>
+<ul>
+<li>Seed Provider；</li>
+<li>Draw Count Provider；</li>
+<li>Restore Handler。</li>
+</ul>
+<p><strong>随机流回卷（后文简称“连随机进度一起退”）</strong>：Undo 时恢复到该命令执行前的随机种子与抽取位置。</p>
+<p>只记录 Seed 通常不够。</p>
+<p>如果随机生成器已经消费若干次，同一 Seed 的起点无法表示当前进度。</p>
+<p>记录 Draw Count 后，Adapter 可以重建随机流：</p>
+<pre><code>初始化 Seed
+→ 按记录次数推进
+→ 回到命令执行前的位置
+</code></pre>
+<p>这要求项目使用可控的伪随机实例，而不是在业务中散落调用不可追踪的全局随机 API。</p>
+<h2 id="replay-导出当前有效分支">Replay 导出当前有效分支</h2><p>玩家执行：</p>
+<pre><code>A → B → C
+</code></pre>
+<p>随后 Undo 到 A，再执行 D，真实历史已经变成：</p>
+<pre><code>A → D
+</code></pre>
+<p>Replay 不应继续导出被放弃的 B、C。</p>
+<p>因此，导出数据只包含当前指针之前的有效分支。</p>
+<p>一份轻量 Replay 通常包括：</p>
+<ul>
+<li>Game Version；</li>
+<li>初始状态元数据；</li>
+<li>Random Seed；</li>
+<li>Command Sequence；</li>
+<li>每条命令的 CommandId；</li>
+<li>Payload；</li>
+<li>可选时间戳；</li>
+<li>命令执行前的 RNG Draw Count。</li>
+</ul>
+<p>这里的初始状态元数据不一定是完整存档。</p>
+<p>它可以是：</p>
+<ul>
+<li>关卡 ID；</li>
+<li>配置版本；</li>
+<li>初始 Deck；</li>
+<li>初始棋盘；</li>
+<li>战斗种子；</li>
+<li>规则集 Revision。</li>
+</ul>
+<p>只要项目能够从它重建确定的起点。</p>
+<h2 id="replay-加载与重演分成两个阶段">Replay 加载与重演分成两个阶段</h2><p>加载 Replay 时，不应立即修改世界。</p>
+<p>更安全的流程是：</p>
+<ol>
+<li>清空当前历史；</li>
+<li>验证 Replay 基础结构；</li>
+<li>恢复随机种子起点；</li>
+<li>逐条查找命令工厂；</li>
+<li>创建命令并反序列化 Payload；</li>
+<li>把命令装入历史；</li>
+<li>将当前指针置于起点；</li>
+<li>由调用方逐步 Redo。</li>
+</ol>
+<pre><code>flowchart LR
+    A["Replay JSON"] --&gt; B["验证与重建命令"]
+    B --&gt; C["历史指针 = -1"]
+    C --&gt; D["Redo 1"]
+    D --&gt; E["Redo 2"]
+    E --&gt; F["Redo N"]
+</code></pre>
+<p><strong>装载与执行分离（后文简称“先把剧本装好，再开始演”）</strong>：Replay 解析只重建动作历史，实际状态变化由显式 Redo 推进。</p>
+<p>这带来几个好处：</p>
+<ul>
+<li>可以逐步播放；</li>
+<li>可以在每一步比较状态；</li>
+<li>可以暂停和诊断；</li>
+<li>可以把重演接入 UI；</li>
+<li>可以在执行前完成版本和权限校验。</li>
+</ul>
+<h2 id="command-replay-可以成为-save-payload">Command Replay 可以成为 Save Payload</h2><p>传统存档通常直接保存大量最终状态。</p>
+<p>对于动作数量有限、起点稳定的玩法，也可以保存：</p>
+<pre><code>初始状态
++ 已提交命令序列
+</code></pre>
+<p>加载时从起点确定性重演。</p>
+<p>这种方式的优势包括：</p>
+<ul>
+<li>存档结构更接近玩家行为；</li>
+<li>容易生成操作历史；</li>
+<li>可以用于回放和 Bug 报告；</li>
+<li>状态差异可以定位到具体命令；</li>
+<li>同一格式能够支持临时检查点。</li>
+</ul>
+<p>但它不适用于所有存档。</p>
+<p>当一局包含数十万连续操作、实时物理或大量外部状态时，完整重演成本会过高。</p>
+<p>更实际的方案可能是：</p>
+<pre><code>周期性状态快照
++ 快照后的命令增量
+</code></pre>
+<h2 id="command-历史需要明确-scope">Command 历史需要明确 Scope</h2><p>Command Service 可以作为 App 级服务登记，但具体历史不应无限跨玩法累积。</p>
+<p>项目需要决定：</p>
+<ul>
+<li>一个战斗一份历史；</li>
+<li>一个关卡一份历史；</li>
+<li>一个编辑文档一份历史；</li>
+<li>一个玩家会话一份历史。</li>
+</ul>
+<p>Scope 结束时应：</p>
+<ul>
+<li><code>Clear()</code> 历史；</li>
+<li>清空或替换命令工厂；</li>
+<li>解绑随机状态访问器；</li>
+<li>注销历史事件监听；</li>
+<li>释放命令持有的业务引用。</li>
+</ul>
+<p>如果 App 级单例永久保存上一局工厂，下一局 Replay 可能重建到已经销毁的目标对象。</p>
+<p>服务可以常驻，历史和工厂必须按 Owner 更新。</p>
+<h2 id="它不是完整网络-rollback">它不是完整网络 Rollback</h2><p>Command Replay 容易与帧同步或网络回滚混淆。</p>
+<p>当前范式主要解决的是业务动作历史，不自动提供：</p>
+<ul>
+<li>每帧输入预测；</li>
+<li>状态校正；</li>
+<li>客户端回滚重模拟；</li>
+<li>物理确定性；</li>
+<li>网络快照压缩；</li>
+<li>延迟补偿；</li>
+<li>跨平台浮点一致性。</li>
+</ul>
+<p>网络系统可以复用稳定 CommandId、Payload 和确定性随机思想，但仍需要自己的 Tick、Authority 和 Snapshot 协议。</p>
+<h2 id="测试应围绕动作边界">测试应围绕动作边界</h2><p>Command 系统的测试不应只验证 Undo 后数值相等。</p>
+<p>还应覆盖：</p>
+<ul>
+<li>执行失败时不写入历史；</li>
+<li>Undo 失败时指针不移动；</li>
+<li>中间分支执行新命令后 Redo 被清除；</li>
+<li>历史超过上限时移除最旧记录；</li>
+<li>Replay 只导出有效分支；</li>
+<li>未登记工厂时加载整体失败；</li>
+<li>Payload 反序列化异常时不留下半套历史；</li>
+<li>RNG Draw Count 可以恢复；</li>
+<li><code>Clear()</code> 后历史指针回到起点；</li>
+<li>Scope 销毁后没有事件和目标引用残留。</li>
+</ul>
+<p>这些测试共同保护的是“做过什么的账本”可信，而不只是某个命令类能够运行。</p>
+<h2 id="我的判断">我的判断</h2><p>可撤销和可重演不是两个独立功能。</p>
+<p>它们共享同一个基础问题：</p>
+<blockquote>
+<p>游戏是否把重要业务变化表达成稳定、可识别、可恢复的动作。</p>
+</blockquote>
+<p>当 CommandId、Payload、前置快照、历史指针和随机流位置都成为正式合同后，同一套动作历史可以服务于：</p>
+<ul>
+<li>Undo / Redo；</li>
+<li>局内回退；</li>
+<li>Save Checkpoint；</li>
+<li>教学回放；</li>
+<li>Bug 复现；</li>
+<li>自动化验证；</li>
+<li>观战与审计的上层适配。</li>
+</ul>
+<h2 id="设计检查表">设计检查表</h2><ul>
+<li>CommandId 是否独立于类名和程序集；</li>
+<li>Replay 是否只允许白名单工厂重建；</li>
+<li>Payload 是否只包含稳定业务参数；</li>
+<li>Undo 使用反向逻辑还是前置快照；</li>
+<li>快照边界是否足够完整且不过大；
+  -随机 Seed 与 Draw Count 是否可以恢复；</li>
+<li>在历史中间执行新命令时是否擦除 Redo 分支；</li>
+<li>Replay 是否只导出当前有效分支；</li>
+<li>加载与实际重演是否分离；</li>
+<li>未知命令或反序列化失败时是否整体拒绝；</li>
+<li>历史、工厂和随机适配是否属于明确 Scope；</li>
+<li>是否错误地把业务 Replay 当成完整网络 Rollback。</li>
+</ul>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正式术语</td>
+<td>通俗称呼</td>
+<td>含义</td>
+</tr>
+<tr>
+<td>业务命令历史</td>
+<td>做过什么的账本</td>
+<td>记录已执行动作、参数和当前历史指针</td>
+</tr>
+<tr>
+<td>稳定命令标识</td>
+<td>动作身份证</td>
+<td>独立于类型名的持久化 Command Key</td>
+</tr>
+<tr>
+<td>命令工厂白名单</td>
+<td>只重建项目认识的动作</td>
+<td>仅允许登记过的命令从 Replay 恢复</td>
+</tr>
+<tr>
+<td>状态自愈快照</td>
+<td>行动前留底</td>
+<td>执行前捕获状态，Undo 时恢复</td>
+</tr>
+<tr>
+<td>随机流回卷</td>
+<td>连随机进度一起退</td>
+<td>恢复命令执行前的 Seed 与 Draw Count</td>
+</tr>
+<tr>
+<td>装载与执行分离</td>
+<td>先把剧本装好，再开始演</td>
+<td>先重建命令历史，再逐步 Redo</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>资料说明：本文依据 2026-08-05 的 Command Core、Facade 生命周期和 Replay 接口整理。该模块聚焦业务动作历史，不等同于完整网络回滚、物理确定性或跨平台帧同步方案。</p>
+</blockquote>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="ai-safe-execution-plane.html"><span>同属「Sakura Framework 工程实践」</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a><a href="ai-task-capsule-semantic-graph.html"><span>同属「Sakura Framework 工程实践」</span><strong>开发任务胶囊与项目语义图：AI 协作中的只读上下文、影响分析与证据边界</strong><small>大型代码仓库如何把一个开发任务需要的范围、项目结构、影响关系和验证证据压缩成稳定的机器可读上下文，同时不把“理解仓库”错误地升级成“拥有执行权限”？</small></a><a href="framework-capability-semantic-catalog.html"><span>同属「Sakura Framework 工程实践」</span><strong>框架能力语义目录：能力词表、证据化声明与可解释模块选择</strong><small>大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

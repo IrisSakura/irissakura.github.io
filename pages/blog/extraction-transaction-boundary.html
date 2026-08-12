@@ -23,7 +23,7 @@
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算 | IrisSakura","description":"从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。","url":"https://irissakura.github.io/pages/blog/extraction-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算","image":"https://irissakura.github.io/assets/social/pages-blog-extraction-transaction-boundary.png","datePublished":"2026-07-29","dateModified":"2026-08-07","about":["extraction","pvpve","transactions"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算 | IrisSakura","description":"从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。","url":"https://irissakura.github.io/pages/blog/extraction-transaction-boundary.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算","image":"https://irissakura.github.io/assets/social/pages-blog-extraction-transaction-boundary.png","datePublished":"2026-07-29","dateModified":"2026-08-12","about":["extraction","pvpve","transactions"]}</script>
     <!-- site-meta:end -->
     <title>撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -138,7 +138,7 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-07-29 · 更新于 2026-08-07</p>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-07-29 · 更新于 2026-08-12</p>
             <h1>撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算</h1>
             <p class="blog-deck">从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。</p>
             <div class="note-tags"><span>extraction</span><span>pvpve</span><a href="tag/transactions.html">transactions</a></div>
@@ -154,8 +154,7 @@
 <li>第二个时刻是系统承认东西已经属于玩家。</li>
 </ul>
 <p>两个时刻之间的距离，就是撤离玩法最主要的紧张感来源。</p>
-<h2>先说结论：事务提交边界，就是收益的“真正到账点”</h2>
-<p>这里需要先定义一个正式概念。</p>
+<h2 id="先说结论事务提交边界就是收益的真正到账点">先说结论：事务提交边界，就是收益的“真正到账点”</h2><p>这里需要先定义一个正式概念。</p>
 <p><strong>事务提交边界（即“真正到账点”）</strong>：一批局内临时结果经过校验后，被一次性确认并写入长期状态的边界。</p>
 <p>“事务”听起来像数据库术语，但玩家感受到的事情很简单：</p>
 <blockquote>
@@ -171,8 +170,7 @@
 <li>最终结果是否已经写入长期存档。</li>
 </ul>
 <p>因此，撤离点不是普通传送门。它是整个战局从“临时运行”转向“长期结果”的入口。</p>
-<h2>局内持有权：为什么“拿在手里”还不等于真正拥有</h2>
-<p>为了说清这件事，还要区分三个概念。</p>
+<h2 id="局内持有权为什么拿在手里还不等于真正拥有">局内持有权：为什么“拿在手里”还不等于真正拥有</h2><p>为了说清这件事，还要区分三个概念。</p>
 <p><strong>局内持有权（即“拿在手里”）</strong>：物品当前由哪个角色或容器控制。</p>
 <p><strong>局内归属（即“本局算谁的”）</strong>：在当前战局规则中，物品被记录为属于哪个参与者或实体。</p>
 <p><strong>持久所有权（即“真正进仓库”）</strong>：物品已经进入玩家的长期账户，可以在战局外出售、装备、制造或带入下一局。</p>
@@ -191,8 +189,7 @@
 <p>这张图里最重要的不是某个具体字段，而是状态不能被混在一起。</p>
 <p>如果拾取物品时就直接写入长期仓库，系统随后还要处理死亡扣除、其他玩家掠夺、断线回档和重复结算。每一个异常都可能把局内状态与长期存档撕成两份不同的事实。</p>
 <p>更稳妥的方式是：战局负责记录变化，结算负责确认结果。</p>
-<h2>为什么带入的装备需要先放进“风险寄存处”</h2>
-<p>撤离玩法不仅延迟确认新获得的物品，也会让玩家主动把旧资产带入风险。</p>
+<h2 id="为什么带入的装备需要先放进风险寄存处">为什么带入的装备需要先放进“风险寄存处”</h2><p>撤离玩法不仅延迟确认新获得的物品，也会让玩家主动把旧资产带入风险。</p>
 <p>前面定义的资产托管，也就是“风险寄存处”，负责在战局开始前锁定玩家准备携带的长期资产。</p>
 <p>如果一把武器已经被带入战局，它就不应该同时被：</p>
 <ul>
@@ -208,8 +205,7 @@
 </blockquote>
 <p>只有当战局尚未真正开始，例如匹配失败或角色没有成功生成，系统才适合把托管安全回滚。玩家已经进入有效战局之后，普通断线或主动关闭客户端不能成为无风险取回装备的办法。</p>
 <p>否则玩家面对危险时最合理的操作就不是寻找撤离点，而是拔网线。</p>
-<h2>撤离为什么必须由玩家主动决定</h2>
-<p>普通关卡通常由系统决定结束时间：击败首领、完成目标或者到达终点。</p>
+<h2 id="撤离为什么必须由玩家主动决定">撤离为什么必须由玩家主动决定</h2><p>普通关卡通常由系统决定结束时间：击败首领、完成目标或者到达终点。</p>
 <p>撤离玩法把结束权交给了玩家。</p>
 <p>玩家需要不断比较：</p>
 <ul>
@@ -234,8 +230,7 @@
 </blockquote>
 <p>战斗可能消耗弹药、治疗、时间和位置隐蔽性。玩家赢下遭遇，却可能因为伤势过重、出口关闭或第三方队伍介入而输掉整次行动。</p>
 <p>战斗胜利和行动成功因此被明确分开。</p>
-<h2>不完全信息不是让玩家瞎猜</h2>
-<p>撤离玩法通常不会告诉玩家地图上还剩多少敌人、哪个区域已经被搜过、哪个出口有人埋伏。</p>
+<h2 id="不完全信息不是让玩家瞎猜">不完全信息不是让玩家瞎猜</h2><p>撤离玩法通常不会告诉玩家地图上还剩多少敌人、哪个区域已经被搜过、哪个出口有人埋伏。</p>
 <p>这种设计可以称为<strong>不完全信息（即“只知道一部分真相”）</strong>。</p>
 <p>但“只知道一部分”不等于“什么也不知道”。如果玩家无法通过任何线索判断风险，撤离选择就会从决策变成赌博。</p>
 <p>有用的线索包括：</p>
@@ -254,8 +249,7 @@
 <p>信息不够完整，但足以让玩家为自己的判断负责。</p>
 </blockquote>
 <p>这也解释了为什么撤离点常常会变成风险集中区。多个玩家根据有限信息选择少数离场路线，出口自然成为路线交汇点、信息争夺点和最后一次风险判断。</p>
-<h2>失败必须真实，但不能让玩家永远爬不起来</h2>
-<p>如果死亡之后所有装备自动恢复，战利品又在拾取瞬间永久入库，所谓风险就只剩下表面演出。</p>
+<h2 id="失败必须真实但不能让玩家永远爬不起来">失败必须真实，但不能让玩家永远爬不起来</h2><p>如果死亡之后所有装备自动恢复，战利品又在拾取瞬间永久入库，所谓风险就只剩下表面演出。</p>
 <p>但如果连续失败会让玩家永久失去参与核心循环的能力，系统又会形成另一种问题。</p>
 <p>这种问题可以称为<strong>不可恢复死锁（即“输到再也玩不动”）</strong>：玩家越失败，越没有资源取得下一次成功，最终连低风险尝试都无法进行。</p>
 <p>因此，撤离玩法需要同时成立的不是一句“失败有代价”，而是两条看似相反的原则：</p>
@@ -275,8 +269,7 @@
 <li>面向失败玩家的低风险路线。</li>
 </ul>
 <p>这些机制不应该完全抹掉失败，否则真正到账点会失去意义。它们更像止损装置：保留失败的疼痛，但避免失败变成永久退出。</p>
-<h2>成功撤离后，结算仍可能没有立刻完成</h2>
-<p>玩家体验中的“撤离成功”和后台数据的“持久化成功”也不是同一件事。</p>
+<h2 id="成功撤离后结算仍可能没有立刻完成">成功撤离后，结算仍可能没有立刻完成</h2><p>玩家体验中的“撤离成功”和后台数据的“持久化成功”也不是同一件事。</p>
 <p>撤离成功后，系统通常还需要生成结果快照，检查物品来源，计算丢失和保险候选，再更新仓库、角色、任务、经验与声望。</p>
 <p>这里还需要一个正式术语。</p>
 <p><strong>幂等结算（即“重复处理也只算一次”）</strong>：同一个战局结果即使因为超时或重试被提交多次，也只能产生一次长期变化。</p>
@@ -290,8 +283,7 @@
 <p>系统应保存一份待提交结果，随后使用同一个结算身份重试。</p>
 <p>这看起来是后台可靠性问题，但它直接影响玩家是否相信风险规则。玩家可以接受“我因为没有撤离而失去物品”，却很难接受“我已经撤离，只是服务器保存失败，所以全部没了”。</p>
 <p>规则越强调高风险，结算就越需要可信。</p>
-<h2>和类魂、远征、Roguelike 相比，哪些地方相似</h2>
-<p>“延迟确认收益”并不只存在于撤离式 PvPvE，但不同类型不能被简单写成同一种系统。</p>
+<h2 id="和类魂远征roguelike-相比哪些地方相似">和类魂、远征、Roguelike 相比，哪些地方相似</h2><p>“延迟确认收益”并不只存在于撤离式 PvPvE，但不同类型不能被简单写成同一种系统。</p>
 <table>
 <thead>
 <tr>
@@ -334,38 +326,32 @@
 <li>是否存在其他玩家参与所有权转移。</li>
 </ul>
 <p>所以，“真正到账点”是一种分析工具，不是一套可以原封不动复制到所有游戏中的模板。</p>
-<h2>设计一个真正到账点时，我会检查什么</h2>
-<p>如果要判断一个撤离循环是否成立，我会先问以下问题。</p>
-<h3>进入风险</h3>
-<ul>
+<h2 id="设计一个真正到账点时我会检查什么">设计一个真正到账点时，我会检查什么</h2><p>如果要判断一个撤离循环是否成立，我会先问以下问题。</p>
+<h3 id="进入风险">进入风险</h3><ul>
 <li>玩家带入的资产是否真的被锁定？</li>
 <li>玩家是否清楚哪些资产会承担损失？</li>
 <li>战局尚未开始时，系统能否安全回滚？</li>
 <li>战局已经开始后，断线是否会错误地变成安全退出？</li>
 </ul>
-<h3>局内变化</h3>
-<ul>
+<h3 id="局内变化">局内变化</h3><ul>
 <li>“拿在手里”和“真正进仓库”是否明确分开？</li>
 <li>物品是否有可审计的来源和流转记录？</li>
 <li>玩家能否通过环境痕迹推理风险？</li>
 <li>继续探索是否同时增加潜在收益与潜在损失？</li>
 </ul>
-<h3>提交结果</h3>
-<ul>
+<h3 id="提交结果">提交结果</h3><ul>
 <li>撤离条件是否清晰且能持续验证？</li>
 <li>结果是否会在提交前被冻结？</li>
 <li>重复结算是否只产生一次结果？</li>
 <li>存储暂时失败时，是否能保留待提交结果并安全重试？</li>
 </ul>
-<h3>失败与恢复</h3>
-<ul>
+<h3 id="失败与恢复">失败与恢复</h3><ul>
 <li>失败是否产生玩家能够理解的真实损失？</li>
 <li>玩家是否仍有重新进入循环的基础资源？</li>
 <li>恢复机制是在止损，还是已经把风险完全抹掉？</li>
 <li>连续失败会不会让玩家输到再也玩不动？</li>
 </ul>
-<h2>结语：真正有价值的不是高惩罚，而是可信的风险</h2>
-<p>撤离玩法经常被概括成“死亡会掉装备”，但我认为这还没有触及它真正特别的地方。</p>
+<h2 id="结语真正有价值的不是高惩罚而是可信的风险">结语：真正有价值的不是高惩罚，而是可信的风险</h2><p>撤离玩法经常被概括成“死亡会掉装备”，但我认为这还没有触及它真正特别的地方。</p>
 <p>它真正改变的是奖励被确认的时机。</p>
 <p>玩家捡到物品时，收益开始存在；玩家完成撤离并通过结算时，收益才真正成立。中间这段尚未确认的状态，让移动、战斗、路线、声音、时间和信息都获得了新的意义。</p>
 <p>也正因为如此，撤离玩法不能只设计损失。它还必须设计：</p>
@@ -378,8 +364,7 @@
 </ul>
 <p>高惩罚只能让玩家害怕失去。</p>
 <p>清晰、可推理、可结算、可恢复的风险，才会让玩家愿意再走进下一局。</p>
-<h2>术语对照</h2>
-<table>
+<h2 id="术语对照">术语对照</h2><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -438,20 +423,19 @@
 <td>同一结果被重试时不会重复发放或扣除</td>
 </tr>
 </tbody></table>
-<h2>内部资料依据</h2>
-<p>以下链接用于仓库内部审稿与追溯，不是公开版最终引用：</p>
+<h2 id="内部资料依据">内部资料依据</h2><p>以下链接用于仓库内部审稿与追溯，不是公开版最终引用：</p>
 <ul>
-<li><a href="../journal.html#design-extraction-cross-session-loop">撤离式 PvPvE：风险资产托管、局内所有权转移与撤离提交边界</a></li>
-<li><a href="../journal.html#design-soulslike-action-commitment-recovery">类魂动作 RPG：死亡回收与检查点世界循环</a></li>
-<li><a href="../journal.html#design-expedition-management">远征队探险管理：风险投资与主动撤退</a></li>
-<li><a href="../journal.html#design-deckbuilder-roguelike">卡牌构筑式 Roguelike：风险路线经营</a></li>
+<li><a href="../journal/extraction-cross-session-loop.html">撤离式 PvPvE：风险资产托管、局内所有权转移与撤离提交边界</a></li>
+<li><a href="../journal/soulslike-action-commitment-recovery.html">类魂动作 RPG：死亡回收与检查点世界循环</a></li>
+<li><a href="../journal/expedition-management.html">远征队探险管理：风险投资与主动撤退</a></li>
+<li><a href="../journal/deckbuilder-roguelike.html">卡牌构筑式 Roguelike：风险路线经营</a></li>
 </ul>
 <p>公开发布前应补充公开案例或公开设计资料，并把内部路径替换为稳定公开链接。</p>
 </div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
-            <div><a href="metroidvania-capability-gated-topology.html"><span>同属「游戏系统的共同语言」</span><strong>世界拓扑与能力门控：银河城地图中的权限、可达性与区域重访</strong><small>从空间、权限与记忆三层解释银河城地图如何用能力门控改变可达范围，并让旧区域在成长后重新产生价值。</small></a><a href="authoritative-time-source.html"><span>同属「游戏系统的共同语言」</span><strong>音游、格斗与竞速的权威时间源：输入、模拟、音频与表现层的时钟分工</strong><small>比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。</small></a><a href="stealth-recoverable-exposure.html"><span>同属「游戏系统的共同语言」</span><strong>潜行游戏的可恢复暴露循环：警戒升级、信息传播与补救空间</strong><small>从感知不对称、警戒升级与信息传播解释潜行失败如何成为仍可判断、可补救但有后果的玩法。</small></a></div>
+            <div><a href="battle-royale-dual-convergence.html"><span>同属「游戏系统的共同语言」</span><strong>双重收敛：大逃杀中的有效空间、存活人数与终局密度控制</strong><small>一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？</small></a><a href="future-draw-quality-deck-convergence.html"><span>同属「游戏系统的共同语言」</span><strong>未来抽牌质量与构筑收敛：卡组规模、抽取概率与奖励边际价值</strong><small>卡组构筑游戏为什么必须允许玩家拒绝奖励，以及一张单独很强的卡为什么可能让整套卡组变弱？</small></a><a href="governance-capacity-in-4x.html"><span>同属「游戏系统的共同语言」</span><strong>治理容量：4X 扩张中的收益、组织负担与管理约束</strong><small>为什么许多 4X 游戏前期充满战略选择，到了中后期却变成不断占地、点建筑和处理重复事务？</small></a></div>
         </aside>
     </article>
 </main>

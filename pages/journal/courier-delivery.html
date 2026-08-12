@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/courier-delivery.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation） | Sakura Design Journal">
+    <meta property="og:description" content="围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/courier-delivery.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-courier-delivery.png">
+    <meta property="og:image:alt" content="末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation） | Sakura Design Journal">
+    <meta name="twitter:description" content="围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-courier-delivery.png">
+    <meta name="twitter:image:alt" content="末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation） | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"末端物流模拟（Courier Delivery & Last-Mile Logistics Simulation） | Sakura Design Journal","description":"围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。","url":"https://irissakura.github.io/pages/journal/courier-delivery.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"末端物流模拟（Courier Delivery & Last-Mile Logistics Simulation）","image":"https://irissakura.github.io/assets/social/pages-journal-courier-delivery.png","dateModified":"2026-08-12","about":["delivery","logistics","routing"]}</script>
+    <!-- site-meta:end -->
+    <title>末端物流模拟（Courier Delivery & Last-Mile Logistics Simulation） | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-courier-delivery"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation）</h1><p>围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。</p><div class="note-tags"><span>delivery</span><span>logistics</span><span>routing</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>核心问题：如何在订单承诺、城市路网、分拣能力和配送员负荷之间，持续做出可执行且可恢复的最后一公里计划？</p>
+</blockquote>
+<h2 id="一类型定位与核心抽象">一、类型定位与核心抽象</h2><p>快递配送与末端物流模拟的核心不是普通运输，也不是交易商队式买卖套利。</p>
+<p>它关注的是在城市或区域网络中，将大量包裹、订单或乘客按照不同时间窗口、优先级、地址约束和服务质量要求，调度到正确地点。</p>
+<p>它与模拟经营与交通不同。交通模拟关注道路网络、公共运输、城市流量；末端物流关注具体订单、具体包裹、具体路线、具体承诺和最后一公里执行。</p>
+<p>它最适合抽象为：</p>
+<p>订单批次、路线规划与服务承诺履约框架。</p>
+<p>核心循环是：</p>
+<p>接收订单 → 分类包裹 → 分配车辆或骑手 → 规划路线 → 执行配送 → 处理迟到、拒收、改地址、交通、天气、损坏等异常 → 完成交付 → 结算效率、成本、满意度与信誉。</p>
+<p>玩家管理的是：</p>
+<p>路线、时间窗、容量、包裹约束、人员状态、城市交通、服务承诺和异常恢复。</p>
+<h2 id="二运行时架构">二、运行时架构</h2><p>框架可以分为九个核心域。</p>
+<p>第一是订单生成域，负责生成配送订单、取件订单、退货订单、即时单、预约单、大件单、冷链单、贵重单和特殊服务单。</p>
+<p>第二是包裹状态域，负责维护包裹大小、重量、易碎、温控、贵重、签收要求、当前状态、损坏风险和所属批次。</p>
+<p>第三是地址与区域域，负责维护城市网格、街区、楼栋、门禁、小区、楼层、电梯、停车点、禁行区和地理服务范围。</p>
+<p>第四是运力域，负责维护骑手、车辆、无人机、货车、步行员、仓库、前置站和中转点。</p>
+<p>第五是路线规划域，负责计算路线、时间、交通拥堵、天气影响、装载顺序、取送混合、优先级和动态改道。</p>
+<p>第六是服务承诺域，负责维护预计送达、超时赔付、客户等待、签收要求、预约时间、失败重投和客服处理。</p>
+<p>第七是异常事件域，负责交通堵塞、车辆故障、客户不在家、地址错误、包裹损坏、天气恶化、门禁失败、临时改地址等问题。</p>
+<p>第八是运营评价域，负责准时率、成本、里程、空载率、单均收益、客户满意度、骑手疲劳、投诉率和站点效率。</p>
+<p>第九是调试与回放域，负责订单流向、路线决策、延误来源、容量冲突、包裹状态变化和服务失败原因。</p>
+<h2 id="三核心数据模型">三、核心数据模型</h2><p>DeliveryOrder 表示配送订单，包含订单ID、取件点、送达点、时间窗口、服务等级、客户要求、签收方式、失败处理和赔付规则。</p>
+<p>PackageItem 表示包裹，包含包裹ID、尺寸、重量、易碎度、温控要求、贵重等级、当前状态、所属订单、装载位置和损坏状态。</p>
+<p>CourierUnit 表示配送单位，包含骑手或车辆ID、容量、速度、当前位置、当前路线、疲劳、技能、可服务类型和工作时段。</p>
+<p>RoutePlan 表示路线计划，包含停靠点序列、预计到达时间、装载顺序、订单分组、风险点、可改道节点和总成本。</p>
+<p>ServicePromise 表示服务承诺，包含预计送达、最晚送达、预约时间、优先级、客户容忍度、失败后果和赔付。</p>
+<p>DeliveryEvent 表示配送事件，包含取件、装车、到达、签收、失败、改派、延误、损坏、退回等状态变化。</p>
+<p>LogisticsMetrics 表示运营指标，包含准时率、配送成本、平均里程、平均等待、投诉率、包裹损坏率、站点吞吐和人员利用率。</p>
+<h2 id="四核心范式一订单不是目的地而是服务承诺">四、核心范式一：订单不是目的地，而是服务承诺</h2><p>末端物流中，订单不是一个“去某地”的任务。</p>
+<p>它是一份承诺。</p>
+<p>这个承诺包括：</p>
+<p>什么时候送到。
+送给谁。
+是否必须本人签收。
+是否能放在门口。
+是否需要冷藏。
+是否怕摔。
+失败后是否重投。
+超时是否赔付。</p>
+<p>因此 DeliveryOrder 必须和 ServicePromise 绑定。</p>
+<p>同样距离的两个订单，难度可能完全不同。</p>
+<p>一个普通包裹可以延迟十分钟。
+一个冷链药品必须在温度失效前送达。
+一个贵重物品必须本人签收。
+一个预约件只能在晚上七点到八点之间送。</p>
+<p>这让订单系统从点到点运输变成履约系统。</p>
+<h2 id="五核心范式二路线规划必须同时考虑时间窗容量和装载顺序">五、核心范式二：路线规划必须同时考虑时间窗、容量和装载顺序</h2><p>快递配送不是简单最短路径。</p>
+<p>车辆容量有限，包裹有大小重量；订单有时间窗；装车顺序会影响取件效率；某些包裹不能压在下面；冷链包裹有时间限制；大件包裹需要停车点更近。</p>
+<p>因此 RoutePlan 需要同时考虑：</p>
+<p>距离。
+交通。
+时间窗。
+包裹体积。
+装载顺序。
+服务等级。
+客户可签收时间。
+停车难度。
+天气风险。
+人员疲劳。</p>
+<p>例如，地图上最近的订单不一定先送，因为它的时间窗口更晚。一个远处高优先级订单可能必须插队。一个大件包裹可能应该最后装车但最先送，否则每次取件都要搬开其他包裹。</p>
+<p>这使路线规划成为核心玩法，而不是导航功能。</p>
+<h2 id="六核心范式三配送过程需要动态重规划">六、核心范式三：配送过程需要动态重规划</h2><p>末端物流最大的特点是计划经常被打断。</p>
+<p>客户临时改地址。
+道路拥堵。
+车辆故障。
+小区门禁进不去。
+客户不在家。
+包裹被错误装车。
+天气突然变差。
+新增高优先级即时单。</p>
+<p>因此路线不是一次性计算结果，而是可被事件打断和重规划的动态计划。</p>
+<p>RoutePlan 应支持：</p>
+<p>暂停。
+插单。
+改派。
+跳过站点。
+重排停靠点。
+转交其他骑手。
+退回站点。
+分拆批次。</p>
+<p>玩家的能力体现在：</p>
+<p>发现计划不再成立时，能否快速调整，减少整体损失。</p>
+<h2 id="七核心范式四包裹状态是独立实体而不是订单字段">七、核心范式四：包裹状态是独立实体，而不是订单字段</h2><p>包裹不应只存在于订单里。</p>
+<p>它应该有自己的生命周期：</p>
+<p>待入库。
+已分拣。
+已装车。
+配送中。
+到达地址。
+等待签收。
+签收完成。
+失败退回。
+损坏。
+丢失。
+改派。</p>
+<p>同时包裹有物理和服务属性：</p>
+<p>重量。
+体积。
+易碎。
+冷链。
+贵重。
+危险品。
+大件。
+文件。
+生鲜。</p>
+<p>这样，系统才能支持真实异常。</p>
+<p>车厢太满无法装入。
+易碎品被错误堆放导致损坏风险升高。
+冷链包裹超时导致失效。
+贵重物品不能无人签收。
+大件需要双人搬运。</p>
+<p>包裹实体化以后，物流玩法才有深度。</p>
+<h2 id="八核心范式五失败配送不是失败终点而是异常流程入口">八、核心范式五：失败配送不是失败终点，而是异常流程入口</h2><p>客户不在家、电话打不通、地址错误、门禁失败，这些不应该直接让订单失败。</p>
+<p>它们应该进入异常处理流程。</p>
+<p>异常处理可以包括：</p>
+<p>联系客户。
+延迟等待。
+放入自提柜。
+交给物业。
+改约时间。
+重新派送。
+退回站点。
+转客服处理。
+上报地址问题。</p>
+<p>每种处理方式都有成本、时间和满意度影响。</p>
+<p>例如，自提柜快，但某些客户不接受。
+等待客户会拖慢后续订单。
+重投增加成本。
+退回站点损害满意度。</p>
+<p>这让异常处理成为玩法的一部分，而不是纯惩罚。</p>
+<h2 id="九事件与执行流程">九、事件与执行流程</h2><p>一次典型配送流程如下。</p>
+<p>订单系统生成 DeliveryOrder。
+包裹系统创建 PackageItem。
+分拣系统根据区域、时间窗和服务等级分配批次。
+调度系统选择 CourierUnit。
+路线系统生成初始 RoutePlan。
+骑手或车辆按路线执行取件和送达。
+事件系统持续检查交通、天气、客户状态和包裹风险。
+若出现异常，RoutePlan 进入重规划。
+配送到达后，签收系统根据订单要求判断成功、失败或异常处理。
+运营系统结算准时率、成本、客户满意度、投诉和人员状态。</p>
+<p>关键事件包括：</p>
+<p>订单创建事件。
+包裹入库事件。
+包裹分拣事件。
+包裹装车事件。
+路线生成事件。
+路线重规划事件。
+到达站点事件。
+签收成功事件。
+签收失败事件。
+客户改地址事件。
+包裹损坏事件。
+超时事件。
+改派事件。
+退回站点事件。
+指标更新事件。</p>
+<h2 id="十模块通信">十、模块通信</h2><p>建议采用事件驱动。</p>
+<p>订单系统只创建服务需求。
+包裹系统维护包裹生命周期。
+调度系统根据订单、包裹和运力生成派单。
+路线系统生成或更新 RoutePlan。
+执行系统推进配送单位移动。
+异常系统监听交通、客户、天气和包裹事件。
+签收系统判断交付结果。
+运营系统监听全部交付事件生成指标。
+UI只展示订单、路线、异常和指标，不直接改变状态。</p>
+<p>这样可以避免“订单完成但包裹仍在车上”“路线已改派但骑手还按旧路线走”“客户不在家却自动签收”等问题。</p>
+<h2 id="十一可扩展点">十一、可扩展点</h2><p>可以扩展为外卖配送，加入餐品温度、备餐时间、商家出餐延迟和客户评分。</p>
+<p>可以扩展为同城跑腿，加入取买送、排队、代办、临时沟通和费用谈判。</p>
+<p>可以扩展为无人机物流，加入飞行禁区、电量、降落点、天气和监管。</p>
+<p>可以扩展为仓配一体，加入仓库分拣、前置仓选址、库存和补货。</p>
+<p>可以扩展为多人协作，一个玩家负责调度，一个负责路线，一个负责异常客服，一个负责仓库。</p>
+<p>可以扩展为末日或科幻题材，例如在危险城市中配送药物、情报、零件和救援物资。</p>
+<h2 id="十二失败隔离与调试">十二、失败隔离与调试</h2><p>常见问题包括订单无法完成、路线规划死循环、包裹丢失、容量计算错误、签收状态不同步、改派后重复配送。</p>
+<p>调试工具应支持：</p>
+<p>订单状态追踪。
+包裹生命周期回放。
+路线重规划原因。
+车辆容量检查。
+时间窗冲突分析。
+签收失败原因。
+异常处理路径。
+准时率与延误来源分析。</p>
+<p>失败隔离上，关键订单应支持备用处理方式，如改派、延期、自提、客服介入、退回站点、赔付完成，避免一个异常导致整条物流链卡死。</p>
+<h2 id="十三玩家体验目标">十三、玩家体验目标</h2><p>这个类型最核心的体验不是：</p>
+<p>我把车开到了目的地。</p>
+<p>而是：</p>
+<p>我在一堆时间窗口、异常和容量限制中，设计了一条能履约的配送链。</p>
+<p>玩家体验通常是：</p>
+<p>订单涌入。
+系统变得拥堵。
+玩家开始按区域和时间窗分批。
+突发异常打乱路线。
+玩家重新调度。
+最终用有限运力完成大部分承诺。</p>
+<p>优秀体验来自：</p>
+<p>不是所有订单都最短路，而是整体履约最优。</p>
+<h2 id="十四可迁移设计思想">十四、可迁移设计思想</h2><p>最值得迁移的是：</p>
+<p>将任务从“到达目标点”升级为带时间窗、容量、状态、异常和服务承诺的履约对象。</p>
+<p>在Roguelike Shooter中，可以用于护送物资、撤离伤员、限时补给、战场快递和基地物流。
+在策略游戏中，可以用于补给线、弹药运输、部队调动和战线维护。
+在生存游戏中，可以用于营地配送、资源搬运、人员转移和灾害撤离。
+在模拟经营中，可以用于订单履约、外卖、仓储和供应链。</p>
+<p>通用思想是：</p>
+<p>不要只设计“把东西送到”。
+要设计“在承诺、限制和异常中完成交付”。</p>
+<h2 id="十五完整产品边界与配送支柱">十五、完整产品边界与配送支柱</h2><p>完整产品应覆盖“接单—集货—分拣—装载—派送—签收或异常—结算复盘”的配送日，而不只是地图上的最短路规划。</p>
+<p>核心支柱是承诺兑现、批量协同、执行弹性和服务质量。路线最短不一定最好：它可能错过时间窗、让车辆超载、把异常件带入死路，或使配送员无法在班次内返回。</p>
+<p>订单、包裹、车辆、人员和站点必须是相互关联但独立的对象。一次订单可拆成多件包裹，一辆车承载多张订单，一个地址失败也不应把整条路线判为同一状态。</p>
+<h2 id="十六配送日生命周期与关键状态">十六、配送日生命周期与关键状态</h2><p>配送日分为预测与接单、波次分拣、装载发车、在途执行、异常收束和站点结算。玩家在发车前做批量计划，在执行中只能用有限的改派、转运和延期能力修正。</p>
+<p>订单至少区分待确认、待集货、待分拣、待派送、在途、已签收、失败、改约和退回；包裹还需记录实际位置、保管责任与异常原因。每次交接都要转移责任，防止“丢件”只表现为随机罚款。</p>
+<p>配送员状态应包含班次剩余、载重、当前位置、熟悉区域和疲劳。系统不能用一条抽象运力值抹去人和车辆真正在哪里、能否接手的问题。</p>
+<h2 id="十七长期进程内容单元与经济闭环">十七、长期进程、内容单元与经济闭环</h2><p>长期进程围绕服务区域、站点布局、车队结构、人员技能和客户合同展开。扩区会增加订单密度，也会带来陌生路网、不同时间窗和更长返程距离；自动化分拣则以资本和固定维护换取波次稳定。</p>
+<p>内容单元可定义为“城区拓扑 + 订单画像 + 服务承诺 + 异常规则 + 日内流量曲线”。住宅、商业、校园和偏远地区应通过停靠成本、可达时间和失败模式改变计划，而不只是换一张地图皮肤。</p>
+<p>经济要区分单票收入、人工与车辆成本、超时赔付、二次派送和长期合同信誉。低价订单可能通过高密度形成利润，昂贵急件则会打断整条路线，需要玩家判断是否值得承接。</p>
+<h2 id="十八扰动恢复与公平性">十八、扰动、恢复与公平性</h2><p>难度从稳定订单和单站点开始，逐步加入波峰、动态插单、地址错误、收件人不在、道路封闭与人员缺勤。扰动应在可观察信号后发生，例如天气预警或地址置信度，而非无条件随机毁掉路线。</p>
+<p>恢复工具包括改约、邻近转交、路线重算、站点间转运、备用人员和拒绝新单。它们会增加成本或降低当日评分，但应避免一个异常件无限阻塞后续订单。</p>
+<p>复盘必须解释每次超时来自接单过量、分拣延迟、装载错误、路线计划还是现场异常。只有首因清晰，玩家才可能改善系统，而不是机械扩充所有数值。</p>
+<h2 id="十九作者工具最小切片与验收标准">十九、作者工具、最小切片与验收标准</h2><p>作者工具需要城区路网编辑、订单批量生成、时间窗冲突检查、路线回放和包裹责任追踪。压力测试应能固定订单集，对比不同分区、装载和改派策略。</p>
+<p>最小切片包含一个站点、两名配送员、两种车辆、三个街区、两类时间窗和一次可恢复的派送异常。它必须跑通接单到结算，并让玩家在发车前与在途中各做一次有效决策。</p>
+<p>验收时至少确认：每件包裹位置可查；路线满足载重与时间窗；异常不会污染无关订单；改派会改变成本和后续负荷；日终报告能指出具体瓶颈并支持下一日调整。</p>
+<h2 id="防重记录更新">防重记录更新</h2><p>新增类型：</p>
+<p>快递配送 / 末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation）</p>
+<p>新增核心范式：</p>
+<ol>
+<li><p>订单批次、路线规划与服务承诺履约框架</p>
+</li>
+<li><p>订单作为服务承诺，而非普通目的地</p>
+</li>
+<li><p>路线规划同时考虑时间窗、容量、装载顺序和交通</p>
+</li>
+<li><p>配送过程支持动态重规划、插单、改派和退回</p>
+</li>
+<li><p>包裹作为独立生命周期实体</p>
+</li>
+<li><p>失败配送进入异常处理流程，而非直接结束</p>
+</li>
+<li><p>事件驱动的订单、包裹、路线、执行、签收与运营结算</p>
+</li>
+<li><p>订单状态、包裹流向、路线重规划和延误来源调试</p>
+</li>
+<li><p>将到达任务升级为带时间窗、容量、异常和服务承诺的履约系统</p>
+</li>
+<li><p>可迁移到补给线、护送、外卖、仓储和战场物流的通用框架</p>
+</li>
+</ol>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

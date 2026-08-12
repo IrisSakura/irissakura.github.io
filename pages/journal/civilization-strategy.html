@@ -1,0 +1,4650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/civilization-strategy.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="4X 文明战略游戏 | Sakura Design Journal">
+    <meta property="og:description" content="玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/civilization-strategy.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-civilization-strategy.png">
+    <meta property="og:image:alt" content="4X 文明战略游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="4X 文明战略游戏 | Sakura Design Journal">
+    <meta name="twitter:description" content="玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-civilization-strategy.png">
+    <meta name="twitter:image:alt" content="4X 文明战略游戏 | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"4X 文明战略游戏 | Sakura Design Journal","description":"玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。","url":"https://irissakura.github.io/pages/journal/civilization-strategy.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"4X 文明战略游戏","image":"https://irissakura.github.io/assets/social/pages-journal-civilization-strategy.png","dateModified":"2026-08-12","about":["civilization","empire","strategy"]}</script>
+    <!-- site-meta:end -->
+    <title>4X 文明战略游戏 | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-civilization-strategy"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-12</p><h1>4X 文明战略游戏</h1><p>玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。</p><div class="note-tags"><span>civilization</span><span>empire</span><span>strategy</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="探索扩张开发与竞争驱动的多层帝国演化循环">探索、扩张、开发与竞争驱动的多层帝国演化循环</h2><hr />
+<h2 id="1-文档定位">1. 文档定位</h2><p>本期新增的宏观游戏类型为：</p>
+<p><strong>4X 文明战略游戏。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>4X Strategy；</p>
+</li>
+<li><p>Civilization Strategy；</p>
+</li>
+<li><p>Empire-Building Strategy；</p>
+</li>
+<li><p>回合制文明战略；</p>
+</li>
+<li><p>帝国经营战略；</p>
+</li>
+<li><p>文明演化游戏。</p>
+</li>
+</ul>
+<p>“4X”通常指四类相互连接的宏观行为：</p>
+<ul>
+<li><p>Explore：探索未知世界；</p>
+</li>
+<li><p>Expand：扩张领土与影响范围；</p>
+</li>
+<li><p>Exploit：开发人口、资源和基础设施；</p>
+</li>
+<li><p>Exterminate：通过战争、压制或竞争排除对手。</p>
+</li>
+</ul>
+<p>这里的“Exterminate”并不要求游戏必须以彻底消灭所有势力为唯一目标。现代4X通常还允许：</p>
+<ul>
+<li><p>外交胜利；</p>
+</li>
+<li><p>科技胜利；</p>
+</li>
+<li><p>文化胜利；</p>
+</li>
+<li><p>经济胜利；</p>
+</li>
+<li><p>宗教胜利；</p>
+</li>
+<li><p>生态胜利；</p>
+</li>
+<li><p>联盟或共同目标胜利。</p>
+</li>
+</ul>
+<p>本文讨论的不是即时战略中的基地建造，也不是城市模拟中的交通与公共服务，而是一种能够独立支撑完整游戏的宏观品类。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p>玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。</p>
+</blockquote>
+<p>4X游戏的核心并不是“不断增加数值”，而是持续处理以下关系：</p>
+<ul>
+<li><p>当前扩张是否超过治理和后勤能力；</p>
+</li>
+<li><p>新城市或新殖民地是否能产生长期收益；</p>
+</li>
+<li><p>科技投入应该解决当前问题还是争取未来优势；</p>
+</li>
+<li><p>与邻近势力应当贸易、结盟、威慑还是开战；</p>
+</li>
+<li><p>军事力量应该集中进攻、分散防守还是保护经济；</p>
+</li>
+<li><p>短期领先是否会暴露自身并招致联盟制衡；</p>
+</li>
+<li><p>世界局势如何从双边关系发展为多方系统；</p>
+</li>
+<li><p>玩家如何将有限资源转化为长期结构性优势。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2-类型定义">2. 类型定义</h2><p>4X文明战略游戏，是以宏观势力经营、世界探索、领土扩张、人口与资源开发、科技演化、外交竞争和多路线胜利为核心的策略游戏类型。</p>
+<p>其典型循环为：</p>
+<ol>
+<li><p>玩家控制一个初始弱小势力；</p>
+</li>
+<li><p>探索战争迷雾下的地图；</p>
+</li>
+<li><p>发现资源、地形、中立势力和竞争者；</p>
+</li>
+<li><p>建立首个城市、殖民地或核心据点；</p>
+</li>
+<li><p>发展人口、生产、科研、文化和军事；</p>
+</li>
+<li><p>向外扩张领土和交通网络；</p>
+</li>
+<li><p>与其他势力贸易、结盟、竞争或战争；</p>
+</li>
+<li><p>根据地形、资源和对手情况调整发展路线；</p>
+</li>
+<li><p>进入新的科技、制度或文明阶段；</p>
+</li>
+<li><p>处理扩张带来的治理、边境和后勤问题；</p>
+</li>
+<li><p>争夺关键区域、奇观、资源和世界议程；</p>
+</li>
+<li><p>推进一种或多种胜利条件；</p>
+</li>
+<li><p>在对手干预前形成不可逆或可维护的战略优势；</p>
+</li>
+<li><p>完成最终胜利、共同胜利或历史结算。</p>
+</li>
+</ol>
+<p>该类型中的主要战略资源通常包括：</p>
+<ul>
+<li><p>人口；</p>
+</li>
+<li><p>食物；</p>
+</li>
+<li><p>生产力；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>文化或制度点；</p>
+</li>
+<li><p>战略资源；</p>
+</li>
+<li><p>领土；</p>
+</li>
+<li><p>城市容量；</p>
+</li>
+<li><p>行动力；</p>
+</li>
+<li><p>外交信用；</p>
+</li>
+<li><p>情报；</p>
+</li>
+<li><p>后勤；</p>
+</li>
+<li><p>治理能力；</p>
+</li>
+<li><p>时间与回合窗口。</p>
+</li>
+</ul>
+<p>其中最重要但最容易被忽略的资源是：</p>
+<blockquote>
+<p>组织能力，即玩家能够有效控制、开发和保护多少领土、人口与系统复杂度。</p>
+</blockquote>
+<hr />
+<h2 id="3-核心设计范式">3. 核心设计范式</h2><p>4X游戏最具代表性的设计范式由八个核心支柱构成。</p>
+<h2 id="31-探索改变可用决策空间">3.1 探索改变可用决策空间</h2><p>地图未知时，玩家只能根据有限信息进行规划。</p>
+<p>探索可以揭示：</p>
+<ul>
+<li><p>可定居区域；</p>
+</li>
+<li><p>战略资源；</p>
+</li>
+<li><p>自然奇观；</p>
+</li>
+<li><p>中立势力；</p>
+</li>
+<li><p>敌方边界；</p>
+</li>
+<li><p>地形瓶颈；</p>
+</li>
+<li><p>海路或星际航道；</p>
+</li>
+<li><p>灾害区域；</p>
+</li>
+<li><p>特殊遗迹；</p>
+</li>
+<li><p>任务目标。</p>
+</li>
+</ul>
+<p>探索不是单纯清除迷雾，而是在持续改变：</p>
+<ul>
+<li><p>扩张方向；</p>
+</li>
+<li><p>技术优先级；</p>
+</li>
+<li><p>城市布局；</p>
+</li>
+<li><p>外交对象；</p>
+</li>
+<li><p>军事部署；</p>
+</li>
+<li><p>胜利路线。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-扩张必须同时产生收益与治理成本">3.2 扩张必须同时产生收益与治理成本</h2><p>新领土可以带来：</p>
+<ul>
+<li><p>人口；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>税收；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>战略纵深；</p>
+</li>
+<li><p>交通节点。</p>
+</li>
+</ul>
+<p>但扩张也会增加：</p>
+<ul>
+<li><p>行政成本；</p>
+</li>
+<li><p>边境长度；</p>
+</li>
+<li><p>防守需求；</p>
+</li>
+<li><p>文化冲突；</p>
+</li>
+<li><p>腐败；</p>
+</li>
+<li><p>物流压力；</p>
+</li>
+<li><p>外交威胁；</p>
+</li>
+<li><p>城市维护；</p>
+</li>
+<li><p>内部派系。</p>
+</li>
+</ul>
+<p>如果扩张只有收益，最佳策略会退化为无条件占领全部空间。</p>
+<hr />
+<h2 id="33-发展路线需要形成机会成本">3.3 发展路线需要形成机会成本</h2><p>一个回合中的资源不能同时用于：</p>
+<ul>
+<li><p>建造军队；</p>
+</li>
+<li><p>建设城市；</p>
+</li>
+<li><p>研究科技；</p>
+</li>
+<li><p>建造奇观；</p>
+</li>
+<li><p>支付外交；</p>
+</li>
+<li><p>维持殖民；</p>
+</li>
+<li><p>应对灾害。</p>
+</li>
+</ul>
+<p>选择某项发展意味着延后其他事项。</p>
+<p>4X深度主要来自：</p>
+<blockquote>
+<p>在多个长期正确方向之间确定当前优先级。</p>
+</blockquote>
+<hr />
+<h2 id="34-世界局势由多方互动形成">3.4 世界局势由多方互动形成</h2><p>4X中的外交不能只是两个玩家之间的好感度。</p>
+<p>一项行为会影响多个势力：</p>
+<ul>
+<li><p>玩家攻打弱国；</p>
+</li>
+<li><p>邻国感到威胁；</p>
+</li>
+<li><p>贸易伙伴遭受损失；</p>
+</li>
+<li><p>共同敌人可能表示支持；</p>
+</li>
+<li><p>防御联盟开始重组；</p>
+</li>
+<li><p>中立势力调整立场；</p>
+</li>
+<li><p>世界议会提出制裁。</p>
+</li>
+</ul>
+<p>因此外交系统需要维护：</p>
+<ul>
+<li><p>双边关系；</p>
+</li>
+<li><p>多边协议；</p>
+</li>
+<li><p>阵营；</p>
+</li>
+<li><p>威胁认知；</p>
+</li>
+<li><p>历史行为；</p>
+</li>
+<li><p>利益冲突；</p>
+</li>
+<li><p>世界声誉。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-军事实力依赖经济技术与投送能力">3.5 军事实力依赖经济、技术与投送能力</h2><p>军队数量不应等同于真实战斗力。</p>
+<p>军事能力同时取决于：</p>
+<ul>
+<li><p>单位质量；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>指挥能力；</p>
+</li>
+<li><p>运输；</p>
+</li>
+<li><p>战争支持度；</p>
+</li>
+<li><p>工业补充能力。</p>
+</li>
+</ul>
+<p>一个远离本土、补给中断的强大军团，可能不如本土附近的较弱防军有效。</p>
+<hr />
+<h2 id="36-科技和制度应改变规则而非只增加数值">3.6 科技和制度应改变规则而非只增加数值</h2><p>高质量科技可以：</p>
+<ul>
+<li><p>解锁新的地形通行能力；</p>
+</li>
+<li><p>改变生产组织；</p>
+</li>
+<li><p>创建新资源需求；</p>
+</li>
+<li><p>开放新的外交方式；</p>
+</li>
+<li><p>改变城市规模上限；</p>
+</li>
+<li><p>允许跨海、航空或星际扩张；</p>
+</li>
+<li><p>形成新的军事时代；</p>
+</li>
+<li><p>解锁胜利项目。</p>
+</li>
+</ul>
+<p>制度、政策或文化同样可以改变：</p>
+<ul>
+<li><p>税收结构；</p>
+</li>
+<li><p>人口分配；</p>
+</li>
+<li><p>城市自治；</p>
+</li>
+<li><p>征兵；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>殖民；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>宗教传播。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-胜利路线需要在中期进入可识别状态">3.7 胜利路线需要在中期进入可识别状态</h2><p>胜利不能只在最后几个回合突然判定。</p>
+<p>系统需要逐步显示：</p>
+<ul>
+<li><p>哪些势力正在接近哪种胜利；</p>
+</li>
+<li><p>其领先来自哪些结构；</p>
+</li>
+<li><p>其他玩家可以如何干预；</p>
+</li>
+<li><p>当前差距是否可逆；</p>
+</li>
+<li><p>胜利项目还需要多少时间。</p>
+</li>
+</ul>
+<p>胜利进度必须成为世界竞争的一部分。</p>
+<hr />
+<h2 id="38-中后期必须从重复操作升级为战略管理">3.8 中后期必须从重复操作升级为战略管理</h2><p>早期玩家可以逐项管理：</p>
+<ul>
+<li><p>城市生产；</p>
+</li>
+<li><p>单位移动；</p>
+</li>
+<li><p>探索路线；</p>
+</li>
+<li><p>地块开发。</p>
+</li>
+</ul>
+<p>中后期势力规模扩大后，需要提供：</p>
+<ul>
+<li><p>城市模板；</p>
+</li>
+<li><p>自动管理；</p>
+</li>
+<li><p>生产队列；</p>
+</li>
+<li><p>区域规划；</p>
+</li>
+<li><p>军团命令；</p>
+</li>
+<li><p>贸易自动化；</p>
+</li>
+<li><p>委任总督；</p>
+</li>
+<li><p>批量操作；</p>
+</li>
+<li><p>战略警报。</p>
+</li>
+</ul>
+<p>否则游戏会从战略决策退化为大量低价值维护。</p>
+<hr />
+<h2 id="4-与相近类型的边界">4. 与相近类型的边界</h2><h2 id="41-与实时战略游戏的区别">4.1 与实时战略游戏的区别</h2><p>实时战略强调：</p>
+<ul>
+<li><p>持续时间推进；</p>
+</li>
+<li><p>高频单位控制；</p>
+</li>
+<li><p>战场微操；</p>
+</li>
+<li><p>快速生产和交战；</p>
+</li>
+<li><p>注意力分配。</p>
+</li>
+</ul>
+<p>4X通常更强调：</p>
+<ul>
+<li><p>长期文明演化；</p>
+</li>
+<li><p>多阶段科技；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>领土；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>多胜利路线；</p>
+</li>
+<li><p>数十至数百回合的战略规划。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-与城市建设模拟的区别">4.2 与城市建设模拟的区别</h2><p>城市建设模拟主要关注：</p>
+<ul>
+<li><p>城市内部交通；</p>
+</li>
+<li><p>公共服务；</p>
+</li>
+<li><p>地价；</p>
+</li>
+<li><p>居民迁移；</p>
+</li>
+<li><p>城市财政。</p>
+</li>
+</ul>
+<p>4X中的城市通常更加抽象，重点是：</p>
+<ul>
+<li><p>帝国资源节点；</p>
+</li>
+<li><p>人口和生产；</p>
+</li>
+<li><p>科研和文化；</p>
+</li>
+<li><p>领土控制；</p>
+</li>
+<li><p>军事支撑；</p>
+</li>
+<li><p>战略位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-与大战略游戏的区别">4.3 与大战略游戏的区别</h2><p>大战略往往从一个已经成熟的国家或世界体系开始，强调：</p>
+<ul>
+<li><p>历史状态；</p>
+</li>
+<li><p>政治；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>军事和经济模拟；</p>
+</li>
+<li><p>长期国家治理。</p>
+</li>
+</ul>
+<p>4X通常从较小起点开始，强调：</p>
+<ul>
+<li><p>探索未知地图；</p>
+</li>
+<li><p>从无到有建立城市；</p>
+</li>
+<li><p>科技时代升级；</p>
+</li>
+<li><p>持续扩张；</p>
+</li>
+<li><p>明确胜利条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-与战棋游戏的区别">4.4 与战棋游戏的区别</h2><p>战棋主要以局部战场、单位位置和战术目标为中心。</p>
+<p>4X中的战斗只是宏观系统的一部分，还需要处理：</p>
+<ul>
+<li><p>城市；</p>
+</li>
+<li><p>人口；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>帝国治理；</p>
+</li>
+<li><p>多回合战争。</p>
+</li>
+</ul>
+<hr />
+<h2 id="5-总体运行时架构">5. 总体运行时架构</h2><p>推荐将运行时划分为以下十六个核心域：</p>
+<ol>
+<li><p>世界生成与地图拓扑域；</p>
+</li>
+<li><p>回合、阶段和命令提交域；</p>
+</li>
+<li><p>势力、国家与所有权域；</p>
+</li>
+<li><p>战争迷雾与情报域；</p>
+</li>
+<li><p>城市、殖民地和人口域；</p>
+</li>
+<li><p>地块、资源和基础设施域；</p>
+</li>
+<li><p>生产队列与建设域；</p>
+</li>
+<li><p>科技、文化和制度域；</p>
+</li>
+<li><p>军事单位、军团和战斗域；</p>
+</li>
+<li><p>后勤、补给和战略投送域；</p>
+</li>
+<li><p>外交、条约和国际关系域；</p>
+</li>
+<li><p>贸易、市场和经济域；</p>
+</li>
+<li><p>中立势力、事件和世界议程域；</p>
+</li>
+<li><p>胜利条件与历史评分域；</p>
+</li>
+<li><p>AI规划、预算和战略评估域；</p>
+</li>
+<li><p>存档、回放、调试与内容验证域。</p>
+</li>
+</ol>
+<p>总体运行关系如下：</p>
+<p>开始回合
+→ 更新世界阶段和全局效果
+→ 各势力获得收入与行动资源
+→ 玩家提交城市、单位、外交和科研命令
+→ 验证命令与资源预留
+→ 执行移动、战斗和领土变化
+→ 更新城市生产、人口与建设
+→ 更新科技、制度和文化传播
+→ 更新贸易、补给和市场
+→ 处理外交事件、条约和声誉
+→ 处理世界事件和中立势力
+→ 检查任务与胜利进度
+→ AI重新评估战略
+→ 生成回合摘要与状态哈希
+→ 进入下一回合</p>
+<hr />
+<h2 id="6-回合与阶段系统">6. 回合与阶段系统</h2><h2 id="61-gameturnstate">6.1 GameTurnState</h2><p>建议字段：</p>
+<ul>
+<li><p>CurrentTurn；</p>
+</li>
+<li><p>CurrentEra；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>ActiveFactionId；</p>
+</li>
+<li><p>SubmittedFactionIds；</p>
+</li>
+<li><p>PendingCommands；</p>
+</li>
+<li><p>ResolvedCommandIds；</p>
+</li>
+<li><p>GlobalEventQueue；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>TurnVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-回合模式">6.2 回合模式</h2><p>可以采用：</p>
+<h3 id="顺序回合">顺序回合</h3><p>玩家依次完成整回合。</p>
+<p>优点：</p>
+<ul>
+<li><p>规则清晰；</p>
+</li>
+<li><p>容易调试；</p>
+</li>
+<li><p>冲突较少。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>多人等待时间较长。</li>
+</ul>
+<h3 id="同步回合">同步回合</h3><p>所有玩家同时提交，再统一结算。</p>
+<p>优点：</p>
+<ul>
+<li><p>多人节奏更快；</p>
+</li>
+<li><p>决策具有预测性。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><p>冲突结算复杂；</p>
+</li>
+<li><p>需要明确优先级。</p>
+</li>
+</ul>
+<h3 id="混合回合">混合回合</h3><p>经济同步结算，战斗或关键事件分阶段处理。</p>
+<hr />
+<h2 id="63-推荐阶段">6.3 推荐阶段</h2><ul>
+<li><p>TurnStart；</p>
+</li>
+<li><p>Upkeep；</p>
+</li>
+<li><p>Planning；</p>
+</li>
+<li><p>CommandSubmission；</p>
+</li>
+<li><p>MovementResolution；</p>
+</li>
+<li><p>CombatResolution；</p>
+</li>
+<li><p>CityResolution；</p>
+</li>
+<li><p>ResearchResolution；</p>
+</li>
+<li><p>DiplomacyResolution；</p>
+</li>
+<li><p>WorldEventResolution；</p>
+</li>
+<li><p>VictoryCheck；</p>
+</li>
+<li><p>TurnEnd。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-阶段职责">6.4 阶段职责</h2><h3 id="upkeep">Upkeep</h3><p>处理：</p>
+<ul>
+<li><p>单位维护；</p>
+</li>
+<li><p>城市维护；</p>
+</li>
+<li><p>条约费用；</p>
+</li>
+<li><p>债务；</p>
+</li>
+<li><p>补给消耗；</p>
+</li>
+<li><p>持续状态。</p>
+</li>
+</ul>
+<h3 id="planning">Planning</h3><p>玩家查看世界并制定命令。</p>
+<h3 id="resolution">Resolution</h3><p>统一解决：</p>
+<ul>
+<li><p>移动冲突；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>建设；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>世界事件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="65-命令不可直接修改权威状态">6.5 命令不可直接修改权威状态</h2><p>玩家提交的是意图：</p>
+<ul>
+<li><p>移动军团；</p>
+</li>
+<li><p>建造设施；</p>
+</li>
+<li><p>研究科技；</p>
+</li>
+<li><p>签订条约；</p>
+</li>
+<li><p>建立城市。</p>
+</li>
+</ul>
+<p>系统统一验证和结算。</p>
+<hr />
+<h2 id="7-世界与地图模型">7. 世界与地图模型</h2><h2 id="71-worlddefinition">7.1 WorldDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>WorldId；</p>
+</li>
+<li><p>MapTopologyType；</p>
+</li>
+<li><p>Width；</p>
+</li>
+<li><p>Height；</p>
+</li>
+<li><p>ClimateProfile；</p>
+</li>
+<li><p>TerrainDistribution；</p>
+</li>
+<li><p>ResourceDistribution；</p>
+</li>
+<li><p>FactionSpawnRules；</p>
+</li>
+<li><p>NeutralFactionRules；</p>
+</li>
+<li><p>SeaLevelRules；</p>
+</li>
+<li><p>HazardRules；</p>
+</li>
+<li><p>WorldAge；</p>
+</li>
+<li><p>GenerationSeed；</p>
+</li>
+<li><p>WorldVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-tilestate">7.2 TileState</h2><p>建议字段：</p>
+<ul>
+<li><p>TileId；</p>
+</li>
+<li><p>Coordinates；</p>
+</li>
+<li><p>TerrainType；</p>
+</li>
+<li><p>Elevation；</p>
+</li>
+<li><p>ClimateType；</p>
+</li>
+<li><p>FeatureTags；</p>
+</li>
+<li><p>ResourceIds；</p>
+</li>
+<li><p>ImprovementId；</p>
+</li>
+<li><p>OwnerFactionId；</p>
+</li>
+<li><p>ControlledByFactionId；</p>
+</li>
+<li><p>CityId；</p>
+</li>
+<li><p>UnitIds；</p>
+</li>
+<li><p>VisibilityStates；</p>
+</li>
+<li><p>SupplyState；</p>
+</li>
+<li><p>TileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-地图拓扑">7.3 地图拓扑</h2><p>可以采用：</p>
+<ul>
+<li><p>方格；</p>
+</li>
+<li><p>六边形；</p>
+</li>
+<li><p>区域图；</p>
+</li>
+<li><p>星系节点；</p>
+</li>
+<li><p>航道网络；</p>
+</li>
+<li><p>混合结构。</p>
+</li>
+</ul>
+<hr />
+<h2 id="74-地形职责">7.4 地形职责</h2><p>地形可以影响：</p>
+<ul>
+<li><p>移动成本；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>城市产出；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>建设；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>灾害；</p>
+</li>
+<li><p>边界。</p>
+</li>
+</ul>
+<hr />
+<h2 id="75-地图生成流程">7.5 地图生成流程</h2><ol>
+<li><p>生成基础高度或区域图；</p>
+</li>
+<li><p>划分海陆、星区或大陆；</p>
+</li>
+<li><p>生成气候和生态；</p>
+</li>
+<li><p>放置河流、航道和关键通道；</p>
+</li>
+<li><p>分配普通资源；</p>
+</li>
+<li><p>分配战略资源；</p>
+</li>
+<li><p>放置奇观和特殊区域；</p>
+</li>
+<li><p>分配出生区域；</p>
+</li>
+<li><p>运行公平性校验；</p>
+</li>
+<li><p>生成中立势力；</p>
+</li>
+<li><p>验证可扩张空间；</p>
+</li>
+<li><p>冻结世界种子和版本。</p>
+</li>
+</ol>
+<hr />
+<h2 id="76-出生公平性">7.6 出生公平性</h2><p>需要比较：</p>
+<ul>
+<li><p>初始产出；</p>
+</li>
+<li><p>可定居空间；</p>
+</li>
+<li><p>战略资源；</p>
+</li>
+<li><p>防守地形；</p>
+</li>
+<li><p>海路；</p>
+</li>
+<li><p>邻近势力；</p>
+</li>
+<li><p>自然奇观；</p>
+</li>
+<li><p>扩张瓶颈。</p>
+</li>
+</ul>
+<p>公平不要求完全对称，但需要避免单方系统性无解劣势。</p>
+<hr />
+<h2 id="8-势力与国家模型">8. 势力与国家模型</h2><h2 id="81-factiondefinition">8.1 FactionDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>FactionDefinitionId；</p>
+</li>
+<li><p>FactionTags；</p>
+</li>
+<li><p>LeaderDefinitionId；</p>
+</li>
+<li><p>UniqueAbilities；</p>
+</li>
+<li><p>UniqueUnits；</p>
+</li>
+<li><p>UniqueBuildings；</p>
+</li>
+<li><p>PreferredTerrains；</p>
+</li>
+<li><p>DiplomacyProfile；</p>
+</li>
+<li><p>AIProfile；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="82-factionruntimestate">8.2 FactionRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>FactionId；</p>
+</li>
+<li><p>ControllerType；</p>
+</li>
+<li><p>CapitalCityId；</p>
+</li>
+<li><p>OwnedTileIds；</p>
+</li>
+<li><p>ControlledTileIds；</p>
+</li>
+<li><p>CityIds；</p>
+</li>
+<li><p>UnitIds；</p>
+</li>
+<li><p>ResourceStockpiles；</p>
+</li>
+<li><p>ResearchState；</p>
+</li>
+<li><p>CivicState；</p>
+</li>
+<li><p>DiplomacyState；</p>
+</li>
+<li><p>TradeState；</p>
+</li>
+<li><p>GovernmentState；</p>
+</li>
+<li><p>VictoryProgress；</p>
+</li>
+<li><p>FactionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="83-领土所有权与控制权分离">8.3 领土所有权与控制权分离</h2><p>一块领土可能：</p>
+<ul>
+<li><p>法理属于A；</p>
+</li>
+<li><p>军事上被B占领；</p>
+</li>
+<li><p>文化上受C影响；</p>
+</li>
+<li><p>当前处于争议状态；</p>
+</li>
+<li><p>由中立势力实际控制。</p>
+</li>
+</ul>
+<p>这为以下系统提供基础：</p>
+<ul>
+<li><p>占领；</p>
+</li>
+<li><p>停战；</p>
+</li>
+<li><p>和平谈判；</p>
+</li>
+<li><p>反抗；</p>
+</li>
+<li><p>边界争议；</p>
+</li>
+<li><p>附庸；</p>
+</li>
+<li><p>解放。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-首都与核心区域">8.4 首都与核心区域</h2><p>首都可以承担：</p>
+<ul>
+<li><p>政治中心；</p>
+</li>
+<li><p>贸易中心；</p>
+</li>
+<li><p>战败条件；</p>
+</li>
+<li><p>治理范围起点；</p>
+</li>
+<li><p>文化传播源；</p>
+</li>
+<li><p>特殊项目。</p>
+</li>
+</ul>
+<p>失去首都不一定立即淘汰，但应产生结构性后果。</p>
+<hr />
+<h2 id="9-战争迷雾与情报">9. 战争迷雾与情报</h2><h2 id="91-visibilitystate">9.1 VisibilityState</h2><p>地块可处于：</p>
+<ul>
+<li><p>Unexplored；</p>
+</li>
+<li><p>Explored；</p>
+</li>
+<li><p>CurrentlyVisible；</p>
+</li>
+<li><p>Detected；</p>
+</li>
+<li><p>LastKnown；</p>
+</li>
+<li><p>IntelligenceReported。</p>
+</li>
+</ul>
+<hr />
+<h2 id="92-factionintelstate">9.2 FactionIntelState</h2><p>建议包含：</p>
+<ul>
+<li><p>VisibleTileIds；</p>
+</li>
+<li><p>ExploredTileIds；</p>
+</li>
+<li><p>VisibleEntityIds；</p>
+</li>
+<li><p>LastKnownEntitySnapshots；</p>
+</li>
+<li><p>KnownFactionIds；</p>
+</li>
+<li><p>KnownCityStates；</p>
+</li>
+<li><p>KnownTechnologyEstimates；</p>
+</li>
+<li><p>KnownMilitaryEstimates；</p>
+</li>
+<li><p>IntelligenceConfidence；</p>
+</li>
+<li><p>IntelVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-情报来源">9.3 情报来源</h2><p>包括：</p>
+<ul>
+<li><p>单位视野；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>边境；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>间谍；</p>
+</li>
+<li><p>中立势力；</p>
+</li>
+<li><p>世界议会；</p>
+</li>
+<li><p>卫星或高级科技。</p>
+</li>
+</ul>
+<hr />
+<h2 id="94-最后已知信息">9.4 最后已知信息</h2><p>失去视野后应保存：</p>
+<ul>
+<li><p>单位最后位置；</p>
+</li>
+<li><p>城市最后人口；</p>
+</li>
+<li><p>最后已知军力；</p>
+</li>
+<li><p>最后已知设施；</p>
+</li>
+<li><p>信息时间；</p>
+</li>
+<li><p>置信度。</p>
+</li>
+</ul>
+<p>不能继续显示实时状态。</p>
+<hr />
+<h2 id="95-情报不确定性">9.5 情报不确定性</h2><p>玩家可以得到：</p>
+<ul>
+<li><p>精确值；</p>
+</li>
+<li><p>范围；</p>
+</li>
+<li><p>相对评价；</p>
+</li>
+<li><p>过时信息；</p>
+</li>
+<li><p>伪造信息；</p>
+</li>
+<li><p>未证实报告。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-城市与殖民地模型">10. 城市与殖民地模型</h2><h2 id="101-citydefinition">10.1 CityDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CityType；</p>
+</li>
+<li><p>BasePopulationCapacity；</p>
+</li>
+<li><p>BaseDistrictCapacity；</p>
+</li>
+<li><p>DefaultProductionRules；</p>
+</li>
+<li><p>DefaultDefenseProfile；</p>
+</li>
+<li><p>ExpansionRules；</p>
+</li>
+<li><p>GovernanceRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="102-cityruntimestate">10.2 CityRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>CityId；</p>
+</li>
+<li><p>OwnerFactionId；</p>
+</li>
+<li><p>OriginalFounderFactionId；</p>
+</li>
+<li><p>TileId；</p>
+</li>
+<li><p>PopulationState；</p>
+</li>
+<li><p>FoodState；</p>
+</li>
+<li><p>ProductionState；</p>
+</li>
+<li><p>ConstructionQueue；</p>
+</li>
+<li><p>DistrictStates；</p>
+</li>
+<li><p>BuildingStates；</p>
+</li>
+<li><p>ResourceOutputs；</p>
+</li>
+<li><p>HappinessState；</p>
+</li>
+<li><p>StabilityState；</p>
+</li>
+<li><p>DefenseState；</p>
+</li>
+<li><p>OccupationState；</p>
+</li>
+<li><p>GovernorId；</p>
+</li>
+<li><p>CityVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="103-建城验证">10.3 建城验证</h2><p>检查：</p>
+<ul>
+<li><p>地块是否合法；</p>
+</li>
+<li><p>与现有城市距离；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>建城单位；</p>
+</li>
+<li><p>领土；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>敌方控制；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>特殊规则。</p>
+</li>
+</ul>
+<hr />
+<h2 id="104-城市作用">10.4 城市作用</h2><p>城市可以提供：</p>
+<ul>
+<li><p>人口；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>税收；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>文化；</p>
+</li>
+<li><p>军队；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>领土影响；</p>
+</li>
+<li><p>贸易节点；</p>
+</li>
+<li><p>胜利项目。</p>
+</li>
+</ul>
+<hr />
+<h2 id="105-城市不能只比较总产出">10.5 城市不能只比较总产出</h2><p>城市应具有不同定位：</p>
+<ul>
+<li><p>工业城市；</p>
+</li>
+<li><p>科研城市；</p>
+</li>
+<li><p>军事城市；</p>
+</li>
+<li><p>港口；</p>
+</li>
+<li><p>资源城市；</p>
+</li>
+<li><p>文化城市；</p>
+</li>
+<li><p>边境要塞；</p>
+</li>
+<li><p>行政中心。</p>
+</li>
+</ul>
+<hr />
+<h2 id="11-人口系统">11. 人口系统</h2><h2 id="111-populationstate">11.1 PopulationState</h2><p>建议包含：</p>
+<ul>
+<li><p>TotalPopulation；</p>
+</li>
+<li><p>PopulationGroups；</p>
+</li>
+<li><p>GrowthProgress；</p>
+</li>
+<li><p>HousingCapacity；</p>
+</li>
+<li><p>FoodConsumption；</p>
+</li>
+<li><p>EmploymentDistribution；</p>
+</li>
+<li><p>CultureGroups；</p>
+</li>
+<li><p>ReligionGroups；</p>
+</li>
+<li><p>EducationLevel；</p>
+</li>
+<li><p>Loyalty；</p>
+</li>
+<li><p>PopulationVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="112-人口分组">11.2 人口分组</h2><p>可以按以下维度聚合：</p>
+<ul>
+<li><p>职业；</p>
+</li>
+<li><p>阶层；</p>
+</li>
+<li><p>文化；</p>
+</li>
+<li><p>宗教；</p>
+</li>
+<li><p>种族或物种；</p>
+</li>
+<li><p>教育；</p>
+</li>
+<li><p>城市身份。</p>
+</li>
+</ul>
+<p>是否需要复杂分组，应取决于游戏重点。</p>
+<hr />
+<h2 id="113-人口增长">11.3 人口增长</h2><p>受到：</p>
+<ul>
+<li><p>食物；</p>
+</li>
+<li><p>住房；</p>
+</li>
+<li><p>健康；</p>
+</li>
+<li><p>安全；</p>
+</li>
+<li><p>政策；</p>
+</li>
+<li><p>移民；</p>
+</li>
+<li><p>战争；</p>
+</li>
+<li><p>灾害；</p>
+</li>
+<li><p>城市规模；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="114-人口分配">11.4 人口分配</h2><p>人口可以分配到：</p>
+<ul>
+<li><p>农业；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>商业；</p>
+</li>
+<li><p>军事；</p>
+</li>
+<li><p>特殊岗位。</p>
+</li>
+</ul>
+<p>玩家可以直接分配，也可以通过政策间接影响。</p>
+<hr />
+<h2 id="115-人口成本">11.5 人口成本</h2><p>人口增加同时提高：</p>
+<ul>
+<li><p>消费；</p>
+</li>
+<li><p>住房需求；</p>
+</li>
+<li><p>稳定风险；</p>
+</li>
+<li><p>治理成本；</p>
+</li>
+<li><p>灾害损失；</p>
+</li>
+<li><p>文化冲突。</p>
+</li>
+</ul>
+<hr />
+<h2 id="12-地块资源与开发">12. 地块、资源与开发</h2><h2 id="121-resourcedefinition">12.1 ResourceDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ResourceId；</p>
+</li>
+<li><p>ResourceType；</p>
+</li>
+<li><p>VisibilityRequirement；</p>
+</li>
+<li><p>ExtractionTechnology；</p>
+</li>
+<li><p>OutputProfile；</p>
+</li>
+<li><p>StrategicUses；</p>
+</li>
+<li><p>TradeRules；</p>
+</li>
+<li><p>DepletionPolicy；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="122-资源分类">12.2 资源分类</h2><h3 id="基础资源">基础资源</h3><ul>
+<li><p>食物；</p>
+</li>
+<li><p>木材；</p>
+</li>
+<li><p>矿物；</p>
+</li>
+<li><p>能源。</p>
+</li>
+</ul>
+<h3 id="战略资源">战略资源</h3><ul>
+<li><p>铁；</p>
+</li>
+<li><p>石油；</p>
+</li>
+<li><p>稀有矿物；</p>
+</li>
+<li><p>魔法水晶；</p>
+</li>
+<li><p>特殊燃料。</p>
+</li>
+</ul>
+<h3 id="奢侈资源">奢侈资源</h3><p>提高：</p>
+<ul>
+<li><p>幸福度；</p>
+</li>
+<li><p>贸易价值；</p>
+</li>
+<li><p>外交价值；</p>
+</li>
+<li><p>文化输出。</p>
+</li>
+</ul>
+<hr />
+<h2 id="123-improvementdefinition">12.3 ImprovementDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ImprovementId；</p>
+</li>
+<li><p>AllowedTerrainTags；</p>
+</li>
+<li><p>RequiredTechnologyIds；</p>
+</li>
+<li><p>ConstructionCost；</p>
+</li>
+<li><p>OutputModifiers；</p>
+</li>
+<li><p>ResourceExtractionRules；</p>
+</li>
+<li><p>MaintenanceCost；</p>
+</li>
+<li><p>AdjacencyRules；</p>
+</li>
+<li><p>UpgradeRules。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-开发流程">12.4 开发流程</h2><ol>
+<li><p>发现资源；</p>
+</li>
+<li><p>获得相应技术；</p>
+</li>
+<li><p>控制地块；</p>
+</li>
+<li><p>分配建设单位或城市生产；</p>
+</li>
+<li><p>完成开发设施；</p>
+</li>
+<li><p>将资源接入交通或贸易网络；</p>
+</li>
+<li><p>进入库存或战略供应。</p>
+</li>
+</ol>
+<hr />
+<h2 id="125-战略资源限制">12.5 战略资源限制</h2><p>军事单位可能需要：</p>
+<ul>
+<li><p>建造时一次性消耗；</p>
+</li>
+<li><p>持续占用；</p>
+</li>
+<li><p>每回合维护；</p>
+</li>
+<li><p>补充弹药；</p>
+</li>
+<li><p>修理。</p>
+</li>
+</ul>
+<p>不同规则会形成不同经济结构。</p>
+<hr />
+<h2 id="13-生产与建设系统">13. 生产与建设系统</h2><h2 id="131-constructionqueue">13.1 ConstructionQueue</h2><p>建议包含：</p>
+<ul>
+<li><p>CityId；</p>
+</li>
+<li><p>QueueEntries；</p>
+</li>
+<li><p>CurrentEntryId；</p>
+</li>
+<li><p>OverflowProduction；</p>
+</li>
+<li><p>ProductionModifiers；</p>
+</li>
+<li><p>QueueVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-constructionqueueentry">13.2 ConstructionQueueEntry</h2><p>建议字段：</p>
+<ul>
+<li><p>EntryId；</p>
+</li>
+<li><p>ConstructionType；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>ProductionCost；</p>
+</li>
+<li><p>ResourceCosts；</p>
+</li>
+<li><p>Progress；</p>
+</li>
+<li><p>ReservedResources；</p>
+</li>
+<li><p>CompletionEffects；</p>
+</li>
+<li><p>QueueState；</p>
+</li>
+<li><p>EntryVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-建设类型">13.3 建设类型</h2><p>包括：</p>
+<ul>
+<li><p>单位；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>区域；</p>
+</li>
+<li><p>奇观；</p>
+</li>
+<li><p>城市项目；</p>
+</li>
+<li><p>胜利项目；</p>
+</li>
+<li><p>公共投资。</p>
+</li>
+</ul>
+<hr />
+<h2 id="134-生产溢出">13.4 生产溢出</h2><p>项目完成后的多余生产力可以：</p>
+<ul>
+<li><p>转入下一项目；</p>
+</li>
+<li><p>部分保留；</p>
+</li>
+<li><p>转为货币；</p>
+</li>
+<li><p>按规则损失。</p>
+</li>
+</ul>
+<p>需要防止通过频繁切换项目产生额外收益。</p>
+<hr />
+<h2 id="135-资源预留">13.5 资源预留</h2><p>对于稀有资源，可采用：</p>
+<ul>
+<li><p>排队时预留；</p>
+</li>
+<li><p>完成时消耗；</p>
+</li>
+<li><p>持续占用。</p>
+</li>
+</ul>
+<p>规则必须明确，避免多个城市同时超额使用同一资源。</p>
+<hr />
+<h2 id="14-科技系统">14. 科技系统</h2><h2 id="141-technologydefinition">14.1 TechnologyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TechnologyId；</p>
+</li>
+<li><p>Era；</p>
+</li>
+<li><p>PrerequisiteTechnologyIds；</p>
+</li>
+<li><p>ResearchCost；</p>
+</li>
+<li><p>UnlockEffects；</p>
+</li>
+<li><p>ModifierEffects；</p>
+</li>
+<li><p>ResourceRevealRules；</p>
+</li>
+<li><p>ObsolescenceRules；</p>
+</li>
+<li><p>DiffusionRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-researchstate">14.2 ResearchState</h2><p>建议包含：</p>
+<ul>
+<li><p>ResearchedTechnologyIds；</p>
+</li>
+<li><p>CurrentResearchId；</p>
+</li>
+<li><p>ResearchProgress；</p>
+</li>
+<li><p>StoredResearch；</p>
+</li>
+<li><p>ResearchAgreements；</p>
+</li>
+<li><p>TechnologyBoosts；</p>
+</li>
+<li><p>ResearchVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="143-科技效果">14.3 科技效果</h2><p>包括：</p>
+<ul>
+<li><p>单位；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>资源发现；</p>
+</li>
+<li><p>新移动方式；</p>
+</li>
+<li><p>新贸易；</p>
+</li>
+<li><p>新外交；</p>
+</li>
+<li><p>城市容量；</p>
+</li>
+<li><p>新政府；</p>
+</li>
+<li><p>胜利项目。</p>
+</li>
+</ul>
+<hr />
+<h2 id="144-科技突破">14.4 科技突破</h2><p>玩家可以通过特定行为获得：</p>
+<ul>
+<li><p>研究加速；</p>
+</li>
+<li><p>成本折扣；</p>
+</li>
+<li><p>直接进度；</p>
+</li>
+<li><p>替代前置。</p>
+</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li><p>发现海洋促进航海技术；</p>
+</li>
+<li><p>击败骑兵促进防御技术；</p>
+</li>
+<li><p>建造多座矿场促进冶炼。</p>
+</li>
+</ul>
+<hr />
+<h2 id="145-科技扩散">14.5 科技扩散</h2><p>落后势力可以通过：</p>
+<ul>
+<li><p>贸易；</p>
+</li>
+<li><p>邻接；</p>
+</li>
+<li><p>间谍；</p>
+</li>
+<li><p>联盟；</p>
+</li>
+<li><p>俘获单位；</p>
+</li>
+<li><p>世界事件；</p>
+</li>
+</ul>
+<p>获得追赶加速。</p>
+<hr />
+<h2 id="15-文化制度与政府">15. 文化、制度与政府</h2><h2 id="151-civicdefinition">15.1 CivicDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CivicId；</p>
+</li>
+<li><p>Era；</p>
+</li>
+<li><p>PrerequisiteCivicIds；</p>
+</li>
+<li><p>CultureCost；</p>
+</li>
+<li><p>PolicySlotChanges；</p>
+</li>
+<li><p>GovernmentUnlocks；</p>
+</li>
+<li><p>DiplomacyUnlocks；</p>
+</li>
+<li><p>SocialEffects；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-governmentdefinition">15.2 GovernmentDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>GovernmentId；</p>
+</li>
+<li><p>PolicySlots；</p>
+</li>
+<li><p>GovernanceCapacity；</p>
+</li>
+<li><p>StabilityModifiers；</p>
+</li>
+<li><p>EconomyModifiers；</p>
+</li>
+<li><p>MilitaryModifiers；</p>
+</li>
+<li><p>DiplomacyModifiers；</p>
+</li>
+<li><p>TransitionCost；</p>
+</li>
+<li><p>GovernmentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-政策系统">15.3 政策系统</h2><p>政策可以分为：</p>
+<ul>
+<li><p>军事；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>文化；</p>
+</li>
+<li><p>特殊。</p>
+</li>
+</ul>
+<hr />
+<h2 id="154-政策切换">15.4 政策切换</h2><p>需要考虑：</p>
+<ul>
+<li><p>切换成本；</p>
+</li>
+<li><p>冷却；</p>
+</li>
+<li><p>政权稳定；</p>
+</li>
+<li><p>城市适应时间；</p>
+</li>
+<li><p>既得利益；</p>
+</li>
+<li><p>外交反应。</p>
+</li>
+</ul>
+<p>如果政策可零成本随时切换，玩家会在每个结算节点进行机械优化。</p>
+<hr />
+<h2 id="16-领土影响力与边界">16. 领土、影响力与边界</h2><h2 id="161-territorystate">16.1 TerritoryState</h2><p>建议包含：</p>
+<ul>
+<li><p>ClaimedTileIds；</p>
+</li>
+<li><p>ControlledTileIds；</p>
+</li>
+<li><p>OccupiedTileIds；</p>
+</li>
+<li><p>DisputedTileIds；</p>
+</li>
+<li><p>InfluenceSources；</p>
+</li>
+<li><p>BorderPressure；</p>
+</li>
+<li><p>TerritoryVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="162-领土扩张方式">16.2 领土扩张方式</h2><p>包括：</p>
+<ul>
+<li><p>城市自然扩张；</p>
+</li>
+<li><p>购买地块；</p>
+</li>
+<li><p>建立前哨；</p>
+</li>
+<li><p>文化影响；</p>
+</li>
+<li><p>军事占领；</p>
+</li>
+<li><p>外交割让；</p>
+</li>
+<li><p>中立势力合并。</p>
+</li>
+</ul>
+<hr />
+<h2 id="163-边界摩擦">16.3 边界摩擦</h2><p>边界冲突可以来自：</p>
+<ul>
+<li><p>资源；</p>
+</li>
+<li><p>城市距离；</p>
+</li>
+<li><p>军事单位；</p>
+</li>
+<li><p>文化传播；</p>
+</li>
+<li><p>历史宣称；</p>
+</li>
+<li><p>宗教；</p>
+</li>
+<li><p>航道；</p>
+</li>
+<li><p>殖民竞争。</p>
+</li>
+</ul>
+<hr />
+<h2 id="164-争议领土">16.4 争议领土</h2><p>争议状态可以影响：</p>
+<ul>
+<li><p>外交；</p>
+</li>
+<li><p>战争理由；</p>
+</li>
+<li><p>收入；</p>
+</li>
+<li><p>稳定；</p>
+</li>
+<li><p>单位通行；</p>
+</li>
+<li><p>国际议程。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-军事单位模型">17. 军事单位模型</h2><h2 id="171-unitdefinition">17.1 UnitDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>UnitDefinitionId；</p>
+</li>
+<li><p>UnitClass；</p>
+</li>
+<li><p>Era；</p>
+</li>
+<li><p>CombatStats；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>TerrainModifiers；</p>
+</li>
+<li><p>ResourceRequirements；</p>
+</li>
+<li><p>MaintenanceCost；</p>
+</li>
+<li><p>UpgradePath；</p>
+</li>
+<li><p>AbilitySet；</p>
+</li>
+<li><p>SupplyProfile；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-unitruntimestate">17.2 UnitRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>UnitId；</p>
+</li>
+<li><p>OwnerFactionId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>TileId；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>Experience；</p>
+</li>
+<li><p>PromotionStates；</p>
+</li>
+<li><p>MovementPoints；</p>
+</li>
+<li><p>ActionPoints；</p>
+</li>
+<li><p>SupplyState；</p>
+</li>
+<li><p>MoraleState；</p>
+</li>
+<li><p>EntrenchmentState；</p>
+</li>
+<li><p>AttachedUnitIds；</p>
+</li>
+<li><p>UnitVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-单位职责">17.3 单位职责</h2><p>包括：</p>
+<ul>
+<li><p>侦察；</p>
+</li>
+<li><p>前线作战；</p>
+</li>
+<li><p>攻城；</p>
+</li>
+<li><p>防空；</p>
+</li>
+<li><p>海军；</p>
+</li>
+<li><p>运输；</p>
+</li>
+<li><p>支援；</p>
+</li>
+<li><p>工程；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>特殊行动。</p>
+</li>
+</ul>
+<hr />
+<h2 id="174-单位升级">17.4 单位升级</h2><p>旧单位可以：</p>
+<ul>
+<li><p>升级为新单位；</p>
+</li>
+<li><p>改装；</p>
+</li>
+<li><p>解散；</p>
+</li>
+<li><p>转为驻军；</p>
+</li>
+<li><p>保留经验。</p>
+</li>
+</ul>
+<p>升级需要考虑：</p>
+<ul>
+<li><p>资源；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>技术；</p>
+</li>
+<li><p>时间；</p>
+</li>
+<li><p>补给。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-移动与占位冲突">18. 移动与占位冲突</h2><h2 id="181-movecommand">18.1 MoveCommand</h2><p>建议字段：</p>
+<ul>
+<li><p>CommandId；</p>
+</li>
+<li><p>UnitId或ArmyId；</p>
+</li>
+<li><p>PathTileIds；</p>
+</li>
+<li><p>DestinationTileId；</p>
+</li>
+<li><p>MovementPolicy；</p>
+</li>
+<li><p>SubmittedTurnVersion；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>IdempotencyKey。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-移动验证">18.2 移动验证</h2><p>检查：</p>
+<ul>
+<li><p>单位行动点；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>通行权；</p>
+</li>
+<li><p>敌方控制区；</p>
+</li>
+<li><p>运输能力；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>路径版本；</p>
+</li>
+<li><p>目标占位。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-同步回合冲突">18.3 同步回合冲突</h2><p>多个单位进入同一地块时，可以按以下方式处理：</p>
+<ul>
+<li><p>行动力；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>命令优先级；</p>
+</li>
+<li><p>随机种子；</p>
+</li>
+<li><p>发生遭遇战；</p>
+</li>
+<li><p>双方停留在原地。</p>
+</li>
+</ul>
+<p>规则必须稳定且可预测。</p>
+<hr />
+<h2 id="184-控制区">18.4 控制区</h2><p>军事单位可以创建Zone of Control，影响：</p>
+<ul>
+<li><p>敌方移动；</p>
+</li>
+<li><p>撤退；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>边境；</p>
+</li>
+<li><p>突破。</p>
+</li>
+</ul>
+<hr />
+<h2 id="19-战斗系统">19. 战斗系统</h2><h2 id="191-battlecontext">19.1 BattleContext</h2><p>建议字段：</p>
+<ul>
+<li><p>BattleId；</p>
+</li>
+<li><p>AttackerIds；</p>
+</li>
+<li><p>DefenderIds；</p>
+</li>
+<li><p>BattleTileIds；</p>
+</li>
+<li><p>TerrainContext；</p>
+</li>
+<li><p>FortificationContext；</p>
+</li>
+<li><p>SupplyContext；</p>
+</li>
+<li><p>ReinforcementIds；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>BattleVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="192-战斗输入">19.2 战斗输入</h2><p>包括：</p>
+<ul>
+<li><p>单位战斗力；</p>
+</li>
+<li><p>生命；</p>
+</li>
+<li><p>经验；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>防御工事；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>指挥；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>支援；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>士气。</p>
+</li>
+</ul>
+<hr />
+<h2 id="193-战斗结算">19.3 战斗结算</h2><ol>
+<li><p>创建BattleContext；</p>
+</li>
+<li><p>锁定参与单位；</p>
+</li>
+<li><p>计算支援和增援；</p>
+</li>
+<li><p>计算地形和状态修正；</p>
+</li>
+<li><p>结算伤害；</p>
+</li>
+<li><p>处理撤退；</p>
+</li>
+<li><p>处理单位死亡；</p>
+</li>
+<li><p>更新经验和士气；</p>
+</li>
+<li><p>更新领土控制；</p>
+</li>
+<li><p>生成BattleResult；</p>
+</li>
+<li><p>发布表现事件。</p>
+</li>
+</ol>
+<hr />
+<h2 id="194-战斗结果">19.4 战斗结果</h2><p>可以包括：</p>
+<ul>
+<li><p>攻击方胜利；</p>
+</li>
+<li><p>防守方胜利；</p>
+</li>
+<li><p>双方撤退；</p>
+</li>
+<li><p>围困；</p>
+</li>
+<li><p>投降；</p>
+</li>
+<li><p>城市占领；</p>
+</li>
+<li><p>僵持。</p>
+</li>
+</ul>
+<hr />
+<h2 id="195-战损与补充">19.5 战损与补充</h2><p>单位损失应影响：</p>
+<ul>
+<li><p>人口；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>战争支持；</p>
+</li>
+<li><p>工业补充；</p>
+</li>
+<li><p>经验。</p>
+</li>
+</ul>
+<hr />
+<h2 id="20-军团与高级命令">20. 军团与高级命令</h2><h2 id="201-armystate">20.1 ArmyState</h2><p>建议包含：</p>
+<ul>
+<li><p>ArmyId；</p>
+</li>
+<li><p>CommanderId；</p>
+</li>
+<li><p>UnitIds；</p>
+</li>
+<li><p>FormationProfile；</p>
+</li>
+<li><p>SupplyState；</p>
+</li>
+<li><p>CurrentMission；</p>
+</li>
+<li><p>RallyPoint；</p>
+</li>
+<li><p>ArmyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="202-军团任务">20.2 军团任务</h2><p>包括：</p>
+<ul>
+<li><p>进攻区域；</p>
+</li>
+<li><p>防守边境；</p>
+</li>
+<li><p>护送；</p>
+</li>
+<li><p>巡逻海域；</p>
+</li>
+<li><p>围攻城市；</p>
+</li>
+<li><p>破坏补给；</p>
+</li>
+<li><p>战略撤退。</p>
+</li>
+</ul>
+<hr />
+<h2 id="203-高层命令">20.3 高层命令</h2><p>中后期玩家应能表达：</p>
+<ul>
+<li><p>向某区域推进；</p>
+</li>
+<li><p>守住某条边界；</p>
+</li>
+<li><p>优先攻击补给节点；</p>
+</li>
+<li><p>避免高损失战斗；</p>
+</li>
+<li><p>等待主力会合。</p>
+</li>
+</ul>
+<p>而不是逐格移动所有单位。</p>
+<hr />
+<h2 id="21-后勤与补给">21. 后勤与补给</h2><h2 id="211-supplynetworkstate">21.1 SupplyNetworkState</h2><p>建议包含：</p>
+<ul>
+<li><p>SupplySourceIds；</p>
+</li>
+<li><p>SupplyRouteEdges；</p>
+</li>
+<li><p>SupplyCapacity；</p>
+</li>
+<li><p>DemandByArmy；</p>
+</li>
+<li><p>DisruptedEdges；</p>
+</li>
+<li><p>SuppliedRegionIds；</p>
+</li>
+<li><p>SupplyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="212-补给来源">21.2 补给来源</h2><p>包括：</p>
+<ul>
+<li><p>城市；</p>
+</li>
+<li><p>港口；</p>
+</li>
+<li><p>仓库；</p>
+</li>
+<li><p>铁路；</p>
+</li>
+<li><p>道路；</p>
+</li>
+<li><p>舰队；</p>
+</li>
+<li><p>运输单位；</p>
+</li>
+<li><p>盟友。</p>
+</li>
+</ul>
+<hr />
+<h2 id="213-补给消耗">21.3 补给消耗</h2><p>军队可能消耗：</p>
+<ul>
+<li><p>食物；</p>
+</li>
+<li><p>弹药；</p>
+</li>
+<li><p>燃料；</p>
+</li>
+<li><p>维修；</p>
+</li>
+<li><p>人力。</p>
+</li>
+</ul>
+<hr />
+<h2 id="214-补给不足后果">21.4 补给不足后果</h2><p>包括：</p>
+<ul>
+<li><p>移动下降；</p>
+</li>
+<li><p>战斗力下降；</p>
+</li>
+<li><p>无法恢复；</p>
+</li>
+<li><p>士气下降；</p>
+</li>
+<li><p>单位损耗；</p>
+</li>
+<li><p>被迫撤退。</p>
+</li>
+</ul>
+<hr />
+<h2 id="215-补给线争夺">21.5 补给线争夺</h2><p>战争可以通过：</p>
+<ul>
+<li><p>摧毁道路；</p>
+</li>
+<li><p>封锁港口；</p>
+</li>
+<li><p>占领铁路；</p>
+</li>
+<li><p>切断航道；</p>
+</li>
+<li><p>骚扰运输；</p>
+</li>
+</ul>
+<p>削弱强敌。</p>
+<hr />
+<h2 id="22-外交关系模型">22. 外交关系模型</h2><h2 id="221-diplomaticrelationstate">22.1 DiplomaticRelationState</h2><p>建议字段：</p>
+<ul>
+<li><p>SourceFactionId；</p>
+</li>
+<li><p>TargetFactionId；</p>
+</li>
+<li><p>RelationValue；</p>
+</li>
+<li><p>Trust；</p>
+</li>
+<li><p>Fear；</p>
+</li>
+<li><p>Respect；</p>
+</li>
+<li><p>Grievances；</p>
+</li>
+<li><p>FavorBalance；</p>
+</li>
+<li><p>ActiveTreatyIds；</p>
+</li>
+<li><p>HistoricalEvents；</p>
+</li>
+<li><p>StrategicConflicts；</p>
+</li>
+<li><p>RelationVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="222-关系维度">22.2 关系维度</h2><p>不建议只使用单一好感度。</p>
+<p>可以区分：</p>
+<ul>
+<li><p>信任；</p>
+</li>
+<li><p>威胁；</p>
+</li>
+<li><p>尊重；</p>
+</li>
+<li><p>怨恨；</p>
+</li>
+<li><p>依赖；</p>
+</li>
+<li><p>共同利益；</p>
+</li>
+<li><p>意识形态差异。</p>
+</li>
+</ul>
+<hr />
+<h2 id="223-外交行为">22.3 外交行为</h2><p>包括：</p>
+<ul>
+<li><p>宣战；</p>
+</li>
+<li><p>停战；</p>
+</li>
+<li><p>和平；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>开放边境；</p>
+</li>
+<li><p>防御协定；</p>
+</li>
+<li><p>联盟；</p>
+</li>
+<li><p>科研协议；</p>
+</li>
+<li><p>附庸；</p>
+</li>
+<li><p>制裁；</p>
+</li>
+<li><p>领土交易；</p>
+</li>
+<li><p>共同战争。</p>
+</li>
+</ul>
+<hr />
+<h2 id="224-条约模型">22.4 条约模型</h2><p>TreatyDefinition建议包含：</p>
+<ul>
+<li><p>TreatyType；</p>
+</li>
+<li><p>ParticipantIds；</p>
+</li>
+<li><p>Terms；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>RenewalRules；</p>
+</li>
+<li><p>ViolationRules；</p>
+</li>
+<li><p>TerminationRules；</p>
+</li>
+<li><p>WorldVisibility；</p>
+</li>
+<li><p>TreatyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="225-条约违反">22.5 条约违反</h2><p>违反条约应影响：</p>
+<ul>
+<li><p>双边关系；</p>
+</li>
+<li><p>世界声誉；</p>
+</li>
+<li><p>盟友信任；</p>
+</li>
+<li><p>未来谈判；</p>
+</li>
+<li><p>战争理由；</p>
+</li>
+<li><p>内部稳定。</p>
+</li>
+</ul>
+<hr />
+<h2 id="23-威胁与制衡">23. 威胁与制衡</h2><h2 id="231-threatassessment">23.1 ThreatAssessment</h2><p>势力可以根据：</p>
+<ul>
+<li><p>军力；</p>
+</li>
+<li><p>边境距离；</p>
+</li>
+<li><p>扩张速度；</p>
+</li>
+<li><p>战争历史；</p>
+</li>
+<li><p>胜利进度；</p>
+</li>
+<li><p>外交网络；</p>
+</li>
+<li><p>资源控制；</p>
+</li>
+</ul>
+<p>评估威胁。</p>
+<hr />
+<h2 id="232-制衡行为">23.2 制衡行为</h2><p>AI和玩家可以：</p>
+<ul>
+<li><p>结盟；</p>
+</li>
+<li><p>制裁；</p>
+</li>
+<li><p>援助弱国；</p>
+</li>
+<li><p>代理战争；</p>
+</li>
+<li><p>封锁贸易；</p>
+</li>
+<li><p>共同研究；</p>
+</li>
+<li><p>阻止胜利项目。</p>
+</li>
+</ul>
+<hr />
+<h2 id="233-领先者压力">23.3 领先者压力</h2><p>领先势力可能面临：</p>
+<ul>
+<li><p>更高外交威胁；</p>
+</li>
+<li><p>联盟围堵；</p>
+</li>
+<li><p>间谍活动；</p>
+</li>
+<li><p>世界议案；</p>
+</li>
+<li><p>军备竞赛。</p>
+</li>
+</ul>
+<p>但不能简单让所有AI无条件攻击第一名。</p>
+<p>应根据利益和认知形成制衡。</p>
+<hr />
+<h2 id="24-贸易与市场">24. 贸易与市场</h2><h2 id="241-traderoutestate">24.1 TradeRouteState</h2><p>建议包含：</p>
+<ul>
+<li><p>TradeRouteId；</p>
+</li>
+<li><p>SourceCityId；</p>
+</li>
+<li><p>TargetCityId；</p>
+</li>
+<li><p>OwnerFactionId；</p>
+</li>
+<li><p>RouteEdges；</p>
+</li>
+<li><p>GoodsProfile；</p>
+</li>
+<li><p>Income；</p>
+</li>
+<li><p>Capacity；</p>
+</li>
+<li><p>RiskState；</p>
+</li>
+<li><p>BlockadeState；</p>
+</li>
+<li><p>TradeRouteVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="242-贸易收益">24.2 贸易收益</h2><p>可以产生：</p>
+<ul>
+<li><p>金钱；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>文化；</p>
+</li>
+<li><p>食物；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>技术扩散；</p>
+</li>
+<li><p>宗教传播。</p>
+</li>
+</ul>
+<hr />
+<h2 id="243-贸易风险">24.3 贸易风险</h2><p>受到：</p>
+<ul>
+<li><p>海盗；</p>
+</li>
+<li><p>战争；</p>
+</li>
+<li><p>封锁；</p>
+</li>
+<li><p>路线距离；</p>
+</li>
+<li><p>边境；</p>
+</li>
+<li><p>灾害；</p>
+</li>
+<li><p>政策；</p>
+</li>
+</ul>
+<p>影响。</p>
+<hr />
+<h2 id="244-贸易依赖">24.4 贸易依赖</h2><p>高度依赖外部贸易的势力可能：</p>
+<ul>
+<li><p>获得更快发展；</p>
+</li>
+<li><p>在战争和制裁时遭受更大冲击。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-中立势力">25. 中立势力</h2><h2 id="251-minorfactionstate">25.1 MinorFactionState</h2><p>建议包含：</p>
+<ul>
+<li><p>MinorFactionId；</p>
+</li>
+<li><p>TerritoryIds；</p>
+</li>
+<li><p>CityId；</p>
+</li>
+<li><p>RelationshipByFaction；</p>
+</li>
+<li><p>InfluenceByFaction；</p>
+</li>
+<li><p>UniqueBonus；</p>
+</li>
+<li><p>ProtectionState；</p>
+</li>
+<li><p>MissionStates；</p>
+</li>
+<li><p>MinorFactionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="252-中立势力作用">25.2 中立势力作用</h2><p>可以提供：</p>
+<ul>
+<li><p>贸易；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>特殊单位；</p>
+</li>
+<li><p>外交支持；</p>
+</li>
+<li><p>情报；</p>
+</li>
+<li><p>世界议会票数；</p>
+</li>
+<li><p>战略缓冲。</p>
+</li>
+</ul>
+<hr />
+<h2 id="253-互动方式">25.3 互动方式</h2><p>包括：</p>
+<ul>
+<li><p>任务；</p>
+</li>
+<li><p>赠礼；</p>
+</li>
+<li><p>保护；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>施压；</p>
+</li>
+<li><p>政变；</p>
+</li>
+<li><p>吞并；</p>
+</li>
+<li><p>解放。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-世界事件与议程">26. 世界事件与议程</h2><h2 id="261-worldeventdefinition">26.1 WorldEventDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EventId；</p>
+</li>
+<li><p>TriggerConditions；</p>
+</li>
+<li><p>ParticipantRules；</p>
+</li>
+<li><p>ChoiceDefinitions；</p>
+</li>
+<li><p>GlobalEffects；</p>
+</li>
+<li><p>LocalEffects；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>ResolutionRules；</p>
+</li>
+<li><p>PresentationProfile。</p>
+</li>
+</ul>
+<hr />
+<h2 id="262-世界事件">26.2 世界事件</h2><p>包括：</p>
+<ul>
+<li><p>灾害；</p>
+</li>
+<li><p>瘟疫；</p>
+</li>
+<li><p>资源危机；</p>
+</li>
+<li><p>技术突破；</p>
+</li>
+<li><p>移民潮；</p>
+</li>
+<li><p>世界战争；</p>
+</li>
+<li><p>异常天体；</p>
+</li>
+<li><p>生态危机；</p>
+</li>
+<li><p>宗教改革。</p>
+</li>
+</ul>
+<hr />
+<h2 id="263-世界议会">26.3 世界议会</h2><p>可以处理：</p>
+<ul>
+<li><p>禁运；</p>
+</li>
+<li><p>世界项目；</p>
+</li>
+<li><p>军事干预；</p>
+</li>
+<li><p>环境协议；</p>
+</li>
+<li><p>贸易标准；</p>
+</li>
+<li><p>特殊胜利议案；</p>
+</li>
+<li><p>中立势力保护。</p>
+</li>
+</ul>
+<hr />
+<h2 id="264-事件公平性">26.4 事件公平性</h2><p>重大事件应：</p>
+<ul>
+<li><p>提供预兆；</p>
+</li>
+<li><p>允许准备；</p>
+</li>
+<li><p>与世界状态相关；</p>
+</li>
+<li><p>存在不同应对方式；</p>
+</li>
+<li><p>不单纯随机惩罚领先者。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-胜利系统">27. 胜利系统</h2><h2 id="271-victorydefinition">27.1 VictoryDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>VictoryId；</p>
+</li>
+<li><p>VictoryType；</p>
+</li>
+<li><p>ProgressMetrics；</p>
+</li>
+<li><p>EntryConditions；</p>
+</li>
+<li><p>CompletionConditions；</p>
+</li>
+<li><p>WarningThresholds；</p>
+</li>
+<li><p>ContestRules；</p>
+</li>
+<li><p>FinalProjectRules；</p>
+</li>
+<li><p>SharedVictoryRules；</p>
+</li>
+<li><p>ScoreWeights。</p>
+</li>
+</ul>
+<hr />
+<h2 id="272-常见胜利类型">27.2 常见胜利类型</h2><h3 id="军事胜利">军事胜利</h3><p>占领首都、消灭主要敌对势力或控制战略目标。</p>
+<h3 id="科技胜利">科技胜利</h3><p>完成关键科技和大型最终项目。</p>
+<h3 id="文化胜利">文化胜利</h3><p>文化影响覆盖其他势力，或完成文明遗产目标。</p>
+<h3 id="外交胜利">外交胜利</h3><p>建立世界联盟、获得议会支持或完成共同秩序。</p>
+<h3 id="经济胜利">经济胜利</h3><p>控制市场、贸易和关键资源。</p>
+<h3 id="特殊胜利">特殊胜利</h3><p>生态修复、宗教传播、超越飞升或叙事目标。</p>
+<hr />
+<h2 id="273-胜利进度">27.3 胜利进度</h2><p>应向其他势力提供：</p>
+<ul>
+<li><p>可见进度；</p>
+</li>
+<li><p>大致阶段；</p>
+</li>
+<li><p>最终项目警告；</p>
+</li>
+<li><p>可干预节点。</p>
+</li>
+</ul>
+<hr />
+<h2 id="274-胜利竞速">27.4 胜利竞速</h2><p>进入最终阶段后，可以触发：</p>
+<ul>
+<li><p>世界警告；</p>
+</li>
+<li><p>外交制衡；</p>
+</li>
+<li><p>破坏任务；</p>
+</li>
+<li><p>军事保护；</p>
+</li>
+<li><p>资源争夺；</p>
+</li>
+<li><p>最终倒计时。</p>
+</li>
+</ul>
+<hr />
+<h2 id="275-防止形式化残局">27.5 防止形式化残局</h2><p>如果某势力已经不可逆领先但仍需执行大量回合，游戏会进入形式化拖延。</p>
+<p>可以提供：</p>
+<ul>
+<li><p>优势胜利；</p>
+</li>
+<li><p>加速项目；</p>
+</li>
+<li><p>投降；</p>
+</li>
+<li><p>自动结算；</p>
+</li>
+<li><p>历史评分结束。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28-ai总体架构">28. AI总体架构</h2><p>推荐将AI分为六层：</p>
+<ol>
+<li><p>认知与情报层；</p>
+</li>
+<li><p>势力评估层；</p>
+</li>
+<li><p>长期战略层；</p>
+</li>
+<li><p>资源预算层；</p>
+</li>
+<li><p>领域规划层；</p>
+</li>
+<li><p>命令执行层。</p>
+</li>
+</ol>
+<hr />
+<h2 id="281-aiworldmodel">28.1 AIWorldModel</h2><p>AI只使用：</p>
+<ul>
+<li><p>已探索世界；</p>
+</li>
+<li><p>已知势力；</p>
+</li>
+<li><p>最后已知军力；</p>
+</li>
+<li><p>外交信息；</p>
+</li>
+<li><p>贸易信息；</p>
+</li>
+<li><p>推测胜利进度。</p>
+</li>
+</ul>
+<p>不能直接读取完整战争迷雾状态。</p>
+<hr />
+<h2 id="282-势力评估">28.2 势力评估</h2><p>AI评估：</p>
+<ul>
+<li><p>经济；</p>
+</li>
+<li><p>军事；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>稳定；</p>
+</li>
+<li><p>领土；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>胜利进度；</p>
+</li>
+<li><p>威胁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="283-长期战略">28.3 长期战略</h2><p>例如：</p>
+<ul>
+<li><p>快速扩张；</p>
+</li>
+<li><p>科技发展；</p>
+</li>
+<li><p>海权；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>文化输出；</p>
+</li>
+<li><p>联盟；</p>
+</li>
+<li><p>征服。</p>
+</li>
+</ul>
+<hr />
+<h2 id="284-预算系统">28.4 预算系统</h2><p>AI将资源分配给：</p>
+<ul>
+<li><p>城市；</p>
+</li>
+<li><p>军事；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>后勤；</p>
+</li>
+<li><p>胜利项目；</p>
+</li>
+<li><p>应急储备。</p>
+</li>
+</ul>
+<p>各模块不能独立争抢全部资源。</p>
+<hr />
+<h2 id="285-计划承诺">28.5 计划承诺</h2><p>AI计划应包含：</p>
+<ul>
+<li><p>目标；</p>
+</li>
+<li><p>投入预算；</p>
+</li>
+<li><p>最低持续时间；</p>
+</li>
+<li><p>成功条件；</p>
+</li>
+<li><p>放弃条件；</p>
+</li>
+<li><p>风险阈值。</p>
+</li>
+</ul>
+<p>否则会频繁：</p>
+<ul>
+<li><p>改研究；</p>
+</li>
+<li><p>取消奇观；</p>
+</li>
+<li><p>反复宣战和停战；</p>
+</li>
+<li><p>调动军队往返。</p>
+</li>
+</ul>
+<hr />
+<h2 id="29-完整事件与执行流程示例">29. 完整事件与执行流程示例</h2><p>以下以“玩家发现稀有能源资源，并由此引发殖民竞争和地区战争”为例。</p>
+<h3 id="291-探索发现">29.1 探索发现</h3><p>侦察单位进入未探索区域。</p>
+<p>系统揭示：</p>
+<ul>
+<li><p>一片可定居平原；</p>
+</li>
+<li><p>稀有能源资源；</p>
+</li>
+<li><p>一条连接两块大陆的狭窄通道；</p>
+</li>
+<li><p>邻近中立势力。</p>
+</li>
+</ul>
+<hr />
+<h3 id="292-战略评估">29.2 战略评估</h3><p>玩家判断：</p>
+<ul>
+<li><p>资源是后期高级单位必需品；</p>
+</li>
+<li><p>区域距离本土较远；</p>
+</li>
+<li><p>邻国也可能发现；</p>
+</li>
+<li><p>狭窄通道适合防守。</p>
+</li>
+</ul>
+<hr />
+<h3 id="293-建立殖民地">29.3 建立殖民地</h3><p>玩家提交建立城市命令。</p>
+<p>系统验证：</p>
+<ul>
+<li><p>建城单位；</p>
+</li>
+<li><p>地块；</p>
+</li>
+<li><p>与现有城市距离；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>领土状态。</p>
+</li>
+</ul>
+<p>城市建立后：</p>
+<ul>
+<li><p>玩家获得初步领土；</p>
+</li>
+<li><p>治理成本上升；</p>
+</li>
+<li><p>邻国增加边界威胁；</p>
+</li>
+<li><p>中立势力关系发生变化。</p>
+</li>
+</ul>
+<hr />
+<h3 id="294-资源开发">29.4 资源开发</h3><p>玩家需要：</p>
+<ul>
+<li><p>研究能源开采科技；</p>
+</li>
+<li><p>建造资源设施；</p>
+</li>
+<li><p>建立道路；</p>
+</li>
+<li><p>保护运输路线。</p>
+</li>
+</ul>
+<p>资源尚未立即进入库存。</p>
+<hr />
+<h3 id="295-外交反应">29.5 外交反应</h3><p>邻国提出：</p>
+<ul>
+<li><p>购买资源；</p>
+</li>
+<li><p>划定边界；</p>
+</li>
+<li><p>或要求停止军事建设。</p>
+</li>
+</ul>
+<p>玩家拒绝边界协议，但接受短期贸易。</p>
+<p>双方关系：</p>
+<ul>
+<li><p>贸易依赖增加；</p>
+</li>
+<li><p>边界怨恨仍然存在；</p>
+</li>
+<li><p>邻国对玩家军力保持警惕。</p>
+</li>
+</ul>
+<hr />
+<h3 id="296-军事部署">29.6 军事部署</h3><p>玩家在狭窄通道建立要塞，并派驻军队。</p>
+<p>邻国根据：</p>
+<ul>
+<li><p>军力；</p>
+</li>
+<li><p>位置；</p>
+</li>
+<li><p>历史行为；</p>
+</li>
+</ul>
+<p>提高威胁评估。</p>
+<p>邻国开始：</p>
+<ul>
+<li><p>扩军；</p>
+</li>
+<li><p>寻求第三国防御协议；</p>
+</li>
+<li><p>侦察玩家资源区。</p>
+</li>
+</ul>
+<hr />
+<h3 id="297-贸易中断">29.7 贸易中断</h3><p>世界事件导致能源价格上涨。</p>
+<p>玩家减少对邻国出口，优先发展高级单位。</p>
+<p>邻国失去关键能源供给，认为玩家利用贸易依赖施压。</p>
+<hr />
+<h3 id="298-边境冲突">29.8 边境冲突</h3><p>邻国单位进入争议地块。</p>
+<p>双方单位因同步移动命令产生遭遇。</p>
+<p>战斗结果：</p>
+<ul>
+<li><p>邻国单位撤退；</p>
+</li>
+<li><p>玩家获得战术胜利；</p>
+</li>
+<li><p>邻国获得正式战争理由；</p>
+</li>
+<li><p>第三国开始外交调停。</p>
+</li>
+</ul>
+<hr />
+<h3 id="299-战争爆发">29.9 战争爆发</h3><p>邻国宣战。</p>
+<p>玩家虽然单位技术更高，但殖民地：</p>
+<ul>
+<li><p>距离本土远；</p>
+</li>
+<li><p>补给容量有限；</p>
+</li>
+<li><p>海上运输容易被切断。</p>
+</li>
+</ul>
+<p>邻国尝试绕过要塞，攻击运输节点。</p>
+<hr />
+<h3 id="2910-玩家应对">29.10 玩家应对</h3><p>玩家可以：</p>
+<ul>
+<li><p>增援殖民地；</p>
+</li>
+<li><p>寻求联盟；</p>
+</li>
+<li><p>用资源换取停战；</p>
+</li>
+<li><p>攻击邻国工业城市；</p>
+</li>
+<li><p>将殖民地设为自治附庸；</p>
+</li>
+<li><p>破坏敌方补给。</p>
+</li>
+</ul>
+<hr />
+<h3 id="2911-战争结果">29.11 战争结果</h3><p>玩家选择与第三国建立防御协议，并保护海上运输。</p>
+<p>战争持续数回合后，邻国无法突破要塞，经济因能源不足恶化。</p>
+<p>双方签订和平：</p>
+<ul>
+<li><p>玩家保留资源区；</p>
+</li>
+<li><p>邻国获得有限贸易；</p>
+</li>
+<li><p>狭窄通道设为非军事区；</p>
+</li>
+<li><p>双方怨恨暂时下降但未消失。</p>
+</li>
+</ul>
+<p>完整循环形成：</p>
+<p>探索
+→ 发现资源
+→ 扩张
+→ 开发
+→ 外交竞争
+→ 军备升级
+→ 补给战争
+→ 和平重构</p>
+<hr />
+<h2 id="30-模块通信设计">30. 模块通信设计</h2><h2 id="301-命令">30.1 命令</h2><p>典型命令包括：</p>
+<ul>
+<li><p>MoveUnit；</p>
+</li>
+<li><p>FoundCity；</p>
+</li>
+<li><p>QueueConstruction；</p>
+</li>
+<li><p>SetResearch；</p>
+</li>
+<li><p>AdoptPolicy；</p>
+</li>
+<li><p>CreateTradeRoute；</p>
+</li>
+<li><p>ProposeTreaty；</p>
+</li>
+<li><p>DeclareWar；</p>
+</li>
+<li><p>AssignGovernor；</p>
+</li>
+<li><p>ImproveTile；</p>
+</li>
+<li><p>StartVictoryProject。</p>
+</li>
+</ul>
+<p>命令必须包含：</p>
+<ul>
+<li><p>FactionId；</p>
+</li>
+<li><p>ActorId；</p>
+</li>
+<li><p>Target；</p>
+</li>
+<li><p>当前回合；</p>
+</li>
+<li><p>世界版本；</p>
+</li>
+<li><p>资源上下文；</p>
+</li>
+<li><p>幂等键。</p>
+</li>
+</ul>
+<hr />
+<h2 id="302-同步查询">30.2 同步查询</h2><p>适用于：</p>
+<ul>
+<li><p>地块是否可定居；</p>
+</li>
+<li><p>单位是否可移动；</p>
+</li>
+<li><p>当前资源；</p>
+</li>
+<li><p>科技是否满足；</p>
+</li>
+<li><p>条约是否合法；</p>
+</li>
+<li><p>某势力威胁评估；</p>
+</li>
+<li><p>城市为何无法生产；</p>
+</li>
+<li><p>胜利进度。</p>
+</li>
+</ul>
+<p>查询不能修改世界或调用随机数。</p>
+<hr />
+<h2 id="303-领域事件">30.3 领域事件</h2><p>包括：</p>
+<ul>
+<li><p>TileExplored；</p>
+</li>
+<li><p>FactionDiscovered；</p>
+</li>
+<li><p>CityFounded；</p>
+</li>
+<li><p>PopulationGrown；</p>
+</li>
+<li><p>ConstructionCompleted；</p>
+</li>
+<li><p>TechnologyResearched；</p>
+</li>
+<li><p>PolicyAdopted；</p>
+</li>
+<li><p>TradeRouteEstablished；</p>
+</li>
+<li><p>TreatySigned；</p>
+</li>
+<li><p>WarDeclared；</p>
+</li>
+<li><p>BattleResolved；</p>
+</li>
+<li><p>CityCaptured；</p>
+</li>
+<li><p>SupplyDisrupted；</p>
+</li>
+<li><p>WorldEventStarted；</p>
+</li>
+<li><p>VictoryProgressChanged；</p>
+</li>
+<li><p>GameCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="304-表现事件">30.4 表现事件</h2><p>包括：</p>
+<ul>
+<li><p>RevealMap；</p>
+</li>
+<li><p>ShowCityFounded；</p>
+</li>
+<li><p>PlayTechnologyUnlocked；</p>
+</li>
+<li><p>ShowDiplomaticMessage；</p>
+</li>
+<li><p>AnimateBattleResult；</p>
+</li>
+<li><p>UpdateBorderPresentation；</p>
+</li>
+<li><p>ShowEraTransition；</p>
+</li>
+<li><p>DisplayVictoryWarning。</p>
+</li>
+</ul>
+<p>表现事件不能决定领土、资源、战斗和胜利结果。</p>
+<hr />
+<h2 id="31-存档与确定性">31. 存档与确定性</h2><h2 id="311-savesnapshot">31.1 SaveSnapshot</h2><p>建议包含：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>GameTurnState；</p>
+</li>
+<li><p>WorldState；</p>
+</li>
+<li><p>TileStates；</p>
+</li>
+<li><p>FactionStates；</p>
+</li>
+<li><p>CityStates；</p>
+</li>
+<li><p>UnitStates；</p>
+</li>
+<li><p>PopulationStates；</p>
+</li>
+<li><p>TechnologyStates；</p>
+</li>
+<li><p>CivicStates；</p>
+</li>
+<li><p>DiplomacyStates；</p>
+</li>
+<li><p>TreatyStates；</p>
+</li>
+<li><p>TradeStates；</p>
+</li>
+<li><p>SupplyStates；</p>
+</li>
+<li><p>VictoryStates；</p>
+</li>
+<li><p>AIPlanStates；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="312-保存边界">31.2 保存边界</h2><p>适合在：</p>
+<ul>
+<li><p>回合开始；</p>
+</li>
+<li><p>回合结束；</p>
+</li>
+<li><p>命令提交完成；</p>
+</li>
+<li><p>战斗结算后；</p>
+</li>
+<li><p>外交事务完成；</p>
+</li>
+<li><p>时代切换；</p>
+</li>
+<li><p>胜利阶段开始；</p>
+</li>
+</ul>
+<p>保存。</p>
+<hr />
+<h2 id="313-随机流分离">31.3 随机流分离</h2><p>建议分离：</p>
+<ul>
+<li><p>WorldGenerationRandom；</p>
+</li>
+<li><p>CombatRandom；</p>
+</li>
+<li><p>EventRandom；</p>
+</li>
+<li><p>DiplomacyRandom；</p>
+</li>
+<li><p>AIRandom；</p>
+</li>
+<li><p>LootRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="314-回放">31.4 回放</h2><p>保存：</p>
+<ul>
+<li><p>初始世界种子；</p>
+</li>
+<li><p>玩家命令；</p>
+</li>
+<li><p>AI命令；</p>
+</li>
+<li><p>外交选择；</p>
+</li>
+<li><p>随机流；</p>
+</li>
+<li><p>周期快照；</p>
+</li>
+<li><p>状态哈希。</p>
+</li>
+</ul>
+<hr />
+<h2 id="315-状态哈希">31.5 状态哈希</h2><p>应覆盖：</p>
+<ul>
+<li><p>地块；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>单位；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>条约；</p>
+</li>
+<li><p>胜利进度；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="32-失败隔离">32. 失败隔离</h2><h2 id="321-命令验证失败">32.1 命令验证失败</h2><p>失败时：</p>
+<ul>
+<li><p>不修改状态；</p>
+</li>
+<li><p>不扣除资源；</p>
+</li>
+<li><p>不占用单位行动点；</p>
+</li>
+<li><p>不推进随机流；</p>
+</li>
+<li><p>返回明确原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="322-城市建设事务失败">32.2 城市建设事务失败</h2><p>如果资源、地块或建城单位状态冲突：</p>
+<ul>
+<li><p>不创建城市；</p>
+</li>
+<li><p>不消耗建城单位；</p>
+</li>
+<li><p>不修改领土；</p>
+</li>
+<li><p>不产生半完成城市；</p>
+</li>
+<li><p>返回冲突版本。</p>
+</li>
+</ul>
+<hr />
+<h2 id="323-生产预留泄漏">32.3 生产预留泄漏</h2><p>定期检查：</p>
+<ul>
+<li><p>项目已取消；</p>
+</li>
+<li><p>城市已被占领；</p>
+</li>
+<li><p>资源已失效；</p>
+</li>
+<li><p>队列项不存在；</p>
+</li>
+<li><p>预留超过库存。</p>
+</li>
+</ul>
+<p>异常预留必须释放。</p>
+<hr />
+<h2 id="324-外交事务冲突">32.4 外交事务冲突</h2><p>同一回合发生：</p>
+<ul>
+<li><p>宣战；</p>
+</li>
+<li><p>签署和平；</p>
+</li>
+<li><p>建立联盟；</p>
+</li>
+<li><p>势力被消灭；</p>
+</li>
+</ul>
+<p>时，按照固定优先级处理。</p>
+<p>不能同时存在相互矛盾条约。</p>
+<hr />
+<h2 id="325-战斗结算异常">32.5 战斗结算异常</h2><p>如果战斗无法完成：</p>
+<ul>
+<li><p>锁定参与单位；</p>
+</li>
+<li><p>保留战斗前快照；</p>
+</li>
+<li><p>使用保底确定性结果；</p>
+</li>
+<li><p>不让单位同时存在于两个位置；</p>
+</li>
+<li><p>记录完整BattleContext。</p>
+</li>
+</ul>
+<hr />
+<h2 id="326-补给图异常">32.6 补给图异常</h2><p>补给网络计算失败时：</p>
+<ul>
+<li><p>使用上一有效网络；</p>
+</li>
+<li><p>标记受影响区域；</p>
+</li>
+<li><p>暂停新的补给变化；</p>
+</li>
+<li><p>重新构建局部图；</p>
+</li>
+<li><p>防止全军错误进入无补给。</p>
+</li>
+</ul>
+<hr />
+<h2 id="327-ai规划失败">32.7 AI规划失败</h2><p>AI无法形成新计划时：</p>
+<ul>
+<li><p>保留当前战略；</p>
+</li>
+<li><p>优先维护城市和防御；</p>
+</li>
+<li><p>停止高风险扩张；</p>
+</li>
+<li><p>使用基础生产模板；</p>
+</li>
+<li><p>记录预算和目标冲突。</p>
+</li>
+</ul>
+<hr />
+<h2 id="328-胜利结算冲突">32.8 胜利结算冲突</h2><p>多个势力同一回合满足胜利条件时，需要明确：</p>
+<ul>
+<li><p>同时胜利；</p>
+</li>
+<li><p>分数比较；</p>
+</li>
+<li><p>完成顺序；</p>
+</li>
+<li><p>最终项目优先级；</p>
+</li>
+<li><p>共享胜利；</p>
+</li>
+<li><p>平局。</p>
+</li>
+</ul>
+<hr />
+<h2 id="329-内容缺失">32.9 内容缺失</h2><p>科技、单位或建筑定义被删除时：</p>
+<ul>
+<li><p>使用迁移映射；</p>
+</li>
+<li><p>转换为等价内容；</p>
+</li>
+<li><p>返还资源；</p>
+</li>
+<li><p>移除非法队列项；</p>
+</li>
+<li><p>不破坏整个存档。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-调试与可观测性">33. 调试与可观测性</h2><h2 id="331-世界状态查看器">33.1 世界状态查看器</h2><p>显示：</p>
+<ul>
+<li><p>回合；</p>
+</li>
+<li><p>时代；</p>
+</li>
+<li><p>世界事件；</p>
+</li>
+<li><p>所有势力；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>单位；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>胜利进度；</p>
+</li>
+<li><p>随机游标。</p>
+</li>
+</ul>
+<hr />
+<h2 id="332-地块解释器">33.2 地块解释器</h2><p>显示：</p>
+<ul>
+<li><p>地形；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>所有权；</p>
+</li>
+<li><p>控制权；</p>
+</li>
+<li><p>产出；</p>
+</li>
+<li><p>改良；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>视野；</p>
+</li>
+<li><p>边界压力；</p>
+</li>
+<li><p>可执行命令。</p>
+</li>
+</ul>
+<hr />
+<h2 id="333-城市产出解释器">33.3 城市产出解释器</h2><p>显示：</p>
+<ul>
+<li><p>人口；</p>
+</li>
+<li><p>地块；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>政策；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>稳定；</p>
+</li>
+<li><p>占领；</p>
+</li>
+<li><p>最终食物、生产、科研和金钱。</p>
+</li>
+</ul>
+<hr />
+<h2 id="334-外交关系解释器">33.4 外交关系解释器</h2><p>显示：</p>
+<ul>
+<li><p>信任；</p>
+</li>
+<li><p>威胁；</p>
+</li>
+<li><p>怨恨；</p>
+</li>
+<li><p>条约；</p>
+</li>
+<li><p>历史行为；</p>
+</li>
+<li><p>共同敌人；</p>
+</li>
+<li><p>边界；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>当前外交倾向。</p>
+</li>
+</ul>
+<hr />
+<h2 id="335-ai战略面板">33.5 AI战略面板</h2><p>显示：</p>
+<ul>
+<li><p>长期目标；</p>
+</li>
+<li><p>当前预算；</p>
+</li>
+<li><p>威胁排序；</p>
+</li>
+<li><p>扩张目标；</p>
+</li>
+<li><p>研究计划；</p>
+</li>
+<li><p>军事计划；</p>
+</li>
+<li><p>外交计划；</p>
+</li>
+<li><p>计划承诺和放弃条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="336-补给网络查看器">33.6 补给网络查看器</h2><p>显示：</p>
+<ul>
+<li><p>补给源；</p>
+</li>
+<li><p>路线；</p>
+</li>
+<li><p>容量；</p>
+</li>
+<li><p>军队需求；</p>
+</li>
+<li><p>阻断点；</p>
+</li>
+<li><p>无补给区域；</p>
+</li>
+<li><p>海运和铁路状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="337-战斗解释器">33.7 战斗解释器</h2><p>显示：</p>
+<ul>
+<li><p>参战单位；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>支援；</p>
+</li>
+<li><p>随机值；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>撤退；</p>
+</li>
+<li><p>最终结果。</p>
+</li>
+</ul>
+<hr />
+<h2 id="338-胜利进度面板">33.8 胜利进度面板</h2><p>显示：</p>
+<ul>
+<li><p>各势力胜利路线；</p>
+</li>
+<li><p>当前阶段；</p>
+</li>
+<li><p>已完成条件；</p>
+</li>
+<li><p>可干预节点；</p>
+</li>
+<li><p>预计剩余回合；</p>
+</li>
+<li><p>当前领先原因。</p>
+</li>
+</ul>
+<hr />
+<h2 id="339-回合时间线">33.9 回合时间线</h2><p>记录：</p>
+<ul>
+<li><p>命令；</p>
+</li>
+<li><p>城市建设；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>战斗；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>事件；</p>
+</li>
+<li><p>胜利变化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3310-状态差异工具">33.10 状态差异工具</h2><p>比较两个回合或存档中的：</p>
+<ul>
+<li><p>领土；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>单位；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>条约；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>胜利进度；</p>
+</li>
+<li><p>AI计划。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-内容验证工具">34. 内容验证工具</h2><h2 id="341-地图公平性验证">34.1 地图公平性验证</h2><p>统计：</p>
+<ul>
+<li><p>出生地基础产出；</p>
+</li>
+<li><p>可扩张地块；</p>
+</li>
+<li><p>战略资源距离；</p>
+</li>
+<li><p>防守地形；</p>
+</li>
+<li><p>海路；</p>
+</li>
+<li><p>邻国距离；</p>
+</li>
+<li><p>中立势力；</p>
+</li>
+<li><p>奇观。</p>
+</li>
+</ul>
+<hr />
+<h2 id="342-科技树验证">34.2 科技树验证</h2><p>检查：</p>
+<ul>
+<li><p>前置循环；</p>
+</li>
+<li><p>不可达科技；</p>
+</li>
+<li><p>无用途科技；</p>
+</li>
+<li><p>过早单位；</p>
+</li>
+<li><p>资源解锁顺序；</p>
+</li>
+<li><p>胜利项目依赖。</p>
+</li>
+</ul>
+<hr />
+<h2 id="343-单位升级链验证">34.3 单位升级链验证</h2><p>检查：</p>
+<ul>
+<li><p>所有单位存在升级路径；</p>
+</li>
+<li><p>资源可获得；</p>
+</li>
+<li><p>不会升级为更弱单位；</p>
+</li>
+<li><p>时代切换合理；</p>
+</li>
+<li><p>特殊单位不会重复解锁。</p>
+</li>
+</ul>
+<hr />
+<h2 id="344-外交状态验证">34.4 外交状态验证</h2><p>检查：</p>
+<ul>
+<li><p>矛盾条约；</p>
+</li>
+<li><p>已灭亡势力仍有协议；</p>
+</li>
+<li><p>宣战后保留错误贸易；</p>
+</li>
+<li><p>附庸同时与宗主交战；</p>
+</li>
+<li><p>联盟义务未执行。</p>
+</li>
+</ul>
+<hr />
+<h2 id="345-胜利可达性验证">34.5 胜利可达性验证</h2><p>自动验证：</p>
+<ul>
+<li><p>每种胜利均有合法路线；</p>
+</li>
+<li><p>必需科技可研究；</p>
+</li>
+<li><p>最终项目可建造；</p>
+</li>
+<li><p>世界规则不会永久阻止；</p>
+</li>
+<li><p>多人条件一致。</p>
+</li>
+</ul>
+<hr />
+<h2 id="346-自动ai对局">34.6 自动AI对局</h2><p>批量模拟并统计：</p>
+<ul>
+<li><p>胜率；</p>
+</li>
+<li><p>游戏时长；</p>
+</li>
+<li><p>城市数量；</p>
+</li>
+<li><p>战争次数；</p>
+</li>
+<li><p>科技速度；</p>
+</li>
+<li><p>扩张速度；</p>
+</li>
+<li><p>胜利路线分布；</p>
+</li>
+<li><p>滚雪球程度；</p>
+</li>
+<li><p>AI停滞；</p>
+</li>
+<li><p>回合耗时。</p>
+</li>
+</ul>
+<hr />
+<h2 id="347-极端状态测试">34.7 极端状态测试</h2><p>包括：</p>
+<ul>
+<li><p>单城通关；</p>
+</li>
+<li><p>超大帝国；</p>
+</li>
+<li><p>全世界战争；</p>
+</li>
+<li><p>所有势力联盟；</p>
+</li>
+<li><p>资源极度稀缺；</p>
+</li>
+<li><p>无海洋地图；</p>
+</li>
+<li><p>全海洋地图；</p>
+</li>
+<li><p>同回合多胜利；</p>
+</li>
+<li><p>首都连续易手。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-性能设计">35. 性能设计</h2><h2 id="351-多频率更新">35.1 多频率更新</h2><h3 id="每回合">每回合</h3><ul>
+<li><p>城市产出；</p>
+</li>
+<li><p>单位维护；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>胜利。</p>
+</li>
+</ul>
+<h3 id="若干回合一次">若干回合一次</h3><ul>
+<li><p>文化扩散；</p>
+</li>
+<li><p>人口迁移；</p>
+</li>
+<li><p>长期AI战略；</p>
+</li>
+<li><p>世界市场；</p>
+</li>
+<li><p>地图价值重评估。</p>
+</li>
+</ul>
+<hr />
+<h2 id="352-脏标记">35.2 脏标记</h2><p>以下变化触发局部重算：</p>
+<ul>
+<li><p>领土变化；</p>
+</li>
+<li><p>道路改变；</p>
+</li>
+<li><p>城市建立；</p>
+</li>
+<li><p>港口失效；</p>
+</li>
+<li><p>政策切换；</p>
+</li>
+<li><p>战争开始；</p>
+</li>
+<li><p>补给节点被占领。</p>
+</li>
+</ul>
+<hr />
+<h2 id="353-路径缓存">35.3 路径缓存</h2><p>适用于：</p>
+<ul>
+<li><p>单位移动；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>AI扩张；</p>
+</li>
+<li><p>海路。</p>
+</li>
+</ul>
+<p>地图拓扑变化时按区域失效。</p>
+<hr />
+<h2 id="354-ai预算">35.4 AI预算</h2><p>限制每个回合：</p>
+<ul>
+<li><p>候选城市数量；</p>
+</li>
+<li><p>路径请求；</p>
+</li>
+<li><p>战争模拟；</p>
+</li>
+<li><p>外交提案；</p>
+</li>
+<li><p>科技评估；</p>
+</li>
+<li><p>单位规划。</p>
+</li>
+</ul>
+<hr />
+<h2 id="355-远端抽象">35.5 远端抽象</h2><p>玩家不需要高频查看的：</p>
+<ul>
+<li><p>远端贸易；</p>
+</li>
+<li><p>中立势力；</p>
+</li>
+<li><p>非关键战争；</p>
+</li>
+<li><p>文化传播；</p>
+</li>
+</ul>
+<p>可以低频或聚合模拟。</p>
+<hr />
+<h2 id="36-可扩展点">36. 可扩展点</h2><h2 id="361-新文明">36.1 新文明</h2><p>提供：</p>
+<ul>
+<li><p>FactionDefinition；</p>
+</li>
+<li><p>领袖；</p>
+</li>
+<li><p>特性；</p>
+</li>
+<li><p>特殊单位；</p>
+</li>
+<li><p>特殊建筑；</p>
+</li>
+<li><p>AI偏好；</p>
+</li>
+<li><p>表现资源。</p>
+</li>
+</ul>
+<hr />
+<h2 id="362-新地图类型">36.2 新地图类型</h2><p>通过：</p>
+<ul>
+<li><p>MapTopology；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>出生规则；</p>
+</li>
+<li><p>航道；</p>
+</li>
+<li><p>灾害；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="363-新科技时代">36.3 新科技时代</h2><p>提供：</p>
+<ul>
+<li><p>科技；</p>
+</li>
+<li><p>单位；</p>
+</li>
+<li><p>建筑；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>制度；</p>
+</li>
+<li><p>世界变体；</p>
+</li>
+<li><p>胜利项目。</p>
+</li>
+</ul>
+<hr />
+<h2 id="364-新外交机制">36.4 新外交机制</h2><p>通过：</p>
+<ul>
+<li><p>条约；</p>
+</li>
+<li><p>关系维度；</p>
+</li>
+<li><p>违约规则；</p>
+</li>
+<li><p>多边规则；</p>
+</li>
+<li><p>AI评估；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="365-新胜利路线">36.5 新胜利路线</h2><p>提供：</p>
+<ul>
+<li><p>ProgressMetrics；</p>
+</li>
+<li><p>阶段条件；</p>
+</li>
+<li><p>最终项目；</p>
+</li>
+<li><p>警告阈值；</p>
+</li>
+<li><p>干预规则；</p>
+</li>
+<li><p>结果表现。</p>
+</li>
+</ul>
+<hr />
+<h2 id="366-新世界事件">36.6 新世界事件</h2><p>通过：</p>
+<ul>
+<li><p>触发条件；</p>
+</li>
+<li><p>参与者；</p>
+</li>
+<li><p>选择；</p>
+</li>
+<li><p>全局效果；</p>
+</li>
+<li><p>持续时间；</p>
+</li>
+<li><p>结算；</p>
+</li>
+</ul>
+<p>接入。</p>
+<hr />
+<h2 id="37-玩家体验设计">37. 玩家体验设计</h2><h2 id="371-玩家必须知道当前最重要的问题">37.1 玩家必须知道当前最重要的问题</h2><p>每回合应优先提示：</p>
+<ul>
+<li><p>城市空闲；</p>
+</li>
+<li><p>单位可行动；</p>
+</li>
+<li><p>补给中断；</p>
+</li>
+<li><p>敌军接近；</p>
+</li>
+<li><p>条约到期；</p>
+</li>
+<li><p>胜利威胁；</p>
+</li>
+<li><p>资源不足。</p>
+</li>
+</ul>
+<p>避免低价值通知淹没关键问题。</p>
+<hr />
+<h2 id="372-信息需要分层">37.2 信息需要分层</h2><p>默认展示：</p>
+<ul>
+<li><p>领土；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>军队；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>研究；</p>
+</li>
+<li><p>外交；</p>
+</li>
+<li><p>胜利。</p>
+</li>
+</ul>
+<p>详细层按需展示：</p>
+<ul>
+<li><p>产出来源；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>人口；</p>
+</li>
+<li><p>AI意图推测；</p>
+</li>
+<li><p>历史数据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="373-扩张成本必须可预测">37.3 扩张成本必须可预测</h2><p>玩家建城前需要看到：</p>
+<ul>
+<li><p>预计维护；</p>
+</li>
+<li><p>治理占用；</p>
+</li>
+<li><p>补给难度；</p>
+</li>
+<li><p>外交影响；</p>
+</li>
+<li><p>地块潜力；</p>
+</li>
+<li><p>防守风险。</p>
+</li>
+</ul>
+<hr />
+<h2 id="374-外交行为需要可解释">37.4 外交行为需要可解释</h2><p>玩家应知道AI拒绝提案的大致原因：</p>
+<ul>
+<li><p>不信任；</p>
+</li>
+<li><p>当前受威胁；</p>
+</li>
+<li><p>条件价值不足；</p>
+</li>
+<li><p>边界冲突；</p>
+</li>
+<li><p>已有盟约；</p>
+</li>
+<li><p>胜利竞争。</p>
+</li>
+</ul>
+<hr />
+<h2 id="375-中后期减少重复管理">37.5 中后期减少重复管理</h2><p>应提供：</p>
+<ul>
+<li><p>城市生产模板；</p>
+</li>
+<li><p>自动探索；</p>
+</li>
+<li><p>军团；</p>
+</li>
+<li><p>贸易续签；</p>
+</li>
+<li><p>批量升级；</p>
+</li>
+<li><p>政策预设；</p>
+</li>
+<li><p>总督。</p>
+</li>
+</ul>
+<hr />
+<h2 id="376-落后玩家需要战略恢复空间">37.6 落后玩家需要战略恢复空间</h2><p>可以通过：</p>
+<ul>
+<li><p>科技扩散；</p>
+</li>
+<li><p>联盟；</p>
+</li>
+<li><p>游击；</p>
+</li>
+<li><p>外交制衡；</p>
+</li>
+<li><p>世界事件；</p>
+</li>
+<li><p>特殊资源；</p>
+</li>
+<li><p>防守优势；</p>
+</li>
+</ul>
+<p>保留翻盘可能。</p>
+<hr />
+<h2 id="377-领先者不能只因数值领先而自动获胜">37.7 领先者不能只因数值领先而自动获胜</h2><p>领先势力仍需：</p>
+<ul>
+<li><p>保护边境；</p>
+</li>
+<li><p>维持补给；</p>
+</li>
+<li><p>管理外交；</p>
+</li>
+<li><p>完成胜利项目；</p>
+</li>
+<li><p>应对制衡。</p>
+</li>
+</ul>
+<hr />
+<h2 id="378-回合摘要需要说明因果">37.8 回合摘要需要说明因果</h2><p>例如：</p>
+<ul>
+<li><p>金钱下降，因为战争维护和贸易中断；</p>
+</li>
+<li><p>城市不稳定，因为占领惩罚与文化冲突；</p>
+</li>
+<li><p>军队战斗力下降，因为补给线被切断。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-常见设计失败">38. 常见设计失败</h2><h2 id="381-扩张只有收益">38.1 扩张只有收益</h2><p>城市越多、领土越大就无条件越强。</p>
+<hr />
+<h2 id="382-科技只是统一百分比提升">38.2 科技只是统一百分比提升</h2><p>没有改变规则和战略选择。</p>
+<hr />
+<h2 id="383-外交只有单一好感度">38.3 外交只有单一好感度</h2><p>无法表达恐惧、信任、利益和怨恨。</p>
+<hr />
+<h2 id="384-ai读取完整战争迷雾">38.4 AI读取完整战争迷雾</h2><p>无需侦察即可精确针对玩家。</p>
+<hr />
+<h2 id="385-军队不需要补给">38.5 军队不需要补给</h2><p>远征距离和交通网络没有意义。</p>
+<hr />
+<h2 id="386-城市之间没有定位差异">38.6 城市之间没有定位差异</h2><p>所有城市采用同一建设模板。</p>
+<hr />
+<h2 id="387-中后期操作量线性增长">38.7 中后期操作量线性增长</h2><p>玩家被城市和单位逐项管理淹没。</p>
+<hr />
+<h2 id="388-胜利条件直到最后才可见">38.8 胜利条件直到最后才可见</h2><p>玩家无法判断对手正在接近胜利。</p>
+<hr />
+<h2 id="389-领先后仍需大量无意义回合">38.9 领先后仍需大量无意义回合</h2><p>结果已不可逆，但游戏拒绝结束。</p>
+<hr />
+<h2 id="3810-落后后无法恢复">38.10 落后后无法恢复</h2><p>早期一次失误直接决定数小时后的结局。</p>
+<hr />
+<h2 id="3811-随机事件与世界状态无关">38.11 随机事件与世界状态无关</h2><p>玩家无法预防或应对，只能承受惩罚。</p>
+<hr />
+<h2 id="3812-地图出生点差异过大">38.12 地图出生点差异过大</h2><p>某些出生点缺乏关键资源或扩张空间。</p>
+<hr />
+<h2 id="3813-政策可以每回合无成本切换">38.13 政策可以每回合无成本切换</h2><p>产生大量机械最优化操作。</p>
+<hr />
+<h2 id="3814-ai反复改变战略">38.14 AI反复改变战略</h2><p>军队来回移动、奇观不断取消、外交立场快速反转。</p>
+<hr />
+<h2 id="39-最小可行原型">39. 最小可行原型</h2><p>一个能够验证4X核心范式的最小原型可以包含：</p>
+<h3 id="世界">世界</h3><ul>
+<li><p>1张六边形地图；</p>
+</li>
+<li><p>4个主要势力；</p>
+</li>
+<li><p>4个中立势力；</p>
+</li>
+<li><p>3种基础地形；</p>
+</li>
+<li><p>3种战略资源；</p>
+</li>
+<li><p>2种奢侈资源；</p>
+</li>
+<li><p>海陆两类交通。</p>
+</li>
+</ul>
+<h3 id="城市与经济">城市与经济</h3><ul>
+<li><p>城市；</p>
+</li>
+<li><p>人口；</p>
+</li>
+<li><p>食物；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>金钱；</p>
+</li>
+<li><p>科研；</p>
+</li>
+<li><p>文化；</p>
+</li>
+<li><p>6种建筑；</p>
+</li>
+<li><p>3种地块改良。</p>
+</li>
+</ul>
+<h3 id="科技与制度">科技与制度</h3><ul>
+<li><p>3个时代；</p>
+</li>
+<li><p>15至20项科技；</p>
+</li>
+<li><p>10项制度；</p>
+</li>
+<li><p>3种政府；</p>
+</li>
+<li><p>12项政策。</p>
+</li>
+</ul>
+<h3 id="军事">军事</h3><ul>
+<li><p>侦察；</p>
+</li>
+<li><p>近战；</p>
+</li>
+<li><p>远程；</p>
+</li>
+<li><p>骑兵或机动；</p>
+</li>
+<li><p>攻城；</p>
+</li>
+<li><p>海军；</p>
+</li>
+<li><p>补给单位。</p>
+</li>
+</ul>
+<h3 id="外交">外交</h3><ul>
+<li><p>贸易；</p>
+</li>
+<li><p>开放边境；</p>
+</li>
+<li><p>防御协定；</p>
+</li>
+<li><p>联盟；</p>
+</li>
+<li><p>宣战；</p>
+</li>
+<li><p>停战；</p>
+</li>
+<li><p>领土交易。</p>
+</li>
+</ul>
+<h3 id="胜利">胜利</h3><ul>
+<li><p>军事胜利；</p>
+</li>
+<li><p>科技胜利；</p>
+</li>
+<li><p>外交胜利。</p>
+</li>
+</ul>
+<h3 id="必要基础设施">必要基础设施</h3><ul>
+<li><p>GameTurnState；</p>
+</li>
+<li><p>WorldDefinition；</p>
+</li>
+<li><p>TileState；</p>
+</li>
+<li><p>FactionRuntimeState；</p>
+</li>
+<li><p>CityRuntimeState；</p>
+</li>
+<li><p>UnitRuntimeState；</p>
+</li>
+<li><p>TechnologyState；</p>
+</li>
+<li><p>DiplomaticRelationState；</p>
+</li>
+<li><p>TreatyState；</p>
+</li>
+<li><p>SupplyNetworkState；</p>
+</li>
+<li><p>VictoryState；</p>
+</li>
+<li><p>SaveSnapshot。</p>
+</li>
+</ul>
+<h3 id="必要调试工具">必要调试工具</h3><ul>
+<li><p>世界状态查看器；</p>
+</li>
+<li><p>地块解释器；</p>
+</li>
+<li><p>城市产出解释器；</p>
+</li>
+<li><p>外交关系解释器；</p>
+</li>
+<li><p>AI战略面板；</p>
+</li>
+<li><p>补给网络查看器；</p>
+</li>
+<li><p>战斗解释器；</p>
+</li>
+<li><p>胜利进度面板；</p>
+</li>
+<li><p>回合时间线。</p>
+</li>
+</ul>
+<p>该原型应重点验证：</p>
+<ul>
+<li><p>探索是否会真实改变战略；</p>
+</li>
+<li><p>扩张是否同时产生收益与成本；</p>
+</li>
+<li><p>城市是否能够形成不同定位；</p>
+</li>
+<li><p>科技是否会改变规则；</p>
+</li>
+<li><p>军事是否依赖补给；</p>
+</li>
+<li><p>外交是否会形成多方制衡；</p>
+</li>
+<li><p>AI是否只使用已知信息；</p>
+</li>
+<li><p>落后势力是否仍有恢复路径；</p>
+</li>
+<li><p>胜利进度是否能够被识别和干预；</p>
+</li>
+<li><p>中后期是否能通过高层管理降低操作负担。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-推荐实施顺序">40. 推荐实施顺序</h2><p>第一阶段：回合、地图和地块
+第二阶段：势力、所有权和战争迷雾
+第三阶段：城市、人口和基础产出
+第四阶段：建设队列和地块开发
+第五阶段：科技、制度和政策
+第六阶段：单位、移动和战斗
+第七阶段：补给和军团
+第八阶段：外交、条约和贸易
+第九阶段：中立势力和世界事件
+第十阶段：胜利条件和时代转换
+第十一阶段：AI战略、预算和计划承诺
+第十二阶段：回放、自动对局和内容验证</p>
+<p>不建议在以下基础设施尚未稳定时先制作大量文明和科技：</p>
+<ul>
+<li><p>回合阶段；</p>
+</li>
+<li><p>地图状态；</p>
+</li>
+<li><p>资源守恒；</p>
+</li>
+<li><p>命令验证；</p>
+</li>
+<li><p>外交事务；</p>
+</li>
+<li><p>补给；</p>
+</li>
+<li><p>AI预算；</p>
+</li>
+<li><p>胜利结算；</p>
+</li>
+<li><p>存档确定性。</p>
+</li>
+</ul>
+<hr />
+<h2 id="41-架构验收标准">41. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>世界能够通过稳定种子生成和重建；</p>
+</li>
+<li><p>战争迷雾为每个势力生成独立信息投影；</p>
+</li>
+<li><p>势力只能根据自己掌握的情报行动；</p>
+</li>
+<li><p>城市能够处理人口、生产、科研和建设；</p>
+</li>
+<li><p>扩张会增加治理、防守或维护成本；</p>
+</li>
+<li><p>地块资源需要技术、控制和设施才能使用；</p>
+</li>
+<li><p>科技和制度能够解锁新规则；</p>
+</li>
+<li><p>单位移动、战斗和占位冲突具有稳定结算顺序；</p>
+</li>
+<li><p>军事行动受到补给、距离和地形影响；</p>
+</li>
+<li><p>城市、单位和项目使用资源预留机制；</p>
+</li>
+<li><p>外交关系区分信任、威胁、怨恨和利益；</p>
+</li>
+<li><p>条约违反会影响多方关系和世界声誉；</p>
+</li>
+<li><p>AI拥有长期目标、预算和计划承诺；</p>
+</li>
+<li><p>AI不会每回合完全改变战略；</p>
+</li>
+<li><p>领先势力会引发基于利益的制衡；</p>
+</li>
+<li><p>落后势力拥有合理追赶和联盟空间；</p>
+</li>
+<li><p>各种胜利路线会提前进入可识别状态；</p>
+</li>
+<li><p>多势力同回合满足胜利时具有明确规则；</p>
+</li>
+<li><p>相同世界种子和命令流能够确定性回放；</p>
+</li>
+<li><p>调试工具能够解释城市、战斗、外交和胜利进度。</p>
+</li>
+</ul>
+<hr />
+<h2 id="42-可迁移到其他游戏的设计思想">42. 可迁移到其他游戏的设计思想</h2><h2 id="421-扩张需要治理成本">42.1 扩张需要治理成本</h2><p>可迁移到：</p>
+<ul>
+<li><p>公会；</p>
+</li>
+<li><p>企业；</p>
+</li>
+<li><p>殖民地；</p>
+</li>
+<li><p>基地；</p>
+</li>
+<li><p>开放世界据点；</p>
+</li>
+<li><p>军团。</p>
+</li>
+</ul>
+<p>规模增长应增加协调、维护和边界成本。</p>
+<hr />
+<h2 id="422-探索应改变规划而不只是提供奖励">42.2 探索应改变规划，而不只是提供奖励</h2><p>可迁移到：</p>
+<ul>
+<li><p>开放世界；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>撤离；</p>
+</li>
+<li><p>地牢；</p>
+</li>
+<li><p>战术游戏。</p>
+</li>
+</ul>
+<p>新信息应改变玩家的路线、构筑和目标。</p>
+<hr />
+<h2 id="423-经济科技和军事应形成相互依赖">42.3 经济、科技和军事应形成相互依赖</h2><p>可迁移到：</p>
+<ul>
+<li><p>战争游戏；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>卡牌战役。</p>
+</li>
+</ul>
+<p>军事优势需要经济支持，经济安全需要军事保护，技术则改变两者效率和规则。</p>
+<hr />
+<h2 id="424-多边关系不能简化为多个双边好感度">42.4 多边关系不能简化为多个双边好感度</h2><p>可迁移到：</p>
+<ul>
+<li><p>社交模拟；</p>
+</li>
+<li><p>阵营；</p>
+</li>
+<li><p>政治；</p>
+</li>
+<li><p>公会；</p>
+</li>
+<li><p>联盟战争。</p>
+</li>
+</ul>
+<p>一项行为会通过利益网络影响多个参与者。</p>
+<hr />
+<h2 id="425-领先状态需要可观察可反制">42.5 领先状态需要可观察、可反制</h2><p>可迁移到：</p>
+<ul>
+<li><p>竞速；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>竞技场；</p>
+</li>
+<li><p>经济竞争；</p>
+</li>
+<li><p>赛季活动。</p>
+</li>
+</ul>
+<p>胜利进度不能完全隐藏，也不能在最后一刻突然完成。</p>
+<hr />
+<h2 id="426-计划需要预算与承诺">42.6 计划需要预算与承诺</h2><p>可迁移到：</p>
+<ul>
+<li><p>AI；</p>
+</li>
+<li><p>项目管理；</p>
+</li>
+<li><p>制造；</p>
+</li>
+<li><p>自动化；</p>
+</li>
+<li><p>NPC行为。</p>
+</li>
+</ul>
+<p>计划需要投入、持续时间、放弃条件和完成判定。</p>
+<hr />
+<h2 id="427-高层命令用于压缩已掌握的微观操作">42.7 高层命令用于压缩已掌握的微观操作</h2><p>可迁移到：</p>
+<ul>
+<li><p>RTS；</p>
+</li>
+<li><p>城市模拟；</p>
+</li>
+<li><p>聚落；</p>
+</li>
+<li><p>多角色控制；</p>
+</li>
+<li><p>生产系统。</p>
+</li>
+</ul>
+<p>规模扩大后，应将重复操作抽象为模板、策略和委任。</p>
+<hr />
+<h2 id="428-情报应具有时间和置信度">42.8 情报应具有时间和置信度</h2><p>可迁移到：</p>
+<ul>
+<li><p>潜行；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>侦探；</p>
+</li>
+<li><p>市场预测；</p>
+</li>
+<li><p>战术AI。</p>
+</li>
+</ul>
+<p>已知信息不应默认永久准确。</p>
+<hr />
+<h2 id="429-补给网络将空间转化为战略成本">42.9 补给网络将空间转化为战略成本</h2><p>可迁移到：</p>
+<ul>
+<li><p>物流；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>战场；</p>
+</li>
+<li><p>基地；</p>
+</li>
+<li><p>运输。</p>
+</li>
+</ul>
+<p>单位或设施的有效能力应受到其与资源源头连接情况影响。</p>
+<hr />
+<h2 id="4210-多路线胜利让相同世界支持不同策略">42.10 多路线胜利让相同世界支持不同策略</h2><p>可迁移到：</p>
+<ul>
+<li><p>卡牌；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>竞技任务；</p>
+</li>
+<li><p>沙盒游戏。</p>
+</li>
+</ul>
+<p>不同玩家可以通过不同长期结构追求成功，而不是只比较同一种资源。</p>
+<hr />
+<h2 id="43-本次防重记录">43. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p>4X文明战略游戏。</p>
+<p>常见名称：</p>
+<ul>
+<li><p>4X Strategy；</p>
+</li>
+<li><p>Civilization Strategy；</p>
+</li>
+<li><p>Empire-Building Strategy；</p>
+</li>
+<li><p>回合制文明战略；</p>
+</li>
+<li><p>帝国经营战略。</p>
+</li>
+</ul>
+<h3 id="核心范式">核心范式</h3><p>玩家以文明、国家或大型势力为长期经营主体，在战争迷雾限制下探索未知世界，通过建立城市、控制领土、开发人口与资源、研究科技、制定制度、处理外交和组织军事行动，将初始弱小势力逐步发展为区域或世界级力量；运行时由回合阶段、领土网络、城市经济、科技演化、外交制衡、军事补给和多路线胜利共同驱动长期帝国演化。</p>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>从较小起点逐步建立大型势力；</p>
+</li>
+<li><p>探索会持续改变扩张和发展方向；</p>
+</li>
+<li><p>扩张同时带来收益、维护和治理成本；</p>
+</li>
+<li><p>城市、人口、资源、科技和军事相互依赖；</p>
+</li>
+<li><p>科技和制度能够改变规则，而不仅是增加数值；</p>
+</li>
+<li><p>世界由多个独立势力共同演化；</p>
+</li>
+<li><p>外交包含信任、威胁、怨恨、利益和条约；</p>
+</li>
+<li><p>军事实力受到地形、后勤和工业能力影响；</p>
+</li>
+<li><p>领土所有权、军事控制和文化影响可以相互分离；</p>
+</li>
+<li><p>中立势力、贸易和世界议程会改变大国竞争；</p>
+</li>
+<li><p>多种胜利路线可以并行推进；</p>
+</li>
+<li><p>胜利进度需要可识别并允许其他势力干预；</p>
+</li>
+<li><p>AI需要长期战略、全局预算和计划承诺；</p>
+</li>
+<li><p>中后期通过军团、模板和委任压缩重复管理；</p>
+</li>
+<li><p>相同世界种子和命令流可以确定性回放。</p>
+</li>
+</ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>4X循环；</p>
+</li>
+<li><p>世界生成；</p>
+</li>
+<li><p>地块与区域拓扑；</p>
+</li>
+<li><p>出生公平性；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>势力状态；</p>
+</li>
+<li><p>城市与人口；</p>
+</li>
+<li><p>地块开发；</p>
+</li>
+<li><p>战略资源；</p>
+</li>
+<li><p>建设队列；</p>
+</li>
+<li><p>科技树；</p>
+</li>
+<li><p>制度与政府；</p>
+</li>
+<li><p>领土与边界；</p>
+</li>
+<li><p>军事单位；</p>
+</li>
+<li><p>同步移动冲突；</p>
+</li>
+<li><p>战斗结算；</p>
+</li>
+<li><p>军团；</p>
+</li>
+<li><p>后勤与补给；</p>
+</li>
+<li><p>多维外交关系；</p>
+</li>
+<li><p>条约；</p>
+</li>
+<li><p>威胁与制衡；</p>
+</li>
+<li><p>贸易；</p>
+</li>
+<li><p>中立势力；</p>
+</li>
+<li><p>世界事件；</p>
+</li>
+<li><p>多路线胜利；</p>
+</li>
+<li><p>AI预算与计划承诺；</p>
+</li>
+<li><p>回合回放与状态哈希。</p>
+</li>
+</ul>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次类型的子系统，不应再次作为新的完整宏观类型记录：</p>
+<ul>
+<li><p>4X地图生成；</p>
+</li>
+<li><p>4X城市系统；</p>
+</li>
+<li><p>文明科技树；</p>
+</li>
+<li><p>4X人口系统；</p>
+</li>
+<li><p>4X外交系统；</p>
+</li>
+<li><p>4X战争迷雾；</p>
+</li>
+<li><p>4X战略资源；</p>
+</li>
+<li><p>4X军事补给；</p>
+</li>
+<li><p>4X领土扩张；</p>
+</li>
+<li><p>4X政府政策；</p>
+</li>
+<li><p>4X贸易系统；</p>
+</li>
+<li><p>4X中立势力；</p>
+</li>
+<li><p>4X世界议会；</p>
+</li>
+<li><p>4X多路线胜利；</p>
+</li>
+<li><p>4X战略AI；</p>
+</li>
+<li><p>4X回合系统；</p>
+</li>
+<li><p>4X出生公平性；</p>
+</li>
+<li><p>4X自动对局；</p>
+</li>
+<li><p>4X后期管理优化。</p>
+</li>
+</ul>
+<p>这些方向可以继续作为专项模块深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-12">2026-08-12</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
