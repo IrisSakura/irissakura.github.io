@@ -3,14 +3,11 @@ export {};
 const SYSTEM_THEME = 'system';
 const FALLBACK_STORAGE_KEY = 'irissakura-theme';
 const REVEAL_SELECTOR = [
-    '.hero-content > *',
-    '.hero-proof',
-    '.evidence-grid > *',
+    '.profile-hero-inner > *',
     '.flagship-grid > *',
+    '.focus-grid > *',
     '.section-heading',
     '.section-heading-row',
-    '.method-chain > *',
-    '.case-list > *',
     '.research-list > *',
     '.evidence-chain-grid > *',
     '.portfolio-header .container > *',
@@ -57,7 +54,7 @@ const DEPTH_SELECTOR = [
     '.maturity-summary article',
     '.stable-route-list article',
     '.research-row',
-    '.method-chain li',
+    '.focus-card',
     '.evidence-chain-card'
 ].join(',');
 
@@ -68,6 +65,11 @@ class SiteShell {
     private themeSelect: HTMLSelectElement | null = null;
     private themeStylesheets: HTMLLinkElement[] = [];
     private colorSchemeQuery: MediaQueryList | null = null;
+    private profileDrawerTrigger: HTMLButtonElement | null = null;
+    private profileDrawer: HTMLElement | null = null;
+    private profileDrawerBackdrop: HTMLButtonElement | null = null;
+    private profileDrawerClose: HTMLButtonElement | null = null;
+    private profileDrawerLastFocused: HTMLElement | null = null;
     private motionObserver: IntersectionObserver | null = null;
     private navigationAbort: AbortController | null = null;
 
@@ -87,11 +89,22 @@ class SiteShell {
         this.themeStylesheets = Array.from(
             document.querySelectorAll<HTMLLinkElement>('[data-theme-stylesheet]')
         );
+        this.profileDrawerTrigger = document.querySelector<HTMLButtonElement>(
+            '.profile-drawer-trigger'
+        );
+        this.profileDrawer = document.querySelector<HTMLElement>('#profile-drawer');
+        this.profileDrawerBackdrop = document.querySelector<HTMLButtonElement>(
+            '[data-profile-drawer-backdrop]'
+        );
+        this.profileDrawerClose = document.querySelector<HTMLButtonElement>(
+            '.profile-drawer-close'
+        );
         this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
         });
         this.setupTheme();
+        this.setupProfileDrawer();
         this.setupNavigation();
         this.setupSoftNavigation();
         this.setupFaq();
@@ -107,9 +120,15 @@ class SiteShell {
             }
         });
         document.querySelectorAll<HTMLAnchorElement>(
-            '.skip-link[href], .navbar a[href], .footer a[href]'
+            '.skip-link[href], .navbar a[href], .profile-drawer a[href], .footer a[href]'
         ).forEach((link) => {
             link.href = link.href;
+        });
+        document.querySelectorAll<HTMLOptionElement>(
+            '.theme-select option[data-home-hero-image]'
+        ).forEach((option) => {
+            const heroImage = option.dataset.homeHeroImage;
+            if (heroImage) option.dataset.homeHeroImage = new URL(heroImage, location.href).href;
         });
     }
 
@@ -154,6 +173,14 @@ class SiteShell {
         document.documentElement.dataset.theme = resolvedTheme;
         document.documentElement.dataset.themePreference = preference;
         document.documentElement.style.colorScheme = option.dataset.colorScheme ?? 'light';
+        const heroImage = option.dataset.homeHeroImage;
+        if (heroImage) {
+            document.documentElement.style.setProperty('--home-hero-image', `url('${heroImage}')`);
+        }
+        const heroPosition = option.dataset.homeHeroPosition;
+        if (heroPosition) {
+            document.documentElement.style.setProperty('--home-hero-position', heroPosition);
+        }
         for (const stylesheet of this.themeStylesheets) {
             const supportedThemes = (stylesheet.dataset.themes ?? '').split(/\s+/);
             stylesheet.disabled = !supportedThemes.includes(resolvedTheme);
@@ -223,6 +250,7 @@ class SiteShell {
         if (!this.toggle || !this.menu) return;
 
         this.toggle.addEventListener('click', () => {
+            this.setProfileDrawerOpen(false);
             this.setMenuOpen(!this.menu?.classList.contains('active'));
         });
 
@@ -267,6 +295,7 @@ class SiteShell {
             const destination = new URL(link.href, location.href);
             if (!this.canSoftNavigate(destination)) return;
             event.preventDefault();
+            this.setProfileDrawerOpen(false);
             this.setMenuOpen(false);
             void this.navigate(destination, true);
         });
@@ -491,6 +520,60 @@ class SiteShell {
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
         });
+    }
+
+    private setupProfileDrawer(): void {
+        if (
+            !this.profileDrawerTrigger
+            || !this.profileDrawer
+            || !this.profileDrawerBackdrop
+            || !this.profileDrawerClose
+        ) {
+            return;
+        }
+
+        this.profileDrawerTrigger.addEventListener('click', () => {
+            const open = this.profileDrawer?.getAttribute('aria-hidden') !== 'false';
+            this.setProfileDrawerOpen(open, !open);
+        });
+        this.profileDrawerClose.addEventListener('click', () => {
+            this.setProfileDrawerOpen(false, true);
+        });
+        this.profileDrawerBackdrop.addEventListener('click', () => {
+            this.setProfileDrawerOpen(false, true);
+        });
+        this.profileDrawer.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => this.setProfileDrawerOpen(false));
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && this.profileDrawer?.getAttribute('aria-hidden') === 'false') {
+                this.setProfileDrawerOpen(false, true);
+            }
+        });
+    }
+
+    private setProfileDrawerOpen(open: boolean, restoreFocus = false): void {
+        if (!this.profileDrawerTrigger || !this.profileDrawer) return;
+        if (open) {
+            this.setMenuOpen(false);
+            this.profileDrawerLastFocused = document.activeElement as HTMLElement | null;
+        }
+
+        this.profileDrawerTrigger.setAttribute('aria-expanded', String(open));
+        this.profileDrawer.setAttribute('aria-hidden', String(!open));
+        document.body.classList.toggle('profile-drawer-open', open);
+        if (open) {
+            this.profileDrawerClose?.focus({ preventScroll: true });
+        }
+        for (const element of document.querySelectorAll<HTMLElement>(
+            '.navbar, main#main-content, footer.footer'
+        )) {
+            element.inert = open;
+        }
+
+        if (!open && restoreFocus) {
+            (this.profileDrawerLastFocused ?? this.profileDrawerTrigger).focus();
+        }
     }
 
     private setMenuOpen(open: boolean, restoreFocus = false): void {

@@ -1,10 +1,15 @@
+<!-- site-navbar:start -->
 <a class="skip-link" href="#main-content">跳到主要内容</a>
 <nav class="navbar" aria-label="主导航">
     <div class="container nav-container">
-        <a href="{{homeHref}}" class="logo" aria-label="IrisSakura 首页">
-            <i class="fas fa-gamepad" aria-hidden="true"></i>
-            <span>Iris</span>Sakura
-        </a>
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="{{profileAvatar}}" alt="">
+            </button>
+            <a href="{{homeHref}}" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
         <div class="nav-menu" id="main-navigation">
             {{navLinks}}
         </div>
@@ -28,3 +33,24 @@
         </div>
     </div>
 </nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="{{profileAvatar}}" alt="{{profileAvatarAlt}}" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">{{profileNickname}}</strong>
+            <span>{{profileRole}}</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="{{gameHref}}" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="{{frameworkHref}}" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="{{journalHref}}" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="{{consumerLabHref}}" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="{{contactHref}}" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->

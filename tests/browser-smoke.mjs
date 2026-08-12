@@ -36,10 +36,10 @@ const lightThemeContrastRoutes = [
   {
     route: '/',
     checks: [
-      ['homepage project proof title', '.hero-proof figcaption strong'],
-      ['homepage project proof metadata', '.hero-proof figcaption small'],
-      ['homepage method labels', '.method-chain > li > span'],
-      ['homepage case labels', '.case-list > article > span']
+      ['homepage profile title', '.profile-copy .hero-title'],
+      ['homepage profile role', '.profile-role'],
+      ['homepage profile introduction', '.profile-copy .hero-description'],
+      ['homepage focus descriptions', '.focus-card > p:not(.focus-index)']
     ]
   },
   {
@@ -194,9 +194,9 @@ try {
     '.nav-link',
     '.hero-title',
     '.btn-primary',
-    '.hero-proof',
-    '.method-chain li',
-    '.case-list > article'
+    '.profile-identity',
+    '.profile-avatar-large',
+    '.focus-card'
   ];
   const sharedDesignProperties = [
     'display',
@@ -287,14 +287,6 @@ try {
             ['.hero-section::after', readProperties(
               getComputedStyle(document.querySelector('.hero-section'), '::after'),
               pseudoProperties
-            )],
-            ['.hero-proof::before', readProperties(
-              getComputedStyle(document.querySelector('.hero-proof'), '::before'),
-              pseudoProperties
-            )],
-            ['.hero-proof::after', readProperties(
-              getComputedStyle(document.querySelector('.hero-proof'), '::after'),
-              pseudoProperties
             )]
           ])
         };
@@ -375,6 +367,35 @@ try {
   if (await desktop.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
     throw new Error('homepage still ships the retired BGM player');
   }
+  const profileDrawerTrigger = desktop.getByRole('button', {
+    name: '打开 IrisSakura 快速导航',
+    exact: true
+  });
+  await profileDrawerTrigger.click();
+  const profileDrawer = desktop.locator('#profile-drawer');
+  if (await profileDrawerTrigger.getAttribute('aria-expanded') !== 'true') {
+    throw new Error('profile drawer trigger did not expose expanded state');
+  }
+  if (await profileDrawer.getAttribute('aria-hidden') !== 'false') {
+    throw new Error('profile drawer did not expose its open state');
+  }
+  if (await desktop.locator('[data-profile-quick-link]').count() !== 5) {
+    throw new Error('profile drawer does not expose all five quick routes');
+  }
+  const profileDrawerClose = desktop.getByRole('button', {
+    name: '关闭快速导航',
+    exact: true
+  });
+  if (!await profileDrawerClose.evaluate((button) => document.activeElement === button)) {
+    throw new Error('opening the profile drawer did not move focus into the dialog');
+  }
+  await desktop.keyboard.press('Escape');
+  if (await profileDrawer.getAttribute('aria-hidden') !== 'true') {
+    throw new Error('Escape did not close the profile drawer');
+  }
+  if (!await profileDrawerTrigger.evaluate((button) => document.activeElement === button)) {
+    throw new Error('closing the profile drawer did not restore trigger focus');
+  }
   await desktop.evaluate(() => {
     document.documentElement.dataset.smokeDocument = 'persistent-navigation';
   });
@@ -399,14 +420,14 @@ try {
   }
   await desktop.evaluate(() => history.back());
   await desktop.waitForURL(`${baseUrl}/index.html`);
-  await desktop.locator('.hero-content').waitFor();
+  await desktop.locator('.profile-identity').waitFor();
   if (await desktop.locator('link[href$="/style/framework.css"]').count() !== 0) {
     throw new Error('history navigation retained a stale Framework page stylesheet');
   }
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('history navigation replaced the active document');
   }
-  await desktop.locator('.hero-content > [data-reveal].is-visible').first().waitFor();
+  await desktop.locator('.profile-hero-inner > [data-reveal].is-visible').first().waitFor();
   if (await desktop.locator('.depth-card').count() === 0) throw new Error('shared depth treatment was not applied');
   await desktop.evaluate(() => window.scrollTo(0, 240));
   await desktop.waitForFunction(() => document.querySelector('.navbar')?.classList.contains('scrolled'));

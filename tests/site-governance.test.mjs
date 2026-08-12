@@ -201,16 +201,12 @@ test('major page visuals are generated without reused category screenshots', asy
   }
 
   const home = await readText('index.html');
-  assert.ok(!home.includes('class="profile-card"'), 'home must not repeat a full identity card after the hero');
-  assert.ok(!home.includes('id="profile-title"'), 'home must not add a redundant identity section');
-  const evidenceOffset = home.indexOf('class="evidence-strip"');
+  const profileOffset = home.indexOf('id="profile"');
   const flagshipOffset = home.indexOf('class="flagship-section"');
-  const casesOffset = home.indexOf('class="case-section"');
-  const methodOffset = home.indexOf('class="method-section"');
-  assert.ok(evidenceOffset > home.indexOf('class="hero-section"'), 'home evidence must follow the hero');
-  assert.ok(flagshipOffset > evidenceOffset, 'flagship proof must immediately follow the evidence summary');
-  assert.ok(casesOffset > flagshipOffset, 'concrete engineering cases must follow the flagship proof');
-  assert.ok(methodOffset > casesOffset, 'the abstract project chain must follow the concrete cases');
+  const focusOffset = home.indexOf('class="focus-section"');
+  assert.ok(profileOffset >= 0, 'home must expose one real identity section');
+  assert.ok(flagshipOffset > profileOffset, 'flagship proof must follow the identity section');
+  assert.ok(focusOffset > flagshipOffset, 'secondary focus areas must follow the flagship proof');
 
   const cssVisualCovers = ['home', 'framework', 'journal', 'blog', 'contact'];
   for (const coverKey of cssVisualCovers) assert.equal(site.pageCovers[coverKey].image, '', `${coverKey} must use a category visual`);
@@ -284,14 +280,15 @@ test('home labels curated research honestly and README matches current routes an
   assert.ok(!readme.includes('FAQ 与作品筛选'));
 });
 
-test('home hero and flagship use distinct existing game evidence', async () => {
+test('home flagship uses registered game evidence without treating theme art as gameplay', async () => {
   const projects = JSON.parse(await readText('data/projects.json'));
   const game = projects.projects.find((project) => project.id === 'sword-of-words');
   const home = await readText('index.html');
   assert.notEqual(game.homeImage, game.featureImage);
   assert.equal((home.match(new RegExp(game.homeImage, 'g')) ?? []).length, 1);
-  assert.equal((home.match(new RegExp(game.featureImage, 'g')) ?? []).length, 1);
-  assert.ok(home.includes(game.featureImageAlt));
+  assert.equal((home.match(new RegExp(game.featureImage, 'g')) ?? []).length, 0);
+  assert.ok(home.includes(game.imageAlt));
+  assert.ok(home.includes('REPRESENTATIVE WORK'));
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {

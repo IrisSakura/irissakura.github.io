@@ -34,7 +34,7 @@
     <!-- theme-bootstrap:start -->
     <script>
         (() => {
-            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0"}}};
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
             let storedTheme = null;
             try {
                 storedTheme = window.localStorage.getItem(config.storageKey);
@@ -51,6 +51,9 @@
             document.documentElement.dataset.theme = theme;
             document.documentElement.dataset.themePreference = preference;
             document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
             document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
                 if (!(stylesheet instanceof HTMLLinkElement)) return;
                 const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
@@ -69,13 +72,18 @@
 </head>
 <body>
 <!-- 导航栏 -->
+<!-- site-navbar:start -->
 <a class="skip-link" href="#main-content">跳到主要内容</a>
 <nav class="navbar" aria-label="主导航">
     <div class="container nav-container">
-        <a href="index.html" class="logo" aria-label="IrisSakura 首页">
-            <i class="fas fa-gamepad" aria-hidden="true"></i>
-            <span>Iris</span>Sakura
-        </a>
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
         <div class="nav-menu" id="main-navigation">
             <a href="index.html" class="nav-link active" aria-current="page">首页</a>
             <a href="pages/portfolio.html" class="nav-link">作品</a>
@@ -96,9 +104,9 @@
                     data-default-dark="night"
                 >
                     <option value="system">跟随系统</option>
-                    <option value="night" data-color-scheme="dark" data-theme-color="#121212">夜色科技</option>
-                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb">东方田园</option>
-                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0">樱里民谣</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
                 </select>
             </label>
             <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
@@ -107,39 +115,47 @@
         </div>
     </div>
 </nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
 
 <!-- 主要内容区域 -->
 <main id="main-content" class="main-content">
     <!-- home-content:start -->
     <section id="home-page" class="page active">
-        <section class="hero-section page-cover" data-page-cover="home" style="--page-cover-image: none; --page-cover-position: 50% 48%;">
-            <div class="container hero">
-                <div class="hero-content">
-                    <p class="section-kicker">UNITY SYSTEMS · GAMEPLAY · TOOLS</p>
-                    <h1 class="hero-title">构建可验证的 <span class="highlight">Unity 游戏系统</span></h1>
-                    <p class="hero-description">我研究游戏机制与引擎运行时，将可复用结论沉淀为 Sakura Framework，并通过《言铸之剑》验证它们是否真正服务于可玩体验。</p>
+        <section id="profile" class="hero-section profile-hero page-cover" data-page-cover="home" style="--page-cover-image: none; --page-cover-position: 50% 48%;">
+            <div class="container profile-hero-inner">
+                <div class="profile-identity">
+                    <img class="profile-avatar-large" src="assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像">
+                    <div class="profile-copy">
+                        <p class="section-kicker">UNITY SYSTEMS · GAMEPLAY · TOOLS</p>
+                        <h1 class="hero-title">你好，我是 <span class="highlight">IrisSakura</span></h1>
+                        <p class="profile-role">可验证的 Unity 游戏系统开发者</p>
+                        <p class="hero-description">我研究游戏机制与引擎运行时，把可复用结论沉淀为 Sakura Framework，并通过真实游戏验证它们。</p>
+                    </div>
                     <div class="hero-buttons">
                         <a href="pages/game.html" class="btn btn-primary">查看代表作</a>
                         <a href="https://github.com/IrisSakura" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">查看 GitHub</a>
                     </div>
                 </div>
-                <figure class="hero-proof">
-                    <img src="assets/images/sword-of-words/potential-tree.png" alt="言铸之剑潜能面板：多个技能强化节点组成可选择的构筑分支">
-                    <figcaption>
-                        <span>PLAYABLE PROTOTYPE</span>
-                        <strong>《言铸之剑》</strong>
-                        <small>Unity 2022.3 LTS · 独立开发 / 系统设计</small>
-                    </figcaption>
-                </figure>
-            </div>
-        </section>
-
-        <section class="evidence-strip" aria-label="项目证据摘要">
-            <div class="container evidence-grid">
-                <a href="pages/game.html"><strong>1</strong><span>可玩原型</span></a>
-                <a href="pages/framework.html#maturity"><strong>6</strong><span>Supported 包</span></a>
-                <a href="pages/journal.html"><strong>47</strong><span>游戏设计主题</span></a>
-                <a href="pages/contact.html"><strong>独立开发</strong><span>系统设计 / 工程实现</span></a>
             </div>
         </section>
 
@@ -163,32 +179,36 @@
             </div>
         </section>
 
-        <section class="case-section">
+        <section class="focus-section">
             <div class="container">
                 <div class="section-heading">
-                    <p class="section-kicker">ENGINEERING CASES</p>
-                    <h2>三个具体问题，三组可检查决策</h2>
+                    <p class="section-kicker">MORE FOCUSED WORK</p>
+                    <h2>围绕代表作继续展开的三条主线</h2>
+                    <p>框架、研究与真实消费项目分别承接复用、判断和验证，让首页重点明确而不失完整脉络。</p>
                 </div>
-                <div class="case-list">
-                    <article><span>01 · COMBAT</span><h3>统一技能、潜能与祝福的能力入口</h3><dl><div><dt>问题</dt><dd>多条成长路径如何作用于同一战斗事实？</dd></div><div><dt>约束</dt><dd>效果必须可组合，伤害提交不能出现双重事实。</dd></div><div><dt>决策</dt><dd>使用标签、属性、效果和能力入口组织结算。</dd></div><div><dt>结果</dt><dd>实时战斗与构筑系统在同一运行循环中协作。</dd></div></dl></article>
-                    <article><span>02 · SAVE</span><h3>通过房间快照维持 Run 连续性</h3><dl><div><dt>问题</dt><dd>跨房间推进时如何恢复局内状态？</dd></div><div><dt>约束</dt><dd>场景对象不能成为持久化事实源。</dd></div><div><dt>决策</dt><dd>在明确推进节点提交结构化 Run 快照。</dd></div><div><dt>结果</dt><dd>房间分支、成长选择和恢复路径拥有清晰边界。</dd></div></dl></article>
-                    <article><span>03 · LOCAL LLM</span><h3>让本地模型参与玩法而不破坏运行循环</h3><dl><div><dt>问题</dt><dd>生成式祝福怎样转化为可执行游戏效果？</dd></div><div><dt>约束</dt><dd>输出不稳定、调用可能失败，不能阻断游戏。</dd></div><div><dt>决策</dt><dd>采用结构化输出、白名单映射与失败回退。</dd></div><div><dt>结果</dt><dd>生成内容进入可验证的祝福选择与效果执行。</dd></div></dl></article>
+                <div class="focus-grid">
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">01 · REUSABLE SYSTEMS</p>
+                        <strong>6</strong>
+                        <h3>Sakura Framework</h3>
+                        <p>把游戏中的稳定边界沉淀为可复用 Unity 包，并持续记录生命周期与验证状态。</p>
+                        <a href="pages/framework.html" class="text-link">查看框架</a>
+                    </article>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">02 · DESIGN RESEARCH</p>
+                        <strong>47</strong>
+                        <h3>Sakura Design Journal</h3>
+                        <p>从机制、源码和实际约束出发，保留可追溯的研究判断与设计结论。</p>
+                        <a href="pages/journal.html" class="text-link">查看研究</a>
+                    </article>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">03 · REAL CONSUMERS</p>
+                        <strong>6</strong>
+                        <h3>Consumer Lab</h3>
+                        <p>用独立玩法项目检验 Framework 能力是否真正落入可理解、可运行的游戏循环。</p>
+                        <a href="pages/portfolio.html#consumer-lab" class="text-link">查看消费项目</a>
+                    </article>
                 </div>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <div class="container">
-                <div class="section-heading">
-                    <p class="section-kicker">RESEARCH → FRAMEWORK → GAME</p>
-                    <h2>一条从判断到验证的项目链</h2>
-                    <p>先看三组具体决策，再解释这些系统从哪里来，以及如何被验证。</p>
-                </div>
-                <ol class="method-chain">
-                    <li><span>01 · JOURNAL</span><h3>Sakura Design Journal</h3><p>研究问题、源码机制与设计判断。</p><a href="pages/journal.html">查看研究</a></li>
-                    <li><span>02 · FRAMEWORK</span><h3>Sakura Framework</h3><p>沉淀可复用的边界、服务与规则。</p><a href="pages/framework.html">查看框架</a></li>
-                    <li><span>03 · GAME</span><h3>《言铸之剑》</h3><p>验证系统是否产生真实玩法价值。</p><a href="pages/game.html">查看游戏</a></li>
-                </ol>
             </div>
         </section>
 

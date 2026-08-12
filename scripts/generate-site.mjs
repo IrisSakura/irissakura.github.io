@@ -275,21 +275,28 @@ for (const page of pageDefinitions) {
 
   const navbar = navbarTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
+    .replaceAll('{{profileAvatar}}', escapeAttribute(pageHref(site.profile.avatar)))
+    .replace('{{profileAvatarAlt}}', escapeAttribute(site.profile.avatarAlt))
+    .replace('{{profileNickname}}', escapeHtml(site.profile.nickname))
+    .replace('{{profileRole}}', escapeHtml(site.profile.role))
+    .replace('{{gameHref}}', escapeAttribute(pageHref('pages/game.html')))
+    .replace('{{frameworkHref}}', escapeAttribute(pageHref('pages/framework.html')))
+    .replace('{{journalHref}}', escapeAttribute(pageHref('pages/journal.html')))
+    .replace('{{consumerLabHref}}', escapeAttribute(pageHref('pages/portfolio.html#consumer-lab')))
+    .replace('{{contactHref}}', escapeAttribute(pageHref('pages/contact.html')))
     .replace('{{navLinks}}', navLinks)
     .replace('{{themeStorageKey}}', escapeAttribute(themeConfig.storageKey))
     .replace('{{defaultLightTheme}}', escapeAttribute(themeConfig.defaultLight))
     .replace('{{defaultDarkTheme}}', escapeAttribute(themeConfig.defaultDark))
-    .replace('{{themeOptions}}', renderThemeOptions(themeConfig));
+    .replace('{{themeOptions}}', renderThemeOptions(themeConfig, prefix));
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
     .replace('{{footerLinks}}', footerLinks)
     .replace('{{socialLinks}}', socialLinks);
 
+  const navbarPattern = /<!-- site-navbar:start -->[\s\S]*?<!-- site-navbar:end -->|(?:<a class="skip-link"[\s\S]*?<\/a>\s*)?<nav class="navbar"[\s\S]*?<\/nav>(?:\s*<aside\b[^>]*\bdata-bgm-player\b[\s\S]*?<\/aside>)*/;
   html = html
-    .replace(
-      /(?:<a class="skip-link"[\s\S]*?<\/a>\s*)?<nav class="navbar"[\s\S]*?<\/nav>(?:\s*<aside\b[^>]*\bdata-bgm-player\b[\s\S]*?<\/aside>)*/,
-      navbar
-    )
+    .replace(navbarPattern, navbar)
     .replace(/<footer class="footer">[\s\S]*?<\/footer>/, footer)
     .replace(/<main(?![^>]*\bid="main-content")/, '<main id="main-content"')
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${page.title}</title>`);
@@ -320,7 +327,11 @@ for (const page of pageDefinitions) {
     );
   }
   if (page.file === 'index.html') {
-    html = replaceGeneratedBlock(html, 'home-content', renderHomeContent(projects, publicJournal, framework, site));
+    html = replaceGeneratedBlock(
+      html,
+      'home-content',
+      renderHomeContent(projects, publicJournal, framework, consumerLab, site)
+    );
   }
   if (page.file === 'pages/portfolio.html') {
     html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, consumerLab));
@@ -468,6 +479,12 @@ function assertThemeConfig(config) {
     ))) {
       throw new Error(`theme ${theme.id} has invalid stylesheets`);
     }
+    if (!/^assets\/images\/profile\/home-hero-[a-z0-9-]+\.png$/u.test(theme.homeHeroImage ?? '')) {
+      throw new Error(`theme ${theme.id} has invalid homeHeroImage`);
+    }
+    if (!/^\d+(?:\.\d+)?% \d+(?:\.\d+)?%$/u.test(theme.homeHeroPosition ?? '')) {
+      throw new Error(`theme ${theme.id} has invalid homeHeroPosition`);
+    }
     if (new Set(theme.stylesheets).size !== theme.stylesheets.length) {
       throw new Error(`theme ${theme.id} contains duplicate stylesheets`);
     }
@@ -485,11 +502,11 @@ function assertThemeConfig(config) {
   }
 }
 
-function renderThemeOptions(config) {
+function renderThemeOptions(config, prefix) {
   const options = [
     `<option value="system">${escapeHtml(config.systemLabel)}</option>`,
     ...config.themes.map((theme) => (
-      `<option value="${escapeAttribute(theme.id)}" data-color-scheme="${theme.colorScheme}" data-theme-color="${theme.themeColor}">${escapeHtml(theme.label)}</option>`
+      `<option value="${escapeAttribute(theme.id)}" data-color-scheme="${theme.colorScheme}" data-theme-color="${theme.themeColor}" data-home-hero-image="${escapeAttribute(`${prefix}${theme.homeHeroImage}`)}" data-home-hero-position="${escapeAttribute(theme.homeHeroPosition)}">${escapeHtml(theme.label)}</option>`
     ))
   ];
   return options.join('\n                    ');
@@ -534,7 +551,9 @@ function installThemeBootstrap(html, prefix, config) {
       theme.id,
       {
         colorScheme: theme.colorScheme,
-        themeColor: theme.themeColor
+        themeColor: theme.themeColor,
+        homeHeroImage: `${prefix}${theme.homeHeroImage}`,
+        homeHeroPosition: theme.homeHeroPosition
       }
     ]))
   };
@@ -558,6 +577,9 @@ function installThemeBootstrap(html, prefix, config) {
             document.documentElement.dataset.theme = theme;
             document.documentElement.dataset.themePreference = preference;
             document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
             document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
                 if (!(stylesheet instanceof HTMLLinkElement)) return;
                 const supportedThemes = (stylesheet.dataset.themes || '').split(/\\s+/);
@@ -581,9 +603,10 @@ function replaceGeneratedBlock(html, name, content) {
   return html.replace(pattern, `<!-- ${name}:start -->\n${content}\n<!-- ${name}:end -->`);
 }
 
-function renderHomeContent(projectData, journalData, frameworkData, siteData) {
+function renderHomeContent(projectData, journalData, frameworkData, consumerLabData, siteData) {
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
+  const { profile } = siteData;
   const researchCards = journalData.featuredNotes.slice(0, 3).map((note) => `
                 <article class="research-row">
                     <p class="project-status">${escapeHtml(note.track)} · ${escapeHtml(note.updatedAt)}</p>
@@ -595,34 +618,21 @@ function renderHomeContent(projectData, journalData, frameworkData, siteData) {
                 </article>`).join('');
 
   return `    <section id="home-page" class="page active">
-        <section class="hero-section">
-            <div class="container hero">
-                <div class="hero-content">
-                    <p class="section-kicker">UNITY SYSTEMS · GAMEPLAY · TOOLS</p>
-                    <h1 class="hero-title">构建可验证的 <span class="highlight">Unity 游戏系统</span></h1>
-                    <p class="hero-description">我研究游戏机制与引擎运行时，将可复用结论沉淀为 Sakura Framework，并通过《言铸之剑》验证它们是否真正服务于可玩体验。</p>
+        <section id="profile" class="hero-section profile-hero">
+            <div class="container profile-hero-inner">
+                <div class="profile-identity">
+                    <img class="profile-avatar-large" src="${escapeAttribute(profile.avatar)}" alt="${escapeAttribute(profile.avatarAlt)}">
+                    <div class="profile-copy">
+                        <p class="section-kicker">UNITY SYSTEMS · GAMEPLAY · TOOLS</p>
+                        <h1 class="hero-title">你好，我是 <span class="highlight">${escapeHtml(profile.nickname)}</span></h1>
+                        <p class="profile-role">${escapeHtml(profile.role)}</p>
+                        <p class="hero-description">${escapeHtml(profile.introduction)}</p>
+                    </div>
                     <div class="hero-buttons">
                         <a href="pages/game.html" class="btn btn-primary">查看代表作</a>
                         <a href="https://github.com/IrisSakura" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">查看 GitHub</a>
                     </div>
                 </div>
-                <figure class="hero-proof">
-                    <img src="${escapeAttribute(game.featureImage)}" alt="${escapeAttribute(game.featureImageAlt)}">
-                    <figcaption>
-                        <span>PLAYABLE PROTOTYPE</span>
-                        <strong>《${escapeHtml(game.title)}》</strong>
-                        <small>Unity 2022.3 LTS · 独立开发 / 系统设计</small>
-                    </figcaption>
-                </figure>
-            </div>
-        </section>
-
-        <section class="evidence-strip" aria-label="项目证据摘要">
-            <div class="container evidence-grid">
-                <a href="pages/game.html"><strong>1</strong><span>可玩原型</span></a>
-                <a href="pages/framework.html#maturity"><strong>${frameworkData.lifecycleCounts.Supported}</strong><span>Supported 包</span></a>
-                <a href="pages/journal.html"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></a>
-                <a href="pages/contact.html"><strong>独立开发</strong><span>系统设计 / 工程实现</span></a>
             </div>
         </section>
 
@@ -646,32 +656,36 @@ function renderHomeContent(projectData, journalData, frameworkData, siteData) {
             </div>
         </section>
 
-        <section class="case-section">
+        <section class="focus-section">
             <div class="container">
                 <div class="section-heading">
-                    <p class="section-kicker">ENGINEERING CASES</p>
-                    <h2>三个具体问题，三组可检查决策</h2>
+                    <p class="section-kicker">MORE FOCUSED WORK</p>
+                    <h2>围绕代表作继续展开的三条主线</h2>
+                    <p>框架、研究与真实消费项目分别承接复用、判断和验证，让首页重点明确而不失完整脉络。</p>
                 </div>
-                <div class="case-list">
-                    <article><span>01 · COMBAT</span><h3>统一技能、潜能与祝福的能力入口</h3><dl><div><dt>问题</dt><dd>多条成长路径如何作用于同一战斗事实？</dd></div><div><dt>约束</dt><dd>效果必须可组合，伤害提交不能出现双重事实。</dd></div><div><dt>决策</dt><dd>使用标签、属性、效果和能力入口组织结算。</dd></div><div><dt>结果</dt><dd>实时战斗与构筑系统在同一运行循环中协作。</dd></div></dl></article>
-                    <article><span>02 · SAVE</span><h3>通过房间快照维持 Run 连续性</h3><dl><div><dt>问题</dt><dd>跨房间推进时如何恢复局内状态？</dd></div><div><dt>约束</dt><dd>场景对象不能成为持久化事实源。</dd></div><div><dt>决策</dt><dd>在明确推进节点提交结构化 Run 快照。</dd></div><div><dt>结果</dt><dd>房间分支、成长选择和恢复路径拥有清晰边界。</dd></div></dl></article>
-                    <article><span>03 · LOCAL LLM</span><h3>让本地模型参与玩法而不破坏运行循环</h3><dl><div><dt>问题</dt><dd>生成式祝福怎样转化为可执行游戏效果？</dd></div><div><dt>约束</dt><dd>输出不稳定、调用可能失败，不能阻断游戏。</dd></div><div><dt>决策</dt><dd>采用结构化输出、白名单映射与失败回退。</dd></div><div><dt>结果</dt><dd>生成内容进入可验证的祝福选择与效果执行。</dd></div></dl></article>
+                <div class="focus-grid">
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">01 · REUSABLE SYSTEMS</p>
+                        <strong>${frameworkData.lifecycleCounts.Supported}</strong>
+                        <h3>Sakura Framework</h3>
+                        <p>把游戏中的稳定边界沉淀为可复用 Unity 包，并持续记录生命周期与验证状态。</p>
+                        <a href="pages/framework.html" class="text-link">查看框架</a>
+                    </article>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">02 · DESIGN RESEARCH</p>
+                        <strong>${journalData.summary.gameDesignCount}</strong>
+                        <h3>Sakura Design Journal</h3>
+                        <p>从机制、源码和实际约束出发，保留可追溯的研究判断与设计结论。</p>
+                        <a href="pages/journal.html" class="text-link">查看研究</a>
+                    </article>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">03 · REAL CONSUMERS</p>
+                        <strong>${consumerLabData.cases.length}</strong>
+                        <h3>Consumer Lab</h3>
+                        <p>用独立玩法项目检验 Framework 能力是否真正落入可理解、可运行的游戏循环。</p>
+                        <a href="pages/portfolio.html#consumer-lab" class="text-link">查看消费项目</a>
+                    </article>
                 </div>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <div class="container">
-                <div class="section-heading">
-                    <p class="section-kicker">RESEARCH → FRAMEWORK → GAME</p>
-                    <h2>一条从判断到验证的项目链</h2>
-                    <p>先看三组具体决策，再解释这些系统从哪里来，以及如何被验证。</p>
-                </div>
-                <ol class="method-chain">
-                    <li><span>01 · JOURNAL</span><h3>Sakura Design Journal</h3><p>研究问题、源码机制与设计判断。</p><a href="pages/journal.html">查看研究</a></li>
-                    <li><span>02 · FRAMEWORK</span><h3>Sakura Framework</h3><p>沉淀可复用的边界、服务与规则。</p><a href="pages/framework.html">查看框架</a></li>
-                    <li><span>03 · GAME</span><h3>《言铸之剑》</h3><p>验证系统是否产生真实玩法价值。</p><a href="pages/game.html">查看游戏</a></li>
-                </ol>
             </div>
         </section>
 

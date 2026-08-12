@@ -37,20 +37,19 @@ test('shared layout uses fluid viewport-aware geometry tokens', async () => {
   );
 });
 
-test('home cases and research use asymmetric desktop compositions with linear mobile fallbacks', async () => {
+test('home profile, focus areas and research use asymmetric desktop compositions with linear mobile fallbacks', async () => {
   const css = await readText('style/main.css');
 
-  assert.match(css, /\.case-list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(12,\s*minmax\(0,\s*1fr\)\)/s);
-  assert.match(css, /\.case-list\s*>\s*article:first-child\s*\{[^}]*grid-column:\s*span 7/s);
-  assert.match(css, /\.case-list\s*>\s*article:nth-child\(2\)\s*\{[^}]*grid-column:\s*span 5/s);
-  assert.match(css, /\.case-list\s*>\s*article:nth-child\(3\)\s*\{[^}]*grid-column:\s*3 \/ span 8/s);
+  assert.match(css, /\.profile-hero-inner\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(12,\s*minmax\(0,\s*1fr\)\)/s);
+  assert.match(css, /\.profile-identity\s*\{[^}]*grid-column:\s*span 8/s);
+  assert.match(css, /\.focus-grid\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/s);
 
   assert.match(css, /\.research-list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(css, /\.research-row:first-child\s*\{[^}]*grid-row:\s*1 \/ span 2/s);
 
   const tabletFallback = css.match(/@media \(max-width: 1000px\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
-  assert.match(tabletFallback, /\.case-list,[\s\S]*?\.research-list\s*\{[^}]*grid-template-columns:\s*1fr/s);
-  assert.match(tabletFallback, /\.case-list\s*>\s*article,[\s\S]*?\.research-row:first-child\s*\{[^}]*grid-column:\s*auto[^}]*grid-row:\s*auto/s);
+  assert.match(tabletFallback, /\.profile-hero-inner,[\s\S]*?\.focus-grid,[\s\S]*?\.research-list\s*\{[^}]*grid-template-columns:\s*1fr/s);
+  assert.match(tabletFallback, /\.profile-identity,[\s\S]*?\.research-row:first-child\s*\{[^}]*grid-column:\s*auto[^}]*grid-row:\s*auto/s);
 });
 
 test('Consumer Lab uses a bounded two-column matrix with readable narrow-screen fallbacks', async () => {

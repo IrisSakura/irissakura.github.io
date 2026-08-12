@@ -35,7 +35,7 @@
     <!-- theme-bootstrap:start -->
     <script>
         (() => {
-            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0"}}};
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
             let storedTheme = null;
             try {
                 storedTheme = window.localStorage.getItem(config.storageKey);
@@ -52,6 +52,9 @@
             document.documentElement.dataset.theme = theme;
             document.documentElement.dataset.themePreference = preference;
             document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
             document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
                 if (!(stylesheet instanceof HTMLLinkElement)) return;
                 const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
@@ -66,13 +69,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- site-navbar:start -->
 <a class="skip-link" href="#main-content">跳到主要内容</a>
 <nav class="navbar" aria-label="主导航">
     <div class="container nav-container">
-        <a href="../index.html" class="logo" aria-label="IrisSakura 首页">
-            <i class="fas fa-gamepad" aria-hidden="true"></i>
-            <span>Iris</span>Sakura
-        </a>
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
         <div class="nav-menu" id="main-navigation">
             <a href="../index.html" class="nav-link">首页</a>
             <a href="../pages/portfolio.html" class="nav-link">作品</a>
@@ -93,9 +101,9 @@
                     data-default-dark="night"
                 >
                     <option value="system">跟随系统</option>
-                    <option value="night" data-color-scheme="dark" data-theme-color="#121212">夜色科技</option>
-                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb">东方田园</option>
-                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0">樱里民谣</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
                 </select>
             </label>
             <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
@@ -104,6 +112,27 @@
         </div>
     </div>
 </nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
 
 <main id="main-content" class="main-content quickstart-main">
     <section class="framework-hero quickstart-hero page-cover" data-page-cover="framework" style="--page-cover-image: none; --page-cover-position: 50% 42%;">
