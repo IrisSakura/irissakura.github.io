@@ -1,4 +1,7 @@
 ## 目标中心化遭遇、部位破坏与协作窗口
+
+> Agent 标签：`action` `cooperative` `hunting`
+
 ---
 ## 1. 类型定义
 

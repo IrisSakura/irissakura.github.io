@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/monster-taming-rpg-capture-identity.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长 | IrisSakura">
+    <meta property="og:description" content="当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/monster-taming-rpg-capture-identity.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-monster-taming-rpg-capture-identity.png">
+    <meta property="og:image:alt" content="角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长 | IrisSakura">
+    <meta name="twitter:description" content="当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-monster-taming-rpg-capture-identity.png">
+    <meta name="twitter:image:alt" content="角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长 | IrisSakura","description":"当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？","url":"https://irissakura.github.io/pages/blog/monster-taming-rpg-capture-identity.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长","image":"https://irissakura.github.io/assets/social/pages-blog-monster-taming-rpg-capture-identity.png","datePublished":"2026-08-14","dateModified":"2026-08-14","about":["rpg"]}</script>
+    <!-- site-meta:end -->
+    <title>角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-08-14 · 更新于 2026-08-14</p>
+            <h1>角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长</h1>
+            <p class="blog-deck">当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？</p>
+            <div class="note-tags"><span>rpg</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>怪物收集 RPG 中，一个玩家可能在沼泽里遇到一只野生生物。</p>
+<p>它会攻击玩家。</p>
+<p>它有当前生命值、技能、状态和自己的战斗 AI。</p>
+<p>几分钟之后，玩家成功捕获它。</p>
+<p>同一个生物现在可能：</p>
+<ul>
+<li>被命名；</li>
+<li>放入长期仓库；</li>
+<li>加入当前队伍；</li>
+<li>升级；</li>
+<li>学习新技能；</li>
+<li>形成关系；</li>
+<li>进化；</li>
+<li>参加数十场战斗；</li>
+<li>被交换给其他玩家。</li>
+</ul>
+<p>多年以后，玩家仍然可能记得：</p>
+<blockquote>
+<p>这是我当初在雷暴天气里抓到的那一只。</p>
+</blockquote>
+<p>从玩家体验看，这是一段非常自然的角色关系。</p>
+<p>但从系统设计看，它意味着一个很难被“敌人类 + 宠物标记”正确表达的问题：</p>
+<blockquote>
+<p>一个短生命周期的世界实体，如何变成一个拥有长期身份、历史和所有权的持久角色资产？</p>
+</blockquote>
+<p>这也是怪物收集 RPG 与普通“打怪掉奖励”系统真正拉开距离的地方。</p>
+<h2 id="先说结论捕获的核心不是改阵营而是建立长期角色资产">先说结论：捕获的核心不是改阵营，而是建立长期角色资产</h2><p><strong>角色资产化（后文简称“从世界里的怪，变成我的这一只”）</strong>：将世界遭遇中的临时生物实体，通过一次明确的所有权转换，提交为拥有稳定身份、来源、成长状态和长期存档责任的玩家角色资产。</p>
+<p>整个转换链可以先写成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Species Definition&lt;br/&gt;这个物种是什么"] --&gt; B["Encounter Entity&lt;br/&gt;这次遇到的野生个体"]
+    B --&gt; C["Capture Transaction"]
+    C --&gt; D["Creature Instance&lt;br/&gt;玩家真正拥有的这一只"]
+    D --&gt; E["Roster Asset&lt;br/&gt;进入长期收藏"]
+    E --&gt; F["Party Member&lt;br/&gt;进入当前战斗队伍"]
+    F --&gt; G["Growth / Evolution"]
+    G --&gt; E
+</code></pre>
+<p>这里至少存在四种完全不同的东西：</p>
+<pre><code class="language-text">Species
+Encounter Entity
+Creature Instance
+Battle Runtime
+</code></pre>
+<p>它们之间可以互相派生。</p>
+<p>但不能互相替代。</p>
+<h2 id="物种和个体必须从数据模型上分开">物种和个体必须从数据模型上分开</h2><p><strong>物种定义（后文简称“这一类生物是什么”）</strong>：描述一个物种共有的静态规则，包括基础属性、技能池、栖息地、捕获难度、进化规则和表现资源。</p>
+<p>例如：</p>
+<pre><code class="language-text">SpeciesId = ThunderCub
+Element = Electric
+BaseStats = ...
+Habitat = Wetland
+EvolutionRules = ...
+</code></pre>
+<p>这些数据属于：</p>
+<pre><code class="language-text">CreatureSpeciesDefinition
+</code></pre>
+<p>它描述的是：</p>
+<blockquote>
+<p>所有雷泽幼兽作为一种物种，理论上拥有哪些共同规则。</p>
+</blockquote>
+<p>而玩家真正捕获的某一只：</p>
+<pre><code class="language-text">CreatureInstanceId = C-982731
+SpeciesId = ThunderCub
+Level = 23
+Temperament = Timid
+Trait = StormSense
+CaptureRegion = BlackMarsh
+CaptureWeather = Thunderstorm
+Bond = 42
+</code></pre>
+<p>则属于：</p>
+<p><strong>个体实例（后文简称“玩家真正拥有的这一只”）</strong>：在物种定义基础上拥有唯一身份、当前成长、来源和个体差异的持久角色对象。</p>
+<p>这两个模型如果没有分开，问题会非常严重。</p>
+<p>例如把 Level 直接写在 SpeciesDefinition 上：</p>
+<pre><code class="language-text">一只雷泽幼兽升级
+→
+所有雷泽幼兽一起升级
+</code></pre>
+<p>这不是小 Bug。</p>
+<p>而是系统从一开始就没有区分：</p>
+<pre><code class="language-text">类型
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">实例。
+</code></pre>
+<h2 id="encounter-entity-也不等于长期-creature-instance">Encounter Entity 也不等于长期 Creature Instance</h2><p>世界中生成一只野生生物以后，它确实需要拥有一些“个体数据”。</p>
+<p>例如：</p>
+<ul>
+<li>当前等级；</li>
+<li>当前生命；</li>
+<li>随机 Trait；</li>
+<li>技能；</li>
+<li>Temperament；</li>
+<li>当前状态。</li>
+</ul>
+<p>但这并不意味着它已经是玩家长期资产。</p>
+<p><strong>遭遇实例（后文简称“这一次世界里出现的它”）</strong>：为了完成当前探索和战斗而创建的临时实体，其生命周期属于 Encounter，而不是玩家角色仓库。</p>
+<p>它可能拥有：</p>
+<pre><code class="language-text">EncounterId
+WildCreatureId
+CurrentHP
+Status
+GeneratedTraits
+GeneratedMoves
+</code></pre>
+<p>如果玩家离开区域、战斗结束或 Encounter 被销毁，这个运行时实体可能正常消失。</p>
+<p>真正的长期身份只应在捕获被成功提交后建立。</p>
+<p>因此，不建议使用：</p>
+<pre><code class="language-text">WildEnemy
+→ enemy.IsMine = true
+→ 完成
+</code></pre>
+<p>这种模型。</p>
+<p>它只是改变了阵营。</p>
+<p>没有完成资产转换。</p>
+<h2 id="捕获是一笔所有权事务">捕获是一笔所有权事务</h2><p><strong>捕获事务（后文简称“真正成为我的那一刻”）</strong>：把目标从 Encounter 所有权域移出，并在玩家角色仓库中创建或确认一个唯一持久实例的原子状态转换。</p>
+<p>一次完整捕获至少涉及：</p>
+<pre><code class="language-text">验证目标仍存在
+→
+验证目标仍可捕获
+→
+冻结捕获结果
+→
+停止敌方行为
+→
+从 Encounter 移除
+→
+创建 CreatureInstance
+→
+分配永久 InstanceId
+→
+写入来源与个体状态
+→
+写入 Roster
+→
+更新图鉴
+→
+更新任务
+→
+提交事件
+</code></pre>
+<p>这里最重要的不是步骤数量。</p>
+<p>而是：</p>
+<blockquote>
+<p>这些步骤必须属于同一个业务结果。</p>
+</blockquote>
+<p>不能出现：</p>
+<pre><code class="language-text">世界里的怪已经消失
+但玩家仓库没有它。
+</code></pre>
+<p>也不能出现：</p>
+<pre><code class="language-text">玩家仓库已经生成一份 CreatureInstance
+但野生实体还留在世界里，可以再抓一次。
+</code></pre>
+<p>前者是资产丢失。</p>
+<p>后者是资产复制。</p>
+<p>因此捕获成功真正的提交条件应该是：</p>
+<pre><code class="language-text">Encounter Ownership Released
+AND
+Player Ownership Established
+</code></pre>
+<p>两个事实同时成立。</p>
+<h2 id="捕获失败也应该产生状态而不是只重复抽概率">捕获失败也应该产生状态，而不是只重复抽概率</h2><p>如果捕获只有：</p>
+<pre><code class="language-text">按按钮
+→
+随机失败
+→
+再按一次
+</code></pre>
+<p>玩家面对的就不是策略。</p>
+<p>而是重复抽奖。</p>
+<p>更有价值的失败可以改变当前 Encounter：</p>
+<pre><code class="language-text">第一次捕获失败
+→
+目标警觉提高
+→
+捕获抵抗暂时变化
+→
+攻击模式改变
+→
+目标可能逃跑
+</code></pre>
+<p>玩家于是需要重新处理：</p>
+<ul>
+<li>削弱目标；</li>
+<li>施加状态；</li>
+<li>更换捕获工具；</li>
+<li>改变时机；</li>
+<li>承担继续尝试的风险。</li>
+</ul>
+<p>这样一次捕获过程就变成：</p>
+<pre><code class="language-text">观察
+→
+尝试
+→
+失败暴露信息
+→
+调整状态
+→
+重新尝试
+</code></pre>
+<p>而不是单纯刷新随机数。</p>
+<h2 id="捕获概率可以不显示数字但不能完全不可理解">捕获概率可以不显示数字，但不能完全不可理解</h2><p><strong>捕获可解释性（后文简称“至少知道现在好不好抓”）</strong>：玩家能够根据目标状态、工具、环境和已知规则判断当前捕获条件的大致优劣，而不必知道精确数学概率。</p>
+<p>游戏完全可以不显示：</p>
+<pre><code class="language-text">37.42%
+</code></pre>
+<p>但玩家至少应该能理解：</p>
+<pre><code class="language-text">目标生命很高
+→
+当前较难捕获
+
+目标进入麻痹
+→
+条件改善
+
+当前捕获工具适配电系
+→
+进一步改善
+
+雷暴环境满足特殊修正
+→
+当前是较好时机
+</code></pre>
+<p>否则捕获系统就无法形成：</p>
+<pre><code class="language-text">玩家假设
+→
+行动
+→
+结果
+→
+修正假设
+</code></pre>
+<p>的学习循环。</p>
+<h2 id="收藏的价值来自宽候选集合而不是全部同时上场">收藏的价值来自“宽候选集合”，而不是全部同时上场</h2><p>怪物收集 RPG 很容易拥有：</p>
+<pre><code class="language-text">几十
+几百
+甚至上千
+</code></pre>
+<p>个可获得角色。</p>
+<p>但真正参与一次战斗的通常只有：</p>
+<pre><code class="language-text">3～6
+</code></pre>
+<p>个。</p>
+<p>这形成该品类另一个极其重要的结构。</p>
+<p><strong>收藏—激活压缩（后文简称“拥有很多，但只能带少量”）</strong>：玩家长期拥有庞大候选角色集合，但每次实际战斗只能激活一个很小的子集，因此必须持续完成筛选、编队和替换。</p>
+<p>可以表示成：</p>
+<pre><code class="language-text">Collection
+████████████████████████████████
+
+Active Party
+████
+</code></pre>
+<p>如果所有捕获的生物都能够自动贡献完整战斗价值：</p>
+<pre><code class="language-text">抓得越多
+→
+总战力自动越高
+</code></pre>
+<p>收藏会退化成纯数量累积。</p>
+<p>真正的构筑来自：</p>
+<pre><code class="language-text">拥有 200 只
+↓
+当前只能选 6 只
+↓
+谁进入 Party？
+↓
+谁暂时留在 Reserve？
+↓
+谁值得投入培养资源？
+</code></pre>
+<p>所以，收藏宽度和战斗深度必须分离。</p>
+<h2 id="reserve-不是垃圾桶而是未来选择空间">Reserve 不是垃圾桶，而是未来选择空间</h2><p>未进入当前 Party 的生物通常会进入 Reserve / Storage。</p>
+<p>如果 Reserve 只提供：</p>
+<pre><code class="language-text">第一页
+第二页
+第三页
+……
+</code></pre>
+<p>玩家拥有数百个个体以后，收藏本身很快会变成 UI 管理负担。</p>
+<p>长期角色仓库至少需要支持：</p>
+<ul>
+<li>搜索；</li>
+<li>物种筛选；</li>
+<li>属性筛选；</li>
+<li>技能筛选；</li>
+<li>等级；</li>
+<li>Trait；</li>
+<li>捕获地区；</li>
+<li>收藏夹；</li>
+<li>自定义标签；</li>
+<li>Party Preset。</li>
+</ul>
+<p>这里的本质和库存管理不同。</p>
+<p>普通材料：</p>
+<pre><code class="language-text">Iron Ore × 132
+</code></pre>
+<p>可以堆叠。</p>
+<p>CreatureInstance 不能简单堆叠，因为：</p>
+<pre><code class="language-text">同一种生物
+≠
+同一个个体。
+</code></pre>
+<p>Reserve 实际管理的是大量独立角色身份。</p>
+<h2 id="生物不是装备它需要来源历史">生物不是装备，它需要来源历史</h2><p><strong>个体来源（后文简称“它是从哪里一路走到现在的”）</strong>：CreatureInstance 在整个生命周期中保留捕获、所有权、培养和形态变化等关键历史，使长期成长仍然绑定于同一角色身份。</p>
+<p>玩家可能在意：</p>
+<ul>
+<li>在哪里捕获；</li>
+<li>什么天气捕获；</li>
+<li>最初等级；</li>
+<li>原始主人；</li>
+<li>特殊技能；</li>
+<li>第一次进化时间；</li>
+<li>战斗次数；</li>
+<li>曾经加入哪些队伍；</li>
+<li>是否参与过关键 Boss 战。</li>
+</ul>
+<p>这类数据可以统一归入：</p>
+<pre><code class="language-text">Provenance
+</code></pre>
+<p>当一个角色陪伴玩家几十个小时后，它的价值已经不只来自当前 Combat Power。</p>
+<p>它还来自：</p>
+<pre><code class="language-text">历史连续性。
+</code></pre>
+<p>因此 CreatureInstance 更接近一个持久角色，而不是一件随机词条装备。</p>
+<h2 id="进化应该保持身份连续而不是删除旧角色">进化应该保持身份连续，而不是删除旧角色</h2><p>假设玩家最初捕获的是：</p>
+<pre><code class="language-text">CreatureInstanceId = C-982731
+SpeciesId = ThunderCub
+</code></pre>
+<p>经过长期培养后，它进化成：</p>
+<pre><code class="language-text">StormBeast
+</code></pre>
+<p>一个危险的实现方式是：</p>
+<pre><code class="language-text">删除 ThunderCub Instance
+→
+创建新的 StormBeast Instance
+</code></pre>
+<p>这样做虽然视觉结果可能一样，却会人为切断大量长期关系：</p>
+<ul>
+<li>名字；</li>
+<li>捕获记录；</li>
+<li>Bond；</li>
+<li>Trait；</li>
+<li>技能历史；</li>
+<li>战斗历史；</li>
+<li>OriginalOwner；</li>
+<li>Lineage。</li>
+</ul>
+<p><strong>身份连续进化（后文简称“形态变了，但还是这一只”）</strong>：CreatureInstance 保持稳定 InstanceId，进化只改变 Species、EvolutionState 与相关派生属性。</p>
+<p>即：</p>
+<pre><code class="language-text">Before
+
+InstanceId = C-982731
+Species = ThunderCub
+
+After
+
+InstanceId = C-982731
+Species = StormBeast
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">C-982731 被删除
+创建 C-104882
+</code></pre>
+<p>这项设计的价值非常直接：</p>
+<blockquote>
+<p>玩家对角色的记忆不会因为系统换了一套 Species 数据而被重置。</p>
+</blockquote>
+<h2 id="进化应该改变角色解释而不只是提高数值">进化应该改变角色解释，而不只是提高数值</h2><p>低质量进化很容易变成：</p>
+<pre><code class="language-text">HP + 50
+Attack + 20
+模型变大
+</code></pre>
+<p>这种变化当然可以提供成长反馈。</p>
+<p>但如果一个系统有大量收集和编队空间，更有价值的是让进化改变角色定位。</p>
+<p>例如同一基础生物可以沿不同条件进入：</p>
+<pre><code class="language-text">A
+高速单体输出
+
+B
+防御控制
+
+C
+天气支援
+</code></pre>
+<p>玩家实际做的就是：</p>
+<pre><code class="language-text">角色构筑方向选择。
+</code></pre>
+<p>此时进化不只是：</p>
+<blockquote>
+<p>升级了。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>这个长期角色在队伍中的解释发生了变化。</p>
+</blockquote>
+<h2 id="分支进化会把培养变成长期承诺">分支进化会把培养变成长期承诺</h2><p>进化条件可以来自：</p>
+<ul>
+<li>等级；</li>
+<li>地点；</li>
+<li>时间；</li>
+<li>天气；</li>
+<li>Bond；</li>
+<li>道具；</li>
+<li>已学技能；</li>
+<li>当前 Party；</li>
+<li>特殊剧情。</li>
+</ul>
+<p>这使玩家提前思考：</p>
+<pre><code class="language-text">我想把这一只培养成什么？
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">Storm Evolution
+需要雷暴天气
++
+较高 Bond
++
+指定技能
+</code></pre>
+<p>玩家获得的不只是一个隐藏条件。</p>
+<p>而是一条长期培养路线。</p>
+<p>当然，这里有一个非常重要的边界：</p>
+<blockquote>
+<p>条件可以复杂，但不能完全无法推理。</p>
+</blockquote>
+<p>如果玩家只能通过外部 Wiki 才知道：</p>
+<pre><code class="language-text">必须星期三凌晨 2 点
+站在某块石头旁
+携带特定隐藏值
+</code></pre>
+<p>系统就不再是发现。</p>
+<p>而是信息隐藏。</p>
+<p>图鉴、NPC、环境线索和 Evolution Debug UI 至少应该逐步提供可推理提示。</p>
+<h2 id="图鉴最好记录知识而不只是拥有过">图鉴最好记录“知识”，而不只是“拥有过”</h2><p>很多图鉴只有：</p>
+<pre><code class="language-text">？？？
+→
+已捕获
+</code></pre>
+<p>但怪物收集系统天然拥有更多认知层次：</p>
+<pre><code class="language-text">Seen
+Encountered
+Fought
+Captured
+Studied
+</code></pre>
+<p><strong>生态知识模型（后文简称“玩家对这个物种到底知道多少”）</strong>：图鉴记录玩家通过观察、战斗、捕获和研究逐渐获得的信息，而不是只维护一个 Boolean Checklist。</p>
+<p>例如：</p>
+<pre><code class="language-text">首次看到
+→
+只知道轮廓和大致属性
+
+战斗过
+→
+开始记录技能和行为
+
+捕获
+→
+解锁基础物种资料
+
+多次观察
+→
+解锁栖息时间和天气规律
+
+完成研究
+→
+获得进化提示
+</code></pre>
+<p>这样图鉴本身也进入探索循环。</p>
+<p>它帮助玩家回答：</p>
+<blockquote>
+<p>下一只应该去哪里找？</p>
+</blockquote>
+<p>而不是只告诉玩家：</p>
+<blockquote>
+<p>还差 37 个问号。</p>
+</blockquote>
+<h2 id="稀有物种最好拥有可学习规律而不只是极低概率">稀有物种最好拥有可学习规律，而不只是极低概率</h2><p>一种最简单的稀有设计是：</p>
+<pre><code class="language-text">SpawnChance = 0.1%
+</code></pre>
+<p>然后玩家在同一片草地不断触发 Encounter。</p>
+<p>这种设计确实能制造稀缺。</p>
+<p>但它几乎没有制造新的决策。</p>
+<p>更有价值的稀有条件可以来自：</p>
+<ul>
+<li>夜晚；</li>
+<li>雷暴；</li>
+<li>季节；</li>
+<li>隐藏区域；</li>
+<li>特殊生态事件；</li>
+<li>前置任务；</li>
+<li>特殊诱饵。</li>
+</ul>
+<p>这样玩家会逐渐学习：</p>
+<pre><code class="language-text">这个物种喜欢什么环境？
+</code></pre>
+<p>发现过程就从：</p>
+<pre><code class="language-text">重复抽随机
+</code></pre>
+<p>变成：</p>
+<pre><code class="language-text">学习生态规则
+→
+准备条件
+→
+主动寻找。
+</code></pre>
+<h2 id="世界生态应该决定为什么它在这里">世界生态应该决定“为什么它在这里”</h2><p>如果每一个 Region 都只是维护：</p>
+<pre><code class="language-text">RandomMonsterTable
+</code></pre>
+<p>生物很容易变成：</p>
+<blockquote>
+<p>会移动的 Loot Table。</p>
+</blockquote>
+<p>更完整的遭遇系统可以根据：</p>
+<pre><code class="language-text">Biome
+Time
+Weather
+Season
+Altitude
+World State
+Population
+Player Progress
+</code></pre>
+<p>共同构造 Encounter Context。</p>
+<p>例如：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["进入沼泽"] --&gt; B["Environment Context"]
+    B --&gt; C["Habitat Filter"]
+    C --&gt; D["Rarity / Population Weight"]
+    D --&gt; E["Encounter Budget"]
+    E --&gt; F["Wild Creature Instance"]
+</code></pre>
+<p>这样玩家得到的体验是：</p>
+<blockquote>
+<p>某种生物属于这个世界。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>系统这次随机把什么塞进来了。</p>
+</blockquote>
+<h2 id="收集越宽追赶机制越重要">收集越宽，追赶机制越重要</h2><p>玩家主力队伍可能已经：</p>
+<pre><code class="language-text">Level 60
+</code></pre>
+<p>此时新区域捕获一只：</p>
+<pre><code class="language-text">Level 18
+</code></pre>
+<p>的新生物。</p>
+<p>如果想真正测试它，需要：</p>
+<pre><code class="language-text">重复练几十级
+</code></pre>
+<p>大多数玩家最终会选择：</p>
+<blockquote>
+<p>算了，还是继续用旧队伍。</p>
+</blockquote>
+<p>这会产生一个很严重的系统反作用：</p>
+<pre><code class="language-text">收集内容越来越多
+但真正可用角色越来越固定。
+</code></pre>
+<p><strong>角色追赶机制（后文简称“新成员能 reasonably 加入竞争”）</strong>：降低后期新获得生物进入真实队伍测试所需的重复培养成本。</p>
+<p>可以使用：</p>
+<ul>
+<li>后备经验；</li>
+<li>区域等级；</li>
+<li>训练设施；</li>
+<li>经验物品；</li>
+<li>等级同步；</li>
+<li>高级区域直接出现高等级个体。</li>
+</ul>
+<p>目标不是：</p>
+<blockquote>
+<p>所有新生物立即和主力一样强。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>玩家愿意真正试它。</p>
+</blockquote>
+<p>如果获取新角色以后首先想到的是：</p>
+<pre><code class="language-text">我要花三个小时把它练到能用
+</code></pre>
+<p>收藏系统实际上在惩罚玩家探索新内容。</p>
+<h2 id="learned-moves-和-equipped-moves-也应该形成大集合到小集合的压缩">Learned Moves 和 Equipped Moves 也应该形成大集合到小集合的压缩</h2><p>一个长期角色可能学会：</p>
+<pre><code class="language-text">18 个技能
+</code></pre>
+<p>但一次战斗只允许装备：</p>
+<pre><code class="language-text">4 个。
+</code></pre>
+<p>这又形成一次：</p>
+<pre><code class="language-text">大候选集合
+→
+小激活集合
+</code></pre>
+<p>它和 Collection / Party 使用的是同一类设计思想。</p>
+<pre><code class="language-text">我知道很多
+≠
+我现在全部能带。
+</code></pre>
+<p>限制并不只是为了减少 UI。</p>
+<p>限制本身创造构筑。</p>
+<p>如果所有已学技能都可以同时使用：</p>
+<pre><code class="language-text">角色越老
+→
+能力覆盖越全面
+→
+新选择越来越少。
+</code></pre>
+<p>小型 Equipped Set 则迫使玩家针对：</p>
+<ul>
+<li>当前队伍；</li>
+<li>当前区域；</li>
+<li>Boss；</li>
+<li>PvP；</li>
+<li>属性覆盖；</li>
+</ul>
+<p>持续调整。</p>
+<h2 id="属性克制的目的不是自动判胜而是阻止单一队伍解决一切">属性克制的目的不是自动判胜，而是阻止单一队伍解决一切</h2><p>属性系统最直观的写法是：</p>
+<pre><code class="language-text">Fire &gt; Grass
+Water &gt; Fire
+</code></pre>
+<p>但它真正承担的战略职责应该是：</p>
+<blockquote>
+<p>队伍不能只围绕一个绝对强单位无限解决所有内容。</p>
+</blockquote>
+<p>如果克制倍率过高：</p>
+<pre><code class="language-text">猜中属性
+→
+自动获胜
+</code></pre>
+<p>那么：</p>
+<ul>
+<li>技能；</li>
+<li>速度；</li>
+<li>状态；</li>
+<li>角色定位；</li>
+<li>配合；</li>
+</ul>
+<p>都会被属性表压过。</p>
+<p>更合理的队伍分析应该同时关注：</p>
+<pre><code class="language-text">Element Coverage
++
+Role Coverage
+</code></pre>
+<p>例如一支队伍可能属性覆盖很好，却缺少：</p>
+<ul>
+<li>控制；</li>
+<li>恢复；</li>
+<li>防御；</li>
+<li>高速成员；</li>
+<li>长期输出。</li>
+</ul>
+<p>所以 Team Coverage UI 更适合告诉玩家：</p>
+<blockquote>
+<p>当前有什么明显缺口。</p>
+</blockquote>
+<p>而不是直接算出：</p>
+<blockquote>
+<p>最优六人队。</p>
+</blockquote>
+<h2 id="战斗应该使用快照而不是直接让外部仓库状态持续渗入">战斗应该使用快照，而不是直接让外部仓库状态持续渗入</h2><p>CreatureInstance 是玩家长期资产。</p>
+<p>战斗则是一段短生命周期模拟。</p>
+<p>这两个状态域不应该在整场战斗中无约束共享。</p>
+<p><strong>战斗角色快照（后文简称“这一场战斗里的版本”）</strong>：进入战斗时从 CreatureInstance 派生当前等级、属性、技能、状态和战斗修正，战斗结束后再把允许持久化的结果提交回长期实例。</p>
+<p>例如：</p>
+<pre><code class="language-text">CreatureInstance
+↓
+BattleCreatureSnapshot
+↓
+Combat Runtime
+↓
+BattleResult
+↓
+Commit Progression
+</code></pre>
+<p>这样战斗过程中外部系统不会突然：</p>
+<pre><code class="language-text">替换技能
+改变 Species
+修改装备
+</code></pre>
+<p>导致正在运行的战斗状态失去一致性。</p>
+<p>同样，捕获成功也必须是一条特殊终止路径。</p>
+<p>不能同时发生：</p>
+<pre><code class="language-text">CreatureCaptured
++
+EnemyKilled
++
+普通死亡掉落
+</code></pre>
+<p>捕获和击杀必须是互斥结局。</p>
+<h2 id="交易比捕获更需要严格所有权事务">交易比捕获更需要严格所有权事务</h2><p>多人交换看起来只是：</p>
+<pre><code class="language-text">A 把怪给 B
+B 把怪给 A
+</code></pre>
+<p>但对于高价值长期角色资产，这是非常危险的状态转换。</p>
+<p>一次交易至少需要：</p>
+<pre><code class="language-text">双方提交
+→
+锁定 CreatureInstance
+→
+生成交易快照
+→
+双方确认
+→
+重新验证当前 Owner
+→
+原子交换 OwnerId
+→
+更新双方 Roster
+→
+提交交易结果
+</code></pre>
+<p>必须防止：</p>
+<ul>
+<li>重复确认；</li>
+<li>断线重试；</li>
+<li>同一个 Creature 同时参加两个交易；</li>
+<li>回滚产生副本；</li>
+<li>一边成功一边失败。</li>
+</ul>
+<p><strong>角色所有权唯一性（后文简称“任何时刻只能真正属于一个 Owner”）</strong>：每个持久 CreatureInstance 在业务真理源中只能拥有一个有效所有者，捕获、交易和其他转移必须通过原子事务改变该关系。</p>
+<p>这已经不是普通 UI 数据。</p>
+<p>它和道具交易、市场资产甚至服务端经济系统属于同一类完整性问题。</p>
+<h2 id="creatureinstance-应被视为高价值存档资产">CreatureInstance 应被视为高价值存档资产</h2><p>玩家可能在一只生物身上投入：</p>
+<pre><code class="language-text">几十小时。
+</code></pre>
+<p>因此它需要：</p>
+<ul>
+<li>稳定 InstanceId；</li>
+<li>Owner；</li>
+<li>Version；</li>
+<li>Provenance；</li>
+<li>Integrity；</li>
+<li>Migration；</li>
+<li>EvolutionHistory。</li>
+</ul>
+<p>绝不能只存在：</p>
+<pre><code class="language-text">Scene GameObject
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-text">当前 Party Prefab。
+</code></pre>
+<p>场景实体只是表现和运行载体。</p>
+<p>长期 CreatureRepository 才应该是真理源。</p>
+<h2 id="内容更新不能让旧角色突然无法加载">内容更新不能让旧角色突然无法加载</h2><p>游戏发布新版本后，可能发生：</p>
+<pre><code class="language-text">某技能被删除
+某 Trait 改名
+某进化形态被重构
+某 Species Schema 增加字段
+</code></pre>
+<p>如果长期角色资产只是直接序列化当前 Definition 引用，一次内容调整就可能让玩家多年培养结果无法加载。</p>
+<p>因此：</p>
+<p><strong>角色资产迁移（后文简称“版本变了，旧角色也必须活下来”）</strong>：内容 Schema 更新后，为已有 CreatureInstance 提供确定性的字段、技能、形态和规则转换路径。</p>
+<p>例如：</p>
+<pre><code class="language-text">OldMoveId
+→
+NewMoveId
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-text">DeletedForm
+→
+ReplacementForm
++
+Compensation
+</code></pre>
+<p>真正需要保护的不是旧数据格式。</p>
+<p>而是：</p>
+<blockquote>
+<p>玩家长期拥有的角色事实不能因为开发者更新内容而消失。</p>
+</blockquote>
+<h2 id="完整性错误必须显式暴露不能静默覆盖">完整性错误必须显式暴露，不能静默覆盖</h2><p>长期存档中最危险的问题之一是：</p>
+<pre><code class="language-text">两个 Creature 拥有同一个 InstanceId。
+</code></pre>
+<p>如果加载逻辑选择：</p>
+<pre><code class="language-text">后加载的覆盖前一个。
+</code></pre>
+<p>用户可能永久失去一个角色。</p>
+<p>更安全的方式是：</p>
+<pre><code class="language-text">发现重复 ID
+→
+隔离冲突实例
+→
+标记 IntegrityError
+→
+停止静默覆盖
+</code></pre>
+<p>类似问题还包括：</p>
+<pre><code class="language-text">Party 引用了一个 Roster 中不存在的 Creature
+Trade 锁没有释放
+Species 已经不存在
+Move 引用非法
+Legendary 重复生成
+</code></pre>
+<p>**角色资产完整性（后文简称“任何时候都能证明这只角色是谁、在哪、属于谁”）**是这类系统必须单独治理的状态。</p>
+<h2 id="捕获成功以后世界状态收藏状态和知识状态仍然不是同一个东西">捕获成功以后，世界状态、收藏状态和知识状态仍然不是同一个东西</h2><p>怪物系统中至少可以区分：</p>
+<pre><code class="language-text">Seen
+Owned
+In Party
+Currently Active
+</code></pre>
+<p>它们不是一组 Boolean 的不同叫法。</p>
+<p>例如：</p>
+<p>玩家第一次看到稀有生物，但没有抓到：</p>
+<pre><code class="language-text">Seen = true
+Owned = false
+</code></pre>
+<p>玩家后来成功捕获：</p>
+<pre><code class="language-text">Owned = true
+</code></pre>
+<p>但 Party 已满：</p>
+<pre><code class="language-text">In Party = false
+Reserve = true
+</code></pre>
+<p>再后来加入主队：</p>
+<pre><code class="language-text">In Party = true
+</code></pre>
+<p>如果这些概念被合并成：</p>
+<pre><code class="language-text">Unlocked
+</code></pre>
+<p>系统很快会失去表达能力。</p>
+<p>长期收集游戏尤其需要避免：</p>
+<blockquote>
+<p>用一个状态词代表多个领域事实。</p>
+</blockquote>
+<h2 id="世界资产和战斗应该拥有不同-owner">世界、资产和战斗应该拥有不同 Owner</h2><p>可以把主要状态责任压缩为：</p>
+<pre><code class="language-text">SpeciesCatalog
+→
+拥有物种定义
+
+EncounterSystem
+→
+拥有当前野生实例
+
+CreatureRepository
+→
+拥有长期 CreatureInstance
+
+RosterSystem
+→
+拥有收藏关系
+
+PartySystem
+→
+拥有当前激活队伍
+
+BattleSystem
+→
+拥有本场 Battle Snapshot
+
+EncyclopediaSystem
+→
+拥有玩家知识
+
+Capture / Trade / Evolution
+→
+负责跨域状态转换
+</code></pre>
+<p>最危险的架构是：</p>
+<pre><code class="language-text">Scene GameObject
+</code></pre>
+<p>逐渐变成：</p>
+<ul>
+<li>角色真理源；</li>
+<li>存档真理源；</li>
+<li>队伍真理源；</li>
+<li>战斗真理源；</li>
+<li>所有权真理源。</li>
+</ul>
+<p>场景对象生命周期太短，也太容易受到表现层操作影响，不应该承担长期角色资产责任。</p>
+<h2 id="一个完整循环实际是世界生态-角色资产-队伍构筑">一个完整循环实际是“世界生态 → 角色资产 → 队伍构筑”</h2><p>假设玩家在雷暴天气进入沼泽。</p>
+<p>系统通过：</p>
+<pre><code class="language-text">Biome
++
+Time
++
+Weather
+</code></pre>
+<p>判断某种稀有电系生物可以出现。</p>
+<p>玩家第一次遭遇：</p>
+<pre><code class="language-text">Seen
+</code></pre>
+<p>进入图鉴。</p>
+<p>野生个体生成时，当前：</p>
+<ul>
+<li>Level；</li>
+<li>Trait；</li>
+<li>Skills；</li>
+<li>Temperament；</li>
+</ul>
+<p>被固定下来。</p>
+<p>玩家第一次尝试捕获失败。</p>
+<p>目标进入更高警觉。</p>
+<p>玩家改用：</p>
+<ul>
+<li>低生命控制；</li>
+<li>麻痹；</li>
+<li>特定工具。</li>
+</ul>
+<p>第二次捕获成功。</p>
+<p>系统执行 Capture Transaction。</p>
+<p>野生 Encounter Entity 消失。</p>
+<p>新的：</p>
+<pre><code class="language-text">CreatureInstanceId
+</code></pre>
+<p>进入长期 Roster。</p>
+<p>因为 Party 已满，它暂时进入 Reserve。</p>
+<p>之后玩家主动将它加入队伍，完成培养。</p>
+<p>数小时以后，它满足：</p>
+<pre><code class="language-text">Level
++
+Bond
++
+Thunderstorm
+</code></pre>
+<p>的特殊进化条件。</p>
+<p>进化发生。</p>
+<p>它的 Species 从：</p>
+<pre><code class="language-text">ThunderCub
+</code></pre>
+<p>变为：</p>
+<pre><code class="language-text">StormBeast
+</code></pre>
+<p>但：</p>
+<pre><code class="language-text">CreatureInstanceId
+</code></pre>
+<p>保持不变。</p>
+<p>玩家仍然知道：</p>
+<blockquote>
+<p>这是当初沼泽里抓到的那一只。</p>
+</blockquote>
+<p>而它新的战斗定位，又促使玩家重新调整整支队伍。</p>
+<p>这就形成了真正完整的循环：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["探索生态"] --&gt; B["发现生物"]
+    B --&gt; C["Encounter"]
+    C --&gt; D["捕获事务"]
+    D --&gt; E["长期角色资产"]
+    E --&gt; F["收藏 / Reserve"]
+    F --&gt; G["Party 构筑"]
+    G --&gt; H["战斗与培养"]
+    H --&gt; I["进化 / 定位变化"]
+    I --&gt; G
+    G --&gt; J["获得新的探索能力"]
+    J --&gt; A
+</code></pre>
+<p>所以，怪物收集 RPG 最重要的不是：</p>
+<blockquote>
+<p>地图上有很多怪。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>世界中的生态多样性，能够不断转换成玩家自己的长期角色组合空间。</p>
+</blockquote>
+<h2 id="与普通-jrpg-的边界">与普通 JRPG 的边界</h2><p>普通 JRPG 通常拥有：</p>
+<pre><code class="language-text">固定或半固定主角团
+</code></pre>
+<p>玩家核心成长围绕：</p>
+<ul>
+<li>角色等级；</li>
+<li>装备；</li>
+<li>技能；</li>
+<li>剧情关系；</li>
+</ul>
+<p>逐渐展开。</p>
+<p>怪物收集 RPG 则把角色集合本身变成主要成长维度。</p>
+<p>玩家不断：</p>
+<pre><code class="language-text">发现新角色
+→
+获得新角色
+→
+筛选
+→
+替换
+→
+重新构筑。
+</code></pre>
+<p>所以二者虽然都可以拥有：</p>
+<ul>
+<li>地图；</li>
+<li>回合战斗；</li>
+<li>Boss；</li>
+<li>剧情；</li>
+</ul>
+<p>运行时中心仍然不同。</p>
+<p>一个主要经营：</p>
+<pre><code class="language-text">已有角色的纵向成长。
+</code></pre>
+<p>另一个同时经营：</p>
+<pre><code class="language-text">角色候选空间的横向扩大。
+</code></pre>
+<h2 id="与宠物养成的边界">与宠物养成的边界</h2><p>宠物养成更强调：</p>
+<ul>
+<li>情绪；</li>
+<li>生理需求；</li>
+<li>信任；</li>
+<li>日常互动；</li>
+<li>陪伴关系。</li>
+</ul>
+<p>怪物收集 RPG 可以拥有 Bond。</p>
+<p>但如果 Bond 逐渐成为：</p>
+<pre><code class="language-text">必须每天摸十次
+必须喂大量重复物品
+否则战力大幅下降
+</code></pre>
+<p>系统就会偏向照护模拟。</p>
+<p>怪物收集 RPG 中的关系更适合服务：</p>
+<ul>
+<li>特殊进化；</li>
+<li>技能；</li>
+<li>少量表现；</li>
+<li>探索互动；</li>
+<li>角色记忆。</li>
+</ul>
+<p>它应该强化“这是我的这一只”。</p>
+<p>不应该变成高频生活维护负担。</p>
+<h2 id="与抽卡角色收集的边界">与抽卡角色收集的边界</h2><p>抽卡游戏也会拥有大量角色。</p>
+<p>但它的角色获得来源通常是：</p>
+<pre><code class="language-text">外部抽取系统
+→
+直接进入玩家资产。
+</code></pre>
+<p>怪物收集 RPG 更强调：</p>
+<pre><code class="language-text">角色先属于世界
+→
+玩家发现
+→
+遭遇
+→
+理解
+→
+捕获
+→
+成为资产。
+</code></pre>
+<p>角色获取本身参与探索和世界生态。</p>
+<p>因此玩家记忆的不只是：</p>
+<blockquote>
+<p>我抽到了它。</p>
+</blockquote>
+<p>而可能是：</p>
+<blockquote>
+<p>我在哪里找到它、当时发生了什么、我怎样把它抓到手。</p>
+</blockquote>
+<p>这就是捕获资产化与普通 Collection Unlock 的重要差别。</p>
+<h2 id="这套模型不能简单照搬到所有收集系统">这套模型不能简单照搬到所有收集系统</h2><p>如果游戏中的“单位”本质上是：</p>
+<ul>
+<li>消耗品；</li>
+<li>无长期差异；</li>
+<li>可完全堆叠；</li>
+<li>没有来源；</li>
+<li>没有个体成长；</li>
+</ul>
+<p>那么为每一个实例建立完整：</p>
+<pre><code class="language-text">Unique Id
+Provenance
+Evolution History
+Ownership Transaction
+</code></pre>
+<p>会制造不必要复杂度。</p>
+<p>只有当玩家确实会把它理解成：</p>
+<blockquote>
+<p>一个独立角色。</p>
+</blockquote>
+<p>长期身份才有足够价值。</p>
+<p>所以真正应该先问的是：</p>
+<blockquote>
+<p>玩家拥有的是“某种单位的一份数量”，还是“这一只具体角色”？</p>
+</blockquote>
+<p>前者适合 Item Stack。</p>
+<p>后者才需要 Character Asset。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="species-和-creatureinstance-混在一起">Species 和 CreatureInstance 混在一起</h3><p>物种规则与个体成长互相污染。</p>
+<h3 id="捕获只是改变阵营字段">捕获只是改变阵营字段</h3><p>没有完成长期身份、所有权和存档转换。</p>
+<h3 id="捕获成功不是原子事务">捕获成功不是原子事务</h3><p>产生重复、生物丢失或图鉴状态漂移。</p>
+<h3 id="捕获失败只重复-rng">捕获失败只重复 RNG</h3><p>没有产生新的战术状态。</p>
+<h3 id="所有收藏都自动贡献战力">所有收藏都自动贡献战力</h3><p>收藏数量直接膨胀为战力，没有 Party 压缩和编队选择。</p>
+<h3 id="reserve-只提供翻页">Reserve 只提供翻页</h3><p>角色数量增加后，收藏系统变成 UI 仓库劳动。</p>
+<h3 id="进化删除旧实例再创建新实例">进化删除旧实例再创建新实例</h3><p>长期身份和来源历史被切断。</p>
+<h3 id="稀有只等于极低概率">稀有只等于极低概率</h3><p>玩家只能通过重复刷取而不是学习世界规律寻找。</p>
+<h3 id="新成员缺少追赶机制">新成员缺少追赶机制</h3><p>后期获得的角色无法合理进入真实队伍竞争。</p>
+<h3 id="属性克制过于绝对">属性克制过于绝对</h3><p>队伍构筑被“猜对属性”替代。</p>
+<h3 id="battle-直接持续修改长期-creatureinstance">Battle 直接持续修改长期 CreatureInstance</h3><p>短生命周期模拟和长期资产状态互相污染。</p>
+<h3 id="交易不是原子所有权事务">交易不是原子所有权事务</h3><p>断线或重试可以产生角色复制。</p>
+<h3 id="长期角色只存-scene-object">长期角色只存 Scene Object</h3><p>场景销毁或重载导致高价值资产失去权威状态。</p>
+<h3 id="内容更新缺少迁移">内容更新缺少迁移</h3><p>技能和形态调整让旧存档角色无法加载。</p>
+<h3 id="重复-instanceid-静默覆盖">重复 InstanceId 静默覆盖</h3><p>高价值角色在加载时无提示丢失。</p>
+<h2 id="我的角色资产设计检查表">我的角色资产设计检查表</h2><ol>
+<li>Species Definition 与 Creature Instance 是否是两个数据模型？</li>
+<li>每个长期角色是否拥有稳定且唯一的 InstanceId？</li>
+<li>Encounter Entity 与长期 CreatureInstance 是否拥有不同生命周期？</li>
+<li>捕获是否是明确的所有权事务？</li>
+<li>捕获成功是否保证世界移除与 Roster 写入同时成立？</li>
+<li>捕获失败是否能改变后续决策，而不是单纯重复抽概率？</li>
+<li>玩家能否理解哪些因素改善捕获条件？</li>
+<li>Seen、Owned、InParty 是否被明确分离？</li>
+<li>大型 Collection 与小型 Active Party 是否形成真实压缩关系？</li>
+<li>Reserve 是否支持搜索、标签和队伍预设？</li>
+<li>CreatureInstance 是否保存必要 Provenance？</li>
+<li>进化是否保持同一个 InstanceId？</li>
+<li>分支进化是否改变角色构筑方向，而不仅是数值？</li>
+<li>Evolution 条件是否可以逐步被玩家理解？</li>
+<li>后期获得的新生物是否有合理追赶方式？</li>
+<li>Learned Moves 与 Equipped Moves 是否形成构筑取舍？</li>
+<li>属性与角色定位是否共同参与 Team Coverage？</li>
+<li>图鉴是否记录知识层次，而不仅是拥有状态？</li>
+<li>稀有出现是否拥有可以学习的生态规律？</li>
+<li>Encounter 是否由 Habitat Context 驱动，而不是纯随机表？</li>
+<li>战斗是否使用独立 Battle Snapshot？</li>
+<li>捕获成功是否与击杀结算互斥？</li>
+<li>Trade 是否锁定角色并进行原子 Owner 转换？</li>
+<li>同一个 Creature 是否能够同时参与多个 Ownership Transaction？</li>
+<li>CreatureRepository 是否是真正长期状态 Owner？</li>
+<li>Party、Roster、Battle 和 Scene 是否都没有越权拥有 Creature 数据？</li>
+<li>存档是否拥有 Creature Schema Version 与 Migration？</li>
+<li>删除技能或形态以后，旧 Creature 是否仍然可以恢复？</li>
+<li>是否存在 InstanceId、Roster、Party 和 Owner 完整性检查？</li>
+<li>调试工具能否解释一个角色“是谁、从哪里来、现在属于谁、经历过什么”？</li>
+</ol>
+<p>怪物收集 RPG 最直观的表面特征，是：</p>
+<blockquote>
+<p>可以抓很多怪。</p>
+</blockquote>
+<p>但真正让这个系统能够长期运转的，并不是“怪物数量”。</p>
+<p>而是系统能够始终准确地区分：</p>
+<pre><code class="language-text">这个物种是什么
+这次世界里遇到的是哪一只
+玩家最终拥有的是哪一只
+这一场战斗使用的是哪个状态版本
+</code></pre>
+<p>捕获把一个临时世界实体变成长期资产。</p>
+<p>收藏扩大候选空间。</p>
+<p>Party 把庞大收藏压缩成当前决策。</p>
+<p>培养与进化继续改变角色定位。</p>
+<p>生态系统又不断提供新的候选。</p>
+<p>于是玩家的成长并不只是：</p>
+<pre><code class="language-text">等级越来越高。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">世界里的可能性
+不断被转换成
+自己拥有、记得并能够重新组合的角色空间。
+</code></pre>
+<p>这也是“怪物收集”真正比“敌人掉角色奖励”更有辨识度的地方：</p>
+<blockquote>
+<p>玩家收集的不是一条解锁记录，而是一群拥有持续身份的角色。</p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>角色资产化</td>
+<td>从世界里的怪，变成我的这一只</td>
+</tr>
+<tr>
+<td>物种定义</td>
+<td>这一类生物是什么</td>
+</tr>
+<tr>
+<td>个体实例</td>
+<td>玩家真正拥有的这一只</td>
+</tr>
+<tr>
+<td>遭遇实例</td>
+<td>这一次世界里出现的它</td>
+</tr>
+<tr>
+<td>捕获事务</td>
+<td>真正成为我的那一刻</td>
+</tr>
+<tr>
+<td>捕获可解释性</td>
+<td>至少知道现在好不好抓</td>
+</tr>
+<tr>
+<td>收藏—激活压缩</td>
+<td>拥有很多，但只能带少量</td>
+</tr>
+<tr>
+<td>个体来源</td>
+<td>它是从哪里一路走到现在的</td>
+</tr>
+<tr>
+<td>身份连续进化</td>
+<td>形态变了，但还是这一只</td>
+</tr>
+<tr>
+<td>生态知识模型</td>
+<td>玩家对这个物种到底知道多少</td>
+</tr>
+<tr>
+<td>角色追赶机制</td>
+<td>新成员能 reasonably 加入竞争</td>
+</tr>
+<tr>
+<td>战斗角色快照</td>
+<td>这一场战斗里的版本</td>
+</tr>
+<tr>
+<td>角色所有权唯一性</td>
+<td>任何时刻只能真正属于一个 Owner</td>
+</tr>
+<tr>
+<td>角色资产迁移</td>
+<td>版本变了，旧角色也必须活下来</td>
+</tr>
+<tr>
+<td>角色资产完整性</td>
+<td>任何时候都能证明这只角色是谁、在哪、属于谁</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>game-designs/怪物收集RPG设计范式.md</code></li>
+<li><code>game-designs/README.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文是对怪物收集 / Monster Taming / Creature Collection RPG 设计范式的个人综述。</p>
+<p>文中的 CaptureTransaction、CreatureRepository、BattleCreatureSnapshot、EvolutionTransaction、Provenance、Roster Integrity 等属于工程化分析模型与可选实现方案，不表示所有怪物收集游戏都使用完全相同的数据结构、事务系统、服务器权威模型或战斗架构。</p>
+<p>尤其需要注意：“保持同一 CreatureInstanceId 完成进化”是用于保护角色身份连续性的推荐设计，而不是所有游戏都必须采用的唯一实现。只要系统能够可靠保留玩家所感知的角色身份、来源和长期成长历史，也可以采用其他内部表示。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="city-accessibility-feedback-loop.html"><span>同属「游戏系统的共同语言」</span><strong>可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环</strong><small>城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？</small></a><a href="moba-action-windows-map-conversion.html"><span>同属「游戏系统的共同语言」</span><strong>可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现</strong><small>MOBA 中一次击杀、一次团战或一次线权优势，怎样从短暂的战斗收益转换成能够持续影响后续局势的地图状态？</small></a><a href="auto-battler-shared-pool-economy.html"><span>同属「游戏系统的共同语言」</span><strong>构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗</strong><small>当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

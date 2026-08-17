@@ -973,12 +973,12 @@ Handle
 
 本文主要基于以下研究材料整理：
 
-- `notes/UnrealEngine源码研究/01_Launch与ModuleManager启动及停机边界.md`
-- `notes/UnrealEngine源码研究/05_UWorld与AActor生命周期及Tick调度.md`
-- `notes/UnrealEngine源码研究/07_游戏线程到渲染线程的Scene与帧提交.md`
-- `notes/UnrealEngine源码研究/11_进程启动到第一帧_GuardedMain到Tick与Present.md`
-- `notes/UnrealEngine源码研究/12_Component从注册到SceneProxy_世界附着与线程提交.md`
-- `notes/UnrealEngine源码研究/README.md`
+- `notes/UnrealEngine源码研究/UE5/01_Launch与ModuleManager启动及停机边界.md`
+- `notes/UnrealEngine源码研究/UE5/05_UWorld与AActor生命周期及Tick调度.md`
+- `notes/UnrealEngine源码研究/UE5/07_游戏线程到渲染线程的Scene与帧提交.md`
+- `notes/UnrealEngine源码研究/UE5/11_进程启动到第一帧_GuardedMain到Tick与Present.md`
+- `notes/UnrealEngine源码研究/UE5/12_Component从注册到SceneProxy_世界附着与线程提交.md`
+- `notes/UnrealEngine源码研究/UE5/README.md`
 
 本文基于当前 Unreal Engine 5.8.1 release 源码研究笔记整理，重点覆盖 Launch、ModuleManager、World/Actor/Component 生命周期以及游戏线程到 Render Thread 的基础帧提交路径。
 

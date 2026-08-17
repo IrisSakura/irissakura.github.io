@@ -1,4 +1,7 @@
 ## 系统性世界、可组合能力与多路径问题求解
+
+> Agent 标签：`emergence` `immersive-sim` `systemic`
+
 ---
 ## 1. 类型定义
 

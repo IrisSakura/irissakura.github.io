@@ -1,4 +1,7 @@
 ## 固定步长车辆模拟、赛道拓扑与连续竞赛裁定
+
+> Agent 标签：`racing` `simulation` `vehicle`
+
 ---
 ## 1. 类型定义
 

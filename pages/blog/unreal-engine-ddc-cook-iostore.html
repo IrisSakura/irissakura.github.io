@@ -23,7 +23,7 @@
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载 | IrisSakura","description":"编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？","url":"https://irissakura.github.io/pages/blog/unreal-engine-ddc-cook-iostore.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-ddc-cook-iostore.png","datePublished":"2026-08-09","dateModified":"2026-08-09","about":["ddc","engine","unreal"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载 | IrisSakura","description":"编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？","url":"https://irissakura.github.io/pages/blog/unreal-engine-ddc-cook-iostore.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-ddc-cook-iostore.png","datePublished":"2026-08-09","dateModified":"2026-08-17","about":["ddc","engine","unreal"]}</script>
     <!-- site-meta:end -->
     <title>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -138,7 +138,7 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-09 · 更新于 2026-08-09</p>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-09 · 更新于 2026-08-17</p>
             <h1>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</h1>
             <p class="blog-deck">编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</p>
             <div class="note-tags"><span>ddc</span><span>engine</span><span>unreal</span></div>
@@ -408,10 +408,10 @@ AsyncLoading2 负责把字节恢复为对象图
 <hr />
 <h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下研究材料整理：</p>
 <ul>
-<li><code>notes/UnrealEngine源码研究/10_序列化与Package加载_FArchive到AsyncLoading.md</code></li>
-<li><code>notes/UnrealEngine源码研究/14_AssetRegistry到PrimaryAsset_发现规则与异步句柄.md</code></li>
-<li><code>notes/UnrealEngine源码研究/15_DDC到Cook与IoStore_资源生产和运行时读取.md</code></li>
-<li><code>notes/UnrealEngine源码研究/README.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/10_序列化与Package加载_FArchive到AsyncLoading.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/14_AssetRegistry到PrimaryAsset_发现规则与异步句柄.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/15_DDC到Cook与IoStore_资源生产和运行时读取.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/README.md</code></li>
 </ul>
 <p>本文依据当前 Unreal Engine 5.8.1 release 源码研究，覆盖 DDC key/request/build、Cook 保存提交、cooked AssetRegistry、IoStore 容器生产、PackageStore、FIoDispatcher 与 AsyncLoading2 的基础职责链。</p>
 <p>本文不声称已经完整覆盖 Texture/Mesh/Shader 的具体派生算法、Pak fallback、Zen Server、DLC/补丁生成、IoStoreOnDemand、容器加密密钥治理或平台安装器。文中的分层与检查清单属于工程设计建议，不表示其他引擎必须复制 Unreal 的具体 API。</p>
@@ -419,7 +419,7 @@ AsyncLoading2 负责把字节恢复为对象图
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
-            <div><a href="unreal-engine-first-frame-pipeline.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</strong><small>一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</small></a><a href="ai-safe-execution-plane.html"><span>近期正式文章</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a><a href="battle-royale-dual-convergence.html"><span>近期正式文章</span><strong>双重收敛：大逃杀中的有效空间、存活人数与终局密度控制</strong><small>一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？</small></a></div>
+            <div><a href="unreal-engine-first-frame-pipeline.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</strong><small>一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</small></a><a href="city-accessibility-feedback-loop.html"><span>近期正式文章</span><strong>可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环</strong><small>城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？</small></a><a href="lease-scope-resource-ownership.html"><span>近期正式文章</span><strong>资源所有权闭环：Lease、Scope 与统一释放终态</strong><small>一个资源已经成功加载之后，框架怎样准确知道究竟是谁拥有它、应该在什么时候释放，以及 Scene 切换、异步取消、兼容 API 和紧急清理同时存在时，怎样保证整个资源系统最终只剩一个生命周期事实？</small></a></div>
         </aside>
     </article>
 </main>

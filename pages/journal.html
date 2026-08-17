@@ -148,9 +148,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>46</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>38</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>27</strong><span>完整博客</span><small>27 篇已公开</small></div>
+                <div class="journal-metric"><strong>50</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>44</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>33</strong><span>完整博客</span><small>33 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -243,34 +243,34 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-10</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>本轮仓库发生了一次相当明显的阶段变化。 8 月 9 日之前，仓库刚刚建立： 其主要目标是控制 146 个 UPM Package 的继续增长，并开始寻找可以合并、内化和退出 UPM 的能力。 但 8 月 10 日，默认分支连续新增了四个 Gameplay Kernel： 同时还完成了： 其中后三组是在既有 Package 内纵向增强，因此没有增加 Package；四个 Gameplay Kernel 则全部成为新的独立 UPM Package。最新 HEAD 中四个新 Kernel 均已经实现并进入 local-passed / runner-pending，对应本地 Unity Testbed 分别记录了 218/218、123/123、76/76、79/79。 这使仓库规模从上一轮的： 增长到： 当前生命周期分布为：</p>
+                    <p class="project-status">框架审计 · 2026-08-17</p>
+                    <h3>UnityGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>与上一轮相比，仓库已经发生了实质变化。 最重要的进展不是新增某个 Runtime 功能，而是此前启动的 Full Package Historical Audit 已经把保留执行范围内的 89 个 Package 全部推进到本地闭环状态。当前已经不再处于“逐包继续找问题”的中段，而是进入： 这一阶段。 最近进入 main 的提交也高度符合“完善已有能力”的主线： 最近提交序列包括 09920ea7 feat(rules): harden rule graph determinism (#709)、eef313b6 feat(pooling): converge pool scope diagnostics (#708)、5384c2aa feat(playerservices): harden player service group lifecycle (#706)、955a167b feat(profiling):…</p>
                 </article>
                 <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-09</p>
+                    <p class="project-status">框架审计 · 2026-08-16</p>
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
-                    <p>当前仓库的主线状态已经保持正确： Evidence Backlog 与 Deferred 工作仍明确禁止自动恢复。 本轮出现了三个值得肯定的变化。 第一，Preferences 已完成独立 Supported 晋级。它没有被强行并入 Runtime Foundation，而是形成单包 preferences-only Stable Profile，最终 SHA 已取得同 SHA 的 Preferences、消费方、Runtime Starter、Host Player、Performance、Stable API / Analyzer 和 Artifact Recovery 证据；v0.8.28 Tag、Release、签名和发布仍明确没有执行。 第二，仓库正式建立了 Package Distribution Boundary。现在 146 个包全部经过 Census 和人工分发复核，新包增长被锁定，需要 E3–E5…</p>
+                    <p>本轮与上一轮相比没有新的代码提交，因此不应人为制造一批“新任务”。当前真正有价值的是重新核对 8 月 14 日收口后的仓库事实是否已经形成一个可以继续推进的稳定基线。 结论是： 仓库当前的开发方向是正确的，但还没有到应该继续推进第 26 个历史审计 Package 的状态。 当前最重要的工作仍然集中在已经暴露、但尚未彻底闭环的三个节点： 与此同时，全包历史审计已经证明这条路线是有效的：Audio、Config、Core、Dialogue、Editor Tools、Event、GameHelper、GAS、Input、Interaction、Movement、Pooling、Save、UI、MVVM、Rendering、CardCore、Swarm、Hitbox、RedDot 等一系列既有 Package 都是在不增加新 Package、不扩大 Stable…</p>
                 </article>
                 <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-08</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>本轮仓库变化非常明显。 过去几轮的主要扩张点已经从游戏 Runtime 模块转移到了两条线： 当前仓库规模已经达到： |指标|当前值| |---|--:| |UPM 包|146| |Catalog 模块|141| |Preset|69| |Profile|10| |程序集|822| |noEngineReferences 程序集|441| |内部依赖边|269| |Supported 包|5| |Preview 包|101| |Plans|469| |Specs|373| |Evidence Backlog|105| 本轮最大的正向变化是 Runtime Foundation 已正式在代码与支持策略中完成生命周期翻转： 五包现在构成 Stable Runtime Foundation，Bootstrap 已从 Preview 进入 Supported；Stable API 扩大到：</p>
+                    <p class="project-status">框架审计 · 2026-08-14</p>
+                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮仓库发生的最重要变化，不是新增模块，也不是继续扩 Stable 面，而是项目实际进入了一条非常明确的： 路线。 当前已经建立一份覆盖全部 145 个物理 UPM Package 的历史顺序审计台账；维护者随后明确缩减范围：57 个 domain-framework 不继续执行，本轮只继续处理其余 88 个 Package，已完成的 Roguelite2D 结果保留，历史删除包不重新创建。该审计明确把 Candidate、Tag、Release、签名和 publication 排除在默认范围之外。 这与当前项目真正需要的主线是高度一致的： 不是继续证明“框架还能加什么”，而是系统地证明已有能力是否正确、有界、可清理、可复用、可消费。 从上一轮审计 HEAD c5f3a89f... 到当前版本，仓库虽然经历了密集修改，但：</p>
                 </article>
                 <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-07</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>本轮仓库状态已经重新稳定在正确的主线上： 根 README、PLAN-INDEX 与生成 Work Status 当前在这一点上已经一致：发布准备未启用，历史 RC 流程不能自动恢复。 相较上一轮审计基准，仓库又进入了一批较密集的能力建设。主要变化已经不是新游戏领域包，而是： Localization Runtime Phase 2； Capability Semantics； Development Intelligence Task / Impact / Evidence Contract； Project Semantic Graph； Gameplay Feature Contract； Project Semantic Cross References； Scenario / Replay Evaluation Protocol；</p>
+                    <p class="project-status">框架审计 · 2026-08-13</p>
+                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮仓库没有继续增加 UPM Package，主线基本保持在正确方向： 当前 Work Status 仍明确为： 当前 Evidence Backlog 为 129，Deferred 为 11。Candidate、Assembler、strict readiness 与 Release 都不是当前执行项。 本轮最重要的正向变化有三类。 第一，Runtime Foundation 五个核心能力面真正开始从“本地验证”进入“能力级 Runner 资格化”。Pooling、Event、Bootstrap、Save 等近期切片已经被终态 source envelope d3d222f43… 聚合验证，PLAN-INDEX 将大量相关工作从 runner-pending 更新为 runner-passed，并记录 Gitea runs 960–963。这个做法比“一份 Plan 对应一次 Runner”更符合长期治理方向。</p>
                 </article>
                 <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-06</p>
+                    <p class="project-status">框架审计 · 2026-08-12</p>
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>较上一轮审计基准 77f4f32d...，默认分支又前进了 21 个提交。近期变化高度集中在 RC 流程验证，同时包含两项实际运行时或测试可靠性修复： 修复 RuntimeTaskSupervisor.WhenIdleAsync() 与受监管任务终态之间的时序窗口； 修复 Modding ScriptProxy 的 Unity EditMode 异步测试死锁； 多次重新选择并验证 Candidate； 将 pre-tag、annotated Tag、strict readiness 与 Release mutation 拆分； 将 Candidate 源码与后续 RC 验证工具检出分离； 完成 v0.8.27-rc.6 的 annotated Tag、strict tagged readiness 和 Artifact 回下载验证；</p>
+                    <p>本轮仓库的主要变化已经不再是增加 Gameplay Kernel 或继续做 Package Family 合并，而是明显转向三个方向： 其中最值得肯定的是 Asset 模块开始真正从“资源加载器”收敛为“资源所有权系统”。当前已经形成： Asset 的多个直接 Addressables 消费方已经迁移到 Lease；最新 Direct Addressables Boundary 中，普通生产资源加载的 migration queue 已经清空，只剩 Mod Catalog 这种明确 Adapter 例外，以及 Config/UI 的程序集或类型合同残留。 另一方面，本轮测试基础设施也出现了明显改善。仓库建立了 Package Test Coverage Gate，补齐 Interaction、Pathfinding.NavMesh、Rules、Welfare、Modding Compatibility…</p>
                 </article>
                 <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-05</p>
+                    <p class="project-status">框架审计 · 2026-08-11</p>
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>本轮仓库没有继续增加 UPM 包、Catalog 模块、Preset 或程序集数量，近期工作主要集中在： 完成 Framework Convergence 0.9 的产品消费闭环； 建立 Quickstart、Roguelite 2D、Runtime Starter、Server Shared Protocol 等独立能力证据 Workflow； 建立无 Tag、无 Release 副作用的 Candidate pre-tag evidence 链路； 修复 SingletonManager 初始化分配、性能校准和 Source Envelope； 修复 Runtime Starter 消费闭包缺少 Audio、Bootstrap、Config、Preferences 的问题； 为共享 Testbed 增加租约、异常残留恢复和 owner-safe Sample 隔离。</p>
+                    <p>本轮与上一轮相比，仓库的状态有一个明显的正向变化： “收敛”终于开始真实地减少物理 Package，而不再只是减少支持承诺或生成更多审计文档。 当前 Inventory 已从前一轮高点的 150 个 UPM Package 降至 145 个，内部依赖边从 276 降至 258。Non-Euclidean Puzzle、VisualNovel、RTT、Hardcore RPG、Survival World 五个独立 UPM Root 已分别并入 Puzzle Platformer、Dialogue、RTS、High Speed ACT、Survival，并保留 Tombstone 和迁移指南。当前分发审计记录 5 个已退休 Package、33 个剩余 non-KEEP 候选。 与此同时，上一轮审计中几个真正重要的基础问题已经完成修复：</p>
                 </article>
                 </div>
             </div>
@@ -278,326 +278,354 @@
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>46 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>50 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
                 <article class="design-summary-card" id="design-alchemy-magical-crafting">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>魔法炼金（Alchemy &amp; Magical Crafting Simulation）</h3>
                     <p>围绕配方发现、材料性质、工艺步骤与实验风险组织魔法制造循环。</p>
                     <div class="note-tags"><span>alchemy</span><span>crafting</span><span>simulation</span></div>
                     <a class="note-link" href="journal/alchemy-magical-crafting.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-archaeology-restoration">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>考古发掘（Archaeology &amp; Artifact Restoration Simulation）</h3>
                     <p>描述勘探、分层发掘、证据记录、文物修复与知识重建的连续工作流。</p>
                     <div class="note-tags"><span>archaeology</span><span>restoration</span><span>simulation</span></div>
                     <a class="note-link" href="journal/archaeology-restoration.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-auto-battler">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>自走棋 / Auto Battler</h3>
                     <p>玩家主要不直接控制单位战斗动作，而是在有限准备阶段内，通过商店购买、共享棋子池竞争、棋子合成、经济投资、阵容羁绊和空间布阵预先构造一个战斗系统；随后单位根据统一战斗规则自主执行。每一轮战斗结果再反向改变生命、经济、对手信息与下一轮构筑空间，形成“构筑决策与自动验证”交替运行的竞技循环。</p>
                     <div class="note-tags"><span>auto</span><span>battler</span><span>chess</span></div>
                     <a class="note-link" href="journal/auto-battler.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-battle-royale">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>大逃杀 / Battle Royale</h3>
                     <p>通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。</p>
                     <div class="note-tags"><span>battle</span><span>br</span><span>royale</span></div>
                     <a class="note-link" href="journal/battle-royale.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
+                <article class="design-summary-card" id="design-bullet-hell">
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
+                    <h3>弹幕射击 / Bullet Hell / Danmaku Shooter</h3>
+                    <p>敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。</p>
+                    <div class="note-tags"><span>bullet</span><span>danmaku</span><span>hell</span></div>
+                    <a class="note-link" href="journal/bullet-hell.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-causal-weaving">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>因果编织类游戏</h3>
                     <p>以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。</p>
                     <div class="note-tags"><span>causality</span><span>narrative</span><span>puzzle</span></div>
                     <a class="note-link" href="journal/causal-weaving.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
+                <article class="design-summary-card" id="design-ccg">
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
+                    <h3>集换式卡牌对战 / Collectible Card Game / Trading Card Game</h3>
+                    <p>玩家在对局之外从长期持久化的个人牌池中构筑一副满足规则约束的牌组，将大量候选卡牌压缩成一个有限概率分布；进入对局后，系统把牌组实例化为具有严格区域归属、隐藏信息、顺序、所有权和控制权的比赛状态。玩家通过抽牌获得有限信息，以逐回合增长或恢复的资源交换卡牌、场面、生命、节奏与未来概率，并通过统一的行动合法性、目标选择、效果队列、触发器和状态检查系统解决复杂卡牌交互。</p>
+                    <div class="note-tags"><span>ccg</span><span>collectible</span><span>tcg</span></div>
+                    <a class="note-link" href="journal/ccg.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="design-summary-card" id="design-city-builder">
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
+                    <h3>城市建设模拟 / City Builder / Urban Planning Simulation</h3>
+                    <p>玩家不主要管理某个居民今天应该去哪里工作，而是设计土地用途、交通网络、公用事业、公共服务、税制和空间政策；大量居民与企业依据可达性、土地价值、就业机会、服务质量和成本自主选择迁入、迁出、通勤与经营位置。城市由这些局部决策逐渐涌现为宏观人口、交通、产业、财政和空间结构。</p>
+                    <div class="note-tags"><span>builder</span><span>building</span><span>city</span></div>
+                    <a class="note-link" href="journal/city-builder.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-civilization-strategy">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>4X 文明战略游戏</h3>
                     <p>玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。</p>
                     <div class="note-tags"><span>civilization</span><span>empire</span><span>strategy</span></div>
                     <a class="note-link" href="journal/civilization-strategy.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-club-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>俱乐部经营模拟</h3>
                     <p>覆盖成员招募、训练、阵容、赛事、财务与声望共同驱动的长期经营循环。</p>
                     <div class="note-tags"><span>club</span><span>management</span><span>simulation</span></div>
                     <a class="note-link" href="journal/club-management.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-colony">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>殖民地模拟与聚落生存经营游戏</h3>
                     <p>玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…</p>
                     <div class="note-tags"><span>colony</span><span>management</span><span>settlement</span></div>
                     <a class="note-link" href="journal/colony.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-cooperative-hunting-action">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>多人共斗狩猎动作游戏中的目标遭遇、部位破坏与协作窗口</h3>
                     <p>围绕大型目标、动作承诺、部位状态、团队职责和阶段窗口组织共斗狩猎。</p>
                     <div class="note-tags"><span>action</span><span>cooperative</span><span>hunting</span></div>
                     <a class="note-link" href="journal/cooperative-hunting-action.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-courier-delivery">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>末端物流模拟（Courier Delivery &amp; Last-Mile Logistics Simulation）</h3>
                     <p>围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。</p>
                     <div class="note-tags"><span>delivery</span><span>logistics</span><span>routing</span></div>
                     <a class="note-link" href="journal/courier-delivery.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-courtroom-trial">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>法庭辩论（Courtroom Trial）</h3>
                     <p>描述证据、证词、论点、反驳与裁决如何构成可审计的庭审对抗。</p>
                     <div class="note-tags"><span>argumentation</span><span>courtroom</span><span>evidence</span></div>
                     <a class="note-link" href="journal/courtroom-trial.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-deckbuilder-roguelike">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>卡组构筑式 Roguelike</h3>
                     <p>玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。</p>
                     <div class="note-tags"><span>deckbuilder</span><span>deckbuilding</span><span>roguelike</span></div>
                     <a class="note-link" href="journal/deckbuilder-roguelike.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-detective">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>侦探调查与推理游戏</h3>
                     <p>运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。</p>
                     <div class="note-tags"><span>detective</span><span>investigation</span><span>mystery</span></div>
                     <a class="note-link" href="journal/detective.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-dress-up">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>造型搭配游戏（Dress-Up Game）</h3>
                     <p>描述服饰部件、搭配约束、审美标签、收藏成长与展示反馈的组合空间。</p>
                     <div class="note-tags"><span>collection</span><span>dress-up</span><span>fashion</span></div>
                     <a class="note-link" href="journal/dress-up.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-expedition-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>远征队探险管理（Expedition Management Simulation）</h3>
                     <p>覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。</p>
                     <div class="note-tags"><span>expedition</span><span>management</span><span>risk</span></div>
                     <a class="note-link" href="journal/expedition-management.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-extraction-cross-session-loop">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>撤离型搜打撤中的风险携带、不完全信息与跨局循环</h3>
                     <p>围绕局外资产带入、局内动态搜刮、不完全信息决策和成功撤离后的收益提交组织跨局风险循环。</p>
                     <div class="note-tags"><span>extraction</span><span>incomplete-information</span><span>risk</span></div>
                     <a class="note-link" href="journal/extraction-cross-session-loop.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
+                <article class="design-summary-card" id="design-factory-automation">
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
+                    <h3>工厂自动化（Factory Automation）</h3>
+                    <p>将生产建模为持续运行的流网络，围绕物流、吞吐、背压、瓶颈诊断与扩容重构组织自动化成长。</p>
+                    <div class="note-tags"><span>automation</span><span>factory</span><span>production</span></div>
+                    <a class="note-link" href="journal/factory-automation.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-farming">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>农场经营与生活模拟游戏</h3>
                     <p>将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。</p>
                     <div class="note-tags"><span>farm</span><span>farming</span><span>life</span></div>
                     <a class="note-link" href="journal/farming.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-fighting">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>格斗游戏</h3>
                     <p>将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。</p>
                     <div class="note-tags"><span>fighting</span><span>platform</span><span>versus</span></div>
                     <a class="note-link" href="journal/fighting.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-fishing-aquatic-ecology">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>水域生态钓鱼模拟（Fishing &amp; Aquatic Ecology Simulation）</h3>
                     <p>将鱼类行为、水域生态、装备选择、捕获过程与资源恢复连接为钓鱼模拟。</p>
                     <div class="note-tags"><span>ecology</span><span>fishing</span><span>simulation</span></div>
                     <a class="note-link" href="journal/fishing-aquatic-ecology.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-heist-planning">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>盗窃计划模拟（Heist Planning &amp; Stealth Infiltration）</h3>
                     <p>围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。</p>
                     <div class="note-tags"><span>heist</span><span>planning</span><span>stealth</span></div>
                     <a class="note-link" href="journal/heist-planning.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-horde-survival">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>幸存者类 / Horde Survival / Bullet Heaven</h3>
                     <p>玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。</p>
                     <div class="note-tags"><span>bullet</span><span>horde</span><span>survival</span></div>
                     <a class="note-link" href="journal/horde-survival.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-hospital-triage">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>医疗分诊运营（Hospital Emergency &amp; Triage Simulation）</h3>
                     <p>描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。</p>
                     <div class="note-tags"><span>healthcare</span><span>operations</span><span>triage</span></div>
                     <a class="note-link" href="journal/hospital-triage.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-immersive-sim">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>沉浸式模拟中的系统性世界、可组合能力与多路径求解</h3>
                     <p>以统一世界规则、能力组合和多入口空间支持玩家自主的问题求解。</p>
                     <div class="note-tags"><span>emergence</span><span>immersive-sim</span><span>systemic</span></div>
                     <a class="note-link" href="journal/immersive-sim.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-interactive-fiction">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>交互式文本冒险（Interactive Fiction）</h3>
                     <p>围绕叙事状态、选择条件、分支汇合与文本反馈组织可追踪的互动故事。</p>
                     <div class="note-tags"><span>interactive-fiction</span><span>narrative</span><span>state</span></div>
                     <a class="note-link" href="journal/interactive-fiction.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-journalism-simulation">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>媒体运营模拟（Journalism Simulation）</h3>
                     <p>覆盖线索获取、事实核验、编辑取舍、发布影响和媒体组织经营。</p>
                     <div class="note-tags"><span>journalism</span><span>media</span><span>simulation</span></div>
                     <a class="note-link" href="journal/journalism-simulation.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-jrpg-chapter-party-progression">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>JRPG 中的章节驱动、队伍成长与冒险循环</h3>
                     <p>以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。</p>
                     <div class="note-tags"><span>jrpg</span><span>narrative</span><span>party-progression</span></div>
                     <a class="note-link" href="journal/jrpg-chapter-party-progression.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-kitchen-time-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>厨房时间管理模拟（Kitchen Time-Management Simulation）</h3>
                     <p>分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。</p>
                     <div class="note-tags"><span>kitchen</span><span>scheduling</span><span>time-management</span></div>
                     <a class="note-link" href="journal/kitchen-time-management.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-metroidvania">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>银河城游戏</h3>
                     <p>将能力门控拓扑、世界状态记忆与探索—受阻—成长—回访组织为可持续重解释的长期循环。</p>
                     <div class="note-tags"><span>metroidvania</span></div>
                     <a class="note-link" href="journal/metroidvania.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-moba">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>MOBA / 线路式英雄团队竞技游戏</h3>
                     <p>兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。</p>
                     <div class="note-tags"><span>moba</span><span>multiplayer</span><span>online</span></div>
                     <a class="note-link" href="journal/moba.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-monster-taming-rpg">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>怪物收集 / 驯兽育成 RPG</h3>
                     <p>玩家拥有相对稳定的角色队伍，并围绕这些角色进行长期成长。</p>
                     <div class="note-tags"><span>monster</span><span>rpg</span><span>taming</span></div>
                     <a class="note-link" href="journal/monster-taming-rpg.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-nation-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>国家执政模拟（Nation Management Simulation）</h3>
                     <p>围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。</p>
                     <div class="note-tags"><span>governance</span><span>nation</span><span>simulation</span></div>
                     <a class="note-link" href="journal/nation-management.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-pet-care">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>宠物照护（Pet Care Simulation）</h3>
                     <p>将生理需求、情绪、习惯、互动和长期信任连接为宠物照护循环。</p>
                     <div class="note-tags"><span>care</span><span>life-sim</span><span>pets</span></div>
                     <a class="note-link" href="journal/pet-care.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-prison-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>监狱经营模拟（Prison Management Simulation）</h3>
                     <p>描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。</p>
                     <div class="note-tags"><span>management</span><span>operations</span><span>prison</span></div>
                     <a class="note-link" href="journal/prison-management.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-racing-fixed-step">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定</h3>
                     <p>聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。</p>
                     <div class="note-tags"><span>racing</span><span>simulation</span><span>vehicle</span></div>
                     <a class="note-link" href="journal/racing-fixed-step.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-railway-network-dispatch">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>铁路网络模拟（Railway Network &amp; Dispatch Simulation）</h3>
                     <p>围绕线路容量、时刻表、信号区段、列车优先级和异常调度模拟铁路网络。</p>
                     <div class="note-tags"><span>dispatch</span><span>network</span><span>railway</span></div>
                     <a class="note-link" href="journal/railway-network-dispatch.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-real-time-strategy">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>实时战略中的命令群体模拟、生产战争循环与战争迷雾</h3>
                     <p>分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。</p>
                     <div class="note-tags"><span>fog-of-war</span><span>real-time-strategy</span><span>strategy</span></div>
                     <a class="note-link" href="journal/real-time-strategy.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-relationship-simulation">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>恋爱养成（Relationship Simulation）</h3>
                     <p>描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。</p>
                     <div class="note-tags"><span>life-sim</span><span>relationship</span><span>simulation</span></div>
                     <a class="note-link" href="journal/relationship-simulation.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-rhythm-audio-clock">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
-                    <h3>节奏游戏的音频主时钟与确定性判定范式</h3>
-                    <p>聚焦音频主时钟、输入时间映射、确定性判定与表现层同步边界。</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
+                    <h3>节奏游戏设计范式</h3>
+                    <p>围绕音频权威时钟、谱面事件流、确定性判定、反馈、练习与内容生产构建完整节奏游戏。</p>
                     <div class="note-tags"><span>audio</span><span>rhythm</span><span>timing</span></div>
                     <a class="note-link" href="journal/rhythm-audio-clock.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-social-deduction-hidden-identity">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>社交推理与隐藏身份中的不完全信息、可信度与秘密行动</h3>
                     <p>分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。</p>
                     <div class="note-tags"><span>hidden-identity</span><span>social-deduction</span><span>trust</span></div>
                     <a class="note-link" href="journal/social-deduction-hidden-identity.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-soulslike-action-commitment-recovery">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>类魂动作角色扮演中的动作承诺、死亡回收与检查点循环</h3>
                     <p>以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。</p>
                     <div class="note-tags"><span>action-rpg</span><span>checkpoint</span><span>soulslike</span></div>
                     <a class="note-link" href="journal/soulslike-action-commitment-recovery.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-stealth-perception-alert-recovery">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>潜行游戏中的感知不对称、警戒升级与可恢复暴露</h3>
                     <p>以世界真相和敌方认知分离、分级警戒、信息传播与暴露恢复构造可规划的潜行循环。</p>
                     <div class="note-tags"><span>alert-state</span><span>perception</span><span>stealth</span></div>
                     <a class="note-link" href="journal/stealth-perception-alert-recovery.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-survival-horror">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>生存恐怖游戏</h3>
                     <p>将玩家置于一个信息有限、空间受限且资源不可无限补充的高压环境中；玩家必须在生命、弹药、治疗、背包容量、存档机会、路线安全度和未知威胁之间持续做出不可完全回退的决策。敌人、谜题、地图锁、物品分布和安全屋共同构成一张压力网络，使玩家不断经历“深入未知区域—消耗资源—暴露新的威胁—寻找返回路径—在安全区重新整理—再次进入”的循环。</p>
                     <div class="note-tags"><span>horror</span><span>resource</span><span>survival</span></div>
                     <a class="note-link" href="journal/survival-horror.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-tactical-rpg">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>回合制战术角色扮演中的离散战场、行动经济与战术因果</h3>
                     <p>描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。</p>
                     <div class="note-tags"><span>tactical-rpg</span><span>turn-based</span><span>wargame</span></div>
                     <a class="note-link" href="journal/tactical-rpg.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-theme-park-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>游乐园经营模拟（Theme Park Management Simulation）</h3>
                     <p>连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。</p>
                     <div class="note-tags"><span>management</span><span>simulation</span><span>theme-park</span></div>
                     <a class="note-link" href="journal/theme-park-management.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-tower-defense">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>塔防游戏</h3>
                     <p>将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。</p>
                     <div class="note-tags"><span>defense</span><span>td</span><span>tower</span></div>
                     <a class="note-link" href="journal/tower-defense.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="design-summary-card" id="design-vessel-systems-management">
-                    <p class="project-status">游戏设计范式 · 2026-08-12</p>
+                    <p class="project-status">游戏设计范式 · 2026-08-17</p>
                     <h3>太空飞船系统管理（Vessel Systems Management）</h3>
                     <p>围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。</p>
                     <div class="note-tags"><span>simulation</span><span>spacecraft</span><span>systems-management</span></div>

@@ -1,4 +1,7 @@
 ## 探索、扩张、开发与竞争驱动的多层帝国演化循环
+
+> Agent 标签：`civilization` `empire` `strategy`
+
 ---
 ## 1. 文档定位
 

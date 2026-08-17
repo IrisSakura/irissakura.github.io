@@ -1,0 +1,3710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/bullet-hell.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="弹幕射击 / Bullet Hell / Danmaku Shooter | Sakura Design Journal">
+    <meta property="og:description" content="敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/bullet-hell.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-bullet-hell.png">
+    <meta property="og:image:alt" content="弹幕射击 / Bullet Hell / Danmaku Shooter | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="弹幕射击 / Bullet Hell / Danmaku Shooter | Sakura Design Journal">
+    <meta name="twitter:description" content="敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-bullet-hell.png">
+    <meta name="twitter:image:alt" content="弹幕射击 / Bullet Hell / Danmaku Shooter | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"弹幕射击 / Bullet Hell / Danmaku Shooter | Sakura Design Journal","description":"敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。","url":"https://irissakura.github.io/pages/journal/bullet-hell.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"弹幕射击 / Bullet Hell / Danmaku Shooter","image":"https://irissakura.github.io/assets/social/pages-journal-bullet-hell.png","dateModified":"2026-08-17","about":["bullet","danmaku","hell"]}</script>
+    <!-- site-meta:end -->
+    <title>弹幕射击 / Bullet Hell / Danmaku Shooter | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-bullet-hell"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-17</p><h1>弹幕射击 / Bullet Hell / Danmaku Shooter</h1><p>敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。</p><div class="note-tags"><span>bullet</span><span>danmaku</span><span>hell</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="1-类型定位">1. 类型定位</h2><p>弹幕射击是一种以：</p>
+<ul>
+<li><p>大量敌方投射物；</p>
+</li>
+<li><p>精确移动；</p>
+</li>
+<li><p>小型真实受击框；</p>
+</li>
+<li><p>固定或半固定攻击模式；</p>
+</li>
+<li><p>Boss多阶段攻击；</p>
+</li>
+<li><p>弹幕形态识别；</p>
+</li>
+<li><p>时间与空间预测；</p>
+</li>
+<li><p>擦弹；</p>
+</li>
+<li><p>Bomb / 清屏等紧急资源；</p>
+</li>
+<li><p>高可重复性；</p>
+</li>
+<li><p>分数、连击或资源路线优化；</p>
+</li>
+</ul>
+<p>为核心的动作射击类型。</p>
+<p>典型单局或关卡流程为：</p>
+<p>玩家进入Stage
+→ 普通敌人按时间轴出现
+→ 小规模Pattern教学
+→ 敌人组合提高空间压力
+→ 中Boss出现
+→ 玩家识别新的弹幕结构
+→ 获得资源或Power
+→ 后半段提高密度与速度
+→ Boss进入
+→ Boss Phase 1使用基础Pattern
+→ Boss生命或时间达到阈值
+→ Phase 2改变弹幕几何
+→ 玩家使用精确移动穿越
+→ Phase 3加入诱导、封路或随机扰动
+→ Boss最终阶段
+→ 玩家击破
+→ 结算生命、Bomb、Graze、Score、No-Miss等结果
+→ 下一Stage继续提高模式复杂度。</p>
+<p>弹幕射击真正独特的地方不是：</p>
+<blockquote>
+<p>“屏幕上子弹特别多。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>大量子弹共同构成一个随时间连续变化、能够被玩家阅读、预测和穿越的危险场。</strong></p>
+</blockquote>
+<p>因此设计单位并不是某一颗子弹。</p>
+<p>真正的设计单位往往是：</p>
+<p><strong>Pattern / 弹幕模式。</strong></p>
+<hr />
+<h2 id="2-核心系统抽象">2. 核心系统抽象</h2><p>弹幕射击可以被抽象为五个相互耦合的运行时系统：</p>
+<h4 id="pattern-timeline">Pattern Timeline</h4><p>什么时候生成什么弹幕。</p>
+<h4 id="bullet-field">Bullet Field</h4><p>当前空间中有哪些危险投射物，以及未来将向哪里移动。</p>
+<h4 id="player-micro-movement">Player Micro-Movement</h4><p>玩家如何在极小空间内重新定位。</p>
+<h4 id="damage-graze-geometry">Damage / Graze Geometry</h4><p>什么算真正受击，什么只算擦弹。</p>
+<h4 id="phase-progression">Phase Progression</h4><p>什么时候从一种危险规则切换到下一种。</p>
+<p>因此基本循环为：</p>
+<p>Pattern定义
+→ SpawnEmitter执行
+→ Bullet进入场地
+→ Bullet Field形成
+→ 玩家观察当前和未来几何
+→ 移动
+→ Hit / Graze检测
+→ Pattern继续演化
+→ Boss状态变化
+→ 新Pattern开始。</p>
+<hr />
+<h2 id="3-核心范式一弹幕场是时间函数不是大量独立ai">3. 核心范式一：弹幕场是“时间函数”，不是大量独立AI</h2><p>低质量实现容易变成：</p>
+<p>每颗Bullet：</p>
+<ul>
+<li><p>有自己的Update；</p>
+</li>
+<li><p>有自己的AI；</p>
+</li>
+<li><p>自己寻找玩家；</p>
+</li>
+<li><p>自己判断什么时候转向；</p>
+</li>
+<li><p>自己决定何时分裂。</p>
+</li>
+</ul>
+<p>数千颗子弹后：</p>
+<p>运行时迅速变得昂贵且难以复现。</p>
+<p>更适合的思想是：</p>
+<blockquote>
+<p><strong>Bullet是Pattern函数的采样结果。</strong></p>
+</blockquote>
+<p>例如一圈36颗子弹：</p>
+<p>并不是36个独立AI决定方向。</p>
+<p>而是：</p>
+<p><code>angle(i) = baseAngle + i × 10°</code></p>
+<p>再结合：</p>
+<p><code>velocity = Direction(angle) × speed</code></p>
+<p>生成36个轻量BulletState。</p>
+<hr />
+<h2 id="4-patterndefinition">4. PatternDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>PatternId；</p>
+</li>
+<li><p>PatternTags；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>EmitterDefinitions；</p>
+</li>
+<li><p>TimelineEvents；</p>
+</li>
+<li><p>DifficultyModifiers；</p>
+</li>
+<li><p>RandomPolicy；</p>
+</li>
+<li><p>PlayerTrackingPolicy；</p>
+</li>
+<li><p>CancellationRules；</p>
+</li>
+<li><p>PresentationProfile；</p>
+</li>
+<li><p>PatternVersion。</p>
+</li>
+</ul>
+<p>Pattern描述：</p>
+<blockquote>
+<p>某一段时间中，弹幕如何被生成。</p>
+</blockquote>
+<p>而不是保存已经生成的每一颗Bullet。</p>
+<hr />
+<h2 id="5-emitterdefinition">5. EmitterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>EmitterId；</p>
+</li>
+<li><p>SpawnAnchorRule；</p>
+</li>
+<li><p>StartTime；</p>
+</li>
+<li><p>EndTime；</p>
+</li>
+<li><p>FireInterval；</p>
+</li>
+<li><p>BurstCount；</p>
+</li>
+<li><p>BulletDefinitionId；</p>
+</li>
+<li><p>AngleRule；</p>
+</li>
+<li><p>SpeedRule；</p>
+</li>
+<li><p>SpawnCount；</p>
+</li>
+<li><p>RotationRule；</p>
+</li>
+<li><p>AimRule；</p>
+</li>
+<li><p>OffsetRule；</p>
+</li>
+<li><p>ChildEmitterRule；</p>
+</li>
+<li><p>EmitterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="6-常见emitter">6. 常见Emitter</h2><p>可以抽象为：</p>
+<ul>
+<li><p>RadialEmitter；</p>
+</li>
+<li><p>FanEmitter；</p>
+</li>
+<li><p>AimedEmitter；</p>
+</li>
+<li><p>SpiralEmitter；</p>
+</li>
+<li><p>RingEmitter；</p>
+</li>
+<li><p>StreamEmitter；</p>
+</li>
+<li><p>ArcEmitter；</p>
+</li>
+<li><p>RandomScatterEmitter；</p>
+</li>
+<li><p>LineEmitter；</p>
+</li>
+<li><p>GridEmitter；</p>
+</li>
+<li><p>ChildBulletEmitter；</p>
+</li>
+<li><p>LaserEmitter。</p>
+</li>
+</ul>
+<p>大部分弹幕不应写专用代码。</p>
+<p>而应该通过：</p>
+<p><strong>Emitter + AngleRule + SpeedRule + Timeline</strong></p>
+<p>组合出来。</p>
+<hr />
+<h2 id="7-anglerule">7. AngleRule</h2><p>典型规则：</p>
+<h3 id="fixed">Fixed</h3><p>固定角度。</p>
+<h3 id="radial">Radial</h3><p>均匀覆盖360度。</p>
+<h3 id="fan">Fan</h3><p>围绕中心方向展开一定角度。</p>
+<h3 id="aimatplayer">AimAtPlayer</h3><p>生成瞬间瞄准玩家。</p>
+<h3 id="rotating">Rotating</h3><p>每次发射增加角度。</p>
+<h3 id="oscillating">Oscillating</h3><p>在范围内往返变化。</p>
+<h3 id="derivedfromparent">DerivedFromParent</h3><p>根据母弹方向生成。</p>
+<hr />
+<h2 id="8-speedrule">8. SpeedRule</h2><p>可以支持：</p>
+<ul>
+<li><p>Constant；</p>
+</li>
+<li><p>LinearSequence；</p>
+</li>
+<li><p>RandomRange；</p>
+</li>
+<li><p>Accelerating；</p>
+</li>
+<li><p>DelayedAcceleration；</p>
+</li>
+<li><p>Curve；</p>
+</li>
+<li><p>ParentVelocityRelative。</p>
+</li>
+</ul>
+<p>例如：</p>
+<p>同一方向连续发射：</p>
+<p>1.0
+1.2
+1.4
+1.6</p>
+<p>速度不同，</p>
+<p>就会自然形成：</p>
+<p>弧形空间层。</p>
+<hr />
+<h2 id="9-pattern是危险空间生成程序">9. Pattern是“危险空间生成程序”</h2><p>设计者真正写的是：</p>
+<blockquote>
+<p>在未来几秒中，哪些位置会变得危险。</p>
+</blockquote>
+<p>例如：</p>
+<p>旋转螺旋：</p>
+<p>时间增加
+→ 发射角旋转
+→ 历史Bullet继续前进
+→ 空间形成螺旋臂。</p>
+<p>玩家看到的是：</p>
+<p>动态几何。</p>
+<p>因此Pattern Editor最好提供：</p>
+<p><strong>未来几秒弹道预览。</strong></p>
+<p>而不是只预览第一帧Spawn。</p>
+<hr />
+<h2 id="10-核心范式二受击框必须明显小于视觉角色">10. 核心范式二：受击框必须明显小于视觉角色</h2><p>这是弹幕射击建立“高密度但仍可穿越”体验的关键。</p>
+<p>角色Sprite可能：</p>
+<p>32×32。</p>
+<p>真实Hitbox：</p>
+<p>可能只有：</p>
+<p>4～8像素等效范围。</p>
+<p>这允许玩家：</p>
+<p>视觉上几乎贴着子弹穿过。</p>
+<hr />
+<h2 id="11-playercollisionstate">11. PlayerCollisionState</h2><p>建议包含：</p>
+<ul>
+<li><p>PlayerEntityId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>VisualRadius；</p>
+</li>
+<li><p>HitRadius；</p>
+</li>
+<li><p>GrazeRadius；</p>
+</li>
+<li><p>InvulnerabilityState；</p>
+</li>
+<li><p>FocusState；</p>
+</li>
+<li><p>PlayerCollisionVersion。</p>
+</li>
+</ul>
+<p>必须明确：</p>
+<p><strong>VisualBounds</strong></p>
+<p><strong>HitBounds</strong></p>
+<p><strong>GrazeBounds</strong></p>
+<p>是三个不同概念。</p>
+<hr />
+<h2 id="12-hit-radius">12. Hit Radius</h2><p>Hit Radius决定：</p>
+<p>真正死亡或受伤。</p>
+<hr />
+<h2 id="13-graze-radius">13. Graze Radius</h2><p>通常满足：</p>
+<p><code>GrazeRadius &gt; HitRadius</code></p>
+<p>Bullet进入GrazeRadius：</p>
+<p>但没有进入HitRadius。</p>
+<p>则：</p>
+<p>产生Graze。</p>
+<p>因此空间可以划分：</p>
+<p>安全
+→ Graze区
+→ Hit区。</p>
+<hr />
+<h2 id="14-为什么hitbox必须可视化">14. 为什么Hitbox必须可视化</h2><p>普通模式可以隐藏。</p>
+<p>但至少：</p>
+<ul>
+<li><p>Focus Mode；</p>
+</li>
+<li><p>Training；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+</ul>
+<p>应该能够显示真实Hitbox。</p>
+<p>否则高难度下玩家会产生：</p>
+<p>“明明没碰到。”</p>
+<p>或：</p>
+<p>“明明碰到了却没死。”</p>
+<p>的认知问题。</p>
+<hr />
+<h2 id="15-focus-mode">15. Focus Mode</h2><p>弹幕射击常见两种移动状态：</p>
+<h3 id="normal-movement">Normal Movement</h3><p>高速。</p>
+<p>用于：</p>
+<ul>
+<li><p>大范围转移；</p>
+</li>
+<li><p>躲避宏观Pattern。</p>
+</li>
+</ul>
+<h3 id="focus-movement">Focus Movement</h3><p>低速。</p>
+<p>用于：</p>
+<ul>
+<li><p>精确穿缝；</p>
+</li>
+<li><p>显示Hitbox；</p>
+</li>
+<li><p>调整微位置。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-playermovementprofile">16. PlayerMovementProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>NormalSpeed；</p>
+</li>
+<li><p>FocusSpeed；</p>
+</li>
+<li><p>Acceleration；</p>
+</li>
+<li><p>Deceleration；</p>
+</li>
+<li><p>BoundaryPolicy；</p>
+</li>
+<li><p>AnalogCurve；</p>
+</li>
+<li><p>DigitalInputNormalization；</p>
+</li>
+<li><p>MovementVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-移动必须与渲染fps解耦">17. 移动必须与渲染FPS解耦</h2><p>弹幕游戏对：</p>
+<p>1～2像素级位置</p>
+<p>都可能敏感。</p>
+<p>因此：</p>
+<ul>
+<li><p>固定逻辑步长；</p>
+</li>
+<li><p>稳定坐标；</p>
+</li>
+<li><p>确定移动；</p>
+</li>
+</ul>
+<p>非常重要。</p>
+<p>不能因为：</p>
+<p>144Hz</p>
+<p>与：</p>
+<p>60Hz</p>
+<p>获得不同有效移动距离。</p>
+<hr />
+<h2 id="18-核心范式三玩家真正阅读的是未来安全空间">18. 核心范式三：玩家真正阅读的是“未来安全空间”</h2><p>只判断：</p>
+<p>当前哪里没有Bullet</p>
+<p>是不够的。</p>
+<p>因为玩家需要考虑：</p>
+<p>自己移动过去时，</p>
+<p>Bullet也会继续移动。</p>
+<p>例如当前右侧为空。</p>
+<p>但：</p>
+<p>半秒后两条弹链将在右侧交叉。</p>
+<p>因此高阶玩法实际是：</p>
+<blockquote>
+<p><strong>预测未来的安全通道。</strong></p>
+</blockquote>
+<hr />
+<h2 id="19-bullet-field">19. Bullet Field</h2><p>运行时可以定义：</p>
+<p>当前所有Bullet组成：</p>
+<p><code>DangerField(t)</code></p>
+<p>玩家需要寻找：</p>
+<p><code>SafeRegion(t + Δt)</code>。</p>
+<p>正式游戏不需要真的实时计算完整安全区域。</p>
+<p>但：</p>
+<ul>
+<li><p>AI；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+<li><p>Pattern Analyzer；</p>
+</li>
+</ul>
+<p>可以进行近似计算。</p>
+<hr />
+<h2 id="20-safety-field-analyzer">20. Safety Field Analyzer</h2><p>开发工具可以：</p>
+<p>将屏幕划分成Grid。</p>
+<p>对未来：</p>
+<p>0ms
+250ms
+500ms
+1000ms</p>
+<p>模拟Bullet位置。</p>
+<p>输出：</p>
+<ul>
+<li><p>DangerDensity；</p>
+</li>
+<li><p>SafeCells；</p>
+</li>
+<li><p>ConnectedSafeRegions；</p>
+</li>
+<li><p>NarrowPassages。</p>
+</li>
+</ul>
+<p>这可以帮助设计者判断：</p>
+<p>某Pattern到底是：</p>
+<p>难，</p>
+<p>还是：</p>
+<p>实际无解。</p>
+<hr />
+<h2 id="21-无解pattern和高难pattern是不同概念">21. 无解Pattern和高难Pattern是不同概念</h2><p>高难Pattern：</p>
+<p>存在稳定安全路径，</p>
+<p>但窗口很小。</p>
+<p>无解Pattern：</p>
+<p>没有任何合法路径，</p>
+<p>除非使用Bomb或无敌。</p>
+<p>如果设计目标不是：</p>
+<p>强制消耗Bomb，</p>
+<p>无解Pattern通常属于内容错误。</p>
+<hr />
+<h2 id="22-pattern-solvability">22. Pattern Solvability</h2><p>可以定义简化验证：</p>
+<p>给定：</p>
+<ul>
+<li><p>PlayerHitRadius；</p>
+</li>
+<li><p>PlayerMaxSpeed；</p>
+</li>
+<li><p>Pattern；</p>
+</li>
+<li><p>ArenaBounds；</p>
+</li>
+</ul>
+<p>是否存在：</p>
+<p>从当前PlayerState开始</p>
+<p>持续存活到Pattern结束的轨迹。</p>
+<p>精确求解可能很贵。</p>
+<p>但可以用：</p>
+<ul>
+<li><p>Time-expanded Grid；</p>
+</li>
+<li><p>Sampling；</p>
+</li>
+<li><p>Search Agent；</p>
+</li>
+</ul>
+<p>进行近似验证。</p>
+<hr />
+<h2 id="23-核心范式四弹幕难度由多个维度共同构成">23. 核心范式四：弹幕难度由多个维度共同构成</h2><p>弹幕难度不能只看：</p>
+<p>BulletCount。</p>
+<p>建议至少分解为：</p>
+<ul>
+<li><p>BulletDensity；</p>
+</li>
+<li><p>BulletSpeed；</p>
+</li>
+<li><p>GapSize；</p>
+</li>
+<li><p>PatternRotationSpeed；</p>
+</li>
+<li><p>SpawnFrequency；</p>
+</li>
+<li><p>Aimedness；</p>
+</li>
+<li><p>Randomness；</p>
+</li>
+<li><p>CrossingRate；</p>
+</li>
+<li><p>SafeRegionMobility；</p>
+</li>
+<li><p>RequiredPlayerTravel；</p>
+</li>
+<li><p>VisualNoise；</p>
+</li>
+<li><p>PatternDuration。</p>
+</li>
+</ul>
+<hr />
+<h2 id="24-bullet-density">24. Bullet Density</h2><p>单位空间中的Bullet数量。</p>
+<hr />
+<h2 id="25-gap-size">25. Gap Size</h2><p>安全通道相对于玩家Hitbox有多宽。</p>
+<p>通常比单纯Bullet数量更有意义。</p>
+<p>1000颗排列整齐的大间隔Bullet：</p>
+<p>可能很简单。</p>
+<p>50颗高速交叉Bullet：</p>
+<p>可能非常困难。</p>
+<hr />
+<h2 id="26-required-movement">26. Required Movement</h2><p>有些Pattern要求：</p>
+<p>几乎不动。</p>
+<p>有些要求：</p>
+<p>从屏幕左侧移动到右侧。</p>
+<p>因此玩家移动距离也是难度指标。</p>
+<hr />
+<h2 id="27-crossing-rate">27. Crossing Rate</h2><p>Bullet轨迹相互交叉越多，</p>
+<p>未来安全区域越难预测。</p>
+<hr />
+<h2 id="28-aimedness">28. Aimedness</h2><p>Pattern可以分：</p>
+<h3 id="static-pattern">Static Pattern</h3><p>与玩家位置无关。</p>
+<h3 id="snapshot-aim">Snapshot Aim</h3><p>生成瞬间读取玩家位置。</p>
+<h3 id="continuous-tracking">Continuous Tracking</h3><p>持续追踪玩家。</p>
+<h3 id="predictive-aim">Predictive Aim</h3><p>预测玩家移动。</p>
+<p>其中持续追踪要谨慎使用。</p>
+<p>否则Pattern可能从：</p>
+<p>可学习几何</p>
+<p>退化为：</p>
+<p>只追玩家的导弹群。</p>
+<hr />
+<h2 id="29-snapshot-aim是非常重要的设计工具">29. Snapshot Aim是非常重要的设计工具</h2><p>例如Boss每0.5秒：</p>
+<p>向玩家当前位置发射一串子弹。</p>
+<p>玩家如果一直向同一方向移动：</p>
+<p>弹幕会在后方形成轨迹。</p>
+<p>这自然产生：</p>
+<p><strong>Streaming / 引弹。</strong></p>
+<hr />
+<h2 id="30-核心范式五引弹是玩家主动塑造未来弹幕场">30. 核心范式五：引弹是玩家主动塑造未来弹幕场</h2><p>如果敌人瞄准：</p>
+<p>玩家当前坐标，</p>
+<p>玩家可以通过：</p>
+<p>故意站在某处</p>
+<p>让后续Bullet朝那个方向生成。</p>
+<p>随后：</p>
+<p>提前离开。</p>
+<p>于是玩家其实在：</p>
+<blockquote>
+<p><strong>使用自己的位置作为弹幕生成参数。</strong></p>
+</blockquote>
+<p>这是一类非常独特的互动。</p>
+<p>玩家不是单纯被动躲Bullet。</p>
+<p>而是在：</p>
+<p>控制未来Bullet Field的形状。</p>
+<hr />
+<h2 id="31-streaming-pattern">31. Streaming Pattern</h2><p>典型循环：</p>
+<p>Boss瞄准
+→ 玩家沿屏幕底部向右慢移
+→ 每轮子弹落在之前位置
+→ 弹幕形成连续尾迹
+→ 玩家到达右边
+→ 快速横穿空白区域
+→ 从左边重新开始。</p>
+<p>这就是经典：</p>
+<p>引弹 / Streaming。</p>
+<hr />
+<h2 id="32-对playertracking需要采样策略">32. 对PlayerTracking需要采样策略</h2><p>不要让每颗Bullet每帧重新瞄准玩家。</p>
+<p>更常见的是：</p>
+<p>Spawn时：</p>
+<p>读取一次PlayerPosition。</p>
+<p>这同时：</p>
+<ul>
+<li><p>降低计算；</p>
+</li>
+<li><p>增强可预测性；</p>
+</li>
+<li><p>形成策略。</p>
+</li>
+</ul>
+<hr />
+<h2 id="33-bulletdefinition">33. BulletDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>BulletId；</p>
+</li>
+<li><p>CollisionRadius；</p>
+</li>
+<li><p>VisualRadius；</p>
+</li>
+<li><p>InitialSpeed；</p>
+</li>
+<li><p>Lifetime；</p>
+</li>
+<li><p>MotionProfileId；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Cancelable；</p>
+</li>
+<li><p>Grazeable；</p>
+</li>
+<li><p>DestroyOutsideBounds；</p>
+</li>
+<li><p>ChildPatternId；</p>
+</li>
+<li><p>PresentationProfile；</p>
+</li>
+<li><p>BulletVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-bulletruntimestate">34. BulletRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>BulletInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Age；</p>
+</li>
+<li><p>MotionState；</p>
+</li>
+<li><p>OwnerId；</p>
+</li>
+<li><p>PatternExecutionId；</p>
+</li>
+<li><p>GrazeState；</p>
+</li>
+<li><p>CollisionState；</p>
+</li>
+<li><p>BulletVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-bullet-motion-profile">35. Bullet Motion Profile</h2><p>不要所有Bullet都独立脚本化。</p>
+<p>推荐支持参数化运动：</p>
+<ul>
+<li><p>Linear；</p>
+</li>
+<li><p>Acceleration；</p>
+</li>
+<li><p>Deceleration；</p>
+</li>
+<li><p>Curve；</p>
+</li>
+<li><p>Spiral；</p>
+</li>
+<li><p>Orbit；</p>
+</li>
+<li><p>Homing；</p>
+</li>
+<li><p>DelayedTurn；</p>
+</li>
+<li><p>StopAndGo；</p>
+</li>
+<li><p>ParentRelative；</p>
+</li>
+<li><p>BoundaryReflect。</p>
+</li>
+</ul>
+<hr />
+<h2 id="36-motionprofile">36. MotionProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>MotionType；</p>
+</li>
+<li><p>InitialVelocityRule；</p>
+</li>
+<li><p>AccelerationRule；</p>
+</li>
+<li><p>AngularVelocity；</p>
+</li>
+<li><p>PhaseTransitions；</p>
+</li>
+<li><p>HomingDuration；</p>
+</li>
+<li><p>TargetPolicy；</p>
+</li>
+<li><p>MotionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="37-bullet-motion-phase">37. Bullet Motion Phase</h2><p>一些Bullet可以：</p>
+<p>高速飞出
+→ 停止
+→ 旋转
+→ 再向玩家发射。</p>
+<p>因此Motion可以拥有：</p>
+<p>Phase列表。</p>
+<p>不要为这类Bullet单独做新类。</p>
+<hr />
+<h2 id="38-bullet生命周期">38. Bullet生命周期</h2><p>标准：</p>
+<p>Spawned
+→ Active
+→ OptionalTransform
+→ Expiring
+→ Destroyed。</p>
+<p>特殊：</p>
+<p>Spawned
+→ Stop
+→ Reaim
+→ Active
+→ Split
+→ Destroyed。</p>
+<hr />
+<h2 id="39-child-bullet">39. Child Bullet</h2><p>母弹达到：</p>
+<p>某年龄；</p>
+<p>某位置；</p>
+<p>死亡；</p>
+<p>时：</p>
+<p>可以生成新Pattern。</p>
+<p>例如：</p>
+<p>大Bullet飞到中央
+→ 爆开32个小Bullet。</p>
+<p>建议：</p>
+<p>Bullet只触发：</p>
+<p>PatternRequest。</p>
+<p>而不是自己直接创建32个GameObject。</p>
+<hr />
+<h2 id="40-patternexecution">40. PatternExecution</h2><p>一次Pattern真正运行时应该生成实例。</p>
+<hr />
+<h3 id="401-patternexecutionstate">40.1 PatternExecutionState</h3><p>建议包含：</p>
+<ul>
+<li><p>PatternExecutionId；</p>
+</li>
+<li><p>PatternId；</p>
+</li>
+<li><p>OwnerEntityId；</p>
+</li>
+<li><p>StartTick；</p>
+</li>
+<li><p>LocalTime；</p>
+</li>
+<li><p>ActiveEmitterStates；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>DifficultyModifiers；</p>
+</li>
+<li><p>CancellationState；</p>
+</li>
+<li><p>ExecutionVersion。</p>
+</li>
+</ul>
+<p>这样同一个PatternDefinition：</p>
+<p>可以被Boss重复释放多次。</p>
+<hr />
+<h2 id="41-弹幕脚本必须支持取消">41. 弹幕脚本必须支持取消</h2><p>Boss进入下一阶段：</p>
+<p>上一阶段Bullet可能：</p>
+<ul>
+<li><p>全部清除；</p>
+</li>
+<li><p>保留；</p>
+</li>
+<li><p>转换为得分道具；</p>
+</li>
+<li><p>渐隐；</p>
+</li>
+<li><p>继续运行。</p>
+</li>
+</ul>
+<p>需要统一：</p>
+<p><strong>BulletCancellationPolicy。</strong></p>
+<hr />
+<h2 id="42-bullet-cancel">42. Bullet Cancel</h2><p>触发来源：</p>
+<ul>
+<li><p>Boss Phase结束；</p>
+</li>
+<li><p>Bomb；</p>
+</li>
+<li><p>特殊技能；</p>
+</li>
+<li><p>Boss死亡；</p>
+</li>
+<li><p>Stage切换。</p>
+</li>
+</ul>
+<hr />
+<h3 id="421-cancelcontext">42.1 CancelContext</h3><p>建议包含：</p>
+<ul>
+<li><p>Source；</p>
+</li>
+<li><p>AffectedBulletTags；</p>
+</li>
+<li><p>Region；</p>
+</li>
+<li><p>ConvertToItemPolicy；</p>
+</li>
+<li><p>ScorePolicy；</p>
+</li>
+<li><p>CancelVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="43-核心范式六bomb不是强技能而是失败保险与节奏资源">43. 核心范式六：Bomb不是“强技能”，而是失败保险与节奏资源</h2><p>Bomb通常可以：</p>
+<ul>
+<li><p>提供短暂无敌；</p>
+</li>
+<li><p>清除附近Bullet；</p>
+</li>
+<li><p>对敌人造成伤害；</p>
+</li>
+<li><p>重置局部压力。</p>
+</li>
+</ul>
+<p>它的真正作用是：</p>
+<blockquote>
+<p>玩家意识到自己无法安全解决当前空间状态时，主动支付稀缺资源换取重新获得可控局面。</p>
+</blockquote>
+<hr />
+<h2 id="44-bombruntimestate">44. BombRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>RemainingCharges；</p>
+</li>
+<li><p>MaximumCharges；</p>
+</li>
+<li><p>InvulnerabilityDuration；</p>
+</li>
+<li><p>CancelRadius；</p>
+</li>
+<li><p>DamageProfile；</p>
+</li>
+<li><p>BombVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-bomb-resource产生决策">45. Bomb Resource产生决策</h2><p>现在使用：</p>
+<p>可以保命。</p>
+<p>但之后Boss最终阶段：</p>
+<p>可能没有Bomb。</p>
+<p>因此玩家会考虑：</p>
+<p>当前Pattern还能否靠技术通过。</p>
+<hr />
+<h2 id="46-deathbomb">46. Deathbomb</h2><p>部分弹幕游戏允许：</p>
+<p>受到致命攻击后的极短窗口内Bomb。</p>
+<p>需要定义：</p>
+<ul>
+<li><p>LethalHitTick；</p>
+</li>
+<li><p>DeathbombWindow；</p>
+</li>
+<li><p>InputTimestamp；</p>
+</li>
+<li><p>ResolutionPriority。</p>
+</li>
+</ul>
+<p>这必须是：</p>
+<p>逻辑规则。</p>
+<p>不能依赖：</p>
+<p>死亡动画还没播完。</p>
+<hr />
+<h2 id="47-playerdamage-resolver">47. PlayerDamage Resolver</h2><p>标准流程：</p>
+<p>Bullet HitCandidate
+→ 验证Invulnerability
+→ 判断是否进入DeathbombPending
+→ 如果无保护则CommitDamage
+→ 消耗生命
+→ 清理或转换Bullet
+→ Respawn或RunEnd。</p>
+<hr />
+<h2 id="48-受击后的无敌时间">48. 受击后的无敌时间</h2><p>Respawn后通常需要：</p>
+<p>短暂Invulnerability。</p>
+<p>否则玩家可能：</p>
+<p>出生在残余弹幕上</p>
+<p>立即再次死亡。</p>
+<hr />
+<h2 id="49-核心范式七graze把几乎失败转化成高阶收益">49. 核心范式七：Graze把“几乎失败”转化成高阶收益</h2><p>如果玩家只需要：</p>
+<p>离Bullet越远越好，</p>
+<p>最优策略通常倾向：</p>
+<p>躲在最安全角落。</p>
+<p>Graze通过奖励：</p>
+<p>靠近Bullet但不受击</p>
+<p>主动鼓励：</p>
+<p>高风险微操。</p>
+<hr />
+<h2 id="50-grazestate">50. GrazeState</h2><p>需要防止同一Bullet：</p>
+<p>每帧反复刷Graze。</p>
+<p>建议Bullet记录：</p>
+<ul>
+<li><p>GrazedPlayerMask；</p>
+</li>
+<li><p>LastGrazeTick；</p>
+</li>
+<li><p>GrazeCooldown。</p>
+</li>
+</ul>
+<hr />
+<h2 id="51-graze奖励">51. Graze奖励</h2><p>可以提供：</p>
+<ul>
+<li><p>Score；</p>
+</li>
+<li><p>Energy；</p>
+</li>
+<li><p>BombCharge；</p>
+</li>
+<li><p>Power；
+  -特殊Gauge。</p>
+</li>
+</ul>
+<p>因此形成：</p>
+<p>风险
+→ 精准操作
+→ 资源</p>
+<p>闭环。</p>
+<hr />
+<h2 id="52-graze必须和hit检测顺序稳定">52. Graze必须和Hit检测顺序稳定</h2><p>推荐：</p>
+<p>先Hit。</p>
+<p>如果没有Hit：</p>
+<p>再检查Graze。</p>
+<p>不能：</p>
+<p>同一Tick先算Graze奖励，</p>
+<p>然后再死亡，</p>
+<p>除非规则就是如此。</p>
+<hr />
+<h2 id="53-玩家射击系统">53. 玩家射击系统</h2><p>弹幕射击虽然重点是规避，</p>
+<p>玩家通常仍持续输出。</p>
+<p>推荐把：</p>
+<p>Player Weapon</p>
+<p>和：</p>
+<p>Enemy Bullet Pattern</p>
+<p>分开。</p>
+<hr />
+<h2 id="54-playerweaponstate">54. PlayerWeaponState</h2><p>建议字段：</p>
+<ul>
+<li><p>WeaponId；</p>
+</li>
+<li><p>FireRate；</p>
+</li>
+<li><p>ShotPatternId；</p>
+</li>
+<li><p>PowerLevel；</p>
+</li>
+<li><p>FocusShotPatternId；</p>
+</li>
+<li><p>OptionStates；</p>
+</li>
+<li><p>WeaponVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="55-自动连射">55. 自动连射</h2><p>很多STG允许：</p>
+<p>按住Fire</p>
+<p>持续射击。</p>
+<p>这意味着玩家输入复杂度集中在：</p>
+<p>移动。</p>
+<hr />
+<h2 id="56-focus-shot">56. Focus Shot</h2><p>Focus时：</p>
+<p>可能同时改变：</p>
+<ul>
+<li><p>移动速度；</p>
+</li>
+<li><p>Shot Pattern；</p>
+</li>
+<li><p>Option位置；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Hitbox显示。</p>
+</li>
+</ul>
+<p>这样Focus不是纯“减速键”，</p>
+<p>而是：</p>
+<p>精确作战模式。</p>
+<hr />
+<h2 id="57-power-system">57. Power System</h2><p>玩家可以通过：</p>
+<ul>
+<li><p>掉落物；</p>
+</li>
+<li><p>Graze；</p>
+</li>
+<li><p>敌人击杀；</p>
+</li>
+</ul>
+<p>提高ShotPower。</p>
+<p>但要谨慎避免：</p>
+<p>一旦死亡掉Power</p>
+<p>→ 更难击杀Boss
+→ 暴露更久
+→ 更容易再死</p>
+<p>形成过强负反馈。</p>
+<hr />
+<h2 id="58-recovery-mechanism">58. Recovery Mechanism</h2><p>可以提供：</p>
+<ul>
+<li><p>死亡后部分Power掉落；</p>
+</li>
+<li><p>Respawn时最低Power；</p>
+</li>
+<li><p>Boss阶段固定补给。</p>
+</li>
+</ul>
+<p>目的是：</p>
+<p>避免一次失误让整局进入不可逆崩坏。</p>
+<hr />
+<h2 id="59-boss定义">59. Boss定义</h2><h3 id="bossdefinition">BossDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>BossId；</p>
+</li>
+<li><p>MaximumHealth；</p>
+</li>
+<li><p>PhaseDefinitions；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>TimeoutRules；</p>
+</li>
+<li><p>DropProfile；</p>
+</li>
+<li><p>ScoreProfile；</p>
+</li>
+<li><p>PresentationProfile；</p>
+</li>
+<li><p>BossVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="60-boss-phase">60. Boss Phase</h2><h3 id="bossphasedefinition">BossPhaseDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>PhaseId；</p>
+</li>
+<li><p>HealthThreshold；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>PatternSequence；</p>
+</li>
+<li><p>MovementRule；</p>
+</li>
+<li><p>PhaseStartEffects；</p>
+</li>
+<li><p>PhaseEndEffects；</p>
+</li>
+<li><p>BulletCancelPolicy；</p>
+</li>
+<li><p>TimeoutResult；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>PhaseVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="61-boss真正的内容单位通常是phase">61. Boss真正的内容单位通常是Phase</h2><p>一个Boss可以：</p>
+<p>拥有10个Phase。</p>
+<p>每个Phase实际上就是：</p>
+<p>一套独立挑战。</p>
+<p>因此Boss本身更接近：</p>
+<p><strong>Pattern Playlist。</strong></p>
+<hr />
+<h2 id="62-spell-card-named-pattern">62. Spell Card / Named Pattern</h2><p>部分作品会把高规格Pattern：</p>
+<p>独立命名。</p>
+<p>这有很强价值：</p>
+<ul>
+<li><p>玩家记忆；</p>
+</li>
+<li><p>练习模式；</p>
+</li>
+<li><p>排行；</p>
+</li>
+<li><p>内容复用；</p>
+</li>
+<li><p>社区交流。</p>
+</li>
+</ul>
+<hr />
+<h2 id="63-phase结束条件">63. Phase结束条件</h2><p>可以：</p>
+<ul>
+<li><p>HP归零；</p>
+</li>
+<li><p>Timer结束；</p>
+</li>
+<li><p>特定任务完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-timeout">64. Timeout</h2><p>某些Pattern：</p>
+<p>时间耗尽仍算通过。</p>
+<p>某些：</p>
+<p>算失败。</p>
+<p>某些：</p>
+<p>奖励降低。</p>
+<p>必须由PhaseDefinition决定。</p>
+<hr />
+<h2 id="65-boss-movement">65. Boss Movement</h2><p>Boss移动不是单纯视觉。</p>
+<p>它会改变：</p>
+<ul>
+<li><p>发射源；</p>
+</li>
+<li><p>玩家输出距离；</p>
+</li>
+<li><p>安全区域。</p>
+</li>
+</ul>
+<p>因此MovementProfile和Pattern必须协同设计。</p>
+<hr />
+<h2 id="66-boss不要随机瞬移到破坏可解性的地方">66. Boss不要随机瞬移到破坏可解性的地方</h2><p>如果Pattern原本留有：</p>
+<p>右侧安全区，</p>
+<p>Boss随机移动后：</p>
+<p>封死通道，</p>
+<p>就可能产生偶发无解局面。</p>
+<p>RandomMovement应该受：</p>
+<p>Pattern Constraints</p>
+<p>约束。</p>
+<hr />
+<h2 id="67-普通敌人stage-timeline">67. 普通敌人Stage Timeline</h2><p>弹幕STG通常不只是Boss Rush。</p>
+<p>Stage中：</p>
+<p>普通敌人出现位置与时间</p>
+<p>也是谱面式内容。</p>
+<hr />
+<h2 id="68-stagedefinition">68. StageDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>StageId；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>SpawnTimeline；</p>
+</li>
+<li><p>BackgroundTimeline；</p>
+</li>
+<li><p>MusicCueIds；</p>
+</li>
+<li><p>MidBossDefinitions；</p>
+</li>
+<li><p>BossDefinitionId；</p>
+</li>
+<li><p>StageBoundary；</p>
+</li>
+<li><p>StageVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="69-enemyspawnevent">69. EnemySpawnEvent</h2><p>建议字段：</p>
+<ul>
+<li><p>SpawnTime；</p>
+</li>
+<li><p>EnemyDefinitionId；</p>
+</li>
+<li><p>SpawnPosition；</p>
+</li>
+<li><p>MovementPathId；</p>
+</li>
+<li><p>PatternId；</p>
+</li>
+<li><p>DifficultyModifiers；</p>
+</li>
+<li><p>SpawnVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="70-stage本质上与节奏游戏有一定时间编排相似性">70. Stage本质上与节奏游戏有一定“时间编排”相似性</h2><p>敌人和Pattern：</p>
+<p>按统一StageClock出现。</p>
+<p>因此应该：</p>
+<p>数据驱动。</p>
+<p>而不是：</p>
+<p>场景中放一堆Coroutine。</p>
+<hr />
+<h2 id="71-stageclock">71. StageClock</h2><p>可以复用：</p>
+<p>固定逻辑时钟。</p>
+<p>需要支持：</p>
+<ul>
+<li><p>Pause；</p>
+</li>
+<li><p>BossTransition；</p>
+</li>
+<li><p>SlowMotion；</p>
+</li>
+<li><p>PracticeSeek。</p>
+</li>
+</ul>
+<hr />
+<h2 id="72-practice-mode">72. Practice Mode</h2><p>高难弹幕游戏非常需要：</p>
+<p>直接练某个Boss Phase。</p>
+<p>建议支持：</p>
+<ul>
+<li><p>Stage Start；</p>
+</li>
+<li><p>Boss Start；</p>
+</li>
+<li><p>Phase Start；</p>
+</li>
+<li><p>无限生命；</p>
+</li>
+<li><p>无限Bomb；</p>
+</li>
+<li><p>Hitbox显示；</p>
+</li>
+<li><p>Slow Motion；</p>
+</li>
+<li><p>Restart Phase。</p>
+</li>
+</ul>
+<hr />
+<h2 id="73-practicesnapshot">73. PracticeSnapshot</h2><p>进入某Phase时记录：</p>
+<ul>
+<li><p>PlayerPower；</p>
+</li>
+<li><p>Lives；</p>
+</li>
+<li><p>Bombs；</p>
+</li>
+<li><p>BossState；</p>
+</li>
+<li><p>Difficulty；</p>
+</li>
+<li><p>RNGSeed。</p>
+</li>
+</ul>
+<p>保证：</p>
+<p>每次练习条件稳定。</p>
+<hr />
+<h2 id="74-replay-system">74. Replay System</h2><p>弹幕游戏非常适合：</p>
+<p>输入回放。</p>
+<p>记录：</p>
+<ul>
+<li><p>InitialSeed；</p>
+</li>
+<li><p>Difficulty；</p>
+</li>
+<li><p>PlayerInputTimeline；</p>
+</li>
+<li><p>BombInput；</p>
+</li>
+<li><p>Pause规则。</p>
+</li>
+</ul>
+<p>如果：</p>
+<p>Pattern和Simulation确定，</p>
+<p>就可以重现整局。</p>
+<hr />
+<h2 id="75-replayinputframe">75. ReplayInputFrame</h2><p>建议字段：</p>
+<ul>
+<li><p>Tick；</p>
+</li>
+<li><p>MoveX；</p>
+</li>
+<li><p>MoveY；</p>
+</li>
+<li><p>Fire；</p>
+</li>
+<li><p>Focus；</p>
+</li>
+<li><p>Bomb；</p>
+</li>
+<li><p>ReplayVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="76-replay确定性为什么非常重要">76. Replay确定性为什么非常重要</h2><p>可以用于：</p>
+<ul>
+<li><p>排行榜验证；</p>
+</li>
+<li><p>Bug复现；</p>
+</li>
+<li><p>玩家复盘；</p>
+</li>
+<li><p>TAS；</p>
+</li>
+<li><p>内容测试。</p>
+</li>
+</ul>
+<hr />
+<h2 id="77-随机性需要非常谨慎">77. 随机性需要非常谨慎</h2><p>弹幕随机性主要有三类：</p>
+<h3 id="cosmetic-random">Cosmetic Random</h3><p>只影响表现。</p>
+<h3 id="bounded-pattern-random">Bounded Pattern Random</h3><p>在可解范围内改变角度或位置。</p>
+<h3 id="fully-random-bullet">Fully Random Bullet</h3><p>自由随机。</p>
+<p>最后一种最容易破坏：</p>
+<p>可学习性和确定性。</p>
+<hr />
+<h2 id="78-rng-stream分离">78. RNG Stream分离</h2><p>建议：</p>
+<ul>
+<li><p>PatternRandom；</p>
+</li>
+<li><p>EnemyMovementRandom；</p>
+</li>
+<li><p>DropRandom；</p>
+</li>
+<li><p>CosmeticRandom。</p>
+</li>
+</ul>
+<p>VisualRandom不能影响：</p>
+<p>PatternRandom。</p>
+<hr />
+<h2 id="79-replay保存seed还不够">79. Replay保存Seed还不够</h2><p>必须保证：</p>
+<p>同一RandomStream的调用顺序稳定。</p>
+<p>如果后来加一个：</p>
+<p>随机声音</p>
+<p>错误调用PatternRandom，</p>
+<p>旧Replay就会失效。</p>
+<hr />
+<h2 id="80-固定步长">80. 固定步长</h2><p>推荐所有权威：</p>
+<ul>
+<li><p>PlayerMovement；</p>
+</li>
+<li><p>BulletMovement；</p>
+</li>
+<li><p>Collision；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Pattern；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+</ul>
+<p>使用固定Tick。</p>
+<hr />
+<h2 id="81-render-interpolation">81. Render Interpolation</h2><p>渲染可以：</p>
+<p>120FPS。</p>
+<p>逻辑：</p>
+<p>60或120固定Tick。</p>
+<p>VisualPosition：</p>
+<p>在逻辑状态之间插值。</p>
+<p>不要让渲染帧改变Bullet轨迹。</p>
+<hr />
+<h2 id="82-bullet-collision">82. Bullet Collision</h2><p>大量Bullet碰撞是核心性能问题。</p>
+<p>不能：</p>
+<p>每颗Bullet</p>
+<p>和PlayerCollider进行完整物理引擎碰撞。</p>
+<hr />
+<h2 id="83-最基础优化">83. 最基础优化</h2><p>因为敌方Bullet主要只关心：</p>
+<p>Player。</p>
+<p>假设1个玩家：</p>
+<p>5000 Bullet。</p>
+<p>每Tick只需要：</p>
+<p>5000次简单距离检测。</p>
+<p>这实际上可以非常廉价。</p>
+<p>无需：</p>
+<p>Bullet-vs-Bullet。</p>
+<hr />
+<h2 id="84-circle-collision">84. Circle Collision</h2><p>最常见：</p>
+<p><code>distanceSquared &lt;= (bulletRadius + hitRadius)^2</code></p>
+<p>甚至不需要开平方。</p>
+<hr />
+<h2 id="85-laser碰撞">85. Laser碰撞</h2><p>可以使用：</p>
+<ul>
+<li><p>Capsule；</p>
+</li>
+<li><p>Segment Distance；</p>
+</li>
+<li><p>OBB；</p>
+</li>
+<li><p>Polygon。</p>
+</li>
+</ul>
+<p>Laser不应离散成：</p>
+<p>几百颗不可见Bullet</p>
+<p>来做碰撞。</p>
+<hr />
+<h2 id="86-collision-layer">86. Collision Layer</h2><p>明确：</p>
+<p>EnemyBullet → PlayerHitbox。</p>
+<p>PlayerBullet → EnemyHitbox。</p>
+<p>EnemyBullet通常无需互相碰撞。</p>
+<p>这会大幅降低复杂度。</p>
+<hr />
+<h2 id="87-graze-query优化">87. Graze Query优化</h2><p>Hit Radius很小。</p>
+<p>Graze Radius稍大。</p>
+<p>可以一次计算：</p>
+<p>distanceSquared。</p>
+<p>然后：</p>
+<p>if &lt;= HitRadius² → Hit</p>
+<p>else if &lt;= GrazeRadius² → Graze。</p>
+<p>不需要两次物理查询。</p>
+<hr />
+<h2 id="88-bullet-cancellation性能">88. Bullet Cancellation性能</h2><p>Bomb可能同一Tick：</p>
+<p>清除5000颗Bullet。</p>
+<p>不能：</p>
+<p>逐颗Destroy GameObject</p>
+<p>造成GC和Spike。</p>
+<p>应批量：</p>
+<p>标记Inactive</p>
+<p>并回到Pool。</p>
+<hr />
+<h2 id="89-bullet-registry">89. Bullet Registry</h2><p>统一管理：</p>
+<ul>
+<li><p>ActiveBulletCount；</p>
+</li>
+<li><p>Spawn；</p>
+</li>
+<li><p>Despawn；</p>
+</li>
+<li><p>BulkCancel；</p>
+</li>
+<li><p>Pool；</p>
+</li>
+<li><p>Pattern归属。</p>
+</li>
+</ul>
+<hr />
+<h2 id="90-bullet-state-soa">90. Bullet State SoA</h2><p>高规模下可以把：</p>
+<p>PositionX[]
+PositionY[]
+VelocityX[]
+VelocityY[]
+Age[]
+Type[]</p>
+<p>集中存储。</p>
+<p>而不是：</p>
+<p>5000个复杂对象。</p>
+<hr />
+<h2 id="91-data-oriented-bullet-simulation">91. Data-Oriented Bullet Simulation</h2><p>这类游戏非常适合：</p>
+<ul>
+<li><p>ECS；</p>
+</li>
+<li><p>Jobs；</p>
+</li>
+<li><p>SIMD；</p>
+</li>
+<li><p>GPU Rendering。</p>
+</li>
+</ul>
+<p>但核心不是必须使用某技术。</p>
+<p>核心原则是：</p>
+<blockquote>
+<p><strong>Bullet应该是批量数据，而不是重量级Actor。</strong></p>
+</blockquote>
+<hr />
+<h2 id="92-rendering">92. Rendering</h2><p>数千Bullet真正的瓶颈可能是：</p>
+<p>Draw Call。</p>
+<p>建议：</p>
+<ul>
+<li><p>GPU Instancing；</p>
+</li>
+<li><p>Sprite Batch；</p>
+</li>
+<li><p>Mesh Batch；</p>
+</li>
+<li><p>Texture Atlas。</p>
+</li>
+</ul>
+<hr />
+<h2 id="93-bullet-logic与bullet-visual严格分离">93. Bullet Logic与Bullet Visual严格分离</h2><p>Bullet Logic：</p>
+<p>位置、半径、规则。</p>
+<p>Bullet Visual：</p>
+<p>Sprite、Trail、Glow。</p>
+<p>视觉对象可以：</p>
+<ul>
+<li><p>LOD；</p>
+</li>
+<li><p>批量；</p>
+</li>
+<li><p>降采样。</p>
+</li>
+</ul>
+<p>不能影响：</p>
+<p>Hit。</p>
+<hr />
+<h2 id="94-offscreen-bullet">94. Offscreen Bullet</h2><p>Bullet离开：</p>
+<p>SimulationBounds</p>
+<p>可以销毁。</p>
+<p>SimulationBounds通常应稍大于：</p>
+<p>CameraBounds。</p>
+<p>避免：</p>
+<p>刚离开一像素就消失，</p>
+<p>导致边缘弹异常。</p>
+<hr />
+<h2 id="95-bullet-lifetime是必须的保险">95. Bullet Lifetime是必须的保险</h2><p>即使轨迹异常，</p>
+<p>超过：</p>
+<p>MaxLifetime</p>
+<p>自动销毁。</p>
+<p>防止泄漏。</p>
+<hr />
+<h2 id="96-弹幕颜色和形状是信息编码">96. 弹幕颜色和形状是信息编码</h2><p>不同视觉可以表达：</p>
+<ul>
+<li><p>速度；</p>
+</li>
+<li><p>类型；</p>
+</li>
+<li><p>可消弹；</p>
+</li>
+<li><p>不可消弹；</p>
+</li>
+<li><p>伤害；</p>
+</li>
+<li><p>状态。</p>
+</li>
+</ul>
+<p>不要让颜色完全随机。</p>
+<hr />
+<h2 id="97-高密度视觉中轮廓比特效更重要">97. 高密度视觉中轮廓比特效更重要</h2><p>Bullet应该：</p>
+<p>轮廓稳定。</p>
+<p>Glow、Trail不能让：</p>
+<p>真实碰撞范围无法判断。</p>
+<hr />
+<h2 id="98-玩家bullet与敌方bullet视觉优先级">98. 玩家Bullet与敌方Bullet视觉优先级</h2><p>敌方危险信息必须优先。</p>
+<p>如果玩家自己的华丽特效：</p>
+<p>遮住敌方Bullet，</p>
+<p>等于破坏玩法信息。</p>
+<hr />
+<h2 id="99-damage-number通常不是核心反馈">99. Damage Number通常不是核心反馈</h2><p>数千次Player Shot命中Boss时：</p>
+<p>没必要每击一个飘字。</p>
+<p>更适合：</p>
+<ul>
+<li><p>Boss HP；</p>
+</li>
+<li><p>Hit Flash；</p>
+</li>
+<li><p>DPS Debug；</p>
+</li>
+</ul>
+<p>表达。</p>
+<hr />
+<h2 id="100-score-system">100. Score System</h2><p>传统弹幕游戏经常拥有深度计分系统。</p>
+<p>可以包括：</p>
+<ul>
+<li><p>EnemyKill；</p>
+</li>
+<li><p>Graze；</p>
+</li>
+<li><p>Chain；</p>
+</li>
+<li><p>PointItem；</p>
+</li>
+<li><p>BossCapture；</p>
+</li>
+<li><p>NoBomb；</p>
+</li>
+<li><p>NoMiss；</p>
+</li>
+<li><p>PointBlank；</p>
+</li>
+<li><p>RiskMultiplier。</p>
+</li>
+</ul>
+<hr />
+<h2 id="101-score不应和生存系统强绑定">101. Score不应和生存系统强绑定</h2><p>高分路线可以：</p>
+<p>要求更危险操作。</p>
+<p>但普通通关玩家：</p>
+<p>应该能够采用更安全路线。</p>
+<p>这样形成：</p>
+<p><strong>Survival Play</strong></p>
+<p>和：</p>
+<p><strong>Scoring Play</strong></p>
+<p>双层体验。</p>
+<hr />
+<h2 id="102-scoremultiplier">102. ScoreMultiplier</h2><p>例如：</p>
+<p>Graze
+→ 增加Multiplier。</p>
+<p>但受击：</p>
+<p>重置。</p>
+<p>于是高手会主动：</p>
+<p>靠近危险。</p>
+<hr />
+<h2 id="103-point-item">103. Point Item</h2><p>敌人死亡可能掉：</p>
+<p>ScoreItem。</p>
+<p>玩家需要：</p>
+<p>移动收集。</p>
+<p>这可以在弹幕缝隙之外再创造：</p>
+<p>风险收益决策。</p>
+<hr />
+<h2 id="104-item-collection-line">104. Item Collection Line</h2><p>部分游戏设置：</p>
+<p>玩家移动到屏幕上方</p>
+<p>→ 自动收集全部道具。</p>
+<p>这会鼓励：</p>
+<p>主动向危险区域推进。</p>
+<p>是非常优秀的：</p>
+<p>空间风险奖励设计。</p>
+<hr />
+<h2 id="105-rank-dynamic-difficulty">105. Rank / Dynamic Difficulty</h2><p>部分弹幕游戏可以根据：</p>
+<p>玩家表现</p>
+<p>动态调整隐性难度。</p>
+<p>例如：</p>
+<p>持续不死
+→ Rank提高。</p>
+<p>受击
+→ Rank下降。</p>
+<hr />
+<h2 id="106-rankstate">106. RankState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentRank；</p>
+</li>
+<li><p>RankGainRate；</p>
+</li>
+<li><p>DeathPenalty；</p>
+</li>
+<li><p>BombPenalty；</p>
+</li>
+<li><p>MaximumRank；</p>
+</li>
+<li><p>RankVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="107-rank可以影响">107. Rank可以影响</h2><ul>
+<li><p>BulletSpeed；</p>
+</li>
+<li><p>BulletCount；</p>
+</li>
+<li><p>SpawnRate；</p>
+</li>
+<li><p>BossPatternModifier。</p>
+</li>
+</ul>
+<hr />
+<h2 id="108-动态rank必须谨慎">108. 动态Rank必须谨慎</h2><p>如果隐藏得太深：</p>
+<p>优秀玩家会感觉：</p>
+<p>“为什么我打得越好，游戏越作弊？”</p>
+<p>最好：</p>
+<ul>
+<li><p>变化有限；</p>
+</li>
+<li><p>规律稳定；</p>
+</li>
+<li><p>高级玩家可推理；</p>
+</li>
+<li><p>不改变Pattern基本可解结构。</p>
+</li>
+</ul>
+<hr />
+<h2 id="109-difficultyprofile">109. DifficultyProfile</h2><p>更稳定的难度方式还是：</p>
+<p>显式Difficulty。</p>
+<p>例如：</p>
+<p>Easy
+Normal
+Hard
+Lunatic。</p>
+<hr />
+<h2 id="110-difficulty不要重新制作四套完全独立pattern">110. Difficulty不要重新制作四套完全独立Pattern</h2><p>推荐：</p>
+<p>同一PatternDefinition</p>
+<p>应用：</p>
+<ul>
+<li><p>BulletCountMultiplier；</p>
+</li>
+<li><p>SpeedMultiplier；</p>
+</li>
+<li><p>FireInterval；</p>
+</li>
+<li><p>AdditionalEmitter；</p>
+</li>
+<li><p>GapModifier。</p>
+</li>
+</ul>
+<p>但某些高难独有Pattern仍可以存在。</p>
+<hr />
+<h2 id="111-difficulty-scaling必须保护gap">111. Difficulty Scaling必须保护Gap</h2><p>错误：</p>
+<p>只把BulletCount ×2。</p>
+<p>可能直接填死安全通道。</p>
+<p>因此Pattern需要：</p>
+<p>Difficulty-aware geometry。</p>
+<hr />
+<h2 id="112-pattern-modifier">112. Pattern Modifier</h2><p>例如：</p>
+<p>Normal：</p>
+<p>Ring 24 bullets。</p>
+<p>Hard：</p>
+<p>Ring 32 bullets，</p>
+<p>但：</p>
+<p>人为留出两个Gap。</p>
+<p>Lunatic：</p>
+<p>36 bullets，</p>
+<p>Gap位置开始旋转。</p>
+<p>这样难度增加仍保持可解。</p>
+<hr />
+<h2 id="113-完整事件与执行流程示例">113. 完整事件与执行流程示例</h2><p>以下以：</p>
+<p><strong>Boss使用三阶段旋转螺旋弹幕，玩家通过引弹、Focus微操与Bomb处理失败状态</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="1131-boss进入phase">113.1 Boss进入Phase</h3><p>Phase：</p>
+<p>Scarlet Spiral。</p>
+<p>持续：</p>
+<p>35秒。</p>
+<p>Boss位于：</p>
+<p>屏幕上方中央。</p>
+<hr />
+<h3 id="1132-patternexecution开始">113.2 PatternExecution开始</h3><p>创建：</p>
+<p>PatternExecutionId。</p>
+<p>Emitter A：</p>
+<p>每0.12秒发射：</p>
+<p>12颗Radial Bullet。</p>
+<p>每次发射：</p>
+<p>BaseAngle + 7°。</p>
+<hr />
+<h3 id="1133-第一秒">113.3 第一秒</h3><p>历史Ring继续向外扩散。</p>
+<p>新Ring角度略微旋转。</p>
+<p>空间开始形成：</p>
+<p>螺旋通道。</p>
+<hr />
+<h3 id="1134-玩家观察">113.4 玩家观察</h3><p>当前Bullet很多，</p>
+<p>但安全路径是：</p>
+<p>沿螺旋臂之间缓慢移动。</p>
+<p>玩家进入Focus。</p>
+<hr />
+<h3 id="1135-hitbox显示">113.5 Hitbox显示</h3><p>角色Sprite仍然较大。</p>
+<p>真实Hitbox显示为：</p>
+<p>中心小点。</p>
+<hr />
+<h3 id="1136-玩家进行微移动">113.6 玩家进行微移动</h3><p>输入：</p>
+<p>非常小的横向移动。</p>
+<p>PlayerMotor按照FocusSpeed推进。</p>
+<hr />
+<h3 id="1137-graze">113.7 Graze</h3><p>两颗Bullet进入：</p>
+<p>GrazeRadius</p>
+<p>但未进入：</p>
+<p>HitRadius。</p>
+<p>触发：</p>
+<p>GrazeEvent。</p>
+<p>增加：</p>
+<p>ScoreGauge。</p>
+<hr />
+<h3 id="1138-phase进入第二段">113.8 Phase进入第二段</h3><p>10秒后：</p>
+<p>Emitter B启动。</p>
+<p>每0.8秒：</p>
+<p>向玩家位置发射：</p>
+<p>AimedStream。</p>
+<hr />
+<h3 id="1139-玩家开始引弹">113.9 玩家开始引弹</h3><p>玩家不再停留中央。</p>
+<p>沿屏幕底部：</p>
+<p>从左向右缓慢移动。</p>
+<hr />
+<h3 id="11310-aimedstream锁定">113.10 AimedStream锁定</h3><p>每次Spawn：</p>
+<p>只读取一次玩家位置。</p>
+<p>因此AimedBullet连续落在：</p>
+<p>玩家之前的位置。</p>
+<hr />
+<h3 id="11311-玩家塑造未来空间">113.11 玩家塑造未来空间</h3><p>因为玩家持续向右：</p>
+<p>左侧形成大量追踪弹尾迹。</p>
+<p>右侧保持相对干净。</p>
+<hr />
+<h3 id="11312-即将到达右边界">113.12 即将到达右边界</h3><p>玩家知道：</p>
+<p>继续向右已经没有空间。</p>
+<p>等待一次AimedBurst发出后：</p>
+<p>快速向左横切。</p>
+<hr />
+<h3 id="11313-spiral仍在运行">113.13 Spiral仍在运行</h3><p>因此横切不能走直线。</p>
+<p>玩家需要沿：</p>
+<p>螺旋Gap</p>
+<p>穿过去。</p>
+<hr />
+<h3 id="11314-第三段开始">113.14 第三段开始</h3><p>20秒时：</p>
+<p>Emitter C启动：</p>
+<p>大Bullet。</p>
+<p>大Bullet飞到玩家附近一定距离后：</p>
+<p>停止0.5秒。</p>
+<p>然后：</p>
+<p>每颗分裂成：</p>
+<p>8颗小Bullet。</p>
+<hr />
+<h3 id="11315-bullet-field迅速复杂化">113.15 Bullet Field迅速复杂化</h3><p>当前同时存在：</p>
+<ul>
+<li><p>Spiral；</p>
+</li>
+<li><p>AimedStream；</p>
+</li>
+<li><p>DelayedSplit。</p>
+</li>
+</ul>
+<p>安全区域快速变窄。</p>
+<hr />
+<h3 id="11316-玩家判断失误">113.16 玩家判断失误</h3><p>玩家进入一个看似安全的区域。</p>
+<p>但未来0.3秒：</p>
+<p>两颗DelayedSplit同时展开。</p>
+<p>出口被封。</p>
+<hr />
+<h3 id="11317-玩家仍未受击">113.17 玩家仍未受击</h3><p>当前PlayerHitbox没有碰Bullet。</p>
+<p>但已经进入：</p>
+<p><strong>Future Dead State</strong></p>
+<p>即：</p>
+<p>没有足够速度离开未来封闭区域。</p>
+<hr />
+<h3 id="11318-玩家使用bomb">113.18 玩家使用Bomb</h3><p>Bomb输入提交。</p>
+<p>BombResolver：</p>
+<ul>
+<li><p>消耗1 Charge；</p>
+</li>
+<li><p>玩家进入Invulnerability；</p>
+</li>
+<li><p>清除一定范围Cancelable Bullet；</p>
+</li>
+<li><p>PatternExecution本身继续运行。</p>
+</li>
+</ul>
+<hr />
+<h3 id="11319-bulkcancel">113.19 BulkCancel</h3><p>BulletRegistry一次批量标记：</p>
+<p>1800颗Bullet取消。</p>
+<p>部分被转换为：</p>
+<p>ScoreItem。</p>
+<hr />
+<h3 id="11320-玩家获得新的空间">113.20 玩家获得新的空间</h3><p>压力重置。</p>
+<p>玩家快速移动回：</p>
+<p>屏幕下方中间区域。</p>
+<hr />
+<h3 id="11321-phase接近结束">113.21 Phase接近结束</h3><p>Boss生命降到：</p>
+<p>PhaseThreshold。</p>
+<p>进入：</p>
+<p>PhaseEnd。</p>
+<hr />
+<h3 id="11322-cancellationpolicy执行">113.22 CancellationPolicy执行</h3><p>本Phase全部普通Bullet：</p>
+<p>转换为PointItem。</p>
+<p>Laser类危险：</p>
+<p>直接消失。</p>
+<hr />
+<h3 id="11323-下一phase">113.23 下一Phase</h3><p>Boss移动至左上。</p>
+<p>新的Pattern：</p>
+<p>不是螺旋，</p>
+<p>而是：</p>
+<p>高速交叉扇形。</p>
+<p>玩家此前的解法不再适用。</p>
+<hr />
+<h3 id="11324-完整核心循环">113.24 完整核心循环</h3><p>Pattern生成
+→ Bullet Field形成
+→ 玩家读型
+→ Focus微移动
+→ Graze风险收益
+→ Aimed Pattern出现
+→ 玩家用位置主动引弹
+→ 多Pattern叠加
+→ 未来安全区域消失
+→ 玩家识别失败状态
+→ Bomb重置空间
+→ Phase结束
+→ 弹幕取消
+→ 新Pattern改变解题规则。</p>
+<p>这就是弹幕射击最具代表性的：</p>
+<blockquote>
+<p><strong>玩家持续读取和操纵动态危险几何，而不是简单对单个投射物做反应。</strong></p>
+</blockquote>
+<hr />
+<h2 id="114-模块通信设计">114. 模块通信设计</h2><h3 id="1141-commands">114.1 Commands</h3><p>典型：</p>
+<ul>
+<li><p>MovePlayer；</p>
+</li>
+<li><p>SetFocus；</p>
+</li>
+<li><p>SetFire；</p>
+</li>
+<li><p>UseBomb；</p>
+</li>
+<li><p>PauseStage；</p>
+</li>
+<li><p>RestartPracticePhase。</p>
+</li>
+</ul>
+<p>实际移动和Fire通常使用：</p>
+<p>高频InputState，</p>
+<p>而不是业务Command队列。</p>
+<hr />
+<h3 id="1142-queries">114.2 Queries</h3><p>适用于：</p>
+<ul>
+<li><p>当前StageTime；</p>
+</li>
+<li><p>当前BossPhase；</p>
+</li>
+<li><p>当前Bomb；</p>
+</li>
+<li><p>当前Power；</p>
+</li>
+<li><p>ActiveBulletCount；</p>
+</li>
+<li><p>当前Rank；</p>
+</li>
+<li><p>当前Score；</p>
+</li>
+<li><p>当前Graze。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>SpawnBullet；</p>
+</li>
+<li><p>修改Pattern；</p>
+</li>
+<li><p>产生随机数；</p>
+</li>
+<li><p>推进BossPhase。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1143-domain-events">114.3 Domain Events</h3><p>包括：</p>
+<ul>
+<li><p>StageStarted；</p>
+</li>
+<li><p>EnemySpawned；</p>
+</li>
+<li><p>PatternStarted；</p>
+</li>
+<li><p>EmitterFired；</p>
+</li>
+<li><p>BulletSpawned；</p>
+</li>
+<li><p>BulletTransformed；</p>
+</li>
+<li><p>BulletCanceled；</p>
+</li>
+<li><p>PlayerGrazed；</p>
+</li>
+<li><p>PlayerHit；</p>
+</li>
+<li><p>BombUsed；</p>
+</li>
+<li><p>PlayerRespawned；</p>
+</li>
+<li><p>BossPhaseStarted；</p>
+</li>
+<li><p>BossPhaseEnded；</p>
+</li>
+<li><p>BossDefeated；</p>
+</li>
+<li><p>StageCompleted。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1144-presentation-events">114.4 Presentation Events</h3><p>包括：</p>
+<ul>
+<li><p>PlayBulletSpawnVFX；</p>
+</li>
+<li><p>PlayGrazeSound；</p>
+</li>
+<li><p>ShowHitEffect；</p>
+</li>
+<li><p>PlayBombEffect；</p>
+</li>
+<li><p>ShowSpellName；</p>
+</li>
+<li><p>PlayPhaseTransition；</p>
+</li>
+<li><p>ShowScorePopup。</p>
+</li>
+</ul>
+<p>表现事件不能：</p>
+<ul>
+<li><p>移动Bullet；</p>
+</li>
+<li><p>判断Hit；</p>
+</li>
+<li><p>更改Boss生命；</p>
+</li>
+<li><p>决定Phase切换。</p>
+</li>
+</ul>
+<hr />
+<h2 id="115-状态所有权">115. 状态所有权</h2><p>推荐：</p>
+<p><strong>StageSystem</strong></p>
+<p>拥有Stage Timeline。</p>
+<p><strong>PatternSystem</strong></p>
+<p>拥有PatternExecution。</p>
+<p><strong>BulletRegistry</strong></p>
+<p>拥有Bullet生命周期。</p>
+<p><strong>PlayerMotor</strong></p>
+<p>拥有Player位置。</p>
+<p><strong>CollisionSystem</strong></p>
+<p>拥有Hit/Graze判定。</p>
+<p><strong>BossSystem</strong></p>
+<p>拥有Boss状态与Phase。</p>
+<p><strong>ScoreSystem</strong></p>
+<p>拥有Score。</p>
+<p><strong>ReplaySystem</strong></p>
+<p>记录Input。</p>
+<p>不要让：</p>
+<p>Bullet GameObject</p>
+<p>自己修改Player Lives。</p>
+<p>也不要让：</p>
+<p>Boss Animation</p>
+<p>决定：</p>
+<p>什么时候Phase结束。</p>
+<hr />
+<h2 id="116-随机流">116. 随机流</h2><p>建议：</p>
+<ul>
+<li><p>PatternRandom；</p>
+</li>
+<li><p>BossMovementRandom；</p>
+</li>
+<li><p>DropRandom；</p>
+</li>
+<li><p>CosmeticRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="117-patternrandom必须绑定patternexecution">117. PatternRandom必须绑定PatternExecution</h2><p>这样：</p>
+<p>同一Replay</p>
+<p>才能恢复相同：</p>
+<p>随机散射角度。</p>
+<hr />
+<h2 id="118-save与continue">118. Save与Continue</h2><p>传统街机式弹幕通常：</p>
+<p>一局并不长，</p>
+<p>不一定需要中途Save。</p>
+<p>但可以保存：</p>
+<ul>
+<li><p>Stage Unlock；</p>
+</li>
+<li><p>Practice Unlock；</p>
+</li>
+<li><p>High Score；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Difficulty Clear；</p>
+</li>
+<li><p>Achievement。</p>
+</li>
+</ul>
+<hr />
+<h2 id="119-continue">119. Continue</h2><p>如果支持Continue：</p>
+<p>需要明确：</p>
+<ul>
+<li><p>Score是否清零；</p>
+</li>
+<li><p>Bomb是否恢复；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Clear标记；</p>
+</li>
+<li><p>排行资格。</p>
+</li>
+</ul>
+<p>Continue属于：</p>
+<p>RunRule，</p>
+<p>而不是：</p>
+<p>简单Respawn。</p>
+<hr />
+<h2 id="120-player-death">120. Player Death</h2><p>标准：</p>
+<p>Hit
+→ Lives -1
+→ DeathSequence
+→ 清弹
+→ Respawn
+→ Invulnerability。</p>
+<hr />
+<h2 id="121-death和game-over分离">121. Death和Game Over分离</h2><p>玩家受击：</p>
+<p>可能只是：</p>
+<p>LoseLife。</p>
+<p>只有：</p>
+<p>Lives耗尽</p>
+<p>才：</p>
+<p>RunFailed。</p>
+<p>类似：</p>
+<p>CombatDeath</p>
+<p>与：</p>
+<p>MatchElimination</p>
+<p>的分离。</p>
+<hr />
+<h2 id="122-失败隔离">122. 失败隔离</h2><hr />
+<h3 id="1221-pattern引用不存在bulletdefinition">122.1 Pattern引用不存在BulletDefinition</h3><p>Pattern启动前验证。</p>
+<p>正式Build：</p>
+<p>内容校验失败。</p>
+<p>运行时Fallback：</p>
+<p>跳过该Emitter</p>
+<p>并记录ContentError。</p>
+<p>不能让整个Stage崩溃。</p>
+<hr />
+<h3 id="1222-bullet-motion异常">122.2 Bullet Motion异常</h3><p>出现：</p>
+<p>NaN；</p>
+<p>Infinite Position；</p>
+<p>非法速度。</p>
+<p>BulletRegistry：</p>
+<p>立即隔离并销毁该Bullet。</p>
+<p>记录：</p>
+<p>PatternId
+EmitterId
+BulletId。</p>
+<hr />
+<h3 id="1223-bullet泄漏">122.3 Bullet泄漏</h3><p>超过MaxLifetime：</p>
+<p>强制销毁。</p>
+<hr />
+<h3 id="1224-activebulletcount不一致">122.4 ActiveBulletCount不一致</h3><p>Registry定期IntegrityCheck：</p>
+<p>ActiveBitset</p>
+<p>与：</p>
+<p>ActiveCount。</p>
+<hr />
+<h3 id="1225-pattern停止但emitter继续工作">122.5 Pattern停止但Emitter继续工作</h3><p>PatternEnd时：</p>
+<p>必须撤销所有ScheduledEmitterTask。</p>
+<p>否则会出现：</p>
+<p>Boss已经死了还在不断发弹。</p>
+<hr />
+<h3 id="1226-boss-phase重复提交">122.6 Boss Phase重复提交</h3><p>HealthThreshold和Timer：</p>
+<p>可能同Tick同时触发PhaseEnd。</p>
+<p>使用：</p>
+<p>PhaseTransitionTransaction。</p>
+<p>只能进入下一Phase一次。</p>
+<hr />
+<h3 id="1227-bomb与hit同tick">122.7 Bomb与Hit同Tick</h3><p>必须定义确定顺序。</p>
+<p>例如：</p>
+<p>如果BombInputTimestamp &lt;= HitCommitTick</p>
+<p>且位于DeathbombWindow，</p>
+<p>Bomb成功。</p>
+<p>不能依赖：</p>
+<p>哪个MonoBehaviour先Update。</p>
+<hr />
+<h3 id="1228-bulkcancel导致巨大spike">122.8 BulkCancel导致巨大Spike</h3><p>Cancel应：</p>
+<p>批量状态变更。</p>
+<p>表现层分帧播放消散效果。</p>
+<p>逻辑不等待动画。</p>
+<hr />
+<h3 id="1229-graze重复刷分">122.9 Graze重复刷分</h3><p>同一Bullet必须有：</p>
+<p>GrazeOncePolicy</p>
+<p>或Cooldown。</p>
+<hr />
+<h3 id="12210-replay不同步">122.10 Replay不同步</h3><p>如果Replay检测：</p>
+<p>当前StateHash</p>
+<p>和记录Hash不同：</p>
+<p>停止成绩验证。</p>
+<p>输出：</p>
+<p>首次Desync Tick。</p>
+<hr />
+<h3 id="12211-practice-seek状态不完整">122.11 Practice Seek状态不完整</h3><p>从Boss Phase 3直接进入练习时：</p>
+<p>必须加载明确PracticeSnapshot。</p>
+<p>不能简单：</p>
+<p>把StageTime设到20秒，</p>
+<p>期待前20秒逻辑自动存在。</p>
+<hr />
+<h2 id="123-调试与可观测性">123. 调试与可观测性</h2><hr />
+<h3 id="1231-pattern-timeline">123.1 Pattern Timeline</h3><p>显示：</p>
+<p>0.0s Emitter A Start
+2.0s Emitter B Start
+5.0s A SpeedChange
+8.0s Emitter C Start
+12.0s Phase End。</p>
+<hr />
+<h3 id="1232-bullet-count-timeline">123.2 Bullet Count Timeline</h3><p>显示：</p>
+<ul>
+<li><p>Spawn/s；</p>
+</li>
+<li><p>Active；</p>
+</li>
+<li><p>Canceled；</p>
+</li>
+<li><p>Expired。</p>
+</li>
+</ul>
+<p>可以快速发现：</p>
+<p>Bullet泄漏。</p>
+<hr />
+<h3 id="1233-pattern-geometry-preview">123.3 Pattern Geometry Preview</h3><p>作者工具中：</p>
+<p>展示未来：</p>
+<p>1秒
+3秒
+5秒</p>
+<p>Bullet轨迹。</p>
+<hr />
+<h3 id="1234-safety-heatmap">123.4 Safety Heatmap</h3><p>显示：</p>
+<p>未来若干时间片中的：</p>
+<p>危险密度。</p>
+<hr />
+<h3 id="1235-gap-analyzer">123.5 Gap Analyzer</h3><p>统计：</p>
+<ul>
+<li><p>MinimumGapWidth；</p>
+</li>
+<li><p>AverageGap；</p>
+</li>
+<li><p>RequiredPlayerSpeed；</p>
+</li>
+<li><p>SafeRegionCount。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1236-player-path-overlay">123.6 Player Path Overlay</h3><p>Replay中显示：</p>
+<p>玩家实际移动轨迹。</p>
+<p>叠加：</p>
+<p>Bullet Field。</p>
+<p>可以分析：</p>
+<p>死亡前是：</p>
+<p>微操失败</p>
+<p>还是：</p>
+<p>提前走入死路。</p>
+<hr />
+<h3 id="1237-hit-inspector">123.7 Hit Inspector</h3><p>一次Hit显示：</p>
+<p>PlayerPosition
+PlayerHitRadius
+BulletPosition
+BulletRadius
+Distance</p>
+<p>以及：</p>
+<p>最终Collision结果。</p>
+<hr />
+<h3 id="1238-graze-inspector">123.8 Graze Inspector</h3><p>同理显示：</p>
+<p>为什么这次算Graze</p>
+<p>或：</p>
+<p>为什么没有算。</p>
+<hr />
+<h3 id="1239-boss-phase-statistics">123.9 Boss Phase Statistics</h3><p>统计：</p>
+<ul>
+<li><p>Attempts；</p>
+</li>
+<li><p>ClearRate；</p>
+</li>
+<li><p>BombUsage；</p>
+</li>
+<li><p>DeathRate；</p>
+</li>
+<li><p>AverageDuration；</p>
+</li>
+<li><p>Graze；</p>
+</li>
+<li><p>Score。</p>
+</li>
+</ul>
+<hr />
+<h3 id="12310-pattern-difficulty-metrics">123.10 Pattern Difficulty Metrics</h3><p>记录：</p>
+<ul>
+<li><p>PeakBulletCount；</p>
+</li>
+<li><p>PeakDensity；</p>
+</li>
+<li><p>BulletSpeedPercentiles；</p>
+</li>
+<li><p>MinimumGap；</p>
+</li>
+<li><p>CrossingRate；</p>
+</li>
+<li><p>RequiredTravel。</p>
+</li>
+</ul>
+<hr />
+<h3 id="12311-performance-panel">123.11 Performance Panel</h3><p>显示：</p>
+<ul>
+<li><p>ActiveBullets；</p>
+</li>
+<li><p>SpawnPerSecond；</p>
+</li>
+<li><p>BulletSimulationTime；</p>
+</li>
+<li><p>CollisionTime；</p>
+</li>
+<li><p>RenderingTime；</p>
+</li>
+<li><p>CancelTime；</p>
+</li>
+<li><p>PoolUsage；</p>
+</li>
+<li><p>AllocationCount。</p>
+</li>
+</ul>
+<hr />
+<h3 id="12312-replay-state-hash">123.12 Replay State Hash</h3><p>每隔固定Tick：</p>
+<p>记录：</p>
+<ul>
+<li><p>Player；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>BulletRegistry；</p>
+</li>
+<li><p>PatternStates；</p>
+</li>
+<li><p>RNG；</p>
+</li>
+</ul>
+<p>摘要Hash。</p>
+<p>用于精确定位：</p>
+<p>Replay分歧。</p>
+<hr />
+<h2 id="124-内容验证工具">124. 内容验证工具</h2><hr />
+<h3 id="1241-pattern-schema-validation">124.1 Pattern Schema Validation</h3><p>检查：</p>
+<ul>
+<li><p>Emitter；</p>
+</li>
+<li><p>Bullet；</p>
+</li>
+<li><p>Time；</p>
+</li>
+<li><p>Interval；</p>
+</li>
+<li><p>SpawnCount；</p>
+</li>
+<li><p>Motion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1242-bullet-lifetime-validation">124.2 Bullet Lifetime Validation</h3><p>计算理论：</p>
+<p>某Motion是否可能永远留在场内。</p>
+<p>必须确保：</p>
+<p>存在Lifetime或退出条件。</p>
+<hr />
+<h3 id="1243-spawn-rate-budget">124.3 Spawn Rate Budget</h3><p>计算：</p>
+<p>某Pattern理论：</p>
+<p>BulletsPerSecond。</p>
+<p>例如：</p>
+<p>Emitter：</p>
+<p>每0.05秒</p>
+<p>发射32颗。</p>
+<p>即：</p>
+<p>640 Bullets/s。</p>
+<p>开发工具应立即显示。</p>
+<hr />
+<h3 id="1244-peak-active-bullet-estimate">124.4 Peak Active Bullet Estimate</h3><p>根据：</p>
+<p>SpawnRate
+× Lifetime</p>
+<p>粗略估计：</p>
+<p>最大Active Bullet。</p>
+<hr />
+<h3 id="1245-pattern-solvability-bot">124.5 Pattern Solvability Bot</h3><p>使用简单Agent：</p>
+<p>在时间展开网格中搜索：</p>
+<p>可生存路径。</p>
+<p>若：</p>
+<p>10000次Sampling</p>
+<p>都无法通过，</p>
+<p>Pattern需要人工检查。</p>
+<hr />
+<h3 id="1246-difficulty-regression">124.6 Difficulty Regression</h3><p>同一Pattern应用：</p>
+<p>Easy
+Normal
+Hard
+Lunatic</p>
+<p>之后，</p>
+<p>自动验证：</p>
+<ul>
+<li><p>Gap不小于绝对下限；</p>
+</li>
+<li><p>Bullet不超性能预算；</p>
+</li>
+<li><p>Spawn合法。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1247-replay-determinism-test">124.7 Replay Determinism Test</h3><p>同一：</p>
+<p>Seed
+Input</p>
+<p>重复运行：</p>
+<p>100次。</p>
+<p>最终状态必须一致。</p>
+<hr />
+<h3 id="1248-bomb-safety-test">124.8 Bomb Safety Test</h3><p>对所有Pattern随机触发Bomb。</p>
+<p>检查：</p>
+<ul>
+<li><p>Bullet Cancel；</p>
+</li>
+<li><p>Invulnerability；</p>
+</li>
+<li><p>Pattern继续；</p>
+</li>
+</ul>
+<p>不会进入非法状态。</p>
+<hr />
+<h3 id="1249-boundary-test">124.9 Boundary Test</h3><p>玩家和Bullet位于：</p>
+<p>屏幕边缘。</p>
+<p>检查：</p>
+<ul>
+<li><p>Collision；</p>
+</li>
+<li><p>Despawn；</p>
+</li>
+<li><p>Spawn；</p>
+</li>
+</ul>
+<p>不会产生边界漏洞。</p>
+<hr />
+<h3 id="12410-extreme-bullet-stress-test">124.10 Extreme Bullet Stress Test</h3><p>模拟：</p>
+<p>1000
+5000
+10000
+50000</p>
+<p>Bullet。</p>
+<p>统计：</p>
+<p>CPU
+GPU
+Memory
+Frame Time。</p>
+<hr />
+<h2 id="125-性能设计">125. 性能设计</h2><p>弹幕游戏的性能设计必须从第一版Bullet System就确定。</p>
+<p>不能等到：</p>
+<p>Boss Pattern已经设计完成</p>
+<p>才发现：</p>
+<p>3000颗子弹跑不动。</p>
+<hr />
+<h3 id="1251-bullet应是数据不是actor">125.1 Bullet应是数据，不是Actor</h3><p>推荐每颗Bullet权威状态只保存：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Age；</p>
+</li>
+<li><p>Type；</p>
+</li>
+<li><p>Flags；</p>
+</li>
+<li><p>PatternExecutionId。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1252-批量更新">125.2 批量更新</h3><p>每Tick：</p>
+<p>遍历ActiveBulletBuffer。</p>
+<p>统一：</p>
+<p>UpdateMotion
+→ Collision
+→ Expire。</p>
+<hr />
+<h3 id="1253-避免每bullet虚函数调用">125.3 避免每Bullet虚函数调用</h3><p>5000Bullet：</p>
+<p>每Tick复杂多态调用</p>
+<p>成本明显。</p>
+<p>可以按：</p>
+<p>MotionType</p>
+<p>分批。</p>
+<hr />
+<h3 id="1254-motion-batch">125.4 Motion Batch</h3><p>例如：</p>
+<p>Linear Bullet</p>
+<p>统一一个批次。</p>
+<p>Accelerating</p>
+<p>另一个批次。</p>
+<p>Homing数量较少，</p>
+<p>单独高成本处理。</p>
+<hr />
+<h3 id="1255-boss-bullet和普通bullet可以使用不同精度层级">125.5 Boss Bullet和普通Bullet可以使用不同精度层级</h3><p>高价值特殊Bullet：</p>
+<p>复杂Motion。</p>
+<p>普通装饰型Bullet：</p>
+<p>简单Linear。</p>
+<hr />
+<h3 id="1256-collision只针对必要目标">125.6 Collision只针对必要目标</h3><p>单人游戏：</p>
+<p>EnemyBullet只需要测试：</p>
+<p>Player。</p>
+<p>无需构建通用全局碰撞矩阵。</p>
+<hr />
+<h3 id="1257-playershot-vs-enemy">125.7 PlayerShot vs Enemy</h3><p>玩家Bullet数量也可能很高。</p>
+<p>可以对Enemy建立：</p>
+<p>SpatialIndex。</p>
+<hr />
+<h3 id="1258-bullet-visual-batch">125.8 Bullet Visual Batch</h3><p>同一BulletType：</p>
+<p>一次批量Draw。</p>
+<hr />
+<h3 id="1259-trail要谨慎">125.9 Trail要谨慎</h3><p>5000颗Bullet</p>
+<p>每颗TrailRenderer：</p>
+<p>通常不可接受。</p>
+<p>可以：</p>
+<p>shader生成；</p>
+<p>短尾纹理；</p>
+<p>GPU方案。</p>
+<hr />
+<h3 id="12510-pool容量监控">125.10 Pool容量监控</h3><p>如果峰值：</p>
+<p>8000。</p>
+<p>Pool只有：</p>
+<p>4000。</p>
+<p>运行时不断扩容：</p>
+<p>会产生Spike。</p>
+<p>开发工具应根据：</p>
+<p>Pattern静态分析</p>
+<p>给出建议容量。</p>
+<hr />
+<h2 id="126-可扩展点">126. 可扩展点</h2><hr />
+<h3 id="1261-新bullet类型">126.1 新Bullet类型</h3><p>主要提供：</p>
+<ul>
+<li><p>BulletDefinition；</p>
+</li>
+<li><p>MotionProfile；</p>
+</li>
+<li><p>VisualProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1262-新pattern">126.2 新Pattern</h3><p>只需要：</p>
+<p>PatternDefinition</p>
+<p>和Emitter组合。</p>
+<p>不改核心BulletLoop。</p>
+<hr />
+<h3 id="1263-新boss">126.3 新Boss</h3><p>组合：</p>
+<ul>
+<li><p>BossMovement；</p>
+</li>
+<li><p>Phase；</p>
+</li>
+<li><p>Pattern；</p>
+</li>
+<li><p>Reward。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1264-新难度">126.4 新难度</h3><p>通过：</p>
+<p>DifficultyModifier。</p>
+<hr />
+<h3 id="1265-新玩家机体">126.5 新玩家机体</h3><p>提供：</p>
+<ul>
+<li><p>Movement；</p>
+</li>
+<li><p>Hitbox；</p>
+</li>
+<li><p>Weapon；</p>
+</li>
+<li><p>Bomb；</p>
+</li>
+<li><p>SpecialAbility。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1266-新score模式">126.6 新Score模式</h3><p>替换：</p>
+<p>ScorePolicy。</p>
+<p>例如：</p>
+<p>Graze型；</p>
+<p>Chain型；</p>
+<p>Risk型；</p>
+<p>PointBlank型。</p>
+<hr />
+<h3 id="1267-双人co-op">126.7 双人Co-op</h3><p>需要增加：</p>
+<ul>
+<li><p>两个PlayerHitbox；</p>
+</li>
+<li><p>Bullet Aim TargetPolicy；</p>
+</li>
+<li><p>Revive或Life；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Screen Constraint。</p>
+</li>
+</ul>
+<p>注意：</p>
+<p>针对一个玩家设计的Pattern</p>
+<p>可能在双人情况下完全失效。</p>
+<hr />
+<h3 id="1268-横版与纵版">126.8 横版与纵版</h3><p>核心Pattern系统基本相同。</p>
+<p>主要替换：</p>
+<ul>
+<li><p>ArenaBounds；</p>
+</li>
+<li><p>PlayerAxisBias；</p>
+</li>
+<li><p>StageScroll；</p>
+</li>
+<li><p>Camera。</p>
+</li>
+</ul>
+<hr />
+<h2 id="127-玩家体验设计">127. 玩家体验设计</h2><hr />
+<h3 id="1271-bullet必须比背景更可读">127.1 Bullet必须比背景更可读</h3><p>无论美术多华丽：</p>
+<p>危险信息优先。</p>
+<hr />
+<h3 id="1272-hitbox反馈必须一致">127.2 Hitbox反馈必须一致</h3><p>同颜色同尺寸Bullet：</p>
+<p>碰撞大小不应该随意变化。</p>
+<p>若不同：</p>
+<p>必须有视觉区别。</p>
+<hr />
+<h3 id="1273-pattern应该让玩家经历第一次看不懂后来突然看懂">127.3 Pattern应该让玩家经历“第一次看不懂，后来突然看懂”</h3><p>这是类型的重要学习快感。</p>
+<p>优秀Pattern：</p>
+<p>第一次：</p>
+<p>看起来像一堵弹墙。</p>
+<p>理解以后：</p>
+<p>发现里面有稳定的：</p>
+<ul>
+<li><p>旋转规律；</p>
+</li>
+<li><p>Gap；</p>
+</li>
+<li><p>引弹规则。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1274-难度提高应该增加决策要求而不仅是反应速度">127.4 难度提高应该增加决策要求，而不仅是反应速度</h3><p>例如：</p>
+<p>Normal：</p>
+<p>只需要跟随Gap。</p>
+<p>Hard：</p>
+<p>需要提前换边。</p>
+<p>Lunatic：</p>
+<p>还需要引弹。</p>
+<p>这样难度增加体现：</p>
+<p>模式理解深化。</p>
+<hr />
+<h3 id="1275-bomb应该容易使用">127.5 Bomb应该容易使用</h3><p>它是：</p>
+<p>紧急保险。</p>
+<p>不能要求：</p>
+<p>复杂组合键。</p>
+<hr />
+<h3 id="1276-player需要清晰位于视觉最上层">127.6 Player需要清晰位于视觉最上层</h3><p>大量Bullet和特效下：</p>
+<p>玩家角色必须始终可定位。</p>
+<hr />
+<h3 id="1277-focus移动必须有立即反馈">127.7 Focus移动必须有立即反馈</h3><p>例如：</p>
+<ul>
+<li><p>Hitbox出现；</p>
+</li>
+<li><p>Option收缩；</p>
+</li>
+<li><p>移动速度明显下降。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1278-boss-phase转换必须清晰">127.8 Boss Phase转换必须清晰</h3><p>玩家需要知道：</p>
+<p>旧Pattern结束，</p>
+<p>新Pattern开始。</p>
+<p>否则认知状态来不及重置。</p>
+<hr />
+<h3 id="1279-practice-restart必须极快">127.9 Practice Restart必须极快</h3><p>高难Pattern可能练习：</p>
+<p>数百次。</p>
+<p>Phase Restart：</p>
+<p>应接近即时。</p>
+<hr />
+<h3 id="12710-death-recap不需要复杂统计但应支持replay">127.10 Death Recap不需要复杂统计，但应支持Replay</h3><p>弹幕死亡通常发生在：</p>
+<p>某个几秒级空间错误。</p>
+<p>Replay回退：</p>
+<p>3～5秒</p>
+<p>往往比文字更有价值。</p>
+<hr />
+<h2 id="128-常见设计失败">128. 常见设计失败</h2><hr />
+<h3 id="1281-把bullet-hell理解成随机生成很多子弹">128.1 把Bullet Hell理解成“随机生成很多子弹”</h3><p>没有Pattern可读性。</p>
+<hr />
+<h3 id="1282-bullet数量成为唯一难度参数">128.2 Bullet数量成为唯一难度参数</h3><p>高难模式只是在填屏。</p>
+<hr />
+<h3 id="1283-hitbox和角色视觉一样大">128.3 Hitbox和角色视觉一样大</h3><p>高密度弹幕根本无法穿越。</p>
+<hr />
+<h3 id="1284-hitbox过小但没有任何反馈">128.4 Hitbox过小但没有任何反馈</h3><p>玩家不理解碰撞规则。</p>
+<hr />
+<h3 id="1285-每颗bullet拥有完整ai和update">128.5 每颗Bullet拥有完整AI和Update</h3><p>性能无法扩展。</p>
+<hr />
+<h3 id="1286-每颗bullet使用刚体物理">128.6 每颗Bullet使用刚体物理</h3><p>大量无必要碰撞开销。</p>
+<hr />
+<h3 id="1287-bullet-motion依赖render-deltatime">128.7 Bullet Motion依赖render deltaTime</h3><p>不同帧率轨迹不同。</p>
+<hr />
+<h3 id="1288-boss动画事件负责发弹">128.8 Boss动画事件负责发弹</h3><p>动画改速度后Gameplay改变。</p>
+<hr />
+<h3 id="1289-pattern没有独立execution实例">128.9 Pattern没有独立Execution实例</h3><p>同一个Pattern重复运行时状态串线。</p>
+<hr />
+<h3 id="12810-aimed-bullet每帧追踪玩家">128.10 Aimed Bullet每帧追踪玩家</h3><p>引弹和Pattern学习空间消失。</p>
+<hr />
+<h3 id="12811-随机移动boss破坏安全路径">128.11 随机移动Boss破坏安全路径</h3><p>偶发生成无解Pattern。</p>
+<hr />
+<h3 id="12812-boss下一phase开始但旧emitter没有取消">128.12 Boss下一Phase开始但旧Emitter没有取消</h3><p>场上出现设计外弹幕叠加。</p>
+<hr />
+<h3 id="12813-bomb逐个destroy几千bullet">128.13 Bomb逐个Destroy几千Bullet</h3><p>产生巨大帧尖峰。</p>
+<hr />
+<h3 id="12814-graze每帧重复计分">128.14 Graze每帧重复计分</h3><p>一颗Bullet可以无限刷资源。</p>
+<hr />
+<h3 id="12815-高难只提高bullet-speed">128.15 高难只提高Bullet Speed</h3><p>原本合理反应窗口消失。</p>
+<hr />
+<h3 id="12816-pattern完全静态而从不读取玩家位置">128.16 Pattern完全静态而从不读取玩家位置</h3><p>高阶玩家只需背固定坐标，</p>
+<p>缺乏互动。</p>
+<hr />
+<h3 id="12817-所有pattern都持续追踪玩家">128.17 所有Pattern都持续追踪玩家</h3><p>另一方面又会导致：</p>
+<p>没有稳定几何和学习价值。</p>
+<hr />
+<h3 id="12818-玩家自己的攻击特效遮挡enemy-bullet">128.18 玩家自己的攻击特效遮挡Enemy Bullet</h3><p>视觉奖励破坏核心操作。</p>
+<hr />
+<h3 id="12819-practice不能直接进入boss-phase">128.19 Practice不能直接进入Boss Phase</h3><p>高难学习成本极高。</p>
+<hr />
+<h3 id="12820-replay不可确定复现">128.20 Replay不可确定复现</h3><p>排行榜、Bug和Pattern调试都受到严重限制。</p>
+<hr />
+<h2 id="129-最小可行原型">129. 最小可行原型</h2><p>一个能够验证弹幕射击核心范式的MVP并不需要完整长关卡。</p>
+<p>建议：</p>
+<p><strong>1个玩家机体 + 1个Boss + 8个Pattern + 1个短Stage。</strong></p>
+<hr />
+<h3 id="1291-player">129.1 Player</h3><p>实现：</p>
+<ul>
+<li><p>Normal Move；</p>
+</li>
+<li><p>Focus Move；</p>
+</li>
+<li><p>Fire；</p>
+</li>
+<li><p>Hitbox；</p>
+</li>
+<li><p>Graze；</p>
+</li>
+<li><p>3 Bomb；</p>
+</li>
+<li><p>3 Lives。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1292-bullet-motion">129.2 Bullet Motion</h3><p>至少支持：</p>
+<ul>
+<li><p>Linear；</p>
+</li>
+<li><p>Accelerating；</p>
+</li>
+<li><p>RotatingDirection；</p>
+</li>
+<li><p>SnapshotAim；</p>
+</li>
+<li><p>DelayedTurn；</p>
+</li>
+<li><p>Split。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1293-emitter">129.3 Emitter</h3><p>至少：</p>
+<ul>
+<li><p>Ring；</p>
+</li>
+<li><p>Fan；</p>
+</li>
+<li><p>Spiral；</p>
+</li>
+<li><p>AimedStream；</p>
+</li>
+<li><p>Burst。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1294-boss">129.4 Boss</h3><p>5～8个Phase。</p>
+<p>需要覆盖：</p>
+<ul>
+<li><p>Spiral；</p>
+</li>
+<li><p>Streaming；</p>
+</li>
+<li><p>Crossing；</p>
+</li>
+<li><p>DelayedSplit；
+  -高速扇形。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1295-普通stage">129.5 普通Stage</h3><p>只需要：</p>
+<p>60～90秒。</p>
+<p>验证：</p>
+<ul>
+<li><p>StageTimeline；</p>
+</li>
+<li><p>EnemySpawn；</p>
+</li>
+<li><p>Pattern组合。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1296-score">129.6 Score</h3><p>只实现：</p>
+<ul>
+<li><p>Kill；</p>
+</li>
+<li><p>Graze；</p>
+</li>
+<li><p>BossPhaseBonus。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1297-必要基础设施">129.7 必要基础设施</h3><ul>
+<li><p>FixedSimulationClock；</p>
+</li>
+<li><p>StageDefinition；</p>
+</li>
+<li><p>StageRuntimeState；</p>
+</li>
+<li><p>PatternDefinition；</p>
+</li>
+<li><p>PatternExecutionState；</p>
+</li>
+<li><p>EmitterDefinition；</p>
+</li>
+<li><p>BulletDefinition；</p>
+</li>
+<li><p>BulletRuntimeBuffer；</p>
+</li>
+<li><p>BulletRegistry；</p>
+</li>
+<li><p>MotionProfile；</p>
+</li>
+<li><p>PlayerCollisionState；</p>
+</li>
+<li><p>GrazeState；</p>
+</li>
+<li><p>BombState；</p>
+</li>
+<li><p>BossDefinition；</p>
+</li>
+<li><p>BossPhaseDefinition；</p>
+</li>
+<li><p>CollisionResolver；</p>
+</li>
+<li><p>ScoreState；</p>
+</li>
+<li><p>ReplayInputStream。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1298-必要调试工具">129.8 必要调试工具</h3><ul>
+<li><p>PatternTimeline；</p>
+</li>
+<li><p>BulletCountTimeline；</p>
+</li>
+<li><p>PatternGeometryPreview；</p>
+</li>
+<li><p>SafetyHeatmap；</p>
+</li>
+<li><p>GapAnalyzer；</p>
+</li>
+<li><p>PlayerPathOverlay；</p>
+</li>
+<li><p>HitInspector；</p>
+</li>
+<li><p>GrazeInspector；</p>
+</li>
+<li><p>BossPhaseStatistics；</p>
+</li>
+<li><p>PerformancePanel；</p>
+</li>
+<li><p>ReplayStateHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="130-mvp核心验收问题">130. MVP核心验收问题</h2><p>原型至少必须回答：</p>
+<ul>
+<li><p>3000～5000颗Bullet同时存在时是否仍稳定；</p>
+</li>
+<li><p>Bullet逻辑是否独立于GameObject和Animator；</p>
+</li>
+<li><p>相同Seed和Input是否产生相同结果；</p>
+</li>
+<li><p>Normal和Focus移动是否形成真实功能差异；</p>
+</li>
+<li><p>角色视觉和真实Hitbox是否能同时保持可读；</p>
+</li>
+<li><p>Graze是否奖励风险而不会被刷取；</p>
+</li>
+<li><p>Pattern是否能被玩家逐渐学习；</p>
+</li>
+<li><p>Snapshot Aim是否能形成引弹行为；</p>
+</li>
+<li><p>Pattern叠加时是否仍存在合法安全路径；</p>
+</li>
+<li><p>Boss Phase转换是否会正确取消旧弹幕；</p>
+</li>
+<li><p>Bomb是否能稳定处理数千Bullet的批量清除；</p>
+</li>
+<li><p>随机Pattern是否仍受到可解约束；</p>
+</li>
+<li><p>不同难度是否改变Pattern复杂度而不仅是速度；</p>
+</li>
+<li><p>Replay能否准确重现死亡位置；</p>
+</li>
+<li><p>调试工具能否解释某个Pattern为什么无解；</p>
+</li>
+<li><p>玩家攻击特效是否不会遮蔽核心危险信息。</p>
+</li>
+</ul>
+<p>这些问题没有稳定前，不建议优先扩展：</p>
+<ul>
+<li><p>大量角色；</p>
+</li>
+<li><p>数十Boss；</p>
+</li>
+<li><p>联机；</p>
+</li>
+<li><p>复杂局外成长；</p>
+</li>
+<li><p>大型剧情；</p>
+</li>
+<li><p>超复杂计分系统。</p>
+</li>
+</ul>
+<hr />
+<h2 id="131-推荐实施顺序">131. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li><p>FixedClock；</p>
+</li>
+<li><p>PlayerMovement；</p>
+</li>
+<li><p>Focus；</p>
+</li>
+<li><p>Hitbox。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>BulletRegistry；</p>
+</li>
+<li><p>LinearBullet；</p>
+</li>
+<li><p>Collision。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Emitter；</p>
+</li>
+<li><p>Ring；</p>
+</li>
+<li><p>Fan；</p>
+</li>
+<li><p>SnapshotAim。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>PatternDefinition；</p>
+</li>
+<li><p>PatternExecution；</p>
+</li>
+<li><p>Timeline。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Graze；</p>
+</li>
+<li><p>Bomb；</p>
+</li>
+<li><p>BulkCancel。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Boss；</p>
+</li>
+<li><p>Phase；</p>
+</li>
+<li><p>PhaseTransition。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>MotionProfile；</p>
+</li>
+<li><p>Split；</p>
+</li>
+<li><p>DelayedTurn；</p>
+</li>
+<li><p>Laser。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>StageTimeline；</p>
+</li>
+<li><p>普通敌人。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Score；</p>
+</li>
+<li><p>Item；</p>
+</li>
+<li><p>Power。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Practice；</p>
+</li>
+<li><p>PhaseRestart；</p>
+</li>
+<li><p>SlowMotion。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Determinism；</p>
+</li>
+<li><p>PatternAnalyzer。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>BatchRendering；</p>
+</li>
+<li><p>HighBulletStress；</p>
+</li>
+<li><p>高级作者工具。</p>
+</li>
+</ul>
+<hr />
+<h2 id="132-架构验收标准">132. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>所有权威战斗逻辑使用稳定固定Tick；</p>
+</li>
+<li><p>Bullet运动不依赖渲染FPS；</p>
+</li>
+<li><p>PatternDefinition与PatternExecution严格分离；</p>
+</li>
+<li><p>Pattern通过Emitter与参数规则组合；</p>
+</li>
+<li><p>常规Pattern无需编写专用Bullet AI；</p>
+</li>
+<li><p>BulletDefinition与BulletRuntimeState分离；</p>
+</li>
+<li><p>Bullet采用轻量数据结构；</p>
+</li>
+<li><p>Bullet Registry拥有唯一生命周期控制权；</p>
+</li>
+<li><p>Bullet具备最大Lifetime保护；</p>
+</li>
+<li><p>EnemyBullet通常只检测PlayerHitbox而非全局物理碰撞；</p>
+</li>
+<li><p>HitRadius、GrazeRadius和VisualRadius严格分离；</p>
+</li>
+<li><p>Collision顺序稳定；</p>
+</li>
+<li><p>Graze不会对同一Bullet无限重复触发；</p>
+</li>
+<li><p>Focus模式拥有独立移动速度和明确反馈；</p>
+</li>
+<li><p>Snapshot Aim只在定义的采样时刻读取玩家位置；</p>
+</li>
+<li><p>玩家能够通过自身移动塑造Aimed Pattern；</p>
+</li>
+<li><p>Boss由明确Phase状态机驱动；</p>
+</li>
+<li><p>Phase切换采用原子事务；</p>
+</li>
+<li><p>Pattern结束会取消所有相关Emitter任务；</p>
+</li>
+<li><p>Bullet Cancel支持批量操作；</p>
+</li>
+<li><p>Bomb不会逐个销毁表现对象阻塞逻辑；</p>
+</li>
+<li><p>Deathbomb等窗口使用逻辑Tick定义；</p>
+</li>
+<li><p>Player死亡和Run结束属于不同状态；</p>
+</li>
+<li><p>Respawn具有明确无敌窗口；</p>
+</li>
+<li><p>Stage敌人出现通过Timeline数据驱动；</p>
+</li>
+<li><p>Pattern随机流与视觉随机流分离；</p>
+</li>
+<li><p>固定Seed与Input可以确定重放；</p>
+</li>
+<li><p>Replay具有周期State Hash；</p>
+</li>
+<li><p>Difficulty Modifier不会无约束填死安全Gap；</p>
+</li>
+<li><p>Pattern Authoring Tool能够预览未来弹道；</p>
+</li>
+<li><p>Pattern Validator能够统计Bullet数量和Spawn Rate；</p>
+</li>
+<li><p>Safety Analyzer能够近似识别明显无解Pattern；</p>
+</li>
+<li><p>大规模Bullet采用批量模拟和批量渲染；</p>
+</li>
+<li><p>Player Shot特效不会破坏Enemy Bullet可读性；</p>
+</li>
+<li><p>新Bullet通常只需新增Definition和Motion Profile；</p>
+</li>
+<li><p>新Pattern通常不需要修改主SimulationLoop；</p>
+</li>
+<li><p>新Boss主要通过Phase和Pattern数据组合完成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="133-可迁移到其他游戏的设计思想">133. 可迁移到其他游戏的设计思想</h2><hr />
+<h3 id="1331-高数量实体可以是一个函数的大量采样而不是大量独立智能体">133.1 高数量实体可以是“一个函数的大量采样”，而不是大量独立智能体</h3><p>可迁移到：</p>
+<ul>
+<li><p>粒子伤害；</p>
+</li>
+<li><p>群体特效；</p>
+</li>
+<li><p>RTS炮火；</p>
+</li>
+<li><p>天气；</p>
+</li>
+<li><p>魔法场。</p>
+</li>
+</ul>
+<p>如果实体行为来自共同规则，</p>
+<p>应该尽量批量表达。</p>
+<hr />
+<h3 id="1332-危险可以被建模为随时间变化的空间场">133.2 危险可以被建模为随时间变化的空间场</h3><p>可迁移到：</p>
+<ul>
+<li><p>Boss战；</p>
+</li>
+<li><p>地面技能；</p>
+</li>
+<li><p>MMO Raid；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>平台跳跃。</p>
+</li>
+</ul>
+<p>玩家面对的不是某一个攻击，</p>
+<p>而是：</p>
+<blockquote>
+<p>未来几秒哪些位置仍然安全。</p>
+</blockquote>
+<hr />
+<h3 id="1333-玩家状态可以反过来成为内容生成参数">133.3 玩家状态可以反过来成为内容生成参数</h3><p>Aimed Bullet使用：</p>
+<p>玩家当前位置</p>
+<p>决定未来弹幕。</p>
+<p>这可以迁移到：</p>
+<ul>
+<li><p>AI攻击；</p>
+</li>
+<li><p>动态关卡；</p>
+</li>
+<li><p>追踪机制；</p>
+</li>
+<li><p>Boss导演。</p>
+</li>
+</ul>
+<p>玩家不仅响应系统，</p>
+<p>还在通过自己的行为塑造系统未来状态。</p>
+<hr />
+<h3 id="1334-视觉尺寸和真实规则尺寸可以分离">133.4 “视觉尺寸”和“真实规则尺寸”可以分离</h3><p>可迁移到：</p>
+<ul>
+<li><p>格斗Hitbox；</p>
+</li>
+<li><p>点击目标；</p>
+</li>
+<li><p>近战判定；</p>
+</li>
+<li><p>UI交互。</p>
+</li>
+</ul>
+<p>视觉应该服务可读性，</p>
+<p>规则尺寸应该服务手感和平衡。</p>
+<hr />
+<h3 id="1335-高难度可以通过改变几何关系而不是简单数值膨胀">133.5 高难度可以通过改变几何关系而不是简单数值膨胀</h3><p>可迁移到：</p>
+<ul>
+<li><p>Boss；</p>
+</li>
+<li><p>平台跳跃；</p>
+</li>
+<li><p>战术关卡；</p>
+</li>
+<li><p>谜题。</p>
+</li>
+</ul>
+<p>增加：</p>
+<ul>
+<li><p>交叉；</p>
+</li>
+<li><p>路径变化；</p>
+</li>
+<li><p>预判；</p>
+</li>
+</ul>
+<p>通常比：</p>
+<p>单纯提高速度</p>
+<p>产生更有价值的难度。</p>
+<hr />
+<h3 id="1336-应急资源本质上可以是恢复系统可控状态的工具">133.6 应急资源本质上可以是“恢复系统可控状态”的工具</h3><p>Bomb并不只是高伤害技能。</p>
+<p>它的价值是：</p>
+<p>把已经进入近乎无解的局面</p>
+<p>重新变为：</p>
+<p>可操作状态。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>战术撤退；</p>
+</li>
+<li><p>格斗Burst；</p>
+</li>
+<li><p>生存紧急技能；</p>
+</li>
+<li><p>Roguelike保命道具。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1337-风险边缘可以被设计为额外收益区域">133.7 风险边缘可以被设计为额外收益区域</h3><p>Graze把：</p>
+<p>“离失败很近”</p>
+<p>转化为：</p>
+<p>高收益。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Perfect Dodge；</p>
+</li>
+<li><p>Parry；</p>
+</li>
+<li><p>Near Miss；</p>
+</li>
+<li><p>赛车擦边；</p>
+</li>
+<li><p>风险采集。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1338-内容作者需要未来状态预览不仅是当前状态预览">133.8 内容作者需要“未来状态预览”，不仅是当前状态预览</h3><p>弹幕Pattern只有看到：</p>
+<p>未来3秒轨迹</p>
+<p>才能真正判断设计。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>AI行为；</p>
+</li>
+<li><p>动画；</p>
+</li>
+<li><p>技能轨迹；</p>
+</li>
+<li><p>交通；</p>
+</li>
+<li><p>任务时间轴。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1339-可解性和难度应该分离">133.9 可解性和难度应该分离</h3><p>一个状态：</p>
+<p>没有解</p>
+<p>不是：</p>
+<p>特别困难。</p>
+<p>该思想可迁移到：</p>
+<ul>
+<li><p>解谜；</p>
+</li>
+<li><p>关卡；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>路径规划。</p>
+</li>
+</ul>
+<hr />
+<h3 id="13310-固定输入-固定随机流-确定模拟是复杂动作系统最有价值的调试资产之一">133.10 固定输入 + 固定随机流 + 确定模拟，是复杂动作系统最有价值的调试资产之一</h3><p>可迁移到：</p>
+<ul>
+<li><p>格斗；</p>
+</li>
+<li><p>RTS；</p>
+</li>
+<li><p>物理挑战；</p>
+</li>
+<li><p>竞技动作；</p>
+</li>
+<li><p>自动测试。</p>
+</li>
+</ul>
+<p>它使：</p>
+<p>“一次偶发死亡”</p>
+<p>可以真正被工程上重现。</p>
+<hr />
+<h2 id="134-本次防重记录">134. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>弹幕射击 / Bullet Hell / Danmaku Shooter。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Bullet Hell；</p>
+</li>
+<li><p>Danmaku Shooter；</p>
+</li>
+<li><p>Bullet Hell Shooter；</p>
+</li>
+<li><p>弹幕射击；</p>
+</li>
+<li><p>弹幕 STG；</p>
+</li>
+<li><p>高密度 Shoot 'em up。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>敌人和Boss通过时间驱动的Pattern与Emitter系统持续生成具有明确几何结构的高密度Bullet Field；玩家并不是逐颗对子弹做反应，而是读取Pattern、预测未来安全区域，通过Normal/Focus两级移动进行宏观转位与微观穿缝，并利用自身位置影响Snapshot-Aimed Pattern的未来形态。真实Hitbox显著小于视觉角色，Graze进一步把接近失败边缘转化为可获得收益的风险区域；Bomb则作为稀缺的“危险场重置资源”，在玩家已经进入不可恢复空间状态时重新获得行动空间。Boss通过多Phase不断替换Pattern规则，最终形成“读型—预测—引弹—微操—擦弹—阶段切换”的高密度时空循环。</p>
+<p>核心循环可以压缩为：</p>
+<p><strong>Pattern启动
+→ Emitter生成弹幕
+→ Bullet Field形成
+→ 玩家读取几何
+→ 预测未来安全区
+→ Normal移动进行宏观转位
+→ Focus进行微操穿缝
+→ Graze获得风险收益
+→ Snapshot Aim让玩家主动引弹
+→ 多Pattern叠加提高复杂度
+→ Bomb处理失败空间状态
+→ Boss Phase结束
+→ 弹幕取消或转换
+→ 新Phase重新定义危险几何。</strong></p>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>游戏主要压力来自高密度敌方投射物；</p>
+</li>
+<li><p>弹幕以Pattern而不是单颗Bullet作为主要内容设计单位；</p>
+</li>
+<li><p>Pattern由时间轴、Emitter、角度和速度规则构成；</p>
+</li>
+<li><p>同一Pattern可以重复实例化为独立PatternExecution；</p>
+</li>
+<li><p>玩家视觉体积与真实Hitbox明显分离；</p>
+</li>
+<li><p>Graze区域大于Hit区域；</p>
+</li>
+<li><p>玩家通常拥有高速Normal移动和低速Focus移动；</p>
+</li>
+<li><p>玩家需要读取未来安全空间，而非只响应当前Bullet；</p>
+</li>
+<li><p>Snapshot Aim允许玩家通过自身位置主动塑造未来弹幕；</p>
+</li>
+<li><p>引弹属于核心高级策略；</p>
+</li>
+<li><p>Bullet数量不是唯一难度指标；</p>
+</li>
+<li><p>Gap、Speed、Crossing、RequiredMovement共同决定Pattern难度；</p>
+</li>
+<li><p>Bomb属于危险空间重置资源；</p>
+</li>
+<li><p>Boss通常由多个独立Pattern Phase构成；</p>
+</li>
+<li><p>Phase切换会明确处理旧Bullet；</p>
+</li>
+<li><p>Stage普通敌人同样可通过时间轴编排；</p>
+</li>
+<li><p>高密度Bullet需要批量数据模拟；</p>
+</li>
+<li><p>Bullet通常不需要完整AI或通用物理Actor；</p>
+</li>
+<li><p>Hit/Graze检测可以使用专用几何算法；</p>
+</li>
+<li><p>Bullet Logic与Visual严格分离；</p>
+</li>
+<li><p>大量Bullet需要批量渲染；</p>
+</li>
+<li><p>Pattern随机性需要保持可学习性和可解性；</p>
+</li>
+<li><p>Replay依赖固定Tick和稳定随机流；</p>
+</li>
+<li><p>Practice Phase Restart属于高难内容的重要基础设施；</p>
+</li>
+<li><p>Pattern Editor需要未来轨迹和安全区域分析工具。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与仓库现有幸存者类的防重边界">与仓库现有幸存者类的防重边界</h3><p>仓库当前已有 <code>horde-survival</code>，其摘要明确聚焦：玩家持续移动、大量攻击自动执行、敌人生成预算随时间提高、击杀产生经验、经验回收后形成构筑成长。</p>
+<p>两者虽然都可能出现极高的屏幕实体密度，但宏观压力方向几乎相反。</p>
+<p><strong>Horde Survival / Bullet Heaven：</strong></p>
+<p>玩家是火力源。</p>
+<p>大量敌人向玩家聚集。</p>
+<p>核心问题是：</p>
+<blockquote>
+<p>我的成长速度能否压过敌群生成压力？</p>
+</blockquote>
+<p><strong>Bullet Hell：</strong></p>
+<p>敌人是火力源。</p>
+<p>大量Bullet向空间扩散。</p>
+<p>核心问题是：</p>
+<blockquote>
+<p>我能否读取并穿越不断演化的危险几何？</p>
+</blockquote>
+<p>因此：</p>
+<p><strong>Bullet Heaven强调构筑吞吐。</strong></p>
+<p><strong>Bullet Hell强调空间阅读与微操作。</strong></p>
+<p>二者不能因为都包含大量投射物而合并为同一宏观范式。</p>
+<hr />
+<h3 id="与仓库现有格斗游戏的防重边界">与仓库现有格斗游戏的防重边界</h3><p>格斗游戏强调：</p>
+<ul>
+<li><p>帧优势；</p>
+</li>
+<li><p>招式起手/有效/收招；</p>
+</li>
+<li><p>Hitbox；</p>
+</li>
+<li><p>连段；</p>
+</li>
+<li><p>双方行为预测。</p>
+</li>
+</ul>
+<p>弹幕射击同样要求高精度确定模拟，但其最核心的状态不是：</p>
+<p>双方行动权。</p>
+<p>而是：</p>
+<p><strong>整个二维空间中的危险场。</strong></p>
+<p>因此：</p>
+<p>格斗：</p>
+<blockquote>
+<p>预测对方下一动作。</p>
+</blockquote>
+<p>弹幕：</p>
+<blockquote>
+<p>预测未来哪些空间仍然可以存在。</p>
+</blockquote>
+<p>两者属于不同的操作认知模型。</p>
+<hr />
+<h3 id="与普通射击游戏的防重边界">与普通射击游戏的防重边界</h3><p>普通射击游戏主要关注：</p>
+<ul>
+<li><p>瞄准；</p>
+</li>
+<li><p>掩体；</p>
+</li>
+<li><p>目标选择；</p>
+</li>
+<li><p>命中精度；</p>
+</li>
+<li><p>敌人位置。</p>
+</li>
+</ul>
+<p>弹幕射击通常：</p>
+<p>玩家输出可以高度自动或持续，</p>
+<p>真正操作预算集中在：</p>
+<p><strong>移动与规避。</strong></p>
+<p>因此即使两者都拥有Projectile System，其玩法重心完全不同。</p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>Bullet Hell；</p>
+</li>
+<li><p>Danmaku；</p>
+</li>
+<li><p>Pattern；</p>
+</li>
+<li><p>Pattern Execution；</p>
+</li>
+<li><p>Pattern Timeline；</p>
+</li>
+<li><p>Emitter；</p>
+</li>
+<li><p>Ring；</p>
+</li>
+<li><p>Fan；</p>
+</li>
+<li><p>Spiral；</p>
+</li>
+<li><p>Aimed Stream；</p>
+</li>
+<li><p>Snapshot Aim；</p>
+</li>
+<li><p>Streaming / 引弹；</p>
+</li>
+<li><p>Bullet Definition；</p>
+</li>
+<li><p>Bullet Runtime State；</p>
+</li>
+<li><p>Motion Profile；</p>
+</li>
+<li><p>Linear Bullet；</p>
+</li>
+<li><p>Acceleration；</p>
+</li>
+<li><p>Delayed Turn；</p>
+</li>
+<li><p>Split Bullet；</p>
+</li>
+<li><p>Child Pattern；</p>
+</li>
+<li><p>Bullet Registry；</p>
+</li>
+<li><p>Bullet Lifetime；</p>
+</li>
+<li><p>Hitbox；</p>
+</li>
+<li><p>Graze Radius；</p>
+</li>
+<li><p>Focus Mode；</p>
+</li>
+<li><p>Player Micro-Movement；</p>
+</li>
+<li><p>Danger Field；</p>
+</li>
+<li><p>Safety Field；</p>
+</li>
+<li><p>Gap Analyzer；</p>
+</li>
+<li><p>Pattern Solvability；</p>
+</li>
+<li><p>Bomb；</p>
+</li>
+<li><p>Deathbomb；</p>
+</li>
+<li><p>Bullet Cancel；</p>
+</li>
+<li><p>Bulk Cancel；</p>
+</li>
+<li><p>Boss Phase；</p>
+</li>
+<li><p>Named Pattern；</p>
+</li>
+<li><p>Timeout；</p>
+</li>
+<li><p>Stage Timeline；</p>
+</li>
+<li><p>Practice Mode；</p>
+</li>
+<li><p>Phase Restart；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Deterministic RNG；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Graze Score；</p>
+</li>
+<li><p>Dynamic Rank；</p>
+</li>
+<li><p>Difficulty Modifier；</p>
+</li>
+<li><p>Batch Bullet Simulation；</p>
+</li>
+<li><p>GPU Batch Rendering；</p>
+</li>
+<li><p>Pattern Geometry Preview；</p>
+</li>
+<li><p>Safety Heatmap；</p>
+</li>
+<li><p>Bullet Stress Test。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次弹幕射击范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Bullet Hell弹幕系统；</p>
+</li>
+<li><p>Danmaku Pattern；</p>
+</li>
+<li><p>弹幕Emitter；</p>
+</li>
+<li><p>环形弹幕；</p>
+</li>
+<li><p>扇形弹幕；</p>
+</li>
+<li><p>螺旋弹幕；</p>
+</li>
+<li><p>瞄准弹；</p>
+</li>
+<li><p>引弹系统；</p>
+</li>
+<li><p>Bullet Motion；</p>
+</li>
+<li><p>弹幕分裂；</p>
+</li>
+<li><p>Boss弹幕；</p>
+</li>
+<li><p>Boss Spell Card；</p>
+</li>
+<li><p>Boss多阶段；</p>
+</li>
+<li><p>弹幕Hitbox；</p>
+</li>
+<li><p>弹幕擦弹；</p>
+</li>
+<li><p>Graze；</p>
+</li>
+<li><p>Focus Mode；</p>
+</li>
+<li><p>弹幕Bomb；</p>
+</li>
+<li><p>Deathbomb；</p>
+</li>
+<li><p>清屏；</p>
+</li>
+<li><p>Bullet Cancel；</p>
+</li>
+<li><p>Pattern Solvability；</p>
+</li>
+<li><p>弹幕安全区域；</p>
+</li>
+<li><p>Bullet Field；</p>
+</li>
+<li><p>弹幕难度分析；</p>
+</li>
+<li><p>Bullet Density；</p>
+</li>
+<li><p>Gap Analyzer；</p>
+</li>
+<li><p>弹幕Replay；</p>
+</li>
+<li><p>弹幕Practice；</p>
+</li>
+<li><p>弹幕对象池；</p>
+</li>
+<li><p>弹幕ECS；</p>
+</li>
+<li><p>Bullet Batch；</p>
+</li>
+<li><p>弹幕GPU Instancing；</p>
+</li>
+<li><p>Pattern Editor；</p>
+</li>
+<li><p>Pattern Geometry Preview；</p>
+</li>
+<li><p>弹幕性能压力测试。</p>
+</li>
+</ul>
+<p>这些方向仍然适合作为后续专项模块继续深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-17">2026-08-17</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

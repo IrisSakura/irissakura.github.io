@@ -23,7 +23,7 @@
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura","description":"一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？","url":"https://irissakura.github.io/pages/blog/unreal-engine-first-frame-pipeline.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-first-frame-pipeline.png","datePublished":"2026-08-08","dateModified":"2026-08-08","about":["engine-loop","lifecycle","render-thread","unreal-engine","world-tick"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura","description":"一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？","url":"https://irissakura.github.io/pages/blog/unreal-engine-first-frame-pipeline.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-first-frame-pipeline.png","datePublished":"2026-08-08","dateModified":"2026-08-17","about":["engine-loop","lifecycle","render-thread","unreal-engine","world-tick"]}</script>
     <!-- site-meta:end -->
     <title>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -138,7 +138,7 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-08 · 更新于 2026-08-08</p>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-08 · 更新于 2026-08-17</p>
             <h1>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</h1>
             <p class="blog-deck">一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</p>
             <div class="note-tags"><span>engine-loop</span><a href="tag/lifecycle.html">lifecycle</a><span>render-thread</span><span>unreal-engine</span><span>world-tick</span></div>
@@ -843,12 +843,12 @@ Handle
 <hr />
 <h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下研究材料整理：</p>
 <ul>
-<li><code>notes/UnrealEngine源码研究/01_Launch与ModuleManager启动及停机边界.md</code></li>
-<li><code>notes/UnrealEngine源码研究/05_UWorld与AActor生命周期及Tick调度.md</code></li>
-<li><code>notes/UnrealEngine源码研究/07_游戏线程到渲染线程的Scene与帧提交.md</code></li>
-<li><code>notes/UnrealEngine源码研究/11_进程启动到第一帧_GuardedMain到Tick与Present.md</code></li>
-<li><code>notes/UnrealEngine源码研究/12_Component从注册到SceneProxy_世界附着与线程提交.md</code></li>
-<li><code>notes/UnrealEngine源码研究/README.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/01_Launch与ModuleManager启动及停机边界.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/05_UWorld与AActor生命周期及Tick调度.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/07_游戏线程到渲染线程的Scene与帧提交.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/11_进程启动到第一帧_GuardedMain到Tick与Present.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/12_Component从注册到SceneProxy_世界附着与线程提交.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/README.md</code></li>
 </ul>
 <p>本文基于当前 Unreal Engine 5.8.1 release 源码研究笔记整理，重点覆盖 Launch、ModuleManager、World/Actor/Component 生命周期以及游戏线程到 Render Thread 的基础帧提交路径。</p>
 <p>本文不声称已经完整覆盖 RDG Pass 构建、Nanite、Lumen、具体 RHI 后端、交换链 Present、完整 Gameplay Framework、网络复制或 World Partition；这些仍属于后续源码研究范围。文中的 Bootstrap 阶段、Render Proxy 和跨线程命令等迁移方案属于工程设计建议，不表示其他框架必须采用与 Unreal 完全相同的实现。</p>
@@ -856,7 +856,7 @@ Handle
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
-            <div><a href="unreal-engine-ddc-cook-iostore.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</strong><small>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</small></a><a href="framework-support-surface-governance.html"><span>共享 lifecycle</span><strong>支持面治理：实现面、消费面与产品承诺的分离</strong><small>从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。</small></a><a href="ai-safe-execution-plane.html"><span>近期正式文章</span><strong>AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界</strong><small>当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？</small></a></div>
+            <div><a href="unreal-engine-ddc-cook-iostore.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</strong><small>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</small></a><a href="framework-support-surface-governance.html"><span>共享 lifecycle</span><strong>支持面治理：实现面、消费面与产品承诺的分离</strong><small>从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。</small></a><a href="city-accessibility-feedback-loop.html"><span>近期正式文章</span><strong>可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环</strong><small>城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？</small></a></div>
         </aside>
     </article>
 </main>

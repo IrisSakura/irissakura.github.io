@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/auto-battler-shared-pool-economy.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗 | IrisSakura">
+    <meta property="og:description" content="当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/auto-battler-shared-pool-economy.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-auto-battler-shared-pool-economy.png">
+    <meta property="og:image:alt" content="构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗 | IrisSakura">
+    <meta name="twitter:description" content="当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-auto-battler-shared-pool-economy.png">
+    <meta name="twitter:image:alt" content="构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗 | IrisSakura","description":"当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？","url":"https://irissakura.github.io/pages/blog/auto-battler-shared-pool-economy.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗","image":"https://irissakura.github.io/assets/social/pages-blog-auto-battler-shared-pool-economy.png","datePublished":"2026-08-14","dateModified":"2026-08-14","about":["essay"]}</script>
+    <!-- site-meta:end -->
+    <title>构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-08-14 · 更新于 2026-08-14</p>
+            <h1>构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗</h1>
+            <p class="blog-deck">当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？</p>
+            <div class="note-tags"><a href="tag/essay.html">essay</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>自走棋最容易产生一种误解：</p>
+<blockquote>
+<p>玩家只是买几个单位，把它们放到棋盘上，然后看 AI 自己打。</p>
+</blockquote>
+<p>如果只看战斗阶段，这个描述似乎没有错。</p>
+<p>但真正玩上一段时间后，玩家会发现，自己最重要的决定往往发生在战斗开始之前：</p>
+<ul>
+<li>这张棋现在该不该买；</li>
+<li>要不要为了它跌破利息线；</li>
+<li>已经有两张同名棋，还要不要继续追第三张；</li>
+<li>对手也在玩同一套阵容，继续追牌是否值得；</li>
+<li>当前应该刷新商店，还是先升级人口；</li>
+<li>一套中期过渡阵容应该继续强化，还是开始为后期转型腾位置；</li>
+<li>核心输出应该放在角落，还是为了防刺客主动换位；</li>
+<li>候补席已经满了，哪一条未来路线应该被放弃。</li>
+</ul>
+<p>战斗开始之后，玩家反而基本失去了即时纠错能力。</p>
+<p>这意味着自走棋的主要策略并不发生在“单位正在攻击”的那几秒里。</p>
+<p>它发生在此前。</p>
+<h2 id="先说结论自走棋的核心是构造系统再让系统接受公开验证">先说结论：自走棋的核心是构造系统，再让系统接受公开验证</h2><p><strong>构筑与验证分离（即“先搭好，再看它自己跑”）</strong>：玩家主要在准备阶段配置经济、单位、羁绊、装备与空间关系，战斗阶段则冻结这些决策并让统一规则自动执行，以结果反向验证此前的构筑质量。</p>
+<p>整个循环可以压缩为：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["概率输入&lt;br/&gt;商店与共享池"] --&gt; B["构筑决策&lt;br/&gt;购买、出售、升级、站位"]
+    B --&gt; C["Planning Locked"]
+    C --&gt; D["Combat Snapshot"]
+    D --&gt; E["自动战斗"]
+    E --&gt; F["结果与伤害"]
+    F --&gt; G["战斗解释与对手信息"]
+    G --&gt; H["经济与棋池变化"]
+    H --&gt; A
+</code></pre>
+<p>这种结构与 RTS 有一个根本差异。</p>
+<p>RTS 中：</p>
+<pre><code class="language-text">战略准备
+和
+战术执行
+</code></pre>
+<p>往往同时发生。</p>
+<p>玩家看到敌人行动后，可以立即：</p>
+<ul>
+<li>拉兵；</li>
+<li>转火；</li>
+<li>释放技能；</li>
+<li>撤退；</li>
+<li>更换目标。</li>
+</ul>
+<p>自走棋则有意把二者拆开。</p>
+<p>准备阶段结束之后，玩家原则上只能观察此前的决定会产生什么结果。</p>
+<p>因此，一场自动战斗真正承担的职责不是：</p>
+<blockquote>
+<p>给玩家提供更多即时操作。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>成为此前构筑决策的验证器。</p>
+</blockquote>
+<p>如果验证器本身不可理解，这个类型的策略基础也就会一起失效。</p>
+<h2 id="商店不是商品菜单而是概率接口">商店不是商品菜单，而是概率接口</h2><p><strong>概率商店（即“只能从系统给出的候选里做选择”）</strong>：玩家不能访问完整单位集合，而是在有限候选中，根据当前等级、供应池、权重和随机状态获得本轮可购买内容。</p>
+<p>普通商店可以近似理解为：</p>
+<pre><code class="language-text">我有钱
+→ 我选择商品
+→ 我购买
+</code></pre>
+<p>自走棋商店更接近：</p>
+<pre><code class="language-text">当前等级
++
+当前池状态
++
+当前商店规则
++
+随机流
+→
+生成有限 Offer
+
+玩家再决定：
+买 / 不买 / 刷新 / 锁定
+</code></pre>
+<p>因此，玩家不是在完整内容空间里寻找最优答案。</p>
+<p>而是在一个不断变化的局部候选集中作决策。</p>
+<p>这里产生的第一个重要成本是：</p>
+<blockquote>
+<p>刷新不是为了“买到我想要的东西”，而是在支付金币换取一次重新暴露概率空间的机会。</p>
+</blockquote>
+<p>玩家可能花掉大量金币，仍然没有看到目标棋子。</p>
+<p>这种失败是否合理，取决于玩家能否理解：</p>
+<ul>
+<li>当前费用等级的基础出现率；</li>
+<li>自己的等级；</li>
+<li>共享池剩余数量；</li>
+<li>是否有其他玩家正在持有同类单位；</li>
+<li>商店是否存在锁定和保留；</li>
+<li>当前阵容是否已经过度依赖某一张低概率棋。</li>
+</ul>
+<p>如果这些信息完全不可解释，玩家看到的就只剩：</p>
+<blockquote>
+<p>系统不让我抽到。</p>
+</blockquote>
+<h2 id="共享棋池把其他玩家变成自己的概率变量">共享棋池把其他玩家变成自己的概率变量</h2><p><strong>共享棋子池（即“大家从同一批货里拿东西”）</strong>：某类单位在整场比赛中只有有限副本，玩家购买、商店预留、出售和淘汰会共同改变剩余供应。</p>
+<p>这是自走棋与很多单机构筑游戏最重要的区别之一。</p>
+<p>假设某个四费单位一共有有限副本。</p>
+<p>玩家 A 持有其中大量副本。</p>
+<p>那么玩家 B 后续看到它的概率可能下降。</p>
+<p>于是：</p>
+<pre><code class="language-text">对手买了什么
+</code></pre>
+<p>不仅是在告诉我：</p>
+<blockquote>
+<p>他正在组成什么阵容。</p>
+</blockquote>
+<p>还在告诉我：</p>
+<blockquote>
+<p>我自己的未来商店空间已经变化。</p>
+</blockquote>
+<p>**间接资源竞争（即“还没打你，我们已经在抢同一份资源”）**因此成立。</p>
+<p>多人互动不再只发生在战斗阶段。</p>
+<p>它已经提前进入了：</p>
+<ul>
+<li>商店；</li>
+<li>候补席；</li>
+<li>升星；</li>
+<li>转型；</li>
+<li>阵容选择。</li>
+</ul>
+<p>这也解释了为什么侦察对手具有双重价值。</p>
+<p>玩家观察其他棋盘，不只是为了判断：</p>
+<pre><code class="language-text">下一轮应该怎样站位。
+</code></pre>
+<p>还在判断：</p>
+<pre><code class="language-text">我这套阵容还有多少供给空间。
+</code></pre>
+<h2 id="共享池必须维护数量守恒">共享池必须维护数量守恒</h2><p>共享池一旦成为玩法事实，就不能只把它实现成一个“降低概率的黑箱参数”。</p>
+<p>底层至少需要能够解释每一份棋子现在位于哪里。</p>
+<p>例如：</p>
+<pre><code class="language-text">Pool
+→ Shop Reservation
+→ Player Bench
+→ Player Board
+→ Merge Composition
+→ 返回 Pool
+</code></pre>
+<p>同一个副本在任何时刻都不应该同时属于两个状态。</p>
+<p>如果采用三合一升星：</p>
+<pre><code class="language-text">3 个一星
+→
+1 个二星
+</code></pre>
+<p>玩家棋盘上虽然只看到一个实例，但它仍然占用了三份底层供应。</p>
+<p>所以：</p>
+<pre><code class="language-text">Unit Instance 数量
+</code></pre>
+<p>不能直接等同于：</p>
+<pre><code class="language-text">Pool Copy 数量。
+</code></pre>
+<p>一名玩家淘汰后，也不是简单删除他的阵容。</p>
+<p>如果设计规定已占用棋子返池，那么：</p>
+<pre><code class="language-text">Player Eliminated
+→ 收集其占用的 Pool Copies
+→ 原子返还 Shared Pool
+→ 其他玩家的未来商店概率发生变化
+</code></pre>
+<p>因此淘汰一个玩家不仅减少比赛人数。</p>
+<p>它还会重写剩余玩家的概率空间。</p>
+<h2 id="商店-offer-需要先预留再购买">商店 Offer 需要先预留，再购买</h2><p>共享池还会带来一个非常具体的并发问题。</p>
+<p>假设某张高阶棋只剩最后一个副本。</p>
+<p>玩家 A 与玩家 B 几乎同时刷新商店。</p>
+<p>如果系统在“购买完成”时才扣减共享池，那么两个人都可能同时看到最后一份单位。</p>
+<p>更稳定的流程是：</p>
+<pre><code class="language-text">生成 Shop Offer
+→ 从 Shared Pool 临时 Reserve
+→ Offer 展示给玩家
+
+玩家购买
+→ Reserve 转为 Ownership
+
+玩家刷新或 Offer 过期
+→ Reserve 返回 Pool
+</code></pre>
+<p>**商店预留（即“展示给你以后，先替你占住这份货”）**让 Offer 本身成为一份可兑现承诺。</p>
+<p>这样玩家看到一个合法商品后，不会因为其他玩家稍后先点购买而突然得到：</p>
+<pre><code class="language-text">购买失败：库存已经被别人抢走。
+</code></pre>
+<p>如果商店支持 Lock，那么锁定的 Offer 还应继续占用对应预留。</p>
+<p>否则所谓“锁商店”只是 UI 保留，底层供应却已经被其他玩家重新消费。</p>
+<h2 id="棋子价值不是一个固定数字">棋子价值不是一个固定数字</h2><p>同一个单位在不同状态下，价值可以差很多。</p>
+<p>第一次看到某个单位：</p>
+<pre><code class="language-text">它是一张候选。
+</code></pre>
+<p>已经拥有两个一星，再看到第三个：</p>
+<pre><code class="language-text">它可能立即触发二星。
+</code></pre>
+<p>当前差一个关键羁绊：</p>
+<pre><code class="language-text">它可能让整个阵容跨过阈值。
+</code></pre>
+<p>自己的候补席已经满：</p>
+<pre><code class="language-text">它即使很强，也可能没有实际容纳空间。
+</code></pre>
+<p>对手有三个人正在追同一阵容：</p>
+<pre><code class="language-text">它所在路线的未来供应风险更高。
+</code></pre>
+<p>因此：</p>
+<p><strong>状态依赖价值（即“同一张棋在不同局面不是同一个价”）</strong>：单位的真实构筑价值需要同时考虑当前持有数量、羁绊、经济、候补席、供应竞争、阵容阶段和未来转型计划。</p>
+<p>这也是为什么简单的：</p>
+<pre><code class="language-text">UnitPower = 100
+</code></pre>
+<p>无法真正表示一张棋是否值得买。</p>
+<p>玩家真正支付的不是只有显示价格。</p>
+<p>还可能同时支付：</p>
+<ul>
+<li>候补席空间；</li>
+<li>利息损失；</li>
+<li>转型承诺；</li>
+<li>装备承诺；</li>
+<li>阵容位置；</li>
+<li>未来刷新预算。</li>
+</ul>
+<h2 id="合成把随机积累转换成确定成长">合成把随机积累转换成确定成长</h2><p><strong>合成进度（即“随机抽到的东西终于变成确定战力”）</strong>：玩家通过多次获得相同单位，把分散的概率事件逐渐转换成明确的星级提升。</p>
+<p>例如：</p>
+<pre><code class="language-text">第一个单位
+→ 获得这个能力
+
+第二个单位
+→ 只是积累
+
+第三个单位
+→ 突然触发二星
+</code></pre>
+<p>这会让第三个副本的边际价值远高于第一个。</p>
+<p>合成系统因此承担了一项很重要的职责：</p>
+<blockquote>
+<p>把多次不确定的商店结果累积成可以被玩家预期的确定性成长节点。</p>
+</blockquote>
+<p>但合成也会反过来扩大承诺。</p>
+<p>玩家已经持有：</p>
+<pre><code class="language-text">5 / 9
+</code></pre>
+<p>个三星所需副本时，很容易继续投入更多刷新。</p>
+<p>即使其他玩家已经严重挤压池子。</p>
+<p>这会形成典型的沉没成本问题：</p>
+<blockquote>
+<p>我已经追这么久了，现在换阵容是不是更亏？</p>
+</blockquote>
+<p>一个好的自走棋系统需要允许玩家真正“转型”，而不是让所有中期投入都变成不可退出的路线锁定。</p>
+<h2 id="候补席实际上保存的是未来选择权">候补席实际上保存的是未来选择权</h2><p>候补席很容易被视为：</p>
+<blockquote>
+<p>棋盘放不下的单位暂时丢这里。</p>
+</blockquote>
+<p>但它实际上是一项非常重要的经济资源。</p>
+<p><strong>候补席选择权（即“我愿意花空间保留哪些未来可能”）</strong>：玩家用有限格位保存尚未投入当前阵容、但可能用于升星、转型或未来羁绊的单位。</p>
+<p>候补席中可能同时存在：</p>
+<ul>
+<li>当前阵容的升星副本；</li>
+<li>新阵容的过渡组件；</li>
+<li>临时卡牌；</li>
+<li>高费核心；</li>
+<li>针对特定对手的替补；</li>
+<li>尚未决定是否保留的机会。</li>
+</ul>
+<p>因此 Bench Full 并不是单纯的 UI 麻烦。</p>
+<p>它会迫使玩家做真正的战略清理：</p>
+<pre><code class="language-text">卖掉什么
+→
+意味着主动关闭哪一条未来路线？
+</code></pre>
+<p>如果候补席无限大，玩家可以几乎无成本保存所有可能构筑。</p>
+<p>随机商店带来的不确定性就会明显下降。</p>
+<p>如果候补席过小，玩家又会被迫过早放弃合理转型。</p>
+<p>它应该制造机会成本，而不是制造库存整理劳动。</p>
+<h2 id="金币既是货币也是资本">金币既是货币，也是资本</h2><p>自走棋经济最有辨识度的地方之一，是金币经常同时拥有两种价值：</p>
+<pre><code class="language-text">现在可以花掉的资源
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">保留下来以后可以产生更多收入的资本。
+</code></pre>
+<p><strong>经济资本（即“钱不花也在产生价值”）</strong>：存量金币不仅用于支付当前行为，还可能通过利息规则影响未来收入。</p>
+<p>于是玩家每花一笔钱，都可能存在两层成本。</p>
+<p>例如当前：</p>
+<pre><code class="language-text">19 金币
+</code></pre>
+<p>购买一个 2 金币单位后：</p>
+<pre><code class="language-text">17 金币
+</code></pre>
+<p>表面成本：</p>
+<pre><code class="language-text">2 金币
+</code></pre>
+<p>但如果这使玩家跌破一个利息阈值，真实机会成本还可能包含：</p>
+<pre><code class="language-text">下一轮少获得的利息。
+</code></pre>
+<p>所以：</p>
+<pre><code class="language-text">显示价格
+≠
+有效成本
+</code></pre>
+<p>这会让很多简单行为突然拥有时间维度。</p>
+<p>一张只值 2 金币的棋，可能因为：</p>
+<ul>
+<li>能立刻形成二星；</li>
+<li>能维持连胜；</li>
+<li>能避免本轮大量掉血；</li>
+</ul>
+<p>而值得牺牲利息。</p>
+<p>另一张同样 2 金币的棋，如果只是：</p>
+<pre><code class="language-text">也许以后有用
+</code></pre>
+<p>就可能不值得破坏经济线。</p>
+<h2 id="当前战力和未来经济必须长期互相竞争">当前战力和未来经济必须长期互相竞争</h2><p>金币通常同时可以用于：</p>
+<ul>
+<li>买棋；</li>
+<li>刷新；</li>
+<li>升人口；</li>
+<li>保留利息。</li>
+</ul>
+<p>因此玩家始终在处理：</p>
+<pre><code class="language-text">Spend Now
+vs
+Invest for Later
+</code></pre>
+<h3 id="买棋">买棋</h3><p>提升当前或未来阵容质量。</p>
+<h3 id="刷新">刷新</h3><p>支付确定货币，换取新的随机机会。</p>
+<h3 id="升人口">升人口</h3><p>购买：</p>
+<ul>
+<li>更多上场单位容量；</li>
+<li>更高阵容复杂度；</li>
+<li>某些设计中的高费用棋出现概率。</li>
+</ul>
+<h3 id="存钱">存钱</h3><p>牺牲当前强化，扩大未来资本。</p>
+<p>真正优秀的经济循环，不应该让其中任何一个长期成为唯一正确答案。</p>
+<p>如果“永远存到最大利息再动”几乎没有风险，前期战斗失去意义。</p>
+<p>如果“不花钱就一定掉大量生命”，经济运营又会消失。</p>
+<h2 id="生命值也可以成为经济资源">生命值也可以成为经济资源</h2><p>连败补偿会进一步制造一种特殊交换：</p>
+<pre><code class="language-text">当前生命
+→
+未来经济
+</code></pre>
+<p><strong>生命—经济转换（即“用血量换发育时间”）</strong>：玩家允许自己暂时维持较弱阵容，以承受生命损失为代价积累更好的经济、商店或转型条件。</p>
+<p>这个机制可以给落后玩家保留恢复路线。</p>
+<p>但它不能变成无风险套利。</p>
+<p>如果：</p>
+<pre><code class="language-text">故意连败
+→
+稳定获得额外经济
+→
+中期必然翻盘
+</code></pre>
+<p>那么前期赢下战斗反而可能成为错误选择。</p>
+<p>因此连败收益需要与：</p>
+<ul>
+<li>玩家剩余生命；</li>
+<li>后期单轮伤害；</li>
+<li>连败收益上限；</li>
+<li>中期提速；</li>
+</ul>
+<p>共同设计。</p>
+<p>核心不是禁止玩家“卖血”。</p>
+<p>而是：</p>
+<blockquote>
+<p>血量应该是一笔真实有限的资本，而不是免费的利息启动器。</p>
+</blockquote>
+<h2 id="升人口同时购买容量和未来概率">升人口同时购买容量和未来概率</h2><p>人口等级经常被简化理解成：</p>
+<pre><code class="language-text">+1 个上场位置
+</code></pre>
+<p>实际上它通常连接两套系统。</p>
+<p>第一：</p>
+<pre><code class="language-text">Board Capacity
+</code></pre>
+<p>决定阵容最多可以同时运行多少单位。</p>
+<p>第二：</p>
+<pre><code class="language-text">Shop Distribution
+</code></pre>
+<p>影响不同费用档位进入商店的概率。</p>
+<p>所以升级人口实际同时购买了：</p>
+<ul>
+<li>当前或下一轮的部署容量；</li>
+<li>更高阵容复杂度；</li>
+<li>未来商店内容结构。</li>
+</ul>
+<p>这使人口升级天然与刷新发生竞争。</p>
+<p>玩家可能拥有一个尚未成型的低费阵容。</p>
+<p>此时继续刷新，可以追求：</p>
+<pre><code class="language-text">当前阵容质量。
+</code></pre>
+<p>把金币投入人口，则是在购买：</p>
+<pre><code class="language-text">未来阵容空间。
+</code></pre>
+<p>这也是自走棋经济系统能够产生长期规划的重要原因。</p>
+<h2 id="阵容不是棋子强度的简单求和">阵容不是棋子强度的简单求和</h2><p>假设：</p>
+<pre><code class="language-text">Unit A = 100
+Unit B = 100
+Unit C = 100
+</code></pre>
+<p>并不意味着：</p>
+<pre><code class="language-text">TeamPower = 300
+</code></pre>
+<p>阵容的实际战斗表现还受到：</p>
+<ul>
+<li>星级；</li>
+<li>装备；</li>
+<li>羁绊；</li>
+<li>前后排结构；</li>
+<li>技能时序；</li>
+<li>控制；</li>
+<li>攻击距离；</li>
+<li>站位；</li>
+<li>当前对手；</li>
+</ul>
+<p>共同影响。</p>
+<p>一个个体较弱的棋子，可能因为补齐关键羁绊，使整个阵容产生新的规则效果。</p>
+<p>因此：</p>
+<p><strong>组合强度（即“队伍强不强不能只把数值相加”）</strong>：阵容价值来源于单位、协同、空间和对手之间的关系，而不是各单位孤立 Power 的简单总和。</p>
+<p>这也是为什么隐藏一个“准确战力值”往往很危险。</p>
+<p>一旦 UI 暗示：</p>
+<pre><code class="language-text">你的战力 = 13426
+对手战力 = 12781
+</code></pre>
+<p>玩家自然会期待：</p>
+<blockquote>
+<p>我应该赢。</p>
+</blockquote>
+<p>但站位、目标选择和技能时机可能让结果完全不同。</p>
+<p>内部可以拥有强度估计用于测试。</p>
+<p>它不应伪装成完整胜负答案。</p>
+<h2 id="站位是自走棋的第二条策略轴">站位是自走棋的第二条策略轴</h2><p>如果商店和经济解决的是：</p>
+<pre><code class="language-text">我拥有谁。
+</code></pre>
+<p>站位解决的是：</p>
+<pre><code class="language-text">这些单位怎样进入战斗。
+</code></pre>
+<p>两名玩家可以拥有完全相同的：</p>
+<ul>
+<li>棋子；</li>
+<li>星级；</li>
+<li>装备；</li>
+<li>羁绊；</li>
+</ul>
+<p>但因为位置不同产生完全不同结果。</p>
+<p>站位会改变：</p>
+<ul>
+<li>首次接敌对象；</li>
+<li>移动路径；</li>
+<li>前排承伤；</li>
+<li>后排安全；</li>
+<li>刺客切入；</li>
+<li>AoE 覆盖；</li>
+<li>控制时机；</li>
+<li>Mana 获取速度；</li>
+<li>技能释放顺序。</li>
+</ul>
+<p>于是自走棋并不是纯粹的商店 RNG。</p>
+<p>空间部署是另一条不可替代的策略轴。</p>
+<h2 id="对手信息让固定最优站位难以长期成立">对手信息让“固定最优站位”难以长期成立</h2><p>如果玩家一直面对同一个固定敌人，就可能逐渐找到一个静态最优阵型。</p>
+<p>多人轮换对手后，站位问题会持续变化。</p>
+<p>对手可能：</p>
+<ul>
+<li>刺客很多；</li>
+<li>AoE 很强；</li>
+<li>前排极厚；</li>
+<li>控制链很长；</li>
+<li>核心单位集中在一侧。</li>
+</ul>
+<p>于是玩家需要执行：</p>
+<pre><code class="language-text">Scouting
+→
+Interpretation
+→
+Formation Adaptation
+</code></pre>
+<p>前一轮失败，也可以成为下一轮的输入。</p>
+<p>例如：</p>
+<pre><code class="language-text">核心输出在角落
+→
+刺客直接切入
+→
+Carry 未释放技能就死亡
+</code></pre>
+<p>下一轮玩家把核心移到中后排，再用辅助单位包围。</p>
+<p>如果第二次战斗结果明显变化，玩家会获得一种很关键的反馈：</p>
+<blockquote>
+<p>战斗结果确实是我此前站位决策的后果。</p>
+</blockquote>
+<p>这正是自动战斗系统需要维护的策略可信度。</p>
+<h2 id="准备结束需要真正冻结阵容">准备结束需要真正冻结阵容</h2><p><strong>准备冻结边界（即“倒计时结束后这套阵容正式交卷”）</strong>：Planning 阶段结束时，把当前合法阵容、羁绊、装备、位置和随机种子原子化为战斗快照，后续 Combat 不再直接读取持续变化的玩家状态。</p>
+<p>倒计时最后一刻可能同时发生：</p>
+<ul>
+<li>买棋；</li>
+<li>卖棋；</li>
+<li>合成；</li>
+<li>移动；</li>
+<li>装备；</li>
+<li>升级人口。</li>
+</ul>
+<p>如果 Combat 直接读取实时 PlayerState，就可能出现：</p>
+<pre><code class="language-text">BoardSystem 看到了新位置
+TraitSystem 还是旧羁绊
+CombatSystem 已经开始
+ShopSystem 又触发了合成
+</code></pre>
+<p>不同系统看到的是不同版本的阵容。</p>
+<p>因此更稳定的过程是：</p>
+<pre><code class="language-text">Planning Timer End
+→
+停止新的构筑修改
+→
+验证阵容合法性
+→
+重新计算派生状态
+→
+创建 CombatSnapshot
+→
+启动 Combat
+</code></pre>
+<p>**战斗快照（即“这一轮真正拿去比赛的阵容版本”）**可以包含：</p>
+<ul>
+<li>单位状态；</li>
+<li>星级；</li>
+<li>装备；</li>
+<li>羁绊；</li>
+<li>位置；</li>
+<li>玩家等级；</li>
+<li>Combat Seed。</li>
+</ul>
+<p>战斗阶段只读取这一份不可变输入。</p>
+<p>这是非常典型的事务提交边界。</p>
+<h2 id="战斗中的死亡不能删除玩家拥有的棋子">战斗中的死亡不能删除玩家拥有的棋子</h2><p>这里也有一个很重要的状态所有权问题。</p>
+<p>战斗中的单位只是：</p>
+<pre><code class="language-text">Combat Unit。
+</code></pre>
+<p>它从玩家永久阵容快照生成。</p>
+<p>因此：</p>
+<pre><code class="language-text">Combat Unit 死亡
+</code></pre>
+<p>只代表：</p>
+<blockquote>
+<p>这一轮战斗里它已经不能继续行动。</p>
+</blockquote>
+<p>不能代表：</p>
+<blockquote>
+<p>玩家永久失去了这张棋。</p>
+</blockquote>
+<p>否则 Combat System 就会越权修改 Roster。</p>
+<p>合理的状态关系更接近：</p>
+<pre><code class="language-text">Player Roster
+→
+Combat Snapshot
+→
+Combat Runtime Unit
+</code></pre>
+<p>战斗结束后：</p>
+<pre><code class="language-text">丢弃 Combat Runtime
+</code></pre>
+<p>玩家原本的阵容仍然存在。</p>
+<p>这种“权威状态与临时模拟状态分离”的思想，同样可以迁移到：</p>
+<ul>
+<li>回合模拟；</li>
+<li>Replay；</li>
+<li>Ghost 对战；</li>
+<li>离线战斗验证；</li>
+<li>服务器重放。</li>
+</ul>
+<h2 id="自动战斗必须尽量可复现">自动战斗必须尽量可复现</h2><p>玩家不能在战斗中人工修复 AI 决策。</p>
+<p>因此随机和 AI 行为必须受到比普通实时战斗更严格的可解释要求。</p>
+<p>可以把基础目标定义为：</p>
+<pre><code class="language-text">相同 CombatSnapshot
++
+相同 CombatSeed
++
+相同规则版本
+≈
+相同 CombatResult
+</code></pre>
+<p>这里并不要求完全取消随机。</p>
+<p>仍然可以存在：</p>
+<ul>
+<li>暴击；</li>
+<li>闪避；</li>
+<li>随机目标；</li>
+<li>概率触发。</li>
+</ul>
+<p>但随机应该：</p>
+<ul>
+<li>来自明确随机流；</li>
+<li>能够 Replay；</li>
+<li>不依赖渲染帧；</li>
+<li>能被调试工具追踪。</li>
+</ul>
+<p>否则新增一个无关视觉随机效果，都可能因为共享 RNG 调用顺序改变整场战斗结果。</p>
+<h2 id="ai-不能偷偷替玩家做到理论最优">AI 不能偷偷替玩家做到“理论最优”</h2><p>自动战斗还有另一种风险：</p>
+<p>设计者为了让单位显得聪明，偷偷写入：</p>
+<pre><code class="language-text">群体技能永远命中最多敌人的完美位置
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-text">刺客总能找到理论价值最高的后排。
+</code></pre>
+<p>如果这些规则没有在游戏语义中明确，玩家会很难预测战斗。</p>
+<p>好的 AI 并不等于：</p>
+<blockquote>
+<p>永远执行全局最优动作。</p>
+</blockquote>
+<p>它更应该：</p>
+<ul>
+<li>使用明确目标规则；</li>
+<li>遵守搜索范围；</li>
+<li>遵守 Taunt；</li>
+<li>遵守移动限制；</li>
+<li>遵守技能条件；</li>
+<li>在相同状态下尽量稳定。</li>
+</ul>
+<p>玩家需要学习的是：</p>
+<blockquote>
+<p>这个单位会怎样行动。</p>
+</blockquote>
+<p>而不是猜测：</p>
+<blockquote>
+<p>设计者这次希望它有多聪明。</p>
+</blockquote>
+<h2 id="战斗结果必须能够解释失败原因">战斗结果必须能够解释失败原因</h2><p>一场自动战斗结束时，玩家真正需要的不是只有：</p>
+<pre><code class="language-text">失败
+-8 HP
+</code></pre>
+<p>更有价值的结果是：</p>
+<pre><code class="language-text">核心输出总伤害正常
+前排存活时间正常
+但 Carry 在首次施法前被刺客接触
+</code></pre>
+<p>于是下一轮玩家知道：</p>
+<blockquote>
+<p>问题主要不是阵容数值，而是 Formation。</p>
+</blockquote>
+<p><strong>战斗可解释性（即“输了以后知道该改哪里”）</strong>：系统能够把自动模拟结果映射回玩家此前可以控制的构筑、经济和站位决定。</p>
+<p>可用的调试或复盘数据包括：</p>
+<ul>
+<li>单位总输出；</li>
+<li>承伤；</li>
+<li>首次施法时间；</li>
+<li>目标选择；</li>
+<li>移动路线；</li>
+<li>控制覆盖；</li>
+<li>核心单位死亡时间；</li>
+<li>羁绊贡献；</li>
+<li>当前对手阵型。</li>
+</ul>
+<p>这里的目标不是给玩家一个：</p>
+<pre><code class="language-text">正确答案按钮。
+</code></pre>
+<p>而是让结果能够形成新的决策输入。</p>
+<h2 id="战斗是验证器所以结果反馈必须进入下一轮">战斗是验证器，所以结果反馈必须进入下一轮</h2><p>一轮完整自走棋循环应该是：</p>
+<pre><code class="language-text">商店给出概率输入
+→
+玩家形成阵容
+→
+自动战斗
+→
+战斗暴露问题
+→
+观察其他玩家
+→
+修改经济、阵容或站位
+→
+再次验证
+</code></pre>
+<p>战斗不是构筑的终点。</p>
+<p>它是下一次构筑的传感器。</p>
+<p>这也是自走棋比纯粹“挂机看数值”更有策略深度的关键。</p>
+<p>如果玩家输了，却无法知道：</p>
+<ul>
+<li>是数值不够；</li>
+<li>羁绊错误；</li>
+<li>星级不足；</li>
+<li>站位被克制；</li>
+<li>商店路线已经被多人竞争；</li>
+<li>经济投入时机错误；</li>
+</ul>
+<p>那么下一轮就无法产生新的假设。</p>
+<p>玩家只能继续：</p>
+<blockquote>
+<p>再刷几次看看。</p>
+</blockquote>
+<p>策略很快就会退化成随机等待。</p>
+<h2 id="淘汰会重新塑造整场比赛">淘汰会重新塑造整场比赛</h2><p>玩家淘汰通常首先改变：</p>
+<pre><code class="language-text">剩余竞争者数量。
+</code></pre>
+<p>在共享棋池中，它还会改变：</p>
+<pre><code class="language-text">全局供应结构。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">一名 Warrior 玩家被淘汰
+→
+大量 Warrior 副本返池
+→
+仍然坚持 Warrior 的其他玩家
+突然更容易完成升星
+</code></pre>
+<p>这意味着比赛后期的概率空间不是简单越来越贫瘠。</p>
+<p>它可能因为玩家退出重新松动。</p>
+<p>因此，自走棋的宏观演化不只是：</p>
+<pre><code class="language-text">所有玩家都越来越强。
+</code></pre>
+<p>还包括：</p>
+<pre><code class="language-text">玩家逐步淘汰
+→
+供应重新分配
+→
+构筑路线重新估值
+</code></pre>
+<p>这是共享有限资源系统非常有价值的一层动态。</p>
+<h2 id="与卡组构筑式-roguelike-的区别">与卡组构筑式 Roguelike 的区别</h2><p>二者都包含：</p>
+<ul>
+<li>有限随机候选；</li>
+<li>构筑收敛；</li>
+<li>拒绝低价值选项；</li>
+<li>概率管理；</li>
+<li>单局成长。</li>
+</ul>
+<p>但核心概率对象不同。</p>
+<p>卡组构筑中：</p>
+<pre><code class="language-text">我拿了哪些牌
+→
+修改我自己的未来抽牌概率。
+</code></pre>
+<p>共享棋池自走棋中：</p>
+<pre><code class="language-text">我和别人拿了哪些单位
+→
+共同修改大家未来的商店供应。
+</code></pre>
+<p>一个主要是：</p>
+<p><strong>内部概率结构。</strong></p>
+<p>另一个额外加入：</p>
+<p><strong>多人共享供应竞争。</strong></p>
+<p>同时，自走棋还拥有明显的：</p>
+<pre><code class="language-text">Planning
+→
+Resolution
+</code></pre>
+<p>结构和空间部署问题。</p>
+<p>因此不能把它简单理解为：</p>
+<blockquote>
+<p>卡组构筑换成棋子。</p>
+</blockquote>
+<h2 id="与-rts-和战术-rpg-的区别">与 RTS 和战术 RPG 的区别</h2><p>RTS 中，玩家通常持续拥有单位控制权。</p>
+<p>战斗结果的一部分来自：</p>
+<ul>
+<li>操作；</li>
+<li>转火；</li>
+<li>移动；</li>
+<li>技能；</li>
+<li>即时反应。</li>
+</ul>
+<p>自走棋则主动降低 Combat Phase 的人工控制，把策略密度压到准备阶段。</p>
+<p>回合制战术 RPG 虽然也是离散阶段，但玩家通常逐单位决定：</p>
+<pre><code class="language-text">谁移动
+谁攻击
+目标是谁
+</code></pre>
+<p>自走棋的单位执行权则主要交给统一 Combat AI。</p>
+<p>因此其设计重点会转向：</p>
+<ul>
+<li>预先构筑；</li>
+<li>规则透明；</li>
+<li>AI 可解释；</li>
+<li>概率管理；</li>
+<li>站位预判。</li>
+</ul>
+<h2 id="这套设计不能简单复制到所有自动战斗游戏">这套设计不能简单复制到所有自动战斗游戏</h2><p>“自动战斗”本身并不足以构成自走棋。</p>
+<p>如果一个游戏：</p>
+<ul>
+<li>没有有限准备阶段；</li>
+<li>没有持续构筑；</li>
+<li>没有经济取舍；</li>
+<li>没有阵容空间；</li>
+<li>没有多人或环境信息适应；</li>
+<li>战斗结果也不会影响下一轮构筑；</li>
+</ul>
+<p>它更可能只是：</p>
+<pre><code class="language-text">自动执行模块。
+</code></pre>
+<p>共享棋池也不是所有自走棋都必须采用的绝对规则。</p>
+<p>有些设计可以使用：</p>
+<ul>
+<li>独立玩家池；</li>
+<li>部分共享；</li>
+<li>动态补充；</li>
+<li>其他稀缺机制。</li>
+</ul>
+<p>值得迁移的不是固定的“全局棋子数量表”。</p>
+<p>而是：</p>
+<blockquote>
+<p>如果多人竞争同一个有限内容空间，其他人的选择应该怎样成为自己的决策变量。</p>
+</blockquote>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="商店只显示结果不解释概率来源">商店只显示结果，不解释概率来源</h3><p>玩家长期刷不到目标棋，却无法判断是等级、池枯竭还是单纯随机。</p>
+<h3 id="共享池存在但玩家几乎感知不到">共享池存在，但玩家几乎感知不到</h3><p>侦察无法帮助构筑决策，所谓多人竞争只停留在隐藏后台。</p>
+<h3 id="商店展示时不预留副本">商店展示时不预留副本</h3><p>最后一个单位可能同时出现在多个玩家商店，并在购买时产生冲突。</p>
+<h3 id="所有路线都可以无成本长期保留">所有路线都可以无成本长期保留</h3><p>候补席过大，玩家不必真正放弃未来选择。</p>
+<h3 id="利息收益几乎没有战斗风险">利息收益几乎没有战斗风险</h3><p>固定存钱路线成为唯一经济答案。</p>
+<h3 id="连败奖励过强">连败奖励过强</h3><p>故意输掉前期成为稳定最优策略。</p>
+<h3 id="阵容强度只按单位-power-相加">阵容强度只按单位 Power 相加</h3><p>羁绊、站位、控制和对手关系无法真正影响结果。</p>
+<h3 id="combat-直接读取实时阵容">Combat 直接读取实时阵容</h3><p>Planning 最后一刻的修改导致羁绊、位置和战斗状态版本不一致。</p>
+<h3 id="ai-为了聪明使用隐藏全局最优规则">AI 为了“聪明”使用隐藏全局最优规则</h3><p>玩家无法预测自动行为。</p>
+<h3 id="战斗随机依赖渲染帧或共享随机流">战斗随机依赖渲染帧或共享随机流</h3><p>同一阵容无法稳定 Replay，调试结果不可复现。</p>
+<h3 id="combat-unit-死亡直接修改玩家-roster">Combat Unit 死亡直接修改玩家 Roster</h3><p>临时战斗状态越权污染永久阵容。</p>
+<h3 id="玩家淘汰时部分棋子没有正确返池">玩家淘汰时部分棋子没有正确返池</h3><p>整个后续商店概率空间被悄然破坏。</p>
+<h3 id="战斗结束只显示胜负">战斗结束只显示胜负</h3><p>玩家无法知道应该调整阵容、经济还是站位。</p>
+<h2 id="我的自走棋设计检查表">我的自走棋设计检查表</h2><ol>
+<li>Planning Phase 与 Combat Phase 是否拥有明确边界？</li>
+<li>战斗开始前是否会原子生成 CombatSnapshot？</li>
+<li>Combat 是否只读取冻结输入，而不是实时玩家状态？</li>
+<li>商店概率是否由明确规则产生？</li>
+<li>共享池存在时，单位数量是否真正守恒？</li>
+<li>Shop Offer 是否会预留有限池副本？</li>
+<li>锁定商店是否同时保留对应 Pool Reservation？</li>
+<li>升星后的 UnitInstance 是否仍能追踪真实 SourceCopyCount？</li>
+<li>淘汰玩家的池副本是否能够完整、原子返还？</li>
+<li>玩家能否理解等级怎样改变费用档位概率？</li>
+<li>侦察对手是否真的能帮助判断供应竞争？</li>
+<li>Bench 是否制造合理机会成本，而不是纯整理负担？</li>
+<li>金币是否同时存在当前消费与未来资本价值？</li>
+<li>利息阈值是否让 Effective Cost 可以被玩家理解？</li>
+<li>连胜和连败是否都存在真实代价？</li>
+<li>升人口是否同时影响容量和未来商店结构？</li>
+<li>阵容是否存在真正的宽羁绊与深羁绊取舍？</li>
+<li>相同阵容通过不同站位能否产生可理解差异？</li>
+<li>自动 AI 的目标选择规则是否能够说明？</li>
+<li>同一 Snapshot 与 Seed 是否能够稳定 Replay？</li>
+<li>Combat Random 是否与表现随机隔离？</li>
+<li>AI 是否避免使用未公开的理论最优目标选择？</li>
+<li>战斗复盘是否能解释核心单位的死亡和技能时序？</li>
+<li>一轮失败是否能够形成下一轮可行动的调整假设？</li>
+<li>调试工具能否解释“为什么一直刷不到这张棋”？</li>
+<li>是否存在 Shared Pool Inspector 和 Economy Timeline？</li>
+<li>Pairing 是否避免明显的连续极端对手重复？</li>
+<li>Ghost 对战是否使用冻结快照而不是实时玩家状态？</li>
+<li>网络重连是否不会重新刷新 Shop 或返还已经消费的金币？</li>
+<li>战斗系统是否始终只是验证构筑，而不是偷偷拥有玩家永久状态？</li>
+</ol>
+<p>自走棋最有价值的设计思想，并不是：</p>
+<blockquote>
+<p>把操作交给 AI。</p>
+</blockquote>
+<p>而是重新分配玩家的决策位置。</p>
+<p>玩家不再持续控制：</p>
+<pre><code class="language-text">这个单位下一秒攻击谁。
+</code></pre>
+<p>而是提前决定：</p>
+<pre><code class="language-text">我应该拥有什么
+愿意为未来支付多少
+保留哪些可能
+放弃哪些路线
+怎样组织空间
+如何针对其他玩家
+</code></pre>
+<p>随后，系统把这些决定冻结下来，公开运行一次结果。</p>
+<p>好的自动战斗不是替玩家思考。</p>
+<p>它应该尽量忠实地执行玩家此前构造的系统。</p>
+<p>于是，一场失败真正有价值的含义就变成：</p>
+<pre><code class="language-text">这套构筑
+在这些规则
+面对这个对手
+以这个站位
+运行以后
+暴露了什么问题。
+</code></pre>
+<p>玩家据此重新构筑。</p>
+<p>再让系统验证一次。</p>
+<p>这才是自走棋真正持续运转的核心循环：</p>
+<blockquote>
+<p><strong>概率输入 → 构筑决策 → 自动验证 → 信息反馈 → 再构筑。</strong></p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>构筑与验证分离</td>
+<td>先搭好，再看它自己跑</td>
+</tr>
+<tr>
+<td>概率商店</td>
+<td>只能从系统给出的候选里做选择</td>
+</tr>
+<tr>
+<td>共享棋子池</td>
+<td>大家从同一批货里拿东西</td>
+</tr>
+<tr>
+<td>间接资源竞争</td>
+<td>还没打你，我们已经在抢同一份资源</td>
+</tr>
+<tr>
+<td>商店预留</td>
+<td>展示给你以后，先替你占住这份货</td>
+</tr>
+<tr>
+<td>状态依赖价值</td>
+<td>同一张棋在不同局面不是同一个价</td>
+</tr>
+<tr>
+<td>合成进度</td>
+<td>随机抽到的东西终于变成确定战力</td>
+</tr>
+<tr>
+<td>候补席选择权</td>
+<td>我愿意花空间保留哪些未来可能</td>
+</tr>
+<tr>
+<td>经济资本</td>
+<td>钱不花也在产生价值</td>
+</tr>
+<tr>
+<td>生命—经济转换</td>
+<td>用血量换发育时间</td>
+</tr>
+<tr>
+<td>组合强度</td>
+<td>队伍强不强不能只把数值相加</td>
+</tr>
+<tr>
+<td>准备冻结边界</td>
+<td>倒计时结束后这套阵容正式交卷</td>
+</tr>
+<tr>
+<td>战斗快照</td>
+<td>这一轮真正拿去比赛的阵容版本</td>
+</tr>
+<tr>
+<td>战斗可解释性</td>
+<td>输了以后知道该改哪里</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>game-designs/自走棋游戏设计范式.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文是对自走棋 / Auto Battler 宏观设计范式的个人综述。</p>
+<p>文中的共享棋池、三合一升星、利息、连胜连败、人口等级、Ghost、CombatSnapshot 等机制属于常见或可选设计方法，不表示所有自走棋作品都必须采用完全相同的棋池数量、商店概率、经济阈值、合成规则或战斗模型。</p>
+<p>尤其需要注意：共享棋池并不是定义自走棋类型的唯一必要条件。本文选择它作为重点，是因为它能够最清楚地展示“其他玩家的构筑行为如何进入自己的概率空间”这一多人策略关系；没有共享池的自走棋仍然可以通过其他稀缺资源、对手信息和构筑约束建立有效竞争。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="city-accessibility-feedback-loop.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环</strong><small>城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？</small></a><a href="horde-survival-pressure-firepower.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>压力—火力追逐：幸存者类的时间难度轴与空间化成长</strong><small>幸存者类如何在玩家输入始终非常简单的情况下，让一场单局从稀疏敌群持续演化成数百甚至上千单位参与的高密度战斗，并让成长、移动和构筑始终保持有效决策？</small></a><a href="battle-royale-dual-convergence.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>双重收敛：大逃杀中的有效空间、存活人数与终局密度控制</strong><small>一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

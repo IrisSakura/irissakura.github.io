@@ -1,3238 +1,5368 @@
-## 音频主时钟与确定性判定范式
----
-## 1. 文档定位
+> Agent 标签：`audio` `rhythm` `timing`
 
-本文选取的新增宏观游戏类型为：
-
-**节奏游戏（Rhythm Game）**
-
-该类型能够独立支撑完整游戏产品，而不是只能作为其他大型游戏中的局部玩法模块。
-
-本文重点提炼节奏游戏最独有、最具代表性的工程设计范式：
-
-**音频主时钟—谱面编译—确定性判定范式**
-
-英文可记录为：
-
-**Audio Clock–Chart Compilation–Deterministic Judgment Paradigm**
-
-该范式适用于下落式音游、鼓点音游、舞蹈音游、触摸滑动音游、节奏射击、节奏动作及其他以输入时序精度为主要评价标准的游戏。
+> 以音频时钟为时间权威，把谱面、输入、判定与反馈组织成可复算的事件链，并围绕“聆听—预判—输入—判定—反馈—练习”构成完整产品循环。
 
 ---
 
-## 2. 类型定义与边界
+## 0. 文档定位与合并边界
 
-### 2.1 类型定义
+本文是仓库中节奏游戏方向的唯一完整设计范式，由原“音频主时钟与确定性判定”专项稿和产品级“节奏游戏设计范式”合并而成。稳定路由 ID 保持为 `rhythm-audio-clock`，不再把判定、谱面、校准或练习系统拆成独立游戏类型。
 
-节奏游戏是指：
+本文覆盖的宏观游戏类型是：
 
-玩家通过感知音乐节奏、视觉提示或两者的组合，在预定时间附近执行输入，并由系统根据输入时刻与谱面目标时刻之间的偏差进行判定、评分和反馈的游戏类型。
+**节奏游戏 / Rhythm Game。**
 
-其核心循环为：
+常见名称包括：
 
-感知音乐与视觉提示
-→ 预测目标输入时刻
-→ 执行输入
-→ 将输入映射到歌曲时间轴
-→ 与谱面事件进行匹配
-→ 计算时间偏差和判定等级
-→ 更新分数、连击和状态
-→ 继续执行后续节奏结构
+- Rhythm Game；
 
-节奏游戏的核心挑战通常包括：
+- Music Game；
 
-- 节拍感知。
+- Rhythm Action；
 
-- 时序预测。
+- 音乐节奏游戏；
 
-- 读谱能力。
+- 音游；
 
-- 手眼协调。
+- 节奏动作游戏；
 
-- 多轨输入。
-
-- 节奏记忆。
-
-- 连续操作稳定性。
-
-- 高密度输入处理。
-
-- 长时间演奏耐力。
+- 谱面式音乐游戏。
 
 
-### 2.2 完整类型与局部模块的区别
+本文讨论的不是普通游戏中的“按节拍 QTE”，也不是动作游戏中的节奏奖励模块，而是一种能独立支撑选曲、演奏、结算、成长、练习、内容生产与长期运营的宏观游戏类型。
 
-以下情况可以构成完整节奏游戏：
+其最具代表性的设计范式可以概括为：
 
-- 主要内容生产单位是歌曲和谱面。
+> **以音频播放时间而非渲染帧作为权威时间源，把歌曲预先编译为一条带时间戳的谱面事件流；玩家输入被记录为精确输入事件，再与谱面目标时间比较得到 Timing Error，由统一判定器转换成 Perfect、Great、Good、Miss 等结果。评分、连击、生命、演出、音效和统计全部消费同一份判定结果，而不能各自重新判断命中。整个游戏因此围绕“音频时间—谱面事件—输入事件—判定结果”这一严格的时间因果链运行。**
 
-- 主要评价依据是输入时间偏差、连击和完成度。
+核心循环可以压缩为：
 
-- 游戏的大部分操作围绕节奏输入展开。
-
-- 玩家成长主要体现为读谱能力和执行精度提升。
-
-- 游戏循环由选曲、挑战、结算、解锁和重复练习构成。
-
-
-以下情况更适合作为其他游戏中的局部模块：
-
-- 动作游戏中的节奏格挡。
-
-- RPG 中的节奏施法。
-
-- 赛车游戏中的节奏换挡。
-
-- 剧情游戏中的音乐 QTE。
-
-- Boss 战中的节拍攻击阶段。
-
-- 经营游戏中的音乐小游戏。
-
-- 卡牌游戏中的节奏增伤操作。
-
-
-这些情况应记录为：
-
-**可迁移模块范式：音频主时钟时序判定模块**
-
-而不是再次记录为完整的节奏游戏类型。
+**音乐推进
+→ 谱面事件接近判定点
+→ 玩家根据声音与视觉预判
+→ 提交输入
+→ 计算时间误差
+→ 生成唯一判定
+→ 更新连击、分数与演出
+→ 下一组节奏结构出现
+→ 玩家逐渐形成歌曲和谱面的身体记忆。**
 
 ---
 
-## 3. 核心设计范式
+# 1. 类型定位
 
-## 3.1 音频时间是权威时间
+节奏游戏通常具备以下核心特征：
 
-节奏游戏必须明确一个最重要的架构原则：
+- 存在稳定音乐或节奏时间轴；
 
-**音乐播放时间是整个游戏运行时的权威时间源。**
+- 游戏内容围绕歌曲展开；
 
-音符位置、输入判定、长按进度、谱面事件、演出动画和歌曲结束状态，都应从音频时间推导。
+- 谱面描述玩家应该在什么时间进行什么操作；
 
-不应使用以下对象作为权威时间：
+- 输入正确性主要依据时间偏差；
 
-- 渲染帧累计时间。
+- 判定具有明确时间窗口；
 
-- 游戏主线程的 DeltaTime。
+- 玩家能够形成连续Combo；
 
-- 动画播放进度。
+- Score与Accuracy反映演奏质量；
 
-- 音符在屏幕上的坐标。
+- 谱面难度可以在同一首歌曲上发生巨大变化；
 
-- UI 进度条位置。
+- 视觉运动必须与音乐高度同步；
 
-- 音符对象的生命周期。
+- 输入、音频、显示延迟直接影响公平性；
 
-- 系统日历时间。
+- 高水平游玩依赖重复练习和动作记忆；
 
-
-渲染帧率可能下降，主线程可能发生卡顿，动画可能跳帧，但这些问题不应改变玩家输入相对于音乐的实际偏差。
-
-推荐使用音频系统提供的以下时间来源：
-
-- DSP 时间。
-
-- 音频设备采样位置。
-
-- 音频播放游标。
-
-- 以采样数表示的歌曲进度。
+- 游戏结果必须能够精确复盘。
 
 
-其中，使用 64 位整数保存歌曲采样位置通常是最稳定的方案。
+典型单曲流程：
 
----
-
-## 3.2 谱面是时间规则，不是场景对象集合
-
-谱面不应被设计为一组在场景中移动的音符对象。
-
-音符对象只是谱面数据的视觉表现代理。
-
-谱面的权威内容应包括：
-
-- 音符目标时间。
-
-- 音符类型。
-
-- 输入轨道。
-
-- 输入动作。
-
-- 长按起止时间。
-
-- 滑动路径。
-
-- 判定规则。
-
-- 和弦分组。
-
-- 表现配置。
-
-- 音效配置。
-
-- 游戏规则标记。
-
-
-运行时应先加载并编译谱面数据，再根据当前歌曲时间决定：
-
-- 哪些音符应进入激活窗口。
-
-- 哪些音符需要生成视觉对象。
-
-- 哪些音符可以接受输入。
-
-- 哪些音符已经超过判定时间。
-
-- 哪些音符需要提交 Miss。
-
-
-即使某个音符因为渲染故障没有显示出来，它在谱面时间轴上的目标时间仍然存在。
+选择歌曲
+→ 选择难度
+→ 加载音频和谱面
+→ 预加载必要资源
+→ 建立AudioClock
+→ Countdown
+→ 音乐开始
+→ Note按谱面时间进入可视区域
+→ 玩家输入
+→ JudgmentSystem计算TimingError
+→ 生成判定
+→ 更新Combo、Score、Gauge
+→ 歌曲继续
+→ 特殊段落提高密度或复杂度
+→ 歌曲结束
+→ 等待尾部谱面结算
+→ 生成SongResult
+→ 展示Accuracy、最大Combo、判定分布和错误位置
+→ 玩家重试或进入下一首歌曲。
 
 ---
 
-## 3.3 输入必须在捕获时记录时间
+# 2. 最核心的系统抽象
 
-输入系统应在接收到设备事件时立即记录时间戳。
+一个节奏游戏可以抽象为四条数据流：
 
-不能等到下一次游戏主循环更新时，才使用当前帧时间作为输入时刻。
+**Audio Timeline**
 
-原因在于：
+歌曲现在播放到哪里。
 
-- 多个输入可能发生在同一渲染帧内。
+**Chart Timeline**
 
-- 低帧率会显著放大输入时间误差。
+这个时间点应该发生什么。
 
-- 输入设备和操作系统通常拥有独立的事件时间。
+**Input Timeline**
 
-- 玩家输入顺序必须能够稳定重建。
+玩家什么时候实际进行了什么操作。
 
-- 回放系统需要原始输入时间，而不是处理时间。
+**Judgment Timeline**
 
+系统如何评价这次操作。
 
-每个输入事件至少应保存：
+最终核心关系为：
 
-- 输入事件 ID。
+`InputTime - TargetTime = TimingError`
 
-- 输入设备 ID。
+然后：
 
-- 物理按键或控制器标识。
+TimingError
+→ JudgmentWindow
+→ JudgmentResult。
 
-- 映射后的游戏动作。
+真正需要保持稳定的是：
 
-- 按下、释放或模拟量变化类型。
+> **时间误差本身。**
 
-- 原始设备时间戳。
+而不是：
 
-- 输入顺序号。
-
-- 当前播放代次。
-
-- 模拟量数值。
-
-- 是否为系统合成输入。
-
-
-输入捕获层只负责记录事实，不负责判断输入命中了哪个音符。
+“Note图标有没有刚好碰到判定线。”
 
 ---
 
-## 3.4 判定必须是确定性事务
-
-不应让每个音符对象在自己的更新函数中读取输入并争抢判定。
-
-这种设计容易导致：
-
-- 同一输入被多个音符消费。
-
-- 判定结果依赖对象遍历顺序。
-
-- 不同帧率下产生不同结果。
-
-- 密集音符出现前后抢占。
-
-- 回放无法稳定重现。
-
-- 网络验证无法复算。
-
-
-正确方式是建立统一的判定流程：
-
-输入事件进入判定系统
-→ 筛选可接受该输入的音符候选
-→ 计算每个候选的时间偏差
-→ 根据固定规则进行冲突仲裁
-→ 生成判定请求
-→ 按稳定顺序提交结果
-→ 更新分数、连击和生命状态
-→ 发送表现事件
-
-在相同谱面、相同规则和相同输入日志下，判定结果必须一致。
+# 3. 核心设计范式
 
 ---
 
-## 3.5 表现是时间事实的投影
+## 3.1 音频时钟必须是权威时间源
 
-音符的屏幕位置应由以下信息计算：
+最常见的错误架构是：
 
-- 当前歌曲采样位置。
+Update推进Note
+→ Note移动到判定线
+→ 玩家按键
+→ 判断Note位置。
 
-- 音符目标采样位置。
+这种实现会受到：
 
-- 视觉提前量。
+- 帧率变化；
 
-- 滚动速度。
+- 卡顿；
 
-- 轨道布局。
+- 时间缩放；
 
-- 视觉变换曲线。
+- 动画误差；
 
+- 插值；
 
-而不应通过每帧累加位移来逼近目标位置。
-
-推荐计算方式是：
-
-音符视觉位置 = 时间差经过滚动变换后的投影结果
-
-这样即使发生渲染跳帧，下一帧音符也会直接出现在正确位置，而不会永久积累位移误差。
-
-视觉系统可以修改：
-
-- 音符滚动速度。
-
-- 判定线位置。
-
-- 音符皮肤。
-
-- 移动方向。
-
-- 透视效果。
-
-- 镜头运动。
-
-- 隐藏和渐显效果。
+- UI布局；
 
 
-但不能修改音符的实际目标时间。
+影响。
+
+更稳定的模型应该是：
+
+AudioClock = 当前歌曲实际时间。
+
+Note视觉位置只是：
+
+`VisualPosition = Function(NoteTargetTime - AudioClock)`
+
+也就是说：
+
+> **Note没有真正“向判定线移动”。它只是根据当前歌曲时间被绘制在一个正确的位置。**
 
 ---
 
-## 4. 总体运行时架构
+## 3.2 谱面应是时间事件流，而不是场景对象列表
 
-节奏游戏推荐划分为四个主要运行域。
+谱面真正需要描述：
 
-## 4.1 音频域
+- 在什么时间；
 
-音频域负责：
+- 哪个轨道；
 
-- 音频解码。
+- 什么操作；
 
-- 音频播放。
+- 持续多久；
 
-- 音频缓冲。
-
-- DSP 采样位置维护。
-
-- 播放、暂停和跳转。
-
-- 播放速率控制。
-
-- 音频设备状态检测。
-
-- 音频欠载检测。
+- 是否属于特殊组合。
 
 
-音频线程不得执行：
+而不是：
 
-- 谱面匹配。
+- 当前GameObject在哪里；
 
-- 分数计算。
+- Note移动速度是多少；
 
-- UI 更新。
+- Note现在距离判定线多少像素。
 
-- 文件读取。
 
-- 复杂日志。
+因此谱面首先是：
 
-- 大量内存分配。
+**Timeline Data。**
 
-- 等待主线程锁。
+表现才把Timeline Data转换为：
 
-- 游戏逻辑事件广播。
+- Note；
+
+- Track；
+
+- Beam；
+
+- Arrow；
+
+- Beat Marker；
+
+- Character Animation。
 
 
 ---
 
-## 4.2 输入域
+## 3.3 输入判定应比较时间，不应依赖物理碰撞
 
-输入域负责：
+例如某Note目标时间：
 
-- 捕获键盘输入。
+65.000秒。
 
-- 捕获手柄输入。
+玩家输入：
 
-- 捕获触摸输入。
+65.021秒。
 
-- 捕获鼠标输入。
+那么：
 
-- 捕获踏板、鼓控制器或 MIDI 输入。
+TimingError = +21ms。
 
-- 记录原始时间戳。
+之后：
 
-- 保存设备标识。
+如果Perfect窗口：
 
-- 维持输入顺序。
+±30ms，
 
-- 将输入写入有界队列。
+则结果为：
 
+Perfect。
 
-输入域不负责：
+这里完全不需要知道：
 
-- 计算判定等级。
+Note图像现在是不是刚好位于判定线中心。
 
-- 查找音符。
+---
 
-- 修改分数。
+## 3.4 判定结果必须是唯一权威事件
 
-- 播放打击特效。
+一次输入不能：
 
-- 控制歌曲进度。
+ScoreSystem自己判断一次；
+
+ComboSystem自己判断一次；
+
+EffectSystem再判断一次。
+
+正确结构：
+
+Input
+→ JudgmentResolver
+→ JudgmentResult
+
+之后：
+
+ScoreSystem
+ComboSystem
+GaugeSystem
+PresentationSystem
+AnalyticsSystem
+
+全部消费同一个JudgmentResult。
+
+否则非常容易出现：
+
+画面显示Perfect
+但Score按Great计算。
+
+---
+
+## 3.5 延迟补偿是核心规则，不是设置菜单附属功能
+
+实际输入链可能存在：
+
+玩家动作
+→ 输入设备采样
+→ 操作系统
+→ 游戏输入系统
+→ Logic
+→ 显示器。
+
+音频链则可能存在：
+
+音频数据
+→ Mixer
+→ 音频设备
+→ 扬声器。
+
+两条路径延迟并不相同。
+
+因此玩家真实感知的：
+
+“我在正确节拍按了”
+
+不一定等于系统得到的：
+
+RawInputTimestamp。
+
+需要显式支持：
+
+- InputOffset；
+
+- AudioOffset；
+
+- VisualOffset。
 
 
 ---
 
-## 4.3 游戏判定域
+## 3.6 音画可以有Offset，但逻辑时间只能有一个
 
-游戏判定域负责：
+例如玩家希望：
 
-- 获取音频时钟快照。
+Note视觉稍微提前10ms显示。
 
-- 将输入时间映射到歌曲时间。
+这是：
 
-- 激活临近音符。
+VisualOffset。
 
-- 解析输入候选。
+不应该修改：
 
-- 提交判定结果。
+NoteTargetTime。
 
-- 推进长按和滑动状态。
+同理：
 
-- 扫描超时音符。
+用户音频设备延迟需要AudioOffset。
 
-- 更新分数和连击。
+也不应修改：
 
-- 更新生命槽或完成状态。
+Chart Data。
 
-- 生成回放日志。
+原则：
 
-- 生成表现事件。
-
-
-该域是节奏游戏的主要权威逻辑层。
+> **Chart定义音乐世界中的真值，Calibration只修改用户如何感知和输入这个真值。**
 
 ---
 
-## 4.4 表现域
+## 3.7 Score、Accuracy和Combo是不同维度
 
-表现域负责：
+Combo：
 
-- 音符生成与回收。
+表达连续稳定执行。
 
-- 音符位置计算。
+Accuracy：
 
-- 判定特效。
+表达整体Timing精度。
 
-- 打击动画。
+Score：
 
-- 角色演出。
+可以进一步加入：
 
-- 镜头效果。
+- Combo奖励；
 
-- UI 更新。
+- Note权重；
 
-- 震动反馈。
+- 难度；
 
-- 非关键音效。
+- 特殊段落；
 
-- 连击和分数动画。
-
-
-表现域发生故障时，不得反向修改已经提交的判定结果。
-
----
-
-## 5. 核心模块职责
-
-### 5.1 SongSessionKernel
-
-负责管理单次歌曲游玩的完整生命周期。
-
-主要职责：
-
-- 创建歌曲会话。
-
-- 冻结谱面版本。
-
-- 冻结规则版本。
-
-- 冻结校准配置。
-
-- 管理会话状态。
-
-- 管理排名资格。
-
-- 管理歌曲完成、失败和中止。
-
-- 管理回放记录生命周期。
+- Fever。
 
 
-它不直接负责音频解码和音符匹配。
+不要把三者混成一个数值。
+
+否则玩家可能：
+
+Accuracy很高
+
+但因为一次Miss导致Score异常低，
+
+却不知道原因。
 
 ---
 
-### 5.2 AudioTransport
+## 3.8 谱面难度主要来自时间结构，不应只来自Note数量
 
-负责控制音频播放状态。
+更高难度可以通过：
 
-主要职责：
+- 更高Note Density；
 
-- 播放歌曲。
+- 更复杂Rhythm Pattern；
 
-- 暂停歌曲。
+- Syncopation；
 
-- 恢复歌曲。
+- Polyrhythm；
 
-- 跳转到指定采样位置。
+- Lane Transition；
 
-- 修改播放速度。
+- Chord；
 
-- 执行预卷。
+- Hold组合；
 
-- 执行歌曲结束淡出。
+- 阅读复杂度；
 
-- 处理音频设备切换。
+- 手部交替；
+
+- 长时间耐力；
 
 
----
+实现。
 
-### 5.3 MasterClock
+不是简单：
 
-负责提供权威歌曲时间。
-
-输出内容包括：
-
-- 当前音频采样位置。
-
-- 采样位置对应的主机时间。
-
-- 采样率。
-
-- 播放速度。
-
-- 输出延迟估计。
-
-- 当前播放代次。
-
-- 时钟是否有效。
-
-- 当前时钟快照编号。
-
+Easy = 100 Notes
+Hard = 400 Notes。
 
 ---
 
-### 5.4 ChartCompiler
+## 3.9 可读性与机械难度必须分离
 
-负责将编辑器谱面转换为稳定的运行时数据。
+一段谱面可能操作上并不难，
 
-主要职责：
+但因为：
 
-- 解析 BPM。
+- Note重叠；
 
-- 解析拍号。
+- 视觉速度；
 
-- 解析停顿和变速。
+- 轨道变形；
 
-- 将拍位转换为采样位置。
-
-- 校验音符顺序。
-
-- 校验长按和滑动结构。
-
-- 构建轨道索引。
-
-- 构建时间区间索引。
-
-- 构建检查点。
-
-- 计算谱面 Hash。
+- 特效遮挡；
 
 
----
+难以读取。
 
-### 5.5 TimelineScheduler
+这种难度属于：
 
-负责管理当前时间附近的谱面事件。
+**Reading Difficulty。**
 
-主要职责：
+而不是：
 
-- 推进每条轨道的音符游标。
+**Execution Difficulty。**
 
-- 将音符从 Pending 转换为 Armed。
-
-- 维护当前可判定音符窗口。
-
-- 触发谱面表现事件。
-
-- 扫描超出判定窗口的音符。
-
-- 管理歌曲段落检查点。
-
+设计和调试时应区分。
 
 ---
 
-### 5.6 InputCapture
+## 3.10 重放能力必须从底层时间模型中自然产生
 
-负责生成原始输入事件。
+如果已经拥有：
 
-主要职责：
+- Chart；
 
-- 捕获设备输入。
+- AudioStartTime；
 
-- 记录时间戳。
+- InputTimeline；
 
-- 分配输入顺序号。
-
-- 记录设备和控制器。
-
-- 写入输入队列。
-
-- 监控输入队列容量。
+- Calibration；
 
 
----
+那么Replay只需要：
 
-### 5.7 ClockMapper
+重新输入记录过的InputEvents。
 
-负责将输入设备时间映射到歌曲采样位置。
+这对：
 
-主要职责：
+- Debug；
 
-- 读取音频时钟快照。
+- 排行榜验证；
 
-- 建立主机时间到音频采样时间的映射。
+- 自动测试；
 
-- 应用输入补偿。
+- 玩家复盘；
 
-- 应用音频输出补偿。
 
-- 检测时钟漂移。
-
-- 标记异常输入。
-
-- 输出有效歌曲时间。
-
+都极其重要。
 
 ---
 
-### 5.8 CandidateResolver
-
-负责筛选输入可以命中的音符候选。
-
-主要职责：
-
-- 检查轨道匹配。
-
-- 检查动作匹配。
-
-- 检查输入类型。
-
-- 检查时间窗口。
-
-- 排除已经完成的音符。
-
-- 排除已被其他输入占用的音符。
-
-- 处理密集音符冲突。
-
-- 处理和弦分组。
-
-- 确定输入消费策略。
-
+# 4. 与相近类型的边界
 
 ---
 
-### 5.9 JudgmentEngine
+## 4.1 与普通QTE的区别
 
-负责产生和提交正式判定。
+QTE通常：
 
-主要职责：
+- 出现在其他类型游戏中；
 
-- 计算输入与目标时间的偏差。
+- 事件数量少；
 
-- 计算 Early 或 Late。
+- 节奏持续时间短；
 
-- 匹配判定等级。
-
-- 生成 JudgmentResult。
-
-- 原子修改音符状态。
-
-- 保证判定结果不可重复提交。
-
-- 保证相同输入日志得到相同结果。
+- 输入主要服务剧情或动作。
 
 
----
+节奏游戏则：
 
-### 5.10 ContinuousNoteSystem
+整套运行时围绕：
 
-负责处理持续输入音符。
+Timing Timeline
 
-适用音符包括：
-
-- Hold。
-
-- Slide。
-
-- Drag。
-
-- Analog。
-
-- Rotation。
-
-- Continuous Trace。
-
-
-主要职责：
-
-- 建立持续输入所有权。
-
-- 监控当前输入状态。
-
-- 推进持续音符检查点。
-
-- 处理断开宽限。
-
-- 处理重新抓取。
-
-- 处理释放判定。
-
-- 处理路径偏差。
-
-- 处理设备断开。
-
+长期持续工作。
 
 ---
 
-### 5.11 ScoreComboSystem
+## 4.2 与动作游戏的区别
 
-负责分数、精度和连击聚合。
+动作游戏的核心通常：
 
-主要职责：
+- 空间；
 
-- 计算单音符得分。
+- 攻防；
+    -敌人；
 
-- 更新连击。
-
-- 更新最大连击。
-
-- 计算总体准确率。
-
-- 计算段落表现。
-
-- 计算最终评级。
-
-- 生成结算快照。
+- 命中。
 
 
-它只能消费已经提交的 JudgmentResult，不能自行修改判定等级。
+节奏游戏即使具有角色动作，
+
+核心结果依然主要由：
+
+**Timing Error**
+
+决定。
 
 ---
 
-### 5.12 GaugeFailSystem
+## 4.3 与音乐模拟器的区别
 
-负责生命槽和失败规则。
+音乐模拟器可能追求：
 
-主要职责：
+- 乐器真实性；
 
-- 根据判定增加或减少生命值。
+- 自由演奏；
 
-- 判断是否失败。
+- 音符生成；
 
-- 支持 NoFail。
+- MIDI输入。
 
-- 支持挑战模式。
 
-- 支持继续游戏。
+节奏游戏通常使用：
 
-- 支持不同生命槽规则。
+作者预先编排好的目标谱面
 
-- 输出失败事件。
+来评价玩家。
+
+---
+
+## 4.4 与舞蹈或体感游戏的区别
+
+体感节奏可以使用：
+
+- 动作姿态；
+    -身体运动；
+
+- 空间位置。
+
+
+但只要核心仍然是：
+
+目标时间
+→ 输入事件
+→ 时间误差
+→ 判定，
+
+它仍属于相同宏观范式。
+
+---
+
+# 5. 总体运行时架构
+
+推荐将运行时划分为以下核心域：
+
+1. SongLifecycleSystem；
+
+2. AudioClockSystem；
+
+3. ChartDataSystem；
+
+4. TimingMapSystem；
+
+5. ChartCompiler；
+
+6. NoteRuntimeSystem；
+
+7. InputCaptureSystem；
+
+8. InputBindingSystem；
+
+9. JudgmentSystem；
+
+10. HoldTrackingSystem；
+
+11. ScoreSystem；
+
+12. ComboSystem；
+
+13. GaugeSystem；
+
+14. PresentationTimelineSystem；
+
+15. AudioFeedbackSystem；
+
+16. CalibrationSystem；
+
+17. PracticeModeSystem；
+
+18. ReplaySystem；
+
+19. ResultSystem；
+
+20. ChartAuthoringSystem；
+
+21. ValidationSystem；
+
+22. TelemetryDebugSystem。
+
+
+总体流程：
+
+选择Song
+→ 读取Chart
+→ ChartCompiler解析TimingMap
+→ 预计算Note绝对时间
+→ 加载Audio
+→ 建立AudioClock
+→ Countdown
+→ AudioStart
+→ NoteRuntime根据AudioTime激活可见Note
+→ InputCapture记录输入时间
+→ JudgmentSystem匹配候选Note
+→ 计算TimingError
+→ 生成JudgmentResult
+→ 更新Score、Combo和Gauge
+→ Presentation播放反馈
+→ AudioClock继续推进
+→ MissScanner处理超过判定窗口的Note
+→ Song结束
+→ 完成尾部Note结算
+→ 创建SongResult
+→ 保存Replay和统计。
+
+---
+
+# 6. Song生命周期
+
+## 6.1 SongDefinition
+
+建议字段：
+
+- SongId；
+
+- AudioAssetId；
+
+- PreviewAssetId；
+
+- Duration；
+
+- DefaultBpm；
+
+- Metadata；
+
+- Artist；
+
+- DifficultyChartIds；
+
+- CalibrationProfile；
+
+- PresentationProfile；
+
+- SongVersion。
 
 
 ---
 
-### 5.13 ReplayVerifier
-
-负责记录和重建游戏结果。
-
-主要职责：
-
-- 记录谱面 Hash。
-
-- 记录规则 Hash。
-
-- 记录校准快照。
-
-- 记录播放操作。
-
-- 记录原始输入事件。
-
-- 记录最终结果 Hash。
-
-- 根据输入日志重新执行判定。
-
-- 定位回放差异。
-
-
----
-
-### 5.14 DiagnosticsSystem
-
-负责调试和性能追踪。
-
-主要职责：
-
-- 记录音频时钟。
-
-- 记录输入时刻。
-
-- 记录映射时刻。
-
-- 记录音符目标时间。
-
-- 记录判定窗口。
-
-- 记录判定原因。
-
-- 记录主线程卡顿。
-
-- 记录音频欠载。
-
-- 记录队列溢出。
-
-- 输出偏差统计。
-
-
----
-
-## 6. 时间模型
-
-## 6.1 HostTime
-
-HostTime 是平台提供的单调时钟。
-
-适用于：
-
-- 输入事件时间戳。
-
-- 音频快照关联。
-
-- 线程之间的时间映射。
-
-- 性能追踪。
-
-
-不得使用系统日历时间作为输入判定时间，因为日历时间可能受到系统校时影响。
-
----
-
-## 6.2 AudioSampleTime
-
-AudioSampleTime 表示歌曲当前播放到第几个音频采样。
-
-例如：
-
-- 采样率为 48000。
-
-- 当前播放位置为 240000。
-
-- 说明歌曲大约播放了 5 秒。
-
-
-推荐使用 64 位整数保存 AudioSampleTime。
-
-它应作为判定系统的主要权威时间单位。
-
----
-
-## 6.3 BeatTime
-
-BeatTime 是谱面作者使用的音乐位置。
-
-通常包括：
-
-- 小节。
-
-- 拍。
-
-- 拍内 Tick。
-
-- PPQ 单位。
-
-- 分数拍位。
-
-
-BeatTime 适合编辑，但不适合在运行时持续动态换算。
-
-因此应在谱面编译阶段转换为 AudioSampleTime。
-
----
-
-## 6.4 RenderTime
-
-RenderTime 是表现系统预测当前画面应该呈现的歌曲位置。
-
-它可以包括：
-
-- 视觉提前量。
-
-- 显示设备延迟补偿。
-
-- 帧预测。
-
-- 插值。
-
-- 镜头延迟。
-
-
-RenderTime 只用于画面表现，不能参与正式判定。
-
----
-
-## 6.5 偏移配置拆分
-
-节奏游戏不应只提供一个含义不明的 Offset。
-
-至少应拆分为以下几类。
-
-### InputCompensation
-
-用于补偿：
-
-- 输入设备延迟。
-
-- 操作系统输入事件延迟。
-
-- 玩家稳定的个人输入习惯。
-
-
-该偏移会参与正式输入时间映射。
-
-### AudioOutputCompensation
-
-用于补偿：
-
-- 音频设备缓冲。
-
-- 蓝牙耳机延迟。
-
-- 音频驱动延迟。
-
-- 音频从提交到实际听见的时间差。
-
-
-### VisualOffset
-
-只用于调整：
-
-- 音符抵达判定线的视觉时刻。
-
-- 判定线动画。
-
-- 演出同步。
-
-- 视频与音乐之间的视觉对齐。
-
-
-VisualOffset 不得修改音符目标时间。
-
-### HitFeedbackOffset
-
-用于调整：
-
-- 打击音。
-
-- 震动。
-
-- 局部点击反馈。
-
-- 角色打击动画。
-
-
----
-
-## 6.6 暂停、跳转和重新开始
-
-暂停和跳转必须作为完整的播放事务处理。
-
-一次跳转推荐执行以下流程：
-
-发出跳转请求
-→ 暂停接受普通判定输入
-→ 增加播放代次
-→ 执行音频跳转
-→ 确认新的采样位置
-→ 从检查点恢复谱面状态
-→ 重建激活音符窗口
-→ 清除旧代次输入
-→ 清除旧代表现事件
-→ 执行预卷
-→ 恢复播放
-
-不能只修改音频播放位置，而保留原来的音符状态和输入队列。
-
----
-
-## 7. 谱面数据模型
-
-## 7.1 SongManifest
-
-SongManifest 表示一首歌曲的基础信息。
-
-建议字段包括：
-
-- SongId。
-
-- AudioAssetId。
-
-- AudioHash。
-
-- DurationSamples。
-
-- SampleRate。
-
-- PreviewStartSample。
-
-- PreviewEndSample。
-
-- 默认音量。
-
-- TempoMapId。
-
-- ChartId 列表。
-
-- 内容版本。
-
-- 发布状态。
-
-- 许可信息。
-
-
----
-
-## 7.2 TempoMap
-
-TempoMap 负责描述歌曲的音乐时间结构。
-
-可以包含：
-
-- BPM 段。
-
-- 拍号段。
-
-- 停顿段。
-
-- 延迟段。
-
-- Warp 段。
-
-- 小节编号变化。
-
-- 段落标记。
-
-- 作者标记。
-
-
-TempoMap 必须能够稳定地将 BeatTime 转换为 AudioSampleTime。
-
----
-
-## 7.3 ChartDefinition
-
-ChartDefinition 表示一张谱面的编辑数据。
-
-建议字段包括：
-
-- ChartId。
-
-- SongId。
-
-- DifficultyId。
-
-- RulesetId。
-
-- LaneLayoutId。
-
-- ChartVersion。
-
-- AuthoringPPQ。
-
-- NoteDefinition 列表。
-
-- ChartEvent 列表。
-
-- JudgmentProfileId。
-
-- 允许使用的玩法修改器。
-
-- ChartHash。
-
-
----
-
-## 7.4 NoteDefinition
-
-通用音符字段包括：
-
-- NoteId。
-
-- NoteType。
-
-- StartBeat。
-
-- EndBeat。
-
-- LaneId。
-
-- ActionId。
-
-- ChordGroupId。
-
-- PathId。
-
-- JudgmentProfileOverride。
-
-- InputConsumptionPolicy。
-
-- VisualStyleId。
-
-- HitSoundId。
-
-- GameplayFlags。
-
-
-典型音符类型包括：
-
-- Tap。
-
-- Hold。
-
-- Release。
-
-- Flick。
-
-- Slide。
-
-- Analog。
-
-- Mine。
-
-- Avoid。
-
-- ChordMember。
-
-- FreeTarget。
-
-
-与判定无关的镜头、粒子和场景变化应使用 ChartEvent，不应随意增加新的音符类型。
-
----
-
-## 7.5 CompiledNote
-
-谱面编译后，每个运行时音符至少包含：
-
-- StartSample。
-
-- EndSample。
-
-- EarliestJudgmentSample。
-
-- LatestJudgmentSample。
-
-- MissCommitSample。
-
-- LaneIndex。
-
-- LaneOrderIndex。
-
-- ChordGroupIndex。
-
-- ContinuousCheckpointIndex。
-
-- StableSortKey。
-
-- RulesetReference。
-
-
-运行时不应反复从 BPM 和拍位计算目标时间。
-
----
-
-## 7.6 JudgmentProfile
-
-JudgmentProfile 定义判定规则。
+## 6.2 SongRuntimeState
 
 建议包含：
 
-- Perfect 的 EarlyWindow。
+- SongId；
 
-- Perfect 的 LateWindow。
+- ChartId；
 
-- Great 的 EarlyWindow。
+- CurrentPhase；
 
-- Great 的 LateWindow。
+- AudioStartTimestamp；
 
-- Good 的 EarlyWindow。
+- CurrentAudioTime；
 
-- Good 的 LateWindow。
+- SongPlaybackState；
 
-- MissWindow。
+- PauseState；
 
-- HoldStartWindow。
+- ScoreState；
 
-- HoldReleaseWindow。
+- ComboState；
 
-- HoldBreakGrace。
+- GaugeState；
 
-- SlidePathTolerance。
+- PendingNotes；
 
-- ChordSpan。
-
-- 是否允许重新抓取。
-
-- 是否消费输入。
-
-- 自动判定规则。
-
-- 分数权重。
-
-- 准确率权重。
-
-
-Early 和 Late 可以不对称，但必须显式定义。
-
----
-
-## 7.7 InputEvent
-
-原始输入事件建议包含：
-
-- InputEventId。
-
-- DeviceId。
-
-- PhysicalControlId。
-
-- MappedActionId。
-
-- EdgeType。
-
-- AnalogValue。
-
-- HostTimestamp。
-
-- InputSequence。
-
-- TransportGeneration。
-
-- IsSynthetic。
-
-
-映射后的输入可以额外附加：
-
-- EffectiveSongSample。
-
-- ClockSnapshotId。
-
-- CalibrationProfileHash。
-
-- MappingConfidence。
-
-- MappingFailureFlags。
-
-
-不得覆盖原始输入时间戳。
-
----
-
-## 7.8 NoteRuntime
-
-普通音符状态机建议为：
-
-Pending
-→ Armed
-→ HitActive
-→ Completed
-
-失败路径为：
-
-Pending 或 Armed
-→ Missed
-
-长按音符状态机建议为：
-
-Pending
-→ Armed
-→ Holding
-→ Released 或 Broken
-→ Completed
-
-额外状态可以包括：
-
-- Invalidated。
-
-- AutoResolved。
-
-- PracticeSkipped。
-
-- RebuiltFromCheckpoint。
+- SongVersion。
 
 
 ---
 
-## 7.9 JudgmentResult
+## 6.3 SongPhase
 
-一次正式判定结果建议包含：
+推荐：
 
-- JudgmentId。
+- Loading；
 
-- NoteId。
+- Ready；
 
-- InputEventId。
+- Countdown；
 
-- TargetSample。
+- Playing；
 
-- EffectiveInputSample。
+- Paused；
 
-- DeltaSamples。
+- Seeking；
 
-- EarlyOrLate。
+- Ending；
 
-- Grade。
+- ResultPending；
 
-- ScoreContribution。
+- Completed；
 
-- AccuracyContribution。
-
-- ComboEffect。
-
-- GaugeEffect。
-
-- RulesetVersion。
-
-- TransportGeneration。
-
-- FailureFlags。
-
-
-JudgmentResult 一旦提交，应保持不可变。
-
----
-
-## 7.10 SessionState
-
-歌曲会话状态建议包含：
-
-- SessionId。
-
-- SongId。
-
-- ChartId。
-
-- ChartHash。
-
-- RulesetHash。
-
-- CalibrationSnapshot。
-
-- TransportGeneration。
-
-- CurrentSongSample。
-
-- LaneCursorState。
-
-- ActiveContinuousNotes。
-
-- ScoreState。
-
-- ComboState。
-
-- GaugeState。
-
-- RankEligibility。
-
-- FailureReasons。
-
-- ReplayWriterState。
-
-
-歌曲是否完成和成绩是否具备排名资格，应分别管理。
-
----
-
-## 8. 谱面编译流程
-
-推荐谱面编译流程如下：
-
-编辑器谱面
-→ 数据结构校验
-→ TempoMap 校验
-→ 拍位转采样位置
-→ 音符引用校验
-→ 音符时间排序
-→ 同轨道冲突检测
-→ 判定窗口歧义分析
-→ 长按和滑动完整性检查
-→ 和弦分组检查
-→ 构建轨道索引
-→ 构建区间索引
-→ 构建段落检查点
-→ 构建持续音符检查点
-→ 运行时预算分析
-→ 生成 ChartHash
-→ 输出只读运行时谱面包
-
-### 8.1 必须检测的问题
-
-谱面编译器至少应检测：
-
-- BPM 小于或等于零。
-
-- Warp 导致采样时间倒退。
-
-- Hold 结束时间早于开始时间。
-
-- 滑动路径时间不单调。
-
-- 和弦中存在重复动作。
-
-- 音符落在歌曲结束之后。
-
-- 同一轨道判定窗口严重重叠。
-
-- 视觉事件引用不存在的音符。
-
-- 音符密度超过运行时预算。
-
-- 排名谱面引用未登记脚本。
-
-- 音频 Hash 与谱面版本不匹配。
-
-- 谱面修改后错误沿用旧 Hash。
+- Aborted。
 
 
 ---
 
-## 9. 运行时执行流程
+# 7. AudioClockSystem
 
-## 9.1 会话生命周期
+AudioClock是整个系统的时间权威。
 
-推荐状态机：
+推荐接口语义：
 
-Created
-→ Loading
-→ Validated
-→ Ready
-→ PreRoll
-→ Playing
-→ Completing
-→ Completed、Failed 或 Aborted
+- CurrentSongTime；
 
-启动步骤：
+- ScheduledStartTime；
 
-1. 加载歌曲资源。
+- PlaybackPosition；
 
-2. 加载运行时谱面。
+- IsPlaying；
 
-3. 校验音频 Hash。
+- IsPaused；
 
-4. 校验谱面 Hash。
+- PlaybackRate；
 
-5. 冻结规则配置。
-
-6. 冻结判定配置。
-
-7. 冻结校准配置。
-
-8. 创建回放头信息。
-
-9. 预缓冲音频。
-
-10. 清空输入队列。
-
-11. 建立初始音频时钟快照。
-
-12. 执行预卷。
-
-13. 从确认的采样位置开始正式播放。
+- ClockVersion。
 
 
 ---
 
-## 9.2 单次判定更新阶段
+## 7.1 不应使用普通GameTime作为歌曲时钟
 
-每次判定更新建议按固定顺序执行。
+以下情况都会破坏同步：
 
-### 阶段一：AcquireClock
+- GameTime受TimeScale影响；
 
-读取最新有效的音频时钟快照。
+- GC卡顿；
 
-计算当前权威歌曲采样位置。
+- Update丢帧；
 
-### 阶段二：TransportBarrier
+- 窗口切换；
 
-检查：
-
-- 当前播放代次。
-
-- 是否发生暂停。
-
-- 是否发生跳转。
-
-- 是否发生音频设备切换。
-
-- 是否发生时钟跳变。
-
-- 是否发生音频欠载。
+- UI暂停。
 
 
-如存在时间不连续，应先执行恢复流程。
+AudioClock必须基于：
 
-### 阶段三：DrainInput
+底层音频时间或稳定的高精度播放时钟。
 
-从输入队列读取事件。
+---
 
-按照以下顺序稳定排序：
+# 8. Scheduling Start
 
-- HostTimestamp。
+不要：
 
-- InputSequence。
+按下Play之后
+
+立刻假设：
+
+SongTime = 0。
+
+推荐：
+
+预定未来一个明确时间点：
+
+ScheduledAudioStart。
+
+例如：
+
+当前DSP时间 + 1秒。
+
+然后：
+
+- Audio；
+
+- Chart；
+
+- Countdown；
 
 
-### 阶段四：MapInputTime
+全部对齐到同一个StartTimestamp。
 
-将输入事件映射为歌曲采样位置。
+---
 
-同时附加：
+# 9. ChartDefinition
 
-- 使用的时钟快照。
+建议字段：
 
-- 校准配置。
+- ChartId；
 
-- 映射异常标记。
+- SongId；
+
+- DifficultyId；
+
+- LaneCount；
+
+- TimingMapId；
+
+- NoteDefinitions；
+
+- EventDefinitions；
+
+- ChartOffset；
+
+- ChartVersion；
+
+- ContentHash。
 
 
-### 阶段五：ArmTimeline
+---
 
-推进每条轨道的音符游标。
+# 10. NoteDefinition
 
-将进入最大 EarlyWindow 的音符从 Pending 转换为 Armed。
+建议字段：
 
-### 阶段六：ResolveDiscreteInput
+- NoteId；
 
-处理离散输入，例如：
+- BeatPosition；
 
-- Tap。
+- NoteType；
+
+- LaneId；
+
+- DurationBeats；
+
+- InputActionId；
+
+- GroupId；
+
+- Flags；
+
+- CustomProperties；
+
+- NoteVersion。
+
+
+推荐优先存：
+
+**Beat Position**
+
+而不是只存：
+
+绝对秒数。
+
+原因：
+
+谱面编辑往往围绕：
+
+- Beat；
+
+- Measure；
+
+- BPM；
+
+
+进行。
+
+---
+
+# 11. TimingMap
+
+歌曲可能存在：
+
+- BPM变化；
+
+- 变拍；
+
+- Stop；
+
+- Warp；
+
+- Scroll Speed变化。
+
+
+需要单独：
+
+**TimingMap。**
+
+---
+
+## 11.1 TimingPoint
+
+建议字段：
+
+- BeatPosition；
+
+- EventType；
+
+- Bpm；
+
+- TimeSignature；
+
+- StopDuration；
+
+- ScrollMultiplier；
+
+- TimingVersion。
+
+
+---
+
+# 12. BeatToTime转换
+
+ChartCompiler负责：
+
+BeatPosition
+
+→
+
+TargetTimestamp。
+
+最终运行时Note最好提前获得：
+
+- TargetTime；
+
+- EndTime；
+
+- VisualSpawnTime；
+
+- MissDeadline。
+
+
+运行中不要频繁重新积分整个BPM Map。
+
+---
+
+# 13. ChartCompiler
+
+加载谱面后：
+
+解析TimingPoints
+→ 建立Beat-Time Segment
+→ 计算每个Note TargetTime
+→ 计算Hold EndTime
+→ 排序Note
+→ 建立LaneIndex
+→ 建立TimeIndex
+→ 验证冲突
+→ 创建CompiledChart。
+
+---
+
+# 14. CompiledChart
+
+推荐包含：
+
+- NotesByTime；
+
+- NotesByLane；
+
+- EventTimeline；
+
+- Duration；
+
+- FirstPlayableTime；
+
+- LastPlayableTime；
+
+- ChartStatistics；
+
+- ContentHash。
+
+
+运行时优先读取CompiledChart，
+
+而不是反复解析原始作者格式。
+
+---
+
+# 15. InputCaptureSystem
+
+## 15.1 InputEvent
+
+建议字段：
+
+- InputEventId；
+
+- InputActionId；
+
+- RawDeviceId；
+
+- EventType；
+
+- Timestamp；
+
+- SequenceId；
+
+- InputVersion。
+
+
+---
+
+## 15.2 EventType
+
+至少区分：
+
+- Press；
+
+- Release；
+
+- AxisEnter；
+
+- AxisExit；
+
+- Gesture；
 
 - Flick。
 
-- Release。
 
-- Mine。
+具体类型取决于玩法。
 
-- Avoid。
+---
+
+# 16. 输入事件时间戳必须尽可能靠近采样源
+
+错误结构：
+
+Input检测
+→ 放到消息队列
+→ 下一个Update
+→ 使用当前SongTime作为InputTime。
+
+这会人为增加：
+
+一帧乃至多帧误差。
+
+InputEvent应在：
+
+检测到输入时
+
+立即附上高精度Timestamp。
+
+---
+
+# 17. InputBinding
+
+Chart不应该直接写：
+
+Keyboard.Space。
+
+应该写：
+
+InputActionId。
+
+例如：
+
+Lane1Hit。
+
+然后设备配置映射：
+
+Keyboard.D
+→ Lane1Hit。
+
+ControllerButtonX
+→ Lane1Hit。
+
+这样谱面与设备完全分离。
+
+---
+
+# 18. JudgmentSystem
+
+这是整个类型最关键的逻辑模块。
+
+---
+
+## 18.1 JudgmentProfile
+
+建议字段：
+
+- PerfectWindowEarly；
+
+- PerfectWindowLate；
+
+- GreatWindowEarly；
+
+- GreatWindowLate；
+
+- GoodWindowEarly；
+
+- GoodWindowLate；
+
+- MissWindow；
+
+- InputOffsetPolicy；
+
+- JudgmentVersion。
 
 
-为每个输入筛选候选音符并生成 JudgmentRequest。
+---
 
-### 阶段七：AdvanceContinuousNotes
+## 18.2 为什么Early和Late可以不同
 
-处理持续音符：
+部分游戏可以设计：
 
-- Hold。
+Early：
 
-- Slide。
+±某范围。
 
-- Drag。
+Late：
 
-- Analog。
+另一范围。
 
-- Rotation。
+因此不要假设判定窗口总是完全对称。
+
+---
+
+# 19. JudgmentCandidate
+
+玩家按下某Lane时：
+
+JudgmentSystem需要找到：
+
+该Lane附近尚未判定的Note。
+
+搜索条件：
+
+TargetTime位于：
+
+InputTime ± MaxWindow。
+
+然后按规则选择：
+
+距离最近；
+
+或最早合法Note。
+
+---
+
+# 20. 判定流程
+
+InputEvent到达
+→ 应用InputCalibration
+→ 得到AdjustedInputTime
+→ 查询Lane PendingNotes
+→ 找到最佳Candidate
+→ 计算TimingError
+→ 映射JudgmentWindow
+→ 生成JudgmentResult
+→ Note进入Resolved
+→ 发布NoteJudged。
+
+---
+
+# 21. JudgmentResult
+
+建议包含：
+
+- NoteId；
+
+- InputEventId；
+
+- JudgmentType；
+
+- TargetTime；
+
+- InputTime；
+
+- TimingErrorMilliseconds；
+
+- IsEarly；
+
+- ComboBefore；
+
+- JudgmentVersion。
 
 
-持续检查点应根据歌曲采样位置推进，而不是依赖每一帧都被执行。
+---
 
-### 阶段八：SweepExpiredNotes
+# 22. 为什么必须保存TimingError
 
-查找已经超过 MissCommitSample，但尚未完成的音符。
+只保存：
 
-为其生成 MissRequest。
+Perfect
 
-### 阶段九：CommitJudgments
+是不够的。
 
-按照稳定顺序提交所有判定请求。
+玩家可能连续得到Perfect，
 
-建议排序键：
+但实际总是：
 
-TransportGeneration
-→ TargetSample
-→ LaneIndex
-→ ChordGroupId
-→ NoteId
-→ RequestSequence
++25ms Late。
 
-### 阶段十：AggregateResults
+TimingError统计可以发现：
 
-分数、连击、生命槽和任务系统消费已经提交的判定结果。
+玩家存在系统性偏移。
 
-### 阶段十一：PresentationExport
+也可以用于：
 
-将权威结果转换为表现事件：
+Calibration建议。
 
-- 判定文字。
+---
 
-- 打击特效。
+# 23. Miss Scanner
 
-- 连击动画。
+不能要求玩家输入才触发判定。
 
-- 分数跳字。
+如果：
 
-- 镜头效果。
+AudioTime > NoteTargetTime + MissWindow
 
-- 角色动画。
+且Note仍然Pending，
 
-- 震动反馈。
+则：
+
+自动生成Miss。
+
+建议使用：
+
+TimeOrderedPendingIndex。
+
+而不是每帧扫描整个谱面。
+
+---
+
+# 24. NoteRuntimeState
+
+推荐状态：
+
+- Dormant；
+
+- Visible；
+
+- JudgmentEligible；
+
+- Holding；
+
+- Released；
+
+- Resolved；
+
+- Missed；
+
+- Despawned。
 
 
-### 阶段十二：Checkpoint
+---
 
-在指定歌曲段落记录检查点。
+# 25. Tap Note
+
+Tap是最基础Note：
+
+目标时刻：
+
+按下InputAction。
+
+判定完成后：
+
+立即Resolved。
+
+---
+
+# 26. Hold Note
+
+Hold至少包含两个判定：
+
+**Head**
+
+按下。
+
+**Tail**
+
+持续到结束。
+
+---
+
+## 26.1 HoldRuntimeState
+
+建议包含：
+
+- NoteId；
+
+- HeadJudgment；
+
+- HoldStartTime；
+
+- ExpectedEndTime；
+
+- IsHeld；
+
+- BreakDuration；
+
+- HoldTicks；
+
+- TailJudgment；
+
+- HoldVersion。
+
+
+---
+
+# 27. Hold不应每帧直接加Score
+
+否则不同帧率：
+
+Score可能不同。
+
+可以：
+
+固定时间Tick
+
+或：
+
+只根据持续比例
+
+计算。
+
+---
+
+# 28. 提前松开
+
+如果ReleaseTime：
+
+早于：
+
+EndTime - ReleaseWindow
+
+则：
+
+HoldBreak
+
+或TailMiss。
+
+规则必须明确。
+
+---
+
+# 29. Slide / Trace Note
+
+Slide需要跟踪：
+
+时间轴上的目标位置：
+
+`TargetLane(t)`
+
+或：
+
+`TargetPosition(t)`。
+
+玩家输入：
+
+`PlayerPosition(t)`。
+
+系统比较：
+
+距离误差
+
+和：
+
+时间误差。
+
+---
+
+# 30. Flick Note
+
+Flick需要同时满足：
+
+- Timing；
+
+- Direction；
+
+- VelocityThreshold。
+
+
+不要只使用：
+
+一次PointerDelta。
+
+推荐记录：
+
+短时间输入轨迹。
+
+---
+
+# 31. Chord
+
+多个Note拥有相同：
+
+GroupId / TargetTime。
+
+玩家必须：
+
+同时或近似同时输入。
+
+需要：
+
+ChordTolerance。
+
+---
+
+# 32. Chord判定不能被输入顺序影响
+
+两个输入在：
+
+同一个极短时间窗口发生，
+
+不能因为事件队列顺序：
+
+一个Perfect；
+
+另一个Miss。
+
+应对：
+
+ChordGroup
+
+进行短时间聚合判定。
+
+---
+
+# 33. VisualNoteSystem
+
+VisualNote只承担：
+
+表现。
+
+其位置由：
+
+CurrentAudioTime
+
+推导。
+
+---
+
+## 33.1 典型计算
+
+RemainingTime：
+
+TargetTime - VisualSongTime。
+
+然后：
+
+根据ScrollProfile
+
+映射为位置。
+
+---
+
+# 34. Note对象不应该控制自己的逻辑时间
+
+错误：
+
+每个Note：
+
+`position -= speed * deltaTime`
+
+正确：
+
+NoteRenderer：
+
+根据：
+
+TargetTime - AudioTime
+
+直接计算位置。
+
+这会让：
+
+掉帧之后
+
+Note立即回到正确位置。
+
+---
+
+# 35. Scroll Speed与谱面难度分离
+
+玩家可以调整：
+
+VisualScrollSpeed。
+
+但：
+
+TargetTime
+
+和：
+
+JudgmentWindow
+
+不变。
+
+因此高速只是：
+
+阅读方式变化，
+
+不是判定规则变化。
+
+---
+
+# 36. 视觉Offset
+
+VisualSongTime可以定义为：
+
+AudioSongTime
+
+- UserVisualOffset。
+
+
+它只影响：
+
+Note绘制。
+
+不影响：
+
+Judgment。
+
+---
+
+# 37. ScoreSystem
+
+## 37.1 ScoreProfile
+
+可以定义：
+
+PerfectValue；
+
+GreatValue；
+
+GoodValue；
+
+MissValue；
+
+ComboMultiplier；
+
+NoteWeight；
+
+SpecialNoteMultiplier。
+
+---
+
+# 38. Accuracy
+
+推荐依据判定精度计算，
+
+而不是直接：
+
+Score / MaxScore，
+
+因为Score可能包含：
+
+Combo、Bonus等额外机制。
+
+---
+
+## 38.1 AccuracyContribution
+
+例如：
+
+Perfect = 1.0；
+
+Great = 0.8；
+
+Good = 0.4；
+
+Miss = 0。
+
+最终：
+
+SumContribution / TotalNotes。
+
+---
+
+# 39. ComboSystem
+
+Combo一般：
+
+成功判定
+→ +1。
+
+Miss
+→ Reset。
+
+部分规则：
+
+Good
+
+也可能打断Combo。
+
+应该数据化。
+
+---
+
+# 40. MaximumCombo
+
+SongResult需要保存：
+
+MaxCombo。
+
+与最终Combo分离。
+
+---
+
+# 41. Gauge / Life
+
+部分节奏游戏拥有：
+
+- Life；
+
+- Groove；
+
+- Clear Gauge；
+
+- Fever Gauge。
+
+
+---
+
+## 41.1 GaugeDefinition
+
+建议字段：
+
+- InitialValue；
+
+- MaximumValue；
+
+- JudgmentDeltas；
+
+- DrainRule；
+
+- ClearThreshold；
+
+- FailThreshold；
+
+- GaugeVersion。
+
+
+---
+
+# 42. Gauge与Score应分离
+
+玩家可能：
+
+Score很高
+
+但Fail。
+
+也可能：
+
+成功Clear
+
+但Accuracy较低。
+
+这种分离产生：
+
+不同目标。
+
+---
+
+# 43. Fever / Bonus Section
+
+可以设计：
+
+高Combo
+→ Fever。
+
+Fever修改：
+
+- Score；
+
+- VFX；
+
+- 音效；
+
+- 特殊演出。
+
+
+但最好不要修改：
+
+基础Timing Window，
+
+否则高Combo玩家突然获得不同判定标准。
+
+---
+
+# 44. CalibrationSystem
+
+至少需要支持：
+
+- AudioOffset；
+
+- InputOffset；
+
+- VisualOffset。
+
+
+---
+
+# 45. AudioOffset
+
+补偿：
+
+实际听到声音
+
+相对于：
+
+逻辑AudioClock
+
+的延迟。
+
+---
+
+# 46. InputOffset
+
+补偿：
+
+设备输入路径。
+
+---
+
+# 47. VisualOffset
+
+调整：
+
+视觉Note到达判定线时间。
+
+---
+
+# 48. 自动Calibration流程
+
+可以：
+
+播放固定节拍
+→ 玩家跟随点击
+→ 收集多次TimingError
+→ 去除极端值
+→ 计算MedianOffset
+→ 推荐Input/Audio Offset。
+
+---
+
+# 49. Calibration不能用少量样本
+
+玩家天然存在：
+
+操作误差。
+
+一次点击：
+
+不能代表设备延迟。
+
+需要：
+
+多次采样。
+
+---
+
+# 50. Calibration Profile
+
+可以按：
+
+- Device；
+
+- AudioOutput；
+
+- DisplayMode；
+
+- Controller；
+
+
+保存。
+
+因为：
+
+蓝牙耳机
+
+和：
+
+有线耳机
+
+延迟可能完全不同。
+
+---
+
+# 51. Pause
+
+暂停节奏游戏比普通游戏复杂。
+
+不能：
+
+Audio暂停了，
+
+但AudioClock继续走。
+
+---
+
+## 51.1 Pause流程
+
+冻结Judgment输入
+→ 暂停Audio
+→ 冻结AudioClock
+→ 保存PauseTimestamp
+→ UI进入Pause。
+
+---
+
+# 52. Resume
+
+Resume不能：
+
+立即恢复音乐
+
+同时Note突然进入判定区。
+
+推荐：
+
+短倒计时：
+
+3
+2
+1
+
+然后：
+
+Audio从精确时间继续。
+
+---
+
+# 53. Seek / Practice
+
+练习模式需要：
+
+跳到：
+
+某个Measure。
+
+流程：
+
+Pause
+→ 清理当前NoteRuntime
+→ Seek Audio
+→ 重建附近Note窗口
+→ 重置相关Score或进入PracticeScore
+→ Countdown
+→ Resume。
+
+---
+
+# 54. Practice Loop
+
+允许：
+
+Measure 20
+
+到：
+
+Measure 28
+
+循环。
+
+这是高难谱面训练的关键工具。
+
+---
+
+# 55. 音频播放结束不等于谱面立刻结束
+
+最后一个Note可能：
+
+晚于音频尾部
+
+或有：
+
+Hold尾部。
+
+SongCompletion应该检查：
+
+AudioEnded
+
+- AllRequiredNotesResolved
+
+
+而不是只监听：
+
+AudioSource finished。
+
+---
+
+# 56. 帧率下降时的行为
+
+假设：
+
+目标Note时间：
+
+10.000s。
+
+游戏从：
+
+9.950
+
+卡顿到：
+
+10.080。
+
+Note视觉可能跳过判定线。
+
+但玩家输入事件如果在：
+
+10.012
+
+已经由输入线程捕获，
+
+仍应：
+
+正确判定。
+
+逻辑不能因为：
+
+某帧没画出来
+
+就判Miss。
+
+---
+
+# 57. Audio Drift
+
+长歌曲可能出现：
+
+音频设备时间
+
+和：
+
+GameClock
+
+逐渐偏移。
+
+因此：
+
+不能简单：
+
+`SongTime += deltaTime`
+
+维护音乐时间。
+
+必须持续参考：
+
+AudioClock真实位置。
+
+---
+
+# 58. 音频事件
+
+部分玩法需要：
+
+击中Note播放KeySound。
+
+KeySound应该：
+
+消费JudgmentResult
+
+触发。
+
+但不要让：
+
+KeySound播放成功
+
+决定：
+
+Note是否命中。
+
+---
+
+# 59. 演出事件
+
+Chart还可以包含：
+
+- CameraEvent；
+
+- CharacterAnimation；
+
+- BackgroundChange；
+
+- Lighting；
+
+- Lyric；
+
+- StageEffect。
+
+
+这些应单独进入：
+
+PresentationEventTimeline。
+
+---
+
+# 60. Presentation Event与Gameplay Note分离
+
+否则：
+
+删除一个舞台特效
+
+可能意外改变：
+
+谱面时间索引或Combo数量。
+
+---
+
+# 61. PresentationTimeline
+
+事件可以依据：
+
+CurrentAudioTime
+
+触发。
+
+需要支持：
+
+- Once；
+
+- Range；
+
+- Continuous；
+
+- SeekRebuild。
+
+
+---
+
+# 62. Seek后的演出恢复
+
+如果Practice从：
+
+90秒
+
+跳到：
+
+120秒，
+
+需要知道：
+
+120秒时：
+
+- 当前背景；
+
+- 当前灯光；
+
+- 当前角色状态。
+
+
+因此某些PresentationEvent需要：
+
+Stateful Timeline。
+
+---
+
+# 63. 难度系统
+
+Difficulty不能只保存：
+
+Easy
+Normal
+Hard。
+
+推荐记录：
+
+实际谱面特征。
+
+---
+
+## 63.1 ChartStatistics
+
+可以包含：
+
+- NoteCount；
+
+- NotesPerSecond；
+
+- PeakNPS；
+
+- ChordRate；
+
+- HoldRatio；
+
+- FlickRatio；
+
+- LaneTransitionRate；
+
+- RhythmComplexity；
+
+- MaximumSimultaneousInputs；
+
+- DifficultyVersion。
+
+
+---
+
+# 64. 局部峰值比平均密度更重要
+
+平均：
+
+5 NPS。
+
+但某5秒：
+
+12 NPS。
+
+玩家真正感受到的是：
+
+局部Peak。
+
+因此难度分析必须拥有：
+
+RollingWindow。
+
+---
+
+# 65. Pattern系统
+
+谱面可以抽象常见Pattern：
+
+- Alternation；
+
+- Trill；
+
+- Staircase；
+
+- Jack；
+
+- ChordStream；
+
+- Burst；
+
+- HoldRelease；
+
+- CrossHand。
+
+
+ChartEditor可以识别Pattern。
+
+这有助于：
+
+- 难度分析；
+    -教学；
+
+- 自动测试。
+
+
+---
+
+# 66. Pattern不是单纯Note序列
+
+同样的时间序列：
+
+映射到不同Lane布局，
+
+手感完全不同。
+
+因此Pattern应包含：
+
+Timing Structure
+
+Spatial Structure。
+
+---
+
+# 67. 作者工具
+
+节奏游戏的内容生产高度依赖Chart Editor。
+
+这是完整产品不可缺少的核心生产工具。
+
+---
+
+# 68. Chart Editor至少需要
+
+- Waveform；
+
+- Beat Grid；
+
+- BPM Markers；
+
+- Measure；
+
+- Lane View；
+
+- Note Placement；
+
+- Hold Editing；
+
+- Playback；
+
+- Speed Control；
+
+- Metronome；
+
+- Loop Region；
+
+- Snap Resolution；
+
+- Judgment Preview；
+
+- Pattern Statistics。
+
+
+---
+
+# 69. Waveform
+
+音乐波形可以帮助作者定位：
+
+- 鼓点；
+
+- 强拍；
+
+- Break；
+
+- 音乐段落。
+
+
+但谱面仍应该基于：
+
+音频时间
+
+而不是：
+
+波形像素位置。
+
+---
+
+# 70. Beat Snap
+
+作者可以设置：
+
+1/4；
+
+1/8；
+
+1/12；
+
+1/16；
+
+1/24；
+
+1/32。
 
 用于：
 
-- 练习模式。
+节奏网格吸附。
 
-- 段落循环。
+---
 
-- 跳转恢复。
+# 71. BPM检测只能辅助，不应直接作为最终谱面真值
 
-- 故障诊断。
+自动BPM分析可能：
 
-- 回放差异定位。
+- 误判半速；
+
+- 误判双速；
+
+- 复杂乐曲存在漂移。
+
+
+最终TimingMap应由作者验证。
+
+---
+
+# 72. Chart Validation
+
+构建前必须自动检查。
+
+---
+
+## 72.1 基础合法性
+
+检查：
+
+- NoteId唯一；
+
+- TargetBeat合法；
+
+- Lane合法；
+
+- Duration非负；
+
+- Hold结束晚于开始；
+
+- TimingMap排序；
+
+- BPM大于0；
+
+- Chart结束时间合理。
 
 
 ---
 
-## 10. 输入候选仲裁
+# 73. 输入冲突验证
 
-一次输入进入候选解析器后，应依次执行：
+例如同一个Lane：
 
-1. 检查播放代次是否匹配。
+10.000 Tap
 
-2. 检查输入动作是否匹配。
+同时：
 
-3. 检查输入轨道是否匹配。
+9.000～11.000 Hold。
 
-4. 排除已经完成的音符。
+如果规则不允许：
 
-5. 排除已经 Miss 的音符。
-
-6. 排除已经被其他输入占用的音符。
-
-7. 检查时间是否位于最大判定窗口。
-
-8. 检查音符类型是否接受当前输入边缘。
-
-9. 检查和弦、长按或路径所有权。
-
-10. 根据 Ruleset 执行候选仲裁。
-
-11. 确定输入是否被消费。
-
-12. 生成判定请求或拒绝原因。
-
-
-常见候选仲裁策略包括：
-
-### EarliestHittable
-
-优先命中时间最早、仍然可以被判定的音符。
-
-### NearestTarget
-
-优先命中与输入时刻绝对偏差最小的音符。
-
-### FrontGuard
-
-前一个音符没有完全离开判定窗口时，不允许后一个音符抢占输入。
-
-### ExplicitGroup
-
-只允许在指定的和弦组或音符组内进行仲裁。
-
-排名模式下，仲裁结果不能依赖数组、字典或对象容器的随机遍历顺序。
+必须报错。
 
 ---
 
-## 11. 长按与持续音符
+# 74. 不可能Chord检测
 
-长按音符不应被简单实现为大量普通 Tap 音符的集合。
+游戏只允许：
 
-推荐设计为：
+最多4个同时输入。
 
-1. 起始输入成功后，创建 HoldOwnership。
+谱面却出现：
 
-2. HoldOwnership 绑定音符、设备和动作。
+6键Chord。
 
-3. 持续状态通过输入状态快照读取。
-
-4. 中途计分点使用预编译采样位置。
-
-5. 断开时进入宽限状态。
-
-6. 如允许重新抓取，则在宽限结束前恢复 Holding。
-
-7. 到达结束点时执行 ReleaseJudgment。
-
-8. 提交完整长按结果。
-
-
-HoldOwnership 建议包含：
-
-- NoteId。
-
-- DeviceId。
-
-- ActionId。
-
-- StartInputEventId。
-
-- StartSample。
-
-- LastValidSample。
-
-- BreakStartSample。
-
-- CurrentCheckpointIndex。
-
-- RegrabCount。
-
-
-渲染帧跳过某个中途检查点时，系统应一次性补处理所有已经经过的检查点，而不是直接漏掉。
+需要ContentValidation直接阻止发布。
 
 ---
 
-## 12. 和弦处理
+# 75. Hold重叠
 
-和弦组可以由多个音符成员组成。
+相同输入轨道：
 
-系统需要明确：
+两个Hold重叠。
 
-- 一个输入能否满足多个成员。
+除非规则明确支持，
 
-- 多个设备能否共同完成和弦。
-
-- 成员输入先后顺序是否影响判定。
-
-- 漏掉一个成员时其他成员是否仍计分。
-
-- 和弦等级是取最差成员、平均值还是独立规则。
-
-- 和弦特效在何时触发。
-
-- 和弦输入时间跨度上限。
-
-- 和弦成员是否分别消费输入。
-
-
-推荐将成员判定和组级判定分离：
-
-成员输入提交
-→ 等待 ChordSpan 结束
-→ 聚合成员状态
-→ 提交 ChordGroupResult
-→ 产生组级表现
+否则应报错。
 
 ---
 
-## 13. 模块通信
+# 76. Judgment Ambiguity Test
 
-## 13.1 Command
+两个同Lane Note：
 
-Command 表示希望模块执行的操作。
+间距比：
+
+最大判定窗口
+
+还小。
+
+可能导致：
+
+一次输入不知道应该判哪个。
+
+Validation应识别。
+
+---
+
+# 77. Chart Difficulty Analyzer
+
+自动统计：
+
+- NPS；
+
+- Peak；
+
+- Chord；
+
+- Pattern；
+
+- HandLoad；
+
+- HoldOverlap；
+
+- Transition。
+
+
+用于辅助Difficulty评级。
+
+---
+
+# 78. 但自动Difficulty不能代替人工试玩
+
+节奏难度受到：
+
+- 手型；
+
+- Pattern熟悉度；
+    -视觉；
+
+- 音乐结构；
+
+
+影响。
+
+Analyzer是工具，
+
+不是最终裁决者。
+
+---
+
+# 79. Replay系统
+
+## 79.1 ReplayHeader
+
+建议包含：
+
+- SongId；
+
+- ChartId；
+
+- ChartContentHash；
+
+- GameVersion；
+
+- JudgmentProfileId；
+
+- CalibrationProfile；
+
+- PlaybackRate；
+
+- ReplayVersion。
+
+
+---
+
+## 79.2 ReplayBody
+
+主要记录：
+
+InputEvents。
+
+无需保存：
+
+每一个Note结果。
+
+重新运行Judgment即可获得结果。
+
+---
+
+# 80. 为什么Replay必须记录ChartHash
+
+如果谱面后续修改：
+
+同一个Replay
+
+可能得到不同结果。
+
+因此需要知道：
+
+Replay对应的是哪一个Chart版本。
+
+---
+
+# 81. Leaderboard
+
+线上排名提交至少需要：
+
+- SongId；
+
+- ChartId；
+
+- ContentHash；
+
+- Score；
+
+- Accuracy；
+
+- MaxCombo；
+
+- JudgmentCounts；
+
+- ReplayHash；
+
+- ClientVersion。
+
+
+---
+
+# 82. 排行榜反作弊
+
+最可靠的模式之一：
+
+客户端提交：
+
+InputReplay。
+
+服务器或验证服务：
+
+重新执行Judgment。
+
+确认：
+
+Score匹配。
+
+---
+
+# 83. 不能只相信客户端上传Score
+
+否则修改内存：
+
+99999999
+
+即可提交。
+
+即使不做完整服务器重放，
+
+至少要进行：
+
+- Score范围验证；
+
+- NoteCount验证；
+
+- Judgment分布验证；
+
+- Combo一致性；
+
+- Replay摘要验证。
+
+
+---
+
+# 84. Multiplayer Rhythm
+
+如果加入实时多人：
+
+不要试图让所有客户端的：
+
+AudioPlayback
+
+直接互相同步。
+
+应定义：
+
+共同：
+
+NetworkSongStartTimestamp。
+
+每个客户端：
+
+将本地AudioClock对齐到：
+
+服务器约定开始时间。
+
+---
+
+# 85. PvP判定仍应本地完成或使用可验证Replay
+
+音乐游戏要求毫秒级反馈。
+
+如果每次按键：
+
+等待服务器确认，
+
+体验会非常差。
+
+因此常见逻辑可以是：
+
+本地即时判定
+→ 比赛结果同步
+→ 后验验证。
+
+---
+
+# 86. Ghost模式
+
+Ghost比实时PvP简单很多。
+
+记录其他玩家：
+
+Combo / Accuracy / Score Timeline。
+
+本地显示：
+
+当前你领先或落后多少。
+
+无需实时同步全部Note。
+
+---
+
+# 87. 完整事件与执行流程示例
+
+以下以：
+
+**一首180 BPM的四轨节奏歌曲，在副歌段包含Tap、Chord与Hold组合**
+
+为例。
+
+---
+
+## 87.1 选择歌曲
+
+玩家选择：
+
+SongId = NeonPulse。
+
+Difficulty：
+
+Expert。
+
+---
+
+## 87.2 加载谱面
+
+ChartCompiler读取：
+
+TimingMap。
+
+开头：
+
+180 BPM。
+
+第二段：
+
+变为：
+
+190 BPM。
+
+---
+
+## 87.3 编译Note
+
+某个Note：
+
+Beat = 64。
+
+转换得到：
+
+TargetTime = 21.333s。
+
+---
+
+## 87.4 Ready阶段
+
+Audio资源加载完成。
+
+系统建立：
+
+ScheduledStartDSPTime。
+
+---
+
+## 87.5 Countdown
+
+UI显示：
+
+3
+2
+1。
+
+此时Audio尚未开始。
+
+---
+
+## 87.6 Song开始
+
+AudioClock进入：
+
+Playing。
+
+ChartRuntime开始根据：
+
+CurrentAudioTime
+
+计算Note视觉位置。
+
+---
+
+## 87.7 Note进入屏幕
+
+目标Note还有：
+
+1.2秒。
+
+Renderer根据：
+
+VisualScrollProfile
+
+把它绘制在远离判定线的位置。
+
+---
+
+## 87.8 玩家看到Note接近
+
+CurrentAudioTime：
+
+21.100。
+
+Note距离目标：
+
+233ms。
+
+---
+
+## 87.9 玩家输入
+
+设备产生：
+
+Lane2 Press。
+
+InputCapture立即记录：
+
+RawTimestamp。
+
+应用Calibration后：
+
+AdjustedSongTime：
+
+21.348。
+
+---
+
+## 87.10 JudgmentCandidate
+
+Lane2 PendingIndex中最近Note：
+
+Target：
+
+21.333。
+
+TimingError：
+
++15ms。
+
+---
+
+## 87.11 判定
+
+PerfectWindow：
+
+±30ms。
+
+因此：
+
+Judgment = Perfect。
+
+---
+
+## 87.12 唯一判定事件发布
+
+NoteJudged：
+
+Perfect
++15ms。
+
+---
+
+## 87.13 下游系统响应
+
+ScoreSystem：
+
+增加Score。
+
+ComboSystem：
+
+Combo +1。
+
+GaugeSystem：
+
+增加Gauge。
+
+PresentationSystem：
+
+显示Perfect特效。
+
+AudioFeedback：
+
+播放HitSound。
+
+Analytics：
+
+记录+15ms Late。
+
+所有系统消费：
+
+同一JudgmentResult。
+
+---
+
+## 87.14 后续Chord
+
+下一节拍有：
+
+Lane1 + Lane3。
+
+两个Note属于同一ChordGroup。
+
+---
+
+## 87.15 玩家输入两个按键
+
+输入时间相差：
+
+8ms。
+
+ChordAggregator确认：
+
+位于SimultaneousWindow内。
+
+分别判定：
+
+Perfect。
+
+---
+
+## 87.16 Hold开始
+
+随后：
+
+Lane4 Hold。
+
+Head目标：
+
+23.000s。
+
+End：
+
+24.500s。
+
+---
+
+## 87.17 Hold Head
+
+玩家按下：
+
+22.991。
+
+Head：
+
+Perfect Early 9ms。
+
+Hold进入：
+
+Holding。
+
+---
+
+## 87.18 Hold期间
+
+系统按照：
+
+固定HoldTick
+
+计算持续状态。
+
+不依赖渲染FPS。
+
+---
+
+## 87.19 提前Release
+
+玩家：
+
+24.420释放。
+
+允许ReleaseWindow：
+
+100ms。
+
+因此：
+
+Tail仍为合法Great。
+
+---
+
+## 87.20 副歌进入190 BPM
+
+TimingMap切换到：
+
+190 BPM Segment。
+
+所有后续Note TargetTime已经由Compiler预计算。
+
+运行时不需要临时修改：
+
+Note移动速度逻辑。
+
+---
+
+## 87.21 发生掉帧
+
+一次资源加载导致：
+
+渲染停止70ms。
+
+Audio仍然继续。
+
+下一帧：
+
+VisualNote直接根据AudioClock重新计算位置。
+
+不会因为Update少执行几次：
+
+逐渐漂移。
+
+---
+
+## 87.22 玩家输入仍被记录
+
+输入事件在：
+
+正确时间进入InputBuffer。
+
+因此即使Note视觉发生跳跃，
+
+逻辑判定仍然可以正确。
+
+---
+
+## 87.23 歌曲结束
+
+Audio结束。
+
+但最后一个Hold仍有：
+
+150ms。
+
+SongLifecycle等待：
+
+AllGameplayNotesResolved。
+
+---
+
+## 87.24 Result
+
+生成：
+
+- Score；
+
+- Accuracy；
+
+- MaxCombo；
+
+- Perfect；
+
+- Great；
+
+- Good；
+
+- Miss；
+
+- MeanTimingError；
+
+- MedianTimingError；
+
+- EarlyLateDistribution。
+
+
+---
+
+## 87.25 玩家发现问题
+
+结果显示：
+
+大部分输入：
+
+Late 18～25ms。
+
+CalibrationSystem提示：
+
+可能存在稳定输入偏移。
+
+---
+
+## 87.26 玩家调整InputOffset
+
+下一局：
+
+TimingError分布逐渐集中在：
+
+0ms附近。
+
+完整循环体现：
+
+音频权威时间
+→ 谱面目标时间
+→ 高精度输入事件
+→ TimingError
+→ 唯一Judgment
+→ 多系统反馈
+→ 统计分析
+→ 玩家校准与技能成长。
+
+---
+
+# 88. 模块通信设计
+
+## 88.1 Commands
+
+典型命令：
+
+- SelectSong；
+
+- StartSong；
+
+- PauseSong；
+
+- ResumeSong；
+
+- RestartSong；
+
+- SeekPracticePosition；
+
+- SubmitInput；
+
+- ChangeCalibration；
+
+- SelectPracticeLoop。
+
+
+其中：
+
+实际游戏输入推荐通过：
+
+InputEventStream
+
+而不是普通业务Command处理。
+
+---
+
+## 88.2 Queries
+
+适用于：
+
+- CurrentSongTime；
+
+- CurrentCombo；
+
+- CurrentScore；
+
+- CurrentGauge；
+
+- CurrentAccuracy；
+
+- RemainingNotes；
+
+- Calibration；
+
+- CurrentMeasure；
+
+- PracticeLoop。
+
+
+Query不能：
+
+- 判定Note；
+
+- 修改Score；
+
+- 推进AudioClock。
+
+
+---
+
+## 88.3 Domain Events
+
+包括：
+
+- SongLoaded；
+
+- SongStarted；
+
+- NoteBecameVisible；
+
+- InputCaptured；
+
+- NoteJudged；
+
+- NoteMissed；
+
+- HoldStarted；
+
+- HoldBroken；
+
+- ComboChanged；
+
+- GaugeChanged；
+
+- SongPaused；
+
+- SongResumed；
+
+- SongEnded；
+
+- SongResultGenerated。
+
+
+---
+
+## 88.4 Presentation Events
+
+包括：
+
+- SpawnNoteVisual；
+
+- ShowJudgmentText；
+
+- PlayHitVFX；
+
+- PlayKeySound；
+
+- ShakeLane；
+
+- UpdateComboVisual；
+
+- PlayStageAnimation；
+
+- ShowResultScreen。
+
+
+表现事件不能决定：
+
+- Timing；
+
+- Judgment；
+
+- Score；
+
+- Combo。
+
+
+---
+
+# 89. 状态所有权
+
+推荐：
+
+**AudioClockSystem**
+
+拥有歌曲时间。
+
+**ChartRuntimeSystem**
+
+拥有Note逻辑状态。
+
+**InputCaptureSystem**
+
+拥有原始输入历史。
+
+**JudgmentSystem**
+
+拥有判定结果。
+
+**ScoreSystem**
+
+拥有Score。
+
+**ComboSystem**
+
+拥有Combo。
+
+**GaugeSystem**
+
+拥有Gauge。
+
+**PresentationSystem**
+
+仅消费状态。
+
+绝对禁止：
+
+NoteRenderer
+
+自己决定：
+
+是否Miss。
+
+---
+
+# 90. 随机性
+
+大多数标准谱面节奏游戏其实可以做到：
+
+几乎完全确定性。
+
+如果存在：
+
+- Random Lane；
+
+- Procedural Chart；
+
+- Bonus事件；
+
+
+建议分离：
+
+GameplayRandomStream。
+
+---
+
+# 91. 同一谱面重试应尽量保持一致
+
+除非玩家主动选择：
+
+Random Modifier。
+
+否则：
+
+相同Chart
+
+应该拥有：
+
+相同Note结构。
+
+这样练习才有意义。
+
+---
+
+# 92. Save数据
+
+长期存档通常保存：
+
+- SongUnlocks；
+
+- ChartUnlocks；
+
+- BestScores；
+
+- BestAccuracy；
+
+- FullComboFlags；
+
+- PerfectClearFlags；
+
+- CalibrationProfiles；
+
+- Settings；
+
+- ReplayReferences；
+
+- PracticeStatistics。
+
+
+---
+
+# 93. 单曲运行态通常无需中途长期存档
+
+一首歌曲通常几分钟。
+
+可以：
+
+Restart。
+
+但超长谱面或特殊模式可以支持：
+
+PracticeCheckpoint。
+
+---
+
+# 94. 失败隔离
+
+---
+
+## 94.1 音频加载失败
+
+Chart不应开始运行。
+
+Song进入：
+
+LoadFailed。
+
+返回歌曲选择。
+
+---
+
+## 94.2 Chart加载失败
+
+音频不能继续进入正常Playable状态。
+
+防止：
+
+音乐在播
+
+但没有Note。
+
+---
+
+## 94.3 TimingMap异常
 
 例如：
 
-- PlaySong。
+BPM = 0。
 
-- PauseSong。
+ChartCompiler直接拒绝。
 
-- ResumeSong。
-
-- SeekToSection。
-
-- RestartSong。
-
-- SetPracticeLoop。
-
-- AbortSession。
-
-
-Command 不代表操作已经成功。
+不要运行时除零。
 
 ---
 
-## 13.2 Request
+## 94.4 Note非法Lane
 
-Request 表示尚未提交的运行时意图。
+构建期：
+
+Validation失败。
+
+运行期：
+
+隔离非法Note，
+
+记录ContentError。
+
+不能崩溃整首歌。
+
+---
+
+## 94.5 Input设备断开
+
+当前Song可以：
+
+Pause
+
+或：
+
+根据模式继续。
+
+重新连接后：
+
+恢复Binding。
+
+---
+
+## 94.6 Audio设备变化
 
 例如：
 
-- JudgmentRequest。
+蓝牙耳机中途连接。
 
-- MissRequest。
+延迟模型可能发生变化。
 
-- HoldBreakRequest。
+推荐提示：
 
-- ReleaseRequest。
+Calibration可能失效。
 
-- TransportSeekRequest。
+竞技模式可以限制：
 
-
----
-
-## 13.3 Event
-
-Event 表示已经提交的不可变事实。
-
-例如：
-
-- TransportStarted。
-
-- TransportPaused。
-
-- JudgmentCommitted。
-
-- NoteMissed。
-
-- ComboChanged。
-
-- GaugeChanged。
-
-- GaugeDepleted。
-
-- SectionEntered。
-
-- SessionCompleted。
-
-- SessionFailed。
-
+播放中切换输出设备。
 
 ---
 
-## 13.4 Snapshot
-
-Snapshot 表示某一时刻的只读状态。
-
-例如：
-
-- ClockSnapshot。
-
-- InputStateSnapshot。
-
-- ScoreSnapshot。
-
-- GaugeSnapshot。
-
-- PresentationSnapshot。
-
-
----
-
-## 13.5 跨线程通信方式
-
-推荐方式：
-
-- 音频线程到游戏线程：原子快照或单生产者单消费者队列。
-
-- 输入线程到游戏线程：有界输入队列。
-
-- 游戏线程内部：分阶段请求队列。
-
-- 游戏线程到表现线程：允许降级的表现事件队列。
-
-- 游戏线程到存档和遥测：异步结果队列。
-
-
----
-
-## 13.6 播放代次隔离
-
-所有跨线程事件建议携带 TransportGeneration。
-
-以下操作发生时应增加代次：
-
-- 歌曲跳转。
-
-- 重新开始。
-
-- 练习循环回跳。
-
-- 音频设备切换。
-
-- 时钟重建。
-
-- 从检查点恢复。
-
-- 会话重新加载。
-
-
-旧代次的输入、判定请求和表现事件必须被拒绝。
-
-这可以避免跳转后旧事件污染新的歌曲时间线。
-
----
-
-## 14. 可扩展点
-
-## 14.1 Ruleset 扩展
-
-Ruleset 可以定义：
-
-- 输入到音符的映射。
-
-- 候选仲裁方式。
-
-- 判定等级。
-
-- 判定窗口。
-
-- 输入消费规则。
-
-- 长按规则。
-
-- 滑动规则。
-
-- 分数公式。
-
-- 连击规则。
-
-- 生命槽规则。
-
-- 失败条件。
-
-- 排名资格。
-
-
-新增玩法应通过登记后的 Ruleset 扩展，而不是让谱面直接执行任意代码。
-
----
-
-## 14.2 输入设备扩展
-
-InputAdapter 可以支持：
-
-- 键盘。
-
-- 手柄。
-
-- 触摸屏。
-
-- 鼠标。
-
-- 舞蹈踏板。
-
-- 鼓控制器。
-
-- MIDI。
-
-- 摄像头动作识别。
-
-- 可访问性辅助设备。
-
-
-所有设备最终应转换为统一的 InputEvent。
-
-设备专有的去抖、滤波和死区处理，应放在输入适配层。
-
----
-
-## 14.3 音符类型扩展
-
-新增音符类型需要提供：
-
-- 接受的输入动作。
-
-- 接受的输入边缘。
-
-- 激活窗口。
-
-- 候选匹配逻辑。
-
-- 运行时状态机。
-
-- 持续推进规则。
-
-- 结束条件。
-
-- 判定结果生成方式。
-
-- 调试信息。
-
-
-音符扩展不能：
-
-- 直接修改全局分数。
-
-- 从渲染坐标读取权威位置。
-
-- 阻塞音频线程。
-
-- 绕过回放系统。
-
-- 绕过判定结果提交过程。
-
-- 在排名模式下执行未登记脚本。
-
-
----
-
-## 14.4 表现扩展
-
-以下内容可以被自由替换，而不改变核心判定：
-
-- 轨道布局。
-
-- 音符皮肤。
-
-- 判定线。
-
-- 音符运动曲线。
-
-- 角色动画。
-
-- 镜头系统。
-
-- 场景演出。
-
-- UI 主题。
-
-- 打击特效。
-
-- 判定文字。
-
-- 音效风格。
-
-
-这使同一套核心框架能够支持：
-
-- 传统下落式音游。
-
-- 圆环式音游。
-
-- 鼓面式音游。
-
-- 空间节奏游戏。
-
-- 节奏射击。
-
-- 节奏动作游戏。
-
-
----
-
-## 14.5 玩法修改器
-
-玩法修改器应明确作用范围。
-
-### 只影响表现
-
-- ScrollSpeed。
-
-- Mirror。
-
-- Reverse。
-
-- NoteSkin。
-
-- Hidden。
-
-- Sudden。
-
-- ReducedFlash。
-
-- CameraReduction。
-
-
-### 修改谱面但仍可确定重建
-
-- RandomLane。
-
-- Shuffle。
-
-- Simplify。
-
-- LaneRemap。
-
-
-### 修改判定规则
-
-- 放宽判定窗口。
-
-- 自动长按。
-
-- 自动输入。
-
-- NoFail。
-
-- 自动滑动。
-
-- 辅助吸附。
-
-
-修改判定规则的玩法修改器通常应影响排名资格。
-
----
-
-## 15. 多人模式
-
-节奏游戏的实时多人不应等待网络往返后再进行本地输入判定。
-
-推荐架构：
-
-1. 服务器下发 SongId。
-
-2. 服务器下发 ChartHash。
-
-3. 服务器下发 RulesetHash。
-
-4. 服务器下发名义开始时间。
-
-5. 客户端本地播放音乐。
-
-6. 客户端根据本地音频主时钟立即判定。
-
-7. 客户端记录输入日志。
-
-8. 客户端上传结果和验证信息。
-
-9. 服务器复核谱面版本、规则和输入范围。
-
-10. 服务器确认排名或比赛结果。
-
-
-适合的多人模式包括：
-
-- 异步排行榜。
-
-- 幽灵对战。
-
-- 同曲同步比赛。
-
-- 段落积分竞赛。
-
-- 合作演奏。
-
-- 分轨合作。
-
-- 节奏 Raid。
-
-
-异步排行榜和幽灵对战通常比强实时多人更适合高精度节奏游戏。
-
----
-
-## 16. 性能设计
-
-## 16.1 禁止全谱扫描
-
-不能每帧遍历整首歌曲的所有音符。
-
-推荐使用：
-
-- 每轨道前向游标。
-
-- 时间滑动窗口。
-
-- 时间区间索引。
-
-- 活跃音符稠密数组。
-
-- 持续音符独立集合。
-
-- 段落检查点。
-
-- 和弦组索引。
-
-
-运行时每帧工作量应主要取决于当前窗口中的音符数量，而不是整张谱面的总音符数。
-
----
-
-## 16.2 音符表现对象池
-
-音符视觉对象应使用对象池。
-
-对象池负责：
-
-- 提前创建音符代理。
-
-- 回收离开显示范围的音符。
-
-- 复用动画和特效对象。
-
-- 降低运行时分配。
-
-- 降低垃圾回收压力。
-
-
-视觉对象被回收不代表音符已经完成。
-
-音符是否完成必须由 NoteRuntime 决定。
-
----
-
-## 16.3 Playing 状态下避免的操作
-
-正式游玩时应尽量避免：
-
-- 每帧创建字符串。
-
-- 每个音符创建闭包。
-
-- 候选列表无界扩容。
-
-- 输入事件装箱。
-
-- 为每个 Hold Tick 创建对象。
-
-- 同步读取文件。
-
-- 同步解码音频。
-
-- 主线程等待音频锁。
-
-- 大量反射调用。
-
-- 动态加载未缓存资源。
-
-
----
-
-## 16.4 关键性能指标
-
-至少应监控：
-
-- 输入捕获到输入映射的延迟。
-
-- 输入队列最大深度。
-
-- 时钟快照年龄。
-
-- 时钟映射残差。
-
-- 每帧激活音符数量。
-
-- 每次输入候选数量。
-
-- 判定提交耗时。
-
-- 长按系统推进耗时。
-
-- 音频欠载次数。
-
-- 表现事件丢弃数量。
-
-- 回放缓冲大小。
-
-- 最大连续主线程卡顿。
-
-
----
-
-## 17. 失败隔离
-
-## 17.1 谱面无效
-
-处理方式：
-
-- 在进入 Ready 前拒绝谱面。
-
-- 显示具体校验错误。
-
-- 禁止进入排名模式。
-
-- 可回退到上一份已验证谱面。
-
-- 保留编译报告。
-
-
-不得在正式游玩中遇到非法音符后自行猜测其含义。
-
----
-
-## 17.2 音频与谱面不匹配
-
-如果发现：
-
-- AudioHash 不匹配。
-
-- DurationSamples 不匹配。
-
-- 同步标记不匹配。
-
-- 音频版本错误。
-
-
-系统应：
-
-- 中止排名会话。
-
-- 输出版本差异。
-
-- 禁止上传成绩。
-
-- 允许进入明确标记的诊断播放模式。
-
-
----
-
-## 17.3 音频欠载
-
-音频欠载会导致玩家实际听见的音乐与内部歌曲时间脱离。
-
-推荐处理：
-
-- 立即记录 AudioUnderrun。
-
-- 取消当前排名资格。
-
-- 练习模式下可以暂停并重新预缓冲。
-
-- 从稳定采样边界恢复。
-
-- 不继续推进内部时间并批量制造 Miss。
-
-
----
-
-## 17.4 输入队列溢出
-
-输入溢出代表输入日志已经不完整。
-
-系统必须：
-
-- 记录溢出时间范围。
-
-- 记录受影响设备。
-
-- 取消排名资格。
-
-- 保留剩余输入日志。
-
-- 向玩家显示输入系统异常。
-
-- 输出诊断文件。
-
-
-不能静默丢弃最旧输入。
-
----
-
-## 17.5 时钟跳变
+## 94.7 AudioClock跳变
 
 如果检测到：
 
-- 音频采样位置倒退。
+异常时间倒退
 
-- 音频采样位置异常跃迁。
+或大幅前跳，
 
-- 时钟映射残差过大。
+进入：
 
-- 播放速度与映射不一致。
+ClockRecovery。
+
+暂停Judgment，
+
+重新同步播放位置。
+
+不能继续使用错误时间判定大量Miss。
+
+---
+
+## 94.8 Note重复判定
+
+每个Note必须具有：
+
+ResolvedState。
+
+Judgment提交采用：
+
+NoteId + JudgmentTransaction。
+
+只能完成一次。
+
+---
+
+## 94.9 一次输入击中多个非法Note
+
+JudgmentResolver必须明确：
+
+InputConsumptionPolicy。
+
+一次Press通常：
+
+只能消费一个对应Tap，
+
+除非：
+
+Chord规则明确允许。
+
+---
+
+## 94.10 Result重复提交
+
+SongResult具有：
+
+PlaySessionId。
+
+BestScore更新必须：
+
+幂等。
+
+---
+
+# 95. 调试与可观测性
+
+---
+
+## 95.1 Audio Clock Inspector
+
+显示：
+
+- DSP Time；
+
+- AudioPlaybackPosition；
+
+- LogicalSongTime；
+
+- VisualSongTime；
+
+- InputOffset；
+
+- AudioOffset；
+
+- VisualOffset；
+
+- Drift。
 
 
-系统应：
+这是最核心Debug界面。
 
-- 进入 Resyncing。
+---
 
-- 增加播放代次。
+## 95.2 Judgment Timeline
 
-- 暂停普通判定。
+显示每个Note：
 
-- 重新采集稳定时钟快照。
+TargetTime
+InputTime
+TimingError
+Judgment。
 
-- 从检查点重建谱面状态。
+---
 
-- 排名模式下中止或取消资格。
+## 95.3 Early/Late Histogram
+
+例如：
+
+-100ms
+到
++100ms
+
+绘制输入分布。
+
+能够快速发现：
+
+系统性偏移。
+
+---
+
+## 95.4 Lane Accuracy
+
+分别统计：
+
+Lane1：
+
+98%。
+
+Lane2：
+
+93%。
+
+可能发现：
+
+某个设备按键或玩家手指存在问题。
+
+---
+
+## 95.5 Judgment Window Overlay
+
+开发模式可以直接显示：
+
+Perfect区域；
+
+Great区域；
+
+Good区域。
+
+---
+
+## 95.6 Input Timeline
+
+按毫秒展示：
+
+Press；
+
+Release；
+
+Chord；
+
+Flick。
+
+---
+
+## 95.7 Chart Event Inspector
+
+当前位置显示：
+
+Beat；
+
+Measure；
+
+BPM；
+
+Note；
+
+PresentationEvent。
+
+---
+
+## 95.8 Drift Monitor
+
+持续绘制：
+
+AudioClock - ExpectedClock。
+
+用于检测长时间播放偏移。
+
+---
+
+## 95.9 Frame Hitch Correlation
+
+记录：
+
+FrameTime Spike
+
+与：
+
+Judgment Error
+
+是否相关。
+
+如果逻辑架构正确，
+
+大部分轻度渲染卡顿不应直接改变输入判定。
+
+---
+
+## 95.10 Replay Diff
+
+同一Replay运行两次：
+
+逐Note比较：
+
+JudgmentResult。
+
+如果不同：
+
+说明逻辑存在非确定性。
+
+---
+
+## 95.11 Score Trace
+
+按Note显示：
+
+BaseScore
+JudgmentModifier
+ComboModifier
+FinalScore。
+
+---
+
+## 95.12 Gauge Trace
+
+记录：
+
+每次判定导致的Gauge变化。
+
+---
+
+# 96. 内容验证工具
+
+---
+
+## 96.1 Chart Structural Validation
+
+检查：
+
+- NoteId；
+
+- Lane；
+
+- 时间；
+
+- Hold；
+
+- TimingMap；
+
+- Chord；
+
+- 输入冲突。
 
 
 ---
 
-## 17.6 渲染卡顿
+## 96.2 BPM Conversion Test
 
-渲染卡顿只能影响视觉体验，不能改变：
+对于每一个TimingSegment：
 
-- 原始输入时间戳。
+验证：
 
-- 音符目标时间。
+Beat → Time → Beat
 
-- Miss 提交时间。
-
-- 判定等级。
-
-- 分数。
-
-- 连击。
-
-- 回放结果。
-
-
-不能因为某一帧卡顿而临时放宽判定窗口。
+误差在容许范围。
 
 ---
 
-## 17.7 可选模块异常
+## 96.3 Judgment Boundary Test
 
-以下模块异常时，应尽量隔离并继续核心判定：
+自动输入：
 
-- 镜头系统。
+PerfectWindow边界前后：
 
-- 粒子系统。
+±1ms。
 
-- 角色演出。
+确保：
 
-- 成就系统。
-
-- 遥测系统。
-
-- 社交系统。
-
-- 排行榜上传。
-
-- 非关键音效。
-
-
-以下核心模块异常时，不应伪造结果：
-
-- MasterClock。
-
-- ClockMapper。
-
-- JudgmentEngine。
-
-- ScoreComboSystem。
-
-- ReplayVerifier。
-
-
-核心模块异常时，可以将本局切换为无排名自由播放，或者安全中止。
+窗口包含关系完全符合规则。
 
 ---
 
-## 18. 调试与可解释性
+## 96.4 Replay Determinism Test
 
-## 18.1 多轨时间线调试器
+同一：
 
-建议开发一个统一时间线工具，同时显示：
+Chart
+InputTimeline
+Calibration
 
-- AudioSampleTime。
+运行100次。
 
-- HostTime。
-
-- RenderTime。
-
-- 原始输入时间。
-
-- 映射后的歌曲时间。
-
-- 音符目标时间。
-
-- 判定窗口。
-
-- 判定结果。
-
-- 音频回调。
-
-- 主线程帧时间。
-
-- 播放代次变化。
-
-- 暂停和跳转区间。
-
-- 音频欠载区间。
-
-
-该工具是分析音游手感问题的核心基础设施。
+Judgment必须一致。
 
 ---
 
-## 18.2 单音符追踪
+## 96.5 Frame Drop Simulation
 
-通过 NoteId 应能够查询：
+故意制造：
 
-- 音符何时进入 Armed。
+16ms
+33ms
+100ms
+200ms
 
-- 收到了哪些输入候选。
+渲染卡顿。
 
-- 每个候选为何被接受或拒绝。
+确认：
 
-- 使用了哪个时钟快照。
+逻辑判定不随Frame Drop改变。
 
-- 应用了哪个校准配置。
+---
 
-- 候选仲裁过程。
+## 96.6 AudioOffset Simulation
 
-- 最终时间偏差。
+给系统注入：
 
-- 最终判定等级。
+±20ms
+±50ms
+±100ms。
 
-- 分数变化。
+验证：
 
-- 连击变化。
+Calibration补偿方向正确。
 
-- 生命槽变化。
+---
 
-- 表现事件是否成功消费。
+## 96.7 Impossible Pattern Validation
+
+根据输入设备限制分析：
+
+同时按键数；
+
+手指约束；
+
+轨道约束。
+
+发现不可执行谱面。
+
+---
+
+## 96.8 Density Analyzer
+
+统计：
+
+每秒Note数量；
+
+局部峰值；
+
+Chord；
+
+Hold。
+
+---
+
+## 96.9 Song Tail Validation
+
+检查：
+
+最后Note、Hold End和AudioDuration之间关系。
+
+避免：
+
+歌曲结束提前切Result。
+
+---
+
+# 97. 性能设计
+
+节奏游戏通常敌人不多，
+
+但对：
+
+**延迟稳定性**
+
+要求极高。
+
+因此性能目标不是：
+
+平均FPS足够高。
+
+而是：
+
+> **减少长尾卡顿和不可预测时延。**
+
+---
+
+## 97.1 不应在Playing阶段进行大规模同步资源加载
+
+资源应：
+
+Song开始前预加载。
+
+---
+
+## 97.2 Note对象池
+
+高密度谱面可以使用：
+
+VisualNotePool。
+
+但Note逻辑本身可以只是：
+
+轻量数据。
+
+---
+
+## 97.3 可视窗口
+
+只实例化：
+
+AudioTime附近
+
+有限范围内的Note视觉。
+
+例如：
+
+未来3秒；
+
+过去0.5秒。
+
+完整Chart不需要全部GameObject化。
+
+---
+
+## 97.4 Lane Time Index
+
+按Lane维护：
+
+时间排序Note。
+
+输入时：
+
+只查询当前附近少量Note。
+
+无需搜索完整Chart。
+
+---
+
+## 97.5 Judgment事件不要依赖UI动画结束
+
+Perfect动画可能播放：
+
+300ms。
+
+但下一Note可能：
+
+50ms后出现。
+
+Logic必须立即继续。
+
+---
+
+## 97.6 Result统计异步计算
+
+复杂：
+
+Heatmap；
+
+Histogram；
+
+Replay压缩；
+
+可以在Song结束后后台逻辑线程或低优先任务处理。
+
+不要阻塞：
+
+Audio/Judgment线程。
+
+---
+
+# 98. 可扩展点
+
+---
+
+## 98.1 新Note类型
+
+实现统一：
+
+NoteBehaviorDefinition
+
+和：
+
+JudgmentPolicy。
+
+---
+
+## 98.2 新输入设备
+
+只需扩展：
+
+InputAdapter。
+
+Chart仍使用：
+
+InputActionId。
+
+---
+
+## 98.3 新谱面模式
+
+例如：
+
+4K；
+
+6K；
+
+8K；
+
+Touch；
+
+Circular；
+
+Drum。
+
+主要替换：
+
+LaneLayout
+
+和：
+
+InputMapping。
+
+Timing核心不变。
+
+---
+
+## 98.4 新判定规则
+
+例如：
+
+严格模式；
+
+宽松模式；
+
+比赛模式。
+
+替换：
+
+JudgmentProfile。
+
+---
+
+## 98.5 新Score规则
+
+替换：
+
+ScoreProfile。
+
+不要修改Judgment。
+
+---
+
+## 98.6 Rhythm Action
+
+可以将JudgmentResult进一步驱动：
+
+- 攻击；
+
+- 防御；
+
+- 角色移动；
+
+- 敌人伤害。
 
 
-常见拒绝原因包括：
+但底层仍保持：
 
-- WrongAction。
+AudioClock
+→ Input
+→ Judgment。
 
-- WrongLane。
+---
 
-- OutsideEarlyWindow。
+## 98.7 Procedural Rhythm
 
-- OutsideLateWindow。
+可以用算法生成：
 
-- InputAlreadyConsumed。
+ChartEvents。
 
-- NoteAlreadyCompleted。
+但生成完成后仍编译为：
 
-- ChordGroupLocked。
+普通CompiledChart。
 
-- HoldOwnershipMismatch。
+不要让运行时判定器直接理解：
 
-- TransportGenerationMismatch。
+Procedural Generator。
 
-- DeviceNotAllowed。
+---
 
-- RulesetRejected。
+# 99. 玩家体验设计
+
+---
+
+## 99.1 音乐必须先于视觉成为节奏信息
+
+玩家最终应该能够：
+
+听节奏
+
+而不是只看Note。
+
+谱面应尽量映射：
+
+- 鼓；
+
+- 主旋律；
+
+- Bass；
+
+- Vocal；
+
+- 节奏结构。
 
 
 ---
 
-## 18.3 偏差统计
+## 99.2 视觉用于提前量，不应成为唯一真值
 
-应按歌曲、谱面、设备和玩家统计：
+Note Highway的作用：
 
-- 平均偏差。
+让玩家知道：
 
-- 中位数偏差。
+未来几秒发生什么。
 
-- Early 比例。
+真正的Timing感：
 
-- Late 比例。
-
-- 标准差。
-
-- 分位数。
-
-- 不同歌曲段落的漂移。
-
-- 不同轨道的偏差。
-
-- 按下与释放的偏差差异。
-
-- 不同设备的偏差差异。
-
-
-校准系统应优先使用中位数或稳健统计方法，避免被极端输入干扰。
+仍然来自音乐。
 
 ---
 
-## 18.4 回放差异定位
+## 99.3 Perfect反馈必须迅速
 
-回放系统至少应记录：
+输入后：
 
-- SongId。
+反馈延迟应尽量低。
 
-- ChartHash。
+包括：
 
-- RulesetHash。
+- JudgmentText；
 
-- CalibrationSnapshot。
+- HitSound；
 
-- 玩法修改器。
+- VFX；
 
-- Transport 操作。
-
-- 原始 InputEvent。
-
-- 最终 ResultHash。
-
-
-回放结果不一致时，应输出第一处差异：
-
-- 输入映射不同。
-
-- 候选集合不同。
-
-- 判定等级不同。
-
-- 连击状态不同。
-
-- 分数聚合不同。
-
-- 生命槽状态不同。
-
-- 排名资格不同。
+- LaneFlash。
 
 
 ---
 
-## 18.5 自动化测试
+## 99.4 反馈强度应随判定变化
 
-推荐测试以下情况：
+Perfect：
 
-- 输入恰好位于判定窗口边界。
+清晰、稳定。
 
-- 判定窗口边界前一个采样点。
+Great：
 
-- 判定窗口边界后一个采样点。
+略弱。
 
-- 同轨道密集双音。
+Miss：
 
-- 多轨同时和弦。
+明显失败。
 
-- Hold 起始。
-
-- Hold 中途断开。
-
-- Hold 重新抓取。
-
-- Hold 释放。
-
-- 暂停期间输入。
-
-- Seek 前后的旧代次输入。
-
-- 播放速度变化。
-
-- 音频设备切换。
-
-- 大幅渲染卡顿。
-
-- 输入队列接近容量。
-
-- 不同帧率下重演同一输入日志。
-
-
-验收标准不应只比较最终总分。
-
-应比较完整的 JudgmentResult 序列是否一致。
+这样玩家不必阅读文字也能感受到结果。
 
 ---
 
-## 19. 玩家体验设计
+## 99.5 Early/Late提示非常重要
 
-## 19.1 公平感优先
+只显示：
 
-玩家虽然无法直接观察内部采样时钟，但能够明显感觉系统是否稳定。
+Great
 
-公平感来自：
+不够。
 
-- 相同输入得到相同结果。
+应支持：
 
-- 帧率变化不改变判定。
+Early；
 
-- 不同歌曲段落没有持续漂移。
+Late。
 
-- 视觉偏移和判定偏移相互独立。
+玩家才能调整Timing。
 
-- Early 和 Late 反馈可信。
+---
 
-- 设备切换后重新校准。
+## 99.6 高难谱面仍需保持Pattern可读
 
-- 系统异常时不伪装成玩家失误。
+不能通过：
+
+隐藏Note；
+
+极端透明度；
+
+随机视觉干扰
+
+制造“假难度”，
+
+除非这就是明确玩法类型。
+
+---
+
+## 99.7 特效不能盖住下一批Note
+
+音乐高潮时最容易：
+
+VFX同步高潮。
+
+但也是：
+
+谱面最密集阶段。
+
+必须建立：
+
+Gameplay Readability Layer
+
+优先级高于：
+
+Stage Presentation Layer。
+
+---
+
+## 99.8 Retry必须非常快
+
+节奏游戏高水平玩家可能：
+
+一首歌重试几十次。
+
+Retry流程应该：
+
+失败/主动Restart
+→ 快速重新定位
+→ Countdown
+→ 开始。
+
+避免：
+
+重复长加载和演出。
+
+---
+
+## 99.9 Practice是高难内容的基础设施
+
+高难谱面如果只能：
+
+从头打到尾，
+
+练习效率极低。
+
+需要：
+
+- Section Jump；
+
+- Loop；
+
+- Speed；
+
+- Metronome；
+
+- Timing Feedback。
 
 
 ---
 
-## 19.2 校准体验
+# 100. 常见设计失败
 
-校准界面不应只有一个含义不明的正负数滑块。
+---
 
-推荐提供：
+## 100.1 Note用DeltaTime向判定线移动
 
-- 音频校准。
+卡顿后谱面和音乐漂移。
 
-- 视觉校准。
+---
 
-- 输入设备独立档案。
+## 100.2 Judgment用图像位置判断
 
-- 自动估计。
+UI比例变化可能改变判定。
 
-- 手动微调。
+---
 
-- 偏差分布显示。
+## 100.3 Audio、Chart、UI各有一套时间
 
-- Early 和 Late 趋势显示。
+长歌曲逐渐失步。
 
-- 恢复默认值。
+---
 
-- 排名资格影响说明。
+## 100.4 输入时间在下一帧才记录
+
+人为增加一帧延迟。
+
+---
+
+## 100.5 Calibration直接修改Chart
+
+不同设备产生不同谱面真值。
+
+---
+
+## 100.6 Score系统重新计算判定
+
+出现Score和视觉结果不一致。
+
+---
+
+## 100.7 Hold每帧增加Score
+
+不同FPS得分不同。
+
+---
+
+## 100.8 Miss每帧扫描全部Notes
+
+高密度谱面产生不必要开销。
+
+---
+
+## 100.9 Note全部实例化为GameObject
+
+长谱面内存和加载成本过高。
+
+---
+
+## 100.10 视觉ScrollSpeed影响JudgmentWindow
+
+玩家改变视觉设置同时改变游戏难度规则。
+
+---
+
+## 100.11 Song结束立即进入Result
+
+尾部Hold或Note无法结算。
+
+---
+
+## 100.12 Pause后直接恢复
+
+玩家毫无准备面对当前Note。
+
+---
+
+## 100.13 Seek只移动Audio
+
+NoteRuntime仍处于旧时间状态。
+
+---
+
+## 100.14 BPM变化运行时临时修改Note速度
+
+很容易产生累计误差。
+
+---
+
+## 100.15 Replay不保存ChartHash
+
+谱面更新后旧Replay失效却无法识别原因。
+
+---
+
+## 100.16 排行榜只上传Score
+
+极易伪造。
+
+---
+
+## 100.17 高难度只靠提高Note数量
+
+谱面缺乏节奏结构和音乐表达。
+
+---
+
+## 100.18 特效与谱面处于同一可读层
+
+高潮段无法看清Note。
+
+---
+
+## 100.19 自动BPM分析结果直接发布
+
+复杂歌曲容易出现Timing错误。
+
+---
+
+## 100.20 只提供Perfect/Great/Miss，没有Timing统计
+
+玩家不知道自己为什么总打不准。
+
+---
+
+# 101. 最小可行原型
+
+一个能够验证节奏游戏核心范式的MVP并不需要大量歌曲。
+
+推荐：
+
+**3首歌曲 + 4轨输入 + 3种Note类型 + 3档难度。**
+
+---
+
+## 101.1 Song
+
+3首不同节奏结构：
+
+- 稳定4/4拍；
+
+- BPM变化；
+
+- 节奏切分明显。
 
 
 ---
 
-## 19.3 即时反馈
+## 101.2 Difficulty
 
-玩家输入后，可以立即播放：
+每首：
 
-- 按键反馈。
+- Easy；
 
-- 轨道按压动画。
+- Normal；
 
-- 局部粒子。
-
-- 低延迟点击声。
-
-- 控制器震动。
+- Hard。
 
 
-但正式判定等级、分数和连击必须由 JudgmentCommitted 驱动。
+共：
 
-不能让预测表现提前提交权威结果。
+9张谱面。
 
 ---
 
-## 19.4 难度设计
+## 101.3 Note类型
 
-节奏游戏难度不应只依赖缩小判定窗口。
+第一版只需要：
 
-更健康的难度维度包括：
+- Tap；
 
-- 音符密度。
+- Hold；
 
-- 节奏复杂度。
-
-- 切分音。
-
-- 弱拍输入。
-
-- 多轨独立性。
-
-- 手部移动距离。
-
-- 读谱提前量。
-
-- 轨道模式切换。
-
-- 持续耐力。
-
-- 视觉干扰。
-
-- 记忆要求。
-
-- 长按和离散输入叠加。
-
-- 复杂和弦。
-
-- 交替输入模式。
+- Chord。
 
 
-判定窗口体现系统容忍度，谱面结构才应承担主要内容难度。
+先不要急于加入：
+
+Slide、Flick、复杂Gesture。
 
 ---
 
-## 19.5 练习与可访问性
+## 101.4 判定
 
-推荐支持：
+支持：
 
-- 段落循环。
+- Perfect；
 
-- 慢速播放。
+- Great；
 
-- 指定段落开始。
+- Good；
 
-- 单手模式。
+- Miss；
 
-- 简化输入。
+- Early/Late。
 
-- 镜像轨道。
-
-- NoFail。
-
-- 自动长按。
-
-- 节拍器辅助。
-
-- 减少闪光。
-
-- 减少镜头运动。
-
-- 高对比音符。
-
-- 使用形状区分轨道。
-
-- 独立音量控制。
-
-- 输入重映射。
-
-
-练习模式必须明确说明是否影响排名资格。
 
 ---
 
-## 20. 可迁移到其他游戏的设计思想
+## 101.5 基础系统
 
-## 20.1 权威时钟层级
+- Combo；
 
-任何强时序系统都应先确定：
+- Score；
 
-哪个时钟代表事实，哪些时钟只是表现或估计。
+- Accuracy；
+
+- Gauge；
+
+- Result。
+
+
+---
+
+## 101.6 Calibration
+
+必须从MVP就加入：
+
+InputOffset
+VisualOffset。
+
+因为如果基础Timing架构错了，
+
+后续所有谱面测试都会受到污染。
+
+---
+
+## 101.7 ChartEditor
+
+即使第一版也建议拥有：
+
+- Waveform；
+
+- BeatGrid；
+
+- NotePlacement；
+
+- Playback；
+
+- BPM；
+
+- Loop。
+
+
+不要长期依赖：
+
+手写JSON谱面。
+
+---
+
+## 101.8 必要基础设施
+
+- AudioClock；
+
+- SongRuntimeState；
+
+- TimingMap；
+
+- ChartDefinition；
+
+- CompiledChart；
+
+- NoteDefinition；
+
+- NoteRuntimeState；
+
+- InputEvent；
+
+- JudgmentProfile；
+
+- JudgmentResult；
+
+- HoldRuntimeState；
+
+- ScoreState；
+
+- ComboState；
+
+- GaugeState；
+
+- CalibrationProfile；
+
+- SongResult；
+
+- ReplayRecord。
+
+
+---
+
+## 101.9 必要调试工具
+
+- AudioClockInspector；
+
+- InputTimeline；
+
+- JudgmentTimeline；
+
+- EarlyLateHistogram；
+
+- JudgmentWindowOverlay；
+
+- ChartEventInspector；
+
+- DriftMonitor；
+
+- ReplayDiff；
+
+- DensityAnalyzer。
+
+
+---
+
+# 102. MVP核心验收问题
+
+原型至少必须回答：
+
+- 游戏卡顿时Note是否仍然和音乐保持同步；
+
+- 输入判定是否只依赖时间误差；
+
+- 修改VisualScrollSpeed是否完全不影响判定；
+
+- 输入设备延迟是否能够通过Calibration修正；
+
+- 同一输入Replay是否每次产生完全相同判定；
+
+- Hold是否在不同FPS下得到相同结果；
+
+- BPM变化是否不会产生累计漂移；
+
+- Pause和Resume是否能够稳定恢复；
+
+- Practice Seek后谱面状态是否正确重建；
+
+- Score、Combo、Gauge是否全部消费同一Judgment；
+
+- Early/Late统计是否能够识别稳定偏移；
+
+- 玩家是否能明显感觉不同难度来自节奏结构变化而不仅是Note数量；
+
+- 高密度谱面中Note渲染和输入判定是否仍稳定；
+
+- ChartEditor是否能够快速制作和修改谱面。
+
+
+这些问题没有成立前，不建议优先增加：
+
+- 大量歌曲；
+
+- 联机；
+
+- 排位；
+
+- 复杂剧情；
+
+- 大型舞台演出；
+
+- 数十种Note类型。
+
+
+---
+
+# 103. 推荐实施顺序
+
+第一阶段：
+
+- AudioClock；
+
+- Scheduled Start；
+
+- Tap Note。
+
+
+第二阶段：
+
+- Input Timestamp；
+
+- JudgmentResolver；
+
+- Timing Window。
+
+
+第三阶段：
+
+- Score；
+
+- Combo；
+
+- Accuracy；
+
+- Result。
+
+
+第四阶段：
+
+- ChartCompiler；
+
+- BPM Map；
+
+- Beat-Time转换。
+
+
+第五阶段：
+
+- NoteRenderer；
+
+- VisualScrollSpeed；
+
+- VisualOffset。
+
+
+第六阶段：
+
+- Hold；
+
+- Chord。
+
+
+第七阶段：
+
+- Calibration；
+
+- Early/Late统计。
+
+
+第八阶段：
+
+- Pause；
+
+- Restart；
+
+- Practice Seek；
+
+- Loop。
+
+
+第九阶段：
+
+- ChartEditor；
+
+- Waveform；
+
+- Validation。
+
+
+第十阶段：
+
+- Replay；
+
+- Determinism测试；
+
+- Leaderboard验证。
+
+
+第十一阶段：
+
+- Slide/Flick等高级Note；
+
+- StagePresentation。
+
+
+第十二阶段：
+
+- Ghost/PvP；
+
+- Procedural Chart；
+
+- 高级作者工具。
+
+
+---
+
+# 104. 架构验收标准
+
+系统初步成立时，应满足：
+
+- 整首歌曲只有一个权威AudioClock；
+
+- Chart不依赖渲染帧时间推进；
+
+- Note逻辑状态与Note视觉对象分离；
+
+- Chart以Beat/Timeline数据形式存在；
+
+- TimingMap支持BPM变化；
+
+- ChartCompiler可以稳定把Beat转换为绝对时间；
+
+- InputEvent拥有高精度采样时间戳；
+
+- Chart不直接绑定具体键盘或手柄按键；
+
+- Judgment只根据调整后的InputTime和TargetTime计算；
+
+- Early和Late均可以独立配置；
+
+- 每个Note只允许提交一次最终Judgment；
+
+- Miss通过时间索引自动生成；
+
+- Score、Combo、Gauge共享同一个JudgmentResult；
+
+- Hold持续判定不依赖渲染FPS；
+
+- Chord判定不受输入事件处理顺序影响；
+
+- VisualScrollSpeed只影响显示；
+
+- VisualOffset不修改Gameplay Timeline；
+
+- Calibration不会改写Chart数据；
+
+- Pause会同时冻结AudioClock与Judgment；
+
+- Resume具有安全Countdown；
+
+- Seek会重建NoteRuntime；
+
+- Song结束会等待所有必要Note完成；
+
+- 长时间播放不会因为DeltaTime积分产生Audio Drift；
+
+- Frame Hitch不会直接修改Note判定结果；
+
+- ChartValidator可以检测非法Lane、Hold重叠和判定歧义；
+
+- 同一Replay能够确定性生成相同Judgment；
+
+- Replay记录ChartContentHash；
+
+- Result提交具有唯一PlaySessionId；
+
+- Leaderboard数据可以通过Replay或一致性规则验证；
+
+- 调试器能够精确显示一次输入是Early还是Late多少毫秒；
+
+- 调试器能够解释为什么某个Note成为Miss；
+
+- 新Note类型通常无需修改AudioClock、Score和SongLifecycle核心逻辑。
+
+
+---
+
+# 105. 可迁移到其他游戏的设计思想
+
+---
+
+## 105.1 权威时间源与表现时间必须分离
 
 可迁移到：
 
-- 网络同步动画。
+- 网络同步；
 
-- 赛车计时。
+- 动画；
 
-- 战斗回放。
+- Cutscene；
 
-- 音乐演出。
+- 战斗回放；
 
-- 过场同步。
-
-- 多人协作。
-
-- 实时竞技。
+- 体育模拟。
 
 
----
+系统应该明确：
 
-## 20.2 编辑数据编译为运行时中间表示
+什么时间是真值，
 
-策划和设计师可以使用易编辑的数据形式。
-
-运行时则消费：
-
-- 已校验。
-
-- 已排序。
-
-- 已建立索引。
-
-- 已消除歧义。
-
-- 已冻结版本。
-
-
-该思想可迁移到：
-
-- 技能时间线。
-
-- 任务流程。
-
-- 对话图。
-
-- 波次配置。
-
-- 关卡触发器。
-
-- 动画状态机。
-
-- 战斗演出。
-
+什么只是显示。
 
 ---
 
-## 20.3 表现是事实的投影
-
-不要让屏幕坐标、动画回调或特效生命周期定义游戏事实。
+## 105.2 视觉位置可以由时间直接推导，而不是逐帧积分
 
 可迁移到：
 
-- 投射物命中。
+- 弹幕；
 
-- 格斗判定。
+- 时间轴UI；
 
-- 卡牌演出。
+- Replay；
 
-- UI 数值动画。
+- 轨道对象；
 
-- 网络预测。
+- 动画事件。
 
-- 角色移动表现。
 
+这种设计天然抗：
+
+Frame Hitch。
 
 ---
 
-## 20.4 输入捕获与玩法解释分离
-
-输入系统先完整记录玩家做了什么以及何时发生。
-
-玩法系统再决定这些输入意味着什么。
+## 105.3 输入事件应该在采样时记录时间，而不是处理时记录时间
 
 可迁移到：
 
-- 连招系统。
+- 格斗；
 
-- 格挡系统。
+- 射击；
 
-- 闪避系统。
+- 音游；
 
-- 输入缓冲。
+- 网络输入；
 
-- 游戏回放。
-
-- 反作弊。
-
-- 无障碍输入适配。
+- 精准QTE。
 
 
 ---
 
-## 20.5 使用代次隔离旧事件
+## 105.4 一次规则结果应该只结算一次，然后广播给多个系统
 
-跳转、回档、重连和重新开始后，不要尝试逐个清理所有旧异步回调。
+JudgmentResult模式可以迁移到：
 
-可以通过 Generation 隔离：
+- DamageResult；
 
-- 旧输入。
+- TransactionResult；
 
-- 旧事件。
+- CraftResult；
 
-- 旧加载请求。
-
-- 旧动画回调。
-
-- 旧网络响应。
-
-- 旧表现请求。
+- QuestResult。
 
 
-可迁移到：
+避免多个模块各自重复计算同一个事实。
 
-- 战斗回滚。
+---
 
-- 关卡重开。
+## 105.5 Calibration应该修改观察或输入坐标系，而不是修改内容真值
 
-- 网络重连。
+可以迁移到：
 
-- 流式场景切换。
+- 网络延迟补偿；
 
-- 编辑器预览。
+- VR；
 
-- UI 页面重建。
+- 控制器；
+
+- 音视频同步。
 
 
 ---
 
-## 20.6 容忍窗口必须是正式规则
+## 105.6 时间误差比离散结果包含更多信息
 
-时间容忍、空间容忍和网络容忍应当显式配置。
+Perfect只告诉：
 
-不能将其分散在大量临时修正中。
+成功。
 
-可迁移到：
+TimingError还能告诉：
 
-- 精确格挡。
+- 偏早；
 
-- 平台跳跃土狼时间。
+- 偏晚；
 
-- 交互吸附。
+- 系统性Offset；
 
-- 网络命中补偿。
-
-- QTE。
-
-- 赛车起步。
-
-- 技能输入缓冲。
+- 玩家稳定度。
 
 
----
+这种“保留原始误差值”的思想可以迁移到：
 
-## 21. 推荐最小实现范围
+- 射击；
 
-第一版节奏游戏框架建议只实现：
+- 操作训练；
 
-- 单机本地模式。
+- 体育；
 
-- 一种固定轨道布局。
-
-- Tap 音符。
-
-- Hold 音符。
-
-- 音频主时钟。
-
-- 原始输入时间戳。
-
-- 输入到歌曲时间映射。
-
-- 可配置 Early 和 Late 判定窗口。
-
-- 分数系统。
-
-- 连击系统。
-
-- 生命槽系统。
-
-- 基础校准。
-
-- 完整输入回放。
-
-- 时间线调试器。
-
-- 谱面静态校验。
-
-- 音符对象池。
-
-- 每轨道前向索引。
-
-
-第一版暂不建议加入：
-
-- 任意谱面脚本。
-
-- 实时在线对战。
-
-- 运行时 AI 生成谱面。
-
-- 复杂 Warp。
-
-- 大量自定义音符插件。
-
-- 摄像头动作识别。
-
-- 跨设备自动迁移校准值。
-
-- 过于复杂的谱面动态变换。
+- 输入分析。
 
 
 ---
 
-## 22. 架构冻结点
+## 105.7 编译内容格式与运行时格式应分离
 
-在大规模制作歌曲和谱面之前，应先冻结以下规则：
+作者编辑：
 
-- 权威时间单位。
+Beat、Measure、BPM。
 
-- 输入时间戳来源。
+运行时需要：
 
-- 偏移正负方向。
+TargetTimestamp、索引。
 
-- BeatTime 到 SampleTime 的转换规则。
+这可以迁移到：
 
-- 候选音符仲裁顺序。
+- Skill Graph；
 
-- JudgmentResult 的不可变性。
+- Quest；
 
-- 暂停语义。
+- AI；
 
-- 跳转语义。
+- Animation；
 
-- 播放代次规则。
-
-- ChartHash 的组成。
-
-- RulesetHash 的组成。
-
-- 排名资格失效条件。
-
-- 回放最小字段。
-
-- 音频欠载处理方式。
-
-- 输入队列溢出处理方式。
+- Dialogue。
 
 
-这些规则一旦在大量内容制作后修改，可能导致旧谱面、旧回放和旧排行榜成绩无法兼容。
+作者友好的数据不一定等于运行时最高效的数据。
 
 ---
 
-## 23. 典型反模式
+## 105.8 Practice Mode实际上是一套开发级状态跳转工具
 
-以下实现方式应明确禁止：
+它不仅帮助玩家，
 
-1. 使用主线程累计时间作为歌曲时间。
+也可以帮助：
 
-2. 根据音符是否碰到判定线决定命中。
+- QA；
 
-3. 每个音符对象独立读取输入。
+- Designer；
 
-4. 低帧率时临时扩大判定窗口。
+- Automation。
 
-5. 使用视觉偏移修改正式判定。
 
-6. 将音频、输入和视觉延迟合并为一个 Offset。
+这种思想可迁移到：
 
-7. 在音频回调中执行游戏逻辑。
+- Boss练习；
 
-8. 使用浮点拍位长期累计时间。
+- 战术关卡；
 
-9. 暂停时只停止音频，不冻结判定状态。
+- 剧情调试；
 
-10. Seek 后保留旧输入事件。
-
-11. Seek 后保留旧音符运行时状态。
-
-12. 输入队列溢出时静默丢弃。
-
-13. 通过特效结束回调增加分数。
-
-14. 音符对象销毁时才判定 Miss。
-
-15. 排名谱面允许执行未登记脚本。
-
-16. 只保存最终分数，不保存输入日志。
-
-17. 将 ScrollSpeed 和 PlaybackRate 作为同一参数。
-
-18. 通过录屏帧判断玩家是否准确输入。
-
-19. 上传失败后重新计算一次成绩。
-
-20. 因视觉对象未生成而跳过音符判定。
+- 格斗训练。
 
 
 ---
 
-## 24. 防重记录
+## 105.9 高精度游戏更应该优化尾部延迟，而不是平均性能
 
-### 本次新增类型
+平均：
 
-节奏游戏（Rhythm Game）
+240 FPS
 
-### 类型层级
+但偶尔卡顿：
 
-完整宏观游戏类型。
+100ms，
 
-能够独立支撑：
+对节奏游戏仍然非常致命。
 
-- 选曲。
+这一思想可以迁移到：
 
-- 谱面挑战。
+- 格斗；
 
-- 分数追求。
+- VR；
 
-- 难度成长。
+- 音频；
 
-- 曲目解锁。
-
-- 收藏系统。
-
-- 排行榜。
-
-- 活动挑战。
-
-- 多人竞赛。
-
-- 用户谱面生态。
+- 竞技射击。
 
 
-### 核心范式
+---
 
-Audio Clock–Chart Compilation–Deterministic Judgment Paradigm
+## 105.10 内容验证应在作者提交时发现“不可能玩法”
 
-中文记录：
+例如：
 
-**音频主时钟—谱面编译—确定性判定范式**
+超出输入能力的Chord。
 
-### 核心识别特征
+可以迁移到：
 
-- 以音频 DSP 或采样位置作为权威时间。
+- 关卡可达性；
 
-- 将编辑器拍位预编译为整数采样位置。
+- 战斗配置；
 
-- 在输入捕获阶段记录原始时间戳。
+- 技能组合；
 
-- 通过统一候选解析器匹配输入和音符。
-
-- 通过稳定顺序原子提交判定结果。
-
-- 将音符位置和动画视为时间事实的表现投影。
-
-- 使用谱面 Hash、规则 Hash、校准快照和输入日志重建成绩。
-
-- 使用 TransportGeneration 隔离跳转、暂停和重建前后的旧事件。
+- 任务链。
 
 
-### 与当前记录的区别
+不要等玩家运行到内容后才发现结构性错误。
 
-该类型不以以下内容作为核心循环：
+---
 
-- 塔防的路线、波次和防御节点。
+# 106. 确定性判定事务、候选仲裁与播放代次
 
-- 战棋的格点移动和回合决策。
+产品层拥有丰富玩法并不意味着底层可以接受含糊的时序。节奏游戏的核心承诺是：相同谱面、规则、校准快照与输入日志必须得到相同判定序列。为兑现这一承诺，判定需要被实现为一笔有明确输入、稳定仲裁和原子提交边界的事务。
 
-- 卡牌构筑的牌组循环。
+## 106.1 编译后的谱面是运行时事实源
 
-- 自动化工厂的生产链优化。
+作者数据应先经过 Chart Compiler，再生成只读的 `CompiledChart`。每个 `CompiledNote` 至少包含：
 
-- 战术射击的空间交火。
+- 稳定且唯一的 `NoteId`；
+- `TargetSample` 与可选的 `EndSample`；
+- `ActionId`、`LaneId` 与 `NoteKind`；
+- 和弦或滑条使用的 `GroupId`；
+- 规则版本与谱面内容哈希；
+- 在目标时间相同时仍唯一的稳定排序键。
 
-- 生存游戏的资源压力。
+运行时不能依赖场景对象创建顺序、哈希容器遍历顺序或渲染层级推导判定顺序。Beat、BPM 与拍号属于作者表达；进入演奏会话后，所有可判定事件都应已经转换到统一采样时间域。
 
-- 语义战斗系统的技能与元素反应。
+## 106.2 输入事件只记录事实
 
-- 编程游戏的指令和自动机执行。
+`InputEvent` 在采样时固定以下字段：
 
-- 商队经营的路线和供需套利。
+- `InputEventId` 与单调递增序号；
+- 设备、动作、轨道和输入边缘；
+- 原始设备时间与映射后的歌曲采样位置；
+- 当前 `TransportGeneration`；
+- 本次会话使用的校准快照 ID；
+- 模拟量数值及是否为系统合成输入。
+
+输入捕获层不回答“命中了哪个音符”。它只保存玩家在什么时间通过什么设备做了什么，使回放、反作弊和故障诊断能够重新执行同一套判定规则。
+
+## 106.3 候选集必须有上界和稳定顺序
+
+一次输入进入判定器后，按以下步骤收敛候选：
+
+1. 拒绝播放代次不匹配的旧输入；
+2. 按动作、轨道、音符类型与输入边缘过滤；
+3. 排除已完成、已 Miss 或已被占用的音符；
+4. 只保留最大判定窗口内的目标；
+5. 检查 Hold、Chord、Slide 的所有权与组规则；
+6. 计算每个候选的 `TimingError`；
+7. 使用固定比较器选出唯一目标。
+
+推荐的默认比较器依次比较：
+
+1. 规则优先级；
+2. `abs(TimingError)`；
+3. `TargetSample`；
+4. 谱面稳定排序键；
+5. `NoteId`。
+
+具体玩法可以选择 `EarliestHittable`、`NearestTarget`、`FrontGuard` 或显式分组策略，但最终比较器必须全序化。任何平局都不能退回数组、字典或对象实例的偶然顺序。
+
+## 106.4 判定以事务方式原子提交
+
+候选确定后先生成 `JudgmentRequest`，再由单一提交点创建不可变的 `JudgmentResult`：
+
+- `JudgmentResultId`；
+- `InputEventId` 与 `NoteId`；
+- `TimingError`、Early/Late 与判定等级；
+- Ruleset、谱面、校准快照和播放代次；
+- 提交序号及必要的 Hold/Chord 组信息。
+
+一次提交必须原子完成：消费输入、结束或推进音符状态、写入结果日志、更新 Combo/Score/Gauge，并发布已提交事件。任一步失败都不能留下“音符已消费但分数未更新”之类的半完成状态。
+
+音效、VFX、镜头、震动、统计和 UI 只能消费已提交的 `JudgmentResult`。它们不能重新计算 Timing Error，也不能修改判定等级。这样一次输入只会产生一个事实，所有反馈都能追溯到同一结果。
+
+## 106.5 Command、Request、Event 与 Snapshot 分工
+
+模块通信需要区分四种语义：
+
+- `Command`：希望系统执行的操作，例如 Pause、Seek、Restart；
+- `Request`：尚未提交的运行时意图，例如 JudgmentRequest、MissRequest；
+- `Event`：已经发生的不可变事实，例如 JudgmentCommitted、TransportPaused；
+- `Snapshot`：某一时刻的只读状态，例如 ClockSnapshot、ScoreSnapshot、PresentationSnapshot。
+
+Command 不代表成功，Request 不能直接驱动表现，Event 不应被二次修改，Snapshot 也不能被消费者当作写入口。清晰的消息语义可以阻止 UI、音频、判定和存档模块越权修改彼此状态。
+
+## 106.6 播放代次隔离旧时间线
+
+以下操作会让之前排队的消息失去语义：
+
+- Seek 或练习循环回跳；
+- Restart 或检查点恢复；
+- 音频设备切换；
+- 时钟与播放图重建；
+- 会话重新加载。
+
+每次操作都应增加 `TransportGeneration`。输入事件、判定请求、音频回调、表现事件和快照都携带代次；消费者发现代次不匹配时直接丢弃。这样暂停恢复或跳转后，旧时间线里的 Miss、按键与特效不会污染当前会话。
+
+## 106.7 跨线程只交换有界消息与只读快照
+
+推荐通信方式为：
+
+- 音频线程到游戏线程：原子时钟快照或单生产者单消费者队列；
+- 输入线程到游戏线程：有界输入队列；
+- 游戏线程内部：按阶段处理的请求队列；
+- 游戏线程到表现线程：允许合并或降级的表现事件队列；
+- 游戏线程到存档、回放和遥测：异步结果队列。
+
+音频回调中不得分配大对象、等待锁或执行业务判定。表现队列拥塞时可以降级粒子和次要动画，但不能丢失判定日志、播放代次或结果统计。
+
+## 106.8 可复算验收条件
+
+架构测试至少应覆盖：
+
+- 同一输入日志重复执行得到逐字段相同的 `JudgmentResult` 序列；
+- 改变渲染帧率、掉帧分布和视觉速度不改变判定；
+- 密集相邻音符、和弦和 Hold 不会重复消费输入；
+- 相同目标时间的候选仍按稳定键得到唯一结果；
+- Seek、Restart 与设备重建后旧代次消息全部失效；
+- 回放差异可以定位到首个输入、候选或提交序号；
+- 表现层关闭或拥塞不影响 Score、Combo、Gauge 与最终结算。
+
+这些条件把“手感看起来差不多”变成可以自动验证的确定性合同，也是排名验证、Ghost、多人对战和长期版本兼容的共同基础。
+
+---
+
+# 107. 防重复边界
+
+## 已登记的宏观游戏类型
+
+**节奏游戏 / Rhythm Game。**
+
+常见名称：
+
+- Rhythm Game；
+
+- Music Game；
+
+- Rhythm Action；
+
+- 音乐节奏游戏；
+
+- 音游；
+
+- 谱面式音乐游戏。
 
 
-节奏游戏的核心问题是：
+---
 
-**玩家输入、音乐时间、谱面目标和判定规则之间的高精度同步。**
+## 核心范式
 
-### 可迁移模块派生记录
+以稳定音频播放时钟作为全局权威时间源，把歌曲内容编译成带绝对目标时间的谱面事件流；玩家输入在采样时被记录为高精度输入事件，并与目标时间计算Timing Error，再由统一Judgment System产生唯一Perfect、Great、Good或Miss结果。Score、Combo、Gauge、音效、VFX和统计全部消费同一个Judgment Result，而视觉Note仅根据AudioTime与TargetTime差值进行派生显示，从而保证渲染卡顿、帧率变化和视觉速度不会改变游戏逻辑。
 
-模块名称：
+核心循环可以压缩为：
 
-**音频主时钟时序判定模块**
+**音乐时间推进
+→ 谱面事件逼近
+→ 玩家预判
+→ 输入采样
+→ 时间误差计算
+→ 唯一判定
+→ 分数/连击/演出反馈
+→ 新节奏结构进入
+→ 玩家形成Timing与Pattern记忆。**
 
-英文记录：
+---
 
-**Audio Clock Timing Judgment Module**
+## 核心识别特征
 
-适用范围：
+- 音乐时间轴是玩法核心；
 
-- 动作游戏中的节奏格挡。
+- AudioClock是权威时间源；
 
-- RPG 中的节奏施法。
+- 谱面以时间事件而非场景对象描述；
 
-- 赛车游戏中的节奏换挡。
+- Beat与Time通过TimingMap转换；
 
-- Boss 战中的音乐阶段。
+- 输入在采样时拥有高精度Timestamp；
 
-- 派对游戏中的节奏关卡。
+- 判定依赖Timing Error而不是Note图像位置；
 
-- 剧情游戏中的音乐 QTE。
+- Perfect、Great、Good、Miss具有明确时间窗口；
+
+- Early与Late可以独立统计；
+
+- 每个Note只能拥有一个最终Judgment；
+
+- Score、Combo和Gauge消费统一判定；
+
+- Note视觉位置由时间差直接推导；
+
+- Scroll Speed不修改Gameplay Timing；
+
+- Calibration与Chart数据严格分离；
+
+- Tap、Hold、Chord等Note共享统一时间系统；
+
+- Hold持续结算不依赖FPS；
+
+- Miss通过时间推进自动产生；
+
+- BPM变化使用TimingMap而非临时改变Note移动速度；
+
+- Pause、Resume和Seek必须同步重建Audio与Chart状态；
+
+- Chart Editor属于核心生产基础设施；
+
+- Chart需要结构、判定歧义和可执行性验证；
+
+- Replay可以只记录输入时间线；
+
+- Replay必须绑定具体Chart版本；
+
+- 高水平Debug围绕Timing Error而不是仅围绕最终Score展开；
+
+- 高精度运行时更关注延迟稳定性和长尾卡顿；
+
+- 同一Chart、输入和Calibration应产生确定性结果。
 
 
-当节奏机制不构成游戏的主要内容循环时，应将其记录为可迁移模块，而不是重复登记为完整节奏游戏类型。
+---
 
-### 建议防重键
+## 与仓库现有格斗游戏的防重边界
 
-Genre.RhythmGame
+当前仓库已经存在格斗游戏范式，其核心是：
 
-Paradigm.AudioClockChartDeterministicJudgment
+- 固定逻辑帧；
 
-Module.AudioClockTimingJudgment
+- 指令识别；
+
+- 起手、有效和收招；
+
+- Hitbox；
+
+- 帧优势；
+
+- 连段；
+
+- 攻防预测。
+
+
+两者都需要高精度输入时间，但判定对象不同。
+
+格斗游戏：
+
+**输入 → 状态机 → 招式 → 空间命中。**
+
+节奏游戏：
+
+**输入 → 时间误差 → 节奏判定。**
+
+格斗中的核心真值是：
+
+角色和战斗状态。
+
+节奏游戏中的核心真值是：
+
+Audio Timeline。
+
+因此节奏游戏不属于格斗输入系统的子范式。
+
+---
+
+## 与仓库现有幸存者类的防重边界
+
+当前仓库已经存在 `horde-survival`，其核心是：
+
+- 持续移动；
+
+- 自动攻击；
+
+- 群潮；
+
+- XP回收；
+
+- Upgrade Draft；
+
+- 时间压力曲线。
+
+
+虽然二者都可能使用固定时间轴，但：
+
+幸存者类的时间用于：
+
+提高Spawn Pressure。
+
+节奏游戏的时间本身就是：
+
+玩家行为是否正确的判定坐标系。
+
+因此二者属于完全不同的核心范式。
+
+---
+
+## 已覆盖的代表性子范式
+
+- Rhythm Game；
+
+- Music Game；
+
+- Audio Clock；
+
+- DSP Timeline；
+
+- Scheduled Audio Start；
+
+- Chart；
+
+- Beat；
+
+- BPM；
+
+- Timing Map；
+
+- Chart Compiler；
+
+- Beat-to-Time；
+
+- Note Timeline；
+
+- Tap Note；
+
+- Hold Note；
+
+- Chord；
+
+- Slide；
+
+- Flick；
+
+- Input Timestamp；
+
+- Input Binding；
+
+- Judgment Window；
+
+- Timing Error；
+
+- Early/Late；
+
+- Perfect；
+
+- Great；
+
+- Good；
+
+- Miss；
+
+- Miss Scanner；
+
+- Score；
+
+- Accuracy；
+
+- Combo；
+
+- Gauge；
+
+- Calibration；
+
+- Audio Offset；
+
+- Input Offset；
+
+- Visual Offset；
+
+- Visual Scroll Speed；
+
+- Pause/Resume；
+
+- Practice Seek；
+
+- Practice Loop；
+
+- Chart Editor；
+
+- Waveform；
+
+- Beat Snap；
+
+- Difficulty Analyzer；
+
+- Replay；
+
+- Determinism；
+
+- Leaderboard Validation；
+
+- Ghost；
+
+- Timing Debug；
+
+- Drift Monitor；
+
+- Frame Hitch Test。
+
+
+---
+
+## 后续防重复范围
+
+以下主题属于本次节奏游戏范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
+
+- 音游判定系统；
+
+- Rhythm Judgment；
+
+- Perfect/Great/Good判定；
+
+- 音游Timing Window；
+
+- 音游Early/Late；
+
+- 音游AudioClock；
+
+- 音乐DSP同步；
+
+- 音游谱面系统；
+
+- Chart Compiler；
+
+- BPM变化；
+
+- 音游Note；
+
+- Tap Note；
+
+- Hold Note；
+
+- Chord；
+
+- Slide Note；
+
+- Flick Note；
+
+- 音游Combo；
+
+- 音游Score；
+
+- 音游Accuracy；
+
+- 音游Gauge；
+
+- 音游延迟校准；
+
+- Input Offset；
+
+- Audio Offset；
+
+- Visual Offset；
+
+- 音游Practice；
+
+- 音游Chart Editor；
+
+- 音游难度分析；
+
+- 音游Replay；
+
+- 音游排行榜验证；
+
+- 音游Ghost；
+
+- 音游帧率同步；
+
+- 音游Drift Debug；
+
+- 音游谱面自动验证。
+
+
+这些方向仍然适合作为专项模块继续深入研究，但不再作为新的宏观游戏类型计入设计范式日报。

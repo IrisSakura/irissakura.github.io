@@ -344,10 +344,10 @@ AsyncLoading2 负责把字节恢复为对象图
 
 本文主要基于以下研究材料整理：
 
-- `notes/UnrealEngine源码研究/10_序列化与Package加载_FArchive到AsyncLoading.md`
-- `notes/UnrealEngine源码研究/14_AssetRegistry到PrimaryAsset_发现规则与异步句柄.md`
-- `notes/UnrealEngine源码研究/15_DDC到Cook与IoStore_资源生产和运行时读取.md`
-- `notes/UnrealEngine源码研究/README.md`
+- `notes/UnrealEngine源码研究/UE5/10_序列化与Package加载_FArchive到AsyncLoading.md`
+- `notes/UnrealEngine源码研究/UE5/14_AssetRegistry到PrimaryAsset_发现规则与异步句柄.md`
+- `notes/UnrealEngine源码研究/UE5/15_DDC到Cook与IoStore_资源生产和运行时读取.md`
+- `notes/UnrealEngine源码研究/UE5/README.md`
 
 本文依据当前 Unreal Engine 5.8.1 release 源码研究，覆盖 DDC key/request/build、Cook 保存提交、cooked AssetRegistry、IoStore 容器生产、PackageStore、FIoDispatcher 与 AsyncLoading2 的基础职责链。
 

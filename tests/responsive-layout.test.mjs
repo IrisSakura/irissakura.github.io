@@ -71,6 +71,15 @@ test('Consumer Lab uses a bounded two-column matrix with readable narrow-screen 
   );
 });
 
+test('Journal cards wrap long mixed-language titles inside their padding', async () => {
+  const css = await readText('style/journal.css');
+
+  assert.match(
+    css,
+    /\.journal-update-card h3,\s*\.design-summary-card h3\s*\{[^}]*overflow-wrap:\s*anywhere/s
+  );
+});
+
 test('fluid geometry is the only layout system and obsolete presets are removed', async () => {
   for (const path of ['data/layouts.json', 'style/layout-compact.css', 'style/layout-wide.css']) {
     await assert.rejects(

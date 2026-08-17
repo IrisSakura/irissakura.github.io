@@ -1,3 +1,5 @@
+> Agent 标签：`simulation` `spacecraft` `systems-management`
+
 > 核心问题：如何让玩家在任务压力下分配船员、能量、时间和舱室安全，使一个相互依赖的封闭系统维持可控而非完美的运行？
 
 ## 一、类型定位与核心抽象

@@ -1,14 +1,56 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "cce85fddc7ab0328bdfde80d2580b2df6fdd2392",
-  "generatedAt": "2026-08-12T14:56:02+08:00",
+  "sourceCommit": "9ce24a943f82caccbbd30e2da23c5eac4d02deef",
+  "generatedAt": "2026-08-17T22:17:28+08:00",
   "summary": {
-    "auditCount": 38,
-    "blogCount": 27,
-    "gameDesignCount": 46
+    "auditCount": 44,
+    "blogCount": 33,
+    "gameDesignCount": 50
   },
-  "gameDesignCatalogDigest": "4b21bd4c2ea6185dc7337100df8f5890936e0cc9635ad2b108d24f3e8c4df286",
+  "gameDesignCatalogDigest": "0a8f274ef4a30768ba52ad97db7943262d2c3ca1cd1105e36dace605df29ca2b",
   "audits": [
+    {
+      "id": "audit-2026-08-17",
+      "title": "UnityGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "与上一轮相比，仓库已经发生了实质变化。 最重要的进展不是新增某个 Runtime 功能，而是此前启动的 Full Package Historical Audit 已经把保留执行范围内的 89 个 Package 全部推进到本地闭环状态。当前已经不再处于“逐包继续找问题”的中段，而是进入： 这一阶段。 最近进入 main 的提交也高度符合“完善已有能力”的主线： 最近提交序列包括 09920ea7 feat(rules): harden rule graph determinism (#709)、eef313b6 feat(pooling): converge pool scope diagnostics (#708)、5384c2aa feat(playerservices): harden player service group lifecycle (#706)、955a167b feat(profiling):…",
+      "updatedAt": "2026-08-17",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-16",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮与上一轮相比没有新的代码提交，因此不应人为制造一批“新任务”。当前真正有价值的是重新核对 8 月 14 日收口后的仓库事实是否已经形成一个可以继续推进的稳定基线。 结论是： 仓库当前的开发方向是正确的，但还没有到应该继续推进第 26 个历史审计 Package 的状态。 当前最重要的工作仍然集中在已经暴露、但尚未彻底闭环的三个节点： 与此同时，全包历史审计已经证明这条路线是有效的：Audio、Config、Core、Dialogue、Editor Tools、Event、GameHelper、GAS、Input、Interaction、Movement、Pooling、Save、UI、MVVM、Rendering、CardCore、Swarm、Hitbox、RedDot 等一系列既有 Package 都是在不增加新 Package、不扩大 Stable…",
+      "updatedAt": "2026-08-16",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-14",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮仓库发生的最重要变化，不是新增模块，也不是继续扩 Stable 面，而是项目实际进入了一条非常明确的： 路线。 当前已经建立一份覆盖全部 145 个物理 UPM Package 的历史顺序审计台账；维护者随后明确缩减范围：57 个 domain-framework 不继续执行，本轮只继续处理其余 88 个 Package，已完成的 Roguelite2D 结果保留，历史删除包不重新创建。该审计明确把 Candidate、Tag、Release、签名和 publication 排除在默认范围之外。 这与当前项目真正需要的主线是高度一致的： 不是继续证明“框架还能加什么”，而是系统地证明已有能力是否正确、有界、可清理、可复用、可消费。 从上一轮审计 HEAD c5f3a89f... 到当前版本，仓库虽然经历了密集修改，但：",
+      "updatedAt": "2026-08-14",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-13",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮仓库没有继续增加 UPM Package，主线基本保持在正确方向： 当前 Work Status 仍明确为： 当前 Evidence Backlog 为 129，Deferred 为 11。Candidate、Assembler、strict readiness 与 Release 都不是当前执行项。 本轮最重要的正向变化有三类。 第一，Runtime Foundation 五个核心能力面真正开始从“本地验证”进入“能力级 Runner 资格化”。Pooling、Event、Bootstrap、Save 等近期切片已经被终态 source envelope d3d222f43… 聚合验证，PLAN-INDEX 将大量相关工作从 runner-pending 更新为 runner-passed，并记录 Gitea runs 960–963。这个做法比“一份 Plan 对应一次 Runner”更符合长期治理方向。",
+      "updatedAt": "2026-08-13",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-12",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库的主要变化已经不再是增加 Gameplay Kernel 或继续做 Package Family 合并，而是明显转向三个方向： 其中最值得肯定的是 Asset 模块开始真正从“资源加载器”收敛为“资源所有权系统”。当前已经形成： Asset 的多个直接 Addressables 消费方已经迁移到 Lease；最新 Direct Addressables Boundary 中，普通生产资源加载的 migration queue 已经清空，只剩 Mod Catalog 这种明确 Adapter 例外，以及 Config/UI 的程序集或类型合同残留。 另一方面，本轮测试基础设施也出现了明显改善。仓库建立了 Package Test Coverage Gate，补齐 Interaction、Pathfinding.NavMesh、Rules、Welfare、Modding Compatibility…",
+      "updatedAt": "2026-08-12",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-11",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮与上一轮相比，仓库的状态有一个明显的正向变化： “收敛”终于开始真实地减少物理 Package，而不再只是减少支持承诺或生成更多审计文档。 当前 Inventory 已从前一轮高点的 150 个 UPM Package 降至 145 个，内部依赖边从 276 降至 258。Non-Euclidean Puzzle、VisualNovel、RTT、Hardcore RPG、Survival World 五个独立 UPM Root 已分别并入 Puzzle Platformer、Dialogue、RTS、High Speed ACT、Survival，并保留 Tombstone 和迁移指南。当前分发审计记录 5 个已退休 Package、33 个剩余 non-KEEP 候选。 与此同时，上一轮审计中几个真正重要的基础问题已经完成修复：",
+      "updatedAt": "2026-08-11",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-10",
       "title": "Sakura Framework 仓库最新审计与能力收敛计划",
@@ -286,10 +328,10 @@
         "crafting",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "c56770d891ffbcf933c535395325733cb4016782c5c3da8d1e3808c7eb9e113a",
-      "contentSha256": "1e2e866a46f543c9759e925cacb7dd71bcbf0a960c914f6df6be6d8468f81b64",
-      "bytes": 14824,
+      "updatedAt": "2026-08-17",
+      "sha256": "7558ad03f1d5fe515471fd9b62801a0e91ed3416095329242af5b176c8d419bb",
+      "contentSha256": "af5070b97788125b62843a2adc45b7496aeab6c6e07040ca1e5e400604eac647",
+      "bytes": 14876,
       "contentPath": "content/game-designs/alchemy-magical-crafting.md"
     },
     {
@@ -301,10 +343,10 @@
         "restoration",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "c66d41f388577bc7873c6ca44ce1e9efe51a0ee5f09ca0131632d616733bb47a",
-      "contentSha256": "3cb80bd84926a4bbb954cea326c7a0102bc4485ab1cf1b3eb28af07127fe9e2f",
-      "bytes": 14615,
+      "updatedAt": "2026-08-17",
+      "sha256": "4559f499f0f67e8fb0f438a0370d867e2628f12e5aeae9982efe2eeb2bb7fb58",
+      "contentSha256": "825ae60e2bfc5e18a1ca29304b0328ae297dd5fb4e8a45ac68d9388add0d59b3",
+      "bytes": 14674,
       "contentPath": "content/game-designs/archaeology-restoration.md"
     },
     {
@@ -316,8 +358,8 @@
         "battler",
         "chess"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "d7128f155f7e8c2b9745a9fbb35ebefc9f37b4677f0da6c042e4013f91e88742",
+      "updatedAt": "2026-08-17",
+      "sha256": "07ab36b04ee5dc897fd7848b9263cc256a1d60e75fbe0a697d88c71b537a6d62",
       "contentSha256": "615561ec92766d53ddce2afde5d95b4689529bc1b0ee94665b5861f83d21ad28",
       "bytes": 64749,
       "contentPath": "content/game-designs/auto-battler.md"
@@ -331,11 +373,26 @@
         "br",
         "royale"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "e0791313e6cc4de1081efa4e076b7d7b482c58180a14a02f8ee8a18f45a85f07",
+      "updatedAt": "2026-08-17",
+      "sha256": "deee64400cf90fa5d220e1b8375dce5dd5fabb937b7f9bb3fa15d5834aa71387",
       "contentSha256": "72ed23458ad286fa1a099ebfc4b3970d90fb8b1e7800fb48eba82f3c4a15f9e3",
       "bytes": 66755,
       "contentPath": "content/game-designs/battle-royale.md"
+    },
+    {
+      "id": "bullet-hell",
+      "title": "弹幕射击 / Bullet Hell / Danmaku Shooter",
+      "summary": "敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。",
+      "tags": [
+        "bullet",
+        "danmaku",
+        "hell"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "64dff5ba3362f35fe741cc777e3abb5b26c848b698edc3b2c0d69b24268446b9",
+      "contentSha256": "9f0a2ab6aa3a04cde78f24a23e02edd4d33989d91854d026cb8ba6a540be9f62",
+      "bytes": 60440,
+      "contentPath": "content/game-designs/bullet-hell.md"
     },
     {
       "id": "causal-weaving",
@@ -346,11 +403,41 @@
         "narrative",
         "puzzle"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "8a34d717929cae047468ed9e777cb14c8755443d27269edfba27977d117f4c6f",
-      "contentSha256": "5acb55f920e965091b34ac417cff46d5c65bd5cb604ff8f318a4d828087f0998",
-      "bytes": 45492,
+      "updatedAt": "2026-08-17",
+      "sha256": "8621085364c4a3748216a9de094d2541af426572c5d3d982dd823cdb6d94424a",
+      "contentSha256": "132dbc094b98d1a58634a061f125c9aadc37beb551a6469114e7e223b6c8307e",
+      "bytes": 45544,
       "contentPath": "content/game-designs/causal-weaving.md"
+    },
+    {
+      "id": "ccg",
+      "title": "集换式卡牌对战 / Collectible Card Game / Trading Card Game",
+      "summary": "玩家在对局之外从长期持久化的个人牌池中构筑一副满足规则约束的牌组，将大量候选卡牌压缩成一个有限概率分布；进入对局后，系统把牌组实例化为具有严格区域归属、隐藏信息、顺序、所有权和控制权的比赛状态。玩家通过抽牌获得有限信息，以逐回合增长或恢复的资源交换卡牌、场面、生命、节奏与未来概率，并通过统一的行动合法性、目标选择、效果队列、触发器和状态检查系统解决复杂卡牌交互。",
+      "tags": [
+        "ccg",
+        "collectible",
+        "tcg"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "c2a0bb682fbb612ee2865954c002d271de480a8bac6559edd057e8e039f4002d",
+      "contentSha256": "be15578cbdd2b56d132764c14ab86a6b38e5ac6e41c7a31d9d7c95bf0bfed9be",
+      "bytes": 64204,
+      "contentPath": "content/game-designs/ccg.md"
+    },
+    {
+      "id": "city-builder",
+      "title": "城市建设模拟 / City Builder / Urban Planning Simulation",
+      "summary": "玩家不主要管理某个居民今天应该去哪里工作，而是设计土地用途、交通网络、公用事业、公共服务、税制和空间政策；大量居民与企业依据可达性、土地价值、就业机会、服务质量和成本自主选择迁入、迁出、通勤与经营位置。城市由这些局部决策逐渐涌现为宏观人口、交通、产业、财政和空间结构。",
+      "tags": [
+        "builder",
+        "building",
+        "city"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "06dc72ab69f66c0c399e555b3bd8be57b0bed9194c4a28763e113434e59ebc1f",
+      "contentSha256": "1d3679d2fe14b400607575b5ed69200e5be36d7e4856d87cb501c4c38906bb13",
+      "bytes": 61335,
+      "contentPath": "content/game-designs/city-builder.md"
     },
     {
       "id": "civilization-strategy",
@@ -361,10 +448,10 @@
         "empire",
         "strategy"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "9976d134685ebb5b033fa6e5d37eac6aa2aabe6d830b2b599f2db4a865e09927",
-      "contentSha256": "02de176245237b0fdae09d47d7bf5f0e1f1dbd90611da9f4111119188d072e56",
-      "bytes": 58647,
+      "updatedAt": "2026-08-17",
+      "sha256": "c686f5e4a0966a4d282af56af6cecc2af6a35789a9e2a895c00ae8b3bda4f505",
+      "contentSha256": "26056cc472882e4b244e360650dbb7e839bcd5ee7e3e09dd2d2fce0900ca17e9",
+      "bytes": 58701,
       "contentPath": "content/game-designs/civilization-strategy.md"
     },
     {
@@ -376,10 +463,10 @@
         "management",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "c3e5e8f685026d6c72fcaab7674b676a3eeee7bdc13f93f4b1c57feb6f13f6d2",
-      "contentSha256": "279320f6eea8bd310f9888d2f9fcc2336ef1ee94d248841fc322441e00a46a04",
-      "bytes": 14084,
+      "updatedAt": "2026-08-17",
+      "sha256": "a03093b042382a700c2dc170f790e93befaae2c3f6f75ecf4a7b6a40b9c15aa2",
+      "contentSha256": "9bd833e7b11bdd37beebf6c82bf72f3a31f452babc7550231c3108a78b85f06e",
+      "bytes": 14135,
       "contentPath": "content/game-designs/club-management.md"
     },
     {
@@ -391,10 +478,10 @@
         "management",
         "settlement"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "fe5706afb89d5059a7a4186bab10d1600bdfc2b62a3c2f217635f7335693a509",
-      "contentSha256": "c91ed1dcfea229fff46bcf79111e0f9700d886058b795fc70d8a8de1bcd2afbb",
-      "bytes": 65882,
+      "updatedAt": "2026-08-17",
+      "sha256": "0299abbbdd2e69d404afad1ed7d71ebea314af1b9e3215c221ae5bb20cd0bb62",
+      "contentSha256": "554ac91b36444483dcebfefb4a145630b061b90a294d093e78c9a022cefa0b75",
+      "bytes": 65936,
       "contentPath": "content/game-designs/colony.md"
     },
     {
@@ -406,10 +493,10 @@
         "cooperative",
         "hunting"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "6e370e9d4a89070b780972b6554727819225d076942f7193fff463a6028ff055",
-      "contentSha256": "0f0927d02f1fe29d1fa6050be17914b84f645ae8568376278e5c74f406108eb7",
-      "bytes": 56658,
+      "updatedAt": "2026-08-17",
+      "sha256": "7e8a49258178f3bb3dd4d797500cad37e69553c9388a2709dfdd9f64d5708632",
+      "contentSha256": "a9e319df8f9f7c99fc36c273a6f6057dc6539a93b8b3764a9083eca3df5ef4d8",
+      "bytes": 56710,
       "contentPath": "content/game-designs/cooperative-hunting-action.md"
     },
     {
@@ -421,10 +508,10 @@
         "logistics",
         "routing"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "18aabf1883dcd96b948c4191dd1f79108745960eb07c077463ab993445c25843",
-      "contentSha256": "27e9a84db08dad5570d3946de6bd01f586c88b4d8c383453e75bda2ccdbe9995",
-      "bytes": 15714,
+      "updatedAt": "2026-08-17",
+      "sha256": "8c60306c03aea5ff75b2d20dd993c02334919d34ef2ad64b36ef709c706d4276",
+      "contentSha256": "1663f3d852bff24eedf0c7e67103bd90f2510be42e9d7d0789d2fd29dc43aecd",
+      "bytes": 15765,
       "contentPath": "content/game-designs/courier-delivery.md"
     },
     {
@@ -436,10 +523,10 @@
         "courtroom",
         "evidence"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "3d5952dae2b04decc1aed4c10fb0269931a5a1b703196c1f26fd8d88b9b0b25a",
-      "contentSha256": "13fdd1568af704270d66903ade87bef350e9812deb7ed5208dea8cdb7d28357a",
-      "bytes": 23829,
+      "updatedAt": "2026-08-17",
+      "sha256": "40416c212fc82f550dc188024b7a9ec4daf54487a3aee6c2fe13fbca4cd93692",
+      "contentSha256": "9864387a22a596f0a76f6a35bb345ce23227606e224ccd05088a93c22dbc4356",
+      "bytes": 23886,
       "contentPath": "content/game-designs/courtroom-trial.md"
     },
     {
@@ -451,10 +538,10 @@
         "deckbuilding",
         "roguelike"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "4e96cfea7c177f7566c6ab1dbda3347d5104eca833cc870765598005b85958b4",
-      "contentSha256": "d3c9ebd51380f531f27eb6708bf483c66cf4e6da52ca01f1b8bf1d5bc931d6ab",
-      "bytes": 60154,
+      "updatedAt": "2026-08-17",
+      "sha256": "b3a35a121abc7b445be4b77da8d6a9f56c40f899c3ed72dda89e727a77bf1389",
+      "contentSha256": "2e101f012b15ed69a0087681872c08d91db2cb6066372384dbca194f875cbfa7",
+      "bytes": 60214,
       "contentPath": "content/game-designs/deckbuilder-roguelike.md"
     },
     {
@@ -466,10 +553,10 @@
         "investigation",
         "mystery"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "2c708c19aff05ea5ff86d24dcdb955e5ba4502fa6b1fcf64b4e4d00998d02201",
-      "contentSha256": "cc16fc8367248ce9af38aa7aa8511d8ae8481ea64374da4296d703efbbd4f0e7",
-      "bytes": 62091,
+      "updatedAt": "2026-08-17",
+      "sha256": "0f848cd7823c44341741585d2b62b83d2ff26db937001e4e9ef603231a9b5d63",
+      "contentSha256": "235c8f5a62ef670b8a9c707b57e5e3fd423e56a57043f418dcfadf043e6f9765",
+      "bytes": 62148,
       "contentPath": "content/game-designs/detective.md"
     },
     {
@@ -481,10 +568,10 @@
         "dress-up",
         "fashion"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "aa1701518313c3cea25ceb852a7e0599922e9000f5b0618f2c0ffb91529166eb",
-      "contentSha256": "4bdc704a92a6a8b1e593748ef80dfe9e454c458fe509ddad2de2d5dd1c31ee94",
-      "bytes": 24659,
+      "updatedAt": "2026-08-17",
+      "sha256": "dd528a22122ac687f682f463bf98a0d17f0b23ed4c2f3b5fe81a7012b65870b8",
+      "contentSha256": "70c5434fe8689ef667816a30314c576e27628b0d7892e75735e9f71db196d709",
+      "bytes": 24711,
       "contentPath": "content/game-designs/dress-up.md"
     },
     {
@@ -496,10 +583,10 @@
         "management",
         "risk"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "8582a7b772fe14df5e23770e333a9fd2352a0ecbd137b597f4af39d7c073d590",
-      "contentSha256": "0b74d1662dc282d62435d7fd5f95db2260dd97d45ab0072e30e1c95de4ccdf94",
-      "bytes": 15613,
+      "updatedAt": "2026-08-17",
+      "sha256": "f39ebc447856c879846e22632d1b7a0e86acef010cd15ae4af6658cce1557ae2",
+      "contentSha256": "7214849cc577bbf044e3285adc80ab90637744aa183df7cace2f2b3405db2ced",
+      "bytes": 15664,
       "contentPath": "content/game-designs/expedition-management.md"
     },
     {
@@ -511,11 +598,26 @@
         "incomplete-information",
         "risk"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "32a0dec56aeffec7c8f38cfa7ba0591975f04d2fd2f19085488e4df8c4f08b7d",
-      "contentSha256": "b7da62235a7238588742ca2af20f1e75fd64aa9a69df1f7e49a8cbf27530db51",
-      "bytes": 64759,
+      "updatedAt": "2026-08-17",
+      "sha256": "e58797e7621736402a52d1cccb174367a926a8b0c033ea2acad458e4371f5c3a",
+      "contentSha256": "5960319aa092890f53ea24362dc93bf00f0ba074c2e89b97bcea7edc2f8ef40d",
+      "bytes": 64823,
       "contentPath": "content/game-designs/extraction-cross-session-loop.md"
+    },
+    {
+      "id": "factory-automation",
+      "title": "工厂自动化（Factory Automation）",
+      "summary": "将生产建模为持续运行的流网络，围绕物流、吞吐、背压、瓶颈诊断与扩容重构组织自动化成长。",
+      "tags": [
+        "automation",
+        "factory",
+        "production"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "9b237942c8ee3c4d3d6d36e13aa220e78ef64ee27f6e0976e8f279111bf7bff6",
+      "contentSha256": "bd366f5e2493471ec6a97d37deca3702460e1135989e63b6b28c4c94fdacf89f",
+      "bytes": 39966,
+      "contentPath": "content/game-designs/factory-automation.md"
     },
     {
       "id": "farming",
@@ -526,10 +628,10 @@
         "farming",
         "life"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "263c246108cfd3a04eaee328008eb99b8a5adec040ca0cfcec24dfcac243647d",
-      "contentSha256": "f7b475fad7d737b70003ca40d295ffd452c397914916d8b49472959dc7c1a465",
-      "bytes": 65692,
+      "updatedAt": "2026-08-17",
+      "sha256": "00ef9bf64fd8eabb6576234911096e4fb24cbe3df1eda76479f188b23e0002c4",
+      "contentSha256": "dc54bf2bcb188b7a5d43fc9bd952dc331d4f342a42f280cf3f096a830f1ba92a",
+      "bytes": 65735,
       "contentPath": "content/game-designs/farming.md"
     },
     {
@@ -541,10 +643,10 @@
         "platform",
         "versus"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "d44212572c221e496911cab20591ebd8b77e1d2805c43dc1c015d643170eb0ef",
-      "contentSha256": "00d04dea6ea59e22f3fa8925b854334395c1efd0d360017c4cba4d3150aa15a4",
-      "bytes": 66429,
+      "updatedAt": "2026-08-17",
+      "sha256": "9ba9bcfecceba72a0c75bccfb4832be138d3df028ace425a92c2744bbadf825a",
+      "contentSha256": "f5feaa32aa5586ff78d30f2d6320c3bb9e06cd974ecd1f76dd031010b63ad0e5",
+      "bytes": 66479,
       "contentPath": "content/game-designs/fighting.md"
     },
     {
@@ -556,10 +658,10 @@
         "fishing",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "12b05869f44683f605339c43b445885b3013f63280067ecae9cb6437ec68169e",
-      "contentSha256": "37c9a9e50f785fae9502d751b329c3769ab5482f7492b23441a1501d7d7adcad",
-      "bytes": 23354,
+      "updatedAt": "2026-08-17",
+      "sha256": "4acb7f4157ed91a935cfd594d6893af4aa1646897b0a6db9b7ab4180b94df1a0",
+      "contentSha256": "099d02452bd223e2b2f4f013f77eeed2c3ffaccd3104fd1ca93b0c9eef013b26",
+      "bytes": 23405,
       "contentPath": "content/game-designs/fishing-aquatic-ecology.md"
     },
     {
@@ -571,10 +673,10 @@
         "planning",
         "stealth"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "09dfd80cf612ee59eefb6a8c3d4d5c98b7c28f5282ac5d7ff79733371cfa6200",
-      "contentSha256": "4cfc534c0c77b73b604f55a9666a759a01b3c19b291d066520ba48267cbcda91",
-      "bytes": 23449,
+      "updatedAt": "2026-08-17",
+      "sha256": "8116d5cc258b7dbc7b8d6a021ded016effc4ddf53329421a119cf9cf31d78ca7",
+      "contentSha256": "eb724791490c029980d93ec0beaa98b952f1f6c54191e617684253be15302875",
+      "bytes": 23496,
       "contentPath": "content/game-designs/heist-planning.md"
     },
     {
@@ -586,8 +688,8 @@
         "horde",
         "survival"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "d3b6d6e133308169401285b3fe85c19064adfc02b1e1b81930cd4db2fb2e8588",
+      "updatedAt": "2026-08-17",
+      "sha256": "80a3432b8a889251f3cf6b715606439a929cbbe9c67d4ec03622e94abf6a9f42",
       "contentSha256": "1c17dc83d1576d99c0d8a20b3c0785eb93a2ec3222d9219ab8318dc3dc001af6",
       "bytes": 65590,
       "contentPath": "content/game-designs/horde-survival.md"
@@ -601,10 +703,10 @@
         "operations",
         "triage"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "142a7d83f7ef0d85a0bd3dc93185dd3164a8c7f44d0e531e0c2869b77182741f",
-      "contentSha256": "242292a5f669cc751fca01bd9c68e6600c4f81ba8b8e4b2fd859b03be89f397d",
-      "bytes": 16597,
+      "updatedAt": "2026-08-17",
+      "sha256": "76bbbcd0f5008a394463e6fd374ea2e94c0dbeae4dafb8c7b740559e3a4db080",
+      "contentSha256": "db6247e649888907abba8ba58ec8fe9c24e740fa6473a5d63fe001ec6592f58a",
+      "bytes": 16650,
       "contentPath": "content/game-designs/hospital-triage.md"
     },
     {
@@ -616,10 +718,10 @@
         "immersive-sim",
         "systemic"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "668a29425a2ad254f7ec5531d2fb34716857b9b8c5e3e36b4e4581f851f6f5ff",
-      "contentSha256": "be3e53b519504e80d089f15d735bcb92a6fae0583c44e59290c2d959868e533d",
-      "bytes": 34587,
+      "updatedAt": "2026-08-17",
+      "sha256": "bec4ae37dcc62e2408b8edfa26f396ec7a617ad04a6a789aaaab006d9372c95f",
+      "contentSha256": "ad0f0a8570cf5b213bb83eba3da815c38b1365cffa6e51cbe865d6dce9392db4",
+      "bytes": 34645,
       "contentPath": "content/game-designs/immersive-sim.md"
     },
     {
@@ -631,10 +733,10 @@
         "narrative",
         "state"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "3c6a6c17b2a508ebb8c8e42a1e8c01ce2425dd56d1b32c00b9f316f5b08b33a4",
-      "contentSha256": "aabed9c605eb88131be82f5ad52740a315f1530215efda8d483f4607f722a097",
-      "bytes": 14294,
+      "updatedAt": "2026-08-17",
+      "sha256": "105c8634fb9b00e959fd0f32115b7444405f4cc44f5c46c82c501cfc1e853194",
+      "contentSha256": "728b33d55fa02d38c7da6e5208bdb073bd85dc5bdc9467ee4dd4c320313d8227",
+      "bytes": 14354,
       "contentPath": "content/game-designs/interactive-fiction.md"
     },
     {
@@ -646,10 +748,10 @@
         "media",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "142f678efc3af5db9f496c8e4f1cfc5bdce69f721f4295624ad43e4d698c2db0",
-      "contentSha256": "a7df67430be6d40e0f92dec3082f8261615efd4b1e1f38e26e7cce9b7a5d93cc",
-      "bytes": 28568,
+      "updatedAt": "2026-08-17",
+      "sha256": "dea0b09dd1f0c4553491a25c589960699996e5dac1fed3ee41f69ea07330c589",
+      "contentSha256": "c2b8c4861226e688dec4a9cd0bae53b99fe21b86b0dfcabc024d0200a925b6ab",
+      "bytes": 28620,
       "contentPath": "content/game-designs/journalism-simulation.md"
     },
     {
@@ -661,10 +763,10 @@
         "narrative",
         "party-progression"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "12e18e3ea5b2729540a16a7daf57ecebe572aab6b4b5e26171083a7c4bc579ce",
-      "contentSha256": "2bd6bd82f685d008dc726400581a6d71406cf110d8f55f3a6a7adaa74570a75d",
-      "bytes": 60692,
+      "updatedAt": "2026-08-17",
+      "sha256": "177cd6f2f47fff206e9fe38ea5fc4ab053495249a05bb152a0aeab985ca34901",
+      "contentSha256": "e32cd59f9e6e33b660c677ebf5a4d46880012d85cf81faf8f3237282990a67f3",
+      "bytes": 60750,
       "contentPath": "content/game-designs/jrpg-chapter-party-progression.md"
     },
     {
@@ -676,10 +778,10 @@
         "scheduling",
         "time-management"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "4d28dc313b8810074f48e99dee2e913d927ad71fd4c7240bfc6be0e88f15f1b0",
-      "contentSha256": "a4967f232099b20e2ff90836d326ba0d10d9b1137bfdc9693935d76e89bfa381",
-      "bytes": 23492,
+      "updatedAt": "2026-08-17",
+      "sha256": "bf6adfd3be00b12813f1e4bde5ea4e3efd251640125c8c874499b828f2ce0dc7",
+      "contentSha256": "52f46d8fbc60e03790a3884c66267a3a45a067db259140707876b18c95549505",
+      "bytes": 23551,
       "contentPath": "content/game-designs/kitchen-time-management.md"
     },
     {
@@ -689,10 +791,10 @@
       "tags": [
         "metroidvania"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "9c09e834ee06822c1109a491c587482a29387c3f0c71e0ecf72054fd785ba688",
-      "contentSha256": "4286c78ab5195c3b1a19840d0697380dad0f6b5688dd0c44c9407b95f9a1309e",
-      "bytes": 54543,
+      "updatedAt": "2026-08-17",
+      "sha256": "d067ea15870da7ac542596f9d1476272514038005f47e54fabfab9330accf6d7",
+      "contentSha256": "2ae395c5b5b40d5a82b121bc04afd4c4d9cabfac01355875f913a5eb9bff8dbe",
+      "bytes": 54577,
       "contentPath": "content/game-designs/metroidvania.md"
     },
     {
@@ -704,8 +806,8 @@
         "multiplayer",
         "online"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "78b1e0f5e48bf78bdd8ac5f59e781552caacd3a4794e674f27a75025c64163ac",
+      "updatedAt": "2026-08-17",
+      "sha256": "57b9ddf5888a1fb736a8ea0e4cfc1de937a496fc2e46cac82b9cdf5b38f50f8d",
       "contentSha256": "8ee5884dd4df6ce69ce5b06937adb0db9272c9987fa595bad8449d543ec0203a",
       "bytes": 62375,
       "contentPath": "content/game-designs/moba.md"
@@ -719,8 +821,8 @@
         "rpg",
         "taming"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "6bf5d442bf061dc186fd18f81f133198e47c774fd9a30871cbc01700f94b4bf7",
+      "updatedAt": "2026-08-17",
+      "sha256": "2428208993bf8cd3b36e1bd28411efcde17c92a2aebbdd09b7ebb9a1a3c11b98",
       "contentSha256": "a265615e82db574bd668cfaf7b6fef013458dd67711343bd00314ccec9a1cdfe",
       "bytes": 51735,
       "contentPath": "content/game-designs/monster-taming-rpg.md"
@@ -734,10 +836,10 @@
         "nation",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "71948998676b7812b74a3f9a15cee6131ea43c949b8b2c0e41c66130d862f086",
-      "contentSha256": "9bdf29389776e5f43a73393229c021e97dbe93000d42234d30f54292cea464f2",
-      "bytes": 24949,
+      "updatedAt": "2026-08-17",
+      "sha256": "a3b21540d3c13d22307211180f36c398ea9a30ff4712582c33290ad6530d6819",
+      "contentSha256": "8571d9ce2b94f1608422a1c99bfb2f6dc100942d28ad99f22a7c2f2e48c54c89",
+      "bytes": 25002,
       "contentPath": "content/game-designs/nation-management.md"
     },
     {
@@ -749,10 +851,10 @@
         "life-sim",
         "pets"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "efbb340bce7a19bdc5be31f684144e8e21a192f2db66dcb646a345707d6a01f5",
-      "contentSha256": "244eb853b2aa3d94073da343ab4b478bcd7d803b3672d834e28e4cc6658377a6",
-      "bytes": 13036,
+      "updatedAt": "2026-08-17",
+      "sha256": "a55725c3e757fffa4d3828385a3f270c3cbc3fb654549e9eae96bdb377a5d081",
+      "contentSha256": "0619d4c01bcd4b28c3129a8475ae56a608ce18cdce1908a52e068f374401e28d",
+      "bytes": 13079,
       "contentPath": "content/game-designs/pet-care.md"
     },
     {
@@ -764,10 +866,10 @@
         "operations",
         "prison"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "f964a6f275938a0af562e7586885b55f67bf1d1c0566a5168d4c2b6ccda9c14f",
-      "contentSha256": "207407f52884e9cdfffbfac179835173cddc64412ba3540ba53013d8b5df9259",
-      "bytes": 15864,
+      "updatedAt": "2026-08-17",
+      "sha256": "176f61727de2249b66aa42f5f3fcc33b0f22a8ac1a94045b3f6dbbfeb5085b46",
+      "contentSha256": "143bd5a1a1d4d2d84032a92b00b2b7fa5174538a6116b717f897223a45a20c77",
+      "bytes": 15917,
       "contentPath": "content/game-designs/prison-management.md"
     },
     {
@@ -779,10 +881,10 @@
         "simulation",
         "vehicle"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "336bc8f23214b075e39c5857a06e7cb7bfbbc42c766006dfcbb4bfb34f4ef040",
-      "contentSha256": "e30507041908ebdfeda4e12f8aa0d4b56dd815c128754effbfda7d75b7a21a3e",
-      "bytes": 53450,
+      "updatedAt": "2026-08-17",
+      "sha256": "562c59076405beca9af0cc30b177ee3ff655ae5a611f0d238c9914856a19140b",
+      "contentSha256": "85bc6b0e7d4a9a7dfd6bc7826c9e4aaca2793822de25c64cb9b00c28ff408e24",
+      "bytes": 53501,
       "contentPath": "content/game-designs/racing-fixed-step.md"
     },
     {
@@ -794,10 +896,10 @@
         "network",
         "railway"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "3e4c04522f6fb266a3beaf95f05f1b95a83daa824f19157ec156f0de25bd3492",
-      "contentSha256": "b68e08f921467d6d2591f3af1283552f91c8216272f627091f96b0133d7fa5d9",
-      "bytes": 17286,
+      "updatedAt": "2026-08-17",
+      "sha256": "b2252fd9214e64ebf7a84a267e3052d0a514b8d66534bfc600890bf2fdbfb14d",
+      "contentSha256": "5eef90a11af8cdf354fe105d203bf91cbebe730129654e89d300a63fd7932a70",
+      "bytes": 17335,
       "contentPath": "content/game-designs/railway-network-dispatch.md"
     },
     {
@@ -809,10 +911,10 @@
         "real-time-strategy",
         "strategy"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "0b9c82bfe7fe8180ec5e7f64a5b7d2651a63f2efeeaeb21d5b6da3cbc5d15fe3",
-      "contentSha256": "39d15a005666f04b843d405222638d00c544ffbfa5ccbeec4ee12be2ce789d8c",
-      "bytes": 54549,
+      "updatedAt": "2026-08-17",
+      "sha256": "ad87fa709406598f8263af7b608b14d06e8dac862b6a8dd3f04dcd16b9c394aa",
+      "contentSha256": "f6b119de9621f91d8605b6861e2aa5d74f74973400238cbc2f6c0e8809b0104c",
+      "bytes": 54613,
       "contentPath": "content/game-designs/real-time-strategy.md"
     },
     {
@@ -824,25 +926,25 @@
         "relationship",
         "simulation"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "57437d0cf953ada9cf788e9b1e227d102ec5b53a69ebd096f49db7bd55f56fe5",
-      "contentSha256": "6e487667f42865b4a6f97ad63d74aebef13a8b276ddab5132a1affd2608fd236",
-      "bytes": 24172,
+      "updatedAt": "2026-08-17",
+      "sha256": "5b72b5e404aec1e941b91bf35bb541c67ec9ecda89e865c1c44149e63346ba87",
+      "contentSha256": "9f46ccb38a777907e373190cd758e2091193c1e1051dae59d4e92b3ce2eae4ea",
+      "bytes": 24229,
       "contentPath": "content/game-designs/relationship-simulation.md"
     },
     {
       "id": "rhythm-audio-clock",
-      "title": "节奏游戏的音频主时钟与确定性判定范式",
-      "summary": "聚焦音频主时钟、输入时间映射、确定性判定与表现层同步边界。",
+      "title": "节奏游戏设计范式",
+      "summary": "围绕音频权威时钟、谱面事件流、确定性判定、反馈、练习与内容生产构建完整节奏游戏。",
       "tags": [
         "audio",
         "rhythm",
         "timing"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "089abcabbb99801ef1e1d3ee97d0e5fe2d2b8b21c34d82227b8e493786b44881",
-      "contentSha256": "85e3c607677b11f36d26dc2c58f88f44ea724ec4c2a2947ad0883e825ddb1f17",
-      "bytes": 46675,
+      "updatedAt": "2026-08-17",
+      "sha256": "c8bde5fa7e5e2c8d0abd0de12375a7775bfa9c4512eb58c1934fa38f79cef331",
+      "contentSha256": "b8a81ce7fa52474b891f8a2c0257f0d1892546f25b9d93f8e957ffed926d51b2",
+      "bytes": 64498,
       "contentPath": "content/game-designs/rhythm-audio-clock.md"
     },
     {
@@ -854,10 +956,10 @@
         "social-deduction",
         "trust"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "5566c45b0e4ad6e481ae0b2c1645c83f3e03b2608f0d60524f354f58387845d5",
-      "contentSha256": "9d5a02cecc40a3118deb80849e35610f104f9b3be5f8e035b6e6b7e9fd465948",
-      "bytes": 41660,
+      "updatedAt": "2026-08-17",
+      "sha256": "0f13d231ae6cdca2b729000fe563f46649020f22e7e96f14befdbbfa4bc8f9aa",
+      "contentSha256": "24d5aea7b401b05a152bcfb87abf41d746276dcb36185b91c7d743c7c84c138f",
+      "bytes": 41724,
       "contentPath": "content/game-designs/social-deduction-hidden-identity.md"
     },
     {
@@ -869,10 +971,10 @@
         "checkpoint",
         "soulslike"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "46beaf833a22eaa4510ca49aae4ed68e364fc4ad44cd968dc442d3f7b7dac42d",
-      "contentSha256": "5985571bef98346bd2d23ac217d7f98c5e02b727368b6e7215edc8b8bb4ea1ff",
-      "bytes": 57337,
+      "updatedAt": "2026-08-17",
+      "sha256": "490585e72a923f01c03728b27511c4fe8a5130d05ebe1262137db0485356f4e4",
+      "contentSha256": "245ced3300af31b2a5676c321dfae8656e01f7b09d70b8491f9a227e5b0a1adc",
+      "bytes": 57394,
       "contentPath": "content/game-designs/soulslike-action-commitment-recovery.md"
     },
     {
@@ -884,10 +986,10 @@
         "perception",
         "stealth"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "6505d20971dd75f0b6fdc83b756363728d8b68d48ae1918fd23986b0ab799c64",
-      "contentSha256": "48f16af528f40ea04aed9c019caeb687964b56413952525a994e08777f97f946",
-      "bytes": 54482,
+      "updatedAt": "2026-08-17",
+      "sha256": "abb91a3180b67020289353a649f6e01f907cd54430eb931f7d0365e77c27a8bd",
+      "contentSha256": "dc599d1607dfa7fc8063b4b2762a99a66eb31d9a65713ae5d41ab8b174230f57",
+      "bytes": 54538,
       "contentPath": "content/game-designs/stealth-perception-alert-recovery.md"
     },
     {
@@ -899,10 +1001,10 @@
         "resource",
         "survival"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "3eb1f212bf24fa92ca8f6df09fc957d2ac9b454eda389d97c64907d9d6944b3f",
-      "contentSha256": "814365000250dc229d936c92353110cf7aef3e2b0a65d8c21a8616e0ccd5f217",
-      "bytes": 54172,
+      "updatedAt": "2026-08-17",
+      "sha256": "96e6bf0ffd97a9e4e6ba7b28b141fbea986682c8f7492f0a4b66570eae9a5ea7",
+      "contentSha256": "6780bb921b0dad91bb7904acf002fa6644cf749076ad7395b0aec7b65f25132f",
+      "bytes": 54222,
       "contentPath": "content/game-designs/survival-horror.md"
     },
     {
@@ -914,10 +1016,10 @@
         "turn-based",
         "wargame"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "e2a1185ecd4cb5e908656f2410a28f9b4a7ddfb74921eec8fc18c8faad02d4ac",
-      "contentSha256": "e504bf08093a4216dbe0d2cd438cf502ea1e4940874fa23f21295bfae838afc5",
-      "bytes": 51417,
+      "updatedAt": "2026-08-17",
+      "sha256": "1af1d98005e34e0d3b32bc7c33585c581d0b3c87972964a66ddb52566c6a036f",
+      "contentSha256": "fa132ae2f97b990241d599cd68af6f6334b87315ae84d3639f409da6a7716ad3",
+      "bytes": 51474,
       "contentPath": "content/game-designs/tactical-rpg.md"
     },
     {
@@ -929,10 +1031,10 @@
         "simulation",
         "theme-park"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "3a2372574b025f4550c67e8b70dfe33ddcd3436ceeb1bcead0a1c61cac6feb1d",
-      "contentSha256": "657b2367bf0bdfb728c97dffc040a82409ffa9c5e91e6118415d5ce1b7b5880b",
-      "bytes": 26274,
+      "updatedAt": "2026-08-17",
+      "sha256": "a0d11d103fa05acfb4ef3a7d9952530b078c7d12d408a932dacc65831bc32108",
+      "contentSha256": "90f81d6329d17f4758eb57d7c3f6b829d0102dedd1ab7973932f8a8c88c6b754",
+      "bytes": 26331,
       "contentPath": "content/game-designs/theme-park-management.md"
     },
     {
@@ -944,10 +1046,10 @@
         "td",
         "tower"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "9d07f2a5b561dad0362269c72f88057f6da60547aed611bfbc15f90e80e8c080",
-      "contentSha256": "02250f00dfec7040a54ee548e889d6f3d32ea7176e4683d71f2d19e258f77817",
-      "bytes": 63418,
+      "updatedAt": "2026-08-17",
+      "sha256": "083b07c4d9091352dd2accbe4ff669d8d91d04b60061688578a5bb9ade383aa5",
+      "contentSha256": "048e7004e663e3a4741fda4375a2e93100c689a9d85a7be11ef084c1cf137464",
+      "bytes": 63460,
       "contentPath": "content/game-designs/tower-defense.md"
     },
     {
@@ -959,14 +1061,153 @@
         "spacecraft",
         "systems-management"
       ],
-      "updatedAt": "2026-08-12",
-      "sha256": "0d47fc48bbc26651ae76b71c473a10147583615867c94c53679a27cee72dc58e",
-      "contentSha256": "0e042393a8a84a601a42bd0d0995b6e1d6c70698a5a3999e562d6c50db4636cc",
-      "bytes": 27067,
+      "updatedAt": "2026-08-17",
+      "sha256": "0e5ae284d8b0bcaa7bbb4cfe1ff740d3a74c037e929b8a9f7126a63d537983dc",
+      "contentSha256": "c5f0aaca3c9c1c05f324c93c291f4e843315ee0668ced95b045cb42af5c67f2e",
+      "bytes": 27132,
       "contentPath": "content/game-designs/vessel-systems-management.md"
     }
   ],
   "blogs": [
+    {
+      "id": "authoritative-time-source",
+      "title": "音游、格斗与竞速的权威时间源：输入、模拟、音频与表现层的时钟分工",
+      "summary": "比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "determinism",
+        "simulation",
+        "timing"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "2994be0f23db0615db774435f8d87b0764f2093da83fb2d46f4ee113f2428fda",
+      "bytes": 17700,
+      "contentPath": "content/blogs/authoritative-time-source.md"
+    },
+    {
+      "id": "city-accessibility-feedback",
+      "title": "可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环",
+      "summary": "城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "0e575d871ea7255d05a2bc73428cdbfd81e3ff83bf5ad3f0ce9fc965285a4ac5",
+      "bytes": 33121,
+      "contentPath": "content/blogs/city-accessibility-feedback.md"
+    },
+    {
+      "id": "lease-scope",
+      "title": "资源所有权闭环：Lease、Scope 与统一释放终态",
+      "summary": "一个资源已经成功加载之后，框架怎样准确知道究竟是谁拥有它、应该在什么时候释放，以及 Scene 切换、异步取消、兼容 API 和紧急清理同时存在时，怎样保证整个资源系统最终只剩一个生命周期事实？",
+      "series": "Sakura Framework 工程实践",
+      "tags": [
+        "lease",
+        "scope"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "df226630bc2ba719844a30bf5a892c8d0111d8812660823f44253c2b226e4052",
+      "bytes": 32725,
+      "contentPath": "content/blogs/lease-scope.md"
+    },
+    {
+      "id": "moba",
+      "title": "可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现",
+      "summary": "MOBA 中一次击杀、一次团战或一次线权优势，怎样从短暂的战斗收益转换成能够持续影响后续局势的地图状态？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "moba"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "c9483311e621e82bb12070d5a11a3f85f858e48bdb4d19735cb15176f59ded10",
+      "bytes": 29055,
+      "contentPath": "content/blogs/moba.md"
+    },
+    {
+      "id": "unreal-engine-ddc-cook-iostore",
+      "title": "Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载",
+      "summary": "编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？",
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "tags": [
+        "ddc",
+        "engine",
+        "unreal"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "1ae31eb23aaf4fe4fbea9f57592474b08c4e80e5249c3cd66621d3cd697f9956",
+      "bytes": 14105,
+      "contentPath": "content/blogs/unreal-engine-ddc-cook-iostore.md"
+    },
+    {
+      "id": "unreal-engine-first-frame-pipeline",
+      "title": "Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接",
+      "summary": "一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？",
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "tags": [
+        "engine-loop",
+        "lifecycle",
+        "render-thread",
+        "unreal-engine",
+        "world-tick"
+      ],
+      "updatedAt": "2026-08-17",
+      "sha256": "8ede9fe369e56021231368fdf8e854b88500e22905bfccfd0f02793beaec3f0f",
+      "bytes": 24581,
+      "contentPath": "content/blogs/unreal-engine-first-frame-pipeline.md"
+    },
+    {
+      "id": "blog-5912662e",
+      "title": "压力—火力追逐：幸存者类的时间难度轴与空间化成长",
+      "summary": "幸存者类如何在玩家输入始终非常简单的情况下，让一场单局从稀疏敌群持续演化成数百甚至上千单位参与的高密度战斗，并让成长、移动和构筑始终保持有效决策？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-14",
+      "sha256": "8db7a6b85236d4cdbdef4184c29fe7ea942eae32c503b9c92a9add267b61d1b9",
+      "bytes": 30270,
+      "contentPath": "content/blogs/blog-5912662e.md"
+    },
+    {
+      "id": "blog-5d9fccc2",
+      "title": "双重收敛：大逃杀中的有效空间、存活人数与终局密度控制",
+      "summary": "一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-14",
+      "sha256": "8c2dbce0cf2d512be6a89fc4500801cd531e9fc45ee64ef97c7973f7ec871929",
+      "bytes": 28122,
+      "contentPath": "content/blogs/blog-5d9fccc2.md"
+    },
+    {
+      "id": "blog-bf46f287",
+      "title": "构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗",
+      "summary": "当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "essay"
+      ],
+      "updatedAt": "2026-08-14",
+      "sha256": "dee3785edc1cf8df6295eeb4957063d4a2fc4c934a98bc72bbd877ed7e4fbaea",
+      "bytes": 30334,
+      "contentPath": "content/blogs/blog-bf46f287.md"
+    },
+    {
+      "id": "rpg",
+      "title": "角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长",
+      "summary": "当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "rpg"
+      ],
+      "updatedAt": "2026-08-14",
+      "sha256": "02627fd70391aa1ecb45333138c14c91d47fb829b33db838f037804c5723e27e",
+      "bytes": 32915,
+      "contentPath": "content/blogs/rpg.md"
+    },
     {
       "id": "4x",
       "title": "治理容量：4X 扩张中的收益、组织负担与管理约束",
@@ -981,21 +1222,6 @@
       "contentPath": "content/blogs/4x.md"
     },
     {
-      "id": "authoritative-time-source",
-      "title": "音游、格斗与竞速的权威时间源：输入、模拟、音频与表现层的时钟分工",
-      "summary": "比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。",
-      "series": "游戏系统的共同语言",
-      "tags": [
-        "determinism",
-        "simulation",
-        "timing"
-      ],
-      "updatedAt": "2026-08-12",
-      "sha256": "2994be0f23db0615db774435f8d87b0764f2093da83fb2d46f4ee113f2428fda",
-      "bytes": 17700,
-      "contentPath": "content/blogs/authoritative-time-source.md"
-    },
-    {
       "id": "blog-2f26d3c7",
       "title": "可调度劳动能力：自主居民调度与聚落生产链",
       "summary": "殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？",
@@ -1007,19 +1233,6 @@
       "sha256": "af72bcba1ba26f0b9c55ee01f0283187fccbf35a3377e18fd695f030738a75f5",
       "bytes": 20613,
       "contentPath": "content/blogs/blog-2f26d3c7.md"
-    },
-    {
-      "id": "blog-5d9fccc2",
-      "title": "双重收敛：大逃杀中的有效空间、存活人数与终局密度控制",
-      "summary": "一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？",
-      "series": "游戏系统的共同语言",
-      "tags": [
-        "essay"
-      ],
-      "updatedAt": "2026-08-12",
-      "sha256": "90413d68b39b317fc681cfdba386c32902aabc049f63f143af3f093b071102b8",
-      "bytes": 28119,
-      "contentPath": "content/blogs/blog-5d9fccc2.md"
     },
     {
       "id": "blog-b5472ca4",
@@ -1104,38 +1317,6 @@
       "sha256": "ac9d0443df2ccb48699ae8083616a5359fac5d31cecd5e3360a6235ce4a79f19",
       "bytes": 25450,
       "contentPath": "content/blogs/ai-ac6e1fb2.md"
-    },
-    {
-      "id": "unreal-engine-ddc-cook-iostore",
-      "title": "Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载",
-      "summary": "编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？",
-      "series": "从 Unreal Engine 源码理解引擎设计",
-      "tags": [
-        "ddc",
-        "engine",
-        "unreal"
-      ],
-      "updatedAt": "2026-08-09",
-      "sha256": "645a24669018d076c887c016d3cdc787259cc1e6ff9c46f54398e919ae691a76",
-      "bytes": 14089,
-      "contentPath": "content/blogs/unreal-engine-ddc-cook-iostore.md"
-    },
-    {
-      "id": "unreal-engine-first-frame-pipeline",
-      "title": "Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接",
-      "summary": "一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？",
-      "series": "从 Unreal Engine 源码理解引擎设计",
-      "tags": [
-        "engine-loop",
-        "lifecycle",
-        "render-thread",
-        "unreal-engine",
-        "world-tick"
-      ],
-      "updatedAt": "2026-08-08",
-      "sha256": "944f2e32689ec285ea5590c10cace0658fc98971989045e76c1057988be6ded8",
-      "bytes": 24557,
-      "contentPath": "content/blogs/unreal-engine-first-frame-pipeline.md"
     },
     {
       "id": "ai",

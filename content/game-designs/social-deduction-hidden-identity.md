@@ -1,4 +1,7 @@
 ## 不完全信息、可信度博弈与可审计秘密行动
+
+> Agent 标签：`hidden-identity` `social-deduction` `trust`
+
 ---
 ## 1. 类型定义
 

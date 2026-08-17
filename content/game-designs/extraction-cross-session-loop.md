@@ -1,4 +1,7 @@
 ## 风险携带、不完全信息与“成功撤离才提交收益”的跨局循环
+
+> Agent 标签：`extraction` `incomplete-information` `risk`
+
 ---
 ## 1. 文档定位
 
