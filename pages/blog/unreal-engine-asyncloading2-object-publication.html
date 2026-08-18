@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unreal-engine-asyncloading2-object-publication.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界 | IrisSakura">
+    <meta property="og:description" content="异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unreal-engine-asyncloading2-object-publication.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-engine-asyncloading2-object-publication.png">
+    <meta property="og:image:alt" content="对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界 | IrisSakura">
+    <meta name="twitter:description" content="异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-engine-asyncloading2-object-publication.png">
+    <meta name="twitter:image:alt" content="对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界 | IrisSakura","description":"异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？","url":"https://irissakura.github.io/pages/blog/unreal-engine-asyncloading2-object-publication.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-asyncloading2-object-publication.png","datePublished":"2026-08-18","dateModified":"2026-08-18","about":["async-loading","asyncloading2","lifecycle","unreal-engine","uobject"]}</script>
+    <!-- site-meta:end -->
+    <title>对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-18 · 更新于 2026-08-18</p>
+            <h1>对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界</h1>
+            <p class="blog-deck">异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？</p>
+            <div class="note-tags"><span>async-loading</span><span>asyncloading2</span><a href="tag/lifecycle.html">lifecycle</a><a href="tag/unreal-engine.html">unreal-engine</a><span>uobject</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>异步加载系统最容易制造一种非常自然的错觉：</p>
+<pre><code class="language-text">对象已经创建
+=
+对象已经加载完成
+=
+其他代码现在可以使用它
+</code></pre>
+<p>但在一个拥有并行序列化、PostLoad、递归依赖和全局对象查找能力的大型引擎里，这三个等号都可能不成立。</p>
+<p>假设一个 Package 正在后台加载。</p>
+<p>某个 UObject 的内存已经分配。</p>
+<p>构造函数已经运行。</p>
+<p>甚至加载器内部已经能够找到这个对象，用它继续处理同一批 Package 的其他依赖。</p>
+<p>此时另一个系统执行：</p>
+<pre><code class="language-text">StaticFind
+Soft Reference Resolve
+Global Registry Lookup
+</code></pre>
+<p>它应该看到这个对象吗？</p>
+<p>如果答案是：</p>
+<pre><code class="language-text">对象存在，所以当然可以
+</code></pre>
+<p>就可能把一个仍在 Serialize、PostLoad 或依赖收口过程中的半成品暴露给普通业务代码。</p>
+<p>于是问题会表现成：</p>
+<ul>
+<li>偶发字段仍然是默认值；</li>
+<li>某些对象在开发环境正常、并行加载时失败；</li>
+<li><code>StaticFind</code> 有时找到、有时找不到；</li>
+<li>Thread Sanitizer 在看似无关的位置发现竞争；</li>
+<li><code>PostLoad</code> 中一次同步 <code>LoadObject</code> 突然制造长时间卡顿；</li>
+<li>Package 已经被内部标记完成，外部完成回调却还没有触发；</li>
+<li>循环依赖只在特定加载顺序下出现缺字段或半初始化对象。</li>
+</ul>
+<p>这些现象看起来来自不同模块。</p>
+<p>实际上，它们都在指向同一个问题：</p>
+<blockquote>
+<p><strong>对象什么时候真正从“加载器内部状态”进入“外部可观察状态”？</strong></p>
+</blockquote>
+<h2 id="先说结论对象创建与对象发布是两个生命周期阶段">先说结论：对象创建与对象发布是两个生命周期阶段</h2><p><strong>对象发布协议（后文简称“什么时候真的可以给外部用”）</strong>：加载器在对象已经创建之后，通过内部阶段、可见性控制、生命周期清理和完成回调，把一个仍由加载器拥有的对象逐步转换成普通系统可以安全发现和持有的对象。</p>
+<p>理解 AsyncLoading2 时，最重要的一条关系可以直接写成：</p>
+<pre><code class="language-text">constructed
+!=
+loader-ready
+!=
+globally published
+!=
+callbacks delivered
+</code></pre>
+<p>它们分别回答四个不同问题：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Constructed</td>
+<td>UObject 的内存和身份是否已经建立</td>
+</tr>
+<tr>
+<td>Loader Ready</td>
+<td>Async Loader 内部是否已经可以继续依赖它</td>
+</tr>
+<tr>
+<td>Globally Published</td>
+<td>普通代码是否可以安全发现并使用它</td>
+</tr>
+<tr>
+<td>Callback Delivered</td>
+<td>外部观察者是否已经收到本次加载完成通知</td>
+</tr>
+</tbody></table>
+<p>这四件事如果被压成一个：</p>
+<pre><code class="language-text">isLoaded
+</code></pre>
+<p>很多并发和生命周期错误就会失去表达空间。</p>
+<p>AsyncLoading2 更值得借鉴的地方，也不是某几个 flag 的名字。</p>
+<p>而是它明确承认：</p>
+<blockquote>
+<p><strong>内部能够继续工作，与外部已经获得访问权，是两种不同事实。</strong></p>
+</blockquote>
+<h2 id="ue6-并没有推翻原来的-package-加载主链">UE6 并没有推翻原来的 Package 加载主链</h2><p>在进入具体发布阶段之前，需要先明确一个边界。</p>
+<p>当前源码研究并不是在说：</p>
+<blockquote>
+<p>UE6 出现了一个完全不同的资源系统。</p>
+</blockquote>
+<p>原来的主链仍然成立：</p>
+<pre><code class="language-text">Package
+→
+Archive / Package Metadata
+→
+Object Construction
+→
+Serialize
+→
+PostLoad
+→
+Runtime UObject
+</code></pre>
+<p>AsyncLoading2 仍然处于这条链中。</p>
+<p>变化更多体现在：</p>
+<blockquote>
+<p><strong>对象在这条链的不同阶段究竟对谁可见。</strong></p>
+</blockquote>
+<p>因此可以把旧的简单模型：</p>
+<pre><code class="language-text">Create
+→
+Serialize
+→
+PostLoad
+→
+Done
+</code></pre>
+<p>升级成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Constructed"] --&gt; B["Loading Phase 1"]
+    B --&gt; C["Loading Phase 2"]
+    C --&gt; D["Game Thread Finalization"]
+    D --&gt; E["Clear Loader Ownership"]
+    E --&gt; F["Global Publication"]
+    F --&gt; G["Callback Gate"]
+    G --&gt; H["External Completion"]
+</code></pre>
+<p>这张图并不是 AsyncLoading2 所有内部事件的完整实现图。</p>
+<p>它只是强调一件事：</p>
+<blockquote>
+<p><strong>Done 不是单一瞬间。</strong></p>
+</blockquote>
+<h2 id="phase1-表示对象仍然明确属于-loader">Phase1 表示对象仍然明确属于 Loader</h2><p><strong>加载器所有权阶段（后文简称“还在加载器手里”）</strong>：对象虽然已经存在，但其完整状态和外部可见性仍由当前异步 Package 加载流程控制。</p>
+<p>对象被构造以后，会进入 Async Loading Phase。</p>
+<p>此时最危险的错误认知是：</p>
+<pre><code class="language-text">UObject* ptr != null
+→
+可以对外发布
+</code></pre>
+<p>实际上，一个对象可能仍然需要完成：</p>
+<ul>
+<li>属性反序列化；</li>
+<li>Import / Export 解析；</li>
+<li>依赖对象加载；</li>
+<li>PostLoad；</li>
+<li>Instance 或 Cluster 处理；</li>
+<li>Game Thread 收口。</li>
+</ul>
+<p>所以指针存在只证明：</p>
+<pre><code class="language-text">内存已经存在。
+</code></pre>
+<p>它不能证明：</p>
+<pre><code class="language-text">对象图已经稳定。
+</code></pre>
+<p>这种分离和数据库中的：</p>
+<pre><code class="language-text">Row 已经写入临时事务状态
+</code></pre>
+<p>与：</p>
+<pre><code class="language-text">事务已经 Commit
+</code></pre>
+<p>非常相似。</p>
+<p>两者都“有数据”。</p>
+<p>但可见性权限完全不同。</p>
+<h2 id="phase1-phase2-的切换必须避免短暂裸露窗口">Phase1 → Phase2 的切换必须避免短暂裸露窗口</h2><p>加载中的对象需要从较早阶段进入较后阶段。</p>
+<p>一个看起来很普通的实现可能是：</p>
+<pre><code class="language-text">Clear Phase1
+→
+Set Phase2
+</code></pre>
+<p>问题是两个操作之间存在一个非常短的窗口：</p>
+<pre><code class="language-text">Phase1 = false
+Phase2 = false
+</code></pre>
+<p>如果其他对象发现逻辑把：</p>
+<pre><code class="language-text">没有任何 Loading Flag
+</code></pre>
+<p>解释为：</p>
+<pre><code class="language-text">这个对象已经属于普通 Runtime
+</code></pre>
+<p>那么一个仍在加载流程中的 UObject 可能瞬间被外部代码发现。</p>
+<p>因此更稳健的状态转换是：</p>
+<pre><code class="language-text">先进入 Phase2
+→
+再离开 Phase1
+</code></pre>
+<p>可以近似理解为：</p>
+<pre><code class="language-text">旧保护还没有撤掉以前
+先建立新的保护状态
+</code></pre>
+<p>这是一个非常通用的并发设计原则。</p>
+<p>状态切换不是：</p>
+<pre><code class="language-text">A
+→ 空状态
+→ B
+</code></pre>
+<p>而应尽量是：</p>
+<pre><code class="language-text">A
+→ A+B
+→ B
+</code></pre>
+<p>当两个状态都承担安全语义时，短暂重叠通常比短暂无保护更加安全。</p>
+<h2 id="phase2-仍然不等于业务代码可以用了">Phase2 仍然不等于“业务代码可以用了”</h2><p><strong>内部就绪态（后文简称“加载器自己已经能继续用了”）</strong>：对象已经满足加载流程后续阶段的内部依赖，但仍然不代表普通 Game Thread 或任意业务系统获得了长期访问权。</p>
+<p>这是整个模型最容易被误解的一步。</p>
+<p>如果一个对象进入更后阶段，加载器可能需要让：</p>
+<pre><code class="language-text">同一批加载流程中的其他 UObject
+</code></pre>
+<p>访问它。</p>
+<p>例如：</p>
+<pre><code class="language-text">Object A PostLoad
+→
+需要解析 Object B
+
+Object B
+→
+已经完成必要阶段
+</code></pre>
+<p>加载器可以在受控 Visibility Scope 中允许这种访问。</p>
+<p>这里的关键词是：</p>
+<pre><code class="language-text">受控。
+</code></pre>
+<p>它表达的是：</p>
+<blockquote>
+<p>Async Loader 为了推进自己的依赖图，可以看见一部分尚未全局发布的对象。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>这个对象现在已经正式进入普通业务世界。</p>
+</blockquote>
+<p>因此：</p>
+<pre><code class="language-text">Loader Can See
+</code></pre>
+<p>不能自动推导：</p>
+<pre><code class="language-text">Everyone Can See。
+</code></pre>
+<h2 id="内部可见性与全局可见性应该是两种权限">内部可见性与全局可见性应该是两种权限</h2><p>很多异步系统喜欢只有一个状态：</p>
+<pre><code class="language-text">Ready
+</code></pre>
+<p>但真正成熟的加载器往往需要至少两种 Ready。</p>
+<p>第一种：</p>
+<pre><code class="language-text">Internal Ready
+</code></pre>
+<p>表示：</p>
+<blockquote>
+<p>后台流水线可以继续推进。</p>
+</blockquote>
+<p>第二种：</p>
+<pre><code class="language-text">Externally Observable
+</code></pre>
+<p>表示：</p>
+<blockquote>
+<p>普通消费者可以安全使用。</p>
+</blockquote>
+<p>这两个阶段分开以后，加载器可以获得一个非常重要的优化空间：</p>
+<pre><code class="language-text">内部已经完成足够工作
+→
+可以继续并行处理其他对象
+
+但
+→
+暂时不允许业务代码拿到半成品
+</code></pre>
+<p>这实际上是一种：</p>
+<p><strong>内部进度与外部一致性分离（后文简称“后台可以继续跑，外面先别看到”）</strong>。</p>
+<p>这条原则可以迁移到很多系统。</p>
+<p>例如 Service 初始化：</p>
+<pre><code class="language-text">Service A 已经足够让 Service B 初始化
+</code></pre>
+<p>并不代表：</p>
+<pre><code class="language-text">Gameplay 可以立刻调用 Service A。
+</code></pre>
+<p>又例如场景 Streaming：</p>
+<pre><code class="language-text">Scene Object Graph 已经建立
+</code></pre>
+<p>并不代表：</p>
+<pre><code class="language-text">Scene 已经正式进入 Active Gameplay。
+</code></pre>
+<h2 id="构造和-serialize-中最危险的行为是提前发布-this">构造和 Serialize 中最危险的行为是提前发布 <code>this</code></h2><p>一个对象仍处于加载阶段时，最危险的操作通常不是：</p>
+<pre><code class="language-text">修改自己的字段。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">让其他系统提前知道自己存在。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">构造函数
+→
+GlobalRegistry.Register(this)
+
+Serialize
+→
+GlobalEventBus.Subscribe(this)
+
+Parallel PostLoad
+→
+Manager.Add(this)
+</code></pre>
+<p>这类操作会让对象逃离 Loader Ownership。</p>
+<p>一旦进入：</p>
+<ul>
+<li>全局 Registry；</li>
+<li>Multicast Delegate；</li>
+<li>Manager；</li>
+<li>可被其他 UObject 遍历的共享容器；</li>
+</ul>
+<p>普通系统就可能在错误时间访问它。</p>
+<p><strong>加载中对象逃逸（后文简称“半成品跑出了加载器”）</strong>：对象在加载协议尚未完成时，被写入一个对加载器外部可见的长期引用位置。</p>
+<p>这种 Bug 的特点是非常难复现。</p>
+<p>因为结果取决于：</p>
+<ul>
+<li>Worker 执行顺序；</li>
+<li>Package 依赖；</li>
+<li>当前线程；</li>
+<li>Game Thread 时机；</li>
+<li>是否启用并行加载；</li>
+<li>是否出现递归同步加载。</li>
+</ul>
+<p>单线程测试可能永远正常。</p>
+<p>切到并行加载以后才出现。</p>
+<h2 id="postload-也不能被简单理解成-game-thread-hook"><code>PostLoad</code> 也不能被简单理解成 Game Thread Hook</h2><p>很多工程代码会逐渐形成一种经验：</p>
+<pre><code class="language-text">构造阶段不能做
+→
+那就全部放进 PostLoad。
+</code></pre>
+<p>这同样不够准确。</p>
+<p>某些类可以声明自己的 PostLoad 是线程安全的。</p>
+<p>这意味着相应逻辑可能在 Loader Worker 执行。</p>
+<p>所以实现 PostLoad 时需要首先区分两类工作。</p>
+<h3 id="纯数据整理">纯数据整理</h3><p>例如：</p>
+<ul>
+<li>根据已加载字段构建局部缓存；</li>
+<li>计算不会触碰全局状态的派生数据；</li>
+<li>整理当前 UObject 自己的内容。</li>
+</ul>
+<p>这类工作更容易适配并行 PostLoad。</p>
+<h3 id="外部发布">外部发布</h3><p>例如：</p>
+<ul>
+<li>注册全局 Delegate；</li>
+<li>修改全局 Manager；</li>
+<li>触碰 Editor 单例；</li>
+<li>修改 Renderer / Audio 等线程敏感系统；</li>
+<li>把自身写入共享跨线程容器。</li>
+</ul>
+<p>这类行为需要明确的线程和发布边界。</p>
+<p>如果某个类无法继续满足：</p>
+<pre><code class="language-text">Thread-safe PostLoad
+</code></pre>
+<p>更稳健的做法通常不是继续在内部堆特殊分支。</p>
+<p>而是重新审视：</p>
+<blockquote>
+<p>这个类是否真的应该承诺并行 PostLoad？</p>
+</blockquote>
+<h2 id="game-thread-也不自动代表对象已经发布">Game Thread 也不自动代表对象已经发布</h2><p>另一个很容易产生误判的条件是：</p>
+<pre><code class="language-text">当前代码运行在 Game Thread。
+</code></pre>
+<p>Game Thread 确实承担很多最终收口工作。</p>
+<p>但：</p>
+<pre><code class="language-text">IsInGameThread()
+</code></pre>
+<p>并不能单独证明：</p>
+<pre><code class="language-text">对象已经完成加载协议。
+</code></pre>
+<p>启动阶段尤其可能存在：</p>
+<pre><code class="language-text">Loader 本身就在 Game Thread 推进
++
+对象仍然携带 Loading State。
+</code></pre>
+<p>所以：</p>
+<pre><code class="language-text">Game Thread
+</code></pre>
+<p>描述的是执行线程。</p>
+<pre><code class="language-text">Published
+</code></pre>
+<p>描述的是对象生命周期。</p>
+<p>两者是正交维度。</p>
+<p>这与很多并发系统中的一个常见错误相同：</p>
+<blockquote>
+<p>“已经切回主线程”被误认为“所有状态都已经稳定”。</p>
+</blockquote>
+<p>实际上，主线程只是一个执行地点。</p>
+<p>不是自动完成证明。</p>
+<h2 id="同步-loadobject-会把异步依赖图重新压回调用栈">同步 <code>LoadObject</code> 会把异步依赖图重新压回调用栈</h2><p>异步 Loader 之所以复杂，是因为它试图把：</p>
+<pre><code class="language-text">Package A
+Package B
+Package C
+</code></pre>
+<p>之间的关系组织成一张可以并行推进的依赖图。</p>
+<p>此时如果某个对象在：</p>
+<ul>
+<li>构造；</li>
+<li>Serialize；</li>
+<li>PostLoad；</li>
+</ul>
+<p>内部主动调用：</p>
+<pre><code class="language-text">LoadObject
+LoadPackage
+StaticLoadObject
+</code></pre>
+<p>就等于要求：</p>
+<blockquote>
+<p>我现在立刻需要另一个 Package 完成。</p>
+</blockquote>
+<p>原本：</p>
+<pre><code class="language-text">Dependency Graph
+</code></pre>
+<p>被重新压成：</p>
+<pre><code class="language-text">Call Stack。
+</code></pre>
+<p>**递归同步加载（后文简称“异步流水线里突然要求现场等另一车货”）**会带来几个直接后果：</p>
+<ul>
+<li>Loader 流水线被串行化；</li>
+<li>Game Thread 可能出现明显 stall；</li>
+<li>依赖顺序开始受到调用栈控制；</li>
+<li>环依赖更难处理；</li>
+<li>原本独立的 Package 生命周期开始互相嵌套。</li>
+</ul>
+<p>因此，在 Serializer 中主动拉取 Package，通常比声明：</p>
+<pre><code class="language-text">Import
+Soft Reference
+Explicit Dependency
+</code></pre>
+<p>更难维护。</p>
+<h2 id="循环递归同步加载最终会遇到活性问题">循环递归同步加载最终会遇到活性问题</h2><p>考虑：</p>
+<pre><code class="language-text">Package A
+正在 Serialize
+
+A
+→
+同步 Load B
+
+B
+→
+又同步要求 A
+</code></pre>
+<p>此时形成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Package A Loading"] --&gt; B["Sync Load B"]
+    B --&gt; C["Flush B"]
+    C --&gt; D["B Sync Load A"]
+    D --&gt; E["Recursive Flush A"]
+    E --&gt; F{"怎么办"}
+    F --&gt;|"等待自己"| G["Deadlock"]
+    F --&gt;|"退化"| H["Partial Load"]
+</code></pre>
+<p>如果 A 坚持：</p>
+<pre><code class="language-text">必须等我自己完整加载完
+</code></pre>
+<p>才能返回，</p>
+<p>系统会永久等待自身。</p>
+<p>为了避免死锁，Loader 只能在某些条件下选择一个退化路径。</p>
+<h2 id="partial-load-是防死锁退化不是正常完成">Partial Load 是防死锁退化，不是正常完成</h2><p><strong>部分加载（后文简称“先让一个没完全做完的 Package 暂时返回”）</strong>：递归同步加载形成无法正常完成的环时，为了维持系统活性，让其中一个 Package 在未完成完整反序列化/PostLoad 的状态下返回。</p>
+<p>Partial Load 最危险的误解是：</p>
+<pre><code class="language-text">它返回了
+→
+所以成功了。
+</code></pre>
+<p>更准确的理解是：</p>
+<pre><code class="language-text">系统选择了
+活着继续跑
+而不是
+永久死锁。
+</code></pre>
+<p>它是 Recovery。</p>
+<p>不是 Happy Path。</p>
+<p>调用方拿到的对象可能还没有完整完成：</p>
+<ul>
+<li>Deserialize；</li>
+<li>PostLoad；</li>
+<li>依赖初始化。</li>
+</ul>
+<p>而且：</p>
+<pre><code class="language-text">哪个 Package 被迫 Partial
+</code></pre>
+<p>可能受到加载顺序影响。</p>
+<p>于是 Bug 可能表现为：</p>
+<pre><code class="language-text">偶尔 A 缺字段
+有时 B 缺字段
+重启以后又正常
+</code></pre>
+<p>这种“随机感”实际上来自依赖环的执行顺序，而不是普通 RNG。</p>
+<h2 id="partial-flush-最应该做的是暴露依赖设计问题">Partial Flush 最应该做的是暴露依赖设计问题</h2><p>如果出现 Partial Load，最差的修复通常是：</p>
+<pre><code class="language-text">再 Flush 一次
+Sleep 一下
+多加一把锁
+</code></pre>
+<p>这些方式只是改变：</p>
+<pre><code class="language-text">谁先进入环。
+</code></pre>
+<p>更合理的排查顺序是：</p>
+<pre><code class="language-text">发现 Partial Flush
+→
+定位触发 Package
+→
+找到 Serialize / PostLoad 中的同步 Load
+→
+画出 Package Dependency Cycle
+→
+改成声明式依赖
+</code></pre>
+<p>Partial Flush 因此不应该被当作：</p>
+<pre><code class="language-text">Loader 的普通优化细节。
+</code></pre>
+<p>它更像一种架构诊断信号：</p>
+<blockquote>
+<p>依赖图中存在一个被同步调用栈隐藏起来的环。</p>
+</blockquote>
+<h2 id="package-内部完成也还不是外部通知点">Package 内部完成也还不是外部通知点</h2><p>假设一个 Package 的核心内容已经完成。</p>
+<p>系统内部可能已经执行：</p>
+<ul>
+<li>非线程安全 PostLoad；</li>
+<li>Instance 处理；</li>
+<li>Cluster 处理；</li>
+<li>Package Full Load 状态更新。</li>
+</ul>
+<p>这仍然不意味着：</p>
+<pre><code class="language-text">现在立刻广播所有外部 callback。
+</code></pre>
+<p>原因是加载器本身还有内部 Ownership 和索引状态需要清理。</p>
+<p>一个简化完成顺序可以表示成：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["PostLoad / Instance / Cluster 收口"] --&gt; B["Package State Complete"]
+    B --&gt; C["记录待广播结果"]
+    C --&gt; D["清理 ConstructedObjects / Loading Flags"]
+    D --&gt; E["可选条件能力处理"]
+    E --&gt; F["Detach Loader / Linker Ownership"]
+    F --&gt; G["移除 Async Lookup"]
+    G --&gt; H["移除 Processing List"]
+    H --&gt; I["整理 Request / Callback Queue"]
+    I --&gt; J["Callback Gate"]
+    J --&gt; K["External Completion"]
+</code></pre>
+<p>这里最值得注意的是：</p>
+<blockquote>
+<p><strong>回调出现在内部状态清理之后。</strong></p>
+</blockquote>
+<h2 id="完成回调本身会重新进入加载系统">完成回调本身会重新进入加载系统</h2><p>为什么不能：</p>
+<pre><code class="language-text">Package 完成
+→
+立即 callback？
+</code></pre>
+<p>因为 callback 不是纯通知。</p>
+<p>外部代码收到通知以后，完全可能：</p>
+<pre><code class="language-text">LoadPackageAsync(...)
+LoadObject(...)
+FlushAsyncLoading(...)
+触发另一批依赖
+</code></pre>
+<p>也就是说：</p>
+<pre><code class="language-text">Completion Callback
+</code></pre>
+<p>是一个潜在的重入点。</p>
+<p><strong>回调门（后文简称“内部状态整理好以后才允许外部重新进来”）</strong>：在加载器仍处于 PostLoad routing 或递归同步加载栈时暂缓外部完成通知，直到内部状态已经满足重入安全要求。</p>
+<p>这是一条非常重要的设计思想。</p>
+<p>完成回调不是：</p>
+<pre><code class="language-text">最后一行顺手 Invoke 一下。
+</code></pre>
+<p>它是：</p>
+<blockquote>
+<p>把控制权重新交还给未知外部代码的边界。</p>
+</blockquote>
+<p>在这个边界之前，内部系统必须先问：</p>
+<pre><code class="language-text">如果 callback 现在重新调用我
+我的所有列表、索引和 Ownership 是否已经稳定？
+</code></pre>
+<h2 id="清理顺序属于并发合同而不是代码风格">清理顺序属于并发合同，而不是代码风格</h2><p>Loader 完成阶段中，一些操作必须保持确定顺序。</p>
+<p>例如，如果旧 Async Package 还持有某个 Linker，却先从全局 lookup 中移除自己：</p>
+<pre><code class="language-text">Lookup
+认为当前 Package 已经不存在
+</code></pre>
+<p>另一个加载流程可能立即为同一个 Package Identity 创建新状态。</p>
+<p>但旧对象仍然没有完成 Detach。</p>
+<p>于是形成：</p>
+<pre><code class="language-text">Old Package
+仍拥有 Linker
+
+New Package
+尝试重新 Attach
+</code></pre>
+<p>这就是 Ownership Race。</p>
+<p>所以：</p>
+<pre><code class="language-text">Detach
+→
+Remove Lookup
+</code></pre>
+<p>不只是更“整洁”。</p>
+<p>它承担的是并发安全语义。</p>
+<p>类似地：</p>
+<pre><code class="language-text">Processing List
+</code></pre>
+<p>也需要在允许 callback 重入之前先进入稳定状态。</p>
+<p>这类顺序最不适合被“代码清理”随意交换。</p>
+<h2 id="package-complete与外部完成应当是两个指标">“Package Complete”与“外部完成”应当是两个指标</h2><p>在调试工具里，如果只记录：</p>
+<pre><code class="language-text">Package State = Complete
+</code></pre>
+<p>开发者可能仍然会遇到：</p>
+<pre><code class="language-text">为什么我的 callback 没来？
+</code></pre>
+<p>因为中间还可能存在：</p>
+<pre><code class="language-text">Callback Gate
+</code></pre>
+<p>或者内部待广播队列。</p>
+<p>所以加载诊断更适合分别记录：</p>
+<pre><code class="language-text">Internal Package Complete
+Publication Complete
+External Completion Delivered
+</code></pre>
+<p>当三个指标被拆开以后，问题定位会非常直接。</p>
+<p>例如：</p>
+<pre><code class="language-text">Internal Complete = true
+Published = false
+</code></pre>
+<p>说明问题在 Loader Ownership 清理或可见性。</p>
+<p>而：</p>
+<pre><code class="language-text">Published = true
+Callback Delivered = false
+</code></pre>
+<p>则更应该检查 callback gate 和当前重入状态。</p>
+<h2 id="完成回调名字听起来对并不代表它仍然是正确-api">“完成回调名字听起来对”并不代表它仍然是正确 API</h2><p>大型引擎演化过程中，一个非常危险的兼容陷阱是：</p>
+<pre><code class="language-text">API 还存在
++
+名字非常符合需求
+→
+继续使用。
+</code></pre>
+<p>但当前源码研究已经显示，某些旧的 Package 完成通知虽然仍然保留声明，却已经明确进入 Deprecated / Unsafe 状态。</p>
+<p>这说明迁移时不能只问：</p>
+<pre><code class="language-text">这个函数还编译吗？
+</code></pre>
+<p>还要问：</p>
+<pre><code class="language-text">当前生命周期合同还承认它是安全观察点吗？
+</code></pre>
+<p>新的批次型 End Load Context 也不应该被机械理解成：</p>
+<pre><code class="language-text">旧 callback 换了一个名字。
+</code></pre>
+<p>它的：</p>
+<ul>
+<li>通知粒度；</li>
+<li>构建条件；</li>
+<li>使用环境；</li>
+</ul>
+<p>都可能不同。</p>
+<p>普通 Runtime Consumer 更适合依赖：</p>
+<pre><code class="language-text">自己发起的异步请求完成
+</code></pre>
+<p>而不是寻找一个看起来能观察“所有 Package 完成”的全局 Hook。</p>
+<h2 id="全局-loader-hook-与业务加载完成不是同一个需求">全局 Loader Hook 与业务加载完成不是同一个需求</h2><p>这里很容易出现一种架构膨胀。</p>
+<p>业务系统只是需要：</p>
+<pre><code class="language-text">我的这次资源请求完成以后做某件事。
+</code></pre>
+<p>却选择监听：</p>
+<pre><code class="language-text">全局所有 Package 加载完成事件。
+</code></pre>
+<p>于是它开始处理：</p>
+<ul>
+<li>其他系统的 Package；</li>
+<li>Editor 加载；</li>
+<li>间接依赖；</li>
+<li>Loader 内部批次；</li>
+<li>不同构建配置。</li>
+</ul>
+<p>一个本来局部的需求被升级成全局 Observer。</p>
+<p>这通常不是更强。</p>
+<p>而是扩大了不必要的生命周期耦合。</p>
+<p>所以：</p>
+<blockquote>
+<p><strong>最小观察边界优先于全局完成事件。</strong></p>
+</blockquote>
+<p>如果一个 Consumer 只拥有自己的 Request，就让它只观察自己的 Request。</p>
+<h2 id="条件能力必须插入现有生命周期而不是绕开它">条件能力必须插入现有生命周期，而不是绕开它</h2><p>当前源码中还存在一些只在特定宏条件下启用的新能力。</p>
+<p>例如某些额外对象形态或新的初始化路径。</p>
+<p>这类代码很容易在阅读源码时产生错觉：</p>
+<pre><code class="language-text">UE6 已经全面采用这个新模型。
+</code></pre>
+<p>但：</p>
+<pre><code class="language-text">代码存在
+</code></pre>
+<p>与：</p>
+<pre><code class="language-text">默认启用
+</code></pre>
+<p>仍然不是一回事。</p>
+<p>更值得关注的是：</p>
+<blockquote>
+<p>新能力被插入生命周期的哪个位置。</p>
+</blockquote>
+<p>如果一个新的对象副本必须等：</p>
+<pre><code class="language-text">Async Loading Flags 已清
+PostLoad 已完成
+Config 已加载
+</code></pre>
+<p>之后才能建立，</p>
+<p>这说明它并没有创造另一套平行生命周期。</p>
+<p>它仍然服从已有 Publication Boundary。</p>
+<p>这其实是成熟基础设施接入方式的一个很好案例：</p>
+<pre><code class="language-text">扩展能力
+→
+嵌入已有完成协议
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">扩展能力
+→
+偷偷建立一条旁路。
+</code></pre>
+<h2 id="对一般资源加载器的迁移启示">对一般资源加载器的迁移启示</h2><p>AsyncLoading2 的实现细节当然不适合直接复制到普通 Unity 项目。</p>
+<p>但它暴露出的几个设计问题非常通用。</p>
+<h3 id="1-给对象增加-published-状态">1. 给对象增加 Published 状态</h3><p>不要只有：</p>
+<pre><code class="language-text">Created
+Loaded
+</code></pre>
+<p>至少考虑：</p>
+<pre><code class="language-text">Creating
+InternalReady
+Published
+Failed
+Released
+</code></pre>
+<h3 id="2-内部依赖和外部-consumer-使用不同访问权限">2. 内部依赖和外部 Consumer 使用不同访问权限</h3><p>Loader 可以拥有：</p>
+<pre><code class="language-text">ResolveInternal(id)
+</code></pre>
+<p>而业务代码只能使用：</p>
+<pre><code class="language-text">ResolvePublished(id)
+</code></pre>
+<p>避免半成品对象泄露。</p>
+<h3 id="3-completion-callback-放到-ownership-清理之后">3. Completion Callback 放到 Ownership 清理之后</h3><p>不要：</p>
+<pre><code class="language-text">状态还在内部表里
+→
+先 Callback
+→
+Callback 重入
+→
+再慢慢 Cleanup。
+</code></pre>
+<p>更安全的是：</p>
+<pre><code class="language-text">Cleanup Internal State
+→
+Enter Reentrant-Safe State
+→
+Callback。
+</code></pre>
+<h3 id="4-把同步递归加载视为设计警告">4. 把同步递归加载视为设计警告</h3><p>Serializer 中出现：</p>
+<pre><code class="language-text">LoadSync()
+</code></pre>
+<p>不应自动被接受。</p>
+<p>至少需要检查：</p>
+<ul>
+<li>是否可以声明依赖；</li>
+<li>是否会制造环；</li>
+<li>是否阻塞主线程；</li>
+<li>是否破坏并行流水线。</li>
+</ul>
+<h3 id="5-partial-success-必须有独立状态">5. Partial Success 必须有独立状态</h3><p>如果系统为了避免死锁允许：</p>
+<pre><code class="language-text">PartiallyReady
+</code></pre>
+<p>就不能继续用：</p>
+<pre><code class="language-text">Success = true。
+</code></pre>
+<p>上层需要知道：</p>
+<blockquote>
+<p>这不是完整结果。</p>
+</blockquote>
+<h2 id="对-service-初始化系统的迁移启示">对 Service 初始化系统的迁移启示</h2><p>对象发布协议同样可以用于模块启动。</p>
+<p>例如：</p>
+<pre><code class="language-text">Service Constructed
+→
+Dependencies Resolved
+→
+Internal Ready
+→
+Registered
+→
+Published
+→
+Consumer Callback
+</code></pre>
+<p>Service A 可能已经足够让 Bootstrap 初始化 Service B。</p>
+<p>但普通 Gameplay 仍然不应该访问 A。</p>
+<p>这样可以避免：</p>
+<pre><code class="language-text">Container 中已经能 Resolve
+=
+业务已经可以调用
+</code></pre>
+<p>这种典型启动竞态。</p>
+<h2 id="对-scene-streaming-的迁移启示">对 Scene Streaming 的迁移启示</h2><p>Scene 加载同样可以拆成：</p>
+<pre><code class="language-text">Scene Data Loaded
+→
+Objects Constructed
+→
+References Resolved
+→
+Internal Initialization
+→
+Activation
+→
+Published To Gameplay
+</code></pre>
+<p>如果：</p>
+<pre><code class="language-text">Scene Objects 已经存在
+</code></pre>
+<p>就立即让 Gameplay 查找，</p>
+<p>可能遇到：</p>
+<ul>
+<li>Component 未初始化；</li>
+<li>依赖 Scene 未完成；</li>
+<li>Nav / Physics 尚未接入；</li>
+<li>Runtime Service 未绑定。</li>
+</ul>
+<p>所以：</p>
+<pre><code class="language-text">Loaded
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">Activated
+</code></pre>
+<p>本来就应该是两种状态。</p>
+<h2 id="对网络-session-的迁移启示">对网络 Session 的迁移启示</h2><p>网络连接也具有类似关系：</p>
+<pre><code class="language-text">Socket Connected
+!=
+Protocol Ready
+!=
+Authenticated
+!=
+Session Published
+</code></pre>
+<p>TCP 已经连通不代表业务消息可以发送。</p>
+<p>Authentication 完成也不一定代表 World Snapshot 已经同步。</p>
+<p>如果这些状态被压成：</p>
+<pre><code class="language-text">Connected = true
+</code></pre>
+<p>协议层同样会看到“半初始化对象”。</p>
+<p>AsyncLoading2 只是用 UObject 展示了同一种问题。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="uobject-地址已经存在就立即写入全局-registry">UObject 地址已经存在，就立即写入全局 Registry</h3><p>半初始化对象逃出 Loader Ownership。</p>
+<h3 id="phase2-被直接解释成业务-ready">Phase2 被直接解释成业务 Ready</h3><p>内部依赖可见性被错误扩大成全局访问权限。</p>
+<h3 id="把-postload-统一当-game-thread-hook">把 PostLoad 统一当 Game Thread Hook</h3><p>线程安全 PostLoad 路径上的全局状态修改产生并发问题。</p>
+<h3 id="game-thread-被当成自动完成证明">Game Thread 被当成自动完成证明</h3><p>执行线程与对象 Publication State 被混为一谈。</p>
+<h3 id="serialize-中主动同步-load-依赖">Serialize 中主动同步 Load 依赖</h3><p>依赖图退化为调用栈，加载流水线被串行化。</p>
+<h3 id="递归加载出现以后继续增加-flush">递归加载出现以后继续增加 Flush</h3><p>只是改变哪一个 Package 先进入 Partial 状态。</p>
+<h3 id="partial-load-被登记为普通-success">Partial Load 被登记为普通 Success</h3><p>外部代码开始使用尚未完整 PostLoad 的对象。</p>
+<h3 id="package-内部-complete-后立即广播外部回调">Package 内部 Complete 后立即广播外部回调</h3><p>Callback 重入时内部 lookup、processing list 或 Ownership 尚未稳定。</p>
+<h3 id="清理顺序被当作无语义重构">清理顺序被当作无语义重构</h3><p>Detach、Lookup Removal 和 Callback 顺序变化制造 Ownership Race。</p>
+<h3 id="只记录一个-loaded-状态">只记录一个 <code>Loaded</code> 状态</h3><p>无法区分 Internal Ready、Published 与 Callback Delivered。</p>
+<h3 id="看见一个全局完成-delegate-就让所有业务订阅">看见一个全局完成 Delegate 就让所有业务订阅</h3><p>局部 Request 被不必要地耦合到整个 Loader 生命周期。</p>
+<h3 id="deprecated-api-仍然编译就假设继续安全">Deprecated API 仍然编译，就假设继续安全</h3><p>编译兼容被错误解释成生命周期合同仍然有效。</p>
+<h3 id="条件编译能力存在就写成默认-ue6-行为">条件编译能力存在，就写成默认 UE6 行为</h3><p>Experimental / Conditional 路径被扩大成正式产品结论。</p>
+<h2 id="我的对象发布协议检查表">我的对象发布协议检查表</h2><ol>
+<li>对象创建和对象发布是否是两个明确状态？</li>
+<li>Loader 是否拥有自己的 Internal Ready 状态？</li>
+<li>Internal Ready 是否不会自动扩大成 Global Visibility？</li>
+<li>外部 Resolver 是否只返回 Published Object？</li>
+<li>Phase 转换过程中是否存在短暂无保护状态？</li>
+<li>状态切换是否优先采用“先建立新保护，再撤旧保护”？</li>
+<li>构造函数是否可能把 <code>this</code> 注册到全局系统？</li>
+<li>Serialize 是否会建立外部长期引用？</li>
+<li>PostLoad 是否真的保证运行在需要的线程？</li>
+<li>Thread-safe PostLoad 是否避免触碰线程不安全单例？</li>
+<li>Game Thread 与 Published State 是否被分开建模？</li>
+<li>Serializer 中是否存在同步 <code>LoadObject</code> / <code>LoadPackage</code>？</li>
+<li>同步加载是否可以改成显式依赖或 Soft Reference？</li>
+<li>是否存在 A → B → A 的递归 Package Load？</li>
+<li>Partial Load 是否具有独立诊断和状态？</li>
+<li>Partial Load 是否绝不会被当成普通完整成功？</li>
+<li>Package 内部完成与 Global Publication 是否分别记录？</li>
+<li>Loader Ownership 是否在 Callback 前已经清理？</li>
+<li>Lookup / Linker / Processing List 的清理顺序是否有明确不变量？</li>
+<li>Callback 是否可能重入 Loader？</li>
+<li>Callback Gate 是否能够推迟不安全的重入通知？</li>
+<li>是否区分 Request Completion 与 Global Loader Event？</li>
+<li>普通 Consumer 是否优先观察自己的 Request？</li>
+<li>Deprecated Completion Hook 是否还有新代码继续依赖？</li>
+<li>构建条件是否会让某些 Global Callback 在 Runtime 不存在？</li>
+<li>条件或 Experimental 能力是否被明确标注成熟度？</li>
+<li>调试工具能否回答对象当前处于 Constructed、InternalReady、Published 还是 CallbackDelivered？</li>
+<li>出现偶发缺字段时，是否会首先检查 Loading Object Escape 和 Partial Flush？</li>
+<li>测试是否覆盖递归加载、Callback 重入和并行 PostLoad？</li>
+<li>一次加载最终对外返回成功时，能否证明调用方拿到的是完整发布对象，而不是加载器内部半成品？</li>
+</ol>
+<p>异步加载最容易让开发者把问题理解成：</p>
+<pre><code class="language-text">资源什么时候读完？
+</code></pre>
+<p>但真正复杂的系统最终都会遇到另一个更重要的问题：</p>
+<pre><code class="language-text">什么时候允许别人看见？
+</code></pre>
+<p>对象地址已经存在，并不足以回答它。</p>
+<p>Serialize 已经结束，也未必足够。</p>
+<p>甚至加载器内部已经能够继续依赖这个对象，也不代表业务系统应该获得访问权。</p>
+<p>真正安全的完成需要一连串条件：</p>
+<pre><code class="language-text">对象完成必要阶段
+→
+加载器内部所有权收敛
+→
+全局可见性打开
+→
+索引和列表进入重入安全状态
+→
+外部完成通知被允许
+</code></pre>
+<p>于是 AsyncLoading2 最值得保留的设计思想，并不是某个 Phase Flag。</p>
+<p>而是一条更普遍的生命周期原则：</p>
+<blockquote>
+<p><strong>存在是内存事实，Ready 是内部事实，Published 才是对外合同。</strong></p>
+</blockquote>
+<p>只有当系统明确区分这三件事，异步并发才不需要依靠“大家刚好不要在错误时间访问”维持正确性。</p>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>对象发布协议</td>
+<td>什么时候真的可以给外部用</td>
+</tr>
+<tr>
+<td>加载器所有权阶段</td>
+<td>还在加载器手里</td>
+</tr>
+<tr>
+<td>内部就绪态</td>
+<td>加载器自己已经能继续用了</td>
+</tr>
+<tr>
+<td>内部进度与外部一致性分离</td>
+<td>后台可以继续跑，外面先别看到</td>
+</tr>
+<tr>
+<td>加载中对象逃逸</td>
+<td>半成品跑出了加载器</td>
+</tr>
+<tr>
+<td>递归同步加载</td>
+<td>异步流水线里突然要求现场等另一车货</td>
+</tr>
+<tr>
+<td>部分加载</td>
+<td>先让一个没完全做完的 Package 暂时返回</td>
+</tr>
+<tr>
+<td>回调门</td>
+<td>内部状态整理好以后才允许外部重新进来</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>notes/UnrealEngine源码研究/UE6/00_UE6源码快照变化_调度加载与内容生产边界.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE6/02_AsyncLoading2对象发布_完成回调与递归加载.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/10_序列化与Package加载_FArchive到AsyncLoading.md</code></li>
+<li><code>blogs/从UnrealEngine源码理解引擎设计/02-UnrealEngine的资源生产线.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文基于 2026-08-14 研究时的 Unreal Engine UE6-main 源码快照以及既有 UE5 研究基线整理。</p>
+<p>当前 UE6 研究采用“两个源码快照的结构对照”方法，而不是完整线性升级日志。因此本文不声称：</p>
+<ul>
+<li>当前 UE6-main 行为已经冻结为正式 Release API；</li>
+<li>Phase2 等同于普通业务代码可以自由访问对象；</li>
+<li>所有 PostLoad 都运行在 Worker Thread 或都运行在 Game Thread；</li>
+<li>Partial Load 能提供确定且完整的对象状态；</li>
+<li>所有完成 Delegate 在所有 Runtime 构建中都存在；</li>
+<li>条件编译或 Experimental 代码已经成为默认产品能力。</li>
+</ul>
+<p>文中将对象发布协议迁移到 Unity 资源加载、Service 初始化、Scene Streaming 和网络 Session 的部分属于工程设计归纳，不表示这些系统必须复制 Unreal 的 Phase Flag、Package 模型或 AsyncLoading2 实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unreal-engine-first-frame-pipeline.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</strong><small>一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</small></a><a href="unreal-engine-ddc-cook-iostore.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</strong><small>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</small></a><a href="framework-support-surface-governance.html"><span>共享 lifecycle</span><strong>支持面治理：实现面、消费面与产品承诺的分离</strong><small>从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

@@ -204,7 +204,7 @@ const pageDefinitions = [
     key: 'research',
     coverKey: 'journal',
     title: '研究记录 | Sakura Design Journal',
-    description: '经过策展的游戏设计、Godot 源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。',
+    description: '经过策展的游戏设计、引擎源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。',
     canonical: '/pages/journal.html',
   },
   {
