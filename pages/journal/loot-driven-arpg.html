@@ -1,0 +1,4543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/loot-driven-arpg.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like | Sakura Design Journal">
+    <meta property="og:description" content="围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/loot-driven-arpg.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-loot-driven-arpg.png">
+    <meta property="og:image:alt" content="刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like | Sakura Design Journal">
+    <meta name="twitter:description" content="围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-loot-driven-arpg.png">
+    <meta name="twitter:image:alt" content="刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like | Sakura Design Journal","description":"围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。","url":"https://irissakura.github.io/pages/journal/loot-driven-arpg.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like","image":"https://irissakura.github.io/assets/social/pages-journal-loot-driven-arpg.png","dateModified":"2026-08-19","about":["action-rpg","buildcraft","loot"]}</script>
+    <!-- site-meta:end -->
+    <title>刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-loot-driven-arpg"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-19</p><h1>刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like</h1><p>围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。</p><div class="note-tags"><span>action-rpg</span><span>buildcraft</span><span>loot</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="1-类型定位">1. 类型定位</h2><p>刷宝型 ARPG 通常具备以下核心特征：</p>
+<ul>
+<li><p>实时动作战斗；</p>
+</li>
+<li><p>高敌人密度；</p>
+</li>
+<li><p>大量敌人可快速击杀；</p>
+</li>
+<li><p>极高掉落频率；</p>
+</li>
+<li><p>装备存在随机或半随机属性；</p>
+</li>
+<li><p>同一基础装备可以生成大量不同实例；</p>
+</li>
+<li><p>玩家 Build 由技能、装备、词缀、天赋、资源机制共同构成；</p>
+</li>
+<li><p>装备价值高度依赖当前 Build；</p>
+</li>
+<li><p>存在普通、魔法、稀有、传奇等品质层级；</p>
+</li>
+<li><p>存在世界等级或难度升阶；</p>
+</li>
+<li><p>高难内容提供更高价值掉落；</p>
+</li>
+<li><p>存在重复可玩的地下城、区域、Boss 或活动；</p>
+</li>
+<li><p>后期目标逐渐从“通关故事”转向“优化 Build”；</p>
+</li>
+<li><p>长期内容依赖定向刷取、打造、重铸和概率收敛；</p>
+</li>
+<li><p>玩家往往拥有长期仓库和多个角色。</p>
+</li>
+</ul>
+<p>典型进度：</p>
+<p>创建角色
+→ 获得基础技能
+→ 清理第一批敌人
+→ 获得普通装备
+→ 逐步形成完整装备栏
+→ 技能和装备开始形成协同
+→ 剧情区域敌人密度提高
+→ 解锁稀有和传奇装备
+→ 第一次 Build 机制成形
+→ 通关基础难度
+→ 开启世界等级或终局内容
+→ 敌人生命和机制提高
+→ 普通“数值更大”的装备价值下降
+→ 玩家开始追求特定词缀组合
+→ 定向刷取特定活动
+→ 打造和重铸减少随机空间
+→ Build逐渐完善
+→ 进入更高层挑战
+→ 新瓶颈暴露
+→ 继续调整 Build。</p>
+<hr />
+<h2 id="2-类型真正的核心对象不是装备而是-build-搜索空间">2. 类型真正的核心对象不是“装备”，而是 Build 搜索空间</h2><p>一件装备本身没有绝对价值。</p>
+<p>例如：</p>
+<p>一把增加：</p>
+<ul>
+<li><p>火焰伤害；</p>
+</li>
+<li><p>燃烧持续时间；</p>
+</li>
+<li><p>火焰技能暴击；</p>
+</li>
+</ul>
+<p>的武器，</p>
+<p>对于冰霜 Build 可能几乎没有价值。</p>
+<p>但对于燃烧 Build：</p>
+<p>可能是核心装备。</p>
+<p>因此装备价值应理解为：</p>
+<p><code>ItemValue = Function(ItemState, CurrentBuild, TargetBuild, CurrentContent)</code></p>
+<p>而不是：</p>
+<p><code>ItemPower = Attack + Defense</code></p>
+<p>刷宝 ARPG 的真正游戏对象实际上是：</p>
+<blockquote>
+<p><strong>玩家正在一个极大的构筑空间中不断搜索更优的局部解。</strong></p>
+</blockquote>
+<p>战斗负责：</p>
+<p>生成新的候选解。</p>
+<hr />
+<h2 id="3-核心范式一itemdefinition-与-iteminstance-必须严格分离">3. 核心范式一：ItemDefinition 与 ItemInstance 必须严格分离</h2><p>静态定义：</p>
+<p>“裂地巨斧”</p>
+<p>和：</p>
+<p>玩家真正掉落的：</p>
+<p>“物品等级 82、+134力量、+22%暴击伤害、附带震地特效的裂地巨斧”</p>
+<p>不是同一个对象。</p>
+<hr />
+<h2 id="4-itembasedefinition">4. ItemBaseDefinition</h2><p>描述：</p>
+<blockquote>
+<p>这种基础物品是什么。</p>
+</blockquote>
+<p>建议字段：</p>
+<ul>
+<li><p>ItemBaseId；</p>
+</li>
+<li><p>ItemType；</p>
+</li>
+<li><p>EquipmentSlot；</p>
+</li>
+<li><p>WeaponClass；</p>
+</li>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>BaseArmor；</p>
+</li>
+<li><p>BaseAttackSpeed；</p>
+</li>
+<li><p>RequiredLevel；</p>
+</li>
+<li><p>AllowedAffixTags；</p>
+</li>
+<li><p>AffixSlotProfile；</p>
+</li>
+<li><p>SocketProfile；</p>
+</li>
+<li><p>DurabilityProfile；</p>
+</li>
+<li><p>ImplicitModifierIds；</p>
+</li>
+<li><p>LootTags；</p>
+</li>
+<li><p>PresentationProfile；</p>
+</li>
+<li><p>ItemBaseVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="5-iteminstance">5. ItemInstance</h2><p>描述：</p>
+<blockquote>
+<p>这一具体掉落现在是什么。</p>
+</blockquote>
+<p>建议字段：</p>
+<ul>
+<li><p>ItemInstanceId；</p>
+</li>
+<li><p>ItemBaseId；</p>
+</li>
+<li><p>OwnerAccountId；</p>
+</li>
+<li><p>OwnerCharacterId；</p>
+</li>
+<li><p>ItemLevel；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>AffixInstances；</p>
+</li>
+<li><p>LegendaryPowerId；</p>
+</li>
+<li><p>LegendaryPowerRoll；</p>
+</li>
+<li><p>SocketStates；</p>
+</li>
+<li><p>UpgradeLevel；</p>
+</li>
+<li><p>TemperingStates；</p>
+</li>
+<li><p>EnchantStates；</p>
+</li>
+<li><p>BindState；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>Provenance；</p>
+</li>
+<li><p>ItemVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="6-为什么-iteminstance-是高价值持久资产">6. 为什么 ItemInstance 是高价值持久资产</h2><p>玩家可能围绕某件装备：</p>
+<p>刷数小时；</p>
+<p>重铸多次；</p>
+<p>升级；</p>
+<p>打孔；</p>
+<p>镶嵌；</p>
+<p>最终形成核心 Build 组件。</p>
+<p>因此必须具有：</p>
+<ul>
+<li><p>稳定 InstanceId；</p>
+</li>
+<li><p>所有权；</p>
+</li>
+<li><p>版本；</p>
+</li>
+<li><p>来源；</p>
+</li>
+<li><p>修改历史；</p>
+</li>
+<li><p>完整性校验。</p>
+</li>
+</ul>
+<p>不能只保存：</p>
+<p><code>SwordDefinition + RandomStats Dictionary</code></p>
+<p>然后依赖场景对象。</p>
+<hr />
+<h2 id="7-item-provenance">7. Item Provenance</h2><p>建议记录：</p>
+<ul>
+<li><p>DropSourceType；</p>
+</li>
+<li><p>SourceMonsterId；</p>
+</li>
+<li><p>SourceActivityId；</p>
+</li>
+<li><p>WorldTier；</p>
+</li>
+<li><p>DropTimestamp；</p>
+</li>
+<li><p>OriginalItemLevel；</p>
+</li>
+<li><p>CraftedBy；</p>
+</li>
+<li><p>TradeHistory；</p>
+</li>
+<li><p>ModificationHistory。</p>
+</li>
+</ul>
+<p>其价值包括：</p>
+<ul>
+<li><p>审计；</p>
+</li>
+<li><p>反复制；</p>
+</li>
+<li><p>玩家收藏；</p>
+</li>
+<li><p>Bug追踪；</p>
+</li>
+<li><p>经济监控。</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-核心范式二loot-generation-必须是正式事务">8. 核心范式二：Loot Generation 必须是正式事务</h2><p>敌人死亡以后：</p>
+<p>不应该由Enemy脚本自己：</p>
+<p>随机一个Prefab。</p>
+<p>推荐：</p>
+<p>EnemyKilled
+→ LootEligibility
+→ LootBudget
+→ LootTable Selection
+→ ItemBase Selection
+→ ItemLevel Resolution
+→ Rarity Roll
+→ Affix Generation
+→ SpecialPower Roll
+→ ItemInstance Creation
+→ DropOwnership Resolution
+→ WorldDrop Registration。</p>
+<hr />
+<h2 id="9-lootcontext">9. LootContext</h2><p>建议包含：</p>
+<ul>
+<li><p>LootEventId；</p>
+</li>
+<li><p>KillerPlayerId；</p>
+</li>
+<li><p>EligiblePlayerIds；</p>
+</li>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>SourceType；</p>
+</li>
+<li><p>SourceLevel；</p>
+</li>
+<li><p>ActivityId；</p>
+</li>
+<li><p>WorldTier；</p>
+</li>
+<li><p>DifficultyModifiers；</p>
+</li>
+<li><p>MagicFindModifiers；</p>
+</li>
+<li><p>PartyContext；</p>
+</li>
+<li><p>LootSeed；</p>
+</li>
+<li><p>LootVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-lootbudget">10. LootBudget</h2><p>敌人不一定直接配置：</p>
+<p>“30%掉剑”。</p>
+<p>更成熟的系统可以使用：</p>
+<p><strong>Loot Budget。</strong></p>
+<p>例如：</p>
+<p>普通怪：</p>
+<p>Budget 1。</p>
+<p>精英：</p>
+<p>Budget 5。</p>
+<p>Boss：</p>
+<p>Budget 30。</p>
+<p>系统再根据：</p>
+<ul>
+<li><p>内容Tier；</p>
+</li>
+<li><p>玩家等级；</p>
+</li>
+<li><p>怪物标签；</p>
+</li>
+<li><p>稀有度表；</p>
+</li>
+</ul>
+<p>消费Budget。</p>
+<p>这种模型比：</p>
+<p>给每一种敌人手写大量独立Drop Table</p>
+<p>更容易扩展。</p>
+<hr />
+<h2 id="11-loot-table-层级">11. Loot Table 层级</h2><p>可以拆成：</p>
+<p>Source Loot Profile
+→ Item Category Pool
+→ Base Item Pool
+→ Rarity Profile
+→ Affix Pool
+→ Special Item Pool。</p>
+<p>例如：</p>
+<p>Skeleton Archer：</p>
+<p>更高概率掉：</p>
+<p>Bow / Dexterity Gear。</p>
+<p>但仍然可以掉普通通用装备。</p>
+<hr />
+<h2 id="12-item-level">12. Item Level</h2><p>ItemLevel 的作用通常是限制：</p>
+<ul>
+<li><p>基础属性范围；</p>
+</li>
+<li><p>可出现词缀；</p>
+</li>
+<li><p>词缀Tier；</p>
+</li>
+<li><p>装备要求；</p>
+</li>
+<li><p>特殊掉落资格。</p>
+</li>
+</ul>
+<p>它代表：</p>
+<blockquote>
+<p>这件装备允许进入多高的随机结果空间。</p>
+</blockquote>
+<hr />
+<h2 id="13-itemlevel-与-characterlevel-不应完全等同">13. ItemLevel 与 CharacterLevel 不应完全等同</h2><p>否则：</p>
+<p>所有高等级角色</p>
+<p>只能刷完全相同区间。</p>
+<p>可以由：</p>
+<p><code>ItemLevel = Function(SourceLevel, WorldTier, ActivityTier, PlayerLevel, SpecialRules)</code></p>
+<p>决定。</p>
+<hr />
+<h2 id="14-rarity-system">14. Rarity System</h2><p>典型：</p>
+<ul>
+<li><p>Common；</p>
+</li>
+<li><p>Magic；</p>
+</li>
+<li><p>Rare；</p>
+</li>
+<li><p>Legendary；</p>
+</li>
+<li><p>Unique；</p>
+</li>
+<li><p>Mythic。</p>
+</li>
+</ul>
+<p>品质不应只代表：</p>
+<p>数值倍率。</p>
+<p>更重要的是：</p>
+<p><strong>允许多少规则层。</strong></p>
+<p>例如：</p>
+<p>Common：</p>
+<p>基础属性。</p>
+<p>Magic：</p>
+<p>少量词缀。</p>
+<p>Rare：</p>
+<p>更多词缀。</p>
+<p>Legendary：</p>
+<p>Rare词缀 + 机制型Legendary Power。</p>
+<p>Unique：</p>
+<p>固定或半固定特殊规则组合。</p>
+<hr />
+<h2 id="15-核心范式三affix-是装备构筑空间的基本原语">15. 核心范式三：Affix 是装备构筑空间的基本原语</h2><p>Affix 不只是：</p>
+<p>+10攻击。</p>
+<p>更合理地分为：</p>
+<h4 id="generic-stat">Generic Stat</h4><ul>
+<li><p>Strength；</p>
+</li>
+<li><p>Armor；</p>
+</li>
+<li><p>CriticalChance。</p>
+</li>
+</ul>
+<h4 id="skill-modifier">Skill Modifier</h4><ul>
+<li><p>FireballDamage；</p>
+</li>
+<li><p>WhirlwindArea；</p>
+</li>
+<li><p>SummonCount。</p>
+</li>
+</ul>
+<h4 id="resource-modifier">Resource Modifier</h4><ul>
+<li><p>ManaCost；</p>
+</li>
+<li><p>FuryGeneration；</p>
+</li>
+<li><p>Cooldown。</p>
+</li>
+</ul>
+<h4 id="conditional-modifier">Conditional Modifier</h4><ul>
+<li><p>DamageAgainstBurning；</p>
+</li>
+<li><p>DamageWhileFortified；</p>
+</li>
+<li><p>CriticalAfterDash。</p>
+</li>
+</ul>
+<h4 id="mechanic-modifier">Mechanic Modifier</h4><ul>
+<li><p>ProjectilePierce；</p>
+</li>
+<li><p>SkillReturns；</p>
+</li>
+<li><p>DamageConvertsToFire。</p>
+</li>
+</ul>
+<hr />
+<h2 id="16-affixdefinition">16. AffixDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>AffixId；</p>
+</li>
+<li><p>AffixGroupId；</p>
+</li>
+<li><p>AffixTags；</p>
+</li>
+<li><p>ApplicableItemTags；</p>
+</li>
+<li><p>MinimumItemLevel；</p>
+</li>
+<li><p>TierDefinitions；</p>
+</li>
+<li><p>Weight；</p>
+</li>
+<li><p>ExclusiveGroups；</p>
+</li>
+<li><p>ModifierSpecs；</p>
+</li>
+<li><p>RollRules；</p>
+</li>
+<li><p>AffixVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-affixtierdefinition">17. AffixTierDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TierId；</p>
+</li>
+<li><p>MinimumItemLevel；</p>
+</li>
+<li><p>RollMin；</p>
+</li>
+<li><p>RollMax；</p>
+</li>
+<li><p>WeightModifier；</p>
+</li>
+<li><p>TierVersion。</p>
+</li>
+</ul>
+<p>例如：</p>
+<p>CriticalChance：</p>
+<p>T1：</p>
+<p>+2～4%</p>
+<p>T2：</p>
+<p>+4～6%</p>
+<p>T3：</p>
+<p>+6～8%。</p>
+<hr />
+<h2 id="18-affix-pool-必须支持排他">18. Affix Pool 必须支持排他</h2><p>一件武器不能同时生成：</p>
+<p><code>+FireDamage</code></p>
+<p>和另一个实际上属于同一Group的：</p>
+<p><code>+GreaterFireDamage</code></p>
+<p>如果规则不允许。</p>
+<p>推荐使用：</p>
+<p><strong>AffixGroupId</strong></p>
+<p>和：</p>
+<p><strong>ExclusiveGroup。</strong></p>
+<hr />
+<h2 id="19-affix-roll-流程">19. Affix Roll 流程</h2><p>ItemBase确定
+→ 获取AllowedAffixPool
+→ 过滤ItemLevel
+→ 过滤Tag
+→ 过滤ExclusiveGroup
+→ 按Weight采样Affix
+→ 决定Tier
+→ Roll数值
+→ 更新已占用Group
+→ 继续下一Slot。</p>
+<hr />
+<h2 id="20-不建议所有装备独立从完整词缀库抽取">20. 不建议所有装备独立从完整词缀库抽取</h2><p>否则：</p>
+<ul>
+<li><p>不相关词缀过多；</p>
+</li>
+<li><p>玩家频繁获得完全无价值装备；</p>
+</li>
+<li><p>Build针对性过低。</p>
+</li>
+</ul>
+<p>可以使用：</p>
+<ul>
+<li><p>Item Type Tag；</p>
+</li>
+<li><p>Class Tag；</p>
+</li>
+<li><p>Skill Tag；</p>
+</li>
+<li><p>Activity Bias；</p>
+</li>
+</ul>
+<p>缩小词缀池。</p>
+<hr />
+<h2 id="21-核心范式四随机掉落必须拥有收敛工具">21. 核心范式四：随机掉落必须拥有“收敛工具”</h2><p>纯随机的长期问题：</p>
+<p>玩家需要：</p>
+<p>某个传奇头盔。</p>
+<p>掉落概率：</p>
+<p>1%。</p>
+<p>即使刷100次：</p>
+<p>仍可能没有。</p>
+<p>如果装备还需要：</p>
+<p>正确词缀；</p>
+<p>高Roll；</p>
+<p>正确Socket，</p>
+<p>随机层数会不断相乘。</p>
+<p>因此成熟刷宝系统必须逐步提供：</p>
+<p><strong>Randomness Compression。</strong></p>
+<hr />
+<h2 id="22-随机收敛工具">22. 随机收敛工具</h2><p>可以包括：</p>
+<ul>
+<li><p>Target Farming；</p>
+</li>
+<li><p>Crafting；</p>
+</li>
+<li><p>Enchant；</p>
+</li>
+<li><p>Reroll；</p>
+</li>
+<li><p>Tempering；</p>
+</li>
+<li><p>Upgrade；</p>
+</li>
+<li><p>Pity；</p>
+</li>
+<li><p>Token Exchange；</p>
+</li>
+<li><p>Boss-specific Drop；</p>
+</li>
+<li><p>Item Conversion；</p>
+</li>
+<li><p>Affix Lock。</p>
+</li>
+</ul>
+<p>这些工具不是“额外方便”。</p>
+<p>它们是：</p>
+<blockquote>
+<p>防止终局 Build 搜索进入不可控概率尾部的核心系统。</p>
+</blockquote>
+<hr />
+<h2 id="23-target-farming">23. Target Farming</h2><p>不同活动提供不同掉落偏向。</p>
+<p>例如：</p>
+<p>Dungeon A：</p>
+<p>更容易掉：</p>
+<p>Boots。</p>
+<p>Boss B：</p>
+<p>掉特定Unique。</p>
+<p>Season Event C：</p>
+<p>提供：</p>
+<p>Fire Build词缀。</p>
+<p>这使玩家从：</p>
+<p>“哪里都能刷”</p>
+<p>进化到：</p>
+<blockquote>
+<p>“我现在缺什么，因此应该刷什么。”</p>
+</blockquote>
+<hr />
+<h2 id="24-lootsourceprofile">24. LootSourceProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>SourceId；</p>
+</li>
+<li><p>BaseLootTableId；</p>
+</li>
+<li><p>GuaranteedDrops；</p>
+</li>
+<li><p>WeightedDropBonuses；</p>
+</li>
+<li><p>UniqueDropIds；</p>
+</li>
+<li><p>AffixBiasTags；</p>
+</li>
+<li><p>ItemSlotBias；</p>
+</li>
+<li><p>PityProfileId；</p>
+</li>
+<li><p>LootSourceVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-pity-system">25. Pity System</h2><p>Pity不一定直接：</p>
+<p>100次必掉。</p>
+<p>也可以：</p>
+<p>持续提高权重。</p>
+<p>必须定义作用范围：</p>
+<ul>
+<li><p>Account；</p>
+</li>
+<li><p>Character；</p>
+</li>
+<li><p>Activity；</p>
+</li>
+<li><p>SpecificItem；</p>
+</li>
+<li><p>Category。</p>
+</li>
+</ul>
+<p>否则玩家很难理解。</p>
+<hr />
+<h2 id="26-pitystate">26. PityState</h2><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>SourceId；</p>
+</li>
+<li><p>TargetCategory；</p>
+</li>
+<li><p>FailedAttempts；</p>
+</li>
+<li><p>CurrentBonusWeight；</p>
+</li>
+<li><p>LastSuccessTimestamp；</p>
+</li>
+<li><p>PityVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-crafting-在刷宝-arpg-中的职责">27. Crafting 在刷宝 ARPG 中的职责</h2><p>Crafting不应该完全替代掉落。</p>
+<p>否则：</p>
+<p>最优玩法变成：</p>
+<p>只刷材料</p>
+<p>然后直接制作毕业装备。</p>
+<p>更合理：</p>
+<p>掉落提供：</p>
+<p><strong>Base Candidate。</strong></p>
+<p>Crafting负责：</p>
+<p><strong>Candidate Refinement。</strong></p>
+<hr />
+<h2 id="28-enchant-reroll">28. Enchant / Reroll</h2><p>典型：</p>
+<p>选一条不需要的Affix</p>
+<p>→ 支付资源</p>
+<p>→ 从合法词缀池重新随机。</p>
+<hr />
+<h2 id="29-enchanttransaction">29. EnchantTransaction</h2><p>验证装备可修改
+→ 锁定ItemInstance
+→ 选择AffixSlot
+→ 计算Cost
+→ 消耗Currency
+→ 生成CandidateRolls
+→ 玩家确认
+→ 替换Affix
+→ 增加RerollCost或次数
+→ 提交ItemVersion。</p>
+<hr />
+<h2 id="30-为什么-candidate-roll-需要冻结">30. 为什么 Candidate Roll 需要冻结</h2><p>玩家点重铸：</p>
+<p>生成三个候选。</p>
+<p>断线重连以后：</p>
+<p>不能重新随机三次。</p>
+<p>需要：</p>
+<p><strong>CraftChoiceInstance。</strong></p>
+<hr />
+<h2 id="31-upgrade-system">31. Upgrade System</h2><p>装备升级可以提高：</p>
+<ul>
+<li><p>BaseStat；</p>
+</li>
+<li><p>AffixScale；</p>
+</li>
+<li><p>Socket；</p>
+</li>
+<li><p>ItemPower。</p>
+</li>
+</ul>
+<p>但应避免：</p>
+<p>升级完全抹除掉落差异。</p>
+<p>否则：</p>
+<p>只要随便掉一件</p>
+<p>就能无限升级成毕业装备。</p>
+<hr />
+<h2 id="32-核心范式五装备评估必须是-build-contextual">32. 核心范式五：装备评估必须是 Build Contextual</h2><p>一个简单绿色箭头：</p>
+<p><code>+35 Item Power</code></p>
+<p>通常不够。</p>
+<p>因为玩家可能牺牲：</p>
+<p>100 Armor</p>
+<p>换取：</p>
+<p>关键Skill Modifier，</p>
+<p>使整体DPS提高50%。</p>
+<p>因此系统需要：</p>
+<p>基础比较</p>
+<p>和：</p>
+<p>Build分析</p>
+<p>分层。</p>
+<hr />
+<h2 id="33-itemcomparisoncontext">33. ItemComparisonContext</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentCharacterStats；</p>
+</li>
+<li><p>EquippedItem；</p>
+</li>
+<li><p>CandidateItem；</p>
+</li>
+<li><p>ActiveSkillIds；</p>
+</li>
+<li><p>BuildTags；</p>
+</li>
+<li><p>TargetContentProfile；</p>
+</li>
+<li><p>ComparisonVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-基础ui可以显示">34. 基础UI可以显示</h2><ul>
+<li><p>Damage变化；</p>
+</li>
+<li><p>Armor变化；</p>
+</li>
+<li><p>Life变化。</p>
+</li>
+</ul>
+<p>高级分析：</p>
+<ul>
+<li><p>ResourceSustain；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>Skill-specific DPS；</p>
+</li>
+<li><p>EffectiveHealth；</p>
+</li>
+<li><p>ProcFrequency。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-不建议游戏直接告诉这个一定更好">35. 不建议游戏直接告诉“这个一定更好”</h2><p>因为：</p>
+<p>玩家目标可能不同。</p>
+<p>更适合显示：</p>
+<blockquote>
+<p>换上以后哪些关键指标改变。</p>
+</blockquote>
+<p>决策仍交给玩家。</p>
+<hr />
+<h2 id="36-characterstatsystem">36. CharacterStatSystem</h2><p>刷宝型ARPG最容易失控的系统之一就是：</p>
+<p>属性计算。</p>
+<p>推荐所有最终属性通过统一：</p>
+<p><strong>Stat Aggregation Pipeline。</strong></p>
+<hr />
+<h2 id="37-statsource">37. StatSource</h2><p>来源可以包括：</p>
+<ul>
+<li><p>CharacterBase；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>Equipment；</p>
+</li>
+<li><p>Affix；</p>
+</li>
+<li><p>Skill；</p>
+</li>
+<li><p>Passive；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>Aura；</p>
+</li>
+<li><p>Party；</p>
+</li>
+<li><p>DifficultyModifier。</p>
+</li>
+</ul>
+<hr />
+<h2 id="38-modifier类型">38. Modifier类型</h2><p>至少区分：</p>
+<ul>
+<li><p>Flat；</p>
+</li>
+<li><p>AdditivePercent；</p>
+</li>
+<li><p>MultiplicativePercent；</p>
+</li>
+<li><p>Override；</p>
+</li>
+<li><p>Conversion；</p>
+</li>
+<li><p>Conditional。</p>
+</li>
+</ul>
+<hr />
+<h2 id="39-乘区必须稳定">39. 乘区必须稳定</h2><p>例如：</p>
+<p>最终伤害：</p>
+<p>BaseDamage
+× SkillCoefficient
+× AdditiveDamageBucket
+× CriticalMultiplier
+× VulnerableMultiplier
+× IndependentLegendaryMultiplier。</p>
+<p>如果每个技能自己决定乘区：</p>
+<p>Build平衡很快失控。</p>
+<hr />
+<h2 id="40-stat-breakdown">40. Stat Breakdown</h2><p>调试器和高级UI应能够回答：</p>
+<p>当前CriticalChance 42%：</p>
+<p>来自：</p>
+<p>Base 5
+Weapon 8
+Gloves 12
+Passive 10
+Buff 7。</p>
+<hr />
+<h2 id="41-derived-stat">41. Derived Stat</h2><p>例如：</p>
+<p>EffectiveHealth</p>
+<p>不是直接保存。</p>
+<p>而是：</p>
+<p>Health</p>
+<ul>
+<li><p>Armor</p>
+</li>
+<li><p>Resistance</p>
+</li>
+<li><p>DamageReduction</p>
+</li>
+</ul>
+<p>推导。</p>
+<p>派生值应：</p>
+<p>缓存</p>
+<p>但不作为唯一权威存档数据。</p>
+<hr />
+<h2 id="42-核心范式六skill-与-gear-必须形成双向构筑">42. 核心范式六：Skill 与 Gear 必须形成双向构筑</h2><p>普通 RPG：</p>
+<p>装备主要提高技能伤害。</p>
+<p>Loot ARPG更典型的是：</p>
+<p>装备会改变技能规则。</p>
+<p>例如：</p>
+<p>Fireball：</p>
+<p>原本单发。</p>
+<p>传奇装备：</p>
+<p>变成三发。</p>
+<p>另一个传奇：</p>
+<p>Fireball返回。</p>
+<p>另一个：</p>
+<p>Fireball爆炸后留下燃烧区域。</p>
+<p>于是：</p>
+<p>Skill选择影响：</p>
+<p>想要什么装备。</p>
+<p>装备掉落又反过来：</p>
+<p>促使玩家换Skill。</p>
+<p>形成：</p>
+<p><strong>Skill ↔ Gear Build Loop。</strong></p>
+<hr />
+<h2 id="43-skilldefinition">43. SkillDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>SkillId；</p>
+</li>
+<li><p>SkillTags；</p>
+</li>
+<li><p>ResourceCost；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>BaseCoefficients；</p>
+</li>
+<li><p>EffectGraph；</p>
+</li>
+<li><p>ScalingTags；</p>
+</li>
+<li><p>SupportedModifierTags；</p>
+</li>
+<li><p>SkillVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-legendarypowerdefinition">44. LegendaryPowerDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>PowerId；</p>
+</li>
+<li><p>ApplicableItemTags；</p>
+</li>
+<li><p>RequiredSkillTags；</p>
+</li>
+<li><p>EffectDefinition；</p>
+</li>
+<li><p>RollRange；</p>
+</li>
+<li><p>StackPolicy；</p>
+</li>
+<li><p>ExclusiveGroup；</p>
+</li>
+<li><p>PowerVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="45-legendary-power-适合修改规则而不只是数值">45. Legendary Power 适合修改规则而不只是数值</h2><p>例如：</p>
+<p>低价值设计：</p>
+<p>Whirlwind Damage +20%。</p>
+<p>高价值设计：</p>
+<p>Whirlwind每击中5名敌人：</p>
+<p>生成Tornado。</p>
+<p>这种能力更能形成：</p>
+<p>Build身份。</p>
+<hr />
+<h2 id="46-unique-item">46. Unique Item</h2><p>Unique与普通Legendary可以区别：</p>
+<p>Legendary：</p>
+<p>随机Base + 随机Affix + 机制Power。</p>
+<p>Unique：</p>
+<p>固定主题；</p>
+<p>特殊属性组合；</p>
+<p>违反普通装备规则。</p>
+<p>例如：</p>
+<p>一双鞋：</p>
+<p>允许Teleport留下Explosion，</p>
+<p>但降低移动速度。</p>
+<p>Unique的价值在于：</p>
+<p>提供通常词缀系统无法表达的构筑分支。</p>
+<hr />
+<h2 id="47-set-item">47. Set Item</h2><p>套装可以：</p>
+<p>2件
+4件
+6件</p>
+<p>激活效果。</p>
+<p>但需要谨慎。</p>
+<p>如果6件套决定整个Build：</p>
+<p>玩家装备选择空间会被强制锁死。</p>
+<p>成熟设计往往倾向：</p>
+<p>套装提供方向，</p>
+<p>但仍保留Slot竞争。</p>
+<hr />
+<h2 id="48-buildstate">48. BuildState</h2><p>建议维护：</p>
+<ul>
+<li><p>ActiveSkills；</p>
+</li>
+<li><p>SkillRanks；</p>
+</li>
+<li><p>PassiveIds；</p>
+</li>
+<li><p>EquipmentIds；</p>
+</li>
+<li><p>LegendaryPowerIds；</p>
+</li>
+<li><p>SetBonuses；</p>
+</li>
+<li><p>BuildTags；</p>
+</li>
+<li><p>DerivedStats；</p>
+</li>
+<li><p>ResourceLoopState；</p>
+</li>
+<li><p>BuildVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="49-buildtags">49. BuildTags</h2><p>例如：</p>
+<ul>
+<li><p>Fire；</p>
+</li>
+<li><p>Burn；</p>
+</li>
+<li><p>Projectile；</p>
+</li>
+<li><p>Crit；</p>
+</li>
+<li><p>Summon；</p>
+</li>
+<li><p>Barrier；</p>
+</li>
+<li><p>Bleed；</p>
+</li>
+<li><p>Melee；</p>
+</li>
+<li><p>ResourceSpend。</p>
+</li>
+</ul>
+<p>可用于：</p>
+<ul>
+<li><p>Affix；</p>
+</li>
+<li><p>Loot Bias；</p>
+</li>
+<li><p>Tooltip；</p>
+</li>
+<li><p>Build Analyzer；</p>
+</li>
+<li><p>Matchmaking Analytics。</p>
+</li>
+</ul>
+<hr />
+<h2 id="50-核心范式七资源循环决定-build-是否真正跑起来">50. 核心范式七：资源循环决定 Build 是否真正“跑起来”</h2><p>许多Build理论伤害很高，</p>
+<p>但资源不足：</p>
+<p>技能无法持续使用。</p>
+<p>因此需要明确：</p>
+<p><strong>Resource Economy。</strong></p>
+<p>例如：</p>
+<p>Mana。</p>
+<p>生成：</p>
+<p>10/s。</p>
+<p>消耗：</p>
+<p>15/s。</p>
+<p>那么Build只能：</p>
+<p>爆发一段时间。</p>
+<hr />
+<h2 id="51-resourceloopstate">51. ResourceLoopState</h2><p>建议包含：</p>
+<ul>
+<li><p>ResourceType；</p>
+</li>
+<li><p>Maximum；</p>
+</li>
+<li><p>PassiveGeneration；</p>
+</li>
+<li><p>SkillGeneration；</p>
+</li>
+<li><p>CostPerSecondEstimate；</p>
+</li>
+<li><p>RecoveryRate；</p>
+</li>
+<li><p>SpendTriggers；</p>
+</li>
+<li><p>OverflowEffects；</p>
+</li>
+<li><p>DeficitState。</p>
+</li>
+</ul>
+<hr />
+<h2 id="52-sustain">52. Sustain</h2><p>成熟Build往往需要解决：</p>
+<ul>
+<li><p>Mana Sustain；</p>
+</li>
+<li><p>Fury Sustain；</p>
+</li>
+<li><p>Cooldown Sustain；</p>
+</li>
+<li><p>Health Sustain；</p>
+</li>
+<li><p>Shield Sustain。</p>
+</li>
+</ul>
+<p>因此一件装备可能DPS较低，</p>
+<p>却因为解决Resource循环：</p>
+<p>让整套Build真正成立。</p>
+<hr />
+<h2 id="53-build-analyzer">53. Build Analyzer</h2><p>建议输出：</p>
+<ul>
+<li><p>SingleTargetDPS；</p>
+</li>
+<li><p>AoEDPS；</p>
+</li>
+<li><p>BurstDPS；</p>
+</li>
+<li><p>ResourceSustain；</p>
+</li>
+<li><p>EffectiveHealth；</p>
+</li>
+<li><p>Mobility；</p>
+</li>
+<li><p>CrowdControl；</p>
+</li>
+<li><p>CooldownCoverage；</p>
+</li>
+<li><p>EliteKillTime；</p>
+</li>
+<li><p>BossKillTime。</p>
+</li>
+</ul>
+<p>不是所有值都需要给正式玩家，</p>
+<p>但开发必须拥有。</p>
+<hr />
+<h2 id="54-核心范式八敌人密度是-build-价值的一部分">54. 核心范式八：敌人密度是 Build 价值的一部分</h2><p>Loot ARPG通常不是：</p>
+<p>每次只打一只敌人。</p>
+<p>而是：</p>
+<p>大量普通怪</p>
+<ul>
+<li><p>精英</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<p>这会使：</p>
+<p>AoE；</p>
+<p>Chain；</p>
+<p>Explosion；</p>
+<p>OnKill</p>
+<p>拥有巨大价值。</p>
+<hr />
+<h2 id="55-encounterdensityprofile">55. EncounterDensityProfile</h2><p>建议字段：</p>
+<ul>
+<li><p>NormalEnemyBudget；</p>
+</li>
+<li><p>EliteBudget；</p>
+</li>
+<li><p>SpawnGroupSize；</p>
+</li>
+<li><p>PackSpacing；</p>
+</li>
+<li><p>ReinforcementRules；</p>
+</li>
+<li><p>DensityScaling；</p>
+</li>
+<li><p>EncounterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="56-pack">56. Pack</h2><p>敌人通常以：</p>
+<p><strong>Pack</strong></p>
+<p>而不是完全随机散布。</p>
+<p>例如：</p>
+<p>8普通怪</p>
+<ul>
+<li>1精英。</li>
+</ul>
+<p>这使技能AoE有稳定价值。</p>
+<hr />
+<h2 id="57-elite-pack">57. Elite Pack</h2><p>Elite可以拥有：</p>
+<p>Affix / Modifier。</p>
+<p>例如：</p>
+<ul>
+<li><p>Fire Enchanted；</p>
+</li>
+<li><p>Teleporter；</p>
+</li>
+<li><p>Shielded；</p>
+</li>
+<li><p>Summoner；</p>
+</li>
+<li><p>Suppressor。</p>
+</li>
+</ul>
+<p>形成：</p>
+<p>动态战斗组合。</p>
+<hr />
+<h2 id="58-enemymodifierdefinition">58. EnemyModifierDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ModifierId；</p>
+</li>
+<li><p>EligibleEnemyTags；</p>
+</li>
+<li><p>EffectSpecs；</p>
+</li>
+<li><p>ExclusionGroups；</p>
+</li>
+<li><p>DifficultyTier；</p>
+</li>
+<li><p>VisualTelegraph；</p>
+</li>
+<li><p>RewardModifier；</p>
+</li>
+<li><p>ModifierVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="59-enemy-modifier-同样需要排他">59. Enemy Modifier 同样需要排他</h2><p>例如：</p>
+<p>两个完全矛盾的移动规则：</p>
+<p>不能同时生成。</p>
+<p>使用：</p>
+<p>ModifierGroup</p>
+<p>过滤。</p>
+<hr />
+<h2 id="60-world-tier-difficulty-tier">60. World Tier / Difficulty Tier</h2><p>故事完成后，</p>
+<p>玩家需要继续找到：</p>
+<p>更高价值掉落。</p>
+<p>最自然方式之一：</p>
+<p>提高World Tier。</p>
+<hr />
+<h2 id="61-difficultytierdefinition">61. DifficultyTierDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TierId；</p>
+</li>
+<li><p>EnemyLevelModifier；</p>
+</li>
+<li><p>HealthModifier；</p>
+</li>
+<li><p>DamageModifier；</p>
+</li>
+<li><p>EnemyModifierCount；</p>
+</li>
+<li><p>LootItemLevelModifier；</p>
+</li>
+<li><p>RarityModifier；</p>
+</li>
+<li><p>UniqueDropRules；</p>
+</li>
+<li><p>ExperienceModifier；</p>
+</li>
+<li><p>UnlockConditions；</p>
+</li>
+<li><p>TierVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-difficulty-tier-的核心交换">62. Difficulty Tier 的核心交换</h2><p>更高难度：</p>
+<p>敌人更强。</p>
+<p>但：</p>
+<p>掉落质量和效率提高。</p>
+<p>因此玩家主动问：</p>
+<blockquote>
+<p>我的Build现在能不能高效刷更高Tier？</p>
+</blockquote>
+<p>这会形成自我选择的难度。</p>
+<hr />
+<h2 id="63-高tier不是越早进入越好">63. 高Tier不是越早进入越好</h2><p>如果玩家进入高Tier：</p>
+<p>每个怪打30秒，</p>
+<p>虽然单怪掉落更好，</p>
+<p>但：</p>
+<p>单位时间Loot效率</p>
+<p>可能更低。</p>
+<p>因此：</p>
+<p><strong>Efficiency</strong></p>
+<p>成为终局重要指标。</p>
+<hr />
+<h2 id="64-loot-per-hour-loot-per-run">64. Loot Per Hour / Loot Per Run</h2><p>后期玩家的真实优化目标经常变成：</p>
+<p>单位时间：</p>
+<ul>
+<li><p>Legendary数量；</p>
+</li>
+<li><p>Boss次数；</p>
+</li>
+<li><p>Currency；</p>
+</li>
+<li><p>XP；</p>
+</li>
+<li><p>SpecificDropAttempts。</p>
+</li>
+</ul>
+<p>因此内容效率需要进入Telemetry。</p>
+<hr />
+<h2 id="65-activitydefinition">65. ActivityDefinition</h2><p>终局活动可以包括：</p>
+<ul>
+<li><p>Dungeon；</p>
+</li>
+<li><p>Rift；</p>
+</li>
+<li><p>Map；</p>
+</li>
+<li><p>Arena；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Wave Survival；</p>
+</li>
+<li><p>Bounty；</p>
+</li>
+<li><p>OpenWorld Event。</p>
+</li>
+</ul>
+<hr />
+<h2 id="66-activity需要拥有独立奖励结构">66. Activity需要拥有独立奖励结构</h2><p>否则玩家会找到：</p>
+<p>一个效率最高内容</p>
+<p>然后永远只刷它。</p>
+<p>可以通过不同活动提供：</p>
+<ul>
+<li><p>特定Slot；</p>
+</li>
+<li><p>特定Currency；</p>
+</li>
+<li><p>BossUnique；</p>
+</li>
+<li><p>CraftMaterial；</p>
+</li>
+<li><p>Experience；</p>
+</li>
+<li><p>UpgradeMaterial。</p>
+</li>
+</ul>
+<p>形成：</p>
+<p><strong>Activity Specialization。</strong></p>
+<hr />
+<h2 id="67-dungeoninstance">67. DungeonInstance</h2><p>建议包含：</p>
+<ul>
+<li><p>DungeonInstanceId；</p>
+</li>
+<li><p>DungeonDefinitionId；</p>
+</li>
+<li><p>DifficultyTier；</p>
+</li>
+<li><p>Seed；</p>
+</li>
+<li><p>ObjectiveStates；</p>
+</li>
+<li><p>MonsterBudget；</p>
+</li>
+<li><p>EliteStates；</p>
+</li>
+<li><p>BossState；</p>
+</li>
+<li><p>RewardState；</p>
+</li>
+<li><p>CompletionState；</p>
+</li>
+<li><p>DungeonVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="68-地下城最好是重放空间而不是一次性剧情场景">68. 地下城最好是“重放空间”，而不是一次性剧情场景</h2><p>终局内容需要：</p>
+<ul>
+<li><p>可重复；</p>
+</li>
+<li><p>可变；</p>
+</li>
+<li><p>有效率比较；</p>
+</li>
+<li><p>有风险层级。</p>
+</li>
+</ul>
+<p>因此需要：</p>
+<p>程序变化；</p>
+<p>Modifier；</p>
+<p>Tier；</p>
+<p>Leaderboard；</p>
+<p>随机布局；</p>
+<p>其中一种或多种。</p>
+<hr />
+<h2 id="69-dungeon-modifier">69. Dungeon Modifier</h2><p>例如：</p>
+<ul>
+<li><p>Enemies Deal More Fire；</p>
+</li>
+<li><p>Reduced Healing；</p>
+</li>
+<li><p>More Elites；</p>
+</li>
+<li><p>Faster Monsters；</p>
+</li>
+<li><p>Extra Loot；</p>
+</li>
+<li><p>Timer。</p>
+</li>
+</ul>
+<p>形成：</p>
+<p>风险收益调整。</p>
+<hr />
+<h2 id="70-affix-dungeon">70. Affix Dungeon</h2><p>高层内容的随机Modifier不能生成：</p>
+<p>理论不可解组合。</p>
+<p>例如：</p>
+<p>敌人免疫Fire</p>
+<p>而某职业唯一Build只能Fire，</p>
+<p>就可能产生Hard Lock。</p>
+<p>推荐：</p>
+<p>Hard Immunity慎用。</p>
+<p>优先：</p>
+<p>Resistance。</p>
+<hr />
+<h2 id="71-boss-farming">71. Boss Farming</h2><p>Boss是非常适合定向掉落的来源。</p>
+<p>例如：</p>
+<p>某Boss掉：</p>
+<p>3种Unique。</p>
+<p>玩家明确知道：</p>
+<p>自己为什么刷它。</p>
+<p>这比：</p>
+<p>全世界0.01%随机</p>
+<p>更具有目标感。</p>
+<hr />
+<h2 id="72-boss-loot-transaction">72. Boss Loot Transaction</h2><p>Boss死亡
+→ 确认参与资格
+→ 计算PersonalLootContext
+→ 应用BossDropProfile
+→ 应用Pity
+→ 生成ItemInstances
+→ 更新PityState
+→ 发布BossLootGenerated。</p>
+<hr />
+<h2 id="73-personal-loot-与-shared-loot">73. Personal Loot 与 Shared Loot</h2><p>多人模式需要明确：</p>
+<h4 id="personal-loot">Personal Loot</h4><p>每个玩家独立掉落。</p>
+<h4 id="shared-loot">Shared Loot</h4><p>世界生成，谁捡到是谁的。</p>
+<h4 id="hybrid">Hybrid</h4><p>部分共享。</p>
+<p>刷宝型在线ARPG通常Personal Loot更容易避免：</p>
+<p>抢装备争议。</p>
+<hr />
+<h2 id="74-loot-ownership-window">74. Loot Ownership Window</h2><p>如果Personal Loot生成在世界：</p>
+<p>需要：</p>
+<p>OwnerPlayerId</p>
+<p>和：</p>
+<p>ExclusivePickupDuration。</p>
+<p>避免队友误捡。</p>
+<hr />
+<h2 id="75-multiplayer-scaling">75. Multiplayer Scaling</h2><p>队伍人数增加：</p>
+<p>敌人需要提高：</p>
+<ul>
+<li><p>Health；</p>
+</li>
+<li><p>Mechanic；</p>
+</li>
+<li><p>Density；</p>
+</li>
+</ul>
+<p>但不能只：</p>
+<p>HP × PlayerCount。</p>
+<p>否则多人只是：</p>
+<p>更慢。</p>
+<p>更好的方式：</p>
+<ul>
+<li><p>HP适度提高；</p>
+</li>
+<li><p>密度提高；</p>
+</li>
+<li><p>分散机制；</p>
+</li>
+<li><p>多目标机制。</p>
+</li>
+</ul>
+<hr />
+<h2 id="76-party-loot规则必须稳定">76. Party Loot规则必须稳定</h2><p>例如玩家在：</p>
+<p>离Boss很远</p>
+<p>是否有掉落？</p>
+<p>死亡状态？</p>
+<p>刚进副本？</p>
+<p>需要：</p>
+<p>ParticipationRule。</p>
+<p>防止：</p>
+<p>挂机蹭Loot。</p>
+<hr />
+<h2 id="77-contributionstate">77. ContributionState</h2><p>可以记录：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Healing；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>ObjectiveParticipation；</p>
+</li>
+<li><p>TimePresent。</p>
+</li>
+</ul>
+<p>但一般不建议仅按DPS决定资格。</p>
+<p>辅助职业会被惩罚。</p>
+<hr />
+<h2 id="78-核心范式九拾取本身必须被过滤否则高掉落频率会摧毁体验">78. 核心范式九：拾取本身必须被过滤，否则高掉落频率会摧毁体验</h2><p>刷宝ARPG的一个天然问题：</p>
+<p>后期每分钟可能掉：</p>
+<p>几十件甚至几百件物品。</p>
+<p>如果每一件都要人工查看：</p>
+<p>游戏会从：</p>
+<p>战斗</p>
+<p>变成：</p>
+<p>背包清洁模拟。</p>
+<p>因此必须逐步加入：</p>
+<p><strong>Loot Filtering。</strong></p>
+<hr />
+<h2 id="79-lootfilterdefinition">79. LootFilterDefinition</h2><p>建议支持条件：</p>
+<ul>
+<li><p>ItemType；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>ItemLevel；</p>
+</li>
+<li><p>Affix；</p>
+</li>
+<li><p>LegendaryPower；</p>
+</li>
+<li><p>Value；</p>
+</li>
+<li><p>Slot；</p>
+</li>
+<li><p>BuildTag；</p>
+</li>
+<li><p>CraftValue。</p>
+</li>
+</ul>
+<p>输出：</p>
+<ul>
+<li><p>Hide；</p>
+</li>
+<li><p>Show；</p>
+</li>
+<li><p>Highlight；</p>
+</li>
+<li><p>Sound；</p>
+</li>
+<li><p>BeamColor。</p>
+</li>
+</ul>
+<hr />
+<h2 id="80-lootfilter-不应改变实际掉落">80. LootFilter 不应改变实际掉落</h2><p>它只是：</p>
+<p>Visibility Projection。</p>
+<p>真正Item仍然由LootSystem生成。</p>
+<p>否则：</p>
+<p>切换Filter</p>
+<p>可能影响经济。</p>
+<hr />
+<h2 id="81-auto-salvage">81. Auto Salvage</h2><p>部分模式可以：</p>
+<p>低品质物品直接：</p>
+<p>转换材料。</p>
+<p>这实际上是在：</p>
+<p>减少没有决策价值的ItemInstance生成。</p>
+<hr />
+<h2 id="82-auto-salvage-应在-lootgeneration-后明确执行">82. Auto Salvage 应在 LootGeneration 后明确执行</h2><p>例如：</p>
+<p>生成Rare以下</p>
+<p>→ AutoSalvagePolicy
+→ 不创建WorldDrop
+→ 生成CraftMaterial。</p>
+<p>仍然要进入：</p>
+<p>LootLedger。</p>
+<hr />
+<h2 id="83-inventory">83. Inventory</h2><p>建议包含：</p>
+<ul>
+<li><p>EquipmentSlots；</p>
+</li>
+<li><p>Backpack；</p>
+</li>
+<li><p>Consumables；</p>
+</li>
+<li><p>QuestItems；</p>
+</li>
+<li><p>TemporaryLoot；</p>
+</li>
+<li><p>InventoryVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="84-stash">84. Stash</h2><p>长期仓库是刷宝型游戏的核心基础设施。</p>
+<p>因为玩家会保存：</p>
+<ul>
+<li><p>未来Build装备；</p>
+</li>
+<li><p>其他角色装备；</p>
+</li>
+<li><p>Unique；</p>
+</li>
+<li><p>Craft Base。</p>
+</li>
+</ul>
+<hr />
+<h2 id="85-stash设计如果失败会直接压垮终局体验">85. Stash设计如果失败，会直接压垮终局体验</h2><p>至少需要：</p>
+<ul>
+<li><p>搜索；</p>
+</li>
+<li><p>Filter；</p>
+</li>
+<li><p>Sort；</p>
+</li>
+<li><p>Tab；</p>
+</li>
+<li><p>ItemType；</p>
+</li>
+<li><p>BuildTag；</p>
+</li>
+<li><p>Favorite；</p>
+</li>
+<li><p>Lock；</p>
+</li>
+<li><p>Compare。</p>
+</li>
+</ul>
+<hr />
+<h2 id="86-item-lock">86. Item Lock</h2><p>重要装备必须能够：</p>
+<p>锁定。</p>
+<p>防止：</p>
+<p>批量Salvage。</p>
+<hr />
+<h2 id="87-salvagetransaction">87. SalvageTransaction</h2><p>选择Item
+→ 检查Lock
+→ 检查Bind/Trade
+→ 锁定ItemInstance
+→ 计算MaterialReward
+→ 删除ItemInstance
+→ 增加Materials
+→ 写入Ledger
+→ 提交。</p>
+<hr />
+<h2 id="88-vendor-system">88. Vendor System</h2><p>卖商店与分解可以形成：</p>
+<p>经济选择。</p>
+<p>例如：</p>
+<p>缺Gold：</p>
+<p>卖。</p>
+<p>缺Craft Material：</p>
+<p>分解。</p>
+<p>让垃圾Loot仍有次级价值。</p>
+<hr />
+<h2 id="89-currency体系需要防止过多">89. Currency体系需要防止过多</h2><p>刷宝游戏很容易积累：</p>
+<ul>
+<li><p>Gold；</p>
+</li>
+<li><p>Gem；</p>
+</li>
+<li><p>Shard；</p>
+</li>
+<li><p>Dust；</p>
+</li>
+<li><p>Token；</p>
+</li>
+<li><p>BossToken；</p>
+</li>
+<li><p>EventToken；</p>
+</li>
+<li><p>UpgradeStone。</p>
+</li>
+</ul>
+<p>每个Currency都应该回答：</p>
+<blockquote>
+<p>它解决什么随机或成长问题？</p>
+</blockquote>
+<p>没有独立功能：</p>
+<p>就不该存在。</p>
+<hr />
+<h2 id="90-currencydefinition">90. CurrencyDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>CurrencyId；</p>
+</li>
+<li><p>MaximumAmount；</p>
+</li>
+<li><p>Sources；</p>
+</li>
+<li><p>Sinks；</p>
+</li>
+<li><p>TradePolicy；</p>
+</li>
+<li><p>SeasonalPolicy；</p>
+</li>
+<li><p>CurrencyVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="91-经济sink">91. 经济Sink</h2><p>必须有持续消耗：</p>
+<ul>
+<li><p>Enchant；</p>
+</li>
+<li><p>Upgrade；</p>
+</li>
+<li><p>Craft；</p>
+</li>
+<li><p>Repair；</p>
+</li>
+<li><p>Dungeon Entry；</p>
+</li>
+<li><p>Respec。</p>
+</li>
+</ul>
+<p>否则后期货币无限通胀。</p>
+<hr />
+<h2 id="92-repair">92. Repair</h2><p>耐久如果存在，</p>
+<p>建议：</p>
+<p>低干扰。</p>
+<p>除非耐久本身是玩法。</p>
+<p>否则玩家刷十分钟：</p>
+<p>回城修装备，</p>
+<p>大多只是重复维护。</p>
+<hr />
+<h2 id="93-respec">93. Respec</h2><p>Build驱动游戏必须允许一定程度：</p>
+<p>重新配置技能和天赋。</p>
+<p>否则掉到关键装备：</p>
+<p>但玩家Build不匹配，</p>
+<p>重新练角色成本过高。</p>
+<hr />
+<h2 id="94-respeccost">94. RespecCost</h2><p>可以：</p>
+<p>免费；</p>
+<p>低成本；</p>
+<p>随次数增加。</p>
+<p>重点是：</p>
+<p>让装备掉落能够激发：</p>
+<p>“我想试试这个Build。”</p>
+<p>而不是：</p>
+<p>“这个很酷，但我懒得重新练。”</p>
+<hr />
+<h2 id="95-loadout">95. Loadout</h2><p>成熟系统建议支持：</p>
+<p>Build Preset。</p>
+<p>保存：</p>
+<ul>
+<li><p>Skills；</p>
+</li>
+<li><p>Passives；</p>
+</li>
+<li><p>Equipment；</p>
+</li>
+<li><p>Talent；</p>
+</li>
+<li><p>Hotbar。</p>
+</li>
+</ul>
+<p>切换可以：</p>
+<p>在城镇；</p>
+<p>支付Cost；</p>
+<p>或有限制。</p>
+<hr />
+<h2 id="96-loadout价值">96. Loadout价值</h2><p>刷宝游戏最终会鼓励：</p>
+<p>一个角色拥有多个Build：</p>
+<p>Boss Build；</p>
+<p>Speed Farming；</p>
+<p>PvP；</p>
+<p>AoE。</p>
+<p>如果没有Preset：</p>
+<p>切换成本极高。</p>
+<hr />
+<h2 id="97-talent-tree-passive-tree">97. Talent Tree / Passive Tree</h2><p>Talent的作用是：</p>
+<p>让玩家主动提供构筑方向，</p>
+<p>而不是完全依赖掉落。</p>
+<hr />
+<h2 id="98-talentstate">98. TalentState</h2><p>建议包含：</p>
+<ul>
+<li><p>AllocatedNodes；</p>
+</li>
+<li><p>AvailablePoints；</p>
+</li>
+<li><p>LockedNodes；</p>
+</li>
+<li><p>RespecHistory；</p>
+</li>
+<li><p>TalentVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="99-gear-与-talent应该存在互补">99. Gear 与 Talent应该存在互补</h2><p>如果装备决定100% Build：</p>
+<p>角色成长显得随机。</p>
+<p>如果Talent决定100%：</p>
+<p>Loot失去意义。</p>
+<p>理想结构：</p>
+<p>Talent提供：</p>
+<p>基础方向。</p>
+<p>Loot提供：</p>
+<p>优化和机制突变。</p>
+<hr />
+<h2 id="100-paragon-post-cap-progression">100. Paragon / Post-Cap Progression</h2><p>满级后仍然需要：</p>
+<p>经验收益。</p>
+<p>可以转向：</p>
+<ul>
+<li><p>Paragon；</p>
+</li>
+<li><p>Account Mastery；</p>
+</li>
+<li><p>Seasonal Progress。</p>
+</li>
+</ul>
+<p>但必须谨慎：</p>
+<p>无限主属性成长</p>
+<p>会导致：</p>
+<p>时间投入直接压倒Build设计。</p>
+<p>更适合：</p>
+<p>逐渐边际递减</p>
+<p>或：</p>
+<p>解锁型成长。</p>
+<hr />
+<h2 id="101-season">101. Season</h2><p>刷宝 ARPG很适合赛季。</p>
+<p>因为：</p>
+<p>长期经济和装备最终趋于饱和。</p>
+<p>新Season通过：</p>
+<ul>
+<li><p>新机制；</p>
+</li>
+<li><p>新掉落；</p>
+</li>
+<li><p>新角色经济；</p>
+</li>
+<li><p>重新成长；</p>
+</li>
+</ul>
+<p>恢复：</p>
+<p>Build搜索过程。</p>
+<hr />
+<h2 id="102-seasonal-character-与-eternal-character">102. Seasonal Character 与 Eternal Character</h2><p>建议严格区分：</p>
+<p>SeasonalRealm</p>
+<p>和：</p>
+<p>PermanentRealm。</p>
+<p>赛季结束：</p>
+<p>角色转移。</p>
+<p>规则必须提前明确。</p>
+<hr />
+<h2 id="103-核心范式十终局必须持续暴露下一个缺口">103. 核心范式十：终局必须持续暴露“下一个缺口”</h2><p>好的终局不是：</p>
+<p>Build完成
+→ 游戏结束。</p>
+<p>而是：</p>
+<p>当前Build清小怪很强。</p>
+<p>但Boss慢。</p>
+<p>调整后：</p>
+<p>Boss快。</p>
+<p>但生存不足。</p>
+<p>防御提高后：</p>
+<p>高层副本时间不够。</p>
+<p>因此高层挑战不断改变：</p>
+<p>优化目标。</p>
+<hr />
+<h2 id="104-endgame-axis">104. Endgame Axis</h2><p>可以存在多个独立轴：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Survivability；</p>
+</li>
+<li><p>Mobility；</p>
+</li>
+<li><p>CrowdClear；</p>
+</li>
+<li><p>BossDamage；</p>
+</li>
+<li><p>ResourceSustain；</p>
+</li>
+<li><p>CrowdControl；</p>
+</li>
+<li><p>Speed；</p>
+</li>
+<li><p>Consistency。</p>
+</li>
+</ul>
+<hr />
+<h2 id="105-内容不应只检查dps">105. 内容不应只检查DPS</h2><p>如果所有高层内容都是：</p>
+<p>Boss HP越来越高，</p>
+<p>Build最终只剩：</p>
+<p>最大化单体伤害。</p>
+<p>需要：</p>
+<ul>
+<li><p>密集群怪；</p>
+</li>
+<li><p>持续伤害环境；</p>
+</li>
+<li><p>控制；</p>
+</li>
+<li><p>移动；</p>
+</li>
+<li><p>精英；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Timer；</p>
+</li>
+</ul>
+<p>组合。</p>
+<hr />
+<h2 id="106-time-to-kill">106. Time-to-Kill</h2><p>重要指标：</p>
+<p>普通怪TTK；</p>
+<p>Elite TTK；</p>
+<p>Boss TTK。</p>
+<p>如果普通怪也需要：</p>
+<p>10秒，</p>
+<p>刷宝的高速战斗节奏会消失。</p>
+<hr />
+<h2 id="107-combat-density">107. Combat Density</h2><p>Loot ARPG通常需要：</p>
+<p>短时间大量击杀。</p>
+<p>这使：</p>
+<p>OnKill；</p>
+<p>Explosion；</p>
+<p>Chain；</p>
+<p>ResourceOnKill</p>
+<p>等机制成立。</p>
+<hr />
+<h2 id="108-on-kill机制需要统一事件">108. On Kill机制需要统一事件</h2><p>EnemyKilled
+→ OnKillTriggerSystem</p>
+<p>而不是：</p>
+<p>每个装备脚本自己监听敌人对象。</p>
+<hr />
+<h2 id="109-triggerdefinition">109. TriggerDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>TriggerEventType；</p>
+</li>
+<li><p>Conditions；</p>
+</li>
+<li><p>Cooldown；</p>
+</li>
+<li><p>ProcChance；</p>
+</li>
+<li><p>EffectDefinition；</p>
+</li>
+<li><p>TriggerLimit；</p>
+</li>
+<li><p>TriggerVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="110-proc-chance">110. Proc Chance</h2><p>如果多个装备同时拥有：</p>
+<p>OnHit 20%触发，</p>
+<p>需要稳定：</p>
+<ul>
+<li><p>Roll顺序；</p>
+</li>
+<li><p>InternalCooldown；</p>
+</li>
+<li><p>ProcCoefficient。</p>
+</li>
+</ul>
+<hr />
+<h2 id="111-proc-coefficient">111. Proc Coefficient</h2><p>高速多段技能容易：</p>
+<p>每秒命中100次。</p>
+<p>如果每次都完整触发：</p>
+<p>OnHit，</p>
+<p>构筑可能爆炸。</p>
+<p>可以为技能定义：</p>
+<p>ProcCoefficient。</p>
+<p>例如：</p>
+<p>每次小Hit只有：</p>
+<p>0.1触发权重。</p>
+<hr />
+<h2 id="112-这允许技能攻击频率与触发强度解耦">112. 这允许技能攻击频率与触发强度解耦</h2><p>否则多段技能天然支配：</p>
+<p>所有OnHit Build。</p>
+<hr />
+<h2 id="113-cooldown-reduction">113. Cooldown Reduction</h2><p>CDR必须有：</p>
+<p>下限或曲线。</p>
+<p>无限堆叠可能：</p>
+<p>技能无CD。</p>
+<p>如果这是允许Build：</p>
+<p>需要整个系统为之设计。</p>
+<p>否则必须限制。</p>
+<hr />
+<h2 id="114-attack-speed-cast-speed同理">114. Attack Speed / Cast Speed同理</h2><p>大量乘法成长可能导致：</p>
+<p>动画、网络、Projectile数量</p>
+<p>超出技术预算。</p>
+<p>平衡必须同时考虑：</p>
+<p>运行时性能。</p>
+<hr />
+<h2 id="115-build复杂度与性能预算必须联动">115. Build复杂度与性能预算必须联动</h2><p>例如传奇效果：</p>
+<p>每次Crit生成8个Projectile。</p>
+<p>玩家达到：</p>
+<p>10 attacks/s；</p>
+<p>80% crit。</p>
+<p>理论：</p>
+<p>64 projectile/s。</p>
+<p>多个效果叠加后：</p>
+<p>可能达到数千。</p>
+<p>需要：</p>
+<p><strong>Build Performance Validator。</strong></p>
+<hr />
+<h2 id="116-item-affix不能只由设计平衡还要进行组合压力测试">116. Item Affix不能只由设计平衡，还要进行组合压力测试</h2><p>自动生成极端：</p>
+<p>AttackSpeed</p>
+<ul>
+<li><p>ProjectileCount</p>
+</li>
+<li><p>OnHit</p>
+</li>
+<li><p>Chain</p>
+</li>
+</ul>
+<p>组合。</p>
+<p>检测：</p>
+<ul>
+<li><p>DamageEvents/s；</p>
+</li>
+<li><p>Projectile/s；</p>
+</li>
+<li><p>TriggerDepth。</p>
+</li>
+</ul>
+<hr />
+<h2 id="117-trigger-loop-guard">117. Trigger Loop Guard</h2><p>装备效果：</p>
+<p>A触发B；</p>
+<p>B又触发A。</p>
+<p>必须限制：</p>
+<ul>
+<li><p>RootEventId；</p>
+</li>
+<li><p>TriggerDepth；</p>
+</li>
+<li><p>InternalCooldown；</p>
+</li>
+<li><p>SameEffectReentry。</p>
+</li>
+</ul>
+<hr />
+<h2 id="118-示例">118. 示例</h2><p>Legendary A：</p>
+<p>Crit造成Explosion。</p>
+<p>Legendary B：</p>
+<p>Explosion可以Crit。</p>
+<p>如果Explosion Crit再次触发A：</p>
+<p>无限。</p>
+<p>可以定义：</p>
+<p>Explosion带：</p>
+<p><code>TriggeredEffect</code></p>
+<p>标签。</p>
+<p>A只允许：</p>
+<p>DirectSkillDamage。</p>
+<hr />
+<h2 id="119-effect-tagging">119. Effect Tagging</h2><p>DamageContext建议包含：</p>
+<ul>
+<li><p>SourceType；</p>
+</li>
+<li><p>SkillTags；</p>
+</li>
+<li><p>DamageTags；</p>
+</li>
+<li><p>TriggerDepth；</p>
+</li>
+<li><p>IsDirect；</p>
+</li>
+<li><p>IsOverTime；</p>
+</li>
+<li><p>IsTriggered。</p>
+</li>
+</ul>
+<p>这是构筑规则稳定性的基础。</p>
+<hr />
+<h2 id="120-damage-context">120. Damage Context</h2><p>建议字段：</p>
+<ul>
+<li><p>DamageEventId；</p>
+</li>
+<li><p>SourceEntityId；</p>
+</li>
+<li><p>SourceSkillId；</p>
+</li>
+<li><p>SourceItemPowerId；</p>
+</li>
+<li><p>TargetEntityId；</p>
+</li>
+<li><p>BaseDamage；</p>
+</li>
+<li><p>DamageTags；</p>
+</li>
+<li><p>CriticalState；</p>
+</li>
+<li><p>ProcCoefficient；</p>
+</li>
+<li><p>TriggerDepth；</p>
+</li>
+<li><p>ModifierSnapshot；</p>
+</li>
+<li><p>DamageVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="121-snapshot-与-dynamic-scaling">121. Snapshot 与 Dynamic Scaling</h2><p>DoT开始时：</p>
+<p>是读取当前装备一次？</p>
+<p>还是每Tick重新读取？</p>
+<p>需要明确：</p>
+<h4 id="snapshot">Snapshot</h4><p>施放时锁定属性。</p>
+<h4 id="dynamic">Dynamic</h4><p>持续读取当前属性。</p>
+<p>不要不同技能随意实现。</p>
+<hr />
+<h2 id="122-buff-system">122. Buff System</h2><p>Build中大量Buff来自：</p>
+<ul>
+<li><p>Skill；</p>
+</li>
+<li><p>Gear；</p>
+</li>
+<li><p>Trigger；</p>
+</li>
+<li><p>Party。</p>
+</li>
+</ul>
+<p>需要统一：</p>
+<p>BuffInstance。</p>
+<hr />
+<h2 id="123-buffinstance">123. BuffInstance</h2><p>建议字段：</p>
+<ul>
+<li><p>BuffInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>SourceId；</p>
+</li>
+<li><p>TargetId；</p>
+</li>
+<li><p>StackCount；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>ExpirationTimestamp；</p>
+</li>
+<li><p>ModifierIds；</p>
+</li>
+<li><p>BuffVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="124-buff-stack-policy">124. Buff Stack Policy</h2><p>可以：</p>
+<ul>
+<li><p>RefreshDuration；</p>
+</li>
+<li><p>AddStack；</p>
+</li>
+<li><p>IndependentStack；</p>
+</li>
+<li><p>ReplaceWeaker；</p>
+</li>
+<li><p>MaxStack。</p>
+</li>
+</ul>
+<hr />
+<h2 id="125-combat-snapshot">125. Combat Snapshot</h2><p>某些战斗计算可以：</p>
+<p>攻击时创建StatSnapshot，</p>
+<p>避免：</p>
+<p>一次Attack的多个Hit读取不同中间状态。</p>
+<p>但实时ARPG通常仍需要高度动态。</p>
+<p>应按能力定义。</p>
+<hr />
+<h2 id="126-item-drop视觉与loot权威状态分离">126. Item Drop视觉与Loot权威状态分离</h2><p>WorldDropVisual</p>
+<p>不是Item所有权。</p>
+<p>服务器：</p>
+<p>创建ItemInstance
+→ 注册WorldLootEntity。</p>
+<p>客户端：</p>
+<p>显示地面光柱。</p>
+<p>视觉消失不能删除Item。</p>
+<hr />
+<h2 id="127-worldlootstate">127. WorldLootState</h2><p>建议包含：</p>
+<ul>
+<li><p>WorldLootEntityId；</p>
+</li>
+<li><p>ItemInstanceId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>OwnerRules；</p>
+</li>
+<li><p>Expiration；</p>
+</li>
+<li><p>PickupState；</p>
+</li>
+<li><p>LootVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="128-pickuptransaction">128. PickupTransaction</h2><p>玩家请求拾取
+→ 验证距离
+→ 验证Owner
+→ 验证Item仍存在
+→ 验证Inventory容量
+→ 锁定WorldLoot
+→ 移除WorldLoot
+→ 加入Inventory
+→ 提交。</p>
+<p>多人时必须防止：</p>
+<p>重复拾取。</p>
+<hr />
+<h2 id="129-inventory满">129. Inventory满</h2><p>可以：</p>
+<p>拒绝拾取；</p>
+<p>或者：</p>
+<p>转到TemporaryLootBuffer。</p>
+<p>不要：</p>
+<p>Item消失。</p>
+<hr />
+<h2 id="130-town-safe-hub">130. Town / Safe Hub</h2><p>刷宝型ARPG通常存在：</p>
+<p>城镇或Hub。</p>
+<p>其职责：</p>
+<ul>
+<li><p>Stash；</p>
+</li>
+<li><p>Vendor；</p>
+</li>
+<li><p>Craft；</p>
+</li>
+<li><p>Upgrade；</p>
+</li>
+<li><p>Respec；</p>
+</li>
+<li><p>Activity Selection；</p>
+</li>
+<li><p>Social。</p>
+</li>
+</ul>
+<p>Hub是：</p>
+<blockquote>
+<p>Build重构阶段和战斗阶段之间的稳定边界。</p>
+</blockquote>
+<hr />
+<h2 id="131-run-activity-loop">131. Run / Activity Loop</h2><p>成熟结构：</p>
+<p>Hub
+→ 选择Activity
+→ 战斗
+→ 获取Loot
+→ 返回Hub
+→ 筛选、打造和调整Build
+→ 下一Activity。</p>
+<p>这类似：</p>
+<p>一种高频：</p>
+<p>Combat Laboratory Loop。</p>
+<hr />
+<h2 id="132-town-portal">132. Town Portal</h2><p>允许玩家：</p>
+<p>随时回城处理：</p>
+<p>满包；</p>
+<p>修理；</p>
+<p>Build。</p>
+<p>但过于自由可能破坏：</p>
+<p>副本风险。</p>
+<p>可以限制：</p>
+<p>Boss战；</p>
+<p>Timed Activity。</p>
+<hr />
+<h2 id="133-death">133. Death</h2><p>死亡惩罚可以：</p>
+<ul>
+<li><p>Equipment Durability；</p>
+</li>
+<li><p>Gold；</p>
+</li>
+<li><p>XP；</p>
+</li>
+<li><p>Dungeon Attempt；</p>
+</li>
+<li><p>Respawn Location。</p>
+</li>
+</ul>
+<p>通常不应：</p>
+<p>永久丢失整套装备，</p>
+<p>否则宏观范式开始接近：</p>
+<p>Extraction或Hardcore Survival。</p>
+<hr />
+<h2 id="134-hardcore-mode">134. Hardcore Mode</h2><p>永久角色死亡可以作为特殊模式。</p>
+<p>但不是刷宝ARPG基础范式。</p>
+<hr />
+<h2 id="135-death-recovery">135. Death Recovery</h2><p>死亡后：</p>
+<p>继续当前Dungeon</p>
+<p>还是：</p>
+<p>重置Dungeon，</p>
+<p>取决于Activity。</p>
+<hr />
+<h2 id="136-activity-failurestate">136. Activity FailureState</h2><p>建议：</p>
+<ul>
+<li><p>RetryAllowed；</p>
+</li>
+<li><p>Checkpoint；</p>
+</li>
+<li><p>RewardPenalty；</p>
+</li>
+<li><p>InstanceReset；</p>
+</li>
+<li><p>KeyConsumed。</p>
+</li>
+</ul>
+<hr />
+<h2 id="137-dungeon-key-entry-resource">137. Dungeon Key / Entry Resource</h2><p>高价值内容可以需要：</p>
+<p>Key。</p>
+<p>Key本身也是Loot。</p>
+<p>于是形成：</p>
+<p>普通内容
+→ Key
+→ 高难Dungeon
+→ 高价值Loot。</p>
+<hr />
+<h2 id="138-但entry-cost过高会抑制实验">138. 但Entry Cost过高会抑制实验</h2><p>如果玩家每次测试新Build：</p>
+<p>失败就损失昂贵Key，</p>
+<p>会降低构筑实验欲望。</p>
+<p>建议：</p>
+<p>高风险内容与普通测试内容分层。</p>
+<hr />
+<h2 id="139-build-test-dummy">139. Build Test Dummy</h2><p>训练木桩或测试场非常重要。</p>
+<p>可以显示：</p>
+<ul>
+<li><p>DPS；</p>
+</li>
+<li><p>Crit；</p>
+</li>
+<li><p>Proc；</p>
+</li>
+<li><p>Resource；</p>
+</li>
+<li><p>Buff Uptime。</p>
+</li>
+</ul>
+<p>否则玩家很难验证：</p>
+<p>装备到底有没有提升。</p>
+<hr />
+<h2 id="140-combat-log">140. Combat Log</h2><p>高级模式应支持：</p>
+<p>Damage Source；</p>
+<p>Trigger；</p>
+<p>Buff；</p>
+<p>Death Cause。</p>
+<p>不一定正式UI全开放，</p>
+<p>但开发必须拥有。</p>
+<hr />
+<h2 id="141-loot-telemetry">141. Loot Telemetry</h2><p>对刷宝游戏极其重要。</p>
+<p>需要统计：</p>
+<ul>
+<li><p>ItemsDropped；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>ItemSlot；</p>
+</li>
+<li><p>Unique；</p>
+</li>
+<li><p>Salvaged；</p>
+</li>
+<li><p>Equipped；</p>
+</li>
+<li><p>Stashed；</p>
+</li>
+<li><p>VendorSold；</p>
+</li>
+<li><p>AffixDistribution。</p>
+</li>
+</ul>
+<hr />
+<h2 id="142-一个装备掉落但999直接分解说明什么">142. 一个装备掉落但99.9%直接分解说明什么</h2><p>可能：</p>
+<ul>
+<li><p>掉落过多；</p>
+</li>
+<li><p>基础价值太低；</p>
+</li>
+<li><p>Affix池污染；</p>
+</li>
+<li><p>装备成长过快。</p>
+</li>
+</ul>
+<p>不是：</p>
+<p>“玩家不喜欢捡东西。”</p>
+<hr />
+<h2 id="143-upgrade-funnel">143. Upgrade Funnel</h2><p>统计：</p>
+<p>Dropped
+→ PickedUp
+→ Inspected
+→ Equipped
+→ Modified
+→ UsedInHighTierContent。</p>
+<p>可以判断：</p>
+<p>真正有意义的Loot比例。</p>
+<hr />
+<h2 id="144-unique-usage-rate">144. Unique Usage Rate</h2><p>某Unique掉落很多，</p>
+<p>但只有0.2%玩家使用：</p>
+<p>可能：</p>
+<p>机制弱；</p>
+<p>或：</p>
+<p>Build前置过高。</p>
+<hr />
+<h2 id="145-build-diversity">145. Build Diversity</h2><p>监控：</p>
+<p>高Tier玩家：</p>
+<p>Skill；</p>
+<p>Item；</p>
+<p>LegendaryPower；</p>
+<p>Talent。</p>
+<p>如果90%集中一个Build：</p>
+<p>需要分析：</p>
+<p>它是玩家偏好，</p>
+<p>还是其他Build不成立。</p>
+<hr />
+<h2 id="146-不应该单纯追求所有build-10使用率">146. 不应该单纯追求所有Build 10%使用率</h2><p>Build自然会有Meta。</p>
+<p>目标是：</p>
+<p>至少存在多个：</p>
+<p>可完成高层内容的稳定路线。</p>
+<hr />
+<h2 id="147-power-creep">147. Power Creep</h2><p>长期新增Season和Item后：</p>
+<p>新装备不断比旧装备更强。</p>
+<p>几年后：</p>
+<p>数值可能失控。</p>
+<p>推荐更多加入：</p>
+<p><strong>Horizontal Mechanic Expansion</strong></p>
+<p>而不是：</p>
+<p>每季基础伤害 +30%。</p>
+<hr />
+<h2 id="148-content-version">148. Content Version</h2><p>长期在线ARPG必须：</p>
+<p>版本化：</p>
+<ul>
+<li><p>Item；</p>
+</li>
+<li><p>Affix；</p>
+</li>
+<li><p>Skill；</p>
+</li>
+<li><p>Dungeon；</p>
+</li>
+<li><p>LootTable。</p>
+</li>
+</ul>
+<hr />
+<h2 id="149-legacy-item">149. Legacy Item</h2><p>Balance更新后：</p>
+<p>旧Item怎么办？</p>
+<p>可以：</p>
+<p>自动更新；</p>
+<p>保留Legacy；</p>
+<p>重新Roll。</p>
+<p>必须有明确策略。</p>
+<hr />
+<h2 id="150-玩家资产迁移是高风险操作">150. 玩家资产迁移是高风险操作</h2><p>装备拥有：</p>
+<p>玩家真实长期投入。</p>
+<p>Migration失败可能：</p>
+<p>直接破坏存档。</p>
+<p>需要：</p>
+<ul>
+<li><p>Backup；</p>
+</li>
+<li><p>Transaction；</p>
+</li>
+<li><p>MigrationVersion；</p>
+</li>
+<li><p>Audit。</p>
+</li>
+</ul>
+<hr />
+<h2 id="151-完整事件与执行流程示例">151. 完整事件与执行流程示例</h2><p>以下以：</p>
+<p><strong>玩家的冰霜法师进入高阶地牢，希望获得一件能让冰矛产生分裂的新传奇装备</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="1511-当前build">151.1 当前Build</h3><p>核心技能：</p>
+<p>IceLance。</p>
+<p>当前装备提供：</p>
+<ul>
+<li><p>+Cold Damage；</p>
+</li>
+<li><p>+Critical Chance；</p>
+</li>
+<li><p>Mana Generation；</p>
+</li>
+<li><p>Freeze Synergy。</p>
+</li>
+</ul>
+<p>Build特点：</p>
+<p>普通怪清理优秀。</p>
+<p>Boss：</p>
+<p>中等。</p>
+<hr />
+<h3 id="1512-玩家目标">151.2 玩家目标</h3><p>缺少Legendary Power：</p>
+<p><code>Fracturing Lance</code></p>
+<p>效果：</p>
+<p>IceLance首次Crit后：</p>
+<p>分裂成3枚次级IceLance。</p>
+<hr />
+<h3 id="1513-target-farming">151.3 Target Farming</h3><p>LootUI显示：</p>
+<p>Dungeon：</p>
+<p>Frozen Archive</p>
+<p>对：</p>
+<p>Cold Legendary</p>
+<p>拥有更高权重。</p>
+<p>玩家选择：</p>
+<p>Tier 12。</p>
+<hr />
+<h3 id="1514-dungeon创建">151.4 Dungeon创建</h3><p>系统：</p>
+<p>创建DungeonInstance。</p>
+<p>记录：</p>
+<ul>
+<li><p>Tier 12；</p>
+</li>
+<li><p>Seed；</p>
+</li>
+<li><p>MonsterBudget；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>ColdAffixBias。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1515-第一组enemy-pack">151.5 第一组Enemy Pack</h3><p>10普通敌人</p>
+<ul>
+<li>1Elite。</li>
+</ul>
+<p>玩家快速击杀普通怪。</p>
+<p>OnFreezeExplosion发生连锁。</p>
+<hr />
+<h3 id="1516-elite掉落">151.6 Elite掉落</h3><p>LootSystem创建：</p>
+<p>Rare Gloves。</p>
+<p>属性：</p>
+<p>+Crit
++Cold
++Life。</p>
+<hr />
+<h3 id="1517-item-comparison">151.7 Item Comparison</h3><p>当前手套：</p>
+<p>较低Damage，</p>
+<p>但提供：</p>
+<p>关键Mana Cost Reduction。</p>
+<p>候选：</p>
+<p>理论伤害更高，</p>
+<p>但ResourceSustain下降。</p>
+<p>玩家决定：</p>
+<p>不换。</p>
+<p>直接标记Salvage。</p>
+<hr />
+<h3 id="1518-第二个elite-pack">151.8 第二个Elite Pack</h3><p>出现：</p>
+<p>Suppressor Modifier。</p>
+<p>玩家资源循环被区域机制打乱。</p>
+<p>说明当前Build对：</p>
+<p>近距离控制区</p>
+<p>较脆弱。</p>
+<hr />
+<h3 id="1519-boss战">151.9 Boss战</h3><p>Boss高生命。</p>
+<p>玩家发现：</p>
+<p>IceLance单体输出仍然不足。</p>
+<p>战斗时间很长。</p>
+<p>但成功击杀。</p>
+<hr />
+<h3 id="15110-boss-lootcontext">151.10 Boss LootContext</h3><p>Boss拥有：</p>
+<p>ColdLegendaryBias。</p>
+<p>PityState：</p>
+<p>此前已连续8次没有掉目标类别。</p>
+<p>当前权重提高。</p>
+<hr />
+<h3 id="15111-传奇掉落">151.11 传奇掉落</h3><p>系统生成：</p>
+<p>Legendary Wand。</p>
+<p>传奇效果：</p>
+<p>Fracturing Lance。</p>
+<hr />
+<h3 id="15112-affix生成">151.12 Affix生成</h3><p>同时随机到：</p>
+<ul>
+<li><p>+Cold Damage；</p>
+</li>
+<li><p>+Critical Damage；</p>
+</li>
+<li><p>+Resource Generation；</p>
+</li>
+<li><p>一个无用的Fire Affix。</p>
+</li>
+</ul>
+<hr />
+<h3 id="15113-玩家回城">151.13 玩家回城</h3><p>装备本身：</p>
+<p>已经具有核心Power。</p>
+<p>但Fire Affix浪费。</p>
+<hr />
+<h3 id="15114-enchant">151.14 Enchant</h3><p>玩家选择：</p>
+<p>Fire Affix</p>
+<p>进行重铸。</p>
+<p>系统生成：</p>
+<p>三个冻结候选：</p>
+<ul>
+<li><p>Mana Cost Reduction；</p>
+</li>
+<li><p>Vulnerable Damage；</p>
+</li>
+<li><p>Intelligence。</p>
+</li>
+</ul>
+<hr />
+<h3 id="15115-玩家选择mana-cost-reduction">151.15 玩家选择Mana Cost Reduction</h3><p>原因：</p>
+<p>新Legendary Power会让IceLance产生更多分裂攻击，</p>
+<p>总施法频率提升，</p>
+<p>Resource压力更大。</p>
+<hr />
+<h3 id="15116-装备新武器">151.16 装备新武器</h3><p>BuildSystem重算。</p>
+<p>IceLance行为改变。</p>
+<hr />
+<h3 id="15117-测试木桩">151.17 测试木桩</h3><p>SingleTarget DPS：</p>
+<p>+22%。</p>
+<p>Mana Sustain：</p>
+<p>仍然稳定。</p>
+<hr />
+<h3 id="15118-实战测试">151.18 实战测试</h3><p>进入Tier 13。</p>
+<p>普通怪：</p>
+<p>分裂IceLance会命中额外目标。</p>
+<p>清怪速度明显提高。</p>
+<hr />
+<h3 id="15119-新问题出现">151.19 新问题出现</h3><p>大量次级Projectile导致：</p>
+<p>OnCrit Frost Nova</p>
+<p>触发频率暴增。</p>
+<p>Build输出很强，</p>
+<p>但视觉和运行时Projectile数量过高。</p>
+<hr />
+<h3 id="15120-trigger-system">151.20 Trigger System</h3><p>由于Secondary IceLance带：</p>
+<p><code>TriggeredProjectile</code></p>
+<p>标签，</p>
+<p>部分OnCast效果不会再次触发。</p>
+<p>防止：</p>
+<p>无限连锁。</p>
+<hr />
+<h3 id="15121-tier-13-boss">151.21 Tier 13 Boss</h3><p>DPS足够。</p>
+<p>但玩家仍然频繁死亡。</p>
+<p>原因：</p>
+<p>此前为了追求Crit，</p>
+<p>牺牲了两条DamageReduction Affix。</p>
+<hr />
+<h3 id="15122-下一目标改变">151.22 下一目标改变</h3><p>此前：</p>
+<p>目标是：</p>
+<p>获得Fracturing Lance。</p>
+<p>现在：</p>
+<p>目标变成：</p>
+<p>提升生存。</p>
+<p>玩家开始Target Farming：</p>
+<p>Chest Armor。</p>
+<hr />
+<h3 id="15123-完整循环">151.23 完整循环</h3><p>发现Build缺口
+→ 确定目标装备
+→ 选择高概率Activity
+→ 高密度战斗
+→ 大量Loot筛选
+→ Boss掉落目标Legendary
+→ Craft压缩随机空间
+→ Build机制变化
+→ 高Tier实战验证
+→ 输出瓶颈解决
+→ 新的防御瓶颈暴露
+→ 下一轮定向刷取。</p>
+<p>这就是刷宝型ARPG最具代表性的：</p>
+<blockquote>
+<p><strong>当前Build决定你在寻找什么，而新Loot不断重写当前Build。</strong></p>
+</blockquote>
+<hr />
+<h2 id="152-模块通信设计">152. 模块通信设计</h2><h3 id="1521-commands">152.1 Commands</h3><p>典型：</p>
+<ul>
+<li><p>EquipItem；</p>
+</li>
+<li><p>UnequipItem；</p>
+</li>
+<li><p>PickupLoot；</p>
+</li>
+<li><p>DropItem；</p>
+</li>
+<li><p>SalvageItem；</p>
+</li>
+<li><p>SellItem；</p>
+</li>
+<li><p>EnchantItem；</p>
+</li>
+<li><p>UpgradeItem；</p>
+</li>
+<li><p>SocketGem；</p>
+</li>
+<li><p>SelectSkill；</p>
+</li>
+<li><p>AllocateTalent；</p>
+</li>
+<li><p>RespecBuild；</p>
+</li>
+<li><p>StartActivity；</p>
+</li>
+<li><p>ChangeWorldTier。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1522-queries">152.2 Queries</h3><p>适用于：</p>
+<ul>
+<li><p>这件Item为什么不能装备；</p>
+</li>
+<li><p>某Affix可以出现在什么装备；</p>
+</li>
+<li><p>当前Build的Crit是多少；</p>
+</li>
+<li><p>某Legendary哪里掉；</p>
+</li>
+<li><p>当前Dungeon能掉什么；</p>
+</li>
+<li><p>Item能否Enchant；</p>
+</li>
+<li><p>当前Pity状态；</p>
+</li>
+<li><p>某Skill受哪些Modifier影响。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>Roll Affix；</p>
+</li>
+<li><p>改变Pity；</p>
+</li>
+<li><p>生成Loot；</p>
+</li>
+<li><p>消耗Currency。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1523-domain-events">152.3 Domain Events</h3><p>包括：</p>
+<ul>
+<li><p>EnemyKilled；</p>
+</li>
+<li><p>LootGenerated；</p>
+</li>
+<li><p>LootDropped；</p>
+</li>
+<li><p>ItemPickedUp；</p>
+</li>
+<li><p>ItemEquipped；</p>
+</li>
+<li><p>BuildChanged；</p>
+</li>
+<li><p>AffixRolled；</p>
+</li>
+<li><p>ItemEnchanted；</p>
+</li>
+<li><p>ItemUpgraded；</p>
+</li>
+<li><p>ItemSalvaged；</p>
+</li>
+<li><p>SkillActivated；</p>
+</li>
+<li><p>TriggerProc；</p>
+</li>
+<li><p>ActivityStarted；</p>
+</li>
+<li><p>ActivityCompleted；</p>
+</li>
+<li><p>WorldTierChanged；</p>
+</li>
+<li><p>BossDefeated；</p>
+</li>
+<li><p>PityUpdated。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1524-presentation-events">152.4 Presentation Events</h3><p>包括：</p>
+<ul>
+<li><p>PlayLootBeam；</p>
+</li>
+<li><p>ShowLegendaryDrop；</p>
+</li>
+<li><p>ShowDamageNumber；</p>
+</li>
+<li><p>PlaySkillEffect；</p>
+</li>
+<li><p>ShowItemCompare；</p>
+</li>
+<li><p>ShowDungeonComplete；</p>
+</li>
+<li><p>PlayUpgradeAnimation。</p>
+</li>
+</ul>
+<p>表现事件绝不能决定：</p>
+<ul>
+<li><p>Loot内容；</p>
+</li>
+<li><p>Item属性；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Pity；</p>
+</li>
+<li><p>Build。</p>
+</li>
+</ul>
+<hr />
+<h2 id="153-状态所有权">153. 状态所有权</h2><p>推荐：</p>
+<p><strong>ItemRepository</strong></p>
+<p>拥有ItemInstance。</p>
+<p><strong>LootSystem</strong></p>
+<p>只负责创建候选与WorldDrop。</p>
+<p><strong>InventorySystem</strong></p>
+<p>拥有Item位置。</p>
+<p><strong>EquipmentSystem</strong></p>
+<p>拥有Slot绑定关系。</p>
+<p><strong>BuildSystem</strong></p>
+<p>拥有构筑派生状态。</p>
+<p><strong>StatSystem</strong></p>
+<p>负责统一属性聚合。</p>
+<p><strong>SkillSystem</strong></p>
+<p>拥有Skill运行状态。</p>
+<p><strong>CraftSystem</strong></p>
+<p>拥有Item修改事务。</p>
+<p><strong>ActivitySystem</strong></p>
+<p>拥有地下城与奖励状态。</p>
+<p><strong>PitySystem</strong></p>
+<p>拥有保底计数。</p>
+<p>任何技能脚本：</p>
+<p>不能直接修改装备词缀。</p>
+<p>任何装备脚本：</p>
+<p>不能直接修改LootTable。</p>
+<hr />
+<h2 id="154-item-ownership">154. Item Ownership</h2><p>Item任意时刻只能属于：</p>
+<ul>
+<li><p>CharacterInventory；</p>
+</li>
+<li><p>Equipped；</p>
+</li>
+<li><p>Stash；</p>
+</li>
+<li><p>WorldLoot；</p>
+</li>
+<li><p>TradeEscrow；</p>
+</li>
+<li><p>CraftTransaction；</p>
+</li>
+<li><p>VendorPending；</p>
+</li>
+</ul>
+<p>其中一个状态。</p>
+<hr />
+<h2 id="155-itemownershipaudit">155. ItemOwnershipAudit</h2><p>必须能够检测：</p>
+<p>同一个ItemInstanceId</p>
+<p>同时出现在：</p>
+<p>Stash</p>
+<p>和：</p>
+<p>CharacterInventory。</p>
+<p>这是严重复制错误。</p>
+<hr />
+<h2 id="156-trade">156. Trade</h2><p>如果支持玩家交易，</p>
+<p>风险急剧增加。</p>
+<hr />
+<h2 id="157-tradetransaction">157. TradeTransaction</h2><p>双方锁定Item
+→ 创建Escrow
+→ 双方确认
+→ 再验证所有权
+→ 原子交换Owner
+→ 更新Inventory
+→ 写入TradeLedger。</p>
+<hr />
+<h2 id="158-绑定规则">158. 绑定规则</h2><p>可以：</p>
+<ul>
+<li><p>BindOnPickup；</p>
+</li>
+<li><p>BindOnEquip；</p>
+</li>
+<li><p>AccountBound；</p>
+</li>
+<li><p>Unbound。</p>
+</li>
+</ul>
+<p>绑定设计直接影响：</p>
+<p>游戏经济。</p>
+<hr />
+<h2 id="159-拍卖行属于另一个巨大经济系统">159. 拍卖行属于另一个巨大经济系统</h2><p>如果存在公开交易：</p>
+<p>掉落价值不再只由Build决定。</p>
+<p>还由：</p>
+<p>市场价格决定。</p>
+<p>这会显著改变：</p>
+<p>Loot、DropRate、Bot、防通胀等设计。</p>
+<p>基础范式不要求必须加入公开市场。</p>
+<hr />
+<h2 id="160-失败隔离">160. 失败隔离</h2><hr />
+<h3 id="1601-loot生成失败">160.1 Loot生成失败</h3><p>某Affix Pool没有合法候选：</p>
+<p>Fallback：</p>
+<p>减少Affix数量</p>
+<p>或使用安全通用词缀。</p>
+<p>不能无限重试。</p>
+<p>同时记录：</p>
+<p>LootGenerationError。</p>
+<hr />
+<h3 id="1602-item生成部分完成">160.2 Item生成部分完成</h3><p>ItemBase生成，</p>
+<p>但Affix过程异常。</p>
+<p>ItemInstance不能进入世界。</p>
+<p>整个LootCreation事务回滚。</p>
+<hr />
+<h3 id="1603-pickup重复">160.3 Pickup重复</h3><p>WorldLootEntity通过：</p>
+<p>CAS / Lock</p>
+<p>确保只能被一个玩家拾取。</p>
+<hr />
+<h3 id="1604-craft失败">160.4 Craft失败</h3><p>Enchant已经扣Currency，</p>
+<p>但写Item失败：</p>
+<p>事务必须回滚或恢复。</p>
+<p>不能丢资源。</p>
+<hr />
+<h3 id="1605-itemversion冲突">160.5 ItemVersion冲突</h3><p>玩家同时：</p>
+<p>Enchant</p>
+<p>和：</p>
+<p>Equip。</p>
+<p>使用：</p>
+<p>ItemVersion。</p>
+<p>一个操作成功后，</p>
+<p>另一个重新读取。</p>
+<hr />
+<h3 id="1606-build重算失败">160.6 Build重算失败</h3><p>新装备已提交，</p>
+<p>BuildSystem异常。</p>
+<p>装备状态仍然是权威。</p>
+<p>BuildDerivedState可以：</p>
+<p>重新计算。</p>
+<p>不要回滚高价值装备事务，只因为缓存失败。</p>
+<hr />
+<h3 id="1607-pity写入失败">160.7 Pity写入失败</h3><p>Boss已经掉目标Item。</p>
+<p>Pity没有Reset。</p>
+<p>必须和Loot结果使用：</p>
+<p>同一奖励事务。</p>
+<p>否则下次可能重复触发高保底。</p>
+<hr />
+<h3 id="1608-salvage重复">160.8 Salvage重复</h3><p>同一Item只能：</p>
+<p>Consume一次。</p>
+<p>Item进入Consumed状态后：</p>
+<p>任何重复请求返回已有结果。</p>
+<hr />
+<h3 id="1609-trigger无限循环">160.9 Trigger无限循环</h3><p>使用：</p>
+<p>RootEventId</p>
+<ul>
+<li><p>TriggerDepth</p>
+</li>
+<li><p>EffectReentryPolicy。</p>
+</li>
+</ul>
+<p>超过阈值：</p>
+<p>中断异常链。</p>
+<hr />
+<h3 id="16010-dungeon奖励重复">160.10 Dungeon奖励重复</h3><p>DungeonCompletionId</p>
+<p>只能提交一次。</p>
+<p>即使：</p>
+<p>断线；</p>
+<p>重连；</p>
+<p>服务器重试。</p>
+<hr />
+<h3 id="16011-season迁移失败">160.11 Season迁移失败</h3><p>Seasonal角色迁移到Permanent：</p>
+<p>需要：</p>
+<p>Snapshot
+→ Validation
+→ Commit。</p>
+<p>失败：</p>
+<p>保留源Realm数据，</p>
+<p>不能先删后写。</p>
+<hr />
+<h2 id="161-调试与可观测性">161. 调试与可观测性</h2><hr />
+<h3 id="1611-loot-generation-trace">161.1 Loot Generation Trace</h3><p>选择一件掉落显示：</p>
+<p>Source
+→ LootBudget
+→ Category
+→ ItemBase
+→ ItemLevel
+→ Rarity
+→ AffixPool
+→ Affix Rolls
+→ LegendaryPower
+→ Final Item。</p>
+<hr />
+<h3 id="1612-affix-probability-inspector">161.2 Affix Probability Inspector</h3><p>显示：</p>
+<p>当前Item：</p>
+<p>哪些Affix合法；</p>
+<p>权重；</p>
+<p>Tier；</p>
+<p>为什么某Affix不会出现。</p>
+<hr />
+<h3 id="1613-item-provenance-viewer">161.3 Item Provenance Viewer</h3><p>显示：</p>
+<ul>
+<li><p>来源Boss；</p>
+</li>
+<li><p>世界Tier；</p>
+</li>
+<li><p>掉落时间；</p>
+</li>
+<li><p>Enchant；</p>
+</li>
+<li><p>Upgrade；</p>
+</li>
+<li><p>Trade；</p>
+</li>
+<li><p>Owner变化。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1614-stat-breakdown">161.4 Stat Breakdown</h3><p>显示：</p>
+<p>每个最终属性的来源和乘区。</p>
+<hr />
+<h3 id="1615-damage-trace">161.5 Damage Trace</h3><p>一次伤害：</p>
+<p>Skill Base
+→ Weapon
+→ Additive Bucket
+→ Crit
+→ Vulnerable
+→ Legendary Multiplier
+→ Resistance
+→ Final Damage。</p>
+<hr />
+<h3 id="1616-trigger-trace">161.6 Trigger Trace</h3><p>显示：</p>
+<p>Direct Hit
+→ Crit
+→ Legendary Trigger
+→ Explosion
+→ Burn
+→ ResourceGain。</p>
+<hr />
+<h3 id="1617-proc-frequency">161.7 Proc Frequency</h3><p>统计：</p>
+<p>每秒：</p>
+<p>OnHit；</p>
+<p>OnCrit；</p>
+<p>OnKill；</p>
+<p>Legendary Proc。</p>
+<hr />
+<h3 id="1618-build-snapshot-diff">161.8 Build Snapshot Diff</h3><p>装备Candidate前：</p>
+<p>BuildSnapshot A。</p>
+<p>装备后：</p>
+<p>B。</p>
+<p>显示：</p>
+<ul>
+<li><p>DPS；</p>
+</li>
+<li><p>Defense；</p>
+</li>
+<li><p>Resource；</p>
+</li>
+<li><p>SkillBehavior。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1619-resource-sustain-timeline">161.9 Resource Sustain Timeline</h3><p>显示：</p>
+<p>Mana：</p>
+<p>生成；</p>
+<p>消耗；</p>
+<p>最低点；</p>
+<p>空档时间。</p>
+<hr />
+<h3 id="16110-enemy-density-timeline">161.10 Enemy Density Timeline</h3><p>显示：</p>
+<p>ActiveEnemies；</p>
+<p>Kills/s；</p>
+<p>Elite；</p>
+<p>Boss。</p>
+<hr />
+<h3 id="16111-loot-funnel">161.11 Loot Funnel</h3><p>Dropped
+→ Picked
+→ Inspected
+→ Equipped
+→ Stashed
+→ Salvaged。</p>
+<hr />
+<h3 id="16112-activity-efficiency">161.12 Activity Efficiency</h3><p>显示：</p>
+<p>每分钟：</p>
+<ul>
+<li><p>XP；</p>
+</li>
+<li><p>Legendary；</p>
+</li>
+<li><p>TargetItemAttempts；</p>
+</li>
+<li><p>Currency。</p>
+</li>
+</ul>
+<hr />
+<h3 id="16113-pity-inspector">161.13 Pity Inspector</h3><p>显示：</p>
+<p>当前Boss：</p>
+<p>FailedAttempts；</p>
+<p>BonusWeight；</p>
+<p>NextThreshold。</p>
+<p>根据产品策略决定是否给玩家显示完整信息。</p>
+<hr />
+<h3 id="16114-build-diversity-dashboard">161.14 Build Diversity Dashboard</h3><p>按：</p>
+<p>Skill；</p>
+<p>Unique；</p>
+<p>LegendaryPower；</p>
+<p>Talent；</p>
+<p>统计高难内容中的使用率和完成率。</p>
+<hr />
+<h3 id="16115-death-causality">161.15 Death Causality</h3><p>例如：</p>
+<p>进入Tier 15
+→ 玩家Damage足够
+→ 为提高Crit牺牲Armor
+→ Elite拥有Vulnerable Modifier
+→ 玩家受到Burst
+→ Barrier已在Cooldown
+→ Death。</p>
+<p>比：</p>
+<p>“受到5200伤害”</p>
+<p>有价值。</p>
+<hr />
+<h2 id="162-内容验证工具">162. 内容验证工具</h2><hr />
+<h3 id="1621-affix-pool-validation">162.1 Affix Pool Validation</h3><p>检查：</p>
+<ul>
+<li><p>ItemTag；</p>
+</li>
+<li><p>MinimumItemLevel；</p>
+</li>
+<li><p>Group；</p>
+</li>
+<li><p>Tier；</p>
+</li>
+<li><p>RollRange；</p>
+</li>
+<li><p>Weight。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1622-item-generation-monte-carlo">162.2 Item Generation Monte Carlo</h3><p>对每个ItemBase：</p>
+<p>生成：</p>
+<p>百万次。</p>
+<p>统计：</p>
+<ul>
+<li><p>Rarity；</p>
+</li>
+<li><p>Affix；</p>
+</li>
+<li><p>Tier；</p>
+</li>
+<li><p>InvalidCombination；</p>
+</li>
+<li><p>ExpectedValue。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1623-unique-reachability">162.3 Unique Reachability</h3><p>每个Unique必须至少存在：</p>
+<p>一个合法掉落来源。</p>
+<hr />
+<h3 id="1624-pity-simulation">162.4 Pity Simulation</h3><p>模拟：</p>
+<p>100万玩家刷Boss。</p>
+<p>检查：</p>
+<p>平均获取次数；</p>
+<p>P95；</p>
+<p>P99。</p>
+<p>避免极端尾部过大。</p>
+<hr />
+<h3 id="1625-build-combination-test">162.5 Build Combination Test</h3><p>自动生成：</p>
+<p>Skill
+× LegendaryPower
+× Affix。</p>
+<p>检测：</p>
+<ul>
+<li><p>无穷伤害；</p>
+</li>
+<li><p>零CD；</p>
+</li>
+<li><p>无限Resource；</p>
+</li>
+<li><p>无限Trigger。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1626-trigger-loop-test">162.6 Trigger Loop Test</h3><p>重点测试：</p>
+<p>OnCrit；</p>
+<p>OnHit；</p>
+<p>Explosion；</p>
+<p>Chain；</p>
+<p>DoT；</p>
+<p>Summon。</p>
+<hr />
+<h3 id="1627-damage-overflow-test">162.7 Damage Overflow Test</h3><p>高层乘法Build：</p>
+<p>检查：</p>
+<p>整数溢出；</p>
+<p>浮点Infinity；</p>
+<p>NaN。</p>
+<hr />
+<h3 id="1628-projectile-stress-test">162.8 Projectile Stress Test</h3><p>最大AttackSpeed Build：</p>
+<p>计算：</p>
+<p>Projectile/s；</p>
+<p>DamageEvent/s；</p>
+<p>Trigger/s。</p>
+<hr />
+<h3 id="1629-economy-simulation">162.9 Economy Simulation</h3><p>模拟：</p>
+<p>Gold Sources；</p>
+<p>Craft Sinks；</p>
+<p>Salvage；</p>
+<p>Vendor。</p>
+<p>长期运行：</p>
+<p>检查通胀。</p>
+<hr />
+<h3 id="16210-loot-value-distribution">162.10 Loot Value Distribution</h3><p>检查：</p>
+<p>高Tier是否真的：</p>
+<p>提高有意义装备概率，</p>
+<p>而不只是：</p>
+<p>所有装备数字+1%。</p>
+<hr />
+<h3 id="16211-activity-reward-balance">162.11 Activity Reward Balance</h3><p>比较不同终局内容：</p>
+<p>ExpectedLoot/hour。</p>
+<p>避免：</p>
+<p>一个活动绝对支配其他内容。</p>
+<hr />
+<h3 id="16212-upgrade-probability-test">162.12 Upgrade Probability Test</h3><p>玩家目标装备在合理时间内：</p>
+<p>是否能够通过：</p>
+<p>Drop + Craft</p>
+<p>逐步收敛。</p>
+<hr />
+<h2 id="163-性能设计">163. 性能设计</h2><hr />
+<h3 id="1631-loot生成不是性能大头但item实例数量可能是">163.1 Loot生成不是性能大头，但Item实例数量可能是</h3><p>大量垃圾装备如果全部：</p>
+<p>长期持久化Instance</p>
+<p>会造成：</p>
+<p>数据库和网络膨胀。</p>
+<hr />
+<h3 id="1632-world-loot-延迟实例化">163.2 World Loot 延迟实例化</h3><p>可以先生成：</p>
+<p>LootRollResult。</p>
+<p>只有需要落地表现时：</p>
+<p>创建WorldLootEntity。</p>
+<hr />
+<h3 id="1633-auto-salvage">163.3 Auto Salvage</h3><p>极低价值Loot可以：</p>
+<p>直接转换成材料。</p>
+<p>减少：</p>
+<p>ItemInstance生命周期。</p>
+<hr />
+<h3 id="1634-affix使用definition引用不复制完整数据">163.4 Affix使用Definition引用，不复制完整数据</h3><p>Item只保存：</p>
+<p>AffixId</p>
+<ul>
+<li><p>RollValue</p>
+</li>
+<li><p>Tier。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1635-stat缓存">163.5 Stat缓存</h3><p>Build不变化时：</p>
+<p>不要每次攻击重新遍历全部Equipment。</p>
+<p>缓存：</p>
+<p>DerivedStats。</p>
+<p>只有：</p>
+<ul>
+<li><p>Equip；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>Skill；</p>
+</li>
+<li><p>Proc；</p>
+</li>
+</ul>
+<p>改变相关DirtyFlag时更新。</p>
+<hr />
+<h3 id="1636-conditional-stat分类">163.6 Conditional Stat分类</h3><p>例如：</p>
+<p>DamageAgainstBurning</p>
+<p>不应展开成：</p>
+<p>每次重算整个Build。</p>
+<p>可以在DamageContext中：</p>
+<p>按Tag应用。</p>
+<hr />
+<h3 id="1637-high-density-combat">163.7 High Density Combat</h3><p>普通怪AI需要：</p>
+<p>LOD；</p>
+<p>空间索引；</p>
+<p>批量更新。</p>
+<p>但其重点不同于幸存者类：</p>
+<p>刷宝ARPG通常敌人数量几十到数百，</p>
+<p>且敌人拥有更复杂AI。</p>
+<hr />
+<h3 id="1638-damage-number-aggregation">163.8 Damage Number Aggregation</h3><p>高速Build每秒大量Hit。</p>
+<p>普通怪：</p>
+<p>可以合并伤害数字。</p>
+<p>Boss：</p>
+<p>保留更多反馈。</p>
+<hr />
+<h3 id="1639-loot-beam-pool">163.9 Loot Beam Pool</h3><p>高掉落场景：</p>
+<p>不要为每件装备新建复杂VFX。</p>
+<hr />
+<h3 id="16310-stash-virtualization">163.10 Stash Virtualization</h3><p>几千件Item：</p>
+<p>UI使用：</p>
+<p>虚拟列表；</p>
+<p>分页；</p>
+<p>索引。</p>
+<p>不要一次创建全部UI节点。</p>
+<hr />
+<h2 id="164-可扩展点">164. 可扩展点</h2><hr />
+<h3 id="1641-新itembase">164.1 新ItemBase</h3><p>主要提供：</p>
+<p>BaseDefinition</p>
+<ul>
+<li>AffixTags。</li>
+</ul>
+<hr />
+<h3 id="1642-新affix">164.2 新Affix</h3><p>通过：</p>
+<p>AffixDefinition</p>
+<p>接入Loot Generator。</p>
+<hr />
+<h3 id="1643-新legendary-power">164.3 新Legendary Power</h3><p>通过：</p>
+<p>Effect/Trigger系统接入。</p>
+<hr />
+<h3 id="1644-新skill">164.4 新Skill</h3><p>提供：</p>
+<p>SkillDefinition</p>
+<ul>
+<li><p>EffectGraph</p>
+</li>
+<li><p>ScalingTags。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1645-新activity">164.5 新Activity</h3><p>提供：</p>
+<p>ActivityDefinition</p>
+<ul>
+<li><p>EncounterProfile</p>
+</li>
+<li><p>RewardProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1646-新world-tier">164.6 新World Tier</h3><p>主要修改：</p>
+<p>EnemyDifficulty</p>
+<ul>
+<li>LootQuality。</li>
+</ul>
+<hr />
+<h3 id="1647-新craft功能">164.7 新Craft功能</h3><p>通过：</p>
+<p>ItemModificationTransaction</p>
+<p>扩展：</p>
+<ul>
+<li><p>Enchant；</p>
+</li>
+<li><p>Temper；</p>
+</li>
+<li><p>Socket；</p>
+</li>
+<li><p>Upgrade。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1648-新season">164.8 新Season</h3><p>提供：</p>
+<ul>
+<li><p>SeasonalMechanic；</p>
+</li>
+<li><p>SeasonalLoot；</p>
+</li>
+<li><p>SeasonalActivity；</p>
+</li>
+<li><p>MigrationPolicy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="165-玩家体验设计">165. 玩家体验设计</h2><hr />
+<h3 id="1651-loot必须在几秒内完成第一层价值判断">165.1 Loot必须在几秒内完成第一层价值判断</h3><p>玩家不能每杀一组怪：</p>
+<p>停下来读五分钟词条。</p>
+<p>地面展示应至少帮助识别：</p>
+<ul>
+<li><p>Slot；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>ItemLevel；</p>
+</li>
+<li><p>Unique；</p>
+</li>
+<li><p>是否可能升级。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1652-稀有掉落必须有明显反馈">165.2 稀有掉落必须有明显反馈</h3><p>声音；</p>
+<p>光柱；</p>
+<p>颜色；</p>
+<p>UI。</p>
+<p>但反馈应该对应：</p>
+<p>真实稀有度，</p>
+<p>不能每30秒“传奇爆闪”一次导致失去价值。</p>
+<hr />
+<h3 id="1653-好loot的核心体验是它让我想到一个新build">165.3 好Loot的核心体验是“它让我想到一个新Build”</h3><p>最有价值的掉落不只是：</p>
+<p>Damage +5%。</p>
+<p>而是：</p>
+<blockquote>
+<p>“如果装备这个，我可以把原来没用的技能重新构造成另一种玩法。”</p>
+</blockquote>
+<hr />
+<h3 id="1654-早期装备比较可以简单">165.4 早期装备比较可以简单</h3><p>剧情阶段：</p>
+<p>绿色箭头足够。</p>
+<p>终局：</p>
+<p>逐渐开放：</p>
+<ul>
+<li><p>高级词缀；</p>
+</li>
+<li><p>Build Tag；</p>
+</li>
+<li><p>DPS分析。</p>
+</li>
+</ul>
+<p>不要一开始把玩家淹没在：</p>
+<p>40个属性中。</p>
+<hr />
+<h3 id="1655-掉落频率应随认知能力提高">165.5 掉落频率应随认知能力提高</h3><p>早期：</p>
+<p>少量装备。</p>
+<p>中后期：</p>
+<p>更多Loot</p>
+<p>但：</p>
+<p>Filter、AutoSalvage、Compare工具同时增强。</p>
+<hr />
+<h3 id="1656-垃圾loot必须具有快速处理路径">165.6 垃圾Loot必须具有快速处理路径</h3><p>例如：</p>
+<p>一键Salvage Rare以下。</p>
+<p>否则后期游戏节奏变成：</p>
+<p>战斗30秒
+→ 清包2分钟。</p>
+<hr />
+<h3 id="1657-stash必须支持未来build心智模型">165.7 Stash必须支持“未来Build”心智模型</h3><p>玩家常常保存：</p>
+<p>“这个现在不用，但以后可能有用。”</p>
+<p>因此：</p>
+<p>Tab、Tag、Favorite非常重要。</p>
+<hr />
+<h3 id="1658-crafting必须减少挫败而不是增加第二层赌博">165.8 Crafting必须减少挫败，而不是增加第二层赌博</h3><p>如果掉装备是随机：</p>
+<p>重铸仍然完全无控制随机，</p>
+<p>会形成：</p>
+<p>RNG × RNG。</p>
+<p>更好的Craft：</p>
+<p>逐渐缩小候选池。</p>
+<hr />
+<h3 id="1659-终局玩家需要明确下一步做什么">165.9 终局玩家需要明确下一步做什么</h3><p>例如：</p>
+<p>想要Unique X：</p>
+<p>去刷Boss Y。</p>
+<p>想升级Glyph：</p>
+<p>去Activity Z。</p>
+<p>想重铸：</p>
+<p>需要Material A。</p>
+<p>否则终局会变成：</p>
+<p>“随便刷。”</p>
+<hr />
+<h3 id="16510-build失败需要可诊断">165.10 Build失败需要可诊断</h3><p>例如：</p>
+<p>你不是Damage不够，</p>
+<p>而是：</p>
+<p>Resource Sustain不足。</p>
+<p>或者：</p>
+<p>Boss机制要求更高移动。</p>
+<hr />
+<h2 id="166-常见设计失败">166. 常见设计失败</h2><hr />
+<h3 id="1661-itemdefinition与instance混在一起">166.1 ItemDefinition与Instance混在一起</h3><p>随机词缀污染所有同类装备。</p>
+<hr />
+<h3 id="1662-loot直接由enemy脚本随机生成">166.2 Loot直接由Enemy脚本随机生成</h3><p>无法统一控制掉落经济。</p>
+<hr />
+<h3 id="1663-itemlevel只是显示数字">166.3 ItemLevel只是显示数字</h3><p>不影响词缀和掉落空间。</p>
+<hr />
+<h3 id="1664-rarity只有数值差异">166.4 Rarity只有数值差异</h3><p>传奇装备没有机制身份。</p>
+<hr />
+<h3 id="1665-affix-pool过于宽泛">166.5 Affix Pool过于宽泛</h3><p>绝大多数装备完全无关当前职业。</p>
+<hr />
+<h3 id="1666-全靠纯随机没有收敛工具">166.6 全靠纯随机，没有收敛工具</h3><p>玩家可能无限刷不到关键装备。</p>
+<hr />
+<h3 id="1667-craft完全替代loot">166.7 Craft完全替代Loot</h3><p>最优玩法变成刷材料。</p>
+<hr />
+<h3 id="1668-craft本身也是无限随机">166.8 Craft本身也是无限随机</h3><p>没有真正降低概率尾部。</p>
+<hr />
+<h3 id="1669-item-power绿箭头代替所有构筑分析">166.9 Item Power绿箭头代替所有构筑分析</h3><p>玩家误换掉核心机制装备。</p>
+<hr />
+<h3 id="16610-装备只增加技能伤害">166.10 装备只增加技能伤害</h3><p>Loot无法改变玩法。</p>
+<hr />
+<h3 id="16611-legendary-power过多只写x伤害">166.11 Legendary Power过多只写“+X%伤害”</h3><p>Build缺乏身份。</p>
+<hr />
+<h3 id="16612-set-bonus过强">166.12 Set Bonus过强</h3><p>所有Slot被套装锁死。</p>
+<hr />
+<h3 id="16613-resource-sustain不进入build分析">166.13 Resource Sustain不进入Build分析</h3><p>纸面DPS很高，实战技能放不出来。</p>
+<hr />
+<h3 id="16614-高难内容只增加敌人hp">166.14 高难内容只增加敌人HP</h3><p>Build检查只有DPS。</p>
+<hr />
+<h3 id="16615-所有activity掉落完全相同">166.15 所有Activity掉落完全相同</h3><p>终局只剩效率最高地图。</p>
+<hr />
+<h3 id="16616-活动奖励差异太大">166.16 活动奖励差异太大</h3><p>强迫所有玩家只玩一个内容。</p>
+<hr />
+<h3 id="16617-loot过多但没有filter">166.17 Loot过多但没有Filter</h3><p>地面和背包被垃圾装备淹没。</p>
+<hr />
+<h3 id="16618-loot太少">166.18 Loot太少</h3><p>刷宝的即时奖励频率不足。</p>
+<hr />
+<h3 id="16619-所有低品质装备都完全无价值">166.19 所有低品质装备都完全无价值</h3><p>掉落只是视觉垃圾。</p>
+<hr />
+<h3 id="16620-currency数量爆炸">166.20 Currency数量爆炸</h3><p>玩家不知道每种材料做什么。</p>
+<hr />
+<h3 id="16621-respec成本过高">166.21 Respec成本过高</h3><p>掉到新机制装备也不愿意尝试。</p>
+<hr />
+<h3 id="16622-build-preset缺失">166.22 Build Preset缺失</h3><p>一个角色只能长期维护一种Build。</p>
+<hr />
+<h3 id="16623-onhit-trigger没有proc控制">166.23 OnHit Trigger没有Proc控制</h3><p>高攻速Build无限触发。</p>
+<hr />
+<h3 id="16624-trigger-effect可以再次触发自己">166.24 Trigger Effect可以再次触发自己</h3><p>形成无限递归。</p>
+<hr />
+<h3 id="16625-damage乘区没有统一规则">166.25 Damage乘区没有统一规则</h3><p>某技能乘法叠加异常。</p>
+<hr />
+<h3 id="16626-item-migration不安全">166.26 Item Migration不安全</h3><p>赛季更新破坏玩家长期资产。</p>
+<hr />
+<h3 id="16627-world-tier只提高敌人难度不提高掉落价值">166.27 World Tier只提高敌人难度，不提高掉落价值</h3><p>玩家没有升阶动力。</p>
+<hr />
+<h3 id="16628-高tier奖励过强">166.28 高Tier奖励过强</h3><p>玩家被迫进入效率很低的难度。</p>
+<hr />
+<h3 id="16629-boss-unique完全世界随机">166.29 Boss Unique完全世界随机</h3><p>Target Farming失去意义。</p>
+<hr />
+<h3 id="16630-终局build完成后没有新约束">166.30 终局Build完成后没有新约束</h3><p>优化循环立即结束。</p>
+<hr />
+<h2 id="167-最小可行原型">167. 最小可行原型</h2><p>一个能够验证刷宝型ARPG核心范式的MVP，不需要数千装备。</p>
+<p>推荐：</p>
+<p><strong>1个职业 + 6个主动技能 + 5个装备槽 + 30个Affix + 10个Legendary Power + 3个重复活动 + 3级难度。</strong></p>
+<hr />
+<h3 id="1671-character">167.1 Character</h3><p>一个职业即可。</p>
+<p>例如：</p>
+<p>Elementalist。</p>
+<hr />
+<h3 id="1672-skill">167.2 Skill</h3><p>至少包含：</p>
+<ul>
+<li><p>单体；</p>
+</li>
+<li><p>AoE；</p>
+</li>
+<li><p>Resource Generator；</p>
+</li>
+<li><p>Resource Spender；</p>
+</li>
+<li><p>Mobility；</p>
+</li>
+<li><p>Defense。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1673-equipment-slot">167.3 Equipment Slot</h3><p>第一版：</p>
+<ul>
+<li><p>Weapon；</p>
+</li>
+<li><p>Helm；</p>
+</li>
+<li><p>Chest；</p>
+</li>
+<li><p>Gloves；</p>
+</li>
+<li><p>Boots。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1674-rarity">167.4 Rarity</h3><p>只需要：</p>
+<ul>
+<li><p>Common；</p>
+</li>
+<li><p>Rare；</p>
+</li>
+<li><p>Legendary；</p>
+</li>
+<li><p>Unique。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1675-affix">167.5 Affix</h3><p>约30个。</p>
+<p>覆盖：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Crit；</p>
+</li>
+<li><p>Resource；</p>
+</li>
+<li><p>Defense；</p>
+</li>
+<li><p>Skill-specific；</p>
+</li>
+<li><p>Conditional。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1676-legendary">167.6 Legendary</h3><p>约10个。</p>
+<p>必须至少有：</p>
+<p>5个会真正修改Skill行为，</p>
+<p>而不是只改伤害。</p>
+<hr />
+<h3 id="1677-activity">167.7 Activity</h3><p>例如：</p>
+<ul>
+<li><p>Open Dungeon；</p>
+</li>
+<li><p>Elite Arena；</p>
+</li>
+<li><p>Boss Dungeon。</p>
+</li>
+</ul>
+<p>三者拥有不同：</p>
+<p>Reward Bias。</p>
+<hr />
+<h3 id="1678-difficulty">167.8 Difficulty</h3><p>Tier 1：</p>
+<p>故事。</p>
+<p>Tier 2：</p>
+<p>终局初阶。</p>
+<p>Tier 3：</p>
+<p>Build Check。</p>
+<hr />
+<h3 id="1679-craft">167.9 Craft</h3><p>只做：</p>
+<ul>
+<li><p>Salvage；</p>
+</li>
+<li><p>Enchant 1 Affix；</p>
+</li>
+<li><p>Upgrade。</p>
+</li>
+</ul>
+<hr />
+<h3 id="16710-必要基础设施">167.10 必要基础设施</h3><ul>
+<li><p>ItemBaseDefinition；</p>
+</li>
+<li><p>ItemInstance；</p>
+</li>
+<li><p>ItemRepository；</p>
+</li>
+<li><p>AffixDefinition；</p>
+</li>
+<li><p>AffixInstance；</p>
+</li>
+<li><p>LegendaryPowerDefinition；</p>
+</li>
+<li><p>LootContext；</p>
+</li>
+<li><p>LootGenerator；</p>
+</li>
+<li><p>WorldLootState；</p>
+</li>
+<li><p>InventoryState；</p>
+</li>
+<li><p>EquipmentState；</p>
+</li>
+<li><p>StatAggregator；</p>
+</li>
+<li><p>BuildState；</p>
+</li>
+<li><p>SkillDefinition；</p>
+</li>
+<li><p>TriggerSystem；</p>
+</li>
+<li><p>DamageContext；</p>
+</li>
+<li><p>CraftTransaction；</p>
+</li>
+<li><p>PityState；</p>
+</li>
+<li><p>ActivityState；</p>
+</li>
+<li><p>DifficultyTier；</p>
+</li>
+<li><p>StashState；</p>
+</li>
+<li><p>LootLedger。</p>
+</li>
+</ul>
+<hr />
+<h3 id="16711-必要调试工具">167.11 必要调试工具</h3><ul>
+<li><p>LootGenerationTrace；</p>
+</li>
+<li><p>AffixProbabilityInspector；</p>
+</li>
+<li><p>ItemProvenanceViewer；</p>
+</li>
+<li><p>StatBreakdown；</p>
+</li>
+<li><p>DamageTrace；</p>
+</li>
+<li><p>TriggerTrace；</p>
+</li>
+<li><p>BuildSnapshotDiff；</p>
+</li>
+<li><p>ResourceSustainTimeline；</p>
+</li>
+<li><p>LootFunnel；</p>
+</li>
+<li><p>ActivityEfficiency；</p>
+</li>
+<li><p>BuildDiversityDashboard；</p>
+</li>
+<li><p>ItemOwnershipAudit。</p>
+</li>
+</ul>
+<hr />
+<h2 id="168-mvp核心验收问题">168. MVP核心验收问题</h2><p>原型至少必须能够回答：</p>
+<ul>
+<li><p>同一ItemBase能否产生明显不同的有效装备实例；</p>
+</li>
+<li><p>Legendary是否能真正改变技能行为；</p>
+</li>
+<li><p>玩家是否会因为一件掉落主动改变Build；</p>
+</li>
+<li><p>高密度战斗是否能稳定产生足够Loot反馈；</p>
+</li>
+<li><p>Loot是否不会多到迫使玩家频繁停下清包；</p>
+</li>
+<li><p>Affix系统是否能形成有意义组合而不是纯随机垃圾；</p>
+</li>
+<li><p>Target Farming是否明显改变目标装备获取效率；</p>
+</li>
+<li><p>Enchant是否能有效缩小随机空间；</p>
+</li>
+<li><p>Skill、Equipment和Talent是否形成双向构筑；</p>
+</li>
+<li><p>Resource Sustain是否真实影响Build可用性；</p>
+</li>
+<li><p>更高Difficulty是否提供更高收益并暴露新缺口；</p>
+</li>
+<li><p>不同Activity是否都有独立刷取价值；</p>
+</li>
+<li><p>同一个Legendary Build是否存在至少一种不同装备路线；</p>
+</li>
+<li><p>Item资产是否在Drop、Pickup、Equip、Stash、Salvage之间保持唯一所有权；</p>
+</li>
+<li><p>Trigger系统是否不会产生无限循环；</p>
+</li>
+<li><p>Stat系统是否能够解释最终伤害来源；</p>
+</li>
+<li><p>玩家是否能明确知道下一件想刷的东西在哪里获取。</p>
+</li>
+</ul>
+<p>这些问题没有稳定前，不建议优先增加：</p>
+<ul>
+<li><p>数百Unique；</p>
+</li>
+<li><p>多职业；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>拍卖行；</p>
+</li>
+<li><p>巨型开放世界；</p>
+</li>
+<li><p>复杂Season；</p>
+</li>
+<li><p>大量Currency。</p>
+</li>
+</ul>
+<hr />
+<h2 id="169-推荐实施顺序">169. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li><p>Character Combat；</p>
+</li>
+<li><p>Skill；</p>
+</li>
+<li><p>Enemy；</p>
+</li>
+<li><p>Damage。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>ItemBase；</p>
+</li>
+<li><p>EquipmentSlot；</p>
+</li>
+<li><p>ItemInstance。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>LootGenerator；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>WorldDrop；</p>
+</li>
+<li><p>Pickup。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Affix；</p>
+</li>
+<li><p>StatAggregator；</p>
+</li>
+<li><p>ItemCompare。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>LegendaryPower；</p>
+</li>
+<li><p>TriggerSystem；</p>
+</li>
+<li><p>Build改变Skill。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Stash；</p>
+</li>
+<li><p>Salvage；</p>
+</li>
+<li><p>Vendor。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Enchant；</p>
+</li>
+<li><p>Upgrade；</p>
+</li>
+<li><p>Currency Sink。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>DifficultyTier；</p>
+</li>
+<li><p>Activity；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Target Farming；</p>
+</li>
+<li><p>Pity；</p>
+</li>
+<li><p>LootSourceProfile。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>BuildAnalyzer；</p>
+</li>
+<li><p>TrainingDummy；</p>
+</li>
+<li><p>DamageTrace。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Endgame Dungeon；</p>
+</li>
+<li><p>Modifier；</p>
+</li>
+<li><p>ActivityEfficiency。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Season；</p>
+</li>
+<li><p>Asset Migration；</p>
+</li>
+<li><p>Multiplayer Economy。</p>
+</li>
+</ul>
+<hr />
+<h2 id="170-架构验收标准">170. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>ItemBaseDefinition与ItemInstance严格分离；</p>
+</li>
+<li><p>每件持久化装备拥有稳定ItemInstanceId；</p>
+</li>
+<li><p>Loot Generation由统一LootSystem执行；</p>
+</li>
+<li><p>Enemy不会自行直接生成任意装备对象；</p>
+</li>
+<li><p>LootContext能够完整描述掉落来源和难度；</p>
+</li>
+<li><p>ItemLevel实际控制可出现的词缀和数值Tier；</p>
+</li>
+<li><p>Rarity控制规则复杂度而不仅是数值倍率；</p>
+</li>
+<li><p>Affix拥有Tag、Group、Tier和Weight；</p>
+</li>
+<li><p>Affix Pool能够阻止非法或排他组合；</p>
+</li>
+<li><p>Affix生成使用确定的Loot Random Stream；</p>
+</li>
+<li><p>Legendary Power与普通Affix严格分离；</p>
+</li>
+<li><p>Unique可以表达普通词缀系统无法表达的规则；</p>
+</li>
+<li><p>装备价值由Build Context决定而不是单一ItemPower；</p>
+</li>
+<li><p>最终属性通过统一Stat Aggregation Pipeline计算；</p>
+</li>
+<li><p>Flat、Additive、Multiplicative、Conversion等Modifier规则明确；</p>
+</li>
+<li><p>所有最终Stat都可追踪来源；</p>
+</li>
+<li><p>Skill与Gear可以双向改变构筑方向；</p>
+</li>
+<li><p>Resource Sustain是正式Build维度；</p>
+</li>
+<li><p>Trigger拥有统一Event、Condition、Cooldown与Reentry规则；</p>
+</li>
+<li><p>高速多段技能拥有ProcCoefficient或等价控制；</p>
+</li>
+<li><p>Triggered Effect不会默认重新触发所有Direct Effect；</p>
+</li>
+<li><p>DamageContext包含完整来源标签；</p>
+</li>
+<li><p>世界难度提升同时提高风险和掉落价值；</p>
+</li>
+<li><p>不同Activity拥有部分独立Reward Profile；</p>
+</li>
+<li><p>高阶目标装备至少存在一种定向获取方式；</p>
+</li>
+<li><p>长期随机系统拥有Pity、Craft或其他收敛工具；</p>
+</li>
+<li><p>Craft主要用于缩小随机空间而不是完全取代Loot；</p>
+</li>
+<li><p>Craft候选生成后能够冻结并支持重连；</p>
+</li>
+<li><p>Stash能够支持大量装备搜索、筛选和锁定；</p>
+</li>
+<li><p>低价值Loot拥有快速分解或过滤路径；</p>
+</li>
+<li><p>Loot Filter只改变表现，不修改实际掉落规则；</p>
+</li>
+<li><p>Item在World、Inventory、Equipment、Stash、Trade、Craft之间具有唯一权威位置；</p>
+</li>
+<li><p>Pickup、Salvage、Craft和Trade均为幂等事务；</p>
+</li>
+<li><p>Pity与最终Loot结果使用同一奖励事务；</p>
+</li>
+<li><p>Activity完成奖励只能提交一次；</p>
+</li>
+<li><p>BuildDerivedState可以从权威Character和Item状态重新计算；</p>
+</li>
+<li><p>赛季与版本更新不会直接损坏长期Item资产；</p>
+</li>
+<li><p>调试器能够解释一件装备为什么生成这些Affix；</p>
+</li>
+<li><p>调试器能够解释某Legendary为什么没有触发；</p>
+</li>
+<li><p>调试器能够解释最终Damage经过哪些乘区；</p>
+</li>
+<li><p>调试器能够解释玩家为什么在高Tier死亡；</p>
+</li>
+<li><p>新ItemBase通常不需要修改Loot主循环；</p>
+</li>
+<li><p>新Affix通过Definition接入；</p>
+</li>
+<li><p>新Legendary主要通过Effect / Trigger接入；</p>
+</li>
+<li><p>新Activity通过Encounter和Reward Profile接入。</p>
+</li>
+</ul>
+<hr />
+<h2 id="171-可迁移到其他游戏的设计思想">171. 可迁移到其他游戏的设计思想</h2><hr />
+<h3 id="1711-候选生成筛选局部优化本身可以成为核心循环">171.1 “候选生成—筛选—局部优化”本身可以成为核心循环</h3><p>刷宝游戏并不是：</p>
+<p>每次都获得明确升级。</p>
+<p>而是：</p>
+<p>持续生成候选，</p>
+<p>玩家逐步筛选。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>招募；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>宠物；</p>
+</li>
+<li><p>Roguelike；</p>
+</li>
+<li><p>装备打造。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1712-随机系统必须提供逐步收敛工具">171.2 随机系统必须提供逐步收敛工具</h3><p>纯随机适合制造惊喜，</p>
+<p>不适合承担无限长期目标。</p>
+<p>可以迁移到：</p>
+<ul>
+<li><p>抽卡；</p>
+</li>
+<li><p>稀有资源；</p>
+</li>
+<li><p>程序生成；</p>
+</li>
+<li><p>招募；</p>
+</li>
+<li><p>技能Roll。</p>
+</li>
+</ul>
+<p>长期系统应该让玩家：</p>
+<p>逐渐减少自己不想要的随机维度。</p>
+<hr />
+<h3 id="1713-对象价值应该根据系统上下文计算">171.3 对象价值应该根据系统上下文计算</h3><p>同一装备：</p>
+<p>对不同Build价值完全不同。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>卡牌；</p>
+</li>
+<li><p>AI任务；</p>
+</li>
+<li><p>资源；</p>
+</li>
+<li><p>队伍角色；</p>
+</li>
+<li><p>建筑。</p>
+</li>
+</ul>
+<p>不要假设所有对象存在一个绝对Power值。</p>
+<hr />
+<h3 id="1714-内容奖励可以定向不同维度而不是简单提高总奖励">171.4 内容奖励可以定向不同维度，而不是简单提高总奖励</h3><p>不同Activity：</p>
+<p>提供不同Loot Bias。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>MMO；</p>
+</li>
+<li><p>开放世界；</p>
+</li>
+<li><p>战役；</p>
+</li>
+<li><p>经营活动。</p>
+</li>
+</ul>
+<p>这样不同内容可以长期共存，</p>
+<p>而不是全部比较：</p>
+<p>Gold/hour。</p>
+<hr />
+<h3 id="1715-高阶装备最好改变规则而不是只改变数字">171.5 高阶装备最好改变规则，而不是只改变数字</h3><p>可迁移到：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>技能；</p>
+</li>
+<li><p>天赋；</p>
+</li>
+<li><p>武器。</p>
+</li>
+</ul>
+<p>机制变化比：</p>
+<p>+15%</p>
+<p>更容易形成Build身份。</p>
+<hr />
+<h3 id="1716-成长系统需要不断暴露新的瓶颈">171.6 成长系统需要不断暴露新的瓶颈</h3><p>伤害不足
+→ 解决伤害。</p>
+<p>之后：</p>
+<p>资源不足。</p>
+<p>再之后：</p>
+<p>生存不足。</p>
+<p>这种结构可以迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>战略；</p>
+</li>
+<li><p>RPG。</p>
+</li>
+</ul>
+<p>优秀长期系统不是让所有指标一起均匀成长，</p>
+<p>而是让优化目标不断移动。</p>
+<hr />
+<h3 id="1717-高价值资产必须拥有完整来源和修改履历">171.7 高价值资产必须拥有完整来源和修改履历</h3><p>可迁移到：</p>
+<ul>
+<li><p>装备；</p>
+</li>
+<li><p>宠物；</p>
+</li>
+<li><p>角色；</p>
+</li>
+<li><p>收藏；</p>
+</li>
+<li><p>交易物。</p>
+</li>
+</ul>
+<p>Provenance对：</p>
+<p>审计、迁移、防复制都很重要。</p>
+<hr />
+<h3 id="1718-大规模随机内容需要telemetry而不能只靠设计师试玩">171.8 大规模随机内容需要Telemetry，而不能只靠设计师试玩</h3><p>百万级Loot组合：</p>
+<p>人工根本无法覆盖。</p>
+<p>需要：</p>
+<ul>
+<li><p>Monte Carlo；</p>
+</li>
+<li><p>Distribution；</p>
+</li>
+<li><p>Funnel；</p>
+</li>
+<li><p>Usage。</p>
+</li>
+</ul>
+<p>这一思想可迁移到：</p>
+<p>所有程序化生成系统。</p>
+<hr />
+<h3 id="1719-玩家效率本身可以成为终局成长目标">171.9 玩家效率本身可以成为终局成长目标</h3><p>不是：</p>
+<p>能不能通关。</p>
+<p>而是：</p>
+<p>多快；</p>
+<p>多稳定；</p>
+<p>收益多高。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Speedrun；</p>
+</li>
+<li><p>Raid；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>Roguelike。</p>
+</li>
+</ul>
+<hr />
+<h3 id="17110-规则层随机-玩家层收敛可以同时保留惊喜和长期控制感">171.10 “规则层随机 + 玩家层收敛”可以同时保留惊喜和长期控制感</h3><p>系统持续产生：</p>
+<p>未知候选。</p>
+<p>玩家不断增加：</p>
+<p>定向刷取、锁词缀、重铸、过滤。</p>
+<p>最终形成：</p>
+<blockquote>
+<p><strong>随机负责发现可能性，玩家负责把可能性逐渐压缩成自己的目标。</strong></p>
+</blockquote>
+<hr />
+<h2 id="172-本次防重记录">172. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Loot-driven ARPG；</p>
+</li>
+<li><p>Loot ARPG；</p>
+</li>
+<li><p>Diablo-like；</p>
+</li>
+<li><p>Hack and Slash RPG；</p>
+</li>
+<li><p>刷宝 ARPG；</p>
+</li>
+<li><p>暗黑式动作角色扮演。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>玩家通过高密度实时战斗持续制造大量战利品候选；静态ItemBase与动态ItemInstance分离，同一基础装备可以通过ItemLevel、Rarity、Affix、Legendary Power、Unique规则与Craft状态形成巨大实例空间。装备价值并非绝对，而取决于玩家当前Skill、Talent、Resource Loop和目标内容。玩家通过掉落、比较、装备、分解、重铸、定向刷取和保底机制不断缩小随机空间，让Build逐渐从临时组合收敛成稳定机制体系；更强Build允许进入更高World Tier和更高收益Activity，而高层内容又暴露新的伤害、生存、资源、速度或Boss能力缺口，驱动下一轮装备搜索。</p>
+<p>核心循环可以压缩为：</p>
+<p><strong>高密度战斗
+→ 大量Loot生成
+→ 快速筛选候选
+→ 识别潜在升级或新机制
+→ 装备 / Craft / Salvage
+→ Build状态重新计算
+→ Skill与Gear协同变化
+→ 进入更高Difficulty
+→ 新的Build缺口暴露
+→ 选择定向Activity
+→ 追逐目标装备与Affix
+→ 随机空间逐步收敛
+→ Build再度成形。</strong></p>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>实时动作战斗承担主要获取循环；</p>
+</li>
+<li><p>普通敌人密度较高且击杀频率高；</p>
+</li>
+<li><p>战斗持续产生大量装备候选；</p>
+</li>
+<li><p>ItemBase与ItemInstance严格分离；</p>
+</li>
+<li><p>同一基础装备可以产生大量不同实例；</p>
+</li>
+<li><p>ItemLevel控制Affix与Tier空间；</p>
+</li>
+<li><p>Rarity影响装备规则复杂度；</p>
+</li>
+<li><p>Affix是构筑空间的基础随机原语；</p>
+</li>
+<li><p>Legendary和Unique能够修改Skill或战斗规则；</p>
+</li>
+<li><p>装备价值依赖当前Build而非单一Power数字；</p>
+</li>
+<li><p>Skill、Equipment、Talent和Resource Loop共同组成Build；</p>
+</li>
+<li><p>玩家能够通过装备掉落改变Skill玩法；</p>
+</li>
+<li><p>高难度同时提高挑战和掉落价值；</p>
+</li>
+<li><p>不同终局Activity拥有不同定向奖励；</p>
+</li>
+<li><p>纯随机获取逐渐被Target Farming、Craft、Enchant和Pity压缩；</p>
+</li>
+<li><p>后期目标从“获得装备”转向“获得正确装备实例”；</p>
+</li>
+<li><p>Loot Filter和Auto Salvage用于压缩低价值信息；</p>
+</li>
+<li><p>Stash用于保存未来Build可能性；</p>
+</li>
+<li><p>Resource Sustain和Defensive Layer与DPS同样属于正式构筑维度；</p>
+</li>
+<li><p>Proc、OnHit、OnCrit等触发需要统一Trigger系统；</p>
+</li>
+<li><p>高频技能需要ProcCoefficient或等价保护；</p>
+</li>
+<li><p>玩家最终优化的不只是能否通关，还包括清怪效率、Boss效率和Loot效率；</p>
+</li>
+<li><p>长期资产需要Item Provenance、版本和迁移支持；</p>
+</li>
+<li><p>Endgame不断通过新内容暴露下一项Build瓶颈。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与仓库现有类魂动作角色扮演的防重边界">与仓库现有类魂动作角色扮演的防重边界</h3><p>当前仓库已经存在 <code>soulslike-action-commitment-recovery</code>，其核心摘要聚焦：</p>
+<ul>
+<li><p>动作承诺；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>死亡风险资产回收；</p>
+</li>
+<li><p>敌人学习。</p>
+</li>
+</ul>
+<p>类魂动作角色扮演的核心问题通常是：</p>
+<blockquote>
+<p>我能否通过观察敌人、管理体力、控制动作承诺和学习攻击窗口稳定完成高风险遭遇？</p>
+</blockquote>
+<p>本次刷宝型ARPG的核心问题则是：</p>
+<blockquote>
+<p>我如何让当前Build以更高效率清除大量敌人，并利用产生的随机Loot继续重写Build？</p>
+</blockquote>
+<p>因此：</p>
+<p><strong>Soulslike：</strong></p>
+<p>敌人和动作窗口是主要学习对象。</p>
+<p>单个敌人的威胁很高。</p>
+<p>死亡与检查点构成压力。</p>
+<p><strong>Loot-driven ARPG：</strong></p>
+<p>Build和Loot Search Space是主要学习对象。</p>
+<p>普通敌人的主要职责之一是提供高频战斗与掉落吞吐。</p>
+<p>死亡通常不是主要长期资产风险。</p>
+<p>二者虽然都属于Action RPG，但拥有完全不同的宏观循环。</p>
+<hr />
+<h3 id="与仓库现有多人共斗狩猎动作的防重边界">与仓库现有多人共斗狩猎动作的防重边界</h3><p>仓库已有多人共斗狩猎，其重点在：</p>
+<ul>
+<li><p>大型目标；</p>
+</li>
+<li><p>部位破坏；</p>
+</li>
+<li><p>团队职责；</p>
+</li>
+<li><p>阶段窗口。</p>
+</li>
+</ul>
+<p>狩猎游戏的典型资产循环：</p>
+<p>选择目标怪物
+→ 完成长时间高价值遭遇
+→ 获取相对确定的怪物材料
+→ 制作指定装备。</p>
+<p>刷宝ARPG：</p>
+<p>高速击杀大量敌人
+→ 生成大量随机装备实例
+→ 从大量候选中筛选可用结果。</p>
+<p>因此：</p>
+<p><strong>Hunting Action：</strong></p>
+<p>核心是“击败正确目标以获得正确材料”。</p>
+<p><strong>Loot ARPG：</strong></p>
+<p>核心是“不断采样装备随机空间并逐步压缩它”。</p>
+<hr />
+<h3 id="与仓库现有撤离型搜打撤的防重边界">与仓库现有撤离型搜打撤的防重边界</h3><p>撤离型游戏重点是：</p>
+<ul>
+<li><p>带入资产；</p>
+</li>
+<li><p>局内搜刮；</p>
+</li>
+<li><p>死亡风险；</p>
+</li>
+<li><p>成功撤离后才把收益提交到长期仓库。</p>
+</li>
+</ul>
+<p>Loot ARPG虽然也大量掉装备，但：</p>
+<p>掉落通常在获得后就属于玩家，</p>
+<p>死亡也通常不会把整套装备永久丢失。</p>
+<p>其压力不在：</p>
+<p>“能不能把Loot活着带出去。”</p>
+<p>而在：</p>
+<p>“掉出来的Loot能否推进Build。”</p>
+<p>因此：</p>
+<p><strong>Extraction：Loot的核心变量是风险归属。</strong></p>
+<p><strong>Loot ARPG：Loot的核心变量是构筑价值。</strong></p>
+<hr />
+<h3 id="与仓库现有卡组构筑-roguelike-的防重边界">与仓库现有卡组构筑 Roguelike 的防重边界</h3><p>两者都包含：</p>
+<p>大量候选
+→ 构筑选择。</p>
+<p>Deckbuilder Roguelike：</p>
+<p>候选进入Deck以后改变：</p>
+<p>未来抽牌概率。</p>
+<p>Loot ARPG：</p>
+<p>装备进入Build以后立即改变：</p>
+<p>实时Combat Rules和Derived Stats。</p>
+<p>因此：</p>
+<p><strong>Deckbuilder：</strong></p>
+<p>Build的主要执行介质是牌库与抽牌。</p>
+<p><strong>Loot ARPG：</strong></p>
+<p>Build的主要执行介质是实时Skill + Gear + Trigger网络。</p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>Loot-driven ARPG；</p>
+</li>
+<li><p>Diablo-like；</p>
+</li>
+<li><p>ItemBase；</p>
+</li>
+<li><p>ItemInstance；</p>
+</li>
+<li><p>Item Provenance；</p>
+</li>
+<li><p>Loot Context；</p>
+</li>
+<li><p>Loot Budget；</p>
+</li>
+<li><p>Loot Table；</p>
+</li>
+<li><p>Item Level；</p>
+</li>
+<li><p>Rarity；</p>
+</li>
+<li><p>Affix；</p>
+</li>
+<li><p>Affix Tier；</p>
+</li>
+<li><p>Affix Group；</p>
+</li>
+<li><p>Legendary Power；</p>
+</li>
+<li><p>Unique Item；</p>
+</li>
+<li><p>Set Item；</p>
+</li>
+<li><p>Stat Aggregation；</p>
+</li>
+<li><p>Build Context；</p>
+</li>
+<li><p>Skill-Gear Synergy；</p>
+</li>
+<li><p>Resource Sustain；</p>
+</li>
+<li><p>Proc Coefficient；</p>
+</li>
+<li><p>Trigger System；</p>
+</li>
+<li><p>Damage Context；</p>
+</li>
+<li><p>Target Farming；</p>
+</li>
+<li><p>Boss-specific Drop；</p>
+</li>
+<li><p>Pity；</p>
+</li>
+<li><p>Enchant；</p>
+</li>
+<li><p>Reroll；</p>
+</li>
+<li><p>Craft Choice；</p>
+</li>
+<li><p>Upgrade；</p>
+</li>
+<li><p>Salvage；</p>
+</li>
+<li><p>Vendor；</p>
+</li>
+<li><p>Stash；</p>
+</li>
+<li><p>Loot Filter；</p>
+</li>
+<li><p>Auto Salvage；</p>
+</li>
+<li><p>World Tier；</p>
+</li>
+<li><p>Dungeon Tier；</p>
+</li>
+<li><p>Activity Reward Profile；</p>
+</li>
+<li><p>Dungeon Modifier；</p>
+</li>
+<li><p>Personal Loot；</p>
+</li>
+<li><p>Party Loot；</p>
+</li>
+<li><p>Build Analyzer；</p>
+</li>
+<li><p>Training Dummy；</p>
+</li>
+<li><p>Loot Funnel；</p>
+</li>
+<li><p>Build Diversity；</p>
+</li>
+<li><p>Season；</p>
+</li>
+<li><p>Legacy Item；</p>
+</li>
+<li><p>Item Migration；</p>
+</li>
+<li><p>Endgame Efficiency；</p>
+</li>
+<li><p>Item Ownership Audit。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次刷宝型ARPG范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Diablo-like装备系统；</p>
+</li>
+<li><p>刷宝掉落系统；</p>
+</li>
+<li><p>Loot Table；</p>
+</li>
+<li><p>Item Level；</p>
+</li>
+<li><p>装备Rarity；</p>
+</li>
+<li><p>装备Affix；</p>
+</li>
+<li><p>词缀Tier；</p>
+</li>
+<li><p>Legendary装备；</p>
+</li>
+<li><p>Unique装备；</p>
+</li>
+<li><p>套装；</p>
+</li>
+<li><p>Item Power；</p>
+</li>
+<li><p>装备比较；</p>
+</li>
+<li><p>刷宝Craft；</p>
+</li>
+<li><p>Enchant；</p>
+</li>
+<li><p>Reroll；</p>
+</li>
+<li><p>装备升级；</p>
+</li>
+<li><p>Target Farming；</p>
+</li>
+<li><p>Boss定向掉落；</p>
+</li>
+<li><p>Loot Pity；</p>
+</li>
+<li><p>Loot Filter；</p>
+</li>
+<li><p>Auto Salvage；</p>
+</li>
+<li><p>Stash；</p>
+</li>
+<li><p>刷宝Currency；</p>
+</li>
+<li><p>Build Analyzer；</p>
+</li>
+<li><p>Skill-Gear联动；</p>
+</li>
+<li><p>Loot ARPG Resource Sustain；</p>
+</li>
+<li><p>Proc Coefficient；</p>
+</li>
+<li><p>OnHit Build；</p>
+</li>
+<li><p>OnCrit Build；</p>
+</li>
+<li><p>Loot ARPG World Tier；</p>
+</li>
+<li><p>高阶Dungeon；</p>
+</li>
+<li><p>Endgame Activity；</p>
+</li>
+<li><p>Dungeon Modifier；</p>
+</li>
+<li><p>Loot效率；</p>
+</li>
+<li><p>Build Diversity；</p>
+</li>
+<li><p>Loot Funnel；</p>
+</li>
+<li><p>Item Provenance；</p>
+</li>
+<li><p>Item Ownership；</p>
+</li>
+<li><p>Seasonal Loot；</p>
+</li>
+<li><p>Legacy Item；</p>
+</li>
+<li><p>装备迁移；</p>
+</li>
+<li><p>刷宝经济；</p>
+</li>
+<li><p>刷宝随机收敛。</p>
+</li>
+</ul>
+<p>这些方向仍然适合作为后续专项模块继续深入研究，但不再作为新的宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-19">2026-08-19</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

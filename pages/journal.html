@@ -148,8 +148,8 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>51</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>44</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>52</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>45</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric journal-metric-with-note"><strong>34</strong><span>完整博客</span><small>34 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
@@ -243,6 +243,11 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-18</p>
+                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮相较上一轮基准 cf4e034c...，main 又前进了 6 个提交。变化高度集中在三条既有能力线上： 没有新增 UPM Package、Catalog Module、asmdef、内部依赖边，也没有扩大 Stable Public API。当前 Inventory 仍然是 146 Package、146 Catalog Module、69 Preset、866 asmdef、248 条内部依赖边；Stable API 仍为 27 Assemblies / 391 Types / 2403 Members。这一组指标与 cf4e034c... 完全一致。 这意味着近期开发行为总体已经从“横向增加框架能力”切换为： 这是符合当前主线的。 尤其 UI 体系已经完成一个值得记录的架构修正：ui-core 当前只依赖 core，ui-binding 只依赖 ui-core，完整 Unity ui 才承担…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-17</p>
                     <h3>UnityGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>与上一轮相比，仓库已经发生了实质变化。 最重要的进展不是新增某个 Runtime 功能，而是此前启动的 Full Package Historical Audit 已经把保留执行范围内的 89 个 Package 全部推进到本地闭环状态。当前已经不再处于“逐包继续找问题”的中段，而是进入： 这一阶段。 最近进入 main 的提交也高度符合“完善已有能力”的主线： 最近提交序列包括 09920ea7 feat(rules): harden rule graph determinism (#709)、eef313b6 feat(pooling): converge pool scope diagnostics (#708)、5384c2aa feat(playerservices): harden player service group lifecycle (#706)、955a167b feat(profiling):…</p>
@@ -267,20 +272,22 @@
                     <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
                     <p>本轮仓库的主要变化已经不再是增加 Gameplay Kernel 或继续做 Package Family 合并，而是明显转向三个方向： 其中最值得肯定的是 Asset 模块开始真正从“资源加载器”收敛为“资源所有权系统”。当前已经形成： Asset 的多个直接 Addressables 消费方已经迁移到 Lease；最新 Direct Addressables Boundary 中，普通生产资源加载的 migration queue 已经清空，只剩 Mod Catalog 这种明确 Adapter 例外，以及 Config/UI 的程序集或类型合同残留。 另一方面，本轮测试基础设施也出现了明显改善。仓库建立了 Package Test Coverage Gate，补齐 Interaction、Pathfinding.NavMesh、Rules、Welfare、Modding Compatibility…</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-11</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>本轮与上一轮相比，仓库的状态有一个明显的正向变化： “收敛”终于开始真实地减少物理 Package，而不再只是减少支持承诺或生成更多审计文档。 当前 Inventory 已从前一轮高点的 150 个 UPM Package 降至 145 个，内部依赖边从 276 降至 258。Non-Euclidean Puzzle、VisualNovel、RTT、Hardcore RPG、Survival World 五个独立 UPM Root 已分别并入 Puzzle Platformer、Dialogue、RTS、High Speed ACT、Survival，并保留 Tombstone 和迁移指南。当前分发审计记录 5 个已退休 Package、33 个剩余 non-KEEP 候选。 与此同时，上一轮审计中几个真正重要的基础问题已经完成修复：</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>51 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>52 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-loot-driven-arpg">
+                    <p class="project-status">游戏设计范式 · 2026-08-19</p>
+                    <h3>刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like</h3>
+                    <p>围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。</p>
+                    <div class="note-tags"><span>action-rpg</span><span>buildcraft</span><span>loot</span></div>
+                    <a class="note-link" href="journal/loot-driven-arpg.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-survival-crafting">
                     <p class="project-status">游戏设计范式 · 2026-08-18</p>
                     <h3>开放世界生存建造 / Survival Crafting / Sandbox Survival</h3>
