@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { resolveBlogDiscovery } from '../scripts/lib/blog-discovery-model.mjs';
+import {
+  reconcileBlogTaxonomy,
+  resolveBlogDiscovery,
+  stringifyBlogTaxonomy
+} from '../scripts/lib/blog-discovery-model.mjs';
 import { selectPublishedBlogs } from '../scripts/lib/blog-publication-model.mjs';
 
 const root = new URL('../', import.meta.url);
@@ -26,8 +30,8 @@ test('blog taxonomy is explicit, semantic and covers exactly the formal articles
     loadPublishedBlogs()
   ]);
   const discovery = resolveBlogDiscovery(taxonomy, articles);
-  assert.equal(discovery.series.length, 5);
-  assert.equal(discovery.tags.length, 49);
+  assert.equal(discovery.series.length, new Set(articles.map((article) => article.series)).size);
+  assert.equal(discovery.tags.length, new Set(articles.flatMap((article) => article.tags)).size);
   assert.ok(discovery.routableTags.length < discovery.tags.length);
   assert.ok(discovery.routableTags.every((entry) => entry.articles.length >= 2));
   assert.ok(discovery.tags.filter((entry) => entry.articles.length >= 2).every((entry) => discovery.routableTags.includes(entry)));
@@ -38,6 +42,39 @@ test('blog taxonomy is explicit, semantic and covers exactly the formal articles
   const missingTag = structuredClone(taxonomy);
   missingTag.tags = missingTag.tags.filter((entry) => entry.name !== 'stealth');
   assert.throws(() => resolveBlogDiscovery(missingTag, articles), /unregistered tag stealth/);
+});
+
+test('taxonomy reconciliation preserves curated entries and derives the active tag set', () => {
+  const taxonomy = {
+    schemaVersion: 1,
+    series: [{ name: 'Test series', slug: 'test-series', description: 'A useful curated series description.' }],
+    tags: [
+      { name: 'kept-tag', slug: 'curated-tag-slug', description: 'A useful curated tag description.' },
+      { name: 'unused-tag', slug: 'unused-tag', description: 'A useful but now unused tag description.' }
+    ]
+  };
+  const articles = [{
+    id: 'article',
+    slug: 'article',
+    series: 'Test series',
+    tags: ['kept-tag', 'new-tag'],
+    publishedAt: '2026-08-21'
+  }];
+
+  const reconciled = reconcileBlogTaxonomy(taxonomy, articles);
+  assert.deepEqual(reconciled.series, taxonomy.series);
+  assert.deepEqual(reconciled.tags, [
+    taxonomy.tags[0],
+    { name: 'new-tag', slug: 'new-tag', description: 'new-tag 主题的公开研究文章。' }
+  ]);
+  const rendered = stringifyBlogTaxonomy(reconciled);
+  assert.deepEqual(JSON.parse(rendered), reconciled);
+  assert.match(rendered, /^    \{ "name": "new-tag", "slug": "new-tag",/mu);
+  assert.doesNotThrow(() => resolveBlogDiscovery(reconciled, articles));
+  assert.throws(
+    () => reconcileBlogTaxonomy(taxonomy, [{ ...articles[0], series: 'Unregistered series' }]),
+    /requires an explicit semantic taxonomy entry/u
+  );
 });
 
 test('series and multi-article tags form indexable discovery routes', async () => {

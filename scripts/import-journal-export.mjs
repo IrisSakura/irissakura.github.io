@@ -9,14 +9,16 @@ import {
   stringifyJson,
   validateJournalSource
 } from './lib/journal-import-model.mjs';
-import { selectPublishedBlogs } from './lib/blog-publication-model.mjs';
+import { reconcileBlogPublication, selectPublishedBlogs } from './lib/blog-publication-model.mjs';
+import { reconcileBlogTaxonomy, stringifyBlogTaxonomy } from './lib/blog-discovery-model.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const options = parseOptions(process.argv.slice(2));
 const input = path.resolve(options.input);
 const source = JSON.parse(await readFile(path.join(input, 'journal-source.json'), 'utf8'));
 const curation = JSON.parse(await readFile(path.join(root, 'config/journal-curation.json'), 'utf8'));
-const publication = JSON.parse(await readFile(path.join(root, 'config/blog-publication.json'), 'utf8'));
+const currentPublication = JSON.parse(await readFile(path.join(root, 'config/blog-publication.json'), 'utf8'));
+const currentTaxonomy = JSON.parse(await readFile(path.join(root, 'data/blog-taxonomy.json'), 'utf8'));
 const sourceBlogDirectory = path.join(input, 'blogs');
 const sourceDesignDirectory = path.join(input, 'designs');
 const blogFiles = (await readdir(sourceBlogDirectory)).filter((entry) => entry.endsWith('.md')).sort();
@@ -36,10 +38,14 @@ const designBodies = new Map(await Promise.all(source.gameDesigns.map(async (des
   [design.id, await readFile(path.join(sourceDesignDirectory, `${design.id}.md`))]
 ))));
 validateJournalSource(source, blogBodies, designBodies);
-selectPublishedBlogs(publication, source, blogBodies);
+const publication = reconcileBlogPublication(currentPublication, source);
+const publishedBlogs = selectPublishedBlogs(publication, source, blogBodies);
+const taxonomy = reconcileBlogTaxonomy(currentTaxonomy, publishedBlogs);
 const journal = buildJournalSnapshot(curation, source);
 
 const expected = new Map([
+  [path.join(root, 'config/blog-publication.json'), Buffer.from(stringifyJson(publication))],
+  [path.join(root, 'data/blog-taxonomy.json'), Buffer.from(stringifyBlogTaxonomy(taxonomy))],
   [path.join(root, 'data/journal-source.json'), Buffer.from(stringifyJson(source))],
   [path.join(root, 'data/journal.json'), Buffer.from(stringifyJson(journal))],
   ...[...blogBodies].map(([id, body]) => [path.join(root, 'content/blogs', `${id}.md`), body]),
@@ -65,6 +71,8 @@ if (options.check) {
 }
 
 await mkdir(path.join(root, 'data'), { recursive: true });
+await writeAtomic(path.join(root, 'config/blog-publication.json'), stringifyJson(publication));
+await writeAtomic(path.join(root, 'data/blog-taxonomy.json'), stringifyBlogTaxonomy(taxonomy));
 await writeAtomic(path.join(root, 'data/journal-source.json'), stringifyJson(source));
 await writeAtomic(path.join(root, 'data/journal.json'), stringifyJson(journal));
 const destinationBlogDirectory = path.join(root, 'content/blogs');

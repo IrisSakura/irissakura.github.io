@@ -672,9 +672,9 @@ test('repository metadata and publishing policy are explicit', async () => {
   assert.ok(!packageJson.dependencies?.gsap);
   assert.ok(readme.includes('内容真实性原则'));
   assert.ok(readme.includes('dist/'));
-  assert.ok(readme.includes('隐式待审核'));
-  assert.ok(journalSync.includes('新增未登记文章不会阻塞同步'));
-  assert.ok(journalSync.includes('任何显式合同'));
+  assert.ok(readme.includes('自动收敛'));
+  assert.ok(journalSync.includes('为新的语义 source ID 追加'));
+  assert.ok(journalSync.includes('来源删除不会自动删合同'));
   assert.ok(workflow.includes('npm run check'));
   assert.ok(workflow.includes('npm run test:smoke'));
   assert.ok(workflow.includes('actions/deploy-pages@v4'));

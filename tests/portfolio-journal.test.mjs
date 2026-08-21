@@ -71,16 +71,16 @@ test('portfolio data keeps research distinct from finished work', async () => {
   }
 });
 
-test('portfolio project evidence does not duplicate volatile snapshot counts', async () => {
+test('portfolio project facts do not duplicate volatile snapshot counts', async () => {
   const data = JSON.parse(await readText('data/projects.json'));
   for (const projectId of ['sakura-design-journal', 'sakura-framework']) {
     const project = data.projects.find((entry) => entry.id === projectId);
     assert.ok(project, `missing project ${projectId}`);
-    for (const evidence of project.evidence) {
+    for (const fact of [...project.evidence, ...project.milestones]) {
       assert.doesNotMatch(
-        evidence,
+        fact,
         /\d+\s*(?:个|条|项|篇)/u,
-        `${projectId} evidence must describe stable proof instead of copying snapshot counts`
+        `${projectId} facts must describe stable proof instead of copying snapshot counts`
       );
     }
   }

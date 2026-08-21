@@ -44,7 +44,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, consum
 
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
-assertProjectFactsCurrent(projects, framework, journal, blogPublication);
+assertProjectFactsCurrent(projects, framework, journal);
 assertConsumerLabCurrent(consumerLab);
 assertThemeConfig(themeConfig);
 

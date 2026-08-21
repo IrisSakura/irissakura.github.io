@@ -55,9 +55,9 @@ npm run package:site
 - `data/consumer-lab.json`：四个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
-- `content/blogs/`：通过安全导入的 Markdown 源镜像，不因存在于此而自动公开；
-- `config/blog-publication.json`：站点侧稀疏出版白名单，只为已经进入人工编辑流程的文章记录状态、语义 slug、发布/更新日期、标题、摘要、系列、标签与正文哈希；
-- `data/blog-taxonomy.json`：正式文章使用的系列与标签语义路由；
+- `content/blogs/`：通过安全导入并由 publication 合同选中的 Markdown 正文镜像；
+- `config/blog-publication.json`：Journal 导入自动收敛的出版投影；既有条目保留站点侧状态、语义 slug 与首次发布日期，标题、摘要、系列、标签、更新日期和正文哈希跟随固定导出；
+- `data/blog-taxonomy.json`：正式文章使用的系列与标签语义路由；既有策展文案保留，新 ASCII 标签由导入器确定性补齐；
 - `data/evidence-chains.json`：研究、Framework 采用映射和游戏系统之间的公开证据链与边界；
 - `data/framework.json`：由 Sakura Framework 权威清单生成的白名单公开快照；
 - `data/framework-adoption.json`：经人工复核的 Supported 包、稳定路线和真实项目采用映射；
@@ -95,12 +95,15 @@ npm run journal:check -- --input /path/to/public-export
 ```
 
 策展白名单位于 `config/journal-curation.json`。游戏设计与框架审计只发布摘要。
-Journal 的 `blogs/publication.v1.json` 只表示文章可以进入安全导出；本站还要用
-`config/blog-publication.json` 做第二级编辑确认。只有 `approved` 或 `published`
-可生成索引、正文页、系列/标签页、RSS 与 Sitemap；`draft`、`review`、`revised` 和 `archived`
-都不进入公开正文或聚合入口。没有站点合同的新文章会作为隐式待审核内容完成安全导入，但不会生成
-公开路由、社交图或聚合入口；显式合同的字段漂移、哈希变化、草稿标记、来源删除或非语义 slug
-仍会让导入/构建失败，必须经过人工复核后更新合同。
+Journal 的 `blogs/publication.v1.json` 是文章进入公开导出和个人站发布的授权边界。导入器会在
+同一次操作中收敛 `config/blog-publication.json`：既有条目保留站点侧 `status`、语义 `slug`
+和 `publishedAt`，从固定导出刷新其余 Journal-owned 元数据；新的语义 ID 默认以该 ID 作为 slug，
+并以来源更新时间作为首次发布日期。新 ASCII 标签也会同步进入 taxonomy，既有标签和系列文案不被覆盖。
+
+来源删除、重复 ID、正文哈希不一致、危险内容、非语义 hash ID、未知系列或正文草稿标记仍会
+失败关闭。新系列需要站点维护者提供可读的语义 slug 和说明，导入器不会猜测公开栏目名称。
+`reviewedJournalCurationHash` 只覆盖人工策展的项目文案、知识流和 featured notes，不把每次自动
+同步的 publication 数量伪装成人工复审。
 
 导入器同时检查提交 SHA、数量、正文哈希、危险 HTML、本机路径和凭据模式。
 

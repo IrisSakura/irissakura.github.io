@@ -1,5 +1,56 @@
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+export function reconcileBlogTaxonomy(taxonomy, articles) {
+  if (taxonomy?.schemaVersion !== 1 || !Array.isArray(taxonomy.series) || !Array.isArray(taxonomy.tags)) {
+    throw new Error('Blog taxonomy must use schemaVersion 1 and expose series and tags arrays.');
+  }
+  if (!Array.isArray(articles) || articles.length === 0) throw new Error('Blog taxonomy reconciliation requires formal articles.');
+
+  const seriesByName = buildRegistry(taxonomy.series, 'series');
+  const tagsByName = buildRegistry(taxonomy.tags, 'tag');
+  const usedSeries = new Set(articles.map((article) => article.series));
+  const usedTags = new Set(articles.flatMap((article) => article.tags));
+
+  for (const name of usedSeries) {
+    if (!seriesByName.has(name)) {
+      throw new Error(`New Journal series ${name} requires an explicit semantic taxonomy entry.`);
+    }
+  }
+
+  const series = taxonomy.series.filter((entry) => usedSeries.has(entry.name));
+  const tags = taxonomy.tags.filter((entry) => usedTags.has(entry.name));
+  for (const name of usedTags) {
+    if (tagsByName.has(name)) continue;
+    if (!SLUG_PATTERN.test(name ?? '')) {
+      throw new Error(`New Journal tag ${name ?? '(missing)'} requires a semantic taxonomy slug.`);
+    }
+    tags.push({
+      name,
+      slug: name,
+      description: `${name} 主题的公开研究文章。`
+    });
+  }
+
+  const reconciled = { ...taxonomy, series, tags };
+  resolveBlogDiscovery(reconciled, articles);
+  return reconciled;
+}
+
+export function stringifyBlogTaxonomy(taxonomy) {
+  if (taxonomy?.schemaVersion !== 1 || !Array.isArray(taxonomy.series) || !Array.isArray(taxonomy.tags)) {
+    throw new Error('Blog taxonomy must use schemaVersion 1 and expose series and tags arrays.');
+  }
+  const series = JSON.stringify(taxonomy.series, null, 2)
+    .split('\n')
+    .map((line, index) => index === 0 ? line : `  ${line}`)
+    .join('\n');
+  const tags = taxonomy.tags.map((entry) => (
+    `    { "name": ${JSON.stringify(entry.name)}, "slug": ${JSON.stringify(entry.slug)}, `
+    + `"description": ${JSON.stringify(entry.description)} }`
+  )).join(',\n');
+  return `{\n  "schemaVersion": 1,\n  "series": ${series},\n  "tags": [\n${tags}\n  ]\n}\n`;
+}
+
 export function resolveBlogDiscovery(taxonomy, articles) {
   if (taxonomy?.schemaVersion !== 1 || !Array.isArray(taxonomy.series) || !Array.isArray(taxonomy.tags)) {
     throw new Error('Blog taxonomy must use schemaVersion 1 and expose series and tags arrays.');

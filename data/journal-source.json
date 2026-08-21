@@ -1,14 +1,21 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "05716097c8b89b6bc6ca8ef0d2e72ab1c21f9280",
-  "generatedAt": "2026-08-19T11:22:04+08:00",
+  "sourceCommit": "7fb7090f69e6a14aff834a991bc72b4291a4bd13",
+  "generatedAt": "2026-08-20T15:41:36+08:00",
   "summary": {
-    "auditCount": 45,
-    "blogCount": 34,
-    "gameDesignCount": 52
+    "auditCount": 46,
+    "blogCount": 36,
+    "gameDesignCount": 53
   },
-  "gameDesignCatalogDigest": "d26739a08f86987461d38222dfa590b5f7559de87c53054340a215deae1d2932",
+  "gameDesignCatalogDigest": "3dd1027608731d1b933e48777b697c5cdde1e3b3aabf32ef826ad67f4c233a4c",
   "audits": [
+    {
+      "id": "audit-2026-08-19",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮从上一审计基线 b9a043f... 到当前 HEAD 前进了 5 个提交，主要集中在三条线： 仓库没有新增 UPM Package、Catalog Module、Preset 或 asmdef。上一基线与当前均为 146 Package、146 Catalog Module、69 Preset、866 asmdef、467 个 noEngineReferences asmdef；但内部依赖边从 248 增至 250。 这说明近期开发没有重新进入“一个能力一个 Package”的扩张模式，整体方向仍然符合 development-convergence。 但复杂度增长已经转移到另外三个地方： Stable Public API 从上一基线的 391 Types / 2403 Members 增至当前 395 Types / 2416 Members；程序集仍为 27 个。当前变化主要来自 Pooling Warmup 和…",
+      "updatedAt": "2026-08-19",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-18",
       "title": "Sakura Framework 最新仓库审计与能力收敛计划",
@@ -326,6 +333,21 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "god-game",
+      "title": "上帝模拟 / God Game / Deity Simulation",
+      "summary": "玩家作为超越普通世界实体的神性存在，通过神迹、教义、代理人与环境改造间接影响自主居民和文明；干预先被世界观察、解释与传播，再反向改变信仰资源、社会制度和后续可用力量。",
+      "tags": [
+        "deity",
+        "god-game",
+        "indirect-control"
+      ],
+      "updatedAt": "2026-08-20",
+      "sha256": "f63323af2161b1e6f6c918148bbdfd233860003f15f59c76f1f87e9f25ecfe2f",
+      "contentSha256": "8e3416546b9f5e4b354feaebfa98fc42c2b64736a450f1ce0c61c382c2969b5c",
+      "bytes": 67388,
+      "contentPath": "content/game-designs/god-game.md"
+    },
     {
       "id": "loot-driven-arpg",
       "title": "刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like",
@@ -1106,6 +1128,40 @@
     }
   ],
   "blogs": [
+    {
+      "id": "unreal-engine-world-partition-state-convergence",
+      "title": "流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接",
+      "summary": "从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。",
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "tags": [
+        "level-streaming",
+        "lifecycle",
+        "streaming",
+        "unreal-engine",
+        "world-partition"
+      ],
+      "updatedAt": "2026-08-20",
+      "sha256": "1c1848fb42348309c08db9ffc603420077675c3a596eb5f3c1bb062a5cd95fc5",
+      "bytes": 35374,
+      "contentPath": "content/blogs/unreal-engine-world-partition-state-convergence.md"
+    },
+    {
+      "id": "unreal-mass-deferred-structural-changes",
+      "title": "结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序",
+      "summary": "从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。",
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "tags": [
+        "archetype",
+        "ecs",
+        "lifecycle",
+        "mass",
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-20",
+      "sha256": "9cc5d464edf51bab4f9f19684079b9fcd60e8cd1bf01545266f6b92946f3aaec",
+      "bytes": 34638,
+      "contentPath": "content/blogs/unreal-mass-deferred-structural-changes.md"
+    },
     {
       "id": "unreal-engine-asyncloading2-object-publication",
       "title": "对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界",

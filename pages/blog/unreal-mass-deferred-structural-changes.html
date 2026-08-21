@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unreal-mass-deferred-structural-changes.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序 | IrisSakura">
+    <meta property="og:description" content="从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unreal-mass-deferred-structural-changes.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-mass-deferred-structural-changes.png">
+    <meta property="og:image:alt" content="结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序 | IrisSakura">
+    <meta name="twitter:description" content="从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-mass-deferred-structural-changes.png">
+    <meta name="twitter:image:alt" content="结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序 | IrisSakura","description":"从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。","url":"https://irissakura.github.io/pages/blog/unreal-mass-deferred-structural-changes.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-mass-deferred-structural-changes.png","datePublished":"2026-08-20","dateModified":"2026-08-20","about":["archetype","ecs","lifecycle","mass","unreal-engine"]}</script>
+    <!-- site-meta:end -->
+    <title>结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-20 · 更新于 2026-08-20</p>
+            <h1>结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序</h1>
+            <p class="blog-deck">从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。</p>
+            <div class="note-tags"><span>archetype</span><span>ecs</span><a href="tag/lifecycle.html">lifecycle</a><span>mass</span><a href="tag/unreal-engine.html">unreal-engine</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>假设一个 Processor 正在遍历所有拥有：</p>
+<pre><code class="language-text">Position
+Velocity
+AliveTag
+</code></pre>
+<p>的 Entity。</p>
+<p>当前 Chunk 中有 128 个实体。</p>
+<p>Processor 已经拿到了连续的：</p>
+<pre><code class="language-text">Position[]
+Velocity[]
+</code></pre>
+<p>Fragment View，并开始逐个更新位置。</p>
+<p>运行到第 37 个 Entity 时，业务逻辑判断：</p>
+<pre><code class="language-text">这个实体死亡了。
+</code></pre>
+<p>最直接的写法似乎是：</p>
+<pre><code class="language-text">Remove&lt;AliveTag&gt;(Entity)
+Add&lt;DeadTag&gt;(Entity)
+</code></pre>
+<p>两个 Tag 都没有数据。</p>
+<p>看起来只是：</p>
+<pre><code class="language-text">两个 Boolean 状态发生了变化。
+</code></pre>
+<p>但在 Archetype ECS 中，这可能完全不是一个简单字段修改。</p>
+<p>Entity 原本属于：</p>
+<pre><code class="language-text">Archetype A
+Position
+Velocity
+AliveTag
+</code></pre>
+<p>修改后则应该属于：</p>
+<pre><code class="language-text">Archetype B
+Position
+Velocity
+DeadTag
+</code></pre>
+<p>这意味着：</p>
+<pre><code class="language-text">Entity
+可能要从当前 Chunk 中移走
+↓
+进入另一个 Archetype 的另一个 Chunk
+↓
+当前 Chunk 的实体排列可能发生变化
+↓
+正在被 Processor 使用的 Range 和 Fragment View 可能失效
+</code></pre>
+<p>如果另一个 Worker 此时还在读取同一个 Archetype，</p>
+<p>问题就不再是：</p>
+<blockquote>
+<p>Tag 写入是否线程安全。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>正在被并行读取的数据结构能不能在处理过程中突然改变形状。</p>
+</blockquote>
+<p>这正是 Mass 基础运行时最值得研究的地方。</p>
+<h2 id="先说结论mass-把数值计算与结构修改拆成两个阶段">先说结论：Mass 把数值计算与结构修改拆成两个阶段</h2><p><strong>结构变更延迟提交（后文简称“先记账，安全点再搬家”）</strong>：Processor 在稳定存储视图上运行时不立即修改 Entity 的 Archetype、Chunk 或生命周期结构，而是先记录变更命令，等当前 Processing Window 完全结束后，再由安全执行点统一提交。</p>
+<p>整个过程可以压缩成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Stable Archetype / Chunk"] --&gt; B["Processor / Query"]
+    B --&gt; C["原位修改 Fragment 数据"]
+    B --&gt; D["记录 Structural Command"]
+    D --&gt; E["Local CommandBuffer"]
+    E --&gt; F["等待全部 Processor 完成"]
+    F --&gt; G["关闭 Processing Window"]
+    G --&gt; H["Game Thread Flush"]
+    H --&gt; I["Archetype / Chunk 迁移"]
+    I --&gt; J["Observer"]
+    J --&gt; K["下一轮 Query 看见新结构"]
+</code></pre>
+<p>这里最重要的不是：</p>
+<pre><code class="language-text">Mass 有一个 CommandBuffer。
+</code></pre>
+<p>而是：</p>
+<blockquote>
+<p><strong>正在读取结构时，结构本身保持稳定；结构变化只在明确提交边界生效。</strong></p>
+</blockquote>
+<p>这是 Archetype ECS 能够把批量查询、并行处理和动态游戏状态同时放在一个运行时中的关键。</p>
+<h2 id="mass-不是一个单体-ecs-模块">Mass 不是一个单体 ECS 模块</h2><p>在进入存储模型之前，当前 Mass 的模块边界本身就很值得注意。</p>
+<p>可以粗略拆成：</p>
+<pre><code class="language-text">MassCore
+→
+纯 ECS 运行时
+
+MassEntity
+→
+UWorld / Subsystem / Tick 宿主
+
+MassEngine
+→
+Rendering / Physics / Navigation 桥接
+
+MassGameplay / MassAI
+→
+更上层玩法能力
+</code></pre>
+<p>其中 MassCore 负责：</p>
+<ul>
+<li>EntityManager；</li>
+<li>EntityHandle；</li>
+<li>Archetype；</li>
+<li>Chunk；</li>
+<li>Fragment；</li>
+<li>Query；</li>
+<li>Processor；</li>
+<li>Observer；</li>
+<li>CommandBuffer；</li>
+<li>ProcessingQueue。</li>
+</ul>
+<p>它不需要反向依赖完整 Engine 世界。</p>
+<p>MassEntity 则负责：</p>
+<ul>
+<li>每个 UWorld 的 Manager 托管；</li>
+<li>World 生命周期；</li>
+<li>Mass Phase 接入 TickGroup；</li>
+<li>Settings；</li>
+<li>World-aware hooks。</li>
+</ul>
+<p>MassEngine 再向上接：</p>
+<ul>
+<li>Render；</li>
+<li>Physics；</li>
+<li>Navigation。</li>
+</ul>
+<p>这个拆分表达了一条很清楚的原则：</p>
+<blockquote>
+<p>ECS 数据运行时不应该为了接入某个世界对象，就让整个内核反向依赖场景、渲染和物理系统。</p>
+</blockquote>
+<p>对于自己的框架来说，这比某一个具体 Mass API 更值得迁移。</p>
+<h2 id="每个-world-拥有自己的-entitymanager">每个 World 拥有自己的 EntityManager</h2><p>Mass 在 Gameplay / Engine 场景中，并不是依赖一个全局静态 ECS World。</p>
+<p><code>UMassEntitySubsystem</code> 为对应 <code>UWorld</code> 托管默认的：</p>
+<pre><code class="language-text">FMassEntityManager
+</code></pre>
+<p>于是 Entity 的有效性天然依赖：</p>
+<pre><code class="language-text">Handle
++
+Manager
+</code></pre>
+<p>而不是 Handle 自己。</p>
+<p>这会直接影响下面的身份模型。</p>
+<h2 id="entityhandle-是票据不是对象">EntityHandle 是票据，不是对象</h2><p><strong>代际实体句柄（后文简称“这张票据现在还指不指向原来那个人”）</strong>：使用 Index 与 Serial/Generation 组合表示一次 Entity 身份，并由对应的 EntityManager 最终判断该身份当前是否仍然有效。</p>
+<p>可以近似理解为：</p>
+<pre><code class="language-text">FMassEntityHandle
+=
+Index
++
+SerialNumber
+</code></pre>
+<p>Index 负责定位存储位置。</p>
+<p>Serial 负责区分：</p>
+<pre><code class="language-text">同一个 Index
+前后两代不同 Entity。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">Entity A
+Index = 42
+Serial = 7
+</code></pre>
+<p>A 被销毁以后，</p>
+<p>Index 42 未来可能重新被利用：</p>
+<pre><code class="language-text">Entity B
+Index = 42
+Serial = 8
+</code></pre>
+<p>旧 Handle：</p>
+<pre><code class="language-text">42 / 7
+</code></pre>
+<p>不能因此重新命中 B。</p>
+<p>但还有一个容易忽略的边界：</p>
+<pre><code class="language-text">Handle.IsValid()
+</code></pre>
+<p>并不自动意味着：</p>
+<blockquote>
+<p>这个 Entity 当前一定属于这里，并且已经完成 Build，可以直接访问。</p>
+</blockquote>
+<p>Handle 自己并不知道：</p>
+<ul>
+<li>当前 Manager 是谁；</li>
+<li>Storage 当前保存的是哪一代；</li>
+<li>Entity 是否已经销毁；</li>
+<li>是否仍只是 Reserved；</li>
+<li>是否已经进入 Archetype。</li>
+</ul>
+<p>真正有效性仍然需要 Manager / Storage 参与判断。</p>
+<p>所以 EntityHandle 更接近：</p>
+<blockquote>
+<p>一张需要到对应管理机构重新核验的票据。</p>
+</blockquote>
+<p>而不是一个可以永久解引用的对象指针。</p>
+<h2 id="composition-决定-entity-属于哪个-archetype">Composition 决定 Entity 属于哪个 Archetype</h2><p><strong>Archetype Composition（后文简称“这个实体现在拥有哪些结构组件”）</strong>：由 Entity 当前具有的 Fragment、Tag、Shared Fragment 等结构元素组合形成的类型身份。</p>
+<p>例如：</p>
+<pre><code class="language-text">Position
+Velocity
+Health
+EnemyTag
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">Position
+Velocity
+Health
+DeadTag
+</code></pre>
+<p>属于两个不同 Composition。</p>
+<p>即使：</p>
+<pre><code class="language-text">EnemyTag
+DeadTag
+</code></pre>
+<p>都没有任何 payload，</p>
+<p>它们仍然参与结构身份。</p>
+<p>因此：</p>
+<pre><code class="language-text">Add Tag
+Remove Tag
+</code></pre>
+<p>并不天然是低成本字段更新。</p>
+<p>如果 Composition 改变，</p>
+<p>Mass 通常需要：</p>
+<pre><code class="language-text">旧 Composition
+→
+找到 / 创建新 Archetype
+→
+找到目标 Chunk
+→
+复制仍然共有的 Fragment 数据
+→
+更新 Entity Storage
+→
+从旧 Chunk 移除
+→
+触发 Composition Observer
+</code></pre>
+<p>这就是：</p>
+<p><strong>Archetype 迁移（后文简称“结构变了，实体要搬到另一类存储里”）</strong>。</p>
+<p>一旦理解这一点，</p>
+<p>Mass 中很多看起来过度谨慎的限制都会变得合理。</p>
+<h2 id="chunk-的价值来自同构与连续">Chunk 的价值来自同构与连续</h2><p>同一个 Archetype 内的 Entity 拥有相同结构。</p>
+<p>因此 Chunk 可以按列保存：</p>
+<pre><code class="language-text">EntityHandle[]
+Position[]
+Velocity[]
+Health[]
+</code></pre>
+<p>而不是每个 Entity 都保存一堆分散对象引用。</p>
+<p>Processor 查询：</p>
+<pre><code class="language-text">Position + Velocity
+</code></pre>
+<p>以后，</p>
+<p>可以直接得到一段连续的：</p>
+<pre><code class="language-text">Position View
+Velocity View
+</code></pre>
+<p>随后批量迭代。</p>
+<p>这正是 Archetype / Chunk 模型的高价值区域：</p>
+<pre><code class="language-text">结构稳定
++
+数据同构
++
+批量访问。
+</code></pre>
+<p>但这个优势同时带来了一个条件：</p>
+<blockquote>
+<p>当前正在遍历的这段 Chunk 不能在迭代中任意改变结构。</p>
+</blockquote>
+<p>否则优化所依赖的连续 View 自己就不再稳定。</p>
+<h2 id="query-热路径依赖的是稳定视图">Query 热路径依赖的是稳定视图</h2><p><strong>稳定查询窗口（后文简称“这一段时间里先别搬 Entity”）</strong>：Query 已经选择匹配 Archetype、取得 Chunk Range 并绑定 Fragment View 后，到本轮 Processor 结束前，相关结构必须保持满足当前遍历假设。</p>
+<p>典型主链可以理解成：</p>
+<pre><code class="language-text">Query Requirements
+↓
+匹配 Archetype
+↓
+取得 Chunk / Range
+↓
+绑定 Fragment Views
+↓
+Processor Execute
+↓
+清理当前 Views
+</code></pre>
+<p>Processor 内部更理想的工作是：</p>
+<pre><code class="language-text">读取 Position
+读取 Velocity
+修改 Position
+</code></pre>
+<p>这些都是当前 Chunk 内部已有数据的原位更新。</p>
+<p>危险的工作则是：</p>
+<pre><code class="language-text">Create Entity
+Destroy Entity
+Add Fragment
+Remove Fragment
+Add Tag
+Remove Tag
+Change Shared Fragment
+</code></pre>
+<p>因为这些动作会改变：</p>
+<pre><code class="language-text">谁属于当前 Archetype
+当前 Chunk 有多少 Entity
+数据应该存在哪一块 Chunk
+下一轮 Query 应该匹配谁。
+</code></pre>
+<p>两类修改应该从概念上彻底分开。</p>
+<h2 id="数据修改与结构修改不是同一种-mutation">数据修改与结构修改不是同一种 Mutation</h2><p>这是设计自己的 ECS 时非常值得显式表达的一条边界。</p>
+<h3 id="数据修改">数据修改</h3><p>例如：</p>
+<pre><code class="language-text">Position.X += Velocity.X * DeltaTime
+Health -= Damage
+Cooldown -= DeltaTime
+</code></pre>
+<p>这些操作没有改变 Entity 的 Composition。</p>
+<p>因此在正确声明 Read / Write Requirement 后，可以在当前 Chunk View 上执行。</p>
+<h3 id="结构修改">结构修改</h3><p>例如：</p>
+<pre><code class="language-text">Add&lt;DeadTag&gt;
+Remove&lt;AliveTag&gt;
+Add&lt;NavigationFragment&gt;
+DestroyEntity
+CreateEntity
+</code></pre>
+<p>这些操作会改变实体结构或生命周期。</p>
+<p>所以更合理的模型是：</p>
+<pre><code class="language-text">Data Mutation
+→
+当前 Processing Window 内执行
+
+Structural Mutation
+→
+记录
+→
+安全点统一提交
+</code></pre>
+<p>如果 API 也能体现这种差异，使用者会更难误用。</p>
+<h2 id="processing-window-是结构稳定合同">Processing Window 是结构稳定合同</h2><p><strong>Processing Window（后文简称“批量计算期间的结构冻结区间”）</strong>：一个或多个 Processor 正在基于当前 Entity Storage 和 Archetype/Chunk 视图执行的时间段；在该区间内禁止同步 Flush 结构变更。</p>
+<p>Mass 对 Flush 有非常明确的约束：</p>
+<pre><code class="language-text">必须在 Game Thread
+并且
+IsProcessing() == false
+</code></pre>
+<p>这不是为了让 API 显得保守。</p>
+<p>如果 Processing 过程中立即 Flush：</p>
+<pre><code class="language-text">Query A
+正在遍历 Chunk 1
+
+Processor B
+Remove Tag
+→
+Entity 离开 Chunk 1
+
+Processor C
+仍然持有 Chunk 1 的旧 Fragment View
+</code></pre>
+<p>此时就必须处理：</p>
+<ul>
+<li>View 失效；</li>
+<li>Range 变化；</li>
+<li>Entity 重排；</li>
+<li>Query Cache 变化；</li>
+<li>并行读写冲突；</li>
+<li>Observer 数据可见性。</li>
+</ul>
+<p>与其让每一种查询路径都承担动态结构修补，</p>
+<p>Mass 选择了更明确的合同：</p>
+<blockquote>
+<p>Processing 时保持结构稳定。</p>
+</blockquote>
+<h2 id="processor-不直接执行结构操作而是记录命令">Processor 不直接执行结构操作，而是记录命令</h2><p>Processor 需要改变结构时，可以：</p>
+<pre><code class="language-text">Context.Defer()
+</code></pre>
+<p>把意图写进 CommandBuffer。</p>
+<p>例如：</p>
+<pre><code class="language-text">Entity X
+→
+Remove AliveTag
+
+Entity X
+→
+Add DeadTag
+
+Entity Y
+→
+Destroy
+</code></pre>
+<p>此时 Processor 只是在说：</p>
+<blockquote>
+<p>当前计算结果要求后续发生这些结构变化。</p>
+</blockquote>
+<p>它还没有真正修改 Archetype。</p>
+<p>因此当前 Query 可以继续基于旧世界结构完成本轮计算。</p>
+<p>这种思路可以理解成：</p>
+<pre><code class="language-text">Compute
+→
+Record Mutation
+→
+Commit Later
+</code></pre>
+<p>和数据库事务、Render Command、Scene Deferred Mutation 都有明显共性。</p>
+<h2 id="并行-processor-需要局部-commandbuffer">并行 Processor 需要局部 CommandBuffer</h2><p>如果多个 Worker 同时把结构命令直接写进同一个可变队列，</p>
+<p>CommandBuffer 自己就会成为新的共享热点。</p>
+<p>Mass 的并行执行可以让不同 ExecutionContext 持有各自的局部 Deferred Buffer。</p>
+<p>于是：</p>
+<pre><code class="language-text">Worker A
+→ Local Commands A
+
+Worker B
+→ Local Commands B
+
+Worker C
+→ Local Commands C
+</code></pre>
+<p>Processor 完成以后，</p>
+<p>这些局部命令才进入统一收口阶段。</p>
+<p>可以把执行过程画成：</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant P1 as Processor A
+    participant P2 as Processor B
+    participant P3 as Processor C
+    participant Done as Executor Done
+    participant M as EntityManager
+
+    P1-&gt;&gt;Done: Local Deferred Commands
+    P2-&gt;&gt;Done: Local Deferred Commands
+    P3-&gt;&gt;Done: Local Deferred Commands
+    Done-&gt;&gt;Done: 等待所有 Processor prerequisite
+    Done-&gt;&gt;M: 合并 Deferred Commands
+    Done-&gt;&gt;M: Close Processing Window
+    Done-&gt;&gt;M: Game Thread Flush
+</code></pre>
+<p>这里有一条非常关键的关系：</p>
+<pre><code class="language-text">Processor Task Completed
+!=
+Structural Mutation Applied
+</code></pre>
+<p>任务完成只表示：</p>
+<blockquote>
+<p>计算结束，命令已经产生。</p>
+</blockquote>
+<p>只有：</p>
+<pre><code class="language-text">Processing Window 关闭
++
+Command Flush 完成
+</code></pre>
+<p>以后，</p>
+<p>结构变化才真正成为下一轮查询事实。</p>
+<h2 id="并行完成与状态提交是两个完成概念">并行完成与状态提交是两个完成概念</h2><p>这是并发系统中非常普遍的一类误判。</p>
+<p>开发者看到：</p>
+<pre><code class="language-text">All Tasks Complete
+</code></pre>
+<p>很容易理解成：</p>
+<pre><code class="language-text">这一批工作造成的所有状态变化已经全部可见。
+</code></pre>
+<p>但 Deferred Architecture 中不是这样。</p>
+<p>更准确的是：</p>
+<pre><code class="language-text">Task Completion
+→
+计算结果已经准备好
+
+Commit Completion
+→
+结果已经进入权威结构
+</code></pre>
+<p>如果系统拥有：</p>
+<pre><code class="language-text">Deferred Spawn
+Deferred Destroy
+Deferred Composition Change
+</code></pre>
+<p>测试与诊断也应该区分这两个阶段。</p>
+<p>否则会出现：</p>
+<pre><code class="language-text">测试等待所有 Processor
+→
+立刻 Query 新 Tag
+→
+发现没有
+→
+误判 Processor 没执行。
+</code></pre>
+<p>真正缺少的可能只是：</p>
+<pre><code class="language-text">Flush。
+</code></pre>
+<h2 id="commandbuffer-不是普通-fifo">CommandBuffer 不是普通 FIFO</h2><p>如果三个 Worker 分别产生：</p>
+<pre><code class="language-text">Create Entity
+Set Fragment
+Destroy Entity
+Add Fragment
+</code></pre>
+<p>最终提交如果只按照：</p>
+<pre><code class="language-text">谁先抢到队列
+</code></pre>
+<p>决定顺序，</p>
+<p>结果会依赖线程调度。</p>
+<p>Mass 的 CommandBuffer 会按结构语义对命令组进行稳定排序。</p>
+<p>可以粗略理解为：</p>
+<pre><code class="language-text">Create
+→
+Add
+→
+ChangeComposition
+→
+Set
+→
+Remove / Destroy
+</code></pre>
+<p><strong>结构提交顺序（后文简称“先把对象建立完整，再处理删除”）</strong>：不同类别的结构命令按照生命周期依赖关系确定提交顺序，同组内部再保持稳定次序。</p>
+<p>这解决的是一个很实际的问题。</p>
+<p>例如：</p>
+<pre><code class="language-text">创建 Entity
+</code></pre>
+<p>必须先于：</p>
+<pre><code class="language-text">给新 Entity 增加结构
+</code></pre>
+<p>而：</p>
+<pre><code class="language-text">Destroy
+</code></pre>
+<p>通常又应该位于更后的结构阶段。</p>
+<p>因此 Deferred CommandBuffer 不是：</p>
+<blockquote>
+<p>一个为了线程安全而存在的消息队列。</p>
+</blockquote>
+<p>它同时承担：</p>
+<blockquote>
+<p>一次结构事务应该按什么顺序落地。</p>
+</blockquote>
+<h2 id="flush-期间新产生的命令也需要有界处理">Flush 期间新产生的命令也需要有界处理</h2><p>Observer 或某些 Command 执行过程中，</p>
+<p>仍然可能产生新的 Deferred Command。</p>
+<p>如果 Flush 简单写成：</p>
+<pre><code class="language-text">while buffer not empty:
+    execute all
+</code></pre>
+<p>一个 Observer 就可能不断产生新命令，</p>
+<p>形成无限自激。</p>
+<p>因此 Flush 需要：</p>
+<ul>
+<li>有限迭代；</li>
+<li>明确命令组；</li>
+<li>失效 Manager 时取消；</li>
+<li>防止无限递归。</li>
+</ul>
+<p>这里再次体现了：</p>
+<blockquote>
+<p>Deferred 并不意味着“以后随便执行”。</p>
+</blockquote>
+<p>延迟提交仍然需要自己的终止合同。</p>
+<h2 id="observer-是结构事务的一部分">Observer 是结构事务的一部分</h2><p><strong>结构观察者（后文简称“在结构真正改变的正确时刻看一眼”）</strong>：针对 Entity Composition 创建、增加、删除或销毁过程，在旧数据或新数据仍具有正确可见性的阶段执行的生命周期回调。</p>
+<p>它和普通 EventBus 有一个根本区别。</p>
+<p>EventBus 常见语义是：</p>
+<pre><code class="language-text">事情发生完
+→
+广播一个通知。
+</code></pre>
+<p>Mass Observer 并不总是这样。</p>
+<h3 id="add-create">Add / Create</h3><p>Observer 通常需要看到：</p>
+<pre><code class="language-text">新 Fragment 已经存在
+</code></pre>
+<p>因此更适合后置通知。</p>
+<h3 id="remove-destroy">Remove / Destroy</h3><p>Observer 可能需要读取：</p>
+<pre><code class="language-text">马上要被删除的 Fragment。
+</code></pre>
+<p>所以必须在真正删除数据之前执行。</p>
+<p>如果统一改成：</p>
+<pre><code class="language-text">所有结构操作全部结束
+→
+最后广播 Observer
+</code></pre>
+<p>Remove Observer 会发现：</p>
+<pre><code class="language-text">它想看的数据已经没了。
+</code></pre>
+<p>因此 Observer 时序实际上属于结构事务协议。</p>
+<h2 id="remove-observer-必须发生在旧数据仍然可读时">Remove Observer 必须发生在旧数据仍然可读时</h2><p>假设 Entity 当前拥有：</p>
+<pre><code class="language-text">NavigationFragment
+</code></pre>
+<p>某个桥接系统需要在 Fragment 被删除时：</p>
+<pre><code class="language-text">从外部 Navigation Runtime 注销对应状态。
+</code></pre>
+<p>如果过程是：</p>
+<pre><code class="language-text">先删 Fragment
+→
+再发 Observer
+</code></pre>
+<p>Observer 已经无法读取：</p>
+<ul>
+<li>旧 Navigation Id；</li>
+<li>旧 Handle；</li>
+<li>旧配置；</li>
+<li>注销所需数据。</li>
+</ul>
+<p>更稳健的顺序是：</p>
+<pre><code class="language-text">准备 Remove
+→
+Pre-Remove Observer
+→
+Observer 读取旧 Fragment
+→
+真正迁移 / 删除
+</code></pre>
+<p>而 Add 则相反：</p>
+<pre><code class="language-text">建立新 Fragment
+→
+Post-Add Observer
+→
+Observer 读取新结构。
+</code></pre>
+<p>所以：</p>
+<p>**前后置可见性（后文简称“删之前看旧值，加之后看新值”）**是 Observer API 真正需要保护的合同。</p>
+<h2 id="observer-不能被抽象成一个万能-gameplay-event">Observer 不能被抽象成一个万能 Gameplay Event</h2><p>这也意味着，不应该简单把：</p>
+<pre><code class="language-text">Mass Observer
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">Gameplay Event Bus
+</code></pre>
+<p>完全统一。</p>
+<p>两者服务不同层次。</p>
+<p>Mass Observer 更接近：</p>
+<pre><code class="language-text">Storage / Composition Transaction Hook。
+</code></pre>
+<p>Gameplay Event 更接近：</p>
+<pre><code class="language-text">业务事实通知。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">DeadTag 被加入
+</code></pre>
+<p>可能会触发一个 Mass Composition Observer。</p>
+<p>但业务真正想表达的：</p>
+<pre><code class="language-text">CharacterDied
+</code></pre>
+<p>未必应该由底层 Storage Observer 直接承担。</p>
+<p>否则游戏逻辑会开始依赖：</p>
+<pre><code class="language-text">Fragment 到底在事务中的哪一刻迁移。
+</code></pre>
+<p>更稳健的方式通常是：</p>
+<pre><code class="language-text">底层 Observer
+→
+维护结构一致性
+
+上层 Gameplay System
+→
+发布业务语义。
+</code></pre>
+<h2 id="concurrent-storage-不代表可以任意线程同步修改结构">Concurrent Storage 不代表可以任意线程同步修改结构</h2><p>当前 Mass 的 Entity Storage 已经明显走向 Concurrent Storage。</p>
+<p>这很容易产生一个危险结论：</p>
+<pre><code class="language-text">底层 Storage 并发安全
+→
+任何线程都可以随时 Add / Remove Entity。
+</code></pre>
+<p>并不成立。</p>
+<p><strong>并发分配安全（后文简称“底层能安全发票号，不代表运行时能随便搬仓库”）<strong>和</strong>结构修改安全</strong>是两个不同问题。</p>
+<p>Concurrent Storage 可以改善：</p>
+<ul>
+<li>Handle reserve；</li>
+<li>分配；</li>
+<li>某些底层存储并发。</li>
+</ul>
+<p>但它并不会取消：</p>
+<ul>
+<li>Query View；</li>
+<li>Processing Window；</li>
+<li>CommandBuffer；</li>
+<li>Access Requirement；</li>
+<li>Observer 时序。</li>
+</ul>
+<p>这是并发基础设施中非常常见的一种误区：</p>
+<blockquote>
+<p>某一层使用原子或并发容器，不代表上层业务协议因此消失。</p>
+</blockquote>
+<h2 id="processor-的访问声明也是正确性合同">Processor 的访问声明也是正确性合同</h2><p>Processor 通过 Query 声明：</p>
+<ul>
+<li>ReadOnly Fragment；</li>
+<li>ReadWrite Fragment；</li>
+<li>Tag Presence；</li>
+<li>Shared Fragment；</li>
+<li>外部 Subsystem；</li>
+<li>Before / After；</li>
+<li>Execution Group。</li>
+</ul>
+<p>这些信息显然可以帮助调度器提高并行度。</p>
+<p>但更重要的是：</p>
+<blockquote>
+<p>它们决定哪些 Processor 实际上可以安全并行。</p>
+</blockquote>
+<p>例如：</p>
+<pre><code class="language-text">Processor A
+Read Position
+
+Processor B
+Write Position
+</code></pre>
+<p>就不能被当成两个完全独立任务。</p>
+<p>同样，如果某个外部 Subsystem 实际只能在 Game Thread 使用，</p>
+<p>却被错误标记为 Thread Safe，</p>
+<p>Processor 就可能被调度到 Worker。</p>
+<p>因此：</p>
+<p>**访问声明（后文简称“先告诉调度器你准备读写什么”）**不仅是性能提示，也是并发正确性合同。</p>
+<p>如果这些声明不准确，</p>
+<p>错误可能表现成：</p>
+<pre><code class="language-text">偶发线程竞争
+</code></pre>
+<p>而不是一个清楚的编译错误。</p>
+<h2 id="query-cache-也依赖-archetype-版本">Query Cache 也依赖 Archetype 版本</h2><p>随着游戏运行，</p>
+<p>新的 Archetype 可能不断出现。</p>
+<p>如果每次 Query 都从头遍历：</p>
+<pre><code class="language-text">所有 Archetype
+</code></pre>
+<p>成本会持续增加。</p>
+<p>因此 Query 可以缓存：</p>
+<pre><code class="language-text">当前已经匹配的 Archetype。
+</code></pre>
+<p>当新的 Archetype 创建以后，</p>
+<p>通过 Archetype Version 增量更新匹配集合。</p>
+<p>这意味着：</p>
+<pre><code class="language-text">Create Archetype
+</code></pre>
+<p>本身也属于 Query 基础设施需要知道的结构事件。</p>
+<p>再次说明：</p>
+<blockquote>
+<p>Archetype 不是一个纯内部内存布局细节，它是整个查询系统的结构索引单位。</p>
+</blockquote>
+<h2 id="world-tick-只负责提供执行宿主">World Tick 只负责提供执行宿主</h2><p>Mass 会把处理阶段映射到标准 TickGroup，例如：</p>
+<pre><code class="language-text">PrePhysics
+StartPhysics
+DuringPhysics
+EndPhysics
+PostPhysics
+FrameEnd
+</code></pre>
+<p>但这并不意味着：</p>
+<pre><code class="language-text">Mass Processor = 普通 Actor Tick。
+</code></pre>
+<p>TickGroup 负责提供：</p>
+<pre><code class="language-text">这一批 Mass 工作应该处于一帧的哪个大阶段。
+</code></pre>
+<p>真正 Processor 间的：</p>
+<ul>
+<li>Query；</li>
+<li>Dependency；</li>
+<li>Parallel Execution；</li>
+<li>Deferred Flush；</li>
+</ul>
+<p>仍由 Mass 自己管理。</p>
+<p>因此 Engine Tick 与 ECS Scheduling 是上下两层系统：</p>
+<pre><code class="language-text">World Tick
+→
+决定什么时候进入 Mass Phase
+
+Mass Runtime
+→
+决定这一 Phase 内怎样运行 Processor。
+</code></pre>
+<p>这和把所有逻辑直接挂在 MonoBehaviour.Update / Actor.Tick 上是很不同的组织方式。</p>
+<h2 id="world-退出时必须先把-deferred-生命周期结清">World 退出时必须先把 Deferred 生命周期结清</h2><p><code>UMassEntitySubsystem</code> 退出时，并不是：</p>
+<pre><code class="language-text">直接 Destroy EntityManager。
+</code></pre>
+<p>当前顺序会先：</p>
+<pre><code class="language-text">FlushCommands()
+</code></pre>
+<p>然后再：</p>
+<pre><code class="language-text">EntityManager.Deinitialize()
+EntityManager.Reset()
+</code></pre>
+<p>原因非常重要。</p>
+<p>World Cleanup 过程中，</p>
+<p>其他系统可能刚刚把：</p>
+<ul>
+<li>Render 注销；</li>
+<li>Physics 清理；</li>
+<li>Navigation 清理；</li>
+<li>Entity Destroy；</li>
+</ul>
+<p>写进 Deferred Buffer。</p>
+<p>如果 Runtime Owner 先消失：</p>
+<pre><code class="language-text">这些命令就永远没有合法提交点。
+</code></pre>
+<p>所以：</p>
+<p>**退出前结账（后文简称“Owner 销毁以前先把最后一批结构事务做完”）**同样属于生命周期合同。</p>
+<p>这和很多异步 Runtime 的 Shutdown 非常相似：</p>
+<pre><code class="language-text">停止产生新工作
+→
+收口已有工作
+→
+Flush / Cancel
+→
+最后销毁 Owner。
+</code></pre>
+<h2 id="mass-的核心并不是ecs-比-actor-快">Mass 的核心并不是“ECS 比 Actor 快”</h2><p>看到 Archetype、Chunk 和并行 Processor，</p>
+<p>很容易把讨论快速转向：</p>
+<pre><code class="language-text">Mass 可以同时跑多少实体？
+</code></pre>
+<p>但仅从当前研究材料，并不能得出：</p>
+<pre><code class="language-text">Mass 一定比 Actor 快多少。
+</code></pre>
+<p>当前真正能够从源码确认的是：</p>
+<ul>
+<li>Chunk 使用同构列式布局；</li>
+<li>Query 按 Archetype / Chunk 绑定 View；</li>
+<li>Processor 可以声明访问要求；</li>
+<li>部分执行可以并行；</li>
+<li>结构修改在安全点延迟提交；</li>
+<li>运行时拥有相应 Trace、Debug 和 Test 入口。</li>
+</ul>
+<p>这些条件提供了数据导向和并行优化基础。</p>
+<p>具体项目究竟能获得多少收益，</p>
+<p>还取决于：</p>
+<ul>
+<li>Entity 数量；</li>
+<li>Fragment 大小；</li>
+<li>Processor 工作量；</li>
+<li>Cache 行为；</li>
+<li>结构变化频率；</li>
+<li>外部 Engine Bridge；</li>
+<li>Representation；</li>
+<li>Physics；</li>
+<li>Navigation。</li>
+</ul>
+<p>所以更准确的结论是：</p>
+<blockquote>
+<p>Mass 建立了一套适合稳定批量数据迭代的运行时合同。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>只要用了 Mass，就自动获得高性能。</p>
+</blockquote>
+<h2 id="结构变化过多时archetype-ecs-也可能不是最优选择">结构变化过多时，Archetype ECS 也可能不是最优选择</h2><p>Archetype 模型最喜欢的是：</p>
+<pre><code class="language-text">很多结构相同的 Entity
++
+大量重复数据计算
++
+相对稳定 Composition。
+</code></pre>
+<p>如果项目中的实体：</p>
+<ul>
+<li>数量不大；</li>
+<li>行为极度异构；</li>
+<li>每帧频繁增删大量 Component；</li>
+<li>很少做批量同构查询；</li>
+</ul>
+<p>那么：</p>
+<pre><code class="language-text">Archetype Migration
+Query Declaration
+CommandBuffer
+Observer
+</code></pre>
+<p>带来的复杂度可能超过收益。</p>
+<p>这也是为什么真正值得迁移的是边界思想，</p>
+<p>而不是：</p>
+<blockquote>
+<p>所有游戏系统都必须 ECS 化。</p>
+</blockquote>
+<h2 id="对自研-ecs-的迁移方式">对自研 ECS 的迁移方式</h2><p>如果设计自己的 Archetype ECS，我会优先建立下面几条不变量。</p>
+<h3 id="entity-identity">Entity Identity</h3><pre><code class="language-text">Index
++
+Generation
++
+Owner World
+</code></pre>
+<p>Handle 本身不能无上下文解引用。</p>
+<h3 id="structural-identity">Structural Identity</h3><pre><code class="language-text">Component / Tag Composition
+→
+Archetype Identity。
+</code></pre>
+<p>Tag 是否有数据，不影响它是否属于结构。</p>
+<h3 id="stable-query-window">Stable Query Window</h3><p>Query 开始以后：</p>
+<pre><code class="language-text">当前 Archetype / Chunk 布局保持稳定。
+</code></pre>
+<h3 id="deferred-structural-mutation">Deferred Structural Mutation</h3><p>Processing 期间：</p>
+<pre><code class="language-text">Create
+Destroy
+Add
+Remove
+</code></pre>
+<p>只记录命令。</p>
+<h3 id="explicit-commit-point">Explicit Commit Point</h3><p>所有 Processor 完成以后：</p>
+<pre><code class="language-text">Close Processing
+→
+Flush Structural Commands。
+</code></pre>
+<h3 id="observer-visibility">Observer Visibility</h3><pre><code class="language-text">Add
+→
+新值存在以后通知
+
+Remove
+→
+旧值删除以前通知。
+</code></pre>
+<p>只要这几条边界先稳定，</p>
+<p>并行优化才能在它们上面继续增加。</p>
+<h2 id="对非-ecs-系统的迁移方式">对非 ECS 系统的迁移方式</h2><p>这套模式同样适合其他批处理系统。</p>
+<h3 id="scene-graph">Scene Graph</h3><p>遍历 Scene Node 时，</p>
+<p>不要让任意 Callback 立即重组整个 Child List。</p>
+<p>可以：</p>
+<pre><code class="language-text">Traverse
+→
+记录 Add / Remove
+→
+Frame End Commit。
+</code></pre>
+<h3 id="ai-批量更新">AI 批量更新</h3><p>多个 AI Job 正在基于同一 Agent Set 计算时，</p>
+<p>Entity Spawn / Despawn 可以：</p>
+<pre><code class="language-text">记录
+→
+任务结束
+→
+统一提交。
+</code></pre>
+<h3 id="physics-bridge">Physics Bridge</h3><p>Gameplay 计算阶段产生：</p>
+<pre><code class="language-text">Create Body
+Destroy Body
+Change Shape
+</code></pre>
+<p>可以先进入 Command Queue，</p>
+<p>随后由 Physics Owner 线程统一执行。</p>
+<h3 id="ui-tree">UI Tree</h3><p>复杂 UI 在 Layout / Render 遍历中如果随意修改 Hierarchy，</p>
+<p>同样容易破坏当前迭代器。</p>
+<p>因此很多 UI 系统实际上也存在自己的：</p>
+<pre><code class="language-text">Deferred Hierarchy Mutation。
+</code></pre>
+<p>这说明：</p>
+<blockquote>
+<p>“读取稳定视图，修改延迟提交”并不是 ECS 专属技巧。</p>
+</blockquote>
+<p>它是一种通用的批处理一致性模式。</p>
+<h2 id="不要把所有-deferred-系统都统一成一个全局-commandbus">不要把所有 Deferred 系统都统一成一个全局 CommandBus</h2><p>看到：</p>
+<ul>
+<li>Render Command；</li>
+<li>Mass CommandBuffer；</li>
+<li>Gameplay Command；</li>
+<li>Scene Mutation；</li>
+</ul>
+<p>很容易产生一个架构冲动：</p>
+<pre><code class="language-text">全部做成统一 CommandBus。
+</code></pre>
+<p>但它们的事务语义并不一样。</p>
+<p>Mass CommandBuffer 需要知道：</p>
+<pre><code class="language-text">Create / Add / Change / Set / Remove / Destroy
+</code></pre>
+<p>之间的结构顺序。</p>
+<p>Render Command 需要遵守：</p>
+<pre><code class="language-text">Render Thread Ownership。
+</code></pre>
+<p>Gameplay Command 可能需要：</p>
+<pre><code class="language-text">Undo / Redo / Replay。
+</code></pre>
+<p>所以更值得统一的是：</p>
+<pre><code class="language-text">Deferred Mutation Pattern
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">一个万能 Command 类型。
+</code></pre>
+<p>基础模式可以相同。</p>
+<p>提交规则必须属于各自的 Domain Owner。</p>
+<h2 id="调试工具需要能够区分已经记录和已经提交">调试工具需要能够区分“已经记录”和“已经提交”</h2><p>Deferred Mutation 最容易让开发者困惑的地方是：</p>
+<pre><code class="language-text">我刚刚 Add 了 Tag
+为什么这里还查不到？
+</code></pre>
+<p>因此诊断最好显式展示：</p>
+<pre><code class="language-text">Processing = true
+
+Deferred Commands
+- Add DeadTag Entity#42
+- Destroy Entity#51
+
+Committed Composition
+Entity#42
+- AliveTag
+</code></pre>
+<p>Flush 后再显示：</p>
+<pre><code class="language-text">Processing = false
+
+Deferred Commands = 0
+
+Committed Composition
+Entity#42
+- DeadTag
+</code></pre>
+<p>**待提交状态（后文简称“已经决定，但还没真正改世界”）**应该成为调试器中可观察的事实。</p>
+<p>否则开发者会把：</p>
+<pre><code class="language-text">Deferred
+</code></pre>
+<p>误认为：</p>
+<pre><code class="language-text">命令丢了。
+</code></pre>
+<h2 id="trace-应该围绕-processing-与-flush-建立时间线">Trace 应该围绕 Processing 与 Flush 建立时间线</h2><p>一个非常有价值的调试时间线可以是：</p>
+<pre><code class="language-text">Frame 120
+
+PrePhysics
+  Processor.Move
+  Processor.Perception
+
+DuringPhysics
+  Processor.Damage
+      Defer Add DeadTag Entity#42
+
+PostPhysics
+  Processor.Cleanup
+
+Mass Processing End
+
+Command Flush
+  Add DeadTag #42
+  Remove AliveTag #42
+  Observer PreRemove AliveTag
+  Archetype A → Archetype B
+  Observer PostAdd DeadTag
+</code></pre>
+<p>这比只打印：</p>
+<pre><code class="language-text">Entity 42 changed
+</code></pre>
+<p>更容易解释：</p>
+<blockquote>
+<p>结构究竟在哪一帧、哪一个安全点真正改变。</p>
+</blockquote>
+<h2 id="自动化测试需要同时覆盖稳定视图和提交结果">自动化测试需要同时覆盖稳定视图和提交结果</h2><p>Mass 当前源码已经存在：</p>
+<ul>
+<li>Entity reserve / create / destroy；</li>
+<li>stale handle；</li>
+<li>Archetype composition；</li>
+<li>Entity migration；</li>
+<li>CommandBuffer；</li>
+<li>Deferred Mutation；</li>
+<li>Query / Processor / Parallel；</li>
+<li>Observer；</li>
+<li>Concurrent Storage；</li>
+</ul>
+<p>等测试入口。</p>
+<p>对于自己的 ECS，也应该把测试分成至少两类。</p>
+<h3 id="processing-期间不变量">Processing 期间不变量</h3><p>验证：</p>
+<pre><code class="language-text">Deferred Add
+</code></pre>
+<p>不会让当前 Query View 在本轮中途变化。</p>
+<h3 id="flush-以后结果">Flush 以后结果</h3><p>验证：</p>
+<pre><code class="language-text">Flush
+</code></pre>
+<p>完成以后：</p>
+<ul>
+<li>Entity 已进入新 Archetype；</li>
+<li>Query 匹配已经更新；</li>
+<li>Observer 时序正确；</li>
+<li>stale Handle 无法访问新 Entity。</li>
+</ul>
+<p>两类测试不能只做其中一半。</p>
+<p>否则系统可能：</p>
+<pre><code class="language-text">最终结果正确
+</code></pre>
+<p>却在过程中存在未定义行为。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="tag-没有数据所以同步增删没关系">Tag 没有数据，所以同步增删没关系</h3><p>Tag 仍然参与 Composition。</p>
+<p>增删 Tag 仍然可能触发 Archetype 迁移。</p>
+<h3 id="handle-有-index所以可以直接永久保存">Handle 有 Index，所以可以直接永久保存</h3><p>Index 会重用。</p>
+<p>Generation 和 Manager Validity 才共同决定当前身份。</p>
+<h3 id="concurrent-storage-已经线程安全所以-processor-可以直接改结构">Concurrent Storage 已经线程安全，所以 Processor 可以直接改结构</h3><p>并发分配能力不取消 Stable Query Window 和 Structural Mutation Contract。</p>
+<h3 id="processor-task-完成就代表-defer-已生效">Processor Task 完成就代表 Defer 已生效</h3><p>Task Completion 只是命令已经产生。</p>
+<p>Flush Completion 才代表结构已经改变。</p>
+<h3 id="commandbuffer-按提交顺序简单-fifo">CommandBuffer 按提交顺序简单 FIFO</h3><p>不同 Worker 的偶然调度顺序不应该成为结构生命周期语义。</p>
+<h3 id="observer-全部放到-flush-最后统一广播">Observer 全部放到 Flush 最后统一广播</h3><p>Remove / Destroy Observer 会失去读取旧 Fragment 的机会。</p>
+<h3 id="observer-被当成-gameplay-event-bus">Observer 被当成 Gameplay Event Bus</h3><p>底层存储事务语义开始向业务层泄漏。</p>
+<h3 id="world-销毁时直接拆-entitymanager">World 销毁时直接拆 EntityManager</h3><p>尚未 Flush 的跨系统注销命令失去合法执行环境。</p>
+<h3 id="所有系统都为了性能强制改成-archetype-ecs">所有系统都为了性能强制改成 Archetype ECS</h3><p>高结构变化、低实体规模的业务反而承担额外复杂度。</p>
+<h3 id="deferred-queue-没有可观测性">Deferred Queue 没有可观测性</h3><p>开发者无法区分“命令还没提交”和“命令已经丢失”。</p>
+<h2 id="我的结构变更延迟提交检查表">我的结构变更延迟提交检查表</h2><ol>
+<li>Entity Handle 是否使用 Index + Generation，而不是裸 Index？</li>
+<li>Handle 最终有效性是否由所属 World / Manager 校验？</li>
+<li>Component / Fragment Composition 是否有明确结构身份？</li>
+<li>无数据 Tag 是否仍被正确视为 Composition 的一部分？</li>
+<li>Archetype 是否能够复用相同 Composition？</li>
+<li>Chunk 是否保存同构连续 Fragment 数据？</li>
+<li>Query 是否按 Archetype / Chunk 批量迭代？</li>
+<li>Query 执行期间是否存在明确 Stable Processing Window？</li>
+<li>数据原位修改和结构修改是否是两套 API 语义？</li>
+<li>Processor 中的 Create / Destroy / Add / Remove 是否默认 Defer？</li>
+<li>并行 Processor 是否拥有局部 CommandBuffer？</li>
+<li>Local Buffer 是否只在所有相关任务完成后合并？</li>
+<li>Processing Window 是否在 Flush 之前明确关闭？</li>
+<li>Structural Flush 是否运行在拥有 Storage Mutation 权限的线程？</li>
+<li>CommandBuffer 是否拥有结构语义顺序，而不是简单 FIFO？</li>
+<li>Flush 中新生成的命令是否拥有有界处理规则？</li>
+<li>Add Observer 是否在新 Fragment 可读后触发？</li>
+<li>Remove / Destroy Observer 是否在旧 Fragment 删除前触发？</li>
+<li>Observer 是否与普通 Gameplay Event 保持职责边界？</li>
+<li>Processor Access Requirement 是否参与并发正确性判断？</li>
+<li>GameThread-only 外部依赖是否不会被错误调度到 Worker？</li>
+<li>Concurrent Storage 是否不会被误解释成任意线程同步 Mutation？</li>
+<li>Query Cache 是否能感知新 Archetype？</li>
+<li>World Shutdown 是否先 Flush，再销毁 Runtime Owner？</li>
+<li>调试器是否能够显示 Pending Structural Commands？</li>
+<li>Trace 是否能够还原 Processor → Defer → Flush → Observer 时间线？</li>
+<li>测试是否验证 Processing 中结构保持稳定？</li>
+<li>测试是否验证 Flush 后 Query 能看到新 Composition？</li>
+<li>Stale Handle 是否不能命中新一代 Entity？</li>
+<li>当前业务规模和结构变化频率是否真的值得采用 Archetype ECS？</li>
+</ol>
+<p>Mass 最值得迁移的地方，不是：</p>
+<pre><code class="language-text">EntityHandle 长什么样
+</code></pre>
+<p>也不是：</p>
+<pre><code class="language-text">一个 Chunk 可以塞多少 Entity。
+</code></pre>
+<p>真正重要的是它围绕批量数据计算建立了一条非常清楚的运行时合同：</p>
+<pre><code class="language-text">Query 开始
+→
+结构保持稳定
+
+Processor 计算
+→
+可以修改已有数据
+
+需要改变结构
+→
+只记录意图
+
+所有计算结束
+→
+关闭 Processing Window
+
+Game Thread Flush
+→
+按照结构语义统一迁移
+
+Observer
+→
+在旧数据或新数据仍然正确可见的时机运行
+
+下一轮 Query
+→
+看到新的世界结构
+</code></pre>
+<p>这使高效批量迭代和动态游戏世界不必互相排斥。</p>
+<p>结构可以持续变化。</p>
+<p>但它不能：</p>
+<blockquote>
+<p><strong>在别人正依赖当前结构计算时悄悄变化。</strong></p>
+</blockquote>
+<p>这就是结构变更延迟提交真正保护的不变量。</p>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>结构变更延迟提交</td>
+<td>先记账，安全点再搬家</td>
+</tr>
+<tr>
+<td>代际实体句柄</td>
+<td>这张票据现在还指不指向原来那个人</td>
+</tr>
+<tr>
+<td>Archetype Composition</td>
+<td>这个实体现在拥有哪些结构组件</td>
+</tr>
+<tr>
+<td>Archetype 迁移</td>
+<td>结构变了，实体要搬到另一类存储里</td>
+</tr>
+<tr>
+<td>稳定查询窗口</td>
+<td>这一段时间里先别搬 Entity</td>
+</tr>
+<tr>
+<td>Processing Window</td>
+<td>批量计算期间的结构冻结区间</td>
+</tr>
+<tr>
+<td>结构提交顺序</td>
+<td>先把对象建立完整，再处理删除</td>
+</tr>
+<tr>
+<td>结构观察者</td>
+<td>在结构真正改变的正确时刻看一眼</td>
+</tr>
+<tr>
+<td>前后置可见性</td>
+<td>删之前看旧值，加之后看新值</td>
+</tr>
+<tr>
+<td>并发分配安全</td>
+<td>底层能安全发票号，不代表运行时能随便搬仓库</td>
+</tr>
+<tr>
+<td>访问声明</td>
+<td>先告诉调度器你准备读写什么</td>
+</tr>
+<tr>
+<td>退出前结账</td>
+<td>Owner 销毁以前先把最后一批结构事务做完</td>
+</tr>
+<tr>
+<td>待提交状态</td>
+<td>已经决定，但还没真正改世界</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>notes/UnrealEngine源码研究/UE6/06_Mass从World托管到Archetype迭代_模块拆分与延迟结构变更.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE6/README.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/05_UWorld与AActor生命周期及Tick调度.md</code></li>
+<li><code>blogs/从UnrealEngine源码理解引擎设计/01-UnrealEngine的第一帧提交链.md</code></li>
+<li><code>blogs/Sakura Framework 工程实践/08-Command历史与确定性Replay.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文基于 2026-08-19 研究时的 Unreal Engine UE6-main 源码快照整理。</p>
+<p>当前研究已经通过源码入口和现有测试目录核对 MassCore / MassEntity 模块边界、EntityHandle、Archetype/Chunk、Processor/Query、Processing Window、Deferred Command 与 Observer 主链，但没有在当前环境中构建 Unreal Editor、运行 Automation/Catch2 或执行 Mass Benchmark。</p>
+<p>因此本文不声称：</p>
+<ul>
+<li>Mass 在具体项目中一定比 Actor / UObject 方案拥有更高性能；</li>
+<li>Concurrent Storage 等价于任意线程可以同步修改 Entity 结构；</li>
+<li><code>FMassEntityHandle::IsValid()</code> 单独就能证明 Entity 当前可访问；</li>
+<li>所有 MassGameplay、MassAI、Representation、Spawner 和 Relation 能力已经完成当前 UE6-main 源码审计；</li>
+<li>当前 UE6-main Mass API 已冻结为正式 Release 合同；</li>
+<li>Deferred Command 的思想意味着所有游戏业务 Command 都应该统一进 Mass CommandBuffer。</li>
+</ul>
+<p>文中把“稳定查询窗口 → 延迟结构变更 → 安全点提交”的模式迁移到 Scene Graph、AI Batch、Physics Bridge 和其他批处理系统，属于工程设计归纳，不表示这些系统必须复制 Mass 的 Archetype、Chunk、Command Group 或 Observer 实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unreal-engine-world-partition-state-convergence.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接</strong><small>从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。</small></a><a href="unreal-engine-asyncloading2-object-publication.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界</strong><small>异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？</small></a><a href="unreal-engine-first-frame-pipeline.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</strong><small>一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

@@ -148,9 +148,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>52</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>45</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>34</strong><span>完整博客</span><small>34 篇已公开</small></div>
+                <div class="journal-metric"><strong>53</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>46</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>36</strong><span>完整博客</span><small>36 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -243,6 +243,11 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-19</p>
+                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮从上一审计基线 b9a043f... 到当前 HEAD 前进了 5 个提交，主要集中在三条线： 仓库没有新增 UPM Package、Catalog Module、Preset 或 asmdef。上一基线与当前均为 146 Package、146 Catalog Module、69 Preset、866 asmdef、467 个 noEngineReferences asmdef；但内部依赖边从 248 增至 250。 这说明近期开发没有重新进入“一个能力一个 Package”的扩张模式，整体方向仍然符合 development-convergence。 但复杂度增长已经转移到另外三个地方： Stable Public API 从上一基线的 391 Types / 2403 Members 增至当前 395 Types / 2416 Members；程序集仍为 27 个。当前变化主要来自 Pooling Warmup 和…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-18</p>
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一轮基准 cf4e034c...，main 又前进了 6 个提交。变化高度集中在三条既有能力线上： 没有新增 UPM Package、Catalog Module、asmdef、内部依赖边，也没有扩大 Stable Public API。当前 Inventory 仍然是 146 Package、146 Catalog Module、69 Preset、866 asmdef、248 条内部依赖边；Stable API 仍为 27 Assemblies / 391 Types / 2403 Members。这一组指标与 cf4e034c... 完全一致。 这意味着近期开发行为总体已经从“横向增加框架能力”切换为： 这是符合当前主线的。 尤其 UI 体系已经完成一个值得记录的架构修正：ui-core 当前只依赖 core，ui-binding 只依赖 ui-core，完整 Unity ui 才承担…</p>
@@ -267,20 +272,22 @@
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮仓库没有继续增加 UPM Package，主线基本保持在正确方向： 当前 Work Status 仍明确为： 当前 Evidence Backlog 为 129，Deferred 为 11。Candidate、Assembler、strict readiness 与 Release 都不是当前执行项。 本轮最重要的正向变化有三类。 第一，Runtime Foundation 五个核心能力面真正开始从“本地验证”进入“能力级 Runner 资格化”。Pooling、Event、Bootstrap、Save 等近期切片已经被终态 source envelope d3d222f43… 聚合验证，PLAN-INDEX 将大量相关工作从 runner-pending 更新为 runner-passed，并记录 Gitea runs 960–963。这个做法比“一份 Plan 对应一次 Runner”更符合长期治理方向。</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-12</p>
-                    <h3>Sakura Framework 仓库最新审计与能力收敛计划</h3>
-                    <p>本轮仓库的主要变化已经不再是增加 Gameplay Kernel 或继续做 Package Family 合并，而是明显转向三个方向： 其中最值得肯定的是 Asset 模块开始真正从“资源加载器”收敛为“资源所有权系统”。当前已经形成： Asset 的多个直接 Addressables 消费方已经迁移到 Lease；最新 Direct Addressables Boundary 中，普通生产资源加载的 migration queue 已经清空，只剩 Mod Catalog 这种明确 Adapter 例外，以及 Config/UI 的程序集或类型合同残留。 另一方面，本轮测试基础设施也出现了明显改善。仓库建立了 Package Test Coverage Gate，补齐 Interaction、Pathfinding.NavMesh、Rules、Welfare、Modding Compatibility…</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>52 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>53 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-god-game">
+                    <p class="project-status">游戏设计范式 · 2026-08-20</p>
+                    <h3>上帝模拟 / God Game / Deity Simulation</h3>
+                    <p>玩家作为超越普通世界实体的神性存在，通过神迹、教义、代理人与环境改造间接影响自主居民和文明；干预先被世界观察、解释与传播，再反向改变信仰资源、社会制度和后续可用力量。</p>
+                    <div class="note-tags"><span>deity</span><span>god-game</span><span>indirect-control</span></div>
+                    <a class="note-link" href="journal/god-game.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-loot-driven-arpg">
                     <p class="project-status">游戏设计范式 · 2026-08-19</p>
                     <h3>刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like</h3>

@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const HASH_FALLBACK_ID_PATTERN = /^blog-[a-f0-9]{8,}$/u;
 const ALLOWED_STATUSES = new Set(['draft', 'review', 'approved', 'published', 'revised', 'archived']);
 const PUBLIC_STATUSES = new Set(['approved', 'published']);
 const FORBIDDEN_PUBLIC_MARKERS = [
@@ -10,6 +11,45 @@ const FORBIDDEN_PUBLIC_MARKERS = [
   /(?:^|[>\s])待补充(?:\s|$)/imu,
   /(?:^|[>\s])TODO(?:\s|$)/imu
 ];
+
+export function reconcileBlogPublication(manifest, source) {
+  if (manifest?.schemaVersion !== 1 || !Array.isArray(manifest.articles)) {
+    throw new Error('Blog publication manifest must use schemaVersion 1 and expose articles.');
+  }
+  if (!Array.isArray(source?.blogs)) throw new Error('Journal source must expose blogs.');
+
+  const sourceById = new Map();
+  for (const article of source.blogs) {
+    if (!SLUG_PATTERN.test(article?.id ?? '')) throw new Error('Journal blog id must be stable kebab-case.');
+    if (sourceById.has(article.id)) throw new Error(`Duplicate Journal blog id: ${article.id}.`);
+    sourceById.set(article.id, article);
+  }
+
+  const manifestIds = new Set();
+  const articles = manifest.articles.map((entry) => {
+    if (!SLUG_PATTERN.test(entry?.sourceId ?? '')) throw new Error('Publication sourceId must be stable kebab-case.');
+    if (manifestIds.has(entry.sourceId)) throw new Error(`Duplicate publication sourceId: ${entry.sourceId}.`);
+    manifestIds.add(entry.sourceId);
+    const article = sourceById.get(entry.sourceId);
+    if (!article) return entry;
+    return mergeJournalMetadata(entry, article);
+  });
+
+  for (const article of source.blogs) {
+    if (manifestIds.has(article.id)) continue;
+    if (HASH_FALLBACK_ID_PATTERN.test(article.id)) {
+      throw new Error(`New Journal blog ${article.id} requires an explicit semantic publication slug.`);
+    }
+    articles.push(mergeJournalMetadata({
+      sourceId: article.id,
+      status: 'published',
+      slug: article.id,
+      publishedAt: article.updatedAt
+    }, article));
+  }
+
+  return { ...manifest, articles };
+}
 
 export function selectPublishedBlogs(manifest, source, blogBodies) {
   if (manifest?.schemaVersion !== 1 || !Array.isArray(manifest.articles)) {
@@ -31,7 +71,7 @@ export function selectPublishedBlogs(manifest, source, blogBodies) {
     if (!article) throw new Error(`Publication source no longer exists: ${entry.sourceId}.`);
 
     if (!ALLOWED_STATUSES.has(entry.status)) throw new Error(`Invalid publication status for ${entry.sourceId}.`);
-    if (!SLUG_PATTERN.test(entry.slug ?? '') || /^blog-[a-f0-9]{8,}$/u.test(entry.slug)) {
+    if (!SLUG_PATTERN.test(entry.slug ?? '') || HASH_FALLBACK_ID_PATTERN.test(entry.slug)) {
       throw new Error(`Blog ${entry.sourceId} requires a semantic slug.`);
     }
     if (slugs.has(entry.slug)) throw new Error(`Duplicate publication slug: ${entry.slug}.`);
@@ -86,6 +126,18 @@ export function selectPublishedBlogs(manifest, source, blogBodies) {
   }
 
   return selected;
+}
+
+function mergeJournalMetadata(entry, article) {
+  return {
+    ...entry,
+    updatedAt: article.updatedAt,
+    title: article.title,
+    description: article.summary,
+    series: article.series,
+    tags: [...article.tags],
+    contentHash: article.sha256
+  };
 }
 
 export function stripBlogPublicationPreamble(markdown) {

@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unreal-engine-world-partition-state-convergence.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接 | IrisSakura">
+    <meta property="og:description" content="从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unreal-engine-world-partition-state-convergence.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-engine-world-partition-state-convergence.png">
+    <meta property="og:image:alt" content="流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接 | IrisSakura">
+    <meta name="twitter:description" content="从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-engine-world-partition-state-convergence.png">
+    <meta name="twitter:image:alt" content="流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接 | IrisSakura","description":"从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。","url":"https://irissakura.github.io/pages/blog/unreal-engine-world-partition-state-convergence.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-engine-world-partition-state-convergence.png","datePublished":"2026-08-20","dateModified":"2026-08-20","about":["level-streaming","lifecycle","streaming","unreal-engine","world-partition"]}</script>
+    <!-- site-meta:end -->
+    <title>流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-20 · 更新于 2026-08-20</p>
+            <h1>流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接</h1>
+            <p class="blog-deck">从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。</p>
+            <div class="note-tags"><span>level-streaming</span><a href="tag/lifecycle.html">lifecycle</a><span>streaming</span><a href="tag/unreal-engine.html">unreal-engine</a><span>world-partition</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>开放世界流送最容易形成一个直觉模型：</p>
+<pre><code class="language-text">玩家进入某个格子
+→
+加载这个格子
+
+玩家离开
+→
+卸载这个格子
+</code></pre>
+<p>这个模型非常适合解释概念。</p>
+<p>但真正开始调试大型世界以后，很快会遇到一些看起来互相矛盾的现象：</p>
+<ul>
+<li>玩家已经靠近某片区域，但对应 Cell 没有进入加载；</li>
+<li>Cell 已经被标记为 Activated，画面里却仍然看不到；</li>
+<li>StreamingSource 明明命中了空间范围，Data Layer 仍然让它保持 Unloaded；</li>
+<li>调高“每帧加载数量”以后，流送仍然没有明显加快；</li>
+<li>Policy 日志显示请求已经全部处理，<code>IsStreamingCompleted()</code> 却仍然返回 false；</li>
+<li>多个 World Partition 同时存在时，近处内容似乎仍然被其他 Partition 的请求抢占预算；</li>
+<li>开启异步 Update 后，目标态计算可以进入 Worker，但真正的 LevelStreaming 修改仍然发生在 Game Thread；</li>
+<li>Dedicated Server 与客户端面对完全相同的 Source，Cell 生命周期却并不一致。</li>
+</ul>
+<p>如果只使用：</p>
+<pre><code class="language-text">Loaded = true / false
+</code></pre>
+<p>解释这些状态，很多问题都会显得像随机 Bug。</p>
+<p>但 World Partition 真正的模型并不是：</p>
+<pre><code class="language-text">距离判断
+→
+加载。
+</code></pre>
+<p>它是一套持续把“世界需求”收敛成“底层真实状态”的控制系统。</p>
+<h2 id="先说结论world-partition-运行时是一条状态收敛链">先说结论：World Partition 运行时是一条状态收敛链</h2><p><strong>流送状态收敛（后文简称“从想要加载到真的加载完”）</strong>：系统先根据 StreamingSource 和世界规则计算 RuntimeCell 的目标状态，再经过优先级、帧预算和 LevelStreaming 异步执行，使实际世界状态逐步追上目标状态。</p>
+<p>可以先把主链压缩为：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["StreamingSource"] --&gt; B["RuntimeHashSet 空间查询"]
+    B --&gt; C["Policy 目标态计算"]
+    C --&gt; D["跨 Partition 排序与预算"]
+    D --&gt; E["RuntimeCell 动作"]
+    E --&gt; F["LevelStreaming Intent"]
+    F --&gt; G["UWorld / Async Loading"]
+    G --&gt; H["真实 Level State"]
+    H --&gt; I["Completion Query"]
+</code></pre>
+<p>这里最重要的是：</p>
+<blockquote>
+<p>每个箭头都代表一次状态转换，不是同一个状态换了不同名字。</p>
+</blockquote>
+<p>整个系统至少存在三本账：</p>
+<table>
+<thead>
+<tr>
+<th>状态层</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Policy Target</td>
+<td>这一轮希望 Cell 变成什么</td>
+</tr>
+<tr>
+<td>LevelStreaming Intent</td>
+<td>已经向底层提出什么加载/可见性要求</td>
+</tr>
+<tr>
+<td>Actual Streaming State</td>
+<td>Level 当前真正完成到哪里</td>
+</tr>
+</tbody></table>
+<p>这三层一旦混在一起，排障就会变得非常困难。</p>
+<h2 id="runtimecell-在运行时开始前就已经被生产出来">RuntimeCell 在运行时开始前就已经被生产出来</h2><p>**RuntimeCell（后文简称“运行时可流送单元”）**并不是每一帧根据玩家位置重新把世界切一遍格子。</p>
+<p>运行时所查询的 Cell，来自此前的世界生成结果。</p>
+<p>可以粗略理解为：</p>
+<pre><code class="language-text">Actor / ActorSet
+→
+Runtime Partition
+→
+Cell Descriptor
+→
+Data Layer 拆分
+→
+RuntimeCell
+→
+静态空间索引
+</code></pre>
+<p>也就是说，大量复杂的：</p>
+<ul>
+<li>Actor 归属；</li>
+<li>Runtime Grid；</li>
+<li>Data Layer；</li>
+<li>Cell Bounds；</li>
+<li>HLOD；</li>
+<li>Priority；</li>
+<li>Content Bundle；</li>
+</ul>
+<p>已经在运行时查询以前被压缩成稳定的 Cell 数据。</p>
+<p>所以玩家移动时，系统不需要重新问：</p>
+<blockquote>
+<p>世界中每一个 Actor 是否离玩家够近？</p>
+</blockquote>
+<p>它只需要问：</p>
+<blockquote>
+<p>已经生成的 RuntimeCell 中，哪些命中了当前 StreamingSource？</p>
+</blockquote>
+<p>这是 World Partition 能够支撑大型世界的重要前提之一：</p>
+<blockquote>
+<p>把高复杂度的世界描述尽可能留在生产期，把运行时问题压缩成稳定数据上的查询。</p>
+</blockquote>
+<h2 id="streamingsource-不是一个玩家坐标">StreamingSource 不是一个玩家坐标</h2><p><strong>StreamingSource（后文简称“世界内容需求来源”）</strong>：告诉 World Partition“从什么位置、以什么形状、什么目标状态和什么优先级需要内容”的统一输入。</p>
+<p>最简单的 Source 确实可以来自玩家。</p>
+<p>但它本身表达的信息远多于：</p>
+<pre><code class="language-text">Player.Position
+</code></pre>
+<p>一个 Source 可以携带：</p>
+<ul>
+<li>Location；</li>
+<li>Rotation；</li>
+<li>Priority；</li>
+<li>Velocity；</li>
+<li>TargetState；</li>
+<li>TargetGrids；</li>
+<li>Include / Exclude；</li>
+<li>一个或多个 Shapes；</li>
+<li>是否需要 Block On Slow Loading；</li>
+<li>是否强制使用 2D 查询。</li>
+</ul>
+<p>因此两个处于相同坐标的 Source，也可能要求完全不同的内容。</p>
+<p>例如：</p>
+<pre><code class="language-text">玩家主体 Source
+→
+要求 Activated
+
+远距离预取 Source
+→
+只要求 Loaded
+</code></pre>
+<p>二者虽然都命中同一个 Cell，含义并不相同。</p>
+<h2 id="loaded-与-activated-是两种不同需求">Loaded 与 Activated 是两种不同需求</h2><p>这里是整个流送模型最重要的区别之一。</p>
+<pre><code class="language-text">Loaded
+</code></pre>
+<p>可以理解为：</p>
+<blockquote>
+<p>内容需要进入内存，但暂时不要求真正可见并参与世界。</p>
+</blockquote>
+<p>而：</p>
+<pre><code class="language-text">Activated
+</code></pre>
+<p>更接近：</p>
+<blockquote>
+<p>内容不仅要加载，还需要进入可见、可参与 World 的状态。</p>
+</blockquote>
+<p>因此：</p>
+<pre><code class="language-text">Prefetch
+</code></pre>
+<p>并不一定应该直接：</p>
+<pre><code class="language-text">Activate。
+</code></pre>
+<p>如果所有提前准备都直接要求 Activated，就会失去“提前进入内存，但暂时不进入世界”的中间层。</p>
+<p>这也是为什么 Cell State 不是简单的：</p>
+<pre><code class="language-text">Loaded / Unloaded。
+</code></pre>
+<p>而存在一个有序关系：</p>
+<pre><code class="language-text">Unloaded
+&lt;
+Loaded
+&lt;
+Activated
+</code></pre>
+<p>这个顺序还会直接参与完成状态判断。</p>
+<h2 id="多个-source-对同一个-cell-的目标应当单调合并">多个 Source 对同一个 Cell 的目标应当单调合并</h2><p>一个 RuntimeCell 可能同时被多个 Source 命中。</p>
+<p>例如：</p>
+<pre><code class="language-text">Source A
+要求 Loaded
+
+Source B
+要求 Activated
+</code></pre>
+<p>系统不应该让 Cell：</p>
+<pre><code class="language-text">这一帧 Loaded
+下一帧 Activated
+再下一帧因为 Source A 又降回 Loaded
+</code></pre>
+<p>在相互冲突的需求之间抖动。</p>
+<p>更稳定的做法是：</p>
+<pre><code class="language-text">Activated
+覆盖
+Loaded。
+</code></pre>
+<p>所以 Policy 在得到本轮：</p>
+<pre><code class="language-text">FrameLoadCells
+FrameActivateCells
+</code></pre>
+<p>之后，会把：</p>
+<pre><code class="language-text">FrameLoadCells -= FrameActivateCells
+</code></pre>
+<p>即：</p>
+<blockquote>
+<p>同一个 Cell 只保留这一轮要求的更高状态。</p>
+</blockquote>
+<p>这是一个很通用的控制系统原则：</p>
+<p><strong>单调目标合并（后文简称“多个需求同时存在时保留更强要求”）</strong>：多个请求作用于同一对象时，如果状态存在明确包含关系，就合并为最高合法目标，而不是让各请求反复覆盖彼此。</p>
+<h2 id="空间命中并不是最终加载许可">空间命中并不是最终加载许可</h2><p>即使 Source Shape 与某个 Cell 相交，也不代表它一定会加载。</p>
+<p>空间只是第一层候选条件。</p>
+<p>后续仍可能受到：</p>
+<ul>
+<li>Data Layer；</li>
+<li>HLOD；</li>
+<li>Client / Server Relevance；</li>
+<li>Target Grid；</li>
+<li>Server Streaming Policy；</li>
+<li>Slow Loading Policy；</li>
+</ul>
+<p>继续过滤。</p>
+<p>这意味着：</p>
+<pre><code class="language-text">Source 命中了 Cell
+</code></pre>
+<p>只能证明：</p>
+<blockquote>
+<p>它进入了候选范围。</p>
+</blockquote>
+<p>不能证明：</p>
+<blockquote>
+<p>它已经获得加载许可。</p>
+</blockquote>
+<p>因此排查：</p>
+<pre><code class="language-text">玩家明明站在这里，为什么内容没加载？
+</code></pre>
+<p>时，不能只画一个 Streaming Radius。</p>
+<p>还需要继续检查：</p>
+<pre><code class="language-text">空间命中
+→
+Data Layer Wanted State
+→
+Relevance
+→
+Policy
+→
+Budget
+→
+LevelStreaming
+</code></pre>
+<h2 id="data-layer-更接近状态门而不是普通标签">Data Layer 更接近状态门，而不是普通标签</h2><p>如果把 Data Layer 只理解为：</p>
+<pre><code class="language-text">Cell 上的一个分类 Tag
+</code></pre>
+<p>很容易低估它对 Runtime Streaming 的影响。</p>
+<p>运行时真正使用的是：</p>
+<pre><code class="language-text">Effective Wanted State。
+</code></pre>
+<p>假设 StreamingSource 要求：</p>
+<pre><code class="language-text">Activated。
+</code></pre>
+<p>但当前 Data Layer 只允许：</p>
+<pre><code class="language-text">Loaded。
+</code></pre>
+<p>那么最终目标仍然只能是：</p>
+<pre><code class="language-text">Loaded。
+</code></pre>
+<p>如果 Data Layer 当前：</p>
+<pre><code class="language-text">Unloaded，
+</code></pre>
+<p>即使玩家就站在 Cell 中央，空间查询也不能把它越权提升到 Activated。</p>
+<p>因此这里的关系更像：</p>
+<pre><code class="language-text">Source
+提出需求
+
+Data Layer
+规定当前允许达到的最高世界状态
+</code></pre>
+<p>两者共同决定最终目标。</p>
+<h2 id="非空间-cell-说明距离从来不是唯一规则">非空间 Cell 说明“距离”从来不是唯一规则</h2><p>World Partition 中还存在 Non-Spatial Cell。</p>
+<p>它们不会因为：</p>
+<pre><code class="language-text">距离 Source 太远
+</code></pre>
+<p>就自然排除。</p>
+<p>这类内容可能依赖：</p>
+<ul>
+<li>Always Loaded；</li>
+<li>Data Layer；</li>
+<li>其他非空间世界规则。</li>
+</ul>
+<p>所以：</p>
+<pre><code class="language-text">没有 StreamingSource
+=
+世界一定全部卸载
+</code></pre>
+<p>并不成立。</p>
+<p>这再次说明：</p>
+<blockquote>
+<p>World Partition 不是单纯的距离 Streaming 系统，而是包含空间查询在内的世界状态策略系统。</p>
+</blockquote>
+<h2 id="policy-真正做的是目标状态差分">Policy 真正做的是“目标状态差分”</h2><p>StreamingSource 查询结束以后，系统并不会对所有 Cell 重新执行一次：</p>
+<pre><code class="language-text">Load / Unload。
+</code></pre>
+<p>Policy 会把：</p>
+<pre><code class="language-text">本轮目标
+</code></pre>
+<p>与：</p>
+<pre><code class="language-text">当前 Policy 状态
+</code></pre>
+<p>进行比较。</p>
+<p>由此得到四类变化：</p>
+<table>
+<thead>
+<tr>
+<th>差分</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ToActivate</td>
+<td>需要提升到 Activated</td>
+</tr>
+<tr>
+<td>ToLoad</td>
+<td>需要进入 Loaded</td>
+</tr>
+<tr>
+<td>ToDeactivate</td>
+<td>Activated 降为 Loaded</td>
+</tr>
+<tr>
+<td>ToUnload</td>
+<td>不再需要保留</td>
+</tr>
+</tbody></table>
+<p>这比：</p>
+<pre><code class="language-text">每帧把所有命中的 Cell 全 Load 一遍
+</code></pre>
+<p>稳定得多。</p>
+<p>整个系统真正计算的是：</p>
+<blockquote>
+<p>与上一轮相比，哪些 Cell 的目标发生了变化？</p>
+</blockquote>
+<p>这是一种典型的增量控制模型。</p>
+<h2 id="policy-currentstate-不是-level-的真实状态">Policy CurrentState 不是 Level 的真实状态</h2><p>这是最容易产生误判的一层。</p>
+<p>假设 Policy 决定：</p>
+<pre><code class="language-text">Cell A
+→
+Activated。
+</code></pre>
+<p>系统调用：</p>
+<pre><code class="language-text">Activate()
+</code></pre>
+<p>以后，Policy 可以立即把它记录到：</p>
+<pre><code class="language-text">ActivatedCells。
+</code></pre>
+<p>但此时底层 Level 可能仍然处于：</p>
+<pre><code class="language-text">Loading
+</code></pre>
+<p>甚至：</p>
+<pre><code class="language-text">LoadedNotVisible。
+</code></pre>
+<p>也就是说：</p>
+<pre><code class="language-text">Policy Activated
+</code></pre>
+<p>更准确的含义是：</p>
+<blockquote>
+<p>我已经接受并发出了 Activated 目标。</p>
+</blockquote>
+<p>它并不是：</p>
+<blockquote>
+<p>这个 Level 已经真正显示出来。</p>
+</blockquote>
+<p>**请求状态（后文简称“系统已经下单”）<strong>和</strong>事实状态（后文简称“底层真的完成”）**必须明确分开。</p>
+<h2 id="levelstreaming-还有自己的意图层">LevelStreaming 还有自己的意图层</h2><p>RuntimeCell 的动作最终会转换到 LevelStreaming。</p>
+<p>例如：</p>
+<pre><code class="language-text">Load
+→
+ShouldBeLoaded = true
+ShouldBeVisible = false
+
+Activate
+→
+ShouldBeLoaded = true
+ShouldBeVisible = true
+
+Deactivate
+→
+ShouldBeVisible = false
+
+Unload
+→
+ShouldBeLoaded = false
+ShouldBeVisible = false
+</code></pre>
+<p>这些字段仍然只是：</p>
+<pre><code class="language-text">Intent。
+</code></pre>
+<p>它们表达：</p>
+<blockquote>
+<p>LevelStreaming 接下来应该向哪里走。</p>
+</blockquote>
+<p>并不表示底层已经走到那里。</p>
+<p>因此 World Partition 的完整状态关系是：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Policy Target"] --&gt; B["RuntimeCell Request"]
+    B --&gt; C["LevelStreaming Intent"]
+    C --&gt; D["Async Package / Level Work"]
+    D --&gt; E["ELevelStreamingState"]
+</code></pre>
+<p>任何一层都不能直接替代下一层。</p>
+<h2 id="activate-真正做的是开始一段收敛过程"><code>Activate()</code> 真正做的是开始一段收敛过程</h2><p>从这个角度看：</p>
+<pre><code class="language-text">Activate()
+</code></pre>
+<p>并不是状态赋值：</p>
+<pre><code class="language-text">State = Activated。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">RequestedState = Activated
+→
+底层逐步追赶。
+</code></pre>
+<p>这是一种很值得迁移到其他异步系统的 API 设计思想：</p>
+<blockquote>
+<p>会产生异步副作用的“状态修改”，最好被理解成 Request，而不是瞬时完成。</p>
+</blockquote>
+<p>例如：</p>
+<pre><code class="language-text">Scene.Activate()
+Service.Start()
+Connection.Connect()
+Asset.Load()
+</code></pre>
+<p>如果这些 API 都隐藏了异步收敛，却只暴露一个 Boolean，调用方很容易把“命令已发出”误认为“工作已完成”。</p>
+<h2 id="isstreamingcompleted-才是真正的事实核验"><code>IsStreamingCompleted()</code> 才是真正的事实核验</h2><p>Policy 已经处理完：</p>
+<pre><code class="language-text">ToLoad
+ToActivate
+</code></pre>
+<p>并不代表流送已经完成。</p>
+<p>它只意味着：</p>
+<pre><code class="language-text">当前目标请求已经全部发出。
+</code></pre>
+<p>真正的完成判断仍然需要重新查询：</p>
+<pre><code class="language-text">相关 Cell 当前 GetCurrentState() 到哪里？
+</code></pre>
+<p><strong>完成重验证（后文简称“最后重新看事实，而不是相信自己的命令”）</strong>：异步控制系统不能仅根据“请求队列已经发空”判断成功，而应该重新读取底层实际状态并验证目标是否真正达成。</p>
+<p>默认查询中，如果要求：</p>
+<pre><code class="language-text">Loaded，
+</code></pre>
+<p>但实际已经：</p>
+<pre><code class="language-text">Activated，
+</code></pre>
+<p>通常可以视为：</p>
+<pre><code class="language-text">目标至少已经达到。
+</code></pre>
+<p>所以：</p>
+<pre><code class="language-text">Activated &gt;= Loaded。
+</code></pre>
+<p>但如果要求：</p>
+<pre><code class="language-text">Activated，
+</code></pre>
+<p>而当前只有：</p>
+<pre><code class="language-text">Loaded，
+</code></pre>
+<p>当然还不能完成。</p>
+<p>这也是 Cell State 使用有序状态，而不是几个独立 Boolean 的价值之一。</p>
+<h2 id="有序状态本身是一项算法合同">有序状态本身是一项算法合同</h2><p>如果完成逻辑依赖：</p>
+<pre><code class="language-text">CurrentState &gt;= TargetState
+</code></pre>
+<p>那么：</p>
+<pre><code class="language-text">Unloaded &lt; Loaded &lt; Activated
+</code></pre>
+<p>就不再只是 Enum 排版。</p>
+<p>它已经成为算法不变量。</p>
+<p>此时有人为了：</p>
+<pre><code class="language-text">让枚举看起来更整齐
+</code></pre>
+<p>调整顺序，</p>
+<p>就可能直接破坏 Completion Query。</p>
+<p>这是一条非常普遍的工程规则：</p>
+<blockquote>
+<p>如果数值顺序被算法用来表达状态包含关系，Enum Ordering 就属于行为合同。</p>
+</blockquote>
+<h2 id="subsystem-才是真正的跨-partition-控制面">Subsystem 才是真正的跨 Partition 控制面</h2><p>每个 WorldPartition 的 Policy 可以计算自己的目标集合。</p>
+<p>但如果每一个 Partition 都独立说：</p>
+<pre><code class="language-text">我本帧加载 20 个 Cell，
+</code></pre>
+<p>三个 Partition 就可能同时制造：</p>
+<pre><code class="language-text">60 个新加载。
+</code></pre>
+<p>所以真正的执行控制被提升到：</p>
+<pre><code class="language-text">UWorldPartitionSubsystem。
+</code></pre>
+<p>Subsystem 会：</p>
+<ol>
+<li>汇总多个 Partition 的 Load / Activate 请求；</li>
+<li>跨 Partition 统一排序；</li>
+<li>计算本帧允许引入的新 Loading Cell；</li>
+<li>优先处理更重要的请求；</li>
+<li>继续调整 pending Cell 的 Streaming Priority。</li>
+</ol>
+<p>这是一项非常关键的架构升级：</p>
+<blockquote>
+<p><strong>局部模块产生需求，全局 Owner 控制共享资源。</strong></p>
+</blockquote>
+<p>各 Partition 决定：</p>
+<pre><code class="language-text">我需要什么。
+</code></pre>
+<p>Subsystem 决定：</p>
+<pre><code class="language-text">当前整个世界能承受多少。
+</code></pre>
+<h2 id="加载预算控制的是新压力不是所有状态变化">加载预算控制的是“新压力”，不是所有状态变化</h2><p><code>MaxLoadingStreamingCells</code> 很容易被理解成：</p>
+<pre><code class="language-text">每帧最多允许处理 N 个 Cell。
+</code></pre>
+<p>但它控制的并不是所有状态操作。</p>
+<p>真正需要消耗新 Load Budget 的主要是：</p>
+<pre><code class="language-text">Unloaded
+→
+Loaded
+
+Unloaded
+→
+Activated
+</code></pre>
+<p>因为两者都会引入新的 Level Loading。</p>
+<p>而：</p>
+<pre><code class="language-text">Loaded
+→
+Activated
+</code></pre>
+<p>已经拥有数据，更多是在推进可见性。</p>
+<p>同样：</p>
+<pre><code class="language-text">Activated
+→
+Loaded
+</code></pre>
+<p>也不代表引入新加载压力。</p>
+<p>所以：</p>
+<p>**加载压力预算（后文简称“这一帧最多再新开多少份加载工作”）**管理的是新增 IO / Level Load 压力，而不是抽象状态操作数量。</p>
+<p>这一区分非常重要。</p>
+<p>否则调参时会把：</p>
+<pre><code class="language-text">状态操作很多
+</code></pre>
+<p>错误等价成：</p>
+<pre><code class="language-text">IO 一定很多。
+</code></pre>
+<h2 id="cpu-update-budget-与-load-budget-是两套预算">CPU Update Budget 与 Load Budget 是两套预算</h2><p>World Partition 还有另一项独立限制：</p>
+<pre><code class="language-text">UpdateStreamingStateTimeLimit。
+</code></pre>
+<p>它限制的是：</p>
+<blockquote>
+<p>一帧中用于更新多个 WorldPartition Policy 的 CPU 时间。</p>
+</blockquote>
+<p>所以存在两个完全不同的资源：</p>
+<h3 id="policy-cpu-budget">Policy CPU Budget</h3><p>回答：</p>
+<pre><code class="language-text">这一帧可以花多少 CPU 去算目标状态？
+</code></pre>
+<h3 id="loading-pressure-budget">Loading Pressure Budget</h3><p>回答：</p>
+<pre><code class="language-text">这一帧可以再引入多少新的 Level Load？
+</code></pre>
+<p>一个项目可能：</p>
+<pre><code class="language-text">空间查询太贵
+但 IO 很轻。
+</code></pre>
+<p>另一个项目可能：</p>
+<pre><code class="language-text">查询极快
+但加载吞吐追不上玩家移动。
+</code></pre>
+<p>如果只有一个：</p>
+<pre><code class="language-text">StreamingBudget
+</code></pre>
+<p>参数，无法正确表达这两类问题。</p>
+<h2 id="预算耗尽以后目标不能被当作失败或丢弃">预算耗尽以后，目标不能被当作失败或丢弃</h2><p>假设本轮 Policy 得到：</p>
+<pre><code class="language-text">ToLoad = 30
+</code></pre>
+<p>但当前预算只允许：</p>
+<pre><code class="language-text">10。
+</code></pre>
+<p>正确结果不是：</p>
+<pre><code class="language-text">剩余 20 个 Cell 不加载。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">本轮先处理 10
+剩余目标继续存在
+下一轮重新排序并继续推进。
+</code></pre>
+<p>因此：</p>
+<p><strong>预算化收敛（后文简称“做不完就留到下一帧继续追”）</strong>：帧预算只能限制单次执行速度，不能让仍然合法的目标从控制系统中消失。</p>
+<p>如果预算耗尽直接丢请求，玩家站着不动时内容可能永远缺失。</p>
+<p>Budget 应该改变：</p>
+<pre><code class="language-text">多久完成。
+</code></pre>
+<p>而不是改变：</p>
+<pre><code class="language-text">最终是否完成。
+</code></pre>
+<h2 id="priority-必须在等待期间继续有意义">Priority 必须在等待期间继续有意义</h2><p>一个 Cell 没有因为预算立即加载，并不意味着它的优先级被冻结。</p>
+<p>玩家可能继续移动。</p>
+<p>新的 Source 可能出现。</p>
+<p>其他 Cell 可能完成。</p>
+<p>因此 pending Cell 仍然需要根据最新信息继续排序和传递 LevelStreaming Priority。</p>
+<p>否则会出现：</p>
+<pre><code class="language-text">玩家已经移动到新区域
+但旧的一批低价值请求仍然占据前排。
+</code></pre>
+<p>动态优先级实际上是：</p>
+<blockquote>
+<p>预算受限系统保持响应性的关键。</p>
+</blockquote>
+<h2 id="source-velocity-是未来价值的输入">Source Velocity 是“未来价值”的输入</h2><p>StreamingSource 不只包含当前位置。</p>
+<p>速度同样可以参与 Cell Priority。</p>
+<p>这让系统有机会区分：</p>
+<pre><code class="language-text">玩家正在快速朝某区域移动
+</code></pre>
+<p>与：</p>
+<pre><code class="language-text">玩家只是暂时站在附近。
+</code></pre>
+<p>换句话说，Streaming 不只在回答：</p>
+<pre><code class="language-text">什么离我最近？
+</code></pre>
+<p>还可以考虑：</p>
+<pre><code class="language-text">什么更可能马上被需要？
+</code></pre>
+<p>但需要注意：当前研究中 Source Hash 优化并不直接把 velocity 纳入位置/旋转哈希；输入 Hash 没变化时，速度仍然存在单独更新路径。</p>
+<p>这说明性能优化不能简单写成：</p>
+<pre><code class="language-text">Hash 没变
+→
+所有 Source 信息都没变。
+</code></pre>
+<h2 id="可选异步更新只计算目标不直接修改-world">可选异步更新只计算目标，不直接修改 World</h2><p>当前源码快照中，异步 Policy Update 是可选能力，并不是默认开启状态。</p>
+<p>即使开启，Worker 执行的也是：</p>
+<pre><code class="language-text">目标集合计算。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">直接 Load Level。
+</code></pre>
+<p>主线更接近：</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant GT as Game Thread
+    participant Task as Worker
+    GT-&gt;&gt;GT: Snapshot Current State
+    GT-&gt;&gt;Task: 计算 Target Diff
+    Task--&gt;&gt;GT: ToLoad / ToActivate
+    GT-&gt;&gt;GT: 用最新 State 重新过滤
+    GT-&gt;&gt;GT: 执行 LevelStreaming Mutation
+</code></pre>
+<p>这体现了一个很稳健的并发边界：</p>
+<p><strong>异步求解、主线程提交（后文简称“后台算答案，Owner 线程真正改世界”）</strong>。</p>
+<p>Worker 负责：</p>
+<pre><code class="language-text">算应该怎么办。
+</code></pre>
+<p>Game Thread 负责：</p>
+<pre><code class="language-text">真正修改有线程归属的运行时状态。
+</code></pre>
+<h2 id="异步计算必须使用快照而不是读不断变化的-live-state">异步计算必须使用快照，而不是读不断变化的 Live State</h2><p>如果 Worker 在后台持续读取：</p>
+<pre><code class="language-text">Policy.CurrentState
+DataLayerState
+Streaming Content
+</code></pre>
+<p>而 Game Thread 同时修改这些对象，</p>
+<p>目标结果就会来自一个不存在的混合时间点。</p>
+<p>因此异步路径需要：</p>
+<pre><code class="language-text">Snapshot Input
+→
+Worker Compute
+→
+Return Result
+</code></pre>
+<p>任务完成后，还需要根据最新 CurrentState 重新过滤结果。</p>
+<p>例如 Worker 得到：</p>
+<pre><code class="language-text">Cell A → ToLoad
+</code></pre>
+<p>但任务运行期间主线程已经因为另一个路径加载了 A。</p>
+<p>结果回来以后就不能再次重复请求。</p>
+<p>这是一套非常典型的：</p>
+<pre><code class="language-text">Snapshot
+→
+Compute
+→
+Revalidate
+→
+Commit
+</code></pre>
+<p>协议。</p>
+<h2 id="修改-streaming-content-前必须等待仍在查询它的任务">修改 Streaming Content 前必须等待仍在查询它的任务</h2><p>Snapshot 只能保护：</p>
+<pre><code class="language-text">状态值。
+</code></pre>
+<p>如果 Worker 仍然持有某些 RuntimeCell 或空间索引对象，而主线程直接：</p>
+<pre><code class="language-text">删除 Streaming Content
+重新生成 Cell
+替换外部 Streaming Object
+</code></pre>
+<p>就可能产生真正生命周期冲突。</p>
+<p>所以内容变更还需要一个更强的边界：</p>
+<blockquote>
+<p>在修改 Worker 可能仍在访问的结构之前，先等待正在运行的 Policy Task。</p>
+</blockquote>
+<p>这说明异步优化不仅需要：</p>
+<pre><code class="language-text">Thread-safe container。
+</code></pre>
+<p>还需要明确：</p>
+<pre><code class="language-text">内容结构什么时候允许被替换。
+</code></pre>
+<h2 id="slow-streaming-是目标移动速度超过系统追赶能力">Slow Streaming 是“目标移动速度超过系统追赶能力”</h2><p>当玩家快速移动时，可能出现：</p>
+<pre><code class="language-text">Source 不断前移
+↓
+新的 Cell 不断进入目标集合
+↓
+Level Loading 长时间追不上
+</code></pre>
+<p>此时 Streaming Performance 进入 Slow / Critical。</p>
+<p>这里真正发生的是：</p>
+<blockquote>
+<p>控制目标移动速度超过了执行层收敛速度。</p>
+</blockquote>
+<p>对于标记了：</p>
+<pre><code class="language-text">BlockOnSlowLoading
+</code></pre>
+<p>的关键 Source，</p>
+<p>系统可以请求更激进的追赶策略。</p>
+<p>但 Policy 本身并不是：</p>
+<pre><code class="language-text">检测到 Critical
+→
+立刻自己同步完成所有 IO。
+</code></pre>
+<p>它更多是在向 World 提出：</p>
+<pre><code class="language-text">需要进入 Block / Catch-up 行为。
+</code></pre>
+<p>这仍然保持了：</p>
+<pre><code class="language-text">Policy
+≠
+IO Executor。
+</code></pre>
+<h2 id="server-streaming-不能直接复制-client-逻辑">Server Streaming 不能直接复制 Client 逻辑</h2><p>客户端最常见的需求是：</p>
+<pre><code class="language-text">围绕当前玩家 Source 加载世界。
+</code></pre>
+<p>服务器面对的问题更复杂。</p>
+<p>它可能：</p>
+<ul>
+<li>不按普通 Source Stream；</li>
+<li>保留更多 Cell；</li>
+<li>禁止 Streaming Out；</li>
+<li>等待客户端 Level Visibility；</li>
+<li>针对 Data Layer 采用不同保留政策。</li>
+</ul>
+<p>所以：</p>
+<pre><code class="language-text">客户端这里会 Unload
+</code></pre>
+<p>不能直接推出：</p>
+<pre><code class="language-text">Dedicated Server 也会同样 Unload。
+</code></pre>
+<p>这是大型网络世界中非常重要的一项边界：</p>
+<blockquote>
+<p>Client 与 Server 可以共享 RuntimeCell 和 Streaming Framework，但不必共享同一种生命周期 Policy。</p>
+</blockquote>
+<h2 id="完成查询应该重新构造需求">完成查询应该重新构造需求</h2><p><code>IsStreamingCompleted()</code> 并不是：</p>
+<pre><code class="language-text">看看上一轮 ToLoad 数组空不空。
+</code></pre>
+<p>它会重新基于：</p>
+<ul>
+<li>Non-Spatial Cells；</li>
+<li>Active / Loaded Data Layers；</li>
+<li>Streaming Sources；</li>
+<li>HLOD；</li>
+<li>Cell Current State；</li>
+</ul>
+<p>检查当前需求是否真正满足。</p>
+<p>这种做法有一个明显好处：</p>
+<blockquote>
+<p>完成判断基于当前世界事实，而不是基于某次过去的计划。</p>
+</blockquote>
+<p>假设玩家在等待期间已经移动。</p>
+<p>原本需要的 Cell 可能已经不再重要。</p>
+<p>新 Cell 又可能加入需求。</p>
+<p>真正合理的 Completion 应该针对：</p>
+<pre><code class="language-text">现在的目标集合。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">三帧前那份工作单。
+</code></pre>
+<h2 id="流送系统需要分层诊断而不是一个streaming-很慢">流送系统需要分层诊断，而不是一个“Streaming 很慢”</h2><p>当玩家看到地形 Pop-in 或区域迟迟不出现时，问题至少可能来自四层。</p>
+<h3 id="source-层">Source 层</h3><ul>
+<li>Provider 没注册；</li>
+<li>Target Grid 错误；</li>
+<li>Shape 没命中；</li>
+<li>Instance Transform 错误。</li>
+</ul>
+<h3 id="policy-层">Policy 层</h3><ul>
+<li>Data Layer 不允许；</li>
+<li>Relevance 被过滤；</li>
+<li>目标 Diff 没生成；</li>
+<li>Update Hash 跳过。</li>
+</ul>
+<h3 id="budget-层">Budget 层</h3><ul>
+<li>Global Load Budget 已满；</li>
+<li>目标排序靠后；</li>
+<li>其他 Partition 正在消耗预算。</li>
+</ul>
+<h3 id="levelstreaming-层">LevelStreaming 层</h3><ul>
+<li>Package Loading 慢；</li>
+<li>Pending Add To World；</li>
+<li>Failed To Load；</li>
+<li>ShouldBeVisible 尚未真正达成。</li>
+</ul>
+<p>所以：</p>
+<pre><code class="language-text">Source Trace 存在
+</code></pre>
+<p>不能证明：</p>
+<pre><code class="language-text">Level 已经加载。
+</code></pre>
+<p>同样：</p>
+<pre><code class="language-text">Policy 日志出现 Activate
+</code></pre>
+<p>也不能证明：</p>
+<pre><code class="language-text">画面应该立即出现内容。
+</code></pre>
+<p>**跨层流送诊断（后文简称“同一个 Cell 从需求一路追到底”）**应该能够关联：</p>
+<pre><code class="language-text">Source
+→
+Cell
+→
+Target
+→
+Budget
+→
+Level State
+</code></pre>
+<p>而不是每个系统输出互相没有身份关联的日志。</p>
+<h2 id="一个典型问题已-activated-但仍不可见">一个典型问题：已 Activated 但仍不可见</h2><p>假设调试面板显示：</p>
+<pre><code class="language-text">Policy:
+Cell_42 = Activated
+</code></pre>
+<p>玩家却仍然看不到区域。</p>
+<p>错误结论是：</p>
+<pre><code class="language-text">World Partition 状态错了。
+</code></pre>
+<p>正确排查应该继续：</p>
+<pre><code class="language-text">Policy Activated
+↓
+ShouldBeLoaded ?
+↓
+ShouldBeVisible ?
+↓
+ELevelStreamingState ?
+↓
+是否仍 Pending Add To World ?
+↓
+OnLevelShown 是否触发？
+</code></pre>
+<p>可能最后发现：</p>
+<pre><code class="language-text">Policy 已经发出正确请求
+但 Level 仍然处于 LoadedNotVisible。
+</code></pre>
+<p>此时问题并不在 Source 或 RuntimeHash。</p>
+<p>而在更下游的收敛过程。</p>
+<p>这就是三层状态模型真正的调试价值。</p>
+<h2 id="一个典型问题附近-cell-总被远处内容抢先加载">一个典型问题：附近 Cell 总被远处内容抢先加载</h2><p>另一个常见体验是：</p>
+<pre><code class="language-text">玩家眼前的区域没有加载
+远处某些内容却先进入内存。
+</code></pre>
+<p>这时首先需要检查的不是：</p>
+<pre><code class="language-text">Streaming Distance。
+</code></pre>
+<p>因为排序可能同时考虑：</p>
+<ul>
+<li>Source Priority；</li>
+<li>Cell Priority；</li>
+<li>Velocity；</li>
+<li>Shape；</li>
+<li>Grid；</li>
+<li>Pending Reprioritization。</li>
+</ul>
+<p>多个 Partition 还会在 Subsystem 层进入统一排序。</p>
+<p>因此真正的问题可能是：</p>
+<blockquote>
+<p>当前优先级模型把“对玩家最迫切”表达错了。</p>
+</blockquote>
+<p>Streaming 排序不应该只等价于：</p>
+<pre><code class="language-text">距离越近越先加载。
+</code></pre>
+<p>它需要表达：</p>
+<pre><code class="language-text">未来使用价值。
+</code></pre>
+<h2 id="一个典型问题把所有-streaming-cvar-都当成速度参数">一个典型问题：把所有 Streaming CVar 都当成速度参数</h2><p>World Partition 有很多配置项。</p>
+<p>它们看起来都和：</p>
+<pre><code class="language-text">Streaming Performance
+</code></pre>
+<p>有关。</p>
+<p>但实际分属完全不同控制面：</p>
+<table>
+<thead>
+<tr>
+<th>配置类型</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Update Optimization</td>
+<td>是否重复计算目标集合</td>
+</tr>
+<tr>
+<td>Async Update</td>
+<td>Policy Diff 是否可在 Worker 计算</td>
+</tr>
+<tr>
+<td>Max Loading Cells</td>
+<td>同时引入多少新 Load 压力</td>
+</tr>
+<tr>
+<td>Update Time Limit</td>
+<td>Policy CPU 每帧投入多少</td>
+</tr>
+<tr>
+<td>Block On Slow</td>
+<td>Critical 时是否请求追赶</td>
+</tr>
+<tr>
+<td>Server Streaming</td>
+<td>Server 是否按 Source 执行生命周期</td>
+</tr>
+</tbody></table>
+<p>如果项目：</p>
+<pre><code class="language-text">空间 Query CPU 爆炸，
+</code></pre>
+<p>调高：</p>
+<pre><code class="language-text">MaxLoadingStreamingCells
+</code></pre>
+<p>几乎没有帮助。</p>
+<p>如果问题是：</p>
+<pre><code class="language-text">IO 长期追不上 Source，
+</code></pre>
+<p>只优化：</p>
+<pre><code class="language-text">Policy Diff
+</code></pre>
+<p>同样不会解决。</p>
+<p>所以调优前首先需要明确：</p>
+<blockquote>
+<p>当前瓶颈到底属于哪一层？</p>
+</blockquote>
+<h2 id="world-partition-最值得迁移的是控制系统分层">World Partition 最值得迁移的是控制系统分层</h2><p>很多自研引擎或大型场景系统不需要复制：</p>
+<pre><code class="language-text">RuntimeHashSet
+WorldPartitionSubsystem
+UWorldPartitionLevelStreamingDynamic
+</code></pre>
+<p>但它们可以借鉴同一组结构：</p>
+<pre><code class="language-text">需求输入
+↓
+候选查询
+↓
+目标规划
+↓
+预算调度
+↓
+副作用执行
+↓
+实际状态核验
+</code></pre>
+<p>这六层一旦分开，系统就自然拥有加入：</p>
+<ul>
+<li>异步计算；</li>
+<li>帧预算；</li>
+<li>多 Source；</li>
+<li>多世界实例；</li>
+<li>优先级；</li>
+<li>完成等待；</li>
+<li>调试追踪；</li>
+</ul>
+<p>的空间。</p>
+<p>反过来，如果系统一开始就是：</p>
+<pre><code class="language-text">if distance &lt; 100:
+    LoadScene()
+else:
+    UnloadScene()
+</code></pre>
+<p>后续每增加一项能力都会继续堆进同一个条件函数。</p>
+<h2 id="对-unity-大世界流送系统的迁移方式">对 Unity 大世界流送系统的迁移方式</h2><p>一个更轻量的 Unity 方案也可以使用类似结构：</p>
+<pre><code class="language-text">StreamingSource
+→
+SpatialIndex Query
+→
+DesiredChunkState
+→
+GlobalScheduler
+→
+Addressables / Scene Load
+→
+ActualChunkState
+</code></pre>
+<p>状态可以简化为：</p>
+<pre><code class="language-text">Unloaded
+Loaded
+Activated
+</code></pre>
+<p>但要保持：</p>
+<pre><code class="language-text">DesiredState
+≠
+ActualState。
+</code></pre>
+<p>然后 Scheduler 统一控制：</p>
+<ul>
+<li>每帧最多开启多少 Load；</li>
+<li>最大并发 Addressables Operation；</li>
+<li>Activate 优先级；</li>
+<li>玩家速度预测；</li>
+<li>Scene Scope；</li>
+<li>Cancellation；</li>
+<li>Completion。</li>
+</ul>
+<p>这样，即使底层不是 Unreal，核心控制逻辑仍然成立。</p>
+<h2 id="对普通-asset-streaming-的迁移方式">对普通 Asset Streaming 的迁移方式</h2><p>这套模型甚至不要求对象是 Scene。</p>
+<p>例如开放世界 Texture / Mesh Streaming 可以使用：</p>
+<pre><code class="language-text">Observer Demand
+→
+Wanted Quality
+→
+Budget Arbitration
+→
+IO / Upload
+→
+Actual Resident Quality
+</code></pre>
+<p>同样存在：</p>
+<pre><code class="language-text">Wanted
+≠
+Requested
+≠
+Resident。
+</code></pre>
+<p>World Partition 的 Cell State 只是这种控制模型的一种具体形式。</p>
+<h2 id="这套模型不能机械复制到小型项目">这套模型不能机械复制到小型项目</h2><p>如果一个项目只有：</p>
+<ul>
+<li>十几个小场景；</li>
+<li>没有多人；</li>
+<li>没有多个 Streaming Source；</li>
+<li>没有复杂 Data Layer；</li>
+<li>内存余量充分；</li>
+<li>加载耗时很低；</li>
+</ul>
+<p>那么建立完整：</p>
+<pre><code class="language-text">Policy
+Global Scheduler
+Priority
+Snapshot
+Completion Query
+</code></pre>
+<p>可能反而增加维护成本。</p>
+<p>简单的：</p>
+<pre><code class="language-text">Trigger
+→
+Load Additive Scene
+→
+Unload Previous
+</code></pre>
+<p>完全可能更加适合。</p>
+<p>World Partition 的复杂度服务的是：</p>
+<blockquote>
+<p>多个持续变化的需求正在竞争有限加载能力。</p>
+</blockquote>
+<p>只有问题规模达到这个层级以后，完整状态收敛模型才真正值得建立。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="直接使用玩家距离调用-load-unload">直接使用玩家距离调用 Load / Unload</h3><p>空间判断、调度、预算和副作用全部耦合在同一个函数。</p>
+<h3 id="每帧重新扫描所有世界对象">每帧重新扫描所有世界对象</h3><p>生产期可以压缩的数据没有被固化成 Runtime Cell。</p>
+<h3 id="source-只保存位置">Source 只保存位置</h3><p>无法表达预取、方向、优先级和不同 Target State。</p>
+<h3 id="所有-source-都直接要求-activated">所有 Source 都直接要求 Activated</h3><p>失去 Loaded / Activated 两阶段流送空间。</p>
+<h3 id="spatial-hit-被直接当成加载许可">Spatial Hit 被直接当成加载许可</h3><p>Data Layer、Server Policy 和 Relevance 被绕过。</p>
+<h3 id="用一个-boolean-表示-cell-生命周期">用一个 Boolean 表示 Cell 生命周期</h3><p>无法区分 Wanted、Requested、Loaded 和 Visible。</p>
+<h3 id="policy-currentstate-被当成-level-实际状态">Policy CurrentState 被当成 Level 实际状态</h3><p>日志显示 Activated，就误判画面必须已经出现。</p>
+<h3 id="发出所有-load-请求以后就宣称完成">发出所有 Load 请求以后就宣称完成</h3><p>没有重新核验底层真实状态。</p>
+<h3 id="每个-partition-独立消耗自己的加载预算">每个 Partition 独立消耗自己的加载预算</h3><p>多个 Partition 同时把世界加载压力推爆。</p>
+<h3 id="一个参数同时控制-cpu-与-io-budget">一个参数同时控制 CPU 与 IO Budget</h3><p>无法独立调节查询成本和加载吞吐。</p>
+<h3 id="budget-耗尽后直接丢弃剩余目标">Budget 耗尽后直接丢弃剩余目标</h3><p>静止玩家附近的内容可能永久无法最终收敛。</p>
+<h3 id="worker-直接执行-levelstreaming-mutation">Worker 直接执行 LevelStreaming Mutation</h3><p>线程所有权与目标计算耦合。</p>
+<h3 id="async-task-读取持续变化的-live-state">Async Task 读取持续变化的 Live State</h3><p>目标结果来自不存在的混合时间点。</p>
+<h3 id="修改-streaming-content-时不等待-worker">修改 Streaming Content 时不等待 Worker</h3><p>后台查询访问已经被销毁或替换的 Cell。</p>
+<h3 id="client-与-server-共用一套-streaming-out-假设">Client 与 Server 共用一套 Streaming-Out 假设</h3><p>服务器生命周期和客户端视野需求被混为一谈。</p>
+<h3 id="所有-streaming-cvar-都按速度参数调">所有 Streaming CVar 都按“速度参数”调</h3><p>没有定位真正瓶颈所属控制层。</p>
+<h2 id="我的流送状态收敛检查表">我的流送状态收敛检查表</h2><ol>
+<li>运行时流送单元是否在生产期提前稳定生成？</li>
+<li>Runtime 查询是否使用空间索引，而不是遍历全部世界对象？</li>
+<li>StreamingSource 是否是统一输入协议？</li>
+<li>Source 是否能明确区分 Loaded 与 Activated？</li>
+<li>多个 Source 的目标状态是否采用单调合并？</li>
+<li>Data Layer 是否进入目标态计算，而不是事后补过滤？</li>
+<li>Non-Spatial 内容是否拥有独立规则？</li>
+<li>Desired State 与 Actual State 是否是两个数据模型？</li>
+<li>Policy CurrentState 是否被明确解释成请求账本？</li>
+<li>LevelStreaming Intent 是否不会被当成完成事实？</li>
+<li>是否能够区分 LoadedNotVisible 与 LoadedVisible？</li>
+<li>Completion 是否重新读取实际状态？</li>
+<li>状态枚举顺序是否被算法依赖？</li>
+<li>多个 Streaming Region / Partition 是否共享全局预算？</li>
+<li>Load Budget 是否只计算真正新增的 Load Pressure？</li>
+<li>CPU Update Budget 与 IO / Load Budget 是否独立？</li>
+<li>Budget 耗尽后未完成目标是否会进入下一轮继续收敛？</li>
+<li>Pending Cell 是否会根据最新信息重新排序？</li>
+<li>Source Velocity 是否可以影响未来优先级？</li>
+<li>异步任务是否只计算目标，而不直接修改线程敏感状态？</li>
+<li>Worker 是否基于 Immutable Snapshot？</li>
+<li>Worker Result 回主线程后是否会重新验证 Current State？</li>
+<li>Streaming Content 变更以前是否等待正在访问它的任务？</li>
+<li>Slow Streaming 是否有独立诊断，而不是简单降低 FPS？</li>
+<li>Critical Streaming 是否能够区分 Blocking 与 Non-Blocking 内容？</li>
+<li>Server Streaming Policy 是否与 Client 独立验证？</li>
+<li>Completion Query 是否基于当前 Source 和 Data Layer？</li>
+<li>Source、Policy、Budget 和 LevelState 是否拥有可关联身份？</li>
+<li>调试工具能否回答“为什么这个 Cell 没有加载”？</li>
+<li>调试工具能否回答“为什么它已经 Activated 却仍然不可见”？</li>
+<li>性能测试是否分别记录 Query CPU、Policy CPU、IO Latency 和 Visibility Latency？</li>
+<li>项目是否真的需要完整 World Partition 式控制面，而不是简单 Additive Scene Streaming？</li>
+</ol>
+<p>World Partition 表面上解决的是：</p>
+<pre><code class="language-text">开放世界太大，不能一次全部加载。
+</code></pre>
+<p>但源码真正展示出来的问题更深一层。</p>
+<p>大型世界并不是简单地决定：</p>
+<pre><code class="language-text">加载谁。
+</code></pre>
+<p>它需要持续处理：</p>
+<pre><code class="language-text">谁现在需要内容
+需要到什么程度
+哪些需求优先
+当前预算允许做多少
+命令已经推进到哪里
+底层事实到底完成没有
+</code></pre>
+<p>于是整个系统形成了一条不断追赶的控制链：</p>
+<pre><code class="language-text">StreamingSource
+→
+Target State
+→
+Budgeted Request
+→
+LevelStreaming Intent
+→
+Actual State
+→
+Completion Revalidation
+</code></pre>
+<p>玩家移动以后，目标会变化。</p>
+<p>目标变化以后，Policy 重新求解。</p>
+<p>预算不足时，系统不会放弃目标，而是下一帧继续追赶。</p>
+<p>底层 Level 完成以后，事实状态再向目标收敛。</p>
+<p>因此 World Partition 最值得迁移的思想，并不是“把地图切成格子”。</p>
+<p>而是：</p>
+<blockquote>
+<p><strong>把需求计算、调度意图和真实完成拆成不同层，让一个持续变化的大世界能够在有限预算下稳定追赶目标。</strong></p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>流送状态收敛</td>
+<td>从想要加载到真的加载完</td>
+</tr>
+<tr>
+<td>RuntimeCell</td>
+<td>运行时可流送单元</td>
+</tr>
+<tr>
+<td>StreamingSource</td>
+<td>世界内容需求来源</td>
+</tr>
+<tr>
+<td>单调目标合并</td>
+<td>多个需求同时存在时保留更强要求</td>
+</tr>
+<tr>
+<td>请求状态</td>
+<td>系统已经下单</td>
+</tr>
+<tr>
+<td>事实状态</td>
+<td>底层真的完成</td>
+</tr>
+<tr>
+<td>完成重验证</td>
+<td>最后重新看事实，而不是相信自己的命令</td>
+</tr>
+<tr>
+<td>加载压力预算</td>
+<td>这一帧最多再新开多少份加载工作</td>
+</tr>
+<tr>
+<td>预算化收敛</td>
+<td>做不完就留到下一帧继续追</td>
+</tr>
+<tr>
+<td>异步求解、主线程提交</td>
+<td>后台算答案，Owner 线程真正改世界</td>
+</tr>
+<tr>
+<td>跨层流送诊断</td>
+<td>同一个 Cell 从需求一路追到底</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>notes/UnrealEngine源码研究/UE6/05_WorldPartition从StreamingSource到RuntimeCell_流送查询与状态收敛.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE6/README.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE5/05_UWorld与AActor生命周期及Tick调度.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE6/03_DDC与Cook生产控制面_工厂ArtifactView与ChunkAssignment.md</code></li>
+<li><code>blogs/从UnrealEngine源码理解引擎设计/01-UnrealEngine的第一帧提交链.md</code></li>
+<li><code>blogs/从UnrealEngine源码理解引擎设计/02-UnrealEngine的资源生产线.md</code></li>
+<li><code>blogs/从UnrealEngine源码理解引擎设计/03-AsyncLoading2对象发布协议.md</code></li>
+</ul>
+<p>本文主要依据 2026-08-18 的 UE6-main 源码快照整理。</p>
+<p>当前研究已经通过源码入口、状态机与现有测试入口核对 <code>StreamingSource → RuntimeHashSet → Policy → Subsystem → RuntimeCell → LevelStreaming → IsStreamingCompleted</code> 主链，但没有运行 PIE、Cook、Automation Test 或真实开放世界 Benchmark。</p>
+<p>因此本文不声称：</p>
+<ul>
+<li>当前 UE6-main 的 World Partition API 已冻结为正式 Release 合同；</li>
+<li>UE6 默认开启异步 Streaming Policy Update；</li>
+<li>Policy 中的 Activated 状态等价于 Level 已经 LoadedVisible；</li>
+<li>Source Shape 命中一定导致加载；</li>
+<li><code>MaxLoadingStreamingCells</code> 等于底层 IO 请求数量限制；</li>
+<li>Client 与 Dedicated Server 拥有完全相同的 Streaming 生命周期；</li>
+<li>当前源码结构已经证明某种具体开放世界性能水平。</li>
+</ul>
+<p>文中将状态收敛模型迁移到 Unity Additive Scene、Addressables 和其他 Streaming 系统的部分属于工程归纳，不表示这些系统需要复制 Unreal 的具体 RuntimeHash、Cell、CVar 或 LevelStreaming 实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unreal-mass-deferred-structural-changes.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序</strong><small>从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。</small></a><a href="unreal-engine-asyncloading2-object-publication.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界</strong><small>异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？</small></a><a href="unreal-engine-first-frame-pipeline.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 lifecycle、unreal-engine</span><strong>Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接</strong><small>一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

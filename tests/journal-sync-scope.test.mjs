@@ -8,6 +8,8 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'assets/social/pages-journal-design.png',
     'content/blogs/article.md',
     'content/game-designs/design.md',
+    'config/blog-publication.json',
+    'data/blog-taxonomy.json',
     'data/journal.json',
     'data/journal-source.json',
     'pages/framework.html',
@@ -28,6 +30,7 @@ test('push-driven Journal sync owns only generated public projections', () => {
   for (const forbidden of [
     'package.json',
     'scripts/import-journal-export.mjs',
+    'config/journal-curation.json',
     'style/blog.css',
     'assets/social/pages-contact.png',
     'assets/social/pages-blog-article.svg',

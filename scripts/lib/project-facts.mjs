@@ -2,9 +2,8 @@ import { createHash } from 'node:crypto';
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const REVIEW_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
-const PUBLIC_BLOG_STATUSES = new Set(['approved', 'published']);
 
-export function assertProjectFactsCurrent(projectData, framework, journal, blogPublication) {
+export function assertProjectFactsCurrent(projectData, framework, journal) {
   if (projectData?.schemaVersion !== 3 || !Array.isArray(projectData.projects)) {
     throw new Error('Project facts must use schemaVersion 3 and expose projects.');
   }
@@ -57,38 +56,20 @@ export function assertProjectFactsCurrent(projectData, framework, journal, blogP
   if (!REVIEW_HASH_PATTERN.test(journalProject?.reviewedJournalCurationHash ?? '')) {
     throw new Error('Sakura Design Journal project facts require reviewedJournalCurationHash.');
   }
-  if (journalProject.reviewedJournalCurationHash !== journalCurationReviewHash(journal, blogPublication)) {
+  if (journalProject.reviewedJournalCurationHash !== journalCurationReviewHash(journal)) {
     throw new Error('Journal curation contract changed; review Sakura Design Journal project facts.');
   }
 }
 
-export function journalCurationReviewHash(journal, blogPublication) {
+export function journalCurationReviewHash(journal) {
   if (!Array.isArray(journal?.streams) || !Array.isArray(journal?.featuredNotes)) {
     throw new Error('Journal curation review requires streams and featuredNotes.');
   }
-  if (!Array.isArray(blogPublication?.articles)) {
-    throw new Error('Journal curation review requires the blog publication registry.');
-  }
-  const publicArticles = blogPublication.articles
-    .filter((article) => PUBLIC_BLOG_STATUSES.has(article.status))
-    .map((article) => ({
-      sourceId: article.sourceId,
-      status: article.status,
-      slug: article.slug,
-      publishedAt: article.publishedAt,
-      updatedAt: article.updatedAt,
-      title: article.title,
-      description: article.description,
-      series: article.series,
-      tags: article.tags,
-      contentHash: article.contentHash
-    }));
   const semanticContract = {
     title: journal.title,
     description: journal.summary?.description,
     streams: journal.streams,
-    featuredNotes: journal.featuredNotes,
-    publicArticles
+    featuredNotes: journal.featuredNotes
   };
   const digest = createHash('sha256')
     .update(JSON.stringify(canonicalize(semanticContract)))

@@ -11,18 +11,19 @@ Sakura Design Journal 的 `main` 分支推送负责生成公开导出包，并�
 - 未提交文件、未登记博客、Godot 笔记、审计全文和设计正文不会进入导出。
 
 Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`。本站导入器随后重新
-校验 SHA、数量、正文哈希和敏感内容。这是“可以安全公开”门禁，不等于编辑上已经可发布。
+校验 SHA、数量、正文哈希和敏感内容。因为只有 `blogs/publication.v1.json` 已登记文章才会进入
+该公开包，Journal 登记同时构成个人站发布授权。
 
-站点侧的 `config/blog-publication.json` 是第二级稀疏出版白名单。它不需要覆盖全部导入文章；
-没有合同的来源文章自动进入隐式待审核状态，只保留安全导入镜像，不生成正文页、旧址引导页、
-社交图、RSS 或 Sitemap 条目。显式合同固定 `status`、语义 `slug`、`publishedAt`、
-`updatedAt`、标题、摘要、系列、标签和 `contentHash`。只有 `approved` 或 `published`
-会生成正式正文页；显式登记的其他状态只保留 `noindex` 的旧路由引导页。Markdown 产生的
-HTML 仍会经过白名单清理。
+站点侧的 `config/blog-publication.json` 是可重建但保留站点字段的出版投影。每次导入都会：
 
-该合同不属于 Journal 自动同步的可写路径。新增未登记文章不会阻塞同步；但任何显式合同的
-来源删除、字段或正文哈希变化仍会失败关闭。站点维护者完成编辑复核并手工新增或更新合同后，
-文章才能获得语义路由并进入正式发布流程。
+- 保留既有条目的 `status`、语义 `slug`、`publishedAt` 和未知站点扩展字段；
+- 从 fixed export 刷新 `updatedAt`、标题、摘要、系列、标签和 `contentHash`；
+- 为新的语义 source ID 追加 `published` 条目，默认 `slug=sourceId`、`publishedAt=updatedAt`；
+- 保留仍被使用的 taxonomy 人工文案，并为新 ASCII tag 追加确定性标签入口。
+
+来源删除不会自动删合同；重复 ID、正文或元数据不一致、草稿标记、非语义 hash ID 和未知系列
+仍会失败关闭。新系列需要维护者显式提供 slug 与说明，避免同步器猜测公开栏目名称。项目事实的
+人工策展 hash 只覆盖项目文案、知识流和 featured notes，不包含自动收敛的 publication 列表。
 
 ## Runner 配置
 
@@ -42,11 +43,14 @@ HTML 仍会经过白名单清理。
 同步提交只能修改：
 
 - `data/journal.json`、`data/journal-source.json`；
-- `content/blogs/`；
+- `content/blogs/`、`content/game-designs/`；
+- `config/blog-publication.json`、`data/blog-taxonomy.json`；
 - `pages/blog.html`、正文/旧址/系列/标签页、`pages/journal.html`；
+- Journal 正文页及对应博客/设计分享图；
 - 因计数或链接变化而生成的 `index.html`、`pages/portfolio.html`、`rss.xml`、`sitemap.xml`。
 
-`data/blog-taxonomy.json`、`data/evidence-chains.json` 和 `config/blog-publication.json` 都是站点维护者事实源，不属于自动同步可写范围。
+`data/evidence-chains.json`、`config/journal-curation.json`、项目文案、生成器和样式仍是站点维护者
+事实源，不属于自动同步可写范围。
 
 `scripts/verify-journal-sync-scope.mjs` 会拒绝其他路径。工作流在提交前运行完整站点检查和
 `git diff --cached --check`，只做普通 fast-forward push，绝不 force push。

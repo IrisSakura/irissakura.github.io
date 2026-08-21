@@ -3,7 +3,11 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { selectPublishedBlogs, stripBlogPublicationPreamble } from '../scripts/lib/blog-publication-model.mjs';
+import {
+  reconcileBlogPublication,
+  selectPublishedBlogs,
+  stripBlogPublicationPreamble
+} from '../scripts/lib/blog-publication-model.mjs';
 
 const root = new URL('../', import.meta.url);
 
@@ -43,6 +47,102 @@ test('unregistered Journal blogs remain in implicit review without entering publ
 
   const selected = selectPublishedBlogs(sparseManifest, source, bodies);
   assert.ok(selected.every((article) => article.id !== omitted.sourceId));
+});
+
+test('publication reconciliation updates Journal facts and appends semantic public articles', () => {
+  const existingBody = Buffer.from('# Existing\n\nUpdated complete publication body.\n');
+  const addedBody = Buffer.from('# Added\n\nNew complete publication body.\n');
+  const manifest = {
+    schemaVersion: 1,
+    articles: [{
+      sourceId: 'existing-article',
+      status: 'published',
+      slug: 'curated-existing-slug',
+      publishedAt: '2026-08-01',
+      updatedAt: '2026-08-01',
+      title: 'Old title',
+      description: 'Old publication description long enough for validation.',
+      series: 'Old series',
+      tags: ['old'],
+      contentHash: '0'.repeat(64)
+    }]
+  };
+  const source = {
+    blogs: [
+      sourceArticle('existing-article', existingBody, { updatedAt: '2026-08-20' }),
+      sourceArticle('added-semantic-article', addedBody, { updatedAt: '2026-08-21' })
+    ]
+  };
+
+  const reconciled = reconcileBlogPublication(manifest, source);
+  assert.equal(reconciled.articles.length, 2);
+  assert.deepEqual(
+    pick(reconciled.articles[0], ['status', 'slug', 'publishedAt']),
+    { status: 'published', slug: 'curated-existing-slug', publishedAt: '2026-08-01' }
+  );
+  assert.deepEqual(
+    pick(reconciled.articles[0], ['updatedAt', 'title', 'description', 'series', 'tags', 'contentHash']),
+    {
+      updatedAt: '2026-08-20',
+      title: 'Existing article title',
+      description: 'Existing article summary is intentionally long enough for public validation.',
+      series: 'Test series',
+      tags: ['testing'],
+      contentHash: createHash('sha256').update(existingBody).digest('hex')
+    }
+  );
+  assert.deepEqual(
+    pick(reconciled.articles[1], ['sourceId', 'status', 'slug', 'publishedAt', 'updatedAt']),
+    {
+      sourceId: 'added-semantic-article',
+      status: 'published',
+      slug: 'added-semantic-article',
+      publishedAt: '2026-08-21',
+      updatedAt: '2026-08-21'
+    }
+  );
+  assert.equal(selectPublishedBlogs(
+    reconciled,
+    source,
+    new Map([
+      ['existing-article', existingBody],
+      ['added-semantic-article', addedBody]
+    ])
+  ).length, 2);
+});
+
+test('publication reconciliation keeps deletion and non-semantic URL decisions fail closed', () => {
+  const staleManifest = {
+    schemaVersion: 1,
+    articles: [{
+      sourceId: 'removed-article',
+      status: 'published',
+      slug: 'removed-article',
+      publishedAt: '2026-08-01',
+      updatedAt: '2026-08-01',
+      title: 'Removed article',
+      description: 'Removed publication description long enough for validation.',
+      series: 'Test series',
+      tags: ['testing'],
+      contentHash: '0'.repeat(64)
+    }]
+  };
+  const withoutBlogs = { blogs: [] };
+  const reconciled = reconcileBlogPublication(staleManifest, withoutBlogs);
+  assert.deepEqual(reconciled, staleManifest);
+  assert.throws(
+    () => selectPublishedBlogs(reconciled, withoutBlogs, new Map()),
+    /Publication source no longer exists: removed-article/u
+  );
+
+  const body = Buffer.from('# Hash fallback\n\nComplete body.\n');
+  assert.throws(
+    () => reconcileBlogPublication(
+      { schemaVersion: 1, articles: [] },
+      { blogs: [sourceArticle('blog-deadbeef', body)] }
+    ),
+    /requires an explicit semantic publication slug/u
+  );
 });
 
 test('explicit publication entries fail closed on source deletion, metadata drift and body drift', async () => {
@@ -120,4 +220,22 @@ test('publication preamble is removed from rendered article prose', () => {
 
 async function readJson(relativePath) {
   return JSON.parse(await readFile(new URL(relativePath, root), 'utf8'));
+}
+
+function sourceArticle(id, body, { updatedAt = '2026-08-20' } = {}) {
+  return {
+    id,
+    title: id === 'existing-article' ? 'Existing article title' : 'Added article title',
+    summary: id === 'existing-article'
+      ? 'Existing article summary is intentionally long enough for public validation.'
+      : 'Added article summary is intentionally long enough for public validation.',
+    series: 'Test series',
+    tags: ['testing'],
+    updatedAt,
+    sha256: createHash('sha256').update(body).digest('hex')
+  };
+}
+
+function pick(value, keys) {
+  return Object.fromEntries(keys.map((key) => [key, value[key]]));
 }
