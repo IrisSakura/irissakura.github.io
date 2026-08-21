@@ -148,9 +148,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>53</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>46</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>36</strong><span>完整博客</span><small>36 篇已公开</small></div>
+                <div class="journal-metric"><strong>54</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>47</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>37</strong><span>完整博客</span><small>37 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -243,6 +243,11 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-20</p>
+                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮最大的变化不是新增 Package，而是开始进一步抽取重复底层机制并让现有 Domain / Gameplay Kernel 复用统一 Core 能力。近期主线包括 Core Replay / Canonical Fingerprint 收敛、GAS/RTS 时间源复用、Editor Tools 可选能力隔离，以及随后暴露并修复的 RTS FlowField 语义回归。整体方向与“完善项目能力，而非形成可交付版本”的目标一致。 当前物理规模没有继续增加：仍为 146 个 UPM Package、146 个 Catalog Module、69 个 Preset、866 个 asmdef、467 个 noEngineReferences asmdef。但内部依赖边由上一轮的 250 增至 252；Stable API 则从 395 Types / 2416 Members 增至 399 Types / 2437…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-19</p>
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮从上一审计基线 b9a043f... 到当前 HEAD 前进了 5 个提交，主要集中在三条线： 仓库没有新增 UPM Package、Catalog Module、Preset 或 asmdef。上一基线与当前均为 146 Package、146 Catalog Module、69 Preset、866 asmdef、467 个 noEngineReferences asmdef；但内部依赖边从 248 增至 250。 这说明近期开发没有重新进入“一个能力一个 Package”的扩张模式，整体方向仍然符合 development-convergence。 但复杂度增长已经转移到另外三个地方： Stable Public API 从上一基线的 391 Types / 2403 Members 增至当前 395 Types / 2416 Members；程序集仍为 27 个。当前变化主要来自 Pooling Warmup 和…</p>
@@ -267,20 +272,22 @@
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮仓库发生的最重要变化，不是新增模块，也不是继续扩 Stable 面，而是项目实际进入了一条非常明确的： 路线。 当前已经建立一份覆盖全部 145 个物理 UPM Package 的历史顺序审计台账；维护者随后明确缩减范围：57 个 domain-framework 不继续执行，本轮只继续处理其余 88 个 Package，已完成的 Roguelite2D 结果保留，历史删除包不重新创建。该审计明确把 Candidate、Tag、Release、签名和 publication 排除在默认范围之外。 这与当前项目真正需要的主线是高度一致的： 不是继续证明“框架还能加什么”，而是系统地证明已有能力是否正确、有界、可清理、可复用、可消费。 从上一轮审计 HEAD c5f3a89f... 到当前版本，仓库虽然经历了密集修改，但：</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-13</p>
-                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮仓库没有继续增加 UPM Package，主线基本保持在正确方向： 当前 Work Status 仍明确为： 当前 Evidence Backlog 为 129，Deferred 为 11。Candidate、Assembler、strict readiness 与 Release 都不是当前执行项。 本轮最重要的正向变化有三类。 第一，Runtime Foundation 五个核心能力面真正开始从“本地验证”进入“能力级 Runner 资格化”。Pooling、Event、Bootstrap、Save 等近期切片已经被终态 source envelope d3d222f43… 聚合验证，PLAN-INDEX 将大量相关工作从 runner-pending 更新为 runner-passed，并记录 Gitea runs 960–963。这个做法比“一份 Plan 对应一次 Runner”更符合长期治理方向。</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>53 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>54 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-mmorpg">
+                    <p class="project-status">游戏设计范式 · 2026-08-21</p>
+                    <h3>MMORPG / 持久共享世界在线角色扮演游戏</h3>
+                    <p>服务器长期维护一个独立于任意单个玩家生命周期存在的持久世界；大量玩家以持久角色身份同时进入这个世界，但通过 Realm、Zone、Shard、Layer 和 Instance 等空间容器被动态分配到有限规模的权威模拟单元。角色成长、装备、任务、声望、经济、好友、公会和副本进度跨会话保存；开放世界提供偶遇、资源竞争、公共事件和社会存在感，副本则提供人数、规则…</p>
+                    <div class="note-tags"><span>massively</span><span>mmorpg</span><span>multiplayer</span></div>
+                    <a class="note-link" href="journal/mmorpg.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-god-game">
                     <p class="project-status">游戏设计范式 · 2026-08-20</p>
                     <h3>上帝模拟 / God Game / Deity Simulation</h3>

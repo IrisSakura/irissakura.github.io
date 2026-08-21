@@ -1,14 +1,21 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "78484e8fec20efa1eb105a0f8462c6d834b6a508",
-  "generatedAt": "2026-08-21T12:21:56+08:00",
+  "sourceCommit": "de685ff4c044f91c7ad6d041ccfce8becb52f28c",
+  "generatedAt": "2026-08-21T21:16:29+08:00",
   "summary": {
-    "auditCount": 46,
-    "blogCount": 36,
-    "gameDesignCount": 53
+    "auditCount": 47,
+    "blogCount": 37,
+    "gameDesignCount": 54
   },
-  "gameDesignCatalogDigest": "3dd1027608731d1b933e48777b697c5cdde1e3b3aabf32ef826ad67f4c233a4c",
+  "gameDesignCatalogDigest": "b800e4544f06900a111b0278722b5b6fccf9e289329a42dd42dde57d5a9c64da",
   "audits": [
+    {
+      "id": "audit-2026-08-20",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮最大的变化不是新增 Package，而是开始进一步抽取重复底层机制并让现有 Domain / Gameplay Kernel 复用统一 Core 能力。近期主线包括 Core Replay / Canonical Fingerprint 收敛、GAS/RTS 时间源复用、Editor Tools 可选能力隔离，以及随后暴露并修复的 RTS FlowField 语义回归。整体方向与“完善项目能力，而非形成可交付版本”的目标一致。 当前物理规模没有继续增加：仍为 146 个 UPM Package、146 个 Catalog Module、69 个 Preset、866 个 asmdef、467 个 noEngineReferences asmdef。但内部依赖边由上一轮的 250 增至 252；Stable API 则从 395 Types / 2416 Members 增至 399 Types / 2437…",
+      "updatedAt": "2026-08-20",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-19",
       "title": "Sakura Framework 最新仓库审计与能力收敛计划",
@@ -333,6 +340,21 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "mmorpg",
+      "title": "MMORPG / 持久共享世界在线角色扮演游戏",
+      "summary": "服务器长期维护一个独立于任意单个玩家生命周期存在的持久世界；大量玩家以持久角色身份同时进入这个世界，但通过 Realm、Zone、Shard、Layer 和 Instance 等空间容器被动态分配到有限规模的权威模拟单元。角色成长、装备、任务、声望、经济、好友、公会和副本进度跨会话保存；开放世界提供偶遇、资源竞争、公共事件和社会存在感，副本则提供人数、规则…",
+      "tags": [
+        "massively",
+        "mmorpg",
+        "multiplayer"
+      ],
+      "updatedAt": "2026-08-21",
+      "sha256": "ea0df9023dbacba1087d070423f1c180286ed81871817a7910fd29772bf69b0a",
+      "contentSha256": "c5f4980b0e818cc13cfce9b450213dadc1e4f7d201ea996bec001954396ecbb1",
+      "bytes": 77460,
+      "contentPath": "content/game-designs/mmorpg.md"
+    },
     {
       "id": "god-game",
       "title": "上帝模拟 / God Game / Deity Simulation",
@@ -1128,6 +1150,21 @@
     }
   ],
   "blogs": [
+    {
+      "id": "god-game-belief-attribution",
+      "title": "信仰归因与间接统治：上帝模拟中的世界真相、神迹解释与社会扩散",
+      "summary": "当玩家拥有直接改变天气、生命和地形的神性力量，却不能直接控制凡人如何理解这些变化时，世界真相、个人观察、社会归因和长期治理怎样形成一套完整的反馈系统？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "belief",
+        "god-game",
+        "simulation"
+      ],
+      "updatedAt": "2026-08-21",
+      "sha256": "f66ea8f51bf30f61aa2d3cd6bb228081b7dcef1cc95147c651642f7fba2da69b",
+      "bytes": 36321,
+      "contentPath": "content/blogs/god-game-belief-attribution.md"
+    },
     {
       "id": "unreal-engine-world-partition-state-convergence",
       "title": "流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接",
