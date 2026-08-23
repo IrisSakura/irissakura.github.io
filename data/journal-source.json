@@ -1,14 +1,21 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "de685ff4c044f91c7ad6d041ccfce8becb52f28c",
-  "generatedAt": "2026-08-21T21:16:29+08:00",
+  "sourceCommit": "bc0ce990d91efbc957e2e343f3b9afbb71139152",
+  "generatedAt": "2026-08-23T19:13:15+08:00",
   "summary": {
-    "auditCount": 47,
-    "blogCount": 37,
-    "gameDesignCount": 54
+    "auditCount": 48,
+    "blogCount": 39,
+    "gameDesignCount": 56
   },
-  "gameDesignCatalogDigest": "b800e4544f06900a111b0278722b5b6fccf9e289329a42dd42dde57d5a9c64da",
+  "gameDesignCatalogDigest": "09ee24369bcdf2192c70b1bdc775ab68e6e58980955f03f2373b254b9f61b048",
   "audits": [
+    {
+      "id": "audit-2026-08-21",
+      "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "当前仓库仍然明确处于： 主目标仍是： 而不是： 当前生成 Work Status 明确记录： 并且 evidenceBacklog 与 deferred 明确禁止自动恢复。 这一战略状态与当前项目阶段是匹配的，应继续维持。 ---",
+      "updatedAt": "2026-08-21",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-20",
       "title": "Sakura Framework 最新仓库审计与能力收敛计划",
@@ -340,6 +347,36 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "household-life-sim",
+      "title": "家庭人生模拟 / Household Life Simulation / Dollhouse Life Sim",
+      "summary": "玩家同时扮演“具体生活行为的导演”和“家庭长期发展的规划者”。世界中的角色拥有需求、性格、技能、关系、记忆、时间表、愿望和人生阶段；家具、场所和其他角色则通过统一的 Affordance / 可供性交互系统向角色暴露“这里可以做什么”。当玩家不直接下达命令时，角色根据需求紧迫度、性格偏好、关系、环境、计划和对象可达性自主选择行为；玩家又可以随时插入命令、调…",
+      "tags": [
+        "dollhouse",
+        "household",
+        "life"
+      ],
+      "updatedAt": "2026-08-23",
+      "sha256": "01dcb14fe77a41689def1743faf94dbc45bb8b677f7b8920b7d0a693fead24d2",
+      "contentSha256": "b45be5c9418a3be9b17c45eb427ae53f06d2757c843f3a5dbafca356a028f23f",
+      "bytes": 77927,
+      "contentPath": "content/game-designs/household-life-sim.md"
+    },
+    {
+      "id": "traditional-roguelike",
+      "title": "传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler",
+      "summary": "世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…",
+      "tags": [
+        "classical",
+        "roguelike",
+        "traditional"
+      ],
+      "updatedAt": "2026-08-23",
+      "sha256": "91f67b9df83a61ded7ac766a14bcc7d19ce982f0c4224caa005ad5eece630c32",
+      "contentSha256": "d27040913649e66a6cd5400ebe62ed92aeb40331efada2be794670631a71b1d5",
+      "bytes": 59917,
+      "contentPath": "content/game-designs/traditional-roguelike.md"
+    },
     {
       "id": "mmorpg",
       "title": "MMORPG / 持久共享世界在线角色扮演游戏",
@@ -1150,6 +1187,36 @@
     }
   ],
   "blogs": [
+    {
+      "id": "mmorpg-persistent-identity",
+      "title": "持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务",
+      "summary": "玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "mmorpg",
+        "persistent-identity",
+        "session"
+      ],
+      "updatedAt": "2026-08-23",
+      "sha256": "a4c656291e27faea2ca0539943801fbec5f6f781c79ee3f24d5310e2399e67a6",
+      "bytes": 33857,
+      "contentPath": "content/blogs/mmorpg-persistent-identity.md"
+    },
+    {
+      "id": "unreal-engine-rdg-compilation",
+      "title": "声明式渲染图编译：RDG 的依赖建图、资源生命周期与 Barrier 执行",
+      "summary": "当一帧渲染包含大量 Pass、临时纹理、Async Compute 和跨 Pipeline 资源访问时，怎样让调用方只描述真实依赖，而由统一基础设施决定哪些工作必须执行、资源何时真正存在以及什么时候需要 GPU 状态转换？",
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "tags": [
+        "rdg",
+        "render-graph",
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-23",
+      "sha256": "b19e66ec9493ddebedc67ad0c9b4f075e89172576920775e191f1817c6adc9bf",
+      "bytes": 36002,
+      "contentPath": "content/blogs/unreal-engine-rdg-compilation.md"
+    },
     {
       "id": "god-game-belief-attribution",
       "title": "信仰归因与间接统治：上帝模拟中的世界真相、神迹解释与社会扩散",

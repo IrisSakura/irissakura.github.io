@@ -1,0 +1,3596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/traditional-roguelike.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler | Sakura Design Journal">
+    <meta property="og:description" content="世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/traditional-roguelike.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-traditional-roguelike.png">
+    <meta property="og:image:alt" content="传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler | Sakura Design Journal">
+    <meta name="twitter:description" content="世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-traditional-roguelike.png">
+    <meta name="twitter:image:alt" content="传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler | Sakura Design Journal","description":"世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…","url":"https://irissakura.github.io/pages/journal/traditional-roguelike.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler","image":"https://irissakura.github.io/assets/social/pages-journal-traditional-roguelike.png","dateModified":"2026-08-23","about":["classical","roguelike","traditional"]}</script>
+    <!-- site-meta:end -->
+    <title>传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-traditional-roguelike"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-23</p><h1>传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler</h1><p>世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…</p><div class="note-tags"><span>classical</span><span>roguelike</span><span>traditional</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><h2 id="1-类型定位">1. 类型定位</h2><p>传统 Roguelike 通常具有以下核心特征：</p>
+<ul>
+<li><p>单局制；</p>
+</li>
+<li><p>程序生成地牢；</p>
+</li>
+<li><p>网格或离散空间；</p>
+</li>
+<li><p>回合制；</p>
+</li>
+<li><p>玩家行动推动世界时间；</p>
+</li>
+<li><p>单个主要角色；</p>
+</li>
+<li><p>敌人与玩家共享同一行动规则或近似规则；</p>
+</li>
+<li><p>有限视野；</p>
+</li>
+<li><p>未知地图；</p>
+</li>
+<li><p>随机物品；</p>
+</li>
+<li><p>随机敌人；</p>
+</li>
+<li><p>状态效果；</p>
+</li>
+<li><p>环境互动；</p>
+</li>
+<li><p>高信息密度；</p>
+</li>
+<li><p>高决策密度；</p>
+</li>
+<li><p>资源管理；</p>
+</li>
+<li><p>不可撤销行动；</p>
+</li>
+<li><p>高失败代价；</p>
+</li>
+<li><p>永久死亡或近似永久死亡；</p>
+</li>
+<li><p>单局重新开始；</p>
+</li>
+<li><p>以知识积累为重要跨局成长。</p>
+</li>
+</ul>
+<p>典型流程：</p>
+<p>创建角色<br />
+→ 生成Run Seed<br />
+→ 生成第一层地牢<br />
+→ 玩家只能看到附近区域<br />
+→ 移动探索<br />
+→ 每移动一步世界推进一回合<br />
+→ 遭遇敌人<br />
+→ 玩家决定战斗、绕行或撤退<br />
+→ 获得物品<br />
+→ 部分物品效果未知<br />
+→ 玩家判断是否使用<br />
+→ 发现楼梯或出口<br />
+→ 进入下一层<br />
+→ 地牢复杂度提高<br />
+→ 补给逐渐减少<br />
+→ 特殊敌人与环境规则增加<br />
+→ 玩家不断依靠有限信息做不可逆行动<br />
+→ 到达终局或死亡<br />
+→ 当前Run结束<br />
+→ 新Seed重新生成世界<br />
+→ 玩家利用上一局学到的知识做出更好的决策。</p>
+<hr />
+<h2 id="2-本类型最核心的运行时原则行动即时间">2. 本类型最核心的运行时原则：行动即时间</h2><p>传统实时游戏通常：</p>
+<p>即使玩家什么都不做，</p>
+<p>世界仍然持续运行。</p>
+<p>传统 Roguelike 的经典结构则是：</p>
+<blockquote>
+<p><strong>玩家不行动，世界通常也不行动。</strong></p>
+</blockquote>
+<p>玩家拥有充分现实思考时间。</p>
+<p>但一旦提交：</p>
+<p>Move North，</p>
+<p>世界就获得一次推进机会。</p>
+<p>因此一个输入可以理解为：</p>
+<p><strong>World Simulation Commit。</strong></p>
+<hr />
+<h2 id="3-player-action-与-world-tick">3. Player Action 与 World Tick</h2><p>典型关系：</p>
+<p>玩家提交Action<br />
+→ Action合法性验证<br />
+→ 玩家Action执行<br />
+→ 消耗Time Cost<br />
+→ TurnScheduler推进<br />
+→ 其他Actor达到行动阈值<br />
+→ Enemy Action执行<br />
+→ Status Tick<br />
+→ Environment Tick<br />
+→ Death / Spawn / Trigger结算<br />
+→ 世界达到稳定状态<br />
+→ 返回玩家决策点。</p>
+<p>这意味着：</p>
+<p>UI、AI、回放、存档和调试都可以围绕：</p>
+<p><strong>Stable Decision Point</strong></p>
+<p>组织。</p>
+<hr />
+<h2 id="4-为什么稳定决策点极其重要">4. 为什么“稳定决策点”极其重要</h2><p>玩家输入应该发生在：</p>
+<p>世界已经处理完所有前序后果之后。</p>
+<p>例如：</p>
+<p>玩家移动<br />
+→ 敌人移动<br />
+→ 中毒状态结算<br />
+→ 门关闭<br />
+→ 某个敌人死亡<br />
+→ 掉落物生成。</p>
+<p>全部处理结束以后，</p>
+<p>系统才再次请求：</p>
+<p>Player Action。</p>
+<p>不要让玩家在：</p>
+<p>半个世界状态更新到一半时</p>
+<p>输入下一步。</p>
+<hr />
+<h2 id="5-simulationstate">5. SimulationState</h2><p>建议包含：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>CurrentFloorId；</p>
+</li>
+<li><p>SimulationTick；</p>
+</li>
+<li><p>WorldTimeUnits；</p>
+</li>
+<li><p>PlayerState；</p>
+</li>
+<li><p>ActorStates；</p>
+</li>
+<li><p>MapState；</p>
+</li>
+<li><p>ItemStates；</p>
+</li>
+<li><p>EnvironmentStates；</p>
+</li>
+<li><p>SchedulerState；</p>
+</li>
+<li><p>PendingEffects；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>RunVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="6-核心范式一时间应使用行动成本而不仅是简单你一回合我一回合">6. 核心范式一：时间应使用“行动成本”而不仅是简单你一回合我一回合</h2><p>最基础模型：</p>
+<p>玩家行动一次。</p>
+<p>所有敌人行动一次。</p>
+<p>但这样难以表达：</p>
+<ul>
+<li><p>快速敌人；</p>
+</li>
+<li><p>缓慢敌人；</p>
+</li>
+<li><p>重型动作；</p>
+</li>
+<li><p>快速动作；</p>
+</li>
+<li><p>状态减速；</p>
+</li>
+<li><p>加速。</p>
+</li>
+</ul>
+<p>更适合使用：</p>
+<p><strong>Time Cost / Energy Scheduler。</strong></p>
+<hr />
+<h2 id="7-actiontimecost">7. ActionTimeCost</h2><p>例如：</p>
+<p>普通移动：</p>
+<p>100 Time Units。</p>
+<p>快速动作：</p>
+<p>70。</p>
+<p>重型动作：</p>
+<p>150。</p>
+<p>等待：</p>
+<p>100。</p>
+<p>快速敌人：</p>
+<p>行动间隔80。</p>
+<p>缓慢敌人：</p>
+<p>150。</p>
+<hr />
+<h2 id="8-schedulerstate">8. SchedulerState</h2><p>建议包含：</p>
+<ul>
+<li><p>CurrentWorldTime；</p>
+</li>
+<li><p>ActorScheduleEntries；</p>
+</li>
+<li><p>ActiveActorId；</p>
+</li>
+<li><p>PendingInterrupts；</p>
+</li>
+<li><p>SchedulerVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-actorscheduleentry">9. ActorScheduleEntry</h2><p>建议字段：</p>
+<ul>
+<li><p>ActorId；</p>
+</li>
+<li><p>NextActionTime；</p>
+</li>
+<li><p>SpeedModifier；</p>
+</li>
+<li><p>DelayModifier；</p>
+</li>
+<li><p>ScheduleVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-调度流程">10. 调度流程</h2><p>玩家ActionCost = 100。</p>
+<p>当前时间：</p>
+<p>1000。</p>
+<p>玩家下一次可行动时间：</p>
+<p>1100。</p>
+<p>敌人A：</p>
+<p>1040。</p>
+<p>敌人B：</p>
+<p>1080。</p>
+<p>系统于是：</p>
+<p>先执行A。</p>
+<p>再执行B。</p>
+<p>直到：</p>
+<p>Player重新成为Next Actor。</p>
+<p>这样：</p>
+<p>速度自然进入统一时间系统。</p>
+<hr />
+<h2 id="11-不建议直接给速度快的敌人一回合攻击两次">11. 不建议直接给“速度快的敌人一回合攻击两次”</h2><p>这种特殊逻辑会快速污染：</p>
+<ul>
+<li><p>Buff；</p>
+</li>
+<li><p>Slow；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>动作成本。</p>
+</li>
+</ul>
+<p>统一调度器更稳定。</p>
+<hr />
+<h2 id="12-核心范式二任何动作都应该通过统一-action-intent-进入世界">12. 核心范式二：任何动作都应该通过统一 Action Intent 进入世界</h2><p>玩家和AI最好使用近似统一的行动模型。</p>
+<p>典型Action：</p>
+<ul>
+<li><p>Move；</p>
+</li>
+<li><p>Wait；</p>
+</li>
+<li><p>MeleeAttack；</p>
+</li>
+<li><p>RangedAttack；</p>
+</li>
+<li><p>UseItem；</p>
+</li>
+<li><p>Equip；</p>
+</li>
+<li><p>Drop；</p>
+</li>
+<li><p>OpenDoor；</p>
+</li>
+<li><p>CloseDoor；</p>
+</li>
+<li><p>Interact；</p>
+</li>
+<li><p>Descend；</p>
+</li>
+<li><p>Ascend；</p>
+</li>
+<li><p>CastAbility。</p>
+</li>
+</ul>
+<hr />
+<h2 id="13-actionintent">13. ActionIntent</h2><p>建议字段：</p>
+<ul>
+<li><p>ActionId；</p>
+</li>
+<li><p>ActorId；</p>
+</li>
+<li><p>ActionType；</p>
+</li>
+<li><p>TargetPosition；</p>
+</li>
+<li><p>TargetEntityId；</p>
+</li>
+<li><p>ItemInstanceId；</p>
+</li>
+<li><p>AbilityId；</p>
+</li>
+<li><p>RequestedDirection；</p>
+</li>
+<li><p>SubmittedWorldVersion；</p>
+</li>
+<li><p>ActionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="14-actionvalidator">14. ActionValidator</h2><p>统一检查：</p>
+<ul>
+<li><p>Actor是否Alive；</p>
+</li>
+<li><p>当前是否轮到Actor；</p>
+</li>
+<li><p>是否拥有足够Action资源；</p>
+</li>
+<li><p>目标位置是否合法；</p>
+</li>
+<li><p>目标是否存在；</p>
+</li>
+<li><p>路径是否合法；</p>
+</li>
+<li><p>Item是否属于Actor；</p>
+</li>
+<li><p>状态是否禁止行动；</p>
+</li>
+<li><p>动作是否满足环境条件。</p>
+</li>
+</ul>
+<hr />
+<h2 id="15-ai也提交actionintent">15. AI也提交ActionIntent</h2><p>敌人不应该：</p>
+<p>直接修改Position。</p>
+<p>AI只决定：</p>
+<p>“我想向东移动。”</p>
+<p>World Action System决定：</p>
+<p>是否真的能移动。</p>
+<p>这样：</p>
+<p>玩家和AI共享：</p>
+<ul>
+<li><p>碰撞；</p>
+</li>
+<li><p>占位；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>状态；</p>
+</li>
+<li><p>地形；</p>
+</li>
+</ul>
+<p>同一套规则。</p>
+<hr />
+<h2 id="16-核心范式三程序生成不是随机摆房间而是带约束的拓扑编译">16. 核心范式三：程序生成不是“随机摆房间”，而是带约束的拓扑编译</h2><p>传统 Roguelike 中：</p>
+<p>每局地图未知</p>
+<p>是核心体验。</p>
+<p>但随机并不意味着：</p>
+<p>无规则。</p>
+<p>生成器必须保证至少：</p>
+<ul>
+<li><p>起点合法；</p>
+</li>
+<li><p>出口合法；</p>
+</li>
+<li><p>必要目标可达；</p>
+</li>
+<li><p>必要资源有合理分布；</p>
+</li>
+<li><p>不出现无法恢复的生成死锁；</p>
+</li>
+<li><p>区域结构具有设计意图。</p>
+</li>
+</ul>
+<hr />
+<h2 id="17-dungeongenerationdefinition">17. DungeonGenerationDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>GeneratorId；</p>
+</li>
+<li><p>Width；</p>
+</li>
+<li><p>Height；</p>
+</li>
+<li><p>RoomCountRange；</p>
+</li>
+<li><p>CorridorProfile；</p>
+</li>
+<li><p>RegionRules；</p>
+</li>
+<li><p>ConnectivityRules；</p>
+</li>
+<li><p>SecretAreaRules；</p>
+</li>
+<li><p>HazardRules；</p>
+</li>
+<li><p>SpawnBudget；</p>
+</li>
+<li><p>LootBudget；</p>
+</li>
+<li><p>ExitRules；</p>
+</li>
+<li><p>GenerationVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="18-生成流程">18. 生成流程</h2><p>创建FloorSeed<br />
+→ 生成基础空间拓扑<br />
+→ 创建Room / Corridor Graph<br />
+→ 保证起点与出口连通<br />
+→ 添加回路与支线<br />
+→ 分配区域主题<br />
+→ 放置门与特殊地形<br />
+→ 放置敌人<br />
+→ 放置物品<br />
+→ 放置危险<br />
+→ 放置楼梯 / 出口<br />
+→ 执行Reachability Validation<br />
+→ 执行资源与难度Validation<br />
+→ 冻结FloorState。</p>
+<hr />
+<h2 id="19-推荐生成两层数据">19. 推荐生成两层数据</h2><h3 id="logical-topology">Logical Topology</h3><p>房间、连接和可达性。</p>
+<h3 id="tile-representation">Tile Representation</h3><p>具体网格。</p>
+<p>这样可以先保证：</p>
+<p>宏观地图合理，</p>
+<p>再生成：</p>
+<p>具体形状。</p>
+<hr />
+<h2 id="20-floorgraph">20. FloorGraph</h2><p>建议包含：</p>
+<ul>
+<li><p>RegionNodes；</p>
+</li>
+<li><p>RoomNodes；</p>
+</li>
+<li><p>ConnectionEdges；</p>
+</li>
+<li><p>StartNodeId；</p>
+</li>
+<li><p>ExitNodeIds；</p>
+</li>
+<li><p>CriticalPath；</p>
+</li>
+<li><p>OptionalBranches；</p>
+</li>
+<li><p>SecretBranches；</p>
+</li>
+<li><p>GraphVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="21-critical-path">21. Critical Path</h2><p>从：</p>
+<p>Start</p>
+<p>到：</p>
+<p>Exit</p>
+<p>存在一条主可达路径。</p>
+<p>但玩家不一定知道。</p>
+<p>支线用于：</p>
+<ul>
+<li><p>Loot；</p>
+</li>
+<li><p>特殊敌人；</p>
+</li>
+<li><p>Shrine；</p>
+</li>
+<li><p>Secret；</p>
+</li>
+<li><p>Risk / Reward。</p>
+</li>
+</ul>
+<hr />
+<h2 id="22-不建议地图只是完美迷宫">22. 不建议地图只是完美迷宫</h2><p>如果所有地图：</p>
+<p>唯一正确路线</p>
+<p>→ 出口，</p>
+<p>玩家会不断碰墙。</p>
+<p>更有价值：</p>
+<ul>
+<li><p>Loop；</p>
+</li>
+<li><p>Alternate Route；</p>
+</li>
+<li><p>Shortcuts；</p>
+</li>
+<li><p>Room Landmark。</p>
+</li>
+</ul>
+<p>形成：</p>
+<p>空间决策。</p>
+<hr />
+<h2 id="23-核心范式四地图必须同时存在-world-truth-与-player-knowledge">23. 核心范式四：地图必须同时存在 World Truth 与 Player Knowledge</h2><p>FloorState知道：</p>
+<p>整个地牢。</p>
+<p>玩家只知道：</p>
+<p>已经看到的区域。</p>
+<p>因此至少区分：</p>
+<p><strong>WorldMapState</strong></p>
+<p>和：</p>
+<p><strong>MapKnowledgeState。</strong></p>
+<hr />
+<h2 id="24-tilestate">24. TileState</h2><p>建议字段：</p>
+<ul>
+<li><p>Coordinate；</p>
+</li>
+<li><p>TerrainType；</p>
+</li>
+<li><p>Walkability；</p>
+</li>
+<li><p>Transparency；</p>
+</li>
+<li><p>OccupyingActorId；</p>
+</li>
+<li><p>ItemIds；</p>
+</li>
+<li><p>EnvironmentTags；</p>
+</li>
+<li><p>TileVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25-tileknowledgestate">25. TileKnowledgeState</h2><p>建议包含：</p>
+<ul>
+<li><p>Coordinate；</p>
+</li>
+<li><p>DiscoveryState；</p>
+</li>
+<li><p>LastSeenTerrain；</p>
+</li>
+<li><p>LastSeenActorId；</p>
+</li>
+<li><p>LastSeenItemIds；</p>
+</li>
+<li><p>LastSeenTick；</p>
+</li>
+<li><p>KnowledgeVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="26-discoverystate">26. DiscoveryState</h2><p>推荐：</p>
+<ul>
+<li><p>Unknown；</p>
+</li>
+<li><p>Remembered；</p>
+</li>
+<li><p>CurrentlyVisible。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-为什么-remembered-与-visible-要分离">27. 为什么 Remembered 与 Visible 要分离</h2><p>玩家曾看到：</p>
+<p>走廊里有一只敌人。</p>
+<p>随后离开视野。</p>
+<p>地图可以保留：</p>
+<p>走廊结构。</p>
+<p>但不能继续实时更新：</p>
+<p>敌人位置。</p>
+<p>这与潜行和战争迷雾的“世界事实与玩家知识分离”原则一致。</p>
+<hr />
+<h2 id="28-fov-system">28. FOV System</h2><p>典型使用：</p>
+<ul>
+<li><p>Shadow Casting；</p>
+</li>
+<li><p>Ray Casting；</p>
+</li>
+<li><p>Permissive FOV；</p>
+</li>
+</ul>
+<p>之一。</p>
+<p>关键不是具体算法，</p>
+<p>而是：</p>
+<p>所有可见性判断必须来自统一FOV规则。</p>
+<hr />
+<h2 id="29-fov-输入">29. FOV 输入</h2><ul>
+<li><p>PlayerPosition；</p>
+</li>
+<li><p>VisionRadius；</p>
+</li>
+<li><p>TerrainOpacity；</p>
+</li>
+<li><p>Blindness；</p>
+</li>
+<li><p>Light；<br />
+  -特殊能力。</p>
+</li>
+</ul>
+<p>输出：</p>
+<p>VisibleCells。</p>
+<hr />
+<h2 id="30-fov不是ui特效">30. FOV不是UI特效</h2><p>Enemy AI、Targeting、Player Knowledge、Ranged Attack</p>
+<p>都可能依赖：</p>
+<p>相同Visibility规则。</p>
+<hr />
+<h2 id="31-核心范式五未知性应存在于物品地图和敌人能力多个层面">31. 核心范式五：未知性应存在于物品、地图和敌人能力多个层面</h2><p>传统 Roguelike 常见设计：</p>
+<p>玩家并不是开局就知道：</p>
+<p>所有物品和敌人效果。</p>
+<p>因此：</p>
+<p>Knowledge</p>
+<p>本身成为重要资源。</p>
+<hr />
+<h2 id="32-itemdefinition-与-iteminstance">32. ItemDefinition 与 ItemInstance</h2><p>静态：</p>
+<p>ItemDefinition。</p>
+<p>单局中：</p>
+<p>ItemInstance。</p>
+<hr />
+<h2 id="33-itemdefinition">33. ItemDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>ItemDefinitionId；</p>
+</li>
+<li><p>ItemType；</p>
+</li>
+<li><p>BaseEffects；</p>
+</li>
+<li><p>EquipRules；</p>
+</li>
+<li><p>UsageRules；</p>
+</li>
+<li><p>ChargesProfile；</p>
+</li>
+<li><p>IdentificationProfile；</p>
+</li>
+<li><p>PresentationFamilyId；</p>
+</li>
+<li><p>ItemVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="34-iteminstance">34. ItemInstance</h2><p>建议包含：</p>
+<ul>
+<li><p>ItemInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>OwnerId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Quantity；</p>
+</li>
+<li><p>Charges；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>CurseState；</p>
+</li>
+<li><p>EnchantmentState；</p>
+</li>
+<li><p>IdentificationState；</p>
+</li>
+<li><p>ItemVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="35-核心范式六表现身份与真实身份可以分离">35. 核心范式六：表现身份与真实身份可以分离</h2><p>例如每一局：</p>
+<p>红色药水</p>
+<p>不一定永远是同一个效果。</p>
+<p>可以在Run开始时生成：</p>
+<p><strong>Appearance Mapping。</strong></p>
+<hr />
+<h2 id="36-itemappearancemapping">36. ItemAppearanceMapping</h2><p>例如：</p>
+<p>Red Potion → Healing。</p>
+<p>Blue Potion → Speed。</p>
+<p>下一Run：</p>
+<p>Red Potion → Poison。</p>
+<p>Blue Potion → Healing。</p>
+<p>这样玩家无法只通过颜色背永久答案。</p>
+<hr />
+<h2 id="37-但跨局知识仍然可以保留规则知识">37. 但跨局知识仍然可以保留规则知识</h2><p>玩家可能不知道：</p>
+<p>“红色是什么。”</p>
+<p>但知道：</p>
+<ul>
+<li><p>药水可能存在治疗类；</p>
+</li>
+<li><p>敌人会使用药水；</p>
+</li>
+<li><p>某类卷轴可能有区域效果；</p>
+</li>
+<li><p>试用未知物品存在风险。</p>
+</li>
+</ul>
+<p>真正成长的是：</p>
+<p><strong>推理方法。</strong></p>
+<hr />
+<h2 id="38-identificationstate">38. IdentificationState</h2><p>建议：</p>
+<ul>
+<li><p>Unknown；</p>
+</li>
+<li><p>Suspected；</p>
+</li>
+<li><p>Identified；</p>
+</li>
+<li><p>Mastered。</p>
+</li>
+</ul>
+<p>也可以只用：</p>
+<p>Unknown / Known。</p>
+<hr />
+<h2 id="39-识别来源">39. 识别来源</h2><p>可以包括：</p>
+<ul>
+<li><p>使用；</p>
+</li>
+<li><p>鉴定能力；</p>
+</li>
+<li><p>商人；</p>
+</li>
+<li><p>观察敌人使用；</p>
+</li>
+<li><p>同类物品推断；</p>
+</li>
+<li><p>特殊知识技能。</p>
+</li>
+</ul>
+<hr />
+<h2 id="40-playerknowledgestate">40. PlayerKnowledgeState</h2><p>建议包含：</p>
+<ul>
+<li><p>IdentifiedItemDefinitions；</p>
+</li>
+<li><p>KnownMonsterTraits；</p>
+</li>
+<li><p>KnownTrapTypes；</p>
+</li>
+<li><p>KnownShrineEffects；</p>
+</li>
+<li><p>DiscoveredRecipes；</p>
+</li>
+<li><p>KnowledgeVersion。</p>
+</li>
+</ul>
+<p>需要明确：</p>
+<p>哪些知识：</p>
+<p>只在Run内存在，</p>
+<p>哪些属于：</p>
+<p>玩家本人应通过经验记住，而不需要系统永久记录。</p>
+<hr />
+<h2 id="41-不建议把所有玩家知识自动做成永久图鉴">41. 不建议把所有玩家知识自动做成永久图鉴</h2><p>传统 Roguelike 的一个重要乐趣是：</p>
+<p>玩家本人理解系统。</p>
+<p>如果所有信息：</p>
+<p>死亡一次就自动解锁完整百科，</p>
+<p>知识学习会过快转化为UI解锁。</p>
+<p>可以只记录：</p>
+<p>部分可复习知识。</p>
+<hr />
+<h2 id="42-核心范式七永久死亡不是惩罚模块而是整个决策价值体系的基础">42. 核心范式七：永久死亡不是惩罚模块，而是整个决策价值体系的基础</h2><p>如果玩家可以：</p>
+<p>遇到危险前Save</p>
+<p>失败后Reload，</p>
+<p>绝大多数未知风险会变成：</p>
+<p>低成本实验。</p>
+<p>Permadeath的核心作用是：</p>
+<blockquote>
+<p><strong>让信息不足下的每个动作具有真实长期代价。</strong></p>
+</blockquote>
+<hr />
+<h2 id="43-runstate">43. RunState</h2><p>建议包含：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>CharacterId；</p>
+</li>
+<li><p>Seed；</p>
+</li>
+<li><p>CurrentFloor；</p>
+</li>
+<li><p>CurrentState；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>StartTime；</p>
+</li>
+<li><p>EndReason；</p>
+</li>
+<li><p>VictoryState；</p>
+</li>
+<li><p>RunVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="44-runstate生命周期">44. RunState生命周期</h2><p>Created<br />
+→ Active<br />
+→ Suspended<br />
+→ VictoryPending<br />
+→ Completed</p>
+<p>或：</p>
+<p>Active<br />
+→ DeathCommitted<br />
+→ Failed<br />
+→ Archived。</p>
+<hr />
+<h2 id="45-death-必须是正式事务">45. Death 必须是正式事务</h2><p>Actor HP达到失败条件<br />
+→ 检查特殊复活规则<br />
+→ 锁定Run<br />
+→ 提交DeathRecord<br />
+→ Run进入Failed<br />
+→ 禁止继续修改RunState<br />
+→ 生成RunSummary<br />
+→ 归档Replay / Statistics。</p>
+<hr />
+<h2 id="46-suspend-与-save-scumming-必须分离">46. Suspend 与 Save Scumming 必须分离</h2><p>玩家可能需要：</p>
+<p>退出游戏</p>
+<p>之后继续。</p>
+<p>可以支持：</p>
+<p><strong>Suspend Save。</strong></p>
+<p>语义：</p>
+<p>保存一次当前Run。</p>
+<p>加载后：</p>
+<p>Suspend文件立即失效或继续作为唯一Run状态。</p>
+<p>目的：</p>
+<p>继续游戏。</p>
+<p>不是：</p>
+<p>无限回滚。</p>
+<hr />
+<h2 id="47-suspendstate">47. SuspendState</h2><p>建议包含：</p>
+<ul>
+<li><p>RunId；</p>
+</li>
+<li><p>SnapshotVersion；</p>
+</li>
+<li><p>SimulationState；</p>
+</li>
+<li><p>RandomStreamStates；</p>
+</li>
+<li><p>SaveTimestamp；</p>
+</li>
+<li><p>ResumeToken；</p>
+</li>
+<li><p>SuspendVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="48-为什么随机流也必须保存">48. 为什么随机流也必须保存</h2><p>如果加载以后：</p>
+<p>敌人行为；</p>
+<p>物品生成；</p>
+<p>随机效果</p>
+<p>发生变化，</p>
+<p>Suspend会变成：</p>
+<p>重新Roll命运。</p>
+<hr />
+<h2 id="49-核心范式八玩家跨局成长应优先表现为知识而不是永久基础战斗力">49. 核心范式八：玩家跨局成长应优先表现为知识，而不是永久基础战斗力</h2><p>可以有：</p>
+<ul>
+<li><p>新职业；</p>
+</li>
+<li><p>新模式；</p>
+</li>
+<li><p>新区域；</p>
+</li>
+<li><p>新规则；</p>
+</li>
+<li><p>Cosmetic；</p>
+</li>
+<li><p>Challenge；</p>
+</li>
+</ul>
+<p>解锁。</p>
+<p>但如果每死一次：</p>
+<p>永久+5%攻击，</p>
+<p>长期玩家最终会：</p>
+<p>靠数值覆盖原本的资源压力。</p>
+<hr />
+<h2 id="50-传统-roguelike-的真正-meta-progression">50. 传统 Roguelike 的真正 Meta Progression</h2><p>通常是：</p>
+<p>玩家自己知道：</p>
+<ul>
+<li><p>某敌人不要在狭窄走廊硬打；</p>
+</li>
+<li><p>某状态组合很危险；</p>
+</li>
+<li><p>某未知物品应该先测试；</p>
+</li>
+<li><p>某地图结构通常藏有出口；</p>
+</li>
+<li><p>某资源应该留到更深层；</p>
+</li>
+<li><p>某个敌人行动速度比自己快。</p>
+</li>
+</ul>
+<p>这种知识不会被死亡清除。</p>
+<hr />
+<h2 id="51-这种成长非常独特">51. 这种成长非常独特</h2><p>角色：</p>
+<p>重新Level 1。</p>
+<p>玩家：</p>
+<p>并没有重新Level 1。</p>
+<p>所以真正的长期等级存在于：</p>
+<p><strong>Player Mental Model。</strong></p>
+<hr />
+<h2 id="52-核心范式九敌人设计的重点是行为规律而不是动画复杂度">52. 核心范式九：敌人设计的重点是“行为规律”，而不是动画复杂度</h2><p>因为玩家拥有：</p>
+<p>充分思考时间，</p>
+<p>敌人必须通过：</p>
+<p>规则组合</p>
+<p>产生决策压力。</p>
+<hr />
+<h2 id="53-monsterdefinition">53. MonsterDefinition</h2><p>建议字段：</p>
+<ul>
+<li><p>MonsterId；</p>
+</li>
+<li><p>MonsterTags；</p>
+</li>
+<li><p>BaseStats；</p>
+</li>
+<li><p>SpeedProfile；</p>
+</li>
+<li><p>PerceptionProfile；</p>
+</li>
+<li><p>ActionProfile；</p>
+</li>
+<li><p>AbilityIds；</p>
+</li>
+<li><p>ResistanceProfile；</p>
+</li>
+<li><p>LootProfile；</p>
+</li>
+<li><p>SpawnProfile；</p>
+</li>
+<li><p>BehaviorProfile；</p>
+</li>
+<li><p>MonsterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="54-monsterruntimestate">54. MonsterRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li><p>ActorId；</p>
+</li>
+<li><p>MonsterId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>StatusStates；</p>
+</li>
+<li><p>PerceptionState；</p>
+</li>
+<li><p>CurrentGoal；</p>
+</li>
+<li><p>LastKnownPlayerPosition；</p>
+</li>
+<li><p>NextActionTime；</p>
+</li>
+<li><p>AIState；</p>
+</li>
+<li><p>MonsterVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="55-敌人的独特性可以来自">55. 敌人的独特性可以来自</h2><ul>
+<li><p>速度；</p>
+</li>
+<li><p>追击方式；</p>
+</li>
+<li><p>远程；</p>
+</li>
+<li><p>穿墙；</p>
+</li>
+<li><p>开门；</p>
+</li>
+<li><p>逃跑；</p>
+</li>
+<li><p>召唤；</p>
+</li>
+<li><p>偷物品；</p>
+</li>
+<li><p>模仿；</p>
+</li>
+<li><p>反射；</p>
+</li>
+<li><p>状态攻击；</p>
+</li>
+<li><p>地形互动。</p>
+</li>
+</ul>
+<p>不需要每个敌人拥有：</p>
+<p>复杂行为树。</p>
+<hr />
+<h2 id="56-ai应该只使用自己拥有的信息">56. AI应该只使用自己拥有的信息</h2><p>Enemy如果：</p>
+<p>看不到玩家，</p>
+<p>就不应永远读取：</p>
+<p>PlayerPosition。</p>
+<p>可以保留：</p>
+<p>LastKnownPosition。</p>
+<p>这样：</p>
+<p>门、拐角、黑暗</p>
+<p>都会真实参与玩法。</p>
+<hr />
+<h2 id="57-ai-perceptionstate">57. AI PerceptionState</h2><p>建议包含：</p>
+<ul>
+<li><p>VisibleTargetIds；</p>
+</li>
+<li><p>HeardEventIds；</p>
+</li>
+<li><p>LastKnownTargetPosition；</p>
+</li>
+<li><p>AlertState；</p>
+</li>
+<li><p>Confidence；</p>
+</li>
+<li><p>PerceptionVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="58-ai行动流程">58. AI行动流程</h2><p>AI Turn<br />
+→ 更新可见目标<br />
+→ 检查Immediate Threat<br />
+→ 构建合法Action<br />
+→ 根据Behavior评分<br />
+→ 选择ActionIntent<br />
+→ ActionSystem执行。</p>
+<hr />
+<h2 id="59-敌人也应受到世界规则限制">59. 敌人也应受到世界规则限制</h2><p>如果玩家需要：</p>
+<p>开门才能通过，</p>
+<p>普通敌人不应：</p>
+<p>因为AI方便</p>
+<p>直接穿门。</p>
+<p>除非MonsterDefinition明确：</p>
+<p>CanPassDoor / CanPhase。</p>
+<hr />
+<h2 id="60-核心范式十系统交互比单独技能数量更重要">60. 核心范式十：系统交互比单独技能数量更重要</h2><p>传统 Roguelike 非常适合：</p>
+<p>小规模规则组合。</p>
+<p>例如：</p>
+<ul>
+<li><p>Fire；</p>
+</li>
+<li><p>Water；</p>
+</li>
+<li><p>Poison；</p>
+</li>
+<li><p>Gas；</p>
+</li>
+<li><p>Door；</p>
+</li>
+<li><p>Trap；</p>
+</li>
+<li><p>Scroll；</p>
+</li>
+<li><p>Summon。</p>
+</li>
+</ul>
+<p>真正的深度来自：</p>
+<p>不同系统交叉。</p>
+<hr />
+<h2 id="61-environmenteffect">61. EnvironmentEffect</h2><p>建议字段：</p>
+<ul>
+<li><p>EffectId；</p>
+</li>
+<li><p>EffectTags；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>Intensity；</p>
+</li>
+<li><p>PropagationRule；</p>
+</li>
+<li><p>InteractionRules；</p>
+</li>
+<li><p>EffectVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="62-示例规则">62. 示例规则</h2><p>Fire：</p>
+<p>可以：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Destroy Flammable；</p>
+</li>
+<li><p>Create Smoke；</p>
+</li>
+<li><p>Ignite Oil。</p>
+</li>
+</ul>
+<p>Water：</p>
+<p>可以：</p>
+<ul>
+<li><p>Extinguish Fire；</p>
+</li>
+<li><p>Spread Certain Effects。</p>
+</li>
+</ul>
+<p>这样的规则应该由：</p>
+<p>Tag / Effect Interaction</p>
+<p>统一表达。</p>
+<p>而不是：</p>
+<p>每个Spell单独处理所有组合。</p>
+<hr />
+<h2 id="63-environmentinteractionrule">63. EnvironmentInteractionRule</h2><p>建议字段：</p>
+<ul>
+<li><p>SourceTag；</p>
+</li>
+<li><p>TargetTag；</p>
+</li>
+<li><p>Condition；</p>
+</li>
+<li><p>ResultEffectIds；</p>
+</li>
+<li><p>ConsumptionPolicy；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>RuleVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="64-统一规则带来的价值">64. 统一规则带来的价值</h2><p>设计者新增：</p>
+<p>Oil Flask。</p>
+<p>只要拥有：</p>
+<p>FlammableLiquid</p>
+<p>Tag。</p>
+<p>现有Fire系统就能工作。</p>
+<p>无需：</p>
+<p>修改Fireball代码。</p>
+<p>这正是传统 Roguelike 很容易产生涌现体验的原因。</p>
+<hr />
+<h2 id="65-核心范式十一资源压力应迫使玩家继续移动但不必所有游戏都使用饥饿条">65. 核心范式十一：资源压力应迫使玩家继续移动，但不必所有游戏都使用饥饿条</h2><p>传统 Roguelike经典上常见：</p>
+<p>Food Clock。</p>
+<p>其真正职责不是：</p>
+<p>模拟吃饭。</p>
+<p>而是：</p>
+<blockquote>
+<p>防止玩家无限等待、无限回复、无限搜索每一格。</p>
+</blockquote>
+<p>现代实现可以用其他系统完成。</p>
+<hr />
+<h2 id="66-anti-stall-pressure">66. Anti-Stall Pressure</h2><p>可以包括：</p>
+<ul>
+<li><p>Hunger；</p>
+</li>
+<li><p>Torch；</p>
+</li>
+<li><p>Corruption；</p>
+</li>
+<li><p>Pursuer；</p>
+</li>
+<li><p>Escalating Danger；</p>
+</li>
+<li><p>Floor Collapse；</p>
+</li>
+<li><p>Respawn Pressure；</p>
+</li>
+<li><p>Limited Healing。</p>
+</li>
+</ul>
+<hr />
+<h2 id="67-为什么需要-anti-stall">67. 为什么需要 Anti-Stall</h2><p>回合制意味着：</p>
+<p>玩家现实时间无限。</p>
+<p>如果游戏内也可以：</p>
+<p>无限Wait</p>
+<p>没有成本，</p>
+<p>最优解可能是：</p>
+<p>每场战斗后：</p>
+<p>原地恢复到满状态。</p>
+<p>于是资源规划失效。</p>
+<hr />
+<h2 id="68-不建议为了传统而强制加入饥饿">68. 不建议为了传统而强制加入饥饿</h2><p>如果：</p>
+<p>Healing已经严格有限，</p>
+<p>就可能不需要Food Clock。</p>
+<p>系统职责比历史形式更重要。</p>
+<hr />
+<h2 id="69-核心范式十二探索必须在信息价值和资源成本之间形成取舍">69. 核心范式十二：探索必须在“信息价值”和“资源成本”之间形成取舍</h2><p>当前层出口已经找到。</p>
+<p>玩家可以：</p>
+<p>立刻下楼。</p>
+<p>或者：</p>
+<p>继续探索剩余40%地图。</p>
+<p>可能获得：</p>
+<ul>
+<li><p>装备；</p>
+</li>
+<li><p>Consumable；</p>
+</li>
+<li><p>Shrine；</p>
+</li>
+<li><p>Experience。</p>
+</li>
+</ul>
+<p>但也可能：</p>
+<ul>
+<li><p>受伤；</p>
+</li>
+<li><p>消耗道具；</p>
+</li>
+<li><p>遇到危险。</p>
+</li>
+</ul>
+<hr />
+<h2 id="70-explore-vs-descend">70. Explore vs Descend</h2><p>这是传统Roguelike非常核心的宏观决策：</p>
+<blockquote>
+<p>当前层还能提供多少期望价值，值得我继续承担多少风险？</p>
+</blockquote>
+<hr />
+<h2 id="71-floorvalueestimate">71. FloorValueEstimate</h2><p>开发分析可以估算：</p>
+<ul>
+<li><p>RemainingLootBudget；</p>
+</li>
+<li><p>RemainingEnemyBudget；</p>
+</li>
+<li><p>KnownRisk；</p>
+</li>
+<li><p>UnknownArea；</p>
+</li>
+<li><p>PlayerResourceState。</p>
+</li>
+</ul>
+<p>不一定直接显示给玩家。</p>
+<hr />
+<h2 id="72-楼梯是阶段提交点">72. 楼梯是阶段提交点</h2><p>进入下一层：</p>
+<p>通常意味着：</p>
+<ul>
+<li><p>无法轻易返回；</p>
+</li>
+<li><p>难度提高；</p>
+</li>
+<li><p>新地形；</p>
+</li>
+<li><p>新敌人；</p>
+</li>
+<li><p>新Loot Tier。</p>
+</li>
+</ul>
+<p>因此Descend应是：</p>
+<p>显式动作。</p>
+<p>而不是：</p>
+<p>踩到楼梯自动切图。</p>
+<hr />
+<h2 id="73-floortransitiontransaction">73. FloorTransitionTransaction</h2><p>验证出口<br />
+→ 保存当前Floor Persistent State<br />
+→ 创建/加载TargetFloor<br />
+→ 确认SpawnTile<br />
+→ 迁移Player<br />
+→ 更新Scheduler<br />
+→ 更新Knowledge<br />
+→ Commit。</p>
+<hr />
+<h2 id="74-核心范式十三随机性必须支持确定性重放">74. 核心范式十三：随机性必须支持确定性重放</h2><p>传统 Roguelike 极适合：</p>
+<p>Seed + Input Replay。</p>
+<p>如果：</p>
+<p>地牢；</p>
+<p>敌人；</p>
+<p>Loot；</p>
+<p>AI；</p>
+<p>随机效果</p>
+<p>全部使用稳定Random Streams，</p>
+<p>只记录玩家Action即可重现Run。</p>
+<hr />
+<h2 id="75-runrandomstate">75. RunRandomState</h2><p>建议至少分离：</p>
+<ul>
+<li><p>DungeonGenerationRandom；</p>
+</li>
+<li><p>SpawnRandom；</p>
+</li>
+<li><p>LootRandom；</p>
+</li>
+<li><p>CombatRandom；</p>
+</li>
+<li><p>AIRandom；</p>
+</li>
+<li><p>EnvironmentRandom。</p>
+</li>
+</ul>
+<hr />
+<h2 id="76-为什么随机流要分离">76. 为什么随机流要分离</h2><p>如果后来新增：</p>
+<p>随机地板装饰</p>
+<p>不应该改变：</p>
+<p>最终Boss掉落。</p>
+<p>Visual随机更不应该改变Gameplay。</p>
+<hr />
+<h2 id="77-randomcursor">77. RandomCursor</h2><p>每个Stream保存：</p>
+<p>当前Cursor或状态。</p>
+<p>用于：</p>
+<ul>
+<li><p>Save；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Debug。</p>
+</li>
+</ul>
+<hr />
+<h2 id="78-replayrecord">78. ReplayRecord</h2><p>建议包含：</p>
+<ul>
+<li><p>GameVersion；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>RunSeed；</p>
+</li>
+<li><p>CharacterDefinition；</p>
+</li>
+<li><p>InitialState；</p>
+</li>
+<li><p>ActionIntents；</p>
+</li>
+<li><p>OptionalStateHashes；</p>
+</li>
+<li><p>Result；</p>
+</li>
+<li><p>ReplayVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="79-state-hash">79. State Hash</h2><p>每隔：</p>
+<p>N个Action</p>
+<p>保存：</p>
+<p>WorldState Hash。</p>
+<p>Replay发现分歧：</p>
+<p>可以定位：</p>
+<p>第一个Desync Action。</p>
+<hr />
+<h2 id="80-核心范式十四input-不应与动画绑定">80. 核心范式十四：Input 不应与动画绑定</h2><p>玩家按：</p>
+<p>North。</p>
+<p>逻辑立即处理：</p>
+<p>MoveAction。</p>
+<p>动画只是：</p>
+<p>展示MoveResult。</p>
+<p>不要等待：</p>
+<p>角色走完一格的动画</p>
+<p>再决定：</p>
+<p>敌人行动。</p>
+<p>否则：</p>
+<p>快速播放；</p>
+<p>跳过动画；</p>
+<p>回放</p>
+<p>都会影响模拟。</p>
+<hr />
+<h2 id="81-presentation-queue">81. Presentation Queue</h2><p>逻辑可以：</p>
+<p>已经计算完一整个Turn。</p>
+<p>表现层：</p>
+<p>按顺序播放：</p>
+<p>玩家移动<br />
+→ 敌人移动<br />
+→ 攻击<br />
+→ 状态变化。</p>
+<p>但：</p>
+<p>Gameplay State</p>
+<p>已经确定。</p>
+<hr />
+<h2 id="82-动画速度可以改变但逻辑结果不变">82. 动画速度可以改变但逻辑结果不变</h2><p>可以支持：</p>
+<p>Normal。</p>
+<p>Fast。</p>
+<p>Instant。</p>
+<p>高级玩家通常会偏好：</p>
+<p>快速响应。</p>
+<hr />
+<h2 id="83-核心范式十五信息日志是正式玩家界面">83. 核心范式十五：信息日志是正式玩家界面</h2><p>因为大量结果并不一定都能通过动画看清。</p>
+<p>例如：</p>
+<ul>
+<li><p>状态开始；</p>
+</li>
+<li><p>Item效果；</p>
+</li>
+<li><p>Resistance；</p>
+</li>
+<li><p>Miss；</p>
+</li>
+<li><p>Door；</p>
+</li>
+<li><p>Trap；</p>
+</li>
+<li><p>Enemy能力。</p>
+</li>
+</ul>
+<p>需要：</p>
+<p><strong>Message Log。</strong></p>
+<hr />
+<h2 id="84-gamelogevent">84. GameLogEvent</h2><p>建议字段：</p>
+<ul>
+<li><p>EventId；</p>
+</li>
+<li><p>Tick；</p>
+</li>
+<li><p>Category；</p>
+</li>
+<li><p>SourceId；</p>
+</li>
+<li><p>TargetId；</p>
+</li>
+<li><p>MessageKey；</p>
+</li>
+<li><p>Parameters；</p>
+</li>
+<li><p>VisibilityRule；</p>
+</li>
+<li><p>LogVersion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="85-log必须遵守玩家知识">85. Log必须遵守玩家知识</h2><p>玩家看不到远处：</p>
+<p>Enemy打开Door。</p>
+<p>不应该：</p>
+<p>日志偷偷告诉玩家。</p>
+<p>只有：</p>
+<p>可观察事件</p>
+<p>进入Player Log。</p>
+<hr />
+<h2 id="86-structured-log">86. Structured Log</h2><p>不要只存：</p>
+<p>“Goblin hits you for 3.”</p>
+<p>还要存：</p>
+<p>Event结构。</p>
+<p>UI再格式化。</p>
+<p>这样：</p>
+<ul>
+<li><p>Localization；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+</ul>
+<p>更稳定。</p>
+<hr />
+<h2 id="87-完整事件与执行流程示例">87. 完整事件与执行流程示例</h2><p>以下以：</p>
+<p><strong>玩家在未知地牢中发现一瓶未识别药剂，在资源不足和敌人追击压力下决定是否使用</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="871-初始状态">87.1 初始状态</h3><p>玩家位于：</p>
+<p>Floor 4。</p>
+<p>当前：</p>
+<p>Health 37%。</p>
+<p>治疗资源：</p>
+<p>无已知Healing Potion。</p>
+<p>背包中：</p>
+<p>一瓶：</p>
+<p><code>Blue Potion</code></p>
+<p>状态：</p>
+<p>Unknown。</p>
+<hr />
+<h3 id="872-run-mapping">87.2 Run Mapping</h3><p>本Run开始时：</p>
+<p>PotionAppearanceMapping已经随机确定。</p>
+<p>玩家并不知道：</p>
+<p>Blue对应什么。</p>
+<hr />
+<h3 id="873-玩家打开北侧门">87.3 玩家打开北侧门</h3><p>提交：</p>
+<p>OpenDoor。</p>
+<p>Action Cost：</p>
+<p>100。</p>
+<hr />
+<h3 id="874-door打开">87.4 Door打开</h3><p>FOV重新计算。</p>
+<p>玩家看到：</p>
+<p>走廊尽头有一个高速敌人。</p>
+<hr />
+<h3 id="875-世界推进">87.5 世界推进</h3><p>敌人行动。</p>
+<p>向玩家接近两格等效时间。</p>
+<p>玩家由此学习：</p>
+<p>该敌人行动速度快于普通敌人。</p>
+<hr />
+<h3 id="876-玩家评估">87.6 玩家评估</h3><p>当前选项：</p>
+<ul>
+<li><p>Retreat；</p>
+</li>
+<li><p>CloseDoor；</p>
+</li>
+<li><p>UseUnknownPotion；</p>
+</li>
+<li><p>Fight；</p>
+</li>
+<li><p>MoveIntoSideRoom。</p>
+</li>
+</ul>
+<hr />
+<h3 id="877-玩家选择closedoor">87.7 玩家选择CloseDoor</h3><p>Action提交。</p>
+<p>Door关闭。</p>
+<hr />
+<h3 id="878-enemy行动">87.8 Enemy行动</h3><p>敌人到达门前。</p>
+<p>其Definition允许：</p>
+<p>OpenDoor。</p>
+<hr />
+<h3 id="879-敌人打开门">87.9 敌人打开门</h3><p>玩家知道：</p>
+<p>门不能长期阻挡它。</p>
+<hr />
+<h3 id="8710-玩家后撤">87.10 玩家后撤</h3><p>进入：</p>
+<p>先前探索过的窄走廊。</p>
+<hr />
+<h3 id="8711-当前资源问题">87.11 当前资源问题</h3><p>Health过低。</p>
+<p>敌人速度较快。</p>
+<p>继续纯撤退：</p>
+<p>最终会被追上。</p>
+<hr />
+<h3 id="8712-玩家考虑unknown-potion">87.12 玩家考虑Unknown Potion</h3><p>已知：</p>
+<p>这一类药剂可能包含：</p>
+<p>正面和负面状态。</p>
+<p>如果是治疗：</p>
+<p>可以立即解决危险。</p>
+<p>如果产生不利状态：</p>
+<p>局面可能更差。</p>
+<hr />
+<h3 id="8713-玩家决定使用">87.13 玩家决定使用</h3><p>提交：</p>
+<p>UseItem。</p>
+<hr />
+<h3 id="8714-actionvalidator">87.14 ActionValidator</h3><p>检查：</p>
+<p>Item属于Player。</p>
+<p>当前状态允许Use。</p>
+<p>合法。</p>
+<hr />
+<h3 id="8715-item-effect-resolution">87.15 Item Effect Resolution</h3><p>查询Run Mapping：</p>
+<p>Blue Potion</p>
+<p>实际对应：</p>
+<p>Speed Potion。</p>
+<hr />
+<h3 id="8716-item从inventory消耗">87.16 Item从Inventory消耗</h3><p>创建：</p>
+<p>SpeedBuff。</p>
+<hr />
+<h3 id="8717-identification">87.17 Identification</h3><p>因为玩家亲自使用并观察到效果：</p>
+<p>Blue Potion：</p>
+<p>Identified = Speed Potion。</p>
+<p>本Run之后：</p>
+<p>所有Blue Potion</p>
+<p>都可以显示真实名称。</p>
+<hr />
+<h3 id="8718-playerknowledge更新">87.18 PlayerKnowledge更新</h3><p>这不是：</p>
+<p>永久账户解锁。</p>
+<p>只是当前Run的Identification Mapping已知。</p>
+<hr />
+<h3 id="8719-scheduler变化">87.19 Scheduler变化</h3><p>Speed Buff降低玩家：</p>
+<p>MoveAction Time Cost。</p>
+<p>原本：</p>
+<p>100。</p>
+<p>现在：</p>
+<p>70。</p>
+<hr />
+<h3 id="8720-下一移动">87.20 下一移动</h3><p>玩家向南移动。</p>
+<p>NextActionTime推进70。</p>
+<hr />
+<h3 id="8721-enemy时间尚未到">87.21 Enemy时间尚未到</h3><p>玩家获得额外一次移动机会。</p>
+<hr />
+<h3 id="8722-玩家拉开距离">87.22 玩家拉开距离</h3><p>进入已知安全区域。</p>
+<hr />
+<h3 id="8723-buff持续若干world-time">87.23 Buff持续若干World Time</h3><p>最终失效。</p>
+<p>但危险已解除。</p>
+<hr />
+<h3 id="8724-玩家学到两层知识">87.24 玩家学到两层知识</h3><p>Run内：</p>
+<p>Blue Potion = Speed。</p>
+<p>跨局玩家知识：</p>
+<p>未知药剂有时可以通过危机中的试用转化为逃生工具。</p>
+<hr />
+<h3 id="8725-如果玩家死亡">87.25 如果玩家死亡</h3><p>当前：</p>
+<ul>
+<li><p>Potion Mapping；</p>
+</li>
+<li><p>Floor Map；</p>
+</li>
+<li><p>Character装备；</p>
+</li>
+</ul>
+<p>都结束。</p>
+<p>下一Run：</p>
+<p>颜色映射重新随机。</p>
+<p>但：</p>
+<p>玩家对：</p>
+<p>行动成本、速度差、门机制、未知道具风险</p>
+<p>的理解仍然存在。</p>
+<hr />
+<h3 id="8726-这就是传统roguelike的典型结构">87.26 这就是传统Roguelike的典型结构</h3><p><strong>有限视野<br />
+→ 新威胁出现<br />
+→ 先尝试地形解决<br />
+→ 发现规则不足<br />
+→ 资源压力迫使使用未知工具<br />
+→ 随机结果通过统一规则发生<br />
+→ 玩家获得临时战术优势<br />
+→ 同时获得新的知识<br />
+→ 世界继续推进。</strong></p>
+<hr />
+<h2 id="88-模块通信设计">88. 模块通信设计</h2><h3 id="881-commands-action-intents">88.1 Commands / Action Intents</h3><p>典型：</p>
+<ul>
+<li><p>Move；</p>
+</li>
+<li><p>Wait；</p>
+</li>
+<li><p>Attack；</p>
+</li>
+<li><p>UseItem；</p>
+</li>
+<li><p>Equip；</p>
+</li>
+<li><p>Drop；</p>
+</li>
+<li><p>OpenDoor；</p>
+</li>
+<li><p>CloseDoor；</p>
+</li>
+<li><p>Interact；</p>
+</li>
+<li><p>Cast；</p>
+</li>
+<li><p>Descend；</p>
+</li>
+<li><p>Ascend。</p>
+</li>
+</ul>
+<hr />
+<h3 id="882-query">88.2 Query</h3><p>适用于：</p>
+<ul>
+<li><p>当前可见Tiles；</p>
+</li>
+<li><p>某动作是否合法；</p>
+</li>
+<li><p>某物品是否已识别；</p>
+</li>
+<li><p>当前NextActionTime；</p>
+</li>
+<li><p>某敌人当前是否可见；</p>
+</li>
+<li><p>当前楼层已探索比例；</p>
+</li>
+<li><p>某Tile是否可通行。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>推进时间；</p>
+</li>
+<li><p>消费Random；</p>
+</li>
+<li><p>移动Actor；</p>
+</li>
+<li><p>修改Item。</p>
+</li>
+</ul>
+<hr />
+<h2 id="89-domain-events">89. Domain Events</h2><p>包括：</p>
+<ul>
+<li><p>RunStarted；</p>
+</li>
+<li><p>FloorGenerated；</p>
+</li>
+<li><p>ActorMoved；</p>
+</li>
+<li><p>DoorOpened；</p>
+</li>
+<li><p>ActorAttacked；</p>
+</li>
+<li><p>DamageResolved；</p>
+</li>
+<li><p>ActorDied；</p>
+</li>
+<li><p>ItemPickedUp；</p>
+</li>
+<li><p>ItemUsed；</p>
+</li>
+<li><p>ItemIdentified；</p>
+</li>
+<li><p>StatusApplied；</p>
+</li>
+<li><p>FOVChanged；</p>
+</li>
+<li><p>TileDiscovered；</p>
+</li>
+<li><p>FloorExited；</p>
+</li>
+<li><p>RunFailed；</p>
+</li>
+<li><p>RunCompleted。</p>
+</li>
+</ul>
+<hr />
+<h2 id="90-presentation-events">90. Presentation Events</h2><p>包括：</p>
+<ul>
+<li><p>PlayMoveAnimation；</p>
+</li>
+<li><p>ShowAttackEffect；</p>
+</li>
+<li><p>RevealTile；</p>
+</li>
+<li><p>ShowMessageLog；</p>
+</li>
+<li><p>PlayItemEffect；</p>
+</li>
+<li><p>ShowDeathScreen。</p>
+</li>
+</ul>
+<p>表现不能：</p>
+<ul>
+<li><p>决定Action是否合法；</p>
+</li>
+<li><p>推进时间；</p>
+</li>
+<li><p>决定Damage；</p>
+</li>
+<li><p>生成Loot。</p>
+</li>
+</ul>
+<hr />
+<h2 id="91-稳定事件顺序">91. 稳定事件顺序</h2><p>每个Action应产生：</p>
+<p>ActionSequenceId。</p>
+<p>事件按：</p>
+<p>Sequence</p>
+<p>进入EventLog。</p>
+<p>不要依赖：</p>
+<p>组件Update顺序。</p>
+<hr />
+<h2 id="92-effect-queue">92. Effect Queue</h2><p>Action可能触发：</p>
+<p>Move<br />
+→ Trap<br />
+→ Damage<br />
+→ Status<br />
+→ Death<br />
+→ ItemDrop。</p>
+<p>必须进入统一：</p>
+<p>EffectQueue。</p>
+<hr />
+<h2 id="93-effectdepth">93. EffectDepth</h2><p>防止：</p>
+<p>Trigger无限递归。</p>
+<p>例如：</p>
+<p>反射<br />
+→ 反射反射<br />
+→ 再反射。</p>
+<p>需要：</p>
+<p>RootActionId</p>
+<p>和：</p>
+<p>EffectDepth。</p>
+<hr />
+<h2 id="94-失败隔离">94. 失败隔离</h2><hr />
+<h3 id="941-dungeon-generator生成不可达出口">94.1 Dungeon Generator生成不可达出口</h3><p>Generation Validation失败。</p>
+<p>整个Floor不进入正式Run。</p>
+<p>使用同Seed增加：</p>
+<p>GenerationAttemptIndex</p>
+<p>重新生成。</p>
+<p>必须设置：</p>
+<p>MaximumAttempts。</p>
+<hr />
+<h2 id="95-generation连续失败">95. Generation连续失败</h2><p>使用：</p>
+<p>Fallback Generator。</p>
+<p>不能：</p>
+<p>无限生成卡死加载界面。</p>
+<hr />
+<h2 id="96-critical-resource不可达">96. Critical Resource不可达</h2><p>如果设计要求：</p>
+<p>必须拥有某Key才能进入出口，</p>
+<p>验证：</p>
+<p>Key一定存在于可达区域。</p>
+<hr />
+<h2 id="97-occupancy冲突">97. Occupancy冲突</h2><p>两个Actor同一时间想进入：</p>
+<p>同一Tile。</p>
+<p>Scheduler保证Action顺序。</p>
+<p>先执行者占据。</p>
+<p>后执行者重新验证：</p>
+<p>动作失败或改变AI选择。</p>
+<hr />
+<h2 id="98-moveaction不能基于规划时快照直接提交">98. MoveAction不能基于规划时快照直接提交</h2><p>AI选择：</p>
+<p>Move East。</p>
+<p>真正执行时：</p>
+<p>East可能已被占据。</p>
+<p>需要：</p>
+<p>Execution-time Validation。</p>
+<hr />
+<h2 id="99-actor死亡但仍存在scheduler">99. Actor死亡但仍存在Scheduler</h2><p>Death提交时：</p>
+<p>从Scheduler取消。</p>
+<p>否则：</p>
+<p>已死Actor未来仍获得Turn。</p>
+<hr />
+<h2 id="100-scheduler无下一actor">100. Scheduler无下一Actor</h2><p>如果存在Alive Actor</p>
+<p>但Schedule Queue空：</p>
+<p>属于：</p>
+<p>SchedulerIntegrityError。</p>
+<p>重建Actor Schedule。</p>
+<hr />
+<h2 id="101-zero-cost-action">101. Zero-Cost Action</h2><p>任何能够重复执行且：</p>
+<p>TimeCost = 0</p>
+<p>的Action</p>
+<p>都可能形成：</p>
+<p>无限循环。</p>
+<p>必须明确：</p>
+<p>UI动作</p>
+<p>和：</p>
+<p>World Action</p>
+<p>分离。</p>
+<hr />
+<h2 id="102-inventory重复">102. Inventory重复</h2><p>ItemInstance任意时刻只能属于：</p>
+<ul>
+<li><p>Floor；</p>
+</li>
+<li><p>Actor Inventory；</p>
+</li>
+<li><p>Equipment；</p>
+</li>
+<li><p>Container；</p>
+</li>
+<li><p>Effect Reservation；</p>
+</li>
+</ul>
+<p>一个位置。</p>
+<hr />
+<h2 id="103-itemownershipaudit">103. ItemOwnershipAudit</h2><p>在：</p>
+<ul>
+<li><p>Pickup；</p>
+</li>
+<li><p>Drop；</p>
+</li>
+<li><p>Equip；</p>
+</li>
+<li><p>Death；</p>
+</li>
+</ul>
+<p>后验证。</p>
+<hr />
+<h2 id="104-random-drift">104. Random Drift</h2><p>Replay State Hash发生不同。</p>
+<p>记录：</p>
+<p>哪个RandomStream</p>
+<p>在哪个Cursor首次不同。</p>
+<hr />
+<h2 id="105-fov缓存异常">105. FOV缓存异常</h2><p>FOV是派生状态。</p>
+<p>发现异常：</p>
+<p>重新计算。</p>
+<p>不能破坏World Truth。</p>
+<hr />
+<h2 id="106-knowledge状态异常">106. Knowledge状态异常</h2><p>PlayerKnowledge不应决定：</p>
+<p>真实Item效果。</p>
+<p>只决定：</p>
+<p>展示信息。</p>
+<p>即使Knowledge丢失：</p>
+<p>Item仍按真实Definition运行。</p>
+<hr />
+<h2 id="107-suspend-save写入失败">107. Suspend Save写入失败</h2><p>保留旧有效Suspend。</p>
+<p>采用：</p>
+<p>临时文件<br />
+→ 校验<br />
+→ 原子替换。</p>
+<p>不能：</p>
+<p>覆盖成损坏Run。</p>
+<hr />
+<h2 id="108-suspend-resume重复">108. Suspend Resume重复</h2><p>ResumeToken只能成功一次。</p>
+<p>防止：</p>
+<p>复制同一Run分支。</p>
+<hr />
+<h2 id="109-death与suspend同时发生">109. Death与Suspend同时发生</h2><p>DeathCommit优先。</p>
+<p>不能：</p>
+<p>死亡后立刻加载刚才的Suspend继续。</p>
+<p>除非模式明确允许普通Save。</p>
+<hr />
+<h2 id="110-floortransition失败">110. FloorTransition失败</h2><p>当前Floor保持权威。</p>
+<p>TargetFloor创建成功之前：</p>
+<p>不删除Source Player State。</p>
+<hr />
+<h2 id="111-debug与可观测性">111. Debug与可观测性</h2><hr />
+<h2 id="112-seed-inspector">112. Seed Inspector</h2><p>显示：</p>
+<ul>
+<li><p>RunSeed；</p>
+</li>
+<li><p>FloorSeed；</p>
+</li>
+<li><p>GenerationAttempt；</p>
+</li>
+<li><p>RandomStream Seeds。</p>
+</li>
+</ul>
+<p>任何Bug都应该能够：</p>
+<p>复制Seed重现。</p>
+<hr />
+<h2 id="113-floor-graph-viewer">113. Floor Graph Viewer</h2><p>显示：</p>
+<ul>
+<li><p>Room；</p>
+</li>
+<li><p>Corridor；</p>
+</li>
+<li><p>Critical Path；</p>
+</li>
+<li><p>Branch；</p>
+</li>
+<li><p>Secret；</p>
+</li>
+<li><p>Start；</p>
+</li>
+<li><p>Exit。</p>
+</li>
+</ul>
+<hr />
+<h2 id="114-reachability-overlay">114. Reachability Overlay</h2><p>显示：</p>
+<p>当前从Player位置：</p>
+<p>哪些Tile可达。</p>
+<p>加入：</p>
+<p>Door / Key / Hazard条件以后</p>
+<p>可以查看Conditional Reachability。</p>
+<hr />
+<h2 id="115-fov-overlay">115. FOV Overlay</h2><p>显示：</p>
+<ul>
+<li><p>Visible；</p>
+</li>
+<li><p>Remembered；</p>
+</li>
+<li><p>Unknown。</p>
+</li>
+</ul>
+<hr />
+<h2 id="116-actor-scheduler-timeline">116. Actor Scheduler Timeline</h2><p>例如：</p>
+<p>1000 Player<br />
+1040 Bat<br />
+1080 Snake<br />
+1100 Player。</p>
+<p>非常适合调试速度问题。</p>
+<hr />
+<h2 id="117-action-trace">117. Action Trace</h2><p>一次玩家动作：</p>
+<p>MoveNorth<br />
+→ Validation<br />
+→ Occupancy<br />
+→ Commit<br />
+→ Cost100<br />
+→ EnemyA Turn<br />
+→ Poison Tick<br />
+→ StableState。</p>
+<hr />
+<h2 id="118-effect-trace">118. Effect Trace</h2><p>针对复杂Action：</p>
+<p>显示所有触发链。</p>
+<hr />
+<h2 id="119-ai-decision-inspector">119. AI Decision Inspector</h2><p>Enemy当前候选：</p>
+<p>Attack 82<br />
+MoveCloser 60<br />
+Retreat 10。</p>
+<p>为什么选择Attack。</p>
+<hr />
+<h2 id="120-perception-inspector">120. Perception Inspector</h2><p>Enemy目前：</p>
+<p>看到了什么。</p>
+<p>LastKnownPlayerPosition是多少。</p>
+<hr />
+<h2 id="121-item-identification-inspector">121. Item Identification Inspector</h2><p>Run Mapping：</p>
+<p>Red → Healing。</p>
+<p>Blue → Speed。</p>
+<p>玩家目前只知道：</p>
+<p>Blue。</p>
+<hr />
+<h2 id="122-player-knowledge-inspector">122. Player Knowledge Inspector</h2><p>比较：</p>
+<p>WorldTruth</p>
+<p>与：</p>
+<p>PlayerKnownState。</p>
+<hr />
+<h2 id="123-random-stream-trace">123. Random Stream Trace</h2><p>显示：</p>
+<p>LootRandom #1832</p>
+<p>产生：</p>
+<p>Sword。</p>
+<p>CombatRandom #522</p>
+<p>产生：</p>
+<p>Hit。</p>
+<hr />
+<h2 id="124-resource-timeline">124. Resource Timeline</h2><p>记录：</p>
+<ul>
+<li><p>Health；</p>
+</li>
+<li><p>Healing；</p>
+</li>
+<li><p>Consumables；</p>
+</li>
+<li><p>Food / Anti-Stall Resource；</p>
+</li>
+<li><p>Floor。</p>
+</li>
+</ul>
+<hr />
+<h2 id="125-exploration-timeline">125. Exploration Timeline</h2><p>每层：</p>
+<ul>
+<li><p>ExploredRatio；</p>
+</li>
+<li><p>TimeSpent；</p>
+</li>
+<li><p>DamageTaken；</p>
+</li>
+<li><p>LootFound；</p>
+</li>
+<li><p>ExitFoundTime。</p>
+</li>
+</ul>
+<hr />
+<h2 id="126-death-causality">126. Death Causality</h2><p>例如：</p>
+<p>进入Floor 7<br />
+→ 治疗资源已低<br />
+→ 继续探索支线<br />
+→ 遇到快速敌人<br />
+→ 错误判断速度关系<br />
+→ 尝试后撤<br />
+→ 被迫使用未知道具<br />
+→ 获得非治疗效果<br />
+→ 退路被占<br />
+→ Run结束。</p>
+<p>这种分析比：</p>
+<p>“被敌人击败”</p>
+<p>有价值。</p>
+<hr />
+<h2 id="127-content-validation">127. Content Validation</h2><hr />
+<h3 id="1271-generator-reachability-test">127.1 Generator Reachability Test</h3><p>生成：</p>
+<p>10000个Floor。</p>
+<p>验证：</p>
+<p>Start → Exit。</p>
+<hr />
+<h2 id="128-key-lock-validation">128. Key-Lock Validation</h2><p>生成：</p>
+<p>Lock前必须存在：</p>
+<p>可达Key。</p>
+<hr />
+<h2 id="129-critical-entity-placement-test">129. Critical Entity Placement Test</h2><p>Boss / Exit / Required Shrine</p>
+<p>不能生成在：</p>
+<p>非法Tile。</p>
+<hr />
+<h2 id="130-spawn-safety-test">130. Spawn Safety Test</h2><p>Player初始位置附近：</p>
+<p>不能直接生成：</p>
+<p>不可处理的高危组合。</p>
+<p>除非模式明确如此。</p>
+<hr />
+<h2 id="131-monster-action-validation">131. Monster Action Validation</h2><p>对所有Monster：</p>
+<p>随机生成WorldState。</p>
+<p>尝试：</p>
+<p>百万次AI Action。</p>
+<p>保证：</p>
+<p>不会直接修改非法位置。</p>
+<hr />
+<h2 id="132-action-determinism-test">132. Action Determinism Test</h2><p>相同：</p>
+<p>WorldState</p>
+<ul>
+<li><p>ActionIntent</p>
+</li>
+<li><p>RandomState</p>
+</li>
+</ul>
+<p>必须得到：</p>
+<p>相同结果。</p>
+<hr />
+<h2 id="133-replay-determinism-test">133. Replay Determinism Test</h2><p>固定：</p>
+<p>Seed</p>
+<ul>
+<li>PlayerActionSequence。</li>
+</ul>
+<p>执行：</p>
+<p>100次。</p>
+<p>State Hash保持一致。</p>
+<hr />
+<h2 id="134-random-isolation-test">134. Random Isolation Test</h2><p>加入一个：</p>
+<p>Cosmetic Random调用。</p>
+<p>Gameplay Replay结果不应变化。</p>
+<hr />
+<h2 id="135-item-mapping-test">135. Item Mapping Test</h2><p>保证：</p>
+<p>每Run的随机外观映射：</p>
+<p>不会出现非法重复</p>
+<p>或：</p>
+<p>无法识别状态。</p>
+<hr />
+<h2 id="136-equipment-interaction-test">136. Equipment Interaction Test</h2><p>自动组合：</p>
+<p>不同Item、Status、Monster。</p>
+<p>检查：</p>
+<ul>
+<li><p>无限循环；</p>
+</li>
+<li><p>异常数值；</p>
+</li>
+<li><p>无效状态。</p>
+</li>
+</ul>
+<hr />
+<h2 id="137-anti-stall-simulation">137. Anti-Stall Simulation</h2><p>Bot采用：</p>
+<p>无限Wait策略。</p>
+<p>验证：</p>
+<p>不能获得无限免费优势。</p>
+<hr />
+<h2 id="138-exploration-bot">138. Exploration Bot</h2><p>策略：</p>
+<ul>
+<li><p>直奔出口；</p>
+</li>
+<li><p>全探索；</p>
+</li>
+<li><p>风险规避；</p>
+</li>
+<li><p>Loot优先。</p>
+</li>
+</ul>
+<p>比较：</p>
+<ul>
+<li><p>生存率；</p>
+</li>
+<li><p>资源；<br />
+  -层数；</p>
+</li>
+<li><p>时间。</p>
+</li>
+</ul>
+<p>用于平衡：</p>
+<p>支线收益。</p>
+<hr />
+<h2 id="139-permadeath-integrity-test">139. Permadeath Integrity Test</h2><p>模拟：</p>
+<p>死亡<br />
+→ Crash<br />
+→ Restart<br />
+→ Resume。</p>
+<p>保证：</p>
+<p>死亡Run不能重新恢复为Active。</p>
+<hr />
+<h2 id="140-suspend-integrity-test">140. Suspend Integrity Test</h2><p>Save<br />
+→ Resume<br />
+→ 再次读取旧Suspend。</p>
+<p>必须拒绝。</p>
+<hr />
+<h2 id="141-performance设计">141. Performance设计</h2><p>传统 Roguelike 的特点是：</p>
+<p>世界通常在玩家输入之间静止。</p>
+<p>这是非常巨大的工程优势。</p>
+<hr />
+<h2 id="142-无需让enemy每帧update">142. 无需让Enemy每帧Update</h2><p>Enemy只有：</p>
+<p>Scheduler轮到它</p>
+<p>才思考。</p>
+<hr />
+<h2 id="143-event-driven-simulation">143. Event-Driven Simulation</h2><p>大部分系统在：</p>
+<p>Action Commit</p>
+<p>后运行。</p>
+<p>玩家思考10秒：</p>
+<p>CPU几乎不需要模拟世界。</p>
+<hr />
+<h2 id="144-grid使用紧凑数据结构">144. Grid使用紧凑数据结构</h2><p>例如：</p>
+<p>TileType Array。</p>
+<p>Occupancy Array。</p>
+<p>Visibility Bitset。</p>
+<p>无需：</p>
+<p>每个Tile一个复杂GameObject。</p>
+<hr />
+<h2 id="145-tile-visual-与-tile-logic分离">145. Tile Visual 与 Tile Logic分离</h2><p>逻辑：</p>
+<p>Grid Data。</p>
+<p>表现：</p>
+<p>Tile Renderer。</p>
+<hr />
+<h2 id="146-actor-spatial-index">146. Actor Spatial Index</h2><p>由于Grid离散：</p>
+<p>直接：</p>
+<p>Coordinate → ActorId。</p>
+<p>通常不需要复杂空间树。</p>
+<hr />
+<h2 id="147-pathfinding">147. Pathfinding</h2><p>AI可以使用：</p>
+<ul>
+<li><p>BFS；</p>
+</li>
+<li><p>A*；</p>
+</li>
+<li><p>Flow Field。</p>
+</li>
+</ul>
+<p>由于世界只在回合更新：</p>
+<p>可以控制计算预算。</p>
+<hr />
+<h2 id="148-路径无需每回合所有敌人全算">148. 路径无需每回合所有敌人全算</h2><p>只有：</p>
+<p>需要移动的Actor。</p>
+<hr />
+<h2 id="149-distance-field">149. Distance Field</h2><p>大量敌人共同追Player时：</p>
+<p>可以计算一次：</p>
+<p>Player Distance Map。</p>
+<p>所有简单追击敌人复用。</p>
+<hr />
+<h2 id="150-fov只在必要时重算">150. FOV只在必要时重算</h2><p>Player位置变化。</p>
+<p>门开关。</p>
+<p>透明地形变化。</p>
+<p>才Dirty。</p>
+<hr />
+<h2 id="151-static-map-cache">151. Static Map Cache</h2><p>地牢多数Tile不变。</p>
+<p>可预计算：</p>
+<ul>
+<li><p>Room；</p>
+</li>
+<li><p>Connectivity；</p>
+</li>
+<li><p>Static Walkability。</p>
+</li>
+</ul>
+<hr />
+<h2 id="152-replay-log非常轻量">152. Replay Log非常轻量</h2><p>因为玩家输入速率低。</p>
+<p>记录：</p>
+<p>几千Action</p>
+<p>即可描述一整个Run。</p>
+<hr />
+<h2 id="153-可扩展点">153. 可扩展点</h2><hr />
+<h3 id="1531-新monster">153.1 新Monster</h3><p>主要提供：</p>
+<ul>
+<li><p>MonsterDefinition；</p>
+</li>
+<li><p>Ability；</p>
+</li>
+<li><p>BehaviorProfile。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1532-新item">153.2 新Item</h3><p>提供：</p>
+<ul>
+<li><p>ItemDefinition；</p>
+</li>
+<li><p>Effect；</p>
+</li>
+<li><p>Identification规则。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1533-新tile">153.3 新Tile</h3><p>通过：</p>
+<p>TerrainDefinition</p>
+<p>扩展：</p>
+<ul>
+<li><p>Water；</p>
+</li>
+<li><p>Lava；</p>
+</li>
+<li><p>Ice；</p>
+</li>
+<li><p>Grass；</p>
+</li>
+<li><p>Trap Floor。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1534-新environment-interaction">153.4 新Environment Interaction</h3><p>通过：</p>
+<p>Tag-based InteractionRule。</p>
+<hr />
+<h3 id="1535-新dungeon-generator">153.5 新Dungeon Generator</h3><p>实现统一：</p>
+<p><code>GenerateFloor(seed, constraints)</code></p>
+<p>接口。</p>
+<hr />
+<h3 id="1536-新turn-model">153.6 新Turn Model</h3><p>可以替换：</p>
+<p>EqualTurn</p>
+<p>为：</p>
+<p>Energy Scheduler。</p>
+<p>World Action接口不变。</p>
+<hr />
+<h3 id="1537-新run模式">153.7 新Run模式</h3><p>例如：</p>
+<ul>
+<li><p>Daily Seed；</p>
+</li>
+<li><p>Challenge；</p>
+</li>
+<li><p>Endless；</p>
+</li>
+<li><p>Puzzle Seed；</p>
+</li>
+<li><p>Ironman Campaign。</p>
+</li>
+</ul>
+<hr />
+<h3 id="1538-daily-run">153.8 Daily Run</h3><p>所有玩家：</p>
+<p>同一个Seed。</p>
+<p>可以比较：</p>
+<ul>
+<li><p>FloorReached；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Turns；</p>
+</li>
+<li><p>Time。</p>
+</li>
+</ul>
+<p>非常适合传统Roguelike。</p>
+<hr />
+<h2 id="154-玩家体验设计">154. 玩家体验设计</h2><hr />
+<h2 id="155-输入必须立即明确可撤销前确认">155. 输入必须立即、明确、可撤销前确认</h2><p>因为一次错误按键：</p>
+<p>可能结束整个Run。</p>
+<p>高风险动作应支持：</p>
+<p>确认。</p>
+<p>例如：</p>
+<p>攻击友好NPC。</p>
+<p>踏入极端危险区域。</p>
+<p>普通移动则必须：</p>
+<p>快速。</p>
+<hr />
+<h2 id="156-不要把所有移动都做确认">156. 不要把所有移动都做确认</h2><p>否则操作极其拖沓。</p>
+<p>确认只用于：</p>
+<p>高信息价值异常动作。</p>
+<hr />
+<h2 id="157-键盘操作必须适合高频重复">157. 键盘操作必须适合高频重复</h2><p>传统Roguelike一局可能：</p>
+<p>数千次移动。</p>
+<p>基础操作应：</p>
+<ul>
+<li><p>快；</p>
+</li>
+<li><p>稳；</p>
+</li>
+<li><p>少菜单层级。</p>
+</li>
+</ul>
+<hr />
+<h2 id="158-自动探索可以减少低价值输入">158. 自动探索可以减少低价值输入</h2><p>已知安全走廊：</p>
+<p>玩家可以：</p>
+<p>Auto Explore。</p>
+<p>系统遇到：</p>
+<ul>
+<li><p>Enemy；</p>
+</li>
+<li><p>Item；</p>
+</li>
+<li><p>New Tile；</p>
+</li>
+<li><p>Hazard；</p>
+</li>
+</ul>
+<p>立即停止。</p>
+<hr />
+<h2 id="159-自动移动不能穿越新危险信息">159. 自动移动不能穿越新危险信息</h2><p>AutoMove只在：</p>
+<p>已知安全区域。</p>
+<p>否则会替玩家做风险决策。</p>
+<hr />
+<h2 id="160-message-log需要允许快速理解刚才发生了什么">160. Message Log需要允许快速理解刚才发生了什么</h2><p>高速连续输入以后：</p>
+<p>玩家可能不知道：</p>
+<p>HP为什么下降。</p>
+<p>Log应：</p>
+<p>结构清晰，</p>
+<p>支持高亮：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Status；</p>
+</li>
+<li><p>Critical Event。</p>
+</li>
+</ul>
+<hr />
+<h2 id="161-未知信息应该产生紧张而不是完全不可推理">161. 未知信息应该产生紧张，而不是完全不可推理</h2><p>Unknown Potion可以未知。</p>
+<p>但玩家至少知道：</p>
+<p>它属于：</p>
+<p>Potion类别。</p>
+<p>能够通过：</p>
+<p>实验、鉴定、观察</p>
+<p>逐步缩小不确定性。</p>
+<hr />
+<h2 id="162-敌人应该可学习">162. 敌人应该“可学习”</h2><p>第一次遇到：</p>
+<p>不知道它速度快。</p>
+<p>第二次：</p>
+<p>玩家已经会：</p>
+<p>提前保持距离。</p>
+<p>这就是：</p>
+<p>知识成长。</p>
+<hr />
+<h2 id="163-敌人随机性不应抹除行为身份">163. 敌人随机性不应抹除行为身份</h2><p>某Monster如果：</p>
+<p>每回合完全随机技能，</p>
+<p>玩家无法学习。</p>
+<p>可以：</p>
+<p>存在少量随机</p>
+<p>但保持：</p>
+<p>稳定规则边界。</p>
+<hr />
+<h2 id="164-程序生成地图必须拥有可读landmark">164. 程序生成地图必须拥有可读Landmark</h2><p>完全随机噪音地图：</p>
+<p>玩家很难形成空间记忆。</p>
+<p>可以有：</p>
+<ul>
+<li><p>Room形状；</p>
+</li>
+<li><p>Region主题；</p>
+</li>
+<li><p>地标；</p>
+</li>
+<li><p>特殊墙体；</p>
+</li>
+<li><p>地形模式。</p>
+</li>
+</ul>
+<hr />
+<h2 id="165-run失败需要快速重新开始">165. Run失败需要快速重新开始</h2><p>Permadeath游戏如果：</p>
+<p>失败后：</p>
+<p>看2分钟结算动画，</p>
+<p>重新加载30秒，</p>
+<p>挫败会放大。</p>
+<p>推荐：</p>
+<p>Death<br />
+→ 简洁Summary<br />
+→ New Run。</p>
+<hr />
+<h2 id="166-death-summary应强调因果链">166. Death Summary应强调“因果链”</h2><p>可以显示：</p>
+<p>最后若干Action。</p>
+<p>让玩家判断：</p>
+<p>问题开始于哪里。</p>
+<hr />
+<h2 id="167-长局应该支持suspend">167. 长局应该支持Suspend</h2><p>Permadeath并不意味着：</p>
+<p>必须一次坐完3小时。</p>
+<p>Suspend是：</p>
+<p>现实生活友好功能。</p>
+<hr />
+<h2 id="168-但suspend不能变成无限检查点">168. 但Suspend不能变成无限检查点</h2><p>设计上明确：</p>
+<p>继续游戏</p>
+<p>和：</p>
+<p>回滚状态</p>
+<p>是两件事。</p>
+<hr />
+<h2 id="169-常见设计失败">169. 常见设计失败</h2><hr />
+<h3 id="1691-把roguelike理解成随机地图-死亡重开">169.1 把Roguelike理解成“随机地图 + 死亡重开”</h3><p>没有行动时间和信息结构。</p>
+<hr />
+<h3 id="1692-世界实时运行">169.2 世界实时运行</h3><p>玩家没有传统Roguelike的离散决策空间。</p>
+<p>这可以成为Roguelite，但已经是另一种操作范式。</p>
+<hr />
+<h3 id="1693-玩家和敌人使用完全不同的世界规则">169.3 玩家和敌人使用完全不同的世界规则</h3><p>系统涌现减少。</p>
+<hr />
+<h3 id="1694-action直接修改世界不走统一validator">169.4 Action直接修改世界，不走统一Validator</h3><p>Replay和AI行为不一致。</p>
+<hr />
+<h3 id="1695-speed使用大量特例">169.5 Speed使用大量特例</h3><p>快速怪写成：</p>
+<p>额外攻击。</p>
+<p>慢速怪：</p>
+<p>随机跳回合。</p>
+<p>调度系统越来越乱。</p>
+<hr />
+<h3 id="1696-generator只负责随机房间">169.6 Generator只负责随机房间</h3><p>不做可达性验证。</p>
+<hr />
+<h3 id="1697-每个seed都理论可生成死局">169.7 每个Seed都理论可生成死局</h3><p>Permadeath会显得极不公平。</p>
+<hr />
+<h3 id="1698-地图全部是树状死路">169.8 地图全部是树状死路</h3><p>探索只剩反复回头。</p>
+<hr />
+<h3 id="1699-玩家地图实时显示视野外敌人">169.9 玩家地图实时显示视野外敌人</h3><p>有限信息被破坏。</p>
+<hr />
+<h3 id="16910-fov只是视觉shader">169.10 FOV只是视觉Shader</h3><p>AI和Targeting使用另一套可见规则。</p>
+<hr />
+<h3 id="16911-未识别物品完全随机且没有推理方式">169.11 未识别物品完全随机且没有推理方式</h3><p>结果只是赌博。</p>
+<hr />
+<h3 id="16912-identification永久账户解锁过多">169.12 Identification永久账户解锁过多</h3><p>很快失去未知体验。</p>
+<hr />
+<h3 id="16913-所有meta成长都是永久数值增强">169.13 所有Meta成长都是永久数值增强</h3><p>Permadeath逐渐失去意义。</p>
+<hr />
+<h3 id="16914-死亡以后可以读取旧save无限回滚">169.14 死亡以后可以读取旧Save无限回滚</h3><p>不可逆决策失去价值。</p>
+<hr />
+<h3 id="16915-没有suspend">169.15 没有Suspend</h3><p>长局对现实时间不友好。</p>
+<hr />
+<h3 id="16916-suspend可以无限复制">169.16 Suspend可以无限复制</h3><p>Save Scumming重新出现。</p>
+<hr />
+<h3 id="16917-enemy-ai永远知道player坐标">169.17 Enemy AI永远知道Player坐标</h3><p>视野和逃脱机制失效。</p>
+<hr />
+<h3 id="16918-每个monster使用巨大行为树">169.18 每个Monster使用巨大行为树</h3><p>内容扩展成本高，但行为深度未必增加。</p>
+<hr />
+<h3 id="16919-环境互动全部写在技能脚本里">169.19 环境互动全部写在技能脚本里</h3><p>新增系统组合需要修改大量代码。</p>
+<hr />
+<h3 id="16920-没有anti-stall机制">169.20 没有Anti-Stall机制</h3><p>无限Wait成为最优解。</p>
+<hr />
+<h3 id="16921-hunger存在但只是烦人的计时器">169.21 Hunger存在但只是烦人的计时器</h3><p>没有承担Anti-Stall职责。</p>
+<hr />
+<h3 id="16922-每层要求100探索">169.22 每层要求100%探索</h3><p>Explore vs Descend决策消失。</p>
+<hr />
+<h3 id="16923-楼梯踩上去自动进入下一层">169.23 楼梯踩上去自动进入下一层</h3><p>玩家无法做阶段性确认。</p>
+<hr />
+<h3 id="16924-逻辑等待动画完成">169.24 逻辑等待动画完成</h3><p>高速输入与回放变慢。</p>
+<hr />
+<h3 id="16925-所有tile和actor每帧update">169.25 所有Tile和Actor每帧Update</h3><p>浪费回合制天然性能优势。</p>
+<hr />
+<h3 id="16926-replay只有录像没有输入重演">169.26 Replay只有录像，没有输入重演</h3><p>Bug难以定位真实模拟状态。</p>
+<hr />
+<h3 id="16927-random全部共享一个stream">169.27 Random全部共享一个Stream</h3><p>增加新功能后旧Seed完全改变。</p>
+<hr />
+<h3 id="16928-death-screen只告诉你死了">169.28 Death Screen只告诉“你死了”</h3><p>玩家不知道真正的错误发生在哪一步。</p>
+<hr />
+<h2 id="170-最小可行原型">170. 最小可行原型</h2><p>一个能够验证传统 Roguelike 核心范式的 MVP 可以非常紧凑。</p>
+<p>推荐：</p>
+<p><strong>10层地牢 + 1个角色 + 12种敌人 + 25种物品 + 6种地形/环境规则 + 1个Boss。</strong></p>
+<hr />
+<h2 id="171-地图">171. 地图</h2><p>建议：</p>
+<ul>
+<li><p>40×40 或类似Grid；</p>
+</li>
+<li><p>Room + Corridor；</p>
+</li>
+<li><p>Loop；</p>
+</li>
+<li><p>Branch；</p>
+</li>
+<li><p>Door；</p>
+</li>
+<li><p>Stair。</p>
+</li>
+</ul>
+<hr />
+<h2 id="172-player">172. Player</h2><p>至少：</p>
+<ul>
+<li><p>Move；</p>
+</li>
+<li><p>Wait；</p>
+</li>
+<li><p>Melee；</p>
+</li>
+<li><p>UseItem；</p>
+</li>
+<li><p>Equip；</p>
+</li>
+<li><p>OpenDoor；</p>
+</li>
+<li><p>Descend。</p>
+</li>
+</ul>
+<hr />
+<h2 id="173-scheduler">173. Scheduler</h2><p>第一版直接实现：</p>
+<p><strong>Time Cost Scheduler。</strong></p>
+<p>不要先做简单Round</p>
+<p>以后再重构。</p>
+<hr />
+<h2 id="174-monster">174. Monster</h2><p>建议至少覆盖：</p>
+<ul>
+<li><p>普通追击；</p>
+</li>
+<li><p>快速；</p>
+</li>
+<li><p>缓慢高耐久；</p>
+</li>
+<li><p>远程；</p>
+</li>
+<li><p>开门；</p>
+</li>
+<li><p>逃跑；</p>
+</li>
+<li><p>状态型；</p>
+</li>
+<li><p>召唤型。</p>
+</li>
+</ul>
+<hr />
+<h2 id="175-items">175. Items</h2><p>建议：</p>
+<ul>
+<li><p>Healing；</p>
+</li>
+<li><p>Buff Potion；</p>
+</li>
+<li><p>Unknown Potion；</p>
+</li>
+<li><p>Scroll；</p>
+</li>
+<li><p>Weapon；</p>
+</li>
+<li><p>Armor；</p>
+</li>
+<li><p>Consumable Escape Tool。</p>
+</li>
+</ul>
+<hr />
+<h2 id="176-world-systems">176. World Systems</h2><p>至少：</p>
+<ul>
+<li><p>Door；</p>
+</li>
+<li><p>Fire；</p>
+</li>
+<li><p>Water或其他环境状态；</p>
+</li>
+<li><p>Trap；</p>
+</li>
+<li><p>FOV；</p>
+</li>
+<li><p>Item Identification。</p>
+</li>
+</ul>
+<hr />
+<h2 id="177-permadeath">177. Permadeath</h2><p>第一版即实现：</p>
+<ul>
+<li><p>Death Ends Run；</p>
+</li>
+<li><p>Suspend Save；</p>
+</li>
+<li><p>Run Replay。</p>
+</li>
+</ul>
+<p>不要后期再补。</p>
+<p>因为它会影响整个状态持久化设计。</p>
+<hr />
+<h2 id="178-mvp必要基础设施">178. MVP必要基础设施</h2><ul>
+<li><p>RunState；</p>
+</li>
+<li><p>SimulationState；</p>
+</li>
+<li><p>ActionIntent；</p>
+</li>
+<li><p>ActionValidator；</p>
+</li>
+<li><p>TurnScheduler；</p>
+</li>
+<li><p>ActorState；</p>
+</li>
+<li><p>MonsterDefinition；</p>
+</li>
+<li><p>FloorState；</p>
+</li>
+<li><p>TileState；</p>
+</li>
+<li><p>FloorGraph；</p>
+</li>
+<li><p>DungeonGenerator；</p>
+</li>
+<li><p>FOVSystem；</p>
+</li>
+<li><p>MapKnowledgeState；</p>
+</li>
+<li><p>ItemDefinition；</p>
+</li>
+<li><p>ItemInstance；</p>
+</li>
+<li><p>ItemAppearanceMapping；</p>
+</li>
+<li><p>IdentificationState；</p>
+</li>
+<li><p>StatusSystem；</p>
+</li>
+<li><p>EffectQueue；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>SuspendState；</p>
+</li>
+<li><p>ReplayRecord。</p>
+</li>
+</ul>
+<hr />
+<h2 id="179-mvp必要调试工具">179. MVP必要调试工具</h2><ul>
+<li><p>SeedInspector；</p>
+</li>
+<li><p>FloorGraphViewer；</p>
+</li>
+<li><p>ReachabilityOverlay；</p>
+</li>
+<li><p>FOVOverlay；</p>
+</li>
+<li><p>SchedulerTimeline；</p>
+</li>
+<li><p>ActionTrace；</p>
+</li>
+<li><p>EffectTrace；</p>
+</li>
+<li><p>AIDecisionInspector；</p>
+</li>
+<li><p>ItemIdentificationInspector；</p>
+</li>
+<li><p>RandomStreamTrace；</p>
+</li>
+<li><p>ResourceTimeline；</p>
+</li>
+<li><p>DeathCausality；</p>
+</li>
+<li><p>ReplayStateHash。</p>
+</li>
+</ul>
+<hr />
+<h2 id="180-mvp核心验收问题">180. MVP核心验收问题</h2><p>原型至少必须回答：</p>
+<ul>
+<li><p>玩家不输入时世界是否完全稳定；</p>
+</li>
+<li><p>每次玩家World Action是否必然推进统一时间；</p>
+</li>
+<li><p>快慢Actor是否通过同一Scheduler正常运作；</p>
+</li>
+<li><p>Player和AI是否共享Action Validator；</p>
+</li>
+<li><p>相同Seed是否生成相同Floor；</p>
+</li>
+<li><p>所有生成Floor是否具有合法出口；</p>
+</li>
+<li><p>地图是否同时存在主路和可选风险支线；</p>
+</li>
+<li><p>FOV是否真正限制玩家知识；</p>
+</li>
+<li><p>敌人是否只依据自己拥有的信息行动；</p>
+</li>
+<li><p>Unknown Item是否能够通过游戏行为逐步识别；</p>
+</li>
+<li><p>世界环境规则是否能够产生至少几种自然组合；</p>
+</li>
+<li><p>玩家是否会在继续探索和立即下楼之间做真实选择；</p>
+</li>
+<li><p>是否存在防止无限Wait的有效压力；</p>
+</li>
+<li><p>Death是否真正终止当前Run；</p>
+</li>
+<li><p>Suspend是否允许现实中途退出而不能无限回滚；</p>
+</li>
+<li><p>相同Seed和Action Replay是否得到相同结果；</p>
+</li>
+<li><p>Run失败后玩家是否能够明确指出一个或多个决策错误；</p>
+</li>
+<li><p>新Monster是否不需要修改Player Action系统；</p>
+</li>
+<li><p>新Item是否能够通过统一Effect体系接入。</p>
+</li>
+</ul>
+<p>这些问题没有稳定之前，不建议优先加入：</p>
+<ul>
+<li><p>数百敌人；</p>
+</li>
+<li><p>数百物品；</p>
+</li>
+<li><p>巨型Meta系统；</p>
+</li>
+<li><p>在线多人；</p>
+</li>
+<li><p>长剧情；</p>
+</li>
+<li><p>大量职业；</p>
+</li>
+<li><p>复杂局外永久强化。</p>
+</li>
+</ul>
+<hr />
+<h2 id="181-推荐实施顺序">181. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li><p>Grid；</p>
+</li>
+<li><p>Player；</p>
+</li>
+<li><p>Move；</p>
+</li>
+<li><p>Fixed Action Model。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>TurnScheduler；</p>
+</li>
+<li><p>Time Cost。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Monster；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>Occupancy。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>DungeonGenerator；</p>
+</li>
+<li><p>Reachability。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>FOV；</p>
+</li>
+<li><p>Player Knowledge。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Combat；</p>
+</li>
+<li><p>Status；</p>
+</li>
+<li><p>EffectQueue。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Item；</p>
+</li>
+<li><p>Inventory；</p>
+</li>
+<li><p>UseItem。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Identification；</p>
+</li>
+<li><p>Appearance Mapping。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Door；</p>
+</li>
+<li><p>Environment；</p>
+</li>
+<li><p>Tag Interaction。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>FloorTransition；</p>
+</li>
+<li><p>RunState；</p>
+</li>
+<li><p>Permadeath。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Suspend；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Random Isolation。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Debug Tool；</p>
+</li>
+<li><p>Simulation Bot；</p>
+</li>
+<li><p>Procedural Content Expansion。</p>
+</li>
+</ul>
+<hr />
+<h2 id="182-架构验收标准">182. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>世界在玩家没有提交World Action时不自行推进；</p>
+</li>
+<li><p>所有世界行动拥有明确Time Cost；</p>
+</li>
+<li><p>Actor速度通过统一Scheduler表达；</p>
+</li>
+<li><p>Player与AI使用统一ActionIntent；</p>
+</li>
+<li><p>Action执行前进行统一合法性验证；</p>
+</li>
+<li><p>世界只在Stable Decision Point重新接受玩家输入；</p>
+</li>
+<li><p>Effect、Status、Death等结果在下一次玩家决策前完整结算；</p>
+</li>
+<li><p>Dungeon由稳定Seed生成；</p>
+</li>
+<li><p>DungeonGenerator和FloorRuntimeState严格分离；</p>
+</li>
+<li><p>程序生成后执行强制Reachability验证；</p>
+</li>
+<li><p>关键出口和必要资源不存在生成死锁；</p>
+</li>
+<li><p>Generator连续失败存在Fallback；</p>
+</li>
+<li><p>地牢逻辑拓扑与Tile表现可以分离；</p>
+</li>
+<li><p>WorldMapTruth与PlayerMapKnowledge严格分离；</p>
+</li>
+<li><p>Visible、Remembered和Unknown属于不同状态；</p>
+</li>
+<li><p>AI只依据自身Perception行动；</p>
+</li>
+<li><p>FOV是统一Gameplay规则而不是单纯视觉效果；</p>
+</li>
+<li><p>ItemDefinition与ItemInstance严格分离；</p>
+</li>
+<li><p>未识别物品的Appearance与真实Effect可以映射分离；</p>
+</li>
+<li><p>Identification状态不改变物品真实规则；</p>
+</li>
+<li><p>Inventory、Floor、Equipment之间Item拥有唯一归属；</p>
+</li>
+<li><p>Environmental Interaction通过统一规则或Tag系统执行；</p>
+</li>
+<li><p>Anti-Stall机制能够阻止无限等待获得免费优势；</p>
+</li>
+<li><p>Explore与Descend之间存在真实风险收益选择；</p>
+</li>
+<li><p>FloorTransition是显式阶段事务；</p>
+</li>
+<li><p>Run Death拥有明确不可逆Commit；</p>
+</li>
+<li><p>已死亡Run不会通过旧Suspend恢复；</p>
+</li>
+<li><p>Suspend支持现实退出但不提供无限回滚；</p>
+</li>
+<li><p>Random Stream按照Generation、Loot、Combat、AI等领域隔离；</p>
+</li>
+<li><p>Save和Replay保存完整随机状态；</p>
+</li>
+<li><p>相同Seed和ActionSequence能够确定重放；</p>
+</li>
+<li><p>Logic不等待Animation完成；</p>
+</li>
+<li><p>Message Log只显示玩家有权观察到的事件；</p>
+</li>
+<li><p>回合制AI不依赖每帧Update；</p>
+</li>
+<li><p>Grid、Occupancy和Visibility使用紧凑数据结构；</p>
+</li>
+<li><p>FOV和Path只在必要时重新计算；</p>
+</li>
+<li><p>调试器能够解释Actor为什么现在获得行动权；</p>
+</li>
+<li><p>调试器能够解释某AI为什么做这个决定；</p>
+</li>
+<li><p>调试器能够解释某物品为什么仍然未知；</p>
+</li>
+<li><p>调试器能够定位Replay第一次随机状态分歧；</p>
+</li>
+<li><p>新Monster通常只需新增Definition与Behavior；</p>
+</li>
+<li><p>新Item通常只需新增Definition与Effect；</p>
+</li>
+<li><p>新环境规则无需修改所有旧技能；</p>
+</li>
+<li><p>新Generator只需输出满足统一Floor约束的数据。</p>
+</li>
+</ul>
+<hr />
+<h2 id="183-可迁移到其他游戏的设计思想">183. 可迁移到其他游戏的设计思想</h2><hr />
+<h3 id="1831-玩家行动推动时间是一种极强的复杂度控制方式">183.1 “玩家行动推动时间”是一种极强的复杂度控制方式</h3><p>可迁移到：</p>
+<ul>
+<li><p>战术游戏；</p>
+</li>
+<li><p>解谜；</p>
+</li>
+<li><p>潜行；</p>
+</li>
+<li><p>时间规划；</p>
+</li>
+<li><p>回合制生存。</p>
+</li>
+</ul>
+<p>玩家拥有无限现实思考时间，</p>
+<p>但游戏世界只响应：</p>
+<p>已经提交的行动。</p>
+<hr />
+<h3 id="1832-stable-decision-point-可以大幅提高复杂规则系统的可靠性">183.2 Stable Decision Point 可以大幅提高复杂规则系统的可靠性</h3><p>可迁移到：</p>
+<ul>
+<li><p>卡牌；</p>
+</li>
+<li><p>战棋；</p>
+</li>
+<li><p>策略；</p>
+</li>
+<li><p>工作流系统。</p>
+</li>
+</ul>
+<p>所有连锁结果先处理完，</p>
+<p>再接受下一项外部命令。</p>
+<hr />
+<h3 id="1833-速度可以统一表达为下一次获得行动权的时间">183.3 速度可以统一表达为“下一次获得行动权的时间”</h3><p>可迁移到：</p>
+<ul>
+<li><p>ATB；</p>
+</li>
+<li><p>战术RPG；</p>
+</li>
+<li><p>多单位调度；</p>
+</li>
+<li><p>模拟。</p>
+</li>
+</ul>
+<p>比：</p>
+<p>“偶尔多行动一次”</p>
+<p>更容易扩展。</p>
+<hr />
+<h3 id="1834-程序生成应该被理解为随机输入-约束验证">183.4 程序生成应该被理解为“随机输入 + 约束验证”</h3><p>可迁移到：</p>
+<ul>
+<li><p>开放世界；</p>
+</li>
+<li><p>关卡；</p>
+</li>
+<li><p>战利品；</p>
+</li>
+<li><p>任务；</p>
+</li>
+<li><p>地牢。</p>
+</li>
+</ul>
+<p>随机负责：</p>
+<p>变化。</p>
+<p>Constraint负责：</p>
+<p>合法性。</p>
+<hr />
+<h3 id="1835-世界事实和玩家知识应该严格分离">183.5 世界事实和玩家知识应该严格分离</h3><p>可迁移到：</p>
+<ul>
+<li><p>潜行；</p>
+</li>
+<li><p>侦探；</p>
+</li>
+<li><p>战争迷雾；</p>
+</li>
+<li><p>社交推理；</p>
+</li>
+<li><p>MMO。</p>
+</li>
+</ul>
+<p>系统知道某件事，</p>
+<p>不代表玩家应该知道。</p>
+<hr />
+<h3 id="1836-对象身份与对象外观可以分离">183.6 对象身份与对象外观可以分离</h3><p>可迁移到：</p>
+<ul>
+<li><p>未鉴定装备；</p>
+</li>
+<li><p>隐藏角色；</p>
+</li>
+<li><p>伪装；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>随机道具。</p>
+</li>
+</ul>
+<p>同一个视觉符号</p>
+<p>可以只是：</p>
+<p>当前Run中的信息编码。</p>
+<hr />
+<h3 id="1837-永久失败可以让知识成为真正的进度">183.7 永久失败可以让“知识”成为真正的进度</h3><p>可迁移到：</p>
+<ul>
+<li><p>Boss学习；</p>
+</li>
+<li><p>Puzzle；</p>
+</li>
+<li><p>Investigation；</p>
+</li>
+<li><p>Survival。</p>
+</li>
+</ul>
+<p>即使角色状态重置，</p>
+<p>玩家的Mental Model仍然进步。</p>
+<hr />
+<h3 id="1838-anti-stall-pressure-的职责比饥饿系统本身更重要">183.8 Anti-Stall Pressure 的职责比“饥饿系统”本身更重要</h3><p>可迁移到：</p>
+<ul>
+<li><p>战术；</p>
+</li>
+<li><p>防守；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>回合制。</p>
+</li>
+</ul>
+<p>先问：</p>
+<p>为什么不能无限等待？</p>
+<p>再决定：</p>
+<p>用饥饿、追兵还是资源损耗实现。</p>
+<hr />
+<h3 id="1839-explore-vs-advance-是一种非常通用的风险收益结构">183.9 Explore vs Advance 是一种非常通用的风险收益结构</h3><p>当前区域还有潜在收益。</p>
+<p>继续搜索：</p>
+<p>可能更强，</p>
+<p>也可能消耗更多资源。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>撤离；</p>
+</li>
+<li><p>副本；</p>
+</li>
+<li><p>生存；</p>
+</li>
+<li><p>战役。</p>
+</li>
+</ul>
+<hr />
+<h3 id="18310-统一环境规则比大量专用技能组合更容易产生涌现">183.10 统一环境规则比大量专用技能组合更容易产生涌现</h3><p>Fire不需要知道：</p>
+<p>每一种可燃物。</p>
+<p>只需要：</p>
+<p>对象拥有Flammable标签。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>GAS；</p>
+</li>
+<li><p>Immersive Sim；</p>
+</li>
+<li><p>Sandbox；</p>
+</li>
+<li><p>元素系统。</p>
+</li>
+</ul>
+<hr />
+<h3 id="18311-回合制并不意味着运行时可以没有严格时间模型">183.11 回合制并不意味着运行时可以没有严格时间模型</h3><p>即使没有实时秒数，</p>
+<p>仍然需要：</p>
+<p>行动成本、顺序和稳定状态。</p>
+<p>这一思想可迁移到：</p>
+<p>任何复杂回合系统。</p>
+<hr />
+<h3 id="18312-可确定重放是程序生成游戏最重要的工程资产之一">183.12 可确定重放是程序生成游戏最重要的工程资产之一</h3><p>一个罕见Seed Bug</p>
+<p>如果无法重现：</p>
+<p>几乎无法修复。</p>
+<p>固定：</p>
+<p>Seed</p>
+<ul>
+<li>Input</li>
+</ul>
+<p>就能重新构建完整历史。</p>
+<p>适用于：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>Procedural World；</p>
+</li>
+<li><p>Strategy；</p>
+</li>
+<li><p>Simulation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="184-本次防重记录">184. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Traditional Roguelike；</p>
+</li>
+<li><p>Classical Roguelike；</p>
+</li>
+<li><p>Turn-Based Roguelike；</p>
+</li>
+<li><p>Grid-Based Dungeon Crawler；</p>
+</li>
+<li><p>回合制 Roguelike；</p>
+</li>
+<li><p>传统地牢探索；</p>
+</li>
+<li><p>程序生成地牢冒险。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>传统 Roguelike 将整个世界组织成由玩家离散行动驱动的稳定模拟：玩家不输入时世界通常保持静止，每个移动、攻击、开门、使用道具或等待操作都会提交一个 Action Intent，并消耗确定的世界时间；统一 Scheduler 再依据 Actor 速度和动作成本依次让其他角色获得行动机会，直到世界重新到达稳定决策点。</p>
+<p>每个 Run 使用确定 Seed 生成未知但经过可达性验证的地牢拓扑、敌人、资源和危险；World Truth 与 Player Knowledge 分离，玩家只能依据当前视野、历史记忆和逐步识别出的物品、敌人和环境规则行动。Permadeath 使一次错误决策具有真实不可逆代价，但死亡只重置角色和当前世界，不会重置玩家本人对系统规则的理解。</p>
+<p>其核心循环可以压缩为：</p>
+<p><strong>观察有限信息<br />
+→ 提交一个不可撤销Action<br />
+→ 消耗世界时间<br />
+→ Scheduler推进其他Actor<br />
+→ 世界规则完整结算<br />
+→ 返回Stable Decision Point<br />
+→ 探索未知Tile与支线<br />
+→ 获取资源、装备和知识<br />
+→ 判断继续探索还是进入下一层<br />
+→ 风险与Anti-Stall压力逐渐增加<br />
+→ 使用有限资源应对未知局面<br />
+→ 成功深入或Run终止<br />
+→ 世界重置<br />
+→ 玩家知识保留<br />
+→ 下一Run做出更成熟的决策。</strong></p>
+<p>本类型最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>角色每局从有限状态重新开始，但玩家对规则的理解持续成长；真正跨局升级的首先不是人物数值，而是玩家的世界模型。</strong></p>
+</blockquote>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>单局通常由程序生成世界构成；</p>
+</li>
+<li><p>玩家行动才推动世界时间；</p>
+</li>
+<li><p>世界在玩家思考期间通常保持稳定；</p>
+</li>
+<li><p>所有行动具有明确Time Cost；</p>
+</li>
+<li><p>Actor速度通过统一调度表达；</p>
+</li>
+<li><p>Player与AI共享统一行动规则；</p>
+</li>
+<li><p>每个Action都会进入完整世界结算链；</p>
+</li>
+<li><p>程序地图生成后必须执行可达性验证；</p>
+</li>
+<li><p>地牢包含主路径、支线和风险收益空间；</p>
+</li>
+<li><p>世界地图事实与玩家地图知识分离；</p>
+</li>
+<li><p>有限视野是真正Gameplay规则；</p>
+</li>
+<li><p>AI只依据自己的感知信息行动；</p>
+</li>
+<li><p>随机物品可以存在身份未知或效果未知；</p>
+</li>
+<li><p>当前Run的物品外观与真实身份可以重新映射；</p>
+</li>
+<li><p>玩家需要通过试用、观察或鉴定建立知识；</p>
+</li>
+<li><p>环境规则可以通过Tag组合产生涌现；</p>
+</li>
+<li><p>游戏通常需要Anti-Stall机制阻止无限等待；</p>
+</li>
+<li><p>每层都存在继续探索与提前前进的风险收益取舍；</p>
+</li>
+<li><p>Permanent Death结束当前Run；</p>
+</li>
+<li><p>Suspend用于继续游戏而不是无限回滚；</p>
+</li>
+<li><p>跨局成长主要来自玩家知识而非永久数值膨胀；</p>
+</li>
+<li><p>Random Stream必须支持Seed重放；</p>
+</li>
+<li><p>相同Seed和ActionSequence可以确定性复现；</p>
+</li>
+<li><p>Message Log属于正式信息界面；</p>
+</li>
+<li><p>AI和世界模拟不依赖高频Frame Update；</p>
+</li>
+<li><p>Death Summary应能解释真正的失败因果链。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与仓库现有卡组构筑式-roguelike-的防重边界">与仓库现有卡组构筑式 Roguelike 的防重边界</h3><p>当前仓库已有 <code>deckbuilder-roguelike</code>。其核心是玩家通过战斗奖励、删牌、升级、遗物和路线选择不断修改卡组，从而修改未来抽牌概率和每回合可用行动集合。</p>
+<p>本次传统 Roguelike 的主要决策对象则是：</p>
+<ul>
+<li><p>当前网格位置；</p>
+</li>
+<li><p>当前视野；</p>
+</li>
+<li><p>地牢拓扑；</p>
+</li>
+<li><p>敌人速度与行为；</p>
+</li>
+<li><p>实体物品；</p>
+</li>
+<li><p>地形；</p>
+</li>
+<li><p>环境互动；</p>
+</li>
+<li><p>世界时间；</p>
+</li>
+<li><p>行动成本。</p>
+</li>
+</ul>
+<p>因此可以概括为：</p>
+<p><strong>Deckbuilder Roguelike：</strong></p>
+<blockquote>
+<p>玩家主要构筑未来会抽到什么行动。</p>
+</blockquote>
+<p><strong>Traditional Roguelike：</strong></p>
+<blockquote>
+<p>玩家拥有当前完整行动能力，但每一个世界行动都会不可逆地推进时间和空间状态。</p>
+</blockquote>
+<p>两者共享：</p>
+<ul>
+<li><p>Run；</p>
+</li>
+<li><p>Procedural Content；</p>
+</li>
+<li><p>Permadeath；</p>
+</li>
+<li><p>Risk Management；</p>
+</li>
+</ul>
+<p>但核心决策媒介完全不同。</p>
+<hr />
+<h3 id="与仓库现有回合制战术-rpg-的防重边界">与仓库现有回合制战术 RPG 的防重边界</h3><p>当前仓库已有 <code>tactical-rpg</code>，其核心围绕离散战场、行动资源、小队单位、掩体、视野、任务目标以及跨任务长期队伍成长。</p>
+<p>传统 Roguelike 虽然同样采用网格和回合，但更典型地：</p>
+<ul>
+<li><p>长期控制单个主要角色；</p>
+</li>
+<li><p>重点是未知地牢探索；</p>
+</li>
+<li><p>世界通过玩家Action持续推进；</p>
+</li>
+<li><p>地图逐步揭示；</p>
+</li>
+<li><p>每局世界重新生成；</p>
+</li>
+<li><p>Permanent Death终止当前角色状态；</p>
+</li>
+<li><p>玩家知识替代长期队伍成长成为重要跨局进度。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>Tactical RPG：</strong></p>
+<blockquote>
+<p>在一个任务型战场中调度多个单位完成战术目标。</p>
+</blockquote>
+<p><strong>Traditional Roguelike：</strong></p>
+<blockquote>
+<p>在一个未知且持续深入的程序世界中，以单角色连续行动管理信息、空间与资源风险。</p>
+</blockquote>
+<hr />
+<h3 id="与仓库现有生存恐怖的防重边界">与仓库现有生存恐怖的防重边界</h3><p>生存恐怖同样强调：</p>
+<ul>
+<li><p>有限资源；</p>
+</li>
+<li><p>未知威胁；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>路线安全；</p>
+</li>
+<li><p>生存余量。</p>
+</li>
+</ul>
+<p>但其地图通常：</p>
+<p>具有作者设计的长期空间记忆和回访结构。</p>
+<p>传统 Roguelike则通常：</p>
+<ul>
+<li><p>每Run重新生成；</p>
+</li>
+<li><p>地图知识高度局部；</p>
+</li>
+<li><p>重点不是安全屋和长期回访；</p>
+</li>
+<li><p>核心时间结构是Action-driven Turn Simulation；</p>
+</li>
+<li><p>Permadeath和Seed世界承担主要不可逆压力。</p>
+</li>
+</ul>
+<p>因此二者共享风险管理，但属于不同宏观控制范式。</p>
+<hr />
+<h3 id="与动作-roguelite-的防重边界">与动作 Roguelite 的防重边界</h3><p>动作 Roguelite通常：</p>
+<ul>
+<li><p>世界实时运行；</p>
+</li>
+<li><p>玩家依赖反应、操作和动作执行；</p>
+</li>
+<li><p>一次战斗中每秒产生大量输入。</p>
+</li>
+</ul>
+<p>传统 Roguelike则：</p>
+<ul>
+<li><p>玩家可以无限思考；</p>
+</li>
+<li><p>世界由离散行动推进；</p>
+</li>
+<li><p>难点主要来自信息、规则、资源与不可逆决策；</p>
+</li>
+<li><p>一个按键可能比一秒操作更重要。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>Action Roguelite：</strong></p>
+<blockquote>
+<p>实时执行能力决定你能否利用Build。</p>
+</blockquote>
+<p><strong>Traditional Roguelike：</strong></p>
+<blockquote>
+<p>世界理解和行动质量决定你能否让Run继续存在。**</p>
+</blockquote>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>Traditional Roguelike；</p>
+</li>
+<li><p>Turn-Based Dungeon Crawler；</p>
+</li>
+<li><p>Action-as-Time；</p>
+</li>
+<li><p>Stable Decision Point；</p>
+</li>
+<li><p>Time Cost；</p>
+</li>
+<li><p>Energy Scheduler；</p>
+</li>
+<li><p>Actor Schedule；</p>
+</li>
+<li><p>Unified Action Intent；</p>
+</li>
+<li><p>Player/AI Shared Rules；</p>
+</li>
+<li><p>Procedural Dungeon；</p>
+</li>
+<li><p>Floor Graph；</p>
+</li>
+<li><p>Critical Path；</p>
+</li>
+<li><p>Branch；</p>
+</li>
+<li><p>Reachability Validation；</p>
+</li>
+<li><p>FOV；</p>
+</li>
+<li><p>Player Knowledge；</p>
+</li>
+<li><p>Remembered Tile；</p>
+</li>
+<li><p>Unknown Item；</p>
+</li>
+<li><p>Item Identification；</p>
+</li>
+<li><p>Appearance Mapping；</p>
+</li>
+<li><p>Permadeath；</p>
+</li>
+<li><p>Suspend Save；</p>
+</li>
+<li><p>Player Knowledge Progression；</p>
+</li>
+<li><p>Monster Behavior；</p>
+</li>
+<li><p>AI Perception；</p>
+</li>
+<li><p>Environment Interaction；</p>
+</li>
+<li><p>Tag-Based Emergence；</p>
+</li>
+<li><p>Anti-Stall Pressure；</p>
+</li>
+<li><p>Explore vs Descend；</p>
+</li>
+<li><p>Floor Transition；</p>
+</li>
+<li><p>Deterministic Random；</p>
+</li>
+<li><p>Random Stream Isolation；</p>
+</li>
+<li><p>Input Replay；</p>
+</li>
+<li><p>Message Log；</p>
+</li>
+<li><p>Seed Debug；</p>
+</li>
+<li><p>Scheduler Timeline；</p>
+</li>
+<li><p>Death Causality；</p>
+</li>
+<li><p>Generator Validation；</p>
+</li>
+<li><p>Replay State Hash。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次传统 Roguelike 范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Traditional Roguelike Turn System；</p>
+</li>
+<li><p>Roguelike行动时间；</p>
+</li>
+<li><p>Energy Scheduler；</p>
+</li>
+<li><p>Roguelike Grid；</p>
+</li>
+<li><p>Roguelike Dungeon Generator；</p>
+</li>
+<li><p>Roguelike Procedural Dungeon；</p>
+</li>
+<li><p>Floor Graph；</p>
+</li>
+<li><p>Roguelike FOV；</p>
+</li>
+<li><p>Roguelike Fog of War；</p>
+</li>
+<li><p>Roguelike未知物品；</p>
+</li>
+<li><p>Potion Identification；</p>
+</li>
+<li><p>Scroll Identification；</p>
+</li>
+<li><p>Roguelike Appearance Mapping；</p>
+</li>
+<li><p>Roguelike Permadeath；</p>
+</li>
+<li><p>Roguelike Suspend Save；</p>
+</li>
+<li><p>Roguelike Anti-Stall；</p>
+</li>
+<li><p>Roguelike Hunger Clock；</p>
+</li>
+<li><p>Roguelike Explore vs Descend；</p>
+</li>
+<li><p>Roguelike Floor Transition；</p>
+</li>
+<li><p>Roguelike Monster AI；</p>
+</li>
+<li><p>Roguelike AI Perception；</p>
+</li>
+<li><p>Roguelike Environment Interaction；</p>
+</li>
+<li><p>Roguelike Item Interaction；</p>
+</li>
+<li><p>Roguelike Seed；</p>
+</li>
+<li><p>Roguelike RNG；</p>
+</li>
+<li><p>Roguelike Replay；</p>
+</li>
+<li><p>Roguelike Message Log；</p>
+</li>
+<li><p>Roguelike Procedural Validation；</p>
+</li>
+<li><p>Roguelike Reachability；</p>
+</li>
+<li><p>Roguelike Solvability；</p>
+</li>
+<li><p>Roguelike Death Causality；</p>
+</li>
+<li><p>Roguelike Daily Seed；</p>
+</li>
+<li><p>Roguelike Run Knowledge；</p>
+</li>
+<li><p>Roguelike Meta Knowledge。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-23">2026-08-23</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

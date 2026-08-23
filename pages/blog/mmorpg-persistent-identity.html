@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/mmorpg-persistent-identity.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务 | IrisSakura">
+    <meta property="og:description" content="玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/mmorpg-persistent-identity.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-mmorpg-persistent-identity.png">
+    <meta property="og:image:alt" content="持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务 | IrisSakura">
+    <meta name="twitter:description" content="玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-mmorpg-persistent-identity.png">
+    <meta name="twitter:image:alt" content="持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#d7e8eb">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务 | IrisSakura","description":"玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？","url":"https://irissakura.github.io/pages/blog/mmorpg-persistent-identity.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务","image":"https://irissakura.github.io/assets/social/pages-blog-mmorpg-persistent-identity.png","datePublished":"2026-08-23","dateModified":"2026-08-23","about":["mmorpg","persistent-identity","session"]}</script>
+    <!-- site-meta:end -->
+    <title>持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- theme-styles:start -->
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
+    <!-- theme-styles:end -->
+    <!-- theme-bootstrap:start -->
+    <script>
+        (() => {
+            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            let storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(config.storageKey);
+            } catch {
+                // 受限存储环境下继续使用系统主题。
+            }
+            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
+            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const theme = preference === 'system'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? config.defaultDark
+                    : config.defaultLight
+                : preference;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.themePreference = preference;
+            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
+            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
+            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
+            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
+            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
+                if (!(stylesheet instanceof HTMLLinkElement)) return;
+                const supportedThemes = (stylesheet.dataset.themes || '').split(/\s+/);
+                stylesheet.disabled = !supportedThemes.includes(theme);
+            });
+            document.querySelector('meta[name="theme-color"]')
+                ?.setAttribute('content', config.themes[theme].themeColor);
+        })();
+    </script>
+    <!-- theme-bootstrap:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <span>Iris</span>Sakura
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <label class="theme-picker">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+                <span class="sr-only">选择页面主题</span>
+                <select
+                    class="theme-select"
+                    aria-label="选择页面主题"
+                    data-storage-key="irissakura-theme"
+                    data-default-light="pastoral"
+                    data-default-dark="night"
+                >
+                    <option value="system">跟随系统</option>
+                    <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
+                    <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
+                    <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
+                </select>
+            </label>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-08-23 · 更新于 2026-08-23</p>
+            <h1>持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务</h1>
+            <p class="blog-deck">玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？</p>
+            <div class="note-tags"><span>mmorpg</span><span>persistent-identity</span><span>session</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>玩家昨天晚上在一座主城下线。</p>
+<p>今天重新登录。</p>
+<p>他仍然拥有昨天获得的装备、公会身份、任务进度和拍卖订单。</p>
+<p>好友已经比昨天高了两级。</p>
+<p>某个世界 Boss 在玩家离线期间已经被其他人击败。</p>
+<p>市场价格也发生了变化。</p>
+<p>玩家走出主城，跨过地图边界。</p>
+<p>画面短暂加载了一下，但角色仍然是原来的角色。</p>
+<p>稍后他加入朋友的队伍，却发现两个人明明都站在“北风平原”，一开始却互相看不见；系统经过一次分线调整后，两人才出现在同一个世界实例中。</p>
+<p>晚上网络突然断开。</p>
+<p>玩家立刻重新连接。</p>
+<p>服务器必须判断：</p>
+<ul>
+<li><p>旧连接是真的死了，还是只是暂时丢包；</p>
+</li>
+<li><p>新连接能不能接管原来的角色；</p>
+</li>
+<li><p>旧服务器上那个 Runtime Entity 是否还活着；</p>
+</li>
+<li><p>是否允许同一个 Character 同时出现两份；</p>
+</li>
+<li><p>玩家断线前正在跨区的话，到底应该恢复在 Source 还是 Target。</p>
+</li>
+</ul>
+<p>从玩家视角看，这些事情最终应该只有一个结果：</p>
+<blockquote>
+<p>我还是昨天那个角色，我回到了同一个长期世界。</p>
+</blockquote>
+<p>但服务器内部真正维持这句话，需要的是一整套身份、所有权和事务边界。</p>
+<h2 id="先说结论mmorpg-的核心不是很多玩家而是持久身份跨越临时运行时继续成立">先说结论：MMORPG 的核心不是“很多玩家”，而是持久身份跨越临时运行时继续成立</h2><p><strong>持久身份（后文简称“不会因为下线就消失的那个我”）</strong>：独立于本次网络连接、服务器进程和场景实例存在，并能够跨会话继续承载角色资产、成长、社会关系和历史的长期身份。</p>
+<p><strong>临时运行时（后文简称“这一次在线时被服务器托管的那个我”）</strong>：为了当前 Session、当前 Zone 和当前战斗而存在的在线实体；它可以被销毁、迁移和重建，但不能改变长期角色是谁。</p>
+<p>可以先把最重要的关系压缩成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Account&lt;br/&gt;现实账户"] --&gt; B["Character&lt;br/&gt;长期世界身份"]
+    B --&gt; C["Persistent State&lt;br/&gt;长期资产与进度"]
+    B --&gt; D["Session&lt;br/&gt;本次连接"]
+    D --&gt; E["Runtime Entity&lt;br/&gt;当前在线实例"]
+    E --&gt; F["Zone / Shard / Instance&lt;br/&gt;当前运行容器"]
+    F --&gt; G["迁移 / 断线 / 重连"]
+    G --&gt; E
+</code></pre>
+<p>这张图真正表达的是：</p>
+<pre><code class="language-text">Character
+不等于
+Session
+
+Session
+不等于
+Runtime Entity
+
+Runtime Entity
+也不等于
+Persistent State。
+</code></pre>
+<p>只要这几层被压成一个对象，很多 MMO 特有问题就会变成生命周期灾难。</p>
+<h2 id="持久共享世界首先要求世界真相不属于任何单个玩家">持久共享世界首先要求世界真相不属于任何单个玩家</h2><p><strong>持久共享世界（后文简称“玩家下线以后仍然继续存在的世界”）</strong>：服务器维护的一套公共世界事实，其生命周期独立于任意单个玩家 Session。</p>
+<p>假设一个世界 Boss 已经刷新。</p>
+<p>玩家 A 下线。</p>
+<p>随后玩家 B 组织队伍击败 Boss。</p>
+<p>几个小时后，A 再次登录。</p>
+<p>此时不能因为：</p>
+<pre><code class="language-text">A 上次退出时的本地状态
+=
+Boss 仍然存活
+</code></pre>
+<p>就为 A 单独生成另一份公共事实。</p>
+<p>真正的状态应该是：</p>
+<pre><code class="language-text">Shared World State:
+Boss = Dead
+</code></pre>
+<p>而 A 个人可能仍然拥有：</p>
+<pre><code class="language-text">Player Personal State:
+本周个人奖励未领取
+个人任务阶段 = X
+个人声望 = Y
+</code></pre>
+<p>因此：</p>
+<p>**共享世界状态（后文简称“所有人共同面对的事实”）<strong>与</strong>个人状态（后文简称“只属于这个角色的进度”）**必须分开。</p>
+<p>共享状态可以包含：</p>
+<ul>
+<li><p>世界时间；</p>
+</li>
+<li><p>公共 Boss；</p>
+</li>
+<li><p>世界事件；</p>
+</li>
+<li><p>Realm 状态；</p>
+</li>
+<li><p>公共经济与资源状态。</p>
+</li>
+</ul>
+<p>个人状态则可以包含：</p>
+<ul>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>Inventory；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>Achievement；</p>
+</li>
+<li><p>Personal Reputation；</p>
+</li>
+<li><p>Personal Phase。</p>
+</li>
+</ul>
+<p>这并不意味着 MMORPG 不能拥有个人剧情分层。</p>
+<p>而是：</p>
+<blockquote>
+<p>Personal Phase 必须被明确承认为个人投影，不能偷偷篡改共享世界真相。</p>
+</blockquote>
+<h2 id="数据库里的角色和服务器里正在跑的角色不是同一个对象">数据库里的角色和服务器里正在跑的角色不是同一个对象</h2><p><strong>角色持久状态（后文简称“角色真正长期拥有的东西”）</strong>：跨登录保存的 Character 事实，例如等级、装备、货币、任务、声望、公会成员身份和长期位置。</p>
+<p><strong>角色运行实体（后文简称“这次在线时正在世界里跑的实体”）</strong>：当前服务器为这一 Character 建立的短生命周期模拟对象，例如 Position、CurrentHealth、Buff、Threat、CurrentTarget 和移动状态。</p>
+<p>一个长期角色可能保存：</p>
+<pre><code class="language-text">CharacterId
+Level
+Equipment
+Inventory
+Currency
+Quest
+Reputation
+GuildMembership
+LastKnownWorldLocation
+</code></pre>
+<p>而当前在线实体可能保存：</p>
+<pre><code class="language-text">RuntimeEntityId
+SessionId
+CurrentZoneInstanceId
+Position
+CurrentHealth
+CombatState
+BuffStates
+ThreatState
+MovementState
+</code></pre>
+<p>把两者拆开以后，一个很重要的工程问题会自然得到答案：</p>
+<blockquote>
+<p>为什么不应该每 0.1 秒把角色当前位置、目标和 Buff 全部写进数据库？</p>
+</blockquote>
+<p>因为这些高频状态首先属于 Runtime。</p>
+<p>真正需要强持久化保证的通常是：</p>
+<ul>
+<li><p>获得装备；</p>
+</li>
+<li><p>消耗货币；</p>
+</li>
+<li><p>任务完成；</p>
+</li>
+<li><p>等级提升；</p>
+</li>
+<li><p>拍卖交易；</p>
+</li>
+<li><p>Guild 状态；</p>
+</li>
+<li><p>副本 Lockout；</p>
+</li>
+<li><p>稀有奖励。</p>
+</li>
+</ul>
+<p>也就是说，MMORPG 不只有：</p>
+<pre><code class="language-text">Runtime Update。
+</code></pre>
+<p>它还必须拥有：</p>
+<p><strong>耐久提交点（后文简称“这件事从现在开始真的不能丢”）</strong>。</p>
+<p>位置少同步一帧通常可以通过重同步恢复。</p>
+<p>一件唯一传奇装备重复生成两份，则可能直接破坏经济和玩家资产可信度。</p>
+<p>这两种数据不能使用完全相同的一致性成本。</p>
+<h2 id="accountcharacter-与-session-是三个身份域">Account、Character 与 Session 是三个身份域</h2><p>如果要找一个最常见的 MMO 身份建模错误，那就是：</p>
+<pre><code class="language-text">PlayerId
+</code></pre>
+<p>一个字段承担所有含义。</p>
+<p>实际上至少存在三个层次。</p>
+<h3 id="account">Account</h3><p>现实账户。</p>
+<p>它拥有：</p>
+<ul>
+<li><p>Entitlement；</p>
+</li>
+<li><p>账号设置；</p>
+</li>
+<li><p>多角色集合；</p>
+</li>
+<li><p>账号级收藏；</p>
+</li>
+<li><p>安全状态。</p>
+</li>
+</ul>
+<h3 id="character">Character</h3><p>世界中的长期角色身份。</p>
+<p>玩家今天登录和明天登录：</p>
+<pre><code class="language-text">CharacterId
+</code></pre>
+<p>仍然可以相同。</p>
+<h3 id="session">Session</h3><p>这一次在线连接。</p>
+<p>每次登录都应产生新的：</p>
+<pre><code class="language-text">SessionId。
+</code></pre>
+<p>因此：</p>
+<pre><code class="language-text">Account
+→
+可以有多个 Character
+
+Character
+→
+可以经历很多 Session
+
+Session
+→
+只代表某一次连接和运行时接管。
+</code></pre>
+<p>**身份分层（后文简称“账号是谁、角色是谁、这次连接是谁要分开”）**让重连、封禁、跨区、重复登录和运行实体重建拥有明确语义。</p>
+<h2 id="session-不能等于-character">Session 不能等于 Character</h2><p>假设玩家手机网络突然断开。</p>
+<p>服务器还没有及时发现旧连接失效。</p>
+<p>玩家立刻切换网络重新登录。</p>
+<p>如果系统只使用：</p>
+<pre><code class="language-text">CharacterId
+</code></pre>
+<p>作为在线连接身份，就可能出现两个方向的错误。</p>
+<p>一种是：</p>
+<pre><code class="language-text">角色已经在线
+→
+拒绝新连接。
+</code></pre>
+<p>玩家明明只是网络抖动，却被自己残留的旧 Session 锁在门外。</p>
+<p>另一种更危险：</p>
+<pre><code class="language-text">新连接成功
+→
+重新 Spawn Character
+
+旧连接对应 Runtime 仍然存在
+</code></pre>
+<p>于是世界中出现：</p>
+<pre><code class="language-text">两个相同 CharacterId。
+</code></pre>
+<p>这已经不是普通网络问题。</p>
+<p>它变成资产和世界身份复制。</p>
+<h2 id="session-lease-把连接暂时消失与角色已经离线分开">Session Lease 把“连接暂时消失”与“角色已经离线”分开</h2><p><strong>Session Lease（后文简称“这次在线身份的临时租约”）</strong>：通过 Heartbeat、Expiration 和 Grace Period 表达某次连接当前是否仍有资格控制 Character。</p>
+<p>网络连接消失以后，不一定立刻：</p>
+<pre><code class="language-text">Destroy Character Runtime。
+</code></pre>
+<p>更合理的模型可以是：</p>
+<pre><code class="language-text">Connected
+→
+Heartbeat Missed
+→
+Reconnect Grace Period
+→
+Expired
+</code></pre>
+<p>在 Grace Period 中：</p>
+<ul>
+<li><p>Character 仍然存在；</p>
+</li>
+<li><p>可能进入受限状态；</p>
+</li>
+<li><p>新 Session 可以发起接管；</p>
+</li>
+<li><p>旧 Session 不再无限持有控制权。</p>
+</li>
+</ul>
+<p>这样可以同时避免：</p>
+<pre><code class="language-text">网络抖一下
+→
+角色立即消失
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">连接早已死亡
+→
+服务器永远认为它在线。
+</code></pre>
+<h2 id="重复登录的本质是-character-控制权接管">重复登录的本质是 Character 控制权接管</h2><p>新的 Session 验证成功以后，不应该简单：</p>
+<pre><code class="language-text">Create New Character Runtime。
+</code></pre>
+<p>更清楚的流程是：</p>
+<pre><code class="language-text">New Session Authenticated
+→
+Old Session = Replacing
+→
+冻结旧 Runtime 高价值操作
+→
+新 Session 取得控制资格
+→
+确认新的连接稳定
+→
+旧 Session 失效
+</code></pre>
+<p>这里真正发生的不是：</p>
+<blockquote>
+<p>第二个玩家登录。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>同一个长期 Character 的控制权从一个临时 Session 迁移到另一个 Session。</p>
+</blockquote>
+<p>因此最终仍然必须维护：</p>
+<p><strong>唯一在线运行时（后文简称“同一个角色任何时刻只能真正活一份”）</strong>。</p>
+<h2 id="mmorpg-的一个世界不意味着运行在一台服务器上">MMORPG 的“一个世界”不意味着运行在一台服务器上</h2><p>玩家感知的是：</p>
+<pre><code class="language-text">一个连续世界。
+</code></pre>
+<p>运行时却可能拆成：</p>
+<pre><code class="language-text">Realm
+→
+Region
+→
+Zone
+→
+Shard / Layer
+→
+Instance
+→
+Encounter。
+</code></pre>
+<p>这些层次不是越多越高级。</p>
+<p>它们分别解决不同问题。</p>
+<h3 id="realm">Realm</h3><p>长期世界归属。</p>
+<p>它可以承载：</p>
+<ul>
+<li><p>社区；</p>
+</li>
+<li><p>Guild；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>共享世界状态。</p>
+</li>
+</ul>
+<h3 id="zone">Zone</h3><p>地理或玩法区域。</p>
+<p>例如一整块森林、沙漠或主城。</p>
+<h3 id="shard-layer">Shard / Layer</h3><p>同一个逻辑 Zone 的多个容量副本。</p>
+<p>它解决：</p>
+<pre><code class="language-text">这个区域同时来的人太多。
+</code></pre>
+<h3 id="instance">Instance</h3><p>拥有独立生命周期的高控制内容。</p>
+<p>例如：</p>
+<ul>
+<li><p>Dungeon；</p>
+</li>
+<li><p>Raid；</p>
+</li>
+<li><p>Scenario；</p>
+</li>
+<li><p>Personal Story。</p>
+</li>
+</ul>
+<p>这套结构可以概括为：</p>
+<p><strong>世界拓扑（后文简称“一个世界实际上由很多有限运行容器拼起来”）</strong>。</p>
+<p>玩家看到的是连续地理和长期社会。</p>
+<p>服务器看到的是一系列可以分别扩容、重启、销毁和迁移的权威模拟单元。</p>
+<h2 id="shard-是容量分片不应该变成平行世界">Shard 是容量分片，不应该变成平行世界</h2><p>假设两个玩家都位于：</p>
+<pre><code class="language-text">北风平原。
+</code></pre>
+<p>玩家 A 实际在：</p>
+<pre><code class="language-text">Shard 3。
+</code></pre>
+<p>玩家 B 实际在：</p>
+<pre><code class="language-text">Shard 7。
+</code></pre>
+<p>逻辑位置相同。</p>
+<p>他们却无法互相看见。</p>
+<p>如果系统完全不处理这件事，玩家会产生很强的世界割裂感：</p>
+<blockquote>
+<p>明明朋友说就在我旁边，为什么世界里没有他？</p>
+</blockquote>
+<p>因此 Party 建立以后通常需要：</p>
+<p><strong>Shard Cohesion（后文简称“组队以后尽量让大家真的出现在同一条世界线上”）</strong>。</p>
+<p>例如：</p>
+<pre><code class="language-text">Party Formed
+→
+检查成员当前 Shard
+→
+检查各 Shard 容量
+→
+选择 Target Shard
+→
+预留 Party 容量
+→
+迁移成员
+→
+恢复共同可见性
+</code></pre>
+<p>Shard 的目标是解决容量。</p>
+<p>它不应该破坏：</p>
+<pre><code class="language-text">Party 是一个共同活动单元。
+</code></pre>
+<h2 id="但-shard-cohesion-不能成为逃战工具">但 Shard Cohesion 不能成为逃战工具</h2><p>如果玩家可以在任何时刻：</p>
+<pre><code class="language-text">切换 Shard
+</code></pre>
+<p>就可能出现：</p>
+<ul>
+<li><p>被怪追时换线；</p>
+</li>
+<li><p>PvP 劣势时消失；</p>
+</li>
+<li><p>抢资源失败后瞬间换层；</p>
+</li>
+<li><p>世界 Boss 机制中规避危险。</p>
+</li>
+</ul>
+<p>因此 Shard Migration 仍然需要业务规则。</p>
+<p>例如：</p>
+<pre><code class="language-text">Combat Lock
+Encounter Lock
+PvP Lock
+Transfer Cooldown。
+</code></pre>
+<p>这揭示了一个非常重要的原则：</p>
+<blockquote>
+<p>容量基础设施不能绕过玩法规则。</p>
+</blockquote>
+<p>分片系统首先是技术设施。</p>
+<p>但一旦玩家能够主动触发，它就进入 Gameplay Contract。</p>
+<h2 id="zone-transfer-不是-scene-load而是一笔分布式角色迁移事务">Zone Transfer 不是 Scene Load，而是一笔分布式角色迁移事务</h2><p>玩家从 Zone A 走到 Zone B。</p>
+<p>客户端看起来可能只是：</p>
+<pre><code class="language-text">Loading...
+</code></pre>
+<p>但实际后台可能是：</p>
+<pre><code class="language-text">Source Server 17
+→
+Target Server 42。
+</code></pre>
+<p>这时最危险的两个结果分别是：</p>
+<h3 id="source-先删除">Source 先删除</h3><pre><code class="language-text">Source Runtime Destroyed
+→
+Target Spawn Failed
+</code></pre>
+<p>角色从运行世界里消失。</p>
+<h3 id="target-先创建且-source-未清">Target 先创建且 Source 未清</h3><pre><code class="language-text">Target Runtime Active
++
+Source Runtime Still Active
+</code></pre>
+<p>同一个长期角色出现两份在线实体。</p>
+<p>所以：</p>
+<p>**跨区迁移事务（后文简称“换服务器也必须保证角色既不丢也不复制”）**不能被建模成普通 Scene 切换。</p>
+<h2 id="zone-transfer-需要明确状态机">Zone Transfer 需要明确状态机</h2><p>一个较完整的迁移过程可以是：</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Requested
+    Requested --&gt; TargetReserved
+    TargetReserved --&gt; SourceFrozen
+    SourceFrozen --&gt; SnapshotTransferred
+    SnapshotTransferred --&gt; TargetSpawned
+    TargetSpawned --&gt; ClientAttached
+    ClientAttached --&gt; Committed
+
+    Requested --&gt; Failed
+    TargetReserved --&gt; RolledBack
+    SourceFrozen --&gt; RolledBack
+    SnapshotTransferred --&gt; RolledBack
+</code></pre>
+<p>对应的业务流程可以理解为：</p>
+<pre><code class="language-text">Source 收到 Transfer Intent
+→
+冻结 Character 关键操作
+→
+生成 Transfer Snapshot
+→
+World Router 选择 Target
+→
+Target 预留玩家容量
+→
+Target 验证 Snapshot
+→
+Target 建立 Runtime Entity
+→
+Client 切换 Route
+→
+Target 确认 Character Active
+→
+Source 销毁旧 Runtime
+→
+Transfer Commit
+</code></pre>
+<p>最终必须守住：</p>
+<p><strong>Exactly-One Active Runtime（后文简称“迁移过程中可以暂时有准备状态，但不能同时有两份正式角色”）</strong>。</p>
+<h2 id="冻结-source不是为了做漂亮状态机">“冻结 Source”不是为了做漂亮状态机</h2><p>迁移过程中，如果旧角色仍然可以：</p>
+<ul>
+<li><p>交易；</p>
+</li>
+<li><p>拾取装备；</p>
+</li>
+<li><p>完成任务；</p>
+</li>
+<li><p>领取奖励；</p>
+</li>
+</ul>
+<p>Target 同时又根据之前的 Snapshot 创建新 Runtime，</p>
+<p>就会产生经典双写问题。</p>
+<p>例如：</p>
+<pre><code class="language-text">Snapshot 时金币 = 1000
+
+Source 冻结不完整
+→
+玩家又花了 500
+
+Target 根据 Snapshot
+→
+仍然得到 1000。
+</code></pre>
+<p>因此 Transfer Pending 期间必须明确：</p>
+<blockquote>
+<p>哪些状态还能变化，哪些高价值状态已经禁止继续修改。</p>
+</blockquote>
+<p>这本质上是一次分布式资产交接。</p>
+<h2 id="transfer-失败必须恢复到一个明确-owner">Transfer 失败必须恢复到一个明确 Owner</h2><p>假设 Target 服务器因为容量或进程错误创建失败。</p>
+<p>玩家最多应该体验到：</p>
+<pre><code class="language-text">跨区失败
+→
+回到原区域。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">角色数据进入未知状态。
+</code></pre>
+<p>因此 Target 失败时，Source 应能够恢复角色。</p>
+<p>同样，如果某个 Transfer 卡在中途，下一次登录也需要根据：</p>
+<pre><code class="language-text">TransferId
+TransferState
+Source
+Target
+</code></pre>
+<p>判断最终权威位置。</p>
+<p>这里的重要原则不是“永远不失败”。</p>
+<p>而是：</p>
+<blockquote>
+<p>失败以后仍然能够确定谁现在拥有这个 Character。</p>
+</blockquote>
+<h2 id="持久角色状态与-transfer-snapshot-也不是同一个东西">持久角色状态与 Transfer Snapshot 也不是同一个东西</h2><p>跨区迁移不应该每次：</p>
+<pre><code class="language-text">从数据库完整重新加载角色。
+</code></pre>
+<p>当前 Runtime 已经拥有最新：</p>
+<ul>
+<li><p>生命状态；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>当前位置；</p>
+</li>
+<li><p>Runtime Progress；</p>
+</li>
+<li><p>当前活动上下文。</p>
+</li>
+</ul>
+<p>因此需要 Transfer Snapshot。</p>
+<p>但 Transfer Snapshot 又不是角色最终耐久存档。</p>
+<p>可以把三层再拆开：</p>
+<pre><code class="language-text">Persistent State
+→
+长期事实
+
+Runtime State
+→
+当前在线模拟事实
+
+Transfer Snapshot
+→
+一次运行时所有权交接所需的临时事实。
+</code></pre>
+<p>三个状态都描述同一个 Character。</p>
+<p>但用途和一致性边界不同。</p>
+<h2 id="公共世界与副本并不互相替代">公共世界与副本并不互相替代</h2><p>MMORPG 常同时拥有开放世界与 Instance。</p>
+<p>这不是历史遗留。</p>
+<p>两者承担不同设计职责。</p>
+<p>公共世界擅长：</p>
+<ul>
+<li><p>偶遇；</p>
+</li>
+<li><p>采集；</p>
+</li>
+<li><p>公共任务；</p>
+</li>
+<li><p>世界 Boss；</p>
+</li>
+<li><p>探索；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>社会存在感；</p>
+</li>
+<li><p>动态活动。</p>
+</li>
+</ul>
+<p>Instance 擅长：</p>
+<ul>
+<li><p>精确人数；</p>
+</li>
+<li><p>明确难度；</p>
+</li>
+<li><p>稳定 Encounter；</p>
+</li>
+<li><p>可控复活；</p>
+</li>
+<li><p>Boss 机制；</p>
+</li>
+<li><p>Raid；</p>
+</li>
+<li><p>Lockout；</p>
+</li>
+<li><p>可预测 Reward。</p>
+</li>
+</ul>
+<p>可以把二者理解成：</p>
+<pre><code class="language-text">Public World
+→
+提供“世界里还有其他真实的人”的社会感。
+
+Instance
+→
+提供“设计者知道这一场里究竟有几个人”的机制控制力。
+</code></pre>
+<p>MMORPG 的长期世界体验，往往恰恰来自这两种空间不断切换。</p>
+<h2 id="instance-可以销毁但角色身份不能跟着销毁">Instance 可以销毁，但角色身份不能跟着销毁</h2><p>副本完成以后：</p>
+<pre><code class="language-text">RuntimeInstance
+</code></pre>
+<p>完全可以进入：</p>
+<pre><code class="language-text">Completed
+→
+GracePeriod
+→
+Destroyed。
+</code></pre>
+<p>真正需要长期保存的是：</p>
+<ul>
+<li><p>Result；</p>
+</li>
+<li><p>Reward；</p>
+</li>
+<li><p>Lockout；</p>
+</li>
+<li><p>Character Progression。</p>
+</li>
+</ul>
+<p>这又一次体现同一条核心原则：</p>
+<blockquote>
+<p>运行容器可以结束，长期身份继续存在。</p>
+</blockquote>
+<p>如果把副本 Runtime 当成长期世界事实，就会让大量短生命周期战斗状态污染持久层。</p>
+<h2 id="共享世界不意味着每个人都同步所有人">共享世界不意味着每个人都同步所有人</h2><p>“Massively Multiplayer”很容易让人误以为：</p>
+<pre><code class="language-text">Zone 有 300 人
+→
+每个客户端都需要实时知道另外 299 人的一切。
+</code></pre>
+<p>实际上，这种模型在世界 Boss 等热点中很快会失控。</p>
+<p>因此：</p>
+<p>**兴趣管理（后文简称“只把当前真正相关的世界切片发送给这个玩家”）**通过距离、可见性、Party、战斗关系、Guild、Target、Entity Type 和事件重要性决定同步范围。</p>
+<p>例如：</p>
+<h3 id="tier-0">Tier 0</h3><p>自己。</p>
+<p>最高频。</p>
+<h3 id="tier-1">Tier 1</h3><p>当前战斗目标与 Party 成员。</p>
+<p>高频。</p>
+<h3 id="tier-2">Tier 2</h3><p>附近玩家。</p>
+<p>中频。</p>
+<h3 id="tier-3">Tier 3</h3><p>远处可见实体。</p>
+<p>低频。</p>
+<p>这意味着：</p>
+<pre><code class="language-text">同一个 World State
+</code></pre>
+<p>可以向不同客户端提供不同精度的观察投影。</p>
+<p>“所有人共享一个权威世界”和“所有人收到完整世界数据”并不是同一个要求。</p>
+<h2 id="社交关系本身也可以改变-interest">社交关系本身也可以改变 Interest</h2><p>Party 成员即使已经进入远处 Zone，</p>
+<p>玩家可能仍然需要看到：</p>
+<ul>
+<li><p>Health；</p>
+</li>
+<li><p>Zone；</p>
+</li>
+<li><p>Online State。</p>
+</li>
+</ul>
+<p>但不需要：</p>
+<pre><code class="language-text">每帧完整 Transform。
+</code></pre>
+<p>这说明 Interest Management 不只是空间问题。</p>
+<p>它还可以包含：</p>
+<pre><code class="language-text">Social Interest。
+</code></pre>
+<p>MMORPG 的世界网络，因此天然同时存在：</p>
+<ul>
+<li><p>Spatial Graph；</p>
+</li>
+<li><p>Combat Graph；</p>
+</li>
+<li><p>Social Graph。</p>
+</li>
+</ul>
+<p>复制系统需要知道当前关系属于哪一类。</p>
+<h2 id="server-authority-保护的是长期世界可信度">Server Authority 保护的是长期世界可信度</h2><p>客户端可以预测：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>动画；</p>
+</li>
+<li><p>输入反馈。</p>
+</li>
+</ul>
+<p>但高价值事实仍然应该由服务器决定：</p>
+<ul>
+<li><p>技能是否合法；</p>
+</li>
+<li><p>命中；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>Inventory；</p>
+</li>
+<li><p>Currency；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>Trade；</p>
+</li>
+<li><p>Guild；</p>
+</li>
+<li><p>Reward。</p>
+</li>
+</ul>
+<p>客户端更适合发送：</p>
+<pre><code class="language-text">I want to cast Fireball on Entity 382.
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">I dealt 7421 damage.
+</code></pre>
+<p>这种区别并不只是反作弊。</p>
+<p>它还在保护：</p>
+<blockquote>
+<p>所有玩家最终面对的是同一份长期世界事实。</p>
+</blockquote>
+<p>如果客户端可以自行宣布高价值结果，那么 Persistent World 很快会失去可信度。</p>
+<h2 id="实时状态和资产状态应该使用不同一致性等级">“实时状态”和“资产状态”应该使用不同一致性等级</h2><p>一个非常实用的 MMORPG 设计原则是：</p>
+<pre><code class="language-text">Position 丢一帧
+通常可以恢复。
+
+Legendary Item 重复
+不可接受。
+</code></pre>
+<p>这两件事如果都使用最强事务：</p>
+<pre><code class="language-text">成本巨大。
+</code></pre>
+<p>如果都使用最终一致：</p>
+<pre><code class="language-text">资产会失控。
+</code></pre>
+<p>因此系统需要明确哪些数据属于：</p>
+<h3 id="高频可恢复状态">高频可恢复状态</h3><p>例如：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Rotation；</p>
+</li>
+<li><p>动画；</p>
+</li>
+<li><p>部分短 Buff；</p>
+</li>
+<li><p>可重构 Target。</p>
+</li>
+</ul>
+<h3 id="高价值耐久状态">高价值耐久状态</h3><p>例如：</p>
+<ul>
+<li><p>Item Ownership；</p>
+</li>
+<li><p>Currency；</p>
+</li>
+<li><p>Trade；</p>
+</li>
+<li><p>Auction；</p>
+</li>
+<li><p>Guild Bank；</p>
+</li>
+<li><p>Reward；</p>
+</li>
+<li><p>Lockout。</p>
+</li>
+</ul>
+<p>成熟在线系统并不追求：</p>
+<blockquote>
+<p>所有数据同样强一致。</p>
+</blockquote>
+<p>它追求：</p>
+<blockquote>
+<p>每类事实获得与其损失成本匹配的一致性。</p>
+</blockquote>
+<h2 id="reward-必须把重复请求当成正常故障模型">Reward 必须把重复请求当成正常故障模型</h2><p>分布式在线系统里，重复消息不是异常中的异常。</p>
+<p>它可能来自：</p>
+<ul>
+<li><p>Timeout Retry；</p>
+</li>
+<li><p>网络重发；</p>
+</li>
+<li><p>服务重启；</p>
+</li>
+<li><p>Consumer 重放；</p>
+</li>
+<li><p>Transfer 恢复。</p>
+</li>
+</ul>
+<p>所以一个 Boss Reward 如果收到同一个：</p>
+<pre><code class="language-text">RewardOperationId
+</code></pre>
+<p>两次，</p>
+<p>不能产生两份装备。</p>
+<p>**幂等提交（后文简称“同一个结果可以安全重试，但不能重复到账”）**应该成为：</p>
+<ul>
+<li><p>Loot；</p>
+</li>
+<li><p>Currency；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>Weekly Reward；</p>
+</li>
+<li><p>Auction；</p>
+</li>
+</ul>
+<p>等关键资产流程的基础合同。</p>
+<p>这也是为什么 MMORPG 的长期资产系统和普通单机 Inventory 有完全不同的失败面。</p>
+<h2 id="世界热点比平均在线人数更危险">世界热点比平均在线人数更危险</h2><p>服务器平均负载：</p>
+<pre><code class="language-text">30%。
+</code></pre>
+<p>并不能证明世界很安全。</p>
+<p>一次世界 Boss 可能把：</p>
+<pre><code class="language-text">几百人
++
+召唤物
++
+投射物
++
+战斗同步
+</code></pre>
+<p>集中到同一个 Zone。</p>
+<p>于是：</p>
+<pre><code class="language-text">Realm 总体很空闲
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">某个权威模拟单元已经过载
+</code></pre>
+<p>可以同时成立。</p>
+<p>**热点容量（后文简称“真正需要扛住的是所有人突然挤到同一个地方”）**比单纯平均在线人数更能描述 MMO 的扩展压力。</p>
+<p>这也解释了为什么：</p>
+<ul>
+<li><p>Shard；</p>
+</li>
+<li><p>AOI；</p>
+</li>
+<li><p>Replication Tier；</p>
+</li>
+<li><p>World Event Scaling；</p>
+</li>
+</ul>
+<p>不是彼此独立的系统。</p>
+<p>它们共同在解决：</p>
+<blockquote>
+<p>共享世界中局部人口密度会高度不均匀。</p>
+</blockquote>
+<h2 id="逻辑状态-owner-不应该直接等同于某个物理进程">逻辑状态 Owner 不应该直接等同于某个物理进程</h2><p>MMORPG 架构讨论很容易很快进入：</p>
+<pre><code class="language-text">这个服务要不要拆成微服务？
+要不要独立 Docker？
+</code></pre>
+<p>但更优先的问题应该是：</p>
+<blockquote>
+<p>谁拥有这份事实？</p>
+</blockquote>
+<p>例如：</p>
+<pre><code class="language-text">Character Persistent State
+由谁拥有？
+
+Guild Membership
+由谁拥有？
+
+Zone Runtime
+由谁拥有？
+
+Auction Escrow
+由谁拥有？
+</code></pre>
+<p>**逻辑所有权边界（后文简称“先决定谁说了算，再决定它跑在哪台机器”）**应该先于物理部署边界。</p>
+<p>今天两个逻辑 Owner 可以运行在同一个进程。</p>
+<p>未来也可以拆开。</p>
+<p>只要 Authority Contract 没有变化，上层业务无需因此重写。</p>
+<p>如果反过来先按服务器数量切职责，系统很容易让物理拓扑污染业务真理源。</p>
+<h2 id="mmorpg-的连续世界其实是一种被精心维护的错觉">MMORPG 的连续世界其实是一种被精心维护的错觉</h2><p>从玩家体验看：</p>
+<pre><code class="language-text">我昨天在这里下线，
+今天回来还是我。
+
+我从森林走进城市，
+仍然是我。
+
+我进入 Raid，
+出来以后还是我。
+
+我网络断了重新连，
+仍然是我。
+</code></pre>
+<p>服务器内部却发生过：</p>
+<ul>
+<li><p>Session 替换；</p>
+</li>
+<li><p>Runtime Entity 重建；</p>
+</li>
+<li><p>Shard 迁移；</p>
+</li>
+<li><p>Zone Server 迁移；</p>
+</li>
+<li><p>Instance 创建和销毁；</p>
+</li>
+<li><p>Snapshot；</p>
+</li>
+<li><p>Durable Commit。</p>
+</li>
+</ul>
+<p>所以 MMORPG 最重要的技术体验之一，恰恰是：</p>
+<blockquote>
+<p>让大量生命周期变化对玩家来说不改变长期身份连续性。</p>
+</blockquote>
+<p>它不像一场 Match。</p>
+<p>Match 结束以后，Runtime 本身可以整体销毁。</p>
+<p>MMORPG 则必须不断回答：</p>
+<pre><code class="language-text">这次运行时结束以后，
+什么东西仍然算是真的？
+</code></pre>
+<h2 id="与-jrpg-的边界">与 JRPG 的边界</h2><p>JRPG 同样拥有：</p>
+<ul>
+<li><p>长期角色；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>等级；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>城镇；</p>
+</li>
+<li><p>Boss。</p>
+</li>
+</ul>
+<p>但其核心问题更多是：</p>
+<pre><code class="language-text">一支相对稳定的角色队伍
+怎样沿章节和冒险成长。
+</code></pre>
+<p>MMORPG 增加的并不只是：</p>
+<pre><code class="language-text">Network = true。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">世界在我离线时继续存在
++
+大量长期身份同时进入
++
+世界必须拆分运行
++
+社会和经济持续存在
++
+资产状态需要服务器权威。
+</code></pre>
+<p>因此，同样是 Character Level，</p>
+<p>在两个类型中所处的运行环境完全不同。</p>
+<h2 id="与多人共斗游戏的边界">与多人共斗游戏的边界</h2><p>多人共斗可以拥有：</p>
+<ul>
+<li><p>四人队伍；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Lobby；</p>
+</li>
+<li><p>掉落；</p>
+</li>
+<li><p>长期装备。</p>
+</li>
+</ul>
+<p>但如果核心结构是：</p>
+<pre><code class="language-text">组队
+→
+进入一次任务
+→
+完成
+→
+回大厅，
+</code></pre>
+<p>它并不一定需要：</p>
+<ul>
+<li><p>持久公共世界；</p>
+</li>
+<li><p>Shard；</p>
+</li>
+<li><p>Zone Transfer；</p>
+</li>
+<li><p>Realm Economy；</p>
+</li>
+<li><p>大型社会组织。</p>
+</li>
+</ul>
+<p>多人共斗的核心价值可以集中在：</p>
+<pre><code class="language-text">Encounter 本身。
+</code></pre>
+<p>MMORPG 中 Encounter 只是长期世界里的一个节点。</p>
+<p>Raid 结束以后，玩家仍然回到：</p>
+<ul>
+<li><p>Guild；</p>
+</li>
+<li><p>市场；</p>
+</li>
+<li><p>公共世界；</p>
+</li>
+<li><p>社会关系；</p>
+</li>
+<li><p>周期内容。</p>
+</li>
+</ul>
+<h2 id="与刷宝-arpg-的边界">与刷宝 ARPG 的边界</h2><p>刷宝 ARPG 可以支持在线四人组队。</p>
+<p>甚至可以有非常复杂的 Backend。</p>
+<p>但它的主要长期循环通常仍然围绕：</p>
+<pre><code class="language-text">战斗
+→
+Loot
+→
+筛选
+→
+Build
+→
+更高难度。
+</code></pre>
+<p>MMORPG 完全可以没有极端随机装备系统，依靠：</p>
+<ul>
+<li><p>固定 Raid Reward；</p>
+</li>
+<li><p>Token；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>Craft；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+</ul>
+<p>依然成立。</p>
+<p>所以：</p>
+<pre><code class="language-text">Loot Search Space
+</code></pre>
+<p>不是 MMORPG 的必要核心。</p>
+<p>真正不能轻易删除的是：</p>
+<pre><code class="language-text">Persistent Shared World
++
+Persistent Identity
++
+Social Infrastructure。
+</code></pre>
+<h2 id="这套模型不能机械照搬到所有在线游戏">这套模型不能机械照搬到所有在线游戏</h2><p>如果一个游戏：</p>
+<ul>
+<li><p>只有 4～8 人房间；</p>
+</li>
+<li><p>每场 Match 独立；</p>
+</li>
+<li><p>没有长期世界；</p>
+</li>
+<li><p>没有跨 Zone；</p>
+</li>
+<li><p>没有 Guild 经济；</p>
+</li>
+<li><p>长期资产很少；</p>
+</li>
+<li><p>失败后重新建 Lobby 成本很低；</p>
+</li>
+</ul>
+<p>那么完整的：</p>
+<pre><code class="language-text">Realm
+Shard
+WorldRouter
+TransferTransaction
+AOI
+SessionLease
+</code></pre>
+<p>很可能是过度工程。</p>
+<p>MMORPG 的这些复杂性服务的是一个非常具体的承诺：</p>
+<blockquote>
+<p>大量玩家能够长期生活在一个看起来连续、实际上被分布式运行时不断拆分和重组的世界里。</p>
+</blockquote>
+<p>没有这项产品承诺，就不需要承担同样架构成本。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="accountcharactersession-共用一个-playerid">Account、Character、Session 共用一个 PlayerId</h3><p>重连、重复登录、封禁与角色切换开始互相污染。</p>
+<h3 id="character-persistent-state-与-runtime-entity-是同一对象">Character Persistent State 与 Runtime Entity 是同一对象</h3><p>数据库持久化和高频战斗状态无法建立不同一致性等级。</p>
+<h3 id="每-tick-把完整角色状态写数据库">每 Tick 把完整角色状态写数据库</h3><p>高成本持久化被浪费在可恢复 Runtime 数据上。</p>
+<h3 id="shared-world-state-被塞进每个玩家存档">Shared World State 被塞进每个玩家存档</h3><p>不同玩家开始拥有互相矛盾的 Boss 和世界事件事实。</p>
+<h3 id="shard-被设计成玩家可以随意切换的平行世界">Shard 被设计成玩家可以随意切换的平行世界</h3><p>容量系统成为逃战、抢资源和规避规则的工具。</p>
+<h3 id="party-没有-shard-cohesion">Party 没有 Shard Cohesion</h3><p>好友逻辑上组队，却长期无法在世界里相遇。</p>
+<h3 id="zone-transfer-等同于客户端-loadscene">Zone Transfer 等同于客户端 LoadScene</h3><p>Source 与 Target 没有明确 Runtime Ownership 交接。</p>
+<h3 id="source-先销毁再让-target-尝试创建">Source 先销毁，再让 Target 尝试创建</h3><p>Target 失败时角色失去在线 Owner。</p>
+<h3 id="target-创建成功以后-source-仍然继续运行">Target 创建成功以后 Source 仍然继续运行</h3><p>同一 Character 产生双 Runtime。</p>
+<h3 id="transfer-没有持久-transferid-和恢复状态">Transfer 没有持久 TransferId 和恢复状态</h3><p>服务器重启以后无法判断角色应该恢复在哪一侧。</p>
+<h3 id="session-断线后立即删除-character">Session 断线后立即删除 Character</h3><p>短暂网络抖动被放大成完整退出和重建。</p>
+<h3 id="旧-session-永不失效">旧 Session 永不失效</h3><p>幽灵连接长期占有角色控制权。</p>
+<h3 id="所有-zone-实体向所有客户端同频复制">所有 Zone 实体向所有客户端同频复制</h3><p>世界热点立即制造网络和 CPU 风暴。</p>
+<h3 id="aoi-只按距离判断">AOI 只按距离判断</h3><p>Party、战斗对象和世界事件的重要关系无法得到合理同步。</p>
+<h3 id="client-可以直接提交-damageloot-或-currency-结果">Client 可以直接提交 Damage、Loot 或 Currency 结果</h3><p>长期世界资产权威被交给不可信端。</p>
+<h3 id="所有状态都追求同等级强一致">所有状态都追求同等级强一致</h3><p>实时战斗延迟与后台成本失控。</p>
+<h3 id="所有状态都只使用弱最终一致">所有状态都只使用弱最终一致</h3><p>Inventory、交易和唯一资产开始出现复制。</p>
+<h3 id="只看-realm-平均负载设计容量">只看 Realm 平均负载设计容量</h3><p>世界 Boss 等局部热点成为真正崩溃点。</p>
+<h3 id="先按微服务数量切系统再决定谁拥有状态">先按微服务数量切系统，再决定谁拥有状态</h3><p>部署拓扑开始反向定义业务真理源。</p>
+<h2 id="我的-mmorpg-持久身份检查表">我的 MMORPG 持久身份检查表</h2><ol>
+<li><p>Shared World State 与 Player Personal State 是否明确分开？</p>
+</li>
+<li><p>Character Persistent State 与 Runtime Entity 是否是两个模型？</p>
+</li>
+<li><p>Account、Character、Session 是否拥有不同 ID？</p>
+</li>
+<li><p>同一个 Character 是否可以经历多次 Session？</p>
+</li>
+<li><p>Session 是否拥有 Heartbeat、Lease 或 Expiration 语义？</p>
+</li>
+<li><p>网络抖动是否拥有合理 Reconnect Grace Period？</p>
+</li>
+<li><p>Duplicate Login 是否不会生成第二份正式 Character Runtime？</p>
+</li>
+<li><p>Session 接管时旧 Runtime 是否会进入冻结或 Replacing 状态？</p>
+</li>
+<li><p>任意时刻是否能证明一个 Character 只有一个权威 Runtime？</p>
+</li>
+<li><p>Runtime 高频状态是否不会无意义全量写入 Durable Store？</p>
+</li>
+<li><p>Item、Currency、Quest、Guild、Reward 是否拥有明确 Durable Commit Point？</p>
+</li>
+<li><p>World Truth 是否独立于任意玩家个人存档？</p>
+</li>
+<li><p>Realm、Zone、Shard 与 Instance 的职责是否明确？</p>
+</li>
+<li><p>Shard 是否只是容量分片，而不是另一个独立世界事实？</p>
+</li>
+<li><p>Party 是否拥有 Shard Cohesion？</p>
+</li>
+<li><p>战斗、PvP 和 Encounter 是否限制任意换 Shard？</p>
+</li>
+<li><p>Zone Transfer 是否有稳定 TransferId？</p>
+</li>
+<li><p>Transfer 是否拥有 Requested、Reserved、Frozen、Spawned、Committed 等明确状态？</p>
+</li>
+<li><p>Source 是否在 Target 能安全接管前避免永久删除 Character？</p>
+</li>
+<li><p>Target 成功以后 Source 是否一定失去正式 Authority？</p>
+</li>
+<li><p>Transfer 失败是否能够 Rollback 到明确 Owner？</p>
+</li>
+<li><p>Transfer Timeout 后是否能够在下一次登录恢复？</p>
+</li>
+<li><p>Transfer Snapshot 与 Durable Character State 是否是两个概念？</p>
+</li>
+<li><p>Public World 和 Instance 是否承担不同设计职责？</p>
+</li>
+<li><p>Instance Runtime 销毁以后 Reward 与 Lockout 是否仍能持久存在？</p>
+</li>
+<li><p>AOI 是否限制每个客户端实际复制的 Entity 集合？</p>
+</li>
+<li><p>Party、Combat、Social Relation 是否能够影响 Interest Tier？</p>
+</li>
+<li><p>世界 Boss 等热点是否拥有独立 Replication / Capacity Budget？</p>
+</li>
+<li><p>客户端是否主要发送 Intent，而不是高价值结果？</p>
+</li>
+<li><p>Position 等可恢复状态与 Legendary Item 等资产状态是否采用不同一致性策略？</p>
+</li>
+<li><p>Reward、Trade 和 Auction 是否能够安全处理重复请求？</p>
+</li>
+<li><p>逻辑 State Owner 是否先于物理服务器边界定义？</p>
+</li>
+<li><p>调试系统是否能回答某个 Character 当前由哪个 Session、Zone、Shard 和 Server 托管？</p>
+</li>
+<li><p>玩家断线、换线、进副本和跨区以后，长期 Character Identity 是否始终保持连续？</p>
+</li>
+</ol>
+<p>MMORPG 最容易被宣传的是：</p>
+<pre><code class="language-text">同时在线人数很多。
+</code></pre>
+<p>最容易被看到的是：</p>
+<pre><code class="language-text">大地图
+副本
+Raid
+Guild
+拍卖行。
+</code></pre>
+<p>但这些功能真正建立在同一个更底层的承诺之上：</p>
+<pre><code class="language-text">世界不会随着某个玩家退出而消失，
+角色也不会随着某次连接结束而重新开始。
+</code></pre>
+<p>玩家登录的是一个长期 Character。</p>
+<p>Session 只是这次连接。</p>
+<p>Runtime Entity 只是当前服务器上的在线身体。</p>
+<p>Zone、Shard 和 Instance 只是这一刻托管它的运行容器。</p>
+<p>这些容器都可以被替换。</p>
+<p>长期身份不能因此改变。</p>
+<p>于是 MMORPG 真正复杂的地方，也并不是让一台服务器同时模拟无限玩家。</p>
+<p>而是让：</p>
+<pre><code class="language-text">大量长期身份
+不断进入和离开
+大量短生命周期运行容器
+</code></pre>
+<p>同时始终保持三件事：</p>
+<pre><code class="language-text">世界真相只有一份，
+角色身份始终连续，
+高价值资产不会因为分布式故障被丢失或复制。
+</code></pre>
+<p>从玩家角度看，最终只剩一句非常简单的话：</p>
+<blockquote>
+<p><strong>我离开过，但这个世界一直都在；我重新回来时，我仍然是我。</strong></p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>持久身份</td>
+<td>不会因为下线就消失的那个我</td>
+</tr>
+<tr>
+<td>临时运行时</td>
+<td>这一次在线时被服务器托管的那个我</td>
+</tr>
+<tr>
+<td>持久共享世界</td>
+<td>玩家下线以后仍然继续存在的世界</td>
+</tr>
+<tr>
+<td>共享世界状态</td>
+<td>所有人共同面对的事实</td>
+</tr>
+<tr>
+<td>个人状态</td>
+<td>只属于这个角色的进度</td>
+</tr>
+<tr>
+<td>角色持久状态</td>
+<td>角色真正长期拥有的东西</td>
+</tr>
+<tr>
+<td>角色运行实体</td>
+<td>这次在线时正在世界里跑的实体</td>
+</tr>
+<tr>
+<td>耐久提交点</td>
+<td>这件事从现在开始真的不能丢</td>
+</tr>
+<tr>
+<td>身份分层</td>
+<td>账号是谁、角色是谁、这次连接是谁要分开</td>
+</tr>
+<tr>
+<td>Session Lease</td>
+<td>这次在线身份的临时租约</td>
+</tr>
+<tr>
+<td>唯一在线运行时</td>
+<td>同一个角色任何时刻只能真正活一份</td>
+</tr>
+<tr>
+<td>世界拓扑</td>
+<td>一个世界实际上由很多有限运行容器拼起来</td>
+</tr>
+<tr>
+<td>Shard Cohesion</td>
+<td>组队以后尽量让大家真的出现在同一条世界线上</td>
+</tr>
+<tr>
+<td>跨区迁移事务</td>
+<td>换服务器也必须保证角色既不丢也不复制</td>
+</tr>
+<tr>
+<td>Exactly-One Active Runtime</td>
+<td>迁移过程中可以暂时有准备状态，但不能同时有两份正式角色</td>
+</tr>
+<tr>
+<td>兴趣管理</td>
+<td>只把当前真正相关的世界切片发送给这个玩家</td>
+</tr>
+<tr>
+<td>幂等提交</td>
+<td>同一个结果可以安全重试，但不能重复到账</td>
+</tr>
+<tr>
+<td>热点容量</td>
+<td>真正需要扛住的是所有人突然挤到同一个地方</td>
+</tr>
+<tr>
+<td>逻辑所有权边界</td>
+<td>先决定谁说了算，再决定它跑在哪台机器</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><p><code>game-designs/MMORPG游戏设计范式.md</code></p>
+</li>
+<li><p><code>game-designs/README.md</code></p>
+</li>
+<li><p><code>game-designs/catalog.v1.json</code></p>
+</li>
+<li><p><code>blogs/README.md</code></p>
+</li>
+<li><p><code>blogs/publication.v1.json</code></p>
+</li>
+</ul>
+<p>本文是对 MMORPG / Persistent Shared-World RPG 宏观设计范式的个人综述。</p>
+<p>文中的 Account / Character / Session 分型、Session Lease、Realm / Zone / Shard / Instance、Zone Transfer State Machine、Exactly-One Active Runtime、AOI 与 Durable Commit Point 属于用于分析和设计长期在线世界的工程模型，并不表示所有 MMORPG 都必须采用完全相同的服务器拓扑、分片算法、数据库结构或转区协议。</p>
+<p>尤其需要注意：</p>
+<ul>
+<li><p>“Shard 是容量分片”不意味着所有 MMORPG 都必须向玩家隐藏分线，也不意味着所有公共区域都适合自动 Sharding；</p>
+</li>
+<li><p>“Zone Transfer 是分布式事务”强调的是唯一 Runtime 与失败恢复语义，不要求具体实现使用某一种数据库事务或两阶段提交协议；</p>
+</li>
+<li><p>“Session Lease”是一种适合表达重连和幽灵连接的生命周期模型，并不是唯一可行的网络会话实现；</p>
+</li>
+<li><p>“服务器权威”不意味着客户端不能预测移动和即时表现，真正需要严格保护的是会影响其他玩家和长期资产的高价值事实；</p>
+</li>
+<li><p>“Persistent World”也不要求世界中的每一个系统在玩家离线后都持续逐 Tick 模拟，只要求关键公共事实和长期社会状态不会因为某个玩家 Session 结束而失去连续性。</p>
+</li>
+</ul>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="god-game-belief-attribution.html"><span>同属「游戏系统的共同语言」</span><strong>信仰归因与间接统治：上帝模拟中的世界真相、神迹解释与社会扩散</strong><small>当玩家拥有直接改变天气、生命和地形的神性力量，却不能直接控制凡人如何理解这些变化时，世界真相、个人观察、社会归因和长期治理怎样形成一套完整的反馈系统？</small></a><a href="city-accessibility-feedback-loop.html"><span>同属「游戏系统的共同语言」</span><strong>可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环</strong><small>城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？</small></a><a href="moba-action-windows-map-conversion.html"><span>同属「游戏系统的共同语言」</span><strong>可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现</strong><small>MOBA 中一次击杀、一次团战或一次线权优势，怎样从短暂的战斗收益转换成能够持续影响后续局势的地图状态？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>Iris</span>Sakura
+                </a>
+                <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>研究 · 框架 · 游戏</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
