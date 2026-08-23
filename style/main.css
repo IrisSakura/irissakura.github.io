@@ -2018,7 +2018,227 @@ body.profile-drawer-open .profile-drawer {
         rgba(255, 255, 255, 0.025);
 }
 
+/* IRIS × SAKURA brand ecosystem */
+.brand-ecosystem-section,
+.brand-visual-section,
+.brand-emblem-story {
+    padding: var(--section-space) 0;
+}
+
+.brand-ecosystem-section {
+    border-top: 1px solid var(--ui-border-subtle);
+    border-bottom: 1px solid var(--ui-border-subtle);
+    background:
+        radial-gradient(circle at 12% 16%, rgba(76, 76, 245, 0.16), transparent 32rem),
+        radial-gradient(circle at 88% 84%, rgba(255, 126, 182, 0.13), transparent 30rem),
+        color-mix(in srgb, var(--light-color), transparent 98%);
+}
+
+.brand-ecosystem-hero {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(1.5rem, 4vw, 3.75rem);
+    align-items: center;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.brand-ecosystem-hero img,
+.brand-project-card img,
+.brand-joint-emblem img,
+.brand-system-header-image,
+.brand-board img,
+.brand-visual-card img,
+.brand-emblem-story img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.brand-ecosystem-hero h2,
+.brand-system-copy h2,
+.brand-section-heading h2,
+.brand-emblem-story h2 {
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    letter-spacing: -0.035em;
+}
+
+.brand-ecosystem-hero p,
+.brand-system-copy p,
+.brand-section-heading p,
+.brand-emblem-story p {
+    color: var(--muted-text-color);
+}
+
+.brand-ecosystem-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(160px, 0.48fr) minmax(0, 1fr);
+    gap: var(--story-grid-gap);
+    align-items: stretch;
+}
+
+.brand-project-card,
+.brand-joint-emblem,
+.brand-visual-card {
+    min-width: 0;
+    margin: 0;
+    padding: clamp(1.1rem, 2.4vw, 1.75rem);
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: calc(var(--border-radius) * 1.5);
+    background: var(--ui-surface-card);
+    box-shadow: var(--box-shadow);
+}
+
+.brand-project-card {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+}
+
+.brand-project-card h3,
+.brand-project-card p,
+.brand-joint-emblem figcaption,
+.brand-visual-card figcaption {
+    margin: 0;
+}
+
+.brand-project-card p,
+.brand-joint-emblem figcaption,
+.brand-visual-card figcaption {
+    color: var(--muted-text-color);
+}
+
+.brand-joint-emblem {
+    display: grid;
+    gap: 0.8rem;
+    place-items: center;
+    text-align: center;
+}
+
+.brand-joint-emblem img {
+    max-height: 250px;
+    object-fit: contain;
+}
+
+.brand-portfolio-header {
+    background:
+        linear-gradient(120deg, rgba(76, 76, 245, 0.2), transparent 52%),
+        radial-gradient(circle at 84% 30%, rgba(255, 126, 182, 0.22), transparent 28rem),
+        var(--surface-strong);
+}
+
+.brand-portfolio {
+    display: grid;
+    gap: 0;
+}
+
+.brand-system-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+    padding: var(--section-space) 0;
+}
+
+.brand-system-header-image {
+    filter: drop-shadow(0 22px 42px rgba(76, 76, 245, 0.18));
+}
+
+.brand-board {
+    margin: 0 0 var(--section-space);
+    overflow: hidden;
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: calc(var(--border-radius) * 1.5);
+    background: linear-gradient(135deg, rgba(76, 76, 245, 0.08), rgba(255, 126, 182, 0.08));
+    box-shadow: var(--box-shadow-hover);
+}
+
+.brand-board figcaption,
+.brand-visual-card figcaption {
+    padding-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.brand-board figcaption {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--ui-border-subtle);
+    color: var(--muted-text-color);
+}
+
+.brand-visual-section {
+    border-top: 1px solid var(--ui-border-subtle);
+}
+
+.brand-section-heading {
+    max-width: 820px;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.brand-subbrand-grid,
+.brand-persona-grid,
+.brand-portrait-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--story-grid-gap);
+}
+
+.brand-visual-card {
+    display: grid;
+    align-content: start;
+}
+
+.brand-visual-card img {
+    max-height: 520px;
+    object-fit: contain;
+}
+
+.brand-persona-card img {
+    max-height: 620px;
+}
+
+.brand-emblem-story {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+    border-top: 1px solid var(--ui-border-subtle);
+}
+
+.brand-emblem-story figure {
+    margin: 0;
+}
+
+.brand-emblem-story img {
+    max-height: 420px;
+    object-fit: contain;
+    filter: drop-shadow(0 22px 44px rgba(160, 107, 255, 0.2));
+}
+
+.brand-guideline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--story-grid-gap);
+}
+
+.brand-guideline-grid .brand-visual-card img {
+    aspect-ratio: 440 / 201;
+}
+
+.brand-portrait-section {
+    padding-bottom: calc(var(--section-space) * 1.2);
+}
+
 @media (max-width: 1000px) {
+    .brand-ecosystem-hero,
+    .brand-ecosystem-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-joint-emblem img {
+        max-height: 210px;
+    }
+
     .profile-hero-inner,
     .flagship-grid,
     .focus-grid,
@@ -2056,6 +2276,21 @@ body.profile-drawer-open .profile-drawer {
 }
 
 @media (max-width: 720px) {
+    .brand-system-intro,
+    .brand-emblem-story,
+    .brand-subbrand-grid,
+    .brand-persona-grid,
+    .brand-portrait-grid,
+    .brand-guideline-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-ecosystem-section,
+    .brand-visual-section,
+    .brand-emblem-story {
+        padding: 4.25rem 0;
+    }
+
     .hero-section .hero {
         padding-top: 3.5rem;
         padding-bottom: 3.5rem;

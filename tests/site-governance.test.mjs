@@ -241,7 +241,7 @@ test('research and articles share one primary navigation route without changing 
   assert.match(blog, activeResearchNav);
 });
 
-test('primary navigation exposes the art and music entry while preserving retired route compatibility', async () => {
+test('primary navigation exposes the public brand portfolio while preserving retired route compatibility', async () => {
   for (const page of ['index.html', 'pages/framework.html', 'pages/art-music.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
@@ -253,14 +253,15 @@ test('primary navigation exposes the art and music entry while preserving retire
 
   const sitemap = await readText('sitemap.xml');
   const artMusic = await readText('pages/art-music.html');
-  assert.ok(artMusic.includes('<meta name="robots" content="noindex, follow">'));
-  assert.ok(artMusic.includes('当前尚未公开作品'));
+  assert.ok(!artMusic.includes('<meta name="robots" content="noindex, follow">'));
+  assert.ok(artMusic.includes('id="brand-system"'));
+  assert.ok(artMusic.includes('品牌视觉与创作'));
   assert.match(
     artMusic,
     /href="\.\.\/pages\/art-music\.html" class="nav-link active" aria-current="page">美术音乐<\/a>/u
   );
   assert.match(artMusic, /<footer class="footer">[\s\S]*?>美术音乐<\/a>/u);
-  assert.ok(!sitemap.includes('/pages/art-music.html'));
+  assert.ok(sitemap.includes('/pages/art-music.html'));
 
   const about = await readText('pages/about.html');
   assert.ok(about.includes('<meta name="robots" content="noindex, follow">'));
@@ -276,7 +277,7 @@ test('home labels curated research honestly and README matches current routes an
   assert.ok(!home.includes('LATEST RESEARCH'));
   assert.ok(readme.includes('/pages/art-music.html'));
   assert.ok(readme.includes('一级“美术音乐”入口'));
-  assert.ok(readme.includes('暂不进入 Sitemap'));
+  assert.ok(readme.includes('公开展示 IRIS × SAKURA 品牌系统'));
   assert.ok(!readme.includes('FAQ 与作品筛选'));
 });
 

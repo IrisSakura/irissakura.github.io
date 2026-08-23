@@ -186,10 +186,9 @@ const pageDefinitions = [
   {
     file: 'pages/art-music.html',
     key: 'art-music',
-    title: '美术与音乐作品集 | IrisSakura',
-    description: 'IrisSakura 的美术与音乐作品集入口；当前尚未公开作品，后续内容将在这里持续更新。',
-    canonical: '/pages/art-music.html',
-    noIndex: true
+    title: '品牌视觉与创作 | IrisSakura',
+    description: '查看 IRIS × SAKURA 品牌系统、双人格视觉、工程子品牌、色板、图标与命名规则。',
+    canonical: '/pages/art-music.html'
   },
   {
     file: 'pages/about.html',
@@ -649,6 +648,36 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
                         <a href="pages/game.html" class="btn btn-primary">查看代表作</a>
                         <a href="https://github.com/IrisSakura" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">查看 GitHub</a>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-ecosystem-section" aria-labelledby="brand-ecosystem-title">
+            <div class="container">
+                <div class="brand-ecosystem-hero">
+                    <img src="assets/images/brand/01_iris_x_sakura_header.png" alt="IRIS × SAKURA 游戏科技生态品牌标题" loading="lazy">
+                    <div>
+                        <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
+                        <h2 id="brand-ecosystem-title">工程体系与游戏体验，在同一品牌下生长</h2>
+                        <p>IRIS 承接 Framework、Engineering、Developer Tools、Pipeline 与 Infrastructure；SAKURA 承接 Games、Experiences、Worldbuilding 与原创 IP。</p>
+                        <a href="pages/art-music.html#brand-system" class="text-link">查看完整品牌视觉</a>
+                    </div>
+                </div>
+                <div class="brand-ecosystem-grid">
+                    <article class="brand-project-card">
+                        <img src="assets/images/brand/02_irisgameframework_brand_card.png" alt="IrisGameFramework 独立品牌卡" loading="lazy">
+                        <h3>IrisGameFramework</h3>
+                        <p>模块化、可扩展，并以真实消费路径验证的 Unity 工程能力。</p>
+                    </article>
+                    <figure class="brand-joint-emblem">
+                        <img src="assets/images/brand/06_iris_sakura_joint_emblem.png" alt="IRIS × SAKURA 联合鸢尾与樱花徽记" loading="lazy">
+                        <figcaption>Build · Create · Bloom</figcaption>
+                    </figure>
+                    <article class="brand-project-card">
+                        <img src="assets/images/brand/03_iris_engineering_brand_card.png" alt="Iris Engineering 独立品牌卡" loading="lazy">
+                        <h3>Iris Engineering</h3>
+                        <p>让研发事实、验证边界与受控自动化拥有清晰的工程入口。</p>
+                    </article>
                 </div>
             </div>
         </section>

@@ -104,12 +104,14 @@ test('homepage presents identity, flagship work and three secondary focus areas 
   ]);
 
   const profileOffset = home.indexOf('id="profile"');
+  const brandOffset = home.indexOf('class="brand-ecosystem-section"');
   const flagshipOffset = home.indexOf('class="flagship-section"');
   const focusOffset = home.indexOf('class="focus-section"');
   const researchOffset = home.indexOf('class="research-section"');
   const contactOffset = home.indexOf('class="public-cta"');
   assert.ok(profileOffset >= 0, 'homepage profile must exist');
-  assert.ok(flagshipOffset > profileOffset, 'flagship must follow the profile');
+  assert.ok(brandOffset > profileOffset, 'brand ecosystem must follow the profile');
+  assert.ok(flagshipOffset > brandOffset, 'flagship must follow the brand ecosystem');
   assert.ok(focusOffset > flagshipOffset, 'secondary focus areas must follow the flagship');
   assert.ok(researchOffset > focusOffset, 'selected research must follow focus areas');
   assert.ok(contactOffset > researchOffset, 'contact CTA must close the homepage');
@@ -121,6 +123,14 @@ test('homepage presents identity, flagship work and three secondary focus areas 
   assert.equal((home.match(/data-home-focus/g) ?? []).length, 3);
   for (const label of ['Sakura Framework', 'Sakura Design Journal', 'Consumer Lab']) {
     assert.ok(home.includes(label), `homepage focus areas are missing ${label}`);
+  }
+  for (const asset of [
+    '01_iris_x_sakura_header.png',
+    '02_irisgameframework_brand_card.png',
+    '03_iris_engineering_brand_card.png',
+    '06_iris_sakura_joint_emblem.png'
+  ]) {
+    assert.ok(home.includes(`assets/images/brand/${asset}`), `homepage is missing ${asset}`);
   }
   for (const obsoleteClass of ['evidence-strip', 'case-section', 'method-section']) {
     assert.ok(!home.includes(`class="${obsoleteClass}"`), `homepage still renders ${obsoleteClass}`);

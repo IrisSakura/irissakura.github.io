@@ -16,7 +16,7 @@
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 - `/pages/portfolio.html`：三条真实项目主线，以及四个 Domain Consumer Lab 独立消费项目的本地验证矩阵；
-- `/pages/art-music.html`：一级“美术音乐”入口；在至少有一组真实作品前展示诚实空状态、保持 `noindex`，暂不进入 Sitemap；
+- `/pages/art-music.html`：一级“美术音乐”入口，公开展示 IRIS × SAKURA 品牌系统、双人格视觉、色板、图标与命名规则；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
 - `/pages/about.html`：旧 About 地址的 `noindex` 首页兼容跳转；
 - `/404.html`：GitHub Pages 自定义错误页。
