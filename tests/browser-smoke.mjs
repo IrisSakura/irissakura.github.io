@@ -631,14 +631,14 @@ try {
 
   await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/art-music.html`);
-  if (await desktop.locator('meta[name="robots"][content="noindex, follow"]').count() !== 1) {
-    throw new Error('art and music holding page must remain noindex');
+  if (await desktop.locator('meta[name="robots"][content^="noindex"]').count() !== 0) {
+    throw new Error('public brand portfolio must remain indexable');
   }
-  if (!await desktop.getByRole('heading', { name: '美术与音乐作品集', exact: true }).isVisible()) {
-    throw new Error('art and music portfolio entry does not open its public page');
+  if (!await desktop.getByRole('heading', { name: '品牌视觉与创作', exact: true }).isVisible()) {
+    throw new Error('art and music navigation does not open the public brand portfolio');
   }
-  if (!await desktop.getByText('当前尚未公开作品。准备完成后，美术与音乐条目会从这里开始更新。', { exact: true }).isVisible()) {
-    throw new Error('art and music portfolio does not expose its honest empty state');
+  if (!await desktop.locator('#brand-system').isVisible()) {
+    throw new Error('public brand portfolio does not expose its brand system');
   }
 
   await desktop.goto(`${baseUrl}/pages/journal.html`, { waitUntil: 'networkidle' });
