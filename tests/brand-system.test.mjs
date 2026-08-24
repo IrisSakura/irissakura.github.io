@@ -7,10 +7,10 @@ const root = new URL('../', import.meta.url);
 const brandAssets = [
   '00_full_brand_board.png',
   '01_iris_x_sakura_header.png',
-  '02_irisgameframework_brand_card.png',
-  '03_iris_engineering_brand_card.png',
-  '04_iris_persona.png',
-  '05_sakura_persona.png',
+  '02_iris_engineering_brand_card.png',
+  '03_sakura_game_framework_brand_card.png',
+  '04_iris_persona_engineering_project_management.png',
+  '05_sakura_persona_game_framework.png',
   '06_iris_sakura_joint_emblem.png',
   '07_color_palette.png',
   '08_iconography_style.png',
@@ -19,7 +19,7 @@ const brandAssets = [
   '11_sakura_character_portrait.png'
 ];
 
-test('all supplied brand sources remain local while public pages use the curated board and portraits', async () => {
+test('all v3 brand sources remain local while public pages use the recommended editorial slices', async () => {
   const [home, page] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
     readFile(new URL('pages/art-music.html', root), 'utf8')
@@ -29,15 +29,15 @@ test('all supplied brand sources remain local while public pages use the curated
   }
 
   for (const asset of [
-    '01_iris_x_sakura_header.png',
-    '02_irisgameframework_brand_card.png',
-    '03_iris_engineering_brand_card.png',
+    '02_iris_engineering_brand_card.png',
+    '03_sakura_game_framework_brand_card.png',
     '06_iris_sakura_joint_emblem.png'
   ]) {
     assert.ok(!home.includes(asset), `homepage still treats the cropped ${asset} slice as a standalone mark`);
   }
   for (const asset of [
     '00_full_brand_board.png',
+    '01_iris_x_sakura_header.png',
     '10_iris_character_portrait.png',
     '11_sakura_character_portrait.png'
   ]) {
@@ -70,12 +70,22 @@ test('brand story is expressed as live dual tracks, convergence, palette and nam
   assert.ok(page.includes('data-brand-branch="iris"'));
   assert.ok(page.includes('data-brand-branch="sakura"'));
   assert.ok(page.includes('data-brand-convergence'));
-  assert.ok(page.includes('BUILD · CREATE · BLOOM'));
-  for (const value of ['#4C4CF5', '#7B73FF', '#A06BFF', '#FF7EB6', '#FFC1D8', '#7EC6FF']) {
+  assert.ok(page.includes('BUILD · ORGANIZE · BLOOM'));
+  for (const value of ['#4C3DF5', '#7B73FF', '#A06BFF', '#FF7EB6', '#FFC1D8', '#7EC6FF']) {
     assert.ok(page.includes(value), `brand page is missing live palette value ${value}`);
   }
   assert.ok(page.includes('IRIS-*'));
   assert.ok(page.includes('SAKURA-*'));
+  for (const marker of [
+    'ENGINEER · MANAGE · DELIVER',
+    'FRAME · POWER · EXTEND',
+    'Engineering &amp; Project Management',
+    'SakuraGameFramework',
+    'Game Framework / Modules / Runtime / Tooling'
+  ]) {
+    assert.ok(page.includes(marker), `brand page is missing v3 ownership marker ${marker}`);
+  }
+  assert.doesNotMatch(page, /IRIS \/ FRAMEWORK|Games &amp; Experiences|Worlds &amp; IP|CREATE · INSPIRE · CONNECT/u);
 });
 
 test('generated public shell uses one joint brand mark without the retired gamepad identity', async () => {
@@ -88,10 +98,14 @@ test('generated public shell uses one joint brand mark without the retired gamep
   for (const page of [home, brandPage]) {
     assert.ok(page.includes('class="brand-wordmark"'));
     assert.ok(page.includes('class="brand-mark"'));
+    assert.ok(page.includes('BUILD · ORGANIZE · BLOOM'));
+    assert.ok(page.includes('Iris Engineering'));
+    assert.ok(page.includes('Sakura Framework'));
+    assert.ok(!page.includes('BUILD · CREATE · BLOOM'));
     assert.ok(!page.includes('fa-gamepad'));
   }
   assert.ok(favicon.includes('IRIS × SAKURA 联合标识'));
-  assert.ok(favicon.includes('#4C4CF5'));
+  assert.ok(favicon.includes('#4C3DF5'));
   assert.ok(favicon.includes('#FF7EB6'));
 });
 

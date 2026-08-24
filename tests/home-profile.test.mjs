@@ -22,6 +22,8 @@ test('public profile data owns the homepage identity and a local avatar', async 
   assert.equal(site.profile.nickname, 'IrisSakura');
   assert.equal(site.profile.role, '可验证的 Unity 游戏系统开发者');
   assert.ok(site.profile.introduction.length >= 30);
+  assert.match(site.profile.introduction, /Iris Engineering/u);
+  assert.match(site.profile.introduction, /Sakura Framework/u);
   assert.match(site.profile.avatar, /^assets\/images\/profile\/.+\.jpe?g$/iu);
   assert.ok(site.profile.avatarAlt.includes('IrisSakura'));
   await access(new URL(site.profile.avatar, root));
@@ -126,7 +128,9 @@ test('homepage presents identity, flagship work and three secondary focus areas 
   }
   assert.ok(home.includes('class="brand-lockup'));
   assert.equal((home.match(/data-home-brand-branch/g) ?? []).length, 2);
-  assert.ok(home.includes('BUILD · CREATE · BLOOM'));
+  assert.ok(home.includes('BUILD · ORGANIZE · BLOOM'));
+  assert.ok(home.includes('Engineering &amp; Project Management'));
+  assert.ok(home.includes('Game Framework'));
   for (const obsoleteClass of ['evidence-strip', 'case-section', 'method-section']) {
     assert.ok(!home.includes(`class="${obsoleteClass}"`), `homepage still renders ${obsoleteClass}`);
   }

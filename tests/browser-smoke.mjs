@@ -731,6 +731,24 @@ try {
   await mobile.keyboard.press('Escape');
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 
+  await mobile.goto(`${baseUrl}/pages/art-music.html`, { waitUntil: 'networkidle' });
+  const brandMobileState = await mobile.evaluate(() => {
+    const header = document.querySelector('.brand-header-slice img');
+    return {
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+      headerReady: header instanceof HTMLImageElement && header.complete && header.naturalWidth > 0
+    };
+  });
+  if (brandMobileState.overflow > 1) {
+    throw new Error(`Brand portfolio overflows the mobile viewport by ${brandMobileState.overflow}px`);
+  }
+  if (!brandMobileState.headerReady) {
+    throw new Error('mobile brand portfolio did not load the V3 header slice');
+  }
+  if (process.env.SITE_SCREENSHOT_DIR) {
+    await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'brand-mobile.png'), fullPage: true });
+  }
+
   await mobile.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
   const quickstartMobileState = await mobile.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,

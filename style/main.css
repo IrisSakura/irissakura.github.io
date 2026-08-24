@@ -11,7 +11,7 @@
     --success-color: #28a745;
     --warning-color: #ffc107;
     --danger-color: #dc3545;
-    --brand-iris: #4c4cf5;
+    --brand-iris: #4c3df5;
     --brand-iris-light: #7b73ff;
     --brand-shared: #a06bff;
     --brand-sakura: #ff7eb6;
@@ -2297,6 +2297,10 @@ body.profile-drawer-open .profile-drawer {
     align-items: end;
 }
 
+.brand-system-copy {
+    min-width: 0;
+}
+
 .brand-lockup-subtitle {
     margin-bottom: 2.25rem;
     color: var(--brand-shared);
@@ -2312,9 +2316,29 @@ body.profile-drawer-open .profile-drawer {
     letter-spacing: -0.035em;
 }
 
-.brand-system-copy > p:last-child,
+.brand-system-copy > p:not(.section-kicker),
 .brand-section-heading p {
     color: var(--muted-text-color);
+}
+
+.brand-header-slice {
+    margin: 2rem 0 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--brand-shared) 34%, var(--ui-border-subtle));
+    border-radius: var(--border-radius);
+    background: var(--ui-surface-card);
+}
+
+.brand-header-slice img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.brand-header-slice figcaption {
+    padding: 0.75rem 1rem;
+    color: var(--muted-text-color);
+    font-size: 0.76rem;
 }
 
 .brand-principles {
@@ -2528,6 +2552,14 @@ body.profile-drawer-open .profile-drawer {
         var(--ui-surface-card);
 }
 
+.brand-product-framework {
+    border-color: color-mix(in srgb, var(--brand-sakura) 44%, var(--ui-border-subtle));
+    background:
+        radial-gradient(circle at 84% 18%, color-mix(in srgb, var(--brand-sakura-light) 32%, transparent), transparent 15rem),
+        linear-gradient(145deg, color-mix(in srgb, var(--brand-sakura) 16%, transparent), transparent 64%),
+        var(--ui-surface-card);
+}
+
 .brand-product-symbol {
     display: grid;
     width: 4.5rem;
@@ -2546,6 +2578,17 @@ body.profile-drawer-open .profile-drawer {
     color: var(--brand-iris-light);
     font: 800 0.72rem/1.5 var(--font-display);
     letter-spacing: 0.1em;
+}
+
+.brand-product-framework .brand-product-symbol {
+    border-color: color-mix(in srgb, var(--brand-sakura) 54%, transparent);
+    color: var(--brand-sakura);
+    background: color-mix(in srgb, var(--brand-sakura) 12%, transparent);
+}
+
+.brand-product-framework p,
+.brand-product-framework strong {
+    color: var(--brand-sakura);
 }
 
 .brand-product-card h3 {
@@ -2815,7 +2858,18 @@ body.profile-drawer-open .profile-drawer {
     }
 
     .brand-lockup-hero {
-        font-size: clamp(2.35rem, 11vw, 4rem);
+        gap: 0.16em;
+        max-width: 100%;
+        font-size: clamp(2rem, 9vw, 3rem);
+        letter-spacing: 0.045em;
+    }
+
+    .brand-lockup-subtitle {
+        letter-spacing: 0.16em;
+    }
+
+    .brand-system-copy h2 {
+        font-size: clamp(1.85rem, 8vw, 2.5rem);
     }
 
     .brand-principles li {

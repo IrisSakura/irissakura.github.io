@@ -1,6 +1,8 @@
 # IrisSakura 个人站
 
-这是 IrisSakura 的公开个人品牌站，围绕一条可验证的项目链组织内容：
+这是 IrisSakura 的公开个人品牌站。品牌体系以两个职责清晰的支柱组织：IRIS 负责 Engineering / Project Management，SAKURA 负责 Game Framework；游戏消费项目暂不纳入这套命名家族。
+
+站点内容继续围绕一条可验证的项目链组织：
 
 > Sakura Design Journal（研究）→ Sakura Framework（工程沉淀）→《言铸之剑》（游戏验证）
 

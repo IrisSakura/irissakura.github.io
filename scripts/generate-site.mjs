@@ -187,7 +187,7 @@ const pageDefinitions = [
     file: 'pages/art-music.html',
     key: 'art-music',
     title: '品牌视觉与创作 | IrisSakura',
-    description: '查看 IRIS × SAKURA 品牌系统、双人格视觉、工程子品牌、色板、图标与命名规则。',
+    description: '查看 IRIS × SAKURA V3 品牌系统、双人格视觉、两大产品支柱、色板、图标与命名规则。',
     canonical: '/pages/art-music.html'
   },
   {
@@ -695,22 +695,22 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
                     <div class="brand-lockup brand-lockup-compact" aria-label="IRIS × SAKURA">
                         <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
                     </div>
-                    <p>BUILD · CREATE · BLOOM</p>
+                    <p>BUILD · ORGANIZE · BLOOM</p>
                     <a href="pages/art-music.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </div>
                 <div>
                     <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
-                    <h2 id="brand-ecosystem-title">让工程的确定性，托住创作的生命力</h2>
+                    <h2 id="brand-ecosystem-title">让工程与项目管理有序推进，让游戏框架持续承载创作</h2>
                     <div class="brand-branch-grid">
                         <article class="brand-branch brand-branch-iris" data-home-brand-branch>
                             <span>01 / IRIS</span>
-                            <h3>Systems &amp; Tools</h3>
-                            <p>Framework、Engineering、Pipeline 与 Infrastructure。</p>
+                            <h3>Engineering &amp; Project Management</h3>
+                            <p>Engineering、Project Management、Workflow、Pipeline 与 Reliability。</p>
                         </article>
                         <article class="brand-branch brand-branch-sakura" data-home-brand-branch>
                             <span>02 / SAKURA</span>
-                            <h3>Games &amp; Worlds</h3>
-                            <p>Games、Experiences、Worldbuilding 与原创 IP。</p>
+                            <h3>Game Framework</h3>
+                            <p>Game Framework、Runtime Systems、Gameplay Modules 与 Tooling。</p>
                         </article>
                     </div>
                 </div>
@@ -772,7 +772,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
 
 function renderBrandContent() {
   const palette = [
-    ['Iris Core', '#4C4CF5'],
+    ['Iris Core', '#4C3DF5'],
     ['Iris Light', '#7B73FF'],
     ['Shared Violet', '#A06BFF'],
     ['Sakura Core', '#FF7EB6'],
@@ -785,7 +785,7 @@ function renderBrandContent() {
         <div class="container">
             <p class="section-kicker">IRIS × SAKURA · BRAND SYSTEM</p>
             <h1>品牌视觉与创作</h1>
-            <p>一套连接工程体系与游戏体验的双人格视觉语言：IRIS 负责构建，SAKURA 负责绽放。</p>
+            <p>一套连接工程与项目管理、游戏框架的双人格视觉语言：IRIS 组织创造，SAKURA 为游戏创作提供框架底座。</p>
         </div>
     </header>
 
@@ -797,14 +797,18 @@ function renderBrandContent() {
                     <div class="brand-lockup brand-lockup-hero" aria-label="IRIS × SAKURA">
                         <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
                     </div>
-                    <p class="brand-lockup-subtitle">GAME-TECH ECOSYSTEM</p>
-                    <h2 id="brand-system-title">Build · Create · Bloom</h2>
-                    <p>不是把工程与创作混成一种声音，而是让两种力量在同一生态里各自清晰、彼此支撑。</p>
+                    <p class="brand-lockup-subtitle">GAME-TECH ECOSYSTEM · BUILD · ORGANIZE · BLOOM</p>
+                    <h2 id="brand-system-title">Build · Organize · Bloom</h2>
+                    <p>不是把工程管理与框架能力混成一种声音，而是让两根支柱在同一生态里各自清晰、彼此支撑。</p>
+                    <figure class="brand-header-slice">
+                        <img src="../assets/images/brand/01_iris_x_sakura_header.png" alt="IRIS × SAKURA 游戏技术生态：Build、Organize、Bloom" decoding="async">
+                        <figcaption>V3 生态头图 · 工程与项目管理连接游戏框架</figcaption>
+                    </figure>
                 </div>
                 <ol class="brand-principles" aria-label="品牌行动原则">
-                    <li><span>01</span><strong>BUILD</strong><small>用可验证的系统建立创作底座</small></li>
-                    <li><span>02</span><strong>CREATE</strong><small>把能力转化为可感知的玩法体验</small></li>
-                    <li><span>03</span><strong>BLOOM</strong><small>让作品、世界与原创 IP 持续生长</small></li>
+                    <li><span>01</span><strong>BUILD</strong><small>用可验证的工程系统建立创造底座</small></li>
+                    <li><span>02</span><strong>ORGANIZE</strong><small>让项目、工作流与交付保持清晰</small></li>
+                    <li><span>03</span><strong>BLOOM</strong><small>让 Sakura Framework 支撑游戏创作扩展</small></li>
                 </ol>
             </div>
         </section>
@@ -814,7 +818,7 @@ function renderBrandContent() {
                 <div class="brand-section-heading">
                     <p class="section-kicker">MASTER BRAND BOARD</p>
                     <h2 id="brand-board-title">先看完整生态，再进入每一条分支</h2>
-                    <p>总览板保留双人格、工程子品牌、联合徽记、色板与命名家族的原始关系；网页组件则把这些规则变成可阅读、可复用的界面语言。</p>
+                    <p>总览板保留双人格、两大产品支柱、联合徽记、色板与命名家族的原始关系；网页组件则把这些规则变成可阅读、可复用的界面语言。</p>
                 </div>
                 <figure class="brand-board">
                     <img src="../assets/images/brand/00_full_brand_board.png" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则" decoding="async">
@@ -828,14 +832,14 @@ function renderBrandContent() {
                 <div class="brand-section-heading brand-section-heading-centered">
                     <p class="section-kicker">DUAL TRACKS</p>
                     <h2 id="brand-duality-title">边界清晰，才能真正合流</h2>
-                    <p>IRIS 对工程质量负责，SAKURA 对体验生命力负责。名称、语气和能力范围分别表达，生态层再用联合标识连接。</p>
+                    <p>IRIS 对工程与项目管理负责，SAKURA 对游戏框架负责。名称、语气和能力范围分别表达，生态层再用联合标识连接。</p>
                 </div>
                 <div class="brand-duality-grid">
                     <article class="brand-track brand-track-iris" data-brand-branch="iris">
-                        <header><span>IRIS / 01</span><strong>ENGINEER · BUILD · OPTIMIZE</strong></header>
-                        <h3>Tools &amp; Engineering</h3>
-                        <p>冷静、精确、结构化。承担 Framework、Engineering、Developer Tools、Pipeline 与 Infrastructure。</p>
-                        <ul><li>Scalable Systems</li><li>Quality &amp; Reliability</li><li>Developer Velocity</li></ul>
+                        <header><span>IRIS / 01</span><strong>ENGINEER · MANAGE · DELIVER</strong></header>
+                        <h3>Engineering &amp; Project Management</h3>
+                        <p>冷静、精确、结构化。承担 Engineering、Project Management、Workflow、Pipeline 与 Reliability。</p>
+                        <ul><li>Project Management</li><li>Workflow &amp; Pipeline</li><li>Quality &amp; Reliability</li></ul>
                     </article>
                     <div class="brand-convergence" data-brand-convergence>
                         <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-convergence-mark">
@@ -843,10 +847,10 @@ function renderBrandContent() {
                         <span>Shared intent<br>Distinct voices</span>
                     </div>
                     <article class="brand-track brand-track-sakura" data-brand-branch="sakura">
-                        <header><span>SAKURA / 02</span><strong>CREATE · INSPIRE · CONNECT</strong></header>
-                        <h3>Games &amp; Experiences</h3>
-                        <p>温暖、灵动、富有生命力。承担 Games、Experiences、Worldbuilding 与原创 IP。</p>
-                        <ul><li>Playable Worlds</li><li>Player Experience</li><li>Creative Identity</li></ul>
+                        <header><span>SAKURA / 02</span><strong>FRAME · POWER · EXTEND</strong></header>
+                        <h3>Game Framework</h3>
+                        <p>温暖、灵动、富有生命力。承担 Game Framework、Runtime Systems、Gameplay Modules 与 Tooling。</p>
+                        <ul><li>Runtime Systems</li><li>Gameplay Modules</li><li>Extensible Tooling</li></ul>
                     </article>
                 </div>
             </div>
@@ -855,24 +859,24 @@ function renderBrandContent() {
         <section class="brand-products-section" aria-labelledby="brand-products-title">
             <div class="container">
                 <div class="brand-section-heading">
-                    <p class="section-kicker">ENGINEERING SUB-BRANDS</p>
-                    <h2 id="brand-products-title">让子品牌像产品，而不是母品牌的复印件</h2>
-                    <p>统一继承 IRIS 的工程语气与几何秩序，同时用职责和成果边界区分框架产品与研发工作流。</p>
+                    <p class="section-kicker">TWO PRODUCT PILLARS</p>
+                    <h2 id="brand-products-title">两个支柱，各自承担清晰职责</h2>
+                    <p>Iris Engineering 组织研发与项目工作流；SakuraGameFramework 为可扩展游戏创作提供模块、运行时与工具底座。</p>
                 </div>
                 <div class="brand-product-grid">
-                    <article class="brand-product-card brand-product-framework">
-                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-cubes-stacked"></i></div>
-                        <p>IRIS / FRAMEWORK</p>
-                        <h3>IrisGameFramework</h3>
-                        <strong>MODULAR · SCALABLE · CREATOR-READY</strong>
-                        <span>为真实游戏生产建立可复用的 Unity 系统边界。</span>
-                    </article>
                     <article class="brand-product-card brand-product-engineering">
                         <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-code-branch"></i></div>
-                        <p>IRIS / ENGINEERING</p>
+                        <p>IRIS / ENGINEERING &amp; PROJECT MANAGEMENT</p>
                         <h3>Iris Engineering</h3>
-                        <strong>AUTOMATE · INTEGRATE · VERIFY</strong>
+                        <strong>ENGINEER · ORGANIZE · DELIVER</strong>
                         <span>让研发事实、验证边界与受控自动化进入同一工作流。</span>
+                    </article>
+                    <article class="brand-product-card brand-product-framework">
+                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-cubes-stacked"></i></div>
+                        <p>SAKURA / GAME FRAMEWORK</p>
+                        <h3>SakuraGameFramework</h3>
+                        <strong>MODULAR · EXTENSIBLE · CREATOR-READY</strong>
+                        <span>为真实游戏生产建立可复用、可组合的 Unity 系统边界。</span>
                     </article>
                 </div>
             </div>
@@ -901,8 +905,9 @@ function renderBrandContent() {
                     <article class="brand-language-card brand-naming-card">
                         <span class="brand-card-index">03 / NAMING</span>
                         <h3>一个生态，两套命名家族</h3>
-                        <div><code>IRIS-*</code><span>Tools / Engineering / Framework</span></div>
-                        <div><code>SAKURA-*</code><span>Games / Experiences / Worlds &amp; IP</span></div>
+                        <div><code>IRIS-*</code><span>Engineering / Project Management</span></div>
+                        <div><code>SAKURA-*</code><span>Game Framework / Modules / Runtime / Tooling</span></div>
+                        <p>游戏消费项目暂不纳入当前命名体系。</p>
                     </article>
                 </div>
             </div>
@@ -918,11 +923,11 @@ function renderBrandContent() {
                 <div class="brand-persona-stage">
                     <figure class="brand-persona-portrait brand-persona-iris">
                         <img src="../assets/images/brand/10_iris_character_portrait.png" alt="IRIS 品牌人格角色肖像" loading="lazy" decoding="async">
-                        <figcaption><span>IRIS</span><strong>Rational · Precise · Structured</strong></figcaption>
+                        <figcaption><span>IRIS</span><strong>Engineer · Manage · Deliver</strong></figcaption>
                     </figure>
                     <figure class="brand-persona-portrait brand-persona-sakura">
                         <img src="../assets/images/brand/11_sakura_character_portrait.png" alt="SAKURA 品牌人格角色肖像" loading="lazy" decoding="async">
-                        <figcaption><span>SAKURA</span><strong>Warm · Imaginative · Alive</strong></figcaption>
+                        <figcaption><span>SAKURA</span><strong>Frame · Power · Extend</strong></figcaption>
                     </figure>
                 </div>
             </div>

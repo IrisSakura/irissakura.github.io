@@ -500,11 +500,11 @@ test('theme registry supports a default IRIS × SAKURA brand theme and the exist
   assert.equal(brandTheme.homeHeroImage, 'assets/images/profile/home-hero-iris-sakura.png');
   const brandCss = await readText('style/iris-sakura.css');
   for (const motif of [
-    '--primary-color: #4c4cf5',
+    '--primary-color: #4c3df5',
     '--accent-color: #b82f6c',
     '--paper: #f7f4ff',
     '--ink: #2f2556',
-    '--ui-action-primary-bg: #4c4cf5'
+    '--ui-action-primary-bg: #4c3df5'
   ]) {
     assert.ok(brandCss.includes(motif), `brand theme missing palette token ${motif}`);
   }
