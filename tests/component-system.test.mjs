@@ -32,7 +32,7 @@ test('shared component tokens own common actions, controls, chips, surfaces and 
   }
 
   assert.match(main, /\.btn\s*\{[^}]*var\(--ui-action-radius\)/s);
-  assert.match(main, /\.theme-picker\s*\{[^}]*var\(--ui-control-border\)[^}]*var\(--ui-pill-radius\)/s);
+  assert.match(main, /\.brand-seal\s*\{[^}]*var\(--ui-control-border\)[^}]*var\(--ui-pill-radius\)/s);
   assert.match(main, /\.tag,[\s\S]*?\.portfolio-tags span\s*\{[^}]*var\(--ui-chip-surface\)/s);
   assert.match(main, /:focus-visible\s*\{[^}]*var\(--ui-focus-color\)/s);
   assert.match(framework, /\.module-search input\s*\{[^}]*var\(--ui-control-border\)/s);
@@ -42,22 +42,20 @@ test('shared component tokens own common actions, controls, chips, surfaces and 
   assert.match(game, /\.system-tags span\s*\{[^}]*var\(--ui-chip-surface\)/s);
 });
 
-test('themes configure component tokens instead of re-declaring shared component classes', async () => {
-  for (const themePath of ['style/iris-sakura.css', 'style/pastoral.css', 'style/sakura-village.css']) {
-    const css = await readText(themePath);
-    for (const token of [
-      '--ui-action-primary-bg',
-      '--ui-action-secondary-text',
-      '--ui-control-surface',
-      '--ui-control-surface-hover',
-      '--ui-chip-surface',
-      '--ui-focus-color'
-    ]) {
-      assert.ok(css.includes(`${token}:`), `${themePath} missing ${token}`);
-    }
-    for (const selector of ['.btn', '.theme-picker', '.tag']) {
-      assert.ok(!css.includes(selector), `${themePath} re-declares shared component selector ${selector}`);
-    }
+test('the single brand palette configures tokens without re-declaring shared components', async () => {
+  const css = await readText('style/iris-sakura.css');
+  for (const token of [
+    '--ui-action-primary-bg',
+    '--ui-action-secondary-text',
+    '--ui-control-surface',
+    '--ui-control-surface-hover',
+    '--ui-chip-surface',
+    '--ui-focus-color'
+  ]) {
+    assert.ok(css.includes(`${token}:`), `brand palette missing ${token}`);
+  }
+  for (const selector of ['.btn', '.theme-picker', '.tag']) {
+    assert.ok(!css.includes(selector), `brand palette re-declares shared selector ${selector}`);
   }
 });
 

@@ -46,7 +46,7 @@ assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
 assertProjectFactsCurrent(projects, framework, journal);
 assertConsumerLabCurrent(consumerLab);
-assertThemeConfig(themeConfig);
+assertBrandConfig(themeConfig);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
   [article.id, await readText(article.contentPath)]
@@ -301,12 +301,8 @@ for (const page of pageDefinitions) {
     .replace('{{journalHref}}', escapeAttribute(pageHref('pages/journal.html')))
     .replace('{{consumerLabHref}}', escapeAttribute(pageHref('pages/portfolio.html#consumer-lab')))
     .replace('{{contactHref}}', escapeAttribute(pageHref('pages/contact.html')))
-    .replace('{{navLinks}}', navLinks)
-    .replace('{{themeStorageKey}}', escapeAttribute(themeConfig.storageKey))
-    .replace('{{defaultThemePreference}}', escapeAttribute(themeConfig.defaultPreference))
-    .replace('{{defaultLightTheme}}', escapeAttribute(themeConfig.defaultLight))
-    .replace('{{defaultDarkTheme}}', escapeAttribute(themeConfig.defaultDark))
-    .replace('{{themeOptions}}', renderThemeOptions(themeConfig, prefix));
+    .replace('{{brandHref}}', escapeAttribute(pageHref('pages/art-music.html#brand-system')))
+    .replace('{{navLinks}}', navLinks);
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
     .replaceAll('{{brandMark}}', escapeAttribute(pageHref('assets/favicon.svg?v=20260824')))
@@ -326,7 +322,7 @@ for (const page of pageDefinitions) {
   } else {
     html = html.replace(/(<meta name="viewport"[^>]*>)/, `$1\n    ${meta}`);
   }
-  html = installThemeBootstrap(html, prefix, themeConfig);
+  html = installBrandIdentity(html, prefix, themeConfig);
 
   const siteScript = `<script src="${prefix}dist/site.js" type="module"></script>`;
   if (!html.includes('dist/site.js')) {
@@ -388,19 +384,18 @@ await Promise.all([
     description: site.description,
     start_url: '/',
     display: 'standalone',
-    background_color: themeConfig.themes.find((theme) => theme.id === resolveDefaultThemeId(themeConfig)).backgroundColor,
-    theme_color: themeConfig.themes.find((theme) => theme.id === resolveDefaultThemeId(themeConfig)).themeColor,
+    background_color: themeConfig.backgroundColor,
+    theme_color: themeConfig.themeColor,
     icons: [
       { src: '/assets/favicon.svg?v=20260824', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
     ]
   }, null, 2) + '\n')
 ]);
 
-function buildMeta(page, siteData, themes) {
+function buildMeta(page, siteData, brand) {
   const canonical = `${siteData.siteUrl}${page.canonical}`;
   const image = `${siteData.siteUrl}${page.image}`;
   const prefix = '../'.repeat(page.file.split('/').length - 1);
-  const defaultThemeColor = themes.themes.find((theme) => theme.id === resolveDefaultThemeId(themes)).themeColor;
   const structured = {
     '@context': 'https://schema.org',
     '@type': page.schemaType ?? 'WebPage',
@@ -454,7 +449,7 @@ function buildMeta(page, siteData, themes) {
     <meta name="twitter:image" content="${image}">
     <meta name="twitter:image:alt" content="${escapeAttribute(page.imageAlt)}">
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
-    <meta name="theme-color" content="${defaultThemeColor}">
+    <meta name="theme-color" content="${brand.themeColor}">
     <link rel="icon" href="${prefix}assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="${prefix}rss.xml">
@@ -462,170 +457,50 @@ function buildMeta(page, siteData, themes) {
     <!-- site-meta:end -->`;
 }
 
-function assertThemeConfig(config) {
-  if (!config || !Array.isArray(config.themes) || config.themes.length < 2) {
-    throw new Error('theme registry must contain at least two themes');
+function assertBrandConfig(config) {
+  if (!config || config.id !== 'iris-sakura' || config.label !== 'IRIS × SAKURA') {
+    throw new Error('brand registry must define IRIS × SAKURA');
   }
-  if (!/^[a-z0-9-]+$/.test(config.storageKey ?? '')) {
-    throw new Error('theme registry storageKey must be a stable identifier');
+  if (config.colorScheme !== 'light') {
+    throw new Error('IRIS × SAKURA must use the reviewed light color scheme');
   }
-  if (typeof config.systemLabel !== 'string' || config.systemLabel.trim() === '') {
-    throw new Error('theme registry requires a system label');
-  }
-
-  const ids = new Set();
-  for (const theme of config.themes) {
-    if (!/^[a-z0-9-]+$/.test(theme.id ?? '') || theme.id === 'system') {
-      throw new Error(`invalid theme id: ${theme.id}`);
-    }
-    if (ids.has(theme.id)) {
-      throw new Error(`duplicate theme id: ${theme.id}`);
-    }
-    ids.add(theme.id);
-    if (typeof theme.label !== 'string' || theme.label.trim() === '') {
-      throw new Error(`theme ${theme.id} requires a label`);
-    }
-    if (!['light', 'dark'].includes(theme.colorScheme)) {
-      throw new Error(`theme ${theme.id} has invalid colorScheme`);
-    }
-    for (const [name, value] of [
-      ['themeColor', theme.themeColor],
-      ['backgroundColor', theme.backgroundColor]
-    ]) {
-      if (!/^#[0-9a-f]{6}$/i.test(value ?? '')) {
-        throw new Error(`theme ${theme.id} has invalid ${name}`);
-      }
-    }
-    if (!Array.isArray(theme.stylesheets) || theme.stylesheets.some((stylesheet) => (
-      !/^style\/[a-z0-9-]+\.css$/.test(stylesheet)
-    ))) {
-      throw new Error(`theme ${theme.id} has invalid stylesheets`);
-    }
-    if (!/^assets\/images\/profile\/home-hero-[a-z0-9-]+\.png$/u.test(theme.homeHeroImage ?? '')) {
-      throw new Error(`theme ${theme.id} has invalid homeHeroImage`);
-    }
-    if (!/^\d+(?:\.\d+)?% \d+(?:\.\d+)?%$/u.test(theme.homeHeroPosition ?? '')) {
-      throw new Error(`theme ${theme.id} has invalid homeHeroPosition`);
-    }
-    if (new Set(theme.stylesheets).size !== theme.stylesheets.length) {
-      throw new Error(`theme ${theme.id} contains duplicate stylesheets`);
+  for (const [name, value] of [
+    ['themeColor', config.themeColor],
+    ['backgroundColor', config.backgroundColor]
+  ]) {
+    if (!/^#[0-9a-f]{6}$/i.test(value ?? '')) {
+      throw new Error(`brand registry has invalid ${name}`);
     }
   }
-  for (const defaultTheme of [config.defaultLight, config.defaultDark]) {
-    if (!ids.has(defaultTheme)) {
-      throw new Error(`theme registry default is not registered: ${defaultTheme}`);
-    }
+  if (config.stylesheet !== 'style/iris-sakura.css') {
+    throw new Error('brand registry must own the IRIS × SAKURA stylesheet');
   }
-  if (config.defaultPreference !== 'system' && !ids.has(config.defaultPreference)) {
-    throw new Error(`theme registry defaultPreference is not registered: ${config.defaultPreference}`);
+  if (config.homeHeroImage !== 'assets/images/profile/home-hero-iris-sakura.png') {
+    throw new Error('brand registry must own the IRIS × SAKURA hero image');
   }
-  if (config.themes.find((theme) => theme.id === config.defaultLight).colorScheme !== 'light') {
-    throw new Error('defaultLight must reference a light theme');
-  }
-  if (config.themes.find((theme) => theme.id === config.defaultDark).colorScheme !== 'dark') {
-    throw new Error('defaultDark must reference a dark theme');
+  if (!/^\d+(?:\.\d+)?% \d+(?:\.\d+)?%$/u.test(config.homeHeroPosition ?? '')) {
+    throw new Error('brand registry has invalid homeHeroPosition');
   }
 }
 
-function resolveDefaultThemeId(config) {
-  return config.defaultPreference === 'system'
-    ? config.defaultLight
-    : config.defaultPreference;
-}
+function installBrandIdentity(html, prefix, config) {
+  const brandStyles = `<!-- brand-styles:start -->
+    <link rel="stylesheet" href="${prefix}${config.stylesheet}">
+    <!-- brand-styles:end -->`;
+  const stylePattern = /<!-- (?:theme|brand)-styles:start -->[\s\S]*?<!-- (?:theme|brand)-styles:end -->/;
+  if (!stylePattern.test(html)) throw new Error('missing generated brand styles block');
+  html = html.replace(stylePattern, brandStyles);
+  html = html.replace(/<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/, '');
 
-function renderThemeOptions(config, prefix) {
-  const options = [
-    `<option value="system">${escapeHtml(config.systemLabel)}</option>`,
-    ...config.themes.map((theme) => (
-      `<option value="${escapeAttribute(theme.id)}" data-color-scheme="${theme.colorScheme}" data-theme-color="${theme.themeColor}" data-home-hero-image="${escapeAttribute(`${prefix}${theme.homeHeroImage}`)}" data-home-hero-position="${escapeAttribute(theme.homeHeroPosition)}">${escapeHtml(theme.label)}</option>`
-    ))
-  ];
-  return options.join('\n                    ');
-}
-
-function renderThemeStyles(prefix, config) {
-  const stylesheetThemes = new Map();
-  for (const theme of config.themes) {
-    for (const stylesheet of theme.stylesheets) {
-      const owners = stylesheetThemes.get(stylesheet) ?? [];
-      owners.push(theme.id);
-      stylesheetThemes.set(stylesheet, owners);
-    }
-  }
-
-  const links = Array.from(stylesheetThemes, ([stylesheet, themeIds]) => {
-    const enabledByDefault = themeIds.includes(resolveDefaultThemeId(config));
-    return `<link rel="stylesheet" href="${prefix}${stylesheet}" data-theme-stylesheet data-themes="${themeIds.join(' ')}"${enabledByDefault ? '' : ' disabled'}>`;
-  });
-  return `<!-- theme-styles:start -->
-    ${links.join('\n    ')}
-    <!-- theme-styles:end -->`;
-}
-
-function installThemeBootstrap(html, prefix, config) {
-  const themeStyles = renderThemeStyles(prefix, config);
-  const themeStylesPattern = /<!-- theme-styles:start -->[\s\S]*?<!-- theme-styles:end -->/;
-  const legacyThemeLinkPattern = /<link rel="stylesheet" href="(?:\.\.\/)*style\/pastoral\.css"(?:\s+data-theme-stylesheet)?\s*>/;
-  if (themeStylesPattern.test(html)) {
-    html = html.replace(themeStylesPattern, themeStyles);
-  } else if (legacyThemeLinkPattern.test(html)) {
-    html = html.replace(legacyThemeLinkPattern, themeStyles);
-  } else {
-    throw new Error('missing generated theme styles block');
-  }
-
-  const browserConfig = {
-    storageKey: config.storageKey,
-    defaultPreference: config.defaultPreference,
-    defaultLight: config.defaultLight,
-    defaultDark: config.defaultDark,
-    themes: Object.fromEntries(config.themes.map((theme) => [
-      theme.id,
-      {
-        colorScheme: theme.colorScheme,
-        themeColor: theme.themeColor,
-        homeHeroImage: `${prefix}${theme.homeHeroImage}`,
-        homeHeroPosition: theme.homeHeroPosition
-      }
-    ]))
-  };
-  const themeBootstrap = `<!-- theme-bootstrap:start -->
-    <script>
-        (() => {
-            const config = ${JSON.stringify(browserConfig)};
-            let storedTheme = null;
-            try {
-                storedTheme = window.localStorage.getItem(config.storageKey);
-            } catch {
-                // 受限存储环境下继续使用站点默认主题。
-            }
-            const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
-            const isPreference = (value) => value === 'system' || isTheme(value);
-            const preference = isPreference(storedTheme) ? storedTheme : config.defaultPreference;
-            const theme = preference === 'system'
-                ? window.matchMedia('(prefers-color-scheme: dark)').matches
-                    ? config.defaultDark
-                    : config.defaultLight
-                : preference;
-            document.documentElement.dataset.theme = theme;
-            document.documentElement.dataset.themePreference = preference;
-            document.documentElement.style.colorScheme = config.themes[theme].colorScheme;
-            const homeHeroImage = new URL(config.themes[theme].homeHeroImage, window.location.href).href;
-            document.documentElement.style.setProperty('--home-hero-image', "url('" + homeHeroImage + "')");
-            document.documentElement.style.setProperty('--home-hero-position', config.themes[theme].homeHeroPosition);
-            document.querySelectorAll('[data-theme-stylesheet]').forEach((stylesheet) => {
-                if (!(stylesheet instanceof HTMLLinkElement)) return;
-                const supportedThemes = (stylesheet.dataset.themes || '').split(/\\s+/);
-                stylesheet.disabled = !supportedThemes.includes(theme);
-            });
-            document.querySelector('meta[name="theme-color"]')
-                ?.setAttribute('content', config.themes[theme].themeColor);
-        })();
-    </script>
-    <!-- theme-bootstrap:end -->`;
-  const themeBootstrapPattern = /<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/;
-  html = html.replace(themeBootstrapPattern, '');
-  return html.replace(themeStyles, `${themeStyles}\n    ${themeBootstrap}`);
+  const rootStyle = [
+    `color-scheme: ${config.colorScheme}`,
+    `--home-hero-image: url('/${config.homeHeroImage}')`,
+    `--home-hero-position: ${config.homeHeroPosition}`
+  ].join('; ');
+  return html.replace(
+    /<html\b[^>]*>/,
+    `<html lang="zh-CN" data-brand="${config.id}" style="${escapeAttribute(rootStyle)};">`
+  );
 }
 
 function replaceGeneratedBlock(html, name, content) {
@@ -651,7 +526,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
                 </article>`).join('');
 
   return `    <section id="home-page" class="page active">
-        <section id="profile" class="hero-section profile-hero">
+        <section id="profile" class="hero-section profile-hero" data-brand-layout="editorial">
             <div class="container profile-hero-inner">
                 <div class="profile-identity">
                     <img class="profile-avatar-large" src="${escapeAttribute(profile.avatar)}" alt="${escapeAttribute(profile.avatarAlt)}">
@@ -669,7 +544,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
 
-        <section class="flagship-section">
+        <section class="flagship-section" data-brand-layout="editorial">
             <div class="container flagship-grid">
                 <div class="flagship-media">
                     <img src="${escapeAttribute(game.homeImage)}" alt="${escapeAttribute(game.imageAlt)}">
@@ -689,7 +564,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
 
-        <section class="brand-ecosystem-section" aria-labelledby="brand-ecosystem-title">
+        <section class="brand-ecosystem-section" data-brand-layout="contrast" aria-labelledby="brand-ecosystem-title">
             <div class="container brand-ecosystem-inner">
                 <div class="brand-signature">
                     <div class="brand-lockup brand-lockup-compact" aria-label="IRIS × SAKURA">
@@ -717,7 +592,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
 
-        <section class="focus-section">
+        <section class="focus-section" data-brand-layout="editorial">
             <div class="container">
                 <div class="section-heading">
                     <p class="section-kicker">MORE FOCUSED WORK</p>
@@ -750,7 +625,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
 
-        <section class="research-section">
+        <section class="research-section" data-brand-layout="editorial">
             <div class="container">
                 <div class="section-heading section-heading-row">
                     <div><p class="section-kicker">SELECTED RESEARCH</p><h2>精选研究主题</h2></div>
@@ -761,7 +636,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
 
-        <section class="public-cta">
+        <section class="public-cta" data-brand-layout="editorial">
             <div class="container public-cta-inner">
                 <div><p class="section-kicker">CONTACT & PUBLIC ROUTES</p><h2>直接联系或继续查看公开记录</h2><p>工作邮箱、工作 QQ 与公开项目入口都集中在联系页。</p></div>
                 <a href="pages/contact.html" class="btn btn-secondary">查看公开入口</a>
@@ -790,7 +665,7 @@ function renderBrandContent() {
     </header>
 
     <div class="brand-portfolio" id="brand-system">
-        <section class="brand-system-intro" aria-labelledby="brand-system-title">
+        <section class="brand-system-intro" data-brand-layout="editorial" aria-labelledby="brand-system-title">
             <div class="container brand-system-intro-inner">
                 <div class="brand-system-copy">
                     <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
@@ -813,7 +688,7 @@ function renderBrandContent() {
             </div>
         </section>
 
-        <section class="brand-board-section" aria-labelledby="brand-board-title">
+        <section class="brand-board-section" data-brand-layout="editorial" aria-labelledby="brand-board-title">
             <div class="container">
                 <div class="brand-section-heading">
                     <p class="section-kicker">MASTER BRAND BOARD</p>
@@ -827,7 +702,7 @@ function renderBrandContent() {
             </div>
         </section>
 
-        <section class="brand-duality-section" aria-labelledby="brand-duality-title">
+        <section class="brand-duality-section" data-brand-layout="contrast" aria-labelledby="brand-duality-title">
             <div class="container">
                 <div class="brand-section-heading brand-section-heading-centered">
                     <p class="section-kicker">DUAL TRACKS</p>
@@ -856,7 +731,7 @@ function renderBrandContent() {
             </div>
         </section>
 
-        <section class="brand-products-section" aria-labelledby="brand-products-title">
+        <section class="brand-products-section" data-brand-layout="contrast" aria-labelledby="brand-products-title">
             <div class="container">
                 <div class="brand-section-heading">
                     <p class="section-kicker">TWO PRODUCT PILLARS</p>
@@ -1387,7 +1262,9 @@ async function writeFrameworkQuickstartSource(quickstart) {
     <title>${escapeHtml(quickstart.title)} | IrisSakura</title>
     <link rel="stylesheet" href="../style/main.css">
     <link rel="stylesheet" href="../style/framework.css">
-    <link rel="stylesheet" href="../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -1429,7 +1306,9 @@ async function writeCompatibilityRouteSources() {
     <meta http-equiv="refresh" content="0; url=../index.html">
     <title>关于页面已迁移 | IrisSakura</title>
     <link rel="stylesheet" href="../style/main.css">
-    <link rel="stylesheet" href="../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
 </head>
 <body>
 <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -1489,7 +1368,9 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
     <title>${escapeHtml(article.title)} | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
-    <link rel="stylesheet" href="../../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -1545,7 +1426,9 @@ function renderGameDesignDetailSource({ design, markdown, note }) {
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/journal.css">
     <link rel="stylesheet" href="../../style/blog.css">
-    <link rel="stylesheet" href="../../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1632,7 +1515,9 @@ function renderBlogCollectionSource({ collection }) {
     <title>${escapeHtml(collection.kindLabel)}：${escapeHtml(collection.name)} | IrisSakura</title>
     <link rel="stylesheet" href="../../../style/main.css">
     <link rel="stylesheet" href="../../../style/blog.css">
-    <link rel="stylesheet" href="../../../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -1670,7 +1555,9 @@ function renderBlogAliasSource({ redirect, title, description }) {
     <title>${escapeHtml(title)}</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
-    <link rel="stylesheet" href="../../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
 </head>
 <body>
 <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -1697,7 +1584,9 @@ function renderJournalDetailSource(note) {
     <title>${escapeHtml(note.title)} | Sakura Design Journal</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/journal.css">
-    <link rel="stylesheet" href="../../style/pastoral.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

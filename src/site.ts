@@ -1,7 +1,5 @@
 export {};
 
-const SYSTEM_THEME = 'system';
-const FALLBACK_STORAGE_KEY = 'irissakura-theme';
 const REVEAL_SELECTOR = [
     '.profile-hero-inner > *',
     '.flagship-grid > *',
@@ -75,9 +73,6 @@ class SiteShell {
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
     private lastFocused: HTMLElement | null = null;
-    private themeSelect: HTMLSelectElement | null = null;
-    private themeStylesheets: HTMLLinkElement[] = [];
-    private colorSchemeQuery: MediaQueryList | null = null;
     private profileDrawerTrigger: HTMLButtonElement | null = null;
     private profileDrawer: HTMLElement | null = null;
     private profileDrawerBackdrop: HTMLButtonElement | null = null;
@@ -85,8 +80,6 @@ class SiteShell {
     private profileDrawerLastFocused: HTMLElement | null = null;
     private motionObserver: IntersectionObserver | null = null;
     private navigationAbort: AbortController | null = null;
-    private themeTransitionOverlay: HTMLElement | null = null;
-    private themeTransitionSequence = 0;
 
     constructor() {
         if (document.readyState === 'loading') {
@@ -100,10 +93,6 @@ class SiteShell {
         this.normalizePersistentUrls();
         this.toggle = document.querySelector<HTMLButtonElement>('.mobile-toggle');
         this.menu = document.querySelector<HTMLElement>('.nav-menu');
-        this.themeSelect = document.querySelector<HTMLSelectElement>('.theme-select');
-        this.themeStylesheets = Array.from(
-            document.querySelectorAll<HTMLLinkElement>('[data-theme-stylesheet]')
-        );
         this.profileDrawerTrigger = document.querySelector<HTMLButtonElement>(
             '.profile-drawer-trigger'
         );
@@ -114,11 +103,9 @@ class SiteShell {
         this.profileDrawerClose = document.querySelector<HTMLButtonElement>(
             '.profile-drawer-close'
         );
-        this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
         });
-        this.setupTheme();
         this.setupProfileDrawer();
         this.setupNavigation();
         this.setupSoftNavigation();
@@ -139,247 +126,6 @@ class SiteShell {
         ).forEach((link) => {
             link.href = link.href;
         });
-        document.querySelectorAll<HTMLOptionElement>(
-            '.theme-select option[data-home-hero-image]'
-        ).forEach((option) => {
-            const heroImage = option.dataset.homeHeroImage;
-            if (heroImage) option.dataset.homeHeroImage = new URL(heroImage, location.href).href;
-        });
-    }
-
-    private setupTheme(): void {
-        const themeSelect = this.themeSelect;
-        if (!themeSelect) return;
-        const initialPreference = this.readDocumentPreference()
-            ?? this.readStoredTheme()
-            ?? this.getDefaultThemePreference();
-        this.applyThemePreference(initialPreference);
-
-        themeSelect.addEventListener('change', () => {
-            const preference = this.isTheme(themeSelect.value)
-                ? themeSelect.value
-                : SYSTEM_THEME;
-            void this.transitionThemePreference(preference, true);
-        });
-
-        this.colorSchemeQuery?.addEventListener('change', () => {
-            if (this.readDocumentPreference() === SYSTEM_THEME) {
-                void this.transitionThemePreference(SYSTEM_THEME);
-            }
-        });
-
-        window.addEventListener('storage', (event) => {
-            if (event.key !== this.getStorageKey()) return;
-            const preference = this.isTheme(event.newValue)
-                ? event.newValue
-                : this.getDefaultThemePreference();
-            void this.transitionThemePreference(preference);
-        });
-    }
-
-    private async transitionThemePreference(preference: string, persist = false): Promise<void> {
-        if (!this.themeSelect) return;
-        const resolvedTheme = preference === SYSTEM_THEME
-            ? this.getSystemTheme()
-            : preference;
-        const option = this.getThemeOption(resolvedTheme);
-        if (!option) return;
-
-        const transitionSequence = ++this.themeTransitionSequence;
-        const currentTheme = document.documentElement.dataset.theme;
-        if (
-            currentTheme === resolvedTheme
-            || window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ) {
-            this.applyThemePreference(preference, persist);
-            this.themeTransitionOverlay?.classList.remove('is-covering');
-            document.documentElement.classList.remove('theme-transitioning');
-            return;
-        }
-
-        const root = document.documentElement;
-        const overlay = this.getThemeTransitionOverlay();
-        const assetsReady = this.waitForThemeAssets(resolvedTheme, option);
-
-        if (!root.classList.contains('theme-transitioning')) {
-            overlay.style.setProperty(
-                '--theme-transition-color',
-                window.getComputedStyle(document.body).backgroundColor
-            );
-            root.classList.add('theme-transitioning');
-            await this.waitForNextPaint();
-            if (transitionSequence !== this.themeTransitionSequence) return;
-            overlay.classList.add('is-covering');
-            await this.waitForThemeTransition(overlay);
-        } else if (!overlay.classList.contains('is-covering')) {
-            overlay.classList.add('is-covering');
-            await this.waitForThemeTransition(overlay);
-        }
-
-        if (transitionSequence !== this.themeTransitionSequence) return;
-        this.applyThemePreference(preference, persist);
-        await assetsReady;
-        await this.waitForNextPaint();
-        if (transitionSequence !== this.themeTransitionSequence) return;
-
-        overlay.classList.remove('is-covering');
-        await this.waitForThemeTransition(overlay);
-        if (transitionSequence !== this.themeTransitionSequence) return;
-        root.classList.remove('theme-transitioning');
-    }
-
-    private getThemeTransitionOverlay(): HTMLElement {
-        if (this.themeTransitionOverlay?.isConnected) return this.themeTransitionOverlay;
-        const overlay = document.createElement('div');
-        overlay.className = 'theme-transition-overlay';
-        overlay.setAttribute('aria-hidden', 'true');
-        document.body.append(overlay);
-        this.themeTransitionOverlay = overlay;
-        return overlay;
-    }
-
-    private waitForThemeAssets(
-        resolvedTheme: string,
-        option: HTMLOptionElement
-    ): Promise<void> {
-        const assets: Promise<unknown>[] = this.themeStylesheets
-            .filter((stylesheet) => (
-                (stylesheet.dataset.themes ?? '').split(/\s+/).includes(resolvedTheme)
-            ))
-            .filter((stylesheet) => !stylesheet.sheet)
-            .map((stylesheet) => new Promise<void>((resolve) => {
-                stylesheet.addEventListener('load', () => resolve(), { once: true });
-                stylesheet.addEventListener('error', () => resolve(), { once: true });
-            }));
-
-        const heroImage = option.dataset.homeHeroImage;
-        if (heroImage) {
-            assets.push(new Promise<void>((resolve) => {
-                const image = new Image();
-                image.addEventListener('load', () => resolve(), { once: true });
-                image.addEventListener('error', () => resolve(), { once: true });
-                image.src = heroImage;
-                if (image.complete) resolve();
-            }));
-        }
-
-        if (document.fonts) assets.push(document.fonts.ready);
-        return Promise.race([
-            Promise.all(assets).then(() => undefined),
-            new Promise<void>((resolve) => window.setTimeout(resolve, 1200))
-        ]);
-    }
-
-    private waitForNextPaint(): Promise<void> {
-        return new Promise((resolve) => {
-            window.requestAnimationFrame(() => {
-                window.requestAnimationFrame(() => resolve());
-            });
-        });
-    }
-
-    private waitForThemeTransition(overlay: HTMLElement): Promise<void> {
-        return new Promise((resolve) => {
-            let settled = false;
-            const finish = (): void => {
-                if (settled) return;
-                settled = true;
-                overlay.removeEventListener('transitionend', onTransitionEnd);
-                resolve();
-            };
-            const onTransitionEnd = (event: TransitionEvent): void => {
-                if (event.target === overlay && event.propertyName === 'opacity') finish();
-            };
-            overlay.addEventListener('transitionend', onTransitionEnd);
-            window.setTimeout(finish, 400);
-        });
-    }
-
-    private applyThemePreference(preference: string, persist = false): void {
-        if (!this.themeSelect) return;
-        const resolvedTheme = preference === SYSTEM_THEME
-            ? this.getSystemTheme()
-            : preference;
-        const option = this.getThemeOption(resolvedTheme);
-        if (!option) return;
-
-        document.documentElement.dataset.theme = resolvedTheme;
-        document.documentElement.dataset.themePreference = preference;
-        document.documentElement.style.colorScheme = option.dataset.colorScheme ?? 'light';
-        const heroImage = option.dataset.homeHeroImage;
-        if (heroImage) {
-            document.documentElement.style.setProperty('--home-hero-image', `url('${heroImage}')`);
-        }
-        const heroPosition = option.dataset.homeHeroPosition;
-        if (heroPosition) {
-            document.documentElement.style.setProperty('--home-hero-position', heroPosition);
-        }
-        for (const stylesheet of this.themeStylesheets) {
-            const supportedThemes = (stylesheet.dataset.themes ?? '').split(/\s+/);
-            stylesheet.disabled = !supportedThemes.includes(resolvedTheme);
-        }
-        document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-            ?.setAttribute('content', option.dataset.themeColor ?? '#d7e8eb');
-        this.themeSelect.value = preference;
-
-        if (persist) {
-            try {
-                localStorage.setItem(this.getStorageKey(), preference);
-            } catch {
-                // 隐私模式或受限存储环境下仍保持本次页面选择可用。
-            }
-        }
-    }
-
-    private readDocumentPreference(): string | null {
-        const preference = document.documentElement.dataset.themePreference;
-        return this.isTheme(preference) ? preference : null;
-    }
-
-    private readStoredTheme(): string | null {
-        try {
-            const theme = localStorage.getItem(this.getStorageKey());
-            return this.isTheme(theme) ? theme : null;
-        } catch {
-            return null;
-        }
-    }
-
-    private getDefaultThemePreference(): string {
-        const defaultPreference = this.themeSelect?.dataset.defaultPreference;
-        return this.isTheme(defaultPreference)
-            ? defaultPreference
-            : this.firstRegisteredTheme();
-    }
-
-    private getSystemTheme(): string {
-        const preferredTheme = this.colorSchemeQuery?.matches
-            ? this.themeSelect?.dataset.defaultDark
-            : this.themeSelect?.dataset.defaultLight;
-        return this.isTheme(preferredTheme) && preferredTheme !== SYSTEM_THEME
-            ? preferredTheme
-            : this.firstRegisteredTheme();
-    }
-
-    private getThemeOption(theme: string): HTMLOptionElement | null {
-        if (!this.themeSelect) return null;
-        return Array.from(this.themeSelect.options)
-            .find((option) => option.value === theme) ?? null;
-    }
-
-    private firstRegisteredTheme(): string {
-        if (!this.themeSelect) return '';
-        return Array.from(this.themeSelect.options)
-            .find((option) => option.value !== SYSTEM_THEME)?.value ?? '';
-    }
-
-    private getStorageKey(): string {
-        return this.themeSelect?.dataset.storageKey ?? FALLBACK_STORAGE_KEY;
-    }
-
-    private isTheme(value: string | null | undefined): value is string {
-        if (!value || !this.themeSelect) return false;
-        return Array.from(this.themeSelect.options).some((option) => option.value === value);
     }
 
     private setupNavigation(): void {
@@ -541,11 +287,6 @@ class SiteShell {
             const link = current.get(href);
             if (link) document.head.insertBefore(link, firstExternalStylesheet);
         }
-        this.themeStylesheets = Array.from(
-            document.querySelectorAll<HTMLLinkElement>('[data-theme-stylesheet]')
-        );
-        const preference = document.documentElement.dataset.themePreference ?? SYSTEM_THEME;
-        this.applyThemePreference(preference);
     }
 
     private addStylesheet(
@@ -561,13 +302,7 @@ class SiteShell {
         }
         link.href = href;
         link.dataset.siteLocalStylesheet = '';
-        if (source.hasAttribute('data-theme-stylesheet')) {
-            const activeTheme = document.documentElement.dataset.theme ?? '';
-            const supportedThemes = (source.dataset.themes ?? '').split(/\s+/);
-            link.disabled = !supportedThemes.includes(activeTheme);
-        } else {
-            link.disabled = source.disabled;
-        }
+        link.disabled = source.disabled;
         current.set(href, link);
 
         return new Promise((resolve) => {

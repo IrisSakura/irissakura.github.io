@@ -293,7 +293,7 @@ test('home flagship uses registered game evidence without treating theme art as 
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
-  const themeConfig = JSON.parse(await readText('data/themes.json'));
+  const brand = JSON.parse(await readText('data/themes.json'));
   const pages = [
     'index.html',
     '404.html',
@@ -314,28 +314,23 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'id="main-navigation"',
       'aria-controls="main-navigation"',
       'aria-expanded="false"',
-      'theme-styles:start',
-      'data-theme-stylesheet',
-      'data-themes=',
-      'theme-bootstrap:start',
-      'class="theme-select"',
-      'aria-label="选择页面主题"',
-      'option value="system"',
+      'data-brand="iris-sakura"',
+      'brand-styles:start',
+      brand.stylesheet,
       'dist/site.js'
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
     }
     assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);
 
-    assert.ok(
-      html.indexOf('theme-styles:start') < html.indexOf('theme-bootstrap:start'),
-      `${page} must load registered theme styles before applying the stored preference`
-    );
-    assert.ok(
-      html.indexOf('theme-bootstrap:start') < html.indexOf('</head>'),
-      `${page} must apply the theme before body rendering`
-    );
     for (const marker of [
+      'theme-picker',
+      'theme-select',
+      'theme-styles',
+      'theme-bootstrap',
+      'data-theme-stylesheet',
+      'data-theme-preference',
+      'option value="system"',
       'irissakura-layout',
       'layout-picker',
       'layout-select',
@@ -345,23 +340,11 @@ test('all public pages use generated metadata and shared accessible shell', asyn
     ]) {
       assert.ok(!html.includes(marker), `${page} still contains obsolete layout marker ${marker}`);
     }
-    for (const theme of themeConfig.themes) {
-      assert.ok(
-        html.includes(`option value="${theme.id}"`),
-        `${page} missing registered theme option ${theme.id}`
-      );
-    }
-    for (const stylesheet of new Set(themeConfig.themes.flatMap((theme) => theme.stylesheets))) {
-      assert.ok(
-        html.includes(stylesheet),
-        `${page} missing registered theme stylesheet ${stylesheet}`
-      );
-    }
   }
 });
 
-test('theme selector uses the brand default while keeping system as a persistent visitor choice', async () => {
-  const [siteSource, mainCss, generator, navbar, themeConfig] = await Promise.all([
+test('single-brand shell contains no theme switching, persistence or transition machinery', async () => {
+  const [siteSource, mainCss, generator, navbar, brand] = await Promise.all([
     readText('src/site.ts'),
     readText('style/main.css'),
     readText('scripts/generate-site.mjs'),
@@ -370,43 +353,37 @@ test('theme selector uses the brand default while keeping system as a persistent
   ]);
 
   assert.ok(generator.includes("readJson('data/themes.json')"));
-  assert.ok(generator.includes('renderThemeOptions'));
-  assert.ok(generator.includes('renderThemeStyles'));
-  assert.ok(generator.includes("prefers-color-scheme: dark"));
-  assert.ok(siteSource.includes("querySelector<HTMLSelectElement>('.theme-select')"));
-  assert.ok(siteSource.includes("window.addEventListener('storage'"));
-  assert.ok(siteSource.includes('localStorage.setItem'));
+  assert.ok(generator.includes('installBrandIdentity'));
+  assert.ok(generator.includes('data-brand="${config.id}"'));
+  assert.equal(brand.id, 'iris-sakura');
+  assert.equal(brand.stylesheet, 'style/iris-sakura.css');
   for (const contract of [
+    'SYSTEM_THEME',
+    'FALLBACK_STORAGE_KEY',
+    'themeSelect',
+    'themeStylesheets',
+    'setupTheme',
     'transitionThemePreference',
     'theme-transition-overlay',
     'waitForThemeAssets',
-    "window.getComputedStyle(document.body).backgroundColor",
-    "prefers-reduced-motion: reduce"
+    "window.addEventListener('storage'",
+    'localStorage.setItem'
   ]) {
-    assert.ok(siteSource.includes(contract), `theme transition runtime missing ${contract}`);
+    assert.ok(!siteSource.includes(contract), `single-brand runtime still contains ${contract}`);
   }
   for (const contract of [
     '--theme-transition-duration',
+    '.theme-picker',
+    '.theme-select',
     '.theme-transition-overlay',
-    '.theme-transition-overlay.is-covering',
-    '.theme-transitioning .theme-transition-overlay'
+    '.theme-transitioning'
   ]) {
-    assert.ok(mainCss.includes(contract), `theme transition CSS missing ${contract}`);
+    assert.ok(!mainCss.includes(contract), `single-brand CSS still contains ${contract}`);
   }
-  assert.match(
-    mainCss,
-    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.theme-transition-overlay[\s\S]*?transition-duration:\s*0\.01ms\s*!important/s
-  );
-  assert.ok(navbar.includes('{{themeOptions}}'));
-  assert.ok(navbar.includes('data-default-light="{{defaultLightTheme}}"'));
-  assert.ok(navbar.includes('data-default-preference="{{defaultThemePreference}}"'));
-  assert.equal(themeConfig.storageKey, 'irissakura-theme');
-  assert.equal(themeConfig.defaultPreference, 'iris-sakura');
-  assert.ok(generator.includes('defaultPreference: config.defaultPreference'));
-  assert.ok(generator.includes('config.defaultPreference'));
-  assert.ok(siteSource.includes('getDefaultThemePreference'));
-  assert.ok(siteSource.includes('localStorage.setItem(this.getStorageKey(), preference)'));
-  assert.ok(!siteSource.includes('localStorage.removeItem(this.getStorageKey())'));
+  for (const contract of ['{{themeOptions}}', 'theme-picker', 'theme-select', '选择页面主题']) {
+    assert.ok(!navbar.includes(contract), `single-brand navigation still contains ${contract}`);
+  }
+  assert.ok(navbar.includes('class="brand-seal"'));
 });
 
 test('obsolete layout selector, registry and runtime are fully removed', async () => {
@@ -474,30 +451,23 @@ test('shared motion adds progressive depth without hiding content for reduced-mo
   );
 });
 
-test('theme registry supports a default IRIS × SAKURA brand theme and the existing palettes', async () => {
+test('brand registry exposes only IRIS × SAKURA and legacy theme styles are removed', async () => {
   const config = JSON.parse(await readText('data/themes.json'));
-  const ids = config.themes.map((theme) => theme.id);
-  assert.equal(new Set(ids).size, ids.length);
-  assert.deepEqual(ids, ['iris-sakura', 'night', 'pastoral', 'sakura-village']);
-  assert.equal(config.defaultPreference, 'iris-sakura');
-  assert.equal(
-    config.themes.find((theme) => theme.id === config.defaultLight)?.colorScheme,
-    'light'
-  );
-  assert.equal(
-    config.themes.find((theme) => theme.id === config.defaultDark)?.colorScheme,
-    'dark'
-  );
-
-  const registeredStylesheets = new Set(config.themes.flatMap((theme) => theme.stylesheets));
-  for (const stylesheet of registeredStylesheets) {
-    await readText(stylesheet);
-  }
-
-  const brandTheme = config.themes.find((theme) => theme.id === 'iris-sakura');
-  assert.deepEqual(brandTheme.stylesheets, ['style/iris-sakura.css']);
-  assert.equal(brandTheme.colorScheme, 'light');
-  assert.equal(brandTheme.homeHeroImage, 'assets/images/profile/home-hero-iris-sakura.png');
+  assert.deepEqual(Object.keys(config).sort(), [
+    'backgroundColor',
+    'colorScheme',
+    'homeHeroImage',
+    'homeHeroPosition',
+    'id',
+    'label',
+    'stylesheet',
+    'themeColor'
+  ]);
+  assert.equal(config.id, 'iris-sakura');
+  assert.equal(config.label, 'IRIS × SAKURA');
+  assert.equal(config.stylesheet, 'style/iris-sakura.css');
+  assert.equal(config.colorScheme, 'light');
+  assert.equal(config.homeHeroImage, 'assets/images/profile/home-hero-iris-sakura.png');
   const brandCss = await readText('style/iris-sakura.css');
   for (const motif of [
     '--primary-color: #4c3df5',
@@ -508,41 +478,14 @@ test('theme registry supports a default IRIS × SAKURA brand theme and the exist
   ]) {
     assert.ok(brandCss.includes(motif), `brand theme missing palette token ${motif}`);
   }
-
-  const sakuraTheme = config.themes.find((theme) => theme.id === 'sakura-village');
-  assert.deepEqual(
-    sakuraTheme.stylesheets,
-    ['style/pastoral.css', 'style/sakura-village.css']
-  );
-  const sakuraCss = await readText('style/sakura-village.css');
-  for (const motif of [
-    '--torii',
-    '--sakura',
-    '--indigo',
-    '--ui-control-icon: var(--torii)',
-    '--ui-action-primary-bg: var(--torii)'
-  ]) {
-    assert.ok(sakuraCss.includes(motif), `sakura theme missing palette token ${motif}`);
-  }
-
-  const traditionalAnchors = new Map([
-    ['paper', '#fbfaf5'],
-    ['surface-strong', '#fffffc'],
-    ['petal-strong', '#a22041'],
-    ['torii', '#9e3d3f'],
-    ['indigo', '#0f2350'],
-    ['leaf', '#888e7e'],
-    ['wood', '#8d6449'],
-    ['sakura-soft', '#fef4f4']
-  ]);
-  for (const [token, expected] of traditionalAnchors) {
-    assert.equal(readCssHexVariable(sakuraCss, token), expected, `${token} must use its reviewed traditional anchor`);
+  for (const path of ['style/pastoral.css', 'style/sakura-village.css']) {
+    await assert.rejects(access(new URL(path, root)), { code: 'ENOENT' });
   }
 });
 
-test('theme styles only change palette colors', async () => {
+test('the single brand stylesheet only changes palette colors', async () => {
   const config = JSON.parse(await readText('data/themes.json'));
-  const stylesheets = new Set(config.themes.flatMap((theme) => theme.stylesheets));
+  const stylesheets = new Set([config.stylesheet]);
   const paletteProperties = new Set([
     'background',
     'background-color',
@@ -654,7 +597,7 @@ test('theme styles only change palette colors', async () => {
   assert.deepEqual(
     violations,
     [],
-    `theme styles must only change palette colors:\n${violations.join('\n')}`
+    `brand stylesheet must only change palette colors:\n${violations.join('\n')}`
   );
 });
 
@@ -738,24 +681,24 @@ test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
   assert.match(css, /\.footer-bottom\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
 });
 
-test('sakura village text and actions meet WCAG AA contrast', async () => {
-  const css = await readText('style/sakura-village.css');
+test('IRIS × SAKURA text and actions meet WCAG AA contrast', async () => {
+  const css = await readText('style/iris-sakura.css');
   const paper = readCssHexVariable(css, 'paper');
   const ink = readCssHexVariable(css, 'ink');
   const inkSoft = readCssHexVariable(css, 'ink-soft');
   const petalStrong = readCssHexVariable(css, 'petal-strong');
-  const torii = readCssHexVariable(css, 'torii');
+  const primary = readCssHexVariable(css, 'primary-color');
   const primaryButtonText = readCssHexVariable(css, 'ui-action-primary-text');
 
   for (const foreground of [ink, inkSoft, petalStrong]) {
     assert.ok(
       contrastRatio(foreground, paper) >= 4.5,
-      `${foreground} must reach 4.5:1 on sakura paper ${paper}`
+      `${foreground} must reach 4.5:1 on brand paper ${paper}`
     );
   }
   assert.ok(
-    contrastRatio(primaryButtonText, torii) >= 4.5,
-    `primary button text must reach 4.5:1 on torii ${torii}`
+    contrastRatio(primaryButtonText, primary) >= 4.5,
+    `primary button text must reach 4.5:1 on ${primary}`
   );
 });
 

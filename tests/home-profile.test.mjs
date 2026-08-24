@@ -29,23 +29,18 @@ test('public profile data owns the homepage identity and a local avatar', async 
   await access(new URL(site.profile.avatar, root));
 });
 
-test('every registered theme owns one unique local homepage hero image', async () => {
-  const themeConfig = await readJson('data/themes.json');
-  const heroImages = themeConfig.themes.map((theme) => theme.homeHeroImage);
-
-  assert.equal(new Set(heroImages).size, themeConfig.themes.length);
-  for (const theme of themeConfig.themes) {
-    assert.match(
-      theme.homeHeroImage,
-      new RegExp(`^assets/images/profile/home-hero-${theme.id}\\.png$`, 'u')
-    );
-    assert.match(theme.homeHeroPosition, /^\d+(?:\.\d+)?% \d+(?:\.\d+)?%$/u);
-    await access(new URL(theme.homeHeroImage, root));
-  }
+test('the single brand owns one local homepage hero image', async () => {
+  const brand = await readJson('data/themes.json');
+  assert.equal(brand.id, 'iris-sakura');
+  assert.equal(brand.label, 'IRIS × SAKURA');
+  assert.equal(brand.stylesheet, 'style/iris-sakura.css');
+  assert.equal(brand.homeHeroImage, 'assets/images/profile/home-hero-iris-sakura.png');
+  assert.match(brand.homeHeroPosition, /^\d+(?:\.\d+)?% \d+(?:\.\d+)?%$/u);
+  await access(new URL(brand.homeHeroImage, root));
 });
 
-test('generated theme controls expose the registered homepage hero for every route depth', async () => {
-  const themeConfig = await readJson('data/themes.json');
+test('generated pages load one static brand without theme controls or bootstrap code', async () => {
+  const brand = await readJson('data/themes.json');
   const pages = [
     { path: 'index.html', prefix: '' },
     { path: 'pages/framework.html', prefix: '../' }
@@ -53,16 +48,15 @@ test('generated theme controls expose the registered homepage hero for every rou
 
   for (const page of pages) {
     const html = await readFile(new URL(page.path, root), 'utf8');
-    for (const theme of themeConfig.themes) {
-      const optionPattern = new RegExp(
-        `<option value="${theme.id}"[^>]*data-home-hero-image="${page.prefix}${theme.homeHeroImage}"[^>]*data-home-hero-position="${theme.homeHeroPosition}"`,
-        'u'
-      );
-      assert.match(html, optionPattern, `${page.path} does not expose ${theme.id} hero data`);
+    assert.ok(html.includes('data-brand="iris-sakura"'));
+    assert.ok(html.includes(`href="${page.prefix}${brand.stylesheet}"`));
+    assert.ok(
+      html.includes(`--home-hero-image: url('/${brand.homeHeroImage}')`),
+      `${page.path} must use a root-relative hero URL so CSS consumption cannot resolve under /style/`
+    );
+    for (const forbidden of ['theme-select', 'theme-bootstrap', 'data-theme-stylesheet', 'localStorage']) {
+      assert.ok(!html.includes(forbidden), `${page.path} still contains ${forbidden}`);
     }
-    assert.ok(html.includes("style.setProperty('--home-hero-image'"));
-    assert.ok(html.includes('new URL(config.themes[theme].homeHeroImage, window.location.href).href'));
-    assert.ok(html.includes("style.setProperty('--home-hero-position'"));
   }
 });
 

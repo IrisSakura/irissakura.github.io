@@ -109,17 +109,23 @@ test('generated public shell uses one joint brand mark without the retired gamep
   assert.ok(favicon.includes('#FF7EB6'));
 });
 
-test('theme palettes preserve the three-part IRIS × SAKURA wordmark instead of flattening it', async () => {
-  const themeCss = await Promise.all([
-    'style/iris-sakura.css',
-    'style/pastoral.css',
-    'style/sakura-village.css'
-  ].map((path) => readFile(new URL(path, root), 'utf8')));
+test('the single brand palette preserves the three-part wordmark', async () => {
+  const css = await readFile(new URL('style/iris-sakura.css', root), 'utf8');
+  assert.doesNotMatch(css, /\.logo\s+span\s*,[\s\S]*?\.footer-logo\s+span\s*\{/u);
+  assert.doesNotMatch(css, /\.footer\s+\.footer-logo\s+span\s*\{/u);
+});
 
-  for (const css of themeCss) {
-    assert.doesNotMatch(css, /\.logo\s+span\s*,[\s\S]*?\.footer-logo\s+span\s*\{/u);
-    assert.doesNotMatch(css, /\.footer\s+\.footer-logo\s+span\s*\{/u);
-  }
+test('IRIS/Sakura contrast composition is exactly three of ten governed story sections', async () => {
+  const [home, brandPage] = await Promise.all([
+    readFile(new URL('index.html', root), 'utf8'),
+    readFile(new URL('pages/art-music.html', root), 'utf8')
+  ]);
+  const combined = `${home}\n${brandPage}`;
+  const governed = combined.match(/data-brand-layout="(?:contrast|editorial)"/g) ?? [];
+  const contrast = combined.match(/data-brand-layout="contrast"/g) ?? [];
+  assert.equal(governed.length, 10);
+  assert.equal(contrast.length, 3);
+  assert.equal(contrast.length / governed.length, 0.3);
 });
 
 test('shared cards carry one restrained IRIS-to-SAKURA signature across page types', async () => {

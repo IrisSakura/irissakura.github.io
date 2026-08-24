@@ -98,8 +98,6 @@
     --motion-enter-distance: 26px;
     --motion-stagger: 70ms;
     --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-    --theme-transition-duration: 180ms;
-    --theme-transition-ease: ease-in-out;
 }
 /* 基础动画类 */
 .fade-in {
@@ -239,24 +237,6 @@ body {
     color: var(--light-color);
     background-color: var(--dark-color);
     overflow-x: hidden;
-}
-
-.theme-transition-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2147483646;
-    pointer-events: none;
-    opacity: 0;
-    background-color: var(--theme-transition-color, var(--dark-color));
-    transition: opacity var(--theme-transition-duration) var(--theme-transition-ease);
-}
-
-.theme-transitioning .theme-transition-overlay {
-    pointer-events: auto;
-}
-
-.theme-transition-overlay.is-covering {
-    opacity: 1;
 }
 
 .container {
@@ -508,62 +488,47 @@ a {
     gap: 0.65rem;
 }
 
-.theme-picker {
-    position: relative;
+.brand-seal {
     display: inline-flex;
     align-items: center;
+    gap: 0.52rem;
     min-height: var(--ui-control-height);
+    padding: 0.45rem 0.85rem;
     border: 1px solid var(--ui-control-border);
     border-radius: var(--ui-pill-radius);
     color: var(--ui-control-text);
     background: var(--ui-control-surface);
     box-shadow: var(--ui-control-shadow);
+    font: 800 0.62rem/1 var(--font-display);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
     transition: var(--transition);
 }
 
-.theme-picker:hover,
-.theme-picker:focus-within {
+.brand-seal:hover,
+.brand-seal:focus-visible {
     border-color: var(--ui-control-border-hover);
     color: var(--ui-control-text);
     background: var(--ui-control-surface-hover);
+    box-shadow: var(--box-shadow-hover);
 }
 
-.theme-picker > i {
-    position: absolute;
-    left: 0.7rem;
-    z-index: 1;
-    color: var(--ui-control-icon);
-    pointer-events: none;
+.brand-seal-dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0.22rem color-mix(in srgb, currentColor 12%, transparent);
 }
 
-.theme-picker::after {
-    content: "";
-    position: absolute;
-    right: 0.72rem;
-    width: 0.42rem;
-    height: 0.42rem;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    pointer-events: none;
-    transform: translateY(-2px) rotate(45deg);
+.brand-seal-iris {
+    color: var(--brand-iris);
+    background: currentColor;
 }
 
-.theme-select {
-    width: 8.6rem;
-    min-height: var(--ui-control-height);
-    padding: 0.45rem 1.7rem 0.45rem 2rem;
-    border: 0;
-    outline: 0;
-    appearance: none;
-    color: inherit;
-    background: transparent;
-    font: 600 0.84rem/1 var(--font-body);
-    cursor: pointer;
-}
-
-.theme-select option {
-    color: var(--ui-control-option-text);
-    background: var(--ui-control-option-surface);
+.brand-seal-sakura {
+    color: var(--brand-sakura);
+    background: currentColor;
 }
 
 .nav-link {
@@ -1344,8 +1309,9 @@ body.profile-drawer-open .profile-drawer {
         gap: 0.75rem;
     }
 
-    .theme-select {
-        width: 6.8rem;
+    .brand-seal {
+        padding-inline: 0.7rem;
+        font-size: 0.56rem;
     }
 
     .logo {
@@ -1416,27 +1382,8 @@ body.profile-drawer-open .profile-drawer {
         place-items: center;
     }
 
-    .theme-picker {
-        width: 44px;
-        min-width: 44px;
-        min-height: 44px;
-        overflow: hidden;
-    }
-
-    .theme-picker > i {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .theme-picker::after {
+    .brand-seal {
         display: none;
-    }
-
-    .theme-select {
-        width: 44px;
-        min-height: 44px;
-        padding: 0;
-        color: transparent;
     }
 
     h1 {
@@ -3152,10 +3099,6 @@ body.profile-drawer-open .profile-drawer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .theme-transition-overlay {
-        transition-duration: 0.01ms !important;
-    }
-
     .motion-ready [data-reveal],
     [data-reveal] {
         opacity: 1 !important;
@@ -3183,5 +3126,537 @@ body.profile-drawer-open .profile-drawer {
     .hero-section::after,
     .hero-proof::after {
         animation: none !important;
+    }
+}
+
+/* 2026-08-24 single-brand IRIS × SAKURA interface */
+:root {
+    --container-width: 1320px;
+    --page-gutter: clamp(1.25rem, 5vw, 5.5rem);
+    --section-space: clamp(4.75rem, 8vw, 8rem);
+    --story-grid-gap: clamp(1rem, 2.2vw, 2rem);
+    --border-radius: 20px;
+    --ui-action-radius: 999px;
+    --ui-control-radius: 999px;
+    --transition: all 0.24s var(--motion-ease-out);
+    --box-shadow: 0 18px 55px rgba(47, 37, 86, 0.08);
+    --box-shadow-hover: 0 26px 72px rgba(76, 61, 245, 0.14);
+}
+
+html[data-brand="iris-sakura"] {
+    color-scheme: light;
+    scroll-padding-top: 6rem;
+}
+
+html[data-brand="iris-sakura"] body {
+    font-size: 1rem;
+    line-height: 1.72;
+    letter-spacing: 0.005em;
+}
+
+html[data-brand="iris-sakura"] h1,
+html[data-brand="iris-sakura"] h2,
+html[data-brand="iris-sakura"] h3 {
+    text-wrap: balance;
+}
+
+html[data-brand="iris-sakura"] h1 {
+    font-size: clamp(2.7rem, 7vw, 6.4rem);
+    letter-spacing: -0.055em;
+}
+
+html[data-brand="iris-sakura"] h2 {
+    margin-bottom: 1.25rem;
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    letter-spacing: -0.045em;
+    text-align: left;
+}
+
+html[data-brand="iris-sakura"] h3 {
+    letter-spacing: -0.025em;
+}
+
+html[data-brand="iris-sakura"] .section-kicker,
+html[data-brand="iris-sakura"] .journal-kicker,
+html[data-brand="iris-sakura"] .game-kicker {
+    margin-bottom: 1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+}
+
+html[data-brand="iris-sakura"] .navbar {
+    padding: 0.68rem 0;
+    backdrop-filter: blur(24px) saturate(145%);
+}
+
+html[data-brand="iris-sakura"] .nav-container {
+    min-height: 3.75rem;
+}
+
+html[data-brand="iris-sakura"] .nav-identity {
+    gap: 0.8rem;
+}
+
+html[data-brand="iris-sakura"] .profile-drawer-trigger {
+    border-radius: 36% 64% 56% 44% / 46% 42% 58% 54%;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--brand-shared) 9%, transparent);
+}
+
+html[data-brand="iris-sakura"] .logo {
+    gap: 0.7rem;
+}
+
+html[data-brand="iris-sakura"] .brand-mark {
+    width: 2.45rem;
+    height: 2.45rem;
+}
+
+html[data-brand="iris-sakura"] .brand-wordmark {
+    font-size: 0.86rem;
+    letter-spacing: 0.16em;
+}
+
+html[data-brand="iris-sakura"] .nav-menu {
+    gap: 0.2rem;
+    padding: 0.28rem;
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ui-surface-card) 68%, transparent);
+}
+
+html[data-brand="iris-sakura"] .nav-link {
+    padding: 0.55rem 0.72rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+}
+
+html[data-brand="iris-sakura"] .nav-link:hover,
+html[data-brand="iris-sakura"] .nav-link.active {
+    background: var(--ui-surface-hover);
+}
+
+html[data-brand="iris-sakura"] .nav-link::after {
+    right: 0.72rem;
+    bottom: 0.28rem;
+    left: 0.72rem;
+    width: auto;
+    height: 1px;
+    opacity: 0;
+}
+
+html[data-brand="iris-sakura"] .nav-link:hover::after,
+html[data-brand="iris-sakura"] .nav-link.active::after {
+    opacity: 1;
+}
+
+html[data-brand="iris-sakura"] .brand-seal {
+    min-height: 2.65rem;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.54);
+}
+
+html[data-brand="iris-sakura"] .btn {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.74rem 1.35rem;
+    border-width: 1px;
+    font-size: 0.86rem;
+    font-weight: 750;
+    letter-spacing: 0.025em;
+    text-transform: none;
+}
+
+html[data-brand="iris-sakura"] .btn-primary {
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--brand-iris) 22%, transparent);
+}
+
+html[data-brand="iris-sakura"] .btn-primary:hover,
+html[data-brand="iris-sakura"] .btn-secondary:hover,
+html[data-brand="iris-sakura"] .btn-outline:hover {
+    transform: translateY(-2px);
+}
+
+html[data-brand="iris-sakura"] .main-content {
+    margin-top: 5.15rem;
+    min-height: calc(100svh - 5.15rem - 16rem);
+}
+
+html[data-brand="iris-sakura"] [data-page-cover].page-cover {
+    min-height: clamp(30rem, 65svh, 46rem);
+    overflow: hidden;
+    color: var(--ink);
+    background-color: var(--paper);
+    background-image:
+        radial-gradient(circle at 80% 24%, color-mix(in srgb, var(--brand-sakura) 20%, transparent), transparent 24rem),
+        radial-gradient(circle at 18% 70%, color-mix(in srgb, var(--brand-iris) 16%, transparent), transparent 26rem),
+        linear-gradient(112deg, color-mix(in srgb, var(--brand-iris) 8%, white), color-mix(in srgb, var(--brand-sakura) 9%, white));
+    box-shadow: inset 0 -1px var(--ui-border-subtle);
+}
+
+html[data-brand="iris-sakura"] [data-page-cover="home"].page-cover {
+    background-image:
+        linear-gradient(92deg, rgba(255, 250, 255, 0.98) 0%, rgba(255, 250, 255, 0.92) 44%, rgba(247, 244, 255, 0.2) 74%),
+        var(--home-hero-image, none);
+    background-repeat: no-repeat;
+    background-position: center, var(--home-hero-position, 74% 50%);
+    background-size: cover;
+}
+
+html[data-brand="iris-sakura"] [data-page-cover="framework"].page-cover {
+    background-image:
+        linear-gradient(90deg, color-mix(in srgb, var(--brand-iris) 10%, transparent) 1px, transparent 1px),
+        linear-gradient(color-mix(in srgb, var(--brand-iris) 8%, transparent) 1px, transparent 1px),
+        radial-gradient(circle at 82% 22%, color-mix(in srgb, var(--brand-sakura) 18%, transparent), transparent 25rem),
+        linear-gradient(135deg, #f4f1ff, #fff4f9);
+    background-size: 64px 64px, 64px 64px, auto, auto;
+}
+
+html[data-brand="iris-sakura"] [data-page-cover="journal"].page-cover,
+html[data-brand="iris-sakura"] [data-page-cover="blog"].page-cover {
+    background-image:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.82), transparent 48%),
+        radial-gradient(circle at 82% 20%, color-mix(in srgb, var(--brand-sakura) 20%, transparent), transparent 22rem),
+        repeating-linear-gradient(0deg, color-mix(in srgb, var(--brand-shared) 8%, transparent) 0 1px, transparent 1px 42px),
+        linear-gradient(135deg, #f1edff, #fff2f8);
+}
+
+html[data-brand="iris-sakura"] [data-page-cover="contact"].page-cover {
+    background-image:
+        radial-gradient(circle at 78% 52%, transparent 0 5rem, color-mix(in srgb, var(--brand-shared) 14%, transparent) 5.1rem 5.2rem, transparent 5.3rem 9rem, color-mix(in srgb, var(--brand-sakura) 14%, transparent) 9.1rem 9.2rem, transparent 9.3rem),
+        linear-gradient(125deg, #f4f0ff, #fff2f8);
+}
+
+html[data-brand="iris-sakura"] [data-page-cover].page-cover h1,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover h2,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover h3,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover strong {
+    color: var(--ink);
+    text-shadow: none;
+}
+
+html[data-brand="iris-sakura"] [data-page-cover].page-cover p,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover li,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover dd,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover small,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover .journal-back,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover .game-back,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover .game-facts dt {
+    color: var(--ink-soft);
+}
+
+html[data-brand="iris-sakura"] [data-page-cover].page-cover .section-kicker,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover .journal-kicker,
+html[data-brand="iris-sakura"] [data-page-cover].page-cover .game-kicker {
+    color: var(--petal-strong);
+}
+
+html[data-brand="iris-sakura"] .profile-hero-inner {
+    min-height: clamp(34rem, calc(100svh - 5.15rem), 50rem);
+}
+
+html[data-brand="iris-sakura"] .profile-identity {
+    grid-column: span 7;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: 2rem;
+    box-shadow: 0 30px 90px color-mix(in srgb, var(--brand-iris) 12%, transparent);
+    backdrop-filter: blur(24px) saturate(125%);
+}
+
+html[data-brand="iris-sakura"] .profile-avatar-large {
+    border-radius: 42% 58% 48% 52% / 48% 42% 58% 52%;
+}
+
+html[data-brand="iris-sakura"] .profile-copy .hero-title {
+    font-size: clamp(2.65rem, 5.5vw, 5.3rem);
+}
+
+html[data-brand="iris-sakura"] .flagship-grid {
+    grid-template-columns: minmax(0, 1.16fr) minmax(21rem, 0.84fr);
+}
+
+html[data-brand="iris-sakura"] .flagship-media img {
+    border-radius: 2rem 2rem 0.6rem 2rem;
+    box-shadow: 0 30px 80px color-mix(in srgb, var(--brand-iris) 14%, transparent);
+}
+
+html[data-brand="iris-sakura"] .flagship-media::after {
+    right: 1rem;
+    bottom: 1rem;
+    border-radius: 999px;
+}
+
+html[data-brand="iris-sakura"] [data-brand-layout] {
+    position: relative;
+    isolation: isolate;
+}
+
+html[data-brand="iris-sakura"] [data-brand-layout="contrast"] {
+    overflow: hidden;
+    background:
+        linear-gradient(90deg,
+            color-mix(in srgb, var(--brand-iris) 9%, var(--paper)) 0 49.92%,
+            color-mix(in srgb, var(--brand-shared) 30%, transparent) 49.92% 50.08%,
+            color-mix(in srgb, var(--brand-sakura) 9%, var(--paper)) 50.08% 100%);
+}
+
+html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::before,
+html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::after {
+    position: absolute;
+    top: 1.15rem;
+    z-index: -1;
+    color: color-mix(in srgb, currentColor 12%, transparent);
+    font: 900 clamp(2.2rem, 5vw, 5.2rem)/1 var(--font-display);
+    letter-spacing: 0.14em;
+    pointer-events: none;
+}
+
+html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::before {
+    content: "IRIS";
+    left: max(var(--page-gutter), calc((100vw - var(--container-width)) / 2));
+    color: var(--brand-iris);
+}
+
+html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::after {
+    content: "SAKURA";
+    right: max(var(--page-gutter), calc((100vw - var(--container-width)) / 2));
+    color: var(--brand-sakura);
+}
+
+html[data-brand="iris-sakura"] .brand-ecosystem-inner {
+    grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+}
+
+html[data-brand="iris-sakura"] .brand-signature {
+    padding: 2rem;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 30%, transparent);
+    border-radius: 2rem;
+    background: color-mix(in srgb, var(--surface-strong) 80%, transparent);
+    box-shadow: var(--box-shadow);
+}
+
+html[data-brand="iris-sakura"] .brand-branch {
+    padding: 1.35rem;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 30%, transparent);
+    border-radius: 1.5rem;
+    background: color-mix(in srgb, var(--surface-strong) 74%, transparent);
+}
+
+html[data-brand="iris-sakura"] .brand-branch-sakura {
+    border-color: color-mix(in srgb, var(--brand-sakura) 34%, transparent);
+}
+
+html[data-brand="iris-sakura"] :is(
+    .project-card,
+    .blog-card,
+    .stream-card,
+    .note-card,
+    .journal-update-card,
+    .design-summary-card,
+    .principle-item,
+    .gallery-card,
+    .game-system-card,
+    .preference-card,
+    .discussion-grid article,
+    .public-route-card,
+    .research-row,
+    .focus-card,
+    .evidence-chain-card,
+    .module-card,
+    .stable-route-list article,
+    .quickstart-route-grid article,
+    .quickstart-step > article
+) {
+    border-radius: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+html[data-brand="iris-sakura"] :is(
+    .project-card,
+    .blog-card,
+    .stream-card,
+    .note-card,
+    .journal-update-card,
+    .design-summary-card,
+    .principle-item,
+    .gallery-card,
+    .game-system-card,
+    .preference-card,
+    .discussion-grid article,
+    .public-route-card,
+    .research-row,
+    .focus-card,
+    .evidence-chain-card,
+    .module-card
+):hover {
+    border-color: color-mix(in srgb, var(--brand-shared) 44%, var(--ui-border-subtle));
+}
+
+html[data-brand="iris-sakura"] .focus-card {
+    min-height: 22rem;
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    align-content: end;
+}
+
+html[data-brand="iris-sakura"] .research-row {
+    padding: clamp(1.6rem, 3vw, 2.6rem);
+}
+
+html[data-brand="iris-sakura"] .public-cta-inner {
+    padding: clamp(1.6rem, 4vw, 3rem);
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow);
+}
+
+html[data-brand="iris-sakura"] .brand-board,
+html[data-brand="iris-sakura"] .brand-track,
+html[data-brand="iris-sakura"] .brand-product-card,
+html[data-brand="iris-sakura"] .brand-language-card,
+html[data-brand="iris-sakura"] .brand-persona-portrait {
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow);
+}
+
+html[data-brand="iris-sakura"] .brand-product-grid {
+    gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+html[data-brand="iris-sakura"] .brand-product-card {
+    min-height: 30rem;
+}
+
+html[data-brand="iris-sakura"] .blog-article,
+html[data-brand="iris-sakura"] .journal-detail {
+    width: min(calc(100% - var(--page-gutter) - var(--page-gutter)), 920px);
+}
+
+html[data-brand="iris-sakura"] .blog-article > header,
+html[data-brand="iris-sakura"] .journal-detail > header {
+    padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+html[data-brand="iris-sakura"] .blog-prose,
+html[data-brand="iris-sakura"] .journal-research-body {
+    font-size: clamp(1rem, 1.4vw, 1.1rem);
+    line-height: 1.88;
+}
+
+html[data-brand="iris-sakura"] .blog-prose :is(h2, h3),
+html[data-brand="iris-sakura"] .journal-research-body :is(h2, h3) {
+    margin-top: 2.5em;
+}
+
+html[data-brand="iris-sakura"] .footer {
+    margin-top: 0;
+    padding: clamp(3.5rem, 7vw, 6rem) 0 1.5rem;
+}
+
+html[data-brand="iris-sakura"] .footer-content {
+    grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(12rem, 0.65fr));
+    gap: clamp(2rem, 5vw, 5rem);
+}
+
+@media (max-width: 1120px) {
+    html[data-brand="iris-sakura"] .brand-seal {
+        display: none;
+    }
+
+    html[data-brand="iris-sakura"] .nav-menu {
+        gap: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    html[data-brand="iris-sakura"] .nav-menu {
+        padding: 1.5rem;
+        border-radius: 0 0 1.75rem 1.75rem;
+    }
+
+    html[data-brand="iris-sakura"] .profile-identity,
+    html[data-brand="iris-sakura"] .flagship-grid,
+    html[data-brand="iris-sakura"] .brand-ecosystem-inner,
+    html[data-brand="iris-sakura"] .brand-duality-grid,
+    html[data-brand="iris-sakura"] .brand-product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    html[data-brand="iris-sakura"] [data-brand-layout="contrast"] {
+        background:
+            linear-gradient(180deg,
+                color-mix(in srgb, var(--brand-iris) 9%, var(--paper)) 0 49.92%,
+                color-mix(in srgb, var(--brand-shared) 30%, transparent) 49.92% 50.08%,
+                color-mix(in srgb, var(--brand-sakura) 9%, var(--paper)) 50.08% 100%);
+    }
+
+    html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::before,
+    html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::after {
+        font-size: clamp(2rem, 12vw, 4rem);
+        opacity: 0.72;
+    }
+
+    html[data-brand="iris-sakura"] [data-brand-layout="contrast"]::after {
+        top: auto;
+        bottom: 1.15rem;
+    }
+
+    html[data-brand="iris-sakura"] .brand-convergence {
+        min-height: 8rem;
+    }
+
+    html[data-brand="iris-sakura"] .footer-content {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 620px) {
+    :root {
+        --page-gutter: 1.25rem;
+        --border-radius: 16px;
+    }
+
+    html[data-brand="iris-sakura"] h1 {
+        font-size: clamp(2.4rem, 14vw, 4rem);
+    }
+
+    html[data-brand="iris-sakura"] .main-content {
+        margin-top: 4.9rem;
+    }
+
+    html[data-brand="iris-sakura"] [data-page-cover].page-cover {
+        min-height: auto;
+        padding: 5.5rem 0 4.5rem;
+    }
+
+    html[data-brand="iris-sakura"] .profile-hero-inner {
+        min-height: 40rem;
+        align-items: end;
+    }
+
+    html[data-brand="iris-sakura"] .profile-identity {
+        padding: 1.35rem;
+        border-radius: 1.5rem;
+    }
+
+    html[data-brand="iris-sakura"] .profile-copy .hero-title {
+        font-size: clamp(2.35rem, 13vw, 3.6rem);
+    }
+
+    html[data-brand="iris-sakura"] .flagship-media img,
+    html[data-brand="iris-sakura"] .brand-board,
+    html[data-brand="iris-sakura"] .brand-track,
+    html[data-brand="iris-sakura"] .brand-product-card,
+    html[data-brand="iris-sakura"] .brand-language-card,
+    html[data-brand="iris-sakura"] .brand-persona-portrait {
+        border-radius: 1.35rem;
+    }
+
+    html[data-brand="iris-sakura"] .focus-card,
+    html[data-brand="iris-sakura"] .brand-product-card {
+        min-height: auto;
+    }
+
+    html[data-brand="iris-sakura"] .footer-content {
+        grid-template-columns: 1fr;
     }
 }

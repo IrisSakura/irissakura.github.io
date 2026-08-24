@@ -5,7 +5,7 @@
 ## 层级与所有权
 
 1. `style/main.css` 定义 `--ui-*` token 和共享组件行为。
-2. `style/pastoral.css`、`style/sakura-village.css` 只为主题赋值 token，并保留纯氛围装饰；不重新实现 `.btn`、picker 或 tag 基类。
+2. `style/iris-sakura.css` 是唯一品牌配色层，只为 token 与颜色赋值；不重新实现 `.btn`、brand seal 或 tag 基类。
 3. 页面 CSS 负责网格、内容密度和有语义的变体，并通过 token 获取 surface、边框、控件、chip 与焦点状态。
 4. `src/site.ts` 的 `DEPTH_SELECTOR` 只增强动效；基础表面和可访问状态必须在无 JavaScript 时仍成立。
 

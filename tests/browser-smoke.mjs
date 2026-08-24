@@ -32,7 +32,7 @@ const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.category === 'game');
 if (!gameProject) throw new Error('project registry does not contain a game case');
-const lightThemeContrastRoutes = [
+const brandContrastRoutes = [
   {
     route: '/',
     checks: [
@@ -134,283 +134,56 @@ const baseUrl = `http://127.0.0.1:${address.port}`;
 const browser = await chromium.launch({ headless: true });
 
 try {
-  const lightThemePage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  await keepSmokeTestLocal(lightThemePage);
-  await lightThemePage.emulateMedia({ reducedMotion: 'reduce' });
-  await lightThemePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-  const lightThemeIds = themeConfig.themes
-    .filter((theme) => theme.colorScheme === 'light')
-    .map((theme) => theme.id);
-  if (lightThemeIds.length === 0) throw new Error('theme registry does not contain a light theme');
+  if (themeConfig.id !== 'iris-sakura' || themeConfig.colorScheme !== 'light') {
+    throw new Error('single-brand registry is not IRIS × SAKURA light');
+  }
+  const brandPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await keepSmokeTestLocal(brandPage);
+  await brandPage.emulateMedia({ reducedMotion: 'reduce' });
   const contrastViewports = [
     ['desktop', { width: 1280, height: 900 }],
     ['mobile', { width: 390, height: 844 }]
   ];
   const contrastFailures = [];
   for (const [viewportName, viewport] of contrastViewports) {
-    await lightThemePage.setViewportSize(viewport);
-    for (const themeId of lightThemeIds) {
-      await lightThemePage.evaluate(
-        ({ storageKey, value }) => localStorage.setItem(storageKey, value),
-        { storageKey: themeConfig.storageKey, value: themeId }
-      );
-      for (const routeContract of lightThemeContrastRoutes) {
-        await lightThemePage.goto(`${baseUrl}${routeContract.route}`, { waitUntil: 'networkidle' });
-        if (await documentTheme(lightThemePage) !== themeId) {
-          throw new Error(`Light-theme contrast test did not activate ${themeId} on ${routeContract.route}`);
+    await brandPage.setViewportSize(viewport);
+    for (const routeContract of brandContrastRoutes) {
+      await brandPage.goto(`${baseUrl}${routeContract.route}`, { waitUntil: 'networkidle' });
+      const shell = await brandPage.evaluate(() => ({
+        brand: document.documentElement.dataset.brand,
+        themeControls: document.querySelectorAll('.theme-select, .theme-picker, .theme-transition-overlay').length
+      }));
+      if (shell.brand !== 'iris-sakura' || shell.themeControls !== 0) {
+        throw new Error(`Single-brand shell drifted on ${routeContract.route}: ${JSON.stringify(shell)}`);
+      }
+      if (routeContract.readySelector) {
+        await brandPage.locator(routeContract.readySelector).waitFor();
+      }
+      for (const [label, selector] of routeContract.checks) {
+        const measurements = await measureTextContrast(brandPage, selector);
+        if (measurements.length === 0) {
+          contrastFailures.push(
+            `${viewportName} ${routeContract.route} ${label}: no visible matches for ${selector}`
+          );
+          continue;
         }
-        if (routeContract.readySelector) {
-          await lightThemePage.locator(routeContract.readySelector).waitFor();
-        }
-        for (const [label, selector] of routeContract.checks) {
-          const measurements = await measureTextContrast(lightThemePage, selector);
-          if (measurements.length === 0) {
+        for (const measurement of measurements) {
+          const foreground = compositeColor(measurement.foreground, measurement.background);
+          const ratio = contrastRatio(foreground, measurement.background);
+          if (ratio < 4.5) {
             contrastFailures.push(
-              `${viewportName} ${themeId} ${routeContract.route} ${label}: no visible matches for ${selector}`
+              `${viewportName} ${routeContract.route} ${label} "${measurement.text}" `
+              + `${ratio.toFixed(2)}:1 (${measurement.foregroundCss} on ${formatColor(measurement.background)})`
             );
-            continue;
-          }
-          for (const measurement of measurements) {
-            const foreground = compositeColor(measurement.foreground, measurement.background);
-            const ratio = contrastRatio(foreground, measurement.background);
-            if (ratio < 4.5) {
-              contrastFailures.push(
-                `${viewportName} ${themeId} ${routeContract.route} ${label} "${measurement.text}" `
-                + `${ratio.toFixed(2)}:1 (${measurement.foregroundCss} on ${formatColor(measurement.background)})`
-              );
-            }
           }
         }
       }
     }
   }
   if (contrastFailures.length > 0) {
-    throw new Error(`Light-theme text contrast failures:\n${contrastFailures.join('\n')}`);
+    throw new Error(`Single-brand text contrast failures:\n${contrastFailures.join('\n')}`);
   }
-
-  const sharedDesignSelectors = [
-    'body',
-    '.navbar',
-    '.logo',
-    '.nav-link',
-    '.hero-title',
-    '.btn-primary',
-    '.profile-identity',
-    '.profile-avatar-large',
-    '.focus-card'
-  ];
-  const sharedDesignProperties = [
-    'display',
-    'position',
-    'font-family',
-    'font-size',
-    'font-style',
-    'font-weight',
-    'line-height',
-    'letter-spacing',
-    'text-transform',
-    'padding-top',
-    'padding-right',
-    'padding-bottom',
-    'padding-left',
-    'margin-top',
-    'margin-right',
-    'margin-bottom',
-    'margin-left',
-    'gap',
-    'border-top-width',
-    'border-right-width',
-    'border-bottom-width',
-    'border-left-width',
-    'border-top-left-radius',
-    'border-top-right-radius',
-    'border-bottom-right-radius',
-    'border-bottom-left-radius',
-    'box-shadow',
-    'filter',
-    'opacity',
-    'transform',
-    'transition-duration',
-    'transition-timing-function'
-  ];
-  const sharedPseudoProperties = [
-    'content',
-    'display',
-    'position',
-    'top',
-    'right',
-    'bottom',
-    'left',
-    'width',
-    'height',
-    'border-top-left-radius',
-    'border-top-right-radius',
-    'border-bottom-right-radius',
-    'border-bottom-left-radius',
-    'filter',
-    'opacity',
-    'transform'
-  ];
-  const designSnapshots = new Map();
-  await lightThemePage.setViewportSize({ width: 1280, height: 900 });
-  for (const theme of themeConfig.themes) {
-    await lightThemePage.evaluate(
-      ({ storageKey, value }) => localStorage.setItem(storageKey, value),
-      { storageKey: themeConfig.storageKey, value: theme.id }
-    );
-    await lightThemePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-    if (await documentTheme(lightThemePage) !== theme.id) {
-      throw new Error(`Shared-design test did not activate ${theme.id}`);
-    }
-    designSnapshots.set(theme.id, await lightThemePage.evaluate(
-      ({ selectors, properties, pseudoProperties }) => {
-        const readProperties = (style, names) => Object.fromEntries(
-          names.map((name) => [name, style.getPropertyValue(name)])
-        );
-        return {
-          elements: Object.fromEntries(selectors.map((selector) => {
-            const element = document.querySelector(selector);
-            if (!element) throw new Error(`Missing shared-design selector ${selector}`);
-            const rect = element.getBoundingClientRect();
-            return [selector, {
-              rect: {
-                width: Number(rect.width.toFixed(3)),
-                height: Number(rect.height.toFixed(3))
-              },
-              style: readProperties(getComputedStyle(element), properties)
-            }];
-          })),
-          pseudoElements: Object.fromEntries([
-            ['.hero-section::before', readProperties(
-              getComputedStyle(document.querySelector('.hero-section'), '::before'),
-              pseudoProperties
-            )],
-            ['.hero-section::after', readProperties(
-              getComputedStyle(document.querySelector('.hero-section'), '::after'),
-              pseudoProperties
-            )]
-          ])
-        };
-      },
-      {
-        selectors: sharedDesignSelectors,
-        properties: sharedDesignProperties,
-        pseudoProperties: sharedPseudoProperties
-      }
-    ));
-  }
-  const [designBaselineTheme] = themeConfig.themes;
-  const designBaseline = JSON.stringify(designSnapshots.get(designBaselineTheme.id));
-  const designDrift = themeConfig.themes
-    .slice(1)
-    .filter((theme) => JSON.stringify(designSnapshots.get(theme.id)) !== designBaseline)
-    .map((theme) => theme.id);
-  if (designDrift.length > 0) {
-    throw new Error(
-      `Themes must share typography, component geometry and pseudo-element design; drifted: ${designDrift.join(', ')}`
-    );
-  }
-  await lightThemePage.close();
-
-  const transitionPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  await keepSmokeTestLocal(transitionPage);
-  await transitionPage.emulateMedia({ reducedMotion: 'no-preference' });
-  await transitionPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-  const transitionResult = await transitionPage.evaluate(async (registeredThemeIds) => {
-    const root = document.documentElement;
-    const select = document.querySelector('.theme-select');
-    if (!(select instanceof HTMLSelectElement)) throw new Error('theme selector is unavailable');
-    const initialTheme = root.dataset.theme ?? '';
-    const targetTheme = registeredThemeIds.find((themeId) => themeId !== initialTheme);
-    if (!targetTheme) throw new Error('theme transition needs at least two registered themes');
-    const observations = [];
-    const sample = () => {
-      const overlay = document.querySelector('.theme-transition-overlay');
-      observations.push({
-        theme: root.dataset.theme ?? '',
-        covering: overlay?.classList.contains('is-covering') ?? false,
-        transitioning: root.classList.contains('theme-transitioning')
-      });
-    };
-    const observer = new MutationObserver(sample);
-    observer.observe(root, { attributes: true });
-    observer.observe(document.body, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-      attributeFilter: ['class']
-    });
-    const waitForSettledTheme = (themeId) => new Promise((resolve, reject) => {
-      const timeout = window.setTimeout(
-        () => {
-          window.clearInterval(poll);
-          reject(new Error(`theme ${themeId} did not settle: ${JSON.stringify({
-            currentTheme: root.dataset.theme,
-            rootClass: root.className,
-            overlayClass: document.querySelector('.theme-transition-overlay')?.className,
-            observations: observations.slice(-8)
-          })}`));
-        },
-        3000
-      );
-      const poll = window.setInterval(() => {
-        if (root.dataset.theme !== themeId || root.classList.contains('theme-transitioning')) return;
-        window.clearTimeout(timeout);
-        window.clearInterval(poll);
-        resolve();
-      }, 10);
-    });
-    const chooseTheme = (themeId) => {
-      select.value = themeId;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-    };
-
-    const startedAt = performance.now();
-    chooseTheme(targetTheme);
-    await waitForSettledTheme(targetTheme);
-    const duration = performance.now() - startedAt;
-    const overlay = document.querySelector('.theme-transition-overlay');
-    const normalTransition = {
-      duration,
-      hadCoverBeforeTheme: observations.some((entry) => (
-        entry.theme === initialTheme && entry.covering
-      )),
-      themeChangedWhileCovered: observations.some((entry) => (
-        entry.theme === targetTheme && entry.covering
-      )),
-      endedUncovered: !overlay?.classList.contains('is-covering')
-        && !root.classList.contains('theme-transitioning')
-    };
-
-    chooseTheme(initialTheme);
-    await new Promise((resolve) => window.setTimeout(resolve, 40));
-    chooseTheme(targetTheme);
-    await waitForSettledTheme(targetTheme);
-    await new Promise((resolve) => window.setTimeout(resolve, 450));
-    observer.disconnect();
-
-    return {
-      ...normalTransition,
-      rapidExpectedTheme: targetTheme,
-      rapidFinalTheme: root.dataset.theme,
-      rapidTransitioning: root.classList.contains('theme-transitioning')
-    };
-  }, themeConfig.themes.map((theme) => theme.id));
-  if (
-    transitionResult.duration < 250
-    || !transitionResult.hadCoverBeforeTheme
-    || !transitionResult.themeChangedWhileCovered
-    || !transitionResult.endedUncovered
-  ) {
-    throw new Error(`Theme fade sequence is incomplete: ${JSON.stringify(transitionResult)}`);
-  }
-  if (
-    transitionResult.rapidFinalTheme !== transitionResult.rapidExpectedTheme
-    || transitionResult.rapidTransitioning
-  ) {
-    throw new Error(`Rapid theme switching left stale state: ${JSON.stringify(transitionResult)}`);
-  }
-  await transitionPage.close();
+  await brandPage.close();
 
   const responsiveContext = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
   const responsivePage = await responsiveContext.newPage();
@@ -603,7 +376,6 @@ try {
     throw new Error('Consumer Lab exposes owner-only evidence metadata');
   }
 
-  await desktop.getByLabel('选择页面主题').selectOption('sakura-village');
   const portfolioInsetFailures = [];
   for (const viewport of [
     { width: 2048, height: 1200 },
@@ -655,21 +427,18 @@ try {
     ['mobile', { width: 390, height: 844 }]
   ]) {
     await desktop.setViewportSize(viewport);
-    for (const theme of themeConfig.themes) {
-      await desktop.getByLabel('选择页面主题').selectOption(theme.id);
-      const overflows = await desktop.locator('.journal-update-card h3, .design-summary-card h3').evaluateAll((headings) => (
-        headings.flatMap((heading) => {
-          const overflow = heading.scrollWidth - heading.clientWidth;
-          return overflow > 1
-            ? [{ text: heading.textContent?.trim(), overflow }]
-            : [];
-        })
-      ));
-      for (const overflow of overflows) {
-        journalTitleBoundaryFailures.push(
-          `${viewportName} ${theme.id} "${overflow.text}" overflows by ${overflow.overflow}px`
-        );
-      }
+    const overflows = await desktop.locator('.journal-update-card h3, .design-summary-card h3').evaluateAll((headings) => (
+      headings.flatMap((heading) => {
+        const overflow = heading.scrollWidth - heading.clientWidth;
+        return overflow > 1
+          ? [{ text: heading.textContent?.trim(), overflow }]
+          : [];
+      })
+    ));
+    for (const overflow of overflows) {
+      journalTitleBoundaryFailures.push(
+        `${viewportName} IRIS × SAKURA "${overflow.text}" overflows by ${overflow.overflow}px`
+      );
     }
   }
   if (journalTitleBoundaryFailures.length > 0) {
@@ -845,10 +614,6 @@ function contrastRatio(left, right) {
   const brighter = Math.max(luminance(left), luminance(right));
   const darker = Math.min(luminance(left), luminance(right));
   return (brighter + 0.05) / (darker + 0.05);
-}
-
-function documentTheme(page) {
-  return page.evaluate(() => document.documentElement.dataset.theme);
 }
 
 async function measureTextContrast(page, selector) {
