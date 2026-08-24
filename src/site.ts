@@ -5,6 +5,14 @@ const FALLBACK_STORAGE_KEY = 'irissakura-theme';
 const REVEAL_SELECTOR = [
     '.profile-hero-inner > *',
     '.flagship-grid > *',
+    '.brand-ecosystem-inner > *',
+    '.brand-branch-grid > *',
+    '.brand-system-intro-inner > *',
+    '.brand-board',
+    '.brand-duality-grid > *',
+    '.brand-product-grid > *',
+    '.brand-language-grid > *',
+    '.brand-persona-stage > *',
     '.focus-grid > *',
     '.section-heading',
     '.section-heading-row',
@@ -55,6 +63,11 @@ const DEPTH_SELECTOR = [
     '.stable-route-list article',
     '.research-row',
     '.focus-card',
+    '.brand-branch',
+    '.brand-track',
+    '.brand-product-card',
+    '.brand-language-card',
+    '.brand-persona-portrait',
     '.evidence-chain-card'
 ].join(',');
 
@@ -139,7 +152,7 @@ class SiteShell {
         if (!themeSelect) return;
         const initialPreference = this.readDocumentPreference()
             ?? this.readStoredTheme()
-            ?? SYSTEM_THEME;
+            ?? this.getDefaultThemePreference();
         this.applyThemePreference(initialPreference);
 
         themeSelect.addEventListener('change', () => {
@@ -150,7 +163,7 @@ class SiteShell {
         });
 
         this.colorSchemeQuery?.addEventListener('change', () => {
-            if (!this.readStoredTheme()) {
+            if (this.readDocumentPreference() === SYSTEM_THEME) {
                 void this.transitionThemePreference(SYSTEM_THEME);
             }
         });
@@ -159,7 +172,7 @@ class SiteShell {
             if (event.key !== this.getStorageKey()) return;
             const preference = this.isTheme(event.newValue)
                 ? event.newValue
-                : SYSTEM_THEME;
+                : this.getDefaultThemePreference();
             void this.transitionThemePreference(preference);
         });
     }
@@ -311,11 +324,7 @@ class SiteShell {
 
         if (persist) {
             try {
-                if (preference === SYSTEM_THEME) {
-                    localStorage.removeItem(this.getStorageKey());
-                } else {
-                    localStorage.setItem(this.getStorageKey(), preference);
-                }
+                localStorage.setItem(this.getStorageKey(), preference);
             } catch {
                 // 隐私模式或受限存储环境下仍保持本次页面选择可用。
             }
@@ -330,10 +339,17 @@ class SiteShell {
     private readStoredTheme(): string | null {
         try {
             const theme = localStorage.getItem(this.getStorageKey());
-            return this.isTheme(theme) && theme !== SYSTEM_THEME ? theme : null;
+            return this.isTheme(theme) ? theme : null;
         } catch {
             return null;
         }
+    }
+
+    private getDefaultThemePreference(): string {
+        const defaultPreference = this.themeSelect?.dataset.defaultPreference;
+        return this.isTheme(defaultPreference)
+            ? defaultPreference
+            : this.firstRegisteredTheme();
     }
 
     private getSystemTheme(): string {

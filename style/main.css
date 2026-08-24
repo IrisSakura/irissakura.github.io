@@ -11,6 +11,12 @@
     --success-color: #28a745;
     --warning-color: #ffc107;
     --danger-color: #dc3545;
+    --brand-iris: #4c4cf5;
+    --brand-iris-light: #7b73ff;
+    --brand-shared: #a06bff;
+    --brand-sakura: #ff7eb6;
+    --brand-sakura-light: #ffc1d8;
+    --brand-sky: #7ec6ff;
 
     --font-display: 'Orbitron', sans-serif;
     --font-heading: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
@@ -75,6 +81,14 @@
     --ui-chip-border: rgba(106, 17, 203, 0.28);
     --ui-chip-surface: rgba(106, 17, 203, 0.2);
     --ui-chip-text: var(--secondary-text-color);
+    --ui-home-cover-heading: #f8fbff;
+    --ui-home-cover-text: rgba(248, 251, 255, 0.84);
+    --ui-home-cover-kicker: #a9eee5;
+    --ui-home-cover-secondary-text: #ffffff;
+    --ui-home-cover-secondary-border: rgba(255, 255, 255, 0.62);
+    --ui-home-cover-secondary-bg: rgba(7, 15, 25, 0.3);
+    --ui-home-cover-secondary-hover-text: #ffffff;
+    --ui-home-cover-secondary-hover-bg: var(--accent-color);
 
     /* 动画相关变量 */
     --animation-duration: 0.3s;
@@ -445,19 +459,42 @@ a {
 .logo {
     display: flex;
     align-items: center;
+    gap: 0.55rem;
     font-family: var(--font-display);
-    font-size: 1.8rem;
     font-weight: 900;
     color: white;
 }
 
-.logo i {
-    color: var(--accent-color);
-    margin-right: 10px;
+.brand-mark {
+    display: block;
+    width: 2.2rem;
+    height: 2.2rem;
+    flex: 0 0 auto;
 }
 
-.logo span {
-    color: var(--secondary-color);
+.brand-wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.34em;
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    line-height: 1;
+}
+
+.brand-wordmark-iris {
+    color: var(--brand-iris-light);
+}
+
+.brand-wordmark-cross {
+    color: var(--muted-text-color);
+    font-size: 0.78em;
+    font-weight: 500;
+}
+
+.brand-wordmark-sakura {
+    color: var(--brand-sakura);
 }
 
 .nav-menu {
@@ -830,6 +867,31 @@ body.profile-drawer-open .profile-drawer {
     backdrop-filter: blur(8px);
 }
 
+[data-page-cover="home"].page-cover h1,
+[data-page-cover="home"].page-cover strong {
+    color: var(--ui-home-cover-heading);
+}
+
+[data-page-cover="home"].page-cover p,
+[data-page-cover="home"].page-cover small {
+    color: var(--ui-home-cover-text);
+}
+
+[data-page-cover="home"].page-cover .section-kicker {
+    color: var(--ui-home-cover-kicker);
+}
+
+[data-page-cover="home"].page-cover .btn-secondary {
+    border-color: var(--ui-home-cover-secondary-border);
+    color: var(--ui-home-cover-secondary-text);
+    background: var(--ui-home-cover-secondary-bg);
+}
+
+[data-page-cover="home"].page-cover .btn-secondary:hover {
+    color: var(--ui-home-cover-secondary-hover-text);
+    background: var(--ui-home-cover-secondary-hover-bg);
+}
+
 [data-page-cover].page-cover .btn-secondary:hover,
 [data-page-cover].page-cover .btn-secondary:focus-visible,
 [data-page-cover].page-cover .btn-outline:hover,
@@ -1157,11 +1219,21 @@ body.profile-drawer-open .profile-drawer {
 }
 
 .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
     font-family: var(--font-display);
-    font-size: 1.8rem;
     font-weight: 900;
     margin-bottom: 1rem;
-    display: inline-block;
+}
+
+.footer-logo .brand-mark {
+    width: 2.65rem;
+    height: 2.65rem;
+}
+
+.footer-logo .brand-wordmark {
+    font-size: 1rem;
 }
 
 .footer-description {
@@ -2018,114 +2090,182 @@ body.profile-drawer-open .profile-drawer {
         rgba(255, 255, 255, 0.025);
 }
 
-/* IRIS × SAKURA brand ecosystem */
-.brand-ecosystem-section,
-.brand-visual-section,
-.brand-emblem-story {
-    padding: var(--section-space) 0;
+/* Cross-page IRIS × SAKURA signature */
+:where(
+    .project-card,
+    .blog-card,
+    .stream-card,
+    .note-card,
+    .journal-update-card,
+    .design-summary-card,
+    .principle-item,
+    .gallery-card,
+    .game-system-card,
+    .preference-card,
+    .discussion-grid article,
+    .public-route-card,
+    .research-row,
+    .focus-card,
+    .evidence-chain-card
+) {
+    position: relative;
+}
+
+:where(
+    .project-card,
+    .blog-card,
+    .stream-card,
+    .note-card,
+    .journal-update-card,
+    .design-summary-card,
+    .principle-item,
+    .gallery-card,
+    .game-system-card,
+    .preference-card,
+    .discussion-grid article,
+    .public-route-card,
+    .research-row,
+    .focus-card,
+    .evidence-chain-card
+)::before {
+    content: "";
+    position: absolute;
+    inset: 0 1px auto;
+    z-index: 1;
+    height: 2px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--brand-iris), var(--brand-shared), var(--brand-sakura));
+    opacity: 0.72;
+    pointer-events: none;
+}
+
+/* IRIS × SAKURA brand system */
+.brand-lockup {
+    display: flex;
+    align-items: baseline;
+    gap: 0.26em;
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    line-height: 0.95;
+}
+
+.brand-lockup-iris {
+    color: var(--brand-iris-light);
+}
+
+.brand-lockup-cross {
+    color: var(--brand-shared);
+    font-size: 0.65em;
+    font-weight: 500;
+}
+
+.brand-lockup-sakura {
+    color: var(--brand-sakura);
+}
+
+.brand-lockup-compact {
+    font-size: clamp(1.7rem, 4vw, 3rem);
+}
+
+.brand-lockup-hero {
+    margin: 0.65rem 0 1rem;
+    font-size: clamp(2.8rem, 8vw, 6.8rem);
 }
 
 .brand-ecosystem-section {
+    padding: clamp(3.25rem, 6vw, 5rem) 0;
     border-top: 1px solid var(--ui-border-subtle);
     border-bottom: 1px solid var(--ui-border-subtle);
     background:
-        radial-gradient(circle at 12% 16%, rgba(76, 76, 245, 0.16), transparent 32rem),
-        radial-gradient(circle at 88% 84%, rgba(255, 126, 182, 0.13), transparent 30rem),
-        color-mix(in srgb, var(--light-color), transparent 98%);
+        linear-gradient(112deg, color-mix(in srgb, var(--brand-iris) 10%, transparent), transparent 44%),
+        linear-gradient(292deg, color-mix(in srgb, var(--brand-sakura) 10%, transparent), transparent 42%),
+        color-mix(in srgb, var(--ui-surface-card) 54%, transparent);
 }
 
-.brand-ecosystem-hero {
+.brand-ecosystem-inner {
     display: grid;
-    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(1.5rem, 4vw, 3.75rem);
+    grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(2rem, 5vw, 5rem);
     align-items: center;
-    margin-bottom: clamp(2rem, 5vw, 4rem);
 }
 
-.brand-ecosystem-hero img,
-.brand-project-card img,
-.brand-joint-emblem img,
-.brand-system-header-image,
-.brand-board img,
-.brand-visual-card img,
-.brand-emblem-story img {
-    display: block;
-    width: 100%;
-    height: auto;
+.brand-signature {
+    padding-left: 1.4rem;
+    border-left: 3px solid transparent;
+    border-image: linear-gradient(to bottom, var(--brand-iris), var(--brand-sakura)) 1;
 }
 
-.brand-ecosystem-hero h2,
-.brand-system-copy h2,
-.brand-section-heading h2,
-.brand-emblem-story h2 {
-    margin-bottom: 1rem;
+.brand-signature p {
+    margin: 0.8rem 0 1.25rem;
+    color: var(--muted-text-color);
+    font: 700 0.76rem/1.4 var(--font-display);
+    letter-spacing: 0.14em;
+}
+
+.brand-ecosystem-inner h2 {
+    margin: 0 0 1.5rem;
     text-align: left;
-    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-size: clamp(2rem, 4vw, 3.25rem);
     letter-spacing: -0.035em;
 }
 
-.brand-ecosystem-hero p,
-.brand-system-copy p,
-.brand-section-heading p,
-.brand-emblem-story p {
-    color: var(--muted-text-color);
-}
-
-.brand-ecosystem-grid {
+.brand-branch-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(160px, 0.48fr) minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--story-grid-gap);
-    align-items: stretch;
 }
 
-.brand-project-card,
-.brand-joint-emblem,
-.brand-visual-card {
+.brand-branch {
     min-width: 0;
+    padding: 1.3rem 0 0;
+    border-top: 2px solid var(--brand-iris);
+}
+
+.brand-branch-sakura {
+    border-top-color: var(--brand-sakura);
+}
+
+.brand-branch span,
+.brand-card-index {
+    color: var(--brand-iris-light);
+    font: 800 0.72rem/1.4 var(--font-display);
+    letter-spacing: 0.11em;
+}
+
+.brand-branch-sakura span {
+    color: var(--brand-sakura);
+}
+
+.brand-branch h3 {
+    margin: 0.45rem 0 0.6rem;
+    font-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+
+.brand-branch p {
     margin: 0;
-    padding: clamp(1.1rem, 2.4vw, 1.75rem);
-    border: 1px solid var(--ui-border-subtle);
-    border-radius: calc(var(--border-radius) * 1.5);
-    background: var(--ui-surface-card);
-    box-shadow: var(--box-shadow);
-}
-
-.brand-project-card {
-    display: grid;
-    gap: 0.8rem;
-    align-content: start;
-}
-
-.brand-project-card h3,
-.brand-project-card p,
-.brand-joint-emblem figcaption,
-.brand-visual-card figcaption {
-    margin: 0;
-}
-
-.brand-project-card p,
-.brand-joint-emblem figcaption,
-.brand-visual-card figcaption {
     color: var(--muted-text-color);
-}
-
-.brand-joint-emblem {
-    display: grid;
-    gap: 0.8rem;
-    place-items: center;
-    text-align: center;
-}
-
-.brand-joint-emblem img {
-    max-height: 250px;
-    object-fit: contain;
 }
 
 .brand-portfolio-header {
+    position: relative;
+    overflow: hidden;
     background:
-        linear-gradient(120deg, rgba(76, 76, 245, 0.2), transparent 52%),
-        radial-gradient(circle at 84% 30%, rgba(255, 126, 182, 0.22), transparent 28rem),
+        linear-gradient(118deg, color-mix(in srgb, var(--brand-iris) 22%, transparent), transparent 48%),
+        radial-gradient(circle at 86% 30%, color-mix(in srgb, var(--brand-sakura) 24%, transparent), transparent 26rem),
         var(--surface-strong);
+}
+
+.brand-portfolio-header::after {
+    content: "IRIS × SAKURA";
+    position: absolute;
+    right: max(var(--page-gutter), calc((100vw - var(--container-width)) / 2));
+    bottom: -0.16em;
+    color: color-mix(in srgb, var(--brand-shared) 12%, transparent);
+    font: 900 clamp(3rem, 9vw, 8rem)/1 var(--font-display);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    pointer-events: none;
 }
 
 .brand-portfolio {
@@ -2133,110 +2273,493 @@ body.profile-drawer-open .profile-drawer {
     gap: 0;
 }
 
-.brand-system-intro {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
-    gap: clamp(2rem, 5vw, 5rem);
-    align-items: center;
+.brand-system-intro,
+.brand-board-section,
+.brand-duality-section,
+.brand-products-section,
+.brand-language-section,
+.brand-persona-section {
     padding: var(--section-space) 0;
+    border-top: 1px solid var(--ui-border-subtle);
 }
 
-.brand-system-header-image {
-    filter: drop-shadow(0 22px 42px rgba(76, 76, 245, 0.18));
+.brand-system-intro {
+    border-top: 0;
+    background:
+        radial-gradient(circle at 18% 24%, color-mix(in srgb, var(--brand-iris) 16%, transparent), transparent 28rem),
+        radial-gradient(circle at 82% 76%, color-mix(in srgb, var(--brand-sakura) 16%, transparent), transparent 30rem);
+}
+
+.brand-system-intro-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: end;
+}
+
+.brand-lockup-subtitle {
+    margin-bottom: 2.25rem;
+    color: var(--brand-shared);
+    font: 800 0.82rem/1.4 var(--font-display);
+    letter-spacing: 0.28em;
+}
+
+.brand-system-copy h2,
+.brand-section-heading h2 {
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    letter-spacing: -0.035em;
+}
+
+.brand-system-copy > p:last-child,
+.brand-section-heading p {
+    color: var(--muted-text-color);
+}
+
+.brand-principles {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--ui-border-subtle);
+    list-style: none;
+}
+
+.brand-principles li {
+    display: grid;
+    grid-template-columns: 2.7rem minmax(5rem, 0.35fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--ui-border-subtle);
+}
+
+.brand-principles span,
+.brand-principles strong {
+    color: var(--brand-iris-light);
+    font-family: var(--font-display);
+}
+
+.brand-principles li:nth-child(2) span,
+.brand-principles li:nth-child(2) strong {
+    color: var(--brand-shared);
+}
+
+.brand-principles li:nth-child(3) span,
+.brand-principles li:nth-child(3) strong {
+    color: var(--brand-sakura);
+}
+
+.brand-principles small {
+    color: var(--muted-text-color);
+}
+
+.brand-section-heading {
+    max-width: 840px;
+    margin-bottom: clamp(2rem, 4vw, 3.75rem);
+}
+
+.brand-section-heading-centered {
+    margin-inline: auto;
+    text-align: center;
+}
+
+.brand-section-heading-centered h2 {
+    text-align: center;
 }
 
 .brand-board {
-    margin: 0 0 var(--section-space);
+    margin: 0;
     overflow: hidden;
     border: 1px solid var(--ui-border-subtle);
     border-radius: calc(var(--border-radius) * 1.5);
-    background: linear-gradient(135deg, rgba(76, 76, 245, 0.08), rgba(255, 126, 182, 0.08));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--brand-iris) 8%, transparent), color-mix(in srgb, var(--brand-sakura) 8%, transparent));
     box-shadow: var(--box-shadow-hover);
 }
 
-.brand-board figcaption,
-.brand-visual-card figcaption {
-    padding-top: 1rem;
-    font-size: 0.9rem;
+.brand-board img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .brand-board figcaption {
     padding: 1rem 1.25rem;
     border-top: 1px solid var(--ui-border-subtle);
     color: var(--muted-text-color);
+    font-size: 0.9rem;
 }
 
-.brand-visual-section {
-    border-top: 1px solid var(--ui-border-subtle);
+.brand-duality-section {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--brand-iris) 7%, transparent), transparent 40%, color-mix(in srgb, var(--brand-sakura) 7%, transparent));
 }
 
-.brand-section-heading {
-    max-width: 820px;
-    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+.brand-duality-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 0.32fr) minmax(0, 1fr);
+    gap: var(--story-grid-gap);
+    align-items: stretch;
 }
 
-.brand-subbrand-grid,
-.brand-persona-grid,
-.brand-portrait-grid {
+.brand-track {
+    position: relative;
+    min-width: 0;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 52%, var(--ui-border-subtle));
+    border-radius: calc(var(--border-radius) * 1.5);
+    background:
+        linear-gradient(145deg, color-mix(in srgb, var(--brand-iris) 18%, transparent), transparent 58%),
+        var(--ui-surface-card);
+}
+
+.brand-track-sakura {
+    border-color: color-mix(in srgb, var(--brand-sakura) 52%, var(--ui-border-subtle));
+    background:
+        linear-gradient(215deg, color-mix(in srgb, var(--brand-sakura) 18%, transparent), transparent 58%),
+        var(--ui-surface-card);
+}
+
+.brand-track header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--brand-iris-light);
+    font: 800 0.68rem/1.5 var(--font-display);
+    letter-spacing: 0.08em;
+}
+
+.brand-track-sakura header {
+    color: var(--brand-sakura);
+}
+
+.brand-track h3 {
+    margin: clamp(2.5rem, 7vw, 5rem) 0 1rem;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.brand-track p {
+    color: var(--muted-text-color);
+}
+
+.brand-track ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.brand-track li {
+    padding: 0.42rem 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 34%, transparent);
+    border-radius: var(--ui-pill-radius);
+    color: var(--brand-iris-light);
+    font-size: 0.78rem;
+}
+
+.brand-track-sakura li {
+    border-color: color-mix(in srgb, var(--brand-sakura) 38%, transparent);
+    color: var(--brand-sakura);
+}
+
+.brand-convergence {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+    text-align: center;
+}
+
+.brand-convergence::before,
+.brand-convergence::after {
+    content: "";
+    width: 1px;
+    min-height: 2.5rem;
+    background: linear-gradient(var(--brand-iris), var(--brand-sakura));
+}
+
+.brand-convergence-mark {
+    width: clamp(4.5rem, 8vw, 6.5rem);
+    height: auto;
+    filter: drop-shadow(0 18px 30px color-mix(in srgb, var(--brand-shared) 25%, transparent));
+}
+
+.brand-convergence strong {
+    color: var(--brand-shared);
+    font: 800 0.72rem/1.4 var(--font-display);
+    letter-spacing: 0.12em;
+}
+
+.brand-convergence span {
+    color: var(--muted-text-color);
+    font-size: 0.78rem;
+}
+
+.brand-product-grid,
+.brand-persona-stage {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--story-grid-gap);
 }
 
-.brand-visual-card {
+.brand-product-card {
     display: grid;
-    align-content: start;
+    min-width: 0;
+    min-height: 25rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    align-content: end;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 38%, var(--ui-border-subtle));
+    border-radius: calc(var(--border-radius) * 1.5);
+    background:
+        radial-gradient(circle at 84% 18%, color-mix(in srgb, var(--brand-iris-light) 28%, transparent), transparent 15rem),
+        linear-gradient(145deg, color-mix(in srgb, var(--brand-iris) 17%, transparent), transparent 64%),
+        var(--ui-surface-card);
 }
 
-.brand-visual-card img {
-    max-height: 520px;
-    object-fit: contain;
+.brand-product-engineering {
+    background:
+        radial-gradient(circle at 84% 18%, color-mix(in srgb, var(--brand-sky) 28%, transparent), transparent 15rem),
+        linear-gradient(145deg, color-mix(in srgb, var(--brand-sky) 14%, transparent), transparent 64%),
+        var(--ui-surface-card);
 }
 
-.brand-persona-card img {
-    max-height: 620px;
-}
-
-.brand-emblem-story {
+.brand-product-symbol {
     display: grid;
-    grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
-    gap: clamp(2rem, 6vw, 6rem);
-    align-items: center;
-    border-top: 1px solid var(--ui-border-subtle);
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: auto;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 54%, transparent);
+    border-radius: 50%;
+    color: var(--brand-iris-light);
+    background: color-mix(in srgb, var(--brand-iris) 12%, transparent);
+    font-size: 1.5rem;
 }
 
-.brand-emblem-story figure {
-    margin: 0;
+.brand-product-card p,
+.brand-product-card strong {
+    color: var(--brand-iris-light);
+    font: 800 0.72rem/1.5 var(--font-display);
+    letter-spacing: 0.1em;
 }
 
-.brand-emblem-story img {
-    max-height: 420px;
-    object-fit: contain;
-    filter: drop-shadow(0 22px 44px rgba(160, 107, 255, 0.2));
+.brand-product-card h3 {
+    margin-bottom: 0.7rem;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
 
-.brand-guideline-grid {
+.brand-product-card span {
+    margin-top: 0.85rem;
+    color: var(--muted-text-color);
+}
+
+.brand-language-section {
+    background: color-mix(in srgb, var(--ui-surface-card) 48%, transparent);
+}
+
+.brand-language-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.25fr) repeat(2, minmax(0, 0.875fr));
     gap: var(--story-grid-gap);
 }
 
-.brand-guideline-grid .brand-visual-card img {
-    aspect-ratio: 440 / 201;
+.brand-language-card {
+    min-width: 0;
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: calc(var(--border-radius) * 1.5);
+    background: var(--ui-surface-card);
 }
 
-.brand-portrait-section {
-    padding-bottom: calc(var(--section-space) * 1.2);
+.brand-language-card h3 {
+    margin: 0.8rem 0 1.5rem;
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+}
+
+.brand-palette {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.brand-palette li {
+    display: grid;
+    grid-template-columns: 2.3rem minmax(0, 1fr);
+    gap: 0.15rem 0.7rem;
+    align-items: center;
+}
+
+.brand-swatch {
+    grid-row: span 2;
+    width: 2.3rem;
+    height: 2.3rem;
+    border: 1px solid color-mix(in srgb, var(--light-color) 18%, transparent);
+    border-radius: 50%;
+    background: var(--brand-swatch);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, white 34%, transparent);
+}
+
+.brand-palette strong,
+.brand-palette code {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 0.74rem;
+}
+
+.brand-palette code {
+    color: var(--muted-text-color);
+}
+
+.brand-icon-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+    margin: 2.4rem 0;
+}
+
+.brand-icon-row i {
+    display: grid;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--brand-shared) 42%, transparent);
+    border-radius: 28%;
+    color: var(--brand-shared);
+    background: color-mix(in srgb, var(--brand-shared) 9%, transparent);
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+.brand-icon-card p {
+    margin: 0;
+    color: var(--muted-text-color);
+}
+
+.brand-naming-card > div {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.15rem 0;
+    border-top: 1px solid var(--ui-border-subtle);
+}
+
+.brand-naming-card code {
+    color: var(--brand-iris-light);
+    font: 900 1.35rem/1.3 var(--font-display);
+}
+
+.brand-naming-card > div:last-child code {
+    color: var(--brand-sakura);
+}
+
+.brand-naming-card span {
+    color: var(--muted-text-color);
+    font-size: 0.78rem;
+}
+
+.brand-persona-stage {
+    position: relative;
+}
+
+.brand-persona-stage::after {
+    content: "×";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    place-items: center;
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: 50%;
+    color: var(--brand-shared);
+    background: var(--dark-color);
+    font-family: var(--font-display);
+    transform: translate(-50%, -50%);
+}
+
+.brand-persona-portrait {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--brand-iris) 40%, var(--ui-border-subtle));
+    border-radius: calc(var(--border-radius) * 1.5);
+    background:
+        radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--brand-iris) 18%, transparent), transparent 65%),
+        var(--ui-surface-card);
+}
+
+.brand-persona-sakura {
+    border-color: color-mix(in srgb, var(--brand-sakura) 44%, var(--ui-border-subtle));
+    background:
+        radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--brand-sakura) 18%, transparent), transparent 65%),
+        var(--ui-surface-card);
+}
+
+.brand-persona-portrait img {
+    display: block;
+    width: 100%;
+    max-height: 45rem;
+    object-fit: contain;
+}
+
+.brand-persona-portrait figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--ui-border-subtle);
+}
+
+.brand-persona-portrait figcaption span {
+    color: var(--brand-iris-light);
+    font: 900 0.82rem/1.3 var(--font-display);
+    letter-spacing: 0.1em;
+}
+
+.brand-persona-sakura figcaption span {
+    color: var(--brand-sakura);
+}
+
+.brand-persona-portrait figcaption strong {
+    color: var(--muted-text-color);
+    font-size: 0.78rem;
+    font-weight: 600;
 }
 
 @media (max-width: 1000px) {
-    .brand-ecosystem-hero,
-    .brand-ecosystem-grid {
+    .brand-ecosystem-inner,
+    .brand-branch-grid {
         grid-template-columns: 1fr;
     }
 
-    .brand-joint-emblem img {
-        max-height: 210px;
+    .brand-signature {
+        max-width: 36rem;
+    }
+
+    .brand-system-intro-inner,
+    .brand-duality-grid,
+    .brand-language-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-convergence {
+        grid-template-columns: 1fr auto auto auto 1fr;
+    }
+
+    .brand-convergence::before,
+    .brand-convergence::after {
+        width: auto;
+        min-width: 2rem;
+        min-height: 1px;
+        background: linear-gradient(90deg, var(--brand-iris), var(--brand-sakura));
     }
 
     .profile-hero-inner,
@@ -2276,19 +2799,56 @@ body.profile-drawer-open .profile-drawer {
 }
 
 @media (max-width: 720px) {
-    .brand-system-intro,
-    .brand-emblem-story,
-    .brand-subbrand-grid,
-    .brand-persona-grid,
-    .brand-portrait-grid,
-    .brand-guideline-grid {
+    .brand-product-grid,
+    .brand-persona-stage {
         grid-template-columns: 1fr;
     }
 
     .brand-ecosystem-section,
-    .brand-visual-section,
-    .brand-emblem-story {
+    .brand-system-intro,
+    .brand-board-section,
+    .brand-duality-section,
+    .brand-products-section,
+    .brand-language-section,
+    .brand-persona-section {
         padding: 4.25rem 0;
+    }
+
+    .brand-lockup-hero {
+        font-size: clamp(2.35rem, 11vw, 4rem);
+    }
+
+    .brand-principles li {
+        grid-template-columns: 2.3rem minmax(0, 1fr);
+    }
+
+    .brand-principles small {
+        grid-column: 2;
+    }
+
+    .brand-convergence {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-convergence::before,
+    .brand-convergence::after {
+        width: 1px;
+        min-width: 0;
+        min-height: 2.5rem;
+        background: linear-gradient(var(--brand-iris), var(--brand-sakura));
+    }
+
+    .brand-product-card {
+        min-height: 21rem;
+    }
+
+    .brand-persona-stage::after {
+        top: 50%;
+    }
+
+    .brand-persona-portrait figcaption {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .hero-section .hero {

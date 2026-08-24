@@ -19,8 +19,8 @@
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-moba-action-windows-map-conversion.png">
     <meta name="twitter:image:alt" content="可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现 的 IrisSakura 分享图">
     <!-- indexable page -->
-    <meta name="theme-color" content="#d7e8eb">
-    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现 | IrisSakura","description":"MOBA 中一次击杀、一次团战或一次线权优势，怎样从短暂的战斗收益转换成能够持续影响后续局势的地图状态？","url":"https://irissakura.github.io/pages/blog/moba-action-windows-map-conversion.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现","image":"https://irissakura.github.io/assets/social/pages-blog-moba-action-windows-map-conversion.png","datePublished":"2026-08-17","dateModified":"2026-08-17","about":["moba"]}</script>
@@ -29,21 +29,23 @@
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
     <!-- theme-styles:start -->
-    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../../style/iris-sakura.css" data-theme-stylesheet data-themes="iris-sakura">
+    <link rel="stylesheet" href="../../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village" disabled>
     <link rel="stylesheet" href="../../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
     <!-- theme-styles:end -->
     <!-- theme-bootstrap:start -->
     <script>
         (() => {
-            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            const config = {"storageKey":"irissakura-theme","defaultPreference":"iris-sakura","defaultLight":"pastoral","defaultDark":"night","themes":{"iris-sakura":{"colorScheme":"light","themeColor":"#f4efff","homeHeroImage":"../../assets/images/profile/home-hero-iris-sakura.png","homeHeroPosition":"74% 50%"},"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
             let storedTheme = null;
             try {
                 storedTheme = window.localStorage.getItem(config.storageKey);
             } catch {
-                // 受限存储环境下继续使用系统主题。
+                // 受限存储环境下继续使用站点默认主题。
             }
             const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
-            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const isPreference = (value) => value === 'system' || isTheme(value);
+            const preference = isPreference(storedTheme) ? storedTheme : config.defaultPreference;
             const theme = preference === 'system'
                 ? window.matchMedia('(prefers-color-scheme: dark)').matches
                     ? config.defaultDark
@@ -78,7 +80,8 @@
                 <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </button>
             <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
-                <span>Iris</span>Sakura
+                <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
             </a>
         </div>
         <div class="nav-menu" id="main-navigation">
@@ -97,10 +100,12 @@
                     class="theme-select"
                     aria-label="选择页面主题"
                     data-storage-key="irissakura-theme"
+                    data-default-preference="iris-sakura"
                     data-default-light="pastoral"
                     data-default-dark="night"
                 >
                     <option value="system">跟随系统</option>
+                    <option value="iris-sakura" data-color-scheme="light" data-theme-color="#f4efff" data-home-hero-image="../../assets/images/profile/home-hero-iris-sakura.png" data-home-hero-position="74% 50%">IRIS × SAKURA</option>
                     <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
                     <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
                     <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
@@ -1195,8 +1200,8 @@ Boss。
         <div class="footer-content">
             <div class="footer-info">
                 <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
-                    <i class="fas fa-gamepad" aria-hidden="true"></i>
-                    <span>Iris</span>Sakura
+                    <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
                 </a>
                 <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
             </div>
@@ -1218,7 +1223,7 @@ Boss。
         </div>
         <div class="footer-bottom">
             <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
-            <p>研究 · 框架 · 游戏</p>
+            <p>BUILD · CREATE · BLOOM</p>
         </div>
     </div>
 </footer>

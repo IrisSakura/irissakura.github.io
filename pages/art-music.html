@@ -19,8 +19,8 @@
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-art-music.png">
     <meta name="twitter:image:alt" content="品牌视觉与创作 的 IrisSakura 分享图">
     <!-- indexable page -->
-    <meta name="theme-color" content="#d7e8eb">
-    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../rss.xml">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"品牌视觉与创作 | IrisSakura","description":"查看 IRIS × SAKURA 品牌系统、双人格视觉、工程子品牌、色板、图标与命名规则。","url":"https://irissakura.github.io/pages/art-music.html"}</script>
@@ -29,21 +29,23 @@
     <link rel="stylesheet" href="../style/main.css">
     <link rel="stylesheet" href="../style/portfolio.css">
     <!-- theme-styles:start -->
-    <link rel="stylesheet" href="../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village">
+    <link rel="stylesheet" href="../style/iris-sakura.css" data-theme-stylesheet data-themes="iris-sakura">
+    <link rel="stylesheet" href="../style/pastoral.css" data-theme-stylesheet data-themes="pastoral sakura-village" disabled>
     <link rel="stylesheet" href="../style/sakura-village.css" data-theme-stylesheet data-themes="sakura-village" disabled>
     <!-- theme-styles:end -->
     <!-- theme-bootstrap:start -->
     <script>
         (() => {
-            const config = {"storageKey":"irissakura-theme","defaultLight":"pastoral","defaultDark":"night","themes":{"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
+            const config = {"storageKey":"irissakura-theme","defaultPreference":"iris-sakura","defaultLight":"pastoral","defaultDark":"night","themes":{"iris-sakura":{"colorScheme":"light","themeColor":"#f4efff","homeHeroImage":"../assets/images/profile/home-hero-iris-sakura.png","homeHeroPosition":"74% 50%"},"night":{"colorScheme":"dark","themeColor":"#121212","homeHeroImage":"../assets/images/profile/home-hero-night.png","homeHeroPosition":"70% 50%"},"pastoral":{"colorScheme":"light","themeColor":"#d7e8eb","homeHeroImage":"../assets/images/profile/home-hero-pastoral.png","homeHeroPosition":"70% 50%"},"sakura-village":{"colorScheme":"light","themeColor":"#eadce0","homeHeroImage":"../assets/images/profile/home-hero-sakura-village.png","homeHeroPosition":"70% 50%"}}};
             let storedTheme = null;
             try {
                 storedTheme = window.localStorage.getItem(config.storageKey);
             } catch {
-                // 受限存储环境下继续使用系统主题。
+                // 受限存储环境下继续使用站点默认主题。
             }
             const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
-            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const isPreference = (value) => value === 'system' || isTheme(value);
+            const preference = isPreference(storedTheme) ? storedTheme : config.defaultPreference;
             const theme = preference === 'system'
                 ? window.matchMedia('(prefers-color-scheme: dark)').matches
                     ? config.defaultDark
@@ -79,7 +81,8 @@
                 <img src="../assets/images/profile/irissakura-avatar.jpg" alt="">
             </button>
             <a href="../index.html" class="logo" aria-label="IrisSakura 首页">
-                <span>Iris</span>Sakura
+                <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
             </a>
         </div>
         <div class="nav-menu" id="main-navigation">
@@ -98,10 +101,12 @@
                     class="theme-select"
                     aria-label="选择页面主题"
                     data-storage-key="irissakura-theme"
+                    data-default-preference="iris-sakura"
                     data-default-light="pastoral"
                     data-default-dark="night"
                 >
                     <option value="system">跟随系统</option>
+                    <option value="iris-sakura" data-color-scheme="light" data-theme-color="#f4efff" data-home-hero-image="../assets/images/profile/home-hero-iris-sakura.png" data-home-hero-position="74% 50%">IRIS × SAKURA</option>
                     <option value="night" data-color-scheme="dark" data-theme-color="#121212" data-home-hero-image="../assets/images/profile/home-hero-night.png" data-home-hero-position="70% 50%">夜色科技</option>
                     <option value="pastoral" data-color-scheme="light" data-theme-color="#d7e8eb" data-home-hero-image="../assets/images/profile/home-hero-pastoral.png" data-home-hero-position="70% 50%">东方田园</option>
                     <option value="sakura-village" data-color-scheme="light" data-theme-color="#eadce0" data-home-hero-image="../assets/images/profile/home-hero-sakura-village.png" data-home-hero-position="70% 50%">樱里民谣</option>
@@ -136,7 +141,8 @@
 <!-- site-navbar:end -->
 
 <main id="main-content" class="main-content">
-    <header class="portfolio-header brand-portfolio-header">
+    <!-- brand-content:start -->
+<header class="portfolio-header brand-portfolio-header">
         <div class="container">
             <p class="section-kicker">IRIS × SAKURA · BRAND SYSTEM</p>
             <h1>品牌视觉与创作</h1>
@@ -144,116 +150,160 @@
         </div>
     </header>
 
-    <div class="container brand-portfolio" id="brand-system">
+    <div class="brand-portfolio" id="brand-system">
         <section class="brand-system-intro" aria-labelledby="brand-system-title">
-            <div class="brand-system-copy">
-                <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
-                <h2 id="brand-system-title">Build · Create · Bloom</h2>
-                <p>IRIS 面向 Framework、Engineering、Developer Tools、Pipeline 与 Infrastructure；SAKURA 面向 Games、Experiences、Worldbuilding 与原创 IP。两者共享同一套结构、色彩和联合徽记，但保持清晰的产品边界。</p>
-            </div>
-            <img src="../assets/images/brand/01_iris_x_sakura_header.png" alt="IRIS × SAKURA 游戏科技生态品牌标题" class="brand-system-header-image">
-        </section>
-
-        <figure class="brand-board">
-            <img src="../assets/images/brand/00_full_brand_board.png" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则">
-            <figcaption>品牌系统总览 · 工程理性与创作生命力并行</figcaption>
-        </figure>
-
-        <section class="brand-visual-section" aria-labelledby="brand-projects-title">
-            <div class="brand-section-heading">
-                <p class="section-kicker">ENGINEERING SUB-BRANDS</p>
-                <h2 id="brand-projects-title">工程子品牌</h2>
-                <p>两张品牌卡分别服务于 Unity 框架与研发工作流产品；正式产品名和代码命名仍以各项目自身合同为准。</p>
-            </div>
-            <div class="brand-subbrand-grid">
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/02_irisgameframework_brand_card.png" alt="IrisGameFramework 模块化 Unity 框架品牌卡" loading="lazy">
-                    <figcaption>IrisGameFramework · Modular / Scalable / Future-ready</figcaption>
-                </figure>
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/03_iris_engineering_brand_card.png" alt="Iris Engineering 研发自动化平台品牌卡" loading="lazy">
-                    <figcaption>Iris Engineering · Automate / Integrate / Elevate</figcaption>
-                </figure>
+            <div class="container brand-system-intro-inner">
+                <div class="brand-system-copy">
+                    <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
+                    <div class="brand-lockup brand-lockup-hero" aria-label="IRIS × SAKURA">
+                        <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
+                    </div>
+                    <p class="brand-lockup-subtitle">GAME-TECH ECOSYSTEM</p>
+                    <h2 id="brand-system-title">Build · Create · Bloom</h2>
+                    <p>不是把工程与创作混成一种声音，而是让两种力量在同一生态里各自清晰、彼此支撑。</p>
+                </div>
+                <ol class="brand-principles" aria-label="品牌行动原则">
+                    <li><span>01</span><strong>BUILD</strong><small>用可验证的系统建立创作底座</small></li>
+                    <li><span>02</span><strong>CREATE</strong><small>把能力转化为可感知的玩法体验</small></li>
+                    <li><span>03</span><strong>BLOOM</strong><small>让作品、世界与原创 IP 持续生长</small></li>
+                </ol>
             </div>
         </section>
 
-        <section class="brand-visual-section" aria-labelledby="brand-personas-title">
-            <div class="brand-section-heading">
-                <p class="section-kicker">DUAL PERSONAS</p>
-                <h2 id="brand-personas-title">两种力量，同一个生态</h2>
-                <p>IRIS 是冷静、精确、结构化的系统建造者；SAKURA 是温暖、灵动、富有生命力的体验创造者。</p>
-            </div>
-            <div class="brand-persona-grid">
-                <figure class="brand-visual-card brand-persona-card">
-                    <img src="../assets/images/brand/04_iris_persona.png" alt="IRIS 工程人格设定，代表系统、基础设施与研发工具" loading="lazy">
-                    <figcaption>IRIS · Build the future.</figcaption>
-                </figure>
-                <figure class="brand-visual-card brand-persona-card">
-                    <img src="../assets/images/brand/05_sakura_persona.png" alt="SAKURA 创作人格设定，代表游戏、体验、世界观与原创 IP" loading="lazy">
-                    <figcaption>SAKURA · Make it bloom.</figcaption>
+        <section class="brand-board-section" aria-labelledby="brand-board-title">
+            <div class="container">
+                <div class="brand-section-heading">
+                    <p class="section-kicker">MASTER BRAND BOARD</p>
+                    <h2 id="brand-board-title">先看完整生态，再进入每一条分支</h2>
+                    <p>总览板保留双人格、工程子品牌、联合徽记、色板与命名家族的原始关系；网页组件则把这些规则变成可阅读、可复用的界面语言。</p>
+                </div>
+                <figure class="brand-board">
+                    <img src="../assets/images/brand/00_full_brand_board.png" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则" decoding="async">
+                    <figcaption>品牌系统总览 · 工程理性与创作生命力并行</figcaption>
                 </figure>
             </div>
         </section>
 
-        <section class="brand-emblem-story" aria-labelledby="brand-emblem-title">
-            <figure>
-                <img src="../assets/images/brand/06_iris_sakura_joint_emblem.png" alt="由鸢尾花与樱花组成的 IRIS × SAKURA 联合徽记" loading="lazy">
-            </figure>
-            <div>
-                <p class="section-kicker">JOINT EMBLEM</p>
-                <h2 id="brand-emblem-title">Iris builds. Sakura blooms.</h2>
-                <p>联合徽记用于跨项目、生态总览与共同叙事；独立项目场景优先使用自己的品牌卡，避免联合标识掩盖产品身份。</p>
+        <section class="brand-duality-section" aria-labelledby="brand-duality-title">
+            <div class="container">
+                <div class="brand-section-heading brand-section-heading-centered">
+                    <p class="section-kicker">DUAL TRACKS</p>
+                    <h2 id="brand-duality-title">边界清晰，才能真正合流</h2>
+                    <p>IRIS 对工程质量负责，SAKURA 对体验生命力负责。名称、语气和能力范围分别表达，生态层再用联合标识连接。</p>
+                </div>
+                <div class="brand-duality-grid">
+                    <article class="brand-track brand-track-iris" data-brand-branch="iris">
+                        <header><span>IRIS / 01</span><strong>ENGINEER · BUILD · OPTIMIZE</strong></header>
+                        <h3>Tools &amp; Engineering</h3>
+                        <p>冷静、精确、结构化。承担 Framework、Engineering、Developer Tools、Pipeline 与 Infrastructure。</p>
+                        <ul><li>Scalable Systems</li><li>Quality &amp; Reliability</li><li>Developer Velocity</li></ul>
+                    </article>
+                    <div class="brand-convergence" data-brand-convergence>
+                        <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-convergence-mark">
+                        <strong>ONE ECOSYSTEM</strong>
+                        <span>Shared intent<br>Distinct voices</span>
+                    </div>
+                    <article class="brand-track brand-track-sakura" data-brand-branch="sakura">
+                        <header><span>SAKURA / 02</span><strong>CREATE · INSPIRE · CONNECT</strong></header>
+                        <h3>Games &amp; Experiences</h3>
+                        <p>温暖、灵动、富有生命力。承担 Games、Experiences、Worldbuilding 与原创 IP。</p>
+                        <ul><li>Playable Worlds</li><li>Player Experience</li><li>Creative Identity</li></ul>
+                    </article>
+                </div>
             </div>
         </section>
 
-        <section class="brand-visual-section" aria-labelledby="brand-guides-title">
-            <div class="brand-section-heading">
-                <p class="section-kicker">VISUAL LANGUAGE</p>
-                <h2 id="brand-guides-title">色彩、图标与命名</h2>
-                <p>以鸢尾紫和樱花粉区分工程与创作，以天空蓝和浅色背景保持界面清晰；图标采用圆角线框与可扩展几何。</p>
-            </div>
-            <div class="brand-guideline-grid">
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/07_color_palette.png" alt="IRIS × SAKURA 品牌色板" loading="lazy">
-                    <figcaption>Color Palette</figcaption>
-                </figure>
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/08_iconography_style.png" alt="IRIS × SAKURA 圆角线框图标风格" loading="lazy">
-                    <figcaption>Iconography Style</figcaption>
-                </figure>
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/09_naming_rule.png" alt="IRIS 工程体系与 SAKURA 游戏体验体系的命名规则" loading="lazy">
-                    <figcaption>Naming Rule</figcaption>
-                </figure>
+        <section class="brand-products-section" aria-labelledby="brand-products-title">
+            <div class="container">
+                <div class="brand-section-heading">
+                    <p class="section-kicker">ENGINEERING SUB-BRANDS</p>
+                    <h2 id="brand-products-title">让子品牌像产品，而不是母品牌的复印件</h2>
+                    <p>统一继承 IRIS 的工程语气与几何秩序，同时用职责和成果边界区分框架产品与研发工作流。</p>
+                </div>
+                <div class="brand-product-grid">
+                    <article class="brand-product-card brand-product-framework">
+                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-cubes-stacked"></i></div>
+                        <p>IRIS / FRAMEWORK</p>
+                        <h3>IrisGameFramework</h3>
+                        <strong>MODULAR · SCALABLE · CREATOR-READY</strong>
+                        <span>为真实游戏生产建立可复用的 Unity 系统边界。</span>
+                    </article>
+                    <article class="brand-product-card brand-product-engineering">
+                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-code-branch"></i></div>
+                        <p>IRIS / ENGINEERING</p>
+                        <h3>Iris Engineering</h3>
+                        <strong>AUTOMATE · INTEGRATE · VERIFY</strong>
+                        <span>让研发事实、验证边界与受控自动化进入同一工作流。</span>
+                    </article>
+                </div>
             </div>
         </section>
 
-        <section class="brand-visual-section brand-portrait-section" aria-labelledby="brand-portraits-title">
-            <div class="brand-section-heading">
-                <p class="section-kicker">CHARACTER PORTRAITS</p>
-                <h2 id="brand-portraits-title">品牌人格肖像</h2>
-                <p>肖像用于品牌故事、演示与文化表达，不替代项目 Logo、应用图标或产品界面中的功能性标识。</p>
+        <section class="brand-language-section" aria-labelledby="brand-language-title">
+            <div class="container">
+                <div class="brand-section-heading brand-section-heading-centered">
+                    <p class="section-kicker">VISUAL LANGUAGE</p>
+                    <h2 id="brand-language-title">一套能够直接进入产品的品牌工具箱</h2>
+                    <p>颜色负责区分力量，图标负责解释系统，命名负责守住产品边界。</p>
+                </div>
+                <div class="brand-language-grid">
+                    <article class="brand-language-card brand-palette-card">
+                        <span class="brand-card-index">01 / COLOR</span>
+                        <h3>从鸢尾紫到樱花粉</h3>
+                        <ul class="brand-palette" aria-label="品牌核心色">
+                            <li><span class="brand-swatch" style="--brand-swatch: #4C4CF5"></span><strong>Iris Core</strong><code>#4C4CF5</code></li>
+                            <li><span class="brand-swatch" style="--brand-swatch: #7B73FF"></span><strong>Iris Light</strong><code>#7B73FF</code></li>
+                            <li><span class="brand-swatch" style="--brand-swatch: #A06BFF"></span><strong>Shared Violet</strong><code>#A06BFF</code></li>
+                            <li><span class="brand-swatch" style="--brand-swatch: #FF7EB6"></span><strong>Sakura Core</strong><code>#FF7EB6</code></li>
+                            <li><span class="brand-swatch" style="--brand-swatch: #FFC1D8"></span><strong>Sakura Light</strong><code>#FFC1D8</code></li>
+                            <li><span class="brand-swatch" style="--brand-swatch: #7EC6FF"></span><strong>Sky Link</strong><code>#7EC6FF</code></li>
+                        </ul>
+                    </article>
+                    <article class="brand-language-card brand-icon-card">
+                        <span class="brand-card-index">02 / ICONOGRAPHY</span>
+                        <h3>Clean · Technical · Elegant</h3>
+                        <div class="brand-icon-row" aria-hidden="true"><i class="fas fa-code"></i><i class="fas fa-cubes"></i><i class="fas fa-diagram-project"></i><i class="fas fa-gears"></i></div>
+                        <p>圆角线框、清晰几何与适度细节，优先服务识别和信息层级。</p>
+                    </article>
+                    <article class="brand-language-card brand-naming-card">
+                        <span class="brand-card-index">03 / NAMING</span>
+                        <h3>一个生态，两套命名家族</h3>
+                        <div><code>IRIS-*</code><span>Tools / Engineering / Framework</span></div>
+                        <div><code>SAKURA-*</code><span>Games / Experiences / Worlds &amp; IP</span></div>
+                    </article>
+                </div>
             </div>
-            <div class="brand-portrait-grid">
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/10_iris_character_portrait.png" alt="IRIS 品牌人格角色肖像" loading="lazy">
-                    <figcaption>IRIS · Rational / Precise / Structured</figcaption>
-                </figure>
-                <figure class="brand-visual-card">
-                    <img src="../assets/images/brand/11_sakura_character_portrait.png" alt="SAKURA 品牌人格角色肖像" loading="lazy">
-                    <figcaption>SAKURA · Warm / Imaginative / Alive</figcaption>
-                </figure>
+        </section>
+
+        <section class="brand-persona-section" aria-labelledby="brand-personas-title">
+            <div class="container">
+                <div class="brand-section-heading">
+                    <p class="section-kicker">PERSONIFIED BRAND</p>
+                    <h2 id="brand-personas-title">让抽象价值拥有可以记住的面孔</h2>
+                    <p>肖像只服务于品牌故事与文化表达；产品界面仍优先使用功能清晰的联合标识、产品名和系统图标。</p>
+                </div>
+                <div class="brand-persona-stage">
+                    <figure class="brand-persona-portrait brand-persona-iris">
+                        <img src="../assets/images/brand/10_iris_character_portrait.png" alt="IRIS 品牌人格角色肖像" loading="lazy" decoding="async">
+                        <figcaption><span>IRIS</span><strong>Rational · Precise · Structured</strong></figcaption>
+                    </figure>
+                    <figure class="brand-persona-portrait brand-persona-sakura">
+                        <img src="../assets/images/brand/11_sakura_character_portrait.png" alt="SAKURA 品牌人格角色肖像" loading="lazy" decoding="async">
+                        <figcaption><span>SAKURA</span><strong>Warm · Imaginative · Alive</strong></figcaption>
+                    </figure>
+                </div>
             </div>
         </section>
     </div>
+<!-- brand-content:end -->
 </main>
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
             <div class="footer-info">
                 <a href="../index.html" class="footer-logo" aria-label="IrisSakura 首页">
-                    <i class="fas fa-gamepad" aria-hidden="true"></i>
-                    <span>Iris</span>Sakura
+                    <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
                 </a>
                 <p class="footer-description">研究游戏设计与引擎机制，将结论沉淀为框架，并通过真实游戏验证。</p>
             </div>
@@ -275,7 +325,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
-            <p>研究 · 框架 · 游戏</p>
+            <p>BUILD · CREATE · BLOOM</p>
         </div>
     </div>
 </footer>

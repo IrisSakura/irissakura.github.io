@@ -291,6 +291,7 @@ for (const page of pageDefinitions) {
 
   const navbar = navbarTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
+    .replaceAll('{{brandMark}}', escapeAttribute(pageHref('assets/favicon.svg?v=20260824')))
     .replaceAll('{{profileAvatar}}', escapeAttribute(pageHref(site.profile.avatar)))
     .replace('{{profileAvatarAlt}}', escapeAttribute(site.profile.avatarAlt))
     .replace('{{profileNickname}}', escapeHtml(site.profile.nickname))
@@ -302,11 +303,13 @@ for (const page of pageDefinitions) {
     .replace('{{contactHref}}', escapeAttribute(pageHref('pages/contact.html')))
     .replace('{{navLinks}}', navLinks)
     .replace('{{themeStorageKey}}', escapeAttribute(themeConfig.storageKey))
+    .replace('{{defaultThemePreference}}', escapeAttribute(themeConfig.defaultPreference))
     .replace('{{defaultLightTheme}}', escapeAttribute(themeConfig.defaultLight))
     .replace('{{defaultDarkTheme}}', escapeAttribute(themeConfig.defaultDark))
     .replace('{{themeOptions}}', renderThemeOptions(themeConfig, prefix));
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
+    .replaceAll('{{brandMark}}', escapeAttribute(pageHref('assets/favicon.svg?v=20260824')))
     .replace('{{footerLinks}}', footerLinks)
     .replace('{{socialLinks}}', socialLinks);
 
@@ -349,6 +352,9 @@ for (const page of pageDefinitions) {
       renderHomeContent(projects, publicJournal, framework, consumerLab, site)
     );
   }
+  if (page.file === 'pages/art-music.html') {
+    html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent());
+  }
   if (page.file === 'pages/portfolio.html') {
     html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, consumerLab));
   }
@@ -382,10 +388,10 @@ await Promise.all([
     description: site.description,
     start_url: '/',
     display: 'standalone',
-    background_color: themeConfig.themes.find((theme) => theme.id === themeConfig.defaultLight).backgroundColor,
-    theme_color: themeConfig.themes.find((theme) => theme.id === themeConfig.defaultLight).themeColor,
+    background_color: themeConfig.themes.find((theme) => theme.id === resolveDefaultThemeId(themeConfig)).backgroundColor,
+    theme_color: themeConfig.themes.find((theme) => theme.id === resolveDefaultThemeId(themeConfig)).themeColor,
     icons: [
-      { src: '/assets/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
+      { src: '/assets/favicon.svg?v=20260824', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
     ]
   }, null, 2) + '\n')
 ]);
@@ -394,7 +400,7 @@ function buildMeta(page, siteData, themes) {
   const canonical = `${siteData.siteUrl}${page.canonical}`;
   const image = `${siteData.siteUrl}${page.image}`;
   const prefix = '../'.repeat(page.file.split('/').length - 1);
-  const defaultThemeColor = themes.themes.find((theme) => theme.id === themes.defaultLight).themeColor;
+  const defaultThemeColor = themes.themes.find((theme) => theme.id === resolveDefaultThemeId(themes)).themeColor;
   const structured = {
     '@context': 'https://schema.org',
     '@type': page.schemaType ?? 'WebPage',
@@ -449,7 +455,7 @@ function buildMeta(page, siteData, themes) {
     <meta name="twitter:image:alt" content="${escapeAttribute(page.imageAlt)}">
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
     <meta name="theme-color" content="${defaultThemeColor}">
-    <link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="${prefix}assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="${prefix}rss.xml">
     <script type="application/ld+json">${JSON.stringify(structured)}</script>
@@ -510,12 +516,21 @@ function assertThemeConfig(config) {
       throw new Error(`theme registry default is not registered: ${defaultTheme}`);
     }
   }
+  if (config.defaultPreference !== 'system' && !ids.has(config.defaultPreference)) {
+    throw new Error(`theme registry defaultPreference is not registered: ${config.defaultPreference}`);
+  }
   if (config.themes.find((theme) => theme.id === config.defaultLight).colorScheme !== 'light') {
     throw new Error('defaultLight must reference a light theme');
   }
   if (config.themes.find((theme) => theme.id === config.defaultDark).colorScheme !== 'dark') {
     throw new Error('defaultDark must reference a dark theme');
   }
+}
+
+function resolveDefaultThemeId(config) {
+  return config.defaultPreference === 'system'
+    ? config.defaultLight
+    : config.defaultPreference;
 }
 
 function renderThemeOptions(config, prefix) {
@@ -539,7 +554,7 @@ function renderThemeStyles(prefix, config) {
   }
 
   const links = Array.from(stylesheetThemes, ([stylesheet, themeIds]) => {
-    const enabledByDefault = themeIds.includes(config.defaultLight);
+    const enabledByDefault = themeIds.includes(resolveDefaultThemeId(config));
     return `<link rel="stylesheet" href="${prefix}${stylesheet}" data-theme-stylesheet data-themes="${themeIds.join(' ')}"${enabledByDefault ? '' : ' disabled'}>`;
   });
   return `<!-- theme-styles:start -->
@@ -561,6 +576,7 @@ function installThemeBootstrap(html, prefix, config) {
 
   const browserConfig = {
     storageKey: config.storageKey,
+    defaultPreference: config.defaultPreference,
     defaultLight: config.defaultLight,
     defaultDark: config.defaultDark,
     themes: Object.fromEntries(config.themes.map((theme) => [
@@ -581,10 +597,11 @@ function installThemeBootstrap(html, prefix, config) {
             try {
                 storedTheme = window.localStorage.getItem(config.storageKey);
             } catch {
-                // 受限存储环境下继续使用系统主题。
+                // 受限存储环境下继续使用站点默认主题。
             }
             const isTheme = (value) => Object.prototype.hasOwnProperty.call(config.themes, value);
-            const preference = isTheme(storedTheme) ? storedTheme : 'system';
+            const isPreference = (value) => value === 'system' || isTheme(value);
+            const preference = isPreference(storedTheme) ? storedTheme : config.defaultPreference;
             const theme = preference === 'system'
                 ? window.matchMedia('(prefers-color-scheme: dark)').matches
                     ? config.defaultDark
@@ -652,36 +669,6 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
 
-        <section class="brand-ecosystem-section" aria-labelledby="brand-ecosystem-title">
-            <div class="container">
-                <div class="brand-ecosystem-hero">
-                    <img src="assets/images/brand/01_iris_x_sakura_header.png" alt="IRIS × SAKURA 游戏科技生态品牌标题" loading="lazy">
-                    <div>
-                        <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
-                        <h2 id="brand-ecosystem-title">工程体系与游戏体验，在同一品牌下生长</h2>
-                        <p>IRIS 承接 Framework、Engineering、Developer Tools、Pipeline 与 Infrastructure；SAKURA 承接 Games、Experiences、Worldbuilding 与原创 IP。</p>
-                        <a href="pages/art-music.html#brand-system" class="text-link">查看完整品牌视觉</a>
-                    </div>
-                </div>
-                <div class="brand-ecosystem-grid">
-                    <article class="brand-project-card">
-                        <img src="assets/images/brand/02_irisgameframework_brand_card.png" alt="IrisGameFramework 独立品牌卡" loading="lazy">
-                        <h3>IrisGameFramework</h3>
-                        <p>模块化、可扩展，并以真实消费路径验证的 Unity 工程能力。</p>
-                    </article>
-                    <figure class="brand-joint-emblem">
-                        <img src="assets/images/brand/06_iris_sakura_joint_emblem.png" alt="IRIS × SAKURA 联合鸢尾与樱花徽记" loading="lazy">
-                        <figcaption>Build · Create · Bloom</figcaption>
-                    </figure>
-                    <article class="brand-project-card">
-                        <img src="assets/images/brand/03_iris_engineering_brand_card.png" alt="Iris Engineering 独立品牌卡" loading="lazy">
-                        <h3>Iris Engineering</h3>
-                        <p>让研发事实、验证边界与受控自动化拥有清晰的工程入口。</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
         <section class="flagship-section">
             <div class="container flagship-grid">
                 <div class="flagship-media">
@@ -698,6 +685,34 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
                         <div><dt>当前限制</dt><dd>${escapeHtml(game.limitations.join('；'))}</dd></div>
                     </dl>
                     <a href="pages/game.html" class="btn btn-primary">查看完整案例</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-ecosystem-section" aria-labelledby="brand-ecosystem-title">
+            <div class="container brand-ecosystem-inner">
+                <div class="brand-signature">
+                    <div class="brand-lockup brand-lockup-compact" aria-label="IRIS × SAKURA">
+                        <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
+                    </div>
+                    <p>BUILD · CREATE · BLOOM</p>
+                    <a href="pages/art-music.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+                <div>
+                    <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
+                    <h2 id="brand-ecosystem-title">让工程的确定性，托住创作的生命力</h2>
+                    <div class="brand-branch-grid">
+                        <article class="brand-branch brand-branch-iris" data-home-brand-branch>
+                            <span>01 / IRIS</span>
+                            <h3>Systems &amp; Tools</h3>
+                            <p>Framework、Engineering、Pipeline 与 Infrastructure。</p>
+                        </article>
+                        <article class="brand-branch brand-branch-sakura" data-home-brand-branch>
+                            <span>02 / SAKURA</span>
+                            <h3>Games &amp; Worlds</h3>
+                            <p>Games、Experiences、Worldbuilding 与原创 IP。</p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>
@@ -753,6 +768,166 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             </div>
         </section>
     </section>`;
+}
+
+function renderBrandContent() {
+  const palette = [
+    ['Iris Core', '#4C4CF5'],
+    ['Iris Light', '#7B73FF'],
+    ['Shared Violet', '#A06BFF'],
+    ['Sakura Core', '#FF7EB6'],
+    ['Sakura Light', '#FFC1D8'],
+    ['Sky Link', '#7EC6FF']
+  ].map(([label, value]) => `
+                            <li><span class="brand-swatch" style="--brand-swatch: ${value}"></span><strong>${label}</strong><code>${value}</code></li>`).join('');
+
+  return `<header class="portfolio-header brand-portfolio-header">
+        <div class="container">
+            <p class="section-kicker">IRIS × SAKURA · BRAND SYSTEM</p>
+            <h1>品牌视觉与创作</h1>
+            <p>一套连接工程体系与游戏体验的双人格视觉语言：IRIS 负责构建，SAKURA 负责绽放。</p>
+        </div>
+    </header>
+
+    <div class="brand-portfolio" id="brand-system">
+        <section class="brand-system-intro" aria-labelledby="brand-system-title">
+            <div class="container brand-system-intro-inner">
+                <div class="brand-system-copy">
+                    <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
+                    <div class="brand-lockup brand-lockup-hero" aria-label="IRIS × SAKURA">
+                        <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
+                    </div>
+                    <p class="brand-lockup-subtitle">GAME-TECH ECOSYSTEM</p>
+                    <h2 id="brand-system-title">Build · Create · Bloom</h2>
+                    <p>不是把工程与创作混成一种声音，而是让两种力量在同一生态里各自清晰、彼此支撑。</p>
+                </div>
+                <ol class="brand-principles" aria-label="品牌行动原则">
+                    <li><span>01</span><strong>BUILD</strong><small>用可验证的系统建立创作底座</small></li>
+                    <li><span>02</span><strong>CREATE</strong><small>把能力转化为可感知的玩法体验</small></li>
+                    <li><span>03</span><strong>BLOOM</strong><small>让作品、世界与原创 IP 持续生长</small></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="brand-board-section" aria-labelledby="brand-board-title">
+            <div class="container">
+                <div class="brand-section-heading">
+                    <p class="section-kicker">MASTER BRAND BOARD</p>
+                    <h2 id="brand-board-title">先看完整生态，再进入每一条分支</h2>
+                    <p>总览板保留双人格、工程子品牌、联合徽记、色板与命名家族的原始关系；网页组件则把这些规则变成可阅读、可复用的界面语言。</p>
+                </div>
+                <figure class="brand-board">
+                    <img src="../assets/images/brand/00_full_brand_board.png" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则" decoding="async">
+                    <figcaption>品牌系统总览 · 工程理性与创作生命力并行</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="brand-duality-section" aria-labelledby="brand-duality-title">
+            <div class="container">
+                <div class="brand-section-heading brand-section-heading-centered">
+                    <p class="section-kicker">DUAL TRACKS</p>
+                    <h2 id="brand-duality-title">边界清晰，才能真正合流</h2>
+                    <p>IRIS 对工程质量负责，SAKURA 对体验生命力负责。名称、语气和能力范围分别表达，生态层再用联合标识连接。</p>
+                </div>
+                <div class="brand-duality-grid">
+                    <article class="brand-track brand-track-iris" data-brand-branch="iris">
+                        <header><span>IRIS / 01</span><strong>ENGINEER · BUILD · OPTIMIZE</strong></header>
+                        <h3>Tools &amp; Engineering</h3>
+                        <p>冷静、精确、结构化。承担 Framework、Engineering、Developer Tools、Pipeline 与 Infrastructure。</p>
+                        <ul><li>Scalable Systems</li><li>Quality &amp; Reliability</li><li>Developer Velocity</li></ul>
+                    </article>
+                    <div class="brand-convergence" data-brand-convergence>
+                        <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-convergence-mark">
+                        <strong>ONE ECOSYSTEM</strong>
+                        <span>Shared intent<br>Distinct voices</span>
+                    </div>
+                    <article class="brand-track brand-track-sakura" data-brand-branch="sakura">
+                        <header><span>SAKURA / 02</span><strong>CREATE · INSPIRE · CONNECT</strong></header>
+                        <h3>Games &amp; Experiences</h3>
+                        <p>温暖、灵动、富有生命力。承担 Games、Experiences、Worldbuilding 与原创 IP。</p>
+                        <ul><li>Playable Worlds</li><li>Player Experience</li><li>Creative Identity</li></ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-products-section" aria-labelledby="brand-products-title">
+            <div class="container">
+                <div class="brand-section-heading">
+                    <p class="section-kicker">ENGINEERING SUB-BRANDS</p>
+                    <h2 id="brand-products-title">让子品牌像产品，而不是母品牌的复印件</h2>
+                    <p>统一继承 IRIS 的工程语气与几何秩序，同时用职责和成果边界区分框架产品与研发工作流。</p>
+                </div>
+                <div class="brand-product-grid">
+                    <article class="brand-product-card brand-product-framework">
+                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-cubes-stacked"></i></div>
+                        <p>IRIS / FRAMEWORK</p>
+                        <h3>IrisGameFramework</h3>
+                        <strong>MODULAR · SCALABLE · CREATOR-READY</strong>
+                        <span>为真实游戏生产建立可复用的 Unity 系统边界。</span>
+                    </article>
+                    <article class="brand-product-card brand-product-engineering">
+                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-code-branch"></i></div>
+                        <p>IRIS / ENGINEERING</p>
+                        <h3>Iris Engineering</h3>
+                        <strong>AUTOMATE · INTEGRATE · VERIFY</strong>
+                        <span>让研发事实、验证边界与受控自动化进入同一工作流。</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-language-section" aria-labelledby="brand-language-title">
+            <div class="container">
+                <div class="brand-section-heading brand-section-heading-centered">
+                    <p class="section-kicker">VISUAL LANGUAGE</p>
+                    <h2 id="brand-language-title">一套能够直接进入产品的品牌工具箱</h2>
+                    <p>颜色负责区分力量，图标负责解释系统，命名负责守住产品边界。</p>
+                </div>
+                <div class="brand-language-grid">
+                    <article class="brand-language-card brand-palette-card">
+                        <span class="brand-card-index">01 / COLOR</span>
+                        <h3>从鸢尾紫到樱花粉</h3>
+                        <ul class="brand-palette" aria-label="品牌核心色">${palette}
+                        </ul>
+                    </article>
+                    <article class="brand-language-card brand-icon-card">
+                        <span class="brand-card-index">02 / ICONOGRAPHY</span>
+                        <h3>Clean · Technical · Elegant</h3>
+                        <div class="brand-icon-row" aria-hidden="true"><i class="fas fa-code"></i><i class="fas fa-cubes"></i><i class="fas fa-diagram-project"></i><i class="fas fa-gears"></i></div>
+                        <p>圆角线框、清晰几何与适度细节，优先服务识别和信息层级。</p>
+                    </article>
+                    <article class="brand-language-card brand-naming-card">
+                        <span class="brand-card-index">03 / NAMING</span>
+                        <h3>一个生态，两套命名家族</h3>
+                        <div><code>IRIS-*</code><span>Tools / Engineering / Framework</span></div>
+                        <div><code>SAKURA-*</code><span>Games / Experiences / Worlds &amp; IP</span></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-persona-section" aria-labelledby="brand-personas-title">
+            <div class="container">
+                <div class="brand-section-heading">
+                    <p class="section-kicker">PERSONIFIED BRAND</p>
+                    <h2 id="brand-personas-title">让抽象价值拥有可以记住的面孔</h2>
+                    <p>肖像只服务于品牌故事与文化表达；产品界面仍优先使用功能清晰的联合标识、产品名和系统图标。</p>
+                </div>
+                <div class="brand-persona-stage">
+                    <figure class="brand-persona-portrait brand-persona-iris">
+                        <img src="../assets/images/brand/10_iris_character_portrait.png" alt="IRIS 品牌人格角色肖像" loading="lazy" decoding="async">
+                        <figcaption><span>IRIS</span><strong>Rational · Precise · Structured</strong></figcaption>
+                    </figure>
+                    <figure class="brand-persona-portrait brand-persona-sakura">
+                        <img src="../assets/images/brand/11_sakura_character_portrait.png" alt="SAKURA 品牌人格角色肖像" loading="lazy" decoding="async">
+                        <figcaption><span>SAKURA</span><strong>Warm · Imaginative · Alive</strong></figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>`;
 }
 
 function renderPortfolioContent(projectData, journalData, frameworkData, consumerLabData) {

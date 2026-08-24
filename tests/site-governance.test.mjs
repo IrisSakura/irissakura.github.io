@@ -308,6 +308,9 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'rel="canonical"',
       'application/ld+json',
       'class="skip-link"',
+      'class="brand-mark"',
+      'class="brand-wordmark"',
+      'assets/favicon.svg?v=20260824',
       'id="main-navigation"',
       'aria-controls="main-navigation"',
       'aria-expanded="false"',
@@ -322,6 +325,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
     }
+    assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);
 
     assert.ok(
       html.indexOf('theme-styles:start') < html.indexOf('theme-bootstrap:start'),
@@ -356,7 +360,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
   }
 });
 
-test('theme selector follows the registry and system until the visitor stores a preference', async () => {
+test('theme selector uses the brand default while keeping system as a persistent visitor choice', async () => {
   const [siteSource, mainCss, generator, navbar, themeConfig] = await Promise.all([
     readText('src/site.ts'),
     readText('style/main.css'),
@@ -372,7 +376,6 @@ test('theme selector follows the registry and system until the visitor stores a 
   assert.ok(siteSource.includes("querySelector<HTMLSelectElement>('.theme-select')"));
   assert.ok(siteSource.includes("window.addEventListener('storage'"));
   assert.ok(siteSource.includes('localStorage.setItem'));
-  assert.ok(siteSource.includes('localStorage.removeItem'));
   for (const contract of [
     'transitionThemePreference',
     'theme-transition-overlay',
@@ -396,7 +399,14 @@ test('theme selector follows the registry and system until the visitor stores a 
   );
   assert.ok(navbar.includes('{{themeOptions}}'));
   assert.ok(navbar.includes('data-default-light="{{defaultLightTheme}}"'));
+  assert.ok(navbar.includes('data-default-preference="{{defaultThemePreference}}"'));
   assert.equal(themeConfig.storageKey, 'irissakura-theme');
+  assert.equal(themeConfig.defaultPreference, 'iris-sakura');
+  assert.ok(generator.includes('defaultPreference: config.defaultPreference'));
+  assert.ok(generator.includes('config.defaultPreference'));
+  assert.ok(siteSource.includes('getDefaultThemePreference'));
+  assert.ok(siteSource.includes('localStorage.setItem(this.getStorageKey(), preference)'));
+  assert.ok(!siteSource.includes('localStorage.removeItem(this.getStorageKey())'));
 });
 
 test('obsolete layout selector, registry and runtime are fully removed', async () => {
@@ -464,11 +474,12 @@ test('shared motion adds progressive depth without hiding content for reduced-mo
   );
 });
 
-test('theme registry supports shared layers and the sakura village palette', async () => {
+test('theme registry supports a default IRIS × SAKURA brand theme and the existing palettes', async () => {
   const config = JSON.parse(await readText('data/themes.json'));
   const ids = config.themes.map((theme) => theme.id);
   assert.equal(new Set(ids).size, ids.length);
-  assert.deepEqual(ids, ['night', 'pastoral', 'sakura-village']);
+  assert.deepEqual(ids, ['iris-sakura', 'night', 'pastoral', 'sakura-village']);
+  assert.equal(config.defaultPreference, 'iris-sakura');
   assert.equal(
     config.themes.find((theme) => theme.id === config.defaultLight)?.colorScheme,
     'light'
@@ -481,6 +492,21 @@ test('theme registry supports shared layers and the sakura village palette', asy
   const registeredStylesheets = new Set(config.themes.flatMap((theme) => theme.stylesheets));
   for (const stylesheet of registeredStylesheets) {
     await readText(stylesheet);
+  }
+
+  const brandTheme = config.themes.find((theme) => theme.id === 'iris-sakura');
+  assert.deepEqual(brandTheme.stylesheets, ['style/iris-sakura.css']);
+  assert.equal(brandTheme.colorScheme, 'light');
+  assert.equal(brandTheme.homeHeroImage, 'assets/images/profile/home-hero-iris-sakura.png');
+  const brandCss = await readText('style/iris-sakura.css');
+  for (const motif of [
+    '--primary-color: #4c4cf5',
+    '--accent-color: #b82f6c',
+    '--paper: #f7f4ff',
+    '--ink: #2f2556',
+    '--ui-action-primary-bg: #4c4cf5'
+  ]) {
+    assert.ok(brandCss.includes(motif), `brand theme missing palette token ${motif}`);
   }
 
   const sakuraTheme = config.themes.find((theme) => theme.id === 'sakura-village');
@@ -593,7 +619,15 @@ test('theme styles only change palette colors', async () => {
     '--ui-action-outline-hover-bg',
     '--ui-chip-border',
     '--ui-chip-surface',
-    '--ui-chip-text'
+    '--ui-chip-text',
+    '--ui-home-cover-heading',
+    '--ui-home-cover-text',
+    '--ui-home-cover-kicker',
+    '--ui-home-cover-secondary-text',
+    '--ui-home-cover-secondary-border',
+    '--ui-home-cover-secondary-bg',
+    '--ui-home-cover-secondary-hover-text',
+    '--ui-home-cover-secondary-hover-bg'
   ]);
   const violations = [];
 

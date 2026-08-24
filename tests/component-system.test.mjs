@@ -43,7 +43,7 @@ test('shared component tokens own common actions, controls, chips, surfaces and 
 });
 
 test('themes configure component tokens instead of re-declaring shared component classes', async () => {
-  for (const themePath of ['style/pastoral.css', 'style/sakura-village.css']) {
+  for (const themePath of ['style/iris-sakura.css', 'style/pastoral.css', 'style/sakura-village.css']) {
     const css = await readText(themePath);
     for (const token of [
       '--ui-action-primary-bg',
