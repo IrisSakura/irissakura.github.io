@@ -1,4 +1,45 @@
-## 1. 类型定位
+> Agent 标签：`builder` `building` `city`
+
+---
+
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `game-designs`。当前生成的 `README.md` 标记 `Entries: 46`，`route-metadata.v1.json` 中已经登记殖民地模拟、农场经营、4X、俱乐部经营、末端物流、幸存者类、自走棋等类型，但当前路由索引中没有独立的 `city-builder`、`urban-planning` 或“城市建设模拟”范式。
+
+本期选择：
+
+**城市建设模拟 / City Builder / Urban Planning Simulation。**
+
+常见名称包括：
+
+- City Builder；
+
+- City-Building Simulation；
+
+- Urban Planning Simulation；
+
+- 城市建设模拟；
+
+- 城市规划模拟；
+
+- 都市经营模拟。
+
+
+仓库中已有的殖民地模拟以“具体居民—工作订单—资源搬运—需求满足”为核心，即玩家通过工作优先级、区域和生产链间接组织一群具有独立状态的居民。
+
+本期城市建设模拟则固定研究另一套宏观范式：
+
+> **玩家不主要管理某个居民今天应该去哪里工作，而是设计土地用途、交通网络、公用事业、公共服务、税制和空间政策；大量居民与企业依据可达性、土地价值、就业机会、服务质量和成本自主选择迁入、迁出、通勤与经营位置。城市由这些局部决策逐渐涌现为宏观人口、交通、产业、财政和空间结构。**
+
+因此：
+
+**殖民地模拟的核心对象是“具体居民与工作”。**
+
+**城市建设模拟的核心对象是“空间、网络、土地市场与聚合人口流”。**
+
+---
+
+# 1. 类型定位
 
 城市建设模拟是一种以：
 
@@ -60,7 +101,7 @@
 
 ---
 
-## 2. 最核心的系统抽象
+# 2. 最核心的系统抽象
 
 城市建设模拟可以被抽象为六个不断互相影响的状态域：
 
@@ -109,11 +150,11 @@
 
 ---
 
-## 3. 城市建设类最具代表性的设计范式
+# 3. 城市建设类最具代表性的设计范式
 
 ---
 
-### 3.1 玩家主要规划“允许发生什么”，而不是直接决定“谁住在哪里”
+## 3.1 玩家主要规划“允许发生什么”，而不是直接决定“谁住在哪里”
 
 典型城市建设中，玩家通常不会逐户决定：
 
@@ -163,7 +204,7 @@
 
 ---
 
-### 3.2 土地不是空白格子，而是不断变化的经济资产
+## 3.2 土地不是空白格子，而是不断变化的经济资产
 
 每块土地可能具有：
 
@@ -210,7 +251,7 @@
 
 ---
 
-### 3.3 可达性往往比直线距离更重要
+## 3.3 可达性往往比直线距离更重要
 
 居民离工作地点：
 
@@ -240,7 +281,7 @@
 
 ---
 
-### 3.4 道路既是空间，也是容量有限的运输网络
+## 3.4 道路既是空间，也是容量有限的运输网络
 
 道路不是简单：
 
@@ -285,7 +326,7 @@
 
 ---
 
-### 3.5 城市问题通常具有延迟
+## 3.5 城市问题通常具有延迟
 
 修建住宅区以后：
 
@@ -314,7 +355,7 @@
 
 ---
 
-### 3.6 城市增长本身会制造下一阶段的问题
+## 3.6 城市增长本身会制造下一阶段的问题
 
 人口增加不是纯奖励。
 
@@ -349,7 +390,7 @@ Growth
 
 ---
 
-### 3.7 公共服务具有“覆盖、容量和响应时间”三个不同维度
+## 3.7 公共服务具有“覆盖、容量和响应时间”三个不同维度
 
 例如医院：
 
@@ -361,15 +402,15 @@ Growth
 
 必须考虑：
 
-#### Coverage
+### Coverage
 
 哪些地区原则上能服务。
 
-#### Capacity
+### Capacity
 
 能处理多少患者。
 
-#### Response Time
+### Response Time
 
 救护车实际多久能到。
 
@@ -388,7 +429,7 @@ Growth
 
 ---
 
-### 3.8 城市财政必须让增长具有维护成本
+## 3.8 城市财政必须让增长具有维护成本
 
 低质量城市经营：
 
@@ -430,7 +471,7 @@ Growth
 
 ---
 
-### 3.9 城市没有唯一正确布局，而是不同权衡的稳定态
+## 3.9 城市没有唯一正确布局，而是不同权衡的稳定态
 
 高密度中心城市：
 
@@ -474,11 +515,11 @@ Growth
 
 ---
 
-## 4. 与相近类型的边界
+# 4. 与相近类型的边界
 
 ---
 
-### 4.1 与殖民地模拟的区别
+## 4.1 与殖民地模拟的区别
 
 当前仓库已有殖民地模拟，核心强调独立居民、工作订单、资源搬运和具体行为调度。
 
@@ -526,7 +567,7 @@ Growth
 
 ---
 
-### 4.2 与4X的区别
+## 4.2 与4X的区别
 
 4X更强调：
 
@@ -560,7 +601,7 @@ Growth
 
 ---
 
-### 4.3 与工厂自动化的区别
+## 4.3 与工厂自动化的区别
 
 工厂自动化中的主要流：
 
@@ -597,7 +638,7 @@ Growth
 
 ---
 
-### 4.4 与交通经营模拟的区别
+## 4.4 与交通经营模拟的区别
 
 交通经营游戏主要围绕：
 
@@ -620,7 +661,7 @@ Growth
 
 ---
 
-## 5. 总体运行时架构
+# 5. 总体运行时架构
 
 推荐将运行时划分为以下核心域：
 
@@ -693,9 +734,9 @@ SimulationClock推进
 
 ---
 
-## 6. 城市模拟时钟
+# 6. 城市模拟时钟
 
-### 6.1 CitySimulationClock
+## 6.1 CitySimulationClock
 
 建议字段：
 
@@ -718,11 +759,11 @@ SimulationClock推进
 
 ---
 
-### 6.2 更新频率分层
+## 6.2 更新频率分层
 
 不是所有系统都应该每帧更新。
 
-#### 高频
+### 高频
 
 - 活跃车辆；
 
@@ -731,7 +772,7 @@ SimulationClock推进
 - 紧急车辆。
 
 
-#### 中频
+### 中频
 
 - 路径重算；
 
@@ -740,7 +781,7 @@ SimulationClock推进
 - 建筑服务状态。
 
 
-#### 低频
+### 低频
 
 - 人口迁移；
 
@@ -753,7 +794,7 @@ SimulationClock推进
 - 企业开闭。
 
 
-#### 日级或周级
+### 日级或周级
 
 - 财政报表；
     -教育人口；
@@ -765,7 +806,7 @@ SimulationClock推进
 
 ---
 
-## 7. 地块与Parcel系统
+# 7. 地块与Parcel系统
 
 建议不要让城市所有规则直接绑定到渲染网格。
 
@@ -777,7 +818,7 @@ SimulationClock推进
 
 ---
 
-### 7.1 ParcelState
+## 7.1 ParcelState
 
 建议字段：
 
@@ -812,7 +853,7 @@ SimulationClock推进
 
 ---
 
-### 7.2 Parcel职责
+## 7.2 Parcel职责
 
 Parcel是：
 
@@ -830,9 +871,9 @@ Parcel可能需要重新分割。
 
 ---
 
-## 8. 道路网络
+# 8. 道路网络
 
-### 8.1 RoadNode
+## 8.1 RoadNode
 
 建议字段：
 
@@ -851,7 +892,7 @@ Parcel可能需要重新分割。
 
 ---
 
-### 8.2 RoadSegment
+## 8.2 RoadSegment
 
 建议字段：
 
@@ -882,7 +923,7 @@ Parcel可能需要重新分割。
 
 ---
 
-## 9. Road Graph
+# 9. Road Graph
 
 城市中的RoadGraph同时供：
 
@@ -907,7 +948,7 @@ Parcel可能需要重新分割。
 
 ---
 
-## 10. 路网修改
+# 10. 路网修改
 
 玩家：
 
@@ -937,7 +978,7 @@ Parcel可能需要重新分割。
 
 ---
 
-## 11. 道路删除失败隔离
+# 11. 道路删除失败隔离
 
 删除一条主干道可能导致：
 
@@ -965,9 +1006,9 @@ Parcel可能需要重新分割。
 
 ---
 
-## 12. 分区系统
+# 12. 分区系统
 
-### 12.1 ZoneTypeDefinition
+## 12.1 ZoneTypeDefinition
 
 典型包括：
 
@@ -990,7 +1031,7 @@ Parcel可能需要重新分割。
 
 ---
 
-### 12.2 ZoneState
+## 12.2 ZoneState
 
 建议包含：
 
@@ -1011,7 +1052,7 @@ Parcel可能需要重新分割。
 
 ---
 
-## 13. 分区不是建筑
+# 13. 分区不是建筑
 
 玩家划住宅区：
 
@@ -1041,7 +1082,7 @@ Zone Applied
 
 ---
 
-## 14. Development Demand
+# 14. Development Demand
 
 需要至少区分：
 
@@ -1056,7 +1097,7 @@ Zone Applied
 
 ---
 
-### 14.1 DemandState
+## 14.1 DemandState
 
 建议包含：
 
@@ -1075,7 +1116,7 @@ Zone Applied
 
 ---
 
-### 14.2 住宅需求来源
+## 14.2 住宅需求来源
 
 例如：
 
@@ -1094,7 +1135,7 @@ Zone Applied
 
 ---
 
-### 14.3 商业需求来源
+## 14.3 商业需求来源
 
 例如：
 
@@ -1111,7 +1152,7 @@ Zone Applied
 
 ---
 
-### 14.4 工业需求来源
+## 14.4 工业需求来源
 
 例如：
 
@@ -1128,7 +1169,7 @@ Zone Applied
 
 ---
 
-## 15. 需求不能简单变成三根无解释色条
+# 15. 需求不能简单变成三根无解释色条
 
 传统城市模拟经常显示：
 
@@ -1155,9 +1196,9 @@ ResidentialDemand：
 
 ---
 
-## 16. 建筑生命周期
+# 16. 建筑生命周期
 
-### 16.1 BuildingDefinition
+## 16.1 BuildingDefinition
 
 建议字段：
 
@@ -1190,7 +1231,7 @@ ResidentialDemand：
 
 ---
 
-### 16.2 BuildingRuntimeState
+## 16.2 BuildingRuntimeState
 
 建议包含：
 
@@ -1219,7 +1260,7 @@ ResidentialDemand：
 
 ---
 
-## 17. BuildingState
+# 17. BuildingState
 
 推荐：
 
@@ -1242,7 +1283,7 @@ ResidentialDemand：
 
 ---
 
-## 18. 建筑升级
+# 18. 建筑升级
 
 高质量升级不应只根据：
 
@@ -1267,7 +1308,7 @@ ResidentialDemand：
 
 ---
 
-### 18.1 Upgrade流程
+## 18.1 Upgrade流程
 
 Building长期满足条件
 → UpgradeEligibility
@@ -1283,7 +1324,7 @@ Building长期满足条件
 
 ---
 
-## 19. 人口模型
+# 19. 人口模型
 
 城市人口可以采用：
 
@@ -1295,7 +1336,7 @@ Building长期满足条件
 
 ---
 
-### 19.1 HouseholdState
+## 19.1 HouseholdState
 
 建议字段：
 
@@ -1322,7 +1363,7 @@ Building长期满足条件
 
 ---
 
-## 20. 为什么推荐Household而不是纯Citizen
+# 20. 为什么推荐Household而不是纯Citizen
 
 住宅决策通常发生在：
 
@@ -1347,7 +1388,7 @@ Citizen
 
 ---
 
-## 21. 人口聚合策略
+# 21. 人口聚合策略
 
 如果城市有：
 
@@ -1383,7 +1424,7 @@ Household / Cohort。
 
 ---
 
-## 22. 迁入
+# 22. 迁入
 
 迁入需要：
 
@@ -1402,7 +1443,7 @@ Household / Cohort。
 
 ---
 
-### 22.1 MoveInTransaction
+## 22.1 MoveInTransaction
 
 ExternalHouseholdCandidate
 → 找到合法住宅
@@ -1414,7 +1455,7 @@ ExternalHouseholdCandidate
 
 ---
 
-## 23. 迁出
+# 23. 迁出
 
 原因可能包括：
 
@@ -1439,9 +1480,9 @@ ExternalHouseholdCandidate
 
 ---
 
-## 24. 就业系统
+# 24. 就业系统
 
-### 24.1 JobSlotDefinition
+## 24.1 JobSlotDefinition
 
 建议包含：
 
@@ -1458,7 +1499,7 @@ ExternalHouseholdCandidate
 
 ---
 
-### 24.2 EmploymentState
+## 24.2 EmploymentState
 
 居民就业需要匹配：
 
@@ -1475,7 +1516,7 @@ ExternalHouseholdCandidate
 
 ---
 
-## 25. “有工作”不等于“能招到人”
+# 25. “有工作”不等于“能招到人”
 
 一个工业区可能存在大量岗位，
 
@@ -1502,9 +1543,9 @@ ExternalHouseholdCandidate
 
 ---
 
-## 26. 企业生命周期
+# 26. 企业生命周期
 
-### 26.1 BusinessState
+## 26.1 BusinessState
 
 建议包含：
 
@@ -1533,7 +1574,7 @@ ExternalHouseholdCandidate
 
 ---
 
-### 26.2 企业开业
+## 26.2 企业开业
 
 CommercialDemand
 → Building可用
@@ -1544,7 +1585,7 @@ CommercialDemand
 
 ---
 
-### 26.3 企业倒闭
+## 26.3 企业倒闭
 
 长期：
 
@@ -1569,7 +1610,7 @@ Closed。
 
 ---
 
-## 27. Trip Generation
+# 27. Trip Generation
 
 这是城市模拟和一般经营模拟的重要分界。
 
@@ -1579,7 +1620,7 @@ Closed。
 
 ---
 
-### 27.1 TripRequest
+## 27.1 TripRequest
 
 建议字段：
 
@@ -1604,7 +1645,7 @@ Closed。
 
 ---
 
-### 27.2 TripPurpose
+## 27.2 TripPurpose
 
 包括：
 
@@ -1629,7 +1670,7 @@ Closed。
 
 ---
 
-## 28. 城市问题最终经常表现为“移动失败”
+# 28. 城市问题最终经常表现为“移动失败”
 
 例如：
 
@@ -1656,9 +1697,9 @@ Need
 
 ---
 
-## 29. 交通方式选择
+# 29. 交通方式选择
 
-### 29.1 ModeChoiceContext
+## 29.1 ModeChoiceContext
 
 可考虑：
 
@@ -1681,7 +1722,7 @@ Need
 
 ---
 
-### 29.2 Modal Split
+## 29.2 Modal Split
 
 最后形成：
 
@@ -1702,7 +1743,7 @@ Need
 
 ---
 
-## 30. Traffic Assignment
+# 30. Traffic Assignment
 
 交通需求不能只看：
 
@@ -1714,7 +1755,7 @@ OD Flow / Origin-Destination Demand。
 
 ---
 
-### 30.1 RouteChoice
+## 30.1 RouteChoice
 
 推荐成本：
 
@@ -1733,9 +1774,9 @@ TravelTime
 
 ---
 
-## 31. 道路拥堵
+# 31. 道路拥堵
 
-### 31.1 SegmentTrafficState
+## 31.1 SegmentTrafficState
 
 建议包含：
 
@@ -1756,7 +1797,7 @@ TravelTime
 
 ---
 
-### 31.2 拥堵是非线性的
+## 31.2 拥堵是非线性的
 
 道路流量：
 
@@ -1778,7 +1819,7 @@ VehicleCount / LaneCount。
 
 ---
 
-## 32. 路口往往比道路本身更重要
+# 32. 路口往往比道路本身更重要
 
 交通瓶颈经常发生在：
 
@@ -1799,7 +1840,7 @@ VehicleCount / LaneCount。
 
 ---
 
-## 33. Traffic Signal System
+# 33. Traffic Signal System
 
 可以支持：
 
@@ -1816,7 +1857,7 @@ VehicleCount / LaneCount。
 
 ---
 
-### 33.1 信号灯不应直接“提高容量”
+## 33.1 信号灯不应直接“提高容量”
 
 它改变的是：
 
@@ -1824,9 +1865,9 @@ VehicleCount / LaneCount。
 
 ---
 
-## 34. 公共交通
+# 34. 公共交通
 
-### 34.1 TransitLineState
+## 34.1 TransitLineState
 
 建议包含：
 
@@ -1851,7 +1892,7 @@ VehicleCount / LaneCount。
 
 ---
 
-## 35. 公交系统完整流程
+# 35. 公交系统完整流程
 
 居民产生Trip
 → ModeChoice选择Transit
@@ -1865,7 +1906,7 @@ VehicleCount / LaneCount。
 
 ---
 
-## 36. 公交容量
+# 36. 公交容量
 
 公交线路存在：
 
@@ -1888,7 +1929,7 @@ VehicleCount / LaneCount。
 
 ---
 
-## 37. 水、电等Utility Network
+# 37. 水、电等Utility Network
 
 城市网络不应该统一成：
 
@@ -1909,7 +1950,7 @@ VehicleCount / LaneCount。
 
 ---
 
-### 37.1 UtilityNode
+## 37.1 UtilityNode
 
 建议字段：
 
@@ -1930,7 +1971,7 @@ VehicleCount / LaneCount。
 
 ---
 
-## 38. Network Flow
+# 38. Network Flow
 
 基础版本可以：
 
@@ -1955,7 +1996,7 @@ ConnectedComponent
 
 ---
 
-## 39. 电力过载
+# 39. 电力过载
 
 例如：
 
@@ -1983,7 +2024,7 @@ NetworkBottleneck。
 
 ---
 
-## 40. Utility Failure
+# 40. Utility Failure
 
 断电会影响：
 
@@ -2006,7 +2047,7 @@ NetworkBottleneck。
 
 ---
 
-## 41. 公共服务系统
+# 41. 公共服务系统
 
 典型服务：
 
@@ -2029,7 +2070,7 @@ NetworkBottleneck。
 
 ---
 
-### 41.1 ServiceFacilityState
+## 41.1 ServiceFacilityState
 
 建议包含：
 
@@ -2054,7 +2095,7 @@ NetworkBottleneck。
 
 ---
 
-## 42. 教育系统
+# 42. 教育系统
 
 教育与消防不同。
 
@@ -2086,7 +2127,7 @@ EligiblePopulation
 
 ---
 
-## 43. 消防系统
+# 43. 消防系统
 
 FireIncident
 → 查询可用FireStation
@@ -2107,7 +2148,7 @@ FireIncident
 
 ---
 
-## 44. 医疗系统
+# 44. 医疗系统
 
 医疗可包含：
 
@@ -2130,7 +2171,7 @@ FireIncident
 
 ---
 
-## 45. 垃圾系统
+# 45. 垃圾系统
 
 垃圾是非常典型的城市物流反馈：
 
@@ -2143,7 +2184,7 @@ FireIncident
 
 ---
 
-### 45.1 垃圾问题可能源于交通
+## 45.1 垃圾问题可能源于交通
 
 处理厂容量正常，
 
@@ -2159,9 +2200,9 @@ FireIncident
 
 ---
 
-## 46. 土地价值
+# 46. 土地价值
 
-### 46.1 LandValueContext
+## 46.1 LandValueContext
 
 建议包含：
 
@@ -2190,7 +2231,7 @@ FireIncident
 
 ---
 
-## 47. 土地价值不是“幸福度”
+# 47. 土地价值不是“幸福度”
 
 它更接近：
 
@@ -2209,7 +2250,7 @@ FireIncident
 
 ---
 
-## 48. 土地价值过高也可以成为问题
+# 48. 土地价值过高也可以成为问题
 
 例如：
 
@@ -2233,9 +2274,9 @@ FireIncident
 
 ---
 
-## 49. 污染与环境
+# 49. 污染与环境
 
-### 49.1 PollutionField
+## 49.1 PollutionField
 
 可以分：
 
@@ -2250,7 +2291,7 @@ FireIncident
 
 ---
 
-### 49.2 PollutionSource
+## 49.2 PollutionSource
 
 包括：
 
@@ -2267,7 +2308,7 @@ FireIncident
 
 ---
 
-### 49.3 Pollution传播
+## 49.3 Pollution传播
 
 可以使用：
 
@@ -2282,7 +2323,7 @@ FireIncident
 
 ---
 
-## 50. 环境会反馈人口与土地价值
+# 50. 环境会反馈人口与土地价值
 
 IndustrialPollution
 → ResidentialAttractiveness下降
@@ -2295,9 +2336,9 @@ IndustrialPollution
 
 ---
 
-## 51. 财政系统
+# 51. 财政系统
 
-### 51.1 CityFinanceState
+## 51.1 CityFinanceState
 
 建议包含：
 
@@ -2322,7 +2363,7 @@ IndustrialPollution
 
 ---
 
-## 52. 收入来源
+# 52. 收入来源
 
 包括：
 
@@ -2347,7 +2388,7 @@ IndustrialPollution
 
 ---
 
-## 53. 支出
+# 53. 支出
 
 包括：
 
@@ -2372,7 +2413,7 @@ IndustrialPollution
 
 ---
 
-## 54. 建设成本和运营成本必须分离
+# 54. 建设成本和运营成本必须分离
 
 一座医院：
 
@@ -2388,7 +2429,7 @@ OperatingCost = 5000 / week。
 
 ---
 
-## 55. 城市财政的周期问题
+# 55. 城市财政的周期问题
 
 快速扩张：
 
@@ -2407,9 +2448,9 @@ OperatingCost = 5000 / week。
 
 ---
 
-## 56. 税率和政策
+# 56. 税率和政策
 
-### 56.1 PolicyDefinition
+## 56.1 PolicyDefinition
 
 建议字段：
 
@@ -2432,7 +2473,7 @@ OperatingCost = 5000 / week。
 
 ---
 
-## 57. 税率作用
+# 57. 税率作用
 
 高税率：
 
@@ -2455,9 +2496,9 @@ OperatingCost = 5000 / week。
 
 ---
 
-## 58. District
+# 58. District
 
-### 58.1 DistrictState
+## 58.1 DistrictState
 
 建议包含：
 
@@ -2478,7 +2519,7 @@ OperatingCost = 5000 / week。
 
 ---
 
-## 59. District的价值
+# 59. District的价值
 
 允许玩家从：
 
@@ -2504,7 +2545,7 @@ OperatingCost = 5000 / week。
 
 ---
 
-## 60. 城市吸引力
+# 60. 城市吸引力
 
 可以定义：
 
@@ -2535,7 +2576,7 @@ ExternalMigrationPool
 
 ---
 
-## 61. 但不要用一个总分替代所有系统
+# 61. 但不要用一个总分替代所有系统
 
 Attractiveness可以作为：
 
@@ -2553,7 +2594,7 @@ Attractiveness可以作为：
 
 ---
 
-## 62. 完整事件与执行流程示例
+# 62. 完整事件与执行流程示例
 
 以下以：
 
@@ -2563,7 +2604,7 @@ Attractiveness可以作为：
 
 ---
 
-### 62.1 初始城市状态
+## 62.1 初始城市状态
 
 城市人口：
 
@@ -2583,7 +2624,7 @@ ResidentialDemand较高。
 
 ---
 
-### 62.2 玩家开放新区
+## 62.2 玩家开放新区
 
 东侧有一大片未开发土地。
 
@@ -2599,7 +2640,7 @@ ResidentialDemand较高。
 
 ---
 
-### 62.3 Parcel生成
+## 62.3 Parcel生成
 
 RoadNetwork变化。
 
@@ -2611,7 +2652,7 @@ ParcelSystem根据：
 
 ---
 
-### 62.4 Zoning提交
+## 62.4 Zoning提交
 
 Parcel被标记：
 
@@ -2621,7 +2662,7 @@ ResidentialHigh。
 
 ---
 
-### 62.5 DevelopmentDemand判断
+## 62.5 DevelopmentDemand判断
 
 当前：
 
@@ -2644,7 +2685,7 @@ DevelopmentEligible。
 
 ---
 
-### 62.6 建筑出现
+## 62.6 建筑出现
 
 BuildingLifecycle创建：
 
@@ -2656,7 +2697,7 @@ UnderConstruction住宅。
 
 ---
 
-### 62.7 Household迁入
+## 62.7 Household迁入
 
 外部人口不断进入。
 
@@ -2670,7 +2711,7 @@ UnderConstruction住宅。
 
 ---
 
-### 62.8 第一个隐患
+## 62.8 第一个隐患
 
 东区拥有：
 
@@ -2688,7 +2729,7 @@ CommuteTrip。
 
 ---
 
-### 62.9 TrafficAssignment
+## 62.9 TrafficAssignment
 
 所有车辆主要使用：
 
@@ -2702,7 +2743,7 @@ Flow / Capacity = 0.6。
 
 ---
 
-### 62.10 人口继续增加
+## 62.10 人口继续增加
 
 东区人口达到：
 
@@ -2716,7 +2757,7 @@ Flow / Capacity = 1.05。
 
 ---
 
-### 62.11 拥堵产生次生效果
+## 62.11 拥堵产生次生效果
 
 居民通勤时间增加。
 
@@ -2739,7 +2780,7 @@ Transportation Bottleneck
 
 ---
 
-### 62.12 玩家看到表面症状
+## 62.12 玩家看到表面症状
 
 东区开始出现：
 
@@ -2754,7 +2795,7 @@ Transportation Bottleneck
 
 ---
 
-### 62.13 错误解决方案
+## 62.13 错误解决方案
 
 玩家首先：
 
@@ -2772,7 +2813,7 @@ Transportation Bottleneck
 
 ---
 
-### 62.14 DebugExplainability
+## 62.14 DebugExplainability
 
 ServiceInspector显示：
 
@@ -2790,7 +2831,7 @@ AverageTravelTime Too High。
 
 ---
 
-### 62.15 玩家修建第二条道路
+## 62.15 玩家修建第二条道路
 
 短期：
 
@@ -2808,7 +2849,7 @@ AverageTravelTime Too High。
 
 ---
 
-### 62.16 玩家改变策略
+## 62.16 玩家改变策略
 
 决定不再单纯增加道路容量。
 
@@ -2821,7 +2862,7 @@ East Residential
 
 ---
 
-### 62.17 Transit上线
+## 62.17 Transit上线
 
 部分居民重新进行ModeChoice。
 
@@ -2837,7 +2878,7 @@ Metro：
 
 ---
 
-### 62.18 Modal Split变化
+## 62.18 Modal Split变化
 
 东区：
 
@@ -2859,7 +2900,7 @@ Transit：
 
 ---
 
-### 62.19 路网压力下降
+## 62.19 路网压力下降
 
 主干路：
 
@@ -2875,7 +2916,7 @@ CongestionRatio
 
 ---
 
-### 62.20 但出现新的问题
+## 62.20 但出现新的问题
 
 地铁站周围：
 
@@ -2889,7 +2930,7 @@ LandValue上升。
 
 ---
 
-### 62.21 玩家进行第二轮规划
+## 62.21 玩家进行第二轮规划
 
 不再让所有新增人口前往市中心。
 
@@ -2899,7 +2940,7 @@ MixedUse / Commercial / Office。
 
 ---
 
-### 62.22 就业空间重新分布
+## 62.22 就业空间重新分布
 
 部分居民可以：
 
@@ -2909,7 +2950,7 @@ MixedUse / Commercial / Office。
 
 ---
 
-### 62.23 土地价值继续提高
+## 62.23 土地价值继续提高
 
 Transit
 
@@ -2926,7 +2967,7 @@ Transit
 
 ---
 
-### 62.24 城市形成新的副中心
+## 62.24 城市形成新的副中心
 
 原本城市：
 
@@ -2938,7 +2979,7 @@ Polycentric City。
 
 ---
 
-### 62.25 完整因果链
+## 62.25 完整因果链
 
 高住宅需求
 → 新区开发
@@ -2962,9 +3003,9 @@ Polycentric City。
 
 ---
 
-## 63. 模块通信设计
+# 63. 模块通信设计
 
-### 63.1 Commands
+## 63.1 Commands
 
 典型命令：
 
@@ -3010,7 +3051,7 @@ Command应携带：
 
 ---
 
-### 63.2 Queries
+## 63.2 Queries
 
 适用于：
 
@@ -3044,7 +3085,7 @@ Query绝不能：
 
 ---
 
-### 63.3 Domain Events
+## 63.3 Domain Events
 
 包括：
 
@@ -3089,7 +3130,7 @@ Query绝不能：
 
 ---
 
-### 63.4 Presentation Events
+## 63.4 Presentation Events
 
 包括：
 
@@ -3123,7 +3164,7 @@ Query绝不能：
 
 ---
 
-## 64. 状态所有权
+# 64. 状态所有权
 
 推荐明确：
 
@@ -3190,7 +3231,7 @@ TrafficSystem
 
 ---
 
-## 65. 城市的派生状态必须和权威状态分离
+# 65. 城市的派生状态必须和权威状态分离
 
 例如：
 
@@ -3216,7 +3257,7 @@ ParcelState
 
 ---
 
-## 66. SaveSnapshot
+# 66. SaveSnapshot
 
 建议包含：
 
@@ -3261,7 +3302,7 @@ ParcelState
 
 ---
 
-## 67. 不建议持久化所有派生缓存
+# 67. 不建议持久化所有派生缓存
 
 例如：
 
@@ -3290,7 +3331,7 @@ ParcelState
 
 ---
 
-## 68. 存档恢复顺序
+# 68. 存档恢复顺序
 
 推荐：
 
@@ -3308,11 +3349,11 @@ ParcelState
 
 ---
 
-## 69. 失败隔离
+# 69. 失败隔离
 
 ---
 
-### 69.1 路网拓扑损坏
+## 69.1 路网拓扑损坏
 
 若RoadSegment引用不存在Node：
 
@@ -3322,7 +3363,7 @@ ParcelState
 
 ---
 
-### 69.2 Parcel无道路
+## 69.2 Parcel无道路
 
 建筑所在Parcel失去RoadAccess时：
 
@@ -3336,7 +3377,7 @@ Disconnected。
 
 ---
 
-### 69.3 Trip无法寻路
+## 69.3 Trip无法寻路
 
 Trip进入：
 
@@ -3366,7 +3407,7 @@ Unreachable。
 
 ---
 
-### 69.4 公交线路断裂
+## 69.4 公交线路断裂
 
 道路删除后：
 
@@ -3384,7 +3425,7 @@ UI提示：
 
 ---
 
-### 69.5 Utility孤岛
+## 69.5 Utility孤岛
 
 供电网络分裂后：
 
@@ -3396,7 +3437,7 @@ UI提示：
 
 ---
 
-### 69.6 企业岗位引用失效
+## 69.6 企业岗位引用失效
 
 建筑被拆除：
 
@@ -3409,7 +3450,7 @@ UI提示：
 
 ---
 
-### 69.7 Household Home失效
+## 69.7 Household Home失效
 
 住宅被拆：
 
@@ -3427,7 +3468,7 @@ MoveOut。
 
 ---
 
-### 69.8 ServiceVehicle死锁
+## 69.8 ServiceVehicle死锁
 
 垃圾车或救护车路径失效：
 
@@ -3440,7 +3481,7 @@ MoveOut。
 
 ---
 
-### 69.9 财政结算重复
+## 69.9 财政结算重复
 
 每个FinancePeriod需要：
 
@@ -3452,7 +3493,7 @@ PeriodId。
 
 ---
 
-### 69.10 BuildingUpgrade重复
+## 69.10 BuildingUpgrade重复
 
 升级事务必须拥有：
 
@@ -3464,7 +3505,7 @@ BuildingUpgradeTransactionId。
 
 ---
 
-## 70. Debug 与 Explainability
+# 70. Debug 与 Explainability
 
 城市建设模拟如果缺乏解释工具，会迅速变成：
 
@@ -3476,7 +3517,7 @@ BuildingUpgradeTransactionId。
 
 ---
 
-## 71. Road Network Debugger
+# 71. Road Network Debugger
 
 显示：
 
@@ -3499,7 +3540,7 @@ BuildingUpgradeTransactionId。
 
 ---
 
-## 72. Traffic Heatmap
+# 72. Traffic Heatmap
 
 显示：
 
@@ -3520,7 +3561,7 @@ BuildingUpgradeTransactionId。
 
 ---
 
-## 73. Origin-Destination Inspector
+# 73. Origin-Destination Inspector
 
 点击某条拥堵道路：
 
@@ -3547,7 +3588,7 @@ Industrial → Highway。
 
 ---
 
-## 74. Demand Explainer
+# 74. Demand Explainer
 
 显示：
 
@@ -3577,7 +3618,7 @@ Commercial：
 
 ---
 
-## 75. Building Inspector
+# 75. Building Inspector
 
 某栋楼为什么没有升级：
 
@@ -3596,7 +3637,7 @@ Commercial：
 
 ---
 
-## 76. Employment Inspector
+# 76. Employment Inspector
 
 某工业区缺工：
 
@@ -3615,7 +3656,7 @@ Commercial：
 
 ---
 
-## 77. Utility Flow Viewer
+# 77. Utility Flow Viewer
 
 显示：
 
@@ -3630,7 +3671,7 @@ Commercial：
 
 ---
 
-## 78. Service Coverage Viewer
+# 78. Service Coverage Viewer
 
 应允许切换：
 
@@ -3648,7 +3689,7 @@ Commercial：
 
 ---
 
-## 79. Land Value Breakdown
+# 79. Land Value Breakdown
 
 点击Parcel显示：
 
@@ -3670,7 +3711,7 @@ Commercial：
 
 ---
 
-## 80. Finance Timeline
+# 80. Finance Timeline
 
 显示：
 
@@ -3689,7 +3730,7 @@ Commercial：
 
 ---
 
-## 81. Population Funnel
+# 81. Population Funnel
 
 可以显示：
 
@@ -3706,7 +3747,7 @@ ExternalPotentialResidents
 
 ---
 
-## 82. City Causality Graph
+# 82. City Causality Graph
 
 例如：
 
@@ -3721,11 +3762,11 @@ ExternalPotentialResidents
 
 ---
 
-## 83. 内容验证工具
+# 83. 内容验证工具
 
 ---
 
-### 83.1 Road Topology Validation
+## 83.1 Road Topology Validation
 
 检查：
 
@@ -3742,7 +3783,7 @@ ExternalPotentialResidents
 
 ---
 
-### 83.2 Parcel Generation Test
+## 83.2 Parcel Generation Test
 
 随机创建：
 
@@ -3761,7 +3802,7 @@ ExternalPotentialResidents
 
 ---
 
-### 83.3 Zoning Reachability
+## 83.3 Zoning Reachability
 
 所有可开发Parcel必须：
 
@@ -3769,7 +3810,7 @@ ExternalPotentialResidents
 
 ---
 
-### 83.4 Population Simulation
+## 83.4 Population Simulation
 
 不用渲染，
 
@@ -3792,7 +3833,7 @@ ExternalPotentialResidents
 
 ---
 
-### 83.5 Traffic Stress Test
+## 83.5 Traffic Stress Test
 
 模拟：
 
@@ -3814,7 +3855,7 @@ Trip Demand。
 
 ---
 
-### 83.6 Utility Capacity Test
+## 83.6 Utility Capacity Test
 
 自动生成：
 
@@ -3829,7 +3870,7 @@ Failure。
 
 ---
 
-### 83.7 Finance Sustainability Test
+## 83.7 Finance Sustainability Test
 
 Bot城市测试：
 
@@ -3849,7 +3890,7 @@ Bot城市测试：
 
 ---
 
-### 83.8 Service Response Simulation
+## 83.8 Service Response Simulation
 
 大量随机：
 
@@ -3861,7 +3902,7 @@ ResponseTime分布。
 
 ---
 
-### 83.9 Policy Long-Term Test
+## 83.9 Policy Long-Term Test
 
 运行数年：
 
@@ -3877,7 +3918,7 @@ ResponseTime分布。
 
 ---
 
-## 84. 性能设计
+# 84. 性能设计
 
 城市建设模拟通常很容易掉入：
 
@@ -3887,19 +3928,19 @@ ResponseTime分布。
 
 ---
 
-### 84.1 Simulation LOD
+## 84.1 Simulation LOD
 
 推荐至少三层：
 
-#### Macro
+### Macro
 
 人口、就业、需求。
 
-#### Meso
+### Meso
 
 Household、Business、Trip。
 
-#### Micro
+### Micro
 
 当前可见的Citizen和Vehicle。
 
@@ -3907,7 +3948,7 @@ Household、Business、Trip。
 
 ---
 
-## 85. 不需要让每个居民每天真正走完整路径
+# 85. 不需要让每个居民每天真正走完整路径
 
 可以：
 
@@ -3927,7 +3968,7 @@ TravelCost。
 
 ---
 
-## 86. Trip Sampling
+# 86. Trip Sampling
 
 例如：
 
@@ -3943,7 +3984,7 @@ TravelCost。
 
 ---
 
-## 87. Path Cache
+# 87. Path Cache
 
 大量居民拥有相似：
 
@@ -3957,7 +3998,7 @@ Route。
 
 ---
 
-## 88. Hierarchical Pathfinding
+# 88. Hierarchical Pathfinding
 
 大地图可以：
 
@@ -3969,7 +4010,7 @@ Route。
 
 ---
 
-## 89. Traffic Assignment不需要每Tick全重算
+# 89. Traffic Assignment不需要每Tick全重算
 
 只有：
 
@@ -3986,7 +4027,7 @@ Route。
 
 ---
 
-## 90. Heatmap异步生成
+# 90. Heatmap异步生成
 
 交通、地价、污染等Heatmap：
 
@@ -3998,7 +4039,7 @@ Route。
 
 ---
 
-## 91. Building实例化分层
+# 91. Building实例化分层
 
 远距离：
 
@@ -4019,11 +4060,11 @@ Route。
 
 ---
 
-## 92. 可扩展点
+# 92. 可扩展点
 
 ---
 
-### 92.1 新Zone类型
+## 92.1 新Zone类型
 
 通过：
 
@@ -4042,7 +4083,7 @@ ZoneTypeDefinition
 
 ---
 
-### 92.2 新交通方式
+## 92.2 新交通方式
 
 实现统一：
 
@@ -4065,7 +4106,7 @@ TransitMode。
 
 ---
 
-### 92.3 新Utility
+## 92.3 新Utility
 
 通过：
 
@@ -4084,7 +4125,7 @@ NetworkCommodity
 
 ---
 
-### 92.4 新Service
+## 92.4 新Service
 
 通过：
 
@@ -4103,7 +4144,7 @@ ServiceDefinition
 
 ---
 
-### 92.5 新产业
+## 92.5 新产业
 
 通过：
 
@@ -4124,7 +4165,7 @@ IndustryDefinition：
 
 ---
 
-### 92.6 新Policy
+## 92.6 新Policy
 
 主要实现：
 
@@ -4137,7 +4178,7 @@ IndustryDefinition：
 
 ---
 
-### 92.7 新地图
+## 92.7 新地图
 
 提供：
 
@@ -4156,7 +4197,7 @@ IndustryDefinition：
 
 ---
 
-### 92.8 新城市模式
+## 92.8 新城市模式
 
 可以支持：
 
@@ -4175,11 +4216,11 @@ IndustryDefinition：
 
 ---
 
-## 93. 玩家体验设计
+# 93. 玩家体验设计
 
 ---
 
-### 93.1 玩家必须先看懂城市，再解决城市
+## 93.1 玩家必须先看懂城市，再解决城市
 
 城市建设的UI应该从：
 
@@ -4205,7 +4246,7 @@ East Residential → Center Jobs。
 
 ---
 
-### 93.2 不要把所有问题都简化成红绿Heatmap
+## 93.2 不要把所有问题都简化成红绿Heatmap
 
 Heatmap适合：
 
@@ -4221,7 +4262,7 @@ Inspector。
 
 ---
 
-### 93.3 建设预览应显示未来影响
+## 93.3 建设预览应显示未来影响
 
 修建道路前：
 
@@ -4249,7 +4290,7 @@ Inspector。
 
 ---
 
-### 93.4 城市增长需要明显可视反馈
+## 93.4 城市增长需要明显可视反馈
 
 玩家应该感受到：
 
@@ -4263,7 +4304,7 @@ Inspector。
 
 ---
 
-### 93.5 但视觉建筑不能成为权威数据
+## 93.5 但视觉建筑不能成为权威数据
 
 建筑动画还没结束：
 
@@ -4273,7 +4314,7 @@ Inspector。
 
 ---
 
-## 94. 玩家应该能暂停并进行复杂规划
+# 94. 玩家应该能暂停并进行复杂规划
 
 城市建设本质上需要：
 
@@ -4292,7 +4333,7 @@ Inspector。
 
 ---
 
-## 95. 倍速不能改变模拟结果
+# 95. 倍速不能改变模拟结果
 
 在不同TimeScale下：
 
@@ -4313,7 +4354,7 @@ Inspector。
 
 ---
 
-## 96. 新手问题应该通过渐进复杂度引入
+# 96. 新手问题应该通过渐进复杂度引入
 
 建议：
 
@@ -4336,47 +4377,47 @@ Inspector。
 
 ---
 
-## 97. 常见设计失败
+# 97. 常见设计失败
 
 ---
 
-### 97.1 分区后立即生成建筑
+## 97.1 分区后立即生成建筑
 
 城市没有市场与生长过程。
 
 ---
 
-### 97.2 需求只是三个不可解释进度条
+## 97.2 需求只是三个不可解释进度条
 
 玩家无法理解城市为什么不增长。
 
 ---
 
-### 97.3 道路只承担建筑连接
+## 97.3 道路只承担建筑连接
 
 没有真实交通容量。
 
 ---
 
-### 97.4 道路容量完全线性
+## 97.4 道路容量完全线性
 
 无法形成真实拥堵瓶颈。
 
 ---
 
-### 97.5 只模拟道路，不模拟路口
+## 97.5 只模拟道路，不模拟路口
 
 交通问题与玩家直觉不符。
 
 ---
 
-### 97.6 公交拥有无限容量
+## 97.6 公交拥有无限容量
 
 玩家只需放线路即可解决所有交通。
 
 ---
 
-### 97.7 居民总是选择最短距离
+## 97.7 居民总是选择最短距离
 
 没有考虑：
 
@@ -4384,13 +4425,13 @@ Inspector。
 
 ---
 
-### 97.8 所有市民都必须完整Agent模拟
+## 97.8 所有市民都必须完整Agent模拟
 
 人口规模无法扩展。
 
 ---
 
-### 97.9 完全不模拟个体行为
+## 97.9 完全不模拟个体行为
 
 城市又退化为纯数字Excel。
 
@@ -4403,43 +4444,43 @@ Inspector。
 
 ---
 
-### 97.10 服务只看圆形覆盖范围
+## 97.10 服务只看圆形覆盖范围
 
 医院附近堵车也永远算满服务。
 
 ---
 
-### 97.11 垃圾问题只能靠增加垃圾场
+## 97.11 垃圾问题只能靠增加垃圾场
 
 忽略收运能力。
 
 ---
 
-### 97.12 高地价永远是纯好事
+## 97.12 高地价永远是纯好事
 
 缺少住房成本和人口结构反馈。
 
 ---
 
-### 97.13 高税只减少一条幸福值
+## 97.13 高税只减少一条幸福值
 
 缺少企业迁出、开发需求和人口变化。
 
 ---
 
-### 97.14 城市扩张只增加收入
+## 97.14 城市扩张只增加收入
 
 没有维护成本。
 
 ---
 
-### 97.15 建筑升级没有增加基础设施需求
+## 97.15 建筑升级没有增加基础设施需求
 
 高密度增长没有后果。
 
 ---
 
-### 97.16 玩家解决拥堵只能扩路
+## 97.16 玩家解决拥堵只能扩路
 
 缺少：
 
@@ -4447,19 +4488,19 @@ Inspector。
 
 ---
 
-### 97.17 所有问题即时反馈
+## 97.17 所有问题即时反馈
 
 缺少城市系统应有的延迟和惯性。
 
 ---
 
-### 97.18 问题反馈延迟但没有解释工具
+## 97.18 问题反馈延迟但没有解释工具
 
 玩家完全不知道错误来自哪个历史决策。
 
 ---
 
-### 97.19 Heatmap成为唯一调试工具
+## 97.19 Heatmap成为唯一调试工具
 
 能看到哪里错，
 
@@ -4467,13 +4508,13 @@ Inspector。
 
 ---
 
-### 97.20 各系统拥有自己的道路寻路
+## 97.20 各系统拥有自己的道路寻路
 
 消防、垃圾、居民、公交出现互相矛盾的路径结果。
 
 ---
 
-## 98. 最小可行原型
+# 98. 最小可行原型
 
 城市建设MVP不需要：
 
@@ -4485,7 +4526,7 @@ Inspector。
 
 ---
 
-### 98.1 地图
+## 98.1 地图
 
 - 1张平坦地图；
 
@@ -4498,7 +4539,7 @@ Inspector。
 
 ---
 
-### 98.2 Zone
+## 98.2 Zone
 
 只做：
 
@@ -4511,7 +4552,7 @@ Inspector。
 
 ---
 
-### 98.3 Road
+## 98.3 Road
 
 只做：
 
@@ -4524,7 +4565,7 @@ Inspector。
 
 ---
 
-### 98.4 Population
+## 98.4 Population
 
 只需要：
 
@@ -4539,7 +4580,7 @@ Inspector。
 
 ---
 
-### 98.5 Economy
+## 98.5 Economy
 
 只需要：
 
@@ -4556,7 +4597,7 @@ Inspector。
 
 ---
 
-### 98.6 Utilities
+## 98.6 Utilities
 
 先只做：
 
@@ -4567,7 +4608,7 @@ Inspector。
 
 ---
 
-### 98.7 Services
+## 98.7 Services
 
 先做：
 
@@ -4587,7 +4628,7 @@ Inspector。
 
 ---
 
-### 98.8 Transit
+## 98.8 Transit
 
 加入：
 
@@ -4595,7 +4636,7 @@ Bus。
 
 ---
 
-### 98.9 必要基础设施
+## 98.9 必要基础设施
 
 - CitySimulationClock；
 
@@ -4632,7 +4673,7 @@ Bus。
 
 ---
 
-### 98.10 必要调试工具
+## 98.10 必要调试工具
 
 - RoadGraphViewer；
 
@@ -4659,7 +4700,7 @@ Bus。
 
 ---
 
-## 99. MVP核心验收问题
+# 99. MVP核心验收问题
 
 原型必须能够回答：
 
@@ -4711,7 +4752,7 @@ Bus。
 
 ---
 
-## 100. 推荐实施顺序
+# 100. 推荐实施顺序
 
 第一阶段：
 
@@ -4819,7 +4860,7 @@ Bus。
 
 ---
 
-## 101. 架构验收标准
+# 101. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -4898,11 +4939,11 @@ Bus。
 
 ---
 
-## 102. 可迁移到其他游戏的设计思想
+# 102. 可迁移到其他游戏的设计思想
 
 ---
 
-### 102.1 玩家可以设计条件，而不是直接控制结果
+## 102.1 玩家可以设计条件，而不是直接控制结果
 
 可迁移到：
 
@@ -4927,7 +4968,7 @@ Bus。
 
 ---
 
-### 102.2 可达性比距离更适合复杂空间系统
+## 102.2 可达性比距离更适合复杂空间系统
 
 可迁移到：
 
@@ -4952,7 +4993,7 @@ Bus。
 
 ---
 
-### 102.3 共享基础设施可以自然耦合多个系统
+## 102.3 共享基础设施可以自然耦合多个系统
 
 道路同时被：
 
@@ -4976,7 +5017,7 @@ Bus。
 
 ---
 
-### 102.4 覆盖、容量和响应应该分离
+## 102.4 覆盖、容量和响应应该分离
 
 可迁移到：
 
@@ -4999,7 +5040,7 @@ Bus。
 
 ---
 
-### 102.5 延迟反馈能够创造真正的长期规划
+## 102.5 延迟反馈能够创造真正的长期规划
 
 可迁移到：
 
@@ -5020,7 +5061,7 @@ Bus。
 
 ---
 
-### 102.6 成长最好自己制造下一阶段约束
+## 102.6 成长最好自己制造下一阶段约束
 
 人口增长：
 
@@ -5036,7 +5077,7 @@ Bus。
 
 ---
 
-### 102.7 聚合模拟与微观表现可以分离
+## 102.7 聚合模拟与微观表现可以分离
 
 可迁移到：
 
@@ -5059,7 +5100,7 @@ Bus。
 
 ---
 
-### 102.8 城市问题适合用因果链而不是单点警报解释
+## 102.8 城市问题适合用因果链而不是单点警报解释
 
 “垃圾堆积”
 
@@ -5075,7 +5116,7 @@ Bus。
 
 ---
 
-### 102.9 高价值状态也可以产生负面反馈
+## 102.9 高价值状态也可以产生负面反馈
 
 LandValue提高：
 
@@ -5102,7 +5143,7 @@ LandValue提高：
 
 ---
 
-### 102.10 网络容量是空间系统中的一种“隐性资源”
+## 102.10 网络容量是空间系统中的一种“隐性资源”
 
 道路、电网、水管、公交通常都存在：
 
@@ -5123,9 +5164,9 @@ Capacity。
 
 ---
 
-## 103. 本次防重记录
+# 103. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **城市建设模拟 / City Builder / Urban Planning Simulation。**
 
@@ -5146,7 +5187,7 @@ Capacity。
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家不主要直接控制具体居民或企业，而是通过道路、分区、公共交通、公用事业、公共服务、税率和区域政策构造城市运行环境。土地Parcel在这些环境约束下获得不同可达性、地价和开发条件，住宅、商业和产业建筑根据需求自主生成和升级；居民与企业进一步产生就业、消费和通勤需求，并将这些需求转换成道路、公交、服务和Utility网络上的真实负载。
 
@@ -5170,7 +5211,7 @@ Capacity。
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 道路是全城市共享的交通网络；
 
@@ -5221,7 +5262,7 @@ Capacity。
 
 ---
 
-### 与仓库现有殖民地模拟的防重边界
+## 与仓库现有殖民地模拟的防重边界
 
 当前仓库已经存在 `colony`，其重点是：
 
@@ -5297,7 +5338,7 @@ Parcel、Network、District、Population Flow。
 
 ---
 
-### 与仓库现有4X范式的防重边界
+## 与仓库现有4X范式的防重边界
 
 4X重点在：
 
@@ -5337,7 +5378,7 @@ Parcel、Network、District、Population Flow。
 
 ---
 
-### 与仓库现有末端物流模拟的防重边界
+## 与仓库现有末端物流模拟的防重边界
 
 末端物流主要研究：
 
@@ -5360,7 +5401,7 @@ Parcel、Network、District、Population Flow。
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - City Builder；
 
@@ -5461,7 +5502,7 @@ Parcel、Network、District、Population Flow。
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次城市建设模拟范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

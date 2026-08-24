@@ -85,10 +85,11 @@
     </header>
     <nav class="profile-drawer-links" aria-label="个人快速导航">
         <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     </nav>
 </aside>
 <!-- site-navbar:end -->
@@ -152,7 +153,7 @@
 → 下一组节奏结构出现
 → 玩家逐渐形成歌曲和谱面的身体记忆。</strong></p>
 <hr />
-<h1>1. 类型定位</h1><p>节奏游戏通常具备以下核心特征：</p>
+<h1 id="1-类型定位">1. 类型定位</h1><p>节奏游戏通常具备以下核心特征：</p>
 <ul>
 <li><p>存在稳定音乐或节奏时间轴；</p>
 </li>
@@ -200,7 +201,7 @@
 → 展示Accuracy、最大Combo、判定分布和错误位置
 → 玩家重试或进入下一首歌曲。</p>
 <hr />
-<h1>2. 最核心的系统抽象</h1><p>一个节奏游戏可以抽象为四条数据流：</p>
+<h1 id="2-最核心的系统抽象">2. 最核心的系统抽象</h1><p>一个节奏游戏可以抽象为四条数据流：</p>
 <p><strong>Audio Timeline</strong></p>
 <p>歌曲现在播放到哪里。</p>
 <p><strong>Chart Timeline</strong></p>
@@ -222,7 +223,7 @@
 <p>而不是：</p>
 <p>“Note图标有没有刚好碰到判定线。”</p>
 <hr />
-<h1>3. 核心设计范式</h1><hr />
+<h1 id="3-核心设计范式">3. 核心设计范式</h1><hr />
 <h2 id="31-音频时钟必须是权威时间源">3.1 音频时钟必须是权威时间源</h2><p>最常见的错误架构是：</p>
 <p>Update推进Note
 → Note移动到判定线
@@ -465,7 +466,7 @@ Hard = 400 Notes。</p>
 </ul>
 <p>都极其重要。</p>
 <hr />
-<h1>4. 与相近类型的边界</h1><hr />
+<h1 id="4-与相近类型的边界">4. 与相近类型的边界</h1><hr />
 <h2 id="41-与普通qte的区别">4.1 与普通QTE的区别</h2><p>QTE通常：</p>
 <ul>
 <li><p>出现在其他类型游戏中；</p>
@@ -527,7 +528,7 @@ Hard = 400 Notes。</p>
 → 判定，</p>
 <p>它仍属于相同宏观范式。</p>
 <hr />
-<h1>5. 总体运行时架构</h1><p>推荐将运行时划分为以下核心域：</p>
+<h1 id="5-总体运行时架构">5. 总体运行时架构</h1><p>推荐将运行时划分为以下核心域：</p>
 <ol>
 <li><p>SongLifecycleSystem；</p>
 </li>
@@ -597,7 +598,7 @@ Hard = 400 Notes。</p>
 → 创建SongResult
 → 保存Replay和统计。</p>
 <hr />
-<h1>6. Song生命周期</h1><h2 id="61-songdefinition">6.1 SongDefinition</h2><p>建议字段：</p>
+<h1 id="6-song生命周期">6. Song生命周期</h1><h2 id="61-songdefinition">6.1 SongDefinition</h2><p>建议字段：</p>
 <ul>
 <li><p>SongId；</p>
 </li>
@@ -675,7 +676,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>7. AudioClockSystem</h1><p>AudioClock是整个系统的时间权威。</p>
+<h1 id="7-audioclocksystem">7. AudioClockSystem</h1><p>AudioClock是整个系统的时间权威。</p>
 <p>推荐接口语义：</p>
 <ul>
 <li><p>CurrentSongTime；</p>
@@ -710,7 +711,7 @@ Hard = 400 Notes。</p>
 <p>AudioClock必须基于：</p>
 <p>底层音频时间或稳定的高精度播放时钟。</p>
 <hr />
-<h1>8. Scheduling Start</h1><p>不要：</p>
+<h1 id="8-scheduling-start">8. Scheduling Start</h1><p>不要：</p>
 <p>按下Play之后</p>
 <p>立刻假设：</p>
 <p>SongTime = 0。</p>
@@ -730,7 +731,7 @@ Hard = 400 Notes。</p>
 </ul>
 <p>全部对齐到同一个StartTimestamp。</p>
 <hr />
-<h1>9. ChartDefinition</h1><p>建议字段：</p>
+<h1 id="9-chartdefinition">9. ChartDefinition</h1><p>建议字段：</p>
 <ul>
 <li><p>ChartId；</p>
 </li>
@@ -754,7 +755,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>10. NoteDefinition</h1><p>建议字段：</p>
+<h1 id="10-notedefinition">10. NoteDefinition</h1><p>建议字段：</p>
 <ul>
 <li><p>NoteId；</p>
 </li>
@@ -793,7 +794,7 @@ Hard = 400 Notes。</p>
 </ul>
 <p>进行。</p>
 <hr />
-<h1>11. TimingMap</h1><p>歌曲可能存在：</p>
+<h1 id="11-timingmap">11. TimingMap</h1><p>歌曲可能存在：</p>
 <ul>
 <li><p>BPM变化；</p>
 </li>
@@ -827,7 +828,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>12. BeatToTime转换</h1><p>ChartCompiler负责：</p>
+<h1 id="12-beattotime转换">12. BeatToTime转换</h1><p>ChartCompiler负责：</p>
 <p>BeatPosition</p>
 <p>→</p>
 <p>TargetTimestamp。</p>
@@ -844,7 +845,7 @@ Hard = 400 Notes。</p>
 </ul>
 <p>运行中不要频繁重新积分整个BPM Map。</p>
 <hr />
-<h1>13. ChartCompiler</h1><p>加载谱面后：</p>
+<h1 id="13-chartcompiler">13. ChartCompiler</h1><p>加载谱面后：</p>
 <p>解析TimingPoints
 → 建立Beat-Time Segment
 → 计算每个Note TargetTime
@@ -855,7 +856,7 @@ Hard = 400 Notes。</p>
 → 验证冲突
 → 创建CompiledChart。</p>
 <hr />
-<h1>14. CompiledChart</h1><p>推荐包含：</p>
+<h1 id="14-compiledchart">14. CompiledChart</h1><p>推荐包含：</p>
 <ul>
 <li><p>NotesByTime；</p>
 </li>
@@ -877,7 +878,7 @@ Hard = 400 Notes。</p>
 <p>运行时优先读取CompiledChart，</p>
 <p>而不是反复解析原始作者格式。</p>
 <hr />
-<h1>15. InputCaptureSystem</h1><h2 id="151-inputevent">15.1 InputEvent</h2><p>建议字段：</p>
+<h1 id="15-inputcapturesystem">15. InputCaptureSystem</h1><h2 id="151-inputevent">15.1 InputEvent</h2><p>建议字段：</p>
 <ul>
 <li><p>InputEventId；</p>
 </li>
@@ -912,7 +913,7 @@ Hard = 400 Notes。</p>
 </ul>
 <p>具体类型取决于玩法。</p>
 <hr />
-<h1>16. 输入事件时间戳必须尽可能靠近采样源</h1><p>错误结构：</p>
+<h1 id="16-输入事件时间戳必须尽可能靠近采样源">16. 输入事件时间戳必须尽可能靠近采样源</h1><p>错误结构：</p>
 <p>Input检测
 → 放到消息队列
 → 下一个Update
@@ -923,7 +924,7 @@ Hard = 400 Notes。</p>
 <p>检测到输入时</p>
 <p>立即附上高精度Timestamp。</p>
 <hr />
-<h1>17. InputBinding</h1><p>Chart不应该直接写：</p>
+<h1 id="17-inputbinding">17. InputBinding</h1><p>Chart不应该直接写：</p>
 <p>Keyboard.Space。</p>
 <p>应该写：</p>
 <p>InputActionId。</p>
@@ -936,7 +937,7 @@ Hard = 400 Notes。</p>
 → Lane1Hit。</p>
 <p>这样谱面与设备完全分离。</p>
 <hr />
-<h1>18. JudgmentSystem</h1><p>这是整个类型最关键的逻辑模块。</p>
+<h1 id="18-judgmentsystem">18. JudgmentSystem</h1><p>这是整个类型最关键的逻辑模块。</p>
 <hr />
 <h2 id="181-judgmentprofile">18.1 JudgmentProfile</h2><p>建议字段：</p>
 <ul>
@@ -967,7 +968,7 @@ Hard = 400 Notes。</p>
 <p>另一范围。</p>
 <p>因此不要假设判定窗口总是完全对称。</p>
 <hr />
-<h1>19. JudgmentCandidate</h1><p>玩家按下某Lane时：</p>
+<h1 id="19-judgmentcandidate">19. JudgmentCandidate</h1><p>玩家按下某Lane时：</p>
 <p>JudgmentSystem需要找到：</p>
 <p>该Lane附近尚未判定的Note。</p>
 <p>搜索条件：</p>
@@ -977,7 +978,7 @@ Hard = 400 Notes。</p>
 <p>距离最近；</p>
 <p>或最早合法Note。</p>
 <hr />
-<h1>20. 判定流程</h1><p>InputEvent到达
+<h1 id="20-判定流程">20. 判定流程</h1><p>InputEvent到达
 → 应用InputCalibration
 → 得到AdjustedInputTime
 → 查询Lane PendingNotes
@@ -988,7 +989,7 @@ Hard = 400 Notes。</p>
 → Note进入Resolved
 → 发布NoteJudged。</p>
 <hr />
-<h1>21. JudgmentResult</h1><p>建议包含：</p>
+<h1 id="21-judgmentresult">21. JudgmentResult</h1><p>建议包含：</p>
 <ul>
 <li><p>NoteId；</p>
 </li>
@@ -1010,7 +1011,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>22. 为什么必须保存TimingError</h1><p>只保存：</p>
+<h1 id="22-为什么必须保存timingerror">22. 为什么必须保存TimingError</h1><p>只保存：</p>
 <p>Perfect</p>
 <p>是不够的。</p>
 <p>玩家可能连续得到Perfect，</p>
@@ -1021,7 +1022,7 @@ Hard = 400 Notes。</p>
 <p>也可以用于：</p>
 <p>Calibration建议。</p>
 <hr />
-<h1>23. Miss Scanner</h1><p>不能要求玩家输入才触发判定。</p>
+<h1 id="23-miss-scanner">23. Miss Scanner</h1><p>不能要求玩家输入才触发判定。</p>
 <p>如果：</p>
 <p>AudioTime &gt; NoteTargetTime + MissWindow</p>
 <p>且Note仍然Pending，</p>
@@ -1031,7 +1032,7 @@ Hard = 400 Notes。</p>
 <p>TimeOrderedPendingIndex。</p>
 <p>而不是每帧扫描整个谱面。</p>
 <hr />
-<h1>24. NoteRuntimeState</h1><p>推荐状态：</p>
+<h1 id="24-noteruntimestate">24. NoteRuntimeState</h1><p>推荐状态：</p>
 <ul>
 <li><p>Dormant；</p>
 </li>
@@ -1051,13 +1052,13 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>25. Tap Note</h1><p>Tap是最基础Note：</p>
+<h1 id="25-tap-note">25. Tap Note</h1><p>Tap是最基础Note：</p>
 <p>目标时刻：</p>
 <p>按下InputAction。</p>
 <p>判定完成后：</p>
 <p>立即Resolved。</p>
 <hr />
-<h1>26. Hold Note</h1><p>Hold至少包含两个判定：</p>
+<h1 id="26-hold-note">26. Hold Note</h1><p>Hold至少包含两个判定：</p>
 <p><strong>Head</strong></p>
 <p>按下。</p>
 <p><strong>Tail</strong></p>
@@ -1085,7 +1086,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>27. Hold不应每帧直接加Score</h1><p>否则不同帧率：</p>
+<h1 id="27-hold不应每帧直接加score">27. Hold不应每帧直接加Score</h1><p>否则不同帧率：</p>
 <p>Score可能不同。</p>
 <p>可以：</p>
 <p>固定时间Tick</p>
@@ -1093,7 +1094,7 @@ Hard = 400 Notes。</p>
 <p>只根据持续比例</p>
 <p>计算。</p>
 <hr />
-<h1>28. 提前松开</h1><p>如果ReleaseTime：</p>
+<h1 id="28-提前松开">28. 提前松开</h1><p>如果ReleaseTime：</p>
 <p>早于：</p>
 <p>EndTime - ReleaseWindow</p>
 <p>则：</p>
@@ -1101,7 +1102,7 @@ Hard = 400 Notes。</p>
 <p>或TailMiss。</p>
 <p>规则必须明确。</p>
 <hr />
-<h1>29. Slide / Trace Note</h1><p>Slide需要跟踪：</p>
+<h1 id="29-slide-trace-note">29. Slide / Trace Note</h1><p>Slide需要跟踪：</p>
 <p>时间轴上的目标位置：</p>
 <p><code>TargetLane(t)</code></p>
 <p>或：</p>
@@ -1113,7 +1114,7 @@ Hard = 400 Notes。</p>
 <p>和：</p>
 <p>时间误差。</p>
 <hr />
-<h1>30. Flick Note</h1><p>Flick需要同时满足：</p>
+<h1 id="30-flick-note">30. Flick Note</h1><p>Flick需要同时满足：</p>
 <ul>
 <li><p>Timing；</p>
 </li>
@@ -1127,14 +1128,14 @@ Hard = 400 Notes。</p>
 <p>推荐记录：</p>
 <p>短时间输入轨迹。</p>
 <hr />
-<h1>31. Chord</h1><p>多个Note拥有相同：</p>
+<h1 id="31-chord">31. Chord</h1><p>多个Note拥有相同：</p>
 <p>GroupId / TargetTime。</p>
 <p>玩家必须：</p>
 <p>同时或近似同时输入。</p>
 <p>需要：</p>
 <p>ChordTolerance。</p>
 <hr />
-<h1>32. Chord判定不能被输入顺序影响</h1><p>两个输入在：</p>
+<h1 id="32-chord判定不能被输入顺序影响">32. Chord判定不能被输入顺序影响</h1><p>两个输入在：</p>
 <p>同一个极短时间窗口发生，</p>
 <p>不能因为事件队列顺序：</p>
 <p>一个Perfect；</p>
@@ -1143,7 +1144,7 @@ Hard = 400 Notes。</p>
 <p>ChordGroup</p>
 <p>进行短时间聚合判定。</p>
 <hr />
-<h1>33. VisualNoteSystem</h1><p>VisualNote只承担：</p>
+<h1 id="33-visualnotesystem">33. VisualNoteSystem</h1><p>VisualNote只承担：</p>
 <p>表现。</p>
 <p>其位置由：</p>
 <p>CurrentAudioTime</p>
@@ -1155,7 +1156,7 @@ Hard = 400 Notes。</p>
 <p>根据ScrollProfile</p>
 <p>映射为位置。</p>
 <hr />
-<h1>34. Note对象不应该控制自己的逻辑时间</h1><p>错误：</p>
+<h1 id="34-note对象不应该控制自己的逻辑时间">34. Note对象不应该控制自己的逻辑时间</h1><p>错误：</p>
 <p>每个Note：</p>
 <p><code>position -= speed * deltaTime</code></p>
 <p>正确：</p>
@@ -1167,7 +1168,7 @@ Hard = 400 Notes。</p>
 <p>掉帧之后</p>
 <p>Note立即回到正确位置。</p>
 <hr />
-<h1>35. Scroll Speed与谱面难度分离</h1><p>玩家可以调整：</p>
+<h1 id="35-scroll-speed与谱面难度分离">35. Scroll Speed与谱面难度分离</h1><p>玩家可以调整：</p>
 <p>VisualScrollSpeed。</p>
 <p>但：</p>
 <p>TargetTime</p>
@@ -1178,7 +1179,7 @@ Hard = 400 Notes。</p>
 <p>阅读方式变化，</p>
 <p>不是判定规则变化。</p>
 <hr />
-<h1>36. 视觉Offset</h1><p>VisualSongTime可以定义为：</p>
+<h1 id="36-视觉offset">36. 视觉Offset</h1><p>VisualSongTime可以定义为：</p>
 <p>AudioSongTime</p>
 <ul>
 <li>UserVisualOffset。</li>
@@ -1188,7 +1189,7 @@ Hard = 400 Notes。</p>
 <p>不影响：</p>
 <p>Judgment。</p>
 <hr />
-<h1>37. ScoreSystem</h1><h2 id="371-scoreprofile">37.1 ScoreProfile</h2><p>可以定义：</p>
+<h1 id="37-scoresystem">37. ScoreSystem</h1><h2 id="371-scoreprofile">37.1 ScoreProfile</h2><p>可以定义：</p>
 <p>PerfectValue；</p>
 <p>GreatValue；</p>
 <p>GoodValue；</p>
@@ -1197,7 +1198,7 @@ Hard = 400 Notes。</p>
 <p>NoteWeight；</p>
 <p>SpecialNoteMultiplier。</p>
 <hr />
-<h1>38. Accuracy</h1><p>推荐依据判定精度计算，</p>
+<h1 id="38-accuracy">38. Accuracy</h1><p>推荐依据判定精度计算，</p>
 <p>而不是直接：</p>
 <p>Score / MaxScore，</p>
 <p>因为Score可能包含：</p>
@@ -1211,7 +1212,7 @@ Hard = 400 Notes。</p>
 <p>最终：</p>
 <p>SumContribution / TotalNotes。</p>
 <hr />
-<h1>39. ComboSystem</h1><p>Combo一般：</p>
+<h1 id="39-combosystem">39. ComboSystem</h1><p>Combo一般：</p>
 <p>成功判定
 → +1。</p>
 <p>Miss
@@ -1221,11 +1222,11 @@ Hard = 400 Notes。</p>
 <p>也可能打断Combo。</p>
 <p>应该数据化。</p>
 <hr />
-<h1>40. MaximumCombo</h1><p>SongResult需要保存：</p>
+<h1 id="40-maximumcombo">40. MaximumCombo</h1><p>SongResult需要保存：</p>
 <p>MaxCombo。</p>
 <p>与最终Combo分离。</p>
 <hr />
-<h1>41. Gauge / Life</h1><p>部分节奏游戏拥有：</p>
+<h1 id="41-gauge-life">41. Gauge / Life</h1><p>部分节奏游戏拥有：</p>
 <ul>
 <li><p>Life；</p>
 </li>
@@ -1255,7 +1256,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>42. Gauge与Score应分离</h1><p>玩家可能：</p>
+<h1 id="42-gauge与score应分离">42. Gauge与Score应分离</h1><p>玩家可能：</p>
 <p>Score很高</p>
 <p>但Fail。</p>
 <p>也可能：</p>
@@ -1264,7 +1265,7 @@ Hard = 400 Notes。</p>
 <p>这种分离产生：</p>
 <p>不同目标。</p>
 <hr />
-<h1>43. Fever / Bonus Section</h1><p>可以设计：</p>
+<h1 id="43-fever-bonus-section">43. Fever / Bonus Section</h1><p>可以设计：</p>
 <p>高Combo
 → Fever。</p>
 <p>Fever修改：</p>
@@ -1282,7 +1283,7 @@ Hard = 400 Notes。</p>
 <p>基础Timing Window，</p>
 <p>否则高Combo玩家突然获得不同判定标准。</p>
 <hr />
-<h1>44. CalibrationSystem</h1><p>至少需要支持：</p>
+<h1 id="44-calibrationsystem">44. CalibrationSystem</h1><p>至少需要支持：</p>
 <ul>
 <li><p>AudioOffset；</p>
 </li>
@@ -1292,19 +1293,19 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>45. AudioOffset</h1><p>补偿：</p>
+<h1 id="45-audiooffset">45. AudioOffset</h1><p>补偿：</p>
 <p>实际听到声音</p>
 <p>相对于：</p>
 <p>逻辑AudioClock</p>
 <p>的延迟。</p>
 <hr />
-<h1>46. InputOffset</h1><p>补偿：</p>
+<h1 id="46-inputoffset">46. InputOffset</h1><p>补偿：</p>
 <p>设备输入路径。</p>
 <hr />
-<h1>47. VisualOffset</h1><p>调整：</p>
+<h1 id="47-visualoffset">47. VisualOffset</h1><p>调整：</p>
 <p>视觉Note到达判定线时间。</p>
 <hr />
-<h1>48. 自动Calibration流程</h1><p>可以：</p>
+<h1 id="48-自动calibration流程">48. 自动Calibration流程</h1><p>可以：</p>
 <p>播放固定节拍
 → 玩家跟随点击
 → 收集多次TimingError
@@ -1312,14 +1313,14 @@ Hard = 400 Notes。</p>
 → 计算MedianOffset
 → 推荐Input/Audio Offset。</p>
 <hr />
-<h1>49. Calibration不能用少量样本</h1><p>玩家天然存在：</p>
+<h1 id="49-calibration不能用少量样本">49. Calibration不能用少量样本</h1><p>玩家天然存在：</p>
 <p>操作误差。</p>
 <p>一次点击：</p>
 <p>不能代表设备延迟。</p>
 <p>需要：</p>
 <p>多次采样。</p>
 <hr />
-<h1>50. Calibration Profile</h1><p>可以按：</p>
+<h1 id="50-calibration-profile">50. Calibration Profile</h1><p>可以按：</p>
 <ul>
 <li><p>Device；</p>
 </li>
@@ -1337,7 +1338,7 @@ Hard = 400 Notes。</p>
 <p>有线耳机</p>
 <p>延迟可能完全不同。</p>
 <hr />
-<h1>51. Pause</h1><p>暂停节奏游戏比普通游戏复杂。</p>
+<h1 id="51-pause">51. Pause</h1><p>暂停节奏游戏比普通游戏复杂。</p>
 <p>不能：</p>
 <p>Audio暂停了，</p>
 <p>但AudioClock继续走。</p>
@@ -1348,7 +1349,7 @@ Hard = 400 Notes。</p>
 → 保存PauseTimestamp
 → UI进入Pause。</p>
 <hr />
-<h1>52. Resume</h1><p>Resume不能：</p>
+<h1 id="52-resume">52. Resume</h1><p>Resume不能：</p>
 <p>立即恢复音乐</p>
 <p>同时Note突然进入判定区。</p>
 <p>推荐：</p>
@@ -1359,7 +1360,7 @@ Hard = 400 Notes。</p>
 <p>然后：</p>
 <p>Audio从精确时间继续。</p>
 <hr />
-<h1>53. Seek / Practice</h1><p>练习模式需要：</p>
+<h1 id="53-seek-practice">53. Seek / Practice</h1><p>练习模式需要：</p>
 <p>跳到：</p>
 <p>某个Measure。</p>
 <p>流程：</p>
@@ -1371,14 +1372,14 @@ Hard = 400 Notes。</p>
 → Countdown
 → Resume。</p>
 <hr />
-<h1>54. Practice Loop</h1><p>允许：</p>
+<h1 id="54-practice-loop">54. Practice Loop</h1><p>允许：</p>
 <p>Measure 20</p>
 <p>到：</p>
 <p>Measure 28</p>
 <p>循环。</p>
 <p>这是高难谱面训练的关键工具。</p>
 <hr />
-<h1>55. 音频播放结束不等于谱面立刻结束</h1><p>最后一个Note可能：</p>
+<h1 id="55-音频播放结束不等于谱面立刻结束">55. 音频播放结束不等于谱面立刻结束</h1><p>最后一个Note可能：</p>
 <p>晚于音频尾部</p>
 <p>或有：</p>
 <p>Hold尾部。</p>
@@ -1390,7 +1391,7 @@ Hard = 400 Notes。</p>
 <p>而不是只监听：</p>
 <p>AudioSource finished。</p>
 <hr />
-<h1>56. 帧率下降时的行为</h1><p>假设：</p>
+<h1 id="56-帧率下降时的行为">56. 帧率下降时的行为</h1><p>假设：</p>
 <p>目标Note时间：</p>
 <p>10.000s。</p>
 <p>游戏从：</p>
@@ -1407,7 +1408,7 @@ Hard = 400 Notes。</p>
 <p>某帧没画出来</p>
 <p>就判Miss。</p>
 <hr />
-<h1>57. Audio Drift</h1><p>长歌曲可能出现：</p>
+<h1 id="57-audio-drift">57. Audio Drift</h1><p>长歌曲可能出现：</p>
 <p>音频设备时间</p>
 <p>和：</p>
 <p>GameClock</p>
@@ -1419,7 +1420,7 @@ Hard = 400 Notes。</p>
 <p>必须持续参考：</p>
 <p>AudioClock真实位置。</p>
 <hr />
-<h1>58. 音频事件</h1><p>部分玩法需要：</p>
+<h1 id="58-音频事件">58. 音频事件</h1><p>部分玩法需要：</p>
 <p>击中Note播放KeySound。</p>
 <p>KeySound应该：</p>
 <p>消费JudgmentResult</p>
@@ -1429,7 +1430,7 @@ Hard = 400 Notes。</p>
 <p>决定：</p>
 <p>Note是否命中。</p>
 <hr />
-<h1>59. 演出事件</h1><p>Chart还可以包含：</p>
+<h1 id="59-演出事件">59. 演出事件</h1><p>Chart还可以包含：</p>
 <ul>
 <li><p>CameraEvent；</p>
 </li>
@@ -1447,12 +1448,12 @@ Hard = 400 Notes。</p>
 <p>这些应单独进入：</p>
 <p>PresentationEventTimeline。</p>
 <hr />
-<h1>60. Presentation Event与Gameplay Note分离</h1><p>否则：</p>
+<h1 id="60-presentation-event与gameplay-note分离">60. Presentation Event与Gameplay Note分离</h1><p>否则：</p>
 <p>删除一个舞台特效</p>
 <p>可能意外改变：</p>
 <p>谱面时间索引或Combo数量。</p>
 <hr />
-<h1>61. PresentationTimeline</h1><p>事件可以依据：</p>
+<h1 id="61-presentationtimeline">61. PresentationTimeline</h1><p>事件可以依据：</p>
 <p>CurrentAudioTime</p>
 <p>触发。</p>
 <p>需要支持：</p>
@@ -1467,7 +1468,7 @@ Hard = 400 Notes。</p>
 </li>
 </ul>
 <hr />
-<h1>62. Seek后的演出恢复</h1><p>如果Practice从：</p>
+<h1 id="62-seek后的演出恢复">62. Seek后的演出恢复</h1><p>如果Practice从：</p>
 <p>90秒</p>
 <p>跳到：</p>
 <p>120秒，</p>
@@ -1484,7 +1485,7 @@ Hard = 400 Notes。</p>
 <p>因此某些PresentationEvent需要：</p>
 <p>Stateful Timeline。</p>
 <hr />
-<h1>63. 难度系统</h1><p>Difficulty不能只保存：</p>
+<h1 id="63-难度系统">63. 难度系统</h1><p>Difficulty不能只保存：</p>
 <p>Easy
 Normal
 Hard。</p>
@@ -1515,7 +1516,7 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>64. 局部峰值比平均密度更重要</h1><p>平均：</p>
+<h1 id="64-局部峰值比平均密度更重要">64. 局部峰值比平均密度更重要</h1><p>平均：</p>
 <p>5 NPS。</p>
 <p>但某5秒：</p>
 <p>12 NPS。</p>
@@ -1524,7 +1525,7 @@ Hard。</p>
 <p>因此难度分析必须拥有：</p>
 <p>RollingWindow。</p>
 <hr />
-<h1>65. Pattern系统</h1><p>谱面可以抽象常见Pattern：</p>
+<h1 id="65-pattern系统">65. Pattern系统</h1><p>谱面可以抽象常见Pattern：</p>
 <ul>
 <li><p>Alternation；</p>
 </li>
@@ -1553,17 +1554,17 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>66. Pattern不是单纯Note序列</h1><p>同样的时间序列：</p>
+<h1 id="66-pattern不是单纯note序列">66. Pattern不是单纯Note序列</h1><p>同样的时间序列：</p>
 <p>映射到不同Lane布局，</p>
 <p>手感完全不同。</p>
 <p>因此Pattern应包含：</p>
 <p>Timing Structure</p>
 <p>Spatial Structure。</p>
 <hr />
-<h1>67. 作者工具</h1><p>节奏游戏的内容生产高度依赖Chart Editor。</p>
+<h1 id="67-作者工具">67. 作者工具</h1><p>节奏游戏的内容生产高度依赖Chart Editor。</p>
 <p>这是完整产品不可缺少的核心生产工具。</p>
 <hr />
-<h1>68. Chart Editor至少需要</h1><ul>
+<h1 id="68-chart-editor至少需要">68. Chart Editor至少需要</h1><ul>
 <li><p>Waveform；</p>
 </li>
 <li><p>Beat Grid；</p>
@@ -1594,7 +1595,7 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>69. Waveform</h1><p>音乐波形可以帮助作者定位：</p>
+<h1 id="69-waveform">69. Waveform</h1><p>音乐波形可以帮助作者定位：</p>
 <ul>
 <li><p>鼓点；</p>
 </li>
@@ -1610,7 +1611,7 @@ Hard。</p>
 <p>而不是：</p>
 <p>波形像素位置。</p>
 <hr />
-<h1>70. Beat Snap</h1><p>作者可以设置：</p>
+<h1 id="70-beat-snap">70. Beat Snap</h1><p>作者可以设置：</p>
 <p>1/4；</p>
 <p>1/8；</p>
 <p>1/12；</p>
@@ -1620,7 +1621,7 @@ Hard。</p>
 <p>用于：</p>
 <p>节奏网格吸附。</p>
 <hr />
-<h1>71. BPM检测只能辅助，不应直接作为最终谱面真值</h1><p>自动BPM分析可能：</p>
+<h1 id="71-bpm检测只能辅助不应直接作为最终谱面真值">71. BPM检测只能辅助，不应直接作为最终谱面真值</h1><p>自动BPM分析可能：</p>
 <ul>
 <li><p>误判半速；</p>
 </li>
@@ -1631,7 +1632,7 @@ Hard。</p>
 </ul>
 <p>最终TimingMap应由作者验证。</p>
 <hr />
-<h1>72. Chart Validation</h1><p>构建前必须自动检查。</p>
+<h1 id="72-chart-validation">72. Chart Validation</h1><p>构建前必须自动检查。</p>
 <hr />
 <h2 id="721-基础合法性">72.1 基础合法性</h2><p>检查：</p>
 <ul>
@@ -1653,25 +1654,25 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>73. 输入冲突验证</h1><p>例如同一个Lane：</p>
+<h1 id="73-输入冲突验证">73. 输入冲突验证</h1><p>例如同一个Lane：</p>
 <p>10.000 Tap</p>
 <p>同时：</p>
 <p>9.000～11.000 Hold。</p>
 <p>如果规则不允许：</p>
 <p>必须报错。</p>
 <hr />
-<h1>74. 不可能Chord检测</h1><p>游戏只允许：</p>
+<h1 id="74-不可能chord检测">74. 不可能Chord检测</h1><p>游戏只允许：</p>
 <p>最多4个同时输入。</p>
 <p>谱面却出现：</p>
 <p>6键Chord。</p>
 <p>需要ContentValidation直接阻止发布。</p>
 <hr />
-<h1>75. Hold重叠</h1><p>相同输入轨道：</p>
+<h1 id="75-hold重叠">75. Hold重叠</h1><p>相同输入轨道：</p>
 <p>两个Hold重叠。</p>
 <p>除非规则明确支持，</p>
 <p>否则应报错。</p>
 <hr />
-<h1>76. Judgment Ambiguity Test</h1><p>两个同Lane Note：</p>
+<h1 id="76-judgment-ambiguity-test">76. Judgment Ambiguity Test</h1><p>两个同Lane Note：</p>
 <p>间距比：</p>
 <p>最大判定窗口</p>
 <p>还小。</p>
@@ -1679,7 +1680,7 @@ Hard。</p>
 <p>一次输入不知道应该判哪个。</p>
 <p>Validation应识别。</p>
 <hr />
-<h1>77. Chart Difficulty Analyzer</h1><p>自动统计：</p>
+<h1 id="77-chart-difficulty-analyzer">77. Chart Difficulty Analyzer</h1><p>自动统计：</p>
 <ul>
 <li><p>NPS；</p>
 </li>
@@ -1698,7 +1699,7 @@ Hard。</p>
 </ul>
 <p>用于辅助Difficulty评级。</p>
 <hr />
-<h1>78. 但自动Difficulty不能代替人工试玩</h1><p>节奏难度受到：</p>
+<h1 id="78-但自动difficulty不能代替人工试玩">78. 但自动Difficulty不能代替人工试玩</h1><p>节奏难度受到：</p>
 <ul>
 <li><p>手型；</p>
 </li>
@@ -1712,7 +1713,7 @@ Hard。</p>
 <p>Analyzer是工具，</p>
 <p>不是最终裁决者。</p>
 <hr />
-<h1>79. Replay系统</h1><h2 id="791-replayheader">79.1 ReplayHeader</h2><p>建议包含：</p>
+<h1 id="79-replay系统">79. Replay系统</h1><h2 id="791-replayheader">79.1 ReplayHeader</h2><p>建议包含：</p>
 <ul>
 <li><p>SongId；</p>
 </li>
@@ -1738,13 +1739,13 @@ Hard。</p>
 <p>每一个Note结果。</p>
 <p>重新运行Judgment即可获得结果。</p>
 <hr />
-<h1>80. 为什么Replay必须记录ChartHash</h1><p>如果谱面后续修改：</p>
+<h1 id="80-为什么replay必须记录charthash">80. 为什么Replay必须记录ChartHash</h1><p>如果谱面后续修改：</p>
 <p>同一个Replay</p>
 <p>可能得到不同结果。</p>
 <p>因此需要知道：</p>
 <p>Replay对应的是哪一个Chart版本。</p>
 <hr />
-<h1>81. Leaderboard</h1><p>线上排名提交至少需要：</p>
+<h1 id="81-leaderboard">81. Leaderboard</h1><p>线上排名提交至少需要：</p>
 <ul>
 <li><p>SongId；</p>
 </li>
@@ -1766,7 +1767,7 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>82. 排行榜反作弊</h1><p>最可靠的模式之一：</p>
+<h1 id="82-排行榜反作弊">82. 排行榜反作弊</h1><p>最可靠的模式之一：</p>
 <p>客户端提交：</p>
 <p>InputReplay。</p>
 <p>服务器或验证服务：</p>
@@ -1774,7 +1775,7 @@ Hard。</p>
 <p>确认：</p>
 <p>Score匹配。</p>
 <hr />
-<h1>83. 不能只相信客户端上传Score</h1><p>否则修改内存：</p>
+<h1 id="83-不能只相信客户端上传score">83. 不能只相信客户端上传Score</h1><p>否则修改内存：</p>
 <p>99999999</p>
 <p>即可提交。</p>
 <p>即使不做完整服务器重放，</p>
@@ -1792,7 +1793,7 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>84. Multiplayer Rhythm</h1><p>如果加入实时多人：</p>
+<h1 id="84-multiplayer-rhythm">84. Multiplayer Rhythm</h1><p>如果加入实时多人：</p>
 <p>不要试图让所有客户端的：</p>
 <p>AudioPlayback</p>
 <p>直接互相同步。</p>
@@ -1803,7 +1804,7 @@ Hard。</p>
 <p>将本地AudioClock对齐到：</p>
 <p>服务器约定开始时间。</p>
 <hr />
-<h1>85. PvP判定仍应本地完成或使用可验证Replay</h1><p>音乐游戏要求毫秒级反馈。</p>
+<h1 id="85-pvp判定仍应本地完成或使用可验证replay">85. PvP判定仍应本地完成或使用可验证Replay</h1><p>音乐游戏要求毫秒级反馈。</p>
 <p>如果每次按键：</p>
 <p>等待服务器确认，</p>
 <p>体验会非常差。</p>
@@ -1812,14 +1813,14 @@ Hard。</p>
 → 比赛结果同步
 → 后验验证。</p>
 <hr />
-<h1>86. Ghost模式</h1><p>Ghost比实时PvP简单很多。</p>
+<h1 id="86-ghost模式">86. Ghost模式</h1><p>Ghost比实时PvP简单很多。</p>
 <p>记录其他玩家：</p>
 <p>Combo / Accuracy / Score Timeline。</p>
 <p>本地显示：</p>
 <p>当前你领先或落后多少。</p>
 <p>无需实时同步全部Note。</p>
 <hr />
-<h1>87. 完整事件与执行流程示例</h1><p>以下以：</p>
+<h1 id="87-完整事件与执行流程示例">87. 完整事件与执行流程示例</h1><p>以下以：</p>
 <p><strong>一首180 BPM的四轨节奏歌曲，在副歌段包含Tap、Chord与Hold组合</strong></p>
 <p>为例。</p>
 <hr />
@@ -2011,7 +2012,7 @@ Hard。</p>
 → 统计分析
 → 玩家校准与技能成长。</p>
 <hr />
-<h1>88. 模块通信设计</h1><h2 id="881-commands">88.1 Commands</h2><p>典型命令：</p>
+<h1 id="88-模块通信设计">88. 模块通信设计</h1><h2 id="881-commands">88.1 Commands</h2><p>典型命令：</p>
 <ul>
 <li><p>SelectSong；</p>
 </li>
@@ -2131,7 +2132,7 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>89. 状态所有权</h1><p>推荐：</p>
+<h1 id="89-状态所有权">89. 状态所有权</h1><p>推荐：</p>
 <p><strong>AudioClockSystem</strong></p>
 <p>拥有歌曲时间。</p>
 <p><strong>ChartRuntimeSystem</strong></p>
@@ -2153,7 +2154,7 @@ Hard。</p>
 <p>自己决定：</p>
 <p>是否Miss。</p>
 <hr />
-<h1>90. 随机性</h1><p>大多数标准谱面节奏游戏其实可以做到：</p>
+<h1 id="90-随机性">90. 随机性</h1><p>大多数标准谱面节奏游戏其实可以做到：</p>
 <p>几乎完全确定性。</p>
 <p>如果存在：</p>
 <ul>
@@ -2167,7 +2168,7 @@ Hard。</p>
 <p>建议分离：</p>
 <p>GameplayRandomStream。</p>
 <hr />
-<h1>91. 同一谱面重试应尽量保持一致</h1><p>除非玩家主动选择：</p>
+<h1 id="91-同一谱面重试应尽量保持一致">91. 同一谱面重试应尽量保持一致</h1><p>除非玩家主动选择：</p>
 <p>Random Modifier。</p>
 <p>否则：</p>
 <p>相同Chart</p>
@@ -2175,7 +2176,7 @@ Hard。</p>
 <p>相同Note结构。</p>
 <p>这样练习才有意义。</p>
 <hr />
-<h1>92. Save数据</h1><p>长期存档通常保存：</p>
+<h1 id="92-save数据">92. Save数据</h1><p>长期存档通常保存：</p>
 <ul>
 <li><p>SongUnlocks；</p>
 </li>
@@ -2199,13 +2200,13 @@ Hard。</p>
 </li>
 </ul>
 <hr />
-<h1>93. 单曲运行态通常无需中途长期存档</h1><p>一首歌曲通常几分钟。</p>
+<h1 id="93-单曲运行态通常无需中途长期存档">93. 单曲运行态通常无需中途长期存档</h1><p>一首歌曲通常几分钟。</p>
 <p>可以：</p>
 <p>Restart。</p>
 <p>但超长谱面或特殊模式可以支持：</p>
 <p>PracticeCheckpoint。</p>
 <hr />
-<h1>94. 失败隔离</h1><hr />
+<h1 id="94-失败隔离">94. 失败隔离</h1><hr />
 <h2 id="941-音频加载失败">94.1 音频加载失败</h2><p>Chart不应开始运行。</p>
 <p>Song进入：</p>
 <p>LoadFailed。</p>
@@ -2270,7 +2271,7 @@ Hard。</p>
 <p>BestScore更新必须：</p>
 <p>幂等。</p>
 <hr />
-<h1>95. 调试与可观测性</h1><hr />
+<h1 id="95-调试与可观测性">95. 调试与可观测性</h1><hr />
 <h2 id="951-audio-clock-inspector">95.1 Audio Clock Inspector</h2><p>显示：</p>
 <ul>
 <li><p>DSP Time；</p>
@@ -2359,7 +2360,7 @@ FinalScore。</p>
 <h2 id="9512-gauge-trace">95.12 Gauge Trace</h2><p>记录：</p>
 <p>每次判定导致的Gauge变化。</p>
 <hr />
-<h1>96. 内容验证工具</h1><hr />
+<h1 id="96-内容验证工具">96. 内容验证工具</h1><hr />
 <h2 id="961-chart-structural-validation">96.1 Chart Structural Validation</h2><p>检查：</p>
 <ul>
 <li><p>NoteId；</p>
@@ -2429,7 +2430,7 @@ Calibration</p>
 <p>避免：</p>
 <p>歌曲结束提前切Result。</p>
 <hr />
-<h1>97. 性能设计</h1><p>节奏游戏通常敌人不多，</p>
+<h1 id="97-性能设计">97. 性能设计</h1><p>节奏游戏通常敌人不多，</p>
 <p>但对：</p>
 <p><strong>延迟稳定性</strong></p>
 <p>要求极高。</p>
@@ -2476,7 +2477,7 @@ Calibration</p>
 <p>不要阻塞：</p>
 <p>Audio/Judgment线程。</p>
 <hr />
-<h1>98. 可扩展点</h1><hr />
+<h1 id="98-可扩展点">98. 可扩展点</h1><hr />
 <h2 id="981-新note类型">98.1 新Note类型</h2><p>实现统一：</p>
 <p>NoteBehaviorDefinition</p>
 <p>和：</p>
@@ -2534,7 +2535,7 @@ Calibration</p>
 <p>不要让运行时判定器直接理解：</p>
 <p>Procedural Generator。</p>
 <hr />
-<h1>99. 玩家体验设计</h1><hr />
+<h1 id="99-玩家体验设计">99. 玩家体验设计</h1><hr />
 <h2 id="991-音乐必须先于视觉成为节奏信息">99.1 音乐必须先于视觉成为节奏信息</h2><p>玩家最终应该能够：</p>
 <p>听节奏</p>
 <p>而不是只看Note。</p>
@@ -2631,7 +2632,7 @@ Calibration</p>
 </li>
 </ul>
 <hr />
-<h1>100. 常见设计失败</h1><hr />
+<h1 id="100-常见设计失败">100. 常见设计失败</h1><hr />
 <h2 id="1001-note用deltatime向判定线移动">100.1 Note用DeltaTime向判定线移动</h2><p>卡顿后谱面和音乐漂移。</p>
 <hr />
 <h2 id="1002-judgment用图像位置判断">100.2 Judgment用图像位置判断</h2><p>UI比例变化可能改变判定。</p>
@@ -2672,7 +2673,7 @@ Calibration</p>
 <hr />
 <h2 id="10020-只提供perfectgreatmiss没有timing统计">100.20 只提供Perfect/Great/Miss，没有Timing统计</h2><p>玩家不知道自己为什么总打不准。</p>
 <hr />
-<h1>101. 最小可行原型</h1><p>一个能够验证节奏游戏核心范式的MVP并不需要大量歌曲。</p>
+<h1 id="101-最小可行原型">101. 最小可行原型</h1><p>一个能够验证节奏游戏核心范式的MVP并不需要大量歌曲。</p>
 <p>推荐：</p>
 <p><strong>3首歌曲 + 4轨输入 + 3种Note类型 + 3档难度。</strong></p>
 <hr />
@@ -2819,7 +2820,7 @@ VisualOffset。</p>
 </li>
 </ul>
 <hr />
-<h1>102. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<h1 id="102-mvp核心验收问题">102. MVP核心验收问题</h1><p>原型至少必须回答：</p>
 <ul>
 <li><p>游戏卡顿时Note是否仍然和音乐保持同步；</p>
 </li>
@@ -2866,7 +2867,7 @@ VisualOffset。</p>
 </li>
 </ul>
 <hr />
-<h1>103. 推荐实施顺序</h1><p>第一阶段：</p>
+<h1 id="103-推荐实施顺序">103. 推荐实施顺序</h1><p>第一阶段：</p>
 <ul>
 <li><p>AudioClock；</p>
 </li>
@@ -2973,7 +2974,7 @@ VisualOffset。</p>
 </li>
 </ul>
 <hr />
-<h1>104. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<h1 id="104-架构验收标准">104. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
 <ul>
 <li><p>整首歌曲只有一个权威AudioClock；</p>
 </li>
@@ -3041,7 +3042,7 @@ VisualOffset。</p>
 </li>
 </ul>
 <hr />
-<h1>105. 可迁移到其他游戏的设计思想</h1><hr />
+<h1 id="105-可迁移到其他游戏的设计思想">105. 可迁移到其他游戏的设计思想</h1><hr />
 <h2 id="1051-权威时间源与表现时间必须分离">105.1 权威时间源与表现时间必须分离</h2><p>可迁移到：</p>
 <ul>
 <li><p>网络同步；</p>
@@ -3212,7 +3213,7 @@ VisualOffset。</p>
 </ul>
 <p>不要等玩家运行到内容后才发现结构性错误。</p>
 <hr />
-<h1>106. 确定性判定事务、候选仲裁与播放代次</h1><p>产品层拥有丰富玩法并不意味着底层可以接受含糊的时序。节奏游戏的核心承诺是：相同谱面、规则、校准快照与输入日志必须得到相同判定序列。为兑现这一承诺，判定需要被实现为一笔有明确输入、稳定仲裁和原子提交边界的事务。</p>
+<h1 id="106-确定性判定事务候选仲裁与播放代次">106. 确定性判定事务、候选仲裁与播放代次</h1><p>产品层拥有丰富玩法并不意味着底层可以接受含糊的时序。节奏游戏的核心承诺是：相同谱面、规则、校准快照与输入日志必须得到相同判定序列。为兑现这一承诺，判定需要被实现为一笔有明确输入、稳定仲裁和原子提交边界的事务。</p>
 <h2 id="1061-编译后的谱面是运行时事实源">106.1 编译后的谱面是运行时事实源</h2><p>作者数据应先经过 Chart Compiler，再生成只读的 <code>CompiledChart</code>。每个 <code>CompiledNote</code> 至少包含：</p>
 <ul>
 <li>稳定且唯一的 <code>NoteId</code>；</li>
@@ -3300,7 +3301,7 @@ VisualOffset。</p>
 </ul>
 <p>这些条件把“手感看起来差不多”变成可以自动验证的确定性合同，也是排名验证、Ghost、多人对战和长期版本兼容的共同基础。</p>
 <hr />
-<h1>107. 防重复边界</h1><h2 id="已登记的宏观游戏类型">已登记的宏观游戏类型</h2><p><strong>节奏游戏 / Rhythm Game。</strong></p>
+<h1 id="107-防重复边界">107. 防重复边界</h1><h2 id="已登记的宏观游戏类型">已登记的宏观游戏类型</h2><p><strong>节奏游戏 / Rhythm Game。</strong></p>
 <p>常见名称：</p>
 <ul>
 <li><p>Rhythm Game；</p>

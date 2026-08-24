@@ -1,5 +1,3 @@
-## 叙事章节驱动、队伍中心成长与“城镇—迷宫—战斗—结算”循环
-
 > Agent 标签：`jrpg` `narrative` `party-progression`
 
 ---

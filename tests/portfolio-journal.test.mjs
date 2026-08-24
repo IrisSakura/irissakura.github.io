@@ -12,11 +12,13 @@ test('portfolio explains the path from research to finished work', async () => {
   const html = await readText('pages/portfolio.html');
 
   for (const fragment of [
-    '研究 → 范式 → 框架 → 游戏验证',
-    '研究问题',
-    '工程抽象',
-    '作品验证',
+    '研究判断 → 工程治理 → 框架沉淀 → 游戏验证',
+    '研究判断',
+    '显式授权',
+    '框架沉淀',
+    '游戏验证',
     'portfolio-case-game',
+    'Iris Engineering',
     'Sakura Design Journal'
   ]) {
     assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
@@ -28,7 +30,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   const titles = data.projects.map((project) => project.title);
 
   assert.equal(data.schemaVersion, 3);
-  assert.deepEqual(titles, ['Sakura Design Journal', 'Sakura Framework', '言铸之剑']);
+  assert.deepEqual(titles, ['Sakura Design Journal', 'Iris Engineering', 'Sakura Framework', '言铸之剑']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
     assert.match(project.updatedAt, /^\d{4}-\d{2}-\d{2}$/u, `${project.title} needs an update date`);
@@ -94,13 +96,15 @@ test('public portfolio does not expose the private journal origin', async () => 
   assert.ok(!data.includes('154.37.215.57'));
 });
 
-test('portfolio renders exactly three fixed evidence-led cases with the game first', async () => {
+test('portfolio renders four fixed evidence-led cases with the game first', async () => {
   const html = await readText('pages/portfolio.html');
-  assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 3);
+  assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 4);
   assert.ok(!html.includes('portfolio-filters'));
   assert.ok(!html.includes('data-filter='));
-  assert.ok(html.indexOf('project-sword-of-words') < html.indexOf('project-sakura-framework'));
+  assert.ok(html.indexOf('project-sword-of-words') < html.indexOf('project-iris-engineering'));
+  assert.ok(html.indexOf('project-iris-engineering') < html.indexOf('project-sakura-framework'));
   assert.ok(html.indexOf('project-sakura-framework') < html.indexOf('project-sakura-design-journal'));
+  assert.ok(html.includes('engineering-proof-visual'));
   assert.ok(html.includes('framework-proof-visual'));
   assert.ok(html.includes('journal-proof-visual'));
 });

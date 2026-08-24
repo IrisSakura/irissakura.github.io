@@ -85,10 +85,11 @@
     </header>
     <nav class="profile-drawer-links" aria-label="个人快速导航">
         <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     </nav>
 </aside>
 <!-- site-navbar:end -->
@@ -156,7 +157,7 @@
 <p>这形成了工厂自动化游戏最关键的认知转变：</p>
 <p><strong>从 Operator 转变为 System Designer。</strong></p>
 <hr />
-<h1>二、最核心的系统抽象：Flow Network</h1><p>工厂自动化游戏最适合被理解为一个持续运行的有向流网络：</p>
+<h1 id="二最核心的系统抽象flow-network">二、最核心的系统抽象：Flow Network</h1><p>工厂自动化游戏最适合被理解为一个持续运行的有向流网络：</p>
 <p><code>Source → Transport → Processor → Buffer → Transport → Processor → Sink</code></p>
 <p>例如：</p>
 <p>铁矿脉
@@ -198,7 +199,7 @@
 <p><strong>如何让一个越来越大的流网络稳定运行。</strong></p>
 </blockquote>
 <hr />
-<h1>三、运行时总体架构</h1><p>推荐将运行时拆成以下层级。</p>
+<h1 id="三运行时总体架构">三、运行时总体架构</h1><p>推荐将运行时拆成以下层级。</p>
 <pre><code class="language-text">FactoryRuntime
 │
 ├─ WorldSimulation
@@ -253,7 +254,7 @@
 </ul>
 <p>这是支撑百万级物流对象的重要架构原则。</p>
 <hr />
-<h1>四、核心模块职责</h1><h2 id="41-resourcesystem">4.1 ResourceSystem</h2><p>负责定义整个工业系统中可以流动的基本对象。</p>
+<h1 id="四核心模块职责">四、核心模块职责</h1><h2 id="41-resourcesystem">4.1 ResourceSystem</h2><p>负责定义整个工业系统中可以流动的基本对象。</p>
 <p>例如：</p>
 <ul>
 <li><p>IronOre</p>
@@ -291,7 +292,7 @@ Tags
 <p>“我应该被送去哪里。”</p>
 <p>路由属于物流系统。</p>
 <hr />
-<h1>五、RecipeSystem：生产规则的数据化核心</h1><p>配方是整个工业系统的最基础规则。</p>
+<h1 id="五recipesystem生产规则的数据化核心">五、RecipeSystem：生产规则的数据化核心</h1><p>配方是整个工业系统的最基础规则。</p>
 <p>推荐模型：</p>
 <pre><code class="language-text">RecipeDefinition
 
@@ -350,7 +351,7 @@ Furnace</p>
 </ul>
 <p>在不修改生产系统内核的情况下扩展。</p>
 <hr />
-<h1>六、ProductionSystem：持续生产，而不是定时生成物品</h1><p>每个生产节点维护：</p>
+<h1 id="六productionsystem持续生产而不是定时生成物品">六、ProductionSystem：持续生产，而不是定时生成物品</h1><p>每个生产节点维护：</p>
 <pre><code class="language-text">ProductionNodeRuntime
 
 MachineId
@@ -396,7 +397,7 @@ Disabled
 <p><code>MachineStopped</code></p>
 <p>否则玩家无法调试自己的工厂。</p>
 <hr />
-<h1>七、工厂自动化最重要的设计范式之一：背压</h1><p>工业系统中非常重要的概念是：</p>
+<h1 id="七工厂自动化最重要的设计范式之一背压">七、工厂自动化最重要的设计范式之一：背压</h1><p>工业系统中非常重要的概念是：</p>
 <p><strong>Backpressure。</strong></p>
 <p>例如：</p>
 <p>Assembler A
@@ -432,7 +433,7 @@ A 停止。</p>
 <p><strong>一个工厂不是建筑集合，而是一条动态因果网络。</strong></p>
 </blockquote>
 <hr />
-<h1>八、物流系统：物流不是移动动画，而是容量网络</h1><p>LogisticsSystem 至少需要处理：</p>
+<h1 id="八物流系统物流不是移动动画而是容量网络">八、物流系统：物流不是移动动画，而是容量网络</h1><p>LogisticsSystem 至少需要处理：</p>
 <ul>
 <li><p>Transport Capacity；</p>
 </li>
@@ -480,7 +481,7 @@ Capacity
 <p>都可以视为不同形式的：</p>
 <p><code>TransportChannel</code></p>
 <hr />
-<h1>九、运输必须同时考虑 Throughput 与 Latency</h1><p>物流系统存在两个非常不同的参数：</p>
+<h1 id="九运输必须同时考虑-throughput-与-latency">九、运输必须同时考虑 Throughput 与 Latency</h1><p>物流系统存在两个非常不同的参数：</p>
 <h2 id="throughput">Throughput</h2><p>单位时间最多运输多少资源。</p>
 <p>例如：</p>
 <p><code>120 item/min</code></p>
@@ -508,7 +509,7 @@ Capacity
 </ul>
 <p>等重要玩法。</p>
 <hr />
-<h1>十、Buffer：缓冲是工业系统的减震器</h1><p>Buffer 不只是仓库。</p>
+<h1 id="十buffer缓冲是工业系统的减震器">十、Buffer：缓冲是工业系统的减震器</h1><p>Buffer 不只是仓库。</p>
 <p>它的主要作用是：</p>
 <p><strong>解耦生产阶段。</strong></p>
 <p>例如：</p>
@@ -536,7 +537,7 @@ Capacity
 <p>Buffer 是系统稳定性的空间换时间工具。</p>
 </blockquote>
 <hr />
-<h1>十一、吞吐率是本类型真正的“战斗力”</h1><p>RPG 常见核心指标：</p>
+<h1 id="十一吞吐率是本类型真正的战斗力">十一、吞吐率是本类型真正的“战斗力”</h1><p>RPG 常见核心指标：</p>
 <p>DPS。</p>
 <p>Factory Automation 更重要的指标是：</p>
 <p>Throughput。</p>
@@ -556,7 +557,7 @@ Processor
 <p><code>ActualThroughput = min(...)</code></p>
 <p>它最终由整条链中最弱的环节决定。</p>
 <hr />
-<h1>十二、核心范式：瓶颈决定整个系统</h1><p>假设：</p>
+<h1 id="十二核心范式瓶颈决定整个系统">十二、核心范式：瓶颈决定整个系统</h1><p>假设：</p>
 <p>矿场：</p>
 <p>600 ore/min</p>
 <p>运输：</p>
@@ -581,7 +582,7 @@ Processor
 <p>玩家不断寻找：</p>
 <p>哪里限制了整个生产链？</p>
 <hr />
-<h1>十三、BottleneckDetectionSystem</h1><p>游戏可以提供内部分析系统：</p>
+<h1 id="十三bottleneckdetectionsystem">十三、BottleneckDetectionSystem</h1><p>游戏可以提供内部分析系统：</p>
 <pre><code class="language-text">FactoryTelemetry
 
 InputRate
@@ -628,7 +629,7 @@ CopperPlate shortage
 <p>不是：</p>
 <p>Auto Optimize。</p>
 <hr />
-<h1>十四、PowerSystem：第二张流网络</h1><p>电力系统最好独立于物资生产网络。</p>
+<h1 id="十四powersystem第二张流网络">十四、PowerSystem：第二张流网络</h1><p>电力系统最好独立于物资生产网络。</p>
 <p>形成：</p>
 <p><code>PowerGraph</code></p>
 <p>包括：</p>
@@ -668,7 +669,7 @@ StoredEnergy
 更多系统停摆。</p>
 <p>从而形成跨网络因果传播。</p>
 <hr />
-<h1>十五、多个网络同时叠加才形成真正的工厂</h1><p>成熟自动化游戏通常不是只有一张生产图。</p>
+<h1 id="十五多个网络同时叠加才形成真正的工厂">十五、多个网络同时叠加才形成真正的工厂</h1><p>成熟自动化游戏通常不是只有一张生产图。</p>
 <p>而是多张网络叠加：</p>
 <pre><code class="language-text">Material Network
 
@@ -702,7 +703,7 @@ HasInput
 </code></pre>
 <p>这让简单节点通过规则组合形成复杂工业系统。</p>
 <hr />
-<h1>十六、DemandSystem：没有消费，就没有生产问题</h1><p>如果系统只让玩家不断生产更多东西：</p>
+<h1 id="十六demandsystem没有消费就没有生产问题">十六、DemandSystem：没有消费，就没有生产问题</h1><p>如果系统只让玩家不断生产更多东西：</p>
 <p>最终会陷入：</p>
 <p>库存越来越大。</p>
 <p>所以需要明确：</p>
@@ -743,7 +744,7 @@ HasInput
 <p>因此高级产品实际上承担：</p>
 <p><strong>生产网络的资源黑洞。</strong></p>
 <hr />
-<h1>十七、自动化游戏最重要的正反馈：生产机器生产更多生产机器</h1><p>这一类型最强的反馈之一是：</p>
+<h1 id="十七自动化游戏最重要的正反馈生产机器生产更多生产机器">十七、自动化游戏最重要的正反馈：生产机器生产更多生产机器</h1><p>这一类型最强的反馈之一是：</p>
 <p>玩家使用工厂生产：</p>
 <p>建筑工厂所需要的东西。</p>
 <p>例如：</p>
@@ -766,7 +767,7 @@ HasInput
 <p>Factory Automation：</p>
 <p>采集 → 制造机器 → 机器生产机器 → 工厂变强。</p>
 <hr />
-<h1>十八、ResearchSystem：复杂度许可系统</h1><p>科技树的核心作用不只是：</p>
+<h1 id="十八researchsystem复杂度许可系统">十八、ResearchSystem：复杂度许可系统</h1><p>科技树的核心作用不只是：</p>
 <p>增加数值。</p>
 <p>更重要的是：</p>
 <p>逐渐允许玩家管理更高的系统复杂度。</p>
@@ -797,7 +798,7 @@ HasInput
 <p>玩家刚刚熟悉一种问题，系统就引入下一种可以处理的新问题。</p>
 </blockquote>
 <hr />
-<h1>十九、复杂度必须逐层释放</h1><p>不要一开始就给予玩家：</p>
+<h1 id="十九复杂度必须逐层释放">十九、复杂度必须逐层释放</h1><p>不要一开始就给予玩家：</p>
 <ul>
 <li><p>20 种物流设备；</p>
 </li>
@@ -834,7 +835,7 @@ Large-scale Automation
 <p>这是典型的：</p>
 <p><strong>Complexity Ramp。</strong></p>
 <hr />
-<h1>二十、ConstructionSystem：建设操作应该修改图，而不是直接驱动模拟</h1><p>玩家执行：</p>
+<h1 id="二十constructionsystem建设操作应该修改图而不是直接驱动模拟">二十、ConstructionSystem：建设操作应该修改图，而不是直接驱动模拟</h1><p>玩家执行：</p>
 <p><code>BuildCommand</code></p>
 <p>例如：</p>
 <pre><code class="language-text">BuildMachine
@@ -865,7 +866,7 @@ PowerGraph</p>
 <p>这样可以避免：</p>
 <p>ConstructionSystem 直接操作生产逻辑。</p>
 <hr />
-<h1>二十一、推荐的数据模型层级</h1><p>建议明确区分：</p>
+<h1 id="二十一推荐的数据模型层级">二十一、推荐的数据模型层级</h1><p>建议明确区分：</p>
 <h2 id="definition">Definition</h2><p>静态配置。</p>
 <p>例如：</p>
 <pre><code class="language-text">MachineDefinition
@@ -895,7 +896,7 @@ BottleneckSnapshot
 <h2 id="save-snapshot">Save Snapshot</h2><p>持久化状态。</p>
 <p>不要让这些数据结构混在一个 MonoBehaviour / Node / Entity 中。</p>
 <hr />
-<h1>二十二、事件与执行流程</h1><p>推荐核心执行顺序：</p>
+<h1 id="二十二事件与执行流程">二十二、事件与执行流程</h1><p>推荐核心执行顺序：</p>
 <pre><code class="language-text">SimulationTick
 ↓
 ApplyPlayerCommands
@@ -929,7 +930,7 @@ Presentation
 <p>否则容易出现：</p>
 <p>同一个生产链因为机器更新顺序不同而产生不同结果。</p>
 <hr />
-<h1>二十三、生产最好采用 Fixed Simulation Tick</h1><p>生产逻辑不应该依赖：</p>
+<h1 id="二十三生产最好采用-fixed-simulation-tick">二十三、生产最好采用 Fixed Simulation Tick</h1><p>生产逻辑不应该依赖：</p>
 <p>Render Frame。</p>
 <p>建议：</p>
 <pre><code class="language-text">SimulationTick = 50ms / 100ms / 200ms
@@ -955,7 +956,7 @@ Presentation
 <p>表现层仍然可以：</p>
 <p>60 / 120 FPS。</p>
 <hr />
-<h1>二十四、不要为每一个资源实体执行完整 Update</h1><p>这是大型自动化游戏最典型的性能陷阱。</p>
+<h1 id="二十四不要为每一个资源实体执行完整-update">二十四、不要为每一个资源实体执行完整 Update</h1><p>这是大型自动化游戏最典型的性能陷阱。</p>
 <p>错误模型：</p>
 <p>100000 个 Item
 → 100000 个 Update。</p>
@@ -981,7 +982,7 @@ Output:
 </code></pre>
 <p>而不再逐个模拟物品位置。</p>
 <hr />
-<h1>二十五、多级模拟精度</h1><p>建议使用：</p>
+<h1 id="二十五多级模拟精度">二十五、多级模拟精度</h1><p>建议使用：</p>
 <h3 id="level-0entity-simulation">Level 0：Entity Simulation</h3><p>玩家附近。</p>
 <p>完整模拟：</p>
 <p>位置、动画、资源实体。</p>
@@ -1000,7 +1001,7 @@ Output:
 <p><strong>模拟语义稳定，而模拟精度动态变化。</strong></p>
 </blockquote>
 <hr />
-<h1>二十六、RegionSimulationSystem</h1><p>大型世界应该进行空间分区：</p>
+<h1 id="二十六regionsimulationsystem">二十六、RegionSimulationSystem</h1><p>大型世界应该进行空间分区：</p>
 <pre><code class="language-text">FactoryRegion
 </code></pre>
 <p>例如：</p>
@@ -1028,7 +1029,7 @@ Sleeping。</p>
 <p>工业系统被冻结。</p>
 <p>这会破坏世界可信度。</p>
 <hr />
-<h1>二十七、模块通信</h1><p>建议：</p>
+<h1 id="二十七模块通信">二十七、模块通信</h1><p>建议：</p>
 <p><strong>命令用于修改。</strong></p>
 <p><strong>事件用于通知。</strong></p>
 <p><strong>查询用于读取。</strong></p>
@@ -1059,7 +1060,7 @@ GetBottleneck
 → 修改 A</p>
 <p>最终无法追踪因果关系。</p>
 <hr />
-<h1>二十八、状态变化事件，而不是 Tick 事件</h1><p>不要广播：</p>
+<h1 id="二十八状态变化事件而不是-tick-事件">二十八、状态变化事件，而不是 Tick 事件</h1><p>不要广播：</p>
 <pre><code class="language-text">MachineProducing
 </code></pre>
 <p>每帧一次。</p>
@@ -1075,7 +1076,7 @@ WaitingInput
 日志量
 UI 更新压力。</p>
 <hr />
-<h1>二十九、玩家真正需要的是“因果可见性”</h1><p>自动化系统最危险的体验问题是：</p>
+<h1 id="二十九玩家真正需要的是因果可见性">二十九、玩家真正需要的是“因果可见性”</h1><p>自动化系统最危险的体验问题是：</p>
 <p><strong>工厂停了，但玩家不知道为什么。</strong></p>
 <p>因此机器 UI 应该能够显示：</p>
 <pre><code class="language-text">Status:
@@ -1109,7 +1110,7 @@ Train Delivery Congested
 <p>这相当于工业系统中的：</p>
 <p><strong>Dependency Trace。</strong></p>
 <hr />
-<h1>三十、失败隔离</h1><p>自动化世界天然容易出现级联故障。</p>
+<h1 id="三十失败隔离">三十、失败隔离</h1><p>自动化世界天然容易出现级联故障。</p>
 <p>例如：</p>
 <p>煤矿停止
 ↓
@@ -1146,7 +1147,7 @@ Train Delivery Congested
 <p><strong>允许系统产生灾难性故障，但不要让故障变成不可理解或无法恢复的死局。</strong></p>
 </blockquote>
 <hr />
-<h1>三十一、模块级失败隔离</h1><p>代码层面同样需要隔离。</p>
+<h1 id="三十一模块级失败隔离">三十一、模块级失败隔离</h1><p>代码层面同样需要隔离。</p>
 <p>例如：</p>
 <p>LogisticsSystem 异常不应破坏：</p>
 <p>SaveSystem。</p>
@@ -1164,7 +1165,7 @@ Presentation
 <p>其中只有第一层：</p>
 <p>可以改变事实状态。</p>
 <hr />
-<h1>三十二、Debugging：必须能够回答“为什么”</h1><p>自动化框架的调试工具至少应支持：</p>
+<h1 id="三十二debugging必须能够回答为什么">三十二、Debugging：必须能够回答“为什么”</h1><p>自动化框架的调试工具至少应支持：</p>
 <h3 id="machine-inspector">Machine Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Recipe；</p>
@@ -1214,7 +1215,7 @@ Presentation
 <h3 id="dependency-trace">Dependency Trace</h3><p>显示：</p>
 <p>为什么某个节点没有工作。</p>
 <hr />
-<h1>三十三、Simulation Trace</h1><p>建议允许记录：</p>
+<h1 id="三十三simulation-trace">三十三、Simulation Trace</h1><p>建议允许记录：</p>
 <pre><code class="language-text">Tick 238403
 
 Machine #182
@@ -1238,7 +1239,7 @@ Belt #51
 吞吐异常</p>
 <p>极其重要。</p>
 <hr />
-<h1>三十四、确定性与可复现性</h1><p>如果输入：</p>
+<h1 id="三十四确定性与可复现性">三十四、确定性与可复现性</h1><p>如果输入：</p>
 <pre><code class="language-text">Seed
 InitialState
 CommandSequence
@@ -1255,7 +1256,7 @@ Simulation Test</p>
 <p>尤其不要让生产逻辑依赖：</p>
 <p>GameObject Update 顺序。</p>
 <hr />
-<h1>三十五、核心扩展点</h1><p>一个好的 Factory Framework 应允许扩展：</p>
+<h1 id="三十五核心扩展点">三十五、核心扩展点</h1><p>一个好的 Factory Framework 应允许扩展：</p>
 <h3 id="resource">Resource</h3><p>新增：</p>
 <p>固体
 液体
@@ -1291,7 +1292,7 @@ Simulation Test</p>
 <p>而不是：</p>
 <p>修改 Simulation Core。</p>
 <hr />
-<h1>三十六、让复杂性来自组合，而不是例外规则</h1><p>这是 Factory Automation 最值得框架设计学习的地方之一。</p>
+<h1 id="三十六让复杂性来自组合而不是例外规则">三十六、让复杂性来自组合，而不是例外规则</h1><p>这是 Factory Automation 最值得框架设计学习的地方之一。</p>
 <p>不要做：</p>
 <pre><code class="language-text">CoalPlantSpecialCase
 NuclearPlantSpecialCase
@@ -1325,7 +1326,7 @@ NuclearPlant。</p>
 <p>一个巨大的：</p>
 <p><code>NuclearPowerPlant.cs</code>。</p>
 <hr />
-<h1>三十七、空间是工厂的重要成本</h1><p>自动化游戏不是纯 Spreadsheet Game。</p>
+<h1 id="三十七空间是工厂的重要成本">三十七、空间是工厂的重要成本</h1><p>自动化游戏不是纯 Spreadsheet Game。</p>
 <p>空间布局本身必须参与系统设计。</p>
 <p>玩家需要考虑：</p>
 <ul>
@@ -1355,7 +1356,7 @@ NuclearPlant。</p>
 <p>因此玩家会自然产生：</p>
 <p><strong>Architecture Debt。</strong></p>
 <hr />
-<h1>三十八、工厂也存在“技术债”</h1><p>自动化游戏一个非常特殊的体验是：</p>
+<h1 id="三十八工厂也存在技术债">三十八、工厂也存在“技术债”</h1><p>自动化游戏一个非常特殊的体验是：</p>
 <p>玩家早期设计的工厂会逐渐变得落后。</p>
 <p>例如：</p>
 <p>最初：</p>
@@ -1380,7 +1381,7 @@ NuclearPlant。</p>
 <p>促使重构。</p>
 <p>而不是要求玩家从第一分钟就知道最终最优布局。</p>
 <hr />
-<h1>三十九、Blueprint：从施工升级为编程</h1><p>当玩家掌握基础生产后，</p>
+<h1 id="三十九blueprint从施工升级为编程">三十九、Blueprint：从施工升级为编程</h1><p>当玩家掌握基础生产后，</p>
 <p>重复搭建会变成纯体力劳动。</p>
 <p>这时应该解锁：</p>
 <p>Blueprint。</p>
@@ -1402,7 +1403,7 @@ NuclearPlant。</p>
 <p>函数/模块</p>
 <p>非常接近。</p>
 <hr />
-<h1>四十、模块化工厂</h1><p>后期理想的玩家思维通常会变成：</p>
+<h1 id="四十模块化工厂">四十、模块化工厂</h1><p>后期理想的玩家思维通常会变成：</p>
 <pre><code class="language-text">Mining Module
 
 Smelting Module
@@ -1432,7 +1433,7 @@ IronPlate
 <p>玩家实际上正在进行：</p>
 <p>系统架构设计。</p>
 <hr />
-<h1>四十一、规模增长不能只是数字增加</h1><p>如果：</p>
+<h1 id="四十一规模增长不能只是数字增加">四十一、规模增长不能只是数字增加</h1><p>如果：</p>
 <p>10 台机器
 和
 10000 台机器</p>
@@ -1455,7 +1456,7 @@ New Coordination Problems
 </code></pre>
 <p>这样规模本身才是玩法。</p>
 <hr />
-<h1>四十二、玩家体验曲线</h1><p>优秀的自动化游戏通常经历以下阶段。</p>
+<h1 id="四十二玩家体验曲线">四十二、玩家体验曲线</h1><p>优秀的自动化游戏通常经历以下阶段。</p>
 <h2 id="阶段一劳动">阶段一：劳动</h2><p>“我需要铁板。”</p>
 <p>玩家亲自制造。</p>
 <hr />
@@ -1482,7 +1483,7 @@ New Coordination Problems
 <p>“我需要新增 2400/min 的铜板产能。”</p>
 <p>这就是本类型真正的终局体验。</p>
 <hr />
-<h1>四十三、玩家爽点：把问题永久解决</h1><p>大量游戏的任务结构是：</p>
+<h1 id="四十三玩家爽点把问题永久解决">四十三、玩家爽点：把问题永久解决</h1><p>大量游戏的任务结构是：</p>
 <p>问题出现
 ↓
 玩家处理
@@ -1508,7 +1509,7 @@ New Coordination Problems
 <p><strong>Manual Action Elimination</strong></p>
 <p>是自动化玩法最重要的心理奖励之一。</p>
 <hr />
-<h1>四十四、不要让自动化变成新的重复劳动</h1><p>这是本类型常见设计失败。</p>
+<h1 id="四十四不要让自动化变成新的重复劳动">四十四、不要让自动化变成新的重复劳动</h1><p>这是本类型常见设计失败。</p>
 <p>例如：</p>
 <p>玩家已经自动化：</p>
 <p>生产。</p>
@@ -1526,7 +1527,7 @@ New Coordination Problems
 <p>之后引入：</p>
 <p>更高一级的问题。</p>
 <hr />
-<h1>四十五、失败应该暴露设计信息</h1><p>生产失败不应该只是：</p>
+<h1 id="四十五失败应该暴露设计信息">四十五、失败应该暴露设计信息</h1><p>生产失败不应该只是：</p>
 <p>“损失资源。”</p>
 <p>更有价值的是：</p>
 <p>“暴露系统设计缺陷。”</p>
@@ -1543,7 +1544,7 @@ New Coordination Problems
 <p><strong>System Feedback。</strong></p>
 <p>这也是自动化游戏和很多传统惩罚式失败机制的重要区别。</p>
 <hr />
-<h1>四十六、自动化中的不完全最优</h1><p>不要设计一个绝对最优的固定生产布局。</p>
+<h1 id="四十六自动化中的不完全最优">四十六、自动化中的不完全最优</h1><p>不要设计一个绝对最优的固定生产布局。</p>
 <p>应该存在多个优化维度：</p>
 <ul>
 <li><p>空间；</p>
@@ -1575,7 +1576,7 @@ New Coordination Problems
 <p>这样玩家才能形成自己的：</p>
 <p><strong>Engineering Style。</strong></p>
 <hr />
-<h1>四十七、测试策略</h1><p>自动化系统特别适合进行自动测试。</p>
+<h1 id="四十七测试策略">四十七、测试策略</h1><p>自动化系统特别适合进行自动测试。</p>
 <h2 id="recipe-test">Recipe Test</h2><p>验证：</p>
 <p>Input × Rate × Time</p>
 <p>产生正确输出。</p>
@@ -1613,7 +1614,7 @@ New Coordination Problems
 <p>验证：</p>
 <p>结果一致。</p>
 <hr />
-<h1>四十八、性能架构重点</h1><p>自动化类项目后期最危险的性能来源通常是：</p>
+<h1 id="四十八性能架构重点">四十八、性能架构重点</h1><p>自动化类项目后期最危险的性能来源通常是：</p>
 <pre><code class="language-text">Entity Count
 ×
 Update Frequency
@@ -1638,7 +1639,7 @@ Network Traversal
 <p>真正的问题通常是：</p>
 <p>几十万实体。</p>
 <hr />
-<h1>四十九、Graph Dirty Update</h1><p>生产网络不需要每 Tick：</p>
+<h1 id="四十九graph-dirty-update">四十九、Graph Dirty Update</h1><p>生产网络不需要每 Tick：</p>
 <p>重新构建图。</p>
 <p>只有发生：</p>
 <p>Build
@@ -1658,7 +1659,7 @@ Disconnect</p>
 <p>这是一种非常通用的：</p>
 <p><strong>结构变化驱动计算。</strong></p>
 <hr />
-<h1>五十、稳定状态可以解析计算</h1><p>假设一个生产区已经连续运行很久：</p>
+<h1 id="五十稳定状态可以解析计算">五十、稳定状态可以解析计算</h1><p>假设一个生产区已经连续运行很久：</p>
 <p>库存稳定
 物流稳定
 配方稳定。</p>
@@ -1684,7 +1685,7 @@ Analytical
 </code></pre>
 <p>对于超大型模拟游戏非常有价值。</p>
 <hr />
-<h1>五十一、存档设计</h1><p>不要简单序列化所有表现对象。</p>
+<h1 id="五十一存档设计">五十一、存档设计</h1><p>不要简单序列化所有表现对象。</p>
 <p>存档应该围绕：</p>
 <p><strong>Authoritative State。</strong></p>
 <p>包括：</p>
@@ -1715,7 +1716,7 @@ UI 状态
 <p>Presentation</p>
 <p>重新派生即可。</p>
 <hr />
-<h1>五十二、版本迁移</h1><p>自动化游戏的存档寿命通常较长。</p>
+<h1 id="五十二版本迁移">五十二、版本迁移</h1><p>自动化游戏的存档寿命通常较长。</p>
 <p>因此需要：</p>
 <pre><code class="language-text">SaveVersion
 </code></pre>
@@ -1731,7 +1732,7 @@ V2 → V3
 <p>配方结构改动</p>
 <p>可能直接破坏玩家数百小时的工厂。</p>
 <hr />
-<h1>五十三、作者工具</h1><p>如果要让内容规模持续增长，编辑器至少应该提供：</p>
+<h1 id="五十三作者工具">五十三、作者工具</h1><p>如果要让内容规模持续增长，编辑器至少应该提供：</p>
 <h2 id="recipe-graph-viewer">Recipe Graph Viewer</h2><p>可视化：</p>
 <p>资源生产依赖。</p>
 <p>例如：</p>
@@ -1776,7 +1777,7 @@ Copper:
 </li>
 </ul>
 <hr />
-<h1>五十四、最小可玩切片</h1><p>如果要验证这一范式，不需要立刻实现：</p>
+<h1 id="五十四最小可玩切片">五十四、最小可玩切片</h1><p>如果要验证这一范式，不需要立刻实现：</p>
 <p>火车
 机器人
 核电
@@ -1808,7 +1809,7 @@ Assembler。</p>
 扩容</p>
 <p>这个类型的核心已经成立。</p>
 <hr />
-<h1>五十五、范式成立的验收标准</h1><p>如果一个游戏要被视为真正的 Factory Automation，至少应该满足：</p>
+<h1 id="五十五范式成立的验收标准">五十五、范式成立的验收标准</h1><p>如果一个游戏要被视为真正的 Factory Automation，至少应该满足：</p>
 <h3 id="1-生产可以脱离玩家持续运行">1. 生产可以脱离玩家持续运行</h3><p>如果玩家必须不断点击生产：</p>
 <p>不是完整自动化。</p>
 <h3 id="2-多个生产节点可以连接">2. 多个生产节点可以连接</h3><p>需要形成：</p>
@@ -1819,7 +1820,7 @@ Assembler。</p>
 <h3 id="6-生产能力可以进一步制造生产能力">6. 生产能力可以进一步制造生产能力</h3><p>形成自举。</p>
 <h3 id="7-后期问题从单机转向网络">7. 后期问题从单机转向网络</h3><p>否则规模不会产生玩法。</p>
 <hr />
-<h1>五十六、与相近类型的边界</h1><h2 id="与城市建设模拟的区别">与城市建设模拟的区别</h2><p>城市建设关注：</p>
+<h1 id="五十六与相近类型的边界">五十六、与相近类型的边界</h1><h2 id="与城市建设模拟的区别">与城市建设模拟的区别</h2><p>城市建设关注：</p>
 <p>人口
 土地
 交通
@@ -1886,7 +1887,7 @@ Flow Network
 <p>因为其核心目标可以仅仅是：</p>
 <p><strong>最大化工业能力。</strong></p>
 <hr />
-<h1>五十七、可以迁移到其他游戏的设计思想</h1><h2 id="571-backpressure">57.1 Backpressure</h2><p>适用于：</p>
+<h1 id="五十七可以迁移到其他游戏的设计思想">五十七、可以迁移到其他游戏的设计思想</h1><h2 id="571-backpressure">57.1 Backpressure</h2><p>适用于：</p>
 <p>任务系统
 消息队列
 经济系统
@@ -1961,7 +1962,7 @@ RPG
 <p>Diagnostic Failure</p>
 <p>非常适合复杂系统型游戏。</p>
 <hr />
-<h1>五十八、对通用游戏框架设计的启发</h1><p>Factory Automation 对通用框架尤其有价值，因为它会强迫架构正确处理：</p>
+<h1 id="五十八对通用游戏框架设计的启发">五十八、对通用游戏框架设计的启发</h1><p>Factory Automation 对通用框架尤其有价值，因为它会强迫架构正确处理：</p>
 <pre><code class="language-text">大量实体
 +
 稳定 Tick
@@ -1994,7 +1995,7 @@ Simulation LOD
 <p>因此 Factory Automation 也非常适合作为：</p>
 <p>框架压力测试案例。</p>
 <hr />
-<h1>五十九、推荐的框架抽象</h1><p>如果未来将该范式映射到通用 Framework，可以考虑抽象出：</p>
+<h1 id="五十九推荐的框架抽象">五十九、推荐的框架抽象</h1><p>如果未来将该范式映射到通用 Framework，可以考虑抽象出：</p>
 <pre><code class="language-text">FlowGraph
 FlowNode
 FlowEdge
@@ -2027,7 +2028,7 @@ Assembler。</p>
 生态
 网络数据流。</p>
 <hr />
-<h1>六十、最终设计原则</h1><p>Factory Automation 最核心的工程与设计原则可以归纳为：</p>
+<h1 id="六十最终设计原则">六十、最终设计原则</h1><p>Factory Automation 最核心的工程与设计原则可以归纳为：</p>
 <h3 id="原则一">原则一</h3><p><strong>世界不是建筑集合，而是持续运行的网络。</strong></p>
 <h3 id="原则二">原则二</h3><p><strong>机器不是行为脚本，而是统一规则下的数据驱动节点。</strong></p>
 <h3 id="原则三">原则三</h3><p><strong>资源不是库存数字，而是拥有容量、速率和延迟约束的流。</strong></p>
@@ -2039,7 +2040,7 @@ Assembler。</p>
 <h3 id="原则九">原则九</h3><p><strong>故障应该形成可追踪的因果链。</strong></p>
 <h3 id="原则十">原则十</h3><p><strong>后期玩家真正建设的不是工厂，而是一套工业架构。</strong></p>
 <hr />
-<h1>六十一、本次设计范式总结</h1><p>本类型最具代表性的范式不是：</p>
+<h1 id="六十一本次设计范式总结">六十一、本次设计范式总结</h1><p>本类型最具代表性的范式不是：</p>
 <p><strong>生产配方系统。</strong></p>
 <p>也不是：</p>
 <p><strong>传送带系统。</strong></p>
@@ -2082,7 +2083,7 @@ Industrial Network
 Distributed Industrial System
 </code></pre>
 <hr />
-<h1>六十二、防重记录更新</h1><h2 id="本次新增类型">本次新增类型</h2><p><strong>Factory Automation / Production Automation / 工厂自动化游戏</strong></p>
+<h1 id="六十二防重记录更新">六十二、防重记录更新</h1><h2 id="本次新增类型">本次新增类型</h2><p><strong>Factory Automation / Production Automation / 工厂自动化游戏</strong></p>
 <p>建议稳定 ID：</p>
 <p><code>factory-automation</code></p>
 <p>建议文件：</p>

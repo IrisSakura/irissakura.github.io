@@ -60,7 +60,7 @@ test('generated pages load one static brand without theme controls or bootstrap 
   }
 });
 
-test('shared navigation exposes the profile avatar and five real quick routes at every depth', async () => {
+test('shared navigation exposes the profile avatar and six real quick routes at every depth', async () => {
   const site = await readJson('data/site.json');
   const pages = [
     { path: 'index.html', prefix: '' },
@@ -68,6 +68,7 @@ test('shared navigation exposes the profile avatar and five real quick routes at
   ];
   const routeTargets = [
     'pages/game.html',
+    'pages/engineering.html',
     'pages/framework.html',
     'pages/journal.html',
     'pages/portfolio.html#consumer-lab',
@@ -93,7 +94,7 @@ test('shared navigation exposes the profile avatar and five real quick routes at
   }
 });
 
-test('homepage presents identity, flagship work and three secondary focus areas in order', async () => {
+test('homepage presents identity, flagship work and four secondary focus areas in order', async () => {
   const [site, home] = await Promise.all([
     readJson('data/site.json'),
     readFile(new URL('index.html', root), 'utf8')
@@ -116,8 +117,8 @@ test('homepage presents identity, flagship work and three secondary focus areas 
   assert.ok(home.includes(site.profile.role));
   assert.ok(home.includes(site.profile.introduction));
   assert.ok(home.includes(`src="${site.profile.avatar}"`));
-  assert.equal((home.match(/data-home-focus/g) ?? []).length, 3);
-  for (const label of ['Sakura Framework', 'Sakura Design Journal', 'Consumer Lab']) {
+  assert.equal((home.match(/data-home-focus/g) ?? []).length, 4);
+  for (const label of ['Iris Engineering', 'Sakura Framework', 'Sakura Design Journal', 'Consumer Lab']) {
     assert.ok(home.includes(label), `homepage focus areas are missing ${label}`);
   }
   assert.ok(home.includes('class="brand-lockup'));

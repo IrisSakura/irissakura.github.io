@@ -1,4 +1,71 @@
-## 1. 类型定位
+> Agent 标签：`classical` `roguelike` `traditional`
+
+---
+
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `sakura-design-journal/game-designs`。当前生成索引标记 **Entries: 54**；其中已经登记 `deckbuilder-roguelike`，其核心是通过路线、卡牌奖励、删牌、升级和遗物不断修改未来抽牌概率，并让单局构筑逐渐收敛。当前索引中尚未存在独立的传统 Roguelike / Dungeon Crawler 范式。
+
+仓库现有卡组构筑式 Roguelike 文档也明确把“传统 Roguelike”作为相邻类型区分：传统 Roguelike 可以通过装备、技能、地图和网格移动形成单局变化，而卡组构筑式 Roguelike 将主要行动集合集中表达在抽牌堆、手牌、弃牌堆与卡牌升级结构中。
+
+同时，当前仓库已经存在回合制战术 RPG，其核心是离散战场、有限行动资源、视野、路径、掩体、任务目标和小队长期成长。
+
+因此本期新增：
+
+**传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler。**
+
+常见名称包括：
+
+- Traditional Roguelike；
+
+- Classical Roguelike；
+
+- Turn-Based Roguelike；
+
+- Grid-Based Dungeon Crawler；
+
+- 回合制 Roguelike；
+
+- 传统地牢探索；
+
+- 程序生成地牢冒险；
+
+- 单角色回合制地牢探索。
+
+
+本文讨论的不是泛化意义上“带随机地图和死亡重开”的所有 Roguelite，而是一种具有非常明确运行时特征、足以独立支撑完整产品的宏观类型。
+
+其最具代表性的设计范式可以概括为：
+
+> **世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状态不可恢复，但玩家本人获得的怪物规律、物品识别、资源价值和地图阅读经验不会被重置，从而形成一种以“玩家知识”而非永久数值成长为核心的跨局进步。**
+
+核心循环可以压缩为：
+
+**观察当前局面<br>
+→ 提交一个离散行动<br>
+→ 世界统一推进时间<br>
+→ 敌人、状态和环境获得行动机会<br>
+→ 世界进入新的稳定状态<br>
+→ 玩家重新观察<br>
+→ 探索未知区域<br>
+→ 获取资源与知识<br>
+→ 进入更深层地牢<br>
+→ 风险和资源压力提高<br>
+→ 发生不可逆决策<br>
+→ 成功深入或 Run 终止<br>
+→ 玩家保留知识并重新开始。**
+
+传统 Roguelike 真正独特的地方不是：
+
+> “地图随机、死了重来。”
+
+而是：
+
+> **玩家拥有近乎无限的现实思考时间，却只能通过一次一次不可撤销的离散行动推动世界；因此每一个按键本质上都是对未来世界状态的一次提交。**
+
+---
+
+# 1. 类型定位
 
 传统 Roguelike 通常具有以下核心特征：
 
@@ -71,7 +138,7 @@
 
 ---
 
-## 2. 本类型最核心的运行时原则：行动即时间
+# 2. 本类型最核心的运行时原则：行动即时间
 
 传统实时游戏通常：
 
@@ -97,7 +164,7 @@ Move North，
 
 ---
 
-## 3. Player Action 与 World Tick
+# 3. Player Action 与 World Tick
 
 典型关系：
 
@@ -124,7 +191,7 @@ UI、AI、回放、存档和调试都可以围绕：
 
 ---
 
-## 4. 为什么“稳定决策点”极其重要
+# 4. 为什么“稳定决策点”极其重要
 
 玩家输入应该发生在：
 
@@ -153,7 +220,7 @@ Player Action。
 
 ---
 
-## 5. SimulationState
+# 5. SimulationState
 
 建议包含：
 
@@ -186,7 +253,7 @@ Player Action。
 
 ---
 
-## 6. 核心范式一：时间应使用“行动成本”而不仅是简单你一回合我一回合
+# 6. 核心范式一：时间应使用“行动成本”而不仅是简单你一回合我一回合
 
 最基础模型：
 
@@ -215,7 +282,7 @@ Player Action。
 
 ---
 
-## 7. ActionTimeCost
+# 7. ActionTimeCost
 
 例如：
 
@@ -245,7 +312,7 @@ Player Action。
 
 ---
 
-## 8. SchedulerState
+# 8. SchedulerState
 
 建议包含：
 
@@ -262,7 +329,7 @@ Player Action。
 
 ---
 
-## 9. ActorScheduleEntry
+# 9. ActorScheduleEntry
 
 建议字段：
 
@@ -279,7 +346,7 @@ Player Action。
 
 ---
 
-## 10. 调度流程
+# 10. 调度流程
 
 玩家ActionCost = 100。
 
@@ -315,7 +382,7 @@ Player重新成为Next Actor。
 
 ---
 
-## 11. 不建议直接给“速度快的敌人一回合攻击两次”
+# 11. 不建议直接给“速度快的敌人一回合攻击两次”
 
 这种特殊逻辑会快速污染：
 
@@ -334,7 +401,7 @@ Player重新成为Next Actor。
 
 ---
 
-## 12. 核心范式二：任何动作都应该通过统一 Action Intent 进入世界
+# 12. 核心范式二：任何动作都应该通过统一 Action Intent 进入世界
 
 玩家和AI最好使用近似统一的行动模型。
 
@@ -369,7 +436,7 @@ Player重新成为Next Actor。
 
 ---
 
-## 13. ActionIntent
+# 13. ActionIntent
 
 建议字段：
 
@@ -396,7 +463,7 @@ Player重新成为Next Actor。
 
 ---
 
-## 14. ActionValidator
+# 14. ActionValidator
 
 统一检查：
 
@@ -421,7 +488,7 @@ Player重新成为Next Actor。
 
 ---
 
-## 15. AI也提交ActionIntent
+# 15. AI也提交ActionIntent
 
 敌人不应该：
 
@@ -454,7 +521,7 @@ World Action System决定：
 
 ---
 
-## 16. 核心范式三：程序生成不是“随机摆房间”，而是带约束的拓扑编译
+# 16. 核心范式三：程序生成不是“随机摆房间”，而是带约束的拓扑编译
 
 传统 Roguelike 中：
 
@@ -483,7 +550,7 @@ World Action System决定：
 
 ---
 
-## 17. DungeonGenerationDefinition
+# 17. DungeonGenerationDefinition
 
 建议字段：
 
@@ -516,7 +583,7 @@ World Action System决定：
 
 ---
 
-## 18. 生成流程
+# 18. 生成流程
 
 创建FloorSeed<br>
 → 生成基础空间拓扑<br>
@@ -535,13 +602,13 @@ World Action System决定：
 
 ---
 
-## 19. 推荐生成两层数据
+# 19. 推荐生成两层数据
 
-### Logical Topology
+## Logical Topology
 
 房间、连接和可达性。
 
-### Tile Representation
+## Tile Representation
 
 具体网格。
 
@@ -555,7 +622,7 @@ World Action System决定：
 
 ---
 
-## 20. FloorGraph
+# 20. FloorGraph
 
 建议包含：
 
@@ -580,7 +647,7 @@ World Action System决定：
 
 ---
 
-## 21. Critical Path
+# 21. Critical Path
 
 从：
 
@@ -609,7 +676,7 @@ Exit
 
 ---
 
-## 22. 不建议地图只是完美迷宫
+# 22. 不建议地图只是完美迷宫
 
 如果所有地图：
 
@@ -636,7 +703,7 @@ Exit
 
 ---
 
-## 23. 核心范式四：地图必须同时存在 World Truth 与 Player Knowledge
+# 23. 核心范式四：地图必须同时存在 World Truth 与 Player Knowledge
 
 FloorState知道：
 
@@ -656,7 +723,7 @@ FloorState知道：
 
 ---
 
-## 24. TileState
+# 24. TileState
 
 建议字段：
 
@@ -679,7 +746,7 @@ FloorState知道：
 
 ---
 
-## 25. TileKnowledgeState
+# 25. TileKnowledgeState
 
 建议包含：
 
@@ -700,7 +767,7 @@ FloorState知道：
 
 ---
 
-## 26. DiscoveryState
+# 26. DiscoveryState
 
 推荐：
 
@@ -713,7 +780,7 @@ FloorState知道：
 
 ---
 
-## 27. 为什么 Remembered 与 Visible 要分离
+# 27. 为什么 Remembered 与 Visible 要分离
 
 玩家曾看到：
 
@@ -733,7 +800,7 @@ FloorState知道：
 
 ---
 
-## 28. FOV System
+# 28. FOV System
 
 典型使用：
 
@@ -754,7 +821,7 @@ FloorState知道：
 
 ---
 
-## 29. FOV 输入
+# 29. FOV 输入
 
 - PlayerPosition；
 
@@ -774,7 +841,7 @@ VisibleCells。
 
 ---
 
-## 30. FOV不是UI特效
+# 30. FOV不是UI特效
 
 Enemy AI、Targeting、Player Knowledge、Ranged Attack
 
@@ -784,7 +851,7 @@ Enemy AI、Targeting、Player Knowledge、Ranged Attack
 
 ---
 
-## 31. 核心范式五：未知性应存在于物品、地图和敌人能力多个层面
+# 31. 核心范式五：未知性应存在于物品、地图和敌人能力多个层面
 
 传统 Roguelike 常见设计：
 
@@ -800,7 +867,7 @@ Knowledge
 
 ---
 
-## 32. ItemDefinition 与 ItemInstance
+# 32. ItemDefinition 与 ItemInstance
 
 静态：
 
@@ -812,7 +879,7 @@ ItemInstance。
 
 ---
 
-## 33. ItemDefinition
+# 33. ItemDefinition
 
 建议字段：
 
@@ -837,7 +904,7 @@ ItemInstance。
 
 ---
 
-## 34. ItemInstance
+# 34. ItemInstance
 
 建议包含：
 
@@ -866,7 +933,7 @@ ItemInstance。
 
 ---
 
-## 35. 核心范式六：表现身份与真实身份可以分离
+# 35. 核心范式六：表现身份与真实身份可以分离
 
 例如每一局：
 
@@ -880,7 +947,7 @@ ItemInstance。
 
 ---
 
-## 36. ItemAppearanceMapping
+# 36. ItemAppearanceMapping
 
 例如：
 
@@ -898,7 +965,7 @@ Blue Potion → Healing。
 
 ---
 
-## 37. 但跨局知识仍然可以保留规则知识
+# 37. 但跨局知识仍然可以保留规则知识
 
 玩家可能不知道：
 
@@ -921,7 +988,7 @@ Blue Potion → Healing。
 
 ---
 
-## 38. IdentificationState
+# 38. IdentificationState
 
 建议：
 
@@ -940,7 +1007,7 @@ Unknown / Known。
 
 ---
 
-## 39. 识别来源
+# 39. 识别来源
 
 可以包括：
 
@@ -959,7 +1026,7 @@ Unknown / Known。
 
 ---
 
-## 40. PlayerKnowledgeState
+# 40. PlayerKnowledgeState
 
 建议包含：
 
@@ -988,7 +1055,7 @@ Unknown / Known。
 
 ---
 
-## 41. 不建议把所有玩家知识自动做成永久图鉴
+# 41. 不建议把所有玩家知识自动做成永久图鉴
 
 传统 Roguelike 的一个重要乐趣是：
 
@@ -1006,7 +1073,7 @@ Unknown / Known。
 
 ---
 
-## 42. 核心范式七：永久死亡不是惩罚模块，而是整个决策价值体系的基础
+# 42. 核心范式七：永久死亡不是惩罚模块，而是整个决策价值体系的基础
 
 如果玩家可以：
 
@@ -1024,7 +1091,7 @@ Permadeath的核心作用是：
 
 ---
 
-## 43. RunState
+# 43. RunState
 
 建议包含：
 
@@ -1051,7 +1118,7 @@ Permadeath的核心作用是：
 
 ---
 
-## 44. RunState生命周期
+# 44. RunState生命周期
 
 Created<br>
 → Active<br>
@@ -1068,7 +1135,7 @@ Active<br>
 
 ---
 
-## 45. Death 必须是正式事务
+# 45. Death 必须是正式事务
 
 Actor HP达到失败条件<br>
 → 检查特殊复活规则<br>
@@ -1081,7 +1148,7 @@ Actor HP达到失败条件<br>
 
 ---
 
-## 46. Suspend 与 Save Scumming 必须分离
+# 46. Suspend 与 Save Scumming 必须分离
 
 玩家可能需要：
 
@@ -1111,7 +1178,7 @@ Suspend文件立即失效或继续作为唯一Run状态。
 
 ---
 
-## 47. SuspendState
+# 47. SuspendState
 
 建议包含：
 
@@ -1132,7 +1199,7 @@ Suspend文件立即失效或继续作为唯一Run状态。
 
 ---
 
-## 48. 为什么随机流也必须保存
+# 48. 为什么随机流也必须保存
 
 如果加载以后：
 
@@ -1150,7 +1217,7 @@ Suspend会变成：
 
 ---
 
-## 49. 核心范式八：玩家跨局成长应优先表现为知识，而不是永久基础战斗力
+# 49. 核心范式八：玩家跨局成长应优先表现为知识，而不是永久基础战斗力
 
 可以有：
 
@@ -1179,7 +1246,7 @@ Suspend会变成：
 
 ---
 
-## 50. 传统 Roguelike 的真正 Meta Progression
+# 50. 传统 Roguelike 的真正 Meta Progression
 
 通常是：
 
@@ -1202,7 +1269,7 @@ Suspend会变成：
 
 ---
 
-## 51. 这种成长非常独特
+# 51. 这种成长非常独特
 
 角色：
 
@@ -1218,7 +1285,7 @@ Suspend会变成：
 
 ---
 
-## 52. 核心范式九：敌人设计的重点是“行为规律”，而不是动画复杂度
+# 52. 核心范式九：敌人设计的重点是“行为规律”，而不是动画复杂度
 
 因为玩家拥有：
 
@@ -1232,7 +1299,7 @@ Suspend会变成：
 
 ---
 
-## 53. MonsterDefinition
+# 53. MonsterDefinition
 
 建议字段：
 
@@ -1263,7 +1330,7 @@ Suspend会变成：
 
 ---
 
-## 54. MonsterRuntimeState
+# 54. MonsterRuntimeState
 
 建议包含：
 
@@ -1292,7 +1359,7 @@ Suspend会变成：
 
 ---
 
-## 55. 敌人的独特性可以来自
+# 55. 敌人的独特性可以来自
 
 - 速度；
 
@@ -1325,7 +1392,7 @@ Suspend会变成：
 
 ---
 
-## 56. AI应该只使用自己拥有的信息
+# 56. AI应该只使用自己拥有的信息
 
 Enemy如果：
 
@@ -1347,7 +1414,7 @@ LastKnownPosition。
 
 ---
 
-## 57. AI PerceptionState
+# 57. AI PerceptionState
 
 建议包含：
 
@@ -1366,7 +1433,7 @@ LastKnownPosition。
 
 ---
 
-## 58. AI行动流程
+# 58. AI行动流程
 
 AI Turn<br>
 → 更新可见目标<br>
@@ -1378,7 +1445,7 @@ AI Turn<br>
 
 ---
 
-## 59. 敌人也应受到世界规则限制
+# 59. 敌人也应受到世界规则限制
 
 如果玩家需要：
 
@@ -1396,7 +1463,7 @@ CanPassDoor / CanPhase。
 
 ---
 
-## 60. 核心范式十：系统交互比单独技能数量更重要
+# 60. 核心范式十：系统交互比单独技能数量更重要
 
 传统 Roguelike 非常适合：
 
@@ -1427,7 +1494,7 @@ CanPassDoor / CanPhase。
 
 ---
 
-## 61. EnvironmentEffect
+# 61. EnvironmentEffect
 
 建议字段：
 
@@ -1450,7 +1517,7 @@ CanPassDoor / CanPhase。
 
 ---
 
-## 62. 示例规则
+# 62. 示例规则
 
 Fire：
 
@@ -1486,7 +1553,7 @@ Tag / Effect Interaction
 
 ---
 
-## 63. EnvironmentInteractionRule
+# 63. EnvironmentInteractionRule
 
 建议字段：
 
@@ -1507,7 +1574,7 @@ Tag / Effect Interaction
 
 ---
 
-## 64. 统一规则带来的价值
+# 64. 统一规则带来的价值
 
 设计者新增：
 
@@ -1529,7 +1596,7 @@ Tag。
 
 ---
 
-## 65. 核心范式十一：资源压力应迫使玩家继续移动，但不必所有游戏都使用饥饿条
+# 65. 核心范式十一：资源压力应迫使玩家继续移动，但不必所有游戏都使用饥饿条
 
 传统 Roguelike经典上常见：
 
@@ -1547,7 +1614,7 @@ Food Clock。
 
 ---
 
-## 66. Anti-Stall Pressure
+# 66. Anti-Stall Pressure
 
 可以包括：
 
@@ -1570,7 +1637,7 @@ Food Clock。
 
 ---
 
-## 67. 为什么需要 Anti-Stall
+# 67. 为什么需要 Anti-Stall
 
 回合制意味着：
 
@@ -1592,7 +1659,7 @@ Food Clock。
 
 ---
 
-## 68. 不建议为了传统而强制加入饥饿
+# 68. 不建议为了传统而强制加入饥饿
 
 如果：
 
@@ -1604,7 +1671,7 @@ Healing已经严格有限，
 
 ---
 
-## 69. 核心范式十二：探索必须在“信息价值”和“资源成本”之间形成取舍
+# 69. 核心范式十二：探索必须在“信息价值”和“资源成本”之间形成取舍
 
 当前层出口已经找到。
 
@@ -1638,7 +1705,7 @@ Healing已经严格有限，
 
 ---
 
-## 70. Explore vs Descend
+# 70. Explore vs Descend
 
 这是传统Roguelike非常核心的宏观决策：
 
@@ -1646,7 +1713,7 @@ Healing已经严格有限，
 
 ---
 
-## 71. FloorValueEstimate
+# 71. FloorValueEstimate
 
 开发分析可以估算：
 
@@ -1665,7 +1732,7 @@ Healing已经严格有限，
 
 ---
 
-## 72. 楼梯是阶段提交点
+# 72. 楼梯是阶段提交点
 
 进入下一层：
 
@@ -1692,7 +1759,7 @@ Healing已经严格有限，
 
 ---
 
-## 73. FloorTransitionTransaction
+# 73. FloorTransitionTransaction
 
 验证出口<br>
 → 保存当前Floor Persistent State<br>
@@ -1705,7 +1772,7 @@ Healing已经严格有限，
 
 ---
 
-## 74. 核心范式十三：随机性必须支持确定性重放
+# 74. 核心范式十三：随机性必须支持确定性重放
 
 传统 Roguelike 极适合：
 
@@ -1729,7 +1796,7 @@ AI；
 
 ---
 
-## 75. RunRandomState
+# 75. RunRandomState
 
 建议至少分离：
 
@@ -1748,7 +1815,7 @@ AI；
 
 ---
 
-## 76. 为什么随机流要分离
+# 76. 为什么随机流要分离
 
 如果后来新增：
 
@@ -1762,7 +1829,7 @@ Visual随机更不应该改变Gameplay。
 
 ---
 
-## 77. RandomCursor
+# 77. RandomCursor
 
 每个Stream保存：
 
@@ -1779,7 +1846,7 @@ Visual随机更不应该改变Gameplay。
 
 ---
 
-## 78. ReplayRecord
+# 78. ReplayRecord
 
 建议包含：
 
@@ -1804,7 +1871,7 @@ Visual随机更不应该改变Gameplay。
 
 ---
 
-## 79. State Hash
+# 79. State Hash
 
 每隔：
 
@@ -1822,7 +1889,7 @@ Replay发现分歧：
 
 ---
 
-## 80. 核心范式十四：Input 不应与动画绑定
+# 80. 核心范式十四：Input 不应与动画绑定
 
 玩家按：
 
@@ -1856,7 +1923,7 @@ MoveAction。
 
 ---
 
-## 81. Presentation Queue
+# 81. Presentation Queue
 
 逻辑可以：
 
@@ -1879,7 +1946,7 @@ Gameplay State
 
 ---
 
-## 82. 动画速度可以改变但逻辑结果不变
+# 82. 动画速度可以改变但逻辑结果不变
 
 可以支持：
 
@@ -1895,7 +1962,7 @@ Instant。
 
 ---
 
-## 83. 核心范式十五：信息日志是正式玩家界面
+# 83. 核心范式十五：信息日志是正式玩家界面
 
 因为大量结果并不一定都能通过动画看清。
 
@@ -1922,7 +1989,7 @@ Instant。
 
 ---
 
-## 84. GameLogEvent
+# 84. GameLogEvent
 
 建议字段：
 
@@ -1947,7 +2014,7 @@ Instant。
 
 ---
 
-## 85. Log必须遵守玩家知识
+# 85. Log必须遵守玩家知识
 
 玩家看不到远处：
 
@@ -1965,7 +2032,7 @@ Enemy打开Door。
 
 ---
 
-## 86. Structured Log
+# 86. Structured Log
 
 不要只存：
 
@@ -1990,7 +2057,7 @@ UI再格式化。
 
 ---
 
-## 87. 完整事件与执行流程示例
+# 87. 完整事件与执行流程示例
 
 以下以：
 
@@ -2000,7 +2067,7 @@ UI再格式化。
 
 ---
 
-### 87.1 初始状态
+## 87.1 初始状态
 
 玩家位于：
 
@@ -2026,7 +2093,7 @@ Unknown。
 
 ---
 
-### 87.2 Run Mapping
+## 87.2 Run Mapping
 
 本Run开始时：
 
@@ -2038,7 +2105,7 @@ Blue对应什么。
 
 ---
 
-### 87.3 玩家打开北侧门
+## 87.3 玩家打开北侧门
 
 提交：
 
@@ -2050,7 +2117,7 @@ Action Cost：
 
 ---
 
-### 87.4 Door打开
+## 87.4 Door打开
 
 FOV重新计算。
 
@@ -2060,7 +2127,7 @@ FOV重新计算。
 
 ---
 
-### 87.5 世界推进
+## 87.5 世界推进
 
 敌人行动。
 
@@ -2072,7 +2139,7 @@ FOV重新计算。
 
 ---
 
-### 87.6 玩家评估
+## 87.6 玩家评估
 
 当前选项：
 
@@ -2089,7 +2156,7 @@ FOV重新计算。
 
 ---
 
-### 87.7 玩家选择CloseDoor
+## 87.7 玩家选择CloseDoor
 
 Action提交。
 
@@ -2097,7 +2164,7 @@ Door关闭。
 
 ---
 
-### 87.8 Enemy行动
+## 87.8 Enemy行动
 
 敌人到达门前。
 
@@ -2107,7 +2174,7 @@ OpenDoor。
 
 ---
 
-### 87.9 敌人打开门
+## 87.9 敌人打开门
 
 玩家知道：
 
@@ -2115,7 +2182,7 @@ OpenDoor。
 
 ---
 
-### 87.10 玩家后撤
+## 87.10 玩家后撤
 
 进入：
 
@@ -2123,7 +2190,7 @@ OpenDoor。
 
 ---
 
-### 87.11 当前资源问题
+## 87.11 当前资源问题
 
 Health过低。
 
@@ -2135,7 +2202,7 @@ Health过低。
 
 ---
 
-### 87.12 玩家考虑Unknown Potion
+## 87.12 玩家考虑Unknown Potion
 
 已知：
 
@@ -2153,7 +2220,7 @@ Health过低。
 
 ---
 
-### 87.13 玩家决定使用
+## 87.13 玩家决定使用
 
 提交：
 
@@ -2161,7 +2228,7 @@ UseItem。
 
 ---
 
-### 87.14 ActionValidator
+## 87.14 ActionValidator
 
 检查：
 
@@ -2173,7 +2240,7 @@ Item属于Player。
 
 ---
 
-### 87.15 Item Effect Resolution
+## 87.15 Item Effect Resolution
 
 查询Run Mapping：
 
@@ -2185,7 +2252,7 @@ Speed Potion。
 
 ---
 
-### 87.16 Item从Inventory消耗
+## 87.16 Item从Inventory消耗
 
 创建：
 
@@ -2193,7 +2260,7 @@ SpeedBuff。
 
 ---
 
-### 87.17 Identification
+## 87.17 Identification
 
 因为玩家亲自使用并观察到效果：
 
@@ -2209,7 +2276,7 @@ Identified = Speed Potion。
 
 ---
 
-### 87.18 PlayerKnowledge更新
+## 87.18 PlayerKnowledge更新
 
 这不是：
 
@@ -2219,7 +2286,7 @@ Identified = Speed Potion。
 
 ---
 
-### 87.19 Scheduler变化
+## 87.19 Scheduler变化
 
 Speed Buff降低玩家：
 
@@ -2235,7 +2302,7 @@ MoveAction Time Cost。
 
 ---
 
-### 87.20 下一移动
+## 87.20 下一移动
 
 玩家向南移动。
 
@@ -2243,19 +2310,19 @@ NextActionTime推进70。
 
 ---
 
-### 87.21 Enemy时间尚未到
+## 87.21 Enemy时间尚未到
 
 玩家获得额外一次移动机会。
 
 ---
 
-### 87.22 玩家拉开距离
+## 87.22 玩家拉开距离
 
 进入已知安全区域。
 
 ---
 
-### 87.23 Buff持续若干World Time
+## 87.23 Buff持续若干World Time
 
 最终失效。
 
@@ -2263,7 +2330,7 @@ NextActionTime推进70。
 
 ---
 
-### 87.24 玩家学到两层知识
+## 87.24 玩家学到两层知识
 
 Run内：
 
@@ -2275,7 +2342,7 @@ Blue Potion = Speed。
 
 ---
 
-### 87.25 如果玩家死亡
+## 87.25 如果玩家死亡
 
 当前：
 
@@ -2302,7 +2369,7 @@ Blue Potion = Speed。
 
 ---
 
-### 87.26 这就是传统Roguelike的典型结构
+## 87.26 这就是传统Roguelike的典型结构
 
 **有限视野<br>
 → 新威胁出现<br>
@@ -2316,9 +2383,9 @@ Blue Potion = Speed。
 
 ---
 
-## 88. 模块通信设计
+# 88. 模块通信设计
 
-### 88.1 Commands / Action Intents
+## 88.1 Commands / Action Intents
 
 典型：
 
@@ -2349,7 +2416,7 @@ Blue Potion = Speed。
 
 ---
 
-### 88.2 Query
+## 88.2 Query
 
 适用于：
 
@@ -2381,7 +2448,7 @@ Query不能：
 
 ---
 
-## 89. Domain Events
+# 89. Domain Events
 
 包括：
 
@@ -2420,7 +2487,7 @@ Query不能：
 
 ---
 
-## 90. Presentation Events
+# 90. Presentation Events
 
 包括：
 
@@ -2450,7 +2517,7 @@ Query不能：
 
 ---
 
-## 91. 稳定事件顺序
+# 91. 稳定事件顺序
 
 每个Action应产生：
 
@@ -2468,7 +2535,7 @@ Sequence
 
 ---
 
-## 92. Effect Queue
+# 92. Effect Queue
 
 Action可能触发：
 
@@ -2485,7 +2552,7 @@ EffectQueue。
 
 ---
 
-## 93. EffectDepth
+# 93. EffectDepth
 
 防止：
 
@@ -2507,11 +2574,11 @@ EffectDepth。
 
 ---
 
-## 94. 失败隔离
+# 94. 失败隔离
 
 ---
 
-### 94.1 Dungeon Generator生成不可达出口
+## 94.1 Dungeon Generator生成不可达出口
 
 Generation Validation失败。
 
@@ -2529,7 +2596,7 @@ MaximumAttempts。
 
 ---
 
-## 95. Generation连续失败
+# 95. Generation连续失败
 
 使用：
 
@@ -2541,7 +2608,7 @@ Fallback Generator。
 
 ---
 
-## 96. Critical Resource不可达
+# 96. Critical Resource不可达
 
 如果设计要求：
 
@@ -2553,7 +2620,7 @@ Key一定存在于可达区域。
 
 ---
 
-## 97. Occupancy冲突
+# 97. Occupancy冲突
 
 两个Actor同一时间想进入：
 
@@ -2569,7 +2636,7 @@ Scheduler保证Action顺序。
 
 ---
 
-## 98. MoveAction不能基于规划时快照直接提交
+# 98. MoveAction不能基于规划时快照直接提交
 
 AI选择：
 
@@ -2585,7 +2652,7 @@ Execution-time Validation。
 
 ---
 
-## 99. Actor死亡但仍存在Scheduler
+# 99. Actor死亡但仍存在Scheduler
 
 Death提交时：
 
@@ -2597,7 +2664,7 @@ Death提交时：
 
 ---
 
-## 100. Scheduler无下一Actor
+# 100. Scheduler无下一Actor
 
 如果存在Alive Actor
 
@@ -2611,7 +2678,7 @@ SchedulerIntegrityError。
 
 ---
 
-## 101. Zero-Cost Action
+# 101. Zero-Cost Action
 
 任何能够重复执行且：
 
@@ -2635,7 +2702,7 @@ World Action
 
 ---
 
-## 102. Inventory重复
+# 102. Inventory重复
 
 ItemInstance任意时刻只能属于：
 
@@ -2654,7 +2721,7 @@ ItemInstance任意时刻只能属于：
 
 ---
 
-## 103. ItemOwnershipAudit
+# 103. ItemOwnershipAudit
 
 在：
 
@@ -2671,7 +2738,7 @@ ItemInstance任意时刻只能属于：
 
 ---
 
-## 104. Random Drift
+# 104. Random Drift
 
 Replay State Hash发生不同。
 
@@ -2683,7 +2750,7 @@ Replay State Hash发生不同。
 
 ---
 
-## 105. FOV缓存异常
+# 105. FOV缓存异常
 
 FOV是派生状态。
 
@@ -2695,7 +2762,7 @@ FOV是派生状态。
 
 ---
 
-## 106. Knowledge状态异常
+# 106. Knowledge状态异常
 
 PlayerKnowledge不应决定：
 
@@ -2711,7 +2778,7 @@ Item仍按真实Definition运行。
 
 ---
 
-## 107. Suspend Save写入失败
+# 107. Suspend Save写入失败
 
 保留旧有效Suspend。
 
@@ -2727,7 +2794,7 @@ Item仍按真实Definition运行。
 
 ---
 
-## 108. Suspend Resume重复
+# 108. Suspend Resume重复
 
 ResumeToken只能成功一次。
 
@@ -2737,7 +2804,7 @@ ResumeToken只能成功一次。
 
 ---
 
-## 109. Death与Suspend同时发生
+# 109. Death与Suspend同时发生
 
 DeathCommit优先。
 
@@ -2749,7 +2816,7 @@ DeathCommit优先。
 
 ---
 
-## 110. FloorTransition失败
+# 110. FloorTransition失败
 
 当前Floor保持权威。
 
@@ -2759,11 +2826,11 @@ TargetFloor创建成功之前：
 
 ---
 
-## 111. Debug与可观测性
+# 111. Debug与可观测性
 
 ---
 
-## 112. Seed Inspector
+# 112. Seed Inspector
 
 显示：
 
@@ -2782,7 +2849,7 @@ TargetFloor创建成功之前：
 
 ---
 
-## 113. Floor Graph Viewer
+# 113. Floor Graph Viewer
 
 显示：
 
@@ -2803,7 +2870,7 @@ TargetFloor创建成功之前：
 
 ---
 
-## 114. Reachability Overlay
+# 114. Reachability Overlay
 
 显示：
 
@@ -2819,7 +2886,7 @@ Door / Key / Hazard条件以后
 
 ---
 
-## 115. FOV Overlay
+# 115. FOV Overlay
 
 显示：
 
@@ -2832,7 +2899,7 @@ Door / Key / Hazard条件以后
 
 ---
 
-## 116. Actor Scheduler Timeline
+# 116. Actor Scheduler Timeline
 
 例如：
 
@@ -2845,7 +2912,7 @@ Door / Key / Hazard条件以后
 
 ---
 
-## 117. Action Trace
+# 117. Action Trace
 
 一次玩家动作：
 
@@ -2860,7 +2927,7 @@ MoveNorth<br>
 
 ---
 
-## 118. Effect Trace
+# 118. Effect Trace
 
 针对复杂Action：
 
@@ -2868,7 +2935,7 @@ MoveNorth<br>
 
 ---
 
-## 119. AI Decision Inspector
+# 119. AI Decision Inspector
 
 Enemy当前候选：
 
@@ -2880,7 +2947,7 @@ Retreat 10。
 
 ---
 
-## 120. Perception Inspector
+# 120. Perception Inspector
 
 Enemy目前：
 
@@ -2890,7 +2957,7 @@ LastKnownPlayerPosition是多少。
 
 ---
 
-## 121. Item Identification Inspector
+# 121. Item Identification Inspector
 
 Run Mapping：
 
@@ -2904,7 +2971,7 @@ Blue。
 
 ---
 
-## 122. Player Knowledge Inspector
+# 122. Player Knowledge Inspector
 
 比较：
 
@@ -2916,7 +2983,7 @@ PlayerKnownState。
 
 ---
 
-## 123. Random Stream Trace
+# 123. Random Stream Trace
 
 显示：
 
@@ -2934,7 +3001,7 @@ Hit。
 
 ---
 
-## 124. Resource Timeline
+# 124. Resource Timeline
 
 记录：
 
@@ -2951,7 +3018,7 @@ Hit。
 
 ---
 
-## 125. Exploration Timeline
+# 125. Exploration Timeline
 
 每层：
 
@@ -2968,7 +3035,7 @@ Hit。
 
 ---
 
-## 126. Death Causality
+# 126. Death Causality
 
 例如：
 
@@ -2991,11 +3058,11 @@ Hit。
 
 ---
 
-## 127. Content Validation
+# 127. Content Validation
 
 ---
 
-### 127.1 Generator Reachability Test
+## 127.1 Generator Reachability Test
 
 生成：
 
@@ -3007,7 +3074,7 @@ Start → Exit。
 
 ---
 
-## 128. Key-Lock Validation
+# 128. Key-Lock Validation
 
 生成：
 
@@ -3017,7 +3084,7 @@ Lock前必须存在：
 
 ---
 
-## 129. Critical Entity Placement Test
+# 129. Critical Entity Placement Test
 
 Boss / Exit / Required Shrine
 
@@ -3027,7 +3094,7 @@ Boss / Exit / Required Shrine
 
 ---
 
-## 130. Spawn Safety Test
+# 130. Spawn Safety Test
 
 Player初始位置附近：
 
@@ -3039,7 +3106,7 @@ Player初始位置附近：
 
 ---
 
-## 131. Monster Action Validation
+# 131. Monster Action Validation
 
 对所有Monster：
 
@@ -3055,7 +3122,7 @@ Player初始位置附近：
 
 ---
 
-## 132. Action Determinism Test
+# 132. Action Determinism Test
 
 相同：
 
@@ -3072,7 +3139,7 @@ WorldState
 
 ---
 
-## 133. Replay Determinism Test
+# 133. Replay Determinism Test
 
 固定：
 
@@ -3089,7 +3156,7 @@ State Hash保持一致。
 
 ---
 
-## 134. Random Isolation Test
+# 134. Random Isolation Test
 
 加入一个：
 
@@ -3099,7 +3166,7 @@ Gameplay Replay结果不应变化。
 
 ---
 
-## 135. Item Mapping Test
+# 135. Item Mapping Test
 
 保证：
 
@@ -3113,7 +3180,7 @@ Gameplay Replay结果不应变化。
 
 ---
 
-## 136. Equipment Interaction Test
+# 136. Equipment Interaction Test
 
 自动组合：
 
@@ -3130,7 +3197,7 @@ Gameplay Replay结果不应变化。
 
 ---
 
-## 137. Anti-Stall Simulation
+# 137. Anti-Stall Simulation
 
 Bot采用：
 
@@ -3142,7 +3209,7 @@ Bot采用：
 
 ---
 
-## 138. Exploration Bot
+# 138. Exploration Bot
 
 策略：
 
@@ -3171,7 +3238,7 @@ Bot采用：
 
 ---
 
-## 139. Permadeath Integrity Test
+# 139. Permadeath Integrity Test
 
 模拟：
 
@@ -3186,7 +3253,7 @@ Bot采用：
 
 ---
 
-## 140. Suspend Integrity Test
+# 140. Suspend Integrity Test
 
 Save<br>
 → Resume<br>
@@ -3196,7 +3263,7 @@ Save<br>
 
 ---
 
-## 141. Performance设计
+# 141. Performance设计
 
 传统 Roguelike 的特点是：
 
@@ -3206,7 +3273,7 @@ Save<br>
 
 ---
 
-## 142. 无需让Enemy每帧Update
+# 142. 无需让Enemy每帧Update
 
 Enemy只有：
 
@@ -3216,7 +3283,7 @@ Scheduler轮到它
 
 ---
 
-## 143. Event-Driven Simulation
+# 143. Event-Driven Simulation
 
 大部分系统在：
 
@@ -3230,7 +3297,7 @@ CPU几乎不需要模拟世界。
 
 ---
 
-## 144. Grid使用紧凑数据结构
+# 144. Grid使用紧凑数据结构
 
 例如：
 
@@ -3246,7 +3313,7 @@ Visibility Bitset。
 
 ---
 
-## 145. Tile Visual 与 Tile Logic分离
+# 145. Tile Visual 与 Tile Logic分离
 
 逻辑：
 
@@ -3258,7 +3325,7 @@ Tile Renderer。
 
 ---
 
-## 146. Actor Spatial Index
+# 146. Actor Spatial Index
 
 由于Grid离散：
 
@@ -3270,7 +3337,7 @@ Coordinate → ActorId。
 
 ---
 
-## 147. Pathfinding
+# 147. Pathfinding
 
 AI可以使用：
 
@@ -3287,7 +3354,7 @@ AI可以使用：
 
 ---
 
-## 148. 路径无需每回合所有敌人全算
+# 148. 路径无需每回合所有敌人全算
 
 只有：
 
@@ -3295,7 +3362,7 @@ AI可以使用：
 
 ---
 
-## 149. Distance Field
+# 149. Distance Field
 
 大量敌人共同追Player时：
 
@@ -3307,7 +3374,7 @@ Player Distance Map。
 
 ---
 
-## 150. FOV只在必要时重算
+# 150. FOV只在必要时重算
 
 Player位置变化。
 
@@ -3319,7 +3386,7 @@ Player位置变化。
 
 ---
 
-## 151. Static Map Cache
+# 151. Static Map Cache
 
 地牢多数Tile不变。
 
@@ -3334,7 +3401,7 @@ Player位置变化。
 
 ---
 
-## 152. Replay Log非常轻量
+# 152. Replay Log非常轻量
 
 因为玩家输入速率低。
 
@@ -3346,11 +3413,11 @@ Player位置变化。
 
 ---
 
-## 153. 可扩展点
+# 153. 可扩展点
 
 ---
 
-### 153.1 新Monster
+## 153.1 新Monster
 
 主要提供：
 
@@ -3363,7 +3430,7 @@ Player位置变化。
 
 ---
 
-### 153.2 新Item
+## 153.2 新Item
 
 提供：
 
@@ -3376,7 +3443,7 @@ Player位置变化。
 
 ---
 
-### 153.3 新Tile
+## 153.3 新Tile
 
 通过：
 
@@ -3397,7 +3464,7 @@ TerrainDefinition
 
 ---
 
-### 153.4 新Environment Interaction
+## 153.4 新Environment Interaction
 
 通过：
 
@@ -3405,7 +3472,7 @@ Tag-based InteractionRule。
 
 ---
 
-### 153.5 新Dungeon Generator
+## 153.5 新Dungeon Generator
 
 实现统一：
 
@@ -3415,7 +3482,7 @@ Tag-based InteractionRule。
 
 ---
 
-### 153.6 新Turn Model
+## 153.6 新Turn Model
 
 可以替换：
 
@@ -3429,7 +3496,7 @@ World Action接口不变。
 
 ---
 
-### 153.7 新Run模式
+## 153.7 新Run模式
 
 例如：
 
@@ -3446,7 +3513,7 @@ World Action接口不变。
 
 ---
 
-### 153.8 Daily Run
+## 153.8 Daily Run
 
 所有玩家：
 
@@ -3467,11 +3534,11 @@ World Action接口不变。
 
 ---
 
-## 154. 玩家体验设计
+# 154. 玩家体验设计
 
 ---
 
-## 155. 输入必须立即、明确、可撤销前确认
+# 155. 输入必须立即、明确、可撤销前确认
 
 因为一次错误按键：
 
@@ -3493,7 +3560,7 @@ World Action接口不变。
 
 ---
 
-## 156. 不要把所有移动都做确认
+# 156. 不要把所有移动都做确认
 
 否则操作极其拖沓。
 
@@ -3503,7 +3570,7 @@ World Action接口不变。
 
 ---
 
-## 157. 键盘操作必须适合高频重复
+# 157. 键盘操作必须适合高频重复
 
 传统Roguelike一局可能：
 
@@ -3520,7 +3587,7 @@ World Action接口不变。
 
 ---
 
-## 158. 自动探索可以减少低价值输入
+# 158. 自动探索可以减少低价值输入
 
 已知安全走廊：
 
@@ -3543,7 +3610,7 @@ Auto Explore。
 
 ---
 
-## 159. 自动移动不能穿越新危险信息
+# 159. 自动移动不能穿越新危险信息
 
 AutoMove只在：
 
@@ -3553,7 +3620,7 @@ AutoMove只在：
 
 ---
 
-## 160. Message Log需要允许快速理解刚才发生了什么
+# 160. Message Log需要允许快速理解刚才发生了什么
 
 高速连续输入以后：
 
@@ -3576,7 +3643,7 @@ Log应：
 
 ---
 
-## 161. 未知信息应该产生紧张，而不是完全不可推理
+# 161. 未知信息应该产生紧张，而不是完全不可推理
 
 Unknown Potion可以未知。
 
@@ -3594,7 +3661,7 @@ Potion类别。
 
 ---
 
-## 162. 敌人应该“可学习”
+# 162. 敌人应该“可学习”
 
 第一次遇到：
 
@@ -3612,7 +3679,7 @@ Potion类别。
 
 ---
 
-## 163. 敌人随机性不应抹除行为身份
+# 163. 敌人随机性不应抹除行为身份
 
 某Monster如果：
 
@@ -3630,7 +3697,7 @@ Potion类别。
 
 ---
 
-## 164. 程序生成地图必须拥有可读Landmark
+# 164. 程序生成地图必须拥有可读Landmark
 
 完全随机噪音地图：
 
@@ -3651,7 +3718,7 @@ Potion类别。
 
 ---
 
-## 165. Run失败需要快速重新开始
+# 165. Run失败需要快速重新开始
 
 Permadeath游戏如果：
 
@@ -3671,7 +3738,7 @@ Death<br>
 
 ---
 
-## 166. Death Summary应强调“因果链”
+# 166. Death Summary应强调“因果链”
 
 可以显示：
 
@@ -3683,7 +3750,7 @@ Death<br>
 
 ---
 
-## 167. 长局应该支持Suspend
+# 167. 长局应该支持Suspend
 
 Permadeath并不意味着：
 
@@ -3695,7 +3762,7 @@ Suspend是：
 
 ---
 
-## 168. 但Suspend不能变成无限检查点
+# 168. 但Suspend不能变成无限检查点
 
 设计上明确：
 
@@ -3709,17 +3776,17 @@ Suspend是：
 
 ---
 
-## 169. 常见设计失败
+# 169. 常见设计失败
 
 ---
 
-### 169.1 把Roguelike理解成“随机地图 + 死亡重开”
+## 169.1 把Roguelike理解成“随机地图 + 死亡重开”
 
 没有行动时间和信息结构。
 
 ---
 
-### 169.2 世界实时运行
+## 169.2 世界实时运行
 
 玩家没有传统Roguelike的离散决策空间。
 
@@ -3727,19 +3794,19 @@ Suspend是：
 
 ---
 
-### 169.3 玩家和敌人使用完全不同的世界规则
+## 169.3 玩家和敌人使用完全不同的世界规则
 
 系统涌现减少。
 
 ---
 
-### 169.4 Action直接修改世界，不走统一Validator
+## 169.4 Action直接修改世界，不走统一Validator
 
 Replay和AI行为不一致。
 
 ---
 
-### 169.5 Speed使用大量特例
+## 169.5 Speed使用大量特例
 
 快速怪写成：
 
@@ -3753,145 +3820,145 @@ Replay和AI行为不一致。
 
 ---
 
-### 169.6 Generator只负责随机房间
+## 169.6 Generator只负责随机房间
 
 不做可达性验证。
 
 ---
 
-### 169.7 每个Seed都理论可生成死局
+## 169.7 每个Seed都理论可生成死局
 
 Permadeath会显得极不公平。
 
 ---
 
-### 169.8 地图全部是树状死路
+## 169.8 地图全部是树状死路
 
 探索只剩反复回头。
 
 ---
 
-### 169.9 玩家地图实时显示视野外敌人
+## 169.9 玩家地图实时显示视野外敌人
 
 有限信息被破坏。
 
 ---
 
-### 169.10 FOV只是视觉Shader
+## 169.10 FOV只是视觉Shader
 
 AI和Targeting使用另一套可见规则。
 
 ---
 
-### 169.11 未识别物品完全随机且没有推理方式
+## 169.11 未识别物品完全随机且没有推理方式
 
 结果只是赌博。
 
 ---
 
-### 169.12 Identification永久账户解锁过多
+## 169.12 Identification永久账户解锁过多
 
 很快失去未知体验。
 
 ---
 
-### 169.13 所有Meta成长都是永久数值增强
+## 169.13 所有Meta成长都是永久数值增强
 
 Permadeath逐渐失去意义。
 
 ---
 
-### 169.14 死亡以后可以读取旧Save无限回滚
+## 169.14 死亡以后可以读取旧Save无限回滚
 
 不可逆决策失去价值。
 
 ---
 
-### 169.15 没有Suspend
+## 169.15 没有Suspend
 
 长局对现实时间不友好。
 
 ---
 
-### 169.16 Suspend可以无限复制
+## 169.16 Suspend可以无限复制
 
 Save Scumming重新出现。
 
 ---
 
-### 169.17 Enemy AI永远知道Player坐标
+## 169.17 Enemy AI永远知道Player坐标
 
 视野和逃脱机制失效。
 
 ---
 
-### 169.18 每个Monster使用巨大行为树
+## 169.18 每个Monster使用巨大行为树
 
 内容扩展成本高，但行为深度未必增加。
 
 ---
 
-### 169.19 环境互动全部写在技能脚本里
+## 169.19 环境互动全部写在技能脚本里
 
 新增系统组合需要修改大量代码。
 
 ---
 
-### 169.20 没有Anti-Stall机制
+## 169.20 没有Anti-Stall机制
 
 无限Wait成为最优解。
 
 ---
 
-### 169.21 Hunger存在但只是烦人的计时器
+## 169.21 Hunger存在但只是烦人的计时器
 
 没有承担Anti-Stall职责。
 
 ---
 
-### 169.22 每层要求100%探索
+## 169.22 每层要求100%探索
 
 Explore vs Descend决策消失。
 
 ---
 
-### 169.23 楼梯踩上去自动进入下一层
+## 169.23 楼梯踩上去自动进入下一层
 
 玩家无法做阶段性确认。
 
 ---
 
-### 169.24 逻辑等待动画完成
+## 169.24 逻辑等待动画完成
 
 高速输入与回放变慢。
 
 ---
 
-### 169.25 所有Tile和Actor每帧Update
+## 169.25 所有Tile和Actor每帧Update
 
 浪费回合制天然性能优势。
 
 ---
 
-### 169.26 Replay只有录像，没有输入重演
+## 169.26 Replay只有录像，没有输入重演
 
 Bug难以定位真实模拟状态。
 
 ---
 
-### 169.27 Random全部共享一个Stream
+## 169.27 Random全部共享一个Stream
 
 增加新功能后旧Seed完全改变。
 
 ---
 
-### 169.28 Death Screen只告诉“你死了”
+## 169.28 Death Screen只告诉“你死了”
 
 玩家不知道真正的错误发生在哪一步。
 
 ---
 
-## 170. 最小可行原型
+# 170. 最小可行原型
 
 一个能够验证传统 Roguelike 核心范式的 MVP 可以非常紧凑。
 
@@ -3901,7 +3968,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 171. 地图
+# 171. 地图
 
 建议：
 
@@ -3920,7 +3987,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 172. Player
+# 172. Player
 
 至少：
 
@@ -3941,7 +4008,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 173. Scheduler
+# 173. Scheduler
 
 第一版直接实现：
 
@@ -3953,7 +4020,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 174. Monster
+# 174. Monster
 
 建议至少覆盖：
 
@@ -3976,7 +4043,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 175. Items
+# 175. Items
 
 建议：
 
@@ -3997,7 +4064,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 176. World Systems
+# 176. World Systems
 
 至少：
 
@@ -4016,7 +4083,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 177. Permadeath
+# 177. Permadeath
 
 第一版即实现：
 
@@ -4033,7 +4100,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 178. MVP必要基础设施
+# 178. MVP必要基础设施
 
 - RunState；
 
@@ -4082,7 +4149,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 179. MVP必要调试工具
+# 179. MVP必要调试工具
 
 - SeedInspector；
 
@@ -4113,7 +4180,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 180. MVP核心验收问题
+# 180. MVP核心验收问题
 
 原型至少必须回答：
 
@@ -4175,7 +4242,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 181. 推荐实施顺序
+# 181. 推荐实施顺序
 
 第一阶段：
 
@@ -4281,7 +4348,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 182. 架构验收标准
+# 182. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -4376,11 +4443,11 @@ Bug难以定位真实模拟状态。
 
 ---
 
-## 183. 可迁移到其他游戏的设计思想
+# 183. 可迁移到其他游戏的设计思想
 
 ---
 
-### 183.1 “玩家行动推动时间”是一种极强的复杂度控制方式
+## 183.1 “玩家行动推动时间”是一种极强的复杂度控制方式
 
 可迁移到：
 
@@ -4403,7 +4470,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-### 183.2 Stable Decision Point 可以大幅提高复杂规则系统的可靠性
+## 183.2 Stable Decision Point 可以大幅提高复杂规则系统的可靠性
 
 可迁移到：
 
@@ -4422,7 +4489,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-### 183.3 速度可以统一表达为“下一次获得行动权的时间”
+## 183.3 速度可以统一表达为“下一次获得行动权的时间”
 
 可迁移到：
 
@@ -4443,7 +4510,7 @@ Bug难以定位真实模拟状态。
 
 ---
 
-### 183.4 程序生成应该被理解为“随机输入 + 约束验证”
+## 183.4 程序生成应该被理解为“随机输入 + 约束验证”
 
 可迁移到：
 
@@ -4468,7 +4535,7 @@ Constraint负责：
 
 ---
 
-### 183.5 世界事实和玩家知识应该严格分离
+## 183.5 世界事实和玩家知识应该严格分离
 
 可迁移到：
 
@@ -4489,7 +4556,7 @@ Constraint负责：
 
 ---
 
-### 183.6 对象身份与对象外观可以分离
+## 183.6 对象身份与对象外观可以分离
 
 可迁移到：
 
@@ -4512,7 +4579,7 @@ Constraint负责：
 
 ---
 
-### 183.7 永久失败可以让“知识”成为真正的进度
+## 183.7 永久失败可以让“知识”成为真正的进度
 
 可迁移到：
 
@@ -4531,7 +4598,7 @@ Constraint负责：
 
 ---
 
-### 183.8 Anti-Stall Pressure 的职责比“饥饿系统”本身更重要
+## 183.8 Anti-Stall Pressure 的职责比“饥饿系统”本身更重要
 
 可迁移到：
 
@@ -4554,7 +4621,7 @@ Constraint负责：
 
 ---
 
-### 183.9 Explore vs Advance 是一种非常通用的风险收益结构
+## 183.9 Explore vs Advance 是一种非常通用的风险收益结构
 
 当前区域还有潜在收益。
 
@@ -4577,7 +4644,7 @@ Constraint负责：
 
 ---
 
-### 183.10 统一环境规则比大量专用技能组合更容易产生涌现
+## 183.10 统一环境规则比大量专用技能组合更容易产生涌现
 
 Fire不需要知道：
 
@@ -4600,7 +4667,7 @@ Fire不需要知道：
 
 ---
 
-### 183.11 回合制并不意味着运行时可以没有严格时间模型
+## 183.11 回合制并不意味着运行时可以没有严格时间模型
 
 即使没有实时秒数，
 
@@ -4614,7 +4681,7 @@ Fire不需要知道：
 
 ---
 
-### 183.12 可确定重放是程序生成游戏最重要的工程资产之一
+## 183.12 可确定重放是程序生成游戏最重要的工程资产之一
 
 一个罕见Seed Bug
 
@@ -4644,9 +4711,9 @@ Seed
 
 ---
 
-## 184. 本次防重记录
+# 184. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler。**
 
@@ -4669,7 +4736,7 @@ Seed
 
 ---
 
-### 核心范式
+## 核心范式
 
 传统 Roguelike 将整个世界组织成由玩家离散行动驱动的稳定模拟：玩家不输入时世界通常保持静止，每个移动、攻击、开门、使用道具或等待操作都会提交一个 Action Intent，并消耗确定的世界时间；统一 Scheduler 再依据 Actor 速度和动作成本依次让其他角色获得行动机会，直到世界重新到达稳定决策点。
 
@@ -4699,7 +4766,7 @@ Seed
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 单局通常由程序生成世界构成；
 
@@ -4756,7 +4823,7 @@ Seed
 
 ---
 
-### 与仓库现有卡组构筑式 Roguelike 的防重边界
+## 与仓库现有卡组构筑式 Roguelike 的防重边界
 
 当前仓库已有 `deckbuilder-roguelike`。其核心是玩家通过战斗奖励、删牌、升级、遗物和路线选择不断修改卡组，从而修改未来抽牌概率和每回合可用行动集合。
 
@@ -4806,7 +4873,7 @@ Seed
 
 ---
 
-### 与仓库现有回合制战术 RPG 的防重边界
+## 与仓库现有回合制战术 RPG 的防重边界
 
 当前仓库已有 `tactical-rpg`，其核心围绕离散战场、行动资源、小队单位、掩体、视野、任务目标以及跨任务长期队伍成长。
 
@@ -4839,7 +4906,7 @@ Seed
 
 ---
 
-### 与仓库现有生存恐怖的防重边界
+## 与仓库现有生存恐怖的防重边界
 
 生存恐怖同样强调：
 
@@ -4875,7 +4942,7 @@ Seed
 
 ---
 
-### 与动作 Roguelite 的防重边界
+## 与动作 Roguelite 的防重边界
 
 动作 Roguelite通常：
 
@@ -4909,7 +4976,7 @@ Seed
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Traditional Roguelike；
 
@@ -4992,7 +5059,7 @@ Seed
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次传统 Roguelike 范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

@@ -1,5 +1,3 @@
-## 受限抽取、构筑收敛与“选择—战斗—重组—风险升级”的单局演化循环
-
 > Agent 标签：`deckbuilder` `deckbuilding` `roguelike`
 
 ---

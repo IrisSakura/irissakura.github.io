@@ -1,5 +1,3 @@
-## 感知不对称、警戒升级与可恢复暴露循环
-
 > Agent 标签：`alert-state` `perception` `stealth`
 
 ---

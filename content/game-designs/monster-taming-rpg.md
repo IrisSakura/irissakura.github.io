@@ -1,4 +1,61 @@
-## 1. 类型定位
+> Agent 标签：`monster` `rpg` `taming`
+
+---
+## 0. 本期选型与仓库防重核对
+
+已核对当前 `game-designs/catalog.v1.json`。当前 `game-designs` 目录登记 **44 个设计范式条目**。目录中已经存在 JRPG，其重点是章节驱动、队伍成长与“城镇—迷宫—战斗—结算”的冒险循环；也存在宠物照护模拟，其重点是生理需求、情绪、习惯、互动和长期信任。当前目录中未登记独立的 `monster-taming`、`creature-collection`、`monster-collection-rpg` 或以“捕获—收藏—编队—进化”为核心的宏观范式。
+
+本期选择：
+
+**怪物收集 / 驯兽育成 RPG。**
+
+常见名称包括：
+
+- Monster Taming RPG；
+
+- Creature Collection RPG；
+
+- Monster Collection RPG；
+
+- Creature Training RPG；
+
+- 怪物收集 RPG；
+
+- 驯兽 RPG；
+
+- 生物收集养成游戏。
+
+
+它与 JRPG 共享：
+
+- 地图探索；
+
+- 回合制或实时战斗；
+
+- 等级成长；
+
+- 剧情推进。
+
+
+但两者真正的运行时中心不同。
+
+普通 JRPG 的核心通常是：
+
+> 玩家拥有相对稳定的角色队伍，并围绕这些角色进行长期成长。
+
+怪物收集 RPG 的核心则是：
+
+> **玩家持续把世界中的潜在敌对生物转换为自己的持久化角色资产，再通过大量候选生物的发现、捕获、培养、筛选、组合和进化不断重构战斗队伍。**
+
+因此，本期重点研究：
+
+**Species → Encounter Entity → Captured Creature Instance → Roster Asset → Party Member**
+
+这一条极具代表性的运行时转换链。
+
+---
+
+# 1. 类型定位
 
 怪物收集游戏是一类以：
 
@@ -48,11 +105,11 @@
 
 ---
 
-## 2. 核心玩家目标
+# 2. 核心玩家目标
 
 玩家通常同时拥有四类长期目标。
 
-### 2.1 探索目标
+## 2.1 探索目标
 
 寻找：
 
@@ -69,7 +126,7 @@
 
 ---
 
-### 2.2 收藏目标
+## 2.2 收藏目标
 
 提高：
 
@@ -88,7 +145,7 @@
 
 ---
 
-### 2.3 培养目标
+## 2.3 培养目标
 
 提升：
 
@@ -109,7 +166,7 @@
 
 ---
 
-### 2.4 战斗目标
+## 2.4 战斗目标
 
 构建能够应对：
 
@@ -142,11 +199,11 @@
 
 ---
 
-## 3. 该类型最核心的设计范式
+# 3. 该类型最核心的设计范式
 
 ---
 
-### 3.1 物种定义与个体实例必须严格分离
+## 3.1 物种定义与个体实例必须严格分离
 
 这是怪物收集系统最重要的架构边界之一。
 
@@ -172,7 +229,7 @@
 
 ---
 
-### 3.2 Species Definition
+## 3.2 Species Definition
 
 描述：
 
@@ -201,7 +258,7 @@
 
 ---
 
-### 3.3 Creature Instance
+## 3.3 Creature Instance
 
 描述：
 
@@ -241,7 +298,7 @@
 
 ---
 
-## 4. 核心范式一：捕获是“实体所有权转换事务”
+# 4. 核心范式一：捕获是“实体所有权转换事务”
 
 普通 RPG 中：
 
@@ -271,7 +328,7 @@ Player Creature Asset。
 
 ---
 
-### 4.1 捕获前
+## 4.1 捕获前
 
 目标属于：
 
@@ -292,7 +349,7 @@ WorldEncounterState。
 
 ---
 
-### 4.2 捕获成功
+## 4.2 捕获成功
 
 系统需要：
 
@@ -329,7 +386,7 @@ WorldEncounterState。
 
 ---
 
-### 4.3 捕获必须是原子事务
+## 4.3 捕获必须是原子事务
 
 不能出现：
 
@@ -356,9 +413,9 @@ CreatureInstance 已进入仓库
 
 ---
 
-## 5. 捕获概率系统
+# 5. 捕获概率系统
 
-### 5.1 CaptureProfile
+## 5.1 CaptureProfile
 
 建议字段：
 
@@ -385,7 +442,7 @@ CreatureInstance 已进入仓库
 
 ---
 
-### 5.2 CaptureAttempt
+## 5.2 CaptureAttempt
 
 建议包含：
 
@@ -414,7 +471,7 @@ CreatureInstance 已进入仓库
 
 ---
 
-### 5.3 影响捕获的因素
+## 5.3 影响捕获的因素
 
 可以包括：
 
@@ -445,7 +502,7 @@ CreatureInstance 已进入仓库
 
 ---
 
-### 5.4 捕获概率不应该完全隐藏
+## 5.4 捕获概率不应该完全隐藏
 
 可以不显示：
 
@@ -466,7 +523,7 @@ CreatureInstance 已进入仓库
 
 ---
 
-## 6. 捕获失败不是“什么都没发生”
+# 6. 捕获失败不是“什么都没发生”
 
 捕获失败可以产生：
 
@@ -499,7 +556,7 @@ Attempt 1
 
 ---
 
-## 7. 核心范式二：收藏宽度与战斗队伍深度必须分离
+# 7. 核心范式二：收藏宽度与战斗队伍深度必须分离
 
 玩家最终可能拥有：
 
@@ -513,7 +570,7 @@ Attempt 1
 
 ---
 
-### 7.1 Collection
+## 7.1 Collection
 
 表示：
 
@@ -525,7 +582,7 @@ Attempt 1
 
 ---
 
-### 7.2 Active Party
+## 7.2 Active Party
 
 表示：
 
@@ -535,7 +592,7 @@ Attempt 1
 
 ---
 
-### 7.3 这产生核心决策
+## 7.3 这产生核心决策
 
 玩家不能：
 
@@ -554,9 +611,9 @@ Attempt 1
 
 ---
 
-## 8. Party System
+# 8. Party System
 
-### 8.1 PartyState
+## 8.1 PartyState
 
 建议包含：
 
@@ -577,7 +634,7 @@ Attempt 1
 
 ---
 
-### 8.2 PartySlot
+## 8.2 PartySlot
 
 建议字段：
 
@@ -596,7 +653,7 @@ Attempt 1
 
 ---
 
-### 8.3 编队限制
+## 8.3 编队限制
 
 可以包括：
 
@@ -617,9 +674,9 @@ Attempt 1
 
 ---
 
-## 9. Reserve / Storage System
+# 9. Reserve / Storage System
 
-### 9.1 CreatureRosterState
+## 9.1 CreatureRosterState
 
 建议包含：
 
@@ -640,7 +697,7 @@ Attempt 1
 
 ---
 
-### 9.2 储备系统必须高度可管理
+## 9.2 储备系统必须高度可管理
 
 当玩家拥有数百个生物时，需要：
 
@@ -667,7 +724,7 @@ Attempt 1
 
 ---
 
-## 10. 核心范式三：生物不是装备，而是持续拥有身份的角色资产
+# 10. 核心范式三：生物不是装备，而是持续拥有身份的角色资产
 
 同一种武器：
 
@@ -704,7 +761,7 @@ Attempt 1
 
 ---
 
-## 11. CreatureInstance 核心模型
+# 11. CreatureInstance 核心模型
 
 建议字段：
 
@@ -751,7 +808,7 @@ Attempt 1
 
 ---
 
-## 12. CreatureSpeciesDefinition
+# 12. CreatureSpeciesDefinition
 
 建议字段：
 
@@ -792,7 +849,7 @@ Attempt 1
 
 ---
 
-## 13. 成长系统
+# 13. 成长系统
 
 生物成长可以包括：
 
@@ -823,9 +880,9 @@ Attempt 1
 
 ---
 
-## 14. 等级与经验
+# 14. 等级与经验
 
-### 14.1 GrowthCurveDefinition
+## 14.1 GrowthCurveDefinition
 
 建议字段：
 
@@ -844,7 +901,7 @@ Attempt 1
 
 ---
 
-### 14.2 经验来源
+## 14.2 经验来源
 
 包括：
 
@@ -864,7 +921,7 @@ Attempt 1
 
 ---
 
-### 14.3 后备成员经验
+## 14.3 后备成员经验
 
 需要决定：
 
@@ -887,7 +944,7 @@ Attempt 1
 
 ---
 
-## 15. 追赶机制
+# 15. 追赶机制
 
 怪物收集游戏非常容易出现：
 
@@ -920,9 +977,9 @@ Attempt 1
 
 ---
 
-## 16. 技能学习系统
+# 16. 技能学习系统
 
-### 16.1 MoveDefinition
+## 16.1 MoveDefinition
 
 建议字段：
 
@@ -953,7 +1010,7 @@ Attempt 1
 
 ---
 
-### 16.2 LearnsetDefinition
+## 16.2 LearnsetDefinition
 
 建议包含：
 
@@ -972,7 +1029,7 @@ Attempt 1
 
 ---
 
-### 16.3 LearnedMove 与 EquippedMove 分离
+## 16.3 LearnedMove 与 EquippedMove 分离
 
 生物可以：
 
@@ -994,9 +1051,9 @@ EquippedMoves = 4
 
 ---
 
-## 17. 属性与克制系统
+# 17. 属性与克制系统
 
-### 17.1 ElementTypeDefinition
+## 17.1 ElementTypeDefinition
 
 建议字段：
 
@@ -1017,7 +1074,7 @@ EquippedMoves = 4
 
 ---
 
-### 17.2 多属性
+## 17.2 多属性
 
 一个生物可以拥有：
 
@@ -1030,7 +1087,7 @@ EquippedMoves = 4
 
 ---
 
-### 17.3 克制职责
+## 17.3 克制职责
 
 属性系统的目标不只是：
 
@@ -1043,7 +1100,7 @@ EquippedMoves = 4
 
 ---
 
-### 17.4 克制不能过度绝对
+## 17.4 克制不能过度绝对
 
 如果克制倍率过高：
 
@@ -1065,7 +1122,7 @@ EquippedMoves = 4
 
 ---
 
-## 18. 战斗角色定位
+# 18. 战斗角色定位
 
 除了元素属性，还可以使用：
 
@@ -1100,7 +1157,7 @@ EquippedMoves = 4
 
 ---
 
-## 19. Team Coverage Matrix
+# 19. Team Coverage Matrix
 
 调试和玩家辅助工具可以分析：
 
@@ -1129,7 +1186,7 @@ EquippedMoves = 4
 
 ---
 
-## 20. 核心范式四：进化应该改变角色定位，而不只是数值升级
+# 20. 核心范式四：进化应该改变角色定位，而不只是数值升级
 
 低质量进化：
 
@@ -1160,7 +1217,7 @@ HP + 50
 
 ---
 
-## 21. EvolutionRule
+# 21. EvolutionRule
 
 建议字段：
 
@@ -1195,7 +1252,7 @@ HP + 50
 
 ---
 
-## 22. 进化触发方式
+# 22. 进化触发方式
 
 可以包括：
 
@@ -1224,7 +1281,7 @@ HP + 50
 
 ---
 
-## 23. 分支进化
+# 23. 分支进化
 
 同一生物可以根据条件进入：
 
@@ -1246,7 +1303,7 @@ C形态：
 
 ---
 
-## 24. EvolutionTransaction
+# 24. EvolutionTransaction
 
 进化不能简单：
 
@@ -1287,7 +1344,7 @@ EvolutionHistory。
 
 ---
 
-## 25. 核心范式五：世界生态决定“为什么某种生物出现在这里”
+# 25. 核心范式五：世界生态决定“为什么某种生物出现在这里”
 
 如果每张地图只是：
 
@@ -1320,7 +1377,7 @@ EvolutionHistory。
 
 ---
 
-## 26. HabitatProfile
+# 26. HabitatProfile
 
 建议字段：
 
@@ -1347,7 +1404,7 @@ EvolutionHistory。
 
 ---
 
-## 27. EncounterSpawnContext
+# 27. EncounterSpawnContext
 
 建议包含：
 
@@ -1376,7 +1433,7 @@ EvolutionHistory。
 
 ---
 
-## 28. 遭遇生成流程
+# 28. 遭遇生成流程
 
 玩家进入区域
 → EnvironmentSystem生成 EncounterContext
@@ -1390,7 +1447,7 @@ EvolutionHistory。
 
 ---
 
-## 29. 稀有物种不应只有低概率
+# 29. 稀有物种不应只有低概率
 
 稀有可以来自：
 
@@ -1422,9 +1479,9 @@ EvolutionHistory。
 
 ---
 
-## 30. 图鉴系统
+# 30. 图鉴系统
 
-### 30.1 EncyclopediaRecord
+## 30.1 EncyclopediaRecord
 
 建议字段：
 
@@ -1453,7 +1510,7 @@ EvolutionHistory。
 
 ---
 
-### 30.2 图鉴不应只是 Checklist
+## 30.2 图鉴不应只是 Checklist
 
 可以让图鉴逐步记录：
 
@@ -1478,7 +1535,7 @@ EvolutionHistory。
 
 ---
 
-## 31. 捕获与图鉴的关系
+# 31. 捕获与图鉴的关系
 
 需要区分：
 
@@ -1494,7 +1551,7 @@ EvolutionHistory。
 
 ---
 
-## 32. 重复捕获为什么仍需要价值
+# 32. 重复捕获为什么仍需要价值
 
 玩家已经拥有某物种后：
 
@@ -1527,7 +1584,7 @@ EvolutionHistory。
 
 ---
 
-## 33. 但必须防止重复捕获变成强迫刷取
+# 33. 但必须防止重复捕获变成强迫刷取
 
 如果最优玩法变成：
 
@@ -1549,9 +1606,9 @@ EvolutionHistory。
 
 ---
 
-## 34. 性格与特质
+# 34. 性格与特质
 
-### 34.1 TemperamentDefinition
+## 34.1 TemperamentDefinition
 
 可以影响：
 
@@ -1568,7 +1625,7 @@ EvolutionHistory。
 
 ---
 
-### 34.2 TraitDefinition
+## 34.2 TraitDefinition
 
 建议字段：
 
@@ -1591,7 +1648,7 @@ EvolutionHistory。
 
 ---
 
-## 35. 特性系统
+# 35. 特性系统
 
 Ability / Trait 可以让同一物种产生不同战术职责。
 
@@ -1611,9 +1668,9 @@ Ability / Trait 可以让同一物种产生不同战术职责。
 
 ---
 
-## 36. Bond / 关系系统
+# 36. Bond / 关系系统
 
-### 36.1 BondState
+## 36.1 BondState
 
 建议包含：
 
@@ -1634,7 +1691,7 @@ Ability / Trait 可以让同一物种产生不同战术职责。
 
 ---
 
-### 36.2 关系来源
+## 36.2 关系来源
 
 可以来自：
 
@@ -1657,7 +1714,7 @@ Ability / Trait 可以让同一物种产生不同战术职责。
 
 ---
 
-### 36.3 关系作用
+## 36.3 关系作用
 
 可以影响：
 
@@ -1678,13 +1735,13 @@ Ability / Trait 可以让同一物种产生不同战术职责。
 
 ---
 
-## 37. 繁殖系统
+# 37. 繁殖系统
 
 繁殖不是所有怪物收集游戏必需，但属于常见扩展。
 
 ---
 
-### 37.1 BreedingDefinition
+## 37.1 BreedingDefinition
 
 建议字段：
 
@@ -1705,7 +1762,7 @@ Ability / Trait 可以让同一物种产生不同战术职责。
 
 ---
 
-### 37.2 OffspringGeneration
+## 37.2 OffspringGeneration
 
 输入：
 
@@ -1731,7 +1788,7 @@ ChildCreatureInstance。
 
 ---
 
-### 37.3 血统
+## 37.3 血统
 
 LineageState 可以记录：
 
@@ -1748,7 +1805,7 @@ LineageState 可以记录：
 
 ---
 
-### 37.4 防止血统数据无限膨胀
+## 37.4 防止血统数据无限膨胀
 
 长期存档可能出现：
 
@@ -1765,7 +1822,7 @@ LineageState 可以记录：
 
 ---
 
-## 38. 技能继承
+# 38. 技能继承
 
 繁殖可以允许：
 
@@ -1790,13 +1847,13 @@ LineageState 可以记录：
 
 ---
 
-## 39. 交换系统
+# 39. 交换系统
 
 如果支持多人交换，需要极其严格的所有权事务。
 
 ---
 
-### 39.1 TradeTransaction
+## 39.1 TradeTransaction
 
 建议字段：
 
@@ -1823,7 +1880,7 @@ LineageState 可以记录：
 
 ---
 
-### 39.2 交换流程
+## 39.2 交换流程
 
 双方提交
 → 锁定CreatureInstance
@@ -1837,7 +1894,7 @@ LineageState 可以记录：
 
 ---
 
-### 39.3 交换是最危险的复制漏洞来源之一
+## 39.3 交换是最危险的复制漏洞来源之一
 
 必须防止：
 
@@ -1854,7 +1911,7 @@ LineageState 可以记录：
 
 ---
 
-## 40. 战斗系统
+# 40. 战斗系统
 
 战斗可以：
 
@@ -1881,7 +1938,7 @@ CreatureInstance
 
 ---
 
-### 40.1 BattleCreatureSnapshot
+## 40.1 BattleCreatureSnapshot
 
 进入战斗时创建：
 
@@ -1904,7 +1961,7 @@ CreatureInstance
 
 ---
 
-### 40.2 为什么建议使用 Battle Snapshot
+## 40.2 为什么建议使用 Battle Snapshot
 
 战斗运行过程中：
 
@@ -1935,7 +1992,7 @@ CreatureInstance
 
 ---
 
-## 41. 战斗结算
+# 41. 战斗结算
 
 BattleCompleted
 → 创建 BattleResult
@@ -1950,7 +2007,7 @@ BattleCompleted
 
 ---
 
-## 42. 捕获与战斗的特殊交叉
+# 42. 捕获与战斗的特殊交叉
 
 当目标被成功捕获时：
 
@@ -1971,9 +2028,9 @@ BattleCompleted
 
 ---
 
-## 43. 训练师 / NPC队伍
+# 43. 训练师 / NPC队伍
 
-### 43.1 TrainerDefinition
+## 43.1 TrainerDefinition
 
 建议包含：
 
@@ -1994,7 +2051,7 @@ BattleCompleted
 
 ---
 
-### 43.2 NPC队伍同样使用 CreatureInstance 或 BattleCreatureSnapshot
+## 43.2 NPC队伍同样使用 CreatureInstance 或 BattleCreatureSnapshot
 
 不要设计：
 
@@ -2013,7 +2070,7 @@ Template
 
 ---
 
-## 44. Boss / Legendary Creature
+# 44. Boss / Legendary Creature
 
 特殊生物可以拥有：
 
@@ -2032,7 +2089,7 @@ Template
 
 ---
 
-### 44.1 LegendaryState
+## 44.1 LegendaryState
 
 建议包含：
 
@@ -2053,7 +2110,7 @@ Template
 
 ---
 
-### 44.2 唯一性
+## 44.2 唯一性
 
 需要明确：
 
@@ -2074,7 +2131,7 @@ Template
 
 ---
 
-## 45. 世界能力与生物探索能力
+# 45. 世界能力与生物探索能力
 
 怪物收集游戏可以让生物提供：
 
@@ -2111,7 +2168,7 @@ Template
 
 ---
 
-## 46. ExplorationCapability
+# 46. ExplorationCapability
 
 建议字段：
 
@@ -2132,7 +2189,7 @@ Template
 
 ---
 
-## 47. 事件与执行流程示例
+# 47. 事件与执行流程示例
 
 以下以：
 
@@ -2142,7 +2199,7 @@ Template
 
 ---
 
-### 47.1 世界环境
+## 47.1 世界环境
 
 当前：
 
@@ -2161,7 +2218,7 @@ EncounterSpawnContext。
 
 ---
 
-### 47.2 栖息地筛选
+## 47.2 栖息地筛选
 
 HabitatSystem过滤物种。
 
@@ -2175,7 +2232,7 @@ HabitatSystem过滤物种。
 
 ---
 
-### 47.3 玩家发现未知生物
+## 47.3 玩家发现未知生物
 
 系统：
 
@@ -2194,7 +2251,7 @@ SeenState = true。
 
 ---
 
-### 47.4 进入战斗
+## 47.4 进入战斗
 
 系统生成：
 
@@ -2221,7 +2278,7 @@ WildCreatureInstance。
 
 ---
 
-### 47.5 玩家第一次捕获
+## 47.5 玩家第一次捕获
 
 目标生命还有90%。
 
@@ -2235,7 +2292,7 @@ CaptureResolver判断：
 
 ---
 
-### 47.6 捕获失败状态变化
+## 47.6 捕获失败状态变化
 
 目标获得：
 
@@ -2245,7 +2302,7 @@ AlertedCaptureResistance。
 
 ---
 
-### 47.7 玩家调整策略
+## 47.7 玩家调整策略
 
 玩家：
 
@@ -2258,7 +2315,7 @@ AlertedCaptureResistance。
 
 ---
 
-### 47.8 第二次捕获
+## 47.8 第二次捕获
 
 CaptureAttempt：
 
@@ -2274,7 +2331,7 @@ CaptureTool = ConductiveTrap。
 
 ---
 
-### 47.9 捕获成功
+## 47.9 捕获成功
 
 服务器提交：
 
@@ -2294,7 +2351,7 @@ CreatureInstanceId = C-982731。
 
 ---
 
-### 47.10 队伍满员
+## 47.10 队伍满员
 
 当前 Party 已有6只。
 
@@ -2308,7 +2365,7 @@ ReserveRoster。
 
 ---
 
-### 47.11 图鉴更新
+## 47.11 图鉴更新
 
 EncyclopediaRecord 更新：
 
@@ -2322,7 +2379,7 @@ KnownHabitat；
 
 ---
 
-### 47.12 后续培养
+## 47.12 后续培养
 
 玩家把它加入队伍。
 
@@ -2335,7 +2392,7 @@ KnownHabitat；
 
 ---
 
-### 47.13 进化条件满足
+## 47.13 进化条件满足
 
 EvolutionRule：
 
@@ -2349,7 +2406,7 @@ Weather = Thunderstorm。
 
 ---
 
-### 47.14 EvolutionTransaction
+## 47.14 EvolutionTransaction
 
 CreatureInstance保持：
 
@@ -2380,7 +2437,7 @@ StormBeast。
 
 ---
 
-### 47.15 战术变化
+## 47.15 战术变化
 
 进化后：
 
@@ -2396,7 +2453,7 @@ StormBeast。
 
 ---
 
-### 47.16 完整循环
+## 47.16 完整循环
 
 探索环境
 → 理解生态条件
@@ -2419,11 +2476,11 @@ StormBeast。
 
 ---
 
-## 48. 模块通信设计
+# 48. 模块通信设计
 
 ---
 
-### 48.1 Commands
+## 48.1 Commands
 
 典型命令：
 
@@ -2471,7 +2528,7 @@ StormBeast。
 
 ---
 
-### 48.2 Queries
+## 48.2 Queries
 
 适用于：
 
@@ -2505,7 +2562,7 @@ Query不能：
 
 ---
 
-### 48.3 Domain Events
+## 48.3 Domain Events
 
 包括：
 
@@ -2540,7 +2597,7 @@ Query不能：
 
 ---
 
-### 48.4 Presentation Events
+## 48.4 Presentation Events
 
 包括：
 
@@ -2572,7 +2629,7 @@ Query不能：
 
 ---
 
-## 49. 状态所有权原则
+# 49. 状态所有权原则
 
 推荐明确：
 
@@ -2612,9 +2669,9 @@ UI、BattleSystem、SceneObject
 
 ---
 
-## 50. 存档
+# 50. 存档
 
-### 50.1 SaveSnapshot
+## 50.1 SaveSnapshot
 
 建议包含：
 
@@ -2649,7 +2706,7 @@ UI、BattleSystem、SceneObject
 
 ---
 
-## 51. CreatureInstance 是高价值存档资产
+# 51. CreatureInstance 是高价值存档资产
 
 一个长期存档中的生物可能包含：
 
@@ -2676,7 +2733,7 @@ Scene GameObject。
 
 ---
 
-## 52. 存档迁移
+# 52. 存档迁移
 
 如果游戏更新删除：
 
@@ -2708,11 +2765,11 @@ MigrationRule。
 
 ---
 
-## 53. 失败隔离
+# 53. 失败隔离
 
 ---
 
-### 53.1 捕获事务失败
+## 53.1 捕获事务失败
 
 若目标已消失：
 
@@ -2724,7 +2781,7 @@ TargetUnavailable。
 
 ---
 
-### 53.2 捕获成功但Roster写入失败
+## 53.2 捕获成功但Roster写入失败
 
 必须：
 
@@ -2736,7 +2793,7 @@ TargetUnavailable。
 
 ---
 
-### 53.3 Creature重复ID
+## 53.3 Creature重复ID
 
 启动加载时运行：
 
@@ -2750,7 +2807,7 @@ CreatureIdentityAudit。
 
 ---
 
-### 53.4 Party与Roster不一致
+## 53.4 Party与Roster不一致
 
 例如：
 
@@ -2767,7 +2824,7 @@ Party引用C123。
 
 ---
 
-### 53.5 进化事务失败
+## 53.5 进化事务失败
 
 进化中途失败：
 
@@ -2785,7 +2842,7 @@ EvolutionTransaction。
 
 ---
 
-### 53.6 Learnset失效
+## 53.6 Learnset失效
 
 Species引用不存在Move：
 
@@ -2800,7 +2857,7 @@ Species引用不存在Move：
 
 ---
 
-### 53.7 Encounter无合法物种
+## 53.7 Encounter无合法物种
 
 Biome过滤后为空：
 
@@ -2814,7 +2871,7 @@ RegionFallbackEncounterPool
 
 ---
 
-### 53.8 Legendary重复生成
+## 53.8 Legendary重复生成
 
 LegendaryState为：
 
@@ -2826,7 +2883,7 @@ SpawnSystem不得再次创建普通实例。
 
 ---
 
-### 53.9 Trade重复提交
+## 53.9 Trade重复提交
 
 使用：
 
@@ -2836,7 +2893,7 @@ TradeId + CreatureInstanceId
 
 ---
 
-### 53.10 Breeding异常
+## 53.10 Breeding异常
 
 若Parent被交易或删除：
 
@@ -2849,11 +2906,11 @@ TradeId + CreatureInstanceId
 
 ---
 
-## 54. 调试与可观测性
+# 54. 调试与可观测性
 
 ---
 
-### 54.1 Creature Inspector
+## 54.1 Creature Inspector
 
 显示：
 
@@ -2882,7 +2939,7 @@ TradeId + CreatureInstanceId
 
 ---
 
-### 54.2 Capture Probability Explainer
+## 54.2 Capture Probability Explainer
 
 显示：
 
@@ -2899,7 +2956,7 @@ BaseDifficulty
 
 ---
 
-### 54.3 Encounter Heatmap
+## 54.3 Encounter Heatmap
 
 显示：
 
@@ -2920,7 +2977,7 @@ BaseDifficulty
 
 ---
 
-### 54.4 Species Reachability Analyzer
+## 54.4 Species Reachability Analyzer
 
 检查每一种可收集物种：
 
@@ -2940,7 +2997,7 @@ BaseDifficulty
 
 ---
 
-### 54.5 Evolution Rule Debugger
+## 54.5 Evolution Rule Debugger
 
 给定CreatureInstance：
 
@@ -2961,7 +3018,7 @@ BaseDifficulty
 
 ---
 
-### 54.6 Team Coverage Matrix
+## 54.6 Team Coverage Matrix
 
 显示：
 
@@ -2982,7 +3039,7 @@ BaseDifficulty
 
 ---
 
-### 54.7 Roster Integrity Checker
+## 54.7 Roster Integrity Checker
 
 检查：
 
@@ -3003,7 +3060,7 @@ BaseDifficulty
 
 ---
 
-### 54.8 Capture Funnel
+## 54.8 Capture Funnel
 
 统计：
 
@@ -3021,7 +3078,7 @@ Encountered
 
 ---
 
-### 54.9 Species Usage Graph
+## 54.9 Species Usage Graph
 
 统计：
 
@@ -3038,7 +3095,7 @@ Encountered
 
 ---
 
-### 54.10 Full Creature Provenance
+## 54.10 Full Creature Provenance
 
 针对某个Instance显示：
 
@@ -3055,11 +3112,11 @@ Encountered
 
 ---
 
-## 55. 内容验证工具
+# 55. 内容验证工具
 
 ---
 
-### 55.1 SpeciesDefinition Validation
+## 55.1 SpeciesDefinition Validation
 
 检查：
 
@@ -3080,7 +3137,7 @@ Encountered
 
 ---
 
-### 55.2 Evolution Graph Validation
+## 55.2 Evolution Graph Validation
 
 检查：
 
@@ -3097,7 +3154,7 @@ Encountered
 
 ---
 
-### 55.3 Learnset Validation
+## 55.3 Learnset Validation
 
 检查：
 
@@ -3108,7 +3165,7 @@ Species
 
 ---
 
-### 55.4 Encounter Reachability
+## 55.4 Encounter Reachability
 
 自动遍历：
 
@@ -3122,7 +3179,7 @@ Region
 
 ---
 
-### 55.5 Capture Simulation
+## 55.5 Capture Simulation
 
 对不同：
 
@@ -3143,7 +3200,7 @@ Region
 
 ---
 
-### 55.6 Party Composition Simulation
+## 55.6 Party Composition Simulation
 
 自动生成大量队伍：
 
@@ -3160,7 +3217,7 @@ Region
 
 ---
 
-### 55.7 Growth Curve Simulation
+## 55.7 Growth Curve Simulation
 
 模拟：
 
@@ -3175,7 +3232,7 @@ Region
 
 ---
 
-### 55.8 Roster Scale Test
+## 55.8 Roster Scale Test
 
 模拟：
 
@@ -3201,7 +3258,7 @@ CreatureInstances。
 
 ---
 
-### 55.9 Trade Duplication Test
+## 55.9 Trade Duplication Test
 
 模拟：
 
@@ -3220,11 +3277,11 @@ CreatureInstances。
 
 ---
 
-## 56. 性能设计
+# 56. 性能设计
 
 ---
 
-### 56.1 SpeciesDefinition共享
+## 56.1 SpeciesDefinition共享
 
 所有同物种生物共享：
 
@@ -3245,7 +3302,7 @@ CreatureInstance只保存：
 
 ---
 
-### 56.2 派生属性缓存
+## 56.2 派生属性缓存
 
 最终属性可通过：
 
@@ -3266,7 +3323,7 @@ BaseStats
 
 ---
 
-### 56.3 Encounter区域分频
+## 56.3 Encounter区域分频
 
 玩家附近：
 
@@ -3282,7 +3339,7 @@ PopulationState。
 
 ---
 
-### 56.4 虚拟生态种群
+## 56.4 虚拟生态种群
 
 远端区域可以只保存：
 
@@ -3301,7 +3358,7 @@ PopulationState。
 
 ---
 
-### 56.5 Roster分页
+## 56.5 Roster分页
 
 数百CreatureInstance：
 
@@ -3318,11 +3375,11 @@ PopulationState。
 
 ---
 
-## 57. 可扩展点
+# 57. 可扩展点
 
 ---
 
-### 57.1 新物种
+## 57.1 新物种
 
 主要提供：
 
@@ -3345,7 +3402,7 @@ PopulationState。
 
 ---
 
-### 57.2 新捕获工具
+## 57.2 新捕获工具
 
 提供：
 
@@ -3360,7 +3417,7 @@ PopulationState。
 
 ---
 
-### 57.3 新生态区域
+## 57.3 新生态区域
 
 提供：
 
@@ -3377,7 +3434,7 @@ PopulationState。
 
 ---
 
-### 57.4 新进化方式
+## 57.4 新进化方式
 
 通过：
 
@@ -3400,7 +3457,7 @@ EvolutionCondition插件
 
 ---
 
-### 57.5 新战斗模式
+## 57.5 新战斗模式
 
 例如：
 
@@ -3419,7 +3476,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 57.6 新养成系统
+## 57.6 新养成系统
 
 可以加入：
 
@@ -3438,11 +3495,11 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-## 58. 玩家体验设计
+# 58. 玩家体验设计
 
 ---
 
-### 58.1 玩家第一次遇到未知生物必须产生“发现感”
+## 58.1 玩家第一次遇到未知生物必须产生“发现感”
 
 可以通过：
 
@@ -3463,7 +3520,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.2 捕获反馈需要让玩家理解进度
+## 58.2 捕获反馈需要让玩家理解进度
 
 捕获可以通过：
 
@@ -3484,7 +3541,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.3 稀有生物必须能够被玩家主动寻找
+## 58.3 稀有生物必须能够被玩家主动寻找
 
 图鉴可以逐步提供：
 
@@ -3501,7 +3558,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.4 新捕获生物应尽快具有使用价值
+## 58.4 新捕获生物应尽快具有使用价值
 
 获得一只新生物后，玩家最好能够：
 
@@ -3518,7 +3575,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.5 收藏管理不能成为仓库劳动
+## 58.5 收藏管理不能成为仓库劳动
 
 需要：
 
@@ -3537,7 +3594,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.6 个体差异应产生个性，而不是制造焦虑
+## 58.6 个体差异应产生个性，而不是制造焦虑
 
 玩家应该感觉：
 
@@ -3549,7 +3606,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.7 进化需要兼顾惊喜与可控
+## 58.7 进化需要兼顾惊喜与可控
 
 第一次游玩：
 
@@ -3568,7 +3625,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 58.8 已培养个体应该保持情感连续性
+## 58.8 已培养个体应该保持情感连续性
 
 进化、换技能、升星后：
 
@@ -3593,11 +3650,11 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-## 59. 常见设计失败
+# 59. 常见设计失败
 
 ---
 
-### 59.1 Species和CreatureInstance混在一起
+## 59.1 Species和CreatureInstance混在一起
 
 导致：
 
@@ -3605,7 +3662,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 59.2 捕获成功直接生成新怪，原怪再删除
+## 59.2 捕获成功直接生成新怪，原怪再删除
 
 事务不完整时容易产生：
 
@@ -3613,37 +3670,37 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 59.3 稀有怪只有超低随机概率
+## 59.3 稀有怪只有超低随机概率
 
 玩家只能重复刷同一地区。
 
 ---
 
-### 59.4 新生物等级远低于主队
+## 59.4 新生物等级远低于主队
 
 玩家根本不会尝试新收藏。
 
 ---
 
-### 59.5 所有进化只是数值提高
+## 59.5 所有进化只是数值提高
 
 进化缺乏构筑价值。
 
 ---
 
-### 59.6 个体差异过强
+## 59.6 个体差异过强
 
 玩家被迫疯狂刷取完美个体。
 
 ---
 
-### 59.7 个体差异完全不存在
+## 59.7 个体差异完全不存在
 
 重复捕获毫无价值。
 
 ---
 
-### 59.8 图鉴只是列表
+## 59.8 图鉴只是列表
 
 没有帮助玩家理解：
 
@@ -3651,31 +3708,31 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 59.9 属性克制倍率过强
+## 59.9 属性克制倍率过强
 
 战斗退化为猜属性。
 
 ---
 
-### 59.10 技能池无限膨胀
+## 59.10 技能池无限膨胀
 
 玩家难以理解角色定位。
 
 ---
 
-### 59.11 战斗技能承担探索门控
+## 59.11 战斗技能承担探索门控
 
 迫使玩家携带纯工具角色。
 
 ---
 
-### 59.12 Warehouse UI无法处理大量实例
+## 59.12 Warehouse UI无法处理大量实例
 
 后期整理Creature比玩游戏更耗时间。
 
 ---
 
-### 59.13 进化通过删除旧Instance实现
+## 59.13 进化通过删除旧Instance实现
 
 丢失：
 
@@ -3683,7 +3740,7 @@ CreatureInstance仍作为统一角色来源。
 
 ---
 
-### 59.14 Legendary状态分散
+## 59.14 Legendary状态分散
 
 任务认为已捕获；
 
@@ -3693,17 +3750,17 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 59.15 交换不是原子事务
+## 59.15 交换不是原子事务
 
 成为复制漏洞。
 
 ---
 
-## 60. 最小可行原型
+# 60. 最小可行原型
 
 一个可以验证怪物收集核心范式的 MVP，可以包含：
 
-### 世界
+## 世界
 
 - 3个生态区域；
 
@@ -3716,7 +3773,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 生物
+## 生物
 
 约：
 
@@ -3735,7 +3792,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 进化
+## 进化
 
 约：
 
@@ -3748,7 +3805,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 战斗
+## 战斗
 
 推荐：
 
@@ -3767,7 +3824,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 捕获
+## 捕获
 
 支持：
 
@@ -3780,7 +3837,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### Roster
+## Roster
 
 至少测试：
 
@@ -3788,7 +3845,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 图鉴
+## 图鉴
 
 支持：
 
@@ -3803,7 +3860,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 必要基础设施
+## 必要基础设施
 
 - CreatureSpeciesDefinition；
 
@@ -3838,7 +3895,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-### 必要调试工具
+## 必要调试工具
 
 - CreatureInspector；
 
@@ -3859,7 +3916,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-## 61. MVP核心验收问题
+# 61. MVP核心验收问题
 
 原型必须能够回答：
 
@@ -3894,7 +3951,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-## 62. 推荐实施顺序
+# 62. 推荐实施顺序
 
 第一阶段：
 
@@ -3998,7 +4055,7 @@ SpawnSystem认为未捕获；
 
 ---
 
-## 63. 架构验收标准
+# 63. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -4063,11 +4120,11 @@ SpawnSystem认为未捕获；
 
 ---
 
-## 64. 可迁移到其他游戏的设计思想
+# 64. 可迁移到其他游戏的设计思想
 
 ---
 
-### 64.1 类型定义与实例状态必须分离
+## 64.1 类型定义与实例状态必须分离
 
 可以迁移到：
 
@@ -4094,7 +4151,7 @@ Instance回答：
 
 ---
 
-### 64.2 捕获是一种运行时资产转换模式
+## 64.2 捕获是一种运行时资产转换模式
 
 可以迁移到：
 
@@ -4119,7 +4176,7 @@ World Entity
 
 ---
 
-### 64.3 大候选集合与小激活集合能自然产生构筑
+## 64.3 大候选集合与小激活集合能自然产生构筑
 
 可以迁移到：
 
@@ -4142,7 +4199,7 @@ World Entity
 
 ---
 
-### 64.4 生态条件可以让随机内容变得可推理
+## 64.4 生态条件可以让随机内容变得可推理
 
 可迁移到：
 
@@ -4168,7 +4225,7 @@ World Entity
 
 ---
 
-### 64.5 知识系统可以成为探索成长
+## 64.5 知识系统可以成为探索成长
 
 Seen
 → Known
@@ -4190,7 +4247,7 @@ Seen
 
 ---
 
-### 64.6 资产履历可以增强玩家情感所有权
+## 64.6 资产履历可以增强玩家情感所有权
 
 可以迁移到：
 
@@ -4218,7 +4275,7 @@ Seen
 
 ---
 
-### 64.7 形态变化最好保持身份连续性
+## 64.7 形态变化最好保持身份连续性
 
 升级、进化、升阶时：
 
@@ -4242,7 +4299,7 @@ Seen
 
 ---
 
-### 64.8 随机个体差异需要提供后期纠偏能力
+## 64.8 随机个体差异需要提供后期纠偏能力
 
 可以迁移到：
 
@@ -4267,7 +4324,7 @@ Seen
 
 ---
 
-### 64.9 复杂收藏系统必须从第一天考虑搜索和管理
+## 64.9 复杂收藏系统必须从第一天考虑搜索和管理
 
 很多系统在10个对象时：
 
@@ -4292,7 +4349,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 64.10 唯一资产必须拥有所有权完整性审计
+## 64.10 唯一资产必须拥有所有权完整性审计
 
 适用于：
 
@@ -4313,9 +4370,9 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-## 65. 本次防重记录
+# 65. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **怪物收集 / 驯兽育成 RPG。**
 
@@ -4336,7 +4393,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 核心范式
+## 核心范式
 
 世界通过生态、时间、天气和稀有度规则生成可遭遇的野生生物；玩家在战斗中观察、削弱并尝试捕获目标，成功后通过原子所有权转换将野生 Encounter Entity 转化为具有永久身份的 CreatureInstance。大量 CreatureInstance 进入玩家收藏库，但只有少量成员能够进入当前战斗队伍，因此形成“收藏宽度—队伍深度”的压缩式构筑。玩家随后通过等级、技能、特质、关系与进化持续改变这些个体，再利用新的队伍组合探索更深区域、发现新的生物，最终形成：
 
@@ -4355,7 +4412,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 世界拥有大量可收集生物Species；
 
@@ -4404,7 +4461,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 与仓库现有 JRPG 的防重边界
+## 与仓库现有 JRPG 的防重边界
 
 仓库已经存在独立 JRPG 范式，其重点是：
 
@@ -4453,7 +4510,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 与仓库现有宠物照护模拟的防重边界
+## 与仓库现有宠物照护模拟的防重边界
 
 仓库中已有宠物照护类型，其核心围绕：
 
@@ -4495,7 +4552,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Monster Taming；
 
@@ -4590,7 +4647,7 @@ Roster、Inventory、CardCollection等系统应从一开始考虑：
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次怪物收集 / 驯兽育成 RPG 的子系统，不应再作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

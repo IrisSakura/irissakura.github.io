@@ -1,5 +1,3 @@
-## 信息不对称、证据溯源与“调查—建模—质疑—定案”的案件闭环
-
 > Agent 标签：`detective` `investigation` `mystery`
 
 ---

@@ -1,4 +1,66 @@
-## 1. 类型定位
+> Agent 标签：`bullet` `horde` `survival`
+
+---
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `game-designs` 的生成索引。当前 `README.md` 标记 `Entries: 47`，现有记录已经包含自走棋、大逃杀、卡组构筑 Roguelike、生存恐怖、类魂、实时战略、MOBA、怪物收集 RPG、银河城等宏观类型。
+
+本次进一步针对当前路由索引检索：
+
+- `survivor`
+
+- `horde`
+
+- `bullet`
+
+
+未发现独立的幸存者类 / Horde Survival / Bullet Heaven 范式条目。
+
+因此本期新增类型选择：
+
+**幸存者类 / Horde Survival / Bullet Heaven。**
+
+常见名称包括：
+
+- Horde Survival；
+
+- Bullet Heaven；
+
+- Survivors-like；
+
+- Arena Survival；
+
+- 群潮生存；
+
+- 幸存者类；
+
+- 自动火力生存 Roguelite。
+
+
+这里讨论的不是普通动作游戏中的“坚持五分钟”任务，也不是塔防中的怪物波次，更不是自走棋中的自动战斗，而是一种已经足以独立支撑完整产品的宏观游戏类型。
+
+其最具代表性的设计范式可以概括为：
+
+> 玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—升级强化火力—允许更高密度—继续升级”的正反馈循环，并由Boss、精英、区域事件和固定终局时间对这一循环施加阶段性能力检查。
+
+核心循环可以压缩为：
+
+**移动规避
+→ 自动攻击
+→ 击杀敌群
+→ 经验散落
+→ 主动拾取
+→ 等级提升
+→ 随机能力选择
+→ 构筑产生协同
+→ 清怪效率提高
+→ 系统增加敌群密度
+→ 精英与Boss进行能力检查
+→ 生存至终局。**
+
+---
+
+# 1. 类型定位
 
 幸存者类游戏通常具有以下核心特征：
 
@@ -87,7 +149,7 @@
 
 ---
 
-## 2. 最核心的系统抽象
+# 2. 最核心的系统抽象
 
 可以把整个类型抽象为三个互相耦合的系统：
 
@@ -140,7 +202,7 @@
 
 ---
 
-## 3. 时间是主要难度轴
+# 3. 时间是主要难度轴
 
 传统 RPG 常通过：
 
@@ -181,7 +243,7 @@ Boss。
 
 ---
 
-## 4. RunClock
+# 4. RunClock
 
 建议状态包含：
 
@@ -231,7 +293,7 @@ UI再维护一套时间。
 
 ---
 
-## 5. 难度不是简单提高敌人生命值
+# 5. 难度不是简单提高敌人生命值
 
 时间推进后，可以同时改变：
 
@@ -311,7 +373,7 @@ HP × 8。
 
 ---
 
-## 6. 总体运行时架构
+# 6. 总体运行时架构
 
 推荐将运行时划分为以下核心域：
 
@@ -395,9 +457,9 @@ HP × 8。
 
 ---
 
-## 7. Run 生命周期
+# 7. Run 生命周期
 
-### 7.1 RunDefinition
+## 7.1 RunDefinition
 
 建议字段：
 
@@ -426,7 +488,7 @@ HP × 8。
 
 ---
 
-### 7.2 RunRuntimeState
+## 7.2 RunRuntimeState
 
 建议包含：
 
@@ -463,7 +525,7 @@ HP × 8。
 
 ---
 
-### 7.3 RunPhase
+## 7.3 RunPhase
 
 推荐区分：
 
@@ -504,7 +566,7 @@ RunElapsedTime
 
 ---
 
-## 8. 玩家直接控制必须保持简洁
+# 8. 玩家直接控制必须保持简洁
 
 该类型的输入预算通常故意很低。
 
@@ -548,7 +610,7 @@ RunElapsedTime
 
 ---
 
-## 9. PlayerRuntimeState
+# 9. PlayerRuntimeState
 
 建议包含：
 
@@ -593,7 +655,7 @@ RunElapsedTime
 
 ---
 
-## 10. 能力定义与能力实例分离
+# 10. 能力定义与能力实例分离
 
 与大量可成长系统一样，需要区分：
 
@@ -605,7 +667,7 @@ RunElapsedTime
 
 ---
 
-### 10.1 AbilityDefinition
+## 10.1 AbilityDefinition
 
 描述能力类型：
 
@@ -636,7 +698,7 @@ RunElapsedTime
 
 ---
 
-### 10.2 AbilityRuntimeState
+## 10.2 AbilityRuntimeState
 
 描述当前Run中这一项能力：
 
@@ -659,7 +721,7 @@ RunElapsedTime
 
 ---
 
-## 11. AutoCast Scheduler
+# 11. AutoCast Scheduler
 
 这是该类型最核心的运行时模块之一。
 
@@ -669,7 +731,7 @@ RunElapsedTime
 
 ---
 
-### 11.1 AutoCast流程
+## 11.1 AutoCast流程
 
 Ability进入Ready
 → 查询CastCondition
@@ -683,7 +745,7 @@ Ability进入Ready
 
 ---
 
-### 11.2 AutoCast不能完全依赖Update轮询
+## 11.2 AutoCast不能完全依赖Update轮询
 
 低效实现：
 
@@ -717,7 +779,7 @@ Ability进入Ready
 
 ---
 
-## 12. CastPattern
+# 12. CastPattern
 
 能力可以抽象为不同攻击范式：
 
@@ -765,9 +827,9 @@ CastPattern
 
 ---
 
-## 13. TargetSelectionSystem
+# 13. TargetSelectionSystem
 
-### 13.1 TargetingProfile
+## 13.1 TargetingProfile
 
 建议字段：
 
@@ -794,7 +856,7 @@ CastPattern
 
 ---
 
-### 13.2 常见目标策略
+## 13.2 常见目标策略
 
 包括：
 
@@ -817,7 +879,7 @@ CastPattern
 
 ---
 
-### 13.3 自动攻击必须可预测
+## 13.3 自动攻击必须可预测
 
 如果一个技能：
 
@@ -838,7 +900,7 @@ CastPattern
 
 ---
 
-## 14. 构筑的核心不是技能数量，而是参数空间联动
+# 14. 构筑的核心不是技能数量，而是参数空间联动
 
 幸存者类非常典型的一点是：
 
@@ -889,7 +951,7 @@ Duration +20%
 
 ---
 
-## 15. BuildModifierSystem
+# 15. BuildModifierSystem
 
 建议区分：
 
@@ -906,7 +968,7 @@ Duration +20%
 
 ---
 
-### 15.1 ModifierContext
+## 15.1 ModifierContext
 
 例如：
 
@@ -926,7 +988,7 @@ BaseDamage
 
 ---
 
-## 16. 被动能力
+# 16. 被动能力
 
 PassiveDefinition可以修改：
 
@@ -957,7 +1019,7 @@ PassiveDefinition可以修改：
 
 ---
 
-## 17. Ability Evolution
+# 17. Ability Evolution
 
 本品类常见高价值机制：
 
@@ -971,7 +1033,7 @@ PassiveDefinition可以修改：
 
 ---
 
-### 17.1 EvolutionRule
+## 17.1 EvolutionRule
 
 建议字段：
 
@@ -998,7 +1060,7 @@ PassiveDefinition可以修改：
 
 ---
 
-### 17.2 进化职责
+## 17.2 进化职责
 
 进化用于：
 
@@ -1013,7 +1075,7 @@ PassiveDefinition可以修改：
 
 ---
 
-### 17.3 进化应该改变行为
+## 17.3 进化应该改变行为
 
 低质量：
 
@@ -1046,7 +1108,7 @@ Fireball
 
 ---
 
-## 18. EnemyDefinition
+# 18. EnemyDefinition
 
 建议字段：
 
@@ -1079,13 +1141,13 @@ Fireball
 
 ---
 
-## 19. Enemy Archetype
+# 19. Enemy Archetype
 
 敌人应承担不同压力职责。
 
 例如：
 
-### Chaser
+## Chaser
 
 持续追逐玩家。
 
@@ -1093,7 +1155,7 @@ Fireball
 
 基础移动与持续输出。
 
-### Swarm
+## Swarm
 
 低生命、大量出现。
 
@@ -1101,7 +1163,7 @@ Fireball
 
 AoE和密度处理。
 
-### Tank
+## Tank
 
 高生命。
 
@@ -1109,7 +1171,7 @@ AoE和密度处理。
 
 持续DPS。
 
-### Runner
+## Runner
 
 高速。
 
@@ -1117,13 +1179,13 @@ AoE和密度处理。
 
 外围防御。
 
-### Ranged
+## Ranged
 
 远程攻击。
 
 迫使玩家改变路径。
 
-### Splitter
+## Splitter
 
 死亡分裂。
 
@@ -1131,23 +1193,23 @@ AoE和密度处理。
 
 清怪链。
 
-### Buffer
+## Buffer
 
 强化附近敌人。
 
 产生优先目标。
 
-### Elite
+## Elite
 
 拥有明显独立机制。
 
-### Boss
+## Boss
 
 阶段性构筑检查。
 
 ---
 
-## 20. Horde Spawn Director
+# 20. Horde Spawn Director
 
 这是类型的第二个核心运行时模块。
 
@@ -1157,7 +1219,7 @@ AoE和密度处理。
 
 ---
 
-### 20.1 SpawnDirectorState
+## 20.1 SpawnDirectorState
 
 建议包含：
 
@@ -1182,7 +1244,7 @@ AoE和密度处理。
 
 ---
 
-## 21. Spawn Budget
+# 21. Spawn Budget
 
 不要简单：
 
@@ -1216,7 +1278,7 @@ Director决定：
 
 ---
 
-## 22. PressureProfile
+# 22. PressureProfile
 
 建议字段：
 
@@ -1241,7 +1303,7 @@ Director决定：
 
 ---
 
-## 23. Spawn位置
+# 23. Spawn位置
 
 不能随意在玩家视野中央生成。
 
@@ -1261,7 +1323,7 @@ MaxSpawnDistance
 
 ---
 
-### 23.1 Spawn候选检查
+## 23.1 Spawn候选检查
 
 检查：
 
@@ -1284,7 +1346,7 @@ MaxSpawnDistance
 
 ---
 
-### 23.2 生成失败
+## 23.2 生成失败
 
 如果没有合法位置：
 
@@ -1301,7 +1363,7 @@ MaxSpawnDistance
 
 ---
 
-## 24. Spawn Fairness
+# 24. Spawn Fairness
 
 敌人应该形成压力。
 
@@ -1330,7 +1392,7 @@ Boss。
 
 ---
 
-## 25. Crowd Simulation
+# 25. Crowd Simulation
 
 同屏：
 
@@ -1353,7 +1415,7 @@ Boss。
 
 ---
 
-## 26. Enemy Movement
+# 26. Enemy Movement
 
 最基础的敌人可以使用：
 
@@ -1372,7 +1434,7 @@ DesiredDirection = PlayerPosition - EnemyPosition。
 
 ---
 
-### 26.1 不必让所有敌人拥有完整路径规划
+## 26.1 不必让所有敌人拥有完整路径规划
 
 大部分群潮单位只需要：
 
@@ -1389,7 +1451,7 @@ DesiredDirection = PlayerPosition - EnemyPosition。
 
 ---
 
-## 27. Crowd Separation
+# 27. Crowd Separation
 
 没有分离时：
 
@@ -1416,7 +1478,7 @@ LocalSeparation。
 
 ---
 
-## 28. 敌人碰撞策略
+# 28. 敌人碰撞策略
 
 通常不建议：
 
@@ -1443,7 +1505,7 @@ LocalSeparation。
 
 ---
 
-## 29. Spatial Query Infrastructure
+# 29. Spatial Query Infrastructure
 
 这是整个类型最重要的底层性能基础设施之一。
 
@@ -1477,7 +1539,7 @@ LocalSeparation。
 
 ---
 
-## 30. 禁止技能直接FindObjectsOfType所有敌人
+# 30. 禁止技能直接FindObjectsOfType所有敌人
 
 典型错误：
 
@@ -1501,9 +1563,9 @@ TargetingSystem必须走：
 
 ---
 
-## 31. Damage System
+# 31. Damage System
 
-### 31.1 DamageContext
+## 31.1 DamageContext
 
 建议包含：
 
@@ -1530,7 +1592,7 @@ TargetingSystem必须走：
 
 ---
 
-### 31.2 Damage流程
+## 31.2 Damage流程
 
 HitCandidate
 → 验证目标Alive
@@ -1544,7 +1606,7 @@ HitCandidate
 
 ---
 
-## 32. Damage不能直接写在Projectile脚本中
+# 32. Damage不能直接写在Projectile脚本中
 
 否则：
 
@@ -1566,7 +1628,7 @@ DamageResolver。
 
 ---
 
-## 33. Hit Memory
+# 33. Hit Memory
 
 持续性技能尤其需要：
 
@@ -1582,7 +1644,7 @@ DamageResolver。
 
 ---
 
-### 33.1 HitPolicy
+## 33.1 HitPolicy
 
 可以定义：
 
@@ -1599,9 +1661,9 @@ DamageResolver。
 
 ---
 
-## 34. Projectile System
+# 34. Projectile System
 
-### 34.1 ProjectileDefinition
+## 34.1 ProjectileDefinition
 
 建议字段：
 
@@ -1632,7 +1694,7 @@ DamageResolver。
 
 ---
 
-### 34.2 ProjectileRuntimeState
+## 34.2 ProjectileRuntimeState
 
 建议包含：
 
@@ -1659,7 +1721,7 @@ DamageResolver。
 
 ---
 
-## 35. 投射物数量本身是玩法资源，也是性能资源
+# 35. 投射物数量本身是玩法资源，也是性能资源
 
 玩家后期可能同时生成：
 
@@ -1679,7 +1741,7 @@ ProjectileCount × AttackSpeed × Lifetime
 
 ---
 
-## 36. AreaEffectSystem
+# 36. AreaEffectSystem
 
 区域能力可以包括：
 
@@ -1702,7 +1764,7 @@ AreaEffect需要独立于Projectile。
 
 ---
 
-## 37. ExperienceDropSystem
+# 37. ExperienceDropSystem
 
 这是类型的第三个核心系统。
 
@@ -1718,7 +1780,7 @@ XP立即加到玩家。
 
 ---
 
-### 37.1 为什么XP要落在地上
+## 37.1 为什么XP要落在地上
 
 因为它把：
 
@@ -1744,7 +1806,7 @@ XP立即加到玩家。
 
 ---
 
-## 38. ExperiencePickupState
+# 38. ExperiencePickupState
 
 建议包含：
 
@@ -1767,7 +1829,7 @@ XP立即加到玩家。
 
 ---
 
-## 39. XP碎片数量必须控制
+# 39. XP碎片数量必须控制
 
 如果每个敌人死亡：
 
@@ -1783,7 +1845,7 @@ XP立即加到玩家。
 
 ---
 
-### 39.1 Experience Aggregation
+## 39.1 Experience Aggregation
 
 邻近小经验：
 
@@ -1810,7 +1872,7 @@ XP立即加到玩家。
 
 ---
 
-## 40. Pickup Magnet
+# 40. Pickup Magnet
 
 玩家进入：
 
@@ -1822,7 +1884,7 @@ ExperiencePickup开始吸附。
 
 ---
 
-### 40.1 MagnetState
+## 40.1 MagnetState
 
 推荐：
 
@@ -1833,7 +1895,7 @@ Idle
 
 ---
 
-### 40.2 一旦进入Attracted可以取消碰撞查询
+## 40.2 一旦进入Attracted可以取消碰撞查询
 
 之后直接：
 
@@ -1843,7 +1905,7 @@ Idle
 
 ---
 
-## 41. 全屏吸取
+# 41. 全屏吸取
 
 特殊Pickup可以：
 
@@ -1859,7 +1921,7 @@ Idle
 
 ---
 
-## 42. Experience提交
+# 42. Experience提交
 
 Pickup接触玩家
 → 标记Collected
@@ -1870,7 +1932,7 @@ Pickup接触玩家
 
 ---
 
-## 43. 多级连续升级
+# 43. 多级连续升级
 
 后期一次全屏吸收可能产生：
 
@@ -1894,7 +1956,7 @@ Experience += value
 
 ---
 
-## 44. LevelProgressionState
+# 44. LevelProgressionState
 
 建议包含：
 
@@ -1913,7 +1975,7 @@ Experience += value
 
 ---
 
-## 45. Upgrade Draft
+# 45. Upgrade Draft
 
 每次升级：
 
@@ -1927,7 +1989,7 @@ Experience += value
 
 ---
 
-### 45.1 UpgradePoolEntry
+## 45.1 UpgradePoolEntry
 
 建议字段：
 
@@ -1952,7 +2014,7 @@ Experience += value
 
 ---
 
-## 46. 候选生成
+# 46. 候选生成
 
 LevelUp
 → 获取所有合法Upgrade
@@ -1966,7 +2028,7 @@ LevelUp
 
 ---
 
-## 47. Draft必须先生成结果再展示
+# 47. Draft必须先生成结果再展示
 
 不要：
 
@@ -1993,19 +2055,19 @@ UpgradeDraftInstance。
 
 ---
 
-## 48. Reroll / Banish / Skip
+# 48. Reroll / Banish / Skip
 
 高级构筑可以提供：
 
-### Reroll
+## Reroll
 
 重新抽取候选。
 
-### Banish
+## Banish
 
 将某Upgrade从本局池中移除。
 
-### Skip
+## Skip
 
 放弃当前升级换其他收益。
 
@@ -2015,7 +2077,7 @@ UpgradeDraftInstance。
 
 ---
 
-## 49. Upgrade Pool Control
+# 49. Upgrade Pool Control
 
 如果完全随机：
 
@@ -2039,7 +2101,7 @@ UpgradeDraftInstance。
 
 ---
 
-## 50. 新技能与技能强化竞争
+# 50. 新技能与技能强化竞争
 
 一次Draft可能同时出现：
 
@@ -2066,7 +2128,7 @@ UpgradeDraftInstance。
 
 ---
 
-### 50.1 Build Width
+## 50.1 Build Width
 
 增加更多技能。
 
@@ -2079,7 +2141,7 @@ UpgradeDraftInstance。
 
 ---
 
-### 50.2 Build Depth
+## 50.2 Build Depth
 
 升级已有技能。
 
@@ -2092,7 +2154,7 @@ UpgradeDraftInstance。
 
 ---
 
-## 51. Ability Slot Limit
+# 51. Ability Slot Limit
 
 限制最多：
 
@@ -2110,7 +2172,7 @@ UpgradeDraftInstance。
 
 ---
 
-## 52. Passive Slot Limit
+# 52. Passive Slot Limit
 
 同理可以限制：
 
@@ -2131,7 +2193,7 @@ Passive数量。
 
 ---
 
-## 53. Build Synergy
+# 53. Build Synergy
 
 真正优秀的幸存者类不是：
 
@@ -2170,7 +2232,7 @@ SummonCount
 
 ---
 
-## 54. BuildSynergyGraph
+# 54. BuildSynergyGraph
 
 开发工具可以维护：
 
@@ -2213,7 +2275,7 @@ Area：
 
 ---
 
-## 55. 不建议直接硬编码“套装答案”
+# 55. 不建议直接硬编码“套装答案”
 
 如果游戏明确告诉：
 
@@ -2231,7 +2293,7 @@ Area：
 
 ---
 
-## 56. Elite System
+# 56. Elite System
 
 精英应该：
 
@@ -2250,7 +2312,7 @@ Area：
 
 ---
 
-## 57. EliteDefinition
+# 57. EliteDefinition
 
 建议字段：
 
@@ -2273,7 +2335,7 @@ Area：
 
 ---
 
-## 58. Boss System
+# 58. Boss System
 
 Boss不应只是：
 
@@ -2294,7 +2356,7 @@ Boss应该测试：
 
 ---
 
-### 58.1 Boss与群潮的组合
+## 58.1 Boss与群潮的组合
 
 Boss存在时：
 
@@ -2323,7 +2385,7 @@ Boss
 
 ---
 
-## 59. Reward Chest
+# 59. Reward Chest
 
 精英或Boss死亡后可以生成：
 
@@ -2342,7 +2404,7 @@ Chest的主要作用：
 
 ---
 
-## 60. Reward Transaction
+# 60. Reward Transaction
 
 EliteDeath
 → 创建RewardSource
@@ -2357,7 +2419,7 @@ EliteDeath
 
 ---
 
-## 61. Health与恢复
+# 61. Health与恢复
 
 玩家生命通常相对有限。
 
@@ -2376,7 +2438,7 @@ EliteDeath
 
 ---
 
-### 61.1 恢复资源不能过于稳定
+## 61.1 恢复资源不能过于稳定
 
 如果玩家每次受伤：
 
@@ -2386,7 +2448,7 @@ EliteDeath
 
 ---
 
-## 62. 接触伤害
+# 62. 接触伤害
 
 大量敌人靠近时最容易出现一个问题：
 
@@ -2411,7 +2473,7 @@ EliteDeath
 
 ---
 
-## 63. PlayerDamageContext
+# 63. PlayerDamageContext
 
 建议记录：
 
@@ -2436,7 +2498,7 @@ Death Recap需要能够回答：
 
 ---
 
-## 64. 移动本身是最核心战术资源
+# 64. 移动本身是最核心战术资源
 
 由于攻击自动，
 
@@ -2465,7 +2527,7 @@ Position。
 
 ---
 
-## 65. Kiting
+# 65. Kiting
 
 经典循环：
 
@@ -2479,7 +2541,7 @@ Position。
 
 ---
 
-## 66. 地图不能完全没有意义
+# 66. 地图不能完全没有意义
 
 如果地图只是：
 
@@ -2512,27 +2574,27 @@ Position。
 
 ---
 
-## 67. 时间阶段
+# 67. 时间阶段
 
 推荐显式设计：
 
-### 0～20%
+## 0～20%
 
 建立基础构筑。
 
-### 20～50%
+## 20～50%
 
 构筑方向确定。
 
-### 50～75%
+## 50～75%
 
 形成主要Evolution。
 
-### 75～90%
+## 75～90%
 
 高密度压力。
 
-### 90～100%
+## 90～100%
 
 终局能力检查。
 
@@ -2542,7 +2604,7 @@ Position。
 
 ---
 
-## 68. 时间压力与构筑速度必须匹配
+# 68. 时间压力与构筑速度必须匹配
 
 非常重要的平衡指标：
 
@@ -2554,7 +2616,7 @@ Position。
 
 ---
 
-### 68.1 PlayerPowerCurve
+## 68.1 PlayerPowerCurve
 
 来源：
 
@@ -2571,7 +2633,7 @@ Position。
 
 ---
 
-### 68.2 EnemyPressureCurve
+## 68.2 EnemyPressureCurve
 
 来源：
 
@@ -2592,7 +2654,7 @@ Position。
 
 ---
 
-### 68.3 两条曲线的关系
+## 68.3 两条曲线的关系
 
 如果：
 
@@ -2614,7 +2676,7 @@ Pressure远高于Power：
 
 ---
 
-## 69. Kill Capacity
+# 69. Kill Capacity
 
 一个非常适合本品类的内部指标：
 
@@ -2626,7 +2688,7 @@ Pressure远高于Power：
 
 ---
 
-## 70. Spawn Pressure
+# 70. Spawn Pressure
 
 对应：
 
@@ -2650,7 +2712,7 @@ KillCapacity：
 
 ---
 
-## 71. 正反馈与失控
+# 71. 正反馈与失控
 
 本品类存在非常明显的正反馈：
 
@@ -2674,7 +2736,7 @@ KillCapacity：
 
 ---
 
-## 72. 追赶机制
+# 72. 追赶机制
 
 可以使用：
 
@@ -2701,21 +2763,21 @@ KillCapacity：
 
 ---
 
-## 73. 升级暂停策略
+# 73. 升级暂停策略
 
 LevelUp时可以：
 
-### 完全暂停世界
+## 完全暂停世界
 
 优点：
 
 玩家可以思考。
 
-### 时间减速
+## 时间减速
 
 保留压力。
 
-### 不暂停
+## 不暂停
 
 适合高强度动作。
 
@@ -2727,7 +2789,7 @@ LevelUp时可以：
 
 ---
 
-## 74. 连续多级升级
+# 74. 连续多级升级
 
 如果PendingLevelUps很多：
 
@@ -2749,7 +2811,7 @@ LevelUp时可以：
 
 ---
 
-## 75. Run Termination
+# 75. Run Termination
 
 胜利条件可以是：
 
@@ -2764,7 +2826,7 @@ LevelUp时可以：
 
 ---
 
-### 75.1 时间到达不应立刻无条件胜利
+## 75.1 时间到达不应立刻无条件胜利
 
 如果：
 
@@ -2782,7 +2844,7 @@ LevelUp时可以：
 
 ---
 
-## 76. 完整事件与执行流程示例
+# 76. 完整事件与执行流程示例
 
 以下以：
 
@@ -2792,7 +2854,7 @@ LevelUp时可以：
 
 ---
 
-### 76.1 Run开始
+## 76.1 Run开始
 
 玩家选择角色：
 
@@ -2813,7 +2875,7 @@ ThrowingKnife Lv1。
 
 ---
 
-### 76.2 第一波敌人
+## 76.2 第一波敌人
 
 SpawnDirector：
 
@@ -2831,7 +2893,7 @@ ThrowingKnife自动寻找最近敌人。
 
 ---
 
-### 76.3 第一批击杀
+## 76.3 第一批击杀
 
 Enemy死亡：
 
@@ -2843,7 +2905,7 @@ Enemy死亡：
 
 ---
 
-### 76.4 玩家绕圈
+## 76.4 玩家绕圈
 
 玩家先拉开敌群，
 
@@ -2855,7 +2917,7 @@ PickupMagnet吸收经验。
 
 ---
 
-### 76.5 Level 2
+## 76.5 Level 2
 
 系统创建：
 
@@ -2880,7 +2942,7 @@ ProjectileCount +1。
 
 ---
 
-### 76.6 火力提高
+## 76.6 火力提高
 
 现在每次攻击：
 
@@ -2894,7 +2956,7 @@ XP生成速度提高。
 
 ---
 
-### 76.7 3分钟阶段
+## 76.7 3分钟阶段
 
 SpawnDirector切换PressureProfile。
 
@@ -2906,7 +2968,7 @@ SwarmEnemy。
 
 ---
 
-### 76.8 第一次Build分叉
+## 76.8 第一次Build分叉
 
 升级候选：
 
@@ -2927,7 +2989,7 @@ Knife现在：
 
 ---
 
-### 76.9 协同出现
+## 76.9 协同出现
 
 ProjectileCount 2
 
@@ -2955,7 +3017,7 @@ Damage +20%。
 
 ---
 
-### 76.10 敌群密度上升
+## 76.10 敌群密度上升
 
 SpawnPressure继续提高。
 
@@ -2967,7 +3029,7 @@ SpatialQuery系统仍通过UniformGrid寻找目标。
 
 ---
 
-### 76.11 5分钟Elite出现
+## 76.11 5分钟Elite出现
 
 Elite拥有：
 
@@ -2983,7 +3045,7 @@ Elite拥有：
 
 ---
 
-### 76.12 Elite死亡
+## 76.12 Elite死亡
 
 生成Chest。
 
@@ -2993,7 +3055,7 @@ ThrowingKnife免费升级一级。
 
 ---
 
-### 76.13 进化条件逐渐满足
+## 76.13 进化条件逐渐满足
 
 ThrowingKnife达到MaxLevel。
 
@@ -3005,7 +3067,7 @@ EvolutionRule满足大部分条件。
 
 ---
 
-### 76.14 8分钟Boss前精英
+## 76.14 8分钟Boss前精英
 
 玩家获得第二个Chest。
 
@@ -3032,7 +3094,7 @@ InfernoBladeStorm。
 
 ---
 
-### 76.15 Build进入成熟期
+## 76.15 Build进入成熟期
 
 当前构筑形成：
 
@@ -3050,7 +3112,7 @@ Explosion
 
 ---
 
-### 76.16 10分钟压力上升
+## 76.16 10分钟压力上升
 
 SpawnDirector加入：
 
@@ -3062,7 +3124,7 @@ Tank开始不断积累。
 
 ---
 
-### 76.17 玩家发现构筑短板
+## 76.17 玩家发现构筑短板
 
 清杂能力极强，
 
@@ -3076,7 +3138,7 @@ Build AoE充足，
 
 ---
 
-### 76.18 11分钟Draft
+## 76.18 11分钟Draft
 
 出现：
 
@@ -3095,7 +3157,7 @@ Crit。
 
 ---
 
-### 76.19 12分钟Boss出现
+## 76.19 12分钟Boss出现
 
 Boss拥有：
 
@@ -3113,7 +3175,7 @@ SpawnDirector同时：
 
 ---
 
-### 76.20 战斗形成双重压力
+## 76.20 战斗形成双重压力
 
 玩家必须：
 
@@ -3129,7 +3191,7 @@ SpawnDirector同时：
 
 ---
 
-### 76.21 Build验证
+## 76.21 Build验证
 
 Burn：
 
@@ -3152,7 +3214,7 @@ SingleTarget
 
 ---
 
-### 76.22 Boss死亡
+## 76.22 Boss死亡
 
 Run进入：
 
@@ -3164,7 +3226,7 @@ VictoryPending。
 
 ---
 
-### 76.23 RunResult
+## 76.23 RunResult
 
 记录：
 
@@ -3193,7 +3255,7 @@ VictoryPending。
 
 ---
 
-### 76.24 完整核心循环
+## 76.24 完整核心循环
 
 移动规避
 → 自动攻击
@@ -3215,9 +3277,9 @@ VictoryPending。
 
 ---
 
-## 77. 模块通信设计
+# 77. 模块通信设计
 
-### 77.1 Commands
+## 77.1 Commands
 
 由于自动战斗占比高，业务Command数量通常不多。
 
@@ -3242,7 +3304,7 @@ VictoryPending。
 
 ---
 
-### 77.2 Queries
+## 77.2 Queries
 
 适用于：
 
@@ -3278,7 +3340,7 @@ Query不能：
 
 ---
 
-### 77.3 Domain Events
+## 77.3 Domain Events
 
 包括：
 
@@ -3323,7 +3385,7 @@ Query不能：
 
 ---
 
-### 77.4 Presentation Events
+## 77.4 Presentation Events
 
 包括：
 
@@ -3361,7 +3423,7 @@ Query不能：
 
 ---
 
-## 78. 随机流
+# 78. 随机流
 
 建议至少分离：
 
@@ -3380,7 +3442,7 @@ Query不能：
 
 ---
 
-### 78.1 为什么要分流
+## 78.1 为什么要分流
 
 假设：
 
@@ -3398,7 +3460,7 @@ Query不能：
 
 ---
 
-## 79. Replay
+# 79. Replay
 
 幸存者类非常适合：
 
@@ -3432,7 +3494,7 @@ Input Replay。
 
 ---
 
-## 80. Save / Suspend Run
+# 80. Save / Suspend Run
 
 如果单局较长，
 
@@ -3471,11 +3533,11 @@ Input Replay。
 
 ---
 
-## 81. 失败隔离
+# 81. 失败隔离
 
 ---
 
-### 81.1 Spawn位置生成失败
+## 81.1 Spawn位置生成失败
 
 如果没有合法SpawnPoint：
 
@@ -3494,7 +3556,7 @@ Input Replay。
 
 ---
 
-### 81.2 Enemy超出合法世界
+## 81.2 Enemy超出合法世界
 
 敌人掉出地图：
 
@@ -3509,7 +3571,7 @@ Input Replay。
 
 ---
 
-### 81.3 EnemyCount泄漏
+## 81.3 EnemyCount泄漏
 
 Enemy对象销毁
 
@@ -3525,7 +3587,7 @@ EnemyRegistry
 
 ---
 
-### 81.4 Projectile失去目标
+## 81.4 Projectile失去目标
 
 Homing目标死亡：
 
@@ -3544,7 +3606,7 @@ DestroyedEntity引用。
 
 ---
 
-### 81.5 HitMemory无限增长
+## 81.5 HitMemory无限增长
 
 长期Projectile可能记录：
 
@@ -3561,7 +3623,7 @@ DestroyedEntity引用。
 
 ---
 
-### 81.6 XP对象爆炸
+## 81.6 XP对象爆炸
 
 如果ExperiencePickup数量超过阈值：
 
@@ -3573,7 +3635,7 @@ AggregationPolicy。
 
 ---
 
-### 81.7 多级升级重入
+## 81.7 多级升级重入
 
 ExperienceCollected
 
@@ -3591,7 +3653,7 @@ PendingLevelUpQueue。
 
 ---
 
-### 81.8 Draft无合法候选
+## 81.8 Draft无合法候选
 
 可能原因：
 
@@ -3616,7 +3678,7 @@ PendingLevelUpQueue。
 
 ---
 
-### 81.9 Evolution事务失败
+## 81.9 Evolution事务失败
 
 如果Evolution满足：
 
@@ -3632,7 +3694,7 @@ EvolutionContentError。
 
 ---
 
-### 81.10 Boss状态异常
+## 81.10 Boss状态异常
 
 Boss被销毁但DeathEvent未提交：
 
@@ -3644,7 +3706,7 @@ BossRegistryIntegrityCheck。
 
 ---
 
-### 81.11 RunCompletion重复
+## 81.11 RunCompletion重复
 
 Boss死亡
 
@@ -3662,11 +3724,11 @@ RunTerminationTransaction。
 
 ---
 
-## 82. 调试与可观测性
+# 82. 调试与可观测性
 
 ---
 
-### 82.1 Spawn Pressure Graph
+## 82.1 Spawn Pressure Graph
 
 时间轴显示：
 
@@ -3683,7 +3745,7 @@ RunTerminationTransaction。
 
 ---
 
-### 82.2 Player Power Graph
+## 82.2 Player Power Graph
 
 显示：
 
@@ -3702,7 +3764,7 @@ RunTerminationTransaction。
 
 ---
 
-### 82.3 Pressure vs Power Graph
+## 82.3 Pressure vs Power Graph
 
 同时绘制：
 
@@ -3716,7 +3778,7 @@ PlayerPower。
 
 ---
 
-### 82.4 Kill Rate Timeline
+## 82.4 Kill Rate Timeline
 
 显示：
 
@@ -3730,7 +3792,7 @@ KillRate突然提高。
 
 ---
 
-### 82.5 XP Economy Timeline
+## 82.5 XP Economy Timeline
 
 显示：
 
@@ -3757,7 +3819,7 @@ Generated远高于Collected，
 
 ---
 
-### 82.6 Upgrade Draft Trace
+## 82.6 Upgrade Draft Trace
 
 每一级记录：
 
@@ -3780,7 +3842,7 @@ Generated远高于Collected，
 
 ---
 
-### 82.7 Build Timeline
+## 82.7 Build Timeline
 
 例如：
 
@@ -3794,7 +3856,7 @@ Generated远高于Collected，
 
 ---
 
-### 82.8 Ability Damage Breakdown
+## 82.8 Ability Damage Breakdown
 
 统计：
 
@@ -3813,7 +3875,7 @@ Generated远高于Collected，
 
 ---
 
-### 82.9 Spatial Density Heatmap
+## 82.9 Spatial Density Heatmap
 
 显示：
 
@@ -3830,7 +3892,7 @@ Generated远高于Collected，
 
 ---
 
-### 82.10 Death Causality
+## 82.10 Death Causality
 
 不要只显示：
 
@@ -3849,7 +3911,7 @@ Tank单位开始堆积
 
 ---
 
-### 82.11 Targeting Inspector
+## 82.11 Targeting Inspector
 
 针对一次AutoCast显示：
 
@@ -3866,7 +3928,7 @@ Tank单位开始堆积
 
 ---
 
-### 82.12 Projectile Inspector
+## 82.12 Projectile Inspector
 
 显示：
 
@@ -3887,7 +3949,7 @@ Tank单位开始堆积
 
 ---
 
-### 82.13 Crowd Performance Panel
+## 82.13 Crowd Performance Panel
 
 显示：
 
@@ -3908,11 +3970,11 @@ Tank单位开始堆积
 
 ---
 
-## 83. 内容验证工具
+# 83. 内容验证工具
 
 ---
 
-### 83.1 SpawnSchedule Simulation
+## 83.1 SpawnSchedule Simulation
 
 不用真正渲染，
 
@@ -3933,7 +3995,7 @@ Tank单位开始堆积
 
 ---
 
-### 83.2 Build Monte Carlo
+## 83.2 Build Monte Carlo
 
 Bot自动选择：
 
@@ -3962,7 +4024,7 @@ Defense优先。
 
 ---
 
-### 83.3 Upgrade Pool Reachability
+## 83.3 Upgrade Pool Reachability
 
 检查每个Evolution：
 
@@ -3972,7 +4034,7 @@ Defense优先。
 
 ---
 
-### 83.4 Ability Scaling Test
+## 83.4 Ability Scaling Test
 
 对每个Ability计算：
 
@@ -3994,7 +4056,7 @@ MaxLevel
 
 ---
 
-### 83.5 Projectile Explosion Test
+## 83.5 Projectile Explosion Test
 
 自动测试：
 
@@ -4008,7 +4070,7 @@ MaxLevel
 
 ---
 
-### 83.6 Crowd Stress Test
+## 83.6 Crowd Stress Test
 
 模拟：
 
@@ -4037,7 +4099,7 @@ MaxLevel
 
 ---
 
-### 83.7 XP Stress Test
+## 83.7 XP Stress Test
 
 每秒击杀：
 
@@ -4049,7 +4111,7 @@ XP Aggregation能够保持实体数量上限。
 
 ---
 
-### 83.8 Infinite Sustain Test
+## 83.8 Infinite Sustain Test
 
 自动组合：
 
@@ -4067,7 +4129,7 @@ Shield。
 
 ---
 
-### 83.9 AFK Build Test
+## 83.9 AFK Build Test
 
 这是该类型非常重要的测试：
 
@@ -4079,7 +4141,7 @@ Shield。
 
 ---
 
-### 83.10 No-Damage Test
+## 83.10 No-Damage Test
 
 相反：
 
@@ -4089,13 +4151,13 @@ Shield。
 
 ---
 
-## 84. 性能设计
+# 84. 性能设计
 
 这是幸存者类必须从早期就纳入核心架构的部分。
 
 ---
 
-### 84.1 不要让每个敌人拥有完整MonoBehaviour生命周期
+## 84.1 不要让每个敌人拥有完整MonoBehaviour生命周期
 
 大量独立：
 
@@ -4117,7 +4179,7 @@ EnemySimulationManager
 
 ---
 
-### 84.2 Data-Oriented Enemy State
+## 84.2 Data-Oriented Enemy State
 
 高频数据可以集中：
 
@@ -4154,27 +4216,27 @@ Job；
 
 ---
 
-### 84.3 AI分层
+## 84.3 AI分层
 
-#### Tier 0
+### Tier 0
 
 Boss、Elite：
 
 完整AI。
 
-#### Tier 1
+### Tier 1
 
 玩家附近敌人：
 
 高频Movement + Combat。
 
-#### Tier 2
+### Tier 2
 
 中距离普通敌人：
 
 降低更新频率。
 
-#### Tier 3
+### Tier 3
 
 远端敌人：
 
@@ -4182,7 +4244,7 @@ Boss、Elite：
 
 ---
 
-### 84.4 Animation分层
+## 84.4 Animation分层
 
 远端敌人：
 
@@ -4201,7 +4263,7 @@ Boss、Elite：
 
 ---
 
-### 84.5 Damage Batch
+## 84.5 Damage Batch
 
 Aura每0.1秒命中：
 
@@ -4219,7 +4281,7 @@ Aura每0.1秒命中：
 
 ---
 
-### 84.6 Damage Number Aggregation
+## 84.6 Damage Number Aggregation
 
 玩家后期每秒可能造成：
 
@@ -4242,7 +4304,7 @@ UI不能：
 
 ---
 
-### 84.7 Object Pool
+## 84.7 Object Pool
 
 必须考虑Pool：
 
@@ -4265,7 +4327,7 @@ UI不能：
 
 ---
 
-### 84.8 Spatial Grid更新
+## 84.8 Spatial Grid更新
 
 只有移动跨Cell时：
 
@@ -4280,11 +4342,11 @@ UI不能：
 
 ---
 
-## 85. 可扩展点
+# 85. 可扩展点
 
 ---
 
-### 85.1 新Ability
+## 85.1 新Ability
 
 主要提供：
 
@@ -4305,7 +4367,7 @@ UI不能：
 
 ---
 
-### 85.2 新Enemy
+## 85.2 新Enemy
 
 提供：
 
@@ -4322,7 +4384,7 @@ UI不能：
 
 ---
 
-### 85.3 新PressureProfile
+## 85.3 新PressureProfile
 
 可以快速创建：
 
@@ -4339,7 +4401,7 @@ UI不能：
 
 ---
 
-### 85.4 新Run模式
+## 85.4 新Run模式
 
 可以支持：
 
@@ -4358,7 +4420,7 @@ UI不能：
 
 ---
 
-### 85.5 新升级选择系统
+## 85.5 新升级选择系统
 
 可以替换：
 
@@ -4383,7 +4445,7 @@ BuildModifier。
 
 ---
 
-### 85.6 新角色
+## 85.6 新角色
 
 角色主要定义：
 
@@ -4400,7 +4462,7 @@ BuildModifier。
 
 ---
 
-### 85.7 多人合作
+## 85.7 多人合作
 
 如果加入Co-op：
 
@@ -4427,11 +4489,11 @@ BuildModifier。
 
 ---
 
-## 86. 玩家体验设计
+# 86. 玩家体验设计
 
 ---
 
-### 86.1 玩家必须迅速进入第一次成长
+## 86.1 玩家必须迅速进入第一次成长
 
 第一轮LevelUp通常应该非常快。
 
@@ -4445,7 +4507,7 @@ BuildModifier。
 
 ---
 
-### 86.2 前几级应该让构筑方向快速形成
+## 86.2 前几级应该让构筑方向快速形成
 
 如果前5分钟都只是：
 
@@ -4468,7 +4530,7 @@ Damage +5%
 
 ---
 
-### 86.3 后期视觉要“强”，但规则仍需可读
+## 86.3 后期视觉要“强”，但规则仍需可读
 
 玩家应该感觉：
 
@@ -4491,7 +4553,7 @@ Damage +5%
 
 ---
 
-### 86.4 VFX层级必须分级
+## 86.4 VFX层级必须分级
 
 最高优先级：
 
@@ -4513,7 +4575,7 @@ Boss危险技能。
 
 ---
 
-### 86.5 XP Pickup需要具有节奏反馈
+## 86.5 XP Pickup需要具有节奏反馈
 
 大量经验被磁吸时：
 
@@ -4532,7 +4594,7 @@ Boss危险技能。
 
 ---
 
-### 86.6 Draft描述必须表达机制变化
+## 86.6 Draft描述必须表达机制变化
 
 不要只显示：
 
@@ -4550,7 +4612,7 @@ Bounce；
 
 ---
 
-### 86.7 Evolution必须是明显Power Spike
+## 86.7 Evolution必须是明显Power Spike
 
 应该通过：
 
@@ -4571,7 +4633,7 @@ Bounce；
 
 ---
 
-### 86.8 玩家死亡必须能理解“为什么突然撑不住了”
+## 86.8 玩家死亡必须能理解“为什么突然撑不住了”
 
 Death Recap应该至少提示：
 
@@ -4588,7 +4650,7 @@ Death Recap应该至少提示：
 
 ---
 
-### 86.9 高密度不等于视觉噪音
+## 86.9 高密度不等于视觉噪音
 
 好的后期体验应该是：
 
@@ -4600,7 +4662,7 @@ Death Recap应该至少提示：
 
 ---
 
-### 86.10 Build应该让玩家产生“这一局就是这个玩法”的身份感
+## 86.10 Build应该让玩家产生“这一局就是这个玩法”的身份感
 
 例如：
 
@@ -4620,47 +4682,47 @@ Death Recap应该至少提示：
 
 ---
 
-## 87. 常见设计失败
+# 87. 常见设计失败
 
 ---
 
-### 87.1 只增加敌人生命，不增加压力结构
+## 87.1 只增加敌人生命，不增加压力结构
 
 后期只是数字变大。
 
 ---
 
-### 87.2 敌人数量很多，但行为完全相同
+## 87.2 敌人数量很多，但行为完全相同
 
 大量单位只是视觉复制。
 
 ---
 
-### 87.3 Spawn直接出现在玩家身边
+## 87.3 Spawn直接出现在玩家身边
 
 死亡没有反应空间。
 
 ---
 
-### 87.4 XP直接自动进入玩家
+## 87.4 XP直接自动进入玩家
 
 移动回收资源这一层空间决策消失。
 
 ---
 
-### 87.5 XP对象没有聚合
+## 87.5 XP对象没有聚合
 
 后期生成数万个Pickup。
 
 ---
 
-### 87.6 所有Upgrade只是百分比数值
+## 87.6 所有Upgrade只是百分比数值
 
 构筑缺乏机制变化。
 
 ---
 
-### 87.7 Ability Slot无限
+## 87.7 Ability Slot无限
 
 玩家最终把所有技能全部拿到。
 
@@ -4668,85 +4730,85 @@ Death Recap应该至少提示：
 
 ---
 
-### 87.8 Evolution过于隐蔽
+## 87.8 Evolution过于隐蔽
 
 玩家必须查外部Wiki才能知道组合。
 
 ---
 
-### 87.9 Evolution条件过于确定
+## 87.9 Evolution条件过于确定
 
 玩家每局机械背固定Build。
 
 ---
 
-### 87.10 自动攻击目标完全随机
+## 87.10 自动攻击目标完全随机
 
 玩家无法利用站位。
 
 ---
 
-### 87.11 AutoCast使用完整敌人扫描
+## 87.11 AutoCast使用完整敌人扫描
 
 后期性能严重下降。
 
 ---
 
-### 87.12 每个Enemy独立使用复杂AI
+## 87.12 每个Enemy独立使用复杂AI
 
 千单位模拟不可扩展。
 
 ---
 
-### 87.13 玩家成长速度低于敌人压力且没有恢复空间
+## 87.13 玩家成长速度低于敌人压力且没有恢复空间
 
 早期一次错误选择导致整局必败。
 
 ---
 
-### 87.14 玩家成长速度远高于压力
+## 87.14 玩家成长速度远高于压力
 
 后半局变成挂机。
 
 ---
 
-### 87.15 防御构筑可以完全AFK通关
+## 87.15 防御构筑可以完全AFK通关
 
 移动失去意义。
 
 ---
 
-### 87.16 纯移动操作也无法避免伤害
+## 87.16 纯移动操作也无法避免伤害
 
 战斗退化为纯数值检查。
 
 ---
 
-### 87.17 Boss只增加生命
+## 87.17 Boss只增加生命
 
 无法检查构筑短板。
 
 ---
 
-### 87.18 特效遮挡危险信息
+## 87.18 特效遮挡危险信息
 
 玩家不是被敌人击败，而是被自己的视觉效果击败。
 
 ---
 
-### 87.19 Damage Number无限生成
+## 87.19 Damage Number无限生成
 
 UI成为主要性能瓶颈。
 
 ---
 
-### 87.20 随机系统共享一个RandomStream
+## 87.20 随机系统共享一个RandomStream
 
 新增一个随机事件导致整个Run不可重放。
 
 ---
 
-## 88. 最小可行原型
+# 88. 最小可行原型
 
 一个能够验证幸存者类核心范式的MVP可以非常小。
 
@@ -4756,7 +4818,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.1 Run长度
+## 88.1 Run长度
 
 第一版：
 
@@ -4770,7 +4832,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.2 玩家
+## 88.2 玩家
 
 只需要：
 
@@ -4789,7 +4851,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.3 Ability
+## 88.3 Ability
 
 建议：
 
@@ -4814,7 +4876,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.4 Enemy
+## 88.4 Enemy
 
 建议：
 
@@ -4837,7 +4899,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.5 Upgrade
+## 88.5 Upgrade
 
 支持：
 
@@ -4852,7 +4914,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.6 Spawn
+## 88.6 Spawn
 
 至少：
 
@@ -4860,7 +4922,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.7 必要基础设施
+## 88.7 必要基础设施
 
 - RunRuntimeState；
 
@@ -4899,7 +4961,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 88.8 必要调试工具
+## 88.8 必要调试工具
 
 - SpawnPressureGraph；
 
@@ -4928,7 +4990,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-## 89. MVP核心验收问题
+# 89. MVP核心验收问题
 
 原型至少必须回答：
 
@@ -4976,7 +5038,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-## 90. 推荐实施顺序
+# 90. 推荐实施顺序
 
 第一阶段：
 
@@ -5082,7 +5144,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-## 91. 架构验收标准
+# 91. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -5163,11 +5225,11 @@ UI成为主要性能瓶颈。
 
 ---
 
-## 92. 可迁移到其他游戏的设计思想
+# 92. 可迁移到其他游戏的设计思想
 
 ---
 
-### 92.1 把玩家操作预算固定，可以让系统复杂度大幅扩张
+## 92.1 把玩家操作预算固定，可以让系统复杂度大幅扩张
 
 幸存者类的重要思想是：
 
@@ -5194,7 +5256,7 @@ UI成为主要性能瓶颈。
 
 ---
 
-### 92.2 把奖励留在世界中，可以把数值奖励变成空间决策
+## 92.2 把奖励留在世界中，可以把数值奖励变成空间决策
 
 Enemy死亡后：
 
@@ -5225,7 +5287,7 @@ RewardClaimOpportunity。
 
 ---
 
-### 92.3 压力和成长可以设计成互相追逐的两条曲线
+## 92.3 压力和成长可以设计成互相追逐的两条曲线
 
 可以迁移到：
 
@@ -5250,7 +5312,7 @@ RewardClaimOpportunity。
 
 ---
 
-### 92.4 Spawn Budget比固定敌人数更容易扩展
+## 92.4 Spawn Budget比固定敌人数更容易扩展
 
 把不同敌人统一映射到：
 
@@ -5281,7 +5343,7 @@ Pressure Cost。
 
 ---
 
-### 92.5 有限随机候选比完全随机和完全自由更容易产生适应性
+## 92.5 有限随机候选比完全随机和完全自由更容易产生适应性
 
 3选1Upgrade本质是：
 
@@ -5302,7 +5364,7 @@ Pressure Cost。
 
 ---
 
-### 92.6 大候选池与有限槽位天然产生构筑
+## 92.6 大候选池与有限槽位天然产生构筑
 
 玩家可能有：
 
@@ -5319,7 +5381,7 @@ Build Identity。
 
 ---
 
-### 92.7 自动系统越复杂，越需要可解释性
+## 92.7 自动系统越复杂，越需要可解释性
 
 玩家没有逐次控制攻击，
 
@@ -5349,7 +5411,7 @@ Build Identity。
 
 ---
 
-### 92.8 大规模群体不一定需要个体级高精度
+## 92.8 大规模群体不一定需要个体级高精度
 
 数千普通敌人的战略职责可能只是：
 
@@ -5365,7 +5427,7 @@ Elite和Boss。
 
 ---
 
-### 92.9 “单位时间处理能力”和“单位时间压力输入”是一组通用吞吐模型
+## 92.9 “单位时间处理能力”和“单位时间压力输入”是一组通用吞吐模型
 
 KillCapacityPerSecond
 
@@ -5392,7 +5454,7 @@ SpawnCostPerSecond。
 
 ---
 
-### 92.10 正反馈系统必须预留恢复窗口
+## 92.10 正反馈系统必须预留恢复窗口
 
 幸存者类天然存在：
 
@@ -5415,9 +5477,9 @@ SpawnCostPerSecond。
 
 ---
 
-## 93. 本次防重记录
+# 93. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **幸存者类 / Horde Survival / Bullet Heaven。**
 
@@ -5440,7 +5502,7 @@ SpawnCostPerSecond。
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家主要持续控制移动，而装备和技能通过统一AutoCast系统自动执行攻击；Horde Spawn Director以运行时间为主要难度轴，不断提高敌人生成预算、敌群密度和敌人结构。敌人死亡后不会直接把经验写入玩家，而是在世界中生成需要主动回收的经验资源，使“击杀收益”重新进入空间风险。经验提交后触发有限随机Upgrade Draft，玩家在技能宽度、技能深度、被动强化和Evolution条件之间构造单局Build。构筑成长提高单位时间Kill Capacity，而系统继续提高Spawn Pressure，使二者持续互相追逐，并最终通过Elite、Boss和终局群潮验证构筑。
 
@@ -5462,7 +5524,7 @@ SpawnCostPerSecond。
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 玩家主要直接控制移动；
 
@@ -5517,7 +5579,7 @@ SpawnCostPerSecond。
 
 ---
 
-### 与仓库现有自走棋的防重边界
+## 与仓库现有自走棋的防重边界
 
 仓库已有 `auto-battler`，其核心是：
 
@@ -5568,7 +5630,7 @@ SpawnCostPerSecond。
 
 ---
 
-### 与仓库现有生存恐怖的防重边界
+## 与仓库现有生存恐怖的防重边界
 
 当前仓库已有 `survival-horror`，其重点是：
 
@@ -5605,7 +5667,7 @@ SpawnCostPerSecond。
 
 ---
 
-### 与仓库现有卡组构筑式 Roguelike 的防重边界
+## 与仓库现有卡组构筑式 Roguelike 的防重边界
 
 卡组构筑式 Roguelike 的核心对象是：
 
@@ -5650,7 +5712,7 @@ Horde Survival：
 
 ---
 
-### 与仓库现有塔防范式的防重边界
+## 与仓库现有塔防范式的防重边界
 
 二者都可能出现：
 
@@ -5682,7 +5744,7 @@ Horde Survival：
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Survivors-like；
 
@@ -5789,7 +5851,7 @@ Horde Survival：
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次幸存者类 / Horde Survival / Bullet Heaven范式内部系统，不应再作为新的独立宏观游戏类型计入 `game-designs` 日报防重集合：
 

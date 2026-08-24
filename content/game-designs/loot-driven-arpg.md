@@ -1,4 +1,57 @@
-## 1. 类型定位
+> Agent 标签：`action-rpg` `buildcraft` `loot`
+
+---
+
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `game-designs` 的路由元数据。当前仓库已经存在 `soulslike-action-commitment-recovery`，即类魂动作角色扮演范式；同时已有多人共斗狩猎、JRPG、怪物收集、卡组构筑 Roguelike、撤离型搜打撤等相邻类型，但当前 `game-designs` 路由索引中没有独立的 `loot-driven-arpg`、`diablo-like`、`looter-arpg` 或“刷宝型动作角色扮演”条目。
+
+因此本期新增类型选择：
+
+**刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like。**
+
+常见名称包括：
+
+- Loot-driven ARPG；
+
+- Diablo-like；
+
+- Loot ARPG；
+
+- Hack and Slash RPG；
+
+- 刷宝 ARPG；
+
+- 暗黑式 ARPG；
+
+- 战利品驱动动作角色扮演。
+
+
+这里讨论的不是普通 RPG 中“敌人会掉装备”的附属系统，也不是类魂游戏中的动作承诺、检查点和死亡回收，更不是多人狩猎中“击败特定大型目标获得制作材料”的狩猎循环，而是一种能够独立支撑完整长期产品的宏观品类。
+
+其最具代表性的设计范式可以概括为：
+
+> 玩家通过高频战斗持续制造大量随机战利品，战利品通过基础物品、物品等级、品质、词缀、特殊效果、套装、传奇机制和打造状态组合成巨大的装备实例空间；玩家不断把掉落物与当前 Build 比较，在即时战斗强度、技能机制、资源循环、防御结构与未来构筑潜力之间做选择。更高强度的 Build 允许玩家进入更高难度、更高怪物密度和更高掉落质量的内容，新的内容又提供更高等级、更稀有或更特化的装备，使整个长期循环围绕“用当前 Build 寻找能够重写下一版 Build 的装备”持续运转。
+
+核心循环可以压缩为：
+
+**进入高密度战斗内容
+→ 快速击杀大量敌人
+→ 战利品生成
+→ 筛选值得关注的掉落
+→ 比较、鉴定、装备、分解或存储
+→ Build属性和机制发生变化
+→ 调整技能、天赋与资源循环
+→ 战斗效率提高
+→ 提升世界难度或进入更高阶副本
+→ 掉落池升级
+→ 定向追逐关键装备与词缀
+→ Build逐渐收敛
+→ 再通过更高难度暴露新的构筑缺口。**
+
+---
+
+# 1. 类型定位
 
 刷宝型 ARPG 通常具备以下核心特征：
 
@@ -58,7 +111,7 @@
 
 ---
 
-## 2. 类型真正的核心对象不是“装备”，而是 Build 搜索空间
+# 2. 类型真正的核心对象不是“装备”，而是 Build 搜索空间
 
 一件装备本身没有绝对价值。
 
@@ -99,7 +152,7 @@
 
 ---
 
-## 3. 核心范式一：ItemDefinition 与 ItemInstance 必须严格分离
+# 3. 核心范式一：ItemDefinition 与 ItemInstance 必须严格分离
 
 静态定义：
 
@@ -115,7 +168,7 @@
 
 ---
 
-## 4. ItemBaseDefinition
+# 4. ItemBaseDefinition
 
 描述：
 
@@ -158,7 +211,7 @@
 
 ---
 
-## 5. ItemInstance
+# 5. ItemInstance
 
 描述：
 
@@ -203,7 +256,7 @@
 
 ---
 
-## 6. 为什么 ItemInstance 是高价值持久资产
+# 6. 为什么 ItemInstance 是高价值持久资产
 
 玩家可能围绕某件装备：
 
@@ -242,7 +295,7 @@
 
 ---
 
-## 7. Item Provenance
+# 7. Item Provenance
 
 建议记录：
 
@@ -280,7 +333,7 @@
 
 ---
 
-## 8. 核心范式二：Loot Generation 必须是正式事务
+# 8. 核心范式二：Loot Generation 必须是正式事务
 
 敌人死亡以后：
 
@@ -305,7 +358,7 @@ EnemyKilled
 
 ---
 
-## 9. LootContext
+# 9. LootContext
 
 建议包含：
 
@@ -338,7 +391,7 @@ EnemyKilled
 
 ---
 
-## 10. LootBudget
+# 10. LootBudget
 
 敌人不一定直接配置：
 
@@ -383,7 +436,7 @@ Budget 30。
 
 ---
 
-## 11. Loot Table 层级
+# 11. Loot Table 层级
 
 可以拆成：
 
@@ -406,7 +459,7 @@ Bow / Dexterity Gear。
 
 ---
 
-## 12. Item Level
+# 12. Item Level
 
 ItemLevel 的作用通常是限制：
 
@@ -427,7 +480,7 @@ ItemLevel 的作用通常是限制：
 
 ---
 
-## 13. ItemLevel 与 CharacterLevel 不应完全等同
+# 13. ItemLevel 与 CharacterLevel 不应完全等同
 
 否则：
 
@@ -443,7 +496,7 @@ ItemLevel 的作用通常是限制：
 
 ---
 
-## 14. Rarity System
+# 14. Rarity System
 
 典型：
 
@@ -492,7 +545,7 @@ Unique：
 
 ---
 
-## 15. 核心范式三：Affix 是装备构筑空间的基本原语
+# 15. 核心范式三：Affix 是装备构筑空间的基本原语
 
 Affix 不只是：
 
@@ -500,7 +553,7 @@ Affix 不只是：
 
 更合理地分为：
 
-#### Generic Stat
+### Generic Stat
 
 - Strength；
 
@@ -509,7 +562,7 @@ Affix 不只是：
 - CriticalChance。
 
 
-#### Skill Modifier
+### Skill Modifier
 
 - FireballDamage；
 
@@ -518,7 +571,7 @@ Affix 不只是：
 - SummonCount。
 
 
-#### Resource Modifier
+### Resource Modifier
 
 - ManaCost；
 
@@ -527,7 +580,7 @@ Affix 不只是：
 - Cooldown。
 
 
-#### Conditional Modifier
+### Conditional Modifier
 
 - DamageAgainstBurning；
 
@@ -536,7 +589,7 @@ Affix 不只是：
 - CriticalAfterDash。
 
 
-#### Mechanic Modifier
+### Mechanic Modifier
 
 - ProjectilePierce；
 
@@ -547,7 +600,7 @@ Affix 不只是：
 
 ---
 
-## 16. AffixDefinition
+# 16. AffixDefinition
 
 建议字段：
 
@@ -576,7 +629,7 @@ Affix 不只是：
 
 ---
 
-## 17. AffixTierDefinition
+# 17. AffixTierDefinition
 
 建议字段：
 
@@ -611,7 +664,7 @@ T3：
 
 ---
 
-## 18. Affix Pool 必须支持排他
+# 18. Affix Pool 必须支持排他
 
 一件武器不能同时生成：
 
@@ -633,7 +686,7 @@ T3：
 
 ---
 
-## 19. Affix Roll 流程
+# 19. Affix Roll 流程
 
 ItemBase确定
 → 获取AllowedAffixPool
@@ -648,7 +701,7 @@ ItemBase确定
 
 ---
 
-## 20. 不建议所有装备独立从完整词缀库抽取
+# 20. 不建议所有装备独立从完整词缀库抽取
 
 否则：
 
@@ -674,7 +727,7 @@ ItemBase确定
 
 ---
 
-## 21. 核心范式四：随机掉落必须拥有“收敛工具”
+# 21. 核心范式四：随机掉落必须拥有“收敛工具”
 
 纯随机的长期问题：
 
@@ -706,7 +759,7 @@ ItemBase确定
 
 ---
 
-## 22. 随机收敛工具
+# 22. 随机收敛工具
 
 可以包括：
 
@@ -741,7 +794,7 @@ ItemBase确定
 
 ---
 
-## 23. Target Farming
+# 23. Target Farming
 
 不同活动提供不同掉落偏向。
 
@@ -773,7 +826,7 @@ Fire Build词缀。
 
 ---
 
-## 24. LootSourceProfile
+# 24. LootSourceProfile
 
 建议字段：
 
@@ -798,7 +851,7 @@ Fire Build词缀。
 
 ---
 
-## 25. Pity System
+# 25. Pity System
 
 Pity不一定直接：
 
@@ -825,7 +878,7 @@ Pity不一定直接：
 
 ---
 
-## 26. PityState
+# 26. PityState
 
 建议包含：
 
@@ -846,7 +899,7 @@ Pity不一定直接：
 
 ---
 
-## 27. Crafting 在刷宝 ARPG 中的职责
+# 27. Crafting 在刷宝 ARPG 中的职责
 
 Crafting不应该完全替代掉落。
 
@@ -870,7 +923,7 @@ Crafting负责：
 
 ---
 
-## 28. Enchant / Reroll
+# 28. Enchant / Reroll
 
 典型：
 
@@ -882,7 +935,7 @@ Crafting负责：
 
 ---
 
-## 29. EnchantTransaction
+# 29. EnchantTransaction
 
 验证装备可修改
 → 锁定ItemInstance
@@ -897,7 +950,7 @@ Crafting负责：
 
 ---
 
-## 30. 为什么 Candidate Roll 需要冻结
+# 30. 为什么 Candidate Roll 需要冻结
 
 玩家点重铸：
 
@@ -913,7 +966,7 @@ Crafting负责：
 
 ---
 
-## 31. Upgrade System
+# 31. Upgrade System
 
 装备升级可以提高：
 
@@ -938,7 +991,7 @@ Crafting负责：
 
 ---
 
-## 32. 核心范式五：装备评估必须是 Build Contextual
+# 32. 核心范式五：装备评估必须是 Build Contextual
 
 一个简单绿色箭头：
 
@@ -968,7 +1021,7 @@ Build分析
 
 ---
 
-## 33. ItemComparisonContext
+# 33. ItemComparisonContext
 
 建议包含：
 
@@ -989,7 +1042,7 @@ Build分析
 
 ---
 
-## 34. 基础UI可以显示
+# 34. 基础UI可以显示
 
 - Damage变化；
 
@@ -1013,7 +1066,7 @@ Build分析
 
 ---
 
-## 35. 不建议游戏直接告诉“这个一定更好”
+# 35. 不建议游戏直接告诉“这个一定更好”
 
 因为：
 
@@ -1027,7 +1080,7 @@ Build分析
 
 ---
 
-## 36. CharacterStatSystem
+# 36. CharacterStatSystem
 
 刷宝型ARPG最容易失控的系统之一就是：
 
@@ -1039,7 +1092,7 @@ Build分析
 
 ---
 
-## 37. StatSource
+# 37. StatSource
 
 来源可以包括：
 
@@ -1066,7 +1119,7 @@ Build分析
 
 ---
 
-## 38. Modifier类型
+# 38. Modifier类型
 
 至少区分：
 
@@ -1085,7 +1138,7 @@ Build分析
 
 ---
 
-## 39. 乘区必须稳定
+# 39. 乘区必须稳定
 
 例如：
 
@@ -1104,7 +1157,7 @@ Build平衡很快失控。
 
 ---
 
-## 40. Stat Breakdown
+# 40. Stat Breakdown
 
 调试器和高级UI应能够回答：
 
@@ -1120,7 +1173,7 @@ Buff 7。
 
 ---
 
-## 41. Derived Stat
+# 41. Derived Stat
 
 例如：
 
@@ -1149,7 +1202,7 @@ Health
 
 ---
 
-## 42. 核心范式六：Skill 与 Gear 必须形成双向构筑
+# 42. 核心范式六：Skill 与 Gear 必须形成双向构筑
 
 普通 RPG：
 
@@ -1193,7 +1246,7 @@ Skill选择影响：
 
 ---
 
-## 43. SkillDefinition
+# 43. SkillDefinition
 
 建议字段：
 
@@ -1218,7 +1271,7 @@ Skill选择影响：
 
 ---
 
-## 44. LegendaryPowerDefinition
+# 44. LegendaryPowerDefinition
 
 建议字段：
 
@@ -1241,7 +1294,7 @@ Skill选择影响：
 
 ---
 
-## 45. Legendary Power 适合修改规则而不只是数值
+# 45. Legendary Power 适合修改规则而不只是数值
 
 例如：
 
@@ -1261,7 +1314,7 @@ Build身份。
 
 ---
 
-## 46. Unique Item
+# 46. Unique Item
 
 Unique与普通Legendary可以区别：
 
@@ -1291,7 +1344,7 @@ Unique的价值在于：
 
 ---
 
-## 47. Set Item
+# 47. Set Item
 
 套装可以：
 
@@ -1315,7 +1368,7 @@ Unique的价值在于：
 
 ---
 
-## 48. BuildState
+# 48. BuildState
 
 建议维护：
 
@@ -1342,7 +1395,7 @@ Unique的价值在于：
 
 ---
 
-## 49. BuildTags
+# 49. BuildTags
 
 例如：
 
@@ -1380,7 +1433,7 @@ Unique的价值在于：
 
 ---
 
-## 50. 核心范式七：资源循环决定 Build 是否真正“跑起来”
+# 50. 核心范式七：资源循环决定 Build 是否真正“跑起来”
 
 许多Build理论伤害很高，
 
@@ -1410,7 +1463,7 @@ Mana。
 
 ---
 
-## 51. ResourceLoopState
+# 51. ResourceLoopState
 
 建议包含：
 
@@ -1435,7 +1488,7 @@ Mana。
 
 ---
 
-## 52. Sustain
+# 52. Sustain
 
 成熟Build往往需要解决：
 
@@ -1458,7 +1511,7 @@ Mana。
 
 ---
 
-## 53. Build Analyzer
+# 53. Build Analyzer
 
 建议输出：
 
@@ -1489,7 +1542,7 @@ Mana。
 
 ---
 
-## 54. 核心范式八：敌人密度是 Build 价值的一部分
+# 54. 核心范式八：敌人密度是 Build 价值的一部分
 
 Loot ARPG通常不是：
 
@@ -1518,7 +1571,7 @@ OnKill
 
 ---
 
-## 55. EncounterDensityProfile
+# 55. EncounterDensityProfile
 
 建议字段：
 
@@ -1539,7 +1592,7 @@ OnKill
 
 ---
 
-## 56. Pack
+# 56. Pack
 
 敌人通常以：
 
@@ -1556,7 +1609,7 @@ OnKill
 
 ---
 
-## 57. Elite Pack
+# 57. Elite Pack
 
 Elite可以拥有：
 
@@ -1581,7 +1634,7 @@ Affix / Modifier。
 
 ---
 
-## 58. EnemyModifierDefinition
+# 58. EnemyModifierDefinition
 
 建议字段：
 
@@ -1604,7 +1657,7 @@ Affix / Modifier。
 
 ---
 
-## 59. Enemy Modifier 同样需要排他
+# 59. Enemy Modifier 同样需要排他
 
 例如：
 
@@ -1620,7 +1673,7 @@ ModifierGroup
 
 ---
 
-## 60. World Tier / Difficulty Tier
+# 60. World Tier / Difficulty Tier
 
 故事完成后，
 
@@ -1634,7 +1687,7 @@ ModifierGroup
 
 ---
 
-## 61. DifficultyTierDefinition
+# 61. DifficultyTierDefinition
 
 建议字段：
 
@@ -1663,7 +1716,7 @@ ModifierGroup
 
 ---
 
-## 62. Difficulty Tier 的核心交换
+# 62. Difficulty Tier 的核心交换
 
 更高难度：
 
@@ -1681,7 +1734,7 @@ ModifierGroup
 
 ---
 
-## 63. 高Tier不是越早进入越好
+# 63. 高Tier不是越早进入越好
 
 如果玩家进入高Tier：
 
@@ -1703,7 +1756,7 @@ ModifierGroup
 
 ---
 
-## 64. Loot Per Hour / Loot Per Run
+# 64. Loot Per Hour / Loot Per Run
 
 后期玩家的真实优化目标经常变成：
 
@@ -1724,7 +1777,7 @@ ModifierGroup
 
 ---
 
-## 65. ActivityDefinition
+# 65. ActivityDefinition
 
 终局活动可以包括：
 
@@ -1747,7 +1800,7 @@ ModifierGroup
 
 ---
 
-## 66. Activity需要拥有独立奖励结构
+# 66. Activity需要拥有独立奖励结构
 
 否则玩家会找到：
 
@@ -1776,7 +1829,7 @@ ModifierGroup
 
 ---
 
-## 67. DungeonInstance
+# 67. DungeonInstance
 
 建议包含：
 
@@ -1805,7 +1858,7 @@ ModifierGroup
 
 ---
 
-## 68. 地下城最好是“重放空间”，而不是一次性剧情场景
+# 68. 地下城最好是“重放空间”，而不是一次性剧情场景
 
 终局内容需要：
 
@@ -1834,7 +1887,7 @@ Leaderboard；
 
 ---
 
-## 69. Dungeon Modifier
+# 69. Dungeon Modifier
 
 例如：
 
@@ -1857,7 +1910,7 @@ Leaderboard；
 
 ---
 
-## 70. Affix Dungeon
+# 70. Affix Dungeon
 
 高层内容的随机Modifier不能生成：
 
@@ -1881,7 +1934,7 @@ Resistance。
 
 ---
 
-## 71. Boss Farming
+# 71. Boss Farming
 
 Boss是非常适合定向掉落的来源。
 
@@ -1903,7 +1956,7 @@ Boss是非常适合定向掉落的来源。
 
 ---
 
-## 72. Boss Loot Transaction
+# 72. Boss Loot Transaction
 
 Boss死亡
 → 确认参与资格
@@ -1916,19 +1969,19 @@ Boss死亡
 
 ---
 
-## 73. Personal Loot 与 Shared Loot
+# 73. Personal Loot 与 Shared Loot
 
 多人模式需要明确：
 
-#### Personal Loot
+### Personal Loot
 
 每个玩家独立掉落。
 
-#### Shared Loot
+### Shared Loot
 
 世界生成，谁捡到是谁的。
 
-#### Hybrid
+### Hybrid
 
 部分共享。
 
@@ -1938,7 +1991,7 @@ Boss死亡
 
 ---
 
-## 74. Loot Ownership Window
+# 74. Loot Ownership Window
 
 如果Personal Loot生成在世界：
 
@@ -1954,7 +2007,7 @@ ExclusivePickupDuration。
 
 ---
 
-## 75. Multiplayer Scaling
+# 75. Multiplayer Scaling
 
 队伍人数增加：
 
@@ -1988,7 +2041,7 @@ HP × PlayerCount。
 
 ---
 
-## 76. Party Loot规则必须稳定
+# 76. Party Loot规则必须稳定
 
 例如玩家在：
 
@@ -2010,7 +2063,7 @@ ParticipationRule。
 
 ---
 
-## 77. ContributionState
+# 77. ContributionState
 
 可以记录：
 
@@ -2031,7 +2084,7 @@ ParticipationRule。
 
 ---
 
-## 78. 核心范式九：拾取本身必须被过滤，否则高掉落频率会摧毁体验
+# 78. 核心范式九：拾取本身必须被过滤，否则高掉落频率会摧毁体验
 
 刷宝ARPG的一个天然问题：
 
@@ -2055,7 +2108,7 @@ ParticipationRule。
 
 ---
 
-## 79. LootFilterDefinition
+# 79. LootFilterDefinition
 
 建议支持条件：
 
@@ -2093,7 +2146,7 @@ ParticipationRule。
 
 ---
 
-## 80. LootFilter 不应改变实际掉落
+# 80. LootFilter 不应改变实际掉落
 
 它只是：
 
@@ -2109,7 +2162,7 @@ Visibility Projection。
 
 ---
 
-## 81. Auto Salvage
+# 81. Auto Salvage
 
 部分模式可以：
 
@@ -2123,7 +2176,7 @@ Visibility Projection。
 
 ---
 
-## 82. Auto Salvage 应在 LootGeneration 后明确执行
+# 82. Auto Salvage 应在 LootGeneration 后明确执行
 
 例如：
 
@@ -2139,7 +2192,7 @@ LootLedger。
 
 ---
 
-## 83. Inventory
+# 83. Inventory
 
 建议包含：
 
@@ -2158,7 +2211,7 @@ LootLedger。
 
 ---
 
-## 84. Stash
+# 84. Stash
 
 长期仓库是刷宝型游戏的核心基础设施。
 
@@ -2175,7 +2228,7 @@ LootLedger。
 
 ---
 
-## 85. Stash设计如果失败，会直接压垮终局体验
+# 85. Stash设计如果失败，会直接压垮终局体验
 
 至少需要：
 
@@ -2200,7 +2253,7 @@ LootLedger。
 
 ---
 
-## 86. Item Lock
+# 86. Item Lock
 
 重要装备必须能够：
 
@@ -2212,7 +2265,7 @@ LootLedger。
 
 ---
 
-## 87. SalvageTransaction
+# 87. SalvageTransaction
 
 选择Item
 → 检查Lock
@@ -2226,7 +2279,7 @@ LootLedger。
 
 ---
 
-## 88. Vendor System
+# 88. Vendor System
 
 卖商店与分解可以形成：
 
@@ -2246,7 +2299,7 @@ LootLedger。
 
 ---
 
-## 89. Currency体系需要防止过多
+# 89. Currency体系需要防止过多
 
 刷宝游戏很容易积累：
 
@@ -2277,7 +2330,7 @@ LootLedger。
 
 ---
 
-## 90. CurrencyDefinition
+# 90. CurrencyDefinition
 
 建议字段：
 
@@ -2298,7 +2351,7 @@ LootLedger。
 
 ---
 
-## 91. 经济Sink
+# 91. 经济Sink
 
 必须有持续消耗：
 
@@ -2319,7 +2372,7 @@ LootLedger。
 
 ---
 
-## 92. Repair
+# 92. Repair
 
 耐久如果存在，
 
@@ -2337,7 +2390,7 @@ LootLedger。
 
 ---
 
-## 93. Respec
+# 93. Respec
 
 Build驱动游戏必须允许一定程度：
 
@@ -2351,7 +2404,7 @@ Build驱动游戏必须允许一定程度：
 
 ---
 
-## 94. RespecCost
+# 94. RespecCost
 
 可以：
 
@@ -2373,7 +2426,7 @@ Build驱动游戏必须允许一定程度：
 
 ---
 
-## 95. Loadout
+# 95. Loadout
 
 成熟系统建议支持：
 
@@ -2402,7 +2455,7 @@ Build Preset。
 
 ---
 
-## 96. Loadout价值
+# 96. Loadout价值
 
 刷宝游戏最终会鼓励：
 
@@ -2422,7 +2475,7 @@ AoE。
 
 ---
 
-## 97. Talent Tree / Passive Tree
+# 97. Talent Tree / Passive Tree
 
 Talent的作用是：
 
@@ -2432,7 +2485,7 @@ Talent的作用是：
 
 ---
 
-## 98. TalentState
+# 98. TalentState
 
 建议包含：
 
@@ -2449,7 +2502,7 @@ Talent的作用是：
 
 ---
 
-## 99. Gear 与 Talent应该存在互补
+# 99. Gear 与 Talent应该存在互补
 
 如果装备决定100% Build：
 
@@ -2471,7 +2524,7 @@ Loot提供：
 
 ---
 
-## 100. Paragon / Post-Cap Progression
+# 100. Paragon / Post-Cap Progression
 
 满级后仍然需要：
 
@@ -2504,7 +2557,7 @@ Loot提供：
 
 ---
 
-## 101. Season
+# 101. Season
 
 刷宝 ARPG很适合赛季。
 
@@ -2529,7 +2582,7 @@ Build搜索过程。
 
 ---
 
-## 102. Seasonal Character 与 Eternal Character
+# 102. Seasonal Character 与 Eternal Character
 
 建议严格区分：
 
@@ -2547,7 +2600,7 @@ PermanentRealm。
 
 ---
 
-## 103. 核心范式十：终局必须持续暴露“下一个缺口”
+# 103. 核心范式十：终局必须持续暴露“下一个缺口”
 
 好的终局不是：
 
@@ -2576,7 +2629,7 @@ Boss快。
 
 ---
 
-## 104. Endgame Axis
+# 104. Endgame Axis
 
 可以存在多个独立轴：
 
@@ -2601,7 +2654,7 @@ Boss快。
 
 ---
 
-## 105. 内容不应只检查DPS
+# 105. 内容不应只检查DPS
 
 如果所有高层内容都是：
 
@@ -2632,7 +2685,7 @@ Build最终只剩：
 
 ---
 
-## 106. Time-to-Kill
+# 106. Time-to-Kill
 
 重要指标：
 
@@ -2650,7 +2703,7 @@ Boss TTK。
 
 ---
 
-## 107. Combat Density
+# 107. Combat Density
 
 Loot ARPG通常需要：
 
@@ -2670,7 +2723,7 @@ ResourceOnKill
 
 ---
 
-## 108. On Kill机制需要统一事件
+# 108. On Kill机制需要统一事件
 
 EnemyKilled
 → OnKillTriggerSystem
@@ -2681,7 +2734,7 @@ EnemyKilled
 
 ---
 
-## 109. TriggerDefinition
+# 109. TriggerDefinition
 
 建议字段：
 
@@ -2702,7 +2755,7 @@ EnemyKilled
 
 ---
 
-## 110. Proc Chance
+# 110. Proc Chance
 
 如果多个装备同时拥有：
 
@@ -2719,7 +2772,7 @@ OnHit 20%触发，
 
 ---
 
-## 111. Proc Coefficient
+# 111. Proc Coefficient
 
 高速多段技能容易：
 
@@ -2743,7 +2796,7 @@ ProcCoefficient。
 
 ---
 
-## 112. 这允许技能攻击频率与触发强度解耦
+# 112. 这允许技能攻击频率与触发强度解耦
 
 否则多段技能天然支配：
 
@@ -2751,7 +2804,7 @@ ProcCoefficient。
 
 ---
 
-## 113. Cooldown Reduction
+# 113. Cooldown Reduction
 
 CDR必须有：
 
@@ -2769,7 +2822,7 @@ CDR必须有：
 
 ---
 
-## 114. Attack Speed / Cast Speed同理
+# 114. Attack Speed / Cast Speed同理
 
 大量乘法成长可能导致：
 
@@ -2783,7 +2836,7 @@ CDR必须有：
 
 ---
 
-## 115. Build复杂度与性能预算必须联动
+# 115. Build复杂度与性能预算必须联动
 
 例如传奇效果：
 
@@ -2809,7 +2862,7 @@ CDR必须有：
 
 ---
 
-## 116. Item Affix不能只由设计平衡，还要进行组合压力测试
+# 116. Item Affix不能只由设计平衡，还要进行组合压力测试
 
 自动生成极端：
 
@@ -2835,7 +2888,7 @@ AttackSpeed
 
 ---
 
-## 117. Trigger Loop Guard
+# 117. Trigger Loop Guard
 
 装备效果：
 
@@ -2856,7 +2909,7 @@ B又触发A。
 
 ---
 
-## 118. 示例
+# 118. 示例
 
 Legendary A：
 
@@ -2884,7 +2937,7 @@ DirectSkillDamage。
 
 ---
 
-## 119. Effect Tagging
+# 119. Effect Tagging
 
 DamageContext建议包含：
 
@@ -2907,7 +2960,7 @@ DamageContext建议包含：
 
 ---
 
-## 120. Damage Context
+# 120. Damage Context
 
 建议字段：
 
@@ -2938,7 +2991,7 @@ DamageContext建议包含：
 
 ---
 
-## 121. Snapshot 与 Dynamic Scaling
+# 121. Snapshot 与 Dynamic Scaling
 
 DoT开始时：
 
@@ -2948,11 +3001,11 @@ DoT开始时：
 
 需要明确：
 
-#### Snapshot
+### Snapshot
 
 施放时锁定属性。
 
-#### Dynamic
+### Dynamic
 
 持续读取当前属性。
 
@@ -2960,7 +3013,7 @@ DoT开始时：
 
 ---
 
-## 122. Buff System
+# 122. Buff System
 
 Build中大量Buff来自：
 
@@ -2979,7 +3032,7 @@ BuffInstance。
 
 ---
 
-## 123. BuffInstance
+# 123. BuffInstance
 
 建议字段：
 
@@ -3004,7 +3057,7 @@ BuffInstance。
 
 ---
 
-## 124. Buff Stack Policy
+# 124. Buff Stack Policy
 
 可以：
 
@@ -3021,7 +3074,7 @@ BuffInstance。
 
 ---
 
-## 125. Combat Snapshot
+# 125. Combat Snapshot
 
 某些战斗计算可以：
 
@@ -3037,7 +3090,7 @@ BuffInstance。
 
 ---
 
-## 126. Item Drop视觉与Loot权威状态分离
+# 126. Item Drop视觉与Loot权威状态分离
 
 WorldDropVisual
 
@@ -3056,7 +3109,7 @@ WorldDropVisual
 
 ---
 
-## 127. WorldLootState
+# 127. WorldLootState
 
 建议包含：
 
@@ -3077,7 +3130,7 @@ WorldDropVisual
 
 ---
 
-## 128. PickupTransaction
+# 128. PickupTransaction
 
 玩家请求拾取
 → 验证距离
@@ -3095,7 +3148,7 @@ WorldDropVisual
 
 ---
 
-## 129. Inventory满
+# 129. Inventory满
 
 可以：
 
@@ -3111,7 +3164,7 @@ Item消失。
 
 ---
 
-## 130. Town / Safe Hub
+# 130. Town / Safe Hub
 
 刷宝型ARPG通常存在：
 
@@ -3140,7 +3193,7 @@ Hub是：
 
 ---
 
-## 131. Run / Activity Loop
+# 131. Run / Activity Loop
 
 成熟结构：
 
@@ -3160,7 +3213,7 @@ Combat Laboratory Loop。
 
 ---
 
-## 132. Town Portal
+# 132. Town Portal
 
 允许玩家：
 
@@ -3184,7 +3237,7 @@ Timed Activity。
 
 ---
 
-## 133. Death
+# 133. Death
 
 死亡惩罚可以：
 
@@ -3209,7 +3262,7 @@ Extraction或Hardcore Survival。
 
 ---
 
-## 134. Hardcore Mode
+# 134. Hardcore Mode
 
 永久角色死亡可以作为特殊模式。
 
@@ -3217,7 +3270,7 @@ Extraction或Hardcore Survival。
 
 ---
 
-## 135. Death Recovery
+# 135. Death Recovery
 
 死亡后：
 
@@ -3231,7 +3284,7 @@ Extraction或Hardcore Survival。
 
 ---
 
-## 136. Activity FailureState
+# 136. Activity FailureState
 
 建议：
 
@@ -3248,7 +3301,7 @@ Extraction或Hardcore Survival。
 
 ---
 
-## 137. Dungeon Key / Entry Resource
+# 137. Dungeon Key / Entry Resource
 
 高价值内容可以需要：
 
@@ -3265,7 +3318,7 @@ Key本身也是Loot。
 
 ---
 
-## 138. 但Entry Cost过高会抑制实验
+# 138. 但Entry Cost过高会抑制实验
 
 如果玩家每次测试新Build：
 
@@ -3279,7 +3332,7 @@ Key本身也是Loot。
 
 ---
 
-## 139. Build Test Dummy
+# 139. Build Test Dummy
 
 训练木桩或测试场非常重要。
 
@@ -3302,7 +3355,7 @@ Key本身也是Loot。
 
 ---
 
-## 140. Combat Log
+# 140. Combat Log
 
 高级模式应支持：
 
@@ -3320,7 +3373,7 @@ Death Cause。
 
 ---
 
-## 141. Loot Telemetry
+# 141. Loot Telemetry
 
 对刷宝游戏极其重要。
 
@@ -3347,7 +3400,7 @@ Death Cause。
 
 ---
 
-## 142. 一个装备掉落但99.9%直接分解说明什么
+# 142. 一个装备掉落但99.9%直接分解说明什么
 
 可能：
 
@@ -3366,7 +3419,7 @@ Death Cause。
 
 ---
 
-## 143. Upgrade Funnel
+# 143. Upgrade Funnel
 
 统计：
 
@@ -3383,7 +3436,7 @@ Dropped
 
 ---
 
-## 144. Unique Usage Rate
+# 144. Unique Usage Rate
 
 某Unique掉落很多，
 
@@ -3399,7 +3452,7 @@ Build前置过高。
 
 ---
 
-## 145. Build Diversity
+# 145. Build Diversity
 
 监控：
 
@@ -3423,7 +3476,7 @@ Talent。
 
 ---
 
-## 146. 不应该单纯追求所有Build 10%使用率
+# 146. 不应该单纯追求所有Build 10%使用率
 
 Build自然会有Meta。
 
@@ -3435,7 +3488,7 @@ Build自然会有Meta。
 
 ---
 
-## 147. Power Creep
+# 147. Power Creep
 
 长期新增Season和Item后：
 
@@ -3455,7 +3508,7 @@ Build自然会有Meta。
 
 ---
 
-## 148. Content Version
+# 148. Content Version
 
 长期在线ARPG必须：
 
@@ -3474,7 +3527,7 @@ Build自然会有Meta。
 
 ---
 
-## 149. Legacy Item
+# 149. Legacy Item
 
 Balance更新后：
 
@@ -3492,7 +3545,7 @@ Balance更新后：
 
 ---
 
-## 150. 玩家资产迁移是高风险操作
+# 150. 玩家资产迁移是高风险操作
 
 装备拥有：
 
@@ -3515,7 +3568,7 @@ Migration失败可能：
 
 ---
 
-## 151. 完整事件与执行流程示例
+# 151. 完整事件与执行流程示例
 
 以下以：
 
@@ -3525,7 +3578,7 @@ Migration失败可能：
 
 ---
 
-### 151.1 当前Build
+## 151.1 当前Build
 
 核心技能：
 
@@ -3552,7 +3605,7 @@ Boss：
 
 ---
 
-### 151.2 玩家目标
+## 151.2 玩家目标
 
 缺少Legendary Power：
 
@@ -3566,7 +3619,7 @@ IceLance首次Crit后：
 
 ---
 
-### 151.3 Target Farming
+## 151.3 Target Farming
 
 LootUI显示：
 
@@ -3586,7 +3639,7 @@ Tier 12。
 
 ---
 
-### 151.4 Dungeon创建
+## 151.4 Dungeon创建
 
 系统：
 
@@ -3607,7 +3660,7 @@ Tier 12。
 
 ---
 
-### 151.5 第一组Enemy Pack
+## 151.5 第一组Enemy Pack
 
 10普通敌人
 + 1Elite。
@@ -3618,7 +3671,7 @@ OnFreezeExplosion发生连锁。
 
 ---
 
-### 151.6 Elite掉落
+## 151.6 Elite掉落
 
 LootSystem创建：
 
@@ -3632,7 +3685,7 @@ Rare Gloves。
 
 ---
 
-### 151.7 Item Comparison
+## 151.7 Item Comparison
 
 当前手套：
 
@@ -3656,7 +3709,7 @@ Rare Gloves。
 
 ---
 
-### 151.8 第二个Elite Pack
+## 151.8 第二个Elite Pack
 
 出现：
 
@@ -3672,7 +3725,7 @@ Suppressor Modifier。
 
 ---
 
-### 151.9 Boss战
+## 151.9 Boss战
 
 Boss高生命。
 
@@ -3686,7 +3739,7 @@ IceLance单体输出仍然不足。
 
 ---
 
-### 151.10 Boss LootContext
+## 151.10 Boss LootContext
 
 Boss拥有：
 
@@ -3700,7 +3753,7 @@ PityState：
 
 ---
 
-### 151.11 传奇掉落
+## 151.11 传奇掉落
 
 系统生成：
 
@@ -3712,7 +3765,7 @@ Fracturing Lance。
 
 ---
 
-### 151.12 Affix生成
+## 151.12 Affix生成
 
 同时随机到：
 
@@ -3727,7 +3780,7 @@ Fracturing Lance。
 
 ---
 
-### 151.13 玩家回城
+## 151.13 玩家回城
 
 装备本身：
 
@@ -3737,7 +3790,7 @@ Fracturing Lance。
 
 ---
 
-### 151.14 Enchant
+## 151.14 Enchant
 
 玩家选择：
 
@@ -3758,7 +3811,7 @@ Fire Affix
 
 ---
 
-### 151.15 玩家选择Mana Cost Reduction
+## 151.15 玩家选择Mana Cost Reduction
 
 原因：
 
@@ -3770,7 +3823,7 @@ Resource压力更大。
 
 ---
 
-### 151.16 装备新武器
+## 151.16 装备新武器
 
 BuildSystem重算。
 
@@ -3778,7 +3831,7 @@ IceLance行为改变。
 
 ---
 
-### 151.17 测试木桩
+## 151.17 测试木桩
 
 SingleTarget DPS：
 
@@ -3790,7 +3843,7 @@ Mana Sustain：
 
 ---
 
-### 151.18 实战测试
+## 151.18 实战测试
 
 进入Tier 13。
 
@@ -3802,7 +3855,7 @@ Mana Sustain：
 
 ---
 
-### 151.19 新问题出现
+## 151.19 新问题出现
 
 大量次级Projectile导致：
 
@@ -3816,7 +3869,7 @@ Build输出很强，
 
 ---
 
-### 151.20 Trigger System
+## 151.20 Trigger System
 
 由于Secondary IceLance带：
 
@@ -3832,7 +3885,7 @@ Build输出很强，
 
 ---
 
-### 151.21 Tier 13 Boss
+## 151.21 Tier 13 Boss
 
 DPS足够。
 
@@ -3846,7 +3899,7 @@ DPS足够。
 
 ---
 
-### 151.22 下一目标改变
+## 151.22 下一目标改变
 
 此前：
 
@@ -3866,7 +3919,7 @@ Chest Armor。
 
 ---
 
-### 151.23 完整循环
+## 151.23 完整循环
 
 发现Build缺口
 → 确定目标装备
@@ -3887,9 +3940,9 @@ Chest Armor。
 
 ---
 
-## 152. 模块通信设计
+# 152. 模块通信设计
 
-### 152.1 Commands
+## 152.1 Commands
 
 典型：
 
@@ -3924,7 +3977,7 @@ Chest Armor。
 
 ---
 
-### 152.2 Queries
+## 152.2 Queries
 
 适用于：
 
@@ -3958,7 +4011,7 @@ Query不能：
 
 ---
 
-### 152.3 Domain Events
+## 152.3 Domain Events
 
 包括：
 
@@ -3999,7 +4052,7 @@ Query不能：
 
 ---
 
-### 152.4 Presentation Events
+## 152.4 Presentation Events
 
 包括：
 
@@ -4033,7 +4086,7 @@ Query不能：
 
 ---
 
-## 153. 状态所有权
+# 153. 状态所有权
 
 推荐：
 
@@ -4087,7 +4140,7 @@ Query不能：
 
 ---
 
-## 154. Item Ownership
+# 154. Item Ownership
 
 Item任意时刻只能属于：
 
@@ -4110,7 +4163,7 @@ Item任意时刻只能属于：
 
 ---
 
-## 155. ItemOwnershipAudit
+# 155. ItemOwnershipAudit
 
 必须能够检测：
 
@@ -4128,7 +4181,7 @@ CharacterInventory。
 
 ---
 
-## 156. Trade
+# 156. Trade
 
 如果支持玩家交易，
 
@@ -4136,7 +4189,7 @@ CharacterInventory。
 
 ---
 
-## 157. TradeTransaction
+# 157. TradeTransaction
 
 双方锁定Item
 → 创建Escrow
@@ -4148,7 +4201,7 @@ CharacterInventory。
 
 ---
 
-## 158. 绑定规则
+# 158. 绑定规则
 
 可以：
 
@@ -4167,7 +4220,7 @@ CharacterInventory。
 
 ---
 
-## 159. 拍卖行属于另一个巨大经济系统
+# 159. 拍卖行属于另一个巨大经济系统
 
 如果存在公开交易：
 
@@ -4185,11 +4238,11 @@ Loot、DropRate、Bot、防通胀等设计。
 
 ---
 
-## 160. 失败隔离
+# 160. 失败隔离
 
 ---
 
-### 160.1 Loot生成失败
+## 160.1 Loot生成失败
 
 某Affix Pool没有合法候选：
 
@@ -4207,7 +4260,7 @@ LootGenerationError。
 
 ---
 
-### 160.2 Item生成部分完成
+## 160.2 Item生成部分完成
 
 ItemBase生成，
 
@@ -4219,7 +4272,7 @@ ItemInstance不能进入世界。
 
 ---
 
-### 160.3 Pickup重复
+## 160.3 Pickup重复
 
 WorldLootEntity通过：
 
@@ -4229,7 +4282,7 @@ CAS / Lock
 
 ---
 
-### 160.4 Craft失败
+## 160.4 Craft失败
 
 Enchant已经扣Currency，
 
@@ -4241,7 +4294,7 @@ Enchant已经扣Currency，
 
 ---
 
-### 160.5 ItemVersion冲突
+## 160.5 ItemVersion冲突
 
 玩家同时：
 
@@ -4261,7 +4314,7 @@ ItemVersion。
 
 ---
 
-### 160.6 Build重算失败
+## 160.6 Build重算失败
 
 新装备已提交，
 
@@ -4277,7 +4330,7 @@ BuildDerivedState可以：
 
 ---
 
-### 160.7 Pity写入失败
+## 160.7 Pity写入失败
 
 Boss已经掉目标Item。
 
@@ -4291,7 +4344,7 @@ Pity没有Reset。
 
 ---
 
-### 160.8 Salvage重复
+## 160.8 Salvage重复
 
 同一Item只能：
 
@@ -4303,7 +4356,7 @@ Item进入Consumed状态后：
 
 ---
 
-### 160.9 Trigger无限循环
+## 160.9 Trigger无限循环
 
 使用：
 
@@ -4320,7 +4373,7 @@ RootEventId
 
 ---
 
-### 160.10 Dungeon奖励重复
+## 160.10 Dungeon奖励重复
 
 DungeonCompletionId
 
@@ -4336,7 +4389,7 @@ DungeonCompletionId
 
 ---
 
-### 160.11 Season迁移失败
+## 160.11 Season迁移失败
 
 Seasonal角色迁移到Permanent：
 
@@ -4354,11 +4407,11 @@ Snapshot
 
 ---
 
-## 161. 调试与可观测性
+# 161. 调试与可观测性
 
 ---
 
-### 161.1 Loot Generation Trace
+## 161.1 Loot Generation Trace
 
 选择一件掉落显示：
 
@@ -4375,7 +4428,7 @@ Source
 
 ---
 
-### 161.2 Affix Probability Inspector
+## 161.2 Affix Probability Inspector
 
 显示：
 
@@ -4391,7 +4444,7 @@ Tier；
 
 ---
 
-### 161.3 Item Provenance Viewer
+## 161.3 Item Provenance Viewer
 
 显示：
 
@@ -4412,7 +4465,7 @@ Tier；
 
 ---
 
-### 161.4 Stat Breakdown
+## 161.4 Stat Breakdown
 
 显示：
 
@@ -4420,7 +4473,7 @@ Tier；
 
 ---
 
-### 161.5 Damage Trace
+## 161.5 Damage Trace
 
 一次伤害：
 
@@ -4435,7 +4488,7 @@ Skill Base
 
 ---
 
-### 161.6 Trigger Trace
+## 161.6 Trigger Trace
 
 显示：
 
@@ -4448,7 +4501,7 @@ Direct Hit
 
 ---
 
-### 161.7 Proc Frequency
+## 161.7 Proc Frequency
 
 统计：
 
@@ -4464,7 +4517,7 @@ Legendary Proc。
 
 ---
 
-### 161.8 Build Snapshot Diff
+## 161.8 Build Snapshot Diff
 
 装备Candidate前：
 
@@ -4487,7 +4540,7 @@ B。
 
 ---
 
-### 161.9 Resource Sustain Timeline
+## 161.9 Resource Sustain Timeline
 
 显示：
 
@@ -4503,7 +4556,7 @@ Mana：
 
 ---
 
-### 161.10 Enemy Density Timeline
+## 161.10 Enemy Density Timeline
 
 显示：
 
@@ -4517,7 +4570,7 @@ Boss。
 
 ---
 
-### 161.11 Loot Funnel
+## 161.11 Loot Funnel
 
 Dropped
 → Picked
@@ -4528,7 +4581,7 @@ Dropped
 
 ---
 
-### 161.12 Activity Efficiency
+## 161.12 Activity Efficiency
 
 显示：
 
@@ -4545,7 +4598,7 @@ Dropped
 
 ---
 
-### 161.13 Pity Inspector
+## 161.13 Pity Inspector
 
 显示：
 
@@ -4561,7 +4614,7 @@ NextThreshold。
 
 ---
 
-### 161.14 Build Diversity Dashboard
+## 161.14 Build Diversity Dashboard
 
 按：
 
@@ -4577,7 +4630,7 @@ Talent；
 
 ---
 
-### 161.15 Death Causality
+## 161.15 Death Causality
 
 例如：
 
@@ -4597,11 +4650,11 @@ Talent；
 
 ---
 
-## 162. 内容验证工具
+# 162. 内容验证工具
 
 ---
 
-### 162.1 Affix Pool Validation
+## 162.1 Affix Pool Validation
 
 检查：
 
@@ -4620,7 +4673,7 @@ Talent；
 
 ---
 
-### 162.2 Item Generation Monte Carlo
+## 162.2 Item Generation Monte Carlo
 
 对每个ItemBase：
 
@@ -4643,7 +4696,7 @@ Talent；
 
 ---
 
-### 162.3 Unique Reachability
+## 162.3 Unique Reachability
 
 每个Unique必须至少存在：
 
@@ -4651,7 +4704,7 @@ Talent；
 
 ---
 
-### 162.4 Pity Simulation
+## 162.4 Pity Simulation
 
 模拟：
 
@@ -4669,7 +4722,7 @@ P99。
 
 ---
 
-### 162.5 Build Combination Test
+## 162.5 Build Combination Test
 
 自动生成：
 
@@ -4690,7 +4743,7 @@ Skill
 
 ---
 
-### 162.6 Trigger Loop Test
+## 162.6 Trigger Loop Test
 
 重点测试：
 
@@ -4708,7 +4761,7 @@ Summon。
 
 ---
 
-### 162.7 Damage Overflow Test
+## 162.7 Damage Overflow Test
 
 高层乘法Build：
 
@@ -4722,7 +4775,7 @@ NaN。
 
 ---
 
-### 162.8 Projectile Stress Test
+## 162.8 Projectile Stress Test
 
 最大AttackSpeed Build：
 
@@ -4736,7 +4789,7 @@ Trigger/s。
 
 ---
 
-### 162.9 Economy Simulation
+## 162.9 Economy Simulation
 
 模拟：
 
@@ -4754,7 +4807,7 @@ Vendor。
 
 ---
 
-### 162.10 Loot Value Distribution
+## 162.10 Loot Value Distribution
 
 检查：
 
@@ -4768,7 +4821,7 @@ Vendor。
 
 ---
 
-### 162.11 Activity Reward Balance
+## 162.11 Activity Reward Balance
 
 比较不同终局内容：
 
@@ -4780,7 +4833,7 @@ ExpectedLoot/hour。
 
 ---
 
-### 162.12 Upgrade Probability Test
+## 162.12 Upgrade Probability Test
 
 玩家目标装备在合理时间内：
 
@@ -4792,11 +4845,11 @@ Drop + Craft
 
 ---
 
-## 163. 性能设计
+# 163. 性能设计
 
 ---
 
-### 163.1 Loot生成不是性能大头，但Item实例数量可能是
+## 163.1 Loot生成不是性能大头，但Item实例数量可能是
 
 大量垃圾装备如果全部：
 
@@ -4808,7 +4861,7 @@ Drop + Craft
 
 ---
 
-### 163.2 World Loot 延迟实例化
+## 163.2 World Loot 延迟实例化
 
 可以先生成：
 
@@ -4820,7 +4873,7 @@ LootRollResult。
 
 ---
 
-### 163.3 Auto Salvage
+## 163.3 Auto Salvage
 
 极低价值Loot可以：
 
@@ -4832,7 +4885,7 @@ ItemInstance生命周期。
 
 ---
 
-### 163.4 Affix使用Definition引用，不复制完整数据
+## 163.4 Affix使用Definition引用，不复制完整数据
 
 Item只保存：
 
@@ -4845,7 +4898,7 @@ AffixId
 
 ---
 
-### 163.5 Stat缓存
+## 163.5 Stat缓存
 
 Build不变化时：
 
@@ -4870,7 +4923,7 @@ DerivedStats。
 
 ---
 
-### 163.6 Conditional Stat分类
+## 163.6 Conditional Stat分类
 
 例如：
 
@@ -4886,7 +4939,7 @@ DamageAgainstBurning
 
 ---
 
-### 163.7 High Density Combat
+## 163.7 High Density Combat
 
 普通怪AI需要：
 
@@ -4904,7 +4957,7 @@ LOD；
 
 ---
 
-### 163.8 Damage Number Aggregation
+## 163.8 Damage Number Aggregation
 
 高速Build每秒大量Hit。
 
@@ -4918,7 +4971,7 @@ Boss：
 
 ---
 
-### 163.9 Loot Beam Pool
+## 163.9 Loot Beam Pool
 
 高掉落场景：
 
@@ -4926,7 +4979,7 @@ Boss：
 
 ---
 
-### 163.10 Stash Virtualization
+## 163.10 Stash Virtualization
 
 几千件Item：
 
@@ -4942,11 +4995,11 @@ UI使用：
 
 ---
 
-## 164. 可扩展点
+# 164. 可扩展点
 
 ---
 
-### 164.1 新ItemBase
+## 164.1 新ItemBase
 
 主要提供：
 
@@ -4957,7 +5010,7 @@ BaseDefinition
 
 ---
 
-### 164.2 新Affix
+## 164.2 新Affix
 
 通过：
 
@@ -4967,7 +5020,7 @@ AffixDefinition
 
 ---
 
-### 164.3 新Legendary Power
+## 164.3 新Legendary Power
 
 通过：
 
@@ -4975,7 +5028,7 @@ Effect/Trigger系统接入。
 
 ---
 
-### 164.4 新Skill
+## 164.4 新Skill
 
 提供：
 
@@ -4988,7 +5041,7 @@ SkillDefinition
 
 ---
 
-### 164.5 新Activity
+## 164.5 新Activity
 
 提供：
 
@@ -5001,7 +5054,7 @@ ActivityDefinition
 
 ---
 
-### 164.6 新World Tier
+## 164.6 新World Tier
 
 主要修改：
 
@@ -5012,7 +5065,7 @@ EnemyDifficulty
 
 ---
 
-### 164.7 新Craft功能
+## 164.7 新Craft功能
 
 通过：
 
@@ -5031,7 +5084,7 @@ ItemModificationTransaction
 
 ---
 
-### 164.8 新Season
+## 164.8 新Season
 
 提供：
 
@@ -5046,11 +5099,11 @@ ItemModificationTransaction
 
 ---
 
-## 165. 玩家体验设计
+# 165. 玩家体验设计
 
 ---
 
-### 165.1 Loot必须在几秒内完成第一层价值判断
+## 165.1 Loot必须在几秒内完成第一层价值判断
 
 玩家不能每杀一组怪：
 
@@ -5071,7 +5124,7 @@ ItemModificationTransaction
 
 ---
 
-### 165.2 稀有掉落必须有明显反馈
+## 165.2 稀有掉落必须有明显反馈
 
 声音；
 
@@ -5089,7 +5142,7 @@ UI。
 
 ---
 
-### 165.3 好Loot的核心体验是“它让我想到一个新Build”
+## 165.3 好Loot的核心体验是“它让我想到一个新Build”
 
 最有价值的掉落不只是：
 
@@ -5101,7 +5154,7 @@ Damage +5%。
 
 ---
 
-### 165.4 早期装备比较可以简单
+## 165.4 早期装备比较可以简单
 
 剧情阶段：
 
@@ -5124,7 +5177,7 @@ Damage +5%。
 
 ---
 
-### 165.5 掉落频率应随认知能力提高
+## 165.5 掉落频率应随认知能力提高
 
 早期：
 
@@ -5140,7 +5193,7 @@ Filter、AutoSalvage、Compare工具同时增强。
 
 ---
 
-### 165.6 垃圾Loot必须具有快速处理路径
+## 165.6 垃圾Loot必须具有快速处理路径
 
 例如：
 
@@ -5153,7 +5206,7 @@ Filter、AutoSalvage、Compare工具同时增强。
 
 ---
 
-### 165.7 Stash必须支持“未来Build”心智模型
+## 165.7 Stash必须支持“未来Build”心智模型
 
 玩家常常保存：
 
@@ -5165,7 +5218,7 @@ Tab、Tag、Favorite非常重要。
 
 ---
 
-### 165.8 Crafting必须减少挫败，而不是增加第二层赌博
+## 165.8 Crafting必须减少挫败，而不是增加第二层赌博
 
 如果掉装备是随机：
 
@@ -5181,7 +5234,7 @@ RNG × RNG。
 
 ---
 
-### 165.9 终局玩家需要明确下一步做什么
+## 165.9 终局玩家需要明确下一步做什么
 
 例如：
 
@@ -5203,7 +5256,7 @@ RNG × RNG。
 
 ---
 
-### 165.10 Build失败需要可诊断
+## 165.10 Build失败需要可诊断
 
 例如：
 
@@ -5219,191 +5272,191 @@ Boss机制要求更高移动。
 
 ---
 
-## 166. 常见设计失败
+# 166. 常见设计失败
 
 ---
 
-### 166.1 ItemDefinition与Instance混在一起
+## 166.1 ItemDefinition与Instance混在一起
 
 随机词缀污染所有同类装备。
 
 ---
 
-### 166.2 Loot直接由Enemy脚本随机生成
+## 166.2 Loot直接由Enemy脚本随机生成
 
 无法统一控制掉落经济。
 
 ---
 
-### 166.3 ItemLevel只是显示数字
+## 166.3 ItemLevel只是显示数字
 
 不影响词缀和掉落空间。
 
 ---
 
-### 166.4 Rarity只有数值差异
+## 166.4 Rarity只有数值差异
 
 传奇装备没有机制身份。
 
 ---
 
-### 166.5 Affix Pool过于宽泛
+## 166.5 Affix Pool过于宽泛
 
 绝大多数装备完全无关当前职业。
 
 ---
 
-### 166.6 全靠纯随机，没有收敛工具
+## 166.6 全靠纯随机，没有收敛工具
 
 玩家可能无限刷不到关键装备。
 
 ---
 
-### 166.7 Craft完全替代Loot
+## 166.7 Craft完全替代Loot
 
 最优玩法变成刷材料。
 
 ---
 
-### 166.8 Craft本身也是无限随机
+## 166.8 Craft本身也是无限随机
 
 没有真正降低概率尾部。
 
 ---
 
-### 166.9 Item Power绿箭头代替所有构筑分析
+## 166.9 Item Power绿箭头代替所有构筑分析
 
 玩家误换掉核心机制装备。
 
 ---
 
-### 166.10 装备只增加技能伤害
+## 166.10 装备只增加技能伤害
 
 Loot无法改变玩法。
 
 ---
 
-### 166.11 Legendary Power过多只写“+X%伤害”
+## 166.11 Legendary Power过多只写“+X%伤害”
 
 Build缺乏身份。
 
 ---
 
-### 166.12 Set Bonus过强
+## 166.12 Set Bonus过强
 
 所有Slot被套装锁死。
 
 ---
 
-### 166.13 Resource Sustain不进入Build分析
+## 166.13 Resource Sustain不进入Build分析
 
 纸面DPS很高，实战技能放不出来。
 
 ---
 
-### 166.14 高难内容只增加敌人HP
+## 166.14 高难内容只增加敌人HP
 
 Build检查只有DPS。
 
 ---
 
-### 166.15 所有Activity掉落完全相同
+## 166.15 所有Activity掉落完全相同
 
 终局只剩效率最高地图。
 
 ---
 
-### 166.16 活动奖励差异太大
+## 166.16 活动奖励差异太大
 
 强迫所有玩家只玩一个内容。
 
 ---
 
-### 166.17 Loot过多但没有Filter
+## 166.17 Loot过多但没有Filter
 
 地面和背包被垃圾装备淹没。
 
 ---
 
-### 166.18 Loot太少
+## 166.18 Loot太少
 
 刷宝的即时奖励频率不足。
 
 ---
 
-### 166.19 所有低品质装备都完全无价值
+## 166.19 所有低品质装备都完全无价值
 
 掉落只是视觉垃圾。
 
 ---
 
-### 166.20 Currency数量爆炸
+## 166.20 Currency数量爆炸
 
 玩家不知道每种材料做什么。
 
 ---
 
-### 166.21 Respec成本过高
+## 166.21 Respec成本过高
 
 掉到新机制装备也不愿意尝试。
 
 ---
 
-### 166.22 Build Preset缺失
+## 166.22 Build Preset缺失
 
 一个角色只能长期维护一种Build。
 
 ---
 
-### 166.23 OnHit Trigger没有Proc控制
+## 166.23 OnHit Trigger没有Proc控制
 
 高攻速Build无限触发。
 
 ---
 
-### 166.24 Trigger Effect可以再次触发自己
+## 166.24 Trigger Effect可以再次触发自己
 
 形成无限递归。
 
 ---
 
-### 166.25 Damage乘区没有统一规则
+## 166.25 Damage乘区没有统一规则
 
 某技能乘法叠加异常。
 
 ---
 
-### 166.26 Item Migration不安全
+## 166.26 Item Migration不安全
 
 赛季更新破坏玩家长期资产。
 
 ---
 
-### 166.27 World Tier只提高敌人难度，不提高掉落价值
+## 166.27 World Tier只提高敌人难度，不提高掉落价值
 
 玩家没有升阶动力。
 
 ---
 
-### 166.28 高Tier奖励过强
+## 166.28 高Tier奖励过强
 
 玩家被迫进入效率很低的难度。
 
 ---
 
-### 166.29 Boss Unique完全世界随机
+## 166.29 Boss Unique完全世界随机
 
 Target Farming失去意义。
 
 ---
 
-### 166.30 终局Build完成后没有新约束
+## 166.30 终局Build完成后没有新约束
 
 优化循环立即结束。
 
 ---
 
-## 167. 最小可行原型
+# 167. 最小可行原型
 
 一个能够验证刷宝型ARPG核心范式的MVP，不需要数千装备。
 
@@ -5413,7 +5466,7 @@ Target Farming失去意义。
 
 ---
 
-### 167.1 Character
+## 167.1 Character
 
 一个职业即可。
 
@@ -5423,7 +5476,7 @@ Elementalist。
 
 ---
 
-### 167.2 Skill
+## 167.2 Skill
 
 至少包含：
 
@@ -5442,7 +5495,7 @@ Elementalist。
 
 ---
 
-### 167.3 Equipment Slot
+## 167.3 Equipment Slot
 
 第一版：
 
@@ -5459,7 +5512,7 @@ Elementalist。
 
 ---
 
-### 167.4 Rarity
+## 167.4 Rarity
 
 只需要：
 
@@ -5474,7 +5527,7 @@ Elementalist。
 
 ---
 
-### 167.5 Affix
+## 167.5 Affix
 
 约30个。
 
@@ -5495,7 +5548,7 @@ Elementalist。
 
 ---
 
-### 167.6 Legendary
+## 167.6 Legendary
 
 约10个。
 
@@ -5507,7 +5560,7 @@ Elementalist。
 
 ---
 
-### 167.7 Activity
+## 167.7 Activity
 
 例如：
 
@@ -5524,7 +5577,7 @@ Reward Bias。
 
 ---
 
-### 167.8 Difficulty
+## 167.8 Difficulty
 
 Tier 1：
 
@@ -5540,7 +5593,7 @@ Build Check。
 
 ---
 
-### 167.9 Craft
+## 167.9 Craft
 
 只做：
 
@@ -5553,7 +5606,7 @@ Build Check。
 
 ---
 
-### 167.10 必要基础设施
+## 167.10 必要基础设施
 
 - ItemBaseDefinition；
 
@@ -5602,7 +5655,7 @@ Build Check。
 
 ---
 
-### 167.11 必要调试工具
+## 167.11 必要调试工具
 
 - LootGenerationTrace；
 
@@ -5631,7 +5684,7 @@ Build Check。
 
 ---
 
-## 168. MVP核心验收问题
+# 168. MVP核心验收问题
 
 原型至少必须能够回答：
 
@@ -5689,7 +5742,7 @@ Build Check。
 
 ---
 
-## 169. 推荐实施顺序
+# 169. 推荐实施顺序
 
 第一阶段：
 
@@ -5805,7 +5858,7 @@ Build Check。
 
 ---
 
-## 170. 架构验收标准
+# 170. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -5902,11 +5955,11 @@ Build Check。
 
 ---
 
-## 171. 可迁移到其他游戏的设计思想
+# 171. 可迁移到其他游戏的设计思想
 
 ---
 
-### 171.1 “候选生成—筛选—局部优化”本身可以成为核心循环
+## 171.1 “候选生成—筛选—局部优化”本身可以成为核心循环
 
 刷宝游戏并不是：
 
@@ -5933,7 +5986,7 @@ Build Check。
 
 ---
 
-### 171.2 随机系统必须提供逐步收敛工具
+## 171.2 随机系统必须提供逐步收敛工具
 
 纯随机适合制造惊喜，
 
@@ -5958,7 +6011,7 @@ Build Check。
 
 ---
 
-### 171.3 对象价值应该根据系统上下文计算
+## 171.3 对象价值应该根据系统上下文计算
 
 同一装备：
 
@@ -5981,7 +6034,7 @@ Build Check。
 
 ---
 
-### 171.4 内容奖励可以定向不同维度，而不是简单提高总奖励
+## 171.4 内容奖励可以定向不同维度，而不是简单提高总奖励
 
 不同Activity：
 
@@ -6006,7 +6059,7 @@ Gold/hour。
 
 ---
 
-### 171.5 高阶装备最好改变规则，而不是只改变数字
+## 171.5 高阶装备最好改变规则，而不是只改变数字
 
 可迁移到：
 
@@ -6029,7 +6082,7 @@ Gold/hour。
 
 ---
 
-### 171.6 成长系统需要不断暴露新的瓶颈
+## 171.6 成长系统需要不断暴露新的瓶颈
 
 伤害不足
 → 解决伤害。
@@ -6059,7 +6112,7 @@ Gold/hour。
 
 ---
 
-### 171.7 高价值资产必须拥有完整来源和修改履历
+## 171.7 高价值资产必须拥有完整来源和修改履历
 
 可迁移到：
 
@@ -6080,7 +6133,7 @@ Provenance对：
 
 ---
 
-### 171.8 大规模随机内容需要Telemetry，而不能只靠设计师试玩
+## 171.8 大规模随机内容需要Telemetry，而不能只靠设计师试玩
 
 百万级Loot组合：
 
@@ -6103,7 +6156,7 @@ Provenance对：
 
 ---
 
-### 171.9 玩家效率本身可以成为终局成长目标
+## 171.9 玩家效率本身可以成为终局成长目标
 
 不是：
 
@@ -6132,7 +6185,7 @@ Provenance对：
 
 ---
 
-### 171.10 “规则层随机 + 玩家层收敛”可以同时保留惊喜和长期控制感
+## 171.10 “规则层随机 + 玩家层收敛”可以同时保留惊喜和长期控制感
 
 系统持续产生：
 
@@ -6148,9 +6201,9 @@ Provenance对：
 
 ---
 
-## 172. 本次防重记录
+# 172. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like。**
 
@@ -6171,7 +6224,7 @@ Provenance对：
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家通过高密度实时战斗持续制造大量战利品候选；静态ItemBase与动态ItemInstance分离，同一基础装备可以通过ItemLevel、Rarity、Affix、Legendary Power、Unique规则与Craft状态形成巨大实例空间。装备价值并非绝对，而取决于玩家当前Skill、Talent、Resource Loop和目标内容。玩家通过掉落、比较、装备、分解、重铸、定向刷取和保底机制不断缩小随机空间，让Build逐渐从临时组合收敛成稳定机制体系；更强Build允许进入更高World Tier和更高收益Activity，而高层内容又暴露新的伤害、生存、资源、速度或Boss能力缺口，驱动下一轮装备搜索。
 
@@ -6193,7 +6246,7 @@ Provenance对：
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 实时动作战斗承担主要获取循环；
 
@@ -6246,7 +6299,7 @@ Provenance对：
 
 ---
 
-### 与仓库现有类魂动作角色扮演的防重边界
+## 与仓库现有类魂动作角色扮演的防重边界
 
 当前仓库已经存在 `soulslike-action-commitment-recovery`，其核心摘要聚焦：
 
@@ -6289,7 +6342,7 @@ Build和Loot Search Space是主要学习对象。
 
 ---
 
-### 与仓库现有多人共斗狩猎动作的防重边界
+## 与仓库现有多人共斗狩猎动作的防重边界
 
 仓库已有多人共斗狩猎，其重点在：
 
@@ -6327,7 +6380,7 @@ Build和Loot Search Space是主要学习对象。
 
 ---
 
-### 与仓库现有撤离型搜打撤的防重边界
+## 与仓库现有撤离型搜打撤的防重边界
 
 撤离型游戏重点是：
 
@@ -6362,7 +6415,7 @@ Loot ARPG虽然也大量掉装备，但：
 
 ---
 
-### 与仓库现有卡组构筑 Roguelike 的防重边界
+## 与仓库现有卡组构筑 Roguelike 的防重边界
 
 两者都包含：
 
@@ -6393,7 +6446,7 @@ Build的主要执行介质是实时Skill + Gear + Trigger网络。
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Loot-driven ARPG；
 
@@ -6498,7 +6551,7 @@ Build的主要执行介质是实时Skill + Gear + Trigger网络。
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次刷宝型ARPG范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

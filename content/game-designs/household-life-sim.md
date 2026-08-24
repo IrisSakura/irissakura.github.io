@@ -1,4 +1,67 @@
-## 1. 类型定位
+> Agent 标签：`dollhouse` `household` `life`
+
+---
+
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `sakura-design-journal/game-designs`。当前生成的 `README.md` 标记 **Entries: 54**。现有目录已经覆盖殖民地模拟、城市建设、农场经营、宠物照护、恋爱养成、俱乐部经营、上帝模拟等相邻类型。
+
+当前路由元数据中，`life-sim` 已作为标签出现在 **宠物照护**与**恋爱养成**条目：前者集中于宠物的生理需求、情绪、习惯、互动与长期信任，后者集中于关系维度、互动记忆、阶段门槛和承诺状态；但当前索引中尚未存在一个以“家庭、个人生活、自主行为、家居空间与人生阶段”为完整核心的独立 Household Life Simulation 条目。
+
+因此本期新增类型选择：
+
+**家庭人生模拟 / Household Life Simulation / Dollhouse Life Sim。**
+
+常见名称包括：
+
+- Life Simulation；
+
+- Household Simulation；
+
+- Dollhouse Simulation；
+
+- Virtual Life Simulation；
+
+- 家庭人生模拟；
+
+- 人生模拟；
+
+- 虚拟家庭模拟；
+
+- 娃娃屋式生活模拟。
+
+
+本文讨论的不是农场游戏中的日常生活部分，不是恋爱游戏中的单一关系发展，也不是殖民地模拟中对劳动力和生产订单的组织，而是一种足以独立支撑完整产品的宏观游戏类型。
+
+其最具代表性的设计范式可以概括为：
+
+> 玩家同时扮演“具体生活行为的导演”和“家庭长期发展的规划者”。世界中的角色拥有需求、性格、技能、关系、记忆、时间表、愿望和人生阶段；家具、场所和其他角色则通过统一的 Affordance / 可供性交互系统向角色暴露“这里可以做什么”。当玩家不直接下达命令时，角色根据需求紧迫度、性格偏好、关系、环境、计划和对象可达性自主选择行为；玩家又可以随时插入命令、调整房屋、购买设施、改变职业和推动关系，从而持续改变角色未来能够做出的选择空间。最终故事不是由固定任务链完全预写，而是由“个体状态 + 社会关系 + 时间 + 空间 + 玩家干预”共同涌现。
+
+核心循环可以压缩为：
+
+**角色产生需求<br>
+→ 世界对象提供可行动机会<br>
+→ 玩家直接下令或 Autonomy 自主选择<br>
+→ 角色预约目标对象<br>
+→ 寻路并执行 Interaction<br>
+→ 需求、情绪、技能、关系与记忆变化<br>
+→ 时间推进<br>
+→ 工作、社交、家庭和人生事件发生<br>
+→ 玩家调整家庭、房屋和长期目标<br>
+→ 环境中的可供性结构发生变化<br>
+→ 下一轮生活决策重新生成。**
+
+本类型真正的核心不是：
+
+> “控制一个人在房子里走来走去。”
+
+而是：
+
+> **构造一个能够自己生活、自己产生问题、自己形成关系，而玩家可以随时介入并重塑其未来可能性的虚拟人生系统。**
+
+---
+
+# 1. 类型定位
 
 家庭人生模拟通常包含：
 
@@ -80,7 +143,7 @@
 
 ---
 
-## 2. 本类型最核心的系统对象不是“角色”，而是“生活可能性空间”
+# 2. 本类型最核心的系统对象不是“角色”，而是“生活可能性空间”
 
 一个角色当前能够做什么，取决于：
 
@@ -142,7 +205,7 @@
 
 ---
 
-## 3. 核心范式一：对象通过 Affordance 暴露行为，而不是角色硬编码所有交互
+# 3. 核心范式一：对象通过 Affordance 暴露行为，而不是角色硬编码所有交互
 
 这是本类型最重要的运行时架构原则之一。
 
@@ -185,7 +248,7 @@
 
 ---
 
-## 4. AffordanceDefinition
+# 4. AffordanceDefinition
 
 建议字段：
 
@@ -251,7 +314,7 @@ Computer提供：
 
 ---
 
-## 5. ObjectRuntimeState
+# 5. ObjectRuntimeState
 
 建议包含：
 
@@ -286,7 +349,7 @@ Computer提供：
 
 ---
 
-## 6. 查询交互流程
+# 6. 查询交互流程
 
 角色或玩家选择对象：
 
@@ -321,7 +384,7 @@ Repair。
 
 ---
 
-## 7. Affordance是可扩展能力边界
+# 7. Affordance是可扩展能力边界
 
 新增：
 
@@ -344,7 +407,7 @@ CharacterAI核心。
 
 ---
 
-## 8. 核心范式二：角色需求负责产生“问题”，Interaction负责提供“解决方案”
+# 8. 核心范式二：角色需求负责产生“问题”，Interaction负责提供“解决方案”
 
 典型需求：
 
@@ -385,7 +448,7 @@ Hunger只表示：
 
 ---
 
-## 9. NeedDefinition
+# 9. NeedDefinition
 
 建议字段：
 
@@ -412,7 +475,7 @@ Hunger只表示：
 
 ---
 
-## 10. NeedRuntimeState
+# 10. NeedRuntimeState
 
 建议包含：
 
@@ -433,7 +496,7 @@ Hunger只表示：
 
 ---
 
-## 11. Need只输出压力
+# 11. Need只输出压力
 
 例如：
 
@@ -472,7 +535,7 @@ Utility系统转换为：
 
 ---
 
-## 12. 这是本类型产生涌现的重要来源
+# 12. 这是本类型产生涌现的重要来源
 
 两个角色都饿了。
 
@@ -519,7 +582,7 @@ OrderDelivery。
 
 ---
 
-## 13. 核心范式三：Autonomy应使用 Utility Arbitration，而不是固定行为树
+# 13. 核心范式三：Autonomy应使用 Utility Arbitration，而不是固定行为树
 
 家庭人生模拟中角色每几秒都可能面临：
 
@@ -541,7 +604,7 @@ OrderDelivery。
 
 ---
 
-## 14. AutonomousIntentCandidate
+# 14. AutonomousIntentCandidate
 
 建议字段：
 
@@ -580,7 +643,7 @@ OrderDelivery。
 
 ---
 
-## 15. Utility基本结构
+# 15. Utility基本结构
 
 可以近似理解为：
 
@@ -603,7 +666,7 @@ OrderDelivery。
 
 ---
 
-## 16. Autonomy决策流程
+# 16. Autonomy决策流程
 
 Autonomy Tick<br>
 → 收集当前高优先级Need<br>
@@ -619,7 +682,7 @@ Autonomy Tick<br>
 
 ---
 
-## 17. 为什么需要有限随机
+# 17. 为什么需要有限随机
 
 完全确定：
 
@@ -649,7 +712,7 @@ Autonomy Tick<br>
 
 ---
 
-## 18. Autonomy Random不应绕过严重Need
+# 18. Autonomy Random不应绕过严重Need
 
 当Energy接近崩溃：
 
@@ -661,7 +724,7 @@ Autonomy Tick<br>
 
 ---
 
-## 19. 核心范式四：玩家命令和自主行为必须是两个不同优先级层
+# 19. 核心范式四：玩家命令和自主行为必须是两个不同优先级层
 
 玩家既希望：
 
@@ -683,7 +746,7 @@ Autonomy Tick<br>
 
 ---
 
-## 20. InteractionRequest
+# 20. InteractionRequest
 
 建议字段：
 
@@ -723,7 +786,7 @@ SourceType：
 
 ---
 
-## 21. Priority建议
+# 21. Priority建议
 
 通常：
 
@@ -745,7 +808,7 @@ Emergency
 
 ---
 
-## 22. ActionQueue
+# 22. ActionQueue
 
 角色可以拥有：
 
@@ -774,7 +837,7 @@ Eat<br>
 
 ---
 
-## 23. 玩家操作队列的价值
+# 23. 玩家操作队列的价值
 
 玩家可以一次规划：
 
@@ -788,7 +851,7 @@ Eat<br>
 
 ---
 
-## 24. Autonomy通常不应填满长队列
+# 24. Autonomy通常不应填满长队列
 
 否则：
 
@@ -806,7 +869,7 @@ Autonomy更适合：
 
 ---
 
-## 25. Player Command Override
+# 25. Player Command Override
 
 玩家新命令可以：
 
@@ -833,7 +896,7 @@ Autonomy更适合：
 
 ---
 
-## 26. 核心范式五：Interaction必须是正式状态机，而不是“一段动画”
+# 26. 核心范式五：Interaction必须是正式状态机，而不是“一段动画”
 
 一项Interaction可能涉及：
 
@@ -864,7 +927,7 @@ Autonomy更适合：
 
 ---
 
-## 27. InteractionDefinition
+# 27. InteractionDefinition
 
 建议字段：
 
@@ -905,7 +968,7 @@ Autonomy更适合：
 
 ---
 
-## 28. InteractionRuntimeState
+# 28. InteractionRuntimeState
 
 建议包含：
 
@@ -940,7 +1003,7 @@ Autonomy更适合：
 
 ---
 
-## 29. 标准Interaction流程
+# 29. 标准Interaction流程
 
 Request<br>
 → Validate<br>
@@ -958,7 +1021,7 @@ Request<br>
 
 ---
 
-## 30. Commit Point非常重要
+# 30. Commit Point非常重要
 
 例如：
 
@@ -986,7 +1049,7 @@ Money减少并解除Debt。
 
 ---
 
-## 31. InterruptPolicy
+# 31. InterruptPolicy
 
 Interaction需要定义：
 
@@ -1005,7 +1068,7 @@ Interaction需要定义：
 
 ---
 
-## 32. 烹饪中途取消
+# 32. 烹饪中途取消
 
 材料可能已经消耗。
 
@@ -1025,7 +1088,7 @@ Interaction需要定义：
 
 ---
 
-## 33. 核心范式六：Reservation是自主个体共享世界的基础设施
+# 33. 核心范式六：Reservation是自主个体共享世界的基础设施
 
 两个角色同时发现：
 
@@ -1045,7 +1108,7 @@ Interaction需要定义：
 
 ---
 
-## 34. ReservationState
+# 34. ReservationState
 
 建议字段：
 
@@ -1070,7 +1133,7 @@ Interaction需要定义：
 
 ---
 
-## 35. 可以预约的不只有Object
+# 35. 可以预约的不只有Object
 
 还包括：
 
@@ -1095,7 +1158,7 @@ Interaction需要定义：
 
 ---
 
-## 36. Reservation Mode
+# 36. Reservation Mode
 
 例如：
 
@@ -1109,7 +1172,7 @@ Queueable。
 
 ---
 
-## 37. Reservation必须有Lease
+# 37. Reservation必须有Lease
 
 角色卡住或Interaction异常：
 
@@ -1121,7 +1184,7 @@ Expiration / Heartbeat。
 
 ---
 
-## 38. 预约失败后的Autonomy
+# 38. 预约失败后的Autonomy
 
 Candidate变Invalid。
 
@@ -1135,7 +1198,7 @@ Candidate变Invalid。
 
 ---
 
-## 39. 核心范式七：空间布局直接改变角色行为
+# 39. 核心范式七：空间布局直接改变角色行为
 
 房屋建设不是纯装修。
 
@@ -1164,7 +1227,7 @@ Candidate变Invalid。
 
 ---
 
-## 40. RoomState
+# 40. RoomState
 
 建议包含：
 
@@ -1189,7 +1252,7 @@ Candidate变Invalid。
 
 ---
 
-## 41. Room不是必须人工绘制
+# 41. Room不是必须人工绘制
 
 可以从：
 
@@ -1205,7 +1268,7 @@ Connected Interior Space。
 
 ---
 
-## 42. Room Tag
+# 42. Room Tag
 
 可以：
 
@@ -1240,7 +1303,7 @@ Bed + Wardrobe
 
 ---
 
-## 43. Object Placement 会改变 Affordance Graph
+# 43. Object Placement 会改变 Affordance Graph
 
 一张桌子挡住门：
 
@@ -1256,7 +1319,7 @@ Bed + Wardrobe
 
 ---
 
-## 44. PlacementPreview
+# 44. PlacementPreview
 
 除了碰撞：
 
@@ -1275,7 +1338,7 @@ Bed + Wardrobe
 
 ---
 
-## 45. 家具“放得下”不代表“用得了”
+# 45. 家具“放得下”不代表“用得了”
 
 这是家庭人生模拟非常典型的内容生产问题。
 
@@ -1291,7 +1354,7 @@ Interaction Reachable
 
 ---
 
-## 46. 核心范式八：寻路应服务Interaction，而不是角色单纯走到Object中心
+# 46. 核心范式八：寻路应服务Interaction，而不是角色单纯走到Object中心
 
 角色不是走到：
 
@@ -1303,7 +1366,7 @@ Interaction Reachable
 
 ---
 
-## 47. InteractionSlot
+# 47. InteractionSlot
 
 建议字段：
 
@@ -1326,7 +1389,7 @@ Interaction Reachable
 
 ---
 
-## 48. 双人互动
+# 48. 双人互动
 
 沙发：
 
@@ -1344,7 +1407,7 @@ PlayerB Slot。
 
 ---
 
-## 49. Routing流程
+# 49. Routing流程
 
 Interaction Request<br>
 → 选择合法Slot<br>
@@ -1357,7 +1420,7 @@ Interaction Request<br>
 
 ---
 
-## 50. Route失败不是Interaction逻辑错误
+# 50. Route失败不是Interaction逻辑错误
 
 如果Object存在，
 
@@ -1375,7 +1438,7 @@ Result应为：
 
 ---
 
-## 51. Routing Failure Cache
+# 51. Routing Failure Cache
 
 同一个对象连续寻路失败：
 
@@ -1387,7 +1450,7 @@ Result应为：
 
 ---
 
-## 52. Door与Lock
+# 52. Door与Lock
 
 Route Graph需要考虑：
 
@@ -1410,7 +1473,7 @@ Route Graph需要考虑：
 
 ---
 
-## 53. 核心范式九：角色“人格”应主要修改偏好和反应，而不是复制一套AI
+# 53. 核心范式九：角色“人格”应主要修改偏好和反应，而不是复制一套AI
 
 Trait例如：
 
@@ -1450,7 +1513,7 @@ Trait向统一系统提供：
 
 ---
 
-## 54. TraitDefinition
+# 54. TraitDefinition
 
 建议字段：
 
@@ -1477,7 +1540,7 @@ Trait向统一系统提供：
 
 ---
 
-## 55. 示例
+# 55. 示例
 
 Neat：
 
@@ -1511,7 +1574,7 @@ Career Goal Utility。
 
 ---
 
-## 56. 核心范式十：情绪应改变当前行为价值，而不是只提供 Buff
+# 56. 核心范式十：情绪应改变当前行为价值，而不是只提供 Buff
 
 Mood可以来自：
 
@@ -1559,7 +1622,7 @@ Sad：
 
 ---
 
-## 57. EmotionState
+# 57. EmotionState
 
 建议包含：
 
@@ -1580,7 +1643,7 @@ Sad：
 
 ---
 
-## 58. 多情绪模型
+# 58. 多情绪模型
 
 可以：
 
@@ -1598,7 +1661,7 @@ Happy + Nervous。
 
 ---
 
-## 59. Moodlet / EmotionalModifier
+# 59. Moodlet / EmotionalModifier
 
 建议字段：
 
@@ -1619,7 +1682,7 @@ Happy + Nervous。
 
 ---
 
-## 60. 情绪应该具有惯性
+# 60. 情绪应该具有惯性
 
 刚刚亲人去世：
 
@@ -1642,7 +1705,7 @@ Sad很高。
 
 ---
 
-## 61. 核心范式十一：社会关系应该是多维状态而不是单一好感度
+# 61. 核心范式十一：社会关系应该是多维状态而不是单一好感度
 
 家庭人生模拟中可能存在：
 
@@ -1679,7 +1742,7 @@ Sad很高。
 
 ---
 
-## 62. RelationshipState
+# 62. RelationshipState
 
 建议包含：
 
@@ -1708,7 +1771,7 @@ Sad很高。
 
 ---
 
-## 63. 有向关系
+# 63. 有向关系
 
 A喜欢B
 
@@ -1724,7 +1787,7 @@ B同样喜欢A。
 
 ---
 
-## 64. Shared Relationship Fact
+# 64. Shared Relationship Fact
 
 例如：
 
@@ -1736,7 +1799,7 @@ Coworker。
 
 ---
 
-## 65. Individual Sentiment
+# 65. Individual Sentiment
 
 A对B：
 
@@ -1750,7 +1813,7 @@ Trust 45。
 
 ---
 
-## 66. 核心范式十二：社交互动必须消费“关系上下文”
+# 66. 核心范式十二：社交互动必须消费“关系上下文”
 
 同一句笑话：
 
@@ -1768,7 +1831,7 @@ Trust 45。
 
 ---
 
-## 67. SocialInteractionContext
+# 67. SocialInteractionContext
 
 建议包含：
 
@@ -1797,7 +1860,7 @@ Trust 45。
 
 ---
 
-## 68. Social Resolution
+# 68. Social Resolution
 
 发起Interaction<br>
 → Receiver判断是否接受<br>
@@ -1810,7 +1873,7 @@ Trust 45。
 
 ---
 
-## 69. Receiver拥有拒绝权
+# 69. Receiver拥有拒绝权
 
 玩家命令：
 
@@ -1830,7 +1893,7 @@ Trust 45。
 
 ---
 
-## 70. SocialOutcome
+# 70. SocialOutcome
 
 可以：
 
@@ -1849,7 +1912,7 @@ Trust 45。
 
 ---
 
-## 71. 核心范式十三：记忆是把一次事件转换成长期人格上下文的桥梁
+# 71. 核心范式十三：记忆是把一次事件转换成长期人格上下文的桥梁
 
 没有Memory：
 
@@ -1865,7 +1928,7 @@ Friendship -5。
 
 ---
 
-## 72. MemoryRecord
+# 72. MemoryRecord
 
 建议字段：
 
@@ -1896,7 +1959,7 @@ Friendship -5。
 
 ---
 
-## 73. Memory作用
+# 73. Memory作用
 
 可以影响：
 
@@ -1917,7 +1980,7 @@ Friendship -5。
 
 ---
 
-## 74. 记忆不应无限增长
+# 74. 记忆不应无限增长
 
 角色活80年，
 
@@ -1931,27 +1994,27 @@ Importance。
 
 ---
 
-## 75. Memory层级
+# 75. Memory层级
 
-#### Ephemeral
+### Ephemeral
 
 “刚吃过好吃的饭”。
 
 几小时消失。
 
-#### Medium
+### Medium
 
 “今天升职”。
 
 数天。
 
-#### Long-term
+### Long-term
 
 “结婚”。
 
 长期。
 
-#### Historical
+### Historical
 
 “亲人死亡”。
 
@@ -1959,7 +2022,7 @@ Importance。
 
 ---
 
-## 76. Memory Consolidation
+# 76. Memory Consolidation
 
 大量类似事件：
 
@@ -1981,7 +2044,7 @@ Importance。
 
 ---
 
-## 77. 核心范式十四：职业和日程把自由沙盒引入时间约束
+# 77. 核心范式十四：职业和日程把自由沙盒引入时间约束
 
 如果角色永远：
 
@@ -1995,7 +2058,7 @@ Importance。
 
 ---
 
-## 78. ScheduleEntry
+# 78. ScheduleEntry
 
 建议字段：
 
@@ -2022,7 +2085,7 @@ Importance。
 
 ---
 
-## 79. 日程产生准备行为
+# 79. 日程产生准备行为
 
 工作8:00开始。
 
@@ -2051,7 +2114,7 @@ Importance。
 
 ---
 
-## 80. Schedule Utility
+# 80. Schedule Utility
 
 临近工作：
 
@@ -2063,7 +2126,7 @@ Work Attendance Utility逐渐提高。
 
 ---
 
-## 81. Late State
+# 81. Late State
 
 角色迟到：
 
@@ -2084,9 +2147,9 @@ Work Attendance Utility逐渐提高。
 
 ---
 
-## 82. 职业系统
+# 82. 职业系统
 
-### CareerDefinition
+## CareerDefinition
 
 建议字段：
 
@@ -2111,7 +2174,7 @@ Work Attendance Utility逐渐提高。
 
 ---
 
-## 83. CareerRuntimeState
+# 83. CareerRuntimeState
 
 建议包含：
 
@@ -2136,19 +2199,19 @@ Work Attendance Utility逐渐提高。
 
 ---
 
-## 84. 工作不一定需要完整场景
+# 84. 工作不一定需要完整场景
 
 可以采用：
 
-#### Rabbit Hole
+### Rabbit Hole
 
 角色离开模拟。
 
-#### Off-lot Simulation
+### Off-lot Simulation
 
 在后台模拟工作结果。
 
-#### Full Workplace
+### Full Workplace
 
 玩家可进入工作地点。
 
@@ -2158,7 +2221,7 @@ Work Attendance Utility逐渐提高。
 
 ---
 
-## 85. AwayActivityState
+# 85. AwayActivityState
 
 建议包含：
 
@@ -2183,7 +2246,7 @@ Work Attendance Utility逐渐提高。
 
 ---
 
-## 86. 离开家庭地块以后角色不能停止存在
+# 86. 离开家庭地块以后角色不能停止存在
 
 Needs仍然变化。
 
@@ -2204,7 +2267,7 @@ Needs仍然变化。
 
 ---
 
-## 87. 核心范式十五：家庭是最适合长期经济和资产所有权的单位
+# 87. 核心范式十五：家庭是最适合长期经济和资产所有权的单位
 
 角色可以拥有：
 
@@ -2216,7 +2279,7 @@ Household。
 
 ---
 
-## 88. HouseholdState
+# 88. HouseholdState
 
 建议包含：
 
@@ -2243,7 +2306,7 @@ Household。
 
 ---
 
-## 89. Household与Character必须分离
+# 89. Household与Character必须分离
 
 角色：
 
@@ -2259,7 +2322,7 @@ Household则可能继续存在。
 
 ---
 
-## 90. Household Membership Transaction
+# 90. Household Membership Transaction
 
 角色搬出：
 
@@ -2274,7 +2337,7 @@ Household则可能继续存在。
 
 ---
 
-## 91. Household Funds
+# 91. Household Funds
 
 不同游戏可以：
 
@@ -2288,7 +2351,7 @@ Household则可能继续存在。
 
 ---
 
-## 92. 核心范式十六：Build/Buy模式本质上是在修改行为图
+# 92. 核心范式十六：Build/Buy模式本质上是在修改行为图
 
 玩家买更好的床：
 
@@ -2325,7 +2388,7 @@ Reservation竞争。
 
 ---
 
-## 93. HomeEfficiency
+# 93. HomeEfficiency
 
 开发工具可以估算：
 
@@ -2346,7 +2409,7 @@ Reservation竞争。
 
 ---
 
-## 94. 空间与社会行为也会耦合
+# 94. 空间与社会行为也会耦合
 
 客厅：
 
@@ -2366,7 +2429,7 @@ Privacy高
 
 ---
 
-## 95. PrivacySystem
+# 95. PrivacySystem
 
 Room可以有：
 
@@ -2387,7 +2450,7 @@ Social Reaction。
 
 ---
 
-## 96. 核心范式十七：愿望和长期目标用于给自主生活增加方向
+# 96. 核心范式十七：愿望和长期目标用于给自主生活增加方向
 
 只有Needs：
 
@@ -2403,7 +2466,7 @@ Social Reaction。
 
 ---
 
-## 97. GoalDefinition
+# 97. GoalDefinition
 
 建议字段：
 
@@ -2426,7 +2489,7 @@ Social Reaction。
 
 ---
 
-## 98. Goal示例
+# 98. Goal示例
 
 - BecomeChef；
 
@@ -2445,7 +2508,7 @@ Social Reaction。
 
 ---
 
-## 99. Goal不是Quest
+# 99. Goal不是Quest
 
 Quest通常：
 
@@ -2468,7 +2531,7 @@ Goal可以由：
 
 ---
 
-## 100. Want生成
+# 100. Want生成
 
 Creative角色：
 
@@ -2488,7 +2551,7 @@ AvoidCharacter。
 
 ---
 
-## 101. Player Pin
+# 101. Player Pin
 
 玩家可以把：
 
@@ -2504,7 +2567,7 @@ AvoidCharacter。
 
 ---
 
-## 102. 核心范式十八：人生阶段提供长时间尺度的状态变化
+# 102. 核心范式十八：人生阶段提供长时间尺度的状态变化
 
 角色不是永远：
 
@@ -2529,7 +2592,7 @@ AvoidCharacter。
 
 ---
 
-## 103. LifeStageDefinition
+# 103. LifeStageDefinition
 
 建议字段：
 
@@ -2554,7 +2617,7 @@ AvoidCharacter。
 
 ---
 
-## 104. AgingState
+# 104. AgingState
 
 建议包含：
 
@@ -2575,7 +2638,7 @@ AvoidCharacter。
 
 ---
 
-## 105. 生命周期的核心价值
+# 105. 生命周期的核心价值
 
 它制造：
 
@@ -2595,7 +2658,7 @@ AvoidCharacter。
 
 ---
 
-## 106. Aging不能只是模型变老
+# 106. Aging不能只是模型变老
 
 人生阶段应该改变：
 
@@ -2610,7 +2673,7 @@ AvoidCharacter。
 
 ---
 
-## 107. LifeStage Transition
+# 107. LifeStage Transition
 
 进入新阶段：
 
@@ -2624,7 +2687,7 @@ AvoidCharacter。
 
 ---
 
-## 108. 核心范式十九：人生事件应该由状态组合触发，而不全是随机脚本
+# 108. 核心范式十九：人生事件应该由状态组合触发，而不全是随机脚本
 
 例如求婚：
 
@@ -2651,7 +2714,7 @@ AvoidCharacter。
 
 ---
 
-## 109. LifeEventDefinition
+# 109. LifeEventDefinition
 
 建议字段：
 
@@ -2676,7 +2739,7 @@ AvoidCharacter。
 
 ---
 
-## 110. 事件可以包括
+# 110. 事件可以包括
 
 - Promotion；
 
@@ -2703,7 +2766,7 @@ AvoidCharacter。
 
 ---
 
-## 111. 状态驱动事件比纯随机更可解释
+# 111. 状态驱动事件比纯随机更可解释
 
 玩家应该能够回看：
 
@@ -2724,7 +2787,7 @@ AvoidCharacter。
 
 ---
 
-## 112. 核心范式二十：Autonomy应允许角色制造玩家没有计划过的故事
+# 112. 核心范式二十：Autonomy应允许角色制造玩家没有计划过的故事
 
 如果Autonomy永远只负责：
 
@@ -2751,23 +2814,23 @@ AvoidCharacter。
 
 ---
 
-## 113. Autonomy层级
+# 113. Autonomy层级
 
 可以提供玩家设置：
 
-#### Off
+### Off
 
 只处理紧急生存。
 
-#### Basic
+### Basic
 
 自动满足Needs。
 
-#### Full
+### Full
 
 允许社交和兴趣。
 
-#### Story
+### Story
 
 允许重大自主人生决定。
 
@@ -2777,7 +2840,7 @@ AvoidCharacter。
 
 ---
 
-## 114. Major Autonomy
+# 114. Major Autonomy
 
 例如：
 
@@ -2795,7 +2858,7 @@ AvoidCharacter。
 
 ---
 
-## 115. 核心范式二十一：Routine能够让角色形成可识别习惯
+# 115. 核心范式二十一：Routine能够让角色形成可识别习惯
 
 如果角色每天：
 
@@ -2819,7 +2882,7 @@ Routine。
 
 ---
 
-## 116. RoutineState
+# 116. RoutineState
 
 建议包含：
 
@@ -2840,7 +2903,7 @@ Routine。
 
 ---
 
-## 117. Routine如何形成
+# 117. Routine如何形成
 
 反复发生：
 
@@ -2854,7 +2917,7 @@ RoutineWeight。
 
 ---
 
-## 118. Routine不是硬日程
+# 118. Routine不是硬日程
 
 Need严重时：
 
@@ -2870,7 +2933,7 @@ Need严重时：
 
 ---
 
-## 119. Routine让玩家感受到“这个人有自己的生活”
+# 119. Routine让玩家感受到“这个人有自己的生活”
 
 并且让：
 
@@ -2880,7 +2943,7 @@ Need严重时：
 
 ---
 
-## 120. 完整事件与执行流程示例
+# 120. 完整事件与执行流程示例
 
 以下以：
 
@@ -2890,7 +2953,7 @@ Need严重时：
 
 ---
 
-### 120.1 家庭状态
+## 120.1 家庭状态
 
 Household：
 
@@ -2918,7 +2981,7 @@ Child D：
 
 ---
 
-### 120.2 6:45
+## 120.2 6:45
 
 WorldClock推进。
 
@@ -2941,7 +3004,7 @@ Autonomy生成候选：
 
 ---
 
-### 120.3 A预约厕所
+## 120.3 A预约厕所
 
 ReservationSystem：
 
@@ -2953,7 +3016,7 @@ A开始寻路。
 
 ---
 
-### 120.4 6:48
+## 120.4 6:48
 
 Teen C醒来。
 
@@ -2973,7 +3036,7 @@ Shower候选Utility降低或不可用。
 
 ---
 
-### 120.5 C选择吃早餐
+## 120.5 C选择吃早餐
 
 厨房冰箱提供：
 
@@ -2981,7 +3044,7 @@ GrabQuickMeal。
 
 ---
 
-### 120.6 母亲B醒来
+## 120.6 母亲B醒来
 
 玩家直接下达：
 
@@ -2991,7 +3054,7 @@ Player Command进入Queue。
 
 ---
 
-### 120.7 B申请Bathroom
+## 120.7 B申请Bathroom
 
 当前Privacy规则：
 
@@ -3007,7 +3070,7 @@ WaitingForReservation
 
 ---
 
-### 120.8 A完成
+## 120.8 A完成
 
 Need Effect：
 
@@ -3017,13 +3080,13 @@ Reservation释放。
 
 ---
 
-### 120.9 B获得Bathroom Reservation
+## 120.9 B获得Bathroom Reservation
 
 开始Shower。
 
 ---
 
-### 120.10 C吃完早餐
+## 120.10 C吃完早餐
 
 当前：
 
@@ -3045,7 +3108,7 @@ UseComputer。
 
 ---
 
-### 120.11 B洗澡时间较长
+## 120.11 B洗澡时间较长
 
 因为：
 
@@ -3055,7 +3118,7 @@ Hygiene Recovery Rate低。
 
 ---
 
-### 120.12 Child D醒来
+## 120.12 Child D醒来
 
 也需要Bathroom。
 
@@ -3063,7 +3126,7 @@ Hygiene Recovery Rate低。
 
 ---
 
-### 120.13 7:30
+## 120.13 7:30
 
 A需要洗澡。
 
@@ -3073,7 +3136,7 @@ Work Schedule Utility开始升高。
 
 ---
 
-### 120.14 玩家决定取消A的洗澡计划
+## 120.14 玩家决定取消A的洗澡计划
 
 直接让A：
 
@@ -3081,7 +3144,7 @@ EatBreakfast。
 
 ---
 
-### 120.15 厨房冲突
+## 120.15 厨房冲突
 
 C仍然坐在DiningChair。
 
@@ -3095,7 +3158,7 @@ A开始CookBreakfast。
 
 ---
 
-### 120.16 B终于完成洗澡
+## 120.16 B终于完成洗澡
 
 Bathroom释放。
 
@@ -3103,7 +3166,7 @@ D进入。
 
 ---
 
-### 120.17 7:45
+## 120.17 7:45
 
 A的工作出发时间逼近。
 
@@ -3117,7 +3180,7 @@ ScheduleSystem判断：
 
 ---
 
-### 120.18 A拥有Ambitious Trait
+## 120.18 A拥有Ambitious Trait
 
 CareerUtility显著提高。
 
@@ -3129,7 +3192,7 @@ Cancel Cooking
 
 ---
 
-### 120.19 由于Cooking已经经过Ingredient Commit
+## 120.19 由于Cooking已经经过Ingredient Commit
 
 取消后：
 
@@ -3141,7 +3204,7 @@ UnfinishedMeal。
 
 ---
 
-### 120.20 A离家
+## 120.20 A离家
 
 没有吃早餐。
 
@@ -3149,7 +3212,7 @@ Hunger继续下降。
 
 ---
 
-### 120.21 B发现厨房脏乱
+## 120.21 B发现厨房脏乱
 
 B拥有Neat Trait。
 
@@ -3157,13 +3220,13 @@ CleanKitchen Utility提高。
 
 ---
 
-### 120.22 玩家却命令B吃UnfinishedMeal
+## 120.22 玩家却命令B吃UnfinishedMeal
 
 Player Command覆盖Autonomy Clean。
 
 ---
 
-### 120.23 Teen C仍在玩电脑
+## 120.23 Teen C仍在玩电脑
 
 7:55。
 
@@ -3177,7 +3240,7 @@ GoToSchool。
 
 ---
 
-### 120.24 C尝试离开
+## 120.24 C尝试离开
 
 但Child D正在门口进行：
 
@@ -3187,13 +3250,13 @@ Door Approach Slot短暂占用。
 
 ---
 
-### 120.25 C等待
+## 120.25 C等待
 
 延迟约一分钟。
 
 ---
 
-### 120.26 8:00
+## 120.26 8:00
 
 A已经到Work AwayActivity。
 
@@ -3209,7 +3272,7 @@ Performance获得轻微Penalty。
 
 ---
 
-### 120.27 B和D开始社交
+## 120.27 B和D开始社交
 
 D因为：
 
@@ -3223,7 +3286,7 @@ Friendly Conversation。
 
 ---
 
-### 120.28 D当前Irritated
+## 120.28 D当前Irritated
 
 SocialContext降低Friendly Interaction成功率。
 
@@ -3233,13 +3296,13 @@ Awkward。
 
 ---
 
-### 120.29 B获得短期Moodlet
+## 120.29 B获得短期Moodlet
 
 “孩子今天脾气不好”。
 
 ---
 
-### 120.30 D形成Memory
+## 120.30 D形成Memory
 
 “早晨没有吃到早餐”。
 
@@ -3249,7 +3312,7 @@ Importance较低。
 
 ---
 
-### 120.31 C迟到
+## 120.31 C迟到
 
 School AwayActivity记录：
 
@@ -3259,7 +3322,7 @@ Performance略降。
 
 ---
 
-### 120.32 玩家看到的不是一个预写剧情
+## 120.32 玩家看到的不是一个预写剧情
 
 而是一连串：
 
@@ -3277,7 +3340,7 @@ Performance略降。
 
 ---
 
-### 120.33 玩家下一步可能怎么办
+## 120.33 玩家下一步可能怎么办
 
 扩建：
 
@@ -3301,7 +3364,7 @@ Performance略降。
 
 ---
 
-### 120.34 这就是本类型的核心涌现循环
+## 120.34 这就是本类型的核心涌现循环
 
 **空间条件<br>
 → 资源竞争<br>
@@ -3317,9 +3380,9 @@ Performance略降。
 
 ---
 
-## 121. 模块通信设计
+# 121. 模块通信设计
 
-### 121.1 Commands
+## 121.1 Commands
 
 典型命令：
 
@@ -3352,7 +3415,7 @@ Performance略降。
 
 ---
 
-### 121.2 Queries
+## 121.2 Queries
 
 适用于：
 
@@ -3390,7 +3453,7 @@ Query不能：
 
 ---
 
-### 121.3 Domain Events
+## 121.3 Domain Events
 
 包括：
 
@@ -3447,7 +3510,7 @@ Query不能：
 
 ---
 
-### 121.4 Presentation Events
+## 121.4 Presentation Events
 
 包括：
 
@@ -3483,7 +3546,7 @@ Query不能：
 
 ---
 
-## 122. 状态所有权
+# 122. 状态所有权
 
 推荐：
 
@@ -3563,7 +3626,7 @@ Eat Interaction。
 
 ---
 
-## 123. 核心范式二十二：权威状态与派生状态必须分离
+# 123. 核心范式二十二：权威状态与派生状态必须分离
 
 权威：
 
@@ -3599,7 +3662,7 @@ Eat Interaction。
 
 ---
 
-## 124. SaveSnapshot
+# 124. SaveSnapshot
 
 建议包含：
 
@@ -3644,17 +3707,17 @@ Eat Interaction。
 
 ---
 
-## 125. 运行中的Interaction是否需要存档
+# 125. 运行中的Interaction是否需要存档
 
 可以选择：
 
-#### 完整恢复
+### 完整恢复
 
 保存Interaction Stage和Reservation。
 
 复杂。
 
-#### 安全归一化
+### 安全归一化
 
 Save时将角色恢复到：
 
@@ -3670,7 +3733,7 @@ Safe Idle State。
 
 ---
 
-## 126. Save时不要依赖动画状态
+# 126. Save时不要依赖动画状态
 
 Animation：
 
@@ -3686,7 +3749,7 @@ Interaction逻辑状态。
 
 ---
 
-## 127. Memory持久化需要容量控制
+# 127. Memory持久化需要容量控制
 
 角色生活几十年：
 
@@ -3705,7 +3768,7 @@ Memory数量可能巨大。
 
 ---
 
-## 128. 历史事件可以压缩
+# 128. 历史事件可以压缩
 
 例如：
 
@@ -3725,7 +3788,7 @@ Wedding
 
 ---
 
-## 129. 核心范式二十三：离屏模拟必须与当前地块高精度模拟分层
+# 129. 核心范式二十三：离屏模拟必须与当前地块高精度模拟分层
 
 如果Neighborhood拥有：
 
@@ -3737,29 +3800,29 @@ Wedding
 
 ---
 
-## 130. Simulation LOD
+# 130. Simulation LOD
 
 推荐：
 
-#### Tier 0：Active Household
+### Tier 0：Active Household
 
 完整Interaction、Routing、Object Reservation。
 
-#### Tier 1：Visible Neighbor
+### Tier 1：Visible Neighbor
 
 简化自主行为。
 
-#### Tier 2：Off-Lot Character
+### Tier 2：Off-Lot Character
 
 基于Schedule和统计更新。
 
-#### Tier 3：Inactive Population
+### Tier 3：Inactive Population
 
 事件级更新。
 
 ---
 
-## 131. Off-Lot Simulation
+# 131. Off-Lot Simulation
 
 例如NPC上班：
 
@@ -3780,7 +3843,7 @@ Wedding
 
 ---
 
-## 132. Off-Lot Need不能完全冻结
+# 132. Off-Lot Need不能完全冻结
 
 否则玩家切换家庭后发现：
 
@@ -3796,7 +3859,7 @@ Analytical Update。
 
 ---
 
-## 133. Character Materialization
+# 133. Character Materialization
 
 NPC来到当前Lot：
 
@@ -3806,7 +3869,7 @@ NPC来到当前Lot：
 
 ---
 
-## 134. Dematerialization
+# 134. Dematerialization
 
 离开：
 
@@ -3816,7 +3879,7 @@ NPC来到当前Lot：
 
 ---
 
-## 135. 核心范式二十四：时间加速是正式玩法基础设施
+# 135. 核心范式二十四：时间加速是正式玩法基础设施
 
 生活模拟存在大量：
 
@@ -3839,7 +3902,7 @@ NPC来到当前Lot：
 
 ---
 
-## 136. Time Scale Policy
+# 136. Time Scale Policy
 
 交互状态不能依赖：
 
@@ -3857,7 +3920,7 @@ NPC来到当前Lot：
 
 ---
 
-## 137. Ultra Fast可以在所有可控角色不可操作时自动启用
+# 137. Ultra Fast可以在所有可控角色不可操作时自动启用
 
 例如：
 
@@ -3878,7 +3941,7 @@ NPC来到当前Lot：
 
 ---
 
-## 138. Scheduled Events使用世界时间
+# 138. Scheduled Events使用世界时间
 
 不要：
 
@@ -3892,11 +3955,11 @@ WorldDateTime。
 
 ---
 
-## 139. 失败隔离
+# 139. 失败隔离
 
 ---
 
-### 139.1 Interaction对象被删除
+## 139.1 Interaction对象被删除
 
 角色正在：
 
@@ -3919,7 +3982,7 @@ ProviderInvalidated。
 
 ---
 
-## 140. Furniture移动导致Route失效
+# 140. Furniture移动导致Route失效
 
 当前Route版本：
 
@@ -3935,7 +3998,7 @@ BuildMode提交以后：
 
 ---
 
-## 141. Reservation泄漏
+# 141. Reservation泄漏
 
 Interaction异常退出：
 
@@ -3949,7 +4012,7 @@ ReservationLeakWarning。
 
 ---
 
-## 142. 多人Interaction缺席
+# 142. 多人Interaction缺席
 
 双人Conversation。
 
@@ -3969,7 +4032,7 @@ Fallback。
 
 ---
 
-## 143. Need异常
+# 143. Need异常
 
 配置错误：
 
@@ -3987,7 +4050,7 @@ AbnormalNeedRate。
 
 ---
 
-## 144. Autonomy没有合法Candidate
+# 144. Autonomy没有合法Candidate
 
 Fallback：
 
@@ -4003,7 +4066,7 @@ SitGround。
 
 ---
 
-## 145. Autonomy循环
+# 145. Autonomy循环
 
 角色选择：
 
@@ -4019,7 +4082,7 @@ RecentFailurePenalty。
 
 ---
 
-## 146. Action Queue循环
+# 146. Action Queue循环
 
 A Interaction完成时又自动加入A。
 
@@ -4029,7 +4092,7 @@ RepetitionPenalty / LoopGuard。
 
 ---
 
-## 147. Character卡在导航中
+# 147. Character卡在导航中
 
 超过：
 
@@ -4047,7 +4110,7 @@ Safe Position Recovery。
 
 ---
 
-## 148. Safe Position Recovery
+# 148. Safe Position Recovery
 
 不能默认：
 
@@ -4063,7 +4126,7 @@ RoutingRecovery。
 
 ---
 
-## 149. Household资金重复扣除
+# 149. Household资金重复扣除
 
 BuyObject使用：
 
@@ -4077,7 +4140,7 @@ BuildingSystem再扣一次。
 
 ---
 
-## 150. PurchaseTransaction
+# 150. PurchaseTransaction
 
 验证Funds<br>
 → ReserveFunds<br>
@@ -4088,7 +4151,7 @@ BuildingSystem再扣一次。
 
 ---
 
-## 151. 社交结果重复
+# 151. 社交结果重复
 
 动画通知两次：
 
@@ -4102,7 +4165,7 @@ InteractionInstanceId。
 
 ---
 
-## 152. LifeStage重复转换
+# 152. LifeStage重复转换
 
 Birthday事件和AgeTick：
 
@@ -4114,7 +4177,7 @@ LifeStageTransitionTransaction。
 
 ---
 
-## 153. Household成员重复归属
+# 153. Household成员重复归属
 
 一个Character不能同时属于：
 
@@ -4126,7 +4189,7 @@ HouseholdIntegrityAudit。
 
 ---
 
-## 154. Inventory Item重复
+# 154. Inventory Item重复
 
 同一ItemInstance：
 
@@ -4136,7 +4199,7 @@ HouseholdIntegrityAudit。
 
 ---
 
-## 155. Off-Lot Simulation与Active Simulation双跑
+# 155. Off-Lot Simulation与Active Simulation双跑
 
 角色回到当前Lot以后：
 
@@ -4150,7 +4213,7 @@ Need会被更新两次。
 
 ---
 
-## 156. CharacterRuntimeLease
+# 156. CharacterRuntimeLease
 
 可以确保：
 
@@ -4158,7 +4221,7 @@ Need会被更新两次。
 
 ---
 
-## 157. Debug与可观测性
+# 157. Debug与可观测性
 
 本类型复杂度极高。
 
@@ -4170,7 +4233,7 @@ Need会被更新两次。
 
 ---
 
-## 158. Autonomy Decision Inspector
+# 158. Autonomy Decision Inspector
 
 这是最重要的工具之一。
 
@@ -4195,7 +4258,7 @@ Final 82。
 
 ---
 
-## 159. Autonomy Timeline
+# 159. Autonomy Timeline
 
 记录：
 
@@ -4209,7 +4272,7 @@ Final 82。
 
 ---
 
-## 160. Need Timeline
+# 160. Need Timeline
 
 显示：
 
@@ -4228,7 +4291,7 @@ Final 82。
 
 ---
 
-## 161. Interaction Trace
+# 161. Interaction Trace
 
 显示：
 
@@ -4247,7 +4310,7 @@ Request<br>
 
 ---
 
-## 162. Reservation Inspector
+# 162. Reservation Inspector
 
 点击Object：
 
@@ -4259,7 +4322,7 @@ Request<br>
 
 ---
 
-## 163. Routing Inspector
+# 163. Routing Inspector
 
 显示：
 
@@ -4278,7 +4341,7 @@ Request<br>
 
 ---
 
-## 164. Affordance Inspector
+# 164. Affordance Inspector
 
 点击冰箱：
 
@@ -4295,7 +4358,7 @@ Clean ❌ 当前不脏。
 
 ---
 
-## 165. Relationship Breakdown
+# 165. Relationship Breakdown
 
 A → B：
 
@@ -4310,7 +4373,7 @@ Neglect -5。
 
 ---
 
-## 166. Memory Inspector
+# 166. Memory Inspector
 
 显示：
 
@@ -4322,7 +4385,7 @@ Neglect -5。
 
 ---
 
-## 167. Mood Breakdown
+# 167. Mood Breakdown
 
 当前：
 
@@ -4336,7 +4399,7 @@ DirtyRoom +10。
 
 ---
 
-## 168. Schedule Timeline
+# 168. Schedule Timeline
 
 显示：
 
@@ -4358,7 +4421,7 @@ Actual Execution。
 
 ---
 
-## 169. Household Morning Congestion Heatmap
+# 169. Household Morning Congestion Heatmap
 
 显示：
 
@@ -4376,7 +4439,7 @@ Door；
 
 ---
 
-## 170. Room Utility Analyzer
+# 170. Room Utility Analyzer
 
 显示：
 
@@ -4388,7 +4451,7 @@ Bed Interaction Slot。
 
 ---
 
-## 171. Career Trace
+# 171. Career Trace
 
 某角色为什么没有Promotion：
 
@@ -4400,7 +4463,7 @@ Skill要求满足。
 
 ---
 
-## 172. Life Event Trace
+# 172. Life Event Trace
 
 为什么触发Breakup：
 
@@ -4415,7 +4478,7 @@ Relationship Conflict
 
 ---
 
-## 173. Simulation LOD Inspector
+# 173. Simulation LOD Inspector
 
 显示每个Character当前：
 
@@ -4433,7 +4496,7 @@ Aggregated。
 
 ---
 
-## 174. Time Scale Consistency Test
+# 174. Time Scale Consistency Test
 
 相同Household：
 
@@ -4445,11 +4508,11 @@ Aggregated。
 
 ---
 
-## 175. Content Validation
+# 175. Content Validation
 
 ---
 
-### 175.1 Affordance Validation
+## 175.1 Affordance Validation
 
 所有Interaction检查：
 
@@ -4468,7 +4531,7 @@ Aggregated。
 
 ---
 
-### 175.2 Interaction Slot Validation
+## 175.2 Interaction Slot Validation
 
 Object模型：
 
@@ -4483,7 +4546,7 @@ Object模型：
 
 ---
 
-## 176. Object Functional Test
+# 176. Object Functional Test
 
 自动摆放Object于标准房间。
 
@@ -4499,7 +4562,7 @@ Bot角色尝试：
 
 ---
 
-## 177. Need Simulation
+# 177. Need Simulation
 
 Bot家庭运行：
 
@@ -4517,7 +4580,7 @@ Need或Autonomy有问题。
 
 ---
 
-## 178. Autonomy Stability Test
+# 178. Autonomy Stability Test
 
 无人干预：
 
@@ -4542,7 +4605,7 @@ Need或Autonomy有问题。
 
 ---
 
-## 179. Minimal House Test
+# 179. Minimal House Test
 
 定义一个官方“最低可生活住宅”。
 
@@ -4556,7 +4619,7 @@ Need或Autonomy有问题。
 
 ---
 
-## 180. Object Contention Test
+# 180. Object Contention Test
 
 四人家庭。
 
@@ -4570,7 +4633,7 @@ Reservation和等待是否稳定。
 
 ---
 
-## 181. Route Mutation Test
+# 181. Route Mutation Test
 
 角色正在行动时：
 
@@ -4582,7 +4645,7 @@ Reservation和等待是否稳定。
 
 ---
 
-## 182. Social Monte Carlo
+# 182. Social Monte Carlo
 
 不同Trait组合：
 
@@ -4600,7 +4663,7 @@ Reservation和等待是否稳定。
 
 ---
 
-## 183. Relationship Long-Run Test
+# 183. Relationship Long-Run Test
 
 模拟多年。
 
@@ -4614,7 +4677,7 @@ Reservation和等待是否稳定。
 
 ---
 
-## 184. Memory Load Test
+# 184. Memory Load Test
 
 角色生活：
 
@@ -4626,7 +4689,7 @@ Memory数量、查询时间、存档大小。
 
 ---
 
-## 185. Household Lifecycle Test
+# 185. Household Lifecycle Test
 
 模拟：
 
@@ -4643,7 +4706,7 @@ Memory数量、查询时间、存档大小。
 
 ---
 
-## 186. Career Schedule Test
+# 186. Career Schedule Test
 
 随机：
 
@@ -4659,7 +4722,7 @@ Need。
 
 ---
 
-## 187. Life Stage Compatibility Test
+# 187. Life Stage Compatibility Test
 
 Child不能：
 
@@ -4671,7 +4734,7 @@ Elder允许：
 
 ---
 
-## 188. Save/Load Determinism Test
+# 188. Save/Load Determinism Test
 
 保存Household。
 
@@ -4691,7 +4754,7 @@ Elder允许：
 
 ---
 
-## 189. 性能设计
+# 189. 性能设计
 
 家庭人生模拟通常不是：
 
@@ -4718,7 +4781,7 @@ Elder允许：
 
 ---
 
-## 190. Autonomy不需要每帧运行
+# 190. Autonomy不需要每帧运行
 
 角色当前正在：
 
@@ -4749,7 +4812,7 @@ Autonomy只在：
 
 ---
 
-## 191. Affordance Spatial Index
+# 191. Affordance Spatial Index
 
 不要让角色：
 
@@ -4768,7 +4831,7 @@ Autonomy只在：
 
 ---
 
-## 192. 两阶段候选生成
+# 192. 两阶段候选生成
 
 第一阶段：
 
@@ -4798,7 +4861,7 @@ Provider。
 
 ---
 
-## 193. Utility评分也不必评分500个候选
+# 193. Utility评分也不必评分500个候选
 
 每类Interaction：
 
@@ -4810,7 +4873,7 @@ Top K Provider。
 
 ---
 
-## 194. Path Cost延迟计算
+# 194. Path Cost延迟计算
 
 路径计算昂贵。
 
@@ -4824,7 +4887,7 @@ Top K Provider。
 
 ---
 
-## 195. Interaction运行后角色大部分时间进入低成本状态
+# 195. Interaction运行后角色大部分时间进入低成本状态
 
 例如：
 
@@ -4838,7 +4901,7 @@ Sleep：
 
 ---
 
-## 196. Memory索引
+# 196. Memory索引
 
 按：
 
@@ -4859,7 +4922,7 @@ Sleep：
 
 ---
 
-## 197. Relationship图使用稀疏结构
+# 197. Relationship图使用稀疏结构
 
 角色没有见过：
 
@@ -4875,7 +4938,7 @@ Sleep：
 
 ---
 
-## 198. Neighborhood人口需要LOD
+# 198. Neighborhood人口需要LOD
 
 当前Household：
 
@@ -4887,7 +4950,7 @@ Sleep：
 
 ---
 
-## 199. Build Mode提交后局部重建
+# 199. Build Mode提交后局部重建
 
 移动一把椅子：
 
@@ -4905,11 +4968,11 @@ Sleep：
 
 ---
 
-## 200. 可扩展点
+# 200. 可扩展点
 
 ---
 
-### 200.1 新Need
+## 200.1 新Need
 
 通过：
 
@@ -4919,7 +4982,7 @@ NeedDefinition
 
 ---
 
-### 200.2 新Trait
+## 200.2 新Trait
 
 通过：
 
@@ -4929,7 +4992,7 @@ ModifierProfile
 
 ---
 
-### 200.3 新Object
+## 200.3 新Object
 
 提供：
 
@@ -4942,7 +5005,7 @@ ObjectDefinition
 
 ---
 
-### 200.4 新Interaction
+## 200.4 新Interaction
 
 通过：
 
@@ -4952,7 +5015,7 @@ InteractionDefinition
 
 ---
 
-### 200.5 新Career
+## 200.5 新Career
 
 通过：
 
@@ -4963,7 +5026,7 @@ CareerDefinition
 
 ---
 
-### 200.6 新Relationship维度
+## 200.6 新Relationship维度
 
 扩展：
 
@@ -4977,7 +5040,7 @@ RelationshipComponent。
 
 ---
 
-### 200.7 新LifeStage
+## 200.7 新LifeStage
 
 通过：
 
@@ -4985,7 +5048,7 @@ LifeStageDefinition。
 
 ---
 
-### 200.8 新Neighborhood
+## 200.8 新Neighborhood
 
 主要提供：
 
@@ -4993,7 +5056,7 @@ Lots、NPC Household和服务。
 
 ---
 
-### 200.9 新自主系统
+## 200.9 新自主系统
 
 例如：
 
@@ -5009,11 +5072,11 @@ Preference。
 
 ---
 
-## 201. 玩家体验设计
+# 201. 玩家体验设计
 
 ---
 
-### 201.1 角色必须显得自主，但不能和玩家争夺控制权
+## 201.1 角色必须显得自主，但不能和玩家争夺控制权
 
 这是本类型最难的体验平衡之一。
 
@@ -5027,7 +5090,7 @@ Preference。
 
 ---
 
-## 202. 玩家命令需要明确锁定
+# 202. 玩家命令需要明确锁定
 
 角色正在执行Player Order时：
 
@@ -5046,7 +5109,7 @@ Preference。
 
 ---
 
-## 203. Autonomy行为最好给轻量解释
+# 203. Autonomy行为最好给轻量解释
 
 角色主动拿食物：
 
@@ -5066,7 +5129,7 @@ Lonely。
 
 ---
 
-## 204. 角色拒绝玩家命令也必须解释
+# 204. 角色拒绝玩家命令也必须解释
 
 例如：
 
@@ -5084,7 +5147,7 @@ Not Appropriate。
 
 ---
 
-## 205. Needs UI应该显示趋势
+# 205. Needs UI应该显示趋势
 
 Energy：
 
@@ -5098,7 +5161,7 @@ Energy 40
 
 ---
 
-## 206. 玩家应能感受到不同家具真正改变生活质量
+# 206. 玩家应能感受到不同家具真正改变生活质量
 
 高级床：
 
@@ -5118,7 +5181,7 @@ Energy 40
 
 ---
 
-## 207. Build Mode和Live Mode应该形成强闭环
+# 207. Build Mode和Live Mode应该形成强闭环
 
 生活中发现问题：
 
@@ -5140,7 +5203,7 @@ Energy 40
 
 ---
 
-## 208. 角色个性应该通过行为体现，而不是只显示Trait图标
+# 208. 角色个性应该通过行为体现，而不是只显示Trait图标
 
 Lazy角色：
 
@@ -5156,7 +5219,7 @@ Neat角色：
 
 ---
 
-## 209. 但Trait不应该把角色锁死
+# 209. 但Trait不应该把角色锁死
 
 Lazy角色：
 
@@ -5168,7 +5231,7 @@ Lazy角色：
 
 ---
 
-## 210. 情绪不能完全接管玩家控制
+# 210. 情绪不能完全接管玩家控制
 
 Angry：
 
@@ -5180,7 +5243,7 @@ Angry：
 
 ---
 
-## 211. 社交结果要保留对方自主性
+# 211. 社交结果要保留对方自主性
 
 玩家可以：
 
@@ -5194,7 +5257,7 @@ Angry：
 
 ---
 
-## 212. 失败最好形成故事，而不是纯惩罚
+# 212. 失败最好形成故事，而不是纯惩罚
 
 角色迟到。
 
@@ -5210,7 +5273,7 @@ Angry：
 
 ---
 
-## 213. 生活模拟需要允许“不最优”
+# 213. 生活模拟需要允许“不最优”
 
 如果所有系统都鼓励：
 
@@ -5235,7 +5298,7 @@ Angry：
 
 ---
 
-## 214. 幸福不应只有单一总分
+# 214. 幸福不应只有单一总分
 
 否则所有玩法都趋向：
 
@@ -5249,7 +5312,7 @@ Angry：
 
 ---
 
-## 215. 长期故事需要可回顾
+# 215. 长期故事需要可回顾
 
 可以提供：
 
@@ -5270,191 +5333,191 @@ Angry：
 
 ---
 
-## 216. 常见设计失败
+# 216. 常见设计失败
 
 ---
 
-### 216.1 角色AI硬编码所有家具
+## 216.1 角色AI硬编码所有家具
 
 新增内容成本指数增长。
 
 ---
 
-### 216.2 Need自己寻找具体Object
+## 216.2 Need自己寻找具体Object
 
 需求系统和世界内容耦合。
 
 ---
 
-### 216.3 Autonomy使用固定if-else优先级
+## 216.3 Autonomy使用固定if-else优先级
 
 所有角色行为高度一致。
 
 ---
 
-### 216.4 Autonomy完全随机
+## 216.4 Autonomy完全随机
 
 角色没有人格和动机。
 
 ---
 
-### 216.5 Autonomy覆盖Player Queue
+## 216.5 Autonomy覆盖Player Queue
 
 玩家失去控制感。
 
 ---
 
-### 216.6 玩家命令无条件压过Emergency
+## 216.6 玩家命令无条件压过Emergency
 
 角色着火还继续看电视。
 
 ---
 
-### 216.7 Interaction只是动画Callback
+## 216.7 Interaction只是动画Callback
 
 取消、寻路和存档都难以维护。
 
 ---
 
-### 216.8 没有Reservation
+## 216.8 没有Reservation
 
 全家每天抢同一个厕所并集体卡住。
 
 ---
 
-### 216.9 Reservation没有Lease
+## 216.9 Reservation没有Lease
 
 角色异常后家具永久不可用。
 
 ---
 
-### 216.10 寻路目标是Object中心
+## 216.10 寻路目标是Object中心
 
 床、沙发、多人家具无法正确使用。
 
 ---
 
-### 216.11 家具放得下但互动Slot不可达
+## 216.11 家具放得下但互动Slot不可达
 
 玩家不知道为什么不能使用。
 
 ---
 
-### 216.12 Build Mode修改世界后旧Route仍然使用
+## 216.12 Build Mode修改世界后旧Route仍然使用
 
 角色穿墙或卡死。
 
 ---
 
-### 216.13 Trait拥有独立AI代码
+## 216.13 Trait拥有独立AI代码
 
 Trait组合爆炸。
 
 ---
 
-### 216.14 Emotion直接覆盖角色人格
+## 216.14 Emotion直接覆盖角色人格
 
 情绪一变角色完全不像自己。
 
 ---
 
-### 216.15 Relationship只有单一好感值
+## 216.15 Relationship只有单一好感值
 
 复杂社会状态无法表达。
 
 ---
 
-### 216.16 社交成功由发起方单独决定
+## 216.16 社交成功由发起方单独决定
 
 对方没有自主性。
 
 ---
 
-### 216.17 所有互动永久生成Memory
+## 216.17 所有互动永久生成Memory
 
 存档最终爆炸。
 
 ---
 
-### 216.18 Memory无限影响角色
+## 216.18 Memory无限影响角色
 
 几十年前的小事件永久主导行为。
 
 ---
 
-### 216.19 Schedule只在到点瞬间触发
+## 216.19 Schedule只在到点瞬间触发
 
 角色没有提前出发概念。
 
 ---
 
-### 216.20 Off-Lot角色完全冻结
+## 216.20 Off-Lot角色完全冻结
 
 邻居世界没有持续性。
 
 ---
 
-### 216.21 Off-Lot仍完整模拟
+## 216.21 Off-Lot仍完整模拟
 
 性能浪费巨大。
 
 ---
 
-### 216.22 Household与Character资产不分
+## 216.22 Household与Character资产不分
 
 搬家、离婚、死亡后资产混乱。
 
 ---
 
-### 216.23 Aging只换模型
+## 216.23 Aging只换模型
 
 人生阶段没有玩法意义。
 
 ---
 
-### 216.24 Life Event完全随机
+## 216.24 Life Event完全随机
 
 长期故事缺乏因果。
 
 ---
 
-### 216.25 全部重大人生决定都自动发生
+## 216.25 全部重大人生决定都自动发生
 
 玩家感觉自己只是观众。
 
 ---
 
-### 216.26 所有重大人生决定都必须玩家手动触发
+## 216.26 所有重大人生决定都必须玩家手动触发
 
 角色又显得没有自主生命。
 
 ---
 
-### 216.27 房屋装饰只改变美观评分
+## 216.27 房屋装饰只改变美观评分
 
 空间布局与生活系统脱节。
 
 ---
 
-### 216.28 更贵家具只是Need +10%
+## 216.28 更贵家具只是Need +10%
 
 升级体验过于数值化。
 
 ---
 
-### 216.29 玩家必须持续微操才能避免角色自毁
+## 216.29 玩家必须持续微操才能避免角色自毁
 
 Autonomy没有承担基础生活。
 
 ---
 
-### 216.30 Autonomy过强
+## 216.30 Autonomy过强
 
 完全不需要玩家参与。
 
 ---
 
-## 217. 最小可行原型
+# 217. 最小可行原型
 
 验证家庭人生模拟核心范式时，不需要一开始制作：
 
@@ -5466,7 +5529,7 @@ Autonomy没有承担基础生活。
 
 ---
 
-## 218. 核心Needs
+# 218. 核心Needs
 
 建议：
 
@@ -5489,7 +5552,7 @@ Autonomy没有承担基础生活。
 
 ---
 
-## 219. Traits
+# 219. Traits
 
 先做：
 
@@ -5508,7 +5571,7 @@ Autonomy没有承担基础生活。
 
 ---
 
-## 220. Objects
+# 220. Objects
 
 至少：
 
@@ -5545,7 +5608,7 @@ Autonomy没有承担基础生活。
 
 ---
 
-## 221. Social
+# 221. Social
 
 只需要：
 
@@ -5566,7 +5629,7 @@ Relationship + Mood + Memory。
 
 ---
 
-## 222. Career
+# 222. Career
 
 例如：
 
@@ -5580,7 +5643,7 @@ Artist。
 
 ---
 
-## 223. LifeStage
+# 223. LifeStage
 
 MVP只需：
 
@@ -5596,7 +5659,7 @@ LifeStage。
 
 ---
 
-## 224. Build Mode
+# 224. Build Mode
 
 实现：
 
@@ -5615,7 +5678,7 @@ LifeStage。
 
 ---
 
-## 225. MVP必要基础设施
+# 225. MVP必要基础设施
 
 - CharacterState；
 
@@ -5662,7 +5725,7 @@ LifeStage。
 
 ---
 
-## 226. MVP必要调试工具
+# 226. MVP必要调试工具
 
 - AutonomyDecisionInspector；
 
@@ -5689,7 +5752,7 @@ LifeStage。
 
 ---
 
-## 227. MVP核心验收问题
+# 227. MVP核心验收问题
 
 原型至少必须能够回答：
 
@@ -5751,7 +5814,7 @@ LifeStage。
 
 ---
 
-## 228. 推荐实施顺序
+# 228. 推荐实施顺序
 
 第一阶段：
 
@@ -5859,7 +5922,7 @@ LifeStage。
 
 ---
 
-## 229. 架构验收标准
+# 229. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -5964,11 +6027,11 @@ LifeStage。
 
 ---
 
-## 230. 可迁移到其他游戏的设计思想
+# 230. 可迁移到其他游戏的设计思想
 
 ---
 
-### 230.1 Affordance可以把“谁能做什么”从Agent AI转移到世界对象
+## 230.1 Affordance可以把“谁能做什么”从Agent AI转移到世界对象
 
 可迁移到：
 
@@ -5991,7 +6054,7 @@ Agent不需要认识所有对象类型。
 
 ---
 
-## 231. Need和Solution应该分离
+# 231. Need和Solution应该分离
 
 可迁移到：
 
@@ -6016,7 +6079,7 @@ Agent不需要认识所有对象类型。
 
 ---
 
-## 232. Utility Arbitration比硬优先级更适合存在大量合理行为的系统
+# 232. Utility Arbitration比硬优先级更适合存在大量合理行为的系统
 
 可迁移到：
 
@@ -6033,7 +6096,7 @@ Agent不需要认识所有对象类型。
 
 ---
 
-## 233. 玩家命令与自主AI可以通过优先级层共存
+# 233. 玩家命令与自主AI可以通过优先级层共存
 
 可迁移到：
 
@@ -6058,7 +6121,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 234. Reservation是共享资源Agent系统的基础设施
+# 234. Reservation是共享资源Agent系统的基础设施
 
 可迁移到：
 
@@ -6081,7 +6144,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 235. Interaction Slot比“移动到Object位置”更加通用
+# 235. Interaction Slot比“移动到Object位置”更加通用
 
 可迁移到：
 
@@ -6100,7 +6163,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 236. 空间布局可以通过行为成本影响AI，而不需要特殊规则
+# 236. 空间布局可以通过行为成本影响AI，而不需要特殊规则
 
 玩家把床放远：
 
@@ -6119,7 +6182,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 237. Trait更适合作为统一决策函数的Modifier，而不是完整行为脚本
+# 237. Trait更适合作为统一决策函数的Modifier，而不是完整行为脚本
 
 可迁移到：
 
@@ -6135,7 +6198,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 238. Memory把一次性事件转化为长期行为上下文
+# 238. Memory把一次性事件转化为长期行为上下文
 
 可迁移到：
 
@@ -6152,7 +6215,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 239. Schedule可以把自由沙盒转化为周期性时间压力
+# 239. Schedule可以把自由沙盒转化为周期性时间压力
 
 可迁移到：
 
@@ -6169,7 +6232,7 @@ Player Intent之外的Fallback层。
 
 ---
 
-## 240. Household是一种非常有价值的中层所有权单位
+# 240. Household是一种非常有价值的中层所有权单位
 
 可迁移到：
 
@@ -6196,7 +6259,7 @@ World
 
 ---
 
-## 241. Simulation LOD不仅适用于图形，也适用于“行为精度”
+# 241. Simulation LOD不仅适用于图形，也适用于“行为精度”
 
 可迁移到：
 
@@ -6219,7 +6282,7 @@ World
 
 ---
 
-## 242. 人生事件最好由已有系统状态自然达到阈值，而不是单独随机制造
+# 242. 人生事件最好由已有系统状态自然达到阈值，而不是单独随机制造
 
 可迁移到：
 
@@ -6238,7 +6301,7 @@ World
 
 ---
 
-## 243. 失败可以是故事内容，而不仅是惩罚
+# 243. 失败可以是故事内容，而不仅是惩罚
 
 迟到、做饭失败、争吵等：
 
@@ -6257,7 +6320,7 @@ World
 
 ---
 
-## 244. 长期模拟最有价值的内容之一是“系统自己产生玩家没预料到的事件”
+# 244. 长期模拟最有价值的内容之一是“系统自己产生玩家没预料到的事件”
 
 只要：
 
@@ -6272,9 +6335,9 @@ World
 
 ---
 
-## 245. 本次防重记录
+# 245. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **家庭人生模拟 / Household Life Simulation / Dollhouse Life Sim。**
 
@@ -6299,7 +6362,7 @@ World
 
 ---
 
-### 核心范式
+## 核心范式
 
 角色拥有持续变化的Need、Trait、Emotion、Relationship、Memory、Schedule、Goal和LifeStage；世界中的家具、场所和其他角色通过统一Affordance系统暴露当前可执行Interaction。玩家可以直接向角色提交高优先级命令，角色在没有玩家命令时则通过Utility Autonomy，根据需求紧迫度、性格、情绪、关系、目标、日程、距离和对象状态自主选择行为。
 
@@ -6325,7 +6388,7 @@ World
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 游戏长期围绕一个或多个持久角色生活展开；
 
@@ -6390,7 +6453,7 @@ World
 
 ---
 
-### 与仓库现有宠物照护的防重边界
+## 与仓库现有宠物照护的防重边界
 
 当前仓库已有 `pet-care`，其摘要明确聚焦于宠物的**生理需求、情绪、习惯、互动和长期信任**。
 
@@ -6433,7 +6496,7 @@ World
 
 ---
 
-### 与仓库现有恋爱养成的防重边界
+## 与仓库现有恋爱养成的防重边界
 
 当前仓库已有 `relationship-simulation`，重点是**关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化**。
 
@@ -6476,7 +6539,7 @@ World
 
 ---
 
-### 与仓库现有农场经营的防重边界
+## 与仓库现有农场经营的防重边界
 
 当前仓库已经独立登记 `farming`，其核心围绕日、周、季节和年份组织种植、养殖、采集、加工、建设、交易、社交和探索。
 
@@ -6501,7 +6564,7 @@ World
 
 ---
 
-### 与仓库现有殖民地模拟的防重边界
+## 与仓库现有殖民地模拟的防重边界
 
 当前 `colony` 范式围绕居民需求、技能、工作订单、资源搬运、生产链和优先级间接组织聚落。
 
@@ -6542,7 +6605,7 @@ Need / Goal<br>
 
 ---
 
-### 与仓库现有城市建设模拟的防重边界
+## 与仓库现有城市建设模拟的防重边界
 
 城市建设模拟主要以：
 
@@ -6575,7 +6638,7 @@ Need / Goal<br>
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Household Life Simulation；
 
@@ -6686,7 +6749,7 @@ Need / Goal<br>
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次家庭人生模拟范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

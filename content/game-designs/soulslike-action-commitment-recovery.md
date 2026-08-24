@@ -1,5 +1,3 @@
-## 动作承诺、死亡回收与检查点世界循环
-
 > Agent 标签：`action-rpg` `checkpoint` `soulslike`
 
 ---

@@ -1,4 +1,65 @@
-## 1. 类型定位
+> Agent 标签：`deity` `god-game` `indirect-control`
+
+---
+
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `game-designs` 的生成索引。当前仓库登记 **52 个**设计范式条目，已经覆盖城市建设、殖民地模拟、4X、实时战略、恋爱养成、社交推理、塔防、太空飞船系统管理、工厂自动化、生存建造、刷宝 ARPG 等宏观类型。
+
+同时检索当前路由索引中的 `god`、`deity` 等关键词，未发现独立的 `god-game` / `deity-simulation` 范式。本期因此新增：
+
+**上帝模拟 / God Game / Deity Simulation。**
+
+常见名称包括：
+
+- God Game；
+
+- Deity Simulation；
+
+- Divine Simulation；
+
+- Indirect-Control Simulation；
+
+- 上帝模拟；
+
+- 神祇模拟；
+
+- 神明经营；
+
+- 信仰文明模拟。
+
+
+本类型与当前已经登记的城市建设、殖民地模拟具有部分表面相似性，但运行时核心不同。现有城市建设范式重点是通过土地用途、交通网络、公共服务和空间政策间接塑造城市；殖民地模拟则以具体居民、工作订单、需求和劳动力调度为主要运行对象。
+
+上帝模拟更典型的核心则是：
+
+> **玩家并不直接扮演市长、指挥官或工头，而是作为超越普通世界实体的高层存在，通过神迹、启示、教义、祝福、灾难、地形改造和代理人间接影响一个拥有自主居民、社会解释体系和世界因果关系的模拟世界。玩家的干预并不会直接变成确定结果，而会先被世界中的个体观察、解释、传播和制度化，再反过来影响信仰、社会行为和玩家未来能够施加的神性力量。**
+
+它最具代表性的循环可以压缩为：
+
+**观察世界状态
+→ 接收居民需求与祈祷
+→ 判断哪些问题值得亲自干预
+→ 消耗神力或注意力发动神迹
+→ 世界产生直接物理结果
+→ 居民观察并解释事件
+→ 信仰、恐惧、感激或怀疑变化
+→ 教义和社会行为发生扩散
+→ 聚落、生态与政治结构改变
+→ 新问题从旧解决方案中涌现
+→ 玩家再次决定是否干预。**
+
+本类型真正的核心不是：
+
+“玩家拥有很多强力技能。”
+
+而是：
+
+> **玩家拥有改变世界的能力，却无法直接控制世界如何理解这些改变。**
+
+---
+
+# 1. 类型定位
 
 上帝模拟通常以以下要素为核心：
 
@@ -80,31 +141,31 @@
 
 ---
 
-## 2. 核心系统抽象
+# 2. 核心系统抽象
 
 上帝模拟可以抽象为六个长期耦合的状态域：
 
-### World Truth
+## World Truth
 
 世界实际上发生了什么。
 
-### Mortal Perception
+## Mortal Perception
 
 居民看到了什么、知道什么。
 
-### Attribution
+## Attribution
 
 居民认为事情为什么发生。
 
-### Belief
+## Belief
 
 居民因此相信什么。
 
-### Divine Intervention
+## Divine Intervention
 
 玩家能够如何改变世界。
 
-### Social Propagation
+## Social Propagation
 
 个人认知如何传播为文化、制度和集体行为。
 
@@ -128,7 +189,7 @@
 
 ---
 
-## 3. 核心范式一：世界真相与居民认知必须严格分离
+# 3. 核心范式一：世界真相与居民认知必须严格分离
 
 假设天空突然下雨。
 
@@ -170,7 +231,7 @@ WorldTruth：
 
 ---
 
-## 4. WorldEventRecord
+# 4. WorldEventRecord
 
 建议字段：
 
@@ -228,7 +289,7 @@ WorldTruth：
 
 ---
 
-## 5. ObservationRecord
+# 5. ObservationRecord
 
 居民观察到的是：
 
@@ -265,7 +326,7 @@ WorldTruth：
 
 ---
 
-## 6. AttributionState
+# 6. AttributionState
 
 描述个体认为：
 
@@ -302,7 +363,7 @@ WorldTruth：
 
 ---
 
-## 7. 为什么 Attribution 是独立系统
+# 7. 为什么 Attribution 是独立系统
 
 如果规则只是：
 
@@ -328,7 +389,7 @@ WorldTruth：
 
 ---
 
-## 8. 核心范式二：信仰不是单一全局数值
+# 8. 核心范式二：信仰不是单一全局数值
 
 低质量设计：
 
@@ -361,7 +422,7 @@ Faith越高，
 
 ---
 
-## 9. IndividualBeliefState
+# 9. IndividualBeliefState
 
 建议包含：
 
@@ -390,7 +451,7 @@ Faith越高，
 
 ---
 
-## 10. Faith 与 Fear 必须分离
+# 10. Faith 与 Fear 必须分离
 
 一个居民可能：
 
@@ -422,7 +483,7 @@ Trust下降。
 
 ---
 
-## 11. CommunityBeliefState
+# 11. CommunityBeliefState
 
 建议包含：
 
@@ -449,7 +510,7 @@ Trust下降。
 
 ---
 
-## 12. 社区信仰不应简单取个人平均值
+# 12. 社区信仰不应简单取个人平均值
 
 100名弱信徒
 
@@ -467,7 +528,7 @@ Trust下降。
 
 ---
 
-## 13. 信仰分布
+# 13. 信仰分布
 
 可以划分：
 
@@ -494,7 +555,7 @@ UI可以显示：
 
 ---
 
-## 14. 核心范式三：祈祷是“底层需求向玩家注意力的投影”
+# 14. 核心范式三：祈祷是“底层需求向玩家注意力的投影”
 
 世界中的居民有大量需求：
 
@@ -525,7 +586,7 @@ UI可以显示：
 
 ---
 
-## 15. PrayerIntent
+# 15. PrayerIntent
 
 个人层可以产生：
 
@@ -552,7 +613,7 @@ UI可以显示：
 
 ---
 
-## 16. PrayerAggregator
+# 16. PrayerAggregator
 
 把大量相似Prayer：
 
@@ -585,7 +646,7 @@ UI可以显示：
 
 ---
 
-## 17. PrayerCluster
+# 17. PrayerCluster
 
 建议字段：
 
@@ -610,7 +671,7 @@ UI可以显示：
 
 ---
 
-## 18. 祈祷不是任务列表
+# 18. 祈祷不是任务列表
 
 玩家不应该被迫：
 
@@ -641,7 +702,7 @@ UI可以显示：
 
 ---
 
-## 19. 忽略祈祷同样应产生信息
+# 19. 忽略祈祷同样应产生信息
 
 长期祈祷没有回应：
 
@@ -664,7 +725,7 @@ UI可以显示：
 
 ---
 
-## 20. 核心范式四：神性资源应至少区分“力量”和“注意力”
+# 20. 核心范式四：神性资源应至少区分“力量”和“注意力”
 
 如果玩家可以无限同时观察和干预全世界：
 
@@ -674,17 +735,17 @@ UI可以显示：
 
 建议区分：
 
-### Divine Power
+## Divine Power
 
 能否执行一个神迹。
 
-### Divine Attention
+## Divine Attention
 
 玩家同时能精确干预多少问题。
 
 ---
 
-## 21. DivineResourceState
+# 21. DivineResourceState
 
 建议包含：
 
@@ -709,7 +770,7 @@ UI可以显示：
 
 ---
 
-## 22. Divine Power
+# 22. Divine Power
 
 可以来源：
 
@@ -732,7 +793,7 @@ UI可以显示：
 
 ---
 
-## 23. Attention
+# 23. Attention
 
 可以理解为：
 
@@ -757,7 +818,7 @@ UI可以显示：
 
 ---
 
-## 24. 为什么 Attention 比单纯 Mana 更重要
+# 24. 为什么 Attention 比单纯 Mana 更重要
 
 Mana只限制：
 
@@ -790,7 +851,7 @@ Attention可以限制：
 
 ---
 
-## 25. 核心范式五：神迹必须先改变世界，再改变信仰
+# 25. 核心范式五：神迹必须先改变世界，再改变信仰
 
 正确链：
 
@@ -807,7 +868,7 @@ Miracle
 
 ---
 
-## 26. MiracleDefinition
+# 26. MiracleDefinition
 
 建议字段：
 
@@ -842,7 +903,7 @@ Miracle
 
 ---
 
-## 27. MiracleRuntimeState
+# 27. MiracleRuntimeState
 
 建议包含：
 
@@ -873,7 +934,7 @@ Miracle
 
 ---
 
-## 28. MiracleTransaction
+# 28. MiracleTransaction
 
 标准流程：
 
@@ -896,7 +957,7 @@ Miracle
 
 ---
 
-## 29. 神迹应有预兆
+# 29. 神迹应有预兆
 
 大型神迹最好不要：
 
@@ -923,7 +984,7 @@ Miracle
 
 ---
 
-## 30. Miracle Visibility
+# 30. Miracle Visibility
 
 例如：
 
@@ -947,7 +1008,7 @@ Miracle
 
 ---
 
-## 31. MiracleWitnessSet
+# 31. MiracleWitnessSet
 
 建议包含：
 
@@ -966,7 +1027,7 @@ Miracle
 
 ---
 
-## 32. 神迹成本不应只和数值强度有关
+# 32. 神迹成本不应只和数值强度有关
 
 大型：
 
@@ -993,7 +1054,7 @@ Miracle
 
 ---
 
-## 33. 核心范式六：神迹应该制造副作用
+# 33. 核心范式六：神迹应该制造副作用
 
 如果每个神迹都是：
 
@@ -1025,7 +1086,7 @@ Rain Miracle：
 
 ---
 
-## 34. WorldEffectDefinition
+# 34. WorldEffectDefinition
 
 建议字段：
 
@@ -1050,7 +1111,7 @@ Rain Miracle：
 
 ---
 
-## 35. 副作用不需要随机惩罚
+# 35. 副作用不需要随机惩罚
 
 更好的方式：
 
@@ -1074,7 +1135,7 @@ Rain Miracle：
 
 ---
 
-## 36. ConsequenceGraph
+# 36. ConsequenceGraph
 
 神迹：
 
@@ -1097,7 +1158,7 @@ HeavyRain
 
 ---
 
-## 37. 世界系统不应该知道“这是神迹”
+# 37. 世界系统不应该知道“这是神迹”
 
 例如农业系统只读取：
 
@@ -1117,7 +1178,7 @@ Perception / Belief。
 
 ---
 
-## 38. 核心范式七：教义是从微操向宏观治理升级的关键
+# 38. 核心范式七：教义是从微操向宏观治理升级的关键
 
 早期：
 
@@ -1135,7 +1196,7 @@ Doctrine / Commandment。
 
 ---
 
-## 39. DoctrineDefinition
+# 39. DoctrineDefinition
 
 建议字段：
 
@@ -1160,7 +1221,7 @@ Doctrine / Commandment。
 
 ---
 
-## 40. Doctrine作用对象不是单个居民
+# 40. Doctrine作用对象不是单个居民
 
 例如：
 
@@ -1187,7 +1248,7 @@ Doctrine / Commandment。
 
 ---
 
-## 41. Doctrine不是绝对命令
+# 41. Doctrine不是绝对命令
 
 如果玩家发布：
 
@@ -1223,7 +1284,7 @@ Doctrine / Commandment。
 
 ---
 
-## 42. DoctrineCompliance
+# 42. DoctrineCompliance
 
 建议包含：
 
@@ -1248,7 +1309,7 @@ Doctrine / Commandment。
 
 ---
 
-## 43. 教义冲突
+# 43. 教义冲突
 
 例如：
 
@@ -1279,7 +1340,7 @@ Doctrine B：
 
 ---
 
-## 44. DoctrineGraph
+# 44. DoctrineGraph
 
 建议显式记录：
 
@@ -1298,7 +1359,7 @@ Doctrine B：
 
 ---
 
-## 45. 核心范式八：神职代理人是“可扩展控制带宽”
+# 45. 核心范式八：神职代理人是“可扩展控制带宽”
 
 当世界规模从：
 
@@ -1327,7 +1388,7 @@ Doctrine B：
 
 ---
 
-## 46. ReligiousAgentState
+# 46. ReligiousAgentState
 
 建议包含：
 
@@ -1356,7 +1417,7 @@ Doctrine B：
 
 ---
 
-## 47. Prophet
+# 47. Prophet
 
 Prophet可以：
 
@@ -1375,7 +1436,7 @@ Prophet可以：
 
 ---
 
-## 48. 代理人不能只是免费自动化
+# 48. 代理人不能只是免费自动化
 
 关键是：
 
@@ -1389,7 +1450,7 @@ Prophet可以：
 
 ---
 
-## 49. InterpretationBias
+# 49. InterpretationBias
 
 例如：
 
@@ -1412,7 +1473,7 @@ Prophet可以：
 
 ---
 
-## 50. 这是非常核心的长期成长结构
+# 50. 这是非常核心的长期成长结构
 
 Early Game：
 
@@ -1430,7 +1491,7 @@ Doctrine + Institution + Regional Religious Network。
 
 ---
 
-## 51. 核心范式九：制度应该让信仰具有惯性
+# 51. 核心范式九：制度应该让信仰具有惯性
 
 如果玩家一周不施神迹：
 
@@ -1444,7 +1505,7 @@ Institution用于：
 
 ---
 
-## 52. ReligiousInstitutionState
+# 52. ReligiousInstitutionState
 
 建议包含：
 
@@ -1473,7 +1534,7 @@ Institution用于：
 
 ---
 
-## 53. Institution类型
+# 53. Institution类型
 
 例如：
 
@@ -1492,7 +1553,7 @@ Institution用于：
 
 ---
 
-## 54. Institution的作用
+# 54. Institution的作用
 
 可以：
 
@@ -1522,7 +1583,7 @@ Institution用于：
 
 ---
 
-## 55. Religion不是玩家完全拥有的UI组件
+# 55. Religion不是玩家完全拥有的UI组件
 
 随着时间：
 
@@ -1534,7 +1595,7 @@ Institution用于：
 
 ---
 
-## 56. 核心范式十：信仰传播应该通过社会网络，而不是全局广播
+# 56. 核心范式十：信仰传播应该通过社会网络，而不是全局广播
 
 居民改变信仰：
 
@@ -1561,7 +1622,7 @@ Institution用于：
 
 ---
 
-## 57. SocialInfluenceEdge
+# 57. SocialInfluenceEdge
 
 建议字段：
 
@@ -1582,7 +1643,7 @@ Institution用于：
 
 ---
 
-## 58. BeliefPropagation
+# 58. BeliefPropagation
 
 简化流程：
 
@@ -1594,7 +1655,7 @@ Person A观察神迹
 
 ---
 
-## 59. 不需要逐个居民模拟传播到百万规模
+# 59. 不需要逐个居民模拟传播到百万规模
 
 可以使用：
 
@@ -1610,7 +1671,7 @@ CommunityDiffusion。
 
 ---
 
-## 60. CommunityDiffusion
+# 60. CommunityDiffusion
 
 例如：
 
@@ -1628,7 +1689,7 @@ TradeContact × MissionaryInfluence × CulturalSimilarity
 
 ---
 
-## 61. 核心范式十一：玩家不是必须被所有人信仰
+# 61. 核心范式十一：玩家不是必须被所有人信仰
 
 可以存在：
 
@@ -1649,7 +1710,7 @@ TradeContact × MissionaryInfluence × CulturalSimilarity
 
 ---
 
-## 62. RivalFaithState
+# 62. RivalFaithState
 
 建议包含：
 
@@ -1670,7 +1731,7 @@ TradeContact × MissionaryInfluence × CulturalSimilarity
 
 ---
 
-## 63. Rival God
+# 63. Rival God
 
 如果存在真正的AI神祇，
 
@@ -1695,7 +1756,7 @@ TradeContact × MissionaryInfluence × CulturalSimilarity
 
 ---
 
-## 64. DivineAIState
+# 64. DivineAIState
 
 建议包含：
 
@@ -1718,7 +1779,7 @@ TradeContact × MissionaryInfluence × CulturalSimilarity
 
 ---
 
-## 65. 神战不一定是直接攻击
+# 65. 神战不一定是直接攻击
 
 竞争可以发生在：
 
@@ -1749,13 +1810,13 @@ Rival Priest声称：
 
 ---
 
-## 66. Holy Site
+# 66. Holy Site
 
 地理位置可以成为信仰网络节点。
 
 ---
 
-## 67. SacredSiteState
+# 67. SacredSiteState
 
 建议包含：
 
@@ -1778,7 +1839,7 @@ Rival Priest声称：
 
 ---
 
-## 68. Holy Site为什么有意义
+# 68. Holy Site为什么有意义
 
 一次重大Miracle发生地点：
 
@@ -1796,7 +1857,7 @@ Rival Priest声称：
 
 ---
 
-## 69. Divine Memory
+# 69. Divine Memory
 
 社区需要记录：
 
@@ -1804,7 +1865,7 @@ Rival Priest声称：
 
 ---
 
-## 70. ReligiousMemory
+# 70. ReligiousMemory
 
 建议字段：
 
@@ -1829,7 +1890,7 @@ Rival Priest声称：
 
 ---
 
-## 71. 记忆可以被仪式化
+# 71. 记忆可以被仪式化
 
 一次古老洪水：
 
@@ -1847,9 +1908,9 @@ Flood Festival。
 
 ---
 
-## 72. Ritual System
+# 72. Ritual System
 
-### RitualDefinition
+## RitualDefinition
 
 建议字段：
 
@@ -1874,7 +1935,7 @@ Flood Festival。
 
 ---
 
-## 73. Ritual是居民主动产生信仰资源的方式
+# 73. Ritual是居民主动产生信仰资源的方式
 
 这意味着玩家不必：
 
@@ -1886,7 +1947,7 @@ Flood Festival。
 
 ---
 
-## 74. 但仪式也会消耗现实资源
+# 74. 但仪式也会消耗现实资源
 
 例如：
 
@@ -1906,7 +1967,7 @@ Sacrifice：
 
 ---
 
-## 75. 核心范式十二：世界模拟必须能够在“没有玩家干预”时独立运行
+# 75. 核心范式十二：世界模拟必须能够在“没有玩家干预”时独立运行
 
 这是上帝模拟成立的重要验收标准。
 
@@ -1941,7 +2002,7 @@ Sacrifice：
 
 ---
 
-## 76. Autonomous World Principle
+# 76. Autonomous World Principle
 
 世界必须有自己的：
 
@@ -1968,7 +2029,7 @@ Sacrifice：
 
 ---
 
-## 77. 玩家干预应该保留“反事实”
+# 77. 玩家干预应该保留“反事实”
 
 开发调试可以问：
 
@@ -1978,7 +2039,7 @@ Sacrifice：
 
 ---
 
-## 78. Counterfactual Simulation
+# 78. Counterfactual Simulation
 
 可以从某个WorldSnapshot：
 
@@ -2013,7 +2074,7 @@ Branch B：
 
 ---
 
-## 79. 核心范式十三：世界尺度扩大后，模拟精度必须分层
+# 79. 核心范式十三：世界尺度扩大后，模拟精度必须分层
 
 Early Game：
 
@@ -2033,31 +2094,31 @@ Late Game：
 
 ---
 
-## 80. Population Simulation Tier
+# 80. Population Simulation Tier
 
-#### Tier 0：Key Agent
+### Tier 0：Key Agent
 
 Prophet、King、Hero。
 
 完整Agent。
 
-#### Tier 1：Visible Citizen
+### Tier 1：Visible Citizen
 
 玩家镜头附近。
 
 轻量行为。
 
-#### Tier 2：Household / Group
+### Tier 2：Household / Group
 
 聚合需求。
 
-#### Tier 3：Community
+### Tier 3：Community
 
 人口统计模型。
 
 ---
 
-## 81. Individual-to-Community Projection
+# 81. Individual-to-Community Projection
 
 居民状态可以聚合为：
 
@@ -2076,7 +2137,7 @@ Prophet、King、Hero。
 
 ---
 
-## 82. Community-to-Individual Materialization
+# 82. Community-to-Individual Materialization
 
 玩家把镜头移动到城市时：
 
@@ -2090,7 +2151,7 @@ Prophet、King、Hero。
 
 ---
 
-## 83. Key Agent必须持久
+# 83. Key Agent必须持久
 
 Prophet、King等：
 
@@ -2102,7 +2163,7 @@ AgentId。
 
 ---
 
-## 84. 大规模祈祷同样使用聚合
+# 84. 大规模祈祷同样使用聚合
 
 否则：
 
@@ -2114,7 +2175,7 @@ AgentId。
 
 ---
 
-## 85. 世界时间尺度
+# 85. 世界时间尺度
 
 上帝模拟通常适合：
 
@@ -2135,7 +2196,7 @@ AgentId。
 
 ---
 
-## 86. WorldClock
+# 86. WorldClock
 
 建议字段：
 
@@ -2156,7 +2217,7 @@ AgentId。
 
 ---
 
-## 87. 倍速不能改变模拟结果
+# 87. 倍速不能改变模拟结果
 
 同一Seed和同一DivineAction序列：
 
@@ -2174,7 +2235,7 @@ render frame。
 
 ---
 
-## 88. Event Scheduling
+# 88. Event Scheduling
 
 天气、出生、作物、生长等不需要每帧轮询。
 
@@ -2184,7 +2245,7 @@ ScheduledEventQueue。
 
 ---
 
-## 89. 核心范式十四：玩家的“善恶”最好是世界反馈，不是单一善恶条
+# 89. 核心范式十四：玩家的“善恶”最好是世界反馈，不是单一善恶条
 
 上帝模拟很容易加入：
 
@@ -2220,7 +2281,7 @@ Faith ↑。
 
 ---
 
-## 90. ReputationByCommunity
+# 90. ReputationByCommunity
 
 建议每个Community独立维护：
 
@@ -2243,7 +2304,7 @@ Global Morality。
 
 ---
 
-## 91. 神祇身份由行为历史涌现
+# 91. 神祇身份由行为历史涌现
 
 玩家长期：
 
@@ -2267,7 +2328,7 @@ Storm God。
 
 ---
 
-## 92. DivineIdentityState
+# 92. DivineIdentityState
 
 建议包含：
 
@@ -2284,7 +2345,7 @@ Storm God。
 
 ---
 
-## 93. 身份反向影响信仰期待
+# 93. 身份反向影响信仰期待
 
 如果玩家长期作为：
 
@@ -2302,7 +2363,7 @@ Attribution冲击更强。
 
 ---
 
-## 94. Expectation System
+# 94. Expectation System
 
 居民会根据：
 
@@ -2312,7 +2373,7 @@ Attribution冲击更强。
 
 ---
 
-## 95. ExpectationState
+# 95. ExpectationState
 
 建议字段：
 
@@ -2331,7 +2392,7 @@ Attribution冲击更强。
 
 ---
 
-## 96. 回应过度会制造依赖
+# 96. 回应过度会制造依赖
 
 如果玩家：
 
@@ -2353,7 +2414,7 @@ Attribution冲击更强。
 
 ---
 
-## 97. Divine Dependency
+# 97. Divine Dependency
 
 可以影响：
 
@@ -2376,7 +2437,7 @@ Attribution冲击更强。
 
 ---
 
-## 98. 这是本类型非常独特的系统张力
+# 98. 这是本类型非常独特的系统张力
 
 玩家力量越强，
 
@@ -2392,7 +2453,7 @@ Attribution冲击更强。
 
 ---
 
-## 99. AutonomyState
+# 99. AutonomyState
 
 建议社区维护：
 
@@ -2409,7 +2470,7 @@ Attribution冲击更强。
 
 ---
 
-## 100. Miracle替代社会基础设施的例子
+# 100. Miracle替代社会基础设施的例子
 
 持续Rain Miracle：
 
@@ -2431,11 +2492,11 @@ IrrigationInvestment下降。
 
 ---
 
-## 101. 神迹可以解决症状，而Doctrine和Infrastructure解决根因
+# 101. 神迹可以解决症状，而Doctrine和Infrastructure解决根因
 
 这是设计上非常重要的层次：
 
-#### Miracle
+### Miracle
 
 即时。
 
@@ -2443,13 +2504,13 @@ IrrigationInvestment下降。
 
 高成本。
 
-#### Doctrine
+### Doctrine
 
 中期。
 
 影响行为。
 
-#### Institution
+### Institution
 
 长期。
 
@@ -2465,7 +2526,7 @@ Doctrine + Institution。
 
 ---
 
-## 102. 完整事件与执行流程示例
+# 102. 完整事件与执行流程示例
 
 以下以：
 
@@ -2475,7 +2536,7 @@ Doctrine + Institution。
 
 ---
 
-### 102.1 初始河谷
+## 102.1 初始河谷
 
 Population：
 
@@ -2495,7 +2556,7 @@ FoodReserve：
 
 ---
 
-### 102.2 Prayer产生
+## 102.2 Prayer产生
 
 农民个体开始：
 
@@ -2513,7 +2574,7 @@ RiverValley Drought Prayer。
 
 ---
 
-### 102.3 玩家第一次回应
+## 102.3 玩家第一次回应
 
 使用：
 
@@ -2521,7 +2582,7 @@ Rain Miracle。
 
 ---
 
-### 102.4 MiracleTransaction
+## 102.4 MiracleTransaction
 
 系统验证：
 
@@ -2533,7 +2594,7 @@ AttentionCost 1。
 
 ---
 
-### 102.5 WorldEffect
+## 102.5 WorldEffect
 
 Region Rainfall：
 
@@ -2549,7 +2610,7 @@ CropYield：
 
 ---
 
-### 102.6 Observation
+## 102.6 Observation
 
 大量居民直接观察：
 
@@ -2561,7 +2622,7 @@ Divine Attribution概率很高。
 
 ---
 
-### 102.7 信仰变化
+## 102.7 信仰变化
 
 Faith上升。
 
@@ -2571,7 +2632,7 @@ Doubt下降。
 
 ---
 
-### 102.8 收成恢复
+## 102.8 收成恢复
 
 粮食危机结束。
 
@@ -2579,7 +2640,7 @@ Doubt下降。
 
 ---
 
-### 102.9 第二年再次干旱
+## 102.9 第二年再次干旱
 
 由于过去神迹效果很好：
 
@@ -2591,13 +2652,13 @@ Doubt下降。
 
 ---
 
-### 102.10 玩家再次回应
+## 102.10 玩家再次回应
 
 继续Rain Miracle。
 
 ---
 
-### 102.11 社会行为变化
+## 102.11 社会行为变化
 
 Community DecisionSystem发现：
 
@@ -2613,7 +2674,7 @@ DivineDependency提高。
 
 ---
 
-### 102.12 人口继续增长
+## 102.12 人口继续增长
 
 320
 → 510
@@ -2623,7 +2684,7 @@ DivineDependency提高。
 
 ---
 
-### 102.13 森林减少
+## 102.13 森林减少
 
 为了新农田：
 
@@ -2631,7 +2692,7 @@ Valley Forest Coverage下降。
 
 ---
 
-### 102.14 ErosionRisk上升
+## 102.14 ErosionRisk上升
 
 生态系统根据：
 
@@ -2643,7 +2704,7 @@ SoilRetention下降。
 
 ---
 
-### 102.15 第五年再次出现干旱Prayer
+## 102.15 第五年再次出现干旱Prayer
 
 玩家像往常一样：
 
@@ -2651,7 +2712,7 @@ SoilRetention下降。
 
 ---
 
-### 102.16 降雨发生
+## 102.16 降雨发生
 
 直接效果：
 
@@ -2663,7 +2724,7 @@ ErosionRisk已很高。
 
 ---
 
-### 102.17 Consequence传播
+## 102.17 Consequence传播
 
 HeavyRain
 → Soil Saturation
@@ -2673,7 +2734,7 @@ HeavyRain
 
 ---
 
-### 102.18 洪水冲击聚落
+## 102.18 洪水冲击聚落
 
 部分房屋受损。
 
@@ -2683,7 +2744,7 @@ HeavyRain
 
 ---
 
-### 102.19 居民解释出现分化
+## 102.19 居民解释出现分化
 
 部分居民：
 
@@ -2703,7 +2764,7 @@ Doubt上升。
 
 ---
 
-### 102.20 Player看到Belief分裂
+## 102.20 Player看到Belief分裂
 
 原本统一的Faith：
 
@@ -2717,7 +2778,7 @@ Skeptic。
 
 ---
 
-### 102.21 玩家不能继续只靠Rain解决
+## 102.21 玩家不能继续只靠Rain解决
 
 再次大量施雨：
 
@@ -2733,7 +2794,7 @@ Water Infrastructure。
 
 ---
 
-### 102.22 玩家发布Doctrine
+## 102.22 玩家发布Doctrine
 
 Doctrine：
 
@@ -2741,7 +2802,7 @@ Doctrine：
 
 ---
 
-### 102.23 Priest传播教义
+## 102.23 Priest传播教义
 
 Temple开始：
 
@@ -2753,7 +2814,7 @@ IrrigationWork Priority。
 
 ---
 
-### 102.24 社区自主建设
+## 102.24 社区自主建设
 
 几年中逐渐建成：
 
@@ -2766,7 +2827,7 @@ IrrigationWork Priority。
 
 ---
 
-### 102.25 DivineDependency下降
+## 102.25 DivineDependency下降
 
 SelfReliance提高。
 
@@ -2774,7 +2835,7 @@ SelfReliance提高。
 
 ---
 
-### 102.26 新干旱到来
+## 102.26 新干旱到来
 
 社区能够通过：
 
@@ -2786,7 +2847,7 @@ Reservoir
 
 ---
 
-### 102.27 玩家从直接干预中退出
+## 102.27 玩家从直接干预中退出
 
 神力可以投入：
 
@@ -2794,7 +2855,7 @@ Reservoir
 
 ---
 
-### 102.28 长期信仰反而更加稳定
+## 102.28 长期信仰反而更加稳定
 
 居民不再认为：
 
@@ -2810,7 +2871,7 @@ Reservoir
 
 ---
 
-### 102.29 完整因果链
+## 102.29 完整因果链
 
 干旱
 → Prayer
@@ -2837,9 +2898,9 @@ Reservoir
 
 ---
 
-## 103. 模块通信设计
+# 103. 模块通信设计
 
-### 103.1 Commands
+## 103.1 Commands
 
 典型命令：
 
@@ -2868,7 +2929,7 @@ Reservoir
 
 ---
 
-### 103.2 Queries
+## 103.2 Queries
 
 适用于：
 
@@ -2902,7 +2963,7 @@ Query不能：
 
 ---
 
-### 103.3 Domain Events
+## 103.3 Domain Events
 
 包括：
 
@@ -2947,7 +3008,7 @@ Query不能：
 
 ---
 
-### 103.4 Presentation Events
+## 103.4 Presentation Events
 
 包括：
 
@@ -2979,7 +3040,7 @@ Query不能：
 
 ---
 
-## 104. 状态所有权
+# 104. 状态所有权
 
 推荐：
 
@@ -3039,7 +3100,7 @@ Query不能：
 
 ---
 
-## 105. 神迹效果与信仰效果解耦
+# 105. 神迹效果与信仰效果解耦
 
 例如：
 
@@ -3073,7 +3134,7 @@ Observation / Attribution
 
 ---
 
-## 106. 隐秘神迹
+# 106. 隐秘神迹
 
 玩家可以选择：
 
@@ -3099,7 +3160,7 @@ Observation / Attribution
 
 ---
 
-## 107. Avatar / Physical Manifestation
+# 107. Avatar / Physical Manifestation
 
 部分上帝模拟允许玩家：
 
@@ -3122,7 +3183,7 @@ Avatar可以拥有：
 
 ---
 
-## 108. Avatar改变控制尺度
+# 108. Avatar改变控制尺度
 
 神视角：
 
@@ -3142,7 +3203,7 @@ Avatar：
 
 ---
 
-## 109. Avatar不应成为普通动作角色替代整个God Game
+# 109. Avatar不应成为普通动作角色替代整个God Game
 
 如果最终最优玩法是：
 
@@ -3160,7 +3221,7 @@ Avatar应作为：
 
 ---
 
-## 110. World Event Director
+# 110. World Event Director
 
 自然事件可以包括：
 
@@ -3183,7 +3244,7 @@ Avatar应作为：
 
 ---
 
-## 111. Director原则
+# 111. Director原则
 
 事件应该基于：
 
@@ -3201,7 +3262,7 @@ Disease概率提高。
 
 ---
 
-## 112. Disaster不是纯负面内容
+# 112. Disaster不是纯负面内容
 
 灾难会：
 
@@ -3220,7 +3281,7 @@ Disease概率提高。
 
 ---
 
-## 113. 灾难不能只用来逼玩家花神力
+# 113. 灾难不能只用来逼玩家花神力
 
 否则每个灾难都是：
 
@@ -3236,7 +3297,7 @@ Mana Tax。
 
 ---
 
-## 114. Rival Religion传播
+# 114. Rival Religion传播
 
 可以受到：
 
@@ -3257,7 +3318,7 @@ Mana Tax。
 
 ---
 
-## 115. Conversion不是瞬间翻色
+# 115. Conversion不是瞬间翻色
 
 建议阶段：
 
@@ -3273,7 +3334,7 @@ Aware
 
 ---
 
-## 116. Forced Conversion
+# 116. Forced Conversion
 
 玩家或代理人可以：
 
@@ -3291,7 +3352,7 @@ HiddenFaith
 
 ---
 
-## 117. Public Faith 与 Private Faith
+# 117. Public Faith 与 Private Faith
 
 如果游戏强调政治宗教冲突，
 
@@ -3314,7 +3375,7 @@ HiddenFaith
 
 ---
 
-## 118. 不需要每款上帝模拟都实现这一层
+# 118. 不需要每款上帝模拟都实现这一层
 
 如果产品重点是：
 
@@ -3330,7 +3391,7 @@ HiddenFaith
 
 ---
 
-## 119. 世界环境
+# 119. 世界环境
 
 神迹常直接作用：
 
@@ -3351,7 +3412,7 @@ HiddenFaith
 
 ---
 
-## 120. EnvironmentCell / RegionState
+# 120. EnvironmentCell / RegionState
 
 建议包含：
 
@@ -3378,7 +3439,7 @@ HiddenFaith
 
 ---
 
-## 121. Terrain Miracle
+# 121. Terrain Miracle
 
 例如：
 
@@ -3403,7 +3464,7 @@ RaiseLand。
 
 ---
 
-## 122. TerrainModificationTransaction
+# 122. TerrainModificationTransaction
 
 验证区域
 → 预览影响
@@ -3417,7 +3478,7 @@ RaiseLand。
 
 ---
 
-## 123. 地形改造失败隔离
+# 123. 地形改造失败隔离
 
 如果Navigation重建失败：
 
@@ -3433,7 +3494,7 @@ Transactional Terrain Patch
 
 ---
 
-## 124. 生态反馈
+# 124. 生态反馈
 
 例如：
 
@@ -3461,11 +3522,11 @@ Transactional Terrain Patch
 
 ---
 
-## 125. 玩家体验设计
+# 125. 玩家体验设计
 
 ---
 
-### 125.1 世界必须“自己活着”
+## 125.1 世界必须“自己活着”
 
 玩家暂停干预时：
 
@@ -3492,7 +3553,7 @@ Transactional Terrain Patch
 
 ---
 
-## 126. 玩家必须能从宏观问题钻取到因果
+# 126. 玩家必须能从宏观问题钻取到因果
 
 例如：
 
@@ -3522,7 +3583,7 @@ UnansweredPrayer。
 
 ---
 
-## 127. 同样需要从微观角色返回宏观趋势
+# 127. 同样需要从微观角色返回宏观趋势
 
 点击一个村民：
 
@@ -3540,7 +3601,7 @@ UnansweredPrayer。
 
 ---
 
-## 128. 神迹必须拥有强烈但准确的视觉反馈
+# 128. 神迹必须拥有强烈但准确的视觉反馈
 
 玩家正在做：
 
@@ -3565,7 +3626,7 @@ Miracle需要：
 
 ---
 
-## 129. Miracle预览
+# 129. Miracle预览
 
 发动前显示：
 
@@ -3588,7 +3649,7 @@ Miracle需要：
 
 ---
 
-## 130. 祈祷UI不能成为通知轰炸
+# 130. 祈祷UI不能成为通知轰炸
 
 应该：
 
@@ -3608,7 +3669,7 @@ Routine。
 
 ---
 
-## 131. 玩家应该允许“故意不管”
+# 131. 玩家应该允许“故意不管”
 
 世界应该能够：
 
@@ -3624,7 +3685,7 @@ Routine。
 
 ---
 
-## 132. 神力越强，UI越要从微观升级到宏观
+# 132. 神力越强，UI越要从微观升级到宏观
 
 早期：
 
@@ -3646,7 +3707,7 @@ Institution Dashboard。
 
 ---
 
-## 133. 不要让所有系统都变成红色警报
+# 133. 不要让所有系统都变成红色警报
 
 一个大型世界：
 
@@ -3669,147 +3730,147 @@ Critical Alert，
 
 ---
 
-## 134. 常见设计失败
+# 134. 常见设计失败
 
 ---
 
-### 134.1 神迹直接增加Faith
+## 134.1 神迹直接增加Faith
 
 跳过Observation和Attribution。
 
 ---
 
-### 134.2 Faith只有一个全局数字
+## 134.2 Faith只有一个全局数字
 
 地区、阶层和宗派差异消失。
 
 ---
 
-### 134.3 每个居民都向玩家弹祈祷
+## 134.3 每个居民都向玩家弹祈祷
 
 后期完全不可管理。
 
 ---
 
-### 134.4 玩家必须完成所有祈祷
+## 134.4 玩家必须完成所有祈祷
 
 神祇退化成任务客服。
 
 ---
 
-### 134.5 世界没有玩家就停止
+## 134.5 世界没有玩家就停止
 
 居民无法自治。
 
 ---
 
-### 134.6 Miracle只有正面结果
+## 134.6 Miracle只有正面结果
 
 没有世界副作用。
 
 ---
 
-### 134.7 副作用纯随机
+## 134.7 副作用纯随机
 
 玩家无法学习因果。
 
 ---
 
-### 134.8 Doctrine只是永久Buff按钮
+## 134.8 Doctrine只是永久Buff按钮
 
 没有社会传播和执行过程。
 
 ---
 
-### 134.9 Doctrine所有居民立即100%执行
+## 134.9 Doctrine所有居民立即100%执行
 
 社会系统失去自主性。
 
 ---
 
-### 134.10 Prophet只是自动Faith生成器
+## 134.10 Prophet只是自动Faith生成器
 
 没有解释偏差和代理风险。
 
 ---
 
-### 134.11 后期玩家仍需逐个治疗居民
+## 134.11 后期玩家仍需逐个治疗居民
 
 没有控制层级成长。
 
 ---
 
-### 134.12 所有人都自动知道神迹来源
+## 134.12 所有人都自动知道神迹来源
 
 没有信息传播。
 
 ---
 
-### 134.13 RivalReligion只是地图颜色
+## 134.13 RivalReligion只是地图颜色
 
 没有传播和制度基础。
 
 ---
 
-### 134.14 灾难只是周期性Mana Tax
+## 134.14 灾难只是周期性Mana Tax
 
 世界系统没有自治解决能力。
 
 ---
 
-### 134.15 生态系统只做视觉
+## 134.15 生态系统只做视觉
 
 Rain、Forest、River没有长期影响。
 
 ---
 
-### 134.16 Terrain Miracle只修改Mesh
+## 134.16 Terrain Miracle只修改Mesh
 
 导航和水流状态失效。
 
 ---
 
-### 134.17 玩家帮助越多永远越好
+## 134.17 玩家帮助越多永远越好
 
 没有Divine Dependency。
 
 ---
 
-### 134.18 神迹被忽略完全没有后果
+## 134.18 神迹被忽略完全没有后果
 
 Expectation系统不存在。
 
 ---
 
-### 134.19 Good/Evil条替代所有社会反馈
+## 134.19 Good/Evil条替代所有社会反馈
 
 复杂行为被压缩为一个数值。
 
 ---
 
-### 134.20 大规模世界仍逐居民高频模拟
+## 134.20 大规模世界仍逐居民高频模拟
 
 人口规模无法扩展。
 
 ---
 
-### 134.21 聚合模拟后所有居民都失去个体故事
+## 134.21 聚合模拟后所有居民都失去个体故事
 
 世界变成纯Excel。
 
 ---
 
-### 134.22 倍速改变社会结果
+## 134.22 倍速改变社会结果
 
 模拟依赖渲染帧。
 
 ---
 
-## 135. 失败隔离
+# 135. 失败隔离
 
 ---
 
-### 135.1 Miracle资源已扣但WorldEffect失败
+## 135.1 Miracle资源已扣但WorldEffect失败
 
 Miracle需要原子Commit。
 
@@ -3823,7 +3884,7 @@ WorldEffect成功提交后：
 
 ---
 
-### 135.2 WorldEffect成功但Belief系统失败
+## 135.2 WorldEffect成功但Belief系统失败
 
 世界物理效果属于权威事实。
 
@@ -3837,7 +3898,7 @@ Observation / Attribution队列。
 
 ---
 
-## 136. Observation事件爆炸
+# 136. Observation事件爆炸
 
 一次流星：
 
@@ -3855,7 +3916,7 @@ Community aggregate observation。
 
 ---
 
-## 137. Prayer爆炸
+# 137. Prayer爆炸
 
 PrayerAggregator周期压缩。
 
@@ -3865,7 +3926,7 @@ PrayerAggregator周期压缩。
 
 ---
 
-## 138. Belief数值震荡
+# 138. Belief数值震荡
 
 例如：
 
@@ -3888,7 +3949,7 @@ PrayerAggregator周期压缩。
 
 ---
 
-## 139. SocialPropagation循环
+# 139. SocialPropagation循环
 
 A影响B。
 
@@ -3904,7 +3965,7 @@ Discrete Propagation Step。
 
 ---
 
-## 140. Doctrine循环
+# 140. Doctrine循环
 
 Doctrine A改变B采用率。
 
@@ -3918,7 +3979,7 @@ B又立即改变A。
 
 ---
 
-## 141. Institution孤儿
+# 141. Institution孤儿
 
 Temple被摧毁。
 
@@ -3932,7 +3993,7 @@ InstitutionLifecycle
 
 ---
 
-## 142. Prophet死亡
+# 142. Prophet死亡
 
 Doctrine本身不能消失。
 
@@ -3944,7 +4005,7 @@ Doctrine本身不能消失。
 
 ---
 
-## 143. RivalGod缺失
+# 143. RivalGod缺失
 
 AI神祇被移除或版本迁移失败时：
 
@@ -3958,7 +4019,7 @@ OrphanedReligion
 
 ---
 
-## 144. Terrain修改异常
+# 144. Terrain修改异常
 
 局部Region进入：
 
@@ -3970,7 +4031,7 @@ TerrainRebuildPending。
 
 ---
 
-## 145. Save迁移
+# 145. Save迁移
 
 Doctrine、Miracle、Religion等长期状态都需要稳定ID。
 
@@ -3980,7 +4041,7 @@ Doctrine、Miracle、Religion等长期状态都需要稳定ID。
 
 ---
 
-## 146. Random Stream
+# 146. Random Stream
 
 建议分离：
 
@@ -4003,11 +4064,11 @@ Doctrine、Miracle、Religion等长期状态都需要稳定ID。
 
 ---
 
-## 147. Debug与可观测性
+# 147. Debug与可观测性
 
 ---
 
-### 147.1 World Truth Inspector
+## 147.1 World Truth Inspector
 
 显示：
 
@@ -4019,7 +4080,7 @@ Doctrine、Miracle、Religion等长期状态都需要稳定ID。
 
 ---
 
-### 147.2 Observation Inspector
+## 147.2 Observation Inspector
 
 显示：
 
@@ -4027,7 +4088,7 @@ Doctrine、Miracle、Religion等长期状态都需要稳定ID。
 
 ---
 
-### 147.3 Attribution Inspector
+## 147.3 Attribution Inspector
 
 显示某居民：
 
@@ -4044,7 +4105,7 @@ NaturalExplanation -10。
 
 ---
 
-## 148. Belief Breakdown
+# 148. Belief Breakdown
 
 某Community：
 
@@ -4069,7 +4130,7 @@ Faith 63%。
 
 ---
 
-## 149. Prayer Heatmap
+# 149. Prayer Heatmap
 
 显示：
 
@@ -4088,7 +4149,7 @@ Faith 63%。
 
 ---
 
-## 150. Divine Resource Timeline
+# 150. Divine Resource Timeline
 
 显示：
 
@@ -4110,7 +4171,7 @@ Blessing 30。
 
 ---
 
-## 151. Miracle Causality Trace
+# 151. Miracle Causality Trace
 
 选择一次Rain Miracle：
 
@@ -4125,7 +4186,7 @@ Rain
 
 ---
 
-## 152. Doctrine Compliance Inspector
+# 152. Doctrine Compliance Inspector
 
 显示：
 
@@ -4145,7 +4206,7 @@ Wood shortage严重。
 
 ---
 
-## 153. Institution Influence Graph
+# 153. Institution Influence Graph
 
 显示：
 
@@ -4155,7 +4216,7 @@ Temple、Prophet和Pilgrimage之间：
 
 ---
 
-## 154. Social Diffusion Graph
+# 154. Social Diffusion Graph
 
 显示：
 
@@ -4165,7 +4226,7 @@ Temple、Prophet和Pilgrimage之间：
 
 ---
 
-## 155. Divine Dependency Graph
+# 155. Divine Dependency Graph
 
 展示：
 
@@ -4179,7 +4240,7 @@ Temple、Prophet和Pilgrimage之间：
 
 ---
 
-## 156. Counterfactual Viewer
+# 156. Counterfactual Viewer
 
 开发者可以：
 
@@ -4195,7 +4256,7 @@ Simulate Without Intervention。
 
 ---
 
-## 157. Agent Decision Trace
+# 157. Agent Decision Trace
 
 对于关键居民：
 
@@ -4209,7 +4270,7 @@ Need
 
 ---
 
-## 158. Simulation Scale Panel
+# 158. Simulation Scale Panel
 
 显示：
 
@@ -4230,7 +4291,7 @@ Need
 
 ---
 
-## 159. Belief Oscillation Monitor
+# 159. Belief Oscillation Monitor
 
 检测：
 
@@ -4238,7 +4299,7 @@ Need
 
 ---
 
-## 160. World Performance Timeline
+# 160. World Performance Timeline
 
 显示：
 
@@ -4257,11 +4318,11 @@ Need
 
 ---
 
-## 161. 内容验证工具
+# 161. 内容验证工具
 
 ---
 
-### 161.1 MiracleDefinition Validation
+## 161.1 MiracleDefinition Validation
 
 检查：
 
@@ -4280,7 +4341,7 @@ Need
 
 ---
 
-### 161.2 DoctrineGraph Validation
+## 161.2 DoctrineGraph Validation
 
 检查：
 
@@ -4295,7 +4356,7 @@ Need
 
 ---
 
-### 161.3 Belief Formula Simulation
+## 161.3 Belief Formula Simulation
 
 固定WorldEvent。
 
@@ -4312,7 +4373,7 @@ Need
 
 ---
 
-## 162. Prayer Load Test
+# 162. Prayer Load Test
 
 模拟：
 
@@ -4324,7 +4385,7 @@ Need
 
 ---
 
-## 163. Population Scale Test
+# 163. Population Scale Test
 
 测试：
 
@@ -4339,7 +4400,7 @@ Simulation LOD能够扩展。
 
 ---
 
-## 164. Miracle Side-Effect Test
+# 164. Miracle Side-Effect Test
 
 大量随机WorldState：
 
@@ -4360,7 +4421,7 @@ Simulation LOD能够扩展。
 
 ---
 
-## 165. Doctrine Adoption Monte Carlo
+# 165. Doctrine Adoption Monte Carlo
 
 对不同社会条件：
 
@@ -4372,7 +4433,7 @@ Doctrine传播概率。
 
 ---
 
-## 166. Rival Religion Simulation
+# 166. Rival Religion Simulation
 
 让两个AI Religion：
 
@@ -4386,7 +4447,7 @@ Doctrine传播概率。
 
 ---
 
-## 167. Divine Dependency Test
+# 167. Divine Dependency Test
 
 玩家Bot采用：
 
@@ -4413,7 +4474,7 @@ SelectiveIntervention。
 
 ---
 
-## 168. World Without Player Test
+# 168. World Without Player Test
 
 非常重要。
 
@@ -4431,7 +4492,7 @@ SelectiveIntervention。
 
 ---
 
-## 169. Replay Determinism Test
+# 169. Replay Determinism Test
 
 固定：
 
@@ -4446,7 +4507,7 @@ WorldSeed
 
 ---
 
-## 170. Terrain Miracle Stress Test
+# 170. Terrain Miracle Stress Test
 
 连续修改：
 
@@ -4465,7 +4526,7 @@ WorldSeed
 
 ---
 
-## 171. 性能设计
+# 171. 性能设计
 
 上帝模拟很容易成为：
 
@@ -4479,7 +4540,7 @@ WorldSeed
 
 ---
 
-## 172. 不要让每个人类都拥有永久高频Update
+# 172. 不要让每个人类都拥有永久高频Update
 
 关键角色：
 
@@ -4491,7 +4552,7 @@ WorldSeed
 
 ---
 
-## 173. Event-driven Needs
+# 173. Event-driven Needs
 
 居民不需要：
 
@@ -4505,7 +4566,7 @@ SocialUpdate
 
 ---
 
-## 174. Belief Update Frequency
+# 174. Belief Update Frequency
 
 Physical Combat：
 
@@ -4525,7 +4586,7 @@ Cultural change：
 
 ---
 
-## 175. Miracle即时，文化缓慢
+# 175. Miracle即时，文化缓慢
 
 这是很自然的时间尺度分层。
 
@@ -4555,7 +4616,7 @@ Cultural change：
 
 ---
 
-## 176. Region Aggregation
+# 176. Region Aggregation
 
 远离镜头地区：
 
@@ -4565,7 +4626,7 @@ Community级模拟。
 
 ---
 
-## 177. Institution Simulation
+# 177. Institution Simulation
 
 Temple无需：
 
@@ -4579,7 +4640,7 @@ DailyTick
 
 ---
 
-## 178. Social Graph压缩
+# 178. Social Graph压缩
 
 不需要构建：
 
@@ -4595,7 +4656,7 @@ Community网络。
 
 ---
 
-## 179. World Event Scheduling
+# 179. World Event Scheduling
 
 使用：
 
@@ -4616,7 +4677,7 @@ ScheduledQueue
 
 ---
 
-## 180. Terrain派生缓存
+# 180. Terrain派生缓存
 
 HeightField改变：
 
@@ -4624,7 +4685,7 @@ HeightField改变：
 
 ---
 
-## 181. UI数据也需要聚合
+# 181. UI数据也需要聚合
 
 100万Prayer
 
@@ -4636,11 +4697,11 @@ PrayerCluster。
 
 ---
 
-## 182. 可扩展点
+# 182. 可扩展点
 
 ---
 
-### 182.1 新Miracle
+## 182.1 新Miracle
 
 通过：
 
@@ -4651,7 +4712,7 @@ MiracleDefinition
 
 ---
 
-### 182.2 新Doctrine
+## 182.2 新Doctrine
 
 通过：
 
@@ -4662,7 +4723,7 @@ DoctrineDefinition
 
 ---
 
-### 182.3 新Religion
+## 182.3 新Religion
 
 提供：
 
@@ -4677,7 +4738,7 @@ DoctrineDefinition
 
 ---
 
-### 182.4 新RivalGod
+## 182.4 新RivalGod
 
 复用：
 
@@ -4690,7 +4751,7 @@ DivineResource
 
 ---
 
-### 182.5 新WorldEvent
+## 182.5 新WorldEvent
 
 通过：
 
@@ -4700,7 +4761,7 @@ WorldEventDefinition
 
 ---
 
-### 182.6 新Institution
+## 182.6 新Institution
 
 实现统一：
 
@@ -4708,7 +4769,7 @@ InstitutionCapability。
 
 ---
 
-### 182.7 新生态系统
+## 182.7 新生态系统
 
 例如：
 
@@ -4723,7 +4784,7 @@ Miracle仍通过WorldEffect接口。
 
 ---
 
-### 182.8 新时代
+## 182.8 新时代
 
 可以让文明从：
 
@@ -4738,7 +4799,7 @@ Tribal
 
 ---
 
-## 183. 最小可行原型
+# 183. 最小可行原型
 
 一个验证上帝模拟核心范式的MVP不需要整个星球。
 
@@ -4748,7 +4809,7 @@ Tribal
 
 ---
 
-### 183.1 世界
+## 183.1 世界
 
 至少包含：
 
@@ -4767,7 +4828,7 @@ Tribal
 
 ---
 
-### 183.2 居民需求
+## 183.2 居民需求
 
 只做：
 
@@ -4780,7 +4841,7 @@ Tribal
 
 ---
 
-### 183.3 神迹
+## 183.3 神迹
 
 建议：
 
@@ -4799,7 +4860,7 @@ Tribal
 
 ---
 
-### 183.4 Belief
+## 183.4 Belief
 
 实现：
 
@@ -4814,7 +4875,7 @@ Tribal
 
 ---
 
-### 183.5 Prayer
+## 183.5 Prayer
 
 只实现：
 
@@ -4831,7 +4892,7 @@ Tribal
 
 ---
 
-### 183.6 Doctrine
+## 183.6 Doctrine
 
 例如：
 
@@ -4846,7 +4907,7 @@ Tribal
 
 ---
 
-### 183.7 Institution
+## 183.7 Institution
 
 只需要：
 
@@ -4857,7 +4918,7 @@ Temple
 
 ---
 
-### 183.8 Rival Faith
+## 183.8 Rival Faith
 
 不一定需要真正AI God。
 
@@ -4867,7 +4928,7 @@ Temple
 
 ---
 
-### 183.9 必要基础设施
+## 183.9 必要基础设施
 
 - WorldClock；
 
@@ -4906,7 +4967,7 @@ Temple
 
 ---
 
-### 183.10 必要调试工具
+## 183.10 必要调试工具
 
 - WorldTruthInspector；
 
@@ -4929,7 +4990,7 @@ Temple
 
 ---
 
-## 184. MVP核心验收问题
+# 184. MVP核心验收问题
 
 原型至少必须能够回答：
 
@@ -4987,7 +5048,7 @@ Temple
 
 ---
 
-## 185. 推荐实施顺序
+# 185. 推荐实施顺序
 
 第一阶段：
 
@@ -5095,7 +5156,7 @@ Temple
 
 ---
 
-## 186. 架构验收标准
+# 186. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -5194,11 +5255,11 @@ Temple
 
 ---
 
-## 187. 可迁移到其他游戏的设计思想
+# 187. 可迁移到其他游戏的设计思想
 
 ---
 
-### 187.1 世界真相、观察信息和因果解释是三个不同层
+## 187.1 世界真相、观察信息和因果解释是三个不同层
 
 可迁移到：
 
@@ -5223,7 +5284,7 @@ Temple
 
 ---
 
-### 187.2 玩家意图可以先改变环境，再由自治系统决定最终结果
+## 187.2 玩家意图可以先改变环境，再由自治系统决定最终结果
 
 可迁移到：
 
@@ -5246,7 +5307,7 @@ Temple
 
 ---
 
-### 187.3 玩家注意力本身是一种可设计资源
+## 187.3 玩家注意力本身是一种可设计资源
 
 可迁移到：
 
@@ -5269,7 +5330,7 @@ Temple
 
 ---
 
-### 187.4 长期成长可以表现为“从亲自处理转向代理与制度”
+## 187.4 长期成长可以表现为“从亲自处理转向代理与制度”
 
 可迁移到：
 
@@ -5294,7 +5355,7 @@ Late：
 
 ---
 
-### 187.5 代理自动化应该附带解释偏差
+## 187.5 代理自动化应该附带解释偏差
 
 可迁移到：
 
@@ -5317,7 +5378,7 @@ Late：
 
 ---
 
-### 187.6 即时解决方案可以制造长期依赖
+## 187.6 即时解决方案可以制造长期依赖
 
 可迁移到：
 
@@ -5338,7 +5399,7 @@ Late：
 
 ---
 
-### 187.7 玩家越强越需要限制“直接解决所有问题”的能力
+## 187.7 玩家越强越需要限制“直接解决所有问题”的能力
 
 可迁移到：
 
@@ -5357,7 +5418,7 @@ Late：
 
 ---
 
-### 187.8 事件的社会意义不应等于事件本身的物理效果
+## 187.8 事件的社会意义不应等于事件本身的物理效果
 
 可迁移到：
 
@@ -5380,7 +5441,7 @@ Late：
 
 ---
 
-### 187.9 延迟因果需要专门的可观测性工具
+## 187.9 延迟因果需要专门的可观测性工具
 
 如果行为的后果在：
 
@@ -5405,7 +5466,7 @@ Causality Trace。
 
 ---
 
-### 187.10 大规模系统应该同时保留宏观统计和少量微观角色
+## 187.10 大规模系统应该同时保留宏观统计和少量微观角色
 
 只有宏观：
 
@@ -5430,9 +5491,9 @@ Causality Trace。
 
 ---
 
-## 188. 本次防重记录
+# 188. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **上帝模拟 / God Game / Deity Simulation。**
 
@@ -5457,7 +5518,7 @@ Causality Trace。
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家作为高于普通世界实体的超然存在，并不持续直接控制居民，而是通过神迹、启示、教义、神职代理人、圣地和环境改造间接干预一个能够自主运行的世界。世界物理真相、居民观察信息和居民因果解释相互分离：神迹首先修改天气、地形、生命或资源等真实世界状态，居民随后根据自己看到的现象、已有信仰、神职解释和社会传播判断事件是否源于玩家，并进一步改变Faith、Fear、Gratitude、Doubt和制度行为。
 
@@ -5483,7 +5544,7 @@ Causality Trace。
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 玩家拥有超越普通居民的世界级干预能力；
 
@@ -5552,7 +5613,7 @@ Causality Trace。
 
 ---
 
-### 与仓库现有城市建设模拟的防重边界
+## 与仓库现有城市建设模拟的防重边界
 
 当前仓库中的 `city-builder` 以土地用途、交通网络、公用事业、公共服务、税制和空间政策作为主要控制手段，并让居民和企业基于可达性、土地价值和就业机会自组织。
 
@@ -5597,7 +5658,7 @@ Causality Trace。
 
 ---
 
-### 与仓库现有殖民地模拟的防重边界
+## 与仓库现有殖民地模拟的防重边界
 
 当前 `colony` 重点是居民需求、工作订单、生产、搬运和劳动力调度，玩家通过优先级和制度组织具体劳动。
 
@@ -5634,7 +5695,7 @@ Causality Trace。
 
 ---
 
-### 与仓库现有4X的防重边界
+## 与仓库现有4X的防重边界
 
 4X中的主要控制主体是：
 
@@ -5672,7 +5733,7 @@ Causality Trace。
 
 ---
 
-### 与仓库现有恋爱养成 / Relationship Simulation 的防重边界
+## 与仓库现有恋爱养成 / Relationship Simulation 的防重边界
 
 仓库中的关系模拟关注个体之间的互动记忆、关系维度和阶段门槛。当前索引已经登记 `relationship-simulation`。
 
@@ -5692,7 +5753,7 @@ Trust、Faith、Gratitude，
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - God Game；
 
@@ -5785,7 +5846,7 @@ Trust、Faith、Gratitude，
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次上帝模拟范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

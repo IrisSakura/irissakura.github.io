@@ -1,4 +1,57 @@
-## 1. 类型定位
+> Agent 标签：`bullet` `danmaku` `hell`
+
+---
+
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `game-designs`。仓库当前生成索引标记 **Entries: 47**，已有大逃杀、自走棋、城市建设、幸存者类、格斗、潜行、JRPG、实时战略等范式。仓库中已经存在 `horde-survival`，其核心是玩家持续移动、自动火力、击杀生成经验、升级形成构筑，并让玩家成长曲线持续对抗敌群压力曲线。
+
+进一步核对当前 `route-metadata.v1.json`，未发现独立的 `danmaku`、`bullet-hell` 或“弹幕射击”路由；因此本期选择：
+
+**弹幕射击 / Bullet Hell / Danmaku Shooter。**
+
+常见名称包括：
+
+- Bullet Hell；
+
+- Danmaku Shooter；
+
+- Bullet Hell Shooter；
+
+- Shoot 'em up / STG 中的高密度弹幕分支；
+
+- 弹幕射击；
+
+- 弹幕 STG；
+
+- 纵版弹幕；
+
+- 横版弹幕。
+
+
+本期不是再次讨论仓库已有的 `Bullet Heaven / Horde Survival`。现有幸存者类的压力主要来自敌人实体密度持续增加、自动攻击与单局构筑增长。
+
+弹幕射击的独立核心则是：
+
+> **敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。**
+
+其核心循环可以压缩为：
+
+**敌人进入攻击阶段
+→ 弹幕Pattern开始生成
+→ 玩家识别几何结构
+→ 预测未来安全区
+→ 进行微移动
+→ 穿越弹幕缝隙
+→ 持续输出 / 擦弹 / 收集资源
+→ Pattern强度提高
+→ Boss切换阶段
+→ 新规则改变安全空间
+→ 玩家重新读型并适应。**
+
+---
+
+# 1. 类型定位
 
 弹幕射击是一种以：
 
@@ -64,27 +117,27 @@
 
 ---
 
-## 2. 核心系统抽象
+# 2. 核心系统抽象
 
 弹幕射击可以被抽象为五个相互耦合的运行时系统：
 
-#### Pattern Timeline
+### Pattern Timeline
 
 什么时候生成什么弹幕。
 
-#### Bullet Field
+### Bullet Field
 
 当前空间中有哪些危险投射物，以及未来将向哪里移动。
 
-#### Player Micro-Movement
+### Player Micro-Movement
 
 玩家如何在极小空间内重新定位。
 
-#### Damage / Graze Geometry
+### Damage / Graze Geometry
 
 什么算真正受击，什么只算擦弹。
 
-#### Phase Progression
+### Phase Progression
 
 什么时候从一种危险规则切换到下一种。
 
@@ -103,7 +156,7 @@ Pattern定义
 
 ---
 
-## 3. 核心范式一：弹幕场是“时间函数”，不是大量独立AI
+# 3. 核心范式一：弹幕场是“时间函数”，不是大量独立AI
 
 低质量实现容易变成：
 
@@ -144,7 +197,7 @@ Pattern定义
 
 ---
 
-## 4. PatternDefinition
+# 4. PatternDefinition
 
 建议字段：
 
@@ -179,7 +232,7 @@ Pattern描述：
 
 ---
 
-## 5. EmitterDefinition
+# 5. EmitterDefinition
 
 建议字段：
 
@@ -216,7 +269,7 @@ Pattern描述：
 
 ---
 
-## 6. 常见Emitter
+# 6. 常见Emitter
 
 可以抽象为：
 
@@ -255,41 +308,41 @@ Pattern描述：
 
 ---
 
-## 7. AngleRule
+# 7. AngleRule
 
 典型规则：
 
-### Fixed
+## Fixed
 
 固定角度。
 
-### Radial
+## Radial
 
 均匀覆盖360度。
 
-### Fan
+## Fan
 
 围绕中心方向展开一定角度。
 
-### AimAtPlayer
+## AimAtPlayer
 
 生成瞬间瞄准玩家。
 
-### Rotating
+## Rotating
 
 每次发射增加角度。
 
-### Oscillating
+## Oscillating
 
 在范围内往返变化。
 
-### DerivedFromParent
+## DerivedFromParent
 
 根据母弹方向生成。
 
 ---
 
-## 8. SpeedRule
+# 8. SpeedRule
 
 可以支持：
 
@@ -325,7 +378,7 @@ Pattern描述：
 
 ---
 
-## 9. Pattern是“危险空间生成程序”
+# 9. Pattern是“危险空间生成程序”
 
 设计者真正写的是：
 
@@ -352,7 +405,7 @@ Pattern描述：
 
 ---
 
-## 10. 核心范式二：受击框必须明显小于视觉角色
+# 10. 核心范式二：受击框必须明显小于视觉角色
 
 这是弹幕射击建立“高密度但仍可穿越”体验的关键。
 
@@ -372,7 +425,7 @@ Pattern描述：
 
 ---
 
-## 11. PlayerCollisionState
+# 11. PlayerCollisionState
 
 建议包含：
 
@@ -405,7 +458,7 @@ Pattern描述：
 
 ---
 
-## 12. Hit Radius
+# 12. Hit Radius
 
 Hit Radius决定：
 
@@ -413,7 +466,7 @@ Hit Radius决定：
 
 ---
 
-## 13. Graze Radius
+# 13. Graze Radius
 
 通常满足：
 
@@ -435,7 +488,7 @@ Bullet进入GrazeRadius：
 
 ---
 
-## 14. 为什么Hitbox必须可视化
+# 14. 为什么Hitbox必须可视化
 
 普通模式可以隐藏。
 
@@ -462,11 +515,11 @@ Bullet进入GrazeRadius：
 
 ---
 
-## 15. Focus Mode
+# 15. Focus Mode
 
 弹幕射击常见两种移动状态：
 
-### Normal Movement
+## Normal Movement
 
 高速。
 
@@ -477,7 +530,7 @@ Bullet进入GrazeRadius：
 - 躲避宏观Pattern。
 
 
-### Focus Movement
+## Focus Movement
 
 低速。
 
@@ -492,7 +545,7 @@ Bullet进入GrazeRadius：
 
 ---
 
-## 16. PlayerMovementProfile
+# 16. PlayerMovementProfile
 
 建议字段：
 
@@ -515,7 +568,7 @@ Bullet进入GrazeRadius：
 
 ---
 
-## 17. 移动必须与渲染FPS解耦
+# 17. 移动必须与渲染FPS解耦
 
 弹幕游戏对：
 
@@ -546,7 +599,7 @@ Bullet进入GrazeRadius：
 
 ---
 
-## 18. 核心范式三：玩家真正阅读的是“未来安全空间”
+# 18. 核心范式三：玩家真正阅读的是“未来安全空间”
 
 只判断：
 
@@ -572,7 +625,7 @@ Bullet也会继续移动。
 
 ---
 
-## 19. Bullet Field
+# 19. Bullet Field
 
 运行时可以定义：
 
@@ -599,7 +652,7 @@ Bullet也会继续移动。
 
 ---
 
-## 20. Safety Field Analyzer
+# 20. Safety Field Analyzer
 
 开发工具可以：
 
@@ -637,7 +690,7 @@ Bullet也会继续移动。
 
 ---
 
-## 21. 无解Pattern和高难Pattern是不同概念
+# 21. 无解Pattern和高难Pattern是不同概念
 
 高难Pattern：
 
@@ -659,7 +712,7 @@ Bullet也会继续移动。
 
 ---
 
-## 22. Pattern Solvability
+# 22. Pattern Solvability
 
 可以定义简化验证：
 
@@ -695,7 +748,7 @@ Bullet也会继续移动。
 
 ---
 
-## 23. 核心范式四：弹幕难度由多个维度共同构成
+# 23. 核心范式四：弹幕难度由多个维度共同构成
 
 弹幕难度不能只看：
 
@@ -730,13 +783,13 @@ BulletCount。
 
 ---
 
-## 24. Bullet Density
+# 24. Bullet Density
 
 单位空间中的Bullet数量。
 
 ---
 
-## 25. Gap Size
+# 25. Gap Size
 
 安全通道相对于玩家Hitbox有多宽。
 
@@ -752,7 +805,7 @@ BulletCount。
 
 ---
 
-## 26. Required Movement
+# 26. Required Movement
 
 有些Pattern要求：
 
@@ -766,7 +819,7 @@ BulletCount。
 
 ---
 
-## 27. Crossing Rate
+# 27. Crossing Rate
 
 Bullet轨迹相互交叉越多，
 
@@ -774,23 +827,23 @@ Bullet轨迹相互交叉越多，
 
 ---
 
-## 28. Aimedness
+# 28. Aimedness
 
 Pattern可以分：
 
-### Static Pattern
+## Static Pattern
 
 与玩家位置无关。
 
-### Snapshot Aim
+## Snapshot Aim
 
 生成瞬间读取玩家位置。
 
-### Continuous Tracking
+## Continuous Tracking
 
 持续追踪玩家。
 
-### Predictive Aim
+## Predictive Aim
 
 预测玩家移动。
 
@@ -806,7 +859,7 @@ Pattern可以分：
 
 ---
 
-## 29. Snapshot Aim是非常重要的设计工具
+# 29. Snapshot Aim是非常重要的设计工具
 
 例如Boss每0.5秒：
 
@@ -822,7 +875,7 @@ Pattern可以分：
 
 ---
 
-## 30. 核心范式五：引弹是玩家主动塑造未来弹幕场
+# 30. 核心范式五：引弹是玩家主动塑造未来弹幕场
 
 如果敌人瞄准：
 
@@ -852,7 +905,7 @@ Pattern可以分：
 
 ---
 
-## 31. Streaming Pattern
+# 31. Streaming Pattern
 
 典型循环：
 
@@ -870,7 +923,7 @@ Boss瞄准
 
 ---
 
-## 32. 对PlayerTracking需要采样策略
+# 32. 对PlayerTracking需要采样策略
 
 不要让每颗Bullet每帧重新瞄准玩家。
 
@@ -891,7 +944,7 @@ Spawn时：
 
 ---
 
-## 33. BulletDefinition
+# 33. BulletDefinition
 
 建议字段：
 
@@ -924,7 +977,7 @@ Spawn时：
 
 ---
 
-## 34. BulletRuntimeState
+# 34. BulletRuntimeState
 
 建议包含：
 
@@ -953,7 +1006,7 @@ Spawn时：
 
 ---
 
-## 35. Bullet Motion Profile
+# 35. Bullet Motion Profile
 
 不要所有Bullet都独立脚本化。
 
@@ -984,7 +1037,7 @@ Spawn时：
 
 ---
 
-## 36. MotionProfile
+# 36. MotionProfile
 
 建议字段：
 
@@ -1007,7 +1060,7 @@ Spawn时：
 
 ---
 
-## 37. Bullet Motion Phase
+# 37. Bullet Motion Phase
 
 一些Bullet可以：
 
@@ -1024,7 +1077,7 @@ Phase列表。
 
 ---
 
-## 38. Bullet生命周期
+# 38. Bullet生命周期
 
 标准：
 
@@ -1045,7 +1098,7 @@ Spawned
 
 ---
 
-## 39. Child Bullet
+# 39. Child Bullet
 
 母弹达到：
 
@@ -1074,13 +1127,13 @@ PatternRequest。
 
 ---
 
-## 40. PatternExecution
+# 40. PatternExecution
 
 一次Pattern真正运行时应该生成实例。
 
 ---
 
-### 40.1 PatternExecutionState
+## 40.1 PatternExecutionState
 
 建议包含：
 
@@ -1111,7 +1164,7 @@ PatternRequest。
 
 ---
 
-## 41. 弹幕脚本必须支持取消
+# 41. 弹幕脚本必须支持取消
 
 Boss进入下一阶段：
 
@@ -1134,7 +1187,7 @@ Boss进入下一阶段：
 
 ---
 
-## 42. Bullet Cancel
+# 42. Bullet Cancel
 
 触发来源：
 
@@ -1151,7 +1204,7 @@ Boss进入下一阶段：
 
 ---
 
-### 42.1 CancelContext
+## 42.1 CancelContext
 
 建议包含：
 
@@ -1170,7 +1223,7 @@ Boss进入下一阶段：
 
 ---
 
-## 43. 核心范式六：Bomb不是“强技能”，而是失败保险与节奏资源
+# 43. 核心范式六：Bomb不是“强技能”，而是失败保险与节奏资源
 
 Bomb通常可以：
 
@@ -1189,7 +1242,7 @@ Bomb通常可以：
 
 ---
 
-## 44. BombRuntimeState
+# 44. BombRuntimeState
 
 建议包含：
 
@@ -1208,7 +1261,7 @@ Bomb通常可以：
 
 ---
 
-## 45. Bomb Resource产生决策
+# 45. Bomb Resource产生决策
 
 现在使用：
 
@@ -1224,7 +1277,7 @@ Bomb通常可以：
 
 ---
 
-## 46. Deathbomb
+# 46. Deathbomb
 
 部分弹幕游戏允许：
 
@@ -1251,7 +1304,7 @@ Bomb通常可以：
 
 ---
 
-## 47. PlayerDamage Resolver
+# 47. PlayerDamage Resolver
 
 标准流程：
 
@@ -1265,7 +1318,7 @@ Bullet HitCandidate
 
 ---
 
-## 48. 受击后的无敌时间
+# 48. 受击后的无敌时间
 
 Respawn后通常需要：
 
@@ -1279,7 +1332,7 @@ Respawn后通常需要：
 
 ---
 
-## 49. 核心范式七：Graze把“几乎失败”转化成高阶收益
+# 49. 核心范式七：Graze把“几乎失败”转化成高阶收益
 
 如果玩家只需要：
 
@@ -1299,7 +1352,7 @@ Graze通过奖励：
 
 ---
 
-## 50. GrazeState
+# 50. GrazeState
 
 需要防止同一Bullet：
 
@@ -1316,7 +1369,7 @@ Graze通过奖励：
 
 ---
 
-## 51. Graze奖励
+# 51. Graze奖励
 
 可以提供：
 
@@ -1340,7 +1393,7 @@ Graze通过奖励：
 
 ---
 
-## 52. Graze必须和Hit检测顺序稳定
+# 52. Graze必须和Hit检测顺序稳定
 
 推荐：
 
@@ -1360,7 +1413,7 @@ Graze通过奖励：
 
 ---
 
-## 53. 玩家射击系统
+# 53. 玩家射击系统
 
 弹幕射击虽然重点是规避，
 
@@ -1378,7 +1431,7 @@ Enemy Bullet Pattern
 
 ---
 
-## 54. PlayerWeaponState
+# 54. PlayerWeaponState
 
 建议字段：
 
@@ -1399,7 +1452,7 @@ Enemy Bullet Pattern
 
 ---
 
-## 55. 自动连射
+# 55. 自动连射
 
 很多STG允许：
 
@@ -1413,7 +1466,7 @@ Enemy Bullet Pattern
 
 ---
 
-## 56. Focus Shot
+# 56. Focus Shot
 
 Focus时：
 
@@ -1438,7 +1491,7 @@ Focus时：
 
 ---
 
-## 57. Power System
+# 57. Power System
 
 玩家可以通过：
 
@@ -1463,7 +1516,7 @@ Focus时：
 
 ---
 
-## 58. Recovery Mechanism
+# 58. Recovery Mechanism
 
 可以提供：
 
@@ -1480,9 +1533,9 @@ Focus时：
 
 ---
 
-## 59. Boss定义
+# 59. Boss定义
 
-### BossDefinition
+## BossDefinition
 
 建议字段：
 
@@ -1507,9 +1560,9 @@ Focus时：
 
 ---
 
-## 60. Boss Phase
+# 60. Boss Phase
 
-### BossPhaseDefinition
+## BossPhaseDefinition
 
 建议字段：
 
@@ -1538,7 +1591,7 @@ Focus时：
 
 ---
 
-## 61. Boss真正的内容单位通常是Phase
+# 61. Boss真正的内容单位通常是Phase
 
 一个Boss可以：
 
@@ -1554,7 +1607,7 @@ Focus时：
 
 ---
 
-## 62. Spell Card / Named Pattern
+# 62. Spell Card / Named Pattern
 
 部分作品会把高规格Pattern：
 
@@ -1575,7 +1628,7 @@ Focus时：
 
 ---
 
-## 63. Phase结束条件
+# 63. Phase结束条件
 
 可以：
 
@@ -1588,7 +1641,7 @@ Focus时：
 
 ---
 
-## 64. Timeout
+# 64. Timeout
 
 某些Pattern：
 
@@ -1606,7 +1659,7 @@ Focus时：
 
 ---
 
-## 65. Boss Movement
+# 65. Boss Movement
 
 Boss移动不是单纯视觉。
 
@@ -1623,7 +1676,7 @@ Boss移动不是单纯视觉。
 
 ---
 
-## 66. Boss不要随机瞬移到破坏可解性的地方
+# 66. Boss不要随机瞬移到破坏可解性的地方
 
 如果Pattern原本留有：
 
@@ -1643,7 +1696,7 @@ Pattern Constraints
 
 ---
 
-## 67. 普通敌人Stage Timeline
+# 67. 普通敌人Stage Timeline
 
 弹幕STG通常不只是Boss Rush。
 
@@ -1655,7 +1708,7 @@ Stage中：
 
 ---
 
-## 68. StageDefinition
+# 68. StageDefinition
 
 建议字段：
 
@@ -1680,7 +1733,7 @@ Stage中：
 
 ---
 
-## 69. EnemySpawnEvent
+# 69. EnemySpawnEvent
 
 建议字段：
 
@@ -1701,7 +1754,7 @@ Stage中：
 
 ---
 
-## 70. Stage本质上与节奏游戏有一定“时间编排”相似性
+# 70. Stage本质上与节奏游戏有一定“时间编排”相似性
 
 敌人和Pattern：
 
@@ -1717,7 +1770,7 @@ Stage中：
 
 ---
 
-## 71. StageClock
+# 71. StageClock
 
 可以复用：
 
@@ -1736,7 +1789,7 @@ Stage中：
 
 ---
 
-## 72. Practice Mode
+# 72. Practice Mode
 
 高难弹幕游戏非常需要：
 
@@ -1763,7 +1816,7 @@ Stage中：
 
 ---
 
-## 73. PracticeSnapshot
+# 73. PracticeSnapshot
 
 进入某Phase时记录：
 
@@ -1786,7 +1839,7 @@ Stage中：
 
 ---
 
-## 74. Replay System
+# 74. Replay System
 
 弹幕游戏非常适合：
 
@@ -1813,7 +1866,7 @@ Pattern和Simulation确定，
 
 ---
 
-## 75. ReplayInputFrame
+# 75. ReplayInputFrame
 
 建议字段：
 
@@ -1834,7 +1887,7 @@ Pattern和Simulation确定，
 
 ---
 
-## 76. Replay确定性为什么非常重要
+# 76. Replay确定性为什么非常重要
 
 可以用于：
 
@@ -1851,19 +1904,19 @@ Pattern和Simulation确定，
 
 ---
 
-## 77. 随机性需要非常谨慎
+# 77. 随机性需要非常谨慎
 
 弹幕随机性主要有三类：
 
-### Cosmetic Random
+## Cosmetic Random
 
 只影响表现。
 
-### Bounded Pattern Random
+## Bounded Pattern Random
 
 在可解范围内改变角度或位置。
 
-### Fully Random Bullet
+## Fully Random Bullet
 
 自由随机。
 
@@ -1873,7 +1926,7 @@ Pattern和Simulation确定，
 
 ---
 
-## 78. RNG Stream分离
+# 78. RNG Stream分离
 
 建议：
 
@@ -1892,7 +1945,7 @@ PatternRandom。
 
 ---
 
-## 79. Replay保存Seed还不够
+# 79. Replay保存Seed还不够
 
 必须保证：
 
@@ -1908,7 +1961,7 @@ PatternRandom。
 
 ---
 
-## 80. 固定步长
+# 80. 固定步长
 
 推荐所有权威：
 
@@ -1929,7 +1982,7 @@ PatternRandom。
 
 ---
 
-## 81. Render Interpolation
+# 81. Render Interpolation
 
 渲染可以：
 
@@ -1947,7 +2000,7 @@ VisualPosition：
 
 ---
 
-## 82. Bullet Collision
+# 82. Bullet Collision
 
 大量Bullet碰撞是核心性能问题。
 
@@ -1959,7 +2012,7 @@ VisualPosition：
 
 ---
 
-## 83. 最基础优化
+# 83. 最基础优化
 
 因为敌方Bullet主要只关心：
 
@@ -1981,7 +2034,7 @@ Bullet-vs-Bullet。
 
 ---
 
-## 84. Circle Collision
+# 84. Circle Collision
 
 最常见：
 
@@ -1991,7 +2044,7 @@ Bullet-vs-Bullet。
 
 ---
 
-## 85. Laser碰撞
+# 85. Laser碰撞
 
 可以使用：
 
@@ -2012,7 +2065,7 @@ Laser不应离散成：
 
 ---
 
-## 86. Collision Layer
+# 86. Collision Layer
 
 明确：
 
@@ -2026,7 +2079,7 @@ EnemyBullet通常无需互相碰撞。
 
 ---
 
-## 87. Graze Query优化
+# 87. Graze Query优化
 
 Hit Radius很小。
 
@@ -2046,7 +2099,7 @@ else if <= GrazeRadius² → Graze。
 
 ---
 
-## 88. Bullet Cancellation性能
+# 88. Bullet Cancellation性能
 
 Bomb可能同一Tick：
 
@@ -2066,7 +2119,7 @@ Bomb可能同一Tick：
 
 ---
 
-## 89. Bullet Registry
+# 89. Bullet Registry
 
 统一管理：
 
@@ -2085,7 +2138,7 @@ Bomb可能同一Tick：
 
 ---
 
-## 90. Bullet State SoA
+# 90. Bullet State SoA
 
 高规模下可以把：
 
@@ -2104,7 +2157,7 @@ Type[]
 
 ---
 
-## 91. Data-Oriented Bullet Simulation
+# 91. Data-Oriented Bullet Simulation
 
 这类游戏非常适合：
 
@@ -2125,7 +2178,7 @@ Type[]
 
 ---
 
-## 92. Rendering
+# 92. Rendering
 
 数千Bullet真正的瓶颈可能是：
 
@@ -2144,7 +2197,7 @@ Draw Call。
 
 ---
 
-## 93. Bullet Logic与Bullet Visual严格分离
+# 93. Bullet Logic与Bullet Visual严格分离
 
 Bullet Logic：
 
@@ -2169,7 +2222,7 @@ Hit。
 
 ---
 
-## 94. Offscreen Bullet
+# 94. Offscreen Bullet
 
 Bullet离开：
 
@@ -2189,7 +2242,7 @@ CameraBounds。
 
 ---
 
-## 95. Bullet Lifetime是必须的保险
+# 95. Bullet Lifetime是必须的保险
 
 即使轨迹异常，
 
@@ -2203,7 +2256,7 @@ MaxLifetime
 
 ---
 
-## 96. 弹幕颜色和形状是信息编码
+# 96. 弹幕颜色和形状是信息编码
 
 不同视觉可以表达：
 
@@ -2224,7 +2277,7 @@ MaxLifetime
 
 ---
 
-## 97. 高密度视觉中轮廓比特效更重要
+# 97. 高密度视觉中轮廓比特效更重要
 
 Bullet应该：
 
@@ -2236,7 +2289,7 @@ Glow、Trail不能让：
 
 ---
 
-## 98. 玩家Bullet与敌方Bullet视觉优先级
+# 98. 玩家Bullet与敌方Bullet视觉优先级
 
 敌方危险信息必须优先。
 
@@ -2248,7 +2301,7 @@ Glow、Trail不能让：
 
 ---
 
-## 99. Damage Number通常不是核心反馈
+# 99. Damage Number通常不是核心反馈
 
 数千次Player Shot命中Boss时：
 
@@ -2267,7 +2320,7 @@ Glow、Trail不能让：
 
 ---
 
-## 100. Score System
+# 100. Score System
 
 传统弹幕游戏经常拥有深度计分系统。
 
@@ -2294,7 +2347,7 @@ Glow、Trail不能让：
 
 ---
 
-## 101. Score不应和生存系统强绑定
+# 101. Score不应和生存系统强绑定
 
 高分路线可以：
 
@@ -2316,7 +2369,7 @@ Glow、Trail不能让：
 
 ---
 
-## 102. ScoreMultiplier
+# 102. ScoreMultiplier
 
 例如：
 
@@ -2333,7 +2386,7 @@ Graze
 
 ---
 
-## 103. Point Item
+# 103. Point Item
 
 敌人死亡可能掉：
 
@@ -2349,7 +2402,7 @@ ScoreItem。
 
 ---
 
-## 104. Item Collection Line
+# 104. Item Collection Line
 
 部分游戏设置：
 
@@ -2367,7 +2420,7 @@ ScoreItem。
 
 ---
 
-## 105. Rank / Dynamic Difficulty
+# 105. Rank / Dynamic Difficulty
 
 部分弹幕游戏可以根据：
 
@@ -2385,7 +2438,7 @@ ScoreItem。
 
 ---
 
-## 106. RankState
+# 106. RankState
 
 建议包含：
 
@@ -2404,7 +2457,7 @@ ScoreItem。
 
 ---
 
-## 107. Rank可以影响
+# 107. Rank可以影响
 
 - BulletSpeed；
 
@@ -2417,7 +2470,7 @@ ScoreItem。
 
 ---
 
-## 108. 动态Rank必须谨慎
+# 108. 动态Rank必须谨慎
 
 如果隐藏得太深：
 
@@ -2438,7 +2491,7 @@ ScoreItem。
 
 ---
 
-## 109. DifficultyProfile
+# 109. DifficultyProfile
 
 更稳定的难度方式还是：
 
@@ -2453,7 +2506,7 @@ Lunatic。
 
 ---
 
-## 110. Difficulty不要重新制作四套完全独立Pattern
+# 110. Difficulty不要重新制作四套完全独立Pattern
 
 推荐：
 
@@ -2476,7 +2529,7 @@ Lunatic。
 
 ---
 
-## 111. Difficulty Scaling必须保护Gap
+# 111. Difficulty Scaling必须保护Gap
 
 错误：
 
@@ -2490,7 +2543,7 @@ Difficulty-aware geometry。
 
 ---
 
-## 112. Pattern Modifier
+# 112. Pattern Modifier
 
 例如：
 
@@ -2516,7 +2569,7 @@ Gap位置开始旋转。
 
 ---
 
-## 113. 完整事件与执行流程示例
+# 113. 完整事件与执行流程示例
 
 以下以：
 
@@ -2526,7 +2579,7 @@ Gap位置开始旋转。
 
 ---
 
-### 113.1 Boss进入Phase
+## 113.1 Boss进入Phase
 
 Phase：
 
@@ -2542,7 +2595,7 @@ Boss位于：
 
 ---
 
-### 113.2 PatternExecution开始
+## 113.2 PatternExecution开始
 
 创建：
 
@@ -2560,7 +2613,7 @@ BaseAngle + 7°。
 
 ---
 
-### 113.3 第一秒
+## 113.3 第一秒
 
 历史Ring继续向外扩散。
 
@@ -2572,7 +2625,7 @@ BaseAngle + 7°。
 
 ---
 
-### 113.4 玩家观察
+## 113.4 玩家观察
 
 当前Bullet很多，
 
@@ -2584,7 +2637,7 @@ BaseAngle + 7°。
 
 ---
 
-### 113.5 Hitbox显示
+## 113.5 Hitbox显示
 
 角色Sprite仍然较大。
 
@@ -2594,7 +2647,7 @@ BaseAngle + 7°。
 
 ---
 
-### 113.6 玩家进行微移动
+## 113.6 玩家进行微移动
 
 输入：
 
@@ -2604,7 +2657,7 @@ PlayerMotor按照FocusSpeed推进。
 
 ---
 
-### 113.7 Graze
+## 113.7 Graze
 
 两颗Bullet进入：
 
@@ -2624,7 +2677,7 @@ ScoreGauge。
 
 ---
 
-### 113.8 Phase进入第二段
+## 113.8 Phase进入第二段
 
 10秒后：
 
@@ -2638,7 +2691,7 @@ AimedStream。
 
 ---
 
-### 113.9 玩家开始引弹
+## 113.9 玩家开始引弹
 
 玩家不再停留中央。
 
@@ -2648,7 +2701,7 @@ AimedStream。
 
 ---
 
-### 113.10 AimedStream锁定
+## 113.10 AimedStream锁定
 
 每次Spawn：
 
@@ -2660,7 +2713,7 @@ AimedStream。
 
 ---
 
-### 113.11 玩家塑造未来空间
+## 113.11 玩家塑造未来空间
 
 因为玩家持续向右：
 
@@ -2670,7 +2723,7 @@ AimedStream。
 
 ---
 
-### 113.12 即将到达右边界
+## 113.12 即将到达右边界
 
 玩家知道：
 
@@ -2682,7 +2735,7 @@ AimedStream。
 
 ---
 
-### 113.13 Spiral仍在运行
+## 113.13 Spiral仍在运行
 
 因此横切不能走直线。
 
@@ -2694,7 +2747,7 @@ AimedStream。
 
 ---
 
-### 113.14 第三段开始
+## 113.14 第三段开始
 
 20秒时：
 
@@ -2714,7 +2767,7 @@ Emitter C启动：
 
 ---
 
-### 113.15 Bullet Field迅速复杂化
+## 113.15 Bullet Field迅速复杂化
 
 当前同时存在：
 
@@ -2729,7 +2782,7 @@ Emitter C启动：
 
 ---
 
-### 113.16 玩家判断失误
+## 113.16 玩家判断失误
 
 玩家进入一个看似安全的区域。
 
@@ -2741,7 +2794,7 @@ Emitter C启动：
 
 ---
 
-### 113.17 玩家仍未受击
+## 113.17 玩家仍未受击
 
 当前PlayerHitbox没有碰Bullet。
 
@@ -2755,7 +2808,7 @@ Emitter C启动：
 
 ---
 
-### 113.18 玩家使用Bomb
+## 113.18 玩家使用Bomb
 
 Bomb输入提交。
 
@@ -2772,7 +2825,7 @@ BombResolver：
 
 ---
 
-### 113.19 BulkCancel
+## 113.19 BulkCancel
 
 BulletRegistry一次批量标记：
 
@@ -2784,7 +2837,7 @@ ScoreItem。
 
 ---
 
-### 113.20 玩家获得新的空间
+## 113.20 玩家获得新的空间
 
 压力重置。
 
@@ -2794,7 +2847,7 @@ ScoreItem。
 
 ---
 
-### 113.21 Phase接近结束
+## 113.21 Phase接近结束
 
 Boss生命降到：
 
@@ -2806,7 +2859,7 @@ PhaseEnd。
 
 ---
 
-### 113.22 CancellationPolicy执行
+## 113.22 CancellationPolicy执行
 
 本Phase全部普通Bullet：
 
@@ -2818,7 +2871,7 @@ Laser类危险：
 
 ---
 
-### 113.23 下一Phase
+## 113.23 下一Phase
 
 Boss移动至左上。
 
@@ -2834,7 +2887,7 @@ Boss移动至左上。
 
 ---
 
-### 113.24 完整核心循环
+## 113.24 完整核心循环
 
 Pattern生成
 → Bullet Field形成
@@ -2857,9 +2910,9 @@ Pattern生成
 
 ---
 
-## 114. 模块通信设计
+# 114. 模块通信设计
 
-### 114.1 Commands
+## 114.1 Commands
 
 典型：
 
@@ -2884,7 +2937,7 @@ Pattern生成
 
 ---
 
-### 114.2 Queries
+## 114.2 Queries
 
 适用于：
 
@@ -2918,7 +2971,7 @@ Query不能：
 
 ---
 
-### 114.3 Domain Events
+## 114.3 Domain Events
 
 包括：
 
@@ -2955,7 +3008,7 @@ Query不能：
 
 ---
 
-### 114.4 Presentation Events
+## 114.4 Presentation Events
 
 包括：
 
@@ -2987,7 +3040,7 @@ Query不能：
 
 ---
 
-## 115. 状态所有权
+# 115. 状态所有权
 
 推荐：
 
@@ -3039,7 +3092,7 @@ Boss Animation
 
 ---
 
-## 116. 随机流
+# 116. 随机流
 
 建议：
 
@@ -3054,7 +3107,7 @@ Boss Animation
 
 ---
 
-## 117. PatternRandom必须绑定PatternExecution
+# 117. PatternRandom必须绑定PatternExecution
 
 这样：
 
@@ -3066,7 +3119,7 @@ Boss Animation
 
 ---
 
-## 118. Save与Continue
+# 118. Save与Continue
 
 传统街机式弹幕通常：
 
@@ -3091,7 +3144,7 @@ Boss Animation
 
 ---
 
-## 119. Continue
+# 119. Continue
 
 如果支持Continue：
 
@@ -3118,7 +3171,7 @@ RunRule，
 
 ---
 
-## 120. Player Death
+# 120. Player Death
 
 标准：
 
@@ -3131,7 +3184,7 @@ Hit
 
 ---
 
-## 121. Death和Game Over分离
+# 121. Death和Game Over分离
 
 玩家受击：
 
@@ -3159,11 +3212,11 @@ MatchElimination
 
 ---
 
-## 122. 失败隔离
+# 122. 失败隔离
 
 ---
 
-### 122.1 Pattern引用不存在BulletDefinition
+## 122.1 Pattern引用不存在BulletDefinition
 
 Pattern启动前验证。
 
@@ -3181,7 +3234,7 @@ Pattern启动前验证。
 
 ---
 
-### 122.2 Bullet Motion异常
+## 122.2 Bullet Motion异常
 
 出现：
 
@@ -3203,7 +3256,7 @@ BulletId。
 
 ---
 
-### 122.3 Bullet泄漏
+## 122.3 Bullet泄漏
 
 超过MaxLifetime：
 
@@ -3211,7 +3264,7 @@ BulletId。
 
 ---
 
-### 122.4 ActiveBulletCount不一致
+## 122.4 ActiveBulletCount不一致
 
 Registry定期IntegrityCheck：
 
@@ -3223,7 +3276,7 @@ ActiveCount。
 
 ---
 
-### 122.5 Pattern停止但Emitter继续工作
+## 122.5 Pattern停止但Emitter继续工作
 
 PatternEnd时：
 
@@ -3235,7 +3288,7 @@ Boss已经死了还在不断发弹。
 
 ---
 
-### 122.6 Boss Phase重复提交
+## 122.6 Boss Phase重复提交
 
 HealthThreshold和Timer：
 
@@ -3249,7 +3302,7 @@ PhaseTransitionTransaction。
 
 ---
 
-### 122.7 Bomb与Hit同Tick
+## 122.7 Bomb与Hit同Tick
 
 必须定义确定顺序。
 
@@ -3267,7 +3320,7 @@ Bomb成功。
 
 ---
 
-### 122.8 BulkCancel导致巨大Spike
+## 122.8 BulkCancel导致巨大Spike
 
 Cancel应：
 
@@ -3279,7 +3332,7 @@ Cancel应：
 
 ---
 
-### 122.9 Graze重复刷分
+## 122.9 Graze重复刷分
 
 同一Bullet必须有：
 
@@ -3289,7 +3342,7 @@ GrazeOncePolicy
 
 ---
 
-### 122.10 Replay不同步
+## 122.10 Replay不同步
 
 如果Replay检测：
 
@@ -3305,7 +3358,7 @@ GrazeOncePolicy
 
 ---
 
-### 122.11 Practice Seek状态不完整
+## 122.11 Practice Seek状态不完整
 
 从Boss Phase 3直接进入练习时：
 
@@ -3319,11 +3372,11 @@ GrazeOncePolicy
 
 ---
 
-## 123. 调试与可观测性
+# 123. 调试与可观测性
 
 ---
 
-### 123.1 Pattern Timeline
+## 123.1 Pattern Timeline
 
 显示：
 
@@ -3335,7 +3388,7 @@ GrazeOncePolicy
 
 ---
 
-### 123.2 Bullet Count Timeline
+## 123.2 Bullet Count Timeline
 
 显示：
 
@@ -3354,7 +3407,7 @@ Bullet泄漏。
 
 ---
 
-### 123.3 Pattern Geometry Preview
+## 123.3 Pattern Geometry Preview
 
 作者工具中：
 
@@ -3368,7 +3421,7 @@ Bullet轨迹。
 
 ---
 
-### 123.4 Safety Heatmap
+## 123.4 Safety Heatmap
 
 显示：
 
@@ -3378,7 +3431,7 @@ Bullet轨迹。
 
 ---
 
-### 123.5 Gap Analyzer
+## 123.5 Gap Analyzer
 
 统计：
 
@@ -3393,7 +3446,7 @@ Bullet轨迹。
 
 ---
 
-### 123.6 Player Path Overlay
+## 123.6 Player Path Overlay
 
 Replay中显示：
 
@@ -3415,7 +3468,7 @@ Bullet Field。
 
 ---
 
-### 123.7 Hit Inspector
+## 123.7 Hit Inspector
 
 一次Hit显示：
 
@@ -3431,7 +3484,7 @@ Distance
 
 ---
 
-### 123.8 Graze Inspector
+## 123.8 Graze Inspector
 
 同理显示：
 
@@ -3443,7 +3496,7 @@ Distance
 
 ---
 
-### 123.9 Boss Phase Statistics
+## 123.9 Boss Phase Statistics
 
 统计：
 
@@ -3464,7 +3517,7 @@ Distance
 
 ---
 
-### 123.10 Pattern Difficulty Metrics
+## 123.10 Pattern Difficulty Metrics
 
 记录：
 
@@ -3483,7 +3536,7 @@ Distance
 
 ---
 
-### 123.11 Performance Panel
+## 123.11 Performance Panel
 
 显示：
 
@@ -3506,7 +3559,7 @@ Distance
 
 ---
 
-### 123.12 Replay State Hash
+## 123.12 Replay State Hash
 
 每隔固定Tick：
 
@@ -3531,11 +3584,11 @@ Replay分歧。
 
 ---
 
-## 124. 内容验证工具
+# 124. 内容验证工具
 
 ---
 
-### 124.1 Pattern Schema Validation
+## 124.1 Pattern Schema Validation
 
 检查：
 
@@ -3554,7 +3607,7 @@ Replay分歧。
 
 ---
 
-### 124.2 Bullet Lifetime Validation
+## 124.2 Bullet Lifetime Validation
 
 计算理论：
 
@@ -3566,7 +3619,7 @@ Replay分歧。
 
 ---
 
-### 124.3 Spawn Rate Budget
+## 124.3 Spawn Rate Budget
 
 计算：
 
@@ -3590,7 +3643,7 @@ Emitter：
 
 ---
 
-### 124.4 Peak Active Bullet Estimate
+## 124.4 Peak Active Bullet Estimate
 
 根据：
 
@@ -3603,7 +3656,7 @@ SpawnRate
 
 ---
 
-### 124.5 Pattern Solvability Bot
+## 124.5 Pattern Solvability Bot
 
 使用简单Agent：
 
@@ -3621,7 +3674,7 @@ Pattern需要人工检查。
 
 ---
 
-### 124.6 Difficulty Regression
+## 124.6 Difficulty Regression
 
 同一Pattern应用：
 
@@ -3643,7 +3696,7 @@ Lunatic
 
 ---
 
-### 124.7 Replay Determinism Test
+## 124.7 Replay Determinism Test
 
 同一：
 
@@ -3658,7 +3711,7 @@ Input
 
 ---
 
-### 124.8 Bomb Safety Test
+## 124.8 Bomb Safety Test
 
 对所有Pattern随机触发Bomb。
 
@@ -3675,7 +3728,7 @@ Input
 
 ---
 
-### 124.9 Boundary Test
+## 124.9 Boundary Test
 
 玩家和Bullet位于：
 
@@ -3694,7 +3747,7 @@ Input
 
 ---
 
-### 124.10 Extreme Bullet Stress Test
+## 124.10 Extreme Bullet Stress Test
 
 模拟：
 
@@ -3714,7 +3767,7 @@ Frame Time。
 
 ---
 
-## 125. 性能设计
+# 125. 性能设计
 
 弹幕游戏的性能设计必须从第一版Bullet System就确定。
 
@@ -3728,7 +3781,7 @@ Boss Pattern已经设计完成
 
 ---
 
-### 125.1 Bullet应是数据，不是Actor
+## 125.1 Bullet应是数据，不是Actor
 
 推荐每颗Bullet权威状态只保存：
 
@@ -3747,7 +3800,7 @@ Boss Pattern已经设计完成
 
 ---
 
-### 125.2 批量更新
+## 125.2 批量更新
 
 每Tick：
 
@@ -3761,7 +3814,7 @@ UpdateMotion
 
 ---
 
-### 125.3 避免每Bullet虚函数调用
+## 125.3 避免每Bullet虚函数调用
 
 5000Bullet：
 
@@ -3777,7 +3830,7 @@ MotionType
 
 ---
 
-### 125.4 Motion Batch
+## 125.4 Motion Batch
 
 例如：
 
@@ -3795,7 +3848,7 @@ Homing数量较少，
 
 ---
 
-### 125.5 Boss Bullet和普通Bullet可以使用不同精度层级
+## 125.5 Boss Bullet和普通Bullet可以使用不同精度层级
 
 高价值特殊Bullet：
 
@@ -3807,7 +3860,7 @@ Homing数量较少，
 
 ---
 
-### 125.6 Collision只针对必要目标
+## 125.6 Collision只针对必要目标
 
 单人游戏：
 
@@ -3819,7 +3872,7 @@ Player。
 
 ---
 
-### 125.7 PlayerShot vs Enemy
+## 125.7 PlayerShot vs Enemy
 
 玩家Bullet数量也可能很高。
 
@@ -3829,7 +3882,7 @@ SpatialIndex。
 
 ---
 
-### 125.8 Bullet Visual Batch
+## 125.8 Bullet Visual Batch
 
 同一BulletType：
 
@@ -3837,7 +3890,7 @@ SpatialIndex。
 
 ---
 
-### 125.9 Trail要谨慎
+## 125.9 Trail要谨慎
 
 5000颗Bullet
 
@@ -3855,7 +3908,7 @@ GPU方案。
 
 ---
 
-### 125.10 Pool容量监控
+## 125.10 Pool容量监控
 
 如果峰值：
 
@@ -3877,11 +3930,11 @@ Pattern静态分析
 
 ---
 
-## 126. 可扩展点
+# 126. 可扩展点
 
 ---
 
-### 126.1 新Bullet类型
+## 126.1 新Bullet类型
 
 主要提供：
 
@@ -3894,7 +3947,7 @@ Pattern静态分析
 
 ---
 
-### 126.2 新Pattern
+## 126.2 新Pattern
 
 只需要：
 
@@ -3906,7 +3959,7 @@ PatternDefinition
 
 ---
 
-### 126.3 新Boss
+## 126.3 新Boss
 
 组合：
 
@@ -3921,7 +3974,7 @@ PatternDefinition
 
 ---
 
-### 126.4 新难度
+## 126.4 新难度
 
 通过：
 
@@ -3929,7 +3982,7 @@ DifficultyModifier。
 
 ---
 
-### 126.5 新玩家机体
+## 126.5 新玩家机体
 
 提供：
 
@@ -3946,7 +3999,7 @@ DifficultyModifier。
 
 ---
 
-### 126.6 新Score模式
+## 126.6 新Score模式
 
 替换：
 
@@ -3964,7 +4017,7 @@ PointBlank型。
 
 ---
 
-### 126.7 双人Co-op
+## 126.7 双人Co-op
 
 需要增加：
 
@@ -3987,7 +4040,7 @@ PointBlank型。
 
 ---
 
-### 126.8 横版与纵版
+## 126.8 横版与纵版
 
 核心Pattern系统基本相同。
 
@@ -4004,11 +4057,11 @@ PointBlank型。
 
 ---
 
-## 127. 玩家体验设计
+# 127. 玩家体验设计
 
 ---
 
-### 127.1 Bullet必须比背景更可读
+## 127.1 Bullet必须比背景更可读
 
 无论美术多华丽：
 
@@ -4016,7 +4069,7 @@ PointBlank型。
 
 ---
 
-### 127.2 Hitbox反馈必须一致
+## 127.2 Hitbox反馈必须一致
 
 同颜色同尺寸Bullet：
 
@@ -4028,7 +4081,7 @@ PointBlank型。
 
 ---
 
-### 127.3 Pattern应该让玩家经历“第一次看不懂，后来突然看懂”
+## 127.3 Pattern应该让玩家经历“第一次看不懂，后来突然看懂”
 
 这是类型的重要学习快感。
 
@@ -4051,7 +4104,7 @@ PointBlank型。
 
 ---
 
-### 127.4 难度提高应该增加决策要求，而不仅是反应速度
+## 127.4 难度提高应该增加决策要求，而不仅是反应速度
 
 例如：
 
@@ -4073,7 +4126,7 @@ Lunatic：
 
 ---
 
-### 127.5 Bomb应该容易使用
+## 127.5 Bomb应该容易使用
 
 它是：
 
@@ -4085,7 +4138,7 @@ Lunatic：
 
 ---
 
-### 127.6 Player需要清晰位于视觉最上层
+## 127.6 Player需要清晰位于视觉最上层
 
 大量Bullet和特效下：
 
@@ -4093,7 +4146,7 @@ Lunatic：
 
 ---
 
-### 127.7 Focus移动必须有立即反馈
+## 127.7 Focus移动必须有立即反馈
 
 例如：
 
@@ -4106,7 +4159,7 @@ Lunatic：
 
 ---
 
-### 127.8 Boss Phase转换必须清晰
+## 127.8 Boss Phase转换必须清晰
 
 玩家需要知道：
 
@@ -4118,7 +4171,7 @@ Lunatic：
 
 ---
 
-### 127.9 Practice Restart必须极快
+## 127.9 Practice Restart必须极快
 
 高难Pattern可能练习：
 
@@ -4130,7 +4183,7 @@ Phase Restart：
 
 ---
 
-### 127.10 Death Recap不需要复杂统计，但应支持Replay
+## 127.10 Death Recap不需要复杂统计，但应支持Replay
 
 弹幕死亡通常发生在：
 
@@ -4144,101 +4197,101 @@ Replay回退：
 
 ---
 
-## 128. 常见设计失败
+# 128. 常见设计失败
 
 ---
 
-### 128.1 把Bullet Hell理解成“随机生成很多子弹”
+## 128.1 把Bullet Hell理解成“随机生成很多子弹”
 
 没有Pattern可读性。
 
 ---
 
-### 128.2 Bullet数量成为唯一难度参数
+## 128.2 Bullet数量成为唯一难度参数
 
 高难模式只是在填屏。
 
 ---
 
-### 128.3 Hitbox和角色视觉一样大
+## 128.3 Hitbox和角色视觉一样大
 
 高密度弹幕根本无法穿越。
 
 ---
 
-### 128.4 Hitbox过小但没有任何反馈
+## 128.4 Hitbox过小但没有任何反馈
 
 玩家不理解碰撞规则。
 
 ---
 
-### 128.5 每颗Bullet拥有完整AI和Update
+## 128.5 每颗Bullet拥有完整AI和Update
 
 性能无法扩展。
 
 ---
 
-### 128.6 每颗Bullet使用刚体物理
+## 128.6 每颗Bullet使用刚体物理
 
 大量无必要碰撞开销。
 
 ---
 
-### 128.7 Bullet Motion依赖render deltaTime
+## 128.7 Bullet Motion依赖render deltaTime
 
 不同帧率轨迹不同。
 
 ---
 
-### 128.8 Boss动画事件负责发弹
+## 128.8 Boss动画事件负责发弹
 
 动画改速度后Gameplay改变。
 
 ---
 
-### 128.9 Pattern没有独立Execution实例
+## 128.9 Pattern没有独立Execution实例
 
 同一个Pattern重复运行时状态串线。
 
 ---
 
-### 128.10 Aimed Bullet每帧追踪玩家
+## 128.10 Aimed Bullet每帧追踪玩家
 
 引弹和Pattern学习空间消失。
 
 ---
 
-### 128.11 随机移动Boss破坏安全路径
+## 128.11 随机移动Boss破坏安全路径
 
 偶发生成无解Pattern。
 
 ---
 
-### 128.12 Boss下一Phase开始但旧Emitter没有取消
+## 128.12 Boss下一Phase开始但旧Emitter没有取消
 
 场上出现设计外弹幕叠加。
 
 ---
 
-### 128.13 Bomb逐个Destroy几千Bullet
+## 128.13 Bomb逐个Destroy几千Bullet
 
 产生巨大帧尖峰。
 
 ---
 
-### 128.14 Graze每帧重复计分
+## 128.14 Graze每帧重复计分
 
 一颗Bullet可以无限刷资源。
 
 ---
 
-### 128.15 高难只提高Bullet Speed
+## 128.15 高难只提高Bullet Speed
 
 原本合理反应窗口消失。
 
 ---
 
-### 128.16 Pattern完全静态而从不读取玩家位置
+## 128.16 Pattern完全静态而从不读取玩家位置
 
 高阶玩家只需背固定坐标，
 
@@ -4246,7 +4299,7 @@ Replay回退：
 
 ---
 
-### 128.17 所有Pattern都持续追踪玩家
+## 128.17 所有Pattern都持续追踪玩家
 
 另一方面又会导致：
 
@@ -4254,25 +4307,25 @@ Replay回退：
 
 ---
 
-### 128.18 玩家自己的攻击特效遮挡Enemy Bullet
+## 128.18 玩家自己的攻击特效遮挡Enemy Bullet
 
 视觉奖励破坏核心操作。
 
 ---
 
-### 128.19 Practice不能直接进入Boss Phase
+## 128.19 Practice不能直接进入Boss Phase
 
 高难学习成本极高。
 
 ---
 
-### 128.20 Replay不可确定复现
+## 128.20 Replay不可确定复现
 
 排行榜、Bug和Pattern调试都受到严重限制。
 
 ---
 
-## 129. 最小可行原型
+# 129. 最小可行原型
 
 一个能够验证弹幕射击核心范式的MVP并不需要完整长关卡。
 
@@ -4282,7 +4335,7 @@ Replay回退：
 
 ---
 
-### 129.1 Player
+## 129.1 Player
 
 实现：
 
@@ -4303,7 +4356,7 @@ Replay回退：
 
 ---
 
-### 129.2 Bullet Motion
+## 129.2 Bullet Motion
 
 至少支持：
 
@@ -4322,7 +4375,7 @@ Replay回退：
 
 ---
 
-### 129.3 Emitter
+## 129.3 Emitter
 
 至少：
 
@@ -4339,7 +4392,7 @@ Replay回退：
 
 ---
 
-### 129.4 Boss
+## 129.4 Boss
 
 5～8个Phase。
 
@@ -4357,7 +4410,7 @@ Replay回退：
 
 ---
 
-### 129.5 普通Stage
+## 129.5 普通Stage
 
 只需要：
 
@@ -4374,7 +4427,7 @@ Replay回退：
 
 ---
 
-### 129.6 Score
+## 129.6 Score
 
 只实现：
 
@@ -4387,7 +4440,7 @@ Replay回退：
 
 ---
 
-### 129.7 必要基础设施
+## 129.7 必要基础设施
 
 - FixedSimulationClock；
 
@@ -4428,7 +4481,7 @@ Replay回退：
 
 ---
 
-### 129.8 必要调试工具
+## 129.8 必要调试工具
 
 - PatternTimeline；
 
@@ -4455,7 +4508,7 @@ Replay回退：
 
 ---
 
-## 130. MVP核心验收问题
+# 130. MVP核心验收问题
 
 原型至少必须回答：
 
@@ -4509,7 +4562,7 @@ Replay回退：
 
 ---
 
-## 131. 推荐实施顺序
+# 131. 推荐实施顺序
 
 第一阶段：
 
@@ -4625,7 +4678,7 @@ Replay回退：
 
 ---
 
-## 132. 架构验收标准
+# 132. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -4706,11 +4759,11 @@ Replay回退：
 
 ---
 
-## 133. 可迁移到其他游戏的设计思想
+# 133. 可迁移到其他游戏的设计思想
 
 ---
 
-### 133.1 高数量实体可以是“一个函数的大量采样”，而不是大量独立智能体
+## 133.1 高数量实体可以是“一个函数的大量采样”，而不是大量独立智能体
 
 可迁移到：
 
@@ -4731,7 +4784,7 @@ Replay回退：
 
 ---
 
-### 133.2 危险可以被建模为随时间变化的空间场
+## 133.2 危险可以被建模为随时间变化的空间场
 
 可迁移到：
 
@@ -4754,7 +4807,7 @@ Replay回退：
 
 ---
 
-### 133.3 玩家状态可以反过来成为内容生成参数
+## 133.3 玩家状态可以反过来成为内容生成参数
 
 Aimed Bullet使用：
 
@@ -4779,7 +4832,7 @@ Aimed Bullet使用：
 
 ---
 
-### 133.4 “视觉尺寸”和“真实规则尺寸”可以分离
+## 133.4 “视觉尺寸”和“真实规则尺寸”可以分离
 
 可迁移到：
 
@@ -4798,7 +4851,7 @@ Aimed Bullet使用：
 
 ---
 
-### 133.5 高难度可以通过改变几何关系而不是简单数值膨胀
+## 133.5 高难度可以通过改变几何关系而不是简单数值膨胀
 
 可迁移到：
 
@@ -4828,7 +4881,7 @@ Aimed Bullet使用：
 
 ---
 
-### 133.6 应急资源本质上可以是“恢复系统可控状态”的工具
+## 133.6 应急资源本质上可以是“恢复系统可控状态”的工具
 
 Bomb并不只是高伤害技能。
 
@@ -4853,7 +4906,7 @@ Bomb并不只是高伤害技能。
 
 ---
 
-### 133.7 风险边缘可以被设计为额外收益区域
+## 133.7 风险边缘可以被设计为额外收益区域
 
 Graze把：
 
@@ -4878,7 +4931,7 @@ Graze把：
 
 ---
 
-### 133.8 内容作者需要“未来状态预览”，不仅是当前状态预览
+## 133.8 内容作者需要“未来状态预览”，不仅是当前状态预览
 
 弹幕Pattern只有看到：
 
@@ -4901,7 +4954,7 @@ Graze把：
 
 ---
 
-### 133.9 可解性和难度应该分离
+## 133.9 可解性和难度应该分离
 
 一个状态：
 
@@ -4926,7 +4979,7 @@ Graze把：
 
 ---
 
-### 133.10 固定输入 + 固定随机流 + 确定模拟，是复杂动作系统最有价值的调试资产之一
+## 133.10 固定输入 + 固定随机流 + 确定模拟，是复杂动作系统最有价值的调试资产之一
 
 可迁移到：
 
@@ -4949,9 +5002,9 @@ Graze把：
 
 ---
 
-## 134. 本次防重记录
+# 134. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **弹幕射击 / Bullet Hell / Danmaku Shooter。**
 
@@ -4972,7 +5025,7 @@ Graze把：
 
 ---
 
-### 核心范式
+## 核心范式
 
 敌人和Boss通过时间驱动的Pattern与Emitter系统持续生成具有明确几何结构的高密度Bullet Field；玩家并不是逐颗对子弹做反应，而是读取Pattern、预测未来安全区域，通过Normal/Focus两级移动进行宏观转位与微观穿缝，并利用自身位置影响Snapshot-Aimed Pattern的未来形态。真实Hitbox显著小于视觉角色，Graze进一步把接近失败边缘转化为可获得收益的风险区域；Bomb则作为稀缺的“危险场重置资源”，在玩家已经进入不可恢复空间状态时重新获得行动空间。Boss通过多Phase不断替换Pattern规则，最终形成“读型—预测—引弹—微操—擦弹—阶段切换”的高密度时空循环。
 
@@ -4995,7 +5048,7 @@ Graze把：
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 游戏主要压力来自高密度敌方投射物；
 
@@ -5050,7 +5103,7 @@ Graze把：
 
 ---
 
-### 与仓库现有幸存者类的防重边界
+## 与仓库现有幸存者类的防重边界
 
 仓库当前已有 `horde-survival`，其摘要明确聚焦：玩家持续移动、大量攻击自动执行、敌人生成预算随时间提高、击杀产生经验、经验回收后形成构筑成长。
 
@@ -5086,7 +5139,7 @@ Graze把：
 
 ---
 
-### 与仓库现有格斗游戏的防重边界
+## 与仓库现有格斗游戏的防重边界
 
 格斗游戏强调：
 
@@ -5123,7 +5176,7 @@ Graze把：
 
 ---
 
-### 与普通射击游戏的防重边界
+## 与普通射击游戏的防重边界
 
 普通射击游戏主要关注：
 
@@ -5150,7 +5203,7 @@ Graze把：
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Bullet Hell；
 
@@ -5257,7 +5310,7 @@ Graze把：
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次弹幕射击范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

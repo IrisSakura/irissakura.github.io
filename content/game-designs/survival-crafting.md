@@ -1,4 +1,97 @@
-## 1. 类型定位
+> Agent 标签：`crafting` `sandbox` `survival`
+
+---
+## 0. 本期选型与仓库防重核对
+
+已实际核对当前 `game-designs` 的生成索引。当前 `README.md` 标记 **Entries: 50**；目录中已经登记生存恐怖、农场经营、殖民地模拟、工厂自动化、远征队管理、沉浸式模拟、类魂、4X、城市建设等宏观范式，但当前索引中没有独立的 `survival-crafting`、`sandbox-survival` 或 `open-world-survival` 类型。
+
+因此本期新增类型选择：
+
+**开放世界生存建造 / Survival Crafting / Sandbox Survival。**
+
+常见名称包括：
+
+- Survival Crafting；
+
+- Open-World Survival Crafting；
+
+- Sandbox Survival；
+
+- Survival Sandbox；
+
+- Base-Building Survival；
+
+- 开放世界生存建造；
+
+- 沙盒生存；
+
+- 生存制作；
+
+- 基地建造生存游戏。
+
+
+本文讨论的不是普通 RPG 中附带的采集与制作系统，也不是生存恐怖中的有限弹药管理，更不是工厂自动化中的高吞吐流水线，而是一种足以独立支撑完整产品的宏观游戏类型。
+
+其最具代表性的设计范式可以概括为：
+
+> **玩家以脆弱、低能力和低物资状态进入一个长期持久化的开放世界，通过主动探索识别环境资源与危险，再把采集到的自然资源经过工具、加工、制作和建造逐步转化为可持续生存能力。基地把散落资源压缩成安全、储存、加工、休息和补给基础设施；工具与装备进一步把原本危险或不可获取的区域转化为新的资源空间，使玩家不断经历“离开安全区—承担风险—获取稀缺资源—成功带回—转化为永久能力—扩大下一次远征半径”的循环。**
+
+核心循环可以压缩为：
+
+**离开基地
+→ 探索未知环境
+→ 识别资源与威胁
+→ 采集有限物资
+→ 管理负重、时间和生存需求
+→ 安全返回
+→ 储存、制作和加工
+→ 建造更稳定基础设施
+→ 获得更高阶工具与装备
+→ 解锁更危险区域
+→ 获取新的材料层级
+→ 再次扩张基地和行动半径。**
+
+这个品类最独特的长期成长并不是：
+
+“角色等级越来越高。”
+
+而是：
+
+> **越来越多原本需要临时解决的生存问题，被玩家转换成稳定基础设施。**
+
+早期：
+
+每天需要寻找水源。
+
+中期：
+
+基地拥有储水。
+
+后期：
+
+拥有自动净水系统。
+
+早期：
+
+夜晚必须躲避危险。
+
+中期：
+
+拥有封闭住所。
+
+后期：
+
+拥有防御、照明、储备和快速交通网络。
+
+因此其成长本质是：
+
+**临时求生问题
+→ 可重复解决方案
+→ 持久基础设施。**
+
+---
+
+# 1. 类型定位
 
 开放世界生存建造游戏通常以以下内容为核心：
 
@@ -63,27 +156,27 @@
 
 ---
 
-## 2. 最核心的系统抽象
+# 2. 最核心的系统抽象
 
 本类型可以被抽象为五个互相闭环的状态域：
 
-### Environment
+## Environment
 
 世界能够提供什么，以及世界正在施加什么压力。
 
-### Player Survival State
+## Player Survival State
 
 玩家还能在外部环境中行动多久。
 
-### Resource Inventory
+## Resource Inventory
 
 玩家当前能够带走多少价值。
 
-### Infrastructure
+## Infrastructure
 
 玩家已经把多少重复问题转换成了固定设施。
 
-### Capability
+## Capability
 
 玩家现在能够进入哪些区域、采集哪些资源、对抗哪些威胁。
 
@@ -108,7 +201,7 @@
 
 ---
 
-## 3. 核心范式一：生存需求应限制远征半径，而不是单纯制造状态条
+# 3. 核心范式一：生存需求应限制远征半径，而不是单纯制造状态条
 
 饥饿、口渴、体温等系统如果只是：
 
@@ -145,7 +238,7 @@
 
 ---
 
-## 4. SurvivalNeedDefinition
+# 4. SurvivalNeedDefinition
 
 建议字段：
 
@@ -199,7 +292,7 @@
 
 ---
 
-## 5. PlayerSurvivalState
+# 5. PlayerSurvivalState
 
 建议包含：
 
@@ -230,7 +323,7 @@
 
 ---
 
-## 6. Need更新需要统一上下文
+# 6. Need更新需要统一上下文
 
 例如BodyTemperature不应该由：
 
@@ -267,7 +360,7 @@ BodyTemperatureTrend。
 
 ---
 
-## 7. Trend比CurrentValue更重要
+# 7. Trend比CurrentValue更重要
 
 玩家看到：
 
@@ -300,7 +393,7 @@ BodyTemperature = 42%。
 
 ---
 
-## 8. 生存状态应存在时间尺度差异
+# 8. 生存状态应存在时间尺度差异
 
 例如：
 
@@ -322,7 +415,7 @@ BodyTemperature = 42%。
 
 可以构造：
 
-#### Immediate Pressure
+### Immediate Pressure
 
 - Oxygen；
 
@@ -331,7 +424,7 @@ BodyTemperature = 42%。
 - Poison。
 
 
-#### Expedition Pressure
+### Expedition Pressure
 
 - Temperature；
 
@@ -340,7 +433,7 @@ BodyTemperature = 42%。
 - Fatigue。
 
 
-#### Long-Term Pressure
+### Long-Term Pressure
 
 - Hunger；
 
@@ -353,7 +446,7 @@ BodyTemperature = 42%。
 
 ---
 
-## 9. 核心范式二：采集不是“点资源加库存”，而是世界资源向玩家资产的转换
+# 9. 核心范式二：采集不是“点资源加库存”，而是世界资源向玩家资产的转换
 
 一个资源节点至少经历：
 
@@ -378,7 +471,7 @@ World Resource
 
 ---
 
-## 10. ResourceNodeDefinition
+# 10. ResourceNodeDefinition
 
 建议字段：
 
@@ -407,7 +500,7 @@ World Resource
 
 ---
 
-## 11. ResourceNodeRuntimeState
+# 11. ResourceNodeRuntimeState
 
 建议包含：
 
@@ -434,7 +527,7 @@ World Resource
 
 ---
 
-## 12. 采集工具必须改变资源经济
+# 12. 采集工具必须改变资源经济
 
 石斧的价值不应只是：
 
@@ -475,7 +568,7 @@ World Resource
 
 ---
 
-## 13. ToolDefinition
+# 13. ToolDefinition
 
 建议字段：
 
@@ -502,7 +595,7 @@ World Resource
 
 ---
 
-## 14. 工具耐久的设计职责
+# 14. 工具耐久的设计职责
 
 耐久可以：
 
@@ -532,7 +625,7 @@ World Resource
 
 ---
 
-## 15. HarvestTransaction
+# 15. HarvestTransaction
 
 标准流程：
 
@@ -552,7 +645,7 @@ World Resource
 
 ---
 
-## 16. 采集不应在动作开始时立即结算
+# 16. 采集不应在动作开始时立即结算
 
 否则：
 
@@ -570,7 +663,7 @@ World Resource
 
 ---
 
-## 17. 核心范式三：背包是“远征收益上限”
+# 17. 核心范式三：背包是“远征收益上限”
 
 玩家进入野外以后真正积累的是：
 
@@ -605,7 +698,7 @@ World Resource
 
 ---
 
-## 18. InventoryState
+# 18. InventoryState
 
 建议包含：
 
@@ -632,23 +725,23 @@ World Resource
 
 ---
 
-## 19. Slot、Weight和Volume不必全部存在
+# 19. Slot、Weight和Volume不必全部存在
 
 可以选择：
 
-#### Slot-Based
+### Slot-Based
 
 强调选择。
 
-#### Weight-Based
+### Weight-Based
 
 强调携带重资源。
 
-#### Grid-Based
+### Grid-Based
 
 强调空间整理。
 
-#### Hybrid
+### Hybrid
 
 更复杂。
 
@@ -660,7 +753,7 @@ World Resource
 
 ---
 
-## 20. Encumbrance
+# 20. Encumbrance
 
 负重不一定要：
 
@@ -690,7 +783,7 @@ World Resource
 
 ---
 
-## 21. UnbankedValue
+# 21. UnbankedValue
 
 开发分析可以估算玩家当前：
 
@@ -708,7 +801,7 @@ UnbankedValue不断增加。
 
 ---
 
-## 22. 核心范式四：基地是“风险转换节点”
+# 22. 核心范式四：基地是“风险转换节点”
 
 基地最重要的职责不是：
 
@@ -742,7 +835,7 @@ UnbankedValue不断增加。
 
 ---
 
-## 23. BaseState
+# 23. BaseState
 
 建议包含：
 
@@ -771,7 +864,7 @@ UnbankedValue不断增加。
 
 ---
 
-## 24. 不一定需要硬性的“基地范围”
+# 24. 不一定需要硬性的“基地范围”
 
 部分游戏允许自由建造。
 
@@ -792,7 +885,7 @@ BaseBoundary只是派生概念。
 
 ---
 
-## 25. BuildingDefinition
+# 25. BuildingDefinition
 
 建议字段：
 
@@ -823,7 +916,7 @@ BaseBoundary只是派生概念。
 
 ---
 
-## 26. 建筑至少要区分Definition与Instance
+# 26. 建筑至少要区分Definition与Instance
 
 BuildingDefinition：
 
@@ -835,7 +928,7 @@ BuildingInstance：
 
 ---
 
-## 27. BuildingRuntimeState
+# 27. BuildingRuntimeState
 
 建议包含：
 
@@ -864,7 +957,7 @@ BuildingInstance：
 
 ---
 
-## 28. 核心范式五：建造必须把自由摆放转换成可验证规则
+# 28. 核心范式五：建造必须把自由摆放转换成可验证规则
 
 建筑放置不能只检查：
 
@@ -897,7 +990,7 @@ Collider有没有重叠。
 
 ---
 
-## 29. PlacementPreviewContext
+# 29. PlacementPreviewContext
 
 建议包含：
 
@@ -920,7 +1013,7 @@ Collider有没有重叠。
 
 ---
 
-## 30. 玩家必须在点击确认前知道为什么不能建
+# 30. 玩家必须在点击确认前知道为什么不能建
 
 例如：
 
@@ -945,7 +1038,7 @@ Invalid Placement。
 
 ---
 
-## 31. Snap系统
+# 31. Snap系统
 
 建造系统如果依赖模块拼接，需要统一：
 
@@ -982,7 +1075,7 @@ Roof。
 
 ---
 
-## 32. Snap不应修改世界位置后再验证
+# 32. Snap不应修改世界位置后再验证
 
 更合理流程：
 
@@ -996,7 +1089,7 @@ Roof。
 
 ---
 
-## 33. Structural Support
+# 33. Structural Support
 
 如果游戏强调物理建造，可以维护：
 
@@ -1004,7 +1097,7 @@ Roof。
 
 ---
 
-## 34. StructuralNode
+# 34. StructuralNode
 
 建议字段：
 
@@ -1023,7 +1116,7 @@ Roof。
 
 ---
 
-## 35. Support Graph
+# 35. Support Graph
 
 Foundation：
 
@@ -1047,7 +1140,7 @@ SupportSource。
 
 ---
 
-## 36. 不建议使用完整实时结构力学，除非它本身就是核心玩法
+# 36. 不建议使用完整实时结构力学，除非它本身就是核心玩法
 
 大多数生存建造只需要：
 
@@ -1066,7 +1159,7 @@ SupportSource。
 
 ---
 
-## 37. 建筑损坏与维修
+# 37. 建筑损坏与维修
 
 世界中的：
 
@@ -1083,7 +1176,7 @@ SupportSource。
 
 ---
 
-## 38. BuildingDamageContext
+# 38. BuildingDamageContext
 
 建议字段：
 
@@ -1102,7 +1195,7 @@ SupportSource。
 
 ---
 
-## 39. Repair
+# 39. Repair
 
 维修应尽量：
 
@@ -1116,7 +1209,7 @@ SupportSource。
 
 ---
 
-## 40. 基地功能模块
+# 40. 基地功能模块
 
 建筑功能最好模块化：
 
@@ -1153,7 +1246,7 @@ SupportSource。
 
 ---
 
-## 41. 核心范式六：制作是“能力门控图”，不是单纯配方列表
+# 41. 核心范式六：制作是“能力门控图”，不是单纯配方列表
 
 制作系统真正的价值通常不是：
 
@@ -1180,7 +1273,7 @@ SupportSource。
 
 ---
 
-## 42. RecipeDefinition
+# 42. RecipeDefinition
 
 建议字段：
 
@@ -1207,7 +1300,7 @@ SupportSource。
 
 ---
 
-## 43. Recipe只是Capability Graph中的边
+# 43. Recipe只是Capability Graph中的边
 
 例如：
 
@@ -1239,7 +1332,7 @@ CopperAxe
 
 ---
 
-## 44. CraftingKnowledgeState
+# 44. CraftingKnowledgeState
 
 建议包含：
 
@@ -1256,7 +1349,7 @@ CopperAxe
 
 ---
 
-## 45. Recipe解锁方式
+# 45. Recipe解锁方式
 
 可以包括：
 
@@ -1283,7 +1376,7 @@ CopperAxe
 
 ---
 
-## 46. CraftStation
+# 46. CraftStation
 
 例如：
 
@@ -1302,7 +1395,7 @@ CopperAxe
 
 ---
 
-## 47. CraftStationTier
+# 47. CraftStationTier
 
 高级Recipe可以要求：
 
@@ -1316,7 +1409,7 @@ Forge Level 2。
 
 ---
 
-## 48. CraftExecutionState
+# 48. CraftExecutionState
 
 建议包含：
 
@@ -1343,7 +1436,7 @@ Forge Level 2。
 
 ---
 
-## 49. 制作必须原子处理资源
+# 49. 制作必须原子处理资源
 
 开始前：
 
@@ -1365,7 +1458,7 @@ Commit时：
 
 ---
 
-## 50. 个人制作与工作台制作可以使用同一底层Recipe
+# 50. 个人制作与工作台制作可以使用同一底层Recipe
 
 区别只是：
 
@@ -1385,7 +1478,7 @@ ForgeCraft：
 
 ---
 
-## 51. 核心范式七：资源层级应该自然推动地图扩张
+# 51. 核心范式七：资源层级应该自然推动地图扩张
 
 好的生存建造不应只靠任务告诉玩家：
 
@@ -1420,7 +1513,7 @@ MountainBiome。
 
 ---
 
-## 52. RegionDefinition
+# 52. RegionDefinition
 
 建议字段：
 
@@ -1445,7 +1538,7 @@ MountainBiome。
 
 ---
 
-## 53. 区域Tier不是简单敌人等级
+# 53. 区域Tier不是简单敌人等级
 
 可以由多个维度组成：
 
@@ -1468,7 +1561,7 @@ MountainBiome。
 
 ---
 
-## 54. CapabilityGate
+# 54. CapabilityGate
 
 典型：
 
@@ -1493,7 +1586,7 @@ MountainBiome。
 
 ---
 
-## 55. Soft Gate优先于Hard Gate
+# 55. Soft Gate优先于Hard Gate
 
 Hard Gate：
 
@@ -1521,7 +1614,7 @@ Soft Gate允许：
 
 ---
 
-## 56. 风险突破是一种重要沙盒体验
+# 56. 风险突破是一种重要沙盒体验
 
 例如玩家装备不足，
 
@@ -1541,7 +1634,7 @@ Soft Gate允许：
 
 ---
 
-## 57. 核心范式八：远征需要有“准备—执行—回程”完整结构
+# 57. 核心范式八：远征需要有“准备—执行—回程”完整结构
 
 正式远征前：
 
@@ -1572,7 +1665,7 @@ Soft Gate允许：
 
 ---
 
-## 58. ExpeditionContext
+# 58. ExpeditionContext
 
 建议包含：
 
@@ -1599,7 +1692,7 @@ Soft Gate允许：
 
 ---
 
-## 59. 游戏可以提供Estimate，但不应直接告诉最佳答案
+# 59. 游戏可以提供Estimate，但不应直接告诉最佳答案
 
 例如：
 
@@ -1617,7 +1710,7 @@ Soft Gate允许：
 
 ---
 
-## 60. Return Trip很重要
+# 60. Return Trip很重要
 
 很多游戏只设计：
 
@@ -1644,7 +1737,7 @@ Soft Gate允许：
 
 ---
 
-## 61. Fast Travel的解锁时机
+# 61. Fast Travel的解锁时机
 
 如果过早：
 
@@ -1674,7 +1767,7 @@ Soft Gate允许：
 
 ---
 
-## 62. 核心范式九：昼夜和天气应该改变行为窗口
+# 62. 核心范式九：昼夜和天气应该改变行为窗口
 
 Day/Night如果只是：
 
@@ -1701,7 +1794,7 @@ Day/Night如果只是：
 
 ---
 
-## 63. WorldClock
+# 63. WorldClock
 
 建议字段：
 
@@ -1722,7 +1815,7 @@ Day/Night如果只是：
 
 ---
 
-## 64. WeatherState
+# 64. WeatherState
 
 建议包含：
 
@@ -1747,7 +1840,7 @@ Day/Night如果只是：
 
 ---
 
-## 65. Weather Forecast
+# 65. Weather Forecast
 
 如果天气能够造成致命影响：
 
@@ -1770,7 +1863,7 @@ Day/Night如果只是：
 
 ---
 
-## 66. Extreme Weather
+# 66. Extreme Weather
 
 极端天气可以成为：
 
@@ -1796,7 +1889,7 @@ Day/Night如果只是：
 
 ---
 
-## 67. 核心范式十：世界资源应区分可再生、有限和条件性恢复
+# 67. 核心范式十：世界资源应区分可再生、有限和条件性恢复
 
 如果所有资源无限快速刷新：
 
@@ -1808,7 +1901,7 @@ Day/Night如果只是：
 
 可以区分：
 
-#### Renewable
+### Renewable
 
 - Plants；
 
@@ -1817,21 +1910,21 @@ Day/Night如果只是：
 - Wood。
 
 
-#### Slow Renewable
+### Slow Renewable
 
 - 特殊植物；
 
 - 某些生态资源。
 
 
-#### Finite
+### Finite
 
 - 稀有矿脉；
 
 - 遗迹资源。
 
 
-#### Procedurally Expandable
+### Procedurally Expandable
 
 旧区域有限，
 
@@ -1839,7 +1932,7 @@ Day/Night如果只是：
 
 ---
 
-## 68. RespawnPolicy
+# 68. RespawnPolicy
 
 建议字段：
 
@@ -1860,7 +1953,7 @@ Day/Night如果只是：
 
 ---
 
-## 69. 不要让资源在玩家面前直接重生
+# 69. 不要让资源在玩家面前直接重生
 
 例如树砍掉：
 
@@ -1881,7 +1974,7 @@ Day/Night如果只是：
 
 ---
 
-## 70. 生态恢复
+# 70. 生态恢复
 
 更复杂版本可以维护：
 
@@ -1907,7 +2000,7 @@ RegionResourcePopulation。
 
 ---
 
-## 71. 狩猎与动物资源
+# 71. 狩猎与动物资源
 
 动物既是：
 
@@ -1923,7 +2016,7 @@ RegionResourcePopulation。
 
 ---
 
-## 72. WildlifePopulationState
+# 72. WildlifePopulationState
 
 建议包含：
 
@@ -1944,7 +2037,7 @@ RegionResourcePopulation。
 
 ---
 
-## 73. 捕猎压力
+# 73. 捕猎压力
 
 大量捕杀：
 
@@ -1965,7 +2058,7 @@ Population下降。
 
 ---
 
-## 74. 基地从“临时安全点”升级为“长期生产中心”
+# 74. 基地从“临时安全点”升级为“长期生产中心”
 
 早期基地功能：
 
@@ -2014,7 +2107,7 @@ Population下降。
 
 ---
 
-## 75. 不建议基地系统无边界吞噬游戏
+# 75. 不建议基地系统无边界吞噬游戏
 
 如果后期：
 
@@ -2034,7 +2127,7 @@ Population下降。
 
 ---
 
-## 76. Farming作为生存稳定化工具
+# 76. Farming作为生存稳定化工具
 
 农场在此类型中的职责与纯农场游戏不同。
 
@@ -2052,7 +2145,7 @@ Infrastructure Stabilization。
 
 ---
 
-## 77. 农业降低一种压力，但消耗另一种资源
+# 77. 农业降低一种压力，但消耗另一种资源
 
 例如：
 
@@ -2073,7 +2166,7 @@ Infrastructure Stabilization。
 
 ---
 
-## 78. 基地Storage系统
+# 78. 基地Storage系统
 
 Storage应该让：
 
@@ -2087,7 +2180,7 @@ Storage应该让：
 
 ---
 
-## 79. ContainerState
+# 79. ContainerState
 
 建议包含：
 
@@ -2108,7 +2201,7 @@ Storage应该让：
 
 ---
 
-## 80. 自动存入和快速整理是后期非常重要的QoL
+# 80. 自动存入和快速整理是后期非常重要的QoL
 
 如果玩家每次远征回来：
 
@@ -2129,7 +2222,7 @@ Storage应该让：
 
 ---
 
-## 81. Craft From Storage
+# 81. Craft From Storage
 
 允许工作台读取：
 
@@ -2145,7 +2238,7 @@ Storage应该让：
 
 ---
 
-## 82. 但不能完全无边界读取全世界仓库
+# 82. 但不能完全无边界读取全世界仓库
 
 否则Storage布局没有意义。
 
@@ -2162,7 +2255,7 @@ Storage应该让：
 
 ---
 
-## 83. 核心范式十一：死亡应重置风险，但不能摧毁长期基础设施
+# 83. 核心范式十一：死亡应重置风险，但不能摧毁长期基础设施
 
 常见死亡后果：
 
@@ -2185,7 +2278,7 @@ Storage应该让：
 
 ---
 
-## 84. DeathDropState
+# 84. DeathDropState
 
 建议包含：
 
@@ -2208,7 +2301,7 @@ Storage应该让：
 
 ---
 
-## 85. Corpse Run
+# 85. Corpse Run
 
 死亡后：
 
@@ -2228,7 +2321,7 @@ Storage应该让：
 
 ---
 
-## 86. Recovery失败
+# 86. Recovery失败
 
 如果再次死亡：
 
@@ -2246,7 +2339,7 @@ Storage应该让：
 
 ---
 
-## 87. 死亡物品需要唯一所有权
+# 87. 死亡物品需要唯一所有权
 
 不能：
 
@@ -2263,7 +2356,7 @@ DeathDrop再复制一份。
 
 ---
 
-## 88. DeathTransaction
+# 88. DeathTransaction
 
 锁定PlayerState
 → 冻结InventorySnapshot
@@ -2277,7 +2370,7 @@ DeathDrop再复制一份。
 
 ---
 
-## 89. 床铺 / Respawn Point
+# 89. 床铺 / Respawn Point
 
 建议：
 
@@ -2291,7 +2384,7 @@ DeathDrop再复制一份。
 
 ---
 
-## 90. 多基地策略
+# 90. 多基地策略
 
 后期玩家可能在：
 
@@ -2318,7 +2411,7 @@ DeathDrop再复制一份。
 
 ---
 
-## 91. Safe Node Network
+# 91. Safe Node Network
 
 主基地
 → 森林前哨
@@ -2337,7 +2430,7 @@ DeathDrop再复制一份。
 
 ---
 
-## 92. 基地之间的交通
+# 92. 基地之间的交通
 
 可以逐步解锁：
 
@@ -2362,7 +2455,7 @@ CarryCapacity × TravelSpeed。
 
 ---
 
-## 93. TransportCapacity
+# 93. TransportCapacity
 
 大型资源：
 
@@ -2385,7 +2478,7 @@ CarryCapacity × TravelSpeed。
 
 ---
 
-## 94. VehicleDefinition
+# 94. VehicleDefinition
 
 建议字段：
 
@@ -2410,7 +2503,7 @@ CarryCapacity × TravelSpeed。
 
 ---
 
-## 95. 载具是移动基础设施，不只是更快跑步
+# 95. 载具是移动基础设施，不只是更快跑步
 
 除了速度，还可以：
 
@@ -2427,7 +2520,7 @@ CarryCapacity × TravelSpeed。
 
 ---
 
-## 96. 地图与发现系统
+# 96. 地图与发现系统
 
 地图不应该开局完全揭示所有：
 
@@ -2448,7 +2541,7 @@ PlayerWorldKnowledge。
 
 ---
 
-## 97. WorldKnowledgeState
+# 97. WorldKnowledgeState
 
 建议包含：
 
@@ -2469,7 +2562,7 @@ PlayerWorldKnowledge。
 
 ---
 
-## 98. 世界真相和玩家地图知识必须分离
+# 98. 世界真相和玩家地图知识必须分离
 
 ResourceNode存在：
 
@@ -2481,7 +2574,7 @@ ResourceNode存在：
 
 ---
 
-## 99. Map Marker
+# 99. Map Marker
 
 允许玩家手动标记：
 
@@ -2502,7 +2595,7 @@ ResourceNode存在：
 
 ---
 
-## 100. Procedural World
+# 100. Procedural World
 
 如果采用程序生成：
 
@@ -2529,7 +2622,7 @@ WorldSeed。
 
 ---
 
-## 101. WorldGenerationDefinition
+# 101. WorldGenerationDefinition
 
 建议字段：
 
@@ -2552,7 +2645,7 @@ WorldSeed。
 
 ---
 
-## 102. Progression-Aware World Generation
+# 102. Progression-Aware World Generation
 
 例如Tier 2矿物：
 
@@ -2572,7 +2665,7 @@ Progression Deadlock。
 
 ---
 
-## 103. Capability Reachability Validation
+# 103. Capability Reachability Validation
 
 建立：
 
@@ -2596,7 +2689,7 @@ GrantedCapabilities对应材料。
 
 ---
 
-## 104. 核心范式十二：持久世界必须明确“什么离线也继续”
+# 104. 核心范式十二：持久世界必须明确“什么离线也继续”
 
 单人游戏较简单。
 
@@ -2619,7 +2712,7 @@ GrantedCapabilities对应材料。
 
 ---
 
-## 105. OfflineSimulationPolicy
+# 105. OfflineSimulationPolicy
 
 建议按系统配置：
 
@@ -2636,7 +2729,7 @@ GrantedCapabilities对应材料。
 
 ---
 
-## 106. Catch-Up Simulation
+# 106. Catch-Up Simulation
 
 玩家重新加载世界：
 
@@ -2665,7 +2758,7 @@ Delta。
 
 ---
 
-## 107. 多人服务器权威
+# 107. 多人服务器权威
 
 多人模式下服务器应决定：
 
@@ -2694,7 +2787,7 @@ Movement。
 
 ---
 
-## 108. 建造并发
+# 108. 建造并发
 
 两个玩家同时尝试在同一位置建造：
 
@@ -2710,7 +2803,7 @@ Occupied。
 
 ---
 
-## 109. Storage并发
+# 109. Storage并发
 
 多人同时从箱子取：
 
@@ -2724,7 +2817,7 @@ Inventory Reservation / Version。
 
 ---
 
-## 110. Ownership和Permission
+# 110. Ownership和Permission
 
 多人基地需要：
 
@@ -2739,7 +2832,7 @@ Inventory Reservation / Version。
 
 ---
 
-## 111. AccessPolicy
+# 111. AccessPolicy
 
 可以作用于：
 
@@ -2756,7 +2849,7 @@ Inventory Reservation / Version。
 
 ---
 
-## 112. 领地系统
+# 112. 领地系统
 
 某些PvP生存游戏拥有：
 
@@ -2779,7 +2872,7 @@ Claim / Territory。
 
 ---
 
-## 113. Raid
+# 113. Raid
 
 PvP基地Raid会显著改变整个宏观范式：
 
@@ -2806,7 +2899,7 @@ PvP基地Raid会显著改变整个宏观范式：
 
 ---
 
-## 114. PvE基地袭击
+# 114. PvE基地袭击
 
 敌人可能周期攻击基地。
 
@@ -2820,7 +2913,7 @@ PvP基地Raid会显著改变整个宏观范式：
 
 ---
 
-## 115. ThreatDirector
+# 115. ThreatDirector
 
 可以根据：
 
@@ -2847,7 +2940,7 @@ PvP基地Raid会显著改变整个宏观范式：
 
 ---
 
-## 116. 基地袭击后的恢复成本必须可控
+# 116. 基地袭击后的恢复成本必须可控
 
 如果每次Raid：
 
@@ -2868,7 +2961,7 @@ PvP基地Raid会显著改变整个宏观范式：
 
 ---
 
-## 117. 蓝图 / Building Plan
+# 117. 蓝图 / Building Plan
 
 成熟基地游戏非常适合：
 
@@ -2886,7 +2979,7 @@ PvP基地Raid会显著改变整个宏观范式：
 
 ---
 
-## 118. World Event
+# 118. World Event
 
 可以加入：
 
@@ -2909,7 +3002,7 @@ WorldEvent用于：
 
 ---
 
-## 119. 世界事件应改变行动优先级
+# 119. 世界事件应改变行动优先级
 
 例如：
 
@@ -2932,7 +3025,7 @@ WorldEvent用于：
 
 ---
 
-## 120. Boss的职责
+# 120. Boss的职责
 
 Boss不应只是：
 
@@ -2955,7 +3048,7 @@ Boss不应只是：
 
 ---
 
-## 121. BossDefinition
+# 121. BossDefinition
 
 建议字段：
 
@@ -2980,7 +3073,7 @@ Boss不应只是：
 
 ---
 
-## 122. Boss准备阶段往往比Boss战本身更重要
+# 122. Boss准备阶段往往比Boss战本身更重要
 
 玩家可能需要：
 
@@ -3003,7 +3096,7 @@ Boss不应只是：
 
 ---
 
-## 123. 完整事件与执行流程示例
+# 123. 完整事件与执行流程示例
 
 以下以：
 
@@ -3013,7 +3106,7 @@ Boss不应只是：
 
 ---
 
-### 123.1 当前世界状态
+## 123.1 当前世界状态
 
 玩家主基地位于：
 
@@ -3036,7 +3129,7 @@ Mountain Region。
 
 ---
 
-### 123.2 第一次进入山区
+## 123.2 第一次进入山区
 
 EnvironmentSystem：
 
@@ -3050,7 +3143,7 @@ BodyTemperature持续下降。
 
 ---
 
-### 123.3 玩家发现银矿
+## 123.3 玩家发现银矿
 
 但只停留了：
 
@@ -3066,7 +3159,7 @@ BodyTemperature持续下降。
 
 ---
 
-### 123.4 玩家主动撤退
+## 123.4 玩家主动撤退
 
 这里没有：
 
@@ -3082,7 +3175,7 @@ Expedition Duration。
 
 ---
 
-### 123.5 回基地分析
+## 123.5 回基地分析
 
 玩家需要提高：
 
@@ -3103,7 +3196,7 @@ Cold Survival Duration。
 
 ---
 
-### 123.6 寻找狼皮
+## 123.6 寻找狼皮
 
 Wolf Fur Cloak需要：
 
@@ -3117,7 +3210,7 @@ WolfPelt。
 
 ---
 
-### 123.7 制作防寒斗篷
+## 123.7 制作防寒斗篷
 
 Craft系统验证：
 
@@ -3132,7 +3225,7 @@ ColdResistance显著提高。
 
 ---
 
-### 123.8 第二次山区远征
+## 123.8 第二次山区远征
 
 现在理论体温下降速度：
 
@@ -3144,7 +3237,7 @@ ColdResistance显著提高。
 
 ---
 
-### 123.9 玩家开始采银
+## 123.9 玩家开始采银
 
 Iron Pickaxe满足：
 
@@ -3156,7 +3249,7 @@ SilverOre。
 
 ---
 
-### 123.10 新问题出现
+## 123.10 新问题出现
 
 SilverOre非常重。
 
@@ -3170,7 +3263,7 @@ Encumbered。
 
 ---
 
-### 123.11 Cart无法进入山区
+## 123.11 Cart无法进入山区
 
 因为：
 
@@ -3180,7 +3273,7 @@ Encumbered。
 
 ---
 
-### 123.12 玩家建立山区前哨
+## 123.12 玩家建立山区前哨
 
 选择：
 
@@ -3201,7 +3294,7 @@ Encumbered。
 
 ---
 
-### 123.13 前哨成为新Safe Node
+## 123.13 前哨成为新Safe Node
 
 玩家可以：
 
@@ -3219,7 +3312,7 @@ Encumbered。
 
 ---
 
-### 123.14 银矿临时存储
+## 123.14 银矿临时存储
 
 玩家多次短距离采集：
 
@@ -3230,7 +3323,7 @@ Mine
 
 ---
 
-### 123.15 批量回运问题
+## 123.15 批量回运问题
 
 最终Outpost有：
 
@@ -3240,7 +3333,7 @@ Mine
 
 ---
 
-### 123.16 玩家解锁PackAnimal
+## 123.16 玩家解锁PackAnimal
 
 之前获取的材料允许：
 
@@ -3252,7 +3345,7 @@ PackAnimal可以：
 
 ---
 
-### 123.17 新物流路线形成
+## 123.17 新物流路线形成
 
 主基地
 → Mountain Outpost
@@ -3270,7 +3363,7 @@ Safe Node Network
 
 ---
 
-### 123.18 银锭加工
+## 123.18 银锭加工
 
 银矿返回。
 
@@ -3281,7 +3374,7 @@ SilverOre
 
 ---
 
-### 123.19 新装备
+## 123.19 新装备
 
 SilverIngot制作：
 
@@ -3289,7 +3382,7 @@ SilverIngot制作：
 
 ---
 
-### 123.20 新Capability
+## 123.20 新Capability
 
 高级装备允许玩家：
 
@@ -3297,7 +3390,7 @@ SilverIngot制作：
 
 ---
 
-### 123.21 Boss击败
+## 123.21 Boss击败
 
 Boss奖励：
 
@@ -3309,7 +3402,7 @@ DragonTear。
 
 ---
 
-### 123.22 世界能力再次扩大
+## 123.22 世界能力再次扩大
 
 新的设施允许：
 
@@ -3317,7 +3410,7 @@ DragonTear。
 
 ---
 
-### 123.23 完整循环
+## 123.23 完整循环
 
 发现区域
 → 尝试进入
@@ -3341,9 +3434,9 @@ DragonTear。
 
 ---
 
-## 124. 模块通信设计
+# 124. 模块通信设计
 
-### 124.1 Commands
+## 124.1 Commands
 
 典型命令：
 
@@ -3380,7 +3473,7 @@ DragonTear。
 
 ---
 
-### 124.2 Queries
+## 124.2 Queries
 
 适用于：
 
@@ -3418,7 +3511,7 @@ Query不能：
 
 ---
 
-### 124.3 Domain Events
+## 124.3 Domain Events
 
 包括：
 
@@ -3465,7 +3558,7 @@ Query不能：
 
 ---
 
-### 124.4 Presentation Events
+## 124.4 Presentation Events
 
 包括：
 
@@ -3503,7 +3596,7 @@ Query不能：
 
 ---
 
-## 125. 状态所有权
+# 125. 状态所有权
 
 推荐：
 
@@ -3555,7 +3648,7 @@ Scene GameObject
 
 ---
 
-## 126. ItemDefinition与ItemInstance
+# 126. ItemDefinition与ItemInstance
 
 静态Definition建议包含：
 
@@ -3601,7 +3694,7 @@ Instance：
 
 ---
 
-## 127. 不是所有物品都必须拥有独立InstanceId
+# 127. 不是所有物品都必须拥有独立InstanceId
 
 大宗普通材料：
 
@@ -3619,7 +3712,7 @@ Wood ×50
 
 ---
 
-## 128. Food Spoilage
+# 128. Food Spoilage
 
 如果存在腐坏：
 
@@ -3636,7 +3729,7 @@ Wood ×50
 
 ---
 
-## 129. Spoilage规则必须与存档离线时间统一
+# 129. Spoilage规则必须与存档离线时间统一
 
 玩家退出游戏：
 
@@ -3646,7 +3739,7 @@ Wood ×50
 
 ---
 
-## 130. SaveSnapshot
+# 130. SaveSnapshot
 
 建议包含：
 
@@ -3691,7 +3784,7 @@ Wood ×50
 
 ---
 
-## 131. 世界存档不能保存所有程序生成默认状态
+# 131. 世界存档不能保存所有程序生成默认状态
 
 如果树从未被玩家接触：
 
@@ -3705,7 +3798,7 @@ Wood ×50
 
 ---
 
-## 132. World Delta
+# 132. World Delta
 
 例如：
 
@@ -3727,7 +3820,7 @@ Tree123 = Depleted。
 
 ---
 
-## 133. Chunk Persistence
+# 133. Chunk Persistence
 
 每个Chunk保存：
 
@@ -3746,7 +3839,7 @@ Tree123 = Depleted。
 
 ---
 
-## 134. Chunk Streaming
+# 134. Chunk Streaming
 
 玩家接近：
 
@@ -3762,7 +3855,7 @@ Load Chunk。
 
 ---
 
-## 135. 卸载Chunk不能重置世界
+# 135. 卸载Chunk不能重置世界
 
 常见严重Bug：
 
@@ -3774,7 +3867,7 @@ Load Chunk。
 
 ---
 
-## 136. 动态实体持久化策略
+# 136. 动态实体持久化策略
 
 普通动物可能：
 
@@ -3794,11 +3887,11 @@ PersistencePolicy。
 
 ---
 
-## 137. 失败隔离
+# 137. 失败隔离
 
 ---
 
-### 137.1 ResourceNode状态损坏
+## 137.1 ResourceNode状态损坏
 
 如果存档引用不存在Definition：
 
@@ -3812,7 +3905,7 @@ PersistencePolicy。
 
 ---
 
-### 137.2 Item所有权重复
+## 137.2 Item所有权重复
 
 同一个ItemInstance同时出现在：
 
@@ -3830,7 +3923,7 @@ InventoryIntegrityAudit。
 
 ---
 
-### 137.3 Craft中途断线
+## 137.3 Craft中途断线
 
 CraftExecution保留：
 
@@ -3847,7 +3940,7 @@ ExecutionId
 
 ---
 
-### 137.4 Building放置事务失败
+## 137.4 Building放置事务失败
 
 材料只有在：
 
@@ -3863,7 +3956,7 @@ ExecutionId
 
 ---
 
-### 137.5 Support Graph异常
+## 137.5 Support Graph异常
 
 局部建筑拓扑损坏：
 
@@ -3873,7 +3966,7 @@ ExecutionId
 
 ---
 
-### 137.6 BuildingDefinition更新
+## 137.6 BuildingDefinition更新
 
 旧存档建筑仍需加载。
 
@@ -3887,7 +3980,7 @@ Migration。
 
 ---
 
-### 137.7 DeathDrop创建失败
+## 137.7 DeathDrop创建失败
 
 死亡事务不能：
 
@@ -3899,7 +3992,7 @@ Migration。
 
 ---
 
-### 137.8 DeathDrop处于非法地形
+## 137.8 DeathDrop处于非法地形
 
 例如玩家掉进不可达深渊。
 
@@ -3911,7 +4004,7 @@ Migration。
 
 ---
 
-### 137.9 RespawnPoint失效
+## 137.9 RespawnPoint失效
 
 Bed被拆除。
 
@@ -3925,7 +4018,7 @@ DefaultSpawn
 
 ---
 
-### 137.10 WorldClock跳变
+## 137.10 WorldClock跳变
 
 离线Catch-Up出现异常Delta：
 
@@ -3937,7 +4030,7 @@ DefaultSpawn
 
 ---
 
-### 137.11 Weather状态损坏
+## 137.11 Weather状态损坏
 
 Fallback到：
 
@@ -3947,7 +4040,7 @@ Region Default Weather。
 
 ---
 
-### 137.12 Multiplayer Transfer冲突
+## 137.12 Multiplayer Transfer冲突
 
 Inventory操作使用：
 
@@ -3961,11 +4054,11 @@ Version或Reservation。
 
 ---
 
-## 138. 调试与可观测性
+# 138. 调试与可观测性
 
 ---
 
-### 138.1 Survival State Inspector
+## 138.1 Survival State Inspector
 
 显示：
 
@@ -3986,7 +4079,7 @@ Version或Reservation。
 
 ---
 
-### 138.2 Thermal Breakdown
+## 138.2 Thermal Breakdown
 
 例如：
 
@@ -4016,7 +4109,7 @@ BodyTemperatureTrend = +0.3/min。
 
 ---
 
-### 138.3 Resource Node Inspector
+## 138.3 Resource Node Inspector
 
 显示：
 
@@ -4035,7 +4128,7 @@ BodyTemperatureTrend = +0.3/min。
 
 ---
 
-### 138.4 Inventory Provenance
+## 138.4 Inventory Provenance
 
 针对稀有Item：
 
@@ -4056,7 +4149,7 @@ BodyTemperatureTrend = +0.3/min。
 
 ---
 
-### 138.5 Capability Graph Viewer
+## 138.5 Capability Graph Viewer
 
 显示：
 
@@ -4076,7 +4169,7 @@ FrostPotion。
 
 ---
 
-### 138.6 Region Risk Inspector
+## 138.6 Region Risk Inspector
 
 显示：
 
@@ -4097,7 +4190,7 @@ FrostPotion。
 
 ---
 
-### 138.7 Expedition Timeline
+## 138.7 Expedition Timeline
 
 记录：
 
@@ -4110,7 +4203,7 @@ FrostPotion。
 
 ---
 
-### 138.8 Carry Value Graph
+## 138.8 Carry Value Graph
 
 显示：
 
@@ -4128,7 +4221,7 @@ DistanceToSafety。
 
 ---
 
-### 138.9 Base Utility Inspector
+## 138.9 Base Utility Inspector
 
 显示：
 
@@ -4149,7 +4242,7 @@ DistanceToSafety。
 
 ---
 
-### 138.10 Building Support Viewer
+## 138.10 Building Support Viewer
 
 显示：
 
@@ -4164,7 +4257,7 @@ DistanceToSafety。
 
 ---
 
-### 138.11 Placement Debugger
+## 138.11 Placement Debugger
 
 显示所有失败条件：
 
@@ -4174,7 +4267,7 @@ Collision Building B34。
 
 ---
 
-### 138.12 Resource Regeneration Heatmap
+## 138.12 Resource Regeneration Heatmap
 
 显示：
 
@@ -4182,7 +4275,7 @@ Collision Building B34。
 
 ---
 
-### 138.13 Death Causality
+## 138.13 Death Causality
 
 例如：
 
@@ -4206,11 +4299,11 @@ Collision Building B34。
 
 ---
 
-## 139. 内容验证工具
+# 139. 内容验证工具
 
 ---
 
-### 139.1 Capability Reachability Test
+## 139.1 Capability Reachability Test
 
 自动遍历：
 
@@ -4226,7 +4319,7 @@ Start Capability
 
 ---
 
-### 139.2 Recipe Graph Validation
+## 139.2 Recipe Graph Validation
 
 检查：
 
@@ -4243,7 +4336,7 @@ Start Capability
 
 ---
 
-### 139.3 Resource Reachability
+## 139.3 Resource Reachability
 
 每个主线材料：
 
@@ -4253,7 +4346,7 @@ Start Capability
 
 ---
 
-### 139.4 Tool Tier Test
+## 139.4 Tool Tier Test
 
 验证：
 
@@ -4267,7 +4360,7 @@ Tier N工具才能采集。
 
 ---
 
-### 139.5 Survival Duration Simulation
+## 139.5 Survival Duration Simulation
 
 针对Region：
 
@@ -4286,7 +4379,7 @@ Tier N工具才能采集。
 
 ---
 
-### 139.6 Expedition Feasibility Test
+## 139.6 Expedition Feasibility Test
 
 输入：
 
@@ -4305,7 +4398,7 @@ TravelSpeed。
 
 ---
 
-### 139.7 Building Placement Stress Test
+## 139.7 Building Placement Stress Test
 
 随机Terrain：
 
@@ -4322,7 +4415,7 @@ TravelSpeed。
 
 ---
 
-### 139.8 Structural Collapse Test
+## 139.8 Structural Collapse Test
 
 随机删除：
 
@@ -4338,7 +4431,7 @@ Support Graph稳定。
 
 ---
 
-### 139.9 Inventory Duplication Test
+## 139.9 Inventory Duplication Test
 
 模拟：
 
@@ -4361,7 +4454,7 @@ Item Conservation。
 
 ---
 
-### 139.10 Offline Catch-Up Test
+## 139.10 Offline Catch-Up Test
 
 模拟：
 
@@ -4386,7 +4479,7 @@ Item Conservation。
 
 ---
 
-### 139.11 World Persistence Test
+## 139.11 World Persistence Test
 
 进入Chunk
 → 改变资源
@@ -4400,7 +4493,7 @@ Item Conservation。
 
 ---
 
-### 139.12 Long-World Test
+## 139.12 Long-World Test
 
 模拟：
 
@@ -4419,7 +4512,7 @@ Item Conservation。
 
 ---
 
-## 140. 性能设计
+# 140. 性能设计
 
 开放世界生存建造通常同时具有：
 
@@ -4442,7 +4535,7 @@ Persistence + Streaming
 
 ---
 
-### 140.1 静态资源不需要完整运行时对象
+## 140.1 静态资源不需要完整运行时对象
 
 远处的：
 
@@ -4460,7 +4553,7 @@ Generated Data。
 
 ---
 
-### 140.2 Chunk是核心性能边界
+## 140.2 Chunk是核心性能边界
 
 Chunk可以维护：
 
@@ -4475,21 +4568,21 @@ Chunk可以维护：
 
 ---
 
-### 140.3 Simulation Tier
+## 140.3 Simulation Tier
 
-#### Active
+### Active
 
 玩家附近：
 
 完整AI和交互。
 
-#### Warm
+### Warm
 
 邻近区域：
 
 低频动态。
 
-#### Dormant
+### Dormant
 
 远端：
 
@@ -4497,7 +4590,7 @@ Chunk可以维护：
 
 ---
 
-### 140.4 野生动物远端聚合
+## 140.4 野生动物远端聚合
 
 不需要世界上：
 
@@ -4515,7 +4608,7 @@ PopulationState。
 
 ---
 
-### 140.5 建筑不应每个都独立Update
+## 140.5 建筑不应每个都独立Update
 
 几千墙体：
 
@@ -4534,7 +4627,7 @@ PopulationState。
 
 ---
 
-### 140.6 CraftStation事件驱动
+## 140.6 CraftStation事件驱动
 
 没有Recipe Queue：
 
@@ -4550,7 +4643,7 @@ ScheduledTimestamp。
 
 ---
 
-### 140.7 Food Spoilage使用Timestamp而不是每秒Update
+## 140.7 Food Spoilage使用Timestamp而不是每秒Update
 
 例如：
 
@@ -4562,7 +4655,7 @@ ExpiryTime。
 
 ---
 
-### 140.8 Resource Respawn同理
+## 140.8 Resource Respawn同理
 
 记录：
 
@@ -4572,7 +4665,7 @@ RespawnTimestamp。
 
 ---
 
-### 140.9 Save采用增量脏标记
+## 140.9 Save采用增量脏标记
 
 Chunk没有变化：
 
@@ -4584,7 +4677,7 @@ Container变化：
 
 ---
 
-### 140.10 大型基地需要空间索引
+## 140.10 大型基地需要空间索引
 
 用于：
 
@@ -4601,11 +4694,11 @@ Container变化：
 
 ---
 
-## 141. 可扩展点
+# 141. 可扩展点
 
 ---
 
-### 141.1 新Biome
+## 141.1 新Biome
 
 主要提供：
 
@@ -4624,7 +4717,7 @@ Container变化：
 
 ---
 
-### 141.2 新Need
+## 141.2 新Need
 
 通过：
 
@@ -4640,7 +4733,7 @@ Radiation
 
 ---
 
-### 141.3 新资源
+## 141.3 新资源
 
 提供：
 
@@ -4651,7 +4744,7 @@ ResourceNodeDefinition
 
 ---
 
-### 141.4 新工具
+## 141.4 新工具
 
 通过：
 
@@ -4664,7 +4757,7 @@ ToolTags
 
 ---
 
-### 141.5 新CraftStation
+## 141.5 新CraftStation
 
 提供：
 
@@ -4674,7 +4767,7 @@ Recipe只声明自己需要什么Capability。
 
 ---
 
-### 141.6 新建筑
+## 141.6 新建筑
 
 提供：
 
@@ -4685,7 +4778,7 @@ BuildingDefinition
 
 ---
 
-### 141.7 新交通工具
+## 141.7 新交通工具
 
 统一接入：
 
@@ -4693,7 +4786,7 @@ Movement / Cargo / EnvironmentRestriction。
 
 ---
 
-### 141.8 新World Event
+## 141.8 新World Event
 
 通过：
 
@@ -4701,7 +4794,7 @@ WorldEventDefinition。
 
 ---
 
-### 141.9 新Boss
+## 141.9 新Boss
 
 通过：
 
@@ -4712,7 +4805,7 @@ BossDefinition
 
 ---
 
-### 141.10 PvP模式
+## 141.10 PvP模式
 
 增加：
 
@@ -4731,11 +4824,11 @@ BossDefinition
 
 ---
 
-## 142. 玩家体验设计
+# 142. 玩家体验设计
 
 ---
 
-### 142.1 玩家第一次生存问题必须快速、明确
+## 142.1 玩家第一次生存问题必须快速、明确
 
 前期应该让玩家迅速理解：
 
@@ -4754,7 +4847,7 @@ BossDefinition
 
 ---
 
-### 142.2 生存系统应逐步从“手动维护”转换为“基础设施维护”
+## 142.2 生存系统应逐步从“手动维护”转换为“基础设施维护”
 
 早期：
 
@@ -4772,7 +4865,7 @@ BossDefinition
 
 ---
 
-### 142.3 世界资源必须易于形成视觉语言
+## 142.3 世界资源必须易于形成视觉语言
 
 玩家应逐渐学会：
 
@@ -4787,7 +4880,7 @@ BossDefinition
 
 ---
 
-### 142.4 高级工具需要明显改变手感
+## 142.4 高级工具需要明显改变手感
 
 不是：
 
@@ -4808,7 +4901,7 @@ BossDefinition
 
 ---
 
-### 142.5 基地应该给玩家明显的安全感
+## 142.5 基地应该给玩家明显的安全感
 
 例如：
 
@@ -4829,7 +4922,7 @@ BossDefinition
 
 ---
 
-### 142.6 返回基地应该形成“战利品落袋”的满足
+## 142.6 返回基地应该形成“战利品落袋”的满足
 
 远征回来：
 
@@ -4841,7 +4934,7 @@ BossDefinition
 
 ---
 
-### 142.7 背包满应产生决策，不应只产生烦躁
+## 142.7 背包满应产生决策，不应只产生烦躁
 
 玩家应该：
 
@@ -4855,7 +4948,7 @@ or
 
 ---
 
-### 142.8 建造UI必须支持精确和快速两种模式
+## 142.8 建造UI必须支持精确和快速两种模式
 
 快速：
 
@@ -4871,7 +4964,7 @@ or
 
 ---
 
-### 142.9 已完成的基地维护要逐步自动化
+## 142.9 已完成的基地维护要逐步自动化
 
 例如：
 
@@ -4890,7 +4983,7 @@ or
 
 ---
 
-### 142.10 世界必须持续提供离开基地的理由
+## 142.10 世界必须持续提供离开基地的理由
 
 高级资源；
 
@@ -4910,155 +5003,155 @@ Boss；
 
 ---
 
-## 143. 常见设计失败
+# 143. 常见设计失败
 
 ---
 
-### 143.1 Need太多
+## 143.1 Need太多
 
 玩家大部分时间都在补状态条。
 
 ---
 
-### 143.2 Need完全没有战略意义
+## 143.2 Need完全没有战略意义
 
 只是在固定时间按一下吃饭键。
 
 ---
 
-### 143.3 工具只是线性速度升级
+## 143.3 工具只是线性速度升级
 
 没有改变资源可达性。
 
 ---
 
-### 143.4 所有高级资源都在主基地附近
+## 143.4 所有高级资源都在主基地附近
 
 探索失去意义。
 
 ---
 
-### 143.5 所有资源快速无限刷新
+## 143.5 所有资源快速无限刷新
 
 地点记忆和远征规划失去意义。
 
 ---
 
-### 143.6 所有关键资源永久有限
+## 143.6 所有关键资源永久有限
 
 长期世界可能被彻底挖空。
 
 ---
 
-### 143.7 Craft Recipe一次性全部开放
+## 143.7 Craft Recipe一次性全部开放
 
 探索和发现失去技术成长。
 
 ---
 
-### 143.8 新Recipe完全淘汰旧资源
+## 143.8 新Recipe完全淘汰旧资源
 
 早期区域快速失去意义。
 
 ---
 
-### 143.9 基地只是装饰
+## 143.9 基地只是装饰
 
 玩家不用建基地也能稳定通关。
 
 ---
 
-### 143.10 基地功能过强
+## 143.10 基地功能过强
 
 后期完全不需要再探索。
 
 ---
 
-### 143.11 建造系统只有Collider Overlap验证
+## 143.11 建造系统只有Collider Overlap验证
 
 出现悬空、穿墙和奇怪结构。
 
 ---
 
-### 143.12 建造约束很多但不解释失败原因
+## 143.12 建造约束很多但不解释失败原因
 
 玩家反复移动Ghost尝试。
 
 ---
 
-### 143.13 耐久过低
+## 143.13 耐久过低
 
 玩家主要时间用于重复制造同样工具。
 
 ---
 
-### 143.14 死亡复制物品
+## 143.14 死亡复制物品
 
 Inventory与Corpse同时保留资源。
 
 ---
 
-### 143.15 尸体掉到不可达位置
+## 143.15 尸体掉到不可达位置
 
 永久失去重要装备。
 
 ---
 
-### 143.16 Chunk卸载后资源重置
+## 143.16 Chunk卸载后资源重置
 
 玩家可以通过出入区域刷资源。
 
 ---
 
-### 143.17 所有野生动物完整模拟
+## 143.17 所有野生动物完整模拟
 
 服务器大量CPU浪费。
 
 ---
 
-### 143.18 食物腐坏逐物品每秒Tick
+## 143.18 食物腐坏逐物品每秒Tick
 
 大仓库性能恶化。
 
 ---
 
-### 143.19 高级基地仍要求玩家逐箱搬材料
+## 143.19 高级基地仍要求玩家逐箱搬材料
 
 成长只增加资源量，没有提高管理抽象层级。
 
 ---
 
-### 143.20 Fast Travel太早
+## 143.20 Fast Travel太早
 
 地图距离和前哨建设失去意义。
 
 ---
 
-### 143.21 永远没有Fast Travel
+## 143.21 永远没有Fast Travel
 
 后期大量时间浪费在已征服区域往返。
 
 ---
 
-### 143.22 区域难度只靠敌人HP
+## 143.22 区域难度只靠敌人HP
 
 环境准备和生存构筑失去意义。
 
 ---
 
-### 143.23 Boss与制作系统无关
+## 143.23 Boss与制作系统无关
 
 击Boss只是普通战斗，不推动生存科技层级。
 
 ---
 
-### 143.24 程序生成没有进度可达性验证
+## 143.24 程序生成没有进度可达性验证
 
 关键材料生成到理论不可访问区域。
 
 ---
 
-## 144. 最小可行原型
+# 144. 最小可行原型
 
 一个能够验证开放世界生存建造核心范式的MVP，不需要一开始做巨型无限世界。
 
@@ -5068,21 +5161,21 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.1 Biome
+## 144.1 Biome
 
-#### Grassland
+### Grassland
 
 安全。
 
 基础木石食物。
 
-#### Forest
+### Forest
 
 中等危险。
 
 皮革、硬木、高级动物。
 
-#### Mountain
+### Mountain
 
 寒冷。
 
@@ -5094,7 +5187,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.2 Need
+## 144.2 Need
 
 只做：
 
@@ -5111,7 +5204,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.3 Tool
+## 144.3 Tool
 
 - Stone Axe；
 
@@ -5124,7 +5217,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.4 CraftStation
+## 144.4 CraftStation
 
 - Campfire；
 
@@ -5135,7 +5228,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.5 Building
+## 144.5 Building
 
 - Foundation；
 
@@ -5154,7 +5247,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.6 Food
+## 144.6 Food
 
 - RawFood；
 
@@ -5165,7 +5258,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.7 Boss
+## 144.7 Boss
 
 击败后：
 
@@ -5173,7 +5266,7 @@ Inventory与Corpse同时保留资源。
 
 ---
 
-### 144.8 Death
+## 144.8 Death
 
 实现：
 
@@ -5181,7 +5274,7 @@ DeathDrop + Respawn Bed。
 
 ---
 
-### 144.9 必要基础设施
+## 144.9 必要基础设施
 
 - WorldClock；
 
@@ -5224,7 +5317,7 @@ DeathDrop + Respawn Bed。
 
 ---
 
-### 144.10 必要调试工具
+## 144.10 必要调试工具
 
 - SurvivalStateInspector；
 
@@ -5249,7 +5342,7 @@ DeathDrop + Respawn Bed。
 
 ---
 
-## 145. MVP核心验收问题
+# 145. MVP核心验收问题
 
 原型至少必须能够回答：
 
@@ -5305,7 +5398,7 @@ DeathDrop + Respawn Bed。
 
 ---
 
-## 146. 推荐实施顺序
+# 146. 推荐实施顺序
 
 第一阶段：
 
@@ -5421,7 +5514,7 @@ DeathDrop + Respawn Bed。
 
 ---
 
-## 147. 架构验收标准
+# 147. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -5512,11 +5605,11 @@ DeathDrop + Respawn Bed。
 
 ---
 
-## 148. 可迁移到其他游戏的设计思想
+# 148. 可迁移到其他游戏的设计思想
 
 ---
 
-### 148.1 成长可以表现为“把临时问题转化为基础设施”
+## 148.1 成长可以表现为“把临时问题转化为基础设施”
 
 可迁移到：
 
@@ -5543,7 +5636,7 @@ DeathDrop + Respawn Bed。
 
 ---
 
-### 148.2 Capability比角色等级更适合描述系统型探索进度
+## 148.2 Capability比角色等级更适合描述系统型探索进度
 
 可迁移到：
 
@@ -5566,7 +5659,7 @@ Level 20。
 
 ---
 
-### 148.3 资源价值不仅取决于数量，还取决于“安全提交位置”
+## 148.3 资源价值不仅取决于数量，还取决于“安全提交位置”
 
 野外Inventory：
 
@@ -5593,7 +5686,7 @@ Level 20。
 
 ---
 
-### 148.4 安全节点网络可以逐步重构开放世界
+## 148.4 安全节点网络可以逐步重构开放世界
 
 主基地、前哨、传送点会把：
 
@@ -5616,7 +5709,7 @@ Level 20。
 
 ---
 
-### 148.5 Soft Gate比Hard Gate更容易产生玩家创造性
+## 148.5 Soft Gate比Hard Gate更容易产生玩家创造性
 
 可迁移到：
 
@@ -5641,7 +5734,7 @@ Level 20。
 
 ---
 
-### 148.6 环境压力可以作为“时间预算”
+## 148.6 环境压力可以作为“时间预算”
 
 寒冷并不一定直接阻止玩家。
 
@@ -5664,7 +5757,7 @@ Level 20。
 
 ---
 
-### 148.7 前进和回程应该共同计入风险模型
+## 148.7 前进和回程应该共同计入风险模型
 
 可迁移到：
 
@@ -5687,7 +5780,7 @@ Level 20。
 
 ---
 
-### 148.8 世界持久化最好保存“偏离生成真值的Delta”
+## 148.8 世界持久化最好保存“偏离生成真值的Delta”
 
 可迁移到：
 
@@ -5706,7 +5799,7 @@ Save只记录：
 
 ---
 
-### 148.9 维护成本应该随着成长被更高层工具压缩
+## 148.9 维护成本应该随着成长被更高层工具压缩
 
 可迁移到：
 
@@ -5723,7 +5816,7 @@ Save只记录：
 
 ---
 
-### 148.10 失败复盘应该追踪压力链而不仅是最后一击
+## 148.10 失败复盘应该追踪压力链而不仅是最后一击
 
 玩家最后死于：
 
@@ -5744,9 +5837,9 @@ Wolf。
 
 ---
 
-## 149. 本次防重记录
+# 149. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **开放世界生存建造 / Survival Crafting / Sandbox Survival。**
 
@@ -5769,7 +5862,7 @@ Wolf。
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家从低能力、低资源和低安全性的状态进入长期持久化世界，通过探索发现资源和危险，在有限背包、生存时间和装备能力约束下进行远征；成功带回的野外资源通过储存、制作、加工和建造逐渐转化为基地、工具、装备、补给和交通等长期基础设施。基础设施进一步降低重复生存成本并扩大安全行动半径，使玩家能够进入此前无法长期生存或无法有效采集的高阶区域，获取新的材料层级并继续提升世界可达能力。
 
@@ -5795,7 +5888,7 @@ Wolf。
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 玩家生活在长期持久化世界中；
 
@@ -5852,7 +5945,7 @@ Wolf。
 
 ---
 
-### 与仓库现有生存恐怖的防重边界
+## 与仓库现有生存恐怖的防重边界
 
 仓库当前已经存在 `survival-horror`，其核心围绕：
 
@@ -5910,7 +6003,7 @@ Wolf。
 
 ---
 
-### 与仓库现有农场经营的防重边界
+## 与仓库现有农场经营的防重边界
 
 农场经营已经以：
 
@@ -5939,7 +6032,7 @@ Wolf。
 
 ---
 
-### 与仓库现有殖民地模拟的防重边界
+## 与仓库现有殖民地模拟的防重边界
 
 殖民地模拟核心是：
 
@@ -5991,7 +6084,7 @@ Wolf。
 
 ---
 
-### 与仓库现有工厂自动化的防重边界
+## 与仓库现有工厂自动化的防重边界
 
 仓库已有 `factory-automation`，其核心是：
 
@@ -6038,7 +6131,7 @@ Wolf。
 
 ---
 
-### 与仓库现有远征队探险管理的防重边界
+## 与仓库现有远征队探险管理的防重边界
 
 远征管理已经围绕：
 
@@ -6084,7 +6177,7 @@ Wolf。
 
 ---
 
-### 与仓库现有沉浸式模拟的防重边界
+## 与仓库现有沉浸式模拟的防重边界
 
 沉浸式模拟强调：
 
@@ -6126,7 +6219,7 @@ Wolf。
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Survival Crafting；
 
@@ -6241,7 +6334,7 @@ Wolf。
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次开放世界生存建造范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

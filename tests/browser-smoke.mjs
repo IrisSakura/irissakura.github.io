@@ -6,12 +6,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, blogPublication, blogTaxonomy, evidenceChains, projectData, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
+const [journalSource, blogPublication, blogTaxonomy, evidenceChains, projectData, irisEngineering, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
   readJson('data/blog-taxonomy.json'),
   readJson('data/evidence-chains.json'),
   readJson('data/projects.json'),
+  readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
   readJson('data/framework-quickstart.json'),
   readJson('data/site.json'),
@@ -40,6 +41,17 @@ const brandContrastRoutes = [
       ['homepage profile role', '.profile-role'],
       ['homepage profile introduction', '.profile-copy .hero-description'],
       ['homepage focus descriptions', '.focus-card > p:not(.focus-index)']
+    ]
+  },
+  {
+    route: '/pages/engineering.html',
+    checks: [
+      ['Engineering hero description', '.engineering-hero-inner > div > p:last-child'],
+      ['Engineering status', '.engineering-status p'],
+      ['Engineering workflow descriptions', '.engineering-workflow li > span:last-child'],
+      ['Engineering capability descriptions', '.engineering-capability-card > p'],
+      ['Engineering evidence descriptions', '.engineering-evidence-card p'],
+      ['Engineering boundary descriptions', '.engineering-boundaries li']
     ]
   },
   {
@@ -253,8 +265,8 @@ try {
   if (await profileDrawer.getAttribute('aria-hidden') !== 'false') {
     throw new Error('profile drawer did not expose its open state');
   }
-  if (await desktop.locator('[data-profile-quick-link]').count() !== 5) {
-    throw new Error('profile drawer does not expose all five quick routes');
+  if (await desktop.locator('[data-profile-quick-link]').count() !== 6) {
+    throw new Error('profile drawer does not expose all six quick routes');
   }
   const profileDrawerClose = desktop.getByRole('button', {
     name: '关闭快速导航',
@@ -331,6 +343,8 @@ try {
     await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'home-desktop.png'), fullPage: true });
     await desktop.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
     await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-desktop.png'), fullPage: true });
+    await desktop.goto(`${baseUrl}/pages/engineering.html`, { waitUntil: 'networkidle' });
+    await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'engineering-desktop.png'), fullPage: true });
     await desktop.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
     await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-quickstart-desktop.png'), fullPage: true });
   }
@@ -348,6 +362,29 @@ try {
   const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   if (quickstartDesktopOverflow > 1) {
     throw new Error(`Quickstart overflows the desktop viewport by ${quickstartDesktopOverflow}px`);
+  }
+
+  await desktop.goto(`${baseUrl}/pages/engineering.html`, { waitUntil: 'networkidle' });
+  if (await desktop.locator('.engineering-workflow li').count() !== irisEngineering.workflow.length) {
+    throw new Error('Engineering page does not expose every reviewed workflow step');
+  }
+  if (await desktop.locator('.engineering-capability-card').count() !== irisEngineering.capabilities.length) {
+    throw new Error('Engineering page does not expose every reviewed capability group');
+  }
+  if (await desktop.locator('.engineering-evidence-card').count() !== irisEngineering.evidence.length) {
+    throw new Error('Engineering page does not expose every reviewed evidence boundary');
+  }
+  const engineeringDesktopState = await desktop.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    text: document.body.innerText
+  }));
+  if (engineeringDesktopState.overflow > 1) {
+    throw new Error(`Engineering page overflows the desktop viewport by ${engineeringDesktopState.overflow}px`);
+  }
+  for (const forbidden of ['/Users/', '154.37.215.57', 'external-read-passed']) {
+    if (engineeringDesktopState.text.includes(forbidden)) {
+      throw new Error(`Engineering page exposes private or overstated text: ${forbidden}`);
+    }
   }
 
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
@@ -516,6 +553,25 @@ try {
   }
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'brand-mobile.png'), fullPage: true });
+  }
+
+  await mobile.goto(`${baseUrl}/pages/engineering.html`, { waitUntil: 'networkidle' });
+  const engineeringMobileState = await mobile.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    workflowSteps: document.querySelectorAll('.engineering-workflow li').length,
+    capabilityCards: document.querySelectorAll('.engineering-capability-card').length
+  }));
+  if (engineeringMobileState.overflow > 1) {
+    throw new Error(`Engineering page overflows the mobile viewport by ${engineeringMobileState.overflow}px`);
+  }
+  if (engineeringMobileState.workflowSteps !== irisEngineering.workflow.length) {
+    throw new Error('mobile Engineering page does not expose every workflow step');
+  }
+  if (engineeringMobileState.capabilityCards !== irisEngineering.capabilities.length) {
+    throw new Error('mobile Engineering page does not expose every capability group');
+  }
+  if (process.env.SITE_SCREENSHOT_DIR) {
+    await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'engineering-mobile.png'), fullPage: true });
   }
 
   await mobile.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });

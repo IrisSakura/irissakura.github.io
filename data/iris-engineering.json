@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "iris-engineering",
+  "title": "Iris Engineering",
+  "eyebrow": "IRIS ENGINEERING · CONTROL PLANE",
+  "headline": "把研发事实、显式授权与验证边界组织成可复查的工作流",
+  "description": "一个引擎无关的研发工作流控制面：读取 Git 与平台事实，形成只读视图和研究提案，在明确授权后组装受限任务，并以可恢复、失败关闭的执行状态保留证据。",
+  "operatingMode": "maintenance",
+  "statusLabel": "P10",
+  "status": "P1–P10 本地产品基线已完成；当前没有自动续作的活动工作。",
+  "workflow": [
+    {
+      "id": "observe",
+      "label": "Observe",
+      "title": "读取事实",
+      "description": "从 Git、Gitea Adapter、本地 Snapshot 与只读报告收集事实，不复制第二套可独立修改的业务真理源。"
+    },
+    {
+      "id": "authorize",
+      "label": "Authorize",
+      "title": "显式授权",
+      "description": "Research Artifact 只生成 pending-approval 提案；WorkAuthorization 明确限定目标、权限与执行边界。"
+    },
+    {
+      "id": "execute",
+      "label": "Execute",
+      "title": "受限执行",
+      "description": "TaskEnvelope 与 Runner 权限求交集，AgentRun 通过 claim、lease、heartbeat 与 recovery 管理生命周期。"
+    },
+    {
+      "id": "verify",
+      "label": "Verify",
+      "title": "验证与审计",
+      "description": "把结果、失败、边界与后续入口分开记录；未知终态不盲目重试，未取得证据就不升级结论。"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "workflow-core",
+      "title": "Workflow Core",
+      "description": "版本化合同、状态与 Flag 规则、幂等 Inbox、Preview、Reconciliation 和 Audit。",
+      "items": ["Closed JSON Schema", "Deterministic plan", "Inbox & reconciliation"]
+    },
+    {
+      "id": "read-models",
+      "title": "Read Models & Dashboard",
+      "description": "Today、Milestone、Quality、Build 与 Operations 的只读投影，固定本地回环、GET/HEAD-only。",
+      "items": ["Today / Milestone", "Quality / Build", "Operations health"]
+    },
+    {
+      "id": "research-intake",
+      "title": "Research Artifact Intake",
+      "description": "把研究材料固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。",
+      "items": ["Immutable artifact", "Pending proposal", "Offline inspection"]
+    },
+    {
+      "id": "agent-execution",
+      "title": "Agent Execution Contract",
+      "description": "连接授权、上下文、Runner 权限与 AgentRun 状态，保留 claim、lease、恢复和只读检查。",
+      "items": ["Task envelope", "Permission intersection", "Claim / lease / recovery"]
+    }
+  ],
+  "evidence": [
+    {
+      "label": "本地产品基线",
+      "state": "local-passed",
+      "summary": "Workflow、Persistence、CLI、Dashboard、Research Intake 与 Agent Execution 均有本地合同和回归覆盖。"
+    },
+    {
+      "label": "只读行动视图",
+      "state": "local-passed",
+      "summary": "Today、Milestone、Quality、Build 与 Operations 页面保持零凭据、零远端写入和输入故障隔离。"
+    },
+    {
+      "label": "Canonical external read",
+      "state": "failed-closed",
+      "summary": "试点在首个传输请求失败后停止，未重试、未取得远端事实，也没有把失败解释成接入成功。"
+    }
+  ],
+  "boundaries": [
+    "Iris Engineering 不拥有 Unity Runtime、玩法逻辑或 Sakura Framework 的包与发布状态。",
+    "真实平台读取、写入、Runner、工作树与外部 Agent 接入都必须单独授权。",
+    "Dashboard 是可丢弃、可重建的 Read Model，不成为新的 Issue、PR 或 CI 真理源。",
+    "P6.1 与 P7 的当前跨平台证据来自 Windows host；macOS 与 Linux 仍需在相同变更上分别验证。"
+  ]
+}

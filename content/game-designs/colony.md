@@ -1,5 +1,3 @@
-## 自主居民、工作订单与“需求—生产—分配—危机—恢复”的聚落演化循环
-
 > Agent 标签：`colony` `management` `settlement`
 
 ---

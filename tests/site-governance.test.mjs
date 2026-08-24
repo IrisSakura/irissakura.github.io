@@ -184,6 +184,7 @@ test('major page visuals are generated without reused category screenshots', asy
   const majorPages = {
     home: 'index.html',
     portfolio: 'pages/portfolio.html',
+    engineering: 'pages/engineering.html',
     framework: 'pages/framework.html',
     journal: 'pages/journal.html',
     blog: 'pages/blog.html',

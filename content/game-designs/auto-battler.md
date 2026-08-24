@@ -1,4 +1,49 @@
-## 1. 类型定位
+> Agent 标签：`auto` `battler` `chess`
+
+---
+## 0. 本期选型与仓库防重核对
+
+已实际读取当前 `game-designs/catalog.v1.json`。当前目录登记 **46 个设计范式条目**。现有目录已经包含大逃杀、MOBA、怪物收集 RPG、实时战略、回合制战术 RPG、卡组构筑式 Roguelike 等类型，但当前目录中没有独立的 `auto-battler` / `自走棋` 类型记录。
+
+与本期最接近的已有范式主要有：
+
+- `real-time-strategy`：重点是命令驱动的群体模拟、生产战争循环和战争迷雾。
+
+- `tactical-rpg`：重点是离散战场、行动经济和玩家逐回合直接决定单位行动。
+
+- 卡组构筑式 Roguelike：重点是抽牌概率、牌组收敛和单局卡组构筑。
+
+- `moba`：重点是兵线、英雄成长、人数差以及地图优势转换。
+
+
+本期选择：
+
+**自走棋 / Auto Battler。**
+
+常见名称包括：
+
+- Auto Battler；
+
+- Auto Chess；
+
+- 自走棋；
+
+- 自动战斗构筑；
+
+- 阵容构筑竞技；
+
+- Shop-Based Auto Battler。
+
+
+本期不把“自动战斗”作为一个普通游戏内部模块处理，而把自走棋视为一个完整宏观类型。
+
+其独立核心在于：
+
+> **玩家主要不直接控制单位战斗动作，而是在有限准备阶段内，通过商店购买、共享棋子池竞争、棋子合成、经济投资、阵容羁绊和空间布阵预先构造一个战斗系统；随后单位根据统一战斗规则自主执行。每一轮战斗结果再反向改变生命、经济、对手信息与下一轮构筑空间，形成“构筑决策与自动验证”交替运行的竞技循环。**
+
+---
+
+# 1. 类型定位
 
 自走棋是一种以：
 
@@ -58,7 +103,7 @@
 
 ---
 
-## 2. 最核心的系统抽象
+# 2. 最核心的系统抽象
 
 自走棋可以被抽象为两个不断交替的宏观状态：
 
@@ -101,11 +146,11 @@ RTS 中玩家在战斗过程中持续控制。
 
 ---
 
-## 3. 核心设计范式
+# 3. 核心设计范式
 
 ---
 
-### 3.1 商店不是商品列表，而是受约束的概率入口
+## 3.1 商店不是商品列表，而是受约束的概率入口
 
 玩家不能自由购买全部棋子。
 
@@ -151,7 +196,7 @@ RTS 中玩家在战斗过程中持续控制。
 
 ---
 
-### 3.2 共享棋子池把“别人购买什么”变成自己的概率变量
+## 3.2 共享棋子池把“别人购买什么”变成自己的概率变量
 
 这是很多成熟自走棋中非常重要的机制。
 
@@ -188,7 +233,7 @@ RTS 中玩家在战斗过程中持续控制。
 
 ---
 
-### 3.3 阵容构筑不是单一棋子强度相加
+## 3.3 阵容构筑不是单一棋子强度相加
 
 一个阵容的强度通常由：
 
@@ -225,7 +270,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.4 合成系统把概率积累转换成确定性成长
+## 3.4 合成系统把概率积累转换成确定性成长
 
 典型模式：
 
@@ -259,7 +304,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.5 经济系统需要同时支持“现在变强”和“未来更强”
+## 3.5 经济系统需要同时支持“现在变强”和“未来更强”
 
 金币通常可以用于：
 
@@ -286,7 +331,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.6 人口等级连接“经济投资”和“阵容复杂度”
+## 3.6 人口等级连接“经济投资”和“阵容复杂度”
 
 玩家等级通常决定：
 
@@ -326,7 +371,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.7 自动战斗必须高度可解释
+## 3.7 自动战斗必须高度可解释
 
 玩家无法在战斗中直接纠正 AI。
 
@@ -355,7 +400,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.8 站位把空间问题加入纯数值构筑
+## 3.8 站位把空间问题加入纯数值构筑
 
 即使双方：
 
@@ -401,7 +446,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.9 对手信息使阵容不存在永久最优站位
+## 3.9 对手信息使阵容不存在永久最优站位
 
 如果玩家永远只面对一个固定 AI：
 
@@ -432,7 +477,7 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-### 3.10 战斗是构筑验证器，而不是主要输入阶段
+## 3.10 战斗是构筑验证器，而不是主要输入阶段
 
 自动战斗的设计职责是回答：
 
@@ -462,11 +507,11 @@ TeamPower = 所有UnitPower之和。
 
 ---
 
-## 4. 与相近类型的边界
+# 4. 与相近类型的边界
 
 ---
 
-### 4.1 与实时战略的区别
+## 4.1 与实时战略的区别
 
 仓库已有实时战略范式强调命令驱动的群体模拟与生产战争循环。
 
@@ -496,7 +541,7 @@ RTS中：
 
 ---
 
-### 4.2 与回合制战术 RPG 的区别
+## 4.2 与回合制战术 RPG 的区别
 
 仓库已有 `tactical-rpg`，强调离散战场、行动资源以及玩家逐回合直接做战术选择。
 
@@ -530,7 +575,7 @@ RTS中：
 
 ---
 
-### 4.3 与卡组构筑式 Roguelike 的区别
+## 4.3 与卡组构筑式 Roguelike 的区别
 
 仓库已有卡组构筑式 Roguelike，其核心是通过牌组改变未来行动抽取概率。
 
@@ -560,7 +605,7 @@ Auto Battler：
 
 ---
 
-### 4.4 与传统英雄养成游戏的区别
+## 4.4 与传统英雄养成游戏的区别
 
 英雄养成通常：
 
@@ -584,7 +629,7 @@ Auto Battler：
 
 ---
 
-## 5. 总体运行时架构
+# 5. 总体运行时架构
 
 推荐将运行时划分为以下核心域：
 
@@ -654,9 +699,9 @@ Auto Battler：
 
 ---
 
-## 6. 比赛生命周期
+# 6. 比赛生命周期
 
-### 6.1 AutoBattlerMatchDefinition
+## 6.1 AutoBattlerMatchDefinition
 
 建议字段：
 
@@ -689,7 +734,7 @@ Auto Battler：
 
 ---
 
-### 6.2 MatchRuntimeState
+## 6.2 MatchRuntimeState
 
 建议包含：
 
@@ -716,7 +761,7 @@ Auto Battler：
 
 ---
 
-### 6.3 MatchPhase
+## 6.3 MatchPhase
 
 推荐：
 
@@ -747,7 +792,7 @@ Auto Battler：
 
 ---
 
-## 7. RoundSchedulerSystem
+# 7. RoundSchedulerSystem
 
 自走棋的时间不是连续战争，而是：
 
@@ -755,7 +800,7 @@ Auto Battler：
 
 ---
 
-### 7.1 RoundDefinition
+## 7.1 RoundDefinition
 
 建议字段：
 
@@ -780,7 +825,7 @@ Auto Battler：
 
 ---
 
-### 7.2 RoundType
+## 7.2 RoundType
 
 可以包括：
 
@@ -799,7 +844,7 @@ Auto Battler：
 
 ---
 
-### 7.3 一轮标准流程
+## 7.3 一轮标准流程
 
 RoundStarted
 → PlanningTimerStart
@@ -819,7 +864,7 @@ RoundStarted
 
 ---
 
-### 7.4 为什么必须存在 PlanningLocked
+## 7.4 为什么必须存在 PlanningLocked
 
 倒计时最后一刻可能同时出现：
 
@@ -850,9 +895,9 @@ Planning结束
 
 ---
 
-## 8. 共享棋子池
+# 8. 共享棋子池
 
-### 8.1 UnitPoolDefinition
+## 8.1 UnitPoolDefinition
 
 建议字段：
 
@@ -873,7 +918,7 @@ Planning结束
 
 ---
 
-### 8.2 SharedUnitPoolState
+## 8.2 SharedUnitPoolState
 
 建议包含：
 
@@ -890,7 +935,7 @@ Planning结束
 
 ---
 
-### 8.3 棋子池状态守恒
+## 8.3 棋子池状态守恒
 
 任意棋子副本只能处于：
 
@@ -919,7 +964,7 @@ Planning结束
 
 ---
 
-### 8.4 为什么商店需要预留副本
+## 8.4 为什么商店需要预留副本
 
 假设某高阶棋子：
 
@@ -946,9 +991,9 @@ Offer消失：
 
 ---
 
-## 9. 商店系统
+# 9. 商店系统
 
-### 9.1 ShopOfferState
+## 9.1 ShopOfferState
 
 建议包含：
 
@@ -967,7 +1012,7 @@ Offer消失：
 
 ---
 
-### 9.2 ShopSlotOffer
+## 9.2 ShopSlotOffer
 
 建议字段：
 
@@ -986,7 +1031,7 @@ Offer消失：
 
 ---
 
-### 9.3 商店刷新流程
+## 9.3 商店刷新流程
 
 玩家请求刷新
 → 验证金币
@@ -1001,7 +1046,7 @@ Offer消失：
 
 ---
 
-### 9.4 Shop Lock
+## 9.4 Shop Lock
 
 锁定商店时：
 
@@ -1017,9 +1062,9 @@ Offer消失：
 
 ---
 
-## 10. 玩家等级与商店概率
+# 10. 玩家等级与商店概率
 
-### 10.1 PlayerLevelDefinition
+## 10.1 PlayerLevelDefinition
 
 建议字段：
 
@@ -1038,7 +1083,7 @@ Offer消失：
 
 ---
 
-### 10.2 PlayerLevelState
+## 10.2 PlayerLevelState
 
 建议包含：
 
@@ -1055,15 +1100,15 @@ Offer消失：
 
 ---
 
-### 10.3 等级影响两类系统
+## 10.3 等级影响两类系统
 
-#### Board Capacity
+### Board Capacity
 
 决定：
 
 最多可以上场几名单位。
 
-#### Shop Distribution
+### Shop Distribution
 
 决定：
 
@@ -1079,9 +1124,9 @@ Offer消失：
 
 ---
 
-## 11. 经济系统
+# 11. 经济系统
 
-### 11.1 PlayerEconomyState
+## 11.1 PlayerEconomyState
 
 建议包含：
 
@@ -1104,7 +1149,7 @@ Offer消失：
 
 ---
 
-### 11.2 Gold来源
+## 11.2 Gold来源
 
 包括：
 
@@ -1129,7 +1174,7 @@ Offer消失：
 
 ---
 
-### 11.3 Gold用途
+## 11.3 Gold用途
 
 包括：
 
@@ -1146,7 +1191,7 @@ Offer消失：
 
 ---
 
-## 12. 利息系统
+# 12. 利息系统
 
 典型：
 
@@ -1170,7 +1215,7 @@ Offer消失：
 
 ---
 
-### 12.1 利息职责
+## 12.1 利息职责
 
 促使玩家思考：
 
@@ -1182,7 +1227,7 @@ Offer消失：
 
 ---
 
-### 12.2 利息阈值问题
+## 12.2 利息阈值问题
 
 如果玩家有：
 
@@ -1208,9 +1253,9 @@ Offer消失：
 
 ---
 
-## 13. 连胜与连败
+# 13. 连胜与连败
 
-### 13.1 StreakState
+## 13.1 StreakState
 
 建议包含：
 
@@ -1229,7 +1274,7 @@ Offer消失：
 
 ---
 
-### 13.2 连胜
+## 13.2 连胜
 
 奖励：
 
@@ -1241,7 +1286,7 @@ Offer消失：
 
 ---
 
-### 13.3 连败
+## 13.3 连败
 
 奖励：
 
@@ -1257,7 +1302,7 @@ Offer消失：
 
 ---
 
-### 13.4 连败不能变成无风险最优策略
+## 13.4 连败不能变成无风险最优策略
 
 如果：
 
@@ -1282,9 +1327,9 @@ Offer消失：
 
 ---
 
-## 14. 棋子定义
+# 14. 棋子定义
 
-### 14.1 UnitDefinition
+## 14.1 UnitDefinition
 
 建议字段：
 
@@ -1315,7 +1360,7 @@ Offer消失：
 
 ---
 
-### 14.2 UnitInstance
+## 14.2 UnitInstance
 
 建议包含：
 
@@ -1340,7 +1385,7 @@ Offer消失：
 
 ---
 
-## 15. 棋子实例与池副本不是同一个概念
+# 15. 棋子实例与池副本不是同一个概念
 
 例如：
 
@@ -1376,9 +1421,9 @@ Offer消失：
 
 ---
 
-## 16. BenchSystem
+# 16. BenchSystem
 
-### 16.1 BenchState
+## 16.1 BenchState
 
 建议包含：
 
@@ -1395,7 +1440,7 @@ Offer消失：
 
 ---
 
-### 16.2 Bench职责
+## 16.2 Bench职责
 
 候补席并不是无意义中转站。
 
@@ -1416,7 +1461,7 @@ Offer消失：
 
 ---
 
-### 16.3 候补席压力
+## 16.3 候补席压力
 
 玩家可能拥有金币，却无法购买想要的棋子，因为：
 
@@ -1435,9 +1480,9 @@ BenchFull。
 
 ---
 
-## 17. BoardPlacementSystem
+# 17. BoardPlacementSystem
 
-### 17.1 BoardDefinition
+## 17.1 BoardDefinition
 
 建议字段：
 
@@ -1460,7 +1505,7 @@ BenchFull。
 
 ---
 
-### 17.2 BoardCell
+## 17.2 BoardCell
 
 建议包含：
 
@@ -1481,7 +1526,7 @@ BenchFull。
 
 ---
 
-### 17.3 DeploymentState
+## 17.3 DeploymentState
 
 建议包含：
 
@@ -1496,7 +1541,7 @@ BenchFull。
 
 ---
 
-### 17.4 部署验证
+## 17.4 部署验证
 
 检查：
 
@@ -1515,9 +1560,9 @@ BenchFull。
 
 ---
 
-## 18. 合成系统
+# 18. 合成系统
 
-### 18.1 MergeRuleDefinition
+## 18.1 MergeRuleDefinition
 
 建议字段：
 
@@ -1538,7 +1583,7 @@ BenchFull。
 
 ---
 
-### 18.2 MergeCandidateIndex
+## 18.2 MergeCandidateIndex
 
 不要每次购买后：
 
@@ -1552,7 +1597,7 @@ UnitDefinitionId + StarLevel
 
 ---
 
-### 18.3 合成流程
+## 18.3 合成流程
 
 玩家获得新单位
 → 更新MergeIndex
@@ -1569,7 +1614,7 @@ UnitDefinitionId + StarLevel
 
 ---
 
-### 18.4 合成身份策略
+## 18.4 合成身份策略
 
 推荐：
 
@@ -1595,9 +1640,9 @@ UnitDefinitionId + StarLevel
 
 ---
 
-## 19. 装备系统
+# 19. 装备系统
 
-### 19.1 AutoBattlerItemDefinition
+## 19.1 AutoBattlerItemDefinition
 
 建议字段：
 
@@ -1620,7 +1665,7 @@ UnitDefinitionId + StarLevel
 
 ---
 
-### 19.2 ItemAssignmentState
+## 19.2 ItemAssignmentState
 
 需要记录：
 
@@ -1637,7 +1682,7 @@ UnitDefinitionId + StarLevel
 
 ---
 
-### 19.3 装备不可随意拆除时
+## 19.3 装备不可随意拆除时
 
 给谁装备会变成：
 
@@ -1647,9 +1692,9 @@ UnitDefinitionId + StarLevel
 
 ---
 
-## 20. Trait / 羁绊系统
+# 20. Trait / 羁绊系统
 
-### 20.1 TraitDefinition
+## 20.1 TraitDefinition
 
 建议字段：
 
@@ -1670,7 +1715,7 @@ UnitDefinitionId + StarLevel
 
 ---
 
-### 20.2 TraitThreshold
+## 20.2 TraitThreshold
 
 例如：
 
@@ -1687,7 +1732,7 @@ Warrior：
 
 ---
 
-### 20.3 TraitRuntimeState
+## 20.3 TraitRuntimeState
 
 建议包含：
 
@@ -1706,7 +1751,7 @@ Warrior：
 
 ---
 
-## 21. 羁绊统计必须基于部署单位
+# 21. 羁绊统计必须基于部署单位
 
 通常：
 
@@ -1726,7 +1771,7 @@ ActiveBoardTraitCount
 
 ---
 
-## 22. 羁绊并非越多越好
+# 22. 羁绊并非越多越好
 
 如果每个单位拥有过多Traits：
 
@@ -1748,7 +1793,7 @@ ActiveBoardTraitCount
 
 ---
 
-## 23. 羁绊重算
+# 23. 羁绊重算
 
 以下事件触发：
 
@@ -1773,9 +1818,9 @@ ActiveBoardTraitCount
 
 ---
 
-## 24. 阵容快照
+# 24. 阵容快照
 
-### 24.1 CombatSnapshot
+## 24.1 CombatSnapshot
 
 建议包含：
 
@@ -1802,7 +1847,7 @@ ActiveBoardTraitCount
 
 ---
 
-### 24.2 CombatSnapshot职责
+## 24.2 CombatSnapshot职责
 
 战斗开始后：
 
@@ -1820,7 +1865,7 @@ Snapshot。
 
 ---
 
-## 25. Pairing / 对手匹配
+# 25. Pairing / 对手匹配
 
 多玩家比赛中，每轮需要决定：
 
@@ -1828,7 +1873,7 @@ Snapshot。
 
 ---
 
-### 25.1 PairingState
+## 25.1 PairingState
 
 建议包含：
 
@@ -1847,7 +1892,7 @@ Snapshot。
 
 ---
 
-### 25.2 Pairing规则
+## 25.2 Pairing规则
 
 可以考虑：
 
@@ -1864,7 +1909,7 @@ Snapshot。
 
 ---
 
-### 25.3 为什么不能完全随机
+## 25.3 为什么不能完全随机
 
 如果8人局：
 
@@ -1878,7 +1923,7 @@ Snapshot。
 
 ---
 
-## 26. 奇数玩家与Ghost
+# 26. 奇数玩家与Ghost
 
 当剩余玩家为奇数时，可以：
 
@@ -1899,9 +1944,9 @@ Snapshot。
 
 ---
 
-## 27. 自动战斗模拟
+# 27. 自动战斗模拟
 
-### 27.1 CombatRuntimeState
+## 27.1 CombatRuntimeState
 
 建议包含：
 
@@ -1930,7 +1975,7 @@ Snapshot。
 
 ---
 
-## 28. UnitCombatState
+# 28. UnitCombatState
 
 建议字段：
 
@@ -1963,7 +2008,7 @@ Snapshot。
 
 ---
 
-## 29. Auto Combat单位状态机
+# 29. Auto Combat单位状态机
 
 典型状态：
 
@@ -1994,9 +2039,9 @@ Spawn
 
 ---
 
-## 30. 目标选择规则
+# 30. 目标选择规则
 
-### 30.1 TargetingProfile
+## 30.1 TargetingProfile
 
 建议字段：
 
@@ -2019,7 +2064,7 @@ Spawn
 
 ---
 
-### 30.2 常见目标规则
+## 30.2 常见目标规则
 
 例如：
 
@@ -2037,7 +2082,7 @@ Spawn
 
 ---
 
-### 30.3 AI必须稳定
+## 30.3 AI必须稳定
 
 给定：
 
@@ -2063,7 +2108,7 @@ Spawn
 
 ---
 
-## 31. 移动与寻路
+# 31. 移动与寻路
 
 棋盘规模通常较小。
 
@@ -2084,7 +2129,7 @@ Spawn
 
 ---
 
-### 31.1 MovementReservation
+## 31.1 MovementReservation
 
 多个单位同时移动时需要防止：
 
@@ -2101,7 +2146,7 @@ Spawn
 
 ---
 
-### 31.2 死锁
+## 31.2 死锁
 
 例如：
 
@@ -2125,9 +2170,9 @@ Spawn
 
 ---
 
-## 32. 攻击系统
+# 32. 攻击系统
 
-### 32.1 BasicAttackDefinition
+## 32.1 BasicAttackDefinition
 
 建议字段：
 
@@ -2150,7 +2195,7 @@ Spawn
 
 ---
 
-### 32.2 近战
+## 32.2 近战
 
 进入攻击范围
 → Windup
@@ -2159,7 +2204,7 @@ Spawn
 
 ---
 
-### 32.3 远程
+## 32.3 远程
 
 Windup
 → 创建Projectile
@@ -2168,7 +2213,7 @@ Windup
 
 ---
 
-## 33. Mana / 能量系统
+# 33. Mana / 能量系统
 
 很多自走棋通过：
 
@@ -2183,7 +2228,7 @@ Windup
 
 ---
 
-### 33.1 ManaProfile
+## 33.1 ManaProfile
 
 建议字段：
 
@@ -2202,7 +2247,7 @@ Windup
 
 ---
 
-### 33.2 Mana的战术意义
+## 33.2 Mana的战术意义
 
 高承伤单位可能：
 
@@ -2214,9 +2259,9 @@ Windup
 
 ---
 
-## 34. Ability System
+# 34. Ability System
 
-### 34.1 AutoAbilityDefinition
+## 34.1 AutoAbilityDefinition
 
 建议字段：
 
@@ -2239,7 +2284,7 @@ Windup
 
 ---
 
-### 34.2 自动施法不能读取设计者“想要的最优目标”
+## 34.2 自动施法不能读取设计者“想要的最优目标”
 
 例如群体技能：
 
@@ -2253,7 +2298,7 @@ Windup
 
 ---
 
-## 35. 战斗随机性
+# 35. 战斗随机性
 
 允许：
 
@@ -2279,7 +2324,7 @@ Windup
 
 ---
 
-## 36. Combat RNG隔离
+# 36. Combat RNG隔离
 
 建议分离：
 
@@ -2304,7 +2349,7 @@ DeterministicRandomStream
 
 ---
 
-## 37. 战斗结束判定
+# 37. 战斗结束判定
 
 条件：
 
@@ -2320,7 +2365,7 @@ CombatTimeout。
 
 ---
 
-### 37.1 平局
+## 37.1 平局
 
 需要定义：
 
@@ -2335,7 +2380,7 @@ CombatTimeout。
 
 ---
 
-### 37.2 CombatTimeout
+## 37.2 CombatTimeout
 
 防止：
 
@@ -2347,7 +2392,7 @@ vs
 
 ---
 
-## 38. RoundDamageSystem
+# 38. RoundDamageSystem
 
 败方玩家通常受到：
 
@@ -2357,7 +2402,7 @@ vs
 
 ---
 
-### 38.1 RoundDamageContext
+## 38.1 RoundDamageContext
 
 建议包含：
 
@@ -2382,7 +2427,7 @@ vs
 
 ---
 
-### 38.2 轮次伤害是比赛节奏控制器
+## 38.2 轮次伤害是比赛节奏控制器
 
 前期伤害低：
 
@@ -2406,7 +2451,7 @@ vs
 
 ---
 
-## 39. PlayerElimination
+# 39. PlayerElimination
 
 玩家生命：
 
@@ -2418,7 +2463,7 @@ EliminationPending。
 
 ---
 
-### 39.1 淘汰事务
+## 39.1 淘汰事务
 
 锁定PlayerState
 → 确认生命
@@ -2434,7 +2479,7 @@ EliminationPending。
 
 ---
 
-## 40. 淘汰玩家棋子返回共享池
+# 40. 淘汰玩家棋子返回共享池
 
 这是共享池模式最容易遗漏的地方之一。
 
@@ -2458,7 +2503,7 @@ EliminationPending。
 
 ---
 
-## 41. Scouting System
+# 41. Scouting System
 
 玩家应该能够观察：
 
@@ -2479,7 +2524,7 @@ EliminationPending。
 
 ---
 
-### 41.1 为什么Scouting重要
+## 41.1 为什么Scouting重要
 
 如果玩家无法知道对手状态：
 
@@ -2499,7 +2544,7 @@ EliminationPending。
 
 ---
 
-## 42. Counter-Positioning
+# 42. Counter-Positioning
 
 典型例子：
 
@@ -2525,7 +2570,7 @@ Formation
 
 ---
 
-## 43. 阵容转型
+# 43. 阵容转型
 
 玩家中期发现：
 
@@ -2541,7 +2586,7 @@ Pivot / 转型。
 
 ---
 
-### 43.1 PivotState
+## 43.1 PivotState
 
 分析层可以记录：
 
@@ -2560,7 +2605,7 @@ Pivot / 转型。
 
 ---
 
-### 43.2 转型为什么重要
+## 43.2 转型为什么重要
 
 如果所有玩家：
 
@@ -2578,7 +2623,7 @@ Pivot / 转型。
 
 ---
 
-## 44. Flexible Unit / 过渡棋
+# 44. Flexible Unit / 过渡棋
 
 过渡棋子的价值在于：
 
@@ -2605,13 +2650,13 @@ Pivot / 转型。
 
 ---
 
-## 45. Tempo与Greed
+# 45. Tempo与Greed
 
 这是自走棋最典型的经济博弈之一。
 
 ---
 
-### 45.1 Tempo
+## 45.1 Tempo
 
 花钱：
 
@@ -2628,7 +2673,7 @@ Pivot / 转型。
 
 ---
 
-### 45.2 Greed
+## 45.2 Greed
 
 保留金币：
 
@@ -2645,7 +2690,7 @@ Pivot / 转型。
 
 ---
 
-### 45.3 玩家生命连接两者
+## 45.3 玩家生命连接两者
 
 如果生命健康：
 
@@ -2665,19 +2710,19 @@ BoardPower
 
 ---
 
-## 46. 核心状态三角
+# 46. 核心状态三角
 
 可以将玩家状态抽象为：
 
-#### Economy
+### Economy
 
 未来潜力。
 
-#### Board Strength
+### Board Strength
 
 当前战力。
 
-#### Health
+### Health
 
 剩余容错时间。
 
@@ -2701,7 +2746,7 @@ Economy
 
 ---
 
-## 47. 装备随机与阵容随机的耦合
+# 47. 装备随机与阵容随机的耦合
 
 如果：
 
@@ -2740,7 +2785,7 @@ PvE掉落决定装备。
 
 ---
 
-## 48. PvE Round
+# 48. PvE Round
 
 PvE回合可以承担：
 
@@ -2761,7 +2806,7 @@ PvE回合可以承担：
 
 ---
 
-## 49. Draft / 公共选秀
+# 49. Draft / 公共选秀
 
 部分自走棋使用：
 
@@ -2769,7 +2814,7 @@ PvE回合可以承担：
 
 ---
 
-### 49.1 DraftState
+## 49.1 DraftState
 
 建议包含：
 
@@ -2788,7 +2833,7 @@ PvE回合可以承担：
 
 ---
 
-### 49.2 选秀职责
+## 49.2 选秀职责
 
 可以：
 
@@ -2803,7 +2848,7 @@ PvE回合可以承担：
 
 ---
 
-## 50. Comeback机制
+# 50. Comeback机制
 
 自走棋天然存在雪球：
 
@@ -2822,7 +2867,7 @@ PvE回合可以承担：
 
 ---
 
-### 50.1 Comeback不能保证翻盘
+## 50.1 Comeback不能保证翻盘
 
 其目标是：
 
@@ -2834,7 +2879,7 @@ PvE回合可以承担：
 
 ---
 
-## 51. 完整事件与执行流程示例
+# 51. 完整事件与执行流程示例
 
 以下以：
 
@@ -2844,7 +2889,7 @@ PvE回合可以承担：
 
 ---
 
-### 51.1 第三轮
+## 51.1 第三轮
 
 玩家当前拥有：
 
@@ -2861,7 +2906,7 @@ PvE回合可以承担：
 
 ---
 
-### 51.2 商店刷新
+## 51.2 商店刷新
 
 出现：
 
@@ -2886,7 +2931,7 @@ PvE回合可以承担：
 
 ---
 
-### 51.3 当前收益
+## 51.3 当前收益
 
 BoardStrength明显提高。
 
@@ -2894,7 +2939,7 @@ BoardStrength明显提高。
 
 ---
 
-### 51.4 第六轮观察对手
+## 51.4 第六轮观察对手
 
 Scouting发现：
 
@@ -2908,7 +2953,7 @@ Warrior Trait。
 
 ---
 
-### 51.5 SharedPool变化
+## 51.5 SharedPool变化
 
 因为大量战士被其他玩家购买：
 
@@ -2920,7 +2965,7 @@ AvailableCopies下降。
 
 ---
 
-### 51.6 玩家获得装备
+## 51.6 玩家获得装备
 
 PvE掉落：
 
@@ -2930,7 +2975,7 @@ PvE掉落：
 
 ---
 
-### 51.7 转型信号出现
+## 51.7 转型信号出现
 
 玩家拥有：
 
@@ -2949,7 +2994,7 @@ PvE掉落：
 
 ---
 
-### 51.8 玩家开始Pivot
+## 51.8 玩家开始Pivot
 
 没有立即卖掉全部战士。
 
@@ -2968,7 +3013,7 @@ Tempo Board职责。
 
 ---
 
-### 51.9 第八轮
+## 51.9 第八轮
 
 玩家达到：
 
@@ -2980,7 +3025,7 @@ Tempo Board职责。
 
 ---
 
-### 51.10 提升人口
+## 51.10 提升人口
 
 Level提高：
 
@@ -2990,7 +3035,7 @@ BoardUnitLimit +1。
 
 ---
 
-### 51.11 商店出现关键四费召唤核心
+## 51.11 商店出现关键四费召唤核心
 
 玩家购买。
 
@@ -3002,7 +3047,7 @@ Bench已经接近满员。
 
 ---
 
-### 51.12 Trait重新计算
+## 51.12 Trait重新计算
 
 旧阵容：
 
@@ -3017,7 +3062,7 @@ Bench已经接近满员。
 
 ---
 
-### 51.13 战斗快照
+## 51.13 战斗快照
 
 PlanningTimer结束。
 
@@ -3030,7 +3075,7 @@ PlanningTimer结束。
 
 ---
 
-### 51.14 站位问题
+## 51.14 站位问题
 
 玩家法师Carry仍在左后角。
 
@@ -3038,7 +3083,7 @@ PlanningTimer结束。
 
 ---
 
-### 51.15 自动战斗
+## 51.15 自动战斗
 
 敌方刺客：
 
@@ -3052,7 +3097,7 @@ Carry在第一次技能释放前死亡。
 
 ---
 
-### 51.16 RoundDamage
+## 51.16 RoundDamage
 
 玩家受到：
 
@@ -3064,7 +3109,7 @@ Carry在第一次技能释放前死亡。
 
 ---
 
-### 51.17 Combat Review
+## 51.17 Combat Review
 
 战斗回放显示：
 
@@ -3077,7 +3122,7 @@ Carry在第一次技能释放前死亡。
 
 ---
 
-### 51.18 下一Planning
+## 51.18 下一Planning
 
 玩家通过Scouting发现：
 
@@ -3094,7 +3139,7 @@ Carry在第一次技能释放前死亡。
 
 ---
 
-### 51.19 再次战斗
+## 51.19 再次战斗
 
 刺客首先接触辅助单位。
 
@@ -3104,7 +3149,7 @@ Carry成功释放两次技能。
 
 ---
 
-### 51.20 中期完成转型
+## 51.20 中期完成转型
 
 玩家卖掉剩余Warrior过渡单位。
 
@@ -3117,7 +3162,7 @@ Carry成功释放两次技能。
 
 ---
 
-### 51.21 后期池状态变化
+## 51.21 后期池状态变化
 
 此前占用Warrior大量副本的一名玩家被淘汰。
 
@@ -3131,7 +3176,7 @@ Carry成功释放两次技能。
 
 ---
 
-### 51.22 完整循环
+## 51.22 完整循环
 
 随机商店
 → 重复棋子合成
@@ -3155,9 +3200,9 @@ Carry成功释放两次技能。
 
 ---
 
-## 52. 模块通信设计
+# 52. 模块通信设计
 
-### 52.1 Commands
+## 52.1 Commands
 
 典型命令：
 
@@ -3203,7 +3248,7 @@ Carry成功释放两次技能。
 
 ---
 
-### 52.2 Queries
+## 52.2 Queries
 
 适用于：
 
@@ -3241,7 +3286,7 @@ Query不能：
 
 ---
 
-### 52.3 Domain Events
+## 52.3 Domain Events
 
 包括：
 
@@ -3288,7 +3333,7 @@ Query不能：
 
 ---
 
-### 52.4 Presentation Events
+## 52.4 Presentation Events
 
 包括：
 
@@ -3324,7 +3369,7 @@ Query不能：
 
 ---
 
-## 53. 状态所有权
+# 53. 状态所有权
 
 推荐明确：
 
@@ -3378,7 +3423,7 @@ CombatUnit死亡。
 
 ---
 
-## 54. 存档与比赛恢复
+# 54. 存档与比赛恢复
 
 在线竞技通常以：
 
@@ -3417,7 +3462,7 @@ CombatUnit死亡。
 
 ---
 
-## 55. 重连中的关键问题
+# 55. 重连中的关键问题
 
 如果玩家在Planning断线：
 
@@ -3443,11 +3488,11 @@ CombatUnit死亡。
 
 ---
 
-## 56. 失败隔离
+# 56. 失败隔离
 
 ---
 
-### 56.1 Shop生成失败
+## 56.1 Shop生成失败
 
 如果某Tier的Pool已经接近耗尽：
 
@@ -3466,7 +3511,7 @@ CombatUnit死亡。
 
 ---
 
-### 56.2 Pool负数
+## 56.2 Pool负数
 
 任何操作导致：
 
@@ -3480,7 +3525,7 @@ PoolIntegrityError。
 
 ---
 
-### 56.3 Purchase失败
+## 56.3 Purchase失败
 
 如果玩家看到Offer后购买时：
 
@@ -3494,7 +3539,7 @@ PoolIntegrityError。
 
 ---
 
-### 56.4 Merge事务失败
+## 56.4 Merge事务失败
 
 合成期间必须保证：
 
@@ -3513,7 +3558,7 @@ PoolIntegrityError。
 
 ---
 
-### 56.5 BenchOverflow
+## 56.5 BenchOverflow
 
 某些奖励可能绕过普通购买产生棋子。
 
@@ -3534,7 +3579,7 @@ PoolIntegrityError。
 
 ---
 
-### 56.6 CombatSnapshot失败
+## 56.6 CombatSnapshot失败
 
 如果阵容存在非法状态：
 
@@ -3557,7 +3602,7 @@ PoolIntegrityError。
 
 ---
 
-### 56.7 AI死锁
+## 56.7 AI死锁
 
 Unit长期：
 
@@ -3578,7 +3623,7 @@ Unit长期：
 
 ---
 
-### 56.8 Combat超时
+## 56.8 Combat超时
 
 达到MaxCombatDuration：
 
@@ -3590,7 +3635,7 @@ Unit长期：
 
 ---
 
-### 56.9 PlayerElimination失败
+## 56.9 PlayerElimination失败
 
 玩家淘汰后：
 
@@ -3609,7 +3654,7 @@ PlayerState
 
 ---
 
-### 56.10 Pairing异常
+## 56.10 Pairing异常
 
 如果生成：
 
@@ -3623,11 +3668,11 @@ PairingValidation必须阻止。
 
 ---
 
-## 57. 调试与可观测性
+# 57. 调试与可观测性
 
 ---
 
-### 57.1 Shared Pool Inspector
+## 57.1 Shared Pool Inspector
 
 显示每个Unit：
 
@@ -3654,7 +3699,7 @@ Total
 
 ---
 
-### 57.2 Shop Probability Explainer
+## 57.2 Shop Probability Explainer
 
 给定玩家等级：
 
@@ -3671,7 +3716,7 @@ Tier概率
 
 ---
 
-### 57.3 Shop Roll Timeline
+## 57.3 Shop Roll Timeline
 
 记录：
 
@@ -3692,7 +3737,7 @@ Tier概率
 
 ---
 
-### 57.4 Economy Timeline
+## 57.4 Economy Timeline
 
 显示：
 
@@ -3719,7 +3764,7 @@ Tier概率
 
 ---
 
-### 57.5 Board Strength Timeline
+## 57.5 Board Strength Timeline
 
 可估算：
 
@@ -3738,7 +3783,7 @@ Tier概率
 
 ---
 
-### 57.6 Trait Debugger
+## 57.6 Trait Debugger
 
 显示：
 
@@ -3759,7 +3804,7 @@ Bench中的E：
 
 ---
 
-### 57.7 Merge Trace
+## 57.7 Merge Trace
 
 显示：
 
@@ -3775,7 +3820,7 @@ SourceCopyCount。
 
 ---
 
-### 57.8 AI Decision Inspector
+## 57.8 AI Decision Inspector
 
 针对Unit显示：
 
@@ -3792,7 +3837,7 @@ SourceCopyCount。
 
 ---
 
-### 57.9 Movement Heatmap
+## 57.9 Movement Heatmap
 
 显示战斗中：
 
@@ -3809,7 +3854,7 @@ SourceCopyCount。
 
 ---
 
-### 57.10 Combat Event Timeline
+## 57.10 Combat Event Timeline
 
 按时间：
 
@@ -3828,7 +3873,7 @@ B Cast
 
 ---
 
-### 57.11 Combat Replay
+## 57.11 Combat Replay
 
 必须支持：
 
@@ -3847,7 +3892,7 @@ B Cast
 
 ---
 
-### 57.12 Matchup Matrix
+## 57.12 Matchup Matrix
 
 统计：
 
@@ -3868,7 +3913,7 @@ B Cast
 
 ---
 
-### 57.13 Pairing History
+## 57.13 Pairing History
 
 显示：
 
@@ -3880,7 +3925,7 @@ Round 5：P1 vs P4
 
 ---
 
-### 57.14 Health Timeline
+## 57.14 Health Timeline
 
 显示：
 
@@ -3903,11 +3948,11 @@ Round 5：P1 vs P4
 
 ---
 
-## 58. 内容验证工具
+# 58. 内容验证工具
 
 ---
 
-### 58.1 SharedPool Conservation Test
+## 58.1 SharedPool Conservation Test
 
 随机执行：
 
@@ -3925,7 +3970,7 @@ Pool副本守恒。
 
 ---
 
-### 58.2 Shop Probability Monte Carlo
+## 58.2 Shop Probability Monte Carlo
 
 不同Level下模拟：
 
@@ -3939,7 +3984,7 @@ Pool副本守恒。
 
 ---
 
-### 58.3 Merge Simulation
+## 58.3 Merge Simulation
 
 测试：
 
@@ -3958,7 +4003,7 @@ Pool副本守恒。
 
 ---
 
-### 58.4 Trait Graph Validation
+## 58.4 Trait Graph Validation
 
 检查：
 
@@ -3977,7 +4022,7 @@ Pool副本守恒。
 
 ---
 
-### 58.5 Combat Determinism Test
+## 58.5 Combat Determinism Test
 
 相同：
 
@@ -3996,7 +4041,7 @@ CombatSnapshot
 
 ---
 
-### 58.6 AI Deadlock Test
+## 58.6 AI Deadlock Test
 
 生成：
 
@@ -4023,7 +4068,7 @@ CombatSnapshot
 
 ---
 
-### 58.7 Infinite Combat Test
+## 58.7 Infinite Combat Test
 
 自动生成：
 
@@ -4040,7 +4085,7 @@ CombatSnapshot
 
 ---
 
-### 58.8 Economy Simulation
+## 58.8 Economy Simulation
 
 模拟玩家策略：
 
@@ -4066,7 +4111,7 @@ CombatSnapshot
 
 ---
 
-### 58.9 Composition Diversity Test
+## 58.9 Composition Diversity Test
 
 大量Bot比赛统计：
 
@@ -4083,7 +4128,7 @@ CombatSnapshot
 
 ---
 
-### 58.10 Contest Pressure Test
+## 58.10 Contest Pressure Test
 
 统计：
 
@@ -4102,11 +4147,11 @@ CombatSnapshot
 
 ---
 
-## 59. 性能设计
+# 59. 性能设计
 
 ---
 
-### 59.1 Planning阶段低频逻辑
+## 59.1 Planning阶段低频逻辑
 
 规划阶段主要处理：
 
@@ -4123,7 +4168,7 @@ CombatSnapshot
 
 ---
 
-### 59.2 Combat阶段批量模拟
+## 59.2 Combat阶段批量模拟
 
 不同玩家战斗彼此独立。
 
@@ -4133,7 +4178,7 @@ CombatSnapshot
 
 ---
 
-### 59.3 Combat完全与表现解耦
+## 59.3 Combat完全与表现解耦
 
 服务器甚至可以：
 
@@ -4153,7 +4198,7 @@ CombatSnapshot
 
 ---
 
-### 59.4 Shared Definitions
+## 59.4 Shared Definitions
 
 所有UnitInstance共享：
 
@@ -4170,13 +4215,13 @@ UnitDefinition。
 
 ---
 
-### 59.5 Trait缓存
+## 59.5 Trait缓存
 
 只有BoardComposition变化时重算。
 
 ---
 
-### 59.6 Shop索引
+## 59.6 Shop索引
 
 按：
 
@@ -4190,11 +4235,11 @@ UnitAvailability
 
 ---
 
-## 60. 可扩展点
+# 60. 可扩展点
 
 ---
 
-### 60.1 新棋子
+## 60.1 新棋子
 
 主要提供：
 
@@ -4215,7 +4260,7 @@ Shop、Pool、Round主循环。
 
 ---
 
-### 60.2 新Trait
+## 60.2 新Trait
 
 提供：
 
@@ -4228,7 +4273,7 @@ Shop、Pool、Round主循环。
 
 ---
 
-### 60.3 新棋盘
+## 60.3 新棋盘
 
 提供：
 
@@ -4243,7 +4288,7 @@ Shop、Pool、Round主循环。
 
 ---
 
-### 60.4 新经济模式
+## 60.4 新经济模式
 
 可以支持：
 
@@ -4260,7 +4305,7 @@ Shop、Pool、Round主循环。
 
 ---
 
-### 60.5 非共享棋池模式
+## 60.5 非共享棋池模式
 
 SharedPoolSystem可以替换为：
 
@@ -4279,7 +4324,7 @@ IndependentPoolPolicy。
 
 ---
 
-### 60.6 新升星规则
+## 60.6 新升星规则
 
 可以：
 
@@ -4295,7 +4340,7 @@ IndependentPoolPolicy。
 
 ---
 
-### 60.7 Hero / Commander
+## 60.7 Hero / Commander
 
 部分自走棋允许玩家选择：
 
@@ -4316,7 +4361,7 @@ Commander。
 
 ---
 
-### 60.8 Roguelike Auto Battler
+## 60.8 Roguelike Auto Battler
 
 如果是单机：
 
@@ -4339,11 +4384,11 @@ EncounterSequence。
 
 ---
 
-## 61. 玩家体验设计
+# 61. 玩家体验设计
 
 ---
 
-### 61.1 商店概率需要“可理解，而不是完全可预测”
+## 61.1 商店概率需要“可理解，而不是完全可预测”
 
 玩家应知道：
 
@@ -4357,7 +4402,7 @@ EncounterSequence。
 
 ---
 
-### 61.2 共享棋池必须有可感知线索
+## 61.2 共享棋池必须有可感知线索
 
 如果共享池影响极强，但UI完全没有提示：
 
@@ -4380,7 +4425,7 @@ EncounterSequence。
 
 ---
 
-### 61.3 合成反馈必须非常清晰
+## 61.3 合成反馈必须非常清晰
 
 玩家购买第3张棋时：
 
@@ -4400,7 +4445,7 @@ EncounterSequence。
 
 ---
 
-### 61.4 Trait变化需要即时反馈
+## 61.4 Trait变化需要即时反馈
 
 棋子移动上场：
 
@@ -4415,7 +4460,7 @@ EncounterSequence。
 
 ---
 
-### 61.5 AI行为必须可学习
+## 61.5 AI行为必须可学习
 
 玩家应该通过反复观察逐渐理解：
 
@@ -4430,7 +4475,7 @@ EncounterSequence。
 
 ---
 
-### 61.6 败局应能被复盘
+## 61.6 败局应能被复盘
 
 战斗结束后可以告诉玩家：
 
@@ -4455,7 +4500,7 @@ EncounterSequence。
 
 ---
 
-### 61.7 战斗速度需要可调
+## 61.7 战斗速度需要可调
 
 因为自动战斗中：
 
@@ -4474,7 +4519,7 @@ EncounterSequence。
 
 ---
 
-### 61.8 Planning时间需要随着复杂度调整
+## 61.8 Planning时间需要随着复杂度调整
 
 早期：
 
@@ -4505,7 +4550,7 @@ EncounterSequence。
 
 ---
 
-### 61.9 Bench管理必须低摩擦
+## 61.9 Bench管理必须低摩擦
 
 支持：
 
@@ -4522,7 +4567,7 @@ EncounterSequence。
 
 ---
 
-### 61.10 新手应先理解经济，不应先背阵容表
+## 61.10 新手应先理解经济，不应先背阵容表
 
 推荐教学顺序：
 
@@ -4540,17 +4585,17 @@ EncounterSequence。
 
 ---
 
-## 62. 常见设计失败
+# 62. 常见设计失败
 
 ---
 
-### 62.1 战斗AI完全不可解释
+## 62.1 战斗AI完全不可解释
 
 玩家无法知道失败原因。
 
 ---
 
-### 62.2 每个单位都使用特例AI
+## 62.2 每个单位都使用特例AI
 
 新增棋子需要修改核心AI。
 
@@ -4558,7 +4603,7 @@ EncounterSequence。
 
 ---
 
-### 62.3 SharedPool没有副本守恒
+## 62.3 SharedPool没有副本守恒
 
 出现：
 
@@ -4568,13 +4613,13 @@ EncounterSequence。
 
 ---
 
-### 62.4 商店看到棋子时不预留PoolCopy
+## 62.4 商店看到棋子时不预留PoolCopy
 
 多个玩家同时购买最后一个副本。
 
 ---
 
-### 62.5 Merge不记录SourceCopyCount
+## 62.5 Merge不记录SourceCopyCount
 
 出售三星棋子时：
 
@@ -4582,7 +4627,7 @@ EncounterSequence。
 
 ---
 
-### 62.6 Bench容量太宽松
+## 62.6 Bench容量太宽松
 
 玩家可以无限保存所有潜在路线。
 
@@ -4590,13 +4635,13 @@ EncounterSequence。
 
 ---
 
-### 62.7 Bench容量过小
+## 62.7 Bench容量过小
 
 轻微随机波动就迫使玩家卖掉重要棋。
 
 ---
 
-### 62.8 羁绊过强
+## 62.8 羁绊过强
 
 阵容只看Trait数量。
 
@@ -4604,7 +4649,7 @@ EncounterSequence。
 
 ---
 
-### 62.9 羁绊过弱
+## 62.9 羁绊过弱
 
 玩家只购买最高数值棋子。
 
@@ -4612,7 +4657,7 @@ EncounterSequence。
 
 ---
 
-### 62.10 利息收益过高
+## 62.10 利息收益过高
 
 最优策略长期变成：
 
@@ -4620,7 +4665,7 @@ EncounterSequence。
 
 ---
 
-### 62.11 利息收益过低
+## 62.11 利息收益过低
 
 经济管理消失。
 
@@ -4628,25 +4673,25 @@ EncounterSequence。
 
 ---
 
-### 62.12 连败收益过高
+## 62.12 连败收益过高
 
 故意输成为默认策略。
 
 ---
 
-### 62.13 当前Board伤害过高
+## 62.13 当前Board伤害过高
 
 前期几次随机失败直接淘汰玩家。
 
 ---
 
-### 62.14 当前Board伤害过低
+## 62.14 当前Board伤害过低
 
 中后期大量无意义回合。
 
 ---
 
-### 62.15 高费用单位无条件优于低费
+## 62.15 高费用单位无条件优于低费
 
 所有阵容后期都变成：
 
@@ -4654,7 +4699,7 @@ EncounterSequence。
 
 ---
 
-### 62.16 低费三星无条件最强
+## 62.16 低费三星无条件最强
 
 玩家只需要无限刷低费。
 
@@ -4662,31 +4707,31 @@ EncounterSequence。
 
 ---
 
-### 62.17 装备和商店双重随机无法修正
+## 62.17 装备和商店双重随机无法修正
 
 玩家可能整局没有任何合理构筑。
 
 ---
 
-### 62.18 Pairing完全随机
+## 62.18 Pairing完全随机
 
 可能连续遭遇同一个最强玩家。
 
 ---
 
-### 62.19 战斗结果不能确定性重放
+## 62.19 战斗结果不能确定性重放
 
 出现平衡Bug时无法复现。
 
 ---
 
-### 62.20 Combat直接修改玩家Roster
+## 62.20 Combat直接修改玩家Roster
 
 战斗死亡导致棋子真的消失。
 
 ---
 
-## 63. 最小可行原型
+# 63. 最小可行原型
 
 一个能够验证自走棋核心范式的 MVP 可以从：
 
@@ -4696,7 +4741,7 @@ EncounterSequence。
 
 ---
 
-### 63.1 棋子
+## 63.1 棋子
 
 建议：
 
@@ -4717,7 +4762,7 @@ EncounterSequence。
 
 ---
 
-### 63.2 Trait
+## 63.2 Trait
 
 建议：
 
@@ -4742,7 +4787,7 @@ EncounterSequence。
 
 ---
 
-### 63.3 棋盘
+## 63.3 棋盘
 
 例如：
 
@@ -4752,7 +4797,7 @@ EncounterSequence。
 
 ---
 
-### 63.4 经济
+## 63.4 经济
 
 包含：
 
@@ -4773,7 +4818,7 @@ EncounterSequence。
 
 ---
 
-### 63.5 合成
+## 63.5 合成
 
 使用：
 
@@ -4787,7 +4832,7 @@ EncounterSequence。
 
 ---
 
-### 63.6 装备
+## 63.6 装备
 
 初期：
 
@@ -4799,7 +4844,7 @@ EncounterSequence。
 
 ---
 
-### 63.7 必要基础设施
+## 63.7 必要基础设施
 
 - MatchRuntimeState；
 
@@ -4836,7 +4881,7 @@ EncounterSequence。
 
 ---
 
-### 63.8 必要调试工具
+## 63.8 必要调试工具
 
 - SharedPoolInspector；
 
@@ -4861,7 +4906,7 @@ EncounterSequence。
 
 ---
 
-## 64. MVP核心验收问题
+# 64. MVP核心验收问题
 
 原型至少必须能够回答：
 
@@ -4913,7 +4958,7 @@ EncounterSequence。
 
 ---
 
-## 65. 推荐实施顺序
+# 65. 推荐实施顺序
 
 第一阶段：
 
@@ -5027,7 +5072,7 @@ EncounterSequence。
 
 ---
 
-## 66. 架构验收标准
+# 66. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -5098,11 +5143,11 @@ EncounterSequence。
 
 ---
 
-## 67. 可迁移到其他游戏的设计思想
+# 67. 可迁移到其他游戏的设计思想
 
 ---
 
-### 67.1 把“构筑”和“执行”拆开可以创造新的策略体验
+## 67.1 把“构筑”和“执行”拆开可以创造新的策略体验
 
 可迁移到：
 
@@ -5127,7 +5172,7 @@ EncounterSequence。
 
 ---
 
-### 67.2 共享池可以把概率随机转化为玩家间接竞争
+## 67.2 共享池可以把概率随机转化为玩家间接竞争
 
 可迁移到：
 
@@ -5150,7 +5195,7 @@ EncounterSequence。
 
 ---
 
-### 67.3 有限候选窗口可以制造动态构筑
+## 67.3 有限候选窗口可以制造动态构筑
 
 玩家不是：
 
@@ -5173,7 +5218,7 @@ EncounterSequence。
 
 ---
 
-### 67.4 重复对象可以转化为确定性成长进度
+## 67.4 重复对象可以转化为确定性成长进度
 
 三张相同棋：
 
@@ -5198,7 +5243,7 @@ EncounterSequence。
 
 ---
 
-### 67.5 当前强度、未来经济和容错资源可以形成三角循环
+## 67.5 当前强度、未来经济和容错资源可以形成三角循环
 
 自走棋中的：
 
@@ -5221,7 +5266,7 @@ Health
 
 ---
 
-### 67.6 生命可以表示“剩余试错时间”
+## 67.6 生命可以表示“剩余试错时间”
 
 这里的Health不只是战斗生命。
 
@@ -5242,7 +5287,7 @@ Health
 
 ---
 
-### 67.7 位置能够为自动执行系统增加第二策略维度
+## 67.7 位置能够为自动执行系统增加第二策略维度
 
 如果自动战斗只有：
 
@@ -5260,7 +5305,7 @@ Health
 
 ---
 
-### 67.8 AI系统越自动，越需要解释能力
+## 67.8 AI系统越自动，越需要解释能力
 
 玩家不能控制AI时：
 
@@ -5284,7 +5329,7 @@ Health
 
 ---
 
-### 67.9 Snapshot可以隔离规划状态和执行状态
+## 67.9 Snapshot可以隔离规划状态和执行状态
 
 PlanningState
 
@@ -5309,7 +5354,7 @@ ExecutionSnapshot。
 
 ---
 
-### 67.10 玩家淘汰可以反向改变剩余玩家的资源空间
+## 67.10 玩家淘汰可以反向改变剩余玩家的资源空间
 
 自走棋中：
 
@@ -5334,9 +5379,9 @@ ExecutionSnapshot。
 
 ---
 
-## 68. 本次防重记录
+# 68. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **自走棋 / Auto Battler。**
 
@@ -5355,7 +5400,7 @@ ExecutionSnapshot。
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家在周期性准备阶段内，通过有限金币、概率商店和共享棋子池不断购买、保留、出售和合成棋子；大量候选棋子被压缩成有限Board阵容，并通过Trait羁绊、装备和空间布阵构造一个自动执行的战斗系统。准备阶段结束后，系统冻结阵容快照，由统一Unit AI自动完成战斗；战斗结果改变玩家生命、经济、连胜连败和对手信息，再反过来决定下一轮是存钱、刷新、升级、转型还是继续强化现有阵容。
 
@@ -5390,7 +5435,7 @@ ExecutionSnapshot。
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 比赛由Planning与Auto Combat阶段交替组成；
 
@@ -5439,7 +5484,7 @@ ExecutionSnapshot。
 
 ---
 
-### 与仓库现有实时战略的防重边界
+## 与仓库现有实时战略的防重边界
 
 仓库中的实时战略重点是：
 
@@ -5485,7 +5530,7 @@ ExecutionSnapshot。
 
 ---
 
-### 与仓库现有回合制战术 RPG 的防重边界
+## 与仓库现有回合制战术 RPG 的防重边界
 
 `tactical-rpg` 已记录网格战场、行动资源与玩家直接决定单位行为的战术范式。
 
@@ -5505,7 +5550,7 @@ ExecutionSnapshot。
 
 ---
 
-### 与仓库现有卡组构筑式 Roguelike 的防重边界
+## 与仓库现有卡组构筑式 Roguelike 的防重边界
 
 现有卡组构筑式 Roguelike 通过牌组结构改变未来抽牌概率，并围绕选择、战斗、删牌和牌组收敛形成单局演化。
 
@@ -5538,7 +5583,7 @@ Auto Battler：
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - Auto Battler Match；
 
@@ -5641,7 +5686,7 @@ Auto Battler：
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次自走棋范式的内部系统，不应再次作为新的独立宏观游戏类型计入 `game-designs` 日报防重集合：
 

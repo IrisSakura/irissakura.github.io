@@ -18,6 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PAGE_COVER_TARGETS = {
   home: 'hero-section',
   portfolio: 'portfolio-header',
+  engineering: 'engineering-hero',
   framework: 'framework-hero',
   journal: 'journal-hero',
   blog: 'blog-hero',
@@ -25,12 +26,13 @@ const PAGE_COVER_TARGETS = {
   contact: 'contact-header'
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
   readJson('data/framework-quickstart.json'),
   readJson('data/projects.json'),
+  readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
   readJson('data/journal.json'),
   readJson('data/journal-source.json'),
@@ -45,6 +47,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, consum
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
 assertProjectFactsCurrent(projects, framework, journal);
+assertEngineeringSnapshot(irisEngineering);
 assertConsumerLabCurrent(consumerLab);
 assertBrandConfig(themeConfig);
 
@@ -157,6 +160,15 @@ const pageDefinitions = [
     canonical: '/',
   },
   {
+    file: 'pages/engineering.html',
+    key: 'portfolio',
+    coverKey: 'engineering',
+    title: 'Iris Engineering | 研发工作流控制面',
+    description: '查看 Iris Engineering 如何把仓库事实、研究提案、显式授权、受限执行与验证审计组织成失败关闭的研发工作流。',
+    canonical: '/pages/engineering.html',
+    schemaType: 'SoftwareApplication'
+  },
+  {
     file: 'pages/framework.html',
     key: 'framework',
     coverKey: 'framework',
@@ -180,7 +192,7 @@ const pageDefinitions = [
     key: 'portfolio',
     coverKey: 'portfolio',
     title: '作品集 | 游戏、Framework 玩法项目与研究',
-    description: `${projects.projects.length} 条真实作品主线与 ${consumerLab.cases.length} 个独立玩法项目，呈现从研究、框架到游戏实践的完整链路。`,
+    description: `${projects.projects.length} 条真实作品主线与 ${consumerLab.cases.length} 个独立玩法项目，呈现从研究、工程治理、框架到游戏实践的完整链路。`,
     canonical: '/pages/portfolio.html',
   },
   {
@@ -297,6 +309,7 @@ for (const page of pageDefinitions) {
     .replace('{{profileNickname}}', escapeHtml(site.profile.nickname))
     .replace('{{profileRole}}', escapeHtml(site.profile.role))
     .replace('{{gameHref}}', escapeAttribute(pageHref('pages/game.html')))
+    .replace('{{engineeringHref}}', escapeAttribute(pageHref('pages/engineering.html')))
     .replace('{{frameworkHref}}', escapeAttribute(pageHref('pages/framework.html')))
     .replace('{{journalHref}}', escapeAttribute(pageHref('pages/journal.html')))
     .replace('{{consumerLabHref}}', escapeAttribute(pageHref('pages/portfolio.html#consumer-lab')))
@@ -341,18 +354,21 @@ for (const page of pageDefinitions) {
       renderFrameworkQuickstart(frameworkQuickstart, frameworkAdoption)
     );
   }
+  if (page.file === 'pages/engineering.html') {
+    html = replaceGeneratedBlock(html, 'engineering-content', renderEngineeringContent(irisEngineering));
+  }
   if (page.file === 'index.html') {
     html = replaceGeneratedBlock(
       html,
       'home-content',
-      renderHomeContent(projects, publicJournal, framework, consumerLab, site)
+      renderHomeContent(projects, publicJournal, framework, irisEngineering, consumerLab, site)
     );
   }
   if (page.file === 'pages/art-music.html') {
     html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent());
   }
   if (page.file === 'pages/portfolio.html') {
-    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, consumerLab));
+    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab));
   }
   if (page.file === 'pages/journal.html') {
     html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(publicJournal, publicJournalSource, evidenceChains));
@@ -483,6 +499,37 @@ function assertBrandConfig(config) {
   }
 }
 
+function assertEngineeringSnapshot(snapshot) {
+  if (!snapshot || snapshot.schemaVersion !== 1 || snapshot.id !== 'iris-engineering') {
+    throw new Error('Iris Engineering snapshot must use schemaVersion 1 and the stable project id');
+  }
+  if (snapshot.operatingMode !== 'maintenance') {
+    throw new Error('Iris Engineering public status must match its reviewed maintenance mode');
+  }
+  const workflowIds = snapshot.workflow?.map((entry) => entry.id);
+  if (JSON.stringify(workflowIds) !== JSON.stringify(['observe', 'authorize', 'execute', 'verify'])) {
+    throw new Error('Iris Engineering workflow must preserve Observe, Authorize, Execute and Verify');
+  }
+  const capabilityIds = snapshot.capabilities?.map((entry) => entry.id);
+  if (JSON.stringify(capabilityIds) !== JSON.stringify([
+    'workflow-core',
+    'read-models',
+    'research-intake',
+    'agent-execution'
+  ])) {
+    throw new Error('Iris Engineering public capability set is incomplete');
+  }
+  if (!snapshot.evidence?.some((entry) => entry.state === 'failed-closed')) {
+    throw new Error('Iris Engineering evidence must retain the failed-closed external read result');
+  }
+  const publicJson = JSON.stringify(snapshot);
+  for (const forbidden of ['/Users/', '154.37.215.57', 'git@', 'credential-revoked', 'remote-matched']) {
+    if (publicJson.includes(forbidden)) {
+      throw new Error(`Iris Engineering public snapshot leaks ${forbidden}`);
+    }
+  }
+}
+
 function installBrandIdentity(html, prefix, config) {
   const brandStyles = `<!-- brand-styles:start -->
     <link rel="stylesheet" href="${prefix}${config.stylesheet}">
@@ -511,7 +558,7 @@ function replaceGeneratedBlock(html, name, content) {
   return html.replace(pattern, `<!-- ${name}:start -->\n${content}\n<!-- ${name}:end -->`);
 }
 
-function renderHomeContent(projectData, journalData, frameworkData, consumerLabData, siteData) {
+function renderHomeContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, siteData) {
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
   const { profile } = siteData;
@@ -580,7 +627,7 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
                         <article class="brand-branch brand-branch-iris" data-home-brand-branch>
                             <span>01 / IRIS</span>
                             <h3>Engineering &amp; Project Management</h3>
-                            <p>Engineering、Project Management、Workflow、Pipeline 与 Reliability。</p>
+                            <p>Iris Engineering 承接 Workflow、Project Management、Pipeline 与 Reliability。</p>
                         </article>
                         <article class="brand-branch brand-branch-sakura" data-home-brand-branch>
                             <span>02 / SAKURA</span>
@@ -596,26 +643,33 @@ function renderHomeContent(projectData, journalData, frameworkData, consumerLabD
             <div class="container">
                 <div class="section-heading">
                     <p class="section-kicker">MORE FOCUSED WORK</p>
-                    <h2>围绕代表作继续展开的三条主线</h2>
-                    <p>框架、研究与真实消费项目分别承接复用、判断和验证，让首页重点明确而不失完整脉络。</p>
+                    <h2>围绕代表作继续展开的四条主线</h2>
+                    <p>工程治理、框架、研究与真实消费项目分别承接授权、复用、判断和验证，让首页重点明确而不失完整脉络。</p>
                 </div>
                 <div class="focus-grid">
                     <article class="focus-card" data-home-focus>
-                        <p class="focus-index">01 · REUSABLE SYSTEMS</p>
+                        <p class="focus-index">01 · ENGINEERING CONTROL</p>
+                        <strong>${escapeHtml(irisEngineeringData.statusLabel)}</strong>
+                        <h3>Iris Engineering</h3>
+                        <p>把研究提案、显式授权、受限执行与验证审计组织成失败关闭的研发工作流。</p>
+                        <a href="pages/engineering.html" class="text-link">查看工程控制面</a>
+                    </article>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">02 · REUSABLE SYSTEMS</p>
                         <strong>${frameworkData.lifecycleCounts.Supported}</strong>
                         <h3>Sakura Framework</h3>
                         <p>把游戏中的稳定边界沉淀为可复用 Unity 包，并持续记录生命周期与验证状态。</p>
                         <a href="pages/framework.html" class="text-link">查看框架</a>
                     </article>
                     <article class="focus-card" data-home-focus>
-                        <p class="focus-index">02 · DESIGN RESEARCH</p>
+                        <p class="focus-index">03 · DESIGN RESEARCH</p>
                         <strong>${journalData.summary.gameDesignCount}</strong>
                         <h3>Sakura Design Journal</h3>
                         <p>从机制、源码和实际约束出发，保留可追溯的研究判断与设计结论。</p>
                         <a href="pages/journal.html" class="text-link">查看研究</a>
                     </article>
                     <article class="focus-card" data-home-focus>
-                        <p class="focus-index">03 · REAL CONSUMERS</p>
+                        <p class="focus-index">04 · REAL CONSUMERS</p>
                         <strong>${consumerLabData.cases.length}</strong>
                         <h3>Consumer Lab</h3>
                         <p>用独立玩法项目检验 Framework 能力是否真正落入可理解、可运行的游戏循环。</p>
@@ -745,6 +799,7 @@ function renderBrandContent() {
                         <h3>Iris Engineering</h3>
                         <strong>ENGINEER · ORGANIZE · DELIVER</strong>
                         <span>让研发事实、验证边界与受控自动化进入同一工作流。</span>
+                        <a href="engineering.html" class="text-link">查看工程控制面<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </article>
                     <article class="brand-product-card brand-product-framework">
                         <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-cubes-stacked"></i></div>
@@ -810,12 +865,90 @@ function renderBrandContent() {
     </div>`;
 }
 
-function renderPortfolioContent(projectData, journalData, frameworkData, consumerLabData) {
-  const order = ['sword-of-words', 'sakura-framework', 'sakura-design-journal'];
+function renderEngineeringContent(engineering) {
+  const workflow = engineering.workflow.map((step, index) => `
+                <li>
+                    <span class="engineering-step-index">0${index + 1}</span>
+                    <p>${escapeHtml(step.label)}</p>
+                    <h3>${escapeHtml(step.title)}</h3>
+                    <span>${escapeHtml(step.description)}</span>
+                </li>`).join('');
+  const capabilities = engineering.capabilities.map((capability, index) => `
+                <article class="engineering-capability-card">
+                    <p class="engineering-card-index">0${index + 1} / ${escapeHtml(capability.id.toUpperCase())}</p>
+                    <h3>${escapeHtml(capability.title)}</h3>
+                    <p>${escapeHtml(capability.description)}</p>
+                    <ul>${capability.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+                </article>`).join('');
+  const evidence = engineering.evidence.map((entry) => `
+                <article class="engineering-evidence-card engineering-evidence-${escapeAttribute(entry.state)}">
+                    <div><span>${entry.state === 'failed-closed' ? '失败关闭' : '本地通过'}</span><strong>${escapeHtml(entry.label)}</strong></div>
+                    <p>${escapeHtml(entry.summary)}</p>
+                </article>`).join('');
+  const boundaries = engineering.boundaries.map((boundary) => `<li>${escapeHtml(boundary)}</li>`).join('');
+
+  return `<header class="engineering-hero page-cover" data-page-cover="engineering">
+        <div class="container engineering-hero-inner">
+            <div>
+                <p class="section-kicker">${escapeHtml(engineering.eyebrow)}</p>
+                <h1>研发工作流控制面</h1>
+                <p>${escapeHtml(engineering.description)}</p>
+            </div>
+            <aside class="engineering-status" aria-label="Iris Engineering 当前状态">
+                <span>${escapeHtml(engineering.operatingMode)}</span>
+                <strong>${escapeHtml(engineering.statusLabel)}</strong>
+                <p>${escapeHtml(engineering.status)}</p>
+            </aside>
+        </div>
+    </header>
+
+    <div class="engineering-page">
+        <section class="engineering-intro" aria-labelledby="engineering-intro-title">
+            <div class="container engineering-intro-grid">
+                <div><p class="section-kicker">WHY IRIS ENGINEERING</p><h2 id="engineering-intro-title">${escapeHtml(engineering.headline)}</h2></div>
+                <p>Iris Engineering 不替代 Git、Gitea、Sakura Framework 或人的判断。它负责把分散事实变成只读视图，把研究建议变成待审批提案，再让获得授权的任务拥有明确目标、权限和恢复边界。</p>
+            </div>
+        </section>
+
+        <section class="engineering-workflow" aria-labelledby="engineering-workflow-title">
+            <div class="container">
+                <div class="engineering-section-heading"><p class="section-kicker">OBSERVE · AUTHORIZE · EXECUTE · VERIFY</p><h2 id="engineering-workflow-title">从事实到验证，四段互不越权</h2></div>
+                <ol>${workflow}
+                </ol>
+            </div>
+        </section>
+
+        <section class="engineering-capabilities" aria-labelledby="engineering-capabilities-title">
+            <div class="container">
+                <div class="engineering-section-heading"><p class="section-kicker">P1–P10 PRODUCT BASELINE</p><h2 id="engineering-capabilities-title">四个已经形成合同的能力层</h2><p>从 Workflow Core 到只读视图，再到 Research Artifact 与 Agent Execution，公开展示只描述已实现的本地产品边界。</p></div>
+                <div class="engineering-capability-grid">${capabilities}
+                </div>
+            </div>
+        </section>
+
+        <section class="engineering-evidence" aria-labelledby="engineering-evidence-title">
+            <div class="container engineering-evidence-grid">
+                <div class="engineering-section-heading"><p class="section-kicker">EVIDENCE BEFORE CLAIMS</p><h2 id="engineering-evidence-title">通过与失败都保留原本含义</h2><p>本地合同、只读行动视图与外部试点分别陈述；传输失败没有被重试或改写成接入成功。</p></div>
+                <div>${evidence}
+                </div>
+            </div>
+        </section>
+
+        <section class="engineering-boundaries" aria-labelledby="engineering-boundaries-title">
+            <div class="container engineering-boundary-grid">
+                <div><p class="section-kicker">CURRENT BOUNDARIES</p><h2 id="engineering-boundaries-title">当前边界</h2><p>失败关闭不是保守文案，而是产品设计的一部分：没有新的授权与证据，就不扩大能力结论。</p></div>
+                <ul>${boundaries}</ul>
+            </div>
+        </section>
+    </div>`;
+}
+
+function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData) {
+  const order = ['sword-of-words', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
   const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
   if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
   const cases = ordered.map((project, index) => {
-    const visual = renderPortfolioVisual(project, journalData, frameworkData);
+    const visual = renderPortfolioVisual(project, journalData, frameworkData, irisEngineeringData);
     return `<article class="portfolio-case portfolio-case-${escapeAttribute(project.category)}" id="project-${escapeAttribute(project.id)}">
                 <div class="portfolio-case-visual">${visual}</div>
                 <div class="portfolio-case-copy">
@@ -838,20 +971,21 @@ function renderPortfolioContent(projectData, journalData, frameworkData, consume
         <div class="container">
             <p class="section-kicker">WORK BEFORE CLAIMS</p>
             <h1>真实作品与工程证据</h1>
-            <p>先看做成了什么，再看研究和框架如何支撑这些结果。</p>
+            <p>先看做成了什么，再看研究、工程治理和框架如何支撑这些结果。</p>
         </div>
     </div>
     <div class="container">
         <section class="portfolio-journey" aria-labelledby="portfolio-journey-title">
             <div class="journey-heading">
-                <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究 → 范式 → 框架 → 游戏验证</h2></div>
+                <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究判断 → 工程治理 → 框架沉淀 → 游戏验证</h2></div>
                 <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </div>
-            <p class="journey-intro">展示顺序从游戏开始，因果链仍从研究开始：Journal 保存判断，Framework 沉淀复用能力，《言铸之剑》检验这些能力是否真正服务于玩法。</p>
+            <p class="journey-intro">展示顺序从游戏开始，因果链仍从研究开始：Journal 保存判断，Iris Engineering 约束授权与执行，Framework 沉淀复用能力，《言铸之剑》检验这些能力是否真正服务于玩法。</p>
             <ol class="journey-path">
-                <li><span class="journey-index">01</span><h3>研究问题</h3><p>理解引擎机制与游戏设计约束。</p></li>
-                <li><span class="journey-index">02</span><h3>工程抽象</h3><p>只把跨项目复用的结论沉淀为框架。</p></li>
-                <li><span class="journey-index">03</span><h3>作品验证</h3><p>用可玩循环、截图和限制校验价值。</p></li>
+                <li><span class="journey-index">01</span><h3>研究判断</h3><p>理解引擎机制、游戏设计与当前约束。</p></li>
+                <li><span class="journey-index">02</span><h3>显式授权</h3><p>把研究提案、目标和执行权限变成可复查合同。</p></li>
+                <li><span class="journey-index">03</span><h3>框架沉淀</h3><p>只把跨项目复用的结论沉淀为稳定边界。</p></li>
+                <li><span class="journey-index">04</span><h3>游戏验证</h3><p>用可玩循环、截图和限制校验实际价值。</p></li>
             </ol>
         </section>
         <section class="portfolio-cases" aria-label="${ordered.length} 个真实项目">
@@ -883,7 +1017,7 @@ function renderConsumerLab(consumerLabData) {
         </section>`;
 }
 
-function renderPortfolioVisual(project, journalData, frameworkData) {
+function renderPortfolioVisual(project, journalData, frameworkData, irisEngineeringData) {
   if (project.image) {
     return `<img src="${escapeAttribute(project.image)}" alt="${escapeAttribute(project.imageAlt)}"><span class="visual-label">PLAYABLE PROTOTYPE</span>`;
   }
@@ -894,6 +1028,12 @@ function renderPortfolioVisual(project, journalData, frameworkData) {
         <div><strong>${frameworkData.lifecycleCounts.Experimental}</strong><span>Experimental</span></div>
         <p>${frameworkData.lifecycleCounts.DocsOnly} DocsOnly · ${frameworkData.lifecycleCounts.Frozen} Frozen</p>
     </div><span class="visual-label">PUBLIC SNAPSHOT</span>`;
+  }
+  if (project.id === 'iris-engineering') {
+    return `<div class="engineering-proof-visual" aria-label="Iris Engineering 受控工作流">
+      ${irisEngineeringData.workflow.map((step, index) => `<div><span>0${index + 1}</span><strong>${escapeHtml(step.label)}</strong><small>${escapeHtml(step.title)}</small></div>`).join('')}
+      <p>EXPLICIT AUTHORIZATION · FAIL CLOSED</p>
+    </div><span class="visual-label">CONTROL PLANE</span>`;
   }
   return `<div class="journal-proof-visual" aria-label="Journal 精选研究主题">
       <p>${journalData.summary.gameDesignCount} 个设计主题 · ${journalData.summary.knowledgeStreamCount} 条知识流</p>
@@ -1478,6 +1618,7 @@ function renderPublicMarkdown(markdown) {
       a: ['href', 'name', 'target', 'rel'],
       img: ['src', 'alt', 'title', 'width', 'height'],
       code: ['class'],
+      h1: ['id'],
       h2: ['id'],
       h3: ['id'],
       h4: ['id'],

@@ -1,4 +1,57 @@
-## 1. 类型定位
+> Agent 标签：`ccg` `collectible` `tcg`
+
+---
+
+## 0. 本期选型与防重定位
+
+本期新增宏观游戏类型：
+
+**集换式卡牌对战 / Collectible Card Game / Trading Card Game。**
+
+常见名称包括：
+
+- CCG；
+
+- TCG；
+
+- Collectible Card Game；
+
+- Trading Card Game；
+
+- Digital Card Game；
+
+- 集换式卡牌游戏；
+
+- 构筑式卡牌对战；
+
+- 数字卡牌竞技。
+
+
+这里讨论的不是卡组构筑 Roguelike 中“一局内边打边拿牌”的临时构筑，也不是普通 RPG 中作为小游戏存在的卡牌玩法，而是一种能够独立支撑完整产品的宏观品类。
+
+其最具代表性的设计范式可以概括为：
+
+> 玩家在对局之外从长期持久化的个人牌池中构筑一副满足规则约束的牌组，将大量候选卡牌压缩成一个有限概率分布；进入对局后，系统把牌组实例化为具有严格区域归属、隐藏信息、顺序、所有权和控制权的比赛状态。玩家通过抽牌获得有限信息，以逐回合增长或恢复的资源交换卡牌、场面、生命、节奏与未来概率，并通过统一的行动合法性、目标选择、效果队列、触发器和状态检查系统解决复杂卡牌交互。最终胜负既取决于单回合操作，也取决于牌组在开局之前已经编码进去的概率结构和资源曲线。
+
+核心循环可以压缩为：
+
+**长期收集牌池
+→ 对局前构筑Deck
+→ Deck合法性验证
+→ 进入比赛并生成Match Deck
+→ 起手与调度
+→ 抽牌获得有限行动集合
+→ 分配资源
+→ 打出卡牌与对手交互
+→ 效果与触发器统一结算
+→ 场面、手牌、生命和牌库状态改变
+→ 根据剩余信息重新规划
+→ 胜负结算
+→ 返回长期牌池继续调整构筑。**
+
+---
+
+# 1. 类型定位
 
 集换式卡牌对战通常具备以下核心特征：
 
@@ -53,7 +106,7 @@
 
 ---
 
-## 2. 该类型最核心的设计对象不是“卡牌”，而是概率分布
+# 2. 该类型最核心的设计对象不是“卡牌”，而是概率分布
 
 玩家构筑一副：
 
@@ -92,7 +145,7 @@
 
 ---
 
-## 3. 长期牌池与对局卡牌必须分离
+# 3. 长期牌池与对局卡牌必须分离
 
 至少需要区分三个层次：
 
@@ -112,7 +165,7 @@
 
 ---
 
-## 4. CardDefinition
+# 4. CardDefinition
 
 描述：
 
@@ -170,7 +223,7 @@ CardDefinition应尽量不可变。
 
 ---
 
-## 5. CollectionEntry
+# 5. CollectionEntry
 
 描述：
 
@@ -199,7 +252,7 @@ CardDefinition应尽量不可变。
 
 ---
 
-## 6. MatchCardInstance
+# 6. MatchCardInstance
 
 描述：
 
@@ -244,7 +297,7 @@ CardDefinition应尽量不可变。
 
 ---
 
-## 7. 为什么OriginalOwner和CurrentController要分离
+# 7. 为什么OriginalOwner和CurrentController要分离
 
 卡牌可能存在：
 
@@ -281,7 +334,7 @@ CurrentController = B。
 
 ---
 
-## 8. DeckDefinition
+# 8. DeckDefinition
 
 长期构筑数据应该保存：
 
@@ -310,7 +363,7 @@ CurrentController = B。
 
 ---
 
-## 9. DeckEntry
+# 9. DeckEntry
 
 建议字段：
 
@@ -327,7 +380,7 @@ FireBolt ×3。
 
 ---
 
-## 10. Deck合法性验证
+# 10. Deck合法性验证
 
 DeckValidator至少检查：
 
@@ -356,7 +409,7 @@ DeckValidator至少检查：
 
 ---
 
-## 11. DeckValidationResult
+# 11. DeckValidationResult
 
 建议包含：
 
@@ -383,7 +436,7 @@ DeckValidator至少检查：
 
 ---
 
-## 12. 核心范式一：Collection、Deck和Match必须形成单向转换链
+# 12. 核心范式一：Collection、Deck和Match必须形成单向转换链
 
 推荐：
 
@@ -406,7 +459,7 @@ Collection
 
 ---
 
-## 13. ValidatedDeckSnapshot
+# 13. ValidatedDeckSnapshot
 
 建议包含：
 
@@ -431,7 +484,7 @@ Collection
 
 ---
 
-## 14. Match Deck实例化
+# 14. Match Deck实例化
 
 比赛开始：
 
@@ -449,7 +502,7 @@ DeckSnapshot
 
 ---
 
-## 15. 核心范式二：Zone是卡牌状态机的骨架
+# 15. 核心范式二：Zone是卡牌状态机的骨架
 
 绝大多数卡牌游戏都可以抽象为：
 
@@ -478,7 +531,7 @@ DeckSnapshot
 
 ---
 
-## 16. ZoneDefinition
+# 16. ZoneDefinition
 
 建议字段：
 
@@ -501,7 +554,7 @@ DeckSnapshot
 
 ---
 
-## 17. Ordered Zone与Unordered Zone必须分离
+# 17. Ordered Zone与Unordered Zone必须分离
 
 Deck通常：
 
@@ -523,7 +576,7 @@ Battlefield通常：
 
 ---
 
-## 18. ZoneMoveTransaction
+# 18. ZoneMoveTransaction
 
 所有卡牌移动都建议通过统一事务：
 
@@ -548,7 +601,7 @@ Battlefield通常：
 
 ---
 
-## 19. 为什么不能让卡牌Effect直接修改Zone字段
+# 19. 为什么不能让卡牌Effect直接修改Zone字段
 
 错误：
 
@@ -583,7 +636,7 @@ DrawCardEffect
 
 ---
 
-## 20. 隐藏信息必须存在于权威状态层，而不是只存在于UI
+# 20. 隐藏信息必须存在于权威状态层，而不是只存在于UI
 
 对手手牌：
 
@@ -607,7 +660,7 @@ DrawCardEffect
 
 ---
 
-## 21. PlayerViewProjection
+# 21. PlayerViewProjection
 
 服务器完整状态：
 
@@ -637,7 +690,7 @@ Secret：
 
 ---
 
-## 22. Hidden Information Policy
+# 22. Hidden Information Policy
 
 建议至少区分：
 
@@ -656,7 +709,7 @@ Secret：
 
 ---
 
-## 23. 信息泄露是卡牌游戏的一类核心作弊面
+# 23. 信息泄露是卡牌游戏的一类核心作弊面
 
 服务器不应无必要发送：
 
@@ -679,7 +732,7 @@ Secret：
 
 ---
 
-## 24. 核心范式三：Match State应由严格的阶段机驱动
+# 24. 核心范式三：Match State应由严格的阶段机驱动
 
 推荐不要只有：
 
@@ -706,7 +759,7 @@ TurnStart
 
 ---
 
-## 25. MatchPhaseDefinition
+# 25. MatchPhaseDefinition
 
 建议字段：
 
@@ -729,7 +782,7 @@ TurnStart
 
 ---
 
-## 26. TurnRuntimeState
+# 26. TurnRuntimeState
 
 建议包含：
 
@@ -752,7 +805,7 @@ TurnStart
 
 ---
 
-## 27. Action是否合法取决于上下文
+# 27. Action是否合法取决于上下文
 
 一张牌本身“可以使用”，
 
@@ -781,7 +834,7 @@ TurnStart
 
 ---
 
-## 28. GameAction
+# 28. GameAction
 
 统一抽象：
 
@@ -808,7 +861,7 @@ TurnStart
 
 ---
 
-## 29. ActionValidator
+# 29. ActionValidator
 
 标准流程：
 
@@ -828,7 +881,7 @@ TurnStart
 
 ---
 
-## 30. Cost System
+# 30. Cost System
 
 费用不一定只有Mana。
 
@@ -855,7 +908,7 @@ TurnStart
 
 ---
 
-## 31. CostDefinition
+# 31. CostDefinition
 
 建议字段：
 
@@ -876,7 +929,7 @@ TurnStart
 
 ---
 
-## 32. 支付费用与效果执行必须分离
+# 32. 支付费用与效果执行必须分离
 
 合法Action确认后：
 
@@ -896,7 +949,7 @@ TurnStart
 
 ---
 
-## 33. CostTransaction
+# 33. CostTransaction
 
 需要确保：
 
@@ -913,7 +966,7 @@ Mana扣除
 
 ---
 
-## 34. Targeting System
+# 34. Targeting System
 
 一张卡可能目标：
 
@@ -934,7 +987,7 @@ Mana扣除
 
 ---
 
-## 35. TargetingProfile
+# 35. TargetingProfile
 
 建议字段：
 
@@ -959,7 +1012,7 @@ Mana扣除
 
 ---
 
-## 36. 选择合法不等于结算时仍合法
+# 36. 选择合法不等于结算时仍合法
 
 玩家施法时：
 
@@ -992,7 +1045,7 @@ A已经不存在。
 
 ---
 
-## 37. 核心范式四：卡牌效果需要统一的效果解释器
+# 37. 核心范式四：卡牌效果需要统一的效果解释器
 
 如果每张卡都写一个：
 
@@ -1019,7 +1072,7 @@ A已经不存在。
 
 ---
 
-## 38. EffectDefinition
+# 38. EffectDefinition
 
 可以由原子效果组合：
 
@@ -1060,7 +1113,7 @@ A已经不存在。
 
 ---
 
-## 39. EffectExecutionContext
+# 39. EffectExecutionContext
 
 建议包含：
 
@@ -1087,7 +1140,7 @@ A已经不存在。
 
 ---
 
-## 40. 原子效果的重要性
+# 40. 原子效果的重要性
 
 例如：
 
@@ -1112,7 +1165,7 @@ Sequence
 
 ---
 
-## 41. Card Script可以存在，但应成为例外
+# 41. Card Script可以存在，但应成为例外
 
 少数真正特殊的卡：
 
@@ -1130,7 +1183,7 @@ Sequence
 
 ---
 
-## 42. 核心范式五：Stack / Queue决定“什么时候真正发生”
+# 42. 核心范式五：Stack / Queue决定“什么时候真正发生”
 
 一张法术被打出时：
 
@@ -1144,7 +1197,7 @@ Sequence
 
 ---
 
-## 43. StackItem
+# 43. StackItem
 
 建议字段：
 
@@ -1169,7 +1222,7 @@ Sequence
 
 ---
 
-## 44. 优先权循环
+# 44. 优先权循环
 
 典型：
 
@@ -1186,7 +1239,7 @@ Sequence
 
 ---
 
-## 45. 为什么响应顺序必须属于核心引擎
+# 45. 为什么响应顺序必须属于核心引擎
 
 如果每张“反制牌”自己寻找：
 
@@ -1204,7 +1257,7 @@ StackSystem
 
 ---
 
-## 46. 不使用Stack的游戏也需要EffectQueue
+# 46. 不使用Stack的游戏也需要EffectQueue
 
 即使游戏规则是：
 
@@ -1228,13 +1281,13 @@ StackSystem
 
 ---
 
-## 47. Trigger System
+# 47. Trigger System
 
 Trigger是大型卡牌游戏最复杂的核心之一。
 
 ---
 
-### 47.1 TriggerDefinition
+## 47.1 TriggerDefinition
 
 建议字段：
 
@@ -1255,7 +1308,7 @@ Trigger是大型卡牌游戏最复杂的核心之一。
 
 ---
 
-## 48. 常见Trigger
+# 48. 常见Trigger
 
 - OnPlay；
 
@@ -1284,7 +1337,7 @@ Trigger是大型卡牌游戏最复杂的核心之一。
 
 ---
 
-## 49. Trigger来源应该订阅领域事件
+# 49. Trigger来源应该订阅领域事件
 
 例如：
 
@@ -1304,7 +1357,7 @@ TriggerSystem查询：
 
 ---
 
-## 50. Trigger顺序
+# 50. Trigger顺序
 
 同一事件可能触发：
 
@@ -1335,7 +1388,7 @@ TriggerSystem查询：
 
 ---
 
-## 51. TriggerQueue
+# 51. TriggerQueue
 
 建议包含：
 
@@ -1356,7 +1409,7 @@ TriggerSystem查询：
 
 ---
 
-## 52. 无限触发循环
+# 52. 无限触发循环
 
 例如：
 
@@ -1374,7 +1427,7 @@ B：
 
 ---
 
-## 53. Trigger Loop Guard
+# 53. Trigger Loop Guard
 
 建议记录：
 
@@ -1401,7 +1454,7 @@ B：
 
 ---
 
-## 54. Replacement Effect
+# 54. Replacement Effect
 
 Trigger：
 
@@ -1435,7 +1488,7 @@ OnDamage Trigger
 
 ---
 
-## 55. Prevention和Replacement必须有独立阶段
+# 55. Prevention和Replacement必须有独立阶段
 
 推荐：
 
@@ -1449,7 +1502,7 @@ Intent
 
 ---
 
-## 56. State-Based Action
+# 56. State-Based Action
 
 一些状态不是由卡牌明确触发，
 
@@ -1468,7 +1521,7 @@ Intent
 
 ---
 
-## 57. StateCheckLoop
+# 57. StateCheckLoop
 
 每次Effect完成后：
 
@@ -1490,7 +1543,7 @@ Intent
 
 ---
 
-## 58. Unit / Permanent State
+# 58. Unit / Permanent State
 
 如果游戏存在战场单位，
 
@@ -1506,7 +1559,7 @@ BattlefieldEntity
 
 ---
 
-## 59. BattlefieldEntity
+# 59. BattlefieldEntity
 
 建议字段：
 
@@ -1537,7 +1590,7 @@ BattlefieldEntity
 
 ---
 
-## 60. 为什么Card和Entity可以分开
+# 60. 为什么Card和Entity可以分开
 
 同一Card可能：
 
@@ -1565,7 +1618,7 @@ Entity是：
 
 ---
 
-## 61. Token
+# 61. Token
 
 Token通常：
 
@@ -1590,13 +1643,13 @@ Token通常：
 
 ---
 
-## 62. Damage System
+# 62. Damage System
 
 卡牌游戏中的Damage也应该统一。
 
 ---
 
-### 62.1 DamageIntent
+## 62.1 DamageIntent
 
 建议包含：
 
@@ -1617,7 +1670,7 @@ Token通常：
 
 ---
 
-### 62.2 Damage流程
+## 62.2 Damage流程
 
 创建DamageIntent
 → Replacement
@@ -1630,7 +1683,7 @@ Token通常：
 
 ---
 
-## 63. 不要让卡牌直接写Health -= X
+# 63. 不要让卡牌直接写Health -= X
 
 否则：
 
@@ -1649,7 +1702,7 @@ Token通常：
 
 ---
 
-## 64. Buff与Modifier
+# 64. Buff与Modifier
 
 建议使用：
 
@@ -1657,7 +1710,7 @@ ModifierLayer。
 
 ---
 
-### 64.1 Modifier
+## 64.1 Modifier
 
 字段：
 
@@ -1684,7 +1737,7 @@ ModifierLayer。
 
 ---
 
-## 65. 派生属性不能长期直接写死
+# 65. 派生属性不能长期直接写死
 
 例如单位：
 
@@ -1718,7 +1771,7 @@ BaseValue
 
 ---
 
-## 66. Aura
+# 66. Aura
 
 Aura需要动态检查：
 
@@ -1734,7 +1787,7 @@ Source离场：
 
 ---
 
-## 67. Silence
+# 67. Silence
 
 Silence通常意味着：
 
@@ -1761,25 +1814,25 @@ Effect Suppression
 
 ---
 
-## 68. Copy与Transform
+# 68. Copy与Transform
 
 这是非常容易产生Bug的规则。
 
 必须明确Copy哪些层：
 
-### Copy Definition
+## Copy Definition
 
 只复制基础卡。
 
-### Copy Current State
+## Copy Current State
 
 复制Buff和Damage？
 
-### Transform
+## Transform
 
 保留伤害还是重置？
 
-### Created Copy
+## Created Copy
 
 是否拥有OriginalOwner？
 
@@ -1791,7 +1844,7 @@ CopyPolicy / TransformPolicy
 
 ---
 
-## 69. Card Creation
+# 69. Card Creation
 
 有些效果：
 
@@ -1811,7 +1864,7 @@ GenerationSource。
 
 ---
 
-## 70. Discover / Choice
+# 70. Discover / Choice
 
 游戏可能要求玩家：
 
@@ -1819,7 +1872,7 @@ GenerationSource。
 
 ---
 
-### 70.1 ChoiceInstance
+## 70.1 ChoiceInstance
 
 建议字段：
 
@@ -1842,7 +1895,7 @@ GenerationSource。
 
 ---
 
-## 71. 候选必须生成一次后冻结
+# 71. 候选必须生成一次后冻结
 
 不能：
 
@@ -1858,7 +1911,7 @@ UI刷新
 
 ---
 
-## 72. Random System
+# 72. Random System
 
 建议分离Random Stream：
 
@@ -1875,7 +1928,7 @@ UI刷新
 
 ---
 
-## 73. 为什么分流
+# 73. 为什么分流
 
 新增一个：
 
@@ -1887,7 +1940,7 @@ UI刷新
 
 ---
 
-## 74. Shuffle
+# 74. Shuffle
 
 洗牌必须服务器权威。
 
@@ -1903,7 +1956,7 @@ UI刷新
 
 ---
 
-## 75. Draw
+# 75. Draw
 
 Draw流程：
 
@@ -1916,7 +1969,7 @@ Draw流程：
 
 ---
 
-## 76. Hand Full
+# 76. Hand Full
 
 需要定义：
 
@@ -1937,7 +1990,7 @@ Draw流程：
 
 ---
 
-## 77. Fatigue / Deck Exhaustion
+# 77. Fatigue / Deck Exhaustion
 
 牌库为空以后抽牌：
 
@@ -1956,9 +2009,9 @@ Draw流程：
 
 ---
 
-## 78. Mulligan
+# 78. Mulligan
 
-### 78.1 MulliganState
+## 78.1 MulliganState
 
 建议包含：
 
@@ -1975,7 +2028,7 @@ Draw流程：
 
 ---
 
-## 79. Mulligan不能改变牌库总卡数
+# 79. Mulligan不能改变牌库总卡数
 
 退回的牌：
 
@@ -1989,7 +2042,7 @@ Draw流程：
 
 ---
 
-## 80. 起手公平
+# 80. 起手公平
 
 先手和后手可能存在天然差异。
 
@@ -2014,7 +2067,7 @@ StartingPlayerPolicy
 
 ---
 
-## 81. 核心资源模型
+# 81. 核心资源模型
 
 常见资源：
 
@@ -2033,7 +2086,7 @@ StartingPlayerPolicy
 
 ---
 
-### 81.1 ResourceState
+## 81.1 ResourceState
 
 建议字段：
 
@@ -2054,7 +2107,7 @@ StartingPlayerPolicy
 
 ---
 
-## 82. 资源曲线是牌组构筑核心之一
+# 82. 资源曲线是牌组构筑核心之一
 
 Deck有：
 
@@ -2080,25 +2133,25 @@ Deck有：
 
 ---
 
-## 83. Tempo、Value与Card Advantage
+# 83. Tempo、Value与Card Advantage
 
 这是CCG最代表性的三类宏观资源。
 
 ---
 
-### 83.1 Tempo
+## 83.1 Tempo
 
 当前回合对场面施加了多少即时压力。
 
 ---
 
-### 83.2 Value
+## 83.2 Value
 
 一张牌最终交换了多少总资源。
 
 ---
 
-### 83.3 Card Advantage
+## 83.3 Card Advantage
 
 双方可用卡牌数量差。
 
@@ -2118,7 +2171,7 @@ Tempo。
 
 ---
 
-## 84. 生命值也是资源
+# 84. 生命值也是资源
 
 高水平卡牌策略经常包含：
 
@@ -2147,7 +2200,7 @@ Tempo。
 
 ---
 
-## 85. 核心范式六：玩家每回合都在不同资源维度间交换
+# 85. 核心范式六：玩家每回合都在不同资源维度间交换
 
 一张卡可能：
 
@@ -2191,7 +2244,7 @@ Card Advantage持平。
 
 ---
 
-## 86. Attack System
+# 86. Attack System
 
 如果存在单位攻击，
 
@@ -2201,7 +2254,7 @@ AttackAction。
 
 ---
 
-### 86.1 AttackAction
+## 86.1 AttackAction
 
 建议字段：
 
@@ -2218,7 +2271,7 @@ AttackAction。
 
 ---
 
-## 87. Attack合法性
+# 87. Attack合法性
 
 检查：
 
@@ -2239,7 +2292,7 @@ AttackAction。
 
 ---
 
-## 88. Combat Resolution
+# 88. Combat Resolution
 
 根据规则可能：
 
@@ -2263,7 +2316,7 @@ B再调用A。
 
 ---
 
-## 89. Board Capacity
+# 89. Board Capacity
 
 战场如果有限槽位：
 
@@ -2284,7 +2337,7 @@ Board满时：
 
 ---
 
-## 90. Position
+# 90. Position
 
 部分CCG战场无位置。
 
@@ -2309,7 +2362,7 @@ Targeting、Attack和Aura规则。
 
 ---
 
-## 91. Turn Timer
+# 91. Turn Timer
 
 线上对局需要：
 
@@ -2317,7 +2370,7 @@ ActionTimer。
 
 ---
 
-### 91.1 TimerState
+## 91.1 TimerState
 
 建议包含：
 
@@ -2334,7 +2387,7 @@ ActionTimer。
 
 ---
 
-## 92. 超时处理
+# 92. 超时处理
 
 玩家超时：
 
@@ -2348,7 +2401,7 @@ EndTurn。
 
 ---
 
-## 93. 玩家断线
+# 93. 玩家断线
 
 短时断线：
 
@@ -2366,7 +2419,7 @@ Timer继续或暂停，
 
 ---
 
-## 94. 重连不能重新生成Random结果
+# 94. 重连不能重新生成Random结果
 
 例如：
 
@@ -2380,7 +2433,7 @@ ChoiceInstance必须持久存在于Match。
 
 ---
 
-## 95. Match State Snapshot
+# 95. Match State Snapshot
 
 建议包含：
 
@@ -2411,7 +2464,7 @@ ChoiceInstance必须持久存在于Match。
 
 ---
 
-## 96. Event Log
+# 96. Event Log
 
 卡牌游戏极其适合：
 
@@ -2421,7 +2474,7 @@ ChoiceInstance必须持久存在于Match。
 
 ---
 
-### 96.1 MatchEvent
+## 96.1 MatchEvent
 
 例如：
 
@@ -2450,7 +2503,7 @@ ChoiceInstance必须持久存在于Match。
 
 ---
 
-## 97. 为什么Event Log价值非常高
+# 97. 为什么Event Log价值非常高
 
 可以用于：
 
@@ -2471,11 +2524,11 @@ ChoiceInstance必须持久存在于Match。
 
 ---
 
-## 98. Replay可以基于Action Log或Event Log
+# 98. Replay可以基于Action Log或Event Log
 
 两种路线：
 
-### Action Replay
+## Action Replay
 
 记录玩家输入，
 
@@ -2489,7 +2542,7 @@ ChoiceInstance必须持久存在于Match。
 
 完全确定性。
 
-### Event Replay
+## Event Replay
 
 直接播放权威事件。
 
@@ -2503,7 +2556,7 @@ ChoiceInstance必须持久存在于Match。
 
 ---
 
-## 99. 卡牌版本变更与Replay
+# 99. 卡牌版本变更与Replay
 
 如果CardDefinition被Balance Patch修改：
 
@@ -2517,7 +2570,7 @@ MatchRulesVersion / CardRulesVersion。
 
 ---
 
-## 100. 服务器权威
+# 100. 服务器权威
 
 在线CCG非常适合：
 
@@ -2548,7 +2601,7 @@ Action Intent。
 
 ---
 
-## 101. Anti-Cheat
+# 101. Anti-Cheat
 
 重点并不是高速位置外挂，
 
@@ -2571,9 +2624,9 @@ Action Intent。
 
 ---
 
-## 102. Match Result
+# 102. Match Result
 
-### MatchResultSnapshot
+## MatchResultSnapshot
 
 建议字段：
 
@@ -2600,7 +2653,7 @@ Action Intent。
 
 ---
 
-## 103. 结算必须幂等
+# 103. 结算必须幂等
 
 MatchId只能结算一次：
 
@@ -2617,7 +2670,7 @@ MatchId只能结算一次：
 
 ---
 
-## 104. 长期Collection与比赛结果严格分离
+# 104. 长期Collection与比赛结果严格分离
 
 比赛中：
 
@@ -2635,7 +2688,7 @@ Create Copy of LegendaryCard。
 
 ---
 
-## 105. Format System
+# 105. Format System
 
 长期卡牌游戏通常会有：
 
@@ -2656,7 +2709,7 @@ Create Copy of LegendaryCard。
 
 ---
 
-### 105.1 FormatDefinition
+## 105.1 FormatDefinition
 
 建议字段：
 
@@ -2681,7 +2734,7 @@ Create Copy of LegendaryCard。
 
 ---
 
-## 106. Deck必须绑定FormatVersion
+# 106. Deck必须绑定FormatVersion
 
 玩家保存时合法，
 
@@ -2697,7 +2750,7 @@ Create Copy of LegendaryCard。
 
 ---
 
-## 107. Draft与Sealed模式
+# 107. Draft与Sealed模式
 
 这类模式也属于CCG生态，
 
@@ -2721,7 +2774,7 @@ Sealed：
 
 ---
 
-## 108. 运行时可以复用相同Match Engine
+# 108. 运行时可以复用相同Match Engine
 
 只替换：
 
@@ -2733,7 +2786,7 @@ DeckAcquisitionPolicy。
 
 ---
 
-## 109. Deck Editor
+# 109. Deck Editor
 
 长期体验里，Deck Editor几乎和Battle一样重要。
 
@@ -2764,7 +2817,7 @@ DeckAcquisitionPolicy。
 
 ---
 
-## 110. Deck Statistics
+# 110. Deck Statistics
 
 推荐显示：
 
@@ -2787,7 +2840,7 @@ DeckAcquisitionPolicy。
 
 ---
 
-## 111. Hypergeometric概率工具
+# 111. Hypergeometric概率工具
 
 假设Deck：
 
@@ -2811,7 +2864,7 @@ DrawProbabilityAnalyzer。
 
 ---
 
-## 112. Deck Probability Analyzer
+# 112. Deck Probability Analyzer
 
 输入：
 
@@ -2835,7 +2888,7 @@ DrawProbabilityAnalyzer。
 
 ---
 
-## 113. 这是CCG区别于普通技能构筑的关键分析工具
+# 113. 这是CCG区别于普通技能构筑的关键分析工具
 
 一套Combo理论非常强，
 
@@ -2849,7 +2902,7 @@ DrawProbabilityAnalyzer。
 
 ---
 
-## 114. Card Interaction Test
+# 114. Card Interaction Test
 
 大型卡池必须拥有自动规则测试。
 
@@ -2863,7 +2916,7 @@ DrawProbabilityAnalyzer。
 
 ---
 
-## 115. Card Rule Unit Test
+# 115. Card Rule Unit Test
 
 针对每张关键卡：
 
@@ -2873,7 +2926,7 @@ Arrange MatchState
 
 ---
 
-## 116. Pairwise Interaction Test
+# 116. Pairwise Interaction Test
 
 选择高风险Keyword组合：
 
@@ -2896,7 +2949,7 @@ Arrange MatchState
 
 ---
 
-## 117. Property-Based Test
+# 117. Property-Based Test
 
 例如：
 
@@ -2915,7 +2968,7 @@ Arrange MatchState
 
 ---
 
-## 118. Card Ownership Integrity
+# 118. Card Ownership Integrity
 
 任意MatchCardInstance：
 
@@ -2933,7 +2986,7 @@ Arrange MatchState
 
 ---
 
-## 119. Zone Integrity Auditor
+# 119. Zone Integrity Auditor
 
 开发模式每个Action后可检查：
 
@@ -2945,7 +2998,7 @@ Zone归属唯一。
 
 ---
 
-## 120. Infinite Combo Detection
+# 120. Infinite Combo Detection
 
 完全自动证明任意卡池不存在无限Combo：
 
@@ -2964,7 +3017,7 @@ Zone归属唯一。
 
 ---
 
-## 121. 无限Combo不一定必须禁止
+# 121. 无限Combo不一定必须禁止
 
 某些CCG允许：
 
@@ -2983,7 +3036,7 @@ Zone归属唯一。
 
 ---
 
-## 122. Loop Shortcut
+# 122. Loop Shortcut
 
 玩家证明：
 
@@ -3001,7 +3054,7 @@ Zone归属唯一。
 
 ---
 
-## 123. AI Opponent
+# 123. AI Opponent
 
 AI可以分：
 
@@ -3026,7 +3079,7 @@ GameAction。
 
 ---
 
-## 124. AI合法行动生成
+# 124. AI合法行动生成
 
 MatchEngine应该能够：
 
@@ -3045,7 +3098,7 @@ GenerateLegalActions(Player)。
 
 ---
 
-## 125. Legal Action Generator
+# 125. Legal Action Generator
 
 可能输出：
 
@@ -3062,7 +3115,7 @@ GenerateLegalActions(Player)。
 
 ---
 
-## 126. 不建议正式玩家UI完全依赖“枚举全部合法行动”
+# 126. 不建议正式玩家UI完全依赖“枚举全部合法行动”
 
 复杂卡池下：
 
@@ -3076,7 +3129,7 @@ UI可以：
 
 ---
 
-## 127. Match Determinism
+# 127. Match Determinism
 
 如果Random Seed固定，
 
@@ -3099,7 +3152,7 @@ Action Sequence固定，
 
 ---
 
-## 128. Random Resolution必须写入Event Log
+# 128. Random Resolution必须写入Event Log
 
 例如：
 
@@ -3115,7 +3168,7 @@ Event Log必须记录：
 
 ---
 
-## 129. Effect Versioning
+# 129. Effect Versioning
 
 CardDefinition更新后：
 
@@ -3129,7 +3182,7 @@ RulesPackageVersion。
 
 ---
 
-## 130. Hot Update边界
+# 130. Hot Update边界
 
 如果线上修改CardBalance：
 
@@ -3145,7 +3198,7 @@ RulesPackageVersion。
 
 ---
 
-## 131. 完整事件与执行流程示例
+# 131. 完整事件与执行流程示例
 
 以下以：
 
@@ -3155,7 +3208,7 @@ RulesPackageVersion。
 
 ---
 
-### 131.1 当前状态
+## 131.1 当前状态
 
 玩家A：
 
@@ -3191,7 +3244,7 @@ OnDeath：Summon Phoenix。
 
 ---
 
-### 131.2 A提交FlameSweep
+## 131.2 A提交FlameSweep
 
 效果：
 
@@ -3199,7 +3252,7 @@ OnDeath：Summon Phoenix。
 
 ---
 
-### 131.3 ActionValidator
+## 131.3 ActionValidator
 
 检查：
 
@@ -3216,7 +3269,7 @@ OnDeath：Summon Phoenix。
 
 ---
 
-### 131.4 CostTransaction
+## 131.4 CostTransaction
 
 扣除：
 
@@ -3228,7 +3281,7 @@ Hand → Stack。
 
 ---
 
-### 131.5 A让出Priority
+## 131.5 A让出Priority
 
 B没有响应，
 
@@ -3238,7 +3291,7 @@ B没有响应，
 
 ---
 
-### 131.6 Stack开始结算
+## 131.6 Stack开始结算
 
 FlameSweep进入EffectExecution。
 
@@ -3248,7 +3301,7 @@ DamageIntent。
 
 ---
 
-### 131.7 DamageResolver
+## 131.7 DamageResolver
 
 Wolf：
 
@@ -3264,7 +3317,7 @@ PhoenixEgg：
 
 ---
 
-### 131.8 DamageResolved
+## 131.8 DamageResolved
 
 三个单位：
 
@@ -3278,7 +3331,7 @@ CurrentDamage
 
 ---
 
-### 131.9 StateBasedAction检查
+## 131.9 StateBasedAction检查
 
 识别：
 
@@ -3294,7 +3347,7 @@ DeathBatch。
 
 ---
 
-### 131.10 DeathBatch处理
+## 131.10 DeathBatch处理
 
 三个单位同时离开Battlefield。
 
@@ -3308,7 +3361,7 @@ EntityDied事件。
 
 ---
 
-### 131.11 TriggerSystem收集
+## 131.11 TriggerSystem收集
 
 Scholar：
 
@@ -3320,7 +3373,7 @@ OnDeath → Summon Phoenix。
 
 ---
 
-### 131.12 Trigger排序
+## 131.12 Trigger排序
 
 根据规则：
 
@@ -3336,7 +3389,7 @@ Summon后入Queue。
 
 ---
 
-### 131.13 Trigger Resolution
+## 131.13 Trigger Resolution
 
 Draw 1执行：
 
@@ -3346,7 +3399,7 @@ Deck顶牌
 
 ---
 
-### 131.14 Phoenix触发执行
+## 131.14 Phoenix触发执行
 
 创建：
 
@@ -3356,7 +3409,7 @@ Phoenix Token。
 
 ---
 
-### 131.15 FlameSweep结束
+## 131.15 FlameSweep结束
 
 FlameSweep：
 
@@ -3364,7 +3417,7 @@ Stack → Graveyard。
 
 ---
 
-### 131.16 最终状态
+## 131.16 最终状态
 
 A：
 
@@ -3388,7 +3441,7 @@ B仍然保留：
 
 ---
 
-### 131.17 资源分析
+## 131.17 资源分析
 
 从Tempo看：
 
@@ -3408,7 +3461,7 @@ FlameSweep并没有取得完整三换一。
 
 ---
 
-### 131.18 这个例子体现了什么
+## 131.18 这个例子体现了什么
 
 一次看似简单的：
 
@@ -3436,9 +3489,9 @@ ActionValidation
 
 ---
 
-## 132. 模块通信设计
+# 132. 模块通信设计
 
-### 132.1 Commands / Actions
+## 132.1 Commands / Actions
 
 典型：
 
@@ -3463,7 +3516,7 @@ ActionValidation
 
 ---
 
-### 132.2 Queries
+## 132.2 Queries
 
 适用于：
 
@@ -3495,7 +3548,7 @@ Query不能：
 
 ---
 
-### 132.3 Domain Events
+## 132.3 Domain Events
 
 包括：
 
@@ -3534,7 +3587,7 @@ Query不能：
 
 ---
 
-### 132.4 Presentation Events
+## 132.4 Presentation Events
 
 包括：
 
@@ -3557,11 +3610,11 @@ Query不能：
 
 ---
 
-## 133. 失败隔离
+# 133. 失败隔离
 
 ---
 
-### 133.1 非法Action
+## 133.1 非法Action
 
 服务器拒绝。
 
@@ -3582,7 +3635,7 @@ Query不能：
 
 ---
 
-### 133.2 Effect执行中目标消失
+## 133.2 Effect执行中目标消失
 
 根据TargetPolicy：
 
@@ -3592,7 +3645,7 @@ Query不能：
 
 ---
 
-### 133.3 CardDefinition缺失
+## 133.3 CardDefinition缺失
 
 新Match构建时：
 
@@ -3606,7 +3659,7 @@ Query不能：
 
 ---
 
-### 133.4 Trigger来源离场
+## 133.4 Trigger来源离场
 
 已经进入TriggerQueue的触发：
 
@@ -3620,7 +3673,7 @@ Query不能：
 
 ---
 
-### 133.5 无限Trigger
+## 133.5 无限Trigger
 
 超过：
 
@@ -3643,7 +3696,7 @@ RulesLoopDetected。
 
 ---
 
-### 133.6 ZoneMove失败
+## 133.6 ZoneMove失败
 
 例如：
 
@@ -3661,7 +3714,7 @@ Fail Gracefully。
 
 ---
 
-### 133.7 Random Stream异常
+## 133.7 Random Stream异常
 
 如果Replay中Random调用数量不同：
 
@@ -3671,7 +3724,7 @@ DeterminismViolation。
 
 ---
 
-### 133.8 重连时Stack存在
+## 133.8 重连时Stack存在
 
 必须恢复：
 
@@ -3688,7 +3741,7 @@ DeterminismViolation。
 
 ---
 
-### 133.9 Match结算失败
+## 133.9 Match结算失败
 
 保留：
 
@@ -3702,11 +3755,11 @@ PendingCommit。
 
 ---
 
-## 134. 调试与可观测性
+# 134. 调试与可观测性
 
 ---
 
-### 134.1 Match State Inspector
+## 134.1 Match State Inspector
 
 显示：
 
@@ -3729,7 +3782,7 @@ PendingCommit。
 
 ---
 
-### 134.2 Card Instance Inspector
+## 134.2 Card Instance Inspector
 
 显示：
 
@@ -3752,7 +3805,7 @@ PendingCommit。
 
 ---
 
-### 134.3 Zone Inspector
+## 134.3 Zone Inspector
 
 每个Zone显示：
 
@@ -3767,7 +3820,7 @@ PendingCommit。
 
 ---
 
-### 134.4 Effect Trace
+## 134.4 Effect Trace
 
 针对一次Play：
 
@@ -3783,7 +3836,7 @@ Action
 
 ---
 
-### 134.5 Trigger Trace
+## 134.5 Trigger Trace
 
 显示：
 
@@ -3807,7 +3860,7 @@ E。
 
 ---
 
-### 134.6 Modifier Breakdown
+## 134.6 Modifier Breakdown
 
 例如单位攻击：
 
@@ -3828,7 +3881,7 @@ Attack = 9。
 
 ---
 
-### 134.7 Probability Inspector
+## 134.7 Probability Inspector
 
 随机效果显示开发日志：
 
@@ -3843,7 +3896,7 @@ Candidate Pool
 
 ---
 
-### 134.8 Deck Draw Analyzer
+## 134.8 Deck Draw Analyzer
 
 显示：
 
@@ -3857,7 +3910,7 @@ By Turn 10。
 
 ---
 
-### 134.9 Match Event Timeline
+## 134.9 Match Event Timeline
 
 按Sequence显示：
 
@@ -3871,7 +3924,7 @@ Draw。
 
 ---
 
-### 134.10 Replay Diff
+## 134.10 Replay Diff
 
 相同Action Replay：
 
@@ -3883,7 +3936,7 @@ Draw。
 
 ---
 
-### 134.11 Zone Integrity Checker
+## 134.11 Zone Integrity Checker
 
 每个结算稳定点：
 
@@ -3891,7 +3944,7 @@ Draw。
 
 ---
 
-### 134.12 Resource Ledger
+## 134.12 Resource Ledger
 
 追踪：
 
@@ -3905,11 +3958,11 @@ Refund。
 
 ---
 
-## 135. 内容验证工具
+# 135. 内容验证工具
 
 ---
 
-### 135.1 Card Schema Validation
+## 135.1 Card Schema Validation
 
 检查：
 
@@ -3930,7 +3983,7 @@ Refund。
 
 ---
 
-### 135.2 Deck Rule Test
+## 135.2 Deck Rule Test
 
 对所有正式Deck和AI Deck：
 
@@ -3938,7 +3991,7 @@ Refund。
 
 ---
 
-### 135.3 Effect Graph Validation
+## 135.3 Effect Graph Validation
 
 检查：
 
@@ -3955,7 +4008,7 @@ Refund。
 
 ---
 
-### 135.4 Trigger Cycle Static Analysis
+## 135.4 Trigger Cycle Static Analysis
 
 尝试发现：
 
@@ -3963,7 +4016,7 @@ Refund。
 
 ---
 
-### 135.5 Zone Conservation Test
+## 135.5 Zone Conservation Test
 
 随机生成：
 
@@ -3975,7 +4028,7 @@ CardInstance唯一归属。
 
 ---
 
-### 135.6 Deterministic Match Test
+## 135.6 Deterministic Match Test
 
 固定：
 
@@ -3989,7 +4042,7 @@ Action Sequence。
 
 ---
 
-### 135.7 Random Distribution Monte Carlo
+## 135.7 Random Distribution Monte Carlo
 
 验证：
 
@@ -3999,7 +4052,7 @@ Discover、RandomTarget、Shuffle
 
 ---
 
-### 135.8 Mana Curve Simulation
+## 135.8 Mana Curve Simulation
 
 自动模拟：
 
@@ -4013,7 +4066,7 @@ Discover、RandomTarget、Shuffle
 
 ---
 
-### 135.9 Matchup Simulation
+## 135.9 Matchup Simulation
 
 AI大量运行：
 
@@ -4027,7 +4080,7 @@ Deck A vs Deck B。
 
 ---
 
-### 135.10 Infinite Resource Property Test
+## 135.10 Infinite Resource Property Test
 
 检查：
 
@@ -4048,7 +4101,7 @@ Tokens。
 
 ---
 
-## 136. 性能设计
+# 136. 性能设计
 
 CCG通常不会遇到数千场景对象，
 
@@ -4058,7 +4111,7 @@ CCG通常不会遇到数千场景对象，
 
 ---
 
-### 136.1 Effect执行避免运行时反射
+## 136.1 Effect执行避免运行时反射
 
 Card Effect最好预编译为：
 
@@ -4066,7 +4119,7 @@ Card Effect最好预编译为：
 
 ---
 
-### 136.2 Trigger Index
+## 136.2 Trigger Index
 
 不要每发生一个Event：
 
@@ -4078,7 +4131,7 @@ EventType → ActiveTriggerIndex。
 
 ---
 
-### 136.3 Zone Index
+## 136.3 Zone Index
 
 按：
 
@@ -4097,7 +4150,7 @@ EventType → ActiveTriggerIndex。
 
 ---
 
-### 136.4 Modifier缓存
+## 136.4 Modifier缓存
 
 只有依赖发生变化时：
 
@@ -4107,7 +4160,7 @@ EventType → ActiveTriggerIndex。
 
 ---
 
-### 136.5 Event Log压缩
+## 136.5 Event Log压缩
 
 长局可能产生：
 
@@ -4121,7 +4174,7 @@ EventType → ActiveTriggerIndex。
 
 ---
 
-### 136.6 Spectator Projection
+## 136.6 Spectator Projection
 
 观战者根据权限获得：
 
@@ -4131,11 +4184,11 @@ EventType → ActiveTriggerIndex。
 
 ---
 
-## 137. 可扩展点
+# 137. 可扩展点
 
 ---
 
-### 137.1 新卡牌
+## 137.1 新卡牌
 
 理想情况下主要新增：
 
@@ -4150,7 +4203,7 @@ CardDefinition
 
 ---
 
-### 137.2 新Keyword
+## 137.2 新Keyword
 
 通过：
 
@@ -4164,7 +4217,7 @@ KeywordHandler / Modifier / Trigger
 
 ---
 
-### 137.3 新资源体系
+## 137.3 新资源体系
 
 可以扩展：
 
@@ -4180,7 +4233,7 @@ Land。
 
 ---
 
-### 137.4 新Zone
+## 137.4 新Zone
 
 例如：
 
@@ -4192,7 +4245,7 @@ CommanderZone。
 
 ---
 
-### 137.5 新Format
+## 137.5 新Format
 
 主要修改：
 
@@ -4204,7 +4257,7 @@ SpecialRules。
 
 ---
 
-### 137.6 新模式
+## 137.6 新模式
 
 Constructed；
 
@@ -4224,7 +4277,7 @@ Raid。
 
 ---
 
-### 137.7 新战场布局
+## 137.7 新战场布局
 
 可以扩展：
 
@@ -4243,11 +4296,11 @@ BattlefieldLayoutPolicy。
 
 ---
 
-## 138. 玩家体验设计
+# 138. 玩家体验设计
 
 ---
 
-### 138.1 卡牌文字必须和规则引擎语义一致
+## 138.1 卡牌文字必须和规则引擎语义一致
 
 如果文字写：
 
@@ -4272,7 +4325,7 @@ Deal 999 Damage。
 
 ---
 
-### 138.2 关键词用于压缩规则复杂度
+## 138.2 关键词用于压缩规则复杂度
 
 重复出现的规则：
 
@@ -4288,7 +4341,7 @@ Lifesteal；
 
 ---
 
-### 138.3 Tooltip必须能展开规则
+## 138.3 Tooltip必须能展开规则
 
 新玩家看到：
 
@@ -4302,7 +4355,7 @@ Lifesteal；
 
 ---
 
-### 138.4 动画不能阻塞逻辑理解
+## 138.4 动画不能阻塞逻辑理解
 
 线上卡牌常出现：
 
@@ -4324,7 +4377,7 @@ Turn Timer规则。
 
 ---
 
-### 138.5 高速模式可以压缩演出，但不能改变顺序
+## 138.5 高速模式可以压缩演出，但不能改变顺序
 
 动画快进：
 
@@ -4334,7 +4387,7 @@ Event Sequence必须完全相同。
 
 ---
 
-### 138.6 对手操作需要显示可理解的因果链
+## 138.6 对手操作需要显示可理解的因果链
 
 不要：
 
@@ -4351,7 +4404,7 @@ Card Played
 
 ---
 
-### 138.7 Hidden Information和可追踪历史需要平衡
+## 138.7 Hidden Information和可追踪历史需要平衡
 
 对手当前手牌隐藏。
 
@@ -4365,7 +4418,7 @@ Game History。
 
 ---
 
-### 138.8 Deck Editor需要及时显示构筑后果
+## 138.8 Deck Editor需要及时显示构筑后果
 
 加入一张7费卡以后：
 
@@ -4377,7 +4430,7 @@ DeckValidator立即报错。
 
 ---
 
-### 138.9 失败复盘应超越“对方抽得好”
+## 138.9 失败复盘应超越“对方抽得好”
 
 Result可以展示：
 
@@ -4400,125 +4453,125 @@ Result可以展示：
 
 ---
 
-## 139. 常见设计失败
+# 139. 常见设计失败
 
 ---
 
-### 139.1 Collection Card和Match Card共用同一实例
+## 139.1 Collection Card和Match Card共用同一实例
 
 比赛Buff污染长期资产。
 
 ---
 
-### 139.2 Deck Editor直接把Card对象塞进Match
+## 139.2 Deck Editor直接把Card对象塞进Match
 
 比赛中Deck修改影响正在进行的对局。
 
 ---
 
-### 139.3 隐藏信息只在UI隐藏
+## 139.3 隐藏信息只在UI隐藏
 
 客户端已经拿到对手手牌数据。
 
 ---
 
-### 139.4 CardEffect直接修改Health、Zone或Mana
+## 139.4 CardEffect直接修改Health、Zone或Mana
 
 统一规则被绕过。
 
 ---
 
-### 139.5 每张卡写一个独立脚本
+## 139.5 每张卡写一个独立脚本
 
 卡池扩张后交互维护成本爆炸。
 
 ---
 
-### 139.6 Trigger顺序依赖容器遍历顺序
+## 139.6 Trigger顺序依赖容器遍历顺序
 
 同一局在不同环境得到不同结果。
 
 ---
 
-### 139.7 Trigger没有无限循环保护
+## 139.7 Trigger没有无限循环保护
 
 服务器卡死。
 
 ---
 
-### 139.8 Damage通过“扣血再补血”实现免疫
+## 139.8 Damage通过“扣血再补血”实现免疫
 
 错误触发OnDamage。
 
 ---
 
-### 139.9 Copy逻辑散落在各个Card脚本
+## 139.9 Copy逻辑散落在各个Card脚本
 
 不同卡的Copy语义互相矛盾。
 
 ---
 
-### 139.10 Match中途读取最新CardDefinition
+## 139.10 Match中途读取最新CardDefinition
 
 热修Balance导致进行中的对局规则改变。
 
 ---
 
-### 139.11 Choice UI重新打开就重新随机
+## 139.11 Choice UI重新打开就重新随机
 
 玩家可以通过重连刷候选。
 
 ---
 
-### 139.12 Shuffle由客户端决定
+## 139.12 Shuffle由客户端决定
 
 可以预知抽牌顺序。
 
 ---
 
-### 139.13 DeckValidator只在编辑器保存时运行
+## 139.13 DeckValidator只在编辑器保存时运行
 
 禁卡更新后旧Deck仍进入排位。
 
 ---
 
-### 139.14 Score/Rank奖励非幂等
+## 139.14 Score/Rank奖励非幂等
 
 网络重试导致重复奖励。
 
 ---
 
-### 139.15 Card Text和Effect语义不一致
+## 139.15 Card Text和Effect语义不一致
 
 玩家无法建立规则直觉。
 
 ---
 
-### 139.16 动画就是逻辑状态机
+## 139.16 动画就是逻辑状态机
 
 玩家开动画加速会破坏结算。
 
 ---
 
-### 139.17 随机流没有分离
+## 139.17 随机流没有分离
 
 增加一个Random Effect改变未来洗牌。
 
 ---
 
-### 139.18 手牌、牌库和墓地只是几个普通List
+## 139.18 手牌、牌库和墓地只是几个普通List
 
 没有Zone级规则和唯一归属验证。
 
 ---
 
-### 139.19 AI直接读对手隐藏手牌
+## 139.19 AI直接读对手隐藏手牌
 
 PvE表现像作弊。
 
 ---
 
-### 139.20 牌组概率从不进入平衡分析
+## 139.20 牌组概率从不进入平衡分析
 
 设计者只看单卡强度，
 
@@ -4526,7 +4579,7 @@ PvE表现像作弊。
 
 ---
 
-## 140. 最小可行原型
+# 140. 最小可行原型
 
 一个能够验证CCG核心范式的MVP，不需要立刻制作数百张卡。
 
@@ -4536,7 +4589,7 @@ PvE表现像作弊。
 
 ---
 
-### 140.1 Card Type
+## 140.1 Card Type
 
 第一版：
 
@@ -4551,7 +4604,7 @@ PvE表现像作弊。
 
 ---
 
-### 140.2 Zone
+## 140.2 Zone
 
 实现：
 
@@ -4568,7 +4621,7 @@ PvE表现像作弊。
 
 ---
 
-### 140.3 Resource
+## 140.3 Resource
 
 使用：
 
@@ -4588,7 +4641,7 @@ Turn 2：
 
 ---
 
-### 140.4 基础Keyword
+## 140.4 基础Keyword
 
 只做：
 
@@ -4605,7 +4658,7 @@ Turn 2：
 
 ---
 
-### 140.5 Effect原语
+## 140.5 Effect原语
 
 至少：
 
@@ -4630,7 +4683,7 @@ Turn 2：
 
 ---
 
-### 140.6 Trigger
+## 140.6 Trigger
 
 支持：
 
@@ -4647,7 +4700,7 @@ Turn 2：
 
 ---
 
-### 140.7 Deck Editor
+## 140.7 Deck Editor
 
 支持：
 
@@ -4664,7 +4717,7 @@ Turn 2：
 
 ---
 
-### 140.8 必要基础设施
+## 140.8 必要基础设施
 
 - CardDefinition；
 
@@ -4711,7 +4764,7 @@ Turn 2：
 
 ---
 
-### 140.9 必要调试工具
+## 140.9 必要调试工具
 
 - MatchStateInspector；
 
@@ -4738,7 +4791,7 @@ Turn 2：
 
 ---
 
-## 141. MVP核心验收问题
+# 141. MVP核心验收问题
 
 原型至少必须能够回答：
 
@@ -4794,7 +4847,7 @@ Turn 2：
 
 ---
 
-## 142. 推荐实施顺序
+# 142. 推荐实施顺序
 
 第一阶段：
 
@@ -4914,7 +4967,7 @@ Turn 2：
 
 ---
 
-## 143. 架构验收标准
+# 143. 架构验收标准
 
 系统初步成立时，应满足：
 
@@ -4999,11 +5052,11 @@ Turn 2：
 
 ---
 
-## 144. 可迁移到其他游戏的设计思想
+# 144. 可迁移到其他游戏的设计思想
 
 ---
 
-### 144.1 构筑本质上可以是“未来行动概率”的设计
+## 144.1 构筑本质上可以是“未来行动概率”的设计
 
 可迁移到：
 
@@ -5028,7 +5081,7 @@ Turn 2：
 
 ---
 
-### 144.2 长期资产模板与单局运行实例应严格分离
+## 144.2 长期资产模板与单局运行实例应严格分离
 
 可以迁移到：
 
@@ -5053,7 +5106,7 @@ Turn 2：
 
 ---
 
-### 144.3 Zone是一种非常通用的状态归属模型
+## 144.3 Zone是一种非常通用的状态归属模型
 
 可迁移到：
 
@@ -5073,7 +5126,7 @@ Turn 2：
 
 ---
 
-### 144.4 “Intent → Replacement → Commit → Result”适合复杂规则结算
+## 144.4 “Intent → Replacement → Commit → Result”适合复杂规则结算
 
 可迁移到：
 
@@ -5098,7 +5151,7 @@ Turn 2：
 
 ---
 
-### 144.5 规则结果应只有一个权威来源
+## 144.5 规则结果应只有一个权威来源
 
 DamageResult、JudgmentResult、CraftResult等都适用。
 
@@ -5108,7 +5161,7 @@ DamageResult、JudgmentResult、CraftResult等都适用。
 
 ---
 
-### 144.6 事件触发器可以实现跨系统能力而不增加模块耦合
+## 144.6 事件触发器可以实现跨系统能力而不增加模块耦合
 
 卡牌效果监听：
 
@@ -5132,7 +5185,7 @@ DamageSystem无需知道：
 
 ---
 
-### 144.7 隐藏信息应该从数据访问层限制，而不是从表现层遮挡
+## 144.7 隐藏信息应该从数据访问层限制，而不是从表现层遮挡
 
 可迁移到：
 
@@ -5153,7 +5206,7 @@ DamageSystem无需知道：
 
 ---
 
-### 144.8 冻结Match Snapshot可以保护正在运行的业务不受外部配置变化影响
+## 144.8 冻结Match Snapshot可以保护正在运行的业务不受外部配置变化影响
 
 可迁移到：
 
@@ -5174,7 +5227,7 @@ DamageSystem无需知道：
 
 ---
 
-### 144.9 Event Log非常适合离散状态系统
+## 144.9 Event Log非常适合离散状态系统
 
 可迁移到：
 
@@ -5197,7 +5250,7 @@ Replay和Debug能力。
 
 ---
 
-### 144.10 资源价值必须同时考虑当前节奏和长期收益
+## 144.10 资源价值必须同时考虑当前节奏和长期收益
 
 Tempo、Value、Card Advantage这一思想可以迁移到：
 
@@ -5218,9 +5271,9 @@ Tempo、Value、Card Advantage这一思想可以迁移到：
 
 ---
 
-## 145. 本次防重记录
+# 145. 本次防重记录
 
-### 新增宏观游戏类型
+## 新增宏观游戏类型
 
 **集换式卡牌对战 / CCG / TCG。**
 
@@ -5243,7 +5296,7 @@ Tempo、Value、Card Advantage这一思想可以迁移到：
 
 ---
 
-### 核心范式
+## 核心范式
 
 玩家从跨局持久化Collection中选择有限卡牌构筑Deck，从而在比赛开始前主动设计自己的未来抽牌概率、资源曲线和胜利条件；Match开始后Deck被冻结并实例化为具有严格Zone归属、隐藏信息、顺序和所有权的卡牌实例。玩家只能利用逐步抽取出的有限Hand行动，并不断在Mana、Tempo、Card Advantage、Life和Board State之间进行交换。所有复杂卡牌交互通过统一Action Validation、Cost Transaction、Targeting、Effect Queue、Stack、Trigger、Replacement和State-Based Action系统完成，最终使庞大卡池能够在统一规则引擎中组合而无需每张卡重新实现整个游戏逻辑。
 
@@ -5265,7 +5318,7 @@ Tempo、Value、Card Advantage这一思想可以迁移到：
 
 ---
 
-### 核心识别特征
+## 核心识别特征
 
 - 玩家拥有长期持久卡牌集合；
 
@@ -5324,7 +5377,7 @@ Tempo、Value、Card Advantage这一思想可以迁移到：
 
 ---
 
-### 与仓库现有卡组构筑式 Roguelike 的防重边界
+## 与仓库现有卡组构筑式 Roguelike 的防重边界
 
 仓库已经存在 `deckbuilder-roguelike`。其核心是：
 
@@ -5366,7 +5419,7 @@ Tempo、Value、Card Advantage这一思想可以迁移到：
 
 ---
 
-### 与仓库现有自走棋的防重边界
+## 与仓库现有自走棋的防重边界
 
 自走棋同样存在：
 
@@ -5403,7 +5456,7 @@ CCG构筑对象主要是：
 
 ---
 
-### 与仓库现有回合制战术 RPG 的防重边界
+## 与仓库现有回合制战术 RPG 的防重边界
 
 回合制战术RPG主要处理：
 
@@ -5439,7 +5492,7 @@ CCG虽然同样使用回合，但最主要的不确定性不是：
 
 ---
 
-### 已覆盖的代表性子范式
+## 已覆盖的代表性子范式
 
 - CCG；
 
@@ -5568,7 +5621,7 @@ CCG虽然同样使用回合，但最主要的不确定性不是：
 
 ---
 
-### 后续防重复范围
+## 后续防重复范围
 
 以下主题属于本次集换式卡牌对战范式内部系统，不应再次作为新的完整宏观游戏类型计入 `game-designs` 日报防重集合：
 

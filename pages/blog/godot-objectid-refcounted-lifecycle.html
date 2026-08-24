@@ -23,7 +23,7 @@
     <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura","description":"跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？","url":"https://irissakura.github.io/pages/blog/godot-objectid-refcounted-lifecycle.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型","image":"https://irissakura.github.io/assets/social/pages-blog-godot-objectid-refcounted-lifecycle.png","datePublished":"2026-08-07","dateModified":"2026-08-07","about":["godot","objectid","refcounted"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura","description":"跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？","url":"https://irissakura.github.io/pages/blog/godot-objectid-refcounted-lifecycle.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型","image":"https://irissakura.github.io/assets/social/pages-blog-godot-objectid-refcounted-lifecycle.png","datePublished":"2026-08-07","dateModified":"2026-08-24","about":["godot","objectid","refcounted"]}</script>
     <!-- site-meta:end -->
     <title>身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -82,10 +82,11 @@
     </header>
     <nav class="profile-drawer-links" aria-label="个人快速导航">
         <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/framework.html" data-profile-quick-link><span>02</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>04</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../../pages/contact.html" data-profile-quick-link><span>05</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     </nav>
 </aside>
 <!-- site-navbar:end -->
@@ -94,7 +95,7 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/godot-source-research.html">从 Godot 源码理解引擎设计</a> · 发布于 2026-08-07 · 更新于 2026-08-07</p>
+            <p class="journal-kicker"><a href="series/godot-source-research.html">从 Godot 源码理解引擎设计</a> · 发布于 2026-08-07 · 更新于 2026-08-24</p>
             <h1>身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型</h1>
             <p class="blog-deck">跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？</p>
             <div class="note-tags"><span>godot</span><span>objectid</span><span>refcounted</span></div>

@@ -1,5 +1,3 @@
-## 命令驱动的群体模拟、生产战争循环与战争迷雾
-
 > Agent 标签：`fog-of-war` `real-time-strategy` `strategy`
 
 ---

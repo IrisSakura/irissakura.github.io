@@ -42,7 +42,7 @@ test('home profile, focus areas and research use asymmetric desktop compositions
 
   assert.match(css, /\.profile-hero-inner\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(12,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(css, /\.profile-identity\s*\{[^}]*grid-column:\s*span 8/s);
-  assert.match(css, /\.focus-grid\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/s);
+  assert.match(css, /\.focus-grid\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(css, /\.brand-ecosystem-inner\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*minmax\(220px,\s*0\.7fr\)\s+minmax\(0,\s*1\.3fr\)/s);
   assert.match(css, /\.brand-branch-grid\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
 

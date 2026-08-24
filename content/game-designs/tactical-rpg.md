@@ -1,5 +1,3 @@
-## 离散战场、行动经济与可验证战术因果链
-
 > Agent 标签：`tactical-rpg` `turn-based` `wargame`
 
 ---
