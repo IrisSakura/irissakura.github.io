@@ -105,9 +105,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>57</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>48</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>39</strong><span>完整博客</span><small>39 篇已公开</small></div>
+                <div class="journal-metric"><strong>58</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>50</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>41</strong><span>完整博客</span><small>41 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -200,6 +200,16 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-25</p>
+                    <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮相较上一轮基线 08a24dc4...，main 又前进了 7 个提交。真正影响工程状态的不是最新的品牌文档提交，而是三条能力收敛线：Pooling Ownership/Lifecycle 二次闭环、Event Diagnostics Surface、Editor Tools Installer 异步边界收敛。最新 Brand V4 只是把 “Frame · Power · Extend” 与真实产品证据、文档入口绑定起来，并明确品牌表达不能替代真实 Supported/Runner 状态，不改变 Package、API 或发布身份。 最重要的状态变化是：上一轮 Pooling 的 55 个失败已经关闭。当前 Pooling focused EditMode 已达到 139/139，Stable API fresh compare 为 0/0/0/0；46 包 affected closure 为…</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-24</p>
+                    <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮最重要的结论发生了变化。 前几轮仓库的主要风险是： 而当前实际 main 已经明显进入： 当前仓库仍明确声明： 根 README 同样明确写明：当前发布准备未启用，不应自行恢复 RC、Tag、Release、Evidence Backlog 或 Deferred 工作。 因此战略主线仍然正确。 但本轮出现了一个比前几轮更值得优先处理的问题： Supported Runtime Foundation 中的 Pooling 已经有大规模 Ownership/Lifecycle 重构进入 main，但对应工作仍然是 approved / deferred / not-run，并且当前另一个 Editor Tools 工作的 affected Unity lane 中，Framework.Pooling.Tests 实际出现了 55 个失败。</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-21</p>
                     <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>当前仓库仍然明确处于： 主目标仍是： 而不是： 当前生成 Work Status 明确记录： 并且 evidenceBacklog 与 deferred 明确禁止自动恢复。 这一战略状态与当前项目阶段是匹配的，应继续维持。 ---</p>
@@ -219,25 +229,22 @@
                     <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一轮基准 cf4e034c...，main 又前进了 6 个提交。变化高度集中在三条既有能力线上： 没有新增 UPM Package、Catalog Module、asmdef、内部依赖边，也没有扩大 Stable Public API。当前 Inventory 仍然是 146 Package、146 Catalog Module、69 Preset、866 asmdef、248 条内部依赖边；Stable API 仍为 27 Assemblies / 391 Types / 2403 Members。这一组指标与 cf4e034c... 完全一致。 这意味着近期开发行为总体已经从“横向增加框架能力”切换为： 这是符合当前主线的。 尤其 UI 体系已经完成一个值得记录的架构修正：ui-core 当前只依赖 core，ui-binding 只依赖 ui-core，完整 Unity ui 才承担…</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-17</p>
-                    <h3>UnityGameFramework 最新仓库审计与能力收敛计划</h3>
-                    <p>与上一轮相比，仓库已经发生了实质变化。 最重要的进展不是新增某个 Runtime 功能，而是此前启动的 Full Package Historical Audit 已经把保留执行范围内的 89 个 Package 全部推进到本地闭环状态。当前已经不再处于“逐包继续找问题”的中段，而是进入： 这一阶段。 最近进入 main 的提交也高度符合“完善已有能力”的主线： 最近提交序列包括 09920ea7 feat(rules): harden rule graph determinism (#709)、eef313b6 feat(pooling): converge pool scope diagnostics (#708)、5384c2aa feat(playerservices): harden player service group lifecycle (#706)、955a167b feat(profiling):…</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-16</p>
-                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮与上一轮相比没有新的代码提交，因此不应人为制造一批“新任务”。当前真正有价值的是重新核对 8 月 14 日收口后的仓库事实是否已经形成一个可以继续推进的稳定基线。 结论是： 仓库当前的开发方向是正确的，但还没有到应该继续推进第 26 个历史审计 Package 的状态。 当前最重要的工作仍然集中在已经暴露、但尚未彻底闭环的三个节点： 与此同时，全包历史审计已经证明这条路线是有效的：Audio、Config、Core、Dialogue、Editor Tools、Event、GameHelper、GAS、Input、Interaction、Movement、Pooling、Save、UI、MVVM、Rendering、CardCore、Swarm、Hitbox、RedDot 等一系列既有 Package 都是在不增加新 Package、不扩大 Stable…</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>57 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>58 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-precision-platformer">
+                    <p class="project-status">游戏设计范式 · 2026-08-25</p>
+                    <h3>精密平台跳跃 / Precision Platformer</h3>
+                    <p>把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…</p>
+                    <div class="note-tags"><span>hardcore</span><span>platformer</span><span>precision</span></div>
+                    <a class="note-link" href="journal/precision-platformer.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-auto-battler">
                     <p class="project-status">游戏设计范式 · 2026-08-24</p>
                     <h3>自走棋 / Auto Battler</h3>

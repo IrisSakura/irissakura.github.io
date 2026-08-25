@@ -1,0 +1,3660 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/precision-platformer.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="精密平台跳跃 / Precision Platformer | Sakura Design Journal">
+    <meta property="og:description" content="把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/precision-platformer.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-precision-platformer.png">
+    <meta property="og:image:alt" content="精密平台跳跃 / Precision Platformer | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="精密平台跳跃 / Precision Platformer | Sakura Design Journal">
+    <meta name="twitter:description" content="把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-precision-platformer.png">
+    <meta name="twitter:image:alt" content="精密平台跳跃 / Precision Platformer | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"精密平台跳跃 / Precision Platformer | Sakura Design Journal","description":"把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…","url":"https://irissakura.github.io/pages/journal/precision-platformer.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"精密平台跳跃 / Precision Platformer","image":"https://irissakura.github.io/assets/social/pages-journal-precision-platformer.png","dateModified":"2026-08-25","about":["hardcore","platformer","precision"]}</script>
+    <!-- site-meta:end -->
+    <title>精密平台跳跃 / Precision Platformer | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-precision-platformer"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-25</p><h1>精密平台跳跃 / Precision Platformer</h1><p>把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…</p><div class="note-tags"><span>hardcore</span><span>platformer</span><span>precision</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>hardcore</code> <code>platformer</code> <code>precision</code></p>
+</blockquote>
+<h2 id="输入宽容运动包络与观察起跳修正落点失败即时重试路线掌握的身体技能循环">输入宽容、运动包络与“观察—起跳—修正—落点—失败—即时重试—路线掌握”的身体技能循环</h2><hr />
+<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 Journal 的 <code>game-designs</code> 权威目录。当前生成的 <code>README.md</code> 标记 <strong>Entries: 57</strong>；现有目录已经登记传统 Roguelike、回合制战术 RPG、格斗、弹幕射击、节奏游戏、幸存者类、城市建设、MMORPG 等宏观范式。</p>
+<p>同时针对当前 <code>route-metadata.v1.json</code> 与生成索引检索：</p>
+<ul>
+<li><p><code>platformer</code></p>
+</li>
+<li><p><code>precision</code></p>
+</li>
+<li><p><code>跳跃</code></p>
+</li>
+</ul>
+<p>未发现独立的平台跳跃 / Precision Platformer 路由；虽然现有 <code>fighting</code> 条目的 Tags 中包含 <code>platform</code>，其语义属于格斗类型标签，并非平台跳跃范式。当前路由中的格斗范式核心仍然是帧级攻防、招式状态机与距离博弈。</p>
+<p>因此本期新增类型选择：</p>
+<p><strong>精密平台跳跃 / Precision Platformer。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Precision Platformer；</p>
+</li>
+<li><p>Platformer；</p>
+</li>
+<li><p>Hardcore Platformer；</p>
+</li>
+<li><p>2D Precision Platformer；</p>
+</li>
+<li><p>精密平台跳跃；</p>
+</li>
+<li><p>高难平台跳跃；</p>
+</li>
+<li><p>横版平台动作。</p>
+</li>
+</ul>
+<p>本文讨论的不是动作游戏中“角色也能跳”的移动模块，也不是银河城中作为地图能力门槛存在的平台移动，更不是跑酷游戏中持续速度和动作串联本身，而是一种可以独立支撑完整产品的宏观类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩家完成挑战；关卡则使用角色的可达运动包络构造成一系列具有明确安全窗口的空间问题。失败成本极低、重试极快，使玩家通过大量短周期尝试逐渐把视觉判断转化成身体记忆，最终从“理解路线”成长为“稳定执行路线”。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>观察下一段几何<br />
+→ 选择起跳位置和速度<br />
+→ 提交跳跃输入<br />
+→ 角色按照稳定运动规则进入空中<br />
+→ 玩家进行有限空中修正<br />
+→ 读取墙体、平台和危险物<br />
+→ 落地或衔接下一动作<br />
+→ 成功推进<br />
+或<br />
+→ 碰触危险 / 坠落<br />
+→ 几乎立即重生<br />
+→ 根据刚才误差调整下一次输入<br />
+→ 逐渐稳定通过整段路线。</strong></p>
+<p>本类型真正的核心不是：</p>
+<blockquote>
+<p>“跳得准。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>玩家必须能够确信：相同状态下给出相同输入，角色会以足够稳定的方式得到相同结果；只有建立这种运动可信度，高难失败才能被玩家解释为自己的决策或执行误差，而不是物理系统的不确定性。</strong></p>
+</blockquote>
+<hr />
+<h1 id="1-类型定位">1. 类型定位</h1><p>精密平台跳跃通常包含：</p>
+<ul>
+<li><p>单角色直接控制；</p>
+</li>
+<li><p>连续或网格化二维 / 三维空间；</p>
+</li>
+<li><p>高精度横向移动；</p>
+</li>
+<li><p>跳跃；</p>
+</li>
+<li><p>空中控制；</p>
+</li>
+<li><p>墙体；</p>
+</li>
+<li><p>单向平台；</p>
+</li>
+<li><p>危险物；</p>
+</li>
+<li><p>移动平台；</p>
+</li>
+<li><p>弹簧、冲刺等运动变体；</p>
+</li>
+<li><p>短挑战房间；</p>
+</li>
+<li><p>检查点；</p>
+</li>
+<li><p>高频死亡；</p>
+</li>
+<li><p>高频重试；</p>
+</li>
+<li><p>低随机性；</p>
+</li>
+<li><p>高可重复性；</p>
+</li>
+<li><p>输入时序；</p>
+</li>
+<li><p>路线学习；</p>
+</li>
+<li><p>速度保持；</p>
+</li>
+<li><p>高难度进阶路线；</p>
+</li>
+<li><p>收集品或计时挑战；</p>
+</li>
+<li><p>Replay / Ghost。</p>
+</li>
+</ul>
+<p>一个典型流程为：</p>
+<p>进入房间<br />
+→ 玩家观察平台和危险物<br />
+→ 尝试第一跳<br />
+→ 发现跳距不足<br />
+→ 立即重试<br />
+→ 更晚起跳<br />
+→ 成功落到小平台<br />
+→ 发现下一段需要墙跳<br />
+→ 尝试墙跳<br />
+→ 撞到顶部尖刺<br />
+→ 重试<br />
+→ 调整墙面离开时机<br />
+→ 成功进入下一段<br />
+→ 逐渐把三个独立动作连接成完整路线<br />
+→ 稳定通过房间<br />
+→ 进入下一检查点<br />
+→ 新机制加入<br />
+→ 原有移动原语重新组合<br />
+→ 最终能够连续执行长路线。</p>
+<p>因此该类型的核心成长主要发生在：</p>
+<p><strong>Player Execution Model。</strong></p>
+<p>角色本身可能从头到尾没有：</p>
+<ul>
+<li><p>等级；</p>
+</li>
+<li><p>装备；</p>
+</li>
+<li><p>数值成长。</p>
+</li>
+</ul>
+<p>但玩家本人对：</p>
+<ul>
+<li><p>加速度；</p>
+</li>
+<li><p>跳距；</p>
+</li>
+<li><p>重力；</p>
+</li>
+<li><p>空中修正；</p>
+</li>
+<li><p>墙跳；</p>
+</li>
+<li><p>冲刺距离；</p>
+</li>
+</ul>
+<p>的内在预测模型会越来越准确。</p>
+<hr />
+<h1 id="2-最核心的系统抽象movement-intent-motion-state-contact-result">2. 最核心的系统抽象：Movement Intent → Motion State → Contact → Result</h1><p>平台跳跃最适合把一次角色运动拆成四层：</p>
+<h2 id="input-intent">Input Intent</h2><p>玩家想做什么。</p>
+<p>例如：</p>
+<ul>
+<li><p>向右；</p>
+</li>
+<li><p>跳；</p>
+</li>
+<li><p>松开跳跃；</p>
+</li>
+<li><p>冲刺；</p>
+</li>
+<li><p>下落穿平台。</p>
+</li>
+</ul>
+<h2 id="motion-state">Motion State</h2><p>当前角色实际速度和运动模式。</p>
+<p>例如：</p>
+<ul>
+<li><p>Grounded；</p>
+</li>
+<li><p>Rising；</p>
+</li>
+<li><p>Falling；</p>
+</li>
+<li><p>WallSliding；</p>
+</li>
+<li><p>Dashing。</p>
+</li>
+</ul>
+<h2 id="contact-state">Contact State</h2><p>角色当前与什么几何接触。</p>
+<p>例如：</p>
+<ul>
+<li><p>Ground；</p>
+</li>
+<li><p>LeftWall；</p>
+</li>
+<li><p>RightWall；</p>
+</li>
+<li><p>Ceiling；</p>
+</li>
+<li><p>MovingPlatform。</p>
+</li>
+</ul>
+<h2 id="result">Result</h2><p>运动积分和碰撞求解后的新状态。</p>
+<p>因此核心链路应该是：</p>
+<p><strong>Input Sample<br />
+→ Intent Interpretation<br />
+→ Motion Rule<br />
+→ Collision Sweep<br />
+→ Contact Resolution<br />
+→ Final Position / Velocity<br />
+→ State Transition。</strong></p>
+<p>动画、粒子、音效都在这之后消费结果。</p>
+<hr />
+<h1 id="3-核心范式一movement-controller-应优先追求可预测性而不是物理真实性">3. 核心范式一：Movement Controller 应优先追求可预测性，而不是物理真实性</h1><p>真实物理中的人物跳跃可能包含：</p>
+<ul>
+<li><p>摩擦；</p>
+</li>
+<li><p>动量；</p>
+</li>
+<li><p>复杂碰撞；</p>
+</li>
+<li><p>刚体旋转；</p>
+</li>
+<li><p>接触解算误差。</p>
+</li>
+</ul>
+<p>精密平台游戏更关心：</p>
+<blockquote>
+<p>玩家能不能准确预测自己下一秒会在哪里。</p>
+</blockquote>
+<p>因此通常更适合：</p>
+<p><strong>Kinematic Character Motor</strong></p>
+<p>而不是完全交给通用 Rigidbody Physics。</p>
+<hr />
+<h1 id="4-playermotionstate">4. PlayerMotionState</h1><p>建议包含：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>FacingDirection；</p>
+</li>
+<li><p>GroundedState；</p>
+</li>
+<li><p>GroundNormal；</p>
+</li>
+<li><p>GroundEntityId；</p>
+</li>
+<li><p>WallContactState；</p>
+</li>
+<li><p>CeilingContactState；</p>
+</li>
+<li><p>CurrentMovementMode；</p>
+</li>
+<li><p>JumpState；</p>
+</li>
+<li><p>DashState；</p>
+</li>
+<li><p>CoyoteState；</p>
+</li>
+<li><p>JumpBufferState；</p>
+</li>
+<li><p>InputState；</p>
+</li>
+<li><p>LastSafePosition；</p>
+</li>
+<li><p>MotionVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="5-movementmode">5. MovementMode</h1><p>推荐至少区分：</p>
+<ul>
+<li><p>Grounded；</p>
+</li>
+<li><p>Rising；</p>
+</li>
+<li><p>Falling；</p>
+</li>
+<li><p>WallSliding；</p>
+</li>
+<li><p>Dashing；</p>
+</li>
+<li><p>Climbing；</p>
+</li>
+<li><p>Knockback；</p>
+</li>
+<li><p>Disabled。</p>
+</li>
+</ul>
+<p>不同游戏可以减少。</p>
+<p>关键在于：</p>
+<blockquote>
+<p>状态语义必须明确。</p>
+</blockquote>
+<p>不要依靠：</p>
+<p><code>velocity.y &gt; 0</code></p>
+<p>推断角色所有状态。</p>
+<hr />
+<h1 id="6-movementprofile">6. MovementProfile</h1><p>建议字段：</p>
+<ul>
+<li><p>MaximumGroundSpeed；</p>
+</li>
+<li><p>GroundAcceleration；</p>
+</li>
+<li><p>GroundDeceleration；</p>
+</li>
+<li><p>AirAcceleration；</p>
+</li>
+<li><p>MaximumAirSpeed；</p>
+</li>
+<li><p>GravityUp；</p>
+</li>
+<li><p>GravityDown；</p>
+</li>
+<li><p>JumpInitialVelocity；</p>
+</li>
+<li><p>JumpCutMultiplier；</p>
+</li>
+<li><p>MaximumFallSpeed；</p>
+</li>
+<li><p>CoyoteDuration；</p>
+</li>
+<li><p>JumpBufferDuration；</p>
+</li>
+<li><p>GroundSnapDistance；</p>
+</li>
+<li><p>CornerCorrectionDistance；</p>
+</li>
+<li><p>WallSlideSpeed；</p>
+</li>
+<li><p>WallJumpVelocity；</p>
+</li>
+<li><p>DashVelocity；</p>
+</li>
+<li><p>DashDuration；</p>
+</li>
+<li><p>MovementVersion。</p>
+</li>
+</ul>
+<p>它是：</p>
+<p>角色运动手感的事实源。</p>
+<hr />
+<h1 id="7-为什么上升和下降可以使用不同重力">7. 为什么上升和下降可以使用不同重力</h1><p>传统真实抛物线：</p>
+<p>上升和下降同一个Gravity。</p>
+<p>但平台游戏经常使用：</p>
+<h3 id="上升">上升</h3><p>较低重力。</p>
+<p>让起跳更可控制。</p>
+<h3 id="下降">下降</h3><p>更高重力。</p>
+<p>让角色快速落地。</p>
+<p>形成：</p>
+<p>更紧凑的动作节奏。</p>
+<p>因此：</p>
+<p><code>GravityUp</code></p>
+<p>和：</p>
+<p><code>GravityDown</code></p>
+<p>可以独立。</p>
+<p>这不是物理Bug。</p>
+<p>而是：</p>
+<p><strong>Game Feel Rule。</strong></p>
+<hr />
+<h1 id="8-核心范式二跳跃应该表达玩家意图而不是只接受完美输入时刻">8. 核心范式二：跳跃应该表达“玩家意图”，而不是只接受完美输入时刻</h1><p>玩家在平台边缘：</p>
+<p>提前几帧按Jump。</p>
+<p>人类意图非常明确：</p>
+<p>“落地以后立即跳。”</p>
+<p>如果系统只检查：</p>
+<p>当前Frame Grounded</p>
+<p>则输入直接丢失。</p>
+<p>这会让角色显得：</p>
+<p>“不听话。”</p>
+<p>因此出现：</p>
+<p><strong>Jump Buffer。</strong></p>
+<hr />
+<h1 id="9-jump-buffer">9. Jump Buffer</h1><p>玩家按Jump：</p>
+<p>记录：</p>
+<p><code>JumpRequestedTime</code>。</p>
+<p>如果未来短时间内：</p>
+<p>角色进入可跳状态，</p>
+<p>自动消费该请求。</p>
+<p>例如：</p>
+<p>Buffer：</p>
+<p>100ms。</p>
+<p>玩家在落地前：</p>
+<p>60ms按Jump。</p>
+<p>落地时：</p>
+<p>自动起跳。</p>
+<hr />
+<h1 id="10-jumpbufferstate">10. JumpBufferState</h1><p>建议包含：</p>
+<ul>
+<li><p>Requested；</p>
+</li>
+<li><p>RequestTimestamp；</p>
+</li>
+<li><p>ExpirationTimestamp；</p>
+</li>
+<li><p>Consumed；</p>
+</li>
+<li><p>SourceInputSequence；</p>
+</li>
+<li><p>BufferVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="11-jump-buffer不是自动游戏">11. Jump Buffer不是自动游戏</h1><p>它不会：</p>
+<p>替玩家选择什么时候跳。</p>
+<p>它只把：</p>
+<p>人类输入时序误差</p>
+<p>转换为：</p>
+<p>更合理的Intent解释。</p>
+<hr />
+<h1 id="12-核心范式三coyote-time-处理平台边缘的感知误差">12. 核心范式三：Coyote Time 处理平台边缘的感知误差</h1><p>玩家视觉上仍觉得：</p>
+<p>自己站在平台上。</p>
+<p>实际碰撞体：</p>
+<p>刚刚离开边缘一个Frame。</p>
+<p>玩家按Jump。</p>
+<p>如果系统：</p>
+<p>严格拒绝，</p>
+<p>玩家通常感觉：</p>
+<p>输入被吃掉。</p>
+<p>因此可以：</p>
+<p>离地后短时间仍允许普通跳跃。</p>
+<hr />
+<h1 id="13-coyotestate">13. CoyoteState</h1><p>建议包含：</p>
+<ul>
+<li><p>LastGroundedTimestamp；</p>
+</li>
+<li><p>GraceExpirationTimestamp；</p>
+</li>
+<li><p>WasGrounded；</p>
+</li>
+<li><p>JumpConsumedDuringGrace；</p>
+</li>
+<li><p>CoyoteVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="14-coyote-time的职责">14. Coyote Time的职责</h1><p>不是：</p>
+<p>让玩家凭空二段跳。</p>
+<p>而是：</p>
+<p>弥合：</p>
+<p><strong>视觉感知边缘</strong></p>
+<p>和：</p>
+<p><strong>碰撞几何边缘</strong></p>
+<p>之间的毫秒级差异。</p>
+<hr />
+<h1 id="15-jump-buffer与coyote-time组合">15. Jump Buffer与Coyote Time组合</h1><p>有两种最常见的输入误差：</p>
+<h3 id="过早">过早</h3><p>还没落地就按跳。</p>
+<p>→ Jump Buffer。</p>
+<h3 id="过晚">过晚</h3><p>刚离开平台才按跳。</p>
+<p>→ Coyote Time。</p>
+<p>两者共同建立：</p>
+<p><strong>Intent Window。</strong></p>
+<hr />
+<h1 id="16-intent-window是本类型最重要的宽容但不降难度设计之一">16. Intent Window是本类型最重要的“宽容但不降难度”设计之一</h1><p>关卡仍然要求：</p>
+<p>跳到正确位置。</p>
+<p>但系统减少：</p>
+<p>“我明明想跳却完全没跳”</p>
+<p>这种输入解释失败。</p>
+<hr />
+<h1 id="17-核心范式四variable-jump-height-让一个按钮同时表达两层控制">17. 核心范式四：Variable Jump Height 让一个按钮同时表达两层控制</h1><p>经典：</p>
+<p>按住Jump：</p>
+<p>跳得高。</p>
+<p>快速松开：</p>
+<p>短跳。</p>
+<p>实现不建议：</p>
+<p>直接瞬移高度。</p>
+<p>可以：</p>
+<p>Jump Release时：</p>
+<p>削减上升速度。</p>
+<hr />
+<h1 id="18-jump-cut">18. Jump Cut</h1><p>如果：</p>
+<p><code>VelocityY &gt; 0</code></p>
+<p>且Jump Released：</p>
+<p><code>VelocityY *= JumpCutMultiplier</code></p>
+<p>例如：</p>
+<p>0.45。</p>
+<p>这样同一Jump输入可以生成：</p>
+<p>连续高度区间。</p>
+<hr />
+<h1 id="19-这会把玩家控制从起跳时刻扩展到空中时长">19. 这会把玩家控制从“起跳时刻”扩展到“空中时长”</h1><p>一跳包含两个决定：</p>
+<p>什么时候起跳。</p>
+<p>什么时候松开。</p>
+<p>因此只用一个Jump键：</p>
+<p>就产生丰富操作空间。</p>
+<hr />
+<h1 id="20-jumpstate">20. JumpState</h1><p>建议包含：</p>
+<ul>
+<li><p>HasJumped；</p>
+</li>
+<li><p>JumpStartTimestamp；</p>
+</li>
+<li><p>JumpSource；</p>
+</li>
+<li><p>JumpHeld；</p>
+</li>
+<li><p>JumpCutApplied；</p>
+</li>
+<li><p>RemainingAirJumps；</p>
+</li>
+<li><p>JumpVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="21-核心范式五水平移动应该区分加速和目标速度">21. 核心范式五：水平移动应该区分“加速”和“目标速度”</h1><p>低质量Controller：</p>
+<p>按右：</p>
+<p><code>velocity.x = maxSpeed</code></p>
+<p>松开：</p>
+<p><code>velocity.x = 0</code></p>
+<p>角色像棋子。</p>
+<p>更有表现力：</p>
+<p>Input决定：</p>
+<p><strong>Target Horizontal Speed。</strong></p>
+<p>Controller逐步靠近目标。</p>
+<hr />
+<h1 id="22-ground-movement">22. Ground Movement</h1><p>例如：</p>
+<p>TargetSpeed = InputX × MaxSpeed。</p>
+<p>当前速度：</p>
+<p>使用Acceleration逼近。</p>
+<p>松开：</p>
+<p>使用Deceleration逼近0。</p>
+<hr />
+<h1 id="23-air-control">23. Air Control</h1><p>空中：</p>
+<p>也可以调整水平速度。</p>
+<p>但通常：</p>
+<p>AirAcceleration</p>
+<p>与GroundAcceleration不同。</p>
+<hr />
+<h1 id="24-空中控制是平台跳跃的重要设计维度">24. 空中控制是平台跳跃的重要设计维度</h1><h3 id="高air-control">高Air Control</h3><p>玩家可在空中大量修正。</p>
+<p>偏向：</p>
+<p>精密执行。</p>
+<h3 id="低air-control">低Air Control</h3><p>起跳前速度决定更多。</p>
+<p>偏向：</p>
+<p>动量规划。</p>
+<p>两种都成立。</p>
+<p>但关卡必须根据角色真实运动模型设计。</p>
+<hr />
+<h1 id="25-核心范式六运动包络是关卡设计的真正尺度">25. 核心范式六：运动包络是关卡设计的真正尺度</h1><p>角色不是一个任意移动点。</p>
+<p>其能力形成：</p>
+<p><strong>Reachability Envelope。</strong></p>
+<p>例如从平台边缘起跳：</p>
+<p>在不同：</p>
+<ul>
+<li><p>起跳速度；</p>
+</li>
+<li><p>Jump Hold；</p>
+</li>
+<li><p>Air Input；</p>
+</li>
+</ul>
+<p>下，</p>
+<p>角色能到达一个二维区域。</p>
+<p>这就是：</p>
+<p><strong>Jump Envelope。</strong></p>
+<hr />
+<h1 id="26-jumpenvelopedefinition">26. JumpEnvelopeDefinition</h1><p>开发工具可以根据MovementProfile离线计算：</p>
+<ul>
+<li><p>MaximumHorizontalReach；</p>
+</li>
+<li><p>MaximumVerticalReach；</p>
+</li>
+<li><p>MinimumShortJumpHeight；</p>
+</li>
+<li><p>FullJumpApexTime；</p>
+</li>
+<li><p>FallTimeByHeight；</p>
+</li>
+<li><p>AirCorrectionRange；</p>
+</li>
+<li><p>WallJumpReach；</p>
+</li>
+<li><p>DashReach。</p>
+</li>
+</ul>
+<hr />
+<h1 id="27-关卡设计不应该只靠设计师目测应该能跳过去">27. 关卡设计不应该只靠设计师“目测应该能跳过去”</h1><p>应该能够：</p>
+<p>在Editor直接显示：</p>
+<p>当前平台边缘的：</p>
+<p>Jump Envelope。</p>
+<hr />
+<h1 id="28-reachability-overlay">28. Reachability Overlay</h1><p>选择一个起点：</p>
+<p>显示：</p>
+<p>绿色：</p>
+<p>稳定可达。</p>
+<p>黄色：</p>
+<p>需要接近极限输入。</p>
+<p>红色：</p>
+<p>不可达。</p>
+<p>这会大幅降低：</p>
+<p>关卡几何和角色手感变更后的返工成本。</p>
+<hr />
+<h1 id="29-为什么movement-profile修改风险巨大">29. 为什么Movement Profile修改风险巨大</h1><p>如果：</p>
+<p>Jump Velocity +5%。</p>
+<p>整个游戏：</p>
+<p>数百个平台的可达性</p>
+<p>都可能改变。</p>
+<p>因此Movement Profile应该被视为：</p>
+<p><strong>Level Contract。</strong></p>
+<hr />
+<h1 id="30-版本冻结">30. 版本冻结</h1><p>内容生产进入后期以后：</p>
+<p>核心Movement Profile不应频繁大改。</p>
+<p>如果必须改变：</p>
+<p>自动运行：</p>
+<p>Reachability Regression Test。</p>
+<hr />
+<h1 id="31-核心范式七碰撞解算需要游戏专用稳定规则">31. 核心范式七：碰撞解算需要游戏专用稳定规则</h1><p>平台跳跃最常见的“手感差”很多不是移动参数问题。</p>
+<p>而是：</p>
+<p>Collision Resolution问题。</p>
+<p>例如：</p>
+<ul>
+<li><p>角落卡住；</p>
+</li>
+<li><p>贴墙不跳；</p>
+</li>
+<li><p>下坡抖动；</p>
+</li>
+<li><p>落地漏判；</p>
+</li>
+<li><p>高速穿墙；</p>
+</li>
+<li><p>移动平台滑走。</p>
+</li>
+</ul>
+<p>因此Collision Motor本身属于：</p>
+<p>核心玩法系统。</p>
+<hr />
+<h1 id="32-charactercollider">32. CharacterCollider</h1><p>推荐使用：</p>
+<ul>
+<li><p>Capsule；</p>
+</li>
+<li><p>Box；</p>
+</li>
+<li><p>Rounded Box；</p>
+</li>
+</ul>
+<p>之一。</p>
+<p>实际几何尽量：</p>
+<p>简单、稳定。</p>
+<p>视觉Sprite可以更复杂。</p>
+<hr />
+<h1 id="33-visual-bounds与collision-bounds分离">33. Visual Bounds与Collision Bounds分离</h1><p>角色头发、手臂、披风：</p>
+<p>不应该导致：</p>
+<p>碰到尖刺。</p>
+<p>真实碰撞体需要：</p>
+<p>玩家能够逐渐形成稳定直觉。</p>
+<hr />
+<h1 id="34-sweep-movement">34. Sweep Movement</h1><p>每Simulation Tick：</p>
+<p>不要：</p>
+<p>Position += Velocity × dt</p>
+<p>以后再看有没有穿墙。</p>
+<p>更稳：</p>
+<p>根据Delta执行：</p>
+<p><strong>Shape Sweep。</strong></p>
+<p>发现最近Collision。</p>
+<p>移动到：</p>
+<p>Contact Point。</p>
+<p>分解剩余运动。</p>
+<p>继续求解。</p>
+<hr />
+<h1 id="35-collision-iteration">35. Collision Iteration</h1><p>例如：</p>
+<p>最多：</p>
+<p>3～5次。</p>
+<p>避免：</p>
+<p>复杂角落进入无限碰撞迭代。</p>
+<hr />
+<h1 id="36-contactstate">36. ContactState</h1><p>建议包含：</p>
+<ul>
+<li><p>IsGrounded；</p>
+</li>
+<li><p>GroundNormal；</p>
+</li>
+<li><p>GroundColliderId；</p>
+</li>
+<li><p>LeftWall；</p>
+</li>
+<li><p>RightWall；</p>
+</li>
+<li><p>Ceiling；</p>
+</li>
+<li><p>ContactPoints；</p>
+</li>
+<li><p>ContactVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="37-核心范式八grounded-不应只依赖这一帧刚好碰撞到底面">37. 核心范式八：Grounded 不应只依赖“这一帧刚好碰撞到底面”</h1><p>常见Bug：</p>
+<p>角色下坡。</p>
+<p>每隔几帧：</p>
+<p>短暂离地。</p>
+<p>Grounded来回闪。</p>
+<p>导致：</p>
+<ul>
+<li><p>无法Jump；</p>
+</li>
+<li><p>动画抖动；</p>
+</li>
+<li><p>Coyote错误。</p>
+</li>
+</ul>
+<p>需要：</p>
+<p><strong>Ground Probe / Ground Snap。</strong></p>
+<hr />
+<h1 id="38-ground-probe">38. Ground Probe</h1><p>角色底部向下检测短距离。</p>
+<p>若：</p>
+<ul>
+<li><p>Surface可站立；</p>
+</li>
+<li><p>垂直速度合理；</p>
+</li>
+<li><p>距离足够近；</p>
+</li>
+</ul>
+<p>则：</p>
+<p>保持Grounded。</p>
+<hr />
+<h1 id="39-ground-snap">39. Ground Snap</h1><p>沿微小下坡移动：</p>
+<p>将角色贴合地面。</p>
+<p>防止：</p>
+<p>角色像一系列小抛物线跳跃。</p>
+<hr />
+<h1 id="40-slope-limit">40. Slope Limit</h1><p>Surface Normal超过：</p>
+<p>MaximumWalkableSlope</p>
+<p>则：</p>
+<p>不视为Ground。</p>
+<p>可以：</p>
+<p>滑落。</p>
+<hr />
+<h1 id="41-核心范式九corner-correction-用于解决视觉上合理几何上差一点的失败">41. 核心范式九：Corner Correction 用于解决“视觉上合理、几何上差一点”的失败</h1><p>玩家向上跳。</p>
+<p>头部碰到平台角落：</p>
+<p>只差2像素。</p>
+<p>严格碰撞：</p>
+<p>上升速度立即归零。</p>
+<p>玩家会觉得：</p>
+<p>被小角卡死。</p>
+<p>可以允许：</p>
+<p>在小范围内寻找：</p>
+<p>横向修正位置。</p>
+<hr />
+<h1 id="42-cornercorrection">42. CornerCorrection</h1><p>检测Ceiling碰撞。</p>
+<p>如果：</p>
+<p>横向偏移 ≤ CorrectionThreshold</p>
+<p>能够进入合法空间：</p>
+<p>自动微调角色。</p>
+<hr />
+<h1 id="43-correction必须非常有限">43. Correction必须非常有限</h1><p>如果范围太大：</p>
+<p>角色会：</p>
+<p>自动绕障碍。</p>
+<p>破坏关卡难度。</p>
+<p>其职责只是：</p>
+<p>修复离散碰撞与视觉误差。</p>
+<hr />
+<h1 id="44-同类宽容机制">44. 同类宽容机制</h1><p>还可以有：</p>
+<ul>
+<li><p>Ledge Correction；</p>
+</li>
+<li><p>Dash Corner Correction；</p>
+</li>
+<li><p>One-Way Platform Grace；</p>
+</li>
+<li><p>Wall Jump Grace。</p>
+</li>
+</ul>
+<p>所有这些都应遵循：</p>
+<blockquote>
+<p><strong>修正Intent解释误差，不替玩家解决宏观路线问题。</strong></p>
+</blockquote>
+<hr />
+<h1 id="45-核心范式十moving-platform需要参考系语义而不是简单角色作为child">45. 核心范式十：Moving Platform需要参考系语义，而不是简单“角色作为Child”</h1><p>简单把角色：</p>
+<p>Parent到Platform</p>
+<p>容易产生：</p>
+<ul>
+<li><p>Scale问题；</p>
+</li>
+<li><p>Rotation问题；</p>
+</li>
+<li><p>物理顺序问题。</p>
+</li>
+</ul>
+<p>更合理：</p>
+<p>记录：</p>
+<p><code>GroundEntityId</code></p>
+<p>和：</p>
+<p>平台上一Tick到当前Tick的Transform Delta。</p>
+<hr />
+<h1 id="46-platformmotionstate">46. PlatformMotionState</h1><p>建议包含：</p>
+<ul>
+<li><p>PlatformEntityId；</p>
+</li>
+<li><p>PreviousTransform；</p>
+</li>
+<li><p>CurrentTransform；</p>
+</li>
+<li><p>LinearVelocity；</p>
+</li>
+<li><p>AngularVelocity；</p>
+</li>
+<li><p>MotionPathState；</p>
+</li>
+<li><p>PlatformVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="47-riding-motion">47. Riding Motion</h1><p>角色Grounded在MovingPlatform：</p>
+<p>先应用：</p>
+<p>PlatformDelta。</p>
+<p>再处理：</p>
+<p>PlayerMotion。</p>
+<hr />
+<h1 id="48-玩家跳离平台">48. 玩家跳离平台</h1><p>需要决定：</p>
+<p>是否继承：</p>
+<p>Platform Velocity。</p>
+<p>例如水平移动平台：</p>
+<p>Jump时获得平台水平速度。</p>
+<p>这是手感的重要规则。</p>
+<hr />
+<h1 id="49-platform-velocity-inheritance">49. Platform Velocity Inheritance</h1><p>建议明确：</p>
+<ul>
+<li><p>HorizontalInheritance；</p>
+</li>
+<li><p>VerticalInheritance；</p>
+</li>
+<li><p>Clamp；</p>
+</li>
+<li><p>Decay。</p>
+</li>
+</ul>
+<hr />
+<h1 id="50-高速平台不能把角色甩入墙体">50. 高速平台不能把角色甩入墙体</h1><p>PlatformDelta同样需要：</p>
+<p>经过Collision Sweep。</p>
+<p>不能：</p>
+<p>直接把角色Teleport。</p>
+<hr />
+<h1 id="51-核心范式十一one-way-platform需要独立碰撞语义">51. 核心范式十一：One-Way Platform需要独立碰撞语义</h1><p>平台：</p>
+<p>从上面能站。</p>
+<p>从下面能穿。</p>
+<p>这不是普通Collider。</p>
+<hr />
+<h1 id="52-onewayplatformrule">52. OneWayPlatformRule</h1><p>碰撞成立需要：</p>
+<ul>
+<li><p>Player上一位置在平台上方；</p>
+</li>
+<li><p>当前向下运动；</p>
+</li>
+<li><p>没有DropThrough状态。</p>
+</li>
+</ul>
+<hr />
+<h1 id="53-drop-through">53. Drop Through</h1><p>玩家：</p>
+<p>Down + Jump</p>
+<p>可以临时忽略当前One-Way Platform。</p>
+<hr />
+<h1 id="54-ignore必须绑定具体platform或短时间">54. Ignore必须绑定具体Platform或短时间</h1><p>否则：</p>
+<p>玩家可能连续穿过：</p>
+<p>多层本不希望穿过的平台。</p>
+<hr />
+<h1 id="55-核心范式十二wall-interaction应该是统一surface-capability而不是地图特殊脚本">55. 核心范式十二：Wall Interaction应该是统一Surface Capability，而不是地图特殊脚本</h1><p>墙可能支持：</p>
+<ul>
+<li><p>Wall Slide；</p>
+</li>
+<li><p>Wall Jump；</p>
+</li>
+<li><p>Climb；</p>
+</li>
+<li><p>Grab；</p>
+</li>
+<li><p>Bounce。</p>
+</li>
+</ul>
+<p>SurfaceDefinition提供：</p>
+<p>相关Tags。</p>
+<hr />
+<h1 id="56-surfacedefinition">56. SurfaceDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SurfaceId；</p>
+</li>
+<li><p>SurfaceTags；</p>
+</li>
+<li><p>Walkable；</p>
+</li>
+<li><p>WallSlideAllowed；</p>
+</li>
+<li><p>WallJumpAllowed；</p>
+</li>
+<li><p>ClimbAllowed；</p>
+</li>
+<li><p>FrictionProfile；</p>
+</li>
+<li><p>BounceProfile；</p>
+</li>
+<li><p>HazardProfile；</p>
+</li>
+<li><p>SurfaceVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="57-wall-slide">57. Wall Slide</h1><p>条件：</p>
+<ul>
+<li><p>Falling；</p>
+</li>
+<li><p>接触Wall；</p>
+</li>
+<li><p>玩家向Wall输入；</p>
+</li>
+<li><p>Surface允许。</p>
+</li>
+</ul>
+<p>则：</p>
+<p>限制最大下降速度。</p>
+<hr />
+<h1 id="58-wall-jump">58. Wall Jump</h1><p>通常产生：</p>
+<p>固定或可调：</p>
+<p>水平 + 垂直初速度。</p>
+<p>同时：</p>
+<p>短暂限制玩家立即向原墙吸回。</p>
+<hr />
+<h1 id="59-wall-jump-lock">59. Wall Jump Lock</h1><p>例如：</p>
+<p>100ms内：</p>
+<p>降低朝原墙方向AirControl。</p>
+<p>目的：</p>
+<p>让离墙动作可读。</p>
+<hr />
+<h1 id="60-核心范式十三dash-等能力应改变reachability而不是只提供快速移动">60. 核心范式十三：Dash 等能力应改变Reachability，而不是只提供“快速移动”</h1><p>Dash典型特点：</p>
+<ul>
+<li><p>固定速度；</p>
+</li>
+<li><p>固定时间；</p>
+</li>
+<li><p>忽略部分Gravity；</p>
+</li>
+<li><p>有限次数；</p>
+</li>
+<li><p>落地恢复。</p>
+</li>
+</ul>
+<hr />
+<h1 id="61-dashstate">61. DashState</h1><p>建议包含：</p>
+<ul>
+<li><p>RemainingCharges；</p>
+</li>
+<li><p>DashDirection；</p>
+</li>
+<li><p>DashStartTime；</p>
+</li>
+<li><p>DashEndTime；</p>
+</li>
+<li><p>DashVelocity；</p>
+</li>
+<li><p>RecoveryPolicy；</p>
+</li>
+<li><p>DashVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="62-dash加入以后关卡语法发生改变">62. Dash加入以后关卡语法发生改变</h1><p>原来：</p>
+<p>Jump Envelope。</p>
+<p>现在：</p>
+<p>Jump<br />
+→ Dash</p>
+<p>形成新的：</p>
+<p>Reachability Envelope。</p>
+<p>因此Ability加入必须重新计算：</p>
+<p>Level Reachability。</p>
+<hr />
+<h1 id="63-ability-graph">63. Ability Graph</h1><p>玩家移动能力可以抽象：</p>
+<ul>
+<li><p>Jump；</p>
+</li>
+<li><p>WallJump；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+<li><p>Climb；</p>
+</li>
+<li><p>Bounce；</p>
+</li>
+<li><p>Grapple。</p>
+</li>
+</ul>
+<p>关卡边：</p>
+<p>要求：</p>
+<p>CapabilitySet。</p>
+<p>这为未来：</p>
+<p>银河城式能力门控</p>
+<p>提供可复用基础，</p>
+<p>但本次范式重点仍然是：</p>
+<p>运动执行本身，</p>
+<p>不是大型回访地图拓扑。</p>
+<hr />
+<h1 id="64-核心范式十四关卡应被视为运动句法而不是一堆平台">64. 核心范式十四：关卡应被视为“运动句法”，而不是一堆平台</h1><p>平台、墙、尖刺等是：</p>
+<p>运动原语。</p>
+<p>关卡段落是：</p>
+<p>这些原语的组合。</p>
+<p>例如：</p>
+<p>Run<br />
+→ Jump<br />
+→ Short Hold<br />
+→ Wall Slide<br />
+→ Wall Jump<br />
+→ Dash<br />
+→ Land。</p>
+<p>这可以看成：</p>
+<p><strong>Movement Sentence。</strong></p>
+<hr />
+<h1 id="65-routesectiondefinition">65. RouteSectionDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SectionId；</p>
+</li>
+<li><p>StartCheckpointId；</p>
+</li>
+<li><p>EndCheckpointId；</p>
+</li>
+<li><p>RequiredCapabilities；</p>
+</li>
+<li><p>PrimaryRouteEdges；</p>
+</li>
+<li><p>OptionalRouteEdges；</p>
+</li>
+<li><p>HazardDefinitions；</p>
+</li>
+<li><p>IntendedMovementPatterns；</p>
+</li>
+<li><p>DifficultyProfile；</p>
+</li>
+<li><p>SectionVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="66-movement-pattern-tags">66. Movement Pattern Tags</h1><p>例如：</p>
+<ul>
+<li><p>LongJump；</p>
+</li>
+<li><p>ShortHop；</p>
+</li>
+<li><p>LateJump；</p>
+</li>
+<li><p>WallChain；</p>
+</li>
+<li><p>DashGap；</p>
+</li>
+<li><p>FallingControl；</p>
+</li>
+<li><p>MomentumCarry；</p>
+</li>
+<li><p>MovingPlatformTiming。</p>
+</li>
+</ul>
+<p>用于：</p>
+<ul>
+<li><p>内容分析；</p>
+</li>
+<li><p>教学；</p>
+</li>
+<li><p>难度曲线。</p>
+</li>
+</ul>
+<hr />
+<h1 id="67-一次只引入一个新原语">67. 一次只引入一个新原语</h1><p>经典教学结构：</p>
+<h3 id="introduce">Introduce</h3><p>安全环境展示新机制。</p>
+<h3 id="validate">Validate</h3><p>要求正确使用。</p>
+<h3 id="combine">Combine</h3><p>和旧机制组合。</p>
+<h3 id="twist">Twist</h3><p>改变环境参数。</p>
+<h3 id="mastery">Mastery</h3><p>长链条使用。</p>
+<p>这种结构非常适合精密平台跳跃。</p>
+<hr />
+<h1 id="68-不应通过文字教程解释所有运动">68. 不应通过文字教程解释所有运动</h1><p>最好的教学通常是：</p>
+<p>几何本身告诉玩家：</p>
+<p>这里需要短跳。</p>
+<p>那里需要墙跳。</p>
+<hr />
+<h1 id="69-关卡几何是教程语言">69. 关卡几何是教程语言</h1><p>例如：</p>
+<p>低天花板 + 小间隙：</p>
+<p>自然教：</p>
+<p>短跳。</p>
+<p>两堵高墙：</p>
+<p>教：</p>
+<p>墙跳。</p>
+<p>宽沟 + 空中危险：</p>
+<p>教：</p>
+<p>冲刺。</p>
+<hr />
+<h1 id="70-核心范式十五安全地带和危险地带应存在明确视觉语义">70. 核心范式十五：安全地带和危险地带应存在明确视觉语义</h1><p>玩家必须快速判断：</p>
+<ul>
+<li><p>哪个表面能站；</p>
+</li>
+<li><p>哪个会死；</p>
+</li>
+<li><p>哪个可墙跳；</p>
+</li>
+<li><p>哪个是背景。</p>
+</li>
+</ul>
+<p>高难关卡绝不能：</p>
+<p>主要通过辨认美术细节判断碰撞。</p>
+<hr />
+<h1 id="71-hazarddefinition">71. HazardDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>HazardId；</p>
+</li>
+<li><p>HazardType；</p>
+</li>
+<li><p>CollisionProfile；</p>
+</li>
+<li><p>DamagePolicy；</p>
+</li>
+<li><p>RespawnPolicy；</p>
+</li>
+<li><p>ActiveTimeRule；</p>
+</li>
+<li><p>TelegraphProfile；</p>
+</li>
+<li><p>HazardVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="72-高精度游戏中的hazard碰撞体也需要稳定">72. 高精度游戏中的Hazard碰撞体也需要稳定</h1><p>尖刺美术可能很尖。</p>
+<p>实际危险区域可以：</p>
+<p>略小于视觉。</p>
+<p>这样：</p>
+<p>视觉接触边缘</p>
+<p>不一定立刻判死。</p>
+<hr />
+<h1 id="73-hazard-visual-bounds-hazard-collision-bounds">73. Hazard Visual Bounds &gt; Hazard Collision Bounds</h1><p>与玩家Hitbox同理：</p>
+<p>宽容优先服务：</p>
+<p>信任感。</p>
+<hr />
+<h1 id="74-但不能缩小得不可理解">74. 但不能缩小得不可理解</h1><p>玩家穿过：</p>
+<p>明显插进身体一半的尖刺</p>
+<p>却不死，</p>
+<p>同样会破坏规则感。</p>
+<hr />
+<h1 id="75-核心范式十六失败成本必须足够低才能允许高难度">75. 核心范式十六：失败成本必须足够低，才能允许高难度</h1><p>如果一段跳跃：</p>
+<p>需要20次尝试。</p>
+<p>每次失败以后：</p>
+<ul>
+<li><p>5秒死亡动画；</p>
+</li>
+<li><p>10秒加载；</p>
+</li>
+<li><p>重新跑1分钟；</p>
+</li>
+</ul>
+<p>玩家实际训练效率非常低。</p>
+<p>因此精密平台游戏通常需要：</p>
+<p><strong>Fast Failure Recovery。</strong></p>
+<hr />
+<h1 id="76-death-failure流程">76. Death / Failure流程</h1><p>Hit Hazard<br />
+→ 立即冻结或短暂Hit Stop<br />
+→ 播放极短失败反馈<br />
+→ 使用Checkpoint Snapshot恢复<br />
+→ 重新获得Input。</p>
+<p>目标：</p>
+<p>失败到再次可控制</p>
+<p>尽可能短。</p>
+<hr />
+<h1 id="77-checkpointstate">77. CheckpointState</h1><p>建议包含：</p>
+<ul>
+<li><p>CheckpointId；</p>
+</li>
+<li><p>SpawnPosition；</p>
+</li>
+<li><p>SpawnFacing；</p>
+</li>
+<li><p>MovementResetPolicy；</p>
+</li>
+<li><p>AbilityResetPolicy；</p>
+</li>
+<li><p>CollectiblePolicy；</p>
+</li>
+<li><p>RoomStateResetPolicy；</p>
+</li>
+<li><p>CheckpointVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="78-checkpoint不仅保存位置">78. Checkpoint不仅保存位置</h1><p>还需要决定：</p>
+<p>重生后：</p>
+<ul>
+<li><p>Dash是否恢复；</p>
+</li>
+<li><p>Moving Platform处于什么状态；</p>
+</li>
+<li><p>开关是否重置；</p>
+</li>
+<li><p>Collectible是否保留；</p>
+</li>
+<li><p>Timer是否重置。</p>
+</li>
+</ul>
+<hr />
+<h1 id="79-room-reset-snapshot">79. Room Reset Snapshot</h1><p>精密关卡非常适合：</p>
+<p>进入房间时创建：</p>
+<p><strong>Deterministic Section Snapshot。</strong></p>
+<p>失败后：</p>
+<p>恢复同一个初始状态。</p>
+<hr />
+<h1 id="80-为什么环境应该稳定重置">80. 为什么环境应该稳定重置</h1><p>如果失败后：</p>
+<p>Moving Platform相位随机变化，</p>
+<p>玩家无法建立：</p>
+<p>动作记忆。</p>
+<p>除非随机变化本身就是设计。</p>
+<hr />
+<h1 id="81-核心范式十七快速重试把失败变成误差反馈而不是惩罚">81. 核心范式十七：快速重试把失败变成“误差反馈”，而不是惩罚</h1><p>玩家第1次：</p>
+<p>差30像素。</p>
+<p>第2次：</p>
+<p>差10像素。</p>
+<p>第3次：</p>
+<p>成功。</p>
+<p>这和：</p>
+<p>死亡损失大量资产</p>
+<p>完全不同。</p>
+<p>失败本质上是：</p>
+<p><strong>Control Error Measurement。</strong></p>
+<hr />
+<h1 id="82-attemptstate">82. AttemptState</h1><p>建议记录：</p>
+<ul>
+<li><p>AttemptId；</p>
+</li>
+<li><p>SectionId；</p>
+</li>
+<li><p>StartTime；</p>
+</li>
+<li><p>EndTime；</p>
+</li>
+<li><p>DeathCause；</p>
+</li>
+<li><p>DeathPosition；</p>
+</li>
+<li><p>InputTimelineReference；</p>
+</li>
+<li><p>MaximumProgress；</p>
+</li>
+<li><p>AttemptVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="83-attempt-analytics">83. Attempt Analytics</h1><p>可以统计：</p>
+<ul>
+<li><p>Attempts；</p>
+</li>
+<li><p>CompletionRate；</p>
+</li>
+<li><p>MedianAttempts；</p>
+</li>
+<li><p>DeathHeatmap；</p>
+</li>
+<li><p>FailureCause；</p>
+</li>
+<li><p>AverageSectionTime。</p>
+</li>
+</ul>
+<hr />
+<h1 id="84-某个房间90死亡集中在同一个角">84. 某个房间90%死亡集中在同一个角</h1><p>这可能说明：</p>
+<ul>
+<li>该处就是预期难点；</li>
+</ul>
+<p>也可能说明：</p>
+<ul>
+<li><p>碰撞不合理；</p>
+</li>
+<li><p>视觉误导；</p>
+</li>
+<li><p>输入窗口过窄。</p>
+</li>
+</ul>
+<p>Telemetry可以帮助区分。</p>
+<hr />
+<h1 id="85-核心范式十八摄像机属于gameplay信息系统">85. 核心范式十八：摄像机属于Gameplay信息系统</h1><p>平台跳跃中：</p>
+<p>玩家需要看到：</p>
+<p>自己将要落到哪里。</p>
+<p>摄像机如果：</p>
+<p>滞后太多，</p>
+<p>会直接影响操作。</p>
+<p>因此Camera不能只由电影式演出决定。</p>
+<hr />
+<h1 id="86-camerastate">86. CameraState</h1><p>建议包含：</p>
+<ul>
+<li><p>TargetPosition；</p>
+</li>
+<li><p>LookAheadOffset；</p>
+</li>
+<li><p>DeadZone；</p>
+</li>
+<li><p>VerticalBias；</p>
+</li>
+<li><p>CurrentBounds；</p>
+</li>
+<li><p>TransitionState；</p>
+</li>
+<li><p>CameraVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="87-look-ahead">87. Look Ahead</h1><p>角色向右高速移动：</p>
+<p>Camera可以：</p>
+<p>略微看向右侧。</p>
+<p>让玩家看到：</p>
+<p>未来平台。</p>
+<hr />
+<h1 id="88-但camera不能根据input瞬间乱摆">88. 但Camera不能根据Input瞬间乱摆</h1><p>推荐：</p>
+<p>根据：</p>
+<ul>
+<li><p>Velocity；</p>
+</li>
+<li><p>Facing；</p>
+</li>
+<li><p>Stable Intent；</p>
+</li>
+</ul>
+<p>平滑调整。</p>
+<hr />
+<h1 id="89-vertical-camera">89. Vertical Camera</h1><p>向上跳：</p>
+<p>太早上移：</p>
+<p>看不到脚下。</p>
+<p>太晚上移：</p>
+<p>看不到上方危险。</p>
+<p>需要：</p>
+<p>Apex-aware Camera</p>
+<p>或：</p>
+<p>Vertical Dead Zone。</p>
+<hr />
+<h1 id="90-camera-bounds">90. Camera Bounds</h1><p>房间可以：</p>
+<p>定义Camera Region。</p>
+<p>进入新房间：</p>
+<p>平滑切换。</p>
+<hr />
+<h1 id="91-camera不能影响逻辑坐标">91. Camera不能影响逻辑坐标</h1><p>Camera Shake、Zoom：</p>
+<p>不能修改：</p>
+<p>Player Collision。</p>
+<hr />
+<h1 id="92-核心范式十九input-sampling应该独立于fixed-simulation-tick">92. 核心范式十九：Input Sampling应该独立于Fixed Simulation Tick</h1><p>假设：</p>
+<p>Render 144Hz。</p>
+<p>Simulation 60Hz。</p>
+<p>玩家按Jump：</p>
+<p>刚好发生在两个Simulation Tick之间。</p>
+<p>如果只在：</p>
+<p>FixedUpdate</p>
+<p>读取：</p>
+<p>当前ButtonState，</p>
+<p>短输入可能丢失。</p>
+<hr />
+<h1 id="93-inputframe">93. InputFrame</h1><p>建议高频采集：</p>
+<ul>
+<li><p>Timestamp；</p>
+</li>
+<li><p>Sequence；</p>
+</li>
+<li><p>Horizontal；</p>
+</li>
+<li><p>Vertical；</p>
+</li>
+<li><p>JumpPressed；</p>
+</li>
+<li><p>JumpReleased；</p>
+</li>
+<li><p>DashPressed；</p>
+</li>
+<li><p>Grab；</p>
+</li>
+<li><p>InputVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="94-input-buffer">94. Input Buffer</h1><p>Render / Device事件：</p>
+<p>进入InputQueue。</p>
+<p>Simulation Tick：</p>
+<p>消费自上次Tick以来的全部输入变化。</p>
+<p>这样：</p>
+<p>短按不会因为Tick率丢失。</p>
+<hr />
+<h1 id="95-press与held必须分开">95. Press与Held必须分开</h1><p><code>JumpPressed</code></p>
+<p>只发生一次。</p>
+<p><code>JumpHeld</code></p>
+<p>持续。</p>
+<p>否则：</p>
+<p>一个持续按键</p>
+<p>可能每Tick重复起跳。</p>
+<hr />
+<h1 id="96-input-sequence">96. Input Sequence</h1><p>非常适合：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Ghost；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+<li><p>网络扩展。</p>
+</li>
+</ul>
+<hr />
+<h1 id="97-核心范式二十动画必须追随motion-state而不能反过来驱动运动">97. 核心范式二十：动画必须追随Motion State，而不能反过来驱动运动</h1><p>错误：</p>
+<p>Jump Animation第5帧</p>
+<p>给角色向上Impulse。</p>
+<p>这会导致：</p>
+<p>换动画长度</p>
+<p>→ Jump手感变化。</p>
+<p>正确：</p>
+<p>MovementSystem已经决定：</p>
+<p>Jump发生。</p>
+<p>Animation读取：</p>
+<p>JumpState</p>
+<p>播放对应表现。</p>
+<hr />
+<h1 id="98-animationstate">98. AnimationState</h1><p>可从：</p>
+<ul>
+<li><p>Grounded；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>WallState；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+</ul>
+<p>派生。</p>
+<p>不作为：</p>
+<p>权威运动状态。</p>
+<hr />
+<h1 id="99-animation-cancel">99. Animation Cancel</h1><p>玩家落地：</p>
+<p>即使Jump动画还没播完，</p>
+<p>逻辑已经Grounded。</p>
+<p>动画必须：</p>
+<p>快速切换。</p>
+<p>不能为了动画完整性：</p>
+<p>锁角色输入。</p>
+<hr />
+<h1 id="100-核心范式二十一hit-stop可以加强反馈但不能破坏时间逻辑">100. 核心范式二十一：Hit Stop可以加强反馈，但不能破坏时间逻辑</h1><p>例如：</p>
+<p>踩弹簧。</p>
+<p>撞破机关。</p>
+<p>可以：</p>
+<p>短暂停顿2～4帧视觉时间。</p>
+<p>需要区分：</p>
+<ul>
+<li><p>Presentation Freeze；</p>
+</li>
+<li><p>Simulation Freeze。</p>
+</li>
+</ul>
+<hr />
+<h1 id="101-如果真正暂停simulation">101. 如果真正暂停Simulation</h1><p>必须确保：</p>
+<p>Input Buffer规则稳定。</p>
+<p>否则Hit Stop期间按Jump：</p>
+<p>可能丢失。</p>
+<hr />
+<h1 id="102-input-during-freeze">102. Input During Freeze</h1><p>建议：</p>
+<p>仍采集Input。</p>
+<p>恢复以后：</p>
+<p>根据Buffer规则消费。</p>
+<hr />
+<h1 id="103-核心范式二十二辅助模式应修改参数而不是建立另一套关卡">103. 核心范式二十二：辅助模式应修改参数，而不是建立另一套关卡</h1><p>精密平台游戏非常适合：</p>
+<p>Assist Mode。</p>
+<p>例如：</p>
+<ul>
+<li><p>Game Speed；</p>
+</li>
+<li><p>Extra Dash；</p>
+</li>
+<li><p>Invulnerability；</p>
+</li>
+<li><p>Wider Coyote；</p>
+</li>
+<li><p>Reduced Hazard；</p>
+</li>
+<li><p>Infinite Stamina。</p>
+</li>
+</ul>
+<hr />
+<h1 id="104-assistprofile">104. AssistProfile</h1><p>建议字段：</p>
+<ul>
+<li><p>SimulationSpeedMultiplier；</p>
+</li>
+<li><p>CoyoteMultiplier；</p>
+</li>
+<li><p>JumpBufferMultiplier；</p>
+</li>
+<li><p>DashCountOverride；</p>
+</li>
+<li><p>InvulnerabilityPolicy；</p>
+</li>
+<li><p>HazardModifier；</p>
+</li>
+<li><p>AssistVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="105-为什么assist应该基于同一movement-core">105. 为什么Assist应该基于同一Movement Core</h1><p>避免：</p>
+<p>普通模式</p>
+<p>和：</p>
+<p>辅助模式</p>
+<p>维护两套角色Controller。</p>
+<p>同一个关卡：</p>
+<p>不同参数运行。</p>
+<hr />
+<h1 id="106-game-speed-assist">106. Game Speed Assist</h1><p>把Simulation速度：</p>
+<p>降到80%。</p>
+<p>玩家拥有：</p>
+<p>更多现实反应时间。</p>
+<p>但：</p>
+<p>游戏内部运动关系保持一致。</p>
+<p>这是很干净的辅助方式。</p>
+<hr />
+<h1 id="107-核心范式二十三ghost-和-replay-是技能学习工具">107. 核心范式二十三：Ghost 和 Replay 是技能学习工具</h1><p>相同关卡状态下：</p>
+<p>记录玩家输入。</p>
+<p>重放：</p>
+<p>角色路线。</p>
+<p>可以用于：</p>
+<ul>
+<li><p>Speedrun；</p>
+</li>
+<li><p>Ghost Race；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+<li><p>教学。</p>
+</li>
+</ul>
+<hr />
+<h1 id="108-replayrecord">108. ReplayRecord</h1><p>建议包含：</p>
+<ul>
+<li><p>LevelVersion；</p>
+</li>
+<li><p>MovementProfileVersion；</p>
+</li>
+<li><p>InitialSectionSnapshotId；</p>
+</li>
+<li><p>InputFrames；</p>
+</li>
+<li><p>SimulationTickRate；</p>
+</li>
+<li><p>OptionalStateHashes；</p>
+</li>
+<li><p>ReplayVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="109-为什么必须保存movementprofileversion">109. 为什么必须保存MovementProfileVersion</h1><p>如果游戏更新：</p>
+<p>Gravity。</p>
+<p>旧Replay：</p>
+<p>可能完全不同。</p>
+<p>因此Replay必须绑定：</p>
+<p>运动规则版本。</p>
+<hr />
+<h1 id="110-deterministic-replay">110. Deterministic Replay</h1><p>同一：</p>
+<p>Section Snapshot</p>
+<ul>
+<li><p>Movement Profile</p>
+</li>
+<li><p>Input Frames</p>
+</li>
+</ul>
+<p>应得到：</p>
+<p>相同：</p>
+<p>Player Path。</p>
+<p>这是精密平台Controller质量的极高验收标准。</p>
+<hr />
+<h1 id="111-state-hash">111. State Hash</h1><p>每隔：</p>
+<p>若干Tick</p>
+<p>记录：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>State；</p>
+</li>
+<li><p>Contact。</p>
+</li>
+</ul>
+<p>Replay分歧：</p>
+<p>可以定位第一处。</p>
+<hr />
+<h1 id="112-核心范式二十四speedrun-是自然从稳定运动规则中涌现的第二层玩法">112. 核心范式二十四：Speedrun 是自然从稳定运动规则中涌现的第二层玩法</h1><p>普通玩家目标：</p>
+<p>安全通过。</p>
+<p>高手目标：</p>
+<p>减少：</p>
+<ul>
+<li><p>停顿；</p>
+</li>
+<li><p>多余跳跃；</p>
+</li>
+<li><p>速度损失；</p>
+</li>
+<li><p>路线长度。</p>
+</li>
+</ul>
+<p>同一Movement System自然产生：</p>
+<p><strong>Execution Optimization。</strong></p>
+<hr />
+<h1 id="113-section-timer">113. Section Timer</h1><p>建议：</p>
+<p>逻辑Tick计时。</p>
+<p>不要使用：</p>
+<p>渲染帧。</p>
+<hr />
+<h1 id="114-split">114. Split</h1><p>关卡分：</p>
+<p>Section。</p>
+<p>记录：</p>
+<p>每段时间。</p>
+<p>用于：</p>
+<p>Ghost / Speedrun。</p>
+<hr />
+<h1 id="115-不需要专门给每个speedrun技巧写技巧系统">115. 不需要专门给每个Speedrun技巧写“技巧系统”</h1><p>例如：</p>
+<p>边缘起跳更远。</p>
+<p>如果只是：</p>
+<p>稳定基础运动产生的结果，</p>
+<p>让玩家自然发现。</p>
+<p>这是系统型深度。</p>
+<hr />
+<h1 id="116-完整事件与执行流程示例">116. 完整事件与执行流程示例</h1><p>以下以：</p>
+<p><strong>玩家需要完成“短平台起跳 → 墙滑 → 墙跳 → 空中冲刺 → 落到移动平台”的连续路线</strong></p>
+<p>为例。</p>
+<hr />
+<h2 id="1161-section开始">116.1 Section开始</h2><p>Checkpoint恢复。</p>
+<p>Player：</p>
+<p>Position固定。</p>
+<p>Velocity = 0。</p>
+<p>DashCharge = 1。</p>
+<p>MovingPlatform：</p>
+<p>重置到确定相位。</p>
+<hr />
+<h2 id="1162-玩家向右加速">116.2 玩家向右加速</h2><p>Input：</p>
+<p>Right Held。</p>
+<p>MovementSystem：</p>
+<p>VelocityX逐步逼近MaxSpeed。</p>
+<hr />
+<h2 id="1163-玩家接近平台边缘">116.3 玩家接近平台边缘</h2><p>角色当前：</p>
+<p>Grounded。</p>
+<hr />
+<h2 id="1164-玩家略早按jump">116.4 玩家略早按Jump</h2><p>实际仍然距离最佳起跳点：</p>
+<p>约一帧。</p>
+<p>JumpPressed进入：</p>
+<p>Input Buffer。</p>
+<hr />
+<h2 id="1165-下一simulation-tick">116.5 下一Simulation Tick</h2><p>角色运动到平台边缘。</p>
+<p>Ground状态仍合法。</p>
+<p>JumpBuffer被消费。</p>
+<hr />
+<h2 id="1166-jump-commit">116.6 Jump Commit</h2><p>VelocityY：</p>
+<p>设置为JumpInitialVelocity。</p>
+<p>Grounded：</p>
+<p>false。</p>
+<p>JumpState开始。</p>
+<hr />
+<h2 id="1167-玩家持续按住jump">116.7 玩家持续按住Jump</h2><p>角色保持：</p>
+<p>完整上升曲线。</p>
+<hr />
+<h2 id="1168-接近墙面">116.8 接近墙面</h2><p>Horizontal Sweep检测：</p>
+<p>RightWall Contact。</p>
+<hr />
+<h2 id="1169-角色仍在下降初期">116.9 角色仍在下降初期</h2><p>进入：</p>
+<p>WallSlide条件。</p>
+<p>VerticalSpeed被限制。</p>
+<hr />
+<h2 id="11610-玩家按jump">116.10 玩家按Jump</h2><p>WallJump合法。</p>
+<hr />
+<h2 id="11611-wall-jump">116.11 Wall Jump</h2><p>Velocity：</p>
+<p>左向 + 上向。</p>
+<p>记录：</p>
+<p>WallJump Lock。</p>
+<p>短时间降低：</p>
+<p>向右AirControl。</p>
+<hr />
+<h2 id="11612-玩家离墙">116.12 玩家离墙</h2><p>角色进入Rising。</p>
+<hr />
+<h2 id="11613-玩家发现高度足够">116.13 玩家发现高度足够</h2><p>提前松开Jump。</p>
+<hr />
+<h2 id="11614-jump-cut">116.14 Jump Cut</h2><p>VerticalVelocity降低。</p>
+<p>避免：</p>
+<p>撞到上方尖刺。</p>
+<hr />
+<h2 id="11615-角色开始下降">116.15 角色开始下降</h2><p>目标MovingPlatform还在右侧。</p>
+<p>单纯落体：</p>
+<p>无法到达。</p>
+<hr />
+<h2 id="11616-玩家按dash">116.16 玩家按Dash</h2><p>DashDirection：</p>
+<p>右下。</p>
+<hr />
+<h2 id="11617-dash开始">116.17 Dash开始</h2><p>Gravity暂时被Dash规则覆盖。</p>
+<p>角色快速进入目标区域。</p>
+<hr />
+<h2 id="11618-dash即将结束">116.18 Dash即将结束</h2><p>MovingPlatform在向右移动。</p>
+<hr />
+<h2 id="11619-玩家落到平台边缘">116.19 玩家落到平台边缘</h2><p>Sweep检测：</p>
+<p>Ground Contact。</p>
+<hr />
+<h2 id="11620-ground-snap">116.20 Ground Snap</h2><p>角色和MovingPlatform顶部稳定贴合。</p>
+<hr />
+<h2 id="11621-groundentity">116.21 GroundEntity</h2><p>设置为：</p>
+<p>MovingPlatformId。</p>
+<hr />
+<h2 id="11622-下一tick">116.22 下一Tick</h2><p>平台向右移动。</p>
+<p>PlatformDelta先应用到Player。</p>
+<p>然后：</p>
+<p>处理Player自身输入。</p>
+<hr />
+<h2 id="11623-玩家成功完成section">116.23 玩家成功完成Section</h2><p>Checkpoint触发。</p>
+<p>记录：</p>
+<p>Attempt Complete。</p>
+<hr />
+<h2 id="11624-如果第一次失败">116.24 如果第一次失败</h2><p>例如玩家WallJump后：</p>
+<p>没有提前Release。</p>
+<p>撞到Ceiling Spike。</p>
+<p>Hazard触发。</p>
+<hr />
+<h2 id="11625-death记录">116.25 Death记录</h2><p>DeathCause：</p>
+<p>CeilingSpike。</p>
+<p>DeathPosition。</p>
+<p>InputTimeline。</p>
+<hr />
+<h2 id="11626-150300ms左右短反馈后">116.26 150～300ms左右短反馈后</h2><p>Checkpoint Restore。</p>
+<p>环境恢复相同初始状态。</p>
+<hr />
+<h2 id="11627-玩家第二次尝试">116.27 玩家第二次尝试</h2><p>这次：</p>
+<p>更早Jump Cut。</p>
+<p>成功通过。</p>
+<hr />
+<h2 id="11628-玩家学到的不是角色升级">116.28 玩家学到的不是“角色升级”</h2><p>而是：</p>
+<blockquote>
+<p>墙跳后不能保持满Jump，否则会撞到顶部；需要在某个时间窗口提前Release。</p>
+</blockquote>
+<hr />
+<h2 id="11629-连续重复以后">116.29 连续重复以后</h2><p>玩家不再：</p>
+<p>显式思考这一点。</p>
+<p>输入成为：</p>
+<p>身体记忆。</p>
+<hr />
+<h2 id="11630-完整核心链">116.30 完整核心链</h2><p>Input Sample<br />
+→ Jump Buffer解释意图<br />
+→ Jump Motion<br />
+→ Wall Contact<br />
+→ Wall Slide<br />
+→ Wall Jump<br />
+→ Jump Cut<br />
+→ Dash<br />
+→ Moving Platform Contact<br />
+→ Platform Reference Motion<br />
+→ Checkpoint。</p>
+<p>这就是精密平台跳跃的核心：</p>
+<blockquote>
+<p><strong>极少数运动原语通过稳定规则组合，可以产生极高的操作深度，而不需要不断增加新的按钮。</strong></p>
+</blockquote>
+<hr />
+<h1 id="117-模块通信设计">117. 模块通信设计</h1><h2 id="1171-高频input">117.1 高频Input</h2><p>包括：</p>
+<ul>
+<li><p>Move；</p>
+</li>
+<li><p>Jump；</p>
+</li>
+<li><p>JumpRelease；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+<li><p>Grab；</p>
+</li>
+<li><p>DropThrough。</p>
+</li>
+</ul>
+<p>进入：</p>
+<p>Input Sampling Pipeline。</p>
+<hr />
+<h2 id="1172-commands">117.2 Commands</h2><p>低频命令包括：</p>
+<ul>
+<li><p>RestartSection；</p>
+</li>
+<li><p>ActivateCheckpoint；</p>
+</li>
+<li><p>Pause；</p>
+</li>
+<li><p>ChangeAssistProfile；</p>
+</li>
+<li><p>StartTimeTrial。</p>
+</li>
+</ul>
+<hr />
+<h1 id="118-queries">118. Queries</h1><p>适用于：</p>
+<ul>
+<li><p>当前是否Grounded；</p>
+</li>
+<li><p>Jump是否可用；</p>
+</li>
+<li><p>当前Coyote是否有效；</p>
+</li>
+<li><p>当前Jump Buffer；</p>
+</li>
+<li><p>Dash剩余次数；</p>
+</li>
+<li><p>当前接触Surface；</p>
+</li>
+<li><p>最近Checkpoint；</p>
+</li>
+<li><p>当前Section时间。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>推进Movement；</p>
+</li>
+<li><p>修改Velocity；</p>
+</li>
+<li><p>消费Jump；</p>
+</li>
+<li><p>重置Checkpoint。</p>
+</li>
+</ul>
+<hr />
+<h1 id="119-domain-events">119. Domain Events</h1><p>包括：</p>
+<ul>
+<li><p>JumpRequested；</p>
+</li>
+<li><p>JumpCommitted；</p>
+</li>
+<li><p>JumpCut；</p>
+</li>
+<li><p>Grounded；</p>
+</li>
+<li><p>LeftGround；</p>
+</li>
+<li><p>WallContactStarted；</p>
+</li>
+<li><p>WallJumped；</p>
+</li>
+<li><p>DashStarted；</p>
+</li>
+<li><p>DashEnded；</p>
+</li>
+<li><p>PlatformMounted；</p>
+</li>
+<li><p>PlatformLeft；</p>
+</li>
+<li><p>HazardTouched；</p>
+</li>
+<li><p>PlayerFailed；</p>
+</li>
+<li><p>CheckpointActivated；</p>
+</li>
+<li><p>SectionRestarted；</p>
+</li>
+<li><p>SectionCompleted；</p>
+</li>
+<li><p>CollectiblePicked；</p>
+</li>
+<li><p>AssistChanged。</p>
+</li>
+</ul>
+<hr />
+<h1 id="120-presentation-events">120. Presentation Events</h1><p>包括：</p>
+<ul>
+<li><p>PlayJumpAnimation；</p>
+</li>
+<li><p>SpawnDust；</p>
+</li>
+<li><p>PlayLandingSound；</p>
+</li>
+<li><p>PlayDashTrail；</p>
+</li>
+<li><p>CameraShake；</p>
+</li>
+<li><p>PlayDeathEffect；</p>
+</li>
+<li><p>ShowCheckpointEffect。</p>
+</li>
+</ul>
+<p>表现事件不能：</p>
+<ul>
+<li><p>修改Velocity；</p>
+</li>
+<li><p>判定Grounded；<br />
+  -决定Hazard；</p>
+</li>
+<li><p>修改Checkpoint状态。</p>
+</li>
+</ul>
+<hr />
+<h1 id="121-状态所有权">121. 状态所有权</h1><p>推荐：</p>
+<p><strong>InputSystem</strong></p>
+<p>拥有输入采样和序列。</p>
+<p><strong>PlayerMotor</strong></p>
+<p>拥有Position、Velocity和MovementMode。</p>
+<p><strong>CollisionSystem</strong></p>
+<p>拥有Contact Result。</p>
+<p><strong>SurfaceSystem</strong></p>
+<p>拥有Surface能力。</p>
+<p><strong>AbilitySystem</strong></p>
+<p>拥有Dash、Climb等运动能力状态。</p>
+<p><strong>HazardSystem</strong></p>
+<p>拥有失败判定。</p>
+<p><strong>CheckpointSystem</strong></p>
+<p>拥有重生Snapshot。</p>
+<p><strong>MovingPlatformSystem</strong></p>
+<p>拥有平台运动。</p>
+<p><strong>LevelTraversalSystem</strong></p>
+<p>拥有Section和Route元数据。</p>
+<p><strong>CameraSystem</strong></p>
+<p>只消费Movement。</p>
+<p><strong>ReplaySystem</strong></p>
+<p>记录Input和State Hash。</p>
+<hr />
+<h1 id="122-playermotor不应读取美术animation-state">122. PlayerMotor不应读取美术Animation State</h1><p>Animation：</p>
+<p>从PlayerMotor读取。</p>
+<p>方向单向。</p>
+<hr />
+<h1 id="123-collisionsystem不应直接播放音效">123. CollisionSystem不应直接播放音效</h1><p>Collision产生：</p>
+<p>Landed Event。</p>
+<p>Presentation处理：</p>
+<p>音效和Dust。</p>
+<hr />
+<h1 id="124-checkpointsystem不应该依赖scene-reload">124. CheckpointSystem不应该依赖Scene Reload</h1><p>理想情况：</p>
+<p>恢复：</p>
+<p>Section Snapshot。</p>
+<p>这样重试：</p>
+<p>更快。</p>
+<hr />
+<h1 id="125-失败隔离">125. 失败隔离</h1><hr />
+<h2 id="1251-player穿入墙体">125.1 Player穿入墙体</h2><p>检测：</p>
+<p>Depenetration。</p>
+<p>尝试：</p>
+<p>最小位移退出。</p>
+<hr />
+<h1 id="126-depenetration失败">126. Depenetration失败</h1><p>使用：</p>
+<p>LastSafePosition。</p>
+<p>同时输出：</p>
+<p>CollisionRecoveryWarning。</p>
+<p>不能让角色永久卡住。</p>
+<hr />
+<h1 id="127-lastsafeposition">127. LastSafePosition</h1><p>只在：</p>
+<p>角色处于稳定合法状态时更新。</p>
+<p>例如：</p>
+<p>Grounded安全地面。</p>
+<p>不要每Tick都写。</p>
+<p>否则卡入墙以后：</p>
+<p>Safe Position也在墙里。</p>
+<hr />
+<h1 id="128-高速tunneling">128. 高速Tunneling</h1><p>Dash位移大。</p>
+<p>必须使用：</p>
+<p>Sweep / Continuous Collision。</p>
+<p>不能仅：</p>
+<p>终点Overlap。</p>
+<hr />
+<h1 id="129-ground漏判">129. Ground漏判</h1><p>若角色和地面距离在：</p>
+<p>Snap范围</p>
+<p>并满足速度条件：</p>
+<p>恢复Grounded。</p>
+<p>记录：</p>
+<p>GroundSnapApplied。</p>
+<hr />
+<h1 id="130-ceiling错误ground">130. Ceiling错误Ground</h1><p>Ground Probe必须结合：</p>
+<p>Surface Normal。</p>
+<p>不能：</p>
+<p>贴在天花板</p>
+<p>也视为Grounded。</p>
+<hr />
+<h1 id="131-coyote重复消费">131. Coyote重复消费</h1><p>一次离地窗口：</p>
+<p>只能消费一次普通Jump。</p>
+<p>否则：</p>
+<p>可以连续利用Coyote无限Jump。</p>
+<hr />
+<h1 id="132-jump-buffer跨死亡残留">132. Jump Buffer跨死亡残留</h1><p>Respawn：</p>
+<p>清理Input Buffer。</p>
+<p>否则死亡前按的Jump</p>
+<p>可能在复活后自动起跳。</p>
+<hr />
+<h1 id="133-dash跨checkpoint残留">133. Dash跨Checkpoint残留</h1><p>CheckpointSnapshot决定：</p>
+<p>Dash Charge。</p>
+<p>不要恢复：</p>
+<p>死亡前运行中的Dash State。</p>
+<hr />
+<h1 id="134-movingplatform被删除">134. MovingPlatform被删除</h1><p>PlayerGroundEntity失效。</p>
+<p>Player进入：</p>
+<p>Falling。</p>
+<p>不能保留：</p>
+<p>不存在的平台Delta。</p>
+<hr />
+<h1 id="135-platform-teleport">135. Platform Teleport</h1><p>某Platform重置到起点。</p>
+<p>Checkpoint Restore期间：</p>
+<p>应该一起恢复Player Snapshot。</p>
+<p>不要先Teleport平台</p>
+<p>再让Player被甩飞。</p>
+<hr />
+<h1 id="136-one-way-platform-drop-through卡住">136. One-Way Platform Drop Through卡住</h1><p>DropThrough IgnoreState：</p>
+<p>必须有：</p>
+<ul>
+<li><p>SpecificPlatform；</p>
+</li>
+<li><p>Timeout；</p>
+</li>
+<li><p>ClearCondition。</p>
+</li>
+</ul>
+<hr />
+<h1 id="137-wallcontact闪烁">137. WallContact闪烁</h1><p>使用：</p>
+<p>Contact Persistence</p>
+<p>或：</p>
+<p>短Grace，</p>
+<p>避免粗糙Tile边缘导致：</p>
+<p>WallSlide每帧开关。</p>
+<hr />
+<h1 id="138-hazard多次触发">138. Hazard多次触发</h1><p>Player进入Failed状态以后：</p>
+<p>后续Hazard事件忽略。</p>
+<p>Death事务：</p>
+<p>只提交一次。</p>
+<hr />
+<h1 id="139-checkpoint重复触发">139. Checkpoint重复触发</h1><p>CheckpointId：</p>
+<p>幂等。</p>
+<p>不反复保存和播放大型反馈。</p>
+<hr />
+<h1 id="140-section-restore失败">140. Section Restore失败</h1><p>Fallback：</p>
+<p>Level Safe Spawn。</p>
+<p>并记录：</p>
+<p>SnapshotRestoreError。</p>
+<p>不要无限死亡循环。</p>
+<hr />
+<h1 id="141-replay-desync">141. Replay Desync</h1><p>State Hash不同：</p>
+<p>记录：</p>
+<ul>
+<li><p>Tick；</p>
+</li>
+<li><p>Input；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Contact；</p>
+</li>
+<li><p>MovementProfileVersion。</p>
+</li>
+</ul>
+<p>便于定位。</p>
+<hr />
+<h1 id="142-debug与可观测性">142. Debug与可观测性</h1><hr />
+<h2 id="1421-motion-inspector">142.1 Motion Inspector</h2><p>实时显示：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Grounded；</p>
+</li>
+<li><p>Surface；</p>
+</li>
+<li><p>MovementMode；</p>
+</li>
+<li><p>Coyote；</p>
+</li>
+<li><p>JumpBuffer；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+<li><p>Input。</p>
+</li>
+</ul>
+<hr />
+<h1 id="143-motion-trail">143. Motion Trail</h1><p>记录最近：</p>
+<p>2～5秒</p>
+<p>角色轨迹。</p>
+<p>显示：</p>
+<p>每个Simulation Tick的位置。</p>
+<hr />
+<h1 id="144-jump-arc-preview">144. Jump Arc Preview</h1><p>开发模式：</p>
+<p>显示当前MovementProfile理论：</p>
+<p>Full Jump。</p>
+<p>Short Jump。</p>
+<p>Moving Jump。</p>
+<hr />
+<h1 id="145-reachability-overlay">145. Reachability Overlay</h1><p>编辑器选平台：</p>
+<p>显示：</p>
+<p>可达区域。</p>
+<p>是该品类最重要的内容工具之一。</p>
+<hr />
+<h1 id="146-contact-overlay">146. Contact Overlay</h1><p>显示：</p>
+<ul>
+<li><p>Collider；</p>
+</li>
+<li><p>Ground Probe；</p>
+</li>
+<li><p>Wall Probe；</p>
+</li>
+<li><p>Sweep；</p>
+</li>
+<li><p>Contact Normal；</p>
+</li>
+<li><p>Corner Correction。</p>
+</li>
+</ul>
+<hr />
+<h1 id="147-coyote-debug">147. Coyote Debug</h1><p>角色离开地面以后：</p>
+<p>显示：</p>
+<p>剩余：</p>
+<p>80ms<br />
+60ms<br />
+40ms。</p>
+<p>用于验证：</p>
+<p>窗口语义。</p>
+<hr />
+<h1 id="148-jump-buffer-debug">148. Jump Buffer Debug</h1><p>显示：</p>
+<p>Jump Requested</p>
+<p>等待：</p>
+<p>Grounded。</p>
+<hr />
+<h1 id="149-input-timeline">149. Input Timeline</h1><p>毫秒级显示：</p>
+<p>Right Hold。</p>
+<p>Jump Press。</p>
+<p>Jump Release。</p>
+<p>Dash。</p>
+<hr />
+<h1 id="150-motion-state-timeline">150. Motion State Timeline</h1><p>叠加：</p>
+<p>Grounded<br />
+Rising<br />
+Falling<br />
+WallSlide<br />
+Dash。</p>
+<p>这样可以分析：</p>
+<p>某次失败是：</p>
+<p>输入错误</p>
+<p>还是状态机错误。</p>
+<hr />
+<h1 id="151-collision-correction-trace">151. Collision Correction Trace</h1><p>记录：</p>
+<p>CornerCorrection：</p>
+<p>Applied +2px Right。</p>
+<p>GroundSnap：</p>
+<p>3px。</p>
+<hr />
+<h1 id="152-moving-platform-inspector">152. Moving Platform Inspector</h1><p>显示：</p>
+<p>Platform Velocity。</p>
+<p>Player Relative Velocity。</p>
+<p>Inherited Velocity。</p>
+<hr />
+<h1 id="153-camera-debug">153. Camera Debug</h1><p>显示：</p>
+<ul>
+<li><p>DeadZone；</p>
+</li>
+<li><p>LookAhead；</p>
+</li>
+<li><p>Bounds；</p>
+</li>
+<li><p>Target。</p>
+</li>
+</ul>
+<p>用于排查：</p>
+<p>“操作难是Camera问题还是Level问题。”</p>
+<hr />
+<h1 id="154-death-heatmap">154. Death Heatmap</h1><p>按Section统计：</p>
+<p>死亡位置。</p>
+<hr />
+<h1 id="155-death-direction">155. Death Direction</h1><p>进一步记录：</p>
+<ul>
+<li><p>Spike；</p>
+</li>
+<li><p>Fall；</p>
+</li>
+<li><p>Crush；</p>
+</li>
+<li><p>Timing。</p>
+</li>
+</ul>
+<hr />
+<h1 id="156-attempt-histogram">156. Attempt Histogram</h1><p>某房间：</p>
+<p>平均：</p>
+<p>4次。</p>
+<p>P95：</p>
+<p>18次。</p>
+<p>可以检测：</p>
+<p>难度尖峰。</p>
+<hr />
+<h1 id="157-completion-time-distribution">157. Completion Time Distribution</h1><p>看：</p>
+<p>是否存在：</p>
+<p>某一Section远高于其他Section。</p>
+<hr />
+<h1 id="158-input-to-action-latency">158. Input-to-Action Latency</h1><p>记录：</p>
+<p>Device Input Timestamp</p>
+<p>到：</p>
+<p>Simulation Consume Tick。</p>
+<p>确保：</p>
+<p>没有异常输入延迟。</p>
+<hr />
+<h1 id="159-replay-diff">159. Replay Diff</h1><p>同一Input Replay运行两次。</p>
+<p>找到：</p>
+<p>首个State差异。</p>
+<hr />
+<h1 id="160-content-validation">160. Content Validation</h1><hr />
+<h2 id="1601-jump-reachability-test">160.1 Jump Reachability Test</h2><p>所有标记为：</p>
+<p>Required Jump Edge</p>
+<p>必须：</p>
+<p>至少存在合法输入轨迹。</p>
+<hr />
+<h1 id="161-capability-reachability">161. Capability Reachability</h1><p>拥有：</p>
+<p>Jump + Dash</p>
+<p>时可达。</p>
+<p>只有Jump：</p>
+<p>不可达。</p>
+<p>验证设计标签。</p>
+<hr />
+<h1 id="162-minimum-gap-validation">162. Minimum Gap Validation</h1><p>尖刺间缝：</p>
+<p>宽度</p>
+<p>必须大于：</p>
+<p>PlayerCollider</p>
+<p>加设计Margin。</p>
+<hr />
+<h1 id="163-platform-landing-width">163. Platform Landing Width</h1><p>检测：</p>
+<p>平台宽度</p>
+<p>是否满足目标难度。</p>
+<hr />
+<h1 id="164-ceiling-clearance">164. Ceiling Clearance</h1><p>Jump路线不能：</p>
+<p>由于Collider变化</p>
+<p>突然撞到天花板。</p>
+<hr />
+<h1 id="165-moving-platform-phase-test">165. Moving Platform Phase Test</h1><p>模拟：</p>
+<p>完整周期。</p>
+<p>检测：</p>
+<p>是否存在：</p>
+<p>玩家理论永远等不到可用窗口。</p>
+<hr />
+<h1 id="166-hazard-collision-test">166. Hazard Collision Test</h1><p>Visual Hazard</p>
+<p>和：</p>
+<p>Logical Bounds</p>
+<p>偏差不能超过规范。</p>
+<hr />
+<h1 id="167-one-way-platform-test">167. One-Way Platform Test</h1><p>从：</p>
+<p>上、下、侧面</p>
+<p>自动执行碰撞测试。</p>
+<hr />
+<h1 id="168-corner-stress-test">168. Corner Stress Test</h1><p>随机生成：</p>
+<p>不同Tile角。</p>
+<p>高速移动。</p>
+<p>检测：</p>
+<p>卡角和穿透。</p>
+<hr />
+<h1 id="169-high-speed-dash-test">169. High-Speed Dash Test</h1><p>不同：</p>
+<p>dt</p>
+<p>和：</p>
+<p>速度。</p>
+<p>确认：</p>
+<p>不会Tunneling。</p>
+<hr />
+<h1 id="170-fixed-tick-consistency-test">170. Fixed-Tick Consistency Test</h1><p>相同Input：</p>
+<p>渲染：</p>
+<p>30FPS<br />
+60FPS<br />
+144FPS。</p>
+<p>逻辑轨迹：</p>
+<p>必须一致。</p>
+<hr />
+<h1 id="171-replay-determinism-test">171. Replay Determinism Test</h1><p>固定：</p>
+<p>MovementProfile</p>
+<ul>
+<li><p>SectionState</p>
+</li>
+<li><p>Input</p>
+</li>
+</ul>
+<p>执行：</p>
+<p>100次。</p>
+<p>最终：</p>
+<p>Position和State一致。</p>
+<hr />
+<h1 id="172-assist-regression-test">172. Assist Regression Test</h1><p>不同Assist参数：</p>
+<p>必须仍然：</p>
+<ul>
+<li><p>不穿墙；</p>
+</li>
+<li><p>Checkpoint正常；</p>
+</li>
+<li><p>能完成Section。</p>
+</li>
+</ul>
+<hr />
+<h1 id="173-controller-deadzone-test">173. Controller Deadzone Test</h1><p>模拟：</p>
+<p>轻微摇杆漂移。</p>
+<p>不应该：</p>
+<p>角色自动移动。</p>
+<hr />
+<h1 id="174-digital-analog-parity-test">174. Digital / Analog Parity Test</h1><p>键盘和手柄：</p>
+<p>在设计允许范围内</p>
+<p>都能完成关键路线。</p>
+<hr />
+<h1 id="175-性能设计">175. 性能设计</h1><p>精密平台跳跃通常实体数量不大。</p>
+<p>性能挑战不是：</p>
+<p>规模。</p>
+<p>而是：</p>
+<p><strong>稳定帧时间和输入延迟。</strong></p>
+<hr />
+<h1 id="176-固定逻辑更新">176. 固定逻辑更新</h1><p>推荐：</p>
+<p>Movement和Collision</p>
+<p>在固定Simulation Tick执行。</p>
+<p>例如：</p>
+<p>60Hz / 120Hz。</p>
+<p>具体取决于游戏需求。</p>
+<hr />
+<h1 id="177-不要因为高刷新显示器提高逻辑速度">177. 不要因为高刷新显示器提高逻辑速度</h1><p>144Hz显示：</p>
+<p>只是更多Interpolation帧。</p>
+<hr />
+<h1 id="178-physics-query需要可控">178. Physics Query需要可控</h1><p>单角色：</p>
+<p>Shape Sweep成本通常很低。</p>
+<p>无需过早复杂优化。</p>
+<p>优先：</p>
+<p>稳定语义。</p>
+<hr />
+<h1 id="179-level-collision建议简化">179. Level Collision建议简化</h1><p>视觉复杂Tile：</p>
+<p>可以合并成：</p>
+<p>较简单Collision Shape。</p>
+<p>减少：</p>
+<p>微小角造成异常。</p>
+<hr />
+<h1 id="180-tile-collision-merge">180. Tile Collision Merge</h1><p>连续地面：</p>
+<p>合并长Collider。</p>
+<p>避免：</p>
+<p>每个Tile边缘产生Contact seam。</p>
+<hr />
+<h1 id="181-dynamic-hazard">181. Dynamic Hazard</h1><p>只有：</p>
+<p>真正运动危险物</p>
+<p>需要Runtime更新。</p>
+<p>静态Spike：</p>
+<p>不需要Update。</p>
+<hr />
+<h1 id="182-moving-platform按路径系统批量更新">182. Moving Platform按路径系统批量更新</h1><p>不需要：</p>
+<p>每个平台独立复杂脚本。</p>
+<hr />
+<h1 id="183-input采集应高优先">183. Input采集应高优先</h1><p>避免：</p>
+<p>UI、日志、资源加载</p>
+<p>导致Input Event延迟。</p>
+<hr />
+<h1 id="184-section资源预加载">184. Section资源预加载</h1><p>死亡后重试：</p>
+<p>不应该重新从磁盘加载。</p>
+<p>房间进入前：</p>
+<p>资源已经驻留。</p>
+<hr />
+<h1 id="185-death不reload-scene">185. Death不Reload Scene</h1><p>优先：</p>
+<p>Reset State。</p>
+<p>这是：</p>
+<p>Fast Retry</p>
+<p>的重要技术保障。</p>
+<hr />
+<h1 id="186-可扩展点">186. 可扩展点</h1><hr />
+<h2 id="1861-新movement-ability">186.1 新Movement Ability</h2><p>实现：</p>
+<p>CapabilityDefinition</p>
+<p>并扩展PlayerMotor状态。</p>
+<hr />
+<h2 id="1862-新surface">186.2 新Surface</h2><p>通过：</p>
+<p>SurfaceDefinition</p>
+<p>接入：</p>
+<p>Wall、Bounce、Ice等规则。</p>
+<hr />
+<h2 id="1863-新hazard">186.3 新Hazard</h2><p>使用：</p>
+<p>HazardDefinition</p>
+<p>和Collision Effect。</p>
+<hr />
+<h2 id="1864-新moving-object">186.4 新Moving Object</h2><p>实现统一：</p>
+<p>MotionProvider。</p>
+<hr />
+<h2 id="1865-新level-mechanic">186.5 新Level Mechanic</h2><p>例如：</p>
+<p>Wind。</p>
+<p>Gravity Zone。</p>
+<p>Conveyor。</p>
+<p>尽量通过：</p>
+<p>Movement Modifier Field</p>
+<p>接入。</p>
+<hr />
+<h2 id="1866-3d-precision-platformer">186.6 3D Precision Platformer</h2><p>核心仍然成立：</p>
+<p>Input Intent<br />
+→ Motion<br />
+→ Sweep<br />
+→ Contact<br />
+→ Reachability。</p>
+<p>只是：</p>
+<p>二维水平控制</p>
+<p>变为：</p>
+<p>XZ平面。</p>
+<p>Camera要求更高。</p>
+<hr />
+<h2 id="1867-multiplayer-race">186.7 Multiplayer Race</h2><p>可以：</p>
+<p>玩家彼此Ghost化，</p>
+<p>避免碰撞。</p>
+<p>重点同步：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Time；</p>
+</li>
+<li><p>Checkpoint。</p>
+</li>
+</ul>
+<hr />
+<h2 id="1868-co-op-platformer">186.8 Co-op Platformer</h2><p>如果玩家可以：</p>
+<p>碰撞、抬人、合作开关，</p>
+<p>则需要：</p>
+<p>Multi-Actor Contact和同步。</p>
+<p>但基础Movement Core仍可复用。</p>
+<hr />
+<h1 id="187-玩家体验设计">187. 玩家体验设计</h1><hr />
+<h2 id="1871-玩家首先需要信任角色">187.1 玩家首先需要信任角色</h2><p>失败以后应自然产生：</p>
+<p>“我跳早了。”</p>
+<p>而不是：</p>
+<p>“游戏没吃到我的Jump。”</p>
+<p>这种信任感优先于：</p>
+<p>物理真实。</p>
+<hr />
+<h1 id="188-输入宽容最好隐藏在系统里">188. 输入宽容最好隐藏在系统里</h1><p>玩家不需要知道：</p>
+<p>Coyote = 100ms。</p>
+<p>只需要感觉：</p>
+<p>角色响应自然。</p>
+<hr />
+<h1 id="189-操作规则必须高度一致">189. 操作规则必须高度一致</h1><p>同一种墙：</p>
+<p>总能Wall Jump。</p>
+<p>同一种Spike：</p>
+<p>碰到就死。</p>
+<p>不要为了单独关卡：</p>
+<p>偷偷修改Movement。</p>
+<hr />
+<h1 id="190-关卡难度应来自规则组合而不是隐藏规则变化">190. 关卡难度应来自规则组合，而不是隐藏规则变化</h1><p>同一Jump：</p>
+<p>不要在Boss关突然Gravity ×1.2</p>
+<p>却不告诉玩家。</p>
+<hr />
+<h1 id="191-新机制需要单独教学空间">191. 新机制需要单独教学空间</h1><p>第一次见Dash：</p>
+<p>不要同时要求：</p>
+<p>Dash + WallJump + MovingPlatform。</p>
+<hr />
+<h1 id="192-成功反馈需要迅速但不要拖慢继续操作">192. 成功反馈需要迅速但不要拖慢继续操作</h1><p>Landing：</p>
+<p>音效、尘土。</p>
+<p>Checkpoint：</p>
+<p>明显。</p>
+<p>但不能：</p>
+<p>成功以后强制停3秒庆祝。</p>
+<hr />
+<h1 id="193-死亡反馈必须短">193. 死亡反馈必须短</h1><p>高难游戏：</p>
+<p>死亡本来就频繁。</p>
+<p>视觉反馈：</p>
+<p>清楚即可。</p>
+<hr />
+<h1 id="194-retry最好接近一个连续学习过程">194. Retry最好接近“一个连续学习过程”</h1><p>死<br />
+→ 立即回起点。</p>
+<p>玩家脑中的：</p>
+<p>运动预测</p>
+<p>还没消失。</p>
+<p>这是非常重要的学习体验。</p>
+<hr />
+<h1 id="195-checkpoint间长度决定心理压力">195. Checkpoint间长度决定心理压力</h1><p>短：</p>
+<p>适合精密高难。</p>
+<p>长：</p>
+<p>适合耐力与连续执行。</p>
+<p>需要明确：</p>
+<p>当前游戏想考什么。</p>
+<hr />
+<h1 id="196-收藏品可以制造风险路线">196. 收藏品可以制造风险路线</h1><p>主路线：</p>
+<p>较安全。</p>
+<p>草莓 / 宝石：</p>
+<p>位于更危险分支。</p>
+<p>玩家自主选择：</p>
+<p>是否进行更高精度挑战。</p>
+<hr />
+<h1 id="197-optional-challenge与主线难度分层">197. Optional Challenge与主线难度分层</h1><p>这样：</p>
+<p>普通玩家可以通关。</p>
+<p>高手：</p>
+<p>追求：</p>
+<ul>
+<li><p>Collectible；</p>
+</li>
+<li><p>Golden；</p>
+</li>
+<li><p>No Death；</p>
+</li>
+<li><p>Speedrun。</p>
+</li>
+</ul>
+<hr />
+<h1 id="198-难度不应主要依赖视觉欺骗">198. 难度不应主要依赖视觉欺骗</h1><p>平台边缘、危险和可站立区域：</p>
+<p>应清晰。</p>
+<p>操作难度</p>
+<p>和：</p>
+<p>信息不清</p>
+<p>是两种不同东西。</p>
+<hr />
+<h1 id="199-camera必须提前提供足够未来信息">199. Camera必须提前提供足够未来信息</h1><p>如果玩家需要：</p>
+<p>盲跳到屏幕外平台，</p>
+<p>除非这是明确记忆挑战，</p>
+<p>否则Camera设计失败。</p>
+<hr />
+<h1 id="200-手柄和键盘都需要独立调校">200. 手柄和键盘都需要独立调校</h1><p>Analog：</p>
+<p>Deadzone。</p>
+<p>Digital：</p>
+<p>瞬时全输入。</p>
+<p>Movement逻辑可以共享，</p>
+<p>但Input Mapping和Acceleration感受需要测试。</p>
+<hr />
+<h1 id="201-常见设计失败">201. 常见设计失败</h1><hr />
+<h2 id="2011-直接使用通用刚体物理作为全部角色运动">201.1 直接使用通用刚体物理作为全部角色运动</h2><p>角色碰撞和摩擦不可预测。</p>
+<hr />
+<h2 id="2012-为追求真实完全取消空中控制">201.2 为追求“真实”完全取消空中控制</h2><p>但关卡又要求精密落点。</p>
+<hr />
+<h2 id="2013-角色按下jump必须刚好grounded">201.3 角色按下Jump必须刚好Grounded</h2><p>大量输入被吃掉。</p>
+<hr />
+<h2 id="2014-没有coyote-time">201.4 没有Coyote Time</h2><p>平台边缘产生大量“不讲理”失败。</p>
+<hr />
+<h2 id="2015-coyote-time过长">201.5 Coyote Time过长</h2><p>玩家明显在空中仍能跳。</p>
+<p>规则感崩溃。</p>
+<hr />
+<h2 id="2016-jump-buffer过长">201.6 Jump Buffer过长</h2><p>玩家很早以前的输入突然执行。</p>
+<p>感觉角色自己跳。</p>
+<hr />
+<h2 id="2017-jump-buffer跨状态不清理">201.7 Jump Buffer跨状态不清理</h2><p>Dash结束以后意外Jump。</p>
+<hr />
+<h2 id="2018-grounded只靠collision-enter">201.8 Grounded只靠Collision Enter</h2><p>坡地和平台边缘不稳定。</p>
+<hr />
+<h2 id="2019-每个tile独立collider">201.9 每个Tile独立Collider</h2><p>大量边缘缝导致卡顿和Ground flicker。</p>
+<hr />
+<h2 id="20110-没有continuous-sweep">201.10 没有Continuous Sweep</h2><p>高速Dash穿墙。</p>
+<hr />
+<h2 id="20111-corner-correction过强">201.11 Corner Correction过强</h2><p>角色自动绕开障碍。</p>
+<hr />
+<h2 id="20112-moving-platform通过简单parent实现">201.12 Moving Platform通过简单Parent实现</h2><p>运动继承和碰撞异常。</p>
+<hr />
+<h2 id="20113-平台移动发生在player之后且无统一顺序">201.13 平台移动发生在Player之后且无统一顺序</h2><p>角色站在平台上抖动。</p>
+<hr />
+<h2 id="20114-wall-jump后air-control立即把角色拉回原墙">201.14 Wall Jump后Air Control立即把角色拉回原墙</h2><p>玩家感觉WallJump无力。</p>
+<hr />
+<h2 id="20115-one-way-platform使用普通碰撞器开关">201.15 One-Way Platform使用普通碰撞器开关</h2><p>多人或复杂接触时状态混乱。</p>
+<hr />
+<h2 id="20116-animation-event真正触发jump">201.16 Animation Event真正触发Jump</h2><p>动画长度修改Gameplay。</p>
+<hr />
+<h2 id="20117-camera滞后导致玩家看不到未来平台">201.17 Camera滞后导致玩家看不到未来平台</h2><p>关卡难度来自摄像机。</p>
+<hr />
+<h2 id="20118-death后reload完整scene">201.18 Death后Reload完整Scene</h2><p>高频重试非常慢。</p>
+<hr />
+<h2 id="20119-moving-platform死亡后不重置相位">201.19 Moving Platform死亡后不重置相位</h2><p>每次重试条件不同。</p>
+<hr />
+<h2 id="20120-checkpoint只存位置">201.20 Checkpoint只存位置</h2><p>能力、机关和环境状态异常。</p>
+<hr />
+<h2 id="20121-关卡完全手工目测可达">201.21 关卡完全手工目测可达</h2><p>Movement参数一改大量地图损坏。</p>
+<hr />
+<h2 id="20122-高难度只不断缩小平台">201.22 高难度只不断缩小平台</h2><p>关卡缺乏运动语法变化。</p>
+<hr />
+<h2 id="20123-每个房间添加新的移动能力">201.23 每个房间添加新的移动能力</h2><p>玩家认知负荷快速膨胀。</p>
+<hr />
+<h2 id="20124-用随机移动平台增加难度">201.24 用随机移动平台增加难度</h2><p>玩家无法形成稳定技能。</p>
+<hr />
+<h2 id="20125-碰撞体和美术严重不一致">201.25 碰撞体和美术严重不一致</h2><p>玩家无法建立空间直觉。</p>
+<hr />
+<h2 id="20126-伤害物碰撞体比视觉明显更大">201.26 伤害物碰撞体比视觉明显更大</h2><p>失败感觉不公平。</p>
+<hr />
+<h2 id="20127-assist维护独立关卡版本">201.27 Assist维护独立关卡版本</h2><p>内容成本成倍增长。</p>
+<hr />
+<h2 id="20128-replay只录像画面">201.28 Replay只录像画面</h2><p>无法重现运动Bug。</p>
+<hr />
+<h2 id="20129-输入在fixedupdate里直接轮询">201.29 输入在FixedUpdate里直接轮询</h2><p>短按可能丢失。</p>
+<hr />
+<h2 id="20130-ui卡顿能够改变movement结果">201.30 UI卡顿能够改变Movement结果</h2><p>逻辑和渲染未真正解耦。</p>
+<hr />
+<h1 id="202-最小可行原型">202. 最小可行原型</h1><p>验证精密平台跳跃核心范式，不需要立即制作几十关。</p>
+<p>推荐：</p>
+<p><strong>1个角色 + 12～15个短房间 + 6种核心移动/环境原语。</strong></p>
+<hr />
+<h1 id="203-玩家运动">203. 玩家运动</h1><p>第一版实现：</p>
+<ul>
+<li><p>Run；</p>
+</li>
+<li><p>Variable Jump；</p>
+</li>
+<li><p>Coyote Time；</p>
+</li>
+<li><p>Jump Buffer；</p>
+</li>
+<li><p>Air Control；</p>
+</li>
+<li><p>Wall Jump。</p>
+</li>
+</ul>
+<hr />
+<h1 id="204-第二阶段能力">204. 第二阶段能力</h1><p>加入：</p>
+<p>Dash。</p>
+<p>已经足以产生大量组合。</p>
+<hr />
+<h1 id="205-环境">205. 环境</h1><p>至少：</p>
+<ul>
+<li><p>Solid Ground；</p>
+</li>
+<li><p>One-Way Platform；</p>
+</li>
+<li><p>Spike；</p>
+</li>
+<li><p>Moving Platform；</p>
+</li>
+<li><p>Wall；</p>
+</li>
+<li><p>Bounce Pad。</p>
+</li>
+</ul>
+<hr />
+<h1 id="206-checkpoint">206. Checkpoint</h1><p>每：</p>
+<p>1～3个房间</p>
+<p>一个。</p>
+<p>高难房：</p>
+<p>房间入口即Checkpoint。</p>
+<hr />
+<h1 id="207-camera">207. Camera</h1><p>实现：</p>
+<ul>
+<li><p>Dead Zone；</p>
+</li>
+<li><p>Look Ahead；</p>
+</li>
+<li><p>Room Bounds。</p>
+</li>
+</ul>
+<hr />
+<h1 id="208-mvp必要基础设施">208. MVP必要基础设施</h1><ul>
+<li><p>InputFrame；</p>
+</li>
+<li><p>InputBuffer；</p>
+</li>
+<li><p>MovementProfile；</p>
+</li>
+<li><p>PlayerMotionState；</p>
+</li>
+<li><p>CharacterMotor；</p>
+</li>
+<li><p>ContactState；</p>
+</li>
+<li><p>SurfaceDefinition；</p>
+</li>
+<li><p>JumpState；</p>
+</li>
+<li><p>DashState；</p>
+</li>
+<li><p>MovingPlatformState；</p>
+</li>
+<li><p>HazardDefinition；</p>
+</li>
+<li><p>CheckpointState；</p>
+</li>
+<li><p>SectionSnapshot；</p>
+</li>
+<li><p>RouteSectionDefinition；</p>
+</li>
+<li><p>AttemptState；</p>
+</li>
+<li><p>ReplayRecord。</p>
+</li>
+</ul>
+<hr />
+<h1 id="209-mvp必要调试工具">209. MVP必要调试工具</h1><ul>
+<li><p>MotionInspector；</p>
+</li>
+<li><p>MotionTrail；</p>
+</li>
+<li><p>JumpArcPreview；</p>
+</li>
+<li><p>ReachabilityOverlay；</p>
+</li>
+<li><p>ContactOverlay；</p>
+</li>
+<li><p>CoyoteDebug；</p>
+</li>
+<li><p>JumpBufferDebug；</p>
+</li>
+<li><p>InputTimeline；</p>
+</li>
+<li><p>MotionStateTimeline；</p>
+</li>
+<li><p>MovingPlatformInspector；</p>
+</li>
+<li><p>CameraDebug；</p>
+</li>
+<li><p>DeathHeatmap；</p>
+</li>
+<li><p>AttemptHistogram；</p>
+</li>
+<li><p>ReplayDiff。</p>
+</li>
+</ul>
+<hr />
+<h1 id="210-mvp核心验收问题">210. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<ul>
+<li><p>相同起始状态和输入是否能得到稳定相同轨迹；</p>
+</li>
+<li><p>30FPS、60FPS、144FPS渲染下逻辑轨迹是否一致；</p>
+</li>
+<li><p>Jump Buffer是否能稳定接住合理的提前输入；</p>
+</li>
+<li><p>Coyote Time是否能修复平台边缘感知误差而不显得作弊；</p>
+</li>
+<li><p>Variable Jump是否形成有意义的长跳 / 短跳控制；</p>
+</li>
+<li><p>Grounded是否在坡面、边缘和Moving Platform上稳定；</p>
+</li>
+<li><p>高速Dash是否不会穿透几何；</p>
+</li>
+<li><p>Corner Correction是否只修复小误差；</p>
+</li>
+<li><p>Moving Platform是否能稳定携带角色；</p>
+</li>
+<li><p>Wall Jump是否不会立即被Air Control抵消；</p>
+</li>
+<li><p>One-Way Platform是否在所有进入方向上规则一致；</p>
+</li>
+<li><p>Hazard Visual与Collision是否具有可信对应关系；</p>
+</li>
+<li><p>Checkpoint是否能完整恢复Section状态；</p>
+</li>
+<li><p>死亡到重新可控是否足够快；</p>
+</li>
+<li><p>Camera是否始终让玩家看到下一次关键落点；</p>
+</li>
+<li><p>Reachability工具是否能正确预测主要平台可达性；</p>
+</li>
+<li><p>新房间难度是否来自已有原语组合而不是隐藏参数变化；</p>
+</li>
+<li><p>Replay能否完整重现一次失败；</p>
+</li>
+<li><p>DeathHeatmap是否能识别异常碰撞或难度尖峰；</p>
+</li>
+<li><p>玩家是否能明确感觉失败来源于自己的时机、路线或运动判断。</p>
+</li>
+</ul>
+<p>这些问题没有成立之前，不建议优先增加：</p>
+<ul>
+<li><p>大量关卡；</p>
+</li>
+<li><p>数十移动能力；</p>
+</li>
+<li><p>在线竞速；</p>
+</li>
+<li><p>战斗系统；</p>
+</li>
+<li><p>大型剧情；</p>
+</li>
+<li><p>RPG成长；</p>
+</li>
+<li><p>复杂随机地牢。</p>
+</li>
+</ul>
+<hr />
+<h1 id="211-推荐实施顺序">211. 推荐实施顺序</h1><p>第一阶段：</p>
+<ul>
+<li><p>Input Sampling；</p>
+</li>
+<li><p>Fixed Simulation；</p>
+</li>
+<li><p>Horizontal Movement。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>Sweep Collision；</p>
+</li>
+<li><p>Ground；</p>
+</li>
+<li><p>Jump。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Variable Jump；</p>
+</li>
+<li><p>Coyote；</p>
+</li>
+<li><p>Jump Buffer。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Air Control；</p>
+</li>
+<li><p>Ground Snap；</p>
+</li>
+<li><p>Slope。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Wall Contact；</p>
+</li>
+<li><p>Wall Slide；</p>
+</li>
+<li><p>Wall Jump。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Hazard；</p>
+</li>
+<li><p>Death；</p>
+</li>
+<li><p>Fast Respawn；</p>
+</li>
+<li><p>Checkpoint。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Moving Platform；</p>
+</li>
+<li><p>One-Way Platform。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Dash；</p>
+</li>
+<li><p>Bounce；</p>
+</li>
+<li><p>Ability State。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Camera；</p>
+</li>
+<li><p>Room Bounds；</p>
+</li>
+<li><p>Look Ahead。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Reachability Tool；</p>
+</li>
+<li><p>Jump Envelope；</p>
+</li>
+<li><p>Level Validation。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Ghost；</p>
+</li>
+<li><p>Death Analytics。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Assist Mode；</p>
+</li>
+<li><p>Speedrun；</p>
+</li>
+<li><p>Advanced Content Tools。</p>
+</li>
+</ul>
+<hr />
+<h1 id="212-架构验收标准">212. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>输入采样与Simulation Tick分离；</p>
+</li>
+<li><p>Press、Release与Held输入语义严格区分；</p>
+</li>
+<li><p>短输入不会因Fixed Tick丢失；</p>
+</li>
+<li><p>权威运动状态由统一PlayerMotor维护；</p>
+</li>
+<li><p>Movement逻辑不依赖Animation；</p>
+</li>
+<li><p>角色移动优先使用可预测Kinematic规则；</p>
+</li>
+<li><p>水平移动拥有明确Acceleration与Deceleration；</p>
+</li>
+<li><p>Ground和Air控制参数独立；</p>
+</li>
+<li><p>上升与下降Gravity可以独立配置；</p>
+</li>
+<li><p>Jump拥有稳定初速度；</p>
+</li>
+<li><p>Jump Release可以通过统一Jump Cut改变高度；</p>
+</li>
+<li><p>Jump Buffer拥有明确有效窗口与消费语义；</p>
+</li>
+<li><p>Coyote Time拥有明确有效窗口与单次消费语义；</p>
+</li>
+<li><p>Jump Buffer和Coyote不会跨死亡错误继承；</p>
+</li>
+<li><p>Motion使用连续Shape Sweep而不是只做终点Overlap；</p>
+</li>
+<li><p>Contact拥有Ground、Wall、Ceiling等明确状态；</p>
+</li>
+<li><p>Ground Probe与Ground Snap稳定处理坡面和边缘；</p>
+</li>
+<li><p>Surface Normal决定可站立性；</p>
+</li>
+<li><p>Character Visual Bounds与Collision Bounds分离；</p>
+</li>
+<li><p>Hazard Visual与Collision保持明确且略宽容的对应关系；</p>
+</li>
+<li><p>Corner Correction只有有限范围；</p>
+</li>
+<li><p>Moving Platform拥有独立Motion State；</p>
+</li>
+<li><p>Player能够稳定继承Moving Platform位移与可配置速度；</p>
+</li>
+<li><p>Moving Platform高速运动同样经过碰撞验证；</p>
+</li>
+<li><p>One-Way Platform拥有方向性碰撞规则；</p>
+</li>
+<li><p>Wall能力由Surface Capability控制；</p>
+</li>
+<li><p>Dash等移动能力拥有正式状态和资源；</p>
+</li>
+<li><p>新Movement Ability会进入Reachability分析；</p>
+</li>
+<li><p>MovementProfile被视为Level Design Contract；</p>
+</li>
+<li><p>编辑器能够显示Jump / Dash Reachability Envelope；</p>
+</li>
+<li><p>Level生成或制作工具能够检测明显不可达路线；</p>
+</li>
+<li><p>Section具有明确起点和终点；</p>
+</li>
+<li><p>Hazard死亡只能提交一次；</p>
+</li>
+<li><p>Checkpoint不仅保存位置，还定义能力和环境恢复策略；</p>
+</li>
+<li><p>高频失败不依赖Scene Reload；</p>
+</li>
+<li><p>Section Restore保证重复尝试具有稳定初始条件；</p>
+</li>
+<li><p>Camera只消费运动状态，不反向改变运动；</p>
+</li>
+<li><p>Camera Look Ahead和Bounds属于Gameplay Readability系统；</p>
+</li>
+<li><p>Input在Hit Stop等表现冻结期间仍可按照规则缓存；</p>
+</li>
+<li><p>Assist Mode复用同一Movement Core；</p>
+</li>
+<li><p>Replay绑定MovementProfileVersion；</p>
+</li>
+<li><p>相同输入能够确定性重现Player Path；</p>
+</li>
+<li><p>Death / Attempt Telemetry能够定位难度和碰撞问题；</p>
+</li>
+<li><p>新Surface通常只需扩展SurfaceDefinition；</p>
+</li>
+<li><p>新Hazard通过HazardDefinition接入；</p>
+</li>
+<li><p>新关卡不需要编写角色专用运动逻辑；</p>
+</li>
+<li><p>同一运动原语在所有关卡保持规则一致。</p>
+</li>
+</ul>
+<hr />
+<h1 id="213-可迁移到其他游戏的设计思想">213. 可迁移到其他游戏的设计思想</h1><hr />
+<h2 id="2131-宽容输入和降低挑战是两个不同概念">213.1 “宽容输入”和“降低挑战”是两个不同概念</h2><p>Jump Buffer与Coyote Time不会替玩家完成跳跃。</p>
+<p>它们只是：</p>
+<p>更准确地解释玩家意图。</p>
+<p>这一思想可迁移到：</p>
+<ul>
+<li><p>动作游戏；</p>
+</li>
+<li><p>格斗；</p>
+</li>
+<li><p>QTE；</p>
+</li>
+<li><p>技能释放；</p>
+</li>
+<li><p>UI操作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2132-操作系统首先需要建立玩家对因果的信任">213.2 操作系统首先需要建立玩家对因果的信任</h2><p>可迁移到：</p>
+<p>所有高技能动作游戏。</p>
+<p>玩家必须相信：</p>
+<p>相同输入</p>
+<p>会得到：</p>
+<p>可预测结果。</p>
+<p>否则：</p>
+<p>任何高难度都容易被理解为系统不公平。</p>
+<hr />
+<h2 id="2133-玩家能力可以被描述为空间可达包络">213.3 玩家能力可以被描述为“空间可达包络”</h2><p>可迁移到：</p>
+<ul>
+<li><p>银河城；</p>
+</li>
+<li><p>AI导航；</p>
+</li>
+<li><p>战术移动；</p>
+</li>
+<li><p>Parkour；</p>
+</li>
+<li><p>Boss Arena。</p>
+</li>
+</ul>
+<p>不要只问：</p>
+<p>“角色会不会Jump。”</p>
+<p>要问：</p>
+<blockquote>
+<p>在当前运动规则下，他实际能够到达哪些状态空间？</p>
+</blockquote>
+<hr />
+<h2 id="2134-内容与角色能力之间应该存在自动契约验证">213.4 内容与角色能力之间应该存在自动契约验证</h2><p>如果角色Movement改5%，</p>
+<p>关卡也可能变化。</p>
+<p>同理可迁移到：</p>
+<ul>
+<li><p>战术射程；</p>
+</li>
+<li><p>攀爬；</p>
+</li>
+<li><p>车辆；</p>
+</li>
+<li><p>AI路径；</p>
+</li>
+<li><p>技能范围。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2135-correction系统适合修复微小离散误差而不应该替玩家完成宏观决策">213.5 Correction系统适合修复微小离散误差，而不应该替玩家完成宏观决策</h2><p>可迁移到：</p>
+<ul>
+<li><p>Aim Assist；</p>
+</li>
+<li><p>Cover Snap；</p>
+</li>
+<li><p>Climbing；</p>
+</li>
+<li><p>Interaction Alignment。</p>
+</li>
+</ul>
+<p>关键是：</p>
+<p>明确Correction Budget。</p>
+<hr />
+<h2 id="2136-失败成本越低系统越能要求高执行精度">213.6 失败成本越低，系统越能要求高执行精度</h2><p>可迁移到：</p>
+<ul>
+<li><p>Boss Rush；</p>
+</li>
+<li><p>Puzzle；</p>
+</li>
+<li><p>Rhythm；</p>
+</li>
+<li><p>Speedrun；</p>
+</li>
+<li><p>Challenge Room。</p>
+</li>
+</ul>
+<p>高难度和低惩罚并不矛盾。</p>
+<p>反而可以互相支持。</p>
+<hr />
+<h2 id="2137-快速重试会把失败从惩罚转换为训练反馈">213.7 快速重试会把失败从“惩罚”转换为“训练反馈”</h2><p>玩家可以迅速比较：</p>
+<p>上一条输入轨迹</p>
+<p>和：</p>
+<p>下一条轨迹。</p>
+<p>这是一种非常高效的技能学习循环。</p>
+<hr />
+<h2 id="2138-稳定基础规则可以自然产生高级技巧">213.8 稳定基础规则可以自然产生高级技巧</h2><p>玩家从：</p>
+<p>边缘起跳；</p>
+<p>动量保持；</p>
+<p>Jump Cut；</p>
+<p>Wall Jump Timing</p>
+<p>中自然发现优化。</p>
+<p>不需要系统显式提供：</p>
+<p>“高级技巧按钮”。</p>
+<hr />
+<h2 id="2139-动画应表示状态而不是拥有状态">213.9 动画应表示状态，而不是拥有状态</h2><p>可迁移到：</p>
+<ul>
+<li><p>战斗；</p>
+</li>
+<li><p>角色移动；</p>
+</li>
+<li><p>UI流程；</p>
+</li>
+<li><p>技能。</p>
+</li>
+</ul>
+<p>Gameplay产生事实。</p>
+<p>Animation表现事实。</p>
+<hr />
+<h2 id="21310-moving-platform问题本质上是参考系问题">213.10 Moving Platform问题本质上是参考系问题</h2><p>可迁移到：</p>
+<ul>
+<li><p>船；</p>
+</li>
+<li><p>火车；</p>
+</li>
+<li><p>Vehicle；</p>
+</li>
+<li><p>太空站；</p>
+</li>
+<li><p>移动Boss。</p>
+</li>
+</ul>
+<p>“站在一个移动物体上”</p>
+<p>需要明确：</p>
+<p>世界空间速度</p>
+<p>和：</p>
+<p>相对空间速度。</p>
+<hr />
+<h2 id="21311-输入采样频率和逻辑更新频率应该解耦">213.11 输入采样频率和逻辑更新频率应该解耦</h2><p>可迁移到：</p>
+<ul>
+<li><p>节奏；</p>
+</li>
+<li><p>格斗；</p>
+</li>
+<li><p>射击；</p>
+</li>
+<li><p>网络输入。</p>
+</li>
+</ul>
+<p>逻辑60Hz</p>
+<p>不代表：</p>
+<p>只能每16.67ms观察一次玩家输入。</p>
+<hr />
+<h2 id="21312-摄像机不是纯表现系统">213.12 摄像机不是纯表现系统</h2><p>在依赖未来空间信息的玩法中：</p>
+<p>Camera决定：</p>
+<p>玩家拥有多少可操作信息。</p>
+<p>同样适用于：</p>
+<ul>
+<li><p>赛车；</p>
+</li>
+<li><p>平台；</p>
+</li>
+<li><p>RTS；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>Boss战。</p>
+</li>
+</ul>
+<hr />
+<h1 id="214-本次防重记录">214. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>精密平台跳跃 / Precision Platformer。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Precision Platformer；</p>
+</li>
+<li><p>Hardcore Platformer；</p>
+</li>
+<li><p>2D Precision Platformer；</p>
+</li>
+<li><p>Platformer；</p>
+</li>
+<li><p>精密平台跳跃；</p>
+</li>
+<li><p>高难平台跳跃；</p>
+</li>
+<li><p>横版平台动作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="核心范式">核心范式</h2><p>精密平台跳跃以稳定可预测的角色运动为核心运行时事实。设备输入先进入独立Input Buffer，再由固定Simulation Tick解释为Movement Intent；Player Motor依据Acceleration、Jump、Gravity、Air Control、Wall、Dash等统一规则计算目标运动，并通过连续Sweep、Ground Probe、Ground Snap、Corner Correction和Moving Platform参考系求解真实位置与接触状态。Jump Buffer和Coyote Time允许系统在极短窗口内修正人类输入与碰撞边界之间的感知误差，却不会替玩家完成路线。</p>
+<p>关卡不应只被视为一组平台模型，而应被视为角色Reachability Envelope上的一系列运动句法：Run、Short Jump、Full Jump、Wall Jump、Dash、Moving Platform等少量原语被持续重新组合，产生越来越复杂的空间执行问题。失败以后系统从稳定Checkpoint Snapshot快速恢复，使玩家能够在极短反馈周期内比较上一轮误差、调整输入并再次尝试；长期成长因此主要沉淀在玩家自身的运动预测和身体记忆中，而不是角色数值。</p>
+<p>核心循环可以压缩为：</p>
+<p><strong>观察几何<br />
+→ 判断可达运动包络<br />
+→ 提交移动与跳跃Intent<br />
+→ Input Buffer解释人类时序<br />
+→ Player Motor生成稳定轨迹<br />
+→ Collision / Contact求解<br />
+→ 空中微调、墙跳或Dash<br />
+→ 落点验证<br />
+→ 成功推进<br />
+或<br />
+→ Hazard失败<br />
+→ 即时Checkpoint恢复<br />
+→ 根据上一Attempt误差调整<br />
+→ 重复直到路线被身体记忆掌握。</strong></p>
+<hr />
+<h2 id="核心识别特征">核心识别特征</h2><ul>
+<li><p>玩家直接控制单个高响应角色；</p>
+</li>
+<li><p>Movement本身就是主要玩法；</p>
+</li>
+<li><p>角色运动强调可预测而非完整物理真实性；</p>
+</li>
+<li><p>输入采样和固定Simulation分离；</p>
+</li>
+<li><p>Jump通常支持Variable Height；</p>
+</li>
+<li><p>Jump Buffer解释合理提前输入；</p>
+</li>
+<li><p>Coyote Time解释平台边缘合理延迟输入；</p>
+</li>
+<li><p>Ground和Air Control拥有独立参数；</p>
+</li>
+<li><p>Grounded使用稳定Probe / Snap而非偶然碰撞事件；</p>
+</li>
+<li><p>高速运动使用连续Sweep避免穿透；</p>
+</li>
+<li><p>Corner Correction只修复微小几何误差；</p>
+</li>
+<li><p>Visual Bounds和真实Collision Bounds分离；</p>
+</li>
+<li><p>Moving Platform使用明确参考系；</p>
+</li>
+<li><p>One-Way Platform拥有独立方向碰撞规则；</p>
+</li>
+<li><p>Surface能够声明Wall Jump、Slide等运动能力；</p>
+</li>
+<li><p>Dash等能力真正改变Reachability Envelope；</p>
+</li>
+<li><p>关卡设计依赖角色运动包络；</p>
+</li>
+<li><p>Level Editor应能够可视化Jump Reachability；</p>
+</li>
+<li><p>MovementProfile修改需要关卡回归验证；</p>
+</li>
+<li><p>关卡主要通过少量运动原语组合形成复杂度；</p>
+</li>
+<li><p>Hazard需要极高视觉可读性；</p>
+</li>
+<li><p>高频死亡拥有极低重试成本；</p>
+</li>
+<li><p>Checkpoint恢复的是稳定Section状态而不只是Player Position；</p>
+</li>
+<li><p>Camera属于未来空间信息系统；</p>
+</li>
+<li><p>Animation不驱动权威运动；</p>
+</li>
+<li><p>Assist Mode复用相同Movement Core；</p>
+</li>
+<li><p>Replay可以通过Input重建Player Path；</p>
+</li>
+<li><p>长期成长主要表现为玩家运动模型和身体记忆越来越精确。</p>
+</li>
+</ul>
+<hr />
+<h2 id="与仓库现有格斗游戏的防重边界">与仓库现有格斗游戏的防重边界</h2><p>当前仓库已有 <code>fighting</code>，其核心是帧级模拟、招式起手/有效/收招、Hitbox、帧优势、取消与双方攻防预测。</p>
+<p>两者都非常强调：</p>
+<ul>
+<li><p>输入延迟；</p>
+</li>
+<li><p>稳定碰撞；</p>
+</li>
+<li><p>固定逻辑；</p>
+</li>
+<li><p>可重放性。</p>
+</li>
+</ul>
+<p>但核心控制对象不同：</p>
+<p><strong>Fighting：</strong></p>
+<blockquote>
+<p>用招式状态和空间距离预测另一个玩家的下一行动。</p>
+</blockquote>
+<p><strong>Precision Platformer：</strong></p>
+<blockquote>
+<p>用角色运动包络预测自己在未来连续空间中的位置。</p>
+</blockquote>
+<p>格斗的主要压力来自：</p>
+<p>另一个自主对手。</p>
+<p>精密平台跳跃的主要压力来自：</p>
+<p>稳定的几何、时间窗口和角色运动模型。</p>
+<p>因此两者不属于同一宏观范式。</p>
+<hr />
+<h2 id="与仓库现有节奏游戏的防重边界">与仓库现有节奏游戏的防重边界</h2><p>节奏游戏的核心真值是：</p>
+<p><strong>Audio Timeline。</strong></p>
+<p>玩家输入通过：</p>
+<p>InputTime - TargetTime</p>
+<p>获得Timing Error。</p>
+<p>精密平台跳跃虽然同样重视输入时序，但不存在一条统一音乐时间轴。</p>
+<p>它的输入价值取决于：</p>
+<ul>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Contact；</p>
+</li>
+<li><p>Geometry。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>Rhythm Game：</strong></p>
+<blockquote>
+<p>在正确的时间输入。</p>
+</blockquote>
+<p><strong>Precision Platformer：</strong></p>
+<blockquote>
+<p>在正确的运动状态、位置与时间共同构成的窗口输入。</p>
+</blockquote>
+<p>二者都适合高精度Input和Replay，但运行时核心完全不同。</p>
+<hr />
+<h2 id="与传统-roguelike-的防重边界">与传统 Roguelike 的防重边界</h2><p>当前仓库已经存在 <code>traditional-roguelike</code>，其核心是玩家提交一个离散行动以后世界才推进，强调有限信息、程序地牢和不可逆决策。当前生成索引中该类型已经独立存在。</p>
+<p>精密平台跳跃则是：</p>
+<p>严格连续时间的身体执行。</p>
+<p>玩家无法：</p>
+<p>暂停在半空无限思考下一次输入。</p>
+<p>因此：</p>
+<p><strong>Traditional Roguelike：</strong></p>
+<p>行动质量主要来自推理。</p>
+<p><strong>Precision Platformer：</strong></p>
+<p>行动质量主要来自连续运动预测与执行。</p>
+<hr />
+<h2 id="与未来银河城-metroidvania记录的防重边界">与未来“银河城 / Metroidvania”记录的防重边界</h2><p>本次防重范围<strong>不会</strong>把银河城整体吸收进来。</p>
+<p>精密平台跳跃固定研究：</p>
+<ul>
+<li><p>Movement Controller；</p>
+</li>
+<li><p>Jump；</p>
+</li>
+<li><p>Contact；</p>
+</li>
+<li><p>Platform；</p>
+</li>
+<li><p>Hazard；</p>
+</li>
+<li><p>Checkpoint；</p>
+</li>
+<li><p>Movement Route Mastery。</p>
+</li>
+</ul>
+<p>如果未来新增银河城范式，应固定研究：</p>
+<ul>
+<li><p>大型互联世界；</p>
+</li>
+<li><p>能力门控；</p>
+</li>
+<li><p>Capability Graph；</p>
+</li>
+<li><p>回访；</p>
+</li>
+<li><p>Shortcut；</p>
+</li>
+<li><p>区域重新语义化；</p>
+</li>
+<li><p>探索进度。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>Precision Platformer：</strong></p>
+<blockquote>
+<p>我怎样稳定完成这个运动序列？</p>
+</blockquote>
+<p><strong>Metroidvania：</strong></p>
+<blockquote>
+<p>获得新能力以后，整个旧世界有哪些路径和意义被重新打开？</p>
+</blockquote>
+<p>二者可以共享Movement基础设施，但不是同一个宏观范式。</p>
+<hr />
+<h2 id="与未来跑酷-parkour-flow记录的防重边界">与未来“跑酷 / Parkour Flow”记录的防重边界</h2><p>本次也不把跑酷竞速整体纳入防重。</p>
+<p>如果未来记录跑酷类，应重点研究：</p>
+<ul>
+<li><p>连续速度；</p>
+</li>
+<li><p>动量；</p>
+</li>
+<li><p>Vault；</p>
+</li>
+<li><p>Wall Run；</p>
+</li>
+<li><p>Route Branching；</p>
+</li>
+<li><p>Flow；</p>
+</li>
+<li><p>连招式移动；</p>
+</li>
+<li><p>时间优化。</p>
+</li>
+</ul>
+<p>精密平台跳跃则更集中于：</p>
+<p>单次动作窗口和小尺度落点精度。</p>
+<p>因此两者仍可独立存在。</p>
+<hr />
+<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<li><p>Precision Platformer；</p>
+</li>
+<li><p>Player Motor；</p>
+</li>
+<li><p>Kinematic Character Controller；</p>
+</li>
+<li><p>Fixed Simulation；</p>
+</li>
+<li><p>Input Sampling；</p>
+</li>
+<li><p>Input Buffer；</p>
+</li>
+<li><p>Jump；</p>
+</li>
+<li><p>Variable Jump Height；</p>
+</li>
+<li><p>Jump Cut；</p>
+</li>
+<li><p>Jump Buffer；</p>
+</li>
+<li><p>Coyote Time；</p>
+</li>
+<li><p>Ground Acceleration；</p>
+</li>
+<li><p>Air Control；</p>
+</li>
+<li><p>Gravity Up / Down；</p>
+</li>
+<li><p>Ground Probe；</p>
+</li>
+<li><p>Ground Snap；</p>
+</li>
+<li><p>Slope；</p>
+</li>
+<li><p>Continuous Sweep；</p>
+</li>
+<li><p>Collision Resolution；</p>
+</li>
+<li><p>Corner Correction；</p>
+</li>
+<li><p>Character Hitbox；</p>
+</li>
+<li><p>Surface Definition；</p>
+</li>
+<li><p>Wall Slide；</p>
+</li>
+<li><p>Wall Jump；</p>
+</li>
+<li><p>Wall Jump Lock；</p>
+</li>
+<li><p>One-Way Platform；</p>
+</li>
+<li><p>Drop Through；</p>
+</li>
+<li><p>Moving Platform；</p>
+</li>
+<li><p>Platform Velocity Inheritance；</p>
+</li>
+<li><p>Dash；</p>
+</li>
+<li><p>Bounce；</p>
+</li>
+<li><p>Movement Capability；</p>
+</li>
+<li><p>Jump Envelope；</p>
+</li>
+<li><p>Reachability Overlay；</p>
+</li>
+<li><p>Movement Profile；</p>
+</li>
+<li><p>Level Contract；</p>
+</li>
+<li><p>Movement Sentence；</p>
+</li>
+<li><p>Section；</p>
+</li>
+<li><p>Hazard；</p>
+</li>
+<li><p>Checkpoint；</p>
+</li>
+<li><p>Fast Respawn；</p>
+</li>
+<li><p>Deterministic Section Reset；</p>
+</li>
+<li><p>Camera Look Ahead；</p>
+</li>
+<li><p>Camera Dead Zone；</p>
+</li>
+<li><p>Assist Mode；</p>
+</li>
+<li><p>Ghost；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Speedrun；</p>
+</li>
+<li><p>Attempt Telemetry；</p>
+</li>
+<li><p>Death Heatmap；</p>
+</li>
+<li><p>Motion Debug；</p>
+</li>
+<li><p>Reachability Validation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次精密平台跳跃范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Platformer角色移动；</p>
+</li>
+<li><p>Precision Platformer Controller；</p>
+</li>
+<li><p>平台跳跃Jump系统；</p>
+</li>
+<li><p>Variable Jump；</p>
+</li>
+<li><p>Jump Buffer；</p>
+</li>
+<li><p>Coyote Time；</p>
+</li>
+<li><p>Platformer Air Control；</p>
+</li>
+<li><p>Ground Snap；</p>
+</li>
+<li><p>Platformer Slope；</p>
+</li>
+<li><p>Corner Correction；</p>
+</li>
+<li><p>平台跳跃碰撞；</p>
+</li>
+<li><p>Platformer Kinematic Controller；</p>
+</li>
+<li><p>Wall Slide；</p>
+</li>
+<li><p>Wall Jump；</p>
+</li>
+<li><p>One-Way Platform；</p>
+</li>
+<li><p>Moving Platform；</p>
+</li>
+<li><p>Platform Velocity；</p>
+</li>
+<li><p>Platformer Dash；</p>
+</li>
+<li><p>Platformer Bounce；</p>
+</li>
+<li><p>Jump Reachability；</p>
+</li>
+<li><p>Jump Envelope；</p>
+</li>
+<li><p>Platformer Level Validation；</p>
+</li>
+<li><p>Precision Platformer Checkpoint；</p>
+</li>
+<li><p>Platformer Fast Respawn；</p>
+</li>
+<li><p>Platformer Hazard；</p>
+</li>
+<li><p>Platformer Camera；</p>
+</li>
+<li><p>Platformer Assist Mode；</p>
+</li>
+<li><p>Platformer Ghost；</p>
+</li>
+<li><p>Platformer Replay；</p>
+</li>
+<li><p>Platformer Speedrun；</p>
+</li>
+<li><p>Platformer Death Heatmap；</p>
+</li>
+<li><p>Platformer Motion Debug；</p>
+</li>
+<li><p>Platformer Input Buffer；</p>
+</li>
+<li><p>Platformer固定逻辑更新；</p>
+</li>
+<li><p>Platformer确定性运动。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-25">2026-08-25</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

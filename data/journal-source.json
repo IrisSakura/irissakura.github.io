@@ -1,14 +1,28 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "5e0a74eba86f166e73d3c103604d3ce4a6a429e8",
-  "generatedAt": "2026-08-24T12:35:18+08:00",
+  "sourceCommit": "f523b7cf39884be53502cc2db469e4d86ffce862",
+  "generatedAt": "2026-08-25T22:50:02+08:00",
   "summary": {
-    "auditCount": 48,
-    "blogCount": 39,
-    "gameDesignCount": 57
+    "auditCount": 50,
+    "blogCount": 41,
+    "gameDesignCount": 58
   },
-  "gameDesignCatalogDigest": "744928f9176c9a604bd00005a0d3215236682f017678c665fbbc9046b8402d2b",
+  "gameDesignCatalogDigest": "e84a298905bc3ddf9e06cd6dacb3eaaebcde9dfb0cb347658b3dacbb18e43def",
   "audits": [
+    {
+      "id": "audit-2026-08-25",
+      "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一轮基线 08a24dc4...，main 又前进了 7 个提交。真正影响工程状态的不是最新的品牌文档提交，而是三条能力收敛线：Pooling Ownership/Lifecycle 二次闭环、Event Diagnostics Surface、Editor Tools Installer 异步边界收敛。最新 Brand V4 只是把 “Frame · Power · Extend” 与真实产品证据、文档入口绑定起来，并明确品牌表达不能替代真实 Supported/Runner 状态，不改变 Package、API 或发布身份。 最重要的状态变化是：上一轮 Pooling 的 55 个失败已经关闭。当前 Pooling focused EditMode 已达到 139/139，Stable API fresh compare 为 0/0/0/0；46 包 affected closure 为…",
+      "updatedAt": "2026-08-25",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-24",
+      "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮最重要的结论发生了变化。 前几轮仓库的主要风险是： 而当前实际 main 已经明显进入： 当前仓库仍明确声明： 根 README 同样明确写明：当前发布准备未启用，不应自行恢复 RC、Tag、Release、Evidence Backlog 或 Deferred 工作。 因此战略主线仍然正确。 但本轮出现了一个比前几轮更值得优先处理的问题： Supported Runtime Foundation 中的 Pooling 已经有大规模 Ownership/Lifecycle 重构进入 main，但对应工作仍然是 approved / deferred / not-run，并且当前另一个 Editor Tools 工作的 affected Unity lane 中，Framework.Pooling.Tests 实际出现了 55 个失败。",
+      "updatedAt": "2026-08-24",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-21",
       "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
@@ -347,6 +361,21 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "precision-platformer",
+      "title": "精密平台跳跃 / Precision Platformer",
+      "summary": "把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…",
+      "tags": [
+        "hardcore",
+        "platformer",
+        "precision"
+      ],
+      "updatedAt": "2026-08-25",
+      "sha256": "9f9b61030d1d2259c69d66da3ac0927324238f831134c6c4337554917e9ca7f0",
+      "contentSha256": "709c729c28e33c6512586a42bbd0c6c52c9a22e79492b8391e39dd89d731eb80",
+      "bytes": 67592,
+      "contentPath": "content/game-designs/precision-platformer.md"
+    },
     {
       "id": "auto-battler",
       "title": "自走棋 / Auto Battler",
@@ -1202,6 +1231,35 @@
     }
   ],
   "blogs": [
+    {
+      "id": "godot-gdtype-classdb-methodbind",
+      "title": "反射快照与运行时热路径：Godot GDType、ClassDB 与 MethodBind 的职责分离",
+      "summary": "动态语言和编辑器需要按名字查找属性、方法、信号与类型信息时，引擎怎样保留完整反射能力，同时避免每一次对象访问都重新进入一个全局类数据库并沿继承链搜索？",
+      "series": "从 Godot 源码理解引擎设计",
+      "tags": [
+        "classdb",
+        "gdtype",
+        "godot"
+      ],
+      "updatedAt": "2026-08-25",
+      "sha256": "2e396e8513b89bd450f8f101d671ae465819489624f500c03f122f6ef470a9a5",
+      "bytes": 33837,
+      "contentPath": "content/blogs/godot-gdtype-classdb-methodbind.md"
+    },
+    {
+      "id": "ue6-iris",
+      "title": "复制资格与交付确认：UE6 Iris 的对象协议、连接可见性与可靠状态",
+      "summary": "一个 UObject 的状态已经发生变化以后，怎样逐步判断哪些连接有资格看到它、本次带宽是否应该发送它，以及什么时候才能真正认为这一份状态已经可靠交付？",
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "tags": [
+        "iris",
+        "ue6"
+      ],
+      "updatedAt": "2026-08-25",
+      "sha256": "636aa058d8f56b470f03a3293bc95bc6fa190a1e1cb8a56fdafcc1e9e73be65f",
+      "bytes": 33413,
+      "contentPath": "content/blogs/ue6-iris.md"
+    },
     {
       "id": "4x",
       "title": "治理容量：4X 扩张中的收益、组织负担与管理约束",
