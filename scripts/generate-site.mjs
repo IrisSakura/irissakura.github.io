@@ -50,6 +50,7 @@ assertProjectFactsCurrent(projects, framework, journal);
 assertEngineeringSnapshot(irisEngineering);
 assertConsumerLabCurrent(consumerLab);
 assertBrandConfig(themeConfig);
+assertBrandProof(site);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
   [article.id, await readText(article.contentPath)]
@@ -499,6 +500,19 @@ function assertBrandConfig(config) {
   }
 }
 
+function assertBrandProof(siteData) {
+  const proof = siteData?.brandProof;
+  const ids = proof?.items?.map((item) => item.id);
+  if (JSON.stringify(ids) !== JSON.stringify(['iris', 'sakura', 'outcome'])) {
+    throw new Error('brand proof must preserve the IRIS, SAKURA and outcome sequence');
+  }
+  for (const item of proof.items) {
+    if (!item.promise || !item.proof || !/^pages\/[a-z-]+\.html(?:#[a-z-]+)?$/u.test(item.href ?? '') || !item.cta) {
+      throw new Error(`brand proof has an invalid ${item.id} entry`);
+    }
+  }
+}
+
 function assertEngineeringSnapshot(snapshot) {
   if (!snapshot || snapshot.schemaVersion !== 1 || snapshot.id !== 'iris-engineering') {
     throw new Error('Iris Engineering snapshot must use schemaVersion 1 and the stable project id');
@@ -562,6 +576,13 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
   const { profile } = siteData;
+  const brandProofItems = siteData.brandProof.items.map((item, index) => `
+                        <article class="brand-proof-item brand-proof-${escapeAttribute(item.id)}" data-brand-proof="${escapeAttribute(item.id)}">
+                            <span>0${index + 1}</span>
+                            <p>${escapeHtml(item.promise)}</p>
+                            <strong>${escapeHtml(item.proof)}</strong>
+                            <a href="${escapeAttribute(item.href)}" class="text-link">${escapeHtml(item.cta)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                        </article>`).join('');
   const researchCards = journalData.featuredNotes.slice(0, 3).map((note) => `
                 <article class="research-row">
                     <p class="project-status">${escapeHtml(note.track)} · ${escapeHtml(note.updatedAt)}</p>
@@ -634,6 +655,15 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
                             <h3>Game Framework</h3>
                             <p>Game Framework、Runtime Systems、Gameplay Modules 与 Tooling。</p>
                         </article>
+                    </div>
+                </div>
+                <div class="brand-proof" aria-labelledby="brand-proof-title">
+                    <div class="brand-proof-heading">
+                        <p class="section-kicker">${escapeHtml(siteData.brandProof.label)}</p>
+                        <h3 id="brand-proof-title">${escapeHtml(siteData.brandProof.title)}</h3>
+                        <p>${escapeHtml(siteData.brandProof.description)}</p>
+                    </div>
+                    <div class="brand-proof-grid">${brandProofItems}
                     </div>
                 </div>
             </div>

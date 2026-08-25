@@ -145,3 +145,27 @@ test('shared cards carry one restrained IRIS-to-SAKURA signature across page typ
   assert.ok(css.includes('Cross-page IRIS × SAKURA signature'));
   assert.ok(css.includes('linear-gradient(90deg, var(--brand-iris), var(--brand-shared), var(--brand-sakura))'));
 });
+
+test('homepage turns the brand promise into a data-owned product proof rail', async () => {
+  const [site, home, generator, css] = await Promise.all([
+    readFile(new URL('data/site.json', root), 'utf8').then(JSON.parse),
+    readFile(new URL('index.html', root), 'utf8'),
+    readFile(new URL('scripts/generate-site.mjs', root), 'utf8'),
+    readFile(new URL('style/main.css', root), 'utf8')
+  ]);
+
+  assert.deepEqual(site.brandProof.items.map((item) => item.id), ['iris', 'sakura', 'outcome']);
+  assert.equal((home.match(/data-brand-proof=/g) ?? []).length, 3);
+  for (const marker of [
+    'BRAND PROMISE → PRODUCT PROOF',
+    'Engineer · Manage · Deliver',
+    'Observe → Authorize → Execute → Verify',
+    'Frame · Power · Extend',
+    'Profiles → Packages → Verification',
+    'Research → System → Playable Work'
+  ]) {
+    assert.ok(home.includes(marker), `homepage is missing brand proof marker ${marker}`);
+  }
+  assert.match(generator, /assertBrandProof\(site\)/u);
+  assert.ok(css.includes('.brand-proof-grid'));
+});
