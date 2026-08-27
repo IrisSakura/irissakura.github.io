@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unreal-build-accelerator-known-inputs-cas.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门 | IrisSakura">
+    <meta property="og:description" content="远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unreal-build-accelerator-known-inputs-cas.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-build-accelerator-known-inputs-cas.png">
+    <meta property="og:image:alt" content="数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门 | IrisSakura">
+    <meta name="twitter:description" content="远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-build-accelerator-known-inputs-cas.png">
+    <meta name="twitter:image:alt" content="数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门 | IrisSakura","description":"远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？","url":"https://irissakura.github.io/pages/blog/unreal-build-accelerator-known-inputs-cas.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-build-accelerator-known-inputs-cas.png","datePublished":"2026-08-27","dateModified":"2026-08-27","about":["prefetch","uba","unreal-engine"]}</script>
+    <!-- site-meta:end -->
+    <title>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-27 · 更新于 2026-08-27</p>
+            <h1>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门</h1>
+            <p class="blog-deck">远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？</p>
+            <div class="note-tags"><span>prefetch</span><span>uba</span><a href="tag/unreal-engine.html">unreal-engine</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>一台远程构建机器已经空闲。</p>
+<p>Scheduler 也已经决定：</p>
+<pre><code class="language-text">这个 C++ Compile Action
+可以交给它执行。
+</code></pre>
+<p>编译器进程成功启动。</p>
+<p>CPU 也开始运行。</p>
+<p>但真正进入编译以后，第一批 Header Include 开始访问文件。</p>
+<p>Helper 发现这些内容本地并不存在。</p>
+<p>于是：</p>
+<pre><code class="language-text">编译器请求文件
+→
+Helper 才开始向 Host / CAS 拉取
+→
+等待网络
+→
+内容到达
+→
+编译继续
+</code></pre>
+<p>如果网络延迟很高，这种等待会重复发生。</p>
+<p>从任务调度的角度看：</p>
+<pre><code class="language-text">远程机器已经拿到工作。
+</code></pre>
+<p>从数据路径的角度看：</p>
+<pre><code class="language-text">工作真正需要的数据还没有靠近执行位置。
+</code></pre>
+<p>于是一个很自然的优化出现了：</p>
+<blockquote>
+<p>既然构建系统在 Action 开始以前已经知道很多潜在输入，为什么不提前把它们送过去？</p>
+</blockquote>
+<p>这就是 Known Inputs 预热真正解决的问题。</p>
+<p>但它同时制造了一个很危险的架构诱惑：</p>
+<pre><code class="language-text">既然我们已经知道输入
+→
+那这份 Known Inputs 列表是不是就等于 Action 的完整依赖清单？
+</code></pre>
+<p>答案是否定的。</p>
+<p>而这条否定，比预取本身更值得研究。</p>
+<h2 id="先说结论known-inputs-是数据预热平面不是构建正确性平面">先说结论：Known Inputs 是数据预热平面，不是构建正确性平面</h2><p><strong>数据预热（后文简称“文件真正被读取以前先把它搬近一点”）</strong>：根据已有依赖信息或预测结果，在任务正式访问数据以前异步准备其内容，以降低之后真实访问时的等待时间。</p>
+<p><strong>正确性主链（后文简称“就算预热完全失败，系统仍然必须能得到正确文件”）</strong>：真正决定 Action 能否执行、文件访问返回什么内容以及构建结果是否有效的依赖、文件系统、Detour、Storage 与 CAS 访问协议。</p>
+<p>两者之间最重要的关系是：</p>
+<pre><code class="language-text">Prefetch
+可以让正确路径更快
+
+但
+Prefetch 不能成为正确路径成立的前提。
+</code></pre>
+<p>可以把 UBA 当前主链压缩成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["UBT Action / Scheduler"] --&gt; B["Dependency Ready"]
+    A --&gt; C["Known Inputs Hint"]
+
+    C --&gt; D["Host Resolve File → CAS Key"]
+    D --&gt; E["ProcessAvailable Protocol"]
+    E --&gt; F["Helper Prefetch Queue"]
+    F --&gt; G["Storage::RetrieveCasFile"]
+
+    B --&gt; H["Remote Process Eligible"]
+    H --&gt; I["Process Execution"]
+    I --&gt; J["Actual File Access"]
+    J --&gt; K["Detour / Name-to-Hash / CAS"]
+
+    G -. "降低未来等待" .-&gt; K
+</code></pre>
+<p>真正决定构建是否正确的是：</p>
+<pre><code class="language-text">Dependency Ready
++
+Actual File Access Correctness。
+</code></pre>
+<p>Known Inputs 只是在这条路径旁边提前做准备。</p>
+<h2 id="uba-首先不是-ubt-的别名">UBA 首先不是 UBT 的别名</h2><p>讨论 Known Inputs 以前，需要先把几个常见名字分开。</p>
+<p>Unreal 构建工具链中至少存在：</p>
+<pre><code class="language-text">UBT
+UHT
+UAT
+UBA。
+</code></pre>
+<p>它们不是同一个“大构建工具”的不同函数。</p>
+<p>可以粗略理解为：</p>
+<table>
+<thead>
+<tr>
+<th>系统</th>
+<th>主要职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UBT</td>
+<td>Target、Module、Action Graph 与构建决策</td>
+</tr>
+<tr>
+<td>UHT</td>
+<td>Unreal Header 解析与代码生成</td>
+</tr>
+<tr>
+<td>UAT</td>
+<td>Build/Cook/Stage/Package/Deploy 等自动化编排</td>
+</tr>
+<tr>
+<td>UBA</td>
+<td>Action 执行加速、远程进程、CAS/Storage、Helper 协调与 Trace</td>
+</tr>
+</tbody></table>
+<p>UBA 可以作为 UBT 的 Action Executor。</p>
+<p>也可以由 <code>UbaCli</code> 通过独立 Scheduler / YAML 驱动。</p>
+<p>因此：</p>
+<pre><code class="language-text">UBT 知道构建图
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">UBA 知道某个 Action 怎样执行得更快
+</code></pre>
+<p>本身就是两层职责。</p>
+<h2 id="dependency-与-known-input-必须分开">Dependency 与 Known Input 必须分开</h2><p><strong>Action Dependency（后文简称“这个任务什么时候有资格开始”）</strong>：决定前置 Action 是否完成，以及当前 Action 是否具备执行条件的调度事实。</p>
+<p><strong>Known Input（后文简称“它大概率很快会读这些文件”）</strong>：提前告诉远程数据面哪些内容值得准备的性能提示。</p>
+<p>例如：</p>
+<pre><code class="language-text">Compile Foo.cpp
+</code></pre>
+<p>可能依赖：</p>
+<pre><code class="language-text">GenerateHeader Action
+</code></pre>
+<p>必须先完成。</p>
+<p>这属于：</p>
+<pre><code class="language-text">Dependency。
+</code></pre>
+<p>同时，Foo.cpp 编译大概率会读取：</p>
+<pre><code class="language-text">Foo.h
+CoreMinimal.h
+若干 Generated Header
+</code></pre>
+<p>这属于：</p>
+<pre><code class="language-text">Known Inputs。
+</code></pre>
+<p>两者虽然都叫“输入相关信息”，意义完全不同。</p>
+<p>Dependency 回答：</p>
+<pre><code class="language-text">现在能不能执行？
+</code></pre>
+<p>Known Input 回答：</p>
+<pre><code class="language-text">如果要执行，哪些数据值得提前准备？
+</code></pre>
+<p>如果这两件事被混在一起，优化层就会开始拥有改变构建语义的权力。</p>
+<h2 id="prerequisiteitems-可以成为预取提示但不因此升级成依赖图">PrerequisiteItems 可以成为预取提示，但不因此升级成依赖图</h2><p>UBT 本来就拥有：</p>
+<pre><code class="language-text">LinkedAction.PrerequisiteActions
+LinkedAction.PrerequisiteItems。
+</code></pre>
+<p>前者参与 Action Graph。</p>
+<p>后者可以被编码成 UBA Action 级 Known Inputs。</p>
+<p>这项复用很合理。</p>
+<p>因为构建系统已经掌握一批：</p>
+<pre><code class="language-text">高概率会被当前 Action 使用的文件。
+</code></pre>
+<p>但：</p>
+<pre><code class="language-text">PrerequisiteItems
+→
+Known Inputs
+</code></pre>
+<p>并不意味着：</p>
+<pre><code class="language-text">Known Inputs
+→
+Action 的全部真实运行时文件访问。
+</code></pre>
+<p>编译器实际还可能通过：</p>
+<ul>
+<li>响应文件；</li>
+<li>系统 Header；</li>
+<li>工具自身资源；</li>
+<li>间接 Include；</li>
+<li>动态路径；</li>
+</ul>
+<p>访问其他数据。</p>
+<p>所以 Known Inputs 最安全的定义应该始终保持：</p>
+<blockquote>
+<p>已知有价值输入的一个子集或提示集合。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>构建过程唯一合法输入 Manifest。</p>
+</blockquote>
+<h2 id="ubacli-又提供了另一条-known-inputs-输入面">UbaCli 又提供了另一条 Known Inputs 输入面</h2><p>除了 UBT Action 自带的 Known Inputs，Scheduler YAML 还可以提供：</p>
+<pre><code class="language-yaml">knowninputsfile: /path/CommonInputs.txt
+
+processes:
+  - app: ...
+    dir: ...
+    knowninputsfile: /path/ActionInputs.txt
+</code></pre>
+<p>这里出现两个层级：</p>
+<p><strong>Common Known Inputs（后文简称“这个 Helper 大概率很多任务都会用”）</strong></p>
+<p>和：</p>
+<p><strong>Action Known Inputs（后文简称“这一项工作尤其可能马上用”）</strong>。</p>
+<p>两者虽然最终都进入 CAS 预取路径，但生命周期并不一样。</p>
+<h2 id="common-与-action-不应该强行共用同一个状态机">Common 与 Action 不应该强行共用同一个状态机</h2><p>Common Inputs 的特点是：</p>
+<pre><code class="language-text">跨多个 Action 共享。
+</code></pre>
+<p>例如一个构建 Helper 可能反复访问：</p>
+<ul>
+<li>编译器工具；</li>
+<li>常用 Header；</li>
+<li>公共 Runtime 文件。</li>
+</ul>
+<p>Action Inputs 则只与某一个进程分配关联。</p>
+<p>因此两者的合同天然不同。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Common</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作用域</td>
+<td>当前 Helper Session</td>
+<td>单个 Process</td>
+</tr>
+<tr>
+<td>登记时间</td>
+<td>Helper 连接以前</td>
+<td>Process 入队时</td>
+</tr>
+<tr>
+<td>发送方式</td>
+<td>可分批流式发送</td>
+<td>随 Process Response 携带</td>
+</tr>
+<tr>
+<td>完成状态</td>
+<td>每 Client 有独立 Cursor</td>
+<td>当前 Response 内处理</td>
+</tr>
+<tr>
+<td>对进程分配</td>
+<td>会形成前置闸门</td>
+<td>可与进程创建重叠</td>
+</tr>
+<tr>
+<td>去重</td>
+<td>Per-client <code>sentKeys</code></td>
+<td>同一 <code>sentKeys</code></td>
+</tr>
+</tbody></table>
+<p>共享字段不代表共享生命周期。</p>
+<p>这是非常值得迁移的一条设计原则：</p>
+<blockquote>
+<p>两类对象即使最终使用同一个底层数据结构，只要完成条件不同，就不应该为了“统一”强行做成同一个状态机。</p>
+</blockquote>
+<h2 id="common-known-inputs-必须在-helper-连接前登记">Common Known Inputs 必须在 Helper 连接前登记</h2><p>这项顺序不是普通代码风格。</p>
+<p>它属于初始化拓扑。</p>
+<p>Common Input 的流程近似：</p>
+<pre><code class="language-text">解析配置
+→
+登记 Common Known Inputs
+→
+允许 Coordinator 创建 Helper
+→
+Helper 连接
+→
+Session 首次启动 Common Preparation。
+</code></pre>
+<p>如果顺序反过来：</p>
+<pre><code class="language-text">先连接 Helper
+→
+Session 已经开始
+→
+之后才设置 Common Inputs
+</code></pre>
+<p>系统就需要面对：</p>
+<pre><code class="language-text">已经启动的 Client
+是否应该重新补发？
+谁拥有重新初始化？
+已有 Cursor 怎么办？
+</code></pre>
+<p>当前合同更简单：</p>
+<blockquote>
+<p>Common 配置属于 Session 启动以前的注册信息。</p>
+</blockquote>
+<p>因此：</p>
+<pre><code class="language-text">Registration
+→
+Session Start
+</code></pre>
+<p>是一条不可随意交换的生命周期顺序。</p>
+<h2 id="配置阶段和运行阶段应该拥有明确冻结边界">配置阶段和运行阶段应该拥有明确冻结边界</h2><p><strong>注册冻结边界（后文简称“连接一旦开始，这份公共预热计划就不再随便改”）</strong>：在远端执行 Session 对外可见以前完成 Common Known Inputs 登记，Session 启动以后将其视作稳定输入。</p>
+<p>这种结构可以迁移到很多系统：</p>
+<pre><code class="language-text">服务发现列表
+→
+在 Worker 启动以前注册
+
+网络协议能力
+→
+在 Connection Handshake 以前确定
+
+资源 Warmup Profile
+→
+在 Loading Session 以前冻结。
+</code></pre>
+<p>如果运行阶段允许任意修改启动配置，系统就需要持续处理：</p>
+<ul>
+<li>重新广播；</li>
+<li>版本漂移；</li>
+<li>Client 补偿；</li>
+<li>Cursor Reset。</li>
+</ul>
+<p>很多时候更合理的设计是：</p>
+<blockquote>
+<p>初始化阶段解决配置变化，运行阶段消费稳定快照。</p>
+</blockquote>
+<h2 id="host-会先把路径解析成内容身份">Host 会先把路径解析成内容身份</h2><p>Known Input 不是直接把整个文件内容塞进控制消息。</p>
+<p>Host 会为输入准备：</p>
+<pre><code class="language-text">File StringKey
+CAS Key
+Memory Map Alignment
+Allow Proxy。
+</code></pre>
+<p>这里最重要的转换是：</p>
+<pre><code class="language-text">Path
+→
+Content Address。
+</code></pre>
+<p>**内容寻址（后文简称“用内容身份描述文件，而不是只相信某台机器上的路径”）**让远端 Helper 可以围绕 CAS 获取数据。</p>
+<p>路径回答：</p>
+<pre><code class="language-text">这个文件在 Host 上叫什么？
+</code></pre>
+<p>CAS Key 更接近：</p>
+<pre><code class="language-text">我真正需要的是哪份内容？
+</code></pre>
+<p>对于远程执行系统，这种分离非常重要。</p>
+<p>本地路径并不是跨机器稳定身份。</p>
+<h2 id="known-inputs-的真正价值是把-retrieve-提前">Known Inputs 的真正价值是把 Retrieve 提前</h2><p>如果没有 Known Inputs：</p>
+<pre><code class="language-text">Process Start
+→
+Compiler 真正访问 File X
+→
+Helper 发现本地缺失
+→
+Retrieve CAS
+→
+等待
+→
+继续。
+</code></pre>
+<p>有 Known Inputs 以后：</p>
+<pre><code class="language-text">Process 被分配以前或同时
+→
+Known Input 到达 Helper
+→
+Retrieve CAS 提前进入 Work Queue
+
+稍后 Compiler 访问 File X
+→
+内容可能已经在本地
+或至少已经在途。
+</code></pre>
+<p>这不是减少文件数量。</p>
+<p>也不是改变编译器行为。</p>
+<p>它只是把：</p>
+<pre><code class="language-text">必然或高概率发生的数据等待
+</code></pre>
+<p>从关键路径上向前移动。</p>
+<p>这就是典型的 latency hiding。</p>
+<h2 id="common-process-gate-只保证预取已开始不保证文件已下载完">Common Process Gate 只保证“预取已开始”，不保证“文件已下载完”</h2><p>这是整套协议最容易被误读的地方。</p>
+<p>Common Known Inputs 尚未准备完成，或者当前 Client 还没有接收完自己的 Common Entries 时：</p>
+<pre><code class="language-text">ProcessAvailable
+</code></pre>
+<p>可以暂时不下发真正 Process。</p>
+<p>客户端收到：</p>
+<pre><code class="language-text">Common-only Response
+</code></pre>
+<p>以后会继续 Poll。</p>
+<p>表面看起来很像：</p>
+<pre><code class="language-text">Common 文件下载结束
+→
+才允许 Process Start。
+</code></pre>
+<p>实际并不是。</p>
+<p>真正保证的是：</p>
+<pre><code class="language-text">Common Entry
+已经送到 Client
+↓
+Client 已经把对应 Retrieve 工作安排进去
+↓
+随后 Process 才开始获得分配机会。
+</code></pre>
+<p>并没有等待：</p>
+<pre><code class="language-text">Storage::RetrieveCasFile
+全部完成。
+</code></pre>
+<p>所以：</p>
+<p>**预热闸门（后文简称“先确保下载已经开跑，再让任务进来”）**只改变数据准备的起跑时间。</p>
+<p>它不是：</p>
+<p><strong>正确性屏障（后文简称“没有全部完成就绝对不能执行”）</strong>。</p>
+<p>这一区分非常重要。</p>
+<h2 id="为什么不直接等所有-common-下载完成再启动进程">为什么不直接等所有 Common 下载完成再启动进程</h2><p>最直观的“更保险”方案是：</p>
+<pre><code class="language-text">所有 Known Input
+全部 Retrieve 完成
+→
+Process Start。
+</code></pre>
+<p>但这样会带来新的问题。</p>
+<p>假设某个文件：</p>
+<pre><code class="language-text">最终根本没有被当前 Process 使用。
+</code></pre>
+<p>现在进程仍然必须等待它下载。</p>
+<p>Known Inputs 一旦预测过宽：</p>
+<pre><code class="language-text">性能优化
+</code></pre>
+<p>反而变成：</p>
+<pre><code class="language-text">额外启动延迟。
+</code></pre>
+<p>UBA 当前更像：</p>
+<pre><code class="language-text">让数据下载领先进程一步
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">要求所有预测数据在进程前形成完整 Barrier。
+</code></pre>
+<p>这是更符合 Prefetch 语义的设计。</p>
+<h2 id="action-known-inputs-更明确地允许数据和计算重叠">Action Known Inputs 更明确地允许数据和计算重叠</h2><p>Action Known Inputs 与 Process Record 位于同一个完整响应中。</p>
+<p>Helper 会先安排对应 Retrieve。</p>
+<p>但随后仍然可以继续进入 Process Creation。</p>
+<p>因此：</p>
+<pre><code class="language-text">Retrieve
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">Process Startup
+</code></pre>
+<p>存在重叠空间。</p>
+<p>这说明预取系统真正追求的是：</p>
+<p><strong>工作重叠（后文简称“下载和进程启动能并行就不要硬串行”）</strong>。</p>
+<p>只要真实文件访问路径仍然可以在内容尚未到达时正确等待，</p>
+<p>就没有必要把所有预取都升级成同步屏障。</p>
+<h2 id="预取失败必须退回正确路径而不是让构建语义改变">预取失败必须退回正确路径，而不是让构建语义改变</h2><p>假设一个 Known Input：</p>
+<pre><code class="language-text">RetrieveCasFile
+</code></pre>
+<p>失败。</p>
+<p>如果 Known Inputs 是正确性主链：</p>
+<pre><code class="language-text">整个 Action 必须失败。
+</code></pre>
+<p>如果 Known Inputs 是优化提示：</p>
+<pre><code class="language-text">预取没有成功隐藏延迟
+→
+后续真实文件访问仍走正常 Storage / Detour 路径。
+</code></pre>
+<p>这两种 failure semantic 完全不同。</p>
+<p>因此设计任何 Prefetch 系统时，都应该先问：</p>
+<blockquote>
+<p>预取失败是“变慢”，还是“结果不再正确”？</p>
+</blockquote>
+<p>如果答案是后者，</p>
+<p>它其实已经不是普通 Prefetch。</p>
+<p>它是正式依赖传输协议。</p>
+<p>命名和测试都应该升级。</p>
+<h2 id="64-kib-边界暴露了-known-inputs-的真实性质">64 KiB 边界暴露了 Known Inputs 的真实性质</h2><p>Action Known Input 路径会被编码成连续字符串 Block。</p>
+<p>当前存在约：</p>
+<pre><code class="language-text">64 KiB
+</code></pre>
+<p>边界。</p>
+<p>超过整体容量的后续路径可能被跳过，而解析仍然返回成功。</p>
+<p>这个行为如果应用在：</p>
+<pre><code class="language-text">Correctness Manifest
+</code></pre>
+<p>上会非常危险。</p>
+<p>假设：</p>
+<pre><code class="language-text">1000 个真正必要输入
+只发送了前 800 个
+系统仍然认为 Manifest 有效。
+</code></pre>
+<p>那么构建结果可能直接不可信。</p>
+<p>但对 Prefetch Hint 来说，语义是：</p>
+<pre><code class="language-text">前 800 个被提前准备
+后 200 个没有预热
+→
+以后按普通路径读取。
+</code></pre>
+<p>最坏结果应该是：</p>
+<pre><code class="language-text">性能下降。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">构建错误。
+</code></pre>
+<p>**退化只影响性能（后文简称“提示不完整最多变慢，不能变错”）**是判断一个优化层是否真正与正确性分离的最好试金石之一。</p>
+<h2 id="优化提示可以允许不完整正确性声明不可以">优化提示可以允许不完整，正确性声明不可以</h2><p>这一点可以推广成一个非常实用的判断表。</p>
+<table>
+<thead>
+<tr>
+<th>信息</th>
+<th>是否允许缺失</th>
+<th>缺失后的合理后果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dependency</td>
+<td>否</td>
+<td>任务调度错误</td>
+</tr>
+<tr>
+<td>Correctness Manifest</td>
+<td>否</td>
+<td>结果不可信</td>
+</tr>
+<tr>
+<td>Security Allowlist</td>
+<td>否</td>
+<td>权限语义失效</td>
+</tr>
+<tr>
+<td>Prefetch Hint</td>
+<td>可以</td>
+<td>性能下降</td>
+</tr>
+<tr>
+<td>Branch Prediction</td>
+<td>可以</td>
+<td>CPU 效率下降</td>
+</tr>
+<tr>
+<td>Cache Warmup</td>
+<td>可以</td>
+<td>首次访问更慢</td>
+</tr>
+</tbody></table>
+<p>所以，当一个系统开始允许：</p>
+<pre><code class="language-text">静默截断
+best effort
+失败继续
+</code></pre>
+<p>时，</p>
+<p>首先应该重新确认：</p>
+<blockquote>
+<p>它究竟是在表达事实，还是只是在表达优化建议？</p>
+</blockquote>
+<p>两类数据的失败合同不能互换。</p>
+<h2 id="common-input-的-host-完成仍然不是-client-下载完成">Common Input 的 Host 完成仍然不是 Client 下载完成</h2><p>Common Known Inputs 至少存在几种不同“完成”。</p>
+<pre><code class="language-text">Registered
+→
+Host 正在准备 CAS Identity
+
+Host Done
+→
+所有可准备 Entry 已经生成
+
+Delivered To Client
+→
+当前 Client Cursor 已经追上 Entry 集合
+
+Retrieve Complete
+→
+Helper 真的拥有对应内容。
+</code></pre>
+<p>这四个状态不能压成：</p>
+<pre><code class="language-text">CommonReady = true。
+</code></pre>
+<p>尤其：</p>
+<pre><code class="language-text">Host Done
+</code></pre>
+<p>只说明 Host 端已经准备完 key。</p>
+<pre><code class="language-text">Client Cursor Done
+</code></pre>
+<p>只说明控制信息已经送达。</p>
+<p>它们都不能证明：</p>
+<pre><code class="language-text">内容文件已经完整落到 Helper。
+</code></pre>
+<p>这也是分布式系统里非常常见的状态分层：</p>
+<blockquote>
+<p>“消息已发送”与“工作已完成”不是同一件事。</p>
+</blockquote>
+<h2 id="每个-helper-需要自己的-common-cursor">每个 Helper 需要自己的 Common Cursor</h2><p>Common Inputs 是共享集合。</p>
+<p>但不同 Helper 连接时间不同。</p>
+<p>网络容量也不同。</p>
+<p>因此不能只维护一个全局：</p>
+<pre><code class="language-text">commonInputsSent = true。
+</code></pre>
+<p>每个 ClientSession 都需要独立知道：</p>
+<pre><code class="language-text">我已经接收到 Common Entries 的哪一段。
+</code></pre>
+<p>这就是 per-client cursor。</p>
+<p>例如：</p>
+<pre><code class="language-text">Helper A
+cursor = 120
+
+Helper B
+cursor = 43
+
+Helper C
+刚连接
+cursor = 0。
+</code></pre>
+<p>Host 的 Common 集合是一份。</p>
+<p>每个 Helper 的交付进度却不同。</p>
+<p>**每连接进度（后文简称“同一份共享数据，每台远端机器都要单独记自己收到哪儿”）**是所有广播式控制协议都会遇到的问题。</p>
+<h2 id="sentkeys-去重针对的是-client-已经知道的内容身份"><code>sentKeys</code> 去重针对的是 Client 已经知道的内容身份</h2><p>Common 和 Action Known Inputs 可能重叠。</p>
+<p>两个连续 Action 也可能引用相同 Header。</p>
+<p>如果每次都重复发送：</p>
+<pre><code class="language-text">同一个 CAS Key，
+</code></pre>
+<p>控制消息和 Retrieve Queue 都会浪费。</p>
+<p>因此每个 Client 可以维护：</p>
+<pre><code class="language-text">sentKeys。
+</code></pre>
+<p>这不是全局去重。</p>
+<p>原因依然是：</p>
+<pre><code class="language-text">不同 Client 的已知集合不同。
+</code></pre>
+<p>共享事实与每连接状态再次被明确分开。</p>
+<h2 id="调度消息的容量本身也是协议资源">调度消息的容量本身也是协议资源</h2><p>Known Inputs 并不是脱离 <code>ProcessAvailable</code> 消息无限发送。</p>
+<p>它受到：</p>
+<pre><code class="language-text">Network Buffer Capacity
+</code></pre>
+<p>限制。</p>
+<p>因此系统必须在：</p>
+<pre><code class="language-text">Common Entries
+Action Records
+Action Known Inputs
+</code></pre>
+<p>之间安排协议空间。</p>
+<p>这说明：</p>
+<blockquote>
+<p>控制面消息本身也有 Budget。</p>
+</blockquote>
+<p>一个分布式优化系统如果只计算：</p>
+<pre><code class="language-text">文件下载带宽，
+</code></pre>
+<p>却忽略：</p>
+<pre><code class="language-text">控制消息大小，
+</code></pre>
+<p>同样可能把预热信息做得比真正工作还重。</p>
+<h2 id="协议格式变化必须显式升版">协议格式变化必须显式升版</h2><p>本轮 Known Inputs 协议修改了：</p>
+<pre><code class="language-text">ProcessAvailable Response
+</code></pre>
+<p>开头布局。</p>
+<p>旧 Client 原本会把第一个字段解释成另一种值。</p>
+<p>新 Client 则先读取 Common Entry Count。</p>
+<p>这不是：</p>
+<pre><code class="language-text">多一个可选字段
+旧 Reader 忽略就好。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">相同 bit
+在不同版本里含义已经改变。
+</code></pre>
+<p>因此：</p>
+<pre><code class="language-text">SessionNetworkVersion
+57
+→
+58。
+</code></pre>
+<p>**协议版本闸门（后文简称“布局变了就拒绝让旧 reader 猜”）**把不兼容性放到连接协商层解决。</p>
+<p>这是非常稳健的网络协议原则：</p>
+<blockquote>
+<p>不可兼容 wire layout 变化应该 fail early，而不是让下游 parser 尝试猜对端到底是哪一版。</p>
+</blockquote>
+<h2 id="版本号不是文档数字而是解析安全边界">版本号不是文档数字，而是解析安全边界</h2><p>如果 57 Client 连接 58 Server，</p>
+<p>却没有版本阻断，</p>
+<p>它可能把：</p>
+<pre><code class="language-text">Common Count
+</code></pre>
+<p>误读成：</p>
+<pre><code class="language-text">Process Race Count。
+</code></pre>
+<p>后续整个消息游标都会错位。</p>
+<p>结果未必立刻 Crash。</p>
+<p>更危险的是：</p>
+<pre><code class="language-text">继续按照错误字段解释剩余数据。
+</code></pre>
+<p>因此协议版本检查保护的是：</p>
+<pre><code class="language-text">parser 对同一组 bytes 拥有一致语义。
+</code></pre>
+<p>这和存档 Schema、网络 RPC、Binary Artifact Format 都是一类问题。</p>
+<h2 id="scheduler-的输入-buffer-也需要明确所有权">Scheduler 的输入 Buffer 也需要明确所有权</h2><p>YAML Parser 可以暂时把 Known Inputs 编码在自己的 Cache Buffer 中。</p>
+<p>如果 Scheduler 入队以后仍然只是：</p>
+<pre><code class="language-text">保存一个 pointer/view
+</code></pre>
+<p>下一个 Action 重新解析其他文件时，</p>
+<p>Cache 被覆盖，</p>
+<p>旧 Process 就会持有悬空或错误数据。</p>
+<p>当前链路会在进入 Process Entry 时复制对应 Block，使入队后的 Process 拥有自己的数据。</p>
+<p>这是：</p>
+<p><strong>配置视图与任务所有权分离（后文简称“解析器可以借给你看，但任务入队以后必须自己持有”）</strong>。</p>
+<p>这条规则同样适用于很多异步系统：</p>
+<pre><code class="language-text">Parser Buffer
+Request Span
+Stack Memory
+Temporary Builder Data。
+</code></pre>
+<p>只要生命周期将跨越当前调用栈，</p>
+<p>临时 view 就必须在明确边界转换成 owned state。</p>
+<h2 id="列表缓存不等于长期文件真相">“列表缓存”不等于长期文件真相</h2><p>Scheduler YAML 路径还会缓存最近一次解析的 Known Inputs 文件。</p>
+<p>连续多个 Action 使用同一个列表时可以复用编码结果。</p>
+<p>这是一项纯解析优化。</p>
+<p>因此：</p>
+<pre><code class="language-text">源文本稍后发生变化
+</code></pre>
+<p>不意味着已经入队的 Action 自动重新解析。</p>
+<p>这也是合理的。</p>
+<p>Process Entry 应该拥有：</p>
+<pre><code class="language-text">入队时的稳定输入快照。
+</code></pre>
+<p>而不是运行到一半突然因为配置文件变化，预取计划跟着漂移。</p>
+<h2 id="已知输入不是依赖图也不是-sandbox-allowlist">已知输入不是依赖图，也不是 Sandbox Allowlist</h2><p>这是最需要明确禁止的两种误用。</p>
+<h3 id="误用一把-known-inputs-当依赖图">误用一：把 Known Inputs 当依赖图</h3><p>如果文件不在 Known Inputs：</p>
+<pre><code class="language-text">就禁止 Action 读取。
+</code></pre>
+<p>这已经改变了原本的 Correctness Path。</p>
+<p>必须重新建立：</p>
+<ul>
+<li>完整依赖生成；</li>
+<li>失败语义；</li>
+<li>诊断；</li>
+<li>测试。</li>
+</ul>
+<p>不能借 Prefetch Hint 顺便实现。</p>
+<h3 id="误用二把-known-inputs-当安全白名单">误用二：把 Known Inputs 当安全白名单</h3><p>安全 Allowlist 要求：</p>
+<pre><code class="language-text">遗漏一个合法文件
+→
+明确拒绝并报告。
+</code></pre>
+<p>Known Inputs 则允许：</p>
+<pre><code class="language-text">遗漏
+→
+后续普通文件访问。
+</code></pre>
+<p>两者的失败哲学完全相反。</p>
+<p>所以：</p>
+<blockquote>
+<p>性能预测信息绝不能因为“看起来像文件列表”就被提升为权限事实。</p>
+</blockquote>
+<h2 id="预取提示的最大价值是可以大胆失败">预取提示的最大价值，是可以大胆失败</h2><p>这是一个非常重要的工程优势。</p>
+<p>只要 Prefetch 层不拥有 Correctness，</p>
+<p>它就可以更激进地：</p>
+<ul>
+<li>猜测；</li>
+<li>缓存；</li>
+<li>丢弃；</li>
+<li>截断；</li>
+<li>并行；</li>
+<li>延迟；</li>
+<li>部分失败。</li>
+</ul>
+<p>因为系统始终存在：</p>
+<pre><code class="language-text">真实访问时的正确路径
+</code></pre>
+<p>作为兜底。</p>
+<p>这实际上给性能工程提供了更大的优化自由。</p>
+<p>如果所有性能预测都必须：</p>
+<pre><code class="language-text">100% 准确，
+</code></pre>
+<p>它就不再是 Prediction。</p>
+<p>而会逐渐变成另一套必须维护的事实源。</p>
+<h2 id="同样不要让-correctness-path-依赖预取通常都会成功">同样不要让 Correctness Path 依赖“预取通常都会成功”</h2><p>最危险的系统往往不是显式声明：</p>
+<pre><code class="language-text">Prefetch 是正确性依赖。
+</code></pre>
+<p>而是随着时间演化成：</p>
+<pre><code class="language-text">理论上不是，
+但实际大家都假设它一定成功。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">Fallback 路径长期没人测试
+↓
+性能优化成为默认
+↓
+普通访问路径逐渐腐烂
+↓
+某次 Prefetch 失败
+↓
+构建突然彻底失败。
+</code></pre>
+<p>所以如果设计声明：</p>
+<pre><code class="language-text">Prefetch failure only hurts latency，
+</code></pre>
+<p>就应该有测试证明：</p>
+<pre><code class="language-text">Prefetch disabled / failed
+→
+任务仍然正确完成。
+</code></pre>
+<p>否则“正确性分离”只存在于架构图上。</p>
+<h2 id="测试需要同时证明收益路径和退化路径">测试需要同时证明收益路径和退化路径</h2><p>Known Inputs 至少适合分成几类验证。</p>
+<h3 id="编码合同">编码合同</h3><p>验证：</p>
+<ul>
+<li>LF / CRLF；</li>
+<li>终止符；</li>
+<li>Count；</li>
+<li>64 KiB 边界；</li>
+<li>Cache 复用。</li>
+</ul>
+<h3 id="common-协议">Common 协议</h3><p>验证：</p>
+<ul>
+<li>Helper 连接前登记；</li>
+<li>Host 构建完成；</li>
+<li>per-client cursor；</li>
+<li>common-only response；</li>
+<li>repoll；</li>
+<li><code>sentKeys</code> 去重。</li>
+</ul>
+<h3 id="action-预取">Action 预取</h3><p>验证：</p>
+<ul>
+<li>Action Known Inputs 与 Process Record 同批传输；</li>
+<li>Retrieve 可以和 Process Start 重叠；</li>
+<li>相同 CAS Key 不重复安排。</li>
+</ul>
+<h3 id="failure">Failure</h3><p>尤其应该验证：</p>
+<pre><code class="language-text">Known Input Retrieve 失败
+→
+真实进程仍能通过正常文件访问获得正确内容。
+</code></pre>
+<p>这是最能证明：</p>
+<pre><code class="language-text">Optimization
+≠
+Correctness
+</code></pre>
+<p>的一项测试。</p>
+<h3 id="wan-性能">WAN 性能</h3><p>最后才是：</p>
+<ul>
+<li>高 RTT；</li>
+<li>冷 CAS；</li>
+<li>多 Helper；</li>
+<li>大型 Header Set；</li>
+<li>Prefetch Hit Rate；</li>
+<li>Process Stall Time。</li>
+</ul>
+<p>正确性证据和性能证据同样不能混为一谈。</p>
+<h2 id="当前源码测试并没有证明真实-wan-收益">当前源码测试并没有证明真实 WAN 收益</h2><p>当前研究能够确认源码树存在：</p>
+<ul>
+<li>YAML 编码 / 缓存相关测试；</li>
+<li>Common Known Inputs 场景；</li>
+<li>远程 Process 可以完成的测试入口。</li>
+</ul>
+<p>但这不等于：</p>
+<pre><code class="language-text">本轮已经实际跑过。
+</code></pre>
+<p>也不等于：</p>
+<pre><code class="language-text">真实高延迟环境一定获得某个百分比提升。
+</code></pre>
+<p>当前仍没有从这次源码研究得到：</p>
+<ul>
+<li>WAN Benchmark；</li>
+<li>多 Client 极限；</li>
+<li>所有 Retrieve Failure；</li>
+<li>容量压力；</li>
+<li>跨版本真实二进制互联；</li>
+</ul>
+<p>的运行证据。</p>
+<p>因此正确的结论只能是：</p>
+<blockquote>
+<p>当前源码结构明确把 Known Inputs 建模成预热优化，并已有部分测试入口；实际性能收益仍需要真实环境 Benchmark。</p>
+</blockquote>
+<h2 id="对-asset-streaming-的迁移启示">对 Asset Streaming 的迁移启示</h2><p>游戏资源系统也经常拥有：</p>
+<pre><code class="language-text">下一房间大概率会使用这些资源。
+</code></pre>
+<p>可以：</p>
+<pre><code class="language-text">Warmup / Prefetch。
+</code></pre>
+<p>但加载预测失败以后，</p>
+<p>真正进入房间时仍然应该：</p>
+<pre><code class="language-text">按正常 Asset Acquire 路径补加载。
+</code></pre>
+<p>否则 Warmup Profile 就从：</p>
+<pre><code class="language-text">性能优化
+</code></pre>
+<p>变成了：</p>
+<pre><code class="language-text">隐藏资源 Manifest。
+</code></pre>
+<p>一旦二者混在一起：</p>
+<pre><code class="language-text">策划漏配 Warmup
+→
+游戏资源直接缺失。
+</code></pre>
+<p>这就是典型的正确性泄漏。</p>
+<h2 id="对开放世界-streaming-的迁移启示">对开放世界 Streaming 的迁移启示</h2><p>玩家速度和方向可以预测：</p>
+<pre><code class="language-text">未来可能进入哪些 Cell。
+</code></pre>
+<p>系统可以提前提高这些 Cell 的优先级。</p>
+<p>但：</p>
+<pre><code class="language-text">Prediction Miss
+</code></pre>
+<p>不应该让真正位于玩家当前位置的 Cell：</p>
+<pre><code class="language-text">因为不在预测列表里而永远不加载。
+</code></pre>
+<p>真正当前位置需求属于：</p>
+<pre><code class="language-text">Correctness / Required Target。
+</code></pre>
+<p>未来轨迹属于：</p>
+<pre><code class="language-text">Optimization Hint。
+</code></pre>
+<p>两者同样应该分层。</p>
+<h2 id="对-ai-context-preload-的迁移启示">对 AI Context Preload 的迁移启示</h2><p>Agent 执行任务以前，可以根据：</p>
+<ul>
+<li>Task Type；</li>
+<li>Project Graph；</li>
+<li>Historical Usage；</li>
+</ul>
+<p>提前预取若干文件进入 Context Cache。</p>
+<p>这能够减少后续检索等待。</p>
+<p>但预测到的文件集合不能直接变成：</p>
+<pre><code class="language-text">唯一允许读取的任务事实。
+</code></pre>
+<p>如果 Agent 之后发现另一个合法相关文件，</p>
+<p>它仍然应该走正式：</p>
+<pre><code class="language-text">Read Scope / Capability
+</code></pre>
+<p>规则。</p>
+<p>性能预测不应该改变 Authority。</p>
+<h2 id="对数据库-read-ahead-的迁移启示">对数据库 Read-Ahead 的迁移启示</h2><p>数据库和文件系统长期使用同样原则：</p>
+<pre><code class="language-text">预读可能命中
+→
+访问更快
+
+预读没有命中
+→
+真实读取仍然正确。
+</code></pre>
+<p>UBA Known Inputs 的特殊之处只是：</p>
+<pre><code class="language-text">它把这个原则应用到分布式构建 Action 与 CAS。
+</code></pre>
+<p>底层思想并不局限于 Unreal。</p>
+<h2 id="一个更通用的三层模型">一个更通用的三层模型</h2><p>对于任何带 Prefetch 的系统，我会优先分成三层：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["Correctness Dependency&lt;br/&gt;必须满足"] --&gt; D["Actual Execution"]
+
+    B["Prediction / Known Inputs&lt;br/&gt;可能有帮助"] --&gt; C["Prefetch Scheduler"]
+    C --&gt; E["Warm Cache / Local CAS"]
+
+    E --&gt; D
+
+    D --&gt; F["Normal Fallback Access"]
+</code></pre>
+<p>这里必须维持三个不变量。</p>
+<h3 id="不变量一">不变量一</h3><pre><code class="language-text">删除所有 Prefetch
+→
+系统仍然正确。
+</code></pre>
+<h3 id="不变量二">不变量二</h3><pre><code class="language-text">Prefetch 不完整
+→
+最多增加延迟。
+</code></pre>
+<h3 id="不变量三">不变量三</h3><pre><code class="language-text">Correctness Dependency 不完整
+→
+必须明确失败。
+</code></pre>
+<p>只要三个条件中任何一个不成立，</p>
+<p>就需要重新审视：</p>
+<blockquote>
+<p>这个“优化层”是不是已经偷偷变成正式业务协议。</p>
+</blockquote>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="把-known-inputs-当作完整依赖图">把 Known Inputs 当作完整依赖图</h3><p>优化提示开始决定任务正确性。</p>
+<h3 id="把-known-inputs-当-sandbox-文件白名单">把 Known Inputs 当 Sandbox 文件白名单</h3><p>Best-effort 列表被错误升级成安全权限事实。</p>
+<h3 id="所有预取完成以后才启动进程">所有预取完成以后才启动进程</h3><p>预测过宽时，预取反而变成新的关键路径。</p>
+<h3 id="common-和-action-known-inputs-强行使用同一个完成状态">Common 和 Action Known Inputs 强行使用同一个完成状态</h3><p>跨 Session 预热与单 Action 预热的生命周期被混淆。</p>
+<h3 id="helper-已经连接以后才注册-common-inputs">Helper 已经连接以后才注册 Common Inputs</h3><p>初始化协议变成动态补发状态机。</p>
+<h3 id="host-prepared-被解释成-client-已经拥有内容">Host Prepared 被解释成 Client 已经拥有内容</h3><p>Control Plane 完成与 Data Plane 完成混为一谈。</p>
+<h3 id="client-cursor-完成被解释成-cas-retrieve-完成">Client Cursor 完成被解释成 CAS Retrieve 完成</h3><p>“已经通知去下载”和“已经下载完”混为一谈。</p>
+<h3 id="所有-helper-共享一个全局-sent-flag">所有 Helper 共享一个全局 sent flag</h3><p>不同连接的交付进度互相覆盖。</p>
+<h3 id="不做-cas-key-去重">不做 CAS Key 去重</h3><p>大量公共 Header 被每个 Action 反复安排下载。</p>
+<h3 id="临时-parser-buffer-直接被异步-process-长期引用">临时 Parser Buffer 直接被异步 Process 长期引用</h3><p>下一轮解析覆盖数据以后产生悬空或错误输入。</p>
+<h3 id="wire-layout-改变但不升协议版本">Wire Layout 改变但不升协议版本</h3><p>旧 Client 继续用旧字段布局解释新消息。</p>
+<h3 id="prefetch-失败路径长期不测试">Prefetch 失败路径长期不测试</h3><p>架构上声称 best-effort，实际上已经形成隐藏 correctness dependency。</p>
+<h3 id="性能优化没有真实-wan-benchmark">性能优化没有真实 WAN Benchmark</h3><p>源码结构合理被错误扩大成“已经证明显著加速”。</p>
+<h2 id="我的数据预热与正确性分离检查表">我的数据预热与正确性分离检查表</h2><ol>
+<li>当前数据列表是 Correctness Dependency，还是 Optimization Hint？</li>
+<li>两者是否拥有不同数据类型或至少不同 API？</li>
+<li>Prefetch 完全关闭以后任务是否仍然正确？</li>
+<li>Prefetch 列表缺失部分数据以后是否只会变慢？</li>
+<li>Prefetch Retrieve 失败以后是否存在可靠 Fallback？</li>
+<li>Fallback 是否在自动测试中真正执行过？</li>
+<li>Scheduler Dependency 是否不会被 Known Inputs 替代？</li>
+<li>安全 Allowlist 是否不会复用 Prefetch Hint 作为权威来源？</li>
+<li>Common 与 Action Prefetch 是否拥有不同生命周期？</li>
+<li>Common Configuration 是否在 Session 启动以前冻结？</li>
+<li>Session 启动以后是否拒绝无协议的 Common Set 变更？</li>
+<li>Path 是否会转换成稳定 Content Identity？</li>
+<li>CAS Key 是否成为跨机器真正的数据身份？</li>
+<li>Host Preparation、Control Delivery 与 Content Retrieve 是否是三个状态？</li>
+<li>Process Gate 到底等待哪一个状态，是否有明确名称？</li>
+<li>Gate 是否没有无意中升级成全下载 Barrier？</li>
+<li>Action Prefetch 是否允许和 Process Startup 合理重叠？</li>
+<li>每个 Client 是否拥有自己的 Common Delivery Cursor？</li>
+<li>Dedupe 是否按每个 Client 的已知 CAS Key 维护？</li>
+<li>Control Message 是否有明确容量预算？</li>
+<li>容量不足时 Prefetch 是否有可解释退化语义？</li>
+<li>静默截断是否只出现在允许不完整的 Hint 数据中？</li>
+<li>如果列表必须完整，是否会 fail-closed 而不是继续？</li>
+<li>Async Task 入队以后是否拥有自己的输入副本？</li>
+<li>临时 parser view 是否不会越过所有权边界？</li>
+<li>Wire Format 改变以后是否显式提升协议版本？</li>
+<li>Version Negotiation 是否在 Parser 看到不兼容布局前失败？</li>
+<li>测试是否分别覆盖 correctness fallback 与 latency optimization？</li>
+<li>性能测试是否包含高 RTT、冷缓存和多个 Helper？</li>
+<li>Telemetry 是否能够区分 Prefetch Hit、Late Hit 与 Miss？</li>
+<li>是否能够统计进程真正因文件等待而停顿的时间？</li>
+<li>优化层是否始终可以被移除而不改变结果？</li>
+<li>当前系统是否已经出现“大家都假设预取一定成功”的隐性耦合？</li>
+</ol>
+<p>UBA Known Inputs 最值得保留的设计思想，并不是：</p>
+<pre><code class="language-text">提前下载 Header。
+</code></pre>
+<p>这件事本身并不新鲜。</p>
+<p>真正重要的是它把两类事实保持在不同层级。</p>
+<p>构建系统知道：</p>
+<pre><code class="language-text">这个 Action 什么时候有资格执行。
+</code></pre>
+<p>预热系统知道：</p>
+<pre><code class="language-text">哪些文件很可能马上被读取。
+</code></pre>
+<p>CAS 知道：</p>
+<pre><code class="language-text">这些路径对应哪份内容。
+</code></pre>
+<p>Helper 可以：</p>
+<pre><code class="language-text">在真正访问发生以前尽量把内容搬近。
+</code></pre>
+<p>但即使所有预测全部失败，</p>
+<p>实际文件访问仍然必须能够沿正常路径得到正确结果。</p>
+<p>正是因为预取不拥有正确性，</p>
+<p>它才可以：</p>
+<ul>
+<li>不完整；</li>
+<li>并行；</li>
+<li>提前；</li>
+<li>截断；</li>
+<li>猜测；</li>
+<li>部分失败。</li>
+</ul>
+<p>而系统仍然可信。</p>
+<p>因此 UBA Known Inputs 最值得迁移的原则可以压缩成一句话：</p>
+<blockquote>
+<p><strong>性能预测应该拥有加速系统的权力，但不应该获得决定系统真相的权力。</strong></p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据预热</td>
+<td>文件真正被读取以前先把它搬近一点</td>
+</tr>
+<tr>
+<td>正确性主链</td>
+<td>就算预热完全失败，系统仍然必须能得到正确文件</td>
+</tr>
+<tr>
+<td>Action Dependency</td>
+<td>这个任务什么时候有资格开始</td>
+</tr>
+<tr>
+<td>Known Input</td>
+<td>它大概率很快会读这些文件</td>
+</tr>
+<tr>
+<td>Common Known Inputs</td>
+<td>这个 Helper 大概率很多任务都会用</td>
+</tr>
+<tr>
+<td>Action Known Inputs</td>
+<td>这一项工作尤其可能马上用</td>
+</tr>
+<tr>
+<td>注册冻结边界</td>
+<td>连接一旦开始，这份公共预热计划就不再随便改</td>
+</tr>
+<tr>
+<td>内容寻址</td>
+<td>用内容身份描述文件，而不是只相信某台机器上的路径</td>
+</tr>
+<tr>
+<td>预热闸门</td>
+<td>先确保下载已经开跑，再让任务进来</td>
+</tr>
+<tr>
+<td>正确性屏障</td>
+<td>没有全部完成就绝对不能执行</td>
+</tr>
+<tr>
+<td>工作重叠</td>
+<td>下载和进程启动能并行就不要硬串行</td>
+</tr>
+<tr>
+<td>退化只影响性能</td>
+<td>提示不完整最多变慢，不能变错</td>
+</tr>
+<tr>
+<td>每连接进度</td>
+<td>同一份共享数据，每台远端机器都要单独记自己收到哪儿</td>
+</tr>
+<tr>
+<td>协议版本闸门</td>
+<td>布局变了就拒绝让旧 reader 猜</td>
+</tr>
+<tr>
+<td>配置视图与任务所有权分离</td>
+<td>解析器可以借给你看，但任务入队以后必须自己持有</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>notes/UnrealEngine源码研究/UE6/09_UnrealBuildAccelerator从Scheduler到HelperCAS预取_KnownInputs协议与远程执行闸门.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE6/08_UE6核心模块全景_依赖层级生命周期与纵向主链.md</code></li>
+<li><code>notes/UnrealEngine源码研究/UE6/README.md</code></li>
+<li><code>notes/UnrealEngine源码研究/README.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文主要依据研究时的 Unreal Engine UE6-main 源码快照整理。</p>
+<p>当前研究已经从源码层确认：</p>
+<ul>
+<li>UBT Action 可提供 Action-level Known Inputs；</li>
+<li>UbaCli / Scheduler YAML 支持 Common 与 Action <code>knowninputsfile</code>；</li>
+<li>Common Inputs 必须在 Helper Session 启动前登记；</li>
+<li>Host 会把路径转换为 CAS / name-to-hash 所需身份；</li>
+<li>Common Inputs 使用每 Client Cursor 分批交付；</li>
+<li>Common Gate 不等待 <code>RetrieveCasFile</code> 全部完成；</li>
+<li>Action Inputs 可以和 Process Creation 重叠；</li>
+<li>Common / Action 使用 per-client <code>sentKeys</code> 去重；</li>
+<li>协议布局变化伴随 <code>SessionNetworkVersion</code> 升版；</li>
+<li>Action Known Input 编码存在有限容量与部分省略语义。</li>
+</ul>
+<p>但本次源码研究没有：</p>
+<ul>
+<li>编译 UBA；</li>
+<li>实际运行 UbaTest；</li>
+<li>启动真实远端 Helper；</li>
+<li>执行高 RTT / WAN Benchmark；</li>
+<li>验证全部 Retrieve Failure；</li>
+<li>验证多 Client 极限；</li>
+<li>证明当前机制在任何项目中具有固定百分比性能提升。</li>
+</ul>
+<p>因此本文把 Known Inputs 定位为<strong>源码上已经明确建立的数据预热协议</strong>，但不把真实 WAN 性能、所有失败路径或跨版本二进制互操作写成已经验证完成的事实。</p>
+<p>文中将“Prefetch Hint 与 Correctness Dependency 分离”的思想迁移到 Asset Streaming、开放世界预取、AI Context Preload 和数据库 Read-Ahead，属于工程设计归纳，不表示这些系统需要复制 UBA 的 Scheduler、CAS、Helper 或 wire protocol 实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unreal-engine-rdg-compilation.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 unreal-engine</span><strong>声明式渲染图编译：RDG 的依赖建图、资源生命周期与 Barrier 执行</strong><small>当一帧渲染包含大量 Pass、临时纹理、Async Compute 和跨 Pipeline 资源访问时，怎样让调用方只描述真实依赖，而由统一基础设施决定哪些工作必须执行、资源何时真正存在以及什么时候需要 GPU 状态转换？</small></a><a href="unreal-engine-world-partition-state-convergence.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 unreal-engine</span><strong>流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接</strong><small>从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。</small></a><a href="unreal-mass-deferred-structural-changes.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 unreal-engine</span><strong>结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序</strong><small>从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

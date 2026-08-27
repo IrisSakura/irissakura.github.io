@@ -105,13 +105,13 @@
     <section class="blog-taxonomy" aria-labelledby="blog-taxonomy-title">
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">SERIES & TAGS</p><h2 id="blog-taxonomy-title">按系列与主题继续阅读</h2></div><p>分类只覆盖已经正式发布的文章；草稿不会进入聚合页或订阅。</p></div>
-            <div class="blog-series-list"><a href="blog/series/shared-language-of-game-systems.html"><strong>游戏系统的共同语言</strong><span>17 篇</span><small>从不同游戏类型中提取能力门控、时间、事务与可恢复状态等可迁移的系统判断。</small></a><a href="blog/series/large-unity-framework-governance.html"><strong>大型 Unity 框架的治理复盘</strong><span>3 篇</span><small>记录本地验证、Runner 证据与支持面治理之间必须保持的工程边界。</small></a><a href="blog/series/sakura-framework-engineering.html"><strong>Sakura Framework 工程实践</strong><span>13 篇</span><small>围绕热更新、事务边界和 Unity 工程集成整理可复核的实现判断。</small></a><a href="blog/series/unreal-engine-source-research.html"><strong>从 Unreal Engine 源码理解引擎设计</strong><span>7 篇</span><small>沿 Unreal Engine 源码追踪启动、资源生产、世界推进与渲染提交边界。</small></a><a href="blog/series/godot-source-research.html"><strong>从 Godot 源码理解引擎设计</strong><span>2 篇</span><small>从 Godot 的对象身份、引用计数与生命周期实现提炼可迁移的引擎判断。</small></a></div>
-            <div class="blog-tag-list" aria-label="文章标签"><a href="blog/tag/simulation.html">simulation<span>2</span></a><a href="blog/tag/transactions.html">transactions<span>2</span></a><a href="blog/tag/unity.html">unity<span>4</span></a><a href="blog/tag/ai.html">ai<span>2</span></a><a href="blog/tag/essay.html">essay<span>11</span></a><a href="blog/tag/godot.html">godot<span>2</span></a><a href="blog/tag/lifecycle.html">lifecycle<span>5</span></a><a href="blog/tag/scope.html">scope<span>2</span></a><a href="blog/tag/unreal-engine.html">unreal-engine<span>5</span></a></div>
+            <div class="blog-series-list"><a href="blog/series/shared-language-of-game-systems.html"><strong>游戏系统的共同语言</strong><span>17 篇</span><small>从不同游戏类型中提取能力门控、时间、事务与可恢复状态等可迁移的系统判断。</small></a><a href="blog/series/large-unity-framework-governance.html"><strong>大型 Unity 框架的治理复盘</strong><span>3 篇</span><small>记录本地验证、Runner 证据与支持面治理之间必须保持的工程边界。</small></a><a href="blog/series/sakura-framework-engineering.html"><strong>Sakura Framework 工程实践</strong><span>13 篇</span><small>围绕热更新、事务边界和 Unity 工程集成整理可复核的实现判断。</small></a><a href="blog/series/unreal-engine-source-research.html"><strong>从 Unreal Engine 源码理解引擎设计</strong><span>8 篇</span><small>沿 Unreal Engine 源码追踪启动、资源生产、世界推进与渲染提交边界。</small></a><a href="blog/series/godot-source-research.html"><strong>从 Godot 源码理解引擎设计</strong><span>2 篇</span><small>从 Godot 的对象身份、引用计数与生命周期实现提炼可迁移的引擎判断。</small></a></div>
+            <div class="blog-tag-list" aria-label="文章标签"><a href="blog/tag/simulation.html">simulation<span>2</span></a><a href="blog/tag/transactions.html">transactions<span>2</span></a><a href="blog/tag/unity.html">unity<span>4</span></a><a href="blog/tag/ai.html">ai<span>2</span></a><a href="blog/tag/essay.html">essay<span>11</span></a><a href="blog/tag/godot.html">godot<span>2</span></a><a href="blog/tag/lifecycle.html">lifecycle<span>5</span></a><a href="blog/tag/scope.html">scope<span>2</span></a><a href="blog/tag/unreal-engine.html">unreal-engine<span>6</span></a></div>
         </div>
     </section>
     <section class="blog-list-section" id="articles">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>42 篇正式文章</h2></div></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>43 篇正式文章</h2></div></div>
             <div class="blog-card-grid">
                 <article class="blog-card">
                     <p class="project-status"><a href="blog/series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 2026-08-24</p>
@@ -406,6 +406,13 @@
                     <p>精密平台跳跃怎样在保持高执行要求的同时，让玩家确信每一次成功和失败都来自可以理解、学习和重复的运动规则？</p>
                     <div class="note-tags"><span>movement</span><span>platformer</span><span>precision</span></div>
                     <a class="note-link" href="blog/precision-platformer-movement-trust.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="blog-card">
+                    <p class="project-status"><a href="blog/series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 2026-08-27</p>
+                    <h2>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门</h2>
+                    <p>远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？</p>
+                    <div class="note-tags"><span>prefetch</span><span>uba</span><a href="blog/tag/unreal-engine.html">unreal-engine</a></div>
+                    <a class="note-link" href="blog/unreal-build-accelerator-known-inputs-cas.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
             </div>
         </div>

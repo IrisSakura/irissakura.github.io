@@ -1,0 +1,4474 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/incremental.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="增量游戏 / Incremental Game / Idle Game | Sakura Design Journal">
+    <meta property="og:description" content="玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/incremental.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-incremental.png">
+    <meta property="og:image:alt" content="增量游戏 / Incremental Game / Idle Game | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="增量游戏 / Incremental Game / Idle Game | Sakura Design Journal">
+    <meta name="twitter:description" content="玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-incremental.png">
+    <meta name="twitter:image:alt" content="增量游戏 / Incremental Game / Idle Game | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"增量游戏 / Incremental Game / Idle Game | Sakura Design Journal","description":"玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑…","url":"https://irissakura.github.io/pages/journal/incremental.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"增量游戏 / Incremental Game / Idle Game","image":"https://irissakura.github.io/assets/social/pages-journal-incremental.png","dateModified":"2026-08-27","about":["clicker","idle","incremental"]}</script>
+    <!-- site-meta:end -->
+    <title>增量游戏 / Incremental Game / Idle Game | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-incremental"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-27</p><h1>增量游戏 / Incremental Game / Idle Game</h1><p>玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑…</p><div class="note-tags"><span>clicker</span><span>idle</span><span>incremental</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>clicker</code> <code>idle</code> <code>incremental</code></p>
+</blockquote>
+<h2 id="速率积累指数扩张与生产购买自动化突破重置再加速的多尺度成长循环">速率积累、指数扩张与“生产—购买—自动化—突破—重置—再加速”的多尺度成长循环</h2><hr />
+<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 Journal 的 <code>game-designs</code> 权威目录。当前生成的 <code>README.md</code> 标记 <strong>Entries: 59</strong>。</p>
+<p>同时检查当前 <code>route-metadata.v1.json</code>，现有条目已经覆盖工厂自动化、城市建设、殖民地模拟、俱乐部经营、农场经营、刷宝 ARPG、MMORPG、4X、大国战略、家庭人生模拟等大量长期成长或经营类型；但当前路由中没有独立的 <code>incremental</code>、<code>idle</code>、<code>clicker</code> 范式记录。</p>
+<p>因此本期新增类型选择：</p>
+<p><strong>增量游戏 / Incremental Game / Idle Game。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Incremental Game；</p>
+</li>
+<li><p>Idle Game；</p>
+</li>
+<li><p>Clicker Game；</p>
+</li>
+<li><p>Numbers Go Up Game；</p>
+</li>
+<li><p>Prestige Game；</p>
+</li>
+<li><p>Incremental Simulation；</p>
+</li>
+<li><p>增量游戏；</p>
+</li>
+<li><p>放置游戏；</p>
+</li>
+<li><p>点击游戏；</p>
+</li>
+<li><p>数值增长游戏；</p>
+</li>
+<li><p>转生型增长游戏。</p>
+</li>
+</ul>
+<p>这里讨论的不是普通 RPG 中的挂机收益，也不是工厂自动化中机器持续生产资源，更不是经营游戏里的“离线结算”功能，而是一种足以独立支撑完整产品的宏观游戏类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑、天级重置以及更长期的元成长。真正的设计重点不是某个数字本身有多大，而是不断让玩家发现新的“增长函数”，并让旧系统逐渐从操作对象转变为自动运行的底层基础设施。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>资源自动增长<br />
+→ 观察当前瓶颈<br />
+→ 购买生产者或升级<br />
+→ 单位时间产出提高<br />
+→ 解锁新的资源层<br />
+→ 旧操作逐渐自动化<br />
+→ 增长速度开始下降<br />
+→ 计算是否值得 Prestige<br />
+→ 主动重置当前层进度<br />
+→ 获得永久乘区 / 新机制<br />
+→ 重新开始但更快跨越旧阶段<br />
+→ 到达此前无法达到的数量级<br />
+→ 解锁下一层增长系统<br />
+→ 再次形成新的增长曲线。</strong></p>
+<p>本类型真正的核心并不是：</p>
+<blockquote>
+<p>“数字一直变大。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>玩家不断把“当前需要亲自优化的系统”压缩成下一层增长循环中的一个自动化组件。</strong></p>
+</blockquote>
+<hr />
+<h1 id="1-类型定位">1. 类型定位</h1><p>增量游戏通常具备以下核心特征：</p>
+<ul>
+<li><p>一个或多个持续增长的资源；</p>
+</li>
+<li><p>资源按时间自动生产；</p>
+</li>
+<li><p>玩家消费资源提高未来生产能力；</p>
+</li>
+<li><p>生产者具有等级或数量；</p>
+</li>
+<li><p>升级提供加法或乘法收益；</p>
+</li>
+<li><p>成本通常呈非线性增长；</p>
+</li>
+<li><p>收益同样呈指数或超线性增长；</p>
+</li>
+<li><p>多层资源；</p>
+</li>
+<li><p>自动购买；</p>
+</li>
+<li><p>自动生产；</p>
+</li>
+<li><p>里程碑；</p>
+</li>
+<li><p>解锁；</p>
+</li>
+<li><p>Prestige / Ascension / Rebirth；</p>
+</li>
+<li><p>离线收益；</p>
+</li>
+<li><p>长期存档；</p>
+</li>
+<li><p>大数字；</p>
+</li>
+<li><p>多时间尺度进度；</p>
+</li>
+<li><p>逐步降低早期操作负担；</p>
+</li>
+<li><p>新机制随着数量级逐渐展开。</p>
+</li>
+</ul>
+<p>典型流程：</p>
+<p>点击获得第一个资源<br />
+→ 买第一个自动生产者<br />
+→ 不再需要持续点击<br />
+→ 买更多生产者<br />
+→ 生产速度上升<br />
+→ 解锁第二种生产者<br />
+→ 解锁倍率升级<br />
+→ 资源从个位进入千、百万、十亿<br />
+→ 低级购买逐渐自动化<br />
+→ 当前系统增长开始放缓<br />
+→ 解锁第一次 Prestige<br />
+→ 清空基础资源和生产者<br />
+→ 获得永久 Prestige Currency<br />
+→ 重新开始<br />
+→ 原本需要30分钟的阶段现在3分钟通过<br />
+→ 解锁以前从未达到的新升级<br />
+→ 新资源层出现<br />
+→ 原来的整个生产体系成为新系统的输入<br />
+→ 再次扩张。</p>
+<p>因此它的成长不是简单：</p>
+<p><code>100 → 200 → 300</code></p>
+<p>而通常是：</p>
+<p><strong>线性<br />
+→ 指数<br />
+→ 平台期<br />
+→ 规则突破<br />
+→ 新指数<br />
+→ 再平台<br />
+→ 更高层突破。</strong></p>
+<hr />
+<h1 id="2-最核心的系统抽象增量游戏本质是增长函数的逐层替换">2. 最核心的系统抽象：增量游戏本质是“增长函数的逐层替换”</h1><p>可以把每个阶段抽象成：</p>
+<p><code>Resource(t + Δt) = Resource(t) + ProductionRate × Δt</code></p>
+<p>最初：</p>
+<p>ProductionRate = 1/s。</p>
+<p>之后：</p>
+<p>10/s。</p>
+<p>1000/s。</p>
+<p>1e12/s。</p>
+<p>但单纯提高 Rate 只能形成：</p>
+<p>数值膨胀。</p>
+<p>真正有价值的是：</p>
+<p>ProductionRate 本身又由越来越多系统决定：</p>
+<p><code>ProductionRate = BaseProduction × ProducerCount × UpgradeMultiplier × PrestigeMultiplier × MilestoneMultiplier × TemporaryModifier × CrossResourceSynergy</code></p>
+<p>然后更高层系统甚至会修改：</p>
+<ul>
+<li><p>ProducerCount如何增长；</p>
+</li>
+<li><p>Upgrade如何计算；</p>
+</li>
+<li><p>时间如何加速；</p>
+</li>
+<li><p>Prestige如何转换；</p>
+</li>
+<li><p>指数本身。</p>
+</li>
+</ul>
+<p>因此成熟增量游戏的核心进度是：</p>
+<blockquote>
+<p><strong>玩家不断解锁新的 Growth Function。</strong></p>
+</blockquote>
+<hr />
+<h1 id="3-核心范式一所有资源都应该拥有明确的-sourcesink-和-growth-role">3. 核心范式一：所有资源都应该拥有明确的 Source、Sink 和 Growth Role</h1><p>每个资源至少要回答三件事：</p>
+<h2 id="source">Source</h2><p>从哪里获得。</p>
+<h2 id="sink">Sink</h2><p>拿来做什么。</p>
+<h2 id="role">Role</h2><p>它在整个增长体系中属于哪一层。</p>
+<hr />
+<h1 id="4-resourcedefinition">4. ResourceDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>ResourceId；</p>
+</li>
+<li><p>DisplayName；</p>
+</li>
+<li><p>ResourceTier；</p>
+</li>
+<li><p>InitialValue；</p>
+</li>
+<li><p>MaximumRule；</p>
+</li>
+<li><p>PrecisionPolicy；</p>
+</li>
+<li><p>ProductionTags；</p>
+</li>
+<li><p>SpendTags；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>OfflinePolicy；</p>
+</li>
+<li><p>PresentationProfile；</p>
+</li>
+<li><p>ResourceVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="5-resourceruntimestate">5. ResourceRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li><p>ResourceId；</p>
+</li>
+<li><p>CurrentValue；</p>
+</li>
+<li><p>LifetimeEarned；</p>
+</li>
+<li><p>CurrentRunEarned；</p>
+</li>
+<li><p>CurrentRate；</p>
+</li>
+<li><p>PendingGain；</p>
+</li>
+<li><p>PendingSpend；</p>
+</li>
+<li><p>LastUpdatedTimestamp；</p>
+</li>
+<li><p>ResourceVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="6-为什么需要-lifetimeearned">6. 为什么需要 LifetimeEarned</h1><p>很多条件并不关心：</p>
+<p>玩家当前还有多少资源。</p>
+<p>例如：</p>
+<p>“累计生产1e9金币后解锁实验室。”</p>
+<p>玩家可能已经花掉了8e8。</p>
+<p>因此要区分：</p>
+<p><strong>Current Balance</strong></p>
+<p>和：</p>
+<p><strong>Lifetime Production。</strong></p>
+<hr />
+<h1 id="7-currentrunearned">7. CurrentRunEarned</h1><p>Prestige以后：</p>
+<p>LifetimeEarned继续存在。</p>
+<p>但：</p>
+<p>CurrentRunEarned归零。</p>
+<p>这使系统可以定义：</p>
+<ul>
+<li><p>本轮里程碑；</p>
+</li>
+<li><p>永久成就；</p>
+</li>
+<li><p>重置奖励；</p>
+</li>
+</ul>
+<p>不同条件。</p>
+<hr />
+<h1 id="8-核心范式二生产应该表达为-rate而不是大量计时器">8. 核心范式二：生产应该表达为 Rate，而不是大量计时器</h1><p>错误实现：</p>
+<p>Producer A：</p>
+<p>每1秒给10金币。</p>
+<p>Producer B：</p>
+<p>每0.7秒给2金币。</p>
+<p>Producer C：</p>
+<p>每4秒给100金币。</p>
+<p>然后为每一个Producer创建Timer。</p>
+<p>随着系统扩张：</p>
+<p>大量计时状态和边界问题出现。</p>
+<p>更适合：</p>
+<p>统一转换为：</p>
+<p><strong>Production Rate。</strong></p>
+<hr />
+<h1 id="9-producerdefinition">9. ProducerDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>ProducerId；</p>
+</li>
+<li><p>OutputResourceId；</p>
+</li>
+<li><p>BaseProductionPerSecond；</p>
+</li>
+<li><p>CostDefinition；</p>
+</li>
+<li><p>MaximumLevel；</p>
+</li>
+<li><p>UnlockConditionId；</p>
+</li>
+<li><p>UpgradeTagIds；</p>
+</li>
+<li><p>AutomationProfile；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>ProducerVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="10-producerruntimestate">10. ProducerRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li><p>ProducerId；</p>
+</li>
+<li><p>OwnedCount；</p>
+</li>
+<li><p>EffectiveCount；</p>
+</li>
+<li><p>BaseRate；</p>
+</li>
+<li><p>EffectiveRate；</p>
+</li>
+<li><p>CostForNext；</p>
+</li>
+<li><p>CurrentModifiers；</p>
+</li>
+<li><p>AutomationState；</p>
+</li>
+<li><p>ProducerVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="11-rate公式">11. Rate公式</h1><p>例如：</p>
+<p>10个矿工。</p>
+<p>每个：</p>
+<p>2 Gold/s。</p>
+<p>基础：</p>
+<p>20/s。</p>
+<p>装备倍率：</p>
+<p>×3。</p>
+<p>Prestige：</p>
+<p>×5。</p>
+<p>最终：</p>
+<p>300 Gold/s。</p>
+<hr />
+<h1 id="12-为什么-rate-是核心调试单位">12. 为什么 Rate 是核心调试单位</h1><p>玩家当前：</p>
+<p>拥有1e15 Gold。</p>
+<p>这个数字并不能告诉他：</p>
+<p>下一阶段多久能到。</p>
+<p>真正需要的是：</p>
+<p>Gold/s。</p>
+<p>因此增量系统应把：</p>
+<p><strong>当前存量</strong></p>
+<p>和：</p>
+<p><strong>增长速度</strong></p>
+<p>同时视为一等状态。</p>
+<hr />
+<h1 id="13-核心范式三成本增长函数决定玩家购买节奏">13. 核心范式三：成本增长函数决定玩家购买节奏</h1><p>最常见：</p>
+<p>几何成本。</p>
+<p>例如：</p>
+<p><code>Cost(n) = BaseCost × GrowthFactor^n</code></p>
+<p>第1个：</p>
+<p>10。</p>
+<p>第2个：</p>
+<p>15。</p>
+<p>第3个：</p>
+<p>22.5。</p>
+<p>如此递增。</p>
+<hr />
+<h1 id="14-costdefinition">14. CostDefinition</h1><p>建议支持：</p>
+<ul>
+<li><p>Linear；</p>
+</li>
+<li><p>Polynomial；</p>
+</li>
+<li><p>Exponential；</p>
+</li>
+<li><p>Piecewise；</p>
+</li>
+<li><p>CustomCurve；</p>
+</li>
+<li><p>MilestoneReset；</p>
+</li>
+<li><p>DynamicCost。</p>
+</li>
+</ul>
+<p>字段可包含：</p>
+<ul>
+<li><p>BaseCost；</p>
+</li>
+<li><p>GrowthFactor；</p>
+</li>
+<li><p>Exponent；</p>
+</li>
+<li><p>CostResourceId；</p>
+</li>
+<li><p>BulkDiscountRule；</p>
+</li>
+<li><p>CostVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="15-成本与收益的比值决定购买价值">15. 成本与收益的比值决定购买价值</h1><p>玩家真正比较的是：</p>
+<blockquote>
+<p>花多少资源，换多少新增 Rate。</p>
+</blockquote>
+<p>可以定义：</p>
+<p><strong>Payback Time。</strong></p>
+<hr />
+<h1 id="16-payback-time">16. Payback Time</h1><p>例如：</p>
+<p>Upgrade花：</p>
+<p>1000 Gold。</p>
+<p>增加：</p>
+<p>100 Gold/s。</p>
+<p>那么：</p>
+<p>理论回本时间：</p>
+<p>10秒。</p>
+<p>这比：</p>
+<p>“+100 Production”</p>
+<p>更适合作为平衡指标。</p>
+<hr />
+<h1 id="17-upgrade-efficiency">17. Upgrade Efficiency</h1><p>内部工具可以计算：</p>
+<p><code>Efficiency = ΔProductionRate / Cost</code></p>
+<p>或：</p>
+<p><code>PaybackTime = Cost / ΔProductionRate</code></p>
+<p>用于：</p>
+<p>比较多个升级是否存在明显支配选项。</p>
+<hr />
+<h1 id="18-核心范式四bulk-buy-是增量游戏必须从早期考虑的运行时能力">18. 核心范式四：Bulk Buy 是增量游戏必须从早期考虑的运行时能力</h1><p>玩家后期拥有：</p>
+<p>1e100资源。</p>
+<p>不可能：</p>
+<p>连续点击10000次购买矿工。</p>
+<p>需要：</p>
+<ul>
+<li><p>Buy 1；</p>
+</li>
+<li><p>Buy 10；</p>
+</li>
+<li><p>Buy 100；</p>
+</li>
+<li><p>Buy Max；</p>
+</li>
+<li><p>Buy Until Milestone。</p>
+</li>
+</ul>
+<hr />
+<h1 id="19-bulk-purchase-不能循环执行单次购买">19. Bulk Purchase 不能循环执行单次购买</h1><p>错误：</p>
+<p>Buy Max：</p>
+<p>while CanBuy:<br />
+BuyOne()</p>
+<p>购买100000次：</p>
+<p>性能崩溃。</p>
+<p>应针对成本函数：</p>
+<p>直接计算：</p>
+<p><strong>最大可购买数量。</strong></p>
+<hr />
+<h1 id="20-geometric-cost-sum">20. Geometric Cost Sum</h1><p>对于指数成本：</p>
+<p>可以通过公式求：</p>
+<p>购买 N 个的总成本。</p>
+<p>再用：</p>
+<ul>
+<li><p>数学反解；</p>
+</li>
+<li><p>Binary Search；</p>
+</li>
+</ul>
+<p>找到：</p>
+<p>最大合法N。</p>
+<p>运行时复杂度应近似：</p>
+<p>O(log N)</p>
+<p>而不是：</p>
+<p>O(N)。</p>
+<hr />
+<h1 id="21-bulkpurchasequote">21. BulkPurchaseQuote</h1><p>建议包含：</p>
+<ul>
+<li><p>ProducerId；</p>
+</li>
+<li><p>RequestedMode；</p>
+</li>
+<li><p>CurrentOwned；</p>
+</li>
+<li><p>PurchaseCount；</p>
+</li>
+<li><p>TotalCost；</p>
+</li>
+<li><p>NewOwned；</p>
+</li>
+<li><p>NewProductionRate；</p>
+</li>
+<li><p>QuoteVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="22-quote-与-commit-分离">22. Quote 与 Commit 分离</h1><p>UI显示：</p>
+<p>Buy Max = 724个。</p>
+<p>玩家点击。</p>
+<p>真正提交时：</p>
+<p>资源可能已经变化。</p>
+<p>必须：</p>
+<p>重新验证Quote。</p>
+<hr />
+<h1 id="23-核心范式五modifier-pipeline-是增长系统的事实源">23. 核心范式五：Modifier Pipeline 是增长系统的事实源</h1><p>增量游戏会不断加入：</p>
+<ul>
+<li><p>+100%；</p>
+</li>
+<li><p>×2；</p>
+</li>
+<li><p>×10；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Exponent；</p>
+</li>
+<li><p>Time Acceleration；</p>
+</li>
+<li><p>Synergy。</p>
+</li>
+</ul>
+<p>如果每个系统自己改Rate：</p>
+<p>很快无法解释数字。</p>
+<p>因此需要：</p>
+<p>统一：</p>
+<p><strong>Modifier Pipeline。</strong></p>
+<hr />
+<h1 id="24-modifierdefinition">24. ModifierDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>ModifierId；</p>
+</li>
+<li><p>TargetType；</p>
+</li>
+<li><p>TargetIdOrTag；</p>
+</li>
+<li><p>Operation；</p>
+</li>
+<li><p>ValueSource；</p>
+</li>
+<li><p>Condition；</p>
+</li>
+<li><p>Layer；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>ModifierVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="25-modifier-operation">25. Modifier Operation</h1><p>至少可以区分：</p>
+<ul>
+<li><p>FlatAdd；</p>
+</li>
+<li><p>AdditivePercent；</p>
+</li>
+<li><p>Multiplicative；</p>
+</li>
+<li><p>Override；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>ExponentAdd；</p>
+</li>
+<li><p>SoftcapModifier；</p>
+</li>
+<li><p>TimeMultiplier。</p>
+</li>
+</ul>
+<hr />
+<h1 id="26-modifier层级必须固定">26. Modifier层级必须固定</h1><p>例如：</p>
+<p>Base<br />
+→ Flat Add<br />
+→ Additive Percent<br />
+→ Multiplicative<br />
+→ Global Multiplier<br />
+→ Prestige Multiplier<br />
+→ Exponent<br />
+→ Softcap。</p>
+<p>如果顺序随功能编写顺序变化：</p>
+<p>数值不可维护。</p>
+<hr />
+<h1 id="27-breakdown">27. Breakdown</h1><p>玩家或开发者点击：</p>
+<p>Gold/s = 4.72e18</p>
+<p>可以展开：</p>
+<p>Base：2.5e12<br />
+Miner Count：×80<br />
+Mine Upgrade：×20<br />
+Prestige：×100<br />
+Achievement：×1.18<br />
+Research：^1.12。</p>
+<p>这类解释能力是成熟增量系统的关键。</p>
+<hr />
+<h1 id="28-核心范式六里程碑负责把连续数字转化成离散节奏点">28. 核心范式六：里程碑负责把连续数字转化成离散节奏点</h1><p>纯粹连续增长：</p>
+<p>100<br />
+110<br />
+120<br />
+130</p>
+<p>体验容易变得平。</p>
+<p>里程碑：</p>
+<p>10 Producers<br />
+→ ×2。</p>
+<p>25 Producers<br />
+→ 自动生产。</p>
+<p>50 Producers<br />
+→ 新机制。</p>
+<p>100 Producers<br />
+→ Producer自身指数提高。</p>
+<p>于是形成：</p>
+<p><strong>Threshold Reward。</strong></p>
+<hr />
+<h1 id="29-milestonedefinition">29. MilestoneDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>MilestoneId；</p>
+</li>
+<li><p>TrackedMetric；</p>
+</li>
+<li><p>Threshold；</p>
+</li>
+<li><p>RewardDefinitionIds；</p>
+</li>
+<li><p>VisibilityRule；</p>
+</li>
+<li><p>PermanentRule；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>MilestoneVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="30-里程碑职责">30. 里程碑职责</h1><ul>
+<li><p>制造明确短期目标；</p>
+</li>
+<li><p>让批量购买产生节奏；</p>
+</li>
+<li><p>给低级Producer长期价值；</p>
+</li>
+<li><p>引入新机制；</p>
+</li>
+<li><p>标记Progress阶段。</p>
+</li>
+</ul>
+<hr />
+<h1 id="31-里程碑不是成就系统的重复">31. 里程碑不是成就系统的重复</h1><p>Achievement通常：</p>
+<p>记录完成。</p>
+<p>Milestone：</p>
+<p>直接参与：</p>
+<p>Growth Function。</p>
+<hr />
+<h1 id="32-核心范式七unlock-应通过条件图驱动而不是到处写-if-money-x">32. 核心范式七：Unlock 应通过条件图驱动，而不是到处写 if money &gt; X</h1><p>增量游戏的内容会不断展开：</p>
+<p>第一层：</p>
+<p>Gold。</p>
+<p>第二层：</p>
+<p>Research。</p>
+<p>第三层：</p>
+<p>Prestige。</p>
+<p>第四层：</p>
+<p>Automation。</p>
+<p>如果每个UI和系统自行判断解锁：</p>
+<p>逻辑很快散落。</p>
+<p>需要：</p>
+<p><strong>Unlock Condition Graph。</strong></p>
+<hr />
+<h1 id="33-unlockcondition">33. UnlockCondition</h1><p>可以由：</p>
+<ul>
+<li><p>ResourceThreshold；</p>
+</li>
+<li><p>LifetimeProduction；</p>
+</li>
+<li><p>ProducerCount；</p>
+</li>
+<li><p>Milestone；</p>
+</li>
+<li><p>PrestigeCount；</p>
+</li>
+<li><p>Achievement；</p>
+</li>
+<li><p>TimePlayed；</p>
+</li>
+<li><p>OtherUnlock；</p>
+</li>
+<li><p>Compound AND / OR；</p>
+</li>
+</ul>
+<p>组合。</p>
+<hr />
+<h1 id="34-unlockstate">34. UnlockState</h1><p>建议包含：</p>
+<ul>
+<li><p>UnlockId；</p>
+</li>
+<li><p>IsUnlocked；</p>
+</li>
+<li><p>UnlockTimestamp；</p>
+</li>
+<li><p>UnlockSource；</p>
+</li>
+<li><p>UnlockVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="35-解锁应单向还是可撤销">35. 解锁应单向还是可撤销</h1><p>多数核心内容：</p>
+<p>一旦解锁永久存在。</p>
+<p>Prestige后：</p>
+<p>虽然资源归零，</p>
+<p>UI不应重新隐藏所有已经理解过的系统。</p>
+<p>这能减少：</p>
+<p>重复认知成本。</p>
+<hr />
+<h1 id="36-核心范式八automation-是玩家成长的操作层升级">36. 核心范式八：Automation 是玩家成长的“操作层升级”</h1><p>早期：</p>
+<p>玩家手动点击：</p>
+<p>Produce。</p>
+<p>随后：</p>
+<p>自动Produce。</p>
+<p>早期：</p>
+<p>手动Buy。</p>
+<p>随后：</p>
+<p>Auto Buyer。</p>
+<p>之后：</p>
+<p>自动选择Upgrade。</p>
+<p>再之后：</p>
+<p>自动Prestige。</p>
+<p>因此玩家长期成长不是：</p>
+<p>操作越来越多。</p>
+<p>理想方向是：</p>
+<blockquote>
+<p><strong>旧层的操作逐渐消失，新层的决策逐渐出现。</strong></p>
+</blockquote>
+<hr />
+<h1 id="37-automationdefinition">37. AutomationDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>AutomationId；</p>
+</li>
+<li><p>TargetSystem；</p>
+</li>
+<li><p>UnlockCondition；</p>
+</li>
+<li><p>TriggerRule；</p>
+</li>
+<li><p>PriorityRule；</p>
+</li>
+<li><p>ResourceReserveRule；</p>
+</li>
+<li><p>MinimumInterval；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>AutomationVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="38-auto-buyer">38. Auto Buyer</h1><p>需要的不只是：</p>
+<p>CanBuy → Buy。</p>
+<p>玩家可能希望：</p>
+<ul>
+<li><p>保留10%资源；</p>
+</li>
+<li><p>优先某Producer；</p>
+</li>
+<li><p>只买达到里程碑前的数量；</p>
+</li>
+<li><p>不购买低效率升级。</p>
+</li>
+</ul>
+<hr />
+<h1 id="39-automationpolicy">39. AutomationPolicy</h1><p>建议包含：</p>
+<ul>
+<li><p>Enabled；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>MinimumReserve；</p>
+</li>
+<li><p>MaximumSpendRatio；</p>
+</li>
+<li><p>TargetIds；</p>
+</li>
+<li><p>ThresholdRule；</p>
+</li>
+<li><p>PolicyVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="40-automation不能每帧疯狂执行">40. Automation不能每帧疯狂执行</h1><p>可以采用：</p>
+<ul>
+<li><p>Dirty Event；</p>
+</li>
+<li><p>Periodic Scheduler；</p>
+</li>
+<li><p>Threshold Trigger。</p>
+</li>
+</ul>
+<p>例如：</p>
+<p>每100ms</p>
+<p>或：</p>
+<p>资源跨越下一个购买阈值时执行。</p>
+<hr />
+<h1 id="41-核心范式九prestige-是主动压缩当前层进度的核心结构">41. 核心范式九：Prestige 是“主动压缩当前层进度”的核心结构</h1><p>Prestige最重要的语义：</p>
+<blockquote>
+<p>放弃当前层已经积累的大量状态，以换取一个会提高未来所有同层 Run 效率的上层资产。</p>
+</blockquote>
+<p>因此它不是普通 Reset。</p>
+<p>而是：</p>
+<p><strong>Progress Compression。</strong></p>
+<hr />
+<h1 id="42-prestigedefinition">42. PrestigeDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>PrestigeId；</p>
+</li>
+<li><p>Requirement；</p>
+</li>
+<li><p>RewardFormula；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>PreservedStateRules；</p>
+</li>
+<li><p>PermanentUnlockRules；</p>
+</li>
+<li><p>MinimumGainRule；</p>
+</li>
+<li><p>PreviewProfile；</p>
+</li>
+<li><p>PrestigeVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="43-prestigeruntimestate">43. PrestigeRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li><p>PrestigeId；</p>
+</li>
+<li><p>LifetimePrestigeCount；</p>
+</li>
+<li><p>CurrentPrestigeCurrency；</p>
+</li>
+<li><p>LifetimePrestigeCurrency；</p>
+</li>
+<li><p>LastPrestigeTimestamp；</p>
+</li>
+<li><p>CurrentRunStartTimestamp；</p>
+</li>
+<li><p>BestRunMetric；</p>
+</li>
+<li><p>PrestigeVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="44-prestige-reward">44. Prestige Reward</h1><p>例如：</p>
+<p>根据当前Run生产量：</p>
+<p><code>PrestigeCurrency = floor((LifetimeRunResource / 1e6)^0.5)</code></p>
+<p>前期：</p>
+<p>1点。</p>
+<p>后期：</p>
+<p>10。</p>
+<p>100。</p>
+<p>10000。</p>
+<hr />
+<h1 id="45-为什么通常要-sublinear-formula">45. 为什么通常要 Sublinear Formula</h1><p>如果Prestige奖励和基础资源线性：</p>
+<p>多等一倍时间</p>
+<p>直接多一倍永久成长。</p>
+<p>玩家最优策略容易变成：</p>
+<p>无限不Reset。</p>
+<p>次线性或分段函数：</p>
+<p>促使玩家寻找合理Reset时机。</p>
+<hr />
+<h1 id="46-核心范式十何时-prestige-应该是一个真正的决策">46. 核心范式十：何时 Prestige 应该是一个真正的决策</h1><p>Prestige如果永远：</p>
+<p>一亮按钮立刻点</p>
+<p>就没有策略。</p>
+<p>玩家应比较：</p>
+<p><strong>继续当前Run的边际收益</strong></p>
+<p>与：</p>
+<p><strong>立即Reset后的未来加速。</strong></p>
+<hr />
+<h1 id="47-prestige-decision">47. Prestige Decision</h1><p>内部可以估算：</p>
+<p><code>CurrentRun FutureGain</code></p>
+<p>vs</p>
+<p><code>Prestige Restart Gain</code></p>
+<p>玩家不一定获得精确最优答案。</p>
+<p>但UI应该显示：</p>
+<ul>
+<li><p>现在重置获得多少；</p>
+</li>
+<li><p>相比上次提高多少；</p>
+</li>
+<li><p>新Multiplier；</p>
+</li>
+<li><p>哪些内容会重置；</p>
+</li>
+<li><p>哪些会保留。</p>
+</li>
+</ul>
+<hr />
+<h1 id="48-prestige-preview">48. Prestige Preview</h1><p>必须明确：</p>
+<p>你会失去：</p>
+<ul>
+<li><p>Gold；</p>
+</li>
+<li><p>Producers；</p>
+</li>
+<li><p>Basic Upgrades。</p>
+</li>
+</ul>
+<p>你会保留：</p>
+<ul>
+<li><p>Achievements；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Prestige Currency。</p>
+</li>
+</ul>
+<p>你会获得：</p>
+<p>+14 Prestige Points。</p>
+<hr />
+<h1 id="49-reset范围必须数据化">49. Reset范围必须数据化</h1><p>不要：</p>
+<p>Prestige函数里手写：</p>
+<p>Gold = 0<br />
+Miner = 0<br />
+Factory = 0<br />
+...</p>
+<p>随着系统增加：</p>
+<p>极易遗漏。</p>
+<hr />
+<h1 id="50-resetscope">50. ResetScope</h1><p>每个状态声明：</p>
+<ul>
+<li><p>NeverReset；</p>
+</li>
+<li><p>Layer1Reset；</p>
+</li>
+<li><p>Layer2Reset；</p>
+</li>
+<li><p>SeasonReset；</p>
+</li>
+<li><p>FullReset。</p>
+</li>
+</ul>
+<p>Prestige系统只执行：</p>
+<p>对应Scope。</p>
+<hr />
+<h1 id="51-核心范式十一多层-prestige-是增量游戏后期最典型的结构">51. 核心范式十一：多层 Prestige 是增量游戏后期最典型的结构</h1><p>例如：</p>
+<p>Layer 0：</p>
+<p>Gold。</p>
+<p>Layer 1：</p>
+<p>Prestige Points。</p>
+<p>Layer 2：</p>
+<p>Ascension Shards。</p>
+<p>Layer 3：</p>
+<p>Reality Cores。</p>
+<p>上层Reset：</p>
+<p>通常会同时清理：</p>
+<p>多个下层。</p>
+<hr />
+<h1 id="52-resethierarchy">52. ResetHierarchy</h1><p>可以形成：</p>
+<p>Layer 3<br />
+→ resets 0,1,2。</p>
+<p>Layer 2<br />
+→ resets 0,1。</p>
+<p>Layer 1<br />
+→ resets 0。</p>
+<hr />
+<h1 id="53-resetgraph">53. ResetGraph</h1><p>建议避免任意网状Reset。</p>
+<p>层级越复杂：</p>
+<p>越难理解。</p>
+<p>最好保持：</p>
+<p>大部分是有序Hierarchy。</p>
+<p>特殊例外：</p>
+<p>明确标注。</p>
+<hr />
+<h1 id="54-高层reset的体验职责">54. 高层Reset的体验职责</h1><p>它不应该只是：</p>
+<p>“获得更大的Multiplier。”</p>
+<p>最好同时解锁：</p>
+<ul>
+<li><p>新自动化；</p>
+</li>
+<li><p>新资源；</p>
+</li>
+<li><p>新公式；</p>
+</li>
+<li><p>新目标；</p>
+</li>
+<li><p>新视图。</p>
+</li>
+</ul>
+<p>否则玩家只是在：</p>
+<p>重复相同循环但数字更快。</p>
+<hr />
+<h1 id="55-核心范式十二每个新增长层都应该重构玩家对旧系统的关注方式">55. 核心范式十二：每个新增长层都应该重构玩家对旧系统的关注方式</h1><p>Early：</p>
+<p>关注：</p>
+<p>每一个Miner。</p>
+<p>Mid：</p>
+<p>Miner自动化。</p>
+<p>玩家关注：</p>
+<p>Research。</p>
+<p>Later：</p>
+<p>Research自动化。</p>
+<p>玩家关注：</p>
+<p>Prestige Tree。</p>
+<p>更后：</p>
+<p>整个Prestige层成为：</p>
+<p>自动运行的底层。</p>
+<p>这就是：</p>
+<p><strong>Abstraction Ladder。</strong></p>
+<hr />
+<h1 id="56-abstraction-ladder">56. Abstraction Ladder</h1><p>可以概括：</p>
+<p>Manual Action<br />
+→ Producer Management<br />
+→ Upgrade Optimization<br />
+→ Automation Configuration<br />
+→ Prestige Timing<br />
+→ Cross-Layer Allocation<br />
+→ Meta Optimization。</p>
+<p>优秀增量游戏的复杂度是在：</p>
+<p>向上移动。</p>
+<p>不是：</p>
+<p>一直堆更多相同按钮。</p>
+<hr />
+<h1 id="57-核心范式十三offline-progress-必须使用解析结算而不是补跑离线每一帧">57. 核心范式十三：Offline Progress 必须使用解析结算，而不是补跑离线每一帧</h1><p>玩家退出：</p>
+<p>8小时。</p>
+<p>重新登录。</p>
+<p>错误实现：</p>
+<p>模拟：</p>
+<p>8小时 × 60FPS。</p>
+<p>完全不可行。</p>
+<p>需要：</p>
+<p><strong>Offline Catch-Up。</strong></p>
+<hr />
+<h1 id="58-offlineprogressstate">58. OfflineProgressState</h1><p>建议包含：</p>
+<ul>
+<li><p>LogoutTimestamp；</p>
+</li>
+<li><p>LastCommittedSimulationTimestamp；</p>
+</li>
+<li><p>OfflinePolicyVersion；</p>
+</li>
+<li><p>MaximumOfflineDuration；</p>
+</li>
+<li><p>OfflineMultiplier；</p>
+</li>
+<li><p>OfflineVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="59-基础离线计算">59. 基础离线计算</h1><p>如果系统稳定Rate：</p>
+<p><code>OfflineGain = ProductionRate × OfflineDuration</code></p>
+<p>即可。</p>
+<p>但成熟系统可能包含：</p>
+<ul>
+<li><p>Resource Cap；</p>
+</li>
+<li><p>Auto Buyer；</p>
+</li>
+<li><p>Unlock；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>Producer变化。</p>
+</li>
+</ul>
+<p>此时Rate并不恒定。</p>
+<hr />
+<h1 id="60-offline-simulation策略">60. Offline Simulation策略</h1><p>可以分三层：</p>
+<h3 id="closed-form">Closed-form</h3><p>有解析公式：</p>
+<p>直接算。</p>
+<h3 id="event-jump">Event Jump</h3><p>跳到下一个重要阈值：</p>
+<p>购买、解锁、容量上限。</p>
+<h3 id="coarse-simulation">Coarse Simulation</h3><p>固定较大步长：</p>
+<p>例如10秒 / 1分钟。</p>
+<hr />
+<h1 id="61-不要离线使用与在线完全相同的小tick循环">61. 不要离线使用与在线完全相同的小Tick循环</h1><p>离线1个月：</p>
+<p>可能产生：</p>
+<p>数亿Tick。</p>
+<p>需要专门：</p>
+<p>Catch-Up Engine。</p>
+<hr />
+<h1 id="62-offline-catch-up-loop">62. Offline Catch-Up Loop</h1><p>从Logout Time开始：</p>
+<p>找到下一个：</p>
+<ul>
+<li><p>Resource Cap；</p>
+</li>
+<li><p>Automation Purchase；</p>
+</li>
+<li><p>Milestone；</p>
+</li>
+<li><p>Unlock；</p>
+</li>
+</ul>
+<p>最早事件。</p>
+<p>直接推进时间到该点。</p>
+<p>提交事件。</p>
+<p>重新计算Rate。</p>
+<p>继续。</p>
+<hr />
+<h1 id="63-offline-event-budget">63. Offline Event Budget</h1><p>如果玩家离线一年，</p>
+<p>Automation可能产生：</p>
+<p>数百万购买。</p>
+<p>不能逐笔回放。</p>
+<p>达到预算后：</p>
+<p>切换：</p>
+<p>聚合计算。</p>
+<hr />
+<h1 id="64-核心范式十四在线与离线结果必须尽量符合相同经济规则">64. 核心范式十四：在线与离线结果必须尽量符合相同经济规则</h1><p>如果在线1小时：</p>
+<p>赚1e12。</p>
+<p>离线1小时：</p>
+<p>赚1e15。</p>
+<p>玩家最优策略：</p>
+<p>退出游戏。</p>
+<p>反过来：</p>
+<p>离线收益几乎为0，</p>
+<p>放置属性形同虚设。</p>
+<p>因此需要明确：</p>
+<p>Offline Efficiency。</p>
+<hr />
+<h1 id="65-offline-efficiency">65. Offline Efficiency</h1><p>例如：</p>
+<p>100%。</p>
+<p>或：</p>
+<p>50%。</p>
+<p>可以通过升级提高到：</p>
+<p>100%。</p>
+<p>但玩家必须能理解。</p>
+<hr />
+<h1 id="66-offline-cap">66. Offline Cap</h1><p>例如：</p>
+<p>最多累计：</p>
+<p>24小时。</p>
+<p>作用：</p>
+<p>鼓励定期回归。</p>
+<p>但这是产品节奏设计，</p>
+<p>不是技术必要条件。</p>
+<hr />
+<h1 id="67-核心范式十五big-number-是正式基础设施不是显示格式问题">67. 核心范式十五：Big Number 是正式基础设施，不是显示格式问题</h1><p>增量游戏很容易到：</p>
+<p>1e308</p>
+<p>超过标准 double 范围。</p>
+<p>需要从早期选择：</p>
+<p><strong>Large Number Representation。</strong></p>
+<hr />
+<h1 id="68-bignumber最基础结构">68. BigNumber最基础结构</h1><p>可以使用：</p>
+<p>Mantissa + Exponent。</p>
+<p>例如：</p>
+<p><code>4.82 × 10^127</code></p>
+<p>保存：</p>
+<p>Mantissa = 4.82。</p>
+<p>Exponent = 127。</p>
+<hr />
+<h1 id="69-更高层增长">69. 更高层增长</h1><p>某些游戏甚至进入：</p>
+<p>10^(10^100)</p>
+<p>需要：</p>
+<p>Layered Exponent</p>
+<p>或：</p>
+<p>Logarithmic Number Representation。</p>
+<p>是否需要做到这一级，</p>
+<p>取决于产品。</p>
+<p>不要为了“增量”一开始就造超大数库。</p>
+<hr />
+<h1 id="70-numberpolicy">70. NumberPolicy</h1><p>建议明确：</p>
+<ul>
+<li><p>Exact Integer Range；</p>
+</li>
+<li><p>Floating Range；</p>
+</li>
+<li><p>Scientific Range；</p>
+</li>
+<li><p>Layered Exponent Range；</p>
+</li>
+<li><p>Comparison Precision；</p>
+</li>
+<li><p>Serialization Format。</p>
+</li>
+</ul>
+<hr />
+<h1 id="71-经济逻辑不能依赖显示字符串">71. 经济逻辑不能依赖显示字符串</h1><p>显示：</p>
+<p><code>1.23 Qa</code></p>
+<p>只是Presentation。</p>
+<p>权威值必须：</p>
+<p>Numeric Representation。</p>
+<hr />
+<h1 id="72-核心范式十六数值格式本身影响玩家理解增长">72. 核心范式十六：数值格式本身影响玩家理解增长</h1><p>典型：</p>
+<ul>
+<li><p>1,000,000；</p>
+</li>
+<li><p>1M；</p>
+</li>
+<li><p>1e6；</p>
+</li>
+<li><p>10^6。</p>
+</li>
+</ul>
+<p>不同用户偏好不同。</p>
+<p>可以设置：</p>
+<p>Notation。</p>
+<hr />
+<h1 id="73-notationprofile">73. NotationProfile</h1><p>例如：</p>
+<ul>
+<li><p>Standard Suffix；</p>
+</li>
+<li><p>Scientific；</p>
+</li>
+<li><p>Engineering；</p>
+</li>
+<li><p>Letter；</p>
+</li>
+<li><p>Logarithmic。</p>
+</li>
+</ul>
+<p>但不要让：</p>
+<p>Notation改变逻辑。</p>
+<hr />
+<h1 id="74-precision">74. Precision</h1><p>显示：</p>
+<p>1.234567e40</p>
+<p>信息过多。</p>
+<p>通常：</p>
+<p>3～5有效数字足够。</p>
+<p>玩家关心：</p>
+<p>增长数量级。</p>
+<p>不是：</p>
+<p>最后一位。</p>
+<hr />
+<h1 id="75-核心范式十七softcap-用于控制无限增长而不直接设置硬墙">75. 核心范式十七：Softcap 用于控制无限增长，而不直接设置硬墙</h1><p>如果Multiplier无限线性叠加：</p>
+<p>后期可能过快。</p>
+<p>硬上限：</p>
+<p>玩家突然完全失去收益。</p>
+<p>更常用：</p>
+<p><strong>Softcap。</strong></p>
+<hr />
+<h1 id="76-softcap例子">76. Softcap例子</h1><p>当X &lt;= 100：</p>
+<p>EffectiveX = X。</p>
+<p>X &gt; 100：</p>
+<p>额外部分按：</p>
+<p>sqrt</p>
+<p>或：</p>
+<p>指数 &lt; 1</p>
+<p>增长。</p>
+<hr />
+<h1 id="77-softcapdefinition">77. SoftcapDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>TargetMetric；</p>
+</li>
+<li><p>Threshold；</p>
+</li>
+<li><p>FunctionType；</p>
+</li>
+<li><p>Parameter；</p>
+</li>
+<li><p>Layer；</p>
+</li>
+<li><p>ExplanationKey；</p>
+</li>
+<li><p>SoftcapVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="78-softcap必须可解释">78. Softcap必须可解释</h1><p>玩家看到：</p>
+<p>Upgrade写：</p>
+<p>×100。</p>
+<p>结果Rate只涨：</p>
+<p>×3。</p>
+<p>如果没有说明：</p>
+<p>会认为Bug。</p>
+<hr />
+<h1 id="79-ui应显示">79. UI应显示：</h1><p>“该属性超过Softcap 1e6后收益降低。”</p>
+<p>复杂游戏甚至可以显示：</p>
+<p>Before Softcap<br />
+After Softcap。</p>
+<hr />
+<h1 id="80-核心范式十八新系统的价值应来自改变瓶颈而不是只提供同一乘区">80. 核心范式十八：新系统的价值应来自“改变瓶颈”，而不是只提供同一乘区</h1><p>假设当前瓶颈：</p>
+<p>Producer Cost太高。</p>
+<p>新机制如果只是：</p>
+<p>Production ×2</p>
+<p>短暂有效。</p>
+<p>更有价值：</p>
+<ul>
+<li><p>Cost Scaling降低；</p>
+</li>
+<li><p>Milestone间距变化；</p>
+</li>
+<li><p>Automation提前；</p>
+</li>
+<li><p>Prestige Formula改善；</p>
+</li>
+<li><p>Upgrade Exponent提高。</p>
+</li>
+</ul>
+<p>这些机制会：</p>
+<p>改变玩家优化方式。</p>
+<hr />
+<h1 id="81-bottleneckstate">81. BottleneckState</h1><p>开发分析可以估算：</p>
+<p>当前Progression主要受：</p>
+<ul>
+<li><p>Resource Rate；</p>
+</li>
+<li><p>Producer Cost；</p>
+</li>
+<li><p>Unlock Threshold；</p>
+</li>
+<li><p>Prestige Gain；</p>
+</li>
+<li><p>Time Gate；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Secondary Resource；</p>
+</li>
+</ul>
+<p>哪个限制。</p>
+<hr />
+<h1 id="82-增量游戏本质上是瓶颈迁移游戏">82. 增量游戏本质上是“瓶颈迁移游戏”</h1><p>Early：</p>
+<p>点击速度。</p>
+<p>之后：</p>
+<p>Gold Rate。</p>
+<p>之后：</p>
+<p>Producer Cost。</p>
+<p>之后：</p>
+<p>Prestige Gain。</p>
+<p>之后：</p>
+<p>Research。</p>
+<p>之后：</p>
+<p>Time-based Currency。</p>
+<p>优秀设计会持续：</p>
+<p>移动主要瓶颈。</p>
+<hr />
+<h1 id="83-核心范式十九cross-resource-synergy-可以把平行系统重新耦合">83. 核心范式十九：Cross-Resource Synergy 可以把平行系统重新耦合</h1><p>例如：</p>
+<p>Gold系统。</p>
+<p>Research系统。</p>
+<p>Energy系统。</p>
+<p>如果三者完全独立：</p>
+<p>玩家只是在同时玩三条进度条。</p>
+<p>更好的设计：</p>
+<p>Research提高Gold。</p>
+<p>Gold购买Energy Generator。</p>
+<p>Energy提高Research速度。</p>
+<p>形成：</p>
+<p><strong>Cross-Layer Feedback。</strong></p>
+<hr />
+<h1 id="84-synergydefinition">84. SynergyDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SourceMetric；</p>
+</li>
+<li><p>TargetMetric；</p>
+</li>
+<li><p>Formula；</p>
+</li>
+<li><p>Cap；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>UnlockCondition；</p>
+</li>
+<li><p>SynergyVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="85-正反馈需要控制">85. 正反馈需要控制</h1><p>Gold提高Research。</p>
+<p>Research又提高Gold。</p>
+<p>如果都是线性乘法：</p>
+<p>可能形成：</p>
+<p>无限爆炸。</p>
+<p>需要：</p>
+<ul>
+<li><p>Diminishing Return；</p>
+</li>
+<li><p>Softcap；</p>
+</li>
+<li><p>Exponent控制；</p>
+</li>
+<li><p>更新频率。</p>
+</li>
+</ul>
+<hr />
+<h1 id="86-核心范式二十time-resource-是增量游戏中非常特殊的资源">86. 核心范式二十：Time Resource 是增量游戏中非常特殊的资源</h1><p>部分系统不是由玩家主动生产：</p>
+<p>每天获得：</p>
+<p>1 Chrono Token。</p>
+<p>这类资源形成：</p>
+<p><strong>Real-Time Gate。</strong></p>
+<hr />
+<h1 id="87-time-gated-resource">87. Time-gated Resource</h1><p>建议谨慎使用。</p>
+<p>它能：</p>
+<ul>
+<li><p>限制内容速度；</p>
+</li>
+<li><p>制造长期目标。</p>
+</li>
+</ul>
+<p>但如果成为：</p>
+<p>唯一进度：</p>
+<p>玩家会感觉：</p>
+<p>除了等待什么都做不了。</p>
+<hr />
+<h1 id="88-最好允许玩家优化时间资源的效率">88. 最好允许玩家优化时间资源的效率</h1><p>例如：</p>
+<p>基础：</p>
+<p>每小时1。</p>
+<p>升级后：</p>
+<p>1.2。</p>
+<p>或：</p>
+<p>资源用于多个选择。</p>
+<p>这样玩家仍有：</p>
+<p>决策。</p>
+<hr />
+<h1 id="89-核心范式二十一active-play-和-idle-play-应形成互补而不是互相否定">89. 核心范式二十一：Active Play 和 Idle Play 应形成互补，而不是互相否定</h1><p>Idle Game并不意味着：</p>
+<p>玩家最好什么都不做。</p>
+<p>Active行为可以：</p>
+<ul>
+<li><p>短期Boost；</p>
+</li>
+<li><p>手动技能；</p>
+</li>
+<li><p>Minigame；</p>
+</li>
+<li><p>优化购买；</p>
+</li>
+<li><p>Prestige决策。</p>
+</li>
+</ul>
+<p>但不能：</p>
+<p>要求全天不停点击</p>
+<p>才能跟上。</p>
+<hr />
+<h1 id="90-activebonusstate">90. ActiveBonusState</h1><p>可以定义：</p>
+<ul>
+<li><p>ManualBoost；</p>
+</li>
+<li><p>TemporaryMultiplier；</p>
+</li>
+<li><p>ActiveAbilityCooldown；</p>
+</li>
+<li><p>InteractionBonus；</p>
+</li>
+<li><p>ActiveVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="91-active玩法的合理职责">91. Active玩法的合理职责</h1><p>提供：</p>
+<p>1.2～3倍短期效率。</p>
+<p>而不是：</p>
+<p>在线手动：</p>
+<p>1000倍。</p>
+<p>否则：</p>
+<p>Idle体系名存实亡。</p>
+<hr />
+<h1 id="92-核心范式二十二temporary-boost-应改变短期计划而不破坏长期经济">92. 核心范式二十二：Temporary Boost 应改变短期计划，而不破坏长期经济</h1><p>例如：</p>
+<p>10分钟：</p>
+<p>Production ×3。</p>
+<p>玩家可能决定：</p>
+<p>在Boost前：</p>
+<p>先Prestige。</p>
+<p>或者：</p>
+<p>保存某资源。</p>
+<p>形成：</p>
+<p>短期策略。</p>
+<hr />
+<h1 id="93-boost不能叠出无限乘区">93. Boost不能叠出无限乘区</h1><p>需要明确：</p>
+<ul>
+<li><p>Stack；</p>
+</li>
+<li><p>Duration；</p>
+</li>
+<li><p>Category；</p>
+</li>
+<li><p>Cap。</p>
+</li>
+</ul>
+<hr />
+<h1 id="94-booststate">94. BoostState</h1><p>建议包含：</p>
+<ul>
+<li><p>BoostId；</p>
+</li>
+<li><p>StartTimestamp；</p>
+</li>
+<li><p>EndTimestamp；</p>
+</li>
+<li><p>Multiplier；</p>
+</li>
+<li><p>StackGroup；</p>
+</li>
+<li><p>Source；</p>
+</li>
+<li><p>BoostVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="95-核心范式二十三成就适合提供轻量长期乘区但不应成为主要增长源">95. 核心范式二十三：成就适合提供轻量长期乘区，但不应成为主要增长源</h1><p>Achievement可以提供：</p>
+<p>+1%。</p>
+<p>+5%。</p>
+<p>这种增长：</p>
+<p>跨层永久。</p>
+<p>它的作用：</p>
+<p>奖励广度玩法。</p>
+<hr />
+<h1 id="96-achievementpower">96. AchievementPower</h1><p>如果所有核心Multiplier都来自Achievement：</p>
+<p>玩家被迫：</p>
+<p>完成大量无关操作。</p>
+<p>更适合：</p>
+<p>小幅长期加成。</p>
+<hr />
+<h1 id="97-核心范式二十四目标系统必须同时存在短中长三个时间尺度">97. 核心范式二十四：目标系统必须同时存在短、中、长三个时间尺度</h1><p>玩家应该随时至少看到：</p>
+<h3 id="短期">短期</h3><p>再买5个Generator。</p>
+<h3 id="中期">中期</h3><p>达到1e15解锁Research。</p>
+<h3 id="长期">长期</h3><p>完成下一次Ascension。</p>
+<p>如果只有：</p>
+<p>“下一个系统还要三天”</p>
+<p>当前游戏会失去操作意义。</p>
+<hr />
+<h1 id="98-goalstate">98. GoalState</h1><p>可以派生：</p>
+<ul>
+<li><p>NextAffordablePurchase；</p>
+</li>
+<li><p>NextMilestone；</p>
+</li>
+<li><p>NextUnlock；</p>
+</li>
+<li><p>NextPrestigeThreshold；</p>
+</li>
+<li><p>LongTermUnlock。</p>
+</li>
+</ul>
+<hr />
+<h1 id="99-ui层级">99. UI层级</h1><p>推荐：</p>
+<p>Current Rate</p>
+<p>总是可见。</p>
+<p>下一目标：</p>
+<p>明显可见。</p>
+<p>长期系统：</p>
+<p>可预览但不完全展开。</p>
+<hr />
+<h1 id="100-核心范式二十五未知机制的渐进揭示是增量游戏的重要内容生产手段">100. 核心范式二十五：未知机制的渐进揭示是增量游戏的重要内容生产手段</h1><p>开局只显示：</p>
+<p>一个按钮。</p>
+<p>10分钟后：</p>
+<p>出现Producer。</p>
+<p>30分钟：</p>
+<p>Upgrade。</p>
+<p>2小时：</p>
+<p>Prestige。</p>
+<p>一天：</p>
+<p>Research。</p>
+<p>如果开局就显示：</p>
+<p>25个Tab</p>
+<p>玩家会直接被系统复杂度压垮。</p>
+<hr />
+<h1 id="101-progressive-disclosure">101. Progressive Disclosure</h1><p>解锁时：</p>
+<p>UI新增：</p>
+<ul>
+<li><p>Tab；</p>
+</li>
+<li><p>Resource；</p>
+</li>
+<li><p>System。</p>
+</li>
+</ul>
+<p>玩家每次只需要学习：</p>
+<p>一个新层。</p>
+<hr />
+<h1 id="102-已经理解的旧ui可以自动压缩">102. 已经理解的旧UI可以自动压缩</h1><p>例如：</p>
+<p>早期完整Miner面板。</p>
+<p>后期只显示：</p>
+<p>Miner Auto：Running。</p>
+<p>这样：</p>
+<p>UI也随着Abstraction Ladder升级。</p>
+<hr />
+<h1 id="103-核心范式二十六每次prestige后的重跑必须逐渐发生质变">103. 核心范式二十六：每次Prestige后的“重跑”必须逐渐发生质变</h1><p>第一次Prestige：</p>
+<p>30分钟回到原进度。</p>
+<p>第二次：</p>
+<p>10分钟。</p>
+<p>第五次：</p>
+<p>2分钟。</p>
+<p>最终：</p>
+<p>旧层几乎瞬间自动完成。</p>
+<p>如果玩家每次重置后：</p>
+<p>仍然需要手工执行完全相同的30分钟操作，</p>
+<p>Prestige会变成：</p>
+<p>重复劳动。</p>
+<hr />
+<h1 id="104-fast-forward-by-mastery">104. Fast-Forward by Mastery</h1><p>可以通过：</p>
+<ul>
+<li><p>Auto Buyer；</p>
+</li>
+<li><p>Starting Resource；</p>
+</li>
+<li><p>Starting Producer；</p>
+</li>
+<li><p>Skip Milestone；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Multipliers；</p>
+</li>
+</ul>
+<p>让熟悉内容快速被压缩。</p>
+<hr />
+<h1 id="105-本质">105. 本质：</h1><blockquote>
+<p><strong>玩家已经证明自己理解的内容，不应该永久要求同样操作成本。</strong></p>
+</blockquote>
+<hr />
+<h1 id="106-核心范式二十七reset-不应删除玩家认知">106. 核心范式二十七：Reset 不应删除玩家认知</h1><p>Prestige后：</p>
+<p>系统UI、说明、已发现机制</p>
+<p>通常应该保留。</p>
+<p>只是：</p>
+<p>运行时资源归零。</p>
+<p>这和传统 Roguelike的世界重置不同。</p>
+<p>增量 Prestige 是：</p>
+<p><strong>能力重置 + 知识和元成长保留。</strong></p>
+<hr />
+<h1 id="107-核心范式二十八offline-report-是玩家重新进入系统的状态同步界面">107. 核心范式二十八：Offline Report 是玩家重新进入系统的状态同步界面</h1><p>玩家8小时后登录。</p>
+<p>不要只是：</p>
+<p>“你获得 1.27e18 Gold。”</p>
+<p>更有价值：</p>
+<ul>
+<li><p>离线多久；</p>
+</li>
+<li><p>获得多少；</p>
+</li>
+<li><p>哪些Automation运行；</p>
+</li>
+<li><p>解锁什么；</p>
+</li>
+<li><p>是否达到资源Cap；</p>
+</li>
+<li><p>主要进度变化。</p>
+</li>
+</ul>
+<hr />
+<h1 id="108-offlinereport">108. OfflineReport</h1><p>建议包含：</p>
+<ul>
+<li><p>Duration；</p>
+</li>
+<li><p>ResourceGains；</p>
+</li>
+<li><p>Purchases；</p>
+</li>
+<li><p>Milestones；</p>
+</li>
+<li><p>Unlocks；</p>
+</li>
+<li><p>CapsReached；</p>
+</li>
+<li><p>AutomationActions；</p>
+</li>
+<li><p>CatchUpVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="109-offline-report不要长成1000条日志">109. Offline Report不要长成1000条日志</h1><p>聚合：</p>
+<p>“Auto Buyer购买Miner 12,430次。”</p>
+<p>而不是：</p>
+<p>列12430行。</p>
+<hr />
+<h1 id="110-核心范式二十九增量游戏的权威时间必须防止系统时钟作弊或异常">110. 核心范式二十九：增量游戏的权威时间必须防止系统时钟作弊或异常</h1><p>如果单机完全信任：</p>
+<p>Device Clock，</p>
+<p>玩家把时间调到：</p>
+<p>2099年</p>
+<p>即可获得几十年离线收益。</p>
+<hr />
+<h1 id="111-timeauthoritystrategy">111. TimeAuthorityStrategy</h1><p>根据产品可以选择：</p>
+<h3 id="pure-local">Pure Local</h3><p>完全单机。</p>
+<p>接受时间修改风险。</p>
+<h3 id="monotonic-local">Monotonic Local</h3><p>使用系统单调时间辅助。</p>
+<h3 id="server-timestamp">Server Timestamp</h3><p>在线服务器提供权威时间。</p>
+<h3 id="hybrid">Hybrid</h3><p>定期校准服务器时间。</p>
+<hr />
+<h1 id="112-clockstate">112. ClockState</h1><p>建议保存：</p>
+<ul>
+<li><p>LastWallClockTimestamp；</p>
+</li>
+<li><p>LastMonotonicTimestamp；</p>
+</li>
+<li><p>LastServerTimestamp；</p>
+</li>
+<li><p>TrustedTimeLevel；</p>
+</li>
+<li><p>ClockAnomalyState。</p>
+</li>
+</ul>
+<hr />
+<h1 id="113-时间倒退">113. 时间倒退</h1><p>当前时间：</p>
+<p>早于上次存档。</p>
+<p>不能：</p>
+<p>产生负离线时间。</p>
+<p>Clamp到0。</p>
+<p>记录：</p>
+<p>ClockRegression。</p>
+<hr />
+<h1 id="114-时间巨幅前跳">114. 时间巨幅前跳</h1><p>如果超过：</p>
+<p>合理阈值，</p>
+<p>根据产品：</p>
+<ul>
+<li><p>Cap Offline；</p>
+</li>
+<li><p>要求服务器校验；</p>
+</li>
+<li><p>接受但标记。</p>
+</li>
+</ul>
+<hr />
+<h1 id="115-核心范式三十save-是增量游戏最核心的可靠性基础设施之一">115. 核心范式三十：Save 是增量游戏最核心的可靠性基础设施之一</h1><p>玩家可能玩：</p>
+<p>几个月。</p>
+<p>整个资产几乎全部存在于：</p>
+<p>Save。</p>
+<p>一旦损坏：</p>
+<p>产品体验接近灾难。</p>
+<hr />
+<h1 id="116-savesnapshot">116. SaveSnapshot</h1><p>建议包含：</p>
+<ul>
+<li><p>SaveSchemaVersion；</p>
+</li>
+<li><p>ContentVersion；</p>
+</li>
+<li><p>SaveTimestamp；</p>
+</li>
+<li><p>ResourceStates；</p>
+</li>
+<li><p>ProducerStates；</p>
+</li>
+<li><p>UpgradeStates；</p>
+</li>
+<li><p>MilestoneStates；</p>
+</li>
+<li><p>UnlockStates；</p>
+</li>
+<li><p>PrestigeStates；</p>
+</li>
+<li><p>AutomationStates；</p>
+</li>
+<li><p>AchievementStates；</p>
+</li>
+<li><p>BoostStates；</p>
+</li>
+<li><p>Statistics；</p>
+</li>
+<li><p>RandomStates；</p>
+</li>
+<li><p>ClockState；</p>
+</li>
+<li><p>IntegrityHash。</p>
+</li>
+</ul>
+<hr />
+<h1 id="117-save写入采用原子策略">117. Save写入采用原子策略</h1><p>新Save：</p>
+<p>写Temp。</p>
+<p>校验。</p>
+<p>替换Primary。</p>
+<p>保留：</p>
+<p>Backup。</p>
+<p>不要：</p>
+<p>直接覆盖唯一存档。</p>
+<hr />
+<h1 id="118-auto-save">118. Auto Save</h1><p>适合：</p>
+<ul>
+<li><p>固定时间；</p>
+</li>
+<li><p>Prestige前；<br />
+  -重大购买后；</p>
+</li>
+<li><p>App Suspend；</p>
+</li>
+<li><p>Exit。</p>
+</li>
+</ul>
+<p>不需要：</p>
+<p>每帧写磁盘。</p>
+<hr />
+<h1 id="119-cloud-save">119. Cloud Save</h1><p>如果有：</p>
+<p>多设备，</p>
+<p>最危险的是：</p>
+<p>两个设备同时离线玩。</p>
+<p>需要：</p>
+<p>Save Version</p>
+<p>和：</p>
+<p>Conflict Policy。</p>
+<hr />
+<h1 id="120-cloudconflict">120. CloudConflict</h1><p>不要简单：</p>
+<p>Last Write Wins。</p>
+<p>可能丢失：</p>
+<p>数小时进度。</p>
+<p>可以比较：</p>
+<ul>
+<li><p>SaveVersion；</p>
+</li>
+<li><p>TotalPlayTime；</p>
+</li>
+<li><p>LifetimeResources；</p>
+</li>
+<li><p>PrestigeCount；</p>
+</li>
+<li><p>Timestamp。</p>
+</li>
+</ul>
+<p>必要时：</p>
+<p>让玩家选择。</p>
+<hr />
+<h1 id="121-merge通常非常困难">121. Merge通常非常困难</h1><p>两个设备分别：</p>
+<p>购买不同Upgrade。</p>
+<p>直接合并：</p>
+<p>可能创造不存在的资源。</p>
+<p>因此大多数经济型Save：</p>
+<p>应该：</p>
+<p>选择一个权威分支。</p>
+<p>而不是字段级Merge。</p>
+<hr />
+<h1 id="122-核心范式三十一所有购买prestige和奖励都应可幂等">122. 核心范式三十一：所有购买、Prestige和奖励都应可幂等</h1><p>尤其在线版本。</p>
+<p>例如：</p>
+<p>Prestige请求网络超时。</p>
+<p>客户端重试。</p>
+<p>如果服务器执行两次：</p>
+<p>玩家可能获得双倍Prestige Currency。</p>
+<hr />
+<h1 id="123-prestigetransaction">123. PrestigeTransaction</h1><p>建议包含：</p>
+<ul>
+<li><p>TransactionId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>PrestigeId；</p>
+</li>
+<li><p>SourceStateVersion；</p>
+</li>
+<li><p>RewardQuote；</p>
+</li>
+<li><p>ResetPlan；</p>
+</li>
+<li><p>ResultStateVersion。</p>
+</li>
+</ul>
+<p>同TransactionId重复请求：</p>
+<p>返回：</p>
+<p>同一个结果。</p>
+<hr />
+<h1 id="124-purchasetransaction">124. PurchaseTransaction</h1><p>同理：</p>
+<ul>
+<li><p>TransactionId；</p>
+</li>
+<li><p>TargetId；</p>
+</li>
+<li><p>Count；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>StateVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="125-核心范式三十二event-log适合记录重要增长事件不适合记录每个资源tick">125. 核心范式三十二：Event Log适合记录“重要增长事件”，不适合记录每个资源Tick</h1><p>不要每秒写：</p>
+<p>Gold +100。</p>
+<p>日志爆炸。</p>
+<p>适合记录：</p>
+<ul>
+<li><p>Unlock；</p>
+</li>
+<li><p>Milestone；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>Major Upgrade；</p>
+</li>
+<li><p>Achievement；</p>
+</li>
+<li><p>System Migration。</p>
+</li>
+</ul>
+<hr />
+<h1 id="126-resource增长通过">126. Resource增长通过：</h1><p>Snapshot + Formula</p>
+<p>恢复。</p>
+<hr />
+<h1 id="127-核心范式三十三运行时不应该每帧重新计算所有公式">127. 核心范式三十三：运行时不应该每帧重新计算所有公式</h1><p>系统可能有：</p>
+<p>200 Producers。</p>
+<p>500 Modifiers。</p>
+<p>几十个资源。</p>
+<p>每帧全量递归：</p>
+<p>没有必要。</p>
+<hr />
+<h1 id="128-dirty-graph">128. Dirty Graph</h1><p>Growth Graph中：</p>
+<p>节点依赖其他节点。</p>
+<p>只有源发生变化：</p>
+<p>标记下游Dirty。</p>
+<hr />
+<h1 id="129-growthnode">129. GrowthNode</h1><p>可以表示：</p>
+<ul>
+<li><p>ResourceRate；</p>
+</li>
+<li><p>ProducerRate；</p>
+</li>
+<li><p>Modifier；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>PrestigeGain；</p>
+</li>
+<li><p>Synergy。</p>
+</li>
+</ul>
+<hr />
+<h1 id="130-dependencygraph">130. DependencyGraph</h1><p>例如：</p>
+<p>MinerCount<br />
+→ MinerRate<br />
+→ GoldRate<br />
+→ ResearchSynergy<br />
+→ PrestigePreview。</p>
+<p>购买Miner：</p>
+<p>只重算：</p>
+<p>受影响链。</p>
+<hr />
+<h1 id="131-不要把完整经济公式写进ui">131. 不要把完整经济公式写进UI</h1><p>UI只Query：</p>
+<p>当前Rate、Cost、Breakdown。</p>
+<p>UI刷新不能：</p>
+<p>改变经济状态。</p>
+<hr />
+<h1 id="132-核心范式三十四tickless-simulation-非常适合增量游戏">132. 核心范式三十四：Tickless Simulation 非常适合增量游戏</h1><p>如果Rate在未来10秒不会变化：</p>
+<p>为什么一定每Frame执行：</p>
+<p>Gold += Rate × dt？</p>
+<p>可以保存：</p>
+<p>LastUpdateTime。</p>
+<p>读取Gold时：</p>
+<p>动态结算：</p>
+<p><code>Gold += Rate × (Now - LastUpdateTime)</code></p>
+<hr />
+<h1 id="133-lazy-accumulation">133. Lazy Accumulation</h1><p>资源只在：</p>
+<ul>
+<li><p>UI查询；</p>
+</li>
+<li><p>消费；</p>
+</li>
+<li><p>Rate改变；</p>
+</li>
+<li><p>Save；</p>
+</li>
+</ul>
+<p>前结算到当前时间。</p>
+<p>这可以极大减少：</p>
+<p>无意义Update。</p>
+<hr />
+<h1 id="134-但跨资源依赖需要谨慎">134. 但跨资源依赖需要谨慎</h1><p>如果：</p>
+<p>Gold Rate</p>
+<p>依赖：</p>
+<p>Energy当前值，</p>
+<p>而Energy同时变化，</p>
+<p>则不再是恒定Rate。</p>
+<p>需要：</p>
+<p>事件切分</p>
+<p>或：</p>
+<p>固定低频Strategic Tick。</p>
+<hr />
+<h1 id="135-hybrid-simulation">135. Hybrid Simulation</h1><p>推荐：</p>
+<p>简单稳定资源：</p>
+<p>Lazy / Analytic。</p>
+<p>复杂联动：</p>
+<p>低频Simulation Tick。</p>
+<hr />
+<h1 id="136-核心范式三十五随机性通常不应支配基础增长">136. 核心范式三十五：随机性通常不应支配基础增长</h1><p>增量游戏的核心吸引力之一：</p>
+<p>可预测成长。</p>
+<p>如果生产每秒：</p>
+<p>0～1000完全随机，</p>
+<p>玩家无法规划。</p>
+<p>随机更适合：</p>
+<ul>
+<li><p>Bonus Drop；</p>
+</li>
+<li><p>Rare Event；</p>
+</li>
+<li><p>Crit Production；</p>
+</li>
+<li><p>Lottery System。</p>
+</li>
+</ul>
+<p>基础Rate：</p>
+<p>尽量稳定。</p>
+<hr />
+<h1 id="137-random-bonus-应长期收敛到可预期均值">137. Random Bonus 应长期收敛到可预期均值</h1><p>例如：</p>
+<p>1%概率 ×100生产。</p>
+<p>长期：</p>
+<p>平均值稳定。</p>
+<p>短期：</p>
+<p>产生惊喜。</p>
+<hr />
+<h1 id="138-核心范式三十六玩家体验必须让增长速度变化比绝对数字变化更明显">138. 核心范式三十六：玩家体验必须让“增长速度变化”比“绝对数字变化”更明显</h1><p>从：</p>
+<p>1e50</p>
+<p>涨到：</p>
+<p>1.1e50</p>
+<p>看起来数字巨大，</p>
+<p>实际只有10%。</p>
+<p>而从：</p>
+<p>10/s</p>
+<p>变成：</p>
+<p>100/s</p>
+<p>才是明显成长。</p>
+<p>因此反馈需要强调：</p>
+<p><strong>Rate Delta。</strong></p>
+<hr />
+<h1 id="139-upgrade反馈">139. Upgrade反馈</h1><p>购买以后显示：</p>
+<p>Production：</p>
+<p>1.82e9/s<br />
+→<br />
+3.64e9/s</p>
+<p><code>×2</code></p>
+<p>比：</p>
+<p>Balance数字快速跳动</p>
+<p>更容易理解。</p>
+<hr />
+<h1 id="140-time-to-goal">140. Time-to-Goal</h1><p>如果下一升级：</p>
+<p>Cost 1e12。</p>
+<p>当前Rate：</p>
+<p>1e10/s。</p>
+<p>预计：</p>
+<p>100秒。</p>
+<p>可以显示：</p>
+<p>ETA。</p>
+<hr />
+<h1 id="141-eta-是增量游戏极高价值指标">141. ETA 是增量游戏极高价值指标</h1><p>玩家可以决定：</p>
+<ul>
+<li><p>等；</p>
+</li>
+<li><p>买其他Upgrade；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>关闭游戏。</p>
+</li>
+</ul>
+<hr />
+<h1 id="142-eta必须考虑rate变化">142. ETA必须考虑Rate变化</h1><p>基础版本：</p>
+<p>CurrentCost / CurrentRate。</p>
+<p>高级版本：</p>
+<p>根据预测Growth。</p>
+<p>不要假装给极精确秒数。</p>
+<hr />
+<h1 id="143-核心范式三十七等待必须对应可预期结果">143. 核心范式三十七：等待必须对应可预期结果</h1><p>“等三小时以后可能有东西”</p>
+<p>通常不如：</p>
+<p>“约45分钟达到下一里程碑”</p>
+<p>更有动力。</p>
+<p>增量游戏适合：</p>
+<p>明确目标。</p>
+<hr />
+<h1 id="144-但不能所有目标都成为倒计时">144. 但不能所有目标都成为倒计时</h1><p>玩家仍需要：</p>
+<p>做选择。</p>
+<p>否则整个游戏变成：</p>
+<p>Timer Viewer。</p>
+<hr />
+<h1 id="145-核心范式三十八主动操作的价值应随着阶段变化而衰减">145. 核心范式三十八：主动操作的价值应随着阶段变化而衰减</h1><p>开局点击：</p>
+<p>非常有价值。</p>
+<p>中期：</p>
+<p>点击产出只占自动生产1%。</p>
+<p>这时继续要求：</p>
+<p>手动点击</p>
+<p>没有意义。</p>
+<p>应该：</p>
+<ul>
+<li><p>淘汰Click；</p>
+</li>
+<li><p>转换成Boost；</p>
+</li>
+<li><p>自动化。</p>
+</li>
+</ul>
+<hr />
+<h1 id="146-旧机制退出舞台同样是progression">146. 旧机制退出舞台同样是Progression</h1><p>很多游戏只会：</p>
+<p>不断增加系统。</p>
+<p>优秀增量设计还会：</p>
+<p>让旧系统逐渐：</p>
+<p><strong>退居背景。</strong></p>
+<hr />
+<h1 id="147-核心范式三十九长期设计需要防止升级选项事实上只有一个最优解">147. 核心范式三十九：长期设计需要防止“升级选项事实上只有一个最优解”</h1><p>如果每次：</p>
+<p>购买最便宜PaybackTime升级</p>
+<p>永远最优，</p>
+<p>玩家只是：</p>
+<p>执行计算器答案。</p>
+<p>可以增加：</p>
+<p>不同时间尺度和条件：</p>
+<ul>
+<li><p>Immediate Rate；</p>
+</li>
+<li><p>Prestige Gain；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Future Unlock；</p>
+</li>
+<li><p>Resource Synergy；</p>
+</li>
+<li><p>Offline Bonus。</p>
+</li>
+</ul>
+<p>于是某个升级：</p>
+<p>短期差，</p>
+<p>长期强。</p>
+<hr />
+<h1 id="148-upgradecategory">148. UpgradeCategory</h1><p>可以区分：</p>
+<ul>
+<li><p>Production；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>Offline；</p>
+</li>
+<li><p>Unlock；</p>
+</li>
+<li><p>Synergy；</p>
+</li>
+<li><p>Time。</p>
+</li>
+</ul>
+<hr />
+<h1 id="149-核心范式四十prestige-tree适合制造长期方向而不是只卖无穷multiplier">149. 核心范式四十：Prestige Tree适合制造长期方向，而不是只卖无穷Multiplier</h1><p>Prestige Currency可以购买：</p>
+<ul>
+<li><p>自动化；</p>
+</li>
+<li><p>新Producer；</p>
+</li>
+<li><p>Cost Scaling改善；</p>
+</li>
+<li><p>Offline效率；</p>
+</li>
+<li><p>Unlock提前；</p>
+</li>
+<li><p>新公式。</p>
+</li>
+</ul>
+<p>这些比：</p>
+<p>+10% Production</p>
+<p>更有结构价值。</p>
+<hr />
+<h1 id="150-prestigeupgradedefinition">150. PrestigeUpgradeDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>UpgradeId；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>MaxRank；</p>
+</li>
+<li><p>Preconditions；</p>
+</li>
+<li><p>Effects；</p>
+</li>
+<li><p>RefundPolicy；</p>
+</li>
+<li><p>PermanentRule；</p>
+</li>
+<li><p>UpgradeVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="151-respec">151. Respec</h1><p>如果Prestige Tree有明显分支：</p>
+<p>应考虑：</p>
+<p>是否允许Respec。</p>
+<p>如果完全不可逆：</p>
+<p>玩家可能因为不了解系统永久损失大量效率。</p>
+<hr />
+<h1 id="152-可以通过">152. 可以通过：</h1><ul>
+<li><p>免费；</p>
+</li>
+<li><p>有成本；</p>
+</li>
+<li><p>每次Prestige重选；</p>
+</li>
+</ul>
+<p>降低试错成本。</p>
+<hr />
+<h1 id="153-核心范式四十一无限增长系统需要定义阶段目标否则没有终点会变成没有意义">153. 核心范式四十一：无限增长系统需要定义阶段目标，否则“没有终点”会变成“没有意义”</h1><p>Incremental可以理论无限。</p>
+<p>但玩家仍需要：</p>
+<p>阶段性胜利。</p>
+<p>例如：</p>
+<ul>
+<li><p>First Prestige；</p>
+</li>
+<li><p>Unlock Universe；</p>
+</li>
+<li><p>Reach 1e100；</p>
+</li>
+<li><p>Complete Research Tier；</p>
+</li>
+<li><p>Defeat Mathematical Wall；</p>
+</li>
+<li><p>Story Chapter。</p>
+</li>
+</ul>
+<hr />
+<h1 id="154-chapterstate">154. ChapterState</h1><p>把长期内容划成：</p>
+<p>Chapter。</p>
+<p>每个Chapter：</p>
+<p>引入一到两个新Growth Rule。</p>
+<p>完成后：</p>
+<p>剧情或系统推进。</p>
+<hr />
+<h1 id="155-infinite-mode-可以在主要内容完成后开放">155. Infinite Mode 可以在主要内容完成后开放</h1><p>而不是：</p>
+<p>从第一秒就告诉玩家：</p>
+<p>目标是无限。</p>
+<hr />
+<h1 id="156-完整事件与执行流程示例">156. 完整事件与执行流程示例</h1><p>以下以：</p>
+<p><strong>玩家从基础矿工生产 Gold 开始，逐步解锁自动购买和第一次 Prestige，之后用 Prestige 点数快速压缩旧阶段</strong></p>
+<p>为例。</p>
+<hr />
+<h2 id="1561-初始状态">156.1 初始状态</h2><p>Gold：</p>
+<p>0。</p>
+<p>Manual Click：</p>
+<p>+1 Gold。</p>
+<p>Miner Cost：</p>
+<p>10。</p>
+<p>Miner Production：</p>
+<p>1 Gold/s。</p>
+<hr />
+<h2 id="1562-玩家手动点击">156.2 玩家手动点击</h2><p>10次。</p>
+<p>Gold：</p>
+<p>10。</p>
+<hr />
+<h2 id="1563-购买miner">156.3 购买Miner</h2><p>PurchaseTransaction：</p>
+<p>验证：</p>
+<p>Gold &gt;= 10。</p>
+<p>扣除：</p>
+<p>10。</p>
+<p>MinerCount：</p>
+<p>0 → 1。</p>
+<hr />
+<h2 id="1564-growthgraph变dirty">156.4 GrowthGraph变Dirty</h2><p>MinerRate：</p>
+<p>重新计算。</p>
+<p>GoldRate：</p>
+<p>1/s。</p>
+<hr />
+<h2 id="1565-玩家停止点击">156.5 玩家停止点击</h2><p>系统仍然：</p>
+<p>每秒获得1 Gold。</p>
+<p>这是第一个重要体验：</p>
+<blockquote>
+<p>我的进度已经部分脱离手动操作。</p>
+</blockquote>
+<hr />
+<h2 id="1566-第二个miner成本">156.6 第二个Miner成本</h2><p>15 Gold。</p>
+<p>约15秒后：</p>
+<p>可购买。</p>
+<hr />
+<h2 id="1567-玩家继续购买">156.7 玩家继续购买</h2><p>MinerCount：</p>
+<p>10。</p>
+<p>GoldRate：</p>
+<p>10/s。</p>
+<hr />
+<h2 id="1568-达到10-miner里程碑">156.8 达到10 Miner里程碑</h2><p>Milestone触发：</p>
+<p>Miner Production ×2。</p>
+<p>GoldRate：</p>
+<p>10<br />
+→ 20/s。</p>
+<hr />
+<h2 id="1569-玩家看到明显rate-jump">156.9 玩家看到明显Rate Jump</h2><p>而不是：</p>
+<p>只看到Balance上涨。</p>
+<hr />
+<h2 id="15610-解锁factory">156.10 解锁Factory</h2><p>条件：</p>
+<p>LifetimeGold &gt;= 10000。</p>
+<p>Factory：</p>
+<p>基础产出：</p>
+<p>50 Gold/s。</p>
+<p>成本：</p>
+<p>5000。</p>
+<hr />
+<h2 id="15611-factory购买以后">156.11 Factory购买以后</h2><p>旧Miner仍有价值，</p>
+<p>但：</p>
+<p>Factory成为主要增长来源。</p>
+<hr />
+<h2 id="15612-解锁auto-click">156.12 解锁Auto Click</h2><p>手动点击不再需要。</p>
+<p>旧的最初操作：</p>
+<p>被系统自动化。</p>
+<hr />
+<h2 id="15613-30分钟后">156.13 30分钟后</h2><p>玩家：</p>
+<p>GoldRate = 2e6/s。</p>
+<p>下一主要升级：</p>
+<p>需要1e10。</p>
+<p>ETA：</p>
+<p>约5000秒。</p>
+<p>增长明显进入平台。</p>
+<hr />
+<h2 id="15614-prestige按钮出现">156.14 Prestige按钮出现</h2><p>条件：</p>
+<p>LifetimeGold &gt;= 1e9。</p>
+<p>当前重置可获得：</p>
+<p>12 Prestige Points。</p>
+<hr />
+<h2 id="15615-玩家查看preview">156.15 玩家查看Preview</h2><p>会Reset：</p>
+<ul>
+<li><p>Gold；</p>
+</li>
+<li><p>Miner；</p>
+</li>
+<li><p>Factory；</p>
+</li>
+<li><p>Basic Upgrade。</p>
+</li>
+</ul>
+<p>保留：</p>
+<ul>
+<li><p>Achievements；</p>
+</li>
+<li><p>Unlock Knowledge。</p>
+</li>
+</ul>
+<p>获得：</p>
+<p>12 PP。</p>
+<hr />
+<h2 id="15616-玩家犹豫">156.16 玩家犹豫</h2><p>如果继续等：</p>
+<p>可能达到：</p>
+<p>15 PP。</p>
+<p>但需要：</p>
+<p>20分钟。</p>
+<p>立即Reset：</p>
+<p>可以现在获得：</p>
+<p>Permanent Multiplier。</p>
+<p>这就是：</p>
+<p>真正的Prestige Timing决策。</p>
+<hr />
+<h2 id="15617-玩家选择prestige">156.17 玩家选择Prestige</h2><p>PrestigeTransaction：</p>
+<p>锁定当前StateVersion。</p>
+<p>计算：</p>
+<p>Reward = 12 PP。</p>
+<p>生成：</p>
+<p>ResetPlan。</p>
+<hr />
+<h2 id="15618-原子提交">156.18 原子提交</h2><p>Gold：</p>
+<p>0。</p>
+<p>Miner：</p>
+<p>0。</p>
+<p>Factory：</p>
+<p>0。</p>
+<p>PrestigePoint：</p>
+<p>0 → 12。</p>
+<p>PrestigeCount：</p>
+<p>1。</p>
+<hr />
+<h2 id="15619-玩家进入prestige-tree">156.19 玩家进入Prestige Tree</h2><p>花：</p>
+<p>5 PP：</p>
+<p>Starting Miner = 1。</p>
+<p>花：</p>
+<p>4 PP：</p>
+<p>Global Production ×3。</p>
+<p>花：</p>
+<p>3 PP：</p>
+<p>Unlock Auto Buyer。</p>
+<hr />
+<h2 id="15620-第二个run开始">156.20 第二个Run开始</h2><p>玩家不再：</p>
+<p>手动点击10次。</p>
+<p>因为：</p>
+<p>开局直接拥有Miner。</p>
+<hr />
+<h2 id="15621-production-3">156.21 Production ×3</h2><p>原来：</p>
+<p>1/s。</p>
+<p>现在：</p>
+<p>3/s。</p>
+<hr />
+<h2 id="15622-auto-buyer开始工作">156.22 Auto Buyer开始工作</h2><p>达到成本时：</p>
+<p>自动购买Miner。</p>
+<p>玩家不再：</p>
+<p>手动点击每个购买按钮。</p>
+<hr />
+<h2 id="15623-原来需要15分钟达到factory">156.23 原来需要15分钟达到Factory</h2><p>现在：</p>
+<p>约2分钟。</p>
+<hr />
+<h2 id="15624-旧阶段被压缩">156.24 旧阶段被压缩</h2><p>玩家不是：</p>
+<p>“再玩一次同样15分钟。”</p>
+<p>而是：</p>
+<p>看着自己快速穿越以前需要努力的内容。</p>
+<hr />
+<h2 id="15625-第二次run达到旧最高进度">156.25 第二次Run达到旧最高进度</h2><p>只用了：</p>
+<p>7分钟。</p>
+<hr />
+<h2 id="15626-随后进入新区域">156.26 随后进入新区域</h2><p>LifetimeGold达到：</p>
+<p>1e13。</p>
+<p>解锁：</p>
+<p>Research。</p>
+<hr />
+<h2 id="15627-research产生新资源">156.27 Research产生新资源</h2><p>ResearchPoint/s</p>
+<p>由：</p>
+<p>Factory数量</p>
+<p>提供。</p>
+<p>于是旧Factory系统不再只是：</p>
+<p>Gold Producer。</p>
+<p>同时成为：</p>
+<p>Research Input。</p>
+<hr />
+<h2 id="15628-cross-resource-synergy形成">156.28 Cross-resource Synergy形成</h2><p>Research可以购买：</p>
+<p>Miner Cost Scaling降低。</p>
+<p>这又反过来：</p>
+<p>提高Gold。</p>
+<hr />
+<h2 id="15629-新瓶颈出现">156.29 新瓶颈出现</h2><p>以前：</p>
+<p>Gold Rate。</p>
+<p>现在：</p>
+<p>Research Rate。</p>
+<p>玩家关注层级上升。</p>
+<hr />
+<h2 id="15630-第三次prestige">156.30 第三次Prestige</h2><p>Prestige Point增长更快。</p>
+<p>玩家获得：</p>
+<p>Auto Prestige条件配置。</p>
+<hr />
+<h2 id="15631-最终">156.31 最终</h2><p>基础Gold系统：</p>
+<p>几乎完全自动。</p>
+<p>玩家真正管理的是：</p>
+<p>Research和Prestige策略。</p>
+<hr />
+<h2 id="15632-完整核心链">156.32 完整核心链</h2><p>Manual Click<br />
+→ 第一个Producer<br />
+→ 自动Rate<br />
+→ Producer Scaling<br />
+→ Milestone<br />
+→ 新Producer<br />
+→ 旧操作自动化<br />
+→ 当前增长平台<br />
+→ Prestige Preview<br />
+→ 主动Reset<br />
+→ Permanent Upgrade<br />
+→ 旧阶段Fast-forward<br />
+→ 新资源层<br />
+→ Cross-resource Synergy<br />
+→ 新瓶颈<br />
+→ 更高层Automation。</p>
+<p>这就是增量游戏最具代表性的：</p>
+<blockquote>
+<p><strong>旧增长层被玩家理解、优化并最终压缩成新的增长层中的自动基础设施。</strong></p>
+</blockquote>
+<hr />
+<h1 id="157-模块通信设计">157. 模块通信设计</h1><h2 id="1571-commands">157.1 Commands</h2><p>典型：</p>
+<ul>
+<li><p>ProduceManual；</p>
+</li>
+<li><p>PurchaseProducer；</p>
+</li>
+<li><p>PurchaseUpgrade；</p>
+</li>
+<li><p>ToggleAutomation；</p>
+</li>
+<li><p>ConfigureAutomation；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>PurchasePrestigeUpgrade；</p>
+</li>
+<li><p>ActivateBoost；</p>
+</li>
+<li><p>ClaimReward；</p>
+</li>
+<li><p>ChangeNotation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="1572-queries">157.2 Queries</h2><p>适用于：</p>
+<ul>
+<li><p>当前Resource；</p>
+</li>
+<li><p>当前Rate；</p>
+</li>
+<li><p>下一Producer Cost；</p>
+</li>
+<li><p>BuyMax数量；</p>
+</li>
+<li><p>某Upgrade收益；</p>
+</li>
+<li><p>下一Milestone；</p>
+</li>
+<li><p>当前Prestige Gain；</p>
+</li>
+<li><p>Prestige会Reset什么；</p>
+</li>
+<li><p>Offline ETA；</p>
+</li>
+<li><p>当前主要Modifier来源。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>推进资源；</p>
+</li>
+<li><p>修改购买；</p>
+</li>
+<li><p>触发Prestige；</p>
+</li>
+<li><p>消耗随机数。</p>
+</li>
+</ul>
+<hr />
+<h1 id="158-domain-events">158. Domain Events</h1><p>包括：</p>
+<ul>
+<li><p>ResourceChanged；</p>
+</li>
+<li><p>ProductionRateChanged；</p>
+</li>
+<li><p>ProducerPurchased；</p>
+</li>
+<li><p>UpgradePurchased；</p>
+</li>
+<li><p>MilestoneReached；</p>
+</li>
+<li><p>SystemUnlocked；</p>
+</li>
+<li><p>AutomationEnabled；</p>
+</li>
+<li><p>AutomationActionExecuted；</p>
+</li>
+<li><p>PrestigeStarted；</p>
+</li>
+<li><p>PrestigeCommitted；</p>
+</li>
+<li><p>PrestigeCurrencyGranted；</p>
+</li>
+<li><p>OfflineCatchUpCompleted；</p>
+</li>
+<li><p>BoostStarted；</p>
+</li>
+<li><p>BoostEnded；</p>
+</li>
+<li><p>AchievementUnlocked；</p>
+</li>
+<li><p>SaveCommitted。</p>
+</li>
+</ul>
+<hr />
+<h1 id="159-presentation-events">159. Presentation Events</h1><p>包括：</p>
+<ul>
+<li><p>ShowNumberBurst；</p>
+</li>
+<li><p>PlayPurchaseEffect；</p>
+</li>
+<li><p>ShowMilestoneBanner；</p>
+</li>
+<li><p>RevealNewSystemTab；</p>
+</li>
+<li><p>PlayPrestigeAnimation；</p>
+</li>
+<li><p>ShowOfflineReport。</p>
+</li>
+</ul>
+<p>表现事件不能：</p>
+<ul>
+<li><p>增加资源；<br />
+  -修改倍率；</p>
+</li>
+<li><p>执行Reset；</p>
+</li>
+<li><p>决定Offline Gain。</p>
+</li>
+</ul>
+<hr />
+<h1 id="160-状态所有权">160. 状态所有权</h1><p>推荐：</p>
+<p><strong>ResourceSystem</strong></p>
+<p>拥有资源余额与累计量。</p>
+<p><strong>ProductionSystem</strong></p>
+<p>拥有Producer与Rate。</p>
+<p><strong>ModifierSystem</strong></p>
+<p>拥有最终增长公式。</p>
+<p><strong>PurchaseSystem</strong></p>
+<p>拥有Cost和购买事务。</p>
+<p><strong>MilestoneSystem</strong></p>
+<p>拥有阈值奖励。</p>
+<p><strong>UnlockSystem</strong></p>
+<p>拥有内容解锁。</p>
+<p><strong>AutomationSystem</strong></p>
+<p>拥有自动操作策略。</p>
+<p><strong>PrestigeSystem</strong></p>
+<p>拥有Reset和上层资产。</p>
+<p><strong>OfflineSystem</strong></p>
+<p>负责Catch-Up。</p>
+<p><strong>ClockSystem</strong></p>
+<p>拥有时间可信度。</p>
+<p><strong>SaveSystem</strong></p>
+<p>拥有持久化Snapshot。</p>
+<p><strong>StatisticsSystem</strong></p>
+<p>只记录派生分析。</p>
+<hr />
+<h1 id="161-resourcesystem不应知道ui当前显示哪个tab">161. ResourceSystem不应知道UI当前显示哪个Tab</h1><p>Production不会因为：</p>
+<p>玩家切走页面</p>
+<p>停止。</p>
+<hr />
+<h1 id="162-ui不会直接修改ownedcount">162. UI不会直接修改OwnedCount</h1><p>必须：</p>
+<p>PurchaseCommand。</p>
+<p>否则：</p>
+<p>购买逻辑可能绕过Cost。</p>
+<hr />
+<h1 id="163-失败隔离">163. 失败隔离</h1><hr />
+<h2 id="1631-formula产生nan">163.1 Formula产生NaN</h2><p>例如：</p>
+<p>负数执行：</p>
+<p>log。</p>
+<p>Formula Engine必须检测：</p>
+<p>Finite / Valid。</p>
+<p>失败：</p>
+<p>使用上一次合法值。</p>
+<p>记录：</p>
+<p>FormulaIntegrityError。</p>
+<hr />
+<h1 id="164-infinity">164. Infinity</h1><p>BigNumber范围不足。</p>
+<p>系统检测：</p>
+<p>Exponent overflow。</p>
+<p>根据NumberPolicy：</p>
+<p>升级层级</p>
+<p>或：</p>
+<p>Clamp并报警。</p>
+<p>不能：</p>
+<p>继续传播NaN。</p>
+<hr />
+<h1 id="165-negative-resource">165. Negative Resource</h1><p>购买竞争或浮点误差：</p>
+<p>资源出现：</p>
+<p>-0.0000001。</p>
+<p>允许：</p>
+<p>epsilon Clamp到0。</p>
+<p>明显负数：</p>
+<p>事务失败并报警。</p>
+<hr />
+<h1 id="166-purchase重复">166. Purchase重复</h1><p>TransactionId幂等。</p>
+<p>同一请求：</p>
+<p>只执行一次。</p>
+<hr />
+<h1 id="167-buymax公式异常">167. BuyMax公式异常</h1><p>计算出：</p>
+<p>负数量</p>
+<p>或：</p>
+<p>明显超出理论范围。</p>
+<p>Fallback：</p>
+<p>Binary Search。</p>
+<p>不能死循环。</p>
+<hr />
+<h1 id="168-automation循环">168. Automation循环</h1><p>Auto Buyer购买Upgrade。</p>
+<p>Upgrade改变Cost。</p>
+<p>又立即触发Auto Buyer。</p>
+<p>如果无间隔：</p>
+<p>可能同Tick执行数万次。</p>
+<p>需要：</p>
+<p>Automation Work Budget。</p>
+<hr />
+<h1 id="169-automationbudget">169. AutomationBudget</h1><p>每个Simulation Cycle：</p>
+<p>最多执行：</p>
+<p>N次高层Automation。</p>
+<p>超出：</p>
+<p>聚合</p>
+<p>或：</p>
+<p>推迟下一Cycle。</p>
+<hr />
+<h1 id="170-unlock循环">170. Unlock循环</h1><p>Unlock A要求B。</p>
+<p>B要求A。</p>
+<p>Content Validator：</p>
+<p>构建期发现。</p>
+<p>运行时：</p>
+<p>不能无限递归。</p>
+<hr />
+<h1 id="171-modifier循环">171. Modifier循环</h1><p>GoldRate</p>
+<p>依赖：</p>
+<p>ResearchRate。</p>
+<p>ResearchRate又直接依赖：</p>
+<p>GoldRate。</p>
+<p>如果公式无法求稳定解：</p>
+<p>属于Cycle。</p>
+<p>必须：</p>
+<ul>
+<li><p>明确延迟；</p>
+</li>
+<li><p>使用PreviousTick；</p>
+</li>
+<li><p>或禁止。</p>
+</li>
+</ul>
+<hr />
+<h1 id="172-growthgraph-cycle-validator">172. GrowthGraph Cycle Validator</h1><p>所有直接派生Formula：</p>
+<p>生成Dependency Graph。</p>
+<p>检查：</p>
+<p>非法环。</p>
+<hr />
+<h1 id="173-prestige部分reset失败">173. Prestige部分Reset失败</h1><p>不能：</p>
+<p>Gold清零成功，</p>
+<p>PrestigePoint增加失败。</p>
+<p>Prestige使用：</p>
+<p>完整State Transaction</p>
+<p>或：</p>
+<p>先生成新Snapshot</p>
+<p>再原子替换。</p>
+<hr />
+<h1 id="174-offline-catch-up异常">174. Offline Catch-Up异常</h1><p>离线时间：</p>
+<p>负数。</p>
+<p>→ 0。</p>
+<p>超大：</p>
+<p>→ MaxOffline或校验。</p>
+<hr />
+<h1 id="175-offline模拟预算耗尽">175. Offline模拟预算耗尽</h1><p>如果复杂Automation导致事件过多：</p>
+<p>切换：</p>
+<p>Approximation Mode。</p>
+<p>生成：</p>
+<p>CatchUpApproximationWarning</p>
+<p>用于开发。</p>
+<hr />
+<h1 id="176-save损坏">176. Save损坏</h1><p>加载：</p>
+<p>Primary失败。</p>
+<p>尝试：</p>
+<p>Backup。</p>
+<p>仍失败：</p>
+<p>Migration / Recovery。</p>
+<p>绝不能：</p>
+<p>直接创建新游戏覆盖旧Save。</p>
+<hr />
+<h1 id="177-save-migration失败">177. Save Migration失败</h1><p>保留：</p>
+<p>旧原文件。</p>
+<p>不要：</p>
+<p>原地修改以后无法回滚。</p>
+<hr />
+<h1 id="178-cloud-conflict">178. Cloud Conflict</h1><p>检测到：</p>
+<p>两个后继版本。</p>
+<p>冻结自动上传。</p>
+<p>执行：</p>
+<p>Conflict Resolution。</p>
+<hr />
+<h1 id="179-debug与可观测性">179. Debug与可观测性</h1><p>增量游戏最容易出现的问题不是：</p>
+<p>“功能完全不运行。”</p>
+<p>而是：</p>
+<blockquote>
+<p>“一个公式悄悄多乘了十倍，几个小时以后整个经济已经崩了。”</p>
+</blockquote>
+<p>因此数值可观测性是核心。</p>
+<hr />
+<h1 id="180-resource-inspector">180. Resource Inspector</h1><p>显示：</p>
+<ul>
+<li><p>Current；</p>
+</li>
+<li><p>CurrentRate；</p>
+</li>
+<li><p>Lifetime；</p>
+</li>
+<li><p>RunLifetime；</p>
+</li>
+<li><p>LastSettlementTime；</p>
+</li>
+<li><p>Source Breakdown；</p>
+</li>
+<li><p>Sink Breakdown。</p>
+</li>
+</ul>
+<hr />
+<h1 id="181-rate-breakdown">181. Rate Breakdown</h1><p>显示所有乘区。</p>
+<p>是最重要调试器之一。</p>
+<hr />
+<h1 id="182-producer-inspector">182. Producer Inspector</h1><p>显示：</p>
+<p>Owned。</p>
+<p>BaseRate。</p>
+<p>EffectiveRate。</p>
+<p>NextCost。</p>
+<p>CostScaling。</p>
+<p>PaybackTime。</p>
+<hr />
+<h1 id="183-upgrade-comparison-tool">183. Upgrade Comparison Tool</h1><p>所有当前可购买Upgrade：</p>
+<p>按：</p>
+<ul>
+<li><p>Cost；</p>
+</li>
+<li><p>ΔRate；</p>
+</li>
+<li><p>Payback；</p>
+</li>
+<li><p>Long-term Effect；</p>
+</li>
+</ul>
+<p>比较。</p>
+<hr />
+<h1 id="184-milestone-timeline">184. Milestone Timeline</h1><p>显示：</p>
+<p>下一：</p>
+<p>10<br />
+25<br />
+50<br />
+100</p>
+<p>个Producer奖励。</p>
+<hr />
+<h1 id="185-unlock-graph-viewer">185. Unlock Graph Viewer</h1><p>显示：</p>
+<p>系统解锁依赖。</p>
+<p>检查：</p>
+<p>某新系统为什么没出现。</p>
+<hr />
+<h1 id="186-prestige-preview-debug">186. Prestige Preview Debug</h1><p>显示：</p>
+<p>Current Metric。</p>
+<p>Formula。</p>
+<p>Reward Before Floor。</p>
+<p>Final Reward。</p>
+<p>ResetScope。</p>
+<hr />
+<h1 id="187-reset-diff">187. Reset Diff</h1><p>Prestige前后：</p>
+<p>哪些状态：</p>
+<p>Reset。</p>
+<p>Preserved。</p>
+<p>Granted。</p>
+<p>用于防止：</p>
+<p>新系统忘记配置ResetScope。</p>
+<hr />
+<h1 id="188-automation-trace">188. Automation Trace</h1><p>例如：</p>
+<p>12:00:01</p>
+<p>AutoBuyer购买：</p>
+<p>Miner ×37。</p>
+<p>原因：</p>
+<p>Reserve Rule满足。</p>
+<hr />
+<h1 id="189-automation-decision-inspector">189. Automation Decision Inspector</h1><p>为什么没有买：</p>
+<p>Gold不足。</p>
+<p>Reserve 20%。</p>
+<p>Priority低于Factory。</p>
+<hr />
+<h1 id="190-offline-simulation-trace">190. Offline Simulation Trace</h1><p>显示：</p>
+<p>Logout：</p>
+<p>00:00。</p>
+<p>Login：</p>
+<p>08:00。</p>
+<p>Catch-Up：</p>
+<p>Phase 1 0～2h。</p>
+<p>Milestone reached。</p>
+<p>Rate Changed。</p>
+<p>Phase 2。</p>
+<hr />
+<h1 id="191-online-vs-offline-diff">191. Online vs Offline Diff</h1><p>同一状态：</p>
+<p>模拟：</p>
+<p>在线8小时。</p>
+<p>离线Catch-Up 8小时。</p>
+<p>比较：</p>
+<p>资源误差。</p>
+<p>这是核心自动测试。</p>
+<hr />
+<h1 id="192-growth-curve-graph">192. Growth Curve Graph</h1><p>横轴：</p>
+<p>Time。</p>
+<p>纵轴：</p>
+<p>log(Resource)。</p>
+<p>显示：</p>
+<ul>
+<li><p>Run；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>Unlock。</p>
+</li>
+</ul>
+<p>对于增量设计极其重要。</p>
+<hr />
+<h1 id="193-log-scale是默认分析方式">193. Log Scale是默认分析方式</h1><p>资源跨度：</p>
+<p>1</p>
+<p>到：</p>
+<p>1e100。</p>
+<p>普通线性图毫无意义。</p>
+<hr />
+<h1 id="194-time-to-milestone-graph">194. Time-to-Milestone Graph</h1><p>统计：</p>
+<p>每个主要里程碑之间：</p>
+<p>预计所需时间。</p>
+<p>用于检查：</p>
+<p>异常Dead Zone。</p>
+<hr />
+<h1 id="195-progression-dead-zone">195. Progression Dead Zone</h1><p>例如：</p>
+<p>前一Upgrade后：</p>
+<p>3分钟没有新决策。</p>
+<p>后面：</p>
+<p>突然30分钟纯等待。</p>
+<p>这通常需要：</p>
+<p>新目标</p>
+<p>或：</p>
+<p>调整增长函数。</p>
+<hr />
+<h1 id="196-prestige-frequency-dashboard">196. Prestige Frequency Dashboard</h1><p>统计玩家：</p>
+<p>多久Prestige。</p>
+<p>例如：</p>
+<p>第一次：</p>
+<p>45分钟。</p>
+<p>第二次：</p>
+<p>18分钟。</p>
+<p>第五次：</p>
+<p>5分钟。</p>
+<p>如果一直：</p>
+<p>45分钟，</p>
+<p>说明旧阶段没有被压缩。</p>
+<hr />
+<h1 id="197-retention-telemetry">197. Retention Telemetry</h1><p>增量游戏非常适合观察：</p>
+<p>玩家离开时处于：</p>
+<p>哪个Growth Wall。</p>
+<p>但数据应服务：</p>
+<p>设计诊断，</p>
+<p>而不是仅用于人为拖延进度。</p>
+<hr />
+<h1 id="198-formula-trace">198. Formula Trace</h1><p>输入某Metric：</p>
+<p>追踪：</p>
+<p>依赖图。</p>
+<p>例如：</p>
+<p>GoldRate<br />
+← MinePower<br />
+← MinerCount<br />
+← PrestigeBonus。</p>
+<hr />
+<h1 id="199-number-precision-debug">199. Number Precision Debug</h1><p>显示：</p>
+<p>Internal Mantissa / Exponent</p>
+<p>和：</p>
+<p>Displayed Notation。</p>
+<hr />
+<h1 id="200-content-validation">200. Content Validation</h1><hr />
+<h2 id="2001-formula-validation">200.1 Formula Validation</h2><p>检查：</p>
+<ul>
+<li><p>Divide by Zero；</p>
+</li>
+<li><p>Negative Log；</p>
+</li>
+<li><p>Invalid Pow；</p>
+</li>
+<li><p>NaN；</p>
+</li>
+<li><p>Infinite。</p>
+</li>
+</ul>
+<hr />
+<h1 id="201-modifier-cycle-validation">201. Modifier Cycle Validation</h1><p>构建DependencyGraph。</p>
+<p>禁止非法循环。</p>
+<hr />
+<h1 id="202-unlock-reachability">202. Unlock Reachability</h1><p>从Fresh Save开始。</p>
+<p>验证：</p>
+<p>所有核心系统</p>
+<p>都有合法解锁路径。</p>
+<hr />
+<h1 id="203-prestige-reachability">203. Prestige Reachability</h1><p>玩家不使用：</p>
+<p>不可解锁机制</p>
+<p>也必须能够达到第一次Prestige。</p>
+<p>避免：</p>
+<p>自锁。</p>
+<hr />
+<h1 id="204-automation-reachability">204. Automation Reachability</h1><p>Auto Buyer不能要求：</p>
+<p>Auto Buyer自己才能达到的资源。</p>
+<hr />
+<h1 id="205-long-run-simulation">205. Long Run Simulation</h1><p>Bot运行：</p>
+<p>1小时。</p>
+<p>1天。</p>
+<p>1周。</p>
+<p>1个月。</p>
+<p>检查：</p>
+<p>Progression。</p>
+<hr />
+<h1 id="206-fast-player-simulation">206. Fast Player Simulation</h1><p>Bot总是选择：</p>
+<p>理论最佳Upgrade。</p>
+<hr />
+<h1 id="207-naive-player-simulation">207. Naive Player Simulation</h1><p>Bot：</p>
+<p>随机合理购买。</p>
+<p>检查：</p>
+<p>普通玩家是否也能推进。</p>
+<hr />
+<h1 id="208-no-prestige-simulation">208. No-Prestige Simulation</h1><p>玩家拒绝Prestige。</p>
+<p>检查：</p>
+<p>是否能无限继续</p>
+<p>或最终明确进入平台。</p>
+<hr />
+<h1 id="209-frequent-prestige-simulation">209. Frequent Prestige Simulation</h1><p>玩家一有1点就Prestige。</p>
+<p>观察：</p>
+<p>是否反而成为绝对最优。</p>
+<hr />
+<h1 id="210-optimal-prestige-approximation">210. Optimal Prestige Approximation</h1><p>搜索：</p>
+<p>不同Reset时间。</p>
+<p>绘制：</p>
+<p>长期资源 / 时间。</p>
+<p>检查：</p>
+<p>是否存在：</p>
+<p>合理宽容区间。</p>
+<hr />
+<h1 id="211-offline-catch-up-regression">211. Offline Catch-Up Regression</h1><p>不同离线时长：</p>
+<p>1分钟<br />
+1小时<br />
+24小时<br />
+30天。</p>
+<p>对比在线结果。</p>
+<hr />
+<h1 id="212-clock-manipulation-test">212. Clock Manipulation Test</h1><p>模拟：</p>
+<p>时间倒退。</p>
+<p>前进30年。</p>
+<p>时区变化。</p>
+<p>DST。</p>
+<p>保证：</p>
+<p>不会复制或丢失进度。</p>
+<hr />
+<h1 id="213-save-corruption-test">213. Save Corruption Test</h1><p>随机截断Save。</p>
+<p>确认：</p>
+<p>Backup Recovery。</p>
+<hr />
+<h1 id="214-migration-test">214. Migration Test</h1><p>从：</p>
+<p>所有历史SaveVersion</p>
+<p>升级到当前。</p>
+<hr />
+<h1 id="215-bignumber-stress-test">215. BigNumber Stress Test</h1><p>输入：</p>
+<p>1e1000。</p>
+<p>1e1000000。</p>
+<p>检查：</p>
+<p>Comparison、Add、Mul、Pow、Serialization。</p>
+<hr />
+<h1 id="216-bulk-buy-property-test">216. Bulk Buy Property Test</h1><p>随机：</p>
+<p>Resource、OwnedCount。</p>
+<p>比较：</p>
+<p>公式BulkBuy</p>
+<p>和：</p>
+<p>逐个购买参考实现。</p>
+<p>结果必须一致。</p>
+<hr />
+<h1 id="217-reset-property-test">217. Reset Property Test</h1><p>Prestige以后：</p>
+<p>所有指定ResetScope：</p>
+<p>必须恢复默认。</p>
+<p>所有Permanent：</p>
+<p>必须保持。</p>
+<hr />
+<h1 id="218-性能设计">218. 性能设计</h1><p>增量游戏画面可能很简单，</p>
+<p>但长期数值系统可以非常复杂。</p>
+<p>性能重点在：</p>
+<p><strong>避免无意义高频计算。</strong></p>
+<hr />
+<h1 id="219-不要每frame结算resource">219. 不要每Frame结算Resource</h1><p>大多数Rate：</p>
+<p>无需60Hz。</p>
+<p>可以：</p>
+<p>10Hz。</p>
+<p>1Hz。</p>
+<p>或：</p>
+<p>Lazy Settlement。</p>
+<hr />
+<h1 id="220-ui可以60fps动画数字">220. UI可以60FPS动画数字</h1><p>但逻辑值：</p>
+<p>低频更新。</p>
+<p>数字显示使用：</p>
+<p>Interpolation。</p>
+<hr />
+<h1 id="221-simulation-tick">221. Simulation Tick</h1><p>例如：</p>
+<p>100ms。</p>
+<p>已经足够大多数系统。</p>
+<p>纯Idle甚至：</p>
+<p>1秒。</p>
+<hr />
+<h1 id="222-rate不变时使用解析积分">222. Rate不变时使用解析积分</h1><p>避免：</p>
+<p>逐Tick累加浮点误差。</p>
+<hr />
+<h1 id="223-dirty-dependency-graph">223. Dirty Dependency Graph</h1><p>购买发生：</p>
+<p>重算相关Rate。</p>
+<p>没有事件：</p>
+<p>不重算。</p>
+<hr />
+<h1 id="224-bignumber对象避免大量短生命周期分配">224. BigNumber对象避免大量短生命周期分配</h1><p>尤其：</p>
+<p>UI每Frame格式化。</p>
+<p>使用：</p>
+<p>缓存和复用。</p>
+<hr />
+<h1 id="225-number-formatting-cache">225. Number Formatting Cache</h1><p>当前Exponent和前几位没有变化：</p>
+<p>无需重新格式化完整字符串。</p>
+<hr />
+<h1 id="226-offline计算需要独立performance-budget">226. Offline计算需要独立Performance Budget</h1><p>不能：</p>
+<p>登录以后UI卡30秒</p>
+<p>才完成离线结算。</p>
+<hr />
+<h1 id="227-复杂catch-up可以">227. 复杂Catch-Up可以：</h1><p>先完成重要经济状态。</p>
+<p>再异步生成：</p>
+<p>详细Report。</p>
+<p>但权威结果必须：</p>
+<p>当前响应内完成。</p>
+<hr />
+<h1 id="228-可扩展点">228. 可扩展点</h1><hr />
+<h2 id="2281-新resource">228.1 新Resource</h2><p>提供：</p>
+<p>ResourceDefinition</p>
+<ul>
+<li>Source / Sink。</li>
+</ul>
+<hr />
+<h2 id="2282-新producer">228.2 新Producer</h2><p>接入：</p>
+<p>统一Production Graph。</p>
+<hr />
+<h2 id="2283-新upgrade">228.3 新Upgrade</h2><p>通过：</p>
+<p>ModifierDefinition。</p>
+<hr />
+<h2 id="2284-新milestone">228.4 新Milestone</h2><p>使用：</p>
+<p>Threshold + Reward。</p>
+<hr />
+<h2 id="2285-新automation">228.5 新Automation</h2><p>实现：</p>
+<p>AutomationPolicy。</p>
+<hr />
+<h2 id="2286-新prestige-layer">228.6 新Prestige Layer</h2><p>定义：</p>
+<p>RewardFormula</p>
+<ul>
+<li><p>ResetScope</p>
+</li>
+<li><p>PermanentUnlock。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2287-新notation">228.7 新Notation</h2><p>仅扩展：</p>
+<p>Presentation。</p>
+<hr />
+<h2 id="2288-新offline-rule">228.8 新Offline Rule</h2><p>通过：</p>
+<p>OfflinePolicy。</p>
+<hr />
+<h2 id="2289-新growth-formula">228.9 新Growth Formula</h2><p>注册：</p>
+<p>FormulaNode。</p>
+<p>但应保持：</p>
+<p>Dependency可追踪。</p>
+<hr />
+<h1 id="229-玩家体验设计">229. 玩家体验设计</h1><hr />
+<h2 id="2291-开局必须迅速出现第一次自动化">229.1 开局必须迅速出现第一次“自动化”</h2><p>如果玩家点击：</p>
+<p>15分钟</p>
+<p>才能获得第一个自动Producer，</p>
+<p>它更像：</p>
+<p>重复劳动。</p>
+<p>第一层自动化最好：</p>
+<p>很快出现。</p>
+<hr />
+<h1 id="230-第一次自动生产是本类型关键爽点">230. 第一次自动生产是本类型关键爽点</h1><p>玩家第一次感觉：</p>
+<blockquote>
+<p>“即使我什么都不做，这个系统也会继续为我工作。”</p>
+</blockquote>
+<p>这奠定整个品类的认知。</p>
+<hr />
+<h1 id="231-数字增长需要速度感">231. 数字增长需要速度感</h1><p>可以通过：</p>
+<ul>
+<li><p>数字滚动；</p>
+</li>
+<li><p>Rate变化；</p>
+</li>
+<li><p>进度条；</p>
+</li>
+<li><p>里程碑；</p>
+</li>
+</ul>
+<p>表达。</p>
+<p>不是：</p>
+<p>屏幕上疯狂飞几十个数字。</p>
+<hr />
+<h1 id="232-玩家必须随时知道下一件值得做的事">232. 玩家必须随时知道“下一件值得做的事”</h1><p>例如：</p>
+<p>下一Miner：</p>
+<p>4秒。</p>
+<p>下一Milestone：</p>
+<p>2分钟。</p>
+<p>第一次Prestige：</p>
+<p>约25分钟。</p>
+<hr />
+<h1 id="233-但不要用任务箭头强迫玩家">233. 但不要用任务箭头强迫玩家</h1><p>玩家应该拥有：</p>
+<p>多种成长选择。</p>
+<p>UI提供：</p>
+<p>信息。</p>
+<p>不是：</p>
+<p>唯一正确操作。</p>
+<hr />
+<h1 id="234-upgrade反馈必须突出增长发生了什么变化">234. Upgrade反馈必须突出“增长发生了什么变化”</h1><p>购买：</p>
+<p><code>Factory Efficiency II</code></p>
+<p>之后：</p>
+<p>Factory：</p>
+<p>×4。</p>
+<p>应该立刻看到：</p>
+<p>Rate跳变。</p>
+<hr />
+<h1 id="235-prestige动画可以有重量但不能太长">235. Prestige动画可以有重量，但不能太长</h1><p>玩家后期可能：</p>
+<p>一天Prestige几十次。</p>
+<p>第一次：</p>
+<p>完整演出。</p>
+<p>之后：</p>
+<p>可以快速。</p>
+<hr />
+<h1 id="236-重复prestige的操作成本必须逐渐降低">236. 重复Prestige的操作成本必须逐渐降低</h1><p>支持：</p>
+<ul>
+<li><p>Hotkey；</p>
+</li>
+<li><p>Auto Prestige；</p>
+</li>
+<li><p>Preset。</p>
+</li>
+</ul>
+<hr />
+<h1 id="237-新系统出现应该制造重新理解游戏的感觉">237. 新系统出现应该制造“重新理解游戏”的感觉</h1><p>例如：</p>
+<p>玩家一直认为：</p>
+<p>Gold是核心。</p>
+<p>解锁Prestige后发现：</p>
+<p>Gold其实只是：</p>
+<p>生成Prestige Currency的中间量。</p>
+<p>这类认知翻转是增量游戏最具代表性的内容体验。</p>
+<hr />
+<h1 id="238-后期ui应逐步宏观化">238. 后期UI应逐步宏观化</h1><p>旧Producer：</p>
+<p>不再占主要屏幕。</p>
+<p>显示：</p>
+<p>Group Summary。</p>
+<p>玩家关注：</p>
+<p>更高层资源。</p>
+<hr />
+<h1 id="239-offline归来应提供明确世界继续运行的反馈">239. Offline归来应提供明确“世界继续运行”的反馈</h1><p>但不能用：</p>
+<p>几十个弹窗</p>
+<p>阻碍重新进入。</p>
+<hr />
+<h1 id="240-等待不应成为唯一内容">240. 等待不应成为唯一内容</h1><p>如果未来30分钟：</p>
+<p>完全没有任何有意义选择，</p>
+<p>可以：</p>
+<ul>
+<li><p>增加中间Milestone；</p>
+</li>
+<li><p>提供Active Boost；</p>
+</li>
+<li><p>把等待时间缩短；</p>
+</li>
+<li><p>允许离线。</p>
+</li>
+</ul>
+<hr />
+<h1 id="241-玩家离线应该是合理策略不是失败">241. 玩家离线应该是合理策略，不是失败</h1><p>Idle Game应允许：</p>
+<p>关掉游戏。</p>
+<p>回来继续。</p>
+<hr />
+<h1 id="242-但在线操作也应有价值">242. 但在线操作也应有价值</h1><p>理想：</p>
+<p>在线：</p>
+<p>更高效。</p>
+<p>离线：</p>
+<p>仍然进步。</p>
+<hr />
+<h1 id="243-常见设计失败">243. 常见设计失败</h1><hr />
+<h2 id="2431-把incremental理解成每秒金币1">243.1 把Incremental理解成“每秒金币+1”</h2><p>没有增长函数演化。</p>
+<hr />
+<h2 id="2432-所有升级只是production-2">243.2 所有升级只是Production ×2</h2><p>系统长期没有新决策。</p>
+<hr />
+<h2 id="2433-每个producer一个coroutine">243.3 每个Producer一个Coroutine</h2><p>规模扩大后状态和性能混乱。</p>
+<hr />
+<h2 id="2434-所有逻辑每frame运行">243.4 所有逻辑每Frame运行</h2><p>严重浪费。</p>
+<hr />
+<h2 id="2435-ui数字就是权威经济状态">243.5 UI数字就是权威经济状态</h2><p>表现和逻辑耦合。</p>
+<hr />
+<h2 id="2436-cost-function到处硬编码">243.6 Cost Function到处硬编码</h2><p>Bulk Buy无法统一。</p>
+<hr />
+<h2 id="2437-buy-max逐个循环购买">243.7 Buy Max逐个循环购买</h2><p>后期卡死。</p>
+<hr />
+<h2 id="2438-modifier顺序由代码执行顺序决定">243.8 Modifier顺序由代码执行顺序决定</h2><p>数值不可解释。</p>
+<hr />
+<h2 id="2439-没有rate-breakdown">243.9 没有Rate Breakdown</h2><p>玩家和开发者都不知道为什么是这个数字。</p>
+<hr />
+<h2 id="24310-milestone只发成就徽章">243.10 Milestone只发成就徽章</h2><p>没有实际节奏价值。</p>
+<hr />
+<h2 id="24311-解锁条件散落在ui">243.11 解锁条件散落在UI</h2><p>存档和逻辑不一致。</p>
+<hr />
+<h2 id="24312-automation只是自动点击鼠标">243.12 Automation只是“自动点击鼠标”</h2><p>没有真正提高操作抽象层级。</p>
+<hr />
+<h2 id="24313-auto-buyer每帧无限执行">243.13 Auto Buyer每帧无限执行</h2><p>CPU尖峰。</p>
+<hr />
+<h2 id="24314-prestige只做全局2">243.14 Prestige只做全局×2</h2><p>长期只是重复旧内容。</p>
+<hr />
+<h2 id="24315-prestige后所有操作完全重做">243.15 Prestige后所有操作完全重做</h2><p>没有旧阶段压缩。</p>
+<hr />
+<h2 id="24316-prestige按钮一亮永远应该立刻点">243.16 Prestige按钮一亮永远应该立刻点</h2><p>Reset没有决策。</p>
+<hr />
+<h2 id="24317-prestige奖励线性无限增长">243.17 Prestige奖励线性无限增长</h2><p>玩家最优策略永远不Reset。</p>
+<hr />
+<h2 id="24318-reset字段手工逐项清零">243.18 Reset字段手工逐项清零</h2><p>新系统容易漏Reset。</p>
+<hr />
+<h2 id="24319-多层prestige没有明确层级">243.19 多层Prestige没有明确层级</h2><p>玩家不知道什么会被重置。</p>
+<hr />
+<h2 id="24320-离线收益通过补跑所有tick实现">243.20 离线收益通过补跑所有Tick实现</h2><p>长时间离线卡死。</p>
+<hr />
+<h2 id="24321-offline和online采用完全不同经济公式">243.21 Offline和Online采用完全不同经济公式</h2><p>玩家通过退出游戏套利。</p>
+<hr />
+<h2 id="24322-信任设备时间却没有异常处理">243.22 信任设备时间却没有异常处理</h2><p>调系统时钟可以无限获得资源。</p>
+<hr />
+<h2 id="24323-使用double直到1e308才发现溢出">243.23 使用double直到1e308才发现溢出</h2><p>后期存档损坏。</p>
+<hr />
+<h2 id="24324-bignumber显示层和逻辑层混合">243.24 BigNumber显示层和逻辑层混合</h2><p>Notation变更破坏数据。</p>
+<hr />
+<h2 id="24325-softcap隐藏">243.25 Softcap隐藏</h2><p>玩家看到倍率与实际结果不一致。</p>
+<hr />
+<h2 id="24326-cross-resource正反馈无控制">243.26 Cross-resource正反馈无控制</h2><p>数值瞬间爆炸。</p>
+<hr />
+<h2 id="24327-资源很多但互不相关">243.27 资源很多但互不相关</h2><p>变成多个独立进度条。</p>
+<hr />
+<h2 id="24328-active-play效率比idle高几百倍">243.28 Active Play效率比Idle高几百倍</h2><p>玩家被迫全天挂机操作。</p>
+<hr />
+<h2 id="24329-idle效率几乎等于0">243.29 Idle效率几乎等于0</h2><p>“放置”名存实亡。</p>
+<hr />
+<h2 id="24330-等待时间过长但无中间目标">243.30 等待时间过长但无中间目标</h2><p>玩家只有关闭游戏一个选择。</p>
+<hr />
+<h2 id="24331-所有目标都只是等待计时">243.31 所有目标都只是等待计时</h2><p>玩家没有决策。</p>
+<hr />
+<h2 id="24332-旧手动操作永远不被淘汰">243.32 旧手动操作永远不被淘汰</h2><p>后期管理负担持续增加。</p>
+<hr />
+<h2 id="24333-每层都增加五个新按钮但不压缩旧层">243.33 每层都增加五个新按钮但不压缩旧层</h2><p>UI最终失控。</p>
+<hr />
+<h2 id="24334-save只有一个文件且直接覆盖">243.34 Save只有一个文件且直接覆盖</h2><p>一次写入失败毁掉几个月进度。</p>
+<hr />
+<h2 id="24335-cloud-save简单last-write-wins">243.35 Cloud Save简单Last Write Wins</h2><p>多设备长期进度丢失。</p>
+<hr />
+<h2 id="24336-prestige请求网络重试可以重复领奖励">243.36 Prestige请求网络重试可以重复领奖励</h2><p>资产完整性失败。</p>
+<hr />
+<h2 id="24337-event-log记录每秒资源增长">243.37 Event Log记录每秒资源增长</h2><p>日志体积爆炸。</p>
+<hr />
+<h2 id="24338-所有经济公式由ui重新计算">243.38 所有经济公式由UI重新计算</h2><p>多个页面显示不同数值。</p>
+<hr />
+<h2 id="24339-某upgrade永远拥有最短paybacktime">243.39 某Upgrade永远拥有最短PaybackTime</h2><p>所有选择成为伪选择。</p>
+<hr />
+<h2 id="24340-新层只提供更大的数字">243.40 新层只提供更大的数字</h2><p>没有新的增长语义。</p>
+<hr />
+<h1 id="244-最小可行原型">244. 最小可行原型</h1><p>验证增量游戏核心范式时，不需要一开始设计：</p>
+<p>十层Prestige和1e10000。</p>
+<p>推荐：</p>
+<p><strong>3种基础Producer + 1种基础资源 + 1种Research资源 + 1层Prestige + Automation + Offline Progress。</strong></p>
+<hr />
+<h1 id="245-基础资源">245. 基础资源</h1><p>Gold。</p>
+<hr />
+<h1 id="246-producer">246. Producer</h1><p>例如：</p>
+<ul>
+<li><p>Miner；</p>
+</li>
+<li><p>Mine；</p>
+</li>
+<li><p>Factory。</p>
+</li>
+</ul>
+<p>每层：</p>
+<p>Cost和Rate明显不同。</p>
+<hr />
+<h1 id="247-upgrade">247. Upgrade</h1><p>约：</p>
+<p>15～20个。</p>
+<p>覆盖：</p>
+<ul>
+<li><p>Producer ×2；</p>
+</li>
+<li><p>Cost Scaling；</p>
+</li>
+<li><p>Global Rate；</p>
+</li>
+<li><p>Cross-Synergy。</p>
+</li>
+</ul>
+<hr />
+<h1 id="248-milestone">248. Milestone</h1><p>Producer数量：</p>
+<p>10<br />
+25<br />
+50<br />
+100。</p>
+<hr />
+<h1 id="249-research">249. Research</h1><p>Factory数量产生：</p>
+<p>Research / s。</p>
+<p>Research反向提高：</p>
+<p>Gold系统。</p>
+<hr />
+<h1 id="250-prestige">250. Prestige</h1><p>第一次预期：</p>
+<p>30～60分钟。</p>
+<p>Prestige后：</p>
+<p>旧阶段缩短到：</p>
+<p>5～15分钟。</p>
+<hr />
+<h1 id="251-automation">251. Automation</h1><p>至少：</p>
+<ul>
+<li><p>Auto Buy Producer；</p>
+</li>
+<li><p>Auto Buy Upgrade。</p>
+</li>
+</ul>
+<hr />
+<h1 id="252-offline">252. Offline</h1><p>支持：</p>
+<p>至少24小时。</p>
+<p>并提供：</p>
+<p>Offline Report。</p>
+<hr />
+<h1 id="253-bignumber">253. BigNumber</h1><p>第一版支持：</p>
+<p>至少：</p>
+<p>1e1000。</p>
+<p>足够验证：</p>
+<p>表示、格式化、存档。</p>
+<hr />
+<h1 id="254-mvp必要基础设施">254. MVP必要基础设施</h1><ul>
+<li><p>ResourceDefinition；</p>
+</li>
+<li><p>ResourceRuntimeState；</p>
+</li>
+<li><p>ProducerDefinition；</p>
+</li>
+<li><p>ProducerRuntimeState；</p>
+</li>
+<li><p>CostDefinition；</p>
+</li>
+<li><p>ModifierDefinition；</p>
+</li>
+<li><p>ModifierPipeline；</p>
+</li>
+<li><p>MilestoneDefinition；</p>
+</li>
+<li><p>UnlockCondition；</p>
+</li>
+<li><p>AutomationDefinition；</p>
+</li>
+<li><p>AutomationPolicy；</p>
+</li>
+<li><p>PrestigeDefinition；</p>
+</li>
+<li><p>PrestigeRuntimeState；</p>
+</li>
+<li><p>ResetScope；</p>
+</li>
+<li><p>OfflineProgressState；</p>
+</li>
+<li><p>ClockState；</p>
+</li>
+<li><p>BigNumber；</p>
+</li>
+<li><p>SaveSnapshot；</p>
+</li>
+<li><p>TransactionId；</p>
+</li>
+<li><p>GrowthDependencyGraph。</p>
+</li>
+</ul>
+<hr />
+<h1 id="255-mvp必要调试工具">255. MVP必要调试工具</h1><ul>
+<li><p>ResourceInspector；</p>
+</li>
+<li><p>RateBreakdown；</p>
+</li>
+<li><p>ProducerInspector；</p>
+</li>
+<li><p>UpgradeComparison；</p>
+</li>
+<li><p>MilestoneTimeline；</p>
+</li>
+<li><p>UnlockGraph；</p>
+</li>
+<li><p>PrestigePreview；</p>
+</li>
+<li><p>ResetDiff；</p>
+</li>
+<li><p>AutomationTrace；</p>
+</li>
+<li><p>OfflineSimulationTrace；</p>
+</li>
+<li><p>OnlineOfflineDiff；</p>
+</li>
+<li><p>GrowthCurveGraph；</p>
+</li>
+<li><p>TimeToMilestoneGraph；</p>
+</li>
+<li><p>FormulaTrace；</p>
+</li>
+<li><p>BigNumberDebugger。</p>
+</li>
+</ul>
+<hr />
+<h1 id="256-mvp核心验收问题">256. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<ul>
+<li><p>玩家是否在最初几分钟内体验到自动生产；</p>
+</li>
+<li><p>每次购买是否明显改变未来增长速度；</p>
+</li>
+<li><p>Producer成本是否能够通过统一公式进行Buy Max；</p>
+</li>
+<li><p>10/25/50等里程碑是否形成明确短期节奏；</p>
+</li>
+<li><p>Research是否真正改变Gold系统，而不是平行第二条进度条；</p>
+</li>
+<li><p>第一次Prestige是否形成“继续等还是现在Reset”的决策；</p>
+</li>
+<li><p>Prestige后旧阶段是否显著加速；</p>
+</li>
+<li><p>第三次Prestige以后玩家是否不再重复开局手动操作；</p>
+</li>
+<li><p>Automation是否真正减少操作量；</p>
+</li>
+<li><p>Offline 8小时和在线模拟8小时结果是否在设计范围内一致；</p>
+</li>
+<li><p>30FPS和144FPS是否不会改变长期生产；</p>
+</li>
+<li><p>修改Notation是否完全不影响权威数值；</p>
+</li>
+<li><p>1e1000级数据是否能够正确保存和加载；</p>
+</li>
+<li><p>Save损坏是否能够从Backup恢复；</p>
+</li>
+<li><p>Prestige事务重复执行是否不会重复奖励；</p>
+</li>
+<li><p>玩家是否始终拥有至少一个可理解的下一阶段目标；</p>
+</li>
+<li><p>系统是否会逐渐把玩家注意力从Gold转移到Research和Prestige；</p>
+</li>
+<li><p>当前增长Rate是否能够被完整解释；</p>
+</li>
+<li><p>玩家是否感觉自己是在“升级增长系统”，而不仅是看一个数字自动变大。</p>
+</li>
+</ul>
+<p>这些问题没有稳定之前，不建议优先增加：</p>
+<ul>
+<li><p>第二层Prestige；</p>
+</li>
+<li><p>十几种Currency；</p>
+</li>
+<li><p>Gacha；</p>
+</li>
+<li><p>广告Boost；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>Guild；</p>
+</li>
+<li><p>复杂Season；</p>
+</li>
+<li><p>百种Producer；</p>
+</li>
+<li><p>超高阶层叠指数。</p>
+</li>
+</ul>
+<hr />
+<h1 id="257-推荐实施顺序">257. 推荐实施顺序</h1><p>第一阶段：</p>
+<ul>
+<li><p>Resource；</p>
+</li>
+<li><p>Clock；</p>
+</li>
+<li><p>Production Rate。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>Producer；</p>
+</li>
+<li><p>Cost；</p>
+</li>
+<li><p>Purchase。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Modifier Pipeline；</p>
+</li>
+<li><p>Rate Breakdown。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Bulk Buy；</p>
+</li>
+<li><p>Buy Max。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Milestone；</p>
+</li>
+<li><p>Unlock。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Research；</p>
+</li>
+<li><p>Cross-resource Synergy。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Prestige；</p>
+</li>
+<li><p>Reset Scope；</p>
+</li>
+<li><p>Preview。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Automation；</p>
+</li>
+<li><p>Policy。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Offline Catch-Up；</p>
+</li>
+<li><p>Offline Report。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>BigNumber；</p>
+</li>
+<li><p>Notation；</p>
+</li>
+<li><p>Precision。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Save Backup；</p>
+</li>
+<li><p>Migration；</p>
+</li>
+<li><p>Cloud Conflict。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Growth Simulator；</p>
+</li>
+<li><p>Long-run Balance；</p>
+</li>
+<li><p>Additional Prestige Layer。</p>
+</li>
+</ul>
+<hr />
+<h1 id="258-架构验收标准">258. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>所有核心资源拥有明确ResourceDefinition；</p>
+</li>
+<li><p>Current Balance、Run Earned和Lifetime Earned严格分离；</p>
+</li>
+<li><p>Producer以Production Rate而不是独立高频Timer为基础；</p>
+</li>
+<li><p>Production Rate与资源余额严格分离；</p>
+</li>
+<li><p>Producer Cost由统一CostDefinition表达；</p>
+</li>
+<li><p>Bulk Buy不会逐个循环单次购买；</p>
+</li>
+<li><p>Buy Max可通过公式或对数复杂度算法计算；</p>
+</li>
+<li><p>Purchase使用Quote + Commit或等价重新验证机制；</p>
+</li>
+<li><p>所有增长倍率通过统一Modifier Pipeline处理；</p>
+</li>
+<li><p>Flat、Additive、Multiplicative、Power等层级拥有稳定顺序；</p>
+</li>
+<li><p>最终Rate能够完整展示Breakdown；</p>
+</li>
+<li><p>Milestone是正式Growth Rule而不是纯成就；</p>
+</li>
+<li><p>所有主要系统解锁通过统一Unlock Condition；</p>
+</li>
+<li><p>Unlock依赖不存在非法循环；</p>
+</li>
+<li><p>核心系统解锁通常为永久认知解锁；</p>
+</li>
+<li><p>Automation拥有独立Policy；</p>
+</li>
+<li><p>Auto Buyer不会每帧无预算循环执行；</p>
+</li>
+<li><p>旧操作层可以通过Automation逐渐退居后台；</p>
+</li>
+<li><p>Prestige使用正式PrestigeDefinition；</p>
+</li>
+<li><p>Prestige Reward Formula和Reset Scope分离；</p>
+</li>
+<li><p>Prestige执行能够原子Reset和Grant；</p>
+</li>
+<li><p>Prestige请求具有幂等TransactionId；</p>
+</li>
+<li><p>Prestige Preview能够准确说明Gain、Loss和Preserve；</p>
+</li>
+<li><p>多层Reset如果存在，拥有明确Hierarchy；</p>
+</li>
+<li><p>上层增长机制不会依赖大量手工重复旧操作；</p>
+</li>
+<li><p>每次主要Prestige都能明显压缩已掌握的旧阶段；</p>
+</li>
+<li><p>Offline Progress不通过逐Frame补跑实现；</p>
+</li>
+<li><p>Offline Catch-Up支持Closed-form、Event Jump或Coarse Simulation；</p>
+</li>
+<li><p>Offline和Online遵循同一核心经济规则；</p>
+</li>
+<li><p>Offline Catch-Up拥有计算预算和聚合Fallback；</p>
+</li>
+<li><p>Clock异常不会产生负收益或无界收益；</p>
+</li>
+<li><p>BigNumber属于独立逻辑基础设施；</p>
+</li>
+<li><p>Number Notation仅影响显示；</p>
+</li>
+<li><p>BigNumber能够稳定序列化和迁移；</p>
+</li>
+<li><p>Softcap由正式规则定义并能够解释；</p>
+</li>
+<li><p>Cross-resource依赖进入统一Growth Graph；</p>
+</li>
+<li><p>Growth Graph能够检测非法循环；</p>
+</li>
+<li><p>资源Rate仅在依赖Dirty时重算；</p>
+</li>
+<li><p>稳定Rate允许Lazy / Tickless积累；</p>
+</li>
+<li><p>高级系统可以使用Hybrid Simulation；</p>
+</li>
+<li><p>基础增长不会主要依赖不可预测Random；</p>
+</li>
+<li><p>UI始终区分当前数值与增长速度；</p>
+</li>
+<li><p>关键目标能够提供Time-to-Goal或等价进度感；</p>
+</li>
+<li><p>新内容使用Progressive Disclosure逐步展开；</p>
+</li>
+<li><p>后期UI能够压缩已自动化的低层系统；</p>
+</li>
+<li><p>Save使用Snapshot + Backup + Integrity Validation；</p>
+</li>
+<li><p>Save Migration保留旧数据以支持恢复；</p>
+</li>
+<li><p>Cloud Conflict不会盲目字段级合并经济状态；</p>
+</li>
+<li><p>重要购买、奖励和Reset都可安全重复请求；</p>
+</li>
+<li><p>Event Log只记录关键离散事件，不记录每秒基础生产；</p>
+</li>
+<li><p>Long-run Simulator能够离线模拟数天、数周乃至更久；</p>
+</li>
+<li><p>Online / Offline Regression可以自动比较；</p>
+</li>
+<li><p>Formula Debug能够追踪某最终数值的完整来源；</p>
+</li>
+<li><p>新Resource、Producer、Upgrade、Milestone和Prestige层通常不需要修改主SimulationLoop。</p>
+</li>
+</ul>
+<hr />
+<h1 id="259-可迁移到其他游戏的设计思想">259. 可迁移到其他游戏的设计思想</h1><hr />
+<h2 id="2591-增长速度往往比当前库存更能描述系统未来">259.1 “增长速度”往往比“当前库存”更能描述系统未来</h2><p>可迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>经验成长；</p>
+</li>
+<li><p>资源恢复。</p>
+</li>
+</ul>
+<p>库存告诉你：</p>
+<p>现在有什么。</p>
+<p>Rate告诉你：</p>
+<p>系统将往哪里走。</p>
+<hr />
+<h2 id="2592-成本和收益可以通过-payback-time-形成统一比较尺度">259.2 成本和收益可以通过 Payback Time 形成统一比较尺度</h2><p>可迁移到：</p>
+<ul>
+<li><p>建筑；</p>
+</li>
+<li><p>技能升级；</p>
+</li>
+<li><p>科技；</p>
+</li>
+<li><p>商业投资。</p>
+</li>
+</ul>
+<p>不是只比较：</p>
+<p>谁收益大。</p>
+<p>而是：</p>
+<p>投入多久能回本。</p>
+<hr />
+<h2 id="2593-玩家成长可以表现为提高操作抽象层级">259.3 玩家成长可以表现为“提高操作抽象层级”</h2><p>早期：</p>
+<p>执行。</p>
+<p>中期：</p>
+<p>配置自动执行。</p>
+<p>后期：</p>
+<p>只管理规则。</p>
+<p>这一思想可以迁移到：</p>
+<ul>
+<li><p>工厂；</p>
+</li>
+<li><p>Colony；</p>
+</li>
+<li><p>项目管理；</p>
+</li>
+<li><p>经营；</p>
+</li>
+<li><p>AI Agent系统。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2594-prestige本质上是一种把已经掌握的进度压缩为永久知识或能力">259.4 Prestige本质上是一种“把已经掌握的进度压缩为永久知识或能力”</h2><p>可迁移到：</p>
+<ul>
+<li><p>Roguelite；</p>
+</li>
+<li><p>赛季；</p>
+</li>
+<li><p>NG+；</p>
+</li>
+<li><p>学习系统；</p>
+</li>
+<li><p>项目模板。</p>
+</li>
+</ul>
+<p>旧阶段没有消失。</p>
+<p>而是：</p>
+<p>被压缩到更低操作成本。</p>
+<hr />
+<h2 id="2595-reset的价值不在于删除状态而在于改变未来增长函数">259.5 Reset的价值不在于删除状态，而在于改变未来增长函数</h2><p>如果Reset后：</p>
+<p>只是重新做一样的东西，</p>
+<p>没有价值。</p>
+<p>真正的Reset应该：</p>
+<p>改变下一轮规则。</p>
+<hr />
+<h2 id="2596-多层系统设计应遵循-abstraction-ladder">259.6 多层系统设计应遵循 Abstraction Ladder</h2><p>新层出现以后：</p>
+<p>旧层应该逐渐：</p>
+<p>自动化、压缩或汇总。</p>
+<p>可以迁移到：</p>
+<ul>
+<li><p>UI；</p>
+</li>
+<li><p>系统管理；</p>
+</li>
+<li><p>组织；</p>
+</li>
+<li><p>RTS宏观指挥。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2597-offline-catch-up本质上是长时间跨度解析模拟">259.7 Offline Catch-Up本质上是“长时间跨度解析模拟”</h2><p>可迁移到：</p>
+<ul>
+<li><p>农业；</p>
+</li>
+<li><p>宠物；</p>
+</li>
+<li><p>城市；</p>
+</li>
+<li><p>MMO建筑；</p>
+</li>
+<li><p>制作队列。</p>
+</li>
+</ul>
+<p>不要补跑几百万Tick。</p>
+<p>应该：</p>
+<p>直接跳重要状态变化。</p>
+<hr />
+<h2 id="2598-source-sink-role-是评估任何游戏资源的通用三问">259.8 Source / Sink / Role 是评估任何游戏资源的通用三问</h2><p>一个资源如果：</p>
+<p>只有Source，</p>
+<p>会无限堆积。</p>
+<p>只有Sink：</p>
+<p>无法获得。</p>
+<p>没有独特Role：</p>
+<p>应该考虑删除。</p>
+<hr />
+<h2 id="2599-progressive-disclosure是管理复杂系统认知负荷的重要方式">259.9 Progressive Disclosure是管理复杂系统认知负荷的重要方式</h2><p>不是：</p>
+<p>把所有系统都放在第一屏。</p>
+<p>而是：</p>
+<p>玩家需要时再出现。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>RPG；</p>
+</li>
+<li><p>策略；</p>
+</li>
+<li><p>Framework工具；</p>
+</li>
+<li><p>编辑器。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25910-softcap比硬上限更适合无限成长系统">259.10 Softcap比硬上限更适合无限成长系统</h2><p>硬上限：</p>
+<p>收益突然变0。</p>
+<p>Softcap：</p>
+<p>仍然增长，</p>
+<p>但边际下降。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>属性；</p>
+</li>
+<li><p>防御；</p>
+</li>
+<li><p>移速；</p>
+</li>
+<li><p>经济；</p>
+</li>
+<li><p>声望。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25911-explainable-modifier-pipeline-是任何复杂数值系统的重要基础设施">259.11 Explainable Modifier Pipeline 是任何复杂数值系统的重要基础设施</h2><p>最终值：</p>
+<p>不应该只是：</p>
+<p>42,839。</p>
+<p>应该能够回答：</p>
+<p>为什么是42,839。</p>
+<p>这同样适用于：</p>
+<ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Attribute；</p>
+</li>
+<li><p>Economy；</p>
+</li>
+<li><p>AI Score；</p>
+</li>
+<li><p>Build。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25912-时间也可以作为一种可消费可优化可加速的资源">259.12 时间也可以作为一种可消费、可优化、可加速的资源</h2><p>Idle系统非常清楚地揭示：</p>
+<p>玩家真正交换的是：</p>
+<p><strong>现实时间。</strong></p>
+<p>设计任何长周期系统时都应该问：</p>
+<blockquote>
+<p>玩家为了这个目标需要支付多少现实时间，这段时间里有没有决策？</p>
+</blockquote>
+<hr />
+<h2 id="25913-等待只有在未来结果足够可预期时才容易产生动力">259.13 “等待”只有在未来结果足够可预期时才容易产生动力</h2><p>玩家知道：</p>
+<p>20分钟以后能Prestige。</p>
+<p>比：</p>
+<p>“以后可能变强”</p>
+<p>拥有更强目标感。</p>
+<p>适用于：</p>
+<ul>
+<li><p>建造；</p>
+</li>
+<li><p>研究；</p>
+</li>
+<li><p>制作；</p>
+</li>
+<li><p>长线养成。</p>
+</li>
+</ul>
+<hr />
+<h2 id="25914-玩家已经解决过的问题应该逐渐退出其注意力预算">259.14 玩家已经解决过的问题应该逐渐退出其注意力预算</h2><p>如果一个玩家已经：</p>
+<p>第100次证明会买Miner，</p>
+<p>系统没有必要继续要求：</p>
+<p>第101次手动点同样按钮。</p>
+<p>这是一条非常通用的长期系统设计原则。</p>
+<hr />
+<h1 id="260-本次防重记录">260. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>增量游戏 / Incremental Game / Idle Game。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Incremental Game；</p>
+</li>
+<li><p>Idle Game；</p>
+</li>
+<li><p>Clicker Game；</p>
+</li>
+<li><p>Numbers Go Up；</p>
+</li>
+<li><p>Prestige Game；</p>
+</li>
+<li><p>Incremental Simulation；</p>
+</li>
+<li><p>增量游戏；</p>
+</li>
+<li><p>放置游戏；</p>
+</li>
+<li><p>点击游戏；</p>
+</li>
+<li><p>转生型增长游戏。</p>
+</li>
+</ul>
+<hr />
+<h2 id="核心范式">核心范式</h2><p>玩家从极低生产能力开始，通过购买Producer、Upgrade、Milestone和Multiplier持续提高单位时间资源产出；成本和收益同时以非线性函数增长，使玩家不断在当前库存、增长速度和下一目标之间进行比较。随着旧系统成熟，Automation逐步接管点击、购买和低层优化，使玩家把注意力转向Research、跨资源协同和Prestige等更高层问题。</p>
+<p>当当前Run的增长进入边际收益下降阶段时，玩家可以主动Prestige：清除指定低层资源、Producer和Upgrade，换取跨Run永久存在的Prestige Currency、Multiplier、Automation或新的Growth Rule。新的Run因此会快速穿越已经掌握的旧阶段，并进入此前无法触及的数量级和机制层。更高层Prestige继续把下层系统压缩成自动基础设施，最终形成多时间尺度嵌套的增长体系。</p>
+<p>离线期间系统不逐帧补跑，而是根据权威时间、Production Rate、Automation和重要阈值进行解析Catch-Up；在线和离线使用同一核心经济规则。整个游戏因此不是“一个数字无限变大”，而是：</p>
+<p><strong>当前增长系统<br />
+→ 被理解<br />
+→ 被优化<br />
+→ 被自动化<br />
+→ 被Prestige压缩<br />
+→ 成为下一层增长系统的底座。</strong></p>
+<p>核心循环可以压缩为：</p>
+<p><strong>积累资源<br />
+→ 分析Rate和下一目标<br />
+→ 购买Producer / Upgrade<br />
+→ 提高增长速度<br />
+→ 达到Milestone<br />
+→ 解锁新资源与规则<br />
+→ 自动化旧操作<br />
+→ 当前增长逐渐平台化<br />
+→ 评估Prestige时机<br />
+→ 重置低层进度<br />
+→ 获得永久增长规则<br />
+→ 快速重跑旧阶段<br />
+→ 抵达新的数量级<br />
+→ 新瓶颈出现<br />
+→ 更高层系统接管玩家注意力。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>增量游戏真正增长的并不是屏幕上的数字，而是玩家能够支配的“增长抽象层级”。</strong></p>
+</blockquote>
+<hr />
+<h2 id="核心识别特征">核心识别特征</h2><ul>
+<li><p>游戏拥有持续积累的数值资源；</p>
+</li>
+<li><p>资源通常以单位时间Rate自动增长；</p>
+</li>
+<li><p>玩家消费当前资源提高未来增长能力；</p>
+</li>
+<li><p>Producer拥有非线性成本；</p>
+</li>
+<li><p>Cost Scaling和Production Scaling共同形成成长曲线；</p>
+</li>
+<li><p>当前余额和Production Rate都是核心信息；</p>
+</li>
+<li><p>Buy Max属于正式运行时能力；</p>
+</li>
+<li><p>Bulk Purchase不能依赖逐次循环；</p>
+</li>
+<li><p>Modifier拥有明确乘区和计算顺序；</p>
+</li>
+<li><p>最终增长值可以追踪完整来源；</p>
+</li>
+<li><p>Milestone把连续增长转化为离散目标；</p>
+</li>
+<li><p>系统功能通过Unlock逐步展开；</p>
+</li>
+<li><p>Automation逐渐接管已掌握的低层操作；</p>
+</li>
+<li><p>Prestige主动重置当前层进度以换取上层永久收益；</p>
+</li>
+<li><p>Prestige Reward一般不是简单线性转换；</p>
+</li>
+<li><p>Prestige时机应形成继续积累与立即重置之间的权衡；</p>
+</li>
+<li><p>Reset Scope必须数据化；</p>
+</li>
+<li><p>多层Prestige形成层级化Reset结构；</p>
+</li>
+<li><p>旧阶段随着Prestige次数增加被快速压缩；</p>
+</li>
+<li><p>新系统出现后玩家注意力逐渐向更高抽象层迁移；</p>
+</li>
+<li><p>Offline Progress属于核心玩法而不是附加奖励；</p>
+</li>
+<li><p>离线结算应采用解析或事件跳跃，而不是逐Tick补跑；</p>
+</li>
+<li><p>Online与Offline遵守同一经济模型；</p>
+</li>
+<li><p>游戏需要Big Number基础设施；</p>
+</li>
+<li><p>Number Notation与权威数值严格分离；</p>
+</li>
+<li><p>Softcap用于控制无限增长的边际收益；</p>
+</li>
+<li><p>Cross-resource Synergy让多个增长系统互相耦合；</p>
+</li>
+<li><p>活跃操作和放置收益可以共存；</p>
+</li>
+<li><p>临时Boost主要改变短期计划而不替代长期Growth；</p>
+</li>
+<li><p>Save属于高价值长期资产；</p>
+</li>
+<li><p>Prestige、Purchase、Reward必须支持幂等事务；</p>
+</li>
+<li><p>Growth Dependency Graph需要检测非法循环；</p>
+</li>
+<li><p>稳定Rate可以采用Tickless / Lazy Accumulation；</p>
+</li>
+<li><p>内容通过Progressive Disclosure逐步增加；</p>
+</li>
+<li><p>已自动化系统应逐步从UI主要注意区域退出；</p>
+</li>
+<li><p>长期平衡必须通过离线Simulation和Growth Curve分析验证；</p>
+</li>
+<li><p>玩家长期成长主要表现为增长函数和操作层级不断升级。</p>
+</li>
+</ul>
+<hr />
+<h2 id="与仓库现有工厂自动化范式的防重边界">与仓库现有工厂自动化范式的防重边界</h2><p>仓库当前已经存在独立的工厂自动化范式；其核心是资源通过机器、传送带、机械臂、缓冲和电力网络形成真实生产流，并通过 Starvation、Backpressure 和 Throughput 暴露物理物流瓶颈。当前路由已将其作为独立类型维护。</p>
+<p>两者最主要的区别是：</p>
+<p><strong>Factory Automation：</strong></p>
+<blockquote>
+<p>玩家设计“资源怎样流动”。</p>
+</blockquote>
+<p>核心对象是：</p>
+<ul>
+<li><p>Machine；</p>
+</li>
+<li><p>Belt；</p>
+</li>
+<li><p>Buffer；</p>
+</li>
+<li><p>Flow Graph；</p>
+</li>
+<li><p>Throughput；</p>
+</li>
+<li><p>Spatial Layout。</p>
+</li>
+</ul>
+<p><strong>Incremental Game：</strong></p>
+<blockquote>
+<p>玩家设计“增长函数怎样放大”。</p>
+</blockquote>
+<p>核心对象是：</p>
+<ul>
+<li><p>Rate；</p>
+</li>
+<li><p>Cost Scaling；</p>
+</li>
+<li><p>Multiplier；</p>
+</li>
+<li><p>Milestone；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>Offline Growth。</p>
+</li>
+</ul>
+<p>工厂自动化即使停留在：</p>
+<p>100铁板/s</p>
+<p>仍然可以通过复杂物流布局产生深度。</p>
+<p>增量游戏则可以完全没有：</p>
+<p>空间、运输、地图，</p>
+<p>只靠数字增长和多层重置独立成立。</p>
+<p>因此二者共享生产Rate概念，但宏观范式不同。</p>
+<hr />
+<h2 id="与仓库现有城市建设模拟的防重边界">与仓库现有城市建设模拟的防重边界</h2><p>城市建设中的人口、财政和税收也会长期增长，但增长受到：</p>
+<ul>
+<li><p>土地；</p>
+</li>
+<li><p>交通；<br />
+  -公共服务；</p>
+</li>
+<li><p>地价；</p>
+</li>
+<li><p>通勤；</p>
+</li>
+</ul>
+<p>等空间系统约束。</p>
+<p>增量游戏不要求任何真实城市语义。</p>
+<p>其核心挑战可以完全存在于：</p>
+<p>数学增长结构中。</p>
+<p>因此：</p>
+<p><strong>City Builder：</strong></p>
+<blockquote>
+<p>玩家优化一个空间社会系统。</p>
+</blockquote>
+<p><strong>Incremental：</strong></p>
+<blockquote>
+<p>玩家优化一个不断自我放大的增长系统。</p>
+</blockquote>
+<hr />
+<h2 id="与仓库现有殖民地模拟的防重边界">与仓库现有殖民地模拟的防重边界</h2><p>殖民地模拟的生产依赖：</p>
+<ul>
+<li><p>Resident；</p>
+</li>
+<li><p>Work Order；</p>
+</li>
+<li><p>Path；</p>
+</li>
+<li><p>Resource Reservation；</p>
+</li>
+<li><p>Logistics。</p>
+</li>
+</ul>
+<p>玩家需要解决：</p>
+<p>具体居民为什么没完成任务。</p>
+<p>增量游戏中的Producer通常不需要：</p>
+<p>角色级执行过程。</p>
+<p><code>10 Miner = 100 Gold/s</code></p>
+<p>可以直接作为Rate。</p>
+<p>因此：</p>
+<p><strong>Colony：</strong></p>
+<p>离散Agent劳动产生资源。</p>
+<p><strong>Incremental：</strong></p>
+<p>资源生产通常被抽象成连续Rate，并重点研究增长层级与重置。</p>
+<hr />
+<h2 id="与仓库现有刷宝型-arpg-的防重边界">与仓库现有刷宝型 ARPG 的防重边界</h2><p>刷宝 ARPG同样具有：</p>
+<p>强度不断增长。</p>
+<p>但其增长主要通过：</p>
+<ul>
+<li><p>Item Instance；</p>
+</li>
+<li><p>Affix；</p>
+</li>
+<li><p>Skill；</p>
+</li>
+<li><p>Build；</p>
+</li>
+</ul>
+<p>进入实时战斗表现。</p>
+<p>增量游戏则可以：</p>
+<p>完全没有战斗。</p>
+<p>其最重要的问题是：</p>
+<blockquote>
+<p>当前 Growth Rate 和下一层 Growth Rule 如何变化。</p>
+</blockquote>
+<p>因此数值增长虽然是共同表象，但不属于同一设计范式。</p>
+<hr />
+<h2 id="与仓库现有俱乐部经营农场经营等长期管理类型的防重边界">与仓库现有俱乐部经营、农场经营等长期管理类型的防重边界</h2><p>经营游戏的持续收益通常仍需要：</p>
+<ul>
+<li><p>人员；</p>
+</li>
+<li><p>日历；</p>
+</li>
+<li><p>生产；</p>
+</li>
+<li><p>市场；</p>
+</li>
+<li><p>空间；</p>
+</li>
+<li><p>客户；</p>
+</li>
+</ul>
+<p>等具体业务语义。</p>
+<p>Incremental则可以把这些全部高度抽象为：</p>
+<p>Producer、Resource和Modifier。</p>
+<p>其独有范式是：</p>
+<p><strong>增长本身就是主要玩法对象。</strong></p>
+<p>因此本次并非一般经营系统的重复记录。</p>
+<hr />
+<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<li><p>Incremental Game；</p>
+</li>
+<li><p>Idle Game；</p>
+</li>
+<li><p>Clicker；</p>
+</li>
+<li><p>Resource Rate；</p>
+</li>
+<li><p>Producer；</p>
+</li>
+<li><p>Production Rate；</p>
+</li>
+<li><p>Cost Scaling；</p>
+</li>
+<li><p>Exponential Cost；</p>
+</li>
+<li><p>Bulk Buy；</p>
+</li>
+<li><p>Buy Max；</p>
+</li>
+<li><p>Payback Time；</p>
+</li>
+<li><p>Modifier Pipeline；</p>
+</li>
+<li><p>Multiplier；</p>
+</li>
+<li><p>Exponent Modifier；</p>
+</li>
+<li><p>Milestone；</p>
+</li>
+<li><p>Unlock Graph；</p>
+</li>
+<li><p>Automation；</p>
+</li>
+<li><p>Auto Buyer；</p>
+</li>
+<li><p>Automation Policy；</p>
+</li>
+<li><p>Prestige；</p>
+</li>
+<li><p>Ascension；</p>
+</li>
+<li><p>Rebirth；</p>
+</li>
+<li><p>Prestige Currency；</p>
+</li>
+<li><p>Prestige Formula；</p>
+</li>
+<li><p>Reset Scope；</p>
+</li>
+<li><p>Reset Hierarchy；</p>
+</li>
+<li><p>Progress Compression；</p>
+</li>
+<li><p>Abstraction Ladder；</p>
+</li>
+<li><p>Offline Progress；</p>
+</li>
+<li><p>Offline Catch-Up；</p>
+</li>
+<li><p>Offline Report；</p>
+</li>
+<li><p>Offline Efficiency；</p>
+</li>
+<li><p>Time Authority；</p>
+</li>
+<li><p>Clock Manipulation；</p>
+</li>
+<li><p>Big Number；</p>
+</li>
+<li><p>Scientific Notation；</p>
+</li>
+<li><p>Softcap；</p>
+</li>
+<li><p>Cross-resource Synergy；</p>
+</li>
+<li><p>Active Boost；</p>
+</li>
+<li><p>Idle Efficiency；</p>
+</li>
+<li><p>Growth Graph；</p>
+</li>
+<li><p>Dirty Dependency；</p>
+</li>
+<li><p>Tickless Simulation；</p>
+</li>
+<li><p>Lazy Accumulation；</p>
+</li>
+<li><p>Growth Curve；</p>
+</li>
+<li><p>Time-to-Milestone；</p>
+</li>
+<li><p>Prestige Frequency；</p>
+</li>
+<li><p>Long-run Simulation；</p>
+</li>
+<li><p>Save Backup；</p>
+</li>
+<li><p>Save Migration；</p>
+</li>
+<li><p>Cloud Conflict；</p>
+</li>
+<li><p>Transaction Idempotency。</p>
+</li>
+</ul>
+<hr />
+<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次增量游戏范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Incremental生产系统；</p>
+</li>
+<li><p>Idle资源增长；</p>
+</li>
+<li><p>Clicker点击生产；</p>
+</li>
+<li><p>Incremental Producer；</p>
+</li>
+<li><p>增量游戏Cost Scaling；</p>
+</li>
+<li><p>增量游戏指数增长；</p>
+</li>
+<li><p>Idle Buy Max；</p>
+</li>
+<li><p>Incremental Bulk Buy；</p>
+</li>
+<li><p>Incremental Modifier；</p>
+</li>
+<li><p>增量游戏Multiplier；</p>
+</li>
+<li><p>Incremental Milestone；</p>
+</li>
+<li><p>Idle Unlock；</p>
+</li>
+<li><p>Incremental Automation；</p>
+</li>
+<li><p>Auto Buyer；</p>
+</li>
+<li><p>Incremental Prestige；</p>
+</li>
+<li><p>Idle Prestige；</p>
+</li>
+<li><p>Ascension；</p>
+</li>
+<li><p>Rebirth；</p>
+</li>
+<li><p>Prestige Currency；</p>
+</li>
+<li><p>Prestige Formula；</p>
+</li>
+<li><p>增量游戏Reset Scope；</p>
+</li>
+<li><p>多层Prestige；</p>
+</li>
+<li><p>Idle Offline Progress；</p>
+</li>
+<li><p>Incremental Offline Catch-Up；</p>
+</li>
+<li><p>Idle Offline Report；</p>
+</li>
+<li><p>Incremental Big Number；</p>
+</li>
+<li><p>Idle Scientific Notation；</p>
+</li>
+<li><p>增量游戏Softcap；</p>
+</li>
+<li><p>Incremental Synergy；</p>
+</li>
+<li><p>Active / Idle Balance；</p>
+</li>
+<li><p>Idle Boost；</p>
+</li>
+<li><p>Incremental Growth Graph；</p>
+</li>
+<li><p>Incremental Tickless Simulation；</p>
+</li>
+<li><p>Incremental Save；</p>
+</li>
+<li><p>Idle Cloud Save；</p>
+</li>
+<li><p>增量游戏时钟校验；</p>
+</li>
+<li><p>Incremental Long-run Simulation；</p>
+</li>
+<li><p>Prestige Timing；</p>
+</li>
+<li><p>Incremental Growth Curve；</p>
+</li>
+<li><p>Time-to-Milestone；</p>
+</li>
+<li><p>Incremental Progression Dead Zone；</p>
+</li>
+<li><p>Incremental数值调试；</p>
+</li>
+<li><p>Idle经济平衡。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-27">2026-08-27</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
