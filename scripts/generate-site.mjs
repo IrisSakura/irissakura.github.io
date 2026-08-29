@@ -931,8 +931,8 @@ function renderEngineeringContent(engineering) {
             <aside class="engineering-status" aria-label="Iris Engineering 当前状态">
                 <span>${escapeHtml(engineering.operatingMode)}</span>
                 <strong>${escapeHtml(engineering.statusLabel)}</strong>
-                <p>${escapeHtml(engineering.status)}</p>
-                ${engineering.schemaVersion === 2 ? `<small>源仓更新 · ${escapeHtml(formatPublicDate(engineering.sourceUpdatedAt))}</small>` : ''}
+                <p>${escapeHtml(engineering.status)}</p>${engineering.schemaVersion === 2 ? `
+                <small>源仓更新 · ${escapeHtml(formatPublicDate(engineering.sourceUpdatedAt))}</small>` : ''}
             </aside>
         </div>
     </header>
