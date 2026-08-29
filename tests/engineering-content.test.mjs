@@ -11,9 +11,10 @@ async function readText(path) {
 test('Iris Engineering public snapshot exposes a reviewed control-plane contract', async () => {
   const data = JSON.parse(await readText('data/iris-engineering.json'));
 
-  assert.equal(data.schemaVersion, 1);
+  assert.ok([1, 2].includes(data.schemaVersion));
   assert.equal(data.id, 'iris-engineering');
-  assert.equal(data.operatingMode, 'maintenance');
+  assert.equal(typeof data.operatingMode, 'string');
+  assert.equal(typeof data.statusLabel, 'string');
   assert.deepEqual(data.workflow.map((step) => step.id), ['observe', 'authorize', 'execute', 'verify']);
   assert.deepEqual(data.capabilities.map((group) => group.id), [
     'workflow-core',
@@ -23,6 +24,7 @@ test('Iris Engineering public snapshot exposes a reviewed control-plane contract
   ]);
   assert.ok(data.evidence.some((entry) => entry.state === 'failed-closed'));
   assert.ok(data.boundaries.length >= 4);
+  if (data.schemaVersion === 2) assert.match(data.sourceUpdatedAt, /^\d{4}-\d{2}-\d{2}T/u);
 
   const publicData = JSON.stringify(data);
   for (const forbidden of ['/Users/', '154.37.215.57', 'git@', 'credential-revoked', 'remote-matched']) {
@@ -51,6 +53,8 @@ test('generated Iris Engineering page explains capability, evidence and limits w
     assert.ok(html.includes(fragment), `missing engineering fragment: ${fragment}`);
   }
   assert.match(generator, /function renderEngineeringContent\(/u);
+  assert.match(generator, /engineering\.sourceUpdatedAt/u);
+  assert.match(generator, /源仓更新/u);
   assert.ok(html.includes('data-brand="iris-sakura"'));
   assert.ok(html.includes('href="../style/engineering.css"'));
   for (const forbidden of ['/Users/', '154.37.215.57', 'git@', 'external-read-passed']) {

@@ -64,8 +64,10 @@ npm run package:site
 - `data/framework.json`：由 Sakura Framework 权威清单生成的白名单公开快照；
 - `data/framework-adoption.json`：经人工复核的 Supported 包、稳定路线和真实项目采用映射；
 - `data/framework-quickstart.json`：只登记路线 ID 与教程步骤，包名从 adoption 注册表派生，不自行绑定版本。
+- `data/iris-engineering.json`：Iris Engineering 的公开快照；首次 fixed-commit import 会把当前 legacy v1 迁移为 schema v2，只公开审阅语义和 `sourceUpdatedAt`，source SHA 留在不发布的 owner provenance。
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
+Iris Engineering 同步、provenance 与五路径 owner scope 见 [`docs/maintenance/iris-engineering-sync.md`](docs/maintenance/iris-engineering-sync.md)。
 
 ### 栏目视觉与项目头图
 
@@ -128,6 +130,23 @@ npm run consumer:check -- --input /tmp/consumer.json
 
 证据新鲜度、包集合复核、Runner Secret 与并发冲突策略见
 [`docs/maintenance/consumer-lab-sync.md`](docs/maintenance/consumer-lab-sync.md)。
+
+### Iris Engineering 同步
+
+Iris Engineering `main` 的每次更新都会由源仓 workflow 从 exact event commit 生成 closed、脱敏导出；本站 importer 验证 manifest hash/bytes、fixed checkout HEAD 和 ancestry 后，原子更新 owner-only provenance 与公开 Engineering snapshot，再由既有 generator 重建首页、Engineering 页和 Portfolio 页。
+
+本地复现：
+
+```bash
+npm run engineering:import -- \
+  --input /absolute/path/to/iris-public-export \
+  --source-repository /absolute/path/to/fixed-iris-checkout
+npm run engineering:check -- \
+  --input /absolute/path/to/iris-public-export \
+  --source-repository /absolute/path/to/fixed-iris-checkout
+```
+
+站点只允许同步修改 `config/iris-engineering-sync.json`、`data/iris-engineering.json`、`index.html`、`pages/engineering.html` 和 `pages/portfolio.html`。source SHA 不进入公开 data/HTML/Pages；同提交篡改、旧提交、旁支、额外文件或范围扩张都会失败关闭。Secret、Runner 与首次真实运行见 [`docs/maintenance/iris-engineering-sync.md`](docs/maintenance/iris-engineering-sync.md)，不能由本地通过推断为已启用。
 
 ## 发布流程
 

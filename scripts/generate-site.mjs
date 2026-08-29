@@ -514,11 +514,15 @@ function assertBrandProof(siteData) {
 }
 
 function assertEngineeringSnapshot(snapshot) {
-  if (!snapshot || snapshot.schemaVersion !== 1 || snapshot.id !== 'iris-engineering') {
-    throw new Error('Iris Engineering snapshot must use schemaVersion 1 and the stable project id');
+  if (!snapshot || ![1, 2].includes(snapshot.schemaVersion) || snapshot.id !== 'iris-engineering') {
+    throw new Error('Iris Engineering snapshot must use the legacy schemaVersion 1 or synced schemaVersion 2 and the stable project id');
   }
-  if (snapshot.operatingMode !== 'maintenance') {
-    throw new Error('Iris Engineering public status must match its reviewed maintenance mode');
+  if (snapshot.schemaVersion === 2 && (
+    typeof snapshot.sourceUpdatedAt !== 'string'
+    || !Number.isFinite(Date.parse(snapshot.sourceUpdatedAt))
+    || new Date(snapshot.sourceUpdatedAt).toISOString() !== snapshot.sourceUpdatedAt
+  )) {
+    throw new Error('Synced Iris Engineering snapshot must expose a canonical sourceUpdatedAt');
   }
   const workflowIds = snapshot.workflow?.map((entry) => entry.id);
   if (JSON.stringify(workflowIds) !== JSON.stringify(['observe', 'authorize', 'execute', 'verify'])) {
@@ -928,6 +932,7 @@ function renderEngineeringContent(engineering) {
                 <span>${escapeHtml(engineering.operatingMode)}</span>
                 <strong>${escapeHtml(engineering.statusLabel)}</strong>
                 <p>${escapeHtml(engineering.status)}</p>
+                ${engineering.schemaVersion === 2 ? `<small>源仓更新 · ${escapeHtml(formatPublicDate(engineering.sourceUpdatedAt))}</small>` : ''}
             </aside>
         </div>
     </header>
@@ -1915,6 +1920,10 @@ function installPageCover(html, page, siteData, prefix) {
     throw new Error(`missing page cover target ${targetClass} in ${page.file}`);
   }
   return result;
+}
+
+function formatPublicDate(value) {
+  return value.slice(0, 10);
 }
 
 function escapeHtml(value) {
