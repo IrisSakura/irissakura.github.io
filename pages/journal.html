@@ -105,9 +105,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>61</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>51</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>44</strong><span>完整博客</span><small>44 篇已公开</small></div>
+                <div class="journal-metric"><strong>62</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>53</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>45</strong><span>完整博客</span><small>45 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -200,6 +200,16 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-29</p>
+                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮相较上一审计基线 337bb3ed...，main 只新增了 1 个提交，但这是一次非常典型、且值得继续采用的架构收敛： 这次迁移的价值并不是“Voxel Sandbox 多了一个功能”，而是修复了： 这一错误 Ownership。 仓库同时新增了一个严格的： 它会直接扫描 foundation、runtime-service、gameplay-kernel 的原始 package.json 和全部仓库 asmdef，包括 Runtime、Editor、Tests、Generated，并同时解析普通 Assembly Name 与 GUID 引用；allowlist、versionDefines、defineConstraints、历史 exception 均不能掩盖真实反向依赖。 本次迁移前： 迁移后： 实际迁移 17 项文件，16 项内容字节保持不变，测试源码只改变 Prefab fixture…</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-28</p>
+                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮相较上一审计基线 25894d48...，main 只前进了两个提交，但其中一个是相当重要的架构治理变化： 实际改动没有新增 UPM Package、没有新增 asmdef、没有扩大 Stable Runtime API，也没有修改任何 Domain Runtime；核心是在现有 editor-tools 和 tools/package-distribution 内建立： 这意味着此前分散在 Module Catalog、Release Policy、Manifest Snippet、Installer 中的“包从哪里来”这一事实，第一次开始拥有专门的物理 Source Owner。方向是正确的，而且高度符合当前“完善已有项目能力，而不是提供可交付版本”的主线。 当前仓库依然明确处于： 当前没有 Active、Pending Approval 或 Blocked 工作；默认动作仍是 route-only。Evidence…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-27</p>
                     <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>当前仓库仍然处于正确的战略模式： 最新 Work Status 仍明确记录 release.intent = deferred-development，Candidate 为空，same-SHA release evidence 与 strict readiness 都是 not-requested；当前没有 Active、Pending Approval 或 Blocked 工作，Evidence Backlog 为 147。 本轮相较上一审计最大的变化只有两项，但都很有价值。第一，Agent 工程规则完成了一次真正的上下文预算收敛：根 AGENTS.md 从约 23.8 KB 降至约 15.3 KB，并增加 bounded route resolver，使普通 route-only 输出降至约 561 bytes，明确 4 KB / 8 KB 的 Route Budget，同时保持…</p>
@@ -219,25 +229,22 @@
                     <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>当前仓库仍然明确处于： 主目标仍是： 而不是： 当前生成 Work Status 明确记录： 并且 evidenceBacklog 与 deferred 明确禁止自动恢复。 这一战略状态与当前项目阶段是匹配的，应继续维持。 ---</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-20</p>
-                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮最大的变化不是新增 Package，而是开始进一步抽取重复底层机制并让现有 Domain / Gameplay Kernel 复用统一 Core 能力。近期主线包括 Core Replay / Canonical Fingerprint 收敛、GAS/RTS 时间源复用、Editor Tools 可选能力隔离，以及随后暴露并修复的 RTS FlowField 语义回归。整体方向与“完善项目能力，而非形成可交付版本”的目标一致。 当前物理规模没有继续增加：仍为 146 个 UPM Package、146 个 Catalog Module、69 个 Preset、866 个 asmdef、467 个 noEngineReferences asmdef。但内部依赖边由上一轮的 250 增至 252；Stable API 则从 395 Types / 2416 Members 增至 399 Types / 2437…</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-19</p>
-                    <h3>Sakura Framework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮从上一审计基线 b9a043f... 到当前 HEAD 前进了 5 个提交，主要集中在三条线： 仓库没有新增 UPM Package、Catalog Module、Preset 或 asmdef。上一基线与当前均为 146 Package、146 Catalog Module、69 Preset、866 asmdef、467 个 noEngineReferences asmdef；但内部依赖边从 248 增至 250。 这说明近期开发没有重新进入“一个能力一个 Package”的扩张模式，整体方向仍然符合 development-convergence。 但复杂度增长已经转移到另外三个地方： Stable Public API 从上一基线的 391 Types / 2403 Members 增至当前 395 Types / 2416 Members；程序集仍为 27 个。当前变化主要来自 Pooling Warmup 和…</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>61 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>62 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-crpg">
+                    <p class="project-status">游戏设计范式 · 2026-08-30</p>
+                    <h3>传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG</h3>
+                    <p>整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…</p>
+                    <div class="note-tags"><span>crpg</span></div>
+                    <a class="note-link" href="journal/crpg.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-association-football">
                     <p class="project-status">游戏设计范式 · 2026-08-28</p>
                     <h3>足球比赛模拟 / Association Football Simulation / Soccer Game</h3>

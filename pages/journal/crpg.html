@@ -1,0 +1,4689 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/crpg.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG | Sakura Design Journal">
+    <meta property="og:description" content="整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/crpg.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-crpg.png">
+    <meta property="og:image:alt" content="传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG | Sakura Design Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG | Sakura Design Journal">
+    <meta name="twitter:description" content="整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-crpg.png">
+    <meta name="twitter:image:alt" content="传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG | Sakura Design Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG | Sakura Design Journal","description":"整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…","url":"https://irissakura.github.io/pages/journal/crpg.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG","image":"https://irissakura.github.io/assets/social/pages-journal-crpg.png","dateModified":"2026-08-30","about":["crpg"]}</script>
+    <!-- site-meta:end -->
+    <title>传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG | Sakura Design Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-crpg"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-30</p><h1>传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG</h1><p>整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…</p><div class="note-tags"><span>crpg</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>crpg</code></p>
+</blockquote>
+<h2 id="共享世界事实规则检定与探索对话检定承诺后果传播队伍重构的反应式角色扮演循环">共享世界事实、规则检定与“探索—对话—检定—承诺—后果传播—队伍重构”的反应式角色扮演循环</h2><hr />
+<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 Journal 的 <code>game-designs</code> 权威目录。当前生成的 <code>README.md</code> 标记 <strong>Entries: 61</strong>；仓库已经覆盖 JRPG、回合制战术 RPG、沉浸式模拟、恋爱关系模拟、侦探调查、刷宝 ARPG、传统 Roguelike、银河城等多个与 RPG 相邻的宏观范式。</p>
+<p>当前路由中已有 JRPG，核心定义为“章节状态、队伍成长和城镇—迷宫—战斗—结算循环”；已有回合制战术 RPG，核心是网格战场、行动资源和战术因果；也已有沉浸式模拟，强调统一世界规则、能力组合和多入口空间。</p>
+<p>对当前 <code>route-metadata.v1.json</code> 进一步检索，尚未发现独立的 <code>crpg</code> 路由。因此本期新增：</p>
+<p><strong>传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li>CRPG；</li>
+</ul>
+<br />
+- Computer Role-Playing Game；
+<br />
+- Party-Based RPG；
+<br />
+- Narrative CRPG；
+<br />
+- Choice &amp; Consequence RPG；
+<br />
+- Western Computer RPG；
+<br />
+- 传统电脑角色扮演；
+<br />
+- 队伍式叙事角色扮演；
+<br />
+- 选择与后果型 RPG。
+<br /><p>这里讨论的不是泛指“在电脑上运行的 RPG”，而是以经典桌面角色扮演规则、队伍构成、能力检定、对话选择、任务分支、阵营关系和长期世界反应为核心的一类作品。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check Engine 验证资格和能力，再由 Choice Transaction 原子提交世界后果；后果不是只推进当前任务节点，而会写入共享事实、NPC状态、Faction关系、Companion态度和未来内容条件，使后续数小时甚至数十小时的剧情重新读取这些事实并产生不同反应。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>探索世界<br />
+→ 发现人物、地点和问题<br />
+→ 获取事实与对话上下文<br />
+→ 依据角色能力和队伍构成看到不同选项<br />
+→ 选择谈判、欺骗、威胁、调查、潜行、战斗或其他解决路线<br />
+→ 执行规则检定<br />
+→ 产生成功、部分成功或失败结果<br />
+→ 原子提交世界事实变化<br />
+→ Quest、NPC、Faction与Companion同时响应<br />
+→ 获得新的资源、关系和信息<br />
+→ 队伍 Build 与角色身份继续成长<br />
+→ 未来再次遭遇旧选择留下的后果。</strong></p>
+<p>本类型真正的核心不是：</p>
+<blockquote>
+<p>“剧情里有很多选项。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>玩家角色的能力、身份和历史必须真正决定“这个世界允许你尝试什么”，而玩家已经做出的选择又必须真正改变未来世界能够发生什么。</strong></p>
+</blockquote>
+<hr />
+<h1 id="1-类型定位">1. 类型定位</h1><p>传统 CRPG 通常具备以下核心特征：</p>
+<ul>
+<li>一个长期主角或自定义玩家角色；</li>
+</ul>
+<br />
+- 多名可招募 Companion；
+<br />
+- Party；
+<br />
+- 属性；
+<br />
+- 技能；
+<br />
+- 职业；
+<br />
+- 背景；
+<br />
+- 天赋；
+<br />
+- 装备；
+<br />
+- 规则检定；
+<br />
+- 对话树；
+<br />
+- Skill Check；
+<br />
+- Quest；
+<br />
+- 多分支解决方案；
+<br />
+- NPC长期状态；
+<br />
+- Faction；
+<br />
+- Reputation；
+<br />
+- Companion Approval；
+<br />
+- 世界事实；
+<br />
+- 玩家知识；
+<br />
+- 探索；
+<br />
+- 场景互动；
+<br />
+- 战斗；
+<br />
+- 非战斗解决路线；
+<br />
+- 长期选择后果；
+<br />
+- 多种结局；
+<br />
+- Save / Load；
+<br />
+- Journal；
+<br />
+- Rulebook Tooltip；
+<br />
+- 高密度文字和规则信息。
+<br /><p>一个典型游戏流程可能是：</p>
+<p>创建角色<br />
+→ 分配属性、背景和技能<br />
+→ 进入初始地区<br />
+→ 遇到一起地方冲突<br />
+→ 调查现场<br />
+→ 获得隐藏事实<br />
+→ 和不同NPC交谈<br />
+→ 因为高洞察看到额外对话选项<br />
+→ 因队伍中有特定Companion出现专属插话<br />
+→ 玩家选择欺骗守卫<br />
+→ 进行Deception Check<br />
+→ 失败但没有立即Game Over<br />
+→ 守卫提高警觉<br />
+→ 玩家转而通过贿赂、潜行或战斗解决<br />
+→ Quest进入不同状态<br />
+→ 某Faction降低信任<br />
+→ Companion对行为产生反应<br />
+→ 数小时以后在另一座城市遇到该Faction成员<br />
+→ 旧行为重新影响价格、任务和对话<br />
+→ 玩家发现当初一个小决定已经成为长期世界事实。</p>
+<p>因此该类型长期进度不仅是：</p>
+<p><strong>Character Power。</strong></p>
+<p>还包括：</p>
+<ul>
+<li>World History；</li>
+</ul>
+<br />
+- Party Identity；
+<br />
+- Political Relationships；
+<br />
+- Known Facts；
+<br />
+- Companion Relationships；
+<br />
+- Quest Consequences；
+<br />
+- Player-authored Narrative。
+<br /><hr />
+<h1 id="2-crpg-的核心运行时不是-dialogue-tree而是共享-world-state">2. CRPG 的核心运行时不是 Dialogue Tree，而是共享 World State</h1><p>如果：</p>
+<p>Dialogue System保存自己的Flag。</p>
+<p>Quest System保存自己的Flag。</p>
+<p>NPC脚本又保存自己的Boolean。</p>
+<p>Faction再维护自己的状态。</p>
+<p>那么一个选择产生的影响会被分散到大量局部脚本中。</p>
+<p>最终非常容易出现：</p>
+<p>NPC已经死亡，</p>
+<p>但另一个Quest仍然认为他活着。</p>
+<p>城市已经被摧毁，</p>
+<p>Dialogue却还讨论：</p>
+<p>“明天去这座城市。”</p>
+<p>因此更合理的基础是：</p>
+<p><strong>World State / Fact Store。</strong></p>
+<p>所有高层内容都从同一个世界事实层读取。</p>
+<hr />
+<h1 id="3-worldfact">3. WorldFact</h1><p>不要长期依赖：</p>
+<p><code>quest_123_step_5_done = true</code></p>
+<p>这种语义极弱的Boolean。</p>
+<p>推荐使用具有领域意义的Fact。</p>
+<p>例如：</p>
+<ul>
+<li><code>Character.Alric.Alive = false</code></li>
+</ul>
+<br />
+- `Settlement.RedVale.Controller = Rebels`
+<br />
+- `Faction.MerchantLeague.Attitude = Hostile`
+<br />
+- `World.Well.Poisoned = true`
+<br />
+- `Player.Knows.WellPoisonSource = true`
+<br />
+- `Companion.Serra.Recruited = true`
+<br /><p>工程实现可以不是字符串路径。</p>
+<p>重点是：</p>
+<blockquote>
+<p><strong>Fact本身应该描述世界事实，而不是描述某个脚本执行到哪里。</strong></p>
+</blockquote>
+<hr />
+<h1 id="4-factdefinition">4. FactDefinition</h1><p>建议字段：</p>
+<ul>
+<li>FactId；</li>
+</ul>
+<br />
+- Scope；
+<br />
+- ValueType；
+<br />
+- DefaultValue；
+<br />
+- PersistencePolicy；
+<br />
+- VisibilityPolicy；
+<br />
+- ValidationRule；
+<br />
+- DependencyTags；
+<br />
+- FactVersion。
+<br /><hr />
+<h1 id="5-fact-scope">5. Fact Scope</h1><p>推荐至少支持：</p>
+<ul>
+<li>Global；</li>
+</ul>
+<br />
+- Region；
+<br />
+- Location；
+<br />
+- Faction；
+<br />
+- Character；
+<br />
+- Party；
+<br />
+- PlayerCharacter；
+<br />
+- Quest；
+<br />
+- Encounter；
+<br />
+- Knowledge。
+<br /><hr />
+<h1 id="6-fact类型">6. Fact类型</h1><p>不仅是Boolean。</p>
+<p>还可以：</p>
+<ul>
+<li>Boolean；</li>
+</ul>
+<br />
+- Integer；
+<br />
+- Float；
+<br />
+- Enum；
+<br />
+- EntityReference；
+<br />
+- Set；
+<br />
+- Timestamp；
+<br />
+- Structured Value。
+<br /><p>例如：</p>
+<p><code>MayorStatus = Alive / Missing / Dead / Replaced</code></p>
+<p>比：</p>
+<p><code>MayorDead = true</code></p>
+<p>未来扩展性更高。</p>
+<hr />
+<h1 id="7-fact-store的核心职责">7. Fact Store的核心职责</h1><p>提供：</p>
+<ul>
+<li>Query；</li>
+</ul>
+<br />
+- Transactional Mutation；
+<br />
+- Dependency Notification；
+<br />
+- Save / Load；
+<br />
+- Validation；
+<br />
+- Debug History。
+<br /><p>所有系统可以：</p>
+<p>读取事实。</p>
+<p>但只有拥有对应领域权限的系统：</p>
+<p>才能修改事实。</p>
+<hr />
+<h1 id="8-不应允许任意dialogue-node直接写任意字段">8. 不应允许任意Dialogue Node直接写任意字段</h1><p>例如：</p>
+<p>对话选择：</p>
+<p>“杀死国王。”</p>
+<p>不能直接：</p>
+<p><code>King.Alive = false</code></p>
+<p>Dialogue应提交：</p>
+<p><strong>Narrative Action / Consequence Intent。</strong></p>
+<p>对应Character / World System完成真实状态变化。</p>
+<p>这样状态所有权仍然清晰。</p>
+<hr />
+<h1 id="9-核心范式一角色能力是内容访问权限而不只是战斗数值">9. 核心范式一：角色能力是“内容访问权限”，而不只是战斗数值</h1><p>传统 RPG 中：</p>
+<p>Strength可能增加Damage。</p>
+<p>CRPG中的Strength还可能：</p>
+<ul>
+<li>撬开铁门；</li>
+</ul>
+<br />
+- 搬走石块；
+<br />
+- 恐吓弱者；
+<br />
+- 破解某种物理障碍。
+<br /><p>Intelligence可能：</p>
+<ul>
+<li>识别魔法；</li>
+</ul>
+<br />
+- 理解古文；
+<br />
+- 推导仪式结构。
+<br /><p>Charisma可能：</p>
+<ul>
+<li>Persuade；</li>
+</ul>
+<br />
+- Deceive；
+<br />
+- Intimidate；
+<br />
+- Rally。
+<br /><p>因此角色Build不仅影响：</p>
+<p>战斗效率。</p>
+<p>它直接改变：</p>
+<p><strong>可见内容空间。</strong></p>
+<hr />
+<h1 id="10-characterdefinition">10. CharacterDefinition</h1><p>建议字段：</p>
+<ul>
+<li>CharacterId；</li>
+</ul>
+<br />
+- RaceId；
+<br />
+- BackgroundId；
+<br />
+- ClassIds；
+<br />
+- AttributeProfile；
+<br />
+- SkillProfile；
+<br />
+- TagIds；
+<br />
+- PersonalityProfile；
+<br />
+- FactionAffiliations；
+<br />
+- CompanionProfile；
+<br />
+- CharacterVersion。
+<br /><hr />
+<h1 id="11-characterruntimestate">11. CharacterRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li>CharacterId；</li>
+</ul>
+<br />
+- Level；
+<br />
+- Experience；
+<br />
+- AttributeStates；
+<br />
+- SkillStates；
+<br />
+- ResourceStates；
+<br />
+- EquipmentState；
+<br />
+- StatusEffects；
+<br />
+- KnownFacts；
+<br />
+- RelationshipStates；
+<br />
+- CurrentLocation；
+<br />
+- AliveState；
+<br />
+- CharacterVersion。
+<br /><hr />
+<h1 id="12-character-tags">12. Character Tags</h1><p>例如：</p>
+<ul>
+<li>Noble；</li>
+</ul>
+<br />
+- Criminal；
+<br />
+- Scholar；
+<br />
+- Cleric；
+<br />
+- Elf；
+<br />
+- Veteran；
+<br />
+- Local；
+<br />
+- Outsider；
+<br />
+- Mage。
+<br /><p>这些Tag可以直接参与：</p>
+<ul>
+<li>Dialogue；</li>
+</ul>
+<br />
+- Quest；
+<br />
+- Faction；
+<br />
+- Interaction；
+<br />
+- Rule Check。
+<br /><hr />
+<h1 id="13-background必须具有规则意义">13. Background必须具有规则意义</h1><p>如果选择：</p>
+<p>Noble</p>
+<p>只改变角色简介文本，</p>
+<p>那不是完整Role Playing。</p>
+<p>理想情况下它可以影响：</p>
+<ul>
+<li>NPC认知；</li>
+</ul>
+<br />
+- Dialogue Options；
+<br />
+- Starting Knowledge；
+<br />
+- Faction Access；
+<br />
+- Skill；
+<br />
+- Reputation。
+<br /><hr />
+<h1 id="14-核心范式二所有能力检定应通过统一-rule-check-engine">14. 核心范式二：所有能力检定应通过统一 Rule / Check Engine</h1><p>不要：</p>
+<p>Dialogue自己写：</p>
+<p><code>if persuasion &gt; 10</code></p>
+<p>Interaction自己写：</p>
+<p><code>if strength + random &gt; 15</code></p>
+<p>Quest又写另一套逻辑。</p>
+<p>需要统一：</p>
+<p><strong>CheckResolver。</strong></p>
+<hr />
+<h1 id="15-checkdefinition">15. CheckDefinition</h1><p>建议包含：</p>
+<ul>
+<li>CheckId；</li>
+</ul>
+<br />
+- CheckType；
+<br />
+- AbilityOrSkillId；
+<br />
+- DifficultyClass；
+<br />
+- OpposedActorRule；
+<br />
+- ModifierRules；
+<br />
+- RollPolicy；
+<br />
+- AdvantageRules；
+<br />
+- CriticalRules；
+<br />
+- VisibilityPolicy；
+<br />
+- FailurePolicy；
+<br />
+- CheckVersion。
+<br /><hr />
+<h1 id="16-checkcontext">16. CheckContext</h1><p>建议包含：</p>
+<ul>
+<li>CheckInstanceId；</li>
+</ul>
+<br />
+- ActorId；
+<br />
+- SupportingActorIds；
+<br />
+- TargetId；
+<br />
+- EnvironmentContext；
+<br />
+- RelevantFacts；
+<br />
+- TemporaryModifiers；
+<br />
+- DifficultyClass；
+<br />
+- RandomStreamId；
+<br />
+- CheckVersion。
+<br /><hr />
+<h1 id="17-checkresult">17. CheckResult</h1><p>建议包含：</p>
+<ul>
+<li>CheckInstanceId；</li>
+</ul>
+<br />
+- ActorId；
+<br />
+- SkillId；
+<br />
+- BaseValue；
+<br />
+- Modifiers；
+<br />
+- RollValue；
+<br />
+- FinalValue；
+<br />
+- DifficultyClass；
+<br />
+- DegreeOfSuccess；
+<br />
+- CriticalState；
+<br />
+- CheckVersion。
+<br /><hr />
+<h1 id="18-degree-of-success">18. Degree of Success</h1><p>不要只考虑：</p>
+<p>Success / Fail。</p>
+<p>可以支持：</p>
+<ul>
+<li>CriticalSuccess；</li>
+</ul>
+<br />
+- Success；
+<br />
+- PartialSuccess；
+<br />
+- Failure；
+<br />
+- CriticalFailure。
+<br /><p>这样内容作者拥有：</p>
+<p>更丰富结果。</p>
+<hr />
+<h1 id="19-partial-success非常适合crpg">19. Partial Success非常适合CRPG</h1><p>例如：</p>
+<p>Persuasion失败。</p>
+<p>并不意味着：</p>
+<p>“没有任何事情发生。”</p>
+<p>可以：</p>
+<p>对方答应，</p>
+<p>但要求更多钱。</p>
+<p>或者：</p>
+<p>只透露一半信息。</p>
+<p>这样失败仍然：</p>
+<p>推动故事。</p>
+<hr />
+<h1 id="20-核心原则失败应该改变故事而不是停止故事">20. 核心原则：失败应该“改变故事”，而不是“停止故事”</h1><p>如果所有Skill Check失败：</p>
+<p>只能Reload，</p>
+<p>玩家自然会：</p>
+<p>Save Scum。</p>
+<p>更好的结构：</p>
+<p>失败：</p>
+<p>进入另一条成本更高的路线。</p>
+<hr />
+<h1 id="21-check-visibility">21. Check Visibility</h1><p>可以存在：</p>
+<h3 id="visible-check">Visible Check</h3><p>玩家知道：</p>
+<p>Persuasion DC 15。</p>
+<h3 id="hidden-difficulty">Hidden Difficulty</h3><p>知道需要Persuasion，</p>
+<p>不知道DC。</p>
+<h3 id="passive-check">Passive Check</h3><p>玩家甚至没有主动选择。</p>
+<p>系统自动判断：</p>
+<p>Perception是否发现异常。</p>
+<hr />
+<h1 id="22-passive-check">22. Passive Check</h1><p>探索时：</p>
+<p>Party接近陷阱。</p>
+<p>Perception Check自动执行。</p>
+<p>成功：</p>
+<p>角色主动提示。</p>
+<p>失败：</p>
+<p>没有提示。</p>
+<p>但陷阱本身仍然存在。</p>
+<hr />
+<h1 id="23-被动检定不应每frame重复roll">23. 被动检定不应每Frame重复Roll</h1><p>否则玩家在陷阱旁站10秒：</p>
+<p>迟早成功。</p>
+<p>应按：</p>
+<p>DiscoveryOpportunityId</p>
+<p>只检定一次</p>
+<p>或根据条件变化重新开放。</p>
+<hr />
+<h1 id="24-check-opportunity">24. Check Opportunity</h1><p>建议维护：</p>
+<ul>
+<li>OpportunityId；</li>
+</ul>
+<br />
+- ActorId；
+<br />
+- CheckId；
+<br />
+- AttemptState；
+<br />
+- RetryPolicy；
+<br />
+- LastAttempt；
+<br />
+- OpportunityVersion。
+<br /><hr />
+<h1 id="25-核心范式三party-是多角色能力集合不是四个战斗单位">25. 核心范式三：Party 是“多角色能力集合”，不是四个战斗单位</h1><p>CRPG队伍的价值不仅来自：</p>
+<p>Tank / Damage / Heal。</p>
+<p>不同成员还提供：</p>
+<ul>
+<li>Skill覆盖；</li>
+</ul>
+<br />
+- 背景；<br />
+    -知识；
+<br />
+- Faction身份；
+<br />
+- Companion剧情；
+<br />
+- 对话插话；
+<br />
+- 特殊互动；
+<br />
+- 道德冲突。
+<br /><p>因此Party Composition会改变：</p>
+<p>世界内容。</p>
+<hr />
+<h1 id="26-partystate">26. PartyState</h1><p>建议包含：</p>
+<ul>
+<li>PartyId；</li>
+</ul>
+<br />
+- LeaderCharacterId；
+<br />
+- ActiveMemberIds；
+<br />
+- ReserveMemberIds；
+<br />
+- FormationState；
+<br />
+- SharedInventoryRule；
+<br />
+- CampState；
+<br />
+- PartyTags；
+<br />
+- PartyVersion。
+<br /><hr />
+<h1 id="27-party-capability-query">27. Party Capability Query</h1><p>例如：</p>
+<p><code>Party.HasSkill("Arcana", &gt;= 8)</code></p>
+<p>可能由：</p>
+<p>任何一个成员满足。</p>
+<p>但不同Check需要明确：</p>
+<p><strong>谁在执行。</strong></p>
+<hr />
+<h1 id="28-skill-check-actor">28. Skill Check Actor</h1><p>门前需要：</p>
+<p>Lockpicking。</p>
+<p>Party里Rogue有12。</p>
+<p>玩家角色只有2。</p>
+<p>系统可以：</p>
+<p>自动推荐Rogue。</p>
+<p>但最终CheckResult必须记录：</p>
+<p>Rogue执行。</p>
+<hr />
+<h1 id="29-对话检定的执行者可能有规则限制">29. 对话检定的执行者可能有规则限制</h1><p>NPC只和主角谈判：</p>
+<p>不能让后排Bard突然代替。</p>
+<p>也可以允许：</p>
+<p>Companion Interjection。</p>
+<p>这些属于：</p>
+<p>Conversation Rules。</p>
+<hr />
+<h1 id="30-核心范式四companion-必须同时是战斗单位和叙事actor">30. 核心范式四：Companion 必须同时是战斗单位和叙事Actor</h1><p>Companion如果只提供：</p>
+<p>Combat Skill</p>
+<p>和：</p>
+<p>几个营地对话，</p>
+<p>会失去传统CRPG最重要的一层。</p>
+<p>Companion应该拥有：</p>
+<ul>
+<li>Personal Goal；</li>
+</ul>
+<br />
+- Values；
+<br />
+- Relationship；
+<br />
+- Approval；
+<br />
+- Memories；
+<br />
+- Quest；
+<br />
+- Interjection；
+<br />
+- Leave Conditions；
+<br />
+- Conflict。
+<br /><hr />
+<h1 id="31-companionstate">31. CompanionState</h1><p>建议包含：</p>
+<ul>
+<li>CompanionId；</li>
+</ul>
+<br />
+- RecruitmentState；
+<br />
+- ApprovalDimensions；
+<br />
+- Trust；
+<br />
+- Loyalty；
+<br />
+- PersonalQuestState；
+<br />
+- ImportantMemoryIds；
+<br />
+- CurrentConflictState；
+<br />
+- LeaveRisk；
+<br />
+- RomanceState；
+<br />
+- CompanionVersion。
+<br /><hr />
+<h1 id="32-approval不应只是单一-100-100">32. Approval不应只是单一 +100 / -100</h1><p>至少可以在内部区分：</p>
+<ul>
+<li>Trust；</li>
+</ul>
+<br />
+- Respect；
+<br />
+- Affection；
+<br />
+- IdeologicalAlignment。
+<br /><p>正式UI可以简化。</p>
+<hr />
+<h1 id="33-为什么多维关系有价值">33. 为什么多维关系有价值</h1><p>Companion可能：</p>
+<p>非常尊敬玩家的能力。</p>
+<p>但：</p>
+<p>完全反对玩家道德立场。</p>
+<p>所以：</p>
+<p>Respect高。</p>
+<p>Alignment低。</p>
+<p>仍然可能：</p>
+<p>继续同行。</p>
+<p>这比：</p>
+<p>“好感度52”</p>
+<p>更有角色感。</p>
+<hr />
+<h1 id="34-companion-reaction">34. Companion Reaction</h1><p>玩家提交重大Choice后：</p>
+<p>Narrative Reaction System查询：</p>
+<ul>
+<li>Choice Tags；</li>
+</ul>
+<br />
+- Companion Values；
+<br />
+- Context；
+<br />
+- Past Memory。
+<br /><p>再产生：</p>
+<ul>
+<li>Approval Change；</li>
+</ul>
+<br />
+- Interjection；
+<br />
+- Confrontation；
+<br />
+- Personal Quest；
+<br />
+- Leave Party。
+<br /><hr />
+<h1 id="35-不要让每个choice手写所有companion结果">35. 不要让每个Choice手写所有Companion结果</h1><p>如果：</p>
+<p>20名Companion</p>
+<p>× 500个Choices，</p>
+<p>内容量爆炸。</p>
+<p>可以组合：</p>
+<p><strong>Choice Tags + Specific Overrides。</strong></p>
+<hr />
+<h1 id="36-choice-tags">36. Choice Tags</h1><p>例如：</p>
+<ul>
+<li>Merciful；</li>
+</ul>
+<br />
+- Cruel；
+<br />
+- Greedy；
+<br />
+- Lawful；
+<br />
+- AntiAuthority；
+<br />
+- Religious；
+<br />
+- Betrayal；
+<br />
+- ProtectWeak。
+<br /><p>Companion拥有：</p>
+<p>ValueProfile。</p>
+<p>通用系统产生基础Reaction。</p>
+<p>重要剧情再写：</p>
+<p>SpecificReaction。</p>
+<hr />
+<h1 id="37-核心范式五conversation-应是一套运行时状态机而不是单纯-dialogue-node-链表">37. 核心范式五：Conversation 应是一套运行时状态机，而不是单纯 Dialogue Node 链表</h1><p>一次对话可能涉及：</p>
+<ul>
+<li>多个NPC；</li>
+</ul>
+<br />
+- Party成员插话；
+<br />
+- Skill Check；
+<br />
+- Item交付；
+<br />
+- Faction；
+<br />
+- Combat Trigger；
+<br />
+- NPC离场；
+<br />
+- World Fact变化。
+<br /><p>因此需要：</p>
+<p><strong>ConversationRuntime。</strong></p>
+<hr />
+<h1 id="38-conversationdefinition">38. ConversationDefinition</h1><p>建议字段：</p>
+<ul>
+<li>ConversationId；</li>
+</ul>
+<br />
+- EntryRules；
+<br />
+- ParticipantRules；
+<br />
+- NodeDefinitions；
+<br />
+- VariableBindings；
+<br />
+- ExitRules；
+<br />
+- InterruptionRules；
+<br />
+- ConversationVersion。
+<br /><hr />
+<h1 id="39-conversationruntimestate">39. ConversationRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li>ConversationInstanceId；</li>
+</ul>
+<br />
+- ConversationId；
+<br />
+- ParticipantIds；
+<br />
+- SpeakerId；
+<br />
+- CurrentNodeId；
+<br />
+- LocalVariables；
+<br />
+- VisitedNodeIds；
+<br />
+- PendingChoiceIds；
+<br />
+- PendingCheckId；
+<br />
+- InterjectionQueue；
+<br />
+- ConversationPhase；
+<br />
+- ConversationVersion。
+<br /><hr />
+<h1 id="40-conversationphase">40. ConversationPhase</h1><p>例如：</p>
+<ul>
+<li>Entering；</li>
+</ul>
+<br />
+- NPCSpeaking；
+<br />
+- PlayerChoosing；
+<br />
+- ResolvingCheck；
+<br />
+- ResolvingConsequences；
+<br />
+- Interjection；
+<br />
+- Exiting；
+<br />
+- Interrupted。
+<br /><hr />
+<h1 id="41-dialogue-node">41. Dialogue Node</h1><p>Node本身不应包含：</p>
+<p>完整业务逻辑。</p>
+<p>它应该描述：</p>
+<ul>
+<li>Text；</li>
+</ul>
+<br />
+- Speaker；
+<br />
+- Conditions；
+<br />
+- Choices；
+<br />
+- Presentation；
+<br />
+- Semantic Tags。
+<br /><hr />
+<h1 id="42-dialogue-choice">42. Dialogue Choice</h1><p>建议字段：</p>
+<ul>
+<li>ChoiceId；</li>
+</ul>
+<br />
+- Text；
+<br />
+- AvailabilityConditions；
+<br />
+- CheckDefinitionId；
+<br />
+- CostDefinition；
+<br />
+- ConsequenceIds；
+<br />
+- ChoiceTags；
+<br />
+- NextNodeRule；
+<br />
+- ChoiceVersion。
+<br /><hr />
+<h1 id="43-availability-与-outcome必须分离">43. Availability 与 Outcome必须分离</h1><p>某个选项是否出现：</p>
+<p>Availability Condition。</p>
+<p>选了以后是否成功：</p>
+<p>Check。</p>
+<p>成功以后发生什么：</p>
+<p>Consequence。</p>
+<p>不要把三者混在：</p>
+<p>一段脚本。</p>
+<hr />
+<h1 id="44-示例">44. 示例</h1><p>玩家有：</p>
+<p>Noble背景。</p>
+<p>因此出现：</p>
+<p>“以王室名义命令守卫开门。”</p>
+<p>这属于：</p>
+<p>Availability。</p>
+<p>守卫是否真的服从：</p>
+<p>可能还需要：</p>
+<p>Authority Check。</p>
+<p>这是：</p>
+<p>Resolution。</p>
+<hr />
+<h1 id="45-核心范式六对话选择提交必须使用-choice-transaction">45. 核心范式六：对话选择提交必须使用 Choice Transaction</h1><p>玩家选择一句话：</p>
+<p>可能造成：</p>
+<ul>
+<li>扣钱；</li>
+</ul>
+<br />
+- Item转移；
+<br />
+- NPC离场；
+<br />
+- Quest变化；
+<br />
+- Faction变化；
+<br />
+- Companion变化；
+<br />
+- Combat开始。
+<br /><p>不能：</p>
+<p>一个个直接写状态</p>
+<p>然后中间失败。</p>
+<hr />
+<h1 id="46-choicetransaction">46. ChoiceTransaction</h1><p>建议包含：</p>
+<ul>
+<li>ChoiceTransactionId；</li>
+</ul>
+<br />
+- ConversationInstanceId；
+<br />
+- ChoiceId；
+<br />
+- ActorId；
+<br />
+- ContextSnapshotVersion；
+<br />
+- CostPlan；
+<br />
+- CheckPlan；
+<br />
+- ConsequencePlan；
+<br />
+- CommitState；
+<br />
+- ResultVersion。
+<br /><hr />
+<h1 id="47-标准流程">47. 标准流程</h1><p>玩家点击Choice<br />
+→ 重新验证Choice仍合法<br />
+→ 锁定必要Context<br />
+→ 支付Cost / Reserve<br />
+→ 执行Check<br />
+→ 确定Outcome<br />
+→ 构建ConsequencePlan<br />
+→ 验证后果<br />
+→ 原子提交World Mutation<br />
+→ 发布Domain Events<br />
+→ Quest / Companion / Faction响应<br />
+→ 选择Next Dialogue Node。</p>
+<hr />
+<h1 id="48-为什么需要重新验证">48. 为什么需要重新验证</h1><p>选项显示以后：</p>
+<p>世界可能变化。</p>
+<p>例如：</p>
+<p>多人模式。</p>
+<p>或者：</p>
+<p>某个Party成员在环境伤害中倒下。</p>
+<p>不能：</p>
+<p>只依赖UI几秒前的合法性结果。</p>
+<hr />
+<h1 id="49-conversation本身不是world-truth">49. Conversation本身不是World Truth</h1><p>NPC说：</p>
+<p>“国王死了。”</p>
+<p>并不等于：</p>
+<p>King.Alive = false。</p>
+<p>那只是：</p>
+<p>Dialogue Statement。</p>
+<p>除非：</p>
+<p>内容通过正式Fact / Knowledge更新确认。</p>
+<p>这一点对复杂叙事尤其重要。</p>
+<hr />
+<h1 id="50-核心范式七world-fact-和-player-knowledge-应该分离">50. 核心范式七：World Fact 和 Player Knowledge 应该分离</h1><p>世界中：</p>
+<p>刺客确实是NPC A。</p>
+<p>这是：</p>
+<p>World Truth。</p>
+<p>玩家是否知道：</p>
+<p>是：</p>
+<p>Knowledge。</p>
+<hr />
+<h1 id="51-knowledgefact">51. KnowledgeFact</h1><p>例如：</p>
+<ul>
+<li><code>Party.Knows.AssassinIdentity = true</code></li>
+</ul>
+<br />
+- `Party.Knows.HiddenEntrance = true`
+<br />
+- `Party.Knows.DukeBlackmail = true`
+<br /><p>Knowledge可以决定：</p>
+<ul>
+<li>Dialogue Option；</li>
+</ul>
+<br />
+- Journal；
+<br />
+- Quest Route；
+<br />
+- NPC Accusation。
+<br /><hr />
+<h1 id="52-knowledge不是quest-flag">52. Knowledge不是Quest Flag</h1><p>因为同一个事实可能：</p>
+<p>在多个完全不同Quest</p>
+<p>里被使用。</p>
+<p>例如：</p>
+<p>知道公爵贪污</p>
+<p>可能影响：</p>
+<ul>
+<li>主线；</li>
+</ul>
+<br />
+- 商会Quest；
+<br />
+- Companion Quest；
+<br />
+- 王室谈判。
+<br /><p>所以它应该：</p>
+<p>存在于共享Knowledge层。</p>
+<hr />
+<h1 id="53-核心范式八quest-应该是世界问题的追踪器而不是所有世界逻辑的owner">53. 核心范式八：Quest 应该是世界问题的追踪器，而不是所有世界逻辑的Owner</h1><p>Quest最容易变成：</p>
+<p>God Object。</p>
+<p>例如：</p>
+<p>QuestState控制：</p>
+<p>NPC是否活着。</p>
+<p>门是否打开。</p>
+<p>城市是否毁灭。</p>
+<p>这是错误方向。</p>
+<p>更合理：</p>
+<p>Quest读取：</p>
+<p>World Facts。</p>
+<p>并维护：</p>
+<p><strong>Player-facing Progress Interpretation。</strong></p>
+<hr />
+<h1 id="54-questdefinition">54. QuestDefinition</h1><p>建议字段：</p>
+<ul>
+<li>QuestId；</li>
+</ul>
+<br />
+- AvailabilityConditions；
+<br />
+- StartConditions；
+<br />
+- ObjectiveDefinitions；
+<br />
+- BranchDefinitions；
+<br />
+- CompletionConditions；
+<br />
+- FailureConditions；
+<br />
+- ObsoleteConditions；
+<br />
+- RewardDefinitions；
+<br />
+- JournalRules；
+<br />
+- QuestVersion。
+<br /><hr />
+<h1 id="55-questruntimestate">55. QuestRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li>QuestId；</li>
+</ul>
+<br />
+- CurrentState；
+<br />
+- ActiveObjectiveIds；
+<br />
+- CompletedObjectiveIds；
+<br />
+- FailedObjectiveIds；
+<br />
+- BranchState；
+<br />
+- DiscoveredFacts；
+<br />
+- RewardState；
+<br />
+- QuestVersion。
+<br /><hr />
+<h1 id="56-queststate">56. QuestState</h1><p>推荐：</p>
+<ul>
+<li>Hidden；</li>
+</ul>
+<br />
+- Available；
+<br />
+- Active；
+<br />
+- Suspended；
+<br />
+- Completed；
+<br />
+- Failed；
+<br />
+- Obsolete。
+<br /><hr />
+<h1 id="57-obsolete很重要">57. Obsolete很重要</h1><p>玩家已经：</p>
+<p>把整个村庄毁了。</p>
+<p>之前：</p>
+<p>“帮村长找到失踪的鸡”</p>
+<p>不应该：</p>
+<p>继续永远显示Active。</p>
+<p>但它也不一定是：</p>
+<p>Failed。</p>
+<p>可以：</p>
+<p>Obsolete。</p>
+<hr />
+<h1 id="58-quest-objective">58. Quest Objective</h1><p>Objective最好描述：</p>
+<p>目标状态。</p>
+<p>例如：</p>
+<p><code>Find Source of Poison</code></p>
+<p>而不是：</p>
+<p>“把Variable QStep设置为3”。</p>
+<hr />
+<h1 id="59-objective-completion">59. Objective Completion</h1><p>可以由：</p>
+<p>Fact Condition触发。</p>
+<p>例如：</p>
+<p><code>Party.Knows.PoisonSource == true</code></p>
+<p>则：</p>
+<p>Objective完成。</p>
+<hr />
+<h1 id="60-这样knowledge通过其他路线获得时">60. 这样Knowledge通过其他路线获得时：</h1><p>Quest同样正确更新。</p>
+<p>玩家不必须：</p>
+<p>按设计者预想的唯一步骤走。</p>
+<hr />
+<h1 id="61-核心范式九反应式内容必须依赖统一-condition-系统">61. 核心范式九：反应式内容必须依赖统一 Condition 系统</h1><p>Dialogue、Quest、Interaction、NPC、Loot、Scene Phase</p>
+<p>都会写条件。</p>
+<p>不能拥有：</p>
+<p>五套条件语言。</p>
+<hr />
+<h1 id="62-conditionexpression">62. ConditionExpression</h1><p>应该支持：</p>
+<ul>
+<li>Fact comparison；</li>
+</ul>
+<br />
+- Tag；
+<br />
+- Character State；
+<br />
+- Party Composition；
+<br />
+- Inventory；
+<br />
+- Reputation；
+<br />
+- Skill；
+<br />
+- Quest State；
+<br />
+- Knowledge；
+<br />
+- Time；
+<br />
+- Logical AND / OR / NOT。
+<br /><hr />
+<h1 id="63-示例语义">63. 示例语义</h1><p>“如果玩家知道毒源，并且炼金技能≥5，同时NPC仍然活着。”</p>
+<p>应该由：</p>
+<p>统一ConditionEvaluator</p>
+<p>执行。</p>
+<hr />
+<h1 id="64-condition必须是纯query">64. Condition必须是纯Query</h1><p>不能：</p>
+<p>Evaluation时顺便修改状态。</p>
+<p>否则：</p>
+<p>Tooltip检查一个选项</p>
+<p>可能改变World。</p>
+<hr />
+<h1 id="65-核心范式十consequence-同样需要统一定义">65. 核心范式十：Consequence 同样需要统一定义</h1><p>Choice、Quest和World Interaction</p>
+<p>最终都可以产生：</p>
+<p>Consequence。</p>
+<hr />
+<h1 id="66-consequencedefinition">66. ConsequenceDefinition</h1><p>可包含：</p>
+<ul>
+<li>SetFact；</li>
+</ul>
+<br />
+- ModifyReputation；
+<br />
+- GrantItem；
+<br />
+- RemoveItem；
+<br />
+- ChangeRelationship；
+<br />
+- StartQuest；
+<br />
+- CompleteObjective；
+<br />
+- SpawnEntity；
+<br />
+- MoveEntity；
+<br />
+- StartCombat；
+<br />
+- ApplyStatus；
+<br />
+- UnlockLocation；
+<br />
+- AddKnowledge；
+<br />
+- ScheduleEvent。
+<br /><hr />
+<h1 id="67-重要原则">67. 重要原则</h1><p>Condition：</p>
+<p>只读。</p>
+<p>Action / Consequence：</p>
+<p>负责写。</p>
+<p>这条边界非常关键。</p>
+<hr />
+<h1 id="68-consequenceplan">68. ConsequencePlan</h1><p>在真正执行前：</p>
+<p>系统可以预先构造：</p>
+<p>会修改哪些领域。</p>
+<p>这样：</p>
+<ul>
+<li>事务验证；</li>
+</ul>
+<br />
+- Debug；
+<br />
+- Save；
+<br />
+- Undo in Editor；
+<br /><p>都更容易。</p>
+<hr />
+<h1 id="69-核心范式十一后果传播应该通过domain-event而不是每个choice主动通知所有系统">69. 核心范式十一：后果传播应该通过Domain Event，而不是每个Choice主动通知所有系统</h1><p>Choice：</p>
+<p>救下难民。</p>
+<p>它不应该直接调用：</p>
+<p><code>CompanionSystem.React()</code></p>
+<p><code>FactionSystem.React()</code></p>
+<p><code>AchievementSystem.React()</code></p>
+<p><code>QuestSystem.React()</code></p>
+<p>更合适：</p>
+<p>提交世界事实以后：</p>
+<p>发布：</p>
+<p><code>RefugeesRescued</code></p>
+<p>或更通用：</p>
+<p><code>NarrativeActionCommitted</code>。</p>
+<hr />
+<h1 id="70-event-payload">70. Event Payload</h1><p>建议包含：</p>
+<ul>
+<li>EventId；</li>
+</ul>
+<br />
+- EventType；
+<br />
+- ActorIds；
+<br />
+- TargetIds；
+<br />
+- LocationId；
+<br />
+- ChoiceTags；
+<br />
+- WorldFactChanges；
+<br />
+- Timestamp；
+<br />
+- SourceContentId；
+<br />
+- EventVersion。
+<br /><hr />
+<h1 id="71-companionsystem">71. CompanionSystem</h1><p>根据Event：</p>
+<p>更新。</p>
+<p>FactionSystem：</p>
+<p>根据Event：</p>
+<p>更新。</p>
+<p>Achievement：</p>
+<p>监听。</p>
+<p>Journal：</p>
+<p>记录。</p>
+<p>这样：</p>
+<p>Narrative内容不会知道：</p>
+<p>所有消费者。</p>
+<hr />
+<h1 id="72-核心范式十二反应式叙事需要-dependency-index">72. 核心范式十二：反应式叙事需要 Dependency Index</h1><p>世界可能有：</p>
+<p>50000个Condition。</p>
+<p>某个Fact变化：</p>
+<p>不能重新扫描：</p>
+<p>所有Dialogue和Quest。</p>
+<p>应建立：</p>
+<p><strong>Fact → Dependent Content Index。</strong></p>
+<hr />
+<h1 id="73-reactivedependencyindex">73. ReactiveDependencyIndex</h1><p>例如：</p>
+<p><code>King.Alive</code></p>
+<p>依赖它的内容：</p>
+<ul>
+<li>Quest 18；</li>
+</ul>
+<br />
+- Dialogue 52；
+<br />
+- Location Phase 7；
+<br />
+- Companion Reaction 14。
+<br /><p>King死亡：</p>
+<p>只标记这些内容：</p>
+<p>Dirty。</p>
+<hr />
+<h1 id="74-这使大型反应式世界能够扩展">74. 这使大型反应式世界能够扩展</h1><p>否则：</p>
+<p>每个Fact变化</p>
+<p>都全世界重新Eval，</p>
+<p>性能和调试都会恶化。</p>
+<hr />
+<h1 id="75-核心范式十三npc必须拥有长期生命周期而不是对话容器">75. 核心范式十三：NPC必须拥有长期生命周期，而不是对话容器</h1><p>NPC可能：</p>
+<ul>
+<li>活着；</li>
+</ul>
+<br />
+- 死亡；
+<br />
+- 离开；
+<br />
+- 失踪；
+<br />
+- 被囚禁；
+<br />
+- 改变阵营；
+<br />
+- 成为领袖；
+<br />
+- 敌对。
+<br /><hr />
+<h1 id="76-npcstate">76. NPCState</h1><p>建议包含：</p>
+<ul>
+<li>CharacterId；</li>
+</ul>
+<br />
+- LifeState；
+<br />
+- CurrentLocation；
+<br />
+- FactionMembership；
+<br />
+- RoleState；
+<br />
+- Disposition；
+<br />
+- KnownFacts；
+<br />
+- RelationshipToPlayer；
+<br />
+- ActiveSchedule；
+<br />
+- NarrativeTags；
+<br />
+- NPCVersion。
+<br /><hr />
+<h1 id="77-npc死亡必须是世界事实">77. NPC死亡必须是世界事实</h1><p>不能：</p>
+<p>Quest A里死了。</p>
+<p>Quest B里又刷一个新的NPC A。</p>
+<p>如果必须剧情替代：</p>
+<p>生成：</p>
+<p>Successor。</p>
+<hr />
+<h1 id="78-successor-role-slot">78. Successor / Role Slot</h1><p>某些叙事功能不应该绑死具体NPC。</p>
+<p>例如：</p>
+<p>“城市守卫队长”。</p>
+<p>可以维护：</p>
+<p><code>RoleSlot.GuardCaptain = Character X</code></p>
+<p>X死亡。</p>
+<p>系统可能：</p>
+<p>任命Y。</p>
+<p>后续Dialogue读取：</p>
+<p>RoleSlot</p>
+<p>而不是：</p>
+<p>固定X。</p>
+<p>这非常适合长期反应世界。</p>
+<hr />
+<h1 id="79-核心范式十四faction-reputation-应表达政治关系而不是一个全局善恶条">79. 核心范式十四：Faction Reputation 应表达政治关系，而不是一个全局善恶条</h1><p>玩家可能：</p>
+<p>商会友好。</p>
+<p>盗贼公会敌对。</p>
+<p>王室中立。</p>
+<p>这比：</p>
+<p>Good = 72</p>
+<p>更有意义。</p>
+<hr />
+<h1 id="80-factionstate">80. FactionState</h1><p>建议包含：</p>
+<ul>
+<li>FactionId；</li>
+</ul>
+<br />
+- LeaderId；
+<br />
+- MemberIds；
+<br />
+- ControlledLocations；
+<br />
+- RelationToOtherFactions；
+<br />
+- PlayerStanding；
+<br />
+- InternalState；
+<br />
+- FactionVersion。
+<br /><hr />
+<h1 id="81-playerstanding">81. PlayerStanding</h1><p>可以拆：</p>
+<ul>
+<li>Reputation；</li>
+</ul>
+<br />
+- Trust；
+<br />
+- Fear；
+<br />
+- Hostility；
+<br />
+- Rank；
+<br />
+- Membership。
+<br /><p>不一定全开放给玩家。</p>
+<hr />
+<h1 id="82-reputation-change">82. Reputation Change</h1><p>事件：</p>
+<p>玩家救商队。</p>
+<p>商会：</p>
+<p>+10 Reputation。</p>
+<p>盗贼团：</p>
+<p>可能：</p>
+<p>-5。</p>
+<p>如果他们策划了袭击。</p>
+<p>这样：</p>
+<p>一个行为</p>
+<p>在多个阵营中拥有不同意义。</p>
+<hr />
+<h1 id="83-核心范式十五faction-与-npc-relationship需要分离">83. 核心范式十五：Faction 与 NPC Relationship需要分离</h1><p>一个Faction整体讨厌玩家。</p>
+<p>但其中某个NPC：</p>
+<p>仍然是朋友。</p>
+<p>反过来也成立。</p>
+<p>所以不能：</p>
+<p>NPC Attitude = Faction Reputation。</p>
+<hr />
+<h1 id="84-npc-relationship">84. NPC Relationship</h1><p>属于：</p>
+<p>个体。</p>
+<p>Faction Standing：</p>
+<p>属于：</p>
+<p>组织。</p>
+<p>互动时：</p>
+<p>两者共同参与。</p>
+<hr />
+<h1 id="85-核心范式十六探索交互也应该走-rule-condition-consequence">85. 核心范式十六：探索交互也应该走 Rule + Condition + Consequence</h1><p>CRPG不是只有Dialogue有选择。</p>
+<p>世界中的：</p>
+<ul>
+<li>门；<br />
+  -祭坛；</li>
+</ul>
+<br />
+- 陷阱；
+<br />
+- 尸体；<br />
+    -机关；
+<br />
+- 墙；<br />
+    -书籍；
+<br /><p>也可以提供：</p>
+<p>WorldInteraction。</p>
+<hr />
+<h1 id="86-worldinteractiondefinition">86. WorldInteractionDefinition</h1><p>建议字段：</p>
+<ul>
+<li>InteractionId；</li>
+</ul>
+<br />
+- ProviderTags；
+<br />
+- AvailabilityCondition；
+<br />
+- ActorRules；
+<br />
+- CheckDefinitionId；
+<br />
+- CostDefinition；
+<br />
+- ConsequenceRules；
+<br />
+- FailureRules；
+<br />
+- RepeatPolicy；
+<br />
+- InteractionVersion。
+<br /><hr />
+<h1 id="87-示例古代石门">87. 示例：古代石门</h1><p>玩家可以：</p>
+<p>Strength破坏。</p>
+<p>Thievery开锁。</p>
+<p>Arcana破解符文。</p>
+<p>持有钥匙直接开。</p>
+<p>从另一个区域关闭机关。</p>
+<p>全部最终修改：</p>
+<p><code>AncientDoor.Open = true</code></p>
+<p>而不是：</p>
+<p>四套独立门状态。</p>
+<hr />
+<h1 id="88-这就是crpg解决问题的核心">88. 这就是CRPG解决问题的核心：</h1><p><strong>多个路径<br />
+→ 同一世界事实目标<br />
+→ 不同成本和后果。</strong></p>
+<hr />
+<h1 id="89-核心范式十七战斗应该与叙事共享-rulebook而不是成为完全隔离小游戏">89. 核心范式十七：战斗应该与叙事共享 Rulebook，而不是成为完全隔离小游戏</h1><p>CRPG可以采用：</p>
+<ul>
+<li>Turn-based；</li>
+</ul>
+<br />
+- Real-Time with Pause；
+<br />
+- Hybrid。
+<br /><p>本范式不绑定具体战斗时间模型。</p>
+<p>真正重要的是：</p>
+<p>战斗和非战斗：</p>
+<p>共享：</p>
+<ul>
+<li>Attribute；</li>
+</ul>
+<br />
+- Skill；
+<br />
+- Status；
+<br />
+- Item；
+<br />
+- Character；
+<br />
+- World Consequence。
+<br /><hr />
+<h1 id="90-encounterstate">90. EncounterState</h1><p>建议包含：</p>
+<ul>
+<li>EncounterId；</li>
+</ul>
+<br />
+- ParticipantIds；
+<br />
+- FactionSides；
+<br />
+- TriggerReason；
+<br />
+- CombatRuntimeReference；
+<br />
+- SurrenderRules；
+<br />
+- EscapeRules；
+<br />
+- ConsequenceRules；
+<br />
+- EncounterVersion。
+<br /><hr />
+<h1 id="91-combat-start">91. Combat Start</h1><p>NPC谈判失败。</p>
+<p>进入战斗。</p>
+<p>不能：</p>
+<p>重新创建几个“战斗版NPC”。</p>
+<p>应使用：</p>
+<p>相同Character Identity</p>
+<p>进入Encounter。</p>
+<hr />
+<h1 id="92-战斗结果">92. 战斗结果</h1><p>NPC死亡：</p>
+<p>写回：</p>
+<p>Character Life State。</p>
+<p>NPC逃走：</p>
+<p>更新：</p>
+<p>Location。</p>
+<p>玩家投降：</p>
+<p>可能：</p>
+<p>Inventory被没收。</p>
+<p>因此战斗和叙事真正统一。</p>
+<hr />
+<h1 id="93-核心范式十八战斗不一定必须以全灭结束">93. 核心范式十八：战斗不一定必须以全灭结束</h1><p>传统CRPG非常适合：</p>
+<ul>
+<li>Surrender；</li>
+</ul>
+<br />
+- Flee；
+<br />
+- Knockout；
+<br />
+- Capture；
+<br />
+- Morale Break。
+<br /><p>这样战斗本身也能产生：</p>
+<p>更多叙事后果。</p>
+<hr />
+<h1 id="94-defeat-game-over">94. Defeat ≠ Game Over</h1><p>某些Encounter失败：</p>
+<p>可以：</p>
+<p>玩家被俘。</p>
+<p>醒来：</p>
+<p>装备没收。</p>
+<p>Quest改变。</p>
+<p>这比：</p>
+<p>任何战斗失败都Reload</p>
+<p>更符合反应式角色扮演。</p>
+<hr />
+<h1 id="95-核心范式十九inventory和item必须能进入叙事规则">95. 核心范式十九：Inventory和Item必须能进入叙事规则</h1><p>物品不仅是：</p>
+<p>Combat Stat。</p>
+<p>还可以是：</p>
+<ul>
+<li>Quest Evidence；</li>
+</ul>
+<br />
+- Dialogue Proof；
+<br />
+- Bribe；
+<br />
+- Key；
+<br />
+- Disguise；
+<br />
+- Faction Symbol；
+<br />
+- Ritual Component。
+<br /><hr />
+<h1 id="96-itemdefinition">96. ItemDefinition</h1><p>建议至少包含：</p>
+<ul>
+<li>ItemId；</li>
+</ul>
+<br />
+- ItemTags；
+<br />
+- StackPolicy；
+<br />
+- EquipRules；
+<br />
+- UseRules；
+<br />
+- NarrativeTags；
+<br />
+- OwnershipRules；
+<br />
+- ItemVersion。
+<br /><hr />
+<h1 id="97-narrative-item-tags">97. Narrative Item Tags</h1><p>例如：</p>
+<ul>
+<li>RoyalSeal；</li>
+</ul>
+<br />
+- Contraband；
+<br />
+- ReligiousRelic；
+<br />
+- MurderWeapon；
+<br />
+- FactionUniform。
+<br /><p>Dialogue条件读取：</p>
+<p>Tag。</p>
+<p>避免写死：</p>
+<p>某个ItemId。</p>
+<hr />
+<h1 id="98-核心范式二十ownership-与-possession需要区分">98. 核心范式二十：Ownership 与 Possession需要区分</h1><p>玩家偷走贵族的戒指。</p>
+<p>当前：</p>
+<p>Possessor = Player。</p>
+<p>LegalOwner = Noble。</p>
+<p>这允许：</p>
+<p>守卫检查赃物。</p>
+<p>NPC识别。</p>
+<p>失窃Quest。</p>
+<hr />
+<h1 id="99-iteminstance">99. ItemInstance</h1><p>可以保存：</p>
+<ul>
+<li>InstanceId；</li>
+</ul>
+<br />
+- DefinitionId；
+<br />
+- PossessorId；
+<br />
+- LegalOwnerId；
+<br />
+- StolenState；
+<br />
+- Provenance；
+<br />
+- CustomState；
+<br />
+- ItemVersion。
+<br /><hr />
+<h1 id="100-这使物品真正进入世界规则">100. 这使物品真正进入世界规则</h1><p>而不是：</p>
+<p>进入背包以后</p>
+<p>来源消失。</p>
+<hr />
+<h1 id="101-核心范式二十一rest-应作为party资源恢复和世界推进的风险决策">101. 核心范式二十一：Rest 应作为Party资源恢复和世界推进的风险决策</h1><p>如果所有技能：</p>
+<p>战斗后自动恢复，</p>
+<p>长线资源管理弱化。</p>
+<p>CRPG常用：</p>
+<p>Short Rest / Long Rest</p>
+<p>或类似系统。</p>
+<hr />
+<h1 id="102-restcontext">102. RestContext</h1><p>建议包含：</p>
+<ul>
+<li>Location；</li>
+</ul>
+<br />
+- Safety；
+<br />
+- Duration；
+<br />
+- Supplies；
+<br />
+- PartyState；
+<br />
+- TimeSensitiveQuestStates；
+<br />
+- EncounterRisk；
+<br />
+- RestVersion。
+<br /><hr />
+<h1 id="103-rest不是免费heal按钮">103. Rest不是免费Heal按钮</h1><p>它可能：</p>
+<ul>
+<li>消耗食物；</li>
+</ul>
+<br />
+- 推进世界时间；
+<br />
+- 触发营地剧情；
+<br />
+- 使Timed Quest变化；<br />
+    -遭遇袭击；
+<br />
+- 刷新能力。
+<br /><hr />
+<h1 id="104-时间推进非常重要">104. 时间推进非常重要</h1><p>如果玩家能够：</p>
+<p>无限Long Rest</p>
+<p>而任何世界状态都不变化，</p>
+<p>资源系统会失去意义。</p>
+<hr />
+<h1 id="105-核心范式二十二camp-是party-narrative的缓冲区">105. 核心范式二十二：Camp 是Party Narrative的缓冲区</h1><p>Camp适合：</p>
+<ul>
+<li>Rest；</li>
+</ul>
+<br />
+- Companion Conversation；
+<br />
+- Party Conflict；
+<br />
+- Equipment；
+<br />
+- Craft；
+<br />
+- Story Event。
+<br /><p>它是：</p>
+<p>高信息密度探索和战斗之间的：</p>
+<p>稳定重组空间。</p>
+<hr />
+<h1 id="106-campevent">106. CampEvent</h1><p>可根据：</p>
+<ul>
+<li>Companion Approval；</li>
+</ul>
+<br />
+- Recent Choice；
+<br />
+- Quest；
+<br />
+- Time；
+<br />
+- Party Member；
+<br /><p>触发。</p>
+<hr />
+<h1 id="107-camp-event不能全部按固定章节触发">107. Camp Event不能全部按固定章节触发</h1><p>否则：</p>
+<p>玩家此前Choice反应过慢。</p>
+<p>建议：</p>
+<p>事件入：</p>
+<p>PendingCampEventQueue。</p>
+<p>下一次休息时：</p>
+<p>按Priority播放。</p>
+<hr />
+<h1 id="108-核心范式二十三重大选择的后果需要不同时间尺度">108. 核心范式二十三：重大选择的后果需要不同时间尺度</h1><p>如果玩家每次Choice：</p>
+<p>立刻知道全部结果，</p>
+<p>世界显得机械。</p>
+<p>可以分：</p>
+<h3 id="immediate">Immediate</h3><p>NPC反应。</p>
+<h3 id="short-term">Short-term</h3><p>Quest变化。</p>
+<h3 id="mid-term">Mid-term</h3><p>Faction关系。</p>
+<h3 id="long-term">Long-term</h3><p>地区领导结构、城市状态、结局。</p>
+<hr />
+<h1 id="109-scheduledconsequence">109. ScheduledConsequence</h1><p>建议字段：</p>
+<ul>
+<li>ConsequenceId；</li>
+</ul>
+<br />
+- TriggerTimeOrCondition；
+<br />
+- SourceEventId；
+<br />
+- RequiredFacts；
+<br />
+- MutationPlan；
+<br />
+- CancellationRules；
+<br />
+- ConsequenceVersion。
+<br /><hr />
+<h1 id="110-例如">110. 例如</h1><p>玩家杀死Bandit Leader。</p>
+<p>立即：</p>
+<p>战斗结束。</p>
+<p>一天后：</p>
+<p>Bandit活动下降。</p>
+<p>几周后：</p>
+<p>另一角色接管帮派。</p>
+<p>或：</p>
+<p>地区贸易恢复。</p>
+<p>这让世界：</p>
+<p>具有时间惯性。</p>
+<hr />
+<h1 id="111-核心范式二十四choice-tags和world-facts承担不同职责">111. 核心范式二十四：Choice Tags和World Facts承担不同职责</h1><p>Choice Tag：</p>
+<p>描述：</p>
+<p>玩家行为的语义。</p>
+<p>例如：</p>
+<p>Merciful。</p>
+<p>World Fact：</p>
+<p>描述：</p>
+<p>实际结果。</p>
+<p>例如：</p>
+<p>Prisoner.Alive = true。</p>
+<p>两者不要混在一起。</p>
+<hr />
+<h1 id="112-为什么需要choice-tag">112. 为什么需要Choice Tag</h1><p>Companion可以反应：</p>
+<p>Merciful。</p>
+<p>Achievement可以统计：</p>
+<p>Merciful choices。</p>
+<p>但World真正状态：</p>
+<p>仍然由：</p>
+<p>Prisoner状态</p>
+<p>决定。</p>
+<hr />
+<h1 id="113-核心范式二十五玩家选择需要长期可追溯性">113. 核心范式二十五：玩家选择需要长期“可追溯性”</h1><p>玩家20小时后：</p>
+<p>发现某城市拒绝自己。</p>
+<p>应该能够在开发工具中回答：</p>
+<p>为什么？</p>
+<p>可能链路：</p>
+<p>Choice 128<br />
+→ Killed Smuggler<br />
+→ SmugglerGuild Reputation -30<br />
+→ Guild控制港口<br />
+→ HarborMaster属于Guild<br />
+→ HarborAccessDenied。</p>
+<p>这需要：</p>
+<p><strong>Narrative Causality Trace。</strong></p>
+<hr />
+<h1 id="114-narrativeeventlog">114. NarrativeEventLog</h1><p>建议记录高价值事件：</p>
+<ul>
+<li>Choice；</li>
+</ul>
+<br />
+- Check；
+<br />
+- Quest；
+<br />
+- Faction；
+<br />
+- Character Death；
+<br />
+- Recruitment；
+<br />
+- Betrayal；
+<br />
+- Major Knowledge；
+<br />
+- World Phase。
+<br /><p>不记录：</p>
+<p>每一步移动。</p>
+<hr />
+<h1 id="115-event字段">115. Event字段</h1><p>建议：</p>
+<ul>
+<li>EventId；</li>
+</ul>
+<br />
+- Timestamp；
+<br />
+- SourceContentId；
+<br />
+- ActorIds；
+<br />
+- TargetIds；
+<br />
+- SemanticTags；
+<br />
+- FactChanges；
+<br />
+- ParentEventIds；
+<br />
+- EventVersion。
+<br /><hr />
+<h1 id="116-parent-event">116. Parent Event</h1><p>允许形成：</p>
+<p>因果链。</p>
+<p>例如：</p>
+<p><code>FactionHostile</code></p>
+<p>来源：</p>
+<p>多个早期事件。</p>
+<p>不一定只有一个Parent。</p>
+<hr />
+<h1 id="117-核心范式二十六反应式世界必须避免分支树指数爆炸">117. 核心范式二十六：反应式世界必须避免分支树指数爆炸</h1><p>如果每一个选择：</p>
+<p>都手工写两个完全独立未来版本，</p>
+<p>10次选择：</p>
+<p>理论上：</p>
+<p>1024条线。</p>
+<p>不可维护。</p>
+<p>CRPG真正可扩展的方式不是：</p>
+<p>无限 Narrative Branch Tree。</p>
+<p>而是：</p>
+<p><strong>Stateful Reactivity。</strong></p>
+<hr />
+<h1 id="118-stateful-reactivity">118. Stateful Reactivity</h1><p>主线场景仍然可以：</p>
+<p>共享。</p>
+<p>但场景读取：</p>
+<p>不同Facts</p>
+<p>产生：</p>
+<ul>
+<li>不同NPC；</li>
+</ul>
+<br />
+- 不同台词；
+<br />
+- 不同价格；
+<br />
+- 不同入口；
+<br />
+- 不同任务；
+<br />
+- 不同战斗。
+<br /><p>这样一个场景：</p>
+<p>支持多个世界状态。</p>
+<hr />
+<h1 id="119-world-phase">119. World Phase</h1><p>重大变化可以使用：</p>
+<p>Phase。</p>
+<p>例如：</p>
+<p>City状态：</p>
+<ul>
+<li>Peaceful；</li>
+</ul>
+<br />
+- UnderSiege；
+<br />
+- Liberated；
+<br />
+- Occupied；
+<br />
+- Destroyed。
+<br /><p>内容作者针对：</p>
+<p>有限几个宏观Phase</p>
+<p>制作差异。</p>
+<p>局部细节再由Facts控制。</p>
+<hr />
+<h1 id="120-这是控制内容爆炸的关键">120. 这是控制内容爆炸的关键</h1><p>**少量宏观Phase</p>
+<ul>
+<li>大量小型Fact Reactivity**</li>
+</ul>
+<br /><p>通常比：</p>
+<p>完全分叉世界</p>
+<p>可维护得多。</p>
+<hr />
+<h1 id="121-核心范式二十七反应应该有优先级和冲突解决">121. 核心范式二十七：反应应该有“优先级和冲突解决”</h1><p>NPC同时满足：</p>
+<ul>
+<li>主线重要台词；</li>
+</ul>
+<br />
+- Faction敌对；
+<br />
+- Companion插话；
+<br />
+- 当前中毒；
+<br />
+- 夜晚状态。
+<br /><p>不能：</p>
+<p>五套Dialogue同时触发。</p>
+<p>需要：</p>
+<p><strong>Narrative Priority。</strong></p>
+<hr />
+<h1 id="122-reactioncandidate">122. ReactionCandidate</h1><p>建议包含：</p>
+<ul>
+<li>ReactionId；</li>
+</ul>
+<br />
+- TriggerEventId；
+<br />
+- SourceSystem；
+<br />
+- Priority；
+<br />
+- ExclusivityGroup；
+<br />
+- Conditions；
+<br />
+- Cooldown；
+<br />
+- ReactionVersion。
+<br /><hr />
+<h1 id="123-reaction-arbitration">123. Reaction Arbitration</h1><p>收集候选<br />
+→ 过滤条件<br />
+→ 按Priority排序<br />
+→ 解决Exclusive Group<br />
+→ 选择执行集合。</p>
+<hr />
+<h1 id="124-companion-interjection同样需要仲裁">124. Companion Interjection同样需要仲裁</h1><p>四个Companion都想插话。</p>
+<p>不能：</p>
+<p>每次全说一遍。</p>
+<p>可以：</p>
+<p>Priority：</p>
+<p>Personal Relevance</p>
+<ul>
+<li>Relationship</li>
+</ul>
+<br />
+- Character Priority
+<br />
+- Cooldown。
+<br /><hr />
+<h1 id="125-核心范式二十八journal-不应保存脚本步骤而应翻译世界状态给玩家">125. 核心范式二十八：Journal 不应保存脚本步骤，而应翻译世界状态给玩家</h1><p>Journal是：</p>
+<p>玩家对复杂世界的认知界面。</p>
+<p>它应该回答：</p>
+<ul>
+<li>我知道什么；</li>
+</ul>
+<br />
+- 我答应了什么；
+<br />
+- 什么已经改变；
+<br />
+- 下一步可能去哪。
+<br /><hr />
+<h1 id="126-journalentry">126. JournalEntry</h1><p>建议字段：</p>
+<ul>
+<li>EntryId；</li>
+</ul>
+<br />
+- QuestIdOrEventId；
+<br />
+- KnowledgeRequirements；
+<br />
+- DisplayState；
+<br />
+- ObjectiveSummaries；
+<br />
+- HistoricalNotes；
+<br />
+- JournalVersion。
+<br /><hr />
+<h1 id="127-journal不要泄露未知信息">127. Journal不要泄露未知信息</h1><p>世界知道：</p>
+<p>NPC在地窖。</p>
+<p>玩家不知道。</p>
+<p>Journal不能写：</p>
+<p>“去地窖找他。”</p>
+<p>只显示：</p>
+<p>当前已知线索。</p>
+<hr />
+<h1 id="128-核心范式二十九save-game本质上是一条世界历史分支">128. 核心范式二十九：Save Game本质上是“一条世界历史分支”</h1><p>CRPG玩家可能：</p>
+<p>保存：</p>
+<p>Choice前。</p>
+<p>选择A。</p>
+<p>再读取：</p>
+<p>选择B。</p>
+<p>因此Save不只是：</p>
+<p>角色位置。</p>
+<p>它包含：</p>
+<p>完整World Branch State。</p>
+<hr />
+<h1 id="129-savesnapshot">129. SaveSnapshot</h1><p>建议包含：</p>
+<ul>
+<li>SaveSchemaVersion；</li>
+</ul>
+<br />
+- ContentVersion；
+<br />
+- WorldFacts；
+<br />
+- CharacterStates；
+<br />
+- PartyState；
+<br />
+- InventoryStates；
+<br />
+- KnowledgeState；
+<br />
+- QuestStates；
+<br />
+- FactionStates；
+<br />
+- CompanionStates；
+<br />
+- ScheduledConsequences；
+<br />
+- LocationStates；
+<br />
+- WorldPhases；
+<br />
+- RandomStreamStates；
+<br />
+- NarrativeEventCursor；
+<br />
+- CurrentLocation；
+<br />
+- SaveTimestamp；
+<br />
+- IntegrityHash。
+<br /><hr />
+<h1 id="130-save必须是自洽快照">130. Save必须是自洽快照</h1><p>不能：</p>
+<p>Quest保存到新版本。</p>
+<p>Faction还是旧版本。</p>
+<p>这样会产生：</p>
+<p>时间撕裂。</p>
+<hr />
+<h1 id="131-save-barrier">131. Save Barrier</h1><p>建议在：</p>
+<p>Stable Runtime Point</p>
+<p>生成。</p>
+<p>例如：</p>
+<ul>
+<li>不在Choice Transaction中；</li>
+</ul>
+<br />
+- 不在Scene Transfer半途中；
+<br />
+- 不在Character Death Commit中。
+<br /><hr />
+<h1 id="132-quicksave">132. Quicksave</h1><p>可以：</p>
+<p>等待当前原子事务完成</p>
+<p>再保存。</p>
+<p>玩家不会感知。</p>
+<hr />
+<h1 id="133-核心范式三十content-version非常重要">133. 核心范式三十：Content Version非常重要</h1><p>CRPG内容经常：</p>
+<p>更新Dialogue。</p>
+<p>修Quest。</p>
+<p>增加Flag。</p>
+<p>老Save必须迁移。</p>
+<hr />
+<h1 id="134-contentversion">134. ContentVersion</h1><p>保存：</p>
+<ul>
+<li>Narrative Content Version；</li>
+</ul>
+<br />
+- Rulebook Version；
+<br />
+- World Schema Version。
+<br /><hr />
+<h1 id="135-migration">135. Migration</h1><p>必须回答：</p>
+<ul>
+<li>新Fact默认值；</li>
+</ul>
+<br />
+- 删除Quest；
+<br />
+- NPC状态变化；
+<br />
+- 新Companion字段；
+<br />
+- Modifier重构。
+<br /><hr />
+<h1 id="136-不要通过重新执行所有旧quest脚本恢复状态">136. 不要通过重新执行所有旧Quest脚本恢复状态</h1><p>历史内容版本已经不同。</p>
+<p>应该：</p>
+<p>迁移Snapshot。</p>
+<hr />
+<h1 id="137-核心范式三十一crpg非常需要规则和叙事两套debug视角">137. 核心范式三十一：CRPG非常需要规则和叙事两套Debug视角</h1><p>规则Debug：</p>
+<p>“为什么Persuasion失败？”</p>
+<p>叙事Debug：</p>
+<p>“为什么这个Dialogue没有出现？”</p>
+<p>两者是不同问题。</p>
+<hr />
+<h1 id="138-rule-check-inspector">138. Rule Check Inspector</h1><p>显示：</p>
+<p>Persuasion：</p>
+<p>Base 7<br />
+Background +2<br />
+Companion Support +1<br />
+Debuff -2<br />
+Roll 11<br />
+Final 19<br />
+DC 18<br />
+Success。</p>
+<hr />
+<h1 id="139-dialogue-availability-inspector">139. Dialogue Availability Inspector</h1><p>某选项没有出现：</p>
+<p>Condition：</p>
+<p>Knowledge.PoisonSource = true ✅</p>
+<p>Companion.Serra.Present = true ❌</p>
+<p>Reputation.Mages &gt;= 20 ✅</p>
+<p>最终：</p>
+<p>Hidden。</p>
+<hr />
+<h1 id="140-quest-state-inspector">140. Quest State Inspector</h1><p>显示：</p>
+<p>Quest：</p>
+<p>Active。</p>
+<p>为什么Objective 2完成：</p>
+<p>Fact X Changed。</p>
+<p>为什么Objective 3变Obsolete：</p>
+<p>NPC Dead。</p>
+<hr />
+<h1 id="141-world-fact-inspector">141. World Fact Inspector</h1><p>搜索：</p>
+<p><code>Mayor</code></p>
+<p>显示：</p>
+<p>所有相关Facts</p>
+<p>以及：</p>
+<p>最后修改它们的Event。</p>
+<hr />
+<h1 id="142-narrative-causality-graph">142. Narrative Causality Graph</h1><p>选择当前状态：</p>
+<p><code>Faction.Hostile</code></p>
+<p>追踪：</p>
+<p>Event 1001<br />
+→ Reputation -15</p>
+<p>Event 1483<br />
+→ Reputation -20</p>
+<p>最终：</p>
+<p>Hostile threshold。</p>
+<hr />
+<h1 id="143-companion-reaction-inspector">143. Companion Reaction Inspector</h1><p>Choice：</p>
+<p>Spared Prisoners。</p>
+<p>Serra：</p>
+<p>Merciful +10。</p>
+<p>Dorn：</p>
+<p>Weakness -8。</p>
+<p>其中：</p>
+<p>为什么。</p>
+<hr />
+<h1 id="144-conversation-trace">144. Conversation Trace</h1><p>显示：</p>
+<p>Conversation Enter<br />
+→ Node A<br />
+→ Choice B<br />
+→ Check<br />
+→ Consequence<br />
+→ Interjection C<br />
+→ Node D<br />
+→ Exit。</p>
+<hr />
+<h1 id="145-content-coverage-report">145. Content Coverage Report</h1><p>可以统计：</p>
+<p>某Dialogue Node：</p>
+<p>是否存在任何合法World State可以到达。</p>
+<p>避免：</p>
+<p>死内容。</p>
+<hr />
+<h1 id="146-核心范式三十二内容作者工具应把条件和后果作为可视化一等对象">146. 核心范式三十二：内容作者工具应把“条件”和“后果”作为可视化一等对象</h1><p>传统文本编辑器只展示：</p>
+<p>对白。</p>
+<p>不足以支撑大型CRPG。</p>
+<p>最好能看到：</p>
+<p>Node</p>
+<ul>
+<li>Conditions</li>
+</ul>
+<br />
+- Checks
+<br />
+- Consequences
+<br />
+- Related Facts。
+<br /><hr />
+<h1 id="147-dialogue-graph-editor">147. Dialogue Graph Editor</h1><p>节点上至少能查看：</p>
+<ul>
+<li>Speaker；</li>
+</ul>
+<br />
+- Text Key；
+<br />
+- Condition Summary；
+<br />
+- Choice；
+<br />
+- Check；
+<br />
+- Mutation；
+<br />
+- Jump。
+<br /><hr />
+<h1 id="148-quest-graph-editor">148. Quest Graph Editor</h1><p>显示：</p>
+<p>Availability<br />
+→ Active Branch<br />
+→ Fact Dependencies<br />
+→ Completion / Failure / Obsolete。</p>
+<hr />
+<h1 id="149-fact-reference-search">149. Fact Reference Search</h1><p>选Fact：</p>
+<p><code>King.Alive</code></p>
+<p>立即列出：</p>
+<p>所有：</p>
+<p>Dialogue；</p>
+<p>Quest；</p>
+<p>Scene；</p>
+<p>Reaction；</p>
+<p>Condition。</p>
+<p>这是内容维护的高价值工具。</p>
+<hr />
+<h1 id="150-orphan-fact">150. Orphan Fact</h1><p>某Fact再也没有消费者。</p>
+<p>可以提示：</p>
+<p>Technical Debt。</p>
+<hr />
+<h1 id="151-missing-fact">151. Missing Fact</h1><p>Condition引用：</p>
+<p>不存在Fact。</p>
+<p>Build Validation直接失败。</p>
+<hr />
+<h1 id="152-核心范式三十三大量内容条件必须支持静态验证">152. 核心范式三十三：大量内容条件必须支持静态验证</h1><p>至少检查：</p>
+<ul>
+<li>不存在Fact；</li>
+</ul>
+<br />
+- 不存在NPC；
+<br />
+- 不存在Quest；
+<br />
+- 不存在Faction；
+<br />
+- Dialogue Jump失效；<br />
+    -永远False Condition；
+<br />
+- 永远不可达Node；
+<br />
+- 无出口Conversation；
+<br />
+- Consequence引用非法字段。
+<br /><hr />
+<h1 id="153-contradiction-validation">153. Contradiction Validation</h1><p>例如某Dialogue要求：</p>
+<p><code>NPC.Alive = true</code></p>
+<p>同时：</p>
+<p><code>NPC.State = Dead</code></p>
+<p>属于：</p>
+<p>明显矛盾。</p>
+<p>可静态发现部分问题。</p>
+<hr />
+<h1 id="154-quest-reachability-test">154. Quest Reachability Test</h1><p>使用自动World State生成器：</p>
+<p>尝试覆盖：</p>
+<p>Quest Branch。</p>
+<p>如果某结局：</p>
+<p>永远无法达到，</p>
+<p>报警。</p>
+<hr />
+<h1 id="155-核心范式三十四测试必须覆盖顺序变化">155. 核心范式三十四：测试必须覆盖“顺序变化”</h1><p>反应式内容最危险Bug常来自：</p>
+<p>玩家做事顺序不同。</p>
+<p>设计师测试：</p>
+<p>A → B → C。</p>
+<p>玩家：</p>
+<p>C → A → B。</p>
+<hr />
+<h1 id="156-sequence-permutation-test">156. Sequence Permutation Test</h1><p>对关键Quest：</p>
+<p>生成：</p>
+<p>不同合法事件顺序。</p>
+<p>例如：</p>
+<p>先杀NPC。</p>
+<p>再接Quest。</p>
+<p>先获得Item。</p>
+<p>再知道需要Item。</p>
+<p>先进入隐藏地点。</p>
+<p>再收到地点线索。</p>
+<hr />
+<h1 id="157-系统应该尽量允许">157. 系统应该尽量允许：</h1><p>“玩家已经提前完成条件。”</p>
+<p>Quest接取后：</p>
+<p>立即识别。</p>
+<p>而不是：</p>
+<p>要求玩家重新完成一次。</p>
+<hr />
+<h1 id="158-example">158. Example</h1><p>玩家已经找到：</p>
+<p>AncientSword。</p>
+<p>之后NPC说：</p>
+<p>“帮我找AncientSword。”</p>
+<p>Quest启动时：</p>
+<p>Inventory / Fact已经满足。</p>
+<p>Objective立即完成。</p>
+<p>这是反应式系统应支持的基本能力。</p>
+<hr />
+<h1 id="159-核心范式三十五场景加载必须从world-state构造当前版本而不是依赖之前场景对象记忆">159. 核心范式三十五：场景加载必须从World State构造当前版本，而不是依赖之前场景对象记忆</h1><p>玩家离开村庄。</p>
+<p>十小时后回来。</p>
+<p>需要根据WorldFacts：</p>
+<p>重新构建：</p>
+<ul>
+<li>NPC；</li>
+</ul>
+<br />
+- 门；
+<br />
+- 火灾；
+<br />
+- 商店；
+<br />
+- Guards。
+<br /><hr />
+<h1 id="160-locationdefinition">160. LocationDefinition</h1><p>建议字段：</p>
+<ul>
+<li>LocationId；</li>
+</ul>
+<br />
+- BaseEntities；
+<br />
+- PhaseDefinitions；
+<br />
+- ReactiveSpawnRules；
+<br />
+- InteractionDefinitions；
+<br />
+- LocationVersion。
+<br /><hr />
+<h1 id="161-locationruntimestate">161. LocationRuntimeState</h1><p>保存真正需要持久化的：</p>
+<ul>
+<li>DestroyedObjects；</li>
+</ul>
+<br />
+- MovedUniqueItems；
+<br />
+- NPC State；
+<br />
+- LootedContainers；
+<br />
+- DynamicChanges。
+<br /><p>不需要：</p>
+<p>保存所有默认墙体。</p>
+<hr />
+<h1 id="162-location-materialization">162. Location Materialization</h1><p>Load Location<br />
+→ 读取WorldPhase<br />
+→ 应用Global Facts<br />
+→ 加载Persistent Delta<br />
+→ 生成NPC<br />
+→ 生成Reactive Objects<br />
+→ 建立Interaction<br />
+→ 创建Runtime。</p>
+<hr />
+<h1 id="163-这与开放世界delta-save思想相似">163. 这与开放世界Delta Save思想相似</h1><p>基础内容来自：</p>
+<p>Definition。</p>
+<p>Save只保存：</p>
+<p>玩家改变的部分。</p>
+<hr />
+<h1 id="164-核心范式三十六随机性必须与叙事承诺分离">164. 核心范式三十六：随机性必须与叙事承诺分离</h1><p>Skill Check可以随机。</p>
+<p>Loot可以随机。</p>
+<p>但重大Narrative后果：</p>
+<p>应在Check结果确定后</p>
+<p>稳定提交。</p>
+<p>不能：</p>
+<p>Save/Load后</p>
+<p>同一个已经提交的Choice</p>
+<p>再次随机。</p>
+<hr />
+<h1 id="165-checkresult-persistence">165. CheckResult Persistence</h1><p>一旦Check结果：</p>
+<p>进入Consequence Commit，</p>
+<p>结果成为：</p>
+<p>Event History。</p>
+<p>后续不会重新Roll。</p>
+<hr />
+<h1 id="166-对话中断后恢复">166. 对话中断后恢复</h1><p>如果游戏允许：</p>
+<p>战斗打断Conversation，</p>
+<p>恢复时需要知道：</p>
+<p>之前Check结果。</p>
+<p>不能：</p>
+<p>重新掷。</p>
+<hr />
+<h1 id="167-核心范式三十七多人-crpg-扩展需要-choice-authority">167. 核心范式三十七：多人 CRPG 扩展需要 Choice Authority</h1><p>如果多人合作：</p>
+<p>谁选Dialogue？</p>
+<p>需要：</p>
+<ul>
+<li>Host Authority；</li>
+</ul>
+<br />
+- Speaker Authority；
+<br />
+- Vote；
+<br />
+- Party Leader；
+<br />
+- Character-specific Authority。
+<br /><hr />
+<h1 id="168-conversationauthoritystate">168. ConversationAuthorityState</h1><p>建议包含：</p>
+<ul>
+<li>InitiatorPlayerId；</li>
+</ul>
+<br />
+- SpeakerCharacterId；
+<br />
+- EligibleDecisionPlayerIds；
+<br />
+- VotingPolicy；
+<br />
+- CurrentAuthority；
+<br />
+- ConversationVersion。
+<br /><hr />
+<h1 id="169-即使不做多人">169. 即使不做多人</h1><p>从第一版把：</p>
+<p>Choice Actor</p>
+<p>与：</p>
+<p>Player Controller</p>
+<p>分离，</p>
+<p>未来扩展成本更低。</p>
+<hr />
+<h1 id="170-完整事件与执行流程示例">170. 完整事件与执行流程示例</h1><p>以下以：</p>
+<p><strong>一个村庄水井被下毒事件，玩家通过调查、炼金检定、Faction谈判和Companion冲突解决问题，并在之后改变地区政治格局</strong></p>
+<p>为例。</p>
+<hr />
+<h2 id="1701-初始世界事实">170.1 初始世界事实</h2><p><code>RedVale.Well.Poisoned = true</code></p>
+<p><code>RedVale.Healer.Alive = true</code></p>
+<p><code>MercenaryFaction.ControlsRoad = true</code></p>
+<p>玩家并不知道：</p>
+<p>谁投毒。</p>
+<hr />
+<h2 id="1702-玩家进入村庄">170.2 玩家进入村庄</h2><p>Location Materialization读取：</p>
+<p>Well.Poisoned。</p>
+<p>因此：</p>
+<ul>
+<li>部分村民生病；</li>
+</ul>
+<br />
+- Healer站在井边；
+<br />
+- 商店Food价格提高；
+<br />
+- 村长拥有紧急Dialogue。
+<br /><hr />
+<h2 id="1703-quest出现">170.3 Quest出现</h2><p>Quest：</p>
+<p><code>The Bitter Well</code></p>
+<p>Availability Condition：</p>
+<p>玩家首次进入</p>
+<p>且：</p>
+<p>Well.Poisoned。</p>
+<hr />
+<h2 id="1704-quest启动">170.4 Quest启动</h2><p>Objective：</p>
+<p>“调查井水。”</p>
+<p>它并不：</p>
+<p>创建新的Quest专用井。</p>
+<p>只是指向：</p>
+<p>现有World Entity。</p>
+<hr />
+<h2 id="1705-玩家检查井">170.5 玩家检查井</h2><p>WorldInteraction提供：</p>
+<ul>
+<li>Inspect；</li>
+</ul>
+<br />
+- Arcana Check；
+<br />
+- Survival Check；
+<br />
+- Take Sample。
+<br /><hr />
+<h2 id="1706-party中有炼金师companion-serra">170.6 Party中有炼金师Companion Serra</h2><p>Serra拥有：</p>
+<p>Alchemy 9。</p>
+<p>玩家选择：</p>
+<p>Take Sample。</p>
+<hr />
+<h2 id="1707-进行alchemy-check">170.7 进行Alchemy Check</h2><p>DC：</p>
+<p>14。</p>
+<p>Serra：</p>
+<p>Base 9。</p>
+<p>特殊工具：</p>
+<p>+2。</p>
+<p>Roll：</p>
+<p>8。</p>
+<p>Final：</p>
+<p>19。</p>
+<p>成功。</p>
+<hr />
+<h2 id="1708-checkresult创建">170.8 CheckResult创建</h2><p>Party获得Knowledge：</p>
+<p><code>Knows.PoisonIsBlackroot = true</code></p>
+<p>同时：</p>
+<p>Serra触发Interjection：</p>
+<p>“这种毒来自北方沼泽。”</p>
+<hr />
+<h2 id="1709-quest自动更新">170.9 Quest自动更新</h2><p>因为Objective Condition：</p>
+<p><code>Knows.PoisonIsBlackroot</code></p>
+<p>变为true。</p>
+<p>Objective完成。</p>
+<hr />
+<h2 id="17010-玩家拜访healer">170.10 玩家拜访Healer</h2><p>新的Dialogue Choice出现：</p>
+<p>“我知道这是Blackroot。”</p>
+<p>因为Knowledge满足。</p>
+<hr />
+<h2 id="17011-healer告诉玩家">170.11 Healer告诉玩家</h2><p>最近只有：</p>
+<p>Mercenary Faction</p>
+<p>从北方沼泽经过。</p>
+<p>获得：</p>
+<p><code>Knows.MercenariesCarriedBlackroot = true</code></p>
+<p>但这仍不是：</p>
+<p>“他们就是凶手。”</p>
+<p>只是证据。</p>
+<hr />
+<h2 id="17012-玩家去佣兵营地">170.12 玩家去佣兵营地</h2><p>Faction默认：</p>
+<p>Neutral。</p>
+<p>营地守卫阻止进入。</p>
+<hr />
+<h2 id="17013-当前party有三个路线">170.13 当前Party有三个路线</h2><p>玩家角色：</p>
+<p>Noble Background。</p>
+<p>可以使用：</p>
+<p>Authority。</p>
+<p>Serra：</p>
+<p>认识毒药。</p>
+<p>可以：</p>
+<p>Alchemy Argument。</p>
+<p>另一个Companion Dorn：</p>
+<p>主张：</p>
+<p>Intimidate。</p>
+<hr />
+<h2 id="17014-玩家选择noble-authority">170.14 玩家选择Noble Authority</h2><p>选项因为：</p>
+<p>Background.Noble</p>
+<p>而存在。</p>
+<p>进行：</p>
+<p>Authority Check。</p>
+<hr />
+<h2 id="17015-check失败">170.15 Check失败</h2><p>守卫不接受。</p>
+<p>但不是Game Over。</p>
+<p>结果：</p>
+<p>Faction Suspicion +5。</p>
+<p>守卫仍不敌对。</p>
+<p>玩家可以：</p>
+<p>换方案。</p>
+<hr />
+<h2 id="17016-玩家选择intimidate">170.16 玩家选择Intimidate</h2><p>成功。</p>
+<p>守卫让路。</p>
+<p>但Choice Tag：</p>
+<p><code>Coercive</code></p>
+<p>写入NarrativeEvent。</p>
+<hr />
+<h2 id="17017-companion反应">170.17 Companion反应</h2><p>Dorn：</p>
+<p>Respect +5。</p>
+<p>Serra：</p>
+<p>Trust -3。</p>
+<p>这些Reaction来自：</p>
+<p>Choice Semantic Tag。</p>
+<hr />
+<h2 id="17018-玩家在营地发现运输账本">170.18 玩家在营地发现运输账本</h2><p>Knowledge新增：</p>
+<p><code>Knows.MercenaryCaptainOrderedBlackroot = true</code></p>
+<p>现在证据链已经更强。</p>
+<hr />
+<h2 id="17019-玩家见captain">170.19 玩家见Captain</h2><p>Dialogue根据Knowledge出现：</p>
+<p>“我看过你的运输账本。”</p>
+<hr />
+<h2 id="17020-captain提供另一事实">170.20 Captain提供另一事实</h2><p>他说：</p>
+<p>毒药不是为了村民。</p>
+<p>原计划：</p>
+<p>毒死路边某支叛军。</p>
+<p>容器在运输时被偷。</p>
+<hr />
+<h2 id="17021-玩家当前面临新选择">170.21 玩家当前面临新选择</h2><p>立即杀Captain。</p>
+<p>向村庄公开全部真相。</p>
+<p>帮助Captain调查真正偷毒者。</p>
+<p>利用账本勒索Mercenary Faction。</p>
+<hr />
+<h2 id="17022-玩家选择勒索">170.22 玩家选择勒索</h2><p>Choice Tags：</p>
+<ul>
+<li>Greedy；</li>
+</ul>
+<br />
+- Coercive；
+<br />
+- ConcealTruth。
+<br /><p>要求：</p>
+<p>Deception 16。</p>
+<hr />
+<h2 id="17023-check成功">170.23 Check成功</h2><p>系统生成ConsequencePlan：</p>
+<p>Player Gold +500。</p>
+<p>Mercenary Trust -20。</p>
+<p>Mercenary Fear +15。</p>
+<p>RedVale仍不知道真相。</p>
+<p>Serra Trust -8。</p>
+<p>Dorn Respect +3。</p>
+<p>Quest进入：</p>
+<p><code>CompromisedResolution</code>。</p>
+<hr />
+<h2 id="17024-关键world-fact">170.24 关键World Fact</h2><p><code>MercenaryCaptain.BlackmailedByPlayer = true</code></p>
+<p><code>RedVale.KnowsMercenaryConnection = false</code></p>
+<p>这些不是Quest局部变量。</p>
+<hr />
+<h2 id="17025-玩家返回村庄">170.25 玩家返回村庄</h2><p>由于玩家有Blackroot知识：</p>
+<p>可以制作Antidote。</p>
+<hr />
+<h2 id="17026-使用炼金配方净化井水">170.26 使用炼金配方净化井水</h2><p>World Interaction提交：</p>
+<p><code>RedVale.Well.Poisoned = false</code></p>
+<hr />
+<h2 id="17027-村民恢复">170.27 村民恢复</h2><p>Quest完成。</p>
+<p>Journal写：</p>
+<p>“水源已经恢复，但佣兵团和毒药之间的真正关系并未公开。”</p>
+<hr />
+<h2 id="17028-表面看起来玩家成功了">170.28 表面看起来玩家成功了</h2><p>但长期后果刚开始。</p>
+<hr />
+<h2 id="17029-两章以后">170.29 两章以后</h2><p>Mercenary Faction与当地领主谈判：</p>
+<p>要求道路经营权。</p>
+<hr />
+<h2 id="17030-faction-ai-narrative-content读取">170.30 Faction AI / Narrative Content读取</h2><p><code>MercenaryCaptain.BlackmailedByPlayer = true</code></p>
+<p>以及：</p>
+<p>对玩家：</p>
+<p>Trust低。</p>
+<p>Fear高。</p>
+<hr />
+<h2 id="17031-captain担心玩家再次勒索">170.31 Captain担心玩家再次勒索</h2><p>于是：</p>
+<p>拒绝支持玩家主张。</p>
+<p>原本Neutral的政治会议：</p>
+<p>因为早期行为改变。</p>
+<hr />
+<h2 id="17032-serra也在camp中触发冲突">170.32 Serra也在Camp中触发冲突</h2><p>因为：</p>
+<p>累计：</p>
+<p>ConcealTruth + Greedy</p>
+<p>事件超过她的价值阈值。</p>
+<hr />
+<h2 id="17033-serra要求玩家解释">170.33 Serra要求玩家解释</h2><p>如果再次选择：</p>
+<p>自私路线，</p>
+<p>她可能：</p>
+<p>离开Party。</p>
+<hr />
+<h2 id="17034-玩家可能直到此时才真正看到早期选择的全部代价">170.34 玩家可能直到此时才真正看到早期选择的全部代价</h2><p>但系统可以完整追溯：</p>
+<p>井水中毒<br />
+→ 调查<br />
+→ 获得证据<br />
+→ Intimidation<br />
+→ Blackmail<br />
+→ 隐瞒事实<br />
+→ Faction Trust下降<br />
+→ Companion Trust下降<br />
+→ 后续政治会议<br />
+→ Companion Confrontation。</p>
+<hr />
+<h2 id="17035-这就是传统crpg最具代表性的核心循环">170.35 这就是传统CRPG最具代表性的核心循环</h2><p><strong>World Problem<br />
+→ Exploration<br />
+→ Knowledge<br />
+→ Character Build解锁不同Options<br />
+→ Check<br />
+→ Choice Commit<br />
+→ Shared Facts变化<br />
+→ Quest更新<br />
+→ Faction Reaction<br />
+→ Companion Reaction<br />
+→ Delayed Consequence<br />
+→ 世界后续内容重新读取历史。</strong></p>
+<hr />
+<h1 id="171-模块通信设计">171. 模块通信设计</h1><h2 id="1711-commands">171.1 Commands</h2><p>典型：</p>
+<ul>
+<li>StartConversation；</li>
+</ul>
+<br />
+- SelectDialogueChoice；
+<br />
+- AttemptWorldInteraction；
+<br />
+- RecruitCompanion；
+<br />
+- DismissCompanion；
+<br />
+- StartQuest；
+<br />
+- RestParty；
+<br />
+- TravelToLocation；
+<br />
+- EquipItem；
+<br />
+- UseItem；
+<br />
+- InitiateCombat；
+<br />
+- Surrender；
+<br />
+- StealItem。
+<br /><hr />
+<h2 id="1712-queries">171.2 Queries</h2><p>适用于：</p>
+<ul>
+<li>这个Dialogue Option为什么不可见；</li>
+</ul>
+<br />
+- 当前Party谁最适合执行Check；
+<br />
+- 某Quest为什么变成Obsolete；
+<br />
+- NPC现在在哪里；
+<br />
+- 当前Faction为什么敌对；
+<br />
+- Companion为什么想离队；
+<br />
+- 这个门有哪些合法解决方法；
+<br />
+- 玩家是否知道某事实。
+<br /><p>Query不能：</p>
+<ul>
+<li>修改Fact；</li>
+</ul>
+<br />
+- 执行Check；
+<br />
+- 消耗Item；
+<br />
+- 修改Quest。
+<br /><hr />
+<h2 id="1713-domain-events">171.3 Domain Events</h2><p>包括：</p>
+<ul>
+<li>FactChanged；</li>
+</ul>
+<br />
+- KnowledgeAcquired；
+<br />
+- CheckResolved；
+<br />
+- ChoiceCommitted；
+<br />
+- QuestStarted；
+<br />
+- ObjectiveCompleted；
+<br />
+- QuestCompleted；
+<br />
+- QuestFailed；
+<br />
+- QuestObsoleted；
+<br />
+- NPCDied；
+<br />
+- NPCMoved；
+<br />
+- FactionStandingChanged；
+<br />
+- CompanionReactionTriggered；
+<br />
+- CompanionLeftParty；
+<br />
+- ItemTransferred；
+<br />
+- EncounterStarted；
+<br />
+- EncounterResolved；
+<br />
+- LocationPhaseChanged；
+<br />
+- ScheduledConsequenceTriggered。
+<br /><hr />
+<h2 id="1714-presentation-events">171.4 Presentation Events</h2><p>包括：</p>
+<ul>
+<li>ShowDialogueLine；</li>
+</ul>
+<br />
+- PlayCompanionInterjection；
+<br />
+- ShowCheckRoll；
+<br />
+- UpdateJournal；
+<br />
+- ShowFactionToast；
+<br />
+- PlayQuestComplete；
+<br />
+- PlayLocationTransition。
+<br /><p>表现不能：</p>
+<ul>
+<li>决定Check；</li>
+</ul>
+<br />
+- 修改Fact；
+<br />
+- 完成Quest；
+<br />
+- 修改Companion关系。
+<br /><hr />
+<h1 id="172-状态所有权建议">172. 状态所有权建议</h1><p><strong>WorldStateSystem</strong></p>
+<p>拥有共享Facts。</p>
+<p><strong>CharacterSystem</strong></p>
+<p>拥有NPC与Party角色状态。</p>
+<p><strong>KnowledgeSystem</strong></p>
+<p>拥有玩家 / Party已知事实。</p>
+<p><strong>RuleSystem</strong></p>
+<p>拥有Skill / Attribute / Check规则。</p>
+<p><strong>PartySystem</strong></p>
+<p>拥有Active Party。</p>
+<p><strong>ConversationSystem</strong></p>
+<p>拥有Conversation Runtime。</p>
+<p><strong>QuestSystem</strong></p>
+<p>拥有Quest Progress解释。</p>
+<p><strong>FactionSystem</strong></p>
+<p>拥有Faction关系。</p>
+<p><strong>RelationshipSystem</strong></p>
+<p>拥有NPC与Companion关系。</p>
+<p><strong>NarrativeReactionSystem</strong></p>
+<p>负责事件到Reaction的映射。</p>
+<p><strong>InventorySystem</strong></p>
+<p>拥有Item归属。</p>
+<p><strong>EncounterSystem</strong></p>
+<p>拥有战斗。</p>
+<p><strong>LocationSystem</strong></p>
+<p>拥有Location Materialization。</p>
+<p><strong>ScheduleSystem</strong></p>
+<p>拥有延迟后果。</p>
+<p><strong>SaveSystem</strong></p>
+<p>保存完整世界Branch。</p>
+<hr />
+<h1 id="173-失败隔离">173. 失败隔离</h1><hr />
+<h2 id="1731-dialogue引用不存在npc">173.1 Dialogue引用不存在NPC</h2><p>Conversation启动前：</p>
+<p>Validation失败。</p>
+<p>可以：</p>
+<p>跳过该Interjection。</p>
+<p>主对话继续。</p>
+<p>记录：</p>
+<p>ContentReferenceError。</p>
+<p>不能：</p>
+<p>整个游戏崩溃。</p>
+<hr />
+<h1 id="174-dialogue-choice-condition异常">174. Dialogue Choice Condition异常</h1><p>某Condition解析失败：</p>
+<p>该Choice：</p>
+<p>隐藏或进入Safe Invalid状态。</p>
+<p>记录：</p>
+<p>ConditionEvaluationError。</p>
+<p>不要默认显示并执行未知后果。</p>
+<hr />
+<h1 id="175-check配置缺失">175. Check配置缺失</h1><p>如果Choice依赖：</p>
+<p>不存在的CheckDefinition，</p>
+<p>该Choice应该：</p>
+<p>构建期阻止发布。</p>
+<p>正式运行时：</p>
+<p>安全拒绝。</p>
+<hr />
+<h1 id="176-choice提交过程中某consequence非法">176. Choice提交过程中某Consequence非法</h1><p>例如：</p>
+<p>尝试删除：</p>
+<p>不存在Item。</p>
+<p>如果该后果属于事务关键部分：</p>
+<p>整个ChoiceTransaction不提交。</p>
+<p>如果属于：</p>
+<p>非关键Presentation Side Effect，</p>
+<p>则隔离。</p>
+<p>需要：</p>
+<p>在Definition中标记：</p>
+<p>Criticality。</p>
+<hr />
+<h1 id="177-companion-reaction失败">177. Companion Reaction失败</h1><p>Choice的World Consequence已经提交。</p>
+<p>Companion派生Reaction异常：</p>
+<p>不能：</p>
+<p>回滚整个世界。</p>
+<p>Reaction进入：</p>
+<p>Recovery Queue。</p>
+<hr />
+<h1 id="178-quest更新失败">178. Quest更新失败</h1><p>Quest属于：</p>
+<p>World State的解释层之一。</p>
+<p>如果World Fact已经成功：</p>
+<p>Quest可以：</p>
+<p>通过重新Evaluate恢复。</p>
+<p>不要反过来回滚：</p>
+<p>World Fact。</p>
+<hr />
+<h1 id="179-npc死亡和dialogue同时发生">179. NPC死亡和Dialogue同时发生</h1><p>NPC死亡Transaction提交后：</p>
+<p>Conversation收到：</p>
+<p>ParticipantInvalidated。</p>
+<p>根据Conversation Policy：</p>
+<ul>
+<li>Interrupt；</li>
+</ul>
+<br />
+- 转移Speaker；
+<br />
+- 结束。
+<br /><p>不能：</p>
+<p>继续让死人对话。</p>
+<hr />
+<h1 id="180-party成员离队期间存在装备">180. Party成员离队期间存在装备</h1><p>需要：</p>
+<p>Party Departure Transaction。</p>
+<p>明确：</p>
+<ul>
+<li>装备保留；</li>
+</ul>
+<br />
+- Inventory转移；
+<br />
+- Quest Item；
+<br />
+- Personal Item。
+<br /><p>不能：</p>
+<p>直接从Party数组删除。</p>
+<hr />
+<h1 id="181-scheduledconsequence目标已不存在">181. ScheduledConsequence目标已不存在</h1><p>例如：</p>
+<p>三天后刺客杀NPC。</p>
+<p>但NPC两天前已经死了。</p>
+<p>Condition重新验证。</p>
+<p>事件：</p>
+<p>取消</p>
+<p>或：</p>
+<p>选择Fallback Target。</p>
+<hr />
+<h1 id="182-save写入发生在choice中间">182. Save写入发生在Choice中间</h1><p>禁止Snapshot。</p>
+<p>等待：</p>
+<p>ChoiceTransaction Commit。</p>
+<hr />
+<h1 id="183-save-migration丢失fact">183. Save Migration丢失Fact</h1><p>使用：</p>
+<p>Schema Validation。</p>
+<p>无法迁移的关键Fact：</p>
+<p>阻止覆盖旧Save。</p>
+<p>保留：</p>
+<p>Recovery Copy。</p>
+<hr />
+<h1 id="184-location-phase缺少资源">184. Location Phase缺少资源</h1><p>回退：</p>
+<p>Base Phase。</p>
+<p>记录：</p>
+<p>LocationPhaseContentError。</p>
+<hr />
+<h1 id="185-reactive-spawn重复">185. Reactive Spawn重复</h1><p>每次进入Location：</p>
+<p>条件都成立。</p>
+<p>不能重复创建：</p>
+<p>同一个Unique NPC。</p>
+<p>Unique Entity必须：</p>
+<p>稳定EntityId。</p>
+<hr />
+<h1 id="186-world-fact循环">186. World Fact循环</h1><p>Fact A变化触发B。</p>
+<p>B又立刻修改A。</p>
+<p>Reactive系统需要：</p>
+<p>Mutation Depth / Cycle Guard。</p>
+<hr />
+<h1 id="187-narrative-reaction-storm">187. Narrative Reaction Storm</h1><p>一次Choice触发：</p>
+<p>100个Reaction。</p>
+<p>需要：</p>
+<p>Priority、Batch和Presentation Budget。</p>
+<p>逻辑后果可以全部提交。</p>
+<p>表现层：</p>
+<p>只展示高价值反馈。</p>
+<hr />
+<h1 id="188-调试与可观测性">188. 调试与可观测性</h1><p>复杂CRPG必须把：</p>
+<p><strong>为什么</strong></p>
+<p>做成正式工程能力。</p>
+<p>否则内容团队最终会被：</p>
+<p>“这个对话为什么没出现？”</p>
+<p>淹没。</p>
+<hr />
+<h1 id="189-world-fact-inspector">189. World Fact Inspector</h1><p>支持：</p>
+<ul>
+<li>搜索Fact；</li>
+</ul>
+<br />
+- 当前Value；
+<br />
+- Default；
+<br />
+- LastChangedBy；
+<br />
+- Event History；
+<br />
+- Consumers。
+<br /><hr />
+<h1 id="190-condition-debugger">190. Condition Debugger</h1><p>输入：</p>
+<p>某Dialogue Choice。</p>
+<p>输出：</p>
+<p>每个Condition：</p>
+<p>True / False。</p>
+<p>以及：</p>
+<p>实际值。</p>
+<hr />
+<h1 id="191-check-inspector">191. Check Inspector</h1><p>显示：</p>
+<p>Rule公式。</p>
+<p>所有Modifier。</p>
+<p>Random结果。</p>
+<p>Difficulty。</p>
+<p>Degree of Success。</p>
+<hr />
+<h1 id="192-quest-trace">192. Quest Trace</h1><p>显示：</p>
+<p>Quest如何从：</p>
+<p>Hidden<br />
+→ Available<br />
+→ Active<br />
+→ Completed。</p>
+<p>每次状态变化：</p>
+<p>触发Fact。</p>
+<hr />
+<h1 id="193-dialogue-trace">193. Dialogue Trace</h1><p>按Node记录：</p>
+<ul>
+<li>Enter；</li>
+</ul>
+<br />
+- Condition；
+<br />
+- Choice；
+<br />
+- Check；
+<br />
+- Consequence；
+<br />
+- Jump；
+<br />
+- Exit。
+<br /><hr />
+<h1 id="194-companion-state-inspector">194. Companion State Inspector</h1><p>显示：</p>
+<ul>
+<li>Trust；</li>
+</ul>
+<br />
+- Respect；
+<br />
+- Alignment；
+<br />
+- Relevant Memories；
+<br />
+- Pending Camp Events；
+<br />
+- Leave Risk。
+<br /><hr />
+<h1 id="195-faction-relation-breakdown">195. Faction Relation Breakdown</h1><p>当前：</p>
+<p>Merchant League Hostile。</p>
+<p>原因：</p>
+<p>Smuggling -20。</p>
+<p>Saved Caravan +10。</p>
+<p>Blackmail -30。</p>
+<p>Current -40。</p>
+<hr />
+<h1 id="196-knowledge-inspector">196. Knowledge Inspector</h1><p>比较：</p>
+<p><strong>World Truth</strong></p>
+<p>与：</p>
+<p><strong>Party Knows。</strong></p>
+<p>非常适合排查：</p>
+<p>对话泄露。</p>
+<hr />
+<h1 id="197-narrative-event-timeline">197. Narrative Event Timeline</h1><p>按游戏时间显示：</p>
+<p>重要：</p>
+<p>Choice；</p>
+<p>Death；</p>
+<p>Faction；</p>
+<p>Quest；</p>
+<p>World Phase。</p>
+<hr />
+<h1 id="198-causality-graph">198. Causality Graph</h1><p>从当前结果：</p>
+<p>向后追。</p>
+<p>例如：</p>
+<p>“城门为什么关闭？”</p>
+<p>CityState.Lockdown<br />
+← Assassination<br />
+← Player Failed Warning Quest。</p>
+<hr />
+<h1 id="199-entity-lifecycle-inspector">199. Entity Lifecycle Inspector</h1><p>NPC：</p>
+<p>Created<br />
+→ Recruited<br />
+→ Left Party<br />
+→ Captured<br />
+→ Freed<br />
+→ Died。</p>
+<hr />
+<h1 id="200-location-materialization-inspector">200. Location Materialization Inspector</h1><p>进入Location时：</p>
+<p>显示：</p>
+<p>Base Content。</p>
+<p>WorldPhase。</p>
+<p>Applied Facts。</p>
+<p>Persistent Delta。</p>
+<p>Reactive Spawns。</p>
+<hr />
+<h1 id="201-save-snapshot-diff">201. Save Snapshot Diff</h1><p>比较：</p>
+<p>两个Save。</p>
+<p>显示：</p>
+<ul>
+<li>Facts；</li>
+</ul>
+<br />
+- Quest；
+<br />
+- Faction；
+<br />
+- Companion；
+<br />
+- Inventory。
+<br /><p>这对Narrative QA非常有价值。</p>
+<hr />
+<h1 id="202-content-validation">202. Content Validation</h1><hr />
+<h2 id="2021-fact-reference-validation">202.1 Fact Reference Validation</h2><p>所有Condition和Consequence：</p>
+<p>引用的Fact必须存在。</p>
+<hr />
+<h1 id="203-entity-reference-validation">203. Entity Reference Validation</h1><p>NPC、Faction、Item、Location：</p>
+<p>必须存在稳定ID。</p>
+<hr />
+<h1 id="204-dialogue-graph-validation">204. Dialogue Graph Validation</h1><p>检查：</p>
+<ul>
+<li>无入口；</li>
+</ul>
+<br />
+- 无出口；
+<br />
+- Missing Node；
+<br />
+- 无限Jump；
+<br />
+- Impossible Choice；
+<br />
+- Invalid Speaker。
+<br /><hr />
+<h1 id="205-quest-graph-validation">205. Quest Graph Validation</h1><p>检查：</p>
+<ul>
+<li>无法启动；</li>
+</ul>
+<br />
+- 无法完成；
+<br />
+- Completion与Failure同时满足；
+<br />
+- 永远无法Obsolete的死任务。
+<br /><hr />
+<h1 id="206-condition-static-analysis">206. Condition Static Analysis</h1><p>发现：</p>
+<p>明显：</p>
+<p>A &amp;&amp; !A。</p>
+<p>或者：</p>
+<p>Skill &gt; 10 &amp;&amp; Skill &lt; 5。</p>
+<hr />
+<h1 id="207-choice-consequence-validation">207. Choice Consequence Validation</h1><p>确认：</p>
+<p>Cost和Consequence不会：</p>
+<p>重复扣Item。</p>
+<hr />
+<h1 id="208-knowledge-leak-test">208. Knowledge Leak Test</h1><p>扫描Dialogue：</p>
+<p>如果需要World Truth</p>
+<p>却没有Knowledge条件，</p>
+<p>提示：</p>
+<p>Potential Spoiler Leak。</p>
+<hr />
+<h1 id="209-sequence-permutation-test">209. Sequence Permutation Test</h1><p>对关键任务：</p>
+<p>尝试：</p>
+<ul>
+<li>先杀NPC；</li>
+</ul>
+<br />
+- 先拿Quest Item；
+<br />
+- 先进入Location；
+<br />
+- 先加入Faction；
+<br />
+- 先获得Knowledge。
+<br /><p>确认：</p>
+<p>系统能正确处理。</p>
+<hr />
+<h1 id="210-companion-combination-test">210. Companion Combination Test</h1><p>不同Party组合：</p>
+<p>运行关键Conversation。</p>
+<p>检查：</p>
+<p>Interjection冲突。</p>
+<hr />
+<h1 id="211-faction-state-combination-test">211. Faction State Combination Test</h1><p>Friendly / Neutral / Hostile</p>
+<p>都应存在：</p>
+<p>合法入口或明确拒绝状态。</p>
+<hr />
+<h1 id="212-check-outcome-coverage">212. Check Outcome Coverage</h1><p>一个Check如果支持：</p>
+<p>Critical Success / Success / Failure / Critical Failure，</p>
+<p>每个结果：</p>
+<p>都要有合法内容。</p>
+<hr />
+<h1 id="213-save-migration-test">213. Save Migration Test</h1><p>所有历史SaveSchema：</p>
+<p>升级到当前。</p>
+<hr />
+<h1 id="214-long-narrative-simulation">214. Long Narrative Simulation</h1><p>通过Bot随机选择合理Choice。</p>
+<p>完整跑：</p>
+<p>数十小时等效剧情。</p>
+<p>检查：</p>
+<ul>
+<li>Dead Quest；</li>
+</ul>
+<br />
+- Missing NPC；
+<br />
+- Fact矛盾；
+<br />
+- Content deadlock。
+<br /><hr />
+<h1 id="215-performance设计">215. Performance设计</h1><p>CRPG通常不是：</p>
+<p>实体数量极端大。</p>
+<p>真正性能压力来自：</p>
+<p><strong>大量反应条件和内容状态。</strong></p>
+<hr />
+<h1 id="216-不要每frame扫描dialogue-conditions">216. 不要每Frame扫描Dialogue Conditions</h1><p>Dialogue Option：</p>
+<p>打开Conversation时计算。</p>
+<p>相关Fact变化时：</p>
+<p>Dirty。</p>
+<hr />
+<h1 id="217-quest也不需要每frame检查全部objectives">217. Quest也不需要每Frame检查全部Objectives</h1><p>使用：</p>
+<p>Fact Dependency Index。</p>
+<p>Fact变化：</p>
+<p>只通知：</p>
+<p>相关Objective。</p>
+<hr />
+<h1 id="218-companion-reaction-event-driven">218. Companion Reaction Event-driven</h1><p>不需要：</p>
+<p>每个Companion每秒扫描：</p>
+<p>“玩家最近有没有做坏事。”</p>
+<p>直接消费：</p>
+<p>Narrative Event。</p>
+<hr />
+<h1 id="219-faction同理">219. Faction同理</h1><p>事件：</p>
+<p>改变关系。</p>
+<p>不是：</p>
+<p>持续扫描世界。</p>
+<hr />
+<h1 id="220-fact-store需要高效索引">220. Fact Store需要高效索引</h1><p>按：</p>
+<p>FactId</p>
+<p>O(1)查询。</p>
+<p>复杂集合条件：</p>
+<p>建立必要Index。</p>
+<hr />
+<h1 id="221-conditions可以预编译">221. Conditions可以预编译</h1><p>作者友好表达式：</p>
+<p>构建时：</p>
+<p>编译成：</p>
+<p>轻量ConditionInstruction。</p>
+<p>避免运行时反射和字符串解释。</p>
+<hr />
+<h1 id="222-dialogue-text不应和逻辑definition强耦合">222. Dialogue Text不应和逻辑Definition强耦合</h1><p>Text Key</p>
+<p>独立Localization。</p>
+<p>逻辑图只保存：</p>
+<p>Key。</p>
+<hr />
+<h1 id="223-location流式加载">223. Location流式加载</h1><p>未进入的Location：</p>
+<p>无需生成全部NPC Runtime。</p>
+<p>长期状态保存在：</p>
+<p>World State。</p>
+<hr />
+<h1 id="224-npc-runtime-lod">224. NPC Runtime LOD</h1><p>关键远端NPC：</p>
+<p>只维护Persistent State。</p>
+<p>进入当前Location：</p>
+<p>Materialize完整Actor。</p>
+<hr />
+<h1 id="225-save体积">225. Save体积</h1><p>不要：</p>
+<p>重复保存所有静态Dialogue和Quest Definition。</p>
+<p>Save只保存：</p>
+<p>Runtime State + Content Version。</p>
+<hr />
+<h1 id="226-可扩展点">226. 可扩展点</h1><hr />
+<h2 id="2261-新skill">226.1 新Skill</h2><p>加入：</p>
+<p>SkillDefinition。</p>
+<p>Condition和Check系统自动可使用。</p>
+<hr />
+<h2 id="2262-新background">226.2 新Background</h2><p>主要通过：</p>
+<p>Tag、Skill、StartingFact。</p>
+<p>接入内容。</p>
+<hr />
+<h2 id="2263-新companion">226.3 新Companion</h2><p>提供：</p>
+<p>Character、ValueProfile、ReactionProfile、PersonalQuest。</p>
+<hr />
+<h2 id="2264-新faction">226.4 新Faction</h2><p>接入：</p>
+<p>FactionState与Reaction。</p>
+<hr />
+<h2 id="2265-新quest">226.5 新Quest</h2><p>主要使用：</p>
+<p>现有Facts、Conditions和Consequences。</p>
+<hr />
+<h2 id="2266-新dialogue">226.6 新Dialogue</h2><p>无需修改Conversation Runtime。</p>
+<hr />
+<h2 id="2267-新worldinteraction">226.7 新WorldInteraction</h2><p>使用：</p>
+<p>InteractionDefinition + Check + Consequence。</p>
+<hr />
+<h2 id="2268-新战斗系统">226.8 新战斗系统</h2><p>只要遵守：</p>
+<p>Character / Encounter / Consequence边界，</p>
+<p>CRPG核心叙事架构可以复用。</p>
+<p>因此可以：</p>
+<p>Turn-based。</p>
+<p>RTwP。</p>
+<p>甚至：</p>
+<p>Action Combat。</p>
+<hr />
+<h2 id="2269-新campaign">226.9 新Campaign</h2><p>可以：</p>
+<p>复用完整Rulebook和Party系统。</p>
+<p>只替换：</p>
+<p>World Content。</p>
+<hr />
+<h1 id="227-玩家体验设计">227. 玩家体验设计</h1><hr />
+<h2 id="2271-玩家必须能够看到自己的-build-正在改变世界而不仅是damage数字">227.1 玩家必须能够看到自己的 Build 正在改变世界，而不仅是Damage数字</h2><p>选择：</p>
+<p>Scholar背景。</p>
+<p>游戏数小时后：</p>
+<p>应不断出现：</p>
+<p>知识型解法。</p>
+<p>否则Build只是：</p>
+<p>战斗职业。</p>
+<hr />
+<h1 id="228-dialogue-option最好说明为什么你能说这句话">228. Dialogue Option最好说明“为什么你能说这句话”</h1><p>例如：</p>
+<p><code>[Noble]</code></p>
+<p><code>[Arcana]</code></p>
+<p><code>[Serra]</code></p>
+<p>帮助玩家理解：</p>
+<p>Character Identity</p>
+<p>正在参与世界。</p>
+<hr />
+<h1 id="229-是否显示dc取决于产品风格">229. 是否显示DC取决于产品风格</h1><p>但结果必须：</p>
+<p>可理解。</p>
+<p>失败后：</p>
+<p>玩家至少知道：</p>
+<p>自己尝试了什么。</p>
+<hr />
+<h1 id="230-skill-check失败不要让玩家觉得内容被删除">230. Skill Check失败不要让玩家觉得“内容被删除”</h1><p>最好：</p>
+<p>开启另一条路线。</p>
+<p>或者：</p>
+<p>增加成本。</p>
+<hr />
+<h1 id="231-玩家选择应该有局部即时反馈">231. 玩家选择应该有局部即时反馈</h1><p>即使长期后果延迟，</p>
+<p>当前NPC / Companion至少：</p>
+<p>有所反应。</p>
+<p>否则玩家不知道：</p>
+<p>选择是否被系统记住。</p>
+<hr />
+<h1 id="232-但长期后果不应全部立刻弹toast">232. 但长期后果不应全部立刻弹Toast</h1><p>如果：</p>
+<p>每次Choice</p>
+<p>弹：</p>
+<p>“Faction -10，未来城市关闭。”</p>
+<p>沉浸感会变成：</p>
+<p>Spreadsheet。</p>
+<p>可以：</p>
+<p>即时表现自然反应。</p>
+<p>数值细节：</p>
+<p>放在Journal / Reputation UI。</p>
+<hr />
+<h1 id="233-companion应该主动表达自己的价值观">233. Companion应该主动表达自己的价值观</h1><p>不要要求玩家：</p>
+<p>打开面板看：</p>
+<p>Approval -5。</p>
+<p>角色可以：</p>
+<p>插话、沉默、质疑、营地争执。</p>
+<hr />
+<h1 id="234-世界必须允许玩家做不理想但角色一致的选择">234. 世界必须允许玩家做“不理想但角色一致”的选择</h1><p>Role-playing不等于：</p>
+<p>永远找到最优解。</p>
+<p>可以支持：</p>
+<p>因为信仰、背景或人格</p>
+<p>选择低收益路线。</p>
+<hr />
+<h1 id="235-高属性不能解决所有问题">235. 高属性不能解决所有问题</h1><p>如果Persuasion永远是：</p>
+<p>跳过内容按钮，</p>
+<p>角色构筑会失衡。</p>
+<p>有些问题：</p>
+<p>无法说服。</p>
+<p>有些需要：</p>
+<p>特定Knowledge。</p>
+<p>有些需要：</p>
+<p>付出政治代价。</p>
+<hr />
+<h1 id="236-多路线应有不同代价而不只是不同动画">236. 多路线应有不同代价，而不只是不同动画</h1><p>开锁：</p>
+<p>可能违法。</p>
+<p>破门：</p>
+<p>产生噪声。</p>
+<p>贿赂：</p>
+<p>花钱。</p>
+<p>说服：</p>
+<p>需要关系。</p>
+<p>绕路：</p>
+<p>耗时间。</p>
+<p>这样路线才有真实权衡。</p>
+<hr />
+<h1 id="237-quest-journal要承认不确定性">237. Quest Journal要承认不确定性</h1><p>玩家只知道：</p>
+<p>“有人可能在北部。”</p>
+<p>不要直接给：</p>
+<p>精确地图坐标，</p>
+<p>除非角色确实知道。</p>
+<hr />
+<h1 id="238-玩家应能理解旧决定为什么回来影响自己">238. 玩家应能理解旧决定为什么回来影响自己</h1><p>后果最好：</p>
+<p>通过NPC台词、信件、世界变化、Companion Reaction</p>
+<p>自然提醒：</p>
+<p>此前事件。</p>
+<hr />
+<h1 id="239-save-load必须快且可靠">239. Save / Load必须快且可靠</h1><p>传统CRPG玩家通常：</p>
+<p>高频Quicksave。</p>
+<p>这是产品基本交互。</p>
+<hr />
+<h1 id="240-但系统设计不应假设玩家一定会reload失败结果">240. 但系统设计不应假设玩家一定会Reload失败结果</h1><p>否则：</p>
+<p>Choice &amp; Consequence只存在于理论上。</p>
+<hr />
+<h1 id="241-常见设计失败">241. 常见设计失败</h1><hr />
+<h2 id="2411-所有反应都用quest-boolean保存">241.1 所有反应都用Quest Boolean保存</h2><p>世界状态碎片化。</p>
+<hr />
+<h2 id="2412-dialogue-system拥有npc生死真相">241.2 Dialogue System拥有NPC生死真相</h2><p>状态所有权错误。</p>
+<hr />
+<h2 id="2413-quest成为整个世界god-object">241.3 Quest成为整个世界God Object</h2><p>任何事件都要通过Quest脚本才能发生。</p>
+<hr />
+<h2 id="2414-skill只用于战斗">241.4 Skill只用于战斗</h2><p>角色Build对叙事没有意义。</p>
+<hr />
+<h2 id="2415-每个对话自己实现skill-check">241.5 每个对话自己实现Skill Check</h2><p>规则不一致。</p>
+<hr />
+<h2 id="2416-check只有success-reload">241.6 Check只有Success / Reload</h2><p>失败内容不存在。</p>
+<hr />
+<h2 id="2417-passive-check每秒重复掷">241.7 Passive Check每秒重复掷</h2><p>玩家站着不动迟早成功。</p>
+<hr />
+<h2 id="2418-party只是四个战斗槽">241.8 Party只是四个战斗槽</h2><p>成员背景和知识对内容无影响。</p>
+<hr />
+<h2 id="2419-companion-approval只有单一数字">241.9 Companion Approval只有单一数字</h2><p>角色反应扁平。</p>
+<hr />
+<h2 id="24110-每个choice手写20个companion反应">241.10 每个Choice手写20个Companion反应</h2><p>内容成本失控。</p>
+<hr />
+<h2 id="24111-conversation直接修改任意世界字段">241.11 Conversation直接修改任意世界字段</h2><p>无法验证状态所有权。</p>
+<hr />
+<h2 id="24112-availabilitycheck和consequence混在dialogue脚本">241.12 Availability、Check和Consequence混在Dialogue脚本</h2><p>调试困难。</p>
+<hr />
+<h2 id="24113-npc说了某件事就自动变成世界真相">241.13 NPC说了某件事就自动变成世界真相</h2><p>知识与事实混淆。</p>
+<hr />
+<h2 id="24114-quest-item已提前获得却必须重新拾取">241.14 Quest Item已提前获得却必须重新拾取</h2><p>任务状态不是真正反应式。</p>
+<hr />
+<h2 id="24115-npc已死亡但另一个quest仍刷出同一npc">241.15 NPC已死亡但另一个Quest仍刷出同一NPC</h2><p>Unique Identity丢失。</p>
+<hr />
+<h2 id="24116-faction-reputation直接覆盖个人关系">241.16 Faction Reputation直接覆盖个人关系</h2><p>人物缺乏独立性。</p>
+<hr />
+<h2 id="24117-不同解决路线最后只是同一reward">241.17 不同解决路线最后只是同一Reward</h2><p>选择缺乏后果差异。</p>
+<hr />
+<h2 id="24118-战斗完全独立于narrative-state">241.18 战斗完全独立于Narrative State</h2><p>剧情里死的人战斗后又复活。</p>
+<hr />
+<h2 id="24119-所有战斗必须杀光敌人">241.19 所有战斗必须杀光敌人</h2><p>投降、撤退和俘虏内容消失。</p>
+<hr />
+<h2 id="24120-物品进入背包后来源和所有权消失">241.20 物品进入背包后来源和所有权消失</h2><p>赃物、证物等系统无法成立。</p>
+<hr />
+<h2 id="24121-long-rest无限免费">241.21 Long Rest无限免费</h2><p>世界时间和资源压力失效。</p>
+<hr />
+<h2 id="24122-每次choice立刻显示全部未来后果">241.22 每次Choice立刻显示全部未来后果</h2><p>故事失去自然反馈。</p>
+<hr />
+<h2 id="24123-每个分支都复制一整套后续地图和quest">241.23 每个分支都复制一整套后续地图和Quest</h2><p>内容组合爆炸。</p>
+<hr />
+<h2 id="24124-没有world-phase和共享facts">241.24 没有World Phase和共享Facts</h2><p>只能靠复制内容制造差异。</p>
+<hr />
+<h2 id="24125-fact变化以后扫描整个游戏所有condition">241.25 Fact变化以后扫描整个游戏所有Condition</h2><p>大型内容性能下降。</p>
+<hr />
+<h2 id="24126-condition执行过程中会写状态">241.26 Condition执行过程中会写状态</h2><p>UI检查都可能产生副作用。</p>
+<hr />
+<h2 id="24127-dialogue没有优先级系统">241.27 Dialogue没有优先级系统</h2><p>多个Companion同时抢话。</p>
+<hr />
+<h2 id="24128-journal泄露world-truth">241.28 Journal泄露World Truth</h2><p>玩家获得角色本不该知道的信息。</p>
+<hr />
+<h2 id="24129-quicksave可能保存到choice事务一半">241.29 Quicksave可能保存到Choice事务一半</h2><p>载入以后世界撕裂。</p>
+<hr />
+<h2 id="24130-新版本依赖重新执行老脚本迁移save">241.30 新版本依赖重新执行老脚本迁移Save</h2><p>历史逻辑变化后存档损坏。</p>
+<hr />
+<h2 id="24131-设计师只测试唯一推荐顺序">241.31 设计师只测试唯一推荐顺序</h2><p>玩家乱序玩法大量Bug。</p>
+<hr />
+<h2 id="24132-没有condition-debugger">241.32 没有Condition Debugger</h2><p>QA只能反复猜哪个Flag错了。</p>
+<hr />
+<h2 id="24133-玩家看不到为什么选项没出现">241.33 玩家看不到为什么选项没出现</h2><p>Build反馈弱。</p>
+<hr />
+<h2 id="24134-世界记住选择只体现在ending-slide">241.34 世界“记住选择”只体现在Ending Slide</h2><p>中间几十小时没有反馈。</p>
+<hr />
+<h1 id="242-最小可行原型">242. 最小可行原型</h1><p>验证CRPG核心范式，不需要一开始制作：</p>
+<p>100小时剧情。</p>
+<p>推荐：</p>
+<p><strong>1座小镇 + 1片野外 + 1个地下区域 + 6个主要NPC + 3个Companion + 5个Quest + 3个Faction。</strong></p>
+<p>重点不是内容量。</p>
+<p>而是验证：</p>
+<p>同一批内容能否根据玩家Build和历史状态产生真实不同体验。</p>
+<hr />
+<h1 id="243-player-build">243. Player Build</h1><p>至少：</p>
+<p>4种Attribute。</p>
+<p>6种Skill。</p>
+<p>3种Background。</p>
+<hr />
+<h1 id="244-party">244. Party</h1><p>主角</p>
+<p>最多3名Companion。</p>
+<hr />
+<h1 id="245-skill-check">245. Skill Check</h1><p>至少支持：</p>
+<ul>
+<li>Persuasion；</li>
+</ul>
+<br />
+- Deception；
+<br />
+- Perception；
+<br />
+- Arcana；
+<br />
+- Strength；
+<br />
+- Thievery。
+<br /><hr />
+<h1 id="246-dialogue">246. Dialogue</h1><p>实现：</p>
+<ul>
+<li>Condition；</li>
+</ul>
+<br />
+- Choice；
+<br />
+- Check；
+<br />
+- Consequence；
+<br />
+- Companion Interjection。
+<br /><hr />
+<h1 id="247-quest">247. Quest</h1><p>每个Quest至少：</p>
+<p>存在3种解决方式。</p>
+<p>其中至少：</p>
+<p>一种不依赖战斗。</p>
+<hr />
+<h1 id="248-world-reactivity">248. World Reactivity</h1><p>必须至少有：</p>
+<p>一个早期Choice</p>
+<p>在：</p>
+<p>1～2小时以后</p>
+<p>重新改变：</p>
+<p>NPC、Faction或Quest。</p>
+<p>否则还没有真正验证：</p>
+<p>长期反应性。</p>
+<hr />
+<h1 id="249-companion">249. Companion</h1><p>每名至少：</p>
+<ul>
+<li>Value Profile；</li>
+</ul>
+<br />
+- Approval；
+<br />
+- 1次重大Interjection；
+<br />
+- 1次Camp Reaction；
+<br />
+- 1个Leave条件。
+<br /><hr />
+<h1 id="250-combat">250. Combat</h1><p>可以简化。</p>
+<p>重点保证：</p>
+<p>Character死亡</p>
+<p>和：</p>
+<p>Encounter结果</p>
+<p>能够回写World。</p>
+<hr />
+<h1 id="251-mvp必要基础设施">251. MVP必要基础设施</h1><ul>
+<li>FactStore；</li>
+</ul>
+<br />
+- WorldFact；
+<br />
+- CharacterState；
+<br />
+- CharacterTag；
+<br />
+- PartyState；
+<br />
+- KnowledgeState；
+<br />
+- RuleCheckSystem；
+<br />
+- CheckDefinition；
+<br />
+- CheckResult；
+<br />
+- ConditionEvaluator；
+<br />
+- ConsequenceExecutor；
+<br />
+- ConversationDefinition；
+<br />
+- ConversationRuntime；
+<br />
+- ChoiceTransaction；
+<br />
+- QuestDefinition；
+<br />
+- QuestRuntime；
+<br />
+- FactionState；
+<br />
+- CompanionState；
+<br />
+- NarrativeEventLog；
+<br />
+- ReactionSystem；
+<br />
+- WorldInteraction；
+<br />
+- LocationState；
+<br />
+- ScheduledConsequence；
+<br />
+- SaveSnapshot。
+<br /><hr />
+<h1 id="252-mvp必要调试工具">252. MVP必要调试工具</h1><ul>
+<li>WorldFactInspector；</li>
+</ul>
+<br />
+- ConditionDebugger；
+<br />
+- RuleCheckInspector；
+<br />
+- DialogueTrace；
+<br />
+- QuestTrace；
+<br />
+- CompanionInspector；
+<br />
+- FactionBreakdown；
+<br />
+- KnowledgeInspector；
+<br />
+- CausalityGraph；
+<br />
+- LocationMaterializationInspector；
+<br />
+- SaveDiff；
+<br />
+- ContentReferenceValidator。
+<br /><hr />
+<h1 id="253-mvp核心验收问题">253. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<ul>
+<li>同一个问题是否真的存在三种以上有效解决方式；</li>
+</ul>
+<br />
+- 不同Build是否能够看到不同Interaction或Dialogue；
+<br />
+- Party中不同成员是否能够承担不同Skill Check；
+<br />
+- Check失败以后剧情是否仍然可以继续；
+<br />
+- 玩家提前取得Quest目标时任务是否能够正确识别；
+<br />
+- NPC死亡以后所有相关内容是否正确响应；
+<br />
+- Knowledge和World Truth是否严格分离；
+<br />
+- Dialogue Condition是否不会泄露未知信息；
+<br />
+- 重大Choice是否能够同时影响Quest、Faction和Companion；
+<br />
+- 一个早期Choice是否能在较晚内容中再次产生反应；
+<br />
+- Faction与NPC个人关系是否能够产生不同结果；
+<br />
+- Companion是否根据语义标签和具体事件形成稳定价值观；
+<br />
+- Conversation中多名Companion插话是否具有稳定仲裁；
+<br />
+- World Interaction是否和Dialogue共享同一Check系统；
+<br />
+- 战斗死亡是否真正修改同一个NPC世界身份；
+<br />
+- Save / Load是否可以完整恢复同一世界分支；
+<br />
+- Quicksave是否不会捕获半提交状态；
+<br />
+- 内容工具是否能够解释一个Dialogue Option为什么没有出现；
+<br />
+- Fact变化是否只更新真正依赖它的内容；
+<br />
+- 玩家是否明确感觉“我的角色是谁”正在改变“我能怎么解决问题”。
+<br /><p>这些问题没有稳定以前，不建议优先加入：</p>
+<ul>
+<li>超大开放世界；</li>
+</ul>
+<br />
+- 数十Companion；
+<br />
+- 上千Quest；
+<br />
+- 复杂Craft；
+<br />
+- 大型随机Loot；
+<br />
+- 多人合作；
+<br />
+- 完整语音；
+<br />
+- 数十职业；
+<br />
+- 海量结局动画。
+<br /><hr />
+<h1 id="254-推荐实施顺序">254. 推荐实施顺序</h1><p>第一阶段：</p>
+<ul>
+<li>Character；</li>
+</ul>
+<br />
+- Attribute；
+<br />
+- Skill；
+<br />
+- Rule Check。
+<br /><p>第二阶段：</p>
+<ul>
+<li>FactStore；</li>
+</ul>
+<br />
+- Condition；
+<br />
+- Consequence。
+<br /><p>第三阶段：</p>
+<ul>
+<li>World Interaction；</li>
+</ul>
+<br />
+- Knowledge。
+<br /><p>第四阶段：</p>
+<ul>
+<li>Conversation Runtime；</li>
+</ul>
+<br />
+- Dialogue Choice；
+<br />
+- Check。
+<br /><p>第五阶段：</p>
+<ul>
+<li>Quest；</li>
+</ul>
+<br />
+- Objective；
+<br />
+- Fact Dependency。
+<br /><p>第六阶段：</p>
+<ul>
+<li>Party；</li>
+</ul>
+<br />
+- Companion；
+<br />
+- Interjection。
+<br /><p>第七阶段：</p>
+<ul>
+<li>Faction；</li>
+</ul>
+<br />
+- NPC Relationship；
+<br />
+- Reaction。
+<br /><p>第八阶段：</p>
+<ul>
+<li>Encounter；</li>
+</ul>
+<br />
+- NPC Life State；
+<br />
+- Narrative Combat Consequence。
+<br /><p>第九阶段：</p>
+<ul>
+<li>Location Phase；</li>
+</ul>
+<br />
+- Reactive Spawn；
+<br />
+- Scheduled Consequence。
+<br /><p>第十阶段：</p>
+<ul>
+<li>Narrative Event Log；</li>
+</ul>
+<br />
+- Causality Debug；
+<br />
+- Journal。
+<br /><p>第十一阶段：</p>
+<ul>
+<li>Save Barrier；</li>
+</ul>
+<br />
+- Migration；
+<br />
+- Save Diff。
+<br /><p>第十二阶段：</p>
+<ul>
+<li>Sequence Permutation Testing；</li>
+</ul>
+<br />
+- Large Content Validation；
+<br />
+- Advanced Authoring Tools。
+<br /><hr />
+<h1 id="255-架构验收标准">255. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<ul>
+<li>全局世界事实存在统一Fact Store；</li>
+</ul>
+<br />
+- World Fact具有稳定语义而不是大量脚本步骤Boolean；
+<br />
+- Fact支持明确Scope和Value Type；
+<br />
+- 各领域系统只修改自己拥有的权威状态；
+<br />
+- Dialogue不能任意写Character等其他领域内部字段；
+<br />
+- Character Build同时影响战斗和非战斗内容；
+<br />
+- Background、Race、Class等身份可以进入内容条件；
+<br />
+- 所有Skill / Attribute Check通过统一Rule Engine；
+<br />
+- Check拥有完整Context和可解释Result；
+<br />
+- Check可以支持多级成功结果；
+<br />
+- Check失败不必然中止Quest；
+<br />
+- Passive Check拥有明确Attempt Policy；
+<br />
+- Party成员可以承担不同能力检定；
+<br />
+- Party Composition能够影响Dialogue和Interaction；
+<br />
+- Companion既是Gameplay Unit也是Narrative Actor；
+<br />
+- Companion反应拥有通用Value规则与具体剧情Override；
+<br />
+- Conversation拥有独立Runtime State；
+<br />
+- Dialogue Availability、Check与Consequence严格分离；
+<br />
+- Choice提交使用原子Transaction；
+<br />
+- Choice在提交时重新验证合法性；
+<br />
+- NPC言论和World Truth严格分离；
+<br />
+- Player Knowledge与World Fact严格分离；
+<br />
+- Knowledge可以跨Quest复用；
+<br />
+- Quest不拥有NPC、门等外部世界事实；
+<br />
+- Quest主要追踪和解释World Progress；
+<br />
+- Quest支持Completed、Failed和Obsolete等不同终态；
+<br />
+- 任务条件能够识别玩家提前完成的状态；
+<br />
+- Condition统一服务Dialogue、Quest和World Interaction；
+<br />
+- Condition必须无副作用；
+<br />
+- Consequence使用统一Mutation接口；
+<br />
+- Narrative后果通过Domain Event向Faction、Companion等系统传播；
+<br />
+- Fact Dependency Index可以局部更新反应式内容；
+<br />
+- NPC拥有稳定Character Identity与Lifecycle；
+<br />
+- Unique NPC不会因重新进入场景被重复生成；
+<br />
+- Faction Standing与NPC Relationship分离；
+<br />
+- World Interaction能够支持多个能力路线达成同一世界目标；
+<br />
+- Combat使用同一Character Identity；
+<br />
+- Encounter结束结果能够写回Narrative World；
+<br />
+- Combat允许非死亡式结局扩展；
+<br />
+- Item可以携带Narrative Tag、Ownership和Provenance；
+<br />
+- Rest会推进规则时间并承担资源语义；
+<br />
+- Camp可以承载延迟Companion事件；
+<br />
+- 后果支持Immediate、Delayed等多时间尺度；
+<br />
+- Choice Semantic Tag与World Fact严格分工；
+<br />
+- Narrative Event Log能够追溯长期后果；
+<br />
+- 反应式内容优先使用共享状态而不是无限复制分支；
+<br />
+- World Phase用于承载有限宏观世界版本；
+<br />
+- Reaction系统拥有Priority和Exclusivity仲裁；
+<br />
+- Journal只展示玩家当前Knowledge；
+<br />
+- Save代表完整一致World Branch Snapshot；
+<br />
+- Quicksave只在稳定事务边界生成；
+<br />
+- Save绑定Content和Schema Version；
+<br />
+- Save Migration不依赖重新执行全部历史脚本；
+<br />
+- Condition、Quest和Dialogue拥有静态Content Validation；
+<br />
+- 关键Quest支持顺序置换测试；
+<br />
+- Location通过Definition + Persistent Delta + World Fact重建；
+<br />
+- 随机Check一旦提交便成为稳定历史；
+<br />
+- 调试器可以解释某选项为什么出现或消失；
+<br />
+- 调试器可以追踪某当前结果由哪些旧事件导致；
+<br />
+- 新Skill、新Background、新Companion、新Faction和新Quest通常不需要修改叙事主循环。
+<br /><hr />
+<h1 id="256-可迁移到其他游戏的设计思想">256. 可迁移到其他游戏的设计思想</h1><hr />
+<h2 id="2561-世界事实和任务进度应该分离">256.1 “世界事实”和“任务进度”应该分离</h2><p>可迁移到：</p>
+<ul>
+<li>开放世界；</li>
+</ul>
+<br />
+- MMO；
+<br />
+- 探索；
+<br />
+- 叙事；
+<br />
+- 沙盒。
+<br /><p>NPC死亡：</p>
+<p>首先是世界事实。</p>
+<p>任务只是：</p>
+<p>如何解释这个事实。</p>
+<p>这样多个系统才能共享同一个现实。</p>
+<hr />
+<h2 id="2562-condition只读consequence负责写是非常通用的规则边界">256.2 Condition只读、Consequence负责写，是非常通用的规则边界</h2><p>可迁移到：</p>
+<ul>
+<li>Ability；</li>
+</ul>
+<br />
+- Quest；
+<br />
+- UI；
+<br />
+- AI；
+<br />
+- 工作流。
+<br /><p>判断：</p>
+<p>能不能做。</p>
+<p>和：</p>
+<p>做了以后会怎样。</p>
+<p>应该是两个阶段。</p>
+<hr />
+<h2 id="2563-build可以被理解成问题解决权限集合而不仅是战斗属性集合">256.3 Build可以被理解成“问题解决权限集合”，而不仅是战斗属性集合</h2><p>可迁移到：</p>
+<ul>
+<li>Immersive Sim；</li>
+</ul>
+<br />
+- 银河城；
+<br />
+- 推理；
+<br />
+- 社交系统。
+<br /><p>一个能力真正有价值的地方：</p>
+<p>可能是：</p>
+<p>给玩家新的解题方法。</p>
+<hr />
+<h2 id="2564-intent-与-outcome应该通过统一规则结算">256.4 Intent 与 Outcome应该通过统一规则结算</h2><p>玩家选择：</p>
+<p>“说服他。”</p>
+<p>不等于：</p>
+<p>一定成功。</p>
+<p>可迁移到：</p>
+<ul>
+<li>体育；</li>
+</ul>
+<br />
+- 射击；
+<br />
+- Craft；
+<br />
+- 谈判；
+<br />
+- AI操作。
+<br /><hr />
+<h2 id="2565-失败如果能够改变状态而不是阻塞状态就能显著减少save-scumming动力">256.5 失败如果能够改变状态而不是阻塞状态，就能显著减少Save Scumming动力</h2><p>可迁移到：</p>
+<ul>
+<li>Skill Check；</li>
+</ul>
+<br />
+- Roguelike；
+<br />
+- 战术；
+<br />
+- 经营。
+<br /><p>失败应该：</p>
+<p>产生新局面。</p>
+<p>而不是：</p>
+<p>只让玩家重新Roll。</p>
+<hr />
+<h2 id="2566-多分支内容不一定需要复制整个世界">256.6 多分支内容不一定需要复制整个世界</h2><p>可以通过：</p>
+<p><strong>Shared Content + Stateful Reactivity</strong></p>
+<p>获得大量差异。</p>
+<p>可迁移到：</p>
+<ul>
+<li>Live Service；</li>
+</ul>
+<br />
+- MMO Phase；
+<br />
+- 动态NPC；
+<br />
+- Quest。
+<br /><hr />
+<h2 id="2567-fact-dependency-index是一种通用的大规模反应系统优化">256.7 Fact Dependency Index是一种通用的大规模反应系统优化</h2><p>可迁移到：</p>
+<ul>
+<li>Binding；</li>
+</ul>
+<br />
+- Achievement；
+<br />
+- Rule Engine；
+<br />
+- UI；
+<br />
+- Reactive State。
+<br /><p>状态发生变化时：</p>
+<p>只更新真正依赖它的消费者。</p>
+<hr />
+<h2 id="2568-semantic-tags适合处理很多消费者如何理解同一行为">256.8 Semantic Tags适合处理“很多消费者如何理解同一行为”</h2><p>Choice：</p>
+<p>Merciful。</p>
+<p>Companion A喜欢。</p>
+<p>Companion B讨厌。</p>
+<p>Achievement统计。</p>
+<p>Faction也可能反应。</p>
+<p>可迁移到：</p>
+<ul>
+<li>战斗事件；</li>
+</ul>
+<br />
+- 技能；
+<br />
+- Reputation；
+<br />
+- AI。
+<br /><hr />
+<h2 id="2569-角色身份可以作为规则输入而不是只作为文本设定">256.9 角色身份可以作为规则输入，而不是只作为文本设定</h2><p>可迁移到：</p>
+<ul>
+<li>Background；</li>
+</ul>
+<br />
+- Faction；
+<br />
+- Social；
+<br />
+- NPC；
+<br />
+- Class。
+<br /><p>这会让：</p>
+<p>角色扮演</p>
+<p>真正进入Gameplay。</p>
+<hr />
+<h2 id="25610-长期后果需要causality-trace才能保持可维护">256.10 长期后果需要Causality Trace才能保持可维护</h2><p>玩家20小时以后遇到结果。</p>
+<p>开发者必须能追到：</p>
+<p>源头事件。</p>
+<p>同样适用于：</p>
+<ul>
+<li>大国战略；</li>
+</ul>
+<br />
+- 城市；
+<br />
+- Colony；
+<br />
+- 社会模拟。
+<br /><hr />
+<h2 id="25611-唯一角色身份和当前角色职责应分离">256.11 “唯一角色身份”和“当前角色职责”应分离</h2><p>GuardCaptain可以换人。</p>
+<p>角色本身仍然是：</p>
+<p>独立Entity。</p>
+<p>可迁移到：</p>
+<ul>
+<li>Guild Leader；</li>
+</ul>
+<br />
+- Manager；
+<br />
+- Government Office；
+<br />
+- Squad Role。
+<br /><hr />
+<h2 id="25612-知识状态本身可以成为正式游戏资源">256.12 知识状态本身可以成为正式游戏资源</h2><p>玩家是否知道：</p>
+<p>秘密，</p>
+<p>可以决定：</p>
+<p>能说什么、去哪、做什么。</p>
+<p>可迁移到：</p>
+<ul>
+<li>侦探；</li>
+</ul>
+<br />
+- 潜行；
+<br />
+- Narrative；
+<br />
+- Strategy。
+<br /><hr />
+<h2 id="25613-save可以被理解成完整世界分支而不只是数据序列化">256.13 Save可以被理解成完整世界分支，而不只是数据序列化</h2><p>这意味着：</p>
+<p>所有系统必须能够回答：</p>
+<p>当前Branch中，</p>
+<p>什么是真的。</p>
+<p>这是所有强反应式叙事游戏都应该从架构早期考虑的问题。</p>
+<hr />
+<h1 id="257-本次防重记录">257. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li>CRPG；</li>
+</ul>
+<br />
+- Computer Role-Playing Game；
+<br />
+- Party-Based RPG；
+<br />
+- Narrative CRPG；
+<br />
+- Choice &amp; Consequence RPG；
+<br />
+- 传统电脑角色扮演；
+<br />
+- 队伍式叙事角色扮演；
+<br />
+- 选择与后果型 RPG。
+<br /><hr />
+<h2 id="核心范式">核心范式</h2><p>传统CRPG围绕一套跨探索、对话、任务与战斗共享的World State运行。Character的Attribute、Skill、Background、Class、Tag和Party Composition不仅决定战斗能力，还决定玩家能够看到、尝试和理解哪些世界互动；所有主动与被动能力检定通过统一Rule Engine执行，并产生可以继续推动故事的成功、部分成功或失败结果。</p>
+<p>Dialogue、Quest和World Interaction不会各自维护一套孤立剧情Flag，而是通过统一Condition读取World Fact、Knowledge、Faction、Relationship、Inventory和Character能力；玩家提交Choice以后，通过Choice Transaction原子执行Cost、Check和Consequence，再把真实世界变化写入共享状态。Quest据此更新玩家可见进度，Faction、Companion和其他系统通过Narrative Domain Event产生自己的反应，后续Location、Dialogue和Quest则重新读取已经形成的历史事实。</p>
+<p>为了避免分支内容指数爆炸，宏观场景采用有限World Phase，细粒度差异通过大量共享Fact和条件反应实现；重大Choice可以产生Immediate、Delayed和Long-term Consequence，使玩家数小时以后仍然遇到早期行为留下的政治、关系和世界后果。Save因此不是简单角色数据，而是一份完整World Branch Snapshot。</p>
+<p>核心循环可以压缩为：</p>
+<p><strong>探索世界<br />
+→ 获得事实与知识<br />
+→ Character Build和Party决定可用解决方案<br />
+→ 选择Dialogue / Interaction / Combat路线<br />
+→ Rule Check解释能力与不确定性<br />
+→ Choice Transaction提交真实后果<br />
+→ World Facts变化<br />
+→ Quest重新解释进度<br />
+→ Faction与Companion响应<br />
+→ 延迟后果进入未来世界<br />
+→ 玩家重新组织Party和Build<br />
+→ 后续内容再次读取整段历史。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>传统CRPG真正让玩家扮演的不是“剧情里的那个主角模型”，而是一套由身份、能力、队友、知识和历史行为共同定义的角色；世界必须持续根据这套身份重新回答“你现在能做什么，以及别人会怎样对待你”。</strong></p>
+</blockquote>
+<hr />
+<h2 id="核心识别特征">核心识别特征</h2><ul>
+<li>角色Build同时影响战斗与非战斗内容；</li>
+</ul>
+<br />
+- Attribute、Skill、Background和Class能够解锁不同问题解决方法；
+<br />
+- Party成员为队伍提供不同能力、身份和知识；
+<br />
+- Companion属于持续叙事Actor而不仅是战斗单位；
+<br />
+- 世界拥有跨系统共享的World Fact；
+<br />
+- World Fact与Quest Progress严格分离；
+<br />
+- World Truth与Player Knowledge分离；
+<br />
+- Dialogue、Quest和Interaction共享统一Condition系统；
+<br />
+- 所有Ability / Skill Check使用统一Rule Engine；
+<br />
+- Check失败可以产生新故事状态；
+<br />
+- Dialogue Availability、Check和Consequence是不同阶段；
+<br />
+- Choice通过正式Transaction提交；
+<br />
+- Quest是对World State的玩家可见解释层；
+<br />
+- NPC拥有稳定身份和生命周期；
+<br />
+- Faction与个人Relationship属于不同关系层；
+<br />
+- World Interaction可以通过多种技能路线达到同一状态目标；
+<br />
+- Combat使用同一Narrative Character身份；
+<br />
+- Item可以参与证据、身份、Faction和Quest规则；
+<br />
+- Companion通过Choice Semantic Tag和Specific Reaction形成价值观；
+<br />
+- 后果可以Immediate、Delayed和Long-term传播；
+<br />
+- 反应式叙事主要依靠共享Facts而非完整分支复制；
+<br />
+- World Phase用于控制宏观状态组合爆炸；
+<br />
+- Fact Dependency Index负责局部内容重评估；
+<br />
+- Journal只显示玩家当前Knowledge；
+<br />
+- Save代表完整World Branch；
+<br />
+- Narrative Event Log和Causality Graph用于追踪长期后果；
+<br />
+- 内容工具必须能够解释某Dialogue、Quest和Reaction为何出现或消失；
+<br />
+- 角色扮演的核心体验是“我的角色身份真正改变了世界允许我采取的行动”。
+<br /><hr />
+<h2 id="与仓库现有-jrpg-的防重边界">与仓库现有 JRPG 的防重边界</h2><p>当前仓库中的 JRPG 范式固定以<strong>章节状态、队伍成长和城镇—迷宫—战斗—结算</strong>组织长期冒险流程。</p>
+<p>两者都拥有：</p>
+<ul>
+<li>Party；</li>
+</ul>
+<br />
+- Companion；
+<br />
+- 剧情；
+<br />
+- 城镇；
+<br />
+- 战斗；
+<br />
+- 装备。
+<br /><p>但控制中心不同。</p>
+<p><strong>JRPG：</strong></p>
+<blockquote>
+<p>更强调作者驱动的章节结构、稳定主角队伍、明确剧情节拍与长期成长。</p>
+</blockquote>
+<p><strong>CRPG：</strong></p>
+<blockquote>
+<p>更强调玩家Build、知识、Party Composition和历史Choice持续改变当前可用内容与未来World State。</p>
+</blockquote>
+<p>JRPG当然也可以高度分支。</p>
+<p>CRPG也可以有严格章节。</p>
+<p>本次防重标准不是：</p>
+<p>地域或美术风格。</p>
+<p>而是：</p>
+<p><strong>“章节推进”还是“共享世界状态上的角色扮演反应性”承担主要结构职责。</strong></p>
+<hr />
+<h2 id="与仓库现有回合制战术-rpg-的防重边界">与仓库现有回合制战术 RPG 的防重边界</h2><p>当前 <code>tactical-rpg</code> 重点是离散战场、行动资源、技能结算与战术因果。</p>
+<p>CRPG可以拥有：</p>
+<p>完全相同的回合战斗。</p>
+<p>但即使移除网格战场、换成RTwP，</p>
+<p>CRPG核心仍然成立：</p>
+<ul>
+<li>Dialogue；</li>
+</ul>
+<br />
+- Skill Check；
+<br />
+- Party；
+<br />
+- World Fact；
+<br />
+- Quest；
+<br />
+- Faction；
+<br />
+- Reactivity。
+<br /><p>因此：</p>
+<p><strong>Tactical RPG：</strong></p>
+<blockquote>
+<p>主要研究在战场上怎样行动。</p>
+</blockquote>
+<p><strong>CRPG：</strong></p>
+<blockquote>
+<p>主要研究一个被规则定义的角色怎样在世界中做选择，以及世界怎样长期记住这些选择。</p>
+</blockquote>
+<hr />
+<h2 id="与仓库现有沉浸式模拟的防重边界">与仓库现有沉浸式模拟的防重边界</h2><p>当前 <code>immersive-sim</code> 重点是统一世界规则、可组合能力和多入口空间支持玩家自主解决问题。</p>
+<p>两者都强调：</p>
+<p>多解。</p>
+<p>但实现重点不同。</p>
+<p><strong>Immersive Sim：</strong></p>
+<p>多解主要来自：</p>
+<p>物理空间、系统能力与世界对象之间的组合。</p>
+<p>例如：</p>
+<p>破门、爬窗、断电、控制机器人。</p>
+<p><strong>CRPG：</strong></p>
+<p>多解主要来自：</p>
+<p>Character Build、Skill Check、Knowledge、Dialogue、Faction、Party和Narrative Consequence。</p>
+<p>可以概括：</p>
+<p><strong>Immersive Sim更偏“系统允许我怎么做”。</strong></p>
+<p><strong>CRPG更偏“我扮演的这个人为什么能这么做，以及别人之后如何记住我这样做过”。</strong></p>
+<hr />
+<h2 id="与仓库现有恋爱-relationship-simulation-的防重边界">与仓库现有恋爱 / Relationship Simulation 的防重边界</h2><p>关系模拟可以深入研究：</p>
+<ul>
+<li>Trust；</li>
+</ul>
+<br />
+- Romance；
+<br />
+- Memory；
+<br />
+- Commitment。
+<br /><p>CRPG同样会使用这些状态，但它们只是：</p>
+<p>整个世界反应体系的一部分。</p>
+<p>Companion Relationship最终还会与：</p>
+<ul>
+<li>Quest；</li>
+</ul>
+<br />
+- Party；
+<br />
+- Faction；
+<br />
+- Combat；
+<br />
+- Camp；
+<br />
+- World Choice；
+<br /><p>共同运行。</p>
+<p>因此本期不会把纯关系养成重新计入新类型。</p>
+<hr />
+<h2 id="与仓库现有侦探调查范式的防重边界">与仓库现有侦探调查范式的防重边界</h2><p>侦探范式的核心是：</p>
+<p><strong>World Truth与Player Knowledge分离，并通过证据组织和推理重建事实。</strong></p>
+<p>CRPG同样使用Knowledge Layer，但用途不同。</p>
+<p>侦探：</p>
+<blockquote>
+<p>找出什么是真的。</p>
+</blockquote>
+<p>CRPG：</p>
+<blockquote>
+<p>在已经知道或不知道某些事实的情况下，以自己这个角色的能力和立场决定要做什么。</p>
+</blockquote>
+<p>Knowledge在CRPG中是：</p>
+<p>角色扮演条件之一，</p>
+<p>而不是整个类型唯一核心。</p>
+<hr />
+<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<li>CRPG；</li>
+</ul>
+<br />
+- Party-Based RPG；
+<br />
+- Choice &amp; Consequence；
+<br />
+- World Fact；
+<br />
+- Fact Store；
+<br />
+- Fact Scope；
+<br />
+- Player Knowledge；
+<br />
+- Character Build Reactivity；
+<br />
+- Background Tag；
+<br />
+- Skill Check；
+<br />
+- Passive Check；
+<br />
+- Degree of Success；
+<br />
+- Party Capability；
+<br />
+- Companion；
+<br />
+- Companion Approval；
+<br />
+- Companion Values；
+<br />
+- Interjection；
+<br />
+- Conversation Runtime；
+<br />
+- Dialogue Condition；
+<br />
+- Dialogue Choice；
+<br />
+- Choice Transaction；
+<br />
+- Quest State；
+<br />
+- Quest Objective；
+<br />
+- Quest Obsolete；
+<br />
+- Condition Evaluator；
+<br />
+- Consequence Executor；
+<br />
+- Narrative Domain Event；
+<br />
+- Reactive Dependency Index；
+<br />
+- NPC Lifecycle；
+<br />
+- Role Slot；
+<br />
+- Faction Reputation；
+<br />
+- NPC Relationship；
+<br />
+- World Interaction；
+<br />
+- Multi-solution Interaction；
+<br />
+- Narrative Combat Consequence；
+<br />
+- Item Ownership；
+<br />
+- Narrative Item；
+<br />
+- Rest；
+<br />
+- Camp Event；
+<br />
+- Scheduled Consequence；
+<br />
+- Choice Semantic Tag；
+<br />
+- Narrative Event Log；
+<br />
+- World Phase；
+<br />
+- Reaction Arbitration；
+<br />
+- Journal；
+<br />
+- World Branch Save；
+<br />
+- Save Barrier；
+<br />
+- Content Migration；
+<br />
+- Narrative Causality Debug；
+<br />
+- Sequence Permutation Test；
+<br />
+- Reactive Location Materialization。
+<br /><hr />
+<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次传统CRPG范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li>CRPG Dialogue；</li>
+</ul>
+<br />
+- CRPG对话树；
+<br />
+- CRPG Skill Check；
+<br />
+- Persuasion Check；
+<br />
+- CRPG Background；
+<br />
+- CRPG Party；
+<br />
+- CRPG Companion；
+<br />
+- Companion Approval；
+<br />
+- Companion Interjection；
+<br />
+- CRPG Quest；
+<br />
+- CRPG World Fact；
+<br />
+- CRPG Narrative Flag；
+<br />
+- Player Knowledge；
+<br />
+- CRPG Faction；
+<br />
+- CRPG Reputation；
+<br />
+- CRPG Choice &amp; Consequence；
+<br />
+- CRPG Reactive Narrative；
+<br />
+- Choice Transaction；
+<br />
+- Narrative Consequence；
+<br />
+- CRPG World Phase；
+<br />
+- CRPG Journal；
+<br />
+- CRPG Camp；
+<br />
+- CRPG Rest；
+<br />
+- CRPG非战斗解决；
+<br />
+- CRPG Character Build Reactivity；
+<br />
+- CRPG Narrative Item；
+<br />
+- CRPG NPC Lifecycle；
+<br />
+- CRPG Content Validation；
+<br />
+- CRPG Sequence Testing；
+<br />
+- CRPG Save Branch；
+<br />
+- CRPG Narrative Debug；
+<br />
+- CRPG Causality Graph；
+<br />
+- CRPG Fact Dependency；
+<br />
+- CRPG反应式场景。
+<br /><p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入 <code>game-designs</code> 日报防重集合。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-30">2026-08-30</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

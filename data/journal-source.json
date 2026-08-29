@@ -1,14 +1,28 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "73a4cf58ee46cd15d7ba6973da2ad8eb2ccf132f",
-  "generatedAt": "2026-08-29T17:16:36+08:00",
+  "sourceCommit": "d48056a7402cf87f88811ee1ba2baa9a5df321a4",
+  "generatedAt": "2026-08-30T00:03:31+08:00",
   "summary": {
-    "auditCount": 51,
-    "blogCount": 44,
-    "gameDesignCount": 61
+    "auditCount": 53,
+    "blogCount": 45,
+    "gameDesignCount": 62
   },
-  "gameDesignCatalogDigest": "7044ddbfc09442c9bf406097e11b2f9257e28d6896b61536bf64ec79af5afa9d",
+  "gameDesignCatalogDigest": "cfe51d073c061a4883a25dac87ce7ee1ad87c33affd76006d6c98766c74f1349",
   "audits": [
+    {
+      "id": "audit-2026-08-29",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一审计基线 337bb3ed...，main 只新增了 1 个提交，但这是一次非常典型、且值得继续采用的架构收敛： 这次迁移的价值并不是“Voxel Sandbox 多了一个功能”，而是修复了： 这一错误 Ownership。 仓库同时新增了一个严格的： 它会直接扫描 foundation、runtime-service、gameplay-kernel 的原始 package.json 和全部仓库 asmdef，包括 Runtime、Editor、Tests、Generated，并同时解析普通 Assembly Name 与 GUID 引用；allowlist、versionDefines、defineConstraints、历史 exception 均不能掩盖真实反向依赖。 本次迁移前： 迁移后： 实际迁移 17 项文件，16 项内容字节保持不变，测试源码只改变 Prefab fixture…",
+      "updatedAt": "2026-08-29",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-28",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一审计基线 25894d48...，main 只前进了两个提交，但其中一个是相当重要的架构治理变化： 实际改动没有新增 UPM Package、没有新增 asmdef、没有扩大 Stable Runtime API，也没有修改任何 Domain Runtime；核心是在现有 editor-tools 和 tools/package-distribution 内建立： 这意味着此前分散在 Module Catalog、Release Policy、Manifest Snippet、Installer 中的“包从哪里来”这一事实，第一次开始拥有专门的物理 Source Owner。方向是正确的，而且高度符合当前“完善已有项目能力，而不是提供可交付版本”的主线。 当前仓库依然明确处于： 当前没有 Active、Pending Approval 或 Blocked 工作；默认动作仍是 route-only。Evidence…",
+      "updatedAt": "2026-08-28",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-27",
       "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
@@ -368,6 +382,19 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "crpg",
+      "title": "传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG",
+      "summary": "整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…",
+      "tags": [
+        "crpg"
+      ],
+      "updatedAt": "2026-08-30",
+      "sha256": "2f0310e73478ae1a87231dba49689793600bbf4af35e23fbf1c44da5abe173f4",
+      "contentSha256": "1bf6f8b1f19a1fce4fcdc36ca97c3023db6d5e7667b532e9ac24c88c84bb1900",
+      "bytes": 91945,
+      "contentPath": "content/game-designs/crpg.md"
+    },
     {
       "id": "association-football",
       "title": "足球比赛模拟 / Association Football Simulation / Soccer Game",
@@ -1283,6 +1310,21 @@
     }
   ],
   "blogs": [
+    {
+      "id": "growth-function-replacement",
+      "title": "增长函数替换：增量游戏的自动化、Prestige 与抽象阶梯",
+      "summary": "增量游戏怎样让持续增长的数字长期保持新鲜感，并让已经被玩家掌握的旧玩法逐渐自动化、压缩和退居后台，而不是无限重复同一套购买与等待？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "automation",
+        "incremental",
+        "prestige"
+      ],
+      "updatedAt": "2026-08-30",
+      "sha256": "4a5d4a6e14907a7853baffa226f68784eec7de77049582c0c73d070d7eef79c7",
+      "bytes": 35244,
+      "contentPath": "content/blogs/growth-function-replacement.md"
+    },
     {
       "id": "godot-texture-streaming-residency",
       "title": "驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留",
