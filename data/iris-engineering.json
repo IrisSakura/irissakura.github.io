@@ -6,8 +6,8 @@
   "headline": "把研发事实、显式授权与验证边界组织成可复查的工作流",
   "description": "一个引擎无关的研发工作流控制面：读取 Git 与平台事实，形成只读视图和研究提案，在明确授权后组装受限任务，并以可恢复、失败关闭的执行状态保留证据。",
   "operatingMode": "maintenance",
-  "statusLabel": "P10",
-  "status": "P1–P10 本地产品基线已完成；当前没有自动续作的活动工作。",
+  "statusLabel": "P10 · P9.1",
+  "status": "P1–P10 本地产品基线与 P9.1 提案入口已交付；当前没有自动续作的活动工作。",
   "workflow": [
     {
       "id": "observe",
@@ -49,9 +49,9 @@
     },
     {
       "id": "research-intake",
-      "title": "Research Artifact Intake",
-      "description": "把研究材料固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。",
-      "items": ["Immutable artifact", "Pending proposal", "Offline inspection"]
+      "title": "Research Artifact & Proposal Ingress",
+      "description": "把研究材料或受限 QQ 提案信封固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。",
+      "items": ["Immutable artifact", "QQ Research Proposal Ingress", "Pending proposal"]
     },
     {
       "id": "agent-execution",
@@ -72,6 +72,11 @@
       "summary": "Today、Milestone、Quality、Build 与 Operations 页面保持零凭据、零远端写入和输入故障隔离。"
     },
     {
+      "label": "QQ 研究提案入口",
+      "state": "local-passed",
+      "summary": "P9.1 只把受限提案映射为不可变 Artifact 与 pending-approval Proposal；本地合同已交付，真实 ingress 尚未执行。"
+    },
+    {
       "label": "Canonical external read",
       "state": "failed-closed",
       "summary": "试点在首个传输请求失败后停止，未重试、未取得远端事实，也没有把失败解释成接入成功。"
@@ -80,6 +85,7 @@
   "boundaries": [
     "Iris Engineering 不拥有 Unity Runtime、玩法逻辑或 Sakura Framework 的包与发布状态。",
     "真实平台读取、写入、Runner、工作树与外部 Agent 接入都必须单独授权。",
+    "P9.1 QQ 提案入口只能创建 pending-approval Proposal，不能批准任务、创建执行合同或改写目标仓库。",
     "Dashboard 是可丢弃、可重建的 Read Model，不成为新的 Issue、PR 或 CI 真理源。",
     "P6.1 与 P7 的当前跨平台证据来自 Windows host；macOS 与 Linux 仍需在相同变更上分别验证。"
   ]

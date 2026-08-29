@@ -11,7 +11,7 @@ async function readText(path) {
 test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '可验证的 Unity 游戏系统开发者');
-  assert.equal(site.tagline, '研究 · 框架 · 游戏验证');
+  assert.equal(site.tagline, '研究 · 工程 · 框架 · 游戏验证');
   assert.ok(site.independenceNotice.includes('仅代表本人'));
   assert.deepEqual(site.contacts.map((contact) => contact.id), ['work-email', 'work-qq']);
   const workEmail = site.contacts.find((contact) => contact.id === 'work-email');
@@ -42,7 +42,7 @@ test('public navigation presents Contact as an ordinary tab without owner-only b
   for (const page of pages) {
     const html = await readText(page);
     const nav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.ok(nav.includes('>联系我</a>'), `${page} navigation is missing the 联系我 tab`);
+    assert.ok(nav.includes('>联系</a>'), `${page} navigation is missing the 联系 tab`);
     assert.ok(!nav.includes('>公开入口</a>'), `${page} navigation still labels Contact as 公开入口`);
     assert.ok(!nav.includes('nav-cta'), `${page} gives Contact a special navigation treatment`);
   }
@@ -123,6 +123,8 @@ test('public pages omit the retired test BGM while persistent navigation remains
     'history.pushState',
     'main#main-content',
     'syncLocalStylesheets',
+    'syncDocumentIdentity',
+    'meta[name="theme-color"]',
     "new CustomEvent('site:navigation-complete'",
     'location.assign(destination.href)'
   ]) {
@@ -226,43 +228,51 @@ test('major page visuals are generated without reused category screenshots', asy
   }
 });
 
-test('research and articles share one primary navigation route without changing stable URLs', async () => {
+test('Journal and articles share one primary navigation route without changing stable URLs', async () => {
   for (const page of ['index.html', 'pages/journal.html', 'pages/blog.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.equal((primaryNav.match(/研究与文章/g) ?? []).length, 1, `${page} must expose one research nav item`);
-    assert.ok(!primaryNav.includes('>Journal<'), `${page} must not expose a separate Journal nav item`);
+    assert.equal((primaryNav.match(/>Journal<\/a>/g) ?? []).length, 1, `${page} must expose one Journal nav item`);
+    assert.ok(!primaryNav.includes('>研究与文章<'), `${page} still exposes the retired research label`);
     assert.ok(!primaryNav.includes('>博客<'), `${page} must not expose a separate blog nav item`);
   }
 
   const journal = await readText('pages/journal.html');
   const blog = await readText('pages/blog.html');
-  const activeResearchNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">研究与文章<\/a>/;
-  assert.match(journal, activeResearchNav);
-  assert.match(blog, activeResearchNav);
+  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">Journal<\/a>/;
+  assert.match(journal, activeJournalNav);
+  assert.match(blog, activeJournalNav);
 });
 
-test('primary navigation exposes the public brand portfolio while preserving retired route compatibility', async () => {
-  for (const page of ['index.html', 'pages/framework.html', 'pages/art-music.html']) {
+test('primary navigation freezes capability peers and preserves the retired Art/Music route', async () => {
+  for (const page of ['index.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/brand.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.ok(primaryNav.includes('>框架</a>'), `${page} must label the Framework route as 框架`);
-    assert.ok(!primaryNav.includes('>Framework</a>'), `${page} keeps an English Framework navigation label`);
-    assert.ok(primaryNav.includes('>美术音乐</a>'), `${page} is missing the art and music navigation entry`);
+    for (const label of ['作品', 'Engineering', 'Framework', 'Journal', 'Brand', '联系']) {
+      assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
+    }
+    assert.ok(!primaryNav.includes('>美术音乐</a>'), `${page} still exposes Brand as Art/Music`);
     assert.ok(!primaryNav.includes('>关于</a>'), `${page} still exposes the retired About navigation entry`);
   }
 
   const sitemap = await readText('sitemap.xml');
+  const brand = await readText('pages/brand.html');
   const artMusic = await readText('pages/art-music.html');
-  assert.ok(!artMusic.includes('<meta name="robots" content="noindex, follow">'));
-  assert.ok(artMusic.includes('id="brand-system"'));
-  assert.ok(artMusic.includes('品牌视觉与创作'));
+  assert.ok(!brand.includes('<meta name="robots" content="noindex, follow">'));
+  assert.ok(brand.includes('id="brand-system"'));
+  assert.ok(brand.includes('IrisSakura Brand System'));
   assert.match(
-    artMusic,
-    /href="\.\.\/pages\/art-music\.html" class="nav-link active" aria-current="page">美术音乐<\/a>/u
+    brand,
+    /href="\.\.\/pages\/brand\.html" class="nav-link active" aria-current="page">Brand<\/a>/u
   );
-  assert.match(artMusic, /<footer class="footer">[\s\S]*?>美术音乐<\/a>/u);
-  assert.ok(sitemap.includes('/pages/art-music.html'));
+  assert.match(brand, /<footer class="footer">[\s\S]*?>Brand<\/a>/u);
+  assert.ok(sitemap.includes('/pages/brand.html'));
+
+  assert.ok(artMusic.includes('<meta name="robots" content="noindex, follow">'));
+  assert.ok(artMusic.includes('<link rel="canonical" href="https:\/\/irissakura.github.io/pages/brand.html">'));
+  assert.ok(artMusic.includes('<meta http-equiv="refresh" content="0; url=brand.html">'));
+  assert.ok(!artMusic.includes('id="brand-system"'));
+  assert.ok(!sitemap.includes('/pages/art-music.html'));
 
   const about = await readText('pages/about.html');
   assert.ok(about.includes('<meta name="robots" content="noindex, follow">'));
@@ -276,9 +286,11 @@ test('home labels curated research honestly and README matches current routes an
   assert.ok(home.includes('SELECTED RESEARCH'));
   assert.ok(home.includes('精选研究主题'));
   assert.ok(!home.includes('LATEST RESEARCH'));
+  assert.ok(readme.includes('/pages/brand.html'));
+  assert.ok(readme.includes('一级 `Brand` 入口'));
   assert.ok(readme.includes('/pages/art-music.html'));
-  assert.ok(readme.includes('一级“美术音乐”入口'));
-  assert.ok(readme.includes('公开展示 IRIS × SAKURA 品牌系统'));
+  assert.ok(readme.includes('兼容跳转'));
+  assert.ok(readme.includes('公开展示 IrisSakura 品牌架构'));
   assert.ok(!readme.includes('FAQ 与作品筛选'));
 });
 
@@ -316,12 +328,21 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'aria-controls="main-navigation"',
       'aria-expanded="false"',
       'data-brand="iris-sakura"',
+      'data-brand-mode="',
       'brand-styles:start',
+      'tokens/primitive.css',
+      'tokens/semantic.css',
+      'tokens/modes.css',
       brand.stylesheet,
       'dist/site.js'
     ]) {
       assert.ok(html.includes(fragment), `${page} missing ${fragment}`);
     }
+    assert.match(
+      html,
+      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|game)"/,
+      `${page} has an invalid page brand mode`
+    );
     assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);
 
     for (const marker of [
@@ -462,20 +483,27 @@ test('brand registry exposes only IRIS × SAKURA and legacy theme styles are rem
     'id',
     'label',
     'stylesheet',
-    'themeColor'
+    'themeColor',
+    'tokenStylesheets'
   ]);
   assert.equal(config.id, 'iris-sakura');
   assert.equal(config.label, 'IRIS × SAKURA');
   assert.equal(config.stylesheet, 'style/iris-sakura.css');
+  assert.deepEqual(config.tokenStylesheets, [
+    'style/tokens/primitive.css',
+    'style/tokens/semantic.css',
+    'style/tokens/modes.css',
+    'style/components/brand-experience.css'
+  ]);
   assert.equal(config.colorScheme, 'light');
   assert.equal(config.homeHeroImage, 'assets/images/profile/home-hero-iris-sakura.png');
   const brandCss = await readText('style/iris-sakura.css');
   for (const motif of [
-    '--primary-color: #4c3df5',
-    '--accent-color: #b82f6c',
-    '--paper: #f7f4ff',
-    '--ink: #2f2556',
-    '--ui-action-primary-bg: #4c3df5'
+    '--primary-color: var(--color-action-primary)',
+    '--accent-color: var(--color-brand-highlight)',
+    '--paper: var(--color-background)',
+    '--ink: var(--color-text-primary)',
+    '--ui-action-primary-bg: var(--color-action-primary)'
   ]) {
     assert.ok(brandCss.includes(motif), `brand theme missing palette token ${motif}`);
   }
@@ -660,10 +688,15 @@ test('repository metadata and publishing policy are explicit', async () => {
 });
 
 test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
-  const css = await readText('style/main.css');
-  const secondaryText = readCssHexVariable(css, 'secondary-text-color');
-  const mutedText = readCssHexVariable(css, 'muted-text-color');
-  const grayText = readCssHexVariable(css, 'gray-color');
+  const [css, semantic, primitive] = await Promise.all([
+    readText('style/main.css'),
+    readText('style/tokens/semantic.css'),
+    readText('style/tokens/primitive.css')
+  ]);
+  const tokenSources = [css, semantic, primitive];
+  const secondaryText = readCssHexVariable(tokenSources, 'secondary-text-color');
+  const mutedText = readCssHexVariable(tokenSources, 'muted-text-color');
+  const grayText = readCssHexVariable(tokenSources, 'gray-color');
 
   for (const background of ['#29173d', '#2d1b41', '#1e1e1e']) {
     assert.ok(
@@ -683,13 +716,18 @@ test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
 });
 
 test('IRIS × SAKURA text and actions meet WCAG AA contrast', async () => {
-  const css = await readText('style/iris-sakura.css');
-  const paper = readCssHexVariable(css, 'paper');
-  const ink = readCssHexVariable(css, 'ink');
-  const inkSoft = readCssHexVariable(css, 'ink-soft');
-  const petalStrong = readCssHexVariable(css, 'petal-strong');
-  const primary = readCssHexVariable(css, 'primary-color');
-  const primaryButtonText = readCssHexVariable(css, 'ui-action-primary-text');
+  const [css, semantic, primitive] = await Promise.all([
+    readText('style/iris-sakura.css'),
+    readText('style/tokens/semantic.css'),
+    readText('style/tokens/primitive.css')
+  ]);
+  const tokenSources = [css, semantic, primitive];
+  const paper = readCssHexVariable(tokenSources, 'paper');
+  const ink = readCssHexVariable(tokenSources, 'ink');
+  const inkSoft = readCssHexVariable(tokenSources, 'ink-soft');
+  const petalStrong = readCssHexVariable(tokenSources, 'petal-strong');
+  const primary = readCssHexVariable(tokenSources, 'primary-color');
+  const primaryButtonText = readCssHexVariable(tokenSources, 'ui-action-primary-text');
 
   for (const foreground of [ink, inkSoft, petalStrong]) {
     assert.ok(
@@ -703,10 +741,16 @@ test('IRIS × SAKURA text and actions meet WCAG AA contrast', async () => {
   );
 });
 
-function readCssHexVariable(css, name) {
-  const value = css.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1];
+function readCssHexVariable(sources, name, seen = new Set()) {
+  assert.ok(!seen.has(name), `cyclic CSS variable: --${name}`);
+  seen.add(name);
+  const css = Array.isArray(sources) ? sources.join('\n') : sources;
+  const value = css.match(new RegExp(`--${name}:\\s*([^;]+);`, 'i'))?.[1].trim();
   assert.ok(value, `missing --${name}`);
-  return value;
+  if (/^#[0-9a-f]{6}$/i.test(value)) return value;
+  const reference = value.match(/^var\(--([a-z0-9-]+)\)$/i)?.[1];
+  assert.ok(reference, `--${name} must resolve to a hex primitive, received ${value}`);
+  return readCssHexVariable(sources, reference, seen);
 }
 
 function contrastRatio(foreground, background) {

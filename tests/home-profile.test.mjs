@@ -118,9 +118,12 @@ test('homepage presents identity, flagship work and four secondary focus areas i
   assert.ok(home.includes(site.profile.introduction));
   assert.ok(home.includes(`src="${site.profile.avatar}"`));
   assert.equal((home.match(/data-home-focus/g) ?? []).length, 4);
-  for (const label of ['Iris Engineering', 'Sakura Framework', 'Sakura Design Journal', 'Consumer Lab']) {
+  for (const label of ['Iris Engineering', 'Sakura Framework', 'IrisSakura Journal', 'Consumer Lab']) {
     assert.ok(home.includes(label), `homepage focus areas are missing ${label}`);
   }
+  assert.ok(home.includes('LATEST CONSUMER · WEBGL'));
+  assert.ok(home.includes('奶家人集结 · Sakura Core Arena'));
+  assert.ok(home.includes('href="pages/portfolio.html#consumer-gamejam-game"'));
   assert.ok(home.includes('class="brand-lockup'));
   assert.equal((home.match(/data-home-brand-branch/g) ?? []).length, 2);
   assert.ok(home.includes('BUILD · ORGANIZE · BLOOM'));

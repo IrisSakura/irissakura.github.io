@@ -18,6 +18,16 @@ test('deterministic social images are valid 1200x630 PNG assets', () => {
   assert.equal(first.readUInt32BE(20), 630);
 });
 
+test('the same content receives distinct deterministic geometry by Brand Mode', () => {
+  const palette = ['101722', '1d3557', '2575fc', '6a11cb', 'ff4081', '8ce7dc'];
+  const iris = createSocialImage('/same-page', 'site', palette, 'iris');
+  const sakura = createSocialImage('/same-page', 'site', palette, 'sakura');
+  const journal = createSocialImage('/same-page', 'site', palette, 'journal');
+  assert.notDeepEqual(iris, sakura);
+  assert.notDeepEqual(sakura, journal);
+  assert.deepEqual(iris, createSocialImage('/same-page', 'site', palette, 'iris'));
+});
+
 test('formal articles and major sections expose distinct social images while implicit review exposes none', async () => {
   const [source, publication] = await Promise.all([
     JSON.parse(await readText('data/journal-source.json')),

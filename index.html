@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="master" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +28,10 @@
     <title>IrisSakura | 构建可验证的 Unity 游戏系统</title>
     <link rel="stylesheet" href="style/main.css">
     <!-- brand-styles:start -->
+    <link rel="stylesheet" href="style/tokens/primitive.css">
+    <link rel="stylesheet" href="style/tokens/semantic.css">
+    <link rel="stylesheet" href="style/tokens/modes.css">
+    <link rel="stylesheet" href="style/components/brand-experience.css">
     <link rel="stylesheet" href="style/iris-sakura.css">
     <!-- brand-styles:end -->
 
@@ -47,20 +51,21 @@
                 <img src="assets/images/profile/irissakura-avatar.jpg" alt="">
             </button>
             <a href="index.html" class="logo" aria-label="IrisSakura 首页">
-                <img src="assets/favicon.svg?v=20260824" alt="" class="brand-mark">
-                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                <img src="assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
             </a>
         </div>
         <div class="nav-menu" id="main-navigation">
             <a href="index.html" class="nav-link active" aria-current="page">首页</a>
             <a href="pages/portfolio.html" class="nav-link">作品</a>
-            <a href="pages/art-music.html" class="nav-link">美术音乐</a>
-            <a href="pages/framework.html" class="nav-link">框架</a>
-            <a href="pages/journal.html" class="nav-link">研究与文章</a>
-            <a href="pages/contact.html" class="nav-link">联系我</a>
+            <a href="pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="pages/framework.html" class="nav-link">Framework</a>
+            <a href="pages/journal.html" class="nav-link">Journal</a>
+            <a href="pages/brand.html" class="nav-link">Brand</a>
+            <a href="pages/contact.html" class="nav-link">联系</a>
         </div>
         <div class="nav-actions">
-            <a class="brand-seal" href="pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+            <a class="brand-seal" href="pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
                 <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
                 <span>BUILD · ORGANIZE · BLOOM</span>
                 <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
@@ -87,7 +92,7 @@
         <a href="pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     </nav>
@@ -98,7 +103,7 @@
 <main id="main-content" class="main-content">
     <!-- home-content:start -->
     <section id="home-page" class="page active">
-        <section id="profile" class="hero-section profile-hero page-cover" data-brand-layout="editorial" data-page-cover="home" style="--page-cover-image: none; --page-cover-position: 50% 48%;">
+        <section id="profile" class="hero-section profile-hero page-cover" data-content-stage="value" data-brand-layout="editorial" data-page-cover="home" style="--page-cover-image: none; --page-cover-position: 50% 48%;">
             <div class="container profile-hero-inner">
                 <div class="profile-identity">
                     <img class="profile-avatar-large" src="assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像">
@@ -116,7 +121,7 @@
             </div>
         </section>
 
-        <section class="flagship-section" data-brand-layout="editorial">
+        <section class="flagship-section" data-content-stage="result" data-brand-layout="editorial">
             <div class="container flagship-grid">
                 <div class="flagship-media">
                     <img src="assets/images/sword-of-words/combat-room.png" alt="言铸之剑战斗房间：玩家面对两名骷髅敌人，底部显示生命、理智与技能栏">
@@ -125,7 +130,7 @@
                     <p class="section-kicker">REPRESENTATIVE WORK · 可玩原型</p>
                     <h2>《言铸之剑》：让系统最终回到可玩体验</h2>
                     <p class="flagship-lead">以房间推进、实时动作战斗和构筑成长为核心的 2D Roguelike 原型，技能、潜能、祝福、背包与存档共同形成可运行的局内循环。</p>
-                    <dl class="flagship-facts">
+                    <dl class="flagship-facts" data-content-stage="boundary">
                         <div><dt>职责</dt><dd>独立开发 / 系统设计</dd></div>
                         <div><dt>玩家循环</dt><dd>选择房间 → 实时战斗 → 构筑成长 → 推进与保存</dd></div>
                         <div><dt>关键系统</dt><dd>技能与潜能、生成式祝福、Run 快照存档</dd></div>
@@ -136,14 +141,14 @@
             </div>
         </section>
 
-        <section class="brand-ecosystem-section" data-brand-layout="contrast" aria-labelledby="brand-ecosystem-title">
+        <section class="brand-ecosystem-section" data-content-stage="system" data-brand-layout="contrast" aria-labelledby="brand-ecosystem-title">
             <div class="container brand-ecosystem-inner">
                 <div class="brand-signature">
                     <div class="brand-lockup brand-lockup-compact" aria-label="IRIS × SAKURA">
                         <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
                     </div>
                     <p>BUILD · ORGANIZE · BLOOM</p>
-                    <a href="pages/art-music.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <a href="pages/brand.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </div>
                 <div>
                     <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
@@ -161,7 +166,7 @@
                         </article>
                     </div>
                 </div>
-                <div class="brand-proof" aria-labelledby="brand-proof-title">
+                <div class="brand-proof" data-content-stage="evidence" aria-labelledby="brand-proof-title">
                     <div class="brand-proof-heading">
                         <p class="section-kicker">BRAND PROMISE → PRODUCT PROOF</p>
                         <h3 id="brand-proof-title">品牌承诺必须进入真实产品</h3>
@@ -201,7 +206,7 @@
                 <div class="focus-grid">
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">01 · ENGINEERING CONTROL</p>
-                        <strong>P10</strong>
+                        <strong>P10 · P9.1</strong>
                         <h3>Iris Engineering</h3>
                         <p>把研究提案、显式授权、受限执行与验证审计组织成失败关闭的研发工作流。</p>
                         <a href="pages/engineering.html" class="text-link">查看工程控制面</a>
@@ -216,16 +221,17 @@
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">03 · DESIGN RESEARCH</p>
                         <strong>62</strong>
-                        <h3>Sakura Design Journal</h3>
+                        <h3>IrisSakura Journal</h3>
                         <p>从机制、源码和实际约束出发，保留可追溯的研究判断与设计结论。</p>
                         <a href="pages/journal.html" class="text-link">查看研究</a>
                     </article>
-                    <article class="focus-card" data-home-focus>
+                    <article class="focus-card focus-card-latest" data-home-focus>
                         <p class="focus-index">04 · REAL CONSUMERS</p>
-                        <strong>6</strong>
+                        <strong>7</strong>
                         <h3>Consumer Lab</h3>
-                        <p>用独立玩法项目检验 Framework 能力是否真正落入可理解、可运行的游戏循环。</p>
-                        <a href="pages/portfolio.html#consumer-lab" class="text-link">查看消费项目</a>
+                        <span class="focus-latest">LATEST CONSUMER · WEBGL</span>
+                        <p><span class="focus-latest-name">奶家人集结 · Sakura Core Arena</span>用双模式战斗检验 Framework 能力是否真正落入可理解、可运行的游戏闭环。</p>
+                        <a href="pages/portfolio.html#consumer-gamejam-game" class="text-link">查看最新消费项目</a>
                     </article>
                 </div>
             </div>
@@ -282,18 +288,19 @@
         <div class="footer-content">
             <div class="footer-info">
                 <a href="index.html" class="footer-logo" aria-label="IrisSakura 首页">
-                    <img src="assets/favicon.svg?v=20260824" alt="" class="brand-mark">
-                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                    <img src="assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
                 </a>
                 <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
             </div>
-            <div class="footer-links">
+            <div class="footer-links" data-content-stage="next">
                 <h2>继续浏览</h2>
                 <a href="pages/portfolio.html">作品</a>
-                <a href="pages/art-music.html">美术音乐</a>
-                <a href="pages/framework.html">框架</a>
-                <a href="pages/journal.html">研究与文章</a>
-                <a href="pages/contact.html">联系我</a>
+                <a href="pages/engineering.html">Engineering</a>
+                <a href="pages/framework.html">Framework</a>
+                <a href="pages/journal.html">Journal</a>
+                <a href="pages/brand.html">Brand</a>
+                <a href="pages/contact.html">联系</a>
             </div>
             <div class="footer-social">
                 <h2>公开入口</h2>

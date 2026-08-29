@@ -54,10 +54,10 @@ export function assertProjectFactsCurrent(projectData, framework, journal) {
 
   const journalProject = projectsById.get('sakura-design-journal');
   if (!REVIEW_HASH_PATTERN.test(journalProject?.reviewedJournalCurationHash ?? '')) {
-    throw new Error('Sakura Design Journal project facts require reviewedJournalCurationHash.');
+    throw new Error('IrisSakura Journal project facts require reviewedJournalCurationHash.');
   }
   if (journalProject.reviewedJournalCurationHash !== journalCurationReviewHash(journal)) {
-    throw new Error('Journal curation contract changed; review Sakura Design Journal project facts.');
+    throw new Error('Journal curation contract changed; review IrisSakura Journal project facts.');
   }
 }
 

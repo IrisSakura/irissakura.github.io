@@ -648,11 +648,141 @@
     overflow: hidden;
     min-width: 0;
     flex-direction: column;
+    scroll-margin-top: 10.2rem;
     padding: clamp(1.25rem, 3vw, 2rem);
     border: 1px solid var(--line);
     background:
         linear-gradient(145deg, rgba(84, 214, 197, 0.045), transparent 48%),
         var(--surface);
+}
+
+.consumer-lab-card-featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    background:
+        radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--brand-sakura) 15%, transparent), transparent 18rem),
+        linear-gradient(120deg, color-mix(in srgb, var(--brand-iris) 9%, var(--surface)), var(--surface));
+}
+
+.consumer-lab-feature-copy,
+.consumer-lab-feature-proof {
+    min-width: 0;
+}
+
+.consumer-lab-feature-copy {
+    display: flex;
+    flex-direction: column;
+}
+
+.consumer-lab-feature-proof {
+    align-self: stretch;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+}
+
+.consumer-lab-feature-label {
+    margin: 1.4rem 0 0;
+    color: var(--brand-shared);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.consumer-lab-brand-role {
+    margin-top: 1.4rem;
+    padding: 1rem 0 1rem 1rem;
+    border-left: 3px solid var(--brand-shared);
+}
+
+.consumer-lab-brand-role[data-brand-side="iris"] {
+    border-left-color: var(--brand-iris);
+}
+
+.consumer-lab-brand-role[data-brand-side="sakura"] {
+    margin-top: 0;
+    border-left-color: var(--brand-sakura);
+}
+
+.consumer-lab-brand-role p,
+.consumer-lab-local-proof > p {
+    margin: 0 0 0.55rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.consumer-lab-brand-role[data-brand-side="iris"] p {
+    color: var(--brand-iris-light);
+}
+
+.consumer-lab-brand-role[data-brand-side="sakura"] p {
+    color: var(--brand-sakura);
+}
+
+.consumer-lab-brand-role strong {
+    display: block;
+    color: var(--light-color);
+    font-size: 0.96rem;
+    line-height: 1.7;
+}
+
+.consumer-lab-local-proof {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+}
+
+.consumer-lab-local-proof > p {
+    color: var(--secondary-text-color);
+}
+
+.consumer-lab-local-proof-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.consumer-lab-local-proof-list li {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--brand-shared) 6%, transparent);
+}
+
+.consumer-lab-local-proof-list li:last-child {
+    grid-column: 1 / -1;
+}
+
+.consumer-lab-local-proof-list span {
+    color: var(--muted-text-color);
+    font-size: 0.72rem;
+}
+
+.consumer-lab-local-proof-list strong {
+    overflow-wrap: anywhere;
+    color: var(--light-color);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+}
+
+.consumer-lab-proof-link {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1.25rem;
+    color: var(--secondary-text-color);
+    font-size: 0.86rem;
+    font-weight: 700;
 }
 
 .consumer-lab-card::before {
@@ -743,6 +873,18 @@
     .consumer-lab-grid {
         grid-template-columns: 1fr;
     }
+
+    .consumer-lab-card {
+        scroll-margin-top: 9.6rem;
+    }
+
+    .consumer-lab-card-featured {
+        grid-template-columns: 1fr;
+    }
+
+    .consumer-lab-feature-proof {
+        margin-top: 1.5rem;
+    }
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
@@ -792,5 +934,13 @@
 
     .consumer-lab-card-topline {
         align-items: flex-start;
+    }
+
+    .consumer-lab-local-proof-list {
+        grid-template-columns: 1fr;
+    }
+
+    .consumer-lab-local-proof-list li:last-child {
+        grid-column: 1;
     }
 }

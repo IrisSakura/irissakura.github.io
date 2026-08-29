@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="iris" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-engineering.png">
     <meta name="twitter:image:alt" content="Iris Engineering | 研发工作流控制面 的 IrisSakura 分享图">
     <!-- indexable page -->
-    <meta name="theme-color" content="#f4efff">
+    <meta name="theme-color" content="#1d3557">
     <link rel="icon" href="../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../rss.xml">
@@ -29,6 +29,10 @@
     <link rel="stylesheet" href="../style/main.css">
     <link rel="stylesheet" href="../style/engineering.css">
     <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../style/tokens/modes.css">
+    <link rel="stylesheet" href="../style/components/brand-experience.css">
     <link rel="stylesheet" href="../style/iris-sakura.css">
     <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -44,20 +48,21 @@
                 <img src="../assets/images/profile/irissakura-avatar.jpg" alt="">
             </button>
             <a href="../index.html" class="logo" aria-label="IrisSakura 首页">
-                <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
-                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                <img src="../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
             </a>
         </div>
         <div class="nav-menu" id="main-navigation">
             <a href="../index.html" class="nav-link">首页</a>
-            <a href="../pages/portfolio.html" class="nav-link active" aria-current="page">作品</a>
-            <a href="../pages/art-music.html" class="nav-link">美术音乐</a>
-            <a href="../pages/framework.html" class="nav-link">框架</a>
-            <a href="../pages/journal.html" class="nav-link">研究与文章</a>
-            <a href="../pages/contact.html" class="nav-link">联系我</a>
+            <a href="../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../pages/engineering.html" class="nav-link active" aria-current="page">Engineering</a>
+            <a href="../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../pages/journal.html" class="nav-link">Journal</a>
+            <a href="../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../pages/contact.html" class="nav-link">联系</a>
         </div>
         <div class="nav-actions">
-            <a class="brand-seal" href="../pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+            <a class="brand-seal" href="../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
                 <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
                 <span>BUILD · ORGANIZE · BLOOM</span>
                 <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
@@ -84,7 +89,7 @@
         <a href="../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        <a href="../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         <a href="../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     </nav>
@@ -93,17 +98,23 @@
 
 <main id="main-content" class="main-content">
     <!-- engineering-content:start -->
-<header class="engineering-hero page-cover" data-page-cover="engineering" style="--page-cover-image: none; --page-cover-position: 50% 44%;">
+<header class="engineering-hero page-cover" data-content-stage="value" data-page-cover="engineering" style="--page-cover-image: none; --page-cover-position: 50% 44%;">
+        <!-- brand-mode-signature:start -->
+        <aside class="brand-mode-signature" aria-label="IRIS MODE">
+            <svg aria-hidden="true"><use href="../assets/brand/icons.svg#iris-pipeline"></use></svg>
+            <div><span>IRIS MODE</span><img class="brand-mode-product-lockup" src="../assets/brand/wordmark-iris-engineering.svg" alt=""></div>
+        </aside>
+        <!-- brand-mode-signature:end -->
         <div class="container engineering-hero-inner">
             <div>
                 <p class="section-kicker">IRIS ENGINEERING · CONTROL PLANE</p>
                 <h1>研发工作流控制面</h1>
-                <p>一个引擎无关的研发工作流控制面：读取 Git 与平台事实，形成只读视图和研究提案，在明确授权后组装受限任务，并以可恢复、失败关闭的执行状态保留证据。</p>
+                <p>把分散的仓库与研发事实变成可行动、可授权、可恢复的工作节奏，让个人与小型团队知道现在发生了什么、下一步能安全做什么。</p>
             </div>
             <aside class="engineering-status" aria-label="Iris Engineering 当前状态">
                 <span>maintenance</span>
-                <strong>P10</strong>
-                <p>P1–P10 本地产品基线已完成；当前没有自动续作的活动工作。</p>
+                <strong>P10 · P9.1</strong>
+                <p>P1–P10 本地产品基线与 P9.1 提案入口已交付；当前没有自动续作的活动工作。</p>
             </aside>
         </div>
     </header>
@@ -116,7 +127,7 @@
             </div>
         </section>
 
-        <section class="engineering-workflow" aria-labelledby="engineering-workflow-title">
+        <section class="engineering-workflow" data-content-stage="system" aria-labelledby="engineering-workflow-title">
             <div class="container">
                 <div class="engineering-section-heading"><p class="section-kicker">OBSERVE · AUTHORIZE · EXECUTE · VERIFY</p><h2 id="engineering-workflow-title">从事实到验证，四段互不越权</h2></div>
                 <ol>
@@ -148,7 +159,7 @@
             </div>
         </section>
 
-        <section class="engineering-capabilities" aria-labelledby="engineering-capabilities-title">
+        <section class="engineering-capabilities" data-content-stage="result" aria-labelledby="engineering-capabilities-title">
             <div class="container">
                 <div class="engineering-section-heading"><p class="section-kicker">P1–P10 PRODUCT BASELINE</p><h2 id="engineering-capabilities-title">四个已经形成合同的能力层</h2><p>从 Workflow Core 到只读视图，再到 Research Artifact 与 Agent Execution，公开展示只描述已实现的本地产品边界。</p></div>
                 <div class="engineering-capability-grid">
@@ -166,9 +177,9 @@
                 </article>
                 <article class="engineering-capability-card">
                     <p class="engineering-card-index">03 / RESEARCH-INTAKE</p>
-                    <h3>Research Artifact Intake</h3>
-                    <p>把研究材料固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。</p>
-                    <ul><li>Immutable artifact</li><li>Pending proposal</li><li>Offline inspection</li></ul>
+                    <h3>Research Artifact &amp; Proposal Ingress</h3>
+                    <p>把研究材料或受限 QQ 提案信封固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。</p>
+                    <ul><li>Immutable artifact</li><li>QQ Research Proposal Ingress</li><li>Pending proposal</li></ul>
                 </article>
                 <article class="engineering-capability-card">
                     <p class="engineering-card-index">04 / AGENT-EXECUTION</p>
@@ -180,7 +191,7 @@
             </div>
         </section>
 
-        <section class="engineering-evidence" aria-labelledby="engineering-evidence-title">
+        <section class="engineering-evidence" data-content-stage="evidence" aria-labelledby="engineering-evidence-title">
             <div class="container engineering-evidence-grid">
                 <div class="engineering-section-heading"><p class="section-kicker">EVIDENCE BEFORE CLAIMS</p><h2 id="engineering-evidence-title">通过与失败都保留原本含义</h2><p>本地合同、只读行动视图与外部试点分别陈述；传输失败没有被重试或改写成接入成功。</p></div>
                 <div>
@@ -192,6 +203,10 @@
                     <div><span>本地通过</span><strong>只读行动视图</strong></div>
                     <p>Today、Milestone、Quality、Build 与 Operations 页面保持零凭据、零远端写入和输入故障隔离。</p>
                 </article>
+                <article class="engineering-evidence-card engineering-evidence-local-passed">
+                    <div><span>本地通过</span><strong>QQ 研究提案入口</strong></div>
+                    <p>P9.1 只把受限提案映射为不可变 Artifact 与 pending-approval Proposal；本地合同已交付，真实 ingress 尚未执行。</p>
+                </article>
                 <article class="engineering-evidence-card engineering-evidence-failed-closed">
                     <div><span>失败关闭</span><strong>Canonical external read</strong></div>
                     <p>试点在首个传输请求失败后停止，未重试、未取得远端事实，也没有把失败解释成接入成功。</p>
@@ -200,10 +215,10 @@
             </div>
         </section>
 
-        <section class="engineering-boundaries" aria-labelledby="engineering-boundaries-title">
+        <section class="engineering-boundaries" data-content-stage="boundary" aria-labelledby="engineering-boundaries-title">
             <div class="container engineering-boundary-grid">
                 <div><p class="section-kicker">CURRENT BOUNDARIES</p><h2 id="engineering-boundaries-title">当前边界</h2><p>失败关闭不是保守文案，而是产品设计的一部分：没有新的授权与证据，就不扩大能力结论。</p></div>
-                <ul><li>Iris Engineering 不拥有 Unity Runtime、玩法逻辑或 Sakura Framework 的包与发布状态。</li><li>真实平台读取、写入、Runner、工作树与外部 Agent 接入都必须单独授权。</li><li>Dashboard 是可丢弃、可重建的 Read Model，不成为新的 Issue、PR 或 CI 真理源。</li><li>P6.1 与 P7 的当前跨平台证据来自 Windows host；macOS 与 Linux 仍需在相同变更上分别验证。</li></ul>
+                <ul><li>Iris Engineering 不拥有 Unity Runtime、玩法逻辑或 Sakura Framework 的包与发布状态。</li><li>真实平台读取、写入、Runner、工作树与外部 Agent 接入都必须单独授权。</li><li>P9.1 QQ 提案入口只能创建 pending-approval Proposal，不能批准任务、创建执行合同或改写目标仓库。</li><li>Dashboard 是可丢弃、可重建的 Read Model，不成为新的 Issue、PR 或 CI 真理源。</li><li>P6.1 与 P7 的当前跨平台证据来自 Windows host；macOS 与 Linux 仍需在相同变更上分别验证。</li></ul>
             </div>
         </section>
     </div>
@@ -215,18 +230,19 @@
         <div class="footer-content">
             <div class="footer-info">
                 <a href="../index.html" class="footer-logo" aria-label="IrisSakura 首页">
-                    <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
-                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                    <img src="../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
                 </a>
                 <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
             </div>
-            <div class="footer-links">
+            <div class="footer-links" data-content-stage="next">
                 <h2>继续浏览</h2>
                 <a href="../pages/portfolio.html">作品</a>
-                <a href="../pages/art-music.html">美术音乐</a>
-                <a href="../pages/framework.html">框架</a>
-                <a href="../pages/journal.html">研究与文章</a>
-                <a href="../pages/contact.html">联系我</a>
+                <a href="../pages/engineering.html">Engineering</a>
+                <a href="../pages/framework.html">Framework</a>
+                <a href="../pages/journal.html">Journal</a>
+                <a href="../pages/brand.html">Brand</a>
+                <a href="../pages/contact.html">联系</a>
             </div>
             <div class="footer-social">
                 <h2>公开入口</h2>

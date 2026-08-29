@@ -214,7 +214,26 @@ try {
         `${width}px content inset ${JSON.stringify(containerGeometry)} below ${minimumInset}px`
       );
     }
-    if (width <= 768) continue;
+    if (width <= 900) {
+      const compactNavigation = await responsivePage.locator('.nav-container').evaluate((container) => {
+        const menu = container.querySelector('.nav-menu');
+        const toggle = container.querySelector('.mobile-toggle');
+        const menuRect = menu?.getBoundingClientRect();
+        return {
+          menuPosition: menu ? getComputedStyle(menu).position : 'missing',
+          menuRight: menuRect?.right ?? Number.POSITIVE_INFINITY,
+          toggleDisplay: toggle ? getComputedStyle(toggle).display : 'missing'
+        };
+      });
+      if (
+        compactNavigation.menuPosition !== 'fixed'
+        || compactNavigation.menuRight > 1
+        || compactNavigation.toggleDisplay === 'none'
+      ) {
+        intermediateViewportFailures.push(`${width}px compact navigation ${JSON.stringify(compactNavigation)}`);
+      }
+      continue;
+    }
     const navigationGeometry = await responsivePage.locator('.nav-container').evaluate((container) => {
       const logo = container.querySelector('.logo')?.getBoundingClientRect();
       const menu = container.querySelector('.nav-menu')?.getBoundingClientRect();
@@ -285,7 +304,7 @@ try {
   await desktop.evaluate(() => {
     document.documentElement.dataset.smokeDocument = 'persistent-navigation';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: '联系我', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '联系', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/contact.html`);
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('cross-page navigation replaced the active document');
@@ -295,9 +314,18 @@ try {
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('return navigation replaced the active document');
   }
-  await desktop.locator('.nav-menu').getByRole('link', { name: '框架', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: 'Framework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
+  if (await desktop.getAttribute('html', 'data-brand-mode') !== 'sakura') {
+    throw new Error('soft navigation retained a stale Engineering brand mode');
+  }
+  if (await desktop.locator('meta[name="theme-color"]').getAttribute('content') !== '#dff7f2') {
+    throw new Error('soft navigation retained a stale Engineering theme color');
+  }
+  if (await desktop.locator('.skip-link').getAttribute('href') !== `${baseUrl}/pages/framework.html#main-content`) {
+    throw new Error('soft navigation retained a stale skip-link URL');
+  }
   if (await desktop.locator('#framework-data-status, #framework-source-commit, #framework-generated-at').count() !== 0) {
     throw new Error('Framework page still exposes maintainer-only source metadata');
   }
@@ -307,6 +335,12 @@ try {
   await desktop.evaluate(() => history.back());
   await desktop.waitForURL(`${baseUrl}/index.html`);
   await desktop.locator('.profile-identity').waitFor();
+  if (await desktop.getAttribute('html', 'data-brand-mode') !== 'master') {
+    throw new Error('history navigation retained a stale Framework brand mode');
+  }
+  if (await desktop.locator('meta[name="theme-color"]').getAttribute('content') !== '#f4efff') {
+    throw new Error('history navigation retained a stale Framework theme color');
+  }
   if (await desktop.locator('link[href$="/style/framework.css"]').count() !== 0) {
     throw new Error('history navigation retained a stale Framework page stylesheet');
   }
@@ -356,7 +390,7 @@ try {
   if (await desktop.locator('.quickstart-code pre').count() !== frameworkQuickstart.steps.filter((step) => step.code).length) {
     throw new Error('Quickstart does not render every registered code probe');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '框架' }).isVisible()) {
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: 'Framework' }).isVisible()) {
     throw new Error('Quickstart does not keep the Framework navigation context');
   }
   const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -438,17 +472,19 @@ try {
   }
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
-  await desktop.locator('.nav-menu').getByRole('link', { name: '美术音乐', exact: true }).click();
-  await desktop.waitForURL(`${baseUrl}/pages/art-music.html`);
+  await desktop.locator('.nav-menu').getByRole('link', { name: 'Brand', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/brand.html`);
   if (await desktop.locator('meta[name="robots"][content^="noindex"]').count() !== 0) {
     throw new Error('public brand portfolio must remain indexable');
   }
-  if (!await desktop.getByRole('heading', { name: '品牌视觉与创作', exact: true }).isVisible()) {
-    throw new Error('art and music navigation does not open the public brand portfolio');
+  if (!await desktop.getByRole('heading', { name: 'IrisSakura Brand System', exact: true }).isVisible()) {
+    throw new Error('Brand navigation does not open the public brand guidelines');
   }
   if (!await desktop.locator('#brand-system').isVisible()) {
     throw new Error('public brand portfolio does not expose its brand system');
   }
+  await desktop.goto(`${baseUrl}/pages/art-music.html`, { waitUntil: 'networkidle' });
+  await desktop.waitForURL(`${baseUrl}/pages/brand.html`);
 
   await desktop.goto(`${baseUrl}/pages/journal.html`, { waitUntil: 'networkidle' });
   const journalText = await desktop.locator('body').innerText();
@@ -497,8 +533,8 @@ try {
   if (!await desktop.getByRole('heading', { level: 1, name: representativeSeries.name }).isVisible()) {
     throw new Error('representative series route is not visible');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '研究与文章' }).isVisible()) {
-    throw new Error('series route does not keep the research navigation context');
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: 'Journal' }).isVisible()) {
+    throw new Error('series route does not keep the Journal navigation context');
   }
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.slug)}.html"]`).click();
@@ -524,7 +560,7 @@ try {
       const element = document.querySelector('.mobile-toggle');
       return {
         innerWidth: window.innerWidth,
-        mediaMatches: window.matchMedia('(max-width: 768px)').matches,
+        mediaMatches: window.matchMedia('(max-width: 900px)').matches,
         display: element ? getComputedStyle(element).display : 'missing',
         styleSheets: Array.from(document.styleSheets).map((sheet) => sheet.href)
       };
@@ -537,7 +573,7 @@ try {
   await mobile.keyboard.press('Escape');
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 
-  await mobile.goto(`${baseUrl}/pages/art-music.html`, { waitUntil: 'networkidle' });
+  await mobile.goto(`${baseUrl}/pages/brand.html`, { waitUntil: 'networkidle' });
   const brandMobileState = await mobile.evaluate(() => {
     const header = document.querySelector('.brand-header-slice img');
     return {
@@ -594,8 +630,8 @@ try {
   }
 
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
-  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '联系我', exact: true });
-  if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 联系我');
+  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '联系', exact: true });
+  if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 联系');
   if ((await contactNavLink.getAttribute('class'))?.split(/\s+/).includes('nav-cta')) {
     throw new Error('Contact navigation still has special CTA styling');
   }
@@ -675,6 +711,17 @@ function contrastRatio(left, right) {
 async function measureTextContrast(page, selector) {
   const measurements = await page.locator(selector).evaluateAll((elements) => {
     const parseColor = (value) => {
+      const srgb = value.match(
+        /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?\)$/i
+      );
+      if (srgb) {
+        return {
+          red: Number(srgb[1]) * 255,
+          green: Number(srgb[2]) * 255,
+          blue: Number(srgb[3]) * 255,
+          alpha: srgb[4] === undefined ? 1 : Number(srgb[4])
+        };
+      }
       const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
       return {
         red: channels[0] ?? 0,

@@ -81,6 +81,8 @@ class SiteShell {
     private profileDrawerClose: HTMLButtonElement | null = null;
     private profileDrawerLastFocused: HTMLElement | null = null;
     private motionObserver: IntersectionObserver | null = null;
+    private pageIndexObserver: IntersectionObserver | null = null;
+    private pageIndexAbort: AbortController | null = null;
     private navigationAbort: AbortController | null = null;
 
     constructor() {
@@ -113,6 +115,7 @@ class SiteShell {
         this.setupSoftNavigation();
         this.setupFaq();
         this.setupNavbarDepth();
+        this.setupPageIndex();
         this.setupMotion();
     }
 
@@ -224,11 +227,13 @@ class SiteShell {
             if (controller.signal.aborted) return;
 
             if (pushHistory) history.pushState(null, '', destination.href);
+            this.syncDocumentIdentity(nextDocument);
             this.syncMetadata(nextDocument, destination);
             this.syncNavigationState(nextDocument, destination);
             currentMain?.replaceWith(document.importNode(nextMain, true));
             this.updateCurrentYear();
             this.setupFaq();
+            this.setupPageIndex();
             this.setupMotion();
             await this.loadPageModules(nextDocument, destination);
             document.dispatchEvent(new CustomEvent('site:navigation-complete', {
@@ -251,6 +256,19 @@ class SiteShell {
                     ?.removeAttribute('aria-busy');
             }
         }
+    }
+
+    private syncDocumentIdentity(nextDocument: Document): void {
+        const nextRoot = nextDocument.documentElement;
+        const brand = nextRoot.dataset.brand;
+        const brandMode = nextRoot.dataset.brandMode;
+        if (!brand || !brandMode) {
+            throw new Error('navigation response is missing brand identity');
+        }
+        document.documentElement.lang = nextRoot.lang || 'zh-CN';
+        document.documentElement.dataset.brand = brand;
+        document.documentElement.dataset.brandMode = brandMode;
+        document.documentElement.style.cssText = nextRoot.style.cssText;
     }
 
     private async syncLocalStylesheets(
@@ -318,6 +336,7 @@ class SiteShell {
         document.title = nextDocument.title;
         const selectors = [
             'meta[name="description"]',
+            'meta[name="theme-color"]',
             'meta[name="robots"]',
             'meta[property^="og:"]',
             'meta[name^="twitter:"]',
@@ -341,6 +360,11 @@ class SiteShell {
     }
 
     private syncNavigationState(nextDocument: Document, destination: URL): void {
+        const currentSkipLink = document.querySelector<HTMLAnchorElement>('.skip-link[href]');
+        const nextSkipLink = nextDocument.querySelector<HTMLAnchorElement>('.skip-link[href]');
+        if (currentSkipLink && nextSkipLink?.getAttribute('href')) {
+            currentSkipLink.href = new URL(nextSkipLink.getAttribute('href') ?? '', destination).href;
+        }
         const currentLinks = Array.from(
             document.querySelectorAll<HTMLAnchorElement>('.nav-menu a[href]')
         );
@@ -496,6 +520,87 @@ class SiteShell {
 
         update();
         window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    }
+
+    private setupPageIndex(): void {
+        this.pageIndexObserver?.disconnect();
+        this.pageIndexObserver = null;
+        this.pageIndexAbort?.abort();
+        this.pageIndexAbort = null;
+
+        const pageIndex = document.querySelector<HTMLElement>('[data-page-index]');
+        if (!pageIndex) return;
+        const links = Array.from(
+            pageIndex.querySelectorAll<HTMLAnchorElement>('[data-page-index-link]')
+        );
+        const targets = links.flatMap((link) => {
+            const href = link.getAttribute('href') ?? '';
+            if (!href.startsWith('#')) return [];
+            const id = decodeURIComponent(href.slice(1));
+            const target = document.getElementById(id);
+            return target ? [{ id, link, target }] : [];
+        });
+        if (targets.length === 0) return;
+
+        const linksContainer = pageIndex.querySelector<HTMLElement>('.page-index-links');
+        let activeId = '';
+        const setActive = (id: string): void => {
+            if (id === activeId) return;
+            activeId = id;
+            for (const entry of targets) {
+                if (entry.id === id) {
+                    entry.link.setAttribute('aria-current', 'location');
+                    if (linksContainer) {
+                        const targetLeft = entry.link.offsetLeft
+                            - (linksContainer.clientWidth - entry.link.clientWidth) / 2;
+                        linksContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: 'auto' });
+                    }
+                } else {
+                    entry.link.removeAttribute('aria-current');
+                }
+            }
+        };
+
+        const controller = new AbortController();
+        this.pageIndexAbort = controller;
+        let progressScheduled = false;
+        const updateProgress = (): void => {
+            const maximum = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = maximum > 0 ? Math.min(1, Math.max(0, window.scrollY / maximum)) : 0;
+            pageIndex.style.setProperty('--page-index-progress', progress.toFixed(4));
+            progressScheduled = false;
+        };
+        const scheduleProgress = (): void => {
+            if (progressScheduled) return;
+            progressScheduled = true;
+            window.requestAnimationFrame(updateProgress);
+        };
+        window.addEventListener('scroll', scheduleProgress, {
+            passive: true,
+            signal: controller.signal
+        });
+        window.addEventListener('resize', scheduleProgress, { signal: controller.signal });
+        updateProgress();
+
+        const initialId = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+        setActive(targets.some((entry) => entry.id === initialId) ? initialId : targets[0].id);
+        if (!('IntersectionObserver' in window)) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            const visible = entries
+                .filter((entry) => entry.isIntersecting)
+                .sort((left, right) => (
+                    Math.abs(left.boundingClientRect.top - window.innerHeight * 0.24)
+                    - Math.abs(right.boundingClientRect.top - window.innerHeight * 0.24)
+                ));
+            const id = (visible[0]?.target as HTMLElement | undefined)?.id;
+            if (id) setActive(id);
+        }, {
+            rootMargin: '-20% 0px -68% 0px',
+            threshold: [0, 0.01]
+        });
+        this.pageIndexObserver = observer;
+        targets.forEach((entry) => observer.observe(entry.target));
     }
 
     private setupMotion(): void {

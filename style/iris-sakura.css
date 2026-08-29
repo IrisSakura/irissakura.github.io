@@ -1,31 +1,31 @@
 /* IRIS × SAKURA 默认品牌主题：只覆写配色；排版、几何、组件造型与动效由共享样式统一负责。 */
 
 :root {
-    --primary-color: #4c3df5;
-    --secondary-color: #7b73ff;
-    --secondary-text-color: #5a5272;
-    --accent-color: #b82f6c;
-    --dark-color: #fbfaff;
-    --light-color: #2f2556;
-    --gray-color: #625a78;
-    --muted-text-color: #5a5272;
-    --success-color: #5f7a66;
-    --warning-color: #a36f2c;
-    --danger-color: #b23a55;
-    --paper: #f7f4ff;
-    --paper-deep: #ece7ff;
-    --mist-blue: #eeeaff;
-    --water-blue: #e8e5ff;
-    --hill-blue: #9991df;
-    --petal-pink: #ffe1ee;
-    --petal-strong: #b82f6c;
-    --ink: #2f2556;
-    --ink-soft: #5a5272;
-    --leaf: #7770a2;
-    --line: rgba(76, 61, 245, 0.18);
-    --line-strong: rgba(76, 61, 245, 0.3);
-    --surface: rgba(255, 250, 255, 0.84);
-    --surface-strong: #fffaff;
+    --primary-color: var(--color-action-primary);
+    --secondary-color: var(--brand-iris-300);
+    --secondary-text-color: var(--color-text-secondary);
+    --accent-color: var(--color-brand-highlight);
+    --dark-color: var(--neutral-025);
+    --light-color: var(--color-text-primary);
+    --gray-color: var(--neutral-700);
+    --muted-text-color: var(--color-text-secondary);
+    --success-color: var(--color-success);
+    --warning-color: var(--color-warning);
+    --danger-color: var(--color-danger);
+    --paper: var(--color-background);
+    --paper-deep: var(--color-background-deep);
+    --mist-blue: var(--brand-shared-100);
+    --water-blue: var(--neutral-200);
+    --hill-blue: color-mix(in srgb, var(--brand-iris-300) 72%, var(--neutral-000));
+    --petal-pink: var(--brand-sakura-100);
+    --petal-strong: var(--brand-sakura-700);
+    --ink: var(--color-text-primary);
+    --ink-soft: var(--color-text-secondary);
+    --leaf: color-mix(in srgb, var(--neutral-700) 74%, var(--brand-shared-500));
+    --line: var(--color-border);
+    --line-strong: var(--color-border-strong);
+    --surface: var(--color-surface);
+    --surface-strong: var(--color-surface-strong);
     --ui-surface-hover: var(--mist-blue);
     --ui-focus-color: var(--petal-strong);
     --ui-control-border: var(--line-strong);
@@ -37,8 +37,8 @@
     --ui-control-option-text: var(--ink);
     --ui-control-option-surface: var(--surface-strong);
     --ui-action-primary-text: #fffaff;
-    --ui-action-primary-bg: #4c3df5;
-    --ui-action-primary-hover-bg: #3d3dcc;
+    --ui-action-primary-bg: var(--color-action-primary);
+    --ui-action-primary-hover-bg: var(--color-action-primary-hover);
     --ui-action-secondary-text: #b82f6c;
     --ui-action-secondary-border: rgba(255, 126, 182, 0.62);
     --ui-action-secondary-bg: rgba(255, 250, 255, 0.48);
@@ -97,7 +97,7 @@ h6 {
 .stream-label,
 .note-track,
 .module-detail-category {
-    color: #b82f6c;
+    color: var(--brand-mode-accent);
 }
 
 .skip-link {
@@ -135,7 +135,8 @@ h6 {
 }
 
 .hero-section {
-    background: radial-gradient(circle at 18% 25%, rgba(255, 255, 255, 0.82), transparent 18rem), radial-gradient(circle at 82% 16%, rgba(255, 225, 238, 0.66), transparent 20rem), linear-gradient(180deg, #eeeaff 0%, #fff0f7 64%, #f7f4ff 100%);
+    color: var(--brand-mode-hero-text);
+    background: var(--brand-mode-hero-background);
 }
 
 .hero-section.profile-hero {
@@ -348,7 +349,8 @@ h6 {
 }
 
 .framework-hero {
-    background: radial-gradient(circle at 16% 16%, rgba(255, 255, 255, 0.8), transparent 17rem), radial-gradient(circle at 84% 18%, rgba(255, 225, 238, 0.66), transparent 18rem), linear-gradient(150deg, var(--mist-blue), #f3efff 72%, var(--paper));
+    color: var(--brand-mode-hero-text);
+    background: var(--brand-mode-hero-background);
 }
 
 .framework-subtitle,
@@ -669,7 +671,8 @@ h6 {
 }
 
 .journal-hero {
-    background: radial-gradient(circle at 78% 16%, rgba(255, 225, 238, 0.78), transparent 18rem), radial-gradient(circle at 16% 30%, rgba(255, 255, 255, 0.8), transparent 18rem), linear-gradient(155deg, #e8e5ff, #f2eeff 72%, var(--paper));
+    color: var(--brand-mode-hero-text);
+    background: var(--brand-mode-hero-background);
 }
 
 .journal-back {
@@ -804,8 +807,8 @@ h6 {
 
 .game-main,
 .game-hero {
-    color: var(--ink);
-    background: radial-gradient(circle at 82% 8%, rgba(255, 225, 238, 0.62), transparent 20rem), linear-gradient(180deg, var(--mist-blue), var(--paper) 92%);
+    color: var(--brand-mode-hero-text);
+    background: var(--brand-mode-hero-background);
 }
 
 .game-back,

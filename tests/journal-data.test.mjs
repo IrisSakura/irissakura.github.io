@@ -22,10 +22,24 @@ test('journal snapshot exposes a small curated public contract', async () => {
   const source = JSON.parse(await readText('data/journal-source.json'));
 
   assert.equal(data.schemaVersion, 1);
-  assert.equal(data.title, 'Sakura Design Journal');
+  assert.equal(data.title, 'IrisSakura Journal');
   assert.equal(data.summary.gameDesignCount, source.gameDesigns.length);
   assert.equal(data.summary.auditCount, source.audits.length);
   assert.equal(data.summary.importedBlogCount, source.blogs.length);
+  assert.deepEqual(
+    {
+      sourceCommit: source.sourceCommit,
+      gameDesigns: source.gameDesigns.length,
+      audits: source.audits.length,
+      blogs: source.blogs.length
+    },
+    {
+      sourceCommit: 'd48056a7402cf87f88811ee1ba2baa9a5df321a4',
+      gameDesigns: 62,
+      audits: 53,
+      blogs: 45
+    }
+  );
   assert.ok(!Object.hasOwn(data.summary, 'blogCount'));
   assert.equal(data.summary.knowledgeStreamCount, data.streams.length);
   assert.ok(data.streams.length > 0);

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
+import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
 import { resolveBlogDiscovery } from './lib/blog-discovery-model.mjs';
@@ -15,6 +16,7 @@ import { assertProjectFactsCurrent } from './lib/project-facts.mjs';
 import { writeSocialImages } from './lib/social-image.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const BRAND_MODES = new Set(BRAND_MODE_IDS);
 const PAGE_COVER_TARGETS = {
   home: 'hero-section',
   portfolio: 'portfolio-header',
@@ -25,8 +27,54 @@ const PAGE_COVER_TARGETS = {
   game: 'game-hero',
   contact: 'contact-header'
 };
+const PAGE_INDEXES = {
+  'pages/portfolio.html': {
+    ariaLabel: '作品页章节',
+    title: '浏览作品证据',
+    insertBefore: '    <div class="container">\n        <section class="portfolio-journey"',
+    items: [
+      ['portfolio-journey', '作品路径'],
+      ['portfolio-cases', '真实项目'],
+      ['consumer-lab', '玩法实验室']
+    ]
+  },
+  'pages/framework.html': {
+    ariaLabel: 'Framework 页面章节',
+    title: '浏览框架证据',
+    insertBefore: '    <section class="framework-overview">',
+    items: [
+      ['maturity', '成熟度'],
+      ['adoption', '采用路线'],
+      ['game-adoption', '实战映射'],
+      ['modules', '核心模块'],
+      ['architecture', '架构分层'],
+      ['lifecycle', '支持周期']
+    ]
+  },
+  'pages/journal.html': {
+    ariaLabel: '研究页章节',
+    title: '浏览研究脉络',
+    insertBefore: '    <section class="journal-section"',
+    items: [
+      ['knowledge-streams', '知识流'],
+      ['featured-notes', '精选主题'],
+      ['recent-audits', '近期审计'],
+      ['game-design-library', '设计资料库'],
+      ['evidence-chains', '公开证据链']
+    ]
+  },
+  'pages/blog.html': {
+    ariaLabel: '博客页章节',
+    title: '浏览正式文章',
+    insertBefore: '    <section class="blog-taxonomy"',
+    items: [
+      ['blog-taxonomy', '系列与主题'],
+      ['articles', '全部文章']
+    ]
+  }
+};
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -40,6 +88,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEn
   readJson('data/blog-taxonomy.json'),
   readJson('data/evidence-chains.json'),
   readJson('data/themes.json'),
+  readJson('config/brand.json'),
   readText('components/navbar.html'),
   readText('components/footer.html')
 ]);
@@ -50,6 +99,8 @@ assertProjectFactsCurrent(projects, framework, journal);
 assertEngineeringSnapshot(irisEngineering);
 assertConsumerLabCurrent(consumerLab);
 assertBrandConfig(themeConfig);
+assertBrandContract(brandConfig);
+await assertBrandAssets(root, brandConfig);
 assertBrandProof(site);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
@@ -76,8 +127,8 @@ const featuredNoteById = new Map(journal.featuredNotes.map((note) => [note.id, n
 const gameDesignIds = new Set(journalSource.gameDesigns.map((design) => design.id));
 const gameDesignDetailDefinitions = journalSource.gameDesigns.map((design) => ({
   file: `pages/journal/${design.id}.html`,
-  key: 'research',
-  title: `${design.title} | Sakura Design Journal`,
+  key: 'journal',
+  title: `${design.title} | IrisSakura Journal`,
   description: design.summary,
   canonical: `/pages/journal/${design.id}.html`,
   schemaType: 'Article',
@@ -87,8 +138,8 @@ const gameDesignDetailDefinitions = journalSource.gameDesigns.map((design) => ({
 }));
 const curatedOnlyDetailDefinitions = journal.featuredNotes.filter((note) => !gameDesignIds.has(note.id)).map((note) => ({
   file: `pages/journal/${note.id}.html`,
-  key: 'research',
-  title: `${note.title} | Sakura Design Journal`,
+  key: 'journal',
+  title: `${note.title} | IrisSakura Journal`,
   description: note.description,
   canonical: `/pages/journal/${note.id}.html`,
   schemaType: 'Article',
@@ -97,7 +148,7 @@ const curatedOnlyDetailDefinitions = journal.featuredNotes.filter((note) => !gam
 const journalDetailDefinitions = [...gameDesignDetailDefinitions, ...curatedOnlyDetailDefinitions];
 const blogDetailDefinitions = publishedBlogs.map((article) => ({
   file: `pages/blog/${article.slug}.html`,
-  key: 'research',
+  key: 'journal',
   title: `${article.title} | IrisSakura`,
   description: article.summary,
   canonical: `/pages/blog/${article.slug}.html`,
@@ -111,7 +162,7 @@ const blogDetailDefinitions = publishedBlogs.map((article) => ({
 const blogCollectionDefinitions = [
   ...blogDiscovery.series.map((collection) => ({
     file: `pages/blog/series/${collection.slug}.html`,
-    key: 'research',
+    key: 'journal',
     title: `系列：${collection.name} | IrisSakura`,
     description: collection.description,
     canonical: `/pages/blog/series/${collection.slug}.html`,
@@ -120,7 +171,7 @@ const blogCollectionDefinitions = [
   })),
   ...blogDiscovery.routableTags.map((collection) => ({
     file: `pages/blog/tag/${collection.slug}.html`,
-    key: 'research',
+    key: 'journal',
     title: `标签：${collection.name} | IrisSakura`,
     description: collection.description,
     canonical: `/pages/blog/tag/${collection.slug}.html`,
@@ -135,7 +186,7 @@ const blogAliasDefinitions = journalSource.blogs.flatMap((article) => {
   if (isPublished && publication.slug === article.id) return [];
   return [{
     file: `pages/blog/${article.id}.html`,
-    key: 'research',
+    key: 'journal',
     title: `${isPublished ? '文章已移动' : '文章暂未发布'} | IrisSakura`,
     description: isPublished
       ? '这篇文章已迁移到稳定的语义地址。'
@@ -149,6 +200,7 @@ const blogAliasDefinitions = journalSource.blogs.flatMap((article) => {
 await writeJournalDetailSources(journalDetailDefinitions);
 await writeBlogSources(blogDetailDefinitions, blogAliasDefinitions, blogCollectionDefinitions);
 await writeFrameworkQuickstartSource(frameworkQuickstart);
+await writeBrandSource();
 await writeCompatibilityRouteSources();
 
 const pageDefinitions = [
@@ -162,7 +214,7 @@ const pageDefinitions = [
   },
   {
     file: 'pages/engineering.html',
-    key: 'portfolio',
+    key: 'engineering',
     coverKey: 'engineering',
     title: 'Iris Engineering | 研发工作流控制面',
     description: '查看 Iris Engineering 如何把仓库事实、研究提案、显式授权、受限执行与验证审计组织成失败关闭的研发工作流。',
@@ -197,11 +249,19 @@ const pageDefinitions = [
     canonical: '/pages/portfolio.html',
   },
   {
+    file: 'pages/brand.html',
+    key: 'brand',
+    title: 'IrisSakura Brand System | IrisSakura',
+    description: '查看 IrisSakura 主品牌、IRIS 与 SAKURA 的职责边界、联合标识、色板、角色、图标与命名规则。',
+    canonical: '/pages/brand.html'
+  },
+  {
     file: 'pages/art-music.html',
-    key: 'art-music',
-    title: '品牌视觉与创作 | IrisSakura',
-    description: '查看 IRIS × SAKURA V3 品牌系统、双人格视觉、两大产品支柱、色板、图标与命名规则。',
-    canonical: '/pages/art-music.html'
+    key: '',
+    title: '品牌页面已迁移 | IrisSakura',
+    description: '原美术音乐入口承载的品牌系统已经迁移到独立 Brand 页面。',
+    canonical: '/pages/brand.html',
+    noIndex: true
   },
   {
     file: 'pages/about.html',
@@ -213,15 +273,16 @@ const pageDefinitions = [
   },
   {
     file: 'pages/journal.html',
-    key: 'research',
+    key: 'journal',
     coverKey: 'journal',
-    title: '研究记录 | Sakura Design Journal',
+    title: 'IrisSakura Journal | 游戏系统、架构与引擎研究',
     description: '经过策展的游戏设计、引擎源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。',
     canonical: '/pages/journal.html',
   },
   {
     file: 'pages/game.html',
     key: 'portfolio',
+    brandModeKey: 'game',
     coverKey: 'game',
     title: '言铸之剑 | Unity 2D Roguelike 可玩原型',
     description: '《言铸之剑》是一款围绕房间推进、实时战斗、潜能构筑、生成式祝福和 Run 存档展开的 Unity 2D Roguelike 可玩原型。',
@@ -238,7 +299,7 @@ const pageDefinitions = [
   },
   {
     file: 'pages/blog.html',
-    key: 'research',
+    key: 'journal',
     coverKey: 'blog',
     title: '博客 | 游戏系统与工程设计',
     description: '围绕游戏系统、框架实践与工程决策的完整文章。',
@@ -259,20 +320,24 @@ const pageDefinitions = [
 ];
 
 for (const page of pageDefinitions) {
+  const brandModeKey = (page.brandModeKey ?? page.key) || 'system';
+  const brandMode = resolvePageBrandMode(brandConfig, brandModeKey);
+  page.brandMode = brandMode;
   page.image = socialImagePath(page.file);
   page.imageAlt = `${page.title.replace(/ \| IrisSakura$/u, '')} 的 IrisSakura 分享图`;
   page.socialCategory = socialCategory(page);
 }
-await writeSocialImages(root, pageDefinitions);
+await writeSocialImages(root, pageDefinitions, brandConfig);
 await assertSitePresentation(site, pageDefinitions);
 
 const navItems = [
   ['home', '首页', 'index.html'],
   ['portfolio', '作品', 'pages/portfolio.html'],
-  ['art-music', '美术音乐', 'pages/art-music.html'],
-  ['framework', '框架', 'pages/framework.html'],
-  ['research', '研究与文章', 'pages/journal.html'],
-  ['contact', '联系我', 'pages/contact.html']
+  ['engineering', 'Engineering', 'pages/engineering.html'],
+  ['framework', 'Framework', 'pages/framework.html'],
+  ['journal', 'Journal', 'pages/journal.html'],
+  ['brand', 'Brand', 'pages/brand.html'],
+  ['contact', '联系', 'pages/contact.html']
 ];
 
 for (const page of pageDefinitions) {
@@ -284,6 +349,7 @@ for (const page of pageDefinitions) {
     if (error?.code === 'ENOENT') continue;
     throw error;
   }
+  html = html.replace(/\sdata-content-stage="(?:value|system|result|evidence|boundary|next)"/g, '');
 
   const depth = page.file.split('/').length - 1;
   const prefix = '../'.repeat(depth);
@@ -304,7 +370,8 @@ for (const page of pageDefinitions) {
 
   const navbar = navbarTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
-    .replaceAll('{{brandMark}}', escapeAttribute(pageHref('assets/favicon.svg?v=20260824')))
+    .replaceAll('{{brandMark}}', escapeAttribute(pageHref(brandConfig.assets.symbol)))
+    .replaceAll('{{masterWordmark}}', escapeAttribute(pageHref(brandConfig.assets.masterWordmark)))
     .replaceAll('{{profileAvatar}}', escapeAttribute(pageHref(site.profile.avatar)))
     .replace('{{profileAvatarAlt}}', escapeAttribute(site.profile.avatarAlt))
     .replace('{{profileNickname}}', escapeHtml(site.profile.nickname))
@@ -315,11 +382,12 @@ for (const page of pageDefinitions) {
     .replace('{{journalHref}}', escapeAttribute(pageHref('pages/journal.html')))
     .replace('{{consumerLabHref}}', escapeAttribute(pageHref('pages/portfolio.html#consumer-lab')))
     .replace('{{contactHref}}', escapeAttribute(pageHref('pages/contact.html')))
-    .replace('{{brandHref}}', escapeAttribute(pageHref('pages/art-music.html#brand-system')))
+    .replace('{{brandHref}}', escapeAttribute(pageHref('pages/brand.html#brand-system')))
     .replace('{{navLinks}}', navLinks);
   const footer = footerTemplate
     .replaceAll('{{homeHref}}', pageHref('index.html'))
-    .replaceAll('{{brandMark}}', escapeAttribute(pageHref('assets/favicon.svg?v=20260824')))
+    .replaceAll('{{brandMark}}', escapeAttribute(pageHref(brandConfig.assets.symbol)))
+    .replaceAll('{{masterWordmark}}', escapeAttribute(pageHref(brandConfig.assets.masterWordmark)))
     .replace('{{footerLinks}}', footerLinks)
     .replace('{{socialLinks}}', socialLinks);
 
@@ -330,13 +398,13 @@ for (const page of pageDefinitions) {
     .replace(/<main(?![^>]*\bid="main-content")/, '<main id="main-content"')
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${page.title}</title>`);
 
-  const meta = buildMeta(page, site, themeConfig);
+  const meta = buildMeta(page, site, brandConfig);
   if (/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/.test(html)) {
     html = html.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, meta);
   } else {
     html = html.replace(/(<meta name="viewport"[^>]*>)/, `$1\n    ${meta}`);
   }
-  html = installBrandIdentity(html, prefix, themeConfig);
+  html = installBrandIdentity(html, prefix, themeConfig, page.brandMode);
 
   const siteScript = `<script src="${prefix}dist/site.js" type="module"></script>`;
   if (!html.includes('dist/site.js')) {
@@ -365,8 +433,8 @@ for (const page of pageDefinitions) {
       renderHomeContent(projects, publicJournal, framework, irisEngineering, consumerLab, site)
     );
   }
-  if (page.file === 'pages/art-music.html') {
-    html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent());
+  if (page.file === 'pages/brand.html') {
+    html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent(brandConfig));
   }
   if (page.file === 'pages/portfolio.html') {
     html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab));
@@ -384,7 +452,10 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
   }
 
+  html = installPageIndex(html, page);
   html = installPageCover(html, page, site, prefix);
+  html = installBrandExperience(html, page, prefix, brandConfig);
+  html = installContentVoiceStages(html, page);
   html = html
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n');
@@ -402,9 +473,9 @@ await Promise.all([
     start_url: '/',
     display: 'standalone',
     background_color: themeConfig.backgroundColor,
-    theme_color: themeConfig.themeColor,
+    theme_color: brandConfig.modes.master.themeColor,
     icons: [
-      { src: '/assets/favicon.svg?v=20260824', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
+      { src: `/${brandConfig.assets.favicon}?v=20260824`, sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
     ]
   }, null, 2) + '\n')
 ]);
@@ -466,8 +537,8 @@ function buildMeta(page, siteData, brand) {
     <meta name="twitter:image" content="${image}">
     <meta name="twitter:image:alt" content="${escapeAttribute(page.imageAlt)}">
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
-    <meta name="theme-color" content="${brand.themeColor}">
-    <link rel="icon" href="${prefix}assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <meta name="theme-color" content="${brandConfig.modes[page.brandMode].themeColor}">
+    <link rel="icon" href="${prefix}${brandConfig.assets.favicon}?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="${prefix}rss.xml">
     <script type="application/ld+json">${JSON.stringify(structured)}</script>
@@ -491,6 +562,14 @@ function assertBrandConfig(config) {
   }
   if (config.stylesheet !== 'style/iris-sakura.css') {
     throw new Error('brand registry must own the IRIS × SAKURA stylesheet');
+  }
+  if (JSON.stringify(config.tokenStylesheets) !== JSON.stringify([
+    'style/tokens/primitive.css',
+    'style/tokens/semantic.css',
+    'style/tokens/modes.css',
+    'style/components/brand-experience.css'
+  ])) {
+    throw new Error('brand registry must own the reviewed design token stylesheets');
   }
   if (config.homeHeroImage !== 'assets/images/profile/home-hero-iris-sakura.png') {
     throw new Error('brand registry must own the IRIS × SAKURA hero image');
@@ -548,8 +627,13 @@ function assertEngineeringSnapshot(snapshot) {
   }
 }
 
-function installBrandIdentity(html, prefix, config) {
+function installBrandIdentity(html, prefix, config, brandMode) {
+  if (!BRAND_MODES.has(brandMode)) throw new Error(`invalid page brand mode: ${brandMode}`);
+  const tokenStyles = config.tokenStylesheets
+    .map((stylesheet) => `<link rel="stylesheet" href="${prefix}${stylesheet}">`)
+    .join('\n    ');
   const brandStyles = `<!-- brand-styles:start -->
+    ${tokenStyles}
     <link rel="stylesheet" href="${prefix}${config.stylesheet}">
     <!-- brand-styles:end -->`;
   const stylePattern = /<!-- (?:theme|brand)-styles:start -->[\s\S]*?<!-- (?:theme|brand)-styles:end -->/;
@@ -564,8 +648,78 @@ function installBrandIdentity(html, prefix, config) {
   ].join('; ');
   return html.replace(
     /<html\b[^>]*>/,
-    `<html lang="zh-CN" data-brand="${config.id}" style="${escapeAttribute(rootStyle)};">`
+    `<html lang="zh-CN" data-brand="${config.id}" data-brand-mode="${brandMode}" style="${escapeAttribute(rootStyle)};">`
   );
+}
+
+function installBrandExperience(html, page, prefix, brand) {
+  html = html
+    .replace(/\s*<!-- brand-mode-signature:start -->[\s\S]*?<!-- brand-mode-signature:end -->/g, '')
+    .replace(/\s*<!-- game-brand-attribution:start -->[\s\S]*?<!-- game-brand-attribution:end -->/g, '');
+
+  const signatureByMode = {
+    iris: { icon: 'iris-pipeline', label: 'IRIS MODE', title: 'Engineering Control Plane', productAsset: brand.assets.irisWordmark },
+    sakura: { icon: 'sakura-composition', label: 'SAKURA MODE', title: 'Composable Game Framework', productAsset: brand.assets.sakuraWordmark },
+    journal: { icon: 'shared-research', label: 'JOURNAL MODE', title: 'Questions · Reasoning · Application' }
+  };
+  const signature = signatureByMode[page.brandMode];
+  if (signature && page.coverKey) {
+    const coverPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bdata-page-cover="${escapeRegExp(page.coverKey)}"[^>]*>)`);
+    if (!coverPattern.test(html)) throw new Error(`brand-contract violation: ${page.file} has no cover for ${page.brandMode} signature`);
+    const markup = `<!-- brand-mode-signature:start -->
+        <aside class="brand-mode-signature" aria-label="${escapeAttribute(signature.label)}">
+            <svg aria-hidden="true"><use href="${prefix}${brand.assets.iconSprite}#${signature.icon}"></use></svg>
+            <div><span>${escapeHtml(signature.label)}</span>${signature.productAsset ? `<img class="brand-mode-product-lockup" src="${prefix}${signature.productAsset}" alt="">` : `<strong>${escapeHtml(signature.title)}</strong>`}</div>
+        </aside>
+        <!-- brand-mode-signature:end -->`;
+    html = html.replace(coverPattern, `$1\n        ${markup}`);
+  }
+
+  if (page.brandMode === 'game') {
+    const actionPattern = /(<div class="game-actions">[\s\S]*?<\/div>)/;
+    if (!actionPattern.test(html)) throw new Error(`brand-contract violation: ${page.file} has no game action block`);
+    const attribution = `<!-- game-brand-attribution:start -->
+                    <p class="game-brand-attribution" data-game-brand-attribution><img src="${prefix}${brand.assets.symbol}" alt="">IRIS × SAKURA 技术生态支持</p>
+                    <!-- game-brand-attribution:end -->`;
+    html = html.replace(actionPattern, `$1\n                    ${attribution}`);
+  }
+  return html;
+}
+
+function installContentVoiceStages(html, page) {
+  const stagesByFile = {
+    'index.html': [
+      ['hero-section', 'value'], ['brand-ecosystem-section', 'system'], ['flagship-section', 'result'],
+      ['brand-proof', 'evidence'], ['flagship-facts', 'boundary']
+    ],
+    'pages/portfolio.html': [
+      ['portfolio-header', 'value'], ['portfolio-journey', 'system'], ['portfolio-cases', 'result'],
+      ['consumer-lab', 'evidence'], ['portfolio-facts', 'boundary']
+    ],
+    'pages/engineering.html': [
+      ['engineering-hero', 'value'], ['engineering-workflow', 'system'], ['engineering-capabilities', 'result'],
+      ['engineering-evidence', 'evidence'], ['engineering-boundaries', 'boundary']
+    ],
+    'pages/framework.html': [
+      ['framework-hero', 'value'], ['framework-overview', 'system'], ['game-adoption-section', 'result'],
+      ['evidence-chain-section', 'evidence'], ['lifecycle-section', 'boundary']
+    ],
+    'pages/journal.html': [
+      ['journal-hero', 'value'], ['stream-grid', 'system'], ['journal-bridge', 'result'],
+      ['evidence-chain-section', 'evidence'], ['evidence-chain-limit', 'boundary']
+    ]
+  };
+  const stages = stagesByFile[page.file];
+  if (!stages) return html;
+  html = html.replace(/\sdata-content-stage="(?:value|system|result|evidence|boundary|next)"/g, '');
+  for (const [className, stage] of stages) html = addContentStage(html, className, stage, page.file);
+  return addContentStage(html, 'footer-links', 'next', page.file);
+}
+
+function addContentStage(html, className, stage, file) {
+  const pattern = new RegExp(`(<[a-z][^>]*\\bclass="[^"]*\\b${escapeRegExp(className)}\\b[^"]*")([^>]*>)`, 'i');
+  if (!pattern.test(html)) throw new Error(`content voice contract: ${file} missing ${className}`);
+  return html.replace(pattern, `$1 data-content-stage="${stage}"$2`);
 }
 
 function replaceGeneratedBlock(html, name, content) {
@@ -579,6 +733,8 @@ function replaceGeneratedBlock(html, name, content) {
 function renderHomeContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, siteData) {
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
+  const featuredConsumer = consumerLabData.cases.find((entry) => entry.id === 'gamejam-game');
+  if (!featuredConsumer) throw new Error('missing featured GameJam consumer');
   const { profile } = siteData;
   const brandProofItems = siteData.brandProof.items.map((item, index) => `
                         <article class="brand-proof-item brand-proof-${escapeAttribute(item.id)}" data-brand-proof="${escapeAttribute(item.id)}">
@@ -643,7 +799,7 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
                         <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
                     </div>
                     <p>BUILD · ORGANIZE · BLOOM</p>
-                    <a href="pages/art-music.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <a href="pages/brand.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </div>
                 <div>
                     <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
@@ -698,16 +854,17 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">03 · DESIGN RESEARCH</p>
                         <strong>${journalData.summary.gameDesignCount}</strong>
-                        <h3>Sakura Design Journal</h3>
+                        <h3>IrisSakura Journal</h3>
                         <p>从机制、源码和实际约束出发，保留可追溯的研究判断与设计结论。</p>
                         <a href="pages/journal.html" class="text-link">查看研究</a>
                     </article>
-                    <article class="focus-card" data-home-focus>
+                    <article class="focus-card focus-card-latest" data-home-focus>
                         <p class="focus-index">04 · REAL CONSUMERS</p>
                         <strong>${consumerLabData.cases.length}</strong>
                         <h3>Consumer Lab</h3>
-                        <p>用独立玩法项目检验 Framework 能力是否真正落入可理解、可运行的游戏循环。</p>
-                        <a href="pages/portfolio.html#consumer-lab" class="text-link">查看消费项目</a>
+                        <span class="focus-latest">LATEST CONSUMER · WEBGL</span>
+                        <p><span class="focus-latest-name">${escapeHtml(featuredConsumer.title)}</span>用双模式战斗检验 Framework 能力是否真正落入可理解、可运行的游戏闭环。</p>
+                        <a href="pages/portfolio.html#consumer-gamejam-game" class="text-link">查看最新消费项目</a>
                     </article>
                 </div>
             </div>
@@ -733,7 +890,7 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
     </section>`;
 }
 
-function renderBrandContent() {
+function renderBrandContent(brand) {
   const palette = [
     ['Iris Core', '#4C3DF5'],
     ['Iris Light', '#7B73FF'],
@@ -747,8 +904,8 @@ function renderBrandContent() {
   return `<header class="portfolio-header brand-portfolio-header">
         <div class="container">
             <p class="section-kicker">IRIS × SAKURA · BRAND SYSTEM</p>
-            <h1>品牌视觉与创作</h1>
-            <p>一套连接工程与项目管理、游戏框架的双人格视觉语言：IRIS 组织创造，SAKURA 为游戏创作提供框架底座。</p>
+            <h1>IrisSakura Brand System</h1>
+            <p>主品牌、能力品牌与成果层的共同规则：IRIS 组织工程，SAKURA 承载游戏能力，Journal 保存研究判断，真实项目负责验证。</p>
         </div>
     </header>
 
@@ -757,9 +914,7 @@ function renderBrandContent() {
             <div class="container brand-system-intro-inner">
                 <div class="brand-system-copy">
                     <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
-                    <div class="brand-lockup brand-lockup-hero" aria-label="IRIS × SAKURA">
-                        <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
-                    </div>
+                    <img class="brand-official-lockup" src="../${escapeAttribute(brand.assets.jointLockup)}" alt="IRIS × SAKURA — Build · Organize · Bloom">
                     <p class="brand-lockup-subtitle">GAME-TECH ECOSYSTEM · BUILD · ORGANIZE · BLOOM</p>
                     <h2 id="brand-system-title">Build · Organize · Bloom</h2>
                     <p>不是把工程管理与框架能力混成一种声音，而是让两根支柱在同一生态里各自清晰、彼此支撑。</p>
@@ -784,7 +939,7 @@ function renderBrandContent() {
                     <p>总览板保留双人格、两大产品支柱、联合徽记、色板与命名家族的原始关系；网页组件则把这些规则变成可阅读、可复用的界面语言。</p>
                 </div>
                 <figure class="brand-board">
-                    <img src="../assets/images/brand/00_full_brand_board.png" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则" decoding="async">
+                    <img src="../${escapeAttribute(brand.assets.brandBoard)}" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则" decoding="async">
                     <figcaption>品牌系统总览 · 工程理性与创作生命力并行</figcaption>
                 </figure>
             </div>
@@ -805,7 +960,7 @@ function renderBrandContent() {
                         <ul><li>Project Management</li><li>Workflow &amp; Pipeline</li><li>Quality &amp; Reliability</li></ul>
                     </article>
                     <div class="brand-convergence" data-brand-convergence>
-                        <img src="../assets/favicon.svg?v=20260824" alt="" class="brand-convergence-mark">
+                        <img src="../${escapeAttribute(brand.assets.masterLogo)}" alt="" class="brand-convergence-mark">
                         <strong>ONE ECOSYSTEM</strong>
                         <span>Shared intent<br>Distinct voices</span>
                     </div>
@@ -824,11 +979,11 @@ function renderBrandContent() {
                 <div class="brand-section-heading">
                     <p class="section-kicker">TWO PRODUCT PILLARS</p>
                     <h2 id="brand-products-title">两个支柱，各自承担清晰职责</h2>
-                    <p>Iris Engineering 组织研发与项目工作流；SakuraGameFramework 为可扩展游戏创作提供模块、运行时与工具底座。</p>
+                    <p>Iris Engineering 组织研发与项目工作流；Sakura Framework 为可扩展游戏创作提供模块、运行时与工具底座。</p>
                 </div>
                 <div class="brand-product-grid">
                     <article class="brand-product-card brand-product-engineering">
-                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-code-branch"></i></div>
+                        <img class="brand-product-wordmark" src="../${escapeAttribute(brand.assets.irisWordmark)}" alt="">
                         <p>IRIS / ENGINEERING &amp; PROJECT MANAGEMENT</p>
                         <h3>Iris Engineering</h3>
                         <strong>ENGINEER · ORGANIZE · DELIVER</strong>
@@ -836,9 +991,9 @@ function renderBrandContent() {
                         <a href="engineering.html" class="text-link">查看工程控制面<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </article>
                     <article class="brand-product-card brand-product-framework">
-                        <div class="brand-product-symbol" aria-hidden="true"><i class="fas fa-cubes-stacked"></i></div>
+                        <img class="brand-product-wordmark" src="../${escapeAttribute(brand.assets.sakuraWordmark)}" alt="">
                         <p>SAKURA / GAME FRAMEWORK</p>
-                        <h3>SakuraGameFramework</h3>
+                        <h3>Sakura Framework</h3>
                         <strong>MODULAR · EXTENSIBLE · CREATOR-READY</strong>
                         <span>为真实游戏生产建立可复用、可组合的 Unity 系统边界。</span>
                     </article>
@@ -863,8 +1018,8 @@ function renderBrandContent() {
                     <article class="brand-language-card brand-icon-card">
                         <span class="brand-card-index">02 / ICONOGRAPHY</span>
                         <h3>Clean · Technical · Elegant</h3>
-                        <div class="brand-icon-row" aria-hidden="true"><i class="fas fa-code"></i><i class="fas fa-cubes"></i><i class="fas fa-diagram-project"></i><i class="fas fa-gears"></i></div>
-                        <p>圆角线框、清晰几何与适度细节，优先服务识别和信息层级。</p>
+                        <div class="brand-icon-row brand-icon-row-official" aria-hidden="true"><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#iris-pipeline"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#iris-verification"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#sakura-framework"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#sakura-composition"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#shared-research"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#shared-game"></use></svg></div>
+                        <p>22 个品牌核心概念使用正式 SVG；通用操作继续使用 Font Awesome，避免图标职责混淆。</p>
                     </article>
                     <article class="brand-language-card brand-naming-card">
                         <span class="brand-card-index">03 / NAMING</span>
@@ -926,13 +1081,13 @@ function renderEngineeringContent(engineering) {
             <div>
                 <p class="section-kicker">${escapeHtml(engineering.eyebrow)}</p>
                 <h1>研发工作流控制面</h1>
-                <p>${escapeHtml(engineering.description)}</p>
+                <p>把分散的仓库与研发事实变成可行动、可授权、可恢复的工作节奏，让个人与小型团队知道现在发生了什么、下一步能安全做什么。</p>
             </div>
             <aside class="engineering-status" aria-label="Iris Engineering 当前状态">
                 <span>${escapeHtml(engineering.operatingMode)}</span>
                 <strong>${escapeHtml(engineering.statusLabel)}</strong>
-                <p>${escapeHtml(engineering.status)}</p>
-                ${engineering.schemaVersion === 2 ? `<small>源仓更新 · ${escapeHtml(formatPublicDate(engineering.sourceUpdatedAt))}</small>` : ''}
+                <p>${escapeHtml(engineering.status)}</p>${engineering.schemaVersion === 2 ? `
+                <small>源仓更新 · ${escapeHtml(formatPublicDate(engineering.sourceUpdatedAt))}</small>` : ''}
             </aside>
         </div>
     </header>
@@ -1004,13 +1159,13 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
 
   return `<div class="portfolio-header">
         <div class="container">
-            <p class="section-kicker">WORK BEFORE CLAIMS</p>
-            <h1>真实作品与工程证据</h1>
-            <p>先看做成了什么，再看研究、工程治理和框架如何支撑这些结果。</p>
+            <p class="section-kicker">WORKS IN CONTEXT</p>
+            <h1>从可玩作品看完整技术实践</h1>
+            <p>先看玩家和使用者真正得到的结果，再沿研究、工程治理与框架回看它们如何成立。</p>
         </div>
     </div>
     <div class="container">
-        <section class="portfolio-journey" aria-labelledby="portfolio-journey-title">
+        <section class="portfolio-journey" id="portfolio-journey" aria-labelledby="portfolio-journey-title">
             <div class="journey-heading">
                 <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究判断 → 工程治理 → 框架沉淀 → 游戏验证</h2></div>
                 <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
@@ -1023,7 +1178,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                 <li><span class="journey-index">04</span><h3>游戏验证</h3><p>用可玩循环、截图和限制校验实际价值。</p></li>
             </ol>
         </section>
-        <section class="portfolio-cases" aria-label="${ordered.length} 个真实项目">
+        <section class="portfolio-cases" id="portfolio-cases" aria-label="${ordered.length} 个真实项目">
             ${cases}
         </section>
         ${renderConsumerLab(consumerLabData)}
@@ -1035,6 +1190,33 @@ function renderConsumerLab(consumerLabData) {
     const highlights = entry.highlights
       .map((highlight) => `<li>${escapeHtml(highlight)}</li>`)
       .join('');
+    if (entry.id === 'gamejam-game') {
+      const playerEvidence = entry.verification.player === 'Unity WebGL Build + browser smoke'
+        ? 'WebGL + Browser'
+        : 'Player + Smoke';
+      return `<article class="consumer-lab-card consumer-lab-card-featured" id="consumer-${escapeAttribute(entry.id)}" data-brand-bridge="iris-sakura">
+                    <div class="consumer-lab-feature-copy">
+                        <div class="consumer-lab-card-topline"><span class="consumer-lab-index">0${index + 1}</span><span class="consumer-lab-category">${escapeHtml(entry.category)}</span></div>
+                        <p class="consumer-lab-feature-label">LATEST VERIFIED CONSUMER</p>
+                        <h3>${escapeHtml(entry.title)}</h3>
+                        <p class="consumer-lab-summary">${escapeHtml(entry.summary)}</p>
+                        <div class="consumer-lab-brand-role" data-brand-side="iris"><p>IRIS · DEFINE THE PROOF</p><strong>${escapeHtml(entry.brandNarrative.iris)}</strong></div>
+                    </div>
+                    <aside class="consumer-lab-feature-proof" aria-label="${escapeAttribute(entry.title)} 品牌能力与本地验证">
+                        <div class="consumer-lab-brand-role" data-brand-side="sakura"><p>SAKURA · POWER THE SYSTEM</p><strong>${escapeHtml(entry.brandNarrative.sakura)}</strong></div>
+                        <div class="consumer-lab-systems"><p>核心系统</p><ul class="consumer-lab-highlights" aria-label="${escapeAttribute(entry.title)} 核心系统">${highlights}</ul></div>
+                        <div class="consumer-lab-local-proof">
+                            <p>LOCAL PROOF · NOT A RELEASE</p>
+                            <ul class="consumer-lab-local-proof-list" aria-label="${escapeAttribute(entry.title)} 本地验证结果">
+                                <li><span>EditMode</span><strong>${entry.verification.editMode.passed} / ${entry.verification.editMode.total}</strong></li>
+                                <li><span>PlayMode</span><strong>${entry.verification.playMode.passed} / ${entry.verification.playMode.total}</strong></li>
+                                <li><span>Runtime</span><strong>${playerEvidence}</strong></li>
+                            </ul>
+                        </div>
+                        <a class="consumer-lab-proof-link" href="framework.html#game-adoption">查看 Framework 实战映射<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    </aside>
+                </article>`;
+    }
     return `<article class="consumer-lab-card" id="consumer-${escapeAttribute(entry.id)}">
                     <div class="consumer-lab-card-topline"><span class="consumer-lab-index">0${index + 1}</span><span class="consumer-lab-category">${escapeHtml(entry.category)}</span></div>
                     <h3>${escapeHtml(entry.title)}</h3>
@@ -1112,9 +1294,9 @@ function renderJournalContent(journalData, sourceData, chains) {
         <div class="container journal-hero-grid">
             <div>
                 <a class="journal-back" href="portfolio.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回作品</a>
-                <p class="journal-kicker">CURATED LEARNING · EVIDENCE BY DESIGN</p>
+                <p class="journal-kicker">CURATED LEARNING · QUESTIONS TO APPLICATION</p>
                 <h1>${escapeHtml(journalData.title)}</h1>
-                <p class="journal-lead">${escapeHtml(journalData.summary.description)}</p>
+                <p class="journal-lead">从一个值得追问的问题出发，连接源码观察、设计推理与实际应用，让每篇记录都能影响下一次系统选择。</p>
                 <div class="journal-actions"><a class="btn btn-primary" href="#featured-notes">查看精选主题</a><a class="btn btn-secondary" href="framework.html">查看框架影响</a></div>
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
@@ -1126,7 +1308,7 @@ function renderJournalContent(journalData, sourceData, chains) {
             </div>
         </div>
     </header>
-    <section class="journal-section">
+    <section class="journal-section" id="knowledge-streams">
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">KNOWLEDGE STREAMS</p><h2>${journalData.streams.length} 条相互验证的知识流</h2></div><p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p></div>
             <div class="stream-grid">${streams}
@@ -1160,7 +1342,7 @@ function renderJournalContent(journalData, sourceData, chains) {
             </div>
         </div>
     </section>
-${renderEvidenceChains(chains)}
+${renderEvidenceChains(chains, 'evidence-chains')}
     <section class="journal-section">
         <div class="container">
             <div class="journal-bridge">
@@ -1171,7 +1353,7 @@ ${renderEvidenceChains(chains)}
     </section>`;
 }
 
-function renderEvidenceChains(chains) {
+function renderEvidenceChains(chains, sectionId = '') {
   const cards = chains.map((chain, index) => {
     const researchLinks = chain.research.map((reference) => `<a href="${escapeAttribute(reference.href)}"><span>${reference.type === 'article' ? '正式文章' : '设计索引'}</span><strong>${escapeHtml(reference.title)}</strong><small>${escapeHtml(reference.relation)}</small></a>`).join('');
     return `<article class="evidence-chain-card" id="evidence-chain-${escapeAttribute(chain.id)}">
@@ -1186,7 +1368,7 @@ function renderEvidenceChains(chains) {
                     <p class="evidence-chain-limit"><strong>证据边界</strong>${escapeHtml(chain.limitation)}</p>
                 </article>`;
   }).join('');
-  return `<section class="evidence-chain-section" aria-labelledby="evidence-chain-title">
+  return `<section class="evidence-chain-section"${sectionId ? ` id="${escapeAttribute(sectionId)}"` : ''} aria-labelledby="evidence-chain-title">
         <div class="container">
             <div class="section-heading">
                 <p class="section-kicker">RESEARCH ↔ FRAMEWORK ↔ GAME</p>
@@ -1226,7 +1408,7 @@ function renderBlogIndex(sourceData, discovery) {
             <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a><a class="btn btn-secondary" href="../rss.xml"><i class="fas fa-rss" aria-hidden="true"></i>订阅 RSS</a></div>
         </div>
     </header>
-    <section class="blog-taxonomy" aria-labelledby="blog-taxonomy-title">
+    <section class="blog-taxonomy" id="blog-taxonomy" aria-labelledby="blog-taxonomy-title">
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">SERIES & TAGS</p><h2 id="blog-taxonomy-title">按系列与主题继续阅读</h2></div><p>分类只覆盖已经正式发布的文章；草稿不会进入聚合页或订阅。</p></div>
             <div class="blog-series-list">${series}</div>
@@ -1472,8 +1654,37 @@ async function writeFrameworkQuickstartSource(quickstart) {
 `);
 }
 
+async function writeBrandSource() {
+  await writeFile(path.join(root, 'pages/brand.html'), `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IrisSakura Brand System | IrisSakura</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="main-content brand-main">
+    <!-- brand-content:start -->
+    <!-- brand-content:end -->
+</main>
+<footer class="footer"></footer>
+<script src="../dist/site.js" type="module"></script>
+</body>
+</html>
+`);
+}
+
 async function writeCompatibilityRouteSources() {
-  await writeFile(path.join(root, 'pages/about.html'), `<!DOCTYPE html>
+  await Promise.all([
+    writeFile(path.join(root, 'pages/about.html'), `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -1500,7 +1711,36 @@ async function writeCompatibilityRouteSources() {
 <script src="../dist/site.js" type="module"></script>
 </body>
 </html>
-`);
+`),
+    writeFile(path.join(root, 'pages/art-music.html'), `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=brand.html">
+    <title>品牌页面已迁移 | IrisSakura</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="not-found-main">
+    <section class="container not-found-card">
+        <p class="section-kicker">ROUTE MOVED</p>
+        <h1>品牌系统已迁移到独立页面</h1>
+        <p>原“美术音乐”入口不再承担品牌规范职责；这个旧地址会自动前往 Brand 页面。</p>
+        <a class="btn btn-primary" href="brand.html">前往 Brand</a>
+    </section>
+</main>
+<footer class="footer"></footer>
+<script src="../dist/site.js" type="module"></script>
+</body>
+</html>
+`)
+  ]);
 }
 
 async function writeJournalDetailSources(definitions) {
@@ -1597,7 +1837,7 @@ function renderGameDesignDetailSource({ design, markdown, note }) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(design.title)} | Sakura Design Journal</title>
+    <title>${escapeHtml(design.title)} | IrisSakura Journal</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/journal.css">
     <link rel="stylesheet" href="../../style/blog.css">
@@ -1757,7 +1997,7 @@ function renderJournalDetailSource(note) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(note.title)} | Sakura Design Journal</title>
+    <title>${escapeHtml(note.title)} | IrisSakura Journal</title>
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/journal.css">
     <!-- brand-styles:start -->
@@ -1887,6 +2127,46 @@ function socialCategory(page) {
   return 'site';
 }
 
+function renderPageIndex(config) {
+  const links = config.items.map(([id, label], index) => (
+    `<a href="#${escapeAttribute(id)}" data-page-index-link${index === 0 ? ' aria-current="location"' : ''}><span>${String(index + 1).padStart(2, '0')}</span>${escapeHtml(label)}</a>`
+  )).join('');
+  return `<!-- page-index:start -->
+    <nav class="page-index" aria-label="${escapeAttribute(config.ariaLabel)}" data-page-index>
+        <div class="container page-index-inner">
+            <span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>${escapeHtml(config.title)}</strong></span>
+            <div class="page-index-links">${links}</div>
+            <span class="page-index-progress" aria-hidden="true"></span>
+        </div>
+    </nav>
+    <!-- page-index:end -->`;
+}
+
+function installPageIndex(html, page) {
+  const config = PAGE_INDEXES[page.file];
+  html = html.replace(/<!-- page-index:start -->[\s\S]*?<!-- page-index:end -->/u, '');
+  if (!config) return html;
+
+  const insertionOffset = html.indexOf(config.insertBefore);
+  if (insertionOffset < 0) {
+    throw new Error(`missing page index insertion point in ${page.file}`);
+  }
+  html = `${html.slice(0, insertionOffset)}${renderPageIndex(config)}\n${html.slice(insertionOffset)}`;
+
+  for (const [id] of config.items) {
+    const targetPattern = new RegExp(`(<[a-z][^>]*\\bid="${escapeRegExp(id)}"[^>]*)(>)`, 'iu');
+    let installed = false;
+    html = html.replace(targetPattern, (fullMatch, openTag, closeTag) => {
+      installed = true;
+      return openTag.includes('data-page-index-target')
+        ? fullMatch
+        : `${openTag} data-page-index-target${closeTag}`;
+    });
+    if (!installed) throw new Error(`missing page index target ${id} in ${page.file}`);
+  }
+  return html;
+}
+
 function installPageCover(html, page, siteData, prefix) {
   if (!page.coverKey) return html;
   const targetClass = PAGE_COVER_TARGETS[page.coverKey];
@@ -1933,6 +2213,10 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 async function writeSitemap(pages, siteUrl) {

@@ -33,7 +33,7 @@ test('project facts still reject updates newer than their review date', async ()
     readJson('data/journal.json')
   ]);
   const unreviewed = structuredClone(projects);
-  unreviewed.projects.find((project) => project.id === 'sakura-framework').updatedAt = '2026-08-11';
+  unreviewed.projects.find((project) => project.id === 'sakura-framework').updatedAt = '2099-01-01';
   assert.throws(
     () => assertProjectFactsCurrent(unreviewed, framework, journal),
     /cannot be reviewed before its latest factual update/u

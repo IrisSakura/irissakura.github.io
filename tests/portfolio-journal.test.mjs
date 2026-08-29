@@ -19,7 +19,7 @@ test('portfolio explains the path from research to finished work', async () => {
     '游戏验证',
     'portfolio-case-game',
     'Iris Engineering',
-    'Sakura Design Journal'
+    'IrisSakura Journal'
   ]) {
     assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
   }
@@ -30,7 +30,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   const titles = data.projects.map((project) => project.title);
 
   assert.equal(data.schemaVersion, 3);
-  assert.deepEqual(titles, ['Sakura Design Journal', 'Iris Engineering', 'Sakura Framework', '言铸之剑']);
+  assert.deepEqual(titles, ['IrisSakura Journal', 'Iris Engineering', 'Sakura Framework', '言铸之剑']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
     assert.match(project.updatedAt, /^\d{4}-\d{2}-\d{2}$/u, `${project.title} needs an update date`);
@@ -49,6 +49,15 @@ test('portfolio data keeps research distinct from finished work', async () => {
   }
 
   assert.equal(data.updatedAt, data.projects.map((project) => project.updatedAt).sort().at(-1));
+  for (const projectId of ['iris-engineering', 'sakura-framework', 'sakura-design-journal']) {
+    const project = data.projects.find((entry) => entry.id === projectId);
+    assert.equal(project.updatedAt, '2026-08-29');
+    assert.equal(project.lastReviewedAt, '2026-08-29');
+  }
+  assert.ok(
+    data.projects.find((entry) => entry.id === 'iris-engineering').evidence
+      .some((entry) => entry.includes('P9.1 QQ proposal-only ingress'))
+  );
   assert.equal(data.projects.find((project) => project.id === 'sword-of-words').categoryLabel, '独立游戏项目');
   assert.match(
     data.projects.find((project) => project.id === 'sakura-design-journal').reviewedJournalCurationHash,
@@ -139,7 +148,7 @@ test('finished game page presents the real playable loop and public screenshots'
     'room-selection.png',
     'potential-tree.png',
     'blessing-request.png',
-    'Sakura Design Journal',
+    'IrisSakura Journal',
     'Sakura Framework'
   ]) {
     assert.ok(html.includes(fragment), `missing finished-game fragment: ${fragment}`);

@@ -63,14 +63,36 @@ test('Consumer Lab uses a bounded two-column matrix with readable narrow-screen 
     /\.consumer-lab-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s
   );
   assert.match(css, /\.consumer-lab-card\s*\{[^}]*min-width:\s*0/s);
+  assert.match(css, /\.consumer-lab-card\s*\{[^}]*scroll-margin-top:\s*10\.2rem/s);
+  assert.match(
+    css,
+    /\.consumer-lab-card-featured\s*\{[^}]*grid-column:\s*1\s*\/\s*-1[^}]*grid-template-columns:\s*minmax\(0,\s*1\.15fr\)\s+minmax\(16rem,\s*0\.85fr\)/s
+  );
   assert.match(
     css,
     /\.consumer-lab-highlights\s*\{[^}]*display:\s*flex[^}]*flex-wrap:\s*wrap/s
+  );
+  assert.match(
+    css,
+    /\.consumer-lab-local-proof-list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s
   );
   const tabletFallback = css.match(/@media \(max-width: 900px\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
   assert.match(
     tabletFallback,
     /\.consumer-lab-grid\s*\{[^}]*grid-template-columns:\s*1fr/s
+  );
+  assert.match(
+    tabletFallback,
+    /\.consumer-lab-card-featured\s*\{[^}]*grid-template-columns:\s*1fr/s
+  );
+  assert.match(
+    tabletFallback,
+    /\.consumer-lab-card\s*\{[^}]*scroll-margin-top:\s*9\.6rem/s
+  );
+  const phoneFallback = css.match(/@media \(max-width: 560px\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
+  assert.match(
+    phoneFallback,
+    /\.consumer-lab-local-proof-list\s*\{[^}]*grid-template-columns:\s*1fr/s
   );
 });
 

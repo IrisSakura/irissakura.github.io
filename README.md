@@ -1,24 +1,30 @@
+![IrisSakura：Research · Engineering · Framework · Game](assets/brand/readme-header.svg)
+
 # IrisSakura 个人站
 
 这是 IrisSakura 的公开个人品牌站。品牌体系以两个职责清晰的支柱组织：IRIS 负责 Engineering / Project Management，SAKURA 负责 Game Framework；游戏消费项目暂不纳入这套命名家族。
 
+正式 Logo、Wordmark、产品 Lockup、核心概念 Icon 与 Social Card 模式由 [`config/brand.json`](config/brand.json) 统一登记；新增页面必须先取得一个已登记的 Brand Mode，再由 owner generator 生成公开投影。
+
 站点内容继续围绕一条可验证的项目链组织：
 
-> Sakura Design Journal（研究）→ Sakura Framework（工程沉淀）→《言铸之剑》（游戏验证）
+> IrisSakura Journal（研究）→ Iris Engineering（工程治理）→ Sakura Framework（能力沉淀）→《言铸之剑》（游戏验证）
 
 站点不展示没有事实来源的技能百分比、虚构项目、模拟联系结果或私有仓库地址。
 
 ## 页面结构
 
 - `/`：定位、能力证据、精选项目与研究更新；
-- `/pages/journal.html`：一级“研究与文章”入口，包含策展研究、公开证据链与文章入口；
+- `/pages/engineering.html`：一级 `Engineering` 入口，说明研发工作流、授权、执行与验证边界；
+- `/pages/journal.html`：一级 `Journal` 入口，包含策展研究、公开证据链与文章入口；
 - `/pages/blog.html`：正式文章、系列与标签聚合的稳定独立地址；
 - `/rss.xml`：只收录正式文章语义地址的 RSS 2.0 订阅；
 - `/pages/framework.html`：框架规模、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
-- `/pages/portfolio.html`：三条真实项目主线，以及四个 Domain Consumer Lab 独立消费项目的本地验证矩阵；
-- `/pages/art-music.html`：一级“美术音乐”入口，公开展示 IRIS × SAKURA 品牌系统、双人格视觉、色板、图标与命名规则；
+- `/pages/portfolio.html`：四条真实项目主线，以及七个 Consumer Lab 独立消费项目的本地验证矩阵；
+- `/pages/brand.html`：一级 `Brand` 入口，公开展示 IrisSakura 品牌架构、IRIS × SAKURA 双人格视觉、色板、图标与命名规则；
+- `/pages/art-music.html`：旧“美术音乐”地址的 `noindex` Brand 兼容跳转；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
 - `/pages/about.html`：旧 About 地址的 `noindex` 首页兼容跳转；
 - `/404.html`：GitHub Pages 自定义错误页。
@@ -45,16 +51,17 @@ npm run package:site
 - `npm run test:json`：直接扫描原始 JSON 文本，拒绝 `package.json`、`data/*.json` 和 `config/*.json` 的重复键与语法错误；
 - `npm run build`：生成站点源文件并把 TypeScript 编译到 `dist/`；
 - `npm test`：运行数据契约、内容真实性、链接、资源和 HTML 语义检查；
-- `npm run test:smoke`：用无头 Chromium 检查主要路由、响应式留白、主题切换、文章出版、证据链与移动导航；
+- `npm run test:smoke`：用无头 Chromium 检查主要路由、响应式留白、页面 Brand Mode、文章出版、证据链与移动导航；
 - `npm run package:site`：把发布所需文件复制到 `_site/`。
 
 `dist/` 和 `_site/` 都是 CI 产物，不进入主分支。不要直接修改生成文件。
 
 ## 数据来源
 
-- `data/site.json`：品牌定位和真实社交入口；
-- `data/projects.json`：三个公开项目的状态、职责、证据与限制；
-- `data/consumer-lab.json`：四个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
+- `config/brand.json`：名称、家族、页面 Brand Mode、正式资产、Social palette 与 Deprecated Naming 的品牌合同；
+- `data/site.json`：站点定位、Profile、栏目头图和真实社交入口；
+- `data/projects.json`：四个公开项目的状态、职责、证据与限制；
+- `data/consumer-lab.json`：七个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
 - `content/blogs/`：通过安全导入并由 publication 合同选中的 Markdown 正文镜像；
@@ -68,6 +75,7 @@ npm run package:site
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 Iris Engineering 同步、provenance 与五路径 owner scope 见 [`docs/maintenance/iris-engineering-sync.md`](docs/maintenance/iris-engineering-sync.md)。
+品牌职责与 Design System 所有权分别见 [`docs/brand/brand-architecture.md`](docs/brand/brand-architecture.md) 和 [`docs/brand/visual-system.md`](docs/brand/visual-system.md)。
 
 ### 栏目视觉与项目头图
 

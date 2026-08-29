@@ -8,6 +8,7 @@
     "test": "npm run test:unit && npm run test:site",
     "test:unit": "node --test tests/*.test.mjs",
     "test:json": "node scripts/verify-json.mjs",
+    "test:brand": "node scripts/verify-brand.mjs",
     "test:site": "node scripts/verify-site.mjs",
     "test:smoke": "node tests/browser-smoke.mjs",
     "journal:import": "node scripts/import-journal-export.mjs",
@@ -19,7 +20,7 @@
     "consumer:check": "node scripts/import-consumer-projection.mjs --check",
     "package:site": "node scripts/prepare-pages.mjs",
     "clean": "node scripts/clean-generated.mjs",
-    "check": "npm run test:json && npm run build && npm test"
+    "check": "npm run test:json && npm run build && npm run test:brand && npm test"
   },
   "repository": {
     "type": "git",

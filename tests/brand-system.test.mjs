@@ -19,10 +19,10 @@ const brandAssets = [
   '11_sakura_character_portrait.png'
 ];
 
-test('all v3 brand sources remain local while public pages use the recommended editorial slices', async () => {
+test('all curated brand sources remain local while the independent Brand page uses the recommended editorial slices', async () => {
   const [home, page] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
-    readFile(new URL('pages/art-music.html', root), 'utf8')
+    readFile(new URL('pages/brand.html', root), 'utf8')
   ]);
   for (const asset of brandAssets) {
     await access(new URL(`assets/images/brand/${asset}`, root));
@@ -47,23 +47,24 @@ test('all v3 brand sources remain local while public pages use the recommended e
 
 test('brand portfolio is public, indexable and generator-owned', async () => {
   const [page, generator, sitemap] = await Promise.all([
-    readFile(new URL('pages/art-music.html', root), 'utf8'),
+    readFile(new URL('pages/brand.html', root), 'utf8'),
     readFile(new URL('scripts/generate-site.mjs', root), 'utf8'),
     readFile(new URL('sitemap.xml', root), 'utf8')
   ]);
 
   assert.ok(page.includes('id="brand-system"'));
   assert.ok(page.includes('<!-- brand-content:start -->'));
-  assert.ok(page.includes('<title>品牌视觉与创作 | IrisSakura</title>'));
+  assert.ok(page.includes('<title>IrisSakura Brand System | IrisSakura</title>'));
   assert.ok(!page.includes('name="robots" content="noindex'));
-  assert.match(generator, /title:\s*'品牌视觉与创作 \| IrisSakura'/u);
-  assert.match(generator, /replaceGeneratedBlock\(html, 'brand-content', renderBrandContent\(\)\)/u);
-  assert.match(generator, /function renderBrandContent\(\)/u);
-  assert.ok(sitemap.includes('/pages/art-music.html'));
+  assert.match(generator, /title:\s*'IrisSakura Brand System \| IrisSakura'/u);
+  assert.match(generator, /replaceGeneratedBlock\(html, 'brand-content', renderBrandContent\(brandConfig\)\)/u);
+  assert.match(generator, /function renderBrandContent\(brand\)/u);
+  assert.ok(sitemap.includes('/pages/brand.html'));
+  assert.ok(!sitemap.includes('/pages/art-music.html'));
 });
 
 test('brand story is expressed as live dual tracks, convergence, palette and naming rules', async () => {
-  const page = await readFile(new URL('pages/art-music.html', root), 'utf8');
+  const page = await readFile(new URL('pages/brand.html', root), 'utf8');
 
   assert.ok(page.includes('class="brand-lockup'));
   assert.equal((page.match(/data-brand-branch=/g) ?? []).length, 2);
@@ -80,7 +81,7 @@ test('brand story is expressed as live dual tracks, convergence, palette and nam
     'ENGINEER · MANAGE · DELIVER',
     'FRAME · POWER · EXTEND',
     'Engineering &amp; Project Management',
-    'SakuraGameFramework',
+    'Sakura Framework',
     'Game Framework / Modules / Runtime / Tooling'
   ]) {
     assert.ok(page.includes(marker), `brand page is missing v3 ownership marker ${marker}`);
@@ -91,7 +92,7 @@ test('brand story is expressed as live dual tracks, convergence, palette and nam
 test('generated public shell uses one joint brand mark without the retired gamepad identity', async () => {
   const [home, brandPage, favicon] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
-    readFile(new URL('pages/art-music.html', root), 'utf8'),
+    readFile(new URL('pages/brand.html', root), 'utf8'),
     readFile(new URL('assets/favicon.svg', root), 'utf8')
   ]);
 
@@ -118,7 +119,7 @@ test('the single brand palette preserves the three-part wordmark', async () => {
 test('IRIS/Sakura contrast composition is exactly three of ten governed story sections', async () => {
   const [home, brandPage] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
-    readFile(new URL('pages/art-music.html', root), 'utf8')
+    readFile(new URL('pages/brand.html', root), 'utf8')
   ]);
   const combined = `${home}\n${brandPage}`;
   const governed = combined.match(/data-brand-layout="(?:contrast|editorial)"/g) ?? [];
@@ -126,6 +127,23 @@ test('IRIS/Sakura contrast composition is exactly three of ten governed story se
   assert.equal(governed.length, 10);
   assert.equal(contrast.length, 3);
   assert.equal(contrast.length / governed.length, 0.3);
+});
+
+test('brand architecture is frozen as a maintained repository contract', async () => {
+  const document = await readFile(new URL('docs/brand/brand-architecture.md', root), 'utf8');
+
+  for (const marker of [
+    'IrisSakura',
+    'Iris Engineering',
+    'Sakura Framework',
+    'IrisSakura Journal',
+    'Consumer Lab',
+    'IRIS × SAKURA',
+    'Sakura Design Journal',
+    'Deprecated'
+  ]) {
+    assert.ok(document.includes(marker), `brand architecture is missing ${marker}`);
+  }
 });
 
 test('shared cards carry one restrained IRIS-to-SAKURA signature across page types', async () => {

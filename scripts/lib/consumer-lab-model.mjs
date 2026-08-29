@@ -5,6 +5,10 @@ const PACKAGE_PATTERN = /^com\.unitygame\.framework\.[a-z0-9-]+$/;
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const ISO_INSTANT_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 const PRIVATE_TRANSPORT_PATTERN = /(?:\/Users\/|154\.37\.215\.57|\bGitea\b|git@|https?:\/\/)/iu;
+const PLAYER_EVIDENCE = new Set([
+  'macOS Player Build + actual smoke',
+  'Unity WebGL Build + browser smoke'
+]);
 
 export function assertConsumerLabCurrent(registry) {
   if (registry?.schemaVersion !== 2 || !Array.isArray(registry.cases)) {
@@ -13,8 +17,8 @@ export function assertConsumerLabCurrent(registry) {
   if (!DATE_PATTERN.test(registry.updatedAt ?? '')) {
     throw new Error('Consumer Lab requires a valid updatedAt date.');
   }
-  if (registry.cases.length !== 6) {
-    throw new Error('Consumer Lab must expose exactly six reviewed consumer cases.');
+  if (registry.cases.length !== 7) {
+    throw new Error('Consumer Lab must expose exactly seven reviewed consumer cases.');
   }
   if (PRIVATE_TRANSPORT_PATTERN.test(JSON.stringify(registry))) {
     throw new Error('Consumer Lab public facts contain a private transport or local path.');
@@ -57,6 +61,22 @@ export function assertConsumerLabCurrent(registry) {
         throw new Error(`Consumer Lab case ${entry.id} requires reviewed ${field} copy.`);
       }
     }
+    if (entry.id === 'gamejam-game') {
+      const narrativeKeys = Object.keys(entry.brandNarrative ?? {}).sort();
+      if (
+        narrativeKeys.length !== 2
+        || narrativeKeys[0] !== 'iris'
+        || narrativeKeys[1] !== 'sakura'
+        || narrativeKeys.some((key) => (
+          typeof entry.brandNarrative[key] !== 'string'
+          || entry.brandNarrative[key].trim().length < 18
+        ))
+      ) {
+        throw new Error('Consumer Lab GameJam case requires a reviewed IRIS and SAKURA brand narrative.');
+      }
+    } else if (entry.brandNarrative !== undefined) {
+      throw new Error(`Consumer Lab case ${entry.id} cannot claim the featured brand narrative.`);
+    }
     if (entry.status !== 'local-passed') {
       throw new Error(`Consumer Lab case ${entry.id} must remain local-passed.`);
     }
@@ -74,7 +94,7 @@ export function assertConsumerLabCurrent(registry) {
     }
     assertPassedCount(entry.id, 'EditMode', entry.verification?.editMode);
     assertPassedCount(entry.id, 'PlayMode', entry.verification?.playMode);
-    if (entry.verification?.player !== 'macOS Player Build + actual smoke') {
+    if (!PLAYER_EVIDENCE.has(entry.verification?.player)) {
       throw new Error(`Consumer Lab case ${entry.id} requires reviewed Player evidence.`);
     }
     if (
