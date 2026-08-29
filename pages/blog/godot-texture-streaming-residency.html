@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="当场景拥有大量高分辨率纹理时，系统怎样根据画面真实使用情况决定哪些纹理应该提高质量、哪些应该降级，同时保证显存预算、I/O 峰值和资源生命周期都保持可控？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/godot-texture-streaming-residency.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留 | IrisSakura">
+    <meta property="og:description" content="当场景拥有大量高分辨率纹理时，系统怎样根据画面真实使用情况决定哪些纹理应该提高质量、哪些应该降级，同时保证显存预算、I/O 峰值和资源生命周期都保持可控？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/godot-texture-streaming-residency.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-godot-texture-streaming-residency.png">
+    <meta property="og:image:alt" content="驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留 | IrisSakura">
+    <meta name="twitter:description" content="当场景拥有大量高分辨率纹理时，系统怎样根据画面真实使用情况决定哪些纹理应该提高质量、哪些应该降级，同时保证显存预算、I/O 峰值和资源生命周期都保持可控？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-godot-texture-streaming-residency.png">
+    <meta name="twitter:image:alt" content="驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f4efff">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留 | IrisSakura","description":"当场景拥有大量高分辨率纹理时，系统怎样根据画面真实使用情况决定哪些纹理应该提高质量、哪些应该降级，同时保证显存预算、I/O 峰值和资源生命周期都保持可控？","url":"https://irissakura.github.io/pages/blog/godot-texture-streaming-residency.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留","image":"https://irissakura.github.io/assets/social/pages-blog-godot-texture-streaming-residency.png","datePublished":"2026-08-29","dateModified":"2026-08-29","about":["godot","mip","texture-streaming"]}</script>
+    <!-- site-meta:end -->
+    <title>驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/art-music.html" class="nav-link">美术音乐</a>
+            <a href="../../pages/framework.html" class="nav-link">框架</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/contact.html" class="nav-link">联系我</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/art-music.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>Sakura Design Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/godot-source-research.html">从 Godot 源码理解引擎设计</a> · 发布于 2026-08-29 · 更新于 2026-08-29</p>
+            <h1>驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留</h1>
+            <p class="blog-deck">当场景拥有大量高分辨率纹理时，系统怎样根据画面真实使用情况决定哪些纹理应该提高质量、哪些应该降级，同时保证显存预算、I/O 峰值和资源生命周期都保持可控？</p>
+            <div class="note-tags"><a href="tag/godot.html">godot</a><span>mip</span><span>texture-streaming</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>镜头正在快速靠近一面巨大的建筑墙体。</p>
+<p>墙上的纹理此时仍然比较模糊。</p>
+<p>系统已经知道：</p>
+<blockquote>
+<p>这张纹理现在需要更高分辨率。</p>
+</blockquote>
+<p>但这并不意味着下一帧它就一定能够立刻显示完整 mip 0。</p>
+<p>原因可能有很多：</p>
+<ul>
+<li>当前显存预算已经接近上限；</li>
+<li>其他更重要纹理同样在请求提高质量；</li>
+<li>I/O 线程还有此前的重载任务；</li>
+<li>GPU feedback 刚刚到达 CPU；</li>
+<li>当前只允许纹理每次推进一级 mip；</li>
+<li>纹理虽然已经收到新的目标，但实际 GPU payload 尚未完成替换。</li>
+</ul>
+<p>于是一个看起来只有：</p>
+<pre><code class="language-text">纹理清晰
+/
+纹理模糊
+</code></pre>
+<p>两种结果的问题，实际上至少存在三种不同状态：</p>
+<pre><code class="language-text">画面想要什么
+预算允许什么
+GPU 现在真正有什么。
+</code></pre>
+<p>Godot 当前的纹理 Mip Streaming 最值得研究的地方，就是它没有把这三个事实压成同一个 <code>LOD</code> 数字。</p>
+<h2 id="先说结论纹理流送是一套持续运行的反馈控制系统">先说结论：纹理流送是一套持续运行的反馈控制系统</h2><p><strong>驻留状态收敛（后文简称“从画面想要的质量逐步追到 GPU 真正拥有的质量”）</strong>：渲染器持续测量画面对纹理分辨率的需求，预算系统根据全局资源压力决定允许达到的质量，再由 I/O 与 GPU 资源替换逐步让实际驻留状态追赶目标。</p>
+<p>整个系统可以压缩成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["屏幕空间使用"] --&gt; B["GPU Feedback"]
+    B --&gt; C["request_mip&lt;br/&gt;画面需求"]
+    C --&gt; D["Budget Fit"]
+    D --&gt; E["fit_mip&lt;br/&gt;预算目标"]
+    E --&gt; F["I/O Reload Queue"]
+    F --&gt; G["current_mip&lt;br/&gt;实际驻留"]
+    G --&gt; H["GPU Texture"]
+    H --&gt; A
+</code></pre>
+<p>这里首先需要记住：</p>
+<pre><code class="language-text">Mip 0
+=
+最高质量。
+
+Mip index 越大
+=
+驻留分辨率越低。
+</code></pre>
+<p>因此：</p>
+<pre><code class="language-text">request_mip = 0
+fit_mip = 2
+current_mip = 3
+</code></pre>
+<p>实际表达的是：</p>
+<pre><code class="language-text">画面希望最高质量
+↓
+预算暂时只批准到 mip 2
+↓
+I/O 目前甚至还只完成到 mip 3。
+</code></pre>
+<p>系统正在向目标收敛。</p>
+<p>但还没有完成。</p>
+<h2 id="texture-streaming-和异步-resource-loading-是两类问题">Texture Streaming 和异步 Resource Loading 是两类问题</h2><p>这两个系统很容易因为都涉及：</p>
+<pre><code class="language-text">I/O
+异步
+资源
+</code></pre>
+<p>而被合并理解。</p>
+<p>实际上它们的完成对象完全不同。</p>
+<h3 id="resourceloader">ResourceLoader</h3><p>主要回答：</p>
+<pre><code class="language-text">我请求的这个 Resource
+什么时候能够被拿到？
+</code></pre>
+<p>典型生命周期是：</p>
+<pre><code class="language-text">Request
+→
+Dependency
+→
+Load
+→
+Complete。
+</code></pre>
+<h3 id="texture-streaming">Texture Streaming</h3><p>主要回答：</p>
+<pre><code class="language-text">一个已经存在的纹理
+当前应该驻留到哪一个 mip？
+</code></pre>
+<p>它不会在第一次 Resource Load 完成以后结束。</p>
+<p>运行过程中会持续：</p>
+<pre><code class="language-text">升质量
+降质量
+再升质量
+再降质量。
+</code></pre>
+<p>因此它的生命周期更像一个长时间运行的控制器：</p>
+<pre><code class="language-text">Observe
+→
+Decide
+→
+Adjust
+→
+Observe Again。
+</code></pre>
+<p>这也是为什么把两者统一成一个：</p>
+<pre><code class="language-text">AsyncResourceLoader
+</code></pre>
+<p>往往会损失重要状态语义。</p>
+<h2 id="流式纹理首先需要可独立寻址的-mip-数据">流式纹理首先需要可独立寻址的 Mip 数据</h2><p>普通纹理可以在加载时直接建立完整 GPU Texture。</p>
+<p>流式纹理则需要：</p>
+<blockquote>
+<p>不必读取完整最高质量内容，也能直接从某个较低 mip 开始建立合法纹理。</p>
+</blockquote>
+<p>Godot 当前引入的 <code>.stex</code> 文件会保存：</p>
+<ul>
+<li>原始宽高；</li>
+<li>Image Format；</li>
+<li>mip 数量；</li>
+<li>每个 mip 的 offset；</li>
+<li>每个 mip 的 size；</li>
+<li>完整 mip chain。</li>
+</ul>
+<p>因此运行时可以直接：</p>
+<pre><code class="language-text">Seek 到 mip 3
+→
+读取 mip 3
+→
+继续读取 mip 4…N
+→
+把 mip 3 作为当前最高质量层。
+</code></pre>
+<p>这里有一个很重要的细节。</p>
+<p>所谓：</p>
+<pre><code class="language-text">当前驻留 mip 3
+</code></pre>
+<p>并不是：</p>
+<pre><code class="language-text">GPU 只保留 mip 3 这一张图。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">mip 3
++
+更低质量的 mip 4…N
+</code></pre>
+<p>共同组成一条新的、较短 mip chain。</p>
+<p>这样 GPU 仍然可以正常完成不同采样距离下的 mip 选择。</p>
+<h2 id="resource-的逻辑尺寸和实际驻留尺寸不能混为一谈">Resource 的逻辑尺寸和实际驻留尺寸不能混为一谈</h2><p>**逻辑纹理尺寸（后文简称“这张纹理本来有多大”）<strong>和</strong>驻留纹理尺寸（后文简称“GPU 现在真正放了多大”）**是两个不同事实。</p>
+<p>例如源纹理：</p>
+<pre><code class="language-text">4096 × 4096。
+</code></pre>
+<p>当前只从 mip 2 开始驻留：</p>
+<pre><code class="language-text">1024 × 1024
++
+后续更小 mip。
+</code></pre>
+<p>此时 Resource 仍然应该知道：</p>
+<pre><code class="language-text">原图是 4096 × 4096。
+</code></pre>
+<p>因为 GPU feedback 计算需要根据原始尺寸判断：</p>
+<blockquote>
+<p>当前屏幕覆盖究竟需要哪个 mip。</p>
+</blockquote>
+<p>如果系统把：</p>
+<pre><code class="language-text">当前 resident width
+</code></pre>
+<p>误写回：</p>
+<pre><code class="language-text">Resource logical width，
+</code></pre>
+<p>下一轮质量计算就会不断围绕一个已经降级后的尺寸继续判断，形成错误反馈。</p>
+<p>所以：</p>
+<blockquote>
+<p>逻辑身份描述资源本身，驻留状态描述资源当前实现。</p>
+</blockquote>
+<p>两者不能互相覆盖。</p>
+<h2 id="resource-身份稳定底层-payload-可以变化">Resource 身份稳定，底层 payload 可以变化</h2><p>流式纹理另一个非常重要的目标是：</p>
+<pre><code class="language-text">提高或降低 mip
+</code></pre>
+<p>时，不要求所有材质重新绑定一张新的 Texture Handle。</p>
+<p>Godot 当前的重载路径会：</p>
+<pre><code class="language-text">读取新的 mip chain
+→
+建立新的 GPU Texture
+→
+把新纹理兼容替换进原有 RID 身份。
+</code></pre>
+<p>上层材质继续引用原来的纹理身份。</p>
+<p>变化的是：</p>
+<pre><code class="language-text">这个身份当前背后的 GPU payload。
+</code></pre>
+<p>**稳定资源身份（后文简称“壳不换，里面驻留的质量可以换”）**可以避免流式更新向整个上层引用图扩散。</p>
+<p>这种设计并不只适用于纹理。</p>
+<p>任何需要：</p>
+<pre><code class="language-text">逻辑对象长期稳定
++
+底层实现可以重建
+</code></pre>
+<p>的资源，都可以考虑类似结构。</p>
+<h2 id="gpu-比-cpu-更知道纹理究竟被怎样使用">GPU 比 CPU 更知道纹理究竟被怎样使用</h2><p>一个最简单的纹理 Streaming 算法是：</p>
+<pre><code class="language-text">Texture 与 Camera 的距离
+→
+决定 mip。
+</code></pre>
+<p>但距离并不等于真实纹理需求。</p>
+<p>同一张纹理可能：</p>
+<ul>
+<li>被透视压缩；</li>
+<li>位于斜面；</li>
+<li>只占很小屏幕面积；</li>
+<li>被高倍 UV 平铺；</li>
+<li>出现在多个不同尺寸物体上。</li>
+</ul>
+<p>因此 Godot 当前方案让 Shader 直接根据：</p>
+<pre><code class="language-text">dFdx(UV)
+dFdy(UV)
+</code></pre>
+<p>估算纹理坐标在屏幕空间中的变化尺度。</p>
+<p>**GPU 使用反馈（后文简称“由真正正在画这些像素的 GPU 告诉系统需要多细”）**比简单世界距离更接近最终采样事实。</p>
+<p>它回答的不是：</p>
+<pre><code class="language-text">纹理离镜头几米？
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">当前这些 fragment
+实际需要多少 texel 密度？
+</code></pre>
+<h2 id="反馈粒度本身就是预算">反馈粒度本身就是预算</h2><p>如果每一个：</p>
+<pre><code class="language-text">texture sampler
+</code></pre>
+<p>都在 GPU feedback buffer 中拥有独立 slot，</p>
+<p>反馈精度会很高。</p>
+<p>代价也是：</p>
+<ul>
+<li>buffer 更大；</li>
+<li>atomic 次数更多；</li>
+<li>回读数据更多；</li>
+<li>CPU 处理量更高。</li>
+</ul>
+<p>当前实现选择：</p>
+<pre><code class="language-text">材质
+</code></pre>
+<p>作为主要反馈身份。</p>
+<p>一个材质中的多张流式纹理共享同一份屏幕空间 UV 需求。</p>
+<p>**反馈聚合粒度（后文简称“用多细的单位收集真实需求”）**本身也是一项性能—精度权衡。</p>
+<p>粒度越细：</p>
+<pre><code class="language-text">判断越准确
+反馈成本越高。
+</code></pre>
+<p>粒度越粗：</p>
+<pre><code class="language-text">成本降低
+但同组资源可能被一起过度提质。
+</code></pre>
+<p>这是一种很通用的遥测设计问题。</p>
+<p>并不是 Streaming 独有。</p>
+<h2 id="gpu-feedback-不应该让-render-thread-等待">GPU Feedback 不应该让 Render Thread 等待</h2><p>渲染线程最不应该做的是：</p>
+<pre><code class="language-text">GPU feedback 还没回来
+→
+那我停下来等。
+</code></pre>
+<p>当前实现使用多个 feedback buffer 轮转，并通过异步 GPU readback 获取结果。</p>
+<p>大致过程是：</p>
+<pre><code class="language-text">Buffer A
+GPU 正在写
+
+Buffer B
+正在异步 Readback
+
+Buffer C
+已经清零
+准备下一帧使用。
+</code></pre>
+<p>如果当前所有反馈 buffer 都在途：</p>
+<pre><code class="language-text">本轮直接跳过新的反馈提交。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">阻塞 Render Thread。
+</code></pre>
+<p>这体现了一项重要原则：</p>
+<p><strong>观测可丢帧，主渲染不可被观测拖死。</strong></p>
+<p>Texture Streaming 并不要求：</p>
+<pre><code class="language-text">每一帧都必须得到新反馈。
+</code></pre>
+<p>少一次样本最多让质量调整稍晚。</p>
+<p>它不应该直接让整帧停止。</p>
+<h2 id="requestfit-与-current-是整个系统最重要的三本账">request、fit 与 current 是整个系统最重要的三本账</h2><p><strong>反馈需求（后文简称“画面想要什么”）</strong>：经过 GPU feedback、平滑和闲置策略以后形成的 <code>request_mip</code>。</p>
+<p><strong>预算目标（后文简称“系统现在允许什么”）</strong>：考虑显存预算、单纹理 LOD 边界和全局竞争以后形成的 <code>fit_mip</code>。</p>
+<p><strong>实际驻留（后文简称“I/O 和 GPU 现在真正做到了什么”）</strong>：已经完成 Resource Reload 和 GPU Texture Replace 的 <code>current_mip</code>。</p>
+<p>三者之间应该始终允许存在差异：</p>
+<pre><code class="language-text">request
+≠
+fit
+≠
+current。
+</code></pre>
+<p>这种差异不是错误。</p>
+<p>恰恰是异步预算系统的正常运行状态。</p>
+<h2 id="一个简单调试矩阵">一个简单调试矩阵</h2><p>假设一张纹理看起来过于模糊。</p>
+<p>可以先查看三种状态。</p>
+<table>
+<thead>
+<tr>
+<th align="right">request</th>
+<th align="right">fit</th>
+<th align="right">current</th>
+<th>更可能的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td>I/O / reload 尚未追上</td>
+</tr>
+<tr>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td>预算不允许当前提到最高质量</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td>GPU feedback 本身认为不需要更高质量</td>
+</tr>
+<tr>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td>Residency 已满足，应检查采样、材质或其他渲染问题</td>
+</tr>
+</tbody></table>
+<p>如果只显示：</p>
+<pre><code class="language-text">Current LOD = 3
+</code></pre>
+<p>第一、第二、第三种情况在调试界面中看起来完全一样。</p>
+<p>这就是状态拆分真正带来的可观测价值。</p>
+<h2 id="画面需求不应该直接触发-io">画面需求不应该直接触发 I/O</h2><p>如果 Shader 反馈：</p>
+<pre><code class="language-text">mip 0。
+</code></pre>
+<p>系统立刻：</p>
+<pre><code class="language-text">Load mip 0。
+</code></pre>
+<p>那么全场纹理同时接近镜头时，很容易制造巨大内存和 I/O 峰值。</p>
+<p>所以 GPU Feedback 首先只是：</p>
+<pre><code class="language-text">Demand。
+</code></pre>
+<p>还必须经过：</p>
+<pre><code class="language-text">Admission。
+</code></pre>
+<p>也就是预算准入。</p>
+<p>这和很多实时系统一样：</p>
+<pre><code class="language-text">需求
+≠
+资源分配许可。
+</code></pre>
+<h2 id="预算系统真正决定谁可以牺牲质量">预算系统真正决定“谁可以牺牲质量”</h2><p>当前预算拟合会先为每张纹理形成候选：</p>
+<pre><code class="language-text">请求质量
+单纹理 min/max
+系统 min/max
+当前活动状态
+预计驻留字节数。
+</code></pre>
+<p>如果总量没有超过预算：</p>
+<pre><code class="language-text">不需要额外降级。
+</code></pre>
+<p>如果超过预算：</p>
+<p>系统需要回答：</p>
+<blockquote>
+<p>哪些纹理应该先增加 mip，也就是降低质量？</p>
+</blockquote>
+<p>当前源码中的比较策略大致考虑：</p>
+<ul>
+<li>已经比自身请求质量更高的纹理；</li>
+<li>长时间未活动的纹理；</li>
+<li>占用更大的纹理；</li>
+<li>当前质量更高的纹理。</li>
+</ul>
+<p>这说明预算器并不是简单：</p>
+<pre><code class="language-text">所有 Texture mip +1。
+</code></pre>
+<p>它在做的是：</p>
+<p><strong>资源牺牲排序（后文简称“预算不够时决定先让谁变糊”）</strong>。</p>
+<p>这才是真正的 Streaming Policy。</p>
+<h2 id="预算不能越过硬规则去追求一个不可能数字">预算不能越过硬规则去追求一个不可能数字</h2><p>假设所有纹理已经达到允许的最差 mip，</p>
+<p>总内存仍然超过预算。</p>
+<p>系统可以：</p>
+<pre><code class="language-text">继续无视 LOD 下限降低质量
+</code></pre>
+<p>强行满足预算。</p>
+<p>也可以：</p>
+<pre><code class="language-text">保持硬边界
+→
+报告预算无法满足。
+</code></pre>
+<p>当前实现选择后者。</p>
+<p>这个选择很重要。</p>
+<p>它明确了：</p>
+<pre><code class="language-text">Memory Budget
+</code></pre>
+<p>是一项软目标。</p>
+<p>而：</p>
+<pre><code class="language-text">Min / Max LOD Override
+</code></pre>
+<p>可以是更强的内容合同。</p>
+<p>成熟预算系统不应该为了让 Dashboard 数字好看，悄悄破坏更高优先级约束。</p>
+<h2 id="单阈值预算很容易制造质量抖动">单阈值预算很容易制造质量抖动</h2><p>假设预算：</p>
+<pre><code class="language-text">512 MB。
+</code></pre>
+<p>系统刚超过：</p>
+<pre><code class="language-text">513 MB
+→
+降级纹理。
+</code></pre>
+<p>降级后变成：</p>
+<pre><code class="language-text">511 MB。
+</code></pre>
+<p>下一轮又允许提质。</p>
+<p>随后再次：</p>
+<pre><code class="language-text">513 MB。
+</code></pre>
+<p>于是不断：</p>
+<pre><code class="language-text">Upgrade
+Downgrade
+Upgrade
+Downgrade。
+</code></pre>
+<p>这会同时制造：</p>
+<ul>
+<li>I/O 抖动；</li>
+<li>GPU Resource 重建；</li>
+<li>可见画质跳动。</li>
+</ul>
+<p>因此当前实现使用 high/low 区间，而不是单一阈值。</p>
+<p>**预算滞回（后文简称“超过一段才开始降，降下来以后多留一点余量”）**可以显著降低临界值附近来回切换。</p>
+<p>在当前研究快照中，预算拟合使用了一段明确 deadband。</p>
+<p>具体比例属于当前实现细节。</p>
+<p>真正值得迁移的是：</p>
+<blockquote>
+<p>触发边界和恢复边界最好不是同一个数字。</p>
+</blockquote>
+<h2 id="画质不足和内存回收的用户感知成本不同">画质不足和内存回收的用户感知成本不同</h2><p>镜头突然靠近一个大型物体时，如果纹理仍然模糊：</p>
+<pre><code class="language-text">非常容易看见。
+</code></pre>
+<p>镜头刚离开以后，如果纹理多保持几秒较高质量：</p>
+<pre><code class="language-text">玩家通常完全不会发现。
+</code></pre>
+<p>因此两种状态变化不应该使用对称速度。</p>
+<p><strong>非对称响应（后文简称“靠近时快提质，离开后慢慢回收”）</strong>：</p>
+<pre><code class="language-text">请求更高质量
+→
+快速响应
+
+请求降低质量
+→
+平滑 / inactivity decay。
+</code></pre>
+<p>这样可以同时减少：</p>
+<ul>
+<li>可见糊图；</li>
+<li>镜头轻微移动造成的质量震荡；</li>
+<li>高频 I/O Reload。</li>
+</ul>
+<p>这是一种非常通用的实时控制思想：</p>
+<blockquote>
+<p>提升服务质量和回收资源往往拥有不同的人类感知成本。</p>
+</blockquote>
+<h2 id="fit-已经变化也不应该一次跳到目标">fit 已经变化，也不应该一次跳到目标</h2><p>假设：</p>
+<pre><code class="language-text">current_mip = 5
+fit_mip = 0。
+</code></pre>
+<p>最直接的做法是：</p>
+<pre><code class="language-text">直接加载完整 mip 0 chain。
+</code></pre>
+<p>但这可能突然制造：</p>
+<ul>
+<li>大量磁盘读取；</li>
+<li>Image 构建；</li>
+<li>GPU Texture Replacement；</li>
+<li>内存峰值。</li>
+</ul>
+<p>当前 I/O 路径更接近：</p>
+<pre><code class="language-text">5
+→
+4
+→
+3
+→
+2
+→
+1
+→
+0。
+</code></pre>
+<p>**渐进式收敛（后文简称“一档一档追，不让一次状态变化制造大峰值”）**让质量目标可以很激进，但执行成本保持平滑。</p>
+<p>这也是：</p>
+<pre><code class="language-text">Target State
+</code></pre>
+<p>与：</p>
+<pre><code class="language-text">Transition Policy
+</code></pre>
+<p>必须分开的原因。</p>
+<p>目标可以是 mip 0。</p>
+<p>并不意味着实现必须一步完成。</p>
+<h2 id="快速变化的目标不能无限生成-io-job">快速变化的目标不能无限生成 I/O Job</h2><p>镜头高速移动时：</p>
+<pre><code class="language-text">fit_mip
+</code></pre>
+<p>可能连续变化：</p>
+<pre><code class="language-text">4
+→
+1
+→
+3
+→
+0
+→
+2。
+</code></pre>
+<p>如果每一次变化都生成一个独立 I/O Request：</p>
+<pre><code class="language-text">历史目标队列
+</code></pre>
+<p>会迅速堆积。</p>
+<p>等任务真正执行时，它们可能已经完全失去价值。</p>
+<p>当前实现会合并：</p>
+<pre><code class="language-text">pending_reload_mip。
+</code></pre>
+<p>如果已有工作在队列中：</p>
+<pre><code class="language-text">更新最新目标
+</code></pre>
+<p>而不是重复再排一个完整 job。</p>
+<p>**目标合并（后文简称“只追最新状态，不把已经过时的目标逐个补做”）**是所有实时异步状态机都非常重要的一项能力。</p>
+<p>它适用于：</p>
+<ul>
+<li>纹理 Streaming；</li>
+<li>Scene Streaming；</li>
+<li>UI Search；</li>
+<li>自动保存；</li>
+<li>网络状态同步；</li>
+<li>AI 请求。</li>
+</ul>
+<p>只要中间历史状态没有必须逐项执行的业务意义，就不应该机械保留。</p>
+<h2 id="fitmip-和-currentmip-的差值本身就是-backlog"><code>fit_mip</code> 和 <code>current_mip</code> 的差值本身就是 Backlog</h2><p>假设：</p>
+<pre><code class="language-text">request = 0
+fit = 0
+current = 4。
+</code></pre>
+<p>需求和预算完全一致。</p>
+<p>问题只是：</p>
+<pre><code class="language-text">执行层还没追上。
+</code></pre>
+<p>这个差值可以视作：</p>
+<p><strong>驻留积压（后文简称“系统已经批准，但底层还欠多少执行工作”）</strong>。</p>
+<p>如果大量纹理长期存在：</p>
+<pre><code class="language-text">fit &lt;&lt; current，
+</code></pre>
+<p>说明真正瓶颈可能是：</p>
+<ul>
+<li>磁盘；</li>
+<li>解压；</li>
+<li>Image 构造；</li>
+<li>GPU 替换；</li>
+<li>操作限速。</li>
+</ul>
+<p>继续提高 Budget 并不能解决。</p>
+<p>这也说明一个成熟 Streaming Dashboard 不应该只显示：</p>
+<pre><code class="language-text">Memory Used。
+</code></pre>
+<p>还应该显示：</p>
+<pre><code class="language-text">Demand Gap
+Admission Gap
+Execution Gap。
+</code></pre>
+<h2 id="flush-必须有明确完成语义">Flush 必须有明确完成语义</h2><p>有些工具场景不能接受：</p>
+<pre><code class="language-text">最终会慢慢追上。
+</code></pre>
+<p>例如：</p>
+<ul>
+<li>截图；</li>
+<li>高质量预览；</li>
+<li>场景切换；</li>
+<li>画质设置切换；</li>
+<li>Benchmark 准备。</li>
+</ul>
+<p>这时需要：</p>
+<pre><code class="language-text">Flush。
+</code></pre>
+<p>但：</p>
+<pre><code class="language-text">RequestFlush()
+</code></pre>
+<p>仍然不应该被解释成：</p>
+<pre><code class="language-text">已经完成。
+</code></pre>
+<p>当前流程会：</p>
+<pre><code class="language-text">强制执行一次 Fit
+→
+让已有 Reload 跳过普通限速追向 Target
+→
+插入 I/O Fence
+→
+等待此前工作
+→
+发出 flush_completed。
+</code></pre>
+<p>**流送完成边界（后文简称“明确等到这一批目标真正追完以后再继续”）**必须通过 Fence 和 Completion Signal 表达。</p>
+<p>这和所有异步系统一样：</p>
+<pre><code class="language-text">请求
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">请求已兑现
+</code></pre>
+<p>是两件事。</p>
+<h2 id="flush-也不是永恒稳定点">Flush 也不是永恒稳定点</h2><p>这里还要保留一个很重要的边界。</p>
+<p>Flush 可以保证：</p>
+<pre><code class="language-text">这次 Fence 之前的相关工作已经完成。
+</code></pre>
+<p>但 GPU 画面仍然继续运行。</p>
+<p>之后可能又产生新的 Feedback：</p>
+<pre><code class="language-text">新的 request
+→
+新的 fit
+→
+新的 streaming work。
+</code></pre>
+<p>所以：</p>
+<pre><code class="language-text">flush_completed
+</code></pre>
+<p>不是：</p>
+<blockquote>
+<p>从现在开始 Streaming 世界永远不会再变化。</p>
+</blockquote>
+<p>它只建立：</p>
+<blockquote>
+<p>这一批已知目标的明确完成点。</p>
+</blockquote>
+<p>把局部 Barrier 扩大成永久状态，是异步系统中很常见的错误。</p>
+<h2 id="删除资源比停止请求复杂得多">删除资源比停止请求复杂得多</h2><p>假设一张 Texture 正在：</p>
+<pre><code class="language-text">I/O thread
+读取新的 mip chain。
+</code></pre>
+<p>此时场景卸载。</p>
+<p>Resource 被删除。</p>
+<p>如果主线程直接：</p>
+<pre><code class="language-text">free StreamingState，
+</code></pre>
+<p>后台 job 还可能继续访问这块内存。</p>
+<p>因此删除过程需要拆开：</p>
+<pre><code class="language-text">宣布 removing
+→
+取消新的 target
+→
+从 RenderingServer 解除关联
+→
+等待此前已经排入 I/O 的工作
+→
+最后 free state。
+</code></pre>
+<p>**删除收敛（后文简称“先阻止新工作，再等旧工作排空，最后才真正释放”）**不是一个普通 <code>delete</code>。</p>
+<p>这条原则在：</p>
+<ul>
+<li>Asset Loading；</li>
+<li>Network Session；</li>
+<li>Worker Job；</li>
+<li>File Handle；</li>
+</ul>
+<p>中都非常常见。</p>
+<p>资源生命周期真正危险的时刻，往往不是加载。</p>
+<p>而是：</p>
+<blockquote>
+<p>已经有人在后台使用它时，Owner 决定它应该消失。</p>
+</blockquote>
+<h2 id="线程分工必须围绕状态所有权而不是全部-atomic">线程分工必须围绕状态所有权，而不是“全部 atomic”</h2><p>当前 Texture Streaming 至少涉及：</p>
+<table>
+<thead>
+<tr>
+<th>执行域</th>
+<th>主要职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Render Thread</td>
+<td>建反馈 Buffer、材质索引、GPU Readback</td>
+</tr>
+<tr>
+<td>Feedback Thread</td>
+<td>解码反馈、平滑、预算 Fit</td>
+</tr>
+<tr>
+<td>I/O Thread</td>
+<td>文件读取、纹理 Reload、推进 current mip</td>
+</tr>
+<tr>
+<td>Game / Editor</td>
+<td>Resource API、设置、Flush</td>
+</tr>
+</tbody></table>
+<p>部分关键字段使用 atomic。</p>
+<p>但真正的顺序关系很大程度上来自：</p>
+<pre><code class="language-text">Command Queue
++
+单线程写入责任。
+</code></pre>
+<p>这说明：</p>
+<blockquote>
+<p>看到 <code>memory_order_relaxed</code> 并不能直接判断系统没有同步。</p>
+</blockquote>
+<p>同样：</p>
+<blockquote>
+<p>加了 atomic 也不能替代线程所有权设计。</p>
+</blockquote>
+<p>并发系统的正确性通常来自：</p>
+<pre><code class="language-text">谁可以写什么
+什么时候可以写
+通过哪条 Queue 交接。
+</code></pre>
+<p>而不是每个字段各自证明线程安全。</p>
+<h2 id="texture-streaming-的观测值也有证据层级">Texture Streaming 的观测值也有证据层级</h2><p>当前系统可以报告：</p>
+<pre><code class="language-text">Texture Streaming Memory。
+</code></pre>
+<p>但这个值主要根据 StreamingState 和 mip 字节估算。</p>
+<p>它并不等于：</p>
+<pre><code class="language-text">D3D12 / Metal / Vulkan Driver
+报告的实际物理显存驻留真值。
+</code></pre>
+<p>因此：</p>
+<p>**预算模型观测值（后文简称“控制器认为自己用了多少”）**和：</p>
+<p><strong>驱动物理驻留（后文简称“GPU 驱动实际上占用了多少”）</strong></p>
+<p>不能使用同一个标签。</p>
+<p>如果 Debug UI 写：</p>
+<pre><code class="language-text">VRAM Used = 412 MB
+</code></pre>
+<p>读者会自然认为这是物理事实。</p>
+<p>更准确的名称应该体现：</p>
+<pre><code class="language-text">Streaming Estimated Resident Bytes。
+</code></pre>
+<p>这也是所有性能工具应该注意的证据边界：</p>
+<blockquote>
+<p>模型估计值、逻辑状态和硬件事实必须明确标注来源。</p>
+</blockquote>
+<h2 id="当前源码中的能力边界">当前源码中的能力边界</h2><p>当前研究快照中，这套纹理 Streaming 并不是所有运行环境默认强制启用。</p>
+<p>存在明确边界：</p>
+<ul>
+<li>Streaming Project Setting 可关闭；</li>
+<li>Compatibility Renderer 不进入完整 Streaming；</li>
+<li>Headless 不建立正常 Render Feedback Buffer；</li>
+<li>Importer 依赖可用的 VRAM Compression Family；</li>
+<li>预算功能本身也可单独关闭。</li>
+</ul>
+<p>这些事实很重要。</p>
+<p>看到源码中存在完整：</p>
+<pre><code class="language-text">TextureStreaming
+</code></pre>
+<p>实现，不应扩大成：</p>
+<blockquote>
+<p>当前所有 Godot 项目默认都在自动进行 Mip Residency Streaming。</p>
+</blockquote>
+<p>代码存在、可配置启用和默认产品行为仍然是三种不同状态。</p>
+<h2 id="当前证据也还主要停留在源码闭环">当前证据也还主要停留在源码闭环</h2><p>研究已经从源码闭合：</p>
+<ul>
+<li><code>.stex</code>；</li>
+<li>StreamedTexture2D；</li>
+<li>Material Feedback；</li>
+<li>Shader Feedback；</li>
+<li>Budget Fit；</li>
+<li>I/O Reload；</li>
+<li>Flush；</li>
+<li>删除边界。</li>
+</ul>
+<p>但当前笔记也明确记录：</p>
+<ul>
+<li>没有编译 Godot；</li>
+<li>没有运行真实 GPU Feedback；</li>
+<li>没有 D3D12 / Metal / Vulkan 驻留 Benchmark；</li>
+<li>没有 focused Texture Streaming Test；</li>
+<li>reload failure / remove race 仍需要运行证据。</li>
+</ul>
+<p>因此最合适的表述是：</p>
+<blockquote>
+<p>当前源码已经形成完整的 Streaming 状态机设计。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>当前实现已经被证明在所有平台拥有稳定性能和正确性。</p>
+</blockquote>
+<h2 id="与传统-lod-的边界">与传统 LOD 的边界</h2><p>普通 Mesh / Texture LOD 可能只是：</p>
+<pre><code class="language-text">根据距离
+选择已经存在的多个资源版本。
+</code></pre>
+<p>纹理 Mip Streaming 更进一步：</p>
+<pre><code class="language-text">资源身份不变
+↓
+实际驻留 mip chain 持续变化。
+</code></pre>
+<p>它管理的是：</p>
+<pre><code class="language-text">Residency。
+</code></pre>
+<p>而不是只管理：</p>
+<pre><code class="language-text">Sample Selection。
+</code></pre>
+<p>这也是为什么它需要：</p>
+<ul>
+<li>I/O；</li>
+<li>Memory Budget；</li>
+<li>Resource Replacement；</li>
+<li>Thread Ownership。</li>
+</ul>
+<h2 id="与-virtual-texturing-的边界">与 Virtual Texturing 的边界</h2><p>这套 Mip Streaming 同样不应该直接等同于 Virtual Texturing。</p>
+<p>当前 StreamedTexture2D 更接近：</p>
+<pre><code class="language-text">以整条“从某 mip 到尾部”的 mip chain
+作为驻留单位。
+</code></pre>
+<p>而 Virtual Texturing 通常会进一步把：</p>
+<pre><code class="language-text">Texture
+</code></pre>
+<p>切成更细的 Tile / Page，</p>
+<p>按页面进行物理映射与反馈。</p>
+<p>二者共享：</p>
+<ul>
+<li>Feedback；</li>
+<li>Budget；</li>
+<li>Residency；</li>
+</ul>
+<p>思想。</p>
+<p>但资源粒度和底层内存模型不同。</p>
+<p>不能只因为都叫 Streaming 就写成同一种技术。</p>
+<h2 id="与普通-asset-warmup-的边界">与普通 Asset Warmup 的边界</h2><p>Asset Warmup 解决：</p>
+<pre><code class="language-text">我预测之后可能需要整个资源
+→
+提前 Acquire。
+</code></pre>
+<p>Mip Streaming 解决：</p>
+<pre><code class="language-text">资源已经存在
+→
+当前到底需要驻留到多高质量。
+</code></pre>
+<p>因此：</p>
+<pre><code class="language-text">Asset Present
+</code></pre>
+<p>并不代表：</p>
+<pre><code class="language-text">Residency Quality 已满足。
+</code></pre>
+<p>这是另一条值得迁移的状态边界。</p>
+<h2 id="对自研资源系统最值得迁移的是三态模型">对自研资源系统最值得迁移的是三态模型</h2><p>如果自己设计资源 Streaming，我最优先保留的是：</p>
+<pre><code class="language-text">Requested
+Admitted
+Resident。
+</code></pre>
+<p>例如开放世界 Mesh Streaming：</p>
+<pre><code class="language-text">requested_lod
+→
+视觉系统想要哪个 LOD
+
+admitted_lod
+→
+预算器允许哪个 LOD
+
+resident_lod
+→
+磁盘 / GPU 当前真正完成哪个 LOD。
+</code></pre>
+<p>Scene Streaming 也可以类似：</p>
+<pre><code class="language-text">desired_state
+→
+scheduler accepted state
+→
+actual loaded state。
+</code></pre>
+<p>这种三态模型一旦成立，很多问题都会从：</p>
+<pre><code class="language-text">“系统好像坏了”
+</code></pre>
+<p>变成：</p>
+<pre><code class="language-text">到底卡在哪一层？
+</code></pre>
+<h2 id="budget-应该只决定准入不应该伪装成完成">Budget 应该只决定准入，不应该伪装成完成</h2><p>假设内存压力缓解以后：</p>
+<pre><code class="language-text">admitted_lod
+</code></pre>
+<p>立即提高。</p>
+<p>UI 如果马上显示：</p>
+<pre><code class="language-text">High Quality Loaded，
+</code></pre>
+<p>就是把准入状态冒充实际完成。</p>
+<p>正确做法是继续等待：</p>
+<pre><code class="language-text">resident_lod
+</code></pre>
+<p>追上。</p>
+<p>这一点不仅适用于 Streaming。</p>
+<p>任何异步资源预算系统都需要防止：</p>
+<pre><code class="language-text">Scheduler 已批准
+=
+资源已经存在。
+</code></pre>
+<h2 id="高频目标变化应该合并而不是排队历史">高频目标变化应该合并，而不是排队历史</h2><p>玩家镜头、网络 Interest、AI 目标和搜索框都属于快速变化输入。</p>
+<p>很多系统最初都会写成：</p>
+<pre><code class="language-text">输入每变化一次
+→
+排一个 Task。
+</code></pre>
+<p>最终 Task Queue 充满已经过时的历史目标。</p>
+<p>更合适的是先问：</p>
+<blockquote>
+<p>中间每一个状态是否都具有必须执行的业务意义？</p>
+</blockquote>
+<p>如果没有：</p>
+<pre><code class="language-text">latest target wins
+</code></pre>
+<p>通常比：</p>
+<pre><code class="language-text">replay every target
+</code></pre>
+<p>更合理。</p>
+<p>Texture Streaming 的 pending mip 合并是一个很清楚的实例。</p>
+<h2 id="滞回适用于所有资源回收控制器">滞回适用于所有资源回收控制器</h2><p>只要存在：</p>
+<pre><code class="language-text">超过阈值
+→
+回收
+
+低于阈值
+→
+重新扩张，
+</code></pre>
+<p>单一阈值就容易制造抖动。</p>
+<p>例如：</p>
+<ul>
+<li>Object Pool；</li>
+<li>Worker Scale Out；</li>
+<li>Memory Cache；</li>
+<li>CDN Warm Cache；</li>
+<li>NPC LOD；</li>
+<li>Network Interest。</li>
+</ul>
+<p>都可以考虑：</p>
+<pre><code class="language-text">high watermark
+low watermark。
+</code></pre>
+<p>这并不意味着每个系统都使用同一百分比。</p>
+<p>值得迁移的是：</p>
+<blockquote>
+<p>回收触发点和恢复触发点拥有不同边界。</p>
+</blockquote>
+<h2 id="我的纹理-streaming-检查表">我的纹理 Streaming 检查表</h2><ol>
+<li>Texture Resource 身份与当前驻留 payload 是否分离？</li>
+<li>逻辑 Width / Height 是否不会被当前 mip 尺寸覆盖？</li>
+<li>文件格式是否能够直接寻址目标 mip？</li>
+<li>从目标 mip 加载时是否保留合法的低质量 mip chain？</li>
+<li><code>requested</code>、<code>admitted</code>、<code>resident</code> 是否是三种不同状态？</li>
+<li>当前 Mip 0 / Mip N 的质量方向是否在 API 中足够清楚？</li>
+<li>GPU Feedback 是否来自真实屏幕空间使用，而不只是世界距离？</li>
+<li>Feedback 粒度是 per-texture、per-material 还是其他单位？</li>
+<li>Feedback 粒度的精度—成本取舍是否明确？</li>
+<li>GPU Readback 是否完全异步？</li>
+<li>Feedback Buffer 饱和时是否可以跳帧，而不是阻塞 Render Thread？</li>
+<li>提高画质和降低画质是否需要不同响应速度？</li>
+<li>是否存在 inactivity decay？</li>
+<li>Budget Fit 是否尊重单纹理硬 LOD 边界？</li>
+<li>预算无法满足时是否显式报告，而不是偷偷突破内容合同？</li>
+<li>是否使用 Hysteresis 避免预算边缘抖动？</li>
+<li>Budget Candidate 是否拥有明确降级排序？</li>
+<li><code>fit</code> 变化以后是否允许渐进式收敛？</li>
+<li>I/O 操作是否有速率限制？</li>
+<li>Pending Target 是否会合并到最新目标？</li>
+<li>是否避免为过时目标无限堆 I/O Job？</li>
+<li><code>fit - current</code> 差距是否能够作为 Execution Backlog 观测？</li>
+<li>Flush 是否拥有 Fence 与明确 Completion Event？</li>
+<li>Flush Completion 是否不会被扩大成永久稳定状态？</li>
+<li>Resource Remove 是否先阻止新工作，再等待旧工作排空？</li>
+<li>Streaming State 的最终 free 是否晚于已有 I/O Job？</li>
+<li>Render / Feedback / I/O / Game Thread 是否有明确状态 Owner？</li>
+<li>Atomic 是否只是辅助，而不是线程所有权的替代品？</li>
+<li>Debug UI 能否同时显示 request / fit / current？</li>
+<li>显存观测值是否明确标记是预算估计还是 Driver 真值？</li>
+<li>Streaming Disabled / Unsupported Renderer 是否有明确退化路径？</li>
+<li>当前方案是否真的需要 Mip Streaming，而不是简单全加载或普通 LOD？</li>
+<li>运行测试是否覆盖快速镜头切换、预算震荡和 reload failure？</li>
+<li>删除与 Reload 竞态是否有 focused evidence？</li>
+<li>不同 GPU Backend 的实际驻留和性能是否经过独立验证？</li>
+</ol>
+<p>Texture Streaming 最容易被概括成：</p>
+<pre><code class="language-text">离镜头近
+→
+加载高清 mip
+
+离镜头远
+→
+卸载高清 mip。
+</code></pre>
+<p>这种描述没有错。</p>
+<p>但它会掩盖真正困难的地方。</p>
+<p>渲染器首先要知道：</p>
+<pre><code class="language-text">画面到底需要什么。
+</code></pre>
+<p>然后资源预算器需要决定：</p>
+<pre><code class="language-text">现在能允许什么。
+</code></pre>
+<p>再然后 I/O 和 GPU 才真正执行：</p>
+<pre><code class="language-text">现在做到了什么。
+</code></pre>
+<p>三件事永远可能暂时不一致。</p>
+<p>正是这种不一致，让异步系统能够存在。</p>
+<p>Godot 当前这套设计最值得保留的，不是具体的 UV 梯度公式，也不是某一个内存预算数字。</p>
+<p>而是这三个状态之间清楚的责任边界：</p>
+<pre><code class="language-text">request_mip
+→
+需求事实
+
+fit_mip
+→
+预算裁决
+
+current_mip
+→
+实际完成。
+</code></pre>
+<p>GPU Feedback 不直接控制 I/O。</p>
+<p>Budget 不假装资源已经加载。</p>
+<p>I/O 也不必一次跳到最终目标。</p>
+<p>资源身份则在整个过程中保持稳定。</p>
+<p>于是一个不断变化、不断竞争资源的视觉需求，终于能够被整理成一套可限速、可回退、可观测、可 Flush，也能够安全销毁的持续控制系统。</p>
+<p>这就是纹理 Mip Streaming 真正值得迁移的设计思想：</p>
+<blockquote>
+<p><strong>实时资源系统不应该追求“请求立即等于现实”，而应该建立一个能够让现实稳定追赶请求的状态收敛协议。</strong></p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>驻留状态收敛</td>
+<td>从画面想要的质量逐步追到 GPU 真正拥有的质量</td>
+</tr>
+<tr>
+<td>逻辑纹理尺寸</td>
+<td>这张纹理本来有多大</td>
+</tr>
+<tr>
+<td>驻留纹理尺寸</td>
+<td>GPU 现在真正放了多大</td>
+</tr>
+<tr>
+<td>稳定资源身份</td>
+<td>壳不换，里面驻留的质量可以换</td>
+</tr>
+<tr>
+<td>GPU 使用反馈</td>
+<td>由真正正在画这些像素的 GPU 告诉系统需要多细</td>
+</tr>
+<tr>
+<td>反馈聚合粒度</td>
+<td>用多细的单位收集真实需求</td>
+</tr>
+<tr>
+<td>反馈需求</td>
+<td>画面想要什么</td>
+</tr>
+<tr>
+<td>预算目标</td>
+<td>系统现在允许什么</td>
+</tr>
+<tr>
+<td>实际驻留</td>
+<td>I/O 和 GPU 现在真正做到了什么</td>
+</tr>
+<tr>
+<td>资源牺牲排序</td>
+<td>预算不够时决定先让谁变糊</td>
+</tr>
+<tr>
+<td>预算滞回</td>
+<td>超过一段才开始降，降下来以后多留一点余量</td>
+</tr>
+<tr>
+<td>非对称响应</td>
+<td>靠近时快提质，离开后慢慢回收</td>
+</tr>
+<tr>
+<td>渐进式收敛</td>
+<td>一档一档追，不让一次状态变化制造大峰值</td>
+</tr>
+<tr>
+<td>目标合并</td>
+<td>只追最新状态，不把已经过时的目标逐个补做</td>
+</tr>
+<tr>
+<td>驻留积压</td>
+<td>系统已经批准，但底层还欠多少执行工作</td>
+</tr>
+<tr>
+<td>流送完成边界</td>
+<td>明确等到这一批目标真正追完以后再继续</td>
+</tr>
+<tr>
+<td>删除收敛</td>
+<td>先阻止新工作，再等旧工作排空，最后才真正释放</td>
+</tr>
+<tr>
+<td>预算模型观测值</td>
+<td>控制器认为自己用了多少</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>notes/GODOT源码研究/04_资源与场景/07_StreamedTexture2D纹理Mip流式加载与反馈预算状态机.md</code></li>
+<li><code>notes/GODOT源码研究/04_资源与场景/04_ResourceLoader线程化加载、缓存与完成边界.md</code></li>
+<li><code>notes/GODOT源码研究/04_资源与场景/02_资源导入管线与Metadata依赖缓存机理.md</code></li>
+<li><code>notes/GODOT源码研究/README.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文主要依据研究时的 Godot <code>4.8.0-dev</code> / <code>master</code> 源码快照整理，其中纹理 Mip Streaming 的核心研究锚点来自当前笔记固定的源码提交。</p>
+<p>当前研究已经静态闭合：</p>
+<ul>
+<li><code>.stex</code> 文件格式；</li>
+<li><code>StreamedTexture2D</code>；</li>
+<li>Resource / RID 稳定身份；</li>
+<li>Material Feedback；</li>
+<li>Forward Clustered / Mobile Shader Feedback；</li>
+<li>异步 GPU Readback；</li>
+<li>Feedback Thread；</li>
+<li>Memory Budget Fit；</li>
+<li>I/O Reload；</li>
+<li>Flush；</li>
+<li>Remove / Reload 生命周期边界。</li>
+</ul>
+<p>但本轮研究没有：</p>
+<ul>
+<li>编译 Godot；</li>
+<li>运行真实 Forward Clustered / Mobile GPU Feedback；</li>
+<li>执行 D3D12、Metal、Vulkan 的驻留 Benchmark；</li>
+<li>运行 focused Texture Streaming Test；</li>
+<li>实测高频镜头切换下的预算滞回；</li>
+<li>验证 reload failure 与 remove/reload 竞态；</li>
+<li>证明当前实现已经成为所有 Godot 项目的默认启用行为。</li>
+</ul>
+<p>因此本文把相关机制描述为<strong>当前源码快照中已经形成的设计与状态机</strong>，而不把跨平台性能、GPU 实际显存占用和最终产品默认策略写成已经获得运行验证的事实。</p>
+<p>文中将 <code>requested → admitted → resident</code>、稳定资源身份、预算滞回、目标合并和渐进式收敛迁移到其他 Asset、Scene 或 Mesh Streaming 系统的部分属于工程设计归纳，不表示这些系统必须复制 Godot 的 <code>.stex</code>、Material Feedback 或具体线程模型。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="godot-gdtype-classdb-methodbind.html"><span>同属「从 Godot 源码理解引擎设计」，共享 godot</span><strong>反射快照与运行时热路径：Godot GDType、ClassDB 与 MethodBind 的职责分离</strong><small>动态语言和编辑器需要按名字查找属性、方法、信号与类型信息时，引擎怎样保留完整反射能力，同时避免每一次对象访问都重新进入一个全局类数据库并沿继承链搜索？</small></a><a href="godot-objectid-refcounted-lifecycle.html"><span>同属「从 Godot 源码理解引擎设计」，共享 godot</span><strong>身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型</strong><small>跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？</small></a><a href="unreal-build-accelerator-known-inputs-cas.html"><span>近期正式文章</span><strong>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门</strong><small>远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/favicon.svg?v=20260824" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><span class="brand-wordmark-iris">IRIS</span><span class="brand-wordmark-cross">×</span><span class="brand-wordmark-sakura">SAKURA</span></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/art-music.html">美术音乐</a>
+                <a href="../../pages/framework.html">框架</a>
+                <a href="../../pages/journal.html">研究与文章</a>
+                <a href="../../pages/contact.html">联系我</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
