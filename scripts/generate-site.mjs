@@ -74,7 +74,7 @@ const PAGE_INDEXES = {
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -87,6 +87,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEn
   readJson('config/blog-publication.json'),
   readJson('data/blog-taxonomy.json'),
   readJson('data/evidence-chains.json'),
+  readJson('config/evidence-chain-authorities.json'),
   readJson('data/themes.json'),
   readJson('config/brand.json'),
   readText('components/navbar.html'),
@@ -121,7 +122,7 @@ const publicJournalSource = {
   blogs: publishedBlogs
 };
 const blogDiscovery = resolveBlogDiscovery(blogTaxonomy, publishedBlogs);
-const evidenceChains = resolveEvidenceChains(evidenceChainData, frameworkAdoption, journalSource, blogPublication);
+const evidenceChains = resolveEvidenceChains(evidenceChainData, frameworkAdoption, journalSource, blogPublication, irisEngineering, evidenceChainAuthorities);
 
 const featuredNoteById = new Map(journal.featuredNotes.map((note) => [note.id, note]));
 const gameDesignIds = new Set(journalSource.gameDesigns.map((design) => design.id));
@@ -424,7 +425,7 @@ for (const page of pageDefinitions) {
     );
   }
   if (page.file === 'pages/engineering.html') {
-    html = replaceGeneratedBlock(html, 'engineering-content', renderEngineeringContent(irisEngineering));
+    html = replaceGeneratedBlock(html, 'engineering-content', renderEngineeringContent(irisEngineering, evidenceChains));
   }
   if (page.file === 'index.html') {
     html = replaceGeneratedBlock(
@@ -1054,16 +1055,16 @@ function renderBrandContent(brand) {
     </div>`;
 }
 
-function renderEngineeringContent(engineering) {
+function renderEngineeringContent(engineering, chains) {
   const workflow = engineering.workflow.map((step, index) => `
-                <li>
+                <li id="workflow-${escapeAttribute(step.id)}">
                     <span class="engineering-step-index">0${index + 1}</span>
                     <p>${escapeHtml(step.label)}</p>
                     <h3>${escapeHtml(step.title)}</h3>
                     <span>${escapeHtml(step.description)}</span>
                 </li>`).join('');
   const capabilities = engineering.capabilities.map((capability, index) => `
-                <article class="engineering-capability-card">
+                <article class="engineering-capability-card" id="capability-${escapeAttribute(capability.id)}">
                     <p class="engineering-card-index">0${index + 1} / ${escapeHtml(capability.id.toUpperCase())}</p>
                     <h3>${escapeHtml(capability.title)}</h3>
                     <p>${escapeHtml(capability.description)}</p>
@@ -1130,6 +1131,7 @@ function renderEngineeringContent(engineering) {
                 <ul>${boundaries}</ul>
             </div>
         </section>
+${renderEvidenceChains(chains, 'engineering-evidence-chains')}
     </div>`;
 }
 
@@ -1356,24 +1358,28 @@ ${renderEvidenceChains(chains, 'evidence-chains')}
 function renderEvidenceChains(chains, sectionId = '') {
   const cards = chains.map((chain, index) => {
     const researchLinks = chain.research.map((reference) => `<a href="${escapeAttribute(reference.href)}"><span>${reference.type === 'article' ? '正式文章' : '设计索引'}</span><strong>${escapeHtml(reference.title)}</strong><small>${escapeHtml(reference.relation)}</small></a>`).join('');
+    const workflowLinks = chain.controlPlane.workflows.map((workflow) => `<a href="engineering.html#workflow-${escapeAttribute(workflow.id)}"><strong>${escapeHtml(workflow.label)}</strong><small>${escapeHtml(workflow.title)}</small></a>`).join('');
+    const capabilityLinks = chain.controlPlane.capabilities.map((capability) => `<a href="engineering.html#capability-${escapeAttribute(capability.id)}"><strong>${escapeHtml(capability.title)}</strong><small>${escapeHtml(capability.id)}</small></a>`).join('');
     return `<article class="evidence-chain-card" id="evidence-chain-${escapeAttribute(chain.id)}">
                     <p class="evidence-chain-index">0${index + 1} · ${escapeHtml(chain.gameSystem)}</p>
                     <h3>${escapeHtml(chain.title)}</h3>
                     <p class="evidence-chain-question">${escapeHtml(chain.question)}</p>
-                    <div class="evidence-chain-path" aria-label="游戏、框架与研究证据">
-                        <a href="game.html#${escapeAttribute(chain.gameAnchor)}"><span>GAME</span><strong>《言铸之剑》</strong><small>${escapeHtml(chain.gameSystem)}</small></a>
-                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong>${chain.frameworkPackages.map((name) => `<code>${escapeHtml(name)}</code>`).join(' ')}</strong><small>${escapeHtml(chain.adoptionEvidence)}</small></a>
+                    <div class="evidence-chain-path" aria-label="研究、控制面、框架与游戏证据">
                         <div class="evidence-chain-research"><span>RESEARCH</span>${researchLinks}</div>
+                        <div class="evidence-chain-control-plane"><span>CONTROL PLANE</span><p>${escapeHtml(chain.controlPlane.projectId)}</p>${workflowLinks}${capabilityLinks}</div>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong>${chain.frameworkPackages.map((name) => `<code>${escapeHtml(name)}</code>`).join(' ')}</strong><small>${escapeHtml(chain.adoptionEvidence)}</small></a>
+                        <a href="game.html#${escapeAttribute(chain.gameAnchor)}"><span>GAME</span><strong>《言铸之剑》</strong><small>${escapeHtml(chain.gameSystem)}</small></a>
                     </div>
-                    <p class="evidence-chain-limit"><strong>证据边界</strong>${escapeHtml(chain.limitation)}</p>
+                    <div class="evidence-chain-relationships" aria-label="四个部分之间的关系"><p><strong>RESEARCH → CONTROL PLANE</strong>${escapeHtml(chain.relationships.researchToControlPlane)}</p><p><strong>CONTROL PLANE → FRAMEWORK</strong>${escapeHtml(chain.relationships.controlPlaneToFramework)}</p><p><strong>FRAMEWORK → GAME</strong>${escapeHtml(chain.relationships.frameworkToGame)}</p></div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>${escapeHtml(chain.limitation)} ${escapeHtml(chain.authorityBoundary)}</p>
                 </article>`;
   }).join('');
   return `<section class="evidence-chain-section"${sectionId ? ` id="${escapeAttribute(sectionId)}"` : ''} aria-labelledby="evidence-chain-title">
         <div class="container">
             <div class="section-heading">
-                <p class="section-kicker">RESEARCH ↔ FRAMEWORK ↔ GAME</p>
-                <h2 id="evidence-chain-title">从研究判断到游戏验证的公开证据链</h2>
-                <p>同一条链同时指向游戏系统、Framework 采用映射和研究依据；公开证据不足的部分直接写在边界里。</p>
+                <p class="section-kicker">RESEARCH → CONTROL PLANE → FRAMEWORK → GAME</p>
+                <h2 id="evidence-chain-title">从研究判断到游戏验证的四段公开证据链</h2>
+                <p>同一条链同时指向公开研究、Iris Engineering 控制面、Framework 采用映射和游戏系统；公开证据不足的部分直接写在边界里。</p>
             </div>
             <div class="evidence-chain-grid">${cards}
             </div>

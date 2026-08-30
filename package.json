@@ -10,6 +10,7 @@
     "test:json": "node scripts/verify-json.mjs",
     "test:brand": "node scripts/verify-brand.mjs",
     "test:site": "node scripts/verify-site.mjs",
+    "test:evidence-authorities": "node scripts/verify-evidence-chain-authorities.mjs",
     "test:smoke": "node tests/browser-smoke.mjs",
     "journal:import": "node scripts/import-journal-export.mjs",
     "journal:check": "node scripts/import-journal-export.mjs --check",
@@ -20,7 +21,7 @@
     "consumer:check": "node scripts/import-consumer-projection.mjs --check",
     "package:site": "node scripts/prepare-pages.mjs",
     "clean": "node scripts/clean-generated.mjs",
-    "check": "npm run test:json && npm run build && npm run test:brand && npm test"
+    "check": "npm run test:json && npm run test:evidence-authorities && npm run build && npm run test:brand && npm test"
   },
   "repository": {
     "type": "git",

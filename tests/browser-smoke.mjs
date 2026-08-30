@@ -6,11 +6,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, blogPublication, blogTaxonomy, evidenceChains, projectData, irisEngineering, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
+const [journalSource, blogPublication, blogTaxonomy, evidenceChains, evidenceChainAuthorities, projectData, irisEngineering, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
   readJson('data/blog-taxonomy.json'),
   readJson('data/evidence-chains.json'),
+  readJson('config/evidence-chain-authorities.json'),
   readJson('data/projects.json'),
   readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
@@ -33,6 +34,44 @@ const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.category === 'game');
 if (!gameProject) throw new Error('project registry does not contain a game case');
+
+async function assertEvidenceChainPage(page, route, viewportName) {
+  await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
+  if (await page.locator('.evidence-chain-card').count() !== evidenceChains.chains.length) {
+    throw new Error(`${viewportName} ${route} does not expose every reviewed evidence chain`);
+  }
+  const state = await page.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    columns: getComputedStyle(document.querySelector('.evidence-chain-path')).gridTemplateColumns.split(/\s+/u).length,
+    relationshipColumns: getComputedStyle(document.querySelector('.evidence-chain-relationships')).gridTemplateColumns.split(/\s+/u).length,
+    chains: [...document.querySelectorAll('.evidence-chain-card')].map((card) => ({
+      id: card.id,
+      segments: [...card.querySelectorAll('.evidence-chain-path > *')].map((segment) => segment.querySelector(':scope > span')?.textContent?.trim()),
+      workflowTargets: card.querySelectorAll('a[href^="engineering.html#workflow-"]').length,
+      capabilityTargets: card.querySelectorAll('a[href^="engineering.html#capability-"]').length,
+      frameworkTargets: card.querySelectorAll('a[href="framework.html#game-adoption"]').length,
+      gameTargets: card.querySelectorAll('a[href^="game.html#"]').length
+    }))
+  }));
+  if (state.overflow > 1) throw new Error(`${viewportName} ${route} evidence chain overflows by ${state.overflow}px`);
+  const expectedSegments = ['RESEARCH', 'CONTROL PLANE', 'FRAMEWORK', 'GAME'];
+  for (const [index, chain] of state.chains.entries()) {
+    if (chain.id !== `evidence-chain-${evidenceChains.chains[index].id}`) throw new Error(`${viewportName} ${route} evidence chain order drifted`);
+    if (JSON.stringify(chain.segments) !== JSON.stringify(expectedSegments)) throw new Error(`${viewportName} ${route} has wrong evidence chain segments`);
+    if (chain.workflowTargets !== 3 || chain.capabilityTargets !== 1 || chain.frameworkTargets !== 1 || chain.gameTargets !== 1) {
+      throw new Error(`${viewportName} ${route} has incomplete evidence chain targets`);
+    }
+    for (const relationship of Object.values(evidenceChainAuthorities.relationships)) {
+      const cardText = await page.locator(`#${chain.id}`).innerText();
+      if (!cardText.includes(relationship)) throw new Error(`${viewportName} ${route} is missing relationship text`);
+    }
+  }
+  const expectedColumns = viewportName === 'desktop' ? 4 : 1;
+  if (state.columns !== expectedColumns) throw new Error(`${viewportName} ${route} evidence chain uses ${state.columns} columns, expected ${expectedColumns}`);
+  const expectedRelationshipColumns = viewportName === 'desktop' ? 3 : 1;
+  if (state.relationshipColumns !== expectedRelationshipColumns) throw new Error(`${viewportName} ${route} relationship section uses ${state.relationshipColumns} columns, expected ${expectedRelationshipColumns}`);
+}
+
 const brandContrastRoutes = [
   {
     route: '/',
@@ -420,6 +459,9 @@ try {
       throw new Error(`Engineering page exposes private or overstated text: ${forbidden}`);
     }
   }
+  for (const route of ['/pages/engineering.html', '/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
+    await assertEvidenceChainPage(desktop, route, 'desktop');
+  }
 
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
@@ -605,6 +647,9 @@ try {
   }
   if (engineeringMobileState.capabilityCards !== irisEngineering.capabilities.length) {
     throw new Error('mobile Engineering page does not expose every capability group');
+  }
+  for (const route of ['/pages/engineering.html', '/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
+    await assertEvidenceChainPage(mobile, route, 'mobile');
   }
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'engineering-mobile.png'), fullPage: true });

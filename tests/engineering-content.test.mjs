@@ -52,6 +52,10 @@ test('generated Iris Engineering page explains capability, evidence and limits w
   ]) {
     assert.ok(html.includes(fragment), `missing engineering fragment: ${fragment}`);
   }
+  for (const anchor of ['workflow-observe', 'workflow-authorize', 'workflow-verify', 'capability-workflow-core']) {
+    assert.ok(html.includes(`id="${anchor}"`), `missing stable control-plane anchor: ${anchor}`);
+  }
+  assert.ok(html.includes('RESEARCH → CONTROL PLANE → FRAMEWORK → GAME'));
   assert.match(generator, /function renderEngineeringContent\(/u);
   assert.match(generator, /engineering\.sourceUpdatedAt/u);
   assert.match(generator, /源仓更新/u);

@@ -132,25 +132,25 @@
             <div class="container">
                 <div class="engineering-section-heading"><p class="section-kicker">OBSERVE · AUTHORIZE · EXECUTE · VERIFY</p><h2 id="engineering-workflow-title">从事实到验证，四段互不越权</h2></div>
                 <ol>
-                <li>
+                <li id="workflow-observe">
                     <span class="engineering-step-index">01</span>
                     <p>Observe</p>
                     <h3>读取事实</h3>
                     <span>从 Git、Gitea Adapter、本地 Snapshot 与只读报告收集事实，不复制第二套可独立修改的业务真理源。</span>
                 </li>
-                <li>
+                <li id="workflow-authorize">
                     <span class="engineering-step-index">02</span>
                     <p>Authorize</p>
                     <h3>显式授权</h3>
                     <span>Research Artifact 只生成 pending-approval 提案；WorkAuthorization 明确限定目标、权限与执行边界。</span>
                 </li>
-                <li>
+                <li id="workflow-execute">
                     <span class="engineering-step-index">03</span>
                     <p>Execute</p>
                     <h3>受限执行</h3>
                     <span>TaskEnvelope 与 Runner 权限求交集，AgentRun 通过 claim、lease、heartbeat 与 recovery 管理生命周期。</span>
                 </li>
-                <li>
+                <li id="workflow-verify">
                     <span class="engineering-step-index">04</span>
                     <p>Verify</p>
                     <h3>验证与审计</h3>
@@ -164,25 +164,25 @@
             <div class="container">
                 <div class="engineering-section-heading"><p class="section-kicker">P1–P10 PRODUCT BASELINE</p><h2 id="engineering-capabilities-title">四个已经形成合同的能力层</h2><p>从 Workflow Core 到只读视图，再到 Research Artifact 与 Agent Execution，公开展示只描述已实现的本地产品边界。</p></div>
                 <div class="engineering-capability-grid">
-                <article class="engineering-capability-card">
+                <article class="engineering-capability-card" id="capability-workflow-core">
                     <p class="engineering-card-index">01 / WORKFLOW-CORE</p>
                     <h3>Workflow Core</h3>
                     <p>版本化合同、状态与 Flag 规则、幂等 Inbox、Preview、Reconciliation 和 Audit。</p>
                     <ul><li>Closed JSON Schema</li><li>Deterministic plan</li><li>Inbox &amp; reconciliation</li></ul>
                 </article>
-                <article class="engineering-capability-card">
+                <article class="engineering-capability-card" id="capability-read-models">
                     <p class="engineering-card-index">02 / READ-MODELS</p>
                     <h3>Read Models &amp; Dashboard</h3>
                     <p>Today、Milestone、Quality、Build 与 Operations 的只读投影，固定本地回环、GET/HEAD-only。</p>
                     <ul><li>Today / Milestone</li><li>Quality / Build</li><li>Operations health</li></ul>
                 </article>
-                <article class="engineering-capability-card">
+                <article class="engineering-capability-card" id="capability-research-intake">
                     <p class="engineering-card-index">03 / RESEARCH-INTAKE</p>
                     <h3>Research Artifact &amp; Proposal Ingress</h3>
                     <p>把研究材料或受限 QQ 提案信封固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。</p>
                     <ul><li>Immutable artifact</li><li>QQ Research Proposal Ingress</li><li>Pending proposal</li></ul>
                 </article>
-                <article class="engineering-capability-card">
+                <article class="engineering-capability-card" id="capability-agent-execution">
                     <p class="engineering-card-index">04 / AGENT-EXECUTION</p>
                     <h3>Agent Execution Contract</h3>
                     <p>连接授权、上下文、Runner 权限与 AgentRun 状态，保留 claim、lease、恢复和只读检查。</p>
@@ -222,6 +222,53 @@
                 <ul><li>Iris Engineering 不拥有 Unity Runtime、玩法逻辑或 Sakura Framework 的包与发布状态。</li><li>真实平台读取、写入、Runner、工作树与外部 Agent 接入都必须单独授权。</li><li>P9.1 QQ 提案入口只能创建 pending-approval Proposal，不能批准任务、创建执行合同或改写目标仓库。</li><li>Dashboard 是可丢弃、可重建的 Read Model，不成为新的 Issue、PR 或 CI 真理源。</li><li>P6.1 与 P7 的当前跨平台证据来自 Windows host；macOS 与 Linux 仍需在相同变更上分别验证。</li></ul>
             </div>
         </section>
+<section class="evidence-chain-section" id="engineering-evidence-chains" aria-labelledby="evidence-chain-title">
+        <div class="container">
+            <div class="section-heading">
+                <p class="section-kicker">RESEARCH → CONTROL PLANE → FRAMEWORK → GAME</p>
+                <h2 id="evidence-chain-title">从研究判断到游戏验证的四段公开证据链</h2>
+                <p>同一条链同时指向公开研究、Iris Engineering 控制面、Framework 采用映射和游戏系统；公开证据不足的部分直接写在边界里。</p>
+            </div>
+            <div class="evidence-chain-grid"><article class="evidence-chain-card" id="evidence-chain-capability-gated-combat">
+                    <p class="evidence-chain-index">01 · 技能、潜能与祝福</p>
+                    <h3>能力门控如何进入可玩的战斗构筑</h3>
+                    <p class="evidence-chain-question">研究中的能力门控，怎样落到技能、潜能与祝福共享的能力入口？</p>
+                    <div class="evidence-chain-path" aria-label="研究、控制面、框架与游戏证据">
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/metroidvania-capability-gated-topology.html"><span>正式文章</span><strong>世界拓扑与能力门控：银河城地图中的权限、可达性与区域重访</strong><small>从能力门控、拓扑变化与回访价值提炼设计判断。</small></a><a href="journal/metroidvania.html"><span>设计索引</span><strong>银河城游戏</strong><small>保留银河城能力门控世界图的设计范式索引。</small></a></div>
+                        <div class="evidence-chain-control-plane"><span>CONTROL PLANE</span><p>iris-engineering</p><a href="engineering.html#workflow-observe"><strong>Observe</strong><small>读取事实</small></a><a href="engineering.html#workflow-authorize"><strong>Authorize</strong><small>显式授权</small></a><a href="engineering.html#workflow-verify"><strong>Verify</strong><small>验证与审计</small></a><a href="engineering.html#capability-workflow-core"><strong>Workflow Core</strong><small>workflow-core</small></a></div>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>GAS</code> <code>Event</code></strong><small>游戏项目依赖清单与战斗、潜能、祝福源码引用</small></a>
+                        <a href="game.html#system-skills-potentials-blessings"><span>GAME</span><strong>《言铸之剑》</strong><small>技能、潜能与祝福</small></a>
+                    </div>
+                    <div class="evidence-chain-relationships" aria-label="四个部分之间的关系"><p><strong>RESEARCH → CONTROL PLANE</strong>研究结论保留公开来源与边界，再进入 Iris Engineering 的工作流判断。</p><p><strong>CONTROL PLANE → FRAMEWORK</strong>Iris Engineering 组织授权与验证边界，Sakura Framework 沉淀可复用工程能力。</p><p><strong>FRAMEWORK → GAME</strong>Sakura Framework 的采用映射必须回到《言铸之剑》的实际系统与公开证据。</p></div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>映射只证明公开游戏实现采用了对应 Framework 包，不把 Preview 能力提升为 Supported。 该链只验证已导入的公开快照和页面关系，不证明四个仓库之间存在自动同步、外部发布或运行时因果。</p>
+                </article><article class="evidence-chain-card" id="evidence-chain-run-snapshot-commit">
+                    <p class="evidence-chain-index">02 · Run 存档</p>
+                    <h3>Run 快照如何获得明确提交边界</h3>
+                    <p class="evidence-chain-question">跨房间推进时，哪些事实应在明确节点提交，哪些对象不应成为持久化事实源？</p>
+                    <div class="evidence-chain-path" aria-label="研究、控制面、框架与游戏证据">
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="blog/extraction-transaction-boundary.html"><span>正式文章</span><strong>撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算</strong><small>用撤离提交中的所有权转移讨论事务边界与失败回滚。</small></a><a href="journal/extraction-cross-session-loop.html"><span>设计索引</span><strong>撤离型搜打撤中的风险携带、不完全信息与跨局循环</strong><small>追踪风险资产、所有权转移与撤离提交的设计范式。</small></a></div>
+                        <div class="evidence-chain-control-plane"><span>CONTROL PLANE</span><p>iris-engineering</p><a href="engineering.html#workflow-observe"><strong>Observe</strong><small>读取事实</small></a><a href="engineering.html#workflow-authorize"><strong>Authorize</strong><small>显式授权</small></a><a href="engineering.html#workflow-verify"><strong>Verify</strong><small>验证与审计</small></a><a href="engineering.html#capability-workflow-core"><strong>Workflow Core</strong><small>workflow-core</small></a></div>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>Save</code></strong><small>项目存档测试与 Framework.Save 类型引用</small></a>
+                        <a href="game.html#system-run-save"><span>GAME</span><strong>《言铸之剑》</strong><small>Run 存档</small></a>
+                    </div>
+                    <div class="evidence-chain-relationships" aria-label="四个部分之间的关系"><p><strong>RESEARCH → CONTROL PLANE</strong>研究结论保留公开来源与边界，再进入 Iris Engineering 的工作流判断。</p><p><strong>CONTROL PLANE → FRAMEWORK</strong>Iris Engineering 组织授权与验证边界，Sakura Framework 沉淀可复用工程能力。</p><p><strong>FRAMEWORK → GAME</strong>Sakura Framework 的采用映射必须回到《言铸之剑》的实际系统与公开证据。</p></div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>研究提供的是事务边界类比；游戏页公开的仍是 Run 快照实现与已知限制，不等同于撤离玩法。 该链只验证已导入的公开快照和页面关系，不证明四个仓库之间存在自动同步、外部发布或运行时因果。</p>
+                </article><article class="evidence-chain-card" id="evidence-chain-structured-generative-blessing">
+                    <p class="evidence-chain-index">03 · 生成式祝福</p>
+                    <h3>生成式祝福如何安全进入能力执行</h3>
+                    <p class="evidence-chain-question">不稳定的本地模型输出，怎样经过结构化约束、白名单映射与失败回退进入玩法？</p>
+                    <div class="evidence-chain-path" aria-label="研究、控制面、框架与游戏证据">
+                        <div class="evidence-chain-research"><span>RESEARCH</span><a href="journal/deckbuilder-roguelike.html"><span>设计索引</span><strong>卡组构筑式 Roguelike</strong><small>以效果栈与构筑选择作为相邻设计输入，不把它表述为 LLM 实证。</small></a></div>
+                        <div class="evidence-chain-control-plane"><span>CONTROL PLANE</span><p>iris-engineering</p><a href="engineering.html#workflow-observe"><strong>Observe</strong><small>读取事实</small></a><a href="engineering.html#workflow-authorize"><strong>Authorize</strong><small>显式授权</small></a><a href="engineering.html#workflow-verify"><strong>Verify</strong><small>验证与审计</small></a><a href="engineering.html#capability-workflow-core"><strong>Workflow Core</strong><small>workflow-core</small></a></div>
+                        <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong><code>LLM</code> <code>Dialogue</code> <code>GAS</code></strong><small>本地模型适配、结构化效果映射与能力执行引用</small></a>
+                        <a href="game.html#system-generative-blessing"><span>GAME</span><strong>《言铸之剑》</strong><small>生成式祝福</small></a>
+                    </div>
+                    <div class="evidence-chain-relationships" aria-label="四个部分之间的关系"><p><strong>RESEARCH → CONTROL PLANE</strong>研究结论保留公开来源与边界，再进入 Iris Engineering 的工作流判断。</p><p><strong>CONTROL PLANE → FRAMEWORK</strong>Iris Engineering 组织授权与验证边界，Sakura Framework 沉淀可复用工程能力。</p><p><strong>FRAMEWORK → GAME</strong>Sakura Framework 的采用映射必须回到《言铸之剑》的实际系统与公开证据。</p></div>
+                    <p class="evidence-chain-limit"><strong>证据边界</strong>当前公开证据只覆盖结构化映射与能力执行；独立 Demo、专门研究文章和外部反馈仍未提供。 该链只验证已导入的公开快照和页面关系，不证明四个仓库之间存在自动同步、外部发布或运行时因果。</p>
+                </article>
+            </div>
+        </div>
+    </section>
     </div>
 <!-- engineering-content:end -->
 </main>
