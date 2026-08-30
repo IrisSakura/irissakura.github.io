@@ -676,6 +676,8 @@ function installBrandExperience(html, page, prefix, brand) {
     html = html.replace(coverPattern, `$1\n        ${markup}`);
   }
 
+  html = installBrandModeHeroArt(html, page, prefix, brand);
+
   if (page.brandMode === 'game') {
     const actionPattern = /(<div class="game-actions">[\s\S]*?<\/div>)/;
     if (!actionPattern.test(html)) throw new Error(`brand-contract violation: ${page.file} has no game action block`);
@@ -685,6 +687,31 @@ function installBrandExperience(html, page, prefix, brand) {
     html = html.replace(actionPattern, `$1\n                    ${attribution}`);
   }
   return html;
+}
+
+function installBrandModeHeroArt(html, page, prefix, brand) {
+  html = html.replace(/\s*<!-- brand-mode-hero-art:start -->[\s\S]*?<!-- brand-mode-hero-art:end -->/g, '');
+  const artworkByPage = {
+    'pages/engineering.html': { mode: 'iris', asset: brand.assets.irisHeroArt },
+    'pages/framework.html': { mode: 'sakura', asset: brand.assets.sakuraHeroArt },
+    'pages/journal.html': { mode: 'journal', asset: brand.assets.journalHeroArt }
+  };
+  const artwork = artworkByPage[page.file];
+  if (!artwork || !page.coverKey) return html;
+  if (artwork.mode !== page.brandMode) {
+    throw new Error(`brand-contract violation: ${page.file} hero art mode drift`);
+  }
+
+  const coverPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bdata-page-cover="${escapeRegExp(page.coverKey)}"[^>]*>)`);
+  if (!coverPattern.test(html)) {
+    throw new Error(`brand-contract violation: ${page.file} has no cover for ${page.brandMode} hero art`);
+  }
+  const markup = `<!-- brand-mode-hero-art:start -->
+        <figure class="brand-mode-hero-art brand-mode-hero-art-${artwork.mode}" aria-hidden="true">
+            <img src="${prefix}${artwork.asset}" alt="" decoding="async" fetchpriority="high">
+        </figure>
+        <!-- brand-mode-hero-art:end -->`;
+  return html.replace(coverPattern, `$1\n        ${markup}`);
 }
 
 function installContentVoiceStages(html, page) {

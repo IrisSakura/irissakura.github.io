@@ -60,11 +60,11 @@ export async function assertBrandAssets(root, brand) {
   const required = [
     'favicon', 'symbol', 'masterLogo', 'irisLogo', 'sakuraLogo', 'jointLockup',
     'masterWordmark', 'irisWordmark', 'sakuraWordmark', 'iconSprite', 'readmeHeader',
-    'socialLogo', 'brandBoard'
+    'socialLogo', 'brandBoard', 'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt'
   ];
   for (const key of required) {
     const relativePath = brand.assets?.[key];
-    if (!/^assets\/[a-z0-9/._-]+\.(?:png|svg)$/.test(relativePath ?? '') || relativePath.includes('..')) {
+    if (!/^assets\/[a-z0-9/._-]+\.(?:png|svg|webp)$/.test(relativePath ?? '') || relativePath.includes('..')) {
       throw new Error(`brand-contract violation: invalid ${key} asset path`);
     }
     const absolutePath = path.join(root, relativePath);

@@ -52,11 +52,12 @@ test('official vector identity and core iconography are complete and self-contai
     'irisWordmark',
     'sakuraWordmark',
     'iconSprite',
-    'readmeHeader', 'socialLogo', 'brandBoard'
+    'readmeHeader', 'socialLogo', 'brandBoard',
+    'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt'
   ];
   for (const key of requiredAssetKeys) {
     const relativePath = brand.assets[key];
-    assert.match(relativePath, /^assets\/[a-z0-9/._-]+\.(?:png|svg)$/);
+    assert.match(relativePath, /^assets\/[a-z0-9/._-]+\.(?:png|svg|webp)$/);
     await access(path.join(root, relativePath));
     if (!relativePath.endsWith('.svg')) continue;
     const svg = await readText(relativePath);
@@ -125,6 +126,43 @@ test('mode experience layer differentiates six visual dimensions and respects ga
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.ok(navbar.includes('{{masterWordmark}}'));
   assert.ok(footer.includes('{{masterWordmark}}'));
+});
+
+test('mode hero artwork is contract-owned, decorative and limited to the three product heroes', async () => {
+  const [brand, generator, css] = await Promise.all([
+    readJson('config/brand.json'),
+    readText('scripts/generate-site.mjs'),
+    readText('style/components/brand-experience.css')
+  ]);
+  const expected = {
+    engineering: ['iris', 'irisHeroArt'],
+    framework: ['sakura', 'sakuraHeroArt'],
+    journal: ['journal', 'journalHeroArt']
+  };
+
+  assert.ok(generator.includes('installBrandModeHeroArt'));
+  for (const [pageKey, [mode, assetKey]] of Object.entries(expected)) {
+    const html = await readText(`pages/${pageKey}.html`);
+    const asset = brand.assets[assetKey];
+    assert.match(asset, /^assets\/images\/brand\/[a-z0-9._-]+\.webp$/);
+    await access(path.join(root, asset));
+    assert.equal((html.match(/<!-- brand-mode-hero-art:start -->/g) ?? []).length, 1);
+    assert.equal((html.match(/<!-- brand-mode-hero-art:end -->/g) ?? []).length, 1);
+    assert.match(html, new RegExp(`<figure class="brand-mode-hero-art brand-mode-hero-art-${mode}" aria-hidden="true">`));
+    assert.ok(html.includes(`<img src="../${asset}" alt="" decoding="async" fetchpriority="high">`));
+  }
+
+  for (const file of [
+    'index.html', 'pages/portfolio.html', 'pages/brand.html', 'pages/game.html', 'pages/contact.html',
+    'pages/blog.html', 'pages/framework-quickstart.html'
+  ]) {
+    assert.doesNotMatch(await readText(file), /brand-mode-hero-art/);
+  }
+  assert.match(css, /\.brand-mode-hero-art\s*\{[\s\S]*?pointer-events:\s*none/);
+  assert.match(css, /\.brand-mode-hero-art img\s*\{[\s\S]*?mask-image:/);
+  assert.match(css, /@media \(max-width: 900px\)[\s\S]*?\.brand-mode-hero-art/);
+  assert.match(css, /\.brand-mode-hero-art \+ \.brand-mode-signature\s*\{[\s\S]*?position:\s*absolute/);
+  assert.match(css, /html\[data-brand="iris-sakura"\]\[data-brand-mode="journal"\] \[data-page-cover="journal"\]\.page-cover\s*\{[\s\S]*?padding-block-start:\s*10rem/);
 });
 
 test('brand operating documents cover naming, voice, modes, iconography and maintenance', async () => {
