@@ -435,6 +435,21 @@
     line-height: 1.85;
 }
 
+.portfolio-update {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 1rem;
+    margin: -0.35rem 0 1.15rem;
+    color: #b9c8d8;
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0.035em;
+}
+
+.portfolio-update span + span {
+    color: #8ce7dc;
+}
+
 .portfolio-facts {
     margin: 1.5rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -463,6 +478,11 @@
     padding: 0;
     color: #8ce7dc;
     font-weight: 700;
+}
+
+.portfolio-link-static {
+    color: #b9c8d8;
+    cursor: default;
 }
 
 .framework-proof-visual {
@@ -589,6 +609,70 @@
 
 .journal-proof-visual strong {
     font-size: 1.05rem;
+}
+
+.project-proof-visual {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    min-height: 380px;
+    padding: 2.25rem;
+    align-content: center;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 80% 18%, rgba(126, 198, 255, 0.16), transparent 34%),
+        #0b1320;
+    background-size: 34px 34px, 34px 34px, auto, auto;
+}
+
+.project-proof-visual > div {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+    padding: 1.15rem;
+    border: 1px solid rgba(140, 231, 220, 0.22);
+    background: rgba(5, 13, 22, 0.86);
+}
+
+.project-proof-visual strong {
+    overflow-wrap: anywhere;
+    color: #f6fbff;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 3vw, 2.25rem);
+    line-height: 1;
+}
+
+.project-proof-visual span {
+    color: #8ce7dc;
+    font-size: 0.78rem;
+}
+
+.project-proof-visual > p {
+    grid-column: 1 / -1;
+    margin: 1.1rem 0 0;
+    color: #a8d8ff;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+}
+
+.project-proof-visual-shelf {
+    background:
+        linear-gradient(rgba(160, 107, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126, 198, 255, 0.045) 1px, transparent 1px),
+        radial-gradient(circle at 82% 16%, rgba(160, 107, 255, 0.22), transparent 34%),
+        #101329;
+    background-size: 34px 34px, 34px 34px, auto, auto;
+}
+
+.project-proof-visual-udgap {
+    background:
+        linear-gradient(rgba(255, 183, 77, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 138, 101, 0.045) 1px, transparent 1px),
+        radial-gradient(circle at 82% 16%, rgba(255, 138, 101, 0.2), transparent 34%),
+        #1c1213;
+    background-size: 34px 34px, 34px 34px, auto, auto;
 }
 
 .consumer-lab {
@@ -910,13 +994,23 @@
     .portfolio-case-visual > img,
     .engineering-proof-visual,
     .framework-proof-visual,
-    .journal-proof-visual {
+    .journal-proof-visual,
+    .project-proof-visual {
         min-height: 280px;
     }
 
     .framework-proof-visual {
         grid-template-columns: 1fr;
         padding: 1.25rem;
+    }
+
+    .project-proof-visual {
+        grid-template-columns: 1fr;
+        padding: 1.25rem;
+    }
+
+    .project-proof-visual > p {
+        grid-column: 1;
     }
 
     .engineering-proof-visual {

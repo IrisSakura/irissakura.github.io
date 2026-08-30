@@ -1136,7 +1136,7 @@ ${renderEvidenceChains(chains, 'engineering-evidence-chains')}
 }
 
 function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData) {
-  const order = ['sword-of-words', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
+  const order = ['sword-of-words', 'udgap', 'iris-shelf', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
   const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
   if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
   const cases = ordered.map((project, index) => {
@@ -1146,24 +1146,28 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                 <div class="portfolio-case-copy">
                     <p class="project-status">0${index + 1} · ${escapeHtml(project.categoryLabel)} · ${escapeHtml(project.status)}</p>
                     <h2>${escapeHtml(project.title)}</h2>
+                    <p class="portfolio-update"><span>事实更新 · ${escapeHtml(project.updatedAt)}</span><span>${escapeHtml(project.syncLabel)} · 复核 ${escapeHtml(project.lastReviewedAt)}</span></p>
                     <p class="portfolio-description">${escapeHtml(project.summary)}</p>
                     <dl class="portfolio-facts">
                         <div><dt>职责</dt><dd>${escapeHtml(project.role)}</dd></div>
                         <div><dt>目标</dt><dd>${escapeHtml(project.goal)}</dd></div>
                         <div><dt>证据</dt><dd>${escapeHtml(project.evidence.join('；'))}</dd></div>
                         <div><dt>限制</dt><dd>${escapeHtml(project.limitations.join('；'))}</dd></div>
+                        <div><dt>下一步</dt><dd>${escapeHtml(project.next.join('；'))}</dd></div>
                     </dl>
                     <div class="portfolio-tags">${project.technologies.slice(0, 5).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
-                    <a href="${escapeAttribute(project.href)}" class="portfolio-link">${escapeHtml(project.linkLabel)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    ${project.href
+                      ? `<a href="${escapeAttribute(project.href)}" class="portfolio-link">${escapeHtml(project.linkLabel)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>`
+                      : `<span class="portfolio-link portfolio-link-static">${escapeHtml(project.linkLabel)}</span>`}
                 </div>
             </article>`;
   }).join('\n            ');
 
   return `<div class="portfolio-header">
         <div class="container">
-            <p class="section-kicker">WORKS IN CONTEXT</p>
-            <h1>从可玩作品看完整技术实践</h1>
-            <p>先看玩家和使用者真正得到的结果，再沿研究、工程治理与框架回看它们如何成立。</p>
+            <p class="section-kicker">PROJECT STATUS · REVIEWED SOURCES</p>
+            <h1>6 个项目的当前状态与证据边界</h1>
+            <p>每项状态都区分事实更新时间、人工复核时间与同步方式；未提交工作、私有路径和 source SHA 不进入公开完成声明。</p>
         </div>
     </div>
     <div class="container">
@@ -1172,7 +1176,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                 <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究判断 → 工程治理 → 框架沉淀 → 游戏验证</h2></div>
                 <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </div>
-            <p class="journey-intro">展示顺序从游戏开始，因果链仍从研究开始：Journal 保存判断，Iris Engineering 约束授权与执行，Framework 沉淀复用能力，《言铸之剑》检验这些能力是否真正服务于玩法。</p>
+            <p class="journey-intro">展示顺序从游戏与桌面产品开始，因果链仍从研究开始：Journal 保存判断，Iris Engineering 约束授权与执行，Iris Shelf 提供独立本地入口，Framework 沉淀复用能力，UDGAP 与《言铸之剑》承担不同阶段的游戏验证。</p>
             <ol class="journey-path">
                 <li><span class="journey-index">01</span><h3>研究判断</h3><p>理解引擎机制、游戏设计与当前约束。</p></li>
                 <li><span class="journey-index">02</span><h3>显式授权</h3><p>把研究提案、目标和执行权限变成可复查合同。</p></li>
@@ -1253,6 +1257,13 @@ function renderPortfolioVisual(project, journalData, frameworkData, irisEngineer
       ${irisEngineeringData.workflow.map((step, index) => `<div><span>0${index + 1}</span><strong>${escapeHtml(step.label)}</strong><small>${escapeHtml(step.title)}</small></div>`).join('')}
       <p>EXPLICIT AUTHORIZATION · FAIL CLOSED</p>
     </div><span class="visual-label">CONTROL PLANE</span>`;
+  }
+  if (Array.isArray(project.proof)) {
+    const visualVariant = project.id === 'iris-shelf' ? 'shelf' : project.id;
+    return `<div class="project-proof-visual project-proof-visual-${escapeAttribute(visualVariant)}" aria-label="${escapeAttribute(project.title)} 项目状态">
+      ${project.proof.map((item) => `<div><strong>${escapeHtml(item.value)}</strong><span>${escapeHtml(item.label)}</span></div>`).join('')}
+      <p>${escapeHtml(project.proofFooter)}</p>
+    </div><span class="visual-label">${escapeHtml(project.visualLabel)}</span>`;
   }
   return `<div class="journal-proof-visual" aria-label="Journal 精选研究主题">
       <p>${journalData.summary.gameDesignCount} 个设计主题 · ${journalData.summary.knowledgeStreamCount} 条知识流</p>

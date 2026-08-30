@@ -32,8 +32,8 @@ const routableBlogTags = blogTaxonomy.tags.filter((tag) => (
 ));
 const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
-const gameProject = projectData.projects.find((project) => project.category === 'game');
-if (!gameProject) throw new Error('project registry does not contain a game case');
+const gameProject = projectData.projects.find((project) => project.id === 'sword-of-words');
+if (!gameProject) throw new Error('project registry does not contain the flagship game case');
 
 async function assertEvidenceChainPage(page, route, viewportName) {
   await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
@@ -466,6 +466,8 @@ try {
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
   if (!await desktop.locator('.portfolio-case').first().filter({ hasText: gameProject.title }).isVisible()) throw new Error('registered game project is not the first portfolio case');
+  if (!await desktop.locator('#project-udgap').isVisible()) throw new Error('UDGAP status case is not visible');
+  if (!await desktop.locator('#project-iris-shelf').isVisible()) throw new Error('Iris Shelf status case is not visible');
   if (await desktop.locator('.consumer-lab-card').count() !== consumerLab.cases.length) {
     throw new Error('portfolio does not expose every Consumer Lab project');
   }

@@ -60,7 +60,7 @@ npm run package:site
 
 - `config/brand.json`：名称、家族、页面 Brand Mode、正式资产、Social palette 与 Deprecated Naming 的品牌合同；
 - `data/site.json`：站点定位、Profile、栏目头图和真实社交入口；
-- `data/projects.json`：四个公开项目的状态、职责、证据与限制；
+- `data/projects.json`：六个公开项目的状态、事实更新时间、复核时间、同步方式、职责、证据、限制与下一步；
 - `data/consumer-lab.json`：七个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
@@ -76,6 +76,8 @@ npm run package:site
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 Iris Engineering 同步、provenance 与五路径 owner scope 见 [`docs/maintenance/iris-engineering-sync.md`](docs/maintenance/iris-engineering-sync.md)。
 品牌职责与 Design System 所有权分别见 [`docs/brand/brand-architecture.md`](docs/brand/brand-architecture.md) 和 [`docs/brand/visual-system.md`](docs/brand/visual-system.md)。
+
+项目状态中的 `source-push` 表示已有源仓推送驱动的公开投影，`fixed-snapshot` 表示固定提交导入，`versioned-review` 表示只复核已版本化产品事实，`site-curated` 表示站点策展。后两者不会把本地 dirty、私有运行状态或未验证输出伪装成自动同步；要升级为每次源仓更新自动发布，仍需在对应仓库建立独立 exporter、最小权限凭据与 Runner/CI 授权。
 
 ### 栏目视觉与项目头图
 

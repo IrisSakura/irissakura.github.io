@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const REVIEW_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
+const SYNC_MODES = new Set(['source-push', 'fixed-snapshot', 'versioned-review', 'site-curated']);
 
 export function assertProjectFactsCurrent(projectData, framework, journal) {
   if (projectData?.schemaVersion !== 3 || !Array.isArray(projectData.projects)) {
@@ -17,12 +18,22 @@ export function assertProjectFactsCurrent(projectData, framework, journal) {
     if (project.lastReviewedAt < project.updatedAt) {
       throw new Error(`Project ${project.id} cannot be reviewed before its latest factual update.`);
     }
+    if (!SYNC_MODES.has(project.syncMode) || typeof project.syncLabel !== 'string' || project.syncLabel.trim().length === 0) {
+      throw new Error(`Project ${project.id} requires a reviewed public sync mode and label.`);
+    }
     if (!Array.isArray(project.milestones) || project.milestones.length === 0) {
       throw new Error(`Project ${project.id} requires completed milestones.`);
     }
     const completed = new Set(project.milestones);
     const repeated = project.next?.find((entry) => completed.has(entry));
     if (repeated) throw new Error(`Project ${project.id} repeats completed work in next: ${repeated}.`);
+    if (project.proof !== undefined) {
+      if (!Array.isArray(project.proof) || project.proof.length !== 3
+        || project.proof.some((item) => typeof item?.value !== 'string' || typeof item?.label !== 'string')
+        || typeof project.proofFooter !== 'string' || typeof project.visualLabel !== 'string') {
+        throw new Error(`Project ${project.id} requires a closed three-item proof visual contract.`);
+      }
+    }
   }
 
   if (projectsById.get('sword-of-words')?.categoryLabel !== '独立游戏项目') {

@@ -27,7 +27,7 @@ test('framework.json exposes only the public contract', async () => {
 
   assert.deepEqual(Object.keys(data).sort(), allowed.sort());
   assert.equal(data.schemaVersion, 1);
-  assert.equal(data.sourceCommit, '5d5eafc18cec8c1cd99ccbb850f660a807d7edd7');
+  assert.equal(data.sourceCommit, 'c47ec76e23ad6e57408acb27390ff78239a66dbf');
   assert.match(data.sourceCommit, /^[0-9a-f]{7,40}$/);
   assert.equal(data.adoptionReviewContract, 'supported-stable-v1');
   assert.match(data.adoptionReviewHash, /^sha256:[0-9a-f]{64}$/);
@@ -37,6 +37,7 @@ test('framework.json exposes only the public contract', async () => {
     assert.ok(Number.isInteger(data.summary[key]));
     assert.ok(data.summary[key] >= 0);
   }
+  assert.equal(data.summary.asmdefCount, 869);
 
   assert.ok(Array.isArray(data.layers));
   assert.ok(data.layers.length > 0);
