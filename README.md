@@ -75,9 +75,10 @@ npm run package:site
 
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 Iris Engineering 同步、provenance 与五路径 owner scope 见 [`docs/maintenance/iris-engineering-sync.md`](docs/maintenance/iris-engineering-sync.md)。
+Iris Shelf 与 UDGAP 的 source-push 项目状态、共享 importer 和三路径 owner scope 见 [`docs/maintenance/project-status-sync.md`](docs/maintenance/project-status-sync.md)。
 品牌职责与 Design System 所有权分别见 [`docs/brand/brand-architecture.md`](docs/brand/brand-architecture.md) 和 [`docs/brand/visual-system.md`](docs/brand/visual-system.md)。
 
-项目状态中的 `source-push` 表示已有源仓推送驱动的公开投影，`fixed-snapshot` 表示固定提交导入，`versioned-review` 表示只复核已版本化产品事实，`site-curated` 表示站点策展。后两者不会把本地 dirty、私有运行状态或未验证输出伪装成自动同步；要升级为每次源仓更新自动发布，仍需在对应仓库建立独立 exporter、最小权限凭据与 Runner/CI 授权。
+项目状态中的 `source-push` 表示已有源仓推送驱动的公开投影，`fixed-snapshot` 表示固定提交导入，`versioned-review` 表示只复核已版本化产品事实，`site-curated` 表示站点策展。Iris Shelf 与 UDGAP 使用同一 closed-schema importer，但分别拥有源仓 profile、provenance 和 Actions scope；言铸之剑仍是 Plastic/site-curated，不能把本地工作区或未验证输出伪装成自动同步。
 
 ### 栏目视觉与项目头图
 

@@ -58,19 +58,24 @@ test('portfolio data keeps research distinct from finished work', async () => {
   const journal = data.projects.find((entry) => entry.id === 'sakura-design-journal');
   assert.equal(journal.updatedAt, '2026-08-29');
   assert.equal(journal.lastReviewedAt, '2026-08-29');
-  for (const projectId of ['iris-engineering', 'sakura-framework', 'iris-shelf', 'udgap']) {
+  for (const projectId of ['iris-engineering', 'sakura-framework']) {
     const project = data.projects.find((entry) => entry.id === projectId);
     assert.equal(project.updatedAt, '2026-08-30');
     assert.equal(project.lastReviewedAt, '2026-08-31');
+  }
+  for (const projectId of ['iris-shelf', 'udgap']) {
+    const project = data.projects.find((entry) => entry.id === projectId);
+    assert.equal(project.updatedAt, '2026-08-30');
+    assert.equal(project.lastReviewedAt, '2026-08-30');
   }
   assert.ok(
     data.projects.find((entry) => entry.id === 'iris-engineering').evidence
       .some((entry) => entry.includes('P9.1 QQ proposal-only ingress'))
   );
   assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').status, '完整本地产品');
-  assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').syncMode, 'versioned-review');
+  assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').syncMode, 'source-push');
   assert.equal(data.projects.find((entry) => entry.id === 'udgap').status, 'Unity 6 集成基线');
-  assert.equal(data.projects.find((entry) => entry.id === 'udgap').syncMode, 'versioned-review');
+  assert.equal(data.projects.find((entry) => entry.id === 'udgap').syncMode, 'source-push');
   assert.equal(data.projects.find((entry) => entry.id === 'sakura-framework').status, '开发收敛 · 无 Active');
   assert.equal(data.projects.find((project) => project.id === 'sword-of-words').categoryLabel, '独立游戏项目');
   assert.match(
@@ -131,9 +136,10 @@ test('portfolio renders six reviewed status cases with games first and source fr
   assert.ok(html.indexOf('project-sakura-framework') < html.indexOf('project-sakura-design-journal'));
   assert.equal((html.match(/class="portfolio-update"/g) ?? []).length, 6);
   assert.equal((html.match(/<dt>下一步<\/dt>/g) ?? []).length, 6);
-  assert.ok(html.includes('版本化产品状态'));
-  assert.ok(html.includes('已提交基线复核'));
   assert.ok(html.includes('源仓推送公开投影'));
+  assert.ok(html.includes('源仓推送公开基线'));
+  assert.ok(html.includes('固定提交公开投影'));
+  assert.ok(html.includes('站点策展状态'));
   assert.ok(html.includes('project-proof-visual-shelf'));
   assert.ok(html.includes('project-proof-visual-udgap'));
   assert.ok(html.includes('engineering-proof-visual'));
