@@ -27,6 +27,11 @@ const PAGE_COVER_TARGETS = {
   game: 'game-hero',
   contact: 'contact-header'
 };
+const BRAND_MODE_HERO_ARTWORK = Object.freeze({
+  'pages/engineering.html': Object.freeze({ mode: 'iris', assetKey: 'irisHeroArt' }),
+  'pages/framework.html': Object.freeze({ mode: 'sakura', assetKey: 'sakuraHeroArt' }),
+  'pages/journal.html': Object.freeze({ mode: 'journal', assetKey: 'journalHeroArt' })
+});
 const PAGE_INDEXES = {
   'pages/portfolio.html': {
     ariaLabel: '作品页章节',
@@ -664,7 +669,7 @@ function installBrandExperience(html, page, prefix, brand) {
     journal: { icon: 'shared-research', label: 'JOURNAL MODE', title: 'Questions · Reasoning · Application' }
   };
   const signature = signatureByMode[page.brandMode];
-  if (signature && page.coverKey) {
+  if (signature && page.coverKey && !BRAND_MODE_HERO_ARTWORK[page.file]) {
     const coverPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bdata-page-cover="${escapeRegExp(page.coverKey)}"[^>]*>)`);
     if (!coverPattern.test(html)) throw new Error(`brand-contract violation: ${page.file} has no cover for ${page.brandMode} signature`);
     const markup = `<!-- brand-mode-signature:start -->
@@ -691,16 +696,13 @@ function installBrandExperience(html, page, prefix, brand) {
 
 function installBrandModeHeroArt(html, page, prefix, brand) {
   html = html.replace(/\s*<!-- brand-mode-hero-art:start -->[\s\S]*?<!-- brand-mode-hero-art:end -->/g, '');
-  const artworkByPage = {
-    'pages/engineering.html': { mode: 'iris', asset: brand.assets.irisHeroArt },
-    'pages/framework.html': { mode: 'sakura', asset: brand.assets.sakuraHeroArt },
-    'pages/journal.html': { mode: 'journal', asset: brand.assets.journalHeroArt }
-  };
-  const artwork = artworkByPage[page.file];
+  const artwork = BRAND_MODE_HERO_ARTWORK[page.file];
   if (!artwork || !page.coverKey) return html;
   if (artwork.mode !== page.brandMode) {
     throw new Error(`brand-contract violation: ${page.file} hero art mode drift`);
   }
+  const asset = brand.assets[artwork.assetKey];
+  if (!asset) throw new Error(`brand-contract violation: ${page.file} hero art asset missing`);
 
   const coverPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bdata-page-cover="${escapeRegExp(page.coverKey)}"[^>]*>)`);
   if (!coverPattern.test(html)) {
@@ -708,7 +710,7 @@ function installBrandModeHeroArt(html, page, prefix, brand) {
   }
   const markup = `<!-- brand-mode-hero-art:start -->
         <figure class="brand-mode-hero-art brand-mode-hero-art-${artwork.mode}" aria-hidden="true">
-            <img src="${prefix}${artwork.asset}" alt="" decoding="async" fetchpriority="high">
+            <img src="${prefix}${asset}" alt="" decoding="async" fetchpriority="high">
         </figure>
         <!-- brand-mode-hero-art:end -->`;
   return html.replace(coverPattern, `$1\n        ${markup}`);

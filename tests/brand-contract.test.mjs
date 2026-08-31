@@ -141,6 +141,7 @@ test('mode hero artwork is contract-owned, decorative and limited to the three p
   };
 
   assert.ok(generator.includes('installBrandModeHeroArt'));
+  assert.ok(generator.includes('BRAND_MODE_HERO_ARTWORK'));
   for (const [pageKey, [mode, assetKey]] of Object.entries(expected)) {
     const html = await readText(`pages/${pageKey}.html`);
     const asset = brand.assets[assetKey];
@@ -150,6 +151,7 @@ test('mode hero artwork is contract-owned, decorative and limited to the three p
     assert.equal((html.match(/<!-- brand-mode-hero-art:end -->/g) ?? []).length, 1);
     assert.match(html, new RegExp(`<figure class="brand-mode-hero-art brand-mode-hero-art-${mode}" aria-hidden="true">`));
     assert.ok(html.includes(`<img src="../${asset}" alt="" decoding="async" fetchpriority="high">`));
+    assert.doesNotMatch(html, /brand-mode-signature/);
   }
 
   for (const file of [
@@ -158,11 +160,13 @@ test('mode hero artwork is contract-owned, decorative and limited to the three p
   ]) {
     assert.doesNotMatch(await readText(file), /brand-mode-hero-art/);
   }
+  assert.match(await readText('pages/framework-quickstart.html'), /class="brand-mode-signature" aria-label="SAKURA MODE"/);
+  assert.match(await readText('pages/blog.html'), /class="brand-mode-signature" aria-label="JOURNAL MODE"/);
   assert.match(css, /\.brand-mode-hero-art\s*\{[\s\S]*?pointer-events:\s*none/);
   assert.match(css, /\.brand-mode-hero-art img\s*\{[\s\S]*?mask-image:/);
   assert.match(css, /@media \(max-width: 900px\)[\s\S]*?\.brand-mode-hero-art/);
-  assert.match(css, /\.brand-mode-hero-art \+ \.brand-mode-signature\s*\{[\s\S]*?position:\s*absolute/);
-  assert.match(css, /html\[data-brand="iris-sakura"\]\[data-brand-mode="journal"\] \[data-page-cover="journal"\]\.page-cover\s*\{[\s\S]*?padding-block-start:\s*10rem/);
+  assert.doesNotMatch(css, /\.brand-mode-hero-art \+ \.brand-mode-signature/);
+  assert.doesNotMatch(css, /html\[data-brand="iris-sakura"\]\[data-brand-mode="journal"\] \[data-page-cover="journal"\]\.page-cover/);
 });
 
 test('brand operating documents cover naming, voice, modes, iconography and maintenance', async () => {
