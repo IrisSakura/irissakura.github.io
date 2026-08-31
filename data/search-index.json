@@ -1,0 +1,2413 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-30T00:03:31+08:00",
+  "totalCount": 160,
+  "facets": {
+    "types": [
+      {
+        "id": "article",
+        "label": "正式文章",
+        "count": 45
+      },
+      {
+        "id": "game-design",
+        "label": "游戏设计",
+        "count": 62
+      },
+      {
+        "id": "framework-audit",
+        "label": "框架审计",
+        "count": 53
+      }
+    ],
+    "series": [
+      {
+        "id": "shared-language-of-game-systems",
+        "label": "游戏系统的共同语言",
+        "count": 18
+      },
+      {
+        "id": "large-unity-framework-governance",
+        "label": "大型 Unity 框架的治理复盘",
+        "count": 3
+      },
+      {
+        "id": "sakura-framework-engineering",
+        "label": "Sakura Framework 工程实践",
+        "count": 13
+      },
+      {
+        "id": "unreal-engine-source-research",
+        "label": "从 Unreal Engine 源码理解引擎设计",
+        "count": 8
+      },
+      {
+        "id": "godot-source-research",
+        "label": "从 Godot 源码理解引擎设计",
+        "count": 3
+      }
+    ],
+    "engines": [
+      {
+        "id": "godot",
+        "label": "Godot",
+        "count": 3
+      },
+      {
+        "id": "unity",
+        "label": "Unity",
+        "count": 4
+      },
+      {
+        "id": "unreal-engine",
+        "label": "Unreal Engine",
+        "count": 8
+      }
+    ]
+  },
+  "entries": [
+    {
+      "id": "article:growth-function-replacement",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "增长函数替换：增量游戏的自动化、Prestige 与抽象阶梯",
+      "summary": "增量游戏怎样让持续增长的数字长期保持新鲜感，并让已经被玩家掌握的旧玩法逐渐自动化、压缩和退居后台，而不是无限重复同一套购买与等待？",
+      "tags": [
+        "automation",
+        "incremental",
+        "prestige"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-30",
+      "url": "/pages/blog/growth-function-replacement.html"
+    },
+    {
+      "id": "game-design:crpg",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG",
+      "summary": "整个游戏维护一套跨探索、对话、任务和战斗共享的权威 World State。玩家创建并经营一支具有属性、技能、职业、背景、装备、关系和知识差异的队伍，在探索世界时不断遇到具有多种解决方式的问题；对话选项、场景互动、任务路线和冲突解决方案由当前世界事实、角色能力、队伍成员、历史行为与阵营关系动态生成。玩家提交选择后，系统通过统一 Rule / Check E…",
+      "tags": [
+        "crpg"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-30",
+      "url": "/pages/journal/crpg.html"
+    },
+    {
+      "id": "article:godot-texture-streaming-residency",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留",
+      "summary": "当场景拥有大量高分辨率纹理时，系统怎样根据画面真实使用情况决定哪些纹理应该提高质量、哪些应该降级，同时保证显存预算、I/O 峰值和资源生命周期都保持可控？",
+      "tags": [
+        "godot",
+        "mip",
+        "texture-streaming"
+      ],
+      "series": "从 Godot 源码理解引擎设计",
+      "engines": [
+        "godot"
+      ],
+      "updatedAt": "2026-08-29",
+      "url": "/pages/blog/godot-texture-streaming-residency.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-29",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一审计基线 已脱敏提交，main 只新增了 1 个提交，但这是一次非常典型、且值得继续采用的架构收敛： 这次迁移的价值并不是“Voxel Sandbox 多了一个功能”，而是修复了： 这一错误 Ownership。 仓库同时新增了一个严格的： 它会直接扫描 foundation、runtime-service、gameplay-kernel 的原始 package.json 和全部仓库 asmdef，包括 Runtime、Editor、Tests、Generated，并同时解析普通 Assembly Name 与 GUID 引用；allowlist、versionDefines、defineConstraints、历史 exception 均不能掩盖真实反向依赖。 本次迁移前： 迁移后： 实际迁移 17 项文件，16 项内容字节保持不变，测试源码只改变 Prefab fixture…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-29",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-28",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一审计基线 已脱敏提交，main 只前进了两个提交，但其中一个是相当重要的架构治理变化： 实际改动没有新增 UPM Package、没有新增 asmdef、没有扩大 Stable Runtime API，也没有修改任何 Domain Runtime；核心是在现有 editor-tools 和 tools/package-distribution 内建立： 这意味着此前分散在 Module Catalog、Release Policy、Manifest Snippet、Installer 中的“包从哪里来”这一事实，第一次开始拥有专门的物理 Source Owner。方向是正确的，而且高度符合当前“完善已有项目能力，而不是提供可交付版本”的主线。 当前仓库依然明确处于： 当前没有 Active、Pending Approval 或 Blocked 工作；默认动作仍是 route-only。Evidence…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-28",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "game-design:association-football",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "足球比赛模拟 / Association Football Simulation / Soccer Game",
+      "summary": "球场上22名运动员、一个持续运动的足球、两套团队战术和一套裁判规则共同运行的实时比赛模拟。",
+      "tags": [
+        "association",
+        "football",
+        "soccer"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-28",
+      "url": "/pages/journal/association-football.html"
+    },
+    {
+      "id": "article:unreal-build-accelerator-known-inputs-cas",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门",
+      "summary": "远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？",
+      "tags": [
+        "prefetch",
+        "uba",
+        "unreal-engine"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-27",
+      "url": "/pages/blog/unreal-build-accelerator-known-inputs-cas.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-27",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "当前仓库仍然处于正确的战略模式： 最新 Work Status 仍明确记录 release.intent = deferred-development，Candidate 为空，same-SHA release evidence 与 strict readiness 都是 not-requested；当前没有 Active、Pending Approval 或 Blocked 工作，Evidence Backlog 为 147。 本轮相较上一审计最大的变化只有两项，但都很有价值。第一，Agent 工程规则完成了一次真正的上下文预算收敛：根 AGENTS.md 从约 23.8 KB 降至约 15.3 KB，并增加 bounded route resolver，使普通 route-only 输出降至约 561 bytes，明确 4 KB / 8 KB 的 Route Budget，同时保持…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-27",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "game-design:incremental",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "增量游戏 / Incremental Game / Idle Game",
+      "summary": "玩家从一个极低产出的资源系统开始，通过消费已有资源购买新的生产源、倍率、自动化和规则突破，使单位时间产出持续增长；当当前增长层逐渐进入边际收益下降阶段后，玩家主动放弃部分或全部当前进度，换取只在更高层长期存在的 Prestige 资源或全局倍率，再以更高效率重新经历早期阶段。游戏由此形成多个不同时间尺度嵌套的增长循环：秒级资源生产、分钟级购买、小时级里程碑…",
+      "tags": [
+        "clicker",
+        "idle",
+        "incremental"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-27",
+      "url": "/pages/journal/incremental.html"
+    },
+    {
+      "id": "article:precision-platformer-movement-trust",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "运动可信度：精密平台跳跃的输入宽容、可达包络与快速重试",
+      "summary": "精密平台跳跃怎样在保持高执行要求的同时，让玩家确信每一次成功和失败都来自可以理解、学习和重复的运动规则？",
+      "tags": [
+        "movement",
+        "platformer",
+        "precision"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-26",
+      "url": "/pages/blog/precision-platformer-movement-trust.html"
+    },
+    {
+      "id": "game-design:grand-strategy",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "大国战略 / Grand Strategy / Geopolitical State Simulation",
+      "summary": "玩家直接接管已嵌入复杂国内与国际结构的国家，通过国家能力把人口、财政、行政、外交与军事潜力转化为可持续行动；危机、战争、和约与战后治理持续重塑力量平衡。",
+      "tags": [
+        "geopolitical",
+        "grand",
+        "strategy"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-26",
+      "url": "/pages/journal/grand-strategy.html"
+    },
+    {
+      "id": "article:godot-gdtype-classdb-methodbind",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "反射快照与运行时热路径：Godot GDType、ClassDB 与 MethodBind 的职责分离",
+      "summary": "动态语言和编辑器需要按名字查找属性、方法、信号与类型信息时，引擎怎样保留完整反射能力，同时避免每一次对象访问都重新进入一个全局类数据库并沿继承链搜索？",
+      "tags": [
+        "classdb",
+        "gdtype",
+        "godot"
+      ],
+      "series": "从 Godot 源码理解引擎设计",
+      "engines": [
+        "godot"
+      ],
+      "updatedAt": "2026-08-25",
+      "url": "/pages/blog/godot-gdtype-classdb-methodbind.html"
+    },
+    {
+      "id": "article:ue6-iris",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "复制资格与交付确认：UE6 Iris 的对象协议、连接可见性与可靠状态",
+      "summary": "一个 UObject 的状态已经发生变化以后，怎样逐步判断哪些连接有资格看到它、本次带宽是否应该发送它，以及什么时候才能真正认为这一份状态已经可靠交付？",
+      "tags": [
+        "iris",
+        "ue6"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-25",
+      "url": "/pages/blog/ue6-iris.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-25",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一轮基线 已脱敏提交，main 又前进了 7 个提交。真正影响工程状态的不是最新的品牌文档提交，而是三条能力收敛线：Pooling Ownership/Lifecycle 二次闭环、Event Diagnostics Surface、Editor Tools Installer 异步边界收敛。最新 Brand V4 只是把 “Frame · Power · Extend” 与真实产品证据、文档入口绑定起来，并明确品牌表达不能替代真实 Supported/Runner 状态，不改变 Package、API 或发布身份。 最重要的状态变化是：上一轮 Pooling 的 55 个失败已经关闭。当前 Pooling focused EditMode 已达到 139/139，Stable API fresh compare 为 0/0/0/0；46 包 affected closure 为…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-25",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "game-design:precision-platformer",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "精密平台跳跃 / Precision Platformer",
+      "summary": "把角色运动本身设计成一套高度稳定、可学习、可预测的技能系统；玩家通过极少量输入控制一个具有明确速度、加速度、跳跃曲线、碰撞体和空中修正能力的角色，在连续空间中判断起跳位置、释放时机、空中轨迹和着陆窗口。系统通过 Jump Buffer、Coyote Time、Corner Correction、Ground Snap 等输入宽容机制解释玩家意图，但不会替玩…",
+      "tags": [
+        "hardcore",
+        "platformer",
+        "precision"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-25",
+      "url": "/pages/journal/precision-platformer.html"
+    },
+    {
+      "id": "article:4x",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "治理容量：4X 扩张中的收益、组织负担与管理约束",
+      "summary": "为什么许多 4X 游戏前期充满战略选择，到了中后期却变成不断占地、点建筑和处理重复事务？",
+      "tags": [
+        "4x"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/governance-capacity-in-4x.html"
+    },
+    {
+      "id": "article:ai",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "开发任务胶囊与项目语义图：AI 协作中的只读上下文、影响分析与证据边界",
+      "summary": "大型代码仓库如何把一个开发任务需要的范围、项目结构、影响关系和验证证据压缩成稳定的机器可读上下文，同时不把“理解仓库”错误地升级成“拥有执行权限”？",
+      "tags": [
+        "ai"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/ai-task-capsule-semantic-graph.html"
+    },
+    {
+      "id": "article:ai-ac6e1fb2",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "AI 安全执行平面：隔离工作树、任务绑定写入与人类交付边界",
+      "summary": "当 AI 已经能够理解一个大型代码仓库后，怎样让它真正修改文件、执行验证并参与交付，同时不把“获得上下文”升级成“获得整个仓库的操作权”？",
+      "tags": [
+        "ai"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/ai-safe-execution-plane.html"
+    },
+    {
+      "id": "article:blog-2d6baa70",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "房间加入协议中的响应顺序与快照可见性边界",
+      "summary": "多人服务器处理加入房间请求时，为什么先修改成员关系、再发送成功响应，会让客户端在协议上看到颠倒的消息顺序？",
+      "tags": [
+        "essay"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/room-join-response-snapshot-ordering.html"
+    },
+    {
+      "id": "article:blog-5912662e",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "压力—火力追逐：幸存者类的时间难度轴与空间化成长",
+      "summary": "幸存者类如何在玩家输入始终非常简单的情况下，让一场单局从稀疏敌群持续演化成数百甚至上千单位参与的高密度战斗，并让成长、移动和构筑始终保持有效决策？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/horde-survival-pressure-firepower.html"
+    },
+    {
+      "id": "article:blog-75fbb5c2",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "语义战斗编排：事件、状态、资格事实与受限动作管线",
+      "summary": "跨技能、命中、状态和内容扩展的战斗协作，需要在表达能力、确定性、执行权限和调试可追踪性之间建立稳定边界。",
+      "tags": [
+        "essay"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/semantic-battle-orchestration.html"
+    },
+    {
+      "id": "article:blog-9c93136e",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "框架能力语义目录：能力词表、证据化声明与可解释模块选择",
+      "summary": "大型模块化框架如何从“有哪些包”进一步表达“能解决什么问题、由谁提供、证据在哪里、还需要哪些依赖和项目责任”，并让工具可以确定性地回答能力选择问题？",
+      "tags": [
+        "essay"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/framework-capability-semantic-catalog.html"
+    },
+    {
+      "id": "article:blog-b32aa28b",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "候选版本身份治理：发布冻结、失效判定与主线回退",
+      "summary": "一个发布候选被冻结之后，如果主分支又合入了与构建、测试或消费路径有关的修复，原候选是否还能继续作为交付对象？",
+      "tags": [
+        "essay"
+      ],
+      "series": "大型 Unity 框架的治理复盘",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/release-candidate-identity-governance.html"
+    },
+    {
+      "id": "article:blog-bf46f287",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "构筑与验证分离：自走棋的共享棋池、经济资本与自动战斗",
+      "summary": "当玩家无法在战斗中直接纠正单位行为时，自走棋怎样让商店、经济、阵容和站位决策形成足够可信、可解释且能够持续调整的竞技循环？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/auto-battler-shared-pool-economy.html"
+    },
+    {
+      "id": "article:blog-eb1c415c",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "劳动瓶颈传播：经营规模扩张中的时间、运输与加工压力",
+      "summary": "经营模拟中的规模扩张为什么不会自动带来更高效率，反而可能让玩家被浇水、收获、运输和加工等重复劳动彻底占满？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/labor-bottleneck-propagation.html"
+    },
+    {
+      "id": "article:bootstrap",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Bootstrap 组合根：服务装配、生命周期所有权与重复接管隔离",
+      "summary": "框架启动器需要把模块装进同一运行时，同时避免核心依赖膨胀、重复 Host、生命周期冲突和项目覆盖失效。",
+      "tags": [
+        "bootstrap"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/bootstrap-composition-root.html"
+    },
+    {
+      "id": "article:city-accessibility-feedback",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "可达性驱动的城市自组织：路网容量、公共服务与土地价值的反馈闭环",
+      "summary": "城市建设模拟怎样让道路、分区、居民、企业和公共服务形成真实的互相影响，而不是退化成“哪里变红就多盖一个建筑”的数值面板？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/city-accessibility-feedback-loop.html"
+    },
+    {
+      "id": "article:command-replay",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Command 历史：可逆操作、随机状态回卷与确定性 Replay",
+      "summary": "游戏运行时需要把玩家操作变成可撤销、可重做、可保存和可重演的动作历史，同时保持随机结果与业务状态一致。",
+      "tags": [
+        "command",
+        "replay"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/command-history-deterministic-replay.html"
+    },
+    {
+      "id": "article:facade-scope",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "运行时消费模式：Facade、模块化安装与显式 Scope 的迁移阶梯",
+      "summary": "不同规模的 Unity 项目对服务访问、模块注册和生命周期所有权存在不同要求，框架需要提供可以渐进迁移的使用方式。",
+      "tags": [
+        "facade",
+        "scope"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/runtime-consumption-facade-scope.html"
+    },
+    {
+      "id": "article:god-game-belief-attribution",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "信仰归因与间接统治：上帝模拟中的世界真相、神迹解释与社会扩散",
+      "summary": "当玩家拥有直接改变天气、生命和地形的神性力量，却不能直接控制凡人如何理解这些变化时，世界真相、个人观察、社会归因和长期治理怎样形成一套完整的反馈系统？",
+      "tags": [
+        "belief",
+        "god-game",
+        "simulation"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/god-game-belief-attribution.html"
+    },
+    {
+      "id": "article:godot-objectid-refcounted",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "身份与所有权分离：Godot ObjectID、RefCounted 与弱引用的生命周期模型",
+      "summary": "跨帧保存一个对象时，系统究竟应该只记住“它是谁”，还是必须保证“它继续活着”？",
+      "tags": [
+        "godot",
+        "objectid",
+        "refcounted"
+      ],
+      "series": "从 Godot 源码理解引擎设计",
+      "engines": [
+        "godot"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/godot-objectid-refcounted-lifecycle.html"
+    },
+    {
+      "id": "article:local-passed-runner-passed",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "证据等级：本地验证、Runner 复验与交付结论边界",
+      "summary": "一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？",
+      "tags": [
+        "local",
+        "passed",
+        "runner"
+      ],
+      "series": "大型 Unity 框架的治理复盘",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/local-passed-runner-passed.html"
+    },
+    {
+      "id": "article:metroidvania-capability-gated-topology",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "世界拓扑与能力门控：银河城地图中的权限、可达性与区域重访",
+      "summary": "从空间、权限与记忆三层解释银河城地图如何用能力门控改变可达范围，并让旧区域在成长后重新产生价值。",
+      "tags": [
+        "capability-gating",
+        "metroidvania",
+        "topology"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/metroidvania-capability-gated-topology.html"
+    },
+    {
+      "id": "article:moba",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "可行动时间窗口与地图转换：MOBA 的兵线节拍、人数差与优势兑现",
+      "summary": "MOBA 中一次击杀、一次团战或一次线权优势，怎样从短暂的战斗收益转换成能够持续影响后续局势的地图状态？",
+      "tags": [
+        "moba"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/moba-action-windows-map-conversion.html"
+    },
+    {
+      "id": "article:resolver",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "本地化文本生命周期：Resolver 所有权、语言状态与原子表写入",
+      "summary": "Unity 本地化系统如何从一次字符串查询扩展为覆盖 Resolver 所有权、Fallback、偏好状态、跨模块 Bridge、诊断以及安全表写入的完整生命周期？",
+      "tags": [
+        "resolver"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/localization-resolver-lifecycle.html"
+    },
+    {
+      "id": "article:rpg",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "角色资产化与个体身份：怪物收集 RPG 的捕获事务、队伍压缩与长期成长",
+      "summary": "当世界中的敌对生物可以被玩家捕获、培养、进化、交换并陪伴几十小时以后，系统怎样保证“物种”“这一只个体”“当前战斗单位”和“玩家长期拥有的资产”始终是四个不会混淆的概念？",
+      "tags": [
+        "rpg"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/monster-taming-rpg-capture-identity.html"
+    },
+    {
+      "id": "article:unity-quickstart",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Unity Quickstart 的可执行接入证据与有界进程治理",
+      "summary": "一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？",
+      "tags": [
+        "quickstart",
+        "unity"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [
+        "unity"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/unity-quickstart-executable-evidence.html"
+    },
+    {
+      "id": "article:unity-sample",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Unity Sample 的条件组合层与渐进式依赖闭包",
+      "summary": "一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？",
+      "tags": [
+        "sample",
+        "unity"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [
+        "unity"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/unity-sample-dependency-closure.html"
+    },
+    {
+      "id": "article:unreal-engine-asyncloading2-object-publication",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "对象发布协议：AsyncLoading2 的可见性阶段、递归加载与安全完成边界",
+      "summary": "异步加载中的 UObject 已经分配内存之后，为什么还不能立即被普通代码发现和长期持有，以及加载器怎样把内部就绪状态逐步转换成真正安全的外部完成状态？",
+      "tags": [
+        "async-loading",
+        "asyncloading2",
+        "lifecycle",
+        "unreal-engine",
+        "uobject"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/unreal-engine-asyncloading2-object-publication.html"
+    },
+    {
+      "id": "article:unreal-engine-rdg-compilation",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "声明式渲染图编译：RDG 的依赖建图、资源生命周期与 Barrier 执行",
+      "summary": "当一帧渲染包含大量 Pass、临时纹理、Async Compute 和跨 Pipeline 资源访问时，怎样让调用方只描述真实依赖，而由统一基础设施决定哪些工作必须执行、资源何时真正存在以及什么时候需要 GPU 状态转换？",
+      "tags": [
+        "rdg",
+        "render-graph",
+        "unreal-engine"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/unreal-engine-rdg-compilation.html"
+    },
+    {
+      "id": "article:unreal-engine-world-partition-state-convergence",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "流送状态收敛：World Partition 的空间查询、帧预算与 LevelStreaming 交接",
+      "summary": "从 StreamingSource、RuntimeCell、跨分区预算与 LevelStreaming 交接解释 World Partition 如何让目标态逐步收敛为真实世界状态。",
+      "tags": [
+        "level-streaming",
+        "lifecycle",
+        "streaming",
+        "unreal-engine",
+        "world-partition"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/unreal-engine-world-partition-state-convergence.html"
+    },
+    {
+      "id": "article:unreal-mass-deferred-structural-changes",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序",
+      "summary": "从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。",
+      "tags": [
+        "archetype",
+        "ecs",
+        "lifecycle",
+        "mass",
+        "unreal-engine"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/blog/unreal-mass-deferred-structural-changes.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-24",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮最重要的结论发生了变化。 前几轮仓库的主要风险是： 而当前实际 main 已经明显进入： 当前仓库仍明确声明： 根 README 同样明确写明：当前发布准备未启用，不应自行恢复 RC、Tag、Release、Evidence Backlog 或 Deferred 工作。 因此战略主线仍然正确。 但本轮出现了一个比前几轮更值得优先处理的问题： Supported Runtime Foundation 中的 Pooling 已经有大规模 Ownership/Lifecycle 重构进入 main，但对应工作仍然是 approved / deferred / not-run，并且当前另一个 Editor Tools 工作的 affected Unity lane 中，Framework.Pooling.Tests 实际出现了 55 个失败。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "game-design:auto-battler",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "自走棋 / Auto Battler",
+      "summary": "玩家主要不直接控制单位战斗动作，而是在有限准备阶段内，通过商店购买、共享棋子池竞争、棋子合成、经济投资、阵容羁绊和空间布阵预先构造一个战斗系统；随后单位根据统一战斗规则自主执行。每一轮战斗结果再反向改变生命、经济、对手信息与下一轮构筑空间，形成“构筑决策与自动验证”交替运行的竞技循环。",
+      "tags": [
+        "auto",
+        "battler",
+        "chess"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/auto-battler.html"
+    },
+    {
+      "id": "game-design:battle-royale",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "大逃杀 / Battle Royale",
+      "summary": "通过不断缩小的有效生存空间，强制原本分散的大量玩家持续提高空间密度；玩家从低资源状态落地，通过局内随机搜刮临时构筑战力，在不完全信息下选择战斗、规避和转移路线，并以不可逆淘汰持续减少参与者数量，最终使“空间收缩”和“人数收缩”同时收敛到唯一胜者。",
+      "tags": [
+        "battle",
+        "br",
+        "royale"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/battle-royale.html"
+    },
+    {
+      "id": "game-design:bullet-hell",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "弹幕射击 / Bullet Hell / Danmaku Shooter",
+      "summary": "敌方将攻击预先组织成具有确定时间结构和空间几何结构的弹幕场；玩家控制一个拥有极小真实受击区域的高速响应角色，通过读取弹幕形态、预测未来安全空间、进行微尺度移动、擦弹和资源化规避，在持续输出敌人的同时穿越不断变化的“危险几何”。Boss阶段、弹幕脚本、子弹生命周期、判定几何、时间确定性和可重放性共同构成整个品类的运行时核心。",
+      "tags": [
+        "bullet",
+        "danmaku",
+        "hell"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/bullet-hell.html"
+    },
+    {
+      "id": "game-design:causal-weaving",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "因果编织类游戏",
+      "summary": "以事实、因果链、时间线编辑和后果传播构造可推演的叙事解谜空间。",
+      "tags": [
+        "causality",
+        "narrative",
+        "puzzle"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/causal-weaving.html"
+    },
+    {
+      "id": "game-design:ccg",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "集换式卡牌对战 / Collectible Card Game / Trading Card Game",
+      "summary": "玩家在对局之外从长期持久化的个人牌池中构筑一副满足规则约束的牌组，将大量候选卡牌压缩成一个有限概率分布；进入对局后，系统把牌组实例化为具有严格区域归属、隐藏信息、顺序、所有权和控制权的比赛状态。玩家通过抽牌获得有限信息，以逐回合增长或恢复的资源交换卡牌、场面、生命、节奏与未来概率，并通过统一的行动合法性、目标选择、效果队列、触发器和状态检查系统解决复杂卡牌交互。",
+      "tags": [
+        "ccg",
+        "collectible",
+        "tcg"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/ccg.html"
+    },
+    {
+      "id": "game-design:city-builder",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "城市建设模拟 / City Builder / Urban Planning Simulation",
+      "summary": "玩家不主要管理某个居民今天应该去哪里工作，而是设计土地用途、交通网络、公用事业、公共服务、税制和空间政策；大量居民与企业依据可达性、土地价值、就业机会、服务质量和成本自主选择迁入、迁出、通勤与经营位置。城市由这些局部决策逐渐涌现为宏观人口、交通、产业、财政和空间结构。",
+      "tags": [
+        "builder",
+        "building",
+        "city"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/city-builder.html"
+    },
+    {
+      "id": "game-design:civilization-strategy",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "4X 文明战略游戏",
+      "summary": "玩家以国家、文明、星际势力或大型组织为长期经营主体，在受战争迷雾限制的世界中探索地图、建立据点、控制领土、开发人口与资源、研究技术、处理外交并组织战争；运行时通过回合阶段、领土网络、人口经济、科技扩散、外交关系、军事投送和胜利进度共同驱动一个从弱小势力发展为区域或世界级力量的长期演化过程。",
+      "tags": [
+        "civilization",
+        "empire",
+        "strategy"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/civilization-strategy.html"
+    },
+    {
+      "id": "game-design:colony",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "殖民地模拟与聚落生存经营游戏",
+      "summary": "玩家不直接逐项控制居民完成动作，而是通过划定区域、设置优先级、发布工作订单、建立生产链和调整制度，间接组织一群具有身体需求、技能差异、情绪状态、社会关系和有限认知的自主居民。运行时持续将聚落需求转化为工作任务，再由调度系统依据路径、权限、技能、资源和优先级分配执行；生产、运输、消耗、伤病、天气和外部威胁共同形成动态压力，使聚落在扩张、失衡、危机与恢复之间长…",
+      "tags": [
+        "colony",
+        "management",
+        "settlement"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/colony.html"
+    },
+    {
+      "id": "game-design:cooperative-hunting-action",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "多人共斗狩猎动作游戏中的目标遭遇、部位破坏与协作窗口",
+      "summary": "围绕大型目标、动作承诺、部位状态、团队职责和阶段窗口组织共斗狩猎。",
+      "tags": [
+        "action",
+        "cooperative",
+        "hunting"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/cooperative-hunting-action.html"
+    },
+    {
+      "id": "game-design:deckbuilder-roguelike",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "卡组构筑式 Roguelike",
+      "summary": "玩家以一套不完整但具备基础功能的初始卡组进入单局流程，通过路线选择、战斗、随机奖励、删牌、升级、遗物和事件，持续修改自己的未来行动概率；每一次即时收益都会改变后续抽牌结构、资源曲线和风险承受能力，最终形成一套能够应对高强度敌人与首领机制的临时构筑。单局失败会终止本次构筑，但可通过有限的局外解锁扩展未来内容空间。",
+      "tags": [
+        "deckbuilder",
+        "deckbuilding",
+        "roguelike"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/deckbuilder-roguelike.html"
+    },
+    {
+      "id": "game-design:detective",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "侦探调查与推理游戏",
+      "summary": "运行时同时维护案件真实状态与玩家已知信息。玩家通过现场勘查、证物分析、证言比对、时间线重建和人物关系调查，逐步将离散信息组织为可验证的假设；系统依据证据来源、可靠性、相互矛盾关系和案件阶段，判断玩家是否已经形成足以解释事实的推理链，并允许错误推理产生后果、暴露缺口或进入可恢复的重新调查流程。",
+      "tags": [
+        "detective",
+        "investigation",
+        "mystery"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/detective.html"
+    },
+    {
+      "id": "game-design:extraction-cross-session-loop",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "撤离型搜打撤中的风险携带、不完全信息与跨局循环",
+      "summary": "围绕局外资产带入、局内动态搜刮、不完全信息决策和成功撤离后的收益提交组织跨局风险循环。",
+      "tags": [
+        "extraction",
+        "incomplete-information",
+        "risk"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/extraction-cross-session-loop.html"
+    },
+    {
+      "id": "game-design:farming",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "农场经营与生活模拟游戏",
+      "summary": "将玩家长期生活组织为由日、周、季节和年份构成的周期性时间系统；玩家每天使用有限体力、时间、土地和资金，在种植、养殖、采集、加工、建设、交易、社交和探索之间分配劳动。作物、动物、商店、NPC、节庆、天气与区域内容都依赖日历推进，使短期劳动逐步沉淀为农场资产、稳定生产链、社区关系和生活方式。",
+      "tags": [
+        "farm",
+        "farming",
+        "life"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/farming.html"
+    },
+    {
+      "id": "game-design:fighting",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "格斗游戏",
+      "summary": "将战斗运行时建立在稳定、可回放的帧级模拟之上；玩家通过方向、按键、组合指令和资源状态提交行动意图，角色状态机再依据起手、有效、收招、取消、受击、格挡和位移规则执行招式。双方围绕距离、帧优势、攻击层级、资源、风险和对手习惯持续进行预测与反预测，并通过命中确认、连段、压制、拆解和防守选择重构下一轮攻防状态。",
+      "tags": [
+        "fighting",
+        "platform",
+        "versus"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/fighting.html"
+    },
+    {
+      "id": "game-design:god-game",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "上帝模拟 / God Game / Deity Simulation",
+      "summary": "玩家作为超越普通世界实体的神性存在，通过神迹、教义、代理人与环境改造间接影响自主居民和文明；干预先被世界观察、解释与传播，再反向改变信仰资源、社会制度和后续可用力量。",
+      "tags": [
+        "deity",
+        "god-game",
+        "indirect-control"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/god-game.html"
+    },
+    {
+      "id": "game-design:horde-survival",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "幸存者类 / Horde Survival / Bullet Heaven",
+      "summary": "玩家几乎持续保持直接移动控制，但大量攻击行为由装备、技能和触发器自动执行；系统以运行时间作为主要难度轴，持续提高敌人生成预算、种类、速度和局部密度。玩家通过击杀敌群生成经验资源，再主动移动回收这些资源并触发短暂停顿式升级选择，从有限随机候选中不断扩展当前构筑。构筑成长反过来提高单位时间击杀能力，使玩家能够承受更高敌群密度，最终形成“敌群压力上升—击杀产生经验—移动回收经验—升级形成构筑—构筑反压敌群—进入更高压力”的自强化生存循环。",
+      "tags": [
+        "bullet",
+        "horde",
+        "survival"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/horde-survival.html"
+    },
+    {
+      "id": "game-design:household-life-sim",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "家庭人生模拟 / Household Life Simulation / Dollhouse Life Sim",
+      "summary": "玩家同时扮演“具体生活行为的导演”和“家庭长期发展的规划者”。世界中的角色拥有需求、性格、技能、关系、记忆、时间表、愿望和人生阶段；家具、场所和其他角色则通过统一的 Affordance / 可供性交互系统向角色暴露“这里可以做什么”。当玩家不直接下达命令时，角色根据需求紧迫度、性格偏好、关系、环境、计划和对象可达性自主选择行为；玩家又可以随时插入命令、调…",
+      "tags": [
+        "dollhouse",
+        "household",
+        "life"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/household-life-sim.html"
+    },
+    {
+      "id": "game-design:immersive-sim",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "沉浸式模拟中的系统性世界、可组合能力与多路径求解",
+      "summary": "以统一世界规则、能力组合和多入口空间支持玩家自主的问题求解。",
+      "tags": [
+        "emergence",
+        "immersive-sim",
+        "systemic"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/immersive-sim.html"
+    },
+    {
+      "id": "game-design:jrpg-chapter-party-progression",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "JRPG 中的章节驱动、队伍成长与冒险循环",
+      "summary": "以章节状态、队伍成长和城镇—迷宫—战斗—结算循环组织长期叙事角色扮演进程。",
+      "tags": [
+        "jrpg",
+        "narrative",
+        "party-progression"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/jrpg-chapter-party-progression.html"
+    },
+    {
+      "id": "game-design:loot-driven-arpg",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "刷宝型动作角色扮演 / Loot-driven ARPG / Diablo-like",
+      "summary": "围绕高频战斗、随机装备实例、Build 搜索、定向刷取与难度升阶，构建战斗—掉落—筛选—重构—再挑战的长期循环。",
+      "tags": [
+        "action-rpg",
+        "buildcraft",
+        "loot"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/loot-driven-arpg.html"
+    },
+    {
+      "id": "game-design:metroidvania",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "银河城游戏",
+      "summary": "将能力门控拓扑、世界状态记忆与探索—受阻—成长—回访组织为可持续重解释的长期循环。",
+      "tags": [
+        "metroidvania"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/metroidvania.html"
+    },
+    {
+      "id": "game-design:moba",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "MOBA / 线路式英雄团队竞技游戏",
+      "summary": "兵线时间结构、英雄局内成长、人数差窗口、地图资源交换以及“优势如何被转换成建筑与地图状态”的运行时范式。",
+      "tags": [
+        "moba",
+        "multiplayer",
+        "online"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/moba.html"
+    },
+    {
+      "id": "game-design:monster-taming-rpg",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "怪物收集 / 驯兽育成 RPG",
+      "summary": "玩家拥有相对稳定的角色队伍，并围绕这些角色进行长期成长。",
+      "tags": [
+        "monster",
+        "rpg",
+        "taming"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/monster-taming-rpg.html"
+    },
+    {
+      "id": "game-design:racing-fixed-step",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "驾驶竞速中的固定步长车辆模拟、赛道拓扑与连续裁定",
+      "summary": "聚焦确定性车辆步进、赛道进度、圈次状态和连续竞赛名次裁定。",
+      "tags": [
+        "racing",
+        "simulation",
+        "vehicle"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/racing-fixed-step.html"
+    },
+    {
+      "id": "game-design:real-time-strategy",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "实时战略中的命令群体模拟、生产战争循环与战争迷雾",
+      "summary": "分析玩家命令、单位群体、生产经济、战斗信息和战争迷雾的实时耦合。",
+      "tags": [
+        "fog-of-war",
+        "real-time-strategy",
+        "strategy"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/real-time-strategy.html"
+    },
+    {
+      "id": "game-design:social-deduction-hidden-identity",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "社交推理与隐藏身份中的不完全信息、可信度与秘密行动",
+      "summary": "分析私密角色、有限观察、陈述可信度和可审计秘密行动如何驱动群体推理。",
+      "tags": [
+        "hidden-identity",
+        "social-deduction",
+        "trust"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/social-deduction-hidden-identity.html"
+    },
+    {
+      "id": "game-design:soulslike-action-commitment-recovery",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "类魂动作角色扮演中的动作承诺、死亡回收与检查点循环",
+      "summary": "以动作承诺、检查点重置、死亡风险资产回收和敌人学习组织高风险动作角色扮演循环。",
+      "tags": [
+        "action-rpg",
+        "checkpoint",
+        "soulslike"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/soulslike-action-commitment-recovery.html"
+    },
+    {
+      "id": "game-design:stealth-perception-alert-recovery",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "潜行游戏中的感知不对称、警戒升级与可恢复暴露",
+      "summary": "以世界真相和敌方认知分离、分级警戒、信息传播与暴露恢复构造可规划的潜行循环。",
+      "tags": [
+        "alert-state",
+        "perception",
+        "stealth"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/stealth-perception-alert-recovery.html"
+    },
+    {
+      "id": "game-design:survival-crafting",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "开放世界生存建造 / Survival Crafting / Sandbox Survival",
+      "summary": "玩家以脆弱、低能力和低物资状态进入一个长期持久化的开放世界，通过主动探索识别环境资源与危险，再把采集到的自然资源经过工具、加工、制作和建造逐步转化为可持续生存能力。基地把散落资源压缩成安全、储存、加工、休息和补给基础设施；工具与装备进一步把原本危险或不可获取的区域转化为新的资源空间，使玩家不断经历“离开安全区—承担风险—获取稀缺资源—成功带回—转化为永久能…",
+      "tags": [
+        "crafting",
+        "sandbox",
+        "survival"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/survival-crafting.html"
+    },
+    {
+      "id": "game-design:survival-horror",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "生存恐怖游戏",
+      "summary": "将玩家置于一个信息有限、空间受限且资源不可无限补充的高压环境中；玩家必须在生命、弹药、治疗、背包容量、存档机会、路线安全度和未知威胁之间持续做出不可完全回退的决策。敌人、谜题、地图锁、物品分布和安全屋共同构成一张压力网络，使玩家不断经历“深入未知区域—消耗资源—暴露新的威胁—寻找返回路径—在安全区重新整理—再次进入”的循环。",
+      "tags": [
+        "horror",
+        "resource",
+        "survival"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/survival-horror.html"
+    },
+    {
+      "id": "game-design:tactical-rpg",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "回合制战术角色扮演中的离散战场、行动经济与战术因果",
+      "summary": "描述网格战场、行动资源、技能结算和可回放事件形成的战术决策链。",
+      "tags": [
+        "tactical-rpg",
+        "turn-based",
+        "wargame"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/tactical-rpg.html"
+    },
+    {
+      "id": "game-design:tactical-shooter",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "回合制局间战术射击 / Round-Based Tactical Shooter / Bomb-Defusal FPS",
+      "summary": "整场 Match 被切分为多个高风险、不可撤销的实时小局，每一局死亡通常无法立即复活，而上一局的胜负、存活装备和经济结果会进入下一局，形成跨 Round 的长期战略。",
+      "tags": [
+        "round",
+        "shooter",
+        "tactical"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/tactical-shooter.html"
+    },
+    {
+      "id": "game-design:tower-defense",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "塔防游戏",
+      "summary": "将敌人的推进建模为一股沿空间拓扑持续流动的压力，玩家通过有限经济在关键位置部署、升级和重组防御节点，使攻击范围、目标选择、控制效果、伤害类型和路径结构共同形成防线；每个波次既是对当前防御体系的压力测试，也是下一轮资源分配的输入，从而形成“读取威胁—空间布防—波次执行—漏洞暴露—经济再投资”的循环。",
+      "tags": [
+        "defense",
+        "td",
+        "tower"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/tower-defense.html"
+    },
+    {
+      "id": "game-design:traditional-roguelike",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "传统 Roguelike / Traditional Roguelike / Turn-Based Dungeon Crawler",
+      "summary": "世界时间通常不会独立连续流逝，而是由玩家的离散行动推动；玩家每移动一步、攻击、使用道具或等待一次，整个地牢才推进对应的模拟时间。程序生成系统为每次 Run 创建未知但必须满足可达性约束的地牢拓扑、敌人、物品和危险；玩家只能依据有限视野和逐渐获得的知识行动，并在生命、补给、道具、逃生路径和未知风险之间进行长期权衡。死亡通常结束当前 Run，使角色资产和地牢状…",
+      "tags": [
+        "classical",
+        "roguelike",
+        "traditional"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-24",
+      "url": "/pages/journal/traditional-roguelike.html"
+    },
+    {
+      "id": "article:mmorpg-persistent-identity",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务",
+      "summary": "玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？",
+      "tags": [
+        "mmorpg",
+        "persistent-identity",
+        "session"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-23",
+      "url": "/pages/blog/mmorpg-persistent-identity.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-21",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "IrisGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "当前仓库仍然明确处于： 主目标仍是： 而不是： 当前生成 Work Status 明确记录： 并且 evidenceBacklog 与 deferred 明确禁止自动恢复。 这一战略状态与当前项目阶段是匹配的，应继续维持。 ---",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-21",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "game-design:mmorpg",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "MMORPG / 持久共享世界在线角色扮演游戏",
+      "summary": "服务器长期维护一个独立于任意单个玩家生命周期存在的持久世界；大量玩家以持久角色身份同时进入这个世界，但通过 Realm、Zone、Shard、Layer 和 Instance 等空间容器被动态分配到有限规模的权威模拟单元。角色成长、装备、任务、声望、经济、好友、公会和副本进度跨会话保存；开放世界提供偶遇、资源竞争、公共事件和社会存在感，副本则提供人数、规则…",
+      "tags": [
+        "massively",
+        "mmorpg",
+        "multiplayer"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-21",
+      "url": "/pages/journal/mmorpg.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-20",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮最大的变化不是新增 Package，而是开始进一步抽取重复底层机制并让现有 Domain / Gameplay Kernel 复用统一 Core 能力。近期主线包括 Core Replay / Canonical Fingerprint 收敛、GAS/RTS 时间源复用、Editor Tools 可选能力隔离，以及随后暴露并修复的 RTS FlowField 语义回归。整体方向与“完善项目能力，而非形成可交付版本”的目标一致。 当前物理规模没有继续增加：仍为 146 个 UPM Package、146 个 Catalog Module、69 个 Preset、866 个 asmdef、467 个 noEngineReferences asmdef。但内部依赖边由上一轮的 250 增至 252；Stable API 则从 395 Types / 2416 Members 增至 399 Types / 2437…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-20",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-19",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮从上一审计基线 已脱敏提交 到当前 HEAD 前进了 5 个提交，主要集中在三条线： 仓库没有新增 UPM Package、Catalog Module、Preset 或 asmdef。上一基线与当前均为 146 Package、146 Catalog Module、69 Preset、866 asmdef、467 个 noEngineReferences asmdef；但内部依赖边从 248 增至 250。 这说明近期开发没有重新进入“一个能力一个 Package”的扩张模式，整体方向仍然符合 development-convergence。 但复杂度增长已经转移到另外三个地方： Stable Public API 从上一基线的 391 Types / 2403 Members 增至当前 395 Types / 2416 Members；程序集仍为 27 个。当前变化主要来自 Pooling Warmup 和…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-19",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-18",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一轮基准 已脱敏提交，main 又前进了 6 个提交。变化高度集中在三条既有能力线上： 没有新增 UPM Package、Catalog Module、asmdef、内部依赖边，也没有扩大 Stable Public API。当前 Inventory 仍然是 146 Package、146 Catalog Module、69 Preset、866 asmdef、248 条内部依赖边；Stable API 仍为 27 Assemblies / 391 Types / 2403 Members。这一组指标与 已脱敏提交 完全一致。 这意味着近期开发行为总体已经从“横向增加框架能力”切换为： 这是符合当前主线的。 尤其 UI 体系已经完成一个值得记录的架构修正：ui-core 当前只依赖 core，ui-binding 只依赖 ui-core，完整 Unity ui 才承担…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-18",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "article:authoritative-time-source",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "音游、格斗与竞速的权威时间源：输入、模拟、音频与表现层的时钟分工",
+      "summary": "比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。",
+      "tags": [
+        "determinism",
+        "simulation",
+        "timing"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/blog/authoritative-time-source.html"
+    },
+    {
+      "id": "article:lease-scope",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "资源所有权闭环：Lease、Scope 与统一释放终态",
+      "summary": "一个资源已经成功加载之后，框架怎样准确知道究竟是谁拥有它、应该在什么时候释放，以及 Scene 切换、异步取消、兼容 API 和紧急清理同时存在时，怎样保证整个资源系统最终只剩一个生命周期事实？",
+      "tags": [
+        "lease",
+        "scope"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/blog/lease-scope-resource-ownership.html"
+    },
+    {
+      "id": "article:unreal-engine-ddc-cook-iostore",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载",
+      "summary": "编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？",
+      "tags": [
+        "ddc",
+        "engine",
+        "unreal"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/blog/unreal-engine-ddc-cook-iostore.html"
+    },
+    {
+      "id": "article:unreal-engine-first-frame-pipeline",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Unreal Engine 的第一帧提交链：阶段化启动、世界 Tick 与渲染线程交接",
+      "summary": "一个普通操作系统进程，经过哪些明确的生命周期边界，才真正变成一个能够推进游戏世界并向渲染线程提交画面的 Unreal Engine 运行时？",
+      "tags": [
+        "engine-loop",
+        "lifecycle",
+        "render-thread",
+        "unreal-engine",
+        "world-tick"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/blog/unreal-engine-first-frame-pipeline.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-17",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "UnityGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "与上一轮相比，仓库已经发生了实质变化。 最重要的进展不是新增某个 Runtime 功能，而是此前启动的 Full Package Historical Audit 已经把保留执行范围内的 89 个 Package 全部推进到本地闭环状态。当前已经不再处于“逐包继续找问题”的中段，而是进入： 这一阶段。 最近进入 main 的提交也高度符合“完善已有能力”的主线： 最近提交序列包括 已脱敏提交 feat(rules): harden rule graph determinism (#709)、已脱敏提交 feat(pooling): converge pool scope diagnostics (#708)、已脱敏提交 feat(playerservices): harden player service group lifecycle (#706)、已脱敏提交 feat(profiling):…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "game-design:alchemy-magical-crafting",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "魔法炼金（Alchemy & Magical Crafting Simulation）",
+      "summary": "围绕配方发现、材料性质、工艺步骤与实验风险组织魔法制造循环。",
+      "tags": [
+        "alchemy",
+        "crafting",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/alchemy-magical-crafting.html"
+    },
+    {
+      "id": "game-design:archaeology-restoration",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "考古发掘（Archaeology & Artifact Restoration Simulation）",
+      "summary": "描述勘探、分层发掘、证据记录、文物修复与知识重建的连续工作流。",
+      "tags": [
+        "archaeology",
+        "restoration",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/archaeology-restoration.html"
+    },
+    {
+      "id": "game-design:club-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "俱乐部经营模拟",
+      "summary": "覆盖成员招募、训练、阵容、赛事、财务与声望共同驱动的长期经营循环。",
+      "tags": [
+        "club",
+        "management",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/club-management.html"
+    },
+    {
+      "id": "game-design:courier-delivery",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "末端物流模拟（Courier Delivery & Last-Mile Logistics Simulation）",
+      "summary": "围绕承诺时窗、包裹状态、运力、路线重规划和异常处理组织配送系统。",
+      "tags": [
+        "delivery",
+        "logistics",
+        "routing"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/courier-delivery.html"
+    },
+    {
+      "id": "game-design:courtroom-trial",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "法庭辩论（Courtroom Trial）",
+      "summary": "描述证据、证词、论点、反驳与裁决如何构成可审计的庭审对抗。",
+      "tags": [
+        "argumentation",
+        "courtroom",
+        "evidence"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/courtroom-trial.html"
+    },
+    {
+      "id": "game-design:dress-up",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "造型搭配游戏（Dress-Up Game）",
+      "summary": "描述服饰部件、搭配约束、审美标签、收藏成长与展示反馈的组合空间。",
+      "tags": [
+        "collection",
+        "dress-up",
+        "fashion"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/dress-up.html"
+    },
+    {
+      "id": "game-design:expedition-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "远征队探险管理（Expedition Management Simulation）",
+      "summary": "覆盖队员、补给、路线、风险暴露、发现与撤退决策构成的远征循环。",
+      "tags": [
+        "expedition",
+        "management",
+        "risk"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/expedition-management.html"
+    },
+    {
+      "id": "game-design:factory-automation",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "工厂自动化（Factory Automation）",
+      "summary": "将生产建模为持续运行的流网络，围绕物流、吞吐、背压、瓶颈诊断与扩容重构组织自动化成长。",
+      "tags": [
+        "automation",
+        "factory",
+        "production"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/factory-automation.html"
+    },
+    {
+      "id": "game-design:fishing-aquatic-ecology",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "水域生态钓鱼模拟（Fishing & Aquatic Ecology Simulation）",
+      "summary": "将鱼类行为、水域生态、装备选择、捕获过程与资源恢复连接为钓鱼模拟。",
+      "tags": [
+        "ecology",
+        "fishing",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/fishing-aquatic-ecology.html"
+    },
+    {
+      "id": "game-design:heist-planning",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "盗窃计划模拟（Heist Planning & Stealth Infiltration）",
+      "summary": "围绕情报收集、方案编排、潜入执行、警戒响应与撤离构建盗窃行动。",
+      "tags": [
+        "heist",
+        "planning",
+        "stealth"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/heist-planning.html"
+    },
+    {
+      "id": "game-design:hospital-triage",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "医疗分诊运营（Hospital Emergency & Triage Simulation）",
+      "summary": "描述病情优先级、有限床位和人员、诊疗队列与延误风险的运营决策。",
+      "tags": [
+        "healthcare",
+        "operations",
+        "triage"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/hospital-triage.html"
+    },
+    {
+      "id": "game-design:interactive-fiction",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "交互式文本冒险（Interactive Fiction）",
+      "summary": "围绕叙事状态、选择条件、分支汇合与文本反馈组织可追踪的互动故事。",
+      "tags": [
+        "interactive-fiction",
+        "narrative",
+        "state"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/interactive-fiction.html"
+    },
+    {
+      "id": "game-design:journalism-simulation",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "媒体运营模拟（Journalism Simulation）",
+      "summary": "覆盖线索获取、事实核验、编辑取舍、发布影响和媒体组织经营。",
+      "tags": [
+        "journalism",
+        "media",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/journalism-simulation.html"
+    },
+    {
+      "id": "game-design:kitchen-time-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "厨房时间管理模拟（Kitchen Time-Management Simulation）",
+      "summary": "分析订单、工位、食材、制作步骤与并行调度形成的时间压力循环。",
+      "tags": [
+        "kitchen",
+        "scheduling",
+        "time-management"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/kitchen-time-management.html"
+    },
+    {
+      "id": "game-design:nation-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "国家执政模拟（Nation Management Simulation）",
+      "summary": "围绕政策、预算、群体诉求、制度约束和长期后果构造国家治理模拟。",
+      "tags": [
+        "governance",
+        "nation",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/nation-management.html"
+    },
+    {
+      "id": "game-design:pet-care",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "宠物照护（Pet Care Simulation）",
+      "summary": "将生理需求、情绪、习惯、互动和长期信任连接为宠物照护循环。",
+      "tags": [
+        "care",
+        "life-sim",
+        "pets"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/pet-care.html"
+    },
+    {
+      "id": "game-design:prison-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "监狱经营模拟（Prison Management Simulation）",
+      "summary": "描述收容、安保、人员、设施、秩序和改造目标之间的运营张力。",
+      "tags": [
+        "management",
+        "operations",
+        "prison"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/prison-management.html"
+    },
+    {
+      "id": "game-design:railway-network-dispatch",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "铁路网络模拟（Railway Network & Dispatch Simulation）",
+      "summary": "围绕线路容量、时刻表、信号区段、列车优先级和异常调度模拟铁路网络。",
+      "tags": [
+        "dispatch",
+        "network",
+        "railway"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/railway-network-dispatch.html"
+    },
+    {
+      "id": "game-design:relationship-simulation",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "恋爱养成（Relationship Simulation）",
+      "summary": "描述关系维度、互动记忆、阶段门槛和承诺状态如何驱动长期关系演化。",
+      "tags": [
+        "life-sim",
+        "relationship",
+        "simulation"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/relationship-simulation.html"
+    },
+    {
+      "id": "game-design:rhythm-audio-clock",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "节奏游戏设计范式",
+      "summary": "围绕音频权威时钟、谱面事件流、确定性判定、反馈、练习与内容生产构建完整节奏游戏。",
+      "tags": [
+        "audio",
+        "rhythm",
+        "timing"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/rhythm-audio-clock.html"
+    },
+    {
+      "id": "game-design:theme-park-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "游乐园经营模拟（Theme Park Management Simulation）",
+      "summary": "连接设施布局、游客流、排队、满意度、维护与财务的游乐园经营模型。",
+      "tags": [
+        "management",
+        "simulation",
+        "theme-park"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/theme-park-management.html"
+    },
+    {
+      "id": "game-design:vessel-systems-management",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "太空飞船系统管理（Vessel Systems Management）",
+      "summary": "围绕能源、舱段、设备、船员和故障传播构造飞船系统运营压力。",
+      "tags": [
+        "simulation",
+        "spacecraft",
+        "systems-management"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-17",
+      "url": "/pages/journal/vessel-systems-management.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-16",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮与上一轮相比没有新的代码提交，因此不应人为制造一批“新任务”。当前真正有价值的是重新核对 8 月 14 日收口后的仓库事实是否已经形成一个可以继续推进的稳定基线。 结论是： 仓库当前的开发方向是正确的，但还没有到应该继续推进第 26 个历史审计 Package 的状态。 当前最重要的工作仍然集中在已经暴露、但尚未彻底闭环的三个节点： 与此同时，全包历史审计已经证明这条路线是有效的：Audio、Config、Core、Dialogue、Editor Tools、Event、GameHelper、GAS、Input、Interaction、Movement、Pooling、Save、UI、MVVM、Rendering、CardCore、Swarm、Hitbox、RedDot 等一系列既有 Package 都是在不增加新 Package、不扩大 Stable…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-16",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "article:blog-5d9fccc2",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "双重收敛：大逃杀中的有效空间、存活人数与终局密度控制",
+      "summary": "一场几十甚至上百名玩家、地图又非常巨大的比赛，怎样在保留落点与搜刮自由的同时，稳定地从低密度探索阶段推进到高密度终局？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-14",
+      "url": "/pages/blog/battle-royale-dual-convergence.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-14",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮仓库发生的最重要变化，不是新增模块，也不是继续扩 Stable 面，而是项目实际进入了一条非常明确的： 路线。 当前已经建立一份覆盖全部 145 个物理 UPM Package 的历史顺序审计台账；维护者随后明确缩减范围：57 个 domain-framework 不继续执行，本轮只继续处理其余 88 个 Package，已完成的 Roguelite2D 结果保留，历史删除包不重新创建。该审计明确把 Candidate、Tag、Release、签名和 publication 排除在默认范围之外。 这与当前项目真正需要的主线是高度一致的： 不是继续证明“框架还能加什么”，而是系统地证明已有能力是否正确、有界、可清理、可复用、可消费。 从上一轮审计 HEAD 已脱敏提交 到当前版本，仓库虽然经历了密集修改，但：",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-14",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-13",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "本轮仓库没有继续增加 UPM Package，主线基本保持在正确方向： 当前 Work Status 仍明确为： 当前 Evidence Backlog 为 129，Deferred 为 11。Candidate、Assembler、strict readiness 与 Release 都不是当前执行项。 本轮最重要的正向变化有三类。 第一，Runtime Foundation 五个核心能力面真正开始从“本地验证”进入“能力级 Runner 资格化”。Pooling、Event、Bootstrap、Save 等近期切片已经被终态 source envelope 已脱敏提交 聚合验证，PLAN-INDEX 将大量相关工作从 runner-pending 更新为 runner-passed，并记录 Gitea runs 960–963。这个做法比“一份 Plan 对应一次 Runner”更符合长期治理方向。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-13",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "article:blog-2f26d3c7",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "可调度劳动能力：自主居民调度与聚落生产链",
+      "summary": "殖民地模拟中明明拥有居民、原料和生产设施，为什么关键工作仍然可能无人执行，甚至引发整座聚落的连锁崩溃？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-12",
+      "url": "/pages/blog/schedulable-labor-colony-production-chain.html"
+    },
+    {
+      "id": "article:blog-b5472ca4",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "未来抽牌质量与构筑收敛：卡组规模、抽取概率与奖励边际价值",
+      "summary": "卡组构筑游戏为什么必须允许玩家拒绝奖励，以及一张单独很强的卡为什么可能让整套卡组变弱？",
+      "tags": [
+        "essay"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-12",
+      "url": "/pages/blog/future-draw-quality-deck-convergence.html"
+    },
+    {
+      "id": "article:extraction-transaction-boundary",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "撤离式 PvPvE 的事务提交边界：局内持有、资产托管与撤离结算",
+      "summary": "从局内持有、资产托管与撤离结算解释为什么拾取不等于长期拥有，以及真正到账点如何制造风险。",
+      "tags": [
+        "extraction",
+        "pvpve",
+        "transactions"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-12",
+      "url": "/pages/blog/extraction-transaction-boundary.html"
+    },
+    {
+      "id": "article:stealth-recoverable-exposure",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "潜行游戏的可恢复暴露循环：警戒升级、信息传播与补救空间",
+      "summary": "从感知不对称、警戒升级与信息传播解释潜行失败如何成为仍可判断、可补救但有后果的玩法。",
+      "tags": [
+        "perception",
+        "recovery",
+        "stealth"
+      ],
+      "series": "游戏系统的共同语言",
+      "engines": [],
+      "updatedAt": "2026-08-12",
+      "url": "/pages/blog/stealth-recoverable-exposure.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-12",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库的主要变化已经不再是增加 Gameplay Kernel 或继续做 Package Family 合并，而是明显转向三个方向： 其中最值得肯定的是 Asset 模块开始真正从“资源加载器”收敛为“资源所有权系统”。当前已经形成： Asset 的多个直接 Addressables 消费方已经迁移到 Lease；最新 Direct Addressables Boundary 中，普通生产资源加载的 migration queue 已经清空，只剩 Mod Catalog 这种明确 Adapter 例外，以及 Config/UI 的程序集或类型合同残留。 另一方面，本轮测试基础设施也出现了明显改善。仓库建立了 Package Test Coverage Gate，补齐 Interaction、Pathfinding.NavMesh、Rules、Welfare、Modding Compatibility…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-12",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-11",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮与上一轮相比，仓库的状态有一个明显的正向变化： “收敛”终于开始真实地减少物理 Package，而不再只是减少支持承诺或生成更多审计文档。 当前 Inventory 已从前一轮高点的 150 个 UPM Package 降至 145 个，内部依赖边从 276 降至 258。Non-Euclidean Puzzle、VisualNovel、RTT、Hardcore RPG、Survival World 五个独立 UPM Root 已分别并入 Puzzle Platformer、Dialogue、RTS、High Speed ACT、Survival，并保留 Tombstone 和迁移指南。当前分发审计记录 5 个已退休 Package、33 个剩余 non-KEEP 候选。 与此同时，上一轮审计中几个真正重要的基础问题已经完成修复：",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-11",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-10",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库发生了一次相当明显的阶段变化。 8 月 9 日之前，仓库刚刚建立： 其主要目标是控制 146 个 UPM Package 的继续增长，并开始寻找可以合并、内化和退出 UPM 的能力。 但 8 月 10 日，默认分支连续新增了四个 Gameplay Kernel： 同时还完成了： 其中后三组是在既有 Package 内纵向增强，因此没有增加 Package；四个 Gameplay Kernel 则全部成为新的独立 UPM Package。最新 HEAD 中四个新 Kernel 均已经实现并进入 local-passed / runner-pending，对应本地 Unity Testbed 分别记录了 218/218、123/123、76/76、79/79。 这使仓库规模从上一轮的： 增长到： 当前生命周期分布为：",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-10",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-09",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 最新仓库审计与能力收敛计划",
+      "summary": "当前仓库的主线状态已经保持正确： Evidence Backlog 与 Deferred 工作仍明确禁止自动恢复。 本轮出现了三个值得肯定的变化。 第一，Preferences 已完成独立 Supported 晋级。它没有被强行并入 Runtime Foundation，而是形成单包 preferences-only Stable Profile，最终 SHA 已取得同 SHA 的 Preferences、消费方、Runtime Starter、Host Player、Performance、Stable API / Analyzer 和 Artifact Recovery 证据；v0.8.28 Tag、Release、签名和发布仍明确没有执行。 第二，仓库正式建立了 Package Distribution Boundary。现在 146 个包全部经过 Census 和人工分发复核，新包增长被锁定，需要 E3–E5…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-09",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-08",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库变化非常明显。 过去几轮的主要扩张点已经从游戏 Runtime 模块转移到了两条线： 当前仓库规模已经达到： |指标|当前值| |---|--:| |UPM 包|146| |Catalog 模块|141| |Preset|69| |Profile|10| |程序集|822| |noEngineReferences 程序集|441| |内部依赖边|269| |Supported 包|5| |Preview 包|101| |Plans|469| |Specs|373| |Evidence Backlog|105| 本轮最大的正向变化是 Runtime Foundation 已正式在代码与支持策略中完成生命周期翻转： 五包现在构成 Stable Runtime Foundation，Bootstrap 已从 Preview 进入 Supported；Stable API 扩大到：",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-08",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-07",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库状态已经重新稳定在正确的主线上： 根 README、PLAN-INDEX 与生成 Work Status 当前在这一点上已经一致：发布准备未启用，历史 RC 流程不能自动恢复。 相较上一轮审计基准，仓库又进入了一批较密集的能力建设。主要变化已经不是新游戏领域包，而是： Localization Runtime Phase 2； Capability Semantics； Development Intelligence Task / Impact / Evidence Contract； Project Semantic Graph； Gameplay Feature Contract； Project Semantic Cross References； Scenario / Replay Evaluation Protocol；",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-07",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-06",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "较上一轮审计基准 已脱敏提交，默认分支又前进了 21 个提交。近期变化高度集中在 RC 流程验证，同时包含两项实际运行时或测试可靠性修复： 修复 RuntimeTaskSupervisor.WhenIdleAsync() 与受监管任务终态之间的时序窗口； 修复 Modding ScriptProxy 的 Unity EditMode 异步测试死锁； 多次重新选择并验证 Candidate； 将 pre-tag、annotated Tag、strict readiness 与 Release mutation 拆分； 将 Candidate 源码与后续 RC 验证工具检出分离； 完成 v0.8.27-rc.6 的 annotated Tag、strict tagged readiness 和 Artifact 回下载验证；",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-06",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "article:framework-support-surface-governance",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "支持面治理：实现面、消费面与产品承诺的分离",
+      "summary": "从实现面、消费面、支持面、组合验证与维护容量解释为什么框架规模增长不等于正式产品能力扩张。",
+      "tags": [
+        "framework",
+        "governance",
+        "lifecycle",
+        "support-surface",
+        "unity"
+      ],
+      "series": "大型 Unity 框架的治理复盘",
+      "engines": [
+        "unity"
+      ],
+      "updatedAt": "2026-08-05",
+      "url": "/pages/blog/framework-support-surface-governance.html"
+    },
+    {
+      "id": "article:unity-hot-update-transaction-boundary",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复",
+      "summary": "从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。",
+      "tags": [
+        "hot-update",
+        "modding",
+        "transactions",
+        "unity"
+      ],
+      "series": "Sakura Framework 工程实践",
+      "engines": [
+        "unity"
+      ],
+      "updatedAt": "2026-08-05",
+      "url": "/pages/blog/unity-hot-update-transaction-boundary.html"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-05",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库没有继续增加 UPM 包、Catalog 模块、Preset 或程序集数量，近期工作主要集中在： 完成 Framework Convergence 0.9 的产品消费闭环； 建立 Quickstart、Roguelite 2D、Runtime Starter、Server Shared Protocol 等独立能力证据 Workflow； 建立无 Tag、无 Release 副作用的 Candidate pre-tag evidence 链路； 修复 SingletonManager 初始化分配、性能校准和 Source Envelope； 修复 Runtime Starter 消费闭包缺少 Audio、Bootstrap、Config、Preferences 的问题； 为共享 Testbed 增加租约、异常残留恢复和 owner-safe Sample 隔离。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-05",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-04",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "与上一轮审计基准 已脱敏提交 相比，默认分支新增了 14 个提交，主要完成了五类工作： 建立 Framework Convergence 0.9 收敛路线； 为 core-only、bootstrap-lite 补充真实 Gitea Runner 消费路径证据； 增加独立、手动、精确 SHA 的 Stable API 与 Analyzer Evidence Workflow； 扩展 Runtime Starter 和 Semantic Battle，形成更完整的纵向消费样例； 将 Wasmtime Host 扩展至 Windows/Linux Desktop，并加入受限的 WASI 0.3 Async Research POC； 修复 Server 加入房间响应与 Snapshot 推送的顺序竞态。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-04",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-03",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮默认分支继续沿“开发基础设施与运行时能力纵深化”方向推进，主要新增或扩展了： Trace/Baggage/Metric 与 Server OpenTelemetry； AI Vector Memory、HTN、Embedding 与 RAG； Contract Schema、Local CAS、Formal Model Checking； Trusted Provenance、Runner Attestation 与 SLSA 合同； Wasm Verified Publisher 和外部来源默认拒绝策略； Networking Authority Snapshot、Trace Carrier 与 Simulation Replay Bridge； Testing Differential、Fault Injection 和状态机验证；",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-03",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-02",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮默认分支主要新增三组能力： Constraint Solver Foundation 新增 constraints-core 0.1.0； 提供有限域约束合同、确定性 Managed 回溯求解器和 Sakura 工厂； 接入 Roguelite2D 房间端口匹配； 接入 CardCore 地图节点类型分配。 Verification Failure Evidence 属性测试失败可以写入 canonical JSON； Save、Modding、Simulation 已接入最小失败制品； Gitea Unity Impact 和手动 Testbed 会统一上传 verification-lab； Artifact 保留期为 30 天。 State-machine Testing 与 Fault Injection",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-02",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-08-01",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "自上一轮审计基准以来，默认分支新增了四个主要提交，集中完成三组能力： Artifact Manifest Foundation：建立本地、未签名的 Artifact 完整性清单； Wasm Component Runtime 与隔离编译：加入 Provider-neutral Component 合同、Wasmtime Host、Modding typed session、一次性 helper process 和 Semantic Battle 真实消费链； AI 与 LLM 运行时边界修复：修复行为树生命周期、黑板类型覆盖、GOAP 最低成本保证、非有限数值输入、结构化模型输出和异步 AI Director 生命周期。 最新提交重点修复了： AIBlackboard 同一 Key 同时残留在多种类型存储中的问题；",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-08-01",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-31",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮默认分支较上一轮新增了 12 个提交，主要完成了五组能力： Compile-time Contracts P0：引入 Roslyn Analyzer，对 Engine-Agnostic Core 的程序集边界进行编译期检查。 LLM 0.8.0：建立异步主协议、短期凭据、结构化输出、命令事务和可信执行边界。 Verification Laboratory P0：增加确定性属性测试、Shrink 和最小失败制品。 Deterministic Replay Foundation：将 Simulation 回放协议升级为带 Header 和 Typed Records 的 schema v2。 Trace Context / Observability Foundation：在 Core 包内增加引擎无关 Trace Context、Span 和有界内存 Provider。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-31",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-30",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "本轮仓库变化集中在三条主线上： Modding 与热更新能力大幅扩展：原 Modding 包被拆为 Core、Unity、Code、HybridCLR 四个职责包，原包转为兼容聚合入口；同时建立在线更新事务、不可变版本目录、信任校验、Wasm/Lua、受控托管代码、HybridCLR 使用环境和 Editor Guided Recipe。 跨平台工程链继续加固：近期提交集中修复 Runtime、Editor Tools、Server、Node 工具和 CI Workflow 的路径与宿主兼容性，并增强 Unity 失败摘要保留。 Sample 测试选择问题被修复：最新提交修复了环境变量中的普通 Unity Impact 包集合覆盖 Runtime Starter 动态依赖发现的问题，使 Sample 可以重新安装 Save、Config、Audio、UI 等真实闭包。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-30",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-29",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计与能力收敛计划",
+      "summary": "与上一轮审计基准相比，默认分支新增了四个主要提交： Guided Recipes 与 Sample → 正式项目向导； 网站静态回退页面同步修复； 网站 Featured Module 从 6 项扩展到 12 项； UI Timer、Choice Group、State View、Hold Progress 首批通用控件。 本轮变更没有增加 UPM 包、Profile、Preset 或程序集总数，而是继续扩展现有 editor-tools、ui-core 和 ui 包。当前权威规模仍为： |指标|数量| |---|--:| |UPM 包|140| |Catalog 模块|135| |Installer Preset|65| |Profile|10| |程序集|750| |noEngineReferences 程序集|402|",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-29",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-28",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮没有增加新的 UPM 包、Stable Profile 或 Runtime 公共模块，主要推进了两条路线： 新手接入链路收敛：将根 README、Developer Console、Installer V2、Bootstrap Lite、Sample Gallery 和 Beginner 2D Shooter 串联成 Simple 2D Quickstart。 仓库真理源收敛：压缩 README、Release、Performance、Sample 和历史设计文档中的状态副本，强化 Work Status、Inventory、PLAN-INDEX 和 Runner Ledger 的 Owner 边界。 方向总体正确。新 Quickstart 没有建立第二套安装器、第二个 Sample 系统或新的 Runtime 产品，而是编排现有 Owner；发布参考文档也已转为长期稳定合同，不再硬编码当前包数、Run、SHA 或…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-28",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-27",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "仓库最新一轮改动已经从单纯增加运行时能力，转向三个并行方向： 建立 Agent Mainline Contract，统一仓库工作模式、可执行工作和自动恢复边界； 改善 Unity Testbed、Player Build、Windows/macOS/Linux 兼容性和本地零配置测试体验； 继续扩展 Typed UI/MVVM、ECS Session、Godot Parallel Adapter 和 Editor Tools 新手入口。 当前正式工作模式为： 只有 active 工作可以自动续作；Evidence Backlog 和 Deferred 工作不得自动恢复，RC、Tag 和 Release 也需要维护者明确启动。 这一治理方向是正确的。但实际仓库状态仍存在明显矛盾： 仓库宣称进入“收敛期”，当前没有 Active 工作，却已有 39 项 Evidence Backlog，并继续增加 Editor…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-27",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-26",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最重要的变化是 ECS Runtime 后端可选性完成远端证据闭环。 当前 ECS Runtime 已完成： Disabled / Arch / Unity Entities 三种显式后端选择； 根包依赖收敛； Portable Arch 自包含闭包； Unity Entities 条件程序集； Hitbox、RTS 能力级条件 Bridge； Owned/Borrowed World 生命周期； 显式 Tick 与禁止自动加入 PlayerLoop； PlayMode、IL2CPP/AOT 与性能基线验证。 证据闭包提交 已脱敏提交 的 Gitea CI run 398 已完成常规质量和 Unity Impact；ECS focused run 399 精确选择 ECS Runtime、Hitbox、RTS 三包并通过 113/113，相关 XML 与 Editor Log…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-26",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-25",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮新增的 Sakura Asset Governance 整体方向正确： 没有新增 UPM 包； 归属既有 editor-tools； 分离纯规则 Core、Unity Editor Adapter 和独立测试程序集； 支持目录、扩展名、资源类型、例外、增量扫描、全量扫描、报告、Settings、Doctor、Build Gate 和 Batchmode 入口； 默认不移动、删除或自动修复项目资源。 其实现 SHA 已脱敏提交 已在 Gitea Testbed run 353、354 上取得 Bootstrap 95/95 和 Full 555/555，两个选择清单都包含 Framework.Editor.AssetGovernance.Tests。不过远端 Artifact REST 索引仍返回 0，当前只能证明测试和上传步骤通过，不能声明原始 ZIP 或文件哈希。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-25",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-24",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库继续沿“降低根依赖、明确程序集所有权、补齐通用运行时基础设施”的方向推进，主要完成了六个切片： Core Announcement 迁移至 Ticker； Core VContainer Adapter 迁移至 Bootstrap； 主线程派发 Bridge； Durable Signal Core； Config Snapshot Core； Preferences Store，并接入 Audio、Rhythm。 这些工作均已在 PLAN-INDEX 中标记为 implemented / completed，但证据仍为 local-passed / runner-pending。 总体判断： 所有权收敛和根依赖减负方向正确，但本轮再次同时扩大了包数量、程序集数量和 Stable 公共 API。当前最需要做的是冻结公共面、补同一 SHA 的远端证据和修复新基础设施的失败语义，而不是继续新增“通用基础能力”。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-24",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-23",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最新提交本身主要同步 Domain Optional Bridge 的治理状态；最近最重要的实质代码变更是前一提交： 其核心成果是将大量 Domain Framework 根包中的 Config、GAS、Simulation、Networking、Sensory、Pathfinding 等集成从硬依赖改造成条件程序集，并拆分相应测试程序集。同期还整理了计划文档、建立独立设计日志仓库，并继续压缩主仓库中的非工程事实源。 本轮总体判断： Domain 依赖收敛方向正确，安装闭包已经明显减小；但程序集数量、计划数量和 Runner Evidence Backlog 同时上升。当前应停止继续扩展 Bridge，优先补齐 CI 影响面选择、最新提交远端证据和公开网络传输契约。 与上一轮审计快照相比： 这说明本轮成功降低了根包依赖耦合，但代价是增加了约 23 个条件 Bridge 与测试程序集。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-23",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-22",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库发生了三类实质变化： 治理与证据债务明显收敛：利用既有 Gitea Runner 日志关闭了一批长期 runner-pending 工作，并为 Season Feature 增加正式 CI 入口。 框架能力继续扩展：新增 Semantic Combat 包、GAS 统一伤害事实链、Runtime Starter 综合样例和多个可运行教学 Sample。 日常 CI 与性能资格化已经解耦：合成性能不再阻断普通开发流水线，只保留在显式资格化、手动 Testbed 和 Release 路径中。 当前权威清单已经增长到 137 个 UPM 包、132 个 Catalog 模块、671 个程序集。Supported 仍保持 4 个，但 Preview 降至 99、Experimental 增至 22，说明仓库开始通过生命周期重分类降低“默认可用”的错误预期。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-22",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-21",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库阶段审计与未来工作计划",
+      "summary": "Sakura Framework 已经从“扩充框架能力”的阶段，进入“治理现有能力、降低维护成本、补齐工程证据”的阶段。 当前项目已经具备： 大规模 UPM 多包结构； 明确的 Foundation、Runtime Service、Gameplay Kernel、Domain Framework、Adapter Bridge 和 Tooling 分层； Gitea CI、Unity Testbed、Server Build/Test、DocFX 和 Release Candidate 工具链； Package Lifecycle、Framework Inventory、Plan Gate 和架构边界校验； Core Only、Bootstrap Lite 等正式消费入口； Typed UI、Feature Module、Server Host、Change Publisher 等较完整的子系统；",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-21",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-19",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮近期提交已经从“继续吸收功能”重新收敛到 Stable Profile 性能治理、正式策略迁移和 Public API baseline 同步。 近期提交序列主要包括： 当前总体判断： 仓库的静态真相源已经恢复一致，feature-module 已正式纳入 Package Support Policy 和 Inventory；性能 Stability v2 也已完成正式事务迁移。但当前提交仍缺少新的远端 Runner 证据，性能治理文档的状态机存在滞后，首次 RC 仍不得恢复。 本轮最重要的结论是： UPM 包、支持策略和 Inventory 已从昨日的不一致恢复为一致。 性能 Stability v2 的技术方案合理：本地重复性改用 median+p90，受信 Runner 才使用 p95 CPU 预算。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-19",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-18",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮变化非常密集。最近提交已经不只是完善性能测量，而是同时推进了： Stable Profile 五进程性能稳定性批次； Unity clean-exit 诊断和 Candidate Evidence 性能批次绑定； Core RNG Trace、命名流消费约定与分类诊断日志； Simulation RNG Diff、回放记录、无头验算和指标时间线； CardCore 局内抽牌运行时； 新增 feature-module 0.1.0 UPM 包； Logic-only / Headless 政策与夹具形状校验； CI、Release、Unity Testbed 工作流调整。 这些能力分别具有工程价值，但它们发生在首次 RC 已因性能稳定性问题停止、明确要求保持 baseline 不变和不得创建 rc.6 的阶段。当前出现了明显的治理冲突：",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-18",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-17",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "Sakura Framework 当前已经进入明显的发布稳定性治理期，但最近又同时扩展了 Typed UI Phase 3/4 和 Supported Core 的确定性随机 API。 这两个方向本身都有合理设计，但发生在首次 RC 已经被性能门禁阻断的时间窗口，形成了新的治理风险： 仓库一边试图冻结首次 RC，另一边仍在扩大公共 API、编辑器工具和本地验证矩阵。 本轮最重要的结论是： RC 性能失败不能归因于单一代码回归，也不能通过放宽 baseline 解决。 正式性能门禁的测量模型缺少跨进程资格验证。 Typed UI Phase 0–4 已实质完成，不再只是候选；应立即停止继续扩张 Phase 5。 core 0.6.0 已引入经人工批准的破坏性 RNG API，但仍存在计数类型与隐式随机种子语义不统一。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-17",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-16",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库的主要变化是 Typed UI 系统正式落入源仓库，并完成 Core、Unity Adapter、Item Select Golden Sample 和 CI Sample 验证链路。 近期提交依次推进了： Typed UI 设计与实现； UI 运行时适配和生命周期优化； 将导入后的 Typed UI Sample 测试接入 unity-impact； 将样例状态更新为 runner-passed / accepted-complete。 仓库没有新增 UPM 包，但包内程序集数已增至 614，主要来自 Typed UI Core、Adapter、测试程序集和 Sample。当前总体规模仍为 135 个 UPM 包、131 个 Catalog 模块、64 个 Installer 预设。 本轮总体判断： Typed UI 采用“扩展既有 ui-core 与 ui、不创建第二套 UIManager、不新增 UPM…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-16",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-15",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮仓库没有继续新增 UPM 包或玩法域实现。近期变更主要集中在四个方向： 将一台实际 Runner 的 CPU 性能数据按精确指纹和人工审批纳入正式性能基线； 完成仓库及首次 RC 外部依赖的许可证证据； 修复 Gitea 自托管 Runner 上宿主凭据覆盖工作流凭据的问题； 撤销只存在于 GitHub 镜像的 Typed UI 设计规格，恢复镜像与源仓库的一致性。 当前总体判断： 首次 RC 的本地工程门禁已经接近闭环，许可证和性能基线两个主要本地阻塞项已经解除；但新基线尚未在包含这些变更的新 RC 提交上复证，Gitea checkout 修复也尚未获得远端 Runner 结果，Candidate Evidence 与正式 Release 仍然处于阻断状态。 本轮新增发现的最高风险是： ---",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-15",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-14",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最新变化集中在 Release Candidate 同 SHA 证据生产链路，而不是继续扩充 UPM 包或玩法域。 最近七个提交完成了以下工作： 新增 Candidate Evidence Producer； 将 Release workflow 重构为不可变候选解析、Unity 证据生产、仓库证据生产、证据组装和 Release 五段式流程； 建立 exact-tree Bundle、文件哈希、大小和候选身份验签； 修复 Consumer Walkthrough 本地 run id； 修正 Stable Public API 差异分类和基线； 完成一次干净提交上的本地完整 dry-run； 将 candidate-evidence.json 加入 Release 必需资产测试。 这是明显的正向进展。此前最大的 RC 工程缺口是：",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-14",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-13",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最大的变化不是新增模块，而是 Unity 聚合编译与真实消费验证暴露了此前小型 Profile 测试没有覆盖的一批程序集布局、依赖声明、测试 Fixture 和运行时缺陷。 最新修复覆盖： Guide、ECS Runtime、Life Sim、WorldGen 的测试程序集目录冲突； 缺失或损坏的 Unity .meta GUID； AI GOAP 目标状态副本问题； Life Sim 脏区合并无限循环、稀疏 RLE 坐标丢失、天气和暂停边界； MMO 空间索引换位； Survival World Delta、权重和备份边界； 多个程序集缺少直接引用； Unity Editor 日志在 CI 中的留存与失败诊断。 该切片没有新增 UPM 包或玩法能力，边界仍属于既有实现和测试基础设施修复。原始 CI 选择的 55 包已在本地取得 1554/1554，WorldGen 补充隔离测试取得 31/31；但真实 Gitea…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-13",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-11",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "仓库已经从“扩充模块数量”进入“支持面治理、可复现交付、性能预算和服务端协议闭环”阶段。 当前权威清单显示： |指标|数量| |---|--:| |UPM 包|135| |Catalog 模块|131| |Installer 预设|64| |Supported Profile|9| |包内程序集|610| |noEngineReferences 程序集|354| |内部依赖边|294| 支持生命周期分布为： |生命周期|包数| |---|--:| |Supported|11| |Preview|106| |Experimental|6| |DocsOnly|9| |Frozen|3| 本轮审计的主要结论是： Framework Inventory、Installer V2、Editor Tools 程序集拆分、Public API Snapshot、生命周期策略和 RC/SBOM 工具链已经形成较完整的本地工程闭环。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-11",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-10",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "当前 GitHub 最新可见提交为： 此前两个提交分别是“尝试应用优秀设计理念重构部分模块”和“推进横向能力二期计划”。因此，最近三次提交的主线已经从 Sample Gallery 等横向工具建设，转向： 建立普通 push / PR 的 Unity 影响面测试； 修复 Addressables 加载器的类型错配、取消和异常隔离问题； 收紧运行时诊断开销； 加强内部依赖版本和领域包生命周期校验； 修复 MVVM Unity Adapter； 为 RedDot 增加显式延迟批量提交； 将尚无真实消费条件的 Godot、Save 流式管线和通用代际句柄计划明确标记为 deferred。 仓库当前仍有 135 个 UPM 子包、131 个安装器模块和 64 个预设；其中 61 个属于 domain-framework。这个规模说明项目已经不是“功能不足”，而是进入了稳定性、可信消费和支持面收缩优先的阶段。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-10",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-09",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 已脱敏提交，提交信息是 “feat：补充 sample-gallery”。最近提交序列还包括“持续推进横向能力”“改善横向功能”“正确接入 unity-testbed workflow”“修复 testbed yml”“修复认证失败等一系列可能导致工作流失败”等，说明仓库当前主线已经从“新增玩法域包”转向 横向生产力工具、Sample Gallery、Unity Testbed 远端补证、Gitea 工作流接入修复与文档入口压缩。 当前仓库规模仍保持： |项目|当前状态| |---|--:| |UPM 子包|135| |已登记分层包|135| |package.json / README.md / CHANGELOG.md 完整性|135 / 135 / 135|",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-09",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-08",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 已脱敏提交，提交信息是 “refactor：清理无用文档，整理部分文档”。最近提交序列显示，仓库当前主线已经从“继续新增玩法域包”转向“归档已闭环路线、压缩文档入口、补齐证据账本、治理 domain-framework 扩张”。 当前仓库规模保持为： |项目|当前状态| |---|--:| |UPM 子包|135| |已登记分层包|135| |package.json / README.md / CHANGELOG.md 完整性|135 / 135 / 135| |至少包含一个 .asmdef 的包|135| |Welcome 安装器模块|131| |Welcome 安装器预设|64| |domain-framework 包|61|",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-08",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-07",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 已脱敏提交，提交信息是 “fix：持续推进 domain-framework收敛”。最近提交序列也显示，仓库在连续推进 domain-framework 收敛、冗余清理、Runner 补证、Unity Testbed 产物补齐与易用性治理。 当前仓库规模仍为： 根 README 已将这些数据登记为当前快照，并明确仓库是“单 Git 仓库，多 UPM 子包”的结构，框架不承载具体项目怪物、武器、关卡、数值表、UI 预制体、美术或业务玩法脚本。 本轮核心判断： 最值得肯定的进展： 当前最大风险： ---",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-07",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-06",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "当前 GitHub 仓库已经从前几轮的“消费侧易用性提升”继续推进到 重复造轮子与冗余设计收敛。PLAN-INDEX.md 当前明确写明：当前最高优先级路线是复用地图、消息分发边界、版本闭包校验、Domain 成熟度分级，以及 UI Core ownership、GAS/Hitbox Bridge、FlowField/SpatialHash 复用审计与源码收敛等切片；新的 domain-framework 包扩张仍需单独设计与批准。 仓库规模当前为 135 个 UPM 子包、135 个已登记分层包、131 个 Welcome 安装器模块和 64 个预设；其中 domain-framework 已达到 61 个包，是当前维护面最大的层级。 本轮最重要的变化是： 结论： ---",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-06",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-05",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "本轮最新可见提交为 已脱敏提交，提交信息是 “feat：推进易用性进展”。其后最近提交序列还包括 已脱敏提交 的 Courier Delivery Core 与 已脱敏提交 的 Vessel Systems Management Core。这说明仓库最近一方面继续推进消费侧易用性，另一方面仍有新的玩法域 Core 进入仓库。 当前仓库规模已更新为： 根 README 已将这些数量刷新为 2026-07-04 当前快照。 本轮最重要的结论是： 当前最值得肯定的变化： 当前最需要警惕的风险： ---",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-05",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-04",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库最新审计报告",
+      "summary": "本轮最新可见提交为 已脱敏提交，提交信息是 “feat：完善、推进”。该提交继续推进两个方向：一是将 life-sim 的恋爱养成 Phase 6 从待实施更新为 Core 已落地；二是新增 com.unitygame.framework.journalism-simulation 媒体运营模拟 Core，并同步到计划索引、包、catalog 与推荐预设。 当前仓库仍保持“单 Git 仓库，多 UPM 子包”的定位，根 README 明确：框架只沉淀可迁移、可复用、可组合的基础能力，不承载具体项目怪物、武器、关卡、数值表、UI 预制体、美术资源或业务玩法脚本。 整体判断： 当前最值得肯定的进展： 当前最需要警惕的风险： ---",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-04",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-03",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库审计报告",
+      "summary": "Sakura Framework 当前已经进入一个新的阶段：它不再只是“Unity 多包客户端框架”，而是正在形成一个包含 Unity UPM 包、Gitea CI/CD、Unity Testbed、Server Workspace、Change Publisher、Runtime 生命周期治理 的复合工程平台。 当前 README 记录的工作区状态仍是： Packages/com.unitygame.framework. UPM 子包：132 个； 已登记分层包：132 个； 包级 package.json / README.md / CHANGELOG.md 完整性：132 / 132 / 132； 至少包含一个 .asmdef 的包：132 个； Welcome 安装器模块：128 个； Welcome 安装器预设：61 个。",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-03",
+      "url": "/pages/journal.html#content-search"
+    },
+    {
+      "id": "framework-audit:audit-2026-07-02",
+      "type": "framework-audit",
+      "typeLabel": "框架审计",
+      "title": "Sakura Framework 仓库夜间审计报告",
+      "summary": "Sakura Framework 当前已经从“Unity 客户端多包框架”进入“客户端框架 + 服务端配套 workspace + 私有 Gitea 发布链路”的阶段。 当前 README 记录的实时状态是： 132 个 Packages/com.unitygame.framework. UPM 子包； 132 个已登记分层包； 132 / 132 / 132 个包具备 package.json、README.md、CHANGELOG.md； 132 个包均至少包含一个 .asmdef； Welcome 安装器覆盖 128 个模块与 61 个预设。 框架的主要矛盾已经不再是“能力不足”，而是： 如何把大量已落地能力收敛为可信的安装组合、测试闭环、文档站、Release 产物和客户端—服务端协同边界。 最新提交显示，仓库新增了 /Server 顶层 .NET workspace 的初始路线，并将其登记为 P5…",
+      "tags": [],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-07-02",
+      "url": "/pages/journal.html#content-search"
+    }
+  ]
+}

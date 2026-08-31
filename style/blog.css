@@ -4,6 +4,54 @@
     padding-top: 76px;
 }
 
+/* Weekly audit: one deterministic reading entry per formal Series */
+.blog-featured-reading {
+    padding: 5rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--light-color), transparent 86%);
+    background:
+        radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--brand-mode-accent) 12%, transparent), transparent 28rem),
+        color-mix(in srgb, var(--light-color), transparent 98%);
+}
+
+.blog-featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.blog-featured-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid var(--ui-border-subtle);
+    border-radius: var(--border-radius);
+    background: var(--ui-surface-card);
+}
+
+.blog-featured-card h2 {
+    margin: 0.55rem 0 0.8rem;
+    overflow-wrap: anywhere;
+    font-size: 1.3rem;
+    line-height: 1.35;
+}
+
+.blog-featured-card > p:not(.project-status) {
+    color: var(--secondary-text-color);
+    line-height: 1.7;
+}
+
+.blog-featured-card .note-link {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+@media (max-width: 720px) {
+    .blog-featured-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .blog-hero {
     padding: 7rem 0 5rem;
     background:

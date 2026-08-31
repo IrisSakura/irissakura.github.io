@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '_site');
+const generatedSocial = path.join(root, '.generated', 'social');
 const ownerOnlySources = new Set([
   path.join(root, 'data', 'consumer-lab.json')
 ]);
@@ -32,4 +33,6 @@ for (const entry of entries) {
     )
   });
 }
+await rm(path.join(output, 'assets', 'social'), { recursive: true, force: true });
+await cp(generatedSocial, path.join(output, 'assets', 'social'), { recursive: true });
 console.log(`Prepared GitHub Pages artifact with ${entries.length} entries.`);

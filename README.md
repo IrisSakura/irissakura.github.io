@@ -22,7 +22,9 @@
 - `/pages/framework.html`：框架规模、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
-- `/pages/portfolio.html`：四条真实项目主线，以及七个 Consumer Lab 独立消费项目的本地验证矩阵；
+<!-- project-summary:start -->
+- `/pages/portfolio.html`：6 个正式公开项目，以及 7 个 Consumer Lab 案例的本地验证矩阵；
+<!-- project-summary:end -->
 - `/pages/brand.html`：一级 `Brand` 入口，公开展示 IrisSakura 品牌架构、IRIS × SAKURA 双人格视觉、色板、图标与命名规则；
 - `/pages/art-music.html`：旧“美术音乐”地址的 `noindex` Brand 兼容跳转；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
@@ -97,7 +99,7 @@ Iris Shelf 与 UDGAP 的 source-push 项目状态、共享 importer 和三路径
 
 可配置键为 `home`、`portfolio`、`framework`、`journal`、`blog`、`game` 和 `contact`。`position` 的第一个百分比控制左右焦点，第二个控制上下焦点。
 
-3. 运行 `npm run build`。构建会检查项目图片并重建页面，同时在 `assets/social/` 生成每个页面独立的 1200×630 PNG 分享图。不要手工编辑该生成目录，也不要填写本机绝对路径或私有仓库地址。
+3. 运行 `npm run build`。构建会检查项目图片并重建页面，同时在 ignored `.generated/social/` 生成每个页面独立的 1200×630 PNG 分享图；`npm run package:site` 再将它们映射到 Pages artifact 的稳定 `/assets/social/` URL。不要手工编辑生成目录，也不要填写本机绝对路径或私有仓库地址。
 
 ### 研究记录同步
 
@@ -127,7 +129,11 @@ Gitea 到 GitHub 的密钥配置、路径所有权和冲突处理见
 
 ### Consumer Lab 同步
 
-四个消费者仓库的 `main` 推送会从固定提交生成脱敏技术投影，并由站点导入器更新
+<!-- consumer-summary:start -->
+Consumer Lab 当前包含 7 个 Consumer Lab 案例：4 个仓库启用 source-push，另外 3 个固定快照保留经复核的本地证据但不声明自动同步。
+<!-- consumer-summary:end -->
+
+启用 source-push 的消费者仓库会在 `main` 推送时从固定提交生成脱敏技术投影，并由站点导入器更新
 `data/consumer-lab.json`。源仓只能同步提交、Framework/Unity 版本、包集合和通过计数；项目类型、
 摘要与四条核心系统仍由本站策展，且 owner-only 注册表不会打进 Pages artifact。
 

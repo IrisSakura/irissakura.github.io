@@ -9,7 +9,9 @@ import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
 import { resolveBlogDiscovery } from './lib/blog-discovery-model.mjs';
 import { selectPublishedBlogs, stripBlogPublicationPreamble } from './lib/blog-publication-model.mjs';
+import { buildContentSearchIndex, resolveFeaturedReading } from './lib/content-search-model.mjs';
 import { assertConsumerLabCurrent } from './lib/consumer-lab-model.mjs';
+import { resolveConsumerSyncRegistry } from './lib/consumer-sync-registry.mjs';
 import { resolveEvidenceChains } from './lib/evidence-chain-model.mjs';
 import { updateFrameworkFallback } from './lib/framework-fallback.mjs';
 import { assertProjectFactsCurrent } from './lib/project-facts.mjs';
@@ -62,6 +64,7 @@ const PAGE_INDEXES = {
     insertBefore: '    <section class="journal-section"',
     items: [
       ['knowledge-streams', '知识流'],
+      ['content-search', '内容检索'],
       ['featured-notes', '精选主题'],
       ['recent-audits', '近期审计'],
       ['game-design-library', '设计资料库'],
@@ -73,13 +76,14 @@ const PAGE_INDEXES = {
     title: '浏览正式文章',
     insertBefore: '    <section class="blog-taxonomy"',
     items: [
+      ['featured-reading', '精选阅读'],
       ['blog-taxonomy', '系列与主题'],
       ['articles', '全部文章']
     ]
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -87,6 +91,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEn
   readJson('data/projects.json'),
   readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
+  readJson('config/consumer-sync.json'),
   readJson('data/journal.json'),
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
@@ -104,6 +109,7 @@ assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
 assertProjectFactsCurrent(projects, framework, journal);
 assertEngineeringSnapshot(irisEngineering);
 assertConsumerLabCurrent(consumerLab);
+const consumerSync = resolveConsumerSyncRegistry(consumerSyncRegistry, consumerLab);
 assertBrandConfig(themeConfig);
 assertBrandContract(brandConfig);
 await assertBrandAssets(root, brandConfig);
@@ -127,6 +133,8 @@ const publicJournalSource = {
   blogs: publishedBlogs
 };
 const blogDiscovery = resolveBlogDiscovery(blogTaxonomy, publishedBlogs);
+const contentSearchIndex = buildContentSearchIndex(journalSource, publishedBlogs, blogDiscovery);
+const featuredReading = resolveFeaturedReading(blogDiscovery);
 const evidenceChains = resolveEvidenceChains(evidenceChainData, frameworkAdoption, journalSource, blogPublication, irisEngineering, evidenceChainAuthorities);
 
 const featuredNoteById = new Map(journal.featuredNotes.map((note) => [note.id, note]));
@@ -333,7 +341,11 @@ for (const page of pageDefinitions) {
   page.imageAlt = `${page.title.replace(/ \| IrisSakura$/u, '')} 的 IrisSakura 分享图`;
   page.socialCategory = socialCategory(page);
 }
-await writeSocialImages(root, pageDefinitions, brandConfig);
+await Promise.all([
+  writeSocialImages(root, pageDefinitions, brandConfig),
+  writeFile(path.join(root, 'data/search-index.json'), `${JSON.stringify(contentSearchIndex, null, 2)}\n`),
+  writeReadmeSummaries(projects, consumerSync)
+]);
 await assertSitePresentation(site, pageDefinitions);
 
 const navItems = [
@@ -443,16 +455,16 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent(brandConfig));
   }
   if (page.file === 'pages/portfolio.html') {
-    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab));
+    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab, consumerSync));
   }
   if (page.file === 'pages/journal.html') {
-    html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(publicJournal, publicJournalSource, evidenceChains));
+    html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(publicJournal, publicJournalSource, evidenceChains, contentSearchIndex));
   }
   if (page.file === 'pages/game.html') {
     html = replaceGeneratedBlock(html, 'game-evidence', renderEvidenceChains(evidenceChains));
   }
   if (page.file === 'pages/blog.html') {
-    html = replaceGeneratedBlock(html, 'blog-content', renderBlogIndex(publicJournalSource, blogDiscovery));
+    html = replaceGeneratedBlock(html, 'blog-content', renderBlogIndex(publicJournalSource, blogDiscovery, featuredReading));
   }
   if (page.file === 'pages/contact.html') {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
@@ -758,6 +770,22 @@ function replaceGeneratedBlock(html, name, content) {
     throw new Error(`missing generated block: ${name}`);
   }
   return html.replace(pattern, `<!-- ${name}:start -->\n${content}\n<!-- ${name}:end -->`);
+}
+
+async function writeReadmeSummaries(projectData, sync) {
+  const file = path.join(root, 'README.md');
+  let readme = await readFile(file, 'utf8');
+  readme = replaceGeneratedBlock(
+    readme,
+    'project-summary',
+    `- \`/pages/portfolio.html\`：${projectData.projects.length} 个正式公开项目，以及 ${sync.caseCount} 个 Consumer Lab 案例的本地验证矩阵；`
+  );
+  readme = replaceGeneratedBlock(
+    readme,
+    'consumer-summary',
+    `Consumer Lab 当前包含 ${sync.caseCount} 个 Consumer Lab 案例：${sync.sourcePushCount} 个仓库启用 source-push，另外 ${sync.fixedSnapshotCount} 个固定快照保留经复核的本地证据但不声明自动同步。`
+  );
+  await writeFile(file, `${readme.trim()}\n`);
 }
 
 function renderHomeContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, siteData) {
@@ -1164,7 +1192,7 @@ ${renderEvidenceChains(chains, 'engineering-evidence-chains')}
     </div>`;
 }
 
-function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData) {
+function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, consumerSync) {
   const order = ['sword-of-words', 'udgap', 'iris-shelf', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
   const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
   if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
@@ -1188,6 +1216,9 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                     ${project.href
                       ? `<a href="${escapeAttribute(project.href)}" class="portfolio-link">${escapeHtml(project.linkLabel)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>`
                       : `<span class="portfolio-link portfolio-link-static">${escapeHtml(project.linkLabel)}</span>`}
+                    ${project.id === 'sakura-framework'
+                      ? '<a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">打开 15 分钟 Quickstart<i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
+                      : ''}
                 </div>
             </article>`;
   }).join('\n            ');
@@ -1216,11 +1247,12 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
         <section class="portfolio-cases" id="portfolio-cases" aria-label="${ordered.length} 个真实项目">
             ${cases}
         </section>
-        ${renderConsumerLab(consumerLabData)}
+        ${renderConsumerLab(consumerLabData, consumerSync)}
     </div>`;
 }
 
-function renderConsumerLab(consumerLabData) {
+function renderConsumerLab(consumerLabData, consumerSync) {
+  const representativeEvidence = new Set(consumerSync.representativeEvidenceCaseIds);
   const cards = consumerLabData.cases.map((entry, index) => {
     const highlights = entry.highlights
       .map((highlight) => `<li>${escapeHtml(highlight)}</li>`)
@@ -1241,7 +1273,7 @@ function renderConsumerLab(consumerLabData) {
                         <div class="consumer-lab-brand-role" data-brand-side="sakura"><p>SAKURA · POWER THE SYSTEM</p><strong>${escapeHtml(entry.brandNarrative.sakura)}</strong></div>
                         <div class="consumer-lab-systems"><p>核心系统</p><ul class="consumer-lab-highlights" aria-label="${escapeAttribute(entry.title)} 核心系统">${highlights}</ul></div>
                         <div class="consumer-lab-local-proof">
-                            <p>LOCAL PROOF · NOT A RELEASE</p>
+                            <p>LOCAL UNITY VERIFIED · NOT A RELEASE</p>
                             <ul class="consumer-lab-local-proof-list" aria-label="${escapeAttribute(entry.title)} 本地验证结果">
                                 <li><span>EditMode</span><strong>${entry.verification.editMode.passed} / ${entry.verification.editMode.total}</strong></li>
                                 <li><span>PlayMode</span><strong>${entry.verification.playMode.passed} / ${entry.verification.playMode.total}</strong></li>
@@ -1252,17 +1284,27 @@ function renderConsumerLab(consumerLabData) {
                     </aside>
                 </article>`;
     }
+    const compactProof = representativeEvidence.has(entry.id)
+      ? `<div class="consumer-lab-compact-proof" aria-label="${escapeAttribute(entry.title)} 本地 Unity 验证">
+                        <p>LOCAL UNITY VERIFIED · NOT A RELEASE</p>
+                        <span>EditMode ${entry.verification.editMode.passed}/${entry.verification.editMode.total}</span>
+                        <span>PlayMode ${entry.verification.playMode.passed}/${entry.verification.playMode.total}</span>
+                        <span>${entry.verification.player.startsWith('macOS') ? 'macOS Player + Smoke' : 'WebGL + Browser'}</span>
+                    </div>`
+      : '';
     return `<article class="consumer-lab-card" id="consumer-${escapeAttribute(entry.id)}">
                     <div class="consumer-lab-card-topline"><span class="consumer-lab-index">0${index + 1}</span><span class="consumer-lab-category">${escapeHtml(entry.category)}</span></div>
                     <h3>${escapeHtml(entry.title)}</h3>
                     <p class="consumer-lab-summary">${escapeHtml(entry.summary)}</p>
                     <div class="consumer-lab-systems"><p>核心系统</p><ul class="consumer-lab-highlights" aria-label="${escapeAttribute(entry.title)} 核心系统">${highlights}</ul></div>
+                    ${compactProof}
                 </article>`;
   }).join('\n                ');
 
   return `<section class="consumer-lab" id="consumer-lab" aria-label="${consumerLabData.cases.length} 个独立玩法项目">
             <div class="consumer-lab-heading">
                 <p class="section-kicker">FRAMEWORK PLAYGROUNDS</p><h2>${escapeHtml(consumerLabData.title)}</h2><p class="consumer-lab-intro">${escapeHtml(consumerLabData.description)}</p>
+                <p class="consumer-lab-relation">${consumerSync.caseCount} 个案例 · ${consumerSync.sourcePushCount} 个 Source-push Repository · ${consumerSync.fixedSnapshotCount} 个固定快照</p>
             </div>
             <div class="consumer-lab-grid">${cards}
             </div>
@@ -1300,7 +1342,35 @@ function renderPortfolioVisual(project, journalData, frameworkData, irisEngineer
     </div><span class="visual-label">CURATED RESEARCH</span>`;
 }
 
-function renderJournalContent(journalData, sourceData, chains) {
+function renderContentSearch(searchIndex) {
+  const typeOptions = searchIndex.facets.types
+    .map((entry) => `<option value="${escapeAttribute(entry.id)}">${escapeHtml(entry.label)}（${entry.count}）</option>`)
+    .join('');
+  const seriesOptions = searchIndex.facets.series
+    .map((entry) => `<option value="${escapeAttribute(entry.label)}">${escapeHtml(entry.label)}（${entry.count}）</option>`)
+    .join('');
+  const engineOptions = searchIndex.facets.engines
+    .map((entry) => `<option value="${escapeAttribute(entry.id)}">${escapeHtml(entry.label)}（${entry.count}）</option>`)
+    .join('');
+
+  return `    <section class="journal-section content-search" id="content-search" data-content-search data-search-index="../data/search-index.json" data-search-limit="12">
+        <div class="container">
+            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 ${searchIndex.totalCount} 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
+            <form class="content-search-controls" role="search" aria-labelledby="content-search-title" data-content-search-form>
+                <label class="content-search-query" for="content-search-query"><span>关键词</span><input id="content-search-query" name="query" type="search" autocomplete="off" placeholder="搜索系统、玩法、引擎或主题" data-content-search-query></label>
+                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（${searchIndex.totalCount}）</option>${typeOptions}</select></label>
+                <label><span>文章系列</span><select name="series" data-content-search-series><option value="">全部系列</option>${seriesOptions}</select></label>
+                <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option>${engineOptions}</select></label>
+                <button class="btn btn-secondary" type="reset" data-content-search-reset>清除筛选</button>
+            </form>
+            <p class="content-search-status" id="content-search-status" aria-live="polite" data-content-search-status>正在加载公开索引…</p>
+            <div class="content-search-results" id="content-search-results" aria-label="检索结果" aria-describedby="content-search-status" data-content-search-results></div>
+            <noscript><p class="content-search-fallback">浏览器未启用 JavaScript。仍可通过<a href="blog.html">正式文章</a>、<a href="#game-design-library">游戏设计资料库</a>和<a href="#recent-audits">近期审计</a>浏览公开内容。</p></noscript>
+        </div>
+    </section>`;
+}
+
+function renderJournalContent(journalData, sourceData, chains, searchIndex) {
   const streams = journalData.streams.map((stream, index) => `
                 <article class="stream-card" data-stream="${escapeAttribute(stream.id)}">
                     <div class="stream-card-topline"><span>0${index + 1}</span><i class="fas ${escapeAttribute(stream.icon)}" aria-hidden="true"></i></div>
@@ -1357,6 +1427,7 @@ function renderJournalContent(journalData, sourceData, chains) {
             </div>
         </div>
     </section>
+${renderContentSearch(searchIndex)}
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">可独立分享的精选研究主题</h2></div></div>
@@ -1427,7 +1498,7 @@ function renderEvidenceChains(chains, sectionId = '') {
     </section>`;
 }
 
-function renderBlogIndex(sourceData, discovery) {
+function renderBlogIndex(sourceData, discovery, featuredReading) {
   const articles = sourceData.blogs.map((article) => {
     const series = discovery.seriesByName.get(article.series);
     return `
@@ -1446,6 +1517,12 @@ function renderBlogIndex(sourceData, discovery) {
   }).join('');
   const series = discovery.series.map((entry) => `<a href="blog/series/${escapeAttribute(entry.slug)}.html"><strong>${escapeHtml(entry.name)}</strong><span>${entry.articles.length} 篇</span><small>${escapeHtml(entry.description)}</small></a>`).join('');
   const tags = discovery.routableTags.map((entry) => `<a href="blog/tag/${escapeAttribute(entry.slug)}.html">${escapeHtml(entry.name)}<span>${entry.articles.length}</span></a>`).join('');
+  const featured = featuredReading.map(({ series: seriesEntry, article }) => `<article class="blog-featured-card">
+                <p class="project-status">${escapeHtml(seriesEntry.name)} · ${escapeHtml(article.updatedAt)}</p>
+                <h2>${escapeHtml(article.title)}</h2>
+                <p>${escapeHtml(article.summary)}</p>
+                <a class="note-link" href="blog/${escapeAttribute(article.slug)}.html">开始阅读<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>`).join('');
   return `<header class="blog-hero">
         <div class="container">
             <p class="section-kicker">GAME SYSTEMS · ENGINEERING PRACTICE</p>
@@ -1454,6 +1531,12 @@ function renderBlogIndex(sourceData, discovery) {
             <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a><a class="btn btn-secondary" href="../rss.xml"><i class="fas fa-rss" aria-hidden="true"></i>订阅 RSS</a></div>
         </div>
     </header>
+    <section class="blog-featured-reading" id="featured-reading" aria-labelledby="featured-reading-title">
+        <div class="container">
+            <div class="journal-section-heading"><div><p class="journal-kicker">FEATURED READING</p><h2 id="featured-reading-title">从每个系列开始的一篇文章</h2></div><p>每个正式系列选择最新文章作为入口；完整历史仍由系列、标签与 RSS 承载。</p></div>
+            <div class="blog-featured-grid">${featured}</div>
+        </div>
+    </section>
     <section class="blog-taxonomy" id="blog-taxonomy" aria-labelledby="blog-taxonomy-title">
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">SERIES & TAGS</p><h2 id="blog-taxonomy-title">按系列与主题继续阅读</h2></div><p>分类只覆盖已经正式发布的文章；草稿不会进入聚合页或订阅。</p></div>

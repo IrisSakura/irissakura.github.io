@@ -126,7 +126,7 @@
     <nav class="page-index" aria-label="研究页章节" data-page-index>
         <div class="container page-index-inner">
             <span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>浏览研究脉络</strong></span>
-            <div class="page-index-links"><a href="#knowledge-streams" data-page-index-link aria-current="location"><span>01</span>知识流</a><a href="#featured-notes" data-page-index-link><span>02</span>精选主题</a><a href="#recent-audits" data-page-index-link><span>03</span>近期审计</a><a href="#game-design-library" data-page-index-link><span>04</span>设计资料库</a><a href="#evidence-chains" data-page-index-link><span>05</span>公开证据链</a></div>
+            <div class="page-index-links"><a href="#knowledge-streams" data-page-index-link aria-current="location"><span>01</span>知识流</a><a href="#content-search" data-page-index-link><span>02</span>内容检索</a><a href="#featured-notes" data-page-index-link><span>03</span>精选主题</a><a href="#recent-audits" data-page-index-link><span>04</span>近期审计</a><a href="#game-design-library" data-page-index-link><span>05</span>设计资料库</a><a href="#evidence-chains" data-page-index-link><span>06</span>公开证据链</a></div>
             <span class="page-index-progress" aria-hidden="true"></span>
         </div>
     </nav>
@@ -154,6 +154,21 @@
                     <p>按时间保留研究过程、验证结果和边界判断，避免只展示完成后的漂亮结论。</p>
                 </article>
             </div>
+        </div>
+    </section>
+    <section class="journal-section content-search" id="content-search" data-content-search data-search-index="../data/search-index.json" data-search-limit="12" data-page-index-target>
+        <div class="container">
+            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 160 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
+            <form class="content-search-controls" role="search" aria-labelledby="content-search-title" data-content-search-form>
+                <label class="content-search-query" for="content-search-query"><span>关键词</span><input id="content-search-query" name="query" type="search" autocomplete="off" placeholder="搜索系统、玩法、引擎或主题" data-content-search-query></label>
+                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（160）</option><option value="article">正式文章（45）</option><option value="game-design">游戏设计（62）</option><option value="framework-audit">框架审计（53）</option></select></label>
+                <label><span>文章系列</span><select name="series" data-content-search-series><option value="">全部系列</option><option value="游戏系统的共同语言">游戏系统的共同语言（18）</option><option value="大型 Unity 框架的治理复盘">大型 Unity 框架的治理复盘（3）</option><option value="Sakura Framework 工程实践">Sakura Framework 工程实践（13）</option><option value="从 Unreal Engine 源码理解引擎设计">从 Unreal Engine 源码理解引擎设计（8）</option><option value="从 Godot 源码理解引擎设计">从 Godot 源码理解引擎设计（3）</option></select></label>
+                <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option><option value="godot">Godot（3）</option><option value="unity">Unity（4）</option><option value="unreal-engine">Unreal Engine（8）</option></select></label>
+                <button class="btn btn-secondary" type="reset" data-content-search-reset>清除筛选</button>
+            </form>
+            <p class="content-search-status" id="content-search-status" aria-live="polite" data-content-search-status>正在加载公开索引…</p>
+            <div class="content-search-results" id="content-search-results" aria-label="检索结果" aria-describedby="content-search-status" data-content-search-results></div>
+            <noscript><p class="content-search-fallback">浏览器未启用 JavaScript。仍可通过<a href="blog.html">正式文章</a>、<a href="#game-design-library">游戏设计资料库</a>和<a href="#recent-audits">近期审计</a>浏览公开内容。</p></noscript>
         </div>
     </section>
     <section class="journal-section journal-featured" id="featured-notes" data-page-index-target>

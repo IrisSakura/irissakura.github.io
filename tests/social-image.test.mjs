@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { promisify } from 'node:util';
 
 import { createSocialImage } from '../scripts/lib/social-image.mjs';
 
 const root = new URL('../', import.meta.url);
 const readText = async (file) => readFile(new URL(file, root), 'utf8');
+const execFileAsync = promisify(execFile);
 
 test('deterministic social images are valid 1200x630 PNG assets', () => {
   const first = createSocialImage('article-one', 'article');
@@ -49,7 +52,7 @@ test('formal articles and major sections expose distinct social images while imp
     const image = html.match(/<meta property="og:image" content="https:\/\/irissakura\.github\.io(\/assets\/social\/[a-z0-9-]+\.png)">/)?.[1];
     assert.ok(image, `${page} must use a generated social image`);
     assert.ok(html.includes('meta property="og:image:alt"'), `${page} missing social image alt text`);
-    await access(new URL(`.${image}`, root));
+    await access(new URL(`.generated/social/${image.split('/').at(-1)}`, root));
     images.push(image);
   }
   assert.equal(new Set(images).size, images.length, 'major sections and formal articles must not share social images');
@@ -57,9 +60,19 @@ test('formal articles and major sections expose distinct social images while imp
   const implicitReview = source.blogs.filter((entry) => !publicationIds.has(entry.id));
   for (const article of implicitReview) {
     await assert.rejects(
-      access(new URL(`../assets/social/pages-blog-${article.id}.png`, import.meta.url)),
+      access(new URL(`../.generated/social/pages-blog-${article.id}.png`, import.meta.url)),
       (error) => error?.code === 'ENOENT',
       `implicit-review blog must not expose a social image: ${article.id}`
     );
   }
+});
+
+test('Pages packaging maps generated Social Images to stable public URLs', async () => {
+  await execFileAsync(process.execPath, ['scripts/prepare-pages.mjs'], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+  const generated = await readFile(new URL('.generated/social/pages-journal.png', root));
+  const packaged = await readFile(new URL('_site/assets/social/pages-journal.png', root));
+  assert.deepEqual(packaged, generated);
 });

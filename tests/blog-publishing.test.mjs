@@ -60,7 +60,7 @@ test('only manifest-approved Journal blogs are published as complete indexable a
       `unregistered blog must not have a public route: ${article.id}`
     );
     await assert.rejects(
-      readFile(new URL(`assets/social/pages-blog-${article.id}.png`, root)),
+      readFile(new URL(`.generated/social/pages-blog-${article.id}.png`, root)),
       (error) => error?.code === 'ENOENT',
       `unregistered blog must not have a social image: ${article.id}`
     );
@@ -74,9 +74,8 @@ test('published blog HTML contains no executable source HTML or private reposito
   ]);
   const published = publication.articles.filter((article) => ['approved', 'published'].includes(article.status));
   const pages = await Promise.all(published.map((article) => readText(`pages/blog/${article.slug}.html`)));
-  const publicText = [
+  const publishedBlogText = [
     await readText('pages/blog.html'),
-    await readText('pages/journal.html'),
     JSON.stringify(source),
     ...pages
   ].join('\n');
@@ -86,13 +85,19 @@ test('published blog HTML contains no executable source HTML or private reposito
     '<object',
     '<embed',
     '<form',
-    'onclick=',
+    'onclick='
+  ]) {
+    assert.ok(!publishedBlogText.includes(forbidden), `published content exposes ${forbidden}`);
+  }
+
+  const privateText = [publishedBlogText, await readText('pages/journal.html')].join('\n');
+  for (const forbidden of [
     '/Users/',
     '154.37.215.57',
     'sakura-design-journal.git',
     'WEBSITE_GITHUB_SSH_KEY'
   ]) {
-    assert.ok(!publicText.includes(forbidden), `published content exposes ${forbidden}`);
+    assert.ok(!privateText.includes(forbidden), `published content exposes ${forbidden}`);
   }
 });
 

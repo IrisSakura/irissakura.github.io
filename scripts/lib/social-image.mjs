@@ -106,7 +106,7 @@ export function createSocialImage(seed, category = 'site', paletteOverride, bran
 }
 
 export async function writeSocialImages(root, pages, brand) {
-  const directory = path.join(root, 'assets/social');
+  const directory = path.join(root, '.generated/social');
   await rm(directory, { recursive: true, force: true });
   await mkdir(directory, { recursive: true });
   const seen = new Set();
@@ -117,7 +117,7 @@ export async function writeSocialImages(root, pages, brand) {
     if (seen.has(page.image)) throw new Error(`Generated social image path is not unique: ${page.image}.`);
     seen.add(page.image);
     const palette = brand.modes[page.brandMode].socialPalette;
-    await writeFile(path.join(root, page.image.slice(1)), createSocialImage(page.canonical, page.socialCategory, palette, page.brandMode));
+    await writeFile(path.join(directory, path.basename(page.image)), createSocialImage(page.canonical, page.socialCategory, palette, page.brandMode));
   }));
 }
 

@@ -71,6 +71,25 @@ const DEPTH_SELECTOR = [
     '.evidence-chain-card'
 ].join(',');
 
+interface ContentSearchEntry {
+    id: string;
+    type: string;
+    typeLabel: string;
+    title: string;
+    summary: string;
+    tags: string[];
+    series: string;
+    engines: string[];
+    updatedAt: string;
+    url: string;
+}
+
+interface ContentSearchIndex {
+    schemaVersion: number;
+    totalCount: number;
+    entries: ContentSearchEntry[];
+}
+
 class SiteShell {
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
@@ -116,6 +135,7 @@ class SiteShell {
         this.setupFaq();
         this.setupNavbarDepth();
         this.setupPageIndex();
+        void this.setupContentSearch();
         this.setupMotion();
     }
 
@@ -234,6 +254,7 @@ class SiteShell {
             this.updateCurrentYear();
             this.setupFaq();
             this.setupPageIndex();
+            void this.setupContentSearch();
             this.setupMotion();
             await this.loadPageModules(nextDocument, destination);
             document.dispatchEvent(new CustomEvent('site:navigation-complete', {
@@ -501,6 +522,113 @@ class SiteShell {
                 button.closest('.faq-item')?.classList.toggle('active', !expanded);
             });
         });
+    }
+
+    private async setupContentSearch(): Promise<void> {
+        const root = document.querySelector<HTMLElement>('[data-content-search]');
+        if (!root || root.dataset.searchReady === 'true') return;
+
+        const indexPath = root.dataset.searchIndex;
+        const form = root.querySelector<HTMLFormElement>('[data-content-search-form]');
+        const query = root.querySelector<HTMLInputElement>('[data-content-search-query]');
+        const type = root.querySelector<HTMLSelectElement>('[data-content-search-type]');
+        const series = root.querySelector<HTMLSelectElement>('[data-content-search-series]');
+        const engine = root.querySelector<HTMLSelectElement>('[data-content-search-engine]');
+        const status = root.querySelector<HTMLElement>('[data-content-search-status]');
+        const results = root.querySelector<HTMLElement>('[data-content-search-results]');
+        if (!indexPath || !form || !query || !type || !series || !engine || !status || !results) {
+            return;
+        }
+        root.dataset.searchReady = 'true';
+
+        try {
+            const response = await fetch(new URL(indexPath, location.href));
+            if (!response.ok) throw new Error(`content search returned HTTP ${response.status}`);
+            const index = await response.json() as ContentSearchIndex;
+            if (
+                index.schemaVersion !== 1
+                || !Number.isSafeInteger(index.totalCount)
+                || !Array.isArray(index.entries)
+                || index.entries.length !== index.totalCount
+            ) {
+                throw new Error('content search index contract is invalid');
+            }
+
+            const limit = Math.max(1, Number.parseInt(root.dataset.searchLimit ?? '12', 10) || 12);
+            const normalize = (value: string): string => value.normalize('NFKC').toLocaleLowerCase('zh-CN').trim();
+            const render = (): void => {
+                const terms = normalize(query.value).split(/\s+/u).filter(Boolean);
+                const filtered = index.entries.filter((entry) => {
+                    if (type.value && entry.type !== type.value) return false;
+                    if (series.value && entry.series !== series.value) return false;
+                    if (engine.value && !entry.engines.includes(engine.value)) return false;
+                    const haystack = normalize([
+                        entry.title,
+                        entry.summary,
+                        entry.typeLabel,
+                        entry.series,
+                        ...entry.tags,
+                        ...entry.engines
+                    ].join(' '));
+                    return terms.every((term) => haystack.includes(term));
+                });
+
+                results.replaceChildren(...filtered.slice(0, limit).map((entry) => (
+                    this.createContentSearchResult(entry)
+                )));
+                if (filtered.length === 0) {
+                    const empty = document.createElement('p');
+                    empty.className = 'content-search-empty';
+                    empty.textContent = '没有找到匹配内容。可以减少关键词或清除筛选。';
+                    results.append(empty);
+                }
+                status.textContent = filtered.length > limit
+                    ? `找到 ${filtered.length} 项，当前显示前 ${limit} 项。`
+                    : `找到 ${filtered.length} 项。`;
+            };
+
+            form.addEventListener('input', render);
+            form.addEventListener('change', render);
+            form.addEventListener('reset', () => {
+                window.setTimeout(render, 0);
+            });
+            render();
+        } catch {
+            status.textContent = '公开索引暂时无法加载；仍可使用下方精选主题、审计与设计资料库。';
+            root.dataset.searchState = 'failed';
+        }
+    }
+
+    private createContentSearchResult(entry: ContentSearchEntry): HTMLElement {
+        const article = document.createElement('article');
+        article.className = 'content-search-result';
+
+        const meta = document.createElement('p');
+        meta.className = 'project-status';
+        meta.textContent = `${entry.typeLabel}${entry.series ? ` · ${entry.series}` : ''} · ${entry.updatedAt}`;
+        const heading = document.createElement('h3');
+        heading.textContent = entry.title;
+        const summary = document.createElement('p');
+        summary.textContent = entry.summary;
+        const link = document.createElement('a');
+        link.className = 'note-link';
+        link.href = entry.url;
+        link.textContent = entry.type === 'framework-audit' ? '查看审计检索上下文' : '打开内容';
+        link.setAttribute('aria-label', `${link.textContent}：${entry.title}`);
+
+        article.append(meta, heading, summary);
+        if (entry.tags.length > 0) {
+            const tags = document.createElement('div');
+            tags.className = 'note-tags';
+            for (const value of entry.tags.slice(0, 5)) {
+                const tag = document.createElement('span');
+                tag.textContent = value;
+                tags.append(tag);
+            }
+            article.append(tags);
+        }
+        article.append(link);
+        return article;
     }
 
     private setupNavbarDepth(): void {

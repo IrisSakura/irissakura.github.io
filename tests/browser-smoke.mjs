@@ -6,10 +6,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, blogPublication, blogTaxonomy, evidenceChains, evidenceChainAuthorities, projectData, irisEngineering, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
+const [journalSource, blogPublication, blogTaxonomy, contentSearchIndex, evidenceChains, evidenceChainAuthorities, projectData, irisEngineering, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
   readJson('data/blog-taxonomy.json'),
+  readJson('data/search-index.json'),
   readJson('data/evidence-chains.json'),
   readJson('config/evidence-chain-authorities.json'),
   readJson('data/projects.json'),
@@ -34,6 +35,14 @@ const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.id === 'sword-of-words');
 if (!gameProject) throw new Error('project registry does not contain the flagship game case');
+const normalizedGodotQuery = 'godot';
+const godotSearchCount = contentSearchIndex.entries.filter((entry) => (
+  [entry.title, entry.summary, entry.typeLabel, entry.series, ...entry.tags, ...entry.engines]
+    .join(' ')
+    .normalize('NFKC')
+    .toLocaleLowerCase('zh-CN')
+    .includes(normalizedGodotQuery)
+)).length;
 
 async function assertEvidenceChainPage(page, route, viewportName) {
   await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
@@ -478,6 +487,15 @@ try {
   if (await consumerLabSection.locator('.consumer-lab-highlights li').count() !== consumerLab.cases.length * 4) {
     throw new Error('Consumer Lab core-system highlights are incomplete');
   }
+  if (await consumerLabSection.locator('.consumer-lab-relation').innerText() !== '7 个案例 · 4 个 Source-push Repository · 3 个固定快照') {
+    throw new Error('Consumer Case and source repository relationship is not explicit');
+  }
+  if (await consumerLabSection.locator('.consumer-lab-compact-proof').count() !== 2) {
+    throw new Error('Consumer Lab does not expose the selected compact local evidence');
+  }
+  if (!await desktop.locator('a[href="framework-quickstart.html"]').isVisible()) {
+    throw new Error('portfolio does not expose the 15-minute Framework Quickstart');
+  }
   if (await consumerLabSection.locator([
     '[data-consumer-commit]',
     '.consumer-lab-status',
@@ -538,6 +556,30 @@ try {
   if (await desktop.locator('.evidence-chain-card').count() !== evidenceChains.chains.length) {
     throw new Error('research page does not expose every reviewed evidence chain');
   }
+  const searchResults = desktop.locator('[data-content-search-results] .content-search-result');
+  await searchResults.first().waitFor({ state: 'visible' });
+  if (await searchResults.count() !== 12) {
+    throw new Error('Journal search does not show the initial bounded result set');
+  }
+  if (await desktop.locator('[data-content-search-status]').innerText() !== `找到 ${contentSearchIndex.totalCount} 项，当前显示前 12 项。`) {
+    throw new Error('Journal search does not announce the complete public index count');
+  }
+  const queryInput = desktop.locator('[data-content-search-query]');
+  await queryInput.fill('Godot');
+  await desktop.waitForFunction((expectedCount) => (
+    document.querySelectorAll('[data-content-search-results] .content-search-result').length === expectedCount
+  ), Math.min(godotSearchCount, 12));
+  const expectedGodotStatus = godotSearchCount > 12
+    ? `找到 ${godotSearchCount} 项，当前显示前 12 项。`
+    : `找到 ${godotSearchCount} 项。`;
+  if (await desktop.locator('[data-content-search-status]').innerText() !== expectedGodotStatus) {
+    throw new Error('Journal keyword search does not announce its filtered result count');
+  }
+  await queryInput.fill('');
+  await desktop.locator('[data-content-search-engine]').selectOption('unity');
+  await desktop.waitForFunction(() => document.querySelectorAll('[data-content-search-results] .content-search-result').length === 4);
+  await desktop.locator('[data-content-search-reset]').click();
+  await desktop.waitForFunction(() => document.querySelectorAll('[data-content-search-results] .content-search-result').length === 12);
   const journalTitleBoundaryFailures = [];
   for (const [viewportName, viewport] of [
     ['desktop', { width: 1440, height: 900 }],
@@ -565,6 +607,7 @@ try {
 
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.blog-card').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
+  if (await desktop.locator('.blog-featured-card').count() !== blogTaxonomy.series.length) throw new Error('Featured Reading does not expose one entry per registered series');
   if (await desktop.locator('.blog-series-list > a').count() !== blogTaxonomy.series.length) throw new Error('blog index series registry is incomplete');
   if (await desktop.locator('.blog-tag-list > a').count() !== routableBlogTags.length) throw new Error('blog index exposes the wrong tag route set');
   if (await desktop.locator('a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
@@ -572,6 +615,19 @@ try {
   if (blogIndexText.includes('来源提交') || blogIndexText.includes('经过登记与安全检查')) {
     throw new Error('blog index exposes the internal publication pipeline');
   }
+  await desktop.evaluate(() => {
+    document.documentElement.dataset.searchSoftNav = 'persistent';
+  });
+  await desktop.locator('.nav-menu').getByRole('link', { name: 'Journal', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/journal.html`);
+  await desktop.locator('[data-content-search-results] .content-search-result').first().waitFor({ state: 'visible' });
+  if (await desktop.locator('[data-content-search-results] .content-search-result').count() !== 12) {
+    throw new Error('Journal search did not reinitialize after soft navigation');
+  }
+  if (await desktop.getAttribute('html', 'data-search-soft-nav') !== 'persistent') {
+    throw new Error('Journal search navigation replaced the active document');
+  }
+  await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   const representativeSeries = blogTaxonomy.series.find((entry) => entry.name === representativeBlog.series);
   await desktop.goto(`${baseUrl}/pages/blog/series/${representativeSeries.slug}.html`, { waitUntil: 'networkidle' });
   if (!await desktop.getByRole('heading', { level: 1, name: representativeSeries.name }).isVisible()) {
@@ -700,7 +756,7 @@ try {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'contact-mobile.png'), fullPage: true });
   }
 
-  console.log('Browser smoke passed: routes, persistent navigation, complete blog publishing, evidence-led portfolio, mobile navigation and contact routes checked.');
+  console.log('Browser smoke passed: routes, persistent navigation, static content search, Featured Reading, evidence-led portfolio, mobile navigation and contact routes checked.');
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

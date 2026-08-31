@@ -4,14 +4,13 @@ import { isJournalSyncOwnedPath } from '../scripts/verify-journal-sync-scope.mjs
 
 test('push-driven Journal sync owns only generated public projections', () => {
   for (const owned of [
-    'assets/social/pages-blog-article.png',
-    'assets/social/pages-journal-design.png',
     'content/blogs/article.md',
     'content/game-designs/design.md',
     'config/blog-publication.json',
     'data/blog-taxonomy.json',
     'data/journal.json',
     'data/journal-source.json',
+    'data/search-index.json',
     'pages/framework.html',
     'pages/game.html',
     'pages/blog.html',
@@ -32,6 +31,8 @@ test('push-driven Journal sync owns only generated public projections', () => {
     'scripts/import-journal-export.mjs',
     'config/journal-curation.json',
     'style/blog.css',
+    'assets/social/pages-blog-article.png',
+    'assets/social/pages-journal-design.png',
     'assets/social/pages-contact.png',
     'assets/social/pages-blog-article.svg',
     'assets/social/custom.png',

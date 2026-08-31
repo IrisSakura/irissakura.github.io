@@ -114,6 +114,10 @@ test('generated portfolio presents projects without owner-only Consumer Lab meta
   assert.ok(html.includes('data-brand-side="sakura"'));
   assert.ok(html.includes('SAKURA · POWER THE SYSTEM'));
   assert.ok(html.includes('class="consumer-lab-local-proof"'));
+  assert.equal((html.match(/class="consumer-lab-compact-proof"/gu) ?? []).length, 2);
+  assert.equal((html.match(/LOCAL UNITY VERIFIED · NOT A RELEASE/gu) ?? []).length, 3);
+  assert.ok(html.includes('7 个案例 · 4 个 Source-push Repository · 3 个固定快照'));
+  assert.ok(html.includes('href="framework-quickstart.html"'));
   for (const publicEvidence of ['144 / 144', '59 / 59', 'WebGL + Browser']) {
     assert.ok(html.includes(publicEvidence), `missing featured local evidence: ${publicEvidence}`);
   }

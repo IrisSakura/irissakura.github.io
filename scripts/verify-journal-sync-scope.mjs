@@ -4,12 +4,12 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const allowed = [
-  /^assets\/social\/pages-(?:blog|journal)-[a-z0-9-]+\.png$/,
   /^content\/blogs\/[a-z0-9-]+\.md$/,
   /^content\/game-designs\/[a-z0-9-]+\.md$/,
   /^config\/blog-publication\.json$/,
   /^data\/blog-taxonomy\.json$/,
   /^data\/journal(?:-source)?\.json$/,
+  /^data\/search-index\.json$/,
   /^index\.html$/,
   /^pages\/(?:framework|game)\.html$/,
   /^pages\/blog\.html$/,

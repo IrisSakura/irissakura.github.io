@@ -1,8 +1,13 @@
 # Consumer Lab 推送同步
 
-四个 Consumer Lab 仓库的 `main` 推送负责产生脱敏技术投影；个人站导入投影、运行完整构建，
+Consumer Lab 当前登记七个公开 Case，其中四个 Consumer Repository 启用 source-push，另外三个
+保留经复核的固定快照。启用同步的仓库在 `main` 推送时产生脱敏技术投影；个人站导入投影、运行完整构建，
 再以普通 fast-forward 提交触发既有 GitHub Pages 工作流。个人站不保存消费者 Gitea 地址、凭据
 或源码镜像，Pages artifact 也不包含 `data/consumer-lab.json`。
+
+Case、Repository 与代表性公开证据的关系由 owner-only `config/consumer-sync.json` 统一登记；
+生成器要求 source-push 与 fixed-snapshot 两组 ID 精确覆盖所有 Case，禁止用“七个项目”和“四个仓库”
+指代同一概念。
 
 ## 所有权边界
 

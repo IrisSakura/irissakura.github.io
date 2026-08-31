@@ -11,8 +11,8 @@ async function readText(path) {
 const pageContracts = {
   'pages/portfolio.html': ['portfolio-journey', 'portfolio-cases', 'consumer-lab'],
   'pages/framework.html': ['maturity', 'adoption', 'game-adoption', 'modules', 'architecture', 'lifecycle'],
-  'pages/journal.html': ['knowledge-streams', 'featured-notes', 'recent-audits', 'game-design-library', 'evidence-chains'],
-  'pages/blog.html': ['blog-taxonomy', 'articles']
+  'pages/journal.html': ['knowledge-streams', 'content-search', 'featured-notes', 'recent-audits', 'game-design-library', 'evidence-chains'],
+  'pages/blog.html': ['featured-reading', 'blog-taxonomy', 'articles']
 };
 
 test('long collection pages expose one generated accessible section index with stable targets', async () => {
