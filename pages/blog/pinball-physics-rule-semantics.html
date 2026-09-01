@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="一个高速、连续、长期不可完全预测的球体运动过程，怎样被转换成稳定、可学习、可审计的 Shot、Mode、Combo 和计分规则，同时又不让游戏规则反过来破坏真实物理结果？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/pinball-physics-rule-semantics.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机 | IrisSakura">
+    <meta property="og:description" content="一个高速、连续、长期不可完全预测的球体运动过程，怎样被转换成稳定、可学习、可审计的 Shot、Mode、Combo 和计分规则，同时又不让游戏规则反过来破坏真实物理结果？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/pinball-physics-rule-semantics.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-pinball-physics-rule-semantics.png">
+    <meta property="og:image:alt" content="物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机 | IrisSakura">
+    <meta name="twitter:description" content="一个高速、连续、长期不可完全预测的球体运动过程，怎样被转换成稳定、可学习、可审计的 Shot、Mode、Combo 和计分规则，同时又不让游戏规则反过来破坏真实物理结果？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-pinball-physics-rule-semantics.png">
+    <meta name="twitter:image:alt" content="物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机 | IrisSakura","description":"一个高速、连续、长期不可完全预测的球体运动过程，怎样被转换成稳定、可学习、可审计的 Shot、Mode、Combo 和计分规则，同时又不让游戏规则反过来破坏真实物理结果？","url":"https://irissakura.github.io/pages/blog/pinball-physics-rule-semantics.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机","image":"https://irissakura.github.io/assets/social/pages-blog-pinball-physics-rule-semantics.png","datePublished":"2026-08-31","dateModified":"2026-08-31","about":["physics","pinball","rule-engine","shot-recognition"]}</script>
+    <!-- site-meta:end -->
+    <title>物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">Journal</a>
+            <a href="../../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-08-31 · 更新于 2026-08-31</p>
+            <h1>物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机</h1>
+            <p class="blog-deck">一个高速、连续、长期不可完全预测的球体运动过程，怎样被转换成稳定、可学习、可审计的 Shot、Mode、Combo 和计分规则，同时又不让游戏规则反过来破坏真实物理结果？</p>
+            <div class="note-tags"><span>physics</span><span>pinball</span><span>rule-engine</span><span>shot-recognition</span></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>一颗 Ball 从左侧 Flipper 被击出。</p>
+<p>它沿着斜坡向上运动。</p>
+<p>进入左侧 Orbit。</p>
+<p>连续触发两个 Sensor。</p>
+<p>从桌面上方绕回来。</p>
+<p>最后重新落到右侧 Flipper。</p>
+<p>从物理模拟的角度看，刚才发生的只是：</p>
+<pre><code class="language-text">球的位置改变
+→
+速度改变
+→
+经过若干碰撞体和 Trigger。
+</code></pre>
+<p>但从弹球规则的角度看，这段轨迹可能意味着：</p>
+<pre><code class="language-text">完成 Left Orbit
+→
+Combo +1
+→
+Mode Progress +1
+→
+Multiplier 提升
+→
+下一个 Ramp 被点亮
+→
+如果当前处于 Multiball
+   还可能同时获得 Jackpot Qualification。
+</code></pre>
+<p>更重要的是：</p>
+<p>同一条 Ball 轨迹，在另一局、另一个 Mode、另一个 Multiplier 状态下，可能完全拥有不同的游戏意义。</p>
+<p>物理事实没有改变。</p>
+<p>规则解释改变了。</p>
+<p>这就是数字弹球最值得研究的地方。</p>
+<h2 id="先说结论弹球需要把连续物理与离散规则彻底分层">先说结论：弹球需要把连续物理与离散规则彻底分层</h2><p><strong>物理事实—规则语义分层（后文简称“球只负责真的撞到了什么，规则再决定这件事意味着什么”）</strong>：Physics 负责产生连续运动与真实 Contact，Sensor / Switch 将局部物理事实离散化，Shot Recognizer 再把多个事件识别成稳定球路，Rule Engine 最后根据当前规则状态解释这些球路。</p>
+<p>整个链路可以先压缩成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["玩家输入"] --&gt; B["Flipper / Plunger / Nudge"]
+    B --&gt; C["Ball Physics"]
+    C --&gt; D["Contact"]
+    D --&gt; E["Device Reaction"]
+    E --&gt; F["Switch / Sensor Event"]
+    F --&gt; G["Shot Recognition"]
+    G --&gt; H["Rule Engine"]
+    H --&gt; I["Mode / Combo / Jackpot / Score"]
+    I --&gt; J["Light / Display / Audio"]
+    J --&gt; A
+</code></pre>
+<p>这里每一层都回答不同问题。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Physics</td>
+<td>球实际上怎样运动</td>
+</tr>
+<tr>
+<td>Device</td>
+<td>装置受到球影响后怎样反应</td>
+</tr>
+<tr>
+<td>Switch / Sensor</td>
+<td>哪个可审计检测事实发生了</td>
+</tr>
+<tr>
+<td>Shot Recognition</td>
+<td>这一串事实能否构成一个正式球路</td>
+</tr>
+<tr>
+<td>Rule Engine</td>
+<td>当前规则状态下，这条球路意味着什么</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>玩家现在最应该注意什么</td>
+</tr>
+</tbody></table>
+<p>如果把这些层压进：</p>
+<pre><code class="language-text">OnCollisionEnter()
+</code></pre>
+<p>弹球很快会变成一张无法维护的事件脚本表。</p>
+<h2 id="玩家并不直接控制主游戏对象">玩家并不直接控制主游戏对象</h2><p>大多数动作游戏中，玩家直接控制主角。</p>
+<p>按左：</p>
+<pre><code class="language-text">角色向左移动。
+</code></pre>
+<p>按跳：</p>
+<pre><code class="language-text">角色执行跳跃。
+</code></pre>
+<p>弹球不同。</p>
+<p>主游戏对象是 Ball。</p>
+<p>玩家通常不能直接说：</p>
+<pre><code class="language-text">Ball.Position += ...
+</code></pre>
+<p>真正能够控制的是：</p>
+<ul>
+<li>Flipper；</li>
+<li>Plunger；</li>
+<li>Nudge。</li>
+</ul>
+<p>这些都是：</p>
+<p><strong>致动器（即“玩家不能搬动球，只能改变会影响球的物理装置”）</strong>。</p>
+<p>于是游戏输入关系变成：</p>
+<pre><code class="language-text">玩家
+→
+控制装置
+→
+装置改变物理环境
+→
+Ball 根据同一物理规则自然响应。
+</code></pre>
+<p>这是一种典型的间接运动控制。</p>
+<p>玩家训练的不是：</p>
+<blockquote>
+<p>怎样直接移动 Ball。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>怎样利用极少数控制器，在正确时间改变 Ball 的未来轨迹。</p>
+</blockquote>
+<h2 id="ball-必须始终是独立权威物理实体">Ball 必须始终是独立权威物理实体</h2><p>弹球最危险的捷径之一，是把一些特殊装置实现成：</p>
+<pre><code class="language-text">Ball 进入 Ramp
+→
+隐藏 Ball
+→
+几秒后在 Ramp Exit Spawn 一个新 Ball。
+</code></pre>
+<p>从视觉上看可能完全正常。</p>
+<p>从运行时状态看，已经破坏了 Ball Identity。</p>
+<p>**Ball Identity（后文简称“从发球到掉球，这始终是同一颗球”）**应该跨越：</p>
+<ul>
+<li>Playfield；</li>
+<li>Ramp；</li>
+<li>Orbit；</li>
+<li>Scoop；</li>
+<li>Kicker；</li>
+<li>Lock；</li>
+<li>Drain Transit；</li>
+</ul>
+<p>持续存在。</p>
+<p>例如：</p>
+<pre><code class="language-text">Ball A
+→
+进入 Lock
+
+Ball B
+→
+继续在 Playfield
+
+Ball C
+→
+发生 Drain。
+</code></pre>
+<p>如果 Ball 不拥有稳定身份，</p>
+<p>Multiball 很快会出现：</p>
+<ul>
+<li>重复 Ball；</li>
+<li>Ball Save 发错对象；</li>
+<li>Lock 数量漂移；</li>
+<li>Trough 数量异常；</li>
+<li>Replay 无法解释。</li>
+</ul>
+<h2 id="ball-conservation-是比普通物理对象更强的不变量">Ball Conservation 是比普通物理对象更强的不变量</h2><p>假设一张数字球台配置六颗物理 Ball。</p>
+<p>任意时刻都应近似满足：</p>
+<pre><code class="language-text">Trough
++
+Shooter Lane
++
+Playfield
++
+Physical Locks
++
+Held Devices
++
+Transit
+=
+6。
+</code></pre>
+<p>这就是：</p>
+<p><strong>Ball Conservation（后文简称“球不会因为装置切换偷偷多一颗或少一颗”）</strong>。</p>
+<p>普通 Projectile 可以：</p>
+<pre><code class="language-text">Spawn
+→
+飞行
+→
+Destroy。
+</code></pre>
+<p>Ball 不适合这样理解。</p>
+<p>因为它同时参与：</p>
+<ul>
+<li>当前 Ball 生命周期；</li>
+<li>玩家剩余 Ball；</li>
+<li>Lock；</li>
+<li>Multiball；</li>
+<li>Ball Save；</li>
+<li>End-of-Ball；</li>
+<li>故障恢复。</li>
+</ul>
+<p>所以 BallRegistry 更接近一套：</p>
+<pre><code class="language-text">运行时资产完整性系统。
+</code></pre>
+<p>而不是普通物理 Entity 列表。</p>
+<h2 id="physics-不应该知道当前打这个-bumper-值多少分">Physics 不应该知道当前打这个 Bumper 值多少分</h2><p>假设 Ball 撞上左侧 Bumper。</p>
+<p>一个最直接的实现是：</p>
+<pre><code class="language-text">Bumper.OnCollisionEnter
+{
+    score += 1000;
+
+    if (ModeA)
+        score *= 2;
+}
+</code></pre>
+<p>这种代码的问题不是“不够优雅”。</p>
+<p>而是它把两个完全不同的事实混在了一起。</p>
+<p>Physics 能够证明：</p>
+<pre><code class="language-text">Ball 碰到了 Bumper。
+</code></pre>
+<p>它不能自己决定：</p>
+<pre><code class="language-text">这个碰撞当前值多少分。
+</code></pre>
+<p>Mode、Multiplier、Jackpot、Combo 都属于 Rule State。</p>
+<p>更合理的链路是：</p>
+<pre><code class="language-text">Ball Contact
+→
+Bumper Physical Reaction
+→
+BumperSwitchEvent
+→
+Rule Engine
+→
+Score Pipeline。
+</code></pre>
+<p>于是同一个 Bumper：</p>
+<pre><code class="language-text">普通状态
+→
+500
+
+Mode A
+→
+5000
+
+Wizard Mode
+→
+完成特殊目标。
+</code></pre>
+<p>Physics 完全不需要知道这些规则。</p>
+<h2 id="device-reaction-与-rule-event-同样需要分开">Device Reaction 与 Rule Event 同样需要分开</h2><p>一个 Bumper 被 Ball 撞中以后可能同时发生：</p>
+<pre><code class="language-text">物理冲量
++
+灯光闪烁
++
+机械动画
++
+Switch 激活。
+</code></pre>
+<p>其中：</p>
+<pre><code class="language-text">给 Ball 一个反弹冲量
+</code></pre>
+<p>属于 Device Physical Reaction。</p>
+<p>而：</p>
+<pre><code class="language-text">Bumper #3 被合法命中
+</code></pre>
+<p>才是 Rule Engine 应该消费的事件。</p>
+<p>这意味着：</p>
+<p><strong>装置事实（即“机械结构发生了什么”）</strong></p>
+<p>和：</p>
+<p><strong>规则事件（即“游戏规则应该知道什么”）</strong></p>
+<p>依然不是同一层。</p>
+<p>这样设计以后，一套 Rule Engine 可以在：</p>
+<ul>
+<li>不同 Physics 参数；</li>
+<li>不同视觉模型；</li>
+<li>不同桌面 Theme；</li>
+</ul>
+<p>上复用。</p>
+<h2 id="switch-matrix-是连续物理与离散规则之间的真正桥梁">Switch Matrix 是连续物理与离散规则之间的真正桥梁</h2><p>Physics 世界是连续的。</p>
+<p>Ball 每个 Fixed Step 都拥有：</p>
+<pre><code class="language-text">Position
+Velocity
+AngularVelocity。
+</code></pre>
+<p>规则世界却需要离散事实：</p>
+<pre><code class="language-text">LeftOrbitEnter
+RampExit
+TargetBankHit
+ScoopOccupied。
+</code></pre>
+<p>**Switch Matrix（后文简称“把连续球路转换成稳定开关事实”）**承担的是这个转换。</p>
+<p>它不应该简单等于：</p>
+<pre><code class="language-text">所有 Physics Contact。
+</code></pre>
+<p>因为一个物理接触可能：</p>
+<ul>
+<li>持续很多 Tick；</li>
+<li>反复抖动；</li>
+<li>从错误方向进入；</li>
+<li>擦过边缘；</li>
+<li>同时命中多个碰撞体。</li>
+</ul>
+<p>Switch 需要自己的语义，例如：</p>
+<pre><code class="language-text">Open
+Closed
+Pressed
+Released
+Pulse
+Debounce。
+</code></pre>
+<p>Rule Engine 才能获得稳定输入。</p>
+<h2 id="physics-contact-不能直接当作-shot">Physics Contact 不能直接当作 Shot</h2><p>Ball 进入一个 Orbit 时，可能连续触发：</p>
+<pre><code class="language-text">Sensor A
+Sensor B
+Sensor C。
+</code></pre>
+<p>单独任何一个 Sensor 都不能证明：</p>
+<pre><code class="language-text">Left Orbit Completed。
+</code></pre>
+<p>它可能只是：</p>
+<ul>
+<li>反向进入；</li>
+<li>只经过一半；</li>
+<li>被 Bumper 弹出去；</li>
+<li>从出口方向倒灌。</li>
+</ul>
+<p>因此弹球需要一个非常关键的中间层：</p>
+<p><strong>Shot Recognition（后文简称“从一串局部开关事件里确认玩家真的完成了一条正式球路”）</strong>。</p>
+<p>例如：</p>
+<pre><code class="language-text">Shot: Left Orbit
+
+Expected Sequence:
+A → B → C
+
+Direction:
+Forward
+
+Time Window:
+900ms
+
+Ball:
+Same BallId
+</code></pre>
+<p>只有满足这些条件，</p>
+<p>系统才产生：</p>
+<pre><code class="language-text">LeftOrbitCompleted。
+</code></pre>
+<h2 id="shot-是一种域语义而不是物理路径名称">Shot 是一种域语义，而不是物理路径名称</h2><p>这层存在以后，</p>
+<p>Rule Engine 不必关心：</p>
+<pre><code class="language-text">Sensor A 的具体坐标
+Sensor B 的 collider shape
+Ramp mesh 怎样建。
+</code></pre>
+<p>它只消费：</p>
+<pre><code class="language-text">LeftOrbitCompleted
+CenterRampCompleted
+ThreeBankCompleted。
+</code></pre>
+<p>这就是：</p>
+<p><strong>域语义事件（即“把底层实现细节压缩成玩法真正关心的事实”）</strong>。</p>
+<p>这种模式非常值得迁移。</p>
+<p>赛车可以：</p>
+<pre><code class="language-text">Wheel Contact
+→
+Checkpoint Crossing
+→
+Sector Completed。
+</code></pre>
+<p>足球模拟可以：</p>
+<pre><code class="language-text">Ball Contact
+→
+Controlled Touch
+→
+Pass Completed。
+</code></pre>
+<p>物理解谜也可以：</p>
+<pre><code class="language-text">Collider Contacts
+→
+Object Stable In Socket。
+</code></pre>
+<p>规则系统最好消费高层事实，而不是重新解释所有底层传感器。</p>
+<h2 id="shot-recognition-必须考虑方向和时间">Shot Recognition 必须考虑方向和时间</h2><p>假设球经过：</p>
+<pre><code class="language-text">A
+→
+B
+→
+C。
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">C
+→
+B
+→
+A。
+</code></pre>
+<p>物理上都触发了同样三个 Sensor。</p>
+<p>规则上却可能分别是：</p>
+<pre><code class="language-text">Forward Left Orbit
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">Reverse Orbit。
+</code></pre>
+<p>因此：</p>
+<pre><code class="language-text">Sensor Set
+</code></pre>
+<p>本身通常不够。</p>
+<p>还需要：</p>
+<ul>
+<li>Sequence；</li>
+<li>Direction；</li>
+<li>Time Window；</li>
+<li>Ball Identity。</li>
+</ul>
+<p>否则玩家通过偶然抖动或倒灌就可能获得本不应该成立的 Shot。</p>
+<h2 id="同一物理事实可以被多个规则消费者解释">同一物理事实可以被多个规则消费者解释</h2><p>假设：</p>
+<pre><code class="language-text">CenterRampCompleted。
+</code></pre>
+<p>当前可能同时满足：</p>
+<ul>
+<li>Mode A 要求命中 Center Ramp；</li>
+<li>Combo 系统正在等待连续 Ramp；</li>
+<li>Multiball Jackpot 正好点亮；</li>
+<li>Achievement 统计正在记录；</li>
+<li>Score Pipeline 需要计算基础分。</li>
+</ul>
+<p>因此：</p>
+<p>**规则多重解释（即“一个真实事件可以同时进入多个规则，但只能由各自状态决定意义”）**是弹球非常自然的结构。</p>
+<p>不要让 Shot Recognizer 自己决定：</p>
+<pre><code class="language-text">现在是 Jackpot。
+</code></pre>
+<p>它只负责：</p>
+<pre><code class="language-text">Shot 成立。
+</code></pre>
+<p>剩下的属于各个 Rule Consumer。</p>
+<h2 id="但多消费者必须防止重复奖励">但多消费者必须防止重复奖励</h2><p>如果：</p>
+<pre><code class="language-text">ShotEvent
+</code></pre>
+<p>被多个 System 同时解释，</p>
+<p>就需要明确：</p>
+<pre><code class="language-text">哪些奖励可以叠加
+哪些只能兑现一次。
+</code></pre>
+<p>例如一个 Shot 同时满足：</p>
+<pre><code class="language-text">Mode Objective
++
+Jackpot。
+</code></pre>
+<p>两项都可能合法。</p>
+<p>但同一个：</p>
+<pre><code class="language-text">Jackpot Qualification
+</code></pre>
+<p>不能因为两个 Listener 都看见事件就发两次奖励。</p>
+<p>所以规则事件需要：</p>
+<ul>
+<li>Stable EventId；</li>
+<li>Source BallId；</li>
+<li>ShotId；</li>
+<li>Rule Scope；</li>
+<li>必要时的 idempotence。</li>
+</ul>
+<p>否则事件广播会把内容组合能力变成重复计分风险。</p>
+<h2 id="mode-是弹球长期内容的主要组织单位">Mode 是弹球长期内容的主要组织单位</h2><p>单纯 Physics 可以让球一直弹。</p>
+<p>真正让一张桌面玩几十分钟仍然不断出现新目标的，是：</p>
+<p><strong>Mode（后文简称“当前这段时间，这张桌面要求你完成什么”）</strong>。</p>
+<p>一个 Mode 可以定义：</p>
+<ul>
+<li>Qualification；</li>
+<li>Start Condition；</li>
+<li>Objectives；</li>
+<li>Timer；</li>
+<li>Scoring Modifier；</li>
+<li>Completion；</li>
+<li>Failure；</li>
+<li>Light Profile；</li>
+<li>Audio Profile。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-text">Mode: Reactor Meltdown
+
+目标：
+60 秒内完成
+Left Orbit
+Center Ramp
+Right Orbit。
+</code></pre>
+<p>同一张桌面几何没有改变。</p>
+<p>但玩家现在看到的“地图”已经不同。</p>
+<p>普通状态下：</p>
+<pre><code class="language-text">Center Ramp
+只是一个安全得分路线。
+</code></pre>
+<p>该 Mode 中：</p>
+<pre><code class="language-text">Center Ramp
+变成任务必需目标。
+</code></pre>
+<p>所以弹球很像在同一个物理空间上不断叠加新的规则解释层。</p>
+<h2 id="mode-qualification-与-mode-start-应分离">Mode Qualification 与 Mode Start 应分离</h2><p>玩家可能已经完成：</p>
+<pre><code class="language-text">三个 Qualify Shot。
+</code></pre>
+<p>于是：</p>
+<pre><code class="language-text">Mode Qualified。
+</code></pre>
+<p>但真正进入 Mode 可能还要求：</p>
+<pre><code class="language-text">打入 Scoop。
+</code></pre>
+<p>这两个状态最好分开：</p>
+<pre><code class="language-text">Qualified
+≠
+Active。
+</code></pre>
+<p>否则系统很难表达：</p>
+<blockquote>
+<p>玩家已经准备好了这个 Mode，但什么时候启动由玩家自己决定。</p>
+</blockquote>
+<p>这种分离会产生真实策略。</p>
+<p>玩家可能选择：</p>
+<ul>
+<li>现在启动；</li>
+<li>先把 Multiplier 做高；</li>
+<li>先准备 Ball Lock；</li>
+<li>等下一颗 Ball 再启动。</li>
+</ul>
+<h2 id="mode-也不应该默认全部互斥">Mode 也不应该默认全部互斥</h2><p>一张成熟球台可能同时运行：</p>
+<pre><code class="language-text">Main Mode
++
+Multiball
++
+Combo
++
+Hurry-Up
++
+Multiplier。
+</code></pre>
+<p>如果所有 Mode 都只能：</p>
+<pre><code class="language-text">CurrentMode = X，
+</code></pre>
+<p>内容组合空间会非常有限。</p>
+<p>更适合的是：</p>
+<pre><code class="language-text">Mode Stack
++
+Mode Priority
++
+Conflict Rules。
+</code></pre>
+<p>一些状态可以并行。</p>
+<p>另一些才需要互斥。</p>
+<h2 id="同一张桌面通过-rule-state-不断改变意义">同一张桌面通过 Rule State 不断改变意义</h2><p>这是弹球设计中非常有价值的一点。</p>
+<p>桌面几何可能几十分钟都不变化。</p>
+<p>玩家仍然会不断重新判断：</p>
+<pre><code class="language-text">现在该打哪里？
+</code></pre>
+<p>因为规则状态改变了：</p>
+<pre><code class="language-text">普通阶段
+→
+先打 Drop Targets
+
+Mode Qualified
+→
+进 Scoop
+
+Mode Active
+→
+打左 Orbit
+
+Multiball
+→
+追 Jackpot
+
+Hurry-Up
+→
+必须马上冒险打高风险 Ramp。
+</code></pre>
+<p>因此内容密度不完全依赖：</p>
+<pre><code class="language-text">不断增加新地图。
+</code></pre>
+<p>同一物理空间可以被多层规则反复重解释。</p>
+<h2 id="lighting-不是装饰而是-rule-state-的信息投影">Lighting 不是装饰，而是 Rule State 的信息投影</h2><p>玩家在高速 Ball 状态下没有时间读长文本。</p>
+<p>规则必须通过：</p>
+<ul>
+<li>Lamp；</li>
+<li>Insert；</li>
+<li>Arrow；</li>
+<li>Display；</li>
+<li>Audio；</li>
+</ul>
+<p>实时告诉玩家：</p>
+<pre><code class="language-text">现在什么最重要。
+</code></pre>
+<p>所以：</p>
+<p>**规则信息投影（即“把复杂状态压缩成玩家一眼能读懂的桌面信号”）**是弹球 UI 的核心。</p>
+<p>例如：</p>
+<pre><code class="language-text">Left Orbit Flashing
+</code></pre>
+<p>应该对应某个明确 Rule State：</p>
+<pre><code class="language-text">Active Objective。
+</code></pre>
+<p>而不是视觉脚本自己决定：</p>
+<pre><code class="language-text">现在看起来应该闪一下。
+</code></pre>
+<h2 id="灯光也需要优先级仲裁">灯光也需要优先级仲裁</h2><p>同一个 Lamp 可能同时被多个 Mode 请求：</p>
+<pre><code class="language-text">Mode A
+想要常亮
+
+Jackpot
+想要快速闪烁
+
+Ball Save
+想要呼吸效果。
+</code></pre>
+<p>如果最后一个写入者直接覆盖：</p>
+<pre><code class="language-text">谁后 Update 谁赢，
+</code></pre>
+<p>显示结果会和规则优先级完全脱节。</p>
+<p>因此 Lighting System 应该做：</p>
+<pre><code class="language-text">Rule State
+→
+Light Requests
+→
+Priority Arbitration
+→
+最终表现。
+</code></pre>
+<p>Display 和 Audio 同样适用。</p>
+<h2 id="audio-是高速游戏的重要规则通道">Audio 是高速游戏的重要规则通道</h2><p>玩家盯着 Ball 时，</p>
+<p>很可能根本没有时间看 Display。</p>
+<p>因此：</p>
+<pre><code class="language-text">Jackpot Ready
+Ball Save Expiring
+Mode Completed
+Extra Ball。
+</code></pre>
+<p>这些关键状态应该拥有稳定 Audio Cue。</p>
+<p>音效不只是：</p>
+<pre><code class="language-text">更有打击感。
+</code></pre>
+<p>它在承担：</p>
+<blockquote>
+<p>玩家没有视觉注意力时的规则信息通道。</p>
+</blockquote>
+<h2 id="scoring-应该拥有独立-pipeline">Scoring 应该拥有独立 Pipeline</h2><p>同一个 Shot 的最终 Score 可能来自：</p>
+<pre><code class="language-text">Base Score
+× Playfield Multiplier
+× Mode Multiplier
+× Combo Multiplier
++ Jackpot Bonus
++ Rule Modifier。
+</code></pre>
+<p>如果每个 Device 自己：</p>
+<pre><code class="language-text">score += ...
+</code></pre>
+<p>就无法解释最终数字。</p>
+<p>因此：</p>
+<p>**计分管线（即“先产生得分事实，再由统一规则逐层算出最终奖励”）**应该允许形成 Score Breakdown。</p>
+<p>例如：</p>
+<pre><code class="language-text">Left Orbit
+Base              10,000
+Mode             ×2
+Playfield        ×3
+Combo            ×1.5
+Final             90,000
+</code></pre>
+<p>这同时服务：</p>
+<ul>
+<li>玩家理解；</li>
+<li>Rule Debug；</li>
+<li>Tournament 审计；</li>
+<li>Replay。</li>
+</ul>
+<h2 id="得分真正应该引导玩家承担不同物理风险">得分真正应该引导玩家承担不同物理风险</h2><p>一个特别安全的 Ramp 和一个非常危险的 Side Shot，</p>
+<p>如果：</p>
+<pre><code class="language-text">长期期望分完全一样，
+</code></pre>
+<p>理性玩家会自然重复安全路线。</p>
+<p>因此得分不是纯奖励。</p>
+<p>它也是：</p>
+<p><strong>风险定价（即“更难、更容易掉球或更难连续命中的球路，应该拥有相应收益结构”）</strong>。</p>
+<p>风险可以来自：</p>
+<ul>
+<li>Drain Probability；</li>
+<li>Return Angle；</li>
+<li>Control Loss；</li>
+<li>Shot Difficulty；</li>
+<li>Recovery Difficulty；</li>
+<li>Ball Speed；</li>
+<li>Multiball Pressure。</li>
+</ul>
+<p>真正的风险最好来自 Telemetry。</p>
+<p>而不是设计师看着几何说：</p>
+<pre><code class="language-text">这条 Ramp 看起来比较难，
+给两倍分。
+</code></pre>
+<h2 id="combo-把单次-shot-变成-ball-flow">Combo 把单次 Shot 变成 Ball Flow</h2><p>如果玩家只需要：</p>
+<pre><code class="language-text">反复命中同一高分目标，
+</code></pre>
+<p>空间策略会很快收敛。</p>
+<p>Combo 可以要求：</p>
+<pre><code class="language-text">Left Orbit
+→
+Center Ramp
+→
+Right Orbit
+</code></pre>
+<p>在有限时间内连续成立。</p>
+<p>于是玩家不再只考虑：</p>
+<blockquote>
+<p>当前这一拍怎样打进去。</p>
+</blockquote>
+<p>而开始考虑：</p>
+<blockquote>
+<p>这次 Shot 的返回球路，会不会把我送到下一次 Shot 的良好控制位置？</p>
+</blockquote>
+<p>这就是：</p>
+<p><strong>Ball Flow（即“每一拍都同时在为下一拍创造空间和速度条件”）</strong>。</p>
+<p>弹球高级技能因此不是一系列独立反射。</p>
+<p>而是连续轨迹管理。</p>
+<h2 id="hurry-up-用时间衰减改变风险偏好">Hurry-Up 用时间衰减改变风险偏好</h2><p>Hurry-Up 可以提供：</p>
+<pre><code class="language-text">当前奖励 = 1,000,000
+</code></pre>
+<p>然后持续下降。</p>
+<p>玩家必须决定：</p>
+<pre><code class="language-text">现在立即打一个危险 Shot
+</code></pre>
+<p>还是：</p>
+<pre><code class="language-text">先把 Ball 控稳
+但奖励继续下降。
+</code></pre>
+<p>它建立了很清楚的：</p>
+<pre><code class="language-text">风险
+vs
+等待
+</code></pre>
+<p>交换。</p>
+<p>同一个 Shot 因为时间价值变化，决策意义也改变。</p>
+<h2 id="flipper-是弹球最重要的控制接口">Flipper 是弹球最重要的控制接口</h2><p>Ball 服从 Physics。</p>
+<p>但玩家的大部分技能最终都通过 Flipper 表达。</p>
+<p>因此 Flipper 不应该只是：</p>
+<pre><code class="language-text">按键
+→
+角度瞬间从 0 跳到 50°。
+</code></pre>
+<p>更适合拥有明确状态：</p>
+<pre><code class="language-text">Rest
+Upstroke
+Hold
+Return。
+</code></pre>
+<p>并定义：</p>
+<ul>
+<li>角速度；</li>
+<li>扭矩；</li>
+<li>最大角度；</li>
+<li>Return Profile；</li>
+<li>Collision Surface。</li>
+</ul>
+<p>这样高级技巧才能从同一套稳定 Physics 中自然出现。</p>
+<h2 id="高级技巧应该涌现自同一物理规则">高级技巧应该涌现自同一物理规则</h2><p>玩家逐渐可以学习：</p>
+<ul>
+<li>延迟击球；</li>
+<li>Dead Flip；</li>
+<li>Trap；</li>
+<li>Post Transfer；</li>
+<li>Backhand；</li>
+<li>Live Catch。</li>
+</ul>
+<p>真正有价值的技能不是：</p>
+<pre><code class="language-text">系统检测到高级操作
+→
+给 Ball 一个秘密辅助速度。
+</code></pre>
+<p>而是：</p>
+<blockquote>
+<p>同一套 Flipper 与 Ball Physics 足够稳定，玩家能够自己发现更高精度的输入方式。</p>
+</blockquote>
+<p>这和精密平台跳跃存在一个很好的共同原则：</p>
+<pre><code class="language-text">系统保持稳定
+→
+玩家技能增长。
+</code></pre>
+<p>但弹球增加了长期混沌性：</p>
+<p>同样输入只能保证局部行为相近，</p>
+<p>并不意味着整个 Ball 未来数十秒完全可预测。</p>
+<h2 id="pinball-physics-的目标是局部稳定而不是跨平台完美确定">Pinball Physics 的目标是局部稳定，而不是跨平台完美确定</h2><p>弹球拥有：</p>
+<ul>
+<li>高速 Ball；</li>
+<li>Spin；</li>
+<li>多次 Collision；</li>
+<li>Bumper；</li>
+<li>Flipper Contact；</li>
+<li>Nudge。</li>
+</ul>
+<p>微小浮点差异经过大量碰撞以后会不断放大。</p>
+<p>因此：</p>
+<p>**局部确定、长期混沌（即“相同局部状态应该产生可信结果，但不要求整局永远逐 bit 一致”）**比：</p>
+<pre><code class="language-text">所有平台完整 Physics Replay 一定逐帧相同
+</code></pre>
+<p>更现实。</p>
+<p>真正必须稳定的是：</p>
+<ul>
+<li>Fixed Physics Step；</li>
+<li>Collision 规则；</li>
+<li>Flipper 行为；</li>
+<li>Device Reaction；</li>
+<li>Shot Recognition；</li>
+<li>Rule State。</li>
+</ul>
+<p>只有产品明确采用确定物理或固定点时，</p>
+<p>才适合进一步承诺完整跨平台 deterministic replay。</p>
+<h2 id="rule-clock-与-physics-clock-应分开">Rule Clock 与 Physics Clock 应分开</h2><p>Physics 需要稳定 Fixed Step。</p>
+<p>Mode Timer、Hurry-Up、Ball Save 等规则时间则有自己的语义。</p>
+<p>例如：</p>
+<pre><code class="language-text">Slow Motion 表现
+</code></pre>
+<p>不应该自动让：</p>
+<pre><code class="language-text">Ball Save 多持续一倍现实时间，
+</code></pre>
+<p>除非规则明确如此。</p>
+<p>所以至少要区分：</p>
+<pre><code class="language-text">Physics Clock
+Rule Clock
+Presentation Clock。
+</code></pre>
+<p>这和任何时间敏感游戏一样：</p>
+<blockquote>
+<p>谁拥有规则时间，必须是明确合同。</p>
+</blockquote>
+<h2 id="nudge-应该影响桌面而不是直接给-ball-作弊位移">Nudge 应该影响桌面，而不是直接给 Ball 作弊位移</h2><p>现实弹球中的 Nudge 是玩家推动整个 Machine。</p>
+<p>Ball 因参考系变化受到影响。</p>
+<p>如果数字实现只是：</p>
+<pre><code class="language-text">按左
+→
+Ball.velocity.x -= 5，
+</code></pre>
+<p>结果虽然类似，却删除了 Nudge 的真正语义。</p>
+<p>更好的模型是：</p>
+<pre><code class="language-text">Nudge Intent
+→
+Table impulse / reference frame effect
+→
+所有当前 Ball 都受到一致物理影响。
+</code></pre>
+<p>这在 Multiball 中尤其重要。</p>
+<p>玩家 Nudge 的不是：</p>
+<blockquote>
+<p>某一颗最危险的球。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p>整张桌面。</p>
+</blockquote>
+<h2 id="tilt-是对额外控制权的风险成本">Tilt 是对额外控制权的风险成本</h2><p>如果 Nudge 没有成本，</p>
+<p>玩家就可以不断：</p>
+<pre><code class="language-text">修正 Ball 轨迹。
+</code></pre>
+<p>于是本来有限控制的游戏变成：</p>
+<pre><code class="language-text">隐藏的直接 Ball Movement。
+</code></pre>
+<p>Tilt 则为这种额外控制设置长期风险。</p>
+<p>可以理解为：</p>
+<pre><code class="language-text">Nudge
+→
+Tilt Meter 上升
+
+超过 Warning
+→
+警告
+
+继续滥用
+→
+Tilt
+→
+Flipper Disabled / 本球失去控制。
+</code></pre>
+<p>这是一种很典型的设计：</p>
+<blockquote>
+<p>允许玩家临时突破基础控制限制，但需要累积风险。</p>
+</blockquote>
+<h2 id="multiball-不是简单-spawn-更多-ball">Multiball 不是简单 Spawn 更多 Ball</h2><p>这是数字实现最容易做错的部分之一。</p>
+<p>Multiball 真正发生时，</p>
+<p>系统可能需要同时完成：</p>
+<pre><code class="language-text">释放 Lock Ball
+→
+Serve 新 Ball
+→
+更新 Ball Inventory
+→
+启用 Ball Save
+→
+进入新的 Rule Mode
+→
+点亮 Jackpot
+→
+切换 Lighting
+→
+切换 Music
+→
+提高信息密度。
+</code></pre>
+<p>因此：</p>
+<p>**Multiball Phase（即“从单球控制模式切换到多球高压力规则阶段”）**是一项正式规则事务。</p>
+<p>它不能只是：</p>
+<pre><code class="language-text">Instantiate(ballPrefab, 2)。
+</code></pre>
+<h2 id="multiball-首先必须维护-ball-conservation">Multiball 首先必须维护 Ball Conservation</h2><p>假设：</p>
+<pre><code class="language-text">两颗 Ball 已经被锁住
+一颗 Ball 仍在 Playfield。
+</code></pre>
+<p>启动三球 Multiball 时：</p>
+<pre><code class="language-text">Locked A
+Locked B
+Playfield C
+</code></pre>
+<p>应该成为：</p>
+<pre><code class="language-text">Playfield A
+Playfield B
+Playfield C。
+</code></pre>
+<p>不是：</p>
+<pre><code class="language-text">Destroy Locked
+→
+Spawn 3 New Balls。
+</code></pre>
+<p>Ball Identity 和 Inventory 必须继续守恒。</p>
+<p>否则 Ball Save、Drain 和 Multiball End 都会开始失去可靠输入。</p>
+<h2 id="jackpot-是-multiball-中的目标重映射">Jackpot 是 Multiball 中的目标重映射</h2><p>Multiball 一旦启动，</p>
+<p>屏幕上 Ball 数量更多，</p>
+<p>玩家认知负担显著增加。</p>
+<p>如果目标仍然只是：</p>
+<pre><code class="language-text">随便打任何东西刷分，
+</code></pre>
+<p>阶段会变得杂乱。</p>
+<p>Jackpot 可以重新明确：</p>
+<pre><code class="language-text">当前最值钱的目标在哪里。
+</code></pre>
+<p>于是高信息密度中仍然存在清楚的规则方向。</p>
+<p>Multiball 的乐趣并不是单纯：</p>
+<pre><code class="language-text">球多了。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">控制压力更高
++
+奖励上限更高
++
+目标优先级发生变化。
+</code></pre>
+<h2 id="drain-是弹球最核心的失败事实">Drain 是弹球最核心的失败事实</h2><p>Ball 进入 Drain 后，</p>
+<p>Physics 产生的事实应该明确成立：</p>
+<pre><code class="language-text">Ball Drained。
+</code></pre>
+<p>后续规则再决定：</p>
+<pre><code class="language-text">这次 Drain
+究竟意味着什么。
+</code></pre>
+<p>可能是：</p>
+<pre><code class="language-text">单球
+→
+当前 Ball 结束
+
+Multiball
+→
+只减少 Balls In Play
+
+Ball Save Active
+→
+重新 Serve
+
+最后一颗 Ball
+→
+进入 End-of-Ball。
+</code></pre>
+<p>这里再次体现同一套设计思想：</p>
+<pre><code class="language-text">物理事实
+≠
+最终规则后果。
+</code></pre>
+<h2 id="ball-save-不应该取消-drain">Ball Save 不应该取消 Drain</h2><p>如果 Ball Save 实现成：</p>
+<pre><code class="language-text">检测到 Drain
+→
+假装 Drain 没发生。
+</code></pre>
+<p>很多系统会失去真实事实。</p>
+<p>更清楚的流程是：</p>
+<pre><code class="language-text">DrainEvent
+→
+Ball 从 Playfield 离开
+→
+Ball Save Rule 发现本次可救
+→
+重新 Serve 一颗合法 Ball。
+</code></pre>
+<p>这就是：</p>
+<p><strong>失败事实与补救结果分离（即“失败真的发生了，但规则允许你恢复”）</strong>。</p>
+<p>这和很多可恢复失败设计具有相同价值：</p>
+<blockquote>
+<p>不要删除已经发生的世界事实，补救系统应该在事实之后产生新的状态转换。</p>
+</blockquote>
+<h2 id="extra-ball-与-ball-save-不是同一个东西">Extra Ball 与 Ball Save 不是同一个东西</h2><p>Ball Save：</p>
+<pre><code class="language-text">当前 Ball 早期掉落
+→
+本次失败被补发。
+</code></pre>
+<p>Extra Ball：</p>
+<pre><code class="language-text">玩家获得额外的未来 Ball 生命周期。
+</code></pre>
+<p>两者都可能让玩家：</p>
+<pre><code class="language-text">多打一颗球。
+</code></pre>
+<p>但状态意义不同。</p>
+<p>如果混成：</p>
+<pre><code class="language-text">RemainingBalls += 1，
+</code></pre>
+<p>UI、Tournament Rule 和结算都很难区分。</p>
+<p>相同表现结果不代表相同业务语义。</p>
+<h2 id="end-of-ball-必须等-ball-inventory-稳定">End-of-Ball 必须等 Ball Inventory 稳定</h2><p>一颗 Ball Drain 后，</p>
+<p>不能立即假设：</p>
+<pre><code class="language-text">当前 Ball 结束。
+</code></pre>
+<p>因为：</p>
+<ul>
+<li>Ball Save 可能准备 Serve；</li>
+<li>另一颗 Multiball Ball 仍然在 Playfield；</li>
+<li>某颗 Ball 可能处于 Kicker；</li>
+<li>Ball Inventory 仍在 Transit。</li>
+</ul>
+<p>真正进入 End-of-Ball 前，</p>
+<p>系统需要确认：</p>
+<pre><code class="language-text">当前 Rule State
++
+Ball Registry
++
+Pending Serve
+</code></pre>
+<p>都已经稳定。</p>
+<p>这是一项很典型的：</p>
+<p><strong>终态确认（即“看到失败事件以后，还要确认系统真的没有后续合法恢复动作”）</strong>。</p>
+<h2 id="end-of-ball-bonus-是一个正式结算点">End-of-Ball Bonus 是一个正式结算点</h2><p>弹球会在一颗 Ball 的生命周期中积累很多长期状态：</p>
+<ul>
+<li>Bonus；</li>
+<li>Target Progress；</li>
+<li>Multiplier；</li>
+<li>Mode Result。</li>
+</ul>
+<p>Ball 真正结束以后，</p>
+<p>可以统一计算 End-of-Ball Bonus。</p>
+<p>这里计分应该先完成：</p>
+<pre><code class="language-text">Rule Calculation
+</code></pre>
+<p>再播放：</p>
+<pre><code class="language-text">Bonus Count Animation。
+</code></pre>
+<p>不能让：</p>
+<pre><code class="language-text">UI 数字跳完
+</code></pre>
+<p>决定：</p>
+<pre><code class="language-text">实际 Score 什么时候到账。
+</code></pre>
+<p>Presentation 仍然只是权威规则结果的投影。</p>
+<h2 id="ball-search-是非常独特的失败恢复系统">Ball Search 是非常独特的失败恢复系统</h2><p>真实或高精度数字球台都会遇到一种特殊故障：</p>
+<pre><code class="language-text">系统认为 Ball 还在 Playfield
+但很久没有任何 Switch Activity。
+</code></pre>
+<p>Ball 可能：</p>
+<ul>
+<li>卡在某个装置；</li>
+<li>停在异常区域；</li>
+<li>传感器遗漏；</li>
+<li>状态账本出现偏差。</li>
+</ul>
+<p>此时系统不能无限等待。</p>
+<p>**Ball Search（即“球理论上还在，但系统长时间没有看到它活动，于是开始主动寻找或恢复”）**可以逐级尝试：</p>
+<ul>
+<li>激活 Kicker；</li>
+<li>Pulse 某些 Device；</li>
+<li>触发 Search Sequence；</li>
+<li>最后进入安全恢复。</li>
+</ul>
+<p>Ball Search 因此同时是：</p>
+<pre><code class="language-text">Gameplay Recovery
++
+Runtime Integrity Check。
+</code></pre>
+<p>这是弹球非常少见、也非常有价值的一类故障恢复设计。</p>
+<h2 id="ball-search-不应该静默生成新-ball">Ball Search 不应该静默生成新 Ball</h2><p>如果系统找不到 Ball，</p>
+<p>最简单修复是：</p>
+<pre><code class="language-text">Spawn 一个新的。
+</code></pre>
+<p>但如果旧 Ball 实际只是卡住，</p>
+<p>随后它又重新出现：</p>
+<pre><code class="language-text">Ball Conservation
+</code></pre>
+<p>立即被破坏。</p>
+<p>所以恢复策略首先应该围绕：</p>
+<pre><code class="language-text">找到现有 Ball
+恢复现有 Ball
+重新收敛 Ball Registry。
+</code></pre>
+<p>只有明确确认 Ball 丢失时，</p>
+<p>才能进入特殊恢复。</p>
+<p>这再次说明为什么 Ball Inventory 本身必须是正式状态。</p>
+<h2 id="同一张桌面应该允许长期技巧和规则共同成长">同一张桌面应该允许长期技巧和规则共同成长</h2><p>弹球设计很容易走向两个极端。</p>
+<p>第一个极端：</p>
+<pre><code class="language-text">只做纯 Physics。
+</code></pre>
+<p>结果是一张球台很快变成：</p>
+<pre><code class="language-text">尽量不掉球
+刷同一批 Bumper。
+</code></pre>
+<p>第二个极端：</p>
+<pre><code class="language-text">规则层极度复杂
+但 Ball Physics 不稳定。
+</code></pre>
+<p>玩家无法真正掌握 Shot。</p>
+<p>Mode 只剩随机触发。</p>
+<p>成熟 Pinball 的价值来自两者共同存在：</p>
+<pre><code class="language-text">Physical Skill
++
+Rule Planning。
+</code></pre>
+<p>玩家一方面学习：</p>
+<ul>
+<li>Flipper Timing；</li>
+<li>Trap；</li>
+<li>Aim；</li>
+<li>Ball Flow。</li>
+</ul>
+<p>另一方面学习：</p>
+<ul>
+<li>Mode 顺序；</li>
+<li>Multiplier；</li>
+<li>Lock；</li>
+<li>Jackpot；</li>
+<li>Risk Timing。</li>
+</ul>
+<p>真正高水平玩法来自：</p>
+<blockquote>
+<p>用已经掌握的物理技能，执行越来越复杂的规则计划。</p>
+</blockquote>
+<h2 id="同一张桌面因此拥有两种地图">同一张桌面因此拥有两种地图</h2><p>可以把 Pinball Table 理解成两层地图。</p>
+<h3 id="物理地图">物理地图</h3><p>描述：</p>
+<ul>
+<li>Ramp；</li>
+<li>Orbit；</li>
+<li>Target；</li>
+<li>Bumper；</li>
+<li>Drain；</li>
+<li>Return Lane。</li>
+</ul>
+<p>它决定：</p>
+<pre><code class="language-text">Ball 实际能怎么走。
+</code></pre>
+<h3 id="规则地图">规则地图</h3><p>描述：</p>
+<pre><code class="language-text">当前哪些 Shot 有价值
+哪些 Shot 已点亮
+哪些路线组成 Combo
+哪些目标会启动 Mode。
+</code></pre>
+<p>它决定：</p>
+<pre><code class="language-text">玩家现在为什么要走这条球路。
+</code></pre>
+<p>物理地图基本稳定。</p>
+<p>规则地图不断变化。</p>
+<p>这就是同一张桌面能够长期保持决策密度的重要原因。</p>
+<h2 id="与精密平台跳跃的边界">与精密平台跳跃的边界</h2><p>精密平台和弹球都强调：</p>
+<ul>
+<li>稳定运动；</li>
+<li>Fixed Step；</li>
+<li>高精度输入；</li>
+<li>可学习物理。</li>
+</ul>
+<p>但两者控制结构完全不同。</p>
+<p>精密平台：</p>
+<pre><code class="language-text">玩家直接控制主要角色运动。
+</code></pre>
+<p>弹球：</p>
+<pre><code class="language-text">玩家只控制有限致动器
+Ball 始终独立服从物理。
+</code></pre>
+<p>更重要的是，</p>
+<p>精密平台的关卡几何本身通常就是主要挑战。</p>
+<p>弹球还额外拥有：</p>
+<pre><code class="language-text">Switch
+→
+Shot
+→
+Mode
+→
+Scoring
+</code></pre>
+<p>完整规则解释层。</p>
+<p>因此不能把数字 Pinball 只当成：</p>
+<blockquote>
+<p>一个角色换成球的平台游戏。</p>
+</blockquote>
+<h2 id="与纯物理沙盒的边界">与纯物理沙盒的边界</h2><p>物理沙盒可能拥有：</p>
+<ul>
+<li>刚体；</li>
+<li>碰撞；</li>
+<li>力；</li>
+<li>机械装置。</li>
+</ul>
+<p>但如果缺少：</p>
+<pre><code class="language-text">离散传感器
+Shot Recognition
+Mode
+Ball Lifecycle
+长期规则状态，
+</code></pre>
+<p>它仍然不是完整 Pinball。</p>
+<p>Pinball 真正独特的地方恰恰是：</p>
+<blockquote>
+<p>高连续物理过程被稳定地翻译成离散规则语言。</p>
+</blockquote>
+<h2 id="与节奏游戏的边界">与节奏游戏的边界</h2><p>弹球同样高度依赖输入时机。</p>
+<p>但节奏游戏主要围绕：</p>
+<pre><code class="language-text">音频 / Chart Authority
+→
+输入时间误差。
+</code></pre>
+<p>弹球中的击球时机则通过 Physics：</p>
+<pre><code class="language-text">改变 Ball 未来轨迹。
+</code></pre>
+<p>没有一个固定谱面告诉玩家：</p>
+<pre><code class="language-text">第 2.341 秒应该按左 Flipper。
+</code></pre>
+<p>时机来自实时 Ball State。</p>
+<p>所以弹球更接近：</p>
+<pre><code class="language-text">连续状态预测
++
+时机控制。
+</code></pre>
+<p>而不是预先定义的时间判定。</p>
+<h2 id="与街机积分游戏的边界">与街机积分游戏的边界</h2><p>很多街机游戏都有：</p>
+<pre><code class="language-text">Score
+High Score。
+</code></pre>
+<p>但弹球的 Score 不是简单记录：</p>
+<pre><code class="language-text">活了多久
+杀了多少敌人。
+</code></pre>
+<p>它同时承担：</p>
+<ul>
+<li>风险引导；</li>
+<li>Mode Priority；</li>
+<li>Jackpot；</li>
+<li>Combo；</li>
+<li>Multiplier；</li>
+<li>Tournament Comparison。</li>
+</ul>
+<p>所以 Scoring 本身是正式规则系统。</p>
+<p>高分不是玩法外统计。</p>
+<p>它直接影响玩家当下选择哪条 Shot。</p>
+<h2 id="不能把所有弹球技巧都脚本化">不能把所有弹球技巧都脚本化</h2><p>数字游戏拥有一个危险优势：</p>
+<pre><code class="language-text">我们可以检测玩家想做什么
+然后偷偷帮他。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">检测到玩家试图打 Center Ramp
+→
+轻微修正 Ball 方向。
+</code></pre>
+<p>少量 Accessibility 可以存在。</p>
+<p>但如果高级技巧依赖隐藏磁吸，</p>
+<p>玩家最终学习的不是 Physics。</p>
+<p>而是：</p>
+<pre><code class="language-text">系统什么时候决定让我成功。
+</code></pre>
+<p>这会破坏整个 Skill Loop。</p>
+<p>辅助机制必须透明且有边界。</p>
+<h2 id="也不能为了真实复制所有机械噪声">也不能为了“真实”复制所有机械噪声</h2><p>另一极端是：</p>
+<pre><code class="language-text">真实弹球台有各种材料误差、机械抖动和长期磨损，
+数字模拟全部照搬。
+</code></pre>
+<p>如果随机噪声大到让相同局部操作失去可预测性，</p>
+<p>Skill 同样无法成立。</p>
+<p>数字 Pinball 的首要目标应该是：</p>
+<blockquote>
+<p>保留决定球路和风险的物理复杂性，同时保证局部操作足够稳定、可训练。</p>
+</blockquote>
+<p>真实感服务于技能。</p>
+<p>不是压倒技能。</p>
+<h2 id="高分记录必须绑定规则版本">高分记录必须绑定规则版本</h2><p>假设版本更新：</p>
+<pre><code class="language-text">Center Ramp
+10,000
+→
+20,000。
+</code></pre>
+<p>新旧玩家的 High Score 已经不在同一规则环境中。</p>
+<p>因此高分记录至少应该知道：</p>
+<pre><code class="language-text">TableRuleSetVersion。
+</code></pre>
+<p>Tournament 更应明确：</p>
+<ul>
+<li>Ball 数；</li>
+<li>Extra Ball 是否允许；</li>
+<li>随机 Award；</li>
+<li>Rule Version；</li>
+<li>Physics Version。</li>
+</ul>
+<p>否则：</p>
+<pre><code class="language-text">Leaderboard
+</code></pre>
+<p>会逐渐混合互不兼容的比赛条件。</p>
+<h2 id="replay-同样应该记录规则身份">Replay 同样应该记录规则身份</h2><p>完整跨平台 Physics bit-perfect Replay 未必现实。</p>
+<p>但调试和赛事系统仍然可以记录：</p>
+<ul>
+<li>Input；</li>
+<li>Ball Snapshot；</li>
+<li>Switch Event；</li>
+<li>Shot Event；</li>
+<li>Rule Event；</li>
+<li>Score Event；</li>
+<li>Rule Version；</li>
+<li>Physics Version。</li>
+</ul>
+<p>这样即使不保证所有浮点步骤完全一致，</p>
+<p>仍然可以重建：</p>
+<pre><code class="language-text">为什么这个 Jackpot 成立
+为什么这颗 Ball 被 Save
+为什么最终 Score 是这个数字。
+</code></pre>
+<p>弹球 Replay 的第一目标可以是：</p>
+<pre><code class="language-text">可审计。
+</code></pre>
+<p>而不是盲目承诺：</p>
+<pre><code class="language-text">所有平台完全逐 bit 重现。
+</code></pre>
+<h2 id="对其他游戏最值得迁移的是连续事实-离散语义分层">对其他游戏最值得迁移的是“连续事实 → 离散语义”分层</h2><p>很多游戏都会遇到类似问题。</p>
+<h3 id="赛车">赛车</h3><pre><code class="language-text">Car Transform
+→
+Crossing Sensor
+→
+Checkpoint Passed
+→
+Lap Progress。
+</code></pre>
+<h3 id="体育">体育</h3><pre><code class="language-text">Ball Contact
+→
+Controlled Possession
+→
+Pass / Shot / Goal。
+</code></pre>
+<h3 id="动作游戏">动作游戏</h3><pre><code class="language-text">Collider Contact
+→
+Hit Candidate
+→
+Valid Hit
+→
+Damage Rule。
+</code></pre>
+<h3 id="物理解谜">物理解谜</h3><pre><code class="language-text">RigidBody Contacts
+→
+Object Stable In Region
+→
+Puzzle Condition Completed。
+</code></pre>
+<p>只要游戏规则直接绑定最底层 Physics Callback，</p>
+<p>以后就很难：</p>
+<ul>
+<li>Replay；</li>
+<li>Debug；</li>
+<li>换 Physics Backend；</li>
+<li>组合规则；</li>
+<li>做可靠测试。</li>
+</ul>
+<p>一个正式语义层通常非常值得存在。</p>
+<h2 id="我的弹球物理规则分层检查表">我的弹球物理—规则分层检查表</h2><ol>
+<li>Ball 是否拥有稳定 BallId？</li>
+<li>Ball 是否不会因为进入 Ramp / Scoop / Lock 被随意 Destroy / Spawn？</li>
+<li>是否存在统一 BallRegistry？</li>
+<li>Trough、Shooter Lane、Playfield、Lock 与 Transit 是否保持 Ball Conservation？</li>
+<li>Ball Integrity Error 是否能够被主动检测？</li>
+<li>Physics 是否只决定 Ball Motion，而不直接计分？</li>
+<li>Device Physical Reaction 与 Rule Event 是否分离？</li>
+<li>Switch 是否拥有独立 debounce / direction / state 语义？</li>
+<li>Physics Contact 是否不会被直接当成正式 Shot？</li>
+<li>Shot Recognition 是否支持 Sequence？</li>
+<li>Shot 是否考虑 Direction？</li>
+<li>Shot 是否拥有 Time Window？</li>
+<li>复杂 Shot 是否能够绑定同一个 BallId？</li>
+<li>Reverse Shot 是否有明确语义？</li>
+<li>Rule Engine 是否只消费稳定语义事件？</li>
+<li>一个 Shot 是否允许被多个 Rule Consumer 合法解释？</li>
+<li>重复奖励是否拥有 EventId / Scope / 幂等保护？</li>
+<li>Mode Qualification 与 Mode Start 是否分离？</li>
+<li>多个 Mode 是否支持合法并行与冲突规则？</li>
+<li>Mode 是否能够重新解释同一物理桌面的目标价值？</li>
+<li>Lighting 是否来自 Rule State，而不是独立视觉脚本？</li>
+<li>多个 Light Request 是否拥有 Priority Arbitration？</li>
+<li>Display 与 Audio 是否同样表达 Rule State？</li>
+<li>Scoring 是否拥有独立 Pipeline？</li>
+<li>Score 是否可以提供 Breakdown？</li>
+<li>Shot Reward 是否与实际风险大致匹配？</li>
+<li>Combo 是否鼓励连续 Ball Flow，而不是重复单点刷分？</li>
+<li>Hurry-Up 是否形成清楚的风险—时间交换？</li>
+<li>Flipper 是否是连续物理致动器，而不是角度 Teleport？</li>
+<li>高级技巧是否来自同一稳定 Physics，而不是隐藏 Aim Assist？</li>
+<li>Nudge 是否作用于桌面参考系而不是单独作弊修改某颗 Ball？</li>
+<li>Tilt 是否为额外控制权建立累积风险？</li>
+<li>Multiball 是否是一项完整 Phase Transition？</li>
+<li>启动 Multiball 时 Ball Inventory 是否仍然守恒？</li>
+<li>Jackpot 是否在高 Ball 密度下提供明确目标重映射？</li>
+<li>Drain 是否是不可否认的物理事实？</li>
+<li>Ball Save 是否在 Drain 之后产生恢复，而不是删除 Drain 事实？</li>
+<li>Extra Ball 与 Ball Save 是否拥有不同业务语义？</li>
+<li>End-of-Ball 是否等待 Ball Inventory 真正稳定？</li>
+<li>Bonus 是否由规则先结算，动画只负责展示？</li>
+<li>Ball Search 是否同时承担 Stuck Recovery 与 Integrity Check？</li>
+<li>Ball Search 是否避免直接静默 Spawn 新球？</li>
+<li>Physics Clock、Rule Clock 与 Presentation Clock 是否分离？</li>
+<li>Fixed Physics Step 是否不会受渲染 FPS 直接影响？</li>
+<li>高速 Ball 是否拥有足够可靠的连续碰撞策略？</li>
+<li>Replay 是否明确自身确定性承诺？</li>
+<li>High Score 是否绑定 Rule / Physics Version？</li>
+<li>Tournament Mode 是否固定关键随机与长期特权规则？</li>
+<li>Debugger 是否能沿 <code>Contact → Switch → Shot → Rule → Score</code> 追踪完整因果链？</li>
+<li>当前实现是真正的 Pinball Rule System，还是只在 Physics Callback 里不断增加 <code>if</code>？</li>
+</ol>
+<p>弹球最容易被看见的是：</p>
+<pre><code class="language-text">Ball
+Flipper
+Ramp
+Bumper
+Jackpot。
+</code></pre>
+<p>但真正让这套系统能够长期扩展的，不是增加更多碰撞体。</p>
+<p>而是始终保持几个事实互不冒充。</p>
+<p>Ball 真实撞到了什么，</p>
+<p>属于 Physics。</p>
+<p>哪个 Sensor 被合法触发，</p>
+<p>属于 Switch。</p>
+<p>一串 Sensor 是否构成了完整 Left Orbit，</p>
+<p>属于 Shot Recognition。</p>
+<p>当前 Left Orbit 是普通得分、Mode 目标还是 Jackpot，</p>
+<p>属于 Rule Engine。</p>
+<p>最终需要闪哪盏灯、播放什么声音，</p>
+<p>属于 Presentation。</p>
+<p>同一颗 Ball 可以高速、连续、甚至长期混沌地运动。</p>
+<p>规则系统却仍然能够得到稳定的离散语言：</p>
+<pre><code class="language-text">LeftOrbitCompleted
+ModeStarted
+JackpotQualified
+BallDrained。
+</code></pre>
+<p>正因为这条转换链存在，</p>
+<p>一张固定不变的物理桌面才能不断产生新的规则空间。</p>
+<p>玩家也才能同时学习两件事：</p>
+<pre><code class="language-text">怎样控制 Ball
+</code></pre>
+<p>以及：</p>
+<pre><code class="language-text">现在最值得把 Ball 打到哪里。
+</code></pre>
+<p>这就是物理弹球最值得迁移的设计思想：</p>
+<blockquote>
+<p><strong>不要让复杂游戏规则直接依赖连续物理细节；先把物理事实转换成稳定的领域语义，再让规则系统解释这些语义。</strong></p>
+</blockquote>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>物理事实—规则语义分层</td>
+<td>球只负责真的撞到了什么，规则再决定这件事意味着什么</td>
+</tr>
+<tr>
+<td>致动器</td>
+<td>玩家不能搬动球，只能改变会影响球的物理装置</td>
+</tr>
+<tr>
+<td>Ball Identity</td>
+<td>从发球到掉球，这始终是同一颗球</td>
+</tr>
+<tr>
+<td>Ball Conservation</td>
+<td>球不会因为装置切换偷偷多一颗或少一颗</td>
+</tr>
+<tr>
+<td>装置事实</td>
+<td>机械结构发生了什么</td>
+</tr>
+<tr>
+<td>规则事件</td>
+<td>游戏规则应该知道什么</td>
+</tr>
+<tr>
+<td>Switch Matrix</td>
+<td>把连续球路转换成稳定开关事实</td>
+</tr>
+<tr>
+<td>Shot Recognition</td>
+<td>从一串局部开关事件里确认玩家真的完成了一条正式球路</td>
+</tr>
+<tr>
+<td>域语义事件</td>
+<td>把底层实现细节压缩成玩法真正关心的事实</td>
+</tr>
+<tr>
+<td>规则多重解释</td>
+<td>一个真实事件可以同时进入多个规则，但只能由各自状态决定意义</td>
+</tr>
+<tr>
+<td>Mode</td>
+<td>当前这段时间，这张桌面要求你完成什么</td>
+</tr>
+<tr>
+<td>规则信息投影</td>
+<td>把复杂状态压缩成玩家一眼能读懂的桌面信号</td>
+</tr>
+<tr>
+<td>计分管线</td>
+<td>先产生得分事实，再由统一规则逐层算出最终奖励</td>
+</tr>
+<tr>
+<td>风险定价</td>
+<td>更难、更容易掉球或更难连续命中的球路，应该拥有相应收益结构</td>
+</tr>
+<tr>
+<td>Ball Flow</td>
+<td>每一拍都同时在为下一拍创造空间和速度条件</td>
+</tr>
+<tr>
+<td>局部确定、长期混沌</td>
+<td>相同局部状态应该产生可信结果，但不要求整局永远逐 bit 一致</td>
+</tr>
+<tr>
+<td>Multiball Phase</td>
+<td>从单球控制模式切换到多球高压力规则阶段</td>
+</tr>
+<tr>
+<td>失败事实与补救结果分离</td>
+<td>失败真的发生了，但规则允许你恢复</td>
+</tr>
+<tr>
+<td>终态确认</td>
+<td>看到失败事件以后，还要确认系统真的没有后续合法恢复动作</td>
+</tr>
+<tr>
+<td>Ball Search</td>
+<td>球理论上还在，但系统长时间没有看到它活动，于是开始主动寻找或恢复</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><code>game-designs/物理弹球游戏设计范式.md</code></li>
+<li><code>game-designs/精密平台跳跃游戏设计范式.md</code></li>
+<li><code>blogs/游戏系统的共同语言/03-音游格斗与竞速的权威时间源.md</code></li>
+<li><code>blogs/游戏系统的共同语言/17-运动可信度.md</code></li>
+<li><code>blogs/README.md</code></li>
+<li><code>blogs/publication.v1.json</code></li>
+</ul>
+<p>本文是对物理弹球 / Pinball / Pinball Table Simulation 设计范式的个人综述。</p>
+<p>文中的 BallRegistry、Ball Conservation、Switch Matrix、Shot Recognition、Mode Stack、Scoring Pipeline、Ball Search 和 Rule Clock 等属于用于设计数字 Pinball 的工程化模型，并不表示所有物理弹球作品或所有真实机械球台都使用完全相同的状态结构、Switch 编码、计分规则或物理实现。</p>
+<p>尤其需要注意：</p>
+<ul>
+<li>“Physics 与 Rule Engine 分离”是一项职责边界原则，不表示 Physics Layer 不能产生 Device-specific Contact Data；</li>
+<li>“Ball 必须保持稳定身份”用于维护 Multiball、Lock、Drain 和 Recovery 的一致性，具体实现不一定必须使用显式整数 <code>BallId</code>；</li>
+<li>“局部确定、长期混沌”用于强调可学习的物理手感，不表示数字弹球不能采用完全确定的固定点 Physics；</li>
+<li>“Nudge 应影响桌面参考系”是对真实弹球控制语义的工程抽象，不要求每个数字产品完整模拟机器 Cabinet 的刚体结构；</li>
+<li>“Ball Save 不取消 Drain 事实”强调事件语义分层，具体表现可以瞬间重新发球，也可以采用其他合法恢复方式；</li>
+<li>本文中的 Tournament、Replay 和 High Score 版本治理属于适合竞技/长期榜单产品的扩展，不是所有单机 Pinball 的必要基础设施。</li>
+</ul>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="growth-function-replacement.html"><span>同属「游戏系统的共同语言」</span><strong>增长函数替换：增量游戏的自动化、Prestige 与抽象阶梯</strong><small>增量游戏怎样让持续增长的数字长期保持新鲜感，并让已经被玩家掌握的旧玩法逐渐自动化、压缩和退居后台，而不是无限重复同一套购买与等待？</small></a><a href="precision-platformer-movement-trust.html"><span>同属「游戏系统的共同语言」</span><strong>运动可信度：精密平台跳跃的输入宽容、可达包络与快速重试</strong><small>精密平台跳跃怎样在保持高执行要求的同时，让玩家确信每一次成功和失败都来自可以理解、学习和重复的运动规则？</small></a><a href="mmorpg-persistent-identity.html"><span>同属「游戏系统的共同语言」</span><strong>持久身份与临时运行时：MMORPG 的角色会话、世界分片与跨区事务</strong><small>玩家感知中的“同一个角色、同一个世界”需要跨越登录会话、网络断线、服务器进程、Zone、Shard 和 Instance 长期成立，运行时应该怎样拆分这些身份与生命周期？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/engineering.html">Engineering</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/brand.html">Brand</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

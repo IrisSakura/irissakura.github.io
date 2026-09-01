@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/series/cocos-engine-source-research.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="系列：从 Cocos Engine 源码理解引擎设计 | IrisSakura">
+    <meta property="og:description" content="沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/series/cocos-engine-source-research.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-series-cocos-engine-source-research.png">
+    <meta property="og:image:alt" content="系列：从 Cocos Engine 源码理解引擎设计 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="系列：从 Cocos Engine 源码理解引擎设计 | IrisSakura">
+    <meta name="twitter:description" content="沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-series-cocos-engine-source-research.png">
+    <meta name="twitter:image:alt" content="系列：从 Cocos Engine 源码理解引擎设计 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"系列：从 Cocos Engine 源码理解引擎设计 | IrisSakura","description":"沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。","url":"https://irissakura.github.io/pages/blog/series/cocos-engine-source-research.html"}</script>
+    <!-- site-meta:end -->
+    <title>系列：从 Cocos Engine 源码理解引擎设计 | IrisSakura</title>
+    <link rel="stylesheet" href="../../../style/main.css">
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../../index.html" class="nav-link">首页</a>
+            <a href="../../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../../pages/journal.html" class="nav-link active" aria-current="page">Journal</a>
+            <a href="../../../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-main blog-collection-main">
+    <header class="blog-collection-hero">
+        <div class="container">
+            <a class="journal-back" href="../../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回全部文章</a>
+            <p class="section-kicker">文章系列 · 1 篇正式文章</p>
+            <h1>从 Cocos Engine 源码理解引擎设计</h1>
+            <p>沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。</p>
+        </div>
+    </header>
+    <section class="blog-list-section">
+        <div class="container blog-card-grid"><article class="blog-card">
+                    <p class="project-status">从 Cocos Engine 源码理解引擎设计 · 2026-08-31</p>
+                    <h2>双运行时身份收敛：Cocos JSB 的对象映射、引用保活与清理边界</h2>
+                    <p>Cocos Native 同时拥有 JavaScript / TypeScript 对象世界和 C++ 对象世界时，同一个 Node、Asset 或引擎对象怎样保持稳定身份，又怎样保证任意一侧释放以后不会留下悬空 Wrapper、错误保活或重复对象？</p>
+                    <a class="note-link" href="../cocos-jsb-dual-runtime-identity-lifecycle.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+        </div>
+    </section>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../../pages/portfolio.html">作品</a>
+                <a href="../../../pages/engineering.html">Engineering</a>
+                <a href="../../../pages/framework.html">Framework</a>
+                <a href="../../../pages/journal.html">Journal</a>
+                <a href="../../../pages/brand.html">Brand</a>
+                <a href="../../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../../dist/site.js" type="module"></script>
+</body>
+</html>

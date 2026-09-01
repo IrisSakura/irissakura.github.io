@@ -32,7 +32,11 @@ test('static search index covers only approved public content with useful facets
   assert.equal(generated.totalCount, source.audits.length + source.gameDesigns.length + publishedBlogs.length);
   assert.deepEqual(generated.facets.types.map((entry) => entry.id), ['article', 'game-design', 'framework-audit']);
   assert.equal(generated.facets.series.length, discovery.series.length);
-  assert.deepEqual(generated.facets.engines.map((entry) => entry.id), ['godot', 'unity', 'unreal-engine']);
+  assert.deepEqual(generated.facets.engines.map((entry) => entry.id), ['cocos-engine', 'godot', 'unity', 'unreal-engine']);
+  assert.deepEqual(
+    generated.entries.find((entry) => entry.id === 'article:cocos-jsb-dual-runtime-identity-lifecycle')?.engines,
+    ['cocos-engine']
+  );
 
   const serialized = JSON.stringify(generated);
   for (const forbidden of ['sourceCommit', 'contentPath', 'sha256', '/Users/', 'sakura-design-journal.git']) {

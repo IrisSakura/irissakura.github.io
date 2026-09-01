@@ -1,14 +1,28 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "d48056a7402cf87f88811ee1ba2baa9a5df321a4",
-  "generatedAt": "2026-08-30T00:03:31+08:00",
+  "sourceCommit": "43491a8d43b9bbfa1239f48f7ba0753d81410170",
+  "generatedAt": "2026-09-01T11:29:12+08:00",
   "summary": {
-    "auditCount": 53,
-    "blogCount": 45,
-    "gameDesignCount": 62
+    "auditCount": 55,
+    "blogCount": 47,
+    "gameDesignCount": 65
   },
-  "gameDesignCatalogDigest": "cfe51d073c061a4883a25dac87ce7ee1ad87c33affd76006d6c98766c74f1349",
+  "gameDesignCatalogDigest": "9cb017a33e43e816b26dd8e17bde3f55df8d4cdc32fa708aa8e0a5531a5b48f6",
   "audits": [
+    {
+      "id": "audit-2026-08-31",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "自上一轮审计基准： 之后，main 前进了三个提交： 本轮不是新的 Package 横向扩张，而是三个已有能力面的进一步收敛： 当前仓库仍明确处于： 主目标仍然是： 而发布状态仍是： 当前也没有 Pending Approval、Active 或 Blocked 工作，默认下一动作仍是 route-only。 因此： 当前没有任何理由将主线转为 Candidate / RC / Release。 但与上一轮相比，优先级需要重新调整。 最重要的变化是： GAS → Rendering 的过重 Package Dependency 已经真正关闭。 过去： 现在 GAS Package 只硬依赖： Hitbox 和 Rendering 已转为条件 Bridge。 这使当前内部 Package Dependency Edge：",
+      "updatedAt": "2026-08-31",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-08-30",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "自上一轮 5d5eafc18... 之后，main 前进了 4 个提交： 其中前两项属于治理和文档链修复；最新 HEAD 本身只是静态架构审计文档。真正值得重新评估项目方向的是 Semantic Combat Runtime V2。 当前仓库仍正确地声明： 而且： 因此主线仍然不应该切换到版本交付。 不过本轮优先级需要发生一次明显调整。 过去几轮最值得优先处理的是： 这些问题仍然存在。 但最新 Semantic Combat V2 引入了一套号称“有界”的新 Runtime Contract，而代码中仍有两个非常明确的生命周期资源上界缺口。同时 Semantic Combat 目前没有任何真实 Package Consumer，却已经达到 30 个 asmdef。 所以当前第一主线应调整为： ---",
+      "updatedAt": "2026-08-30",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-29",
       "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
@@ -382,6 +396,51 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "musou",
+      "title": "无双式军团割草动作 / Musou / Warriors-like Battlefield Action",
+      "summary": "一骑当千、军团前线与“清兵—斩将—夺点—救援—推进—决战”的双尺度战场循环",
+      "tags": [
+        "battlefield",
+        "crowd-combat",
+        "musou",
+        "simulation-lod"
+      ],
+      "updatedAt": "2026-09-01",
+      "sha256": "74f88a9caa052c79d13428c82509efd12ba455f1cebd432ea4ed7c6070f6e15b",
+      "contentSha256": "926ac58aa5e27c0cb7b3c1d367bf2ef83fb5b4e035829571b1cbc419964f4a3b",
+      "bytes": 91504,
+      "contentPath": "content/game-designs/musou.md"
+    },
+    {
+      "id": "pinball",
+      "title": "物理弹球 / Pinball / Pinball Table Simulation",
+      "summary": "玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…",
+      "tags": [
+        "pinball"
+      ],
+      "updatedAt": "2026-08-31",
+      "sha256": "af4c67ccf8fe7e6fe0896e310b7514734c7b19c8f7f9f527cfbfa1bb40d49752",
+      "contentSha256": "810d07309b1c8e21c86bafc1a965a7ece708662a025abc76b2da2f2a79973ba8",
+      "bytes": 98272,
+      "contentPath": "content/game-designs/pinball.md"
+    },
+    {
+      "id": "point-and-click-adventure",
+      "title": "点击式图形冒险 / Point-and-Click Adventure / Inventory Puzzle Adventure",
+      "summary": "世界被组织成一组具有持久状态的 Scene，Scene 中的 Character、Hotspot、Container、Exit 和 World Object 向玩家暴露有限但语义明确的 Interaction；玩家通过观察获得线索，通过调查和交互获得 Item，再把 Item、Hotspot、Knowledge 和 World State 组合成新的合法…",
+      "tags": [
+        "adventure",
+        "inventory",
+        "point-and-click",
+        "puzzle"
+      ],
+      "updatedAt": "2026-08-31",
+      "sha256": "c0e4295b9fa8c81b5b9f78b222cfc3361fae732b37659ab885f80800ff530c59",
+      "contentSha256": "c9b79dcab183d4888377a823107857c41a56f7d8af5a6eccc3b05e871586e5a6",
+      "bytes": 84418,
+      "contentPath": "content/game-designs/point-and-click-adventure.md"
+    },
     {
       "id": "crpg",
       "title": "传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG",
@@ -1310,6 +1369,39 @@
     }
   ],
   "blogs": [
+    {
+      "id": "cocos-jsb-dual-runtime-identity-lifecycle",
+      "title": "双运行时身份收敛：Cocos JSB 的对象映射、引用保活与清理边界",
+      "summary": "Cocos Native 同时拥有 JavaScript / TypeScript 对象世界和 C++ 对象世界时，同一个 Node、Asset 或引擎对象怎样保持稳定身份，又怎样保证任意一侧释放以后不会留下悬空 Wrapper、错误保活或重复对象？",
+      "series": "从 Cocos Engine 源码理解引擎设计",
+      "tags": [
+        "bindings",
+        "cocos-engine",
+        "dual-runtime",
+        "jsb",
+        "object-lifecycle"
+      ],
+      "updatedAt": "2026-08-31",
+      "sha256": "fc74be7d9e7b728fa609ae6c6a00494608a99fc5ebb93f63847e1b834681d24b",
+      "bytes": 33558,
+      "contentPath": "content/blogs/cocos-jsb-dual-runtime-identity-lifecycle.md"
+    },
+    {
+      "id": "pinball-physics-rule-semantics",
+      "title": "物理事实到规则语义：弹球中的 Switch、Shot Recognition 与模式状态机",
+      "summary": "一个高速、连续、长期不可完全预测的球体运动过程，怎样被转换成稳定、可学习、可审计的 Shot、Mode、Combo 和计分规则，同时又不让游戏规则反过来破坏真实物理结果？",
+      "series": "游戏系统的共同语言",
+      "tags": [
+        "physics",
+        "pinball",
+        "rule-engine",
+        "shot-recognition"
+      ],
+      "updatedAt": "2026-08-31",
+      "sha256": "6328ca4ee76f253e97f8cc22e6a31e3f7251cbbaac88eb54482ffd353e531cdc",
+      "bytes": 40144,
+      "contentPath": "content/blogs/pinball-physics-rule-semantics.md"
+    },
     {
       "id": "growth-function-replacement",
       "title": "增长函数替换：增量游戏的自动化、Prestige 与抽象阶梯",

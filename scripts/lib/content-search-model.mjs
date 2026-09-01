@@ -4,6 +4,7 @@ const TYPE_DEFINITIONS = [
   { id: 'framework-audit', label: '框架审计' }
 ];
 const ENGINE_DEFINITIONS = [
+  { id: 'cocos-engine', label: 'Cocos Engine', tags: new Set(['cocos-engine']) },
   { id: 'godot', label: 'Godot', tags: new Set(['godot']) },
   { id: 'unity', label: 'Unity', tags: new Set(['unity']) },
   { id: 'unreal-engine', label: 'Unreal Engine', tags: new Set(['unreal', 'unreal-engine', 'ue6']) }

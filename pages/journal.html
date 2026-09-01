@@ -115,9 +115,9 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>62</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>53</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>45</strong><span>完整博客</span><small>45 篇已公开</small></div>
+                <div class="journal-metric"><strong>65</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>55</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric journal-metric-with-note"><strong>47</strong><span>完整博客</span><small>47 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
         </div>
@@ -158,12 +158,12 @@
     </section>
     <section class="journal-section content-search" id="content-search" data-content-search data-search-index="../data/search-index.json" data-search-limit="12" data-page-index-target>
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 160 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 167 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
             <form class="content-search-controls" role="search" aria-labelledby="content-search-title" data-content-search-form>
                 <label class="content-search-query" for="content-search-query"><span>关键词</span><input id="content-search-query" name="query" type="search" autocomplete="off" placeholder="搜索系统、玩法、引擎或主题" data-content-search-query></label>
-                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（160）</option><option value="article">正式文章（45）</option><option value="game-design">游戏设计（62）</option><option value="framework-audit">框架审计（53）</option></select></label>
-                <label><span>文章系列</span><select name="series" data-content-search-series><option value="">全部系列</option><option value="游戏系统的共同语言">游戏系统的共同语言（18）</option><option value="大型 Unity 框架的治理复盘">大型 Unity 框架的治理复盘（3）</option><option value="Sakura Framework 工程实践">Sakura Framework 工程实践（13）</option><option value="从 Unreal Engine 源码理解引擎设计">从 Unreal Engine 源码理解引擎设计（8）</option><option value="从 Godot 源码理解引擎设计">从 Godot 源码理解引擎设计（3）</option></select></label>
-                <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option><option value="godot">Godot（3）</option><option value="unity">Unity（4）</option><option value="unreal-engine">Unreal Engine（8）</option></select></label>
+                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（167）</option><option value="article">正式文章（47）</option><option value="game-design">游戏设计（65）</option><option value="framework-audit">框架审计（55）</option></select></label>
+                <label><span>文章系列</span><select name="series" data-content-search-series><option value="">全部系列</option><option value="游戏系统的共同语言">游戏系统的共同语言（19）</option><option value="大型 Unity 框架的治理复盘">大型 Unity 框架的治理复盘（3）</option><option value="Sakura Framework 工程实践">Sakura Framework 工程实践（13）</option><option value="从 Unreal Engine 源码理解引擎设计">从 Unreal Engine 源码理解引擎设计（8）</option><option value="从 Godot 源码理解引擎设计">从 Godot 源码理解引擎设计（3）</option><option value="从 Cocos Engine 源码理解引擎设计">从 Cocos Engine 源码理解引擎设计（1）</option></select></label>
+                <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option><option value="cocos-engine">Cocos Engine（1）</option><option value="godot">Godot（3）</option><option value="unity">Unity（4）</option><option value="unreal-engine">Unreal Engine（8）</option></select></label>
                 <button class="btn btn-secondary" type="reset" data-content-search-reset>清除筛选</button>
             </form>
             <p class="content-search-status" id="content-search-status" aria-live="polite" data-content-search-status>正在加载公开索引…</p>
@@ -234,6 +234,16 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-31</p>
+                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>自上一轮审计基准： 之后，main 前进了三个提交： 本轮不是新的 Package 横向扩张，而是三个已有能力面的进一步收敛： 当前仓库仍明确处于： 主目标仍然是： 而发布状态仍是： 当前也没有 Pending Approval、Active 或 Blocked 工作，默认下一动作仍是 route-only。 因此： 当前没有任何理由将主线转为 Candidate / RC / Release。 但与上一轮相比，优先级需要重新调整。 最重要的变化是： GAS → Rendering 的过重 Package Dependency 已经真正关闭。 过去： 现在 GAS Package 只硬依赖： Hitbox 和 Rendering 已转为条件 Bridge。 这使当前内部 Package Dependency Edge：</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-08-30</p>
+                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>自上一轮 5d5eafc18... 之后，main 前进了 4 个提交： 其中前两项属于治理和文档链修复；最新 HEAD 本身只是静态架构审计文档。真正值得重新评估项目方向的是 Semantic Combat Runtime V2。 当前仓库仍正确地声明： 而且： 因此主线仍然不应该切换到版本交付。 不过本轮优先级需要发生一次明显调整。 过去几轮最值得优先处理的是： 这些问题仍然存在。 但最新 Semantic Combat V2 引入了一套号称“有界”的新 Runtime Contract，而代码中仍有两个非常明确的生命周期资源上界缺口。同时 Semantic Combat 目前没有任何真实 Package Consumer，却已经达到 30 个 asmdef。 所以当前第一主线应调整为： ---</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-29</p>
                     <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一审计基线 337bb3ed...，main 只新增了 1 个提交，但这是一次非常典型、且值得继续采用的架构收敛： 这次迁移的价值并不是“Voxel Sandbox 多了一个功能”，而是修复了： 这一错误 Ownership。 仓库同时新增了一个严格的： 它会直接扫描 foundation、runtime-service、gameplay-kernel 的原始 package.json 和全部仓库 asmdef，包括 Runtime、Editor、Tests、Generated，并同时解析普通 Assembly Name 与 GUID 引用；allowlist、versionDefines、defineConstraints、历史 exception 均不能掩盖真实反向依赖。 本次迁移前： 迁移后： 实际迁移 17 项文件，16 项内容字节保持不变，测试源码只改变 Prefab fixture…</p>
@@ -253,25 +263,36 @@
                     <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一轮基线 08a24dc4...，main 又前进了 7 个提交。真正影响工程状态的不是最新的品牌文档提交，而是三条能力收敛线：Pooling Ownership/Lifecycle 二次闭环、Event Diagnostics Surface、Editor Tools Installer 异步边界收敛。最新 Brand V4 只是把 “Frame · Power · Extend” 与真实产品证据、文档入口绑定起来，并明确品牌表达不能替代真实 Supported/Runner 状态，不改变 Package、API 或发布身份。 最重要的状态变化是：上一轮 Pooling 的 55 个失败已经关闭。当前 Pooling focused EditMode 已达到 139/139，Stable API fresh compare 为 0/0/0/0；46 包 affected closure 为…</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-24</p>
-                    <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮最重要的结论发生了变化。 前几轮仓库的主要风险是： 而当前实际 main 已经明显进入： 当前仓库仍明确声明： 根 README 同样明确写明：当前发布准备未启用，不应自行恢复 RC、Tag、Release、Evidence Backlog 或 Deferred 工作。 因此战略主线仍然正确。 但本轮出现了一个比前几轮更值得优先处理的问题： Supported Runtime Foundation 中的 Pooling 已经有大规模 Ownership/Lifecycle 重构进入 main，但对应工作仍然是 approved / deferred / not-run，并且当前另一个 Editor Tools 工作的 affected Unity lane 中，Framework.Pooling.Tests 实际出现了 55 个失败。</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-21</p>
-                    <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
-                    <p>当前仓库仍然明确处于： 主目标仍是： 而不是： 当前生成 Work Status 明确记录： 并且 evidenceBacklog 与 deferred 明确禁止自动恢复。 这一战略状态与当前项目阶段是匹配的，应继续维持。 ---</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library" data-page-index-target>
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>62 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>65 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-musou">
+                    <p class="project-status">游戏设计范式 · 2026-09-01</p>
+                    <h3>无双式军团割草动作 / Musou / Warriors-like Battlefield Action</h3>
+                    <p>一骑当千、军团前线与“清兵—斩将—夺点—救援—推进—决战”的双尺度战场循环</p>
+                    <div class="note-tags"><span>battlefield</span><span>crowd-combat</span><span>musou</span><span>simulation-lod</span></div>
+                    <a class="note-link" href="journal/musou.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="design-summary-card" id="design-pinball">
+                    <p class="project-status">游戏设计范式 · 2026-08-31</p>
+                    <h3>物理弹球 / Pinball / Pinball Table Simulation</h3>
+                    <p>玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…</p>
+                    <div class="note-tags"><span>pinball</span></div>
+                    <a class="note-link" href="journal/pinball.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="design-summary-card" id="design-point-and-click-adventure">
+                    <p class="project-status">游戏设计范式 · 2026-08-31</p>
+                    <h3>点击式图形冒险 / Point-and-Click Adventure / Inventory Puzzle Adventure</h3>
+                    <p>世界被组织成一组具有持久状态的 Scene，Scene 中的 Character、Hotspot、Container、Exit 和 World Object 向玩家暴露有限但语义明确的 Interaction；玩家通过观察获得线索，通过调查和交互获得 Item，再把 Item、Hotspot、Knowledge 和 World State 组合成新的合法…</p>
+                    <div class="note-tags"><span>adventure</span><span>inventory</span><span>point-and-click</span><span>puzzle</span></div>
+                    <a class="note-link" href="journal/point-and-click-adventure.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-crpg">
                     <p class="project-status">游戏设计范式 · 2026-08-30</p>
                     <h3>传统 CRPG / Party-Based Computer Role-Playing Game / Choice-Reactivity RPG</h3>

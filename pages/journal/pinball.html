@@ -1,0 +1,5177 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/pinball.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="物理弹球 / Pinball / Pinball Table Simulation | IrisSakura Journal">
+    <meta property="og:description" content="玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/pinball.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-pinball.png">
+    <meta property="og:image:alt" content="物理弹球 / Pinball / Pinball Table Simulation | IrisSakura Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="物理弹球 / Pinball / Pinball Table Simulation | IrisSakura Journal">
+    <meta name="twitter:description" content="玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-pinball.png">
+    <meta name="twitter:image:alt" content="物理弹球 / Pinball / Pinball Table Simulation | IrisSakura Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"物理弹球 / Pinball / Pinball Table Simulation | IrisSakura Journal","description":"玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…","url":"https://irissakura.github.io/pages/journal/pinball.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"物理弹球 / Pinball / Pinball Table Simulation","image":"https://irissakura.github.io/assets/social/pages-journal-pinball.png","dateModified":"2026-08-31","about":["pinball"]}</script>
+    <!-- site-meta:end -->
+    <title>物理弹球 / Pinball / Pinball Table Simulation | IrisSakura Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">Journal</a>
+            <a href="../../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-pinball"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-08-31</p><h1>物理弹球 / Pinball / Pinball Table Simulation</h1><p>玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离…</p><div class="note-tags"><span>pinball</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>pinball</code></p>
+</blockquote>
+<h2 id="共享高速球装置状态机与瞄准击球识别球路推进模式风险增益掉球结算的物理规则循环">共享高速球、装置状态机与“瞄准—击球—识别球路—推进模式—风险增益—掉球结算”的物理规则循环</h2><hr />
+<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 Journal 的 <code>game-designs</code> 权威目录。当前生成的 <code>README.md</code> 标记 <strong>Entries: 62</strong>，目录已经覆盖足球比赛模拟、精密平台跳跃、节奏游戏、赛车、弹幕射击、增量游戏、工厂自动化、传统 Roguelike、CRPG 等大量实时或系统型品类。</p>
+<p>进一步核对当前 <code>route-metadata.v1.json</code>，并针对：</p>
+<ul>
+<li><code>pinball</code></li>
+</ul>
+<br />
+- `弹球`
+<br />
+- `pachinko`
+<br /><p>进行防重检索，当前没有独立的 Pinball / 物理弹球条目。当前索引中已有的精密平台跳跃主要研究稳定角色运动、Jump Buffer、Coyote Time、碰撞宽容和运动包络；节奏游戏则围绕音频权威时钟、谱面事件和确定性时间判定，两者都与弹球的高精度输入存在局部工程交集，但没有覆盖弹球独有的“高速自由球体 + 玩家有限致动器 + 机械装置状态 + 多层规则模式”结构。</p>
+<p>因此本期新增类型选择：</p>
+<p><strong>物理弹球 / Pinball / Pinball Table Simulation。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li>Pinball；</li>
+</ul>
+<br />
+- Digital Pinball；
+<br />
+- Pinball Simulation；
+<br />
+- Arcade Pinball；
+<br />
+- Video Pinball；
+<br />
+- 物理弹球；
+<br />
+- 数字弹球；
+<br />
+- 街机弹球；
+<br />
+- 弹球台游戏。
+<br /><p>这里讨论的不是 RPG 中附带的弹珠小游戏，也不是单纯把一个球通过物理系统弹来弹去，而是一种能够依靠一张或多张 Pinball Table 独立支撑完整产品的宏观游戏类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>玩家不能直接操纵主游戏对象 Ball，而只能通过 Flipper、Plunger、Nudge 等极少数致动器间接改变一个持续服从高速物理模拟的共享球体。Ball 在桌面几何、斜坡、弹簧、碰撞器、轨道、磁铁、锁球装置和排水口之间连续运动；物理层只负责回答“球实际碰到了什么以及接下来如何运动”，Switch / Sensor 层再把这些物理事实转换成可审计的离散事件，Shot Recognizer进一步把一串局部开关事件识别为“完成左轨道”“命中三联靶”“进入中央Scoop”等具有游戏语义的球路。Rule Engine依据这些Shot、Switch和Ball事件推进Mode、Combo、Multiplier、Lock、Multiball、Jackpot和Wizard Mode等规则状态，最终把同一张物理桌面持续重新解释为不同的即时目标和风险收益结构。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>发球<br />
+→ 读取灯光和当前规则目标<br />
+→ 判断下一Shot<br />
+→ 用Flipper时机改变Ball轨迹<br />
+→ Ball进入球台装置<br />
+→ Switch产生事件<br />
+→ Shot Recognizer确认球路<br />
+→ Rule Engine推进Mode<br />
+→ Score / Multiplier / Lock变化<br />
+→ 新目标被点亮<br />
+→ 玩家继续控制Ball流向<br />
+→ 进入Multiball或高倍率阶段<br />
+→ 风险和信息密度提高<br />
+→ Ball Drain<br />
+→ Ball Save或本球结束<br />
+→ Bonus结算<br />
+→ 下一Ball继续长期规则进度。</strong></p>
+<p>本类型真正的核心并不是：</p>
+<blockquote>
+<p>“让球尽量别掉下去。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>玩家用极有限的物理控制权，把一个具有高度连续性和混沌性的Ball运动过程，逐渐转化为能够稳定命中特定Shot、规划Mode顺序、管理球数和倍率，并主动承担更高风险以换取更高计分收益的长期技能。</strong></p>
+</blockquote>
+<hr />
+<h2 id="1-类型定位">1. 类型定位</h2><p>完整的 Pinball 通常包含：</p>
+<ul>
+<li>一个或多个独立Ball；</li>
+</ul>
+<br />
+- 倾斜Playfield；
+<br />
+- 左右Flipper；
+<br />
+- Plunger；
+<br />
+- Nudge；
+<br />
+- Tilt；
+<br />
+- Drain；
+<br />
+- Outlane；
+<br />
+- Inlane；
+<br />
+- Bumper；
+<br />
+- Slingshot；
+<br />
+- Standup Target；
+<br />
+- Drop Target；
+<br />
+- Spinner；
+<br />
+- Rollover；
+<br />
+- Lane；
+<br />
+- Orbit；
+<br />
+- Ramp；
+<br />
+- Scoop；
+<br />
+- Kicker；
+<br />
+- VUK / Vertical Up-Kicker；
+<br />
+- Gate；
+<br />
+- Magnet；
+<br />
+- Ball Lock；
+<br />
+- Multiball；
+<br />
+- Skill Shot；
+<br />
+- Combo；
+<br />
+- Mode；
+<br />
+- Hurry-Up；
+<br />
+- Jackpot；
+<br />
+- Super Jackpot；
+<br />
+- Multiplier；
+<br />
+- Extra Ball；
+<br />
+- Ball Save；
+<br />
+- End-of-Ball Bonus；
+<br />
+- Wizard Mode；
+<br />
+- Score；
+<br />
+- High Score；
+<br />
+- Replay / Attract Mode。
+<br /><p>一次典型Game流程：</p>
+<p>创建Game<br />
+→ Ball进入Trough<br />
+→ Serve到Shooter Lane<br />
+→ 玩家控制Plunger<br />
+→ Launch<br />
+→ 尝试Skill Shot<br />
+→ Ball进入主Playfield<br />
+→ 玩家利用Flipper保持Ball存活<br />
+→ 完成若干基础Shot<br />
+→ 点亮Mode<br />
+→ 打入Scoop启动Mode<br />
+→ 在限定时间完成目标Shots<br />
+→ 获得奖励<br />
+→ 完成Lock条件<br />
+→ Lock第一颗Ball<br />
+→ 再次发球<br />
+→ Lock后续Ball<br />
+→ 启动Multiball<br />
+→ 多球同时进入Playfield<br />
+→ Jackpot目标点亮<br />
+→ 玩家在高信息密度下维持球权并完成Jackpot<br />
+→ 多球逐渐Drain<br />
+→ 回到单球<br />
+→ 最终Drain<br />
+→ 计算End-of-Ball Bonus<br />
+→ 下一Ball开始<br />
+→ 所有Ball耗尽<br />
+→ Game Over<br />
+→ High Score / Initial Entry。</p>
+<hr />
+<h2 id="2-最核心的系统抽象">2. 最核心的系统抽象</h2><p>Pinball可以抽象为五个长期耦合的运行时状态域：</p>
+<h3 id="physical-ball-state">Physical Ball State</h3><p>球真实在哪里、速度是多少、旋转怎样。</p>
+<h3 id="mechanical-device-state">Mechanical Device State</h3><p>Flipper、Bumper、Gate、Magnet、Scoop、Lock等装置当前处于什么状态。</p>
+<h3 id="switch-sensor-state">Switch / Sensor State</h3><p>球刚刚实际通过、触碰或压下了哪些检测区域。</p>
+<h3 id="rule-state">Rule State</h3><p>当前Mode、Combo、Multiplier、Jackpot和长期桌面规则处于什么阶段。</p>
+<h3 id="ball-lifecycle-state">Ball Lifecycle State</h3><p>桌面总共有多少Ball，它们分别在Trough、Shooter Lane、Playfield还是某个Lock中。</p>
+<p>核心链路：</p>
+<p><strong>玩家输入<br />
+→ Flipper / Nudge等装置变化<br />
+→ Ball Physics变化<br />
+→ Ball与桌面发生Contact<br />
+→ Switch产生事件<br />
+→ Shot被识别<br />
+→ Rule Engine推进状态<br />
+→ Light / Audio / Score反馈<br />
+→ 玩家根据新目标改变下一次Shot计划。</strong></p>
+<p>这意味着 Pinball 的运行时必须非常明确地分成：</p>
+<p><strong>Physical Truth</strong></p>
+<p>与：</p>
+<p><strong>Game Rule Interpretation。</strong></p>
+<hr />
+<h2 id="3-核心范式一ball必须始终是独立权威物理实体">3. 核心范式一：Ball必须始终是独立权威物理实体</h2><p>Ball不能：</p>
+<p>打到Ramp以后</p>
+<p>直接：</p>
+<p><code>MoveTo(RampExit)</code>。</p>
+<p>也不能：</p>
+<p>进入Scoop以后</p>
+<p>只把一个UI Flag设为：</p>
+<p><code>BallInScoop = true</code></p>
+<p>而丢失Ball身份。</p>
+<p>每一颗Ball都应该拥有：</p>
+<p>稳定：</p>
+<p><code>BallId</code>。</p>
+<hr />
+<h2 id="4-ballruntimestate">4. BallRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>BallId；</li>
+</ul>
+<br />
+- Position；
+<br />
+- LinearVelocity；
+<br />
+- AngularVelocity；
+<br />
+- Radius；
+<br />
+- PhysicalMaterialId；
+<br />
+- CurrentContainerId；
+<br />
+- CurrentPhysicsRegionId；
+<br />
+- LastContactEntityId；
+<br />
+- LastContactNormal；
+<br />
+- LastSwitchEventId；
+<br />
+- LastPlayerControlInfluence；
+<br />
+- SleepState；
+<br />
+- BallVersion。
+<br /><hr />
+<h2 id="5-ball-state的关键原则">5. Ball State的关键原则</h2><p>任意时刻，一颗Ball必须处于以下一种权威位置：</p>
+<ul>
+<li>Trough；</li>
+</ul>
+<br />
+- ShooterLane；
+<br />
+- Playfield；
+<br />
+- PhysicalLock；
+<br />
+- HeldDevice；
+<br />
+- DrainTransit；
+<br />
+- LostRecovery；
+<br />
+- Removed。
+<br /><p>不能同时：</p>
+<p>既在Playfield Physics里</p>
+<p>又存在于Ball Lock。</p>
+<hr />
+<h2 id="6-ball-registry">6. Ball Registry</h2><p>推荐建立：</p>
+<p><strong>BallRegistry</strong></p>
+<p>统一拥有：</p>
+<ul>
+<li>所有BallId；</li>
+</ul>
+<br />
+- Ball生命周期；
+<br />
+- Ball Container；
+<br />
+- Active Physics Ball集合；
+<br />
+- Ball数量校验。
+<br /><p>不要让：</p>
+<p>Scoop自己Destroy一个Ball</p>
+<p>然后：</p>
+<p>Trough重新Instantiate一个新Ball。</p>
+<hr />
+<h2 id="7-为什么-ball-identity-很重要">7. 为什么 Ball Identity 很重要</h2><p>尤其Multiball时：</p>
+<p>Ball A：</p>
+<p>被Lock。</p>
+<p>Ball B：</p>
+<p>仍在Playfield。</p>
+<p>Ball C：</p>
+<p>Drain。</p>
+<p>如果通过：</p>
+<p>不断Destroy / Spawn</p>
+<p>而没有稳定Identity，</p>
+<p>很容易出现：</p>
+<ul>
+<li>多球复制；</li>
+</ul>
+<br />
+- Ball Save多发；
+<br />
+- Lock数量错误；
+<br />
+- Trough数量不一致。
+<br /><hr />
+<h2 id="8-核心范式二ball-conservation-是弹球运行时最重要的不变量之一">8. 核心范式二：Ball Conservation 是弹球运行时最重要的不变量之一</h2><p>假设一张桌面物理上配置：</p>
+<p>6颗Ball。</p>
+<p>任意时刻应满足：</p>
+<p><code>Trough + ShooterLane + Playfield + Locks + HeldDevices + Transit = 6</code></p>
+<p>除非规则明确：</p>
+<p>使用Virtual Ball。</p>
+<hr />
+<h2 id="9-ballinventorystate">9. BallInventoryState</h2><p>建议包含：</p>
+<ul>
+<li>TotalPhysicalBalls；</li>
+</ul>
+<br />
+- TroughBallIds；
+<br />
+- ShooterLaneBallIds；
+<br />
+- ActivePlayfieldBallIds；
+<br />
+- LockedBallIds；
+<br />
+- HeldBallIds；
+<br />
+- TransitBallIds；
+<br />
+- MissingBallIds；
+<br />
+- InventoryVersion。
+<br /><hr />
+<h2 id="10-ball-inventory-audit">10. Ball Inventory Audit</h2><p>开发模式应该随时能够检查：</p>
+<p>所有Ball：</p>
+<p>是否恰好位于一个Container。</p>
+<p>发现：</p>
+<p>同一Ball处于：</p>
+<p>Playfield</p>
+<p>和：</p>
+<p>Trough。</p>
+<p>属于：</p>
+<p>Critical Integrity Error。</p>
+<hr />
+<h2 id="11-这一点和普通物理游戏不同">11. 这一点和普通物理游戏不同</h2><p>Pinball中：</p>
+<p>球本身就是：</p>
+<p>生命、回合、规则和多球状态的共同载体。</p>
+<p>因此Ball Lifecycle必须拥有：</p>
+<p>比普通Projectile更高的资产级完整性。</p>
+<hr />
+<h2 id="12-核心范式三physics-与-rule-engine-必须彻底分离">12. 核心范式三：Physics 与 Rule Engine 必须彻底分离</h2><p>Physics只负责：</p>
+<blockquote>
+<p>球怎么运动。</p>
+</blockquote>
+<p>Rule Engine负责：</p>
+<blockquote>
+<p>这个运动意味着什么。</p>
+</blockquote>
+<p>例如Ball撞到Bumper。</p>
+<p>Physics处理：</p>
+<ul>
+<li>Contact；</li>
+</ul>
+<br />
+- Normal；
+<br />
+- Impulse；
+<br />
+- Restitution。
+<br /><p>Bumper Device产生：</p>
+<p><code>BumperHitEvent</code>。</p>
+<p>Score System再决定：</p>
+<p>当前Mode下：</p>
+<p>是500分、</p>
+<p>5000分</p>
+<p>还是触发Jackpot链。</p>
+<hr />
+<h2 id="13-错误实现">13. 错误实现</h2><p><code>Bumper.OnCollisionEnter()</code></p>
+<p>内部：</p>
+<p><code>score += 1000</code></p>
+<p>并：</p>
+<p><code>if modeA score *= 2</code></p>
+<p>这会导致：</p>
+<ul>
+<li>物理和计分耦合；</li>
+</ul>
+<br />
+- Mode无法复用；
+<br />
+- Replay难以审计；
+<br />
+- 同一个Bumper在不同规则下难配置。
+<br /><hr />
+<h2 id="14-正确层级">14. 正确层级</h2><p>Ball Contact<br />
+→ Device Reaction<br />
+→ Switch Event<br />
+→ Rule Evaluation<br />
+→ Score Award。</p>
+<hr />
+<h2 id="15-physics-module职责">15. Physics Module职责</h2><p>负责：</p>
+<ul>
+<li>Ball integration；</li>
+</ul>
+<br />
+- Collision detection；
+<br />
+- Continuous collision；
+<br />
+- Surface friction；
+<br />
+- Restitution；
+<br />
+- Gravity；
+<br />
+- Spin；
+<br />
+- Flipper contact；
+<br />
+- Device physical impulses。
+<br /><p>它不应该知道：</p>
+<ul>
+<li>Jackpot；</li>
+</ul>
+<br />
+- Combo；
+<br />
+- Mission；
+<br />
+- Player Score。
+<br /><hr />
+<h2 id="16-rule-engine职责">16. Rule Engine职责</h2><p>负责：</p>
+<ul>
+<li>Switch事件；</li>
+</ul>
+<br />
+- Shot事件；
+<br />
+- Mode；
+<br />
+- Score；
+<br />
+- Lock；
+<br />
+- Multiball；
+<br />
+- Bonus；
+<br />
+- Extra Ball；
+<br />
+- Ball Save。
+<br /><p>它不应该：</p>
+<p>直接修改Ball Position</p>
+<p>或：</p>
+<p>碰撞法线。</p>
+<p>需要改变Ball运动时：</p>
+<p>通过：</p>
+<p>Device Command。</p>
+<hr />
+<h2 id="17-核心范式四pinball-physics-的首要目标是高速稳定而不只是真实刚体">17. 核心范式四：Pinball Physics 的首要目标是高速稳定，而不只是“真实刚体”</h2><p>Ball速度可能很高。</p>
+<p>Flipper角速度也很高。</p>
+<p>如果只做：</p>
+<p>离散Overlap，</p>
+<p>Ball可能：</p>
+<p>穿过Flipper。</p>
+<p>因此：</p>
+<p><strong>Continuous Collision Detection</strong></p>
+<p>属于基础要求。</p>
+<hr />
+<h2 id="18-fixed-physics-step">18. Fixed Physics Step</h2><p>建议Pinball Physics使用：</p>
+<p>固定Simulation Step。</p>
+<p>例如：</p>
+<p>高于普通游戏角色模拟的更新频率。</p>
+<p>具体频率取决于：</p>
+<ul>
+<li>Ball半径；</li>
+</ul>
+<br />
+- 最大速度；
+<br />
+- Flipper速度；
+<br />
+- Table尺寸。
+<br /><hr />
+<h2 id="19-渲染与物理解耦">19. 渲染与物理解耦</h2><p>Physics：</p>
+<p>Fixed Tick。</p>
+<p>Rendering：</p>
+<p>任意刷新率。</p>
+<p>Ball Visual：</p>
+<p>插值。</p>
+<p>不能：</p>
+<p>144Hz显示器</p>
+<p>让Ball飞得更准确。</p>
+<hr />
+<h2 id="20-高速碰撞">20. 高速碰撞</h2><p>尤其：</p>
+<p>Ball vs Flipper。</p>
+<p>应使用：</p>
+<p>Sweep / TOI / CCD</p>
+<p>而不是：</p>
+<p>下一Frame发现已经穿过去。</p>
+<hr />
+<h2 id="21-核心范式五playfield-gravity应该作为桌面坐标系的一部分">21. 核心范式五：Playfield Gravity应该作为桌面坐标系的一部分</h2><p>实体Pinball桌面有：</p>
+<p>倾斜角。</p>
+<p>Gravity投影到Playfield Plane。</p>
+<p>数字模拟可以：</p>
+<p>使用完整3D Gravity</p>
+<p>或：</p>
+<p>在桌面平面上计算：</p>
+<p>Effective Downfield Acceleration。</p>
+<hr />
+<h2 id="22-tablephysicsprofile">22. TablePhysicsProfile</h2><p>建议字段：</p>
+<ul>
+<li>PlayfieldSlope；</li>
+</ul>
+<br />
+- GravityScale；
+<br />
+- BallMass；
+<br />
+- RollingResistance；
+<br />
+- SpinDamping；
+<br />
+- GlobalRestitution；
+<br />
+- AirDrag；
+<br />
+- PhysicsTickRate；
+<br />
+- PhysicsVersion。
+<br /><hr />
+<h2 id="23-为什么不应到处手写球向下加速度">23. 为什么不应到处手写“球向下加速度”</h2><p>所有Ball和Device应共享：</p>
+<p>同一Table Physics Context。</p>
+<p>以后调整：</p>
+<p>Table Slope</p>
+<p>可以统一产生：</p>
+<p>桌面整体速度变化。</p>
+<hr />
+<h2 id="24-核心范式六surface-material决定桌面手感">24. 核心范式六：Surface Material决定桌面手感</h2><p>不同区域：</p>
+<ul>
+<li>Wood；</li>
+</ul>
+<br />
+- Rubber；
+<br />
+- Metal；
+<br />
+- Plastic；
+<br />
+- Rail；
+<br />
+- FlipperRubber；
+<br /><p>具有不同：</p>
+<ul>
+<li>Friction；</li>
+</ul>
+<br />
+- Restitution；
+<br />
+- SpinTransfer。
+<br /><hr />
+<h2 id="25-surfacedefinition">25. SurfaceDefinition</h2><p>建议字段：</p>
+<ul>
+<li>SurfaceId；</li>
+</ul>
+<br />
+- Friction；
+<br />
+- Restitution；
+<br />
+- RollingResistance；
+<br />
+- SpinCoupling；
+<br />
+- ImpactSoundProfile；
+<br />
+- SurfaceTags；
+<br />
+- SurfaceVersion。
+<br /><hr />
+<h2 id="26-视觉与physics-material分离">26. 视觉与Physics Material分离</h2><p>同一木纹贴图区域：</p>
+<p>可能需要不同碰撞手感。</p>
+<p>Physics材质是：</p>
+<p>Gameplay数据。</p>
+<p>不是：</p>
+<p>Renderer材质的附属字段。</p>
+<hr />
+<h2 id="27-核心范式七flipper-是玩家最主要的控制接口必须是独立致动器模型">27. 核心范式七：Flipper 是玩家最主要的控制接口，必须是独立致动器模型</h2><p>Pinball玩家几乎不能直接控制Ball。</p>
+<p>真正持续操作的是：</p>
+<p>Flipper。</p>
+<p>因此Flipper手感相当于：</p>
+<p>平台跳跃中的Player Motor。</p>
+<hr />
+<h2 id="28-flipperdefinition">28. FlipperDefinition</h2><p>建议字段：</p>
+<ul>
+<li>FlipperId；</li>
+</ul>
+<br />
+- Pivot；
+<br />
+- RestAngle；
+<br />
+- ActiveAngle；
+<br />
+- Length；
+<br />
+- RadiusProfile；
+<br />
+- FlipDuration；
+<br />
+- ReturnDuration；
+<br />
+- TorqueProfile；
+<br />
+- HoldProfile；
+<br />
+- SurfaceDefinitionId；
+<br />
+- InputBinding；
+<br />
+- FlipperVersion。
+<br /><hr />
+<h2 id="29-flipperruntimestate">29. FlipperRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>FlipperId；</li>
+</ul>
+<br />
+- CurrentAngle；
+<br />
+- AngularVelocity；
+<br />
+- TargetState；
+<br />
+- InputHeld；
+<br />
+- CurrentMotorForce；
+<br />
+- ContactBallIds；
+<br />
+- FlipperVersion。
+<br /><hr />
+<h2 id="30-flipper不建议直接teleport角度">30. Flipper不建议直接Teleport角度</h2><p>按键：</p>
+<p>RestAngle</p>
+<p>瞬间变：</p>
+<p>ActiveAngle。</p>
+<p>会让Ball获得非常奇怪的冲量。</p>
+<p>更合理：</p>
+<p>使用：</p>
+<p>稳定Motor Curve</p>
+<p>或：</p>
+<p>受控角速度。</p>
+<hr />
+<h2 id="31-flipper-upstroke">31. Flipper Upstroke</h2><p>按下：</p>
+<p>Flipper快速上挥。</p>
+<p>真正高能量控制阶段。</p>
+<hr />
+<h2 id="32-hold">32. Hold</h2><p>玩家继续按住：</p>
+<p>Flipper保持高位。</p>
+<p>Ball可以：</p>
+<p>Trap / Cradle</p>
+<p>在Flipper上。</p>
+<p>因此Hold不是：</p>
+<p>动画结束。</p>
+<p>它属于：</p>
+<p>物理状态。</p>
+<hr />
+<h2 id="33-return">33. Return</h2><p>松开：</p>
+<p>Flipper回落。</p>
+<p>回落速度也会影响：</p>
+<p>Drop Catch</p>
+<p>等高级技巧。</p>
+<hr />
+<h2 id="34-核心范式八高级玩家技巧应从同一稳定flipper-physics自然涌现">34. 核心范式八：高级玩家技巧应从同一稳定Flipper Physics自然涌现</h2><p>例如：</p>
+<ul>
+<li>Cradle；</li>
+</ul>
+<br />
+- Live Catch；
+<br />
+- Dead Bounce；
+<br />
+- Drop Catch；
+<br />
+- Post Transfer；
+<br />
+- Tap Pass；
+<br />
+- Slap Save。
+<br /><p>这些不应该：</p>
+<p>全部做成：</p>
+<p>特殊Skill按钮。</p>
+<p>它们应该尽量来自：</p>
+<p>Flipper位置、速度、Ball动量和输入时机。</p>
+<hr />
+<h2 id="35-这是pinball非常重要的技能结构">35. 这是Pinball非常重要的技能结构</h2><p>新玩家看到：</p>
+<p>球来就按Flipper。</p>
+<p>高手看到：</p>
+<blockquote>
+<p>这个Ball轨迹可以不击球，让它Dead Bounce到另一侧，再Cradle后瞄准目标Shot。</p>
+</blockquote>
+<p>同一套输入和Physics：</p>
+<p>支持完全不同的理解深度。</p>
+<hr />
+<h2 id="36-flipper-debug">36. Flipper Debug</h2><p>开发模式应该能显示：</p>
+<ul>
+<li>Angle；</li>
+</ul>
+<br />
+- MotorForce；
+<br />
+- BallContactPoint；
+<br />
+- BallVelocity Before；
+<br />
+- BallVelocity After；
+<br />
+- Energy Transfer。
+<br /><p>否则：</p>
+<p>“为什么这个Shot突然没力”</p>
+<p>很难调试。</p>
+<hr />
+<h2 id="37-核心范式九plunger-是游戏开始和-skill-shot-的独立控制系统">37. 核心范式九：Plunger 是游戏开始和 Skill Shot 的独立控制系统</h2><p>Shooter Lane不是：</p>
+<p>Ball直接Spawn到Playfield。</p>
+<p>通常经过：</p>
+<p>Plunger。</p>
+<hr />
+<h2 id="38-plungerstate">38. PlungerState</h2><p>建议包含：</p>
+<ul>
+<li>PullDistance；</li>
+</ul>
+<br />
+- PullVelocity；
+<br />
+- MaxPull；
+<br />
+- SpringConstant；
+<br />
+- ReleaseState；
+<br />
+- CurrentBallId；
+<br />
+- PlungerVersion。
+<br /><hr />
+<h2 id="39-analog-plunger">39. Analog Plunger</h2><p>玩家拉动不同距离：</p>
+<p>产生不同Launch Energy。</p>
+<p>这让开局也成为：</p>
+<p>Skill Interaction。</p>
+<hr />
+<h2 id="40-skill-shot">40. Skill Shot</h2><p>例如：</p>
+<p>发球时把Ball准确送到：</p>
+<p>第三条Rollover。</p>
+<p>需要：</p>
+<p>特定Launch Strength。</p>
+<p>Rule Engine识别：</p>
+<p>First Launch Sequence。</p>
+<p>奖励：</p>
+<p>SkillShot。</p>
+<hr />
+<h2 id="41-skill-shot不是plunger自己计分">41. Skill Shot不是Plunger自己计分</h2><p>Plunger只Launch Ball。</p>
+<p>Rule Engine根据：</p>
+<ul>
+<li>当前Ball；</li>
+</ul>
+<br />
+- Launch；
+<br />
+- 后续Switch序列；
+<br /><p>判断：</p>
+<p>是否完成Skill Shot。</p>
+<hr />
+<h2 id="42-核心范式十nudge应影响整个桌面参考系而不是直接给ball作弊速度">42. 核心范式十：Nudge应影响整个桌面参考系，而不是直接给Ball“作弊速度”</h2><p>实体Pinball允许：</p>
+<p>轻推桌子。</p>
+<p>数字版本可以模拟：</p>
+<p>Nudge Input。</p>
+<hr />
+<h2 id="43-nudgeintent">43. NudgeIntent</h2><p>建议包含：</p>
+<ul>
+<li>Direction；</li>
+</ul>
+<br />
+- Magnitude；
+<br />
+- InputTimestamp；
+<br />
+- NudgeVersion。
+<br /><hr />
+<h2 id="44-nudge效果">44. Nudge效果</h2><p>可以：</p>
+<p>施加：</p>
+<p>Table Impulse</p>
+<p>或：</p>
+<p>等效Ball惯性变化。</p>
+<p>目的：</p>
+<p>微调Ball轨迹。</p>
+<hr />
+<h2 id="45-nudge不是无限能力">45. Nudge不是无限能力</h2><p>连续猛烈Nudge：</p>
+<p>进入：</p>
+<p>Tilt系统。</p>
+<p>否则玩家可以：</p>
+<p>直接把Ball从Drain推回来。</p>
+<hr />
+<h2 id="46-核心范式十一tilt-是允许微小物理修正但限制暴力控制的风险预算">46. 核心范式十一：Tilt 是“允许微小物理修正但限制暴力控制”的风险预算</h2><p>TiltState建议包含：</p>
+<ul>
+<li>CurrentTiltEnergy；</li>
+</ul>
+<br />
+- DecayRate；
+<br />
+- WarningThreshold；
+<br />
+- TiltThreshold；
+<br />
+- WarningCount；
+<br />
+- IsTilted；
+<br />
+- TiltVersion。
+<br /><hr />
+<h2 id="47-nudge">47. Nudge</h2><p>增加：</p>
+<p>Tilt Energy。</p>
+<p>一段时间没有Nudge：</p>
+<p>逐渐衰减。</p>
+<hr />
+<h2 id="48-warning">48. Warning</h2><p>超过第一阈值：</p>
+<p>Tilt Warning。</p>
+<p>玩家知道：</p>
+<p>继续推会危险。</p>
+<hr />
+<h2 id="49-tilt">49. Tilt</h2><p>达到最终阈值：</p>
+<p>本Ball通常：</p>
+<ul>
+<li>Flipper禁用；</li>
+</ul>
+<br />
+- Scoring禁用；
+<br />
+- Ball等待Drain。
+<br /><p>具体规则：</p>
+<p>由Table RuleSet决定。</p>
+<hr />
+<h2 id="50-tilt真正的设计意义">50. Tilt真正的设计意义</h2><p>玩家拥有：</p>
+<p>一个紧急轨迹修正工具。</p>
+<p>但不能：</p>
+<p>无限使用。</p>
+<p>形成：</p>
+<p><strong>Save Ball Probability vs Tilt Risk。</strong></p>
+<hr />
+<h2 id="51-核心范式十二机械装置需要统一device抽象">51. 核心范式十二：机械装置需要统一Device抽象</h2><p>Pinball桌面装置非常多。</p>
+<p>如果每种装置拥有：</p>
+<p>完全独立主循环，</p>
+<p>系统会迅速碎片化。</p>
+<p>建议统一：</p>
+<p><strong>TableDevice。</strong></p>
+<hr />
+<h2 id="52-devicedefinition">52. DeviceDefinition</h2><p>建议字段：</p>
+<ul>
+<li>DeviceId；</li>
+</ul>
+<br />
+- DeviceType；
+<br />
+- PhysicalProfile；
+<br />
+- SwitchIds；
+<br />
+- Capacity；
+<br />
+- ActivationRules；
+<br />
+- ActuatorProfile；
+<br />
+- HoldRules；
+<br />
+- EjectRules；
+<br />
+- ResetRules；
+<br />
+- DeviceTags；
+<br />
+- DeviceVersion。
+<br /><hr />
+<h2 id="53-常见device">53. 常见Device</h2><p>可以包括：</p>
+<ul>
+<li>Bumper；</li>
+</ul>
+<br />
+- Slingshot；
+<br />
+- DropTarget；
+<br />
+- StandupTarget；
+<br />
+- Spinner；
+<br />
+- Rollover；
+<br />
+- Gate；
+<br />
+- Kicker；
+<br />
+- Scoop；
+<br />
+- VUK；
+<br />
+- Magnet；
+<br />
+- Diverter；
+<br />
+- BallLock；
+<br />
+- Trough；
+<br />
+- AutoPlunger。
+<br /><hr />
+<h2 id="54-deviceruntimestate">54. DeviceRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>DeviceId；</li>
+</ul>
+<br />
+- CurrentState；
+<br />
+- OccupiedBallIds；
+<br />
+- SwitchStates；
+<br />
+- ActivationCount；
+<br />
+- CooldownState；
+<br />
+- ActuatorState；
+<br />
+- DeviceVersion。
+<br /><hr />
+<h2 id="55-device-physical-reaction-与-rule-event分离">55. Device Physical Reaction 与 Rule Event分离</h2><p>Bumper：</p>
+<p>Physics：</p>
+<p>给Ball冲量。</p>
+<p>Switch：</p>
+<p>产生：</p>
+<p><code>BumperHit</code>。</p>
+<p>Rule：</p>
+<p>根据当前Mode计分。</p>
+<p>三个层次不要混。</p>
+<hr />
+<h2 id="56-核心范式十三switch-matrix-是连续physics与离散规则之间的桥梁">56. 核心范式十三：Switch Matrix 是连续Physics与离散规则之间的桥梁</h2><p>实体Pinball机器本来就大量依赖：</p>
+<p>机械/光电Switch。</p>
+<p>数字Pinball也非常适合保留这层。</p>
+<hr />
+<h2 id="57-switchdefinition">57. SwitchDefinition</h2><p>建议字段：</p>
+<ul>
+<li>SwitchId；</li>
+</ul>
+<br />
+- SwitchType；
+<br />
+- ProviderDeviceId；
+<br />
+- ActivationGeometry；
+<br />
+- DebounceDuration；
+<br />
+- DirectionRule；
+<br />
+- EnabledCondition；
+<br />
+- SwitchTags；
+<br />
+- SwitchVersion。
+<br /><hr />
+<h2 id="58-switchruntimestate">58. SwitchRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>SwitchId；</li>
+</ul>
+<br />
+- IsClosed；
+<br />
+- LastChangedTick；
+<br />
+- LastTriggeredBallId；
+<br />
+- DebounceUntilTick；
+<br />
+- ActivationCount；
+<br />
+- SwitchVersion。
+<br /><hr />
+<h2 id="59-switchevent">59. SwitchEvent</h2><p>建议包含：</p>
+<ul>
+<li>SwitchEventId；</li>
+</ul>
+<br />
+- SwitchId；
+<br />
+- BallId；
+<br />
+- EnterTick；
+<br />
+- ExitTick；
+<br />
+- Direction；
+<br />
+- BallVelocity；
+<br />
+- SourceDeviceId；
+<br />
+- EventVersion。
+<br /><hr />
+<h2 id="60-为什么需要debounce">60. 为什么需要Debounce</h2><p>Ball可能：</p>
+<p>在一个Target附近振动。</p>
+<p>Collision连续触发：</p>
+<p>3～5次。</p>
+<p>真实规则只希望：</p>
+<p>算一次Hit。</p>
+<p>Switch层可以：</p>
+<p>去抖。</p>
+<hr />
+<h2 id="61-physics-contact不能直接当switch">61. Physics Contact不能直接当Switch</h2><p>Collision是：</p>
+<p>物理事实。</p>
+<p>Switch是：</p>
+<p>游戏检测事实。</p>
+<p>一块表面：</p>
+<p>可能发生碰撞</p>
+<p>但没有任何计分Switch。</p>
+<hr />
+<h2 id="62-核心范式十四shot-recognition-是pinball最关键也最容易缺失的语义层">62. 核心范式十四：Shot Recognition 是Pinball最关键、也最容易缺失的语义层</h2><p>玩家说：</p>
+<p>“我打中了左Orbit。”</p>
+<p>系统不能只依赖：</p>
+<p>某一个Collider。</p>
+<p>一个完整Shot可能经过：</p>
+<p>Entrance Sensor<br />
+→ Mid Sensor<br />
+→ Exit Sensor。</p>
+<p>并且：</p>
+<p>方向必须正确。</p>
+<hr />
+<h2 id="63-shotdefinition">63. ShotDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ShotId；</li>
+</ul>
+<br />
+- ShotTags；
+<br />
+- RequiredSwitchSequence；
+<br />
+- OptionalSwitches；
+<br />
+- DirectionRule；
+<br />
+- MaximumTraversalTime；
+<br />
+- MinimumBallSpeed；
+<br />
+- EntryRegion；
+<br />
+- ExitRegion；
+<br />
+- CompletionRule；
+<br />
+- ShotVersion。
+<br /><hr />
+<h2 id="64-shottrackerstate">64. ShotTrackerState</h2><p>建议包含：</p>
+<ul>
+<li>BallId；</li>
+</ul>
+<br />
+- CandidateShotIds；
+<br />
+- CurrentSequenceIndexByShot；
+<br />
+- StartTickByShot；
+<br />
+- LastSwitchId；
+<br />
+- TrackerVersion。
+<br /><hr />
+<h2 id="65-shot-recognition流程">65. Shot Recognition流程</h2><p>Switch A触发<br />
+→ ShotRecognizer查询哪些Shot以A为入口<br />
+→ 为该Ball建立Candidate<br />
+→ Ball触发B<br />
+→ Candidate推进<br />
+→ 触发C<br />
+→ 时间和方向均合法<br />
+→ 生成：</p>
+<p><code>ShotCompleted(LeftOrbit, Ball42)</code>。</p>
+<hr />
+<h2 id="66-为什么按ball追踪">66. 为什么按Ball追踪</h2><p>Multiball时：</p>
+<p>Ball A走左Orbit。</p>
+<p>Ball B同时触发右Ramp。</p>
+<p>如果Shot Tracker只有：</p>
+<p>全局进度，</p>
+<p>两个Ball事件会串线。</p>
+<p>因此：</p>
+<p><strong>Shot Tracking必须Ball-local。</strong></p>
+<hr />
+<h2 id="67-反向shot">67. 反向Shot</h2><p>某Ramp可能：</p>
+<p>正常入口：</p>
+<p>左 → 右。</p>
+<p>Ball反弹回来：</p>
+<p>右 → 左。</p>
+<p>是否算：</p>
+<p>Reverse Shot</p>
+<p>由Definition决定。</p>
+<hr />
+<h2 id="68-核心范式十五rule-engine应只消费语义事件不依赖具体碰撞细节">68. 核心范式十五：Rule Engine应只消费语义事件，不依赖具体碰撞细节</h2><p>理想Rule输入：</p>
+<ul>
+<li>SwitchTriggered；</li>
+</ul>
+<br />
+- ShotCompleted；
+<br />
+- BallServed；
+<br />
+- BallDrained；
+<br />
+- BallLocked；
+<br />
+- ModeStarted；
+<br />
+- ModeCompleted；
+<br />
+- TimerExpired。
+<br /><p>而不是：</p>
+<p>“球撞到了坐标x=3.12的Collider。”</p>
+<hr />
+<h2 id="69-rule-engine职责">69. Rule Engine职责</h2><p>负责：</p>
+<ul>
+<li>当前Game；</li>
+</ul>
+<br />
+- 当前Player；
+<br />
+- 当前Ball；
+<br />
+- Mode；
+<br />
+- Feature；
+<br />
+- Multiplier；
+<br />
+- Locks；
+<br />
+- Ball Save；
+<br />
+- Extra Ball；
+<br />
+- Scoring；
+<br />
+- End-of-Ball Bonus。
+<br /><hr />
+<h2 id="70-核心范式十六mode-是弹球规则内容的主要设计单位">70. 核心范式十六：Mode 是弹球规则内容的主要设计单位</h2><p>Pinball Table可以长时间保持：</p>
+<p>同一Physical Layout。</p>
+<p>真正持续变化的是：</p>
+<p><strong>当前什么Shot有意义。</strong></p>
+<p>这通常通过：</p>
+<p>Mode</p>
+<p>实现。</p>
+<hr />
+<h2 id="71-modedefinition">71. ModeDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ModeId；</li>
+</ul>
+<br />
+- StartConditions；
+<br />
+- StartCost；
+<br />
+- ModeType；
+<br />
+- ObjectiveDefinitions；
+<br />
+- DurationRule；
+<br />
+- CompletionConditions；
+<br />
+- FailureConditions；
+<br />
+- ShotScoringRules；
+<br />
+- LightProfile；
+<br />
+- AudioProfile；
+<br />
+- StackPolicy；
+<br />
+- Priority；
+<br />
+- EndEffects；
+<br />
+- ModeVersion。
+<br /><hr />
+<h2 id="72-moderuntimestate">72. ModeRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>ModeInstanceId；</li>
+</ul>
+<br />
+- ModeId；
+<br />
+- StartTick；
+<br />
+- RemainingTime；
+<br />
+- ObjectiveProgress；
+<br />
+- CompletedShotIds；
+<br />
+- CurrentStage；
+<br />
+- ScoreAccumulated；
+<br />
+- CompletionState；
+<br />
+- PausedState；
+<br />
+- ModeVersion。
+<br /><hr />
+<h2 id="73-常见mode生命周期">73. 常见Mode生命周期</h2><p>Qualified<br />
+→ Ready<br />
+→ Started<br />
+→ Active<br />
+→ Completed</p>
+<p>或：</p>
+<p>Active<br />
+→ TimedOut。</p>
+<hr />
+<h2 id="74-mode-qualify-与-mode-start应分离">74. Mode Qualify 与 Mode Start应分离</h2><p>例如：</p>
+<p>完成：</p>
+<p>三组Target。</p>
+<p>系统提示：</p>
+<p>Mode Ready。</p>
+<p>玩家仍需要：</p>
+<p>把Ball打入Scoop</p>
+<p>才启动。</p>
+<p>这让：</p>
+<p>规则目标</p>
+<p>与：</p>
+<p>物理执行</p>
+<p>持续结合。</p>
+<hr />
+<h2 id="75-核心范式十七mode不应默认互斥">75. 核心范式十七：Mode不应默认互斥</h2><p>Pinball深度很大一部分来自：</p>
+<p><strong>Mode Stacking。</strong></p>
+<p>例如：</p>
+<p>当前正在：</p>
+<p>Monster Hunt Mode。</p>
+<p>同时：</p>
+<p>进入Multiball。</p>
+<p>又激活：</p>
+<p>Playfield Multiplier。</p>
+<p>于是同一个Shot同时：</p>
+<ul>
+<li>推进Monster Hunt；</li>
+</ul>
+<br />
+- 获得Jackpot；
+<br />
+- 乘3分数。
+<br /><hr />
+<h2 id="76-modestack">76. ModeStack</h2><p>建议支持：</p>
+<ul>
+<li>Base Mode；</li>
+</ul>
+<br />
+- Feature Mode；
+<br />
+- Timed Mode；
+<br />
+- Multiball Mode；
+<br />
+- Scoring Mode；
+<br />
+- Wizard Mode。
+<br /><hr />
+<h2 id="77-stackpolicy">77. StackPolicy</h2><p>ModeDefinition可以声明：</p>
+<ul>
+<li>Exclusive；</li>
+</ul>
+<br />
+- Stackable；
+<br />
+- PausesOthers；
+<br />
+- ReplacesGroup；
+<br />
+- RunsInBackground。
+<br /><hr />
+<h2 id="78-mode-priority">78. Mode Priority</h2><p>不是：</p>
+<p>决定谁先得分。</p>
+<p>主要用于：</p>
+<ul>
+<li>Display；</li>
+</ul>
+<br />
+- Audio；
+<br />
+- Lamp Control；
+<br />
+- Input Prompt。
+<br /><p>逻辑上多个Mode仍可以同时消费同一ShotEvent。</p>
+<hr />
+<h2 id="79-核心范式十八rule-event应该允许一次物理事实被多个规则消费者解释">79. 核心范式十八：Rule Event应该允许“一次物理事实被多个规则消费者解释”</h2><p><code>LeftRampCompleted</code></p>
+<p>可能同时被：</p>
+<ul>
+<li>Base Score；</li>
+</ul>
+<br />
+- Combo；
+<br />
+- Mode；
+<br />
+- Jackpot；
+<br />
+- Achievement；
+<br /><p>消费。</p>
+<p>因此不要：</p>
+<p>第一个消费者“吃掉事件”。</p>
+<hr />
+<h2 id="80-event-broadcast">80. Event Broadcast</h2><p>ShotCompleted：</p>
+<p>不可变事件。</p>
+<p>多个Rule Module读取。</p>
+<p>各自产生：</p>
+<p>RuleMutation。</p>
+<hr />
+<h2 id="81-需要防止重复奖励">81. 需要防止重复奖励</h2><p>消费者使用：</p>
+<p><code>SourceEventId + RuleId</code></p>
+<p>作为：</p>
+<p>Reward Key。</p>
+<p>确保：</p>
+<p>同一个Shot不会：</p>
+<p>因为重放或事件重试</p>
+<p>计分两次。</p>
+<hr />
+<h2 id="82-核心范式十九scoring必须拥有独立pipeline">82. 核心范式十九：Scoring必须拥有独立Pipeline</h2><p>低级实现：</p>
+<p>每个物体：</p>
+<p>自己加Score。</p>
+<p>成熟系统应该：</p>
+<p>所有分数都生成：</p>
+<p><strong>ScoreEvent。</strong></p>
+<hr />
+<h2 id="83-scoreevent">83. ScoreEvent</h2><p>建议包含：</p>
+<ul>
+<li>ScoreEventId；</li>
+</ul>
+<br />
+- PlayerId；
+<br />
+- BaseValue；
+<br />
+- SourceEventId；
+<br />
+- SourceRuleId；
+<br />
+- ScoreCategory；
+<br />
+- EligibleMultipliers；
+<br />
+- ModeContext；
+<br />
+- FinalValue；
+<br />
+- ScoreVersion。
+<br /><hr />
+<h2 id="84-score-pipeline">84. Score Pipeline</h2><p>Base Award<br />
+→ Shot Value Modifier<br />
+→ Mode Modifier<br />
+→ Combo Modifier<br />
+→ Playfield Multiplier<br />
+→ Special Modifier<br />
+→ Final Score。</p>
+<p>顺序必须：</p>
+<p>统一。</p>
+<hr />
+<h2 id="85-score-multiplier-和-playfield-multiplier可以分离">85. Score Multiplier 和 Playfield Multiplier可以分离</h2><p>例如：</p>
+<p>Bonus Multiplier</p>
+<p>只影响：</p>
+<p>End-of-Ball Bonus。</p>
+<p>Playfield Multiplier：</p>
+<p>影响实时Shot。</p>
+<p>避免：</p>
+<p>一个全局：</p>
+<p><code>scoreMultiplier</code></p>
+<p>承担所有规则。</p>
+<hr />
+<h2 id="86-scoring-breakdown">86. Scoring Breakdown</h2><p>玩家完成：</p>
+<p>Super Jackpot：</p>
+<p>3,000,000。</p>
+<p>开发工具可以展开：</p>
+<p>Base Jackpot：</p>
+<p>500k。</p>
+<p>Jackpot Level：</p>
+<p>×2。</p>
+<p>Playfield：</p>
+<p>×3。</p>
+<p>最终：</p>
+<p>3M。</p>
+<hr />
+<h2 id="87-核心范式二十计分不是纯奖励它应该引导玩家主动承担不同物理风险">87. 核心范式二十：计分不是纯奖励，它应该引导玩家主动承担不同物理风险</h2><p>某个安全Orbit：</p>
+<p>容易重复命中。</p>
+<p>只能：</p>
+<p>100k。</p>
+<p>危险Center Shot：</p>
+<p>接近直下Drain风险。</p>
+<p>可以：</p>
+<p>1M Jackpot。</p>
+<p>这样：</p>
+<p><strong>Score Value</strong></p>
+<p>与：</p>
+<p><strong>Shot Risk</strong></p>
+<p>形成策略。</p>
+<hr />
+<h2 id="88-shot-risk-profile">88. Shot Risk Profile</h2><p>开发分析可以统计：</p>
+<ul>
+<li>Attempt Count；</li>
+</ul>
+<br />
+- Completion Rate；
+<br />
+- DrainWithin2Seconds；
+<br />
+- AverageRecoveryState；
+<br />
+- BallSpeedAfterExit。
+<br /><p>用于估算：</p>
+<p>实际风险。</p>
+<hr />
+<h2 id="89-设计者不能只凭几何感觉判断shot风险">89. 设计者不能只凭几何感觉判断Shot风险</h2><p>一个Shot看起来很难。</p>
+<p>但Ball从出口出来：</p>
+<p>稳定落在Flipper Cradle。</p>
+<p>它可能实际上：</p>
+<p>很安全。</p>
+<hr />
+<h2 id="90-核心范式二十一combo把单次shot提升为ball-flow路线">90. 核心范式二十一：Combo把单次Shot提升为“Ball Flow路线”</h2><p>例如：</p>
+<p>Left Orbit<br />
+→ Right Ramp</p>
+<p>在4秒内完成：</p>
+<p>Combo ×2。</p>
+<p>再接：</p>
+<p>Center Ramp：</p>
+<p>Combo ×3。</p>
+<hr />
+<h2 id="91-combodefinition">91. ComboDefinition</h2><p>建议字段：</p>
+<ul>
+<li>ComboId；</li>
+</ul>
+<br />
+- ShotSequence；
+<br />
+- MaximumGapTime；
+<br />
+- ResetConditions；
+<br />
+- ScoreRule；
+<br />
+- LightRule；
+<br />
+- ComboVersion。
+<br /><hr />
+<h2 id="92-combostate">92. ComboState</h2><p>建议包含：</p>
+<ul>
+<li>CurrentStep；</li>
+</ul>
+<br />
+- LastCompletionTick；
+<br />
+- ActiveBallId；
+<br />
+- CurrentMultiplier；
+<br />
+- ComboVersion。
+<br /><hr />
+<h2 id="93-combo可以要求同一ball">93. Combo可以要求同一Ball</h2><p>Multiball时：</p>
+<p>是否允许不同Ball共同完成Combo</p>
+<p>必须明确。</p>
+<p>通常：</p>
+<p>高级路径Combo</p>
+<p>最好绑定：</p>
+<p>Single Ball。</p>
+<hr />
+<h2 id="94-核心范式二十二hurry-up-是奖励随时间衰减的短期风险机制">94. 核心范式二十二：Hurry-Up 是“奖励随时间衰减”的短期风险机制</h2><p>例如：</p>
+<p>某Shot初始价值：</p>
+<p>1,000,000。</p>
+<p>每秒下降。</p>
+<p>玩家需要：</p>
+<p>快速命中。</p>
+<hr />
+<h2 id="95-hurryupstate">95. HurryUpState</h2><p>建议包含：</p>
+<ul>
+<li>StartValue；</li>
+</ul>
+<br />
+- CurrentValue；
+<br />
+- DecayRate；
+<br />
+- TargetShotIds；
+<br />
+- StartTick；
+<br />
+- ExpirationTick；
+<br />
+- HurryUpVersion。
+<br /><hr />
+<h2 id="96-hurry-up将">96. Hurry-Up将：</h2><p>物理执行速度</p>
+<p>直接转化成：</p>
+<p>Score。</p>
+<p>非常适合：</p>
+<p>制造节奏变化。</p>
+<hr />
+<h2 id="97-核心范式二十三ball-lock-是单球阶段与multiball阶段之间的转换桥">97. 核心范式二十三：Ball Lock 是单球阶段与Multiball阶段之间的转换桥</h2><p>玩家需要：</p>
+<p>完成若干资格条件。</p>
+<p>再：</p>
+<p>把Ball打进Lock。</p>
+<hr />
+<h2 id="98-lockdefinition">98. LockDefinition</h2><p>建议字段：</p>
+<ul>
+<li>LockId；</li>
+</ul>
+<br />
+- RequiredQualification；
+<br />
+- PhysicalCapacity；
+<br />
+- VirtualLockAllowed；
+<br />
+- BallsRequiredForMultiball；
+<br />
+- ReleaseRule；
+<br />
+- LockVersion。
+<br /><hr />
+<h2 id="99-lockruntimestate">99. LockRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>LockId；</li>
+</ul>
+<br />
+- Qualified；
+<br />
+- LockedBallIds；
+<br />
+- VirtualLockCount；
+<br />
+- LockOwnerPlayerId；
+<br />
+- LockVersion。
+<br /><hr />
+<h2 id="100-physical-lock">100. Physical Lock</h2><p>Ball实际离开Playfield。</p>
+<p>进入：</p>
+<p>Device Container。</p>
+<p>系统从Trough再Serve一个Ball。</p>
+<hr />
+<h2 id="101-virtual-lock">101. Virtual Lock</h2><p>Ball经过LockShot。</p>
+<p>记为：</p>
+<p>锁定进度。</p>
+<p>但同一Ball重新被Eject出来。</p>
+<p>适合：</p>
+<p>数字实现或多玩家公平。</p>
+<hr />
+<h2 id="102-lock必须和ballinventory一起设计">102. Lock必须和BallInventory一起设计</h2><p>Physical Lock锁3球。</p>
+<p>如果Trough只有2球可Serve：</p>
+<p>会Softlock。</p>
+<p>Content Validator必须检查：</p>
+<p>Ball Capacity。</p>
+<hr />
+<h2 id="103-核心范式二十四multiball不是生成更多ball而是完整规则阶段切换">103. 核心范式二十四：Multiball不是“生成更多Ball”，而是完整规则阶段切换</h2><p>启动Multiball：</p>
+<p>通常需要：</p>
+<ul>
+<li>释放Lock；</li>
+</ul>
+<br />
+- Serve额外Ball；
+<br />
+- 开启Ball Save；
+<br />
+- 点亮Jackpot；
+<br />
+- 改变音乐；
+<br />
+- 改变Lamp；
+<br />
+- 增加Scoring Rules。
+<br /><hr />
+<h2 id="104-multiballdefinition">104. MultiballDefinition</h2><p>建议字段：</p>
+<ul>
+<li>MultiballId；</li>
+</ul>
+<br />
+- RequiredBallCount；
+<br />
+- ReleaseSources；
+<br />
+- AutoServeCount；
+<br />
+- IntroBallSaveDuration；
+<br />
+- JackpotRules；
+<br />
+- SuperJackpotRules；
+<br />
+- EndCondition；
+<br />
+- ModeStackRules；
+<br />
+- MultiballVersion。
+<br /><hr />
+<h2 id="105-multiballruntimestate">105. MultiballRuntimeState</h2><p>建议包含：</p>
+<ul>
+<li>MultiballInstanceId；</li>
+</ul>
+<br />
+- ActiveBallIds；
+<br />
+- BallsInPlay；
+<br />
+- BallsRequiredToContinue；
+<br />
+- JackpotState；
+<br />
+- BallSaveState；
+<br />
+- StartTick；
+<br />
+- MultiballVersion。
+<br /><hr />
+<h2 id="106-multiball启动必须是事务">106. Multiball启动必须是事务</h2><p>准备需要的Ball<br />
+→ Reserve Trough Balls<br />
+→ Release Locks<br />
+→ Serve Additional Balls<br />
+→ 确认Active Ball Count<br />
+→ 开启Rule State<br />
+→ Start Multiball。</p>
+<p>不能：</p>
+<p>Rule Mode先启动</p>
+<p>然后发现：</p>
+<p>没有Ball可发。</p>
+<hr />
+<h2 id="107-multiball结束">107. Multiball结束</h2><p>随着Ball Drain：</p>
+<p>BallsInPlay逐渐下降。</p>
+<p>当：</p>
+<p>只剩1颗</p>
+<p>或：</p>
+<p>低于Mode要求，</p>
+<p>Multiball Mode结束。</p>
+<p>但：</p>
+<p>剩余Ball继续正常游戏。</p>
+<hr />
+<h2 id="108-核心范式二十五jackpot是multiball中的高价值目标重映射">108. 核心范式二十五：Jackpot是Multiball中的高价值目标重映射</h2><p>Multiball不是：</p>
+<p>“所有东西分数翻倍。”</p>
+<p>更有结构的设计：</p>
+<p>Multiball开始后：</p>
+<p>指定Shots成为：</p>
+<p>Jackpot。</p>
+<p>完成后：</p>
+<p>下一个Shot点亮。</p>
+<hr />
+<h2 id="109-jackpotstate">109. JackpotState</h2><p>建议包含：</p>
+<ul>
+<li>CurrentJackpotValue；</li>
+</ul>
+<br />
+- QualifiedShotIds；
+<br />
+- CompletedJackpotIds；
+<br />
+- SuperJackpotProgress；
+<br />
+- JackpotMultiplier；
+<br />
+- JackpotVersion。
+<br /><hr />
+<h2 id="110-玩家因此在高ball密度状态中仍然需要">110. 玩家因此在高Ball密度状态中仍然需要：</h2><p>瞄准。</p>
+<p>而不是：</p>
+<p>疯狂乱按Flipper。</p>
+<hr />
+<h2 id="111-核心范式二十六ball-save-是失败宽容机制但必须与ball-lifecycle严格结合">111. 核心范式二十六：Ball Save 是失败宽容机制，但必须与Ball Lifecycle严格结合</h2><p>Ball刚发出：</p>
+<p>意外从Outlane直接Drain。</p>
+<p>完全损失一Ball：</p>
+<p>可能过于残酷。</p>
+<p>因此有：</p>
+<p>Ball Save。</p>
+<hr />
+<h2 id="112-ballsavestate">112. BallSaveState</h2><p>建议包含：</p>
+<ul>
+<li>Active；</li>
+</ul>
+<br />
+- StartTick；
+<br />
+- EndTick；
+<br />
+- SavesRemaining；
+<br />
+- GracePeriod；
+<br />
+- EligibleBallIds；
+<br />
+- SaveVersion。
+<br /><hr />
+<h2 id="113-drain发生">113. Drain发生</h2><p>Ball进入Drain。</p>
+<p>Rule Engine检查：</p>
+<p>Ball Save。</p>
+<p>若有效：</p>
+<p>原Ball进入Trough。</p>
+<p>Serve：</p>
+<p>一颗替代Ball。</p>
+<p>本Ball继续。</p>
+<hr />
+<h2 id="114-ball-save不应该取消drain物理事件">114. Ball Save不应该“取消Drain物理事件”</h2><p>Drain仍然发生。</p>
+<p>只是：</p>
+<p>Ball Lifecycle Rule</p>
+<p>决定：</p>
+<p>重新Serve。</p>
+<p>这样：</p>
+<p>统计与规则一致。</p>
+<hr />
+<h2 id="115-核心范式二十七drain-是pinball中的核心失败事件">115. 核心范式二十七：Drain 是Pinball中的核心失败事件</h2><p>Ball从：</p>
+<p>Playfield</p>
+<p>进入：</p>
+<p>Drain。</p>
+<p>它意味着：</p>
+<p>玩家暂时失去：</p>
+<p>当前物理控制机会。</p>
+<hr />
+<h2 id="116-drainevent">116. DrainEvent</h2><p>建议包含：</p>
+<ul>
+<li>DrainEventId；</li>
+</ul>
+<br />
+- BallId；
+<br />
+- DrainType；
+<br />
+- LastPlayerInfluence；
+<br />
+- LastShotId；
+<br />
+- DrainTick；
+<br />
+- WasBallSaveEligible；
+<br />
+- DrainVersion。
+<br /><hr />
+<h2 id="117-draintype">117. DrainType</h2><p>例如：</p>
+<ul>
+<li>CenterDrain；</li>
+</ul>
+<br />
+- LeftOutlane；
+<br />
+- RightOutlane；
+<br />
+- DeviceFault；
+<br />
+- RecoveryDrain。
+<br /><p>用于：</p>
+<p>Telemetry。</p>
+<hr />
+<h2 id="118-ball-end必须等ball-inventory稳定">118. Ball End必须等Ball Inventory稳定</h2><p>如果Multiball：</p>
+<p>一颗Ball Drain</p>
+<p>不代表：</p>
+<p>Ball End。</p>
+<p>只有：</p>
+<p>所有正常Playfield Balls都离开</p>
+<p>并且：</p>
+<p>没有Ball Save</p>
+<p>才结束当前Ball。</p>
+<hr />
+<h2 id="119-核心范式二十八end-of-ball-bonus-是把整颗ball期间积累的长期状态集中结算">119. 核心范式二十八：End-of-Ball Bonus 是把整颗Ball期间积累的长期状态集中结算</h2><p>例如：</p>
+<ul>
+<li>Targets Hit；</li>
+</ul>
+<br />
+- Lanes；
+<br />
+- Bonus Value；
+<br />
+- Bonus Multiplier；
+<br />
+- Mode Completion。
+<br /><hr />
+<h2 id="120-bonusstate">120. BonusState</h2><p>建议包含：</p>
+<ul>
+<li>BaseBonus；</li>
+</ul>
+<br />
+- BonusMultiplier；
+<br />
+- CategoryBonuses；
+<br />
+- HeldBonusRules；
+<br />
+- BonusVersion。
+<br /><hr />
+<h2 id="121-ball-end流程">121. Ball End流程</h2><p>确认无Ball Save<br />
+→ 停止Ball-local Modes<br />
+→ 冻结Bonus Snapshot<br />
+→ 计算Bonus<br />
+→ Score Commit<br />
+→ 更新Player Ball Count<br />
+→ 检查Extra Ball<br />
+→ 如果还有Ball则Serve<br />
+→ 否则Player / Game结束。</p>
+<hr />
+<h2 id="122-bonus不应依赖动画倒数">122. Bonus不应依赖动画倒数</h2><p>动画可以：</p>
+<p>一项一项显示Bonus。</p>
+<p>逻辑Score：</p>
+<p>已经确定。</p>
+<hr />
+<h2 id="123-核心范式二十九extra-ball-与-ball-save必须是两个不同概念">123. 核心范式二十九：Extra Ball 与 Ball Save必须是两个不同概念</h2><p>Ball Save：</p>
+<p>当前Ball仍然算：</p>
+<p>没结束。</p>
+<p>Extra Ball：</p>
+<p>当前Ball正常结束后：</p>
+<p>获得一颗额外Ball机会。</p>
+<hr />
+<h2 id="124-extraballstate">124. ExtraBallState</h2><p>建议包含：</p>
+<ul>
+<li>EarnedCount；</li>
+</ul>
+<br />
+- ConsumedCount；
+<br />
+- MaximumAllowed；
+<br />
+- ExtraBallVersion。
+<br /><hr />
+<h2 id="125-tournament模式可能限制extra-ball">125. Tournament模式可能限制Extra Ball</h2><p>规则层：</p>
+<p>可把Extra Ball奖励转换成：</p>
+<p>Score Award。</p>
+<p>因此内容和比赛规则应分离。</p>
+<hr />
+<h2 id="126-核心范式三十wizard-mode-是长期规则进度的终局验证">126. 核心范式三十：Wizard Mode 是长期规则进度的终局验证</h2><p>一张复杂Table通常拥有：</p>
+<p>多个主要Mode。</p>
+<p>玩家完成：</p>
+<p>大部分或全部</p>
+<p>以后：</p>
+<p>解锁：</p>
+<p>Wizard Mode。</p>
+<hr />
+<h2 id="127-wizardqualificationstate">127. WizardQualificationState</h2><p>可以包含：</p>
+<ul>
+<li>RequiredModeIds；</li>
+</ul>
+<br />
+- CompletedModeIds；
+<br />
+- RequiredMultiballs；
+<br />
+- SpecialRequirements；
+<br />
+- Qualified；
+<br />
+- QualificationVersion。
+<br /><hr />
+<h2 id="128-wizard-mode的意义">128. Wizard Mode的意义</h2><p>它是：</p>
+<blockquote>
+<p>当前整张Table规则理解程度的综合考试。</p>
+</blockquote>
+<p>不是：</p>
+<p>单纯再开一个分数×10。</p>
+<p>可以：</p>
+<p>组合：</p>
+<ul>
+<li>多球；</li>
+</ul>
+<br />
+- 多Shot；
+<br />
+- 时间；
+<br />
+- Mode回顾；
+<br />
+- 高倍率。
+<br /><hr />
+<h2 id="129-核心范式三十一table-lighting-是-gameplay-state-的信息投影">129. 核心范式三十一：Table Lighting 是 Gameplay State 的信息投影</h2><p>弹球桌上大量灯：</p>
+<p>不是纯美术装饰。</p>
+<p>它们告诉玩家：</p>
+<ul>
+<li>哪个Shot已点亮；</li>
+</ul>
+<br />
+- 哪个Mode Ready；
+<br />
+- 哪个Jackpot Active；
+<br />
+- 哪个Lock Qualified；
+<br />
+- 哪个Multiplier正在运行。
+<br /><p>因此：</p>
+<p><strong>Lamp / Lighting属于Gameplay Information System。</strong></p>
+<hr />
+<h2 id="130-lampdefinition">130. LampDefinition</h2><p>建议字段：</p>
+<ul>
+<li>LampId；</li>
+</ul>
+<br />
+- LogicalMeaningTags；
+<br />
+- DeviceBinding；
+<br />
+- PresentationProfile；
+<br />
+- PriorityLayer；
+<br />
+- LampVersion。
+<br /><hr />
+<h2 id="131-lamp-state不应被rule代码直接到处开关">131. Lamp State不应被Rule代码直接到处开关</h2><p>推荐：</p>
+<p>Rule层提交：</p>
+<p><strong>Lighting Intent。</strong></p>
+<p>例如：</p>
+<p><code>HighlightShot.LeftRamp = Jackpot</code></p>
+<p>LightingSystem根据：</p>
+<p>Priority和当前Mode</p>
+<p>决定实际表现。</p>
+<hr />
+<h2 id="132-lighting-layer">132. Lighting Layer</h2><p>例如：</p>
+<p>Base：</p>
+<p>Shot正常状态。</p>
+<p>Mode：</p>
+<p>Mode目标。</p>
+<p>Multiball：</p>
+<p>Jackpot。</p>
+<p>Critical：</p>
+<p>Ball Save Warning。</p>
+<p>高优先级覆盖低优先级。</p>
+<hr />
+<h2 id="133-如果没有优先级">133. 如果没有优先级</h2><p>多个Mode同时运行：</p>
+<p>同一Lamp不停：</p>
+<p>红绿闪烁争夺。</p>
+<p>玩家无法理解目标。</p>
+<hr />
+<h2 id="134-核心范式三十二display-dmd-同样应该是规则信息层">134. 核心范式三十二：Display / DMD 同样应该是规则信息层</h2><p>可以显示：</p>
+<ul>
+<li>Mode Name；</li>
+</ul>
+<br />
+- Time；
+<br />
+- Jackpot；
+<br />
+- Score；
+<br />
+- Ball Save；
+<br />
+- Combo；
+<br />
+- Bonus。
+<br /><hr />
+<h2 id="135-display-arbitration">135. Display Arbitration</h2><p>多个系统同时想显示信息：</p>
+<p>Jackpot +1M。</p>
+<p>Mode剩3秒。</p>
+<p>Extra Ball Lit。</p>
+<p>需要：</p>
+<p>Display Message Queue</p>
+<p>和：</p>
+<p>Priority。</p>
+<hr />
+<h2 id="136-critical信息">136. Critical信息</h2><p>例如：</p>
+<p>Mode Timer即将结束。</p>
+<p>优先级高于：</p>
+<p>普通Bumper +1000。</p>
+<hr />
+<h2 id="137-核心范式三十三audio-是玩家不看显示器时仍然理解规则状态的重要通道">137. 核心范式三十三：Audio 是玩家不看显示器时仍然理解规则状态的重要通道</h2><p>玩家主要眼睛：</p>
+<p>盯着Ball。</p>
+<p>没有时间一直读UI。</p>
+<p>因此音频承担：</p>
+<ul>
+<li>Mode Start；</li>
+</ul>
+<br />
+- Jackpot Qualified；
+<br />
+- Ball Save；
+<br />
+- Extra Ball；
+<br />
+- Timer；
+<br />
+- Danger；
+<br />
+- Combo。
+<br /><hr />
+<h2 id="138-audio-cue应和rule-event绑定">138. Audio Cue应和Rule Event绑定</h2><p>例如：</p>
+<p>Jackpot Lit</p>
+<p>产生：</p>
+<p>Gameplay Event。</p>
+<p>AudioSystem消费。</p>
+<p>不是：</p>
+<p>Lamp动画播到某帧</p>
+<p>才触发声音。</p>
+<hr />
+<h2 id="139-核心范式三十四rule-clock-和-physics-clock-应分离">139. 核心范式三十四：Rule Clock 和 Physics Clock 应分离</h2><p>Physics：</p>
+<p>高频Fixed Tick。</p>
+<p>Mode Timer：</p>
+<p>不需要同频。</p>
+<hr />
+<h2 id="140-ruleclockstate">140. RuleClockState</h2><p>建议支持：</p>
+<ul>
+<li>Gameplay Time；</li>
+</ul>
+<br />
+- Real Time；
+<br />
+- Ball Active Time；
+<br />
+- Pausable Time。
+<br /><hr />
+<h2 id="141-为什么不同timer需要不同clock">141. 为什么不同Timer需要不同Clock</h2><p>例如：</p>
+<p>Mode 30秒。</p>
+<p>Ball被Scoop抓住播放3秒演出。</p>
+<p>是否继续倒计时？</p>
+<p>设计可能：</p>
+<p>暂停。</p>
+<p>另一个Hurry-Up：</p>
+<p>可能继续。</p>
+<p>因此每个Timer声明：</p>
+<p>Timer Policy。</p>
+<hr />
+<h2 id="142-timerdefinition">142. TimerDefinition</h2><p>建议字段：</p>
+<ul>
+<li>Duration；</li>
+</ul>
+<br />
+- ClockType；
+<br />
+- PauseConditions；
+<br />
+- ExpireRule；
+<br />
+- WarningThresholds；
+<br />
+- TimerVersion。
+<br /><hr />
+<h2 id="143-timer不应该依赖ui动画倒计时">143. Timer不应该依赖UI动画倒计时</h2><p>RuleClock是权威。</p>
+<p>Display只读取。</p>
+<hr />
+<h2 id="144-核心范式三十五装置能够持球因此必须有容量与超时语义">144. 核心范式三十五：装置能够持球，因此必须有容量与超时语义</h2><p>Scoop：</p>
+<p>最多持1球。</p>
+<p>Multiball中：</p>
+<p>三颗Ball几乎同时进入。</p>
+<p>如果Device没有Capacity：</p>
+<p>可能全部消失。</p>
+<hr />
+<h2 id="145-devicecapacity">145. DeviceCapacity</h2><p>需要明确：</p>
+<ul>
+<li>Capacity；</li>
+</ul>
+<br />
+- QueueAllowed；
+<br />
+- OverflowPolicy。
+<br /><hr />
+<h2 id="146-overflow">146. Overflow</h2><p>可能：</p>
+<p>第二颗Ball直接Bounces Out。</p>
+<p>或：</p>
+<p>等待前一Ball Eject。</p>
+<p>不能：</p>
+<p>静默吞掉。</p>
+<hr />
+<h2 id="147-heldballstate">147. HeldBallState</h2><p>建议包含：</p>
+<ul>
+<li>DeviceId；</li>
+</ul>
+<br />
+- BallId；
+<br />
+- HoldStartTick；
+<br />
+- ScheduledEjectTick；
+<br />
+- HoldReason；
+<br />
+- HeldBallVersion。
+<br /><hr />
+<h2 id="148-eject流程">148. Eject流程</h2><p>Device收到：</p>
+<p>Eject Command。</p>
+<p>释放Ball Physics。</p>
+<p>设置：</p>
+<p>Position / Velocity</p>
+<p>来自：</p>
+<p>EjectProfile。</p>
+<hr />
+<h2 id="149-eject不是新建ball">149. Eject不是新建Ball</h2><p>仍然是：</p>
+<p>同一个BallId。</p>
+<hr />
+<h2 id="150-核心范式三十六ball-search-stuck-recovery-是pinball独有的重要失败恢复机制">150. 核心范式三十六：Ball Search / Stuck Recovery 是Pinball独有的重要失败恢复机制</h2><p>实体Pinball存在：</p>
+<p>Ball卡在某个角落。</p>
+<p>机器会：</p>
+<p>周期触发装置</p>
+<p>尝试把Ball震出来。</p>
+<p>数字Pinball同样可能：</p>
+<p>因为几何或物理边界</p>
+<p>产生Stuck Ball。</p>
+<hr />
+<h2 id="151-ballactivitystate">151. BallActivityState</h2><p>可以记录：</p>
+<ul>
+<li>LastMeaningfulMovementTick；</li>
+</ul>
+<br />
+- LastSwitchTick；
+<br />
+- CurrentSpeed；
+<br />
+- CurrentRegion；
+<br />
+- StuckSuspicionLevel。
+<br /><hr />
+<h2 id="152-stuck-detection">152. Stuck Detection</h2><p>如果：</p>
+<p>预计Ball在Playfield。</p>
+<p>但：</p>
+<ul>
+<li>长时间低速；</li>
+</ul>
+<br />
+- 没有Switch；
+<br />
+- 没有Held Device；
+<br />
+- 不在Trough；
+<br /><p>则：</p>
+<p>进入：</p>
+<p>BallSearch。</p>
+<hr />
+<h2 id="153-ballsearch流程">153. BallSearch流程</h2><p>第一阶段：</p>
+<p>轻量激活：</p>
+<ul>
+<li>Bumper；</li>
+</ul>
+<br />
+- Slingshot；
+<br />
+- Kicker。
+<br /><p>仍无活动：</p>
+<p>第二阶段：</p>
+<p>更多Device Pulse。</p>
+<p>最后：</p>
+<p>Digital Recovery：</p>
+<p>把Ball恢复到安全Serve位置。</p>
+<hr />
+<h2 id="154-recovery优先避免直接teleport">154. Recovery优先避免直接Teleport</h2><p>先尝试：</p>
+<p>用正常Device动作恢复。</p>
+<p>这样：</p>
+<p>保持物理可信度。</p>
+<hr />
+<h2 id="155-但永远卡死比一次安全恢复更糟">155. 但永远卡死比一次安全恢复更糟</h2><p>最终必须存在：</p>
+<p>Fallback Recovery。</p>
+<hr />
+<h2 id="156-核心范式三十七ball-search同时是integrity-check">156. 核心范式三十七：Ball Search同时是Integrity Check</h2><p>如果系统认为：</p>
+<p>3颗Ball在Playfield。</p>
+<p>实际Physics Registry只找到：</p>
+<p>2。</p>
+<p>说明：</p>
+<p>Ball Inventory已经异常。</p>
+<p>Ball Search可以触发：</p>
+<p>Inventory Audit。</p>
+<hr />
+<h2 id="157-核心范式三十八physics-region-可以简化复杂轨道与ramp">157. 核心范式三十八：Physics Region 可以简化复杂轨道与Ramp</h2><p>一张Pinball桌可能包含：</p>
+<ul>
+<li>上层Ramp；</li>
+</ul>
+<br />
+- Wireform；
+<br />
+- 地下Subway；
+<br />
+- VUK。
+<br /><p>Ball不一定始终：</p>
+<p>处在同一Playfield Plane。</p>
+<hr />
+<h2 id="158-physicsregiondefinition">158. PhysicsRegionDefinition</h2><p>建议包含：</p>
+<ul>
+<li>RegionId；</li>
+</ul>
+<br />
+- GravityProfile；
+<br />
+- CollisionLayer；
+<br />
+- EntryPortals；
+<br />
+- ExitPortals；
+<br />
+- CameraRule；
+<br />
+- RegionVersion。
+<br /><hr />
+<h2 id="159-ramp">159. Ramp</h2><p>可以是真实3DGeometry。</p>
+<p>也可以：</p>
+<p>部分使用：</p>
+<p>受约束Rail Motion。</p>
+<p>关键是：</p>
+<p>不要直接动画Teleport。</p>
+<hr />
+<h2 id="160-constrained-rail-motion">160. Constrained Rail Motion</h2><p>Ball进入Wireform：</p>
+<p>仍保存：</p>
+<p>BallId、速度和进度。</p>
+<p>只是约束：</p>
+<p>沿Spline运动。</p>
+<p>离开：</p>
+<p>转换回自由Physics。</p>
+<hr />
+<h2 id="161-这样可以在">161. 这样可以在：</h2><p>性能、可控性和视觉之间平衡。</p>
+<p>不要求所有桌面部分都必须使用：</p>
+<p>完全自由3D刚体。</p>
+<hr />
+<h2 id="162-核心范式三十九magnet-等主动装置必须通过-force-field-影响ball">162. 核心范式三十九：Magnet 等主动装置必须通过 Force Field 影响Ball</h2><p>Magnet Mode：</p>
+<p>吸球。</p>
+<p>最好：</p>
+<p>向Ball施加：</p>
+<p>Force。</p>
+<p>而不是：</p>
+<p>强制把Ball MoveTo Center。</p>
+<hr />
+<h2 id="163-magnetfielddefinition">163. MagnetFieldDefinition</h2><p>建议字段：</p>
+<ul>
+<li>Position；</li>
+</ul>
+<br />
+- Radius；
+<br />
+- ForceCurve；
+<br />
+- MaximumForce；
+<br />
+- ActivationRule；
+<br />
+- SpinModifier；
+<br />
+- MagnetVersion。
+<br /><hr />
+<h2 id="164-这样ball仍然">164. 这样Ball仍然：</h2><p>可能逃离。</p>
+<p>轨迹受到：</p>
+<p>真实初始状态影响。</p>
+<p>产生更多自然变化。</p>
+<hr />
+<h2 id="165-核心范式四十pinball的混沌性要求局部确定长期不可完全预测">165. 核心范式四十：Pinball的混沌性要求“局部确定、长期不可完全预测”</h2><p>Ball碰撞属于：</p>
+<p>高度敏感系统。</p>
+<p>微小：</p>
+<p>位置、速度差异</p>
+<p>可能几十次碰撞后：</p>
+<p>产生完全不同轨迹。</p>
+<p>这并不是坏事。</p>
+<hr />
+<h2 id="166-真正需要稳定的是">166. 真正需要稳定的是：</h2><ul>
+<li>Flipper Input响应；</li>
+</ul>
+<br />
+- Contact规则；
+<br />
+- Device规则；
+<br />
+- Shot Recognition；
+<br />
+- Scoring；
+<br />
+- Mode。
+<br /><p>而不是要求：</p>
+<p>每次Launch</p>
+<p>100%走同一路线。</p>
+<hr />
+<h2 id="167-skill成立的前提">167. Skill成立的前提</h2><p>玩家必须感觉：</p>
+<p>好的Flipper Timing</p>
+<p>显著提高：</p>
+<p>目标Shot概率。</p>
+<p>而不是：</p>
+<p>Ball完全随机。</p>
+<hr />
+<h2 id="168-核心范式四十一replay不应轻率依赖跨平台浮点完全确定">168. 核心范式四十一：Replay不应轻率依赖跨平台浮点完全确定</h2><p>Pinball拥有：</p>
+<p>高速刚体 + 多次碰撞 + Spin。</p>
+<p>仅记录：</p>
+<p>Input</p>
+<p>然后期待：</p>
+<p>Windows、macOS、不同CPU</p>
+<p>完全得到同样轨迹，</p>
+<p>可能非常脆弱。</p>
+<hr />
+<h2 id="169-更稳的replay方案">169. 更稳的Replay方案</h2><p><strong>Input + Periodic Authoritative Snapshot + Rule Event。</strong></p>
+<hr />
+<h2 id="170-replaysnapshot">170. ReplaySnapshot</h2><p>建议包含：</p>
+<ul>
+<li>PhysicsTick；</li>
+</ul>
+<br />
+- BallStates；
+<br />
+- FlipperStates；
+<br />
+- DeviceStates；
+<br />
+- RuleStateHash；
+<br />
+- ScoreState；
+<br />
+- ReplayVersion。
+<br /><hr />
+<h2 id="171-replay过程">171. Replay过程</h2><p>输入驱动模拟。</p>
+<p>周期Snapshot进行：</p>
+<p>校正 / 验证。</p>
+<p>重要Rule Event：</p>
+<p>独立记录。</p>
+<p>这样：</p>
+<p>即使长期Physics产生微小浮点漂移，</p>
+<p>Replay仍然可恢复。</p>
+<hr />
+<h2 id="172-如果产品使用固定点-确定physics">172. 如果产品使用固定点 / 确定Physics</h2><p>则可以：</p>
+<p>更激进使用Input Replay。</p>
+<p>但这是：</p>
+<p>技术选择。</p>
+<p>不是本类型成立的前提。</p>
+<hr />
+<h2 id="173-核心范式四十二high-score系统必须明确规则版本">173. 核心范式四十二：High Score系统必须明确规则版本</h2><p>Pinball的重要长期目标：</p>
+<p>高分。</p>
+<p>如果更新：</p>
+<p>Jackpot从500k改成2M，</p>
+<p>旧分数和新分数：</p>
+<p>不再直接可比。</p>
+<hr />
+<h2 id="174-scorerecord">174. ScoreRecord</h2><p>建议包含：</p>
+<ul>
+<li>Score；</li>
+</ul>
+<br />
+- TableId；
+<br />
+- TableRuleVersion；
+<br />
+- PhysicsVersion；
+<br />
+- PlayerId；
+<br />
+- GameMode；
+<br />
+- AssistFlags；
+<br />
+- Timestamp；
+<br />
+- ReplayReference；
+<br />
+- IntegrityState。
+<br /><hr />
+<h2 id="175-leaderboard">175. Leaderboard</h2><p>至少分：</p>
+<ul>
+<li>Table Version；</li>
+</ul>
+<br />
+- Ruleset；
+<br />
+- Tournament Mode；
+<br />
+- Assist Mode。
+<br /><p>避免：</p>
+<p>不同规则直接混榜。</p>
+<hr />
+<h2 id="176-核心范式四十三tournament-mode应减少随机奖励和长期特权">176. 核心范式四十三：Tournament Mode应减少随机奖励和长期特权</h2><p>竞技Pinball常需要：</p>
+<p>所有玩家：</p>
+<p>相同初始条件。</p>
+<p>因此Tournament RuleSet可以：</p>
+<ul>
+<li>禁止Extra Ball；</li>
+</ul>
+<br />
+- 固定Random Awards；
+<br />
+- 转换随机奖励为Score；
+<br />
+- 固定Ball Count；
+<br />
+- 禁止继续投币。
+<br /><hr />
+<h2 id="177-tableruleset">177. TableRuleSet</h2><p>建议包含：</p>
+<ul>
+<li>BallsPerGame；</li>
+</ul>
+<br />
+- ExtraBallPolicy；
+<br />
+- RandomAwardPolicy；
+<br />
+- TiltPolicy；
+<br />
+- BallSavePolicy；
+<br />
+- MatchAwardPolicy；
+<br />
+- TournamentFlags；
+<br />
+- RuleSetVersion。
+<br /><hr />
+<h2 id="178-核心范式四十四多玩家pinball通常是共享桌面轮流拥有ball">178. 核心范式四十四：多玩家Pinball通常是“共享桌面，轮流拥有Ball”</h2><p>经典多人：</p>
+<p>Player A Ball1。</p>
+<p>Drain。</p>
+<p>Player B Ball1。</p>
+<p>……</p>
+<p>因此：</p>
+<p>Table物理资产共享。</p>
+<p>规则进度可能：</p>
+<p>部分Player-specific。</p>
+<hr />
+<h2 id="179-pinballplayerstate">179. PinballPlayerState</h2><p>建议包含：</p>
+<ul>
+<li>PlayerId；</li>
+</ul>
+<br />
+- Score；
+<br />
+- CurrentBallNumber；
+<br />
+- ExtraBalls；
+<br />
+- PlayerModeProgress；
+<br />
+- PlayerLockProgress；
+<br />
+- BonusState；
+<br />
+- PlayerVersion。
+<br /><hr />
+<h2 id="180-global-table-state-vs-player-state">180. Global Table State vs Player State</h2><p>例如：</p>
+<p>Physical Locked Balls</p>
+<p>可能是：</p>
+<p>全局。</p>
+<p>Mode Progress：</p>
+<p>可能每Player独立。</p>
+<p>必须逐项声明Scope。</p>
+<hr />
+<h2 id="181-scopedefinition">181. ScopeDefinition</h2><p>状态可以：</p>
+<ul>
+<li>MachineGlobal；</li>
+</ul>
+<br />
+- GameGlobal；
+<br />
+- Player；
+<br />
+- Ball；
+<br />
+- ModeInstance。
+<br /><p>这是Rule Engine非常重要的基础。</p>
+<hr />
+<h2 id="182-如果不明确scope">182. 如果不明确Scope</h2><p>多人时最容易出现：</p>
+<p>Player A点亮Jackpot。</p>
+<p>Player B上场以后：</p>
+<p>莫名也能拿。</p>
+<hr />
+<h2 id="183-核心范式四十五rule-engine最好使用明确的状态作用域">183. 核心范式四十五：Rule Engine最好使用明确的状态作用域</h2><p>例如：</p>
+<p><code>ModeProgress[PlayerId]</code></p>
+<p>和：</p>
+<p><code>PhysicalLock[Machine]</code></p>
+<p>不要混在：</p>
+<p>一个巨大TableState对象。</p>
+<hr />
+<h2 id="184-rulestatekey">184. RuleStateKey</h2><p>可以由：</p>
+<ul>
+<li>RuleId；</li>
+</ul>
+<br />
+- ScopeType；
+<br />
+- ScopeId；
+<br /><p>构成。</p>
+<hr />
+<h2 id="185-核心范式四十六随机award应有独立rng-stream">185. 核心范式四十六：随机Award应有独立RNG Stream</h2><p>例如：</p>
+<p>Mystery Award。</p>
+<p>可以随机：</p>
+<ul>
+<li>Points；</li>
+</ul>
+<br />
+- Bonus；
+<br />
+- Light Lock；
+<br />
+- Extra Ball。
+<br /><hr />
+<h2 id="186-random-streams">186. Random Streams</h2><p>建议分：</p>
+<ul>
+<li>GameplayAwardRandom；</li>
+</ul>
+<br />
+- DeviceRandom；
+<br />
+- CosmeticRandom；
+<br />
+- AttractRandom。
+<br /><hr />
+<h2 id="187-visual-random不能影响gameplay-award">187. Visual Random不能影响Gameplay Award</h2><p>增加一个：</p>
+<p>随机灯光动画</p>
+<p>不应该：</p>
+<p>改变下一次Mystery奖励。</p>
+<hr />
+<h2 id="188-tournament-mode可以">188. Tournament Mode可以：</h2><p>固定Gameplay Seed</p>
+<p>或：</p>
+<p>使用确定Award Table。</p>
+<hr />
+<h2 id="189-完整事件与执行流程示例">189. 完整事件与执行流程示例</h2><p>以下以：</p>
+<p><strong>玩家完成三次Ramp目标，启动Mode，锁三球进入Multiball，并在高倍率状态完成Super Jackpot，随后只剩一球并最终Drain结算Bonus</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="1891-当前ball">189.1 当前Ball</h3><p>Player 1。</p>
+<p>Ball 2。</p>
+<p>当前：</p>
+<p>单球Playfield。</p>
+<hr />
+<h3 id="1892-当前rule-state">189.2 当前Rule State</h3><p>Mode：</p>
+<p>未激活。</p>
+<p>LeftRampHits：</p>
+<p>2 / 3。</p>
+<p>Lock：</p>
+<p>0 / 3。</p>
+<p>Playfield Multiplier：</p>
+<p>1×。</p>
+<hr />
+<h3 id="1893-玩家在左flipper完成cradle">189.3 玩家在左Flipper完成Cradle</h3><p>Ball低速稳定停在：</p>
+<p>左Flipper上。</p>
+<hr />
+<h3 id="1894-玩家瞄准left-ramp">189.4 玩家瞄准Left Ramp</h3><p>释放Flipper。</p>
+<p>随后：</p>
+<p>在适当时机再次Flip。</p>
+<hr />
+<h3 id="1895-ball-contact">189.5 Ball Contact</h3><p>Physics计算：</p>
+<p>Flipper → Ball冲量。</p>
+<p>Ball向：</p>
+<p>左Ramp入口运动。</p>
+<hr />
+<h3 id="1896-entrance-switch触发">189.6 Entrance Switch触发</h3><p>ShotTracker：</p>
+<p>开始：</p>
+<p>LeftRamp Candidate。</p>
+<hr />
+<h3 id="1897-mid-switch触发">189.7 Mid Switch触发</h3><p>Candidate推进。</p>
+<hr />
+<h3 id="1898-exit-switch触发">189.8 Exit Switch触发</h3><p>方向、时间均合法。</p>
+<p>生成：</p>
+<p><code>ShotCompleted.LeftRamp</code>。</p>
+<hr />
+<h3 id="1899-rule-engine消费shot">189.9 Rule Engine消费Shot</h3><p>Base Rule：</p>
+<p>+50k。</p>
+<p>Ramp Progress：</p>
+<p>2 → 3。</p>
+<p>达到Threshold。</p>
+<hr />
+<h3 id="18910-mode-qualified">189.10 Mode Qualified</h3><p>Rule Engine：</p>
+<p><code>ModeA.Ready = true</code>。</p>
+<p>Lighting Intent：</p>
+<p>中央Scoop开始闪烁。</p>
+<p>Audio：</p>
+<p>“Mode Ready”。</p>
+<hr />
+<h3 id="18911-ball从ramp返回">189.11 Ball从Ramp返回</h3><p>进入右Inlane。</p>
+<p>玩家继续控制。</p>
+<hr />
+<h3 id="18912-玩家打入central-scoop">189.12 玩家打入Central Scoop</h3><p>Ball进入：</p>
+<p>Scoop Device。</p>
+<p>Physics从Free Ball切换：</p>
+<p>Held Device。</p>
+<hr />
+<h3 id="18913-scoop-switch触发">189.13 Scoop Switch触发</h3><p>Rule Engine发现：</p>
+<p>ModeA Ready。</p>
+<hr />
+<h3 id="18914-mode启动">189.14 Mode启动</h3><p>创建：</p>
+<p>ModeInstance。</p>
+<p>持续：</p>
+<p>40秒。</p>
+<p>目标：</p>
+<p>完成：</p>
+<p>LeftOrbit<br />
+RightOrbit<br />
+CenterRamp。</p>
+<hr />
+<h3 id="18915-scoop计划eject">189.15 Scoop计划Eject</h3><p>Ball保持同一个BallId。</p>
+<p>3秒后：</p>
+<p>Eject。</p>
+<hr />
+<h3 id="18916-rule-timer">189.16 Rule Timer</h3><p>根据Mode Timer Policy：</p>
+<p>Scoop演出期间暂停。</p>
+<hr />
+<h3 id="18917-ball-eject">189.17 Ball Eject</h3><p>Scoop施加：</p>
+<p>EjectVelocity。</p>
+<p>Ball回到Playfield。</p>
+<hr />
+<h3 id="18918-玩家完成三个目标shots">189.18 玩家完成三个目标Shots</h3><p>每个：</p>
+<p>ShotEvent同时：</p>
+<ul>
+<li>提供基础Score；</li>
+</ul>
+<br />
+- 推进Mode；
+<br />
+- 推进Combo。
+<br /><hr />
+<h3 id="18919-mode完成">189.19 Mode完成</h3><p>奖励：</p>
+<p>500k。</p>
+<p>同时：</p>
+<p>Lock Qualified。</p>
+<hr />
+<h3 id="18920-lock-lamp点亮">189.20 Lock Lamp点亮</h3><p>玩家现在需要：</p>
+<p>命中右侧Lock Shot。</p>
+<hr />
+<h3 id="18921-玩家完成lock-shot">189.21 玩家完成Lock Shot</h3><p>Ball进入Physical Lock Device。</p>
+<hr />
+<h3 id="18922-ball-inventory变化">189.22 Ball Inventory变化</h3><p>Ball 2：</p>
+<p>Playfield<br />
+→ Lock。</p>
+<hr />
+<h3 id="18923-ballmanager请求serve-replacement">189.23 BallManager请求Serve Replacement</h3><p>Trough中取：</p>
+<p>Ball 4。</p>
+<p>Trough<br />
+→ ShooterLane。</p>
+<hr />
+<h3 id="18924-玩家继续">189.24 玩家继续</h3><p>当前仍是：</p>
+<p>Ball 2的游戏生命周期，</p>
+<p>因为Ball只是被Lock，</p>
+<p>并没有Drain。</p>
+<hr />
+<h3 id="18925-第二第三次lock">189.25 第二、第三次Lock</h3><p>最终：</p>
+<p>Lock拥有3颗Ball。</p>
+<hr />
+<h3 id="18926-multiball-qualified">189.26 Multiball Qualified</h3><p>系统确认：</p>
+<p>Physical Ball Inventory合法。</p>
+<hr />
+<h3 id="18927-玩家命中start-shot">189.27 玩家命中Start Shot</h3><p>MultiballTransaction开始。</p>
+<hr />
+<h3 id="18928-release">189.28 Release</h3><p>Lock中3颗Ball依次：</p>
+<p>Eject到Playfield。</p>
+<p>必要时：</p>
+<p>Trough补足额外Ball。</p>
+<hr />
+<h3 id="18929-active-ball-count">189.29 Active Ball Count</h3><p>从：</p>
+<p>1</p>
+<p>提高到：</p>
+<p>3。</p>
+<hr />
+<h3 id="18930-multiball-mode正式active">189.30 Multiball Mode正式Active</h3><p>开启：</p>
+<p>15秒Ball Save。</p>
+<p>Jackpot：</p>
+<p>LeftRamp / RightRamp点亮。</p>
+<p>音乐与Lamp切换。</p>
+<hr />
+<h3 id="18931-玩家现在面对高信息密度">189.31 玩家现在面对高信息密度</h3><p>三颗Ball同时运动。</p>
+<p>但仍需要：</p>
+<p>瞄准特定Jackpot。</p>
+<hr />
+<h3 id="18932-ball-a命中leftramp">189.32 Ball A命中LeftRamp</h3><p>ShotRecognizer针对Ball A确认。</p>
+<p>Jackpot：</p>
+<p>500k。</p>
+<hr />
+<h3 id="18933-ball-b同时触发bumper">189.33 Ball B同时触发Bumper</h3><p>只是：</p>
+<p>普通Scoring。</p>
+<p>不会污染Ball A的Shot Tracker。</p>
+<hr />
+<h3 id="18934-ball-c从outlane-drain">189.34 Ball C从Outlane Drain</h3><p>当前：</p>
+<p>Ball Save仍然Active。</p>
+<hr />
+<h3 id="18935-drainevent产生">189.35 DrainEvent产生</h3><p>Ball C进入Trough。</p>
+<hr />
+<h3 id="18936-ball-save规则">189.36 Ball Save规则</h3><p>检测Eligible。</p>
+<p>Serve Replacement：</p>
+<p>Ball C重新进入ShooterLane。</p>
+<p>Multiball仍然保持：</p>
+<p>3球。</p>
+<hr />
+<h3 id="18937-玩家完成全部基础jackpot">189.37 玩家完成全部基础Jackpot</h3><p>Super Jackpot：</p>
+<p>中央Scoop点亮。</p>
+<hr />
+<h3 id="18938-同时playfield-multiplier被激活为">189.38 同时Playfield Multiplier被激活为：</h3><p>3×。</p>
+<hr />
+<h3 id="18939-玩家把ball-a打入scoop">189.39 玩家把Ball A打入Scoop</h3><p>Shot / Device Event确认：</p>
+<p>Super Jackpot。</p>
+<hr />
+<h3 id="18940-score-pipeline">189.40 Score Pipeline</h3><p>Base Super Jackpot：</p>
+<p>2M。</p>
+<p>Multiball Rule：</p>
+<p>×2。</p>
+<p>Playfield：</p>
+<p>×3。</p>
+<p>最终：</p>
+<p>12M。</p>
+<hr />
+<h3 id="18941-display和audio播放高优先级反馈">189.41 Display和Audio播放高优先级反馈</h3><p>但：</p>
+<p>其他Ball Physics继续运行。</p>
+<p>不能：</p>
+<p>为了显示12M</p>
+<p>暂停整个比赛，</p>
+<p>除非规则明确。</p>
+<hr />
+<h3 id="18942-ball-b-drain">189.42 Ball B Drain</h3><p>Ball Save已经结束。</p>
+<p>Active：</p>
+<p>2。</p>
+<hr />
+<h3 id="18943-ball-c-drain">189.43 Ball C Drain</h3><p>Active：</p>
+<p>1。</p>
+<hr />
+<h3 id="18944-multiball结束">189.44 Multiball结束</h3><p>Jackpot Rules关闭。</p>
+<p>音乐切回。</p>
+<p>但：</p>
+<p>Ball A仍在Playfield。</p>
+<p>当前Ball继续。</p>
+<hr />
+<h3 id="18945-玩家又生存20秒">189.45 玩家又生存20秒</h3><p>最终：</p>
+<p>Center Drain。</p>
+<hr />
+<h3 id="18946-ball-save无效">189.46 Ball Save无效</h3><p>Active Playfield Ball：</p>
+<p>0。</p>
+<p>无Hold Ball。</p>
+<hr />
+<h3 id="18947-ball-end成立">189.47 Ball End成立</h3><p>停止：</p>
+<p>Ball-local Modes。</p>
+<p>计算：</p>
+<p>Bonus。</p>
+<hr />
+<h3 id="18948-bonus">189.48 Bonus</h3><p>Base Bonus：</p>
+<p>320k。</p>
+<p>Bonus Multiplier：</p>
+<p>4×。</p>
+<p>最终：</p>
+<p>1.28M。</p>
+<hr />
+<h3 id="18949-score-commit">189.49 Score Commit</h3><p>加入：</p>
+<p>Player Score。</p>
+<hr />
+<h3 id="18950-下一ball">189.50 下一Ball</h3><p>Player仍有：</p>
+<p>Ball 3。</p>
+<p>部分Player Progress按规则保留。</p>
+<p>部分Ball-local Combo重置。</p>
+<hr />
+<h3 id="18951-这整个过程涉及">189.51 这整个过程涉及：</h3><p>Flipper Physics<br />
+→ Ball Contact<br />
+→ Switch Matrix<br />
+→ Shot Recognition<br />
+→ Mode Qualification<br />
+→ Held Device<br />
+→ Ball Inventory<br />
+→ Lock<br />
+→ Multiball Transaction<br />
+→ Per-Ball Shot Tracking<br />
+→ Jackpot<br />
+→ Score Pipeline<br />
+→ Ball Save<br />
+→ Drain<br />
+→ End-of-Ball Bonus。</p>
+<p>这就是Pinball最独特的工程结构：</p>
+<blockquote>
+<p><strong>一个连续高速物理世界不断产生离散事实，而规则系统持续把这些事实重新解释成越来越高层的目标与奖励。</strong></p>
+</blockquote>
+<hr />
+<h2 id="190-模块通信设计">190. 模块通信设计</h2><h3 id="1901-高频input">190.1 高频Input</h3><p>包括：</p>
+<ul>
+<li>LeftFlipper；</li>
+</ul>
+<br />
+- RightFlipper；
+<br />
+- AuxiliaryFlipper；
+<br />
+- Plunger；
+<br />
+- NudgeLeft；
+<br />
+- NudgeRight；
+<br />
+- NudgeForward。
+<br /><p>进入：</p>
+<p>Input Sampling → Device Actuation。</p>
+<hr />
+<h2 id="191-commands">191. Commands</h2><p>低频包括：</p>
+<ul>
+<li>StartGame；</li>
+</ul>
+<br />
+- AddPlayer；
+<br />
+- Pause；
+<br />
+- SelectTournamentMode；
+<br />
+- RestartTable；
+<br />
+- EnterInitials。
+<br /><hr />
+<h2 id="192-queries">192. Queries</h2><p>适用于：</p>
+<ul>
+<li>当前Balls In Play；</li>
+</ul>
+<br />
+- 哪个Mode正在运行；
+<br />
+- Jackpot在哪里；
+<br />
+- 当前Bonus；
+<br />
+- Ball Save还剩多久；
+<br />
+- Lock了几球；
+<br />
+- 当前Shot为什么没有识别；
+<br />
+- 哪个Device持有Ball。
+<br /><p>Query不能：</p>
+<ul>
+<li>移动Ball；</li>
+</ul>
+<br />
+- 加分；
+<br />
+- 修改Mode；
+<br />
+- Serve Ball。
+<br /><hr />
+<h2 id="193-domain-events">193. Domain Events</h2><p>包括：</p>
+<ul>
+<li>BallServed；</li>
+</ul>
+<br />
+- BallLaunched；
+<br />
+- BallContactedDevice；
+<br />
+- SwitchTriggered；
+<br />
+- ShotStarted；
+<br />
+- ShotCompleted；
+<br />
+- ShotFailed；
+<br />
+- BallCaptured；
+<br />
+- BallEjected；
+<br />
+- BallLocked；
+<br />
+- BallDrained；
+<br />
+- BallSaveTriggered；
+<br />
+- ModeQualified；
+<br />
+- ModeStarted；
+<br />
+- ModeProgressed；
+<br />
+- ModeCompleted；
+<br />
+- ModeTimedOut；
+<br />
+- MultiballStarted；
+<br />
+- JackpotScored；
+<br />
+- TiltWarning；
+<br />
+- Tilted；
+<br />
+- BallEnded；
+<br />
+- BonusCalculated；
+<br />
+- GameEnded。
+<br /><hr />
+<h2 id="194-presentation-events">194. Presentation Events</h2><p>包括：</p>
+<ul>
+<li>FlashLamp；</li>
+</ul>
+<br />
+- PlayCallout；
+<br />
+- ShowScorePopup；
+<br />
+- PlayJackpotAnimation；
+<br />
+- CameraFocus；
+<br />
+- ControllerRumble；
+<br />
+- PlayDrainEffect。
+<br /><p>表现事件不能：</p>
+<ul>
+<li>修改Ball；</li>
+</ul>
+<br />
+- 判定Shot；
+<br />
+- 改Score；
+<br />
+- 修改Mode。
+<br /><hr />
+<h2 id="195-推荐状态所有权">195. 推荐状态所有权</h2><p><strong>PhysicsSystem</strong></p>
+<p>拥有Ball和Physical Contact。</p>
+<p><strong>BallRegistry</strong></p>
+<p>拥有Ball Identity与Container。</p>
+<p><strong>FlipperSystem</strong></p>
+<p>拥有Flipper Actuator。</p>
+<p><strong>DeviceSystem</strong></p>
+<p>拥有机械装置状态。</p>
+<p><strong>SwitchSystem</strong></p>
+<p>拥有离散传感器事件。</p>
+<p><strong>ShotRecognitionSystem</strong></p>
+<p>拥有Shot语义。</p>
+<p><strong>RuleEngine</strong></p>
+<p>拥有规则解释。</p>
+<p><strong>ModeSystem</strong></p>
+<p>拥有Mode实例。</p>
+<p><strong>ScoringSystem</strong></p>
+<p>拥有Score Pipeline。</p>
+<p><strong>BallLifecycleSystem</strong></p>
+<p>拥有Serve / Drain / Ball End。</p>
+<p><strong>LightingSystem</strong></p>
+<p>拥有Lamp表现。</p>
+<p><strong>DisplaySystem</strong></p>
+<p>拥有信息仲裁。</p>
+<p><strong>AudioSystem</strong></p>
+<p>消费Gameplay事件。</p>
+<p><strong>ReplaySystem</strong></p>
+<p>记录输入、Snapshot和Rule Event。</p>
+<hr />
+<h2 id="196-核心通信原则">196. 核心通信原则</h2><p>物理层向上：</p>
+<p>只发布事实。</p>
+<p>规则层向下：</p>
+<p>只能提交Device Intent。</p>
+<p>例如：</p>
+<p>Rule需要释放Scoop中的Ball。</p>
+<p>提交：</p>
+<p><code>EjectBall(Device17)</code>。</p>
+<p>DeviceSystem执行。</p>
+<p>不能：</p>
+<p>Rule：</p>
+<p><code>Ball.position = exitPoint</code></p>
+<p>直接越过Device。</p>
+<hr />
+<h2 id="197-失败隔离">197. 失败隔离</h2><hr />
+<h3 id="1971-ball产生nan">197.1 Ball产生NaN</h3><p>PhysicsSystem立即：</p>
+<p>冻结对应Ball。</p>
+<p>记录：</p>
+<ul>
+<li>BallId；</li>
+</ul>
+<br />
+- LastValidState；
+<br />
+- ContactHistory。
+<br /><p>进入：</p>
+<p>Ball Recovery。</p>
+<p>不能让NaN传播：</p>
+<p>整个Physics World。</p>
+<hr />
+<h2 id="198-ball飞出合法table-bounds">198. Ball飞出合法Table Bounds</h2><p>如果不是：</p>
+<p>合法Drain / Track出口，</p>
+<p>标记：</p>
+<p>OutOfBounds。</p>
+<p>优先恢复到：</p>
+<p>LastValidRegion。</p>
+<p>最终：</p>
+<p>Safe Serve。</p>
+<hr />
+<h2 id="199-switch抖动">199. Switch抖动</h2><p>SwitchSystem：</p>
+<p>Debounce。</p>
+<p>Rule不会收到：</p>
+<p>几十次重复Hit。</p>
+<hr />
+<h2 id="200-duplicate-switch-event">200. Duplicate Switch Event</h2><p>每个：</p>
+<p>SwitchEventId</p>
+<p>唯一。</p>
+<p>Rule消费使用：</p>
+<p>SourceEvent去重。</p>
+<hr />
+<h2 id="201-shot-candidate超时">201. Shot Candidate超时</h2><p>Ball触发Entrance。</p>
+<p>但没有完成路径。</p>
+<p>超过：</p>
+<p>MaximumTraversalTime。</p>
+<p>Candidate失效。</p>
+<p>不能：</p>
+<p>10秒后另一颗Switch误完成旧Shot。</p>
+<hr />
+<h2 id="202-ball-local-shot-state未清理">202. Ball-local Shot State未清理</h2><p>Ball Drain / Captured后：</p>
+<p>清理：</p>
+<p>不再合法的Shot Candidate。</p>
+<hr />
+<h2 id="203-device容量超限">203. Device容量超限</h2><p>第二颗Ball进入：</p>
+<p>Capacity 1的Scoop。</p>
+<p>根据：</p>
+<p>OverflowPolicy</p>
+<p>处理。</p>
+<p>不能：</p>
+<p>数组越界或吞Ball。</p>
+<hr />
+<h2 id="204-held-ball-eject失败">204. Held Ball Eject失败</h2><p>Device重复尝试。</p>
+<p>若超过：</p>
+<p>EjectRetryCount：</p>
+<p>BallSearch / Recovery。</p>
+<hr />
+<h2 id="205-trough数量异常">205. Trough数量异常</h2><p>预期：</p>
+<p>3球。</p>
+<p>实际：</p>
+<p>2球。</p>
+<p>进入：</p>
+<p>BallInventoryIntegrityError。</p>
+<p>阻止：</p>
+<p>直接开始新Ball</p>
+<p>直到恢复或Fallback。</p>
+<hr />
+<h2 id="206-multiball启动失败">206. Multiball启动失败</h2><p>如果无法确认：</p>
+<p>所需Ball数量：</p>
+<p>整个MultiballTransaction回滚到：</p>
+<p>合法前态。</p>
+<p>Rule不能显示：</p>
+<p>Multiball Active。</p>
+<hr />
+<h2 id="207-ball-save重复">207. Ball Save重复</h2><p>同一DrainEvent：</p>
+<p>只允许触发一次Serve。</p>
+<hr />
+<h2 id="208-end-of-ball重复">208. End-of-Ball重复</h2><p>多个Drain同Tick。</p>
+<p>BallLifecycle在：</p>
+<p>所有事件处理完成后</p>
+<p>统一判断：</p>
+<p>是否真正Ball End。</p>
+<hr />
+<h2 id="209-rule-event无限循环">209. Rule Event无限循环</h2><p>例如：</p>
+<p>Shot Award</p>
+<p>触发Mode Award。</p>
+<p>Mode Award又模拟Shot。</p>
+<p>需要：</p>
+<ul>
+<li>RootEventId；</li>
+</ul>
+<br />
+- RuleDepth；
+<br />
+- ReentryPolicy。
+<br /><hr />
+<h2 id="210-scoring溢出">210. Scoring溢出</h2><p>Score可能：</p>
+<p>极高。</p>
+<p>使用：</p>
+<p>足够位宽或Big Integer策略。</p>
+<p>绝不能：</p>
+<p>高分以后变负数。</p>
+<hr />
+<h2 id="211-timer过期后仍收到旧callback">211. Timer过期后仍收到旧Callback</h2><p>Timer拥有：</p>
+<p>ModeInstanceId</p>
+<p>和：</p>
+<p>TimerGeneration。</p>
+<p>旧Timer事件：</p>
+<p>忽略。</p>
+<hr />
+<h2 id="212-mode结束但lighting仍高亮">212. Mode结束但Lighting仍高亮</h2><p>Lighting是派生状态。</p>
+<p>重新：</p>
+<p>Resolve Lighting Intents。</p>
+<p>不修改Mode。</p>
+<hr />
+<h2 id="213-tilt后某flipper仍能动">213. Tilt后某Flipper仍能动</h2><p>TiltSystem向Flipper提交：</p>
+<p>ControlDisabled。</p>
+<p>所有输入继续采集，</p>
+<p>但Actuation不执行。</p>
+<hr />
+<h2 id="214-replay-desync">214. Replay Desync</h2><p>不要：</p>
+<p>改变正式Game。</p>
+<p>记录：</p>
+<p>PhysicsSnapshot Diff。</p>
+<p>Replay可以：</p>
+<p>从下一Authoritative Snapshot重新同步。</p>
+<hr />
+<h2 id="215-debug与可观测性">215. Debug与可观测性</h2><p>Pinball非常适合做高密度Debug Overlay。</p>
+<p>否则设计师看到的只会是：</p>
+<blockquote>
+<p>“这颗球怎么又莫名其妙弹走了？”</p>
+</blockquote>
+<hr />
+<h2 id="216-ball-inspector">216. Ball Inspector</h2><p>显示：</p>
+<ul>
+<li>Position；</li>
+</ul>
+<br />
+- Velocity；
+<br />
+- Spin；
+<br />
+- Region；
+<br />
+- Container；
+<br />
+- Last Contact；
+<br />
+- Last Switch；
+<br />
+- Last Shot Candidate。
+<br /><hr />
+<h2 id="217-ball-trail">217. Ball Trail</h2><p>显示：</p>
+<p>最近若干秒：</p>
+<p>真实Ball轨迹。</p>
+<p>用于分析：</p>
+<p>Shot Entry / Drain。</p>
+<hr />
+<h2 id="218-contact-inspector">218. Contact Inspector</h2><p>每次碰撞显示：</p>
+<ul>
+<li>Ball；</li>
+</ul>
+<br />
+- Collider；
+<br />
+- Surface；
+<br />
+- Normal；
+<br />
+- RelativeVelocity；
+<br />
+- Impulse；
+<br />
+- Energy Before / After。
+<br /><hr />
+<h2 id="219-flipper-contact-debug">219. Flipper Contact Debug</h2><p>显示：</p>
+<p>球击中Flipper的：</p>
+<ul>
+<li>Contact Position；</li>
+</ul>
+<br />
+- Flipper Angle；
+<br />
+- Angular Velocity；
+<br />
+- Input Timing。
+<br /><p>这对调手感极其重要。</p>
+<hr />
+<h2 id="220-switch-event-monitor">220. Switch Event Monitor</h2><p>实时列表：</p>
+<p>Tick 1234<br />
+LeftRampEntry<br />
+Ball 2。</p>
+<p>Tick 1241<br />
+LeftRampMid。</p>
+<p>Tick 1248<br />
+LeftRampExit。</p>
+<hr />
+<h2 id="221-shot-recognition-inspector">221. Shot Recognition Inspector</h2><p>显示：</p>
+<p>LeftRamp：</p>
+<p>A ✅<br />
+B ✅<br />
+C 等待。</p>
+<p>或：</p>
+<p>Candidate Failed：</p>
+<p>Traversal Timeout。</p>
+<hr />
+<h2 id="222-device-inspector">222. Device Inspector</h2><p>显示：</p>
+<p>Scoop：</p>
+<p>Capacity 1。</p>
+<p>Occupied：</p>
+<p>Ball 4。</p>
+<p>Scheduled Eject：</p>
+<p>2.4s。</p>
+<hr />
+<h2 id="223-ball-inventory-inspector">223. Ball Inventory Inspector</h2><p>一眼显示：</p>
+<p>Trough：2。</p>
+<p>Playfield：2。</p>
+<p>Lock：1。</p>
+<p>Scoop：1。</p>
+<p>Total：6。</p>
+<hr />
+<h2 id="224-任何数量不守恒">224. 任何数量不守恒：</h2><p>直接红色报警。</p>
+<hr />
+<h2 id="225-rule-event-timeline">225. Rule Event Timeline</h2><p>按时间：</p>
+<p>Shot<br />
+→ ModeQualified<br />
+→ ModeStart<br />
+→ Jackpot<br />
+→ Drain。</p>
+<hr />
+<h2 id="226-mode-stack-inspector">226. Mode Stack Inspector</h2><p>显示：</p>
+<p>Base Rules。</p>
+<p>Monster Mode。</p>
+<p>Multiball。</p>
+<p>3× Playfield。</p>
+<p>每个：</p>
+<p>状态、剩余时间、Priority。</p>
+<hr />
+<h2 id="227-score-trace">227. Score Trace</h2><p>点击某次：</p>
+<p>12M Jackpot。</p>
+<p>展开完整：</p>
+<p>来源和乘区。</p>
+<hr />
+<h2 id="228-lighting-debug">228. Lighting Debug</h2><p>点击一个Lamp：</p>
+<p>显示：</p>
+<p>当前所有Lighting Intent。</p>
+<p>最终哪个Priority获胜。</p>
+<hr />
+<h2 id="229-timer-inspector">229. Timer Inspector</h2><p>显示：</p>
+<ul>
+<li>Mode；</li>
+</ul>
+<br />
+- ClockType；
+<br />
+- Remaining；
+<br />
+- Paused Because；
+<br />
+- Expiration。
+<br /><hr />
+<h2 id="230-drain-heatmap">230. Drain Heatmap</h2><p>统计：</p>
+<p>Ball从哪里进入：</p>
+<p>Center Drain。</p>
+<p>Left Outlane。</p>
+<p>Right Outlane。</p>
+<hr />
+<h2 id="231-shot-success-heatmap">231. Shot Success Heatmap</h2><p>记录：</p>
+<p>玩家Shot Attempt：</p>
+<p>从哪一侧Flipper出发。</p>
+<p>命中率。</p>
+<hr />
+<h2 id="232-ball-flow-graph">232. Ball Flow Graph</h2><p>统计真实Ball流：</p>
+<p>Shooter Lane<br />
+→ Orbit<br />
+→ Inlane<br />
+→ Flipper<br />
+→ Ramp<br />
+→ Scoop。</p>
+<p>这可以揭示：</p>
+<p>桌面主要Flow。</p>
+<hr />
+<h2 id="233-stuck-ball-heatmap">233. Stuck Ball Heatmap</h2><p>记录：</p>
+<p>BallSearch触发时：</p>
+<p>Ball位置。</p>
+<p>如果大量集中某Ramp：</p>
+<p>几何设计问题。</p>
+<hr />
+<h2 id="234-nudge-tilt-timeline">234. Nudge / Tilt Timeline</h2><p>显示：</p>
+<p>每次Nudge强度。</p>
+<p>Tilt Energy。</p>
+<p>Warning。</p>
+<hr />
+<h2 id="235-multiball-performance-panel">235. Multiball Performance Panel</h2><p>显示：</p>
+<p>Active Balls。</p>
+<p>Physics Contacts / Tick。</p>
+<p>Switch Events / s。</p>
+<p>Rendering Cost。</p>
+<hr />
+<h2 id="236-replay-diff">236. Replay Diff</h2><p>比较：</p>
+<p>期望Snapshot</p>
+<p>与：</p>
+<p>重播Snapshot。</p>
+<p>显示首个：</p>
+<p>Ball State分歧。</p>
+<hr />
+<h2 id="237-内容验证工具">237. 内容验证工具</h2><hr />
+<h3 id="2371-ball-conservation-test">237.1 Ball Conservation Test</h3><p>随机运行：</p>
+<p>Serve、Lock、Multiball、Drain。</p>
+<p>始终验证：</p>
+<p>总Ball数守恒。</p>
+<hr />
+<h2 id="238-trough-capacity-test">238. Trough Capacity Test</h2><p>所有Game State下：</p>
+<p>必须存在合法：</p>
+<p>下一Ball Serve路径。</p>
+<hr />
+<h2 id="239-physical-lock-capacity-test">239. Physical Lock Capacity Test</h2><p>验证：</p>
+<p>锁定N颗Ball以后：</p>
+<p>Trough仍有足够Ball继续游戏。</p>
+<hr />
+<h2 id="240-device-capacity-test">240. Device Capacity Test</h2><p>向每个Device：</p>
+<p>尝试同时送入：</p>
+<p>1、2、3颗Ball。</p>
+<p>确保：</p>
+<p>Overflow规则稳定。</p>
+<hr />
+<h2 id="241-switch-debounce-test">241. Switch Debounce Test</h2><p>Ball高速振动触发Switch。</p>
+<p>确认：</p>
+<p>不会重复Award。</p>
+<hr />
+<h2 id="242-shot-recognition-test">242. Shot Recognition Test</h2><p>对每个Shot：</p>
+<p>注入：</p>
+<p>正确Switch Sequence。</p>
+<p>必须：</p>
+<p>完成。</p>
+<hr />
+<h2 id="243-reverse-shot-test">243. Reverse Shot Test</h2><p>反向Sequence：</p>
+<p>按规则：</p>
+<p>识别或拒绝。</p>
+<hr />
+<h2 id="244-multiball-interleaving-test">244. Multiball Interleaving Test</h2><p>Ball A、B、C事件交错。</p>
+<p>确保：</p>
+<p>Shot Tracker不会串Ball。</p>
+<hr />
+<h2 id="245-mode-reachability-validation">245. Mode Reachability Validation</h2><p>某Mode要求：</p>
+<p>3个Shot。</p>
+<p>这些Shot：</p>
+<p>必须存在</p>
+<p>且当前RuleSet可以到达。</p>
+<hr />
+<h2 id="246-wizard-mode-reachability">246. Wizard Mode Reachability</h2><p>从Fresh Game：</p>
+<p>所有Qualification</p>
+<p>必须存在合法路径。</p>
+<hr />
+<h2 id="247-rule-deadlock-test">247. Rule Deadlock Test</h2><p>例如：</p>
+<p>Mode要求Lock。</p>
+<p>Lock只能由Mode结束后点亮。</p>
+<p>这属于：</p>
+<p>Rule Deadlock。</p>
+<p>构建期检测部分依赖关系。</p>
+<hr />
+<h2 id="248-scoring-loop-exploit-test">248. Scoring Loop Exploit Test</h2><p>构建Rule Dependency Graph。</p>
+<p>检查：</p>
+<p>一次Switch是否：</p>
+<p>通过规则循环</p>
+<p>无限生成ScoreEvent。</p>
+<hr />
+<h2 id="249-score-overflow-test">249. Score Overflow Test</h2><p>生成：</p>
+<p>极端Multiplier。</p>
+<p>确认：</p>
+<p>Score不溢出。</p>
+<hr />
+<h2 id="250-physics-stress-test">250. Physics Stress Test</h2><p>同时：</p>
+<p>1、3、6、10颗Ball。</p>
+<p>测：</p>
+<ul>
+<li>CCD；</li>
+</ul>
+<br />
+- Contact；
+<br />
+- Frame Time。
+<br /><hr />
+<h2 id="251-flipper-sweep-test">251. Flipper Sweep Test</h2><p>在不同：</p>
+<p>Ball位置、Flipper相位</p>
+<p>自动发射。</p>
+<p>检测：</p>
+<p>穿透和异常能量。</p>
+<hr />
+<h2 id="252-extreme-velocity-test">252. Extreme Velocity Test</h2><p>给Ball：</p>
+<p>超常速度。</p>
+<p>确认：</p>
+<p>不会穿Table。</p>
+<hr />
+<h2 id="253-ramp-transition-test">253. Ramp Transition Test</h2><p>所有：</p>
+<p>Physics Region Portal</p>
+<p>自动过球。</p>
+<p>检查：</p>
+<p>Ball不会丢失。</p>
+<hr />
+<h2 id="254-ball-search-test">254. Ball Search Test</h2><p>人工把Ball放到：</p>
+<p>各种死角。</p>
+<p>验证：</p>
+<p>Device Pulse和Fallback Recovery。</p>
+<hr />
+<h2 id="255-drain-ball-save-race-test">255. Drain / Ball Save Race Test</h2><p>在：</p>
+<p>Ball Save结束Tick附近</p>
+<p>生成Drain。</p>
+<p>结果必须：</p>
+<p>稳定。</p>
+<hr />
+<h2 id="256-multiball-end-race-test">256. Multiball End Race Test</h2><p>两颗Ball同Tick Drain。</p>
+<p>确保：</p>
+<p>Mode只结束一次。</p>
+<hr />
+<h2 id="257-tilt-boundary-test">257. Tilt Boundary Test</h2><p>在Threshold：</p>
+<p>前后输入Nudge。</p>
+<p>确保：</p>
+<p>Warning / Tilt确定。</p>
+<hr />
+<h2 id="258-replay-stability-test">258. Replay Stability Test</h2><p>输入相同Input Stream。</p>
+<p>同Platform执行多次。</p>
+<p>检查：</p>
+<p>Snapshot Drift。</p>
+<hr />
+<h2 id="259-table-monte-carlo">259. Table Monte Carlo</h2><p>使用简单Bot / 随机Flipper策略运行：</p>
+<p>数万Ball。</p>
+<p>统计：</p>
+<ul>
+<li>Average Ball Time；</li>
+</ul>
+<br />
+- Drain Distribution；
+<br />
+- Shot Completion；
+<br />
+- Stuck Rate；
+<br />
+- Device Usage。
+<br /><p>用于发现：</p>
+<p>明显异常桌面结构。</p>
+<hr />
+<h2 id="260-physics-skill-bot">260. Physics Skill Bot</h2><p>更高级工具可以：</p>
+<p>训练或搜索：</p>
+<p>从Flipper Cradle</p>
+<p>打中某Shot的输入Timing窗口。</p>
+<p>估算：</p>
+<p>Shot Difficulty。</p>
+<hr />
+<h2 id="261-shot-window">261. Shot Window</h2><p>例如：</p>
+<p>Left Ramp：</p>
+<p>Flipper触发窗口：</p>
+<p>12ms。</p>
+<p>Right Orbit：</p>
+<p>35ms。</p>
+<p>如果目标面向普通玩家：</p>
+<p>12ms可能过窄。</p>
+<hr />
+<h2 id="262-这比只看几何角度更有价值">262. 这比只看几何角度更有价值</h2><p>真正难度来自：</p>
+<p>玩家可操作时机窗口。</p>
+<hr />
+<h2 id="263-性能设计">263. 性能设计</h2><p>Pinball实体数量通常不大。</p>
+<p>最大的工程压力是：</p>
+<p><strong>高速高精度Physics + Multiball Contact密度。</strong></p>
+<hr />
+<h2 id="264-physics-tick优先级高">264. Physics Tick优先级高</h2><p>避免：</p>
+<p>UI动画、日志、音频</p>
+<p>阻塞：</p>
+<p>Physics。</p>
+<hr />
+<h2 id="265-ball数量少不需要过早做复杂ecs">265. Ball数量少，不需要过早做复杂ECS</h2><p>即使Multiball：</p>
+<p>通常也只是个位数Ball。</p>
+<p>优先：</p>
+<p>正确性和稳定性。</p>
+<hr />
+<h2 id="266-但contact-query必须高质量">266. 但Contact Query必须高质量</h2><p>10颗Ball × 高速Flipper</p>
+<p>仍然可能产生：</p>
+<p>大量CCD计算。</p>
+<hr />
+<h2 id="267-collision-geometry需要简化">267. Collision Geometry需要简化</h2><p>美术Ramp非常复杂。</p>
+<p>Gameplay Collision：</p>
+<p>尽量使用：</p>
+<p>简洁、连续、无缝曲面。</p>
+<hr />
+<h2 id="268-避免微小collider-seam">268. 避免微小Collider Seam</h2><p>Ball高速滚过：</p>
+<p>两块表面连接处。</p>
+<p>0.1mm缝隙</p>
+<p>可能导致：</p>
+<p>异常弹起。</p>
+<p>因此：</p>
+<p>Playfield Collision Mesh需要：</p>
+<p>专项清理。</p>
+<hr />
+<h2 id="269-rail-wireform可以使用constrained-simulation">269. Rail / Wireform可以使用Constrained Simulation</h2><p>降低：</p>
+<p>复杂碰撞成本。</p>
+<hr />
+<h2 id="270-switch是sensor不需要参与physical-collision">270. Switch是Sensor，不需要参与Physical Collision</h2><p>使用：</p>
+<p>Trigger / Analytical Crossing。</p>
+<hr />
+<h2 id="271-rule-engine不需要physics频率">271. Rule Engine不需要Physics频率</h2><p>Physics：</p>
+<p>高频。</p>
+<p>Switch：</p>
+<p>事件。</p>
+<p>Rule：</p>
+<p>事件驱动。</p>
+<p>Mode Timer：</p>
+<p>较低频。</p>
+<hr />
+<h2 id="272-lighting和display同样不需要高频重新计算">272. Lighting和Display同样不需要高频重新计算</h2><p>只在：</p>
+<p>Rule Intent变化</p>
+<p>或：</p>
+<p>Animation Tick</p>
+<p>更新。</p>
+<hr />
+<h2 id="273-score-display可以动画插值">273. Score Display可以动画插值</h2><p>权威Score：</p>
+<p>立即更新。</p>
+<p>UI数字：</p>
+<p>逐渐滚到目标。</p>
+<hr />
+<h2 id="274-replay-snapshot频率可以低于physics">274. Replay Snapshot频率可以低于Physics</h2><p>例如：</p>
+<p>每若干Physics Tick</p>
+<p>保存一次。</p>
+<p>关键事件：</p>
+<p>额外Snapshot。</p>
+<hr />
+<h2 id="275-可扩展点">275. 可扩展点</h2><hr />
+<h3 id="2751-新bumper">275.1 新Bumper</h3><p>新增：</p>
+<p>DeviceDefinition</p>
+<ul>
+<li>Physical Response</li>
+</ul>
+<br />
+- Switch。
+<br /><p>不修改Rule Engine。</p>
+<hr />
+<h3 id="2752-新shot">275.2 新Shot</h3><p>只配置：</p>
+<p>Switch Sequence</p>
+<p>和：</p>
+<p>Rule Tag。</p>
+<hr />
+<h3 id="2753-新mode">275.3 新Mode</h3><p>通过：</p>
+<p>ModeDefinition</p>
+<p>消费已有Shot / Switch事件。</p>
+<hr />
+<h3 id="2754-新multiball">275.4 新Multiball</h3><p>组合：</p>
+<p>Qualification</p>
+<ul>
+<li>Ball Release</li>
+</ul>
+<br />
+- Jackpot Rule。
+<br /><hr />
+<h3 id="2755-新table">275.5 新Table</h3><p>复用：</p>
+<ul>
+<li>Physics；</li>
+</ul>
+<br />
+- Device；
+<br />
+- Switch；
+<br />
+- Shot；
+<br />
+- Rule；
+<br />
+- Ball Lifecycle。
+<br /><p>主要替换：</p>
+<p>Geometry和Rule Content。</p>
+<hr />
+<h3 id="2756-新机械装置">275.6 新机械装置</h3><p>例如：</p>
+<p>Rotating Disc。</p>
+<p>通过：</p>
+<p>Device Physics Adapter。</p>
+<p>Rule仍然只消费：</p>
+<p>Semantic Event。</p>
+<hr />
+<h3 id="2757-新ruleset">275.7 新Ruleset</h3><p>Tournament。</p>
+<p>Casual。</p>
+<p>Practice。</p>
+<p>可以：</p>
+<p>替换：</p>
+<p>Balls、Extra Ball、Random和Score规则。</p>
+<hr />
+<h3 id="2758-practice-mode">275.8 Practice Mode</h3><p>可以提供：</p>
+<ul>
+<li>Infinite Ball Save；</li>
+</ul>
+<br />
+- Shot Reset；
+<br />
+- Direct Mode Start；
+<br />
+- Physics Slow Motion；
+<br />
+- Ball Path Overlay。
+<br /><p>非常适合：</p>
+<p>高技能Pinball。</p>
+<hr />
+<h3 id="2759-roguelike-pinball扩展">275.9 Roguelike Pinball扩展</h3><p>未来可以加入：</p>
+<ul>
+<li>Table Modifier；</li>
+</ul>
+<br />
+- Power；
+<br />
+- Build；
+<br />
+- Random Upgrade。
+<br /><p>但它仍然建立在：</p>
+<p>本次Pinball物理与Rule基础之上。</p>
+<p>不应反过来污染基础Ball Physics。</p>
+<hr />
+<h2 id="276-玩家体验设计">276. 玩家体验设计</h2><hr />
+<h3 id="2761-玩家首先必须信任ball">276.1 玩家首先必须信任Ball</h3><p>这是Pinball最重要的体验底线。</p>
+<p>失败以后玩家最好认为：</p>
+<blockquote>
+<p>我这个Flipper早了。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>球怎么随机穿过去了。</p>
+</blockquote>
+<hr />
+<h2 id="277-physics不必绝对真实但必须稳定">277. Physics不必绝对真实，但必须稳定</h2><p>同一：</p>
+<p>Cradle状态</p>
+<p>和：</p>
+<p>近似相同Input Timing，</p>
+<p>应该产生：</p>
+<p>近似相同Shot区域。</p>
+<hr />
+<h2 id="278-flipper输入必须极低延迟">278. Flipper输入必须极低延迟</h2><p>按键：</p>
+<p>必须立即开始Actuation。</p>
+<p>不能：</p>
+<p>等待动画事件。</p>
+<hr />
+<h2 id="279-任何input-lag都会被高度放大">279. 任何Input Lag都会被高度放大</h2><p>因为Shot Timing</p>
+<p>可能只有：</p>
+<p>几十毫秒窗口。</p>
+<hr />
+<h2 id="280-灯光必须告诉玩家现在应该打哪里">280. 灯光必须告诉玩家“现在应该打哪里”</h2><p>新玩家通常无法：</p>
+<p>同时理解整个Rulebook。</p>
+<p>桌面应该通过：</p>
+<ul>
+<li>Lamp；</li>
+</ul>
+<br />
+- Arrow；
+<br />
+- Insert；
+<br />
+- Audio；
+<br /><p>引导：</p>
+<p>当前目标。</p>
+<hr />
+<h2 id="281-但灯光不能全部一起闪">281. 但灯光不能全部一起闪</h2><p>否则：</p>
+<p>信息密度过高。</p>
+<p>Lighting Priority必须：</p>
+<p>服务决策。</p>
+<hr />
+<h2 id="282-玩家视线主要跟ball走">282. 玩家视线主要跟Ball走</h2><p>关键Mode信息：</p>
+<p>应该通过：</p>
+<p>Audio</p>
+<p>和：</p>
+<p>大面积Lighting</p>
+<p>补充。</p>
+<p>不要要求：</p>
+<p>持续阅读小字。</p>
+<hr />
+<h2 id="283-score反馈应分层">283. Score反馈应分层</h2><p>普通Switch：</p>
+<p>轻。</p>
+<p>Ramp：</p>
+<p>明显。</p>
+<p>Jackpot：</p>
+<p>强。</p>
+<p>Super Jackpot：</p>
+<p>极强。</p>
+<p>让玩家通过：</p>
+<p>声音和画面</p>
+<p>理解价值层级。</p>
+<hr />
+<h2 id="284-drain反馈需要短而明确">284. Drain反馈需要短而明确</h2><p>Ball Drain：</p>
+<p>本身已经是损失。</p>
+<p>不需要：</p>
+<p>长达5秒失败动画。</p>
+<p>下一Ball应该：</p>
+<p>快速Serve。</p>
+<hr />
+<h2 id="285-但end-of-ball-bonus可以提供短暂释放节奏">285. 但End-of-Ball Bonus可以提供短暂释放节奏</h2><p>高强度物理控制之间：</p>
+<p>给玩家：</p>
+<p>一小段结果反馈。</p>
+<hr />
+<h2 id="286-multiball需要提高强度但不能完全失去信息层级">286. Multiball需要提高强度但不能完全失去信息层级</h2><p>如果：</p>
+<p>所有灯、音效、Ball Trail同时爆炸，</p>
+<p>玩家只能：</p>
+<p>乱按。</p>
+<p>仍然需要：</p>
+<p>Jackpot目标可读。</p>
+<hr />
+<h2 id="287-高手玩法和新手玩法应该使用同一桌面">287. 高手玩法和新手玩法应该使用同一桌面</h2><p>新手：</p>
+<p>只求Ball存活。</p>
+<p>中级：</p>
+<p>完成Mode。</p>
+<p>高手：</p>
+<p>叠Mode + Multiplier + Jackpot。</p>
+<p>顶级：</p>
+<p>优化风险和Score。</p>
+<p>这是一张优秀Pinball Table最有价值的层级性。</p>
+<hr />
+<h2 id="288-难度不应主要来自随机bounce">288. 难度不应主要来自随机Bounce</h2><p>可以存在混沌。</p>
+<p>但主要挑战应来自：</p>
+<ul>
+<li>Shot Timing；</li>
+</ul>
+<br />
+- Ball Control；
+<br />
+- Rule Planning；
+<br />
+- Risk Management。
+<br /><hr />
+<h2 id="289-危险shot应该有明确高价值">289. 危险Shot应该有明确高价值</h2><p>如果一个Shot：</p>
+<p>非常容易Center Drain。</p>
+<p>奖励却和安全Orbit一样，</p>
+<p>玩家不会主动尝试。</p>
+<hr />
+<h2 id="290-ball-save应主要保护无学习价值的早期失败">290. Ball Save应主要保护“无学习价值的早期失败”</h2><p>例如：</p>
+<p>刚Launch就Drain。</p>
+<p>而不是：</p>
+<p>无限覆盖玩家明显操作错误。</p>
+<hr />
+<h2 id="291-nudge-tilt应该允许高手挽救ball">291. Nudge / Tilt应该允许高手挽救Ball</h2><p>但：</p>
+<p>风险规则必须稳定。</p>
+<p>玩家才能学习：</p>
+<p>自己还能推几次。</p>
+<hr />
+<h2 id="292-rule-complexity应逐步展开">292. Rule Complexity应逐步展开</h2><p>开局：</p>
+<p>先点亮几个清楚目标。</p>
+<p>中期：</p>
+<p>Mode。</p>
+<p>后期：</p>
+<p>Mode Stack / Multiball。</p>
+<p>不要：</p>
+<p>新玩家第一Ball就展示：</p>
+<p>40条闪烁规则。</p>
+<hr />
+<h2 id="293-rulebook-ui最好可以回答">293. Rulebook UI最好可以回答：</h2><ul>
+<li>怎么启动这个Mode；</li>
+</ul>
+<br />
+- 这个Lamp代表什么；
+<br />
+- Jackpot在哪；
+<br />
+- 当前为什么是3×。
+<br /><p>但实时游戏中：</p>
+<p>不强迫玩家打开。</p>
+<hr />
+<h2 id="294-常见设计失败">294. 常见设计失败</h2><hr />
+<h3 id="2941-ball只是视觉对象">294.1 Ball只是视觉对象</h3><p>真正逻辑用Owner和路径动画。</p>
+<p>失去Pinball核心。</p>
+<hr />
+<h3 id="2942-ramp直接teleport-ball">294.2 Ramp直接Teleport Ball</h3><p>轨迹缺乏连续性。</p>
+<hr />
+<h3 id="2943-每次碰撞直接加score">294.3 每次碰撞直接加Score</h3><p>Physics与Rules耦合。</p>
+<hr />
+<h3 id="2944-没有switch语义层">294.4 没有Switch语义层</h3><p>Rule只能监听Collider。</p>
+<hr />
+<h3 id="2945-没有shot-recognition">294.5 没有Shot Recognition</h3><p>左Ramp等高级目标只能硬绑一个Trigger。</p>
+<hr />
+<h3 id="2946-multiball时shot事件互相串线">294.6 Multiball时Shot事件互相串线</h3><p>没有按Ball追踪Sequence。</p>
+<hr />
+<h3 id="2947-flipper角度瞬间teleport">294.7 Flipper角度瞬间Teleport</h3><p>Ball获得异常冲量。</p>
+<hr />
+<h3 id="2948-animation-event驱动flipper-physics">294.8 Animation Event驱动Flipper Physics</h3><p>视觉帧率改变Gameplay。</p>
+<hr />
+<h3 id="2949-ball使用离散碰撞">294.9 Ball使用离散碰撞</h3><p>高速穿Flipper。</p>
+<hr />
+<h3 id="29410-ramp-collision-mesh和美术完全同精度">294.10 Ramp Collision Mesh和美术完全同精度</h3><p>微小缝隙大量异常Bounce。</p>
+<hr />
+<h3 id="29411-surface-material没有统一规则">294.11 Surface Material没有统一规则</h3><p>同类橡胶碰撞手感不一致。</p>
+<hr />
+<h3 id="29412-plunger只有固定发射力度">294.12 Plunger只有固定发射力度</h3><p>Skill Shot空间消失。</p>
+<hr />
+<h3 id="29413-nudge直接给ball随意velocity">294.13 Nudge直接给Ball随意Velocity</h3><p>玩家可以作弊式控制。</p>
+<hr />
+<h3 id="29414-没有tilt">294.14 没有Tilt</h3><p>Nudge成为无限Save。</p>
+<hr />
+<h3 id="29415-bumper自己决定当前mode分数">294.15 Bumper自己决定当前Mode分数</h3><p>Rule扩展困难。</p>
+<hr />
+<h3 id="29416-device直接destroy-spawn-ball">294.16 Device直接Destroy / Spawn Ball</h3><p>Ball守恒破坏。</p>
+<hr />
+<h3 id="29417-没有ball-registry">294.17 没有Ball Registry</h3><p>不知道Ball到底在哪里。</p>
+<hr />
+<h3 id="29418-lock吞掉ball但trough没有补ball">294.18 Lock吞掉Ball但Trough没有补Ball</h3><p>游戏Softlock。</p>
+<hr />
+<h3 id="29419-multiball先切mode再尝试发ball">294.19 Multiball先切Mode再尝试发Ball</h3><p>规则和物理状态分叉。</p>
+<hr />
+<h3 id="29420-ball-save通过忽略drain实现">294.20 Ball Save通过“忽略Drain”实现</h3><p>统计和生命周期混乱。</p>
+<hr />
+<h3 id="29421-extra-ball和ball-save共用一个变量">294.21 Extra Ball和Ball Save共用一个变量</h3><p>回合语义错误。</p>
+<hr />
+<h3 id="29422-end-of-ball由某个drain-trigger直接执行">294.22 End-of-Ball由某个Drain Trigger直接执行</h3><p>Multiball第一次Drain就结束Ball。</p>
+<hr />
+<h3 id="29423-mode全部互斥">294.23 Mode全部互斥</h3><p>无法形成Mode Stacking深度。</p>
+<hr />
+<h3 id="29424-mode全部无条件叠加">294.24 Mode全部无条件叠加</h3><p>信息和计分失控。</p>
+<hr />
+<h3 id="29425-timer全部使用同一clock">294.25 Timer全部使用同一Clock</h3><p>Scoop演出期间规则时间错误。</p>
+<hr />
+<h3 id="29426-lamp由多个mode直接写颜色">294.26 Lamp由多个Mode直接写颜色</h3><p>状态互相覆盖。</p>
+<hr />
+<h3 id="29427-display没有priority">294.27 Display没有Priority</h3><p>普通+100分覆盖Super Jackpot提示。</p>
+<hr />
+<h3 id="29428-所有音效纯随机播放">294.28 所有音效纯随机播放</h3><p>玩家无法通过Audio理解规则。</p>
+<hr />
+<h3 id="29429-计分multiplier执行顺序不固定">294.29 计分Multiplier执行顺序不固定</h3><p>同一个Jackpot不同路径结果不同。</p>
+<hr />
+<h3 id="29430-score只看绝对值不分析shot-risk">294.30 Score只看绝对值，不分析Shot Risk</h3><p>高风险球路没有价值。</p>
+<hr />
+<h3 id="29431-multiball只是生成三个球">294.31 Multiball只是生成三个球</h3><p>没有Jackpot、Ball Save和规则阶段变化。</p>
+<hr />
+<h3 id="29432-wizard-mode只是普通mode-10分">294.32 Wizard Mode只是普通Mode ×10分</h3><p>没有综合规则验证意义。</p>
+<hr />
+<h3 id="29433-ball卡住以后只能重开game">294.33 Ball卡住以后只能重开Game</h3><p>缺少Ball Search。</p>
+<hr />
+<h3 id="29434-ball-search直接teleport且无诊断">294.34 Ball Search直接Teleport且无诊断</h3><p>几何Bug长期隐藏。</p>
+<hr />
+<h3 id="29435-input-replay被假定跨平台绝对确定">294.35 Input Replay被假定跨平台绝对确定</h3><p>浮点漂移导致Replay后期失真。</p>
+<hr />
+<h3 id="29436-high-score没有记录rule-version">294.36 High Score没有记录Rule Version</h3><p>更新后榜单失去可比性。</p>
+<hr />
+<h3 id="29437-tournament和casual共用随机extra-ball规则">294.37 Tournament和Casual共用随机Extra Ball规则</h3><p>竞技公平差。</p>
+<hr />
+<h3 id="29438-多玩家rule-state没有scope">294.38 多玩家Rule State没有Scope</h3><p>Player进度互相污染。</p>
+<hr />
+<h3 id="29439-玩家必须盯ui文字才能知道当前目标">294.39 玩家必须盯UI文字才能知道当前目标</h3><p>破坏Ball追踪。</p>
+<hr />
+<h3 id="29440-multiball视觉效果遮住ball">294.40 Multiball视觉效果遮住Ball</h3><p>表现奖励反而破坏核心操作。</p>
+<hr />
+<h2 id="295-最小可行原型">295. 最小可行原型</h2><p>验证Pinball核心范式，不需要第一版就制作：</p>
+<p>大型授权主题Table。</p>
+<p>推荐：</p>
+<p><strong>1张小型原创Table + 3颗物理Ball + 2个Flipper + 1个Ramp + 2个Orbit + 3个Bumper + 1个Scoop + 1个Lock + 1套简单Multiball规则。</strong></p>
+<hr />
+<h2 id="296-physics">296. Physics</h2><p>第一版必须完整支持：</p>
+<ul>
+<li>Ball Rolling；</li>
+</ul>
+<br />
+- Ball Spin；
+<br />
+- Surface；
+<br />
+- CCD；
+<br />
+- Flipper；
+<br />
+- Gravity；
+<br />
+- Drain。
+<br /><hr />
+<h2 id="297-control">297. Control</h2><p>实现：</p>
+<ul>
+<li>Left Flipper；</li>
+</ul>
+<br />
+- Right Flipper；
+<br />
+- Plunger；
+<br />
+- Nudge；
+<br />
+- Tilt。
+<br /><hr />
+<h2 id="298-table-device">298. Table Device</h2><p>至少：</p>
+<ul>
+<li>Bumper；</li>
+</ul>
+<br />
+- Slingshot；
+<br />
+- Rollover；
+<br />
+- Standup Target；
+<br />
+- Scoop；
+<br />
+- Ball Lock；
+<br />
+- Trough。
+<br /><hr />
+<h2 id="299-shot">299. Shot</h2><p>定义：</p>
+<ul>
+<li>Left Orbit；</li>
+</ul>
+<br />
+- Right Orbit；
+<br />
+- Center Ramp。
+<br /><p>至少验证：</p>
+<p>Sequence + Direction。</p>
+<hr />
+<h2 id="300-mode">300. Mode</h2><p>例如：</p>
+<p>完成：</p>
+<p>Left Orbit<br />
+Right Orbit<br />
+Center Ramp</p>
+<p>各一次：</p>
+<p>点亮Scoop。</p>
+<p>打入Scoop：</p>
+<p>启动30秒Mode。</p>
+<hr />
+<h2 id="301-multiball">301. Multiball</h2><p>锁：</p>
+<p>2颗Ball。</p>
+<p>第三次Lock：</p>
+<p>启动3-Ball Multiball。</p>
+<hr />
+<h2 id="302-scoring">302. Scoring</h2><p>至少：</p>
+<ul>
+<li>Switch Score；</li>
+</ul>
+<br />
+- Shot Score；
+<br />
+- Mode Score；
+<br />
+- Jackpot；
+<br />
+- 2× Playfield；
+<br />
+- End-of-Ball Bonus。
+<br /><hr />
+<h2 id="303-ball-lifecycle">303. Ball Lifecycle</h2><p>实现：</p>
+<ul>
+<li>Trough；</li>
+</ul>
+<br />
+- Serve；
+<br />
+- Launch；
+<br />
+- Drain；
+<br />
+- Ball Save；
+<br />
+- End Ball；
+<br />
+- Next Ball；
+<br />
+- Game Over。
+<br /><hr />
+<h2 id="304-mvp必要基础设施">304. MVP必要基础设施</h2><ul>
+<li>TablePhysicsProfile；</li>
+</ul>
+<br />
+- BallRegistry；
+<br />
+- BallRuntimeState；
+<br />
+- BallInventoryState；
+<br />
+- SurfaceDefinition；
+<br />
+- FlipperDefinition；
+<br />
+- FlipperRuntimeState；
+<br />
+- PlungerState；
+<br />
+- TiltState；
+<br />
+- DeviceDefinition；
+<br />
+- DeviceRuntimeState；
+<br />
+- SwitchDefinition；
+<br />
+- SwitchEvent；
+<br />
+- ShotDefinition；
+<br />
+- ShotTracker；
+<br />
+- RuleEngine；
+<br />
+- ModeDefinition；
+<br />
+- ModeRuntimeState；
+<br />
+- ScoreEvent；
+<br />
+- BallSaveState；
+<br />
+- LockState；
+<br />
+- MultiballState；
+<br />
+- BonusState；
+<br />
+- GameState；
+<br />
+- PlayerState。
+<br /><hr />
+<h2 id="305-mvp必要调试工具">305. MVP必要调试工具</h2><ul>
+<li>BallInspector；</li>
+</ul>
+<br />
+- BallTrail；
+<br />
+- ContactInspector；
+<br />
+- FlipperContactDebug；
+<br />
+- SwitchEventMonitor；
+<br />
+- ShotRecognitionInspector；
+<br />
+- DeviceInspector；
+<br />
+- BallInventoryInspector；
+<br />
+- RuleEventTimeline；
+<br />
+- ModeStackInspector；
+<br />
+- ScoreTrace；
+<br />
+- LightingDebug；
+<br />
+- TimerInspector；
+<br />
+- DrainHeatmap；
+<br />
+- ShotSuccessHeatmap；
+<br />
+- StuckBallHeatmap；
+<br />
+- ReplayDiff。
+<br /><hr />
+<h2 id="306-mvp核心验收问题">306. MVP核心验收问题</h2><p>原型至少必须回答：</p>
+<ul>
+<li>同一Flipper状态和近似相同Input是否能产生稳定可学习的Shot结果；</li>
+</ul>
+<br />
+- 高速Ball是否不会穿过Flipper和薄碰撞面；
+<br />
+- Ball是否始终具有唯一身份；
+<br />
+- Trough、Playfield、Lock和Device中的Ball总数是否始终守恒；
+<br />
+- Ramp是否能通过真实运动或受约束物理完成，而不是Teleport；
+<br />
+- Bumper Physical Reaction和Score是否完全解耦；
+<br />
+- Switch抖动是否不会重复计分；
+<br />
+- Left Orbit等Shot是否能通过Switch Sequence稳定识别；
+<br />
+- Multiball时多颗Ball的Shot Tracker是否完全独立；
+<br />
+- Mode是否可以通过Shot事件推进；
+<br />
+- 两个Mode是否可以按照Stack规则共同运行；
+<br />
+- Scoring是否能追踪完整Multiplier来源；
+<br />
+- Lock是否不会造成Ball库存死锁；
+<br />
+- Multiball启动是否能原子确认所需Ball；
+<br />
+- Ball Save是否不会重复发Ball；
+<br />
+- Multiball中单颗Drain是否不会结束当前Ball；
+<br />
+- Tilt是否能有效限制过度Nudge；
+<br />
+- Ball卡死时是否存在可诊断的Ball Search流程；
+<br />
+- Lighting是否能清晰表示当前最重要的目标；
+<br />
+- 玩家是否逐渐从“保持Ball不掉”成长到“主动瞄准Shot和规划Mode”。
+<br /><p>这些问题没有稳定以前，不建议优先增加：</p>
+<ul>
+<li>十几个Mode；</li>
+</ul>
+<br />
+- 超复杂Wizard Mode；
+<br />
+- 网络排行榜；
+<br />
+- 主题剧情；
+<br />
+- Roguelike Build；
+<br />
+- 数十种装置；
+<br />
+- 复杂联机竞技；
+<br />
+- 多张Table。
+<br /><hr />
+<h2 id="307-推荐实施顺序">307. 推荐实施顺序</h2><p>第一阶段：</p>
+<ul>
+<li>Table Physics；</li>
+</ul>
+<br />
+- Ball；
+<br />
+- Playfield；
+<br />
+- Drain。
+<br /><p>第二阶段：</p>
+<ul>
+<li>Flipper；</li>
+</ul>
+<br />
+- Input；
+<br />
+- CCD；
+<br />
+- Physics Debug。
+<br /><p>第三阶段：</p>
+<ul>
+<li>Plunger；</li>
+</ul>
+<br />
+- Shooter Lane；
+<br />
+- Trough；
+<br />
+- Ball Lifecycle。
+<br /><p>第四阶段：</p>
+<ul>
+<li>Device；</li>
+</ul>
+<br />
+- Bumper；
+<br />
+- Slingshot；
+<br />
+- Target。
+<br /><p>第五阶段：</p>
+<ul>
+<li>Switch Matrix；</li>
+</ul>
+<br />
+- Event Pipeline。
+<br /><p>第六阶段：</p>
+<ul>
+<li>Shot Recognition；</li>
+</ul>
+<br />
+- Orbit；
+<br />
+- Ramp。
+<br /><p>第七阶段：</p>
+<ul>
+<li>Rule Engine；</li>
+</ul>
+<br />
+- Score Pipeline；
+<br />
+- Lighting。
+<br /><p>第八阶段：</p>
+<ul>
+<li>Mode；</li>
+</ul>
+<br />
+- Timer；
+<br />
+- Combo。
+<br /><p>第九阶段：</p>
+<ul>
+<li>Scoop；</li>
+</ul>
+<br />
+- Ball Lock；
+<br />
+- Device Capacity。
+<br /><p>第十阶段：</p>
+<ul>
+<li>Multiball；</li>
+</ul>
+<br />
+- Jackpot；
+<br />
+- Ball Save。
+<br /><p>第十一阶段：</p>
+<ul>
+<li>Nudge；</li>
+</ul>
+<br />
+- Tilt；
+<br />
+- Ball Search。
+<br /><p>第十二阶段：</p>
+<ul>
+<li>Replay；</li>
+</ul>
+<br />
+- Telemetry；
+<br />
+- Monte Carlo；
+<br />
+- Advanced Authoring Tools。
+<br /><hr />
+<h2 id="308-架构验收标准">308. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<ul>
+<li>Ball始终拥有独立稳定BallId；</li>
+</ul>
+<br />
+- Ball不能通过普通玩法逻辑随意Destroy / Spawn替代状态迁移；
+<br />
+- 所有Ball任意时刻只有一个权威Container；
+<br />
+- BallRegistry可以实时验证总Ball数量守恒；
+<br />
+- Physics与Rule Engine严格分离；
+<br />
+- Physics不会直接增加Score；
+<br />
+- Rule Engine不会直接修改Ball Transform；
+<br />
+- 高速Ball使用连续碰撞检测；
+<br />
+- Physics使用固定Simulation Step；
+<br />
+- Render FPS不会改变Ball轨迹；
+<br />
+- Surface Material属于独立Gameplay数据；
+<br />
+- Flipper拥有明确Motor、角度、速度和Hold语义；
+<br />
+- Flipper动作不依赖Animation Event；
+<br />
+- 高级Ball Control技巧可以从统一Physics自然产生；
+<br />
+- Plunger支持独立Launch Energy；
+<br />
+- Skill Shot通过Rule Event识别而非Plunger硬编码；
+<br />
+- Nudge通过桌面物理影响Ball；
+<br />
+- Tilt限制连续Nudge；
+<br />
+- 所有机械装置通过统一Device接口管理；
+<br />
+- Device物理反应与Switch事件严格分离；
+<br />
+- Switch拥有Debounce；
+<br />
+- SwitchEvent拥有BallId和事件唯一ID；
+<br />
+- 高层Shot通过Switch Sequence识别；
+<br />
+- Shot Recognition支持方向与Traversal Time；
+<br />
+- Shot Tracker严格按Ball分离；
+<br />
+- Rule Engine主要消费Switch、Shot、Ball等语义事件；
+<br />
+- Mode拥有显式生命周期；
+<br />
+- Mode Qualify与Mode Start可以分离；
+<br />
+- Mode支持Stack、Exclusive、Pause等策略；
+<br />
+- 同一ShotEvent可以被多个Rule消费者解释；
+<br />
+- Score统一通过ScoreEvent和稳定Multiplier Pipeline计算；
+<br />
+- Score系统可以完整解释任意一次高分来源；
+<br />
+- Combo拥有明确Sequence与时间窗口；
+<br />
+- Hurry-Up拥有独立衰减规则；
+<br />
+- Ball Lock与Ball Inventory联动；
+<br />
+- Physical Lock不会导致Trough无球Softlock；
+<br />
+- Multiball启动属于原子事务；
+<br />
+- Multiball明确管理Active Ball Count；
+<br />
+- Jackpot是Multiball阶段正式Rule State；
+<br />
+- Drain是Ball Lifecycle事实；
+<br />
+- Ball Save不会隐藏Drain，而是重新Serve；
+<br />
+- Extra Ball和Ball Save语义严格分离；
+<br />
+- End-of-Ball只能在所有有效Ball离开以后发生；
+<br />
+- Bonus在逻辑上一次确定，表现层只负责展示；
+<br />
+- Wizard Mode通过长期规则进度解锁；
+<br />
+- Lighting从Rule Intent派生并拥有Priority；
+<br />
+- Display和Audio拥有独立信息仲裁；
+<br />
+- Mode Timer声明自己的Clock和Pause规则；
+<br />
+- Device拥有Capacity和Overflow Policy；
+<br />
+- Held Ball保留原Ball Identity；
+<br />
+- Eject不会创建新Ball；
+<br />
+- Stuck Detection能够识别异常静止Ball；
+<br />
+- Ball Search优先通过正常Device动作恢复；
+<br />
+- 最终存在安全Ball Recovery；
+<br />
+- Ball Inventory异常属于高优先级Integrity Error；
+<br />
+- Replay不盲目假定跨平台浮点完全确定；
+<br />
+- Replay可以使用Input + Snapshot + Rule Event混合模式；
+<br />
+- High Score绑定Physics / Rules版本；
+<br />
+- 多玩家Rule State拥有明确Scope；
+<br />
+- Tournament Ruleset能够修改Extra Ball和Random等竞技规则；
+<br />
+- Gameplay RNG与Cosmetic RNG分离；
+<br />
+- 调试器能够解释Ball为什么获得当前速度；
+<br />
+- 调试器能够解释某Shot为什么成功或失败识别；
+<br />
+- 调试器能够解释某Jackpot为什么得到当前分数；
+<br />
+- 新Device通常不需要修改Rule主循环；
+<br />
+- 新Shot只需声明Sensor Sequence；
+<br />
+- 新Mode只消费语义事件；
+<br />
+- 新Table可以复用完整Physics、Device、Rule和Ball Lifecycle基础设施。
+<br /><hr />
+<h2 id="309-可迁移到其他游戏的设计思想">309. 可迁移到其他游戏的设计思想</h2><hr />
+<h3 id="3091-连续物理事实和离散游戏语义应该分层">309.1 连续物理事实和离散游戏语义应该分层</h3><p>Ball碰到了三个Sensor。</p>
+<p>物理层只负责：</p>
+<p>碰撞。</p>
+<p>语义层才说：</p>
+<p>“完成Left Orbit。”</p>
+<p>这一思想可迁移到：</p>
+<ul>
+<li>赛车赛道Checkpoint；</li>
+</ul>
+<br />
+- 体育；
+<br />
+- 滑板；
+<br />
+- Parkour；
+<br />
+- 物理解谜。
+<br /><hr />
+<h3 id="3092-复杂动作可以通过事件序列识别得到高层语义">309.2 复杂动作可以通过“事件序列识别”得到高层语义</h3><p>A<br />
+→ B<br />
+→ C</p>
+<p>在时间和方向约束下</p>
+<p>可以被识别为：</p>
+<p>一个完整Shot。</p>
+<p>可迁移到：</p>
+<ul>
+<li>Combo；</li>
+</ul>
+<br />
+- Gesture；
+<br />
+- 赛车路线；
+<br />
+- 战术行为；
+<br />
+- 工作流识别。
+<br /><hr />
+<h3 id="3093-物理对象的控制权和所有权是两个不同概念">309.3 物理对象的“控制权”和“所有权”是两个不同概念</h3><p>玩家可以：</p>
+<p>暂时控制Ball轨迹。</p>
+<p>但Ball从未真正成为：</p>
+<p>Player Transform的Child。</p>
+<p>可迁移到：</p>
+<ul>
+<li>足球；</li>
+</ul>
+<br />
+- 争抢物；
+<br />
+- Vehicle；
+<br />
+- 共享Objective。
+<br /><hr />
+<h3 id="3094-高技能物理系统不需要给玩家更多按钮也可以通过稳定规则产生深度">309.4 高技能物理系统不需要给玩家更多按钮，也可以通过稳定规则产生深度</h3><p>Pinball通常只有：</p>
+<p>左右Flipper + Nudge。</p>
+<p>高手仍然能形成：</p>
+<p>大量不同技巧。</p>
+<p>这说明：</p>
+<blockquote>
+<p><strong>输入维度少并不等于决策空间小。</strong></p>
+</blockquote>
+<p>适用于：</p>
+<ul>
+<li>平台跳跃；</li>
+</ul>
+<br />
+- 格斗；
+<br />
+- 赛车；
+<br />
+- 体育。
+<br /><hr />
+<h3 id="3095-宽容可以通过失败恢复与规则保护实现而不必改变核心物理">309.5 “宽容”可以通过失败恢复与规则保护实现，而不必改变核心物理</h3><p>Ball Save保护：</p>
+<p>刚开球的无意义Drain。</p>
+<p>但Flipper Physics保持不变。</p>
+<p>这与：</p>
+<p>Jump Buffer / Coyote Time</p>
+<p>具有相似设计哲学：</p>
+<blockquote>
+<p>修复低信息价值失败，而不替玩家完成高价值技能。</p>
+</blockquote>
+<hr />
+<h3 id="3096-资源守恒不只适用于经济也适用于实体生命周期">309.6 资源守恒不只适用于经济，也适用于实体生命周期</h3><p>Pinball的Ball：</p>
+<p>Trough + Playfield + Lock + Device</p>
+<p>必须守恒。</p>
+<p>可迁移到：</p>
+<ul>
+<li>Inventory；</li>
+</ul>
+<br />
+- 单位；
+<br />
+- 弹药；
+<br />
+- 车辆；
+<br />
+- 网络Actor。
+<br /><hr />
+<h3 id="3097-状态作用域是复杂规则系统的重要基础设施">309.7 状态作用域是复杂规则系统的重要基础设施</h3><p>Machine Global。</p>
+<p>Player。</p>
+<p>Ball。</p>
+<p>Mode。</p>
+<p>如果Scope模糊：</p>
+<p>多人和重置规则极易污染。</p>
+<p>可迁移到：</p>
+<ul>
+<li>Buff；</li>
+</ul>
+<br />
+- Quest；
+<br />
+- Match；
+<br />
+- Save；
+<br />
+- 多角色系统。
+<br /><hr />
+<h3 id="3098-一个事件可以被多个规则系统同时解释但不应被重复提交">309.8 一个事件可以被多个规则系统同时解释，但不应被重复提交</h3><p>Shot可以同时：</p>
+<p>推进Mode、Combo、Achievement和Score。</p>
+<p>这类：</p>
+<p><strong>Immutable Event + Multiple Consumers</strong></p>
+<p>模式非常适合：</p>
+<ul>
+<li>Achievement；</li>
+</ul>
+<br />
+- Gameplay Ability；
+<br />
+- Analytics；
+<br />
+- Quest。
+<br /><hr />
+<h3 id="3099-gameplay-lighting可以是正式状态投影而不只是美术">309.9 Gameplay Lighting可以是正式状态投影，而不只是美术</h3><p>灯光告诉：</p>
+<p>“现在该去哪里。”</p>
+<p>同样思想可迁移到：</p>
+<ul>
+<li>关卡引导；</li>
+</ul>
+<br />
+- Boss；
+<br />
+- UI-free game；
+<br />
+- Diegetic UI。
+<br /><hr />
+<h3 id="30910-玩家注意力被核心运动对象占据时音频应该承担辅助规则信息">309.10 玩家注意力被核心运动对象占据时，音频应该承担辅助规则信息</h3><p>Pinball玩家无法一直看DMD。</p>
+<p>因此：</p>
+<p>Audio Cue非常重要。</p>
+<p>可迁移到：</p>
+<ul>
+<li>赛车；</li>
+</ul>
+<br />
+- 射击；
+<br />
+- 节奏；
+<br />
+- 高速动作游戏。
+<br /><hr />
+<h3 id="30911-混沌物理并不要求完全随机">309.11 混沌物理并不要求完全随机</h3><p>长期轨迹可以高度不可预测。</p>
+<p>但局部输入—结果关系仍应稳定。</p>
+<p>这是很多：</p>
+<ul>
+<li>物理体育；</li>
+</ul>
+<br />
+- 车辆；
+<br />
+- 球类；
+<br />
+- 沙盒物理
+<br /><p>系统的重要设计原则。</p>
+<hr />
+<h3 id="30912-不要把跨平台浮点确定性当作默认事实">309.12 不要把跨平台浮点确定性当作默认事实</h3><p>复杂连续Physics中：</p>
+<p>Replay更适合：</p>
+<p>Input</p>
+<ul>
+<li>Snapshot</li>
+</ul>
+<br />
+- Event
+<br /><p>混合。</p>
+<p>这可迁移到：</p>
+<ul>
+<li>赛车；</li>
+</ul>
+<br />
+- 体育；
+<br />
+- 物理解谜；
+<br />
+- 网络同步。
+<br /><hr />
+<h3 id="30913-高风险目标应该提供与风险匹配的价值">309.13 高风险目标应该提供与风险匹配的价值</h3><p>危险Center Shot如果：</p>
+<p>回报明显更高，</p>
+<p>玩家会主动承担风险。</p>
+<p>可迁移到：</p>
+<ul>
+<li>Roguelike；</li>
+</ul>
+<br />
+- 赛车捷径；
+<br />
+- Platformer收藏品；
+<br />
+- 战术目标。
+<br /><hr />
+<h3 id="30914-同一空间不断被规则重新解释是一种极高效的内容扩展方式">309.14 “同一空间不断被规则重新解释”是一种极高效的内容扩展方式</h3><p>物理Table不变。</p>
+<p>Mode A：</p>
+<p>Left Ramp是任务目标。</p>
+<p>Multiball：</p>
+<p>Left Ramp变Jackpot。</p>
+<p>Wizard Mode：</p>
+<p>它可能变成最终目标之一。</p>
+<p>因此不需要：</p>
+<p>不断增加新地图，</p>
+<p>也可以持续制造新的决策。</p>
+<p>这一思想可迁移到：</p>
+<ul>
+<li>Boss Arena；<br />
+  -竞技地图；</li>
+</ul>
+<br />
+- 关卡挑战模式；
+<br />
+- 生存模式。
+<br /><hr />
+<h3 id="30915-recovery-system-应优先恢复系统可运行性而不是假装异常不存在">309.15 Recovery System 应优先恢复系统可运行性，而不是假装异常不存在</h3><p>Ball Search先：</p>
+<p>尝试正常装置恢复。</p>
+<p>最后才：</p>
+<p>安全重置。</p>
+<p>可迁移到：</p>
+<ul>
+<li>AI卡死；</li>
+</ul>
+<br />
+- 任务；
+<br />
+- 导航；
+<br />
+- 分布式系统；
+<br />
+- 物理Actor。
+<br /><hr />
+<h2 id="310-本次防重记录">310. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>物理弹球 / Pinball / Pinball Table Simulation。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li>Pinball；</li>
+</ul>
+<br />
+- Digital Pinball；
+<br />
+- Pinball Simulation；
+<br />
+- Arcade Pinball；
+<br />
+- Video Pinball；
+<br />
+- 物理弹球；
+<br />
+- 数字弹球；
+<br />
+- 街机弹球；
+<br />
+- 弹球台游戏。
+<br /><hr />
+<h3 id="核心范式">核心范式</h3><p>Pinball将核心游戏对象建立为一个或多个始终独立存在的高速Ball实体。玩家无法直接移动Ball，只能通过Flipper、Plunger和受Tilt限制的Nudge间接施加物理影响；Ball持续服从固定步长、连续碰撞、Surface Material、Spin和桌面斜率等物理规则，在Ramp、Orbit、Bumper、Scoop、Lock和Drain之间运动。</p>
+<p>Physics只产生Contact，Device将其转换成稳定Switch Event，Shot Recognizer再依据Ball局部的Switch Sequence、方向和时间窗口识别Left Orbit、Center Ramp等高层球路。Rule Engine只消费这些语义事件，并据此推进Mode、Combo、Multiplier、Ball Lock、Multiball、Jackpot、Ball Save、Extra Ball和Wizard Mode；同一张物理Table因此会随着Rule State不断改变“当前什么Shot最重要”。</p>
+<p>Ball Registry负责确保Trough、Shooter Lane、Playfield、Lock和Held Device中的Ball数量始终守恒；Multiball不是简单生成更多Ball，而是一个需要原子完成Ball释放、Ball Save、Jackpot、灯光、音乐和Mode切换的正式规则阶段。Ball Drain则是最核心失败事实：单球时可能结束当前Ball，多球时只是降低Balls In Play，而Ball Save又可以在不否定Drain事实的情况下重新Serve。</p>
+<p>最终形成：</p>
+<p><strong>Flipper / Nudge Input<br />
+→ Device Actuation<br />
+→ Ball Physics<br />
+→ Contact<br />
+→ Switch<br />
+→ Shot Recognition<br />
+→ Rule Interpretation<br />
+→ Mode / Scoring Change<br />
+→ Lighting / Audio反馈<br />
+→ 玩家重新选择目标Shot<br />
+→ Ball Lock / Multiball<br />
+→ 更高风险和倍率<br />
+→ Drain<br />
+→ Ball Save或End-of-Ball<br />
+→ Bonus<br />
+→ 下一Ball继续长期规则进度。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>Pinball不是让玩家直接控制一个球，而是让玩家在高度连续甚至略具混沌性的物理世界中，通过极少量稳定控制手段逐渐建立可预测的局部技巧，再用这些技巧去驾驭一个不断重新解释相同物理空间的高层规则系统。</strong></p>
+</blockquote>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li>游戏核心对象是始终独立存在的Ball；</li>
+</ul>
+<br />
+- 玩家只能间接影响Ball；
+<br />
+- Flipper是主要持续控制接口；
+<br />
+- 高级技巧主要从稳定Physics自然涌现；
+<br />
+- Playfield使用高速连续物理模拟；
+<br />
+- Physics与Rule Engine严格分离；
+<br />
+- Surface Material真实参与Ball运动；
+<br />
+- Plunger允许不同Launch Energy；
+<br />
+- Skill Shot是正式规则目标；
+<br />
+- Nudge提供轨迹微调；
+<br />
+- Tilt限制过度Nudge；
+<br />
+- 桌面机械装置通过统一Device系统管理；
+<br />
+- Switch Matrix把连续Physics转换成离散规则事件；
+<br />
+- Switch拥有Debounce；
+<br />
+- 高层Shot由多个Switch组成的有序序列识别；
+<br />
+- Multiball中的每颗Ball拥有独立Shot Tracking；
+<br />
+- Rule Engine主要处理语义事件而不是Collider；
+<br />
+- Mode是主要规则内容单位；
+<br />
+- Mode可以Qualify后再通过物理Shot启动；
+<br />
+- 多个Mode可以按照明确策略叠加；
+<br />
+- 同一Shot可以同时影响多个规则；
+<br />
+- Score使用统一Multiplier Pipeline；
+<br />
+- Combo把多个Shot组织成Ball Flow路线；
+<br />
+- Hurry-Up把执行速度转换成Score；
+<br />
+- Ball Lock连接单球和Multiball阶段；
+<br />
+- Ball Inventory必须满足实体数量守恒；
+<br />
+- Multiball拥有独立启动和结束事务；
+<br />
+- Jackpot是Multiball中的正式目标结构；
+<br />
+- Ball Save与Extra Ball严格分离；
+<br />
+- Drain是明确Ball Lifecycle事件；
+<br />
+- End-of-Ball只在所有有效Ball离开后发生；
+<br />
+- Bonus集中结算整颗Ball中的累计价值；
+<br />
+- Wizard Mode用于验证长期规则掌握；
+<br />
+- Lamp和DMD属于Gameplay Information System；
+<br />
+- Audio负责在玩家注视Ball时提供规则反馈；
+<br />
+- 不同Mode Timer可以使用不同Rule Clock；
+<br />
+- Device持Ball时仍保留Ball Identity；
+<br />
+- Stuck Ball拥有Ball Search与恢复流程；
+<br />
+- Replay适合采用Input、Snapshot和Rule Event混合方式；
+<br />
+- High Score必须绑定Table Rule / Physics版本；
+<br />
+- 多玩家规则状态需要明确Machine、Player、Ball、Mode作用域。
+<br /><hr />
+<h3 id="与仓库现有精密平台跳跃的防重边界">与仓库现有精密平台跳跃的防重边界</h3><p>当前仓库已经存在 <code>precision-platformer</code>，其核心是通过固定模拟、Player Motor、Jump Buffer、Coyote Time、Corner Correction等机制建立稳定可预测的<strong>直接角色运动控制</strong>。</p>
+<p>两者都强调：</p>
+<ul>
+<li>输入时机；</li>
+</ul>
+<br />
+- 稳定物理；
+<br />
+- 可学习结果；
+<br />
+- Replay；
+<br />
+- 高频失败反馈。
+<br /><p>但核心控制关系完全不同。</p>
+<p><strong>Precision Platformer：</strong></p>
+<blockquote>
+<p>玩家直接控制主要运动实体，并决定其水平移动、Jump、Dash等运动状态。</p>
+</blockquote>
+<p><strong>Pinball：</strong></p>
+<blockquote>
+<p>玩家从不直接控制主要运动实体Ball，而是控制少数Flipper / Nudge等致动器，再通过碰撞间接改变Ball轨迹。</p>
+</blockquote>
+<p>平台跳跃的主要设计对象是：</p>
+<p><strong>Player Reachability Envelope。</strong></p>
+<p>Pinball的主要设计对象则是：</p>
+<p><strong>Ball Flow + Device Geometry + Rule Interpretation。</strong></p>
+<p>因此本期并非平台运动子系统的重复。</p>
+<hr />
+<h3 id="与仓库现有节奏游戏的防重边界">与仓库现有节奏游戏的防重边界</h3><p>仓库中的节奏游戏以音频权威Clock、谱面事件和Input Timing Error作为核心。</p>
+<p>Pinball同样需要：</p>
+<p>毫秒级Flipper时机。</p>
+<p>但玩家并不是：</p>
+<p>匹配预先存在的Target Time。</p>
+<p>Flipper的正确时机取决于：</p>
+<p>此刻Ball真实：</p>
+<ul>
+<li>Position；</li>
+</ul>
+<br />
+- Velocity；
+<br />
+- Spin；
+<br />
+- Flipper状态。
+<br /><p>因此：</p>
+<p><strong>Rhythm：</strong></p>
+<blockquote>
+<p>已知目标时间 → 玩家匹配输入时刻。</p>
+</blockquote>
+<p><strong>Pinball：</strong></p>
+<blockquote>
+<p>当前物理状态 → 玩家预测未来Contact并选择输入时刻。</p>
+</blockquote>
+<p>两者的时间判定模型不同。</p>
+<hr />
+<h3 id="与仓库现有足球比赛模拟的防重边界">与仓库现有足球比赛模拟的防重边界</h3><p>足球同样拥有：</p>
+<p>独立共享Ball</p>
+<p>和：</p>
+<p>玩家间接通过角色触球改变Ball状态。</p>
+<p>但足球的主要系统是：</p>
+<ul>
+<li>22个Player Agent；</li>
+</ul>
+<br />
+- Team Formation；
+<br />
+- Pass Lane；
+<br />
+- Possession；<br />
+    -空间；
+<br />
+- Rules。
+<br /><p>Pinball几乎没有：</p>
+<p>自主角色AI。</p>
+<p>其复杂度集中在：</p>
+<ul>
+<li>Table Geometry；</li>
+</ul>
+<br />
+- Device；
+<br />
+- Switch；
+<br />
+- Shot Recognition；
+<br />
+- Rule Mode；
+<br />
+- Scoring；
+<br />
+- Ball Lifecycle。
+<br /><p>因此共享Ball只是一个局部共性，宏观范式完全不同。</p>
+<hr />
+<h3 id="与仓库现有增量游戏的防重边界">与仓库现有增量游戏的防重边界</h3><p>Pinball也会出现：</p>
+<p>Score Multiplier和数量级成长。</p>
+<p>但一局中的分数主要来自：</p>
+<p>物理技能和规则目标完成。</p>
+<p>不存在：</p>
+<p>自动Rate持续增长</p>
+<p>和：</p>
+<p>Prestige层级。</p>
+<p>因此：</p>
+<p><strong>Incremental：</strong></p>
+<blockquote>
+<p>核心对象是增长函数。</p>
+</blockquote>
+<p><strong>Pinball：</strong></p>
+<blockquote>
+<p>核心对象是Ball物理流和Rule State。</p>
+</blockquote>
+<hr />
+<h3 id="与未来pachinko-peg-drop记录的防重边界">与未来“Pachinko / Peg-Drop”记录的防重边界</h3><p>本次不会把所有弹珠类游戏一并吸收。</p>
+<p>如果未来记录：</p>
+<p>Pachinko / Peg-Drop / Plinko类，</p>
+<p>其核心可以研究：</p>
+<ul>
+<li>Ball大量投放；</li>
+</ul>
+<br />
+- 概率分布；
+<br />
+- Peg碰撞；<br />
+    -期望收益；
+<br />
+- 玩家有限入口控制。
+<br /><p>Pinball则明确具有：</p>
+<ul>
+<li>主动Flipper；</li>
+</ul>
+<br />
+- Ball Control；
+<br />
+- Shot Planning；
+<br />
+- Device State；
+<br />
+- Mode；
+<br />
+- Multiball；
+<br />
+- Score Rule Engine。
+<br /><p>两者仍然可以作为独立范式。</p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li>Pinball；</li>
+</ul>
+<br />
+- Digital Pinball；
+<br />
+- Independent Ball；
+<br />
+- Ball Registry；
+<br />
+- Ball Conservation；
+<br />
+- Playfield Physics；
+<br />
+- Continuous Collision；
+<br />
+- Surface Material；
+<br />
+- Flipper；
+<br />
+- Flipper Motor；
+<br />
+- Cradle；
+<br />
+- Live Catch；
+<br />
+- Dead Bounce；
+<br />
+- Plunger；
+<br />
+- Skill Shot；
+<br />
+- Nudge；
+<br />
+- Tilt；
+<br />
+- Table Device；
+<br />
+- Bumper；
+<br />
+- Slingshot；
+<br />
+- Target；
+<br />
+- Spinner；
+<br />
+- Rollover；
+<br />
+- Scoop；
+<br />
+- Kicker；
+<br />
+- VUK；
+<br />
+- Gate；
+<br />
+- Magnet；
+<br />
+- Ball Lock；
+<br />
+- Trough；
+<br />
+- Switch Matrix；
+<br />
+- Switch Debounce；
+<br />
+- Shot Recognition；
+<br />
+- Shot Sequence；
+<br />
+- Per-Ball Shot Tracker；
+<br />
+- Rule Engine；
+<br />
+- Mode；
+<br />
+- Mode Stack；
+<br />
+- Combo；
+<br />
+- Hurry-Up；
+<br />
+- Score Pipeline；
+<br />
+- Playfield Multiplier；
+<br />
+- Ball Lock；
+<br />
+- Multiball；
+<br />
+- Jackpot；
+<br />
+- Super Jackpot；
+<br />
+- Ball Save；
+<br />
+- Extra Ball；
+<br />
+- Drain；
+<br />
+- End-of-Ball Bonus；
+<br />
+- Wizard Mode；
+<br />
+- Gameplay Lighting；
+<br />
+- DMD / Display Arbitration；
+<br />
+- Gameplay Audio；
+<br />
+- Rule Clock；
+<br />
+- Device Capacity；
+<br />
+- Held Ball；
+<br />
+- Ball Search；
+<br />
+- Stuck Ball Recovery；
+<br />
+- Physics Region；
+<br />
+- Wireform；
+<br />
+- Replay Snapshot；
+<br />
+- High Score Versioning；
+<br />
+- Tournament Rules；
+<br />
+- Player Rule Scope。
+<br /><hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次 Pinball / 物理弹球范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li>Pinball Ball Physics；</li>
+</ul>
+<br />
+- 弹球Flipper系统；
+<br />
+- Flipper Motor；
+<br />
+- Pinball Cradle；
+<br />
+- Dead Bounce；
+<br />
+- Live Catch；
+<br />
+- Pinball Plunger；
+<br />
+- Pinball Skill Shot；
+<br />
+- Pinball Nudge；
+<br />
+- Tilt；
+<br />
+- Pinball Bumper；
+<br />
+- Pinball Slingshot；
+<br />
+- Pinball Target；
+<br />
+- Pinball Spinner；
+<br />
+- Pinball Scoop；
+<br />
+- Pinball Kicker；
+<br />
+- Pinball VUK；
+<br />
+- Pinball Magnet；
+<br />
+- Pinball Ball Lock；
+<br />
+- Pinball Trough；
+<br />
+- Pinball Switch Matrix；
+<br />
+- Pinball Switch Debounce；
+<br />
+- Pinball Shot Recognition；
+<br />
+- Pinball Ramp；
+<br />
+- Pinball Orbit；
+<br />
+- Pinball Mode；
+<br />
+- Pinball Mode Stack；
+<br />
+- Pinball Combo；
+<br />
+- Pinball Hurry-Up；
+<br />
+- Pinball Scoring；
+<br />
+- Pinball Multiplier；
+<br />
+- Pinball Multiball；
+<br />
+- Pinball Jackpot；
+<br />
+- Pinball Super Jackpot；
+<br />
+- Pinball Ball Save；
+<br />
+- Pinball Extra Ball；
+<br />
+- Pinball Drain；
+<br />
+- Pinball End-of-Ball Bonus；
+<br />
+- Pinball Wizard Mode；
+<br />
+- Pinball Lighting；
+<br />
+- Pinball DMD；
+<br />
+- Pinball Audio Cue；
+<br />
+- Pinball Rule Clock；
+<br />
+- Pinball Device Capacity；
+<br />
+- Pinball Ball Search；
+<br />
+- Pinball Stuck Recovery；
+<br />
+- Pinball Replay；
+<br />
+- Pinball High Score；
+<br />
+- Pinball Tournament Mode；
+<br />
+- Pinball Ball Inventory；
+<br />
+- Pinball Physics Debug；
+<br />
+- Pinball Rule Debug。
+<br /><p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入设计范式日报。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-08-31">2026-08-31</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/engineering.html">Engineering</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/brand.html">Brand</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
