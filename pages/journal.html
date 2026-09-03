@@ -116,7 +116,7 @@
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
                 <div class="journal-metric"><strong>68</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>57</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>58</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric journal-metric-with-note"><strong>49</strong><span>完整博客</span><small>49 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
@@ -158,10 +158,10 @@
     </section>
     <section class="journal-section content-search" id="content-search" data-content-search data-search-index="../data/search-index.json" data-search-limit="12" data-page-index-target>
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 174 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 175 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
             <form class="content-search-controls" role="search" aria-labelledby="content-search-title" data-content-search-form>
                 <label class="content-search-query" for="content-search-query"><span>关键词</span><input id="content-search-query" name="query" type="search" autocomplete="off" placeholder="搜索系统、玩法、引擎或主题" data-content-search-query></label>
-                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（174）</option><option value="article">正式文章（49）</option><option value="game-design">游戏设计（68）</option><option value="framework-audit">框架审计（57）</option></select></label>
+                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（175）</option><option value="article">正式文章（49）</option><option value="game-design">游戏设计（68）</option><option value="framework-audit">框架审计（58）</option></select></label>
                 <label><span>文章系列</span><select name="series" data-content-search-series><option value="">全部系列</option><option value="游戏系统的共同语言">游戏系统的共同语言（20）</option><option value="大型 Unity 框架的治理复盘">大型 Unity 框架的治理复盘（3）</option><option value="Sakura Framework 工程实践">Sakura Framework 工程实践（13）</option><option value="从 Unreal Engine 源码理解引擎设计">从 Unreal Engine 源码理解引擎设计（9）</option><option value="从 Godot 源码理解引擎设计">从 Godot 源码理解引擎设计（3）</option><option value="从 Cocos Engine 源码理解引擎设计">从 Cocos Engine 源码理解引擎设计（1）</option></select></label>
                 <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option><option value="cocos-engine">Cocos Engine（1）</option><option value="godot">Godot（3）</option><option value="unity">Unity（4）</option><option value="unreal-engine">Unreal Engine（9）</option></select></label>
                 <button class="btn btn-secondary" type="reset" data-content-search-reset>清除筛选</button>
@@ -234,6 +234,11 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-09-03</p>
+                    <h3>SakuraGameFramework 最新仓库审计：Production Evidence + Team Ownership 阶段</h3>
+                    <p>本轮最重要的变化，不是某个底层 Runtime 又增加了一项能力，而是仓库第一次出现了一条相当符合当前新战略的增量路径： 当前 main 已从上一轮的 146 个 UPM Package 增长到 147 个；新增的是 com.unitygame.framework.card-balance。但它没有增加 Stable API，也没有增加内部 Package Dependency Edge：当前仍为 401 Stable Types / 2445 Stable Members / 250 internal edges。这次扩张不是为了补齐“卡牌游戏模块版图”，而是直接来自真实 The Weaver / STS2 工作流，因此属于当前战略下可以接受的少数新增能力。 更关键的是，它已经产生了真实的消费证据：Unity Editor Adapter 使用实际 106 张 The Weaver 卡牌完成分析；Godot / STS2…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-09-02</p>
                     <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一审计基线 f2f8b5b1... 前进了两个提交。第一项 92812bc8... 实际把此前的 Godot Runtime Foundation P1 扩展为一组较完整的 P2 Runtime Services：Config、Save、Input、Pooling、Localization；第二项 5cbc4e25... 则修复 Unity Testbed 中 Profile 测试受环境级 Package Filter 污染的问题。 整体增长方式依然健康。当前仍是 146 个 UPM Package、250 条内部依赖边、401 个 Stable Types / 2445 Members，没有因为跨引擎扩展继续增加 Package 或 Stable API；仅包内程序集由上一阶段继续增长到 880，其中 noEngineReferences 为…</p>
@@ -257,11 +262,6 @@
                     <p class="project-status">框架审计 · 2026-08-29</p>
                     <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一审计基线 337bb3ed...，main 只新增了 1 个提交，但这是一次非常典型、且值得继续采用的架构收敛： 这次迁移的价值并不是“Voxel Sandbox 多了一个功能”，而是修复了： 这一错误 Ownership。 仓库同时新增了一个严格的： 它会直接扫描 foundation、runtime-service、gameplay-kernel 的原始 package.json 和全部仓库 asmdef，包括 Runtime、Editor、Tests、Generated，并同时解析普通 Assembly Name 与 GUID 引用；allowlist、versionDefines、defineConstraints、历史 exception 均不能掩盖真实反向依赖。 本次迁移前： 迁移后： 实际迁移 17 项文件，16 项内容字节保持不变，测试源码只改变 Prefab fixture…</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-28</p>
-                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮相较上一审计基线 25894d48...，main 只前进了两个提交，但其中一个是相当重要的架构治理变化： 实际改动没有新增 UPM Package、没有新增 asmdef、没有扩大 Stable Runtime API，也没有修改任何 Domain Runtime；核心是在现有 editor-tools 和 tools/package-distribution 内建立： 这意味着此前分散在 Module Catalog、Release Policy、Manifest Snippet、Installer 中的“包从哪里来”这一事实，第一次开始拥有专门的物理 Source Owner。方向是正确的，而且高度符合当前“完善已有项目能力，而不是提供可交付版本”的主线。 当前仓库依然明确处于： 当前没有 Active、Pending Approval 或 Blocked 工作；默认动作仍是 route-only。Evidence…</p>
                 </article>
                 </div>
             </div>
