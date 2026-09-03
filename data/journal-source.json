@@ -1,14 +1,28 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "609f69a78fc14cfb97d1601b8cec1b02075dd9bc",
-  "generatedAt": "2026-09-01T17:42:33+08:00",
+  "sourceCommit": "8330336f0ca8189df9d6aee479cd88d3196d3d1f",
+  "generatedAt": "2026-09-03T14:49:02+08:00",
   "summary": {
-    "auditCount": 55,
+    "auditCount": 57,
     "blogCount": 48,
-    "gameDesignCount": 65
+    "gameDesignCount": 67
   },
-  "gameDesignCatalogDigest": "9cb017a33e43e816b26dd8e17bde3f55df8d4cdc32fa708aa8e0a5531a5b48f6",
+  "gameDesignCatalogDigest": "5d884138582c8d5c3e18e27b3c43cd3fa5659ce8c5bae0fad2fb3047c30741ad",
   "audits": [
+    {
+      "id": "audit-2026-09-02",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮相较上一审计基线 f2f8b5b1... 前进了两个提交。第一项 92812bc8... 实际把此前的 Godot Runtime Foundation P1 扩展为一组较完整的 P2 Runtime Services：Config、Save、Input、Pooling、Localization；第二项 5cbc4e25... 则修复 Unity Testbed 中 Profile 测试受环境级 Package Filter 污染的问题。 整体增长方式依然健康。当前仍是 146 个 UPM Package、250 条内部依赖边、401 个 Stable Types / 2445 Members，没有因为跨引擎扩展继续增加 Package 或 Stable API；仅包内程序集由上一阶段继续增长到 880，其中 noEngineReferences 为…",
+      "updatedAt": "2026-09-02",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-09-01",
+      "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
+      "summary": "本轮是仓库近期一个非常关键的阶段变化。相比上一轮 b11c0ebc...，main 只新增两个提交，但这两个提交第一次把此前“Unity 中存在大量 noEngineReferences Core”的事实真正转化为一套独立的 Portable .NET Kernel + Godot Runtime Foundation： P0 建立了九个 net8.0 linked-source Kernel projection、跨引擎 capability matrix、Parallel Godot Reference Adapter 和对应 CI/Verifier；P1 则新增 repository-level Adapters/Godot，投影 Framework.DI.Core / Framework.Event.Core，实现 SakuraRuntimeHost、主线程 Pump、Owner…",
+      "updatedAt": "2026-09-01",
+      "redacted": false
+    },
     {
       "id": "audit-2026-08-31",
       "title": "SakuraGameFramework 最新仓库审计与能力收敛计划",
@@ -396,6 +410,36 @@
     }
   ],
   "gameDesigns": [
+    {
+      "id": "character-as-system-interface",
+      "title": "角色作为系统接口：长期角色经济的可达状态空间、横向共存与旧资产再激活",
+      "summary": "以可达状态空间、Agency 与情境最优解释长期角色价值，通过公共战斗语法和构筑表达扩大选择空间，避免数值替代、专属锁孔与机制膨胀淘汰旧角色。",
+      "tags": [
+        "character-economy",
+        "contextual-optimality",
+        "systemic-gameplay"
+      ],
+      "updatedAt": "2026-09-03",
+      "sha256": "28e3c85eb9c3adafd66da8d668bdc4f3583b6ea112f740998a7f8b1f5691bc85",
+      "contentSha256": "a77c0f67f004a68e80f016fa6f2e3858b9cab4cca53c148d924798ba86463e4f",
+      "bytes": 33411,
+      "contentPath": "content/game-designs/character-as-system-interface.md"
+    },
+    {
+      "id": "falling-block-puzzle",
+      "title": "落块消除 / Falling-Block Puzzle / Tetris-like",
+      "summary": "围绕有限离散棋盘、持续生成的几何块、实时下落压力、玩家操控、原子落锁、完整结构消除与空间压缩，构成生成—安放—消除—回收空间并持续提速的动作益智运行时。",
+      "tags": [
+        "falling-block",
+        "puzzle",
+        "tetris-like"
+      ],
+      "updatedAt": "2026-09-03",
+      "sha256": "157517e2e3048f44b339c36d6c89d3193e8b3ecfb65fe5a2c26c29b55766f1ff",
+      "contentSha256": "c205cd0c1ee164b203c91b8ae369843c17dc84063d9842587201b98d75f76249",
+      "bytes": 84597,
+      "contentPath": "content/game-designs/falling-block-puzzle.md"
+    },
     {
       "id": "musou",
       "title": "无双式军团割草动作 / Musou / Warriors-like Battlefield Action",

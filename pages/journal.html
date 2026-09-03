@@ -115,8 +115,8 @@
             </div>
             <div class="journal-dashboard" aria-label="学习记录概览">
                 <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
-                <div class="journal-metric"><strong>65</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>55</strong><span>框架审计摘要</span></div>
+                <div class="journal-metric"><strong>67</strong><span>游戏设计主题</span></div>
+                <div class="journal-metric"><strong>57</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric journal-metric-with-note"><strong>48</strong><span>完整博客</span><small>48 篇已公开</small></div>
                 <div class="journal-metric"><strong>3</strong><span>知识流</span></div>
             </div>
@@ -158,10 +158,10 @@
     </section>
     <section class="journal-section content-search" id="content-search" data-content-search data-search-index="../data/search-index.json" data-search-limit="12" data-page-index-target>
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 168 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 172 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
             <form class="content-search-controls" role="search" aria-labelledby="content-search-title" data-content-search-form>
                 <label class="content-search-query" for="content-search-query"><span>关键词</span><input id="content-search-query" name="query" type="search" autocomplete="off" placeholder="搜索系统、玩法、引擎或主题" data-content-search-query></label>
-                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（168）</option><option value="article">正式文章（48）</option><option value="game-design">游戏设计（65）</option><option value="framework-audit">框架审计（55）</option></select></label>
+                <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（172）</option><option value="article">正式文章（48）</option><option value="game-design">游戏设计（67）</option><option value="framework-audit">框架审计（57）</option></select></label>
                 <label><span>文章系列</span><select name="series" data-content-search-series><option value="">全部系列</option><option value="游戏系统的共同语言">游戏系统的共同语言（20）</option><option value="大型 Unity 框架的治理复盘">大型 Unity 框架的治理复盘（3）</option><option value="Sakura Framework 工程实践">Sakura Framework 工程实践（13）</option><option value="从 Unreal Engine 源码理解引擎设计">从 Unreal Engine 源码理解引擎设计（8）</option><option value="从 Godot 源码理解引擎设计">从 Godot 源码理解引擎设计（3）</option><option value="从 Cocos Engine 源码理解引擎设计">从 Cocos Engine 源码理解引擎设计（1）</option></select></label>
                 <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option><option value="cocos-engine">Cocos Engine（1）</option><option value="godot">Godot（3）</option><option value="unity">Unity（4）</option><option value="unreal-engine">Unreal Engine（8）</option></select></label>
                 <button class="btn btn-secondary" type="reset" data-content-search-reset>清除筛选</button>
@@ -234,6 +234,16 @@
             <div class="journal-scroll-region journal-audit-scroll" role="region" aria-labelledby="recent-audits-title" tabindex="0">
                 <div class="journal-update-grid">
                 <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-09-02</p>
+                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮相较上一审计基线 f2f8b5b1... 前进了两个提交。第一项 92812bc8... 实际把此前的 Godot Runtime Foundation P1 扩展为一组较完整的 P2 Runtime Services：Config、Save、Input、Pooling、Localization；第二项 5cbc4e25... 则修复 Unity Testbed 中 Profile 测试受环境级 Package Filter 污染的问题。 整体增长方式依然健康。当前仍是 146 个 UPM Package、250 条内部依赖边、401 个 Stable Types / 2445 Members，没有因为跨引擎扩展继续增加 Package 或 Stable API；仅包内程序集由上一阶段继续增长到 880，其中 noEngineReferences 为…</p>
+                </article>
+                <article class="journal-update-card">
+                    <p class="project-status">框架审计 · 2026-09-01</p>
+                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
+                    <p>本轮是仓库近期一个非常关键的阶段变化。相比上一轮 b11c0ebc...，main 只新增两个提交，但这两个提交第一次把此前“Unity 中存在大量 noEngineReferences Core”的事实真正转化为一套独立的 Portable .NET Kernel + Godot Runtime Foundation： P0 建立了九个 net8.0 linked-source Kernel projection、跨引擎 capability matrix、Parallel Godot Reference Adapter 和对应 CI/Verifier；P1 则新增 repository-level Adapters/Godot，投影 Framework.DI.Core / Framework.Event.Core，实现 SakuraRuntimeHost、主线程 Pump、Owner…</p>
+                </article>
+                <article class="journal-update-card">
                     <p class="project-status">框架审计 · 2026-08-31</p>
                     <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>自上一轮审计基准： 之后，main 前进了三个提交： 本轮不是新的 Package 横向扩张，而是三个已有能力面的进一步收敛： 当前仓库仍明确处于： 主目标仍然是： 而发布状态仍是： 当前也没有 Pending Approval、Active 或 Blocked 工作，默认下一动作仍是 route-only。 因此： 当前没有任何理由将主线转为 Candidate / RC / Release。 但与上一轮相比，优先级需要重新调整。 最重要的变化是： GAS → Rendering 的过重 Package Dependency 已经真正关闭。 过去： 现在 GAS Package 只硬依赖： Hitbox 和 Rendering 已转为条件 Bridge。 这使当前内部 Package Dependency Edge：</p>
@@ -253,25 +263,29 @@
                     <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
                     <p>本轮相较上一审计基线 25894d48...，main 只前进了两个提交，但其中一个是相当重要的架构治理变化： 实际改动没有新增 UPM Package、没有新增 asmdef、没有扩大 Stable Runtime API，也没有修改任何 Domain Runtime；核心是在现有 editor-tools 和 tools/package-distribution 内建立： 这意味着此前分散在 Module Catalog、Release Policy、Manifest Snippet、Installer 中的“包从哪里来”这一事实，第一次开始拥有专门的物理 Source Owner。方向是正确的，而且高度符合当前“完善已有项目能力，而不是提供可交付版本”的主线。 当前仓库依然明确处于： 当前没有 Active、Pending Approval 或 Blocked 工作；默认动作仍是 route-only。Evidence…</p>
                 </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-27</p>
-                    <h3>SakuraGameFramework 最新仓库审计与能力收敛计划</h3>
-                    <p>当前仓库仍然处于正确的战略模式： 最新 Work Status 仍明确记录 release.intent = deferred-development，Candidate 为空，same-SHA release evidence 与 strict readiness 都是 not-requested；当前没有 Active、Pending Approval 或 Blocked 工作，Evidence Backlog 为 147。 本轮相较上一审计最大的变化只有两项，但都很有价值。第一，Agent 工程规则完成了一次真正的上下文预算收敛：根 AGENTS.md 从约 23.8 KB 降至约 15.3 KB，并增加 bounded route resolver，使普通 route-only 输出降至约 561 bytes，明确 4 KB / 8 KB 的 Route Budget，同时保持…</p>
-                </article>
-                <article class="journal-update-card">
-                    <p class="project-status">框架审计 · 2026-08-25</p>
-                    <h3>IrisGameFramework 最新仓库审计与能力收敛计划</h3>
-                    <p>本轮相较上一轮基线 08a24dc4...，main 又前进了 7 个提交。真正影响工程状态的不是最新的品牌文档提交，而是三条能力收敛线：Pooling Ownership/Lifecycle 二次闭环、Event Diagnostics Surface、Editor Tools Installer 异步边界收敛。最新 Brand V4 只是把 “Frame · Power · Extend” 与真实产品证据、文档入口绑定起来，并明确品牌表达不能替代真实 Supported/Runner 状态，不改变 Package、API 或发布身份。 最重要的状态变化是：上一轮 Pooling 的 55 个失败已经关闭。当前 Pooling focused EditMode 已达到 139/139，Stable API fresh compare 为 0/0/0/0；46 包 affected closure 为…</p>
-                </article>
                 </div>
             </div>
         </div>
     </section>
     <section class="journal-section" id="game-design-library" data-page-index-target>
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>65 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>67 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">
+                <article class="design-summary-card" id="design-character-as-system-interface">
+                    <p class="project-status">游戏设计范式 · 2026-09-03</p>
+                    <h3>角色作为系统接口：长期角色经济的可达状态空间、横向共存与旧资产再激活</h3>
+                    <p>以可达状态空间、Agency 与情境最优解释长期角色价值，通过公共战斗语法和构筑表达扩大选择空间，避免数值替代、专属锁孔与机制膨胀淘汰旧角色。</p>
+                    <div class="note-tags"><span>character-economy</span><span>contextual-optimality</span><span>systemic-gameplay</span></div>
+                    <a class="note-link" href="journal/character-as-system-interface.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="design-summary-card" id="design-falling-block-puzzle">
+                    <p class="project-status">游戏设计范式 · 2026-09-03</p>
+                    <h3>落块消除 / Falling-Block Puzzle / Tetris-like</h3>
+                    <p>围绕有限离散棋盘、持续生成的几何块、实时下落压力、玩家操控、原子落锁、完整结构消除与空间压缩，构成生成—安放—消除—回收空间并持续提速的动作益智运行时。</p>
+                    <div class="note-tags"><span>falling-block</span><span>puzzle</span><span>tetris-like</span></div>
+                    <a class="note-link" href="journal/falling-block-puzzle.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
                 <article class="design-summary-card" id="design-musou">
                     <p class="project-status">游戏设计范式 · 2026-09-01</p>
                     <h3>无双式军团割草动作 / Musou / Warriors-like Battlefield Action</h3>
