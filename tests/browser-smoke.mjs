@@ -424,7 +424,7 @@ try {
   if (await desktop.getAttribute('html', 'data-brand-mode') !== 'sakura') {
     throw new Error('soft navigation retained a stale Engineering brand mode');
   }
-  if (await desktop.locator('meta[name="theme-color"]').getAttribute('content') !== '#dff7f2') {
+  if (await desktop.locator('meta[name="theme-color"]').getAttribute('content') !== '#fff0f7') {
     throw new Error('soft navigation retained a stale Engineering theme color');
   }
   if (await desktop.locator('.skip-link').getAttribute('href') !== `${baseUrl}/pages/framework.html#main-content`) {
@@ -449,13 +449,21 @@ try {
     title: document.title,
     text: document.querySelector('#main-content')?.innerText ?? '',
     pageIndex: [...document.querySelectorAll('[data-page-index-link]')].map((link) => link.getAttribute('href')),
-    routeLinks: [...document.querySelectorAll('.framework-adoption-route-card')].map((link) => link.getAttribute('href'))
+    routeLinks: [...document.querySelectorAll('.framework-adoption-route-card')].map((link) => link.getAttribute('href')),
+    themeColor: document.querySelector('meta[name="theme-color"]')?.getAttribute('content'),
+    statusValueColor: getComputedStyle(document.querySelector('.framework-engineering-status-row strong')).color,
+    secondaryActionColor: getComputedStyle(document.querySelector('.framework-actions .btn-secondary')).color
   }));
   if (frameworkEngineeringState.overflow > 1) {
     throw new Error(`Framework Engineering Hub overflows the desktop viewport by ${frameworkEngineeringState.overflow}px`);
   }
   if (frameworkEngineeringState.title !== frameworkEngineering.positioning.seoTitle) {
     throw new Error('Framework Engineering page title drifted from the closed SEO contract');
+  }
+  if (frameworkEngineeringState.themeColor !== '#fff0f7'
+    || frameworkEngineeringState.statusValueColor !== 'rgb(255, 250, 255)'
+    || frameworkEngineeringState.secondaryActionColor !== 'rgb(184, 47, 108)') {
+    throw new Error('Framework Engineering page drifted from the IRIS × SAKURA palette or lost dark-surface contrast');
   }
   const normalizedEngineeringText = frameworkEngineeringState.text.toLocaleUpperCase('en-US');
   for (const phrase of ['D0 · Signal', 'D1 · System', 'D2 · Architecture', 'D3 · Evidence', 'Understand Sakura', 'Explore Engineering', 'Start Using', 'local-passed / runner-pending', 'Production: unknown', 'Implemented']) {
@@ -855,6 +863,8 @@ try {
   await mobile.goto(`${baseUrl}/pages/framework-engineering.html`, { waitUntil: 'networkidle' });
   const frameworkEngineeringMobileState = await mobile.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,
+    viewportWidth: window.innerWidth,
+    heroWidth: document.querySelector('.framework-engineering-hero-inner').getBoundingClientRect().width,
     depthCards: document.querySelectorAll('.framework-depth-card').length,
     readerCards: document.querySelectorAll('.framework-reader-card').length,
     domainCards: document.querySelectorAll('.framework-domain-card').length,
@@ -862,6 +872,9 @@ try {
   }));
   if (frameworkEngineeringMobileState.overflow > 1) {
     throw new Error(`Framework Engineering Hub overflows the mobile viewport by ${frameworkEngineeringMobileState.overflow}px`);
+  }
+  if (frameworkEngineeringMobileState.heroWidth < frameworkEngineeringMobileState.viewportWidth - 48) {
+    throw new Error(`Framework Engineering Hub hero collapsed to ${frameworkEngineeringMobileState.heroWidth}px on mobile`);
   }
   if (frameworkEngineeringMobileState.depthCards !== frameworkEngineering.depthModel.length
     || frameworkEngineeringMobileState.readerCards !== frameworkEngineering.readerPaths.length

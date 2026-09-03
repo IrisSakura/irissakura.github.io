@@ -10,7 +10,7 @@ const BRAND_MODES = new Set(['master', 'iris', 'sakura', 'journal', 'game']);
 const PALETTES = {
   home: ['101722', '1d3557', '2575fc', '6a11cb', 'ff4081', '8ce7dc'],
   portfolio: ['17131f', '493548', 'a56b46', 'd99a72', 'f2d4b5', '7e9da8'],
-  framework: ['0b1820', '123b4a', '1f6f78', '49a6a5', '99d8cf', 'd6f2eb'],
+  framework: ['0d1026', '312aa8', '4c3df5', 'c9c4ff', 'db4f8a', 'ffe1ee'],
   research: ['1d1420', '4a263d', '8b3e62', 'c96f8b', 'efb7c8', 'b6d6d7'],
   article: ['15121d', '382252', '7046a6', 'aa7bd6', 'd8b9ef', '79c7ca'],
   game: ['1b1016', '4d1d2c', '982f45', 'd6656f', 'f3b0a7', 'f2d36d'],

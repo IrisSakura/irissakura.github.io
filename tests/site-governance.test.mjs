@@ -691,6 +691,36 @@ test('the single brand stylesheet only changes palette colors', async () => {
   );
 });
 
+test('Framework surfaces use the shared IRIS and SAKURA visual system', async () => {
+  const [frameworkCss, experienceCss] = await Promise.all([
+    readText('style/framework-engineering.css'),
+    readText('style/components/brand-experience.css')
+  ]);
+
+  for (const staleToken of [
+    '--surface-raised',
+    '--surface-base',
+    '--border-color',
+    '--text-secondary'
+  ]) {
+    assert.ok(!frameworkCss.includes(`var(${staleToken})`), `Framework CSS still uses undefined token ${staleToken}`);
+  }
+
+  for (const legacyColor of [
+    '#f7fbfa', '#16252d', '#edf5f3', '#14232b', '#1d3039', '#c8d8d6', '#b9f2df', '#d8f6ed'
+  ]) {
+    assert.ok(!frameworkCss.toLowerCase().includes(legacyColor), `Framework CSS still uses legacy teal surface ${legacyColor}`);
+  }
+
+  for (const token of ['--brand-iris-500', '--brand-sakura-500', '--surface-strong', '--ink-soft', '--line']) {
+    assert.ok(frameworkCss.includes(`var(${token})`), `Framework CSS missing shared theme token ${token}`);
+  }
+
+  assert.match(experienceCss, /html\[data-brand-mode="sakura"\][\s\S]*?\.framework-detail-hero::before/u);
+  assert.match(experienceCss, /\.framework-depth-card[\s\S]*?\.framework-decision-card/u);
+  assert.match(frameworkCss, /html\[data-brand="iris-sakura"\]\[data-brand-mode="sakura"\][\s\S]*?\.framework-detail-hero\.page-cover \.framework-detail-hero-actions \.btn-secondary/u);
+});
+
 test('placeholder blog, simulated form and unsupported template claims are absent', async () => {
   const publicFiles = [
     await readText('index.html'),

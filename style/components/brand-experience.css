@@ -160,17 +160,40 @@ html[data-brand-mode="sakura"] .brand-mode-signature {
     border-radius: 2rem 0.85rem 2rem 0.85rem;
 }
 
-html[data-brand-mode="sakura"] :is(.overview-grid, .supported-adoption-grid, .module-grid) {
+html[data-brand-mode="sakura"] :is(.overview-grid, .supported-adoption-grid, .module-grid, .framework-depth-grid, .framework-reader-grid, .framework-domain-grid, .framework-evidence-authority-grid, .framework-adoption-route-grid, .framework-boundary-grid, .framework-focus-grid, .framework-toolchain-grid, .framework-topic-grid, .framework-case-grid, .framework-knowledge-grid, .framework-knowledge-clusters, .framework-module-reference-grid) {
     gap: 1.5rem;
 }
 
-html[data-brand-mode="sakura"] :is(.module-detail, .bridge-card, .supported-adoption-grid > *) {
+html[data-brand-mode="sakura"] :is(.module-detail, .bridge-card, .supported-adoption-grid > *, .framework-engineering-status, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-evidence-authority-card, .framework-adoption-route-card, .framework-boundary-grid article, .framework-focus-grid article, .framework-toolchain-grid article, .framework-topic-grid article, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a, .framework-module-reference-card, .framework-consumer-card, .framework-decision-card, .framework-case-sections > section) {
     border-radius: var(--brand-mode-card-radius);
     transition: transform var(--brand-mode-motion-duration) var(--brand-mode-motion-easing), border-color var(--brand-mode-motion-duration) var(--brand-mode-motion-easing);
 }
 
-html[data-brand-mode="sakura"] :is(.module-detail, .bridge-card):hover {
+html[data-brand-mode="sakura"] :is(.module-detail, .bridge-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a):hover {
     transform: translateY(-5px) scale(1.008);
+}
+
+html[data-brand-mode="sakura"] .framework-detail-hero::before,
+html[data-brand-mode="sakura"] .framework-detail-hero::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+}
+
+html[data-brand-mode="sakura"] .framework-detail-hero::before {
+    z-index: -1;
+    inset: 0;
+    background-image: var(--brand-mode-pattern-image);
+    background-size: var(--brand-mode-pattern-size, 64px 64px);
+    opacity: 0.72;
+}
+
+html[data-brand-mode="sakura"] .framework-detail-hero::after {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-iris-500), var(--brand-shared-500) 52%, var(--brand-sakura-500));
 }
 
 html[data-brand-mode="journal"] {
@@ -260,6 +283,14 @@ html[data-brand-mode="game"] {
         margin: 1rem 1.25rem 0 auto;
     }
 
+    html[data-brand-mode="sakura"] .framework-hero .brand-mode-signature {
+        position: absolute;
+        inset-block-start: 0.75rem;
+        inset-inline-end: 1rem;
+        max-width: min(13.5rem, calc(100vw - 2rem));
+        margin: 0;
+    }
+
     .brand-wordmark-image {
         width: 8.2rem;
     }
@@ -284,12 +315,12 @@ html[data-brand-mode="game"] {
 
 @media (prefers-reduced-motion: reduce) {
     .brand-mode-signature,
-    html[data-brand-mode] :is(.engineering-capability-card, .engineering-evidence-card, .module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card) {
+    html[data-brand-mode] :is(.engineering-capability-card, .engineering-evidence-card, .module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a) {
         transition: none;
     }
 
     .brand-mode-signature:hover,
-    html[data-brand-mode] :is(.engineering-capability-card, .engineering-evidence-card, .module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card):hover {
+    html[data-brand-mode] :is(.engineering-capability-card, .engineering-evidence-card, .module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a):hover {
         transform: none;
     }
 }

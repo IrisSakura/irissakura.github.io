@@ -38,6 +38,12 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
       assert.ok(contract.experience[dimension].length > 0, `${mode} has empty ${dimension}`);
     }
   }
+
+  assert.equal(brand.modes.sakura.themeColor, '#fff0f7');
+  assert.deepEqual(brand.modes.sakura.socialPalette, [
+    '0d1026', '312aa8', '4c3df5', 'c9c4ff', 'db4f8a', 'ffe1ee'
+  ]);
+  assert.equal(brand.modes.sakura.experience.color, 'ink indigo, structural violet and blossom pink');
 });
 
 test('official vector identity and core iconography are complete and self-contained', async () => {
