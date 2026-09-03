@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T14:49:02+08:00",
-  "totalCount": 172,
+  "generatedAt": "2026-09-03T16:00:07+08:00",
+  "totalCount": 174,
   "facets": {
     "types": [
       {
         "id": "article",
         "label": "正式文章",
-        "count": 48
+        "count": 49
       },
       {
         "id": "game-design",
         "label": "游戏设计",
-        "count": 67
+        "count": 68
       },
       {
         "id": "framework-audit",
@@ -39,7 +39,7 @@
       {
         "id": "unreal-engine-source-research",
         "label": "从 Unreal Engine 源码理解引擎设计",
-        "count": 8
+        "count": 9
       },
       {
         "id": "godot-source-research",
@@ -71,11 +71,28 @@
       {
         "id": "unreal-engine",
         "label": "Unreal Engine",
-        "count": 8
+        "count": 9
       }
     ]
   },
   "entries": [
+    {
+      "id": "article:unreal-mass",
+      "type": "article",
+      "typeLabel": "正式文章",
+      "title": "类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载",
+      "summary": "一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？",
+      "tags": [
+        "mass",
+        "unreal"
+      ],
+      "series": "从 Unreal Engine 源码理解引擎设计",
+      "engines": [
+        "unreal-engine"
+      ],
+      "updatedAt": "2026-09-03",
+      "url": "/pages/blog/unreal-mass.html"
+    },
     {
       "id": "game-design:character-as-system-interface",
       "type": "game-design",
@@ -107,6 +124,22 @@
       "engines": [],
       "updatedAt": "2026-09-03",
       "url": "/pages/journal/falling-block-puzzle.html"
+    },
+    {
+      "id": "game-design:match-3",
+      "type": "game-design",
+      "typeLabel": "游戏设计",
+      "title": "三消交换益智 / Match-3 / Swap Puzzle",
+      "summary": "游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 R…",
+      "tags": [
+        "3",
+        "match",
+        "three"
+      ],
+      "series": "",
+      "engines": [],
+      "updatedAt": "2026-09-03",
+      "url": "/pages/journal/match-3.html"
     },
     {
       "id": "framework-audit:audit-2026-09-02",

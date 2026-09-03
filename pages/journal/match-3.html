@@ -1,0 +1,4703 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 R…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/match-3.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="三消交换益智 / Match-3 / Swap Puzzle | IrisSakura Journal">
+    <meta property="og:description" content="游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 R…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/match-3.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-match-3.png">
+    <meta property="og:image:alt" content="三消交换益智 / Match-3 / Swap Puzzle | IrisSakura Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="三消交换益智 / Match-3 / Swap Puzzle | IrisSakura Journal">
+    <meta name="twitter:description" content="游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 R…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-match-3.png">
+    <meta name="twitter:image:alt" content="三消交换益智 / Match-3 / Swap Puzzle | IrisSakura Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"三消交换益智 / Match-3 / Swap Puzzle | IrisSakura Journal","description":"游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 R…","url":"https://irissakura.github.io/pages/journal/match-3.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"三消交换益智 / Match-3 / Swap Puzzle","image":"https://irissakura.github.io/assets/social/pages-journal-match-3.png","dateModified":"2026-09-03","about":["3","match","three"]}</script>
+    <!-- site-meta:end -->
+    <title>三消交换益智 / Match-3 / Swap Puzzle | IrisSakura Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">Journal</a>
+            <a href="../../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-match-3"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-09-03</p><h1>三消交换益智 / Match-3 / Swap Puzzle</h1><p>游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 R…</p><div class="note-tags"><span>3</span><span>match</span><span>three</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>3</code> <code>match</code> <code>three</code></p>
+</blockquote>
+<hr />
+<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 <code>game-designs</code> 生成索引。当前目录登记 <strong>67 个</strong>设计范式；已经覆盖落块消除、塔防、传统 Roguelike、生存恐怖、点击式图形冒险、因果编织、自走棋、集换式卡牌等大量相邻类型。</p>
+<p>当前完整路由列表中已经存在 <code>falling-block-puzzle</code>，其核心是“持续从棋盘外输入新的几何块，在实时重力压力下完成移动、旋转、落锁和整行消除”；但当前 67 个稳定 ID 中没有独立的 <code>match-3</code>、<code>swap-puzzle</code> 或等价三消交换范式。</p>
+<p>因此本期新增：</p>
+<p><strong>三消交换益智 / Match-3 / Swap Puzzle。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Match-3；</p>
+</li>
+<li><p>Match Three；</p>
+</li>
+<li><p>Swap Puzzle；</p>
+</li>
+<li><p>Tile Matching Puzzle；</p>
+</li>
+<li><p>三消；</p>
+</li>
+<li><p>交换式消除；</p>
+</li>
+<li><p>相邻交换益智；</p>
+</li>
+<li><p>棋盘级联消除。</p>
+</li>
+</ul>
+<p>本文讨论的不是所有“有三个相同东西就会消失”的游戏，也不是落块消除中的整行清除，更不是 RPG 中附带的三消战斗皮肤，而是一种仅依靠：</p>
+<p><strong>已填充棋盘 + 相邻交换 + 匹配识别 + 消除 + 重力坠落 + 随机补充 + 级联</strong></p>
+<p>就足以独立支撑完整产品的宏观游戏类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>游戏始终维护一个接近填满的离散 Board。玩家不能自由放置新的棋子，只能从当前既有棋盘中选择两个满足交换规则的相邻 Cell，并提交一次 Swap Intent。系统首先执行“候选交换”，验证交换后是否形成合法 Match、触发 Special Interaction 或满足特殊规则；无效交换回滚，合法交换则正式 Commit。随后棋盘进入不可输入的 Resolution Pipeline：识别所有匹配组，生成 Clear Batch，处理 Special Piece 与 Blocker，移除棋子，按照 Gravity 规则压缩各列，从 Spawn Source 补充新棋子，再次检测由坠落形成的 Cascade。直到棋盘重新达到不存在即时匹配、没有待处理效果、并至少拥有一个合法玩家动作的 Stable State，控制权才重新交回玩家。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>读取稳定Board
+→ 评估若干合法交换
+→ 选择两个Cell
+→ 提交Swap
+→ 验证是否形成有效结果
+→ 无效则回滚
+或
+→ 有效Swap正式Commit
+→ Match Detection
+→ Clear / Special Effect
+→ Blocker受损
+→ Gravity Collapse
+→ Refill
+→ Cascade再次检测
+→ Combo / Objective / Score累计
+→ Board重新稳定
+→ 检测是否仍有Legal Move
+→ 下一次玩家交换。</strong></p>
+<p>本类型真正的核心不是：</p>
+<blockquote>
+<p>“找到三个一样的颜色。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>玩家每次只拥有一个非常小的局部操作——交换两个棋子，却必须预测这个局部修改经过匹配、坠落、补充和连锁之后，会怎样重构整个棋盘的未来行动空间。</strong></p>
+</blockquote>
+<hr />
+<h1 id="1-类型定位">1. 类型定位</h1><p>典型 Match-3 通常包含：</p>
+<ul>
+<li><p>二维离散棋盘；</p>
+</li>
+<li><p>已填满或接近填满的 Tile；</p>
+</li>
+<li><p>多种颜色 / 类型；</p>
+</li>
+<li><p>相邻交换；</p>
+</li>
+<li><p>Match Detection；</p>
+</li>
+<li><p>横向三连；</p>
+</li>
+<li><p>纵向三连；</p>
+</li>
+<li><p>四连；</p>
+</li>
+<li><p>五连；</p>
+</li>
+<li><p>T / L 型匹配；</p>
+</li>
+<li><p>Special Piece；</p>
+</li>
+<li><p>Special Combination；</p>
+</li>
+<li><p>Clear；</p>
+</li>
+<li><p>Gravity；</p>
+</li>
+<li><p>Refill；</p>
+</li>
+<li><p>Cascade；</p>
+</li>
+<li><p>Combo；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Moves；</p>
+</li>
+<li><p>Timer；</p>
+</li>
+<li><p>Objective；</p>
+</li>
+<li><p>Blocker；</p>
+</li>
+<li><p>Layered Blocker；</p>
+</li>
+<li><p>Spawn Source；</p>
+</li>
+<li><p>Exit / Sink；</p>
+</li>
+<li><p>Hint；</p>
+</li>
+<li><p>Shuffle；</p>
+</li>
+<li><p>Deadlock Detection；</p>
+</li>
+<li><p>Booster；</p>
+</li>
+<li><p>Level；</p>
+</li>
+<li><p>Puzzle；</p>
+</li>
+<li><p>Endless；</p>
+</li>
+<li><p>PvP / Battle扩展；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Solver；</p>
+</li>
+<li><p>Monte Carlo Level Validation。</p>
+</li>
+</ul>
+<p>典型一关流程：</p>
+<p>生成Level
+→ 填充Board
+→ 保证开局不存在非预期自动匹配
+→ 保证至少存在合法交换
+→ 玩家观察Board
+→ 交换两个相邻棋子
+→ 形成横向四连
+→ 生成Line Special
+→ 消除普通棋子
+→ 下方Blocker受损
+→ 上方棋子坠落
+→ Spawn Source补充新棋子
+→ 新棋子自然形成三连
+→ Cascade继续
+→ Combo提高
+→ Objective计数更新
+→ Board稳定
+→ 玩家剩余Moves减少
+→ 继续规划下一次交换
+→ 达成Objective或Moves归零。</p>
+<hr />
+<h1 id="2-最核心的运行时原则玩家只能在-stable-board-上提交新的决策">2. 最核心的运行时原则：玩家只能在 Stable Board 上提交新的决策</h1><p>Match-3 很容易出现一种架构错误：</p>
+<p>玩家交换后，</p>
+<p>棋盘还在：</p>
+<p>消除动画。</p>
+<p>与此同时：</p>
+<p>又允许玩家交换其他棋子。</p>
+<p>除非游戏明确设计成实时并发消除，否则这会快速制造：</p>
+<ul>
+<li><p>Tile身份错位；</p>
+</li>
+<li><p>Match重复计算；</p>
+</li>
+<li><p>Special重复触发；</p>
+</li>
+<li><p>Gravity与Swap竞争；</p>
+</li>
+<li><p>Objective重复结算；</p>
+</li>
+<li><p>Replay不确定。</p>
+</li>
+</ul>
+<p>标准三消更适合建立：</p>
+<p><strong>Stable Decision Boundary。</strong></p>
+<p>只有当：</p>
+<ul>
+<li><p>没有Active Swap；</p>
+</li>
+<li><p>没有Pending Match；</p>
+</li>
+<li><p>没有Pending Clear；</p>
+</li>
+<li><p>没有Gravity Movement；</p>
+</li>
+<li><p>没有Refill；</p>
+</li>
+<li><p>没有Effect Queue；</p>
+</li>
+<li><p>没有Cascade；</p>
+</li>
+</ul>
+<p>时，</p>
+<p>Board才进入：</p>
+<p><code>Stable</code></p>
+<p>并允许玩家输入。</p>
+<hr />
+<h1 id="3-boardphase">3. BoardPhase</h1><p>推荐至少包含：</p>
+<ul>
+<li><p>Initializing；</p>
+</li>
+<li><p>Stable；</p>
+</li>
+<li><p>Swapping；</p>
+</li>
+<li><p>ValidatingSwap；</p>
+</li>
+<li><p>ResolvingMatches；</p>
+</li>
+<li><p>ResolvingEffects；</p>
+</li>
+<li><p>Clearing；</p>
+</li>
+<li><p>Collapsing；</p>
+</li>
+<li><p>Refilling；</p>
+</li>
+<li><p>Cascading；</p>
+</li>
+<li><p>Shuffling；</p>
+</li>
+<li><p>Completed；</p>
+</li>
+<li><p>Failed；</p>
+</li>
+<li><p>Paused。</p>
+</li>
+</ul>
+<hr />
+<h1 id="4-为什么需要显式-phase">4. 为什么需要显式 Phase</h1><p>不要通过：</p>
+<p><code>isAnimating == false</code></p>
+<p>判断现在能不能交换。</p>
+<p>因为：</p>
+<p>动画可能已经播完，</p>
+<p>但：</p>
+<p>Effect Queue仍然有炸弹待执行。</p>
+<p>也可能：</p>
+<p>逻辑已经稳定，</p>
+<p>但表现仍在收尾。</p>
+<p>因此：</p>
+<p><strong>Gameplay Phase</strong></p>
+<p>和：</p>
+<p><strong>Presentation Activity</strong></p>
+<p>必须分离。</p>
+<hr />
+<h1 id="5-核心范式一board-应是纯离散状态不应由场景中的-tile-gameobject-充当真相">5. 核心范式一：Board 应是纯离散状态，不应由场景中的 Tile GameObject 充当真相</h1><p>最基础的权威状态应类似：</p>
+<p><code>Board[x,y] -&gt; CellState</code></p>
+<p>而不是：</p>
+<p>“场景里这个Sprite目前在哪个Transform”。</p>
+<hr />
+<h1 id="6-boarddefinition">6. BoardDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>BoardWidth；</p>
+</li>
+<li><p>BoardHeight；</p>
+</li>
+<li><p>CellMask；</p>
+</li>
+<li><p>GravityProfile；</p>
+</li>
+<li><p>SpawnSourceDefinitions；</p>
+</li>
+<li><p>SinkDefinitions；</p>
+</li>
+<li><p>InitialLayoutDefinition；</p>
+</li>
+<li><p>MatchRuleProfile；</p>
+</li>
+<li><p>SwapRuleProfile；</p>
+</li>
+<li><p>RefillProfile；</p>
+</li>
+<li><p>BoardVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="7-boardruntimestate">7. BoardRuntimeState</h1><p>建议包含：</p>
+<ul>
+<li><p>CellStates；</p>
+</li>
+<li><p>TileInstanceRegistry；</p>
+</li>
+<li><p>CurrentPhase；</p>
+</li>
+<li><p>BoardRevision；</p>
+</li>
+<li><p>CurrentCascadeIndex；</p>
+</li>
+<li><p>PendingEffectCount；</p>
+</li>
+<li><p>CurrentMoveIndex；</p>
+</li>
+<li><p>RandomStreamState；</p>
+</li>
+<li><p>BoardVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="8-cell-不一定只是一个格子放一个tile">8. Cell 不一定只是“一个格子放一个Tile”</h1><p>成熟 Match-3 往往需要：</p>
+<p>同一个 Cell 同时存在多个逻辑层。</p>
+<p>例如：</p>
+<p>底层：</p>
+<p>Jelly。</p>
+<p>中层：</p>
+<p>普通Candy。</p>
+<p>上层：</p>
+<p>Ice Cover。</p>
+<p>如果只保存：</p>
+<p><code>Cell = BlueCandy</code></p>
+<p>以后加入Blocker会非常痛苦。</p>
+<hr />
+<h1 id="9-推荐-cell-分层">9. 推荐 Cell 分层</h1><p>可以至少拆成：</p>
+<h2 id="terrain-layer">Terrain Layer</h2><p>格子本身。</p>
+<p>例如：</p>
+<ul>
+<li><p>Normal；</p>
+</li>
+<li><p>Hole；</p>
+</li>
+<li><p>Conveyor；</p>
+</li>
+<li><p>Portal；</p>
+</li>
+<li><p>Spawn；</p>
+</li>
+<li><p>Sink。</p>
+</li>
+</ul>
+<h2 id="occupant-layer">Occupant Layer</h2><p>当前主要可移动Piece。</p>
+<p>例如：</p>
+<ul>
+<li><p>Red；</p>
+</li>
+<li><p>Blue；</p>
+</li>
+<li><p>Green；</p>
+</li>
+<li><p>Special。</p>
+</li>
+</ul>
+<h2 id="underlay-layer">Underlay Layer</h2><p>位于Piece下方、需要通过附近Clear移除的目标。</p>
+<p>例如：</p>
+<ul>
+<li><p>Jelly；</p>
+</li>
+<li><p>Grass；</p>
+</li>
+<li><p>Paint。</p>
+</li>
+</ul>
+<h2 id="overlay-layer">Overlay Layer</h2><p>覆盖Piece或阻止交互的结构。</p>
+<p>例如：</p>
+<ul>
+<li><p>Ice；</p>
+</li>
+<li><p>Cage；</p>
+</li>
+<li><p>Chain。</p>
+</li>
+</ul>
+<hr />
+<h1 id="10-cellstate">10. CellState</h1><p>建议包含：</p>
+<ul>
+<li><p>Coordinate；</p>
+</li>
+<li><p>TerrainState；</p>
+</li>
+<li><p>OccupantInstanceId；</p>
+</li>
+<li><p>UnderlayState；</p>
+</li>
+<li><p>OverlayState；</p>
+</li>
+<li><p>CellTags；</p>
+</li>
+<li><p>CellVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="11-分层的价值">11. 分层的价值</h1><p>例如玩家清除一个Blue Piece。</p>
+<p>可以同时：</p>
+<ul>
+<li><p>删除Occupant；</p>
+</li>
+<li><p>Jelly Layer -1；</p>
+</li>
+<li><p>相邻Crate Layer -1；</p>
+</li>
+<li><p>Trigger Spawn。</p>
+</li>
+</ul>
+<p>这些状态不需要：</p>
+<p>互相伪装成不同Tile类型。</p>
+<hr />
+<h1 id="12-核心范式二tiledefinition-与-tileinstance-必须分离">12. 核心范式二：TileDefinition 与 TileInstance 必须分离</h1><h2 id="tiledefinition">TileDefinition</h2><p>描述：</p>
+<p>“红色普通Piece是什么。”</p>
+<h2 id="tileinstance">TileInstance</h2><p>描述：</p>
+<p>“现在Board坐标(3,5)上的这颗红Piece是谁。”</p>
+<hr />
+<h1 id="13-tiledefinition">13. TileDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>TileTypeId；</p>
+</li>
+<li><p>MatchCategoryId；</p>
+</li>
+<li><p>TileTags；</p>
+</li>
+<li><p>Movable；</p>
+</li>
+<li><p>Swappable；</p>
+</li>
+<li><p>Clearable；</p>
+</li>
+<li><p>AffectedByGravity；</p>
+</li>
+<li><p>SpecialBehaviorIds；</p>
+</li>
+<li><p>SpawnWeight；</p>
+</li>
+<li><p>PresentationProfile；</p>
+</li>
+<li><p>TileVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="14-tileinstancestate">14. TileInstanceState</h1><p>建议包含：</p>
+<ul>
+<li><p>TileInstanceId；</p>
+</li>
+<li><p>TileTypeId；</p>
+</li>
+<li><p>CurrentCell；</p>
+</li>
+<li><p>RuntimeFlags；</p>
+</li>
+<li><p>SpecialState；</p>
+</li>
+<li><p>LockState；</p>
+</li>
+<li><p>SpawnSourceId；</p>
+</li>
+<li><p>CreationCause；</p>
+</li>
+<li><p>TileVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="15-tile需要稳定-instanceid">15. Tile需要稳定 InstanceId</h1><p>尤其 Cascade 中：</p>
+<p>同一颗Tile：</p>
+<p>可能从：</p>
+<p>(2,8)</p>
+<p>掉到：</p>
+<p>(2,3)。</p>
+<p>它仍然是：</p>
+<p>同一个Tile。</p>
+<p>这对：</p>
+<ul>
+<li><p>Animation；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+<li><p>Special Origin；</p>
+</li>
+<li><p>Objective Tracking；</p>
+</li>
+</ul>
+<p>非常重要。</p>
+<hr />
+<h1 id="16-核心范式三swap-不是立即状态修改而是一个候选事务">16. 核心范式三：Swap 不是立即状态修改，而是一个候选事务</h1><p>玩家选择：</p>
+<p>A Cell。</p>
+<p>B Cell。</p>
+<p>系统不能：</p>
+<p>直接交换</p>
+<p>然后开始扫描全棋盘。</p>
+<p>首先创建：</p>
+<p><strong>SwapIntent。</strong></p>
+<hr />
+<h1 id="17-swapintent">17. SwapIntent</h1><p>建议包含：</p>
+<ul>
+<li><p>SwapIntentId；</p>
+</li>
+<li><p>CellA；</p>
+</li>
+<li><p>CellB；</p>
+</li>
+<li><p>TileAId；</p>
+</li>
+<li><p>TileBId；</p>
+</li>
+<li><p>InputSource；</p>
+</li>
+<li><p>SubmittedBoardRevision；</p>
+</li>
+<li><p>MoveIndex；</p>
+</li>
+<li><p>SwapVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="18-swap合法性第一层">18. Swap合法性第一层</h1><p>先检查：</p>
+<ul>
+<li><p>两Cell相邻；</p>
+</li>
+<li><p>两Cell都存在；</p>
+</li>
+<li><p>两Piece可交换；</p>
+</li>
+<li><p>没有锁定Overlay；</p>
+</li>
+<li><p>当前Phase == Stable；</p>
+</li>
+<li><p>Board Revision未变化。</p>
+</li>
+</ul>
+<hr />
+<h1 id="19-swap候选">19. Swap候选</h1><p>逻辑上执行：</p>
+<p>A ↔ B。</p>
+<p>但此时还不是最终Commit。</p>
+<hr />
+<h1 id="20-swap合法性第二层">20. Swap合法性第二层</h1><p>根据Ruleset判断：</p>
+<p>候选Board是否产生：</p>
+<ul>
+<li><p>Match；</p>
+</li>
+<li><p>Special Activation；</p>
+</li>
+<li><p>Special + Special Combination；</p>
+</li>
+<li><p>特殊Objective Action。</p>
+</li>
+</ul>
+<p>如果都没有：</p>
+<p>普通三消规则下：</p>
+<p>Swap无效。</p>
+<hr />
+<h1 id="21-invalid-swap">21. Invalid Swap</h1><p>执行：</p>
+<p>逻辑回滚。</p>
+<p>表现可以：</p>
+<p>A移动到B
+→ 抖动
+→ 再回来。</p>
+<p>但最终Board：</p>
+<p>完全不变。</p>
+<hr />
+<h1 id="22-为什么要把候选与commit分离">22. 为什么要把候选与Commit分离</h1><p>因为玩家“尝试交换”</p>
+<p>和：</p>
+<p>“游戏接受这次Move”</p>
+<p>是两个不同事件。</p>
+<p>只有Accepted Move：</p>
+<p>才应该：</p>
+<ul>
+<li><p>Moves -1；</p>
+</li>
+<li><p>进入Cascade；</p>
+</li>
+<li><p>记录Replay Move；</p>
+</li>
+<li><p>推进Turn Counter。</p>
+</li>
+</ul>
+<hr />
+<h1 id="23-核心范式四swap-validation-应优先做局部检测而不是无脑全盘扫描">23. 核心范式四：Swap Validation 应优先做局部检测，而不是无脑全盘扫描</h1><p>一次普通Swap只改变：</p>
+<p>A、B两个位置。</p>
+<p>因此第一轮Match Detection通常只需要：</p>
+<p>检查：</p>
+<p>A和B所在：</p>
+<p>横、纵轴。</p>
+<hr />
+<h1 id="24-但-cascade阶段不同">24. 但 Cascade阶段不同</h1><p>重力后：</p>
+<p>大量Cell改变。</p>
+<p>这时可以：</p>
+<p>扫描Dirty区域</p>
+<p>或：</p>
+<p>全Board。</p>
+<p>由于Board通常很小，</p>
+<p>优先：</p>
+<p>正确性</p>
+<p>而不是复杂增量优化。</p>
+<hr />
+<h1 id="25-matchdetector-应该是纯query">25. MatchDetector 应该是纯Query</h1><p>输入：</p>
+<p>Board Snapshot / Cells。</p>
+<p>输出：</p>
+<p>MatchGroup集合。</p>
+<p>不能：</p>
+<p>检测过程中直接删除Piece。</p>
+<hr />
+<h1 id="26-核心范式五match-是语义对象不应该只是找到3个cell然后立刻destroy">26. 核心范式五：Match 是语义对象，不应该只是“找到3个Cell然后立刻Destroy”</h1><p>需要显式：</p>
+<p><strong>MatchGroup。</strong></p>
+<hr />
+<h1 id="27-matchgroup">27. MatchGroup</h1><p>建议包含：</p>
+<ul>
+<li><p>MatchGroupId；</p>
+</li>
+<li><p>MatchedTileIds；</p>
+</li>
+<li><p>MatchedCells；</p>
+</li>
+<li><p>MatchCategoryId；</p>
+</li>
+<li><p>Orientation；</p>
+</li>
+<li><p>Length；</p>
+</li>
+<li><p>ShapeType；</p>
+</li>
+<li><p>OriginatingSwapId；</p>
+</li>
+<li><p>IntersectionCells；</p>
+</li>
+<li><p>MatchPriority；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="28-shapetype">28. ShapeType</h1><p>例如：</p>
+<ul>
+<li><p>Horizontal；</p>
+</li>
+<li><p>Vertical；</p>
+</li>
+<li><p>Cross；</p>
+</li>
+<li><p>T；</p>
+</li>
+<li><p>L；</p>
+</li>
+<li><p>Cluster；</p>
+</li>
+<li><p>RulesetSpecific。</p>
+</li>
+</ul>
+<hr />
+<h1 id="29-为什么-matchgroup-有价值">29. 为什么 MatchGroup 有价值</h1><p>后续可以根据：</p>
+<ul>
+<li><p>长度；</p>
+</li>
+<li><p>Shape；</p>
+</li>
+<li><p>Player Move来源；</p>
+</li>
+</ul>
+<p>决定：</p>
+<p>是否创建Special。</p>
+<p>如果检测阶段已经：</p>
+<p>直接删除所有Cell，</p>
+<p>你已经失去了：</p>
+<p>形成特殊Piece所需的上下文。</p>
+<hr />
+<h1 id="30-核心范式六重叠-match-必须先归并再决定奖励">30. 核心范式六：重叠 Match 必须先归并，再决定奖励</h1><p>例如一个中心Tile同时形成：</p>
+<p>横三</p>
+<p>和：</p>
+<p>纵三。</p>
+<p>不能简单：</p>
+<p>识别成：</p>
+<p>两个独立三连</p>
+<p>然后中心Tile被清两次。</p>
+<p>需要：</p>
+<p><strong>Match Group Merge / Classification。</strong></p>
+<hr />
+<h1 id="31-match-merge">31. Match Merge</h1><p>根据：</p>
+<p>共享Cell</p>
+<p>和：</p>
+<p>规则，</p>
+<p>可以归并为：</p>
+<p>T / L / Cross。</p>
+<hr />
+<h1 id="32-归并后再决定">32. 归并后再决定：</h1><ul>
+<li><p>Special类型；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Clear范围；</p>
+</li>
+<li><p>Objective效果。</p>
+</li>
+</ul>
+<hr />
+<h1 id="33-核心范式七特殊piece生成位置必须具有确定规则">33. 核心范式七：特殊Piece生成位置必须具有确定规则</h1><p>假设玩家通过Swap形成四连。</p>
+<p>会生成：</p>
+<p>Line Clear Piece。</p>
+<p>它应该出现在哪里？</p>
+<p>如果随机选择：</p>
+<p>玩家无法规划。</p>
+<p>通常应该与：</p>
+<p><strong>Player Action Origin</strong></p>
+<p>关联。</p>
+<hr />
+<h1 id="34-specialspawnanchor规则可以考虑">34. SpecialSpawnAnchor规则可以考虑：</h1><ol>
+<li><p>玩家交换进入Match的目标Cell；</p>
+</li>
+<li><p>参与Match的被移动Piece最终位置；</p>
+</li>
+<li><p>交叉中心；</p>
+</li>
+<li><p>规则明确的优先Cell。</p>
+</li>
+</ol>
+<hr />
+<h1 id="35-specialcreationresult">35. SpecialCreationResult</h1><p>建议包含：</p>
+<ul>
+<li><p>SourceMatchGroupId；</p>
+</li>
+<li><p>SpecialTypeId；</p>
+</li>
+<li><p>SpawnCell；</p>
+</li>
+<li><p>ConsumedTileIds；</p>
+</li>
+<li><p>PreservedTileId；</p>
+</li>
+<li><p>TransformationRule；</p>
+</li>
+<li><p>SpecialVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="36-special生成不能和clear相互冲突">36. Special生成不能和Clear相互冲突</h1><p>例如：</p>
+<p>4个Tile形成Match。</p>
+<p>其中1个转换成Special。</p>
+<p>真正Clear的：</p>
+<p>只有其余3个</p>
+<p>或按照Ruleset处理。</p>
+<p>必须先生成：</p>
+<p><strong>Resolution Plan</strong></p>
+<p>再执行。</p>
+<hr />
+<h1 id="37-核心范式八所有消除应先形成-clear-batch再批量提交">37. 核心范式八：所有消除应先形成 Clear Batch，再批量提交</h1><p>不要：</p>
+<p>遍历Match时</p>
+<p>遇到Tile就立刻：</p>
+<p>Delete。</p>
+<p>因为一个Tile可能：</p>
+<ul>
+<li><p>同时属于多个Match；</p>
+</li>
+<li><p>被Special波及；</p>
+</li>
+<li><p>已被另一个Effect标记Clear。</p>
+</li>
+</ul>
+<hr />
+<h1 id="38-clearbatch">38. ClearBatch</h1><p>建议包含：</p>
+<ul>
+<li><p>ClearBatchId；</p>
+</li>
+<li><p>TargetTileIds；</p>
+</li>
+<li><p>TargetCellEffects；</p>
+</li>
+<li><p>SourceMatchIds；</p>
+</li>
+<li><p>SourceEffectIds；</p>
+</li>
+<li><p>CascadeIndex；</p>
+</li>
+<li><p>CauseType；</p>
+</li>
+<li><p>ClearVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="39-clear集合使用去重">39. Clear集合使用去重</h1><p>同一Tile：</p>
+<p>即使被：</p>
+<p>横线Special</p>
+<p>和：</p>
+<p>炸弹Special</p>
+<p>同时命中，</p>
+<p>仍然只Clear一次。</p>
+<p>但：</p>
+<p>两个Effect事件都可以：</p>
+<p>记录其参与。</p>
+<hr />
+<h1 id="40-核心范式九special-piece不应直接修改一堆cell而应产生-effect">40. 核心范式九：Special Piece不应直接“修改一堆Cell”，而应产生 Effect</h1><p>例如：</p>
+<p>Horizontal Line Special。</p>
+<p>触发后：</p>
+<p>创建：</p>
+<p><code>ClearRowEffect(row=5)</code>。</p>
+<hr />
+<h1 id="41-effectdefinition">41. EffectDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>EffectType；</p>
+</li>
+<li><p>TargetSelector；</p>
+</li>
+<li><p>PropagationRule；</p>
+</li>
+<li><p>ClearPolicy；</p>
+</li>
+<li><p>BlockerInteractionRule；</p>
+</li>
+<li><p>ChainTriggerPolicy；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>EffectVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="42-effectinstance">42. EffectInstance</h1><p>建议包含：</p>
+<ul>
+<li><p>EffectInstanceId；</p>
+</li>
+<li><p>SourceTileId；</p>
+</li>
+<li><p>SourceEventId；</p>
+</li>
+<li><p>CurrentTargets；</p>
+</li>
+<li><p>EffectDepth；</p>
+</li>
+<li><p>Resolved；</p>
+</li>
+<li><p>EffectVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="43-常见-effect">43. 常见 Effect</h1><ul>
+<li><p>ClearRow；</p>
+</li>
+<li><p>ClearColumn；</p>
+</li>
+<li><p>AreaExplosion；</p>
+</li>
+<li><p>ClearColor；</p>
+</li>
+<li><p>CrossClear；</p>
+</li>
+<li><p>RandomTargets；</p>
+</li>
+<li><p>TransformTargets；</p>
+</li>
+<li><p>DamageBlocker；</p>
+</li>
+<li><p>SpawnSpecial。</p>
+</li>
+</ul>
+<hr />
+<h1 id="44-核心范式十effect-queue-是连锁反应的真正核心">44. 核心范式十：Effect Queue 是连锁反应的真正核心</h1><p>假设炸弹A：</p>
+<p>炸到Line Special B。</p>
+<p>B：</p>
+<p>触发横线。</p>
+<p>横线又击中：</p>
+<p>Color Special C。</p>
+<p>C再次清大量Tile。</p>
+<p>如果这些都：</p>
+<p>递归函数直接执行，</p>
+<p>很容易：</p>
+<ul>
+<li><p>Stack爆炸；</p>
+</li>
+<li><p>重复触发；</p>
+</li>
+<li><p>顺序不可解释；</p>
+</li>
+<li><p>无限循环。</p>
+</li>
+</ul>
+<p>需要：</p>
+<p><strong>Effect Queue。</strong></p>
+<hr />
+<h1 id="45-effect-queue流程">45. Effect Queue流程</h1><p>Initial Clear
+→ 找到被触发的Special
+→ 创建Effect
+→ 入队
+→ 取下一个Effect
+→ 计算Targets
+→ 添加Clear Batch
+→ 发现新的Special
+→ 入队
+→ 重复
+→ 队列为空。</p>
+<hr />
+<h1 id="46-每个special一轮-resolution只触发一次">46. 每个Special一轮 Resolution只触发一次</h1><p>维护：</p>
+<p><code>TriggeredSpecialIds</code></p>
+<p>防止：</p>
+<p>同一Piece被两个Effect反复引爆。</p>
+<hr />
+<h1 id="47-effectdepth">47. EffectDepth</h1><p>用于：</p>
+<p>Debug和循环保护。</p>
+<p>如果：</p>
+<p>Depth &gt; 安全上限，</p>
+<p>说明：</p>
+<p>Rule存在异常循环。</p>
+<hr />
+<h1 id="48-核心范式十一特殊piece组合应该拥有专门的-combination-resolver">48. 核心范式十一：特殊Piece组合应该拥有专门的 Combination Resolver</h1><p>例如：</p>
+<p>Line + Line。</p>
+<p>Bomb + Bomb。</p>
+<p>Color + Normal。</p>
+<p>Color + Special。</p>
+<p>这些通常不是：</p>
+<p>分别触发两个Effect那么简单。</p>
+<p>可能产生：</p>
+<p>更大的新规则。</p>
+<hr />
+<h1 id="49-specialcombinationdefinition">49. SpecialCombinationDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SpecialTypeA；</p>
+</li>
+<li><p>SpecialTypeB；</p>
+</li>
+<li><p>OrderSensitive；</p>
+</li>
+<li><p>ResultEffectIds；</p>
+</li>
+<li><p>ConsumptionPolicy；</p>
+</li>
+<li><p>TargetSelectionRule；</p>
+</li>
+<li><p>CombinationVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="50-special-special-swap">50. Special + Special Swap</h1><p>可能即使：</p>
+<p>没有普通Match，</p>
+<p>也应视为：</p>
+<p>合法Move。</p>
+<p>所以：</p>
+<p>SwapValidator</p>
+<p>必须先询问：</p>
+<p>SpecialCombinationResolver。</p>
+<hr />
+<h1 id="51-核心范式十二blocker-应作为独立状态层而不是不断增加不可匹配tile类型">51. 核心范式十二：Blocker 应作为独立状态层，而不是不断增加“不可匹配Tile类型”</h1><p>随着内容扩展，常见Blocker可能包括：</p>
+<ul>
+<li><p>Ice；</p>
+</li>
+<li><p>Chain；</p>
+</li>
+<li><p>Crate；</p>
+</li>
+<li><p>Stone；</p>
+</li>
+<li><p>Jelly；</p>
+</li>
+<li><p>Lock；</p>
+</li>
+<li><p>Vine；</p>
+</li>
+<li><p>Bubble；</p>
+</li>
+<li><p>Multi-layer Armor。</p>
+</li>
+</ul>
+<p>如果都做成：</p>
+<p>特殊Tile，</p>
+<p>交换、重力、匹配逻辑会越来越脆弱。</p>
+<hr />
+<h1 id="52-blockerdefinition">52. BlockerDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>BlockerTypeId；</p>
+</li>
+<li><p>LayerType；</p>
+</li>
+<li><p>HitPointsOrLayers；</p>
+</li>
+<li><p>PreventsSwap；</p>
+</li>
+<li><p>PreventsGravity；</p>
+</li>
+<li><p>PreventsMatch；</p>
+</li>
+<li><p>PreventsSpawn；</p>
+</li>
+<li><p>DamageTriggers；</p>
+</li>
+<li><p>ClearCondition；</p>
+</li>
+<li><p>BlockerVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="53-blockerdamageevent">53. BlockerDamageEvent</h1><p>清除附近Tile</p>
+<p>或：</p>
+<p>Effect命中。</p>
+<p>BlockerSystem根据：</p>
+<p>DamageTrigger</p>
+<p>决定：</p>
+<ul>
+<li><p>Layer -1；</p>
+</li>
+<li><p>Destroy；</p>
+</li>
+<li><p>Transform。</p>
+</li>
+</ul>
+<hr />
+<h1 id="54-例如两层ice">54. 例如两层Ice</h1><p>第一次受到Clear：</p>
+<p>2 → 1。</p>
+<p>第二次：</p>
+<p>1 → 0。</p>
+<p>内部Piece仍然可以：</p>
+<p>保持原InstanceId。</p>
+<hr />
+<h1 id="55-核心范式十三clear-和-blocker-damage-应使用同一个语义事件源">55. 核心范式十三：Clear 和 Blocker Damage 应使用同一个语义事件源</h1><p>不要让：</p>
+<p>普通Match</p>
+<p>和：</p>
+<p>Special Explosion</p>
+<p>分别写两套Blocker逻辑。</p>
+<p>统一生成：</p>
+<p><code>CellAffectedEvent</code></p>
+<p>或：</p>
+<p><code>ClearImpact</code>。</p>
+<p>Blocker只判断：</p>
+<p>这个Impact是否属于：</p>
+<p>自己的DamageTrigger。</p>
+<hr />
+<h1 id="56-核心范式十四gravity-是-board-topology-规则不应默认硬编码所有piece向下掉">56. 核心范式十四：Gravity 是 Board Topology 规则，不应默认硬编码“所有Piece向下掉”</h1><p>最简单：</p>
+<p>Gravity = Down。</p>
+<p>但扩展Level可能存在：</p>
+<ul>
+<li><p>向上；</p>
+</li>
+<li><p>向左；</p>
+</li>
+<li><p>向右；</p>
+</li>
+<li><p>分区重力；</p>
+</li>
+<li><p>Portal；</p>
+</li>
+<li><p>Conveyor。</p>
+</li>
+</ul>
+<p>因此最好：</p>
+<p><strong>GravityProfile</strong></p>
+<p>独立。</p>
+<hr />
+<h1 id="57-标准-column-collapse">57. 标准 Column Collapse</h1><p>对于每一列：</p>
+<p>从Gravity方向最远端开始。</p>
+<p>收集所有：</p>
+<p>可重力移动Occupant。</p>
+<p>压缩到：</p>
+<p>可占用Cell。</p>
+<hr />
+<h1 id="58-hole-cell-non-playable-cell">58. Hole Cell / Non-playable Cell</h1><p>棋盘中可能：</p>
+<p>存在缺口。</p>
+<p>Piece应：</p>
+<p>跳过不可占用Cell</p>
+<p>继续下落。</p>
+<hr />
+<h1 id="59-blocker可能切断gravity">59. Blocker可能切断Gravity</h1><p>例如：</p>
+<p>固定Stone</p>
+<p>占据一格。</p>
+<p>其上方和下方：</p>
+<p>形成：</p>
+<p>不同Gravity Segment。</p>
+<hr />
+<h1 id="60-因此-collapse-应基于">60. 因此 Collapse 应基于：</h1><p><strong>Gravity Segment</strong></p>
+<p>而不是：</p>
+<p>整列简单排序。</p>
+<hr />
+<h1 id="61-核心范式十五collapse-应是逻辑重映射不是逐格物理下落">61. 核心范式十五：Collapse 应是逻辑重映射，不是逐格物理下落</h1><p>清除后：</p>
+<p>Piece从Y=8</p>
+<p>最终到Y=4。</p>
+<p>逻辑系统可以：</p>
+<p>直接确定：</p>
+<p>Final Cell。</p>
+<p>动画层再：</p>
+<p>平滑表现Y8 → Y4。</p>
+<p>不要：</p>
+<p>真的模拟4次物理落格</p>
+<p>并在中途重新检测Match。</p>
+<hr />
+<h1 id="62-match-detection时机">62. Match Detection时机</h1><p>通常：</p>
+<p>所有坠落与Refill完成后</p>
+<p>统一检测。</p>
+<p>这样：</p>
+<p>Cascade阶段边界明确。</p>
+<hr />
+<h1 id="63-核心范式十六refill必须从明确-spawn-source-产生piece">63. 核心范式十六：Refill必须从明确 Spawn Source 产生Piece</h1><p>不要：</p>
+<p>所有空Cell直接：</p>
+<p><code>randomTile()</code>。</p>
+<p>更好的结构：</p>
+<p>棋盘顶部或其他入口：</p>
+<p>拥有：</p>
+<p>Spawn Source。</p>
+<hr />
+<h1 id="64-spawnsourcedefinition">64. SpawnSourceDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SpawnSourceId；</p>
+</li>
+<li><p>TargetGravitySegment；</p>
+</li>
+<li><p>SpawnCell；</p>
+</li>
+<li><p>PiecePoolRule；</p>
+</li>
+<li><p>SpawnWeightProfile；</p>
+</li>
+<li><p>SpawnRestriction；</p>
+</li>
+<li><p>RandomStreamId；</p>
+</li>
+<li><p>SourceVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="65-refill流程">65. Refill流程</h1><p>Collapse完成
+→ 找出未填满的Gravity Segment
+→ 计算需要多少Piece
+→ 对应Spawn Source生成Piece
+→ Assign新TileInstanceId
+→ 设置CreationCause = Refill
+→ 生成最终Cell映射
+→ Presentation坠落
+→ Refill完成。</p>
+<hr />
+<h1 id="66-核心范式十七piece-spawn-rng-与其他gameplay-rng-必须隔离">66. 核心范式十七：Piece Spawn RNG 与其他Gameplay RNG 必须隔离</h1><p>推荐至少分：</p>
+<ul>
+<li><p>RefillRandom；</p>
+</li>
+<li><p>ShuffleRandom；</p>
+</li>
+<li><p>BoosterRandom；</p>
+</li>
+<li><p>CosmeticRandom。</p>
+</li>
+</ul>
+<hr />
+<h1 id="67-为什么必须隔离">67. 为什么必须隔离</h1><p>加入一个：</p>
+<p>随机粒子颜色</p>
+<p>不能：</p>
+<p>改变未来Board补充序列。</p>
+<p>否则：</p>
+<p>Replay、QA、概率平衡</p>
+<p>全部失效。</p>
+<hr />
+<h1 id="68-核心范式十八refill-既要随机也要受规则约束">68. 核心范式十八：Refill 既要随机，也要受规则约束</h1><p>如果完全独立随机，</p>
+<p>可能产生：</p>
+<ul>
+<li><p>开局自动大连锁；</p>
+</li>
+<li><p>长时间无某颜色；</p>
+</li>
+<li><p>不可能完成的Objective；</p>
+</li>
+<li><p>极端Cascade。</p>
+</li>
+</ul>
+<p>这不一定都是坏事。</p>
+<p>但系统需要：</p>
+<p>明确Random Policy。</p>
+<hr />
+<h1 id="69-refillpolicy">69. RefillPolicy</h1><p>可以控制：</p>
+<ul>
+<li><p>Color Weight；</p>
+</li>
+<li><p>Maximum Same-color Streak；</p>
+</li>
+<li><p>Objective Color Bias；</p>
+</li>
+<li><p>Initial Board Rules；</p>
+</li>
+<li><p>Anti-auto-match Rules；</p>
+</li>
+<li><p>Competitive Fairness Rule。</p>
+</li>
+</ul>
+<hr />
+<h1 id="70-不建议偷偷给玩家需要的颜色">70. 不建议偷偷“给玩家需要的颜色”</h1><p>除非产品明确采用：</p>
+<p>Dynamic Assistance。</p>
+<p>这种干预会严重影响：</p>
+<p>公平性和玩家信任。</p>
+<hr />
+<h1 id="71-如果需要动态调整">71. 如果需要动态调整</h1><p>必须：</p>
+<p>和普通随机策略分层。</p>
+<p>例如：</p>
+<p><code>AdaptiveSpawnPolicy</code></p>
+<p>并进入：</p>
+<p>Replay / Analytics。</p>
+<hr />
+<h1 id="72-核心范式十九cascade-是无额外玩家move成本的自动状态传播">72. 核心范式十九：Cascade 是“无额外玩家Move成本的自动状态传播”</h1><p>第一次Match：</p>
+<p>来自玩家Swap。</p>
+<p>之后：</p>
+<p>新Piece下落产生：</p>
+<p>第二次Match。</p>
+<p>这是：</p>
+<p>Cascade 1。</p>
+<p>再坠落：</p>
+<p>Cascade 2。</p>
+<hr />
+<h1 id="73-cascadestate">73. CascadeState</h1><p>建议包含：</p>
+<ul>
+<li><p>CascadeIndex；</p>
+</li>
+<li><p>SourceMoveId；</p>
+</li>
+<li><p>TotalClearedTiles；</p>
+</li>
+<li><p>TotalEffects；</p>
+</li>
+<li><p>TotalScore；</p>
+</li>
+<li><p>ObjectiveProgress；</p>
+</li>
+<li><p>CascadeVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="74-cascade通常不再消耗move">74. Cascade通常不再消耗Move</h1><p>因为它属于：</p>
+<p>同一次玩家决策产生的后果。</p>
+<hr />
+<h1 id="75-这使一个局部swap可能">75. 这使一个局部Swap可能：</h1><p>通过系统状态传播</p>
+<p>产生巨大价值。</p>
+<hr />
+<h1 id="76-cascade的体验价值">76. Cascade的体验价值</h1><p>它同时提供：</p>
+<ul>
+<li><p>惊喜；</p>
+</li>
+<li><p>Combo；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Board重构；</p>
+</li>
+<li><p>新机会。</p>
+</li>
+</ul>
+<p>但如果过度依赖随机Cascade：</p>
+<p>玩家Agency会下降。</p>
+<hr />
+<h1 id="77-核心范式二十resolution-pipeline-应直到棋盘真正稳定才结束">77. 核心范式二十：Resolution Pipeline 应直到棋盘真正稳定才结束</h1><p>标准流程：</p>
+<p>Accepted Swap
+→ Initial Match
+→ Special Generation
+→ Clear
+→ Effects
+→ Blocker Damage
+→ Collapse
+→ Refill
+→ Detect Match
+→ 如果有Match：Cascade++，回到Clear
+→ 如果无Match：继续稳定检查。</p>
+<hr />
+<h1 id="78-没有match还不代表已经stable">78. “没有Match”还不代表已经Stable</h1><p>还需要检查：</p>
+<ul>
+<li><p>Effect Queue为空；</p>
+</li>
+<li><p>没有待Damage Blocker；</p>
+</li>
+<li><p>没有Pending Spawner；</p>
+</li>
+<li><p>没有Pending Garbage / Board Modifier；</p>
+</li>
+<li><p>没有Animation-dependent Gameplay Commit。</p>
+</li>
+</ul>
+<hr />
+<h1 id="79-核心范式二十一deadlock-detection-是-match-3-必须存在的正式系统">79. 核心范式二十一：Deadlock Detection 是 Match-3 必须存在的正式系统</h1><p>最终Board可能：</p>
+<p>没有任何现成Match。</p>
+<p>这正常。</p>
+<p>但如果：</p>
+<p><strong>不存在任何合法Swap能够制造Match</strong></p>
+<p>玩家已经无操作。</p>
+<hr />
+<h1 id="80-legalmovedetector">80. LegalMoveDetector</h1><p>枚举：</p>
+<p>所有可交换邻接Cell。</p>
+<p>虚拟Swap。</p>
+<p>检查：</p>
+<p>是否产生合法结果。</p>
+<p>Board通常很小，</p>
+<p>完全可以：</p>
+<p>穷举。</p>
+<hr />
+<h1 id="81-legal-move存在">81. Legal Move存在</h1><p>Board稳定。</p>
+<p>进入：</p>
+<p>Stable。</p>
+<hr />
+<h1 id="82-legal-move不存在">82. Legal Move不存在</h1><p>进入：</p>
+<p>Deadlock Recovery。</p>
+<hr />
+<h1 id="83-核心范式二十二shuffle-应保持世界状态语义而不是简单重新生成整个关卡">83. 核心范式二十二：Shuffle 应保持世界状态语义，而不是简单重新生成整个关卡</h1><p>标准处理：</p>
+<p>把当前可移动普通Piece：</p>
+<p>重新排列。</p>
+<p>尽量保留：</p>
+<ul>
+<li><p>Blockers；</p>
+</li>
+<li><p>Objectives；</p>
+</li>
+<li><p>Special Piece；</p>
+</li>
+<li><p>Board Geometry。</p>
+</li>
+</ul>
+<hr />
+<h1 id="84-shuffletransaction">84. ShuffleTransaction</h1><p>收集Eligible Tiles
+→ 生成候选Permutation
+→ 检查没有非预期Immediate Match或按Ruleset允许
+→ 检查至少存在Legal Move
+→ Commit新Cell分布
+→ Presentation Shuffle。</p>
+<hr />
+<h1 id="85-shuffle不能无限重试">85. Shuffle不能无限重试</h1><p>设置：</p>
+<p>MaximumAttempts。</p>
+<p>如果随机Shuffle始终失败：</p>
+<p>使用：</p>
+<p>Constructive Fallback</p>
+<p>或：</p>
+<p>强制创建可行动Board。</p>
+<hr />
+<h1 id="86-deadlock恢复不能扣玩家move">86. Deadlock恢复不能扣玩家Move</h1><p>因为：</p>
+<p>玩家没有做错。</p>
+<hr />
+<h1 id="87-核心范式二十三initial-board-generation-与普通-refill-是两个不同问题">87. 核心范式二十三：Initial Board Generation 与普通 Refill 是两个不同问题</h1><p>关卡开局通常需要：</p>
+<ul>
+<li><p>不自动Clear；</p>
+</li>
+<li><p>有至少一个Legal Move；</p>
+</li>
+<li><p>Objective分布合理；</p>
+</li>
+<li><p>Blocker布局正确；</p>
+</li>
+<li><p>Spawn Source可运行。</p>
+</li>
+</ul>
+<p>因此需要：</p>
+<p><strong>InitialBoardGenerator。</strong></p>
+<hr />
+<h1 id="88-initial-board生成流程">88. Initial Board生成流程</h1><p>加载Level Layout
+→ 固定Blocker / Preset Piece
+→ 填充剩余Cell
+→ 检查Forbidden Initial Match
+→ 检查Legal Move
+→ 检查Level Invariant
+→ 如失败则重试或构造修正
+→ Freeze Initial State。</p>
+<hr />
+<h1 id="89-不建议">89. 不建议：</h1><p>进入关卡后</p>
+<p>先随机填满</p>
+<p>再播放十几次自动Cascade</p>
+<p>才让玩家开始。</p>
+<p>除非：</p>
+<p>这是明确的开场效果。</p>
+<hr />
+<h1 id="90-核心范式二十四moves-是一种正式资源而不是ui计数器">90. 核心范式二十四：Moves 是一种正式资源，而不是UI计数器</h1><p>Moves-limited Level：</p>
+<p>玩家每一个Accepted Swap：</p>
+<p>消耗：</p>
+<p>1 Move。</p>
+<p>Invalid Swap：</p>
+<p>通常不消耗。</p>
+<p>Cascade：</p>
+<p>不消耗。</p>
+<p>Booster是否消耗：</p>
+<p>由Ruleset决定。</p>
+<hr />
+<h1 id="91-moveeconomystate">91. MoveEconomyState</h1><p>建议包含：</p>
+<ul>
+<li><p>InitialMoves；</p>
+</li>
+<li><p>MovesRemaining；</p>
+</li>
+<li><p>MovesSpent；</p>
+</li>
+<li><p>BonusMoves；</p>
+</li>
+<li><p>MoveIndex；</p>
+</li>
+<li><p>MoveVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="92-move-commit时机">92. Move Commit时机</h1><p>Swap被接受成为：</p>
+<p>正式Move</p>
+<p>时扣除。</p>
+<p>不要：</p>
+<p>玩家Touch Down就先扣。</p>
+<hr />
+<h1 id="93-核心范式二十五objective-需要独立于-score">93. 核心范式二十五：Objective 需要独立于 Score</h1><p>常见目标：</p>
+<ul>
+<li><p>Clear Red ×30；</p>
+</li>
+<li><p>Remove Jelly ×20；</p>
+</li>
+<li><p>Destroy Crate ×12；</p>
+</li>
+<li><p>Drop Ingredient to Sink；</p>
+</li>
+<li><p>Reach Score；</p>
+</li>
+<li><p>Activate Special；</p>
+</li>
+<li><p>Collect Item；</p>
+</li>
+<li><p>Spread Terrain。</p>
+</li>
+</ul>
+<hr />
+<h1 id="94-objectivedefinition">94. ObjectiveDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>ObjectiveId；</p>
+</li>
+<li><p>ObjectiveType；</p>
+</li>
+<li><p>TargetTagOrEntity；</p>
+</li>
+<li><p>RequiredCount；</p>
+</li>
+<li><p>ProgressSourceEventTypes；</p>
+</li>
+<li><p>CompletionCondition；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>ObjectiveVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="95-objectivesystem-应消费语义事件">95. ObjectiveSystem 应消费语义事件</h1><p>例如：</p>
+<p><code>TileCleared(Red)</code></p>
+<p>→ Red Objective +1。</p>
+<p><code>BlockerDestroyed(Crate)</code></p>
+<p>→ Crate Objective +1。</p>
+<p>不要：</p>
+<p>每次Cascade后</p>
+<p>重新扫描Board</p>
+<p>猜已经完成多少。</p>
+<hr />
+<h1 id="96-objective-progress通常是累计历史">96. Objective Progress通常是累计历史</h1><p>所以：</p>
+<p>Board现在没有Red</p>
+<p>并不等于：</p>
+<p>“已经清了30个Red”。</p>
+<p>必须：</p>
+<p>独立记录Progress。</p>
+<hr />
+<h1 id="97-核心范式二十六level-success-与当前-cascade-resolution必须有严格顺序">97. 核心范式二十六：Level Success 与当前 Cascade Resolution必须有严格顺序</h1><p>玩家最后1 Move。</p>
+<p>交换后：</p>
+<p>MovesRemaining = 0。</p>
+<p>Initial Clear只完成29 / 30目标。</p>
+<p>但Cascade第二轮：</p>
+<p>又清1个。</p>
+<p>最终：</p>
+<p>Objective完成。</p>
+<p>不能：</p>
+<p>第一次Clear后</p>
+<p>看到Moves=0</p>
+<p>立即判Fail。</p>
+<hr />
+<h1 id="98-正确流程">98. 正确流程</h1><p>Player Move提交
+→ Moves--
+→ 完整Resolution Pipeline全部结束
+→ BoardStable
+→ 检查Objectives
+→ 若完成：Success
+→ 否则如果Moves &lt;= 0：Fail
+→ 否则下一Move。</p>
+<hr />
+<h1 id="99-这是非常重要的结算边界">99. 这是非常重要的结算边界。</h1><hr />
+<h1 id="100-核心范式二十七timed-mode与move-mode应共用board-core但拥有不同失败时钟">100. 核心范式二十七：Timed Mode与Move Mode应共用Board Core，但拥有不同失败时钟</h1><p>Timed Level：</p>
+<p>时间不断减少。</p>
+<p>需要定义：</p>
+<p>Clear / Animation期间：</p>
+<p>Timer是否继续。</p>
+<hr />
+<h1 id="101-levelclockdefinition">101. LevelClockDefinition</h1><p>可以：</p>
+<ul>
+<li><p>RealGameplayTime；</p>
+</li>
+<li><p>StableBoardTimeOnly；</p>
+</li>
+<li><p>PresentationPaused；</p>
+</li>
+<li><p>SpecialModeTime。</p>
+</li>
+</ul>
+<hr />
+<h1 id="102-timer规则必须明确">102. Timer规则必须明确</h1><p>玩家不能：</p>
+<p>因为一段30秒Cascade动画</p>
+<p>丢掉30秒。</p>
+<p>除非：</p>
+<p>设计明确如此。</p>
+<hr />
+<h1 id="103-核心范式二十八special-piece-应改变空间作用域而不仅仅提供更大score">103. 核心范式二十八：Special Piece 应改变空间作用域，而不仅仅提供更大Score</h1><p>Special的核心价值：</p>
+<p>把原本局部三格Match</p>
+<p>升级成：</p>
+<ul>
+<li><p>Row；</p>
+</li>
+<li><p>Column；</p>
+</li>
+<li><p>Area；</p>
+</li>
+<li><p>Color；</p>
+</li>
+<li><p>Cross-board</p>
+</li>
+</ul>
+<p>等更大空间影响。</p>
+<hr />
+<h1 id="104-这样玩家的规划层级发生变化">104. 这样玩家的规划层级发生变化</h1><p>普通Piece：</p>
+<p>考虑：</p>
+<p>局部Match。</p>
+<p>Special：</p>
+<p>考虑：</p>
+<p>未来引爆位置。</p>
+<p>Special Combination：</p>
+<p>考虑：</p>
+<p>全棋盘状态转换。</p>
+<hr />
+<h1 id="105-核心范式二十九special-piece的创建和触发必须分离">105. 核心范式二十九：Special Piece的“创建”和“触发”必须分离</h1><p>玩家四连：</p>
+<p>创建Line Special。</p>
+<p>它并不：</p>
+<p>立即自动爆炸。</p>
+<p>仍然存在于Board。</p>
+<p>未来：</p>
+<p>形成Match</p>
+<p>或：</p>
+<p>Special Swap</p>
+<p>才触发。</p>
+<hr />
+<h1 id="106-specialstate">106. SpecialState</h1><p>建议包含：</p>
+<ul>
+<li><p>SpecialType；</p>
+</li>
+<li><p>Orientation；</p>
+</li>
+<li><p>ChargedState；</p>
+</li>
+<li><p>CreatedByMoveId；</p>
+</li>
+<li><p>CreatedByMatchId；</p>
+</li>
+<li><p>TriggerCount；</p>
+</li>
+<li><p>SpecialVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="107-核心范式三十booster-与-board-special必须分离">107. 核心范式三十：Booster 与 Board Special必须分离</h1><p>Booster例如：</p>
+<ul>
+<li><p>Hammer；</p>
+</li>
+<li><p>Shuffle；</p>
+</li>
+<li><p>Swap Anywhere；</p>
+</li>
+<li><p>Extra Moves。</p>
+</li>
+</ul>
+<p>它们来自：</p>
+<p>玩家外部资源</p>
+<p>或：</p>
+<p>关卡道具。</p>
+<p>Board Special则是：</p>
+<p>通过Gameplay产生的棋子。</p>
+<hr />
+<h1 id="108-boosterdefinition">108. BoosterDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>BoosterId；</p>
+</li>
+<li><p>TargetRule；</p>
+</li>
+<li><p>CostRule；</p>
+</li>
+<li><p>ActivationPhase；</p>
+</li>
+<li><p>EffectDefinition；</p>
+</li>
+<li><p>UsageLimit；</p>
+</li>
+<li><p>BoosterVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="109-booster也必须通过effect-pipeline">109. Booster也必须通过Effect Pipeline</h1><p>Hammer点击Crate：</p>
+<p>不要：</p>
+<p>UI直接Delete Blocker。</p>
+<p>提交：</p>
+<p>BoosterAction</p>
+<p>→ Effect</p>
+<p>→ Blocker Damage。</p>
+<hr />
+<h1 id="110-这样">110. 这样：</h1><p>Booster、Special和普通Match</p>
+<p>对目标物的规则：</p>
+<p>保持一致。</p>
+<hr />
+<h1 id="111-核心范式三十一棋盘目标层和occupant层应允许目标被piece覆盖">111. 核心范式三十一：棋盘目标层和Occupant层应允许“目标被Piece覆盖”</h1><p>典型 Jelly：</p>
+<p>不占据棋子位置。</p>
+<p>玩家需要：</p>
+<p>在该Cell上发生Clear。</p>
+<p>因此：</p>
+<p>Board可以同时存在：</p>
+<p>Jelly Underlay</p>
+<p>和：</p>
+<p>Red Piece。</p>
+<hr />
+<h1 id="112-这说明">112. 这说明：</h1><p>“这个Cell是什么”</p>
+<p>不能只用一个Enum回答。</p>
+<p>这是Match-3长期内容可扩展性的关键。</p>
+<hr />
+<h1 id="113-核心范式三十二ingredient-falling-objective-需要-sink-语义">113. 核心范式三十二：Ingredient / Falling Objective 需要 Sink 语义</h1><p>某个特殊目标：</p>
+<p>不是Match。</p>
+<p>需要：</p>
+<p>随着Gravity</p>
+<p>掉到底部。</p>
+<p>进入：</p>
+<p>Sink。</p>
+<hr />
+<h1 id="114-sinkdefinition">114. SinkDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SinkCell；</p>
+</li>
+<li><p>AcceptedTileTags；</p>
+</li>
+<li><p>CollectionRule；</p>
+</li>
+<li><p>SinkEffect；</p>
+</li>
+<li><p>SinkVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="115-collapse结束后">115. Collapse结束后：</h1><p>如果Ingredient进入Sink：</p>
+<p>发布：</p>
+<p><code>ObjectiveItemCollected</code>。</p>
+<p>从Board移除。</p>
+<p>然后：</p>
+<p>再次Collapse / Refill。</p>
+<hr />
+<h1 id="116-因此-sink处理属于">116. 因此 Sink处理属于：</h1><p>Resolution Pipeline的一部分。</p>
+<hr />
+<h1 id="117-核心范式三十三spawner-generator是level内容的正式动态源">117. 核心范式三十三：Spawner / Generator是Level内容的正式动态源</h1><p>部分Blocker会：</p>
+<p>周期生成：</p>
+<ul>
+<li><p>Chocolate；</p>
+</li>
+<li><p>Virus；</p>
+</li>
+<li><p>Obstacle；</p>
+</li>
+<li><p>Special Enemy Tile。</p>
+</li>
+</ul>
+<hr />
+<h1 id="118-spawnerdefinition">118. SpawnerDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>SpawnerId；</p>
+</li>
+<li><p>TriggerCondition；</p>
+</li>
+<li><p>SpawnRule；</p>
+</li>
+<li><p>MaximumActive；</p>
+</li>
+<li><p>CandidateCells；</p>
+</li>
+<li><p>Priority；</p>
+</li>
+<li><p>SpawnVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="119-spawner什么时候执行">119. Spawner什么时候执行</h1><p>必须固定：</p>
+<p>例如：</p>
+<p>每个玩家Move完整Cascade结束后。</p>
+<p>不能：</p>
+<p>随机在动画中插入。</p>
+<hr />
+<h1 id="120-spawner属于">120. Spawner属于：</h1><p>Post-Resolution Rule Phase。</p>
+<p>这样：</p>
+<p>玩家能够学习：</p>
+<p>每回合后它会扩张一次。</p>
+<hr />
+<h1 id="121-核心范式三十四敌对扩张型blocker必须具有可预测节奏">121. 核心范式三十四：敌对扩张型Blocker必须具有可预测节奏</h1><p>例如：</p>
+<p>Chocolate每回合：</p>
+<p>若本回合没有被破坏</p>
+<p>就扩张1格。</p>
+<p>这是非常典型的：</p>
+<p><strong>Board Pressure System。</strong></p>
+<hr />
+<h1 id="122-它让玩家不能">122. 它让玩家不能：</h1><p>只追求Score。</p>
+<p>必须：</p>
+<p>分配Move</p>
+<p>处理扩张威胁。</p>
+<hr />
+<h1 id="123-blocker-expansion不要完全随机瞬发">123. Blocker Expansion不要完全随机瞬发</h1><p>最好：</p>
+<p>有：</p>
+<p>候选规则和稳定节奏。</p>
+<p>否则：</p>
+<p>玩家无法计划。</p>
+<hr />
+<h1 id="124-核心范式三十五level本质上是棋盘拓扑-tile分布-objective-move-economy的联合设计">124. 核心范式三十五：Level本质上是“棋盘拓扑 + Tile分布 + Objective + Move Economy”的联合设计</h1><p>同一个Board几何：</p>
+<p>可以通过：</p>
+<ul>
+<li><p>不同Blocker；</p>
+</li>
+<li><p>不同颜色数；</p>
+</li>
+<li><p>不同Moves；</p>
+</li>
+<li><p>不同目标；</p>
+</li>
+</ul>
+<p>产生完全不同难度。</p>
+<hr />
+<h1 id="125-leveldefinition">125. LevelDefinition</h1><p>建议至少包含：</p>
+<ul>
+<li><p>BoardDefinitionId；</p>
+</li>
+<li><p>InitialLayout；</p>
+</li>
+<li><p>EnabledTileTypes；</p>
+</li>
+<li><p>ColorCount；</p>
+</li>
+<li><p>ObjectiveDefinitions；</p>
+</li>
+<li><p>InitialMovesOrTime；</p>
+</li>
+<li><p>SpecialRules；</p>
+</li>
+<li><p>BoosterRules；</p>
+</li>
+<li><p>SpawnRules；</p>
+</li>
+<li><p>RandomPolicy；</p>
+</li>
+<li><p>SuccessRule；</p>
+</li>
+<li><p>FailureRule；</p>
+</li>
+<li><p>LevelVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="126-核心范式三十六颜色数量是非常强的难度变量">126. 核心范式三十六：颜色数量是非常强的难度变量</h1><p>颜色越少：</p>
+<ul>
+<li><p>Match概率提高；</p>
+</li>
+<li><p>Cascade提高；</p>
+</li>
+<li><p>Special更容易。</p>
+</li>
+</ul>
+<p>颜色越多：</p>
+<ul>
+<li><p>Board更碎；</p>
+</li>
+<li><p>合法Move减少；</p>
+</li>
+<li><p>Cascade减少。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p>Color Count</p>
+<p>不是纯美术内容。</p>
+<p>它是：</p>
+<p>概率结构参数。</p>
+<hr />
+<h1 id="127-核心范式三十七match-3难度无法只靠人工试玩平衡">127. 核心范式三十七：Match-3难度无法只靠人工试玩平衡</h1><p>Board由随机Refill驱动。</p>
+<p>同一个Level：</p>
+<p>一次非常简单。</p>
+<p>一次很难。</p>
+<p>因此必须使用：</p>
+<p><strong>Monte Carlo Simulation。</strong></p>
+<hr />
+<h1 id="128-level-simulation-bot">128. Level Simulation Bot</h1><p>Bot使用：</p>
+<p>某种策略：</p>
+<ul>
+<li><p>Random Legal Move；</p>
+</li>
+<li><p>Greedy Objective；</p>
+</li>
+<li><p>Greedy Score；</p>
+</li>
+<li><p>Heuristic；</p>
+</li>
+<li><p>Strong Search。</p>
+</li>
+</ul>
+<p>重复：</p>
+<p>几千到几十万次。</p>
+<hr />
+<h1 id="129-收集">129. 收集：</h1><ul>
+<li><p>Win Rate；</p>
+</li>
+<li><p>Mean Moves Remaining；</p>
+</li>
+<li><p>P10 / P50 / P90；</p>
+</li>
+<li><p>Deadlock Count；</p>
+</li>
+<li><p>Shuffle Count；</p>
+</li>
+<li><p>Objective Bottleneck；</p>
+</li>
+<li><p>Special Creation Count；</p>
+</li>
+<li><p>Cascade Distribution。</p>
+</li>
+</ul>
+<hr />
+<h1 id="130-不能只看平均win-rate">130. 不能只看平均Win Rate</h1><p>例如：</p>
+<p>平均胜率60%。</p>
+<p>但存在：</p>
+<p>30%局几乎必赢。</p>
+<p>30%局几乎无解。</p>
+<p>体验仍然很差。</p>
+<p>需要看：</p>
+<p><strong>Outcome Distribution。</strong></p>
+<hr />
+<h1 id="131-核心范式三十八random-fairness-应区分可解性和体验公平性">131. 核心范式三十八：Random Fairness 应区分“可解性”和“体验公平性”</h1><p>只要存在：</p>
+<p>理论成功路径</p>
+<p>不等于：</p>
+<p>玩家体验公平。</p>
+<p>如果完成目标需要：</p>
+<p>连续等某颜色20回合，</p>
+<p>依然糟糕。</p>
+<hr />
+<h1 id="132-random-fairness-metrics">132. Random Fairness Metrics</h1><p>可以分析：</p>
+<ul>
+<li><p>Required Color Spawn Variance；</p>
+</li>
+<li><p>Objective Supply Rate；</p>
+</li>
+<li><p>Legal Move Density；</p>
+</li>
+<li><p>Forced Shuffle Rate；</p>
+</li>
+<li><p>Low-agency Board Rate。</p>
+</li>
+</ul>
+<hr />
+<h1 id="133-核心范式三十九move-value-应该支持离线分析">133. 核心范式三十九：Move Value 应该支持离线分析</h1><p>每个合法Move可以估算：</p>
+<ul>
+<li><p>Immediate Clear；</p>
+</li>
+<li><p>Objective Progress；</p>
+</li>
+<li><p>Special Creation；</p>
+</li>
+<li><p>Board Mobility；</p>
+</li>
+<li><p>Future Match Potential；</p>
+</li>
+<li><p>Blocker Damage。</p>
+</li>
+</ul>
+<hr />
+<h1 id="134-这对">134. 这对：</h1><ul>
+<li><p>Hint；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>Level Difficulty；</p>
+</li>
+<li><p>Replay Analysis</p>
+</li>
+</ul>
+<p>都有价值。</p>
+<hr />
+<h1 id="135-核心范式四十hint不应直接显示理论全局最优move而应提供可用建议">135. 核心范式四十：Hint不应直接显示“理论全局最优Move”，而应提供可用建议</h1><p>玩家停留若干秒：</p>
+<p>系统可以：</p>
+<p>高亮一个合法Swap。</p>
+<hr />
+<h1 id="136-hint来源">136. Hint来源</h1><p>LegalMoveDetector</p>
+<p>得到候选。</p>
+<p>再根据：</p>
+<p>轻量Heuristic</p>
+<p>选：</p>
+<p>合理Move。</p>
+<hr />
+<h1 id="137-为什么不必总给最优">137. 为什么不必总给最优</h1><p>如果Hint拥有：</p>
+<p>完美搜索AI，</p>
+<p>玩家可以：</p>
+<p>一直等Hint</p>
+<p>自动通关。</p>
+<p>Hint主要职责：</p>
+<ul>
+<li><p>告诉玩家Board没死锁；</p>
+</li>
+<li><p>帮助视觉发现。</p>
+</li>
+</ul>
+<hr />
+<h1 id="138-hint不能改变board">138. Hint不能改变Board</h1><p>只是：</p>
+<p>Presentation。</p>
+<hr />
+<h1 id="139-核心范式四十一shuffle-与-hint-使用同一个-legal-move-truth">139. 核心范式四十一：Shuffle 与 Hint 使用同一个 Legal Move Truth</h1><p>Hint说：</p>
+<p>还有可走。</p>
+<p>Shuffle却认为：</p>
+<p>Deadlock。</p>
+<p>说明两个系统：</p>
+<p>规则不一致。</p>
+<p>必须统一：</p>
+<p><strong>LegalMoveDetector。</strong></p>
+<hr />
+<h1 id="140-核心范式四十二玩家操作和自动-cascade-的责任必须明确区分">140. 核心范式四十二：玩家操作和自动 Cascade 的责任必须明确区分</h1><p>Move Analytics需要知道：</p>
+<p>哪些Clear来自：</p>
+<ul>
+<li><p>Direct Player Match；</p>
+</li>
+<li><p>Cascade；</p>
+</li>
+<li><p>Special Chain；</p>
+</li>
+<li><p>Booster。</p>
+</li>
+</ul>
+<hr />
+<h1 id="141-causechain">141. CauseChain</h1><p>建议每个：</p>
+<p>Match / Effect / Clear</p>
+<p>保存：</p>
+<p><code>RootMoveId</code>。</p>
+<hr />
+<h1 id="142-这样可以回答">142. 这样可以回答：</h1><p>玩家第12步</p>
+<p>最终清除了：</p>
+<p>83个Tile。</p>
+<p>其中：</p>
+<p>直接3个。</p>
+<p>Cascade 80个。</p>
+<hr />
+<h1 id="143-核心范式四十三root-move-是整条级联因果链的稳定根节点">143. 核心范式四十三：Root Move 是整条级联因果链的稳定根节点</h1><p>每次Accepted Swap：</p>
+<p>创建：</p>
+<p><code>MoveId</code>。</p>
+<p>所有后续：</p>
+<p>Match
+→ Clear
+→ Effect
+→ Cascade
+→ Objective
+→ Score</p>
+<p>全部引用：</p>
+<p>RootMoveId。</p>
+<hr />
+<h1 id="144-这是调试和telemetry极高价值的设计">144. 这是调试和Telemetry极高价值的设计。</h1><hr />
+<h1 id="145-核心范式四十四resolution-event-应保持不可变">145. 核心范式四十四：Resolution Event 应保持不可变</h1><p>例如：</p>
+<p><code>MatchDetectedEvent</code></p>
+<p>发布以后：</p>
+<p>不要：</p>
+<p>消费者A修改：</p>
+<p>MatchedCells</p>
+<p>再给消费者B。</p>
+<p>事件对象：</p>
+<p>Immutable。</p>
+<p>消费者产生：</p>
+<p>自己的Mutation Intent。</p>
+<hr />
+<h1 id="146-这种模式可以显著减少">146. 这种模式可以显著减少：</h1><p>连锁规则之间的隐藏耦合。</p>
+<hr />
+<h1 id="147-核心范式四十五scoreobjectiveachievement和battle-damage都应该消费同一个clear语义">147. 核心范式四十五：Score、Objective、Achievement和Battle Damage都应该消费同一个Clear语义</h1><p>如果三消被嵌入：</p>
+<p>RPG Battle。</p>
+<p>Clear Blue：</p>
+<p>造成Mana。</p>
+<p>Clear Sword：</p>
+<p>造成Damage。</p>
+<p>也不应该：</p>
+<p>把Combat逻辑写进MatchDetector。</p>
+<hr />
+<h1 id="148-match-core只产生">148. Match Core只产生：</h1><p><code>ClearResult</code></p>
+<p>和：</p>
+<p>Tile Tags。</p>
+<p>Battle Adapter解释：</p>
+<p>这次Clear意味着什么。</p>
+<hr />
+<h1 id="149-这使同一-match-3-core可以支持">149. 这使同一 Match-3 Core可以支持：</h1><ul>
+<li><p>纯益智；</p>
+</li>
+<li><p>RPG Battle；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>Score Attack；</p>
+</li>
+<li><p>Meta Game。</p>
+</li>
+</ul>
+<hr />
+<h1 id="150-核心范式四十六如果加入-rpg-battle应保持棋盘事实和战斗事实单向通信">150. 核心范式四十六：如果加入 RPG Battle，应保持“棋盘事实”和“战斗事实”单向通信</h1><p>例如：</p>
+<p>Player Move
+→ Clear 5 Sword Tiles
+→ Match Resolution结束
+→ Combat Adapter生成Attack 50
+→ Enemy HP下降。</p>
+<p>敌人反击：</p>
+<p>可以：</p>
+<p>生成：</p>
+<p>Board Modifier Intent</p>
+<p>例如：</p>
+<p>增加3个Poison Blocker。</p>
+<hr />
+<h1 id="151-不要">151. 不要：</h1><p>Enemy AI直接改：</p>
+<p>某个随机Cell的Sprite。</p>
+<p>仍然需要：</p>
+<p>Board Mutation API。</p>
+<hr />
+<h1 id="152-核心范式四十七pvp同样可以通过语义结果交换而不需要共享一个board">152. 核心范式四十七：PvP同样可以通过语义结果交换，而不需要共享一个Board</h1><p>玩家A：</p>
+<p>完成大Combo。</p>
+<p>产生：</p>
+<p>AttackPacket。</p>
+<p>玩家B：</p>
+<p>收到：</p>
+<ul>
+<li><p>Garbage；</p>
+</li>
+<li><p>Blocker；</p>
+</li>
+<li><p>Time Penalty；</p>
+</li>
+<li><p>Board Pressure。</p>
+</li>
+</ul>
+<p>双方Board：</p>
+<p>仍然独立。</p>
+<hr />
+<h1 id="153-这和-falling-block-versus具有相似的网络边界">153. 这和 Falling-Block Versus具有相似的网络边界，</h1><p>但攻击来源完全不同：</p>
+<p>Falling-Block来自：</p>
+<p>落锁与Line Clear。</p>
+<p>Match-3来自：</p>
+<p>Swap → Cascade结果。</p>
+<hr />
+<h1 id="154-核心范式四十八在线ranked需要服务器验证-root-move-与-resolution">154. 核心范式四十八：在线Ranked需要服务器验证 Root Move 与 Resolution</h1><p>服务器可以：</p>
+<p>运行同一逻辑Board。</p>
+<p>客户端发送：</p>
+<p>SwapIntent。</p>
+<p>服务器：</p>
+<p>重演：</p>
+<p>Swap
+→ Match
+→ Cascade
+→ Attack。</p>
+<p>客户端不能：</p>
+<p>直接说：</p>
+<p>“我打出了Combo 14。”</p>
+<hr />
+<h1 id="155-match-3的board同样非常适合">155. Match-3的Board同样非常适合：</h1><p>整数状态确定性模拟。</p>
+<hr />
+<h1 id="156-replay-record">156. Replay Record</h1><p>建议包含：</p>
+<ul>
+<li><p>RulesetVersion；</p>
+</li>
+<li><p>LevelVersion；</p>
+</li>
+<li><p>InitialBoardSeed；</p>
+</li>
+<li><p>RefillRNGState；</p>
+</li>
+<li><p>ShuffleRNGState；</p>
+</li>
+<li><p>BoosterInputs；</p>
+</li>
+<li><p>SwapInputs；</p>
+</li>
+<li><p>PeriodicBoardHashes；</p>
+</li>
+<li><p>Result；</p>
+</li>
+<li><p>ReplayVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="157-每个stable-state计算">157. 每个Stable State计算：</h1><p>Board Hash。</p>
+<p>一旦Replay Desync：</p>
+<p>可以定位：</p>
+<p>哪一个Move后首次分歧。</p>
+<hr />
+<h1 id="158-核心范式四十九save-最安全的边界是-stable-board">158. 核心范式四十九：Save 最安全的边界是 Stable Board</h1><p>如果是单机长关卡：</p>
+<p>保存：</p>
+<p>Stable State</p>
+<p>最简单。</p>
+<hr />
+<h1 id="159-savesnapshot">159. SaveSnapshot</h1><p>建议包含：</p>
+<ul>
+<li><p>LevelId；</p>
+</li>
+<li><p>LevelVersion；</p>
+</li>
+<li><p>BoardState；</p>
+</li>
+<li><p>TileInstances；</p>
+</li>
+<li><p>Moves；</p>
+</li>
+<li><p>Objectives；</p>
+</li>
+<li><p>RNGStates；</p>
+</li>
+<li><p>CurrentScore；</p>
+</li>
+<li><p>BoosterState；</p>
+</li>
+<li><p>StableMoveIndex；</p>
+</li>
+<li><p>SaveVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="160-不建议在cascade一半保存">160. 不建议在Cascade一半保存</h1><p>除非：</p>
+<p>完整序列化：</p>
+<p>Effect Queue、Clear Batch、Gravity Mapping、Presentation-independent Resolution State。</p>
+<p>通常没有必要。</p>
+<hr />
+<h1 id="161-app-suspend发生在resolution期间">161. App Suspend发生在Resolution期间</h1><p>可以：</p>
+<p>先快速逻辑Resolve到Stable</p>
+<p>再保存。</p>
+<p>表现动画以后：</p>
+<p>恢复时跳过。</p>
+<hr />
+<h1 id="162-核心范式五十动画绝不能成为棋盘状态转换的唯一驱动者">162. 核心范式五十：动画绝不能成为棋盘状态转换的唯一驱动者</h1><p>交换动画。</p>
+<p>Clear动画。</p>
+<p>坠落动画。</p>
+<p>Refill动画。</p>
+<p>Shuffle动画。</p>
+<p>都只是：</p>
+<p>逻辑状态差异的表现。</p>
+<hr />
+<h1 id="163-tile从">163. Tile从：</h1><p>(3,7)</p>
+<p>坠到：</p>
+<p>(3,2)。</p>
+<p>逻辑早已知道：</p>
+<p>最终位置。</p>
+<p>动画只是：</p>
+<p>Tween。</p>
+<hr />
+<h1 id="164-如果玩家开启">164. 如果玩家开启：</h1><p>Fast Animation</p>
+<p>或：</p>
+<p>Skip Cascade，</p>
+<p>最终Board必须完全一致。</p>
+<hr />
+<h1 id="165-核心范式五十一动画时长本身是关卡节奏参数但不是规则参数">165. 核心范式五十一：动画时长本身是关卡节奏参数，但不是规则参数</h1><p>普通玩家：</p>
+<p>喜欢Cascade演出。</p>
+<p>高手：</p>
+<p>可能希望更快。</p>
+<p>可以提供：</p>
+<ul>
+<li><p>Normal；</p>
+</li>
+<li><p>Fast；</p>
+</li>
+<li><p>Reduced Motion。</p>
+</li>
+</ul>
+<p>只改变：</p>
+<p>Presentation Duration。</p>
+<hr />
+<h1 id="166-timed-mode例外">166. Timed Mode例外</h1><p>如果Timer按真实时间继续运行，</p>
+<p>动画时长会影响Gameplay。</p>
+<p>因此Ruleset必须：</p>
+<p>显式规定：</p>
+<p>Timer与Presentation关系。</p>
+<hr />
+<h1 id="167-核心范式五十二视觉可读性比特效复杂度重要">167. 核心范式五十二：视觉可读性比特效复杂度重要</h1><p>玩家必须快速区分：</p>
+<ul>
+<li><p>颜色；</p>
+</li>
+<li><p>Special；</p>
+</li>
+<li><p>Blocker层数；</p>
+</li>
+<li><p>Objective；</p>
+</li>
+<li><p>Locked Piece；</p>
+</li>
+<li><p>Spawn Source。</p>
+</li>
+</ul>
+<hr />
+<h1 id="168-颜色不能成为唯一信息维度">168. 颜色不能成为唯一信息维度</h1><p>Accessibility最好：</p>
+<p>同时使用：</p>
+<ul>
+<li><p>Shape；</p>
+</li>
+<li><p>Icon；</p>
+</li>
+<li><p>Pattern。</p>
+</li>
+</ul>
+<p>支持：</p>
+<p>色觉障碍。</p>
+<hr />
+<h1 id="169-special-piece必须在小尺寸下仍然一眼可识别">169. Special Piece必须在小尺寸下仍然一眼可识别</h1><p>不要：</p>
+<p>靠微小粒子</p>
+<p>区分横线和竖线Special。</p>
+<hr />
+<h1 id="170-核心范式五十三cascade的反馈需要帮助玩家理解因果而不是只制造烟花">170. 核心范式五十三：Cascade的反馈需要帮助玩家理解因果，而不是只制造烟花</h1><p>一连串爆炸以后，</p>
+<p>玩家最好仍能理解：</p>
+<blockquote>
+<p>第一个炸弹为什么引爆第二个。</p>
+</blockquote>
+<p>可以通过：</p>
+<ul>
+<li><p>Effect Direction；</p>
+</li>
+<li><p>Timing Stagger；</p>
+</li>
+<li><p>Audio层级；</p>
+</li>
+<li><p>Camera Shake强度；</p>
+</li>
+</ul>
+<p>保持因果可读。</p>
+<hr />
+<h1 id="171-所有effect同时无延迟爆炸">171. 所有Effect同时无延迟爆炸</h1><p>虽然快，</p>
+<p>但：</p>
+<p>玩家只看到：</p>
+<p>全屏消失。</p>
+<p>长期降低：</p>
+<p>规则学习。</p>
+<hr />
+<h1 id="172-核心范式五十四关卡目标必须在board上具有明确可操作对象">172. 核心范式五十四：关卡目标必须在Board上具有明确“可操作对象”</h1><p>例如：</p>
+<p>清除20个Crate。</p>
+<p>玩家需要：</p>
+<p>看到Crate。</p>
+<p>如果目标是：</p>
+<p>收集“星尘”</p>
+<p>但星尘完全隐藏在随机公式里，</p>
+<p>三消决策难以针对。</p>
+<hr />
+<h1 id="173-objective-ui应与board状态对应">173. Objective UI应与Board状态对应</h1><p>显示：</p>
+<p>剩余：</p>
+<p>Crate 7。</p>
+<p>玩家扫Board：</p>
+<p>可以找到：</p>
+<p>7个Crate。</p>
+<hr />
+<h1 id="174-核心范式五十五move-warning应该在真正没有余量时提供节奏反馈">174. 核心范式五十五：Move Warning应该在真正没有余量时提供节奏反馈</h1><p>例如：</p>
+<p>5 Moves Left。</p>
+<p>音乐变化。</p>
+<p>UI提醒。</p>
+<p>但不要：</p>
+<p>每一Move都弹窗。</p>
+<hr />
+<h1 id="175-last-move结算必须允许完整cascade">175. Last Move结算必须允许完整Cascade</h1><p>这是非常重要的玩家公平感。</p>
+<hr />
+<h1 id="176-核心范式五十六成功后剩余moves可以转换为celebration但必须在success-commit之后">176. 核心范式五十六：成功后剩余Moves可以转换为Celebration，但必须在Success Commit之后</h1><p>关卡已经：</p>
+<p>Objective Complete。</p>
+<p>先提交：</p>
+<p>Success。</p>
+<p>然后：</p>
+<p>剩余Moves转：</p>
+<p>Special / Bonus。</p>
+<hr />
+<h1 id="177-不要让-celebration-bonus存在理论上">177. 不要让 Celebration Bonus存在理论上：</h1><p>把已成功Level重新弄失败。</p>
+<p>成功状态已经：</p>
+<p>Committed。</p>
+<hr />
+<h1 id="178-post-win-cascade属于">178. Post-Win Cascade属于：</h1><p>Bonus Presentation / Score。</p>
+<p>不再：</p>
+<p>反向影响胜负。</p>
+<hr />
+<h1 id="179-完整事件与执行流程示例">179. 完整事件与执行流程示例</h1><p>以下以：</p>
+<p><strong>玩家在剩余3步时需要摧毁最后两层冰块，通过四连生成Line Special，并利用Cascade触发第二个Special完成关卡</strong></p>
+<p>为例。</p>
+<hr />
+<h2 id="1791-当前stable-board">179.1 当前Stable Board</h2><p>MovesRemaining：</p>
+<p>3。</p>
+<p>Objective：</p>
+<p>Ice Layers Remaining = 2。</p>
+<p>一块Ice：</p>
+<p>位于左下。</p>
+<p>一块：</p>
+<p>位于右下。</p>
+<hr />
+<h2 id="1792-当前board存在多个legal-move">179.2 当前Board存在多个Legal Move</h2><p>Hint系统当前未显示。</p>
+<hr />
+<h2 id="1793-玩家观察到">179.3 玩家观察到：</h2><p>通过交换：</p>
+<p>Cell A ↔ B</p>
+<p>可以形成：</p>
+<p>横向4个Blue。</p>
+<hr />
+<h2 id="1794-玩家提交swapintent">179.4 玩家提交SwapIntent</h2><p>Phase：</p>
+<p>Stable
+→ Swapping。</p>
+<hr />
+<h2 id="1795-swap第一层validation">179.5 Swap第一层Validation</h2><p>两Cell相邻。</p>
+<p>都可交换。</p>
+<p>合法。</p>
+<hr />
+<h2 id="1796-执行候选swap">179.6 执行候选Swap</h2><p>Board Candidate生成。</p>
+<hr />
+<h2 id="1797-matchdetector检查a-b轴线">179.7 MatchDetector检查A / B轴线</h2><p>发现：</p>
+<p>Blue Horizontal ×4。</p>
+<hr />
+<h2 id="1798-swap有效">179.8 Swap有效</h2><p>Move正式Commit。</p>
+<p>Moves：</p>
+<p>3 → 2。</p>
+<p>创建：</p>
+<p>RootMoveId = 117。</p>
+<hr />
+<h2 id="1799-matchgroup生成">179.9 MatchGroup生成</h2><p>Length 4。</p>
+<p>Orientation Horizontal。</p>
+<hr />
+<h2 id="17910-specialcreationresolver">179.10 SpecialCreationResolver</h2><p>根据Ruleset：</p>
+<p>创建：</p>
+<p>Horizontal Line Special。</p>
+<p>Spawn Anchor：</p>
+<p>玩家交换进入Match的目标Cell。</p>
+<hr />
+<h2 id="17911-clearplan">179.11 ClearPlan</h2><p>四个Blue中：</p>
+<p>三个普通Piece被Clear。</p>
+<p>第四个转换成：</p>
+<p>Line Special。</p>
+<hr />
+<h2 id="17912-clear-batch提交">179.12 Clear Batch提交</h2><p>左侧某Blue位于：</p>
+<p>Ice Cell上方。</p>
+<p>其Clear产生：</p>
+<p>CellImpact。</p>
+<hr />
+<h2 id="17913-blockersystem">179.13 BlockerSystem</h2><p>左下Ice：</p>
+<p>Layer 1 → 0。</p>
+<p>Objective：</p>
+<p>Ice Remaining：</p>
+<p>2 → 1。</p>
+<hr />
+<h2 id="17914-collapse">179.14 Collapse</h2><p>上方Piece根据Gravity</p>
+<p>生成Final Mapping。</p>
+<hr />
+<h2 id="17915-refill">179.15 Refill</h2><p>从顶部Spawn Source：</p>
+<p>生成新Piece。</p>
+<hr />
+<h2 id="17916-所有piece落定">179.16 所有Piece落定</h2><p>进入：</p>
+<p>Cascade Detection。</p>
+<hr />
+<h2 id="17917-新board自然形成">179.17 新Board自然形成：</h2><p>纵向3个Red。</p>
+<p>其中一颗：</p>
+<p>原本就是Area Special。</p>
+<hr />
+<h2 id="17918-cascade-1">179.18 Cascade 1</h2><p>MatchGroup：</p>
+<p>Red Vertical ×3。</p>
+<hr />
+<h2 id="17919-clear-batch包含area-special">179.19 Clear Batch包含Area Special</h2><p>Special进入：</p>
+<p>Effect Queue。</p>
+<hr />
+<h2 id="17920-area-effect执行">179.20 Area Effect执行</h2><p>目标：</p>
+<p>3×3区域。</p>
+<hr />
+<h2 id="17921-区域中又包含">179.21 区域中又包含：</h2><p>刚才创建的Line Special。</p>
+<p>它被Effect击中。</p>
+<hr />
+<h2 id="17922-line-special进入effect-queue">179.22 Line Special进入Effect Queue</h2><p>不会：</p>
+<p>立即递归调用。</p>
+<hr />
+<h2 id="17923-area-effect完成">179.23 Area Effect完成</h2><p>右下Ice所在Occupant被Clear。</p>
+<p>Ice受到：</p>
+<p>第一次Impact。</p>
+<p>但它有：</p>
+<p>2层。</p>
+<p>状态：</p>
+<p>2 → 1。</p>
+<p>还未完成目标。</p>
+<hr />
+<h2 id="17924-effect-queue取line-special">179.24 Effect Queue取Line Special</h2><p>执行：</p>
+<p>ClearRow。</p>
+<hr />
+<h2 id="17925-row经过">179.25 Row经过：</h2><p>右下Ice所在Cell。</p>
+<p>再次：</p>
+<p>CellImpact。</p>
+<hr />
+<h2 id="17926-ice">179.26 Ice：</h2><p>1 → 0。</p>
+<p>Objective：</p>
+<p>1 → 0。</p>
+<hr />
+<h2 id="17927-effect-queue为空">179.27 Effect Queue为空</h2><p>Collapse。</p>
+<p>Refill。</p>
+<hr />
+<h2 id="17928-cascade-2">179.28 Cascade 2</h2><p>没有新的Match。</p>
+<hr />
+<h2 id="17929-resolution结束条件检查">179.29 Resolution结束条件检查</h2><p>Effect Queue：</p>
+<p>空。</p>
+<p>Match：</p>
+<p>无。</p>
+<p>Gravity：</p>
+<p>稳定。</p>
+<p>Objective：</p>
+<p>完成。</p>
+<hr />
+<h2 id="17930-level-outcome评估">179.30 Level Outcome评估</h2><p>即使MovesRemaining = 2，</p>
+<p>直接：</p>
+<p>Success。</p>
+<hr />
+<h2 id="17931-success-commit">179.31 Success Commit</h2><p>LevelResult：</p>
+<p>Win。</p>
+<p>此时胜负不可再改变。</p>
+<hr />
+<h2 id="17932-剩余moves可以">179.32 剩余Moves可以：</h2><p>转换成：</p>
+<p>Post-win Bonus Special。</p>
+<p>但只影响：</p>
+<p>Score。</p>
+<hr />
+<h2 id="17933-整条因果链">179.33 整条因果链</h2><p>Swap
+→ Four Match
+→ Line Special Created
+→ Ice Layer Clear
+→ Gravity
+→ Refill
+→ Cascade
+→ Area Special Trigger
+→ Line Special被连锁触发
+→ 第二块Ice连续受到两次Impact
+→ Objective Complete
+→ Stable Resolution
+→ Success。</p>
+<p>这就是 Match-3 最具代表性的运行时特点：</p>
+<blockquote>
+<p><strong>玩家只提交了一次Swap，但整个系统通过确定的多阶段Resolution把这个局部动作扩展成一条可追踪的棋盘级因果链。</strong></p>
+</blockquote>
+<hr />
+<h1 id="180-模块通信设计">180. 模块通信设计</h1><h2 id="1801-player-input">180.1 Player Input</h2><p>主要：</p>
+<ul>
+<li><p>Select Cell；</p>
+</li>
+<li><p>Drag Swap；</p>
+</li>
+<li><p>Tap Special；</p>
+</li>
+<li><p>Activate Booster。</p>
+</li>
+</ul>
+<p>UI只生成：</p>
+<p>Intent。</p>
+<hr />
+<h2 id="1802-commands">180.2 Commands</h2><p>典型：</p>
+<ul>
+<li><p>SwapCells；</p>
+</li>
+<li><p>ActivateBooster；</p>
+</li>
+<li><p>StartLevel；</p>
+</li>
+<li><p>Pause；</p>
+</li>
+<li><p>ShuffleDebug；</p>
+</li>
+<li><p>RestartLevel。</p>
+</li>
+</ul>
+<hr />
+<h1 id="181-queries">181. Queries</h1><p>适用于：</p>
+<ul>
+<li><p>Cell能否交换；</p>
+</li>
+<li><p>当前有哪些Legal Moves；</p>
+</li>
+<li><p>当前Match Group；</p>
+</li>
+<li><p>Tile属于什么类型；</p>
+</li>
+<li><p>当前Moves；</p>
+</li>
+<li><p>Objective剩多少；</p>
+</li>
+<li><p>Special如何触发；</p>
+</li>
+<li><p>某个Cell为什么没有下落；</p>
+</li>
+<li><p>当前Board是否Deadlock。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>移动Tile；</p>
+</li>
+<li><p>Clear；</p>
+</li>
+<li><p>消耗Move；</p>
+</li>
+<li><p>推进RNG。</p>
+</li>
+</ul>
+<hr />
+<h1 id="182-domain-events">182. Domain Events</h1><p>包括：</p>
+<ul>
+<li><p>SwapRequested；</p>
+</li>
+<li><p>SwapAccepted；</p>
+</li>
+<li><p>SwapRejected；</p>
+</li>
+<li><p>MatchDetected；</p>
+</li>
+<li><p>SpecialCreated；</p>
+</li>
+<li><p>SpecialTriggered；</p>
+</li>
+<li><p>TileCleared；</p>
+</li>
+<li><p>CellAffected；</p>
+</li>
+<li><p>BlockerDamaged；</p>
+</li>
+<li><p>BlockerDestroyed；</p>
+</li>
+<li><p>BoardCollapsed；</p>
+</li>
+<li><p>TileSpawned；</p>
+</li>
+<li><p>CascadeStarted；</p>
+</li>
+<li><p>CascadeEnded；</p>
+</li>
+<li><p>ObjectiveProgressed；</p>
+</li>
+<li><p>DeadlockDetected；</p>
+</li>
+<li><p>BoardShuffled；</p>
+</li>
+<li><p>MoveSpent；</p>
+</li>
+<li><p>LevelSucceeded；</p>
+</li>
+<li><p>LevelFailed。</p>
+</li>
+</ul>
+<hr />
+<h1 id="183-presentation-events">183. Presentation Events</h1><p>包括：</p>
+<ul>
+<li><p>PlaySwapAnimation；</p>
+</li>
+<li><p>PlayInvalidSwap；</p>
+</li>
+<li><p>PlayMatchEffect；</p>
+</li>
+<li><p>PlaySpecialCreation；</p>
+</li>
+<li><p>PlayExplosion；</p>
+</li>
+<li><p>PlayFallAnimation；</p>
+</li>
+<li><p>ShowCombo；</p>
+</li>
+<li><p>ShowObjectiveProgress；</p>
+</li>
+<li><p>PlayShuffle；</p>
+</li>
+<li><p>ShowWinCelebration。</p>
+</li>
+</ul>
+<p>表现不能：</p>
+<ul>
+<li><p>决定Match；</p>
+</li>
+<li><p>Clear Tile；</p>
+</li>
+<li><p>修改Move；</p>
+</li>
+<li><p>判胜负。</p>
+</li>
+</ul>
+<hr />
+<h1 id="184-推荐状态所有权">184. 推荐状态所有权</h1><p><strong>BoardSystem</strong></p>
+<p>拥有Cell和Occupant事实。</p>
+<p><strong>SwapSystem</strong></p>
+<p>拥有Swap事务。</p>
+<p><strong>MatchSystem</strong></p>
+<p>识别Match Group。</p>
+<p><strong>SpecialSystem</strong></p>
+<p>决定Special创建与组合。</p>
+<p><strong>EffectSystem</strong></p>
+<p>处理连锁效果。</p>
+<p><strong>ClearSystem</strong></p>
+<p>拥有Clear Batch。</p>
+<p><strong>BlockerSystem</strong></p>
+<p>拥有Blocker。</p>
+<p><strong>GravitySystem</strong></p>
+<p>计算Collapse。</p>
+<p><strong>SpawnSystem</strong></p>
+<p>负责Refill。</p>
+<p><strong>Sequence / RandomSystem</strong></p>
+<p>拥有随机状态。</p>
+<p><strong>DeadlockSystem</strong></p>
+<p>拥有Legal Move检测。</p>
+<p><strong>ObjectiveSystem</strong></p>
+<p>拥有目标进度。</p>
+<p><strong>LevelRuleSystem</strong></p>
+<p>拥有Moves / Timer / Success / Failure。</p>
+<p><strong>PresentationSystem</strong></p>
+<p>只消费结果。</p>
+<hr />
+<h1 id="185-模块通信原则">185. 模块通信原则</h1><p>MatchSystem不能：</p>
+<p>直接扣Moves。</p>
+<p>MoveSystem不能：</p>
+<p>直接Clear。</p>
+<p>ClearSystem不能：</p>
+<p>直接写Objective Count。</p>
+<p>Objective消费：</p>
+<p>TileCleared / BlockerDestroyed等事件。</p>
+<p>这样才能：</p>
+<p>支持大量模式扩展。</p>
+<hr />
+<h1 id="186-失败隔离">186. 失败隔离</h1><hr />
+<h2 id="1861-board出现重复tile-ownership">186.1 Board出现重复Tile Ownership</h2><p>一个TileInstanceId：</p>
+<p>同时存在于两个Cell。</p>
+<p>Board Integrity Audit：</p>
+<p>立即报错。</p>
+<p>优先保留：</p>
+<p>Registry权威位置。</p>
+<hr />
+<h1 id="187-cell引用不存在tile">187. Cell引用不存在Tile</h1><p>将Cell清空。</p>
+<p>记录：</p>
+<p>DanglingTileReference。</p>
+<p>如果是关键Objective Tile：</p>
+<p>进入Level Recovery / Fail-safe。</p>
+<hr />
+<h1 id="188-swap-commit以后出现重叠">188. Swap Commit以后出现重叠</h1><p>理论上不应发生。</p>
+<p>回滚：</p>
+<p>到Swap前Board Snapshot。</p>
+<p>记录：</p>
+<p>SwapIntegrityError。</p>
+<hr />
+<h1 id="189-invalid-swap错误扣move">189. Invalid Swap错误扣Move</h1><p>Move Spend应只监听：</p>
+<p>SwapAccepted。</p>
+<p>不能监听：</p>
+<p>SwapRequested。</p>
+<hr />
+<h1 id="190-matchdetector重复返回同一group">190. MatchDetector重复返回同一Group</h1><p>Match Merge阶段：</p>
+<p>根据：</p>
+<p>Cell集合Canonical Key</p>
+<p>去重。</p>
+<hr />
+<h1 id="191-clear同一tile两次">191. Clear同一Tile两次</h1><p>Clear Batch使用：</p>
+<p>Set。</p>
+<p>第二次：</p>
+<p>忽略。</p>
+<p>但保留：</p>
+<p>SourceEffect关系供Debug。</p>
+<hr />
+<h1 id="192-special无限递归">192. Special无限递归</h1><p>TriggeredSpecialIds</p>
+<p>EffectDepth</p>
+<p>双重保护。</p>
+<hr />
+<h1 id="193-special已经clear但effect仍未执行">193. Special已经Clear但Effect仍未执行</h1><p>一旦被合法触发：</p>
+<p>Effect Instance独立存在。</p>
+<p>即使Source Tile视觉已消失：</p>
+<p>Effect仍继续完成。</p>
+<hr />
+<h1 id="194-blocker层数变负">194. Blocker层数变负</h1><p>Clamp 0。</p>
+<p>记录：</p>
+<p>BlockerOverDamageWarning。</p>
+<p>Destroy事件只发布一次。</p>
+<hr />
+<h1 id="195-gravity把两个tile放进同一cell">195. Gravity把两个Tile放进同一Cell</h1><p>Collapse Plan在Commit前：</p>
+<p>验证：</p>
+<p>目标Cell唯一。</p>
+<p>失败：</p>
+<p>保留旧Board</p>
+<p>并输出：</p>
+<p>GravityIntegrityError。</p>
+<hr />
+<h1 id="196-spawn产生非法tile类型">196. Spawn产生非法Tile类型</h1><p>Spawn Pool构建期验证。</p>
+<p>运行时使用：</p>
+<p>Fallback TileType。</p>
+<hr />
+<h1 id="197-refill后无legal-move">197. Refill后无Legal Move</h1><p>这不是错误。</p>
+<p>进入：</p>
+<p>Shuffle。</p>
+<hr />
+<h1 id="198-shuffle多次无法生成legal-board">198. Shuffle多次无法生成Legal Board</h1><p>使用：</p>
+<p>Constructive Recovery。</p>
+<p>例如：</p>
+<p>强制交换少量Tile</p>
+<p>构造一个合法Move。</p>
+<p>同时：</p>
+<p>记录RandomGenerationWarning。</p>
+<hr />
+<h1 id="199-shuffle意外生成immediate-match">199. Shuffle意外生成Immediate Match</h1><p>根据Ruleset：</p>
+<p>可以：</p>
+<p>允许自动Cascade</p>
+<p>或：</p>
+<p>拒绝候选重新Shuffle。</p>
+<p>必须：</p>
+<p>固定策略。</p>
+<hr />
+<h1 id="200-objective-count重复">200. Objective Count重复</h1><p>以：</p>
+<p>SourceEventId + ObjectiveId</p>
+<p>作为：</p>
+<p>幂等键。</p>
+<p>同一TileClear不会：</p>
+<p>统计两次。</p>
+<hr />
+<h1 id="201-last-move竞态">201. Last Move竞态</h1><p>Moves归零。</p>
+<p>必须等待：</p>
+<p>Root Move完整Resolution结束。</p>
+<p>Failure系统不能：</p>
+<p>中途抢先Commit。</p>
+<hr />
+<h1 id="202-timed-mode时间归零时正在cascade">202. Timed Mode时间归零时正在Cascade</h1><p>Ruleset必须定义：</p>
+<ul>
+<li><p>立即失败；</p>
+</li>
+<li><p>当前Root Move结算完；</p>
+</li>
+<li><p>当前动画结束。</p>
+</li>
+</ul>
+<p>推荐将其作为：</p>
+<p>显式Timer Expiration Policy。</p>
+<hr />
+<h1 id="203-app-suspend发生在cascade期间">203. App Suspend发生在Cascade期间</h1><p>优先：</p>
+<p>逻辑快速Resolve到Stable。</p>
+<p>保存。</p>
+<p>不能：</p>
+<p>保存到半个Clear Batch。</p>
+<hr />
+<h1 id="204-动画对象丢失">204. 动画对象丢失</h1><p>重新根据：</p>
+<p>Board State</p>
+<p>Materialize对应Tile View。</p>
+<p>Gameplay继续。</p>
+<hr />
+<h1 id="205-debug与可观测性">205. Debug与可观测性</h1><hr />
+<h2 id="2051-board-inspector">205.1 Board Inspector</h2><p>显示：</p>
+<ul>
+<li><p>Terrain；</p>
+</li>
+<li><p>Occupant；</p>
+</li>
+<li><p>Underlay；</p>
+</li>
+<li><p>Overlay；</p>
+</li>
+<li><p>Cell Tags；</p>
+</li>
+<li><p>TileInstanceId。</p>
+</li>
+</ul>
+<hr />
+<h1 id="206-board-revision-timeline">206. Board Revision Timeline</h1><p>每次正式Mutation：</p>
+<p>Revision +1。</p>
+<p>可以定位：</p>
+<p>状态在哪一步改变。</p>
+<hr />
+<h1 id="207-swap-trace">207. Swap Trace</h1><p>显示：</p>
+<p>A / B。</p>
+<p>第一层合法性。</p>
+<p>Candidate Board。</p>
+<p>Match Validation。</p>
+<p>Accept / Reject原因。</p>
+<hr />
+<h1 id="208-match-inspector">208. Match Inspector</h1><p>显示：</p>
+<p>每个MatchGroup：</p>
+<ul>
+<li><p>Cells；</p>
+</li>
+<li><p>Orientation；</p>
+</li>
+<li><p>Shape；</p>
+</li>
+<li><p>Length；</p>
+</li>
+<li><p>Origin Move；</p>
+</li>
+<li><p>Merge Result。</p>
+</li>
+</ul>
+<hr />
+<h1 id="209-special-creation-trace">209. Special Creation Trace</h1><p>为什么这次四连：</p>
+<p>生成Horizontal Special</p>
+<p>而不是Vertical。</p>
+<p>显示：</p>
+<p>Anchor Rule。</p>
+<hr />
+<h1 id="210-effect-queue-inspector">210. Effect Queue Inspector</h1><p>例如：</p>
+<p>Effect 1：Area
+→ Effect 2：Row
+→ Effect 3：Color。</p>
+<p>显示：</p>
+<p>Source / Target / Depth。</p>
+<hr />
+<h1 id="211-clear-trace">211. Clear Trace</h1><p>每个Tile：</p>
+<p>为什么被Clear。</p>
+<p>来自：</p>
+<p>Match。</p>
+<p>Bomb。</p>
+<p>Line。</p>
+<p>Booster。</p>
+<hr />
+<h1 id="212-blocker-inspector">212. Blocker Inspector</h1><p>Cell(4,7)：</p>
+<p>Ice Layer 2。</p>
+<p>第一次Hit：</p>
+<p>Move 12 Cascade 0。</p>
+<p>第二次：</p>
+<p>Move 12 Cascade 1。</p>
+<hr />
+<h1 id="213-gravity-debug">213. Gravity Debug</h1><p>显示：</p>
+<p>每个Tile：</p>
+<p>SourceCell → TargetCell。</p>
+<p>以及：</p>
+<p>为什么停在该Cell。</p>
+<hr />
+<h1 id="214-gravity-segment-overlay">214. Gravity Segment Overlay</h1><p>可以看到：</p>
+<p>Stone、Hole、Portal</p>
+<p>怎样切分坠落路径。</p>
+<hr />
+<h1 id="215-spawn-trace">215. Spawn Trace</h1><p>新Tile：</p>
+<p>Red。</p>
+<p>来自：</p>
+<p>SpawnSource 2。</p>
+<p>RNG Cursor：</p>
+<p>1142。</p>
+<p>Spawn Weight：</p>
+<p>20%。</p>
+<hr />
+<h1 id="216-cascade-timeline">216. Cascade Timeline</h1><p>RootMove 18：</p>
+<p>Cascade 0：</p>
+<p>Clear 4。</p>
+<p>Cascade 1：</p>
+<p>Clear 6。</p>
+<p>Cascade 2：</p>
+<p>Clear 3。</p>
+<p>总计：</p>
+<p>13。</p>
+<hr />
+<h1 id="217-objective-trace">217. Objective Trace</h1><p>为什么Crate目标增加2：</p>
+<p>对应：</p>
+<p>BlockerDestroyed Event IDs。</p>
+<hr />
+<h1 id="218-legal-move-viewer">218. Legal Move Viewer</h1><p>把所有当前合法Swap：</p>
+<p>高亮。</p>
+<hr />
+<h1 id="219-deadlock-debug">219. Deadlock Debug</h1><p>显示：</p>
+<p>总候选Swap：</p>
+<p>N。</p>
+<p>有效：</p>
+<p>0。</p>
+<p>因此：</p>
+<p>Shuffle。</p>
+<hr />
+<h1 id="220-shuffle-trace">220. Shuffle Trace</h1><p>记录：</p>
+<p>Shuffle Seed。</p>
+<p>Attempt Count。</p>
+<p>最终：</p>
+<p>Legal Move数量。</p>
+<hr />
+<h1 id="221-board-quality-metrics">221. Board Quality Metrics</h1><p>可显示：</p>
+<ul>
+<li><p>Legal Move Count；</p>
+</li>
+<li><p>Potential Match Count；</p>
+</li>
+<li><p>Special Opportunity Count；</p>
+</li>
+<li><p>Objective Reachability Proxy；</p>
+</li>
+<li><p>Color Distribution。</p>
+</li>
+</ul>
+<hr />
+<h1 id="222-move-value-analyzer">222. Move Value Analyzer</h1><p>当前所有Legal Move：</p>
+<p>Immediate Clear。</p>
+<p>Objective Gain。</p>
+<p>Special Creation。</p>
+<p>Estimated Future Value。</p>
+<hr />
+<h1 id="223-level-rng-inspector">223. Level RNG Inspector</h1><p>显示：</p>
+<p>Refill Random。</p>
+<p>Shuffle Random。</p>
+<p>Booster Random。</p>
+<p>保证：</p>
+<p>相互隔离。</p>
+<hr />
+<h1 id="224-replay-hash-timeline">224. Replay Hash Timeline</h1><p>每次Stable Board：</p>
+<p>生成Hash。</p>
+<p>Desync：</p>
+<p>定位到：</p>
+<p>Move 27。</p>
+<hr />
+<h1 id="225-monte-carlo-dashboard">225. Monte Carlo Dashboard</h1><p>显示：</p>
+<ul>
+<li><p>Win Rate；</p>
+</li>
+<li><p>Median Moves；</p>
+</li>
+<li><p>Fail by Objective；</p>
+</li>
+<li><p>Shuffle Rate；</p>
+</li>
+<li><p>Cascade Rate；</p>
+</li>
+<li><p>Color Drought；</p>
+</li>
+<li><p>Special Use。</p>
+</li>
+</ul>
+<hr />
+<h1 id="226-content-validation">226. Content Validation</h1><hr />
+<h2 id="2261-board-shape-validation">226.1 Board Shape Validation</h2><p>检查：</p>
+<ul>
+<li><p>Spawn Source有合法出口；</p>
+</li>
+<li><p>Sink存在；</p>
+</li>
+<li><p>Hole不会造成非法孤岛；</p>
+</li>
+<li><p>Objective Cell合法。</p>
+</li>
+</ul>
+<hr />
+<h1 id="227-tile-pool-validation">227. Tile Pool Validation</h1><p>Enabled TileTypes：</p>
+<p>至少能够：</p>
+<p>构成合法Match。</p>
+<hr />
+<h1 id="228-initial-board-validation">228. Initial Board Validation</h1><p>保证：</p>
+<ul>
+<li><p>Board合法；</p>
+</li>
+<li><p>至少一个Legal Move；</p>
+</li>
+<li><p>无Forbidden Immediate Match；</p>
+</li>
+<li><p>Objective可达。</p>
+</li>
+</ul>
+<hr />
+<h1 id="229-swap-property-test">229. Swap Property Test</h1><p>随机Board。</p>
+<p>任意合法Swap。</p>
+<p>Swap后再Swap回来：</p>
+<p>Board必须恢复原状态。</p>
+<hr />
+<h1 id="230-invalid-swap-property">230. Invalid Swap Property</h1><p>被拒绝的Swap：</p>
+<p>Board Hash</p>
+<p>前后必须相同。</p>
+<hr />
+<h1 id="231-match-detection-reference-test">231. Match Detection Reference Test</h1><p>同时维护：</p>
+<p>简单暴力参考实现。</p>
+<p>与：</p>
+<p>优化实现</p>
+<p>对比。</p>
+<hr />
+<h1 id="232-overlap-match-test">232. Overlap Match Test</h1><p>横、纵、T、L、Cross</p>
+<p>全部标准样例。</p>
+<hr />
+<h1 id="233-special-anchor-test">233. Special Anchor Test</h1><p>同一种玩家动作：</p>
+<p>生成位置稳定。</p>
+<hr />
+<h1 id="234-effect-chain-test">234. Effect Chain Test</h1><p>构造：</p>
+<p>Bomb → Line → Color</p>
+<p>连锁。</p>
+<p>验证：</p>
+<p>每个Special只触发一次。</p>
+<hr />
+<h1 id="235-effect-order-regression">235. Effect Order Regression</h1><p>固定Board。</p>
+<p>固定RootMove。</p>
+<p>最终Board：</p>
+<p>必须稳定。</p>
+<hr />
+<h1 id="236-blocker-damage-matrix">236. Blocker Damage Matrix</h1><p>每种Effect：</p>
+<p>对每种Blocker：</p>
+<p>验证：</p>
+<p>是否Damage。</p>
+<hr />
+<h1 id="237-gravity-property-test">237. Gravity Property Test</h1><p>Collapse以后：</p>
+<p>每个可下落Piece下方</p>
+<p>不存在：</p>
+<p>在同Gravity Segment中的合法空Cell。</p>
+<hr />
+<h1 id="238-tile-conservation">238. Tile Conservation</h1><p>在没有Spawn / Clear时：</p>
+<p>Collapse前后：</p>
+<p>Tile Instance集合一致。</p>
+<hr />
+<h1 id="239-spawn-property-test">239. Spawn Property Test</h1><p>生成Piece：</p>
+<p>必须来自：</p>
+<p>合法Pool。</p>
+<hr />
+<h1 id="240-rng-isolation-test">240. RNG Isolation Test</h1><p>增加Cosmetic Random。</p>
+<p>未来Refill序列：</p>
+<p>不变。</p>
+<hr />
+<h1 id="241-deadlock-detector-test">241. Deadlock Detector Test</h1><p>人工构造：</p>
+<p>无Legal Move Board。</p>
+<p>必须：</p>
+<p>检测。</p>
+<hr />
+<h1 id="242-shuffle-recovery-test">242. Shuffle Recovery Test</h1><p>任何Deadlock Board：</p>
+<p>在有限Attempt内：</p>
+<p>恢复</p>
+<p>或：</p>
+<p>进入Constructive Fallback。</p>
+<hr />
+<h1 id="243-last-move-cascade-test">243. Last Move Cascade Test</h1><p>最后一Move：</p>
+<p>初始未完成目标。</p>
+<p>Cascade完成目标。</p>
+<p>必须：</p>
+<p>Win。</p>
+<hr />
+<h1 id="244-moves-exhausted-test">244. Moves Exhausted Test</h1><p>完整Resolution结束仍未完成。</p>
+<p>才：</p>
+<p>Fail。</p>
+<hr />
+<h1 id="245-objective-event-idempotency">245. Objective Event Idempotency</h1><p>重复发送：</p>
+<p>TileClearedEvent。</p>
+<p>Objective只算一次。</p>
+<hr />
+<h1 id="246-save-stable-state-test">246. Save Stable-State Test</h1><p>保存。</p>
+<p>加载。</p>
+<p>Board、RNG、Moves、Objectives：</p>
+<p>一致。</p>
+<hr />
+<h1 id="247-replay-determinism">247. Replay Determinism</h1><p>固定：</p>
+<p>Initial Seed</p>
+<ul>
+<li><p>Swap Inputs</p>
+</li>
+<li><p>Booster Inputs。</p>
+</li>
+</ul>
+<p>运行100次。</p>
+<p>每个Stable Hash一致。</p>
+<hr />
+<h1 id="248-monte-carlo-level-test">248. Monte Carlo Level Test</h1><p>至少运行：</p>
+<ul>
+<li><p>Weak Bot；</p>
+</li>
+<li><p>Average Heuristic；</p>
+</li>
+<li><p>Strong Bot。</p>
+</li>
+</ul>
+<p>避免：</p>
+<p>只对一种策略平衡。</p>
+<hr />
+<h1 id="249-soft-impossible-state-test">249. Soft Impossible State Test</h1><p>模拟：</p>
+<p>Objective还剩Blue 20。</p>
+<p>但Spawn Pool不再包含Blue。</p>
+<p>构建器直接报警。</p>
+<hr />
+<h1 id="250-level-solver-heuristic-validation">250. Level Solver / Heuristic Validation</h1><p>对于完全确定的Puzzle Level：</p>
+<p>可以使用搜索验证。</p>
+<p>对于随机Level：</p>
+<p>使用统计模拟。</p>
+<p>不要混淆：</p>
+<p><strong>Solvability Proof</strong></p>
+<p>和：</p>
+<p><strong>Expected Difficulty。</strong></p>
+<hr />
+<h1 id="251-性能设计">251. 性能设计</h1><p>Match-3 的棋盘通常很小。</p>
+<p>因此性能优化的首要原则是：</p>
+<blockquote>
+<p><strong>优先保持规则清楚、确定和可测试，而不是提前构造复杂高性能框架。</strong></p>
+</blockquote>
+<hr />
+<h1 id="252-match-detection">252. Match Detection</h1><p>几十到几百个Cell。</p>
+<p>全盘扫描：</p>
+<p>通常完全足够。</p>
+<hr />
+<h1 id="253-effect-chain">253. Effect Chain</h1><p>即使一次全屏Clear，</p>
+<p>也只是：</p>
+<p>几十个Tile。</p>
+<p>不需要：</p>
+<p>复杂并行任务系统。</p>
+<hr />
+<h1 id="254-真正容易产生性能成本的是">254. 真正容易产生性能成本的是：</h1><ul>
+<li><p>大量粒子；</p>
+</li>
+<li><p>UI数字；</p>
+</li>
+<li><p>Cascade动画；</p>
+</li>
+<li><p>特效；</p>
+</li>
+<li><p>Live2D / Meta Layer。</p>
+</li>
+</ul>
+<p>而不是：</p>
+<p>Board Logic。</p>
+<hr />
+<h1 id="255-board-logic最好保持">255. Board Logic最好保持：</h1><p>纯数据。</p>
+<p>甚至：</p>
+<p>无引擎依赖。</p>
+<p>这非常适合作为：</p>
+<p>跨Unity / Godot复用的Game Domain Core。</p>
+<hr />
+<h1 id="256-presentation可以单独消费">256. Presentation可以单独消费：</h1><p>BoardDiff。</p>
+<p>例如：</p>
+<p>SwapDiff。</p>
+<p>ClearDiff。</p>
+<p>FallDiff。</p>
+<p>SpawnDiff。</p>
+<hr />
+<h1 id="257-boarddiff">257. BoardDiff</h1><p>建议描述：</p>
+<ul>
+<li><p>Moved Tile；</p>
+</li>
+<li><p>Cleared Tile；</p>
+</li>
+<li><p>Created Tile；</p>
+</li>
+<li><p>Blocker Changed；</p>
+</li>
+<li><p>Special Created。</p>
+</li>
+</ul>
+<p>动画系统不需要：</p>
+<p>自己比较整个Board。</p>
+<hr />
+<h1 id="258-可扩展点">258. 可扩展点</h1><hr />
+<h2 id="2581-新tile颜色">258.1 新Tile颜色</h2><p>增加：</p>
+<p>TileDefinition。</p>
+<hr />
+<h2 id="2582-新special-piece">258.2 新Special Piece</h2><p>实现：</p>
+<p>SpecialDefinition</p>
+<ul>
+<li>Effect。</li>
+</ul>
+<hr />
+<h2 id="2583-新blocker">258.3 新Blocker</h2><p>实现：</p>
+<p>BlockerDefinition</p>
+<p>和：</p>
+<p>Damage Rule。</p>
+<hr />
+<h2 id="2584-新board-terrain">258.4 新Board Terrain</h2><p>扩展：</p>
+<p>Terrain / Gravity规则。</p>
+<hr />
+<h2 id="2585-新level-objective">258.5 新Level Objective</h2><p>增加：</p>
+<p>ObjectiveDefinition</p>
+<p>并声明：</p>
+<p>消费哪些事件。</p>
+<hr />
+<h2 id="2586-新booster">258.6 新Booster</h2><p>复用：</p>
+<p>Effect Pipeline。</p>
+<hr />
+<h2 id="2587-新game-mode">258.7 新Game Mode</h2><p>复用：</p>
+<p>Board Core，</p>
+<p>替换：</p>
+<ul>
+<li><p>Success；</p>
+</li>
+<li><p>Failure；</p>
+</li>
+<li><p>Moves；</p>
+</li>
+<li><p>Timer；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Battle Adapter。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2588-rpg-battle-adapter">258.8 RPG Battle Adapter</h2><p>把：</p>
+<p>ClearResult</p>
+<p>映射为：</p>
+<p>Damage / Mana / Skill。</p>
+<hr />
+<h2 id="2589-pvp-adapter">258.9 PvP Adapter</h2><p>把：</p>
+<p>Cascade / Combo</p>
+<p>映射为：</p>
+<p>Attack Packet。</p>
+<hr />
+<h2 id="25810-puzzle-mode">258.10 Puzzle Mode</h2><p>固定：</p>
+<p>Initial Board</p>
+<p>和：</p>
+<p>Spawn Sequence。</p>
+<p>使用：</p>
+<p>Solver验证。</p>
+<hr />
+<h1 id="259-玩家体验设计">259. 玩家体验设计</h1><hr />
+<h2 id="2591-玩家每一次swap都必须立刻获得响应">259.1 玩家每一次Swap都必须立刻获得响应</h2><p>拖动两个Cell：</p>
+<p>应立即：</p>
+<ul>
+<li><p>Swap；</p>
+</li>
+<li><p>Invalid Bounce；</p>
+</li>
+<li><p>Special Trigger。</p>
+</li>
+</ul>
+<p>不能：</p>
+<p>延迟半秒才知道有没有操作成功。</p>
+<hr />
+<h1 id="260-invalid-swap应足够快">260. Invalid Swap应足够快</h1><p>它只是：</p>
+<p>告诉玩家：</p>
+<p>这不是Legal Move。</p>
+<p>不要：</p>
+<p>播放2秒失败动画。</p>
+<hr />
+<h1 id="261-玩家必须能够一眼读取">261. 玩家必须能够一眼读取：</h1><p>颜色、Special、Blocker和Objective</p>
+<p>而不是依赖：</p>
+<p>仔细查看文字。</p>
+<hr />
+<h1 id="262-board是主要视觉信息层">262. Board是主要视觉信息层</h1><p>Meta UI不能：</p>
+<p>压缩Board到看不清。</p>
+<hr />
+<h1 id="263-cascade应有节奏但不应拖沓">263. Cascade应有节奏，但不应拖沓</h1><p>小Cascade：</p>
+<p>快速。</p>
+<p>大Combo：</p>
+<p>适度延长反馈。</p>
+<hr />
+<h1 id="264-动画延迟可以按cascade层级略微递增">264. 动画延迟可以按Cascade层级略微递增</h1><p>让玩家感受到：</p>
+<p>连锁升级。</p>
+<p>但不能：</p>
+<p>每一层都加一秒。</p>
+<hr />
+<h1 id="265-special-combination需要明确反馈">265. Special Combination需要明确反馈</h1><p>玩家交换：</p>
+<p>Bomb + Line。</p>
+<p>必须清楚看到：</p>
+<p>这是“组合规则”</p>
+<p>而不是：</p>
+<p>两个普通Special恰好同时触发。</p>
+<hr />
+<h1 id="266-blocker层数必须可读">266. Blocker层数必须可读</h1><p>三层Ice</p>
+<p>和：</p>
+<p>一层Ice</p>
+<p>不能：</p>
+<p>视觉几乎一样。</p>
+<hr />
+<h1 id="267-objective应直接映射到board对象">267. Objective应直接映射到Board对象</h1><p>“剩余5个Crate”</p>
+<p>玩家应该：</p>
+<p>能够数到。</p>
+<hr />
+<h1 id="268-last-moves应提高压力但不抢视线">268. Last Moves应提高压力但不抢视线</h1><p>可以：</p>
+<ul>
+<li><p>音效；</p>
+</li>
+<li><p>UI颜色；</p>
+</li>
+<li><p>简短提示。</p>
+</li>
+</ul>
+<hr />
+<h1 id="269-hint只是辅助发现不应该成为自动玩法">269. Hint只是辅助发现，不应该成为自动玩法</h1><p>玩家主动思考：</p>
+<p>依然应该明显优于：</p>
+<p>无限等待Hint。</p>
+<hr />
+<h1 id="270-shuffle需要明确解释">270. Shuffle需要明确解释</h1><p>例如：</p>
+<p>“No more moves.”</p>
+<p>然后：</p>
+<p>重排。</p>
+<p>避免玩家以为：</p>
+<p>游戏随便改了自己棋盘。</p>
+<hr />
+<h1 id="271-random-cascade要令人惊喜但不能成为关卡唯一获胜方式">271. Random Cascade要令人惊喜，但不能成为关卡唯一获胜方式</h1><p>如果玩家做对所有决策</p>
+<p>仍必须：</p>
+<p>赌10连Cascade，</p>
+<p>关卡Agency不足。</p>
+<hr />
+<h1 id="272-好的match-3难度应该让玩家认为">272. 好的Match-3难度应该让玩家认为：</h1><blockquote>
+<p>“我上一Move浪费了。”</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>“系统今天没给我红色。”</p>
+</blockquote>
+<hr />
+<h1 id="273-这要求关卡设计持续控制">273. 这要求关卡设计持续控制：</h1><ul>
+<li><p>Color Count；</p>
+</li>
+<li><p>Move Budget；</p>
+</li>
+<li><p>Objective Supply；</p>
+</li>
+<li><p>Blocker节奏；</p>
+</li>
+<li><p>RNG方差。</p>
+</li>
+</ul>
+<hr />
+<h1 id="274-常见设计失败">274. 常见设计失败</h1><hr />
+<h2 id="2741-tile-gameobject就是board真相">274.1 Tile GameObject就是Board真相</h2><p>动画和逻辑耦合。</p>
+<hr />
+<h2 id="2742-所有cell只有一个enum">274.2 所有Cell只有一个Enum</h2><p>加入Jelly、Ice、Crate后状态爆炸。</p>
+<hr />
+<h2 id="2743-swap一发生就直接扣move">274.3 Swap一发生就直接扣Move</h2><p>无效交换也损失资源。</p>
+<hr />
+<h2 id="2744-swap没有候选验证阶段">274.4 Swap没有候选验证阶段</h2><p>回滚困难。</p>
+<hr />
+<h2 id="2745-matchdetector检测到就立即destroy">274.5 MatchDetector检测到就立即Destroy</h2><p>Special生成信息丢失。</p>
+<hr />
+<h2 id="2746-横三纵三独立清理">274.6 横三、纵三独立清理</h2><p>T / L中心被重复处理。</p>
+<hr />
+<h2 id="2747-special生成位置随机">274.7 Special生成位置随机</h2><p>玩家无法规划。</p>
+<hr />
+<h2 id="2748-clear过程中边遍历边修改board">274.8 Clear过程中边遍历边修改Board</h2><p>漏匹配、重复匹配。</p>
+<hr />
+<h2 id="2749-special直接递归调用其他special">274.9 Special直接递归调用其他Special</h2><p>Effect Chain难调试。</p>
+<hr />
+<h2 id="27410-同一special被两个effect重复引爆">274.10 同一Special被两个Effect重复引爆</h2><p>奖励翻倍。</p>
+<hr />
+<h2 id="27411-blocker全部伪装成特殊tile">274.11 Blocker全部伪装成特殊Tile</h2><p>逻辑分支无限增长。</p>
+<hr />
+<h2 id="27412-gravity只是简单逐列往下">274.12 Gravity只是简单逐列往下</h2><p>Hole、Stone、Portal加入后重构。</p>
+<hr />
+<h2 id="27413-match在坠落中途不断检测">274.13 Match在坠落中途不断检测</h2><p>Cascade边界不可预测。</p>
+<hr />
+<h2 id="27414-每个空cell独立random补piece">274.14 每个空Cell独立random()补Piece</h2><p>无法建模Spawn Source。</p>
+<hr />
+<h2 id="27415-cosmetic-rng改变refill-rng">274.15 Cosmetic RNG改变Refill RNG</h2><p>Replay漂移。</p>
+<hr />
+<h2 id="27416-开局随机填board以后自动连锁几十次">274.16 开局随机填Board以后自动连锁几十次</h2><p>玩家还没操作就改变关卡状态。</p>
+<hr />
+<h2 id="27417-不检测deadlock">274.17 不检测Deadlock</h2><p>玩家突然无Move。</p>
+<hr />
+<h2 id="27418-shuffle可能再次生成无move-board">274.18 Shuffle可能再次生成无Move Board</h2><p>无限重排。</p>
+<hr />
+<h2 id="27419-shuffle扣move">274.19 Shuffle扣Move</h2><p>惩罚玩家无法控制的状态。</p>
+<hr />
+<h2 id="27420-最后一move一扣完就判失败">274.20 最后一Move一扣完就判失败</h2><p>Cascade完成目标却仍输。</p>
+<hr />
+<h2 id="27421-objective通过扫描当前board推断">274.21 Objective通过扫描当前Board推断</h2><p>累计清除类目标无法成立。</p>
+<hr />
+<h2 id="27422-booster直接修改ui对象">274.22 Booster直接修改UI对象</h2><p>绕过Board规则。</p>
+<hr />
+<h2 id="27423-clear动画结束事件负责真正删除tile">274.23 Clear动画结束事件负责真正删除Tile</h2><p>逻辑依赖表现。</p>
+<hr />
+<h2 id="27424-动画速度改变timed-level结果却没有规则说明">274.24 动画速度改变Timed Level结果却没有规则说明</h2><p>公平性差。</p>
+<hr />
+<h2 id="27425-level只靠设计师人工试玩">274.25 Level只靠设计师人工试玩</h2><p>随机方差未评估。</p>
+<hr />
+<h2 id="27426-只看平均胜率">274.26 只看平均胜率</h2><p>忽略“部分Seed几乎必输”。</p>
+<hr />
+<h2 id="27427-为了控难偷偷给玩家目标颜色">274.27 为了控难偷偷给玩家目标颜色</h2><p>但没有明确Adaptive RNG策略。</p>
+<hr />
+<h2 id="27428-hint系统使用另一套match规则">274.28 Hint系统使用另一套Match规则</h2><p>提示非法Move。</p>
+<hr />
+<h2 id="27429-special-combination代码写在ui-drag-handler">274.29 Special Combination代码写在UI Drag Handler</h2><p>无法复用。</p>
+<hr />
+<h2 id="27430-pvp客户端直接发送我造成10攻击">274.30 PvP客户端直接发送“我造成10攻击”</h2><p>可作弊。</p>
+<hr />
+<h2 id="27431-match-3-core知道enemy-hp">274.31 Match-3 Core知道Enemy HP</h2><p>玩法层和战斗层耦合。</p>
+<hr />
+<h2 id="27432-save发生在cascade中间但不保存effect-queue">274.32 Save发生在Cascade中间但不保存Effect Queue</h2><p>加载状态错乱。</p>
+<hr />
+<h2 id="27433-board-logic为了性能过度引擎化">274.33 Board Logic为了“性能”过度引擎化</h2><p>反而难测试、难Replay。</p>
+<hr />
+<h2 id="27434-special特效完全遮挡board">274.34 Special特效完全遮挡Board</h2><p>玩家看不清Cascade结果。</p>
+<hr />
+<h2 id="27435-颜色是唯一辨识维度">274.35 颜色是唯一辨识维度</h2><p>色觉玩家体验受损。</p>
+<hr />
+<h2 id="27436-难度主要依赖减少moves却不调整随机结构">274.36 难度主要依赖减少Moves，却不调整随机结构</h2><p>关卡变成概率墙。</p>
+<hr />
+<h2 id="27437-一关有十几种blocker同时出现">274.37 一关有十几种Blocker同时出现</h2><p>认知复杂度过高。</p>
+<hr />
+<h2 id="27438-每个新blocker都有完全独立分辨率和clear流程">274.38 每个新Blocker都有完全独立分辨率和Clear流程</h2><p>系统无法维护。</p>
+<hr />
+<h2 id="27439-所有关卡都只是清n个颜色">274.39 所有关卡都只是“清N个颜色”</h2><p>内容缺少机制变化。</p>
+<hr />
+<h2 id="27440-cascade越多总是越好">274.40 Cascade越多总是越好</h2><p>可能导致真正规划价值被随机连锁取代。</p>
+<hr />
+<h1 id="275-最小可行原型">275. 最小可行原型</h1><p>验证 Match-3 核心范式，不需要立即加入：</p>
+<p>数百关卡和Meta装饰系统。</p>
+<p>推荐：</p>
+<p><strong>8×8 Board + 5种普通Piece + 3种Special + 3种Blocker + Moves Level + Objective + Deadlock Shuffle。</strong></p>
+<hr />
+<h1 id="276-基础board">276. 基础Board</h1><p>实现：</p>
+<ul>
+<li><p>Stable Board；</p>
+</li>
+<li><p>Adjacent Swap；</p>
+</li>
+<li><p>Horizontal / Vertical Match；</p>
+</li>
+<li><p>Clear；</p>
+</li>
+<li><p>Gravity；</p>
+</li>
+<li><p>Refill。</p>
+</li>
+</ul>
+<hr />
+<h1 id="277-special">277. Special</h1><p>第一版建议：</p>
+<ul>
+<li><p>Row / Column Line；</p>
+</li>
+<li><p>Area Bomb；</p>
+</li>
+<li><p>Color Clear。</p>
+</li>
+</ul>
+<hr />
+<h1 id="278-blocker">278. Blocker</h1><p>建议：</p>
+<ul>
+<li><p>Jelly Underlay；</p>
+</li>
+<li><p>Ice Overlay；</p>
+</li>
+<li><p>Crate Occupant / Terrain Blocker。</p>
+</li>
+</ul>
+<p>这已经足够验证：</p>
+<p>三种不同逻辑层。</p>
+<hr />
+<h1 id="279-objective">279. Objective</h1><p>至少：</p>
+<ul>
+<li><p>Clear Color；</p>
+</li>
+<li><p>Destroy Blocker；</p>
+</li>
+<li><p>Collect Falling Item。</p>
+</li>
+</ul>
+<hr />
+<h1 id="280-rules">280. Rules</h1><ul>
+<li><p>Moves；</p>
+</li>
+<li><p>Success；</p>
+</li>
+<li><p>Failure；</p>
+</li>
+<li><p>Combo；</p>
+</li>
+<li><p>Score。</p>
+</li>
+</ul>
+<hr />
+<h1 id="281-utility">281. Utility</h1><ul>
+<li><p>Hint；</p>
+</li>
+<li><p>Deadlock Detection；</p>
+</li>
+<li><p>Shuffle；</p>
+</li>
+<li><p>Replay。</p>
+</li>
+</ul>
+<hr />
+<h1 id="282-mvp必要数据结构">282. MVP必要数据结构</h1><ul>
+<li><p>BoardDefinition；</p>
+</li>
+<li><p>BoardRuntimeState；</p>
+</li>
+<li><p>CellState；</p>
+</li>
+<li><p>TileDefinition；</p>
+</li>
+<li><p>TileInstanceState；</p>
+</li>
+<li><p>SwapIntent；</p>
+</li>
+<li><p>MatchGroup；</p>
+</li>
+<li><p>SpecialCreationResult；</p>
+</li>
+<li><p>ClearBatch；</p>
+</li>
+<li><p>EffectInstance；</p>
+</li>
+<li><p>BlockerState；</p>
+</li>
+<li><p>GravityPlan；</p>
+</li>
+<li><p>SpawnSourceDefinition；</p>
+</li>
+<li><p>CascadeState；</p>
+</li>
+<li><p>MoveEconomyState；</p>
+</li>
+<li><p>ObjectiveState；</p>
+</li>
+<li><p>RNGState；</p>
+</li>
+<li><p>LevelDefinition；</p>
+</li>
+<li><p>ReplayRecord。</p>
+</li>
+</ul>
+<hr />
+<h1 id="283-mvp必要调试工具">283. MVP必要调试工具</h1><ul>
+<li><p>BoardInspector；</p>
+</li>
+<li><p>SwapTrace；</p>
+</li>
+<li><p>MatchInspector；</p>
+</li>
+<li><p>SpecialCreationTrace；</p>
+</li>
+<li><p>EffectQueueInspector；</p>
+</li>
+<li><p>ClearTrace；</p>
+</li>
+<li><p>BlockerInspector；</p>
+</li>
+<li><p>GravityDebug；</p>
+</li>
+<li><p>SpawnTrace；</p>
+</li>
+<li><p>CascadeTimeline；</p>
+</li>
+<li><p>LegalMoveViewer；</p>
+</li>
+<li><p>ShuffleTrace；</p>
+</li>
+<li><p>ObjectiveTrace；</p>
+</li>
+<li><p>RNGInspector；</p>
+</li>
+<li><p>ReplayHashTimeline；</p>
+</li>
+<li><p>MonteCarloDashboard。</p>
+</li>
+</ul>
+<hr />
+<h1 id="284-mvp核心验收问题">284. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<ul>
+<li><p>Board逻辑是否完全独立于Tile动画对象；</p>
+</li>
+<li><p>Stable以外阶段是否不会错误接受普通Swap；</p>
+</li>
+<li><p>Invalid Swap是否100%恢复原Board；</p>
+</li>
+<li><p>Accepted Swap是否只扣一次Move；</p>
+</li>
+<li><p>Match Detection是否稳定识别横、纵和交叉结构；</p>
+</li>
+<li><p>Special生成位置是否确定；</p>
+</li>
+<li><p>同一Tile是否不会被Clear两次；</p>
+</li>
+<li><p>连锁Special是否通过Effect Queue稳定执行；</p>
+</li>
+<li><p>Blocker是否使用统一Impact语义；</p>
+</li>
+<li><p>Gravity是否能够正确处理Blocked Segment；</p>
+</li>
+<li><p>Refill是否来自独立Spawn Source；</p>
+</li>
+<li><p>Refill RNG是否能够确定Replay；</p>
+</li>
+<li><p>一次Root Move的所有Cascade是否能够完整追踪；</p>
+</li>
+<li><p>最后一Move产生Cascade完成目标时是否正确判胜；</p>
+</li>
+<li><p>Board无Legal Move时是否能够自动检测；</p>
+</li>
+<li><p>Shuffle是否总能在有限步骤内恢复一个合法Board；</p>
+</li>
+<li><p>Shuffle是否不会消耗玩家Move；</p>
+</li>
+<li><p>Hint是否使用与Deadlock完全相同的Legal Move规则；</p>
+</li>
+<li><p>Monte Carlo是否能够测出不同Level Seed的胜率分布；</p>
+</li>
+<li><p>玩家是否逐渐从“找眼前一个三连”成长到“为了Special、Blocker和未来Board结构规划数步”。</p>
+</li>
+</ul>
+<p>这些问题没有稳定以前，不建议优先加入：</p>
+<ul>
+<li><p>复杂Meta装修；</p>
+</li>
+<li><p>数百Level；</p>
+</li>
+<li><p>付费Booster经济；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>RPG战斗；</p>
+</li>
+<li><p>公会；</p>
+</li>
+<li><p>活动关卡；</p>
+</li>
+<li><p>十几种Blocker。</p>
+</li>
+</ul>
+<hr />
+<h1 id="285-推荐实施顺序">285. 推荐实施顺序</h1><p>第一阶段：</p>
+<ul>
+<li><p>Board；</p>
+</li>
+<li><p>Cell；</p>
+</li>
+<li><p>Tile；</p>
+</li>
+<li><p>Stable State。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>Swap Intent；</p>
+</li>
+<li><p>Swap Validation；</p>
+</li>
+<li><p>Rollback。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Match Detection；</p>
+</li>
+<li><p>Match Group；</p>
+</li>
+<li><p>Overlap Merge。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Clear Batch；</p>
+</li>
+<li><p>Board Mutation。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Gravity；</p>
+</li>
+<li><p>Refill；</p>
+</li>
+<li><p>RNG。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Cascade；</p>
+</li>
+<li><p>Root Move；</p>
+</li>
+<li><p>Stable Resolution。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Moves；</p>
+</li>
+<li><p>Objective；</p>
+</li>
+<li><p>Success / Failure。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Special Creation；</p>
+</li>
+<li><p>Effect Queue；</p>
+</li>
+<li><p>Special Combination。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Layered Blocker；</p>
+</li>
+<li><p>Cell Impact。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Deadlock；</p>
+</li>
+<li><p>Legal Move；</p>
+</li>
+<li><p>Shuffle；</p>
+</li>
+<li><p>Hint。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Determinism；</p>
+</li>
+<li><p>Debug Tools。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Solver；</p>
+</li>
+<li><p>Monte Carlo；</p>
+</li>
+<li><p>Level Authoring；</p>
+</li>
+<li><p>Advanced Modes。</p>
+</li>
+</ul>
+<hr />
+<h1 id="286-架构验收标准">286. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>Board是引擎表现之外的独立权威数据；</p>
+</li>
+<li><p>Cell支持Terrain、Occupant、Underlay和Overlay等独立逻辑层；</p>
+</li>
+<li><p>TileDefinition与TileInstance严格分离；</p>
+</li>
+<li><p>Tile拥有稳定InstanceId；</p>
+</li>
+<li><p>玩家输入只有在Stable Phase才能提交普通Swap；</p>
+</li>
+<li><p>所有交换首先生成SwapIntent；</p>
+</li>
+<li><p>Swap在正式Commit前重新验证Board Revision；</p>
+</li>
+<li><p>Swap支持Candidate与Rollback；</p>
+</li>
+<li><p>Invalid Swap不修改最终Board、不消耗Move；</p>
+</li>
+<li><p>MatchDetector属于无副作用Query；</p>
+</li>
+<li><p>普通Swap首轮可以使用局部Match检测；</p>
+</li>
+<li><p>Cascade阶段可以使用Dirty或全Board检测；</p>
+</li>
+<li><p>Match使用显式MatchGroup；</p>
+</li>
+<li><p>重叠Match先归并再分类；</p>
+</li>
+<li><p>Special类型与生成位置拥有稳定规则；</p>
+</li>
+<li><p>Special创建和Special触发严格分离；</p>
+</li>
+<li><p>Clear先形成去重ClearBatch再Commit；</p>
+</li>
+<li><p>Effect使用独立Effect Queue；</p>
+</li>
+<li><p>连锁Special不会通过无限递归直接执行；</p>
+</li>
+<li><p>同一Special在一次Resolution中最多合法触发一次；</p>
+</li>
+<li><p>Effect拥有RootMove与Depth；</p>
+</li>
+<li><p>Special Combination拥有统一Resolver；</p>
+</li>
+<li><p>Blocker不需要全部伪装成Occupant Piece；</p>
+</li>
+<li><p>Blocker Damage消费统一Cell Impact语义；</p>
+</li>
+<li><p>多层Blocker拥有稳定Layer变化；</p>
+</li>
+<li><p>Gravity属于Board Topology规则；</p>
+</li>
+<li><p>Collapse计算最终Cell Mapping而不是使用真实刚体物理；</p>
+</li>
+<li><p>Gravity Segment可以被Terrain / Blocker切分；</p>
+</li>
+<li><p>Match只在稳定Collapse / Refill阶段边界检测；</p>
+</li>
+<li><p>Refill通过明确Spawn Source执行；</p>
+</li>
+<li><p>新Tile拥有稳定InstanceId和Creation Cause；</p>
+</li>
+<li><p>Refill、Shuffle和Cosmetic RNG严格隔离；</p>
+</li>
+<li><p>Initial Board Generator和普通Refill职责分离；</p>
+</li>
+<li><p>Initial Board可以验证无Forbidden Match和至少一个Legal Move；</p>
+</li>
+<li><p>Cascade属于同一Root Move，不额外消耗Move；</p>
+</li>
+<li><p>Resolution直到Match、Effect、Gravity与Refill全部结束才返回Stable；</p>
+</li>
+<li><p>Legal Move Detector是Deadlock与Hint共同事实源；</p>
+</li>
+<li><p>Deadlock拥有正式恢复流程；</p>
+</li>
+<li><p>Shuffle保持Blocker和关键Board状态语义；</p>
+</li>
+<li><p>Shuffle存在Maximum Attempt与Constructive Fallback；</p>
+</li>
+<li><p>Shuffle不会惩罚玩家Move；</p>
+</li>
+<li><p>Moves只在Accepted Player Move时消费；</p>
+</li>
+<li><p>Objective通过Domain Event累计，不扫描当前Board推断历史；</p>
+</li>
+<li><p>最后一Move必须完整Resolution后才能判Success / Failure；</p>
+</li>
+<li><p>Timed Level拥有明确Clock Policy；</p>
+</li>
+<li><p>Special主要扩展空间影响范围而不是只增加Score；</p>
+</li>
+<li><p>Booster通过同一Effect / Mutation接口作用Board；</p>
+</li>
+<li><p>Falling Objective通过Sink等正式Board语义实现；</p>
+</li>
+<li><p>Dynamic Spawner在固定Resolution边界执行；</p>
+</li>
+<li><p>Level由Board、Tile Pool、Objective和Move Economy共同定义；</p>
+</li>
+<li><p>Color Count被视为正式概率 / 难度参数；</p>
+</li>
+<li><p>随机关卡平衡使用Monte Carlo而不只人工试玩；</p>
+</li>
+<li><p>Level分析关注结果分布而不只平均值；</p>
+</li>
+<li><p>Random Assistance如果存在必须属于显式Policy；</p>
+</li>
+<li><p>RootMoveId能够串联整条Cascade因果；</p>
+</li>
+<li><p>Gameplay Event保持不可变；</p>
+</li>
+<li><p>Score、Objective、Achievement和Battle Adapter消费统一Clear语义；</p>
+</li>
+<li><p>Match-3 Core不依赖RPG / PvP上层；</p>
+</li>
+<li><p>Replay保存Ruleset、Board Seed和所有必要RNG状态；</p>
+</li>
+<li><p>每个Stable Board可以生成State Hash；</p>
+</li>
+<li><p>Save优先发生在Stable Board；</p>
+</li>
+<li><p>App Suspend可以逻辑快进到安全稳定点；</p>
+</li>
+<li><p>Animation、Tween、Particle永远不拥有Board权威状态；</p>
+</li>
+<li><p>调试工具能够解释一次Swap为什么被拒绝；</p>
+</li>
+<li><p>调试工具能够解释一个Special为何生成在某Cell；</p>
+</li>
+<li><p>调试工具能够追踪一次Root Move产生的完整Cascade；</p>
+</li>
+<li><p>调试工具能够解释Board为什么进入Shuffle；</p>
+</li>
+<li><p>新Special、新Blocker、新Objective和新Mode通常无需修改Board核心循环。</p>
+</li>
+</ul>
+<hr />
+<h1 id="287-可迁移到其他游戏的设计思想">287. 可迁移到其他游戏的设计思想</h1><hr />
+<h2 id="2871-玩家决策点和系统自动结算阶段应该明确分离">287.1 “玩家决策点”和“系统自动结算阶段”应该明确分离</h2><p>Match-3：</p>
+<p>Stable时：</p>
+<p>玩家决定。</p>
+<p>Swap之后：</p>
+<p>系统完整Resolve。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>卡牌；</p>
+</li>
+<li><p>战棋；</p>
+</li>
+<li><p>工作流；</p>
+</li>
+<li><p>自动战斗；</p>
+</li>
+<li><p>Puzzle。</p>
+</li>
+</ul>
+<p>不要让：</p>
+<p>外部输入</p>
+<p>插入内部事务一半。</p>
+<hr />
+<h2 id="2872-candidate-state-validation-commit-resolution-是非常通用的交互事务结构">287.2 Candidate State → Validation → Commit → Resolution 是非常通用的交互事务结构</h2><p>玩家先：</p>
+<p>提出交换意图。</p>
+<p>系统：</p>
+<p>在候选状态上验证。</p>
+<p>合法才：</p>
+<p>Commit。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Inventory；</p>
+</li>
+<li><p>Building；</p>
+</li>
+<li><p>Trade；</p>
+</li>
+<li><p>Card Move；</p>
+</li>
+<li><p>Character Loadout。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2873-查询函数越纯净越容易复用于uiaireplay和测试">287.3 查询函数越纯净，越容易复用于UI、AI、Replay和测试</h2><p>例如：</p>
+<p>Legal Move Detection。</p>
+<p>它同时服务：</p>
+<ul>
+<li><p>Hint；</p>
+</li>
+<li><p>Deadlock；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>Solver。</p>
+</li>
+</ul>
+<p>这一原则可迁移到：</p>
+<p>几乎所有Gameplay Rule Engine。</p>
+<hr />
+<h2 id="2874-连锁反应最好使用显式-queue而不是递归调用">287.4 连锁反应最好使用显式 Queue，而不是递归调用</h2><p>Bomb
+→ Line
+→ Color</p>
+<p>通过Effect Queue逐步处理。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Buff；</p>
+</li>
+<li><p>Explosion；</p>
+</li>
+<li><p>Card Trigger；</p>
+</li>
+<li><p>Skill Proc；</p>
+</li>
+<li><p>Event System。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2875-同一个事实可以被多个系统解释但事实本身不应重复计算">287.5 同一个事实可以被多个系统解释，但事实本身不应重复计算</h2><p>ClearResult：</p>
+<p>Score认为是奖励。</p>
+<p>Objective认为是进度。</p>
+<p>PvP认为是Attack。</p>
+<p>这是非常通用的：</p>
+<p><strong>Domain Fact → Multiple Interpretation</strong></p>
+<p>结构。</p>
+<hr />
+<h2 id="2876-root-action-id-是追踪复杂后果传播的高价值设计">287.6 Root Action ID 是追踪复杂后果传播的高价值设计</h2><p>玩家只交换一次。</p>
+<p>后面产生：</p>
+<p>数十事件。</p>
+<p>全部挂到：</p>
+<p>RootMove。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>战斗Combo；</p>
+</li>
+<li><p>Spell Chain；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>Economy；</p>
+</li>
+<li><p>网络事务。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2877-游戏状态可以分层不要用一个巨型enum表达所有cell语义">287.7 游戏状态可以分层，不要用一个巨型Enum表达所有Cell语义</h2><p>Terrain。</p>
+<p>Occupant。</p>
+<p>Underlay。</p>
+<p>Overlay。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Tile Map；</p>
+</li>
+<li><p>Equipment；</p>
+</li>
+<li><p>Buff；</p>
+</li>
+<li><p>UI；</p>
+</li>
+<li><p>Board Game。</p>
+</li>
+</ul>
+<p>多个正交状态域</p>
+<p>通常比：</p>
+<p>枚举所有组合</p>
+<p>更可扩展。</p>
+<hr />
+<h2 id="2878-random系统不仅需要正确概率还需要保证状态可恢复与可重放">287.8 Random系统不仅需要正确概率，还需要保证状态可恢复与可重放</h2><p>Refill RNG。</p>
+<p>Shuffle RNG。</p>
+<p>Cosmetic RNG。</p>
+<p>必须隔离。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Loot；</p>
+</li>
+<li><p>Procedural Generation；</p>
+</li>
+<li><p>Combat Crit；</p>
+</li>
+<li><p>Roguelike；</p>
+</li>
+<li><p>Card Draw。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2879-理论可操作本身应该拥有自动检测">287.9 “理论可操作”本身应该拥有自动检测</h2><p>Match-3中的Legal Move。</p>
+<p>同样可迁移到：</p>
+<ul>
+<li><p>Puzzle Solvability；</p>
+</li>
+<li><p>Quest Reachability；</p>
+</li>
+<li><p>Tech Tree；</p>
+</li>
+<li><p>Craft Recipe；</p>
+</li>
+<li><p>Navigation。</p>
+</li>
+</ul>
+<p>系统不应该只靠：</p>
+<p>玩家发现自己已经无路可走。</p>
+<hr />
+<h2 id="28710-recovery机制应保护玩家免受系统自身产生的死状态">287.10 Recovery机制应保护玩家免受系统自身产生的死状态</h2><p>Deadlock不是：</p>
+<p>玩家失败。</p>
+<p>因此Shuffle：</p>
+<p>不消耗Move。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>AI卡死；</p>
+</li>
+<li><p>Procedural Level；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>Navigation；</p>
+</li>
+<li><p>Matchmaking。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28711-一个小局部动作可以通过系统规则产生大规模后果而不需要增加玩家操作复杂度">287.11 一个小局部动作可以通过系统规则产生大规模后果，而不需要增加玩家操作复杂度</h2><p>玩家只交换：</p>
+<p>两个Cell。</p>
+<p>后果可能：</p>
+<p>重构整个Board。</p>
+<p>这种模式非常适合：</p>
+<ul>
+<li><p>Automation；</p>
+</li>
+<li><p>Strategy；</p>
+</li>
+<li><p>Chain Reaction；</p>
+</li>
+<li><p>Systems Design。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28712-延迟惩罚通常比立即扣血更能产生规划深度">287.12 延迟惩罚通常比立即扣血更能产生规划深度</h2><p>一次差Swap：</p>
+<p>可能没有立刻失败。</p>
+<p>但：</p>
+<p>破坏Board结构，</p>
+<p>浪费关键Move。</p>
+<p>这种“结构债务”思想可迁移到：</p>
+<ul>
+<li><p>Deckbuilding；</p>
+</li>
+<li><p>城市规划；</p>
+</li>
+<li><p>Factory；</p>
+</li>
+<li><p>Economy；</p>
+</li>
+<li><p>技术债系统。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28713-关卡难度涉及随机性时必须从单次解法验证升级到概率分布验证">287.13 关卡难度涉及随机性时，必须从“单次解法验证”升级到“概率分布验证”</h2><p>一个Level：</p>
+<p>能通</p>
+<p>并不代表：</p>
+<p>体验合理。</p>
+<p>Monte Carlo告诉我们：</p>
+<p>应该分析：</p>
+<ul>
+<li><p>胜率分布；</p>
+</li>
+<li><p>方差；</p>
+</li>
+<li><p>极端Seed；</p>
+</li>
+<li><p>玩家Agency。</p>
+</li>
+</ul>
+<p>这适用于：</p>
+<ul>
+<li><p>Roguelike；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>Card Game；</p>
+</li>
+<li><p>Auto Battler；</p>
+</li>
+<li><p>Procedural Content。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28714-presentation可以延长系统反馈但绝不能拥有系统真相">287.14 Presentation可以延长系统反馈，但绝不能拥有系统真相</h2><p>Swap Tween。</p>
+<p>Clear Animation。</p>
+<p>Fall Animation。</p>
+<p>都只是：</p>
+<p>Board Diff的视觉解释。</p>
+<p>这可以迁移到：</p>
+<p>几乎所有游戏。</p>
+<hr />
+<h2 id="28715-同一核心循环-不同规则解释是构建可复用玩法内核的理想模式">287.15 “同一核心循环 + 不同规则解释”是构建可复用玩法内核的理想模式</h2><p>同一个 Match-3 Core：</p>
+<p>可以服务：</p>
+<ul>
+<li><p>纯益智；</p>
+</li>
+<li><p>RPG；</p>
+</li>
+<li><p>PvP；</p>
+</li>
+<li><p>时间赛；</p>
+</li>
+<li><p>关卡制；</p>
+</li>
+<li><p>无限模式。</p>
+</li>
+</ul>
+<p>这是非常适合框架设计的原则：</p>
+<blockquote>
+<p><strong>把最稳定、最容易确定验证的 Domain Loop 保持纯净，让产品模式通过 Adapter 解释 Domain Result。</strong></p>
+</blockquote>
+<hr />
+<h1 id="288-本次防重记录">288. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>三消交换益智 / Match-3 / Swap Puzzle。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Match-3；</p>
+</li>
+<li><p>Match Three；</p>
+</li>
+<li><p>Swap Puzzle；</p>
+</li>
+<li><p>Tile Matching Puzzle；</p>
+</li>
+<li><p>三消；</p>
+</li>
+<li><p>交换式消除；</p>
+</li>
+<li><p>相邻交换益智；</p>
+</li>
+<li><p>棋盘级联消除。</p>
+</li>
+</ul>
+<hr />
+<h2 id="核心范式">核心范式</h2><p>Match-3 始终维护一个接近填满的离散Board。玩家不能自由把新Piece放到任意位置，而只能在Stable Board状态下选择两个满足规则的相邻Cell并提交Swap Intent。系统在候选交换状态中验证是否形成Match、Special Combination或其他合法结果；无效Swap完全回滚，合法Swap才真正Commit并消费一次Move。</p>
+<p>之后游戏进入玩家不可插入普通操作的Resolution Pipeline。Match Detector首先把颜色匹配识别成具有长度、方向和几何形状的Match Group，重叠结构被归并后决定Special创建；所有待消除对象先进入去重Clear Batch，Special则通过显式Effect Queue产生横线、区域、颜色等连锁影响，Blocker通过统一Cell Impact消耗自己的层级。Clear完成以后，Gravity System按照Board Topology计算Piece最终坠落位置，Spawn Source再使用独立RNG补充新Piece，随后系统重新检测由坠落形成的Cascade。</p>
+<p>整个流程不断重复，直到Board不存在即时Match、Effect Queue清空、Gravity和Refill全部完成。系统随后通过统一Legal Move Detector确认至少存在一个合法玩家Swap；如果不存在则进入不消耗Move的Shuffle Recovery。只有棋盘重新达到可操作Stable状态，控制权才回到玩家。</p>
+<p>玩家长期真正管理的因此不是“眼前能不能找到三个同色”，而是：</p>
+<p><strong>一次Swap
+→ 会生成什么Special
+→ 会破坏哪些Blocker
+→ Collapse以后Board会怎样重构
+→ Cascade可能怎样展开
+→ 下一次Stable Board还剩哪些高价值行动。</strong></p>
+<p>核心循环可以压缩为：</p>
+<p><strong>Stable Board
+→ 读取Legal Moves
+→ Swap Intent
+→ Candidate Validation
+→ Commit
+→ Match Group
+→ Special Generation
+→ Clear Batch
+→ Effect Chain
+→ Blocker Damage
+→ Gravity Collapse
+→ Refill
+→ Cascade
+→ Objective / Score
+→ Deadlock Check
+→ Stable Board。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>三消真正的策略对象不是当前这三个相同颜色，而是“一次极小的局部交换经过完整级联系统以后，将把整个棋盘未来的可行动空间改造成什么样”。</strong></p>
+</blockquote>
+<hr />
+<h2 id="核心识别特征">核心识别特征</h2><ul>
+<li><p>棋盘通常在玩家决策时已经接近填满；</p>
+</li>
+<li><p>玩家通过交换已有Tile而不是从棋盘外自由放置新Piece；</p>
+</li>
+<li><p>普通玩家输入只允许发生在Stable Board；</p>
+</li>
+<li><p>Swap先进入候选验证，再正式Commit；</p>
+</li>
+<li><p>无效Swap通常完整回滚；</p>
+</li>
+<li><p>Match Detection属于无副作用规则查询；</p>
+</li>
+<li><p>匹配结果被建模为显式Match Group；</p>
+</li>
+<li><p>重叠Match需要归并；</p>
+</li>
+<li><p>特殊Piece由Match形状与玩家操作上下文确定；</p>
+</li>
+<li><p>Special Creation和Trigger是不同阶段；</p>
+</li>
+<li><p>消除先形成Clear Batch；</p>
+</li>
+<li><p>连锁Special通过Effect Queue处理；</p>
+</li>
+<li><p>同一Special不会在一次Resolution中无限重复触发；</p>
+</li>
+<li><p>Cell能够拥有Occupant、Underlay、Overlay等独立状态层；</p>
+</li>
+<li><p>Blocker通过统一Impact规则受损；</p>
+</li>
+<li><p>Gravity是离散Board重映射而不是普通刚体物理；</p>
+</li>
+<li><p>Refill由Spawn Source和独立Gameplay RNG产生；</p>
+</li>
+<li><p>Piece RNG、Shuffle RNG和Cosmetic RNG相互隔离；</p>
+</li>
+<li><p>Cascade属于同一玩家Move的自动后果；</p>
+</li>
+<li><p>Cascade通常不额外消费Move；</p>
+</li>
+<li><p>Board必须完整Resolve后才重新接受输入；</p>
+</li>
+<li><p>Board Stable以后必须检查Legal Move；</p>
+</li>
+<li><p>无Legal Move属于系统Deadlock而非玩家失败；</p>
+</li>
+<li><p>Deadlock通过不惩罚玩家的Shuffle恢复；</p>
+</li>
+<li><p>Moves属于正式资源；</p>
+</li>
+<li><p>最后一Move必须完整结算所有Cascade后才能判胜负；</p>
+</li>
+<li><p>Objective通过事件累计，而不是扫描当前Board推断历史；</p>
+</li>
+<li><p>Special主要扩展空间作用范围；</p>
+</li>
+<li><p>Booster应复用统一Board Effect语义；</p>
+</li>
+<li><p>Level难度同时受到颜色数、Move、Board几何、Blocker和随机分布影响；</p>
+</li>
+<li><p>随机Level平衡需要Monte Carlo统计；</p>
+</li>
+<li><p>Player Hint和Deadlock Detection应共享同一Legal Move事实源；</p>
+</li>
+<li><p>每个Accepted Move拥有RootMoveId用于追踪整条级联；</p>
+</li>
+<li><p>Score、Objective、Achievement、PvP和RPG Adapter都可以消费同一个ClearResult；</p>
+</li>
+<li><p>Match-3 Board Core本身不需要知道Meta或Battle系统；</p>
+</li>
+<li><p>Stable Board非常适合确定性Save、Replay和服务器验证；</p>
+</li>
+<li><p>动画完全从Board Diff派生；</p>
+</li>
+<li><p>玩家长期成长主要体现为从“看到即时三连”升级为“管理Special、Blocker、随机性和未来Board结构”。</p>
+</li>
+</ul>
+<hr />
+<h2 id="与仓库现有落块消除-falling-block-puzzle-的防重边界">与仓库现有落块消除 / Falling-Block Puzzle 的防重边界</h2><p>当前仓库已有 <code>falling-block-puzzle</code>，其核心是一个仍未Commit的 Active Piece 从棋盘外持续进入Board，在Gravity压力下经过横移、旋转和Lock Delay后写入棋盘，再通过完整行消除回收空间。</p>
+<p>两者虽然都拥有：</p>
+<ul>
+<li><p>Grid Board；</p>
+</li>
+<li><p>Clear；</p>
+</li>
+<li><p>Cascade / Collapse；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Puzzle；</p>
+</li>
+<li><p>PvP扩展。</p>
+</li>
+</ul>
+<p>但核心输入结构完全不同。</p>
+<p><strong>Falling-Block：</strong></p>
+<blockquote>
+<p>新几何体不断从Board外输入，玩家决定“这一块最终放在哪里”。</p>
+</blockquote>
+<p>关键边界：</p>
+<p><strong>Active Piece → Lock → Board。</strong></p>
+<p><strong>Match-3：</strong></p>
+<blockquote>
+<p>Board在玩家行动前已经被填满，玩家只能修改现有Board中两个相邻对象的位置。</p>
+</blockquote>
+<p>关键边界：</p>
+<p><strong>Stable Board → Swap Candidate → Resolution → Stable Board。</strong></p>
+<p>因此：</p>
+<p>Falling-Block主要管理：</p>
+<p><strong>空间占用。</strong></p>
+<p>Match-3主要管理：</p>
+<p><strong>既有空间关系的局部重排与级联重构。</strong></p>
+<p>本期不会重复 Falling-Block 中已经记录的 Gravity Accumulator、落块Rotation、Lock Delay等核心范式。</p>
+<hr />
+<h2 id="与仓库现有点击式图形冒险的防重边界">与仓库现有点击式图形冒险的防重边界</h2><p>当前 <code>point-and-click-adventure</code> 围绕 Scene、Hotspot、Inventory、Knowledge和World State构造作者化物品谜题。</p>
+<p><strong>Point-and-Click：</strong></p>
+<p>主要问题是：</p>
+<blockquote>
+<p>哪个具有语义的世界对象应该和哪个Item / Knowledge发生作用？</p>
+</blockquote>
+<p><strong>Match-3：</strong></p>
+<p>主要问题是：</p>
+<blockquote>
+<p>哪两个相邻Tile现在最值得交换，它们会如何改变后续棋盘结构？</p>
+</blockquote>
+<p>前者是：</p>
+<p>作者定义的语义推理。</p>
+<p>后者是：</p>
+<p>固定规则下的组合空间搜索。</p>
+<p>因此属于完全不同的Puzzle宏观类型。</p>
+<hr />
+<h2 id="与仓库现有因果编织类游戏的防重边界">与仓库现有因果编织类游戏的防重边界</h2><p><code>causal-weaving</code> 以事实、因果链、时间线和后果传播作为主要谜题对象。</p>
+<p>Match-3同样存在：</p>
+<p>Cascade因果。</p>
+<p>但玩家并不编辑：</p>
+<p>故事事实和事件关系。</p>
+<p>其整个因果链发生在：</p>
+<p>Board几何状态之中。</p>
+<p>因此：</p>
+<p><strong>Causal Weaving：</strong></p>
+<blockquote>
+<p>编辑叙事因果。</p>
+</blockquote>
+<p><strong>Match-3：</strong></p>
+<blockquote>
+<p>重排局部棋盘并利用规则产生空间级联。</p>
+</blockquote>
+<hr />
+<h2 id="与仓库现有自走棋的防重边界">与仓库现有自走棋的防重边界</h2><p>自走棋同样要求：</p>
+<p>玩家在离散格子中分析组合。</p>
+<p>但自走棋核心循环是：</p>
+<p>购买、阵容、羁绊、布阵</p>
+<p>→ 自动战斗验证。</p>
+<p>Match-3棋盘则始终是：</p>
+<p>实时 / 回合连续的主玩法对象。</p>
+<p>没有：</p>
+<p>“先构筑阵容，再离开棋盘等待战斗”</p>
+<p>这一结构。</p>
+<hr />
+<h2 id="与未来-tile-merge-2048-like-范式的防重边界">与未来 Tile Merge / 2048-like 范式的防重边界</h2><p>本次不会把所有Tile Puzzle都并入三消。</p>
+<p>未来仍可独立记录：</p>
+<p><strong>Tile Merge / 2048-like。</strong></p>
+<p>其核心应研究：</p>
+<ul>
+<li><p>全局方向输入；</p>
+</li>
+<li><p>整行 / 整列同步滑动；</p>
+</li>
+<li><p>相同值合并；</p>
+</li>
+<li><p>指数数值成长；</p>
+</li>
+<li><p>空位生成；</p>
+</li>
+<li><p>Board Saturation；</p>
+</li>
+<li><p>No-move End State。</p>
+</li>
+</ul>
+<p>而 Match-3 固定研究：</p>
+<ul>
+<li><p>相邻Swap；</p>
+</li>
+<li><p>Match Detection；</p>
+</li>
+<li><p>Clear；</p>
+</li>
+<li><p>Gravity；</p>
+</li>
+<li><p>Refill；</p>
+</li>
+<li><p>Cascade。</p>
+</li>
+</ul>
+<p>因此两者仍然足以独立支撑不同宏观游戏类型。</p>
+<hr />
+<h2 id="与未来-bubble-shooter-范式的防重边界">与未来 Bubble Shooter 范式的防重边界</h2><p>Bubble Shooter虽然也常使用：</p>
+<p>颜色匹配消除，</p>
+<p>但核心控制是：</p>
+<ul>
+<li><p>瞄准；</p>
+</li>
+<li><p>弹道；</p>
+</li>
+<li><p>发射；</p>
+</li>
+<li><p>挂接格；</p>
+</li>
+<li><p>连通组；</p>
+</li>
+<li><p>悬空区域坠落。</p>
+</li>
+</ul>
+<p>玩家不是：</p>
+<p>交换现有Board中的两个对象。</p>
+<p>因此也不应计入本次防重范围。</p>
+<hr />
+<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<li><p>Match-3；</p>
+</li>
+<li><p>Match Three；</p>
+</li>
+<li><p>Swap Puzzle；</p>
+</li>
+<li><p>Stable Board；</p>
+</li>
+<li><p>Board Phase；</p>
+</li>
+<li><p>Cell Layer；</p>
+</li>
+<li><p>Tile Instance；</p>
+</li>
+<li><p>Swap Intent；</p>
+</li>
+<li><p>Candidate Swap；</p>
+</li>
+<li><p>Invalid Swap Rollback；</p>
+</li>
+<li><p>Match Detection；</p>
+</li>
+<li><p>Match Group；</p>
+</li>
+<li><p>Match Merge；</p>
+</li>
+<li><p>T / L Match；</p>
+</li>
+<li><p>Special Piece；</p>
+</li>
+<li><p>Special Spawn Anchor；</p>
+</li>
+<li><p>Clear Batch；</p>
+</li>
+<li><p>Effect Queue；</p>
+</li>
+<li><p>Special Chain；</p>
+</li>
+<li><p>Special Combination；</p>
+</li>
+<li><p>Blocker；</p>
+</li>
+<li><p>Underlay；</p>
+</li>
+<li><p>Overlay；</p>
+</li>
+<li><p>Layered Blocker；</p>
+</li>
+<li><p>Cell Impact；</p>
+</li>
+<li><p>Gravity Segment；</p>
+</li>
+<li><p>Board Collapse；</p>
+</li>
+<li><p>Spawn Source；</p>
+</li>
+<li><p>Refill；</p>
+</li>
+<li><p>Refill RNG；</p>
+</li>
+<li><p>Cascade；</p>
+</li>
+<li><p>Root Move；</p>
+</li>
+<li><p>Legal Move Detector；</p>
+</li>
+<li><p>Deadlock；</p>
+</li>
+<li><p>Shuffle；</p>
+</li>
+<li><p>Move Economy；</p>
+</li>
+<li><p>Objective；</p>
+</li>
+<li><p>Last Move Resolution；</p>
+</li>
+<li><p>Line Special；</p>
+</li>
+<li><p>Area Special；</p>
+</li>
+<li><p>Color Special；</p>
+</li>
+<li><p>Booster；</p>
+</li>
+<li><p>Sink；</p>
+</li>
+<li><p>Spawner；</p>
+</li>
+<li><p>Expanding Blocker；</p>
+</li>
+<li><p>Level Definition；</p>
+</li>
+<li><p>Color Count；</p>
+</li>
+<li><p>Random Fairness；</p>
+</li>
+<li><p>Monte Carlo Level Testing；</p>
+</li>
+<li><p>Hint；</p>
+</li>
+<li><p>Stable Save；</p>
+</li>
+<li><p>Deterministic Replay；</p>
+</li>
+<li><p>Match-3 PvP Adapter；</p>
+</li>
+<li><p>RPG Battle Adapter；</p>
+</li>
+<li><p>Board Hash；</p>
+</li>
+<li><p>Match-3 Debug。</p>
+</li>
+</ul>
+<hr />
+<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次 Match-3 / 三消交换范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Match-3 Board；</p>
+</li>
+<li><p>三消棋盘；</p>
+</li>
+<li><p>Match-3 Swap；</p>
+</li>
+<li><p>Swap Validation；</p>
+</li>
+<li><p>Invalid Swap Rollback；</p>
+</li>
+<li><p>Match Detection；</p>
+</li>
+<li><p>Match Group；</p>
+</li>
+<li><p>三消T / L匹配；</p>
+</li>
+<li><p>Match-3 Special；</p>
+</li>
+<li><p>三消特殊棋子；</p>
+</li>
+<li><p>Match-3 Bomb；</p>
+</li>
+<li><p>Line Clear Special；</p>
+</li>
+<li><p>Color Clear Special；</p>
+</li>
+<li><p>Special Combination；</p>
+</li>
+<li><p>Match-3 Effect Queue；</p>
+</li>
+<li><p>Match-3 Cascade；</p>
+</li>
+<li><p>三消连锁；</p>
+</li>
+<li><p>Match-3 Clear Batch；</p>
+</li>
+<li><p>Match-3 Gravity；</p>
+</li>
+<li><p>Match-3 Refill；</p>
+</li>
+<li><p>三消Spawn Source；</p>
+</li>
+<li><p>Match-3 RNG；</p>
+</li>
+<li><p>三消Blocker；</p>
+</li>
+<li><p>Jelly；</p>
+</li>
+<li><p>Ice；</p>
+</li>
+<li><p>Crate；</p>
+</li>
+<li><p>Layered Blocker；</p>
+</li>
+<li><p>Match-3 Objective；</p>
+</li>
+<li><p>Match-3 Moves；</p>
+</li>
+<li><p>Last Move Resolution；</p>
+</li>
+<li><p>Match-3 Deadlock；</p>
+</li>
+<li><p>三消洗牌；</p>
+</li>
+<li><p>Match-3 Hint；</p>
+</li>
+<li><p>三消Booster；</p>
+</li>
+<li><p>Match-3 Monte Carlo；</p>
+</li>
+<li><p>三消关卡难度；</p>
+</li>
+<li><p>Match-3 Random Fairness；</p>
+</li>
+<li><p>Match-3 Replay；</p>
+</li>
+<li><p>Match-3 Determinism；</p>
+</li>
+<li><p>Match-3 PvP；</p>
+</li>
+<li><p>Match-3 RPG Battle Adapter；</p>
+</li>
+<li><p>Match-3 Solver；</p>
+</li>
+<li><p>Match-3 Board Debug；</p>
+</li>
+<li><p>Match-3 Level Authoring。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入 <code>game-designs</code> 日报防重集合。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-09-03">2026-09-03</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/engineering.html">Engineering</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/brand.html">Brand</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

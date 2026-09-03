@@ -132,10 +132,10 @@
                 <p>一个资源已经成功加载之后，框架怎样准确知道究竟是谁拥有它、应该在什么时候释放，以及 Scene 切换、异步取消、兼容 API 和紧急清理同时存在时，怎样保证整个资源系统最终只剩一个生命周期事实？</p>
                 <a class="note-link" href="blog/lease-scope-resource-ownership.html">开始阅读<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </article><article class="blog-featured-card">
-                <p class="project-status">从 Unreal Engine 源码理解引擎设计 · 2026-08-27</p>
-                <h2>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门</h2>
-                <p>远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？</p>
-                <a class="note-link" href="blog/unreal-build-accelerator-known-inputs-cas.html">开始阅读<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <p class="project-status">从 Unreal Engine 源码理解引擎设计 · 2026-09-03</p>
+                <h2>类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载</h2>
+                <p>一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？</p>
+                <a class="note-link" href="blog/unreal-mass.html">开始阅读<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </article><article class="blog-featured-card">
                 <p class="project-status">从 Godot 源码理解引擎设计 · 2026-08-29</p>
                 <h2>驻留状态收敛：Godot 纹理 Mip 流送的反馈需求、预算目标与实际驻留</h2>
@@ -161,13 +161,13 @@
     <section class="blog-taxonomy" id="blog-taxonomy" aria-labelledby="blog-taxonomy-title" data-page-index-target>
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">SERIES & TAGS</p><h2 id="blog-taxonomy-title">按系列与主题继续阅读</h2></div><p>分类只覆盖已经正式发布的文章；草稿不会进入聚合页或订阅。</p></div>
-            <div class="blog-series-list"><a href="blog/series/shared-language-of-game-systems.html"><strong>游戏系统的共同语言</strong><span>20 篇</span><small>从不同游戏类型中提取能力门控、时间、事务与可恢复状态等可迁移的系统判断。</small></a><a href="blog/series/large-unity-framework-governance.html"><strong>大型 Unity 框架的治理复盘</strong><span>3 篇</span><small>记录本地验证、Runner 证据与支持面治理之间必须保持的工程边界。</small></a><a href="blog/series/sakura-framework-engineering.html"><strong>Sakura Framework 工程实践</strong><span>13 篇</span><small>围绕热更新、事务边界和 Unity 工程集成整理可复核的实现判断。</small></a><a href="blog/series/unreal-engine-source-research.html"><strong>从 Unreal Engine 源码理解引擎设计</strong><span>8 篇</span><small>沿 Unreal Engine 源码追踪启动、资源生产、世界推进与渲染提交边界。</small></a><a href="blog/series/godot-source-research.html"><strong>从 Godot 源码理解引擎设计</strong><span>3 篇</span><small>从 Godot 的对象身份、引用计数与生命周期实现提炼可迁移的引擎判断。</small></a><a href="blog/series/cocos-engine-source-research.html"><strong>从 Cocos Engine 源码理解引擎设计</strong><span>1 篇</span><small>沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。</small></a></div>
-            <div class="blog-tag-list" aria-label="文章标签"><a href="blog/tag/simulation.html">simulation<span>2</span></a><a href="blog/tag/transactions.html">transactions<span>2</span></a><a href="blog/tag/unity.html">unity<span>4</span></a><a href="blog/tag/ai.html">ai<span>2</span></a><a href="blog/tag/essay.html">essay<span>11</span></a><a href="blog/tag/godot.html">godot<span>3</span></a><a href="blog/tag/lifecycle.html">lifecycle<span>5</span></a><a href="blog/tag/scope.html">scope<span>2</span></a><a href="blog/tag/unreal-engine.html">unreal-engine<span>6</span></a></div>
+            <div class="blog-series-list"><a href="blog/series/shared-language-of-game-systems.html"><strong>游戏系统的共同语言</strong><span>20 篇</span><small>从不同游戏类型中提取能力门控、时间、事务与可恢复状态等可迁移的系统判断。</small></a><a href="blog/series/large-unity-framework-governance.html"><strong>大型 Unity 框架的治理复盘</strong><span>3 篇</span><small>记录本地验证、Runner 证据与支持面治理之间必须保持的工程边界。</small></a><a href="blog/series/sakura-framework-engineering.html"><strong>Sakura Framework 工程实践</strong><span>13 篇</span><small>围绕热更新、事务边界和 Unity 工程集成整理可复核的实现判断。</small></a><a href="blog/series/unreal-engine-source-research.html"><strong>从 Unreal Engine 源码理解引擎设计</strong><span>9 篇</span><small>沿 Unreal Engine 源码追踪启动、资源生产、世界推进与渲染提交边界。</small></a><a href="blog/series/godot-source-research.html"><strong>从 Godot 源码理解引擎设计</strong><span>3 篇</span><small>从 Godot 的对象身份、引用计数与生命周期实现提炼可迁移的引擎判断。</small></a><a href="blog/series/cocos-engine-source-research.html"><strong>从 Cocos Engine 源码理解引擎设计</strong><span>1 篇</span><small>沿 Cocos Engine 原生绑定与双运行时对象关系追踪身份、保活和清理边界。</small></a></div>
+            <div class="blog-tag-list" aria-label="文章标签"><a href="blog/tag/simulation.html">simulation<span>2</span></a><a href="blog/tag/transactions.html">transactions<span>2</span></a><a href="blog/tag/unity.html">unity<span>4</span></a><a href="blog/tag/ai.html">ai<span>2</span></a><a href="blog/tag/essay.html">essay<span>11</span></a><a href="blog/tag/godot.html">godot<span>3</span></a><a href="blog/tag/lifecycle.html">lifecycle<span>5</span></a><a href="blog/tag/scope.html">scope<span>2</span></a><a href="blog/tag/unreal.html">unreal<span>2</span></a><a href="blog/tag/unreal-engine.html">unreal-engine<span>6</span></a><a href="blog/tag/mass.html">mass<span>2</span></a></div>
         </div>
     </section>
     <section class="blog-list-section" id="articles" data-page-index-target>
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>48 篇正式文章</h2></div></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>49 篇正式文章</h2></div></div>
             <div class="blog-card-grid">
                 <article class="blog-card">
                     <p class="project-status"><a href="blog/series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 2026-08-24</p>
@@ -306,7 +306,7 @@
                     <p class="project-status"><a href="blog/series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 2026-08-17</p>
                     <h2>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</h2>
                     <p>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</p>
-                    <div class="note-tags"><span>ddc</span><span>engine</span><span>unreal</span></div>
+                    <div class="note-tags"><span>ddc</span><span>engine</span><a href="blog/tag/unreal.html">unreal</a></div>
                     <a class="note-link" href="blog/unreal-engine-ddc-cook-iostore.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="blog-card">
@@ -418,7 +418,7 @@
                     <p class="project-status"><a href="blog/series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 2026-08-24</p>
                     <h2>结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序</h2>
                     <p>从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。</p>
-                    <div class="note-tags"><span>archetype</span><span>ecs</span><a href="blog/tag/lifecycle.html">lifecycle</a><span>mass</span><a href="blog/tag/unreal-engine.html">unreal-engine</a></div>
+                    <div class="note-tags"><span>archetype</span><span>ecs</span><a href="blog/tag/lifecycle.html">lifecycle</a><a href="blog/tag/mass.html">mass</a><a href="blog/tag/unreal-engine.html">unreal-engine</a></div>
                     <a class="note-link" href="blog/unreal-mass-deferred-structural-changes.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
                 <article class="blog-card">
@@ -504,6 +504,13 @@
                     <p>一个本身足够好玩的新玩法进入长期服务型游戏以后，怎样判断它是在强化核心产品，还是正在变成模式孤岛、强制作业或玩家契约冲突？</p>
                     <div class="note-tags"><span>gameplay-flywheel</span><span>live-service</span><span>mode-integration</span><span>product-design</span><span>reward-contract</span></div>
                     <a class="note-link" href="blog/live-service-heterogeneous-mode-integration.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="blog-card">
+                    <p class="project-status"><a href="blog/series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 2026-09-03</p>
+                    <h2>类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载</h2>
+                    <p>一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？</p>
+                    <div class="note-tags"><a href="blog/tag/mass.html">mass</a><a href="blog/tag/unreal.html">unreal</a></div>
+                    <a class="note-link" href="blog/unreal-mass.html">阅读全文<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>
             </div>
         </div>

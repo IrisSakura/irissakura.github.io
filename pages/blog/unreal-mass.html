@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/unreal-mass.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载 | IrisSakura">
+    <meta property="og:description" content="一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/unreal-mass.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-mass.png">
+    <meta property="og:image:alt" content="类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载 | IrisSakura">
+    <meta name="twitter:description" content="一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unreal-mass.png">
+    <meta name="twitter:image:alt" content="类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载 | IrisSakura","description":"一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？","url":"https://irissakura.github.io/pages/blog/unreal-mass.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载","image":"https://irissakura.github.io/assets/social/pages-blog-unreal-mass.png","datePublished":"2026-09-03","dateModified":"2026-09-03","about":["mass","unreal"]}</script>
+    <!-- site-meta:end -->
+    <title>类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../../pages/framework.html" class="nav-link">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">Journal</a>
+            <a href="../../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-09-03 · 更新于 2026-09-03</p>
+            <h1>类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载</h1>
+            <p class="blog-deck">一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？</p>
+            <div class="note-tags"><a href="tag/mass.html">mass</a><a href="tag/unreal.html">unreal</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>一个 Gameplay Plugin 正在被卸载。</p>
+<p>这个模块定义了：</p>
+<pre><code class="language-text">UEnemyProcessor
+FEnemyMovementFragment
+FEnemyEliteTag
+FCombatMassSystem
+</code></pre>
+<p>从模块系统的角度看，过程似乎很简单：</p>
+<pre><code class="language-text">Module Shutdown
+→
+卸载代码
+→
+释放 UObject / UScriptStruct
+→
+完成。
+</code></pre>
+<p>但 Mass 运行时看到的世界并没有这么简单。</p>
+<p>这些类型可能已经被写入：</p>
+<ul>
+<li><p>Type Registry；</p>
+</li>
+<li><p>Observer Registry；</p>
+</li>
+<li><p>Processor Template；</p>
+</li>
+<li><p>Instance Cache；</p>
+</li>
+<li><p>Archetype / Element BitSet；</p>
+</li>
+<li><p>System Wrapper Registry；</p>
+</li>
+<li><p>某个仍在执行的查询或通知上下文。</p>
+</li>
+</ul>
+<p>甚至某个 Worker 并不直接保存：</p>
+<pre><code class="language-text">UScriptStruct*
+</code></pre>
+<p>而是保存了一个更间接的：</p>
+<pre><code class="language-text">TypeIndex。
+</code></pre>
+<p>于是，即使模块自己的 Shutdown 已经结束，</p>
+<p>下一帧某个 Observer 仍然可能通过旧索引重新选中这项即将消失的类型。</p>
+<p>真正的崩溃可能发生在模块已经被卸载很久以后。</p>
+<p>这类问题最危险的地方正在于：</p>
+<blockquote>
+<p><strong>释放发生在这里，错误却发生在另一个长期存活的 Registry 中。</strong></p>
+</blockquote>
+<p>因此，“模块卸载”不能只被理解成销毁模块对象。</p>
+<p>它首先是一场<strong>类型身份撤销</strong>。</p>
+<h2 id="先说结论安全卸载的核心是先撤销可达性再撤销身份">先说结论：安全卸载的核心是先撤销可达性，再撤销身份</h2><p><strong>类型身份撤销（后文简称“让所有系统先停止认得这个类型，再真正让类型消失”）</strong>：模块定义的类型准备离开运行时时，系统先识别所有仍可能访问它的派生状态，阻止新的 Reader 继续命中，然后按依赖顺序清理实例、执行器和缓存，最后才从类型目录中正式移除其身份。</p>
+<p>可以把整个过程压缩成：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["模块注册"] --&gt; B["记录 Type Provenance"]
+    B --&gt; C["运行期 Registry / Cache / Observer"]
+
+    C --&gt; D["Module Unload Requested"]
+    D --&gt; E["生成 Affected Context + Durable Manifest"]
+
+    E --&gt; F["Reader Scrub&lt;br/&gt;先禁止新读者命中"]
+    F --&gt; G["SafePoint"]
+    G --&gt; H["InstanceData Cleanup"]
+    H --&gt; I["Processor Sweep"]
+    I --&gt; J["Type Invalidation"]
+
+    F --&gt; K["暂时不能完成的工作"]
+    K --&gt; L["Parked"]
+    L --&gt; M["Quiet Point"]
+    L --&gt; N["Pre-GC Deadline"]
+    L --&gt; O["Ledger Retirement Deadline"]
+
+    M --&gt; J
+    N --&gt; J
+    O --&gt; J
+</code></pre>
+<p>这里真正需要保护的顺序不是：</p>
+<pre><code class="language-text">找到对象
+→
+delete。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">停止产生新的引用
+→
+清除已经存在的消费者
+→
+最后删除身份来源。
+</code></pre>
+<p>这是一条可以迁移到大量插件和热重载系统的通用原则。</p>
+<h2 id="这和-mass-原来的结构变更安全点不是同一个问题">这和 Mass 原来的结构变更安全点不是同一个问题</h2><p>Mass 已经有另一条非常重要的 Safe Point 规则。</p>
+<p>Processor 正在 Query：</p>
+<pre><code class="language-text">Position
+Velocity
+AliveTag
+</code></pre>
+<p>时，</p>
+<p>Entity 不能突然：</p>
+<pre><code class="language-text">Remove AliveTag
+Add DeadTag
+</code></pre>
+<p>并立刻从当前 Archetype / Chunk 搬走。</p>
+<p>因为 Query 正持有稳定 Fragment View。</p>
+<p>所以原来的主链是：</p>
+<pre><code class="language-text">Processor 读取稳定 Chunk
+→
+结构修改写 Deferred Command
+→
+Processing Window 结束
+→
+Flush
+→
+下一轮 Query 看见新结构。
+</code></pre>
+<p>这保护的是：</p>
+<p><strong>实体结构稳定窗口（后文简称“别人正在遍历这批 Entity 时先不要搬家”）</strong>。</p>
+<p>模块卸载面对的是另一件事：</p>
+<pre><code class="language-text">这个 Fragment Type 本身
+马上就不再属于运行时。
+</code></pre>
+<p>它保护的是：</p>
+<p><strong>类型身份生命周期（后文简称“别人仍可能按这个类型找东西时，类型本身不能先消失”）</strong>。</p>
+<p>两条链都使用：</p>
+<pre><code class="language-text">Reader 先稳定
+Writer 延后提交。
+</code></pre>
+<p>但它们的 Owner、状态对象与截止点完全不同。</p>
+<h3 id="entity-structural-mutation">Entity Structural Mutation</h3><pre><code class="language-text">Entity
+→
+Archetype / Chunk 迁移
+
+边界：
+Processing Window
+</code></pre>
+<h3 id="module-type-unload">Module Type Unload</h3><pre><code class="language-text">Type / Processor / Registry Identity
+→
+整体退出运行时
+
+边界：
+Unload / GC / Ledger Retirement
+</code></pre>
+<p>把两者混成一个：</p>
+<pre><code class="language-text">反正都等下一帧 Flush
+</code></pre>
+<p>会掩盖真正的生命周期差异。</p>
+<h2 id="模块卸载最困难的问题是状态已经扩散出模块自身">模块卸载最困难的问题，是状态已经扩散出模块自身</h2><p>假设一个模块只拥有：</p>
+<pre><code class="language-text">一个 UObject Instance。
+</code></pre>
+<p>那它的生命周期很容易理解：</p>
+<pre><code class="language-text">Owner Destroy
+→
+Object Destroy。
+</code></pre>
+<p>Mass Type 不一样。</p>
+<p>类型一旦注册以后，</p>
+<p>它会产生大量<strong>派生状态</strong>。</p>
+<p>例如一个 Fragment Type 可能进一步影响：</p>
+<pre><code class="language-text">Type Registry
+→
+分配 TypeIndex
+
+TypeIndex
+→
+进入 BitSet
+
+BitSet
+→
+进入 Observer Filter
+
+Observer Filter
+→
+进入长期 Cache
+
+Processor Class
+→
+生成 Template / Execution State。
+</code></pre>
+<p>真正的运行时对象图变成：</p>
+<pre><code class="language-text">Module
+  ↓ defines
+
+Type
+  ↓ creates
+
+Index
+Registry Entry
+Observer State
+Processor Cache
+Instance Data
+</code></pre>
+<p>因此，模块对象自己的生命周期已经无法代表：</p>
+<blockquote>
+<p>谁现在仍然依赖这项类型身份？</p>
+</blockquote>
+<p>这正是为什么需要独立 Ledger。</p>
+<h2 id="provenance-ledger-的价值是注册时知道来源">Provenance Ledger 的价值是“注册时知道来源”</h2><p><strong>类型来源账本（后文简称“这项长期状态究竟是哪个模块带进来的”）</strong>：类型注册时记录其所属 Package / Module，与之后生成的 Mass 派生状态建立来源关系，使卸载时能够准确确定清理范围。</p>
+<p>这里有一条非常重要的设计原则：</p>
+<blockquote>
+<p><strong>不要等资源要删除时才开始猜它从哪里来。</strong></p>
+</blockquote>
+<p>类型第一次进入系统时，</p>
+<p>来源信息最完整。</p>
+<p>例如：</p>
+<pre><code class="language-text">Package A
+注册：
+    Processor A1
+    Fragment A2
+    Tag A3
+
+Package B
+注册：
+    无任何 Mass Type
+</code></pre>
+<p>此时系统拥有非常强的事实：</p>
+<pre><code class="language-text">Package A
+→
+Known + Has Mass Types
+
+Package B
+→
+Known + No Mass Types。
+</code></pre>
+<p>几年以后真正触发 Module Unload，</p>
+<p>系统不必重新：</p>
+<pre><code class="language-text">遍历所有 Registry
+→
+猜哪些类型可能来自这个 Package。
+</code></pre>
+<p>它已经拥有 provenance。</p>
+<h2 id="没有记录和已知为空是两个不同事实">“没有记录”和“已知为空”是两个不同事实</h2><p>这是来源账本里最值得单独保留的一点。</p>
+<p>假设卸载一个 Package。</p>
+<p>Ledger 查询后得到三种可能结果。</p>
+<table>
+<thead>
+<tr>
+<th>Ledger 状态</th>
+<th>合理策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>已观察过，并记录 Mass Type</td>
+<td>精确清理对应类型</td>
+</tr>
+<tr>
+<td>已观察过，确认没有 Mass Type</td>
+<td>可以跳过 Mass Sweep</td>
+</tr>
+<tr>
+<td>从未观察过这个 Package</td>
+<td>不能做否定判断，保守 Full Sweep</td>
+</tr>
+</tbody></table>
+<p>第三种情况尤其重要。</p>
+<pre><code class="language-text">没有记录
+</code></pre>
+<p>并不能自动推出：</p>
+<pre><code class="language-text">没有 Mass State。
+</code></pre>
+<p>它只能推出：</p>
+<pre><code class="language-text">我不知道。
+</code></pre>
+<p>这就是：</p>
+<p>**负面证据（后文简称“我确实检查过并确认没有”）<strong>和</strong>缺失证据（后文简称“我根本没观察到”）**之间的区别。</p>
+<p>很多缓存和依赖分析系统都会犯同样错误：</p>
+<pre><code class="language-text">Cache Miss
+→
+No Dependency。
+</code></pre>
+<p>实际上 Cache Miss 只代表：</p>
+<pre><code class="language-text">Unknown。
+</code></pre>
+<p>成熟系统应该让：</p>
+<pre><code class="language-text">Known Empty
+</code></pre>
+<p>成为一种正式状态。</p>
+<h2 id="provenance-不是为了性能优化它首先为了正确性">Provenance 不是为了性能优化，它首先为了正确性</h2><p>记录：</p>
+<pre><code class="language-text">Package
+→
+Mass Types
+</code></pre>
+<p>当然可以减少卸载时全局扫描。</p>
+<p>但它更重要的价值不是：</p>
+<pre><code class="language-text">快。
+</code></pre>
+<p>而是：</p>
+<blockquote>
+<p>可以证明哪些长期状态必须参与本次失效。</p>
+</blockquote>
+<p>如果某个 raw callback 能把模块定义的 Class 写入 Mass 进程级状态，却不声明 provenance，</p>
+<p>那么卸载时系统无法可靠判断：</p>
+<pre><code class="language-text">这个 Callback 留下的状态
+属于哪个模块？
+</code></pre>
+<p>这类 API 看似灵活。</p>
+<p>长期却是在制造无法回收的隐式 Ownership。</p>
+<p>因此，一个很值得迁移的原则是：</p>
+<blockquote>
+<p><strong>任何能够把模块私有身份写入长生命周期 Registry 的扩展点，都应该同时要求声明来源。</strong></p>
+</blockquote>
+<h2 id="卸载时需要两种身份视图">卸载时需要两种身份视图</h2><p>模块仍然完整存在时，</p>
+<p>当前 Cleanup Callback 可以直接访问：</p>
+<pre><code class="language-text">UScriptStruct*
+UClass*
+TypeIndex
+</code></pre>
+<p>这些都是：</p>
+<pre><code class="language-text">Live Pointer / Runtime Identity。
+</code></pre>
+<p>但如果某一部分清理必须等到：</p>
+<pre><code class="language-text">Quiet Point
+PreGarbageCollect
+下一次 Flush
+</code></pre>
+<p>以后再完成，</p>
+<p>原来的活指针未必还安全。</p>
+<p>因此模块卸载事件更适合同时产生两种视图。</p>
+<h3 id="affected-context">Affected Context</h3><p><strong>受影响上下文（后文简称“当前这一刻还能安全使用的活对象视图”）</strong>：当前广播期间可供 staged participant 查询的 live runtime 信息。</p>
+<h3 id="durable-manifest">Durable Manifest</h3><p><strong>持久卸载清单（后文简称“即使晚一点处理也还能识别这些对象的稳定身份证明”）</strong>：不依赖即将失效裸指针的稳定身份集合，可以跨越 quiet point、延迟清理和 GC 前窗口。</p>
+<p>这是非常典型的生命周期模式：</p>
+<pre><code class="language-text">同步路径
+可以使用活指针。
+
+延迟路径
+必须转换为稳定身份。
+</code></pre>
+<p>如果 Deferred Work 继续保存：</p>
+<pre><code class="language-text">即将卸载模块里的裸 UObject / Class Pointer，
+</code></pre>
+<p>所谓“延迟到更安全的时候处理”</p>
+<p>实际上只是：</p>
+<blockquote>
+<p>把悬空访问推迟到以后。</p>
+</blockquote>
+<h2 id="manifest-consumer-必须比完整-cleanup-更早行动">Manifest Consumer 必须比完整 Cleanup 更早行动</h2><p>模块卸载开始时，</p>
+<p>有些 Consumer 可能暂时无法真正重建或清理内部容器。</p>
+<p>例如 Observer Manager 当前可能：</p>
+<ul>
+<li><p>正在通知 Observer；</p>
+</li>
+<li><p>持有内部 Lock；</p>
+</li>
+<li><p>正在执行某种 Reader Critical Section。</p>
+</li>
+</ul>
+<p>如果此时强行完成所有清理，</p>
+<p>可能造成：</p>
+<ul>
+<li><p>重入；</p>
+</li>
+<li><p>锁顺序冲突；</p>
+</li>
+<li><p>Iterator 失效；</p>
+</li>
+<li><p>Deadlock。</p>
+</li>
+</ul>
+<p>最简单的选择似乎是：</p>
+<pre><code class="language-text">那就什么都不做
+→
+等稍后安全再说。
+</code></pre>
+<p>这同样危险。</p>
+<p>因为在等待期间，</p>
+<p>新的 Reader 仍然可能继续：</p>
+<pre><code class="language-text">从旧 Observer Selection 中
+选中即将失效的 Type。
+</code></pre>
+<p>因此需要把清理再拆成两个动作。</p>
+<h2 id="reader-scrub-和-container-cleanup-是两种工作">Reader Scrub 和 Container Cleanup 是两种工作</h2><p><strong>读者隔离（后文简称“先让所有新查询看不见即将死亡的类型”）</strong>：同步修改 Reader 实际使用的可达状态，使新查询无法再选择正在卸载的 Type。</p>
+<p><strong>容器清理（后文简称“等内部安静以后再把昂贵的数据结构真正整理干净”）</strong>：删除旧 Registry Entry、压缩 Map、重建 Cache 等可能要求更强同步条件的维护工作。</p>
+<p>于是一个 Consumer 可以：</p>
+<pre><code class="language-text">现在：
+    Scrub Reader State
+
+稍后：
+    Prune Internal Container。
+</code></pre>
+<p>这比：</p>
+<pre><code class="language-text">现在做完全部
+</code></pre>
+<p>更安全。</p>
+<p>也比：</p>
+<pre><code class="language-text">现在什么都不做
+</code></pre>
+<p>更安全。</p>
+<p>最关键的目标是：</p>
+<blockquote>
+<p>从卸载广播发生以后，不再允许产生新的对死亡类型的访问。</p>
+</blockquote>
+<h2 id="parked-不是我以后再看看">Parked 不是“我以后再看看”</h2><p>如果 Consumer 已经完成 Reader Scrub，</p>
+<p>但当前无法完成全部 Cleanup，</p>
+<p>它可以进入：</p>
+<pre><code class="language-text">Parked。
+</code></pre>
+<p>**延期清理（后文简称“安全性已经先建立，但维护工作等待真正安静的时机”）**允许高成本或锁敏感操作退出当前回调。</p>
+<p>但 <code>Parked</code> 绝不能等价于：</p>
+<pre><code class="language-text">随便什么时候做都可以。
+</code></pre>
+<p>所有 Deferred Work 都必须继续回答：</p>
+<pre><code class="language-text">最晚什么时候必须完成？
+</code></pre>
+<p>否则系统会积累一批：</p>
+<pre><code class="language-text">理论上以后会清
+实际上永远没人清
+</code></pre>
+<p>的 Zombie State。</p>
+<h2 id="deferred-cleanup-必须拥有-hard-deadline">Deferred Cleanup 必须拥有 Hard Deadline</h2><p>Mass 当前新研究里有两个非常重要的强制截止点。</p>
+<h3 id="pregarbagecollect">PreGarbageCollect</h3><p>GC 即将真正回收 UObject / Type 前，</p>
+<p>任何仍然依赖这些对象的 Parked State 都不能继续存在。</p>
+<h3 id="ledgerretiring">LedgerRetiring</h3><p>MassCore 自己的 Ledger 即将退役前，</p>
+<p>所有仍然挂在 Ledger 上的清理工作必须得到最终处理。</p>
+<p>因此：</p>
+<p>**硬截止点（后文简称“再等下去对象本身就要消失，所以这一刻必须给出结果”）**是 Deferred Cleanup 的组成部分。</p>
+<p>可以把政策写成：</p>
+<pre><code class="language-text">优先：
+    在普通 Quiet Point 完成
+
+如果没有：
+    尝试 Flush Deferred Sweep
+
+再不行：
+    Pre-GC / Retirement 强制收口。
+</code></pre>
+<p>这里有一个很普遍的工程结论：</p>
+<blockquote>
+<p><strong>安全延期不是无限延期。</strong></p>
+</blockquote>
+<p>只要系统支持：</p>
+<pre><code class="language-text">Defer
+Park
+Retry Later
+</code></pre>
+<p>就应该同步设计：</p>
+<pre><code class="language-text">Deadline
+Cancellation
+Fallback
+Failure Diagnostic。
+</code></pre>
+<h2 id="staged-sweep-不是每个-consumer-各自清自己">Staged Sweep 不是每个 Consumer 各自清自己</h2><p>假设存在两个 Participant：</p>
+<pre><code class="language-text">A
+B。
+</code></pre>
+<p>每个 Participant 都需要依次：</p>
+<pre><code class="language-text">InstanceData
+→
+Processor
+→
+Type。
+</code></pre>
+<p>一个看起来很自然的实现是：</p>
+<pre><code class="language-text">A:
+  InstanceData
+  Processor
+  TypeInvalidation
+
+B:
+  InstanceData
+  Processor
+  TypeInvalidation。
+</code></pre>
+<p>这种做法可能错误。</p>
+<p>因为：</p>
+<pre><code class="language-text">A
+已经删掉 Type Identity
+
+B
+仍然需要这个 TypeIndex
+定位自己的 InstanceData。
+</code></pre>
+<p>所以真正需要的是<strong>全局阶段 Barrier</strong>。</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant L as Ledger
+    participant A as Participant A
+    participant B as Participant B
+    participant C as Participant C
+
+    L-&gt;&gt;A: SafePoint
+    L-&gt;&gt;B: SafePoint
+    L-&gt;&gt;C: SafePoint
+
+    L-&gt;&gt;A: InstanceData
+    L-&gt;&gt;B: InstanceData
+    L-&gt;&gt;C: InstanceData
+
+    L-&gt;&gt;A: ProcessorSweep
+    L-&gt;&gt;B: ProcessorSweep
+    L-&gt;&gt;C: ProcessorSweep
+
+    L-&gt;&gt;A: TypeInvalidation
+    L-&gt;&gt;B: TypeInvalidation
+    L-&gt;&gt;C: TypeInvalidation
+</code></pre>
+<p>这里的合同是：</p>
+<blockquote>
+<p>所有人完成阶段 N，任何人才可以进入阶段 N+1。</p>
+</blockquote>
+<p>这比：</p>
+<blockquote>
+<p>每个模块自己按正确顺序清理</p>
+</blockquote>
+<p>强得多。</p>
+<h2 id="safepoint-阶段只负责回答现在能不能开始">SafePoint 阶段只负责回答“现在能不能开始”</h2><p>**卸载安全点（后文简称“如果现在开始拆，所有参与者都能保证自己进入一致清理流程吗”）**位于 staged sweep 的第一阶段。</p>
+<p>某个 Participant 如果当前处于无法安全清理的状态，</p>
+<p>可以要求：</p>
+<pre><code class="language-text">RequestSweepDeferral。
+</code></pre>
+<p>但这种 Veto 只有在：</p>
+<pre><code class="language-text">SafePoint
+</code></pre>
+<p>阶段有效。</p>
+<p>一旦已经进入：</p>
+<pre><code class="language-text">InstanceData
+</code></pre>
+<p>以后，</p>
+<p>不能突然说：</p>
+<pre><code class="language-text">还是算了，我们回到 SafePoint 下次再试。
+</code></pre>
+<p>因为其他 Participant 可能已经开始真实删除状态。</p>
+<p>所以：</p>
+<pre><code class="language-text">是否提交
+</code></pre>
+<p>必须在任何破坏性操作发生以前决定。</p>
+<p>这和数据库事务中的 Prepare / Commit 边界非常相似。</p>
+<h2 id="一个合法-veto-应延期整次-staged-event">一个合法 Veto 应延期整次 staged event</h2><p>如果 Participant A 在 SafePoint 拒绝：</p>
+<pre><code class="language-text">本轮不能安全清理。
+</code></pre>
+<p>正确行为不是：</p>
+<pre><code class="language-text">B 和 C 先继续删一部分
+A 下次再补。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">整个 staged sweep 延后。
+</code></pre>
+<p>下一次重放时：</p>
+<pre><code class="language-text">所有 stage
+重新从头检查。
+</code></pre>
+<p>因此 Participant 自己也应具备：</p>
+<pre><code class="language-text">重复检查安全性。
+</code></pre>
+<p>这是一项很重要的重放要求：</p>
+<blockquote>
+<p>延迟事务不能假定“上次没执行，所以这次一定是第一次看到这个事件”。</p>
+</blockquote>
+<h2 id="manifest-scrub-必须发生在-safepoint-veto-以前">Manifest Scrub 必须发生在 SafePoint Veto 以前</h2><p>这里有一个很精妙的顺序。</p>
+<p>如果：</p>
+<pre><code class="language-text">SafePoint Participant A
+决定本次 Staged Sweep 延后，
+</code></pre>
+<p>系统仍然不能让 Reader 在等待期间继续读取旧 Type。</p>
+<p>因此 Manifest Consumer 会在 staged loop 之前获得机会。</p>
+<p>也就是说：</p>
+<pre><code class="language-text">Unload Event
+→
+先 Reader Scrub
+→
+再询问 Staged Sweep 是否可以提交。
+</code></pre>
+<p>这样即使：</p>
+<pre><code class="language-text">完整 Cleanup 延迟，
+</code></pre>
+<p>安全边界已经成立：</p>
+<pre><code class="language-text">新 Reader
+不会再看到 dying type。
+</code></pre>
+<p>这是整套协议里最值得迁移的思想之一：</p>
+<blockquote>
+<p><strong>“不能马上完成销毁”不代表“不能马上撤销新访问资格”。</strong></p>
+</blockquote>
+<p>很多插件系统都可以使用相同策略。</p>
+<h2 id="四个-stage-实际表达的是依赖逆序">四个 Stage 实际表达的是依赖逆序</h2><p>当前 staged sweep 的主顺序是：</p>
+<pre><code class="language-text">SafePoint
+→
+InstanceData
+→
+ProcessorSweep
+→
+TypeInvalidation。
+</code></pre>
+<p>可以按职责理解。</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>主要职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SafePoint</td>
+<td>判断当前是否允许开始不可逆清理</td>
+</tr>
+<tr>
+<td>InstanceData</td>
+<td>清运行实例、缓存和具体持有</td>
+</tr>
+<tr>
+<td>ProcessorSweep</td>
+<td>清 Processor Class、Template、Scheduler 相关状态</td>
+</tr>
+<tr>
+<td>TypeInvalidation</td>
+<td>最后撤销 Type / Wrapper Registry 身份</td>
+</tr>
+</tbody></table>
+<p>这不是随意排列。</p>
+<p>它表达了一条很明确的销毁顺序：</p>
+<pre><code class="language-text">先清使用者
+→
+最后清身份目录。
+</code></pre>
+<h2 id="为什么-type-registry-必须最后删除">为什么 Type Registry 必须最后删除</h2><p>假设反过来：</p>
+<pre><code class="language-text">第一步：
+删除 Type Registry 中的 TypeIndex。
+
+第二步：
+清 Instance Cache。
+</code></pre>
+<p>问题是 Instance Cache 可能恰好使用：</p>
+<pre><code class="language-text">TypeIndex
+</code></pre>
+<p>定位：</p>
+<pre><code class="language-text">哪些条目来自这项卸载类型。
+</code></pre>
+<p>身份目录已经被破坏，</p>
+<p>Consumer 反而失去了精确清理手段。</p>
+<p>最终只剩两种选择：</p>
+<pre><code class="language-text">全扫
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-text">留下悬空状态。
+</code></pre>
+<p>因此可以提炼成一条很实用的资源销毁原则：</p>
+<blockquote>
+<p><strong>身份目录不是最先删除的东西，而是最后确认所有使用者已经离开的东西。</strong></p>
+</blockquote>
+<p>完整顺序更适合写成：</p>
+<pre><code class="language-text">先禁止新读者进入
+→
+清除具体实例
+→
+清除执行者
+→
+最后销毁身份目录。
+</code></pre>
+<h2 id="observer-manager-展示了先-scrub后-prune">Observer Manager 展示了“先 Scrub、后 Prune”</h2><p>Observer 是最容易形成长期悬空 Type Identity 的系统之一。</p>
+<p>例如：</p>
+<pre><code class="language-text">ObservedElements
+</code></pre>
+<p>可能保存一批 Type Selection。</p>
+<p>如果某个 Fragment Type 来自即将卸载模块，</p>
+<p>Observer Manager 首先要做的不是：</p>
+<pre><code class="language-text">完整重建整个 Observer Map。
+</code></pre>
+<p>而是立即让：</p>
+<pre><code class="language-text">Reader Selection
+</code></pre>
+<p>不再选中该 Type。</p>
+<p>随后如果当前内部环境足够安静，</p>
+<p>可以直接完成剩余清理。</p>
+<p>如果当前：</p>
+<pre><code class="language-text">Observer Lock
+Notification In Flight
+</code></pre>
+<p>则进入：</p>
+<pre><code class="language-text">Parked。
+</code></pre>
+<p>等 Quiet Point 或 Hard Deadline 再完成容器维护。</p>
+<p>这是一种非常值得复用的模式：</p>
+<pre><code class="language-text">Safety-Critical Mutation
+→
+同步执行
+
+Maintenance Mutation
+→
+允许延期。
+</code></pre>
+<p>不要把两者为了“事务完整”强行放在同一个锁区间里。</p>
+<h2 id="不同-consumer-可以选择不同-cleanup-策略">不同 Consumer 可以选择不同 Cleanup 策略</h2><p>并不是所有 Consumer 都必须：</p>
+<pre><code class="language-text">Park。
+</code></pre>
+<p>如果某个 Registry 的内部状态足够简单，</p>
+<p>可以在 unload broadcast 内直接：</p>
+<pre><code class="language-text">Applied。
+</code></pre>
+<p>例如静态 Observer Registry 如果能够安全清除对应注册，</p>
+<p>就没必要为了架构统一强行：</p>
+<pre><code class="language-text">异步化
+延期
+排队。
+</code></pre>
+<p>协议真正需要统一的是：</p>
+<ul>
+<li><p>最终安全结果；</p>
+</li>
+<li><p>Reader 可见性；</p>
+</li>
+<li><p>Deadline；</p>
+</li>
+<li><p>Stage Ordering。</p>
+</li>
+</ul>
+<p>而不是：</p>
+<blockquote>
+<p>所有内部容器必须采用同一种实现。</p>
+</blockquote>
+<p>成熟基础设施应该统一<strong>合同</strong>，</p>
+<p>而不是统一所有<strong>数据结构</strong>。</p>
+<h2 id="unload-manifest-不应该保存即将死亡的裸指针">Unload Manifest 不应该保存即将死亡的裸指针</h2><p>一个 Durable Manifest 如果需要跨：</p>
+<pre><code class="language-text">当前 callback
+→
+下一次 quiet point
+→
+Pre-GC
+</code></pre>
+<p>继续存在，</p>
+<p>就不应该把：</p>
+<pre><code class="language-text">UClass*
+UScriptStruct*
+</code></pre>
+<p>作为唯一身份。</p>
+<p>这是与 ObjectID / Handle / Generation 等生命周期设计完全一致的原则。</p>
+<p>**耐久身份（后文简称“对象本体马上会死，但清理工作以后仍然知道自己指的是谁”）**应该使用在目标销毁以后仍能安全比较和判定的表示。</p>
+<p>这不意味着所有系统都必须实现全局 UUID。</p>
+<p>真正要求只是：</p>
+<blockquote>
+<p>Deferred Cleanup 使用的身份生命周期必须长于被清理对象本身。</p>
+</blockquote>
+<h2 id="handle-看起来还有效也不证明-registration-仍有效">“Handle 看起来还有效”也不证明 Registration 仍有效</h2><p>模块 Ledger 自己也可能经历：</p>
+<pre><code class="language-text">Retire
+→
+再次初始化 / Revive。
+</code></pre>
+<p>这时一个旧 handle 从结构上可能仍然：</p>
+<pre><code class="language-text">index != invalid。
+</code></pre>
+<p>但它所属的 registration generation 已经结束。</p>
+<p>因此：</p>
+<p>**代际注册身份（后文简称“同一个槽位在新的 Ledger 生命周期里不能冒充旧登记”）**需要同时验证：</p>
+<pre><code class="language-text">Handle Shape
++
+Current Registration Generation。
+</code></pre>
+<p>这与 Entity Handle、Asset Lease、Session Lease 都是同一种问题：</p>
+<blockquote>
+<p>结构上像一个合法 ID，不代表它仍然属于当前生命周期。</p>
+</blockquote>
+<h2 id="retirement-是另一种-strong-clear">Retirement 是另一种 Strong Clear</h2><p>Ledger Retirement 可以理解成：</p>
+<pre><code class="language-text">整个 Module Element Ownership Domain
+准备结束。
+</code></pre>
+<p>此时不能只：</p>
+<pre><code class="language-text">clear map。
+</code></pre>
+<p>因为还可能存在：</p>
+<ul>
+<li><p>Parked Work；</p>
+</li>
+<li><p>Deferred Sweep；</p>
+</li>
+<li><p>Participant Registration；</p>
+</li>
+<li><p>Observer State。</p>
+</li>
+</ul>
+<p>所以 Retirement 本身也是一次生命周期事务：</p>
+<pre><code class="language-text">停止接受新的长期状态
+→
+推进所有 Deferred Work
+→
+触发最终 Deadline
+→
+清 Registry
+→
+使旧 Generation 失效。
+</code></pre>
+<p>这与资源 Runtime 的 Strong Clear、网络 Session Shutdown、Script VM Restart 具有相同结构。</p>
+<h2 id="deferred-work-最重要的是能够证明自己最终离开">Deferred Work 最重要的是“能够证明自己最终离开”</h2><p>系统中大量 Bug 来自下面这种 API：</p>
+<pre><code class="language-text">DeferCleanup()
+</code></pre>
+<p>看起来非常安全。</p>
+<p>真正的问题是：</p>
+<pre><code class="language-text">谁保证它以后真的被调用？
+</code></pre>
+<p>所以任何 Deferred Queue 都应该回答四个问题：</p>
+<ol>
+<li><p>谁拥有这条 Pending Work？</p>
+</li>
+<li><p>正常情况下在哪里 Flush？</p>
+</li>
+<li><p>Owner Shutdown 时在哪里 Flush / Cancel？</p>
+</li>
+<li><p>永远没有 Safe Point 时怎样失败？</p>
+</li>
+</ol>
+<p>Mass 新研究中的：</p>
+<pre><code class="language-text">Quiet Point
+PreGarbageCollect
+LedgerRetiring
+</code></pre>
+<p>就是不同等级的答案。</p>
+<h2 id="当前源码里还有一个需要保留的证据缺口">当前源码里还有一个需要保留的证据缺口</h2><p>这里必须非常谨慎。</p>
+<p>当前接口注释表达：</p>
+<pre><code class="language-text">Phase Coordinator
+应该在每个 phase boundary
+以及 deinitialize
+调用 FlushDeferredSweep()。
+</code></pre>
+<p>但当前源码静态研究没有找到对应的外部 PhaseCoordinator 调用点。</p>
+<p>已经明确找到的是：</p>
+<pre><code class="language-text">Ledger 自身 Public Wrapper
+PreGarbageCollect Backstop。
+</code></pre>
+<p>同时，当前也没有发现真实 Participant 调用：</p>
+<pre><code class="language-text">RequestSweepDeferral()。
+</code></pre>
+<p>因此可以确认：</p>
+<pre><code class="language-text">Phase-safe Deferral API
+存在。
+
+Pre-GC Backstop
+存在。
+</code></pre>
+<p>但不能进一步宣称：</p>
+<pre><code class="language-text">每一个 Mass Phase Boundary
+当前已经真实驱动 Deferred Sweep。
+</code></pre>
+<p>这是一个非常重要的研究边界。</p>
+<p>接口注释表达：</p>
+<pre><code class="language-text">设计意图。
+</code></pre>
+<p>真实调用点才能证明：</p>
+<pre><code class="language-text">执行接线。
+</code></pre>
+<p>二者不能混为同一证据等级。</p>
+<h2 id="这同样说明api-存在不等于能力已经闭环">这同样说明“API 存在”不等于“能力已经闭环”</h2><p>大型源码研究很容易出现：</p>
+<pre><code class="language-text">发现一个 API
+→
+推导功能已经完整工作。
+</code></pre>
+<p>但完整能力至少还需要检查：</p>
+<pre><code class="language-text">定义
++
+实现
++
+调用点
++
+状态变化
++
+失败路径
++
+测试。
+</code></pre>
+<p>如果只看到：</p>
+<pre><code class="language-text">FlushDeferredSweep()
+</code></pre>
+<p>的声明，</p>
+<p>最多可以说：</p>
+<blockquote>
+<p>系统设计了这个控制入口。</p>
+</blockquote>
+<p>不能直接说：</p>
+<blockquote>
+<p>每帧都已经正确调用它。</p>
+</blockquote>
+<p>这条方法论本身比具体 Mass API 更值得保留。</p>
+<h2 id="当前研究能证明什么">当前研究能证明什么</h2><p>从当前源码静态闭环，可以较有把握地确认：</p>
+<pre><code class="language-text">Package provenance ledger
+存在
+
+Durable unload manifest
+存在
+
+Manifest / staged participant
+存在
+
+Reader scrub / park
+存在
+
+Pre-GC / retirement deadline
+存在
+
+Type invalidation 顺序
+存在
+
+Ledger generation / retire-revive
+存在。
+</code></pre>
+<p>而当前不能写成已验证事实的包括：</p>
+<pre><code class="language-text">真实热卸载场景已经通过
+
+Observer Lock 竞争已经运行验证
+
+Pre-GC Deadline 已被压力测试
+
+Phase Boundary Flush 已确认接线
+
+当前协议已经获得性能验证。
+</code></pre>
+<p>成熟的源码博客应该保留这道边界。</p>
+<p>否则“读过源码”很容易被写成“证明过运行结果”。</p>
+<h2 id="这套模式可以迁移到插件系统">这套模式可以迁移到插件系统</h2><p>假设自己的游戏框架支持动态 Plugin：</p>
+<pre><code class="language-text">Plugin A
+定义：
+    Command
+    Service
+    Serializer
+    Event Handler。
+</code></pre>
+<p>运行以后这些类型进入：</p>
+<pre><code class="language-text">CommandRegistry
+ServiceDescriptorCache
+SerializationSchema
+EventSubscriptionIndex。
+</code></pre>
+<p>Plugin Unload 时，</p>
+<p>不要只：</p>
+<pre><code class="language-text">AssemblyUnload。
+</code></pre>
+<p>更完整的协议应该是：</p>
+<pre><code class="language-text">注册时记录 provenance
+↓
+Unload 时生成 affected manifest
+↓
+先从 discovery / routing 中删除
+↓
+等 active caller 离开
+↓
+清实例与缓存
+↓
+最后删除 schema / type identity。
+</code></pre>
+<p>这和 Mass 的问题完全同构。</p>
+<h2 id="也可以迁移到反射系统">也可以迁移到反射系统</h2><p>假设一个模块注册：</p>
+<pre><code class="language-text">Type Metadata
+Method Descriptor
+Property Descriptor。
+</code></pre>
+<p>多个对象已经缓存：</p>
+<pre><code class="language-text">MethodHandle。
+</code></pre>
+<p>卸载模块时如果先：</p>
+<pre><code class="language-text">free Type Metadata，
+</code></pre>
+<p>缓存立即失效。</p>
+<p>更稳健的是：</p>
+<pre><code class="language-text">Registry
+先停止返回这个 Type
+
+Existing Consumer
+逐步释放自己的 Handle
+
+最后
+Metadata 真正 free。
+</code></pre>
+<p>这正是：</p>
+<pre><code class="language-text">发现资格
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">对象寿命
+</code></pre>
+<p>分离的价值。</p>
+<h2 id="script-hot-reload-同样需要两阶段失效">Script Hot Reload 同样需要两阶段失效</h2><p>脚本 Runtime 热重载时，</p>
+<p>旧 Script Type 可能已经：</p>
+<ul>
+<li><p>挂在对象上；</p>
+</li>
+<li><p>被 Event Bus 引用；</p>
+</li>
+<li><p>被 Serializer 缓存；</p>
+</li>
+<li><p>被 Inspector 使用。</p>
+</li>
+</ul>
+<p>新 Script 编译完成以后，</p>
+<p>不能简单：</p>
+<pre><code class="language-text">oldType = null
+newType = compiledType。
+</code></pre>
+<p>更适合：</p>
+<pre><code class="language-text">Old Type
+→
+Stop New Discovery
+→
+Migrate / Detach Instances
+→
+Drain Callbacks
+→
+Invalidate Metadata
+→
+Publish New Generation。
+</code></pre>
+<p>只要存在跨模块长生命周期缓存，</p>
+<p>同一套撤销协议就会重新出现。</p>
+<h2 id="schema-registry-也应该记录来源">Schema Registry 也应该记录来源</h2><p>序列化系统经常允许模块动态注册：</p>
+<pre><code class="language-text">Codec
+Schema
+Migration
+Converter。
+</code></pre>
+<p>如果卸载时只知道：</p>
+<pre><code class="language-text">Module X 要走了，
+</code></pre>
+<p>却不知道它向哪些 Registry 写过什么，</p>
+<p>就只能全局扫描。</p>
+<p>更好的结构是：</p>
+<pre><code class="language-text">Registration
+=
+Value
++
+Owner / Provenance。
+</code></pre>
+<p>这让卸载从：</p>
+<pre><code class="language-text">猜测
+</code></pre>
+<p>变成：</p>
+<pre><code class="language-text">确定性撤销。
+</code></pre>
+<p>因此 provenance 不只是日志字段。</p>
+<p>它是一项生命周期基础设施。</p>
+<h2 id="先隐藏后删除是非常通用的模式">“先隐藏、后删除”是非常通用的模式</h2><p>可以把整个设计进一步抽象成：</p>
+<pre><code class="language-text">Publish
+→
+Visible
+→
+In Use
+
+Revocation Requested
+→
+Not Discoverable
+→
+Existing Users Drain
+→
+Destroyed。
+</code></pre>
+<p>这与对象发布协议恰好形成镜像。</p>
+<p>对象创建时：</p>
+<pre><code class="language-text">Constructed
+≠
+Published。
+</code></pre>
+<p>对象销毁时：</p>
+<pre><code class="language-text">Revocation Requested
+≠
+Destroyed。
+</code></pre>
+<p>于是一个完整生命周期可以写成：</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Constructed
+    Constructed --&gt; Published
+    Published --&gt; InUse
+    InUse --&gt; Revoking
+    Revoking --&gt; Hidden
+    Hidden --&gt; Draining
+    Draining --&gt; Destroyed
+    Destroyed --&gt; [*]
+</code></pre>
+<p>创建时不要过早暴露半成品。</p>
+<p>销毁时也不要让仍可发现的对象突然消失。</p>
+<p>两边实际上是同一项生命周期原则。</p>
+<h2 id="删除顺序应该来自依赖图而不是-dispose-调用顺序">删除顺序应该来自依赖图，而不是 <code>Dispose()</code> 调用顺序</h2><p>很多系统通过：</p>
+<pre><code class="language-text">Dispose A
+Dispose B
+Dispose C
+</code></pre>
+<p>手工维护 Shutdown。</p>
+<p>真正的问题是：</p>
+<pre><code class="language-text">B 清理时
+还需不需要 A 的身份信息？
+</code></pre>
+<p>如果需要，</p>
+<p>顺序就是：</p>
+<pre><code class="language-text">B
+先于
+A。
+</code></pre>
+<p>所以销毁顺序最好来自：</p>
+<pre><code class="language-text">Dependency / Ownership Graph。
+</code></pre>
+<p>Mass 当前：</p>
+<pre><code class="language-text">InstanceData
+→
+ProcessorSweep
+→
+TypeInvalidation
+</code></pre>
+<p>本质上就是一条简化的逆依赖顺序。</p>
+<p>真正应该最后消失的，</p>
+<p>通常是仍被前置清理流程用作定位依据的身份基础设施。</p>
+<h2 id="cleanup-protocol-应该统一结果不必统一执行方式">Cleanup Protocol 应该统一结果，不必统一执行方式</h2><p>ObserverRegistry 可以立即：</p>
+<pre><code class="language-text">Applied。
+</code></pre>
+<p>ObserverManager 可能：</p>
+<pre><code class="language-text">Parked。
+</code></pre>
+<p>另一个 Consumer 可能需要：</p>
+<pre><code class="language-text">Staged Sweep。
+</code></pre>
+<p>这些实现方式不同。</p>
+<p>只要最终保证：</p>
+<pre><code class="language-text">新 Reader 不再命中
+旧状态最终清理
+截止点不被突破
+身份最终失效。
+</code></pre>
+<p>合同就可以一致。</p>
+<p>这是大型框架里很重要的设计取舍：</p>
+<blockquote>
+<p>抽象应统一语义，而不是强迫所有组件使用同一种内部算法。</p>
+</blockquote>
+<h2 id="调试器最应该回答谁还认得这个类型">调试器最应该回答“谁还认得这个类型”</h2><p>模块卸载失败时，</p>
+<p>单纯日志：</p>
+<pre><code class="language-text">Module unload failed
+</code></pre>
+<p>信息价值很低。</p>
+<p>更有价值的诊断应该能够显示：</p>
+<pre><code class="language-text">Package:
+Gameplay.Enemy
+
+Affected Types:
+FEnemyTag
+FEnemyMovementFragment
+UEnemyProcessor
+
+Reader State:
+ObserverManager     Scrubbed
+ObserverRegistry    Applied
+
+Staged:
+InstanceData        Complete
+ProcessorSweep      Pending
+TypeInvalidation    Not Started
+
+Parked:
+1
+
+Deadline:
+PreGarbageCollect
+</code></pre>
+<p>这样开发者能够直接知道：</p>
+<blockquote>
+<p>现在真正卡住的是哪一层生命周期。</p>
+</blockquote>
+<p>这比最后得到一个：</p>
+<pre><code class="language-text">Use After Free
+</code></pre>
+<p>崩溃堆栈要有价值得多。</p>
+<h2 id="provenance-同样应该进入-trace">Provenance 同样应该进入 Trace</h2><p>如果系统已经有：</p>
+<pre><code class="language-text">Package → Type
+</code></pre>
+<p>账本，</p>
+<p>调试工具就可以进一步回答：</p>
+<pre><code class="language-text">这个 Type
+最初是谁注册的？
+
+它进入了哪些 Registry？
+
+当前还有哪些 Consumer？
+
+这次为什么进入 conservative full sweep？
+</code></pre>
+<p>生命周期系统一旦有来源信息，</p>
+<p>可观测性就会自然提高。</p>
+<p>这也是“注册时记录来源”带来的第二层收益。</p>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="模块卸载时才全局搜索自己的痕迹">模块卸载时才全局搜索自己的痕迹</h3><p>来源信息已经丢失，只能猜测。</p>
+<h3 id="把没有-ledger-记录当成没有状态">把“没有 Ledger 记录”当成“没有状态”</h3><p>Unknown 被错误解释成 Known Empty。</p>
+<h3 id="模块宣布卸载以后仍允许新-reader-命中旧类型">模块宣布卸载以后仍允许新 Reader 命中旧类型</h3><p>清理速度永远追不上新的引用产生速度。</p>
+<h3 id="当前不能完整-cleanup就什么都不做">当前不能完整 Cleanup，就什么都不做</h3><p>Parked 阶段仍在产生新访问。</p>
+<h3 id="reader-scrub-与-container-maintenance-强制在一个-lock-内完成">Reader Scrub 与 Container Maintenance 强制在一个 Lock 内完成</h3><p>为了原子感制造不必要的死锁和延迟风险。</p>
+<h3 id="每个-participant-自己完整执行全部销毁阶段">每个 Participant 自己完整执行全部销毁阶段</h3><p>Participant A 可能先删除 Participant B 仍需要的身份。</p>
+<h3 id="type-registry-最先删除">Type Registry 最先删除</h3><p>其它 Consumer 失去精确定位和清理依据。</p>
+<h3 id="deferred-cleanup-没有-hard-deadline">Deferred Cleanup 没有 Hard Deadline</h3><p>“稍后处理”最终变成永不处理。</p>
+<h3 id="deferred-manifest-保存裸-class-type-pointer">Deferred Manifest 保存裸 Class / Type Pointer</h3><p>真正执行 Cleanup 时对象已经失效。</p>
+<h3 id="handle-只检查-index不检查-registration-generation">Handle 只检查 Index，不检查 Registration Generation</h3><p>Ledger retire/revive 后旧身份重新命中新状态。</p>
+<h3 id="flushdeferredsweep-有-api-就宣称已经在所有-phase-boundary-接线"><code>FlushDeferredSweep</code> 有 API 就宣称已经在所有 Phase Boundary 接线</h3><p>接口设计被误写成运行事实。</p>
+<h3 id="commit-message-说有测试就当成当前源码证据">Commit Message 说有测试就当成当前源码证据</h3><p>测试身份、当前 checkout 与运行结果没有被真正对应。</p>
+<h2 id="我的模块卸载生命周期检查表">我的模块卸载生命周期检查表</h2><ol>
+<li><p>动态模块能够向哪些长期 Registry 注册状态？</p>
+</li>
+<li><p>每一份长期注册是否同时保存 Owner / Provenance？</p>
+</li>
+<li><p>卸载时是否能精确列出受影响 Type？</p>
+</li>
+<li><p>是否区分 Known Empty 与 Unknown？</p>
+</li>
+<li><p>Unknown 情况是否有保守安全路径？</p>
+</li>
+<li><p>Unload Event 是否生成稳定 Affected Manifest？</p>
+</li>
+<li><p>延迟 Cleanup 是否避免保存即将失效的裸指针？</p>
+</li>
+<li><p>新 Reader 是否在完整 Cleanup 前就被阻止继续命中 dying type？</p>
+</li>
+<li><p>Reader Scrub 和 Container Prune 是否是两个职责？</p>
+</li>
+<li><p>当前无法清理时，是否允许明确 Park？</p>
+</li>
+<li><p>Park 之前是否已经建立安全隔离？</p>
+</li>
+<li><p>Parked Work 的正常 Quiet Point 在哪里？</p>
+</li>
+<li><p>是否存在 Pre-GC 等 Hard Deadline？</p>
+</li>
+<li><p>Owner Retirement 时是否有第二个最终 Deadline？</p>
+</li>
+<li><p>Staged Cleanup 是否拥有正式 Stage 顺序？</p>
+</li>
+<li><p>所有 Participant 是否按全局 Barrier 跨 Stage？</p>
+</li>
+<li><p>SafePoint 是否发生在任何破坏性操作以前？</p>
+</li>
+<li><p>Veto 是否只能在 SafePoint 提交？</p>
+</li>
+<li><p>Veto 是否延期整次事务，而不是只延迟一个 Participant？</p>
+</li>
+<li><p>重放后的 Participant 是否能够容忍重复检查？</p>
+</li>
+<li><p>Instance Data 是否在 Type Identity 仍可定位时清理？</p>
+</li>
+<li><p>Processor / Scheduler Cache 是否在 Type Invalidation 前清理？</p>
+</li>
+<li><p>Type Registry 是否最后失效？</p>
+</li>
+<li><p>不同 Consumer 是否允许 Applied / Parked 等不同内部策略？</p>
+</li>
+<li><p>协议是否统一安全结果而不是强迫统一数据结构？</p>
+</li>
+<li><p>Ledger 自身是否拥有 Retire / Revive 生命周期？</p>
+</li>
+<li><p>Registration Handle 是否验证当前 Generation？</p>
+</li>
+<li><p>旧 Handle 是否无法命中新 Ledger Generation？</p>
+</li>
+<li><p>Deferred Work 是否能证明最终会 Flush、Cancel 或 Fail？</p>
+</li>
+<li><p>Shutdown / GC 是否不会遗留 Pending Cleanup？</p>
+</li>
+<li><p>Trace 是否能回答一个 Type 来自哪个 Package？</p>
+</li>
+<li><p>Debugger 是否能显示哪些 Consumer 仍然引用它？</p>
+</li>
+<li><p>日志是否区分 Reader Scrub、Parked、Applied 和 Type Invalidated？</p>
+</li>
+<li><p>当前测试是否真正运行过模块 Load / Unload？</p>
+</li>
+<li><p>Observer Lock 竞争是否有专项测试？</p>
+</li>
+<li><p>GC 与 Parked Deadline 是否有专项验证？</p>
+</li>
+<li><p>API 注释中的 Safe Point 是否真的存在调用点？</p>
+</li>
+<li><p>如果没有调用点，文档是否明确把它标成 Design Intent 而不是 Runtime Fact？</p>
+</li>
+</ol>
+<p>模块系统最容易给人的错觉是：</p>
+<pre><code class="language-text">模块代码被卸载
+→
+模块已经不存在。
+</code></pre>
+<p>但一个长期运行的 Engine 不只保存模块代码。</p>
+<p>它还保存模块留下来的：</p>
+<pre><code class="language-text">身份
+索引
+缓存
+Observer
+Processor
+Schema
+Handle
+派生状态。
+</code></pre>
+<p>真正危险的不是模块自己忘记释放一个对象。</p>
+<p>而是：</p>
+<blockquote>
+<p><strong>其它更长寿的系统仍然记得这个已经准备消失的类型。</strong></p>
+</blockquote>
+<p>因此安全卸载的第一步不是 <code>delete</code>。</p>
+<p>而是：</p>
+<pre><code class="language-text">让新的 Reader 停止进入。
+</code></pre>
+<p>随后才是：</p>
+<pre><code class="language-text">等待现有使用者离开
+→
+清实例
+→
+清执行器
+→
+最后撤销身份。
+</code></pre>
+<p>如果当前无法完整完成，</p>
+<p>可以 Park。</p>
+<p>但必须有 Deadline。</p>
+<p>如果清理要跨越对象生命周期，</p>
+<p>就必须把裸指针转换成 Durable Identity。</p>
+<p>如果 Registry 可以 retire/revive，</p>
+<p>旧 Handle 就必须绑定 Generation。</p>
+<p>最终，这套协议可以压缩成一句话：</p>
+<blockquote>
+<p><strong>创建时，先准备完整再发布；销毁时，先撤销可见再释放。</strong></p>
+</blockquote>
+<p>这不仅是 Mass 的模块卸载规则。</p>
+<p>它是任何支持动态插件、热重载和长期 Registry 的系统都必须面对的一项生命周期基本功。</p>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型身份撤销</td>
+<td>让所有系统先停止认得这个类型，再真正让类型消失</td>
+</tr>
+<tr>
+<td>类型来源账本 / Provenance Ledger</td>
+<td>这项长期状态究竟是哪个模块带进来的</td>
+</tr>
+<tr>
+<td>负面证据</td>
+<td>我确实检查过并确认没有</td>
+</tr>
+<tr>
+<td>缺失证据</td>
+<td>我根本没观察到</td>
+</tr>
+<tr>
+<td>Affected Context</td>
+<td>当前这一刻还能安全使用的活对象视图</td>
+</tr>
+<tr>
+<td>Durable Manifest</td>
+<td>即使晚一点处理也还能识别这些对象的稳定身份证明</td>
+</tr>
+<tr>
+<td>Reader Scrub</td>
+<td>先让所有新查询看不见即将死亡的类型</td>
+</tr>
+<tr>
+<td>Container Cleanup</td>
+<td>等内部安静以后再把昂贵的数据结构真正整理干净</td>
+</tr>
+<tr>
+<td>Parked Work</td>
+<td>安全性已经先建立，但维护工作等待真正安静的时机</td>
+</tr>
+<tr>
+<td>Hard Deadline</td>
+<td>再等下去对象本身就要消失，所以这一刻必须给出结果</td>
+</tr>
+<tr>
+<td>Staged Sweep</td>
+<td>所有人完成当前清理层以后，整体再进入下一层</td>
+</tr>
+<tr>
+<td>卸载安全点</td>
+<td>如果现在开始拆，所有参与者都能进入一致清理流程</td>
+</tr>
+<tr>
+<td>Type Invalidation</td>
+<td>最后正式撤销类型身份</td>
+</tr>
+<tr>
+<td>耐久身份</td>
+<td>对象本体马上会死，但清理工作以后仍然知道自己指的是谁</td>
+</tr>
+<tr>
+<td>代际注册身份</td>
+<td>同一个槽位在新的 Ledger 生命周期里不能冒充旧登记</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><p><code>notes/UnrealEngine源码研究/UE6/06_Mass从World托管到Archetype迭代_模块拆分与延迟结构变更.md</code></p>
+</li>
+<li><p><code>notes/UnrealEngine源码研究/UE6/08_UE6核心模块全景_依赖层级生命周期与纵向主链.md</code></p>
+</li>
+<li><p><code>notes/UnrealEngine源码研究/UE6/README.md</code></p>
+</li>
+<li><p><code>blogs/从UnrealEngine源码理解引擎设计/05-Mass结构变更延迟提交.md</code></p>
+</li>
+<li><p><code>blogs/README.md</code></p>
+</li>
+<li><p><code>blogs/publication.v1.json</code></p>
+</li>
+</ul>
+<p>本文重点依据 2026-09-02 对当前 UE6-main 源码的增量重核部分整理。</p>
+<p>当前源码研究已经静态闭合：</p>
+<ul>
+<li><p>Module Element Provenance Ledger；</p>
+</li>
+<li><p>Package 到 Mass Type 的来源记录；</p>
+</li>
+<li><p>Known Empty 与 Unknown 的不同卸载策略；</p>
+</li>
+<li><p>Affected Context 与 Durable Manifest；</p>
+</li>
+<li><p>Manifest Participant 的 Reader Scrub / Applied / Parked；</p>
+</li>
+<li><p><code>SafePoint → InstanceData → ProcessorSweep → TypeInvalidation</code> 的全局 staged barrier；</p>
+</li>
+<li><p>ObserverManager / ObserverRegistry / TypeManager 的不同清理策略；</p>
+</li>
+<li><p>Pre-GC 与 Ledger Retirement Deadline；</p>
+</li>
+<li><p>Registration Generation 与 retire/revive；</p>
+</li>
+<li><p>Deferred Archetype Group Command 的执行与 reuse 修复。</p>
+</li>
+</ul>
+<p>但当前研究没有：</p>
+<ul>
+<li><p>构建 Unreal Engine；</p>
+</li>
+<li><p>运行 Editor、Automation、Catch2 或 MassEntityTestSuite；</p>
+</li>
+<li><p>实际执行动态模块 load/unload；</p>
+</li>
+<li><p>实际制造 Observer Lock 竞争；</p>
+</li>
+<li><p>实际验证 GC Deadline；</p>
+</li>
+<li><p>运行性能、延迟或内存 Benchmark。</p>
+</li>
+</ul>
+<p>同时，当前源码静态搜索没有定位到 <code>PhaseCoordinator</code> 对 <code>FlushDeferredSweep()</code> 的 phase-boundary 外部调用，也没有定位到当前 Participant 实际调用 <code>RequestSweepDeferral()</code>。</p>
+<p>因此本文把“phase-safe deferred sweep API 与 pre-GC backstop 已存在”作为当前源码事实；把“每个 Mass phase boundary 已经主动执行 deferred sweep”保留为尚未通过调用点和运行测试证明的设计意图，不将其写成已经完成的 Runtime Contract。</p>
+<p>文中将 Provenance Ledger、Reader Scrub、Durable Manifest、Staged Cleanup、Generation 与 Hard Deadline 迁移到插件、反射、脚本热重载和 Schema Registry 的部分属于工程设计归纳，不表示这些系统需要复制 Mass 的具体类名、Stage 枚举或 CoreUObject 生命周期实现。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="unreal-mass-deferred-structural-changes.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 mass</span><strong>结构变更延迟提交：Unreal Mass 的稳定查询窗口、Archetype 迁移与 Observer 时序</strong><small>从 Archetype、Chunk、Processor、CommandBuffer 与 Observer 时序解释 Unreal Mass 如何把结构变更延迟到稳定查询窗口之外提交。</small></a><a href="unreal-engine-ddc-cook-iostore.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 unreal</span><strong>Unreal Engine 的资源生产线：DDC、Cook、IoStore 与运行时加载</strong><small>编辑器里已经可以浏览和加载的资产，为什么还要经过 DDC、Cook 与 IoStore，才能成为运行时真正可读取的内容？</small></a><a href="unreal-build-accelerator-known-inputs-cas.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门</strong><small>远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/engineering.html">Engineering</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/brand.html">Brand</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
