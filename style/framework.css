@@ -1504,3 +1504,488 @@
         gap: 0.35rem;
     }
 }
+
+/* Framework story: architecture and evidence lead, reference follows. */
+.framework-positioning,
+.framework-architecture-map,
+.framework-pillars,
+.framework-reference {
+    padding: 4.5rem 0;
+}
+
+.framework-positioning {
+    background: #111b21;
+}
+
+html[data-brand-mode="sakura"] .framework-positioning h2,
+html[data-brand-mode="sakura"] .framework-architecture-map h2,
+html[data-brand-mode="sakura"] .framework-pillars h2,
+html[data-brand-mode="sakura"] .framework-reference h2,
+html[data-brand-mode="sakura"] .framework-map-layer h3,
+html[data-brand-mode="sakura"] .framework-map-branch h3,
+html[data-brand-mode="sakura"] .framework-map-boundaries article h3,
+html[data-brand-mode="sakura"] .framework-pillar h3,
+html[data-brand-mode="sakura"] .framework-reference-card strong {
+    color: #f8f9fa;
+}
+
+.framework-story-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 3rem;
+    align-items: start;
+}
+
+.framework-story-intro .section-title {
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.framework-story-intro .section-title::after {
+    left: 0;
+    transform: none;
+}
+
+.framework-story-intro p {
+    color: rgba(248, 249, 250, 0.84);
+    font-size: 1.08rem;
+    line-height: 1.8;
+}
+
+.framework-story-boundary {
+    margin-top: 1.2rem;
+    padding: 1rem 1.2rem;
+    border-left: 3px solid #f4c95d;
+    background: rgba(244, 201, 93, 0.08);
+    color: rgba(248, 249, 250, 0.74) !important;
+    font-size: 0.95rem !important;
+}
+
+.framework-story-boundary strong {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #f4c95d;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+}
+
+.framework-story-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.5rem;
+}
+
+.framework-story-chip {
+    padding: 0.42rem 0.65rem;
+    border: 1px solid rgba(140, 231, 220, 0.35);
+    border-radius: 999px;
+    color: #f4fffd;
+    background: #173b38;
+    font-size: 0.83rem;
+    font-weight: 600;
+}
+
+.framework-evidence-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: baseline;
+    margin: 1.4rem 0 0;
+    color: rgba(248, 249, 250, 0.68);
+    font-size: 0.8rem;
+}
+
+.framework-evidence-line span {
+    color: #8ce7dc;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.framework-evidence-line strong {
+    color: #f4c95d;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+}
+
+.framework-architecture-map {
+    background: #0d1119;
+}
+
+.framework-map-flow {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2.4rem;
+}
+
+.framework-map-layer-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.8rem;
+}
+
+.framework-map-layer-list::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    bottom: -0.65rem;
+    left: 1rem;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(110, 164, 255, 0.1), rgba(140, 231, 220, 0.75), rgba(110, 164, 255, 0.1));
+}
+
+.framework-map-layer,
+.framework-map-branch,
+.framework-map-boundaries article,
+.framework-pillar,
+.framework-reference-card {
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.framework-map-layer {
+    min-height: 156px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.15rem;
+}
+
+.framework-map-layer-portable-core {
+    border-color: rgba(84, 214, 197, 0.58);
+    background: rgba(84, 214, 197, 0.1);
+}
+
+.framework-map-step,
+.framework-pillar-index {
+    color: #6ea4ff;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.framework-map-layer h3,
+.framework-map-branch h3 {
+    margin: 0.8rem 0 0.45rem;
+    font-size: 1.05rem;
+}
+
+.framework-map-layer p,
+.framework-map-branch p,
+.framework-map-boundaries p,
+.framework-pillar > p:not(.section-kicker):not(.framework-pillar-thesis),
+.framework-reference-card p {
+    margin: 0;
+    color: rgba(248, 249, 250, 0.72);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+.framework-map-branches {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 760px;
+    margin: 0 auto;
+    padding-top: 1.15rem;
+}
+
+.framework-map-branch {
+    position: relative;
+    padding: 1.2rem;
+}
+
+.framework-map-branch::before {
+    content: '';
+    position: absolute;
+    top: -1.15rem;
+    left: 50%;
+    width: 1px;
+    height: 1.15rem;
+    background: rgba(140, 231, 220, 0.7);
+}
+
+.framework-map-branch-unity {
+    border-color: rgba(103, 207, 131, 0.45);
+}
+
+.framework-map-branch-godot {
+    border-color: rgba(244, 201, 93, 0.45);
+}
+
+.framework-map-branch strong {
+    display: block;
+    color: #dbe0e5;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+}
+
+.framework-map-status,
+.framework-map-boundaries article > span {
+    display: inline-flex;
+    padding: 0.2rem 0.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 4px;
+    color: #f4c95d;
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.framework-map-branch-unity .framework-map-status {
+    color: #9ce5aa;
+    border-color: rgba(103, 207, 131, 0.4);
+}
+
+.framework-map-governance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.2rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.framework-map-governance span {
+    padding: 0.4rem 0.6rem;
+    color: #aeb5be;
+    font-size: 0.8rem;
+}
+
+.framework-map-governance span ~ span {
+    border: 1px solid rgba(110, 164, 255, 0.3);
+    border-radius: 4px;
+    color: #cbdcff;
+    background: rgba(37, 117, 252, 0.08);
+    font-family: var(--font-heading);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.framework-map-boundaries {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+.framework-map-boundaries article {
+    padding: 1rem 1.15rem;
+    border-color: rgba(244, 201, 93, 0.3);
+    background: rgba(244, 201, 93, 0.05);
+}
+
+.framework-map-boundaries article h3 {
+    margin: 0.7rem 0 0.3rem;
+    font-size: 1rem;
+}
+
+.framework-pillars {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.framework-pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2.25rem;
+}
+
+.framework-pillar {
+    position: relative;
+    min-height: 320px;
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+html[data-brand-mode="sakura"] .framework-pillar {
+    background: #18242b;
+}
+
+.framework-pillar::after {
+    content: '';
+    position: absolute;
+    right: -2rem;
+    bottom: -3rem;
+    width: 9rem;
+    height: 9rem;
+    border: 1px solid rgba(84, 214, 197, 0.18);
+    border-radius: 50%;
+}
+
+.framework-pillar-index {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.framework-pillar h3 {
+    max-width: 78%;
+    margin: 1.6rem 0 0.8rem;
+    font-size: 1.3rem;
+}
+
+.framework-pillar-thesis {
+    min-height: 3.4em;
+    margin-bottom: 1rem;
+    color: #d9f8f4;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+.framework-pillar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1.25rem;
+    list-style: none;
+}
+
+.framework-pillar li {
+    padding: 0.25rem 0.45rem;
+    border-radius: 4px;
+    color: #aeb5be;
+    background: rgba(255, 255, 255, 0.07);
+    font-size: 0.75rem;
+}
+
+.framework-reference {
+    background: #15171a;
+}
+
+.framework-reference-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-top: 2rem;
+}
+
+.framework-reference-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 1rem;
+    color: var(--light-color);
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.framework-reference-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(140, 231, 220, 0.58);
+    background: rgba(84, 214, 197, 0.08);
+}
+
+.framework-reference-card > span {
+    color: #6ea4ff;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.framework-reference-card strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.framework-reference-card > i {
+    padding-top: 0.15rem;
+    color: #8ce7dc;
+    font-size: 0.78rem;
+}
+
+.framework-reference-card:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-offset);
+}
+
+@media (max-width: 1000px) {
+    .framework-map-layer-list,
+    .framework-reference-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .framework-pillar-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .framework-pillar {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .framework-positioning,
+    .framework-architecture-map,
+    .framework-pillars,
+    .framework-reference {
+        padding: 3.5rem 0;
+    }
+
+    .framework-story-intro {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .framework-story-intro .section-title {
+        text-align: center;
+    }
+
+    .framework-story-intro .section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .framework-map-layer-list,
+    .framework-map-boundaries,
+    .framework-reference-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .framework-map-branches {
+        grid-template-columns: 1fr;
+    }
+
+    .framework-map-branch::before {
+        display: none;
+    }
+
+    .framework-evidence-line {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .framework-story-chip {
+        font-size: 0.76rem;
+    }
+
+    .framework-map-governance {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .framework-map-governance span {
+        text-align: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .framework-reference-card {
+        transition: none;
+    }
+}

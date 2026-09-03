@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "storyId": "sakura-framework-engineering",
+  "frameworkCommit": "9d436c62f5cfbe78c84c9ef44fe8b5f8214d5cd1",
+  "evidence": {
+    "local": "local-passed",
+    "runner": "runner-pending",
+    "summary": "这组公开叙事绑定已审阅的 Framework 提交；本地验证已通过，Runner 证据仍待闭合。"
+  },
+  "positioning": {
+    "eyebrow": "SAKURA FRAMEWORK · ENGINEERING PORTFOLIO",
+    "title": "把游戏工程能力做成可迁移、可验证的系统",
+    "seoTitle": "Sakura Framework | Portable Core、Ownership 与 Cross-Engine Architecture",
+    "summary": "一个强调 Portable Core、显式 Ownership、架构治理与真实 Consumer 验证的模块化游戏技术框架。",
+    "description": "Sakura Framework 将可迁移的游戏语义留在 Portable Core，把引擎差异收敛到 Adapter，并用 Ownership、治理规则与证据边界约束每一次扩展。",
+    "claims": [
+      "Portable Core",
+      "Explicit Ownership",
+      "Unity Supported",
+      "Godot Parallel Preview",
+      "Architecture Governance",
+      "Independent Consumers"
+    ],
+    "boundary": "这里展示的是架构方向与已公开证据，不把 Godot Runtime Host、完整 Godot Core / Config 或 Runner 尚未闭合的部分包装成已交付能力。"
+  },
+  "architectureMap": {
+    "eyebrow": "ARCHITECTURE MAP · CROSS-ENGINE BOUNDARY",
+    "title": "语义保持可迁移，引擎负责翻译与承载",
+    "summary": "Gameplay 与 Runtime 语义先落在可迁移的 Core；Unity 与 Godot 只在各自 Adapter 边界做平台翻译。横向的 Tooling、Governance、Verification 与 Diagnostics 负责让边界可观察。",
+    "layers": [
+      {
+        "id": "consumers",
+        "label": "Games / Consumers",
+        "description": "独立项目消费并验证公开 Framework 路线；采用映射只证明真实引用，不扩大成熟度结论。"
+      },
+      {
+        "id": "gameplay-semantics",
+        "label": "Gameplay Semantics",
+        "description": "能力、规则、输入快照与存档语义不绑定具体引擎对象。"
+      },
+      {
+        "id": "runtime-services",
+        "label": "Runtime Service Core",
+        "description": "把服务生命周期、取消与失败边界建模为可测试的运行时契约。"
+      },
+      {
+        "id": "portable-core",
+        "label": "Portable .NET Core / Config Core / Parallel",
+        "status": "portable-preview",
+        "description": "当前按 Portable Preview 公开；它是可迁移方向的证据，不等同于完整多引擎 Runtime 交付。"
+      }
+    ],
+    "branches": [
+      {
+        "id": "unity",
+        "label": "Unity Adapter",
+        "runtimeLabel": "Unity Runtime API",
+        "status": "supported",
+        "description": "Unity route 是当前已复核的 Supported 采用入口。"
+      },
+      {
+        "id": "godot",
+        "label": "Parallel Godot Adapter",
+        "runtimeLabel": "Godot translation boundary",
+        "status": "parallel-preview",
+        "description": "Godot 仅公开为 Parallel Preview 的翻译边界；不宣称一般 Runtime Host、Input 或 UI 适配。"
+      }
+    ],
+    "governance": [
+      "Tooling",
+      "Governance",
+      "Verification",
+      "Diagnostics"
+    ],
+    "boundaries": [
+      {
+        "id": "godot-core-config",
+        "label": "Godot Core / Config",
+        "status": "deferred",
+        "description": "Deferred：暂不把 Core / Config 的 Godot 交付写成当前能力。"
+      },
+      {
+        "id": "godot-runtime-host",
+        "label": "Godot Runtime Host",
+        "status": "not-delivered",
+        "description": "Not delivered：缺少同级公开运行时宿主与证据，不进入 Supported 声明。"
+      }
+    ]
+  },
+  "pillars": [
+    {
+      "id": "explicit-ownership",
+      "eyebrow": "PILLAR 01 · LIFECYCLE",
+      "title": "Explicit Ownership",
+      "thesis": "谁创建，谁拥有，谁清理。",
+      "description": "生命周期不是实现细节，而是 Runtime Host、Scope、Lease、Cancellation 与失败回退共同遵守的边界。",
+      "signals": [
+        "Lifecycle",
+        "Scope",
+        "Lease",
+        "Runtime Host",
+        "Cancellation"
+      ]
+    },
+    {
+      "id": "engine-agnostic-semantics",
+      "eyebrow": "PILLAR 02 · PORTABILITY",
+      "title": "Engine-Agnostic Semantics",
+      "thesis": "Gameplay / Runtime Semantic 不应该属于 Unity 或 Godot。",
+      "description": "输入、存档、能力与服务语义先建立可测试的 Core 契约，再由 Adapter 翻译到具体引擎 API。",
+      "signals": [
+        "Core",
+        "Adapter",
+        "Input Snapshot",
+        "Save Core",
+        "Tooling Core"
+      ]
+    },
+    {
+      "id": "evidence-before-claims",
+      "eyebrow": "PILLAR 03 · GOVERNANCE",
+      "title": "Evidence Before Claims",
+      "thesis": "不以代码存在作为成熟证据。",
+      "description": "生命周期、测试、Consumer、Runner、Release 与已知限制必须分层记录；证据不足时，页面保留边界而不是填补空白。",
+      "signals": [
+        "Lifecycle",
+        "Test",
+        "Consumer",
+        "Runner",
+        "Known Limitations"
+      ]
+    }
+  ],
+  "reference": {
+    "eyebrow": "REFERENCE · KEEP THE DETAIL",
+    "title": "技术参考仍然保留，只是不再承担首页叙事",
+    "summary": "模块目录、成熟度、采用路线、分层、生命周期和 15 分钟 Quickstart 继续作为可查阅的事实入口；它们服务于验证与接入，而不是代替架构判断。",
+    "items": [
+      {
+        "id": "maturity",
+        "label": "Maturity Catalog",
+        "description": "完整生命周期统计与升级条件。",
+        "href": "#maturity"
+      },
+      {
+        "id": "adoption",
+        "label": "Adoption Routes",
+        "description": "Supported 包与最小稳定采用闭包。",
+        "href": "#adoption"
+      },
+      {
+        "id": "game-adoption",
+        "label": "Consumer Mapping",
+        "description": "《言铸之剑》的实际 Framework 使用映射。",
+        "href": "#game-adoption"
+      },
+      {
+        "id": "modules",
+        "label": "Module Catalog",
+        "description": "按职责检索公开模块与能力详情。",
+        "href": "#modules"
+      },
+      {
+        "id": "architecture",
+        "label": "Package Layers",
+        "description": "查看自动快照中的 Package 分层。",
+        "href": "#architecture"
+      },
+      {
+        "id": "lifecycle",
+        "label": "Lifecycle Catalog",
+        "description": "按生命周期查看支持边界。",
+        "href": "#lifecycle"
+      },
+      {
+        "id": "quickstart",
+        "label": "15-minute Quickstart",
+        "description": "从 Core Only 到 Bootstrap Lite 的可验证接入路线。",
+        "href": "framework-quickstart.html"
+      }
+    ]
+  }
+}

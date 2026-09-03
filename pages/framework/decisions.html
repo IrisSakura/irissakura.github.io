@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="十项决策以 Problem、Constraints、Naive Approach、Failure、Decision、Trade-offs、Value 七段结构呈现。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/framework/decisions.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Architecture Decisions：公开判断，也公开代价 | Sakura Framework">
+    <meta property="og:description" content="十项决策以 Problem、Constraints、Naive Approach、Failure、Decision、Trade-offs、Value 七段结构呈现。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/framework/decisions.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-framework-decisions.png">
+    <meta property="og:image:alt" content="Architecture Decisions：公开判断，也公开代价 | Sakura Framework 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Architecture Decisions：公开判断，也公开代价 | Sakura Framework">
+    <meta name="twitter:description" content="十项决策以 Problem、Constraints、Naive Approach、Failure、Decision、Trade-offs、Value 七段结构呈现。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-decisions.png">
+    <meta name="twitter:image:alt" content="Architecture Decisions：公开判断，也公开代价 | Sakura Framework 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#dff7f2">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Architecture Decisions：公开判断，也公开代价 | Sakura Framework","description":"十项决策以 Problem、Constraints、Naive Approach、Failure、Decision、Trade-offs、Value 七段结构呈现。","url":"https://irissakura.github.io/pages/framework/decisions.html"}</script>
+    <!-- site-meta:end -->
+    <title>Architecture Decisions：公开判断，也公开代价 | Sakura Framework</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/framework.css">
+    <link rel="stylesheet" href="../../style/framework-engineering.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../../pages/framework.html" class="nav-link active" aria-current="page">Framework</a>
+            <a href="../../pages/journal.html" class="nav-link">Journal</a>
+            <a href="../../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="main-content framework-detail-main">
+<!-- page-index:start -->
+    <nav class="page-index" aria-label="Architecture Decisions：公开判断，也公开代价 | Sakura Framework 章节" data-page-index>
+        <div class="container page-index-inner">
+            <span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>浏览本页</strong></span>
+            <div class="page-index-links"><a href="#overview" data-page-index-link aria-current="location"><span>01</span>定位与边界</a><a href="#decision-list" data-page-index-link><span>02</span>十项决策</a><a href="#next-route" data-page-index-link><span>03</span>继续阅读</a></div>
+            <span class="page-index-progress" aria-hidden="true"></span>
+        </div>
+    </nav>
+    <!-- page-index:end -->
+    <!-- framework-detail-content:start -->
+<header class="framework-detail-hero page-cover" data-content-stage="value">
+        <div class="container framework-detail-hero-inner">
+            <div><p class="section-kicker">WHY SAKURA WORKS THIS WAY</p><h1>Architecture Decisions：公开判断，也公开代价</h1><p class="framework-subtitle">十项决策以 Problem、Constraints、Naive Approach、Failure、Decision、Trade-offs、Value 七段结构呈现。</p></div>
+            <div class="framework-detail-hero-actions"><a class="btn btn-primary" href="#overview">阅读本页</a><a class="btn btn-secondary" href="../framework-engineering.html">返回 Engineering Hub</a></div>
+        </div>
+    </header><section class="framework-detail-overview" data-content-stage="system" id="overview" data-page-index-target>
+        <div class="container"><div class="framework-boundary-grid">
+            <article><p class="section-kicker">WHAT THIS SOLVES</p><h2>解决什么</h2><p>把架构结果还原为可讨论的约束与取舍，而不是只展示最终目录。</p></article>
+            <article><p class="section-kicker">WHAT THIS COSTS</p><h2>付出什么</h2><p>需要持续更新失效假设，并接受某些决策只适用于特定规模和证据阶段。</p></article>
+            <article><p class="section-kicker">WHERE IT DOES NOT APPLY</p><h2>哪里不适用</h2><p>这些决策不是通用教条；项目规模、团队和平台约束不同，应重新评估。</p></article>
+        </div></div>
+    </section>
+    <section class="framework-detail-body framework-decision-list" data-content-stage="result" id="decision-list" data-page-index-target><div class="container"><div class="section-heading-row"><div><p class="section-kicker">TEN DECISIONS · SEVEN SECTIONS</p><h2 class="section-title">为什么这样设计</h2></div><p class="section-intro">决策不是最佳实践清单；每项都保留约束、失败方案、代价和适用边界。</p></div><article class="framework-decision-card" id="decision-engine-boundary">
+                    <header><span>01</span><h2>为什么 Core 不引用引擎</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>可复用规则容易被 Unity 类型和生命周期绑死。</p></section><section><h3>Constraints</h3><p>Core 必须可在无引擎环境验证，平台能力仍需完整表达。</p></section><section><h3>Naive Approach</h3><p>在 Core 中直接引用 MonoBehaviour、Time 或 Asset。</p></section><section><h3>Failure</h3><p>迁移到 Godot、Server 或纯测试环境时边界失效。</p></section><section><h3>Decision</h3><p>Core 保持 no-engine；Unity、Godot 与 Editor 能力进入 Adapter。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>增加端口和装配代码；高度平台化能力不做伪抽象。</p></section><section><h3>Value</h3><p>语义可迁移，平台差异可见且可测试。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-explicit-ownership">
+                    <header><span>02</span><h2>为什么 Ownership 必须显式</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>全局服务和异步任务容易没有明确清理者。</p></section><section><h3>Constraints</h3><p>场景切换、取消和失败都必须释放订阅与句柄。</p></section><section><h3>Naive Approach</h3><p>依赖静态单例或对象销毁时碰运气清理。</p></section><section><h3>Failure</h3><p>重复初始化、残留回调和半提交副作用。</p></section><section><h3>Decision</h3><p>按 App、Gameplay、Scene 或纯 C# Scope 定义 Owner。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>调用方承担更明确的生命周期协议。</p></section><section><h3>Value</h3><p>清理、取消和故障恢复可以被独立验证。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-architecture-as-code">
+                    <header><span>03</span><h2>为什么治理要 Architecture as Code</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>文档规则会与 147 个包的真实依赖快速漂移。</p></section><section><h3>Constraints</h3><p>清单、层级、Profile 与计划状态存在多个 Owner。</p></section><section><h3>Naive Approach</h3><p>只在 README 维护包数量和允许依赖。</p></section><section><h3>Failure</h3><p>文字仍正确但代码和生成状态已经不同。</p></section><section><h3>Decision</h3><p>用机器清单、resolver 和 verifier 固化规则。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>变更必须同步更多投影与门禁。</p></section><section><h3>Value</h3><p>架构边界可以在提交前失败关闭。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-di-not-everywhere">
+                    <header><span>04</span><h2>为什么 DI 不是通用服务定位器</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>统一容器很容易吞并生命周期和业务访问。</p></section><section><h3>Constraints</h3><p>替换、测试和装配需要 DI，但业务语义需要清晰入口。</p></section><section><h3>Naive Approach</h3><p>所有对象都从全局容器按类型解析。</p></section><section><h3>Failure</h3><p>依赖隐藏、Scope 泄漏且初始化顺序不可见。</p></section><section><h3>Decision</h3><p>DI 只负责依赖、生命周期、替换、测试和 composition root。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>需要维护显式构造和 Facade。</p></section><section><h3>Value</h3><p>依赖图和生命周期保持可读。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-mvvm-not-default">
+                    <header><span>05</span><h2>为什么 MVVM 不是默认</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>把一种 UI 范式用于所有页面会放大小页面成本。</p></section><section><h3>Constraints</h3><p>页面复杂度、协作规模和状态寿命差异很大。</p></section><section><h3>Naive Approach</h3><p>要求所有 View 都创建 ViewModel 和完整绑定层。</p></section><section><h3>Failure</h3><p>样板代码超过业务价值，调试路径变长。</p></section><section><h3>Decision</h3><p>Direct、Binding、MVVM、Structured 按成本渐进选择。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>Framework 需维护多条互操作路径。</p></section><section><h3>Value</h3><p>简单页面保持简单，复杂页面仍有结构化升级路线。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-evidence-before-claims">
+                    <header><span>06</span><h2>为什么证据必须先于成熟度声明</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>代码存在、本地通过和 Production 经常被混为一谈。</p></section><section><h3>Constraints</h3><p>不同证据由不同系统和提交拥有。</p></section><section><h3>Naive Approach</h3><p>用测试总数或单次演示概括成熟度。</p></section><section><h3>Failure</h3><p>读者无法判断结论适用范围和是否同 SHA。</p></section><section><h3>Decision</h3><p>Designed 到 Unknown 八级独立呈现。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>公开文案更克制，状态可能长期显示 Pending。</p></section><section><h3>Value</h3><p>每个结论都有权威来源和恢复入口。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-generated-projections">
+                    <header><span>07</span><h2>为什么波动事实由 Owner 生成</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>包数、路由、文章与 Consumer 证据持续变化。</p></section><section><h3>Constraints</h3><p>网站需要可读策展，但不能复制第二套事实。</p></section><section><h3>Naive Approach</h3><p>手工更新页面数字和列表。</p></section><section><h3>Failure</h3><p>页面与源仓库在下一次变更后分叉。</p></section><section><h3>Decision</h3><p>源仓导出闭合 JSON，站点 generator 负责公开投影。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>生成链和幂等测试成为必要维护面。</p></section><section><h3>Value</h3><p>网站本身成为可验证的数据驱动工程证据。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-consumer-independent-proof">
+                    <header><span>08</span><h2>为什么 Consumer 证据独立于 Framework 状态</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>框架自测不能证明真实项目会正确采用。</p></section><section><h3>Constraints</h3><p>Consumer 可能固定在不同 Framework commit。</p></section><section><h3>Naive Approach</h3><p>把示例或 README 引用当成消费证明。</p></section><section><h3>Failure</h3><p>缺少实际编译、运行和生命周期反馈。</p></section><section><h3>Decision</h3><p>Consumer Matrix 固定双方提交并记录局部验证边界。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>证据不会自动随 Framework main 更新。</p></section><section><h3>Value</h3><p>抽象是否可用由独立项目事实反向校验。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-fail-closed-promotion">
+                    <header><span>09</span><h2>为什么能力晋级失败关闭</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>Preview Adapter 容易因演示成功被提前写成 Supported。</p></section><section><h3>Constraints</h3><p>晋级需要文档、测试、Runner、Consumer 与维护承诺。</p></section><section><h3>Naive Approach</h3><p>实现完成后直接修改营销标签。</p></section><section><h3>Failure</h3><p>支持面超过可持续验证和维护能力。</p></section><section><h3>Decision</h3><p>缺少任一权威证据时保持 Preview、Pending 或 Unknown。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>成熟度推进更慢，但避免不可兑现承诺。</p></section><section><h3>Value</h3><p>支持等级与真实维护能力一致。</p></section></div>
+                </article><article class="framework-decision-card" id="decision-domain-last">
+                    <header><span>10</span><h2>为什么 Domain Framework 最后扩张</h2></header>
+                    <div class="framework-decision-sections"><section><h3>Problem</h3><p>玩法域很容易产生相似但不稳定的公共抽象。</p></section><section><h3>Constraints</h3><p>Core 只应容纳跨 Consumer 的稳定原语。</p></section><section><h3>Naive Approach</h3><p>每个新游戏都先创建一个公共 Domain 包。</p></section><section><h3>Failure</h3><p>模块数量增长快于复用价值，语义重复。</p></section><section><h3>Decision</h3><p>先复用、再 Bridge，跨多个 Consumer 后才下沉最小 Kernel。</p></section><section><h3>Trade-offs / Where Not Apply</h3><p>早期 Consumer 会保留更多本地实现。</p></section><section><h3>Value</h3><p>Framework 优先收敛维护面，而不是追求模块数量。</p></section></div>
+                </article></div></section>
+    <section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="cases.html">Flagship Cases <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="evidence.html">Evidence Model <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="reference.html">Module Reference <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
+<!-- framework-detail-content:end -->
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links" data-content-stage="next">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/engineering.html">Engineering</a>
+                <a href="../../pages/framework.html">Framework</a>
+                <a href="../../pages/journal.html">Journal</a>
+                <a href="../../pages/brand.html">Brand</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

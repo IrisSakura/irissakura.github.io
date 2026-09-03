@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "framework-case-studies",
+  "frameworkCommit": "9d436c62f5cfbe78c84c9ef44fe8b5f8214d5cd1",
+  "sectionOrder": ["problem", "constraints", "naiveApproach", "architectureDecision", "systemModel", "failureModel", "tradeOffs", "implementation", "evidence", "consumer", "knownLimitations", "whatChangedAfterValidation"],
+  "cases": [
+    {
+      "id": "cross-engine-foundation",
+      "route": "pages/framework/cases/cross-engine-foundation.html",
+      "index": "01",
+      "title": "Cross-Engine Runtime Foundation",
+      "subtitle": "从 Unity 默认实现走向被证明的 Portable Core 与专项 Adapter",
+      "status": "local-passed / runner-pending",
+      "sections": {
+        "problem": "Runtime、配置、并行、存档与输入语义若直接依赖 Unity 类型，就无法在 Godot 或纯 .NET 环境复用。",
+        "constraints": "Core 必须保持 no-engine；平台生命周期、资源和 Editor 能力必须留在 Adapter；成熟度不能因文件存在自动晋级。",
+        "naiveApproach": "复制 Unity API 外形到 Godot，或在 Core 中加入条件编译。",
+        "architectureDecision": "以 BCL-only / no-engine Core 表达稳定语义，为 Unity 与 Godot 提供独立宿主和 Adapter，并用 Capability Matrix 分别记录状态。",
+        "systemModel": "Portable Core 定义契约与状态机；Engine Adapter 负责对象、时间和生命周期；Consumer composition root 选择实现。",
+        "failureModel": "Adapter 缺失、生命周期未清理、平台能力不等价或证据级别不足时失败关闭，不回退到隐式全局实现。",
+        "tradeOffs": "接口与装配面增加，且部分引擎特性不会进入公共 Core；换来的是语义边界和可独立测试性。",
+        "implementation": "Core、Config Core 与 Parallel 形成可迁移基础；Runtime、Input、Pooling、Save、Localization 和 Card Balance 已有 Godot 专项本地实现。",
+        "evidence": "专项 Adapter 具备本地测试与审查记录；整体 Foundation 的 Runner、Release 与 Production 不由这些本地结果替代。",
+        "consumer": "Godot tooling 与 STS2/Card Balance 路线证明同一 Core 可被非 Unity 宿主消费，但仅限已列出的能力。",
+        "knownLimitations": "Unity 是成熟主路线；Godot 仍按能力单元展示 Preview / local-only 状态，不声明完整运行时对等。",
+        "whatChangedAfterValidation": "验证后把“一套跨引擎 API”收敛为“共享语义 + 平台 Adapter”，并把每个能力的晋级条件拆开。"
+      }
+    },
+    {
+      "id": "lifecycle-ownership",
+      "route": "pages/framework/cases/lifecycle-ownership.html",
+      "index": "02",
+      "title": "Lifecycle & Ownership",
+      "subtitle": "把启动、Scope、取消、清理与失败回退变成同一运行时协议",
+      "status": "runner-passed / production-unknown",
+      "sections": {
+        "problem": "模块能正常启动并不代表它能在重复初始化、取消、退出或启动失败时保持一致。",
+        "constraints": "App、Gameplay、Scene 与纯 C# Scope 的 Owner 不同；异步退出必须等待或取消；诊断不能改变产品行为。",
+        "naiveApproach": "用静态单例承接全部服务，并只测试正常启动路径。",
+        "architectureDecision": "显式 composition root、immutable registry、Scope Owner、startup rollback 与 async exit，清理责任由创建者持有。",
+        "systemModel": "注册阶段冻结依赖；启动建立 Scope；运行期间由明确 Tick Owner 驱动；退出按逆序取消、释放并发布诊断。",
+        "failureModel": "重复初始化、注册后变更、启动中途异常、退出超时和残留订阅都有独立失败路径。",
+        "tradeOffs": "协议更严格，模块作者需要实现完整生命周期；换来可重入、可诊断和可测试的运行时。",
+        "implementation": "Runtime Foundation 已覆盖 startup failure、diagnostics、scope ownership、async exit、immutable registry 与 gameplay session。",
+        "evidence": "该生命周期收敛在 exact Framework commit 具备 local-passed 与 same-SHA runner-passed 记录。",
+        "consumer": "Bootstrap 与多个 Gameplay Consumer 通过显式 Scope 使用基础服务；Consumer 仍拥有玩法和场景生命周期。",
+        "knownLimitations": "Runner 证明测试工作流，不等于 Release 或真实 Production 长时运行。",
+        "whatChangedAfterValidation": "验证把退出从同步清理扩展为可等待、可取消的协议，并增加启动失败回滚和只读诊断。"
+      }
+    },
+    {
+      "id": "paradigm-neutral-ui",
+      "route": "pages/framework/cases/paradigm-neutral-ui.html",
+      "index": "03",
+      "title": "Paradigm-Neutral UI",
+      "subtitle": "Direct、Binding、MVVM 与 Structured UI 的渐进成本模型",
+      "status": "local-passed / runner-pending",
+      "sections": {
+        "problem": "统一 UI 范式会让简单页面过度工程，也会让复杂页面缺少状态边界。",
+        "constraints": "View 生命周期由 Unity 承担，状态与绑定应可测试；不同 Consumer 的复杂度与团队规模不同。",
+        "naiveApproach": "把 MVVM 设为默认，或让每个 View 直接查找场景和服务。",
+        "architectureDecision": "共享 UI Core 与状态契约，Direct、Binding、MVVM、Structured 作为递增选择，Unity Presentation 保留平台职责。",
+        "systemModel": "State / Intent 位于可测试层；Binding 可选；View 只持有显式依赖并在隐藏或销毁时释放。",
+        "failureModel": "View 关闭后回调、双向绑定循环、隐藏依赖、异步结果写入失效页面与范式间行为不一致。",
+        "tradeOffs": "多路径扩大测试矩阵，但避免把所有页面强制进同一成本模型。",
+        "implementation": "UI Production Architecture V2 覆盖 Direct、Binding、MVVM 与 Structured 多种消费路径。",
+        "evidence": "本地 EditMode 与多 Consumer 回归已闭合；远端 Runner 仍 pending。",
+        "consumer": "不同示例与玩法项目按页面复杂度选择路径，Framework 不拥有具体视觉、文案和业务流程。",
+        "knownLimitations": "没有真实运行截图作为公开素材；本页使用结构与验证边界，不用品牌图冒充运行证据。",
+        "whatChangedAfterValidation": "验证后把“MVVM 最佳实践”改成 Progressive Architecture Cost，并强化关闭、取消和跨范式一致性测试。"
+      }
+    },
+    {
+      "id": "card-balance-toolchain",
+      "route": "pages/framework/cases/card-balance-toolchain.html",
+      "index": "04",
+      "title": "Card Balance Toolchain",
+      "subtitle": "同一数值语义穿过 Unity Editor、Godot Dock、CLI 与 STS2 Consumer",
+      "status": "local-passed / runner-pending",
+      "sections": {
+        "problem": "卡牌数值审查若绑定单一 Editor 或表格格式，设计判断无法跨工具复用。",
+        "constraints": "核心必须 BCL-only；Excel/CSV、Unity、Godot 与 CLI 是不同 Adapter；诊断需要稳定代码和可重复输出。",
+        "naiveApproach": "把规则写进 Unity EditorWindow，或让每个 Consumer 自己解析表格。",
+        "architectureDecision": "建立 Editor-only 但引擎无关的 Card Balance Core，由 Unity/Godot/CLI Adapter 负责输入、展示和导出。",
+        "systemModel": "Importer 产生标准记录；Analyzer 执行规则；Diagnostic Report 保留身份；Adapter 决定交互与文件系统。",
+        "failureModel": "列缺失、值域错误、重复身份、Adapter 输出漂移和 Consumer 卡牌集合变化都必须给出可定位诊断。",
+        "tradeOffs": "维护多个 Adapter 和兼容层，但规则与诊断只存在一份。",
+        "implementation": "Core、Excel/CSV Unity Adapter、Godot Editor Dock、headless CLI 与 STS2 集成已经本地闭合。",
+        "evidence": "Unity Adapter、Editor profile、The Weaver 106 cards、Godot managed tests 与跨阶段 Node contracts 均有本地记录。",
+        "consumer": "The Weaver / STS2 提供真实卡牌集合与工作流反馈，证明工具不只服务示例数据。",
+        "knownLimitations": "本轮没有同 SHA Runner、正式 Release、签名或公开生产使用证明。",
+        "whatChangedAfterValidation": "验证后把规则从 Unity Editor 中抽离，并补充稳定 Diagnostic identity、Godot Dock 和 headless 路线。"
+      }
+    },
+    {
+      "id": "independent-consumer-validation",
+      "route": "pages/framework/cases/independent-consumer-validation.html",
+      "index": "05",
+      "title": "Independent Consumer Validation",
+      "subtitle": "用固定双方提交验证真实引用，而不是用示例替代采用证据",
+      "status": "local-passed / runner-pending",
+      "sections": {
+        "problem": "Framework 自测无法回答独立项目能否安装、组合、运行并清理这些能力。",
+        "constraints": "每个 Consumer 固定在不同 Framework commit；公开数据不能泄漏私有路径或把局部结果外推。",
+        "naiveApproach": "统计 README 引用或只展示一个内部 Sample。",
+        "architectureDecision": "为七个 Consumer 固定 source/framework commits、包哈希、Unity 版本与局部 EditMode/PlayMode/Player 证据。",
+        "systemModel": "Consumer source 导出审查过的闭合事实；站点 importer 校验身份、哈希和新鲜度；Matrix 按假设展示。",
+        "failureModel": "提交混用、测试 XML 失败、包哈希漂移、证据过期或公开字段越界时拒绝导入。",
+        "tradeOffs": "快照需要维护且不会自动追随 Framework main；换来可复核的独立消费边界。",
+        "implementation": "Route-Wave TD、Kitchen Shift、Railworks Factory、Living Bestiary、Ashfall Loot Run、Willow Hearth 与 Sakura Core Arena 已进入 registry。",
+        "evidence": "七个案例均记录 local-passed / runner-pending 及各自 EditMode、PlayMode 或 Player 范围。",
+        "consumer": "每个项目回答不同玩法与生命周期假设；具体游戏内容、数值和体验仍由 Consumer 拥有。",
+        "knownLimitations": "这些是固定快照和本地证据，不代表所有包、当前 main 或 Production。",
+        "whatChangedAfterValidation": "验证后增加双方 commit、package hash、证据新鲜度和 fail-closed importer，移除仅凭文档的采用声明。"
+      }
+    }
+  ]
+}

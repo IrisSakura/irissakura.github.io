@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {assertFrameworkModuleReference,resolveFrameworkModuleReference} from '../scripts/lib/framework-module-reference-model.mjs';
+const data=JSON.parse(await readFile(new URL('../data/framework-module-reference.json',import.meta.url),'utf8'));
+test('selected Module Reference carries twelve architecture-rich entries',()=>{assert.equal(assertFrameworkModuleReference(data),true);assert.equal(data.modules.length,12);for(const entry of data.modules){assert.ok(entry.layer);assert.ok(entry.lifecycle);assert.ok(entry.engineBoundary);assert.ok(entry.evidence);}});
+test('Module Reference rejects package identity drift',()=>{const drift=structuredClone(data);drift.modules[0].name='com.example.core';assert.throws(()=>assertFrameworkModuleReference(drift),/identity/);});
+test('Module Reference resolution is detached',()=>{const resolved=resolveFrameworkModuleReference(data);resolved.modules[1].dependencies[0]='changed';assert.notEqual(resolved.modules[1].dependencies[0],data.modules[1].dependencies[0]);});

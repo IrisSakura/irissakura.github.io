@@ -27,17 +27,29 @@ test('framework.json exposes only the public contract', async () => {
 
   assert.deepEqual(Object.keys(data).sort(), allowed.sort());
   assert.equal(data.schemaVersion, 1);
-  assert.equal(data.sourceCommit, 'c47ec76e23ad6e57408acb27390ff78239a66dbf');
+  assert.equal(data.sourceCommit, '9d436c62f5cfbe78c84c9ef44fe8b5f8214d5cd1');
   assert.match(data.sourceCommit, /^[0-9a-f]{7,40}$/);
   assert.equal(data.adoptionReviewContract, 'supported-stable-v1');
-  assert.match(data.adoptionReviewHash, /^sha256:[0-9a-f]{64}$/);
+  assert.equal(data.adoptionReviewHash, 'sha256:26df9f4c1b99a54f4f11e0e9289493a528fb2d941328bb7c7c47bb3063e08e56');
   assert.ok(!Number.isNaN(Date.parse(data.generatedAt)));
 
-  for (const key of ['packageCount', 'catalogModuleCount', 'presetCount', 'profileCount', 'asmdefCount']) {
-    assert.ok(Number.isInteger(data.summary[key]));
-    assert.ok(data.summary[key] >= 0);
-  }
-  assert.equal(data.summary.asmdefCount, 869);
+  assert.deepEqual(data.summary, {
+    packageCount: 147,
+    catalogModuleCount: 147,
+    presetCount: 69,
+    profileCount: 11,
+    asmdefCount: 884
+  });
+  assert.deepEqual(data.lifecycleCounts, {
+    Deprecated: 0,
+    DocsOnly: 9,
+    Experimental: 23,
+    Frozen: 3,
+    Preview: 106,
+    Research: 0,
+    Supported: 6
+  });
+  assert.equal(Object.hasOwn(data.summary, 'noEnginePackageCount'), false, 'snapshot does not publish a no-engine count');
 
   assert.ok(Array.isArray(data.layers));
   assert.ok(data.layers.length > 0);

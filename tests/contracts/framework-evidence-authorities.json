@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "framework-evidence-authorities",
+  "levels": [
+    {
+      "id": "designed",
+      "label": "Designed",
+      "meaning": "由已审阅的 Work Status、spec 或 plan 记录设计意图与边界。"
+    },
+    {
+      "id": "implemented",
+      "label": "Implemented",
+      "meaning": "由 Framework snapshot 或已提交代码确认能力已经存在。"
+    },
+    {
+      "id": "local-verification",
+      "label": "Local Verification",
+      "meaning": "由本地测试或本地验证记录确认当前工作树范围内的结果。"
+    },
+    {
+      "id": "ci-runner",
+      "label": "CI / Runner",
+      "meaning": "由绑定同一提交 SHA 的 CI 或 Runner 产物确认远程验证结果。"
+    },
+    {
+      "id": "consumer-validation",
+      "label": "Consumer Validation",
+      "meaning": "由独立 Consumer registry 与其固定验证记录确认消费范围。"
+    },
+    {
+      "id": "release",
+      "label": "Release",
+      "meaning": "由同一提交绑定的 Release metadata 与附件校验确认发布事实。"
+    },
+    {
+      "id": "production",
+      "label": "Production",
+      "meaning": "由明确范围的真实 production record 与运行证据确认生产事实。"
+    },
+    {
+      "id": "unknown-deferred",
+      "label": "Unknown / Deferred",
+      "meaning": "对应证据尚未闭合时保持 Unknown 或 Deferred，不用相邻等级替代。"
+    }
+  ],
+  "authorities": [
+    {
+      "id": "designed",
+      "label": "Designed",
+      "source": "Framework Work Status / spec-plan",
+      "level": "designed",
+      "mayClaim": ["已审阅的设计意图、范围、非目标与恢复条件"],
+      "mayNotClaim": ["代码已经存在", "本地或 Runner 已通过", "Consumer 或 Production 已采用"]
+    },
+    {
+      "id": "implemented",
+      "label": "Implemented",
+      "source": "Framework snapshot / committed code",
+      "level": "implemented",
+      "mayClaim": ["已提交代码或快照中存在的结构与能力事实"],
+      "mayNotClaim": ["测试已经通过", "Runner、Consumer、Release 或 Production 已验证"]
+    },
+    {
+      "id": "local",
+      "label": "Local Verification",
+      "source": "site local evidence records",
+      "level": "local-verification",
+      "mayClaim": ["当前本地工作树中已执行并通过的验证范围"],
+      "mayNotClaim": ["同一 SHA Runner 已通过", "Consumer 已验证", "Production 已上线"]
+    },
+    {
+      "id": "runner",
+      "label": "CI / Runner",
+      "source": "same-SHA Runner artifacts",
+      "level": "ci-runner",
+      "mayClaim": ["绑定同一 Framework commit SHA 的 Runner 验证结果"],
+      "mayNotClaim": ["用本地测试代替 Runner", "用旧 SHA 或无 SHA 日志代替 Production"]
+    },
+    {
+      "id": "consumer",
+      "label": "Consumer Validation",
+      "source": "consumer registry",
+      "level": "consumer-validation",
+      "mayClaim": ["独立 Consumer 的引用、测试或可玩验证范围"],
+      "mayNotClaim": ["Framework 全部模块均已生产采用", "Consumer 验证自动证明 Framework 成熟"]
+    },
+    {
+      "id": "release",
+      "label": "Release",
+      "source": "release metadata",
+      "level": "release",
+      "mayClaim": ["同一提交绑定的 Release metadata 与附件校验结果"],
+      "mayNotClaim": ["Release 自动等同 Production", "Candidate 或镜像状态是正式发布"]
+    },
+    {
+      "id": "production",
+      "label": "Production",
+      "source": "production record",
+      "level": "production",
+      "mayClaim": ["明确项目范围内有记录的 Production 事实"],
+      "mayNotClaim": ["缺少真实生产证据时声称 production-ready 或上线", "把本地、Runner、Consumer 或 Release 证据升级为 Production"]
+    },
+    {
+      "id": "unknown",
+      "label": "Unknown / Deferred",
+      "source": "explicit boundary",
+      "level": "unknown-deferred",
+      "mayClaim": ["Unknown", "Deferred", "runner-pending 或未验证边界"],
+      "mayNotClaim": ["用空白或推测填补 Production 状态", "跨级推断成熟度"]
+    }
+  ],
+  "boundaries": [
+    "Designed 与 Implemented 说明意图和存在，不替代验证证据。",
+    "Local Verification 与 CI / Runner 是独立等级，必须分别绑定自己的来源。",
+    "Consumer Validation、Release 与 Production 各自需要对应权威记录，不能跨级升级。",
+    "缺少权威来源时必须公开 Unknown / Deferred，并保留恢复入口。"
+  ]
+}

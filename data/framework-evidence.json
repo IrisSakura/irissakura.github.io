@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "framework-evidence",
+  "frameworkCommit": "9d436c62f5cfbe78c84c9ef44fe8b5f8214d5cd1",
+  "pages": [
+    {"id":"tooling","route":"pages/framework/tooling.html","eyebrow":"CORRECTNESS AS A WORKFLOW","title":"Tooling / Developer Experience","summary":"安装、配置、诊断、分析和生成工具共同降低正确采用成本。","solves":"把高风险人工步骤变成可复跑工作流。","costs":"工具本身需要版本、兼容与失败路径维护。","whereNotApply":"一次性脚本不应被包装成长期支持能力。"},
+    {"id":"evidence","route":"pages/framework/evidence.html","eyebrow":"EVIDENCE BEFORE CLAIMS","title":"Evidence Engineering","summary":"八级 Evidence Ladder 让每个结论停在真实证据能够支持的位置。","solves":"避免本地、Runner、Consumer、Release 与 Production 混写。","costs":"状态必须绑定提交和权威来源，无法用一个总分概括。","whereNotApply":"不存在证据时应显示 Unknown，而不是套用邻近等级。"},
+    {"id":"consumers","route":"pages/framework/consumers.html","eyebrow":"HYPOTHESIS-DRIVEN VALIDATION","title":"Framework Consumer Matrix","summary":"七个独立 Consumer 以固定双方提交、包组合和局部验证回答不同架构假设。","solves":"验证 API 是否能离开 Framework 仓库被真实项目采用。","costs":"每个快照只证明其固定提交与测试范围。","whereNotApply":"Consumer 使用不能自动把 Preview 模块晋级为 Supported。"},
+    {"id":"cases","route":"pages/framework/cases.html","eyebrow":"FIVE FLAGSHIP CASES","title":"Architecture Case Studies","summary":"五个案例用同一 12 段结构连接问题、失败、决策、证据与验证后的变化。","solves":"让架构能力通过完整工程闭环而不是模块数量被理解。","costs":"案例必须持续维护限制与证据状态。","whereNotApply":"没有足够证据的实验能力不进入旗舰案例。"}
+  ],
+  "toolchains": [
+    {"id":"card-balance","title":"Card Balance Toolchain","workflow":["BCL-only balance core","Excel / CSV Editor Adapter","Godot Dock / headless CLI","STS2 consumer validation"],"status":"local-passed","boundary":"Unity、Godot、CLI 与 STS2 证据均为本地闭环；本页不声明 Runner、Release 或 Production。"},
+    {"id":"runtime-console","title":"Runtime Developer Console","workflow":["read-only contributor facade","typed command contribution","diagnostics surface","lifecycle cleanup"],"status":"local-passed / runner-pending","boundary":"本地实现与验证完成；Runner 仍待同 SHA 证据。"},
+    {"id":"public-projection","title":"Public Projection Pipeline","workflow":["Framework source truth","closed public JSON","site generator","tests + Pages package"],"status":"local-passed","boundary":"网站投影链已本地验证；公开部署不属于本轮。"}
+  ],
+  "evidenceTopics": [
+    {"id":"godot","title":"Godot Adapter Evidence","status":"local-passed","summary":"Runtime、Config、Input、Pooling、Save、Localization 与 Card Balance 的专项 Adapter 有本地证据；整体 Godot Foundation 未被提升为 Supported。"},
+    {"id":"lifecycle","title":"Runtime Lifecycle Evidence","status":"runner-passed","summary":"生命周期收敛具备同 SHA Runner 记录；Release 与 Production 仍是独立边界。"},
+    {"id":"ui","title":"UI Architecture Evidence","status":"local-passed / runner-pending","summary":"Direct、Binding、MVVM、Structured 多路径回归在本地闭合，远端 Runner 尚未闭合。"},
+    {"id":"consumer","title":"Independent Consumer Evidence","status":"local-passed / runner-pending","summary":"七个 Consumer 的固定快照记录本地 EditMode、PlayMode 或 Player 范围，不外推生产采用。"}
+  ],
+  "consumerHypotheses": [
+    {"caseId":"route-wave-td","question":"路径、波次与终局清理能否在固定生命周期内组合？"},
+    {"caseId":"kitchen-shift","question":"时间压力与服务流程是否能保持可重置状态？"},
+    {"caseId":"railworks-factory","question":"物流和建造状态能否由明确系统边界承接？"},
+    {"caseId":"living-bestiary","question":"数据驱动实体与事件协作是否能独立演进？"},
+    {"caseId":"ashfall-loot-run","question":"战利品、能力和 Run 状态能否形成可恢复闭环？"},
+    {"caseId":"willow-hearth","question":"生活模拟的多个服务能否保持清晰 Ownership？"},
+    {"caseId":"gamejam-game","question":"GAS、Pooling、Event 与 Ledger 能否被小型游戏直接消费？"}
+  ]
+}

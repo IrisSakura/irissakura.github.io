@@ -10,7 +10,8 @@ async function readText(path) {
 
 const pageContracts = {
   'pages/portfolio.html': ['portfolio-journey', 'portfolio-cases', 'consumer-lab'],
-  'pages/framework.html': ['maturity', 'adoption', 'game-adoption', 'modules', 'architecture', 'lifecycle'],
+  'pages/framework.html': ['architecture-map', 'pillars', 'reference', 'maturity', 'adoption', 'game-adoption'],
+  'pages/framework-engineering.html': ['depth-model', 'reader-paths', 'architecture-domains', 'evidence-boundary', 'adoption-route'],
   'pages/journal.html': ['knowledge-streams', 'content-search', 'featured-notes', 'recent-audits', 'game-design-library', 'evidence-chains'],
   'pages/blog.html': ['featured-reading', 'blog-taxonomy', 'articles']
 };

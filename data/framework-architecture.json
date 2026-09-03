@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "framework-architecture",
+  "frameworkCommit": "9d436c62f5cfbe78c84c9ef44fe8b5f8214d5cd1",
+  "pages": [
+    {
+      "id": "governance",
+      "route": "pages/framework/governance.html",
+      "eyebrow": "ARCHITECTURE AS CODE",
+      "title": "Governance 不是文档口号，而是可执行边界",
+      "summary": "Package Identity、Layer、Dependency、Lifecycle 与 Evidence 由机器合同共同约束，例外必须带理由和恢复条件。",
+      "status": "implemented",
+      "solves": "让 147 个包在持续演进时仍能回答谁可以依赖谁、什么可以晋级，以及失败后从哪里恢复。",
+      "costs": "每次跨层变化都需要同步清单、测试、文档和生成投影，短期交付成本更高。",
+      "whereNotApply": "单仓库一次性原型不必复制完整治理面，但仍应保留最小 Ownership 与依赖方向。",
+      "focusPoints": ["Package Identity 与六层依赖方向", "Lifecycle、Profile 与公开采用面的独立状态", "生成式 Inventory / Work Status / Catalog", "带原因和恢复条件的显式例外"],
+      "failureModes": ["README 数量漂移但仍被当成真理源", "跨层引用通过编译却破坏长期演进边界", "TODO 或历史计划被误当成当前授权", "生成投影被手改并覆盖 Owner"],
+      "tradeoffs": ["治理优先降低长期维护面，但会增加变更前置检查", "例外允许真实迁移，却必须可检索、可撤销", "自动清单更可靠，但只能表达源数据确实拥有的事实"]
+    },
+    {
+      "id": "cross-engine",
+      "route": "pages/framework/cross-engine.html",
+      "eyebrow": "PORTABLE CORE → ENGINE ADAPTER",
+      "title": "Cross-Engine 的核心不是多一个平台标签",
+      "summary": "先把时间、配置、并行、存档等语义从引擎对象中剥离，再由 Unity 或 Godot Adapter 承担生命周期和平台 API。",
+      "status": "implemented",
+      "solves": "让可迁移规则保持 BCL-only / no-engine，同时允许不同引擎以自己的宿主与资源语义接入。",
+      "costs": "需要显式端口、Adapter 测试和能力矩阵；平台特性不能偷渡进 Core。",
+      "whereNotApply": "高度依赖单一引擎渲染、Editor 或资产序列化的能力应留在平台层。",
+      "focusPoints": ["Engine-Agnostic Core", "Unity Runtime / Editor Adapter", "Godot 专项 Adapter 的本地证据", "Capability Matrix 与晋级条件"],
+      "failureModes": ["把源码存在写成平台 Supported", "用 Unity 类型污染可迁移 Core", "把一个 Parallel Adapter 外推成完整 Godot Runtime", "本地测试替代同 SHA Runner / Release"],
+      "tradeoffs": ["更清晰的边界换来更多装配代码", "平台差异显式化后，抽象不会承诺最低公分母以外的能力", "跨引擎复用以被证明的语义为限，不追求表面 API 一致"]
+    },
+    {
+      "id": "decisions",
+      "route": "pages/framework/decisions.html",
+      "eyebrow": "WHY SAKURA WORKS THIS WAY",
+      "title": "Architecture Decisions：公开判断，也公开代价",
+      "summary": "十项决策以 Problem、Constraints、Naive Approach、Failure、Decision、Trade-offs、Value 七段结构呈现。",
+      "status": "implemented",
+      "solves": "把架构结果还原为可讨论的约束与取舍，而不是只展示最终目录。",
+      "costs": "需要持续更新失效假设，并接受某些决策只适用于特定规模和证据阶段。",
+      "whereNotApply": "这些决策不是通用教条；项目规模、团队和平台约束不同，应重新评估。",
+      "focusPoints": ["十项可复核决策", "What This Solves", "What This Costs", "Where It Does Not Apply"],
+      "failureModes": ["只写最佳实践结论", "隐藏失败方案和迁移成本", "把 Framework 默认值推广为所有项目默认值"],
+      "tradeoffs": ["显式决策记录提高复核性，但需要维护", "保留适用边界会减少宣传强度，却提高技术可信度", "约束或证据变化后必须重新评估，而不是永久冻结结论"]
+    },
+    {
+      "id": "runtime",
+      "route": "pages/framework/runtime.html",
+      "eyebrow": "WHO OWNS WHAT?",
+      "title": "Runtime Lifecycle & Ownership",
+      "summary": "启动、Scope、Tick、取消、退出和失败恢复由 Owner 明确承接；清理不是正常路径之后的附注。",
+      "status": "implemented",
+      "solves": "避免重复初始化、跨场景残留、异步退出竞态与无 Owner 的资源句柄。",
+      "costs": "调用方必须显式选择 App、Gameplay、Scene 或纯 C# Scope，并处理取消与失败。",
+      "whereNotApply": "纯函数和无资源短生命周期对象不需要完整宿主协议。",
+      "focusPoints": ["App / Gameplay / Scene Scope", "Startup 与 immutable registry", "Async exit 与 cancellation", "Diagnostics 与 failure rollback"],
+      "failureModes": ["Bootstrap 与 SingletonManager 双重初始化", "页面关闭后订阅继续存活", "启动失败留下半初始化服务", "取消请求到达后仍提交副作用"],
+      "tradeoffs": ["更严格的 Owner 约束减少便利式全局访问", "失败路径测试增加成本，但把泄漏和竞态从线上前移", "生命周期收敛已有 same-SHA Runner 证据，但不外推为 Production"]
+    },
+    {
+      "id": "ui",
+      "route": "pages/framework/ui.html",
+      "eyebrow": "PROGRESSIVE ARCHITECTURE COST",
+      "title": "Paradigm-Neutral UI",
+      "summary": "Direct、Binding、MVVM 与 Structured UI 是递增成本的选择，不是从简单到高级的等级表。",
+      "status": "implemented",
+      "solves": "让 UI 状态、绑定与表现层可以按复杂度组合，而不强迫所有页面进入同一种范式。",
+      "costs": "支持多条路径意味着需要共享契约、适配层和跨范式回归测试。",
+      "whereNotApply": "简单、短寿命、低状态页面通常不需要 MVVM；复杂多人协作页面才可能收回其成本。",
+      "focusPoints": ["UI Core 与 Unity Presentation 分离", "Direct / Binding / MVVM / Structured", "状态与 View 生命周期", "多 Consumer 回归"],
+      "failureModes": ["把 MVVM 作为默认并制造样板代码", "View 隐藏后仍保留订阅", "绑定层直接拥有业务生命周期", "UI 通过层级查找隐式依赖"],
+      "tradeoffs": ["多范式降低采用门槛，却扩大测试矩阵", "结构化状态提高可测试性，但不应吞并表现层", "当前证据是 local-passed / runner-pending，不声明 Release 或 Production"]
+    },
+    {
+      "id": "gameplay",
+      "route": "pages/framework/gameplay.html",
+      "eyebrow": "SEMANTICS BEFORE ENGINE OBJECTS",
+      "title": "Gameplay Kernel & Semantic Systems",
+      "summary": "能力、规则、存档、输入快照与确定性流程优先表达为可迁移语义，Game 保留内容和体验 Owner。",
+      "status": "implemented",
+      "solves": "在不同玩法域之间复用最小规则原语，同时避免 Framework 吞并具体游戏设计。",
+      "costs": "只有跨 Consumer 且语义稳定的能力才值得下沉，候选需要复用审计。",
+      "whereNotApply": "单个游戏独有的数值、关卡、内容编排和视觉反馈应留在 Consumer。",
+      "focusPoints": ["能力与规则语义", "确定性输入与时间", "Save / Config / Event 边界", "Game-owned content 与 Adapter"],
+      "failureModes": ["无 Consumer 的抽象提前进入 Core", "Framework 直接读取场景层内容", "随机、时间和副作用没有注入边界", "玩法包复制已有 Kernel 契约"],
+      "tradeoffs": ["最小 Kernel 提高迁移性，但不提供完整游戏", "Consumer 验证能发现抽象缺口，却不自动晋级生命周期", "Domain Framework 是最后扩张层，不是默认落点"]
+    }
+  ],
+  "decisions": [
+    {"id":"engine-boundary","title":"为什么 Core 不引用引擎","problem":"可复用规则容易被 Unity 类型和生命周期绑死。","constraints":"Core 必须可在无引擎环境验证，平台能力仍需完整表达。","naiveApproach":"在 Core 中直接引用 MonoBehaviour、Time 或 Asset。","failure":"迁移到 Godot、Server 或纯测试环境时边界失效。","decision":"Core 保持 no-engine；Unity、Godot 与 Editor 能力进入 Adapter。","tradeoffs":"增加端口和装配代码；高度平台化能力不做伪抽象。","value":"语义可迁移，平台差异可见且可测试。"},
+    {"id":"explicit-ownership","title":"为什么 Ownership 必须显式","problem":"全局服务和异步任务容易没有明确清理者。","constraints":"场景切换、取消和失败都必须释放订阅与句柄。","naiveApproach":"依赖静态单例或对象销毁时碰运气清理。","failure":"重复初始化、残留回调和半提交副作用。","decision":"按 App、Gameplay、Scene 或纯 C# Scope 定义 Owner。","tradeoffs":"调用方承担更明确的生命周期协议。","value":"清理、取消和故障恢复可以被独立验证。"},
+    {"id":"architecture-as-code","title":"为什么治理要 Architecture as Code","problem":"文档规则会与 147 个包的真实依赖快速漂移。","constraints":"清单、层级、Profile 与计划状态存在多个 Owner。","naiveApproach":"只在 README 维护包数量和允许依赖。","failure":"文字仍正确但代码和生成状态已经不同。","decision":"用机器清单、resolver 和 verifier 固化规则。","tradeoffs":"变更必须同步更多投影与门禁。","value":"架构边界可以在提交前失败关闭。"},
+    {"id":"di-not-everywhere","title":"为什么 DI 不是通用服务定位器","problem":"统一容器很容易吞并生命周期和业务访问。","constraints":"替换、测试和装配需要 DI，但业务语义需要清晰入口。","naiveApproach":"所有对象都从全局容器按类型解析。","failure":"依赖隐藏、Scope 泄漏且初始化顺序不可见。","decision":"DI 只负责依赖、生命周期、替换、测试和 composition root。","tradeoffs":"需要维护显式构造和 Facade。","value":"依赖图和生命周期保持可读。"},
+    {"id":"mvvm-not-default","title":"为什么 MVVM 不是默认","problem":"把一种 UI 范式用于所有页面会放大小页面成本。","constraints":"页面复杂度、协作规模和状态寿命差异很大。","naiveApproach":"要求所有 View 都创建 ViewModel 和完整绑定层。","failure":"样板代码超过业务价值，调试路径变长。","decision":"Direct、Binding、MVVM、Structured 按成本渐进选择。","tradeoffs":"Framework 需维护多条互操作路径。","value":"简单页面保持简单，复杂页面仍有结构化升级路线。"},
+    {"id":"evidence-before-claims","title":"为什么证据必须先于成熟度声明","problem":"代码存在、本地通过和 Production 经常被混为一谈。","constraints":"不同证据由不同系统和提交拥有。","naiveApproach":"用测试总数或单次演示概括成熟度。","failure":"读者无法判断结论适用范围和是否同 SHA。","decision":"Designed 到 Unknown 八级独立呈现。","tradeoffs":"公开文案更克制，状态可能长期显示 Pending。","value":"每个结论都有权威来源和恢复入口。"},
+    {"id":"generated-projections","title":"为什么波动事实由 Owner 生成","problem":"包数、路由、文章与 Consumer 证据持续变化。","constraints":"网站需要可读策展，但不能复制第二套事实。","naiveApproach":"手工更新页面数字和列表。","failure":"页面与源仓库在下一次变更后分叉。","decision":"源仓导出闭合 JSON，站点 generator 负责公开投影。","tradeoffs":"生成链和幂等测试成为必要维护面。","value":"网站本身成为可验证的数据驱动工程证据。"},
+    {"id":"consumer-independent-proof","title":"为什么 Consumer 证据独立于 Framework 状态","problem":"框架自测不能证明真实项目会正确采用。","constraints":"Consumer 可能固定在不同 Framework commit。","naiveApproach":"把示例或 README 引用当成消费证明。","failure":"缺少实际编译、运行和生命周期反馈。","decision":"Consumer Matrix 固定双方提交并记录局部验证边界。","tradeoffs":"证据不会自动随 Framework main 更新。","value":"抽象是否可用由独立项目事实反向校验。"},
+    {"id":"fail-closed-promotion","title":"为什么能力晋级失败关闭","problem":"Preview Adapter 容易因演示成功被提前写成 Supported。","constraints":"晋级需要文档、测试、Runner、Consumer 与维护承诺。","naiveApproach":"实现完成后直接修改营销标签。","failure":"支持面超过可持续验证和维护能力。","decision":"缺少任一权威证据时保持 Preview、Pending 或 Unknown。","tradeoffs":"成熟度推进更慢，但避免不可兑现承诺。","value":"支持等级与真实维护能力一致。"},
+    {"id":"domain-last","title":"为什么 Domain Framework 最后扩张","problem":"玩法域很容易产生相似但不稳定的公共抽象。","constraints":"Core 只应容纳跨 Consumer 的稳定原语。","naiveApproach":"每个新游戏都先创建一个公共 Domain 包。","failure":"模块数量增长快于复用价值，语义重复。","decision":"先复用、再 Bridge，跨多个 Consumer 后才下沉最小 Kernel。","tradeoffs":"早期 Consumer 会保留更多本地实现。","value":"Framework 优先收敛维护面，而不是追求模块数量。"}
+  ]
+}

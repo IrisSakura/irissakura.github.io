@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [journalSource, blogPublication, blogTaxonomy, contentSearchIndex, evidenceChains, evidenceChainAuthorities, projectData, irisEngineering, consumerLab, frameworkQuickstart, siteData, themeConfig, sitemap] = await Promise.all([
+const [journalSource, blogPublication, blogTaxonomy, contentSearchIndex, evidenceChains, evidenceChainAuthorities, projectData, irisEngineering, consumerLab, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkEvidenceAuthorities, siteData, themeConfig, sitemap] = await Promise.all([
   readJson('data/journal-source.json'),
   readJson('config/blog-publication.json'),
   readJson('data/blog-taxonomy.json'),
@@ -17,6 +17,15 @@ const [journalSource, blogPublication, blogTaxonomy, contentSearchIndex, evidenc
   readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
   readJson('data/framework-quickstart.json'),
+  readJson('data/framework-story.json'),
+  readJson('data/framework-engineering.json'),
+  readJson('data/framework-architecture.json'),
+  readJson('data/framework-evidence.json'),
+  readJson('data/framework-case-studies.json'),
+  readJson('data/framework-evolution.json'),
+  readJson('data/framework-knowledge-graph.json'),
+  readJson('data/framework-module-reference.json'),
+  readJson('tests/contracts/framework-evidence-authorities.json'),
   readJson('data/site.json'),
   readJson('data/themes.json'),
   readFile(path.join(root, 'sitemap.xml'), 'utf8')
@@ -106,6 +115,13 @@ const brandContrastRoutes = [
     route: '/pages/framework.html',
     readySelector: '#framework-module-list[data-framework-loaded="true"]',
     checks: [
+      ['Framework positioning summary', '#positioning .framework-story-intro p'],
+      ['Framework story chip', '.framework-story-chip'],
+      ['Framework architecture map title', '#architecture-map h2'],
+      ['Framework architecture status', '.framework-map-branch-unity .framework-map-status'],
+      ['Framework architecture boundary', '.framework-map-boundaries article h3'],
+      ['Framework pillar title', '.framework-pillar h3'],
+      ['Framework reference card', '.framework-reference-card strong'],
       ['Framework module result count', '#framework-module-result-count'],
       ['Framework stack highlight', '.stack-layer.highlight-layer'],
       ['Framework active module filter', '.module-filter.is-active'],
@@ -124,6 +140,17 @@ const brandContrastRoutes = [
       ['Quickstart timeline markers', '.quickstart-step-marker'],
       ['Quickstart completion labels', '.quickstart-done strong'],
       ['Quickstart Preview badge', '.preview-badge']
+    ]
+  },
+  {
+    route: '/pages/framework-engineering.html',
+    checks: [
+      ['Framework Engineering hero description', '.framework-engineering-hero-copy > p:not(.section-kicker)'],
+      ['Framework Engineering depth cards', '.framework-depth-card h3'],
+      ['Framework Engineering reader cards', '.framework-reader-card h3'],
+      ['Framework Engineering domain cards', '.framework-domain-card h3'],
+      ['Framework Engineering evidence cards', '.framework-evidence-authority-card p'],
+      ['Framework Engineering adoption routes', '.framework-adoption-route-card strong']
     ]
   },
   {
@@ -365,6 +392,35 @@ try {
   await desktop.locator('.nav-menu').getByRole('link', { name: 'Framework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
+  if (await desktop.locator('.framework-story-chip').count() !== frameworkStory.positioning.claims.length) {
+    throw new Error('Framework positioning claims are incomplete');
+  }
+  if (await desktop.locator('.framework-map-layer').count() !== frameworkStory.architectureMap.layers.length) {
+    throw new Error('Framework architecture map layers are incomplete');
+  }
+  if (await desktop.locator('.framework-pillar').count() !== frameworkStory.pillars.length) {
+    throw new Error('Framework engineering pillars are incomplete');
+  }
+  if (await desktop.locator('.framework-reference-card').count() !== frameworkStory.reference.items.length) {
+    throw new Error('Framework technical reference entries are incomplete');
+  }
+  const frameworkStoryState = await desktop.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    storyText: document.querySelector('#main-content')?.innerText ?? '',
+    referenceAnchors: [...document.querySelectorAll('.framework-reference-card')].map((card) => card.getAttribute('href'))
+  }));
+  if (frameworkStoryState.overflow > 1) {
+    throw new Error(`Framework story overflows the desktop viewport by ${frameworkStoryState.overflow}px`);
+  }
+  for (const phrase of ['Portable Core', 'Godot Parallel Preview', 'Godot Runtime Host', 'local-passed / runner-pending']) {
+    if (!frameworkStoryState.storyText.includes(phrase)) throw new Error(`Framework story is missing ${phrase}`);
+  }
+  if (frameworkStoryState.storyText.includes('Godot Runtime Supported')) {
+    throw new Error('Framework story overclaims Godot Runtime support');
+  }
+  if (JSON.stringify(frameworkStoryState.referenceAnchors) !== JSON.stringify(frameworkStory.reference.items.map((item) => item.href))) {
+    throw new Error('Framework reference anchors drifted from the story contract');
+  }
   if (await desktop.getAttribute('html', 'data-brand-mode') !== 'sakura') {
     throw new Error('soft navigation retained a stale Engineering brand mode');
   }
@@ -380,6 +436,78 @@ try {
   if (await desktop.locator('link[href$="/style/framework.css"]').count() !== 1) {
     throw new Error('soft navigation did not load the Framework page stylesheet');
   }
+  const frameworkEngineeringPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await keepSmokeTestLocal(frameworkEngineeringPage);
+  await frameworkEngineeringPage.goto(`${baseUrl}/pages/framework-engineering.html`, { waitUntil: 'networkidle' });
+  if (await frameworkEngineeringPage.locator('.framework-depth-card').count() !== frameworkEngineering.depthModel.length
+    || await frameworkEngineeringPage.locator('.framework-reader-card').count() !== frameworkEngineering.readerPaths.length
+    || await frameworkEngineeringPage.locator('.framework-domain-card').count() !== frameworkEngineering.domains.length) {
+    throw new Error('Framework Engineering Hub does not expose the complete depth, reader, and domain contract');
+  }
+  const frameworkEngineeringState = await frameworkEngineeringPage.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    title: document.title,
+    text: document.querySelector('#main-content')?.innerText ?? '',
+    pageIndex: [...document.querySelectorAll('[data-page-index-link]')].map((link) => link.getAttribute('href')),
+    routeLinks: [...document.querySelectorAll('.framework-adoption-route-card')].map((link) => link.getAttribute('href'))
+  }));
+  if (frameworkEngineeringState.overflow > 1) {
+    throw new Error(`Framework Engineering Hub overflows the desktop viewport by ${frameworkEngineeringState.overflow}px`);
+  }
+  if (frameworkEngineeringState.title !== frameworkEngineering.positioning.seoTitle) {
+    throw new Error('Framework Engineering page title drifted from the closed SEO contract');
+  }
+  const normalizedEngineeringText = frameworkEngineeringState.text.toLocaleUpperCase('en-US');
+  for (const phrase of ['D0 · Signal', 'D1 · System', 'D2 · Architecture', 'D3 · Evidence', 'Understand Sakura', 'Explore Engineering', 'Start Using', 'local-passed / runner-pending', 'Production: unknown', 'Implemented']) {
+    if (!normalizedEngineeringText.includes(phrase.toLocaleUpperCase('en-US'))) throw new Error(`Framework Engineering Hub is missing ${phrase}`);
+  }
+  if (JSON.stringify(frameworkEngineeringState.pageIndex) !== JSON.stringify(['#depth-model', '#reader-paths', '#architecture-domains', '#evidence-boundary', '#adoption-route'])) {
+    throw new Error('Framework Engineering page index order drifted');
+  }
+  for (const href of [frameworkEngineering.links.framework, frameworkEngineering.links.quickstart, `${frameworkEngineering.links.portfolio}#consumer-lab`, frameworkEngineering.links.cases, frameworkEngineering.links.knowledge, frameworkEngineering.links.reference, frameworkEngineering.links.home]) {
+    if (!frameworkEngineeringState.routeLinks.includes(href)) throw new Error(`Framework Engineering Hub is missing route ${href}`);
+  }
+  if (frameworkEngineeringState.text.includes('href="pages/')) {
+    throw new Error('Framework Engineering Hub contains an invalid nested page route');
+  }
+  const frameworkDeepRoutes = [
+    ...frameworkArchitecture.pages.map((entry) => entry.route),
+    ...frameworkEvidence.pages.map((entry) => entry.route),
+    ...frameworkCaseStudies.cases.map((entry) => entry.route),
+    frameworkEvolution.route,
+    frameworkKnowledgeGraph.route,
+    frameworkModuleReference.route
+  ];
+  if (frameworkDeepRoutes.length !== 18) throw new Error('Framework deep route topology must contain exactly 18 pages');
+  for (const route of frameworkDeepRoutes) {
+    await frameworkEngineeringPage.goto(`${baseUrl}/${route}`, { waitUntil: 'networkidle' });
+    const state = await frameworkEngineeringPage.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+      h1: document.querySelectorAll('h1').length,
+      indexes: document.querySelectorAll('[data-page-index-link]').length,
+      next: document.querySelectorAll('#next-route a').length,
+      text: document.querySelector('#main-content')?.innerText ?? ''
+    }));
+    if (state.overflow > 1) throw new Error(`${route} overflows the desktop viewport by ${state.overflow}px`);
+    if (state.h1 !== 1 || state.indexes < 3 || state.next < 2) throw new Error(`${route} has an incomplete deep-page shell`);
+    if (state.text.includes('undefined') || state.text.includes('/Users/')) throw new Error(`${route} exposes unresolved or private content`);
+  }
+  await frameworkEngineeringPage.goto(`${baseUrl}/pages/framework/decisions.html`, { waitUntil: 'networkidle' });
+  if (await frameworkEngineeringPage.locator('.framework-decision-card').count() !== 10
+    || await frameworkEngineeringPage.locator('.framework-decision-card section').count() !== 70) {
+    throw new Error('Architecture Decisions page does not expose ten seven-section decisions');
+  }
+  for (const caseStudy of frameworkCaseStudies.cases) {
+    await frameworkEngineeringPage.goto(`${baseUrl}/${caseStudy.route}`, { waitUntil: 'networkidle' });
+    if (await frameworkEngineeringPage.locator('.framework-case-sections > .container > section').count() !== 12) throw new Error(`${caseStudy.id} does not expose twelve sections`);
+  }
+  await frameworkEngineeringPage.goto(`${baseUrl}/pages/framework/evidence.html`, { waitUntil: 'networkidle' });
+  if (await frameworkEngineeringPage.locator('.framework-evidence-ladder > li').count() !== frameworkEvidenceAuthorities.levels.length) throw new Error('Evidence page does not expose the full eight-level ladder');
+  await frameworkEngineeringPage.goto(`${baseUrl}/pages/framework/consumers.html`, { waitUntil: 'networkidle' });
+  if (await frameworkEngineeringPage.locator('.framework-consumer-card').count() !== consumerLab.cases.length) throw new Error('Consumer Matrix does not expose all reviewed snapshots');
+  await frameworkEngineeringPage.goto(`${baseUrl}/pages/framework/reference.html`, { waitUntil: 'networkidle' });
+  if (await frameworkEngineeringPage.locator('.framework-module-reference-card').count() !== frameworkModuleReference.modules.length) throw new Error('Module Reference does not expose every curated module');
+  await frameworkEngineeringPage.close();
   await desktop.evaluate(() => history.back());
   await desktop.waitForURL(`${baseUrl}/index.html`);
   await desktop.locator('.profile-identity').waitFor();
@@ -705,6 +833,51 @@ try {
   }
   if (engineeringMobileState.capabilityCards !== irisEngineering.capabilities.length) {
     throw new Error('mobile Engineering page does not expose every capability group');
+  }
+  await mobile.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
+  await mobile.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
+  const frameworkMobileState = await mobile.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    layers: document.querySelectorAll('.framework-map-layer').length,
+    branches: document.querySelectorAll('.framework-map-branch').length,
+    pillars: document.querySelectorAll('.framework-pillar').length,
+    reference: document.querySelectorAll('.framework-reference-card').length
+  }));
+  if (frameworkMobileState.overflow > 1) {
+    throw new Error(`Framework story overflows the mobile viewport by ${frameworkMobileState.overflow}px`);
+  }
+  if (frameworkMobileState.layers !== frameworkStory.architectureMap.layers.length
+    || frameworkMobileState.branches !== frameworkStory.architectureMap.branches.length
+    || frameworkMobileState.pillars !== frameworkStory.pillars.length
+    || frameworkMobileState.reference !== frameworkStory.reference.items.length) {
+    throw new Error('mobile Framework story does not expose the complete architecture and reference contract');
+  }
+  await mobile.goto(`${baseUrl}/pages/framework-engineering.html`, { waitUntil: 'networkidle' });
+  const frameworkEngineeringMobileState = await mobile.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    depthCards: document.querySelectorAll('.framework-depth-card').length,
+    readerCards: document.querySelectorAll('.framework-reader-card').length,
+    domainCards: document.querySelectorAll('.framework-domain-card').length,
+    evidenceCards: document.querySelectorAll('.framework-evidence-authority-card').length
+  }));
+  if (frameworkEngineeringMobileState.overflow > 1) {
+    throw new Error(`Framework Engineering Hub overflows the mobile viewport by ${frameworkEngineeringMobileState.overflow}px`);
+  }
+  if (frameworkEngineeringMobileState.depthCards !== frameworkEngineering.depthModel.length
+    || frameworkEngineeringMobileState.readerCards !== frameworkEngineering.readerPaths.length
+    || frameworkEngineeringMobileState.domainCards !== frameworkEngineering.domains.length
+    || frameworkEngineeringMobileState.evidenceCards !== frameworkEvidenceAuthorities.authorities.length) {
+    throw new Error('mobile Framework Engineering Hub does not expose the complete contract');
+  }
+  for (const route of ['/pages/framework/decisions.html', '/pages/framework/consumers.html', '/pages/framework/cases/paradigm-neutral-ui.html', '/pages/framework/reference.html']) {
+    await mobile.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
+    const deepMobileState = await mobile.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+      h1: document.querySelectorAll('h1').length,
+      index: document.querySelectorAll('[data-page-index-link]').length
+    }));
+    if (deepMobileState.overflow > 1) throw new Error(`${route} overflows the mobile viewport by ${deepMobileState.overflow}px`);
+    if (deepMobileState.h1 !== 1 || deepMobileState.index < 3) throw new Error(`${route} is incomplete on mobile`);
   }
   for (const route of ['/pages/engineering.html', '/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
     await assertEvidenceChainPage(mobile, route, 'mobile');

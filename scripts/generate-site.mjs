@@ -7,6 +7,16 @@ import sanitizeHtml from 'sanitize-html';
 import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
+import { assertFrameworkEngineering, resolveFrameworkEngineering } from './lib/framework-engineering-model.mjs';
+import { assertFrameworkRequirementCoverage } from './lib/framework-requirement-coverage.mjs';
+import { assertFrameworkEvidenceAuthorities, resolveFrameworkEvidenceAuthorities } from './lib/framework-evidence-authority.mjs';
+import { assertFrameworkStory, resolveFrameworkStory } from './lib/framework-story-model.mjs';
+import { assertFrameworkArchitecture, resolveFrameworkArchitecture } from './lib/framework-architecture-model.mjs';
+import { assertFrameworkEvidence, resolveFrameworkEvidence } from './lib/framework-evidence-model.mjs';
+import { assertFrameworkCaseStudies, resolveFrameworkCaseStudies } from './lib/framework-case-studies-model.mjs';
+import { assertFrameworkEvolution, resolveFrameworkEvolution } from './lib/framework-evolution-model.mjs';
+import { assertFrameworkKnowledgeGraph, resolveFrameworkKnowledgeGraph } from './lib/framework-knowledge-graph-model.mjs';
+import { assertFrameworkModuleReference, resolveFrameworkModuleReference } from './lib/framework-module-reference-model.mjs';
 import { resolveBlogDiscovery } from './lib/blog-discovery-model.mjs';
 import { selectPublishedBlogs, stripBlogPublicationPreamble } from './lib/blog-publication-model.mjs';
 import { buildContentSearchIndex, resolveFeaturedReading } from './lib/content-search-model.mjs';
@@ -48,14 +58,26 @@ const PAGE_INDEXES = {
   'pages/framework.html': {
     ariaLabel: 'Framework 页面章节',
     title: '浏览框架证据',
-    insertBefore: '    <section class="framework-overview">',
+    insertBefore: '    <!-- framework-story:start -->',
     items: [
+      ['architecture-map', '架构地图'],
+      ['pillars', '工程支柱'],
+      ['reference', '技术参考'],
       ['maturity', '成熟度'],
       ['adoption', '采用路线'],
-      ['game-adoption', '实战映射'],
-      ['modules', '核心模块'],
-      ['architecture', '架构分层'],
-      ['lifecycle', '支持周期']
+      ['game-adoption', '消费证据']
+    ]
+  },
+  'pages/framework-engineering.html': {
+    ariaLabel: 'Framework Engineering 页面章节',
+    title: '浏览架构证据',
+    insertBefore: '    <!-- framework-engineering-content:start -->',
+    items: [
+      ['depth-model', '深度模型'],
+      ['reader-paths', '读者路径'],
+      ['architecture-domains', '十个能力域'],
+      ['evidence-boundary', '证据边界'],
+      ['adoption-route', '采用入口']
     ]
   },
   'pages/journal.html': {
@@ -83,11 +105,22 @@ const PAGE_INDEXES = {
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
   readJson('data/framework-quickstart.json'),
+  readJson('data/framework-story.json'),
+  readJson('data/framework-engineering.json'),
+  readJson('data/framework-architecture.json'),
+  readJson('data/framework-evidence.json'),
+  readJson('data/framework-case-studies.json'),
+  readJson('data/framework-evolution.json'),
+  readJson('data/framework-knowledge-graph.json'),
+  readJson('data/framework-module-reference.json'),
+  readJson('tests/contracts/framework-plan-coverage.json'),
+  readJson('tests/contracts/framework-evidence-authorities.json'),
+  readText('components/framework-page-shell.html'),
   readJson('data/projects.json'),
   readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
@@ -106,6 +139,16 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, projects, irisEn
 
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
+assertFrameworkStory(frameworkStory);
+assertFrameworkEngineering(frameworkEngineering);
+assertFrameworkArchitecture(frameworkArchitecture);
+assertFrameworkEvidence(frameworkEvidence);
+assertFrameworkCaseStudies(frameworkCaseStudies);
+assertFrameworkEvolution(frameworkEvolution);
+assertFrameworkKnowledgeGraph(frameworkKnowledgeGraph);
+assertFrameworkModuleReference(frameworkModuleReference);
+assertFrameworkRequirementCoverage(frameworkPlanCoverage);
+assertFrameworkEvidenceAuthorities(frameworkEvidenceAuthorities);
 assertProjectFactsCurrent(projects, framework, journal);
 assertEngineeringSnapshot(irisEngineering);
 assertConsumerLabCurrent(consumerLab);
@@ -211,9 +254,66 @@ const blogAliasDefinitions = journalSource.blogs.flatMap((article) => {
   }];
 });
 
+const architectureView = resolveFrameworkArchitecture(frameworkArchitecture);
+const evidenceView = resolveFrameworkEvidence(frameworkEvidence);
+const caseStudiesView = resolveFrameworkCaseStudies(frameworkCaseStudies);
+const evolutionView = resolveFrameworkEvolution(frameworkEvolution);
+const knowledgeGraphView = resolveFrameworkKnowledgeGraph(frameworkKnowledgeGraph);
+const moduleReferenceView = resolveFrameworkModuleReference(frameworkModuleReference);
+
+const frameworkArchitectureDefinitions = architectureView.pages.map((content) => ({
+  file: content.route,
+  key: 'framework',
+  title: `${content.title} | Sakura Framework`,
+  description: content.summary,
+  canonical: `/${content.route}`,
+  schemaType: 'TechArticle',
+  frameworkDeepKind: 'architecture',
+  content,
+  pageIndex: content.id === 'decisions'
+    ? [['overview', '定位与边界'], ['decision-list', '十项决策'], ['next-route', '继续阅读']]
+    : [['overview', '定位与边界'], ['focus', '系统重点'], ['failure-model', '失败模型'], ['tradeoffs', '代价与边界'], ['next-route', '继续阅读']]
+}));
+const frameworkEvidenceDefinitions = evidenceView.pages.map((content) => ({
+  file: content.route,
+  key: 'framework',
+  title: `${content.title} | Sakura Framework`,
+  description: content.summary,
+  canonical: `/${content.route}`,
+  schemaType: content.id === 'cases' ? 'CollectionPage' : 'TechArticle',
+  frameworkDeepKind: 'evidence',
+  content,
+  pageIndex: content.id === 'tooling'
+    ? [['overview', '定位与边界'], ['toolchains', '工具链'], ['next-route', '继续阅读']]
+    : content.id === 'evidence'
+      ? [['overview', '定位与边界'], ['evidence-ladder', '证据阶梯'], ['evidence-topics', '主题证据'], ['next-route', '继续阅读']]
+      : content.id === 'consumers'
+        ? [['overview', '定位与边界'], ['consumer-matrix', 'Consumer Matrix'], ['next-route', '继续阅读']]
+        : [['overview', '定位与边界'], ['case-grid', '五个案例'], ['next-route', '继续阅读']]
+}));
+const frameworkCaseDefinitions = caseStudiesView.cases.map((content) => ({
+  file: content.route,
+  key: 'framework',
+  title: `${content.title} | Sakura Framework Case Study`,
+  description: content.subtitle,
+  canonical: `/${content.route}`,
+  schemaType: 'TechArticle',
+  frameworkDeepKind: 'case',
+  content,
+  pageIndex: [['overview', '案例摘要'], ['case-sections', '十二段复盘'], ['next-route', '继续阅读']]
+}));
+const frameworkClosingDefinitions = [
+  { file: evolutionView.route, key: 'framework', title: `${evolutionView.title} | Sakura Framework`, description: evolutionView.summary, canonical: `/${evolutionView.route}`, schemaType: 'TechArticle', frameworkDeepKind: 'evolution', content: evolutionView, pageIndex: [['overview','演进原则'],['timeline','演进时间线'],['next-route','继续阅读']] },
+  { file: knowledgeGraphView.route, key: 'framework', title: `${knowledgeGraphView.title} | Sakura Framework`, description: knowledgeGraphView.summary, canonical: `/${knowledgeGraphView.route}`, schemaType: 'CollectionPage', frameworkDeepKind: 'knowledge', content: knowledgeGraphView, pageIndex: [['overview','知识关系'],['knowledge-series','系列入口'],['knowledge-articles','文章节点'],['evidence-graph','证据链'],['next-route','继续阅读']] },
+  { file: moduleReferenceView.route, key: 'framework', title: `${moduleReferenceView.title} | Sakura Framework`, description: moduleReferenceView.summary, canonical: `/${moduleReferenceView.route}`, schemaType: 'CollectionPage', frameworkDeepKind: 'reference', content: moduleReferenceView, pageIndex: [['overview','Reference 定位'],['module-reference','精选模块'],['next-route','继续阅读']] }
+];
+const frameworkDeepDefinitions = [...frameworkArchitectureDefinitions, ...frameworkEvidenceDefinitions, ...frameworkCaseDefinitions, ...frameworkClosingDefinitions];
+
 await writeJournalDetailSources(journalDetailDefinitions);
 await writeBlogSources(blogDetailDefinitions, blogAliasDefinitions, blogCollectionDefinitions);
 await writeFrameworkQuickstartSource(frameworkQuickstart);
+await writeFrameworkEngineeringSource(frameworkPageShellTemplate);
+await writeFrameworkDeepSources(frameworkDeepDefinitions);
 await writeBrandSource();
 await writeCompatibilityRouteSources();
 
@@ -239,10 +339,19 @@ const pageDefinitions = [
     file: 'pages/framework.html',
     key: 'framework',
     coverKey: 'framework',
-    title: 'Sakura Framework | 成熟度透明的 Unity 模块化框架',
-    description: `查看 Sakura Framework 的完整生命周期、${frameworkAdoption.supportedPackages.length} 个 Supported 包、最小稳定采用路线与《言铸之剑》的已验证使用映射。`,
+    title: frameworkStory.positioning.seoTitle,
+    description: frameworkStory.positioning.description,
     canonical: '/pages/framework.html',
-    schemaType: 'SoftwareSourceCode'
+    schemaType: 'SoftwareSourceCode',
+    runtimePlatform: 'Portable .NET; Unity; Godot Parallel Preview'
+  },
+  {
+    file: 'pages/framework-engineering.html',
+    key: 'framework',
+    coverKey: 'framework',
+    title: frameworkEngineering.positioning.seoTitle,
+    description: frameworkEngineering.positioning.description,
+    canonical: '/pages/framework-engineering.html'
   },
   {
     file: 'pages/framework-quickstart.html',
@@ -330,7 +439,8 @@ const pageDefinitions = [
   ...journalDetailDefinitions,
   ...blogDetailDefinitions,
   ...blogCollectionDefinitions,
-  ...blogAliasDefinitions
+  ...blogAliasDefinitions,
+  ...frameworkDeepDefinitions
 ];
 
 for (const page of pageDefinitions) {
@@ -430,6 +540,10 @@ for (const page of pageDefinitions) {
   }
 
   if (page.file === 'pages/framework.html') {
+    const story = resolveFrameworkStory(frameworkStory);
+    html = replaceGeneratedBlock(html, 'framework-story-hero', renderFrameworkStoryHero(story));
+    html = replaceGeneratedBlock(html, 'framework-story', renderFrameworkStory(story));
+    html = replaceGeneratedBlock(html, 'framework-reference', renderFrameworkReference(story));
     html = updateFrameworkFallback(html, framework, frameworkAdoption);
     html = replaceGeneratedBlock(html, 'framework-adoption', renderFrameworkAdoption(frameworkAdoption));
     html = replaceGeneratedBlock(html, 'framework-evidence', renderEvidenceChains(evidenceChains));
@@ -439,6 +553,35 @@ for (const page of pageDefinitions) {
       html,
       'framework-quickstart',
       renderFrameworkQuickstart(frameworkQuickstart, frameworkAdoption)
+    );
+  }
+  if (page.file === 'pages/framework-engineering.html') {
+    html = replaceGeneratedBlock(
+      html,
+      'framework-engineering-content',
+      renderFrameworkEngineering(
+        resolveFrameworkEngineering(frameworkEngineering),
+        resolveFrameworkEvidenceAuthorities(frameworkEvidenceAuthorities)
+      )
+    );
+  }
+  if (page.frameworkDeepKind) {
+    html = replaceGeneratedBlock(
+      html,
+      'framework-detail-content',
+      renderFrameworkDeepPage(page, {
+        architecture: architectureView,
+        evidence: evidenceView,
+        cases: caseStudiesView,
+        authorities: resolveFrameworkEvidenceAuthorities(frameworkEvidenceAuthorities),
+        consumers: consumerLab,
+        knowledge: knowledgeGraphView,
+        blogDiscovery,
+        publishedBlogs,
+        publicationById,
+        evidenceChains,
+        moduleReference: moduleReferenceView
+      })
     );
   }
   if (page.file === 'pages/engineering.html') {
@@ -517,7 +660,7 @@ function buildMeta(page, siteData, brand) {
   if (page.schemaType === 'SoftwareSourceCode') {
     structured.creator = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
     structured.programmingLanguage = 'C#';
-    structured.runtimePlatform = 'Unity';
+    structured.runtimePlatform = page.runtimePlatform ?? 'Unity';
   }
   if (page.schemaType === 'HowTo' && page.quickstart) {
     structured.totalTime = `PT${page.quickstart.durationMinutes}M`;
@@ -743,15 +886,22 @@ function installContentVoiceStages(html, page) {
       ['engineering-evidence', 'evidence'], ['engineering-boundaries', 'boundary']
     ],
     'pages/framework.html': [
-      ['framework-hero', 'value'], ['framework-overview', 'system'], ['game-adoption-section', 'result'],
-      ['evidence-chain-section', 'evidence'], ['lifecycle-section', 'boundary']
+      ['framework-hero', 'value'], ['framework-positioning', 'system'], ['framework-architecture-map', 'result'],
+      ['framework-pillars', 'evidence'], ['framework-reference', 'boundary'], ['framework-overview', 'system'],
+      ['game-adoption-section', 'result'], ['evidence-chain-section', 'evidence'], ['lifecycle-section', 'boundary']
+    ],
+    'pages/framework-engineering.html': [
+      ['framework-engineering-hero', 'value'], ['framework-depth-model', 'system'], ['framework-domain-map', 'result'],
+      ['framework-evidence-boundary', 'evidence'], ['framework-adoption-route', 'boundary']
     ],
     'pages/journal.html': [
       ['journal-hero', 'value'], ['stream-grid', 'system'], ['journal-bridge', 'result'],
       ['evidence-chain-section', 'evidence'], ['evidence-chain-limit', 'boundary']
     ]
   };
-  const stages = stagesByFile[page.file];
+  const stages = page.frameworkDeepKind
+    ? [['framework-detail-hero', 'value'], ['framework-detail-overview', 'system'], ['framework-detail-body', 'result'], ['framework-detail-next', 'next']]
+    : stagesByFile[page.file];
   if (!stages) return html;
   html = html.replace(/\sdata-content-stage="(?:value|system|result|evidence|boundary|next)"/g, '');
   for (const [className, stage] of stages) html = addContentStage(html, className, stage, page.file);
@@ -908,6 +1058,7 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
                         <h3>Sakura Framework</h3>
                         <p>把游戏中的稳定边界沉淀为可复用 Unity 包，并持续记录生命周期与验证状态。</p>
                         <a href="pages/framework.html" class="text-link">查看框架</a>
+                        <a href="pages/framework-engineering.html" class="text-link">查看 Engineering Hub</a>
                     </article>
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">03 · DESIGN RESEARCH</p>
@@ -1217,7 +1368,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                       ? `<a href="${escapeAttribute(project.href)}" class="portfolio-link">${escapeHtml(project.linkLabel)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>`
                       : `<span class="portfolio-link portfolio-link-static">${escapeHtml(project.linkLabel)}</span>`}
                     ${project.id === 'sakura-framework'
-                      ? '<a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">打开 15 分钟 Quickstart<i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
+                      ? '<a href="framework-engineering.html" class="portfolio-link portfolio-link-secondary">打开 Engineering Hub<i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">打开 15 分钟 Quickstart<i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
                       : ''}
                 </div>
             </article>`;
@@ -1599,6 +1750,314 @@ function renderContactContent(siteData) {
     </section>`;
 }
 
+function renderFrameworkStoryHero(story) {
+  const { positioning, architectureMap } = story;
+  const claims = positioning.claims.map((claim) => `<span class="framework-story-chip">${escapeHtml(claim)}</span>`).join('');
+  const stack = [
+    architectureMap.layers[0],
+    architectureMap.layers[1],
+    architectureMap.layers[2],
+    architectureMap.layers[3]
+  ].map((layer, index) => {
+    const statusAttribute = layer.status ? ` data-story-status="${escapeAttribute(layer.status)}"` : '';
+    return `<div class="stack-layer${index === architectureMap.layers.length - 1 ? ' highlight-layer' : ''}"${statusAttribute}>${escapeHtml(layer.label)}</div>`;
+  }).join('');
+  return `<div class="container framework-hero-grid">
+            <div class="framework-hero-copy">
+                <p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p>
+                <h1>${escapeHtml(positioning.title)}</h1>
+                <p class="framework-subtitle">${escapeHtml(positioning.summary)}</p>
+                <div class="framework-story-chips" aria-label="Framework 公开定位">${claims}</div>
+                <div class="framework-actions">
+                    <a href="#architecture-map" class="btn btn-primary">查看架构地图</a>
+                    <a href="#reference" class="btn btn-secondary">浏览技术参考</a>
+                    <a href="framework-engineering.html" class="btn btn-secondary">打开 Engineering Hub</a>
+                </div>
+            </div>
+            <div class="framework-stack" aria-label="Portable Core 到 Games / Consumers 的架构路径">${stack}</div>
+        </div>`;
+}
+
+function renderFrameworkStory(story) {
+  const { positioning, architectureMap, pillars, evidence } = story;
+  const layerCards = architectureMap.layers.map((layer, index) => {
+    const statusAttribute = layer.status ? ` data-story-status="${escapeAttribute(layer.status)}"` : '';
+    return `<article class="framework-map-layer framework-map-layer-${escapeAttribute(layer.id)}"${statusAttribute}>
+                    <span class="framework-map-step">0${index + 1}</span>
+                    <div><h3>${escapeHtml(layer.label)}</h3><p>${escapeHtml(layer.description)}</p></div>
+                </article>`;
+  }).join('');
+  const branches = architectureMap.branches.map((branch) => `<article class="framework-map-branch framework-map-branch-${escapeAttribute(branch.id)}" data-story-status="${escapeAttribute(branch.status)}">
+                    <span class="framework-map-status">${escapeHtml(branch.status.replace('-', ' '))}</span>
+                    <h3>${escapeHtml(branch.label)}</h3><strong>${escapeHtml(branch.runtimeLabel)}</strong><p>${escapeHtml(branch.description)}</p>
+                </article>`).join('');
+  const governance = architectureMap.governance.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
+  const boundaries = architectureMap.boundaries.map((boundary) => `<article data-story-status="${escapeAttribute(boundary.status)}"><span>${escapeHtml(boundary.status.replace('-', ' '))}</span><h3>${escapeHtml(boundary.label)}</h3><p>${escapeHtml(boundary.description)}</p></article>`).join('');
+  const pillarCards = pillars.map((pillar, index) => `<article class="framework-pillar framework-pillar-${escapeAttribute(pillar.id)}">
+                    <p class="section-kicker">${escapeHtml(pillar.eyebrow)}</p>
+                    <span class="framework-pillar-index">0${index + 1}</span>
+                    <h3>${escapeHtml(pillar.title)}</h3>
+                    <p class="framework-pillar-thesis">${escapeHtml(pillar.thesis)}</p>
+                    <p>${escapeHtml(pillar.description)}</p>
+                    <ul>${pillar.signals.map((signal) => `<li>${escapeHtml(signal)}</li>`).join('')}</ul>
+                </article>`).join('');
+  return `<section class="framework-positioning" id="positioning" aria-labelledby="framework-positioning-title">
+        <div class="container framework-story-intro">
+            <div><p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p><h2 class="section-title" id="framework-positioning-title">从模块集合到工程判断</h2></div>
+            <div><p>${escapeHtml(positioning.description)}</p><p class="framework-story-boundary"><strong>边界</strong>${escapeHtml(positioning.boundary)}</p></div>
+        </div>
+    </section>
+    <section class="framework-architecture-map" id="architecture-map" aria-labelledby="framework-architecture-title">
+        <div class="container">
+            <div class="section-heading-row">
+                <div><p class="section-kicker">${escapeHtml(architectureMap.eyebrow)}</p><h2 class="section-title" id="framework-architecture-title">${escapeHtml(architectureMap.title)}</h2></div>
+                <p class="section-intro">${escapeHtml(architectureMap.summary)}</p>
+            </div>
+            <div class="framework-map-flow" aria-label="Cross-Engine Architecture Map">
+                <div class="framework-map-layer-list">${layerCards}</div>
+                <div class="framework-map-branches">${branches}</div>
+            </div>
+            <div class="framework-map-governance"><span>横向约束</span>${governance}</div>
+            <div class="framework-map-boundaries" aria-label="Cross-Engine 未交付边界">${boundaries}</div>
+        </div>
+    </section>
+    <section class="framework-pillars" id="pillars" aria-labelledby="framework-pillars-title">
+        <div class="container">
+            <div class="section-heading-row">
+                <div><p class="section-kicker">THREE ENGINEERING PILLARS</p><h2 class="section-title" id="framework-pillars-title">三条比模块数量更重要的工程判断</h2></div>
+                <div>
+                    <p class="section-intro">${escapeHtml(evidence.summary)}</p>
+                    <p class="framework-evidence-line" aria-label="Framework 公开证据状态"><span>PUBLIC EVIDENCE</span><strong>${escapeHtml(evidence.local)} / ${escapeHtml(evidence.runner)}</strong></p>
+                </div>
+            </div>
+            <div class="framework-pillar-grid">${pillarCards}</div>
+        </div>
+    </section>`;
+}
+
+function renderFrameworkReference(story) {
+  const items = story.reference.items.map((item, index) => `<a class="framework-reference-card" href="${escapeAttribute(item.href)}">
+                    <span>0${index + 1}</span><div><strong>${escapeHtml(item.label)}</strong><p>${escapeHtml(item.description)}</p></div><i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>`).join('');
+  return `<section class="framework-reference" id="reference" aria-labelledby="framework-reference-title">
+        <div class="container">
+            <div class="section-heading-row">
+                <div><p class="section-kicker">${escapeHtml(story.reference.eyebrow)}</p><h2 class="section-title" id="framework-reference-title">${escapeHtml(story.reference.title)}</h2></div>
+                <p class="section-intro">${escapeHtml(story.reference.summary)}</p>
+            </div>
+            <div class="framework-reference-grid">${items}</div>
+        </div>
+    </section>`;
+}
+
+function renderFrameworkEngineering(hub, authorities) {
+  const depthCards = hub.depthModel.map((depth, index) => `<article class="framework-depth-card">
+                    <span class="framework-card-index">0${index + 1}</span>
+                    <p class="section-kicker">${escapeHtml(depth.label)}</p>
+                    <h3>${escapeHtml(depth.goal)}</h3>
+                    <p>${escapeHtml(depth.answers)}</p>
+                    <a class="framework-status-badge" href="${escapeAttribute(depth.route)}">${escapeHtml(deliveryStatusLabel(depth.status))}</a>
+                </article>`).join('');
+  const readerCards = hub.readerPaths.map((path, index) => `<a class="framework-reader-card" href="${escapeAttribute(path.href)}">
+                    <span class="framework-card-index">0${index + 1}</span>
+                    <p class="section-kicker">${escapeHtml(path.label)}</p>
+                    <h3>${escapeHtml(path.audience)}</h3>
+                    <p>${escapeHtml(path.description)}</p>
+                    <span class="framework-card-link">从这里开始 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>`).join('');
+  const domainCards = hub.domains.map((domain, index) => `<article class="framework-domain-card" id="domain-${escapeAttribute(domain.id)}">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">${String(index + 1).padStart(2, '0')}</span><span class="framework-status-badge">${escapeHtml(deliveryStatusLabel(domain.status))}</span></div>
+                    <h3>${escapeHtml(domain.title)}</h3>
+                    <p>${escapeHtml(domain.summary)}</p>
+                    <a class="framework-card-link" href="${escapeAttribute(domain.route)}">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>${escapeHtml(domain.evidence)}</p>
+                </article>`).join('');
+  const levelLabels = new Map(authorities.levels.map((level) => [level.id, level.label]));
+  const authorityCards = authorities.authorities.map((authority) => `<article class="framework-evidence-authority-card">
+                    <p class="section-kicker">${escapeHtml(authority.label)}</p>
+                    <div class="framework-authority-heading"><h3>${escapeHtml(levelLabels.get(authority.level) ?? authority.level)}</h3><code>${escapeHtml(authority.level)}</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>${escapeHtml(authority.source)}</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul>${authority.mayClaim.map((claim) => `<li>${escapeHtml(claim)}</li>`).join('')}</ul></div><div><strong>不能声明</strong><ul>${authority.mayNotClaim.map((claim) => `<li>${escapeHtml(claim)}</li>`).join('')}</ul></div></div>
+                </article>`).join('');
+  const adoptionLinks = [
+    [hub.links.framework, 'Framework Reference', '回到成熟度、架构地图与采用路线。'],
+    [hub.links.quickstart, '15-minute Quickstart', '沿着安装、首次事件、对象池与清理完成最小验证。'],
+    [`${hub.links.portfolio}#consumer-lab`, 'Consumer Evidence', '查看独立 Consumer 的真实引用与验证范围。'],
+    [hub.links.cases, 'Five Flagship Cases', '用统一十二段模板查看完整工程闭环。'],
+    [hub.links.knowledge, 'Knowledge Graph', '从 Framework 判断反向进入已发布研究。'],
+    [hub.links.reference, 'Selected Reference', '查看精选模块的角色、层级、依赖与证据。'],
+    [hub.links.home, 'IrisSakura Home', '回到个人站点的完整工程与项目入口。']
+  ].map(([href, label, description]) => `<a class="framework-adoption-route-card" href="${escapeAttribute(href)}"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(description)}</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a>`).join('');
+
+  return `<header class="framework-hero framework-engineering-hero page-cover">
+        <div class="container framework-engineering-hero-inner">
+            <div class="framework-engineering-hero-copy">
+                <p class="section-kicker">${escapeHtml(hub.positioning.eyebrow)}</p>
+                <h1>${escapeHtml(hub.positioning.title)}</h1>
+                <p class="framework-subtitle">${escapeHtml(hub.positioning.description)}</p>
+                <p class="framework-engineering-boundary"><strong>公开边界</strong>${escapeHtml(hub.positioning.boundary)}</p>
+                <div class="framework-actions"><a href="#depth-model" class="btn btn-primary">理解 Sakura</a><a href="#architecture-domains" class="btn btn-secondary">探索 Engineering</a></div>
+            </div>
+            <aside class="framework-engineering-status" aria-label="Framework Engineering 证据状态">
+                <p class="section-kicker">EVIDENCE BOUNDARY</p>
+                <div class="framework-engineering-status-row"><span>LOCAL</span><strong>${escapeHtml(hub.evidence.local)}</strong></div>
+                <div class="framework-engineering-status-row"><span>RUNNER</span><strong>${escapeHtml(hub.evidence.runner)}</strong></div>
+                <div class="framework-engineering-status-row"><span>PRODUCTION</span><strong>${escapeHtml(hub.evidence.production)}</strong></div>
+                <p>${escapeHtml(hub.evidence.summary)}</p>
+            </aside>
+        </div>
+    </header>
+    <section class="framework-engineering-section framework-depth-model" id="depth-model" aria-labelledby="framework-depth-model-title">
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">D0 → D3</p><h2 class="section-title" id="framework-depth-model-title">四层深度模型</h2></div><p class="section-intro">先建立信号，再解释系统、架构取舍与证据边界。深度模型是阅读路径，不把未交付的深页包装成现状。</p></div>
+            <div class="framework-depth-grid">${depthCards}</div>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-reader-section" id="reader-paths" aria-labelledby="framework-reader-paths-title">
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">THREE READER PATHS</p><h2 class="section-title" id="framework-reader-paths-title">按你的问题进入 Framework</h2></div><p class="section-intro">三条入口共享同一事实边界：理解定位、探索工程判断、开始采用时，分别跳到本 Hub 的真实锚点。</p></div>
+            <div class="framework-reader-grid">${readerCards}</div>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-domain-map" id="architecture-domains" aria-labelledby="framework-domain-map-title">
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">TEN ARCHITECTURE DOMAINS</p><h2 class="section-title" id="framework-domain-map-title">从模块目录走向工程领域</h2></div><p class="section-intro">十个领域均已连接真实深度页面；页面内容完成不改变其中 Framework 能力各自的 Local、Runner、Release 或 Production 状态。</p></div>
+            <div class="framework-domain-grid">${domainCards}</div>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-evidence-boundary" id="evidence-boundary" aria-labelledby="framework-evidence-boundary-title">
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">SOURCE → STATUS → PROOF</p><h2 class="section-title" id="framework-evidence-boundary-title">证据权威各自负责，不跨级声明</h2></div><p class="section-intro">${escapeHtml(hub.evidence.summary)}</p></div>
+            <p class="framework-evidence-summary"><strong>${escapeHtml(hub.evidence.local)} / ${escapeHtml(hub.evidence.runner)}</strong><span>Production: ${escapeHtml(hub.evidence.production)}</span></p>
+            <div class="framework-evidence-authority-grid">${authorityCards}</div>
+            <ul class="framework-evidence-boundaries">${authorities.boundaries.map((boundary) => `<li>${escapeHtml(boundary)}</li>`).join('')}</ul>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-adoption-route" id="adoption-route" aria-labelledby="framework-adoption-route-title">
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">THREE WAYS TO CONTINUE</p><h2 class="section-title" id="framework-adoption-route-title">从 Hub 进入真实参考与采用入口</h2></div><p class="section-intro">理解架构、检查证据与开始采用是三条不同路径；所有入口只连接本次生成并验证的真实页面。</p></div>
+            <div class="framework-adoption-route-grid">${adoptionLinks}</div>
+        </div>
+    </section>`;
+}
+
+function deliveryStatusLabel(status) {
+  if (status === 'implemented') return 'Implemented';
+  if (status === 'information-architecture-closed-with-deferred-status') return 'Deferred';
+  throw new Error(`unsupported Framework delivery status: ${status}`);
+}
+
+function renderFrameworkDeepPage(page, context) {
+  let html;
+  if (page.frameworkDeepKind === 'architecture') html = renderArchitectureDeepPage(page.content, context.architecture);
+  else if (page.frameworkDeepKind === 'evidence') html = renderEvidenceDeepPage(page.content, context);
+  else if (page.frameworkDeepKind === 'case') html = renderCaseStudyDeepPage(page.content, context.cases.sectionOrder);
+  else if (page.frameworkDeepKind === 'evolution') html = renderEvolutionDeepPage(page.content);
+  else if (page.frameworkDeepKind === 'knowledge') html = renderKnowledgeDeepPage(page.content, context);
+  else if (page.frameworkDeepKind === 'reference') html = renderModuleReferenceDeepPage(page.content);
+  else throw new Error(`unsupported Framework deep page kind: ${page.frameworkDeepKind}`);
+
+  return localizeFrameworkDeepLinks(html, page.file);
+}
+
+function localizeFrameworkDeepLinks(html, pageFile) {
+  const sourceDirectory = path.posix.dirname(pageFile);
+  return html.replace(/href="(\/pages\/[^"?#]+)([^" ]*)"/gu, (_match, targetPath, suffix) => {
+    const relativePath = path.posix.relative(sourceDirectory, targetPath.slice(1));
+    return `href="${escapeAttribute(relativePath)}${escapeAttribute(suffix)}"`;
+  });
+}
+
+function renderDeepHero(content, eyebrow = content.eyebrow ?? 'SAKURA FRAMEWORK ENGINEERING') {
+  return `<header class="framework-detail-hero page-cover">
+        <div class="container framework-detail-hero-inner">
+            <div><p class="section-kicker">${escapeHtml(eyebrow)}</p><h1>${escapeHtml(content.title)}</h1><p class="framework-subtitle">${escapeHtml(content.summary ?? content.subtitle)}</p></div>
+            <div class="framework-detail-hero-actions"><a class="btn btn-primary" href="#overview">阅读本页</a><a class="btn btn-secondary" href="/pages/framework-engineering.html">返回 Engineering Hub</a></div>
+        </div>
+    </header>`;
+}
+
+function renderDeepOverview(content) {
+  return `<section class="framework-detail-overview" id="overview">
+        <div class="container"><div class="framework-boundary-grid">
+            <article><p class="section-kicker">WHAT THIS SOLVES</p><h2>解决什么</h2><p>${escapeHtml(content.solves)}</p></article>
+            <article><p class="section-kicker">WHAT THIS COSTS</p><h2>付出什么</h2><p>${escapeHtml(content.costs)}</p></article>
+            <article><p class="section-kicker">WHERE IT DOES NOT APPLY</p><h2>哪里不适用</h2><p>${escapeHtml(content.whereNotApply)}</p></article>
+        </div></div>
+    </section>`;
+}
+
+function renderArchitectureDeepPage(content, architecture) {
+  if (content.id === 'decisions') {
+    const labels = [
+      ['problem','Problem'],['constraints','Constraints'],['naiveApproach','Naive Approach'],['failure','Failure'],['decision','Decision'],['tradeoffs','Trade-offs / Where Not Apply'],['value','Value']
+    ];
+    const decisions = architecture.decisions.map((decision, index) => `<article class="framework-decision-card" id="decision-${escapeAttribute(decision.id)}">
+                    <header><span>${String(index + 1).padStart(2, '0')}</span><h2>${escapeHtml(decision.title)}</h2></header>
+                    <div class="framework-decision-sections">${labels.map(([key,label])=>`<section><h3>${label}</h3><p>${escapeHtml(decision[key])}</p></section>`).join('')}</div>
+                </article>`).join('');
+    return `${renderDeepHero(content)}${renderDeepOverview(content)}
+    <section class="framework-detail-body framework-decision-list" id="decision-list"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">TEN DECISIONS · SEVEN SECTIONS</p><h2 class="section-title">为什么这样设计</h2></div><p class="section-intro">决策不是最佳实践清单；每项都保留约束、失败方案、代价和适用边界。</p></div>${decisions}</div></section>
+    ${renderDeepNext(['/pages/framework/cases.html','/pages/framework/evidence.html','/pages/framework/reference.html'])}`;
+  }
+  return `${renderDeepHero(content)}${renderDeepOverview(content)}
+    <section class="framework-detail-body" id="focus"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">SYSTEM MODEL</p><h2 class="section-title">系统重点</h2></div></div>${renderTextCards(content.focusPoints,'framework-focus-grid')}</div></section>
+    <section class="framework-detail-body framework-failure-section" id="failure-model"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">FAILURE BEFORE HAPPY PATH</p><h2 class="section-title">失败模型</h2></div></div>${renderTextCards(content.failureModes,'framework-focus-grid')}</div></section>
+    <section class="framework-detail-body" id="tradeoffs"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">TRADE-OFFS</p><h2 class="section-title">代价与边界</h2></div></div>${renderTextCards(content.tradeoffs,'framework-focus-grid')}</div></section>
+    ${renderDeepNext(['/pages/framework/decisions.html','/pages/framework/cases.html','/pages/framework/evidence.html'])}`;
+}
+
+function renderEvidenceDeepPage(content, context) {
+  let body = '';
+  if (content.id === 'tooling') {
+    body = `<section class="framework-detail-body" id="toolchains"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">WORKFLOW, NOT SCREENSHOTS</p><h2 class="section-title">三条可复跑工具链</h2></div></div><div class="framework-toolchain-grid">${context.evidence.toolchains.map((tool)=>`<article><span class="framework-status-badge">${escapeHtml(tool.status)}</span><h2>${escapeHtml(tool.title)}</h2><ol>${tool.workflow.map((step)=>`<li>${escapeHtml(step)}</li>`).join('')}</ol><p class="framework-boundary-note">${escapeHtml(tool.boundary)}</p></article>`).join('')}</div></div></section>`;
+  } else if (content.id === 'evidence') {
+    const ladder = context.authorities.levels.map((level,index)=>`<li><span>${String(index+1).padStart(2,'0')}</span><div><strong>${escapeHtml(level.label)}</strong><p>${escapeHtml(level.meaning)}</p></div></li>`).join('');
+    const topics = context.evidence.evidenceTopics.map((topic)=>`<article><span class="framework-status-badge">${escapeHtml(topic.status)}</span><h2>${escapeHtml(topic.title)}</h2><p>${escapeHtml(topic.summary)}</p></article>`).join('');
+    body = `<section class="framework-detail-body" id="evidence-ladder"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">DESIGNED → UNKNOWN</p><h2 class="section-title">八级 Evidence Ladder</h2></div><p class="section-intro">顺序表示证据类型，不表示可以自动逐级推断。</p></div><ol class="framework-evidence-ladder">${ladder}</ol></div></section><section class="framework-detail-body" id="evidence-topics"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">EVIDENCE BY TOPIC</p><h2 class="section-title">按主题保留真实上限</h2></div></div><div class="framework-topic-grid">${topics}</div></div></section>`;
+  } else if (content.id === 'consumers') {
+    const casesById = new Map(context.consumers.cases.map((entry)=>[entry.id,entry]));
+    const rows = context.evidence.consumerHypotheses.map((hypothesis)=>{
+      const consumer = casesById.get(hypothesis.caseId);
+      if (!consumer) throw new Error(`consumer hypothesis references missing case: ${hypothesis.caseId}`);
+      const verification = [consumer.verification.static ?? '', consumer.verification.editMode ? `EditMode ${consumer.verification.editMode.passed}/${consumer.verification.editMode.total}` : '', consumer.verification.playMode ? `PlayMode ${consumer.verification.playMode.passed}/${consumer.verification.playMode.total}` : '', consumer.verification.player ?? ''].filter(Boolean).join(' · ');
+      return `<article class="framework-consumer-card"><div><p class="section-kicker">${escapeHtml(consumer.category)}</p><h2>${escapeHtml(consumer.title)}</h2><p>${escapeHtml(hypothesis.question)}</p></div><dl><div><dt>Packages</dt><dd>${consumer.packages.map((item)=>`<code>${escapeHtml(item.replace('com.unitygame.framework.',''))}</code>`).join(' ')}</dd></div><div><dt>Evidence</dt><dd>${escapeHtml(verification)}</dd></div><div><dt>Status</dt><dd>${escapeHtml(consumer.status)} / ${escapeHtml(consumer.runnerStatus)}</dd></div></dl><p class="framework-boundary-note">${escapeHtml(consumer.evidenceBoundary)}</p></article>`;
+    }).join('');
+    body = `<section class="framework-detail-body" id="consumer-matrix"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">SEVEN HYPOTHESES</p><h2 class="section-title">固定快照，不做泛化背书</h2></div><p class="section-intro">验证数字只说明对应提交和测试范围，不是排行榜。</p></div><div class="framework-consumer-grid">${rows}</div></div></section>`;
+  } else if (content.id === 'cases') {
+    body = `<section class="framework-detail-body" id="case-grid"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">FIVE COMPLETE LOOPS</p><h2 class="section-title">从问题到验证后的变化</h2></div></div><div class="framework-case-grid">${context.cases.cases.map((entry)=>`<a href="/pages/framework/cases/${escapeAttribute(entry.id)}.html"><span>${escapeHtml(entry.index)}</span><h2>${escapeHtml(entry.title)}</h2><p>${escapeHtml(entry.subtitle)}</p><strong>${escapeHtml(entry.status)}</strong></a>`).join('')}</div></div></section>`;
+  }
+  return `${renderDeepHero(content)}${renderDeepOverview(content)}${body}${renderDeepNext(['/pages/framework/decisions.html','/pages/framework/evolution.html','/pages/framework/reference.html'])}`;
+}
+
+function renderCaseStudyDeepPage(content, sectionOrder) {
+  const labels = {problem:'Problem',constraints:'Constraints',naiveApproach:'Naive Approach',architectureDecision:'Architecture Decision',systemModel:'System Model',failureModel:'Failure Model',tradeOffs:'Trade-offs',implementation:'Implementation',evidence:'Evidence',consumer:'Consumer',knownLimitations:'Known Limitations',whatChangedAfterValidation:'What Changed After Validation'};
+  const sections = sectionOrder.map((key,index)=>`<section><header><span>${String(index+1).padStart(2,'0')}</span><h2>${labels[key]}</h2></header><p>${escapeHtml(content.sections[key])}</p></section>`).join('');
+  return `${renderDeepHero(content,`CASE ${content.index} · ${content.status}`)}<section class="framework-detail-overview" id="overview"><div class="container"><p class="framework-case-summary"><strong>${escapeHtml(content.status)}</strong><span>${escapeHtml(content.subtitle)}</span></p></div></section><section class="framework-detail-body framework-case-sections" id="case-sections"><div class="container">${sections}</div></section>${renderDeepNext(['/pages/framework/cases.html','/pages/framework/evidence.html','/pages/framework-engineering.html'])}`;
+}
+
+function renderEvolutionDeepPage(content) {
+  return `${renderDeepHero(content)}<section class="framework-detail-overview" id="overview"><div class="container"><p class="section-intro">${escapeHtml(content.summary)} 时间线只展示公开工程变化，不投影内部 PLAN/TODO。</p></div></section><section class="framework-detail-body" id="timeline"><div class="container"><ol class="framework-evolution-timeline">${content.entries.map((entry)=>`<li><span>${escapeHtml(entry.phase)}</span><article><h2>${escapeHtml(entry.title)}</h2><dl><div><dt>Trigger</dt><dd>${escapeHtml(entry.trigger)}</dd></div><div><dt>Change</dt><dd>${escapeHtml(entry.change)}</dd></div><div><dt>Evidence</dt><dd>${escapeHtml(entry.evidence)}</dd></div><div><dt>Limitation</dt><dd>${escapeHtml(entry.limitation)}</dd></div></dl></article></li>`).join('')}</ol></div></section>${renderDeepNext(['/pages/framework/knowledge.html','/pages/framework/reference.html','/pages/framework-engineering.html'])}`;
+}
+
+function renderKnowledgeDeepPage(content, context) {
+  const seriesBySlug = new Map(context.blogDiscovery.series.map((entry)=>[entry.slug,entry]));
+  const series = content.series.map((slug)=>{ const entry=seriesBySlug.get(slug); if(!entry) throw new Error(`knowledge graph missing series: ${slug}`); return `<a href="/pages/blog/series/${escapeAttribute(slug)}.html"><span>Series</span><h2>${escapeHtml(entry.name)}</h2><p>${escapeHtml(entry.description)}</p></a>`; }).join('');
+  const publishedById = new Map(context.publishedBlogs.map((entry)=>[entry.id,entry]));
+  const articles = content.articles.map((id)=>{ const publication=context.publicationById.get(id); const article=publishedById.get(id); if(!publication||!article) throw new Error(`knowledge graph missing published article: ${id}`); return `<a href="/pages/blog/${escapeAttribute(publication.slug)}.html"><span>Article</span><h2>${escapeHtml(article.title)}</h2><p>${escapeHtml(article.summary)}</p></a>`; }).join('');
+  const chainsById = new Map(context.evidenceChains.map((entry)=>[entry.id,entry]));
+  const chains = content.evidenceChains.map((id)=>{const entry=chainsById.get(id);if(!entry)throw new Error(`knowledge graph missing evidence chain: ${id}`);return `<article><span>Evidence Chain</span><h2>${escapeHtml(entry.title)}</h2><p>${escapeHtml(entry.question)}</p><p class="framework-boundary-note">${escapeHtml(entry.limitation)}</p></article>`;}).join('');
+  return `${renderDeepHero(content)}<section class="framework-detail-overview" id="overview"><div class="container"><div class="framework-knowledge-clusters">${content.clusters.map((entry)=>`<a href="/${escapeAttribute(entry.frameworkRoute)}"><span>${escapeHtml(entry.title)}</span><p>${escapeHtml(entry.question)}</p></a>`).join('')}</div></div></section><section class="framework-detail-body" id="knowledge-series"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">FRAMEWORK → SERIES</p><h2 class="section-title">长期研究入口</h2></div></div><div class="framework-knowledge-grid">${series}</div></div></section><section class="framework-detail-body" id="knowledge-articles"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">DECISION SOURCES</p><h2 class="section-title">已发布文章节点</h2></div></div><div class="framework-knowledge-grid">${articles}</div></div></section><section class="framework-detail-body" id="evidence-graph"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">JOURNAL → FRAMEWORK → CONSUMER</p><h2 class="section-title">公开证据链</h2></div></div><div class="framework-topic-grid">${chains}</div></div></section>${renderDeepNext(['/pages/journal.html','/pages/blog.html','/pages/framework/evidence.html'])}`;
+}
+
+function renderModuleReferenceDeepPage(content) {
+  const cards = content.modules.map((entry)=>`<article class="framework-module-reference-card"><header><div><p class="section-kicker">${escapeHtml(entry.layer)} · ${escapeHtml(entry.lifecycle)}</p><h2>${escapeHtml(entry.id)}</h2></div><code>${escapeHtml(entry.version)}</code></header><p>${escapeHtml(entry.role)}</p><dl><div><dt>Engine Boundary</dt><dd>${escapeHtml(entry.engineBoundary)}</dd></div><div><dt>Dependencies</dt><dd>${entry.dependencies.length?entry.dependencies.map((dep)=>`<code>${escapeHtml(dep)}</code>`).join(' '):'none'}</dd></div><div><dt>Consumers</dt><dd>${escapeHtml(entry.consumers)}</dd></div><div><dt>Evidence</dt><dd>${escapeHtml(entry.evidence)}</dd></div><div><dt>Public Surface</dt><dd>${escapeHtml(entry.publicSurface)}</dd></div></dl></article>`).join('');
+  return `${renderDeepHero(content)}<section class="framework-detail-overview" id="overview"><div class="container"><p class="section-intro">${escapeHtml(content.summary)} <a href="/pages/framework.html#reference">返回完整自动 Reference。</a></p></div></section><section class="framework-detail-body" id="module-reference"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">TWELVE CURATED MODULES</p><h2 class="section-title">Role / Layer / Lifecycle / Boundary / Evidence</h2></div></div><div class="framework-module-reference-grid">${cards}</div></div></section>${renderDeepNext(['/pages/framework.html#reference','/pages/framework/consumers.html','/pages/framework-engineering.html'])}`;
+}
+
+function renderTextCards(items, className) { return `<div class="${className}">${items.map((item,index)=>`<article><span>${String(index+1).padStart(2,'0')}</span><p>${escapeHtml(item)}</p></article>`).join('')}</div>`; }
+function renderDeepNext(routes) { const labels={'/pages/framework-engineering.html':'Engineering Hub','/pages/framework/decisions.html':'Architecture Decisions','/pages/framework/cases.html':'Flagship Cases','/pages/framework/evidence.html':'Evidence Model','/pages/framework/evolution.html':'Evolution','/pages/framework/reference.html':'Module Reference','/pages/framework/knowledge.html':'Knowledge Graph','/pages/framework/consumers.html':'Consumer Matrix','/pages/framework.html#reference':'Full Framework Reference','/pages/journal.html':'Journal','/pages/blog.html':'Blog'}; return `<section class="framework-detail-next" id="next-route"><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div>${routes.map((route)=>`<a href="${escapeAttribute(route)}">${escapeHtml(labels[route]??'Continue')} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>`).join('')}</div></div></section>`; }
+
 function renderFrameworkAdoption(adoption) {
   const supported = adoption.supportedPackages.map((entry) => `
                     <li><span>${escapeHtml(entry.displayName)}</span><code>${escapeHtml(entry.packageName)}</code><p>${escapeHtml(entry.role)}</p></li>`).join('');
@@ -1781,6 +2240,52 @@ async function writeFrameworkQuickstartSource(quickstart) {
 </body>
 </html>
 `);
+}
+
+async function writeFrameworkEngineeringSource(shellTemplate) {
+  const marker = '<!-- framework-engineering-content:start -->';
+  if (!shellTemplate.includes(marker) || !shellTemplate.includes('<!-- framework-engineering-content:end -->')) {
+    throw new Error('framework engineering shell must expose its generator-owned content block');
+  }
+  if (!shellTemplate.includes('framework-engineering.css')) {
+    throw new Error('framework engineering shell must load its page stylesheet');
+  }
+  await writeFile(path.join(root, 'pages/framework-engineering.html'), shellTemplate);
+}
+
+async function writeFrameworkDeepSources(definitions) {
+  for (const definition of definitions) {
+    const absolutePath = path.join(root, definition.file);
+    const sourcePrefix = '../'.repeat(definition.file.split('/').length - 1);
+    await mkdir(path.dirname(absolutePath), { recursive: true });
+    await writeFile(absolutePath, `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(definition.title)}</title>
+    <link rel="stylesheet" href="${sourcePrefix}style/main.css">
+    <link rel="stylesheet" href="${sourcePrefix}style/framework.css">
+    <link rel="stylesheet" href="${sourcePrefix}style/framework-engineering.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="${sourcePrefix}style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="main-content framework-detail-main">
+    <!-- framework-detail-content:start -->
+    <!-- framework-detail-content:end -->
+</main>
+<footer class="footer"></footer>
+<script src="${sourcePrefix}dist/site.js" type="module"></script>
+</body>
+</html>
+`);
+  }
 }
 
 async function writeBrandSource() {
@@ -2272,7 +2777,9 @@ function renderPageIndex(config) {
 }
 
 function installPageIndex(html, page) {
-  const config = PAGE_INDEXES[page.file];
+  const config = page.pageIndex
+    ? { ariaLabel: `${page.title} 章节`, title: '浏览本页', insertBefore: '    <!-- framework-detail-content:start -->', items: page.pageIndex }
+    : PAGE_INDEXES[page.file];
   html = html.replace(/<!-- page-index:start -->[\s\S]*?<!-- page-index:end -->/u, '');
   if (!config) return html;
 

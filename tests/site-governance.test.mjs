@@ -8,6 +8,10 @@ async function readText(path) {
   return readFile(new URL(path, root), 'utf8');
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '可验证的 Unity 游戏系统开发者');
@@ -65,6 +69,63 @@ test('public navigation presents Contact as an ordinary tab without owner-only b
       `${page} exposes the private publication boundary`
     );
   }
+});
+
+test('Framework Engineering Hub is generated from its contract with honest SEO and routes', async () => {
+  const hub = JSON.parse(await readText('data/framework-engineering.json'));
+  const page = await readText('pages/framework-engineering.html');
+
+  assert.match(page, new RegExp(`<title>${escapeRegExp(hub.positioning.seoTitle)}</title>`, 'u'));
+  assert.match(page, new RegExp(`<meta name="description" content="${escapeRegExp(hub.positioning.description)}">`, 'u'));
+  assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/framework-engineering\.html">/u);
+  const structuredData = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)?.[1] ?? '{}');
+  assert.equal(structuredData['@type'], 'WebPage');
+  assert.equal(structuredData.name, hub.positioning.seoTitle);
+  assert.equal(structuredData.description, hub.positioning.description);
+  assert.equal(structuredData.url, 'https://irissakura.github.io/pages/framework-engineering.html');
+  assert.deepEqual(
+    [...page.matchAll(/<a href="(#[a-z0-9-]+)" data-page-index-link/gu)].map((match) => match[1]),
+    ['#depth-model', '#reader-paths', '#architecture-domains', '#evidence-boundary', '#adoption-route']
+  );
+  for (const phrase of ['D0 · Signal', 'D1 · System', 'D2 · Architecture', 'D3 · Evidence', 'Understand Sakura', 'Explore Engineering', 'Start Using', 'local-passed / runner-pending', 'Production: unknown']) {
+    assert.ok(page.includes(phrase), `Framework Engineering Hub missing ${phrase}`);
+  }
+  for (const href of [hub.links.home, hub.links.framework, hub.links.quickstart, `${hub.links.portfolio}#consumer-lab`, hub.links.cases, hub.links.knowledge, hub.links.reference]) {
+    assert.match(page, new RegExp(`href="${escapeRegExp(href)}"`, 'u'), `Framework Engineering Hub missing ${href}`);
+    await access(new URL(href.split('#')[0], new URL('../pages/', import.meta.url)));
+  }
+  for (const domain of hub.domains) {
+    assert.match(page, new RegExp(`id="domain-${escapeRegExp(domain.id)}"`, 'u'));
+    assert.match(page, new RegExp(`href="${escapeRegExp(domain.route)}"`, 'u'));
+    assert.match(page, />Implemented</u);
+  }
+});
+
+test('Framework deep routes are generated, indexable and structurally complete', async () => {
+  const architecture = JSON.parse(await readText('data/framework-architecture.json'));
+  const evidence = JSON.parse(await readText('data/framework-evidence.json'));
+  const cases = JSON.parse(await readText('data/framework-case-studies.json'));
+  const evolution = JSON.parse(await readText('data/framework-evolution.json'));
+  const knowledge = JSON.parse(await readText('data/framework-knowledge-graph.json'));
+  const reference = JSON.parse(await readText('data/framework-module-reference.json'));
+  const routes = [...architecture.pages.map((entry) => entry.route), ...evidence.pages.map((entry) => entry.route), ...cases.cases.map((entry) => entry.route), evolution.route, knowledge.route, reference.route];
+  assert.equal(routes.length, 18);
+  for (const route of routes) {
+    const page = await readText(route);
+    assert.match(page, /<h1>[\s\S]+<\/h1>/u, `${route} missing H1`);
+    assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/framework\//u, `${route} missing canonical`);
+    assert.match(page, /data-page-index-link/u, `${route} missing page index`);
+    assert.match(page, /id="next-route"/u, `${route} missing continuation route`);
+    assert.ok(!page.includes('/Users/'), `${route} exposes a private path`);
+  }
+  assert.equal((await readText('pages/framework/decisions.html')).match(/class="framework-decision-card"/gu)?.length, 10);
+  for (const entry of cases.cases) {
+    const page = await readText(entry.route);
+    const sectionLabels = ['Problem','Constraints','Naive Approach','Architecture Decision','System Model','Failure Model','Trade-offs','Implementation','Evidence','Consumer','Known Limitations','What Changed After Validation'];
+    assert.equal(sectionLabels.filter((label) => page.includes(`<h2>${label}</h2>`)).length, 12, `${entry.id} must expose all twelve case sections`);
+  }
+  assert.equal((await readText('pages/framework/consumers.html')).match(/class="framework-consumer-card"/gu)?.length, 7);
+  assert.equal((await readText('pages/framework/reference.html')).match(/class="framework-module-reference-card"/gu)?.length, reference.modules.length);
 });
 
 test('public pages omit the retired test BGM while persistent navigation remains available', async () => {

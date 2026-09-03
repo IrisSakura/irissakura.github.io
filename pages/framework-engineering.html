@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="以 Engine-Agnostic Core、显式生命周期、模块治理、工具链与 Consumer 验证为主线，展示 Sakura Framework 的架构判断与证据边界。">
+    <link rel="canonical" href="https://irissakura.github.io/pages/framework-engineering.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Sakura Framework Engineering | Architecture &amp; Evidence">
+    <meta property="og:description" content="以 Engine-Agnostic Core、显式生命周期、模块治理、工具链与 Consumer 验证为主线，展示 Sakura Framework 的架构判断与证据边界。">
+    <meta property="og:url" content="https://irissakura.github.io/pages/framework-engineering.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-framework-engineering.png">
+    <meta property="og:image:alt" content="Sakura Framework Engineering | Architecture &amp; Evidence 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sakura Framework Engineering | Architecture &amp; Evidence">
+    <meta name="twitter:description" content="以 Engine-Agnostic Core、显式生命周期、模块治理、工具链与 Consumer 验证为主线，展示 Sakura Framework 的架构判断与证据边界。">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-engineering.png">
+    <meta name="twitter:image:alt" content="Sakura Framework Engineering | Architecture &amp; Evidence 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#dff7f2">
+    <link rel="icon" href="../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Sakura Framework Engineering | Architecture & Evidence","description":"以 Engine-Agnostic Core、显式生命周期、模块治理、工具链与 Consumer 验证为主线，展示 Sakura Framework 的架构判断与证据边界。","url":"https://irissakura.github.io/pages/framework-engineering.html"}</script>
+    <!-- site-meta:end -->
+    <title>Sakura Framework Engineering | Architecture & Evidence</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/framework.css">
+    <link rel="stylesheet" href="../style/framework-engineering.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../style/tokens/modes.css">
+    <link rel="stylesheet" href="../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../index.html" class="nav-link">首页</a>
+            <a href="../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../pages/engineering.html" class="nav-link">Engineering</a>
+            <a href="../pages/framework.html" class="nav-link active" aria-current="page">Framework</a>
+            <a href="../pages/journal.html" class="nav-link">Journal</a>
+            <a href="../pages/brand.html" class="nav-link">Brand</a>
+            <a href="../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>可验证的 Unity 游戏系统开发者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作与完整游戏案例</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/engineering.html" data-profile-quick-link><span>02</span><strong>Iris Engineering</strong><small>研发工作流与受控执行</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/framework.html" data-profile-quick-link><span>03</span><strong>Sakura Framework</strong><small>可复用 Unity 工程能力</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/journal.html" data-profile-quick-link><span>04</span><strong>IrisSakura Journal</strong><small>设计研究与源码判断</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/portfolio.html#consumer-lab" data-profile-quick-link><span>05</span><strong>Consumer Lab</strong><small>独立玩法项目验证</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系与公开入口</strong><small>邮箱、QQ、GitHub、哔哩哔哩</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="main-content framework-engineering-main">
+<!-- page-index:start -->
+    <nav class="page-index" aria-label="Framework Engineering 页面章节" data-page-index>
+        <div class="container page-index-inner">
+            <span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>浏览架构证据</strong></span>
+            <div class="page-index-links"><a href="#depth-model" data-page-index-link aria-current="location"><span>01</span>深度模型</a><a href="#reader-paths" data-page-index-link><span>02</span>读者路径</a><a href="#architecture-domains" data-page-index-link><span>03</span>十个能力域</a><a href="#evidence-boundary" data-page-index-link><span>04</span>证据边界</a><a href="#adoption-route" data-page-index-link><span>05</span>采用入口</a></div>
+            <span class="page-index-progress" aria-hidden="true"></span>
+        </div>
+    </nav>
+    <!-- page-index:end -->
+    <!-- framework-engineering-content:start -->
+<header class="framework-hero framework-engineering-hero page-cover" data-content-stage="value" data-page-cover="framework" style="--page-cover-image: none; --page-cover-position: 50% 42%;">
+        <!-- brand-mode-signature:start -->
+        <aside class="brand-mode-signature" aria-label="SAKURA MODE">
+            <svg aria-hidden="true"><use href="../assets/brand/icons.svg#sakura-composition"></use></svg>
+            <div><span>SAKURA MODE</span><img class="brand-mode-product-lockup" src="../assets/brand/wordmark-sakura-framework.svg" alt=""></div>
+        </aside>
+        <!-- brand-mode-signature:end -->
+        <div class="container framework-engineering-hero-inner">
+            <div class="framework-engineering-hero-copy">
+                <p class="section-kicker">SAKURA FRAMEWORK · ENGINEERING HUB</p>
+                <h1>从模块展示走向架构证据</h1>
+                <p class="framework-subtitle">以 Engine-Agnostic Core、显式生命周期、模块治理、工具链与 Consumer 验证为主线，展示 Sakura Framework 的架构判断与证据边界。</p>
+                <p class="framework-engineering-boundary"><strong>公开边界</strong>这里是 Engineering Portfolio、Architecture Case Study 与 Adoption Portal 的导航层；内容路由已闭合，但本地验证、Runner、Release 与 Production 仍按各自证据独立呈现。</p>
+                <div class="framework-actions"><a href="#depth-model" class="btn btn-primary">理解 Sakura</a><a href="#architecture-domains" class="btn btn-secondary">探索 Engineering</a></div>
+            </div>
+            <aside class="framework-engineering-status" aria-label="Framework Engineering 证据状态">
+                <p class="section-kicker">EVIDENCE BOUNDARY</p>
+                <div class="framework-engineering-status-row"><span>LOCAL</span><strong>local-passed</strong></div>
+                <div class="framework-engineering-status-row"><span>RUNNER</span><strong>runner-pending</strong></div>
+                <div class="framework-engineering-status-row"><span>PRODUCTION</span><strong>unknown</strong></div>
+                <p>本页合同、生成器与站点测试已在本地通过；Runner 与 Production 证据不在本批次内。</p>
+            </aside>
+        </div>
+    </header>
+    <section class="framework-engineering-section framework-depth-model" data-content-stage="system" id="depth-model" aria-labelledby="framework-depth-model-title" data-page-index-target>
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">D0 → D3</p><h2 class="section-title" id="framework-depth-model-title">四层深度模型</h2></div><p class="section-intro">先建立信号，再解释系统、架构取舍与证据边界。深度模型是阅读路径，不把未交付的深页包装成现状。</p></div>
+            <div class="framework-depth-grid"><article class="framework-depth-card">
+                    <span class="framework-card-index">01</span>
+                    <p class="section-kicker">D0 · Signal</p>
+                    <h3>让访客在 10–30 秒内知道 Sakura Framework 是什么。</h3>
+                    <p>它解决什么问题？当前成熟入口与证据状态是什么？</p>
+                    <a class="framework-status-badge" href="framework.html">Implemented</a>
+                </article><article class="framework-depth-card">
+                    <span class="framework-card-index">02</span>
+                    <p class="section-kicker">D1 · System</p>
+                    <h3>让读者在 1–3 分钟内理解 Framework 如何组成。</h3>
+                    <p>Core、Adapter、Runtime Services、Gameplay Kernel、Tooling、Governance 与 Consumer 如何连接？</p>
+                    <a class="framework-status-badge" href="#architecture-domains">Implemented</a>
+                </article><article class="framework-depth-card">
+                    <span class="framework-card-index">03</span>
+                    <p class="section-kicker">D2 · Architecture</p>
+                    <h3>解释关键设计为什么采用当前边界。</h3>
+                    <p>Ownership、Lifecycle、Dependency、Failure、Compatibility 与 Extension 的取舍是什么？</p>
+                    <a class="framework-status-badge" href="framework/decisions.html">Implemented</a>
+                </article><article class="framework-depth-card">
+                    <span class="framework-card-index">04</span>
+                    <p class="section-kicker">D3 · Evidence</p>
+                    <h3>让读者区分代码存在、测试通过、Consumer 使用与 Production 证据。</h3>
+                    <p>哪些事实已在本地闭环？哪些 Runner、Release 或 Production 结论仍 Unknown？</p>
+                    <a class="framework-status-badge" href="framework/evidence.html">Implemented</a>
+                </article></div>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-reader-section" id="reader-paths" aria-labelledby="framework-reader-paths-title" data-page-index-target>
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">THREE READER PATHS</p><h2 class="section-title" id="framework-reader-paths-title">按你的问题进入 Framework</h2></div><p class="section-intro">三条入口共享同一事实边界：理解定位、探索工程判断、开始采用时，分别跳到本 Hub 的真实锚点。</p></div>
+            <div class="framework-reader-grid"><a class="framework-reader-card" href="#depth-model">
+                    <span class="framework-card-index">01</span>
+                    <p class="section-kicker">Understand Sakura</p>
+                    <h3>普通访客、招聘者与第一次了解 Framework 的读者</h3>
+                    <p>先看定位、四层深度模型与架构地图，再进入成熟度和 Consumer 证据。</p>
+                    <span class="framework-card-link">从这里开始 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a><a class="framework-reader-card" href="#architecture-domains">
+                    <span class="framework-card-index">02</span>
+                    <p class="section-kicker">Explore Engineering</p>
+                    <h3>Senior、Lead 与 Architect 读者</h3>
+                    <p>从治理、跨引擎、Ownership、Trade-off 与 Evidence 入口继续阅读。</p>
+                    <span class="framework-card-link">从这里开始 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a><a class="framework-reader-card" href="#adoption-route">
+                    <span class="framework-card-index">03</span>
+                    <p class="section-kicker">Start Using</p>
+                    <h3>Framework 使用者与独立 Consumer</h3>
+                    <p>回到成熟度、采用路线、15 分钟 Quickstart 与真实消费映射。</p>
+                    <span class="framework-card-link">从这里开始 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a></div>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-domain-map" data-content-stage="result" id="architecture-domains" aria-labelledby="framework-domain-map-title" data-page-index-target>
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">TEN ARCHITECTURE DOMAINS</p><h2 class="section-title" id="framework-domain-map-title">从模块目录走向工程领域</h2></div><p class="section-intro">十个领域均已连接真实深度页面；页面内容完成不改变其中 Framework 能力各自的 Local、Runner、Release 或 Production 状态。</p></div>
+            <div class="framework-domain-grid"><article class="framework-domain-card" id="domain-architecture-governance">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">01</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Architecture &amp; Governance</h3>
+                    <p>Package Identity、Layer、Dependency Policy、Capability Matrix 与验证入口。</p>
+                    <a class="framework-card-link" href="framework/governance.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>治理页已生成，并公开 Architecture as Code、失败模式、代价和适用边界。</p>
+                </article><article class="framework-domain-card" id="domain-cross-engine-architecture">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">02</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Cross-Engine Architecture</h3>
+                    <p>Portable Core 与 Adapter 边界；Unity 是成熟路线，Godot 保持明确的 Preview / Deferred 边界。</p>
+                    <a class="framework-card-link" href="framework/cross-engine.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>跨引擎页已生成，并保持 Foundation maturity 与专项 Adapter evidence 分离。</p>
+                </article><article class="framework-domain-card" id="domain-runtime-lifecycle-ownership">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">03</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Runtime Lifecycle &amp; Ownership</h3>
+                    <p>所有权、Scope、取消、清理与失败回退是运行时可维护性的主线。</p>
+                    <a class="framework-card-link" href="framework/runtime.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>Runtime 页与 Lifecycle 旗舰案例共同覆盖正常、失败、取消和清理路径。</p>
+                </article><article class="framework-domain-card" id="domain-ui-presentation-architecture">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">04</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>UI / Presentation Architecture</h3>
+                    <p>把 UI Core、Binding 与 Unity Presentation 的职责边界保持可解释。</p>
+                    <a class="framework-card-link" href="framework/ui.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>UI 页与 Paradigm-Neutral UI 案例已生成，证据保持 local-passed / runner-pending。</p>
+                </article><article class="framework-domain-card" id="domain-gameplay-kernel-semantics">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">05</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Gameplay Kernel &amp; Semantic Systems</h3>
+                    <p>能力、规则、输入快照、存档与玩法语义优先以可迁移 Core 表达。</p>
+                    <a class="framework-card-link" href="framework/gameplay.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>Gameplay 页已生成，明确最小 Kernel 与 Consumer-owned content 边界。</p>
+                </article><article class="framework-domain-card" id="domain-tooling-developer-experience">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">06</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Tooling / Developer Experience</h3>
+                    <p>安装、配置、诊断、校验与文档工具降低正确采用的成本。</p>
+                    <a class="framework-card-link" href="framework/tooling.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>Tooling 页已生成，并连接 Card Balance、Runtime Console 与公开投影工作流。</p>
+                </article><article class="framework-domain-card" id="domain-evidence-engineering">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">07</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Evidence Engineering</h3>
+                    <p>把本地测试、Runner、Consumer、Release 与 Production 分层，不跨级声明。</p>
+                    <a class="framework-card-link" href="framework/evidence.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>Evidence 页已生成，八级 Ladder 与主题证据保持独立。</p>
+                </article><article class="framework-domain-card" id="domain-consumer-validation">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">08</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Consumer Validation</h3>
+                    <p>独立项目消费映射用于验证真实引用，不替代 Framework 自身成熟度。</p>
+                    <a class="framework-card-link" href="framework/consumers.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>Consumer Matrix 由现有七个 reviewed snapshots 与七个架构假设生成。</p>
+                </article><article class="framework-domain-card" id="domain-architecture-decisions-tradeoffs">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">09</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Architecture Decisions / Trade-offs</h3>
+                    <p>每个高级案例应同时说明 What This Solves、What This Costs 与 Where It Does Not Apply。</p>
+                    <a class="framework-card-link" href="framework/decisions.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>十项 Decision 已按统一七段模板生成，并公开成本和不适用范围。</p>
+                </article><article class="framework-domain-card" id="domain-framework-evolution">
+                    <div class="framework-domain-card-heading"><span class="framework-card-index">10</span><span class="framework-status-badge">Implemented</span></div>
+                    <h3>Framework Evolution</h3>
+                    <p>用版本、迁移、冻结与恢复入口解释 Framework 如何在真实证据下演进。</p>
+                    <a class="framework-card-link" href="framework/evolution.html">打开深度页面 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="framework-deferred-reason"><strong>交付证据</strong>Evolution 页已策展六阶段变化，不公开内部 PLAN/TODO。</p>
+                </article></div>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-evidence-boundary" data-content-stage="evidence" id="evidence-boundary" aria-labelledby="framework-evidence-boundary-title" data-page-index-target>
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">SOURCE → STATUS → PROOF</p><h2 class="section-title" id="framework-evidence-boundary-title">证据权威各自负责，不跨级声明</h2></div><p class="section-intro">本页合同、生成器与站点测试已在本地通过；Runner 与 Production 证据不在本批次内。</p></div>
+            <p class="framework-evidence-summary"><strong>local-passed / runner-pending</strong><span>Production: unknown</span></p>
+            <div class="framework-evidence-authority-grid"><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Designed</p>
+                    <div class="framework-authority-heading"><h3>Designed</h3><code>designed</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>Framework Work Status / spec-plan</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>已审阅的设计意图、范围、非目标与恢复条件</li></ul></div><div><strong>不能声明</strong><ul><li>代码已经存在</li><li>本地或 Runner 已通过</li><li>Consumer 或 Production 已采用</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Implemented</p>
+                    <div class="framework-authority-heading"><h3>Implemented</h3><code>implemented</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>Framework snapshot / committed code</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>已提交代码或快照中存在的结构与能力事实</li></ul></div><div><strong>不能声明</strong><ul><li>测试已经通过</li><li>Runner、Consumer、Release 或 Production 已验证</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Local Verification</p>
+                    <div class="framework-authority-heading"><h3>Local Verification</h3><code>local-verification</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>site local evidence records</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>当前本地工作树中已执行并通过的验证范围</li></ul></div><div><strong>不能声明</strong><ul><li>同一 SHA Runner 已通过</li><li>Consumer 已验证</li><li>Production 已上线</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">CI / Runner</p>
+                    <div class="framework-authority-heading"><h3>CI / Runner</h3><code>ci-runner</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>same-SHA Runner artifacts</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>绑定同一 Framework commit SHA 的 Runner 验证结果</li></ul></div><div><strong>不能声明</strong><ul><li>用本地测试代替 Runner</li><li>用旧 SHA 或无 SHA 日志代替 Production</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Consumer Validation</p>
+                    <div class="framework-authority-heading"><h3>Consumer Validation</h3><code>consumer-validation</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>consumer registry</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>独立 Consumer 的引用、测试或可玩验证范围</li></ul></div><div><strong>不能声明</strong><ul><li>Framework 全部模块均已生产采用</li><li>Consumer 验证自动证明 Framework 成熟</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Release</p>
+                    <div class="framework-authority-heading"><h3>Release</h3><code>release</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>release metadata</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>同一提交绑定的 Release metadata 与附件校验结果</li></ul></div><div><strong>不能声明</strong><ul><li>Release 自动等同 Production</li><li>Candidate 或镜像状态是正式发布</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Production</p>
+                    <div class="framework-authority-heading"><h3>Production</h3><code>production</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>production record</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>明确项目范围内有记录的 Production 事实</li></ul></div><div><strong>不能声明</strong><ul><li>缺少真实生产证据时声称 production-ready 或上线</li><li>把本地、Runner、Consumer 或 Release 证据升级为 Production</li></ul></div></div>
+                </article><article class="framework-evidence-authority-card">
+                    <p class="section-kicker">Unknown / Deferred</p>
+                    <div class="framework-authority-heading"><h3>Unknown / Deferred</h3><code>unknown-deferred</code></div>
+                    <p class="framework-authority-source"><strong>权威来源</strong>explicit boundary</p>
+                    <div class="framework-authority-limits"><div><strong>可以声明</strong><ul><li>Unknown</li><li>Deferred</li><li>runner-pending 或未验证边界</li></ul></div><div><strong>不能声明</strong><ul><li>用空白或推测填补 Production 状态</li><li>跨级推断成熟度</li></ul></div></div>
+                </article></div>
+            <ul class="framework-evidence-boundaries"><li>Designed 与 Implemented 说明意图和存在，不替代验证证据。</li><li>Local Verification 与 CI / Runner 是独立等级，必须分别绑定自己的来源。</li><li>Consumer Validation、Release 与 Production 各自需要对应权威记录，不能跨级升级。</li><li>缺少权威来源时必须公开 Unknown / Deferred，并保留恢复入口。</li></ul>
+        </div>
+    </section>
+    <section class="framework-engineering-section framework-adoption-route" data-content-stage="boundary" id="adoption-route" aria-labelledby="framework-adoption-route-title" data-page-index-target>
+        <div class="container">
+            <div class="section-heading-row"><div><p class="section-kicker">THREE WAYS TO CONTINUE</p><h2 class="section-title" id="framework-adoption-route-title">从 Hub 进入真实参考与采用入口</h2></div><p class="section-intro">理解架构、检查证据与开始采用是三条不同路径；所有入口只连接本次生成并验证的真实页面。</p></div>
+            <div class="framework-adoption-route-grid"><a class="framework-adoption-route-card" href="framework.html"><strong>Framework Reference</strong><span>回到成熟度、架构地图与采用路线。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="framework-adoption-route-card" href="framework-quickstart.html"><strong>15-minute Quickstart</strong><span>沿着安装、首次事件、对象池与清理完成最小验证。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="framework-adoption-route-card" href="portfolio.html#consumer-lab"><strong>Consumer Evidence</strong><span>查看独立 Consumer 的真实引用与验证范围。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="framework-adoption-route-card" href="framework/cases.html"><strong>Five Flagship Cases</strong><span>用统一十二段模板查看完整工程闭环。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="framework-adoption-route-card" href="framework/knowledge.html"><strong>Knowledge Graph</strong><span>从 Framework 判断反向进入已发布研究。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="framework-adoption-route-card" href="framework/reference.html"><strong>Selected Reference</strong><span>查看精选模块的角色、层级、依赖与证据。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="framework-adoption-route-card" href="../index.html"><strong>IrisSakura Home</strong><span>回到个人站点的完整工程与项目入口。</span><i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
+        </div>
+    </section>
+<!-- framework-engineering-content:end -->
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">以 Iris Engineering 组织工程与项目工作流，以 Sakura Framework 沉淀可复用游戏系统。</p>
+            </div>
+            <div class="footer-links" data-content-stage="next">
+                <h2>继续浏览</h2>
+                <a href="../pages/portfolio.html">作品</a>
+                <a href="../pages/engineering.html">Engineering</a>
+                <a href="../pages/framework.html">Framework</a>
+                <a href="../pages/journal.html">Journal</a>
+                <a href="../pages/brand.html">Brand</a>
+                <a href="../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../dist/site.js" type="module"></script>
+</body>
+</html>
