@@ -45,7 +45,7 @@ test('README and Portfolio use generated project and Consumer summaries', async 
     readText('pages/portfolio.html')
   ]);
 
-  assert.match(readme, /<!-- project-summary:start -->[\s\S]*6 个正式公开项目[\s\S]*<!-- project-summary:end -->/u);
+  assert.match(readme, /<!-- project-summary:start -->[\s\S]*8 个正式公开项目[\s\S]*<!-- project-summary:end -->/u);
   assert.match(readme, /<!-- consumer-summary:start -->[\s\S]*7 个 Consumer Lab 案例[\s\S]*4 个仓库启用 source-push[\s\S]*3 个固定快照[\s\S]*<!-- consumer-summary:end -->/u);
   assert.ok(!readme.includes('四条真实项目主线'));
   assert.match(portfolio, /7 个案例 · 4 个 Source-push Repository · 3 个固定快照/u);

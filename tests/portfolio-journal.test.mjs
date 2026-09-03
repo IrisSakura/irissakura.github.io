@@ -12,7 +12,7 @@ test('portfolio explains the path from research to finished work', async () => {
   const html = await readText('pages/portfolio.html');
 
   for (const fragment of [
-    '6 个项目的当前状态与证据边界',
+    '8 个项目的当前状态与证据边界',
     '事实更新时间、人工复核时间与同步方式',
     '研究判断 → 工程治理 → 框架沉淀 → 游戏验证',
     '研究判断',
@@ -21,6 +21,8 @@ test('portfolio explains the path from research to finished work', async () => {
     '游戏验证',
     'portfolio-case-game',
     'UDGAP · 梦境诊疗室',
+    'Iris × Sakura — The Weaver',
+    'Iris Core',
     'Iris Shelf',
     'Iris Engineering',
     'IrisSakura Journal'
@@ -34,7 +36,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   const titles = data.projects.map((project) => project.title);
 
   assert.equal(data.schemaVersion, 3);
-  assert.deepEqual(titles, ['IrisSakura Journal', 'Iris Engineering', 'Iris Shelf', 'Sakura Framework', 'UDGAP · 梦境诊疗室', '言铸之剑']);
+  assert.deepEqual(titles, ['IrisSakura Journal', 'Iris Engineering', 'Iris Shelf', 'Iris Core', 'Iris × Sakura — The Weaver', 'Sakura Framework', 'UDGAP · 梦境诊疗室', '言铸之剑']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
     assert.match(project.updatedAt, /^\d{4}-\d{2}-\d{2}$/u, `${project.title} needs an update date`);
@@ -124,27 +126,48 @@ test('public portfolio does not expose the private journal origin', async () => 
   assert.ok(!data.includes('154.37.215.57'));
 });
 
-test('portfolio renders six reviewed status cases with games first and source freshness visible', async () => {
+test('portfolio renders eight reviewed status cases with games first and source freshness visible', async () => {
   const html = await readText('pages/portfolio.html');
-  assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 6);
+  assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 8);
   assert.ok(!html.includes('portfolio-filters'));
   assert.ok(!html.includes('data-filter='));
   assert.ok(html.indexOf('project-sword-of-words') < html.indexOf('project-udgap'));
-  assert.ok(html.indexOf('project-udgap') < html.indexOf('project-iris-shelf'));
+  assert.ok(html.indexOf('project-udgap') < html.indexOf('project-the-weaver'));
+  assert.ok(html.indexOf('project-the-weaver') < html.indexOf('project-iris-core'));
+  assert.ok(html.indexOf('project-iris-core') < html.indexOf('project-iris-shelf'));
   assert.ok(html.indexOf('project-iris-shelf') < html.indexOf('project-iris-engineering'));
   assert.ok(html.indexOf('project-iris-engineering') < html.indexOf('project-sakura-framework'));
   assert.ok(html.indexOf('project-sakura-framework') < html.indexOf('project-sakura-design-journal'));
-  assert.equal((html.match(/class="portfolio-update"/g) ?? []).length, 6);
-  assert.equal((html.match(/<dt>下一步<\/dt>/g) ?? []).length, 6);
+  assert.equal((html.match(/class="portfolio-update"/g) ?? []).length, 8);
+  assert.equal((html.match(/<dt>下一步<\/dt>/g) ?? []).length, 8);
   assert.ok(html.includes('源仓推送公开投影'));
   assert.ok(html.includes('源仓推送公开基线'));
   assert.ok(html.includes('固定提交公开投影'));
   assert.ok(html.includes('站点策展状态'));
   assert.ok(html.includes('project-proof-visual-shelf'));
   assert.ok(html.includes('project-proof-visual-udgap'));
+  assert.ok(html.includes('project-proof-visual-the-weaver'));
+  assert.ok(html.includes('project-proof-visual-iris-core'));
   assert.ok(html.includes('engineering-proof-visual'));
   assert.ok(html.includes('framework-proof-visual'));
   assert.ok(html.includes('journal-proof-visual'));
+});
+
+test('Iris Core and The Weaver preserve their public evidence boundaries', async () => {
+  const data = JSON.parse(await readText('data/projects.json'));
+  const core = data.projects.find((project) => project.id === 'iris-core');
+  const weaver = data.projects.find((project) => project.id === 'the-weaver');
+
+  assert.equal(core.syncMode, 'versioned-review');
+  assert.match(core.summary, /单独启用时不注册或修改玩法内容/u);
+  assert.ok(core.evidence.some((entry) => entry.includes('52 项 Core')));
+  assert.deepEqual(core.proof.map((entry) => entry.value), ['52', 'PCK', '0']);
+
+  assert.equal(weaver.syncMode, 'versioned-review');
+  assert.ok(weaver.evidence.some((entry) => entry.includes('106 张卡均有逐卡效果合同')));
+  assert.ok(weaver.evidence.some((entry) => entry.includes('default / reduced / experimental-heavy')));
+  assert.ok(weaver.limitations.some((entry) => entry.includes('逐卡前台人工')));
+  assert.ok(weaver.limitations.some((entry) => entry.includes('真实双人同步')));
 });
 
 test('public project statuses do not expose repository provenance or local paths', async () => {
@@ -169,6 +192,11 @@ test('portfolio cases preserve responsive inline breathing room', async () => {
     css,
     /\.portfolio-case\s*\{[^}]*padding:\s*4\.5rem\s+var\(--portfolio-case-inline-inset\);/su,
     'portfolio case content must not touch either section edge'
+  );
+  assert.match(
+    css,
+    /@media \(max-width: 560px\)[\s\S]*?\.project-proof-visual\s*\{[^}]*padding:\s*1\.25rem\s+1\.25rem\s+4\.75rem;/u,
+    'mobile proof visuals must reserve space for the absolute visual label'
   );
 });
 

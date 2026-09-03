@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "updatedAt": "2026-08-30",
+  "updatedAt": "2026-09-03",
   "projects": [
     {
       "id": "sakura-design-journal",
@@ -84,6 +84,66 @@
         "kind": "desktop-app",
         "productVersion": "1.0.0"
       }
+    },
+    {
+      "id": "iris-core",
+      "title": "Iris Core",
+      "category": "tool",
+      "categoryLabel": "STS2 模组基础设施",
+      "status": "本地构建与封包通过",
+      "syncMode": "versioned-review",
+      "syncLabel": "固定版本人工复核",
+      "updatedAt": "2026-09-03",
+      "lastReviewedAt": "2026-09-04",
+      "year": 2026,
+      "role": "共享运行时 / 模组控制平面",
+      "summary": "面向 Iris / Sakura《杀戮尖塔 2》模组的独立共享运行时，统一管理模块生命周期、配置、存储、诊断、内容选择与 Iris Hub；单独启用时不注册或修改玩法内容。",
+      "technologies": ["C#", ".NET 9", "Godot", "STS2", "BaseLib"],
+      "goal": "让多个 STS2 模组共用一套可观测、可配置、可恢复的运行与内容控制边界，而不把具体玩法泄漏进 Core。",
+      "constraints": ["必须保持引擎与具体 Consumer 语义隔离", "内容注册、自然池资格与显式生成权必须独立", "当前锁定 STS2 0.107.1 与 BaseLib 3.3.5"],
+      "evidence": ["52 项 Core 测试与中性性静态门禁", "Release / Debug 构建与 IrisCore PCK 资源门禁", "Content Registry、Selection Snapshot / Hash、Profile 可见性和 Iris Hub 合同"],
+      "milestones": ["完成独立 Bootstrap、Registry 与失败隔离生命周期", "完成配置、存储、结构化日志、Debug、Inspector 与 Capabilities", "完成通用 Content Control Plane 与 Iris Hub 分层视图", "完成独立三件套封包与本地哈希校验"],
+      "limitations": ["当前未作为独立公开下载版发布", "现有证据是本地构建、合同与封包，不等同于远端 Runner 或公开发行"],
+      "next": ["在新 Consumer 中验证通用扩展边界", "为同一提交补充远端 Runner 与公开发行证据", "在独立发布门禁下整理安装与升级路径"],
+      "linkLabel": "当前状态已公开",
+      "proof": [
+        { "value": "52", "label": "Core checks" },
+        { "value": "PCK", "label": "Verified bundle" },
+        { "value": "0", "label": "Gameplay content" }
+      ],
+      "proofFooter": "LOCAL BUILD + PACKAGE VERIFIED · NO GAMEPLAY CONTENT",
+      "visualLabel": "STS2 CONTROL PLANE",
+      "featured": true
+    },
+    {
+      "id": "the-weaver",
+      "title": "Iris × Sakura — The Weaver",
+      "category": "game",
+      "categoryLabel": "《杀戮尖塔 2》角色 Mod",
+      "status": "三幕 Headless 验证通过",
+      "syncMode": "versioned-review",
+      "syncLabel": "固定版本人工复核",
+      "updatedAt": "2026-09-03",
+      "lastReviewedAt": "2026-09-04",
+      "year": 2026,
+      "role": "原创角色 / 卡牌与战斗系统开发",
+      "summary": "Iris Core 的首个玩法 Consumer：以 Iris / Sakura 双形态与 Node、Compile、Bloom、Handoff、Dual 组成可切换的构筑循环，已完成 106 张卡、13 件遗物和 3 瓶药水的程序内容。",
+      "technologies": ["C#", ".NET 9", "Godot", "STS2", "BaseLib"],
+      "goal": "用一个真实卡牌角色验证双形态状态机、玩家局部持久化、内容池治理与可扩展机制能否共同稳定运行。",
+      "constraints": ["显式依赖 Iris Core，不保留旧 IrisSakura 身份兼容层", "GeneratedOnly 牌必须保持独立 Token CardPool 所有权", "当前锁定 STS2 0.107.1 与 BaseLib 3.3.5"],
+      "evidence": ["62 项机制与内容门禁，106 张卡均有逐卡效果合同", "95 张奖励牌、5 张 Pinned 起始牌、6 张 GeneratedOnly 派生牌的内容选择快照", "default / reduced / experimental-heavy 三个独立 Headless 完整局均通过三幕、Architect 胜利与返回主菜单", "Release / Debug、双语本地化、PCK 资源门禁和 8 套 Debug Deck"],
+      "milestones": ["完成 Node / Form / Compile / Bloom / Handoff / Dual / Adapter 全链路", "完成 106 张卡的基础、升级、选择与跨回合 Power 语义", "完成玩家局部存档、运行快照和内容选择诊断", "完成三种内容档的三幕 Headless 完整局验证"],
+      "limitations": ["106 张卡尚未完成逐卡前台人工玩感与交互验收", "真实双人同步、最终平衡性与全套最终美术仍待专项验收", "尚未提供公开下载版"],
+      "next": ["按 Starter / Act 1 清单执行前台人工验收", "结合 Telemetry 与人工样本进行数值校准", "单独验收真实双人同步、最终视觉与发行包"],
+      "linkLabel": "当前状态已公开",
+      "proof": [
+        { "value": "106", "label": "Card contracts" },
+        { "value": "3 RUNS", "label": "Act III headless" },
+        { "value": "ENG/ZHS", "label": "Localization" }
+      ],
+      "proofFooter": "THREE HEADLESS PROFILES PASSED · FOREGROUND CARD REVIEW PENDING",
+      "visualLabel": "STS2 CHARACTER MOD",
+      "featured": true
     },
     {
       "id": "sakura-framework",

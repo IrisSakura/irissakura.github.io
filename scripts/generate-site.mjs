@@ -1344,7 +1344,7 @@ ${renderEvidenceChains(chains, 'engineering-evidence-chains')}
 }
 
 function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, consumerSync) {
-  const order = ['sword-of-words', 'udgap', 'iris-shelf', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
+  const order = ['sword-of-words', 'udgap', 'the-weaver', 'iris-core', 'iris-shelf', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
   const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
   if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
   const cases = ordered.map((project, index) => {
@@ -1377,7 +1377,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
   return `<div class="portfolio-header">
         <div class="container">
             <p class="section-kicker">PROJECT STATUS · REVIEWED SOURCES</p>
-            <h1>6 个项目的当前状态与证据边界</h1>
+            <h1>${ordered.length} 个项目的当前状态与证据边界</h1>
             <p>每项状态都区分事实更新时间、人工复核时间与同步方式；未提交工作、私有路径和 source SHA 不进入公开完成声明。</p>
         </div>
     </div>
@@ -1387,7 +1387,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                 <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究判断 → 工程治理 → 框架沉淀 → 游戏验证</h2></div>
                 <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </div>
-            <p class="journey-intro">展示顺序从游戏与桌面产品开始，因果链仍从研究开始：Journal 保存判断，Iris Engineering 约束授权与执行，Iris Shelf 提供独立本地入口，Framework 沉淀复用能力，UDGAP 与《言铸之剑》承担不同阶段的游戏验证。</p>
+            <p class="journey-intro">展示顺序从游戏与桌面产品开始，因果链仍从研究开始：Journal 保存判断，Iris Engineering 约束授权与执行，Iris Shelf 提供独立本地入口，Sakura Framework 与 Iris Core 沉淀可复用能力，UDGAP、The Weaver 与《言铸之剑》承担不同阶段的游戏验证。</p>
             <ol class="journey-path">
                 <li><span class="journey-index">01</span><h3>研究判断</h3><p>理解引擎机制、游戏设计与当前约束。</p></li>
                 <li><span class="journey-index">02</span><h3>显式授权</h3><p>把研究提案、目标和执行权限变成可复查合同。</p></li>

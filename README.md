@@ -23,7 +23,7 @@
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 <!-- project-summary:start -->
-- `/pages/portfolio.html`：6 个正式公开项目，以及 7 个 Consumer Lab 案例的本地验证矩阵；
+- `/pages/portfolio.html`：8 个正式公开项目，以及 7 个 Consumer Lab 案例的本地验证矩阵；
 <!-- project-summary:end -->
 - `/pages/brand.html`：一级 `Brand` 入口，公开展示 IrisSakura 品牌架构、IRIS × SAKURA 双人格视觉、色板、图标与命名规则；
 - `/pages/art-music.html`：旧“美术音乐”地址的 `noindex` Brand 兼容跳转；
@@ -62,7 +62,7 @@ npm run package:site
 
 - `config/brand.json`：名称、家族、页面 Brand Mode、正式资产、Social palette 与 Deprecated Naming 的品牌合同；
 - `data/site.json`：站点定位、Profile、栏目头图和真实社交入口；
-- `data/projects.json`：六个公开项目的状态、事实更新时间、复核时间、同步方式、职责、证据、限制与下一步；
+- `data/projects.json`：八个公开项目的状态、事实更新时间、复核时间、同步方式、职责、证据、限制与下一步；
 - `data/consumer-lab.json`：七个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
 - `data/journal.json`：私有研究仓库的站内策展快照，不含仓库地址；
 - `data/journal-source.json`：由 Journal 固定提交生成的公开摘要与博客清单；
