@@ -389,7 +389,7 @@ try {
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('return navigation replaced the active document');
   }
-  await desktop.locator('.nav-menu').getByRole('link', { name: 'Framework', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '开发工具', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
   if (await desktop.locator('.framework-story-chip').count() !== frameworkStory.positioning.claims.length) {
@@ -574,8 +574,8 @@ try {
   if (await desktop.locator('.quickstart-code pre').count() !== frameworkQuickstart.steps.filter((step) => step.code).length) {
     throw new Error('Quickstart does not render every registered code probe');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: 'Framework' }).isVisible()) {
-    throw new Error('Quickstart does not keep the Framework navigation context');
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '开发工具' }).isVisible()) {
+    throw new Error('Quickstart does not keep the 开发工具 navigation context');
   }
   const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   if (quickstartDesktopOverflow > 1) {
@@ -670,8 +670,8 @@ try {
   }
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
-  await desktop.locator('.nav-menu').getByRole('link', { name: 'Brand', exact: true }).click();
-  await desktop.waitForURL(`${baseUrl}/pages/brand.html`);
+  await desktop.locator('.brand-seal').click();
+  await desktop.waitForURL(`${baseUrl}/pages/brand.html#brand-system`);
   if (await desktop.locator('meta[name="robots"][content^="noindex"]').count() !== 0) {
     throw new Error('public brand portfolio must remain indexable');
   }
@@ -754,7 +754,7 @@ try {
   await desktop.evaluate(() => {
     document.documentElement.dataset.searchSoftNav = 'persistent';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: 'Journal', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '研究与文章', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/journal.html`);
   await desktop.locator('[data-content-search-results] .content-search-result').first().waitFor({ state: 'visible' });
   if (await desktop.locator('[data-content-search-results] .content-search-result').count() !== 12) {
@@ -769,8 +769,8 @@ try {
   if (!await desktop.getByRole('heading', { level: 1, name: representativeSeries.name }).isVisible()) {
     throw new Error('representative series route is not visible');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: 'Journal' }).isVisible()) {
-    throw new Error('series route does not keep the Journal navigation context');
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '研究与文章' }).isVisible()) {
+    throw new Error('series route does not keep the 研究与文章 navigation context');
   }
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.slug)}.html"]`).click();

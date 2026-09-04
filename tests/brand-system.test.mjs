@@ -116,7 +116,7 @@ test('the single brand palette preserves the three-part wordmark', async () => {
   assert.doesNotMatch(css, /\.footer\s+\.footer-logo\s+span\s*\{/u);
 });
 
-test('IRIS/Sakura contrast composition is exactly three of ten governed story sections', async () => {
+test('visitor homepage stays editorial while the dedicated Brand page owns contrast composition', async () => {
   const [home, brandPage] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
     readFile(new URL('pages/brand.html', root), 'utf8')
@@ -124,9 +124,10 @@ test('IRIS/Sakura contrast composition is exactly three of ten governed story se
   const combined = `${home}\n${brandPage}`;
   const governed = combined.match(/data-brand-layout="(?:contrast|editorial)"/g) ?? [];
   const contrast = combined.match(/data-brand-layout="contrast"/g) ?? [];
-  assert.equal(governed.length, 10);
-  assert.equal(contrast.length, 3);
-  assert.equal(contrast.length / governed.length, 0.3);
+  assert.equal(governed.length, 9);
+  assert.equal(contrast.length, 2);
+  assert.equal((home.match(/data-brand-layout="contrast"/g) ?? []).length, 0);
+  assert.equal((brandPage.match(/data-brand-layout="contrast"/g) ?? []).length, 2);
 });
 
 test('brand architecture is frozen as a maintained repository contract', async () => {
@@ -164,26 +165,19 @@ test('shared cards carry one restrained IRIS-to-SAKURA signature across page typ
   assert.ok(css.includes('linear-gradient(90deg, var(--brand-iris), var(--brand-shared), var(--brand-sakura))'));
 });
 
-test('homepage turns the brand promise into a data-owned product proof rail', async () => {
-  const [site, home, generator, css] = await Promise.all([
+test('homepage leaves brand-system detail to the dedicated secondary route', async () => {
+  const [site, home, brandPage, generator] = await Promise.all([
     readFile(new URL('data/site.json', root), 'utf8').then(JSON.parse),
     readFile(new URL('index.html', root), 'utf8'),
-    readFile(new URL('scripts/generate-site.mjs', root), 'utf8'),
-    readFile(new URL('style/main.css', root), 'utf8')
+    readFile(new URL('pages/brand.html', root), 'utf8'),
+    readFile(new URL('scripts/generate-site.mjs', root), 'utf8')
   ]);
 
-  assert.deepEqual(site.brandProof.items.map((item) => item.id), ['iris', 'sakura', 'outcome']);
-  assert.equal((home.match(/data-brand-proof=/g) ?? []).length, 3);
-  for (const marker of [
-    'BRAND PROMISE → PRODUCT PROOF',
-    'Engineer · Manage · Deliver',
-    'Observe → Authorize → Execute → Verify',
-    'Frame · Power · Extend',
-    'Profiles → Packages → Verification',
-    'Research → System → Playable Work'
-  ]) {
-    assert.ok(home.includes(marker), `homepage is missing brand proof marker ${marker}`);
-  }
-  assert.match(generator, /assertBrandProof\(site\)/u);
-  assert.ok(css.includes('.brand-proof-grid'));
+  assert.equal('brandProof' in site, false);
+  assert.equal((home.match(/data-brand-proof=/g) ?? []).length, 0);
+  assert.ok(!home.includes('BRAND PROMISE → PRODUCT PROOF'));
+  assert.ok(brandPage.includes('id="brand-system"'));
+  assert.ok(brandPage.includes('IrisSakura Brand System'));
+  assert.ok(home.includes('href="pages/brand.html#brand-system"'));
+  assert.doesNotMatch(generator, /assertBrandProof/u);
 });

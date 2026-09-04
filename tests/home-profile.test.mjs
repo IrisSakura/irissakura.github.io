@@ -20,10 +20,10 @@ test('public profile data owns the homepage identity and a local avatar', async 
     'role'
   ]);
   assert.equal(site.profile.nickname, 'IrisSakura');
-  assert.equal(site.profile.role, '可验证的 Unity 游戏系统开发者');
+  assert.equal(site.profile.role, '独立游戏开发者与游戏系统设计者');
   assert.ok(site.profile.introduction.length >= 30);
-  assert.match(site.profile.introduction, /Iris Engineering/u);
-  assert.match(site.profile.introduction, /Sakura Framework/u);
+  assert.match(site.profile.introduction, /游戏作品/u);
+  assert.match(site.profile.introduction, /设计研究/u);
   assert.match(site.profile.avatar, /^assets\/images\/profile\/.+\.jpe?g$/iu);
   assert.ok(site.profile.avatarAlt.includes('IrisSakura'));
   await access(new URL(site.profile.avatar, root));
@@ -68,10 +68,10 @@ test('shared navigation exposes the profile avatar and six real quick routes at 
   ];
   const routeTargets = [
     'pages/game.html',
-    'pages/engineering.html',
-    'pages/framework.html',
+    'pages/portfolio.html',
     'pages/journal.html',
-    'pages/portfolio.html#consumer-lab',
+    'pages/blog.html',
+    'pages/framework.html',
     'pages/contact.html'
   ];
 
@@ -94,22 +94,20 @@ test('shared navigation exposes the profile avatar and six real quick routes at 
   }
 });
 
-test('homepage presents identity, flagship work and four secondary focus areas in order', async () => {
+test('homepage presents identity, flagship work and four visitor-interest paths in order', async () => {
   const [site, home] = await Promise.all([
     readJson('data/site.json'),
     readFile(new URL('index.html', root), 'utf8')
   ]);
 
   const profileOffset = home.indexOf('id="profile"');
-  const brandOffset = home.indexOf('class="brand-ecosystem-section"');
   const flagshipOffset = home.indexOf('class="flagship-section"');
   const focusOffset = home.indexOf('class="focus-section"');
   const researchOffset = home.indexOf('class="research-section"');
   const contactOffset = home.indexOf('class="public-cta"');
   assert.ok(profileOffset >= 0, 'homepage profile must exist');
   assert.ok(flagshipOffset > profileOffset, 'flagship must immediately follow the profile hierarchy');
-  assert.ok(brandOffset > flagshipOffset, 'brand ecosystem must support, not precede, the flagship');
-  assert.ok(focusOffset > brandOffset, 'secondary focus areas must follow the brand signature');
+  assert.ok(focusOffset > flagshipOffset, 'visitor-interest paths must follow the flagship');
   assert.ok(researchOffset > focusOffset, 'selected research must follow focus areas');
   assert.ok(contactOffset > researchOffset, 'contact CTA must close the homepage');
 
@@ -118,18 +116,17 @@ test('homepage presents identity, flagship work and four secondary focus areas i
   assert.ok(home.includes(site.profile.introduction));
   assert.ok(home.includes(`src="${site.profile.avatar}"`));
   assert.equal((home.match(/data-home-focus/g) ?? []).length, 4);
-  for (const label of ['Iris Engineering', 'Sakura Framework', 'IrisSakura Journal', 'Consumer Lab']) {
-    assert.ok(home.includes(label), `homepage focus areas are missing ${label}`);
+  for (const label of ['作品与原型', '游戏设计研究', '完整文章', '开发工具']) {
+    assert.ok(home.includes(label), `homepage visitor paths are missing ${label}`);
   }
-  assert.ok(home.includes('LATEST CONSUMER · WEBGL'));
-  assert.ok(home.includes('奶家人集结 · Sakura Core Arena'));
-  assert.ok(home.includes('href="pages/portfolio.html#consumer-gamejam-game"'));
-  assert.ok(home.includes('class="brand-lockup'));
-  assert.equal((home.match(/data-home-brand-branch/g) ?? []).length, 2);
-  assert.ok(home.includes('BUILD · ORGANIZE · BLOOM'));
-  assert.ok(home.includes('Engineering &amp; Project Management'));
-  assert.ok(home.includes('Game Framework'));
-  for (const obsoleteClass of ['evidence-strip', 'case-section', 'method-section']) {
+  assert.ok(home.includes('href="pages/portfolio.html"'));
+  assert.ok(home.includes('href="pages/journal.html"'));
+  assert.ok(home.includes('href="pages/blog.html"'));
+  assert.ok(home.includes('href="pages/framework.html"'));
+  for (const obsoleteClass of ['brand-ecosystem-section', 'brand-proof', 'evidence-strip', 'case-section', 'method-section']) {
     assert.ok(!home.includes(`class="${obsoleteClass}"`), `homepage still renders ${obsoleteClass}`);
+  }
+  for (const developerFirstCopy of ['工程控制面', '显式授权', '受限执行', 'LATEST CONSUMER']) {
+    assert.ok(!home.includes(developerFirstCopy), `homepage still leads with developer copy: ${developerFirstCopy}`);
   }
 });

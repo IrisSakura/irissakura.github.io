@@ -156,7 +156,6 @@ const consumerSync = resolveConsumerSyncRegistry(consumerSyncRegistry, consumerL
 assertBrandConfig(themeConfig);
 assertBrandContract(brandConfig);
 await assertBrandAssets(root, brandConfig);
-assertBrandProof(site);
 
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
   [article.id, await readText(article.contentPath)]
@@ -322,7 +321,7 @@ const pageDefinitions = [
     file: 'index.html',
     key: 'home',
     coverKey: 'home',
-    title: 'IrisSakura | 构建可验证的 Unity 游戏系统',
+    title: 'IrisSakura | 游戏作品、设计研究与开发工具',
     description: site.description,
     canonical: '/',
   },
@@ -330,8 +329,8 @@ const pageDefinitions = [
     file: 'pages/engineering.html',
     key: 'engineering',
     coverKey: 'engineering',
-    title: 'Iris Engineering | 研发工作流控制面',
-    description: '查看 Iris Engineering 如何把仓库事实、研究提案、显式授权、受限执行与验证审计组织成失败关闭的研发工作流。',
+    title: 'Iris Engineering | 研发工作流与工程实践',
+    description: '了解 IrisSakura 如何整理项目事实、明确工作范围，并让开发过程中的决策、执行与验证更容易被理解和复查。',
     canonical: '/pages/engineering.html',
     schemaType: 'SoftwareApplication'
   },
@@ -367,8 +366,8 @@ const pageDefinitions = [
     file: 'pages/portfolio.html',
     key: 'portfolio',
     coverKey: 'portfolio',
-    title: '作品集 | 游戏、Framework 玩法项目与研究',
-    description: `${projects.projects.length} 条真实作品主线与 ${consumerLab.cases.length} 个独立玩法项目，呈现从研究、工程治理、框架到游戏实践的完整链路。`,
+    title: '作品集 | 游戏、工具与创作实践',
+    description: `浏览 IrisSakura 的 ${projects.projects.length} 个公开作品，以及 ${consumerLab.cases.length} 个独立玩法实验；了解每个项目在解决什么问题、做到了哪里。`,
     canonical: '/pages/portfolio.html',
   },
   {
@@ -398,8 +397,8 @@ const pageDefinitions = [
     file: 'pages/journal.html',
     key: 'journal',
     coverKey: 'journal',
-    title: 'IrisSakura Journal | 游戏系统、架构与引擎研究',
-    description: '经过策展的游戏设计、引擎源码研究与工程审计摘要，说明研究如何影响框架和游戏决策。',
+    title: 'IrisSakura Journal | 游戏设计与技术研究',
+    description: '从玩法机制、系统设计到引擎原理，浏览经过整理的研究主题，并了解这些思考如何回到真实创作。',
     canonical: '/pages/journal.html',
   },
   {
@@ -416,8 +415,8 @@ const pageDefinitions = [
     file: 'pages/contact.html',
     key: 'contact',
     coverKey: 'contact',
-    title: '联系 IrisSakura | Unity 系统设计与框架交流',
-    description: '通过工作邮箱、工作 QQ、GitHub 与哔哩哔哩联系 IrisSakura，交流 Unity 游戏系统、框架设计和技术合作。',
+    title: '联系 IrisSakura | 游戏开发、系统设计与合作',
+    description: '通过工作邮箱、工作 QQ、GitHub 与哔哩哔哩联系 IrisSakura，交流游戏开发、系统设计、内容创作或合作。',
     canonical: '/pages/contact.html',
   },
   {
@@ -461,11 +460,18 @@ await assertSitePresentation(site, pageDefinitions);
 const navItems = [
   ['home', '首页', 'index.html'],
   ['portfolio', '作品', 'pages/portfolio.html'],
-  ['engineering', 'Engineering', 'pages/engineering.html'],
-  ['framework', 'Framework', 'pages/framework.html'],
-  ['journal', 'Journal', 'pages/journal.html'],
-  ['brand', 'Brand', 'pages/brand.html'],
+  ['journal', '研究与文章', 'pages/journal.html'],
+  ['framework', '开发工具', 'pages/framework.html'],
   ['contact', '联系', 'pages/contact.html']
+];
+const footerItems = [
+  ['作品', 'pages/portfolio.html'],
+  ['研究', 'pages/journal.html'],
+  ['文章', 'pages/blog.html'],
+  ['开发工具', 'pages/framework.html'],
+  ['工程实践', 'pages/engineering.html'],
+  ['品牌视觉', 'pages/brand.html'],
+  ['联系', 'pages/contact.html']
 ];
 
 for (const page of pageDefinitions) {
@@ -488,7 +494,7 @@ for (const page of pageDefinitions) {
     return `<a href="${pageHref(target)}" class="nav-link${active ? ' active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`;
   }).join('\n            ');
 
-  const footerLinks = navItems.slice(1).map(([, label, target]) => (
+  const footerLinks = footerItems.map(([label, target]) => (
     `<a href="${pageHref(target)}">${label}</a>`
   )).join('\n                ');
 
@@ -505,10 +511,10 @@ for (const page of pageDefinitions) {
     .replace('{{profileNickname}}', escapeHtml(site.profile.nickname))
     .replace('{{profileRole}}', escapeHtml(site.profile.role))
     .replace('{{gameHref}}', escapeAttribute(pageHref('pages/game.html')))
-    .replace('{{engineeringHref}}', escapeAttribute(pageHref('pages/engineering.html')))
+    .replace('{{portfolioHref}}', escapeAttribute(pageHref('pages/portfolio.html')))
     .replace('{{frameworkHref}}', escapeAttribute(pageHref('pages/framework.html')))
     .replace('{{journalHref}}', escapeAttribute(pageHref('pages/journal.html')))
-    .replace('{{consumerLabHref}}', escapeAttribute(pageHref('pages/portfolio.html#consumer-lab')))
+    .replace('{{blogHref}}', escapeAttribute(pageHref('pages/blog.html')))
     .replace('{{contactHref}}', escapeAttribute(pageHref('pages/contact.html')))
     .replace('{{brandHref}}', escapeAttribute(pageHref('pages/brand.html#brand-system')))
     .replace('{{navLinks}}', navLinks);
@@ -591,7 +597,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(
       html,
       'home-content',
-      renderHomeContent(projects, publicJournal, framework, irisEngineering, consumerLab, site)
+      renderHomeContent(projects, publicJournal, framework, site)
     );
   }
   if (page.file === 'pages/brand.html') {
@@ -740,19 +746,6 @@ function assertBrandConfig(config) {
   }
 }
 
-function assertBrandProof(siteData) {
-  const proof = siteData?.brandProof;
-  const ids = proof?.items?.map((item) => item.id);
-  if (JSON.stringify(ids) !== JSON.stringify(['iris', 'sakura', 'outcome'])) {
-    throw new Error('brand proof must preserve the IRIS, SAKURA and outcome sequence');
-  }
-  for (const item of proof.items) {
-    if (!item.promise || !item.proof || !/^pages\/[a-z-]+\.html(?:#[a-z-]+)?$/u.test(item.href ?? '') || !item.cta) {
-      throw new Error(`brand proof has an invalid ${item.id} entry`);
-    }
-  }
-}
-
 function assertEngineeringSnapshot(snapshot) {
   if (!snapshot || ![1, 2].includes(snapshot.schemaVersion) || snapshot.id !== 'iris-engineering') {
     throw new Error('Iris Engineering snapshot must use the legacy schemaVersion 1 or synced schemaVersion 2 and the stable project id');
@@ -874,8 +867,8 @@ function installBrandModeHeroArt(html, page, prefix, brand) {
 function installContentVoiceStages(html, page) {
   const stagesByFile = {
     'index.html': [
-      ['hero-section', 'value'], ['brand-ecosystem-section', 'system'], ['flagship-section', 'result'],
-      ['brand-proof', 'evidence'], ['flagship-facts', 'boundary']
+      ['hero-section', 'value'], ['focus-section', 'system'], ['flagship-section', 'result'],
+      ['research-section', 'evidence'], ['flagship-facts', 'boundary']
     ],
     'pages/portfolio.html': [
       ['portfolio-header', 'value'], ['portfolio-journey', 'system'], ['portfolio-cases', 'result'],
@@ -938,19 +931,10 @@ async function writeReadmeSummaries(projectData, sync) {
   await writeFile(file, `${readme.trim()}\n`);
 }
 
-function renderHomeContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, siteData) {
+function renderHomeContent(projectData, journalData, frameworkData, siteData) {
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
-  const featuredConsumer = consumerLabData.cases.find((entry) => entry.id === 'gamejam-game');
-  if (!featuredConsumer) throw new Error('missing featured GameJam consumer');
   const { profile } = siteData;
-  const brandProofItems = siteData.brandProof.items.map((item, index) => `
-                        <article class="brand-proof-item brand-proof-${escapeAttribute(item.id)}" data-brand-proof="${escapeAttribute(item.id)}">
-                            <span>0${index + 1}</span>
-                            <p>${escapeHtml(item.promise)}</p>
-                            <strong>${escapeHtml(item.proof)}</strong>
-                            <a href="${escapeAttribute(item.href)}" class="text-link">${escapeHtml(item.cta)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                        </article>`).join('');
   const researchCards = journalData.featuredNotes.slice(0, 3).map((note) => `
                 <article class="research-row">
                     <p class="project-status">${escapeHtml(note.track)} · ${escapeHtml(note.updatedAt)}</p>
@@ -967,14 +951,14 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
                 <div class="profile-identity">
                     <img class="profile-avatar-large" src="${escapeAttribute(profile.avatar)}" alt="${escapeAttribute(profile.avatarAlt)}">
                     <div class="profile-copy">
-                        <p class="section-kicker">UNITY SYSTEMS · GAMEPLAY · TOOLS</p>
+                        <p class="section-kicker">GAMES · DESIGN · MAKING</p>
                         <h1 class="hero-title">你好，我是 <span class="highlight">${escapeHtml(profile.nickname)}</span></h1>
                         <p class="profile-role">${escapeHtml(profile.role)}</p>
                         <p class="hero-description">${escapeHtml(profile.introduction)}</p>
                     </div>
                     <div class="hero-buttons">
-                        <a href="pages/game.html" class="btn btn-primary">查看代表作</a>
-                        <a href="https://github.com/IrisSakura" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">查看 GitHub</a>
+                        <a href="pages/game.html" class="btn btn-primary">先看《言铸之剑》</a>
+                        <a href="pages/portfolio.html" class="btn btn-secondary">浏览全部作品</a>
                     </div>
                 </div>
             </div>
@@ -986,53 +970,16 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
                     <img src="${escapeAttribute(game.homeImage)}" alt="${escapeAttribute(game.imageAlt)}">
                 </div>
                 <div class="flagship-copy">
-                    <p class="section-kicker">REPRESENTATIVE WORK · ${escapeHtml(game.status)}</p>
-                    <h2>《${escapeHtml(game.title)}》：让系统最终回到可玩体验</h2>
+                    <p class="section-kicker">代表作 · ${escapeHtml(game.status)}</p>
+                    <h2>《${escapeHtml(game.title)}》：在战斗与选择中构筑每一局冒险</h2>
                     <p class="flagship-lead">${escapeHtml(game.summary)}</p>
                     <dl class="flagship-facts">
-                        <div><dt>职责</dt><dd>${escapeHtml(game.role)}</dd></div>
-                        <div><dt>玩家循环</dt><dd>选择房间 → 实时战斗 → 构筑成长 → 推进与保存</dd></div>
-                        <div><dt>关键系统</dt><dd>技能与潜能、生成式祝福、Run 快照存档</dd></div>
-                        <div><dt>当前限制</dt><dd>${escapeHtml(game.limitations.join('；'))}</dd></div>
+                        <div><dt>我的工作</dt><dd>${escapeHtml(game.role)}</dd></div>
+                        <div><dt>你会经历</dt><dd>选择房间 → 实时战斗 → 构筑成长 → 继续冒险</dd></div>
+                        <div><dt>特色体验</dt><dd>技能与潜能组合、每局不同的祝福、可延续的冒险进度</dd></div>
+                        <div><dt>当前状态</dt><dd>${escapeHtml(game.status)}，尚未提供公开 Demo；内容与表现仍在持续完善</dd></div>
                     </dl>
-                    <a href="pages/game.html" class="btn btn-primary">查看完整案例</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="brand-ecosystem-section" data-brand-layout="contrast" aria-labelledby="brand-ecosystem-title">
-            <div class="container brand-ecosystem-inner">
-                <div class="brand-signature">
-                    <div class="brand-lockup brand-lockup-compact" aria-label="IRIS × SAKURA">
-                        <span class="brand-lockup-iris">IRIS</span><span class="brand-lockup-cross" aria-hidden="true">×</span><span class="brand-lockup-sakura">SAKURA</span>
-                    </div>
-                    <p>BUILD · ORGANIZE · BLOOM</p>
-                    <a href="pages/brand.html#brand-system" class="text-link">进入品牌视觉体系<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                </div>
-                <div>
-                    <p class="section-kicker">ONE ECOSYSTEM · TWO STRENGTHS</p>
-                    <h2 id="brand-ecosystem-title">让工程与项目管理有序推进，让游戏框架持续承载创作</h2>
-                    <div class="brand-branch-grid">
-                        <article class="brand-branch brand-branch-iris" data-home-brand-branch>
-                            <span>01 / IRIS</span>
-                            <h3>Engineering &amp; Project Management</h3>
-                            <p>Iris Engineering 承接 Workflow、Project Management、Pipeline 与 Reliability。</p>
-                        </article>
-                        <article class="brand-branch brand-branch-sakura" data-home-brand-branch>
-                            <span>02 / SAKURA</span>
-                            <h3>Game Framework</h3>
-                            <p>Game Framework、Runtime Systems、Gameplay Modules 与 Tooling。</p>
-                        </article>
-                    </div>
-                </div>
-                <div class="brand-proof" aria-labelledby="brand-proof-title">
-                    <div class="brand-proof-heading">
-                        <p class="section-kicker">${escapeHtml(siteData.brandProof.label)}</p>
-                        <h3 id="brand-proof-title">${escapeHtml(siteData.brandProof.title)}</h3>
-                        <p>${escapeHtml(siteData.brandProof.description)}</p>
-                    </div>
-                    <div class="brand-proof-grid">${brandProofItems}
-                    </div>
+                    <a href="pages/game.html" class="btn btn-primary">了解玩法与制作思路</a>
                 </div>
             </div>
         </section>
@@ -1040,40 +987,38 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
         <section class="focus-section" data-brand-layout="editorial">
             <div class="container">
                 <div class="section-heading">
-                    <p class="section-kicker">MORE FOCUSED WORK</p>
-                    <h2>围绕代表作继续展开的四条主线</h2>
-                    <p>工程治理、框架、研究与真实消费项目分别承接授权、复用、判断和验证，让首页重点明确而不失完整脉络。</p>
+                    <p class="section-kicker">按你的兴趣开始</p>
+                    <h2>这里不只有代码，也记录游戏如何被想出来、做出来</h2>
+                    <p>想先看作品、寻找设计灵感，还是了解开发过程？从你关心的方向继续浏览。</p>
                 </div>
                 <div class="focus-grid">
                     <article class="focus-card" data-home-focus>
-                        <p class="focus-index">01 · ENGINEERING CONTROL</p>
-                        <strong>${escapeHtml(irisEngineeringData.statusLabel)}</strong>
-                        <h3>Iris Engineering</h3>
-                        <p>把研究提案、显式授权、受限执行与验证审计组织成失败关闭的研发工作流。</p>
-                        <a href="pages/engineering.html" class="text-link">查看工程控制面</a>
+                        <p class="focus-index">01 · 作品与原型</p>
+                        <strong>${projectData.projects.length}</strong>
+                        <h3>看看我做过什么</h3>
+                        <p>从独立游戏原型到桌面工具，按作品了解目标、过程、当前状态与仍待解决的问题。</p>
+                        <a href="pages/portfolio.html" class="text-link">浏览全部作品</a>
                     </article>
                     <article class="focus-card" data-home-focus>
-                        <p class="focus-index">02 · REUSABLE SYSTEMS</p>
-                        <strong>${frameworkData.lifecycleCounts.Supported}</strong>
-                        <h3>Sakura Framework</h3>
-                        <p>把游戏中的稳定边界沉淀为可复用 Unity 包，并持续记录生命周期与验证状态。</p>
-                        <a href="pages/framework.html" class="text-link">查看框架</a>
-                        <a href="pages/framework-engineering.html" class="text-link">查看 Engineering Hub</a>
-                    </article>
-                    <article class="focus-card" data-home-focus>
-                        <p class="focus-index">03 · DESIGN RESEARCH</p>
+                        <p class="focus-index">02 · 游戏设计研究</p>
                         <strong>${journalData.summary.gameDesignCount}</strong>
-                        <h3>IrisSakura Journal</h3>
-                        <p>从机制、源码和实际约束出发，保留可追溯的研究判断与设计结论。</p>
-                        <a href="pages/journal.html" class="text-link">查看研究</a>
+                        <h3>寻找玩法与系统灵感</h3>
+                        <p>围绕战斗、成长、经营、叙事与关卡等主题，拆解游戏机制如何形成体验。</p>
+                        <a href="pages/journal.html" class="text-link">浏览设计研究</a>
                     </article>
-                    <article class="focus-card focus-card-latest" data-home-focus>
-                        <p class="focus-index">04 · REAL CONSUMERS</p>
-                        <strong>${consumerLabData.cases.length}</strong>
-                        <h3>Consumer Lab</h3>
-                        <span class="focus-latest">LATEST CONSUMER · WEBGL</span>
-                        <p><span class="focus-latest-name">${escapeHtml(featuredConsumer.title)}</span>用双模式战斗检验 Framework 能力是否真正落入可理解、可运行的游戏闭环。</p>
-                        <a href="pages/portfolio.html#consumer-gamejam-game" class="text-link">查看最新消费项目</a>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">03 · 完整文章</p>
+                        <strong>${journalData.summary.publishedBlogCount}</strong>
+                        <h3>阅读更完整的思考</h3>
+                        <p>把游戏系统、引擎机制与开发中的真实问题整理成可以独立阅读的长文。</p>
+                        <a href="pages/blog.html" class="text-link">阅读全部文章</a>
+                    </article>
+                    <article class="focus-card" data-home-focus>
+                        <p class="focus-index">04 · 开发工具</p>
+                        <strong>${frameworkData.lifecycleCounts.Supported}</strong>
+                        <h3>了解可复用的开发能力</h3>
+                        <p>如果你也在做游戏，可以继续查看我从项目中整理出的 Unity 工具、框架与实践。</p>
+                        <a href="pages/framework.html" class="text-link">查看工具与框架</a>
                     </article>
                 </div>
             </div>
@@ -1082,8 +1027,8 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
         <section class="research-section" data-brand-layout="editorial">
             <div class="container">
                 <div class="section-heading section-heading-row">
-                    <div><p class="section-kicker">SELECTED RESEARCH</p><h2>精选研究主题</h2></div>
-                    <a href="pages/journal.html" class="text-link">查看全部研究</a>
+                    <div><p class="section-kicker">最近值得一读</p><h2>从这些研究主题开始</h2></div>
+                    <a href="pages/journal.html" class="text-link">浏览全部主题</a>
                 </div>
                 <div class="research-list">${researchCards}
                 </div>
@@ -1092,8 +1037,8 @@ function renderHomeContent(projectData, journalData, frameworkData, irisEngineer
 
         <section class="public-cta" data-brand-layout="editorial">
             <div class="container public-cta-inner">
-                <div><p class="section-kicker">CONTACT & PUBLIC ROUTES</p><h2>直接联系或继续查看公开记录</h2><p>工作邮箱、工作 QQ 与公开项目入口都集中在联系页。</p></div>
-                <a href="pages/contact.html" class="btn btn-secondary">查看公开入口</a>
+                <div><p class="section-kicker">保持联系</p><h2>想聊游戏、系统设计或合作？</h2><p>你可以通过邮箱或 QQ 直接联系，也可以在 GitHub 与哔哩哔哩继续关注我的作品。</p></div>
+                <a href="pages/contact.html" class="btn btn-secondary">查看联系方式</a>
             </div>
         </section>
     </section>`;

@@ -14,8 +14,8 @@ function escapeRegExp(value) {
 
 test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
-  assert.equal(site.positioning, '可验证的 Unity 游戏系统开发者');
-  assert.equal(site.tagline, '研究 · 工程 · 框架 · 游戏验证');
+  assert.equal(site.positioning, '独立游戏开发者与游戏系统设计者');
+  assert.equal(site.tagline, '游戏作品 · 设计研究 · 开发工具');
   assert.ok(site.independenceNotice.includes('仅代表本人'));
   assert.deepEqual(site.contacts.map((contact) => contact.id), ['work-email', 'work-qq']);
   const workEmail = site.contacts.find((contact) => contact.id === 'work-email');
@@ -289,28 +289,31 @@ test('major page visuals are generated without reused category screenshots', asy
   }
 });
 
-test('Journal and articles share one primary navigation route without changing stable URLs', async () => {
+test('research and articles share one visitor-facing primary route without changing stable URLs', async () => {
   for (const page of ['index.html', 'pages/journal.html', 'pages/blog.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.equal((primaryNav.match(/>Journal<\/a>/g) ?? []).length, 1, `${page} must expose one Journal nav item`);
-    assert.ok(!primaryNav.includes('>研究与文章<'), `${page} still exposes the retired research label`);
+    assert.equal((primaryNav.match(/>研究与文章<\/a>/g) ?? []).length, 1, `${page} must expose one research and articles nav item`);
+    assert.ok(!primaryNav.includes('>Journal<'), `${page} still exposes the product name instead of the visitor route`);
     assert.ok(!primaryNav.includes('>博客<'), `${page} must not expose a separate blog nav item`);
   }
 
   const journal = await readText('pages/journal.html');
   const blog = await readText('pages/blog.html');
-  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">Journal<\/a>/;
+  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">研究与文章<\/a>/;
   assert.match(journal, activeJournalNav);
   assert.match(blog, activeJournalNav);
 });
 
-test('primary navigation freezes capability peers and preserves the retired Art/Music route', async () => {
+test('primary navigation prioritizes visitor routes and preserves secondary specialist routes', async () => {
   for (const page of ['index.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/brand.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    for (const label of ['作品', 'Engineering', 'Framework', 'Journal', 'Brand', '联系']) {
+    for (const label of ['首页', '作品', '研究与文章', '开发工具', '联系']) {
       assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
+    }
+    for (const productLabel of ['Engineering', 'Framework', 'Journal', 'Brand']) {
+      assert.ok(!primaryNav.includes(`>${productLabel}</a>`), `${page} still exposes the ${productLabel} product label as a primary route`);
     }
     assert.ok(!primaryNav.includes('>美术音乐</a>'), `${page} still exposes Brand as Art/Music`);
     assert.ok(!primaryNav.includes('>关于</a>'), `${page} still exposes the retired About navigation entry`);
@@ -322,11 +325,9 @@ test('primary navigation freezes capability peers and preserves the retired Art/
   assert.ok(!brand.includes('<meta name="robots" content="noindex, follow">'));
   assert.ok(brand.includes('id="brand-system"'));
   assert.ok(brand.includes('IrisSakura Brand System'));
-  assert.match(
-    brand,
-    /href="\.\.\/pages\/brand\.html" class="nav-link active" aria-current="page">Brand<\/a>/u
-  );
-  assert.match(brand, /<footer class="footer">[\s\S]*?>Brand<\/a>/u);
+  assert.match(brand, /<footer class="footer">[\s\S]*?>品牌视觉<\/a>/u);
+  assert.match(brand, /href="\.\.\/pages\/brand\.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统"/u);
+  assert.match(await readText('pages/engineering.html'), /<footer class="footer">[\s\S]*?>工程实践<\/a>/u);
   assert.ok(sitemap.includes('/pages/brand.html'));
 
   assert.ok(artMusic.includes('<meta name="robots" content="noindex, follow">'));
@@ -344,8 +345,8 @@ test('primary navigation freezes capability peers and preserves the retired Art/
 
 test('home labels curated research honestly and README matches current routes and smoke scope', async () => {
   const [home, readme] = await Promise.all([readText('index.html'), readText('README.md')]);
-  assert.ok(home.includes('SELECTED RESEARCH'));
-  assert.ok(home.includes('精选研究主题'));
+  assert.ok(home.includes('最近值得一读'));
+  assert.ok(home.includes('从这些研究主题开始'));
   assert.ok(!home.includes('LATEST RESEARCH'));
   assert.ok(readme.includes('/pages/brand.html'));
   assert.ok(readme.includes('一级 `Brand` 入口'));
@@ -363,7 +364,7 @@ test('home flagship uses registered game evidence without treating theme art as 
   assert.equal((home.match(new RegExp(game.homeImage, 'g')) ?? []).length, 1);
   assert.equal((home.match(new RegExp(game.featureImage, 'g')) ?? []).length, 0);
   assert.ok(home.includes(game.imageAlt));
-  assert.ok(home.includes('REPRESENTATIVE WORK'));
+  assert.ok(home.includes('代表作'));
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
