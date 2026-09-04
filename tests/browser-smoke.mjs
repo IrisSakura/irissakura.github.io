@@ -389,7 +389,12 @@ try {
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('return navigation replaced the active document');
   }
-  await desktop.locator('.nav-menu').getByRole('link', { name: '开发工具', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '研发体系', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/development.html`);
+  if (await desktop.locator('.development-card').count() !== 2) {
+    throw new Error('Development hub does not present two equal sibling routes');
+  }
+  await desktop.getByRole('link', { name: '进入 Sakura Framework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
   if (await desktop.locator('.framework-story-chip').count() !== frameworkStory.positioning.claims.length) {
@@ -574,8 +579,8 @@ try {
   if (await desktop.locator('.quickstart-code pre').count() !== frameworkQuickstart.steps.filter((step) => step.code).length) {
     throw new Error('Quickstart does not render every registered code probe');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '开发工具' }).isVisible()) {
-    throw new Error('Quickstart does not keep the 开发工具 navigation context');
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '研发体系' }).isVisible()) {
+    throw new Error('Quickstart does not keep the 研发体系 navigation context');
   }
   const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   if (quickstartDesktopOverflow > 1) {

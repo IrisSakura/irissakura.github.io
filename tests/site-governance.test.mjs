@@ -305,11 +305,11 @@ test('research and articles share one visitor-facing primary route without chang
   assert.match(blog, activeJournalNav);
 });
 
-test('primary navigation prioritizes visitor routes and preserves secondary specialist routes', async () => {
-  for (const page of ['index.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/brand.html']) {
+test('primary navigation gives Iris Engineering and Sakura Framework one equal parent context', async () => {
+  for (const page of ['index.html', 'pages/development.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/brand.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    for (const label of ['首页', '作品', '研究与文章', '开发工具', '联系']) {
+    for (const label of ['首页', '作品', '研究与文章', '研发体系', '联系']) {
       assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
     }
     for (const productLabel of ['Engineering', 'Framework', 'Journal', 'Brand']) {
@@ -320,14 +320,28 @@ test('primary navigation prioritizes visitor routes and preserves secondary spec
   }
 
   const sitemap = await readText('sitemap.xml');
+  const development = await readText('pages/development.html');
   const brand = await readText('pages/brand.html');
   const artMusic = await readText('pages/art-music.html');
+  assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/development\.html">/u);
+  assert.equal((development.match(/class="development-card /g) ?? []).length, 2);
+  assert.match(development, /class="development-card development-card-iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="engineering\.html"/u);
+  assert.match(development, /class="development-card development-card-sakura"[\s\S]*?<h2>Sakura Framework<\/h2>[\s\S]*?href="framework\.html"/u);
+  assert.match(development, /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">研发体系<\/a>/u);
+  for (const childPage of ['pages/engineering.html', 'pages/framework.html', 'pages/framework-quickstart.html']) {
+    assert.match(await readText(childPage), /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">研发体系<\/a>/u);
+  }
+  for (const page of ['pages/development.html', 'pages/engineering.html', 'pages/framework.html']) {
+    const html = await readText(page);
+    assert.match(html, /<footer class="footer">[\s\S]*?>Iris Engineering<\/a>/u);
+    assert.match(html, /<footer class="footer">[\s\S]*?>Sakura Framework<\/a>/u);
+  }
   assert.ok(!brand.includes('<meta name="robots" content="noindex, follow">'));
   assert.ok(brand.includes('id="brand-system"'));
   assert.ok(brand.includes('IrisSakura Brand System'));
   assert.match(brand, /<footer class="footer">[\s\S]*?>品牌视觉<\/a>/u);
   assert.match(brand, /href="\.\.\/pages\/brand\.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统"/u);
-  assert.match(await readText('pages/engineering.html'), /<footer class="footer">[\s\S]*?>工程实践<\/a>/u);
+  assert.ok(sitemap.includes('/pages/development.html'));
   assert.ok(sitemap.includes('/pages/brand.html'));
 
   assert.ok(artMusic.includes('<meta name="robots" content="noindex, follow">'));

@@ -313,6 +313,7 @@ await writeBlogSources(blogDetailDefinitions, blogAliasDefinitions, blogCollecti
 await writeFrameworkQuickstartSource(frameworkQuickstart);
 await writeFrameworkEngineeringSource(frameworkPageShellTemplate);
 await writeFrameworkDeepSources(frameworkDeepDefinitions);
+await writeDevelopmentSource();
 await writeBrandSource();
 await writeCompatibilityRouteSources();
 
@@ -324,6 +325,15 @@ const pageDefinitions = [
     title: 'IrisSakura | 游戏作品、设计研究与开发工具',
     description: site.description,
     canonical: '/',
+  },
+  {
+    file: 'pages/development.html',
+    key: 'development',
+    brandModeKey: 'system',
+    title: '研发体系 | Iris Engineering 与 Sakura Framework',
+    description: '从项目协作与工程推进，到游戏系统与框架复用，了解 Iris Engineering 与 Sakura Framework 两条平行、互补的研发路径。',
+    canonical: '/pages/development.html',
+    schemaType: 'CollectionPage'
   },
   {
     file: 'pages/engineering.html',
@@ -461,15 +471,16 @@ const navItems = [
   ['home', '首页', 'index.html'],
   ['portfolio', '作品', 'pages/portfolio.html'],
   ['journal', '研究与文章', 'pages/journal.html'],
-  ['framework', '开发工具', 'pages/framework.html'],
+  ['development', '研发体系', 'pages/development.html'],
   ['contact', '联系', 'pages/contact.html']
 ];
 const footerItems = [
   ['作品', 'pages/portfolio.html'],
   ['研究', 'pages/journal.html'],
   ['文章', 'pages/blog.html'],
-  ['开发工具', 'pages/framework.html'],
-  ['工程实践', 'pages/engineering.html'],
+  ['研发体系', 'pages/development.html'],
+  ['Iris Engineering', 'pages/engineering.html'],
+  ['Sakura Framework', 'pages/framework.html'],
   ['品牌视觉', 'pages/brand.html'],
   ['联系', 'pages/contact.html']
 ];
@@ -489,8 +500,9 @@ for (const page of pageDefinitions) {
   const prefix = '../'.repeat(depth);
   const pageHref = (target) => `${prefix}${target}`;
 
+  const activeNavKey = ['engineering', 'framework'].includes(page.key) ? 'development' : page.key;
   const navLinks = navItems.map(([key, label, target]) => {
-    const active = page.key === key;
+    const active = activeNavKey === key;
     return `<a href="${pageHref(target)}" class="nav-link${active ? ' active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`;
   }).join('\n            ');
 
@@ -512,6 +524,7 @@ for (const page of pageDefinitions) {
     .replace('{{profileRole}}', escapeHtml(site.profile.role))
     .replace('{{gameHref}}', escapeAttribute(pageHref('pages/game.html')))
     .replace('{{portfolioHref}}', escapeAttribute(pageHref('pages/portfolio.html')))
+    .replace('{{developmentHref}}', escapeAttribute(pageHref('pages/development.html')))
     .replace('{{frameworkHref}}', escapeAttribute(pageHref('pages/framework.html')))
     .replace('{{journalHref}}', escapeAttribute(pageHref('pages/journal.html')))
     .replace('{{blogHref}}', escapeAttribute(pageHref('pages/blog.html')))
@@ -597,7 +610,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(
       html,
       'home-content',
-      renderHomeContent(projects, publicJournal, framework, site)
+      renderHomeContent(projects, publicJournal, site)
     );
   }
   if (page.file === 'pages/brand.html') {
@@ -931,7 +944,7 @@ async function writeReadmeSummaries(projectData, sync) {
   await writeFile(file, `${readme.trim()}\n`);
 }
 
-function renderHomeContent(projectData, journalData, frameworkData, siteData) {
+function renderHomeContent(projectData, journalData, siteData) {
   const game = projectData.projects.find((project) => project.id === 'sword-of-words');
   if (!game) throw new Error('missing sword-of-words project');
   const { profile } = siteData;
@@ -1014,11 +1027,11 @@ function renderHomeContent(projectData, journalData, frameworkData, siteData) {
                         <a href="pages/blog.html" class="text-link">阅读全部文章</a>
                     </article>
                     <article class="focus-card" data-home-focus>
-                        <p class="focus-index">04 · 开发工具</p>
-                        <strong>${frameworkData.lifecycleCounts.Supported}</strong>
-                        <h3>了解可复用的开发能力</h3>
-                        <p>如果你也在做游戏，可以继续查看我从项目中整理出的 Unity 工具、框架与实践。</p>
-                        <a href="pages/framework.html" class="text-link">查看工具与框架</a>
+                        <p class="focus-index">04 · 研发体系</p>
+                        <strong>2</strong>
+                        <h3>了解两条互补的开发路径</h3>
+                        <p>从项目协作与工程推进，到游戏系统与框架复用，分别认识 Iris Engineering 与 Sakura Framework。</p>
+                        <a href="pages/development.html" class="text-link">了解研发体系</a>
                     </article>
                 </div>
             </div>
@@ -2196,6 +2209,83 @@ async function writeFrameworkEngineeringSource(shellTemplate) {
     throw new Error('framework engineering shell must load its page stylesheet');
   }
   await writeFile(path.join(root, 'pages/framework-engineering.html'), shellTemplate);
+}
+
+async function writeDevelopmentSource() {
+  await writeFile(path.join(root, 'pages/development.html'), `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研发体系 | Iris Engineering 与 Sakura Framework</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="main-content development-main">
+    <header class="development-hero">
+        <div class="container development-hero-inner">
+            <p class="section-kicker">IRIS ENGINEERING × SAKURA FRAMEWORK</p>
+            <h1>同一个研发体系，两条互补路径</h1>
+            <p class="development-lead">Iris Engineering 关注复杂项目如何被理解、协作和持续推进；Sakura Framework 关注游戏系统如何被整理、复用和验证。它们彼此平行，共同服务真实作品。</p>
+            <a class="btn btn-primary" href="#development-paths">认识两条路径</a>
+        </div>
+    </header>
+    <section class="development-siblings" id="development-paths" aria-labelledby="development-paths-title">
+        <div class="container">
+            <div class="section-heading development-heading">
+                <p class="section-kicker">TWO EQUAL PATHS</p>
+                <h2 id="development-paths-title">按你想了解的问题继续</h2>
+                <p>两个入口处于同一层级：一个回答“项目怎样有序推进”，另一个回答“能力怎样稳定复用”。</p>
+            </div>
+            <div class="development-grid">
+                <article class="development-card development-card-iris">
+                    <p class="development-card-index">01 · 工程与项目协作</p>
+                    <h2>Iris Engineering</h2>
+                    <p>把项目事实、目标、边界和验证方式整理清楚，让复杂开发工作更容易被理解、协作和持续推进。</p>
+                    <ul>
+                        <li>看清项目当前状态与下一步</li>
+                        <li>理解决策、执行与验证怎样衔接</li>
+                        <li>了解自动化如何在明确边界内工作</li>
+                    </ul>
+                    <a class="btn btn-secondary" href="engineering.html">进入 Iris Engineering</a>
+                </article>
+                <article class="development-card development-card-sakura">
+                    <p class="development-card-index">02 · 游戏框架与可复用能力</p>
+                    <h2>Sakura Framework</h2>
+                    <p>把真实项目反复需要的游戏系统整理成可复用能力，减少从零搭建，也保留清晰的适用范围。</p>
+                    <ul>
+                        <li>浏览游戏运行时与玩法模块</li>
+                        <li>了解不同项目如何采用这些能力</li>
+                        <li>查看成熟度、示例与使用边界</li>
+                    </ul>
+                    <a class="btn btn-secondary" href="framework.html">进入 Sakura Framework</a>
+                </article>
+            </div>
+        </div>
+    </section>
+    <section class="development-relationship" aria-labelledby="development-relationship-title">
+        <div class="container development-relationship-inner">
+            <div>
+                <p class="section-kicker">HOW THEY WORK TOGETHER</p>
+                <h2 id="development-relationship-title">不是上下级，而是不同层面的共同支撑</h2>
+            </div>
+            <p>Iris Engineering 让研发过程更清楚，Sakura Framework 让可复用能力更可靠。两条路径最终都回到同一件事：把游戏和工具做得更扎实。</p>
+            <a class="text-link" href="portfolio.html">查看它们服务的真实作品</a>
+        </div>
+    </section>
+</main>
+<footer class="footer"></footer>
+<script src="../dist/site.js" type="module"></script>
+</body>
+</html>
+`);
 }
 
 async function writeFrameworkDeepSources(definitions) {

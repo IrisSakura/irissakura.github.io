@@ -43,6 +43,7 @@ test('generated pages load one static brand without theme controls or bootstrap 
   const brand = await readJson('data/themes.json');
   const pages = [
     { path: 'index.html', prefix: '' },
+    { path: 'pages/development.html', prefix: '../' },
     { path: 'pages/framework.html', prefix: '../' }
   ];
 
@@ -71,7 +72,7 @@ test('shared navigation exposes the profile avatar and six real quick routes at 
     'pages/portfolio.html',
     'pages/journal.html',
     'pages/blog.html',
-    'pages/framework.html',
+    'pages/development.html',
     'pages/contact.html'
   ];
 
@@ -116,13 +117,15 @@ test('homepage presents identity, flagship work and four visitor-interest paths 
   assert.ok(home.includes(site.profile.introduction));
   assert.ok(home.includes(`src="${site.profile.avatar}"`));
   assert.equal((home.match(/data-home-focus/g) ?? []).length, 4);
-  for (const label of ['作品与原型', '游戏设计研究', '完整文章', '开发工具']) {
+  for (const label of ['作品与原型', '游戏设计研究', '完整文章', '研发体系']) {
     assert.ok(home.includes(label), `homepage visitor paths are missing ${label}`);
   }
   assert.ok(home.includes('href="pages/portfolio.html"'));
   assert.ok(home.includes('href="pages/journal.html"'));
   assert.ok(home.includes('href="pages/blog.html"'));
-  assert.ok(home.includes('href="pages/framework.html"'));
+  assert.ok(home.includes('href="pages/development.html"'));
+  assert.ok(home.includes('Iris Engineering'));
+  assert.ok(home.includes('Sakura Framework'));
   for (const obsoleteClass of ['brand-ecosystem-section', 'brand-proof', 'evidence-strip', 'case-section', 'method-section']) {
     assert.ok(!home.includes(`class="${obsoleteClass}"`), `homepage still renders ${obsoleteClass}`);
   }

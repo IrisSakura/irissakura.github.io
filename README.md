@@ -15,11 +15,12 @@
 ## 页面结构
 
 - `/`：定位、能力证据、精选项目与研究更新；
-- `/pages/engineering.html`：一级 `Engineering` 入口，说明研发工作流、授权、执行与验证边界；
+- `/pages/development.html`：一级“研发体系”入口，并列介绍 Iris Engineering 与 Sakura Framework 两条互补路径；
+- `/pages/engineering.html`：Iris Engineering 子页，说明研发工作流、授权、执行与验证边界；
 - `/pages/journal.html`：一级 `Journal` 入口，包含策展研究、公开证据链与文章入口；
 - `/pages/blog.html`：正式文章、系列与标签聚合的稳定独立地址；
 - `/rss.xml`：只收录正式文章语义地址的 RSS 2.0 订阅；
-- `/pages/framework.html`：框架规模、模块浏览器与生命周期成熟度；
+- `/pages/framework.html`：Sakura Framework 子页，展示框架规模、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 <!-- project-summary:start -->
