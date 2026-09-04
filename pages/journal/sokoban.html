@@ -1,0 +1,3916 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家和若干箱体共同存在于一个有限离散棋盘中。玩家可以自由行走于当前可达空地，却只能从箱体背后把它向前推动一格，不能从正面把箱体拉回；因此真正改变谜题状态的并不是绝大多数玩家步行，而是每一次 Push。一个 Push 会同时改变箱体位置、玩家位置、玩家未来能够进入的可达区域、其他箱体的可推动方向以及箱体与目标之间的可行匹配关系。错误 Push 往往不会立刻失…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/sokoban.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="推箱子 / Sokoban / Crate-Pushing Puzzle | IrisSakura Journal">
+    <meta property="og:description" content="玩家和若干箱体共同存在于一个有限离散棋盘中。玩家可以自由行走于当前可达空地，却只能从箱体背后把它向前推动一格，不能从正面把箱体拉回；因此真正改变谜题状态的并不是绝大多数玩家步行，而是每一次 Push。一个 Push 会同时改变箱体位置、玩家位置、玩家未来能够进入的可达区域、其他箱体的可推动方向以及箱体与目标之间的可行匹配关系。错误 Push 往往不会立刻失…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/sokoban.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-sokoban.png">
+    <meta property="og:image:alt" content="推箱子 / Sokoban / Crate-Pushing Puzzle | IrisSakura Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="推箱子 / Sokoban / Crate-Pushing Puzzle | IrisSakura Journal">
+    <meta name="twitter:description" content="玩家和若干箱体共同存在于一个有限离散棋盘中。玩家可以自由行走于当前可达空地，却只能从箱体背后把它向前推动一格，不能从正面把箱体拉回；因此真正改变谜题状态的并不是绝大多数玩家步行，而是每一次 Push。一个 Push 会同时改变箱体位置、玩家位置、玩家未来能够进入的可达区域、其他箱体的可推动方向以及箱体与目标之间的可行匹配关系。错误 Push 往往不会立刻失…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-sokoban.png">
+    <meta name="twitter:image:alt" content="推箱子 / Sokoban / Crate-Pushing Puzzle | IrisSakura Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"推箱子 / Sokoban / Crate-Pushing Puzzle | IrisSakura Journal","description":"玩家和若干箱体共同存在于一个有限离散棋盘中。玩家可以自由行走于当前可达空地，却只能从箱体背后把它向前推动一格，不能从正面把箱体拉回；因此真正改变谜题状态的并不是绝大多数玩家步行，而是每一次 Push。一个 Push 会同时改变箱体位置、玩家位置、玩家未来能够进入的可达区域、其他箱体的可推动方向以及箱体与目标之间的可行匹配关系。错误 Push 往往不会立刻失…","url":"https://irissakura.github.io/pages/journal/sokoban.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"推箱子 / Sokoban / Crate-Pushing Puzzle","image":"https://irissakura.github.io/assets/social/pages-journal-sokoban.png","dateModified":"2026-09-04","about":["box","pushing","sokoban"]}</script>
+    <!-- site-meta:end -->
+    <title>推箱子 / Sokoban / Crate-Pushing Puzzle | IrisSakura Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/development.html" class="nav-link">研发体系</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>独立游戏开发者与游戏系统设计者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html" data-profile-quick-link><span>02</span><strong>全部作品</strong><small>游戏与工具</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>设计研究</strong><small>玩法与系统</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/blog.html" data-profile-quick-link><span>04</span><strong>开发文章</strong><small>完整文章</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/development.html" data-profile-quick-link><span>05</span><strong>研发体系</strong><small>Iris Engineering 与 Sakura Framework</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系</strong><small>邮箱、QQ 与公开主页</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-sokoban"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-09-04</p><h1>推箱子 / Sokoban / Crate-Pushing Puzzle</h1><p>玩家和若干箱体共同存在于一个有限离散棋盘中。玩家可以自由行走于当前可达空地，却只能从箱体背后把它向前推动一格，不能从正面把箱体拉回；因此真正改变谜题状态的并不是绝大多数玩家步行，而是每一次 Push。一个 Push 会同时改变箱体位置、玩家位置、玩家未来能够进入的可达区域、其他箱体的可推动方向以及箱体与目标之间的可行匹配关系。错误 Push 往往不会立刻失…</p><div class="note-tags"><span>box</span><span>pushing</span><span>sokoban</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>box</code> <code>pushing</code> <code>sokoban</code></p>
+</blockquote>
+<hr />
+<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前生成索引。当前目录标记 <strong>Entries: 68</strong>；现有条目已经覆盖三消交换、落块消除、因果编织、点击式图形冒险、战术 RPG、自走棋、传统 Roguelike、塔防等大量与“棋盘、空间、谜题”相邻的类型。</p>
+<p>进一步对当前生成索引检索：</p>
+<ul>
+<li><p><code>Sokoban</code></p>
+</li>
+<li><p><code>推箱子</code></p>
+</li>
+</ul>
+<p>均未发现对应独立范式记录；当前已经存在的 <code>falling-block-puzzle</code> 明确围绕“持续从棋盘外生成几何块、实时下落、旋转、落锁与整行消除”构建，而 <code>match-3</code> 则围绕“已填满棋盘上的相邻交换、匹配、坠落、补充与级联”运行。</p>
+<p>因此本期新增：</p>
+<p><strong>推箱子 / Sokoban / Crate-Pushing Puzzle。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Sokoban；</p>
+</li>
+<li><p>Box-Pushing Puzzle；</p>
+</li>
+<li><p>Crate-Pushing Puzzle；</p>
+</li>
+<li><p>Warehouse Puzzle；</p>
+</li>
+<li><p>Push-Block Puzzle；</p>
+</li>
+<li><p>推箱子；</p>
+</li>
+<li><p>箱体推动解谜；</p>
+</li>
+<li><p>仓库搬运谜题；</p>
+</li>
+<li><p>推块式空间解谜。</p>
+</li>
+</ul>
+<p>这里讨论的不是“游戏里存在可以推动的箱子”，也不是开放世界中的普通物理推箱交互，而是一种仅依靠：</p>
+<p><strong>离散空间 + 玩家移动 + 只能推动不能拉回的箱体 + 目标位置 + 不可逆空间变化</strong></p>
+<p>就足以独立支撑完整产品的宏观游戏类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>玩家和若干箱体共同存在于一个有限离散棋盘中。玩家可以自由行走于当前可达空地，却只能从箱体背后把它向前推动一格，不能从正面把箱体拉回；因此真正改变谜题状态的并不是绝大多数玩家步行，而是每一次 Push。一个 Push 会同时改变箱体位置、玩家位置、玩家未来能够进入的可达区域、其他箱体的可推动方向以及箱体与目标之间的可行匹配关系。错误 Push 往往不会立刻失败，而会把箱体推入死角、封闭通道、冻结其他箱体或破坏目标装填顺序，使谜题进入仍可操作但已经不可完成的 Deadlock 状态。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>观察箱体与目标布局
+→ 计算自己当前可达区域
+→ 选择一个候选箱体
+→ 判断自己能否绕到正确推动侧
+→ 判断箱体前方目标格是否可用
+→ 提交Push
+→ 箱体与玩家原子移动
+→ 重新计算玩家可达域
+→ 重新评估箱体可推动方向
+→ 检查静态 / 动态Deadlock
+→ 继续规划后续Push
+→ 所有箱体归位
+→ Puzzle完成。</strong></p>
+<p>本类型真正的核心不是：</p>
+<blockquote>
+<p>“找到一条把箱子送到目标点的路径。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>每推动一次箱体，都在永久修改之后哪些位置还能站人、哪些方向还能施力、哪些箱体还能到达哪些目标；玩家真正规划的是未来的“可推动性”。</strong></p>
+</blockquote>
+<hr />
+<h1 id="1-类型定位">1. 类型定位</h1><p>典型 Sokoban / 推箱子通常具有：</p>
+<ul>
+<li><p>二维或三维离散棋盘；</p>
+</li>
+<li><p>墙体；</p>
+</li>
+<li><p>地面；</p>
+</li>
+<li><p>玩家；</p>
+</li>
+<li><p>一个或多个箱体；</p>
+</li>
+<li><p>一个或多个目标点；</p>
+</li>
+<li><p>玩家四向或有限方向移动；</p>
+</li>
+<li><p>箱体单格推动；</p>
+</li>
+<li><p>通常禁止拉箱；</p>
+</li>
+<li><p>通常禁止两个箱体重叠；</p>
+</li>
+<li><p>通常禁止玩家与箱体重叠；</p>
+</li>
+<li><p>通常箱体数量与目标数量相等；</p>
+</li>
+<li><p>箱体可位于目标上；</p>
+</li>
+<li><p>玩家可以绕行；</p>
+</li>
+<li><p>狭窄通道；</p>
+</li>
+<li><p>房间；</p>
+</li>
+<li><p>死角；</p>
+</li>
+<li><p>目标区；</p>
+</li>
+<li><p>Push Count；</p>
+</li>
+<li><p>Move Count；</p>
+</li>
+<li><p>Undo；</p>
+</li>
+<li><p>Reset；</p>
+</li>
+<li><p>Hint；</p>
+</li>
+<li><p>Level Select；</p>
+</li>
+<li><p>Puzzle Solver；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>最优Push挑战；</p>
+</li>
+<li><p>最优Move挑战；</p>
+</li>
+<li><p>自定义关卡；</p>
+</li>
+<li><p>自动关卡验证。</p>
+</li>
+</ul>
+<p>典型一关流程：</p>
+<p>进入仓库
+→ 查看箱体与目标位置
+→ 发现某箱体挡住中央通道
+→ 玩家绕到箱体左侧
+→ 向右推动
+→ 通道暂时打开
+→ 玩家进入后方区域
+→ 发现另一个箱体必须先处理
+→ 将第二个箱体推向下方目标区
+→ 第一箱体现在可以从后方继续推动
+→ 玩家再次绕位
+→ 把第一箱体推向目标
+→ 最后一个箱体看似距离目标最近
+→ 但如果直接推进，会挡住玩家进入最后推动侧
+→ 玩家先将其横向移开
+→ 绕到另一侧
+→ 再逐步推入目标
+→ 所有Goal Occupied
+→ Level Complete。</p>
+<p>整个过程中：</p>
+<p>玩家可能走了100步。</p>
+<p>但真正具有战略意义的状态变化可能只有：</p>
+<p>12次Push。</p>
+<p>这正是该类型非常重要的结构特征。</p>
+<hr />
+<h1 id="2-最核心的系统抽象walking-是寻找施力位置push-才是真正状态转换">2. 最核心的系统抽象：Walking 是“寻找施力位置”，Push 才是真正状态转换</h1><p>如果玩家当前可以在一大片空地中自由行走，</p>
+<p>从：</p>
+<p>左上角</p>
+<p>走到：</p>
+<p>右下角</p>
+<p>并没有改变：</p>
+<p>任何箱体位置。</p>
+<p>从纯谜题状态上看，这些位置往往属于：</p>
+<p><strong>同一个 Player Reachability Region。</strong></p>
+<p>真正改变：</p>
+<ul>
+<li><p>箱体布局；</p>
+</li>
+<li><p>可达域；</p>
+</li>
+<li><p>目标可行性；</p>
+</li>
+</ul>
+<p>的是：</p>
+<p>Push。</p>
+<p>因此可以把运行时分成两个层次：</p>
+<h2 id="micro-movement">Micro Movement</h2><p>玩家在当前自由区域中移动。</p>
+<p>主要承担：</p>
+<ul>
+<li><p>空间表现；</p>
+</li>
+<li><p>到达推动位置；</p>
+</li>
+<li><p>操作反馈。</p>
+</li>
+</ul>
+<h2 id="strategic-push">Strategic Push</h2><p>玩家推动一个箱体。</p>
+<p>承担：</p>
+<p>真正不可逆的Puzzle State变化。</p>
+<p>这意味着：</p>
+<blockquote>
+<p><strong>推箱子不应该只被设计成“角色移动系统 + 箱子碰撞”，而应该额外拥有一套以 Push 为基本行动单位的 Puzzle Domain。</strong></p>
+</blockquote>
+<hr />
+<h1 id="3-核心范式一static-terrain-与-dynamic-occupancy-必须严格分离">3. 核心范式一：Static Terrain 与 Dynamic Occupancy 必须严格分离</h1><p>墙、目标点和普通地面通常是：</p>
+<p>静态关卡事实。</p>
+<p>玩家与箱体则是：</p>
+<p>动态占用状态。</p>
+<p>不要把：</p>
+<p>“箱子站在目标点上”</p>
+<p>定义成一个新的：</p>
+<p><code>CrateOnGoalTileType</code>。</p>
+<p>更合理：</p>
+<p><strong>Terrain Layer</strong></p>
+<p>仍然是：</p>
+<p>Goal。</p>
+<p><strong>Occupancy Layer</strong></p>
+<p>是：</p>
+<p>Crate。</p>
+<hr />
+<h1 id="4-terraincelldefinition">4. TerrainCellDefinition</h1><p>建议字段：</p>
+<ul>
+<li><p>Coordinate；</p>
+</li>
+<li><p>TerrainType；</p>
+</li>
+<li><p>Walkable；</p>
+</li>
+<li><p>CrateOccupiable；</p>
+</li>
+<li><p>GoalId；</p>
+</li>
+<li><p>TerrainTags；</p>
+</li>
+<li><p>StaticDeadSquareFlag；</p>
+</li>
+<li><p>RegionMetadata；</p>
+</li>
+<li><p>TerrainVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="5-terraintype">5. TerrainType</h1><p>基础类型通常只需要：</p>
+<ul>
+<li><p>Wall；</p>
+</li>
+<li><p>Floor；</p>
+</li>
+<li><p>Goal。</p>
+</li>
+</ul>
+<p>扩展游戏可以加入：</p>
+<ul>
+<li><p>Ice；</p>
+</li>
+<li><p>Conveyor；</p>
+</li>
+<li><p>Door；</p>
+</li>
+<li><p>Teleporter；</p>
+</li>
+<li><p>FragileFloor；</p>
+</li>
+<li><p>OneWay；</p>
+</li>
+<li><p>Switch。</p>
+</li>
+</ul>
+<p>但基础Sokoban Core最好保持：</p>
+<p>Terrain与Occupant正交。</p>
+<hr />
+<h1 id="6-dynamicoccupancystate">6. DynamicOccupancyState</h1><p>建议至少维护：</p>
+<ul>
+<li><p>PlayerCoordinate；</p>
+</li>
+<li><p>CrateCoordinates；</p>
+</li>
+<li><p>CrateInstanceIds；</p>
+</li>
+<li><p>OccupancyIndex；</p>
+</li>
+<li><p>StateRevision。</p>
+</li>
+</ul>
+<hr />
+<h1 id="7-cell最终状态">7. Cell最终状态</h1><p>一个Goal Cell可以：</p>
+<p>空。</p>
+<p>也可以：</p>
+<p>Player站在上面。</p>
+<p>也可以：</p>
+<p>Crate站在上面。</p>
+<p>所以：</p>
+<p><code>Goal</code></p>
+<p>绝不能直接等于：</p>
+<p><code>OccupiedByCrate</code>。</p>
+<hr />
+<h1 id="8-这种分层设计也是后续">8. 这种分层设计也是后续：</h1><ul>
+<li><p>Debug；</p>
+</li>
+<li><p>Solver；</p>
+</li>
+<li><p>Save；</p>
+</li>
+<li><p>Visual Theme；</p>
+</li>
+</ul>
+<p>能够稳定复用的基础。</p>
+<hr />
+<h1 id="9-核心范式二经典箱体通常是逻辑可交换身份表现实例仍可保持唯一id">9. 核心范式二：经典箱体通常是“逻辑可交换身份”，表现实例仍可保持唯一ID</h1><p>经典Sokoban中：</p>
+<p>三个普通箱体</p>
+<p>通常没有：</p>
+<p>箱体A必须去目标A</p>
+<p>这种身份约束。</p>
+<p>只要：</p>
+<p>任意三个箱子</p>
+<p>占据三个目标即可。</p>
+<p>因此从Puzzle Solver视角：</p>
+<p>Crate往往可以：</p>
+<p><strong>视为无序位置集合。</strong></p>
+<hr />
+<h1 id="10-puzzlestate">10. PuzzleState</h1><p>经典状态可以简化为：</p>
+<ul>
+<li><p>CratePositionSet；</p>
+</li>
+<li><p>PlayerPosition / PlayerReachabilityComponent；</p>
+</li>
+<li><p>MoveCount；</p>
+</li>
+<li><p>PushCount。</p>
+</li>
+</ul>
+<p>而不需要：</p>
+<p><code>CrateA=(x,y)</code></p>
+<p><code>CrateB=(x,y)</code></p>
+<p>严格区分。</p>
+<hr />
+<h1 id="11-运行时表现仍建议拥有-crateinstanceid">11. 运行时表现仍建议拥有 CrateInstanceId</h1><p>因为：</p>
+<ul>
+<li><p>动画；</p>
+</li>
+<li><p>Sound；</p>
+</li>
+<li><p>Undo；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+</ul>
+<p>需要知道：</p>
+<p>刚才到底是哪一个可视箱体移动。</p>
+<hr />
+<h1 id="12-solver-canonicalization">12. Solver Canonicalization</h1><p>求解器可以把：</p>
+<p>Crate Position</p>
+<p>排序</p>
+<p>形成：</p>
+<p>Canonical State Key。</p>
+<p>这样交换两个等价箱体的身份：</p>
+<p>不会被误认为两个不同谜题状态。</p>
+<hr />
+<h1 id="13-如果加入彩色箱体-专属目标">13. 如果加入彩色箱体 / 专属目标</h1><p>此时：</p>
+<p>箱体不再可交换。</p>
+<p>State Key必须：</p>
+<p>保留对应类型。</p>
+<p>这属于：</p>
+<p>规则扩展，</p>
+<p>不能偷偷沿用经典Canonicalization。</p>
+<hr />
+<h1 id="14-核心范式三所有移动都必须经过统一-occupancy-query">14. 核心范式三：所有移动都必须经过统一 Occupancy Query</h1><p>玩家想向某方向移动。</p>
+<p>先计算：</p>
+<p><code>TargetCell = Player + Direction</code></p>
+<p>然后分三种情况。</p>
+<hr />
+<h1 id="15-情况一target-是空地">15. 情况一：Target 是空地</h1><p>如果：</p>
+<p>Walkable</p>
+<p>且：</p>
+<p>无箱体，</p>
+<p>则：</p>
+<p>普通Move。</p>
+<hr />
+<h1 id="16-情况二target-有箱体">16. 情况二：Target 有箱体</h1><p>这不是：</p>
+<p>碰撞失败。</p>
+<p>而是：</p>
+<p>尝试Push。</p>
+<p>需要进一步检查：</p>
+<p><code>CrateDestination = Target + Direction</code></p>
+<p>是否合法。</p>
+<hr />
+<h1 id="17-情况三target-是墙或非法cell">17. 情况三：Target 是墙或非法Cell</h1><p>动作失败。</p>
+<p>Player位置不变。</p>
+<hr />
+<h1 id="18-moveintent">18. MoveIntent</h1><p>建议包含：</p>
+<ul>
+<li><p>ActionId；</p>
+</li>
+<li><p>Direction；</p>
+</li>
+<li><p>PlayerStart；</p>
+</li>
+<li><p>TargetCell；</p>
+</li>
+<li><p>InputSequence；</p>
+</li>
+<li><p>SubmittedRevision；</p>
+</li>
+<li><p>ActionVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="19-moveresolver职责">19. MoveResolver职责</h1><p>负责判断：</p>
+<ul>
+<li><p>Walk；</p>
+</li>
+<li><p>Push Attempt；</p>
+</li>
+<li><p>Blocked。</p>
+</li>
+</ul>
+<p>但：</p>
+<p>真正箱体移动</p>
+<p>交给：</p>
+<p>PushResolver。</p>
+<hr />
+<h1 id="20-核心范式四push-必须是独立原子事务">20. 核心范式四：Push 必须是独立原子事务</h1><p>一个合法Push必须同时完成：</p>
+<p><strong>箱体前移一格</strong></p>
+<p>和：</p>
+<p><strong>玩家进入箱体原位置。</strong></p>
+<p>不能：</p>
+<p>先移动箱体，</p>
+<p>下一Frame才移动Player。</p>
+<p>否则中间状态：</p>
+<p>没有逻辑意义。</p>
+<hr />
+<h1 id="21-pushintent">21. PushIntent</h1><p>建议包含：</p>
+<ul>
+<li><p>PushId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>CrateId；</p>
+</li>
+<li><p>Direction；</p>
+</li>
+<li><p>PlayerFrom；</p>
+</li>
+<li><p>CrateFrom；</p>
+</li>
+<li><p>CrateTo；</p>
+</li>
+<li><p>StateRevision；</p>
+</li>
+<li><p>PushVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="22-push合法条件">22. Push合法条件</h1><p>基础Sokoban中至少：</p>
+<ul>
+<li><p>Player位于Crate后方；</p>
+</li>
+<li><p>Crate存在；</p>
+</li>
+<li><p>CrateTo不是Wall；</p>
+</li>
+<li><p>CrateTo没有另一Crate；</p>
+</li>
+<li><p>CrateTo允许箱体进入；</p>
+</li>
+<li><p>当前Puzzle未结束；</p>
+</li>
+<li><p>StateRevision仍匹配。</p>
+</li>
+</ul>
+<hr />
+<h1 id="23-pushtransaction">23. PushTransaction</h1><p>重新验证
+→ 锁定Crate
+→ 将CrateFrom清空
+→ Crate移动到CrateTo
+→ Player移动到CrateFrom
+→ PushCount +1
+→ StateRevision +1
+→ 更新Goal Occupancy
+→ 标记Reachability Cache Dirty
+→ 发布PushCommitted。</p>
+<hr />
+<h1 id="24-事务要么全部完成">24. 事务要么全部完成，</h1><p>要么：</p>
+<p>完全不改变Puzzle State。</p>
+<hr />
+<h1 id="25-这条原则尤其适合">25. 这条原则尤其适合：</h1><p>Undo、Replay与网络扩展。</p>
+<hr />
+<h1 id="26-核心范式五玩家可达域是本类型最重要的派生状态之一">26. 核心范式五：玩家可达域是本类型最重要的派生状态之一</h1><p>给定：</p>
+<p>当前墙体</p>
+<p>和：</p>
+<p>箱体布局，</p>
+<p>从Player当前位置进行Flood Fill。</p>
+<p>得到：</p>
+<p><strong>PlayerReachableCells。</strong></p>
+<hr />
+<h1 id="27-reachabilitystate">27. ReachabilityState</h1><p>建议包含：</p>
+<ul>
+<li><p>SourceStateRevision；</p>
+</li>
+<li><p>ReachableCellBitset；</p>
+</li>
+<li><p>ReachableRegionId；</p>
+</li>
+<li><p>ReachableCellCount；</p>
+</li>
+<li><p>BoundaryCells；</p>
+</li>
+<li><p>ReachabilityVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="28-为什么玩家可达域比player精确坐标更重要">28. 为什么玩家可达域比Player精确坐标更重要</h1><p>假设一个大厅中：</p>
+<p>玩家从左边</p>
+<p>走到右边。</p>
+<p>只要没有推动箱体，</p>
+<p>可达域完全相同。</p>
+<p>从“下一次有哪些Push可以执行”的角度看：</p>
+<p>这两个Player位置往往是：</p>
+<p><strong>等价状态。</strong></p>
+<hr />
+<h1 id="29-solver-canonical-player-position">29. Solver Canonical Player Position</h1><p>求解器甚至可以：</p>
+<p>不保存精确Player位置。</p>
+<p>而保存：</p>
+<p>当前Reachable Region的：</p>
+<p>Canonical Representative。</p>
+<p>例如：</p>
+<p>可达区域中最小Cell Index。</p>
+<hr />
+<h1 id="30-这样可以大量减少搜索状态数量">30. 这样可以大量减少搜索状态数量。</h1><hr />
+<h1 id="31-运行时仍保留真实player-position">31. 运行时仍保留真实Player Position</h1><p>因为玩家需要：</p>
+<p>走路。</p>
+<p>但：</p>
+<p>Puzzle Analysis层</p>
+<p>可以使用：</p>
+<p>Reachable Region。</p>
+<hr />
+<h1 id="32-核心范式六合法-push-的真正判定是三格关系">32. 核心范式六：合法 Push 的真正判定是“三格关系”</h1><p>对于箱体C</p>
+<p>和方向D：</p>
+<p>真正要检查：</p>
+<h2 id="box-destination">Box Destination</h2><p><code>C + D</code></p>
+<p>必须可占用。</p>
+<h2 id="player-stance">Player Stance</h2><p><code>C - D</code></p>
+<p>必须在：</p>
+<p>PlayerReachableCells</p>
+<p>中。</p>
+<p>因此：</p>
+<blockquote>
+<p><strong>箱体能够向某方向移动，不只取决于箱体前方有没有空间，还取决于玩家能不能站到箱体后面。</strong></p>
+</blockquote>
+<p>这是推箱子与普通路径规划最大的差异之一。</p>
+<hr />
+<h1 id="33-pushcandidate">33. PushCandidate</h1><p>建议包含：</p>
+<ul>
+<li><p>CrateId；</p>
+</li>
+<li><p>Direction；</p>
+</li>
+<li><p>RequiredStanceCell；</p>
+</li>
+<li><p>DestinationCell；</p>
+</li>
+<li><p>StanceReachable；</p>
+</li>
+<li><p>DestinationFree；</p>
+</li>
+<li><p>DeadlockRisk；</p>
+</li>
+<li><p>GoalEffect；</p>
+</li>
+<li><p>CandidateVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="34-pushenumerator">34. PushEnumerator</h1><p>遍历：</p>
+<p>所有Crates × 4方向。</p>
+<p>只要：</p>
+<p>Stance可达</p>
+<p>且：</p>
+<p>Destination合法，</p>
+<p>就是：</p>
+<p>当前真正的Strategic Action集合。</p>
+<hr />
+<h1 id="35-这套push-enumerator可以直接服务">35. 这套Push Enumerator可以直接服务：</h1><ul>
+<li><p>Solver；</p>
+</li>
+<li><p>Hint；</p>
+</li>
+<li><p>Debug；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>Training；</p>
+</li>
+<li><p>Puzzle Analysis。</p>
+</li>
+</ul>
+<hr />
+<h1 id="36-核心范式七每一次-push-都必须重新计算可达域">36. 核心范式七：每一次 Push 都必须重新计算可达域</h1><p>箱体从：</p>
+<p>通道口</p>
+<p>移开。</p>
+<p>原本无法进入的房间：</p>
+<p>现在可以进入。</p>
+<p>反过来：</p>
+<p>箱体被推到通道中。</p>
+<p>玩家可能：</p>
+<p>失去整个区域。</p>
+<p>因此：</p>
+<p>Push之后：</p>
+<p>Reachability Cache立即Dirty。</p>
+<hr />
+<h1 id="37-普通walking通常不需要重算整个flood-fill">37. 普通Walking通常不需要重算整个Flood Fill</h1><p>因为：</p>
+<p>箱体布局没变。</p>
+<p>只要Player仍在：</p>
+<p>同一Reachable Region。</p>
+<hr />
+<h1 id="38-这形成一个很高效的架构">38. 这形成一个很高效的架构：</h1><p><strong>Walk高频、低成本。</strong></p>
+<p><strong>Push低频、触发Puzzle重分析。</strong></p>
+<hr />
+<h1 id="39-核心范式八deadlock-不是特殊失败动画而是整个品类的核心设计对象">39. 核心范式八：Deadlock 不是特殊失败动画，而是整个品类的核心设计对象</h1><p>推箱子最具代表性的难度来源不是：</p>
+<p>敌人。</p>
+<p>不是：</p>
+<p>时间。</p>
+<p>而是：</p>
+<blockquote>
+<p>玩家自己制造一个“仍然可以走路，但目标已经永远无法完成”的状态。</p>
+</blockquote>
+<p>这就是：</p>
+<p><strong>Deadlock。</strong></p>
+<hr />
+<h1 id="40-deadlock可以分成">40. Deadlock可以分成：</h1><ul>
+<li><p>Static Deadlock；</p>
+</li>
+<li><p>Dynamic Deadlock；</p>
+</li>
+<li><p>Freeze Deadlock；</p>
+</li>
+<li><p>Wall Deadlock；</p>
+</li>
+<li><p>Assignment Deadlock；</p>
+</li>
+<li><p>Corral Deadlock；</p>
+</li>
+<li><p>Order Deadlock。</p>
+</li>
+</ul>
+<p>并不是所有Deadlock都同样容易检测。</p>
+<hr />
+<h1 id="41-核心范式九最基础的静态死锁是非目标角落">41. 核心范式九：最基础的静态死锁是“非目标角落”</h1><p>箱体被推入：</p>
+<p>两面墙构成的Corner。</p>
+<p>如果该Cell：</p>
+<p>不是Goal，</p>
+<p>则：</p>
+<p>箱体永远无法出来。</p>
+<hr />
+<h1 id="42-staticdeadsquare">42. StaticDeadSquare</h1><p>这种位置可以：</p>
+<p>关卡加载时</p>
+<p>直接预计算。</p>
+<hr />
+<h1 id="43-最简单规则">43. 最简单规则：</h1><p>Floor Cell同时与：</p>
+<p>一个横向Wall</p>
+<p>和：</p>
+<p>一个纵向Wall</p>
+<p>相邻，</p>
+<p>且不是Goal：</p>
+<p>标记：</p>
+<p>Dead。</p>
+<hr />
+<h1 id="44-但仅检测corner远远不够">44. 但仅检测Corner远远不够</h1><p>很多更复杂位置：</p>
+<p>虽然不是真正角落，</p>
+<p>箱体仍然：</p>
+<p>理论上永远到不了Goal。</p>
+<p>因此需要：</p>
+<p>更强的：</p>
+<p><strong>Reverse Pull Analysis。</strong></p>
+<hr />
+<h1 id="45-核心范式十reverse-pull-analysis-是静态死格检测最重要的工程工具">45. 核心范式十：Reverse Pull Analysis 是静态死格检测最重要的工程工具</h1><p>正向Sokoban规则：</p>
+<p>玩家只能Push。</p>
+<p>为了分析一个Cell中的箱体：</p>
+<p>有没有可能最终到达某Goal，</p>
+<p>可以构造一个：</p>
+<p><strong>反向抽象世界。</strong></p>
+<hr />
+<h1 id="46-反向分析中想象">46. 反向分析中想象：</h1><p>从Goal上放置一个箱体。</p>
+<p>允许一个虚拟Agent：</p>
+<p>把箱体“向后拉”。</p>
+<hr />
+<h1 id="47-为什么pull很有价值">47. 为什么Pull很有价值</h1><p>正向：</p>
+<p>箱体从A推到B，</p>
+<p>要求：</p>
+<p>玩家能站在A反方向。</p>
+<p>反向：</p>
+<p>从B拉回A，</p>
+<p>同样需要：</p>
+<p>箱体另一侧存在可站立Cell。</p>
+<p>因此可以：</p>
+<p>在只考虑静态墙体、不考虑其他箱体的情况下，</p>
+<p>枚举：</p>
+<p>哪些Cell理论上能够通过合法Push序列到达Goal。</p>
+<hr />
+<h1 id="48-reversereachablecells">48. ReverseReachableCells</h1><p>从所有Goal同时开始。</p>
+<p>执行：</p>
+<p>Reverse Crate Search。</p>
+<p>最终得到：</p>
+<p><strong>Goal-Reachable Crate Cells。</strong></p>
+<hr />
+<h1 id="49-所有不属于该集合的floor-cell">49. 所有不属于该集合的Floor Cell：</h1><p>只要不是特殊规则，</p>
+<p>都是：</p>
+<p><strong>Static Dead Square。</strong></p>
+<hr />
+<h1 id="50-这能检测大量">50. 这能检测大量：</h1><p>不是简单Corner</p>
+<p>但仍然无法回收的墙边位置。</p>
+<hr />
+<h1 id="51-static-dead-map-可以在editor直接可视化">51. Static Dead Map 可以在Editor直接可视化</h1><p>设计师放一个Crate到红色Cell：</p>
+<p>立即警告：</p>
+<p>“该位置无法到达任何Goal。”</p>
+<p>这是推箱子作者工具中极高价值的功能。</p>
+<hr />
+<h1 id="52-核心范式十一wall-deadlock-需要考虑沿墙移动是否存在目标出口">52. 核心范式十一：Wall Deadlock 需要考虑“沿墙移动是否存在目标出口”</h1><p>箱体贴墙</p>
+<p>不一定死。</p>
+<p>如果：</p>
+<p>同一墙边存在Goal</p>
+<p>且玩家能够沿墙持续推动，</p>
+<p>可能完全合法。</p>
+<hr />
+<h1 id="53-但如果">53. 但如果：</h1><p>箱体贴着一条不可脱离的墙，</p>
+<p>该墙段：</p>
+<p>没有合适Goal，</p>
+<p>那么：</p>
+<p>迟早死锁。</p>
+<hr />
+<h1 id="54-reverse-pull-map通常可以">54. Reverse Pull Map通常可以：</h1><p>统一覆盖很多此类Static Wall Deadlock。</p>
+<p>比手写：</p>
+<p>“贴墙就是死”</p>
+<p>更准确。</p>
+<hr />
+<h1 id="55-核心范式十二freeze-deadlock来自多个箱体相互锁定">55. 核心范式十二：Freeze Deadlock来自多个箱体相互锁定</h1><p>例如：</p>
+<p>两个箱体互相顶住。</p>
+<p>左右是墙。</p>
+<p>上下也无法移动。</p>
+<p>即使每个箱体所在Cell：</p>
+<p>单独分析都不是Dead Square，</p>
+<p>组合起来：</p>
+<p>仍然冻结。</p>
+<hr />
+<h1 id="56-freeze-analysis">56. Freeze Analysis</h1><p>可以从某Crate开始：</p>
+<p>判断：</p>
+<p>X轴是否Blocked。</p>
+<p>Y轴是否Blocked。</p>
+<p>如果：</p>
+<p>两个轴都不可移动，</p>
+<p>且：</p>
+<p>冻结关系依赖其他箱体，</p>
+<p>递归检查：</p>
+<p>邻接箱体。</p>
+<hr />
+<h1 id="57-例如">57. 例如：</h1><p>Crate A左边墙。</p>
+<p>右边Crate B。</p>
+<p>B右边墙。</p>
+<p>则：</p>
+<p>A、B在X轴共同冻结。</p>
+<p>如果Y轴也冻结：</p>
+<p>形成：</p>
+<p>Deadlock Cluster。</p>
+<hr />
+<h1 id="58-如果所有冻结箱体">58. 如果所有冻结箱体：</h1><p>已经正确站在最终Goal上，</p>
+<p>可能仍然：</p>
+<p>是合法终态。</p>
+<p>所以Deadlock检测不能：</p>
+<p>只看“箱子动不了”。</p>
+<hr />
+<h1 id="59-核心范式十三22-freeze-是非常常见的组合死锁">59. 核心范式十三：2×2 Freeze 是非常常见的组合死锁</h1><p>一个2×2区域：</p>
+<p>全部由：</p>
+<p>Wall / Crate</p>
+<p>占据。</p>
+<p>其中至少存在：</p>
+<p>非Goal Crate。</p>
+<p>往往意味着：</p>
+<p>这些箱体无法重排。</p>
+<hr />
+<h1 id="60-这种pattern可以">60. 这种Pattern可以：</h1><p>作为低成本动态检测。</p>
+<hr />
+<h1 id="61-核心范式十四goal-assignment-deadlock-比几何死角更隐蔽">61. 核心范式十四：Goal Assignment Deadlock 比几何死角更隐蔽</h1><p>假设：</p>
+<p>3个Crate。</p>
+<p>3个Goal。</p>
+<p>每一个Crate单独看：</p>
+<p>都能够到达某个Goal。</p>
+<p>但可能：</p>
+<p>Crate A只能到Goal 1。</p>
+<p>Crate B也只能到Goal 1。</p>
+<p>Crate C能到Goal 2 / 3。</p>
+<p>这样：</p>
+<p>不存在：</p>
+<p>一一匹配。</p>
+<p>Puzzle已经无解。</p>
+<hr />
+<h1 id="62-这属于">62. 这属于：</h1><p><strong>Assignment Deadlock。</strong></p>
+<hr />
+<h1 id="63-crategoalreachabilitygraph">63. CrateGoalReachabilityGraph</h1><p>构建二分图：</p>
+<p>左边：</p>
+<p>Crates。</p>
+<p>右边：</p>
+<p>Goals。</p>
+<p>Edge：</p>
+<p>该Crate在静态或更精确分析中</p>
+<p>理论可到Goal。</p>
+<hr />
+<h1 id="64-执行">64. 执行：</h1><p>Maximum Bipartite Matching。</p>
+<p>如果：</p>
+<p>匹配数量 &lt; Crate数量，</p>
+<p>则：</p>
+<p>当前状态至少从目标分配角度：</p>
+<p>无法完成。</p>
+<hr />
+<h1 id="65-这是非常重要的自动solver剪枝方法">65. 这是非常重要的自动Solver剪枝方法。</h1><hr />
+<h1 id="66-需要明确">66. 需要明确：</h1><p>静态Reachability Matching通常是：</p>
+<p>必要条件，</p>
+<p>不一定是：</p>
+<p>充分条件。</p>
+<p>匹配存在</p>
+<p>不代表：</p>
+<p>实际推箱顺序必然可行。</p>
+<hr />
+<h1 id="67-核心范式十五目标区的装填顺序本身可以构成puzzle">67. 核心范式十五：目标区的“装填顺序”本身可以构成Puzzle</h1><p>例如：</p>
+<p>一个一格宽的Goal Corridor</p>
+<p>内部有三个Goal。</p>
+<p>玩家只能：</p>
+<p>从入口方向推箱。</p>
+<p>那么必须：</p>
+<p>先把最深处Goal填满。</p>
+<hr />
+<h1 id="68-如果先填">68. 如果先填：</h1><p>最外侧Goal，</p>
+<p>后续箱体：</p>
+<p>无法越过。</p>
+<p>虽然外侧箱体本身：</p>
+<p>已经正确在Goal上，</p>
+<p>整个Puzzle仍然：</p>
+<p>Deadlock。</p>
+<hr />
+<h1 id="69-这说明">69. 这说明：</h1><p><strong>Crate on Goal ≠ Crate永远不再需要考虑。</strong></p>
+<p>它可能：</p>
+<p>挡住后续路径。</p>
+<hr />
+<h1 id="70-goal-room-packing">70. Goal Room Packing</h1><p>复杂Solver通常会：</p>
+<p>专门分析：</p>
+<p>目标房间装填顺序。</p>
+<p>内容工具同样可以：</p>
+<p>提示：</p>
+<p>狭窄Goal Region的潜在顺序约束。</p>
+<hr />
+<h1 id="71-核心范式十六corral-deadlock来自玩家自己被箱体墙隔离在区域之外">71. 核心范式十六：Corral Deadlock来自“玩家自己被箱体墙隔离在区域之外”</h1><p>有一片区域：</p>
+<p>包含多个Crate。</p>
+<p>但玩家当前：</p>
+<p>进不去。</p>
+<p>这些Crate之间可能：</p>
+<p>仍然存在理论移动空间。</p>
+<p>但由于玩家无法：</p>
+<p>到达必要推动侧，</p>
+<p>实际无解。</p>
+<hr />
+<h1 id="72-这种由crate组成边界">72. 这种由Crate组成边界、</h1><p>把玩家排除在外的区域</p>
+<p>通常称为：</p>
+<p><strong>Corral。</strong></p>
+<hr />
+<h1 id="73-corral分析要同时考虑">73. Corral分析要同时考虑：</h1><ul>
+<li><p>当前Player Reachability；</p>
+</li>
+<li><p>不可进入区域；</p>
+</li>
+<li><p>该区域内部Crate；</p>
+</li>
+<li><p>边界Crate可否从外侧推动；</p>
+</li>
+<li><p>Goal关系。</p>
+</li>
+</ul>
+<p>这是：</p>
+<p>更高级的动态Deadlock分析。</p>
+<hr />
+<h1 id="74-不建议第一版runtime就实现所有高级deadlock算法">74. 不建议第一版Runtime就实现所有高级Deadlock算法</h1><p>推荐分层：</p>
+<h3 id="level-1">Level 1</h3><p>Static Dead Squares。</p>
+<h3 id="level-2">Level 2</h3><p>Corner / 2×2 / Freeze。</p>
+<h3 id="level-3">Level 3</h3><p>Goal Matching。</p>
+<h3 id="level-4">Level 4</h3><p>Corral / Goal Room高级分析。</p>
+<hr />
+<h1 id="75-玩家运行时甚至不一定需要">75. 玩家运行时甚至不一定需要：</h1><p>自动宣布所有Deadlock。</p>
+<p>这些算法首先应该：</p>
+<p>服务：</p>
+<p>Solver和关卡验证。</p>
+<hr />
+<h1 id="76-核心范式十七deadlock-detector不能以可能错误为代价强制重置玩家状态">76. 核心范式十七：Deadlock Detector不能以“可能错误”为代价强制重置玩家状态</h1><p>这是重要失败隔离原则。</p>
+<p>如果一个高级Deadlock算法：</p>
+<p>不能保证100%正确，</p>
+<p>它只能：</p>
+<ul>
+<li><p>Debug报警；</p>
+</li>
+<li><p>Hint；</p>
+</li>
+<li><p>Solver剪枝；</p>
+</li>
+</ul>
+<p>不能：</p>
+<p>自动判玩家失败</p>
+<p>并删除进度。</p>
+<hr />
+<h1 id="77-player-facing-deadlock-warning">77. Player-facing Deadlock Warning</h1><p>可以分：</p>
+<h3 id="proven-deadlock">Proven Deadlock</h3><p>“这个箱体已经无法离开死角。”</p>
+<h3 id="suspected-deadlock">Suspected Deadlock</h3><p>不自动提示，</p>
+<p>除非玩家请求分析。</p>
+<hr />
+<h1 id="78-核心范式十八undo-是本类型的核心实验工具而不是降低难度的外挂">78. 核心范式十八：Undo 是本类型的核心实验工具，而不是降低难度的外挂</h1><p>因为Push具有：</p>
+<p>强不可逆性。</p>
+<p>如果玩家每次错误Push都必须：</p>
+<p>整关Reset，</p>
+<p>试错成本很高。</p>
+<p>因此现代Sokoban非常适合：</p>
+<p><strong>Unlimited Undo。</strong></p>
+<hr />
+<h1 id="79-undorecord">79. UndoRecord</h1><p>每个Commit Action记录：</p>
+<ul>
+<li><p>ActionType；</p>
+</li>
+<li><p>PlayerBefore；</p>
+</li>
+<li><p>PlayerAfter；</p>
+</li>
+<li><p>CrateId；</p>
+</li>
+<li><p>CrateBefore；</p>
+</li>
+<li><p>CrateAfter；</p>
+</li>
+<li><p>MoveCountDelta；</p>
+</li>
+<li><p>PushCountDelta；</p>
+</li>
+<li><p>GoalOccupancyDelta；</p>
+</li>
+<li><p>StateRevisionBefore；</p>
+</li>
+<li><p>StateRevisionAfter。</p>
+</li>
+</ul>
+<hr />
+<h1 id="80-walking是否进入undo">80. Walking是否进入Undo</h1><p>可以有两种策略：</p>
+<h3 id="full-undo">Full Undo</h3><p>每一步都可Undo。</p>
+<h3 id="push-centric-undo">Push-centric Undo</h3><p>允许快速回退到上一个Push。</p>
+<p>两者甚至可以：</p>
+<p>同时存在。</p>
+<hr />
+<h1 id="81-push-centric-undo特别符合该类型">81. Push-centric Undo特别符合该类型</h1><p>因为大量Walking：</p>
+<p>只是重新站位。</p>
+<p>玩家通常真正想撤销的是：</p>
+<blockquote>
+<p>刚才那个Push。</p>
+</blockquote>
+<hr />
+<h1 id="82-undo必须恢复">82. Undo必须恢复：</h1><p>完整Puzzle State。</p>
+<p>不能：</p>
+<p>只把箱体拉回来</p>
+<p>却忘记：</p>
+<p>Player位置。</p>
+<hr />
+<h1 id="83-undo与reset不应重新roll任何随机数">83. Undo与Reset不应重新Roll任何随机数</h1><p>经典Sokoban本来就：</p>
+<p>几乎无随机。</p>
+<p>因此非常适合：</p>
+<p>完全确定。</p>
+<hr />
+<h1 id="84-核心范式十九reset-应该接近零成本">84. 核心范式十九：Reset 应该接近零成本</h1><p>玩家确认思路错了：</p>
+<p>按Restart。</p>
+<p>立即：</p>
+<p>恢复Initial Puzzle Snapshot。</p>
+<hr />
+<h1 id="85-不需要">85. 不需要：</h1><p>Reload整张Scene。</p>
+<p>只需：</p>
+<p>State Reset。</p>
+<hr />
+<h1 id="86-这和高难平台游戏一样">86. 这和高难平台游戏一样：</h1><p>低失败恢复成本</p>
+<p>允许更高Puzzle难度。</p>
+<hr />
+<h1 id="87-核心范式二十最优解指标应区分-push-count-与-walking-move-count">87. 核心范式二十：最优解指标应区分 Push Count 与 Walking Move Count</h1><p>一个解法：</p>
+<p>Push 20次。</p>
+<p>Walk 300步。</p>
+<p>另一个：</p>
+<p>Push 22次。</p>
+<p>Walk 80步。</p>
+<p>到底哪个更优？</p>
+<p>取决于：</p>
+<p>模式。</p>
+<hr />
+<h1 id="88-常见评价指标">88. 常见评价指标</h1><ul>
+<li><p>Minimum Pushes；</p>
+</li>
+<li><p>Minimum Moves；</p>
+</li>
+<li><p>Pushes then Moves；</p>
+</li>
+<li><p>Moves then Pushes；</p>
+</li>
+<li><p>Time；</p>
+</li>
+<li><p>Undo Count。</p>
+</li>
+</ul>
+<hr />
+<h1 id="89-push通常更具有">89. Push通常更具有：</h1><p>谜题战略价值。</p>
+<p>因此Solver和关卡难度分析</p>
+<p>应优先记录：</p>
+<p>Push。</p>
+<hr />
+<h1 id="90-但对玩家操作体验">90. 但对玩家操作体验：</h1><p>Walking也很重要。</p>
+<p>长距离反复绕行：</p>
+<p>即使Push解很漂亮，</p>
+<p>仍可能：</p>
+<p>操作拖沓。</p>
+<hr />
+<h1 id="91-核心范式二十一walking-pathfinding-可以自动化但不应自动决定-push">91. 核心范式二十一：Walking Pathfinding 可以自动化，但不应自动决定 Push</h1><p>如果玩家点击：</p>
+<p>箱子后方某个空格。</p>
+<p>系统可以：</p>
+<p>自动寻路过去。</p>
+<hr />
+<h1 id="92-因为">92. 因为：</h1><p>在当前可达域内部的Walking</p>
+<p>通常不是谜题核心。</p>
+<hr />
+<h1 id="93-但点击箱子以后">93. 但点击箱子以后：</h1><p>系统不应：</p>
+<p>自动替玩家决定：</p>
+<p>应该把箱子推向哪个Goal。</p>
+<hr />
+<h1 id="94-自动行走降低">94. 自动行走降低：</h1><p>操作摩擦。</p>
+<p>不降低：</p>
+<p>Push Planning难度。</p>
+<hr />
+<h1 id="95-这是一条非常有价值的ux边界">95. 这是一条非常有价值的UX边界：</h1><blockquote>
+<p><strong>可以自动化策略无关的路径执行，但不要自动化策略本身。</strong></p>
+</blockquote>
+<hr />
+<h1 id="96-核心范式二十二隧道中的重复push可以做成可选macro操作">96. 核心范式二十二：隧道中的重复Push可以做成可选Macro操作</h1><p>一个一格宽的直线Tunnel。</p>
+<p>箱体进入后：</p>
+<p>只有：</p>
+<p>继续向前</p>
+<p>或：</p>
+<p>原路不能拉回。</p>
+<hr />
+<h1 id="97-如果中间">97. 如果中间：</h1><p>没有分支、Goal决策或其他Crate交互，</p>
+<p>连续5次Push的战略意义可能：</p>
+<p>等价于：</p>
+<p>一个Macro Push。</p>
+<hr />
+<h1 id="98-tunnelmacro可以">98. TunnelMacro可以：</h1><p>用于：</p>
+<ul>
+<li><p>Solver压缩；</p>
+</li>
+<li><p>Hint；</p>
+</li>
+<li><p>Optional Fast Movement。</p>
+</li>
+</ul>
+<hr />
+<h1 id="99-但只有在">99. 但只有在：</h1><p>中间不存在决策点</p>
+<p>时才安全。</p>
+<hr />
+<h1 id="100-核心范式二十三求解器应以-push-state-搜索而不是逐玩家步搜索">100. 核心范式二十三：求解器应以 Push State 搜索，而不是逐玩家步搜索</h1><p>最朴素Solver：</p>
+<p>Player Up。</p>
+<p>Left。</p>
+<p>Right。</p>
+<p>Down。</p>
+<p>搜索大量：</p>
+<p>仅仅是在同一房间里走来走去的状态。</p>
+<p>非常低效。</p>
+<hr />
+<h1 id="101-更合理">101. 更合理：</h1><p>给定当前Crate布局。</p>
+<p>计算：</p>
+<p>PlayerReachableRegion。</p>
+<p>枚举：</p>
+<p>所有合法Push。</p>
+<p>每个Push：</p>
+<p>产生一个新Puzzle State。</p>
+<hr />
+<h1 id="102-于是搜索图中的edge">102. 于是搜索图中的Edge：</h1><p>不是：</p>
+<p>Walk。</p>
+<p>而是：</p>
+<p><strong>Push。</strong></p>
+<hr />
+<h1 id="103-solverstate">103. SolverState</h1><p>推荐：</p>
+<ul>
+<li><p>Canonical Crate Position Set；</p>
+</li>
+<li><p>Canonical Player Reachable Region；</p>
+</li>
+<li><p>PushDepth；</p>
+</li>
+<li><p>ParentState；</p>
+</li>
+<li><p>LastPush；</p>
+</li>
+<li><p>StateHash。</p>
+</li>
+</ul>
+<hr />
+<h1 id="104-这通常会把搜索空间">104. 这通常会把搜索空间：</h1><p>大幅降低。</p>
+<hr />
+<h1 id="105-核心范式二十四state-hash-应忽略无意义身份差异">105. 核心范式二十四：State Hash 应忽略无意义身份差异</h1><p>经典箱体等价时：</p>
+<p>Hash基于：</p>
+<p>Sorted Crate Positions</p>
+<p>Player Reachability Canonical Cell。</p>
+<hr />
+<h1 id="106-不应该">106. 不应该：</h1><p>Crate A和B交换身份</p>
+<p>就认为：</p>
+<p>新状态。</p>
+<hr />
+<h1 id="107-zobrist-hash">107. Zobrist Hash</h1><p>或：</p>
+<p>其他稳定哈希方案</p>
+<p>都可以使用。</p>
+<hr />
+<h1 id="108-transposition-table">108. Transposition Table</h1><p>记录：</p>
+<p>已经访问过的State。</p>
+<p>如果新路径：</p>
+<p>Push Count更差，</p>
+<p>跳过。</p>
+<hr />
+<h1 id="109-这对solver性能至关重要">109. 这对Solver性能至关重要。</h1><hr />
+<h1 id="110-核心范式二十五solver-heuristic不应只用箱体到最近goal的曼哈顿距离">110. 核心范式二十五：Solver Heuristic不应只用箱体到最近Goal的曼哈顿距离</h1><p>基础Heuristic：</p>
+<p>每个Crate</p>
+<p>距离最近Goal。</p>
+<p>但它忽略：</p>
+<ul>
+<li><p>墙；</p>
+</li>
+<li><p>推动方向；</p>
+</li>
+<li><p>Goal冲突；</p>
+</li>
+<li><p>Deadlock。</p>
+</li>
+</ul>
+<hr />
+<h1 id="111-更好的基础">111. 更好的基础：</h1><p>Reverse Pull Distance。</p>
+<hr />
+<h1 id="112-在静态墙体环境中">112. 在静态墙体环境中：</h1><p>预计算：</p>
+<p>每个Cell</p>
+<p>到每个Goal的：</p>
+<p>最少Push近似距离。</p>
+<hr />
+<h1 id="113-然后进行">113. 然后进行：</h1><p>Crate ↔ Goal</p>
+<p>最小代价匹配。</p>
+<p>得到：</p>
+<p>Matching Heuristic。</p>
+<hr />
+<h1 id="114-这是">114. 这是：</h1><p>Admissible / Near-admissible</p>
+<p>与否取决于具体实现。</p>
+<p>但比普通几何距离：</p>
+<p>强很多。</p>
+<hr />
+<h1 id="115-solver还可以加入">115. Solver还可以加入：</h1><ul>
+<li><p>Deadlock pruning；</p>
+</li>
+<li><p>Goal room packing；</p>
+</li>
+<li><p>Tunnel macros；</p>
+</li>
+<li><p>Corral pruning；</p>
+</li>
+<li><p>Relevance cuts。</p>
+</li>
+</ul>
+<hr />
+<h1 id="116-第一版不必实现最强solver">116. 第一版不必实现最强Solver。</h1><p>但架构最好：</p>
+<p>让Solver复用真正Puzzle Rules，</p>
+<p>而不是：</p>
+<p>维护另一套“近似推箱规则”。</p>
+<hr />
+<h1 id="117-核心范式二十六hint-应来自真实solver路径而不是手写试试左边箱子">117. 核心范式二十六：Hint 应来自真实Solver路径，而不是手写“试试左边箱子”</h1><p>最可靠Hint系统可以：</p>
+<p>从当前State</p>
+<p>运行Solver。</p>
+<hr />
+<h1 id="118-solver得到">118. Solver得到：</h1><p>完整Push Solution。</p>
+<p>但Hint不要：</p>
+<p>直接把答案全部显示。</p>
+<hr />
+<h1 id="119-hint-level">119. Hint Level</h1><h3 id="level-1战略方向">Level 1：战略方向</h3><p>“先处理左侧房间里的箱体。”</p>
+<h3 id="level-2箱体选择">Level 2：箱体选择</h3><p>“下一步应该移动中间的箱体。”</p>
+<h3 id="level-3推动方向">Level 3：推动方向</h3><p>“尝试从它的下方把它向上推。”</p>
+<h3 id="level-4完整下一push">Level 4：完整下一Push</h3><p>高亮：</p>
+<p>Required Stance</p>
+<p>和：</p>
+<p>Destination。</p>
+<hr />
+<h1 id="120-solver未能在预算内求解">120. Solver未能在预算内求解</h1><p>不能：</p>
+<p>阻塞游戏。</p>
+<p>返回：</p>
+<p>“当前无法生成提示。”</p>
+<p>或使用：</p>
+<p>较弱Heuristic。</p>
+<hr />
+<h1 id="121-solver应运行在">121. Solver应运行在：</h1><p>Puzzle State Snapshot</p>
+<p>上。</p>
+<hr />
+<h1 id="122-如果玩家在solver工作期间又push">122. 如果玩家在Solver工作期间又Push：</h1><p>State Revision变化。</p>
+<p>旧Hint：</p>
+<p>直接丢弃。</p>
+<p>不能：</p>
+<p>应用到新棋盘。</p>
+<hr />
+<h1 id="123-核心范式二十七关卡难度不应主要按地图面积衡量">123. 核心范式二十七：关卡难度不应主要按地图面积衡量</h1><p>一个：</p>
+<p>8×8</p>
+<p>关卡</p>
+<p>可能比：</p>
+<p>20×20</p>
+<p>难很多。</p>
+<p>真正难度更接近：</p>
+<ul>
+<li><p>合法Push分支数；</p>
+</li>
+<li><p>错误Push比例；</p>
+</li>
+<li><p>Deadlock密度；</p>
+</li>
+<li><p>强制顺序；</p>
+</li>
+<li><p>Goal Packing；</p>
+</li>
+<li><p>Crate互锁；</p>
+</li>
+<li><p>Player Re-routing；</p>
+</li>
+<li><p>最优Push深度；</p>
+</li>
+<li><p>假解数量。</p>
+</li>
+</ul>
+<hr />
+<h1 id="124-leveldifficultymetrics">124. LevelDifficultyMetrics</h1><p>可以记录：</p>
+<ul>
+<li><p>OptimalPushCount；</p>
+</li>
+<li><p>OptimalMoveCount；</p>
+</li>
+<li><p>SearchExpandedStates；</p>
+</li>
+<li><p>AveragePushBranching；</p>
+</li>
+<li><p>DeadPushRatio；</p>
+</li>
+<li><p>ForcedPushDepth；</p>
+</li>
+<li><p>GoalAssignmentComplexity；</p>
+</li>
+<li><p>CorralCount；</p>
+</li>
+<li><p>TunnelCount；</p>
+</li>
+<li><p>SolutionCountApproximation；</p>
+</li>
+<li><p>DifficultyVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="125-solver展开节点数">125. Solver展开节点数</h1><p>虽然不是完美Difficulty指标，</p>
+<p>但通常比：</p>
+<p>地图尺寸</p>
+<p>有价值得多。</p>
+<hr />
+<h1 id="126-核心范式二十八优秀关卡通常围绕一个空间悖论逐渐展开">126. 核心范式二十八：优秀关卡通常围绕“一个空间悖论”逐渐展开</h1><p>例如：</p>
+<ul>
+<li><p>必须把箱子暂时推离Goal；</p>
+</li>
+<li><p>最近的箱子不能去最近的Goal；</p>
+</li>
+<li><p>必须先封路再重新开路；</p>
+</li>
+<li><p>Goal本身也是通道；</p>
+</li>
+<li><p>一个箱体用于改变玩家可达域；</p>
+</li>
+<li><p>最深Goal必须最先填；</p>
+</li>
+<li><p>先推动看似无关箱体才能绕到另一个箱体后方。</p>
+</li>
+</ul>
+<hr />
+<h1 id="127-这些都是">127. 这些都是：</h1><p><strong>Push改变Future Pushability</strong></p>
+<p>的表现。</p>
+<hr />
+<h1 id="128-好的sokoban难题通常不是">128. 好的Sokoban难题通常不是：</h1><p>大量箱子。</p>
+<p>而是：</p>
+<p>少量箱子拥有高度耦合的空间关系。</p>
+<hr />
+<h1 id="129-核心范式二十九关卡作者工具必须可视化箱体可达性而不只是地图">129. 核心范式二十九：关卡作者工具必须可视化“箱体可达性”，而不只是地图</h1><p>传统Tile Editor只告诉：</p>
+<p>墙在哪。</p>
+<p>对于Sokoban还不够。</p>
+<hr />
+<h1 id="130-高价值overlay包括">130. 高价值Overlay包括：</h1><ul>
+<li><p>Static Dead Squares；</p>
+</li>
+<li><p>Goal Reverse Reachability；</p>
+</li>
+<li><p>Player Reachability；</p>
+</li>
+<li><p>Current Legal Pushes；</p>
+</li>
+<li><p>Crate-to-Goal Edges；</p>
+</li>
+<li><p>Tunnel；</p>
+</li>
+<li><p>Goal Room；</p>
+</li>
+<li><p>Corral Candidate；</p>
+</li>
+<li><p>Deadlock Warning。</p>
+</li>
+</ul>
+<hr />
+<h1 id="131-玩家reachability-overlay">131. 玩家Reachability Overlay</h1><p>选择任意测试State。</p>
+<p>显示：</p>
+<p>Player当前可走区域。</p>
+<hr />
+<h1 id="132-push-direction-overlay">132. Push Direction Overlay</h1><p>每个Crate旁边显示：</p>
+<p>当前：</p>
+<p>↑ 可推
+↓ 不可推
+← 可推
+→ 死格。</p>
+<hr />
+<h1 id="133-这对关卡设计师非常直观">133. 这对关卡设计师非常直观。</h1><hr />
+<h1 id="134-核心范式三十关卡验证必须使用真正solver">134. 核心范式三十：关卡验证必须使用真正Solver</h1><p>人工试玩一次能通：</p>
+<p>只证明：</p>
+<p>存在一个解。</p>
+<p>还需要确认：</p>
+<ul>
+<li><p>初始State合法；</p>
+</li>
+<li><p>Goal数量匹配；</p>
+</li>
+<li><p>所有Crate有理论Goal；</p>
+</li>
+<li><p>Solver能够求解；</p>
+</li>
+<li><p>没有非预期超短解；</p>
+</li>
+<li><p>难度符合目标；</p>
+</li>
+<li><p>Optional最优解存在。</p>
+</li>
+</ul>
+<hr />
+<h1 id="135-levelvalidationreport">135. LevelValidationReport</h1><p>建议包含：</p>
+<ul>
+<li><p>Solvable；</p>
+</li>
+<li><p>MinimumPushes；</p>
+</li>
+<li><p>MinimumMoves；</p>
+</li>
+<li><p>SolverTime；</p>
+</li>
+<li><p>ExpandedStates；</p>
+</li>
+<li><p>StaticDeadSquares；</p>
+</li>
+<li><p>InitialDeadlocks；</p>
+</li>
+<li><p>GoalMatchingValid；</p>
+</li>
+<li><p>TrivialSolution；</p>
+</li>
+<li><p>DifficultyMetrics；</p>
+</li>
+<li><p>ValidationVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="136-无法在预算内证明可解">136. 无法在预算内证明可解</h1><p>不要自动等于：</p>
+<p>Unsolvable。</p>
+<p>应该：</p>
+<p><code>Unknown / SolverBudgetExceeded</code>。</p>
+<hr />
+<h1 id="137-正式关卡最好">137. 正式关卡最好：</h1><p>能够离线用更高预算完成验证。</p>
+<hr />
+<h1 id="138-核心范式三十一程序生成关卡不应随机摆墙箱子目标后希望有解">138. 核心范式三十一：程序生成关卡不应随机摆墙、箱子、目标后“希望有解”</h1><p>Sokoban随机正向生成：</p>
+<p>极易得到：</p>
+<p>无解关卡。</p>
+<hr />
+<h1 id="139-更可靠的一种思路">139. 更可靠的一种思路：</h1><p><strong>Reverse Generation。</strong></p>
+<hr />
+<h1 id="140-从solved-state开始">140. 从Solved State开始：</h1><p>所有Crates站在Goal上。</p>
+<p>然后在抽象规则下：</p>
+<p>反向Pull箱体</p>
+<p>生成：</p>
+<p>更远的初始布局。</p>
+<hr />
+<h1 id="141-最终反向操作序列">141. 最终反向操作序列：</h1><p>天然对应：</p>
+<p>一个正向Push解。</p>
+<hr />
+<h1 id="142-但reverse-generation只保证">142. 但Reverse Generation只保证：</h1><p>理论解存在。</p>
+<p>不保证：</p>
+<ul>
+<li><p>关卡有趣；</p>
+</li>
+<li><p>没有捷径；</p>
+</li>
+<li><p>难度合理；</p>
+</li>
+<li><p>解唯一。</p>
+</li>
+</ul>
+<p>所以仍需：</p>
+<p>Solver和Difficulty Analysis。</p>
+<hr />
+<h1 id="143-procedural-pipeline">143. Procedural Pipeline</h1><p>生成Terrain
+→ 放置Goals
+→ 创建Solved State
+→ Reverse Pull Scramble
+→ 确定Player Start
+→ Solver正向验证
+→ 计算最短解
+→ 检查捷径
+→ Difficulty Filter
+→ 发布。</p>
+<hr />
+<h1 id="144-核心范式三十二自动生成的目标不是尽可能复杂而是产生有意义push结构">144. 核心范式三十二：自动生成的目标不是“尽可能复杂”，而是产生有意义Push结构</h1><p>随机绕100次</p>
+<p>可能只是：</p>
+<p>让箱子离Goal很远。</p>
+<p>距离长：</p>
+<p>不等于谜题深。</p>
+<hr />
+<h1 id="145-更有价值的生成指标">145. 更有价值的生成指标：</h1><ul>
+<li><p>箱体互相阻挡；</p>
+</li>
+<li><p>玩家可达域变化；</p>
+</li>
+<li><p>Goal顺序；</p>
+</li>
+<li><p>多个合理候选Push；</p>
+</li>
+<li><p>必须暂时逆向移动；</p>
+</li>
+<li><p>Deadlock诱饵。</p>
+</li>
+</ul>
+<hr />
+<h1 id="146-核心范式三十三关卡不应依赖隐藏规则">146. 核心范式三十三：关卡不应依赖隐藏规则</h1><p>玩家需要清楚知道：</p>
+<ul>
+<li><p>箱子只能推；</p>
+</li>
+<li><p>不能拉；</p>
+</li>
+<li><p>哪些Cell是Goal；</p>
+</li>
+<li><p>哪些是墙；</p>
+</li>
+<li><p>当前箱子是否在Goal。</p>
+</li>
+</ul>
+<hr />
+<h1 id="147-如果某一关突然">147. 如果某一关突然：</h1><p>墙可以穿过去</p>
+<p>但没有提示，</p>
+<p>玩家的空间模型会崩溃。</p>
+<hr />
+<h1 id="148-puzzle-difficulty应来自">148. Puzzle Difficulty应来自：</h1><p>规则推理。</p>
+<p>不是：</p>
+<p>规则欺骗。</p>
+<hr />
+<h1 id="149-核心范式三十四视觉必须让箱体在goal上仍然保持goal可识别">149. 核心范式三十四：视觉必须让“箱体在Goal上”仍然保持Goal可识别</h1><p>箱子占据Goal后：</p>
+<p>玩家仍然需要知道：</p>
+<p>这是正确位置。</p>
+<hr />
+<h1 id="150-可以通过">150. 可以通过：</h1><ul>
+<li><p>地面颜色；</p>
+</li>
+<li><p>发光边缘；</p>
+</li>
+<li><p>Crate状态；</p>
+</li>
+<li><p>图案；</p>
+</li>
+</ul>
+<p>表达。</p>
+<hr />
+<h1 id="151-不要">151. 不要：</h1><p>箱子一站上去</p>
+<p>完全遮住Goal。</p>
+<p>玩家会忘记：</p>
+<p>哪些目标已经完成。</p>
+<hr />
+<h1 id="152-核心范式三十五undo反馈应清楚区分撤销一步走路和撤销一次push">152. 核心范式三十五：Undo反馈应清楚区分“撤销一步走路”和“撤销一次Push”</h1><p>可以：</p>
+<p>普通Undo：</p>
+<p>每步。</p>
+<p>另一个快捷操作：</p>
+<p>Undo Last Push。</p>
+<hr />
+<h1 id="153-对高手而言">153. 对高手而言：</h1><p>Undo Last Push</p>
+<p>尤其高效。</p>
+<p>因为：</p>
+<p>错误往往发生在：</p>
+<p>Push决策。</p>
+<hr />
+<h1 id="154-核心范式三十六输入repeat必须避免意外连续push">154. 核心范式三十六：输入Repeat必须避免意外连续Push</h1><p>玩家按住Right：</p>
+<p>角色沿走廊移动。</p>
+<p>到箱子：</p>
+<p>如果继续Repeat，</p>
+<p>可能连续把箱子推三格。</p>
+<hr />
+<h1 id="155-是否允许">155. 是否允许：</h1><p>这是产品选择。</p>
+<p>但必须明确。</p>
+<hr />
+<h1 id="156-推荐提供">156. 推荐提供：</h1><p><strong>Safe Repeat Policy。</strong></p>
+<p>例如：</p>
+<p>Held Input可以连续Walking。</p>
+<p>第一次进入Push：</p>
+<p>执行一次。</p>
+<p>下一次Push需要：</p>
+<p>新的Press</p>
+<p>或更长Repeat Delay。</p>
+<hr />
+<h1 id="157-这样减少">157. 这样减少：</h1><p>“我只想推一格却多推了一格”</p>
+<p>这种低价值失败。</p>
+<hr />
+<h1 id="158-经典硬核模式也可以">158. 经典硬核模式也可以：</h1><p>允许连续Push。</p>
+<p>重点仍然是：</p>
+<p>规则稳定、可设置。</p>
+<hr />
+<h1 id="159-核心范式三十七点击移动可以直接走到推动站位但不能自动push">159. 核心范式三十七：点击移动可以直接走到“推动站位”，但不能自动Push</h1><p>鼠标模式：</p>
+<p>玩家点击某Crate后方的Cell。</p>
+<p>系统：</p>
+<p>自动A* / BFS走过去。</p>
+<hr />
+<h1 id="160-到达以后">160. 到达以后：</h1><p>等待玩家确认方向。</p>
+<hr />
+<h1 id="161-这把">161. 这把：</h1><p>机械走路</p>
+<p>和：</p>
+<p>策略推动</p>
+<p>清楚分开。</p>
+<hr />
+<h1 id="162-核心范式三十八移动动画不能成为puzzle-commit的事实源">162. 核心范式三十八：移动动画不能成为Puzzle Commit的事实源</h1><p>逻辑：</p>
+<p>Player从A走到B。</p>
+<p>动画：</p>
+<p>可以平滑移动。</p>
+<hr />
+<h1 id="163-push时">163. Push时：</h1><p>逻辑Transaction已经：</p>
+<p>决定：</p>
+<p>Player和Crate的新Cell。</p>
+<p>动画只是：</p>
+<p>从旧Cell</p>
+<p>Tween到新Cell。</p>
+<hr />
+<h1 id="164-如果动画被skip">164. 如果动画被Skip：</h1><p>Puzzle State仍然正确。</p>
+<hr />
+<h1 id="165-核心范式三十九save-最安全的边界是-push-move-transaction-完成后的稳定状态">165. 核心范式三十九：Save 最安全的边界是 Push / Move Transaction 完成后的稳定状态</h1><p>SaveSnapshot可以包含：</p>
+<ul>
+<li><p>LevelId；</p>
+</li>
+<li><p>LevelVersion；</p>
+</li>
+<li><p>PlayerCoordinate；</p>
+</li>
+<li><p>CratePositions；</p>
+</li>
+<li><p>MoveCount；</p>
+</li>
+<li><p>PushCount；</p>
+</li>
+<li><p>UndoHistory；</p>
+</li>
+<li><p>InitialStateReference；</p>
+</li>
+<li><p>StateRevision；</p>
+</li>
+<li><p>ReplayCursor；</p>
+</li>
+<li><p>SaveVersion。</p>
+</li>
+</ul>
+<hr />
+<h1 id="166-terrain通常属于">166. Terrain通常属于：</h1><p>LevelDefinition。</p>
+<p>无需：</p>
+<p>每份Save重复保存。</p>
+<hr />
+<h1 id="167-save中如果保存undohistory">167. Save中如果保存UndoHistory</h1><p>玩家加载以后：</p>
+<p>仍可Undo。</p>
+<p>这是非常好的UX。</p>
+<hr />
+<h1 id="168-不保存undo也成立">168. 不保存Undo也成立。</h1><p>但必须明确：</p>
+<p>加载即形成新的Undo Root。</p>
+<hr />
+<h1 id="169-核心范式四十replay-可以极其轻量">169. 核心范式四十：Replay 可以极其轻量</h1><p>经典Sokoban没有：</p>
+<p>物理随机。</p>
+<p>甚至无需：</p>
+<p>每步记录Position Snapshot。</p>
+<hr />
+<h1 id="170-只需">170. 只需：</h1><ul>
+<li><p>LevelVersion；</p>
+</li>
+<li><p>InitialState；</p>
+</li>
+<li><p>Input / Push Sequence；</p>
+</li>
+<li><p>Optional State Hash。</p>
+</li>
+</ul>
+<p>就能重现。</p>
+<hr />
+<h1 id="171-push-replay甚至可以">171. Push Replay甚至可以：</h1><p>只记录：</p>
+<p>Crate + Direction。</p>
+<p>如果：</p>
+<p>Walking路径不重要。</p>
+<hr />
+<h1 id="172-但用于完整player-ghost时">172. 但用于完整Player Ghost时：</h1><p>记录：</p>
+<p>Move Input。</p>
+<hr />
+<h1 id="173-核心范式四十一state-hash-最适合在-push-后记录">173. 核心范式四十一：State Hash 最适合在 Push 后记录</h1><p>Walking几十步：</p>
+<p>Puzzle结构不变。</p>
+<p>Push以后：</p>
+<p>State变化。</p>
+<p>因此：</p>
+<p>Replay Hash</p>
+<p>可以：</p>
+<p>每次Push记录。</p>
+<hr />
+<h1 id="174-这使">174. 这使：</h1><p>Desync定位</p>
+<p>非常简单。</p>
+<hr />
+<h1 id="175-核心范式四十二多平台逻辑应完全整数化">175. 核心范式四十二：多平台逻辑应完全整数化</h1><p>没有理由：</p>
+<p>用浮点Position</p>
+<p>决定箱子是否合法。</p>
+<hr />
+<h1 id="176-权威状态">176. 权威状态：</h1><p>Grid Coordinate。</p>
+<p>动画：</p>
+<p>浮点世界坐标。</p>
+<hr />
+<h1 id="177-这使">177. 这使：</h1><ul>
+<li><p>Save；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Solver；</p>
+</li>
+<li><p>Unit Test；</p>
+</li>
+</ul>
+<p>全部获得：</p>
+<p>天然确定性。</p>
+<hr />
+<h1 id="178-核心范式四十三模块通信应围绕移动事实和推动事实组织">178. 核心范式四十三：模块通信应围绕“移动事实”和“推动事实”组织</h1><h2 id="高频输入层">高频输入层</h2><ul>
+<li><p>MoveUp；</p>
+</li>
+<li><p>MoveDown；</p>
+</li>
+<li><p>MoveLeft；</p>
+</li>
+<li><p>MoveRight；</p>
+</li>
+<li><p>Undo；</p>
+</li>
+<li><p>Reset；</p>
+</li>
+<li><p>Hint。</p>
+</li>
+</ul>
+<hr />
+<h1 id="179-commands">179. Commands</h1><p>典型：</p>
+<ul>
+<li><p>RequestMove；</p>
+</li>
+<li><p>RequestUndo；</p>
+</li>
+<li><p>RestartLevel；</p>
+</li>
+<li><p>RequestHint；</p>
+</li>
+<li><p>LoadLevel；</p>
+</li>
+<li><p>ApplySolverSolutionStep。</p>
+</li>
+</ul>
+<hr />
+<h1 id="180-queries">180. Queries</h1><p>适用于：</p>
+<ul>
+<li><p>某Cell是否可走；</p>
+</li>
+<li><p>某Crate能否向某方向推；</p>
+</li>
+<li><p>Player当前Reachable Region；</p>
+</li>
+<li><p>当前Legal Pushes；</p>
+</li>
+<li><p>某Cell是否Static Dead Square；</p>
+</li>
+<li><p>当前是否Solved；</p>
+</li>
+<li><p>当前状态是否存在已证明Deadlock；</p>
+</li>
+<li><p>当前最优Push数。</p>
+</li>
+</ul>
+<p>Query绝不能：</p>
+<p>修改：</p>
+<p>Crate、Player或Counter。</p>
+<hr />
+<h1 id="181-domain-events">181. Domain Events</h1><p>包括：</p>
+<ul>
+<li><p>PlayerMoved；</p>
+</li>
+<li><p>PushAttempted；</p>
+</li>
+<li><p>PushRejected；</p>
+</li>
+<li><p>PushCommitted；</p>
+</li>
+<li><p>CrateMoved；</p>
+</li>
+<li><p>GoalOccupied；</p>
+</li>
+<li><p>GoalVacated；</p>
+</li>
+<li><p>ReachabilityChanged；</p>
+</li>
+<li><p>DeadlockDetected；</p>
+</li>
+<li><p>PuzzleSolved；</p>
+</li>
+<li><p>UndoApplied；</p>
+</li>
+<li><p>LevelReset；</p>
+</li>
+<li><p>HintComputed。</p>
+</li>
+</ul>
+<hr />
+<h1 id="182-presentation-events">182. Presentation Events</h1><p>包括：</p>
+<ul>
+<li><p>PlayWalk；</p>
+</li>
+<li><p>PlayPush；</p>
+</li>
+<li><p>PlayBlocked；</p>
+</li>
+<li><p>HighlightGoal；</p>
+</li>
+<li><p>ShowDeadlockWarning；</p>
+</li>
+<li><p>PlaySolvedAnimation；</p>
+</li>
+<li><p>DrawHintArrow。</p>
+</li>
+</ul>
+<p>表现事件不能：</p>
+<p>移动逻辑箱体。</p>
+<hr />
+<h1 id="183-推荐状态所有权">183. 推荐状态所有权</h1><p><strong>LevelSystem</strong></p>
+<p>拥有Static Terrain。</p>
+<p><strong>PuzzleStateSystem</strong></p>
+<p>拥有Player和Crate逻辑位置。</p>
+<p><strong>MoveSystem</strong></p>
+<p>处理普通Walking。</p>
+<p><strong>PushSystem</strong></p>
+<p>拥有Push事务。</p>
+<p><strong>ReachabilitySystem</strong></p>
+<p>计算Player可达域。</p>
+<p><strong>GoalSystem</strong></p>
+<p>判断Goal Occupancy与Solved。</p>
+<p><strong>DeadlockSystem</strong></p>
+<p>提供死锁分析。</p>
+<p><strong>UndoSystem</strong></p>
+<p>拥有历史State Delta。</p>
+<p><strong>SolverSystem</strong></p>
+<p>进行Push搜索。</p>
+<p><strong>HintSystem</strong></p>
+<p>解释Solver结果。</p>
+<p><strong>PresentationSystem</strong></p>
+<p>只读取Puzzle State与Events。</p>
+<hr />
+<h1 id="184-核心通信边界">184. 核心通信边界</h1><p>InputSystem不能：</p>
+<p><code>crate.x += 1</code>。</p>
+<p>必须：</p>
+<p>RequestMove。</p>
+<hr />
+<h1 id="185-goalsystem不能">185. GoalSystem不能：</h1><p>为了让关卡完成</p>
+<p>移动最后一个箱子。</p>
+<p>只判断：</p>
+<p>当前Fact。</p>
+<hr />
+<h1 id="186-solver不能">186. Solver不能：</h1><p>直接共享可变Runtime Board。</p>
+<p>必须：</p>
+<p>使用：</p>
+<p>Immutable / Snapshot PuzzleState。</p>
+<hr />
+<h1 id="187-核心范式四十四完整事件与执行流程示例">187. 核心范式四十四：完整事件与执行流程示例</h1><p>以下以一个包含：</p>
+<p><strong>3个箱体、3个目标、一个狭窄目标房和一条中央通道</strong></p>
+<p>的关卡为例。</p>
+<hr />
+<h2 id="1871-初始结构">187.1 初始结构</h2><p>玩家位于：</p>
+<p>仓库南侧。</p>
+<p>Crate A：</p>
+<p>挡在中央通道附近。</p>
+<p>Crate B：</p>
+<p>位于西侧房间。</p>
+<p>Crate C：</p>
+<p>位于目标房入口。</p>
+<p>三个Goal：</p>
+<p>都位于北侧狭窄目标房。</p>
+<p>其中最深处Goal：</p>
+<p>只能从南向北连续推动进入。</p>
+<hr />
+<h2 id="1872-level加载">187.2 Level加载</h2><p>Static Dead Map已经：</p>
+<p>预计算完成。</p>
+<p>目标房最深处：</p>
+<p>合法。</p>
+<p>若干普通墙角：</p>
+<p>标红为：</p>
+<p>Dead Square。</p>
+<hr />
+<h2 id="1873-初始reachability">187.3 初始Reachability</h2><p>Player只能进入：</p>
+<p>南侧和西侧区域。</p>
+<p>北侧目标房：</p>
+<p>因为Crate C堵住入口，</p>
+<p>当前不可达。</p>
+<hr />
+<h2 id="1874-push-enumerator">187.4 Push Enumerator</h2><p>Crate A：</p>
+<p>当前可向右推。</p>
+<p>不能向左：</p>
+<p>Player无法站到右侧。</p>
+<p>Crate B：</p>
+<p>上下可推。</p>
+<p>Crate C：</p>
+<p>只能向北推。</p>
+<hr />
+<h2 id="1875-玩家直觉认为">187.5 玩家直觉认为：</h2><p>Crate C离Goal最近。</p>
+<p>想直接把它推进目标房。</p>
+<hr />
+<h2 id="1876-第一次push">187.6 第一次Push</h2><p>Player站在C南侧。</p>
+<p>向北Push。</p>
+<p>合法。</p>
+<hr />
+<h2 id="1877-c进入">187.7 C进入：</h2><p>目标房外层Goal。</p>
+<p>视觉显示：</p>
+<p>“目标已占用”。</p>
+<hr />
+<h2 id="1878-但deadlock-analyzer检测">187.8 但Deadlock Analyzer检测：</h2><p>目标房是：</p>
+<p>单通道深度3。</p>
+<p>C现在位于：</p>
+<p>最外侧Goal。</p>
+<hr />
+<h2 id="1879-remaining-crate-goal-matching">187.9 Remaining Crate Goal Matching</h2><p>A和B都无法：</p>
+<p>越过C</p>
+<p>进入更深Goal。</p>
+<hr />
+<h2 id="18710-goal-room-packing判断">187.10 Goal Room Packing判断：</h2><p>当前状态：</p>
+<p>Proven Deadlock。</p>
+<hr />
+<h2 id="18711-游戏可以">187.11 游戏可以：</h2><p>轻提示：</p>
+<p>“这个箱体虽然已经归位，但似乎堵住了更深处。”</p>
+<p>不自动Reset。</p>
+<hr />
+<h2 id="18712-玩家undo-last-push">187.12 玩家Undo Last Push</h2><p>Undo恢复：</p>
+<p>C原位置。</p>
+<p>Player恢复：</p>
+<p>C南侧。</p>
+<p>PushCount回退。</p>
+<hr />
+<h2 id="18713-玩家现在认识到">187.13 玩家现在认识到：</h2><p>最深Goal必须先填。</p>
+<hr />
+<h2 id="18714-但a无法进入目标房">187.14 但A无法进入目标房</h2><p>因为：</p>
+<p>C还堵入口。</p>
+<p>必须先：</p>
+<p>横向移动C。</p>
+<hr />
+<h2 id="18715-玩家需要站在c西侧">187.15 玩家需要站在C西侧</h2><p>但当前：</p>
+<p>无法进入。</p>
+<hr />
+<h2 id="18716-查看reachability">187.16 查看Reachability</h2><p>Crate A挡住：</p>
+<p>去C西侧的唯一通道。</p>
+<hr />
+<h2 id="18717-玩家先处理a">187.17 玩家先处理A</h2><p>不是为了：</p>
+<p>把A送Goal。</p>
+<p>而是为了：</p>
+<p>改变自己的可达区域。</p>
+<hr />
+<h2 id="18718-push-a向右一格">187.18 Push A向右一格</h2><p>Push Commit：</p>
+<p>A移动。</p>
+<p>Player进入A原Cell。</p>
+<hr />
+<h2 id="18719-reachability重新计算">187.19 Reachability重新计算</h2><p>原来封闭的东侧小路：</p>
+<p>现在打开。</p>
+<hr />
+<h2 id="18720-player绕到">187.20 Player绕到：</h2><p>C西侧。</p>
+<hr />
+<h2 id="18721-push-c向东">187.21 Push C向东</h2><p>C离开目标房入口。</p>
+<hr />
+<h2 id="18722-北侧目标房现在">187.22 北侧目标房现在：</h2><p>Player可进入部分区域。</p>
+<hr />
+<h2 id="18723-玩家回到西侧">187.23 玩家回到西侧</h2><p>处理B。</p>
+<hr />
+<h2 id="18724-b需要成为">187.24 B需要成为：</h2><p>第一个进入最深Goal的箱体。</p>
+<hr />
+<h2 id="18725-玩家把b推到中央走廊">187.25 玩家把B推到中央走廊</h2><p>其中一个看似最短Push：</p>
+<p>会把B推到墙边。</p>
+<p>Static Dead Map显示：</p>
+<p>该Cell无法Reverse Reach任何Goal。</p>
+<hr />
+<h2 id="18726-玩家避开这一步">187.26 玩家避开这一步</h2><p>选择多绕一次：</p>
+<p>先横推，</p>
+<p>再从另一侧向北。</p>
+<hr />
+<h2 id="18727-b进入目标房">187.27 B进入目标房</h2><p>连续两次向北Push。</p>
+<p>最终：</p>
+<p>到达最深Goal。</p>
+<hr />
+<h2 id="18728-goal-occupancy">187.28 Goal Occupancy：</h2><p>1 / 3。</p>
+<p>此时该箱体虽然：</p>
+<p>冻结在房间最深处，</p>
+<p>但这是：</p>
+<p>合法Final Freeze。</p>
+<hr />
+<h2 id="18729-接下来c被送入">187.29 接下来C被送入：</h2><p>第二深Goal。</p>
+<hr />
+<h2 id="18730-最后a进入">187.30 最后A进入：</h2><p>最外侧Goal。</p>
+<hr />
+<h2 id="18731-goalsystem检查">187.31 GoalSystem检查</h2><p>所有Goal：</p>
+<p>被Crate占据。</p>
+<hr />
+<h2 id="18732-puzzlesolved">187.32 PuzzleSolved</h2><p>注意：</p>
+<p>Player可能仍然能：</p>
+<p>在仓库里走动。</p>
+<p>关卡完成依据不是：</p>
+<p>“没有Legal Push”。</p>
+<p>而是：</p>
+<p>Goal Condition。</p>
+<hr />
+<h2 id="18733-整个谜题真正的因果链是">187.33 整个谜题真正的因果链是：</h2><p>C看似可直接归位
+→ 外层Goal造成装填顺序死锁
+→ Undo
+→ A被用于改变Player Reachability
+→ C被暂时推离目标方向
+→ B获得进入目标房的路线
+→ 避开Static Dead Square
+→ 先填最深Goal
+→ 再填中间Goal
+→ 最后填外层Goal。</p>
+<hr />
+<h2 id="18734-这说明sokoban最重要的设计思想">187.34 这说明Sokoban最重要的设计思想：</h2><blockquote>
+<p><strong>箱体并不只是需要运送的货物；它们同时也是会持续修改玩家移动拓扑和其他箱体施力条件的移动墙体。</strong></p>
+</blockquote>
+<hr />
+<h1 id="188-失败隔离">188. 失败隔离</h1><hr />
+<h2 id="1881-invalid-move">188.1 Invalid Move</h2><p>玩家撞墙。</p>
+<p>State不变化。</p>
+<p>只产生：</p>
+<p>Blocked Presentation。</p>
+<hr />
+<h1 id="189-invalid-push">189. Invalid Push</h1><p>Crate前方有墙 / Crate。</p>
+<p>PushTransaction：</p>
+<p>不开始Commit。</p>
+<p>Player也不能：</p>
+<p>移动进Crate位置。</p>
+<hr />
+<h1 id="190-occupancy冲突">190. Occupancy冲突</h1><p>两个Crate：</p>
+<p>不能处于同一Cell。</p>
+<p>PuzzleState Commit前：</p>
+<p>进行Invariant Check。</p>
+<hr />
+<h1 id="191-player-crate重叠">191. Player / Crate重叠</h1><p>除Push事务的逻辑过渡外：</p>
+<p>正式State中：</p>
+<p>禁止。</p>
+<hr />
+<h1 id="192-crate跑出board">192. Crate跑出Board</h1><p>所有Destination：</p>
+<p>先做：</p>
+<p>Boundary Query。</p>
+<hr />
+<h1 id="193-undo-stack损坏">193. Undo Stack损坏</h1><p>UndoRecord中的：</p>
+<p>StateRevision</p>
+<p>与当前不匹配。</p>
+<p>拒绝应用。</p>
+<p>Debug Build：</p>
+<p>报警。</p>
+<hr />
+<h1 id="194-presentation与logic不同步">194. Presentation与Logic不同步</h1><p>例如动画箱体卡住。</p>
+<p>直接根据：</p>
+<p>PuzzleState</p>
+<p>重建View。</p>
+<p>不能：</p>
+<p>修改PuzzleState去迁就动画。</p>
+<hr />
+<h1 id="195-solver超时">195. Solver超时</h1><p>Gameplay完全继续。</p>
+<p>Solver是：</p>
+<p>辅助消费者，</p>
+<p>不是：</p>
+<p>Puzzle Truth Owner。</p>
+<hr />
+<h1 id="196-hint结果过期">196. Hint结果过期</h1><p>Hint Snapshot Revision：</p>
+<p>17。</p>
+<p>玩家已经：</p>
+<p>Push到Revision 18。</p>
+<p>结果：</p>
+<p>直接丢弃。</p>
+<hr />
+<h1 id="197-deadlock-detector异常">197. Deadlock Detector异常</h1><p>高级Detector：</p>
+<p>抛错。</p>
+<p>Static基础规则仍然工作。</p>
+<p>不影响：</p>
+<p>玩家继续操作。</p>
+<hr />
+<h1 id="198-false-positive-protection">198. False Positive Protection</h1><p>非数学上已证明的Deadlock：</p>
+<p>不能：</p>
+<p>自动强制Level Fail。</p>
+<hr />
+<h1 id="199-save的levelversion不匹配">199. Save的LevelVersion不匹配</h1><p>如果只修改：</p>
+<p>美术，</p>
+<p>可以兼容。</p>
+<p>如果：</p>
+<p>Terrain / Goal布局改变，</p>
+<p>旧State可能：</p>
+<p>无法映射。</p>
+<p>此时：</p>
+<ul>
+<li><p>保留旧Save；</p>
+</li>
+<li><p>标记Version Incompatible；</p>
+</li>
+<li><p>允许重开当前Level。</p>
+</li>
+</ul>
+<p>不要：</p>
+<p>静默把箱子塞到最近格子。</p>
+<hr />
+<h1 id="200-procedural-level-solver失败">200. Procedural Level Solver失败</h1><p>关卡：</p>
+<p>不进入发布池。</p>
+<p>使用：</p>
+<p>下一候选Level。</p>
+<hr />
+<h1 id="201-level初始就deadlock">201. Level初始就Deadlock</h1><p>构建期Validator：</p>
+<p>阻止发布。</p>
+<hr />
+<h1 id="202-goal数量不等于crate数量">202. Goal数量不等于Crate数量</h1><p>经典Ruleset：</p>
+<p>直接Validation Error。</p>
+<p>扩展Ruleset：</p>
+<p>如果允许多余Goal，</p>
+<p>需要：</p>
+<p>显式配置。</p>
+<hr />
+<h1 id="203-核心范式四十五debug与可观测性应围绕为什么这个push可行-不可行-会死锁设计">203. 核心范式四十五：Debug与可观测性应围绕“为什么这个Push可行 / 不可行 / 会死锁”设计</h1><hr />
+<h2 id="2031-puzzle-state-inspector">203.1 Puzzle State Inspector</h2><p>显示：</p>
+<ul>
+<li><p>Player Cell；</p>
+</li>
+<li><p>Crates；</p>
+</li>
+<li><p>Goals；</p>
+</li>
+<li><p>Moves；</p>
+</li>
+<li><p>Pushes；</p>
+</li>
+<li><p>State Revision；</p>
+</li>
+<li><p>Solved。</p>
+</li>
+</ul>
+<hr />
+<h1 id="204-occupancy-overlay">204. Occupancy Overlay</h1><p>每格：</p>
+<ul>
+<li><p>Terrain；</p>
+</li>
+<li><p>Occupant；</p>
+</li>
+<li><p>Goal；</p>
+</li>
+<li><p>Static Dead。</p>
+</li>
+</ul>
+<hr />
+<h1 id="205-player-reachability-overlay">205. Player Reachability Overlay</h1><p>所有当前Player可达Cell：</p>
+<p>统一高亮。</p>
+<p>这几乎是：</p>
+<p>最重要的Debug视图之一。</p>
+<hr />
+<h1 id="206-legal-push-overlay">206. Legal Push Overlay</h1><p>每个Crate显示：</p>
+<p>四个方向。</p>
+<p>例如：</p>
+<p>↑ 可推
+↓ Blocked by Wall
+← Stance Unreachable
+→ Static Dead Destination。</p>
+<hr />
+<h1 id="207-push-trace">207. Push Trace</h1><p>记录：</p>
+<p>Crate 4。</p>
+<p>方向：</p>
+<p>North。</p>
+<p>Stance：</p>
+<p>(5,6) ✅</p>
+<p>Destination：</p>
+<p>(5,4) ✅</p>
+<p>Dead Square：</p>
+<p>false。</p>
+<p>Commit。</p>
+<hr />
+<h1 id="208-rejected-push-trace">208. Rejected Push Trace</h1><p>例如：</p>
+<p>Stance Cell理论空闲，</p>
+<p>但不在Player Reachability。</p>
+<p>所以：</p>
+<p>Rejected。</p>
+<hr />
+<h1 id="209-static-dead-map">209. Static Dead Map</h1><p>Editor与Runtime均可显示。</p>
+<hr />
+<h1 id="210-reverse-pull-heatmap">210. Reverse Pull Heatmap</h1><p>每个Goal：</p>
+<p>显示：</p>
+<p>哪些Crate Cells</p>
+<p>理论可到达它。</p>
+<hr />
+<h1 id="211-crate-to-goal-graph">211. Crate-to-Goal Graph</h1><p>点击Crate A：</p>
+<p>显示：</p>
+<p>它理论能去：</p>
+<p>Goal 1、2。</p>
+<p>不能去：</p>
+<p>Goal 3。</p>
+<hr />
+<h1 id="212-matching-inspector">212. Matching Inspector</h1><p>当前：</p>
+<p>Crate A → Goal1
+Crate B → Goal1
+Crate C → Goal2/3。</p>
+<p>Maximum Matching = 2/3。</p>
+<p>因此：</p>
+<p>Assignment Deadlock。</p>
+<hr />
+<h1 id="213-freeze-inspector">213. Freeze Inspector</h1><p>选择冻结箱体：</p>
+<p>显示：</p>
+<p>X轴：</p>
+<p>Left Wall
+Right Crate B。</p>
+<p>Y轴：</p>
+<p>Top Wall
+Bottom Wall。</p>
+<p>因此：</p>
+<p>Frozen。</p>
+<hr />
+<h1 id="214-corral-overlay">214. Corral Overlay</h1><p>显示：</p>
+<p>Player不可进入区域</p>
+<p>及：</p>
+<p>构成边界的Crates。</p>
+<hr />
+<h1 id="215-solver-search-inspector">215. Solver Search Inspector</h1><p>显示：</p>
+<ul>
+<li><p>Open States；</p>
+</li>
+<li><p>Closed States；</p>
+</li>
+<li><p>Push Depth；</p>
+</li>
+<li><p>Heuristic；</p>
+</li>
+<li><p>Deadlock Prunes；</p>
+</li>
+<li><p>Matching Prunes；</p>
+</li>
+<li><p>Best Candidate。</p>
+</li>
+</ul>
+<hr />
+<h1 id="216-solver-path">216. Solver Path</h1><p>完整解：</p>
+<p>Push 1：</p>
+<p>Crate C East。</p>
+<p>Push 2：</p>
+<p>Crate A North。</p>
+<p>……</p>
+<p>可以：</p>
+<p>逐步回放。</p>
+<hr />
+<h1 id="217-undo-timeline">217. Undo Timeline</h1><p>记录：</p>
+<p>Moves。</p>
+<p>Pushes。</p>
+<p>Undo。</p>
+<p>便于：</p>
+<p>重现玩家操作。</p>
+<hr />
+<h1 id="218-state-hash-inspector">218. State Hash Inspector</h1><p>Canonical Crate Set。</p>
+<p>Canonical Player Region。</p>
+<p>最终Hash。</p>
+<hr />
+<h1 id="219-level-difficulty-panel">219. Level Difficulty Panel</h1><p>显示：</p>
+<ul>
+<li><p>Optimal Pushes；</p>
+</li>
+<li><p>Search Nodes；</p>
+</li>
+<li><p>Branching；</p>
+</li>
+<li><p>Deadlock Ratio；</p>
+</li>
+<li><p>Goal Ordering；</p>
+</li>
+<li><p>Tunnel Count。</p>
+</li>
+</ul>
+<hr />
+<h1 id="220-player-solution-diff">220. Player Solution Diff</h1><p>玩家：</p>
+<p>42 Push。</p>
+<p>Optimal：</p>
+<p>31。</p>
+<p>可以分析：</p>
+<p>多出的Push发生在哪里。</p>
+<hr />
+<h1 id="221-push-heatmap">221. Push Heatmap</h1><p>统计大量玩家：</p>
+<p>每个Crate位置</p>
+<p>最常发生Push的方向。</p>
+<hr />
+<h1 id="222-undo-heatmap">222. Undo Heatmap</h1><p>某个Cell：</p>
+<p>70%玩家推完马上Undo。</p>
+<p>可能说明：</p>
+<p>这是：</p>
+<p>合理诱饵。</p>
+<p>也可能：</p>
+<p>视觉误导。</p>
+<hr />
+<h1 id="223-reset-point-analytics">223. Reset Point Analytics</h1><p>玩家在哪个Puzzle State：</p>
+<p>最常整关Reset。</p>
+<hr />
+<h1 id="224-hint-funnel">224. Hint Funnel</h1><p>多少玩家：</p>
+<p>Hint 1。</p>
+<p>Hint 2。</p>
+<p>完整Hint。</p>
+<p>用于：</p>
+<p>检测难度尖峰。</p>
+<hr />
+<h1 id="225-content-validation">225. Content Validation</h1><hr />
+<h2 id="2251-terrain-validation">225.1 Terrain Validation</h2><p>检查：</p>
+<ul>
+<li><p>Player Start合法；</p>
+</li>
+<li><p>Crate Start合法；</p>
+</li>
+<li><p>Goal合法；</p>
+</li>
+<li><p>无重叠；</p>
+</li>
+<li><p>Board Boundary闭合。</p>
+</li>
+</ul>
+<hr />
+<h1 id="226-crate-goal-count">226. Crate / Goal Count</h1><p>经典模式：</p>
+<p>必须一致。</p>
+<hr />
+<h1 id="227-static-dead-square-validation">227. Static Dead Square Validation</h1><p>任何初始Crate：</p>
+<p>如果：</p>
+<p>位于Static Dead</p>
+<p>且：</p>
+<p>不是Goal，</p>
+<p>Level直接：</p>
+<p>Invalid。</p>
+<hr />
+<h1 id="228-reverse-goal-reachability">228. Reverse Goal Reachability</h1><p>每个初始Crate：</p>
+<p>至少能理论到达：</p>
+<p>一个Goal。</p>
+<hr />
+<h1 id="229-goal-reachability">229. Goal Reachability</h1><p>每个Goal：</p>
+<p>至少有：</p>
+<p>一个Crate候选。</p>
+<hr />
+<h1 id="230-bipartite-matching">230. Bipartite Matching</h1><p>初始状态：</p>
+<p>必须存在：</p>
+<p>完整Crate ↔ Goal Matching。</p>
+<hr />
+<h1 id="231-solver-validation">231. Solver Validation</h1><p>真正证明：</p>
+<p>存在解。</p>
+<hr />
+<h1 id="232-minimum-solution">232. Minimum Solution</h1><p>记录：</p>
+<p>Push数。</p>
+<p>用于：</p>
+<p>Level Metadata。</p>
+<hr />
+<h1 id="233-trivial-solution-detection">233. Trivial Solution Detection</h1><p>如果：</p>
+<p>所有Crate一开始就在Goal，</p>
+<p>除非教学关，</p>
+<p>报警。</p>
+<hr />
+<h1 id="234-solution-length-regression">234. Solution Length Regression</h1><p>修改墙体以后：</p>
+<p>最佳Push数：</p>
+<p>30 → 5。</p>
+<p>可能：</p>
+<p>意外形成捷径。</p>
+<hr />
+<h1 id="235-unsolvable-regression">235. Unsolvable Regression</h1><p>每次关卡Content修改：</p>
+<p>自动重新跑Solver。</p>
+<hr />
+<h1 id="236-undo-property-test">236. Undo Property Test</h1><p>执行：</p>
+<p>任意合法Action序列。</p>
+<p>全部Undo。</p>
+<p>最终State：</p>
+<p>必须与Initial Hash完全一致。</p>
+<hr />
+<h1 id="237-push-round-trip-test">237. Push Round-trip Test</h1><p>如果：</p>
+<p>Push后立刻Undo，</p>
+<p>Player和Crate：</p>
+<p>完全恢复。</p>
+<hr />
+<h1 id="238-replay-determinism">238. Replay Determinism</h1><p>同一：</p>
+<p>LevelVersion</p>
+<ul>
+<li>InputSequence。</li>
+</ul>
+<p>执行100次。</p>
+<p>每个Push State Hash：</p>
+<p>一致。</p>
+<hr />
+<h1 id="239-solver-runtime-budget-test">239. Solver Runtime Budget Test</h1><p>正式Hint预算：</p>
+<p>例如：</p>
+<p>短时间内未求解。</p>
+<p>必须：</p>
+<p>优雅取消。</p>
+<hr />
+<h1 id="240-generated-level-validation">240. Generated Level Validation</h1><p>每个生成关：</p>
+<p>必须：</p>
+<p>Solver证明可解。</p>
+<hr />
+<h1 id="241-difficulty-bucket-validation">241. Difficulty Bucket Validation</h1><p>生成关卡按照：</p>
+<p>Solver Metrics</p>
+<p>分类：</p>
+<p>Easy / Medium / Hard。</p>
+<p>再由：</p>
+<p>人工校准。</p>
+<hr />
+<h1 id="242-性能设计">242. 性能设计</h1><p>Sokoban棋盘通常很小。</p>
+<p>真正运行时几乎：</p>
+<p>没有性能压力。</p>
+<p>因此不要：</p>
+<p>过度优化普通移动。</p>
+<hr />
+<h1 id="243-主要计算成本来自">243. 主要计算成本来自：</h1><p><strong>Solver</strong></p>
+<p>和：</p>
+<p><strong>Advanced Deadlock Analysis。</strong></p>
+<hr />
+<h1 id="244-runtime-player-reachability">244. Runtime Player Reachability</h1><p>普通Flood Fill：</p>
+<p>几十到几百Cell。</p>
+<p>几乎可以：</p>
+<p>每Push完整重算。</p>
+<hr />
+<h1 id="245-不需要">245. 不需要：</h1><p>复杂Incremental Connectivity算法。</p>
+<p>除非：</p>
+<p>地图极大。</p>
+<hr />
+<h1 id="246-occupancy可以使用">246. Occupancy可以使用：</h1><ul>
+<li><p>Array；</p>
+</li>
+<li><p>Bitset；</p>
+</li>
+<li><p>Hash Set。</p>
+</li>
+</ul>
+<p>根据：</p>
+<p>地图尺寸。</p>
+<hr />
+<h1 id="247-solver应该">247. Solver应该：</h1><p>独立于引擎Scene。</p>
+<p>只消费：</p>
+<p>纯Grid PuzzleState。</p>
+<hr />
+<h1 id="248-这样可以">248. 这样可以：</h1><ul>
+<li><p>后台线程；</p>
+</li>
+<li><p>离线工具；</p>
+</li>
+<li><p>CI；</p>
+</li>
+<li><p>服务器；</p>
+</li>
+</ul>
+<p>直接复用。</p>
+<hr />
+<h1 id="249-solver不应访问">249. Solver不应访问：</h1><p>Unity GameObject / Node / Transform。</p>
+<hr />
+<h1 id="250-editor-solver可以">250. Editor Solver可以：</h1><p>使用更高时间预算。</p>
+<p>Runtime Hint：</p>
+<p>较低预算。</p>
+<hr />
+<h1 id="251-transposition-table是solver主要内存消耗">251. Transposition Table是Solver主要内存消耗。</h1><p>可以使用：</p>
+<ul>
+<li><p>State Hash；</p>
+</li>
+<li><p>Compact Crate Encoding；</p>
+</li>
+<li><p>Region Canonicalization。</p>
+</li>
+</ul>
+<hr />
+<h1 id="252-对于大型level">252. 对于大型Level：</h1><p>IDA*等内存较低方法</p>
+<p>可能更合适。</p>
+<p>具体算法：</p>
+<p>取决于产品规模。</p>
+<hr />
+<h1 id="253-可扩展点">253. 可扩展点</h1><hr />
+<h2 id="2531-彩色箱体与彩色goal">253.1 彩色箱体与彩色Goal</h2><p>Crate获得：</p>
+<p>GoalCompatibility。</p>
+<p>Assignment Graph：</p>
+<p>自然扩展。</p>
+<hr />
+<h2 id="2532-多player">253.2 多Player</h2><p>多个Player共同移动。</p>
+<p>Push Stance只要求：</p>
+<p>某合法Actor。</p>
+<p>甚至可以：</p>
+<p>双人推重箱。</p>
+<hr />
+<h2 id="2533-pull-ability">253.3 Pull Ability</h2><p>一旦允许Pull：</p>
+<p>大量经典Deadlock假设失效。</p>
+<p>必须：</p>
+<p>作为新的Movement Capability进入：</p>
+<p>Reverse / Solver Rules。</p>
+<p>不能：</p>
+<p>简单给角色一个动画。</p>
+<hr />
+<h2 id="2534-ice">253.4 Ice</h2><p>Crate被Push后：</p>
+<p>持续滑动</p>
+<p>直到障碍。</p>
+<p>Push Action仍可：</p>
+<p>产生一个Macro Movement Result。</p>
+<hr />
+<h2 id="2535-conveyor">253.5 Conveyor</h2><p>Push结束以后：</p>
+<p>进入：</p>
+<p>Environment Resolution Phase。</p>
+<hr />
+<h2 id="2536-door-switch">253.6 Door / Switch</h2><p>箱体压住Switch：</p>
+<p>Door状态改变。</p>
+<p>此时：</p>
+<p>Push</p>
+<p>不仅修改Crate，</p>
+<p>还修改：</p>
+<p>Player Reachability Graph。</p>
+<p>基础架构仍可复用。</p>
+<hr />
+<h2 id="2537-teleporter">253.7 Teleporter</h2><p>Crate进入Portal：</p>
+<p>重新映射：</p>
+<p>Destination。</p>
+<p>Deadlock / Solver需要：</p>
+<p>使用同一Transition Rules。</p>
+<hr />
+<h2 id="2538-fragile-floor">253.8 Fragile Floor</h2><p>Crate经过以后：</p>
+<p>Cell状态改变。</p>
+<p>此时Static Terrain</p>
+<p>升级成：</p>
+<p>Dynamic Terrain State。</p>
+<hr />
+<h2 id="2539-重箱">253.9 重箱</h2><p>需要：</p>
+<p>两个角色</p>
+<p>或：</p>
+<p>特殊能力</p>
+<p>才能Push。</p>
+<p>PushPrerequisite扩展即可。</p>
+<hr />
+<h2 id="25310-非方形格">253.10 非方形格</h2><p>Hex Sokoban也成立。</p>
+<p>只需：</p>
+<p>Neighbour Graph</p>
+<p>从4方向改为：</p>
+<p>其他拓扑。</p>
+<p>核心：</p>
+<p>Stance → Crate → Destination</p>
+<p>仍然存在。</p>
+<hr />
+<h1 id="254-玩家体验设计">254. 玩家体验设计</h1><hr />
+<h2 id="2541-玩家必须一眼识别">254.1 玩家必须一眼识别：</h2><p>墙、地面、箱体、Goal。</p>
+<p>这是最低要求。</p>
+<hr />
+<h1 id="255-不要依赖">255. 不要依赖：</h1><p>极细微材质差异</p>
+<p>判断Goal。</p>
+<hr />
+<h1 id="256-玩家移动必须">256. 玩家移动必须：</h1><p>立即响应。</p>
+<p>Puzzle不需要：</p>
+<p>沉重角色惯性。</p>
+<hr />
+<h1 id="257-push需要比walk拥有更强反馈">257. Push需要比Walk拥有更强反馈</h1><p>因为：</p>
+<p>它是真正的战略Commit。</p>
+<p>可以：</p>
+<ul>
+<li><p>不同Sound；</p>
+</li>
+<li><p>微Camera Shake；</p>
+</li>
+<li><p>Crate摩擦；</p>
+</li>
+<li><p>Goal反馈。</p>
+</li>
+</ul>
+<hr />
+<h1 id="258-但反馈不能过长">258. 但反馈不能过长</h1><p>玩家可能：</p>
+<p>一关Push数百次。</p>
+<hr />
+<h1 id="259-错误撞墙">259. 错误撞墙：</h1><p>轻反馈即可。</p>
+<p>不要：</p>
+<p>播放完整失败动画。</p>
+<hr />
+<h1 id="260-unlimited-undo通常提高的是">260. Unlimited Undo通常提高的是：</h1><p>实验意愿，</p>
+<p>而不是降低Puzzle逻辑难度。</p>
+<hr />
+<h1 id="261-玩家应该敢于">261. 玩家应该敢于：</h1><p>试一个想法。</p>
+<p>发现不行：</p>
+<p>Undo。</p>
+<hr />
+<h1 id="262-这比">262. 这比：</h1><p>不断Save / Load</p>
+<p>更适合该品类。</p>
+<hr />
+<h1 id="263-reset必须">263. Reset必须：</h1><p>一键完成。</p>
+<hr />
+<h1 id="264-长地图可以支持">264. 长地图可以支持：</h1><p>点击自动Walking。</p>
+<p>减少：</p>
+<p>已经确定路线上的重复键入。</p>
+<hr />
+<h1 id="265-但push仍应">265. 但Push仍应：</h1><p>明确确认。</p>
+<hr />
+<h1 id="266-goal上的crate应有">266. Goal上的Crate应有：</h1><p>明显完成反馈，</p>
+<p>但不能：</p>
+<p>暗示这个箱子永远不该再动。</p>
+<p>某些谜题需要：</p>
+<p>把已归位Crate再次推开。</p>
+<hr />
+<h1 id="267-如果游戏提供deadlock-warning">267. 如果游戏提供Deadlock Warning，</h1><p>建议允许：</p>
+<p>关闭。</p>
+<p>高手可能：</p>
+<p>不希望系统提示。</p>
+<hr />
+<h1 id="268-教学顺序推荐">268. 教学顺序推荐：</h1><h3 id="第一阶段">第一阶段</h3><p>单箱单Goal。</p>
+<p>理解Push。</p>
+<h3 id="第二阶段">第二阶段</h3><p>Corner Deadlock。</p>
+<p>理解不能拉。</p>
+<h3 id="第三阶段">第三阶段</h3><p>两个箱体。</p>
+<p>理解互相阻挡。</p>
+<h3 id="第四阶段">第四阶段</h3><p>通道Goal。</p>
+<p>理解装填顺序。</p>
+<h3 id="第五阶段">第五阶段</h3><p>箱体改变Player Reachability。</p>
+<p>理解拓扑。</p>
+<h3 id="后期">后期</h3><p>Corral、Goal Packing、多箱耦合。</p>
+<hr />
+<h1 id="269-不应通过大量文字解释deadlock">269. 不应通过大量文字解释Deadlock</h1><p>最好让：</p>
+<p>小型教学关</p>
+<p>直接演示。</p>
+<hr />
+<h1 id="270-好的关卡失败后">270. 好的关卡失败后，</h1><p>玩家应该能够说：</p>
+<blockquote>
+<p>“我不应该先推这个箱子。”</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>“我不知道游戏为什么不让我继续。”</p>
+</blockquote>
+<hr />
+<h1 id="271-常见设计失败">271. 常见设计失败</h1><hr />
+<h2 id="2711-把推箱子实现成普通刚体物理">271.1 把推箱子实现成普通刚体物理</h2><p>箱体位置出现：</p>
+<p>非整数误差。</p>
+<p>无法建立稳定推理。</p>
+<hr />
+<h2 id="2712-player-charactercontroller直接推rigidbody箱子">271.2 Player CharacterController直接推Rigidbody箱子</h2><p>“能不能推”由碰撞求解器决定。</p>
+<p>Puzzle不可确定。</p>
+<hr />
+<h2 id="2713-terrain和occupancy混成一个tile-enum">271.3 Terrain和Occupancy混成一个Tile Enum</h2><p>Crate on Goal状态爆炸。</p>
+<hr />
+<h2 id="2714-逻辑位置使用visual-transform">271.4 逻辑位置使用Visual Transform</h2><p>Tween中途Save后状态错误。</p>
+<hr />
+<h2 id="2715-push不是原子操作">271.5 Push不是原子操作</h2><p>Crate移动了，</p>
+<p>Player没移动。</p>
+<hr />
+<h2 id="2716-每一步walking都触发完整solver分析">271.6 每一步Walking都触发完整Solver分析</h2><p>浪费。</p>
+<hr />
+<h2 id="2717-没有player-reachability概念">271.7 没有Player Reachability概念</h2><p>Hint和Solver只能逐步走路搜索。</p>
+<hr />
+<h2 id="2718-判断箱子可推只看前方是否为空">271.8 判断箱子可推只看前方是否为空</h2><p>忽略Player能否站到后面。</p>
+<hr />
+<h2 id="2719-只检测普通corner-deadlock">271.9 只检测普通Corner Deadlock</h2><p>大量明显无解状态无法识别。</p>
+<hr />
+<h2 id="27110-贴墙一律判死">271.10 “贴墙”一律判死</h2><p>误报合法墙边Goal路线。</p>
+<hr />
+<h2 id="27111-箱子一上goal就从solver中删除">271.11 箱子一上Goal就从Solver中删除</h2><p>目标装填顺序谜题失效。</p>
+<hr />
+<h2 id="27112-deadlock-detector可能误报却强制reset">271.12 Deadlock Detector可能误报却强制Reset</h2><p>玩家失去信任。</p>
+<hr />
+<h2 id="27113-无undo">271.13 无Undo</h2><p>玩家因一次误触重做20分钟。</p>
+<hr />
+<h2 id="27114-undo只恢复箱体">271.14 Undo只恢复箱体</h2><p>忘记Player位置。</p>
+<hr />
+<h2 id="27115-长按方向意外连续推多个箱格">271.15 长按方向意外连续推多个箱格</h2><p>产生低价值失败。</p>
+<hr />
+<h2 id="27116-reset重新加载整个scene">271.16 Reset重新加载整个Scene</h2><p>反馈迟缓。</p>
+<hr />
+<h2 id="27117-solver逐玩家步搜索">271.17 Solver逐玩家步搜索</h2><p>大量等价状态。</p>
+<hr />
+<h2 id="27118-solver把等价箱体身份视为不同">271.18 Solver把等价箱体身份视为不同</h2><p>状态数量爆炸。</p>
+<hr />
+<h2 id="27119-solver使用曼哈顿距离作为唯一heuristic">271.19 Solver使用曼哈顿距离作为唯一Heuristic</h2><p>完全不理解墙与推动条件。</p>
+<hr />
+<h2 id="27120-hint维护另一套简化规则">271.20 Hint维护另一套简化规则</h2><p>提示实际做不到的Push。</p>
+<hr />
+<h2 id="27121-runtime和solver使用两套不同push逻辑">271.21 Runtime和Solver使用两套不同Push逻辑</h2><p>关卡验证结果不可信。</p>
+<hr />
+<h2 id="27122-程序生成随机摆箱后才检查有没有goal">271.22 程序生成随机摆箱后才检查有没有Goal</h2><p>几乎全是废关。</p>
+<hr />
+<h2 id="27123-生成器只追求最优push数大">271.23 生成器只追求最优Push数大</h2><p>关卡可能只是冗长，</p>
+<p>并不聪明。</p>
+<hr />
+<h2 id="27124-关卡难度按地图面积排序">271.24 关卡难度按地图面积排序</h2><p>误判严重。</p>
+<hr />
+<h2 id="27125-goal完全被箱体遮住">271.25 Goal完全被箱体遮住</h2><p>玩家忘记完成状态。</p>
+<hr />
+<h2 id="27126-点击移动自动顺便push">271.26 点击移动自动顺便Push</h2><p>系统替玩家做战略决策。</p>
+<hr />
+<h2 id="27127-动画播放完才真正修改puzzle-state">271.27 动画播放完才真正修改Puzzle State</h2><p>Skip / Save困难。</p>
+<hr />
+<h2 id="27128-view错位以后反过来修改逻辑grid">271.28 View错位以后反过来修改逻辑Grid</h2><p>Presentation成为权威。</p>
+<hr />
+<h2 id="27129-修改关卡布局后不重新跑solver">271.29 修改关卡布局后不重新跑Solver</h2><p>正式版本出现无解关。</p>
+<hr />
+<h2 id="27130-save不记录levelversion">271.30 Save不记录LevelVersion</h2><p>关卡更新后旧Save进入非法位置。</p>
+<hr />
+<h2 id="27131-deadlock只在player请求hint时才发现">271.31 Deadlock只在Player请求Hint时才发现</h2><p>QA和作者工具缺少完整分析。</p>
+<hr />
+<h2 id="27132-solver失败被理解成puzzle无解">271.32 Solver失败被理解成Puzzle无解</h2><p>搜索预算和数学不可解混淆。</p>
+<hr />
+<h2 id="27133-所有关卡通过增加箱体数量提高难度">271.33 所有关卡通过增加箱体数量提高难度</h2><p>状态规模上升，</p>
+<p>但谜题质量不一定提高。</p>
+<hr />
+<h2 id="27134-goal永远就是最终停止点">271.34 Goal永远就是最终停止点</h2><p>失去“暂时推离Goal”的高级设计。</p>
+<hr />
+<h2 id="27135-玩家每次绕路都必须手动走几十格">271.35 玩家每次绕路都必须手动走几十格</h2><p>机械输入吞噬推理时间。</p>
+<hr />
+<h1 id="272-最小可行原型">272. 最小可行原型</h1><p>验证Sokoban核心范式时，不需要：</p>
+<p>大型剧情和几十种机关。</p>
+<p>推荐：</p>
+<p><strong>8×8～12×12离散Grid + 1名玩家 + 3～5个Crate + 等量Goal + Undo + Reset + Solver + Dead Square Overlay。</strong></p>
+<hr />
+<h1 id="273-第一版-terrain">273. 第一版 Terrain</h1><p>只实现：</p>
+<ul>
+<li><p>Wall；</p>
+</li>
+<li><p>Floor；</p>
+</li>
+<li><p>Goal。</p>
+</li>
+</ul>
+<hr />
+<h1 id="274-第一版-entity">274. 第一版 Entity</h1><ul>
+<li><p>Player；</p>
+</li>
+<li><p>Crate。</p>
+</li>
+</ul>
+<hr />
+<h1 id="275-第一版动作">275. 第一版动作</h1><ul>
+<li><p>Four-direction Move；</p>
+</li>
+<li><p>Push；</p>
+</li>
+<li><p>Undo；</p>
+</li>
+<li><p>Reset。</p>
+</li>
+</ul>
+<hr />
+<h1 id="276-第一版puzzle-analysis">276. 第一版Puzzle Analysis</h1><p>必须有：</p>
+<ul>
+<li><p>Player Reachability；</p>
+</li>
+<li><p>Legal Push Enumeration；</p>
+</li>
+<li><p>Static Dead Squares；</p>
+</li>
+<li><p>Reverse Pull Reachability。</p>
+</li>
+</ul>
+<hr />
+<h1 id="277-第二阶段加入">277. 第二阶段加入：</h1><ul>
+<li><p>Freeze Deadlock；</p>
+</li>
+<li><p>2×2 Deadlock；</p>
+</li>
+<li><p>Crate-Goal Matching；</p>
+</li>
+<li><p>Solver。</p>
+</li>
+</ul>
+<hr />
+<h1 id="278-第三阶段">278. 第三阶段：</h1><ul>
+<li><p>Hint；</p>
+</li>
+<li><p>Optimal Push；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Level Editor Validation。</p>
+</li>
+</ul>
+<hr />
+<h1 id="279-mvp必要数据结构">279. MVP必要数据结构</h1><ul>
+<li><p>LevelDefinition；</p>
+</li>
+<li><p>TerrainCellDefinition；</p>
+</li>
+<li><p>PuzzleRuntimeState；</p>
+</li>
+<li><p>PlayerState；</p>
+</li>
+<li><p>CrateInstanceState；</p>
+</li>
+<li><p>OccupancyIndex；</p>
+</li>
+<li><p>MoveIntent；</p>
+</li>
+<li><p>PushIntent；</p>
+</li>
+<li><p>PushTransaction；</p>
+</li>
+<li><p>ReachabilityState；</p>
+</li>
+<li><p>GoalState；</p>
+</li>
+<li><p>UndoRecord；</p>
+</li>
+<li><p>DeadSquareMap；</p>
+</li>
+<li><p>ReverseGoalReachability；</p>
+</li>
+<li><p>CrateGoalGraph；</p>
+</li>
+<li><p>SolverState；</p>
+</li>
+<li><p>StateHash；</p>
+</li>
+<li><p>LevelValidationReport。</p>
+</li>
+</ul>
+<hr />
+<h1 id="280-mvp必要调试工具">280. MVP必要调试工具</h1><ul>
+<li><p>PuzzleStateInspector；</p>
+</li>
+<li><p>OccupancyOverlay；</p>
+</li>
+<li><p>PlayerReachabilityOverlay；</p>
+</li>
+<li><p>LegalPushOverlay；</p>
+</li>
+<li><p>PushTrace；</p>
+</li>
+<li><p>StaticDeadMap；</p>
+</li>
+<li><p>ReversePullHeatmap；</p>
+</li>
+<li><p>CrateGoalGraph；</p>
+</li>
+<li><p>MatchingInspector；</p>
+</li>
+<li><p>FreezeInspector；</p>
+</li>
+<li><p>SolverSearchInspector；</p>
+</li>
+<li><p>SolverPath；</p>
+</li>
+<li><p>UndoTimeline；</p>
+</li>
+<li><p>DifficultyPanel。</p>
+</li>
+</ul>
+<hr />
+<h1 id="281-mvp核心验收问题">281. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<ul>
+<li><p>所有逻辑位置是否严格使用整数Grid；</p>
+</li>
+<li><p>Player、Crate、Wall是否永远不会非法重叠；</p>
+</li>
+<li><p>Push是否始终同时移动Crate与Player；</p>
+</li>
+<li><p>无效Push是否完全不修改State；</p>
+</li>
+<li><p>Player Reachability是否只在箱体布局改变后需要重算；</p>
+</li>
+<li><p>Legal Push是否同时检查Destination与Player Stance；</p>
+</li>
+<li><p>Solver是否使用真正Runtime Push规则；</p>
+</li>
+<li><p>等价Crate是否能够Canonicalize；</p>
+</li>
+<li><p>Static Dead Map是否能发现非目标死角；</p>
+</li>
+<li><p>Reverse Pull是否能发现更多不可回收位置；</p>
+</li>
+<li><p>初始Crate是否都至少拥有一个理论Goal；</p>
+</li>
+<li><p>Crate-to-Goal Matching是否完整；</p>
+</li>
+<li><p>Undo是否能精确恢复Push前State；</p>
+</li>
+<li><p>全部Undo以后State Hash是否等于Initial State；</p>
+</li>
+<li><p>Save / Load以后Undo、Push Count和Crate位置是否正确；</p>
+</li>
+<li><p>Replay是否能够完全确定重放；</p>
+</li>
+<li><p>Solver是否能够证明官方MVP关卡可解；</p>
+</li>
+<li><p>Solver超时是否不会影响正常Gameplay；</p>
+</li>
+<li><p>Hint是否来自当前真实Puzzle State；</p>
+</li>
+<li><p>玩家是否逐渐从“把箱子推向最近目标”成长为“规划推动顺序和未来可达域”。</p>
+</li>
+</ul>
+<p>这些问题没有稳定以前，不建议优先加入：</p>
+<ul>
+<li><p>Ice；</p>
+</li>
+<li><p>Conveyor；</p>
+</li>
+<li><p>Teleporter；</p>
+</li>
+<li><p>Pull Ability；</p>
+</li>
+<li><p>多人协作；</p>
+</li>
+<li><p>程序生成；</p>
+</li>
+<li><p>大量Meta成长；</p>
+</li>
+<li><p>随机机关；</p>
+</li>
+<li><p>战斗系统。</p>
+</li>
+</ul>
+<hr />
+<h1 id="282-推荐实施顺序">282. 推荐实施顺序</h1><p>第一阶段：</p>
+<ul>
+<li><p>Grid；</p>
+</li>
+<li><p>Terrain；</p>
+</li>
+<li><p>Player；</p>
+</li>
+<li><p>Crate；</p>
+</li>
+<li><p>Occupancy。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>Move Resolver；</p>
+</li>
+<li><p>Push Transaction。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Goal；</p>
+</li>
+<li><p>Solved State；</p>
+</li>
+<li><p>Undo；</p>
+</li>
+<li><p>Reset。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Player Reachability；</p>
+</li>
+<li><p>Legal Push Enumerator。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Static Dead Square；</p>
+</li>
+<li><p>Reverse Pull Map。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li>Freeze / 2×2 Deadlock。</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Crate-Goal Graph；</p>
+</li>
+<li><p>Matching。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Push-based Solver；</p>
+</li>
+<li><p>State Hash；</p>
+</li>
+<li><p>Transposition。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Heuristic；</p>
+</li>
+<li><p>Tunnel Macro；</p>
+</li>
+<li><p>Advanced Deadlock。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Hint；</p>
+</li>
+<li><p>Solver Replay；</p>
+</li>
+<li><p>Optimal Metrics。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Level Editor；</p>
+</li>
+<li><p>Validation；</p>
+</li>
+<li><p>Difficulty Analysis。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Procedural Reverse Generation；</p>
+</li>
+<li><p>Advanced Rules；</p>
+</li>
+<li><p>User Level Sharing。</p>
+</li>
+</ul>
+<hr />
+<h1 id="283-架构验收标准">283. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>所有Puzzle逻辑状态使用离散Grid；</p>
+</li>
+<li><p>Visual Transform不参与Push合法性判断；</p>
+</li>
+<li><p>Static Terrain与Dynamic Occupancy严格分离；</p>
+</li>
+<li><p>Goal与Crate Occupancy属于不同状态层；</p>
+</li>
+<li><p>Player和Crate拥有稳定Runtime身份；</p>
+</li>
+<li><p>经典等价Crate可以在Solver层Canonicalize；</p>
+</li>
+<li><p>Move首先生成Intent；</p>
+</li>
+<li><p>普通Walking和Push Attempt拥有不同语义；</p>
+</li>
+<li><p>Push拥有独立PushIntent；</p>
+</li>
+<li><p>Push Commit是Player与Crate同时变化的原子事务；</p>
+</li>
+<li><p>Invalid Push不会修改任何Puzzle State；</p>
+</li>
+<li><p>OccupancyIndex在任意稳定State中不存在重叠；</p>
+</li>
+<li><p>Player Reachability通过统一Flood Fill或等价算法生成；</p>
+</li>
+<li><p>Puzzle Analysis可以使用Player Reachability Region而非精确Walking位置；</p>
+</li>
+<li><p>普通Walking不会无意义触发全局Puzzle重算；</p>
+</li>
+<li><p>每次Push都会使Reachability Cache失效；</p>
+</li>
+<li><p>Legal Push同时要求Crate Destination合法和Player Stance可达；</p>
+</li>
+<li><p>PushEnumerator成为Solver、Hint和Debug共同事实源；</p>
+</li>
+<li><p>Static Dead Squares可以在关卡加载时预计算；</p>
+</li>
+<li><p>Reverse Pull Analysis可以标记无法到达任何Goal的静态死格；</p>
+</li>
+<li><p>普通非Goal Corner必然被识别为Dead Square；</p>
+</li>
+<li><p>Deadlock检测区分Static与Dynamic；</p>
+</li>
+<li><p>Freeze Deadlock能够分析多个箱体相互锁定；</p>
+</li>
+<li><p>2×2等常见Pattern具有低成本检测；</p>
+</li>
+<li><p>Crate与Goal能够形成Reachability二分图；</p>
+</li>
+<li><p>初始和运行时状态可以执行Matching必要条件检查；</p>
+</li>
+<li><p>已经位于Goal的Crate不会自动从Puzzle分析中移除；</p>
+</li>
+<li><p>狭窄Goal Region能够表达装填顺序问题；</p>
+</li>
+<li><p>高级Corral分析可以作为可插拔Deadlock模块；</p>
+</li>
+<li><p>不能100%证明的Deadlock不会自动破坏玩家状态；</p>
+</li>
+<li><p>Undo保存完整Player / Crate / Counter Delta；</p>
+</li>
+<li><p>Undo能够恢复Push前的精确State；</p>
+</li>
+<li><p>Push-centric Undo可以作为独立QoL；</p>
+</li>
+<li><p>Reset不依赖Scene Reload；</p>
+</li>
+<li><p>Auto Walking只能处理当前Reachable Region中的机械移动；</p>
+</li>
+<li><p>Auto Walking不会自动决定Push；</p>
+</li>
+<li><p>Tunnel Macro只在不存在中间战略分支时启用；</p>
+</li>
+<li><p>Solver以Push而不是玩家单步移动作为主要搜索Edge；</p>
+</li>
+<li><p>Solver State使用Canonical Crate布局；</p>
+</li>
+<li><p>Solver能够Canonicalize等价Player Reachability；</p>
+</li>
+<li><p>State Hash稳定且可重放；</p>
+</li>
+<li><p>Transposition Table能够消除重复状态；</p>
+</li>
+<li><p>Solver Heuristic可以使用Reverse Goal Distance；</p>
+</li>
+<li><p>Goal Matching可以参与Heuristic或Deadlock pruning；</p>
+</li>
+<li><p>Solver必须复用Runtime Rule Core；</p>
+</li>
+<li><p>Runtime Hint使用Puzzle Snapshot而不是可变Scene状态；</p>
+</li>
+<li><p>过期Hint根据StateRevision自动丢弃；</p>
+</li>
+<li><p>Level Difficulty不简单按照地图尺寸判断；</p>
+</li>
+<li><p>Level Validation能够证明正式关卡可解；</p>
+</li>
+<li><p>Solver预算耗尽与数学无解严格区分；</p>
+</li>
+<li><p>Level修改后自动重新运行Solvability Regression；</p>
+</li>
+<li><p>程序生成优先从Solved State进行Reverse Generation；</p>
+</li>
+<li><p>Generated Level必须再次通过正向Solver验证；</p>
+</li>
+<li><p>Player-facing规则保持一致且完全可观察；</p>
+</li>
+<li><p>Goal上的Crate仍然保持Goal视觉可读性；</p>
+</li>
+<li><p>输入Repeat不会无意产生不可预期连续Push；</p>
+</li>
+<li><p>Save包含LevelVersion和完整Puzzle State；</p>
+</li>
+<li><p>Replay可以使用整数状态实现完全确定性；</p>
+</li>
+<li><p>每次Push后可以生成State Hash；</p>
+</li>
+<li><p>Presentation失败不会污染Grid Truth；</p>
+</li>
+<li><p>Debug工具能够解释“为什么这个箱子不能向这个方向推”；</p>
+</li>
+<li><p>Debug工具能够解释“为什么这个状态已经无解”；</p>
+</li>
+<li><p>新Terrain、新Crate Rule和新Goal Rule应通过扩展Push / Transition规则接入，而不是绕过Puzzle Core。</p>
+</li>
+</ul>
+<hr />
+<h1 id="284-可迁移到其他游戏的设计思想">284. 可迁移到其他游戏的设计思想</h1><hr />
+<h2 id="2841-玩家可以到哪里和游戏对象可以到哪里是两个完全不同的问题">284.1 “玩家可以到哪里”和“游戏对象可以到哪里”是两个完全不同的问题</h2><p>Player Reachability：</p>
+<p>只需要：</p>
+<p>自己能走。</p>
+<p>Crate Reachability：</p>
+<p>还需要：</p>
+<p>玩家能站到箱体反方向。</p>
+<p>这一思想可以迁移到：</p>
+<ul>
+<li><p>推拉机关；</p>
+</li>
+<li><p>战术；</p>
+</li>
+<li><p>物流机器人；</p>
+</li>
+<li><p>工厂；</p>
+</li>
+<li><p>角色协作。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2842-状态变化的真正价值可以按照是否改变未来行动集合判断">284.2 状态变化的真正价值可以按照“是否改变未来行动集合”判断</h2><p>玩家在大厅走20步：</p>
+<p>Future Push Set不变。</p>
+<p>推动箱体1格：</p>
+<p>Future Push Set完全改变。</p>
+<p>因此可以区分：</p>
+<p><strong>Mechanical Actions</strong></p>
+<p>与：</p>
+<p><strong>Strategic Actions。</strong></p>
+<p>这对：</p>
+<ul>
+<li><p>AI；</p>
+</li>
+<li><p>Solver；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>统计；</p>
+</li>
+</ul>
+<p>都非常有价值。</p>
+<hr />
+<h2 id="2843-大量连续操作可以canonicalize成同一个战略状态">284.3 大量连续操作可以Canonicalize成同一个战略状态</h2><p>玩家在同一个自由区域中：</p>
+<p>站在哪里</p>
+<p>可能并不重要。</p>
+<p>重要的是：</p>
+<p>能否到达该区域中的所有站位。</p>
+<p>这一思想可迁移到：</p>
+<ul>
+<li><p>战略地图；</p>
+</li>
+<li><p>Dungeon；</p>
+</li>
+<li><p>Navigation；</p>
+</li>
+<li><p>Puzzle Solver。</p>
+</li>
+</ul>
+<p>不要把：</p>
+<p>对未来行为没有区别的状态</p>
+<p>重复搜索。</p>
+<hr />
+<h2 id="2844-一个行动的合法性往往需要同时满足目标位置和执行位置">284.4 一个行动的合法性往往需要同时满足“目标位置”和“执行位置”</h2><p>推箱：</p>
+<p>不仅箱子前面要空。</p>
+<p>玩家背后站位也要可达。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Cover；</p>
+</li>
+<li><p>Finisher；</p>
+</li>
+<li><p>Interaction Slot；</p>
+</li>
+<li><p>建筑施工；</p>
+</li>
+<li><p>AI工具使用。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2845-只能push不能pull展示了动作不对称如何自然产生不可逆深度">284.5 “只能Push不能Pull”展示了动作不对称如何自然产生不可逆深度</h2><p>如果箱体可以：</p>
+<p>随便拉回来，</p>
+<p>大量Deadlock消失。</p>
+<p>一个非常简单的不对称规则：</p>
+<p>就足以产生巨大的搜索空间。</p>
+<p>这是非常值得迁移的设计思想：</p>
+<blockquote>
+<p><strong>深度不一定来自增加更多动作，也可以来自限制动作的逆操作。</strong></p>
+</blockquote>
+<hr />
+<h2 id="2846-deadlock是一种仍能运行但已无法达成目标的系统状态">284.6 Deadlock是一种“仍能运行但已无法达成目标”的系统状态</h2><p>它和：</p>
+<p>Game Over</p>
+<p>完全不同。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Quest；</p>
+</li>
+<li><p>Economy；</p>
+</li>
+<li><p>Tech Tree；</p>
+</li>
+<li><p>Craft；</p>
+</li>
+<li><p>Logistics；</p>
+</li>
+<li><p>项目管理。</p>
+</li>
+</ul>
+<p>很多系统真正危险的错误：</p>
+<p>不是Crash，</p>
+<p>而是：</p>
+<p>继续运行却永远到不了目标。</p>
+<hr />
+<h2 id="2847-reverse-analysis是一种非常强的可达性验证方法">284.7 Reverse Analysis是一种非常强的可达性验证方法</h2><p>正向路径复杂。</p>
+<p>可以从Goal反过来问：</p>
+<blockquote>
+<p>哪些状态理论上可能通向这里？</p>
+</blockquote>
+<p>可迁移到：</p>
+<ul>
+<li><p>Platformer Reachability；</p>
+</li>
+<li><p>Tech Tree；</p>
+</li>
+<li><p>Quest；</p>
+</li>
+<li><p>Craft Recipe；</p>
+</li>
+<li><p>Navigation；</p>
+</li>
+<li><p>Procedural Generation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="2848-每个对象都有一个可行目标不代表所有对象能够同时拥有不同目标">284.8 “每个对象都有一个可行目标”不代表“所有对象能够同时拥有不同目标”</h2><p>Crate Goal Matching展示了：</p>
+<p>局部可行</p>
+<p>与：</p>
+<p>全局可行</p>
+<p>之间的区别。</p>
+<p>可以迁移到：</p>
+<ul>
+<li><p>任务分配；</p>
+</li>
+<li><p>NPC工作；</p>
+</li>
+<li><p>资源调度；</p>
+</li>
+<li><p>Matchmaking；</p>
+</li>
+<li><p>设备占用。</p>
+</li>
+</ul>
+<p>这是典型的：</p>
+<p><strong>Assignment Problem。</strong></p>
+<hr />
+<h2 id="2849-已经完成局部目标的对象仍然可能影响全局解">284.9 已经完成局部目标的对象仍然可能影响全局解</h2><p>Crate站在Goal上：</p>
+<p>看起来完成。</p>
+<p>但它可能：</p>
+<p>堵住其他箱体。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>部署；</p>
+</li>
+<li><p>网络路由；</p>
+</li>
+<li><p>Inventory；</p>
+</li>
+<li><p>生产线；</p>
+</li>
+<li><p>战术站位。</p>
+</li>
+</ul>
+<p>局部完成状态不能：</p>
+<p>自动从整体规划中移除。</p>
+<hr />
+<h2 id="28410-unlimited-undo并不一定削弱难度它可以降低实验成本">284.10 Unlimited Undo并不一定削弱难度，它可以降低实验成本</h2><p>推箱子的难点在：</p>
+<p>空间推理。</p>
+<p>不是：</p>
+<p>记住刚才按了哪个键。</p>
+<p>因此Undo让玩家：</p>
+<p>更敢测试假设。</p>
+<p>同样适合：</p>
+<ul>
+<li><p>Puzzle；</p>
+</li>
+<li><p>Turn-based Tactics；</p>
+</li>
+<li><p>Building；</p>
+</li>
+<li><p>Automation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="28411-可以自动化已经确定的执行保留真正需要思考的决定">284.11 可以自动化“已经确定的执行”，保留“真正需要思考的决定”</h2><p>自动走到箱子后面：</p>
+<p>合理。</p>
+<p>自动选择箱子和目标：</p>
+<p>过度。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>RTS路径；</p>
+</li>
+<li><p>RPG移动；</p>
+</li>
+<li><p>Strategy；</p>
+</li>
+<li><p>Agent工具。</p>
+</li>
+</ul>
+<p>一个系统应该优先消除：</p>
+<p>机械执行成本，</p>
+<p>而不是：</p>
+<p>决策本身。</p>
+<hr />
+<h2 id="28412-solver与runtime最好共享同一套domain-rules">284.12 Solver与Runtime最好共享同一套Domain Rules</h2><p>如果Solver认为：</p>
+<p>这步能推，</p>
+<p>Runtime认为：</p>
+<p>不能，</p>
+<p>所有：</p>
+<ul>
+<li><p>Hint；</p>
+</li>
+<li><p>Validation；</p>
+</li>
+<li><p>Generated Level；</p>
+</li>
+</ul>
+<p>都会失去可信度。</p>
+<p>这是通用于：</p>
+<ul>
+<li><p>战棋AI；</p>
+</li>
+<li><p>Card AI；</p>
+</li>
+<li><p>Puzzle Solver；</p>
+</li>
+<li><p>Bot；</p>
+</li>
+<li><p>Automated Test</p>
+</li>
+</ul>
+<p>的重要原则。</p>
+<hr />
+<h2 id="28413-内容编辑器应展示系统意义而不仅是视觉布局">284.13 内容编辑器应展示“系统意义”，而不仅是视觉布局</h2><p>Sokoban Editor真正需要看到：</p>
+<ul>
+<li><p>Dead Squares；</p>
+</li>
+<li><p>Reachability；</p>
+</li>
+<li><p>Goal Matching；</p>
+</li>
+<li><p>Legal Pushes。</p>
+</li>
+</ul>
+<p>同样适用于：</p>
+<ul>
+<li><p>Tactical Map；</p>
+</li>
+<li><p>Platformer；</p>
+</li>
+<li><p>Factory；</p>
+</li>
+<li><p>Quest Graph。</p>
+</li>
+</ul>
+<p>好的Editor不是：</p>
+<p>只让设计师摆东西。</p>
+<p>还应该：</p>
+<p>解释这些东西在规则系统中的意义。</p>
+<hr />
+<h2 id="28414-可解性和难度是两个不同指标">284.14 可解性和难度是两个不同指标</h2><p>Solver证明：</p>
+<p>“有解”。</p>
+<p>并不能证明：</p>
+<p>“这关有趣”。</p>
+<p>Difficulty Metrics和人工设计仍然需要：</p>
+<p>第二层判断。</p>
+<p>这一思想适用于：</p>
+<p>所有Procedural Content。</p>
+<hr />
+<h2 id="28415-从solved-state反向生成是保证生成内容存在至少一条成功路径的通用方法">284.15 从Solved State反向生成，是保证生成内容存在至少一条成功路径的通用方法</h2><p>可以迁移到：</p>
+<ul>
+<li><p>Maze；</p>
+</li>
+<li><p>Key-Lock Dungeon；</p>
+</li>
+<li><p>Puzzle；</p>
+</li>
+<li><p>Craft Chain；</p>
+</li>
+<li><p>Ability Gate。</p>
+</li>
+</ul>
+<p>先构造：</p>
+<p>合法终态。</p>
+<p>再：</p>
+<p>逐步扰动。</p>
+<p>通常比：</p>
+<p>随机初态后祈祷有解</p>
+<p>可靠得多。</p>
+<hr />
+<h1 id="285-本次防重记录">285. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>推箱子 / Sokoban / Crate-Pushing Puzzle。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Sokoban；</p>
+</li>
+<li><p>Box-Pushing Puzzle；</p>
+</li>
+<li><p>Crate-Pushing Puzzle；</p>
+</li>
+<li><p>Warehouse Puzzle；</p>
+</li>
+<li><p>Push-Block Puzzle；</p>
+</li>
+<li><p>推箱子；</p>
+</li>
+<li><p>箱体推动解谜；</p>
+</li>
+<li><p>仓库搬运谜题；</p>
+</li>
+<li><p>推块式空间解谜。</p>
+</li>
+</ul>
+<hr />
+<h2 id="核心范式">核心范式</h2><p>Sokoban维护一个完全离散、确定的棋盘世界。墙、地面和Goal属于静态Terrain，Player和Crate属于动态Occupancy；Player可以在当前可达空地中自由移动，但Crate只能从背后向前Push，通常不能Pull。因此绝大多数Walking只是在寻找下一个合法施力位置，真正改变Puzzle State的是Push。</p>
+<p>每一次Push都作为原子事务执行：系统同时验证Player Stance和Crate Destination，随后让Crate前移一格、Player进入Crate原位置，再重新计算Player Reachability。箱体因此不仅是要运往Goal的货物，也是会动态封闭或开放通路的移动墙体；一个Push可能打开新区域，也可能永久失去某个箱体的推动侧。</p>
+<p>错误Push通常不会立即Game Over，而会把系统带入Deadlock：Crate可能进入非Goal死角、贴入无法恢复的墙段、与其他Crate共同Freeze、破坏Goal装填顺序，或者令所有Crate与Goal无法形成完整一一匹配。静态Dead Square可以通过从Goal反向执行抽象Pull预计算，更高级状态则通过Freeze、2×2、Bipartite Matching、Corral等分析检测。</p>
+<p>由于玩家在同一可达区域中的大量Walking往往属于等价Puzzle状态，Solver应把Player Reachability Region与Crate Position Set作为Canonical State，并直接以合法Push作为搜索Edge，而不是逐玩家步搜索。这样同一套Push Enumerator、Deadlock Rules、State Hash和Goal Reachability既可以服务Runtime，也可以服务Hint、关卡验证、自动求解、Replay和程序生成。</p>
+<p>最终形成：</p>
+<p><strong>读取Crate / Goal布局
+→ 计算Player Reachability
+→ 枚举可执行Push
+→ 选择箱体与方向
+→ 原子Push
+→ Player Reachability重构
+→ 箱体可推动方向改变
+→ Deadlock / Goal Matching重新评估
+→ 必要时Undo
+→ 按正确顺序逐渐装填Goal
+→ 所有Goal被占据
+→ Puzzle完成。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>推箱子真正要求玩家规划的不是“这个箱子下一步往哪里走”，而是“我现在这一推，会不会保留下未来完成所有剩余推动所需要的站位、通道和施力方向”。</strong></p>
+</blockquote>
+<hr />
+<h2 id="核心识别特征">核心识别特征</h2><ul>
+<li><p>核心空间是离散Grid；</p>
+</li>
+<li><p>Player和Crate拥有严格Cell Occupancy；</p>
+</li>
+<li><p>Terrain与Occupancy分离；</p>
+</li>
+<li><p>Goal与Crate状态分离；</p>
+</li>
+<li><p>Player可以移动但通常只能Push不能Pull；</p>
+</li>
+<li><p>Push具有强方向不对称性；</p>
+</li>
+<li><p>Push同时要求Destination可用和Player Stance可达；</p>
+</li>
+<li><p>Player Reachability属于正式派生状态；</p>
+</li>
+<li><p>大量Walking在战略层可以视为同一Reachability状态；</p>
+</li>
+<li><p>Push是主要Puzzle State Transition；</p>
+</li>
+<li><p>Push必须同时修改Crate与Player位置；</p>
+</li>
+<li><p>每次Push都会重新改变未来可达区域；</p>
+</li>
+<li><p>Crate同时是目标对象和动态障碍；</p>
+</li>
+<li><p>错误Push通常形成结构性Deadlock而不是立即失败；</p>
+</li>
+<li><p>非Goal Corner属于最基础静态Deadlock；</p>
+</li>
+<li><p>Reverse Pull可以预计算Goal-Reachable Cells；</p>
+</li>
+<li><p>Static Dead Square可以提前标记；</p>
+</li>
+<li><p>多Crate可以形成Freeze Deadlock；</p>
+</li>
+<li><p>Crate与Goal之间存在Assignment问题；</p>
+</li>
+<li><p>完整二分匹配是目标可行性的必要条件之一；</p>
+</li>
+<li><p>已在Goal上的Crate仍可能阻挡其他箱体；</p>
+</li>
+<li><p>狭窄Goal区域可能要求严格装填顺序；</p>
+</li>
+<li><p>Corral可能让Player失去必要推动侧；</p>
+</li>
+<li><p>Deadlock检测可以分为基础和高级层；</p>
+</li>
+<li><p>不确定Deadlock分析不能强制破坏玩家状态；</p>
+</li>
+<li><p>Unlimited Undo非常适合降低试错摩擦；</p>
+</li>
+<li><p>Push-centric Undo比逐步Walking Undo更符合战略语义；</p>
+</li>
+<li><p>Reset应近乎即时；</p>
+</li>
+<li><p>Auto Walking可以减少机械输入但不应自动Push；</p>
+</li>
+<li><p>Solver应以Push而非玩家步行为搜索Edge；</p>
+</li>
+<li><p>等价Crate位置集合可以Canonicalize；</p>
+</li>
+<li><p>Player位置可以Canonicalize为Reachability Region；</p>
+</li>
+<li><p>State Hash和Transposition Table可以大量减少搜索状态；</p>
+</li>
+<li><p>Reverse Goal Distance与Matching可以提供Solver Heuristic；</p>
+</li>
+<li><p>Hint可以直接消费真实Solver路径；</p>
+</li>
+<li><p>Level必须通过Solver验证可解；</p>
+</li>
+<li><p>地图面积不是可靠难度指标；</p>
+</li>
+<li><p>Static Dead Map、Legal Push Overlay和Goal Matching属于高价值作者工具；</p>
+</li>
+<li><p>Procedural Generation更适合从Solved State反向扰动；</p>
+</li>
+<li><p>Grid整数状态使Save与Replay天然确定；</p>
+</li>
+<li><p>玩家长期成长主要表现为从“把箱子推向Goal”升级为“管理未来可推动性与目标装填顺序”。</p>
+</li>
+</ul>
+<hr />
+<h2 id="与仓库现有落块消除-falling-block-puzzle-的防重边界">与仓库现有落块消除 / Falling-Block Puzzle 的防重边界</h2><p>当前仓库已有 <code>falling-block-puzzle</code>，其核心是从Board外持续生成Active Piece，在Gravity压力下经过移动、旋转与Lock写入棋盘，再通过完整结构Clear回收空间。</p>
+<p>两者都具有：</p>
+<ul>
+<li><p>离散Grid；</p>
+</li>
+<li><p>几何占位；</p>
+</li>
+<li><p>不可逆空间变化；</p>
+</li>
+<li><p>Solver；</p>
+</li>
+<li><p>Replay。</p>
+</li>
+</ul>
+<p>但核心动作完全不同。</p>
+<p><strong>Falling-Block：</strong></p>
+<blockquote>
+<p>新几何块持续进入棋盘，玩家在时间压力下决定这一块最终占据哪些Cell。</p>
+</blockquote>
+<p><strong>Sokoban：</strong></p>
+<blockquote>
+<p>所有关键箱体一开始通常已经存在，玩家通过站位和Push逐步重新排列它们。</p>
+</blockquote>
+<p>Falling-Block的主要不可逆边界是：</p>
+<p><strong>Active Piece Lock。</strong></p>
+<p>Sokoban的主要不可逆边界是：</p>
+<p><strong>Crate Push。</strong></p>
+<p>前者重点管理：</p>
+<p>持续输入的新空间占用。</p>
+<p>后者重点管理：</p>
+<p>推动以后是否仍然保留未来施力条件。</p>
+<p>因此两者属于完全不同的Puzzle范式。</p>
+<hr />
+<h2 id="与仓库现有三消交换-match-3-的防重边界">与仓库现有三消交换 / Match-3 的防重边界</h2><p>当前仓库已经存在 <code>match-3</code>；其核心是Stable Board上的相邻Swap经过Match、Clear、Gravity、Refill和Cascade重新构造棋盘。</p>
+<p><strong>Match-3：</strong></p>
+<p>玩家主要修改：</p>
+<p>两个相邻Tile的位置关系。</p>
+<p>之后大量Board变化：</p>
+<p>由自动Resolution产生。</p>
+<p><strong>Sokoban：</strong></p>
+<p>玩家每次直接推进一个Crate一格。</p>
+<p>不会：</p>
+<p>自动Refill。</p>
+<p>不会：</p>
+<p>自动Cascade。</p>
+<p>不存在：</p>
+<p>颜色匹配。</p>
+<p>真正约束来自：</p>
+<p>Player能否再次站到正确推动侧。</p>
+<p>因此：</p>
+<p>Match-3的核心是：</p>
+<p><strong>局部Swap → 自动级联。</strong></p>
+<p>Sokoban的核心是：</p>
+<p><strong>局部Push → 未来可推动性重构。</strong></p>
+<hr />
+<h2 id="与仓库现有点击式图形冒险的防重边界">与仓库现有点击式图形冒险的防重边界</h2><p>点击式图形冒险同样经常具有：</p>
+<ul>
+<li><p>箱子；</p>
+</li>
+<li><p>门；</p>
+</li>
+<li><p>物品；</p>
+</li>
+<li><p>Puzzle。</p>
+</li>
+</ul>
+<p>但其核心是作者化Interaction Grammar：</p>
+<p>“哪个Item应该用在哪个Hotspot上”。</p>
+<p>Sokoban则几乎不需要：</p>
+<p>物品语义、对话或Knowledge。</p>
+<p>一套：</p>
+<p>墙、箱体、目标和Push规则</p>
+<p>就可以支撑数百个关卡。</p>
+<p>因此：</p>
+<p><strong>Point-and-Click：</strong></p>
+<p>主要难点是：</p>
+<p>世界对象之间的语义关系。</p>
+<p><strong>Sokoban：</strong></p>
+<p>主要难点是：</p>
+<p>不可逆推动下的空间拓扑关系。</p>
+<hr />
+<h2 id="与仓库现有因果编织类游戏的防重边界">与仓库现有因果编织类游戏的防重边界</h2><p><code>causal-weaving</code> 主要让玩家操作：</p>
+<p>事实、时间线和因果关系。</p>
+<p>Sokoban同样存在：</p>
+<p>强烈因果链，</p>
+<p>但因果全部发生在：</p>
+<p>离散空间状态中。</p>
+<p>玩家并不修改：</p>
+<p>Narrative Fact。</p>
+<p>因此：</p>
+<p><strong>Causal Weaving：</strong></p>
+<blockquote>
+<p>推理“事件为什么发生”。</p>
+</blockquote>
+<p><strong>Sokoban：</strong></p>
+<blockquote>
+<p>推理“这一Push之后未来还剩哪些可执行Push”。</p>
+</blockquote>
+<hr />
+<h2 id="与未来滑块谜题-sliding-block-puzzle-的防重边界">与未来滑块谜题 / Sliding-Block Puzzle 的防重边界</h2><p>本次不会把所有“移动方块”谜题都计入Sokoban。</p>
+<p>未来仍可独立记录：</p>
+<p><strong>Sliding-Block Puzzle / Rush-Hour-like。</strong></p>
+<p>其核心可以研究：</p>
+<ul>
+<li><p>每个Block具有固定运动轴；</p>
+</li>
+<li><p>Block之间相互阻挡；</p>
+</li>
+<li><p>玩家直接移动Block；</p>
+</li>
+<li><p>目标是为关键Block清出路径。</p>
+</li>
+</ul>
+<p>Sokoban独有的关键结构则是：</p>
+<blockquote>
+<p>玩家本身也是棋盘实体，并且只有当Player能够进入Crate背后的Stance Cell时，Crate才可向某方向推动。</p>
+</blockquote>
+<p>因此：</p>
+<p><strong>Sliding Block：</strong></p>
+<blockquote>
+<p>Block自己的运动约束决定可达性。</p>
+</blockquote>
+<p><strong>Sokoban：</strong></p>
+<blockquote>
+<p>Player Reachability与Crate Reachability共同决定可推动性。</p>
+</blockquote>
+<p>二者仍足以独立记录。</p>
+<hr />
+<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<li><p>Sokoban；</p>
+</li>
+<li><p>Crate-Pushing Puzzle；</p>
+</li>
+<li><p>Static Terrain；</p>
+</li>
+<li><p>Dynamic Occupancy；</p>
+</li>
+<li><p>Crate Instance；</p>
+</li>
+<li><p>Push Intent；</p>
+</li>
+<li><p>Push Transaction；</p>
+</li>
+<li><p>Player Reachability；</p>
+</li>
+<li><p>Reachability Region；</p>
+</li>
+<li><p>Push Candidate；</p>
+</li>
+<li><p>Stance Cell；</p>
+</li>
+<li><p>Static Dead Square；</p>
+</li>
+<li><p>Reverse Pull；</p>
+</li>
+<li><p>Goal Reachability；</p>
+</li>
+<li><p>Corner Deadlock；</p>
+</li>
+<li><p>Wall Deadlock；</p>
+</li>
+<li><p>Freeze Deadlock；</p>
+</li>
+<li><p>2×2 Deadlock；</p>
+</li>
+<li><p>Goal Assignment；</p>
+</li>
+<li><p>Bipartite Matching；</p>
+</li>
+<li><p>Goal Room Packing；</p>
+</li>
+<li><p>Corral；</p>
+</li>
+<li><p>Deadlock Detector；</p>
+</li>
+<li><p>Unlimited Undo；</p>
+</li>
+<li><p>Push Undo；</p>
+</li>
+<li><p>Reset；</p>
+</li>
+<li><p>Auto Walking；</p>
+</li>
+<li><p>Tunnel Macro；</p>
+</li>
+<li><p>Push-based Solver；</p>
+</li>
+<li><p>Canonical State；</p>
+</li>
+<li><p>State Hash；</p>
+</li>
+<li><p>Transposition Table；</p>
+</li>
+<li><p>Matching Heuristic；</p>
+</li>
+<li><p>Solver Hint；</p>
+</li>
+<li><p>Solver Budget；</p>
+</li>
+<li><p>Level Solvability；</p>
+</li>
+<li><p>Difficulty Metrics；</p>
+</li>
+<li><p>Dead Square Overlay；</p>
+</li>
+<li><p>Legal Push Overlay；</p>
+</li>
+<li><p>Reverse Pull Heatmap；</p>
+</li>
+<li><p>Goal Matching Inspector；</p>
+</li>
+<li><p>Reverse Generation；</p>
+</li>
+<li><p>Deterministic Replay；</p>
+</li>
+<li><p>Sokoban Content Validation。</p>
+</li>
+</ul>
+<hr />
+<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次 Sokoban / 推箱子范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<ul>
+<li><p>Sokoban Grid；</p>
+</li>
+<li><p>推箱子移动系统；</p>
+</li>
+<li><p>Sokoban Push；</p>
+</li>
+<li><p>Push Transaction；</p>
+</li>
+<li><p>推箱子Player Reachability；</p>
+</li>
+<li><p>Sokoban Stance；</p>
+</li>
+<li><p>Legal Push；</p>
+</li>
+<li><p>推箱子Deadlock；</p>
+</li>
+<li><p>Static Dead Square；</p>
+</li>
+<li><p>Sokoban Corner Deadlock；</p>
+</li>
+<li><p>Wall Deadlock；</p>
+</li>
+<li><p>Freeze Deadlock；</p>
+</li>
+<li><p>2×2 Deadlock；</p>
+</li>
+<li><p>Sokoban Corral；</p>
+</li>
+<li><p>Sokoban Goal Assignment；</p>
+</li>
+<li><p>Crate Goal Matching；</p>
+</li>
+<li><p>Goal Room Packing；</p>
+</li>
+<li><p>Reverse Pull；</p>
+</li>
+<li><p>Sokoban Reverse Reachability；</p>
+</li>
+<li><p>推箱子Undo；</p>
+</li>
+<li><p>Sokoban Push Undo；</p>
+</li>
+<li><p>推箱子Hint；</p>
+</li>
+<li><p>Sokoban Solver；</p>
+</li>
+<li><p>Push-based Search；</p>
+</li>
+<li><p>Sokoban State Hash；</p>
+</li>
+<li><p>Sokoban Heuristic；</p>
+</li>
+<li><p>Sokoban Level Validation；</p>
+</li>
+<li><p>Sokoban Difficulty；</p>
+</li>
+<li><p>Sokoban Level Editor；</p>
+</li>
+<li><p>Static Dead Overlay；</p>
+</li>
+<li><p>Legal Push Overlay；</p>
+</li>
+<li><p>Sokoban Procedural Generation；</p>
+</li>
+<li><p>Reverse Sokoban Generation；</p>
+</li>
+<li><p>Sokoban Replay；</p>
+</li>
+<li><p>Sokoban Save；</p>
+</li>
+<li><p>Sokoban Training；</p>
+</li>
+<li><p>Sokoban Debug。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入 <code>game-designs</code> 日报防重集合。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-09-04">2026-09-04</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">游戏作品、设计研究与研发实践。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/journal.html">研究</a>
+                <a href="../../pages/blog.html">文章</a>
+                <a href="../../pages/development.html">研发体系</a>
+                <a href="../../pages/engineering.html">Iris Engineering</a>
+                <a href="../../pages/framework.html">Sakura Framework</a>
+                <a href="../../pages/brand.html">品牌视觉</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
