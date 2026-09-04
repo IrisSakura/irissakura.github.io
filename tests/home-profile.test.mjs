@@ -22,7 +22,7 @@ test('public profile data owns the homepage identity and a local avatar', async 
   assert.equal(site.profile.nickname, 'IrisSakura');
   assert.equal(site.profile.role, '独立游戏开发者与游戏系统设计者');
   assert.ok(site.profile.introduction.length >= 30);
-  assert.match(site.profile.introduction, /游戏作品/u);
+  assert.match(site.profile.introduction, /做游戏/u);
   assert.match(site.profile.introduction, /设计研究/u);
   assert.match(site.profile.avatar, /^assets\/images\/profile\/.+\.jpe?g$/iu);
   assert.ok(site.profile.avatarAlt.includes('IrisSakura'));
@@ -132,4 +132,10 @@ test('homepage presents identity, flagship work and four visitor-interest paths 
   for (const developerFirstCopy of ['工程控制面', '显式授权', '受限执行', 'LATEST CONSUMER']) {
     assert.ok(!home.includes(developerFirstCopy), `homepage still leads with developer copy: ${developerFirstCopy}`);
   }
+  for (const repeatedCopy of ['这里不只有代码', '最近值得一读', '从这些研究主题开始', '尚未提供公开 Demo；内容与表现仍在持续完善']) {
+    assert.ok(!home.includes(repeatedCopy), `homepage still includes verbose copy: ${repeatedCopy}`);
+  }
+  const researchRows = [...home.matchAll(/<article class="research-row">([\s\S]*?)<\/article>/gu)];
+  assert.equal(researchRows.length, 3);
+  for (const [, row] of researchRows) assert.equal((row.match(/<p\b/gu) ?? []).length, 1);
 });

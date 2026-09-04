@@ -15,7 +15,7 @@ function escapeRegExp(value) {
 test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '独立游戏开发者与游戏系统设计者');
-  assert.equal(site.tagline, '游戏作品 · 设计研究 · 开发工具');
+  assert.equal(site.tagline, '游戏作品 · 设计研究 · 研发体系');
   assert.ok(site.independenceNotice.includes('仅代表本人'));
   assert.deepEqual(site.contacts.map((contact) => contact.id), ['work-email', 'work-qq']);
   const workEmail = site.contacts.find((contact) => contact.id === 'work-email');
@@ -359,8 +359,8 @@ test('primary navigation gives Iris Engineering and Sakura Framework one equal p
 
 test('home labels curated research honestly and README matches current routes and smoke scope', async () => {
   const [home, readme] = await Promise.all([readText('index.html'), readText('README.md')]);
-  assert.ok(home.includes('最近值得一读'));
-  assert.ok(home.includes('从这些研究主题开始'));
+  assert.ok(home.includes('最近更新'));
+  assert.ok(home.includes('研究主题'));
   assert.ok(!home.includes('LATEST RESEARCH'));
   assert.ok(readme.includes('/pages/brand.html'));
   assert.ok(readme.includes('一级 `Brand` 入口'));

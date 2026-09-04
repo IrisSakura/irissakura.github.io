@@ -322,7 +322,7 @@ const pageDefinitions = [
     file: 'index.html',
     key: 'home',
     coverKey: 'home',
-    title: 'IrisSakura | 游戏作品、设计研究与开发工具',
+    title: 'IrisSakura | 游戏作品、设计研究与研发体系',
     description: site.description,
     canonical: '/',
   },
@@ -331,7 +331,7 @@ const pageDefinitions = [
     key: 'development',
     brandModeKey: 'system',
     title: '研发体系 | Iris Engineering 与 Sakura Framework',
-    description: '从项目协作与工程推进，到游戏系统与框架复用，了解 Iris Engineering 与 Sakura Framework 两条平行、互补的研发路径。',
+    description: '了解 Iris Engineering 与 Sakura Framework 两条并列的研发路径。',
     canonical: '/pages/development.html',
     schemaType: 'CollectionPage'
   },
@@ -952,9 +952,8 @@ function renderHomeContent(projectData, journalData, siteData) {
                 <article class="research-row">
                     <p class="project-status">${escapeHtml(note.track)} · ${escapeHtml(note.updatedAt)}</p>
                     <h3>${escapeHtml(note.title)}</h3>
-                    <p>${escapeHtml(note.description)}</p>
                     <a href="pages/journal/${encodeURIComponent(note.id)}.html" class="project-detail-link">
-                        阅读研究主题<i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        阅读<i class="fas fa-arrow-right" aria-hidden="true"></i>
                     </a>
                 </article>`).join('');
 
@@ -970,8 +969,8 @@ function renderHomeContent(projectData, journalData, siteData) {
                         <p class="hero-description">${escapeHtml(profile.introduction)}</p>
                     </div>
                     <div class="hero-buttons">
-                        <a href="pages/game.html" class="btn btn-primary">先看《言铸之剑》</a>
-                        <a href="pages/portfolio.html" class="btn btn-secondary">浏览全部作品</a>
+                        <a href="pages/game.html" class="btn btn-primary">查看《言铸之剑》</a>
+                        <a href="pages/portfolio.html" class="btn btn-secondary">全部作品</a>
                     </div>
                 </div>
             </div>
@@ -984,15 +983,13 @@ function renderHomeContent(projectData, journalData, siteData) {
                 </div>
                 <div class="flagship-copy">
                     <p class="section-kicker">代表作 · ${escapeHtml(game.status)}</p>
-                    <h2>《${escapeHtml(game.title)}》：在战斗与选择中构筑每一局冒险</h2>
-                    <p class="flagship-lead">${escapeHtml(game.summary)}</p>
+                    <h2>《${escapeHtml(game.title)}》：战斗、选择与构筑</h2>
                     <dl class="flagship-facts">
-                        <div><dt>我的工作</dt><dd>${escapeHtml(game.role)}</dd></div>
-                        <div><dt>你会经历</dt><dd>选择房间 → 实时战斗 → 构筑成长 → 继续冒险</dd></div>
-                        <div><dt>特色体验</dt><dd>技能与潜能组合、每局不同的祝福、可延续的冒险进度</dd></div>
-                        <div><dt>当前状态</dt><dd>${escapeHtml(game.status)}，尚未提供公开 Demo；内容与表现仍在持续完善</dd></div>
+                        <div><dt>职责</dt><dd>${escapeHtml(game.role)}</dd></div>
+                        <div><dt>玩法</dt><dd>房间选择 → 实时战斗 → 构筑成长</dd></div>
+                        <div><dt>状态</dt><dd>${escapeHtml(game.status)} · 暂无公开 Demo</dd></div>
                     </dl>
-                    <a href="pages/game.html" class="btn btn-primary">了解玩法与制作思路</a>
+                    <a href="pages/game.html" class="btn btn-primary">查看作品</a>
                 </div>
             </div>
         </section>
@@ -1000,38 +997,37 @@ function renderHomeContent(projectData, journalData, siteData) {
         <section class="focus-section" data-brand-layout="editorial">
             <div class="container">
                 <div class="section-heading">
-                    <p class="section-kicker">按你的兴趣开始</p>
-                    <h2>这里不只有代码，也记录游戏如何被想出来、做出来</h2>
-                    <p>想先看作品、寻找设计灵感，还是了解开发过程？从你关心的方向继续浏览。</p>
+                    <p class="section-kicker">浏览</p>
+                    <h2>按兴趣选择</h2>
                 </div>
                 <div class="focus-grid">
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">01 · 作品与原型</p>
                         <strong>${projectData.projects.length}</strong>
-                        <h3>看看我做过什么</h3>
-                        <p>从独立游戏原型到桌面工具，按作品了解目标、过程、当前状态与仍待解决的问题。</p>
-                        <a href="pages/portfolio.html" class="text-link">浏览全部作品</a>
+                        <h3>游戏与工具</h3>
+                        <p>目标、成果与当前状态。</p>
+                        <a href="pages/portfolio.html" class="text-link">查看作品</a>
                     </article>
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">02 · 游戏设计研究</p>
                         <strong>${journalData.summary.gameDesignCount}</strong>
-                        <h3>寻找玩法与系统灵感</h3>
-                        <p>围绕战斗、成长、经营、叙事与关卡等主题，拆解游戏机制如何形成体验。</p>
-                        <a href="pages/journal.html" class="text-link">浏览设计研究</a>
+                        <h3>设计研究</h3>
+                        <p>玩法、系统与体验分析。</p>
+                        <a href="pages/journal.html" class="text-link">查看研究</a>
                     </article>
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">03 · 完整文章</p>
                         <strong>${journalData.summary.publishedBlogCount}</strong>
-                        <h3>阅读更完整的思考</h3>
-                        <p>把游戏系统、引擎机制与开发中的真实问题整理成可以独立阅读的长文。</p>
-                        <a href="pages/blog.html" class="text-link">阅读全部文章</a>
+                        <h3>开发文章</h3>
+                        <p>游戏系统、引擎与实践。</p>
+                        <a href="pages/blog.html" class="text-link">阅读文章</a>
                     </article>
                     <article class="focus-card" data-home-focus>
                         <p class="focus-index">04 · 研发体系</p>
                         <strong>2</strong>
-                        <h3>了解两条互补的开发路径</h3>
-                        <p>从项目协作与工程推进，到游戏系统与框架复用，分别认识 Iris Engineering 与 Sakura Framework。</p>
-                        <a href="pages/development.html" class="text-link">了解研发体系</a>
+                        <h3>研发体系</h3>
+                        <p>Iris Engineering 与 Sakura Framework。</p>
+                        <a href="pages/development.html" class="text-link">查看体系</a>
                     </article>
                 </div>
             </div>
@@ -1040,8 +1036,8 @@ function renderHomeContent(projectData, journalData, siteData) {
         <section class="research-section" data-brand-layout="editorial">
             <div class="container">
                 <div class="section-heading section-heading-row">
-                    <div><p class="section-kicker">最近值得一读</p><h2>从这些研究主题开始</h2></div>
-                    <a href="pages/journal.html" class="text-link">浏览全部主题</a>
+                    <div><p class="section-kicker">最近更新</p><h2>研究主题</h2></div>
+                    <a href="pages/journal.html" class="text-link">全部主题</a>
                 </div>
                 <div class="research-list">${researchCards}
                 </div>
@@ -1050,8 +1046,8 @@ function renderHomeContent(projectData, journalData, siteData) {
 
         <section class="public-cta" data-brand-layout="editorial">
             <div class="container public-cta-inner">
-                <div><p class="section-kicker">保持联系</p><h2>想聊游戏、系统设计或合作？</h2><p>你可以通过邮箱或 QQ 直接联系，也可以在 GitHub 与哔哩哔哩继续关注我的作品。</p></div>
-                <a href="pages/contact.html" class="btn btn-secondary">查看联系方式</a>
+                <div><p class="section-kicker">联系</p><h2>交流或合作</h2></div>
+                <a href="pages/contact.html" class="btn btn-secondary">联系方式</a>
             </div>
         </section>
     </section>`;
@@ -2232,52 +2228,31 @@ async function writeDevelopmentSource() {
     <header class="development-hero">
         <div class="container development-hero-inner">
             <p class="section-kicker">IRIS ENGINEERING × SAKURA FRAMEWORK</p>
-            <h1>同一个研发体系，两条互补路径</h1>
-            <p class="development-lead">Iris Engineering 关注复杂项目如何被理解、协作和持续推进；Sakura Framework 关注游戏系统如何被整理、复用和验证。它们彼此平行，共同服务真实作品。</p>
-            <a class="btn btn-primary" href="#development-paths">认识两条路径</a>
+            <h1>研发体系</h1>
+            <p class="development-lead">Iris Engineering 组织研发，Sakura Framework 沉淀游戏能力。两者并列，服务同一创作过程。</p>
+            <a class="btn btn-primary" href="#development-paths">查看两个方向</a>
         </div>
     </header>
     <section class="development-siblings" id="development-paths" aria-labelledby="development-paths-title">
         <div class="container">
             <div class="section-heading development-heading">
-                <p class="section-kicker">TWO EQUAL PATHS</p>
-                <h2 id="development-paths-title">按你想了解的问题继续</h2>
-                <p>两个入口处于同一层级：一个回答“项目怎样有序推进”，另一个回答“能力怎样稳定复用”。</p>
+                <p class="section-kicker">两个方向</p>
+                <h2 id="development-paths-title">按需选择</h2>
             </div>
             <div class="development-grid">
                 <article class="development-card development-card-iris">
-                    <p class="development-card-index">01 · 工程与项目协作</p>
+                    <p class="development-card-index">01 · 工程协作</p>
                     <h2>Iris Engineering</h2>
-                    <p>把项目事实、目标、边界和验证方式整理清楚，让复杂开发工作更容易被理解、协作和持续推进。</p>
-                    <ul>
-                        <li>看清项目当前状态与下一步</li>
-                        <li>理解决策、执行与验证怎样衔接</li>
-                        <li>了解自动化如何在明确边界内工作</li>
-                    </ul>
+                    <p>组织项目事实、决策、执行与验证。</p>
                     <a class="btn btn-secondary" href="engineering.html">进入 Iris Engineering</a>
                 </article>
                 <article class="development-card development-card-sakura">
-                    <p class="development-card-index">02 · 游戏框架与可复用能力</p>
+                    <p class="development-card-index">02 · 游戏框架</p>
                     <h2>Sakura Framework</h2>
-                    <p>把真实项目反复需要的游戏系统整理成可复用能力，减少从零搭建，也保留清晰的适用范围。</p>
-                    <ul>
-                        <li>浏览游戏运行时与玩法模块</li>
-                        <li>了解不同项目如何采用这些能力</li>
-                        <li>查看成熟度、示例与使用边界</li>
-                    </ul>
+                    <p>沉淀可复用的游戏系统与工具。</p>
                     <a class="btn btn-secondary" href="framework.html">进入 Sakura Framework</a>
                 </article>
             </div>
-        </div>
-    </section>
-    <section class="development-relationship" aria-labelledby="development-relationship-title">
-        <div class="container development-relationship-inner">
-            <div>
-                <p class="section-kicker">HOW THEY WORK TOGETHER</p>
-                <h2 id="development-relationship-title">不是上下级，而是不同层面的共同支撑</h2>
-            </div>
-            <p>Iris Engineering 让研发过程更清楚，Sakura Framework 让可复用能力更可靠。两条路径最终都回到同一件事：把游戏和工具做得更扎实。</p>
-            <a class="text-link" href="portfolio.html">查看它们服务的真实作品</a>
         </div>
     </section>
 </main>
