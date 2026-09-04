@@ -130,3 +130,18 @@ test('representative page heroes consume mode tokens instead of new page literal
     assert.ok(css.includes('var(--brand-mode-hero-text)'), 'page hero does not consume mode text');
   }
 });
+
+test('long-form detail routes share one patternless editorial canvas', async () => {
+  const css = await readText('style/iris-sakura.css');
+  const detailCanvas = css.match(/\.journal-detail-main,\s*\n\.blog-detail-main\s*\{(?<rules>[^}]*)\}/u);
+
+  assert.ok(detailCanvas?.groups?.rules, 'Blog and Journal details must share one reading canvas');
+  assert.ok(detailCanvas.groups.rules.includes('radial-gradient'), 'detail canvas must retain soft brand atmosphere');
+  assert.ok(detailCanvas.groups.rules.includes('linear-gradient'), 'detail canvas must include a stable paper base');
+  assert.ok(!detailCanvas.groups.rules.includes('repeating-'), 'detail canvas must not repeat stripes or grids');
+  assert.doesNotMatch(
+    css,
+    /\.journal-detail-main\s*\{[^}]*repeating-(?:linear|radial)-gradient/su,
+    'Journal detail must not restore the former notebook stripe background'
+  );
+});
