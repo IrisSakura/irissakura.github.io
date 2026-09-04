@@ -521,7 +521,7 @@ try {
   await frameworkEngineeringPage.goto(`${baseUrl}/pages/framework/reference.html`, { waitUntil: 'networkidle' });
   if (await frameworkEngineeringPage.locator('.framework-module-reference-card').count() !== frameworkModuleReference.modules.length) throw new Error('Module Reference does not expose every curated module');
   await frameworkEngineeringPage.close();
-  await desktop.evaluate(() => history.back());
+  await desktop.evaluate(() => history.go(-2));
   await desktop.waitForURL(`${baseUrl}/index.html`);
   await desktop.locator('.profile-identity').waitFor();
   if (await desktop.getAttribute('html', 'data-brand-mode') !== 'master') {
