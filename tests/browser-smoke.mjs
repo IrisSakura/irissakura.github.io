@@ -336,6 +336,56 @@ try {
   await responsivePage.close();
   await responsiveContext.close();
 
+  const resiliencePage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await keepSmokeTestLocal(resiliencePage);
+  await resiliencePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  await resiliencePage.evaluate(() => {
+    document.documentElement.dataset.smokeDocument = 'stylesheet-fallback';
+  });
+  let failedPortfolioStylesheet = false;
+  await resiliencePage.route('**/style/portfolio.css', (route) => {
+    if (!failedPortfolioStylesheet) {
+      failedPortfolioStylesheet = true;
+      return route.abort('failed');
+    }
+    return route.continue();
+  });
+  await resiliencePage.locator('.nav-menu').getByRole('link', { name: '作品', exact: true }).click();
+  await resiliencePage.waitForURL(`${baseUrl}/pages/portfolio.html`);
+  await resiliencePage.waitForLoadState('networkidle');
+  if (await resiliencePage.getAttribute('html', 'data-smoke-document') === 'stylesheet-fallback') {
+    throw new Error('stylesheet failure committed a partially styled soft-navigation response');
+  }
+  const recoveredPortfolioPadding = await resiliencePage.locator('.portfolio-header').evaluate((element) => (
+    Number.parseFloat(getComputedStyle(element).paddingTop)
+  ));
+  if (recoveredPortfolioPadding < 80) {
+    throw new Error('full-navigation stylesheet fallback did not recover the Portfolio layout');
+  }
+
+  await resiliencePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  await resiliencePage.evaluate(() => {
+    const link = document.createElement('a');
+    link.href = '/pages/about.html';
+    link.textContent = 'Compatibility route';
+    link.dataset.compatibilityRoute = '';
+    document.body.append(link);
+  });
+  await resiliencePage.locator('[data-compatibility-route]').click();
+  await resiliencePage.waitForURL(`${baseUrl}/index.html`);
+  if (await resiliencePage.getByRole('heading', { level: 1, name: '关于内容已整合到首页' }).count() !== 0) {
+    throw new Error('soft navigation suppressed a compatibility-route redirect');
+  }
+
+  const fragmentErrors = [];
+  resiliencePage.on('pageerror', (error) => fragmentErrors.push(error.message));
+  await resiliencePage.goto(`${baseUrl}/pages/journal.html#%`, { waitUntil: 'networkidle' });
+  await resiliencePage.locator('[data-content-search-results] .content-search-result').first().waitFor({ state: 'visible' });
+  if (fragmentErrors.some((message) => message.includes('URI malformed'))) {
+    throw new Error('malformed fragment aborted page enhancement');
+  }
+  await resiliencePage.close();
+
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await keepSmokeTestLocal(desktop);
   for (const route of indexedRoutes) {
@@ -715,6 +765,14 @@ try {
     : `找到 ${godotSearchCount} 项。`;
   if (await desktop.locator('[data-content-search-status]').innerText() !== expectedGodotStatus) {
     throw new Error('Journal keyword search does not announce its filtered result count');
+  }
+  const searchUrlBeforeSubmit = desktop.url();
+  await queryInput.press('Enter');
+  if (desktop.url() !== searchUrlBeforeSubmit || await queryInput.inputValue() !== 'Godot') {
+    throw new Error('submitting the Journal search reloaded or cleared the current filters');
+  }
+  if (await searchResults.count() !== Math.min(godotSearchCount, 12)) {
+    throw new Error('submitting the Journal search changed the filtered result set');
   }
   await queryInput.fill('');
   await desktop.locator('[data-content-search-engine]').selectOption('unity');

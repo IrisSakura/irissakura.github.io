@@ -242,6 +242,10 @@ class SiteShell {
             const nextDocument = new DOMParser().parseFromString(await response.text(), 'text/html');
             const nextMain = nextDocument.querySelector<HTMLElement>('main#main-content');
             if (!nextMain) throw new Error('navigation response is missing main#main-content');
+            if (nextDocument.querySelector('meta[http-equiv="refresh" i]')) {
+                location.assign(destination.href);
+                return;
+            }
 
             await this.syncLocalStylesheets(nextDocument, destination, controller.signal);
             if (controller.signal.aborted) return;
@@ -346,9 +350,13 @@ class SiteShell {
         link.disabled = source.disabled;
         current.set(href, link);
 
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             link.addEventListener('load', () => resolve(), { once: true });
-            link.addEventListener('error', () => resolve(), { once: true });
+            link.addEventListener('error', () => {
+                current.delete(href);
+                link.remove();
+                reject(new Error(`failed to load stylesheet: ${href}`));
+            }, { once: true });
             document.head.append(link);
         });
     }
@@ -424,8 +432,8 @@ class SiteShell {
 
     private restoreNavigationPosition(destination: URL): void {
         if (destination.hash) {
-            const id = decodeURIComponent(destination.hash.slice(1));
-            window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
+            const id = this.decodeFragment(destination.hash);
+            if (id) window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
             return;
         }
         window.scrollTo(0, 0);
@@ -587,6 +595,10 @@ class SiteShell {
                     : `找到 ${filtered.length} 项。`;
             };
 
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                render();
+            });
             form.addEventListener('input', render);
             form.addEventListener('change', render);
             form.addEventListener('reset', () => {
@@ -664,8 +676,8 @@ class SiteShell {
         const targets = links.flatMap((link) => {
             const href = link.getAttribute('href') ?? '';
             if (!href.startsWith('#')) return [];
-            const id = decodeURIComponent(href.slice(1));
-            const target = document.getElementById(id);
+            const id = this.decodeFragment(href);
+            const target = id ? document.getElementById(id) : null;
             return target ? [{ id, link, target }] : [];
         });
         if (targets.length === 0) return;
@@ -710,7 +722,7 @@ class SiteShell {
         window.addEventListener('resize', scheduleProgress, { signal: controller.signal });
         updateProgress();
 
-        const initialId = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+        const initialId = this.decodeFragment(location.hash);
         setActive(targets.some((entry) => entry.id === initialId) ? initialId : targets[0].id);
         if (!('IntersectionObserver' in window)) return;
 
@@ -729,6 +741,16 @@ class SiteShell {
         });
         this.pageIndexObserver = observer;
         targets.forEach((entry) => observer.observe(entry.target));
+    }
+
+    private decodeFragment(hash: string): string {
+        const value = hash.startsWith('#') ? hash.slice(1) : hash;
+        if (!value) return '';
+        try {
+            return decodeURIComponent(value);
+        } catch {
+            return '';
+        }
     }
 
     private setupMotion(): void {

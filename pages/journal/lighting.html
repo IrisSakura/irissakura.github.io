@@ -177,7 +177,7 @@
 我们必须继续用同等成本制造全新内容。
 </code></pre>
 <p>实际上，在“生产新内容”和“让旧内容继续产生新意义”之间，还存在一整层设计空间。</p>
-<h2 id="先说结论低成本-context-可以放大高成本-gameplay-content但不能替代-gameplay-content">先说结论：低成本 Context 可以放大高成本 Gameplay Content，但不能替代 Gameplay Content</h2><p><strong>内容情境杠杆（后文简称“同一份内容，因为世界状态不同而重新变得值得玩”）</strong>：在不重做底层战斗、敌人和地图资产的情况下，通过共享世界状态、限时目标、任务组合、人口热点和叙事解释，改变已有内容当前的战略意义、社会意义或进入理由。</p>
+<h3 id="先说结论低成本-context-可以放大高成本-gameplay-content但不能替代-gameplay-content">先说结论：低成本 Context 可以放大高成本 Gameplay Content，但不能替代 Gameplay Content</h3><p><strong>内容情境杠杆（后文简称“同一份内容，因为世界状态不同而重新变得值得玩”）</strong>：在不重做底层战斗、敌人和地图资产的情况下，通过共享世界状态、限时目标、任务组合、人口热点和叙事解释，改变已有内容当前的战略意义、社会意义或进入理由。</p>
 <p>可以把内容生产结构先压缩为：</p>
 <pre><code class="language-mermaid">flowchart TD
     A["昂贵 Gameplay Primitive&lt;br/&gt;Enemy / Biome / Mission Grammar / Combat"] --&gt; B["Reusable Composition&lt;br/&gt;Objective / Modifier / Difficulty / Operation"]
@@ -200,8 +200,8 @@ Gameplay Content。
 <p>它不是：</p>
 <pre><code class="language-text">不用再做新 Gameplay。
 </code></pre>
-<h2 id="内容生产真正需要区分-primitive-与-context">内容生产真正需要区分 Primitive 与 Context</h2><p>长期游戏中的内容可以粗略分成两大层。</p>
-<h3 id="gameplay-primitive">Gameplay Primitive</h3><p><strong>玩法原语（即“真正改变玩家怎么操作和怎么解决问题的昂贵内容”）</strong>。</p>
+<h3 id="内容生产真正需要区分-primitive-与-context">内容生产真正需要区分 Primitive 与 Context</h3><p>长期游戏中的内容可以粗略分成两大层。</p>
+<h4 id="gameplay-primitive">Gameplay Primitive</h4><p><strong>玩法原语（即“真正改变玩家怎么操作和怎么解决问题的昂贵内容”）</strong>。</p>
 <p>例如：</p>
 <ul>
 <li>新敌人行为；</li>
@@ -216,7 +216,7 @@ Gameplay Content。
 <pre><code class="language-text">玩家具体怎么玩。
 </code></pre>
 <p>通常也是生产和 QA 成本最高的一层。</p>
-<h3 id="gameplay-context">Gameplay Context</h3><p><strong>玩法情境（即“今天为什么要使用这些已有玩法原语”）</strong>。</p>
+<h4 id="gameplay-context">Gameplay Context</h4><p><strong>玩法情境（即“今天为什么要使用这些已有玩法原语”）</strong>。</p>
 <p>例如：</p>
 <ul>
 <li>当前哪片区域处于危机；</li>
@@ -230,7 +230,7 @@ Gameplay Content。
 现在为什么值得做。
 </code></pre>
 <p>这两层不能互相冒充。</p>
-<h2 id="content-leverage-architecture-关注的是昂贵内容的复用倍率">Content Leverage Architecture 关注的是昂贵内容的复用倍率</h2><p>**内容杠杆架构（即“昂贵内容做一次，尽量让上层系统产生很多次新的使用理由”）**可以理解成：</p>
+<h3 id="content-leverage-architecture-关注的是昂贵内容的复用倍率">Content Leverage Architecture 关注的是昂贵内容的复用倍率</h3><p>**内容杠杆架构（即“昂贵内容做一次，尽量让上层系统产生很多次新的使用理由”）**可以理解成：</p>
 <pre><code class="language-text">Expensive Primitive
 ×
 Composition Variety
@@ -264,7 +264,7 @@ Effective Content Surface。
 <p>还应该问：</p>
 <pre><code class="language-text">这项昂贵内容以后能进入多少种合法组合？
 </code></pre>
-<h2 id="existing-content-recontextualization-rate-是一种值得观察的内容指标">Existing Content Recontextualization Rate 是一种值得观察的内容指标</h2><p>**内容再语境化率（即“同一项旧内容能被多少个新的合法 Context 重新赋予意义”）**不是一个必须精确量化的产品 KPI，但它很适合帮助团队思考内容架构。</p>
+<h3 id="existing-content-recontextualization-rate-是一种值得观察的内容指标">Existing Content Recontextualization Rate 是一种值得观察的内容指标</h3><p>**内容再语境化率（即“同一项旧内容能被多少个新的合法 Context 重新赋予意义”）**不是一个必须精确量化的产品 KPI，但它很适合帮助团队思考内容架构。</p>
 <p>例如一个 Biome 只支持：</p>
 <pre><code class="language-text">普通歼灭任务。
 </code></pre>
@@ -286,7 +286,7 @@ Effective Content Surface。
 <blockquote>
 <p>在底层内容仍然保持足够游戏价值时，提高它被不同系统重新解释的能力。</p>
 </blockquote>
-<h2 id="所有内容杠杆都建立在一个前提上核心玩法本身值得重复">所有内容杠杆都建立在一个前提上：核心玩法本身值得重复</h2><p>这是最重要的适用边界。</p>
+<h3 id="所有内容杠杆都建立在一个前提上核心玩法本身值得重复">所有内容杠杆都建立在一个前提上：核心玩法本身值得重复</h3><p>这是最重要的适用边界。</p>
 <p>如果一个 PvE Mission：</p>
 <pre><code class="language-text">第一次就不好玩，
 </code></pre>
@@ -316,7 +316,7 @@ Context Multiplier。
 <blockquote>
 <p><strong>Live Narrative 是乘数层，不是底层 Gameplay 的替代品。</strong></p>
 </blockquote>
-<h2 id="systemic-drama-可以减少对脚本戏剧的需求">Systemic Drama 可以减少对脚本戏剧的需求</h2><p>长期合作 PvE 还有一个非常重要的内容杠杆来源：</p>
+<h3 id="systemic-drama-可以减少对脚本戏剧的需求">Systemic Drama 可以减少对脚本戏剧的需求</h3><p>长期合作 PvE 还有一个非常重要的内容杠杆来源：</p>
 <p><strong>系统性戏剧（即“设计师没有预写这件事，但系统自己产生了一段值得记住的故事”）</strong>。</p>
 <p>例如：</p>
 <ul>
@@ -351,7 +351,7 @@ Player Mistakes。
 </code></pre>
 <p>这对内容型游戏尤其重要。</p>
 <p>因为系统性变化能够让相同 Mission Grammar 产生不同记忆。</p>
-<h2 id="但-systemic-variation-同样存在耗尽速度">但 Systemic Variation 同样存在耗尽速度</h2><p>玩家第一次遇到：</p>
+<h3 id="但-systemic-variation-同样存在耗尽速度">但 Systemic Variation 同样存在耗尽速度</h3><p>玩家第一次遇到：</p>
 <pre><code class="language-text">队友意外制造大型事故，
 </code></pre>
 <p>可能非常有记忆点。</p>
@@ -372,7 +372,7 @@ Player Mistakes。
 新 Mission Grammar
 </code></pre>
 <p>的需求。</p>
-<h2 id="一场-match-可以同时输出个人进度和共享世界状态">一场 Match 可以同时输出个人进度和共享世界状态</h2><p>长期 Context 最有价值的结构之一，是让一场普通对局拥有两个不同结果出口。</p>
+<h3 id="一场-match-可以同时输出个人进度和共享世界状态">一场 Match 可以同时输出个人进度和共享世界状态</h3><p>长期 Context 最有价值的结构之一，是让一场普通对局拥有两个不同结果出口。</p>
 <pre><code class="language-mermaid">flowchart LR
     A["Match Result"] --&gt; B["Personal Result"]
     A --&gt; C["Shared Contribution"]
@@ -402,7 +402,7 @@ Player Mistakes。
 <pre><code class="language-text">所有留存只依赖一条装备成长线
 </code></pre>
 <p>更加有弹性。</p>
-<h2 id="shared-contribution-不是普通货币">Shared Contribution 不是普通货币</h2><p>**叙事资源（即“它不能被我存进背包，却能改变大家共同面对的世界状态”）**是一种特殊资源。</p>
+<h3 id="shared-contribution-不是普通货币">Shared Contribution 不是普通货币</h3><p>**叙事资源（即“它不能被我存进背包，却能改变大家共同面对的世界状态”）**是一种特殊资源。</p>
 <p>传统 Currency：</p>
 <pre><code class="language-text">属于玩家
 可以积累
@@ -424,7 +424,7 @@ Player Mistakes。
 </blockquote>
 <p>因此这类数据不应该为了“所有资源统一”硬塞进 Inventory System。</p>
 <p>它属于另一种状态域。</p>
-<h2 id="shared-campaign-state-是一种社会放大器">Shared Campaign State 是一种社会放大器</h2><p>单局里，一个玩家真正改变的数值可能非常小。</p>
+<h3 id="shared-campaign-state-是一种社会放大器">Shared Campaign State 是一种社会放大器</h3><p>单局里，一个玩家真正改变的数值可能非常小。</p>
 <p>例如：</p>
 <pre><code class="language-text">Contribution += 0.00003%。
 </code></pre>
@@ -451,7 +451,7 @@ Player Mistakes。
 <p>而是：</p>
 <pre><code class="language-text">每个人都能明确看见自己的行为属于哪一次共同状态变化。
 </code></pre>
-<h2 id="全局状态最好使用空间隐喻而不是活动任务表">全局状态最好使用空间隐喻，而不是活动任务表</h2><p>后台运营数据完全可以长成：</p>
+<h3 id="全局状态最好使用空间隐喻而不是活动任务表">全局状态最好使用空间隐喻，而不是活动任务表</h3><p>后台运营数据完全可以长成：</p>
 <pre><code class="language-text">Event #472
 Goal:
 Complete Mission Type B 4,000,000 times。
@@ -478,7 +478,7 @@ Control State
 <p>**空间化叙事（即“把后台运营状态翻译成玩家能够理解的世界地理变化”）**能够把抽象 KPI 转成世界故事。</p>
 <p>这里真正改变的可能仍然只是 Server State。</p>
 <p>但 UX 表达改变了玩家理解它的方式。</p>
-<h2 id="这不是换皮前提是状态真的拥有后果">这不是“换皮”，前提是状态真的拥有后果</h2><p>如果：</p>
+<h3 id="这不是换皮前提是状态真的拥有后果">这不是“换皮”，前提是状态真的拥有后果</h3><p>如果：</p>
 <pre><code class="language-text">星球失守
 </code></pre>
 <p>最终没有任何实际差异。</p>
@@ -501,7 +501,7 @@ Control State
 后续状态
 之间存在可信关系。
 </code></pre>
-<h2 id="agency-illusion-collapse-是共享战役最大的风险之一">Agency Illusion Collapse 是共享战役最大的风险之一</h2><p>**行动幻觉崩塌（即“玩家开始认为不管做什么，结果反正早就决定了”）**一旦出现，</p>
+<h3 id="agency-illusion-collapse-是共享战役最大的风险之一">Agency Illusion Collapse 是共享战役最大的风险之一</h3><p>**行动幻觉崩塌（即“玩家开始认为不管做什么，结果反正早就决定了”）**一旦出现，</p>
 <p>整个宏观层最重要的幻想会失效。</p>
 <p>原本：</p>
 <pre><code class="language-text">我在参与战争。
@@ -521,7 +521,7 @@ Control State
 玩家结果
 仍然是正式输入。
 </code></pre>
-<h2 id="human-in-the-loop-比完全自动模拟更适合很多-live-campaign">Human-in-the-loop 比完全自动模拟更适合很多 Live Campaign</h2><p>**人机联合运营（即“系统负责持续模拟和统计，运营人员只在明确控制面进行调节”）**比两个极端更实际。</p>
+<h3 id="human-in-the-loop-比完全自动模拟更适合很多-live-campaign">Human-in-the-loop 比完全自动模拟更适合很多 Live Campaign</h3><p>**人机联合运营（即“系统负责持续模拟和统计，运营人员只在明确控制面进行调节”）**比两个极端更实际。</p>
 <p>极端 A：</p>
 <pre><code class="language-text">所有 Campaign 完全脚本化。
 </code></pre>
@@ -561,7 +561,7 @@ Bounded Operator Controls。
 </code></pre>
 <p>这不是运营能力。</p>
 <p>而是生产风险。</p>
-<h2 id="live-operator-工具必须成为正式产品基础设施">Live Operator 工具必须成为正式产品基础设施</h2><p>一旦 Live Campaign 依赖人工运营，</p>
+<h3 id="live-operator-工具必须成为正式产品基础设施">Live Operator 工具必须成为正式产品基础设施</h3><p>一旦 Live Campaign 依赖人工运营，</p>
 <p>Operator Console 就不再是临时后台页面。</p>
 <p>它至少需要回答：</p>
 <pre><code class="language-text">现在世界处于什么状态？
@@ -588,7 +588,7 @@ Permission。
 </code></pre>
 <p>如果产品需要三年运营，</p>
 <p>这些工具的长期价值往往高于某一次活动脚本。</p>
-<h2 id="major-objective-还承担-population-routing">Major Objective 还承担 Population Routing</h2><p>全局目标还有一个非常现实的产品职责：</p>
+<h3 id="major-objective-还承担-population-routing">Major Objective 还承担 Population Routing</h3><p>全局目标还有一个非常现实的产品职责：</p>
 <p><strong>人口路由（即“把原本分散在大量可选内容中的玩家导向有限热点”）</strong>。</p>
 <p>假设产品允许玩家自由选择：</p>
 <pre><code class="language-text">10 个区域
@@ -614,7 +614,7 @@ Permission。
 <p>它还是：</p>
 <pre><code class="language-text">Population Router。
 </code></pre>
-<h2 id="population-routing-不能变成唯一正确入口">Population Routing 不能变成唯一正确入口</h2><p>如果热点奖励高到：</p>
+<h3 id="population-routing-不能变成唯一正确入口">Population Routing 不能变成唯一正确入口</h3><p>如果热点奖励高到：</p>
 <pre><code class="language-text">不去热点
 =
 显著浪费时间，
@@ -637,7 +637,7 @@ Permission。
 <p>而不是因为：</p>
 <pre><code class="language-text">其他地方被系统性惩罚。
 </code></pre>
-<h2 id="人口规模必须进入全局进度公式">人口规模必须进入全局进度公式</h2><p>共享进度系统有一个非常危险的正反馈。</p>
+<h3 id="人口规模必须进入全局进度公式">人口规模必须进入全局进度公式</h3><p>共享进度系统有一个非常危险的正反馈。</p>
 <p>假设公式固定：</p>
 <pre><code class="language-text">需要 1,000,000 次完成。
 </code></pre>
@@ -677,7 +677,7 @@ Permission。
 <pre><code class="language-text">历史高峰人口
 </code></pre>
 <p>永久写死未来世界难度。</p>
-<h2 id="population-normalization-也不能删除真实结果">Population Normalization 也不能删除真实结果</h2><p>如果系统过度修正：</p>
+<h3 id="population-normalization-也不能删除真实结果">Population Normalization 也不能删除真实结果</h3><p>如果系统过度修正：</p>
 <pre><code class="language-text">今天只有 1000 人
 →
 每个人自动算 1000 倍贡献。
@@ -695,7 +695,7 @@ Permission。
 </code></pre>
 <p>这仍然是一项设计权衡。</p>
 <p>并不存在一条所有产品都能复制的固定公式。</p>
-<h2 id="retention-layer-与-monetization-layer-不必是同一个系统">Retention Layer 与 Monetization Layer 不必是同一个系统</h2><p>一个很健康的长期结构是：</p>
+<h3 id="retention-layer-与-monetization-layer-不必是同一个系统">Retention Layer 与 Monetization Layer 不必是同一个系统</h3><p>一个很健康的长期结构是：</p>
 <pre><code class="language-text">Live Campaign
 →
 负责 Return Motivation
@@ -736,7 +736,7 @@ Gameplay Options
 →
 必须购买本期内容。
 </code></pre>
-<h2 id="evergreen-catalog-会把-fomo-债务换成-balance-surface">Evergreen Catalog 会把 FOMO 债务换成 Balance Surface</h2><p>如果长期商品不会快速过期，</p>
+<h3 id="evergreen-catalog-会把-fomo-债务换成-balance-surface">Evergreen Catalog 会把 FOMO 债务换成 Balance Surface</h3><p>如果长期商品不会快速过期，</p>
 <p>玩家回归压力通常更低。</p>
 <p>旧内容也能继续保持销售和消费价值。</p>
 <p>但这种结构会产生另一笔债：</p>
@@ -762,7 +762,7 @@ Interaction Testing Surface Growth。
 <p>的一部分成本转化成：</p>
 <pre><code class="language-text">长期 Balance / QA Maintenance。
 </code></pre>
-<h2 id="content-throughput-应按生产成本分层">Content Throughput 应按生产成本分层</h2><p>长期内容团队最危险的目标之一是：</p>
+<h3 id="content-throughput-应按生产成本分层">Content Throughput 应按生产成本分层</h3><p>长期内容团队最危险的目标之一是：</p>
 <pre><code class="language-text">每周都要有新内容。
 </code></pre>
 <p>这句话没有区分：</p>
@@ -813,7 +813,7 @@ Interaction Testing Surface Growth。
 <li>复制内容；</li>
 <li>扩大 QA 风险。</li>
 </ul>
-<h2 id="tier-a-的存在就是为了摊销-tier-c">Tier A 的存在，就是为了摊销 Tier C</h2><p>一个高成本 Enemy 做完以后，</p>
+<h3 id="tier-a-的存在就是为了摊销-tier-c">Tier A 的存在，就是为了摊销 Tier C</h3><p>一个高成本 Enemy 做完以后，</p>
 <p>Tier A / B 可以让它进入：</p>
 <ul>
 <li>不同区域；</li>
@@ -842,7 +842,7 @@ Combination Space
 <pre><code class="language-text">重复组合。
 </code></pre>
 <p>而是两层按照不同节奏共同增长。</p>
-<h2 id="content-production-bottleneck-通常不在运营文案">Content Production Bottleneck 通常不在运营文案</h2><p>写一个新的全局目标文本，通常不是最昂贵的工作。</p>
+<h3 id="content-production-bottleneck-通常不在运营文案">Content Production Bottleneck 通常不在运营文案</h3><p>写一个新的全局目标文本，通常不是最昂贵的工作。</p>
 <p>真正长期的高成本更接近：</p>
 <pre><code class="language-text">新 Enemy Behavior
 新 Mission Grammar
@@ -863,7 +863,7 @@ Cross-platform QA。
 <pre><code class="language-text">现有 Primitive
 在扩展之间能够被多少个有效 Context 重组？
 </code></pre>
-<h2 id="mission-grammar-是-context-无法替代的硬底座">Mission Grammar 是 Context 无法替代的硬底座</h2><p>**任务语法（即“玩家进入关卡以后实际反复执行的动作关系”）**包括：</p>
+<h3 id="mission-grammar-是-context-无法替代的硬底座">Mission Grammar 是 Context 无法替代的硬底座</h3><p>**任务语法（即“玩家进入关卡以后实际反复执行的动作关系”）**包括：</p>
 <ul>
 <li>进入；</li>
 <li>移动；</li>
@@ -892,7 +892,7 @@ Tool Interaction
 <p>叙事重新解释的边际价值会不断下降。</p>
 <p>这就是：</p>
 <p><strong>Mission Grammar Exhaustion（即“活动名字还在变化，但玩家实际执行的句子已经全部读过很多遍”）</strong>。</p>
-<h2 id="content-meaning-比-content-asset-更容易先耗尽">Content Meaning 比 Content Asset 更容易先耗尽</h2><p>长期运营时，资产不一定已经过时。</p>
+<h3 id="content-meaning-比-content-asset-更容易先耗尽">Content Meaning 比 Content Asset 更容易先耗尽</h3><p>长期运营时，资产不一定已经过时。</p>
 <p>一张地图：</p>
 <pre><code class="language-text">美术仍然漂亮
 性能仍然正常
@@ -922,7 +922,7 @@ Tool Interaction
 <p>还需要持续生产：</p>
 <pre><code class="language-text">New Meaning。
 </code></pre>
-<h2 id="new-meaning-不等于-new-text">New Meaning 不等于 New Text</h2><p>这是内容运营非常关键的一项区分。</p>
+<h3 id="new-meaning-不等于-new-text">New Meaning 不等于 New Text</h3><p>这是内容运营非常关键的一项区分。</p>
 <p>如果一次新活动只改变：</p>
 <pre><code class="language-text">任务标题
 背景文案
@@ -944,7 +944,7 @@ Mission 出现概率变化
 <pre><code class="language-text">Gameplay Change。
 </code></pre>
 <p>否则 Live Narrative 很容易退化成活动文案流水线。</p>
-<h2 id="campaign-rule-mutation-比纯目标文本更有长期价值">Campaign Rule Mutation 比纯目标文本更有长期价值</h2><p><strong>战役规则变异（即“全局世界状态不只告诉你去哪打，还真正改变在那里怎样打”）</strong></p>
+<h3 id="campaign-rule-mutation-比纯目标文本更有长期价值">Campaign Rule Mutation 比纯目标文本更有长期价值</h3><p><strong>战役规则变异（即“全局世界状态不只告诉你去哪打，还真正改变在那里怎样打”）</strong></p>
 <p>是 Context Layer 从：</p>
 <pre><code class="language-text">叙事包装
 </code></pre>
@@ -967,7 +967,7 @@ Mission 出现概率变化
 <pre><code class="language-text">同样任务
 只是进度条换了名字。
 </code></pre>
-<h2 id="但-live-context-不能无限制造例外规则">但 Live Context 不能无限制造例外规则</h2><p>这里又存在另一个风险。</p>
+<h3 id="但-live-context-不能无限制造例外规则">但 Live Context 不能无限制造例外规则</h3><p>这里又存在另一个风险。</p>
 <p>如果每一次 Campaign 都通过：</p>
 <pre><code class="language-text">临时新增一套特殊规则
 </code></pre>
@@ -990,7 +990,7 @@ Resource Rule。
 </code></pre>
 <p>Live Config 主要组合这些现成能力。</p>
 <p>只有真正值得长期复用的新机制，才进入基础系统。</p>
-<h2 id="content-leverage-的上限由-gameplay-grammar-决定">Content Leverage 的上限由 Gameplay Grammar 决定</h2><p>可以把整个关系粗略理解为：</p>
+<h3 id="content-leverage-的上限由-gameplay-grammar-决定">Content Leverage 的上限由 Gameplay Grammar 决定</h3><p>可以把整个关系粗略理解为：</p>
 <pre><code class="language-text">Useful Content Lifetime
 ≈
 Gameplay Grammar Depth
@@ -1001,9 +1001,9 @@ Context Reinterpretation。
 </code></pre>
 <p>这同样不是正式公式。</p>
 <p>它强调三个不同来源：</p>
-<h3 id="gameplay-grammar">Gameplay Grammar</h3><p>玩家真正能够执行多少种有区别的行为。</p>
-<h3 id="systemic-variation">Systemic Variation</h3><p>同样行为在系统交互中能产生多少变化。</p>
-<h3 id="context-reinterpretation">Context Reinterpretation</h3><p>为什么此刻这些行为值得执行。</p>
+<h4 id="gameplay-grammar">Gameplay Grammar</h4><p>玩家真正能够执行多少种有区别的行为。</p>
+<h4 id="systemic-variation">Systemic Variation</h4><p>同样行为在系统交互中能产生多少变化。</p>
+<h4 id="context-reinterpretation">Context Reinterpretation</h4><p>为什么此刻这些行为值得执行。</p>
 <p>三层缺一不可。</p>
 <p>如果 Grammar 太浅：</p>
 <pre><code class="language-text">Context 很快耗尽。
@@ -1011,7 +1011,7 @@ Context Reinterpretation。
 <p>如果 Context 完全不变：</p>
 <pre><code class="language-text">高质量 Grammar 也可能缺乏长期进入理由。
 </code></pre>
-<h2 id="内容杠杆最大的风险是被拿来掩盖内容枯竭">内容杠杆最大的风险，是被拿来掩盖内容枯竭</h2><p>当团队 Content Throughput 开始下降时，</p>
+<h3 id="内容杠杆最大的风险是被拿来掩盖内容枯竭">内容杠杆最大的风险，是被拿来掩盖内容枯竭</h3><p>当团队 Content Throughput 开始下降时，</p>
 <p>Context Layer 很容易变成遮羞布：</p>
 <pre><code class="language-text">没有新玩法
 →
@@ -1036,7 +1036,7 @@ Context Reinterpretation。
 <p>这次 LiveOps 是在重新解释仍然有生命力的内容，还是在掩盖底层内容已经耗尽？</p>
 </blockquote>
 <p>这是两个完全不同的问题。</p>
-<h2 id="一个简单的-context-review-可以检查四层变化">一个简单的 Context Review 可以检查四层变化</h2><p>每次准备新的社区 Campaign 时，可以检查：</p>
+<h3 id="一个简单的-context-review-可以检查四层变化">一个简单的 Context Review 可以检查四层变化</h3><p>每次准备新的社区 Campaign 时，可以检查：</p>
 <table>
 <thead>
 <tr>
@@ -1069,18 +1069,18 @@ Context Reinterpretation。
 <pre><code class="language-text">Narrative，
 </code></pre>
 <p>就需要警惕 Meaning Exhaustion。</p>
-<h2 id="内容杠杆也需要自己的产品指标">内容杠杆也需要自己的产品指标</h2><p>除了 DAU 和 Completion Rate，可以观察：</p>
-<h3 id="voluntary-participation">Voluntary Participation</h3><p>不考虑强奖励以后，玩家是否仍愿意参与当前 Campaign。</p>
-<h3 id="population-concentration">Population Concentration</h3><p>全局目标是否成功形成热点，而没有把其他正常内容完全挤死。</p>
-<h3 id="recontextualization-coverage">Recontextualization Coverage</h3><p>旧地图、旧敌人、旧任务有多少真正被新 Context 重新激活。</p>
-<h3 id="context-repeat-rate">Context Repeat Rate</h3><p>同一种“危机/防守/解放”框架在短期内重复了多少次。</p>
-<h3 id="mission-grammar-diversity">Mission Grammar Diversity</h3><p>玩家实际执行的任务结构是否仍在变化。</p>
-<h3 id="context-to-primitive-ratio">Context-to-Primitive Ratio</h3><p>一项高成本新 Primitive 后续被多少组 Context 有意义地复用。</p>
+<h3 id="内容杠杆也需要自己的产品指标">内容杠杆也需要自己的产品指标</h3><p>除了 DAU 和 Completion Rate，可以观察：</p>
+<h4 id="voluntary-participation">Voluntary Participation</h4><p>不考虑强奖励以后，玩家是否仍愿意参与当前 Campaign。</p>
+<h4 id="population-concentration">Population Concentration</h4><p>全局目标是否成功形成热点，而没有把其他正常内容完全挤死。</p>
+<h4 id="recontextualization-coverage">Recontextualization Coverage</h4><p>旧地图、旧敌人、旧任务有多少真正被新 Context 重新激活。</p>
+<h4 id="context-repeat-rate">Context Repeat Rate</h4><p>同一种“危机/防守/解放”框架在短期内重复了多少次。</p>
+<h4 id="mission-grammar-diversity">Mission Grammar Diversity</h4><p>玩家实际执行的任务结构是否仍在变化。</p>
+<h4 id="context-to-primitive-ratio">Context-to-Primitive Ratio</h4><p>一项高成本新 Primitive 后续被多少组 Context 有意义地复用。</p>
 <p>这些指标都只是分析工具。</p>
 <p>重点是让团队不再只看：</p>
 <pre><code class="language-text">本周活动开了多少。
 </code></pre>
-<h2 id="context-层也需要技术上的唯一真相源">Context 层也需要技术上的唯一真相源</h2><p>如果 Campaign State 同时存在：</p>
+<h3 id="context-层也需要技术上的唯一真相源">Context 层也需要技术上的唯一真相源</h3><p>如果 Campaign State 同时存在：</p>
 <pre><code class="language-text">运营后台一份
 游戏服务器一份
 客户端地图一份
@@ -1102,7 +1102,7 @@ Context Reinterpretation。
 <p>首先是一份服务器权威事实。</p>
 <p>地图、新闻、Narrative UI 都是它的 Projection。</p>
 <p>不要让 UI 自己成为第二套战争状态机。</p>
-<h2 id="mission-result-和-campaign-contribution-最好分离">Mission Result 和 Campaign Contribution 最好分离</h2><p>一次 Match 可以产生：</p>
+<h3 id="mission-result-和-campaign-contribution-最好分离">Mission Result 和 Campaign Contribution 最好分离</h3><p>一次 Match 可以产生：</p>
 <pre><code class="language-text">Win / Lose
 Objectives
 Difficulty
@@ -1123,7 +1123,7 @@ Performance。
 <p>第二，历史 Match 不需要知道所有未来 Campaign 规则。</p>
 <p>第三，Telemetry 可以重算或审计 Contribution。</p>
 <p>第四，运营不需要修改 Mission Runtime 内部代码才能调整全局进度。</p>
-<h2 id="aggregation-应该是可重试且幂等的">Aggregation 应该是可重试且幂等的</h2><p>在线服务中：</p>
+<h3 id="aggregation-应该是可重试且幂等的">Aggregation 应该是可重试且幂等的</h3><p>在线服务中：</p>
 <pre><code class="language-text">Mission Result
 </code></pre>
 <p>可能因为：</p>
@@ -1146,7 +1146,7 @@ CampaignVersion
 </code></pre>
 <p>建立去重身份。</p>
 <p>这是任何共享进度系统都应该认真处理的运行时边界。</p>
-<h2 id="campaign-formula-需要版本身份">Campaign Formula 需要版本身份</h2><p>假设运营在活动中途调整：</p>
+<h3 id="campaign-formula-需要版本身份">Campaign Formula 需要版本身份</h3><p>假设运营在活动中途调整：</p>
 <pre><code class="language-text">Contribution Formula。
 </code></pre>
 <p>随后出现：</p>
@@ -1166,7 +1166,7 @@ State Revision。
 </code></pre>
 <p>Live Config 不是一个匿名 Dictionary。</p>
 <p>它本身应该进入版本治理。</p>
-<h2 id="operator-修改最好是-intent而不是任意数据库编辑">Operator 修改最好是 Intent，而不是任意数据库编辑</h2><p>一个成熟运营工具更适合提供：</p>
+<h3 id="operator-修改最好是-intent而不是任意数据库编辑">Operator 修改最好是 Intent，而不是任意数据库编辑</h3><p>一个成熟运营工具更适合提供：</p>
 <pre><code class="language-text">AdjustTargetRate
 OpenRegion
 CloseRegion
@@ -1189,7 +1189,7 @@ RollbackRevision。
 </ul>
 <p>这和开发工具的 Safe Execution 非常相似。</p>
 <p>高权限并不意味着应该暴露最低层写入能力。</p>
-<h2 id="运营权限越强越需要-failure-isolation">运营权限越强，越需要 Failure Isolation</h2><p>如果一次错误配置可以影响：</p>
+<h3 id="运营权限越强越需要-failure-isolation">运营权限越强，越需要 Failure Isolation</h3><p>如果一次错误配置可以影响：</p>
 <pre><code class="language-text">全服玩家目标，
 </code></pre>
 <p>那么 LiveOps 系统必须假定：</p>
@@ -1210,7 +1210,7 @@ RollbackRevision。
 </code></pre>
 <p>Human-in-the-loop 的价值来自人类判断。</p>
 <p>风险也同样来自人类操作。</p>
-<h2 id="context-layer-最好能够安全停机">Context Layer 最好能够安全停机</h2><p>一个长期产品还应该问：</p>
+<h3 id="context-layer-最好能够安全停机">Context Layer 最好能够安全停机</h3><p>一个长期产品还应该问：</p>
 <blockquote>
 <p>如果今天 LiveOps 团队暂时不能发布新的 Campaign，游戏本身还能不能运行？</p>
 </blockquote>
@@ -1236,7 +1236,7 @@ Core PvE 仍可运行
 只失去宏观上下文和部分社区功能。
 </code></pre>
 <p>这样 Context 才是真正的 Multiplier Layer。</p>
-<h2 id="不应该直接照搬全服战争地图">不应该直接照搬“全服战争地图”</h2><p>这是整套方法最容易被错误复制的地方。</p>
+<h3 id="不应该直接照搬全服战争地图">不应该直接照搬“全服战争地图”</h3><p>这是整套方法最容易被错误复制的地方。</p>
 <p>团队看到成功案例后，可能直接做：</p>
 <pre><code class="language-text">全球地图
 星球
@@ -1257,7 +1257,7 @@ Core PvE 仍可运行
 <p>一张巨大地图只会成为：</p>
 <pre><code class="language-text">昂贵的活动 UI。
 </code></pre>
-<h2 id="不应该把社区目标等同于玩家-agency">不应该把社区目标等同于玩家 Agency</h2><p>玩家共同推进一个数字，</p>
+<h3 id="不应该把社区目标等同于玩家-agency">不应该把社区目标等同于玩家 Agency</h3><p>玩家共同推进一个数字，</p>
 <p>并不自动意味着：</p>
 <pre><code class="language-text">玩家真正改变了世界。
 </code></pre>
@@ -1276,7 +1276,7 @@ Core PvE 仍可运行
 <pre><code class="language-text">共同决策。
 </code></pre>
 <p>两者的产品体验非常不同。</p>
-<h2 id="不应该把所有运营变化都升级成-gameplay-rule">不应该把所有运营变化都升级成 Gameplay Rule</h2><p>如果每周活动都新增：</p>
+<h3 id="不应该把所有运营变化都升级成-gameplay-rule">不应该把所有运营变化都升级成 Gameplay Rule</h3><p>如果每周活动都新增：</p>
 <pre><code class="language-text">EventSpecificSystemV47
 EventSpecificDamageRuleV23，
 </code></pre>
@@ -1295,7 +1295,7 @@ EventSpecificDamageRuleV23，
 <p>而：</p>
 <pre><code class="language-text">底层规则膨胀速度低。
 </code></pre>
-<h2 id="我的内容情境杠杆检查表">我的内容情境杠杆检查表</h2><ol>
+<h3 id="我的内容情境杠杆检查表">我的内容情境杠杆检查表</h3><ol>
 <li>核心 PvE 在没有 Campaign Context 时是否本身就值得重复？</li>
 <li>当前底层 Gameplay Grammar 有多少真实变化空间？</li>
 <li>新 Context 是在重新解释内容，还是仅仅修改奖励数字？</li>
@@ -1388,7 +1388,7 @@ EventSpecificDamageRuleV23，
 <blockquote>
 <p><strong>昂贵内容负责创造新的 Gameplay Value，廉价 Context 负责提高这些 Gameplay Value 被重新使用和重新理解的次数；但当底层 Grammar 已经耗尽时，最好的运营文案也不能继续替代真正的新玩法。</strong></p>
 </blockquote>
-<h2 id="术语对照">术语对照</h2><table>
+<h3 id="术语对照">术语对照</h3><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -1493,7 +1493,7 @@ EventSpecificDamageRuleV23，
 </tr>
 </tbody></table>
 <hr />
-<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<h3 id="内部资料依据">内部资料依据</h3><p>本文主要基于以下材料整理：</p>
 <ul>
 <li><code>notes/《内容向游戏》逆向拆解/Helldivers 2 Galactic War Major Order Warbond 联动拆解.md</code></li>
 <li><code>notes/《内容向游戏》逆向拆解/README.md</code></li>

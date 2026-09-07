@@ -108,7 +108,7 @@
 <p>Agent 标签：<code>artillery</code> <code>ballistics</code> <code>turn-based</code></p>
 </blockquote>
 <hr />
-<h2 id="0-类型边界与相邻范式核对">0. 类型边界与相邻范式核对</h2><p>相邻范式已经包括回合制战术 RPG、弹幕射击、物理弹球、战术射击、传统 Roguelike、塔防、无双式军团动作、落块消除、三消交换与推箱子等战术、物理和棋盘品类。</p>
+<h3 id="0-类型边界与相邻范式核对">0. 类型边界与相邻范式核对</h3><p>相邻范式已经包括回合制战术 RPG、弹幕射击、物理弹球、战术射击、传统 Roguelike、塔防、无双式军团动作、落块消除、三消交换与推箱子等战术、物理和棋盘品类。</p>
 <p>这些相邻范式中，回合制战术 RPG 的重点仍是网格战场、行动资源、技能结算和战术因果，而不是连续弹道、可破坏地形与轮流射击构成的物理战术；因此炮术对抗仍具有独立的宏观循环。</p>
 <p>因此本期新增：</p>
 <p><strong>回合制炮术对抗 / Turn-Based Artillery / Trajectory Tactics。</strong></p>
@@ -166,7 +166,7 @@
 <p><strong>一次攻击不仅决定“这发能不能命中”，还会永久修改之后所有角色能够站在哪里、躲在哪里、从哪里射击以及哪些弹道仍然成立。</strong></p>
 </blockquote>
 <hr />
-<h1 id="1-类型定位">1. 类型定位</h1><p>典型 Turn-Based Artillery 通常具有：</p>
+<h3 id="1-类型定位">1. 类型定位</h3><p>典型 Turn-Based Artillery 通常具有：</p>
 <ul>
 <li><p>两个或多个阵营；</p>
 </li>
@@ -252,7 +252,7 @@
 → 若干回合后整张地图从初始完整结构变成大量坑洞、断崖和孤岛
 → 最后一支仍有存活单位的队伍获胜。</p>
 <hr />
-<h1 id="2-最核心的系统抽象一次-shot-是对未来战场的不可逆提交">2. 最核心的系统抽象：一次 Shot 是“对未来战场的不可逆提交”</h1><p>普通即时射击中：</p>
+<h3 id="2-最核心的系统抽象一次-shot-是对未来战场的不可逆提交">2. 最核心的系统抽象：一次 Shot 是“对未来战场的不可逆提交”</h3><p>普通即时射击中：</p>
 <p>攻击发生很快。</p>
 <p>玩家关注：</p>
 <p>当前命中。</p>
@@ -304,17 +304,17 @@
 → Stability Barrier
 → Rule Resolution。</strong></p>
 <hr />
-<h1 id="3-核心范式一turn-与-physics-必须是两个不同的时间域">3. 核心范式一：Turn 与 Physics 必须是两个不同的时间域</h1><p>游戏是：</p>
+<h3 id="3-核心范式一turn-与-physics-必须是两个不同的时间域">3. 核心范式一：Turn 与 Physics 必须是两个不同的时间域</h3><p>游戏是：</p>
 <p>回合制。</p>
 <p>但Projectile飞行：</p>
 <p>是连续物理过程。</p>
 <p>因此不能简单：</p>
 <p>“玩家回合一次 = 世界推进一格”。</p>
 <p>推荐分成：</p>
-<h2 id="tactical-turn-time">Tactical Turn Time</h2><p>谁拥有决策权。</p>
-<h2 id="physics-simulation-time">Physics Simulation Time</h2><p>Projectile、击退、坠落如何连续运动。</p>
+<h3 id="tactical-turn-time">Tactical Turn Time</h3><p>谁拥有决策权。</p>
+<h3 id="physics-simulation-time">Physics Simulation Time</h3><p>Projectile、击退、坠落如何连续运动。</p>
 <hr />
-<h1 id="4-matchphase">4. MatchPhase</h1><p>推荐至少包含：</p>
+<h3 id="4-matchphase">4. MatchPhase</h3><p>推荐至少包含：</p>
 <ul>
 <li><p>MatchInitializing；</p>
 </li>
@@ -342,7 +342,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="5-为什么需要显式phase">5. 为什么需要显式Phase</h1><p>玩家发射以后：</p>
+<h3 id="5-为什么需要显式phase">5. 为什么需要显式Phase</h3><p>玩家发射以后：</p>
 <p>不能立刻：</p>
 <p>切到下一个角色。</p>
 <p>因为：</p>
@@ -363,7 +363,7 @@
 <p>只有世界稳定以后：</p>
 <p>才能进入下一Turn。</p>
 <hr />
-<h1 id="6-world-stable-的定义">6. World Stable 的定义</h1><p>例如同时满足：</p>
+<h3 id="6-world-stable-的定义">6. World Stable 的定义</h3><p>例如同时满足：</p>
 <ul>
 <li><p>没有Active Projectile；</p>
 </li>
@@ -383,11 +383,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="7-不要用">7. 不要用：</h1><p>“动画播完”</p>
+<h3 id="7-不要用">7. 不要用：</h3><p>“动画播完”</p>
 <p>作为World Stable。</p>
 <p>Animation不是规则事实。</p>
 <hr />
-<h1 id="8-核心范式二turn-state-必须正式数据化">8. 核心范式二：Turn State 必须正式数据化</h1><h2 id="turnstate">TurnState</h2><p>建议包含：</p>
+<h3 id="8-核心范式二turn-state-必须正式数据化">8. 核心范式二：Turn State 必须正式数据化</h3><h3 id="turnstate">TurnState</h3><p>建议包含：</p>
 <ul>
 <li><p>TurnIndex；</p>
 </li>
@@ -413,7 +413,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="9-turn-ownership">9. Turn Ownership</h1><p>只有：</p>
+<h3 id="9-turn-ownership">9. Turn Ownership</h3><p>只有：</p>
 <p>Active Actor</p>
 <p>可以提交：</p>
 <p>移动、跳跃、瞄准、武器选择或Shot。</p>
@@ -423,7 +423,7 @@
 <p>但没有：</p>
 <p>Input Authority。</p>
 <hr />
-<h1 id="10-turn结束不能只由">10. Turn结束不能只由：</h1><p>“玩家按下Fire”</p>
+<h3 id="10-turn结束不能只由">10. Turn结束不能只由：</h3><p>“玩家按下Fire”</p>
 <p>决定。</p>
 <p>它可以发生在：</p>
 <ul>
@@ -441,7 +441,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="11-核心范式三角色身份与行动顺序应分离">11. 核心范式三：角色身份与行动顺序应分离</h1><p>不要：</p>
+<h3 id="11-核心范式三角色身份与行动顺序应分离">11. 核心范式三：角色身份与行动顺序应分离</h3><p>不要：</p>
 <p>角色数组顺序</p>
 <p>就是：</p>
 <p>Turn顺序。</p>
@@ -463,7 +463,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="12-turnorderstate">12. TurnOrderState</h1><p>建议包含：</p>
+<h3 id="12-turnorderstate">12. TurnOrderState</h3><p>建议包含：</p>
 <ul>
 <li><p>TeamOrder；</p>
 </li>
@@ -479,12 +479,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="13-actor死亡以后">13. Actor死亡以后：</h1><p>TurnOrder能够：</p>
+<h3 id="13-actor死亡以后">13. Actor死亡以后：</h3><p>TurnOrder能够：</p>
 <p>自然跳过。</p>
 <p>不要：</p>
 <p>直接删除数组导致索引漂移。</p>
 <hr />
-<h1 id="14-核心范式四terrain-必须是正式-gameplay-state而不只是collider-mesh">14. 核心范式四：Terrain 必须是正式 Gameplay State，而不只是Collider Mesh</h1><p>这类游戏最大的独特性之一：</p>
+<h3 id="14-核心范式四terrain-必须是正式-gameplay-state而不只是collider-mesh">14. 核心范式四：Terrain 必须是正式 Gameplay State，而不只是Collider Mesh</h3><p>这类游戏最大的独特性之一：</p>
 <p><strong>地形会被攻击永久修改。</strong></p>
 <p>因此地形不能只是：</p>
 <p>一个静态MeshCollider。</p>
@@ -492,21 +492,21 @@
 <p>可查询、可修改、可序列化、可重放的：</p>
 <p><strong>Terrain Domain State。</strong></p>
 <hr />
-<h1 id="15-terrainrepresentation">15. TerrainRepresentation</h1><p>常见选择包括：</p>
-<h3 id="binary-mask-bitmap">Binary Mask / Bitmap</h3><p>二维侧视游戏尤其适合。</p>
+<h3 id="15-terrainrepresentation">15. TerrainRepresentation</h3><p>常见选择包括：</p>
+<h4 id="binary-mask-bitmap">Binary Mask / Bitmap</h4><p>二维侧视游戏尤其适合。</p>
 <p>每个像素 / Cell：</p>
 <p>Solid / Empty。</p>
-<h3 id="signed-distance-field">Signed Distance Field</h3><p>更适合：</p>
+<h4 id="signed-distance-field">Signed Distance Field</h4><p>更适合：</p>
 <p>平滑破坏和碰撞查询。</p>
-<h3 id="polygon-contour">Polygon / Contour</h3><p>更适合：</p>
+<h4 id="polygon-contour">Polygon / Contour</h4><p>更适合：</p>
 <p>矢量地形。</p>
-<h3 id="voxel-grid">Voxel / Grid</h3><p>三维版本。</p>
+<h4 id="voxel-grid">Voxel / Grid</h4><p>三维版本。</p>
 <hr />
-<h1 id="16-本文以二维侧视炮术为主要抽象">16. 本文以二维侧视炮术为主要抽象</h1><p>最经典、最清晰。</p>
+<h3 id="16-本文以二维侧视炮术为主要抽象">16. 本文以二维侧视炮术为主要抽象</h3><p>最经典、最清晰。</p>
 <p>但架构原则：</p>
 <p>同样适用于3D。</p>
 <hr />
-<h1 id="17-terrainstate">17. TerrainState</h1><p>建议包含：</p>
+<h3 id="17-terrainstate">17. TerrainState</h3><p>建议包含：</p>
 <ul>
 <li><p>TerrainId；</p>
 </li>
@@ -528,7 +528,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="18-terrain-truth-与-terrain-view-分离">18. Terrain Truth 与 Terrain View 分离</h1><p>权威：</p>
+<h3 id="18-terrain-truth-与-terrain-view-分离">18. Terrain Truth 与 Terrain View 分离</h3><p>权威：</p>
 <p>Mask / Field。</p>
 <p>表现：</p>
 <p>Mesh、Sprite、Texture。</p>
@@ -541,10 +541,10 @@
 <p>先把Texture画黑</p>
 <p>再猜Collider应该是什么。</p>
 <hr />
-<h1 id="19-核心范式五terrain-mutation-应使用几何操作而不是对象destroy">19. 核心范式五：Terrain Mutation 应使用几何操作而不是对象Destroy</h1><p>Explosion通常对应：</p>
+<h3 id="19-核心范式五terrain-mutation-应使用几何操作而不是对象destroy">19. 核心范式五：Terrain Mutation 应使用几何操作而不是对象Destroy</h3><p>Explosion通常对应：</p>
 <p><strong>Subtract Shape from Terrain。</strong></p>
 <hr />
-<h1 id="20-terrainmutationintent">20. TerrainMutationIntent</h1><p>建议包含：</p>
+<h3 id="20-terrainmutationintent">20. TerrainMutationIntent</h3><p>建议包含：</p>
 <ul>
 <li><p>MutationId；</p>
 </li>
@@ -566,7 +566,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="21-常见操作">21. 常见操作</h1><ul>
+<h3 id="21-常见操作">21. 常见操作</h3><ul>
 <li><p>Subtract Circle；</p>
 </li>
 <li><p>Subtract Capsule；</p>
@@ -581,12 +581,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="22-爆炸不应该">22. 爆炸不应该：</h1><p>逐个查找附近Terrain GameObject</p>
+<h3 id="22-爆炸不应该">22. 爆炸不应该：</h3><p>逐个查找附近Terrain GameObject</p>
 <p>然后Destroy。</p>
 <p>地形是一张：</p>
 <p>连续Gameplay Surface。</p>
 <hr />
-<h1 id="23-terrainmutationtransaction">23. TerrainMutationTransaction</h1><p>获取当前Terrain Revision
+<h3 id="23-terrainmutationtransaction">23. TerrainMutationTransaction</h3><p>获取当前Terrain Revision
 → 应用Logical Mutation
 → 计算Affected Bounds
 → 更新Collision Data
@@ -595,13 +595,13 @@
 → Presentation重建局部Visual
 → Commit Revision。</p>
 <hr />
-<h1 id="24-局部更新">24. 局部更新</h1><p>不要：</p>
+<h3 id="24-局部更新">24. 局部更新</h3><p>不要：</p>
 <p>每次小Explosion</p>
 <p>重新生成整张地图。</p>
 <p>只重建：</p>
 <p>Affected Region。</p>
 <hr />
-<h1 id="25-核心范式六terrain破坏会直接修改navigation和support语义">25. 核心范式六：Terrain破坏会直接修改Navigation和Support语义</h1><p>一块地形被炸掉：</p>
+<h3 id="25-核心范式六terrain破坏会直接修改navigation和support语义">25. 核心范式六：Terrain破坏会直接修改Navigation和Support语义</h3><p>一块地形被炸掉：</p>
 <p>影响的不仅：</p>
 <p>画面。</p>
 <p>还包括：</p>
@@ -624,7 +624,7 @@
 <p>必须通知：</p>
 <p>相关系统。</p>
 <hr />
-<h1 id="26-terrainchangedevent">26. TerrainChangedEvent</h1><p>建议包含：</p>
+<h3 id="26-terrainchangedevent">26. TerrainChangedEvent</h3><p>建议包含：</p>
 <ul>
 <li><p>TerrainRevisionBefore；</p>
 </li>
@@ -642,7 +642,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="27-消费者包括">27. 消费者包括：</h1><ul>
+<h3 id="27-消费者包括">27. 消费者包括：</h3><ul>
 <li><p>ActorSupportSystem；</p>
 </li>
 <li><p>Navigation；</p>
@@ -659,13 +659,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="28-核心范式七actor-standing-应由-support-query-决定而不是仍然groundedtrue">28. 核心范式七：Actor Standing 应由 Support Query 决定，而不是“仍然Grounded=true”</h1><p>角色脚下：</p>
+<h3 id="28-核心范式七actor-standing-应由-support-query-决定而不是仍然groundedtrue">28. 核心范式七：Actor Standing 应由 Support Query 决定，而不是“仍然Grounded=true”</h3><p>角色脚下：</p>
 <p>刚刚被炸空。</p>
 <p>即使当前Actor没有受到Explosion Damage，</p>
 <p>也应该：</p>
 <p>开始掉落。</p>
 <hr />
-<h1 id="29-supportstate">29. SupportState</h1><p>建议包含：</p>
+<h3 id="29-supportstate">29. SupportState</h3><p>建议包含：</p>
 <ul>
 <li><p>ActorId；</p>
 </li>
@@ -683,26 +683,26 @@
 </li>
 </ul>
 <hr />
-<h1 id="30-terrainmutation以后">30. TerrainMutation以后：</h1><p>只需要对：</p>
+<h3 id="30-terrainmutation以后">30. TerrainMutation以后：</h3><p>只需要对：</p>
 <p>Affected Bounds附近Actor</p>
 <p>重算Support。</p>
 <hr />
-<h1 id="31-如果support丢失">31. 如果Support丢失：</h1><p>Actor进入：</p>
+<h3 id="31-如果support丢失">31. 如果Support丢失：</h3><p>Actor进入：</p>
 <p>Falling。</p>
 <p>这使地形破坏本身：</p>
 <p>可以成为攻击手段。</p>
 <hr />
-<h1 id="32-核心范式八damageknockback-与-terrain-damage-必须是三个独立结果">32. 核心范式八：Damage、Knockback 与 Terrain Damage 必须是三个独立结果</h1><p>爆炸命中角色时：</p>
+<h3 id="32-核心范式八damageknockback-与-terrain-damage-必须是三个独立结果">32. 核心范式八：Damage、Knockback 与 Terrain Damage 必须是三个独立结果</h3><p>爆炸命中角色时：</p>
 <p>可以同时产生：</p>
-<h2 id="health-damage">Health Damage</h2><p>HP变化。</p>
-<h2 id="impulse">Impulse</h2><p>角色被推开。</p>
-<h2 id="terrain-mutation">Terrain Mutation</h2><p>周围地形被削去。</p>
+<h3 id="health-damage">Health Damage</h3><p>HP变化。</p>
+<h3 id="impulse">Impulse</h3><p>角色被推开。</p>
+<h3 id="terrain-mutation">Terrain Mutation</h3><p>周围地形被削去。</p>
 <p>三者不要：</p>
 <p>绑定为一个：</p>
 <p><code>ExplosionDamage = 100</code></p>
 <p>黑盒函数。</p>
 <hr />
-<h1 id="33-explosiondefinition">33. ExplosionDefinition</h1><p>建议字段：</p>
+<h3 id="33-explosiondefinition">33. ExplosionDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ExplosionId；</p>
 </li>
@@ -726,21 +726,21 @@
 </li>
 </ul>
 <hr />
-<h1 id="34-这样可以做">34. 这样可以做：</h1><p>低Damage、高Knockback武器。</p>
+<h3 id="34-这样可以做">34. 这样可以做：</h3><p>低Damage、高Knockback武器。</p>
 <p>或：</p>
 <p>低人物伤害、高地形破坏工具。</p>
 <p>或：</p>
 <p>高Damage、几乎不破坏地形的精准武器。</p>
 <hr />
-<h1 id="35-这些参数构成">35. 这些参数构成：</h1><p>不同战术角色。</p>
+<h3 id="35-这些参数构成">35. 这些参数构成：</h3><p>不同战术角色。</p>
 <p>而不是：</p>
 <p>所有武器只比较Damage。</p>
 <hr />
-<h1 id="36-核心范式九projectile-必须是独立权威实体">36. 核心范式九：Projectile 必须是独立权威实体</h1><p>玩家发射以后：</p>
+<h3 id="36-核心范式九projectile-必须是独立权威实体">36. 核心范式九：Projectile 必须是独立权威实体</h3><p>玩家发射以后：</p>
 <p>Projectile拥有：</p>
 <p>自己的状态。</p>
 <hr />
-<h1 id="37-projectiledefinition">37. ProjectileDefinition</h1><p>建议字段：</p>
+<h3 id="37-projectiledefinition">37. ProjectileDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ProjectileTypeId；</p>
 </li>
@@ -768,7 +768,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="38-projectileruntimestate">38. ProjectileRuntimeState</h1><p>建议包含：</p>
+<h3 id="38-projectileruntimestate">38. ProjectileRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>ProjectileId；</p>
 </li>
@@ -796,13 +796,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="39-projectile不应该">39. Projectile不应该：</h1><p>直接拥有：</p>
+<h3 id="39-projectile不应该">39. Projectile不应该：</h3><p>直接拥有：</p>
 <p>“TargetActorId = B”</p>
 <p>然后自动命中。</p>
 <p>核心就是：</p>
 <p>它真正穿过空间。</p>
 <hr />
-<h1 id="40-核心范式十projectile-motion-应统一走-movement-model">40. 核心范式十：Projectile Motion 应统一走 Movement Model</h1><p>基础：</p>
+<h3 id="40-核心范式十projectile-motion-应统一走-movement-model">40. 核心范式十：Projectile Motion 应统一走 Movement Model</h3><p>基础：</p>
 <p>Ballistic。</p>
 <p>未来可以扩展：</p>
 <ul>
@@ -824,7 +824,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="41-projectilemovementmodel">41. ProjectileMovementModel</h1><p>接口语义：</p>
+<h3 id="41-projectilemovementmodel">41. ProjectileMovementModel</h3><p>接口语义：</p>
 <p>给定：</p>
 <ul>
 <li><p>Current State；</p>
@@ -837,7 +837,7 @@
 <p>输出：</p>
 <p>下一候选运动状态。</p>
 <hr />
-<h1 id="42-ballistic-model">42. Ballistic Model</h1><p>输入：</p>
+<h3 id="42-ballistic-model">42. Ballistic Model</h3><p>输入：</p>
 <ul>
 <li><p>Initial Velocity；</p>
 </li>
@@ -847,11 +847,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="43-风最好是">43. 风最好是：</h1><p>Gameplay参数</p>
+<h3 id="43-风最好是">43. 风最好是：</h3><p>Gameplay参数</p>
 <p>而不是：</p>
 <p>粒子系统提供的视觉值。</p>
 <hr />
-<h1 id="44-核心范式十一environment-snapshot-应在-shot-commit-时明确">44. 核心范式十一：Environment Snapshot 应在 Shot Commit 时明确</h1><p>玩家准备发射时：</p>
+<h3 id="44-核心范式十一environment-snapshot-应在-shot-commit-时明确">44. 核心范式十一：Environment Snapshot 应在 Shot Commit 时明确</h3><p>玩家准备发射时：</p>
 <p>环境例如：</p>
 <ul>
 <li><p>Wind；</p>
@@ -866,7 +866,7 @@
 <p>应该有：</p>
 <p>明确权威状态。</p>
 <hr />
-<h1 id="45-environmentstate">45. EnvironmentState</h1><p>建议包含：</p>
+<h3 id="45-environmentstate">45. EnvironmentState</h3><p>建议包含：</p>
 <ul>
 <li><p>WindVectorOrScalar；</p>
 </li>
@@ -882,16 +882,16 @@
 </li>
 </ul>
 <hr />
-<h1 id="46-发射以后环境是否会在飞行中变化">46. 发射以后环境是否会在飞行中变化：</h1><p>由Ruleset定义。</p>
+<h3 id="46-发射以后环境是否会在飞行中变化">46. 发射以后环境是否会在飞行中变化：</h3><p>由Ruleset定义。</p>
 <p>最常见：</p>
 <p>本次Projectile飞行期间：</p>
 <p>使用当前实时Environment。</p>
 <hr />
-<h1 id="47-但如果风每01秒随机跳变">47. 但如果风每0.1秒随机跳变：</h1><p>玩家无法学习。</p>
+<h3 id="47-但如果风每01秒随机跳变">47. 但如果风每0.1秒随机跳变：</h3><p>玩家无法学习。</p>
 <p>所以环境变化应：</p>
 <p>具备稳定节奏。</p>
 <hr />
-<h1 id="48-核心范式十二shot-input-应拆成-anglepowerweaponoptional-timing">48. 核心范式十二：Shot Input 应拆成 Angle、Power、Weapon、Optional Timing</h1><p>玩家决策通常可以抽象成：</p>
+<h3 id="48-核心范式十二shot-input-应拆成-anglepowerweaponoptional-timing">48. 核心范式十二：Shot Input 应拆成 Angle、Power、Weapon、Optional Timing</h3><p>玩家决策通常可以抽象成：</p>
 <ul>
 <li><p>Weapon；</p>
 </li>
@@ -905,7 +905,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="49-shotintent">49. ShotIntent</h1><p>建议包含：</p>
+<h3 id="49-shotintent">49. ShotIntent</h3><p>建议包含：</p>
 <ul>
 <li><p>ShotIntentId；</p>
 </li>
@@ -929,7 +929,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="50-shot-validation">50. Shot Validation</h1><p>检查：</p>
+<h3 id="50-shot-validation">50. Shot Validation</h3><p>检查：</p>
 <ul>
 <li><p>Actor仍然Alive；</p>
 </li>
@@ -949,12 +949,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="51-shot-commit后">51. Shot Commit后：</h1><p>Angle与Power</p>
+<h3 id="51-shot-commit后">51. Shot Commit后：</h3><p>Angle与Power</p>
 <p>通常不可修改。</p>
 <p>这就是：</p>
 <p><strong>Action Commitment。</strong></p>
 <hr />
-<h1 id="52-核心范式十三发射前的瞄准ui应该显示玩家控制的参数而不是自动替玩家求解答案">52. 核心范式十三：发射前的瞄准UI应该显示“玩家控制的参数”，而不是自动替玩家求解答案</h1><p>基础HUD可以显示：</p>
+<h3 id="52-核心范式十三发射前的瞄准ui应该显示玩家控制的参数而不是自动替玩家求解答案">52. 核心范式十三：发射前的瞄准UI应该显示“玩家控制的参数”，而不是自动替玩家求解答案</h3><p>基础HUD可以显示：</p>
 <ul>
 <li><p>当前Angle；</p>
 </li>
@@ -970,63 +970,63 @@
 </li>
 </ul>
 <hr />
-<h1 id="53-是否显示完整trajectory-preview">53. 是否显示完整Trajectory Preview</h1><p>这是重要难度变量。</p>
-<h3 id="无preview">无Preview</h3><p>高度技能记忆。</p>
-<h3 id="部分preview">部分Preview</h3><p>显示短距离初始轨迹。</p>
-<h3 id="完整preview">完整Preview</h3><p>更偏策略与地形编辑。</p>
+<h3 id="53-是否显示完整trajectory-preview">53. 是否显示完整Trajectory Preview</h3><p>这是重要难度变量。</p>
+<h4 id="无preview">无Preview</h4><p>高度技能记忆。</p>
+<h4 id="部分preview">部分Preview</h4><p>显示短距离初始轨迹。</p>
+<h4 id="完整preview">完整Preview</h4><p>更偏策略与地形编辑。</p>
 <hr />
-<h1 id="54-preview不是纯qol">54. Preview不是纯QoL</h1><p>它会显著改变：</p>
+<h3 id="54-preview不是纯qol">54. Preview不是纯QoL</h3><p>它会显著改变：</p>
 <p>品类难度结构。</p>
 <p>所以属于：</p>
 <p>Ruleset / Assist Profile。</p>
 <hr />
-<h1 id="55-核心范式十四trajectory-preview-必须使用与真实projectile相同的simulation规则">55. 核心范式十四：Trajectory Preview 必须使用与真实Projectile相同的Simulation规则</h1><p>最危险错误：</p>
+<h3 id="55-核心范式十四trajectory-preview-必须使用与真实projectile相同的simulation规则">55. 核心范式十四：Trajectory Preview 必须使用与真实Projectile相同的Simulation规则</h3><p>最危险错误：</p>
 <p>Preview使用简化公式。</p>
 <p>真实Projectile使用另一套Physics。</p>
 <p>结果：</p>
 <p>虚线显示命中。</p>
 <p>实际却偏掉。</p>
 <hr />
-<h1 id="56-最稳方案">56. 最稳方案：</h1><p>使用：</p>
+<h3 id="56-最稳方案">56. 最稳方案：</h3><p>使用：</p>
 <p>同一MovementModel</p>
 <p>在：</p>
 <p>只读Simulation Context</p>
 <p>中前向采样。</p>
 <hr />
-<h1 id="57-preview不能">57. Preview不能：</h1><p>修改真实RNG。</p>
+<h3 id="57-preview不能">57. Preview不能：</h3><p>修改真实RNG。</p>
 <p>不能：</p>
 <p>触发真实Collision Event。</p>
 <p>不能：</p>
 <p>消耗Weapon。</p>
 <hr />
-<h1 id="58-核心范式十五projectile-collision-需要-continuous-sweep">58. 核心范式十五：Projectile Collision 需要 Continuous Sweep</h1><p>Projectile速度高。</p>
+<h3 id="58-核心范式十五projectile-collision-需要-continuous-sweep">58. 核心范式十五：Projectile Collision 需要 Continuous Sweep</h3><p>Projectile速度高。</p>
 <p>如果每Tick只检查：</p>
 <p>当前Point是否进入Collider，</p>
 <p>容易：</p>
 <p>穿过薄地形。</p>
 <hr />
-<h1 id="59-每tick">59. 每Tick：</h1><p>PreviousPosition
+<h3 id="59-每tick">59. 每Tick：</h3><p>PreviousPosition
 → NewPosition</p>
 <p>之间做：</p>
 <p>Sweep / Segment Intersection。</p>
 <hr />
-<h1 id="60-找到最早impact">60. 找到最早Impact。</h1><p>移动到：</p>
+<h3 id="60-找到最早impact">60. 找到最早Impact。</h3><p>移动到：</p>
 <p>Impact Point。</p>
 <p>再执行：</p>
 <p>Impact Rule。</p>
 <hr />
-<h1 id="61-对可反弹projectile">61. 对可反弹Projectile：</h1><p>剩余时间片</p>
+<h3 id="61-对可反弹projectile">61. 对可反弹Projectile：</h3><p>剩余时间片</p>
 <p>可以：</p>
 <p>继续模拟。</p>
 <p>但要：</p>
 <p>限制Maximum Substeps。</p>
 <hr />
-<h1 id="62-核心范式十六impact-应形成正式语义对象">62. 核心范式十六：Impact 应形成正式语义对象</h1><p>不要：</p>
+<h3 id="62-核心范式十六impact-应形成正式语义对象">62. 核心范式十六：Impact 应形成正式语义对象</h3><p>不要：</p>
 <p>OnCollision直接：</p>
 <p>Damage、爆炸、Delete Projectile</p>
 <p>全部做完。</p>
 <hr />
-<h1 id="63-impactevent">63. ImpactEvent</h1><p>建议包含：</p>
+<h3 id="63-impactevent">63. ImpactEvent</h3><p>建议包含：</p>
 <ul>
 <li><p>ImpactId；</p>
 </li>
@@ -1052,7 +1052,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="64-impactresolver根据projectiledefinition决定">64. ImpactResolver根据ProjectileDefinition决定：</h1><ul>
+<h3 id="64-impactresolver根据projectiledefinition决定">64. ImpactResolver根据ProjectileDefinition决定：</h3><ul>
 <li><p>Explode；</p>
 </li>
 <li><p>Bounce；</p>
@@ -1067,12 +1067,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="65-这样">65. 这样：</h1><p>Projectile Collision</p>
+<h3 id="65-这样">65. 这样：</h3><p>Projectile Collision</p>
 <p>和：</p>
 <p>Weapon Effect</p>
 <p>保持分离。</p>
 <hr />
-<h1 id="66-核心范式十七explosion-应使用统一-effect-pipeline">66. 核心范式十七：Explosion 应使用统一 Effect Pipeline</h1><p>Explosion产生：</p>
+<h3 id="66-核心范式十七explosion-应使用统一-effect-pipeline">66. 核心范式十七：Explosion 应使用统一 Effect Pipeline</h3><p>Explosion产生：</p>
 <ul>
 <li><p>Damage；</p>
 </li>
@@ -1086,7 +1086,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="67-explosionresolution">67. ExplosionResolution</h1><p>建议先：</p>
+<h3 id="67-explosionresolution">67. ExplosionResolution</h3><p>建议先：</p>
 <p>收集所有受影响对象。</p>
 <p>再：</p>
 <p>生成：</p>
@@ -1101,7 +1101,7 @@
 <p>最后：</p>
 <p>统一Commit。</p>
 <hr />
-<h1 id="68-为什么不能边遍历边改变世界">68. 为什么不能边遍历边改变世界</h1><p>Actor A受Impulse</p>
+<h3 id="68-为什么不能边遍历边改变世界">68. 为什么不能边遍历边改变世界</h3><p>Actor A受Impulse</p>
 <p>马上飞走。</p>
 <p>随后计算Actor B时：</p>
 <p>爆炸中心关系已经变。</p>
@@ -1109,7 +1109,7 @@
 <p>最好使用：</p>
 <p><strong>Impact Snapshot。</strong></p>
 <hr />
-<h1 id="69-explosion-snapshot">69. Explosion Snapshot</h1><p>冻结：</p>
+<h3 id="69-explosion-snapshot">69. Explosion Snapshot</h3><p>冻结：</p>
 <p>Impact时刻：</p>
 <ul>
 <li><p>Actor Position；</p>
@@ -1122,7 +1122,7 @@
 <p>计算所有结果。</p>
 <p>再提交。</p>
 <hr />
-<h1 id="70-核心范式十八damage-falloff-与-knockback-falloff-可独立">70. 核心范式十八：Damage Falloff 与 Knockback Falloff 可独立</h1><p>玩家可能：</p>
+<h3 id="70-核心范式十八damage-falloff-与-knockback-falloff-可独立">70. 核心范式十八：Damage Falloff 与 Knockback Falloff 可独立</h3><p>玩家可能：</p>
 <p>离Explosion较远。</p>
 <p>Health Damage：</p>
 <p>很低。</p>
@@ -1134,12 +1134,12 @@
 <p>位置价值</p>
 <p>变得极其重要。</p>
 <hr />
-<h1 id="71-这使战斗并非">71. 这使战斗并非：</h1><p>单纯HP交换。</p>
+<h3 id="71-这使战斗并非">71. 这使战斗并非：</h3><p>单纯HP交换。</p>
 <p>而是：</p>
 <p><strong>HP + Position + Terrain Stability</strong></p>
 <p>三维资源。</p>
 <hr />
-<h1 id="72-核心范式十九fall-damage-out-of-bounds-应进入统一death-pipeline">72. 核心范式十九：Fall Damage / Out-of-Bounds 应进入统一Death Pipeline</h1><p>角色被炸飞。</p>
+<h3 id="72-核心范式十九fall-damage-out-of-bounds-应进入统一death-pipeline">72. 核心范式十九：Fall Damage / Out-of-Bounds 应进入统一Death Pipeline</h3><p>角色被炸飞。</p>
 <p>掉入：</p>
 <p>地图危险区域。</p>
 <p>或：</p>
@@ -1147,7 +1147,7 @@
 <p>都不应该：</p>
 <p>每个系统直接Delete Actor。</p>
 <hr />
-<h1 id="73-deathcandidate">73. DeathCandidate</h1><p>来源可能：</p>
+<h3 id="73-deathcandidate">73. DeathCandidate</h3><p>来源可能：</p>
 <ul>
 <li><p>HP &lt;= 0；</p>
 </li>
@@ -1161,7 +1161,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="74-actorlifesystem">74. ActorLifeSystem</h1><p>统一确认：</p>
+<h3 id="74-actorlifesystem">74. ActorLifeSystem</h3><p>统一确认：</p>
 <ul>
 <li><p>是否有保护状态；</p>
 </li>
@@ -1175,7 +1175,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="75-deathevent">75. DeathEvent</h1><p>建议包含：</p>
+<h3 id="75-deathevent">75. DeathEvent</h3><p>建议包含：</p>
 <ul>
 <li><p>ActorId；</p>
 </li>
@@ -1195,13 +1195,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="76-击退导致坠落的kill-credit">76. 击退导致坠落的Kill Credit</h1><p>通常应该：</p>
+<h3 id="76-击退导致坠落的kill-credit">76. 击退导致坠落的Kill Credit</h3><p>通常应该：</p>
 <p>归于：</p>
 <p>最后的有效Impulse来源。</p>
 <p>需要：</p>
 <p>Damage / Impulse Attribution。</p>
 <hr />
-<h1 id="77-核心范式二十世界稳定之前不能判断这一炮最终造成了什么">77. 核心范式二十：世界稳定之前不能判断“这一炮最终造成了什么”</h1><p>Explosion发生以后：</p>
+<h3 id="77-核心范式二十世界稳定之前不能判断这一炮最终造成了什么">77. 核心范式二十：世界稳定之前不能判断“这一炮最终造成了什么”</h3><p>Explosion发生以后：</p>
 <p>Actor可能：</p>
 <p>HP还有1。</p>
 <p>但被推下山。</p>
@@ -1215,7 +1215,7 @@
 <p>Shot Result不能：</p>
 <p>Impact瞬间结算完成。</p>
 <hr />
-<h1 id="78-shotresolutionstate">78. ShotResolutionState</h1><p>建议包含：</p>
+<h3 id="78-shotresolutionstate">78. ShotResolutionState</h3><p>建议包含：</p>
 <ul>
 <li><p>ShotId；</p>
 </li>
@@ -1237,7 +1237,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="79-shot-final-result">79. Shot Final Result</h1><p>可以统计：</p>
+<h3 id="79-shot-final-result">79. Shot Final Result</h3><p>可以统计：</p>
 <ul>
 <li><p>Direct Damage；</p>
 </li>
@@ -1257,11 +1257,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="80-核心范式二十一移动属于turn资源但应与shot分开">80. 核心范式二十一：移动属于Turn资源，但应与Shot分开</h1><p>大多数炮术游戏允许：</p>
+<h3 id="80-核心范式二十一移动属于turn资源但应与shot分开">80. 核心范式二十一：移动属于Turn资源，但应与Shot分开</h3><p>大多数炮术游戏允许：</p>
 <p>发射前：</p>
 <p>有限移动。</p>
 <hr />
-<h1 id="81-movementstate">81. MovementState</h1><p>建议包含：</p>
+<h3 id="81-movementstate">81. MovementState</h3><p>建议包含：</p>
 <ul>
 <li><p>MovementBudget；</p>
 </li>
@@ -1275,7 +1275,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="82-玩家移动的真正价值">82. 玩家移动的真正价值：</h1><ul>
+<h3 id="82-玩家移动的真正价值">82. 玩家移动的真正价值：</h3><ul>
 <li><p>改变发射原点；</p>
 </li>
 <li><p>获得高地；</p>
@@ -1290,16 +1290,16 @@
 </li>
 </ul>
 <hr />
-<h1 id="83-因此">83. 因此：</h1><p>Movement和Shot</p>
+<h3 id="83-因此">83. 因此：</h3><p>Movement和Shot</p>
 <p>共同组成：</p>
 <p>Turn Tactical Decision。</p>
 <hr />
-<h1 id="84-不建议移动和发射完全异步并行">84. 不建议移动和发射完全异步并行</h1><p>如果规则强调回合承诺：</p>
+<h3 id="84-不建议移动和发射完全异步并行">84. 不建议移动和发射完全异步并行</h3><p>如果规则强调回合承诺：</p>
 <p>移动完成</p>
 <p>再发射</p>
 <p>更容易理解。</p>
 <hr />
-<h1 id="85-核心范式二十二movement也应服从动态terrain-query">85. 核心范式二十二：Movement也应服从动态Terrain Query</h1><p>Terrain不断被炸开。</p>
+<h3 id="85-核心范式二十二movement也应服从动态terrain-query">85. 核心范式二十二：Movement也应服从动态Terrain Query</h3><p>Terrain不断被炸开。</p>
 <p>预先烘焙的NavMesh：</p>
 <p>可能很快失效。</p>
 <p>二维侧视版本更适合：</p>
@@ -1314,10 +1314,10 @@
 </li>
 </ul>
 <hr />
-<h1 id="86-ai需要的不是传统navigation-mesh">86. AI需要的不是传统Navigation Mesh，</h1><p>而更多是：</p>
+<h3 id="86-ai需要的不是传统navigation-mesh">86. AI需要的不是传统Navigation Mesh，</h3><p>而更多是：</p>
 <p><strong>Standable Position Analysis。</strong></p>
 <hr />
-<h1 id="87-standableposition">87. StandablePosition</h1><p>需要：</p>
+<h3 id="87-standableposition">87. StandablePosition</h3><p>需要：</p>
 <ul>
 <li><p>Solid Support；</p>
 </li>
@@ -1335,10 +1335,10 @@
 </li>
 </ul>
 <hr />
-<h1 id="88-地形改变后">88. 地形改变后：</h1><p>只重新分析：</p>
+<h3 id="88-地形改变后">88. 地形改变后：</h3><p>只重新分析：</p>
 <p>Affected Region。</p>
 <hr />
-<h1 id="89-核心范式二十三weapon-应按改变状态的方式区分而不只是damage">89. 核心范式二十三：Weapon 应按“改变状态的方式”区分，而不只是Damage</h1><p>高质量武器差异可以来自：</p>
+<h3 id="89-核心范式二十三weapon-应按改变状态的方式区分而不只是damage">89. 核心范式二十三：Weapon 应按“改变状态的方式”区分，而不只是Damage</h3><p>高质量武器差异可以来自：</p>
 <ul>
 <li><p>弹道；</p>
 </li>
@@ -1364,7 +1364,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="90-weapondefinition">90. WeaponDefinition</h1><p>建议字段：</p>
+<h3 id="90-weapondefinition">90. WeaponDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>WeaponId；</p>
 </li>
@@ -1392,23 +1392,23 @@
 </li>
 </ul>
 <hr />
-<h1 id="91-武器类别可以形成">91. 武器类别可以形成：</h1><h2 id="precision">Precision</h2><p>小范围、高确定性。</p>
-<h2 id="terrain-shaping">Terrain Shaping</h2><p>低伤害、高地形修改。</p>
-<h2 id="displacement">Displacement</h2><p>主要击退。</p>
-<h2 id="area-control">Area Control</h2><p>限制未来位置。</p>
-<h2 id="mobility-tool">Mobility Tool</h2><p>改变自己位置。</p>
-<h2 id="high-risk">High Risk</h2><p>大范围、可能误伤。</p>
+<h3 id="91-武器类别可以形成">91. 武器类别可以形成：</h3><h3 id="precision">Precision</h3><p>小范围、高确定性。</p>
+<h3 id="terrain-shaping">Terrain Shaping</h3><p>低伤害、高地形修改。</p>
+<h3 id="displacement">Displacement</h3><p>主要击退。</p>
+<h3 id="area-control">Area Control</h3><p>限制未来位置。</p>
+<h3 id="mobility-tool">Mobility Tool</h3><p>改变自己位置。</p>
+<h3 id="high-risk">High Risk</h3><p>大范围、可能误伤。</p>
 <hr />
-<h1 id="92-这比">92. 这比：</h1><p>“Weapon A 100伤害，Weapon B 120伤害”</p>
+<h3 id="92-这比">92. 这比：</h3><p>“Weapon A 100伤害，Weapon B 120伤害”</p>
 <p>更有战术空间。</p>
 <hr />
-<h1 id="93-核心范式二十四ammo-是跨turn资源">93. 核心范式二十四：Ammo 是跨Turn资源</h1><p>某个强力武器：</p>
+<h3 id="93-核心范式二十四ammo-是跨turn资源">93. 核心范式二十四：Ammo 是跨Turn资源</h3><p>某个强力武器：</p>
 <p>每场只有：</p>
 <p>1发。</p>
 <p>玩家需要决定：</p>
 <p>什么时候使用。</p>
 <hr />
-<h1 id="94-teaminventorystate">94. TeamInventoryState</h1><p>建议包含：</p>
+<h3 id="94-teaminventorystate">94. TeamInventoryState</h3><p>建议包含：</p>
 <ul>
 <li><p>WeaponAmmoById；</p>
 </li>
@@ -1420,43 +1420,43 @@
 </li>
 </ul>
 <hr />
-<h1 id="95-强武器不能因为">95. 强武器不能因为：</h1><p>选了以后没发射</p>
+<h3 id="95-强武器不能因为">95. 强武器不能因为：</h3><p>选了以后没发射</p>
 <p>就消耗。</p>
 <p>通常：</p>
 <p>Shot Commit</p>
 <p>才扣Ammo。</p>
 <hr />
-<h1 id="96-如果action中途因系统异常失败">96. 如果Action中途因系统异常失败：</h1><p>需要：</p>
+<h3 id="96-如果action中途因系统异常失败">96. 如果Action中途因系统异常失败：</h3><p>需要：</p>
 <p>事务回滚。</p>
 <hr />
-<h1 id="97-核心范式二十五地图本身是一种逐渐消耗的资源">97. 核心范式二十五：地图本身是一种逐渐消耗的资源</h1><p>开局：</p>
+<h3 id="97-核心范式二十五地图本身是一种逐渐消耗的资源">97. 核心范式二十五：地图本身是一种逐渐消耗的资源</h3><p>开局：</p>
 <p>完整山脉。</p>
 <p>后期：</p>
 <p>坑洞遍布。</p>
 <p>所以Terrain可以理解为：</p>
 <p><strong>Shared Defensive Resource。</strong></p>
 <hr />
-<h1 id="98-玩家每次攻击">98. 玩家每次攻击：</h1><p>可能：</p>
+<h3 id="98-玩家每次攻击">98. 玩家每次攻击：</h3><p>可能：</p>
 <p>削弱敌人掩体。</p>
 <p>也可能：</p>
 <p>破坏自己下一回合的安全站位。</p>
 <hr />
-<h1 id="99-因此某次命中">99. 因此某次“命中”</h1><p>仍可能是：</p>
+<h3 id="99-因此某次命中">99. 因此某次“命中”</h3><p>仍可能是：</p>
 <p>战略错误。</p>
 <hr />
-<h1 id="100-例如">100. 例如：</h1><p>为了30点Damage</p>
+<h3 id="100-例如">100. 例如：</h3><p>为了30点Damage</p>
 <p>把敌人旁边山体炸开。</p>
 <p>下一名敌人因此：</p>
 <p>获得直射通道</p>
 <p>攻击你方核心角色。</p>
 <hr />
-<h1 id="101-核心范式二十六地形破坏具有战术债务">101. 核心范式二十六：地形破坏具有“战术债务”</h1><p>攻击收益：</p>
+<h3 id="101-核心范式二十六地形破坏具有战术债务">101. 核心范式二十六：地形破坏具有“战术债务”</h3><p>攻击收益：</p>
 <p>立即。</p>
 <p>Terrain变化：</p>
 <p>长期。</p>
 <p>这是与许多战术游戏不同的地方。</p>
 <hr />
-<h1 id="102-可以分析">102. 可以分析：</h1><ul>
+<h3 id="102-可以分析">102. 可以分析：</h3><ul>
 <li><p>Cover Loss；</p>
 </li>
 <li><p>High Ground Loss；</p>
@@ -1469,10 +1469,10 @@
 </li>
 </ul>
 <hr />
-<h1 id="103-shot-evaluation不应只看">103. Shot Evaluation不应只看：</h1><p>Expected Damage。</p>
+<h3 id="103-shot-evaluation不应只看">103. Shot Evaluation不应只看：</h3><p>Expected Damage。</p>
 <p>AI尤其如此。</p>
 <hr />
-<h1 id="104-核心范式二十七ai-应把-shot-看成世界状态转换而不是命中率搜索">104. 核心范式二十七：AI 应把 Shot 看成“世界状态转换”，而不是命中率搜索</h1><p>AI候选Shot的Utility可以包括：</p>
+<h3 id="104-核心范式二十七ai-应把-shot-看成世界状态转换而不是命中率搜索">104. 核心范式二十七：AI 应把 Shot 看成“世界状态转换”，而不是命中率搜索</h3><p>AI候选Shot的Utility可以包括：</p>
 <ul>
 <li><p>Damage；</p>
 </li>
@@ -1496,7 +1496,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="105-shotcandidate">105. ShotCandidate</h1><p>建议包含：</p>
+<h3 id="105-shotcandidate">105. ShotCandidate</h3><p>建议包含：</p>
 <ul>
 <li><p>ActorId；</p>
 </li>
@@ -1524,7 +1524,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="106-ai不能只枚举">106. AI不能只枚举：</h1><p>“瞄准敌人中心”。</p>
+<h3 id="106-ai不能只枚举">106. AI不能只枚举：</h3><p>“瞄准敌人中心”。</p>
 <p>很多最佳攻击：</p>
 <p>故意瞄：</p>
 <p>敌人脚下。</p>
@@ -1533,7 +1533,7 @@
 <p>目标是：</p>
 <p>让他坠落。</p>
 <hr />
-<h1 id="107-核心范式二十八ai搜索空间需要分层">107. 核心范式二十八：AI搜索空间需要分层</h1><p>Angle：</p>
+<h3 id="107-核心范式二十八ai搜索空间需要分层">107. 核心范式二十八：AI搜索空间需要分层</h3><p>Angle：</p>
 <p>连续。</p>
 <p>Power：</p>
 <p>连续。</p>
@@ -1542,19 +1542,19 @@
 <p>暴力搜索，</p>
 <p>成本高。</p>
 <hr />
-<h1 id="108-推荐">108. 推荐：</h1><h3 id="stage-1strategic-target">Stage 1：Strategic Target</h3><p>选择：</p>
+<h3 id="108-推荐">108. 推荐：</h3><h4 id="stage-1strategic-target">Stage 1：Strategic Target</h4><p>选择：</p>
 <p>敌人 / 地形 / 区域。</p>
-<h3 id="stage-2weapon">Stage 2：Weapon</h3><p>根据目标选择武器类别。</p>
-<h3 id="stage-3trajectory-candidate">Stage 3：Trajectory Candidate</h3><p>粗粒度采样Angle / Power。</p>
-<h3 id="stage-4refinement">Stage 4：Refinement</h3><p>对最优若干候选细化。</p>
+<h4 id="stage-2weapon">Stage 2：Weapon</h4><p>根据目标选择武器类别。</p>
+<h4 id="stage-3trajectory-candidate">Stage 3：Trajectory Candidate</h4><p>粗粒度采样Angle / Power。</p>
+<h4 id="stage-4refinement">Stage 4：Refinement</h4><p>对最优若干候选细化。</p>
 <hr />
-<h1 id="109-trajectory-cache">109. Trajectory Cache</h1><p>同一Actor、Weapon、Environment</p>
+<h3 id="109-trajectory-cache">109. Trajectory Cache</h3><p>同一Actor、Weapon、Environment</p>
 <p>短时间内：</p>
 <p>可以复用部分轨迹样本。</p>
 <hr />
-<h1 id="110-terrain一旦变化">110. Terrain一旦变化：</h1><p>相关Cache失效。</p>
+<h3 id="110-terrain一旦变化">110. Terrain一旦变化：</h3><p>相关Cache失效。</p>
 <hr />
-<h1 id="111-核心范式二十九ai可以使用与trajectory-preview相同的模拟器">111. 核心范式二十九：AI可以使用与Trajectory Preview相同的模拟器</h1><p>非常重要。</p>
+<h3 id="111-核心范式二十九ai可以使用与trajectory-preview相同的模拟器">111. 核心范式二十九：AI可以使用与Trajectory Preview相同的模拟器</h3><p>非常重要。</p>
 <p>Human Preview。</p>
 <p>AI Prediction。</p>
 <p>Training Tool。</p>
@@ -1563,12 +1563,12 @@
 <p>复用同一个：</p>
 <p><strong>Read-only Projectile Simulator。</strong></p>
 <hr />
-<h1 id="112-不要给ai">112. 不要给AI：</h1><p>作弊公式</p>
+<h3 id="112-不要给ai">112. 不要给AI：</h3><p>作弊公式</p>
 <p>直接算最终命中。</p>
 <p>否则：</p>
 <p>AI和玩家玩的不是同一套规则。</p>
 <hr />
-<h1 id="113-核心范式三十ai-accuracy-应通过决策噪声控制而不是修改真实physics">113. 核心范式三十：AI Accuracy 应通过“决策噪声”控制，而不是修改真实Physics</h1><p>简单难度AI：</p>
+<h3 id="113-核心范式三十ai-accuracy-应通过决策噪声控制而不是修改真实physics">113. 核心范式三十：AI Accuracy 应通过“决策噪声”控制，而不是修改真实Physics</h3><p>简单难度AI：</p>
 <p>可以：</p>
 <ul>
 <li><p>Angle Estimate误差；</p>
@@ -1583,11 +1583,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="114-不要">114. 不要：</h1><p>AI发射以后</p>
+<h3 id="114-不要">114. 不要：</h3><p>AI发射以后</p>
 <p>偷偷修正Projectile轨迹。</p>
 <p>那会破坏系统公平性。</p>
 <hr />
-<h1 id="115-核心范式三十一程序地形生成必须同时验证出生安全和弹道可玩性">115. 核心范式三十一：程序地形生成必须同时验证“出生安全”和“弹道可玩性”</h1><p>随机一张山地：</p>
+<h3 id="115-核心范式三十一程序地形生成必须同时验证出生安全和弹道可玩性">115. 核心范式三十一：程序地形生成必须同时验证“出生安全”和“弹道可玩性”</h3><p>随机一张山地：</p>
 <p>几何上合法</p>
 <p>不代表：</p>
 <p>好玩。</p>
@@ -1611,7 +1611,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="116-terraingenerationdefinition">116. TerrainGenerationDefinition</h1><p>建议字段：</p>
+<h3 id="116-terraingenerationdefinition">116. TerrainGenerationDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>Width；</p>
 </li>
@@ -1635,22 +1635,22 @@
 </li>
 </ul>
 <hr />
-<h1 id="117-spawn-validation">117. Spawn Validation</h1><p>每个Actor：</p>
+<h3 id="117-spawn-validation">117. Spawn Validation</h3><p>每个Actor：</p>
 <p>必须找到：</p>
 <p>Standable Position。</p>
 <hr />
-<h1 id="118-初始队伍分布不能">118. 初始队伍分布不能：</h1><p>一队全部集中坑底。</p>
+<h3 id="118-初始队伍分布不能">118. 初始队伍分布不能：</h3><p>一队全部集中坑底。</p>
 <p>另一队全部占最高点，</p>
 <p>除非Mode明确如此。</p>
 <hr />
-<h1 id="119-核心范式三十二procedural-map-fairness应按行动机会而不只是几何对称衡量">119. 核心范式三十二：Procedural Map Fairness应按“行动机会”而不只是几何对称衡量</h1><p>完全镜像地图：</p>
+<h3 id="119-核心范式三十二procedural-map-fairness应按行动机会而不只是几何对称衡量">119. 核心范式三十二：Procedural Map Fairness应按“行动机会”而不只是几何对称衡量</h3><p>完全镜像地图：</p>
 <p>公平。</p>
 <p>但：</p>
 <p>也可能无聊。</p>
 <p>非对称地图：</p>
 <p>仍然可以公平。</p>
 <hr />
-<h1 id="120-fairness-metrics可以考虑">120. Fairness Metrics可以考虑：</h1><ul>
+<h3 id="120-fairness-metrics可以考虑">120. Fairness Metrics可以考虑：</h3><ul>
 <li><p>Average Height；</p>
 </li>
 <li><p>Cover；</p>
@@ -1669,10 +1669,10 @@
 </li>
 </ul>
 <hr />
-<h1 id="121-通过大量ai模拟">121. 通过大量AI模拟：</h1><p>评估：</p>
+<h3 id="121-通过大量ai模拟">121. 通过大量AI模拟：</h3><p>评估：</p>
 <p>Side Win Rate。</p>
 <hr />
-<h1 id="122-核心范式三十三first-turn-advantage-必须专门测试">122. 核心范式三十三：First Turn Advantage 必须专门测试</h1><p>回合制炮术中：</p>
+<h3 id="122-核心范式三十三first-turn-advantage-必须专门测试">122. 核心范式三十三：First Turn Advantage 必须专门测试</h3><p>回合制炮术中：</p>
 <p>先手可以：</p>
 <p>先破坏地形</p>
 <p>或：</p>
@@ -1680,7 +1680,7 @@
 <p>因此要分析：</p>
 <p>先手优势。</p>
 <hr />
-<h1 id="123-缓解方式可以">123. 缓解方式可以：</h1><ul>
+<h3 id="123-缓解方式可以">123. 缓解方式可以：</h3><ul>
 <li><p>初始保护；</p>
 </li>
 <li><p>分散Spawn；</p>
@@ -1695,11 +1695,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="124-不建议">124. 不建议：</h1><p>单纯给后手：</p>
+<h3 id="124-不建议">124. 不建议：</h3><p>单纯给后手：</p>
 <p>+20% HP</p>
 <p>作为唯一修正。</p>
 <hr />
-<h1 id="125-核心范式三十四turn-timer-是压力工具而不是服务器超时逻辑">125. 核心范式三十四：Turn Timer 是压力工具，而不是服务器超时逻辑</h1><p>没有Timer：</p>
+<h3 id="125-核心范式三十四turn-timer-是压力工具而不是服务器超时逻辑">125. 核心范式三十四：Turn Timer 是压力工具，而不是服务器超时逻辑</h3><p>没有Timer：</p>
 <p>玩家可以：</p>
 <p>精确计算数分钟。</p>
 <p>玩法可能变：</p>
@@ -1707,7 +1707,7 @@
 <p>有限Turn Time迫使：</p>
 <p>估算和执行。</p>
 <hr />
-<h1 id="126-decisionclock">126. DecisionClock</h1><p>建议包含：</p>
+<h3 id="126-decisionclock">126. DecisionClock</h3><p>建议包含：</p>
 <ul>
 <li><p>StartTime；</p>
 </li>
@@ -1723,7 +1723,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="127-timer到0时">127. Timer到0时：</h1><p>可以：</p>
+<h3 id="127-timer到0时">127. Timer到0时：</h3><p>可以：</p>
 <ul>
 <li><p>自动End Turn；</p>
 </li>
@@ -1735,13 +1735,13 @@
 <p>需要：</p>
 <p>Ruleset固定。</p>
 <hr />
-<h1 id="128-online模式尤其要">128. Online模式尤其要：</h1><p>服务器权威维护：</p>
+<h3 id="128-online模式尤其要">128. Online模式尤其要：</h3><p>服务器权威维护：</p>
 <p>Turn Deadline。</p>
 <hr />
-<h1 id="129-核心范式三十五多人网络只需要同步输入和物理事实但terrain-mutation必须权威一致">129. 核心范式三十五：多人网络只需要同步“输入和物理事实”，但Terrain Mutation必须权威一致</h1><p>本类型非常适合：</p>
+<h3 id="129-核心范式三十五多人网络只需要同步输入和物理事实但terrain-mutation必须权威一致">129. 核心范式三十五：多人网络只需要同步“输入和物理事实”，但Terrain Mutation必须权威一致</h3><p>本类型非常适合：</p>
 <p>Server-authoritative Turn Simulation。</p>
 <hr />
-<h1 id="130-客户端发送">130. 客户端发送：</h1><ul>
+<h3 id="130-客户端发送">130. 客户端发送：</h3><ul>
 <li><p>Move Input；</p>
 </li>
 <li><p>Weapon Selection；</p>
@@ -1756,17 +1756,17 @@
 <p>服务器决定：</p>
 <p>Projectile、Impact、Terrain。</p>
 <hr />
-<h1 id="131-因为">131. 因为：</h1><p>地形变化</p>
+<h3 id="131-因为">131. 因为：</h3><p>地形变化</p>
 <p>会影响之后所有回合。</p>
 <p>如果不同客户端Terrain Mask漂移：</p>
 <p>整场比赛立刻失去一致性。</p>
 <hr />
-<h1 id="132-terrain-revision">132. Terrain Revision</h1><p>每次Mutation：</p>
+<h3 id="132-terrain-revision">132. Terrain Revision</h3><p>每次Mutation：</p>
 <p>Revision +1。</p>
 <p>客户端必须：</p>
 <p>确认同步。</p>
 <hr />
-<h1 id="133-server可以周期发送">133. Server可以周期发送：</h1><ul>
+<h3 id="133-server可以周期发送">133. Server可以周期发送：</h3><ul>
 <li><p>Terrain Delta；</p>
 </li>
 <li><p>Terrain Hash；</p>
@@ -1777,13 +1777,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="134-核心范式三十六replay可以依靠输入-terrain-mutation事实-周期hash">134. 核心范式三十六：Replay可以依靠“输入 + Terrain Mutation事实 + 周期Hash”</h1><p>理论上如果：</p>
+<h3 id="134-核心范式三十六replay可以依靠输入-terrain-mutation事实-周期hash">134. 核心范式三十六：Replay可以依靠“输入 + Terrain Mutation事实 + 周期Hash”</h3><p>理论上如果：</p>
 <p>Physics完全确定，</p>
 <p>只记录Input即可。</p>
 <p>但浮点Projectile、碰撞、平台差异</p>
 <p>可能导致长期漂移。</p>
 <hr />
-<h1 id="135-稳健方案">135. 稳健方案：</h1><ul>
+<h3 id="135-稳健方案">135. 稳健方案：</h3><ul>
 <li><p>Turn Inputs；</p>
 </li>
 <li><p>Environment；</p>
@@ -1798,7 +1798,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="136-replayrecord">136. ReplayRecord</h1><p>建议包含：</p>
+<h3 id="136-replayrecord">136. ReplayRecord</h3><p>建议包含：</p>
 <ul>
 <li><p>MatchVersion；</p>
 </li>
@@ -1824,10 +1824,10 @@
 </li>
 </ul>
 <hr />
-<h1 id="137-如果逻辑使用">137. 如果逻辑使用：</h1><p>固定点 / 完全确定碰撞，</p>
+<h3 id="137-如果逻辑使用">137. 如果逻辑使用：</h3><p>固定点 / 完全确定碰撞，</p>
 <p>可以进一步简化。</p>
 <hr />
-<h1 id="138-核心范式三十七terrain-delta-比完整-terrain-snapshot-更适合-replay-network">138. 核心范式三十七：Terrain Delta 比完整 Terrain Snapshot 更适合 Replay / Network</h1><p>每次Explosion只修改：</p>
+<h3 id="138-核心范式三十七terrain-delta-比完整-terrain-snapshot-更适合-replay-network">138. 核心范式三十七：Terrain Delta 比完整 Terrain Snapshot 更适合 Replay / Network</h3><p>每次Explosion只修改：</p>
 <p>局部区域。</p>
 <p>发送：</p>
 <p>Mutation Shape + 参数</p>
@@ -1835,23 +1835,23 @@
 <p>重新发整张Mask</p>
 <p>更轻。</p>
 <hr />
-<h1 id="139-但必须定期">139. 但必须定期：</h1><p>Hash校验。</p>
+<h3 id="139-但必须定期">139. 但必须定期：</h3><p>Hash校验。</p>
 <p>如果Desync：</p>
 <p>发送：</p>
 <p>Authoritative Region Snapshot</p>
 <p>修正。</p>
 <hr />
-<h1 id="140-核心范式三十八环境随机必须在回合边界更新">140. 核心范式三十八：环境随机必须在回合边界更新</h1><p>例如：</p>
+<h3 id="140-核心范式三十八环境随机必须在回合边界更新">140. 核心范式三十八：环境随机必须在回合边界更新</h3><p>例如：</p>
 <p>Wind。</p>
 <p>推荐：</p>
 <p>每Turn / 每Round改变。</p>
 <hr />
-<h1 id="141-不要">141. 不要：</h1><p>Projectile飞到一半</p>
+<h3 id="141-不要">141. 不要：</h3><p>Projectile飞到一半</p>
 <p>随机重新Roll风。</p>
 <p>除非：</p>
 <p>明确天气机制。</p>
 <hr />
-<h1 id="142-environment-rng">142. Environment RNG</h1><p>独立Stream：</p>
+<h3 id="142-environment-rng">142. Environment RNG</h3><p>独立Stream：</p>
 <ul>
 <li><p>WindRandom；</p>
 </li>
@@ -1861,34 +1861,34 @@
 </li>
 </ul>
 <hr />
-<h1 id="143-cosmetic-rng不能">143. Cosmetic RNG不能：</h1><p>改变Wind。</p>
+<h3 id="143-cosmetic-rng不能">143. Cosmetic RNG不能：</h3><p>改变Wind。</p>
 <hr />
-<h1 id="144-核心范式三十九friendly-fire-往往应该成立">144. 核心范式三十九：Friendly Fire 往往应该成立</h1><p>队伍角色彼此存在。</p>
+<h3 id="144-核心范式三十九friendly-fire-往往应该成立">144. 核心范式三十九：Friendly Fire 往往应该成立</h3><p>队伍角色彼此存在。</p>
 <p>Explosion具有真实Area。</p>
 <p>因此：</p>
 <p>攻击敌人旁边的己方角色</p>
 <p>应该：</p>
 <p>有风险。</p>
 <hr />
-<h1 id="145-friendly-fire建立">145. Friendly Fire建立：</h1><p>空间约束。</p>
+<h3 id="145-friendly-fire建立">145. Friendly Fire建立：</h3><p>空间约束。</p>
 <p>使：</p>
 <p>“把所有人聚一起”</p>
 <p>不是绝对最优。</p>
 <hr />
-<h1 id="146-具体伤害比例">146. 具体伤害比例：</h1><p>由Ruleset配置。</p>
+<h3 id="146-具体伤害比例">146. 具体伤害比例：</h3><p>由Ruleset配置。</p>
 <hr />
-<h1 id="147-核心范式四十自伤应与普通damage使用同一规则">147. 核心范式四十：自伤应与普通Damage使用同一规则</h1><p>玩家在脚下爆炸。</p>
+<h3 id="147-核心范式四十自伤应与普通damage使用同一规则">147. 核心范式四十：自伤应与普通Damage使用同一规则</h3><p>玩家在脚下爆炸。</p>
 <p>不应该：</p>
 <p>因为是自己发射</p>
 <p>就走另一套Physics。</p>
 <hr />
-<h1 id="148-如果某weapon允许">148. 如果某Weapon允许：</h1><p>利用Impulse移动自己，</p>
+<h3 id="148-如果某weapon允许">148. 如果某Weapon允许：</h3><p>利用Impulse移动自己，</p>
 <p>这本身可以：</p>
 <p>成为高阶技巧。</p>
 <p>但必须：</p>
 <p>来自相同规则。</p>
 <hr />
-<h1 id="149-核心范式四十一movement-tool-可以模糊武器和机动能力边界">149. 核心范式四十一：Movement Tool 可以模糊“武器”和“机动能力”边界</h1><p>炮术游戏常适合：</p>
+<h3 id="149-核心范式四十一movement-tool-可以模糊武器和机动能力边界">149. 核心范式四十一：Movement Tool 可以模糊“武器”和“机动能力”边界</h3><p>炮术游戏常适合：</p>
 <p>把有限工具用于：</p>
 <ul>
 <li><p>横向移动；</p>
@@ -1903,25 +1903,25 @@
 </li>
 </ul>
 <hr />
-<h1 id="150-这些工具的价值不是">150. 这些工具的价值不是：</h1><p>直接Damage。</p>
+<h3 id="150-这些工具的价值不是">150. 这些工具的价值不是：</h3><p>直接Damage。</p>
 <p>而是：</p>
 <p>改变：</p>
 <p>未来Shot Origin。</p>
 <hr />
-<h1 id="151-这强化">151. 这强化：</h1><p><strong>Position是长期资源。</strong></p>
+<h3 id="151-这强化">151. 这强化：</h3><p><strong>Position是长期资源。</strong></p>
 <hr />
-<h1 id="152-核心范式四十二shot-origin-与-actor-position必须一致">152. 核心范式四十二：Shot Origin 与 Actor Position必须一致</h1><p>不要：</p>
+<h3 id="152-核心范式四十二shot-origin-与-actor-position必须一致">152. 核心范式四十二：Shot Origin 与 Actor Position必须一致</h3><p>不要：</p>
 <p>角色站在掩体里。</p>
 <p>Projectile从：</p>
 <p>摄像机中心生成。</p>
 <hr />
-<h1 id="153-spawn-point应该来自">153. Spawn Point应该来自：</h1><p>Weapon Muzzle / Actor Geometry</p>
+<h3 id="153-spawn-point应该来自">153. Spawn Point应该来自：</h3><p>Weapon Muzzle / Actor Geometry</p>
 <p>的逻辑点。</p>
 <hr />
-<h1 id="154-fire-validation还需要">154. Fire Validation还需要：</h1><p>检查Projectile初始区域</p>
+<h3 id="154-fire-validation还需要">154. Fire Validation还需要：</h3><p>检查Projectile初始区域</p>
 <p>是否立即和Terrain重叠。</p>
 <hr />
-<h1 id="155-如果重叠">155. 如果重叠：</h1><p>可以：</p>
+<h3 id="155-如果重叠">155. 如果重叠：</h3><p>可以：</p>
 <ul>
 <li><p>禁止Fire；</p>
 </li>
@@ -1933,12 +1933,12 @@
 <p>具体规则：</p>
 <p>统一定义。</p>
 <hr />
-<h1 id="156-核心范式四十三weapon-fuse-timing-是扩展弹道维度的强机制">156. 核心范式四十三：Weapon Fuse / Timing 是扩展弹道维度的强机制</h1><p>某些Projectile：</p>
+<h3 id="156-核心范式四十三weapon-fuse-timing-是扩展弹道维度的强机制">156. 核心范式四十三：Weapon Fuse / Timing 是扩展弹道维度的强机制</h3><p>某些Projectile：</p>
 <p>不会Impact立即结算。</p>
 <p>而是：</p>
 <p>延迟触发。</p>
 <hr />
-<h1 id="157-fusestate">157. FuseState</h1><p>建议包含：</p>
+<h3 id="157-fusestate">157. FuseState</h3><p>建议包含：</p>
 <ul>
 <li><p>FuseDuration；</p>
 </li>
@@ -1952,16 +1952,16 @@
 </li>
 </ul>
 <hr />
-<h1 id="158-这增加">158. 这增加：</h1><p>第三个瞄准维度：</p>
+<h3 id="158-这增加">158. 这增加：</h3><p>第三个瞄准维度：</p>
 <p>Angle。</p>
 <p>Power。</p>
 <p>Timing。</p>
 <hr />
-<h1 id="159-但基础游戏不需要">159. 但基础游戏不需要：</h1><p>大量复杂参数。</p>
+<h3 id="159-但基础游戏不需要">159. 但基础游戏不需要：</h3><p>大量复杂参数。</p>
 <p>否则：</p>
 <p>认知负担高。</p>
 <hr />
-<h1 id="160-核心范式四十四bounce-应属于projectile规则而不是collider随机反弹">160. 核心范式四十四：Bounce 应属于Projectile规则，而不是Collider随机反弹</h1><p>反弹需要：</p>
+<h3 id="160-核心范式四十四bounce-应属于projectile规则而不是collider随机反弹">160. 核心范式四十四：Bounce 应属于Projectile规则，而不是Collider随机反弹</h3><p>反弹需要：</p>
 <p>明确：</p>
 <ul>
 <li><p>Maximum Bounces；</p>
@@ -1974,7 +1974,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="161-bounceresult">161. BounceResult</h1><p>记录：</p>
+<h3 id="161-bounceresult">161. BounceResult</h3><p>记录：</p>
 <ul>
 <li><p>ImpactNormal；</p>
 </li>
@@ -1986,12 +1986,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="162-玩家能够">162. 玩家能够：</h1><p>学习：</p>
+<h3 id="162-玩家能够">162. 玩家能够：</h3><p>学习：</p>
 <p>反弹Shot。</p>
 <p>而不是：</p>
 <p>随机弹。</p>
 <hr />
-<h1 id="163-核心范式四十五terrain-material-可以让同一弹道产生不同环境结果">163. 核心范式四十五：Terrain Material 可以让同一弹道产生不同环境结果</h1><p>例如抽象材质：</p>
+<h3 id="163-核心范式四十五terrain-material-可以让同一弹道产生不同环境结果">163. 核心范式四十五：Terrain Material 可以让同一弹道产生不同环境结果</h3><p>例如抽象材质：</p>
 <ul>
 <li><p>Soil；</p>
 </li>
@@ -2014,10 +2014,10 @@
 </li>
 </ul>
 <hr />
-<h1 id="164-不需要模拟真实材料参数">164. 不需要模拟真实材料参数。</h1><p>只需：</p>
+<h3 id="164-不需要模拟真实材料参数">164. 不需要模拟真实材料参数。</h3><p>只需：</p>
 <p>具有稳定Gameplay语义。</p>
 <hr />
-<h1 id="165-materialdefinition">165. MaterialDefinition</h1><p>建议包含：</p>
+<h3 id="165-materialdefinition">165. MaterialDefinition</h3><p>建议包含：</p>
 <ul>
 <li><p>MaterialId；</p>
 </li>
@@ -2033,11 +2033,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="166-核心范式四十六sudden-death-应通过改变环境约束结束无限拖延">166. 核心范式四十六：Sudden Death 应通过改变环境约束结束无限拖延</h1><p>如果双方一直：</p>
+<h3 id="166-核心范式四十六sudden-death-应通过改变环境约束结束无限拖延">166. 核心范式四十六：Sudden Death 应通过改变环境约束结束无限拖延</h3><p>如果双方一直：</p>
 <p>躲在难以攻击的位置，</p>
 <p>比赛可能过长。</p>
 <hr />
-<h1 id="167-sudden-death可以">167. Sudden Death可以：</h1><ul>
+<h3 id="167-sudden-death可以">167. Sudden Death可以：</h3><ul>
 <li><p>Hazard高度上升；</p>
 </li>
 <li><p>Terrain持续缩减；</p>
@@ -2050,14 +2050,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="168-推荐选择">168. 推荐选择：</h1><p><strong>改变空间</strong></p>
+<h3 id="168-推荐选择">168. 推荐选择：</h3><p><strong>改变空间</strong></p>
 <p>而不是：</p>
 <p>直接随机扣血。</p>
 <p>因为这与品类核心：</p>
 <p>地形与位置</p>
 <p>保持一致。</p>
 <hr />
-<h1 id="169-suddendeathstate">169. SuddenDeathState</h1><p>建议包含：</p>
+<h3 id="169-suddendeathstate">169. SuddenDeathState</h3><p>建议包含：</p>
 <ul>
 <li><p>Active；</p>
 </li>
@@ -2071,7 +2071,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="170-核心范式四十七目标模式可以超越消灭所有敌人">170. 核心范式四十七：目标模式可以超越“消灭所有敌人”</h1><p>可以扩展：</p>
+<h3 id="170-核心范式四十七目标模式可以超越消灭所有敌人">170. 核心范式四十七：目标模式可以超越“消灭所有敌人”</h3><p>可以扩展：</p>
 <ul>
 <li><p>King / VIP；</p>
 </li>
@@ -2089,20 +2089,20 @@
 </li>
 </ul>
 <hr />
-<h1 id="171-但核心">171. 但核心：</h1><p>Turn + Projectile + Terrain Mutation</p>
+<h3 id="171-但核心">171. 但核心：</h3><p>Turn + Projectile + Terrain Mutation</p>
 <p>仍然可复用。</p>
 <hr />
-<h1 id="172-核心范式四十八objective-应消费-domain-event而不是weapon直接改进度">172. 核心范式四十八：Objective 应消费 Domain Event，而不是Weapon直接改进度</h1><p>例如：</p>
+<h3 id="172-核心范式四十八objective-应消费-domain-event而不是weapon直接改进度">172. 核心范式四十八：Objective 应消费 Domain Event，而不是Weapon直接改进度</h3><p>例如：</p>
 <p>摧毁桥梁目标。</p>
 <p>TerrainMutation导致：</p>
 <p>BridgeSupportRemoved。</p>
 <p>ObjectiveSystem判断：</p>
 <p>BridgeDestroyed。</p>
 <hr />
-<h1 id="173-weapon不需要">173. Weapon不需要：</h1><p>知道：</p>
+<h3 id="173-weapon不需要">173. Weapon不需要：</h3><p>知道：</p>
 <p>这是任务目标。</p>
 <hr />
-<h1 id="174-核心范式四十九shot-camera属于信息系统而不只是演出">174. 核心范式四十九：Shot Camera属于信息系统而不只是演出</h1><p>Projectile飞出以后：</p>
+<h3 id="174-核心范式四十九shot-camera属于信息系统而不只是演出">174. 核心范式四十九：Shot Camera属于信息系统而不只是演出</h3><p>Projectile飞出以后：</p>
 <p>Camera通常跟随Projectile。</p>
 <p>玩家需要：</p>
 <p>看到：</p>
@@ -2119,19 +2119,19 @@
 <p>这帮助：</p>
 <p>下一次校准。</p>
 <hr />
-<h1 id="175-camera不应提前">175. Camera不应提前：</h1><p>暴露隐藏信息</p>
+<h3 id="175-camera不应提前">175. Camera不应提前：</h3><p>暴露隐藏信息</p>
 <p>如果Mode存在Fog / Concealment。</p>
 <hr />
-<h1 id="176-impact后camera可以">176. Impact后Camera可以：</h1><p>短暂留在结果区域。</p>
+<h3 id="176-impact后camera可以">176. Impact后Camera可以：</h3><p>短暂留在结果区域。</p>
 <p>然后：</p>
 <p>返回战场。</p>
 <hr />
-<h1 id="177-玩家通过视觉">177. 玩家通过视觉：</h1><p>学习：</p>
+<h3 id="177-玩家通过视觉">177. 玩家通过视觉：</h3><p>学习：</p>
 <p>“上次差了多少”。</p>
 <p>这构成：</p>
 <p>技能反馈。</p>
 <hr />
-<h1 id="178-核心范式五十miss-也必须提供高质量学习反馈">178. 核心范式五十：Miss 也必须提供高质量学习反馈</h1><p>一炮没打中。</p>
+<h3 id="178-核心范式五十miss-也必须提供高质量学习反馈">178. 核心范式五十：Miss 也必须提供高质量学习反馈</h3><p>一炮没打中。</p>
 <p>不能：</p>
 <p>只是浪费Turn。</p>
 <p>玩家应该能够：</p>
@@ -2147,16 +2147,16 @@
 </li>
 </ul>
 <hr />
-<h1 id="179-这使失败成为">179. 这使失败成为：</h1><p><strong>Calibration Data。</strong></p>
+<h3 id="179-这使失败成为">179. 这使失败成为：</h3><p><strong>Calibration Data。</strong></p>
 <hr />
-<h1 id="180-玩家下一次">180. 玩家下一次：</h1><p>可以修正：</p>
+<h3 id="180-玩家下一次">180. 玩家下一次：</h3><p>可以修正：</p>
 <p>Angle / Power。</p>
 <hr />
-<h1 id="181-这也是品类长期技能成长的重要来源">181. 这也是品类长期技能成长的重要来源。</h1><hr />
-<h1 id="182-核心范式五十一shot-history-可以成为正式训练工具">182. 核心范式五十一：Shot History 可以成为正式训练工具</h1><p>记录最近：</p>
+<h3 id="181-这也是品类长期技能成长的重要来源">181. 这也是品类长期技能成长的重要来源。</h3><hr />
+<h3 id="182-核心范式五十一shot-history-可以成为正式训练工具">182. 核心范式五十一：Shot History 可以成为正式训练工具</h3><p>记录最近：</p>
 <p>若干发。</p>
 <hr />
-<h1 id="183-shothistoryentry">183. ShotHistoryEntry</h1><p>建议包含：</p>
+<h3 id="183-shothistoryentry">183. ShotHistoryEntry</h3><p>建议包含：</p>
 <ul>
 <li><p>Actor；</p>
 </li>
@@ -2180,14 +2180,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="184-training-mode可以显示">184. Training Mode可以显示：</h1><p>上一发轨迹。</p>
+<h3 id="184-training-mode可以显示">184. Training Mode可以显示：</h3><p>上一发轨迹。</p>
 <p>当前Aim轨迹。</p>
 <p>帮助：</p>
 <p>学习校准。</p>
 <hr />
-<h1 id="185-正式竞技模式">185. 正式竞技模式：</h1><p>可以隐藏部分辅助。</p>
+<h3 id="185-正式竞技模式">185. 正式竞技模式：</h3><p>可以隐藏部分辅助。</p>
 <hr />
-<h1 id="186-核心范式五十二玩家长期知识成长来自弹道模型内化">186. 核心范式五十二：玩家长期知识成长来自“弹道模型内化”</h1><p>角色本身可能：</p>
+<h3 id="186-核心范式五十二玩家长期知识成长来自弹道模型内化">186. 核心范式五十二：玩家长期知识成长来自“弹道模型内化”</h3><p>角色本身可能：</p>
 <p>没有成长。</p>
 <p>但玩家会逐渐学会：</p>
 <ul>
@@ -2205,12 +2205,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="187-因此">187. 因此：</h1><p>Physics必须稳定。</p>
+<h3 id="187-因此">187. 因此：</h3><p>Physics必须稳定。</p>
 <p>如果同样输入：</p>
 <p>结果差异过大，</p>
 <p>技能学习崩溃。</p>
 <hr />
-<h1 id="188-核心范式五十三随机性应主要进入环境和地图而不是进入弹道核心">188. 核心范式五十三：随机性应主要进入环境和地图，而不是进入弹道核心</h1><p>可以随机：</p>
+<h3 id="188-核心范式五十三随机性应主要进入环境和地图而不是进入弹道核心">188. 核心范式五十三：随机性应主要进入环境和地图，而不是进入弹道核心</h3><p>可以随机：</p>
 <ul>
 <li><p>Map；</p>
 </li>
@@ -2226,135 +2226,135 @@
 <p>应该产生：</p>
 <p>高度稳定的Projectile结果。</p>
 <hr />
-<h1 id="189-不建议">189. 不建议：</h1><p>每发Projectile</p>
+<h3 id="189-不建议">189. 不建议：</h3><p>每发Projectile</p>
 <p>随机 ±20%角度。</p>
 <p>这会直接破坏：</p>
 <p>炮术技能。</p>
 <hr />
-<h1 id="190-核心范式五十四完整事件与执行流程示例">190. 核心范式五十四：完整事件与执行流程示例</h1><p>以下以：</p>
+<h3 id="190-核心范式五十四完整事件与执行流程示例">190. 核心范式五十四：完整事件与执行流程示例</h3><p>以下以：</p>
 <p><strong>玩家不直接攻击敌人，而是炸掉敌人脚下的地形，使其落入低处并失去下一轮安全射界</strong></p>
 <p>为例。</p>
 <hr />
-<h2 id="1901-当前turn">190.1 当前Turn</h2><p>Team A。</p>
+<h3 id="1901-当前turn">190.1 当前Turn</h3><p>Team A。</p>
 <p>Actor A2。</p>
 <hr />
-<h2 id="1902-当前战场">190.2 当前战场</h2><p>敌人B1：</p>
+<h3 id="1902-当前战场">190.2 当前战场</h3><p>敌人B1：</p>
 <p>站在高台。</p>
 <p>HP：</p>
 <p>80%。</p>
 <p>高台下：</p>
 <p>存在一个较低安全平台。</p>
 <hr />
-<h2 id="1903-直接攻击评估">190.3 直接攻击评估</h2><p>基础Weapon：</p>
+<h3 id="1903-直接攻击评估">190.3 直接攻击评估</h3><p>基础Weapon：</p>
 <p>即使精准命中：</p>
 <p>预计Damage只有：</p>
 <p>35。</p>
 <p>无法击杀。</p>
 <hr />
-<h2 id="1904-但b1脚下terrain">190.4 但B1脚下Terrain：</h2><p>较薄。</p>
+<h3 id="1904-但b1脚下terrain">190.4 但B1脚下Terrain：</h3><p>较薄。</p>
 <hr />
-<h2 id="1905-玩家选择">190.5 玩家选择：</h2><p>Terrain-focused Projectile。</p>
+<h3 id="1905-玩家选择">190.5 玩家选择：</h3><p>Terrain-focused Projectile。</p>
 <p>特性：</p>
 <p>人物Damage较低。</p>
 <p>Terrain Radius较大。</p>
 <hr />
-<h2 id="1906-玩家移动">190.6 玩家移动</h2><p>Actor A2向左移动：</p>
+<h3 id="1906-玩家移动">190.6 玩家移动</h3><p>Actor A2向左移动：</p>
 <p>改变Shot Origin。</p>
 <p>获得：</p>
 <p>更高弹道弧线空间。</p>
 <hr />
-<h2 id="1907-玩家读取environment">190.7 玩家读取Environment</h2><p>Wind：</p>
+<h3 id="1907-玩家读取environment">190.7 玩家读取Environment</h3><p>Wind：</p>
 <p>轻微向右。</p>
 <hr />
-<h2 id="1908-玩家调整">190.8 玩家调整：</h2><p>Angle。</p>
+<h3 id="1908-玩家调整">190.8 玩家调整：</h3><p>Angle。</p>
 <p>Power。</p>
 <hr />
-<h2 id="1909-shotintent提交">190.9 ShotIntent提交</h2><p>服务器 / Rule系统验证：</p>
+<h3 id="1909-shotintent提交">190.9 ShotIntent提交</h3><p>服务器 / Rule系统验证：</p>
 <p>合法。</p>
 <hr />
-<h2 id="19010-shot-commit">190.10 Shot Commit</h2><p>Ammo：</p>
+<h3 id="19010-shot-commit">190.10 Shot Commit</h3><p>Ammo：</p>
 <p>1 → 0。</p>
 <p>Turn Action：</p>
 <p>Locked。</p>
 <hr />
-<h2 id="19011-projectile-spawn">190.11 Projectile Spawn</h2><p>Origin：</p>
+<h3 id="19011-projectile-spawn">190.11 Projectile Spawn</h3><p>Origin：</p>
 <p>真实Weapon Muzzle。</p>
 <p>Velocity：</p>
 <p>根据Aim + Power生成。</p>
 <hr />
-<h2 id="19012-projectileactive">190.12 ProjectileActive</h2><p>每Fixed Tick：</p>
+<h3 id="19012-projectileactive">190.12 ProjectileActive</h3><p>每Fixed Tick：</p>
 <p>MovementModel</p>
 <p>计算新位置。</p>
 <hr />
-<h2 id="19013-第一段飞行">190.13 第一段飞行</h2><p>Projectile越过：</p>
+<h3 id="19013-第一段飞行">190.13 第一段飞行</h3><p>Projectile越过：</p>
 <p>前方岩壁。</p>
 <hr />
-<h2 id="19014-风逐渐让轨迹">190.14 风逐渐让轨迹：</h2><p>向右偏移。</p>
+<h3 id="19014-风逐渐让轨迹">190.14 风逐渐让轨迹：</h3><p>向右偏移。</p>
 <hr />
-<h2 id="19015-projectile落在">190.15 Projectile落在：</h2><p>B1脚下左侧地形。</p>
+<h3 id="19015-projectile落在">190.15 Projectile落在：</h3><p>B1脚下左侧地形。</p>
 <p>没有直接命中Actor。</p>
 <hr />
-<h2 id="19016-impactevent">190.16 ImpactEvent</h2><p>HitEntity：</p>
+<h3 id="19016-impactevent">190.16 ImpactEvent</h3><p>HitEntity：</p>
 <p>Terrain。</p>
 <p>Impact位置记录。</p>
 <hr />
-<h2 id="19017-impactresolver">190.17 ImpactResolver</h2><p>生成：</p>
+<h3 id="19017-impactresolver">190.17 ImpactResolver</h3><p>生成：</p>
 <p>Explosion Effect。</p>
 <hr />
-<h2 id="19018-explosion-snapshot">190.18 Explosion Snapshot</h2><p>冻结：</p>
+<h3 id="19018-explosion-snapshot">190.18 Explosion Snapshot</h3><p>冻结：</p>
 <p>B1位置。</p>
 <p>附近Terrain Revision。</p>
 <hr />
-<h2 id="19019-damageresult">190.19 DamageResult</h2><p>B1距离Explosion较远：</p>
+<h3 id="19019-damageresult">190.19 DamageResult</h3><p>B1距离Explosion较远：</p>
 <p>只受到：</p>
 <p>8伤害。</p>
 <hr />
-<h2 id="19020-impulseresult">190.20 ImpulseResult</h2><p>受到：</p>
+<h3 id="19020-impulseresult">190.20 ImpulseResult</h3><p>受到：</p>
 <p>小幅向右上Impulse。</p>
 <hr />
-<h2 id="19021-terrainmutation">190.21 TerrainMutation</h2><p>删除：</p>
+<h3 id="19021-terrainmutation">190.21 TerrainMutation</h3><p>删除：</p>
 <p>高台下方一个大范围区域。</p>
 <hr />
-<h2 id="19022-terrain-revision">190.22 Terrain Revision</h2><p>128 → 129。</p>
+<h3 id="19022-terrain-revision">190.22 Terrain Revision</h3><p>128 → 129。</p>
 <hr />
-<h2 id="19023-supportsystem重算">190.23 SupportSystem重算</h2><p>B1脚下：</p>
+<h3 id="19023-supportsystem重算">190.23 SupportSystem重算</h3><p>B1脚下：</p>
 <p>不再有Support。</p>
 <hr />
-<h2 id="19024-b1进入falling">190.24 B1进入Falling</h2><p>此前Explosion Impulse</p>
+<h3 id="19024-b1进入falling">190.24 B1进入Falling</h3><p>此前Explosion Impulse</p>
 <p>又让其略向右移动。</p>
 <hr />
-<h2 id="19025-actor-settling">190.25 Actor Settling</h2><p>B1下坠。</p>
+<h3 id="19025-actor-settling">190.25 Actor Settling</h3><p>B1下坠。</p>
 <hr />
-<h2 id="19026-b1没有掉出地图">190.26 B1没有掉出地图</h2><p>落到：</p>
+<h3 id="19026-b1没有掉出地图">190.26 B1没有掉出地图</h3><p>落到：</p>
 <p>下方平台。</p>
 <hr />
-<h2 id="19027-landing">190.27 Landing</h2><p>受到：</p>
+<h3 id="19027-landing">190.27 Landing</h3><p>受到：</p>
 <p>少量Fall Damage。</p>
 <p>总HP：</p>
 <p>80% → 63%。</p>
 <p>仍然存活。</p>
 <hr />
-<h2 id="19028-表面上看">190.28 表面上看：</h2><p>这一炮Damage很低。</p>
+<h3 id="19028-表面上看">190.28 表面上看：</h3><p>这一炮Damage很低。</p>
 <hr />
-<h2 id="19029-但战略状态发生巨大变化">190.29 但战略状态发生巨大变化</h2><p>B1：</p>
+<h3 id="19029-但战略状态发生巨大变化">190.29 但战略状态发生巨大变化</h3><p>B1：</p>
 <p>从最高地形</p>
 <p>跌到坑底。</p>
 <hr />
-<h2 id="19030-下一轮b1的">190.30 下一轮B1的：</h2><p>Shot Origin降低。</p>
+<h3 id="19030-下一轮b1的">190.30 下一轮B1的：</h3><p>Shot Origin降低。</p>
 <p>大量弹道：</p>
 <p>被前方地形阻挡。</p>
 <hr />
-<h2 id="19031-同时原高台被打穿">190.31 同时原高台被打穿</h2><p>Team A其他Actor</p>
+<h3 id="19031-同时原高台被打穿">190.31 同时原高台被打穿</h3><p>Team A其他Actor</p>
 <p>以后可以：</p>
 <p>从另一条路线射过。</p>
 <hr />
-<h2 id="19032-世界继续settling">190.32 世界继续Settling</h2><p>Terrain无进一步Mutation。</p>
+<h3 id="19032-世界继续settling">190.32 世界继续Settling</h3><p>Terrain无进一步Mutation。</p>
 <p>B1速度归零。</p>
 <p>其他Actor稳定。</p>
 <hr />
-<h2 id="19033-world-stable">190.33 World Stable</h2><p>ShotResolution完成。</p>
+<h3 id="19033-world-stable">190.33 World Stable</h3><p>ShotResolution完成。</p>
 <hr />
-<h2 id="19034-turn-result">190.34 Turn Result</h2><p>Direct Damage：</p>
+<h3 id="19034-turn-result">190.34 Turn Result</h3><p>Direct Damage：</p>
 <p>8。</p>
 <p>Fall Damage：</p>
 <p>9。</p>
@@ -2365,9 +2365,9 @@
 <p>Positional Advantage：</p>
 <p>High。</p>
 <hr />
-<h2 id="19035-turn结束">190.35 Turn结束</h2><p>下一个Actor获得控制权。</p>
+<h3 id="19035-turn结束">190.35 Turn结束</h3><p>下一个Actor获得控制权。</p>
 <hr />
-<h2 id="19036-整个战术链是">190.36 整个战术链是：</h2><p>读取地形
+<h3 id="19036-整个战术链是">190.36 整个战术链是：</h3><p>读取地形
 → 认识直接Damage不足
 → 选择Terrain Weapon
 → 调整自身Shot Origin
@@ -2381,11 +2381,11 @@
 → 新位置稳定
 → 射界永久改变。</p>
 <hr />
-<h2 id="19037-这就是该类型最重要的系统思想">190.37 这就是该类型最重要的系统思想：</h2><blockquote>
+<h3 id="19037-这就是该类型最重要的系统思想">190.37 这就是该类型最重要的系统思想：</h3><blockquote>
 <p><strong>攻击的目标并不一定是敌人的身体；有时最有价值的目标是“支撑敌人的世界”。</strong></p>
 </blockquote>
 <hr />
-<h1 id="191-模块通信设计">191. 模块通信设计</h1><h2 id="1911-高频-input">191.1 高频 Input</h2><p>Turn Decision阶段：</p>
+<h3 id="191-模块通信设计">191. 模块通信设计</h3><h3 id="1911-高频-input">191.1 高频 Input</h3><p>Turn Decision阶段：</p>
 <ul>
 <li><p>Move Left / Right；</p>
 </li>
@@ -2403,7 +2403,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="192-commands">192. Commands</h1><p>典型：</p>
+<h3 id="192-commands">192. Commands</h3><p>典型：</p>
 <ul>
 <li><p>SelectWeapon；</p>
 </li>
@@ -2421,7 +2421,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="193-queries">193. Queries</h1><p>适用于：</p>
+<h3 id="193-queries">193. Queries</h3><p>适用于：</p>
 <ul>
 <li><p>当前Actor是谁；</p>
 </li>
@@ -2454,7 +2454,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="194-domain-events">194. Domain Events</h1><p>包括：</p>
+<h3 id="194-domain-events">194. Domain Events</h3><p>包括：</p>
 <ul>
 <li><p>TurnStarted；</p>
 </li>
@@ -2496,7 +2496,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="195-presentation-events">195. Presentation Events</h1><p>包括：</p>
+<h3 id="195-presentation-events">195. Presentation Events</h3><p>包括：</p>
 <ul>
 <li><p>PlayAimAnimation；</p>
 </li>
@@ -2529,7 +2529,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="196-推荐状态所有权">196. 推荐状态所有权</h1><p><strong>MatchSystem</strong></p>
+<h3 id="196-推荐状态所有权">196. 推荐状态所有权</h3><p><strong>MatchSystem</strong></p>
 <p>拥有Match与胜负。</p>
 <p><strong>TurnSystem</strong></p>
 <p>拥有Active Actor与Turn Lifecycle。</p>
@@ -2558,21 +2558,21 @@
 <p><strong>WorldStabilitySystem</strong></p>
 <p>决定何时可以结束Shot Resolution。</p>
 <hr />
-<h1 id="197-核心模块边界">197. 核心模块边界</h1><p>ProjectileSystem：</p>
+<h3 id="197-核心模块边界">197. 核心模块边界</h3><p>ProjectileSystem：</p>
 <p>不能：</p>
 <p>直接切换Turn。</p>
 <hr />
-<h1 id="198-terrainsystem">198. TerrainSystem：</h1><p>不能：</p>
+<h3 id="198-terrainsystem">198. TerrainSystem：</h3><p>不能：</p>
 <p>因为某Actor死了</p>
 <p>主动给敌队Score。</p>
 <hr />
-<h1 id="199-turnsystem">199. TurnSystem：</h1><p>不能：</p>
+<h3 id="199-turnsystem">199. TurnSystem：</h3><p>不能：</p>
 <p>Projectile刚Impact就认定回合完成。</p>
 <p>它等待：</p>
 <p>WorldStabilitySystem。</p>
 <hr />
-<h1 id="200-失败隔离">200. 失败隔离</h1><hr />
-<h2 id="2001-projectile产生非法数值">200.1 Projectile产生非法数值</h2><p>检测：</p>
+<h3 id="200-失败隔离">200. 失败隔离</h3><hr />
+<h3 id="2001-projectile产生非法数值">200.1 Projectile产生非法数值</h3><p>检测：</p>
 <p>Position / Velocity非Finite。</p>
 <p>立即：</p>
 <p>终止Projectile。</p>
@@ -2582,7 +2582,7 @@
 <p>生成安全Expire</p>
 <p>而不是让NaN污染Physics。</p>
 <hr />
-<h1 id="201-projectile飞出世界">201. Projectile飞出世界</h1><p>如果：</p>
+<h3 id="201-projectile飞出世界">201. Projectile飞出世界</h3><p>如果：</p>
 <p>离开合法World Bounds：</p>
 <p>进入：</p>
 <p>Expired / OutOfBounds。</p>
@@ -2596,28 +2596,28 @@
 </li>
 </ul>
 <hr />
-<h1 id="202-projectile卡在collider边界">202. Projectile卡在Collider边界</h1><p>MaximumLifetime</p>
+<h3 id="202-projectile卡在collider边界">202. Projectile卡在Collider边界</h3><p>MaximumLifetime</p>
 <p>保证：</p>
 <p>不会永久阻塞Turn。</p>
 <hr />
-<h1 id="203-bounce无限循环">203. Bounce无限循环</h1><p>MaximumBounceCount。</p>
+<h3 id="203-bounce无限循环">203. Bounce无限循环</h3><p>MaximumBounceCount。</p>
 <p>超过：</p>
 <p>按规则：</p>
 <p>Explode / Expire。</p>
 <hr />
-<h1 id="204-explosion重复resolve">204. Explosion重复Resolve</h1><p>ExplosionInstanceId：</p>
+<h3 id="204-explosion重复resolve">204. Explosion重复Resolve</h3><p>ExplosionInstanceId：</p>
 <p>幂等。</p>
 <hr />
-<h1 id="205-同一actor被同一explosion重复damage">205. 同一Actor被同一Explosion重复Damage</h1><p>DamageIntent使用：</p>
+<h3 id="205-同一actor被同一explosion重复damage">205. 同一Actor被同一Explosion重复Damage</h3><p>DamageIntent使用：</p>
 <p>ExplosionId + ActorId</p>
 <p>去重。</p>
 <hr />
-<h1 id="206-terrain-mutation重复应用">206. Terrain Mutation重复应用</h1><p>MutationId：</p>
+<h3 id="206-terrain-mutation重复应用">206. Terrain Mutation重复应用</h3><p>MutationId：</p>
 <p>唯一。</p>
 <p>重复网络包：</p>
 <p>不会再挖一次地。</p>
 <hr />
-<h1 id="207-terrain-collision重建失败">207. Terrain Collision重建失败</h1><p>逻辑Terrain已经Commit。</p>
+<h3 id="207-terrain-collision重建失败">207. Terrain Collision重建失败</h3><p>逻辑Terrain已经Commit。</p>
 <p>Presentation / Collider生成进入：</p>
 <p>Recovery。</p>
 <p>如果新的Collider暂时不可用：</p>
@@ -2625,10 +2625,10 @@
 <p>不能：</p>
 <p>让Actor继续穿过未更新Collision。</p>
 <hr />
-<h1 id="208-actor脚下terrain消失但grounded未更新">208. Actor脚下Terrain消失但Grounded未更新</h1><p>TerrainChanged主动：</p>
+<h3 id="208-actor脚下terrain消失但grounded未更新">208. Actor脚下Terrain消失但Grounded未更新</h3><p>TerrainChanged主动：</p>
 <p>标记附近Support Dirty。</p>
 <hr />
-<h1 id="209-actor落入terrain内部">209. Actor落入Terrain内部</h1><p>执行：</p>
+<h3 id="209-actor落入terrain内部">209. Actor落入Terrain内部</h3><p>执行：</p>
 <p>Depenetration。</p>
 <p>失败：</p>
 <p>恢复到：</p>
@@ -2638,7 +2638,7 @@
 <p>记录：</p>
 <p>ActorTerrainIntegrityError。</p>
 <hr />
-<h1 id="210-actor持续bounce永不稳定">210. Actor持续Bounce永不稳定</h1><p>WorldStability设置：</p>
+<h3 id="210-actor持续bounce永不稳定">210. Actor持续Bounce永不稳定</h3><p>WorldStability设置：</p>
 <ul>
 <li><p>Maximum Settle Time；</p>
 </li>
@@ -2652,51 +2652,51 @@
 <p>或：</p>
 <p>按规则处理。</p>
 <hr />
-<h1 id="211-世界永远无法stable">211. 世界永远无法Stable</h1><p>这是关键Softlock。</p>
+<h3 id="211-世界永远无法stable">211. 世界永远无法Stable</h3><p>这是关键Softlock。</p>
 <p>必须存在：</p>
 <p><strong>Stability Timeout Recovery。</strong></p>
 <hr />
-<h1 id="212-turn-timer在projectile期间继续倒计时">212. Turn Timer在Projectile期间继续倒计时</h1><p>一般不应该。</p>
+<h3 id="212-turn-timer在projectile期间继续倒计时">212. Turn Timer在Projectile期间继续倒计时</h3><p>一般不应该。</p>
 <p>Decision Timer：</p>
 <p>在Shot Commit后停止。</p>
 <hr />
-<h1 id="213-turn切换两次">213. Turn切换两次</h1><p>TurnTransition使用：</p>
+<h3 id="213-turn切换两次">213. Turn切换两次</h3><p>TurnTransition使用：</p>
 <p>TurnId / Generation。</p>
 <p>幂等。</p>
 <hr />
-<h1 id="214-active-actor在自己turn开始前已死亡">214. Active Actor在自己Turn开始前已死亡</h1><p>TurnOrder：</p>
+<h3 id="214-active-actor在自己turn开始前已死亡">214. Active Actor在自己Turn开始前已死亡</h3><p>TurnOrder：</p>
 <p>跳过。</p>
 <hr />
-<h1 id="215-active-actor在decision阶段因环境规则死亡">215. Active Actor在Decision阶段因环境规则死亡</h1><p>终止当前Decision。</p>
+<h3 id="215-active-actor在decision阶段因环境规则死亡">215. Active Actor在Decision阶段因环境规则死亡</h3><p>终止当前Decision。</p>
 <p>等待世界稳定。</p>
 <p>再：</p>
 <p>进入Turn Resolution。</p>
 <hr />
-<h1 id="216-ammo变成负数">216. Ammo变成负数</h1><p>Weapon Commit：</p>
+<h3 id="216-ammo变成负数">216. Ammo变成负数</h3><p>Weapon Commit：</p>
 <p>原子检查并扣除。</p>
 <hr />
-<h1 id="217-preview消耗真实rng">217. Preview消耗真实RNG</h1><p>禁止。</p>
+<h3 id="217-preview消耗真实rng">217. Preview消耗真实RNG</h3><p>禁止。</p>
 <p>Preview使用：</p>
 <p>只读Random Snapshot</p>
 <p>或：</p>
 <p>确定模型。</p>
 <hr />
-<h1 id="218-terrain-desync">218. Terrain Desync</h1><p>Network客户端TerrainHash不同。</p>
+<h3 id="218-terrain-desync">218. Terrain Desync</h3><p>Network客户端TerrainHash不同。</p>
 <p>冻结下一Turn开始。</p>
 <p>请求：</p>
 <p>Authoritative Terrain Patch。</p>
 <p>不要：</p>
 <p>继续基于不同地图对战。</p>
 <hr />
-<h1 id="219-replay-physics漂移">219. Replay Physics漂移</h1><p>通过：</p>
+<h3 id="219-replay-physics漂移">219. Replay Physics漂移</h3><p>通过：</p>
 <p>Periodic Hash</p>
 <p>发现。</p>
 <p>回放可以：</p>
 <p>应用Recorded Impact / Mutation事实</p>
 <p>进行重新对齐。</p>
 <hr />
-<h1 id="220-debug与可观测性">220. Debug与可观测性</h1><hr />
-<h2 id="2201-turn-timeline">220.1 Turn Timeline</h2><p>显示：</p>
+<h3 id="220-debug与可观测性">220. Debug与可观测性</h3><hr />
+<h3 id="2201-turn-timeline">220.1 Turn Timeline</h3><p>显示：</p>
 <p>Decision
 → Shot Commit
 → Flight
@@ -2706,7 +2706,7 @@
 → Stable
 → Turn End。</p>
 <hr />
-<h1 id="221-shot-inspector">221. Shot Inspector</h1><p>显示：</p>
+<h3 id="221-shot-inspector">221. Shot Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Actor；</p>
 </li>
@@ -2726,20 +2726,20 @@
 </li>
 </ul>
 <hr />
-<h1 id="222-trajectory-debug">222. Trajectory Debug</h1><p>显示：</p>
+<h3 id="222-trajectory-debug">222. Trajectory Debug</h3><p>显示：</p>
 <p>Projectile每个Simulation Step：</p>
 <p>位置。</p>
 <p>速度。</p>
 <p>加速度。</p>
 <hr />
-<h1 id="223-predicted-vs-actual-trajectory">223. Predicted vs Actual Trajectory</h1><p>训练 / Debug中：</p>
+<h3 id="223-predicted-vs-actual-trajectory">223. Predicted vs Actual Trajectory</h3><p>训练 / Debug中：</p>
 <p>同时显示：</p>
 <p>Preview。</p>
 <p>Actual。</p>
 <p>检查：</p>
 <p>两者分歧。</p>
 <hr />
-<h1 id="224-impact-inspector">224. Impact Inspector</h1><p>显示：</p>
+<h3 id="224-impact-inspector">224. Impact Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Impact Point；</p>
 </li>
@@ -2753,7 +2753,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="225-explosion-inspector">225. Explosion Inspector</h1><p>显示：</p>
+<h3 id="225-explosion-inspector">225. Explosion Inspector</h3><p>显示：</p>
 <p>三个不同几何：</p>
 <ul>
 <li><p>Damage Radius；</p>
@@ -2765,39 +2765,39 @@
 </ul>
 <p>非常直观。</p>
 <hr />
-<h1 id="226-damage-breakdown">226. Damage Breakdown</h1><p>Actor B：</p>
+<h3 id="226-damage-breakdown">226. Damage Breakdown</h3><p>Actor B：</p>
 <p>Base。</p>
 <p>Distance Falloff。</p>
 <p>Cover。</p>
 <p>Status。</p>
 <p>Final。</p>
 <hr />
-<h1 id="227-impulse-debug">227. Impulse Debug</h1><p>显示：</p>
+<h3 id="227-impulse-debug">227. Impulse Debug</h3><p>显示：</p>
 <p>Explosion Origin</p>
 <p>到Actor</p>
 <p>的Impulse Vector。</p>
 <hr />
-<h1 id="228-terrain-mutation-overlay">228. Terrain Mutation Overlay</h1><p>显示：</p>
+<h3 id="228-terrain-mutation-overlay">228. Terrain Mutation Overlay</h3><p>显示：</p>
 <p>Mutation Before / After。</p>
 <hr />
-<h1 id="229-terrain-revision-timeline">229. Terrain Revision Timeline</h1><p>每次爆炸：</p>
+<h3 id="229-terrain-revision-timeline">229. Terrain Revision Timeline</h3><p>每次爆炸：</p>
 <p>Revision。</p>
 <hr />
-<h1 id="230-terrain-thickness-inspector">230. Terrain Thickness Inspector</h1><p>选择一个位置：</p>
+<h3 id="230-terrain-thickness-inspector">230. Terrain Thickness Inspector</h3><p>选择一个位置：</p>
 <p>显示：</p>
 <p>Solid厚度。</p>
 <p>适合：</p>
 <p>设计Terrain Weapon。</p>
 <hr />
-<h1 id="231-actor-support-debug">231. Actor Support Debug</h1><p>Actor脚下：</p>
+<h3 id="231-actor-support-debug">231. Actor Support Debug</h3><p>Actor脚下：</p>
 <p>Support Sample。</p>
 <p>Terrain Revision。</p>
 <hr />
-<h1 id="232-standable-position-overlay">232. Standable Position Overlay</h1><p>AI调试时：</p>
+<h3 id="232-standable-position-overlay">232. Standable Position Overlay</h3><p>AI调试时：</p>
 <p>显示：</p>
 <p>当前所有合理站位。</p>
 <hr />
-<h1 id="233-world-stability-inspector">233. World Stability Inspector</h1><p>列出：</p>
+<h3 id="233-world-stability-inspector">233. World Stability Inspector</h3><p>列出：</p>
 <p>为什么还没Stable。</p>
 <p>例如：</p>
 <p>Projectile：0。</p>
@@ -2805,34 +2805,34 @@
 <p>Moving Actor：B1 Velocity 0.7。</p>
 <p>TerrainJobs：0。</p>
 <hr />
-<h1 id="234-stability-timeout-trace">234. Stability Timeout Trace</h1><p>如果超时：</p>
+<h3 id="234-stability-timeout-trace">234. Stability Timeout Trace</h3><p>如果超时：</p>
 <p>能够知道：</p>
 <p>哪个对象一直不稳定。</p>
 <hr />
-<h1 id="235-turn-order-inspector">235. Turn Order Inspector</h1><p>显示：</p>
+<h3 id="235-turn-order-inspector">235. Turn Order Inspector</h3><p>显示：</p>
 <p>当前Actor。</p>
 <p>后续队列。</p>
 <p>Dead / Skip状态。</p>
 <hr />
-<h1 id="236-ammo-inspector">236. Ammo Inspector</h1><p>按Team：</p>
+<h3 id="236-ammo-inspector">236. Ammo Inspector</h3><p>按Team：</p>
 <p>剩余武器。</p>
 <hr />
-<h1 id="237-shot-outcome-trace">237. Shot Outcome Trace</h1><p>一次Shot：</p>
+<h3 id="237-shot-outcome-trace">237. Shot Outcome Trace</h3><p>一次Shot：</p>
 <p>Direct Damage。</p>
 <p>Fall Damage。</p>
 <p>Terrain。</p>
 <p>Displacement。</p>
 <p>Friendly Damage。</p>
 <hr />
-<h1 id="238-ai-candidate-viewer">238. AI Candidate Viewer</h1><p>显示：</p>
+<h3 id="238-ai-candidate-viewer">238. AI Candidate Viewer</h3><p>显示：</p>
 <p>候选Shot：</p>
 <p>Weapon A / Angle / Power。</p>
 <p>Expected Utility。</p>
 <hr />
-<h1 id="239-ai-trajectory-samples">239. AI Trajectory Samples</h1><p>可以看到：</p>
+<h3 id="239-ai-trajectory-samples">239. AI Trajectory Samples</h3><p>可以看到：</p>
 <p>AI为什么认为某位置可命中。</p>
 <hr />
-<h1 id="240-terrain-fairness-map">240. Terrain Fairness Map</h1><p>生成地图以后显示：</p>
+<h3 id="240-terrain-fairness-map">240. Terrain Fairness Map</h3><p>生成地图以后显示：</p>
 <p>双方：</p>
 <ul>
 <li><p>Height；</p>
@@ -2845,17 +2845,17 @@
 </li>
 </ul>
 <hr />
-<h1 id="241-first-turn-kill-risk">241. First-Turn Kill Risk</h1><p>自动分析：</p>
+<h3 id="241-first-turn-kill-risk">241. First-Turn Kill Risk</h3><p>自动分析：</p>
 <p>先手是否存在：</p>
 <p>明显一发淘汰路径。</p>
 <hr />
-<h1 id="242-replay-desync-inspector">242. Replay Desync Inspector</h1><p>定位：</p>
+<h3 id="242-replay-desync-inspector">242. Replay Desync Inspector</h3><p>定位：</p>
 <p>Turn 17。</p>
 <p>Projectile 52。</p>
 <p>Impact Point首次不同。</p>
 <hr />
-<h1 id="243-content与规则验证">243. Content与规则验证</h1><hr />
-<h2 id="2431-projectile-determinism-test">243.1 Projectile Determinism Test</h2><p>固定：</p>
+<h3 id="243-content与规则验证">243. Content与规则验证</h3><hr />
+<h3 id="2431-projectile-determinism-test">243.1 Projectile Determinism Test</h3><p>固定：</p>
 <p>Origin。</p>
 <p>Aim。</p>
 <p>Power。</p>
@@ -2863,75 +2863,75 @@
 <p>执行100次。</p>
 <p>Impact一致。</p>
 <hr />
-<h1 id="244-render-frame-rate-test">244. Render Frame Rate Test</h1><p>30 / 60 / 144 FPS。</p>
+<h3 id="244-render-frame-rate-test">244. Render Frame Rate Test</h3><p>30 / 60 / 144 FPS。</p>
 <p>固定Physics Tick。</p>
 <p>结果一致。</p>
 <hr />
-<h1 id="245-preview-equality-test">245. Preview Equality Test</h1><p>无碰撞变化时：</p>
+<h3 id="245-preview-equality-test">245. Preview Equality Test</h3><p>无碰撞变化时：</p>
 <p>Preview</p>
 <p>和：</p>
 <p>真实Projectile</p>
 <p>轨迹误差低于规则阈值。</p>
 <hr />
-<h1 id="246-continuous-collision-test">246. Continuous Collision Test</h1><p>高速Projectile</p>
+<h3 id="246-continuous-collision-test">246. Continuous Collision Test</h3><p>高速Projectile</p>
 <p>撞：</p>
 <p>极薄Terrain。</p>
 <p>不能穿透。</p>
 <hr />
-<h1 id="247-bounce-regression">247. Bounce Regression</h1><p>标准角度：</p>
+<h3 id="247-bounce-regression">247. Bounce Regression</h3><p>标准角度：</p>
 <p>结果稳定。</p>
 <hr />
-<h1 id="248-terrain-mutation-geometry-test">248. Terrain Mutation Geometry Test</h1><p>Circle / Shape破坏：</p>
+<h3 id="248-terrain-mutation-geometry-test">248. Terrain Mutation Geometry Test</h3><p>Circle / Shape破坏：</p>
 <p>结果Mask正确。</p>
 <hr />
-<h1 id="249-terrain-collision-sync-test">249. Terrain Collision Sync Test</h1><p>逻辑Mask修改以后：</p>
+<h3 id="249-terrain-collision-sync-test">249. Terrain Collision Sync Test</h3><p>逻辑Mask修改以后：</p>
 <p>Collision查询结果同步。</p>
 <hr />
-<h1 id="250-terrain-save-restore">250. Terrain Save / Restore</h1><p>Mutation若干次。</p>
+<h3 id="250-terrain-save-restore">250. Terrain Save / Restore</h3><p>Mutation若干次。</p>
 <p>保存。</p>
 <p>加载。</p>
 <p>TerrainHash一致。</p>
 <hr />
-<h1 id="251-actor-support-test">251. Actor Support Test</h1><p>炸掉：</p>
+<h3 id="251-actor-support-test">251. Actor Support Test</h3><p>炸掉：</p>
 <p>脚下1像素 / 1Cell。</p>
 <p>Actor正确进入Fall。</p>
 <hr />
-<h1 id="252-explosion-snapshot-test">252. Explosion Snapshot Test</h1><p>同一Explosion中：</p>
+<h3 id="252-explosion-snapshot-test">252. Explosion Snapshot Test</h3><p>同一Explosion中：</p>
 <p>Actor结算顺序改变。</p>
 <p>最终结果必须一致。</p>
 <hr />
-<h1 id="253-damage-impulse-independence-test">253. Damage / Impulse Independence Test</h1><p>不同Definition组合：</p>
+<h3 id="253-damage-impulse-independence-test">253. Damage / Impulse Independence Test</h3><p>不同Definition组合：</p>
 <p>能够独立调节。</p>
 <hr />
-<h1 id="254-world-stability-test">254. World Stability Test</h1><p>构造：</p>
+<h3 id="254-world-stability-test">254. World Stability Test</h3><p>构造：</p>
 <p>Projectile。</p>
 <p>Knockback。</p>
 <p>Fall。</p>
 <p>确认：</p>
 <p>所有对象静止后才Turn End。</p>
 <hr />
-<h1 id="255-stability-timeout-test">255. Stability Timeout Test</h1><p>故意创建：</p>
+<h3 id="255-stability-timeout-test">255. Stability Timeout Test</h3><p>故意创建：</p>
 <p>无法Sleep对象。</p>
 <p>系统最终：</p>
 <p>Recovery。</p>
 <p>不会永久卡住。</p>
 <hr />
-<h1 id="256-turn-order-test">256. Turn Order Test</h1><p>死亡、跳过、回合结束：</p>
+<h3 id="256-turn-order-test">256. Turn Order Test</h3><p>死亡、跳过、回合结束：</p>
 <p>顺序保持正确。</p>
 <hr />
-<h1 id="257-ammo-transaction-test">257. Ammo Transaction Test</h1><p>重复Fire网络包：</p>
+<h3 id="257-ammo-transaction-test">257. Ammo Transaction Test</h3><p>重复Fire网络包：</p>
 <p>只消耗一次Ammo。</p>
 <hr />
-<h1 id="258-terrain-network-delta-test">258. Terrain Network Delta Test</h1><p>重复Mutation Packet：</p>
+<h3 id="258-terrain-network-delta-test">258. Terrain Network Delta Test</h3><p>重复Mutation Packet：</p>
 <p>不会重复破坏。</p>
 <hr />
-<h1 id="259-replay-determinism-correction-test">259. Replay Determinism / Correction Test</h1><p>固定输入。</p>
+<h3 id="259-replay-determinism-correction-test">259. Replay Determinism / Correction Test</h3><p>固定输入。</p>
 <p>周期Hash。</p>
 <p>检查：</p>
 <p>能够稳定回放</p>
 <p>或按记录事件修正。</p>
 <hr />
-<h1 id="260-map-generation-test">260. Map Generation Test</h1><p>生成：</p>
+<h3 id="260-map-generation-test">260. Map Generation Test</h3><p>生成：</p>
 <p>大量地图。</p>
 <p>验证：</p>
 <ul>
@@ -2945,71 +2945,71 @@
 </li>
 </ul>
 <hr />
-<h1 id="261-side-fairness-simulation">261. Side Fairness Simulation</h1><p>AI vs AI：</p>
+<h3 id="261-side-fairness-simulation">261. Side Fairness Simulation</h3><p>AI vs AI：</p>
 <p>交换阵营。</p>
 <p>统计：</p>
 <p>先手胜率。</p>
 <p>Side胜率。</p>
 <hr />
-<h1 id="262-weapon-utility-test">262. Weapon Utility Test</h1><p>自动模拟：</p>
+<h3 id="262-weapon-utility-test">262. Weapon Utility Test</h3><p>自动模拟：</p>
 <p>各Weapon使用。</p>
 <p>检查：</p>
 <p>某Weapon是否在绝大多数局面严格支配其他武器。</p>
 <hr />
-<h1 id="263-terrain-weapon-test">263. Terrain Weapon Test</h1><p>确保：</p>
+<h3 id="263-terrain-weapon-test">263. Terrain Weapon Test</h3><p>确保：</p>
 <p>非Damage武器</p>
 <p>确实能产生：</p>
 <p>长期战术价值。</p>
 <hr />
-<h1 id="264-ai-search-budget-test">264. AI Search Budget Test</h1><p>低配置AI：</p>
+<h3 id="264-ai-search-budget-test">264. AI Search Budget Test</h3><p>低配置AI：</p>
 <p>必须在Turn Time预算内给出合法行动。</p>
 <hr />
-<h1 id="265-性能设计">265. 性能设计</h1><p>本类型通常：</p>
+<h3 id="265-性能设计">265. 性能设计</h3><p>本类型通常：</p>
 <p>Actor数量很少。</p>
 <p>Projectile也很少。</p>
 <p>真正技术压力主要来自：</p>
 <p><strong>动态地形修改与碰撞更新。</strong></p>
 <hr />
-<h1 id="266-不需要">266. 不需要：</h1><p>为十几个Actor</p>
+<h3 id="266-不需要">266. 不需要：</h3><p>为十几个Actor</p>
 <p>设计复杂ECS</p>
 <p>才开始开发。</p>
 <p>优先：</p>
 <p>Terrain Domain正确。</p>
 <hr />
-<h1 id="267-terrain-representation决定大部分性能模型">267. Terrain Representation决定大部分性能模型</h1><p>Bitmap：</p>
+<h3 id="267-terrain-representation决定大部分性能模型">267. Terrain Representation决定大部分性能模型</h3><p>Bitmap：</p>
 <p>逻辑简单。</p>
 <p>SDF：</p>
 <p>视觉平滑。</p>
 <p>Polygon：</p>
 <p>碰撞精确但重建复杂。</p>
 <hr />
-<h1 id="268-推荐">268. 推荐：</h1><p>Gameplay Truth</p>
+<h3 id="268-推荐">268. 推荐：</h3><p>Gameplay Truth</p>
 <p>和：</p>
 <p>高质量Visual Terrain</p>
 <p>可以使用：</p>
 <p>不同表示。</p>
 <hr />
-<h1 id="269-例如">269. 例如：</h1><p>逻辑Mask：</p>
+<h3 id="269-例如">269. 例如：</h3><p>逻辑Mask：</p>
 <p>较稳定分辨率。</p>
 <p>视觉：</p>
 <p>从Mask生成平滑Contour。</p>
 <hr />
-<h1 id="270-collision重建只处理">270. Collision重建只处理：</h1><p>Mutation Bounding Box。</p>
+<h3 id="270-collision重建只处理">270. Collision重建只处理：</h3><p>Mutation Bounding Box。</p>
 <hr />
-<h1 id="271-terrain-visual重建可以">271. Terrain Visual重建可以：</h1><p>异步。</p>
+<h3 id="271-terrain-visual重建可以">271. Terrain Visual重建可以：</h3><p>异步。</p>
 <p>但：</p>
 <p>Gameplay Collision必须在继续Physics前完成。</p>
 <hr />
-<h1 id="272-projectile数量通常低">272. Projectile数量通常低</h1><p>不需要：</p>
+<h3 id="272-projectile数量通常低">272. Projectile数量通常低</h3><p>不需要：</p>
 <p>复杂Pooling。</p>
 <p>但：</p>
 <p>可以Pool：</p>
 <p>Visual Effect。</p>
 <hr />
-<h1 id="273-ai-preview-simulation">273. AI Preview Simulation</h1><p>才可能成为：</p>
+<h3 id="273-ai-preview-simulation">273. AI Preview Simulation</h3><p>才可能成为：</p>
 <p>CPU热点。</p>
 <hr />
-<h1 id="274-可以">274. 可以：</h1><ul>
+<h3 id="274-可以">274. 可以：</h3><ul>
 <li><p>降采样；</p>
 </li>
 <li><p>分阶段搜索；</p>
@@ -3021,57 +3021,57 @@
 </ul>
 <p>优化。</p>
 <hr />
-<h1 id="275-ai-simulation必须使用">275. AI Simulation必须使用：</h1><p>纯数据Terrain Snapshot。</p>
+<h3 id="275-ai-simulation必须使用">275. AI Simulation必须使用：</h3><p>纯数据Terrain Snapshot。</p>
 <p>不访问：</p>
 <p>主线程Renderer。</p>
 <hr />
-<h1 id="276-replay-storage">276. Replay Storage</h1><p>Terrain Mutation是：</p>
+<h3 id="276-replay-storage">276. Replay Storage</h3><p>Terrain Mutation是：</p>
 <p>低频离散事件。</p>
 <p>非常适合：</p>
 <p>Event Log。</p>
 <hr />
-<h1 id="277-可扩展点">277. 可扩展点</h1><hr />
-<h2 id="2771-新weapon">277.1 新Weapon</h2><p>提供：</p>
+<h3 id="277-可扩展点">277. 可扩展点</h3><hr />
+<h3 id="2771-新weapon">277.1 新Weapon</h3><p>提供：</p>
 <p>WeaponDefinition</p>
 <p>和：</p>
 <p>Projectile / Effect组合。</p>
 <hr />
-<h2 id="2772-新projectile-movement">277.2 新Projectile Movement</h2><p>实现：</p>
+<h3 id="2772-新projectile-movement">277.2 新Projectile Movement</h3><p>实现：</p>
 <p>MovementModel。</p>
 <hr />
-<h2 id="2773-新terrain-material">277.3 新Terrain Material</h2><p>扩展：</p>
+<h3 id="2773-新terrain-material">277.3 新Terrain Material</h3><p>扩展：</p>
 <p>MaterialDefinition。</p>
 <hr />
-<h2 id="2774-新environment">277.4 新Environment</h2><p>例如：</p>
+<h3 id="2774-新environment">277.4 新Environment</h3><p>例如：</p>
 <p>低重力、强风。</p>
 <p>通过：</p>
 <p>EnvironmentModifier。</p>
 <hr />
-<h2 id="2775-新game-mode">277.5 新Game Mode</h2><p>复用：</p>
+<h3 id="2775-新game-mode">277.5 新Game Mode</h3><p>复用：</p>
 <p>Turn / Projectile / Terrain。</p>
 <p>只替换：</p>
 <p>Victory Condition。</p>
 <hr />
-<h2 id="2776-新map-generator">277.6 新Map Generator</h2><p>输出：</p>
+<h3 id="2776-新map-generator">277.6 新Map Generator</h3><p>输出：</p>
 <p>TerrainState + Spawn Positions。</p>
 <hr />
-<h2 id="2777-3d-artillery">277.7 3D Artillery</h2><p>Terrain从：</p>
+<h3 id="2777-3d-artillery">277.7 3D Artillery</h3><p>Terrain从：</p>
 <p>2D Mask</p>
 <p>换为：</p>
 <p>Voxel / SDF / Destructible Mesh。</p>
 <p>Turn、Shot、Projectile、Explosion架构仍成立。</p>
 <hr />
-<h2 id="2778-vehicle-artillery">277.8 Vehicle Artillery</h2><p>Actor换成：</p>
+<h3 id="2778-vehicle-artillery">277.8 Vehicle Artillery</h3><p>Actor换成：</p>
 <p>Vehicle。</p>
 <p>移动系统：</p>
 <p>轮式 / 履带。</p>
 <hr />
-<h2 id="2779-fantasy-artillery">277.9 Fantasy Artillery</h2><p>Projectile可以：</p>
+<h3 id="2779-fantasy-artillery">277.9 Fantasy Artillery</h3><p>Projectile可以：</p>
 <p>魔法、传送、地形生长。</p>
 <p>仍然：</p>
 <p>Shot → World Mutation。</p>
 <hr />
-<h2 id="27710-team-ability">277.10 Team Ability</h2><p>可以：</p>
+<h3 id="27710-team-ability">277.10 Team Ability</h3><p>可以：</p>
 <p>改变Wind。</p>
 <p>修复Terrain。</p>
 <p>移动友军。</p>
@@ -3079,74 +3079,74 @@
 <p>Utility Effect</p>
 <p>接入。</p>
 <hr />
-<h1 id="278-玩家体验设计">278. 玩家体验设计</h1><hr />
-<h2 id="2781-玩家必须相信">278.1 玩家必须相信：</h2><p>同样的输入会得到近似同样的弹道</p>
+<h3 id="278-玩家体验设计">278. 玩家体验设计</h3><hr />
+<h3 id="2781-玩家必须相信">278.1 玩家必须相信：</h3><p>同样的输入会得到近似同样的弹道</p>
 <p>这是整个品类的基础。</p>
 <hr />
-<h1 id="279-风重力等变化必须">279. 风、重力等变化必须：</h1><p>在发射前可读。</p>
+<h3 id="279-风重力等变化必须">279. 风、重力等变化必须：</h3><p>在发射前可读。</p>
 <hr />
-<h1 id="280-不要">280. 不要：</h1><p>弹丸飞出后</p>
+<h3 id="280-不要">280. 不要：</h3><p>弹丸飞出后</p>
 <p>系统随机改变基础轨迹</p>
 <p>制造“刺激”。</p>
 <p>这会：</p>
 <p>摧毁技能学习。</p>
 <hr />
-<h1 id="281-发射反馈必须明确">281. 发射反馈必须明确</h1><p>Power Commit。</p>
+<h3 id="281-发射反馈必须明确">281. 发射反馈必须明确</h3><p>Power Commit。</p>
 <p>Weapon Recoil。</p>
 <p>Projectile离膛。</p>
 <hr />
-<h1 id="282-projectile-camera应帮助">282. Projectile Camera应帮助：</h1><p>读取错误量。</p>
+<h3 id="282-projectile-camera应帮助">282. Projectile Camera应帮助：</h3><p>读取错误量。</p>
 <hr />
-<h1 id="283-miss也应该">283. Miss也应该：</h1><p>让玩家知道：</p>
+<h3 id="283-miss也应该">283. Miss也应该：</h3><p>让玩家知道：</p>
 <p>差了多少。</p>
 <hr />
-<h1 id="284-地形改变必须">284. 地形改变必须：</h1><p>视觉和逻辑高度一致。</p>
+<h3 id="284-地形改变必须">284. 地形改变必须：</h3><p>视觉和逻辑高度一致。</p>
 <p>如果画面看起来：</p>
 <p>山已经炸开。</p>
 <p>Projectile下一回合却：</p>
 <p>撞到空气。</p>
 <p>信任立刻崩溃。</p>
 <hr />
-<h1 id="285-同样">285. 同样：</h1><p>画面仍有岩石。</p>
+<h3 id="285-同样">285. 同样：</h3><p>画面仍有岩石。</p>
 <p>Projectile却穿过去。</p>
 <p>也不可接受。</p>
 <hr />
-<h1 id="286-动态terrain游戏中">286. 动态Terrain游戏中：</h1><p><strong>Visual / Collision Consistency</strong></p>
+<h3 id="286-动态terrain游戏中">286. 动态Terrain游戏中：</h3><p><strong>Visual / Collision Consistency</strong></p>
 <p>比高精度贴图更重要。</p>
 <hr />
-<h1 id="287-玩家应能够看出">287. 玩家应能够看出：</h1><p>哪些位置容易坠落。</p>
+<h3 id="287-玩家应能够看出">287. 玩家应能够看出：</h3><p>哪些位置容易坠落。</p>
 <p>不要：</p>
 <p>碰撞边缘和画面差距很大。</p>
 <hr />
-<h1 id="288-回合时间需要">288. 回合时间需要：</h1><p>足够思考</p>
+<h3 id="288-回合时间需要">288. 回合时间需要：</h3><p>足够思考</p>
 <p>但不能：</p>
 <p>拖沓。</p>
 <hr />
-<h1 id="289-本地休闲模式可以">289. 本地休闲模式可以：</h1><p>关闭Timer。</p>
+<h3 id="289-本地休闲模式可以">289. 本地休闲模式可以：</h3><p>关闭Timer。</p>
 <p>竞技：</p>
 <p>开启。</p>
 <hr />
-<h1 id="290-weapon-selection-ui需要">290. Weapon Selection UI需要：</h1><p>快速。</p>
+<h3 id="290-weapon-selection-ui需要">290. Weapon Selection UI需要：</h3><p>快速。</p>
 <p>回合只有几十秒。</p>
 <p>不适合：</p>
 <p>三级菜单找武器。</p>
 <hr />
-<h1 id="291-ammo信息必须">291. Ammo信息必须：</h1><p>直接可见。</p>
+<h3 id="291-ammo信息必须">291. Ammo信息必须：</h3><p>直接可见。</p>
 <hr />
-<h1 id="292-强weapon数量有限时">292. 强Weapon数量有限时：</h1><p>玩家需要：</p>
+<h3 id="292-强weapon数量有限时">292. 强Weapon数量有限时：</h3><p>玩家需要：</p>
 <p>明确知道自己正在花掉一次稀缺机会。</p>
 <hr />
-<h1 id="293-friendly-fire和self-damage需要">293. Friendly Fire和Self Damage需要：</h1><p>规则一致。</p>
+<h3 id="293-friendly-fire和self-damage需要">293. Friendly Fire和Self Damage需要：</h3><p>规则一致。</p>
 <p>否则：</p>
 <p>玩家无法利用系统技巧。</p>
 <hr />
-<h1 id="294-击退应该">294. 击退应该：</h1><p>有明显方向反馈。</p>
+<h3 id="294-击退应该">294. 击退应该：</h3><p>有明显方向反馈。</p>
 <hr />
-<h1 id="295-角色坠落是一种">295. 角色坠落是一种：</h1><p>高度可读的长期威胁。</p>
+<h3 id="295-角色坠落是一种">295. 角色坠落是一种：</h3><p>高度可读的长期威胁。</p>
 <hr />
-<h1 id="296-地图逐渐被打烂以后">296. 地图逐渐被打烂以后：</h1><p>战斗节奏应该明显变化。</p>
+<h3 id="296-地图逐渐被打烂以后">296. 地图逐渐被打烂以后：</h3><p>战斗节奏应该明显变化。</p>
 <hr />
-<h1 id="297-开局">297. 开局：</h1><p>较多掩体。</p>
+<h3 id="297-开局">297. 开局：</h3><p>较多掩体。</p>
 <p>中期：</p>
 <p>通道被打开。</p>
 <p>后期：</p>
@@ -3156,91 +3156,91 @@
 <p>自然经历：</p>
 <p><strong>Topology Progression。</strong></p>
 <hr />
-<h1 id="298-这也是本类型非常强的内容效率来源">298. 这也是本类型非常强的内容效率来源。</h1><hr />
-<h1 id="299-常见设计失败">299. 常见设计失败</h1><hr />
-<h2 id="2991-terrain只是视觉texture">299.1 Terrain只是视觉Texture</h2><p>碰撞仍然静态。</p>
+<h3 id="298-这也是本类型非常强的内容效率来源">298. 这也是本类型非常强的内容效率来源。</h3><hr />
+<h3 id="299-常见设计失败">299. 常见设计失败</h3><hr />
+<h3 id="2991-terrain只是视觉texture">299.1 Terrain只是视觉Texture</h3><p>碰撞仍然静态。</p>
 <hr />
-<h2 id="2992-explosion-destroy几个地形prefab">299.2 Explosion Destroy几个地形Prefab</h2><p>无法形成连续坑洞。</p>
+<h3 id="2992-explosion-destroy几个地形prefab">299.2 Explosion Destroy几个地形Prefab</h3><p>无法形成连续坑洞。</p>
 <hr />
-<h2 id="2993-terrain-truth由meshcollider决定">299.3 Terrain Truth由MeshCollider决定</h2><p>Save、Replay和网络困难。</p>
+<h3 id="2993-terrain-truth由meshcollider决定">299.3 Terrain Truth由MeshCollider决定</h3><p>Save、Replay和网络困难。</p>
 <hr />
-<h2 id="2994-projectile使用target-lock自动命中">299.4 Projectile使用Target Lock自动命中</h2><p>炮术技能消失。</p>
+<h3 id="2994-projectile使用target-lock自动命中">299.4 Projectile使用Target Lock自动命中</h3><p>炮术技能消失。</p>
 <hr />
-<h2 id="2995-preview和真实projectile使用不同physics">299.5 Preview和真实Projectile使用不同Physics</h2><p>玩家失去信任。</p>
+<h3 id="2995-preview和真实projectile使用不同physics">299.5 Preview和真实Projectile使用不同Physics</h3><p>玩家失去信任。</p>
 <hr />
-<h2 id="2996-projectile高速移动只做point-collision">299.6 Projectile高速移动只做Point Collision</h2><p>穿墙。</p>
+<h3 id="2996-projectile高速移动只做point-collision">299.6 Projectile高速移动只做Point Collision</h3><p>穿墙。</p>
 <hr />
-<h2 id="2997-oncollision直接做damageterrain和turn-end">299.7 OnCollision直接做Damage、Terrain和Turn End</h2><p>模块耦合。</p>
+<h3 id="2997-oncollision直接做damageterrain和turn-end">299.7 OnCollision直接做Damage、Terrain和Turn End</h3><p>模块耦合。</p>
 <hr />
-<h2 id="2998-explosion遍历actor时边算边击飞">299.8 Explosion遍历Actor时边算边击飞</h2><p>结算顺序影响结果。</p>
+<h3 id="2998-explosion遍历actor时边算边击飞">299.8 Explosion遍历Actor时边算边击飞</h3><p>结算顺序影响结果。</p>
 <hr />
-<h2 id="2999-damage-radiusimpulse-radiusterrain-radius强绑定">299.9 Damage Radius、Impulse Radius、Terrain Radius强绑定</h2><p>Weapon差异贫乏。</p>
+<h3 id="2999-damage-radiusimpulse-radiusterrain-radius强绑定">299.9 Damage Radius、Impulse Radius、Terrain Radius强绑定</h3><p>Weapon差异贫乏。</p>
 <hr />
-<h2 id="29910-terrain变化后actor仍grounded">299.10 Terrain变化后Actor仍Grounded</h2><p>悬空站立。</p>
+<h3 id="29910-terrain变化后actor仍grounded">299.10 Terrain变化后Actor仍Grounded</h3><p>悬空站立。</p>
 <hr />
-<h2 id="29911-actor开始坠落但turn立即切换">299.11 Actor开始坠落但Turn立即切换</h2><p>下一个玩家在世界仍运动时获得控制。</p>
+<h3 id="29911-actor开始坠落但turn立即切换">299.11 Actor开始坠落但Turn立即切换</h3><p>下一个玩家在世界仍运动时获得控制。</p>
 <hr />
-<h2 id="29912-world-stable靠固定等待3秒">299.12 World Stable靠固定等待3秒</h2><p>有时太长，有时不够。</p>
+<h3 id="29912-world-stable靠固定等待3秒">299.12 World Stable靠固定等待3秒</h3><p>有时太长，有时不够。</p>
 <hr />
-<h2 id="29913-某projectile无限bounce导致turn永远不结束">299.13 某Projectile无限Bounce导致Turn永远不结束</h2><p>缺少Lifetime。</p>
+<h3 id="29913-某projectile无限bounce导致turn永远不结束">299.13 某Projectile无限Bounce导致Turn永远不结束</h3><p>缺少Lifetime。</p>
 <hr />
-<h2 id="29914-强风完全隐藏">299.14 强风完全隐藏</h2><p>玩家无法校准。</p>
+<h3 id="29914-强风完全隐藏">299.14 强风完全隐藏</h3><p>玩家无法校准。</p>
 <hr />
-<h2 id="29915-每发射弹自带大量随机spread">299.15 每发射弹自带大量随机Spread</h2><p>抹除技能。</p>
+<h3 id="29915-每发射弹自带大量随机spread">299.15 每发射弹自带大量随机Spread</h3><p>抹除技能。</p>
 <hr />
-<h2 id="29916-ai直接读取解析公式精准命中">299.16 AI直接读取解析公式精准命中</h2><p>玩家和AI不使用同一规则。</p>
+<h3 id="29916-ai直接读取解析公式精准命中">299.16 AI直接读取解析公式精准命中</h3><p>玩家和AI不使用同一规则。</p>
 <hr />
-<h2 id="29917-ai难度通过中途修正projectile">299.17 AI难度通过中途修正Projectile</h2><p>明显作弊。</p>
+<h3 id="29917-ai难度通过中途修正projectile">299.17 AI难度通过中途修正Projectile</h3><p>明显作弊。</p>
 <hr />
-<h2 id="29918-ai只追求expected-damage">299.18 AI只追求Expected Damage</h2><p>不会打地形。</p>
+<h3 id="29918-ai只追求expected-damage">299.18 AI只追求Expected Damage</h3><p>不会打地形。</p>
 <hr />
-<h2 id="29919-所有weapon只区别damage和radius">299.19 所有Weapon只区别Damage和Radius</h2><p>战术维度少。</p>
+<h3 id="29919-所有weapon只区别damage和radius">299.19 所有Weapon只区别Damage和Radius</h3><p>战术维度少。</p>
 <hr />
-<h2 id="29920-地形武器因为不直接damage而永远弱">299.20 地形武器因为不直接Damage而永远弱</h2><p>缺少长期Terrain Utility评估。</p>
+<h3 id="29920-地形武器因为不直接damage而永远弱">299.20 地形武器因为不直接Damage而永远弱</h3><p>缺少长期Terrain Utility评估。</p>
 <hr />
-<h2 id="29921-稀有weapon在选择时就扣ammo">299.21 稀有Weapon在选择时就扣Ammo</h2><p>取消操作也损失。</p>
+<h3 id="29921-稀有weapon在选择时就扣ammo">299.21 稀有Weapon在选择时就扣Ammo</h3><p>取消操作也损失。</p>
 <hr />
-<h2 id="29922-terrain-mutation网络包重复执行">299.22 Terrain Mutation网络包重复执行</h2><p>同一个坑变两倍大。</p>
+<h3 id="29922-terrain-mutation网络包重复执行">299.22 Terrain Mutation网络包重复执行</h3><p>同一个坑变两倍大。</p>
 <hr />
-<h2 id="29923-不使用terrain-revision">299.23 不使用Terrain Revision</h2><p>Desync难以发现。</p>
+<h3 id="29923-不使用terrain-revision">299.23 不使用Terrain Revision</h3><p>Desync难以发现。</p>
 <hr />
-<h2 id="29924-replay只保存camera录像">299.24 Replay只保存Camera录像</h2><p>不能重现地形。</p>
+<h3 id="29924-replay只保存camera录像">299.24 Replay只保存Camera录像</h3><p>不能重现地形。</p>
 <hr />
-<h2 id="29925-procedural-map只看几何好看">299.25 Procedural Map只看几何好看</h2><p>没有出生与弹道公平性验证。</p>
+<h3 id="29925-procedural-map只看几何好看">299.25 Procedural Map只看几何好看</h3><p>没有出生与弹道公平性验证。</p>
 <hr />
-<h2 id="29926-first-turn可以稳定秒杀一名敌人">299.26 First Turn可以稳定秒杀一名敌人</h2><p>先手优势过大。</p>
+<h3 id="29926-first-turn可以稳定秒杀一名敌人">299.26 First Turn可以稳定秒杀一名敌人</h3><p>先手优势过大。</p>
 <hr />
-<h2 id="29927-turn-timer在projectile飞行时仍倒计时">299.27 Turn Timer在Projectile飞行时仍倒计时</h2><p>行为语义混乱。</p>
+<h3 id="29927-turn-timer在projectile飞行时仍倒计时">299.27 Turn Timer在Projectile飞行时仍倒计时</h3><p>行为语义混乱。</p>
 <hr />
-<h2 id="29928-hit-animation结束才扣hp">299.28 Hit Animation结束才扣HP</h2><p>规则依赖表现。</p>
+<h3 id="29928-hit-animation结束才扣hp">299.28 Hit Animation结束才扣HP</h3><p>规则依赖表现。</p>
 <hr />
-<h2 id="29929-terrain视觉重建完成前physics继续">299.29 Terrain视觉重建完成前Physics继续</h2><p>Actor穿过旧Collider。</p>
+<h3 id="29929-terrain视觉重建完成前physics继续">299.29 Terrain视觉重建完成前Physics继续</h3><p>Actor穿过旧Collider。</p>
 <hr />
-<h2 id="29930-sudden-death直接随机杀人">299.30 Sudden Death直接随机杀人</h2><p>没有利用空间核心。</p>
+<h3 id="29930-sudden-death直接随机杀人">299.30 Sudden Death直接随机杀人</h3><p>没有利用空间核心。</p>
 <hr />
-<h2 id="29931-每回合风完全随机且幅度巨大">299.31 每回合风完全随机且幅度巨大</h2><p>玩家无法形成弹道知识。</p>
+<h3 id="29931-每回合风完全随机且幅度巨大">299.31 每回合风完全随机且幅度巨大</h3><p>玩家无法形成弹道知识。</p>
 <hr />
-<h2 id="29932-强制完整trajectory-preview却又把游戏定位成纯炮术技能">299.32 强制完整Trajectory Preview却又把游戏定位成纯炮术技能</h2><p>规则目标矛盾。</p>
+<h3 id="29932-强制完整trajectory-preview却又把游戏定位成纯炮术技能">299.32 强制完整Trajectory Preview却又把游戏定位成纯炮术技能</h3><p>规则目标矛盾。</p>
 <hr />
-<h2 id="29933-地形破坏没有长期价值">299.33 地形破坏没有长期价值</h2><p>每Turn自动恢复地图。</p>
+<h3 id="29933-地形破坏没有长期价值">299.33 地形破坏没有长期价值</h3><p>每Turn自动恢复地图。</p>
 <p>失去品类核心。</p>
 <hr />
-<h2 id="29934-actor只能互相扣hp">299.34 Actor只能互相扣HP</h2><p>没有位置、击退与坠落威胁。</p>
+<h3 id="29934-actor只能互相扣hp">299.34 Actor只能互相扣HP</h3><p>没有位置、击退与坠落威胁。</p>
 <hr />
-<h2 id="29935-所有角色永远待在出生位置">299.35 所有角色永远待在出生位置</h2><p>Movement系统没有战术意义。</p>
+<h3 id="29935-所有角色永远待在出生位置">299.35 所有角色永远待在出生位置</h3><p>Movement系统没有战术意义。</p>
 <hr />
-<h2 id="29936-大型terrain坑会造成性能尖峰">299.36 大型Terrain坑会造成性能尖峰</h2><p>没有局部重建。</p>
+<h3 id="29936-大型terrain坑会造成性能尖峰">299.36 大型Terrain坑会造成性能尖峰</h3><p>没有局部重建。</p>
 <hr />
-<h2 id="29937-replay依赖浮点跨平台完全一致却没有hash校验">299.37 Replay依赖浮点跨平台完全一致却没有Hash校验</h2><p>难以长期可靠。</p>
+<h3 id="29937-replay依赖浮点跨平台完全一致却没有hash校验">299.37 Replay依赖浮点跨平台完全一致却没有Hash校验</h3><p>难以长期可靠。</p>
 <hr />
-<h2 id="29938-match规则physics规则和assist设置不记录版本">299.38 Match规则、Physics规则和Assist设置不记录版本</h2><p>排行榜不可比较。</p>
+<h3 id="29938-match规则physics规则和assist设置不记录版本">299.38 Match规则、Physics规则和Assist设置不记录版本</h3><p>排行榜不可比较。</p>
 <hr />
-<h1 id="300-最小可行原型">300. 最小可行原型</h1><p>验证该品类核心范式时，不需要立即制作：</p>
+<h3 id="300-最小可行原型">300. 最小可行原型</h3><p>验证该品类核心范式时，不需要立即制作：</p>
 <p>几十种武器和在线排位。</p>
 <p>推荐：</p>
 <p><strong>2支队伍 × 每队3名Actor + 1张可破坏2D地图 + 3类Weapon + Wind + Turn Timer + Terrain Replay。</strong></p>
 <hr />
-<h1 id="301-基础战场">301. 基础战场</h1><p>实现：</p>
+<h3 id="301-基础战场">301. 基础战场</h3><p>实现：</p>
 <ul>
 <li><p>Destructible Terrain；</p>
 </li>
@@ -3254,7 +3254,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="302-turn">302. Turn</h1><p>实现：</p>
+<h3 id="302-turn">302. Turn</h3><p>实现：</p>
 <ul>
 <li><p>Team Alternation；</p>
 </li>
@@ -3274,14 +3274,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="303-weapon">303. Weapon</h1><p>第一版建议：</p>
-<h3 id="standard">Standard</h3><p>中等人物伤害、中等Terrain。</p>
-<h3 id="displacement-1">Displacement</h3><p>低伤害、高Impulse。</p>
-<h3 id="terrain-tool">Terrain Tool</h3><p>低人物伤害、高Terrain Destruction。</p>
+<h3 id="303-weapon">303. Weapon</h3><p>第一版建议：</p>
+<h4 id="standard">Standard</h4><p>中等人物伤害、中等Terrain。</p>
+<h4 id="displacement-1">Displacement</h4><p>低伤害、高Impulse。</p>
+<h4 id="terrain-tool">Terrain Tool</h4><p>低人物伤害、高Terrain Destruction。</p>
 <p>这三种已经足以验证：</p>
 <p>HP、位置和地形三种价值轴。</p>
 <hr />
-<h1 id="304-environment">304. Environment</h1><p>只需要：</p>
+<h3 id="304-environment">304. Environment</h3><p>只需要：</p>
 <ul>
 <li><p>Gravity；</p>
 </li>
@@ -3289,7 +3289,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="305-mvp必要基础设施">305. MVP必要基础设施</h1><ul>
+<h3 id="305-mvp必要基础设施">305. MVP必要基础设施</h3><ul>
 <li><p>MatchState；</p>
 </li>
 <li><p>TurnState；</p>
@@ -3332,7 +3332,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="306-mvp必要调试工具">306. MVP必要调试工具</h1><ul>
+<h3 id="306-mvp必要调试工具">306. MVP必要调试工具</h3><ul>
 <li><p>TurnTimeline；</p>
 </li>
 <li><p>ShotInspector；</p>
@@ -3365,7 +3365,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="307-mvp核心验收问题">307. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<h3 id="307-mvp核心验收问题">307. MVP核心验收问题</h3><p>原型至少必须回答：</p>
 <ul>
 <li><p>同一Origin、Angle、Power和Wind是否得到稳定一致的Projectile结果；</p>
 </li>
@@ -3428,7 +3428,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="308-推荐实施顺序">308. 推荐实施顺序</h1><p>第一阶段：</p>
+<h3 id="308-推荐实施顺序">308. 推荐实施顺序</h3><p>第一阶段：</p>
 <ul>
 <li><p>Match；</p>
 </li>
@@ -3535,7 +3535,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="309-架构验收标准">309. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<h3 id="309-架构验收标准">309. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
 <ul>
 <li><p>Match Lifecycle和Turn Lifecycle严格分离；</p>
 </li>
@@ -3663,8 +3663,8 @@
 </li>
 </ul>
 <hr />
-<h1 id="310-可迁移到其他游戏的设计思想">310. 可迁移到其他游戏的设计思想</h1><hr />
-<h2 id="3101-回合制并不意味着整个世界必须是离散模拟">310.1 “回合制”并不意味着整个世界必须是离散模拟</h2><p>玩家决策：</p>
+<h3 id="310-可迁移到其他游戏的设计思想">310. 可迁移到其他游戏的设计思想</h3><hr />
+<h3 id="3101-回合制并不意味着整个世界必须是离散模拟">310.1 “回合制”并不意味着整个世界必须是离散模拟</h3><p>玩家决策：</p>
 <p>离散。</p>
 <p>Projectile：</p>
 <p>连续。</p>
@@ -3685,7 +3685,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3102-world-stability-barrier-是物理与离散规则交界处非常重要的架构模式">310.2 World Stability Barrier 是物理与离散规则交界处非常重要的架构模式</h2><p>爆炸以后：</p>
+<h3 id="3102-world-stability-barrier-是物理与离散规则交界处非常重要的架构模式">310.2 World Stability Barrier 是物理与离散规则交界处非常重要的架构模式</h3><p>爆炸以后：</p>
 <p>先让所有后果处理完。</p>
 <p>再：</p>
 <p>进入下一玩家决策。</p>
@@ -3701,7 +3701,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3103-一个攻击可以同时修改对象状态和环境状态">310.3 一个攻击可以同时修改“对象状态”和“环境状态”</h2><p>普通战斗通常：</p>
+<h3 id="3103-一个攻击可以同时修改对象状态和环境状态">310.3 一个攻击可以同时修改“对象状态”和“环境状态”</h3><p>普通战斗通常：</p>
 <p>Damage Actor。</p>
 <p>炮术游戏提醒我们：</p>
 <p>攻击还可以：</p>
@@ -3718,7 +3718,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3104-damagedisplacementenvironment-change-应当作为不同价值轴">310.4 Damage、Displacement、Environment Change 应当作为不同价值轴</h2><p>一次攻击：</p>
+<h3 id="3104-damagedisplacementenvironment-change-应当作为不同价值轴">310.4 Damage、Displacement、Environment Change 应当作为不同价值轴</h3><p>一次攻击：</p>
 <p>可以不高Damage。</p>
 <p>却有：</p>
 <p>极高位置价值。</p>
@@ -3736,7 +3736,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3105-地形本身可以是一种逐渐消耗的共享资源">310.5 地形本身可以是一种逐渐消耗的共享资源</h2><p>玩家和敌人都依赖：</p>
+<h3 id="3105-地形本身可以是一种逐渐消耗的共享资源">310.5 地形本身可以是一种逐渐消耗的共享资源</h3><p>玩家和敌人都依赖：</p>
 <p>同一个地形。</p>
 <p>你破坏敌方掩体：</p>
 <p>同时可能破坏自己的未来路线。</p>
@@ -3752,7 +3752,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3106-action-commitment-可以制造深度而不需要提高输入复杂度">310.6 Action Commitment 可以制造深度，而不需要提高输入复杂度</h2><p>Angle。</p>
+<h3 id="3106-action-commitment-可以制造深度而不需要提高输入复杂度">310.6 Action Commitment 可以制造深度，而不需要提高输入复杂度</h3><p>Angle。</p>
 <p>Power。</p>
 <p>Fire。</p>
 <p>一旦Commit：</p>
@@ -3760,7 +3760,7 @@
 <p>这种“输入少、后果大”的结构可以产生：</p>
 <p>极强张力。</p>
 <hr />
-<h2 id="3107-失败如果能提供精确误差信息就会自然形成技能学习循环">310.7 失败如果能提供精确误差信息，就会自然形成技能学习循环</h2><p>上一炮：</p>
+<h3 id="3107-失败如果能提供精确误差信息就会自然形成技能学习循环">310.7 失败如果能提供精确误差信息，就会自然形成技能学习循环</h3><p>上一炮：</p>
 <p>短了。</p>
 <p>下一炮：</p>
 <p>加一点Power。</p>
@@ -3778,7 +3778,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3108-preview必须使用真实规则否则辅助系统反而破坏信任">310.8 Preview必须使用真实规则，否则辅助系统反而破坏信任</h2><p>适用于：</p>
+<h3 id="3108-preview必须使用真实规则否则辅助系统反而破坏信任">310.8 Preview必须使用真实规则，否则辅助系统反而破坏信任</h3><p>适用于：</p>
 <ul>
 <li><p>Trajectory；</p>
 </li>
@@ -3792,7 +3792,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="3109-动态环境系统最重要的不只是能修改而是所有依赖系统都必须订阅修改">310.9 动态环境系统最重要的不只是“能修改”，而是所有依赖系统都必须订阅修改</h2><p>Terrain变化以后：</p>
+<h3 id="3109-动态环境系统最重要的不只是能修改而是所有依赖系统都必须订阅修改">310.9 动态环境系统最重要的不只是“能修改”，而是所有依赖系统都必须订阅修改</h3><p>Terrain变化以后：</p>
 <ul>
 <li><p>Collision；</p>
 </li>
@@ -3810,7 +3810,7 @@
 <p>Mutable World</p>
 <p>架构都需要解决的问题。</p>
 <hr />
-<h2 id="31010-一次物理事件最好先冻结snapshot再批量计算所有后果">310.10 一次物理事件最好先冻结Snapshot，再批量计算所有后果</h2><p>避免：</p>
+<h3 id="31010-一次物理事件最好先冻结snapshot再批量计算所有后果">310.10 一次物理事件最好先冻结Snapshot，再批量计算所有后果</h3><p>避免：</p>
 <p>第一个受影响对象修改世界</p>
 <p>导致：</p>
 <p>第二个对象看到不同上下文。</p>
@@ -3828,7 +3828,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="31011-不同模拟表示可以共存gameplay-truth无需和高质量visual-representation相同">310.11 不同模拟表示可以共存：Gameplay Truth无需和高质量Visual Representation相同</h2><p>逻辑：</p>
+<h3 id="31011-不同模拟表示可以共存gameplay-truth无需和高质量visual-representation相同">310.11 不同模拟表示可以共存：Gameplay Truth无需和高质量Visual Representation相同</h3><p>逻辑：</p>
 <p>Mask。</p>
 <p>视觉：</p>
 <p>高质量Mesh。</p>
@@ -3846,7 +3846,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="31012-动态地图公平性不能只检查几何对称还应检查行动机会">310.12 动态地图公平性不能只检查几何对称，还应检查“行动机会”</h2><p>高度。</p>
+<h3 id="31012-动态地图公平性不能只检查几何对称还应检查行动机会">310.12 动态地图公平性不能只检查几何对称，还应检查“行动机会”</h3><p>高度。</p>
 <p>射界。</p>
 <p>坠落风险。</p>
 <p>站立区域。</p>
@@ -3865,7 +3865,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="31013-ai应评估状态转换后的世界而不仅是即时收益">310.13 AI应评估“状态转换后的世界”，而不仅是即时收益</h2><p>炮术AI如果只看：</p>
+<h3 id="31013-ai应评估状态转换后的世界而不仅是即时收益">310.13 AI应评估“状态转换后的世界”，而不仅是即时收益</h3><p>炮术AI如果只看：</p>
 <p>Damage，</p>
 <p>永远学不会：</p>
 <p>炸掉敌人脚下平台。</p>
@@ -3881,10 +3881,10 @@
 </li>
 </ul>
 <hr />
-<h2 id="31014-低伤害能力也可以通过改变未来空间成为高价值能力">310.14 低伤害能力也可以通过改变未来空间成为高价值能力</h2><p>这是设计控制、地形技能、位移技能时：</p>
+<h3 id="31014-低伤害能力也可以通过改变未来空间成为高价值能力">310.14 低伤害能力也可以通过改变未来空间成为高价值能力</h3><p>这是设计控制、地形技能、位移技能时：</p>
 <p>非常重要的原则。</p>
 <hr />
-<h2 id="31015-网络同步可以围绕权威世界mutation组织而不必频繁发送完整世界">310.15 网络同步可以围绕“权威世界Mutation”组织，而不必频繁发送完整世界</h2><p>初始世界</p>
+<h3 id="31015-网络同步可以围绕权威世界mutation组织而不必频繁发送完整世界">310.15 网络同步可以围绕“权威世界Mutation”组织，而不必频繁发送完整世界</h3><p>初始世界</p>
 <ul>
 <li><p>Mutation Events</p>
 </li>
@@ -3905,7 +3905,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="311-本次防重记录">311. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>回合制炮术对抗 / Turn-Based Artillery / Trajectory Tactics。</strong></p>
+<h3 id="311-本次防重记录">311. 本次防重记录</h3><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>回合制炮术对抗 / Turn-Based Artillery / Trajectory Tactics。</strong></p>
 <p>常见名称：</p>
 <ul>
 <li><p>Turn-Based Artillery；</p>
@@ -3930,7 +3930,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="核心范式">核心范式</h2><p>回合制炮术将“离散决策”与“连续物理世界”严格分成两个时间域。Active Actor先在Turn Decision阶段读取当前地形、高差、风场、武器资源与敌方位置，选择移动、Weapon、Angle与Power；一旦Shot Commit，本次攻击便进入不可撤销的Projectile Simulation。Projectile按照统一Movement Model和Environment真实飞行，通过Continuous Collision产生Impact，再由Explosion Pipeline同时生成Damage、Impulse与Terrain Mutation。</p>
+<h3 id="核心范式">核心范式</h3><p>回合制炮术将“离散决策”与“连续物理世界”严格分成两个时间域。Active Actor先在Turn Decision阶段读取当前地形、高差、风场、武器资源与敌方位置，选择移动、Weapon、Angle与Power；一旦Shot Commit，本次攻击便进入不可撤销的Projectile Simulation。Projectile按照统一Movement Model和Environment真实飞行，通过Continuous Collision产生Impact，再由Explosion Pipeline同时生成Damage、Impulse与Terrain Mutation。</p>
 <p>Terrain本身是权威Gameplay State，不是静态Collider。一次Explosion可以挖掉山体、打开射线通道、破坏Actor脚下Support或制造新的坑洞；因此攻击不仅修改HP，也永久修改之后所有Actor的站位、射界、坠落风险和移动空间。Terrain Mutation完成以后，Actor Support重新评估，被击退或失去支撑的角色继续运动，直到所有Projectile、Terrain变更、击退、坠落、Damage与Death都完整结算并达到World Stable，Turn System才允许下一名Actor获得决策权。</p>
 <p>由此形成：</p>
 <p><strong>读取战场
@@ -3952,7 +3952,7 @@
 <p><strong>回合制炮术真正射击的并不只是敌人，而是“敌人与地形共同组成的未来战场状态”。</strong></p>
 </blockquote>
 <hr />
-<h2 id="核心识别特征">核心识别特征</h2><ul>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
 <li><p>游戏由多个离散Turn组成；</p>
 </li>
 <li><p>单个Turn中的Projectile仍采用连续物理模拟；</p>
@@ -4021,7 +4021,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="与回合制战术-rpg-的类型边界">与回合制战术 RPG 的类型边界</h2><p>回合制战术 RPG 的重点是离散网格战场、行动资源、技能结算和可回放战术因果。</p>
+<h3 id="与回合制战术-rpg-的类型边界">与回合制战术 RPG 的类型边界</h3><p>回合制战术 RPG 的重点是离散网格战场、行动资源、技能结算和可回放战术因果。</p>
 <p>两者都属于：</p>
 <p>Turn-Based Tactics。</p>
 <p>但核心行动语言不同。</p>
@@ -4048,7 +4048,7 @@
 <p>每一个行动都会同时重新绘制下一回合的战场。</p>
 </blockquote>
 <hr />
-<h2 id="与战术射击的类型边界">与战术射击的类型边界</h2><p>战术射击同样高度重视：</p>
+<h3 id="与战术射击的类型边界">与战术射击的类型边界</h3><p>战术射击同样高度重视：</p>
 <ul>
 <li><p>弹道；</p>
 </li>
@@ -4081,7 +4081,7 @@
 <p>而不是：</p>
 <p>实时反应。</p>
 <hr />
-<h2 id="与物理弹球的类型边界">与物理弹球的类型边界</h2><p>Pinball同样具有：</p>
+<h3 id="与物理弹球的类型边界">与物理弹球的类型边界</h3><p>Pinball同样具有：</p>
 <p>稳定连续物理。</p>
 <p>但 Pinball 的核心是：</p>
 <p>玩家不能直接控制Ball，只通过Flipper等致动器持续干预一个高速共享球体。</p>
@@ -4103,7 +4103,7 @@
 <p>通过一次次Projectile Commit持续重写战场Terrain。**</p>
 </blockquote>
 <hr />
-<h2 id="与弹幕射击的类型边界">与弹幕射击的类型边界</h2><p>当前 <code>bullet-hell</code> 的核心是玩家实时穿越确定的危险弹幕几何。其Projectile数量巨大，主要问题是：</p>
+<h3 id="与弹幕射击的类型边界">与弹幕射击的类型边界</h3><p>当前 <code>bullet-hell</code> 的核心是玩家实时穿越确定的危险弹幕几何。其Projectile数量巨大，主要问题是：</p>
 <p><strong>如何规避Projectile。</strong></p>
 <p>炮术游戏中：</p>
 <p>Projectile数量往往非常少。</p>
@@ -4119,7 +4119,7 @@
 <p>Projectile是少量高价值不可逆决策。**</p>
 </blockquote>
 <hr />
-<h2 id="与未来高尔夫-golf-simulation-的防重边界">与未来高尔夫 / Golf Simulation 的防重边界</h2><p>两者都可能使用：</p>
+<h3 id="与未来高尔夫-golf-simulation-的防重边界">与未来高尔夫 / Golf Simulation 的防重边界</h3><p>两者都可能使用：</p>
 <ul>
 <li><p>Angle；</p>
 </li>
@@ -4143,7 +4143,7 @@
 <p>因此未来仍然可以独立记录：</p>
 <p><strong>Golf / Stroke Planning Simulation。</strong></p>
 <hr />
-<h2 id="与未来台球-billiards-的防重边界">与未来台球 / Billiards 的防重边界</h2><p>台球同样属于：</p>
+<h3 id="与未来台球-billiards-的防重边界">与未来台球 / Billiards 的防重边界</h3><p>台球同样属于：</p>
 <p>回合式物理预测。</p>
 <p>但其核心是：</p>
 <p>有限球体之间的：</p>
@@ -4161,7 +4161,7 @@
 </blockquote>
 <p>仍属于不同宏观范式。</p>
 <hr />
-<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
 <li><p>Turn-Based Artillery；</p>
 </li>
 <li><p>Trajectory Tactics；</p>
@@ -4250,7 +4250,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于回合制炮术范式内部系统，不应再次拆成新的完整宏观游戏类型：</p>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于回合制炮术范式内部系统，不应再次拆成新的完整宏观游戏类型：</p>
 <ul>
 <li><p>Artillery Ballistics；</p>
 </li>

@@ -108,7 +108,7 @@
 <p>Agent 标签：<code>round</code> <code>shooter</code> <code>tactical</code></p>
 </blockquote>
 <hr />
-<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 <code>sakura-design-journal/game-designs</code>。当前生成的 <code>README.md</code> 标记 <strong>Entries: 56</strong>；现有目录已经覆盖潜行、盗窃计划、格斗、MOBA、大逃杀、撤离型搜打撤、实时战略、回合制战术 RPG、弹幕射击等类型。</p>
+<h3 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h3><p>已实际核对当前 <code>sakura-design-journal/game-designs</code>。当前生成的 <code>README.md</code> 标记 <strong>Entries: 56</strong>；现有目录已经覆盖潜行、盗窃计划、格斗、MOBA、大逃杀、撤离型搜打撤、实时战略、回合制战术 RPG、弹幕射击等类型。</p>
 <p>同时检索当前 <code>route-metadata.v1.json</code>，未发现独立的 <code>shooter</code> / <code>tactical-shooter</code> / <code>FPS</code> 宏观范式条目。当前仓库已经存在潜行中的感知—警戒模型、盗窃计划中的潜入计划，以及格斗游戏中的固定逻辑帧对抗，但尚未覆盖以<strong>高致死实时枪战、单轮无复活、跨轮经济、区域控制和攻防目标</strong>为核心的战术射击范式。</p>
 <p>因此本期新增类型选择：</p>
 <p><strong>回合制局间战术射击 / Round-Based Tactical Shooter / Bomb-Defusal FPS。</strong></p>
@@ -156,7 +156,7 @@
 <p><strong>高致死枪战把每一次信息、位置和资源决策放大；枪法负责兑现机会，而真正持续跨回合演化的是信息控制、人数交换、地图空间、装备经济与团队预期。</strong></p>
 </blockquote>
 <hr />
-<h1 id="1-类型定位">1. 类型定位</h1><p>典型战术射击通常具备：</p>
+<h3 id="1-类型定位">1. 类型定位</h3><p>典型战术射击通常具备：</p>
 <ul>
 <li><p>第一人称或近似精确瞄准；</p>
 </li>
@@ -223,16 +223,16 @@
 → Round结算<br />
 → 经济进入下一轮。</p>
 <hr />
-<h1 id="2-最核心的系统抽象">2. 最核心的系统抽象</h1><p>整个品类可以抽象为六个持续互相作用的资源域：</p>
-<h2 id="life">Life</h2><p>当前 Round 的行动资格。</p>
+<h3 id="2-最核心的系统抽象">2. 最核心的系统抽象</h3><p>整个品类可以抽象为六个持续互相作用的资源域：</p>
+<h3 id="life">Life</h3><p>当前 Round 的行动资格。</p>
 <p>死亡通常意味着：</p>
 <p>本轮不再参与。</p>
-<h2 id="information">Information</h2><p>知道敌人：</p>
+<h3 id="information">Information</h3><p>知道敌人：</p>
 <p>在哪里、可能在哪里以及肯定不在哪里。</p>
-<h2 id="space">Space</h2><p>当前团队能够安全控制和通过的地图区域。</p>
-<h2 id="time">Time</h2><p>Round Time、Plant Time、Defuse Time以及轮转时间。</p>
-<h2 id="equipment">Equipment</h2><p>当前 Round 能够用于兑现战术的武器和Utility。</p>
-<h2 id="economy">Economy</h2><p>未来若干Round能够购买什么。</p>
+<h3 id="space">Space</h3><p>当前团队能够安全控制和通过的地图区域。</p>
+<h3 id="time">Time</h3><p>Round Time、Plant Time、Defuse Time以及轮转时间。</p>
+<h3 id="equipment">Equipment</h3><p>当前 Round 能够用于兑现战术的武器和Utility。</p>
+<h3 id="economy">Economy</h3><p>未来若干Round能够购买什么。</p>
 <p>因此真正的核心关系为：</p>
 <p><strong>Information<br />
 → 决定如何分配Space。</strong></p>
@@ -250,7 +250,7 @@
 → 改变下一轮能够采取的战术。</strong></p>
 <p>这是一套跨多个时间尺度的闭环。</p>
 <hr />
-<h1 id="3-核心范式一round-是正式的风险事务单元">3. 核心范式一：Round 是正式的风险事务单元</h1><p>Match不是一场连续死亡竞赛。</p>
+<h3 id="3-核心范式一round-是正式的风险事务单元">3. 核心范式一：Round 是正式的风险事务单元</h3><p>Match不是一场连续死亡竞赛。</p>
 <p>应建立明确：</p>
 <p><strong>RoundLifecycle。</strong></p>
 <p>推荐状态：</p>
@@ -277,7 +277,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="4-rounddefinition">4. RoundDefinition</h1><p>建议字段：</p>
+<h3 id="4-rounddefinition">4. RoundDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>RoundTimeLimit；</p>
 </li>
@@ -303,7 +303,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="5-roundruntimestate">5. RoundRuntimeState</h1><p>建议包含：</p>
+<h3 id="5-roundruntimestate">5. RoundRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>RoundId；</p>
 </li>
@@ -335,7 +335,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="6-为什么必须显式存在-round">6. 为什么必须显式存在 Round</h1><p>因为以下系统全部依赖Round边界：</p>
+<h3 id="6-为什么必须显式存在-round">6. 为什么必须显式存在 Round</h3><p>因为以下系统全部依赖Round边界：</p>
 <ul>
 <li><p>复活；</p>
 </li>
@@ -364,7 +364,7 @@
 <p>“场上没人了”</p>
 <p>临时推断Round结束。</p>
 <hr />
-<h1 id="7-round-start-snapshot">7. Round Start Snapshot</h1><p>Round正式开始前建议冻结：</p>
+<h3 id="7-round-start-snapshot">7. Round Start Snapshot</h3><p>Round正式开始前建议冻结：</p>
 <ul>
 <li><p>阵营；</p>
 </li>
@@ -393,7 +393,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="8-核心范式二死亡代表本轮行动权永久丢失">8. 核心范式二：死亡代表“本轮行动权永久丢失”</h1><p>传统Deathmatch：</p>
+<h3 id="8-核心范式二死亡代表本轮行动权永久丢失">8. 核心范式二：死亡代表“本轮行动权永久丢失”</h3><p>传统Deathmatch：</p>
 <p>死亡<br />
 → Respawn<br />
 → 重新战斗。</p>
@@ -407,7 +407,7 @@
 <p><strong>让敌队未来几十秒永久少一个信息节点、枪口、投掷物携带者和地图控制单位。</strong></p>
 </blockquote>
 <hr />
-<h1 id="9-playerroundlifestate">9. PlayerRoundLifeState</h1><p>建议包含：</p>
+<h3 id="9-playerroundlifestate">9. PlayerRoundLifeState</h3><p>建议包含：</p>
 <ul>
 <li><p>PlayerId；</p>
 </li>
@@ -431,7 +431,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="10-人数差">10. 人数差</h1><p>标准状态：</p>
+<h3 id="10-人数差">10. 人数差</h3><p>标准状态：</p>
 <p>5v5。</p>
 <p>一次击杀：</p>
 <p>5v4。</p>
@@ -451,7 +451,7 @@
 <p>因此：</p>
 <p><strong>Player Count 是实时战略资源。</strong></p>
 <hr />
-<h1 id="11-manadvantagestate">11. ManAdvantageState</h1><p>分析层可以维护：</p>
+<h3 id="11-manadvantagestate">11. ManAdvantageState</h3><p>分析层可以维护：</p>
 <ul>
 <li><p>AliveAttackers；</p>
 </li>
@@ -470,7 +470,7 @@
 <p>但极适合：</p>
 <p>AI、观战和Telemetry。</p>
 <hr />
-<h1 id="12-trade-kill">12. Trade Kill</h1><p>战术射击强调：</p>
+<h3 id="12-trade-kill">12. Trade Kill</h3><p>战术射击强调：</p>
 <p>第一个玩家死亡以后，</p>
 <p>队友能否立即击杀对方。</p>
 <p>例如：</p>
@@ -485,14 +485,14 @@
 <p>这就是：</p>
 <p><strong>Trade。</strong></p>
 <hr />
-<h1 id="13-tradewindow">13. TradeWindow</h1><p>Telemetry可以定义：</p>
+<h3 id="13-tradewindow">13. TradeWindow</h3><p>Telemetry可以定义：</p>
 <p>某玩家死亡后：</p>
 <p>X秒内</p>
 <p>其队友击杀凶手或附近敌人。</p>
 <p>用于分析：</p>
 <p>队伍间距与配合。</p>
 <hr />
-<h1 id="14-核心范式三地图不是行走空间而是信息和火力拓扑">14. 核心范式三：地图不是行走空间，而是信息和火力拓扑</h1><p>典型地图可以抽象为：</p>
+<h3 id="14-核心范式三地图不是行走空间而是信息和火力拓扑">14. 核心范式三：地图不是行走空间，而是信息和火力拓扑</h3><p>典型地图可以抽象为：</p>
 <ul>
 <li><p>Spawn；</p>
 </li>
@@ -520,7 +520,7 @@
 <p>真正的游戏对象是：</p>
 <p><strong>Tactical Map Graph。</strong></p>
 <hr />
-<h1 id="15-tacticalzonedefinition">15. TacticalZoneDefinition</h1><p>建议字段：</p>
+<h3 id="15-tacticalzonedefinition">15. TacticalZoneDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ZoneId；</p>
 </li>
@@ -544,7 +544,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="16-为什么需要逻辑zone">16. 为什么需要逻辑Zone</h1><p>例如：</p>
+<h3 id="16-为什么需要逻辑zone">16. 为什么需要逻辑Zone</h3><p>例如：</p>
 <p>“Mid被控制。”</p>
 <p>系统不需要把整个地图离散成：</p>
 <p>百万Voxel。</p>
@@ -567,7 +567,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="17-map-control">17. Map Control</h1><p>控制一个区域并不等于：</p>
+<h3 id="17-map-control">17. Map Control</h3><p>控制一个区域并不等于：</p>
 <p>站在区域中心。</p>
 <p>更合理的概念：</p>
 <p>团队拥有：</p>
@@ -585,7 +585,7 @@
 <p><strong>Information + Fire Coverage + Presence</strong></p>
 <p>共同派生状态。</p>
 <hr />
-<h1 id="18-mid-control-的价值">18. Mid Control 的价值</h1><p>控制Mid可能意味着：</p>
+<h3 id="18-mid-control-的价值">18. Mid Control 的价值</h3><p>控制Mid可能意味着：</p>
 <ul>
 <li><p>攻方可更快转A或B；</p>
 </li>
@@ -601,12 +601,12 @@
 <p>而不是：</p>
 <p>区域本身有资源。</p>
 <hr />
-<h1 id="19-核心范式四sightline-是战斗发生的主要几何单位">19. 核心范式四：Sightline 是战斗发生的主要几何单位</h1><p>射击地图设计不应只维护：</p>
+<h3 id="19-核心范式四sightline-是战斗发生的主要几何单位">19. 核心范式四：Sightline 是战斗发生的主要几何单位</h3><p>射击地图设计不应只维护：</p>
 <p>Navigation Mesh。</p>
 <p>还应维护：</p>
 <p><strong>Combat Sightline。</strong></p>
 <hr />
-<h1 id="20-sightlinedefinition">20. SightlineDefinition</h1><p>建议字段：</p>
+<h3 id="20-sightlinedefinition">20. SightlineDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>SightlineId；</p>
 </li>
@@ -630,7 +630,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="21-angle">21. Angle</h1><p>一个Angle可以理解为：</p>
+<h3 id="21-angle">21. Angle</h3><p>一个Angle可以理解为：</p>
 <p>从某站位观察一个潜在敌方路径。</p>
 <p>玩家无法同时：</p>
 <p>精确控制所有Angle。</p>
@@ -638,7 +638,7 @@
 <p>地图设计本质上在制造：</p>
 <p><strong>有限注意力分配。</strong></p>
 <hr />
-<h1 id="22-多angle区域">22. 多Angle区域</h1><p>如果站在某位置：</p>
+<h3 id="22-多angle区域">22. 多Angle区域</h3><p>如果站在某位置：</p>
 <p>同时可能从：</p>
 <p>左、右、前</p>
 <p>出现敌人，</p>
@@ -647,19 +647,19 @@
 <p>多人协作</p>
 <p>或Utility。</p>
 <hr />
-<h1 id="23-isolation">23. Isolation</h1><p>烟雾、墙体或站位的高阶价值之一：</p>
+<h3 id="23-isolation">23. Isolation</h3><p>烟雾、墙体或站位的高阶价值之一：</p>
 <p>减少同时需要处理的Angle数量。</p>
 <p>因此Utility并不仅是：</p>
 <p>造成伤害。</p>
 <p>而是：</p>
 <p><strong>降低当前空间决策维度。</strong></p>
 <hr />
-<h1 id="24-核心范式五枪战应服从稳定且服务器可验证的武器模型">24. 核心范式五：枪战应服从稳定且服务器可验证的武器模型</h1><p>武器系统至少需要分离：</p>
+<h3 id="24-核心范式五枪战应服从稳定且服务器可验证的武器模型">24. 核心范式五：枪战应服从稳定且服务器可验证的武器模型</h3><p>武器系统至少需要分离：</p>
 <p><strong>WeaponDefinition</strong></p>
 <p>和：</p>
 <p><strong>WeaponRuntimeState。</strong></p>
 <hr />
-<h1 id="25-weapondefinition">25. WeaponDefinition</h1><p>建议字段：</p>
+<h3 id="25-weapondefinition">25. WeaponDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>WeaponId；</p>
 </li>
@@ -693,7 +693,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="26-weaponruntimestate">26. WeaponRuntimeState</h1><p>建议包含：</p>
+<h3 id="26-weaponruntimestate">26. WeaponRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>WeaponInstanceId；</p>
 </li>
@@ -719,7 +719,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="27-逻辑射击流程">27. 逻辑射击流程</h1><p>Client Fire Input<br />
+<h3 id="27-逻辑射击流程">27. 逻辑射击流程</h3><p>Client Fire Input<br />
 → Local Prediction反馈<br />
 → Server接收Input Sequence<br />
 → 验证Weapon状态<br />
@@ -733,7 +733,7 @@
 → Damage Resolve<br />
 → 发布ShotResolved。</p>
 <hr />
-<h1 id="28-shotcontext">28. ShotContext</h1><p>建议包含：</p>
+<h3 id="28-shotcontext">28. ShotContext</h3><p>建议包含：</p>
 <ul>
 <li><p>ShotId；</p>
 </li>
@@ -763,7 +763,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="29-核心范式六recoil-和-spread-必须区分">29. 核心范式六：Recoil 和 Spread 必须区分</h1><p><strong>Recoil</strong></p>
+<h3 id="29-核心范式六recoil-和-spread-必须区分">29. 核心范式六：Recoil 和 Spread 必须区分</h3><p><strong>Recoil</strong></p>
 <p>通常是：</p>
 <p>连续射击产生的确定或半确定瞄准偏移。</p>
 <p><strong>Spread / Inaccuracy</strong></p>
@@ -772,7 +772,7 @@
 <p>两者混在一起：</p>
 <p>玩家难以学习。</p>
 <hr />
-<h1 id="30-recoilprofile">30. RecoilProfile</h1><p>建议包含：</p>
+<h3 id="30-recoilprofile">30. RecoilProfile</h3><p>建议包含：</p>
 <ul>
 <li><p>ShotIndex；</p>
 </li>
@@ -792,18 +792,18 @@
 </li>
 </ul>
 <hr />
-<h1 id="31-可学习recoil">31. 可学习Recoil</h1><p>如果武器后坐力具有稳定模式：</p>
+<h3 id="31-可学习recoil">31. 可学习Recoil</h3><p>如果武器后坐力具有稳定模式：</p>
 <p>玩家可以练习：</p>
 <p>反向压枪。</p>
 <p>这形成：</p>
 <p>机械熟练度。</p>
 <hr />
-<h1 id="32-spread-seed">32. Spread Seed</h1><p>服务器决定：</p>
+<h3 id="32-spread-seed">32. Spread Seed</h3><p>服务器决定：</p>
 <p>或双方共享确定Seed。</p>
 <p>避免：</p>
 <p>客户端自行声明弹着点。</p>
 <hr />
-<h1 id="33-movement-accuracy">33. Movement Accuracy</h1><p>移动射击通常降低精度。</p>
+<h3 id="33-movement-accuracy">33. Movement Accuracy</h3><p>移动射击通常降低精度。</p>
 <p>这建立核心循环：</p>
 <p>移动<br />
 → 停止<br />
@@ -812,18 +812,18 @@
 <p>如果移动射击与静止一样准：</p>
 <p>角度和站位的重要性下降。</p>
 <hr />
-<h1 id="34-counter-strafe-stop-accuracy">34. Counter-Strafe / Stop Accuracy</h1><p>如果游戏设计允许：</p>
+<h3 id="34-counter-strafe-stop-accuracy">34. Counter-Strafe / Stop Accuracy</h3><p>如果游戏设计允许：</p>
 <p>玩家短时间抵消Velocity</p>
 <p>迅速恢复精度，</p>
 <p>必须是明确Movement/Accuracy规则。</p>
 <hr />
-<h1 id="35-核心范式七高致死要求-hit-validation-极其可信">35. 核心范式七：高致死要求 Hit Validation 极其可信</h1><p>如果一次爆头可能：</p>
+<h3 id="35-核心范式七高致死要求-hit-validation-极其可信">35. 核心范式七：高致死要求 Hit Validation 极其可信</h3><p>如果一次爆头可能：</p>
 <p>立即结束本Round，</p>
 <p>网络误差和命中判定的容忍度极低。</p>
 <p>因此服务器必须维护：</p>
 <p><strong>Historical Character State。</strong></p>
 <hr />
-<h1 id="36-characterhistorysnapshot">36. CharacterHistorySnapshot</h1><p>建议字段：</p>
+<h3 id="36-characterhistorysnapshot">36. CharacterHistorySnapshot</h3><p>建议字段：</p>
 <ul>
 <li><p>ServerTick；</p>
 </li>
@@ -845,7 +845,7 @@
 <p>只需保留：</p>
 <p>短时间窗口。</p>
 <hr />
-<h1 id="37-lag-compensation">37. Lag Compensation</h1><p>客户端在：</p>
+<h3 id="37-lag-compensation">37. Lag Compensation</h3><p>客户端在：</p>
 <p>Tclient</p>
 <p>开火。</p>
 <p>服务器收到：</p>
@@ -854,20 +854,20 @@
 <p>回溯目标Hitbox。</p>
 <p>再进行命中判断。</p>
 <hr />
-<h1 id="38-lag-compensation目的">38. Lag Compensation目的</h1><p>不是：</p>
+<h3 id="38-lag-compensation目的">38. Lag Compensation目的</h3><p>不是：</p>
 <p>“让高延迟玩家占便宜。”</p>
 <p>而是：</p>
 <p>尽量还原玩家按下开火时</p>
 <p>自己实际看到的世界。</p>
 <hr />
-<h1 id="39-compensation-window">39. Compensation Window</h1><p>必须有最大值。</p>
+<h3 id="39-compensation-window">39. Compensation Window</h3><p>必须有最大值。</p>
 <p>例如超过：</p>
 <p>某高延迟窗口</p>
 <p>不再完整回滚。</p>
 <p>防止：</p>
 <p>几秒前的位置仍然能被击中。</p>
 <hr />
-<h1 id="40-peekers-advantage">40. Peekers' Advantage</h1><p>客户端预测 + 网络延迟意味着：</p>
+<h3 id="40-peekers-advantage">40. Peekers' Advantage</h3><p>客户端预测 + 网络延迟意味着：</p>
 <p>主动Peek者</p>
 <p>可能比静止防守者更早看到对方。</p>
 <p>这不是纯地图问题。</p>
@@ -886,7 +886,7 @@
 </ul>
 <p>降低。</p>
 <hr />
-<h1 id="41-shot-debugger">41. Shot Debugger</h1><p>高价值开发工具必须显示：</p>
+<h3 id="41-shot-debugger">41. Shot Debugger</h3><p>高价值开发工具必须显示：</p>
 <ul>
 <li><p>Shooter Client Time；</p>
 </li>
@@ -904,7 +904,7 @@
 <p>任何“我明明打中了”的投诉</p>
 <p>都应该能工程化分析。</p>
 <hr />
-<h1 id="42-核心范式八damage需要高致死但明确身体区域语义">42. 核心范式八：Damage需要高致死但明确身体区域语义</h1><p>DamageContext建议包含：</p>
+<h3 id="42-核心范式八damage需要高致死但明确身体区域语义">42. 核心范式八：Damage需要高致死但明确身体区域语义</h3><p>DamageContext建议包含：</p>
 <ul>
 <li><p>Shooter；</p>
 </li>
@@ -930,7 +930,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="43-hit-region">43. Hit Region</h1><p>典型：</p>
+<h3 id="43-hit-region">43. Hit Region</h3><p>典型：</p>
 <ul>
 <li><p>Head；</p>
 </li>
@@ -945,7 +945,7 @@
 </ul>
 <p>不同倍率。</p>
 <hr />
-<h1 id="44-armor">44. Armor</h1><p>Armor不一定简单：</p>
+<h3 id="44-armor">44. Armor</h3><p>Armor不一定简单：</p>
 <p>Damage - X。</p>
 <p>可以区分：</p>
 <ul>
@@ -959,21 +959,21 @@
 </li>
 </ul>
 <hr />
-<h1 id="45-damage必须一次结算">45. Damage必须一次结算</h1><p>Hit Detection、Armor、Kill、Assist：</p>
+<h3 id="45-damage必须一次结算">45. Damage必须一次结算</h3><p>Hit Detection、Armor、Kill、Assist：</p>
 <p>都消费：</p>
 <p>同一个DamageResult。</p>
 <p>不能：</p>
 <p>KillFeed</p>
 <p>自己重新判断是不是爆头。</p>
 <hr />
-<h1 id="46-friendly-fire">46. Friendly Fire</h1><p>若启用：</p>
+<h3 id="46-friendly-fire">46. Friendly Fire</h3><p>若启用：</p>
 <p>必须进入同一Damage系统。</p>
 <p>不能独立做特殊碰撞逻辑。</p>
 <hr />
-<h1 id="47-wall-penetration">47. Wall Penetration</h1><p>子弹穿墙时需要：</p>
+<h3 id="47-wall-penetration">47. Wall Penetration</h3><p>子弹穿墙时需要：</p>
 <p>SurfaceDefinition。</p>
 <hr />
-<h1 id="48-surfacedefinition">48. SurfaceDefinition</h1><p>建议字段：</p>
+<h3 id="48-surfacedefinition">48. SurfaceDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>MaterialTag；</p>
 </li>
@@ -989,13 +989,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="49-穿墙机制真正增加的是隐蔽不等于安全">49. 穿墙机制真正增加的是“隐蔽不等于安全”</h1><p>某些Cover：</p>
+<h3 id="49-穿墙机制真正增加的是隐蔽不等于安全">49. 穿墙机制真正增加的是“隐蔽不等于安全”</h3><p>某些Cover：</p>
 <p>阻挡视线</p>
 <p>但不完全阻挡Damage。</p>
 <p>于是玩家必须学习：</p>
 <p>地图材料知识。</p>
 <hr />
-<h1 id="50-核心范式九声音是一套独立的信息传播系统">50. 核心范式九：声音是一套独立的信息传播系统</h1><p>战术射击中：</p>
+<h3 id="50-核心范式九声音是一套独立的信息传播系统">50. 核心范式九：声音是一套独立的信息传播系统</h3><p>战术射击中：</p>
 <p>敌人不可见</p>
 <p>不代表：</p>
 <p>完全未知。</p>
@@ -1026,7 +1026,7 @@
 <p>因此Sound不能只视为：</p>
 <p>Audio Presentation。</p>
 <hr />
-<h1 id="51-gameplaysoundevent">51. GameplaySoundEvent</h1><p>建议字段：</p>
+<h3 id="51-gameplaysoundevent">51. GameplaySoundEvent</h3><p>建议字段：</p>
 <ul>
 <li><p>SoundEventId；</p>
 </li>
@@ -1050,7 +1050,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="52-sound-propagation">52. Sound Propagation</h1><p>需要考虑：</p>
+<h3 id="52-sound-propagation">52. Sound Propagation</h3><p>需要考虑：</p>
 <ul>
 <li><p>距离；</p>
 </li>
@@ -1071,12 +1071,12 @@
 <p>但至少必须保持：</p>
 <p>稳定、可学习。</p>
 <hr />
-<h1 id="53-soundportal">53. SoundPortal</h1><p>门口、走廊等位置可以用于：</p>
+<h3 id="53-soundportal">53. SoundPortal</h3><p>门口、走廊等位置可以用于：</p>
 <p>区域级声音传播。</p>
 <p>这样不必：</p>
 <p>每个Sound Event进行高成本射线追踪。</p>
 <hr />
-<h1 id="54-player-knowledge">54. Player Knowledge</h1><p>玩家通过声音得到的不是：</p>
+<h3 id="54-player-knowledge">54. Player Knowledge</h3><p>玩家通过声音得到的不是：</p>
 <p>Entity Position = 精确坐标。</p>
 <p>而是：</p>
 <p><strong>Approximate Information。</strong></p>
@@ -1086,7 +1086,7 @@
 <p>游戏系统只需要提供：</p>
 <p>可信音频线索。</p>
 <hr />
-<h1 id="55-核心范式十投掷物的主要价值是改变空间与信息">55. 核心范式十：投掷物的主要价值是改变空间与信息</h1><p>典型Utility：</p>
+<h3 id="55-核心范式十投掷物的主要价值是改变空间与信息">55. 核心范式十：投掷物的主要价值是改变空间与信息</h3><p>典型Utility：</p>
 <ul>
 <li><p>Smoke；</p>
 </li>
@@ -1104,7 +1104,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="56-utilitydefinition">56. UtilityDefinition</h1><p>建议字段：</p>
+<h3 id="56-utilitydefinition">56. UtilityDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>UtilityId；</p>
 </li>
@@ -1128,14 +1128,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="57-smoke">57. Smoke</h1><p>Smoke的真正作用：</p>
+<h3 id="57-smoke">57. Smoke</h3><p>Smoke的真正作用：</p>
 <p>不是：</p>
 <p>降低敌人Accuracy。</p>
 <p>而是：</p>
 <p>改变：</p>
 <p><strong>Visibility Graph。</strong></p>
 <hr />
-<h1 id="58-smokevolumestate">58. SmokeVolumeState</h1><p>建议包含：</p>
+<h3 id="58-smokevolumestate">58. SmokeVolumeState</h3><p>建议包含：</p>
 <ul>
 <li><p>VolumeId；</p>
 </li>
@@ -1155,14 +1155,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="59-visibility-query">59. Visibility Query</h1><p>Line of Sight穿过Smoke：</p>
+<h3 id="59-visibility-query">59. Visibility Query</h3><p>Line of Sight穿过Smoke：</p>
 <p>结果：</p>
 <p>Blocked / Attenuated</p>
 <p>由统一Visibility系统决定。</p>
 <p>AI、观战、服务器验证都使用：</p>
 <p>同一规则。</p>
 <hr />
-<h1 id="60-flash">60. Flash</h1><p>Flash效果应取决于：</p>
+<h3 id="60-flash">60. Flash</h3><p>Flash效果应取决于：</p>
 <ul>
 <li><p>距离；</p>
 </li>
@@ -1176,7 +1176,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="61-flashresult">61. FlashResult</h1><p>建议包含：</p>
+<h3 id="61-flashresult">61. FlashResult</h3><p>建议包含：</p>
 <ul>
 <li><p>TargetId；</p>
 </li>
@@ -1192,7 +1192,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="62-incendiary">62. Incendiary</h1><p>本质是：</p>
+<h3 id="62-incendiary">62. Incendiary</h3><p>本质是：</p>
 <p><strong>Temporary Area Denial。</strong></p>
 <p>作用：</p>
 <ul>
@@ -1207,7 +1207,7 @@
 </ul>
 <p>所以时间价值常高于Damage价值。</p>
 <hr />
-<h1 id="63-核心范式十一utility-economy-是团队战术带宽">63. 核心范式十一：Utility Economy 是团队战术带宽</h1><p>玩家一轮只有：</p>
+<h3 id="63-核心范式十一utility-economy-是团队战术带宽">63. 核心范式十一：Utility Economy 是团队战术带宽</h3><p>玩家一轮只有：</p>
 <p>有限数量投掷物。</p>
 <p>如果前30秒全部使用：</p>
 <p>后续Retake</p>
@@ -1215,7 +1215,7 @@
 <p>因此应该分析：</p>
 <p><strong>Utility Remaining。</strong></p>
 <hr />
-<h1 id="64-teamutilitystate">64. TeamUtilityState</h1><p>可以派生：</p>
+<h3 id="64-teamutilitystate">64. TeamUtilityState</h3><p>可以派生：</p>
 <ul>
 <li><p>SmokesRemaining；</p>
 </li>
@@ -1230,7 +1230,7 @@
 </ul>
 <p>这是残局价值的重要指标。</p>
 <hr />
-<h1 id="65-utility不是越晚用越好">65. Utility不是越晚用越好</h1><p>早期使用：</p>
+<h3 id="65-utility不是越晚用越好">65. Utility不是越晚用越好</h3><p>早期使用：</p>
 <p>可以获得：</p>
 <ul>
 <li><p>Map Control；</p>
@@ -1245,7 +1245,7 @@
 <p>与：</p>
 <p>未来资源。</p>
 <hr />
-<h1 id="66-核心范式十二objective-改变时间和空间的主导权">66. 核心范式十二：Objective 改变时间和空间的主导权</h1><p>以Bomb模式为例。</p>
+<h3 id="66-核心范式十二objective-改变时间和空间的主导权">66. 核心范式十二：Objective 改变时间和空间的主导权</h3><p>以Bomb模式为例。</p>
 <p>Plant之前：</p>
 <p>进攻方受：</p>
 <p>RoundTimer</p>
@@ -1258,7 +1258,7 @@
 <p>主动Retake。</p>
 <p>这是本类型最漂亮的结构之一。</p>
 <hr />
-<h1 id="67-objectivedefinition">67. ObjectiveDefinition</h1><p>建议字段：</p>
+<h3 id="67-objectivedefinition">67. ObjectiveDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ObjectiveId；</p>
 </li>
@@ -1284,7 +1284,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="68-bombruntimestate">68. BombRuntimeState</h1><p>建议包含：</p>
+<h3 id="68-bombruntimestate">68. BombRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>ObjectiveItemId；</p>
 </li>
@@ -1312,7 +1312,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="69-bombstate">69. BombState</h1><p>推荐：</p>
+<h3 id="69-bombstate">69. BombState</h3><p>推荐：</p>
 <ul>
 <li><p>Carried；</p>
 </li>
@@ -1332,7 +1332,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="70-plant-transaction">70. Plant Transaction</h1><p>玩家开始Plant<br />
+<h3 id="70-plant-transaction">70. Plant Transaction</h3><p>玩家开始Plant<br />
 → 验证拥有Bomb<br />
 → 验证在PlantZone<br />
 → 验证Alive<br />
@@ -1345,31 +1345,31 @@
 → 启动PostPlantClock<br />
 → 发布BombPlanted。</p>
 <hr />
-<h1 id="71-plant中断">71. Plant中断</h1><p>移动；</p>
+<h3 id="71-plant中断">71. Plant中断</h3><p>移动；</p>
 <p>死亡；</p>
 <p>离开区域</p>
 <p>通常取消Plant。</p>
 <p>是否保留Progress：</p>
 <p>由规则定义。</p>
 <hr />
-<h1 id="72-defuse">72. Defuse</h1><p>同样是：</p>
+<h3 id="72-defuse">72. Defuse</h3><p>同样是：</p>
 <p>Channel Action。</p>
 <hr />
-<h1 id="73-defuse的真正问题不是能不能拆">73. Defuse的真正问题不是“能不能拆”</h1><p>而是：</p>
+<h3 id="73-defuse的真正问题不是能不能拆">73. Defuse的真正问题不是“能不能拆”</h3><p>而是：</p>
 <blockquote>
 <p>从当前位置到炸弹需要多久，拆弹需要多久，剩余爆炸时间是否允许完成？</p>
 </blockquote>
 <p>因此Time成为：</p>
 <p>显式空间资源。</p>
 <hr />
-<h1 id="74-defuse-feasibility">74. Defuse Feasibility</h1><p>分析可以计算：</p>
+<h3 id="74-defuse-feasibility">74. Defuse Feasibility</h3><p>分析可以计算：</p>
 <p><code>TravelTime + DefuseTime &lt; RemainingBombTime</code></p>
 <p>如果不满足：</p>
 <p>理论上无法拆除。</p>
 <p>玩家应该：</p>
 <p>Save Weapon。</p>
 <hr />
-<h1 id="75-核心范式十三残局是整个round高信息密度的压缩态">75. 核心范式十三：残局是整个Round高信息密度的压缩态</h1><p>例如：</p>
+<h3 id="75-核心范式十三残局是整个round高信息密度的压缩态">75. 核心范式十三：残局是整个Round高信息密度的压缩态</h3><p>例如：</p>
 <p>1v1。</p>
 <p>双方已获得大量信息。</p>
 <p>地图大部分区域：</p>
@@ -1380,7 +1380,7 @@
 <p>残局是：</p>
 <p><strong>Information Compression。</strong></p>
 <hr />
-<h1 id="76-clutchcontext">76. ClutchContext</h1><p>分析层可以保存：</p>
+<h3 id="76-clutchcontext">76. ClutchContext</h3><p>分析层可以保存：</p>
 <ul>
 <li><p>AlivePlayers；</p>
 </li>
@@ -1400,7 +1400,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="77-残局为什么强烈依赖声音">77. 残局为什么强烈依赖声音</h1><p>没有队友提供信息。</p>
+<h3 id="77-残局为什么强烈依赖声音">77. 残局为什么强烈依赖声音</h3><p>没有队友提供信息。</p>
 <p>玩家必须：</p>
 <p>自己完成：</p>
 <ul>
@@ -1414,7 +1414,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="78-fake-action">78. Fake Action</h1><p>例如：</p>
+<h3 id="78-fake-action">78. Fake Action</h3><p>例如：</p>
 <p>轻触Defuse</p>
 <p>发出声音。</p>
 <p>立刻停止。</p>
@@ -1427,14 +1427,14 @@
 <p>这就是：</p>
 <p><strong>系统型竞技设计。</strong></p>
 <hr />
-<h1 id="79-核心范式十四economy-将多个独立round连接成战略序列">79. 核心范式十四：Economy 将多个独立Round连接成战略序列</h1><p>如果每Round装备重置成完全相同：</p>
+<h3 id="79-核心范式十四economy-将多个独立round连接成战略序列">79. 核心范式十四：Economy 将多个独立Round连接成战略序列</h3><p>如果每Round装备重置成完全相同：</p>
 <p>比赛就只是：</p>
 <p>多次独立5v5。</p>
 <p>经济让：</p>
 <p>上一轮</p>
 <p>影响下一轮。</p>
 <hr />
-<h1 id="80-playereconomystate">80. PlayerEconomyState</h1><p>建议包含：</p>
+<h3 id="80-playereconomystate">80. PlayerEconomyState</h3><p>建议包含：</p>
 <ul>
 <li><p>PlayerId；</p>
 </li>
@@ -1454,7 +1454,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="81-teameconomystate">81. TeamEconomyState</h1><p>建议包含：</p>
+<h3 id="81-teameconomystate">81. TeamEconomyState</h3><p>建议包含：</p>
 <ul>
 <li><p>TeamId；</p>
 </li>
@@ -1472,7 +1472,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="82-money-source">82. Money Source</h1><p>典型：</p>
+<h3 id="82-money-source">82. Money Source</h3><p>典型：</p>
 <ul>
 <li><p>Round Win；</p>
 </li>
@@ -1488,7 +1488,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="83-money-sink">83. Money Sink</h1><p>主要：</p>
+<h3 id="83-money-sink">83. Money Sink</h3><p>主要：</p>
 <ul>
 <li><p>Weapon；</p>
 </li>
@@ -1503,14 +1503,14 @@
 <p>Round-limited Economy。</p>
 <p>一般没有长期通胀问题。</p>
 <hr />
-<h1 id="84-equipment-carry">84. Equipment Carry</h1><p>玩家存活：</p>
+<h3 id="84-equipment-carry">84. Equipment Carry</h3><p>玩家存活：</p>
 <p>通常可以把武器带到下一Round。</p>
 <p>死亡：</p>
 <p>装备掉地。</p>
 <p>这会产生：</p>
 <p><strong>Survival Economic Value。</strong></p>
 <hr />
-<h1 id="85-save-weapon">85. Save Weapon</h1><p>局面几乎必输。</p>
+<h3 id="85-save-weapon">85. Save Weapon</h3><p>局面几乎必输。</p>
 <p>玩家可以：</p>
 <p>不尝试无胜算Retake。</p>
 <p>保留：</p>
@@ -1521,18 +1521,18 @@
 <p>未来经济</p>
 <p>产生冲突。</p>
 <hr />
-<h1 id="86-eco-round">86. Eco Round</h1><p>团队资金不足：</p>
+<h3 id="86-eco-round">86. Eco Round</h3><p>团队资金不足：</p>
 <p>选择：</p>
 <p>几乎不购买。</p>
 <p>接受当前Round胜率较低。</p>
 <p>换取：</p>
 <p>下一轮Full Buy。</p>
 <hr />
-<h1 id="87-force-buy">87. Force Buy</h1><p>资金不足但：</p>
+<h3 id="87-force-buy">87. Force Buy</h3><p>资金不足但：</p>
 <p>因比分、战术或对方经济</p>
 <p>选择强行购买不完整装备。</p>
 <hr />
-<h1 id="88-full-buy">88. Full Buy</h1><p>理想配置：</p>
+<h3 id="88-full-buy">88. Full Buy</h3><p>理想配置：</p>
 <p>Primary Weapon</p>
 <ul>
 <li><p>Armor</p>
@@ -1541,19 +1541,19 @@
 </li>
 </ul>
 <hr />
-<h1 id="89-economy本质上形成多轮动态规划">89. Economy本质上形成多轮动态规划</h1><p>玩家不是只问：</p>
+<h3 id="89-economy本质上形成多轮动态规划">89. Economy本质上形成多轮动态规划</h3><p>玩家不是只问：</p>
 <p>“这一轮什么武器最强？”</p>
 <p>而是：</p>
 <blockquote>
 <p>“如果这轮花光钱，我们下一轮会处于什么状态？”</p>
 </blockquote>
 <hr />
-<h1 id="90-loss-bonus">90. Loss Bonus</h1><p>连续失败增加：</p>
+<h3 id="90-loss-bonus">90. Loss Bonus</h3><p>连续失败增加：</p>
 <p>Round Loss Reward。</p>
 <p>目的：</p>
 <p>防止经济雪球无限扩大。</p>
 <hr />
-<h1 id="91-核心范式十五buy-phase-是战略规划窗口而不是商店ui">91. 核心范式十五：Buy Phase 是战略规划窗口，而不是商店UI</h1><p>Buy Phase承担：</p>
+<h3 id="91-核心范式十五buy-phase-是战略规划窗口而不是商店ui">91. 核心范式十五：Buy Phase 是战略规划窗口，而不是商店UI</h3><p>Buy Phase承担：</p>
 <ul>
 <li><p>武器选择；</p>
 </li>
@@ -1567,7 +1567,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="92-purchasetransaction">92. PurchaseTransaction</h1><p>验证Buy Zone / Phase<br />
+<h3 id="92-purchasetransaction">92. PurchaseTransaction</h3><p>验证Buy Zone / Phase<br />
 → 验证Money<br />
 → 验证CarryLimit<br />
 → 创建Equipment<br />
@@ -1576,7 +1576,7 @@
 → Commit。</p>
 <p>必须幂等。</p>
 <hr />
-<h1 id="93-refund">93. Refund</h1><p>Buy Phase内：</p>
+<h3 id="93-refund">93. Refund</h3><p>Buy Phase内：</p>
 <p>若规则允许：</p>
 <p>玩家可以卖回刚购买物品。</p>
 <p>需要：</p>
@@ -1584,11 +1584,11 @@
 <p>防止：</p>
 <p>利用拾取武器套利。</p>
 <hr />
-<h1 id="94-dropped-weapon">94. Dropped Weapon</h1><p>世界中武器拥有：</p>
+<h3 id="94-dropped-weapon">94. Dropped Weapon</h3><p>世界中武器拥有：</p>
 <p>WeaponInstance。</p>
 <p>其他玩家可拾取。</p>
 <hr />
-<h1 id="95-ownership-transfer">95. Ownership Transfer</h1><p>Weapon掉落：</p>
+<h3 id="95-ownership-transfer">95. Ownership Transfer</h3><p>Weapon掉落：</p>
 <p>PlayerInventory<br />
 → WorldWeaponEntity。</p>
 <p>拾取：</p>
@@ -1596,7 +1596,7 @@
 → PlayerInventory。</p>
 <p>不能复制。</p>
 <hr />
-<h1 id="96-round-end-weapon-cleanup">96. Round End Weapon Cleanup</h1><p>根据规则：</p>
+<h3 id="96-round-end-weapon-cleanup">96. Round End Weapon Cleanup</h3><p>根据规则：</p>
 <ul>
 <li><p>活着玩家装备保留；</p>
 </li>
@@ -1609,7 +1609,7 @@
 </ul>
 <p>必须统一结算。</p>
 <hr />
-<h1 id="97-核心范式十六spawn-和-default-是计划起点">97. 核心范式十六：Spawn 和 Default 是“计划起点”</h1><p>双方每Round不是：</p>
+<h3 id="97-核心范式十六spawn-和-default-是计划起点">97. 核心范式十六：Spawn 和 Default 是“计划起点”</h3><p>双方每Round不是：</p>
 <p>随机散布。</p>
 <p>固定Spawn意味着：</p>
 <p>地图开局若干秒高度可预测。</p>
@@ -1624,7 +1624,7 @@
 </ul>
 <p>可以训练。</p>
 <hr />
-<h1 id="98-opening-timing">98. Opening Timing</h1><p>例如：</p>
+<h3 id="98-opening-timing">98. Opening Timing</h3><p>例如：</p>
 <p>防守从Spawn到Mid：</p>
 <p>7.2秒。</p>
 <p>进攻：</p>
@@ -1633,27 +1633,27 @@
 <p>这就是：</p>
 <p>地图设计的一部分。</p>
 <hr />
-<h1 id="99-spawntiminganalyzer">99. SpawnTimingAnalyzer</h1><p>开发工具可以计算：</p>
+<h3 id="99-spawntiminganalyzer">99. SpawnTimingAnalyzer</h3><p>开发工具可以计算：</p>
 <p>每个Spawn点</p>
 <p>到关键Zone的：</p>
 <p>最快合法Travel Time。</p>
 <p>检测：</p>
 <p>某Spawn是否产生不公平首接触。</p>
 <hr />
-<h1 id="100-spawn-randomization">100. Spawn Randomization</h1><p>若每队存在多个Spawn位置：</p>
+<h3 id="100-spawn-randomization">100. Spawn Randomization</h3><p>若每队存在多个Spawn位置：</p>
 <p>随机差异也需要受约束。</p>
 <p>不能某一Round：</p>
 <p>玩家天然快1.5秒到关键点</p>
 <p>导致巨大优势。</p>
 <hr />
-<h1 id="101-核心范式十七战术信息来自已知推断和缺失三层">101. 核心范式十七：战术信息来自“已知、推断和缺失”三层</h1><p>玩家可能知道：</p>
+<h3 id="101-核心范式十七战术信息来自已知推断和缺失三层">101. 核心范式十七：战术信息来自“已知、推断和缺失”三层</h3><p>玩家可能知道：</p>
 <p>A看到2个。</p>
 <p>Mid看到1个。</p>
 <p>则：</p>
 <p>剩下2个未知。</p>
 <p>未知本身就是信息。</p>
 <hr />
-<h1 id="102-team-information-model">102. Team Information Model</h1><p>游戏不一定正式维护。</p>
+<h3 id="102-team-information-model">102. Team Information Model</h3><p>游戏不一定正式维护。</p>
 <p>但Bot和分析系统可以：</p>
 <ul>
 <li><p>ConfirmedEnemyPositions；</p>
@@ -1668,13 +1668,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="103-information-decay">103. Information Decay</h1><p>10秒前看到：</p>
+<h3 id="103-information-decay">103. Information Decay</h3><p>10秒前看到：</p>
 <p>敌人在A Main。</p>
 <p>现在：</p>
 <p>不能假设仍在那里。</p>
 <p>因此LastKnown信息随时间失效。</p>
 <hr />
-<h1 id="104-rotation推断">104. Rotation推断</h1><p>如果：</p>
+<h3 id="104-rotation推断">104. Rotation推断</h3><p>如果：</p>
 <p>B长期无信息，</p>
 <p>A突然出现大量Utility，</p>
 <p>防守可能判断：</p>
@@ -1683,7 +1683,7 @@
 <p>Fake。</p>
 <p>这种不确定性正是玩法核心。</p>
 <hr />
-<h1 id="105-核心范式十八team-communication-是战斗能力的一部分">105. 核心范式十八：Team Communication 是战斗能力的一部分</h1><p>Callout：</p>
+<h3 id="105-核心范式十八team-communication-是战斗能力的一部分">105. 核心范式十八：Team Communication 是战斗能力的一部分</h3><p>Callout：</p>
 <p>“One Mid。”</p>
 <p>比：</p>
 <p>玩家自己跑去确认</p>
@@ -1693,7 +1693,7 @@
 <p>实际上提高团队：</p>
 <p><strong>Effective Information Bandwidth。</strong></p>
 <hr />
-<h1 id="106-ping-callout">106. Ping / Callout</h1><p>可以支持：</p>
+<h3 id="106-ping-callout">106. Ping / Callout</h3><p>可以支持：</p>
 <ul>
 <li><p>Enemy；</p>
 </li>
@@ -1710,25 +1710,25 @@
 </ul>
 <p>竞技语音可独立存在。</p>
 <hr />
-<h1 id="107-communication不能成为服务器权威信息">107. Communication不能成为服务器权威信息</h1><p>Ping只能表示：</p>
+<h3 id="107-communication不能成为服务器权威信息">107. Communication不能成为服务器权威信息</h3><p>Ping只能表示：</p>
 <p>玩家声称那里有敌人。</p>
 <p>不能：</p>
 <p>自动确认隐藏敌人。</p>
 <hr />
-<h1 id="108-minimap">108. Minimap</h1><p>只显示：</p>
+<h3 id="108-minimap">108. Minimap</h3><p>只显示：</p>
 <p>玩家当前有权知道的信息。</p>
 <p>例如：</p>
 <p>队友。</p>
 <p>被看到敌人。</p>
 <p>Objective。</p>
 <hr />
-<h1 id="109-spectator-knowledge">109. Spectator Knowledge</h1><p>死亡玩家观战队友时：</p>
+<h3 id="109-spectator-knowledge">109. Spectator Knowledge</h3><p>死亡玩家观战队友时：</p>
 <p>只能看到：</p>
 <p>自己队伍合法获得的信息。</p>
 <p>不能通过死亡获得：</p>
 <p>全图透视。</p>
 <hr />
-<h1 id="110-核心范式十九服务器网络状态本身需要进入公平性设计">110. 核心范式十九：服务器网络状态本身需要进入公平性设计</h1><p>关键指标：</p>
+<h3 id="110-核心范式十九服务器网络状态本身需要进入公平性设计">110. 核心范式十九：服务器网络状态本身需要进入公平性设计</h3><p>关键指标：</p>
 <ul>
 <li><p>Server Tick Rate；</p>
 </li>
@@ -1746,7 +1746,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="111-fixed-server-simulation">111. Fixed Server Simulation</h1><p>权威战斗建议：</p>
+<h3 id="111-fixed-server-simulation">111. Fixed Server Simulation</h3><p>权威战斗建议：</p>
 <p>固定Tick。</p>
 <p>所有：</p>
 <ul>
@@ -1763,30 +1763,30 @@
 </ul>
 <p>在统一Tick系统中处理。</p>
 <hr />
-<h1 id="112-tick-timestamp">112. Tick Timestamp</h1><p>Gameplay事件记录：</p>
+<h3 id="112-tick-timestamp">112. Tick Timestamp</h3><p>Gameplay事件记录：</p>
 <p>ServerTick。</p>
 <p>这样：</p>
 <p>Replay和命中调试可精确定位。</p>
 <hr />
-<h1 id="113-client-render-rate-可以不同">113. Client Render Rate 可以不同</h1><p>60Hz服务器。</p>
+<h3 id="113-client-render-rate-可以不同">113. Client Render Rate 可以不同</h3><p>60Hz服务器。</p>
 <p>240FPS客户端。</p>
 <p>玩家仍然可以获得：</p>
 <p>高视觉流畅度。</p>
 <p>但逻辑结果按Server Tick。</p>
 <hr />
-<h1 id="114-网络包乱序">114. 网络包乱序</h1><p>Input Sequence处理：</p>
+<h3 id="114-网络包乱序">114. 网络包乱序</h3><p>Input Sequence处理：</p>
 <p>过旧Input：</p>
 <p>丢弃。</p>
 <p>重复Input：</p>
 <p>幂等。</p>
 <hr />
-<h1 id="115-shot输入不能重复执行">115. Shot输入不能重复执行</h1><p>每个Shot：</p>
+<h3 id="115-shot输入不能重复执行">115. Shot输入不能重复执行</h3><p>每个Shot：</p>
 <p>InputSequence / ShotSequence唯一。</p>
 <p>防止：</p>
 <p>重发Packet</p>
 <p>产生两发子弹。</p>
 <hr />
-<h1 id="116-核心范式二十anti-cheat-必须建立在客户端不可信原则上">116. 核心范式二十：Anti-Cheat 必须建立在“客户端不可信”原则上</h1><p>服务器绝不能相信客户端：</p>
+<h3 id="116-核心范式二十anti-cheat-必须建立在客户端不可信原则上">116. 核心范式二十：Anti-Cheat 必须建立在“客户端不可信”原则上</h3><p>服务器绝不能相信客户端：</p>
 <ul>
 <li><p>Position；</p>
 </li>
@@ -1806,7 +1806,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="117-movement-validation">117. Movement Validation</h1><p>检测：</p>
+<h3 id="117-movement-validation">117. Movement Validation</h3><p>检测：</p>
 <ul>
 <li><p>Speed；</p>
 </li>
@@ -1824,7 +1824,7 @@
 <p>不要简单：</p>
 <p>距离超一点立即Ban。</p>
 <hr />
-<h1 id="118-fire-validation">118. Fire Validation</h1><p>检查：</p>
+<h3 id="118-fire-validation">118. Fire Validation</h3><p>检查：</p>
 <ul>
 <li><p>Weapon；</p>
 </li>
@@ -1840,14 +1840,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="119-information-security">119. Information Security</h1><p>客户端不应无条件收到：</p>
+<h3 id="119-information-security">119. Information Security</h3><p>客户端不应无条件收到：</p>
 <p>墙后敌人精确状态。</p>
 <p>否则：</p>
 <p>Wallhack只需要读取内存。</p>
 <p>可以结合AOI / Visibility</p>
 <p>减少隐藏Entity数据暴露。</p>
 <hr />
-<h1 id="120-完全不发送隐藏玩家状态会增加网络和预测复杂度">120. 完全不发送隐藏玩家状态会增加网络和预测复杂度</h1><p>因此需要权衡：</p>
+<h3 id="120-完全不发送隐藏玩家状态会增加网络和预测复杂度">120. 完全不发送隐藏玩家状态会增加网络和预测复杂度</h3><p>因此需要权衡：</p>
 <p>Security</p>
 <p>与：</p>
 <p>Replication Simplicity。</p>
@@ -1856,7 +1856,7 @@
 <p>客户端获得的数据越少，作弊可利用信息越少。</p>
 </blockquote>
 <hr />
-<h1 id="121-核心范式二十一replay-是竞技可信度与调试的基础设施">121. 核心范式二十一：Replay 是竞技可信度与调试的基础设施</h1><p>Replay至少应记录：</p>
+<h3 id="121-核心范式二十一replay-是竞技可信度与调试的基础设施">121. 核心范式二十一：Replay 是竞技可信度与调试的基础设施</h3><p>Replay至少应记录：</p>
 <ul>
 <li><p>MatchId；</p>
 </li>
@@ -1884,12 +1884,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="122-server-demo">122. Server Demo</h1><p>最好使用：</p>
+<h3 id="122-server-demo">122. Server Demo</h3><p>最好使用：</p>
 <p>权威Server State / Event Stream。</p>
 <p>而不是：</p>
 <p>某个玩家屏幕录像。</p>
 <hr />
-<h1 id="123-replay用途">123. Replay用途</h1><ul>
+<h3 id="123-replay用途">123. Replay用途</h3><ul>
 <li><p>Spectator；</p>
 </li>
 <li><p>Anti-Cheat Review；</p>
@@ -1906,13 +1906,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="124-kill-replay">124. Kill Replay</h1><p>击杀后如果显示回放：</p>
+<h3 id="124-kill-replay">124. Kill Replay</h3><p>击杀后如果显示回放：</p>
 <p>必须明确：</p>
 <p>这是Server重建或Spectator重放。</p>
 <p>不要让玩家误以为：</p>
 <p>完全等于敌人的实际屏幕帧。</p>
 <hr />
-<h1 id="125-核心范式二十二match-lifecycle必须高于round">125. 核心范式二十二：Match Lifecycle必须高于Round</h1><p>Match通常：</p>
+<h3 id="125-核心范式二十二match-lifecycle必须高于round">125. 核心范式二十二：Match Lifecycle必须高于Round</h3><p>Match通常：</p>
 <ul>
 <li><p>多个Round；</p>
 </li>
@@ -1924,7 +1924,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="126-matchstate">126. MatchState</h1><p>建议包含：</p>
+<h3 id="126-matchstate">126. MatchState</h3><p>建议包含：</p>
 <ul>
 <li><p>MatchId；</p>
 </li>
@@ -1952,7 +1952,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="127-side-switch">127. Side Switch</h1><p>双方在中场：</p>
+<h3 id="127-side-switch">127. Side Switch</h3><p>双方在中场：</p>
 <p>交换Attack / Defense。</p>
 <p>因此Match Score不能直接：</p>
 <p>记录“攻击方赢多少”。</p>
@@ -1961,7 +1961,7 @@
 <p>和：</p>
 <p>CurrentSide。</p>
 <hr />
-<h1 id="128-overtime">128. Overtime</h1><p>平局以后：</p>
+<h3 id="128-overtime">128. Overtime</h3><p>平局以后：</p>
 <p>进入额外Round组合。</p>
 <p>需要：</p>
 <ul>
@@ -1973,7 +1973,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="129-overtimestate">129. OvertimeState</h1><p>建议包含：</p>
+<h3 id="129-overtimestate">129. OvertimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>OvertimeIndex；</p>
 </li>
@@ -1987,7 +1987,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="130-match-result">130. Match Result</h1><p>建议包含：</p>
+<h3 id="130-match-result">130. Match Result</h3><p>建议包含：</p>
 <ul>
 <li><p>Winner；</p>
 </li>
@@ -2009,17 +2009,17 @@
 </li>
 </ul>
 <hr />
-<h1 id="131-match结算幂等">131. Match结算幂等</h1><p>Rank、XP、奖励：</p>
+<h3 id="131-match结算幂等">131. Match结算幂等</h3><p>Rank、XP、奖励：</p>
 <p>以MatchId</p>
 <p>作为幂等基础。</p>
 <p>不能因为：</p>
 <p>服务器重试</p>
 <p>重复结算。</p>
 <hr />
-<h1 id="132-disconnect">132. Disconnect</h1><p>玩家掉线：</p>
+<h3 id="132-disconnect">132. Disconnect</h3><p>玩家掉线：</p>
 <p>Character不应立即从Round消失。</p>
 <hr />
-<h1 id="133-disconnectstate">133. DisconnectState</h1><p>建议包含：</p>
+<h3 id="133-disconnectstate">133. DisconnectState</h3><p>建议包含：</p>
 <ul>
 <li><p>PlayerId；</p>
 </li>
@@ -2037,12 +2037,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="134-reconnect">134. Reconnect</h1><p>新连接：</p>
+<h3 id="134-reconnect">134. Reconnect</h3><p>新连接：</p>
 <p>接管同一个PlayerMatchEntity。</p>
 <p>不能：</p>
 <p>生成第二个角色。</p>
 <hr />
-<h1 id="135-round中断线">135. Round中断线</h1><p>根据规则：</p>
+<h3 id="135-round中断线">135. Round中断线</h3><p>根据规则：</p>
 <p>角色可能：</p>
 <ul>
 <li><p>留在原地；</p>
@@ -2056,7 +2056,7 @@
 <p>一断线角色立即消失，</p>
 <p>被用来躲避死亡。</p>
 <hr />
-<h1 id="136-buy-phase-reconnect">136. Buy Phase Reconnect</h1><p>应恢复：</p>
+<h3 id="136-buy-phase-reconnect">136. Buy Phase Reconnect</h3><p>应恢复：</p>
 <ul>
 <li><p>Money；</p>
 </li>
@@ -2068,15 +2068,15 @@
 </li>
 </ul>
 <hr />
-<h1 id="137-spectator">137. Spectator</h1><p>死亡玩家进入：</p>
+<h3 id="137-spectator">137. Spectator</h3><p>死亡玩家进入：</p>
 <p>Team Spectator。</p>
 <p>不得与Alive玩家拥有不同合法世界信息。</p>
 <hr />
-<h1 id="138-完整事件与执行流程示例">138. 完整事件与执行流程示例</h1><p>以下以：</p>
+<h3 id="138-完整事件与执行流程示例">138. 完整事件与执行流程示例</h3><p>以下以：</p>
 <p><strong>进攻方在5v5中通过中路施压制造假信息，最终转B安装炸弹并进入2v2残局</strong></p>
 <p>为例。</p>
 <hr />
-<h2 id="1381-buy-phase">138.1 Buy Phase</h2><p>进攻队经济充足。</p>
+<h3 id="1381-buy-phase">138.1 Buy Phase</h3><p>进攻队经济充足。</p>
 <p>购买：</p>
 <ul>
 <li><p>5 Rifles；</p>
@@ -2089,78 +2089,78 @@
 </li>
 </ul>
 <hr />
-<h2 id="1382-default开局">138.2 Default开局</h2><p>玩家分布：</p>
+<h3 id="1382-default开局">138.2 Default开局</h3><p>玩家分布：</p>
 <p>2人A区域。</p>
 <p>2人Mid。</p>
 <p>1人B。</p>
 <p>目的：</p>
 <p>收集防守站位信息。</p>
 <hr />
-<h2 id="1383-mid第一接触">138.3 Mid第一接触</h2><p>进攻方使用：</p>
+<h3 id="1383-mid第一接触">138.3 Mid第一接触</h3><p>进攻方使用：</p>
 <p>Smoke</p>
 <p>隔离一条防守Sightline。</p>
 <hr />
-<h2 id="1384-smoke改变visibility-graph">138.4 Smoke改变Visibility Graph</h2><p>原本防守者可以同时观察：</p>
+<h3 id="1384-smoke改变visibility-graph">138.4 Smoke改变Visibility Graph</h3><p>原本防守者可以同时观察：</p>
 <p>Mid + Connector。</p>
 <p>现在：</p>
 <p>只剩Connector。</p>
 <hr />
-<h2 id="1385-进攻方flash推进">138.5 进攻方Flash推进</h2><p>防守者短暂Blind。</p>
+<h3 id="1385-进攻方flash推进">138.5 进攻方Flash推进</h3><p>防守者短暂Blind。</p>
 <p>被迫后退。</p>
 <hr />
-<h2 id="1386-进攻方获得mid-control">138.6 进攻方获得Mid Control</h2><p>没有发生击杀。</p>
+<h3 id="1386-进攻方获得mid-control">138.6 进攻方获得Mid Control</h3><p>没有发生击杀。</p>
 <p>但：</p>
 <p>防守方已经失去中路直接信息。</p>
 <p>这本身就是重大收益。</p>
 <hr />
-<h2 id="1387-防守方轮转">138.7 防守方轮转</h2><p>防守判断：</p>
+<h3 id="1387-防守方轮转">138.7 防守方轮转</h3><p>防守判断：</p>
 <p>Mid压力很高。</p>
 <p>B防守者向Mid靠近。</p>
 <hr />
-<h2 id="1388-进攻方听到轮转脚步">138.8 进攻方听到轮转脚步</h2><p>GameplaySound提供：</p>
+<h3 id="1388-进攻方听到轮转脚步">138.8 进攻方听到轮转脚步</h3><p>GameplaySound提供：</p>
 <p>位置线索。</p>
 <p>进攻队Callout：</p>
 <p>“B可能只剩一人。”</p>
 <hr />
-<h2 id="1389-进攻队不继续mid">138.9 进攻队不继续Mid</h2><p>使用一颗Flash继续制造噪声。</p>
+<h3 id="1389-进攻队不继续mid">138.9 进攻队不继续Mid</h3><p>使用一颗Flash继续制造噪声。</p>
 <p>两名Mid玩家后撤。</p>
 <hr />
-<h2 id="13810-整队转b">138.10 整队转B</h2><p>因为已经控制部分Mid路线：</p>
+<h3 id="13810-整队转b">138.10 整队转B</h3><p>因为已经控制部分Mid路线：</p>
 <p>转点距离较短。</p>
 <hr />
-<h2 id="13811-b第一接触">138.11 B第一接触</h2><p>B防守者面对：</p>
+<h3 id="13811-b第一接触">138.11 B第一接触</h3><p>B防守者面对：</p>
 <p>四人Utility Execute。</p>
 <hr />
-<h2 id="13812-第一名进攻者进入site">138.12 第一名进攻者进入Site</h2><p>被击杀。</p>
+<h3 id="13812-第一名进攻者进入site">138.12 第一名进攻者进入Site</h3><p>被击杀。</p>
 <p>人数：</p>
 <p>4v5。</p>
 <hr />
-<h2 id="13813-第二名进攻者立即trade">138.13 第二名进攻者立即Trade</h2><p>击杀B防守者。</p>
+<h3 id="13813-第二名进攻者立即trade">138.13 第二名进攻者立即Trade</h3><p>击杀B防守者。</p>
 <p>人数：</p>
 <p>4v4。</p>
 <hr />
-<h2 id="13814-防守轮转开始">138.14 防守轮转开始</h2><p>Mid两名防守者意识到：</p>
+<h3 id="13814-防守轮转开始">138.14 防守轮转开始</h3><p>Mid两名防守者意识到：</p>
 <p>此前是假动作。</p>
 <p>开始向B回防。</p>
 <hr />
-<h2 id="13815-进攻方安装bomb">138.15 进攻方安装Bomb</h2><p>Plant成功。</p>
+<h3 id="13815-进攻方安装bomb">138.15 进攻方安装Bomb</h3><p>Plant成功。</p>
 <p>Objective State：</p>
 <p>Planted。</p>
 <p>Round时间压力反转。</p>
 <hr />
-<h2 id="13816-post-plant">138.16 Post-Plant</h2><p>进攻方剩：</p>
+<h3 id="13816-post-plant">138.16 Post-Plant</h3><p>进攻方剩：</p>
 <p>4人。</p>
 <p>防守：</p>
 <p>4人。</p>
 <p>但进攻拥有：</p>
 <p>Bomb Clock。</p>
 <hr />
-<h2 id="13817-防守使用剩余smoke和flash进行retake">138.17 防守使用剩余Smoke和Flash进行Retake</h2><p>一颗Flash使进攻方失去近点控制。</p>
+<h3 id="13817-防守使用剩余smoke和flash进行retake">138.17 防守使用剩余Smoke和Flash进行Retake</h3><p>一颗Flash使进攻方失去近点控制。</p>
 <hr />
-<h2 id="13818-双方交换">138.18 双方交换</h2><p>连续枪战后：</p>
+<h3 id="13818-双方交换">138.18 双方交换</h3><p>连续枪战后：</p>
 <p>2v2。</p>
 <hr />
-<h2 id="13819-当前信息">138.19 当前信息</h2><p>Attack A：</p>
+<h3 id="13819-当前信息">138.19 当前信息</h3><p>Attack A：</p>
 <p>低Health。</p>
 <p>Attack B：</p>
 <p>一颗Smoke。</p>
@@ -2171,52 +2171,52 @@
 <p>Bomb剩余：</p>
 <p>18秒。</p>
 <hr />
-<h2 id="13820-defender开始defuse">138.20 Defender开始Defuse</h2><p>因为有Kit：</p>
+<h3 id="13820-defender开始defuse">138.20 Defender开始Defuse</h3><p>因为有Kit：</p>
 <p>理论Defuse Time较短。</p>
 <hr />
-<h2 id="13821-attack听到defuse-sound">138.21 Attack听到Defuse Sound</h2><p>但不知道：</p>
+<h3 id="13821-attack听到defuse-sound">138.21 Attack听到Defuse Sound</h3><p>但不知道：</p>
 <p>是否Fake。</p>
 <hr />
-<h2 id="13822-attack选择等待">138.22 Attack选择等待</h2><p>估算：</p>
+<h3 id="13822-attack选择等待">138.22 Attack选择等待</h3><p>估算：</p>
 <p>Defuse不能再拖太久。</p>
 <hr />
-<h2 id="13823-defender取消defuse">138.23 Defender取消Defuse</h2><p>等待Attack Peek。</p>
+<h3 id="13823-defender取消defuse">138.23 Defender取消Defuse</h3><p>等待Attack Peek。</p>
 <hr />
-<h2 id="13824-双方都在利用相同稳定规则进行心理博弈">138.24 双方都在利用相同稳定规则进行心理博弈</h2><p>系统不需要：</p>
+<h3 id="13824-双方都在利用相同稳定规则进行心理博弈">138.24 双方都在利用相同稳定规则进行心理博弈</h3><p>系统不需要：</p>
 <p>“Fake Defuse Skill。”</p>
 <p>只需要：</p>
 <p>Defuse可以中断</p>
 <p>并稳定产生声音。</p>
 <hr />
-<h2 id="13825-defender再次开始defuse">138.25 Defender再次开始Defuse</h2><p>Attack判断：</p>
+<h3 id="13825-defender再次开始defuse">138.25 Defender再次开始Defuse</h3><p>Attack判断：</p>
 <p>这次必须Peek。</p>
 <hr />
-<h2 id="13826-attack击杀defuser">138.26 Attack击杀Defuser</h2><p>人数：</p>
+<h3 id="13826-attack击杀defuser">138.26 Attack击杀Defuser</h3><p>人数：</p>
 <p>2v1。</p>
 <hr />
-<h2 id="13827-最后一名防守者理论上已经无法完成拆弹">138.27 最后一名防守者理论上已经无法完成拆弹</h2><p>Bomb剩：</p>
+<h3 id="13827-最后一名防守者理论上已经无法完成拆弹">138.27 最后一名防守者理论上已经无法完成拆弹</h3><p>Bomb剩：</p>
 <p>4秒。</p>
 <p>Travel + Defuse：</p>
 <p>超过剩余时间。</p>
 <hr />
-<h2 id="13828-防守者决定save-weapon">138.28 防守者决定Save Weapon</h2><p>撤离爆炸区域。</p>
+<h3 id="13828-防守者决定save-weapon">138.28 防守者决定Save Weapon</h3><p>撤离爆炸区域。</p>
 <hr />
-<h2 id="13829-bomb-detonates">138.29 Bomb Detonates</h2><p>进攻方Round Victory。</p>
+<h3 id="13829-bomb-detonates">138.29 Bomb Detonates</h3><p>进攻方Round Victory。</p>
 <hr />
-<h2 id="13830-economy结算">138.30 Economy结算</h2><p>Attack：</p>
+<h3 id="13830-economy结算">138.30 Economy结算</h3><p>Attack：</p>
 <p>Win Reward。</p>
 <p>Defense：</p>
 <p>Loss Bonus增加。</p>
 <p>存活防守者：</p>
 <p>保留Rifle。</p>
 <hr />
-<h2 id="13831-下一round战略变化">138.31 下一Round战略变化</h2><p>防守队虽然输Round，</p>
+<h3 id="13831-下一round战略变化">138.31 下一Round战略变化</h3><p>防守队虽然输Round，</p>
 <p>但因为Save了一把昂贵Rifle：</p>
 <p>下一轮有机会进行：</p>
 <p>Mixed Buy</p>
 <p>而不是纯Eco。</p>
 <hr />
-<h2 id="13832-这个例子体现了完整核心链">138.32 这个例子体现了完整核心链</h2><p>Smoke<br />
+<h3 id="13832-这个例子体现了完整核心链">138.32 这个例子体现了完整核心链</h3><p>Smoke<br />
 → Visibility改变<br />
 → Mid Control<br />
 → Sound Information<br />
@@ -2237,7 +2237,7 @@
 <p><strong>少量稳定系统在信息、空间、人数、时间和经济之间持续相互转换。</strong></p>
 </blockquote>
 <hr />
-<h1 id="139-模块通信设计">139. 模块通信设计</h1><h2 id="1391-高频input">139.1 高频Input</h2><p>包括：</p>
+<h3 id="139-模块通信设计">139. 模块通信设计</h3><h3 id="1391-高频input">139.1 高频Input</h3><p>包括：</p>
 <ul>
 <li><p>Move；</p>
 </li>
@@ -2259,7 +2259,7 @@
 <p>进入：</p>
 <p>固定Tick Input Pipeline。</p>
 <hr />
-<h2 id="1392-低频command">139.2 低频Command</h2><p>包括：</p>
+<h3 id="1392-低频command">139.2 低频Command</h3><p>包括：</p>
 <ul>
 <li><p>Purchase；</p>
 </li>
@@ -2277,7 +2277,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="140-domain-events">140. Domain Events</h1><p>包括：</p>
+<h3 id="140-domain-events">140. Domain Events</h3><p>包括：</p>
 <ul>
 <li><p>RoundStarted；</p>
 </li>
@@ -2321,7 +2321,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="141-presentation-events">141. Presentation Events</h1><p>包括：</p>
+<h3 id="141-presentation-events">141. Presentation Events</h3><p>包括：</p>
 <ul>
 <li><p>PlayMuzzleFlash；</p>
 </li>
@@ -2354,7 +2354,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="142-状态所有权">142. 状态所有权</h1><p>推荐：</p>
+<h3 id="142-状态所有权">142. 状态所有权</h3><p>推荐：</p>
 <p><strong>MatchSystem</strong></p>
 <p>拥有Match、Score、Side。</p>
 <p><strong>RoundSystem</strong></p>
@@ -2382,26 +2382,26 @@
 <p>Bomb Visual</p>
 <p>决定爆炸时间。</p>
 <hr />
-<h1 id="143-失败隔离">143. 失败隔离</h1><hr />
-<h2 id="1431-shot重复包">143.1 Shot重复包</h2><p>通过：</p>
+<h3 id="143-失败隔离">143. 失败隔离</h3><hr />
+<h3 id="1431-shot重复包">143.1 Shot重复包</h3><p>通过：</p>
 <p>ShotSequence</p>
 <p>检测。</p>
 <p>重复：</p>
 <p>忽略已有结果。</p>
 <hr />
-<h1 id="144-firerate异常">144. FireRate异常</h1><p>客户端连续发送：</p>
+<h3 id="144-firerate异常">144. FireRate异常</h3><p>客户端连续发送：</p>
 <p>远高于Weapon FireRate。</p>
 <p>Server拒绝Shot。</p>
 <p>记录：</p>
 <p>Validation anomaly。</p>
 <hr />
-<h1 id="145-objective重复plant">145. Objective重复Plant</h1><p>BombRuntime具有唯一State。</p>
+<h3 id="145-objective重复plant">145. Objective重复Plant</h3><p>BombRuntime具有唯一State。</p>
 <p>从：</p>
 <p>Carried</p>
 <p>只能有一个合法：</p>
 <p>PlantTransaction。</p>
 <hr />
-<h1 id="146-plant完成和plant-player死亡同tick">146. Plant完成和Plant Player死亡同Tick</h1><p>必须定义稳定顺序。</p>
+<h3 id="146-plant完成和plant-player死亡同tick">146. Plant完成和Plant Player死亡同Tick</h3><p>必须定义稳定顺序。</p>
 <p>例如：</p>
 <p>Damage Commit</p>
 <p>先于：</p>
@@ -2410,31 +2410,31 @@
 <p>由Server Tick Event Ordering明确。</p>
 <p>不能依赖线程调度。</p>
 <hr />
-<h1 id="147-bomb爆炸和defuse完成同tick">147. Bomb爆炸和Defuse完成同Tick</h1><p>同样需要：</p>
+<h3 id="147-bomb爆炸和defuse完成同tick">147. Bomb爆炸和Defuse完成同Tick</h3><p>同样需要：</p>
 <p>明确：</p>
 <p>哪个Timestamp先满足。</p>
 <p>建议比较：</p>
 <p>精确Objective时间。</p>
 <hr />
-<h1 id="148-smoke对象异常">148. Smoke对象异常</h1><p>Smoke Visual失效：</p>
+<h3 id="148-smoke对象异常">148. Smoke对象异常</h3><p>Smoke Visual失效：</p>
 <p>GameplayVolume仍然权威。</p>
 <p>表现层可以：</p>
 <p>重新创建。</p>
 <hr />
-<h1 id="149-smoke-gameplay异常">149. Smoke Gameplay异常</h1><p>Volume不存在：</p>
+<h3 id="149-smoke-gameplay异常">149. Smoke Gameplay异常</h3><p>Volume不存在：</p>
 <p>但Visual仍在。</p>
 <p>客户端收到：</p>
 <p>GameplayVersion修正。</p>
 <p>视觉淡出。</p>
 <hr />
-<h1 id="150-weapon-ownership重复">150. Weapon Ownership重复</h1><p>同一WeaponInstance：</p>
+<h3 id="150-weapon-ownership重复">150. Weapon Ownership重复</h3><p>同一WeaponInstance：</p>
 <p>不能：</p>
 <p>一边在Player Inventory，</p>
 <p>一边作为WorldWeapon。</p>
 <p>运行：</p>
 <p>EquipmentOwnershipAudit。</p>
 <hr />
-<h1 id="151-round结束重复">151. Round结束重复</h1><p>Objective Win</p>
+<h3 id="151-round结束重复">151. Round结束重复</h3><p>Objective Win</p>
 <p>和：</p>
 <p>Team Elimination</p>
 <p>可能同Tick触发。</p>
@@ -2443,31 +2443,31 @@
 <p>只允许一个：</p>
 <p>WinReason。</p>
 <hr />
-<h1 id="152-round结算失败">152. Round结算失败</h1><p>Round结果已经确定。</p>
+<h3 id="152-round结算失败">152. Round结算失败</h3><p>Round结果已经确定。</p>
 <p>Economy提交失败：</p>
 <p>保持：</p>
 <p>SettlementPending。</p>
 <p>不重新打一Round。</p>
 <hr />
-<h1 id="153-match结算失败">153. Match结算失败</h1><p>保留：</p>
+<h3 id="153-match结算失败">153. Match结算失败</h3><p>保留：</p>
 <p>MatchResultSnapshot。</p>
 <p>Rank系统之后幂等重试。</p>
 <hr />
-<h1 id="154-reconnect状态冲突">154. Reconnect状态冲突</h1><p>旧Connection仍存在。</p>
+<h3 id="154-reconnect状态冲突">154. Reconnect状态冲突</h3><p>旧Connection仍存在。</p>
 <p>新Session合法。</p>
 <p>使用：</p>
 <p>Session Replacement。</p>
 <p>保证一个Player只有：</p>
 <p>一个Active Input Authority。</p>
 <hr />
-<h1 id="155-replay事件缺失">155. Replay事件缺失</h1><p>Replay是派生记录。</p>
+<h3 id="155-replay事件缺失">155. Replay事件缺失</h3><p>Replay是派生记录。</p>
 <p>不能影响：</p>
 <p>Match正式结果。</p>
 <p>记录：</p>
 <p>ReplayIntegrityWarning。</p>
 <hr />
-<h1 id="156-debug与可观测性">156. Debug与可观测性</h1><hr />
-<h2 id="1561-round-timeline">156.1 Round Timeline</h2><p>显示：</p>
+<h3 id="156-debug与可观测性">156. Debug与可观测性</h3><hr />
+<h3 id="1561-round-timeline">156.1 Round Timeline</h3><p>显示：</p>
 <ul>
 <li><p>Buy End；</p>
 </li>
@@ -2485,7 +2485,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="157-player-position-heatmap">157. Player Position Heatmap</h1><p>按地图统计：</p>
+<h3 id="157-player-position-heatmap">157. Player Position Heatmap</h3><p>按地图统计：</p>
 <ul>
 <li><p>Opening Position；</p>
 </li>
@@ -2499,26 +2499,26 @@
 </li>
 </ul>
 <hr />
-<h1 id="158-first-contact-timeline">158. First Contact Timeline</h1><p>统计：</p>
+<h3 id="158-first-contact-timeline">158. First Contact Timeline</h3><p>统计：</p>
 <p>每个路线：</p>
 <p>双方最快接触时间。</p>
 <hr />
-<h1 id="159-sightline-debug">159. Sightline Debug</h1><p>选择玩家位置：</p>
+<h3 id="159-sightline-debug">159. Sightline Debug</h3><p>选择玩家位置：</p>
 <p>显示：</p>
 <p>当前可能观察的：</p>
 <p>Angles。</p>
 <hr />
-<h1 id="160-smoke-occlusion-debug">160. Smoke Occlusion Debug</h1><p>显示：</p>
+<h3 id="160-smoke-occlusion-debug">160. Smoke Occlusion Debug</h3><p>显示：</p>
 <p>Smoke Volume</p>
 <p>切断了哪些：</p>
 <p>Sightline。</p>
 <hr />
-<h1 id="161-sound-propagation-debug">161. Sound Propagation Debug</h1><p>选择Footstep：</p>
+<h3 id="161-sound-propagation-debug">161. Sound Propagation Debug</h3><p>选择Footstep：</p>
 <p>显示：</p>
 <p>哪些区域</p>
 <p>可以合法听到。</p>
 <hr />
-<h1 id="162-shot-debugger">162. Shot Debugger</h1><p>显示：</p>
+<h3 id="162-shot-debugger">162. Shot Debugger</h3><p>显示：</p>
 <ul>
 <li><p>Input Time；</p>
 </li>
@@ -2536,47 +2536,47 @@
 </li>
 </ul>
 <hr />
-<h1 id="163-recoil-trace">163. Recoil Trace</h1><p>显示连续Shot：</p>
+<h3 id="163-recoil-trace">163. Recoil Trace</h3><p>显示连续Shot：</p>
 <p>Recoil Index</p>
 <p>和：</p>
 <p>Aim Offset。</p>
 <hr />
-<h1 id="164-player-velocity-accuracy-trace">164. Player Velocity / Accuracy Trace</h1><p>用于判断：</p>
+<h3 id="164-player-velocity-accuracy-trace">164. Player Velocity / Accuracy Trace</h3><p>用于判断：</p>
 <p>某Shot为何偏离：</p>
 <p>Movement Inaccuracy</p>
 <p>还是：</p>
 <p>Spread。</p>
 <hr />
-<h1 id="165-utility-timeline">165. Utility Timeline</h1><p>每队：</p>
+<h3 id="165-utility-timeline">165. Utility Timeline</h3><p>每队：</p>
 <p>Smokes 4→0。</p>
 <p>Flashes 6→2。</p>
 <p>可以分析：</p>
 <p>是否过早消耗。</p>
 <hr />
-<h1 id="166-team-map-control-timeline">166. Team Map Control Timeline</h1><p>按战术Zone显示：</p>
+<h3 id="166-team-map-control-timeline">166. Team Map Control Timeline</h3><p>按战术Zone显示：</p>
 <p>随时间：</p>
 <p>Attack / Defense / Contested / Unknown。</p>
 <hr />
-<h1 id="167-rotation-trace">167. Rotation Trace</h1><p>某Defender：</p>
+<h3 id="167-rotation-trace">167. Rotation Trace</h3><p>某Defender：</p>
 <p>为什么从B转A。</p>
 <p>用于Bot和比赛分析。</p>
 <hr />
-<h1 id="168-trade-analysis">168. Trade Analysis</h1><p>死亡后：</p>
+<h3 id="168-trade-analysis">168. Trade Analysis</h3><p>死亡后：</p>
 <p>是否在Trade Window内完成返杀。</p>
 <hr />
-<h1 id="169-economy-timeline">169. Economy Timeline</h1><p>每Round显示：</p>
+<h3 id="169-economy-timeline">169. Economy Timeline</h3><p>每Round显示：</p>
 <p>Player Money；</p>
 <p>Purchase；</p>
 <p>Saved Weapon；</p>
 <p>Win / Loss Bonus。</p>
 <hr />
-<h1 id="170-buy-strength">170. Buy Strength</h1><p>可以估算：</p>
+<h3 id="170-buy-strength">170. Buy Strength</h3><p>可以估算：</p>
 <p>当前Team：</p>
 <p>Full Buy。</p>
 <p>Half Buy。</p>
 <p>Eco。</p>
 <hr />
-<h1 id="171-clutch-analyzer">171. Clutch Analyzer</h1><p>统计：</p>
+<h3 id="171-clutch-analyzer">171. Clutch Analyzer</h3><p>统计：</p>
 <p>1v1；</p>
 <p>1v2；</p>
 <p>1v3；</p>
@@ -2591,13 +2591,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="172-objective-timeline">172. Objective Timeline</h1><p>Plant开始。</p>
+<h3 id="172-objective-timeline">172. Objective Timeline</h3><p>Plant开始。</p>
 <p>Plant成功。</p>
 <p>Defuse尝试。</p>
 <p>Fake Defuse。</p>
 <p>Explosion。</p>
 <hr />
-<h1 id="173-network-performance">173. Network Performance</h1><p>显示：</p>
+<h3 id="173-network-performance">173. Network Performance</h3><p>显示：</p>
 <ul>
 <li><p>RTT；</p>
 </li>
@@ -2615,56 +2615,56 @@
 </li>
 </ul>
 <hr />
-<h1 id="174-player-correction-heatmap">174. Player Correction Heatmap</h1><p>如果某玩家频繁Position Correction：</p>
+<h3 id="174-player-correction-heatmap">174. Player Correction Heatmap</h3><p>如果某玩家频繁Position Correction：</p>
 <p>可能：</p>
 <p>网络差</p>
 <p>或：</p>
 <p>移动作弊。</p>
 <hr />
-<h1 id="175-content-validation">175. Content Validation</h1><hr />
-<h2 id="1751-spawn-timing-test">175.1 Spawn Timing Test</h2><p>自动Bot计算：</p>
+<h3 id="175-content-validation">175. Content Validation</h3><hr />
+<h3 id="1751-spawn-timing-test">175.1 Spawn Timing Test</h3><p>自动Bot计算：</p>
 <p>所有Spawn</p>
 <p>到所有关键Zone的：</p>
 <p>最快到达时间。</p>
 <hr />
-<h1 id="176-sightline-validation">176. Sightline Validation</h1><p>检查：</p>
+<h3 id="176-sightline-validation">176. Sightline Validation</h3><p>检查：</p>
 <p>地图关键区域是否存在：</p>
 <p>意外跨图视线。</p>
 <hr />
-<h1 id="177-objective-reachability">177. Objective Reachability</h1><p>攻守双方：</p>
+<h3 id="177-objective-reachability">177. Objective Reachability</h3><p>攻守双方：</p>
 <p>都必须存在合法路径到Site。</p>
 <hr />
-<h1 id="178-plant-zone-validation">178. Plant Zone Validation</h1><p>保证：</p>
+<h3 id="178-plant-zone-validation">178. Plant Zone Validation</h3><p>保证：</p>
 <p>Bomb Collider、角色站位和Cover</p>
 <p>没有异常重叠。</p>
 <hr />
-<h1 id="179-defuse-position-validation">179. Defuse Position Validation</h1><p>Planted Objective必须：</p>
+<h3 id="179-defuse-position-validation">179. Defuse Position Validation</h3><p>Planted Objective必须：</p>
 <p>存在至少一个可合法Defuse位置。</p>
 <hr />
-<h1 id="180-smoke-coverage-test">180. Smoke Coverage Test</h1><p>标准Smoke落点：</p>
+<h3 id="180-smoke-coverage-test">180. Smoke Coverage Test</h3><p>标准Smoke落点：</p>
 <p>是否真的能够遮挡预期Sightline。</p>
 <hr />
-<h1 id="181-flash-geometry-test">181. Flash Geometry Test</h1><p>验证：</p>
+<h3 id="181-flash-geometry-test">181. Flash Geometry Test</h3><p>验证：</p>
 <p>墙体、朝向和距离计算。</p>
 <hr />
-<h1 id="182-weapon-damage-test">182. Weapon Damage Test</h1><p>不同：</p>
+<h3 id="182-weapon-damage-test">182. Weapon Damage Test</h3><p>不同：</p>
 <p>Distance<br />
 Armor<br />
 HitRegion<br />
 Penetration</p>
 <p>生成测试矩阵。</p>
 <hr />
-<h1 id="183-recoil-determinism-test">183. Recoil Determinism Test</h1><p>固定：</p>
+<h3 id="183-recoil-determinism-test">183. Recoil Determinism Test</h3><p>固定：</p>
 <p>Weapon<br />
 Input<br />
 Seed。</p>
 <p>Shot Pattern必须稳定。</p>
 <hr />
-<h1 id="184-fire-rate-property-test">184. Fire Rate Property Test</h1><p>任何输入频率：</p>
+<h3 id="184-fire-rate-property-test">184. Fire Rate Property Test</h3><p>任何输入频率：</p>
 <p>实际Shot数量都不能超过：</p>
 <p>Weapon规则上限。</p>
 <hr />
-<h1 id="185-lag-compensation-test">185. Lag Compensation Test</h1><p>模拟：</p>
+<h3 id="185-lag-compensation-test">185. Lag Compensation Test</h3><p>模拟：</p>
 <p>0ms<br />
 50ms<br />
 100ms<br />
@@ -2672,19 +2672,19 @@ Seed。</p>
 <p>确认：</p>
 <p>回溯逻辑符合规则。</p>
 <hr />
-<h1 id="186-extreme-ping-test">186. Extreme Ping Test</h1><p>超过补偿窗口：</p>
+<h3 id="186-extreme-ping-test">186. Extreme Ping Test</h3><p>超过补偿窗口：</p>
 <p>系统稳定降级。</p>
 <p>不能：</p>
 <p>回溯数秒。</p>
 <hr />
-<h1 id="187-objective-race-test">187. Objective Race Test</h1><p>随机模拟：</p>
+<h3 id="187-objective-race-test">187. Objective Race Test</h3><p>随机模拟：</p>
 <p>Plant / Death</p>
 <p>和：</p>
 <p>Defuse / Explosion</p>
 <p>同Tick边界。</p>
 <p>确保结果确定。</p>
 <hr />
-<h1 id="188-round-economy-simulation">188. Round Economy Simulation</h1><p>Bot执行：</p>
+<h3 id="188-round-economy-simulation">188. Round Economy Simulation</h3><p>Bot执行：</p>
 <p>Eco；</p>
 <p>Force；</p>
 <p>Full Buy；</p>
@@ -2692,17 +2692,17 @@ Seed。</p>
 <p>统计：</p>
 <p>长期Money Curve。</p>
 <hr />
-<h1 id="189-loss-streak-simulation">189. Loss Streak Simulation</h1><p>验证：</p>
+<h3 id="189-loss-streak-simulation">189. Loss Streak Simulation</h3><p>验证：</p>
 <p>连续失败团队仍存在合理翻盘购买窗口。</p>
 <hr />
-<h1 id="190-map-side-balance">190. Map Side Balance</h1><p>大量Bot或实战数据：</p>
+<h3 id="190-map-side-balance">190. Map Side Balance</h3><p>大量Bot或实战数据：</p>
 <p>Attack Win Rate；</p>
 <p>Defense Win Rate。</p>
 <p>按：</p>
 <p>Skill Level</p>
 <p>分层。</p>
 <hr />
-<h1 id="191-performance设计">191. Performance设计</h1><p>战术射击的主要技术预算集中于：</p>
+<h3 id="191-performance设计">191. Performance设计</h3><p>战术射击的主要技术预算集中于：</p>
 <ul>
 <li><p>低延迟；</p>
 </li>
@@ -2720,10 +2720,10 @@ Seed。</p>
 <p>而不是：</p>
 <p>场上数千Entity。</p>
 <hr />
-<h1 id="192-server-fixed-tick">192. Server Fixed Tick</h1><p>所有核心竞技状态使用：</p>
+<h3 id="192-server-fixed-tick">192. Server Fixed Tick</h3><p>所有核心竞技状态使用：</p>
 <p>Fixed Server Tick。</p>
 <hr />
-<h1 id="193-transform压缩">193. Transform压缩</h1><p>玩家位置和朝向：</p>
+<h3 id="193-transform压缩">193. Transform压缩</h3><p>玩家位置和朝向：</p>
 <p>高频。</p>
 <p>使用：</p>
 <ul>
@@ -2735,7 +2735,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="194-replication-interest">194. Replication Interest</h1><p>小地图玩家数量通常有限。</p>
+<h3 id="194-replication-interest">194. Replication Interest</h3><p>小地图玩家数量通常有限。</p>
 <p>可以比MMO简单。</p>
 <p>但仍可根据：</p>
 <ul>
@@ -2746,12 +2746,12 @@ Seed。</p>
 </ul>
 <p>优化。</p>
 <hr />
-<h1 id="195-character-hitbox-history">195. Character Hitbox History</h1><p>只保存：</p>
+<h3 id="195-character-hitbox-history">195. Character Hitbox History</h3><p>只保存：</p>
 <p>Lag Compensation窗口内。</p>
 <p>使用：</p>
 <p>Ring Buffer。</p>
 <hr />
-<h1 id="196-smoke性能">196. Smoke性能</h1><p>不要用：</p>
+<h3 id="196-smoke性能">196. Smoke性能</h3><p>不要用：</p>
 <p>真实数百万粒子</p>
 <p>决定Gameplay。</p>
 <p>逻辑：</p>
@@ -2759,35 +2759,35 @@ Seed。</p>
 <p>视觉：</p>
 <p>GPU粒子或体积效果。</p>
 <hr />
-<h1 id="197-flash-query">197. Flash Query</h1><p>玩家人数通常：</p>
+<h3 id="197-flash-query">197. Flash Query</h3><p>玩家人数通常：</p>
 <p>10。</p>
 <p>可以：</p>
 <p>Explosion发生时</p>
 <p>一次性计算所有潜在目标。</p>
 <p>无需持续Tick。</p>
 <hr />
-<h1 id="198-bullet-raycast">198. Bullet Raycast</h1><p>Hitscan武器：</p>
+<h3 id="198-bullet-raycast">198. Bullet Raycast</h3><p>Hitscan武器：</p>
 <p>不需要创建长期Bullet Entity。</p>
 <p>Shot发生时：</p>
 <p>执行一次射线流程。</p>
 <hr />
-<h1 id="199-projectile-weapon">199. Projectile Weapon</h1><p>若有：</p>
+<h3 id="199-projectile-weapon">199. Projectile Weapon</h3><p>若有：</p>
 <p>Grenade、Rocket</p>
 <p>才创建长期Projectile Runtime。</p>
 <hr />
-<h1 id="200-replay-buffer">200. Replay Buffer</h1><p>Server Event可：</p>
+<h3 id="200-replay-buffer">200. Replay Buffer</h3><p>Server Event可：</p>
 <p>边比赛边写：</p>
 <p>Ring / Stream。</p>
 <p>不要Match结束才：</p>
 <p>一次性序列化全部状态。</p>
 <hr />
-<h1 id="201-spectator-replication">201. Spectator Replication</h1><p>观战者比普通玩家需要更多：</p>
+<h3 id="201-spectator-replication">201. Spectator Replication</h3><p>观战者比普通玩家需要更多：</p>
 <p>位置、Objective和玩家状态。</p>
 <p>Tournament Spectator可以：</p>
 <p>使用独立数据流。</p>
 <hr />
-<h1 id="202-可扩展点">202. 可扩展点</h1><hr />
-<h2 id="2021-新weapon">202.1 新Weapon</h2><p>主要提供：</p>
+<h3 id="202-可扩展点">202. 可扩展点</h3><hr />
+<h3 id="2021-新weapon">202.1 新Weapon</h3><p>主要提供：</p>
 <p>WeaponDefinition</p>
 <ul>
 <li><p>Recoil</p>
@@ -2799,13 +2799,13 @@ Seed。</p>
 </ul>
 <p>不修改Shot主流程。</p>
 <hr />
-<h2 id="2022-新utility">202.2 新Utility</h2><p>通过：</p>
+<h3 id="2022-新utility">202.2 新Utility</h3><p>通过：</p>
 <p>UtilityDefinition</p>
 <ul>
 <li>GameplayEffect。</li>
 </ul>
 <hr />
-<h2 id="2023-新map">202.3 新Map</h2><p>提供：</p>
+<h3 id="2023-新map">202.3 新Map</h3><p>提供：</p>
 <ul>
 <li><p>Navigation；</p>
 </li>
@@ -2821,14 +2821,14 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2024-新objective">202.4 新Objective</h2><p>例如：</p>
+<h3 id="2024-新objective">202.4 新Objective</h3><p>例如：</p>
 <p>Hostage。</p>
 <p>Payload。</p>
 <p>Control Device。</p>
 <p>通过：</p>
 <p>ObjectiveLifecycle接口。</p>
 <hr />
-<h2 id="2025-新game-mode">202.5 新Game Mode</h2><p>可以：</p>
+<h3 id="2025-新game-mode">202.5 新Game Mode</h3><p>可以：</p>
 <ul>
 <li><p>Bomb；</p>
 </li>
@@ -2842,7 +2842,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2026-hero-ability扩展">202.6 Hero Ability扩展</h2><p>如果加入角色能力，</p>
+<h3 id="2026-hero-ability扩展">202.6 Hero Ability扩展</h3><p>如果加入角色能力，</p>
 <p>能力最终应转换为已有世界原语：</p>
 <ul>
 <li><p>Visibility；</p>
@@ -2861,8 +2861,8 @@ Seed。</p>
 <p>不要创建：</p>
 <p>一套与Weapon/Utility完全割裂的规则系统。</p>
 <hr />
-<h1 id="203-玩家体验设计">203. 玩家体验设计</h1><hr />
-<h2 id="2031-第一枪反馈必须极其明确">203.1 第一枪反馈必须极其明确</h2><p>玩家需要立即知道：</p>
+<h3 id="203-玩家体验设计">203. 玩家体验设计</h3><hr />
+<h3 id="2031-第一枪反馈必须极其明确">203.1 第一枪反馈必须极其明确</h3><p>玩家需要立即知道：</p>
 <ul>
 <li><p>Weapon Fired；</p>
 </li>
@@ -2874,31 +2874,31 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="204-但不要泄露不应知道的信息">204. 但不要泄露不应知道的信息</h1><p>穿墙射击：</p>
+<h3 id="204-但不要泄露不应知道的信息">204. 但不要泄露不应知道的信息</h3><p>穿墙射击：</p>
 <p>如果规则不允许HitMarker透露是否命中，</p>
 <p>就不能反馈：</p>
 <p>“你墙后打中了。”</p>
 <p>信息设计必须与竞技规则一致。</p>
 <hr />
-<h1 id="205-footstep必须可学习">205. Footstep必须可学习</h1><p>同类地面材质：</p>
+<h3 id="205-footstep必须可学习">205. Footstep必须可学习</h3><p>同类地面材质：</p>
 <p>声音稳定。</p>
 <p>距离衰减：</p>
 <p>稳定。</p>
 <p>否则玩家无法建立空间听觉。</p>
 <hr />
-<h1 id="206-地图callout必须明确">206. 地图Callout必须明确</h1><p>正式UI可以支持：</p>
+<h3 id="206-地图callout必须明确">206. 地图Callout必须明确</h3><p>正式UI可以支持：</p>
 <p>区域名称。</p>
 <p>团队交流才能：</p>
 <p>低成本。</p>
 <hr />
-<h1 id="207-utility必须给双方公平反馈">207. Utility必须给双方公平反馈</h1><p>Smoke：</p>
+<h3 id="207-utility必须给双方公平反馈">207. Utility必须给双方公平反馈</h3><p>Smoke：</p>
 <p>看到边界。</p>
 <p>Flash：</p>
 <p>有投掷和爆炸预兆。</p>
 <p>Incendiary：</p>
 <p>有明显危险区域。</p>
 <hr />
-<h1 id="208-高致死要求死亡原因清晰">208. 高致死要求死亡原因清晰</h1><p>死亡界面应至少显示：</p>
+<h3 id="208-高致死要求死亡原因清晰">208. 高致死要求死亡原因清晰</h3><p>死亡界面应至少显示：</p>
 <ul>
 <li><p>Weapon；</p>
 </li>
@@ -2917,7 +2917,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="209-spectating必须保持参与感">209. Spectating必须保持参与感</h1><p>死亡可能意味着：</p>
+<h3 id="209-spectating必须保持参与感">209. Spectating必须保持参与感</h3><p>死亡可能意味着：</p>
 <p>观察1分钟。</p>
 <p>应该允许：</p>
 <ul>
@@ -2930,7 +2930,7 @@ Seed。</p>
 </ul>
 <p>但不能获得额外作弊信息。</p>
 <hr />
-<h1 id="210-buy-ui必须快">210. Buy UI必须快</h1><p>玩家每Round重复购买。</p>
+<h3 id="210-buy-ui必须快">210. Buy UI必须快</h3><p>玩家每Round重复购买。</p>
 <p>需要：</p>
 <ul>
 <li><p>Preset；</p>
@@ -2942,7 +2942,7 @@ Seed。</p>
 </ul>
 <p>不能让商店操作占掉战术准备时间。</p>
 <hr />
-<h1 id="211-economy要让玩家快速理解">211. Economy要让玩家快速理解</h1><p>例如：</p>
+<h3 id="211-economy要让玩家快速理解">211. Economy要让玩家快速理解</h3><p>例如：</p>
 <p>下轮最低收入。</p>
 <p>当前能否Full Buy。</p>
 <p>队友Money。</p>
@@ -2950,13 +2950,13 @@ Seed。</p>
 <p>“为什么队友突然让我Eco”</p>
 <p>的理解成本。</p>
 <hr />
-<h1 id="212-玩家需要学习save而不是系统强迫">212. 玩家需要学习Save而不是系统强迫</h1><p>残局已经无解。</p>
+<h3 id="212-玩家需要学习save而不是系统强迫">212. 玩家需要学习Save而不是系统强迫</h3><p>残局已经无解。</p>
 <p>游戏不必弹：</p>
 <p>“请撤退。”</p>
 <p>稳定时间和经济规则</p>
 <p>自然让玩家学会。</p>
 <hr />
-<h1 id="213-aim训练和战术训练需要分离">213. Aim训练和战术训练需要分离</h1><p>可以提供：</p>
+<h3 id="213-aim训练和战术训练需要分离">213. Aim训练和战术训练需要分离</h3><p>可以提供：</p>
 <ul>
 <li><p>Shooting Range；</p>
 </li>
@@ -2971,79 +2971,79 @@ Seed。</p>
 </ul>
 <p>因为枪法和战术属于不同能力。</p>
 <hr />
-<h1 id="214-replay是高阶玩家体验的一部分">214. Replay是高阶玩家体验的一部分</h1><p>玩家可以回看：</p>
+<h3 id="214-replay是高阶玩家体验的一部分">214. Replay是高阶玩家体验的一部分</h3><p>玩家可以回看：</p>
 <p>不是：</p>
 <p>“我枪没打准。”</p>
 <p>而是：</p>
 <p>“我们30秒就丢了Mid。”</p>
 <hr />
-<h1 id="215-常见设计失败">215. 常见设计失败</h1><hr />
-<h2 id="2151-高致死但没有稳定命中验证">215.1 高致死但没有稳定命中验证</h2><p>玩家不信任系统。</p>
+<h3 id="215-常见设计失败">215. 常见设计失败</h3><hr />
+<h3 id="2151-高致死但没有稳定命中验证">215.1 高致死但没有稳定命中验证</h3><p>玩家不信任系统。</p>
 <hr />
-<h2 id="2152-client决定hit">215.2 Client决定Hit</h2><p>作弊和不同步严重。</p>
+<h3 id="2152-client决定hit">215.2 Client决定Hit</h3><p>作弊和不同步严重。</p>
 <hr />
-<h2 id="2153-recoil与spread完全混合">215.3 Recoil与Spread完全混合</h2><p>玩家无法学习Weapon。</p>
+<h3 id="2153-recoil与spread完全混合">215.3 Recoil与Spread完全混合</h3><p>玩家无法学习Weapon。</p>
 <hr />
-<h2 id="2154-移动射击精度过高">215.4 移动射击精度过高</h2><p>站位和停枪节奏失去意义。</p>
+<h3 id="2154-移动射击精度过高">215.4 移动射击精度过高</h3><p>站位和停枪节奏失去意义。</p>
 <hr />
-<h2 id="2155-lag-compensation没有上限">215.5 Lag Compensation没有上限</h2><p>高延迟攻击过去的玩家。</p>
+<h3 id="2155-lag-compensation没有上限">215.5 Lag Compensation没有上限</h3><p>高延迟攻击过去的玩家。</p>
 <hr />
-<h2 id="2156-不保存历史hitbox">215.6 不保存历史Hitbox</h2><p>服务器只能用收到Packet时的位置判断。</p>
+<h3 id="2156-不保存历史hitbox">215.6 不保存历史Hitbox</h3><p>服务器只能用收到Packet时的位置判断。</p>
 <hr />
-<h2 id="2157-round没有正式lifecycle">215.7 Round没有正式Lifecycle</h2><p>Objective、Economy和Respawn规则混乱。</p>
+<h3 id="2157-round没有正式lifecycle">215.7 Round没有正式Lifecycle</h3><p>Objective、Economy和Respawn规则混乱。</p>
 <hr />
-<h2 id="2158-死亡后立即复活">215.8 死亡后立即复活</h2><p>人数差与Round张力消失。</p>
+<h3 id="2158-死亡后立即复活">215.8 死亡后立即复活</h3><p>人数差与Round张力消失。</p>
 <hr />
-<h2 id="2159-kill只影响score">215.9 Kill只影响Score</h2><p>没有改变团队空间结构。</p>
+<h3 id="2159-kill只影响score">215.9 Kill只影响Score</h3><p>没有改变团队空间结构。</p>
 <hr />
-<h2 id="21510-地图只按视觉构建">215.10 地图只按视觉构建</h2><p>没有考虑Sightline和Rotation Time。</p>
+<h3 id="21510-地图只按视觉构建">215.10 地图只按视觉构建</h3><p>没有考虑Sightline和Rotation Time。</p>
 <hr />
-<h2 id="21511-关键位置同时暴露过多不可处理angle">215.11 关键位置同时暴露过多不可处理Angle</h2><p>地图防守随机性太高。</p>
+<h3 id="21511-关键位置同时暴露过多不可处理angle">215.11 关键位置同时暴露过多不可处理Angle</h3><p>地图防守随机性太高。</p>
 <hr />
-<h2 id="21512-smoke只是视觉粒子">215.12 Smoke只是视觉粒子</h2><p>服务器仍认为可以看见。</p>
+<h3 id="21512-smoke只是视觉粒子">215.12 Smoke只是视觉粒子</h3><p>服务器仍认为可以看见。</p>
 <hr />
-<h2 id="21513-flash只按距离">215.13 Flash只按距离</h2><p>玩家背对Flash仍完全Blind。</p>
+<h3 id="21513-flash只按距离">215.13 Flash只按距离</h3><p>玩家背对Flash仍完全Blind。</p>
 <hr />
-<h2 id="21514-utility全部用于伤害">215.14 Utility全部用于伤害</h2><p>失去空间控制深度。</p>
+<h3 id="21514-utility全部用于伤害">215.14 Utility全部用于伤害</h3><p>失去空间控制深度。</p>
 <hr />
-<h2 id="21515-sound只是氛围音效">215.15 Sound只是氛围音效</h2><p>脚步和Reload不提供稳定Gameplay信息。</p>
+<h3 id="21515-sound只是氛围音效">215.15 Sound只是氛围音效</h3><p>脚步和Reload不提供稳定Gameplay信息。</p>
 <hr />
-<h2 id="21516-声音穿墙规则随机">215.16 声音穿墙规则随机</h2><p>玩家无法推理位置。</p>
+<h3 id="21516-声音穿墙规则随机">215.16 声音穿墙规则随机</h3><p>玩家无法推理位置。</p>
 <hr />
-<h2 id="21517-bomb只是另一种kill目标">215.17 Bomb只是另一种Kill目标</h2><p>没有时间压力反转。</p>
+<h3 id="21517-bomb只是另一种kill目标">215.17 Bomb只是另一种Kill目标</h3><p>没有时间压力反转。</p>
 <hr />
-<h2 id="21518-defuse不能中断">215.18 Defuse不能中断</h2><p>Fake Defuse等自然博弈消失。</p>
+<h3 id="21518-defuse不能中断">215.18 Defuse不能中断</h3><p>Fake Defuse等自然博弈消失。</p>
 <hr />
-<h2 id="21519-每round经济完全重置">215.19 每Round经济完全重置</h2><p>跨局战略消失。</p>
+<h3 id="21519-每round经济完全重置">215.19 每Round经济完全重置</h3><p>跨局战略消失。</p>
 <hr />
-<h2 id="21520-胜者不断变富而没有loss-bonus">215.20 胜者不断变富而没有Loss Bonus</h2><p>比赛快速经济雪球。</p>
+<h3 id="21520-胜者不断变富而没有loss-bonus">215.20 胜者不断变富而没有Loss Bonus</h3><p>比赛快速经济雪球。</p>
 <hr />
-<h2 id="21521-loss-bonus过高">215.21 Loss Bonus过高</h2><p>输Round几乎无成本。</p>
+<h3 id="21521-loss-bonus过高">215.21 Loss Bonus过高</h3><p>输Round几乎无成本。</p>
 <hr />
-<h2 id="21522-weapon-carry规则不清">215.22 Weapon Carry规则不清</h2><p>Save Weapon失去战略价值。</p>
+<h3 id="21522-weapon-carry规则不清">215.22 Weapon Carry规则不清</h3><p>Save Weapon失去战略价值。</p>
 <hr />
-<h2 id="21523-ecoforce与full-buy差异过小">215.23 Eco、Force与Full Buy差异过小</h2><p>经济决策没有意义。</p>
+<h3 id="21523-ecoforce与full-buy差异过小">215.23 Eco、Force与Full Buy差异过小</h3><p>经济决策没有意义。</p>
 <hr />
-<h2 id="21524-spawn随机差异影响关键路线到达时间过大">215.24 Spawn随机差异影响关键路线到达时间过大</h2><p>竞技公平受到破坏。</p>
+<h3 id="21524-spawn随机差异影响关键路线到达时间过大">215.24 Spawn随机差异影响关键路线到达时间过大</h3><p>竞技公平受到破坏。</p>
 <hr />
-<h2 id="21525-minimap显示服务器知道的全部敌人">215.25 Minimap显示服务器知道的全部敌人</h2><p>信息不完全系统崩溃。</p>
+<h3 id="21525-minimap显示服务器知道的全部敌人">215.25 Minimap显示服务器知道的全部敌人</h3><p>信息不完全系统崩溃。</p>
 <hr />
-<h2 id="21526-死亡spectator可以看敌方全图">215.26 死亡Spectator可以看敌方全图</h2><p>死亡成为信息优势。</p>
+<h3 id="21526-死亡spectator可以看敌方全图">215.26 死亡Spectator可以看敌方全图</h3><p>死亡成为信息优势。</p>
 <hr />
-<h2 id="21527-replay来自客户端录像">215.27 Replay来自客户端录像</h2><p>无法验证真正Server状态。</p>
+<h3 id="21527-replay来自客户端录像">215.27 Replay来自客户端录像</h3><p>无法验证真正Server状态。</p>
 <hr />
-<h2 id="21528-网络包重发会重复shot">215.28 网络包重发会重复Shot</h2><p>缺乏输入幂等。</p>
+<h3 id="21528-网络包重发会重复shot">215.28 网络包重发会重复Shot</h3><p>缺乏输入幂等。</p>
 <hr />
-<h2 id="21529-bomb爆炸和defuse同时完成时结果依赖线程顺序">215.29 Bomb爆炸和Defuse同时完成时结果依赖线程顺序</h2><p>竞技规则不确定。</p>
+<h3 id="21529-bomb爆炸和defuse同时完成时结果依赖线程顺序">215.29 Bomb爆炸和Defuse同时完成时结果依赖线程顺序</h3><p>竞技规则不确定。</p>
 <hr />
-<h2 id="21530-round-ending动画决定真正结算时间">215.30 Round Ending动画决定真正结算时间</h2><p>表现层污染逻辑。</p>
+<h3 id="21530-round-ending动画决定真正结算时间">215.30 Round Ending动画决定真正结算时间</h3><p>表现层污染逻辑。</p>
 <hr />
-<h1 id="216-最小可行原型">216. 最小可行原型</h1><p>验证本范式时，不需要立即实现：</p>
+<h3 id="216-最小可行原型">216. 最小可行原型</h3><p>验证本范式时，不需要立即实现：</p>
 <p>十张地图、几十种武器和排位系统。</p>
 <p>推荐：</p>
 <p><strong>5v5 + 1张地图 + 2个Bomb Site + 6种武器 + 4种Utility + 完整经济和Objective。</strong></p>
 <hr />
-<h1 id="217-地图">217. 地图</h1><p>至少包含：</p>
+<h3 id="217-地图">217. 地图</h3><p>至少包含：</p>
 <ul>
 <li><p>A Site；</p>
 </li>
@@ -3059,7 +3059,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="218-weapon">218. Weapon</h1><p>第一版：</p>
+<h3 id="218-weapon">218. Weapon</h3><p>第一版：</p>
 <ul>
 <li><p>Pistol；</p>
 </li>
@@ -3079,7 +3079,7 @@ Seed。</p>
 <p>Range / Economy / Mobility</p>
 <p>定位。</p>
 <hr />
-<h1 id="219-utility">219. Utility</h1><ul>
+<h3 id="219-utility">219. Utility</h3><ul>
 <li><p>Smoke；</p>
 </li>
 <li><p>Flash；</p>
@@ -3092,7 +3092,7 @@ Seed。</p>
 <p>这四类已经能够验证：</p>
 <p>Visibility、Information、Damage和Area Denial。</p>
 <hr />
-<h1 id="220-objective">220. Objective</h1><p>完整实现：</p>
+<h3 id="220-objective">220. Objective</h3><p>完整实现：</p>
 <ul>
 <li><p>Carry；</p>
 </li>
@@ -3110,7 +3110,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="221-economy">221. Economy</h1><p>实现：</p>
+<h3 id="221-economy">221. Economy</h3><p>实现：</p>
 <ul>
 <li><p>Starting Money；</p>
 </li>
@@ -3128,7 +3128,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="222-网络">222. 网络</h1><p>至少验证：</p>
+<h3 id="222-网络">222. 网络</h3><p>至少验证：</p>
 <ul>
 <li><p>Server Authority；</p>
 </li>
@@ -3142,7 +3142,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="223-mvp必要基础设施">223. MVP必要基础设施</h1><ul>
+<h3 id="223-mvp必要基础设施">223. MVP必要基础设施</h3><ul>
 <li><p>MatchState；</p>
 </li>
 <li><p>RoundState；</p>
@@ -3181,7 +3181,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="224-mvp必要调试工具">224. MVP必要调试工具</h1><ul>
+<h3 id="224-mvp必要调试工具">224. MVP必要调试工具</h3><ul>
 <li><p>RoundTimeline；</p>
 </li>
 <li><p>PositionHeatmap；</p>
@@ -3210,7 +3210,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="225-mvp核心验收问题">225. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<h3 id="225-mvp核心验收问题">225. MVP核心验收问题</h3><p>原型至少必须回答：</p>
 <ul>
 <li><p>一次死亡是否足以明显改变Round战略；</p>
 </li>
@@ -3275,7 +3275,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="226-推荐实施顺序">226. 推荐实施顺序</h1><p>第一阶段：</p>
+<h3 id="226-推荐实施顺序">226. 推荐实施顺序</h3><p>第一阶段：</p>
 <ul>
 <li><p>Fixed Server Tick；</p>
 </li>
@@ -3392,7 +3392,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="227-架构验收标准">227. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<h3 id="227-架构验收标准">227. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
 <ul>
 <li><p>Match和Round具有独立生命周期；</p>
 </li>
@@ -3512,8 +3512,8 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h1 id="228-可迁移到其他游戏的设计思想">228. 可迁移到其他游戏的设计思想</h1><hr />
-<h2 id="2281-死亡-当前阶段行动资格清零比单纯扣生命更能制造长期战术后果">228.1 “死亡 = 当前阶段行动资格清零”比单纯扣生命更能制造长期战术后果</h2><p>可迁移到：</p>
+<h3 id="228-可迁移到其他游戏的设计思想">228. 可迁移到其他游戏的设计思想</h3><hr />
+<h3 id="2281-死亡-当前阶段行动资格清零比单纯扣生命更能制造长期战术后果">228.1 “死亡 = 当前阶段行动资格清零”比单纯扣生命更能制造长期战术后果</h3><p>可迁移到：</p>
 <ul>
 <li><p>战术；</p>
 </li>
@@ -3527,7 +3527,7 @@ Seed。</p>
 <p>死亡价值来自：</p>
 <p>失去未来行动机会。</p>
 <hr />
-<h2 id="2282-信息本身可以成为团队共享资源">228.2 信息本身可以成为团队共享资源</h2><p>可迁移到：</p>
+<h3 id="2282-信息本身可以成为团队共享资源">228.2 信息本身可以成为团队共享资源</h3><p>可迁移到：</p>
 <ul>
 <li><p>潜行；</p>
 </li>
@@ -3542,7 +3542,7 @@ Seed。</p>
 <p>玩家“知道敌人不在这里”</p>
 <p>同样是有价值的信息。</p>
 <hr />
-<h2 id="2283-地图空间价值来自连接关系而不只是面积">228.3 地图空间价值来自连接关系，而不只是面积</h2><p>Mid重要：</p>
+<h3 id="2283-地图空间价值来自连接关系而不只是面积">228.3 地图空间价值来自连接关系，而不只是面积</h3><p>Mid重要：</p>
 <p>不是因为大。</p>
 <p>而是：</p>
 <p>它连接多个区域。</p>
@@ -3558,7 +3558,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2284-utility最有价值的能力之一是减少同时需要处理的问题数量">228.4 Utility最有价值的能力之一是减少同时需要处理的问题数量</h2><p>Smoke隔离Sightline。</p>
+<h3 id="2284-utility最有价值的能力之一是减少同时需要处理的问题数量">228.4 Utility最有价值的能力之一是减少同时需要处理的问题数量</h3><p>Smoke隔离Sightline。</p>
 <p>可以迁移到：</p>
 <ul>
 <li><p>控场；</p>
@@ -3574,7 +3574,7 @@ Seed。</p>
 <p>可以：</p>
 <p>降低决策维度。</p>
 <hr />
-<h2 id="2285-目标系统可以通过时间主导权反转制造天然攻防变化">228.5 目标系统可以通过“时间主导权反转”制造天然攻防变化</h2><p>Plant前：</p>
+<h3 id="2285-目标系统可以通过时间主导权反转制造天然攻防变化">228.5 目标系统可以通过“时间主导权反转”制造天然攻防变化</h3><p>Plant前：</p>
 <p>Attack追时间。</p>
 <p>Plant后：</p>
 <p>Defense追时间。</p>
@@ -3590,7 +3590,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2286-稳定基础规则能够自然产生高级心理博弈">228.6 稳定基础规则能够自然产生高级心理博弈</h2><p>Fake Defuse并不需要专门Skill。</p>
+<h3 id="2286-稳定基础规则能够自然产生高级心理博弈">228.6 稳定基础规则能够自然产生高级心理博弈</h3><p>Fake Defuse并不需要专门Skill。</p>
 <p>它来自：</p>
 <p>可中断交互</p>
 <ul>
@@ -3604,7 +3604,7 @@ Seed。</p>
 <p>不直接编码“策略”，而编码足够稳定的规则让策略自行出现。</p>
 </blockquote>
 <hr />
-<h2 id="2287-多轮经济可以把短局结果连接成长线策略">228.7 多轮经济可以把短局结果连接成长线策略</h2><p>可迁移到：</p>
+<h3 id="2287-多轮经济可以把短局结果连接成长线策略">228.7 多轮经济可以把短局结果连接成长线策略</h3><p>可迁移到：</p>
 <ul>
 <li><p>锦标赛；</p>
 </li>
@@ -3617,7 +3617,7 @@ Seed。</p>
 </ul>
 <p>当前资源和未来资源之间存在真实交换。</p>
 <hr />
-<h2 id="2288-保存资源本身可以成为承认当前阶段失败的合理策略">228.8 保存资源本身可以成为“承认当前阶段失败”的合理策略</h2><p>Save Weapon说明：</p>
+<h3 id="2288-保存资源本身可以成为承认当前阶段失败的合理策略">228.8 保存资源本身可以成为“承认当前阶段失败”的合理策略</h3><p>Save Weapon说明：</p>
 <p>玩家不必每个局面都战斗到死亡。</p>
 <p>可迁移到：</p>
 <ul>
@@ -3630,20 +3630,20 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2289-高致死系统越需要高可解释性">228.9 高致死系统越需要高可解释性</h2><p>一次错误判定可能直接结束Round。</p>
+<h3 id="2289-高致死系统越需要高可解释性">228.9 高致死系统越需要高可解释性</h3><p>一次错误判定可能直接结束Round。</p>
 <p>因此：</p>
 <p>Shot Trace、Replay、Timing</p>
 <p>不是高级开发工具，</p>
 <p>而是核心基础设施。</p>
 <hr />
-<h2 id="22810-server-authority-和-client-prediction不是互斥设计">228.10 Server Authority 和 Client Prediction不是互斥设计</h2><p>可迁移到：</p>
+<h3 id="22810-server-authority-和-client-prediction不是互斥设计">228.10 Server Authority 和 Client Prediction不是互斥设计</h3><p>可迁移到：</p>
 <p>几乎所有实时网络竞技游戏。</p>
 <p>Client负责：</p>
 <p>立即反馈。</p>
 <p>Server负责：</p>
 <p>最终事实。</p>
 <hr />
-<h2 id="22811-竞技地图应该同时拥有美术空间和战术拓扑">228.11 竞技地图应该同时拥有“美术空间”和“战术拓扑”</h2><p>NavMesh只能回答：</p>
+<h3 id="22811-竞技地图应该同时拥有美术空间和战术拓扑">228.11 竞技地图应该同时拥有“美术空间”和“战术拓扑”</h3><p>NavMesh只能回答：</p>
 <p>能不能走。</p>
 <p>Tactical Graph还要回答：</p>
 <ul>
@@ -3655,7 +3655,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="22812-gameplay-sound是一种非视觉感知通道">228.12 Gameplay Sound是一种“非视觉感知通道”</h2><p>这套思想可以迁移到：</p>
+<h3 id="22812-gameplay-sound是一种非视觉感知通道">228.12 Gameplay Sound是一种“非视觉感知通道”</h3><p>这套思想可以迁移到：</p>
 <ul>
 <li><p>潜行；</p>
 </li>
@@ -3671,7 +3671,7 @@ Seed。</p>
 <p>音频不仅负责氛围，</p>
 <p>还可以成为正式规则。</p>
 <hr />
-<h1 id="229-本次防重记录">229. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>回合制局间战术射击 / Round-Based Tactical Shooter / Bomb-Defusal FPS。</strong></p>
+<h3 id="229-本次防重记录">229. 本次防重记录</h3><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>回合制局间战术射击 / Round-Based Tactical Shooter / Bomb-Defusal FPS。</strong></p>
 <p>常见名称：</p>
 <ul>
 <li><p>Tactical Shooter；</p>
@@ -3690,7 +3690,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="核心范式">核心范式</h2><p>比赛被切分为多个相互影响的高风险实时 Round：玩家在每轮开始使用有限经济购买武器、护甲和投掷物，随后以高致死、单轮死亡不复活的规则争夺地图信息和空间控制。地图通过 Zone、Sightline、Choke 和 Rotation Route 构成战术拓扑；声音和有限可见性提供不完全信息，Smoke、Flash和Area Denial等Utility则用于临时重写Visibility、Angle和通行规则。</p>
+<h3 id="核心范式">核心范式</h3><p>比赛被切分为多个相互影响的高风险实时 Round：玩家在每轮开始使用有限经济购买武器、护甲和投掷物，随后以高致死、单轮死亡不复活的规则争夺地图信息和空间控制。地图通过 Zone、Sightline、Choke 和 Rotation Route 构成战术拓扑；声音和有限可见性提供不完全信息，Smoke、Flash和Area Denial等Utility则用于临时重写Visibility、Angle和通行规则。</p>
 <p>枪战通过服务器权威的Movement、Weapon、Recoil、Spread、Hitbox History和Lag Compensation体系结算，一次击杀会永久减少敌方当前Round的行动能力并改变地图人数结构。进攻方通过地图控制、假动作、Utility和人数交换进入Objective区域，Bomb Plant又把原本作用于进攻方的Round时间压力转移给防守方，使Retake和残局围绕位置、剩余Utility、声音、Defuse时间和心理博弈展开。</p>
 <p>Round结束后，存活装备、胜负奖励、Kill Reward与Loss Bonus进入下一轮经济，使Eco、Force Buy、Full Buy和Save Weapon形成跨Round动态规划。最终一个完整Match不是多场孤立枪战，而是：</p>
 <p><strong>经济<br />
@@ -3718,7 +3718,7 @@ Seed。</p>
 → Economy Decision<br />
 → 下一Round重新适应。</strong></p>
 <hr />
-<h2 id="核心识别特征">核心识别特征</h2><ul>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
 <li><p>游戏以多Round组成完整Match；</p>
 </li>
 <li><p>单Round内部为实时高精度射击；</p>
@@ -3781,7 +3781,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="与仓库现有潜行游戏的防重边界">与仓库现有潜行游戏的防重边界</h2><p>当前仓库已有潜行范式，其核心是：</p>
+<h3 id="与仓库现有潜行游戏的防重边界">与仓库现有潜行游戏的防重边界</h3><p>当前仓库已有潜行范式，其核心是：</p>
 <ul>
 <li><p>世界真相与敌方认知分离；</p>
 </li>
@@ -3811,7 +3811,7 @@ Seed。</p>
 <p><strong>Team Information + Map Control + Gunfight Conversion。</strong></p>
 <p>因此本期不属于潜行范式子模块。</p>
 <hr />
-<h2 id="与仓库现有盗窃计划范式的防重边界">与仓库现有盗窃计划范式的防重边界</h2><p>当前仓库的 <code>heist-planning</code> 围绕情报收集、方案编排、潜入执行、警戒响应和撤离构建盗窃行动。</p>
+<h3 id="与仓库现有盗窃计划范式的防重边界">与仓库现有盗窃计划范式的防重边界</h3><p>当前仓库的 <code>heist-planning</code> 围绕情报收集、方案编排、潜入执行、警戒响应和撤离构建盗窃行动。</p>
 <p>盗窃计划通常具有：</p>
 <ul>
 <li><p>PvE潜入；</p>
@@ -3845,7 +3845,7 @@ Seed。</p>
 <p><strong>Tactical Shooter：</strong></p>
 <p>主要问题是双方如何同时预测和破坏对方计划。</p>
 <hr />
-<h2 id="与仓库现有格斗游戏的防重边界">与仓库现有格斗游戏的防重边界</h2><p>当前格斗范式强调：</p>
+<h3 id="与仓库现有格斗游戏的防重边界">与仓库现有格斗游戏的防重边界</h3><p>当前格斗范式强调：</p>
 <ul>
 <li><p>帧级模拟；</p>
 </li>
@@ -3882,7 +3882,7 @@ Seed。</p>
 <p>因此它的核心状态空间远不只是：</p>
 <p>帧优势。</p>
 <hr />
-<h2 id="与仓库现有大逃杀的防重边界">与仓库现有大逃杀的防重边界</h2><p>大逃杀以：</p>
+<h3 id="与仓库现有大逃杀的防重边界">与仓库现有大逃杀的防重边界</h3><p>大逃杀以：</p>
 <ul>
 <li><p>大规模玩家；</p>
 </li>
@@ -3921,14 +3921,14 @@ Seed。</p>
 <p><strong>Round-Based Tactical Shooter：</strong></p>
 <p>空间结构固定，而信息、人数、Objective和经济在多个Round之间反复重置和积累。</p>
 <hr />
-<h2 id="与仓库现有回合制战术-rpg-的防重边界">与仓库现有回合制战术 RPG 的防重边界</h2><p>当前 <code>tactical-rpg</code> 是真正的离散回合制，玩家逐个决定单位的移动与技能，并围绕行动经济和网格战场进行战术推演。</p>
+<h3 id="与仓库现有回合制战术-rpg-的防重边界">与仓库现有回合制战术 RPG 的防重边界</h3><p>当前 <code>tactical-rpg</code> 是真正的离散回合制，玩家逐个决定单位的移动与技能，并围绕行动经济和网格战场进行战术推演。</p>
 <p>本期名称中的“Round-Based”只表示：</p>
 <p>Match由多个短局构成。</p>
 <p>单个Round内部仍然是：</p>
 <p>严格实时第一人称枪战。</p>
 <p>因此两者不存在运行时控制范式重复。</p>
 <hr />
-<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
 <li><p>Tactical Shooter；</p>
 </li>
 <li><p>Round-Based FPS；</p>
@@ -4041,7 +4041,7 @@ Seed。</p>
 </li>
 </ul>
 <hr />
-<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次回合制局间战术射击范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次回合制局间战术射击范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
 <ul>
 <li><p>战术射击枪械系统；</p>
 </li>

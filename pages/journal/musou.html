@@ -111,7 +111,7 @@
 <p>一骑当千、军团前线与“清兵—斩将—夺点—救援—推进—决战”的双尺度战场循环</p>
 </blockquote>
 <hr />
-<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 Journal 的 <code>game-designs/</code>、生成索引与路由元数据。当前生成的 <code>README.md</code> 标记 <strong>Entries: 64</strong>；仓库已经覆盖幸存者类、多人共斗狩猎、格斗、实时战略、自走棋、战术射击、传统 Roguelike、MMORPG、足球比赛模拟等大量动作、群体与战略相邻类型。</p>
+<h3 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h3><p>已实际核对当前 Journal 的 <code>game-designs/</code>、生成索引与路由元数据。当前生成的 <code>README.md</code> 标记 <strong>Entries: 64</strong>；仓库已经覆盖幸存者类、多人共斗狩猎、格斗、实时战略、自走棋、战术射击、传统 Roguelike、MMORPG、足球比赛模拟等大量动作、群体与战略相邻类型。</p>
 <p>进一步对当前 <code>route-metadata.v1.json</code> 检索 <code>musou</code>、<code>无双</code> 等关键词，当前不存在独立的 Musou / Warriors-like / 军团割草动作范式记录。当前仓库中的幸存者类固定围绕“自动攻击—敌群压力—经验回收—局内构筑”运行；多人共斗狩猎围绕大型目标、部位状态、动作承诺和协作窗口运行；格斗游戏则聚焦稳定帧模拟、招式状态机、距离与双方预测；实时战略的核心控制语言是玩家对单位群体的命令、生产经济和战争迷雾。</p>
 <p>因此本期新增：</p>
 <p><strong>无双式军团割草动作 / Musou / Warriors-like Battlefield Action。</strong></p>
@@ -165,7 +165,7 @@
 <p><strong>让玩家感觉自己是一个能够决定大规模战争局部结果的战力尖峰——普通军团制造战争规模，武将和据点决定战争结构，而玩家的个人行动持续把局部胜利转换成宏观战场优势。</strong></p>
 </blockquote>
 <hr />
-<h2 id="1-类型定位">1. 类型定位</h2><p>无双式军团割草动作通常具有：</p>
+<h3 id="1-类型定位">1. 类型定位</h3><p>无双式军团割草动作通常具有：</p>
 <ul>
 <li><p>单英雄或少量可切换英雄；</p>
 </li>
@@ -265,12 +265,12 @@
 </ul>
 <p>共同构成的实时战争场。</p>
 <hr />
-<h2 id="2-最核心的系统抽象玩家是局部战力尖峰">2. 最核心的系统抽象：玩家是“局部战力尖峰”</h2><p>整个类型可以先抽象成三个战斗层级：</p>
-<h3 id="hero-layer">Hero Layer</h3><p>玩家英雄、敌方武将、重要精英。</p>
+<h3 id="2-最核心的系统抽象玩家是局部战力尖峰">2. 最核心的系统抽象：玩家是“局部战力尖峰”</h3><p>整个类型可以先抽象成三个战斗层级：</p>
+<h4 id="hero-layer">Hero Layer</h4><p>玩家英雄、敌方武将、重要精英。</p>
 <p>高精度模拟。</p>
-<h3 id="local-crowd-layer">Local Crowd Layer</h3><p>玩家附近的大量普通士兵。</p>
+<h4 id="local-crowd-layer">Local Crowd Layer</h4><p>玩家附近的大量普通士兵。</p>
 <p>需要真实存在、移动、攻击、受击和被击飞，但行为复杂度较低。</p>
-<h3 id="remote-army-layer">Remote Army Layer</h3><p>远离玩家视野的军团。</p>
+<h4 id="remote-army-layer">Remote Army Layer</h4><p>远离玩家视野的军团。</p>
 <p>不应该继续逐兵完整模拟，而是通过兵力、士气、控制区和战力进行聚合结算。</p>
 <p>核心关系：</p>
 <p><strong>Remote Army产生战线问题<br />
@@ -282,7 +282,7 @@
 → 新问题出现。</strong></p>
 <p>这是该品类最关键的运行时架构。</p>
 <hr />
-<h2 id="3-核心范式一必须从第一天设计-simulation-lod而不是先做500个完整ai">3. 核心范式一：必须从第一天设计 Simulation LOD，而不是先做500个完整AI</h2><p>如果每个士兵都拥有：</p>
+<h3 id="3-核心范式一必须从第一天设计-simulation-lod而不是先做500个完整ai">3. 核心范式一：必须从第一天设计 Simulation LOD，而不是先做500个完整AI</h3><p>如果每个士兵都拥有：</p>
 <ul>
 <li><p>完整Behavior Tree；</p>
 </li>
@@ -305,7 +305,7 @@
 <p>更合理的是：</p>
 <p><strong>单位模拟精度随其与玩家、战线和关键事件的关系变化。</strong></p>
 <hr />
-<h2 id="4-simulation-tier">4. Simulation Tier</h2><p>推荐至少划分：</p>
+<h3 id="4-simulation-tier">4. Simulation Tier</h3><p>推荐至少划分：</p>
 <h4 id="tier-0hero-officer">Tier 0：Hero / Officer</h4><p>完整模拟。</p>
 <p>适用于：</p>
 <ul>
@@ -320,7 +320,7 @@
 <li><p>Mission Critical Character。</p>
 </li>
 </ul>
-<h4 id="tier-1active-crowd">Tier 1：Active Crowd</h4><p>玩家附近。</p>
+<h5 id="tier-1active-crowd">Tier 1：Active Crowd</h5><p>玩家附近。</p>
 <p>完整：</p>
 <ul>
 <li><p>Position；</p>
@@ -335,7 +335,7 @@
 </li>
 </ul>
 <p>但AI较轻量。</p>
-<h4 id="tier-2warm-formation">Tier 2：Warm Formation</h4><p>玩家附近但不在直接战斗区。</p>
+<h5 id="tier-2warm-formation">Tier 2：Warm Formation</h5><p>玩家附近但不在直接战斗区。</p>
 <p>低频：</p>
 <ul>
 <li><p>Formation Movement；</p>
@@ -345,7 +345,7 @@
 <li><p>Sparse Entity Update。</p>
 </li>
 </ul>
-<h4 id="tier-3remote-army">Tier 3：Remote Army</h4><p>远处战区。</p>
+<h5 id="tier-3remote-army">Tier 3：Remote Army</h5><p>远处战区。</p>
 <p>只维护：</p>
 <ul>
 <li><p>Strength；</p>
@@ -360,7 +360,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="5-simulationtierstate">5. SimulationTierState</h2><p>建议包含：</p>
+<h3 id="5-simulationtierstate">5. SimulationTierState</h3><p>建议包含：</p>
 <ul>
 <li><p>EntityOrFormationId；</p>
 </li>
@@ -380,7 +380,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="6-tier不能只按照距离判断">6. Tier不能只按照距离判断</h2><p>远处：</p>
+<h3 id="6-tier不能只按照距离判断">6. Tier不能只按照距离判断</h3><p>远处：</p>
 <p>主将正在决斗。</p>
 <p>虽然距离玩家远，</p>
 <p>仍可能属于：</p>
@@ -403,14 +403,14 @@
 </li>
 </ul>
 <hr />
-<h2 id="7-核心范式二普通士兵和武将必须是两个不同复杂度类别">7. 核心范式二：普通士兵和武将必须是两个不同复杂度类别</h2><p>低质量无双实现容易陷入：</p>
+<h3 id="7-核心范式二普通士兵和武将必须是两个不同复杂度类别">7. 核心范式二：普通士兵和武将必须是两个不同复杂度类别</h3><p>低质量无双实现容易陷入：</p>
 <blockquote>
 <p>“把同一套敌人AI复制300份，只是普通兵HP少。”</p>
 </blockquote>
 <p>实际上：</p>
 <p>普通士兵和武将承担完全不同的游戏职责。</p>
 <hr />
-<h2 id="8-普通士兵的职责">8. 普通士兵的职责</h2><p>普通士兵主要负责：</p>
+<h3 id="8-普通士兵的职责">8. 普通士兵的职责</h3><p>普通士兵主要负责：</p>
 <ul>
 <li><p>战场密度；</p>
 </li>
@@ -434,7 +434,7 @@
 <p>他们不需要：</p>
 <p>每一个都成为复杂决斗对象。</p>
 <hr />
-<h2 id="9-武将的职责">9. 武将的职责</h2><p>武将主要负责：</p>
+<h3 id="9-武将的职责">9. 武将的职责</h3><p>武将主要负责：</p>
 <ul>
 <li><p>局部战略锚点；</p>
 </li>
@@ -459,7 +459,7 @@
 <p><strong>士兵是密度单位。</strong></p>
 <p><strong>武将是决策单位。</strong></p>
 <hr />
-<h2 id="10-soldierdefinition">10. SoldierDefinition</h2><p>建议字段：</p>
+<h3 id="10-soldierdefinition">10. SoldierDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>SoldierTypeId；</p>
 </li>
@@ -487,7 +487,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="11-officerdefinition">11. OfficerDefinition</h2><p>建议字段：</p>
+<h3 id="11-officerdefinition">11. OfficerDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>OfficerId；</p>
 </li>
@@ -515,7 +515,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="12-核心范式三battlefield应建模成战术图而不仅是一张navmesh">12. 核心范式三：Battlefield应建模成战术图，而不仅是一张NavMesh</h2><p>大地图需要：</p>
+<h3 id="12-核心范式三battlefield应建模成战术图而不仅是一张navmesh">12. 核心范式三：Battlefield应建模成战术图，而不仅是一张NavMesh</h3><p>大地图需要：</p>
 <ul>
 <li><p>道路；</p>
 </li>
@@ -534,7 +534,7 @@
 <p>因此应存在：</p>
 <p><strong>Battlefield Graph。</strong></p>
 <hr />
-<h2 id="13-battlefieldzonedefinition">13. BattlefieldZoneDefinition</h2><p>建议字段：</p>
+<h3 id="13-battlefieldzonedefinition">13. BattlefieldZoneDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ZoneId；</p>
 </li>
@@ -558,7 +558,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="14-battlefieldgraph">14. BattlefieldGraph</h2><p>例如：</p>
+<h3 id="14-battlefieldgraph">14. BattlefieldGraph</h3><p>例如：</p>
 <p>AlliedBase<br />
 → WestCamp<br />
 → WestGate<br />
@@ -573,7 +573,7 @@
 <p>会改变：</p>
 <p>战场事件和救援距离。</p>
 <hr />
-<h2 id="15-route不是只有玩家使用">15. Route不是只有玩家使用</h2><p>Army Formation也按照：</p>
+<h3 id="15-route不是只有玩家使用">15. Route不是只有玩家使用</h3><p>Army Formation也按照：</p>
 <p>BattlefieldGraph</p>
 <p>移动。</p>
 <p>远端军团无需：</p>
@@ -581,19 +581,19 @@
 <p>只需要：</p>
 <p>Zone → Zone。</p>
 <hr />
-<h2 id="16-local-navigation和strategic-navigation分离">16. Local Navigation和Strategic Navigation分离</h2><p><strong>Strategic Navigation</strong></p>
+<h3 id="16-local-navigation和strategic-navigation分离">16. Local Navigation和Strategic Navigation分离</h3><p><strong>Strategic Navigation</strong></p>
 <p>军团去哪一个Zone。</p>
 <p><strong>Local Navigation</strong></p>
 <p>Materialized士兵在Zone里怎样移动。</p>
 <p>这是非常重要的分层。</p>
 <hr />
-<h2 id="17-核心范式四army-formation必须是正式运行时对象">17. 核心范式四：Army / Formation必须是正式运行时对象</h2><p>如果所有士兵只是：</p>
+<h3 id="17-核心范式四army-formation必须是正式运行时对象">17. 核心范式四：Army / Formation必须是正式运行时对象</h3><p>如果所有士兵只是：</p>
 <p>Scene中的独立Enemy，</p>
 <p>系统没有真正的“军团”。</p>
 <p>应该维护：</p>
 <p><strong>Army Formation。</strong></p>
 <hr />
-<h2 id="18-armyformationstate">18. ArmyFormationState</h2><p>建议包含：</p>
+<h3 id="18-armyformationstate">18. ArmyFormationState</h3><p>建议包含：</p>
 <ul>
 <li><p>FormationId；</p>
 </li>
@@ -623,7 +623,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="19-formation职责">19. Formation职责</h2><ul>
+<h3 id="19-formation职责">19. Formation职责</h3><ul>
 <li><p>军团身份；</p>
 </li>
 <li><p>士兵组成；</p>
@@ -644,7 +644,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="20-普通兵死亡如何影响formation">20. 普通兵死亡如何影响Formation</h2><p>玩家在本地击杀：</p>
+<h3 id="20-普通兵死亡如何影响formation">20. 普通兵死亡如何影响Formation</h3><p>玩家在本地击杀：</p>
 <p>50名士兵。</p>
 <p>这些死亡必须：</p>
 <p>写回：</p>
@@ -653,7 +653,7 @@
 <p>玩家离开区域以后，</p>
 <p>Formation重新生成50名满血士兵。</p>
 <hr />
-<h2 id="21-entity-formation">21. Entity ↔ Formation</h2><p>每个Materialized Soldier：</p>
+<h3 id="21-entity-formation">21. Entity ↔ Formation</h3><p>每个Materialized Soldier：</p>
 <p>拥有：</p>
 <p><code>ParentFormationId</code>。</p>
 <p>死亡：</p>
@@ -663,7 +663,7 @@
 <p>只是：</p>
 <p>Entity转回Aggregate状态。</p>
 <hr />
-<h2 id="22-核心范式五materialization-dematerialization是军团模拟的核心桥梁">22. 核心范式五：Materialization / Dematerialization是军团模拟的核心桥梁</h2><p>玩家接近远处军团。</p>
+<h3 id="22-核心范式五materialization-dematerialization是军团模拟的核心桥梁">22. 核心范式五：Materialization / Dematerialization是军团模拟的核心桥梁</h3><p>玩家接近远处军团。</p>
 <p>原先：</p>
 <p>Formation：</p>
 <p>800 Strength。</p>
@@ -673,14 +673,14 @@
 <p>系统生成：</p>
 <p>可见的士兵Entity。</p>
 <hr />
-<h2 id="23-materialization原则">23. Materialization原则</h2><p>不能直接：</p>
+<h3 id="23-materialization原则">23. Materialization原则</h3><p>不能直接：</p>
 <p>每次进入都随机生成一群全新的状态。</p>
 <p>需要根据：</p>
 <p>Aggregate Army State</p>
 <p>生成：</p>
 <p>等价的Local Representation。</p>
 <hr />
-<h2 id="24-materializationcontext">24. MaterializationContext</h2><p>建议包含：</p>
+<h3 id="24-materializationcontext">24. MaterializationContext</h3><p>建议包含：</p>
 <ul>
 <li><p>FormationId；</p>
 </li>
@@ -702,7 +702,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="25-dematerialization">25. Dematerialization</h2><p>玩家离开。</p>
+<h3 id="25-dematerialization">25. Dematerialization</h3><p>玩家离开。</p>
 <p>活着的普通兵：</p>
 <p>重新聚合。</p>
 <p>例如：</p>
@@ -714,19 +714,19 @@
 <p>AggregateStrength</p>
 <p>需要反映损失。</p>
 <hr />
-<h2 id="26-officer通常不建议随便dematerialize">26. Officer通常不建议随便Dematerialize</h2><p>重要武将：</p>
+<h3 id="26-officer通常不建议随便dematerialize">26. Officer通常不建议随便Dematerialize</h3><p>重要武将：</p>
 <p>拥有稳定Entity身份和位置。</p>
 <p>可以：</p>
 <p>低频模拟，</p>
 <p>但不应：</p>
 <p>随机消失重生。</p>
 <hr />
-<h2 id="27-核心范式六远端战争应该是军团战力流而不是隐藏的随机秒杀">27. 核心范式六：远端战争应该是“军团战力流”，而不是隐藏的随机秒杀</h2><p>玩家在东边战斗。</p>
+<h3 id="27-核心范式六远端战争应该是军团战力流而不是隐藏的随机秒杀">27. 核心范式六：远端战争应该是“军团战力流”，而不是隐藏的随机秒杀</h3><p>玩家在东边战斗。</p>
 <p>西边友军和敌军仍然交战。</p>
 <p>需要：</p>
 <p>Remote Battle Resolution。</p>
 <hr />
-<h2 id="28-remotebattlecontext">28. RemoteBattleContext</h2><p>建议包含：</p>
+<h3 id="28-remotebattlecontext">28. RemoteBattleContext</h3><p>建议包含：</p>
 <ul>
 <li><p>FormationA；</p>
 </li>
@@ -752,7 +752,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="29-remote-resolution不需要每秒杀具体士兵">29. Remote Resolution不需要每秒杀具体士兵</h2><p>可以每：</p>
+<h3 id="29-remote-resolution不需要每秒杀具体士兵">29. Remote Resolution不需要每秒杀具体士兵</h3><p>可以每：</p>
 <p>若干战略Tick</p>
 <p>计算：</p>
 <ul>
@@ -766,7 +766,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="30-remote-battle最重要的是可预期性">30. Remote Battle最重要的是可预期性</h2><p>不能：</p>
+<h3 id="30-remote-battle最重要的是可预期性">30. Remote Battle最重要的是可预期性</h3><p>不能：</p>
 <p>玩家看地图：</p>
 <p>友军优势巨大。</p>
 <p>10秒后突然：</p>
@@ -776,18 +776,18 @@
 <p>玩家需要：</p>
 <p>有时间响应。</p>
 <hr />
-<h2 id="31-remote-combat应提供前兆">31. Remote Combat应提供前兆</h2><p>例如：</p>
+<h3 id="31-remote-combat应提供前兆">31. Remote Combat应提供前兆</h3><p>例如：</p>
 <p>“西军苦战。”</p>
 <p>“张将军陷入危机。”</p>
 <p>“西寨即将失守。”</p>
 <p>然后才：</p>
 <p>真正失败。</p>
 <hr />
-<h2 id="32-这给玩家">32. 这给玩家：</h2><p><strong>Intervention Window。</strong></p>
+<h3 id="32-这给玩家">32. 这给玩家：</h3><p><strong>Intervention Window。</strong></p>
 <p>没有这个窗口：</p>
 <p>战场事件只像随机惩罚。</p>
 <hr />
-<h2 id="33-核心范式七morale-是把局部英雄战果传递到整个军团的关键中介">33. 核心范式七：Morale 是把局部英雄战果传递到整个军团的关键中介</h2><p>玩家击败：</p>
+<h3 id="33-核心范式七morale-是把局部英雄战果传递到整个军团的关键中介">33. 核心范式七：Morale 是把局部英雄战果传递到整个军团的关键中介</h3><p>玩家击败：</p>
 <p>敌方武将。</p>
 <p>如果只是：</p>
 <p>删除一个Enemy，</p>
@@ -796,7 +796,7 @@
 <p>士气</p>
 <p>传播。</p>
 <hr />
-<h2 id="34-moralestate">34. MoraleState</h2><p>建议包含：</p>
+<h3 id="34-moralestate">34. MoraleState</h3><p>建议包含：</p>
 <ul>
 <li><p>FormationId；</p>
 </li>
@@ -820,7 +820,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="35-morale影响">35. Morale影响</h2><p>可以影响：</p>
+<h3 id="35-morale影响">35. Morale影响</h3><p>可以影响：</p>
 <ul>
 <li><p>Remote Combat Strength；</p>
 </li>
@@ -836,12 +836,12 @@
 </li>
 </ul>
 <hr />
-<h2 id="36-不能让morale直接变成">36. 不能让Morale直接变成：</h2><p>所有单位Attack ×2。</p>
+<h3 id="36-不能让morale直接变成">36. 不能让Morale直接变成：</h3><p>所有单位Attack ×2。</p>
 <p>否则局部动作手感浮动过大。</p>
 <p>更适合影响：</p>
 <p><strong>群体行为层。</strong></p>
 <hr />
-<h2 id="37-玩家斩将的宏观反馈">37. 玩家斩将的宏观反馈</h2><p>Enemy Officer Defeated<br />
+<h3 id="37-玩家斩将的宏观反馈">37. 玩家斩将的宏观反馈</h3><p>Enemy Officer Defeated<br />
 → Formation Morale下降<br />
 → 附近士兵更容易撤退<br />
 → Remote Strength下降<br />
@@ -852,7 +852,7 @@
 <p>自然影响：</p>
 <p>战争地图。</p>
 <hr />
-<h2 id="38-核心范式八据点是战场状态转换节点">38. 核心范式八：据点是战场状态转换节点</h2><p>据点不应该只是：</p>
+<h3 id="38-核心范式八据点是战场状态转换节点">38. 核心范式八：据点是战场状态转换节点</h3><p>据点不应该只是：</p>
 <p>站圈5秒。</p>
 <p>它可以承担：</p>
 <ul>
@@ -874,7 +874,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="39-basedefinition">39. BaseDefinition</h2><p>建议字段：</p>
+<h3 id="39-basedefinition">39. BaseDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>BaseId；</p>
 </li>
@@ -900,7 +900,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="40-baseruntimestate">40. BaseRuntimeState</h2><p>建议包含：</p>
+<h3 id="40-baseruntimestate">40. BaseRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>BaseId；</p>
 </li>
@@ -922,7 +922,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="41-据点占领最好由战斗结果驱动">41. 据点占领最好由战斗结果驱动</h2><p>例如：</p>
+<h3 id="41-据点占领最好由战斗结果驱动">41. 据点占领最好由战斗结果驱动</h3><p>例如：</p>
 <p>击败：</p>
 <p>Base Captain。</p>
 <p>清理：</p>
@@ -932,7 +932,7 @@
 <p>而不是：</p>
 <p>玩家在圈里站着就自动把数百敌兵变成友军。</p>
 <hr />
-<h2 id="42-capture流程">42. Capture流程</h2><p>进入Base<br />
+<h3 id="42-capture流程">42. Capture流程</h3><p>进入Base<br />
 → Base进入Contested<br />
 → Defenders生成 / 聚合<br />
 → 玩家与友军降低DefenseStrength<br />
@@ -944,13 +944,13 @@
 → Route / Morale更新<br />
 → 发布BaseCaptured。</p>
 <hr />
-<h2 id="43-核心范式九城门桥梁等战略对象应该改变battlefield-graph">43. 核心范式九：城门、桥梁等战略对象应该改变Battlefield Graph</h2><p>Gate关闭：</p>
+<h3 id="43-核心范式九城门桥梁等战略对象应该改变battlefield-graph">43. 核心范式九：城门、桥梁等战略对象应该改变Battlefield Graph</h3><p>Gate关闭：</p>
 <p>Route不可通。</p>
 <p>玩家完成：</p>
 <p>攻城器械 / 击败守将。</p>
 <p>Gate打开。</p>
 <hr />
-<h2 id="44-strategicobjectstate">44. StrategicObjectState</h2><p>建议包含：</p>
+<h3 id="44-strategicobjectstate">44. StrategicObjectState</h3><p>建议包含：</p>
 <ul>
 <li><p>ObjectId；</p>
 </li>
@@ -970,17 +970,17 @@
 </li>
 </ul>
 <hr />
-<h2 id="45-gate-open不是单纯">45. Gate Open不是单纯：</h2><p>播放开门动画。</p>
+<h3 id="45-gate-open不是单纯">45. Gate Open不是单纯：</h3><p>播放开门动画。</p>
 <p>还需要：</p>
 <p>BattlefieldGraph Edge：</p>
 <p>Blocked → Open。</p>
 <p>Army AI随后：</p>
 <p>重新规划。</p>
 <hr />
-<h2 id="46-这使局部环境变化真正影响全战场">46. 这使局部环境变化真正影响全战场</h2><p>而不是：</p>
+<h3 id="46-这使局部环境变化真正影响全战场">46. 这使局部环境变化真正影响全战场</h3><p>而不是：</p>
 <p>只服务玩家视觉。</p>
 <hr />
-<h2 id="47-核心范式十battle-director负责把静态战场变成动态战争">47. 核心范式十：Battle Director负责把静态战场变成动态战争</h2><p>如果地图开场：</p>
+<h3 id="47-核心范式十battle-director负责把静态战场变成动态战争">47. 核心范式十：Battle Director负责把静态战场变成动态战争</h3><p>如果地图开场：</p>
 <p>所有敌军都已放好，</p>
 <p>然后玩家从A一路杀到B，</p>
 <p>更像大型线性动作关。</p>
@@ -989,7 +989,7 @@
 <p>因此需要：</p>
 <p>Battle Director。</p>
 <hr />
-<h2 id="48-battledirectorstate">48. BattleDirectorState</h2><p>建议包含：</p>
+<h3 id="48-battledirectorstate">48. BattleDirectorState</h3><p>建议包含：</p>
 <ul>
 <li><p>BattleId；</p>
 </li>
@@ -1011,7 +1011,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="49-battle-director职责">49. Battle Director职责</h2><ul>
+<h3 id="49-battle-director职责">49. Battle Director职责</h3><ul>
 <li><p>监听战场事实；</p>
 </li>
 <li><p>启动Battle Event；</p>
@@ -1032,23 +1032,23 @@
 </li>
 </ul>
 <hr />
-<h2 id="50-director不应该直接决定">50. Director不应该直接决定：</h2><p>“玩家将在第300秒失败。”</p>
+<h3 id="50-director不应该直接决定">50. Director不应该直接决定：</h3><p>“玩家将在第300秒失败。”</p>
 <p>它应该读取：</p>
 <p>世界状态。</p>
 <hr />
-<h2 id="51-事件条件示例">51. 事件条件示例</h2><p>敌方西寨失守。</p>
+<h3 id="51-事件条件示例">51. 事件条件示例</h3><p>敌方西寨失守。</p>
 <p>且：</p>
 <p>Enemy Commander仍Alive。</p>
 <p>则：</p>
 <p>触发：</p>
 <p>Central Reinforcement。</p>
 <hr />
-<h2 id="52-玩家提前击败某武将">52. 玩家提前击败某武将</h2><p>可能：</p>
+<h3 id="52-玩家提前击败某武将">52. 玩家提前击败某武将</h3><p>可能：</p>
 <p>阻止未来伏兵。</p>
 <p>这就是：</p>
 <p>Battle Reactivity。</p>
 <hr />
-<h2 id="53-核心范式十一battle-event应基于条件和后果而不是巨大线性脚本">53. 核心范式十一：Battle Event应基于条件和后果，而不是巨大线性脚本</h2><p>传统脆弱脚本：</p>
+<h3 id="53-核心范式十一battle-event应基于条件和后果而不是巨大线性脚本">53. 核心范式十一：Battle Event应基于条件和后果，而不是巨大线性脚本</h3><p>传统脆弱脚本：</p>
 <p>00:30 A进军。</p>
 <p>02:00 B出现。</p>
 <p>04:00 C说台词。</p>
@@ -1057,7 +1057,7 @@
 <p>更合理：</p>
 <p><strong>Event Definition。</strong></p>
 <hr />
-<h2 id="54-battleeventdefinition">54. BattleEventDefinition</h2><p>建议字段：</p>
+<h3 id="54-battleeventdefinition">54. BattleEventDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>EventId；</p>
 </li>
@@ -1085,7 +1085,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="55-battleeventstate">55. BattleEventState</h2><p>建议包含：</p>
+<h3 id="55-battleeventstate">55. BattleEventState</h3><p>建议包含：</p>
 <ul>
 <li><p>EventId；</p>
 </li>
@@ -1103,7 +1103,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="56-event-state">56. Event State</h2><p>推荐：</p>
+<h3 id="56-event-state">56. Event State</h3><p>推荐：</p>
 <ul>
 <li><p>Dormant；</p>
 </li>
@@ -1121,7 +1121,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="57-obsolete很重要">57. Obsolete很重要</h2><p>某伏兵Event准备启动。</p>
+<h3 id="57-obsolete很重要">57. Obsolete很重要</h3><p>某伏兵Event准备启动。</p>
 <p>但玩家提前：</p>
 <p>击败伏兵武将。</p>
 <p>那么：</p>
@@ -1130,7 +1130,7 @@
 <p>不是：</p>
 <p>后面又凭空刷出同一个武将。</p>
 <hr />
-<h2 id="58-核心范式十二战场目标应该是世界状态目标不是脚本步骤">58. 核心范式十二：战场目标应该是“世界状态目标”，不是脚本步骤</h2><p>例如：</p>
+<h3 id="58-核心范式十二战场目标应该是世界状态目标不是脚本步骤">58. 核心范式十二：战场目标应该是“世界状态目标”，不是脚本步骤</h3><p>例如：</p>
 <p><strong>救援东军。</strong></p>
 <p>Goal可以表达：</p>
 <p><code>EastCommander.Alive == true</code></p>
@@ -1139,7 +1139,7 @@
 <p>而不是：</p>
 <p><code>MissionStep = 7</code>。</p>
 <hr />
-<h2 id="59-objectivedefinition">59. ObjectiveDefinition</h2><p>建议字段：</p>
+<h3 id="59-objectivedefinition">59. ObjectiveDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ObjectiveId；</p>
 </li>
@@ -1163,7 +1163,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="60-objective类型">60. Objective类型</h2><ul>
+<h3 id="60-objective类型">60. Objective类型</h3><ul>
 <li><p>Defeat Officer；</p>
 </li>
 <li><p>Capture Base；</p>
@@ -1186,7 +1186,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="61-支线目标应真实改变战场">61. 支线目标应真实改变战场</h2><p>救援友军：</p>
+<h3 id="61-支线目标应真实改变战场">61. 支线目标应真实改变战场</h3><p>救援友军：</p>
 <p>不能只有：</p>
 <p>Bonus Score +1000。</p>
 <p>应该可能：</p>
@@ -1205,7 +1205,7 @@
 <p>这样玩家才会：</p>
 <p>真正权衡是否绕路。</p>
 <hr />
-<h2 id="62-核心范式十三普通士兵ai应该围绕群体角色而不是个体最优">62. 核心范式十三：普通士兵AI应该围绕“群体角色”而不是个体最优</h2><p>普通兵可以拥有：</p>
+<h3 id="62-核心范式十三普通士兵ai应该围绕群体角色而不是个体最优">62. 核心范式十三：普通士兵AI应该围绕“群体角色”而不是个体最优</h3><p>普通兵可以拥有：</p>
 <ul>
 <li><p>Advance；</p>
 </li>
@@ -1223,7 +1223,7 @@
 <p>不需要：</p>
 <p>完整战术Planner。</p>
 <hr />
-<h2 id="63-soldierlocaltask">63. SoldierLocalTask</h2><p>建议：</p>
+<h3 id="63-soldierlocaltask">63. SoldierLocalTask</h3><p>建议：</p>
 <ul>
 <li><p>FollowFormation；</p>
 </li>
@@ -1241,14 +1241,14 @@
 </li>
 </ul>
 <hr />
-<h2 id="64-为什么不是所有士兵都攻击玩家">64. 为什么不是所有士兵都攻击玩家</h2><p>如果300个敌人：</p>
+<h3 id="64-为什么不是所有士兵都攻击玩家">64. 为什么不是所有士兵都攻击玩家</h3><p>如果300个敌人：</p>
 <p>都把Player设为最高目标，</p>
 <p>玩家会瞬间被：</p>
 <p>完全包围和锁死。</p>
 <p>屏幕也失去：</p>
 <p>军团战争感。</p>
 <hr />
-<h2 id="65-attack-slot-system">65. Attack Slot System</h2><p>玩家周围可以定义：</p>
+<h3 id="65-attack-slot-system">65. Attack Slot System</h3><p>玩家周围可以定义：</p>
 <p><strong>Engagement Slots。</strong></p>
 <p>只有少量敌人：</p>
 <p>获得Active Attack Token。</p>
@@ -1264,7 +1264,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="66-engagementstate">66. EngagementState</h2><p>建议包含：</p>
+<h3 id="66-engagementstate">66. EngagementState</h3><p>建议包含：</p>
 <ul>
 <li><p>TargetHeroId；</p>
 </li>
@@ -1280,7 +1280,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="67-这不是敌人排队送死">67. 这不是“敌人排队送死”</h2><p>如果做得合理：</p>
+<h3 id="67-这不是敌人排队送死">67. 这不是“敌人排队送死”</h3><p>如果做得合理：</p>
 <p>外围敌人仍然：</p>
 <ul>
 <li><p>投射；</p>
@@ -1295,7 +1295,7 @@
 <p>只是避免：</p>
 <p>30个近战兵同一Frame出招。</p>
 <hr />
-<h2 id="68-attack-slot数量可以随难度提高">68. Attack Slot数量可以随难度提高</h2><p>Easy：</p>
+<h3 id="68-attack-slot数量可以随难度提高">68. Attack Slot数量可以随难度提高</h3><p>Easy：</p>
 <p>3。</p>
 <p>Hard：</p>
 <p>7。</p>
@@ -1305,14 +1305,14 @@
 <p>难度变化</p>
 <p>不会只靠HP。</p>
 <hr />
-<h2 id="69-核心范式十四普通兵需要群体视觉智能但不需要个体深度智能">69. 核心范式十四：普通兵需要群体视觉智能，但不需要个体深度智能</h2><p>玩家希望看到：</p>
+<h3 id="69-核心范式十四普通兵需要群体视觉智能但不需要个体深度智能">69. 核心范式十四：普通兵需要群体视觉智能，但不需要个体深度智能</h3><p>玩家希望看到：</p>
 <p>军阵像军阵。</p>
 <p>不希望：</p>
 <p>每个士兵都随机走。</p>
 <p>因此需要：</p>
 <p>Formation / Crowd Steering。</p>
 <hr />
-<h2 id="70-crowd-steering输入">70. Crowd Steering输入</h2><ul>
+<h3 id="70-crowd-steering输入">70. Crowd Steering输入</h3><ul>
 <li><p>Formation Direction；</p>
 </li>
 <li><p>Local Density；</p>
@@ -1327,14 +1327,14 @@
 </li>
 </ul>
 <hr />
-<h2 id="71-crowd行为">71. Crowd行为</h2><p>可以：</p>
+<h3 id="71-crowd行为">71. Crowd行为</h3><p>可以：</p>
 <p>向前线填充。</p>
 <p>绕开密度过高区域。</p>
 <p>维持大致朝向。</p>
 <p>但无需：</p>
 <p>每个士兵独立A*找玩家。</p>
 <hr />
-<h2 id="72-核心范式十五flow-field比大量单体path更加适合普通军团">72. 核心范式十五：Flow Field比大量单体Path更加适合普通军团</h2><p>某军团：</p>
+<h3 id="72-核心范式十五flow-field比大量单体path更加适合普通军团">72. 核心范式十五：Flow Field比大量单体Path更加适合普通军团</h3><p>某军团：</p>
 <p>100名士兵。</p>
 <p>目标：</p>
 <p>West Gate。</p>
@@ -1346,7 +1346,7 @@
 <p>士兵只做：</p>
 <p>局部跟随。</p>
 <hr />
-<h2 id="73-sharednavigationstate">73. SharedNavigationState</h2><p>建议包含：</p>
+<h3 id="73-sharednavigationstate">73. SharedNavigationState</h3><p>建议包含：</p>
 <ul>
 <li><p>FormationId；</p>
 </li>
@@ -1360,12 +1360,12 @@
 </li>
 </ul>
 <hr />
-<h2 id="74-officer可以使用更高质量路径">74. Officer可以使用更高质量路径</h2><p>普通兵：</p>
+<h3 id="74-officer可以使用更高质量路径">74. Officer可以使用更高质量路径</h3><p>普通兵：</p>
 <p>共享。</p>
 <p>这是：</p>
 <p>Simulation Budget差异化。</p>
 <hr />
-<h2 id="75-核心范式十六hero-combat应专门为一次命中大量目标设计">75. 核心范式十六：Hero Combat应专门为“一次命中大量目标”设计</h2><p>普通动作游戏：</p>
+<h3 id="75-核心范式十六hero-combat应专门为一次命中大量目标设计">75. 核心范式十六：Hero Combat应专门为“一次命中大量目标”设计</h3><p>普通动作游戏：</p>
 <p>一次Hit Query</p>
 <p>可能命中：</p>
 <p>1～3人。</p>
@@ -1376,7 +1376,7 @@
 <p>Damage / Hit / Reaction系统必须从第一天考虑：</p>
 <p><strong>Hit Fan-out。</strong></p>
 <hr />
-<h2 id="76-attackdefinition">76. AttackDefinition</h2><p>建议字段：</p>
+<h3 id="76-attackdefinition">76. AttackDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>AttackId；</p>
 </li>
@@ -1406,7 +1406,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="77-attackruntimestate">77. AttackRuntimeState</h2><p>建议包含：</p>
+<h3 id="77-attackruntimestate">77. AttackRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>AttackInstanceId；</p>
 </li>
@@ -1426,7 +1426,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="78-alreadyhit集合很重要">78. AlreadyHit集合很重要</h2><p>一个长Sword Sweep持续：</p>
+<h3 id="78-alreadyhit集合很重要">78. AlreadyHit集合很重要</h3><p>一个长Sword Sweep持续：</p>
 <p>5帧。</p>
 <p>Enemy Collider每帧都在里面。</p>
 <p>不能：</p>
@@ -1434,7 +1434,7 @@
 <p>除非Attack明确：</p>
 <p>MultiHit。</p>
 <hr />
-<h2 id="79-hit-query">79. Hit Query</h2><p>可以使用：</p>
+<h3 id="79-hit-query">79. Hit Query</h3><p>可以使用：</p>
 <ul>
 <li><p>Sweep；</p>
 </li>
@@ -1448,13 +1448,13 @@
 <p>不要依赖：</p>
 <p>几十个Weapon Trigger各自OnCollision。</p>
 <hr />
-<h2 id="80-命中30人时不要立即执行30套重逻辑链">80. 命中30人时不要立即执行30套重逻辑链</h2><p>推荐：</p>
+<h3 id="80-命中30人时不要立即执行30套重逻辑链">80. 命中30人时不要立即执行30套重逻辑链</h3><p>推荐：</p>
 <p>Hit Collection<br />
 → Validation<br />
 → Batch Damage Resolve<br />
 → Reaction Scheduling。</p>
 <hr />
-<h2 id="81-核心范式十七hit-reaction需要按目标类别分层">81. 核心范式十七：Hit Reaction需要按目标类别分层</h2><p>普通兵：</p>
+<h3 id="81-核心范式十七hit-reaction需要按目标类别分层">81. 核心范式十七：Hit Reaction需要按目标类别分层</h3><p>普通兵：</p>
 <p>被大招击中。</p>
 <p>可以：</p>
 <p>直接：</p>
@@ -1476,7 +1476,7 @@
 <p>要么普通兵太硬，</p>
 <p>要么武将被无限浮空。</p>
 <hr />
-<h2 id="82-reactionprofile">82. ReactionProfile</h2><p>建议区分：</p>
+<h3 id="82-reactionprofile">82. ReactionProfile</h3><p>建议区分：</p>
 <ul>
 <li><p>Fodder；</p>
 </li>
@@ -1488,7 +1488,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="83-普通兵reaction重点">83. 普通兵Reaction重点</h2><ul>
+<h3 id="83-普通兵reaction重点">83. 普通兵Reaction重点</h3><ul>
 <li><p>夸张；</p>
 </li>
 <li><p>清晰；</p>
@@ -1501,7 +1501,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="84-officer-reaction重点">84. Officer Reaction重点</h2><ul>
+<h3 id="84-officer-reaction重点">84. Officer Reaction重点</h3><ul>
 <li><p>Hitstun；</p>
 </li>
 <li><p>Guard；</p>
@@ -1516,7 +1516,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="85-核心范式十八poise-super-armor-是武将脱离杂兵逻辑的关键机制">85. 核心范式十八：Poise / Super Armor 是武将脱离“杂兵逻辑”的关键机制</h2><p>Officer可以拥有：</p>
+<h3 id="85-核心范式十八poise-super-armor-是武将脱离杂兵逻辑的关键机制">85. 核心范式十八：Poise / Super Armor 是武将脱离“杂兵逻辑”的关键机制</h3><p>Officer可以拥有：</p>
 <p>Poise。</p>
 <p>攻击造成：</p>
 <p>Poise Damage。</p>
@@ -1524,7 +1524,7 @@
 <p>进入：</p>
 <p>Stagger。</p>
 <hr />
-<h2 id="86-officerpoisestate">86. OfficerPoiseState</h2><p>建议包含：</p>
+<h3 id="86-officerpoisestate">86. OfficerPoiseState</h3><p>建议包含：</p>
 <ul>
 <li><p>CurrentPoise；</p>
 </li>
@@ -1540,13 +1540,13 @@
 </li>
 </ul>
 <hr />
-<h2 id="87-这样玩家可以">87. 这样玩家可以：</h2><p>先通过普通连击削韧。</p>
+<h3 id="87-这样玩家可以">87. 这样玩家可以：</h3><p>先通过普通连击削韧。</p>
 <p>再：</p>
 <p>打出完整高伤Combo。</p>
 <p>而不是：</p>
 <p>从第一刀开始无限击飞Boss。</p>
 <hr />
-<h2 id="88-核心范式十九combo-system的主要职责不是招式数量而是维持连续清场节奏">88. 核心范式十九：Combo System的主要职责不是招式数量，而是维持“连续清场节奏”</h2><p>Combo可以包含：</p>
+<h3 id="88-核心范式十九combo-system的主要职责不是招式数量而是维持连续清场节奏">88. 核心范式十九：Combo System的主要职责不是招式数量，而是维持“连续清场节奏”</h3><p>Combo可以包含：</p>
 <ul>
 <li><p>Light Chain；</p>
 </li>
@@ -1564,7 +1564,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="89-combostate">89. ComboState</h2><p>建议包含：</p>
+<h3 id="89-combostate">89. ComboState</h3><p>建议包含：</p>
 <ul>
 <li><p>CurrentChainNode；</p>
 </li>
@@ -1582,7 +1582,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="90-combo-count">90. Combo Count</h2><p>击中多个士兵：</p>
+<h3 id="90-combo-count">90. Combo Count</h3><p>击中多个士兵：</p>
 <p>快速增长。</p>
 <p>可以用于：</p>
 <ul>
@@ -1596,18 +1596,18 @@
 </li>
 </ul>
 <hr />
-<h2 id="91-但combo不能要求玩家逐个锁定敌人">91. 但Combo不能要求玩家逐个锁定敌人</h2><p>攻击应该：</p>
+<h3 id="91-但combo不能要求玩家逐个锁定敌人">91. 但Combo不能要求玩家逐个锁定敌人</h3><p>攻击应该：</p>
 <p>通过宽Hit Volume</p>
 <p>自然命中群体。</p>
 <hr />
-<h2 id="92-核心范式二十hit-stop要按目标重要性控制否则30个hit会把游戏冻结">92. 核心范式二十：Hit Stop要按目标重要性控制，否则30个Hit会把游戏冻结</h2><p>普通动作游戏：</p>
+<h3 id="92-核心范式二十hit-stop要按目标重要性控制否则30个hit会把游戏冻结">92. 核心范式二十：Hit Stop要按目标重要性控制，否则30个Hit会把游戏冻结</h3><p>普通动作游戏：</p>
 <p>每次命中：</p>
 <p>2帧Hit Stop。</p>
 <p>如果一刀打30兵：</p>
 <p>不能叠：</p>
 <p>60帧。</p>
 <hr />
-<h2 id="93-hitstopaggregation">93. HitStopAggregation</h2><p>同一AttackInstance：</p>
+<h3 id="93-hitstopaggregation">93. HitStopAggregation</h3><p>同一AttackInstance：</p>
 <p>一Frame命中30人。</p>
 <p>可以按：</p>
 <p>最大目标重要度</p>
@@ -1623,30 +1623,30 @@
 </li>
 </ul>
 <hr />
-<h2 id="94-不按hit数量累加">94. 不按Hit数量累加</h2><p>这是群体动作游戏非常重要的反馈设计。</p>
+<h3 id="94-不按hit数量累加">94. 不按Hit数量累加</h3><p>这是群体动作游戏非常重要的反馈设计。</p>
 <hr />
-<h2 id="95-核心范式二十一击飞和倒地需要群体性能预算">95. 核心范式二十一：击飞和倒地需要群体性能预算</h2><p>一招：</p>
+<h3 id="95-核心范式二十一击飞和倒地需要群体性能预算">95. 核心范式二十一：击飞和倒地需要群体性能预算</h3><p>一招：</p>
 <p>击飞40个士兵。</p>
 <p>如果全部：</p>
 <p>完整Ragdoll + Physics + Individual Recovery，</p>
 <p>成本很高。</p>
 <p>可以分层。</p>
 <hr />
-<h2 id="96-crowd-reaction-lod">96. Crowd Reaction LOD</h2><p>近处：</p>
+<h3 id="96-crowd-reaction-lod">96. Crowd Reaction LOD</h3><p>近处：</p>
 <p>完整Animation / Limited Ragdoll。</p>
 <p>中距离：</p>
 <p>预设Knockback Animation。</p>
 <p>远处：</p>
 <p>简单位移 / Collapse。</p>
 <hr />
-<h2 id="97-ragdoll不是gameplay-truth">97. Ragdoll不是Gameplay Truth</h2><p>真正状态：</p>
+<h3 id="97-ragdoll不是gameplay-truth">97. Ragdoll不是Gameplay Truth</h3><p>真正状态：</p>
 <p>KnockedDown。</p>
 <p>Ragdoll：</p>
 <p>表现。</p>
 <p>结束后：</p>
 <p>回到合法Navigation位置。</p>
 <hr />
-<h2 id="98-核心范式二十二musou-ultimate主要承担密度转换器职责">98. 核心范式二十二：Musou / Ultimate主要承担“密度转换器”职责</h2><p>必杀技不仅：</p>
+<h3 id="98-核心范式二十二musou-ultimate主要承担密度转换器职责">98. 核心范式二十二：Musou / Ultimate主要承担“密度转换器”职责</h3><p>必杀技不仅：</p>
 <p>高Damage。</p>
 <p>它通常允许：</p>
 <p>玩家短时间把：</p>
@@ -1654,7 +1654,7 @@
 <p>转化为：</p>
 <p>安全空间。</p>
 <hr />
-<h2 id="99-heroresourcestate">99. HeroResourceState</h2><p>可以包含：</p>
+<h3 id="99-heroresourcestate">99. HeroResourceState</h3><p>可以包含：</p>
 <ul>
 <li><p>MusouGauge；</p>
 </li>
@@ -1668,7 +1668,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="100-resource来源">100. Resource来源</h2><p>例如：</p>
+<h3 id="100-resource来源">100. Resource来源</h3><p>例如：</p>
 <ul>
 <li><p>Deal Damage；</p>
 </li>
@@ -1682,7 +1682,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="101-ultimate设计价值">101. Ultimate设计价值</h2><p>在：</p>
+<h3 id="101-ultimate设计价值">101. Ultimate设计价值</h3><p>在：</p>
 <p>普通状态</p>
 <p>玩家应处理：</p>
 <p>空间和Officer。</p>
@@ -1690,11 +1690,11 @@
 <p>Ultimate：</p>
 <p>重新取得主动权。</p>
 <hr />
-<h2 id="102-如果ultimate可以永远循环">102. 如果Ultimate可以永远循环</h2><p>Crowd Pressure失效。</p>
+<h3 id="102-如果ultimate可以永远循环">102. 如果Ultimate可以永远循环</h3><p>Crowd Pressure失效。</p>
 <p>因此需要：</p>
 <p>资源经济。</p>
 <hr />
-<h2 id="103-核心范式二十三普通兵不能完全没有威胁">103. 核心范式二十三：普通兵不能完全没有威胁</h2><p>如果普通兵：</p>
+<h3 id="103-核心范式二十三普通兵不能完全没有威胁">103. 核心范式二十三：普通兵不能完全没有威胁</h3><p>如果普通兵：</p>
 <p>永远不会攻击，</p>
 <p>玩家会立刻识别：</p>
 <p>他们只是特效。</p>
@@ -1703,7 +1703,7 @@
 <p>敌人确实有威胁，但玩家强大到能够高效处理。</p>
 </blockquote>
 <hr />
-<h2 id="104-普通兵威胁可以来自">104. 普通兵威胁可以来自：</h2><ul>
+<h3 id="104-普通兵威胁可以来自">104. 普通兵威胁可以来自：</h3><ul>
 <li><p>集体远程攻击；</p>
 </li>
 <li><p>小范围戳击；</p>
@@ -1722,10 +1722,10 @@
 </li>
 </ul>
 <hr />
-<h2 id="105-individual-threat低">105. Individual Threat低。</h2><p>Collective Threat高。</p>
+<h3 id="105-individual-threat低">105. Individual Threat低。</h3><p>Collective Threat高。</p>
 <p>这是理想结构。</p>
 <hr />
-<h2 id="106-核心范式二十四enemy-composition比纯数量更能改变crowd玩法">106. 核心范式二十四：Enemy Composition比纯数量更能改变Crowd玩法</h2><p>100个相同Sword Soldier</p>
+<h3 id="106-核心范式二十四enemy-composition比纯数量更能改变crowd玩法">106. 核心范式二十四：Enemy Composition比纯数量更能改变Crowd玩法</h3><p>100个相同Sword Soldier</p>
 <p>体验很快重复。</p>
 <p>可以组合：</p>
 <ul>
@@ -1745,7 +1745,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="107-formationcomposition">107. FormationComposition</h2><p>不同兵种：</p>
+<h3 id="107-formationcomposition">107. FormationComposition</h3><p>不同兵种：</p>
 <p>承担群体功能。</p>
 <p>例如：</p>
 <p>Shield：</p>
@@ -1755,10 +1755,10 @@
 <p>Banner：</p>
 <p>提升附近士气。</p>
 <hr />
-<h2 id="108-玩家优先击杀谁">108. 玩家优先击杀谁：</h2><p>就出现：</p>
+<h3 id="108-玩家优先击杀谁">108. 玩家优先击杀谁：</h3><p>就出现：</p>
 <p>局部目标选择。</p>
 <hr />
-<h2 id="109-核心范式二十五officer应成为军团战术结构的关键节点">109. 核心范式二十五：Officer应成为军团战术结构的“关键节点”</h2><p>某武将存在时：</p>
+<h3 id="109-核心范式二十五officer应成为军团战术结构的关键节点">109. 核心范式二十五：Officer应成为军团战术结构的“关键节点”</h3><p>某武将存在时：</p>
 <p>Formation：</p>
 <ul>
 <li><p>Morale高；</p>
@@ -1773,13 +1773,13 @@
 <p>Officer Defeated：</p>
 <p>这些能力解除。</p>
 <hr />
-<h2 id="110-这让">110. 这让：</h2><p>斩将</p>
+<h3 id="110-这让">110. 这让：</h3><p>斩将</p>
 <p>不仅是：</p>
 <p>经验奖励。</p>
 <p>而是：</p>
 <p><strong>破坏敌军组织结构。</strong></p>
 <hr />
-<h2 id="111-核心范式二十六officer-duel需要在crowd中保持可读性">111. 核心范式二十六：Officer Duel需要在Crowd中保持可读性</h2><p>玩家和Officer决斗。</p>
+<h3 id="111-核心范式二十六officer-duel需要在crowd中保持可读性">111. 核心范式二十六：Officer Duel需要在Crowd中保持可读性</h3><p>玩家和Officer决斗。</p>
 <p>周围仍然：</p>
 <p>有几十个士兵。</p>
 <p>如果所有视觉和受击同权重：</p>
@@ -1787,7 +1787,7 @@
 <p>需要：</p>
 <p><strong>Combat Focus Policy。</strong></p>
 <hr />
-<h2 id="112-officer-focus">112. Officer Focus</h2><p>可以：</p>
+<h3 id="112-officer-focus">112. Officer Focus</h3><p>可以：</p>
 <ul>
 <li><p>Camera Bias；</p>
 </li>
@@ -1803,13 +1803,13 @@
 </li>
 </ul>
 <hr />
-<h2 id="113-不建议进入完全独立boss-arena">113. 不建议进入完全独立Boss Arena</h2><p>除非战役需要。</p>
+<h3 id="113-不建议进入完全独立boss-arena">113. 不建议进入完全独立Boss Arena</h3><p>除非战役需要。</p>
 <p>否则：</p>
 <p>会失去：</p>
 <p>“在千军万马中斩将”</p>
 <p>的特色。</p>
 <hr />
-<h2 id="114-核心范式二十七camera必须同时服务大范围crowd和officer动作">114. 核心范式二十七：Camera必须同时服务大范围Crowd和Officer动作</h2><p>普通第三人称动作Camera：</p>
+<h3 id="114-核心范式二十七camera必须同时服务大范围crowd和officer动作">114. 核心范式二十七：Camera必须同时服务大范围Crowd和Officer动作</h3><p>普通第三人称动作Camera：</p>
 <p>离角色较近。</p>
 <p>无双式需要：</p>
 <p>看到：</p>
@@ -1824,7 +1824,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="115-camerastate">115. CameraState</h2><p>可以根据：</p>
+<h3 id="115-camerastate">115. CameraState</h3><p>可以根据：</p>
 <ul>
 <li><p>Enemy Density；</p>
 </li>
@@ -1838,16 +1838,16 @@
 <p>动态调整：</p>
 <p>Distance / FOV。</p>
 <hr />
-<h2 id="116-大招">116. 大招：</h2><p>Camera稍拉远。</p>
+<h3 id="116-大招">116. 大招：</h3><p>Camera稍拉远。</p>
 <p>Officer Duel：</p>
 <p>适度聚焦。</p>
 <hr />
-<h2 id="117-camera不能因为每个敌人锁定请求乱跳">117. Camera不能因为每个敌人锁定请求乱跳</h2><p>锁定系统优先：</p>
+<h3 id="117-camera不能因为每个敌人锁定请求乱跳">117. Camera不能因为每个敌人锁定请求乱跳</h3><p>锁定系统优先：</p>
 <p>Officer / Elite。</p>
 <p>普通兵：</p>
 <p>通常不用硬Lock。</p>
 <hr />
-<h2 id="118-核心范式二十八目标锁定应服务武将而不是杂兵">118. 核心范式二十八：目标锁定应服务武将，而不是杂兵</h2><p>SoftTarget系统：</p>
+<h3 id="118-核心范式二十八目标锁定应服务武将而不是杂兵">118. 核心范式二十八：目标锁定应服务武将，而不是杂兵</h3><p>SoftTarget系统：</p>
 <p>普通攻击根据：</p>
 <p>输入方向</p>
 <p>和：</p>
@@ -1857,7 +1857,7 @@
 <p>主要用于：</p>
 <p>Officer。</p>
 <hr />
-<h2 id="119-targetselectionscore">119. TargetSelectionScore</h2><p>可以考虑：</p>
+<h3 id="119-targetselectionscore">119. TargetSelectionScore</h3><p>可以考虑：</p>
 <ul>
 <li><p>Officer Priority；</p>
 </li>
@@ -1873,10 +1873,10 @@
 </li>
 </ul>
 <hr />
-<h2 id="120-不要在30个杂兵间自动lock疯狂跳转">120. 不要在30个杂兵间自动Lock疯狂跳转</h2><p>会破坏：</p>
+<h3 id="120-不要在30个杂兵间自动lock疯狂跳转">120. 不要在30个杂兵间自动Lock疯狂跳转</h3><p>会破坏：</p>
 <p>大范围攻击控制感。</p>
 <hr />
-<h2 id="121-核心范式二十九battle-announcement是正式信息系统">121. 核心范式二十九：Battle Announcement是正式信息系统</h2><p>玩家无法：</p>
+<h3 id="121-核心范式二十九battle-announcement是正式信息系统">121. 核心范式二十九：Battle Announcement是正式信息系统</h3><p>玩家无法：</p>
 <p>亲眼看到整个战场。</p>
 <p>因此：</p>
 <p>“东寨陷落。”</p>
@@ -1887,7 +1887,7 @@
 <p>而是：</p>
 <p>远端战场信息投影。</p>
 <hr />
-<h2 id="122-battlemessage">122. BattleMessage</h2><p>建议包含：</p>
+<h3 id="122-battlemessage">122. BattleMessage</h3><p>建议包含：</p>
 <ul>
 <li><p>MessageId；</p>
 </li>
@@ -1909,7 +1909,7 @@
 </li>
 </ul>
 <hr />
-<h2 id="123-message-priority">123. Message Priority</h2><p>例如：</p>
+<h3 id="123-message-priority">123. Message Priority</h3><p>例如：</p>
 <p>Critical Failure Warning</p>
 <blockquote>
 <p>Main Objective<br />
@@ -1918,19 +1918,19 @@ Base Capture<br />
 Ordinary Kill。</p>
 </blockquote>
 <hr />
-<h2 id="124-信息不能刷屏">124. 信息不能刷屏</h2><p>如果同一秒：</p>
+<h3 id="124-信息不能刷屏">124. 信息不能刷屏</h3><p>如果同一秒：</p>
 <p>10个据点事件。</p>
 <p>需要：</p>
 <p>Batch / Queue。</p>
 <hr />
-<h2 id="125-地图也必须同步表达">125. 地图也必须同步表达</h2><p>文字说：</p>
+<h3 id="125-地图也必须同步表达">125. 地图也必须同步表达</h3><p>文字说：</p>
 <p>西寨危险。</p>
 <p>Map：</p>
 <p>高亮西寨。</p>
 <p>玩家能够：</p>
 <p>立即决策。</p>
 <hr />
-<h2 id="126-核心范式三十battle-map是战略决策ui不是迷你导航图">126. 核心范式三十：Battle Map是战略决策UI，不是迷你导航图</h2><p>地图应该显示：</p>
+<h3 id="126-核心范式三十battle-map是战略决策ui不是迷你导航图">126. 核心范式三十：Battle Map是战略决策UI，不是迷你导航图</h3><p>地图应该显示：</p>
 <ul>
 <li><p>Ally / Enemy Bases；</p>
 </li>
@@ -1950,17 +1950,17 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="127-远端普通士兵无需逐点显示">127. 远端普通士兵无需逐点显示</h2><p>可以：</p>
+<h3 id="127-远端普通士兵无需逐点显示">127. 远端普通士兵无需逐点显示</h3><p>可以：</p>
 <p>Formation Icon。</p>
 <p>这恰好对应：</p>
 <p>远端聚合模拟。</p>
 <hr />
-<h2 id="128-战术图和运行时模型保持一致">128. 战术图和运行时模型保持一致</h2><p>Map不是：</p>
+<h3 id="128-战术图和运行时模型保持一致">128. 战术图和运行时模型保持一致</h3><p>Map不是：</p>
 <p>假信息UI。</p>
 <p>它直接读取：</p>
 <p>Formation / Base / Objective State。</p>
 <hr />
-<h2 id="129-核心范式三十一玩家移动速度必须允许其成为战场干预者">129. 核心范式三十一：玩家移动速度必须允许其成为“战场干预者”</h2><p>地图很大。</p>
+<h3 id="129-核心范式三十一玩家移动速度必须允许其成为战场干预者">129. 核心范式三十一：玩家移动速度必须允许其成为“战场干预者”</h3><p>地图很大。</p>
 <p>如果从东翼赶到西翼需要：</p>
 <p>五分钟，</p>
 <p>玩家无法响应动态战场。</p>
@@ -1978,7 +1978,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="130-travel-time是battle-design核心指标">130. Travel Time是Battle Design核心指标</h2><p>某救援事件：</p>
+<h3 id="130-travel-time是battle-design核心指标">130. Travel Time是Battle Design核心指标</h3><p>某救援事件：</p>
 <p>留给玩家：</p>
 <p>90秒。</p>
 <p>但从当前主战场跑过去：</p>
@@ -1986,13 +1986,13 @@ Ordinary Kill。</p>
 <p>这就是：</p>
 <p>不可完成设计。</p>
 <hr />
-<h2 id="131-battle-travel-analyzer">131. Battle Travel Analyzer</h2><p>可以计算：</p>
+<h3 id="131-battle-travel-analyzer">131. Battle Travel Analyzer</h3><p>可以计算：</p>
 <p>任意Zone之间：</p>
 <p>Hero Fastest Travel Time。</p>
 <p>用于：</p>
 <p>Objective Time Limit验证。</p>
 <hr />
-<h2 id="132-mount">132. Mount</h2><p>如果存在：</p>
+<h3 id="132-mount">132. Mount</h3><p>如果存在：</p>
 <p>MountState</p>
 <p>应与：</p>
 <p>Combat State</p>
@@ -2000,7 +2000,7 @@ Ordinary Kill。</p>
 <p>其主要职责：</p>
 <p>缩短宏观移动时间。</p>
 <hr />
-<h2 id="133-核心范式三十二动态任务必须提供可达的-intervention-window">133. 核心范式三十二：动态任务必须提供可达的 Intervention Window</h2><p>例如：</p>
+<h3 id="133-核心范式三十二动态任务必须提供可达的-intervention-window">133. 核心范式三十二：动态任务必须提供可达的 Intervention Window</h3><p>例如：</p>
 <p>友军武将苦战。</p>
 <p>事件触发后：</p>
 <p>不能15秒必死。</p>
@@ -2009,7 +2009,7 @@ Ordinary Kill。</p>
 <p>给：</p>
 <p>合理救援窗口。</p>
 <hr />
-<h2 id="134-interventionwindow">134. InterventionWindow</h2><p>建议由：</p>
+<h3 id="134-interventionwindow">134. InterventionWindow</h3><p>建议由：</p>
 <p>Base Duration</p>
 <ul>
 <li><p>Ally Strength</p>
@@ -2021,18 +2021,18 @@ Ordinary Kill。</p>
 </ul>
 <p>计算。</p>
 <hr />
-<h2 id="135-玩家远在另一侧">135. 玩家远在另一侧：</h2><p>可以稍微：</p>
+<h3 id="135-玩家远在另一侧">135. 玩家远在另一侧：</h3><p>可以稍微：</p>
 <p>延缓失败。</p>
 <p>不需要绝对公平，</p>
 <p>但不能：</p>
 <p>纯脚本杀。</p>
 <hr />
-<h2 id="136-核心范式三十三援军不是简单spawn-wave而是军团状态变化">136. 核心范式三十三：援军不是简单Spawn Wave，而是军团状态变化</h2><p>援军可以：</p>
+<h3 id="136-核心范式三十三援军不是简单spawn-wave而是军团状态变化">136. 核心范式三十三：援军不是简单Spawn Wave，而是军团状态变化</h3><p>援军可以：</p>
 <p>从：</p>
 <p>某个入口</p>
 <p>进入Battlefield Graph。</p>
 <hr />
-<h2 id="137-reinforcementdefinition">137. ReinforcementDefinition</h2><p>建议字段：</p>
+<h3 id="137-reinforcementdefinition">137. ReinforcementDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ReinforcementId；</p>
 </li>
@@ -2054,17 +2054,17 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="138-spawn以后">138. Spawn以后：</h2><p>Formation真正参与：</p>
+<h3 id="138-spawn以后">138. Spawn以后：</h3><p>Formation真正参与：</p>
 <p>远端战争。</p>
 <p>不是：</p>
 <p>只在玩家附近刷一波怪。</p>
 <hr />
-<h2 id="139-玩家可以提前">139. 玩家可以提前：</h2><p>占领Entry Base</p>
+<h3 id="139-玩家可以提前">139. 玩家可以提前：</h3><p>占领Entry Base</p>
 <p>阻止援军。</p>
 <p>这会产生：</p>
 <p>战略提前量。</p>
 <hr />
-<h2 id="140-核心范式三十四伏兵应该来自隐藏军团状态而不是无条件凭空生成">140. 核心范式三十四：伏兵应该来自隐藏军团状态，而不是无条件凭空生成</h2><p>AmbushFormation可以：</p>
+<h3 id="140-核心范式三十四伏兵应该来自隐藏军团状态而不是无条件凭空生成">140. 核心范式三十四：伏兵应该来自隐藏军团状态，而不是无条件凭空生成</h3><p>AmbushFormation可以：</p>
 <p>预存在：</p>
 <p>Hidden / Dormant。</p>
 <p>触发条件：</p>
@@ -2072,7 +2072,7 @@ Ordinary Kill。</p>
 <p>或：</p>
 <p>某Officer命令。</p>
 <hr />
-<h2 id="141-ambushstate">141. AmbushState</h2><p>建议包含：</p>
+<h3 id="141-ambushstate">141. AmbushState</h3><p>建议包含：</p>
 <ul>
 <li><p>FormationId；</p>
 </li>
@@ -2088,19 +2088,19 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="142-如果玩家提前">142. 如果玩家提前：</h2><p>发现伏兵。</p>
+<h3 id="142-如果玩家提前">142. 如果玩家提前：</h3><p>发现伏兵。</p>
 <p>可以：</p>
 <p>打乱事件。</p>
 <p>这使：</p>
 <p>Battle有一定反应性。</p>
 <hr />
-<h2 id="143-核心范式三十五撤退和溃败比所有普通兵死亡更符合军团战争">143. 核心范式三十五：撤退和溃败比“所有普通兵死亡”更符合军团战争</h2><p>一支Formation不必：</p>
+<h3 id="143-核心范式三十五撤退和溃败比所有普通兵死亡更符合军团战争">143. 核心范式三十五：撤退和溃败比“所有普通兵死亡”更符合军团战争</h3><p>一支Formation不必：</p>
 <p>被杀到0。</p>
 <p>Morale崩溃：</p>
 <p>可能：</p>
 <p>Retreat。</p>
 <hr />
-<h2 id="144-formationstate">144. FormationState</h2><p>可以：</p>
+<h3 id="144-formationstate">144. FormationState</h3><p>可以：</p>
 <ul>
 <li><p>Advancing；</p>
 </li>
@@ -2116,17 +2116,17 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="145-routed">145. Routed</h2><p>普通兵撤离战区。</p>
+<h3 id="145-routed">145. Routed</h3><p>普通兵撤离战区。</p>
 <p>Player不需要：</p>
 <p>追杀最后一个。</p>
 <p>战局继续。</p>
 <hr />
-<h2 id="146-officer-defeat">146. Officer Defeat</h2><p>可能直接导致：</p>
+<h3 id="146-officer-defeat">146. Officer Defeat</h3><p>可能直接导致：</p>
 <p>Formation Rout。</p>
 <p>这强化：</p>
 <p>“斩将夺势”。</p>
 <hr />
-<h2 id="147-核心范式三十六普通兵击破数与真实军团伤亡可以使用不同表现尺度">147. 核心范式三十六：普通兵击破数与真实军团伤亡可以使用不同表现尺度</h2><p>屏幕显示：</p>
+<h3 id="147-核心范式三十六普通兵击破数与真实军团伤亡可以使用不同表现尺度">147. 核心范式三十六：普通兵击破数与真实军团伤亡可以使用不同表现尺度</h3><p>屏幕显示：</p>
 <p>KO Count 1000。</p>
 <p>并不一定意味着：</p>
 <p>地图中真的持久存在并死亡1000个完整独立AI实体。</p>
@@ -2137,7 +2137,7 @@ Ordinary Kill。</p>
 </ul>
 <p>共同构成。</p>
 <hr />
-<h2 id="148-ko-count">148. KO Count</h2><p>作为：</p>
+<h3 id="148-ko-count">148. KO Count</h3><p>作为：</p>
 <p>Player Performance Statistic。</p>
 <p>但ArmyStrength：</p>
 <p>根据实际规则更新。</p>
@@ -2145,7 +2145,7 @@ Ordinary Kill。</p>
 <p>存在映射，</p>
 <p>但不要混为一个状态。</p>
 <hr />
-<h2 id="149-核心范式三十七地图上的每一个兵不需要和ko统计一一对应">149. 核心范式三十七：地图上的每一个“兵”不需要和KO统计一一对应</h2><p>可以用：</p>
+<h3 id="149-核心范式三十七地图上的每一个兵不需要和ko统计一一对应">149. 核心范式三十七：地图上的每一个“兵”不需要和KO统计一一对应</h3><p>可以用：</p>
 <p>Battle Density Representation。</p>
 <p>例如：</p>
 <p>一个Remote Formation：</p>
@@ -2159,20 +2159,20 @@ Ordinary Kill。</p>
 <p>转换成：</p>
 <p>更大规模战果表现。</p>
 <hr />
-<h2 id="150-但这条规则必须稳定">150. 但这条规则必须稳定</h2><p>否则玩家会发现：</p>
+<h3 id="150-但这条规则必须稳定">150. 但这条规则必须稳定</h3><p>否则玩家会发现：</p>
 <p>杀100人</p>
 <p>有时Army掉100。</p>
 <p>有时掉1000。</p>
 <p>需要明确：</p>
 <p>抽象映射。</p>
 <hr />
-<h2 id="151-也可以选择完全实体一致">151. 也可以选择完全实体一致</h2><p>硬件允许：</p>
+<h3 id="151-也可以选择完全实体一致">151. 也可以选择完全实体一致</h3><p>硬件允许：</p>
 <p>真实数百兵。</p>
 <p>两种路线都成立。</p>
 <p>关键是：</p>
 <p><strong>抽象边界明确。</strong></p>
 <hr />
-<h2 id="152-核心范式三十八difficulty不应只增加敌人hp">152. 核心范式三十八：Difficulty不应只增加敌人HP</h2><p>高难度可以改变：</p>
+<h3 id="152-核心范式三十八difficulty不应只增加敌人hp">152. 核心范式三十八：Difficulty不应只增加敌人HP</h3><p>高难度可以改变：</p>
 <ul>
 <li><p>Active Attack Tokens；</p>
 </li>
@@ -2192,20 +2192,20 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="153-普通兵hp如果过高">153. 普通兵HP如果过高</h2><p>“割草”立刻变成：</p>
+<h3 id="153-普通兵hp如果过高">153. 普通兵HP如果过高</h3><p>“割草”立刻变成：</p>
 <p>刮痧。</p>
 <p>通常普通兵依然应该：</p>
 <p>较快被击败。</p>
 <hr />
-<h2 id="154-高难重点">154. 高难重点：</h2><p>更危险。</p>
+<h3 id="154-高难重点">154. 高难重点：</h3><p>更危险。</p>
 <p>不一定：</p>
 <p>更耐打。</p>
 <hr />
-<h2 id="155-officer耐久则可以">155. Officer耐久则可以：</h2><p>合理提高。</p>
+<h3 id="155-officer耐久则可以">155. Officer耐久则可以：</h3><p>合理提高。</p>
 <p>因为他们承担：</p>
 <p>高价值战斗节点。</p>
 <hr />
-<h2 id="156-核心范式三十九battle-rating应该同时衡量个人战斗和宏观救场能力">156. 核心范式三十九：Battle Rating应该同时衡量个人战斗和宏观救场能力</h2><p>结算可以考虑：</p>
+<h3 id="156-核心范式三十九battle-rating应该同时衡量个人战斗和宏观救场能力">156. 核心范式三十九：Battle Rating应该同时衡量个人战斗和宏观救场能力</h3><p>结算可以考虑：</p>
 <ul>
 <li><p>Clear Time；</p>
 </li>
@@ -2227,7 +2227,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="157-battleevaluationstate">157. BattleEvaluationState</h2><p>建议包含：</p>
+<h3 id="157-battleevaluationstate">157. BattleEvaluationState</h3><p>建议包含：</p>
 <ul>
 <li><p>CompletionTime；</p>
 </li>
@@ -2249,15 +2249,15 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="158-不要让ko-count压倒所有指标">158. 不要让KO Count压倒所有指标</h2><p>否则玩家最优策略：</p>
+<h3 id="158-不要让ko-count压倒所有指标">158. 不要让KO Count压倒所有指标</h3><p>否则玩家最优策略：</p>
 <p>在无限兵点刷10000人，</p>
 <p>不推进战场。</p>
 <hr />
-<h2 id="159-可以使用">159. 可以使用：</h2><p>KO收益Softcap</p>
+<h3 id="159-可以使用">159. 可以使用：</h3><p>KO收益Softcap</p>
 <p>或：</p>
 <p>时间 / 目标权重。</p>
 <hr />
-<h2 id="160-核心范式四十角色成长应该提高群体处理能力而不仅是单体dps">160. 核心范式四十：角色成长应该提高“群体处理能力”，而不仅是单体DPS</h2><p>新的武器、技能可以改变：</p>
+<h3 id="160-核心范式四十角色成长应该提高群体处理能力而不仅是单体dps">160. 核心范式四十：角色成长应该提高“群体处理能力”，而不仅是单体DPS</h3><p>新的武器、技能可以改变：</p>
 <ul>
 <li><p>Attack Width；</p>
 </li>
@@ -2277,7 +2277,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="161-build差异">161. Build差异</h2><p>角色A：</p>
+<h3 id="161-build差异">161. Build差异</h3><p>角色A：</p>
 <p>范围巨大。</p>
 <p>Officer Damage一般。</p>
 <p>角色B：</p>
@@ -2287,10 +2287,10 @@ Ordinary Kill。</p>
 <p>高Mobility。</p>
 <p>适合救援。</p>
 <hr />
-<h2 id="162-这样不同角色在同一个battlefield-graph中">162. 这样不同角色在同一个Battlefield Graph中：</h2><p>形成不同的：</p>
+<h3 id="162-这样不同角色在同一个battlefield-graph中">162. 这样不同角色在同一个Battlefield Graph中：</h3><p>形成不同的：</p>
 <p>战场干预风格。</p>
 <hr />
-<h2 id="163-核心范式四十一武器动作组应保持群体几何身份">163. 核心范式四十一：武器动作组应保持“群体几何身份”</h2><p>武器差异不只是：</p>
+<h3 id="163-核心范式四十一武器动作组应保持群体几何身份">163. 核心范式四十一：武器动作组应保持“群体几何身份”</h3><p>武器差异不只是：</p>
 <p>Attack +20。</p>
 <p>例如：</p>
 <p>长枪：</p>
@@ -2302,7 +2302,7 @@ Ordinary Kill。</p>
 <p>法器：</p>
 <p>远程区域。</p>
 <hr />
-<h2 id="164-attackgeometryprofile">164. AttackGeometryProfile</h2><p>可以描述：</p>
+<h3 id="164-attackgeometryprofile">164. AttackGeometryProfile</h3><p>可以描述：</p>
 <ul>
 <li><p>Arc；</p>
 </li>
@@ -2320,13 +2320,13 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="165-核心范式四十二战场破坏对象应该改变军团路径或战术而不是纯装饰">165. 核心范式四十二：战场破坏对象应该改变军团路径或战术，而不是纯装饰</h2><p>例如：</p>
+<h3 id="165-核心范式四十二战场破坏对象应该改变军团路径或战术而不是纯装饰">165. 核心范式四十二：战场破坏对象应该改变军团路径或战术，而不是纯装饰</h3><p>例如：</p>
 <p>投石车。</p>
 <p>桥。</p>
 <p>Gate。</p>
 <p>攻城塔。</p>
 <hr />
-<h2 id="166-玩家摧毁">166. 玩家摧毁：</h2><p>Enemy Ballista。</p>
+<h3 id="166-玩家摧毁">166. 玩家摧毁：</h3><p>Enemy Ballista。</p>
 <p>影响：</p>
 <p>附近友军：</p>
 <p>Remote Casualty Rate降低。</p>
@@ -2334,7 +2334,7 @@ Ordinary Kill。</p>
 <p>环境目标</p>
 <p>具有真正战场价值。</p>
 <hr />
-<h2 id="167-核心范式四十三battle-script和world-simulation发生冲突时world-truth优先">167. 核心范式四十三：Battle Script和World Simulation发生冲突时，World Truth优先</h2><p>Event计划：</p>
+<h3 id="167-核心范式四十三battle-script和world-simulation发生冲突时world-truth优先">167. 核心范式四十三：Battle Script和World Simulation发生冲突时，World Truth优先</h3><p>Event计划：</p>
 <p>敌将A在中央伏击。</p>
 <p>但玩家已经：</p>
 <p>提前击败A。</p>
@@ -2342,14 +2342,14 @@ Ordinary Kill。</p>
 <p>为了剧情</p>
 <p>重新生成A。</p>
 <hr />
-<h2 id="168-event必须重新验证">168. Event必须重新验证：</h2><p>Preconditions。</p>
+<h3 id="168-event必须重新验证">168. Event必须重新验证：</h3><p>Preconditions。</p>
 <p>无效：</p>
 <p>Obsolete</p>
 <p>或：</p>
 <p>选择替代Officer。</p>
 <hr />
-<h2 id="169-这是保持战场可信度的基本原则">169. 这是保持战场可信度的基本原则。</h2><hr />
-<h2 id="170-核心范式四十四玩家自由不能无限破坏战役结构因此需要-guard-condition">170. 核心范式四十四：玩家自由不能无限破坏战役结构，因此需要 Guard Condition</h2><p>完全反应式Battle很昂贵。</p>
+<h3 id="169-这是保持战场可信度的基本原则">169. 这是保持战场可信度的基本原则。</h3><hr />
+<h3 id="170-核心范式四十四玩家自由不能无限破坏战役结构因此需要-guard-condition">170. 核心范式四十四：玩家自由不能无限破坏战役结构，因此需要 Guard Condition</h3><p>完全反应式Battle很昂贵。</p>
 <p>可以：</p>
 <p>对关键Boss：</p>
 <p>暂时不可进入。</p>
@@ -2361,14 +2361,14 @@ Ordinary Kill。</p>
 <p>空间和Battlefield Graph</p>
 <p>自然控制阶段。</p>
 <hr />
-<h2 id="171-stage-gate最好是世界对象">171. Stage Gate最好是世界对象</h2><p>Gate。</p>
+<h3 id="171-stage-gate最好是世界对象">171. Stage Gate最好是世界对象</h3><p>Gate。</p>
 <p>Bridge。</p>
 <p>Fog。</p>
 <p>Army Wall。</p>
 <p>而不是：</p>
 <p>Invisible Wall。</p>
 <hr />
-<h2 id="172-核心范式四十五合作模式需要把两个战力尖峰重新纳入战场预算">172. 核心范式四十五：合作模式需要把“两个战力尖峰”重新纳入战场预算</h2><p>双人合作：</p>
+<h3 id="172-核心范式四十五合作模式需要把两个战力尖峰重新纳入战场预算">172. 核心范式四十五：合作模式需要把“两个战力尖峰”重新纳入战场预算</h3><p>双人合作：</p>
 <p>玩家可以：</p>
 <p>一人东线。</p>
 <p>一人西线。</p>
@@ -2376,7 +2376,7 @@ Ordinary Kill。</p>
 <p>救援压力</p>
 <p>可能全部失效。</p>
 <hr />
-<h2 id="173-coopbattlecontext">173. CoopBattleContext</h2><p>可以调整：</p>
+<h3 id="173-coopbattlecontext">173. CoopBattleContext</h3><p>可以调整：</p>
 <ul>
 <li><p>Enemy Officer Count；</p>
 </li>
@@ -2390,20 +2390,20 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="174-不建议简单">174. 不建议简单：</h2><p>敌人HP ×2。</p>
+<h3 id="174-不建议简单">174. 不建议简单：</h3><p>敌人HP ×2。</p>
 <p>应该增加：</p>
 <p><strong>并发战场问题数量。</strong></p>
 <hr />
-<h2 id="175-两名player可以存在">175. 两名Player可以存在：</h2><p>不同Active Simulation Center。</p>
+<h3 id="175-两名player可以存在">175. 两名Player可以存在：</h3><p>不同Active Simulation Center。</p>
 <p>这会直接影响：</p>
 <p>Crowd Materialization。</p>
 <hr />
-<h2 id="176-simulation-bubble需要支持多个玩家中心">176. Simulation Bubble需要支持多个玩家中心</h2><p>Formation可能：</p>
+<h3 id="176-simulation-bubble需要支持多个玩家中心">176. Simulation Bubble需要支持多个玩家中心</h3><p>Formation可能：</p>
 <p>同时被两个Bubble覆盖。</p>
 <p>必须：</p>
 <p>只Materialize一次。</p>
 <hr />
-<h2 id="177-核心范式四十六多player-simulation-lod比单人更复杂">177. 核心范式四十六：多Player Simulation LOD比单人更复杂</h2><p>Entity Tier取：</p>
+<h3 id="177-核心范式四十六多player-simulation-lod比单人更复杂">177. 核心范式四十六：多Player Simulation LOD比单人更复杂</h3><p>Entity Tier取：</p>
 <p>对所有Player：</p>
 <p>最高需要精度。</p>
 <p>例如：</p>
@@ -2412,14 +2412,14 @@ Ordinary Kill。</p>
 <p>则：</p>
 <p>Active。</p>
 <hr />
-<h2 id="178-核心范式四十七战场事件presentation不能阻塞实时战争">178. 核心范式四十七：战场事件Presentation不能阻塞实时战争</h2><p>“敌方援军出现！”</p>
+<h3 id="178-核心范式四十七战场事件presentation不能阻塞实时战争">178. 核心范式四十七：战场事件Presentation不能阻塞实时战争</h3><p>“敌方援军出现！”</p>
 <p>如果播放：</p>
 <p>5秒不可跳过Cutscene。</p>
 <p>与此同时：</p>
 <p>玩家被攻击。</p>
 <p>体验很差。</p>
 <hr />
-<h2 id="179-battle-event反馈优先">179. Battle Event反馈优先：</h2><ul>
+<h3 id="179-battle-event反馈优先">179. Battle Event反馈优先：</h3><ul>
 <li><p>Banner；</p>
 </li>
 <li><p>Voice；</p>
@@ -2433,17 +2433,17 @@ Ordinary Kill。</p>
 <p>使用：</p>
 <p>安全Cutscene。</p>
 <hr />
-<h2 id="180-cutscene期间是否暂停">180. Cutscene期间是否暂停：</h2><p>必须明确。</p>
+<h3 id="180-cutscene期间是否暂停">180. Cutscene期间是否暂停：</h3><p>必须明确。</p>
 <p>不要：</p>
 <p>表现层暂停Player</p>
 <p>但Remote War继续。</p>
 <hr />
-<h2 id="181-核心范式四十八battle-clock与action-simulation需要明确">181. 核心范式四十八：Battle Clock与Action Simulation需要明确</h2><p>有些关卡：</p>
+<h3 id="181-核心范式四十八battle-clock与action-simulation需要明确">181. 核心范式四十八：Battle Clock与Action Simulation需要明确</h3><p>有些关卡：</p>
 <p>30分钟限制。</p>
 <p>Battle Clock属于：</p>
 <p>规则时间。</p>
 <hr />
-<h2 id="182-battleclockstate">182. BattleClockState</h2><p>建议包含：</p>
+<h3 id="182-battleclockstate">182. BattleClockState</h3><p>建议包含：</p>
 <ul>
 <li><p>ElapsedBattleTime；</p>
 </li>
@@ -2457,9 +2457,9 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="183-cutscene是否计时">183. Cutscene是否计时：</h2><p>按规则定义。</p>
+<h3 id="183-cutscene是否计时">183. Cutscene是否计时：</h3><p>按规则定义。</p>
 <hr />
-<h2 id="184-核心范式四十九战场事件最好通过事实变化形成因果链">184. 核心范式四十九：战场事件最好通过“事实变化”形成因果链</h2><p>例如：</p>
+<h3 id="184-核心范式四十九战场事件最好通过事实变化形成因果链">184. 核心范式四十九：战场事件最好通过“事实变化”形成因果链</h3><p>例如：</p>
 <p>WestBase Captured<br />
 → WestGate Opened<br />
 → Allied Formation Route Updated<br />
@@ -2469,11 +2469,11 @@ Ordinary Kill。</p>
 <p>固定Timer串联</p>
 <p>更加稳健。</p>
 <hr />
-<h2 id="185-完整事件与执行流程示例">185. 完整事件与执行流程示例</h2><p>以下以：</p>
+<h3 id="185-完整事件与执行流程示例">185. 完整事件与执行流程示例</h3><p>以下以：</p>
 <p><strong>玩家在中央推进时收到东翼友军求援，选择绕路救援并因此改变敌方主将撤退路线，最终形成不同决战结构</strong></p>
 <p>为例。</p>
 <hr />
-<h3 id="1851-初始battle">185.1 初始Battle</h3><p>地图有：</p>
+<h4 id="1851-初始battle">185.1 初始Battle</h4><p>地图有：</p>
 <ul>
 <li><p>Allied Main Camp；</p>
 </li>
@@ -2487,7 +2487,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h3 id="1852-初始军团">185.2 初始军团</h3><p>Allied East Formation：</p>
+<h4 id="1852-初始军团">185.2 初始军团</h4><p>Allied East Formation：</p>
 <p>Strength 700。</p>
 <p>Enemy East Formation：</p>
 <p>Strength 900。</p>
@@ -2496,10 +2496,10 @@ Ordinary Kill。</p>
 <p>Enemy Central：</p>
 <p>Strength 850。</p>
 <hr />
-<h3 id="1853-玩家从中央出发">185.3 玩家从中央出发</h3><p>目标：</p>
+<h4 id="1853-玩家从中央出发">185.3 玩家从中央出发</h4><p>目标：</p>
 <p>攻占Central Gate前的两座据点。</p>
 <hr />
-<h3 id="1854-player接近central-formation">185.4 Player接近Central Formation</h3><p>Remote Enemy Formation：</p>
+<h4 id="1854-player接近central-formation">185.4 Player接近Central Formation</h4><p>Remote Enemy Formation：</p>
 <p>从Tier 3</p>
 <p>逐渐进入：</p>
 <p>Tier 1。</p>
@@ -2508,39 +2508,39 @@ Ordinary Kill。</p>
 <p>和：</p>
 <p>一名Enemy Officer。</p>
 <hr />
-<h3 id="1855-玩家开始战斗">185.5 玩家开始战斗</h3><p>大范围Combo：</p>
+<h4 id="1855-玩家开始战斗">185.5 玩家开始战斗</h4><p>大范围Combo：</p>
 <p>一次命中：</p>
 <p>18名普通兵。</p>
 <hr />
-<h3 id="1856-hit-system">185.6 Hit System</h3><p>Collect Hits。</p>
+<h4 id="1856-hit-system">185.6 Hit System</h4><p>Collect Hits。</p>
 <p>批量Resolve。</p>
 <p>普通兵：</p>
 <p>Launch。</p>
 <p>Enemy Officer：</p>
 <p>Poise Damage。</p>
 <hr />
-<h3 id="1857-hit-stop">185.7 Hit Stop</h3><p>因为命中了Officer：</p>
+<h4 id="1857-hit-stop">185.7 Hit Stop</h4><p>因为命中了Officer：</p>
 <p>使用：</p>
 <p>Officer级Hit Stop。</p>
 <p>不会：</p>
 <p>因为同时18个Soldier</p>
 <p>叠加18次。</p>
 <hr />
-<h3 id="1858-玩家击败central-officer">185.8 玩家击败Central Officer</h3><p>Formation Morale：</p>
+<h4 id="1858-玩家击败central-officer">185.8 玩家击败Central Officer</h4><p>Formation Morale：</p>
 <p>下降。</p>
 <hr />
-<h3 id="1859-enemy-central-formation进入retreat-check">185.9 Enemy Central Formation进入Retreat Check</h3><p>结果：</p>
+<h4 id="1859-enemy-central-formation进入retreat-check">185.9 Enemy Central Formation进入Retreat Check</h4><p>结果：</p>
 <p>部分士兵溃退。</p>
 <hr />
-<h3 id="18510-我方central-formation开始推进">185.10 我方Central Formation开始推进</h3><p>Battle Map：</p>
+<h4 id="18510-我方central-formation开始推进">185.10 我方Central Formation开始推进</h4><p>Battle Map：</p>
 <p>中央颜色变化。</p>
 <hr />
-<h3 id="18511-同时远端east-battle持续">185.11 同时远端East Battle持续</h3><p>East Ally Strength：</p>
+<h4 id="18511-同时远端east-battle持续">185.11 同时远端East Battle持续</h4><p>East Ally Strength：</p>
 <p>700 → 580。</p>
 <p>Enemy：</p>
 <p>900 → 810。</p>
 <hr />
-<h3 id="18512-east-commander进入danger-threshold">185.12 East Commander进入Danger Threshold</h3><p>Battle Director发现：</p>
+<h4 id="18512-east-commander进入danger-threshold">185.12 East Commander进入Danger Threshold</h4><p>Battle Director发现：</p>
 <ul>
 <li><p>Ally Officer Alive；</p>
 </li>
@@ -2552,79 +2552,79 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h3 id="18513-触发救援事件">185.13 触发救援事件</h3><p>消息：</p>
+<h4 id="18513-触发救援事件">185.13 触发救援事件</h4><p>消息：</p>
 <p>“东军苦战！赵将军陷入危机！”</p>
 <p>地图：</p>
 <p>East Camp闪烁。</p>
 <hr />
-<h3 id="18514-intervention-window">185.14 Intervention Window</h3><p>根据：</p>
+<h4 id="18514-intervention-window">185.14 Intervention Window</h4><p>根据：</p>
 <p>East Strength</p>
 <p>计算：</p>
 <p>约85秒。</p>
 <p>不是：</p>
 <p>固定20秒剧情杀。</p>
 <hr />
-<h3 id="18515-玩家此时可以继续central-main-objective">185.15 玩家此时可以继续Central Main Objective</h3><p>但风险：</p>
+<h4 id="18515-玩家此时可以继续central-main-objective">185.15 玩家此时可以继续Central Main Objective</h4><p>但风险：</p>
 <p>East Officer可能阵亡。</p>
 <hr />
-<h3 id="18516-玩家选择救援">185.16 玩家选择救援</h3><p>使用Mount</p>
+<h4 id="18516-玩家选择救援">185.16 玩家选择救援</h4><p>使用Mount</p>
 <p>沿：</p>
 <p>Central → East Connector</p>
 <p>移动。</p>
 <hr />
-<h3 id="18517-玩家远离central">185.17 玩家远离Central</h3><p>Central Crowd逐步Dematerialize。</p>
+<h4 id="18517-玩家远离central">185.17 玩家远离Central</h4><p>Central Crowd逐步Dematerialize。</p>
 <p>剩余士兵状态：</p>
 <p>重新聚合到Formation。</p>
 <hr />
-<h3 id="18518-central战争没有停止">185.18 Central战争没有停止</h3><p>我方因为刚才玩家击败Officer：</p>
+<h4 id="18518-central战争没有停止">185.18 Central战争没有停止</h4><p>我方因为刚才玩家击败Officer：</p>
 <p>当前优势。</p>
 <p>Formation继续：</p>
 <p>低频推进。</p>
 <hr />
-<h3 id="18519-玩家进入east-zone">185.19 玩家进入East Zone</h3><p>East Formation从Remote Aggregate：</p>
+<h4 id="18519-玩家进入east-zone">185.19 玩家进入East Zone</h4><p>East Formation从Remote Aggregate：</p>
 <p>Materialize。</p>
 <p>玩家看到：</p>
 <p>友军被包围。</p>
 <hr />
-<h3 id="18520-enemy普通兵数量很大">185.20 Enemy普通兵数量很大</h3><p>玩家使用Ultimate。</p>
+<h4 id="18520-enemy普通兵数量很大">185.20 Enemy普通兵数量很大</h4><p>玩家使用Ultimate。</p>
 <hr />
-<h3 id="18521-ultimate">185.21 Ultimate</h3><p>清空：</p>
+<h4 id="18521-ultimate">185.21 Ultimate</h4><p>清空：</p>
 <p>大量Active Crowd。</p>
 <p>Enemy Formation Strength显著下降。</p>
 <hr />
-<h3 id="18522-玩家击败east-enemy-officer">185.22 玩家击败East Enemy Officer</h3><p>Enemy East Morale：</p>
+<h4 id="18522-玩家击败east-enemy-officer">185.22 玩家击败East Enemy Officer</h4><p>Enemy East Morale：</p>
 <p>崩溃。</p>
 <p>Formation：</p>
 <p>Routed。</p>
 <hr />
-<h3 id="18523-east-commander获救">185.23 East Commander获救</h3><p>Objective Success。</p>
+<h4 id="18523-east-commander获救">185.23 East Commander获救</h4><p>Objective Success。</p>
 <hr />
-<h3 id="18524-宏观后果">185.24 宏观后果</h3><p>East Camp保留。</p>
+<h4 id="18524-宏观后果">185.24 宏观后果</h4><p>East Camp保留。</p>
 <p>Allied Officer继续存活。</p>
 <p>East Formation收到：</p>
 <p>Advance Order。</p>
 <hr />
-<h3 id="18525-east-formation随后从侧翼推进">185.25 East Formation随后从侧翼推进</h3><p>它不是：</p>
+<h4 id="18525-east-formation随后从侧翼推进">185.25 East Formation随后从侧翼推进</h4><p>它不是：</p>
 <p>救完以后站在原地当摆设。</p>
 <hr />
-<h3 id="18526-allied-east-formation攻下">185.26 Allied East Formation攻下：</h3><p>East Gate。</p>
+<h4 id="18526-allied-east-formation攻下">185.26 Allied East Formation攻下：</h4><p>East Gate。</p>
 <hr />
-<h3 id="18527-east-gate改变battlefieldgraph">185.27 East Gate改变BattlefieldGraph</h3><p>打开：</p>
+<h4 id="18527-east-gate改变battlefieldgraph">185.27 East Gate改变BattlefieldGraph</h4><p>打开：</p>
 <p>通向Enemy Rear Route。</p>
 <hr />
-<h3 id="18528-enemy-commander-ai-battle-event重新评估">185.28 Enemy Commander AI / Battle Event重新评估</h3><p>原本设计：</p>
+<h4 id="18528-enemy-commander-ai-battle-event重新评估">185.28 Enemy Commander AI / Battle Event重新评估</h4><p>原本设计：</p>
 <p>中央失败以后：</p>
 <p>从East Route撤退。</p>
 <p>但：</p>
 <p>East Route现在被玩家救下的友军控制。</p>
 <hr />
-<h3 id="18529-原定retreat-event不再合法">185.29 原定Retreat Event不再合法</h3><p>Battle Director选择：</p>
+<h4 id="18529-原定retreat-event不再合法">185.29 原定Retreat Event不再合法</h4><p>Battle Director选择：</p>
 <p>Fallback Route：</p>
 <p>West Gate。</p>
 <hr />
-<h3 id="18530-新objective">185.30 新Objective</h3><p>“阻止敌方总大将从西门撤退。”</p>
+<h4 id="18530-新objective">185.30 新Objective</h4><p>“阻止敌方总大将从西门撤退。”</p>
 <hr />
-<h3 id="18531-如果玩家之前没有救east">185.31 如果玩家之前没有救East</h3><p>则：</p>
+<h4 id="18531-如果玩家之前没有救east">185.31 如果玩家之前没有救East</h4><p>则：</p>
 <p>East Officer死亡。</p>
 <p>East Camp失守。</p>
 <p>Enemy Commander最终可以：</p>
@@ -2632,24 +2632,24 @@ Ordinary Kill。</p>
 <p>形成：</p>
 <p>完全不同的决战地点。</p>
 <hr />
-<h3 id="18532-玩家赶往west">185.32 玩家赶往West</h3><p>与此同时：</p>
+<h4 id="18532-玩家赶往west">185.32 玩家赶往West</h4><p>与此同时：</p>
 <p>Allied East Formation继续：</p>
 <p>从后方夹击Enemy Main Camp。</p>
 <hr />
-<h3 id="18533-最终boss受到">185.33 最终Boss受到：</h3><p>Morale Debuff</p>
+<h4 id="18533-最终boss受到">185.33 最终Boss受到：</h4><p>Morale Debuff</p>
 <p>和：</p>
 <p>Reinforcement Reduction。</p>
 <p>原因：</p>
 <p>玩家此前救援成功。</p>
 <hr />
-<h3 id="18534-决战开始">185.34 决战开始</h3><p>普通兵：</p>
+<h4 id="18534-决战开始">185.34 决战开始</h4><p>普通兵：</p>
 <p>作为外围压力。</p>
 <p>Boss：</p>
 <p>完整Officer Combat。</p>
 <hr />
-<h3 id="18535-玩家击败enemy-commander">185.35 玩家击败Enemy Commander</h3><p>Battle Win。</p>
+<h4 id="18535-玩家击败enemy-commander">185.35 玩家击败Enemy Commander</h4><p>Battle Win。</p>
 <hr />
-<h3 id="18536-战后评价">185.36 战后评价</h3><p>除了：</p>
+<h4 id="18536-战后评价">185.36 战后评价</h4><p>除了：</p>
 <p>KO、Time，</p>
 <p>还记录：</p>
 <ul>
@@ -2663,7 +2663,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h3 id="18537-整条因果链">185.37 整条因果链</h3><p>中央斩将<br />
+<h4 id="18537-整条因果链">185.37 整条因果链</h4><p>中央斩将<br />
 → 我方中央推进<br />
 → 东翼仍然独立苦战<br />
 → Battle Director产生救援窗口<br />
@@ -2684,7 +2684,7 @@ Ordinary Kill。</p>
 <p><strong>玩家不是在清一条固定怪物走廊，而是在用个人动作能力持续“修改战争图”。</strong></p>
 </blockquote>
 <hr />
-<h2 id="186-模块通信设计">186. 模块通信设计</h2><h3 id="1861-高频-input">186.1 高频 Input</h3><p>包括：</p>
+<h3 id="186-模块通信设计">186. 模块通信设计</h3><h4 id="1861-高频-input">186.1 高频 Input</h4><p>包括：</p>
 <ul>
 <li><p>Move；</p>
 </li>
@@ -2710,7 +2710,7 @@ Ordinary Kill。</p>
 <p>进入：</p>
 <p>Hero Action Pipeline。</p>
 <hr />
-<h2 id="187-commands">187. Commands</h2><p>低频战略命令可包括：</p>
+<h3 id="187-commands">187. Commands</h3><p>低频战略命令可包括：</p>
 <ul>
 <li><p>Mount；</p>
 </li>
@@ -2725,7 +2725,7 @@ Ordinary Kill。</p>
 </ul>
 <p>是否开放取决于产品。</p>
 <hr />
-<h2 id="188-queries">188. Queries</h2><p>适用于：</p>
+<h3 id="188-queries">188. Queries</h3><p>适用于：</p>
 <ul>
 <li><p>当前Zone控制权；</p>
 </li>
@@ -2757,7 +2757,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="189-domain-events">189. Domain Events</h2><p>包括：</p>
+<h3 id="189-domain-events">189. Domain Events</h3><p>包括：</p>
 <ul>
 <li><p>SoldierDefeated；</p>
 </li>
@@ -2801,7 +2801,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="190-presentation-events">190. Presentation Events</h2><p>包括：</p>
+<h3 id="190-presentation-events">190. Presentation Events</h3><p>包括：</p>
 <ul>
 <li><p>ShowOfficerDefeatBanner；</p>
 </li>
@@ -2832,7 +2832,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="191-推荐状态所有权">191. 推荐状态所有权</h2><p><strong>BattleSessionSystem</strong></p>
+<h3 id="191-推荐状态所有权">191. 推荐状态所有权</h3><p><strong>BattleSessionSystem</strong></p>
 <p>拥有Battle生命周期。</p>
 <p><strong>BattlefieldSystem</strong></p>
 <p>拥有Zone、Route和Strategic Object。</p>
@@ -2857,7 +2857,7 @@ Ordinary Kill。</p>
 <p><strong>Spawn / MaterializationSystem</strong></p>
 <p>负责聚合状态和实体表示转换。</p>
 <hr />
-<h2 id="192-模块边界原则">192. 模块边界原则</h2><p>Hero Combat：</p>
+<h3 id="192-模块边界原则">192. 模块边界原则</h3><p>Hero Combat：</p>
 <p>可以发布：</p>
 <p><code>OfficerDefeated</code>。</p>
 <p>不能：</p>
@@ -2868,15 +2868,15 @@ Ordinary Kill。</p>
 <p>决定：</p>
 <p>是否Capture。</p>
 <hr />
-<h2 id="193-同样">193. 同样：</h2><p>Battle Director可以：</p>
+<h3 id="193-同样">193. 同样：</h3><p>Battle Director可以：</p>
 <p>命令：</p>
 <p><code>Spawn Reinforcement Formation</code></p>
 <p>但不能：</p>
 <p>直接创建300个Scene Enemy。</p>
 <p>Formation / Materialization负责实体层。</p>
 <hr />
-<h2 id="194-失败隔离">194. 失败隔离</h2><hr />
-<h3 id="1941-formation兵力变成负数">194.1 Formation兵力变成负数</h3><p>所有Casualty Mutation：</p>
+<h3 id="194-失败隔离">194. 失败隔离</h3><hr />
+<h4 id="1941-formation兵力变成负数">194.1 Formation兵力变成负数</h4><p>所有Casualty Mutation：</p>
 <p>Clamp。</p>
 <p>同时：</p>
 <p>FormationIntegrityError。</p>
@@ -2884,7 +2884,7 @@ Ordinary Kill。</p>
 <p>Strength = -42</p>
 <p>继续传播。</p>
 <hr />
-<h2 id="195-soldier-entity失去parent-formation">195. Soldier Entity失去Parent Formation</h2><p>尝试：</p>
+<h3 id="195-soldier-entity失去parent-formation">195. Soldier Entity失去Parent Formation</h3><p>尝试：</p>
 <p>根据Spawn Context恢复。</p>
 <p>无法恢复：</p>
 <p>转为：</p>
@@ -2893,7 +2893,7 @@ Ordinary Kill。</p>
 <p>不能影响：</p>
 <p>整个Battle。</p>
 <hr />
-<h2 id="196-materialization重复">196. Materialization重复</h2><p>同一个Formation：</p>
+<h3 id="196-materialization重复">196. Materialization重复</h3><p>同一个Formation：</p>
 <p>已经Active。</p>
 <p>另一个触发再次Materialize。</p>
 <p>使用：</p>
@@ -2901,19 +2901,19 @@ Ordinary Kill。</p>
 <p>保证：</p>
 <p>一个Formation只有一份Local Representation。</p>
 <hr />
-<h2 id="197-officer被重复生成">197. Officer被重复生成</h2><p>OfficerId必须全Battle唯一。</p>
+<h3 id="197-officer被重复生成">197. Officer被重复生成</h3><p>OfficerId必须全Battle唯一。</p>
 <p>Spawn系统发现：</p>
 <p>Already Active / Defeated</p>
 <p>则拒绝。</p>
 <hr />
-<h2 id="198-officer已经死亡但event要求出场">198. Officer已经死亡但Event要求出场</h2><p>Battle Event重新验证。</p>
+<h3 id="198-officer已经死亡但event要求出场">198. Officer已经死亡但Event要求出场</h3><p>Battle Event重新验证。</p>
 <p>转：</p>
 <p>Obsolete</p>
 <p>或Fallback。</p>
 <p>绝不：</p>
 <p>复活同一Officer。</p>
 <hr />
-<h2 id="199-base-capture卡死">199. Base Capture卡死</h2><p>例如：</p>
+<h3 id="199-base-capture卡死">199. Base Capture卡死</h3><p>例如：</p>
 <p>DefenseOfficer已经死亡。</p>
 <p>但：</p>
 <p>DefenseStrength因一个失联Entity始终&gt;0。</p>
@@ -2923,14 +2923,14 @@ Ordinary Kill。</p>
 <p>不要依赖：</p>
 <p>Scene里还有没有Collider。</p>
 <hr />
-<h2 id="200-gate打开动画失败">200. Gate打开动画失败</h2><p>Battlefield Route状态：</p>
+<h3 id="200-gate打开动画失败">200. Gate打开动画失败</h3><p>Battlefield Route状态：</p>
 <p>仍然Open。</p>
 <p>Physics Collision需要：</p>
 <p>同步关闭。</p>
 <p>动画只是：</p>
 <p>Presentation。</p>
 <hr />
-<h2 id="201-route断裂">201. Route断裂</h2><p>Formation当前TargetZone：</p>
+<h3 id="201-route断裂">201. Route断裂</h3><p>Formation当前TargetZone：</p>
 <p>不可达。</p>
 <p>Strategic Navigation重新规划。</p>
 <p>失败：</p>
@@ -2939,7 +2939,7 @@ Ordinary Kill。</p>
 <p>不能：</p>
 <p>Teleport穿门。</p>
 <hr />
-<h2 id="202-remote-formation计算异常">202. Remote Formation计算异常</h2><p>某战略Tick：</p>
+<h3 id="202-remote-formation计算异常">202. Remote Formation计算异常</h3><p>某战略Tick：</p>
 <p>Damage NaN。</p>
 <p>保留：</p>
 <p>上一合法Strength。</p>
@@ -2947,7 +2947,7 @@ Ordinary Kill。</p>
 <p>RemoteCombatIntegrityError。</p>
 <p>当前其他Battle继续。</p>
 <hr />
-<h2 id="203-battle-event循环">203. Battle Event循环</h2><p>Event A完成：</p>
+<h3 id="203-battle-event循环">203. Battle Event循环</h3><p>Event A完成：</p>
 <p>触发B。</p>
 <p>B：</p>
 <p>又让A重新Eligible。</p>
@@ -2956,17 +2956,17 @@ Ordinary Kill。</p>
 <p>和：</p>
 <p>Event Generation。</p>
 <hr />
-<h2 id="204-objective重复完成">204. Objective重复完成</h2><p>ObjectiveId + BattleId：</p>
+<h3 id="204-objective重复完成">204. Objective重复完成</h3><p>ObjectiveId + BattleId：</p>
 <p>幂等。</p>
 <p>奖励只发一次。</p>
 <hr />
-<h2 id="205-officer-defeat-event重复">205. Officer Defeat Event重复</h2><p>死亡动画、Ragdoll、清除</p>
+<h3 id="205-officer-defeat-event重复">205. Officer Defeat Event重复</h3><p>死亡动画、Ragdoll、清除</p>
 <p>可能分别发事件。</p>
 <p>真正Defeat由：</p>
 <p>OfficerLifeState</p>
 <p>单次提交。</p>
 <hr />
-<h2 id="206-hit-fan-out过载">206. Hit Fan-out过载</h2><p>一次攻击命中：</p>
+<h3 id="206-hit-fan-out过载">206. Hit Fan-out过载</h3><p>一次攻击命中：</p>
 <p>100目标。</p>
 <p>超过：</p>
 <p>Reaction Budget。</p>
@@ -2975,9 +2975,9 @@ Ordinary Kill。</p>
 <p>低优先级Visual Reaction：</p>
 <p>降级。</p>
 <hr />
-<h2 id="207-这是重要原则">207. 这是重要原则：</h2><p><strong>Gameplay Truth优先，表现复杂度可降级。</strong></p>
+<h3 id="207-这是重要原则">207. 这是重要原则：</h3><p><strong>Gameplay Truth优先，表现复杂度可降级。</strong></p>
 <hr />
-<h2 id="208-crowd-nav卡死">208. Crowd Nav卡死</h2><p>士兵长时间无进度。</p>
+<h3 id="208-crowd-nav卡死">208. Crowd Nav卡死</h3><p>士兵长时间无进度。</p>
 <p>先：</p>
 <p>重新加入Flow Field。</p>
 <p>仍失败：</p>
@@ -2987,21 +2987,21 @@ Ordinary Kill。</p>
 <p>普通兵不能：</p>
 <p>永久占CPU。</p>
 <hr />
-<h2 id="209-player附近不能直接dematerialize卡死士兵">209. Player附近不能直接Dematerialize卡死士兵</h2><p>否则：</p>
+<h3 id="209-player附近不能直接dematerialize卡死士兵">209. Player附近不能直接Dematerialize卡死士兵</h3><p>否则：</p>
 <p>玩家看到敌人突然消失。</p>
 <p>需要：</p>
 <p>Visibility / Distance条件。</p>
 <hr />
-<h2 id="210-multiplay两个player同时激活formation">210. Multiplay两个Player同时激活Formation</h2><p>只提升：</p>
+<h3 id="210-multiplay两个player同时激活formation">210. Multiplay两个Player同时激活Formation</h3><p>只提升：</p>
 <p>同一Representation Tier。</p>
 <p>不生成两份。</p>
 <hr />
-<h2 id="211-battle结束但远端事件仍在队列">211. Battle结束但远端事件仍在队列</h2><p>BattleSession进入Completed：</p>
+<h3 id="211-battle结束但远端事件仍在队列">211. Battle结束但远端事件仍在队列</h3><p>BattleSession进入Completed：</p>
 <p>取消：</p>
 <p>所有非PostBattle Events。</p>
 <hr />
-<h2 id="212-debug与可观测性">212. Debug与可观测性</h2><hr />
-<h3 id="2121-battlefield-graph-viewer">212.1 Battlefield Graph Viewer</h3><p>显示：</p>
+<h3 id="212-debug与可观测性">212. Debug与可观测性</h3><hr />
+<h4 id="2121-battlefield-graph-viewer">212.1 Battlefield Graph Viewer</h4><p>显示：</p>
 <ul>
 <li><p>Zone；</p>
 </li>
@@ -3017,13 +3017,13 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="213-front-pressure-overlay">213. Front Pressure Overlay</h2><p>每个连接边：</p>
+<h3 id="213-front-pressure-overlay">213. Front Pressure Overlay</h3><p>每个连接边：</p>
 <p>显示：</p>
 <p>Ally Pressure</p>
 <p>vs</p>
 <p>Enemy Pressure。</p>
 <hr />
-<h2 id="214-formation-inspector">214. Formation Inspector</h2><p>显示：</p>
+<h3 id="214-formation-inspector">214. Formation Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Strength；</p>
 </li>
@@ -3043,12 +3043,12 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="215-simulation-lod-overlay">215. Simulation LOD Overlay</h2><p>所有对象：</p>
+<h3 id="215-simulation-lod-overlay">215. Simulation LOD Overlay</h3><p>所有对象：</p>
 <p>按Tier着色。</p>
 <p>可以快速发现：</p>
 <p>远处500名士兵为什么仍然Active。</p>
 <hr />
-<h2 id="216-materialization-trace">216. Materialization Trace</h2><p>Formation 17：</p>
+<h3 id="216-materialization-trace">216. Materialization Trace</h3><p>Formation 17：</p>
 <p>Remote Strength 800。</p>
 <p>进入Bubble。</p>
 <p>生成：</p>
@@ -3056,16 +3056,16 @@ Ordinary Kill。</p>
 <p>为什么64。</p>
 <p>Composition是什么。</p>
 <hr />
-<h2 id="217-dematerialization-trace">217. Dematerialization Trace</h2><p>离开Bubble：</p>
+<h3 id="217-dematerialization-trace">217. Dematerialization Trace</h3><p>离开Bubble：</p>
 <p>58 alive。</p>
 <p>聚合后Strength变多少。</p>
 <hr />
-<h2 id="218-ballance-conservation式-army-audit">218. Ballance Conservation式 Army Audit</h2><p>虽然不是严格实体守恒，</p>
+<h3 id="218-ballance-conservation式-army-audit">218. Ballance Conservation式 Army Audit</h3><p>虽然不是严格实体守恒，</p>
 <p>仍可以审计：</p>
 <p><code>Aggregate Strength ↔ Materialized Representation</code></p>
 <p>是否存在突然增长。</p>
 <hr />
-<h2 id="219-morale-breakdown">219. Morale Breakdown</h2><p>Enemy West Formation：</p>
+<h3 id="219-morale-breakdown">219. Morale Breakdown</h3><p>Enemy West Formation：</p>
 <p>Morale 34。</p>
 <p>来源：</p>
 <p>Base -10。</p>
@@ -3073,44 +3073,44 @@ Ordinary Kill。</p>
 <p>Nearby Ally +5。</p>
 <p>Outnumbered -12。</p>
 <hr />
-<h2 id="220-base-capture-debug">220. Base Capture Debug</h2><p>显示：</p>
+<h3 id="220-base-capture-debug">220. Base Capture Debug</h3><p>显示：</p>
 <p>当前：</p>
 <p>DefenseStrength。</p>
 <p>Captain Alive。</p>
 <p>Contested。</p>
 <p>Capture条件哪一项未满足。</p>
 <hr />
-<h2 id="221-battle-event-trace">221. Battle Event Trace</h2><p>某伏兵为何未触发：</p>
+<h3 id="221-battle-event-trace">221. Battle Event Trace</h3><p>某伏兵为何未触发：</p>
 <p>WestGateOpen ✅</p>
 <p>AmbushOfficerAlive ❌</p>
 <p>因此：</p>
 <p>Obsolete。</p>
 <hr />
-<h2 id="222-objective-trace">222. Objective Trace</h2><p>Rescue East Commander：</p>
+<h3 id="222-objective-trace">222. Objective Trace</h3><p>Rescue East Commander：</p>
 <p>Start Tick。</p>
 <p>Estimated Failure Tick。</p>
 <p>Player Fastest ETA。</p>
 <p>Current Pressure。</p>
 <hr />
-<h2 id="223-intervention-window-viewer">223. Intervention Window Viewer</h2><p>把：</p>
+<h3 id="223-intervention-window-viewer">223. Intervention Window Viewer</h3><p>把：</p>
 <p>动态任务时间</p>
 <p>与：</p>
 <p>玩家Travel Time</p>
 <p>并排显示。</p>
 <p>这是非常有价值的关卡工具。</p>
 <hr />
-<h2 id="224-crowd-density-heatmap">224. Crowd Density Heatmap</h2><p>显示：</p>
+<h3 id="224-crowd-density-heatmap">224. Crowd Density Heatmap</h3><p>显示：</p>
 <p>单位密度。</p>
 <p>帮助发现：</p>
 <p>某狭窄Gate堆500兵。</p>
 <hr />
-<h2 id="225-attack-token-inspector">225. Attack Token Inspector</h2><p>围绕Player：</p>
+<h3 id="225-attack-token-inspector">225. Attack Token Inspector</h3><p>围绕Player：</p>
 <p>哪些Soldier拥有：</p>
 <p>Active Attack Token。</p>
 <p>哪些只是：</p>
 <p>Threatening。</p>
 <hr />
-<h2 id="226-hit-fan-out-trace">226. Hit Fan-out Trace</h2><p>Attack 452：</p>
+<h3 id="226-hit-fan-out-trace">226. Hit Fan-out Trace</h3><p>Attack 452：</p>
 <p>Query 37 Targets。</p>
 <p>Valid 32。</p>
 <p>Officer 1。</p>
@@ -3119,7 +3119,7 @@ Ordinary Kill。</p>
 <p>Reaction LOD。</p>
 <p>HitStop。</p>
 <hr />
-<h2 id="227-reaction-budget-dashboard">227. Reaction Budget Dashboard</h2><p>每Frame：</p>
+<h3 id="227-reaction-budget-dashboard">227. Reaction Budget Dashboard</h3><p>每Frame：</p>
 <ul>
 <li><p>Launch；</p>
 </li>
@@ -3131,7 +3131,7 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="228-ai-cost-dashboard">228. AI Cost Dashboard</h2><p>按：</p>
+<h3 id="228-ai-cost-dashboard">228. AI Cost Dashboard</h3><p>按：</p>
 <p>Officer AI。</p>
 <p>Soldier AI。</p>
 <p>Navigation。</p>
@@ -3139,12 +3139,12 @@ Ordinary Kill。</p>
 <p>Remote Combat。</p>
 <p>统计。</p>
 <hr />
-<h2 id="229-ko-heatmap">229. KO Heatmap</h2><p>玩家：</p>
+<h3 id="229-ko-heatmap">229. KO Heatmap</h3><p>玩家：</p>
 <p>在哪些Zone刷兵最多。</p>
 <p>发现：</p>
 <p>无限刷点。</p>
 <hr />
-<h2 id="230-battle-timeline">230. Battle Timeline</h2><p>例如：</p>
+<h3 id="230-battle-timeline">230. Battle Timeline</h3><p>例如：</p>
 <p>00:00 Battle Start<br />
 02:10 Central Officer Defeated<br />
 03:00 East Rescue Trigger<br />
@@ -3152,7 +3152,7 @@ Ordinary Kill。</p>
 05:20 East Gate Captured<br />
 07:40 Enemy Commander Retreat。</p>
 <hr />
-<h2 id="231-causality-trace">231. Causality Trace</h2><p>选择：</p>
+<h3 id="231-causality-trace">231. Causality Trace</h3><p>选择：</p>
 <p>Enemy Commander为何改走West Gate。</p>
 <p>可以追：</p>
 <p>East Gate Captured<br />
@@ -3160,24 +3160,24 @@ Ordinary Kill。</p>
 ← East Commander Survived<br />
 ← Player Rescue Success。</p>
 <hr />
-<h2 id="232-officer-lifecycle-inspector">232. Officer Lifecycle Inspector</h2><p>Spawned<br />
+<h3 id="232-officer-lifecycle-inspector">232. Officer Lifecycle Inspector</h3><p>Spawned<br />
 → Engaged<br />
 → Retreating<br />
 → Returned<br />
 → Defeated。</p>
 <hr />
-<h2 id="233-remote-battle-replay">233. Remote Battle Replay</h2><p>只重放：</p>
+<h3 id="233-remote-battle-replay">233. Remote Battle Replay</h3><p>只重放：</p>
 <p>Formation级状态。</p>
 <p>用于：</p>
 <p>调试：</p>
 <p>“玩家没去那里时为什么友军崩了。”</p>
 <hr />
-<h2 id="234-performance-heatmap">234. Performance Heatmap</h2><p>显示：</p>
+<h3 id="234-performance-heatmap">234. Performance Heatmap</h3><p>显示：</p>
 <p>地图各区域：</p>
 <p>Active Entity Cost。</p>
 <hr />
-<h2 id="235-content-validation">235. Content Validation</h2><hr />
-<h3 id="2351-battlefield-graph-validation">235.1 Battlefield Graph Validation</h3><p>检查：</p>
+<h3 id="235-content-validation">235. Content Validation</h3><hr />
+<h4 id="2351-battlefield-graph-validation">235.1 Battlefield Graph Validation</h4><p>检查：</p>
 <ul>
 <li><p>孤立Zone；</p>
 </li>
@@ -3191,55 +3191,55 @@ Ordinary Kill。</p>
 </li>
 </ul>
 <hr />
-<h2 id="236-main-objective-reachability">236. Main Objective Reachability</h2><p>从：</p>
+<h3 id="236-main-objective-reachability">236. Main Objective Reachability</h3><p>从：</p>
 <p>Player Spawn</p>
 <p>到：</p>
 <p>最终目标</p>
 <p>必须存在：</p>
 <p>至少一条合法Battle Route。</p>
 <hr />
-<h2 id="237-dynamic-gate-validation">237. Dynamic Gate Validation</h2><p>如果所有路线都需要：</p>
+<h3 id="237-dynamic-gate-validation">237. Dynamic Gate Validation</h3><p>如果所有路线都需要：</p>
 <p>互相依赖的Gate。</p>
 <p>检测：</p>
 <p>Deadlock。</p>
 <hr />
-<h2 id="238-event-dependency-validation">238. Event Dependency Validation</h2><p>Battle Event之间：</p>
+<h3 id="238-event-dependency-validation">238. Event Dependency Validation</h3><p>Battle Event之间：</p>
 <p>建立：</p>
 <p>Dependency Graph。</p>
 <p>检查：</p>
 <p>不可达事件。</p>
 <hr />
-<h2 id="239-officer-uniqueness-test">239. Officer Uniqueness Test</h2><p>同一个Officer：</p>
+<h3 id="239-officer-uniqueness-test">239. Officer Uniqueness Test</h3><p>同一个Officer：</p>
 <p>不能同时由两个事件：</p>
 <p>Spawn。</p>
 <hr />
-<h2 id="240-objective-reachability-test">240. Objective Reachability Test</h2><p>对于Timed Objective：</p>
+<h3 id="240-objective-reachability-test">240. Objective Reachability Test</h3><p>对于Timed Objective：</p>
 <p><code>FastestTravelTime + RequiredCombatTime</code></p>
 <p>必须低于：</p>
 <p>FailureWindow</p>
 <p>加设计Margin。</p>
 <hr />
-<h2 id="241-rescue-simulation">241. Rescue Simulation</h2><p>模拟：</p>
+<h3 id="241-rescue-simulation">241. Rescue Simulation</h3><p>模拟：</p>
 <p>Player从各关键Zone出发。</p>
 <p>检查：</p>
 <p>是否理论可救。</p>
 <hr />
-<h2 id="242-formation-conservation-test">242. Formation Conservation Test</h2><p>Materialize / Fight / Dematerialize</p>
+<h3 id="242-formation-conservation-test">242. Formation Conservation Test</h3><p>Materialize / Fight / Dematerialize</p>
 <p>重复10000次。</p>
 <p>Strength不能：</p>
 <p>凭空增长。</p>
 <hr />
-<h2 id="243-base-capture-stress-test">243. Base Capture Stress Test</h2><p>多个Formation与Player同时攻击。</p>
+<h3 id="243-base-capture-stress-test">243. Base Capture Stress Test</h3><p>多个Formation与Player同时攻击。</p>
 <p>Capture只提交一次。</p>
 <hr />
-<h2 id="244-remote-combat-long-run">244. Remote Combat Long Run</h2><p>AI战场运行：</p>
+<h3 id="244-remote-combat-long-run">244. Remote Combat Long Run</h3><p>AI战场运行：</p>
 <p>30分钟。</p>
 <p>玩家不输入。</p>
 <p>检查：</p>
 <p>是否：</p>
 <p>所有Battle总是同一侧必胜。</p>
 <hr />
-<h2 id="245-battle-without-player-test">245. Battle Without Player Test</h2><p>非常重要。</p>
+<h3 id="245-battle-without-player-test">245. Battle Without Player Test</h3><p>非常重要。</p>
 <p>运行：</p>
 <p>完整Battle</p>
 <p>但Player不介入。</p>
@@ -3247,14 +3247,14 @@ Ordinary Kill。</p>
 <p>预期失败路径</p>
 <p>是否合理。</p>
 <hr />
-<h2 id="246-hero-intervention-test">246. Hero Intervention Test</h2><p>Player Bot分别介入：</p>
+<h3 id="246-hero-intervention-test">246. Hero Intervention Test</h3><p>Player Bot分别介入：</p>
 <p>East。</p>
 <p>West。</p>
 <p>Center。</p>
 <p>检查：</p>
 <p>是否真正产生不同战局。</p>
 <hr />
-<h2 id="247-crowd-density-test">247. Crowd Density Test</h2><p>逐渐提高：</p>
+<h3 id="247-crowd-density-test">247. Crowd Density Test</h3><p>逐渐提高：</p>
 <p>Active Soldier：</p>
 <p>100<br />
 300<br />
@@ -3263,7 +3263,7 @@ Ordinary Kill。</p>
 <p>测：</p>
 <p>CPU、GPU、Nav、Animation。</p>
 <hr />
-<h2 id="248-hit-stress-test">248. Hit Stress Test</h2><p>一次攻击：</p>
+<h3 id="248-hit-stress-test">248. Hit Stress Test</h3><p>一次攻击：</p>
 <p>1<br />
 10<br />
 50<br />
@@ -3272,21 +3272,21 @@ Ordinary Kill。</p>
 <p>确认：</p>
 <p>Damage和Reaction不会指数增长。</p>
 <hr />
-<h2 id="249-officer-crowd-test">249. Officer + Crowd Test</h2><p>Boss战周围：</p>
+<h3 id="249-officer-crowd-test">249. Officer + Crowd Test</h3><p>Boss战周围：</p>
 <p>200杂兵。</p>
 <p>验证：</p>
 <p>Camera、Telegraph、Attack Token和VFX可读性。</p>
 <hr />
-<h2 id="250-navigation-choke-test">250. Navigation Choke Test</h2><p>大量士兵通过：</p>
+<h3 id="250-navigation-choke-test">250. Navigation Choke Test</h3><p>大量士兵通过：</p>
 <p>窄Gate。</p>
 <p>检查：</p>
 <p>堵死、震荡、穿透。</p>
 <hr />
-<h2 id="251-formation-flow-test">251. Formation Flow Test</h2><p>100名士兵共同向同一Zone移动。</p>
+<h3 id="251-formation-flow-test">251. Formation Flow Test</h3><p>100名士兵共同向同一Zone移动。</p>
 <p>确认：</p>
 <p>不需要100次全图A*。</p>
 <hr />
-<h2 id="252-reinforcement-entry-test">252. Reinforcement Entry Test</h2><p>入口被敌军占领。</p>
+<h3 id="252-reinforcement-entry-test">252. Reinforcement Entry Test</h3><p>入口被敌军占领。</p>
 <p>援军：</p>
 <p>应：</p>
 <p>战斗</p>
@@ -3295,29 +3295,29 @@ Ordinary Kill。</p>
 <p>不能：</p>
 <p>直接穿过去。</p>
 <hr />
-<h2 id="253-battle-event-permutation-test">253. Battle Event Permutation Test</h2><p>玩家提前：</p>
+<h3 id="253-battle-event-permutation-test">253. Battle Event Permutation Test</h3><p>玩家提前：</p>
 <p>杀Officer。</p>
 <p>攻Base。</p>
 <p>开Gate。</p>
 <p>检查：</p>
 <p>后续Event是否正确Obsolete / Alternative。</p>
 <hr />
-<h2 id="254-coop-simulation-bubble-test">254. Coop Simulation Bubble Test</h2><p>两个Player：</p>
+<h3 id="254-coop-simulation-bubble-test">254. Coop Simulation Bubble Test</h3><p>两个Player：</p>
 <p>地图两端。</p>
 <p>检查：</p>
 <p>双Active Region性能。</p>
 <hr />
-<h2 id="255-replay-stability">255. Replay Stability</h2><p>记录：</p>
+<h3 id="255-replay-stability">255. Replay Stability</h3><p>记录：</p>
 <p>Battle Event、Formation Snapshot、Hero关键状态。</p>
 <p>检查：</p>
 <p>能够复盘主要战局。</p>
 <hr />
-<h2 id="256-性能设计">256. 性能设计</h2><p>无双类真正的技术难点不是：</p>
+<h3 id="256-性能设计">256. 性能设计</h3><p>无双类真正的技术难点不是：</p>
 <p>“如何显示很多模型。”</p>
 <p>而是：</p>
 <p><strong>如何让很多单位同时看起来在打仗，但只有真正需要精细模拟的部分消耗高成本。</strong></p>
 <hr />
-<h2 id="257-cpu预算优先级">257. CPU预算优先级</h2><p>通常可以：</p>
+<h3 id="257-cpu预算优先级">257. CPU预算优先级</h3><p>通常可以：</p>
 <p>Player Hero</p>
 <blockquote>
 <p>Nearby Officers<br />
@@ -3327,7 +3327,7 @@ Remote Officers<br />
 Remote Army。</p>
 </blockquote>
 <hr />
-<h2 id="258-普通兵不需要每frame思考">258. 普通兵不需要每Frame思考</h2><p>Local Soldier Task：</p>
+<h3 id="258-普通兵不需要每frame思考">258. 普通兵不需要每Frame思考</h3><p>Local Soldier Task：</p>
 <p>可以：</p>
 <p>5～15Hz。</p>
 <p>Movement Steering：</p>
@@ -3335,29 +3335,29 @@ Remote Army。</p>
 <p>Animation：</p>
 <p>独立。</p>
 <hr />
-<h2 id="259-officer-ai">259. Officer AI</h2><p>可以：</p>
+<h3 id="259-officer-ai">259. Officer AI</h3><p>可以：</p>
 <p>20～30Hz决策</p>
 <p>或事件驱动。</p>
 <p>Movement仍然：</p>
 <p>固定更新。</p>
 <hr />
-<h2 id="260-remote-formation">260. Remote Formation</h2><p>可以：</p>
+<h3 id="260-remote-formation">260. Remote Formation</h3><p>可以：</p>
 <p>1～4Hz。</p>
 <p>甚至：</p>
 <p>更低。</p>
 <hr />
-<h2 id="261-animation-lod">261. Animation LOD</h2><p>近处：</p>
+<h3 id="261-animation-lod">261. Animation LOD</h3><p>近处：</p>
 <p>完整Animator。</p>
 <p>中距离：</p>
 <p>简化State。</p>
 <p>远距离：</p>
 <p>GPU Instance / Crowd Animation。</p>
 <hr />
-<h2 id="262-skeleton-update-lod">262. Skeleton Update LOD</h2><p>非屏幕内：</p>
+<h3 id="262-skeleton-update-lod">262. Skeleton Update LOD</h3><p>非屏幕内：</p>
 <p>不需要：</p>
 <p>完整骨骼更新。</p>
 <hr />
-<h2 id="263-vfx-lod">263. VFX LOD</h2><p>一次大招：</p>
+<h3 id="263-vfx-lod">263. VFX LOD</h3><p>一次大招：</p>
 <p>击中100人。</p>
 <p>不能：</p>
 <p>生成100套高复杂命中特效。</p>
@@ -3371,7 +3371,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="264-damage-number-lod">264. Damage Number LOD</h2><p>不要：</p>
+<h3 id="264-damage-number-lod">264. Damage Number LOD</h3><p>不要：</p>
 <p>100个伤害数字完全重叠。</p>
 <p>可以：</p>
 <ul>
@@ -3383,21 +3383,21 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="265-audio-lod">265. Audio LOD</h2><p>300士兵喊叫：</p>
+<h3 id="265-audio-lod">265. Audio LOD</h3><p>300士兵喊叫：</p>
 <p>不能300个独立3D Audio Source。</p>
 <p>使用：</p>
 <p>Crowd Ambience。</p>
 <p>关键Officer：</p>
 <p>独立Voice。</p>
 <hr />
-<h2 id="266-object-pool">266. Object Pool</h2><p>Soldier、VFX、Projectile：</p>
+<h3 id="266-object-pool">266. Object Pool</h3><p>Soldier、VFX、Projectile：</p>
 <p>适合Pool。</p>
 <p>但Pool只优化：</p>
 <p>Allocation。</p>
 <p>不能替代：</p>
 <p>Simulation LOD。</p>
 <hr />
-<h2 id="267-渲染">267. 渲染</h2><p>普通兵适合：</p>
+<h3 id="267-渲染">267. 渲染</h3><p>普通兵适合：</p>
 <ul>
 <li><p>GPU Instancing；</p>
 </li>
@@ -3409,14 +3409,14 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="268-尸体">268. 尸体</h2><p>死亡后：</p>
+<h3 id="268-尸体">268. 尸体</h3><p>死亡后：</p>
 <p>短时间保留。</p>
 <p>随后：</p>
 <p>Fade / Recycle。</p>
 <p>不应该：</p>
 <p>战场后半段累积5000具完整Ragdoll。</p>
 <hr />
-<h2 id="269-navigation">269. Navigation</h2><p>战略层：</p>
+<h3 id="269-navigation">269. Navigation</h3><p>战略层：</p>
 <p>Battlefield Graph。</p>
 <p>局部：</p>
 <p>Flow Field / Simple Steering。</p>
@@ -3424,21 +3424,21 @@ Remote Army。</p>
 <p>高质量Nav。</p>
 <p>三层分开。</p>
 <hr />
-<h2 id="270-collision">270. Collision</h2><p>Soldier之间：</p>
+<h3 id="270-collision">270. Collision</h3><p>Soldier之间：</p>
 <p>不要使用：</p>
 <p>高成本完整刚体互推。</p>
 <p>适合：</p>
 <p>轻量Separation。</p>
 <hr />
-<h2 id="271-player和officer">271. Player和Officer：</h2><p>使用更高质量碰撞。</p>
+<h3 id="271-player和officer">271. Player和Officer：</h3><p>使用更高质量碰撞。</p>
 <hr />
-<h2 id="272-可扩展点">272. 可扩展点</h2><hr />
-<h3 id="2721-新soldier-type">272.1 新Soldier Type</h3><p>提供：</p>
+<h3 id="272-可扩展点">272. 可扩展点</h3><hr />
+<h4 id="2721-新soldier-type">272.1 新Soldier Type</h4><p>提供：</p>
 <p>SoldierDefinition</p>
 <p>和：</p>
 <p>Crowd Behavior Profile。</p>
 <hr />
-<h3 id="2722-新officer">272.2 新Officer</h3><p>提供：</p>
+<h4 id="2722-新officer">272.2 新Officer</h4><p>提供：</p>
 <p>OfficerDefinition</p>
 <ul>
 <li><p>Combat Kit</p>
@@ -3447,7 +3447,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="2723-新formation">272.3 新Formation</h3><p>主要：</p>
+<h4 id="2723-新formation">272.3 新Formation</h4><p>主要：</p>
 <p>Composition</p>
 <ul>
 <li><p>Commander</p>
@@ -3456,7 +3456,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="2724-新base类型">272.4 新Base类型</h3><p>例如：</p>
+<h4 id="2724-新base类型">272.4 新Base类型</h4><p>例如：</p>
 <ul>
 <li><p>Supply Camp；</p>
 </li>
@@ -3468,11 +3468,11 @@ Remote Army。</p>
 <p>通过：</p>
 <p>Base Capability扩展。</p>
 <hr />
-<h3 id="2725-新battle-event">272.5 新Battle Event</h3><p>使用：</p>
+<h4 id="2725-新battle-event">272.5 新Battle Event</h4><p>使用：</p>
 <p>Condition + Consequence。</p>
 <p>不修改Battle Director核心。</p>
 <hr />
-<h3 id="2726-新battle">272.6 新Battle</h3><p>主要提供：</p>
+<h4 id="2726-新battle">272.6 新Battle</h4><p>主要提供：</p>
 <ul>
 <li><p>BattlefieldGraph；</p>
 </li>
@@ -3486,7 +3486,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="2727-新difficulty">272.7 新Difficulty</h3><p>调整：</p>
+<h4 id="2727-新difficulty">272.7 新Difficulty</h4><p>调整：</p>
 <ul>
 <li><p>Engagement；</p>
 </li>
@@ -3498,15 +3498,15 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="2728-新角色">272.8 新角色</h3><p>只需要：</p>
+<h4 id="2728-新角色">272.8 新角色</h4><p>只需要：</p>
 <p>Hero Combat Kit。</p>
 <p>Battlefield系统无需知道：</p>
 <p>玩家用谁。</p>
 <hr />
-<h3 id="2729-骑乘扩展">272.9 骑乘扩展</h3><p>Mount实现：</p>
+<h4 id="2729-骑乘扩展">272.9 骑乘扩展</h4><p>Mount实现：</p>
 <p>另一个Hero Movement Mode。</p>
 <hr />
-<h3 id="27210-攻城战">272.10 攻城战</h3><p>增加：</p>
+<h4 id="27210-攻城战">272.10 攻城战</h4><p>增加：</p>
 <ul>
 <li><p>Siege Weapon；</p>
 </li>
@@ -3519,28 +3519,28 @@ Remote Army。</p>
 </ul>
 <p>基础Battlefield Graph仍适用。</p>
 <hr />
-<h3 id="27211-naval-musou">272.11 Naval Musou</h3><p>Zone / Formation / Officer</p>
+<h4 id="27211-naval-musou">272.11 Naval Musou</h4><p>Zone / Formation / Officer</p>
 <p>仍然成立。</p>
 <p>局部Movement换为：</p>
 <p>船。</p>
 <hr />
-<h2 id="273-玩家体验设计">273. 玩家体验设计</h2><hr />
-<h3 id="2731-玩家必须在最初30秒内感受到一骑当千">273.1 玩家必须在最初30秒内感受到“一骑当千”</h3><p>第一群杂兵：</p>
+<h3 id="273-玩家体验设计">273. 玩家体验设计</h3><hr />
+<h4 id="2731-玩家必须在最初30秒内感受到一骑当千">273.1 玩家必须在最初30秒内感受到“一骑当千”</h4><p>第一群杂兵：</p>
 <p>应该让玩家：</p>
 <p>轻易打飞。</p>
 <p>不是：</p>
 <p>每个普通兵三套防御、10刀才死。</p>
 <hr />
-<h2 id="274-但这种power-fantasy必须建立在真正军团环境中">274. 但这种Power Fantasy必须建立在真正军团环境中</h2><p>屏幕上只有：</p>
+<h3 id="274-但这种power-fantasy必须建立在真正军团环境中">274. 但这种Power Fantasy必须建立在真正军团环境中</h3><p>屏幕上只有：</p>
 <p>8个Enemy循环Spawn。</p>
 <p>即使一刀全秒，</p>
 <p>也没有：</p>
 <p>军势规模感。</p>
 <hr />
-<h2 id="275-普通兵数量移动和背景军阵共同制造战争规模">275. 普通兵数量、移动和背景军阵共同制造战争规模</h2><p>不仅是：</p>
+<h3 id="275-普通兵数量移动和背景军阵共同制造战争规模">275. 普通兵数量、移动和背景军阵共同制造战争规模</h3><p>不仅是：</p>
 <p>当前Hit Target数量。</p>
 <hr />
-<h2 id="276-玩家应该始终知道现在最重要的战场问题是什么">276. 玩家应该始终知道“现在最重要的战场问题是什么”</h2><p>通过：</p>
+<h3 id="276-玩家应该始终知道现在最重要的战场问题是什么">276. 玩家应该始终知道“现在最重要的战场问题是什么”</h3><p>通过：</p>
 <ul>
 <li><p>Battle Message；</p>
 </li>
@@ -3552,30 +3552,30 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="277-但不能变成不断追ui红点">277. 但不能变成不断追UI红点</h2><p>最好同时：</p>
+<h3 id="277-但不能变成不断追ui红点">277. 但不能变成不断追UI红点</h3><p>最好同时：</p>
 <p>存在：</p>
 <p>主线。</p>
 <p>支线。</p>
 <p>玩家自己选择。</p>
 <hr />
-<h2 id="278-战场需要给玩家我不可能同时救所有地方的压力">278. 战场需要给玩家“我不可能同时救所有地方”的压力</h2><p>这是宏观决策来源。</p>
+<h3 id="278-战场需要给玩家我不可能同时救所有地方的压力">278. 战场需要给玩家“我不可能同时救所有地方”的压力</h3><p>这是宏观决策来源。</p>
 <p>但：</p>
 <p>失败必须可解释。</p>
 <hr />
-<h2 id="279-友军陷危前需要预警">279. 友军陷危前需要预警</h2><p>不要：</p>
+<h3 id="279-友军陷危前需要预警">279. 友军陷危前需要预警</h3><p>不要：</p>
 <p>玩家刚收到：</p>
 <p>“请救我！”</p>
 <p>下一秒：</p>
 <p>“友军已阵亡。”</p>
 <hr />
-<h2 id="280-玩家救援成功以后必须看到宏观后果">280. 玩家救援成功以后必须看到宏观后果</h2><p>友军：</p>
+<h3 id="280-玩家救援成功以后必须看到宏观后果">280. 玩家救援成功以后必须看到宏观后果</h3><p>友军：</p>
 <p>真的推进。</p>
 <p>据点：</p>
 <p>真的保住。</p>
 <p>后续：</p>
 <p>真的支援Boss战。</p>
 <hr />
-<h2 id="281-武将战需要明显改变节奏">281. 武将战需要明显改变节奏</h2><p>普通兵：</p>
+<h3 id="281-武将战需要明显改变节奏">281. 武将战需要明显改变节奏</h3><p>普通兵：</p>
 <p>快速清理。</p>
 <p>武将：</p>
 <p>要求：</p>
@@ -3590,31 +3590,31 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="282-但武将不能完全脱离战场语境">282. 但武将不能完全脱离战场语境</h2><p>如果每次碰武将：</p>
+<h3 id="282-但武将不能完全脱离战场语境">282. 但武将不能完全脱离战场语境</h3><p>如果每次碰武将：</p>
 <p>自动传送到小圆形Boss Room，</p>
 <p>游戏会变成：</p>
 <p>普通动作Boss Rush。</p>
 <hr />
-<h2 id="283-crowd中仍要保持officer动作可读">283. Crowd中仍要保持Officer动作可读</h2><p>这是：</p>
+<h3 id="283-crowd中仍要保持officer动作可读">283. Crowd中仍要保持Officer动作可读</h3><p>这是：</p>
 <p>视觉设计和Attack Token共同职责。</p>
 <hr />
-<h2 id="284-ko-count属于power-feedback">284. KO Count属于Power Feedback</h2><p>但不能成为：</p>
+<h3 id="284-ko-count属于power-feedback">284. KO Count属于Power Feedback</h3><p>但不能成为：</p>
 <p>唯一目标。</p>
 <hr />
-<h2 id="285-玩家最有成就感的时刻往往不是1000-ko">285. 玩家最有成就感的时刻往往不是“1000 KO”</h2><p>而是：</p>
+<h3 id="285-玩家最有成就感的时刻往往不是1000-ko">285. 玩家最有成就感的时刻往往不是“1000 KO”</h3><p>而是：</p>
 <blockquote>
 <p>我赶到东线，救下武将，然后整条战线因此反推。</p>
 </blockquote>
 <p>这才是无双式：</p>
 <p><strong>Heroic Battlefield Agency。</strong></p>
 <hr />
-<h2 id="286-路线需要支持玩家自主判断">286. 路线需要支持玩家自主判断</h2><p>从A到B：</p>
+<h3 id="286-路线需要支持玩家自主判断">286. 路线需要支持玩家自主判断</h3><p>从A到B：</p>
 <p>可能有：</p>
 <p>安全主路。</p>
 <p>近但危险捷径。</p>
 <p>骑马外圈。</p>
 <hr />
-<h2 id="287-战场旅行不能成为空白时间">287. 战场旅行不能成为空白时间</h2><p>路上可以：</p>
+<h3 id="287-战场旅行不能成为空白时间">287. 战场旅行不能成为空白时间</h3><p>路上可以：</p>
 <ul>
 <li><p>小Formation；</p>
 </li>
@@ -3628,7 +3628,7 @@ Remote Army。</p>
 <p>但不要：</p>
 <p>每5米塞一群兵拖慢救援。</p>
 <hr />
-<h2 id="288-难度需要保留割草感">288. 难度需要保留割草感</h2><p>高难：</p>
+<h3 id="288-难度需要保留割草感">288. 难度需要保留割草感</h3><p>高难：</p>
 <p>普通兵仍然：</p>
 <p>可以快速击败。</p>
 <p>主要变：</p>
@@ -3645,96 +3645,96 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="289-角色成长应该让玩家获得新的crowd处理方式">289. 角色成长应该让玩家获得新的Crowd处理方式</h2><p>而不是：</p>
+<h3 id="289-角色成长应该让玩家获得新的crowd处理方式">289. 角色成长应该让玩家获得新的Crowd处理方式</h3><p>而不是：</p>
 <p>同一攻击Damage从100变120。</p>
 <hr />
-<h2 id="290-常见设计失败">290. 常见设计失败</h2><hr />
-<h3 id="2901-只是在小地图上同时生成很多enemy">290.1 只是在小地图上同时生成很多Enemy</h3><p>没有军团和战场系统。</p>
+<h3 id="290-常见设计失败">290. 常见设计失败</h3><hr />
+<h4 id="2901-只是在小地图上同时生成很多enemy">290.1 只是在小地图上同时生成很多Enemy</h4><p>没有军团和战场系统。</p>
 <hr />
-<h3 id="2902-所有enemy使用同一复杂ai">290.2 所有Enemy使用同一复杂AI</h3><p>CPU爆炸。</p>
+<h4 id="2902-所有enemy使用同一复杂ai">290.2 所有Enemy使用同一复杂AI</h4><p>CPU爆炸。</p>
 <hr />
-<h3 id="2903-所有enemy使用同一低复杂ai">290.3 所有Enemy使用同一低复杂AI</h3><p>武将没有存在感。</p>
+<h4 id="2903-所有enemy使用同一低复杂ai">290.3 所有Enemy使用同一低复杂AI</h4><p>武将没有存在感。</p>
 <hr />
-<h3 id="2904-所有远端士兵继续完整模拟">290.4 所有远端士兵继续完整模拟</h3><p>规模上不去。</p>
+<h4 id="2904-所有远端士兵继续完整模拟">290.4 所有远端士兵继续完整模拟</h4><p>规模上不去。</p>
 <hr />
-<h3 id="2905-远端战争完全停止">290.5 远端战争完全停止</h3><p>玩家不去的区域像静态背景。</p>
+<h4 id="2905-远端战争完全停止">290.5 远端战争完全停止</h4><p>玩家不去的区域像静态背景。</p>
 <hr />
-<h3 id="2906-远端战争纯随机秒杀officer">290.6 远端战争纯随机秒杀Officer</h3><p>玩家无法介入。</p>
+<h4 id="2906-远端战争纯随机秒杀officer">290.6 远端战争纯随机秒杀Officer</h4><p>玩家无法介入。</p>
 <hr />
-<h3 id="2907-军团没有稳定formation身份">290.7 军团没有稳定Formation身份</h3><p>玩家离开区域后敌人重新刷新。</p>
+<h4 id="2907-军团没有稳定formation身份">290.7 军团没有稳定Formation身份</h4><p>玩家离开区域后敌人重新刷新。</p>
 <hr />
-<h3 id="2908-materialization等于重新spawn新军队">290.8 Materialization等于重新Spawn新军队</h3><p>损失不持久。</p>
+<h4 id="2908-materialization等于重新spawn新军队">290.8 Materialization等于重新Spawn新军队</h4><p>损失不持久。</p>
 <hr />
-<h3 id="2909-officer随lod被销毁重建导致状态丢失">290.9 Officer随LOD被销毁重建导致状态丢失</h3><p>关键身份错误。</p>
+<h4 id="2909-officer随lod被销毁重建导致状态丢失">290.9 Officer随LOD被销毁重建导致状态丢失</h4><p>关键身份错误。</p>
 <hr />
-<h3 id="29010-所有普通兵都锁定玩家">290.10 所有普通兵都锁定玩家</h3><p>围攻无法操作。</p>
+<h4 id="29010-所有普通兵都锁定玩家">290.10 所有普通兵都锁定玩家</h4><p>围攻无法操作。</p>
 <hr />
-<h3 id="29011-普通兵完全不攻击">290.11 普通兵完全不攻击</h3><p>Crowd只是纸片。</p>
+<h4 id="29011-普通兵完全不攻击">290.11 普通兵完全不攻击</h4><p>Crowd只是纸片。</p>
 <hr />
-<h3 id="29012-attack-token太明显">290.12 Attack Token太明显</h3><p>敌人像排队送死。</p>
+<h4 id="29012-attack-token太明显">290.12 Attack Token太明显</h4><p>敌人像排队送死。</p>
 <hr />
-<h3 id="29013普通兵hp随难度大量提高">290.13普通兵HP随难度大量提高</h3><p>割草感消失。</p>
+<h4 id="29013普通兵hp随难度大量提高">290.13普通兵HP随难度大量提高</h4><p>割草感消失。</p>
 <hr />
-<h3 id="29014-hit-system逐个高成本resolve所有目标">290.14 Hit System逐个高成本Resolve所有目标</h3><p>大招产生Frame Spike。</p>
+<h4 id="29014-hit-system逐个高成本resolve所有目标">290.14 Hit System逐个高成本Resolve所有目标</h4><p>大招产生Frame Spike。</p>
 <hr />
-<h3 id="29015-每个hit独立hit-stop">290.15 每个Hit独立Hit Stop</h3><p>一刀打20人游戏冻结。</p>
+<h4 id="29015-每个hit独立hit-stop">290.15 每个Hit独立Hit Stop</h4><p>一刀打20人游戏冻结。</p>
 <hr />
-<h3 id="29016-每个被击飞soldier完整ragdoll">290.16 每个被击飞Soldier完整Ragdoll</h3><p>性能崩溃。</p>
+<h4 id="29016-每个被击飞soldier完整ragdoll">290.16 每个被击飞Soldier完整Ragdoll</h4><p>性能崩溃。</p>
 <hr />
-<h3 id="29017-weapon-collider长期trigger检测">290.17 Weapon Collider长期Trigger检测</h3><p>高密度下Hit状态混乱。</p>
+<h4 id="29017-weapon-collider长期trigger检测">290.17 Weapon Collider长期Trigger检测</h4><p>高密度下Hit状态混乱。</p>
 <hr />
-<h3 id="29018-officer没有poise机制">290.18 Officer没有Poise机制</h3><p>被杂兵型连击无限浮空。</p>
+<h4 id="29018-officer没有poise机制">290.18 Officer没有Poise机制</h4><p>被杂兵型连击无限浮空。</p>
 <hr />
-<h3 id="29019-officer完全免疫受击">290.19 Officer完全免疫受击</h3><p>战斗手感像打石头。</p>
+<h4 id="29019-officer完全免疫受击">290.19 Officer完全免疫受击</h4><p>战斗手感像打石头。</p>
 <hr />
-<h3 id="29020-据点只是站圈">290.20 据点只是站圈</h3><p>斩将、军势和据点系统脱节。</p>
+<h4 id="29020-据点只是站圈">290.20 据点只是站圈</h4><p>斩将、军势和据点系统脱节。</p>
 <hr />
-<h3 id="29021-据点被占领但军团路线不变化">290.21 据点被占领但军团路线不变化</h3><p>宏观系统是假象。</p>
+<h4 id="29021-据点被占领但军团路线不变化">290.21 据点被占领但军团路线不变化</h4><p>宏观系统是假象。</p>
 <hr />
-<h3 id="29022-gate动画打开但battlefield-graph仍blocked">290.22 Gate动画打开但Battlefield Graph仍Blocked</h3><p>友军永远不进攻。</p>
+<h4 id="29022-gate动画打开但battlefield-graph仍blocked">290.22 Gate动画打开但Battlefield Graph仍Blocked</h4><p>友军永远不进攻。</p>
 <hr />
-<h3 id="29023-battle-event完全按时间轴硬播">290.23 Battle Event完全按时间轴硬播</h3><p>玩家提前行动造成剧情矛盾。</p>
+<h4 id="29023-battle-event完全按时间轴硬播">290.23 Battle Event完全按时间轴硬播</h4><p>玩家提前行动造成剧情矛盾。</p>
 <hr />
-<h3 id="29024-已死武将因脚本再次出现">290.24 已死武将因脚本再次出现</h3><p>世界可信度崩溃。</p>
+<h4 id="29024-已死武将因脚本再次出现">290.24 已死武将因脚本再次出现</h4><p>世界可信度崩溃。</p>
 <hr />
-<h3 id="29025-objective只给分不改变battle">290.25 Objective只给分，不改变Battle</h3><p>支线没有战略意义。</p>
+<h4 id="29025-objective只给分不改变battle">290.25 Objective只给分，不改变Battle</h4><p>支线没有战略意义。</p>
 <hr />
-<h3 id="29026-rescue事件时间固定且与玩家距离无关">290.26 Rescue事件时间固定且与玩家距离无关</h3><p>不可完成任务频繁发生。</p>
+<h4 id="29026-rescue事件时间固定且与玩家距离无关">290.26 Rescue事件时间固定且与玩家距离无关</h4><p>不可完成任务频繁发生。</p>
 <hr />
-<h3 id="29027-全地图所有危机都要求玩家处理">290.27 全地图所有危机都要求玩家处理</h3><p>变成跑腿游戏。</p>
+<h4 id="29027-全地图所有危机都要求玩家处理">290.27 全地图所有危机都要求玩家处理</h4><p>变成跑腿游戏。</p>
 <hr />
-<h3 id="29028-battle-message无限刷屏">290.28 Battle Message无限刷屏</h3><p>玩家不知道最重要的事。</p>
+<h4 id="29028-battle-message无限刷屏">290.28 Battle Message无限刷屏</h4><p>玩家不知道最重要的事。</p>
 <hr />
-<h3 id="29029-mini-map显示所有普通兵点">290.29 Mini Map显示所有普通兵点</h3><p>地图完全不可读。</p>
+<h4 id="29029-mini-map显示所有普通兵点">290.29 Mini Map显示所有普通兵点</h4><p>地图完全不可读。</p>
 <hr />
-<h3 id="29030-武将决斗时普通兵vfx完全遮挡boss动作">290.30 武将决斗时普通兵VFX完全遮挡Boss动作</h3><p>视觉层级失败。</p>
+<h4 id="29030-武将决斗时普通兵vfx完全遮挡boss动作">290.30 武将决斗时普通兵VFX完全遮挡Boss动作</h4><p>视觉层级失败。</p>
 <hr />
-<h3 id="29031-高难只加hp">290.31 高难只加HP</h3><p>失去品类身份。</p>
+<h4 id="29031-高难只加hp">290.31 高难只加HP</h4><p>失去品类身份。</p>
 <hr />
-<h3 id="29032-coop只把enemy-hp2">290.32 Coop只把Enemy HP×2</h3><p>双人战场压力直接崩溃。</p>
+<h4 id="29032-coop只把enemy-hp2">290.32 Coop只把Enemy HP×2</h4><p>双人战场压力直接崩溃。</p>
 <hr />
-<h3 id="29033-两个coop玩家各自生成一套同formation士兵">290.33 两个Coop玩家各自生成一套同Formation士兵</h3><p>单位复制。</p>
+<h4 id="29033-两个coop玩家各自生成一套同formation士兵">290.33 两个Coop玩家各自生成一套同Formation士兵</h4><p>单位复制。</p>
 <hr />
-<h3 id="29034-战斗结算只看ko-count">290.34 战斗结算只看KO Count</h3><p>鼓励无限刷兵。</p>
+<h4 id="29034-战斗结算只看ko-count">290.34 战斗结算只看KO Count</h4><p>鼓励无限刷兵。</p>
 <hr />
-<h3 id="29035-所有角色只是damage和attackspeed差异">290.35 所有角色只是Damage和AttackSpeed差异</h3><p>没有Crowd Geometry身份。</p>
+<h4 id="29035-所有角色只是damage和attackspeed差异">290.35 所有角色只是Damage和AttackSpeed差异</h4><p>没有Crowd Geometry身份。</p>
 <hr />
-<h3 id="29036-大地图移动速度过慢">290.36 大地图移动速度过慢</h3><p>玩家无法成为战场干预者。</p>
+<h4 id="29036-大地图移动速度过慢">290.36 大地图移动速度过慢</h4><p>玩家无法成为战场干预者。</p>
 <hr />
-<h3 id="29037-mount速度快但上下马动画过长">290.37 Mount速度快但上下马动画过长</h3><p>宏观移动QoL被表现抵消。</p>
+<h4 id="29037-mount速度快但上下马动画过长">290.37 Mount速度快但上下马动画过长</h4><p>宏观移动QoL被表现抵消。</p>
 <hr />
-<h3 id="29038-remote-simulation和local-simulation结果尺度不一致">290.38 Remote Simulation和Local Simulation结果尺度不一致</h3><p>玩家接近后敌军实力突然翻倍。</p>
+<h4 id="29038-remote-simulation和local-simulation结果尺度不一致">290.38 Remote Simulation和Local Simulation结果尺度不一致</h4><p>玩家接近后敌军实力突然翻倍。</p>
 <hr />
-<h3 id="29039-普通兵永不撤退">290.39 普通兵永不撤退</h3><p>所有战争都必须杀到最后一人。</p>
+<h4 id="29039-普通兵永不撤退">290.39 普通兵永不撤退</h4><p>所有战争都必须杀到最后一人。</p>
 <hr />
-<h3 id="29040-battle结束后所有event继续运行">290.40 Battle结束后所有Event继续运行</h3><p>结算状态被污染。</p>
+<h4 id="29040-battle结束后所有event继续运行">290.40 Battle结束后所有Event继续运行</h4><p>结算状态被污染。</p>
 <hr />
-<h2 id="291-最小可行原型">291. 最小可行原型</h2><p>验证本范式时，不需要一开始就实现：</p>
+<h3 id="291-最小可行原型">291. 最小可行原型</h3><p>验证本范式时，不需要一开始就实现：</p>
 <p>数千单位和十几个英雄。</p>
 <p>推荐：</p>
 <p><strong>1张战场 + 6～8个Zone + 4个据点 + 4支军团 + 6名武将 + 200～400个同时可见士兵预算 + 1名玩家英雄。</strong></p>
 <hr />
-<h2 id="292-battlefield">292. Battlefield</h2><p>建议结构：</p>
+<h3 id="292-battlefield">292. Battlefield</h3><p>建议结构：</p>
 <p>Allied Base。</p>
 <p>West Route。</p>
 <p>East Route。</p>
@@ -3743,7 +3743,7 @@ Remote Army。</p>
 <p>至少形成：</p>
 <p>两个可选进攻方向。</p>
 <hr />
-<h2 id="293-普通兵">293. 普通兵</h2><p>第一版：</p>
+<h3 id="293-普通兵">293. 普通兵</h3><p>第一版：</p>
 <ul>
 <li><p>Sword；</p>
 </li>
@@ -3755,7 +3755,7 @@ Remote Army。</p>
 <p>已经足够验证：</p>
 <p>近战Crowd + Ranged Pressure。</p>
 <hr />
-<h2 id="294-officer">294. Officer</h2><p>至少：</p>
+<h3 id="294-officer">294. Officer</h3><p>至少：</p>
 <p>3种：</p>
 <ul>
 <li><p>Heavy；</p>
@@ -3766,7 +3766,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="295-据点">295. 据点</h2><p>实现：</p>
+<h3 id="295-据点">295. 据点</h3><p>实现：</p>
 <ul>
 <li><p>Controller；</p>
 </li>
@@ -3780,7 +3780,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="296-battle-event">296. Battle Event</h2><p>至少：</p>
+<h3 id="296-battle-event">296. Battle Event</h3><p>至少：</p>
 <ul>
 <li><p>Reinforcement；</p>
 </li>
@@ -3794,7 +3794,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="297-hero-combat">297. Hero Combat</h2><p>实现：</p>
+<h3 id="297-hero-combat">297. Hero Combat</h3><p>实现：</p>
 <ul>
 <li><p>Light Chain；</p>
 </li>
@@ -3808,7 +3808,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="298-crowd系统">298. Crowd系统</h2><p>第一版就实现：</p>
+<h3 id="298-crowd系统">298. Crowd系统</h3><p>第一版就实现：</p>
 <ul>
 <li><p>Simulation Tier；</p>
 </li>
@@ -3828,7 +3828,7 @@ Remote Army。</p>
 <p>它们就是：</p>
 <p>品类基础。</p>
 <hr />
-<h2 id="299-mvp必要基础设施">299. MVP必要基础设施</h2><ul>
+<h3 id="299-mvp必要基础设施">299. MVP必要基础设施</h3><ul>
 <li><p>BattleSessionState；</p>
 </li>
 <li><p>BattlefieldGraph；</p>
@@ -3873,7 +3873,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="300-mvp必要调试工具">300. MVP必要调试工具</h2><ul>
+<h3 id="300-mvp必要调试工具">300. MVP必要调试工具</h3><ul>
 <li><p>BattlefieldGraphViewer；</p>
 </li>
 <li><p>FormationInspector；</p>
@@ -3908,7 +3908,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="301-mvp核心验收问题">301. MVP核心验收问题</h2><p>原型至少必须回答：</p>
+<h3 id="301-mvp核心验收问题">301. MVP核心验收问题</h3><p>原型至少必须回答：</p>
 <ul>
 <li><p>玩家附近200～400名Soldier时是否仍保持稳定帧时间；</p>
 </li>
@@ -3971,7 +3971,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="302-推荐实施顺序">302. 推荐实施顺序</h2><p>第一阶段：</p>
+<h3 id="302-推荐实施顺序">302. 推荐实施顺序</h3><p>第一阶段：</p>
 <ul>
 <li><p>Hero Controller；</p>
 </li>
@@ -4082,7 +4082,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="303-架构验收标准">303. 架构验收标准</h2><p>系统初步成立时，应满足：</p>
+<h3 id="303-架构验收标准">303. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
 <ul>
 <li><p>Hero、普通士兵和Officer拥有明确不同模拟复杂度；</p>
 </li>
@@ -4214,8 +4214,8 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h2 id="304-可迁移到其他游戏的设计思想">304. 可迁移到其他游戏的设计思想</h2><hr />
-<h3 id="3041-高密度世界不意味着所有对象都值得同等模拟">304.1 高密度世界不意味着所有对象都值得同等模拟</h3><p>最重要的对象：</p>
+<h3 id="304-可迁移到其他游戏的设计思想">304. 可迁移到其他游戏的设计思想</h3><hr />
+<h4 id="3041-高密度世界不意味着所有对象都值得同等模拟">304.1 高密度世界不意味着所有对象都值得同等模拟</h4><p>最重要的对象：</p>
 <p>完整模拟。</p>
 <p>背景对象：</p>
 <p>聚合。</p>
@@ -4237,7 +4237,7 @@ Remote Army。</p>
 <p>也可以是：</p>
 <p><strong>行为精度LOD。</strong></p>
 <hr />
-<h3 id="3042-个体实体和群体实体可以互相materialize">304.2 个体实体和群体实体可以互相Materialize</h3><p>远处：</p>
+<h4 id="3042-个体实体和群体实体可以互相materialize">304.2 个体实体和群体实体可以互相Materialize</h4><p>远处：</p>
 <p>Army。</p>
 <p>近处：</p>
 <p>Soldiers。</p>
@@ -4257,7 +4257,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="3043-玩家可以被设计成系统中的局部高权重扰动">304.3 玩家可以被设计成系统中的“局部高权重扰动”</h3><p>玩家并不控制整个战争。</p>
+<h4 id="3043-玩家可以被设计成系统中的局部高权重扰动">304.3 玩家可以被设计成系统中的“局部高权重扰动”</h4><p>玩家并不控制整个战争。</p>
 <p>但介入一个节点以后：</p>
 <p>显著改变结果。</p>
 <p>可迁移到：</p>
@@ -4272,7 +4272,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="3044-普通对象和关键对象应该拥有不同设计职责">304.4 普通对象和关键对象应该拥有不同设计职责</h3><p>普通兵：</p>
+<h4 id="3044-普通对象和关键对象应该拥有不同设计职责">304.4 普通对象和关键对象应该拥有不同设计职责</h4><p>普通兵：</p>
 <p>制造密度。</p>
 <p>Officer：</p>
 <p>制造决策。</p>
@@ -4292,7 +4292,7 @@ Remote Army。</p>
 <p>不是所有Enemy都需要：</p>
 <p>同等聪明。</p>
 <hr />
-<h3 id="3045-群体威胁可以通过有限主动攻击者-大量空间压力实现">304.5 群体威胁可以通过“有限主动攻击者 + 大量空间压力”实现</h3><p>可迁移到：</p>
+<h4 id="3045-群体威胁可以通过有限主动攻击者-大量空间压力实现">304.5 群体威胁可以通过“有限主动攻击者 + 大量空间压力”实现</h4><p>可迁移到：</p>
 <ul>
 <li><p>电影式近战；</p>
 </li>
@@ -4306,7 +4306,7 @@ Remote Army。</p>
 <p>避免：</p>
 <p>几十个AI同Frame无序攻击。</p>
 <hr />
-<h3 id="3046-大范围hit系统需要把游戏结果和表现成本分离">304.6 大范围Hit系统需要把“游戏结果”和“表现成本”分离</h3><p>100个目标都应该：</p>
+<h4 id="3046-大范围hit系统需要把游戏结果和表现成本分离">304.6 大范围Hit系统需要把“游戏结果”和“表现成本”分离</h4><p>100个目标都应该：</p>
 <p>正确受伤。</p>
 <p>但不意味着：</p>
 <p>100套完整Ragdoll、VFX、Hit Stop。</p>
@@ -4314,7 +4314,7 @@ Remote Army。</p>
 <p>AoE、高密度战斗</p>
 <p>都值得采用的原则。</p>
 <hr />
-<h3 id="3047-局部胜利可以通过中介状态传播成宏观结果">304.7 局部胜利可以通过中介状态传播成宏观结果</h3><p>斩将<br />
+<h4 id="3047-局部胜利可以通过中介状态传播成宏观结果">304.7 局部胜利可以通过中介状态传播成宏观结果</h4><p>斩将<br />
 → 士气下降<br />
 → Formation溃败<br />
 → 据点推进。</p>
@@ -4332,7 +4332,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="3048-动态任务应该根据玩家真实可达性设计时间窗口">304.8 动态任务应该根据玩家真实可达性设计时间窗口</h3><p>救援任务不是：</p>
+<h4 id="3048-动态任务应该根据玩家真实可达性设计时间窗口">304.8 动态任务应该根据玩家真实可达性设计时间窗口</h4><p>救援任务不是：</p>
 <p>写一个30秒Timer。</p>
 <p>需要问：</p>
 <p>玩家从当前位置最少多久能到。</p>
@@ -4350,7 +4350,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="3049-世界事件最好由状态条件驱动而不是绝对时间轴">304.9 世界事件最好由状态条件驱动，而不是绝对时间轴</h3><p>如果玩家提前：</p>
+<h4 id="3049-世界事件最好由状态条件驱动而不是绝对时间轴">304.9 世界事件最好由状态条件驱动，而不是绝对时间轴</h4><p>如果玩家提前：</p>
 <p>改变世界，</p>
 <p>后续事件应该：</p>
 <p>重新评估。</p>
@@ -4366,7 +4366,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="30410-战略对象应真正修改底层graph">304.10 战略对象应真正修改底层Graph</h3><p>打开城门：</p>
+<h4 id="30410-战略对象应真正修改底层graph">304.10 战略对象应真正修改底层Graph</h4><p>打开城门：</p>
 <p>不是：</p>
 <p>播放动画。</p>
 <p>而是：</p>
@@ -4385,7 +4385,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="30411-救援成功以后角色继续产生作用能显著提高选择重量">304.11 “救援成功以后角色继续产生作用”能显著提高选择重量</h3><p>如果救援成功：</p>
+<h4 id="30411-救援成功以后角色继续产生作用能显著提高选择重量">304.11 “救援成功以后角色继续产生作用”能显著提高选择重量</h4><p>如果救援成功：</p>
 <p>只加1000分，</p>
 <p>玩家知道：</p>
 <p>它是Bonus Task。</p>
@@ -4396,14 +4396,14 @@ Remote Army。</p>
 <p>这条原则适用于：</p>
 <p>几乎所有动态任务系统。</p>
 <hr />
-<h3 id="30412-power-fantasy并不要求敌人完全无威胁">304.12 Power Fantasy并不要求敌人完全无威胁</h3><p>真正的力量感来自：</p>
+<h4 id="30412-power-fantasy并不要求敌人完全无威胁">304.12 Power Fantasy并不要求敌人完全无威胁</h4><p>真正的力量感来自：</p>
 <blockquote>
 <p>对手确实有能力阻止普通人，而玩家拥有稳定压倒它们的工具。</p>
 </blockquote>
 <p>如果敌人根本不会攻击：</p>
 <p>“强大”失去参照物。</p>
 <hr />
-<h3 id="30413-高难度不一定通过提高耐久实现">304.13 高难度不一定通过提高耐久实现</h3><p>可以提高：</p>
+<h4 id="30413-高难度不一定通过提高耐久实现">304.13 高难度不一定通过提高耐久实现</h4><p>可以提高：</p>
 <ul>
 <li><p>行动并发；</p>
 </li>
@@ -4417,7 +4417,7 @@ Remote Army。</p>
 <p>这一思想适用于：</p>
 <p>任何“爽感”依赖快速消灭普通敌人的游戏。</p>
 <hr />
-<h3 id="30414-双尺度玩法可以让动作和战略互相增强而不是互相抢占">304.14 双尺度玩法可以让“动作”和“战略”互相增强而不是互相抢占</h3><p>玩家不需要：</p>
+<h4 id="30414-双尺度玩法可以让动作和战略互相增强而不是互相抢占">304.14 双尺度玩法可以让“动作”和“战略”互相增强而不是互相抢占</h4><p>玩家不需要：</p>
 <p>像RTS一样控制全部军团。</p>
 <p>也不需要：</p>
 <p>假装其他战线不存在。</p>
@@ -4426,7 +4426,7 @@ Remote Army。</p>
 <p>玩家只选择：</p>
 <p>在哪里亲自成为决定性力量。</p>
 <hr />
-<h2 id="305-本次防重记录">305. 本次防重记录</h2><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>无双式军团割草动作 / Musou / Warriors-like Battlefield Action。</strong></p>
+<h3 id="305-本次防重记录">305. 本次防重记录</h3><h4 id="新增宏观游戏类型">新增宏观游戏类型</h4><p><strong>无双式军团割草动作 / Musou / Warriors-like Battlefield Action。</strong></p>
 <p>常见名称：</p>
 <ul>
 <li><p>Musou；</p>
@@ -4449,7 +4449,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="核心范式">核心范式</h3><p>无双式军团割草动作将同一战场同时运行在两个不同尺度上：玩家附近由Hero、Officer和大量普通Soldier组成高密度实时动作战斗，玩家视野之外则通过Formation、Zone、Morale、Base和Battlefield Graph进行低频军团模拟。玩家英雄不是整支军队的直接指挥者，而是一个能够在短时间显著改变局部战力平衡的“战力尖峰”。</p>
+<h4 id="核心范式">核心范式</h4><p>无双式军团割草动作将同一战场同时运行在两个不同尺度上：玩家附近由Hero、Officer和大量普通Soldier组成高密度实时动作战斗，玩家视野之外则通过Formation、Zone、Morale、Base和Battlefield Graph进行低频军团模拟。玩家英雄不是整支军队的直接指挥者，而是一个能够在短时间显著改变局部战力平衡的“战力尖峰”。</p>
 <p>普通Soldier主要承担密度、连击、军势和空间压力，使用低成本群体AI、共享导航与有限攻击并发；Officer则作为高价值战略锚点拥有完整战斗AI、Poise、技能、军团士气和Battle Event身份。玩家通过大范围Combo、Ultimate等群体处理能力清理军势并击败Officer，局部结果再写回Formation：士兵伤亡降低Strength，武将败亡降低Morale，军团可能撤退或溃败，据点因此被夺取，Spawn和Strategic Route发生变化。</p>
 <p>Battle Director持续读取真实战场事实，通过条件驱动Reinforcement、Ambush、Rescue、Gate、Retreat和Final Battle等事件；这些事件并非固定时间轴，而会因为玩家提前斩将、救援、夺点或开放路线发生Obsolete、替换或重新路由。动态Objective则提供有限Intervention Window，使玩家必须在中央推进、友军救援、据点争夺和追击武将之间持续选择。</p>
 <p>最终形成：</p>
@@ -4470,7 +4470,7 @@ Remote Army。</p>
 <p><strong>无双类真正的“一骑当千”不是单纯让玩家一刀打飞几十个敌人，而是让玩家确实成为一个能够以个人行动重写军团战争局部结果的高权重战场变量。</strong></p>
 </blockquote>
 <hr />
-<h3 id="核心识别特征">核心识别特征</h3><ul>
+<h4 id="核心识别特征">核心识别特征</h4><ul>
 <li><p>玩家直接控制高战力Hero；</p>
 </li>
 <li><p>同屏存在大量普通士兵；</p>
@@ -4549,7 +4549,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="与仓库现有幸存者类的防重边界">与仓库现有幸存者类的防重边界</h3><p>当前仓库的 <code>horde-survival</code> 明确以“持续直接移动 + 大量攻击自动执行 + 时间压力增长 + 击杀获得经验 + 升级形成局内构筑”作为核心循环。</p>
+<h4 id="与仓库现有幸存者类的防重边界">与仓库现有幸存者类的防重边界</h4><p>当前仓库的 <code>horde-survival</code> 明确以“持续直接移动 + 大量攻击自动执行 + 时间压力增长 + 击杀获得经验 + 升级形成局内构筑”作为核心循环。</p>
 <p>两者表面上都存在：</p>
 <ul>
 <li><p>大量敌人；</p>
@@ -4582,7 +4582,7 @@ Remote Army。</p>
 <p>依然成立。</p>
 <p>因此二者不重复。</p>
 <hr />
-<h3 id="与仓库现有多人共斗狩猎动作的防重边界">与仓库现有多人共斗狩猎动作的防重边界</h3><p>当前 <code>cooperative-hunting-action</code> 围绕大型目标、部位破坏、团队职责和阶段窗口组织战斗。</p>
+<h4 id="与仓库现有多人共斗狩猎动作的防重边界">与仓库现有多人共斗狩猎动作的防重边界</h4><p>当前 <code>cooperative-hunting-action</code> 围绕大型目标、部位破坏、团队职责和阶段窗口组织战斗。</p>
 <p><strong>Hunting Action：</strong></p>
 <p>主要战斗价值集中在：</p>
 <p>一个或少量大型高复杂度Target。</p>
@@ -4597,7 +4597,7 @@ Remote Army。</p>
 <p><strong>狩猎类的中心是Target。</strong></p>
 <p><strong>无双类的中心是Battlefield。</strong></p>
 <hr />
-<h3 id="与仓库现有格斗游戏的防重边界">与仓库现有格斗游戏的防重边界</h3><p>当前格斗范式围绕帧级动作、起手/有效/收招、Hitbox、帧优势、连段和双方预测运行。</p>
+<h4 id="与仓库现有格斗游戏的防重边界">与仓库现有格斗游戏的防重边界</h4><p>当前格斗范式围绕帧级动作、起手/有效/收招、Hitbox、帧优势、连段和双方预测运行。</p>
 <p>无双式动作当然可以借用：</p>
 <ul>
 <li><p>Combo；</p>
@@ -4630,7 +4630,7 @@ Remote Army。</p>
 </ul>
 <p>因此不是格斗游戏扩大敌人数。</p>
 <hr />
-<h3 id="与仓库现有实时战略的防重边界">与仓库现有实时战略的防重边界</h3><p>当前实时战略条目的核心是玩家对单位群体的命令、生产经济、战斗信息和战争迷雾的实时耦合。</p>
+<h4 id="与仓库现有实时战略的防重边界">与仓库现有实时战略的防重边界</h4><p>当前实时战略条目的核心是玩家对单位群体的命令、生产经济、战斗信息和战争迷雾的实时耦合。</p>
 <p>两者都具有：</p>
 <ul>
 <li><p>Army；</p>
@@ -4656,7 +4656,7 @@ Remote Army。</p>
 <p>无双主要技能是：</p>
 <p>高密度动作执行 + 战场干预优先级判断。</p>
 <hr />
-<h3 id="与仓库现有战术射击的防重边界">与仓库现有战术射击的防重边界</h3><p>战术射击同样存在：</p>
+<h4 id="与仓库现有战术射击的防重边界">与仓库现有战术射击的防重边界</h4><p>战术射击同样存在：</p>
 <p>地图控制、目标、局部人数优势。</p>
 <p>但其基础体验来自：</p>
 <ul>
@@ -4686,7 +4686,7 @@ Remote Army。</p>
 </ul>
 <p>两者拥有完全不同的战斗信息密度与失败模型。</p>
 <hr />
-<h3 id="与未来-beat-em-up-清版动作的防重边界">与未来 Beat-'em-up / 清版动作的防重边界</h3><p>本期不会把传统横版清版动作整体并入。</p>
+<h4 id="与未来-beat-em-up-清版动作的防重边界">与未来 Beat-'em-up / 清版动作的防重边界</h4><p>本期不会把传统横版清版动作整体并入。</p>
 <p>未来若记录 Beat-'em-up，可以固定研究：</p>
 <ul>
 <li><p>屏幕推进；</p>
@@ -4731,7 +4731,7 @@ Remote Army。</p>
 <p>其他区域在你不在时仍然打仗，你需要决定下一步应该去哪里改变战争。**</p>
 </blockquote>
 <hr />
-<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<h4 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h4><ul>
 <li><p>Musou；</p>
 </li>
 <li><p>Warriors-like；</p>
@@ -4836,7 +4836,7 @@ Remote Army。</p>
 </li>
 </ul>
 <hr />
-<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次无双式军团割草动作范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<h4 id="后续防重复范围">后续防重复范围</h4><p>以下主题属于本次无双式军团割草动作范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
 <ul>
 <li><p>Musou Crowd System；</p>
 </li>

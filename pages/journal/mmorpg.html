@@ -108,7 +108,7 @@
 <p>Agent 标签：<code>massively</code> <code>mmorpg</code> <code>multiplayer</code></p>
 </blockquote>
 <hr />
-<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际读取当前 <code>sakura-design-journal/game-designs</code> 生成索引。当前 <code>README.md</code> 标记 <strong>Entries: 53</strong>；现有记录已经覆盖 JRPG、刷宝型 ARPG、4X、多人共斗狩猎、殖民地模拟、俱乐部经营、社交推理、工厂自动化、上帝模拟等类型。</p>
+<h3 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h3><p>已实际读取当前 <code>sakura-design-journal/game-designs</code> 生成索引。当前 <code>README.md</code> 标记 <strong>Entries: 53</strong>；现有记录已经覆盖 JRPG、刷宝型 ARPG、4X、多人共斗狩猎、殖民地模拟、俱乐部经营、社交推理、工厂自动化、上帝模拟等类型。</p>
 <p>同时核对当前 <code>route-metadata.v1.json</code>，未发现独立的 <code>MMORPG</code>、<code>MMO</code> 或 <code>Massively Multiplayer Online RPG</code> 路由。因此本期新增：</p>
 <p><strong>MMORPG / 持久共享世界在线角色扮演游戏。</strong></p>
 <p>常见名称包括：</p>
@@ -155,7 +155,7 @@
 <p><strong>玩家退出以后，世界、经济、组织和其他玩家仍然继续存在；玩家下一次登录面对的是同一个持续演化的社会世界，而不是重新开始一局比赛。</strong></p>
 </blockquote>
 <hr />
-<h1 id="1-类型定位">1. 类型定位</h1><p>MMORPG 通常同时包含：</p>
+<h3 id="1-类型定位">1. 类型定位</h3><p>MMORPG 通常同时包含：</p>
 <ul>
 <li><p>持久角色；</p>
 </li>
@@ -255,7 +255,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="2-mmorpg-的核心不是大地图而是持久共享世界">2. MMORPG 的核心不是“大地图”，而是“持久共享世界”</h1><p>普通开放世界可以理解为：</p>
+<h3 id="2-mmorpg-的核心不是大地图而是持久共享世界">2. MMORPG 的核心不是“大地图”，而是“持久共享世界”</h3><p>普通开放世界可以理解为：</p>
 <blockquote>
 <p>世界服务于当前玩家。</p>
 </blockquote>
@@ -283,7 +283,7 @@
 <p>因此必须建立：</p>
 <p><strong>Persistent World Identity。</strong></p>
 <hr />
-<h1 id="3-worlddefinition">3. WorldDefinition</h1><p>建议字段：</p>
+<h3 id="3-worlddefinition">3. WorldDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>WorldId；</p>
 </li>
@@ -309,7 +309,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="4-worldruntimestate">4. WorldRuntimeState</h1><p>建议包含：</p>
+<h3 id="4-worldruntimestate">4. WorldRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>WorldId；</p>
 </li>
@@ -333,7 +333,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="5-world-truth-不属于任意玩家">5. World Truth 不属于任意玩家</h1><p>例如：</p>
+<h3 id="5-world-truth-不属于任意玩家">5. World Truth 不属于任意玩家</h3><p>例如：</p>
 <p>世界Boss已经死亡。</p>
 <p>玩家A离线。</p>
 <p>玩家B击杀Boss。</p>
@@ -346,7 +346,7 @@
 <p>和：</p>
 <p><strong>Player Personal State。</strong></p>
 <hr />
-<h1 id="6-shared-world-state">6. Shared World State</h1><p>例如：</p>
+<h3 id="6-shared-world-state">6. Shared World State</h3><p>例如：</p>
 <ul>
 <li><p>世界时间；</p>
 </li>
@@ -361,7 +361,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="7-player-personal-state">7. Player Personal State</h1><p>例如：</p>
+<h3 id="7-player-personal-state">7. Player Personal State</h3><p>例如：</p>
 <ul>
 <li><p>Character Level；</p>
 </li>
@@ -379,13 +379,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="8-核心范式一持久角色与在线角色必须分离">8. 核心范式一：持久角色与在线角色必须分离</h1><p>数据库中的角色：</p>
+<h3 id="8-核心范式一持久角色与在线角色必须分离">8. 核心范式一：持久角色与在线角色必须分离</h3><p>数据库中的角色：</p>
 <p><strong>CharacterPersistentState。</strong></p>
 <p>当前服务器正在运行的角色：</p>
 <p><strong>CharacterRuntimeEntity。</strong></p>
 <p>不能视为同一个对象。</p>
 <hr />
-<h1 id="9-characterpersistentstate">9. CharacterPersistentState</h1><p>建议包含：</p>
+<h3 id="9-characterpersistentstate">9. CharacterPersistentState</h3><p>建议包含：</p>
 <ul>
 <li><p>CharacterId；</p>
 </li>
@@ -431,7 +431,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="10-characterruntimeentity">10. CharacterRuntimeEntity</h1><p>建议包含：</p>
+<h3 id="10-characterruntimeentity">10. CharacterRuntimeEntity</h3><p>建议包含：</p>
 <ul>
 <li><p>CharacterId；</p>
 </li>
@@ -465,7 +465,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="11-为什么不能每tick写数据库">11. 为什么不能每Tick写数据库</h1><p>角色每秒可能发生：</p>
+<h3 id="11-为什么不能每tick写数据库">11. 为什么不能每Tick写数据库</h3><p>角色每秒可能发生：</p>
 <ul>
 <li><p>移动；</p>
 </li>
@@ -486,7 +486,7 @@
 <p>Durable State</p>
 <p>分层。</p>
 <hr />
-<h1 id="12-durable-commit-point">12. Durable Commit Point</h1><p>真正需要可靠持久化的状态变化包括：</p>
+<h3 id="12-durable-commit-point">12. Durable Commit Point</h3><p>真正需要可靠持久化的状态变化包括：</p>
 <ul>
 <li><p>获得装备；</p>
 </li>
@@ -511,7 +511,7 @@
 <p>当前位置每0.1秒变化</p>
 <p>不需要同等级事务保证。</p>
 <hr />
-<h1 id="13-character-snapshot">13. Character Snapshot</h1><p>服务器周期保存：</p>
+<h3 id="13-character-snapshot">13. Character Snapshot</h3><p>服务器周期保存：</p>
 <ul>
 <li><p>Position；</p>
 </li>
@@ -530,11 +530,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="14-核心范式二账号角色会话必须是三个身份层">14. 核心范式二：账号、角色、会话必须是三个身份层</h1><h2 id="account">Account</h2><p>现实账户。</p>
-<h2 id="character">Character</h2><p>世界中的长期身份。</p>
-<h2 id="session">Session</h2><p>本次连接。</p>
+<h3 id="14-核心范式二账号角色会话必须是三个身份层">14. 核心范式二：账号、角色、会话必须是三个身份层</h3><h3 id="account">Account</h3><p>现实账户。</p>
+<h3 id="character">Character</h3><p>世界中的长期身份。</p>
+<h3 id="session">Session</h3><p>本次连接。</p>
 <hr />
-<h1 id="15-accountstate">15. AccountState</h1><p>建议包含：</p>
+<h3 id="15-accountstate">15. AccountState</h3><p>建议包含：</p>
 <ul>
 <li><p>AccountId；</p>
 </li>
@@ -556,7 +556,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="16-sessionstate">16. SessionState</h1><p>建议包含：</p>
+<h3 id="16-sessionstate">16. SessionState</h3><p>建议包含：</p>
 <ul>
 <li><p>SessionId；</p>
 </li>
@@ -578,7 +578,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="17-为什么-session-不能等于-character">17. 为什么 Session 不能等于 Character</h1><p>同一角色：</p>
+<h3 id="17-为什么-session-不能等于-character">17. 为什么 Session 不能等于 Character</h3><p>同一角色：</p>
 <p>今天登录一次，</p>
 <p>明天又登录一次。</p>
 <p>CharacterId相同。</p>
@@ -586,7 +586,7 @@
 <p>如果服务器只用CharacterId区分连接：</p>
 <p>重连、重复登录和幽灵连接很难处理。</p>
 <hr />
-<h1 id="18-duplicate-login">18. Duplicate Login</h1><p>常见情况：</p>
+<h3 id="18-duplicate-login">18. Duplicate Login</h3><p>常见情况：</p>
 <p>手机热点断开。</p>
 <p>服务器还认为旧连接存活。</p>
 <p>玩家立刻重新登录。</p>
@@ -599,7 +599,7 @@
 <p>不能同时生成：</p>
 <p>两个同CharacterId的玩家。</p>
 <hr />
-<h1 id="19-session-lease">19. Session Lease</h1><p>推荐Session使用：</p>
+<h3 id="19-session-lease">19. Session Lease</h3><p>推荐Session使用：</p>
 <ul>
 <li><p>Heartbeat；</p>
 </li>
@@ -613,7 +613,7 @@
 <p>给：</p>
 <p>短暂Reconnect Grace Period。</p>
 <hr />
-<h1 id="20-核心范式三mmorpg世界不是一台服务器而是世界拓扑">20. 核心范式三：MMORPG世界不是一台服务器，而是世界拓扑</h1><p>大规模世界需要拆成多个运行容器。</p>
+<h3 id="20-核心范式三mmorpg世界不是一台服务器而是世界拓扑">20. 核心范式三：MMORPG世界不是一台服务器，而是世界拓扑</h3><p>大规模世界需要拆成多个运行容器。</p>
 <p>典型层级：</p>
 <p><strong>Realm</strong></p>
 <p>→ <strong>Region</strong></p>
@@ -624,7 +624,7 @@
 <p>不同游戏命名不同，</p>
 <p>但职责必须明确。</p>
 <hr />
-<h1 id="21-realm">21. Realm</h1><p>玩家长期归属的大型世界逻辑。</p>
+<h3 id="21-realm">21. Realm</h3><p>玩家长期归属的大型世界逻辑。</p>
 <p>可以拥有：</p>
 <ul>
 <li><p>社区；</p>
@@ -637,11 +637,11 @@
 </li>
 </ul>
 <hr />
-<h1 id="22-zone">22. Zone</h1><p>地理和玩法区域。</p>
+<h3 id="22-zone">22. Zone</h3><p>地理和玩法区域。</p>
 <p>例如：</p>
 <p>Elwynn Forest。</p>
 <hr />
-<h1 id="23-shard-layer">23. Shard / Layer</h1><p>同一个逻辑Zone的多个并行运行副本。</p>
+<h3 id="23-shard-layer">23. Shard / Layer</h3><p>同一个逻辑Zone的多个并行运行副本。</p>
 <p>目的：</p>
 <p>控制并发人口。</p>
 <p>例如：</p>
@@ -649,7 +649,7 @@
 <p>Shard 1：180人。</p>
 <p>Shard 2：165人。</p>
 <hr />
-<h1 id="24-instance">24. Instance</h1><p>独立生命周期内容。</p>
+<h3 id="24-instance">24. Instance</h3><p>独立生命周期内容。</p>
 <p>例如：</p>
 <ul>
 <li><p>Dungeon；</p>
@@ -664,7 +664,7 @@
 <p>通常：</p>
 <p>一组玩家拥有自己的Instance。</p>
 <hr />
-<h1 id="25-zonetemplate">25. ZoneTemplate</h1><p>建议字段：</p>
+<h3 id="25-zonetemplate">25. ZoneTemplate</h3><p>建议字段：</p>
 <ul>
 <li><p>ZoneId；</p>
 </li>
@@ -688,7 +688,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="26-zoneinstancestate">26. ZoneInstanceState</h1><p>建议包含：</p>
+<h3 id="26-zoneinstancestate">26. ZoneInstanceState</h3><p>建议包含：</p>
 <ul>
 <li><p>ZoneInstanceId；</p>
 </li>
@@ -712,7 +712,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="27-shard不是另一个世界">27. Shard不是另一个世界</h1><p>如果两个玩家：</p>
+<h3 id="27-shard不是另一个世界">27. Shard不是另一个世界</h3><p>如果两个玩家：</p>
 <p>都在“北风平原”，</p>
 <p>可能实际处于：</p>
 <p>Shard A</p>
@@ -724,7 +724,7 @@
 <p>系统可能需要：</p>
 <p><strong>Shard Cohesion。</strong></p>
 <hr />
-<h1 id="28-party-shard-cohesion">28. Party Shard Cohesion</h1><p>Party组建后：</p>
+<h3 id="28-party-shard-cohesion">28. Party Shard Cohesion</h3><p>Party组建后：</p>
 <p>优先把成员迁移到：</p>
 <p>同一个Shard。</p>
 <p>流程：</p>
@@ -734,7 +734,7 @@
 → 迁移成员<br />
 → 恢复可见性。</p>
 <hr />
-<h1 id="29-不应在战斗中随意换shard">29. 不应在战斗中随意换Shard</h1><p>否则玩家可能：</p>
+<h3 id="29-不应在战斗中随意换shard">29. 不应在战斗中随意换Shard</h3><p>否则玩家可能：</p>
 <p>切Shard</p>
 <p>逃离敌人或争抢资源。</p>
 <p>需要：</p>
@@ -749,7 +749,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="30-layer-population-policy">30. Layer Population Policy</h1><p>可以根据：</p>
+<h3 id="30-layer-population-policy">30. Layer Population Policy</h3><p>可以根据：</p>
 <ul>
 <li><p>Population；</p>
 </li>
@@ -766,7 +766,7 @@
 <p>导致：</p>
 <p>玩家世界连续性很差。</p>
 <hr />
-<h1 id="31-核心范式四zone-transfer-是正式分布式事务">31. 核心范式四：Zone Transfer 是正式分布式事务</h1><p>玩家从：</p>
+<h3 id="31-核心范式四zone-transfer-是正式分布式事务">31. 核心范式四：Zone Transfer 是正式分布式事务</h3><p>玩家从：</p>
 <p>Zone A</p>
 <p>跨到：</p>
 <p>Zone B。</p>
@@ -777,7 +777,7 @@
 <p>这不是：</p>
 <p><code>SceneManager.LoadScene()</code>。</p>
 <hr />
-<h1 id="32-zonetransferrequest">32. ZoneTransferRequest</h1><p>建议字段：</p>
+<h3 id="32-zonetransferrequest">32. ZoneTransferRequest</h3><p>建议字段：</p>
 <ul>
 <li><p>TransferId；</p>
 </li>
@@ -799,7 +799,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="33-zone-transfer流程">33. Zone Transfer流程</h1><p>Source接收Transfer Intent<br />
+<h3 id="33-zone-transfer流程">33. Zone Transfer流程</h3><p>Source接收Transfer Intent<br />
 → 冻结Character关键操作<br />
 → 生成TransferSnapshot<br />
 → 请求WorldRouter选择TargetInstance<br />
@@ -812,7 +812,7 @@
 → Source销毁旧Runtime<br />
 → Transfer Commit。</p>
 <hr />
-<h1 id="34-为什么需要双阶段">34. 为什么需要双阶段</h1><p>最危险的异常：</p>
+<h3 id="34-为什么需要双阶段">34. 为什么需要双阶段</h3><p>最危险的异常：</p>
 <p>Source删除角色。</p>
 <p>Target创建失败。</p>
 <p>玩家消失。</p>
@@ -823,7 +823,7 @@
 <p>因此必须保证：</p>
 <p><strong>Exactly-One Active Runtime。</strong></p>
 <hr />
-<h1 id="35-transferstate">35. TransferState</h1><p>建议：</p>
+<h3 id="35-transferstate">35. TransferState</h3><p>建议：</p>
 <ul>
 <li><p>Requested；</p>
 </li>
@@ -845,14 +845,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="36-transfer失败">36. Transfer失败</h1><p>如果Target失败：</p>
+<h3 id="36-transfer失败">36. Transfer失败</h3><p>如果Target失败：</p>
 <p>Source恢复Character。</p>
 <p>玩家最多：</p>
 <p>看到加载失败。</p>
 <p>不能：</p>
 <p>角色资产损坏。</p>
 <hr />
-<h1 id="37-transfer-timeout">37. Transfer Timeout</h1><p>任何阶段卡死：</p>
+<h3 id="37-transfer-timeout">37. Transfer Timeout</h3><p>任何阶段卡死：</p>
 <p>通过TransferId</p>
 <p>进行恢复。</p>
 <p>下一次登录：</p>
@@ -862,7 +862,7 @@
 <p>还是：</p>
 <p>Target。</p>
 <hr />
-<h1 id="38-核心范式五服务器权威必须覆盖所有高价值状态">38. 核心范式五：服务器权威必须覆盖所有高价值状态</h1><p>客户端可以预测：</p>
+<h3 id="38-核心范式五服务器权威必须覆盖所有高价值状态">38. 核心范式五：服务器权威必须覆盖所有高价值状态</h3><p>客户端可以预测：</p>
 <ul>
 <li><p>移动；</p>
 </li>
@@ -899,12 +899,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="39-client-intent">39. Client Intent</h1><p>客户端发送：</p>
+<h3 id="39-client-intent">39. Client Intent</h3><p>客户端发送：</p>
 <p>“I want to cast Fireball on Entity 382。”</p>
 <p>而不是：</p>
 <p>“I dealt 7421 damage。”</p>
 <hr />
-<h1 id="40-server-validation">40. Server Validation</h1><p>验证：</p>
+<h3 id="40-server-validation">40. Server Validation</h3><p>验证：</p>
 <ul>
 <li><p>Skill已解锁；</p>
 </li>
@@ -924,14 +924,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="41-client-prediction">41. Client Prediction</h1><p>移动必须预测。</p>
+<h3 id="41-client-prediction">41. Client Prediction</h3><p>移动必须预测。</p>
 <p>否则：</p>
 <p>100ms RTT</p>
 <p>意味着：</p>
 <p>按W后100ms才移动。</p>
 <p>体验不可接受。</p>
 <hr />
-<h1 id="42-movement-prediction">42. Movement Prediction</h1><p>Client：</p>
+<h3 id="42-movement-prediction">42. Movement Prediction</h3><p>Client：</p>
 <p>立即模拟。</p>
 <p>同时：</p>
 <p>发送InputSequence。</p>
@@ -942,12 +942,12 @@
 <p>Client：</p>
 <p>重放未确认Input。</p>
 <hr />
-<h1 id="43-reconciliation">43. Reconciliation</h1><p>偏差很小：</p>
+<h3 id="43-reconciliation">43. Reconciliation</h3><p>偏差很小：</p>
 <p>Smooth Correction。</p>
 <p>偏差过大：</p>
 <p>Snap / Strong Correction。</p>
 <hr />
-<h1 id="44-核心范式六interest-management-决定-mmo-是否能够扩展">44. 核心范式六：Interest Management 决定 MMO 是否能够扩展</h1><p>一个Zone里：</p>
+<h3 id="44-核心范式六interest-management-决定-mmo-是否能够扩展">44. 核心范式六：Interest Management 决定 MMO 是否能够扩展</h3><p>一个Zone里：</p>
 <p>300名玩家。</p>
 <p>附近还有：</p>
 <ul>
@@ -967,7 +967,7 @@
 <p>需要：</p>
 <p><strong>Area of Interest / AOI。</strong></p>
 <hr />
-<h1 id="45-interestprofile">45. InterestProfile</h1><p>建议考虑：</p>
+<h3 id="45-interestprofile">45. InterestProfile</h3><p>建议考虑：</p>
 <ul>
 <li><p>Distance；</p>
 </li>
@@ -987,7 +987,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="46-spatial-interest">46. Spatial Interest</h1><p>最基础：</p>
+<h3 id="46-spatial-interest">46. Spatial Interest</h3><p>最基础：</p>
 <p>玩家附近：</p>
 <p>50m。</p>
 <p>进入：</p>
@@ -995,7 +995,7 @@
 <p>离开：</p>
 <p>RemoveEntity。</p>
 <hr />
-<h1 id="47-social-interest">47. Social Interest</h1><p>Party成员即使距离较远：</p>
+<h3 id="47-social-interest">47. Social Interest</h3><p>Party成员即使距离较远：</p>
 <p>也需要：</p>
 <ul>
 <li><p>Health；</p>
@@ -1008,12 +1008,12 @@
 <p>但不需要：</p>
 <p>完整Transform高频同步。</p>
 <hr />
-<h1 id="48-combat-interest">48. Combat Interest</h1><p>正在攻击你的敌人：</p>
+<h3 id="48-combat-interest">48. Combat Interest</h3><p>正在攻击你的敌人：</p>
 <p>优先高频。</p>
 <p>远处路人：</p>
 <p>低频。</p>
 <hr />
-<h1 id="49-entityreplicationstate">49. EntityReplicationState</h1><p>建议字段：</p>
+<h3 id="49-entityreplicationstate">49. EntityReplicationState</h3><p>建议字段：</p>
 <ul>
 <li><p>EntityId；</p>
 </li>
@@ -1029,17 +1029,17 @@
 </li>
 </ul>
 <hr />
-<h1 id="50-replication-tier">50. Replication Tier</h1><p>例如：</p>
-<h3 id="tier-0">Tier 0</h3><p>自己。</p>
+<h3 id="50-replication-tier">50. Replication Tier</h3><p>例如：</p>
+<h4 id="tier-0">Tier 0</h4><p>自己。</p>
 <p>最高频。</p>
-<h3 id="tier-1">Tier 1</h3><p>战斗目标、Party。</p>
+<h4 id="tier-1">Tier 1</h4><p>战斗目标、Party。</p>
 <p>高频。</p>
-<h3 id="tier-2">Tier 2</h3><p>附近玩家。</p>
+<h4 id="tier-2">Tier 2</h4><p>附近玩家。</p>
 <p>中频。</p>
-<h3 id="tier-3">Tier 3</h3><p>远处可见对象。</p>
+<h4 id="tier-3">Tier 3</h4><p>远处可见对象。</p>
 <p>低频。</p>
 <hr />
-<h1 id="51-aoi失效的典型症状">51. AOI失效的典型症状</h1><p>世界Boss旁：</p>
+<h3 id="51-aoi失效的典型症状">51. AOI失效的典型症状</h3><p>世界Boss旁：</p>
 <p>200人。</p>
 <p>每个人：</p>
 <p>收到199名玩家完整Transform。</p>
@@ -1048,7 +1048,7 @@
 <p>因此大型公共事件必须从设计阶段考虑：</p>
 <p>Replication Budget。</p>
 <hr />
-<h1 id="52-核心范式七公共世界与副本承担不同职责">52. 核心范式七：公共世界与副本承担不同职责</h1><p>开放世界适合：</p>
+<h3 id="52-核心范式七公共世界与副本承担不同职责">52. 核心范式七：公共世界与副本承担不同职责</h3><p>开放世界适合：</p>
 <ul>
 <li><p>偶遇；</p>
 </li>
@@ -1086,7 +1086,7 @@
 </ul>
 <p>两者不是谁替代谁。</p>
 <hr />
-<h1 id="53-open-world-的核心价值">53. Open World 的核心价值</h1><p>让玩家感受到：</p>
+<h3 id="53-open-world-的核心价值">53. Open World 的核心价值</h3><p>让玩家感受到：</p>
 <blockquote>
 <p>世界里还有其他真实的人。</p>
 </blockquote>
@@ -1108,7 +1108,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="54-instance-的核心价值">54. Instance 的核心价值</h1><p>设计者可以明确知道：</p>
+<h3 id="54-instance-的核心价值">54. Instance 的核心价值</h3><p>设计者可以明确知道：</p>
 <p>这里有：</p>
 <p>5个人。</p>
 <p>而不是：</p>
@@ -1116,7 +1116,7 @@
 <p>从而制作：</p>
 <p>高精度协作。</p>
 <hr />
-<h1 id="55-instancedefinition">55. InstanceDefinition</h1><p>建议字段：</p>
+<h3 id="55-instancedefinition">55. InstanceDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>InstanceId；</p>
 </li>
@@ -1144,7 +1144,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="56-instanceruntimestate">56. InstanceRuntimeState</h1><p>建议包含：</p>
+<h3 id="56-instanceruntimestate">56. InstanceRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>RuntimeInstanceId；</p>
 </li>
@@ -1168,7 +1168,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="57-instance-lifecycle">57. Instance Lifecycle</h1><p>Create<br />
+<h3 id="57-instance-lifecycle">57. Instance Lifecycle</h3><p>Create<br />
 → WaitingPlayers<br />
 → Active<br />
 → EncounterProgress<br />
@@ -1176,12 +1176,12 @@
 → GracePeriod<br />
 → Destroyed。</p>
 <hr />
-<h1 id="58-副本服务器不一定需要长期存在">58. 副本服务器不一定需要长期存在</h1><p>完成后：</p>
+<h3 id="58-副本服务器不一定需要长期存在">58. 副本服务器不一定需要长期存在</h3><p>完成后：</p>
 <p>保存：</p>
 <p>Result / Lockout。</p>
 <p>RuntimeInstance可以销毁。</p>
 <hr />
-<h1 id="59-核心范式八party-是最基础的多人一致性单元">59. 核心范式八：Party 是最基础的多人一致性单元</h1><h2 id="partystate">PartyState</h2><p>建议包含：</p>
+<h3 id="59-核心范式八party-是最基础的多人一致性单元">59. 核心范式八：Party 是最基础的多人一致性单元</h3><h3 id="partystate">PartyState</h3><p>建议包含：</p>
 <ul>
 <li><p>PartyId；</p>
 </li>
@@ -1205,7 +1205,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="60-party职责">60. Party职责</h1><ul>
+<h3 id="60-party职责">60. Party职责</h3><ul>
 <li><p>共享UI；</p>
 </li>
 <li><p>组队聊天；</p>
@@ -1222,7 +1222,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="61-party不是简单memberid列表">61. Party不是简单MemberId列表</h1><p>需要处理：</p>
+<h3 id="61-party不是简单memberid列表">61. Party不是简单MemberId列表</h3><p>需要处理：</p>
 <ul>
 <li><p>Invite；</p>
 </li>
@@ -1242,17 +1242,17 @@
 </li>
 </ul>
 <hr />
-<h1 id="62-party-operation使用version">62. Party Operation使用Version</h1><p>两人同时：</p>
+<h3 id="62-party-operation使用version">62. Party Operation使用Version</h3><p>两人同时：</p>
 <p>邀请同一个成员。</p>
 <p>或：</p>
 <p>Leader离队和Kick同时发生。</p>
 <p>需要统一串行化或Version控制。</p>
 <hr />
-<h1 id="63-raid">63. Raid</h1><p>Raid是更大的社会执行单元。</p>
+<h3 id="63-raid">63. Raid</h3><p>Raid是更大的社会执行单元。</p>
 <p>例如：</p>
 <p>20人。</p>
 <hr />
-<h1 id="64-raidstate">64. RaidState</h1><p>建议包含：</p>
+<h3 id="64-raidstate">64. RaidState</h3><p>建议包含：</p>
 <ul>
 <li><p>RaidId；</p>
 </li>
@@ -1274,7 +1274,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="65-raid-ui本身就是重要基础设施">65. Raid UI本身就是重要基础设施</h1><p>必须提供：</p>
+<h3 id="65-raid-ui本身就是重要基础设施">65. Raid UI本身就是重要基础设施</h3><p>必须提供：</p>
 <ul>
 <li><p>Health；</p>
 </li>
@@ -1292,14 +1292,14 @@
 <p>因为玩家无法：</p>
 <p>逐个观察20个人角色模型判断状态。</p>
 <hr />
-<h1 id="66-核心范式九threat-aggro-是-pve-团队战的隐性协议">66. 核心范式九：Threat / Aggro 是 PvE 团队战的隐性协议</h1><p>在传统单人 RPG 中：</p>
+<h3 id="66-核心范式九threat-aggro-是-pve-团队战的隐性协议">66. 核心范式九：Threat / Aggro 是 PvE 团队战的隐性协议</h3><p>在传统单人 RPG 中：</p>
 <p>Enemy选择Player。</p>
 <p>在MMORPG组队中：</p>
 <p>敌人需要在：</p>
 <p>Tank、Healer、DPS</p>
 <p>之间做规则化Target Selection。</p>
 <hr />
-<h1 id="67-threatentry">67. ThreatEntry</h1><p>建议字段：</p>
+<h3 id="67-threatentry">67. ThreatEntry</h3><p>建议字段：</p>
 <ul>
 <li><p>EnemyId；</p>
 </li>
@@ -1317,7 +1317,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="68-threat来源">68. Threat来源</h1><p>例如：</p>
+<h3 id="68-threat来源">68. Threat来源</h3><p>例如：</p>
 <p>Damage：</p>
 <p>产生Threat。</p>
 <p>Healing：</p>
@@ -1327,29 +1327,29 @@
 <p>特殊技能：</p>
 <p>ThreatMultiplier。</p>
 <hr />
-<h1 id="69-threat-table">69. Threat Table</h1><p>Enemy维护：</p>
+<h3 id="69-threat-table">69. Threat Table</h3><p>Enemy维护：</p>
 <p>Actor → Threat。</p>
 <p>选择：</p>
 <p>最高合法Threat目标。</p>
 <hr />
-<h1 id="70-threat的设计意义">70. Threat的设计意义</h1><p>让Tank能够：</p>
+<h3 id="70-threat的设计意义">70. Threat的设计意义</h3><p>让Tank能够：</p>
 <p>通过明确行为</p>
 <p>控制Boss目标。</p>
 <p>这是团队职责存在的重要基础。</p>
 <hr />
-<h1 id="71-taunt不是简单threat-999999">71. Taunt不是简单Threat +999999</h1><p>更稳定语义：</p>
+<h3 id="71-taunt不是简单threat-999999">71. Taunt不是简单Threat +999999</h3><p>更稳定语义：</p>
 <p>Taunt期间：</p>
 <p>ForcedTarget = Tank。</p>
 <p>Taunt结束：</p>
 <p>调整Tank Threat到某个阈值。</p>
 <p>否则Threat数值容易失控。</p>
 <hr />
-<h1 id="72-threat-ui">72. Threat UI</h1><p>普通玩家不一定需要完整数字。</p>
+<h3 id="72-threat-ui">72. Threat UI</h3><p>普通玩家不一定需要完整数字。</p>
 <p>Tank高级UI可以：</p>
 <p>显示：</p>
 <p>当前Threat排名。</p>
 <hr />
-<h1 id="73-核心范式十职业职责是一套团队约束解决结构">73. 核心范式十：职业职责是一套“团队约束解决结构”</h1><p>经典：</p>
+<h3 id="73-核心范式十职业职责是一套团队约束解决结构">73. 核心范式十：职业职责是一套“团队约束解决结构”</h3><p>经典：</p>
 <ul>
 <li><p>Tank；</p>
 </li>
@@ -1363,7 +1363,7 @@
 <p>而是：</p>
 <p>团队挑战需要多个同时成立的能力维度。</p>
 <hr />
-<h1 id="74-groupcapability">74. GroupCapability</h1><p>可以抽象：</p>
+<h3 id="74-groupcapability">74. GroupCapability</h3><p>可以抽象：</p>
 <ul>
 <li><p>Damage；</p>
 </li>
@@ -1383,14 +1383,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="75-role-queue">75. Role Queue</h1><p>Matchmaking可以要求：</p>
+<h3 id="75-role-queue">75. Role Queue</h3><p>Matchmaking可以要求：</p>
 <p>1 Tank<br />
 1 Healer<br />
 3 DPS。</p>
 <p>但这只是：</p>
 <p>Role Constraint Solver。</p>
 <hr />
-<h1 id="76-roledefinition">76. RoleDefinition</h1><p>建议字段：</p>
+<h3 id="76-roledefinition">76. RoleDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>RoleId；</p>
 </li>
@@ -1408,7 +1408,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="77-不建议-matchmaker直接根据职业名判断">77. 不建议 Matchmaker直接根据职业名判断</h1><p>例如：</p>
+<h3 id="77-不建议-matchmaker直接根据职业名判断">77. 不建议 Matchmaker直接根据职业名判断</h3><p>例如：</p>
 <p>Paladin可以：</p>
 <p>Tank</p>
 <p>或：</p>
@@ -1419,7 +1419,7 @@
 <p>Build Eligibility</p>
 <p>判断。</p>
 <hr />
-<h1 id="78-dungeon-finder">78. Dungeon Finder</h1><h2 id="queueentry">QueueEntry</h2><p>建议字段：</p>
+<h3 id="78-dungeon-finder">78. Dungeon Finder</h3><h3 id="queueentry">QueueEntry</h3><p>建议字段：</p>
 <ul>
 <li><p>QueueEntryId；</p>
 </li>
@@ -1441,7 +1441,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="79-matchmaking流程">79. Matchmaking流程</h1><p>加入Queue<br />
+<h3 id="79-matchmaking流程">79. Matchmaking流程</h3><p>加入Queue<br />
 → Role分类<br />
 → 找到兼容候选<br />
 → 预创建MatchProposal<br />
@@ -1451,14 +1451,14 @@
 → 传送Players<br />
 → Queue完成。</p>
 <hr />
-<h1 id="80-ready-check">80. Ready Check</h1><p>如果一个玩家拒绝：</p>
+<h3 id="80-ready-check">80. Ready Check</h3><p>如果一个玩家拒绝：</p>
 <p>其他人应该：</p>
 <p>重新进入Queue</p>
 <p>并保留部分等待优先级。</p>
 <p>不能：</p>
 <p>五个人全部重新排20分钟。</p>
 <hr />
-<h1 id="81-queue-time-是正式玩家体验指标">81. Queue Time 是正式玩家体验指标</h1><p>不同Role：</p>
+<h3 id="81-queue-time-是正式玩家体验指标">81. Queue Time 是正式玩家体验指标</h3><p>不同Role：</p>
 <p>等待时间可能巨大不同。</p>
 <p>系统需要监控：</p>
 <ul>
@@ -1472,12 +1472,12 @@
 <p>这会反向影响：</p>
 <p>职业奖励和Queue Incentive。</p>
 <hr />
-<h1 id="82-核心范式十一raid-encounter-是多玩家同步约束系统">82. 核心范式十一：Raid Encounter 是多玩家同步约束系统</h1><p>Raid Boss不应只是：</p>
+<h3 id="82-核心范式十一raid-encounter-是多玩家同步约束系统">82. 核心范式十一：Raid Encounter 是多玩家同步约束系统</h3><p>Raid Boss不应只是：</p>
 <p>HP极高的Boss。</p>
 <p>其真正设计单位是：</p>
 <p><strong>Group Coordination Mechanic。</strong></p>
 <hr />
-<h1 id="83-encounterdefinition">83. EncounterDefinition</h1><p>建议字段：</p>
+<h3 id="83-encounterdefinition">83. EncounterDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>EncounterId；</p>
 </li>
@@ -1501,7 +1501,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="84-raid-mechanic类型">84. Raid Mechanic类型</h1><p>例如：</p>
+<h3 id="84-raid-mechanic类型">84. Raid Mechanic类型</h3><p>例如：</p>
 <ul>
 <li><p>Spread；</p>
 </li>
@@ -1527,7 +1527,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="85-raid的核心不是每个人躲技能">85. Raid的核心不是“每个人躲技能”</h1><p>真正多人机制是：</p>
+<h3 id="85-raid的核心不是每个人躲技能">85. Raid的核心不是“每个人躲技能”</h3><p>真正多人机制是：</p>
 <blockquote>
 <p>一个人的行为会改变其他玩家的安全状态。</p>
 </blockquote>
@@ -1541,7 +1541,7 @@
 <p>这才产生：</p>
 <p>Coordination。</p>
 <hr />
-<h1 id="86-mechanicassignment">86. MechanicAssignment</h1><p>某些机制：</p>
+<h3 id="86-mechanicassignment">86. MechanicAssignment</h3><p>某些机制：</p>
 <p>随机选择：</p>
 <p>3名玩家。</p>
 <p>但必须满足：</p>
@@ -1560,16 +1560,16 @@
 <p>不能：</p>
 <p>完全无条件随机。</p>
 <hr />
-<h1 id="87-encounter-random-stream">87. Encounter Random Stream</h1><p>固定Seed可以帮助：</p>
+<h3 id="87-encounter-random-stream">87. Encounter Random Stream</h3><p>固定Seed可以帮助：</p>
 <p>服务器重放和测试。</p>
 <p>但正式Boss不一定完全固定Pattern。</p>
 <hr />
-<h1 id="88-wipe">88. Wipe</h1><p>Raid中团队全部失败：</p>
+<h3 id="88-wipe">88. Wipe</h3><p>Raid中团队全部失败：</p>
 <p>Encounter Reset。</p>
 <p>但：</p>
 <p>副本其他长期状态可能保持。</p>
 <hr />
-<h1 id="89-encounter-reset">89. Encounter Reset</h1><p>清理：</p>
+<h3 id="89-encounter-reset">89. Encounter Reset</h3><p>清理：</p>
 <ul>
 <li><p>Boss Health；</p>
 </li>
@@ -1594,16 +1594,16 @@
 </li>
 </ul>
 <hr />
-<h1 id="90-boss状态不能靠scene-reload重置">90. Boss状态不能靠Scene Reload重置</h1><p>服务器长期运行时：</p>
+<h3 id="90-boss状态不能靠scene-reload重置">90. Boss状态不能靠Scene Reload重置</h3><p>服务器长期运行时：</p>
 <p>应该拥有显式：</p>
 <p>EncounterResetTransaction。</p>
 <hr />
-<h1 id="91-combat-resurrection">91. Combat Resurrection</h1><p>多人Raid常存在：</p>
+<h3 id="91-combat-resurrection">91. Combat Resurrection</h3><p>多人Raid常存在：</p>
 <p>Battle Rez。</p>
 <p>它本质上是：</p>
 <p>Raid级稀缺资源。</p>
 <hr />
-<h1 id="92-encounterresourcestate">92. EncounterResourceState</h1><p>可以保存：</p>
+<h3 id="92-encounterresourcestate">92. EncounterResourceState</h3><p>可以保存：</p>
 <ul>
 <li><p>BattleRezCharges；</p>
 </li>
@@ -1615,7 +1615,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="93-核心范式十二loot-在-mmo-中不仅是成长还承担社会公平">93. 核心范式十二：Loot 在 MMO 中不仅是成长，还承担社会公平</h1><p>多人Boss死亡：</p>
+<h3 id="93-核心范式十二loot-在-mmo-中不仅是成长还承担社会公平">93. 核心范式十二：Loot 在 MMO 中不仅是成长，还承担社会公平</h3><p>多人Boss死亡：</p>
 <p>谁得到装备？</p>
 <p>可选：</p>
 <ul>
@@ -1635,7 +1635,7 @@
 <p>这会直接影响：</p>
 <p>玩家关系。</p>
 <hr />
-<h1 id="94-looteligibility">94. LootEligibility</h1><p>建议字段：</p>
+<h3 id="94-looteligibility">94. LootEligibility</h3><p>建议字段：</p>
 <ul>
 <li><p>EncounterId；</p>
 </li>
@@ -1651,7 +1651,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="95-personal-loot">95. Personal Loot</h1><p>优点：</p>
+<h3 id="95-personal-loot">95. Personal Loot</h3><p>优点：</p>
 <ul>
 <li><p>减少争议；</p>
 </li>
@@ -1665,21 +1665,21 @@
 <li>团队资源分配策略较少。</li>
 </ul>
 <hr />
-<h1 id="96-shared-loot">96. Shared Loot</h1><p>会产生：</p>
+<h3 id="96-shared-loot">96. Shared Loot</h3><p>会产生：</p>
 <p>Guild内部协作与冲突。</p>
 <p>更适合：</p>
 <p>高组织内容。</p>
 <hr />
-<h1 id="97-token系统">97. Token系统</h1><p>Boss掉：</p>
+<h3 id="97-token系统">97. Token系统</h3><p>Boss掉：</p>
 <p>RaidToken。</p>
 <p>玩家自己兑换目标装备。</p>
 <p>作用：</p>
 <p>减少纯随机尾部。</p>
 <hr />
-<h1 id="98-weekly-lockout">98. Weekly Lockout</h1><p>高价值Raid奖励通常需要：</p>
+<h3 id="98-weekly-lockout">98. Weekly Lockout</h3><p>高价值Raid奖励通常需要：</p>
 <p>限制获取频率。</p>
 <hr />
-<h1 id="99-lockoutstate">99. LockoutState</h1><p>建议包含：</p>
+<h3 id="99-lockoutstate">99. LockoutState</h3><p>建议包含：</p>
 <ul>
 <li><p>CharacterId；</p>
 </li>
@@ -1697,24 +1697,24 @@
 </li>
 </ul>
 <hr />
-<h1 id="100-lockout必须与instance分离">100. Lockout必须与Instance分离</h1><p>Instance被删除：</p>
+<h3 id="100-lockout必须与instance分离">100. Lockout必须与Instance分离</h3><p>Instance被删除：</p>
 <p>不代表玩家能再次拿奖励。</p>
 <p>锁定属于：</p>
 <p>Character Progression State。</p>
 <hr />
-<h1 id="101-reset-schedule">101. Reset Schedule</h1><p>例如：</p>
+<h3 id="101-reset-schedule">101. Reset Schedule</h3><p>例如：</p>
 <p>Weekly Reset。</p>
 <p>所有服务器需要：</p>
 <p>使用统一时间源。</p>
 <p>不要依赖：</p>
 <p>Instance本地计时。</p>
 <hr />
-<h1 id="102-核心范式十三任务必须兼容公共世界状态和个人进度">102. 核心范式十三：任务必须兼容公共世界状态和个人进度</h1><p>Quest既可能是：</p>
+<h3 id="102-核心范式十三任务必须兼容公共世界状态和个人进度">102. 核心范式十三：任务必须兼容公共世界状态和个人进度</h3><p>Quest既可能是：</p>
 <p>完全个人。</p>
 <p>也可能依赖：</p>
 <p>公共事件。</p>
 <hr />
-<h1 id="103-questdefinition">103. QuestDefinition</h1><p>建议字段：</p>
+<h3 id="103-questdefinition">103. QuestDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>QuestId；</p>
 </li>
@@ -1734,7 +1734,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="104-questruntimestate">104. QuestRuntimeState</h1><p>建议包含：</p>
+<h3 id="104-questruntimestate">104. QuestRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>CharacterId；</p>
 </li>
@@ -1754,7 +1754,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="105-phasing">105. Phasing</h1><p>玩家A：</p>
+<h3 id="105-phasing">105. Phasing</h3><p>玩家A：</p>
 <p>城镇已经被敌人摧毁。</p>
 <p>玩家B：</p>
 <p>还处于早期剧情，</p>
@@ -1763,14 +1763,14 @@
 <p>需要：</p>
 <p><strong>Personal Phase。</strong></p>
 <hr />
-<h1 id="106-phasemask">106. PhaseMask</h1><p>实体定义：</p>
+<h3 id="106-phasemask">106. PhaseMask</h3><p>实体定义：</p>
 <p>VisibleInPhaseTags。</p>
 <p>玩家拥有：</p>
 <p>ActivePhaseTags。</p>
 <p>Interest Management再决定：</p>
 <p>是否可见。</p>
 <hr />
-<h1 id="107-phasing最大的风险好友看不见彼此">107. Phasing最大的风险：好友看不见彼此</h1><p>两名好友组队，</p>
+<h3 id="107-phasing最大的风险好友看不见彼此">107. Phasing最大的风险：好友看不见彼此</h3><p>两名好友组队，</p>
 <p>站在相同坐标，</p>
 <p>但不同剧情Phase。</p>
 <p>玩家体验极差。</p>
@@ -1784,7 +1784,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="108-party-quest-sync">108. Party Quest Sync</h1><p>队伍进入Quest Area：</p>
+<h3 id="108-party-quest-sync">108. Party Quest Sync</h3><p>队伍进入Quest Area：</p>
 <p>选择：</p>
 <p>Leader Phase</p>
 <p>或：</p>
@@ -1792,12 +1792,12 @@
 <p>具体取决于设计。</p>
 <p>必须提前定义。</p>
 <hr />
-<h1 id="109-public-quest">109. Public Quest</h1><p>公共事件：</p>
+<h3 id="109-public-quest">109. Public Quest</h3><p>公共事件：</p>
 <p>区域所有玩家共享进度。</p>
 <p>例如：</p>
 <p>抵挡兽人袭击。</p>
 <hr />
-<h1 id="110-publiceventstate">110. PublicEventState</h1><p>建议包含：</p>
+<h3 id="110-publiceventstate">110. PublicEventState</h3><p>建议包含：</p>
 <ul>
 <li><p>EventId；</p>
 </li>
@@ -1821,13 +1821,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="111-dynamic-scaling">111. Dynamic Scaling</h1><p>公共事件参与人数：</p>
+<h3 id="111-dynamic-scaling">111. Dynamic Scaling</h3><p>公共事件参与人数：</p>
 <p>3<br />
 → 20<br />
 → 70。</p>
 <p>内容必须动态调整。</p>
 <hr />
-<h1 id="112-scaling不能只提高hp">112. Scaling不能只提高HP</h1><p>可以：</p>
+<h3 id="112-scaling不能只提高hp">112. Scaling不能只提高HP</h3><p>可以：</p>
 <ul>
 <li><p>Spawn更多敌人；</p>
 </li>
@@ -1841,7 +1841,7 @@
 <p>避免：</p>
 <p>70人打一只HP×20的木桩。</p>
 <hr />
-<h1 id="113-核心范式十四mmorpg经济必须是闭环的-source-sink-系统">113. 核心范式十四：MMORPG经济必须是闭环的 Source / Sink 系统</h1><p>每一天服务器都会产生：</p>
+<h3 id="113-核心范式十四mmorpg经济必须是闭环的-source-sink-系统">113. 核心范式十四：MMORPG经济必须是闭环的 Source / Sink 系统</h3><p>每一天服务器都会产生：</p>
 <p>大量新Gold。</p>
 <p>来源：</p>
 <ul>
@@ -1857,7 +1857,7 @@
 <p>如果没有Sink：</p>
 <p>货币持续通胀。</p>
 <hr />
-<h1 id="114-currencyledger">114. CurrencyLedger</h1><p>建议记录：</p>
+<h3 id="114-currencyledger">114. CurrencyLedger</h3><p>建议记录：</p>
 <ul>
 <li><p>CurrencyId；</p>
 </li>
@@ -1875,7 +1875,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="115-gold-source">115. Gold Source</h1><p>包括：</p>
+<h3 id="115-gold-source">115. Gold Source</h3><p>包括：</p>
 <ul>
 <li><p>Quest；</p>
 </li>
@@ -1887,7 +1887,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="116-gold-sink">116. Gold Sink</h1><p>包括：</p>
+<h3 id="116-gold-sink">116. Gold Sink</h3><p>包括：</p>
 <ul>
 <li><p>Repair；</p>
 </li>
@@ -1907,7 +1907,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="117-经济系统必须监控净发行量">117. 经济系统必须监控净发行量</h1><p>每天：</p>
+<h3 id="117-经济系统必须监控净发行量">117. 经济系统必须监控净发行量</h3><p>每天：</p>
 <p>GoldCreated</p>
 <ul>
 <li>GoldDestroyed</li>
@@ -1916,7 +1916,7 @@
 <p>大正数，</p>
 <p>必然通胀。</p>
 <hr />
-<h1 id="118-inflation-dashboard">118. Inflation Dashboard</h1><p>监控：</p>
+<h3 id="118-inflation-dashboard">118. Inflation Dashboard</h3><p>监控：</p>
 <ul>
 <li><p>Gold Per Active Account；</p>
 </li>
@@ -1930,7 +1930,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="119-核心范式十五item交易需要强资产完整性">119. 核心范式十五：Item交易需要强资产完整性</h1><p>所有高价值Item都应有：</p>
+<h3 id="119-核心范式十五item交易需要强资产完整性">119. 核心范式十五：Item交易需要强资产完整性</h3><p>所有高价值Item都应有：</p>
 <ul>
 <li><p>ItemInstanceId；</p>
 </li>
@@ -1944,7 +1944,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="120-inventorystate">120. InventoryState</h1><p>建议包含：</p>
+<h3 id="120-inventorystate">120. InventoryState</h3><p>建议包含：</p>
 <ul>
 <li><p>CharacterId；</p>
 </li>
@@ -1960,7 +1960,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="121-item-transfer">121. Item Transfer</h1><p>Character A交易给B：</p>
+<h3 id="121-item-transfer">121. Item Transfer</h3><p>Character A交易给B：</p>
 <p>不能：</p>
 <p>A删除<br />
 然后<br />
@@ -1970,7 +1970,7 @@ B添加。</p>
 <p>需要：</p>
 <p>Escrow Transaction。</p>
 <hr />
-<h1 id="122-tradetransaction">122. TradeTransaction</h1><p>A放入Item<br />
+<h3 id="122-tradetransaction">122. TradeTransaction</h3><p>A放入Item<br />
 → Item进入TradeEscrow<br />
 → B放入Item/Gold<br />
 → 双方确认<br />
@@ -1980,15 +1980,15 @@ B添加。</p>
 → 更新Inventory<br />
 → 提交TradeLedger。</p>
 <hr />
-<h1 id="123-trade窗口修改后需要重置确认">123. Trade窗口修改后需要重置确认</h1><p>经典反诈骗规则：</p>
+<h3 id="123-trade窗口修改后需要重置确认">123. Trade窗口修改后需要重置确认</h3><p>经典反诈骗规则：</p>
 <p>任意一方：</p>
 <p>改变物品</p>
 <p>→ 双方Confirm清除。</p>
 <hr />
-<h1 id="124-auction-house">124. Auction House</h1><p>拍卖行进一步把玩家交易转化为：</p>
+<h3 id="124-auction-house">124. Auction House</h3><p>拍卖行进一步把玩家交易转化为：</p>
 <p>异步市场。</p>
 <hr />
-<h1 id="125-auctionlisting">125. AuctionListing</h1><p>建议字段：</p>
+<h3 id="125-auctionlisting">125. AuctionListing</h3><p>建议字段：</p>
 <ul>
 <li><p>ListingId；</p>
 </li>
@@ -2010,13 +2010,13 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="126-listing创建后item进入escrow">126. Listing创建后Item进入Escrow</h1><p>不能：</p>
+<h3 id="126-listing创建后item进入escrow">126. Listing创建后Item进入Escrow</h3><p>不能：</p>
 <p>仍然留在Seller Inventory。</p>
 <p>否则玩家可以：</p>
 <p>一边装备，</p>
 <p>一边拍卖。</p>
 <hr />
-<h1 id="127-auction-purchase-transaction">127. Auction Purchase Transaction</h1><p>Buyer Reserve Gold<br />
+<h3 id="127-auction-purchase-transaction">127. Auction Purchase Transaction</h3><p>Buyer Reserve Gold<br />
 → Listing Lock<br />
 → 验证未售出<br />
 → 扣除Buyer Gold<br />
@@ -2027,7 +2027,7 @@ B添加。</p>
 → Commit。</p>
 <p>整个流程必须幂等。</p>
 <hr />
-<h1 id="128-auction是高风险复制漏洞区">128. Auction是高风险复制漏洞区</h1><p>必须支持：</p>
+<h3 id="128-auction是高风险复制漏洞区">128. Auction是高风险复制漏洞区</h3><p>必须支持：</p>
 <ul>
 <li><p>TransactionId；</p>
 </li>
@@ -2039,7 +2039,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="129-核心范式十六guild-是持久社会实体而不是大型好友列表">129. 核心范式十六：Guild 是持久社会实体，而不是大型好友列表</h1><h2 id="guildstate">GuildState</h2><p>建议包含：</p>
+<h3 id="129-核心范式十六guild-是持久社会实体而不是大型好友列表">129. 核心范式十六：Guild 是持久社会实体，而不是大型好友列表</h3><h3 id="guildstate">GuildState</h3><p>建议包含：</p>
 <ul>
 <li><p>GuildId；</p>
 </li>
@@ -2065,7 +2065,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="130-guildmemberstate">130. GuildMemberState</h1><p>建议包含：</p>
+<h3 id="130-guildmemberstate">130. GuildMemberState</h3><p>建议包含：</p>
 <ul>
 <li><p>CharacterId；</p>
 </li>
@@ -2083,7 +2083,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="131-guild拥有自己的资产">131. Guild拥有自己的资产</h1><p>例如：</p>
+<h3 id="131-guild拥有自己的资产">131. Guild拥有自己的资产</h3><p>例如：</p>
 <ul>
 <li><p>Guild Bank；</p>
 </li>
@@ -2099,7 +2099,7 @@ B添加。</p>
 <p>因此Guild需要：</p>
 <p>独立持久化身份。</p>
 <hr />
-<h1 id="132-guild-permission">132. Guild Permission</h1><p>例如：</p>
+<h3 id="132-guild-permission">132. Guild Permission</h3><p>例如：</p>
 <p>Rank A：</p>
 <p>Withdraw 1 stack/day。</p>
 <p>Rank B：</p>
@@ -2107,7 +2107,7 @@ B添加。</p>
 <p>所有Guild Bank操作需要：</p>
 <p>Audit Log。</p>
 <hr />
-<h1 id="133-guild-bank-transaction">133. Guild Bank Transaction</h1><p>Item：</p>
+<h3 id="133-guild-bank-transaction">133. Guild Bank Transaction</h3><p>Item：</p>
 <p>Character Inventory<br />
 → GuildBank Escrow<br />
 → Commit。</p>
@@ -2116,19 +2116,19 @@ B添加。</p>
 → Player。</p>
 <p>与普通Inventory一样需要资产唯一性。</p>
 <hr />
-<h1 id="134-guild-leadership-transfer">134. Guild Leadership Transfer</h1><p>Leader删除角色怎么办？</p>
+<h3 id="134-guild-leadership-transfer">134. Guild Leadership Transfer</h3><p>Leader删除角色怎么办？</p>
 <p>需要：</p>
 <p>SuccessionPolicy。</p>
 <p>不能让Guild进入：</p>
 <p>永久无Leader。</p>
 <hr />
-<h1 id="135-friend-ignore-block">135. Friend / Ignore / Block</h1><p>社交基础设施属于Account或Character层，</p>
+<h3 id="135-friend-ignore-block">135. Friend / Ignore / Block</h3><p>社交基础设施属于Account或Character层，</p>
 <p>需要明确。</p>
 <p>通常：</p>
 <p>Friend可以Account级。</p>
 <p>Guild可能Character级。</p>
 <hr />
-<h1 id="136-presence-system">136. Presence System</h1><p>好友需要看到：</p>
+<h3 id="136-presence-system">136. Presence System</h3><p>好友需要看到：</p>
 <ul>
 <li><p>Online；</p>
 </li>
@@ -2144,16 +2144,16 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="137-presence是弱一致系统">137. Presence是弱一致系统</h1><p>它不需要：</p>
+<h3 id="137-presence是弱一致系统">137. Presence是弱一致系统</h3><p>它不需要：</p>
 <p>金融事务级强一致。</p>
 <p>好友显示：</p>
 <p>延迟1秒上线</p>
 <p>通常没问题。</p>
 <p>这与Inventory不同。</p>
 <hr />
-<h1 id="138-核心范式十七不同系统需要不同一致性等级">138. 核心范式十七：不同系统需要不同一致性等级</h1><p>这是大型在线游戏非常重要的工程原则。</p>
+<h3 id="138-核心范式十七不同系统需要不同一致性等级">138. 核心范式十七：不同系统需要不同一致性等级</h3><p>这是大型在线游戏非常重要的工程原则。</p>
 <hr />
-<h1 id="139-强一致状态">139. 强一致状态</h1><p>例如：</p>
+<h3 id="139-强一致状态">139. 强一致状态</h3><p>例如：</p>
 <ul>
 <li><p>Item Ownership；</p>
 </li>
@@ -2171,7 +2171,7 @@ B添加。</p>
 <p>不能：</p>
 <p>最终一致到复制资产。</p>
 <hr />
-<h1 id="140-最终一致状态">140. 最终一致状态</h1><p>例如：</p>
+<h3 id="140-最终一致状态">140. 最终一致状态</h3><p>例如：</p>
 <ul>
 <li><p>Presence；</p>
 </li>
@@ -2186,7 +2186,7 @@ B添加。</p>
 </ul>
 <p>允许短暂延迟。</p>
 <hr />
-<h1 id="141-runtime权威状态">141. Runtime权威状态</h1><p>例如：</p>
+<h3 id="141-runtime权威状态">141. Runtime权威状态</h3><p>例如：</p>
 <ul>
 <li><p>Position；</p>
 </li>
@@ -2199,11 +2199,11 @@ B添加。</p>
 </ul>
 <p>存在当前Zone Server。</p>
 <hr />
-<h1 id="142-不要对所有服务使用同一种一致性策略">142. 不要对所有服务使用同一种一致性策略</h1><p>否则：</p>
+<h3 id="142-不要对所有服务使用同一种一致性策略">142. 不要对所有服务使用同一种一致性策略</h3><p>否则：</p>
 <p>要么性能极差，</p>
 <p>要么资产安全极差。</p>
 <hr />
-<h1 id="143-核心范式十八聊天是独立社会服务而不是zone事件">143. 核心范式十八：聊天是独立社会服务，而不是Zone事件</h1><p>Chat需要：</p>
+<h3 id="143-核心范式十八聊天是独立社会服务而不是zone事件">143. 核心范式十八：聊天是独立社会服务，而不是Zone事件</h3><p>Chat需要：</p>
 <ul>
 <li><p>Say；</p>
 </li>
@@ -2221,7 +2221,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="144-chatmessage">144. ChatMessage</h1><p>建议字段：</p>
+<h3 id="144-chatmessage">144. ChatMessage</h3><p>建议字段：</p>
 <ul>
 <li><p>MessageId；</p>
 </li>
@@ -2241,12 +2241,12 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="145-chat服务故障不应让战斗服务器崩溃">145. Chat服务故障不应让战斗服务器崩溃</h1><p>聊天属于：</p>
+<h3 id="145-chat服务故障不应让战斗服务器崩溃">145. Chat服务故障不应让战斗服务器崩溃</h3><p>聊天属于：</p>
 <p>可隔离辅助服务。</p>
 <p>失败时：</p>
 <p>战斗继续。</p>
 <hr />
-<h1 id="146-moderation">146. Moderation</h1><p>需要：</p>
+<h3 id="146-moderation">146. Moderation</h3><p>需要：</p>
 <ul>
 <li><p>Mute；</p>
 </li>
@@ -2263,21 +2263,21 @@ B添加。</p>
 </ul>
 <p>大型持久社区不能把Moderation视为事后补丁。</p>
 <hr />
-<h1 id="147-mail">147. Mail</h1><p>异步玩家交流和物品发送。</p>
+<h3 id="147-mail">147. Mail</h3><p>异步玩家交流和物品发送。</p>
 <hr />
-<h1 id="148-mailtransaction">148. MailTransaction</h1><p>有附件时：</p>
+<h3 id="148-mailtransaction">148. MailTransaction</h3><p>有附件时：</p>
 <p>物品必须：</p>
 <p>进入MailEscrow。</p>
 <p>不能复制。</p>
 <hr />
-<h1 id="149-核心范式十九世界事件提供这个服务器正在发生事情的共同记忆">149. 核心范式十九：世界事件提供“这个服务器正在发生事情”的共同记忆</h1><p>如果所有内容都是：</p>
+<h3 id="149-核心范式十九世界事件提供这个服务器正在发生事情的共同记忆">149. 核心范式十九：世界事件提供“这个服务器正在发生事情”的共同记忆</h3><p>如果所有内容都是：</p>
 <p>Private Instance，</p>
 <p>MMORPG很容易变成：</p>
 <p>Lobby RPG。</p>
 <p>需要一定：</p>
 <p>Shared Event。</p>
 <hr />
-<h1 id="150-worldevent">150. WorldEvent</h1><p>例如：</p>
+<h3 id="150-worldevent">150. WorldEvent</h3><p>例如：</p>
 <ul>
 <li><p>World Boss；</p>
 </li>
@@ -2293,7 +2293,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="151-worldeventdefinition">151. WorldEventDefinition</h1><p>建议字段：</p>
+<h3 id="151-worldeventdefinition">151. WorldEventDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>EventId；</p>
 </li>
@@ -2313,14 +2313,14 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="152-世界事件必须处理人口峰值">152. 世界事件必须处理人口峰值</h1><p>普通Zone：</p>
+<h3 id="152-世界事件必须处理人口峰值">152. 世界事件必须处理人口峰值</h3><p>普通Zone：</p>
 <p>50人。</p>
 <p>WorldBoss：</p>
 <p>突然400人。</p>
 <p>这是：</p>
 <p><strong>Hotspot Problem。</strong></p>
 <hr />
-<h1 id="153-hotspot-mitigation">153. Hotspot Mitigation</h1><p>可以：</p>
+<h3 id="153-hotspot-mitigation">153. Hotspot Mitigation</h3><p>可以：</p>
 <ul>
 <li><p>Dynamic Layer；</p>
 </li>
@@ -2336,7 +2336,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="154-但过度分片会破坏共同事件感">154. 但过度分片会破坏共同事件感</h1><p>如果400人被拆成：</p>
+<h3 id="154-但过度分片会破坏共同事件感">154. 但过度分片会破坏共同事件感</h3><p>如果400人被拆成：</p>
 <p>8个完全独立50人Boss，</p>
 <p>玩家看到的仍然是：</p>
 <p>50人。</p>
@@ -2346,7 +2346,7 @@ B添加。</p>
 <p>Server Budget</p>
 <p>之间权衡。</p>
 <hr />
-<h1 id="155-核心范式二十live-ops-是世界运行的一部分">155. 核心范式二十：Live Ops 是世界运行的一部分</h1><p>MMORPG内容不是发布后固定不变。</p>
+<h3 id="155-核心范式二十live-ops-是世界运行的一部分">155. 核心范式二十：Live Ops 是世界运行的一部分</h3><p>MMORPG内容不是发布后固定不变。</p>
 <p>可能每周有：</p>
 <ul>
 <li><p>Reset；</p>
@@ -2361,7 +2361,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="156-livescheduledefinition">156. LiveScheduleDefinition</h1><p>建议字段：</p>
+<h3 id="156-livescheduledefinition">156. LiveScheduleDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>ScheduleId；</p>
 </li>
@@ -2379,18 +2379,18 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="157-时间必须服务器统一">157. 时间必须服务器统一</h1><p>不能由客户端本地时间判断：</p>
+<h3 id="157-时间必须服务器统一">157. 时间必须服务器统一</h3><p>不能由客户端本地时间判断：</p>
 <p>活动是否开始。</p>
 <hr />
-<h1 id="158-feature-flag">158. Feature Flag</h1><p>新内容可以：</p>
+<h3 id="158-feature-flag">158. Feature Flag</h3><p>新内容可以：</p>
 <p>按Realm、Region、Percent</p>
 <p>逐步开启。</p>
 <hr />
-<h1 id="159-进行中的副本不能因为配置热更新突然改变规则">159. 进行中的副本不能因为配置热更新突然改变规则</h1><p>建议：</p>
+<h3 id="159-进行中的副本不能因为配置热更新突然改变规则">159. 进行中的副本不能因为配置热更新突然改变规则</h3><p>建议：</p>
 <p>Instance创建时冻结：</p>
 <p><strong>ContentPackageVersion。</strong></p>
 <hr />
-<h1 id="160-contentpackageversion">160. ContentPackageVersion</h1><p>包含：</p>
+<h3 id="160-contentpackageversion">160. ContentPackageVersion</h3><p>包含：</p>
 <ul>
 <li><p>Skill；</p>
 </li>
@@ -2411,23 +2411,23 @@ B添加。</p>
 <p>旧Instance：</p>
 <p>保持旧版本到结束。</p>
 <hr />
-<h1 id="161-完整事件与执行流程示例">161. 完整事件与执行流程示例</h1><p>以下以：</p>
+<h3 id="161-完整事件与执行流程示例">161. 完整事件与执行流程示例</h3><p>以下以：</p>
 <p><strong>五名陌生玩家通过Dungeon Finder进入地下城，击败Boss后获得个人Loot，其中一名玩家断线并在副本结束前重连</strong></p>
 <p>为例。</p>
 <hr />
-<h2 id="1611-玩家a排队">161.1 玩家A排队</h2><p>角色：</p>
+<h3 id="1611-玩家a排队">161.1 玩家A排队</h3><p>角色：</p>
 <p>Tank。</p>
 <p>选择：</p>
 <p>Dungeon X。</p>
 <p>QueueSystem创建：</p>
 <p>QueueEntry。</p>
 <hr />
-<h2 id="1612-其他玩家排队">161.2 其他玩家排队</h2><p>B：</p>
+<h3 id="1612-其他玩家排队">161.2 其他玩家排队</h3><p>B：</p>
 <p>Healer。</p>
 <p>C、D、E：</p>
 <p>DPS。</p>
 <hr />
-<h2 id="1613-matchmaker找到组合">161.3 Matchmaker找到组合</h2><p>验证：</p>
+<h3 id="1613-matchmaker找到组合">161.3 Matchmaker找到组合</h3><p>验证：</p>
 <ul>
 <li><p>Level；</p>
 </li>
@@ -2447,35 +2447,35 @@ B添加。</p>
 1 Healer<br />
 3 DPS。</p>
 <hr />
-<h2 id="1614-创建matchproposal">161.4 创建MatchProposal</h2><p>五人收到：</p>
+<h3 id="1614-创建matchproposal">161.4 创建MatchProposal</h3><p>五人收到：</p>
 <p>Ready Check。</p>
 <hr />
-<h2 id="1615-全员接受">161.5 全员接受</h2><p>Matchmaker请求：</p>
+<h3 id="1615-全员接受">161.5 全员接受</h3><p>Matchmaker请求：</p>
 <p>InstanceOrchestrator。</p>
 <hr />
-<h2 id="1616-创建dungeoninstance">161.6 创建DungeonInstance</h2><p>选择：</p>
+<h3 id="1616-创建dungeoninstance">161.6 创建DungeonInstance</h3><p>选择：</p>
 <p>InstanceHost Server。</p>
 <p>创建：</p>
 <p>RuntimeInstanceId = DGN-84021。</p>
 <p>冻结：</p>
 <p>ContentPackageVersion。</p>
 <hr />
-<h2 id="1617-玩家zone-transfer">161.7 玩家Zone Transfer</h2><p>每个玩家：</p>
+<h3 id="1617-玩家zone-transfer">161.7 玩家Zone Transfer</h3><p>每个玩家：</p>
 <p>WorldZone<br />
 → DungeonInstance。</p>
 <p>使用TransferTransaction。</p>
 <hr />
-<h2 id="1618-party自动创建或绑定">161.8 Party自动创建或绑定</h2><p>临时Party：</p>
+<h3 id="1618-party自动创建或绑定">161.8 Party自动创建或绑定</h3><p>临时Party：</p>
 <p>PartyId P-9931。</p>
 <hr />
-<h2 id="1619-第一次战斗">161.9 第一次战斗</h2><p>Tank攻击Monster。</p>
+<h3 id="1619-第一次战斗">161.9 第一次战斗</h3><p>Tank攻击Monster。</p>
 <p>产生：</p>
 <p>Threat。</p>
 <p>Healer治疗Tank：</p>
 <p>获得一定Healing Threat。</p>
 <p>DPS开始输出。</p>
 <hr />
-<h2 id="16110-monster目标选择">161.10 Monster目标选择</h2><p>ThreatTable：</p>
+<h3 id="16110-monster目标选择">161.10 Monster目标选择</h3><p>ThreatTable：</p>
 <p>Tank：</p>
 <p>820。</p>
 <p>DPS1：</p>
@@ -2484,43 +2484,43 @@ B添加。</p>
 <p>210。</p>
 <p>Monster继续攻击Tank。</p>
 <hr />
-<h2 id="16111-tank使用taunt">161.11 Tank使用Taunt</h2><p>ForcedTarget：</p>
+<h3 id="16111-tank使用taunt">161.11 Tank使用Taunt</h3><p>ForcedTarget：</p>
 <p>Tank。</p>
 <hr />
-<h2 id="16112-进入boss">161.12 进入Boss</h2><p>EncounterRuntime建立：</p>
+<h3 id="16112-进入boss">161.12 进入Boss</h3><p>EncounterRuntime建立：</p>
 <p>BossState。</p>
 <p>清理上一场普通怪Threat。</p>
 <hr />
-<h2 id="16113-boss-phase-1">161.13 Boss Phase 1</h2><p>Mechanic：</p>
+<h3 id="16113-boss-phase-1">161.13 Boss Phase 1</h3><p>Mechanic：</p>
 <p>Spread。</p>
 <p>系统选择：</p>
 <p>三个非Tank角色。</p>
 <hr />
-<h2 id="16114-dps-d突然断线">161.14 DPS D突然断线</h2><p>SessionState：</p>
+<h3 id="16114-dps-d突然断线">161.14 DPS D突然断线</h3><p>SessionState：</p>
 <p>Disconnected。</p>
 <p>CharacterRuntime不立刻删除。</p>
 <p>进入：</p>
 <p>ReconnectGrace。</p>
 <hr />
-<h2 id="16115-boss继续运行">161.15 Boss继续运行</h2><p>D的角色：</p>
+<h3 id="16115-boss继续运行">161.15 Boss继续运行</h3><p>D的角色：</p>
 <p>根据规则：</p>
 <p>停留原地。</p>
 <p>不再接受输入。</p>
 <hr />
-<h2 id="16116-party剩余4人继续战斗">161.16 Party剩余4人继续战斗</h2><p>由于DPS下降：</p>
+<h3 id="16116-party剩余4人继续战斗">161.16 Party剩余4人继续战斗</h3><p>由于DPS下降：</p>
 <p>Boss Phase持续更久。</p>
 <p>但仍然可以完成。</p>
 <hr />
-<h2 id="16117-d重新登录">161.17 D重新登录</h2><p>Auth产生：</p>
+<h3 id="16117-d重新登录">161.17 D重新登录</h3><p>Auth产生：</p>
 <p>新SessionId。</p>
 <p>系统发现：</p>
 <p>Character已有Disconnected Runtime。</p>
 <hr />
-<h2 id="16118-session接管">161.18 Session接管</h2><p>旧Session失效。</p>
+<h3 id="16118-session接管">161.18 Session接管</h3><p>旧Session失效。</p>
 <p>新Session绑定原CharacterRuntime。</p>
 <p>不用重新创建另一个角色。</p>
 <hr />
-<h2 id="16119-client恢复副本状态">161.19 Client恢复副本状态</h2><p>发送：</p>
+<h3 id="16119-client恢复副本状态">161.19 Client恢复副本状态</h3><p>发送：</p>
 <ul>
 <li><p>Boss；</p>
 </li>
@@ -2536,55 +2536,55 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h2 id="16120-d继续战斗">161.20 D继续战斗</h2><p>没有重复进入副本，</p>
+<h3 id="16120-d继续战斗">161.20 D继续战斗</h3><p>没有重复进入副本，</p>
 <p>也没有丢失：</p>
 <p>当前位置和生命。</p>
 <hr />
-<h2 id="16121-boss死亡">161.21 Boss死亡</h2><p>Encounter进入：</p>
+<h3 id="16121-boss死亡">161.21 Boss死亡</h3><p>Encounter进入：</p>
 <p>CompletedPendingRewards。</p>
 <hr />
-<h2 id="16122-looteligibility">161.22 LootEligibility</h2><p>检查：</p>
+<h3 id="16122-looteligibility">161.22 LootEligibility</h3><p>检查：</p>
 <p>五人均：</p>
 <p>符合参与资格。</p>
 <hr />
-<h2 id="16123-personal-loot">161.23 Personal Loot</h2><p>系统为每个Character生成：</p>
+<h3 id="16123-personal-loot">161.23 Personal Loot</h3><p>系统为每个Character生成：</p>
 <p>独立LootContext。</p>
 <hr />
-<h2 id="16124-玩家c获得epic-gloves">161.24 玩家C获得Epic Gloves</h2><p>服务器创建：</p>
+<h3 id="16124-玩家c获得epic-gloves">161.24 玩家C获得Epic Gloves</h3><p>服务器创建：</p>
 <p>ItemInstance。</p>
 <p>直接绑定：</p>
 <p>C CharacterId。</p>
 <hr />
-<h2 id="16125-rewardtransaction">161.25 RewardTransaction</h2><p>Item创建<br />
+<h3 id="16125-rewardtransaction">161.25 RewardTransaction</h3><p>Item创建<br />
 → Inventory容量验证<br />
 → 如果满则进入LootOverflow / MailPolicy<br />
 → Lockout更新<br />
 → BossRewardClaim标记<br />
 → Commit。</p>
 <hr />
-<h2 id="16126-weekly-lockout">161.26 Weekly Lockout</h2><p>五人：</p>
+<h3 id="16126-weekly-lockout">161.26 Weekly Lockout</h3><p>五人：</p>
 <p>Boss X</p>
 <p>本周RewardClaimed = true。</p>
 <hr />
-<h2 id="16127-dungeon完成">161.27 Dungeon完成</h2><p>发放：</p>
+<h3 id="16127-dungeon完成">161.27 Dungeon完成</h3><p>发放：</p>
 <p>XP、Currency、QuestProgress。</p>
 <p>全部使用：</p>
 <p>DungeonCompletionId</p>
 <p>幂等提交。</p>
 <hr />
-<h2 id="16128-party返回世界">161.28 Party返回世界</h2><p>DungeonInstance<br />
+<h3 id="16128-party返回世界">161.28 Party返回世界</h3><p>DungeonInstance<br />
 → World Zone。</p>
 <p>再次执行：</p>
 <p>Zone Transfer。</p>
 <hr />
-<h2 id="16129-temporary-party是否保留">161.29 Temporary Party是否保留</h2><p>如果通过Dungeon Finder创建：</p>
+<h3 id="16129-temporary-party是否保留">161.29 Temporary Party是否保留</h3><p>如果通过Dungeon Finder创建：</p>
 <p>可以：</p>
 <p>任务结束后保留短时间。</p>
 <p>玩家可以：</p>
 <p>选择继续一起排队，</p>
 <p>或离队。</p>
 <hr />
-<h2 id="16130-instance进入graceperiod">161.30 Instance进入GracePeriod</h2><p>无人以后：</p>
+<h3 id="16130-instance进入graceperiod">161.30 Instance进入GracePeriod</h3><p>无人以后：</p>
 <p>销毁Runtime。</p>
 <p>长期只保留：</p>
 <ul>
@@ -2598,7 +2598,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h2 id="16131-完整核心链">161.31 完整核心链</h2><p>Queue<br />
+<h3 id="16131-完整核心链">161.31 完整核心链</h3><p>Queue<br />
 → Role约束匹配<br />
 → Ready Check<br />
 → Instance创建<br />
@@ -2619,7 +2619,7 @@ B添加。</p>
 <p><strong>玩家看到的是一次普通地下城，但底层同时跨越身份、会话、世界路由、战斗、社交、资产持久化和奖励事务多个领域。</strong></p>
 </blockquote>
 <hr />
-<h1 id="162-模块通信设计">162. 模块通信设计</h1><h2 id="1621-commands">162.1 Commands</h2><p>典型：</p>
+<h3 id="162-模块通信设计">162. 模块通信设计</h3><h3 id="1621-commands">162.1 Commands</h3><p>典型：</p>
 <ul>
 <li><p>LoginCharacter；</p>
 </li>
@@ -2655,16 +2655,16 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h2 id="1622-高频gameplay-input">162.2 高频Gameplay Input</h2><p>Movement和CombatInput：</p>
+<h3 id="1622-高频gameplay-input">162.2 高频Gameplay Input</h3><p>Movement和CombatInput：</p>
 <p>不要走高延迟业务Command总线。</p>
 <p>进入：</p>
 <p>当前Zone Server实时Simulation。</p>
 <hr />
-<h2 id="1623-低频业务command">162.3 低频业务Command</h2><p>Trade、Guild、Quest、Auction：</p>
+<h3 id="1623-低频业务command">162.3 低频业务Command</h3><p>Trade、Guild、Quest、Auction：</p>
 <p>可以使用：</p>
 <p>可靠请求 / 事务系统。</p>
 <hr />
-<h1 id="163-domain-events">163. Domain Events</h1><p>例如：</p>
+<h3 id="163-domain-events">163. Domain Events</h3><p>例如：</p>
 <ul>
 <li><p>CharacterLoggedIn；</p>
 </li>
@@ -2696,7 +2696,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="164-跨服务事件必须有eventid">164. 跨服务事件必须有EventId</h1><p>因为消息可能：</p>
+<h3 id="164-跨服务事件必须有eventid">164. 跨服务事件必须有EventId</h3><p>因为消息可能：</p>
 <ul>
 <li><p>重试；</p>
 </li>
@@ -2708,7 +2708,7 @@ B添加。</p>
 <p>消费者需要：</p>
 <p>Idempotency。</p>
 <hr />
-<h1 id="165-event-delivery不是exactly-once">165. Event Delivery不是Exactly Once</h1><p>现实分布式系统通常更合理的假设：</p>
+<h3 id="165-event-delivery不是exactly-once">165. Event Delivery不是Exactly Once</h3><p>现实分布式系统通常更合理的假设：</p>
 <p><strong>At Least Once。</strong></p>
 <p>然后业务层：</p>
 <p>Exactly Once Effect。</p>
@@ -2719,7 +2719,7 @@ B添加。</p>
 <p>RewardTransactionId</p>
 <p>确保只发一次。</p>
 <hr />
-<h1 id="166-查询">166. 查询</h1><p>Query适用于：</p>
+<h3 id="166-查询">166. 查询</h3><p>Query适用于：</p>
 <ul>
 <li><p>Character Info；</p>
 </li>
@@ -2737,7 +2737,7 @@ B添加。</p>
 <p>Query不能：</p>
 <p>产生业务副作用。</p>
 <hr />
-<h1 id="167-服务边界不等于必须微服务">167. 服务边界不等于必须微服务</h1><p>逻辑上可以分：</p>
+<h3 id="167-服务边界不等于必须微服务">167. 服务边界不等于必须微服务</h3><p>逻辑上可以分：</p>
 <ul>
 <li><p>Identity；</p>
 </li>
@@ -2757,23 +2757,23 @@ B添加。</p>
 <p>而不是：</p>
 <p>“为了MMO一定拆100个微服务。”</p>
 <hr />
-<h1 id="168-失败隔离">168. 失败隔离</h1><hr />
-<h2 id="1681-gateway崩溃">168.1 Gateway崩溃</h2><p>已进入World的玩家：</p>
+<h3 id="168-失败隔离">168. 失败隔离</h3><hr />
+<h3 id="1681-gateway崩溃">168.1 Gateway崩溃</h3><p>已进入World的玩家：</p>
 <p>不应全部掉线，</p>
 <p>如果连接架构允许。</p>
 <hr />
-<h2 id="1682-chat崩溃">168.2 Chat崩溃</h2><p>战斗继续。</p>
+<h3 id="1682-chat崩溃">168.2 Chat崩溃</h3><p>战斗继续。</p>
 <hr />
-<h2 id="1683-auction崩溃">168.3 Auction崩溃</h2><p>无法拍卖。</p>
+<h3 id="1683-auction崩溃">168.3 Auction崩溃</h3><p>无法拍卖。</p>
 <p>但：</p>
 <p>角色移动、Raid继续。</p>
 <hr />
-<h2 id="1684-zone-server崩溃">168.4 Zone Server崩溃</h2><p>影响：</p>
+<h3 id="1684-zone-server崩溃">168.4 Zone Server崩溃</h3><p>影响：</p>
 <p>该ZoneInstance。</p>
 <p>不应：</p>
 <p>所有Realm一起宕机。</p>
 <hr />
-<h2 id="1685-instance-server崩溃">168.5 Instance Server崩溃</h2><p>Dungeon失败。</p>
+<h3 id="1685-instance-server崩溃">168.5 Instance Server崩溃</h3><p>Dungeon失败。</p>
 <p>系统可：</p>
 <ul>
 <li><p>恢复最近Checkpoint；</p>
@@ -2786,7 +2786,7 @@ B添加。</p>
 <p>不能破坏：</p>
 <p>Character永久资产。</p>
 <hr />
-<h1 id="169-zone-crash-recovery">169. Zone Crash Recovery</h1><p>定期保存：</p>
+<h3 id="169-zone-crash-recovery">169. Zone Crash Recovery</h3><p>定期保存：</p>
 <p>RuntimeSnapshot。</p>
 <p>Server崩溃：</p>
 <p>重新创建Zone。</p>
@@ -2796,19 +2796,19 @@ B添加。</p>
 <p>或：</p>
 <p>Last Snapshot。</p>
 <hr />
-<h1 id="170-combat状态不是最优先保全资产">170. Combat状态不是最优先保全资产</h1><p>服务器崩溃时：</p>
+<h3 id="170-combat状态不是最优先保全资产">170. Combat状态不是最优先保全资产</h3><p>服务器崩溃时：</p>
 <p>宁可玩家回到入口，</p>
 <p>也不能：</p>
 <p>复制装备或金币。</p>
 <p>优先级：</p>
 <p><strong>Asset Integrity &gt; Exact Combat Continuity。</strong></p>
 <hr />
-<h1 id="171-inventory-service不可用">171. Inventory Service不可用</h1><p>建议：</p>
+<h3 id="171-inventory-service不可用">171. Inventory Service不可用</h3><p>建议：</p>
 <p>阻止高价值Item交易。</p>
 <p>不要：</p>
 <p>客户端临时自己管理Inventory。</p>
 <hr />
-<h1 id="172-database写入延迟">172. Database写入延迟</h1><p>Durable Transaction写入失败：</p>
+<h3 id="172-database写入延迟">172. Database写入延迟</h3><p>Durable Transaction写入失败：</p>
 <p>不要对客户端先显示：</p>
 <p>“获得稀有装备”</p>
 <p>然后偷偷丢失。</p>
@@ -2818,7 +2818,7 @@ B添加。</p>
 <p>表现可以：</p>
 <p>Pending。</p>
 <hr />
-<h1 id="173-reward-outbox">173. Reward Outbox</h1><p>Encounter Service：</p>
+<h3 id="173-reward-outbox">173. Reward Outbox</h3><p>Encounter Service：</p>
 <p>完成Boss。</p>
 <p>事务中写：</p>
 <p>BossCompletion</p>
@@ -2830,7 +2830,7 @@ B添加。</p>
 <p>Boss完成提交了</p>
 <p>但Reward消息丢失。</p>
 <hr />
-<h1 id="174-outbox-pattern">174. Outbox Pattern</h1><p>这是MMO资产业务非常适用的模式：</p>
+<h3 id="174-outbox-pattern">174. Outbox Pattern</h3><p>这是MMO资产业务非常适用的模式：</p>
 <p>DB Transaction<br />
 → 写状态</p>
 <ul>
@@ -2839,23 +2839,23 @@ B添加。</p>
 <p>Commit。</p>
 <p>异步Publisher再发送Event。</p>
 <hr />
-<h1 id="175-auction-settlement-recovery">175. Auction Settlement Recovery</h1><p>定期扫描：</p>
+<h3 id="175-auction-settlement-recovery">175. Auction Settlement Recovery</h3><p>定期扫描：</p>
 <p>PendingSettlement。</p>
 <p>即使服务重启：</p>
 <p>继续完成。</p>
 <hr />
-<h1 id="176-guild-bank异常">176. Guild Bank异常</h1><p>所有操作使用：</p>
+<h3 id="176-guild-bank异常">176. Guild Bank异常</h3><p>所有操作使用：</p>
 <p>Ledger。</p>
 <p>出现资产不一致：</p>
 <p>可以重放Audit记录。</p>
 <hr />
-<h1 id="177-duplicate-item-detection">177. Duplicate Item Detection</h1><p>定期：</p>
+<h3 id="177-duplicate-item-detection">177. Duplicate Item Detection</h3><p>定期：</p>
 <p>ItemOwnershipAudit。</p>
 <p>检测：</p>
 <p>同一个ItemInstanceId拥有多个Owner。</p>
 <p>属于最高等级报警。</p>
 <hr />
-<h1 id="178-ghost-character">178. Ghost Character</h1><p>Character数据库显示：</p>
+<h3 id="178-ghost-character">178. Ghost Character</h3><p>Character数据库显示：</p>
 <p>Online。</p>
 <p>实际Session已死。</p>
 <p>Presence Service可以错。</p>
@@ -2863,7 +2863,7 @@ B添加。</p>
 <p>Character Active Runtime Registry</p>
 <p>必须通过Lease恢复。</p>
 <hr />
-<h1 id="179-stuck-transfer">179. Stuck Transfer</h1><p>Character状态：</p>
+<h3 id="179-stuck-transfer">179. Stuck Transfer</h3><p>Character状态：</p>
 <p>TransferPending</p>
 <p>超过Timeout。</p>
 <p>Recovery Service判断：</p>
@@ -2873,18 +2873,18 @@ B添加。</p>
 <p>否则：</p>
 <p>Rollback Source / SafeZone。</p>
 <hr />
-<h1 id="180-matchmaking异常">180. Matchmaking异常</h1><p>一个玩家同时进入两个Dungeon Proposal：</p>
+<h3 id="180-matchmaking异常">180. Matchmaking异常</h3><p>一个玩家同时进入两个Dungeon Proposal：</p>
 <p>QueueEntry需要：</p>
 <p>Single Active Proposal。</p>
 <hr />
-<h1 id="181-lockout重复reward">181. Lockout重复Reward</h1><p>BossRewardTransaction使用：</p>
+<h3 id="181-lockout重复reward">181. Lockout重复Reward</h3><p>BossRewardTransaction使用：</p>
 <p>CharacterId + LockoutPeriod + BossId</p>
 <p>作为唯一业务键。</p>
 <hr />
-<h1 id="182-quest重复完成">182. Quest重复完成</h1><p>QuestCompletion同样必须：</p>
+<h3 id="182-quest重复完成">182. Quest重复完成</h3><p>QuestCompletion同样必须：</p>
 <p>幂等。</p>
 <hr />
-<h1 id="183-经济事务最重要原则">183. 经济事务最重要原则</h1><p>任何会增加：</p>
+<h3 id="183-经济事务最重要原则">183. 经济事务最重要原则</h3><p>任何会增加：</p>
 <ul>
 <li><p>Gold；</p>
 </li>
@@ -2902,8 +2902,8 @@ B添加。</p>
 <p>“获得两份。”</p>
 <p>说明事务边界不完整。</p>
 <hr />
-<h1 id="184-调试与可观测性">184. 调试与可观测性</h1><hr />
-<h2 id="1841-character-state-inspector">184.1 Character State Inspector</h2><p>显示：</p>
+<h3 id="184-调试与可观测性">184. 调试与可观测性</h3><hr />
+<h3 id="1841-character-state-inspector">184.1 Character State Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Persistent Version；</p>
 </li>
@@ -2921,7 +2921,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="185-session-inspector">185. Session Inspector</h1><p>显示：</p>
+<h3 id="185-session-inspector">185. Session Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Gateway；</p>
 </li>
@@ -2935,7 +2935,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="186-zone-population-dashboard">186. Zone Population Dashboard</h1><p>显示：</p>
+<h3 id="186-zone-population-dashboard">186. Zone Population Dashboard</h3><p>显示：</p>
 <ul>
 <li><p>Zone；</p>
 </li>
@@ -2953,7 +2953,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="187-shard-assignment-inspector">187. Shard Assignment Inspector</h1><p>某玩家为什么被放到Shard 3：</p>
+<h3 id="187-shard-assignment-inspector">187. Shard Assignment Inspector</h3><p>某玩家为什么被放到Shard 3：</p>
 <ul>
 <li><p>Party Cohesion；</p>
 </li>
@@ -2967,7 +2967,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="188-transfer-trace">188. Transfer Trace</h1><p>完整记录：</p>
+<h3 id="188-transfer-trace">188. Transfer Trace</h3><p>完整记录：</p>
 <p>SourceFreeze<br />
 → TargetReserve<br />
 → Snapshot<br />
@@ -2975,7 +2975,7 @@ B添加。</p>
 → Attach<br />
 → Commit。</p>
 <hr />
-<h1 id="189-aoi-inspector">189. AOI Inspector</h1><p>选择一个Client：</p>
+<h3 id="189-aoi-inspector">189. AOI Inspector</h3><p>选择一个Client：</p>
 <p>显示：</p>
 <p>当前Relevant Entities。</p>
 <p>以及：</p>
@@ -2991,7 +2991,7 @@ B添加。</p>
 </li>
 </ul>
 <hr />
-<h1 id="190-replication-bandwidth-dashboard">190. Replication Bandwidth Dashboard</h1><p>按：</p>
+<h3 id="190-replication-bandwidth-dashboard">190. Replication Bandwidth Dashboard</h3><p>按：</p>
 <ul>
 <li><p>EntityType；</p>
 </li>
@@ -3004,7 +3004,7 @@ B添加。</p>
 </ul>
 <p>统计Bandwidth。</p>
 <hr />
-<h1 id="191-threat-debugger">191. Threat Debugger</h1><p>Boss当前Threat：</p>
+<h3 id="191-threat-debugger">191. Threat Debugger</h3><p>Boss当前Threat：</p>
 <p>Tank 8200<br />
 DPS A 7120<br />
 DPS B 6300<br />
@@ -3012,7 +3012,7 @@ Healer 5400。</p>
 <p>显示：</p>
 <p>Taunt、Modifier。</p>
 <hr />
-<h1 id="192-encounter-timeline">192. Encounter Timeline</h1><p>按时间：</p>
+<h3 id="192-encounter-timeline">192. Encounter Timeline</h3><p>按时间：</p>
 <ul>
 <li><p>Phase；</p>
 </li>
@@ -3030,7 +3030,7 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="193-wipe-analyzer">193. Wipe Analyzer</h1><p>例如：</p>
+<h3 id="193-wipe-analyzer">193. Wipe Analyzer</h3><p>例如：</p>
 <p>Phase 3<br />
 → Player D未进入Soak<br />
 → Soak人数不足<br />
@@ -3041,7 +3041,7 @@ Healer 5400。</p>
 <p>“20人全死”</p>
 <p>有价值。</p>
 <hr />
-<h1 id="194-queue-dashboard">194. Queue Dashboard</h1><p>显示：</p>
+<h3 id="194-queue-dashboard">194. Queue Dashboard</h3><p>显示：</p>
 <ul>
 <li><p>QueueCount；</p>
 </li>
@@ -3055,7 +3055,7 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="195-economy-dashboard">195. Economy Dashboard</h1><p>显示：</p>
+<h3 id="195-economy-dashboard">195. Economy Dashboard</h3><p>显示：</p>
 <ul>
 <li><p>Gold Sources；</p>
 </li>
@@ -3071,7 +3071,7 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="196-item-provenance">196. Item Provenance</h1><p>选择Item：</p>
+<h3 id="196-item-provenance">196. Item Provenance</h3><p>选择Item：</p>
 <p>显示：</p>
 <p>BossDrop<br />
 → Player A<br />
@@ -3081,7 +3081,7 @@ Healer 5400。</p>
 → Auction<br />
 → Player C。</p>
 <hr />
-<h1 id="197-transaction-trace">197. Transaction Trace</h1><p>输入TransactionId：</p>
+<h3 id="197-transaction-trace">197. Transaction Trace</h3><p>输入TransactionId：</p>
 <p>显示：</p>
 <ul>
 <li><p>Request；</p>
@@ -3098,30 +3098,30 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="198-guild-audit">198. Guild Audit</h1><p>谁：</p>
+<h3 id="198-guild-audit">198. Guild Audit</h3><p>谁：</p>
 <p>什么时候：</p>
 <p>从Guild Bank取了什么。</p>
 <hr />
-<h1 id="199-quest-phase-inspector">199. Quest Phase Inspector</h1><p>显示：</p>
+<h3 id="199-quest-phase-inspector">199. Quest Phase Inspector</h3><p>显示：</p>
 <p>Player当前PhaseTags。</p>
 <p>为什么看不到：</p>
 <p>NPC X。</p>
 <hr />
-<h1 id="200-presence-inspector">200. Presence Inspector</h1><p>好友显示Offline</p>
+<h3 id="200-presence-inspector">200. Presence Inspector</h3><p>好友显示Offline</p>
 <p>但Runtime存在：</p>
 <p>可快速判断：</p>
 <p>Presence服务延迟</p>
 <p>还是：</p>
 <p>Session问题。</p>
 <hr />
-<h1 id="201-hotspot-heatmap">201. Hotspot Heatmap</h1><p>显示：</p>
+<h3 id="201-hotspot-heatmap">201. Hotspot Heatmap</h3><p>显示：</p>
 <p>世界中：</p>
 <p>玩家密度。</p>
 <p>预测：</p>
 <p>世界Boss即将产生：</p>
 <p>Server Hotspot。</p>
 <hr />
-<h1 id="202-crash-recovery-dashboard">202. Crash Recovery Dashboard</h1><p>显示：</p>
+<h3 id="202-crash-recovery-dashboard">202. Crash Recovery Dashboard</h3><p>显示：</p>
 <ul>
 <li><p>Zone Restart；</p>
 </li>
@@ -3135,8 +3135,8 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="203-内容验证工具">203. 内容验证工具</h1><hr />
-<h2 id="2031-character-progression-simulation">203.1 Character Progression Simulation</h2><p>Bot从：</p>
+<h3 id="203-内容验证工具">203. 内容验证工具</h3><hr />
+<h3 id="2031-character-progression-simulation">203.1 Character Progression Simulation</h3><p>Bot从：</p>
 <p>Level 1</p>
 <p>模拟到：</p>
 <p>Level Cap。</p>
@@ -3153,7 +3153,7 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="204-quest-graph-validation">204. Quest Graph Validation</h1><p>检查：</p>
+<h3 id="204-quest-graph-validation">204. Quest Graph Validation</h3><p>检查：</p>
 <ul>
 <li><p>不可达Quest；</p>
 </li>
@@ -3165,11 +3165,11 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="205-dungeon-composition-test">205. Dungeon Composition Test</h1><p>自动验证：</p>
+<h3 id="205-dungeon-composition-test">205. Dungeon Composition Test</h3><p>自动验证：</p>
 <p>所有Dungeon：</p>
 <p>至少存在合法Role组合。</p>
 <hr />
-<h1 id="206-encounter-script-validation">206. Encounter Script Validation</h1><p>检查：</p>
+<h3 id="206-encounter-script-validation">206. Encounter Script Validation</h3><p>检查：</p>
 <ul>
 <li><p>Phase可达；</p>
 </li>
@@ -3183,16 +3183,16 @@ Healer 5400。</p>
 </li>
 </ul>
 <hr />
-<h1 id="207-raid-simulation">207. Raid Simulation</h1><p>Bot执行：</p>
+<h3 id="207-raid-simulation">207. Raid Simulation</h3><p>Bot执行：</p>
 <p>不同Role成功率。</p>
 <p>用于发现：</p>
 <p>某Mechanic理论无解。</p>
 <hr />
-<h1 id="208-threat-simulation">208. Threat Simulation</h1><p>测试：</p>
+<h3 id="208-threat-simulation">208. Threat Simulation</h3><p>测试：</p>
 <p>Tank Threat输出</p>
 <p>是否足够稳定压过DPS和Healing。</p>
 <hr />
-<h1 id="209-loot-lockout-test">209. Loot Lockout Test</h1><p>重复：</p>
+<h3 id="209-loot-lockout-test">209. Loot Lockout Test</h3><p>重复：</p>
 <p>Kill Boss<br />
 Reconnect<br />
 Retry<br />
@@ -3200,7 +3200,7 @@ Server Restart。</p>
 <p>检查：</p>
 <p>Reward永远只发一次。</p>
 <hr />
-<h1 id="210-trade-duplication-test">210. Trade Duplication Test</h1><p>模拟：</p>
+<h3 id="210-trade-duplication-test">210. Trade Duplication Test</h3><p>模拟：</p>
 <ul>
 <li><p>Disconnect；</p>
 </li>
@@ -3213,7 +3213,7 @@ Server Restart。</p>
 </ul>
 <p>确认Item唯一。</p>
 <hr />
-<h1 id="211-auction-property-test">211. Auction Property Test</h1><p>随机运行：</p>
+<h3 id="211-auction-property-test">211. Auction Property Test</h3><p>随机运行：</p>
 <p>Millions：</p>
 <p>Create<br />
 Cancel<br />
@@ -3222,10 +3222,10 @@ Buyout<br />
 Expire。</p>
 <p>资产守恒。</p>
 <hr />
-<h1 id="212-currency-conservation">212. Currency Conservation</h1><p>针对不可生成来源之外：</p>
+<h3 id="212-currency-conservation">212. Currency Conservation</h3><p>针对不可生成来源之外：</p>
 <p>检查货币Ledger。</p>
 <hr />
-<h1 id="213-zone-transfer-chaos-test">213. Zone Transfer Chaos Test</h1><p>随机：</p>
+<h3 id="213-zone-transfer-chaos-test">213. Zone Transfer Chaos Test</h3><p>随机：</p>
 <ul>
 <li><p>Kill Source；</p>
 </li>
@@ -3239,7 +3239,7 @@ Expire。</p>
 <p>验证：</p>
 <p>Character最终只存在一个Runtime。</p>
 <hr />
-<h1 id="214-shard-load-test">214. Shard Load Test</h1><p>模拟：</p>
+<h3 id="214-shard-load-test">214. Shard Load Test</h3><p>模拟：</p>
 <p>100<br />
 500<br />
 1000</p>
@@ -3247,7 +3247,7 @@ Expire。</p>
 <p>测试：</p>
 <p>自动Layer。</p>
 <hr />
-<h1 id="215-world-boss-stress-test">215. World Boss Stress Test</h1><p>集中：</p>
+<h3 id="215-world-boss-stress-test">215. World Boss Stress Test</h3><p>集中：</p>
 <p>200～500玩家。</p>
 <p>统计：</p>
 <ul>
@@ -3263,7 +3263,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="216-reconnect-test">216. Reconnect Test</h1><p>在：</p>
+<h3 id="216-reconnect-test">216. Reconnect Test</h3><p>在：</p>
 <ul>
 <li><p>World；</p>
 </li>
@@ -3278,7 +3278,7 @@ Expire。</p>
 </ul>
 <p>阶段随机断线。</p>
 <hr />
-<h1 id="217-long-world-test">217. Long World Test</h1><p>服务器运行：</p>
+<h3 id="217-long-world-test">217. Long World Test</h3><p>服务器运行：</p>
 <p>7天、30天。</p>
 <p>检查：</p>
 <ul>
@@ -3294,20 +3294,20 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="218-performance设计">218. Performance设计</h1><p>MMORPG最大的性能挑战通常不是：</p>
+<h3 id="218-performance设计">218. Performance设计</h3><p>MMORPG最大的性能挑战通常不是：</p>
 <p>单台服务器纯CPU。</p>
 <p>而是：</p>
 <p><strong>总并发 × 热点密度 × 网络复制 × 持久化事务。</strong></p>
 <hr />
-<h1 id="219-zone-partition">219. Zone Partition</h1><p>合理拆分：</p>
+<h3 id="219-zone-partition">219. Zone Partition</h3><p>合理拆分：</p>
 <p>减少单Simulation容器规模。</p>
 <hr />
-<h1 id="220-zone之间不要高频跨服combat">220. Zone之间不要高频跨服Combat</h1><p>跨Zone边界最好：</p>
+<h3 id="220-zone之间不要高频跨服combat">220. Zone之间不要高频跨服Combat</h3><p>跨Zone边界最好：</p>
 <p>明确Transfer。</p>
 <p>否则一个技能跨两个Server：</p>
 <p>一致性极复杂。</p>
 <hr />
-<h1 id="221-aoi-spatial-index">221. AOI Spatial Index</h1><p>可使用：</p>
+<h3 id="221-aoi-spatial-index">221. AOI Spatial Index</h3><p>可使用：</p>
 <ul>
 <li><p>Uniform Grid；</p>
 </li>
@@ -3317,23 +3317,23 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="222-replication-dirty-flags">222. Replication Dirty Flags</h1><p>只发送：</p>
+<h3 id="222-replication-dirty-flags">222. Replication Dirty Flags</h3><p>只发送：</p>
 <p>变化Component。</p>
 <p>Character Name：</p>
 <p>不需要每Tick同步。</p>
 <p>Position：</p>
 <p>需要。</p>
 <hr />
-<h1 id="223-delta-compression">223. Delta Compression</h1><p>Transform：</p>
+<h3 id="223-delta-compression">223. Delta Compression</h3><p>Transform：</p>
 <p>发送：</p>
 <p>Delta。</p>
 <p>不是完整State。</p>
 <hr />
-<h1 id="224-packet-batching">224. Packet Batching</h1><p>同一Tick：</p>
+<h3 id="224-packet-batching">224. Packet Batching</h3><p>同一Tick：</p>
 <p>多个Entity Update</p>
 <p>合并Message。</p>
 <hr />
-<h1 id="225-effect-lod">225. Effect LOD</h1><p>200人WorldBoss：</p>
+<h3 id="225-effect-lod">225. Effect LOD</h3><p>200人WorldBoss：</p>
 <p>不要向所有玩家发送：</p>
 <p>每一个其他玩家完整粒子效果。</p>
 <p>可以：</p>
@@ -3346,50 +3346,50 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="226-combat-log-lod">226. Combat Log LOD</h1><p>自己：</p>
+<h3 id="226-combat-log-lod">226. Combat Log LOD</h3><p>自己：</p>
 <p>完整。</p>
 <p>Party：</p>
 <p>高精度。</p>
 <p>远处玩家：</p>
 <p>只同步必要结果。</p>
 <hr />
-<h1 id="227-npc-ai-lod">227. NPC AI LOD</h1><p>玩家附近：</p>
+<h3 id="227-npc-ai-lod">227. NPC AI LOD</h3><p>玩家附近：</p>
 <p>完整AI。</p>
 <p>无人区域：</p>
 <p>低频或休眠。</p>
 <hr />
-<h1 id="228-spawn-system">228. Spawn System</h1><p>只有：</p>
+<h3 id="228-spawn-system">228. Spawn System</h3><p>只有：</p>
 <p>玩家进入附近</p>
 <p>才激活普通Monster。</p>
 <p>公共Boss例外。</p>
 <hr />
-<h1 id="229-database-write-coalescing">229. Database Write Coalescing</h1><p>非关键：</p>
+<h3 id="229-database-write-coalescing">229. Database Write Coalescing</h3><p>非关键：</p>
 <p>Quest Counter</p>
 <p>可以短暂聚合。</p>
 <p>但：</p>
 <p>Rare Item</p>
 <p>立即Durable。</p>
 <hr />
-<h1 id="230-cache不能成为资产真相">230. Cache不能成为资产真相</h1><p>Redis、Memory Cache：</p>
+<h3 id="230-cache不能成为资产真相">230. Cache不能成为资产真相</h3><p>Redis、Memory Cache：</p>
 <p>可以加速。</p>
 <p>最终资产归属：</p>
 <p>必须有Durable Source of Truth。</p>
 <hr />
-<h1 id="231-可扩展点">231. 可扩展点</h1><hr />
-<h2 id="2311-新zone">231.1 新Zone</h2><p>通过：</p>
+<h3 id="231-可扩展点">231. 可扩展点</h3><hr />
+<h3 id="2311-新zone">231.1 新Zone</h3><p>通过：</p>
 <p>ZoneTemplate</p>
 <p>接入World Router。</p>
 <hr />
-<h2 id="2312-新dungeon">231.2 新Dungeon</h2><p>通过：</p>
+<h3 id="2312-新dungeon">231.2 新Dungeon</h3><p>通过：</p>
 <p>InstanceDefinition</p>
 <ul>
 <li>Encounter。</li>
 </ul>
 <hr />
-<h2 id="2313-新raid">231.3 新Raid</h2><p>主要组合：</p>
+<h3 id="2313-新raid">231.3 新Raid</h3><p>主要组合：</p>
 <p>EncounterDefinition。</p>
 <hr />
-<h2 id="2314-新class">231.4 新Class</h2><p>提供：</p>
+<h3 id="2314-新class">231.4 新Class</h3><p>提供：</p>
 <ul>
 <li><p>Skill；</p>
 </li>
@@ -3401,20 +3401,20 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2315-新quest">231.5 新Quest</h2><p>通过：</p>
+<h3 id="2315-新quest">231.5 新Quest</h3><p>通过：</p>
 <p>QuestDefinition。</p>
 <hr />
-<h2 id="2316-新world-event">231.6 新World Event</h2><p>通过：</p>
+<h3 id="2316-新world-event">231.6 新World Event</h3><p>通过：</p>
 <p>WorldEventDefinition。</p>
 <hr />
-<h2 id="2317-新currency">231.7 新Currency</h2><p>通过：</p>
+<h3 id="2317-新currency">231.7 新Currency</h3><p>通过：</p>
 <p>CurrencyDefinition</p>
 <p>并必须提供Source和Sink。</p>
 <hr />
-<h2 id="2318-新guild功能">231.8 新Guild功能</h2><p>通过：</p>
+<h3 id="2318-新guild功能">231.8 新Guild功能</h3><p>通过：</p>
 <p>Permission + GuildModule。</p>
 <hr />
-<h2 id="2319-跨realm">231.9 跨Realm</h2><p>可以进一步加入：</p>
+<h3 id="2319-跨realm">231.9 跨Realm</h3><p>可以进一步加入：</p>
 <p>Cross-Realm Party / Instance。</p>
 <p>但需要明确：</p>
 <ul>
@@ -3429,28 +3429,28 @@ Expire。</p>
 </ul>
 <p>哪些仍然Realm Scoped。</p>
 <hr />
-<h1 id="232-玩家体验设计">232. 玩家体验设计</h1><hr />
-<h2 id="2321-玩家第一次进入世界必须迅速感受到还有其他人">232.1 玩家第一次进入世界必须迅速感受到“还有其他人”</h2><p>如果前两小时：</p>
+<h3 id="232-玩家体验设计">232. 玩家体验设计</h3><hr />
+<h3 id="2321-玩家第一次进入世界必须迅速感受到还有其他人">232.1 玩家第一次进入世界必须迅速感受到“还有其他人”</h3><p>如果前两小时：</p>
 <p>完全见不到任何玩家，</p>
 <p>MMO身份非常弱。</p>
 <hr />
-<h1 id="233-但不应为了人多让所有区域过度拥挤">233. 但不应为了“人多”让所有区域过度拥挤</h1><p>新手区域：</p>
+<h3 id="233-但不应为了人多让所有区域过度拥挤">233. 但不应为了“人多”让所有区域过度拥挤</h3><p>新手区域：</p>
 <p>适度。</p>
 <p>主城：</p>
 <p>高密度。</p>
 <p>荒野：</p>
 <p>保留探索空间。</p>
 <hr />
-<h1 id="234-sharding必须尽量无感">234. Sharding必须尽量无感</h1><p>玩家不应该频繁问：</p>
+<h3 id="234-sharding必须尽量无感">234. Sharding必须尽量无感</h3><p>玩家不应该频繁问：</p>
 <p>“我明明就在你旁边为什么看不到你？”</p>
 <p>Party和Friend Cohesion优先。</p>
 <hr />
-<h1 id="235-loading应该对应明确世界边界">235. Loading应该对应明确世界边界</h1><p>跨Zone或Dungeon：</p>
+<h3 id="235-loading应该对应明确世界边界">235. Loading应该对应明确世界边界</h3><p>跨Zone或Dungeon：</p>
 <p>玩家能够理解加载。</p>
 <p>在同一草原走两步突然Load：</p>
 <p>世界连续感很差。</p>
 <hr />
-<h1 id="236-ping与延迟必须透明到合理程度">236. Ping与延迟必须透明到合理程度</h1><p>竞技或Raid玩家需要知道：</p>
+<h3 id="236-ping与延迟必须透明到合理程度">236. Ping与延迟必须透明到合理程度</h3><p>竞技或Raid玩家需要知道：</p>
 <ul>
 <li><p>Latency；</p>
 </li>
@@ -3458,7 +3458,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="237-技能必须有本地即时反馈">237. 技能必须有本地即时反馈</h1><p>按技能：</p>
+<h3 id="237-技能必须有本地即时反馈">237. 技能必须有本地即时反馈</h3><p>按技能：</p>
 <p>客户端立即：</p>
 <ul>
 <li><p>动画；</p>
@@ -3469,18 +3469,18 @@ Expire。</p>
 <p>然后服务器确认。</p>
 <p>不能100ms后才开始表现。</p>
 <hr />
-<h1 id="238-但不能让预测结果过度承诺">238. 但不能让预测结果过度承诺</h1><p>如果Server拒绝技能：</p>
+<h3 id="238-但不能让预测结果过度承诺">238. 但不能让预测结果过度承诺</h3><p>如果Server拒绝技能：</p>
 <p>需要：</p>
 <p>平滑Cancel。</p>
 <hr />
-<h1 id="239-party组建应低摩擦">239. Party组建应低摩擦</h1><p>点击玩家：</p>
+<h3 id="239-party组建应低摩擦">239. Party组建应低摩擦</h3><p>点击玩家：</p>
 <p>Invite。</p>
 <p>好友：</p>
 <p>Invite。</p>
 <p>Dungeon结束：</p>
 <p>Requeue。</p>
 <hr />
-<h1 id="240-社交系统不应强迫所有玩家长期固定组队">240. 社交系统不应强迫所有玩家长期固定组队</h1><p>需要同时支持：</p>
+<h3 id="240-社交系统不应强迫所有玩家长期固定组队">240. 社交系统不应强迫所有玩家长期固定组队</h3><p>需要同时支持：</p>
 <ul>
 <li><p>Solo；</p>
 </li>
@@ -3492,7 +3492,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="241-queue能解决组织成本但会降低世界社交">241. Queue能解决组织成本，但会降低世界社交</h1><p>所有副本：</p>
+<h3 id="241-queue能解决组织成本但会降低世界社交">241. Queue能解决组织成本，但会降低世界社交</h3><p>所有副本：</p>
 <p>一键自动匹配</p>
 <p>→ 玩家可能把世界当Lobby。</p>
 <p>因此可以保留：</p>
@@ -3506,7 +3506,7 @@ Expire。</p>
 </ul>
 <p>形成补充。</p>
 <hr />
-<h1 id="242-raid需要明确失败归因">242. Raid需要明确失败归因</h1><p>玩家必须能理解：</p>
+<h3 id="242-raid需要明确失败归因">242. Raid需要明确失败归因</h3><p>玩家必须能理解：</p>
 <p>为什么Wipe。</p>
 <p>例如：</p>
 <p>Boss Ability：</p>
@@ -3516,7 +3516,7 @@ Expire。</p>
 <p>实际：</p>
 <p>4。</p>
 <hr />
-<h1 id="243-ui应该帮助团队协作而不是要求玩家读战斗日志">243. UI应该帮助团队协作，而不是要求玩家读战斗日志</h1><p>必要信息：</p>
+<h3 id="243-ui应该帮助团队协作而不是要求玩家读战斗日志">243. UI应该帮助团队协作，而不是要求玩家读战斗日志</h3><p>必要信息：</p>
 <ul>
 <li><p>Cast；</p>
 </li>
@@ -3529,7 +3529,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="244-终局不能只有item-level数字">244. 终局不能只有Item Level数字</h1><p>否则：</p>
+<h3 id="244-终局不能只有item-level数字">244. 终局不能只有Item Level数字</h3><p>否则：</p>
 <p>所有装备只比较：</p>
 <p>更高ItemLevel。</p>
 <p>应保留：</p>
@@ -3546,7 +3546,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="245-追赶机制">245. 追赶机制</h1><p>新玩家或回归玩家：</p>
+<h3 id="245-追赶机制">245. 追赶机制</h3><p>新玩家或回归玩家：</p>
 <p>不能永远追不上老玩家。</p>
 <p>可以：</p>
 <ul>
@@ -3560,19 +3560,19 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="246-但追赶不能让当前玩家努力完全失去价值">246. 但追赶不能让当前玩家努力完全失去价值</h1><p>应该：</p>
+<h3 id="246-但追赶不能让当前玩家努力完全失去价值">246. 但追赶不能让当前玩家努力完全失去价值</h3><p>应该：</p>
 <p>缩短旧阶段，</p>
 <p>而不是：</p>
 <p>直接跳到当前顶级毕业装备。</p>
 <hr />
-<h1 id="247-alt角色">247. Alt角色</h1><p>MMORPG玩家常有多个角色。</p>
+<h3 id="247-alt角色">247. Alt角色</h3><p>MMORPG玩家常有多个角色。</p>
 <p>系统需要考虑：</p>
 <p>哪些成长：</p>
 <p>Character Bound。</p>
 <p>哪些：</p>
 <p>Account Bound。</p>
 <hr />
-<h1 id="248-account-wide适合">248. Account-wide适合</h1><ul>
+<h3 id="248-account-wide适合">248. Account-wide适合</h3><ul>
 <li><p>Mount；</p>
 </li>
 <li><p>Cosmetic；</p>
@@ -3584,7 +3584,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="249-character-specific适合">249. Character-specific适合</h1><ul>
+<h3 id="249-character-specific适合">249. Character-specific适合</h3><ul>
 <li><p>Class Gear；</p>
 </li>
 <li><p>Personal Quest；</p>
@@ -3596,105 +3596,105 @@ Expire。</p>
 </ul>
 <p>取决于设计。</p>
 <hr />
-<h1 id="250-重复劳动应逐步account化">250. 重复劳动应逐步Account化</h1><p>如果玩家第二个角色必须：</p>
+<h3 id="250-重复劳动应逐步account化">250. 重复劳动应逐步Account化</h3><p>如果玩家第二个角色必须：</p>
 <p>重新做300小时完全相同内容，</p>
 <p>Alt体验很差。</p>
 <hr />
-<h1 id="251-经济ui需要防止玩家感觉自己必须玩股票">251. 经济UI需要防止玩家感觉自己必须玩股票</h1><p>普通玩家：</p>
+<h3 id="251-经济ui需要防止玩家感觉自己必须玩股票">251. 经济UI需要防止玩家感觉自己必须玩股票</h3><p>普通玩家：</p>
 <p>能买卖。</p>
 <p>高级玩家：</p>
 <p>可以研究市场。</p>
 <p>两者都应成立。</p>
 <hr />
-<h1 id="252-公会属于长期留存价值但不能成为生存必需">252. 公会属于长期留存价值，但不能成为生存必需</h1><p>没有Guild的玩家：</p>
+<h3 id="252-公会属于长期留存价值但不能成为生存必需">252. 公会属于长期留存价值，但不能成为生存必需</h3><p>没有Guild的玩家：</p>
 <p>也应能玩。</p>
 <p>Guild玩家：</p>
 <p>获得：</p>
 <p>更强的社会组织体验。</p>
 <hr />
-<h1 id="253-常见设计失败">253. 常见设计失败</h1><hr />
-<h2 id="2531-mmo只是把单机rpg放服务器">253.1 “MMO”只是把单机RPG放服务器</h2><p>没有真正社会或持久世界结构。</p>
+<h3 id="253-常见设计失败">253. 常见设计失败</h3><hr />
+<h3 id="2531-mmo只是把单机rpg放服务器">253.1 “MMO”只是把单机RPG放服务器</h3><p>没有真正社会或持久世界结构。</p>
 <hr />
-<h2 id="2532-一张地图由一个巨型server处理所有玩家">253.2 一张地图由一个巨型Server处理所有玩家</h2><p>热点无法扩展。</p>
+<h3 id="2532-一张地图由一个巨型server处理所有玩家">253.2 一张地图由一个巨型Server处理所有玩家</h3><p>热点无法扩展。</p>
 <hr />
-<h2 id="2533-shard完全随机">253.3 Shard完全随机</h2><p>朋友经常看不到彼此。</p>
+<h3 id="2533-shard完全随机">253.3 Shard完全随机</h3><p>朋友经常看不到彼此。</p>
 <hr />
-<h2 id="2534-战斗中允许任意切shard">253.4 战斗中允许任意切Shard</h2><p>玩家利用Shard逃避危险和资源竞争。</p>
+<h3 id="2534-战斗中允许任意切shard">253.4 战斗中允许任意切Shard</h3><p>玩家利用Shard逃避危险和资源竞争。</p>
 <hr />
-<h2 id="2535-zone-transfer先删source再建target">253.5 Zone Transfer先删Source再建Target</h2><p>角色可能消失。</p>
+<h3 id="2535-zone-transfer先删source再建target">253.5 Zone Transfer先删Source再建Target</h3><p>角色可能消失。</p>
 <hr />
-<h2 id="2536-transfer先建target再永远不清source">253.6 Transfer先建Target再永远不清Source</h2><p>角色复制。</p>
+<h3 id="2536-transfer先建target再永远不清source">253.6 Transfer先建Target再永远不清Source</h3><p>角色复制。</p>
 <hr />
-<h2 id="2537-accountcharacter和session共用一个id概念">253.7 Account、Character和Session共用一个ID概念</h2><p>重连和多角色管理混乱。</p>
+<h3 id="2537-accountcharacter和session共用一个id概念">253.7 Account、Character和Session共用一个ID概念</h3><p>重连和多角色管理混乱。</p>
 <hr />
-<h2 id="2538-客户端决定damage和loot">253.8 客户端决定Damage和Loot</h2><p>作弊成本极低。</p>
+<h3 id="2538-客户端决定damage和loot">253.8 客户端决定Damage和Loot</h3><p>作弊成本极低。</p>
 <hr />
-<h2 id="2539-所有entity同步给所有玩家">253.9 所有Entity同步给所有玩家</h2><p>世界Boss网络爆炸。</p>
+<h3 id="2539-所有entity同步给所有玩家">253.9 所有Entity同步给所有玩家</h3><p>世界Boss网络爆炸。</p>
 <hr />
-<h2 id="25310-aoi只看距离">253.10 AOI只看距离</h2><p>Party远距离状态丢失。</p>
+<h3 id="25310-aoi只看距离">253.10 AOI只看距离</h3><p>Party远距离状态丢失。</p>
 <hr />
-<h2 id="25311-公共世界全部实例化">253.11 公共世界全部实例化</h2><p>玩家永远只看到极少人，MMO感消失。</p>
+<h3 id="25311-公共世界全部实例化">253.11 公共世界全部实例化</h3><p>玩家永远只看到极少人，MMO感消失。</p>
 <hr />
-<h2 id="25312-完全不实例化">253.12 完全不实例化</h2><p>热点Server崩溃。</p>
+<h3 id="25312-完全不实例化">253.12 完全不实例化</h3><p>热点Server崩溃。</p>
 <hr />
-<h2 id="25313-dungeon只是单机副本多人没有相互依赖">253.13 Dungeon只是单机副本，多人没有相互依赖</h2><p>组队只是五个人各打各的。</p>
+<h3 id="25313-dungeon只是单机副本多人没有相互依赖">253.13 Dungeon只是单机副本，多人没有相互依赖</h3><p>组队只是五个人各打各的。</p>
 <hr />
-<h2 id="25314-tankhealerdps只有伤害数值区别">253.14 Tank/Healer/DPS只有伤害数值区别</h2><p>没有团队约束职责。</p>
+<h3 id="25314-tankhealerdps只有伤害数值区别">253.14 Tank/Healer/DPS只有伤害数值区别</h3><p>没有团队约束职责。</p>
 <hr />
-<h2 id="25315-threat规则不可解释">253.15 Threat规则不可解释</h2><p>Tank莫名失去Boss。</p>
+<h3 id="25315-threat规则不可解释">253.15 Threat规则不可解释</h3><p>Tank莫名失去Boss。</p>
 <hr />
-<h2 id="25316-matchmaking失败后所有人重新排队">253.16 Matchmaking失败后所有人重新排队</h2><p>玩家等待体验极差。</p>
+<h3 id="25316-matchmaking失败后所有人重新排队">253.16 Matchmaking失败后所有人重新排队</h3><p>玩家等待体验极差。</p>
 <hr />
-<h2 id="25317-raid-boss只提高hp">253.17 Raid Boss只提高HP</h2><p>没有团队协作机制。</p>
+<h3 id="25317-raid-boss只提高hp">253.17 Raid Boss只提高HP</h3><p>没有团队协作机制。</p>
 <hr />
-<h2 id="25318-raid奖励没有lockout">253.18 Raid奖励没有Lockout</h2><p>玩家无限刷导致装备经济崩溃。</p>
+<h3 id="25318-raid奖励没有lockout">253.18 Raid奖励没有Lockout</h3><p>玩家无限刷导致装备经济崩溃。</p>
 <hr />
-<h2 id="25319-lockout和instance绑定">253.19 Lockout和Instance绑定</h2><p>换Instance后重复领奖励。</p>
+<h3 id="25319-lockout和instance绑定">253.19 Lockout和Instance绑定</h3><p>换Instance后重复领奖励。</p>
 <hr />
-<h2 id="25320-quest-phasing让朋友互相不可见">253.20 Quest Phasing让朋友互相不可见</h2><p>没有Party Phase Sync。</p>
+<h3 id="25320-quest-phasing让朋友互相不可见">253.20 Quest Phasing让朋友互相不可见</h3><p>没有Party Phase Sync。</p>
 <hr />
-<h2 id="25321-世界事件玩家越多只是boss-hp越高">253.21 世界事件玩家越多只是Boss HP越高</h2><p>高人口体验只是更慢。</p>
+<h3 id="25321-世界事件玩家越多只是boss-hp越高">253.21 世界事件玩家越多只是Boss HP越高</h3><p>高人口体验只是更慢。</p>
 <hr />
-<h2 id="25322-gold只有source没有sink">253.22 Gold只有Source，没有Sink</h2><p>长期严重通胀。</p>
+<h3 id="25322-gold只有source没有sink">253.22 Gold只有Source，没有Sink</h3><p>长期严重通胀。</p>
 <hr />
-<h2 id="25323-所有sink只是repair-tax">253.23 所有Sink只是Repair Tax</h2><p>玩家只觉得被收费。</p>
+<h3 id="25323-所有sink只是repair-tax">253.23 所有Sink只是Repair Tax</h3><p>玩家只觉得被收费。</p>
 <hr />
-<h2 id="25324-trade非原子">253.24 Trade非原子</h2><p>物品复制或消失。</p>
+<h3 id="25324-trade非原子">253.24 Trade非原子</h3><p>物品复制或消失。</p>
 <hr />
-<h2 id="25325-auction-item仍留在玩家inventory">253.25 Auction Item仍留在玩家Inventory</h2><p>重复使用和出售。</p>
+<h3 id="25325-auction-item仍留在玩家inventory">253.25 Auction Item仍留在玩家Inventory</h3><p>重复使用和出售。</p>
 <hr />
-<h2 id="25326-guild-bank没有审计">253.26 Guild Bank没有审计</h2><p>资产事故无法追踪。</p>
+<h3 id="25326-guild-bank没有审计">253.26 Guild Bank没有审计</h3><p>资产事故无法追踪。</p>
 <hr />
-<h2 id="25327-presence要求强一致">253.27 Presence要求强一致</h2><p>浪费大量复杂度。</p>
+<h3 id="25327-presence要求强一致">253.27 Presence要求强一致</h3><p>浪费大量复杂度。</p>
 <hr />
-<h2 id="25328-inventory却只用最终一致">253.28 Inventory却只用最终一致</h2><p>可能复制资产。</p>
+<h3 id="25328-inventory却只用最终一致">253.28 Inventory却只用最终一致</h3><p>可能复制资产。</p>
 <hr />
-<h2 id="25329-chat故障拖垮world-server">253.29 Chat故障拖垮World Server</h2><p>服务隔离失败。</p>
+<h3 id="25329-chat故障拖垮world-server">253.29 Chat故障拖垮World Server</h3><p>服务隔离失败。</p>
 <hr />
-<h2 id="25330-所有功能都拆成独立微服务">253.30 所有功能都拆成独立微服务</h2><p>早期开发和调试成本失控。</p>
+<h3 id="25330-所有功能都拆成独立微服务">253.30 所有功能都拆成独立微服务</h3><p>早期开发和调试成本失控。</p>
 <hr />
-<h2 id="25331-所有功能都塞在单个world进程">253.31 所有功能都塞在单个World进程</h2><p>后期完全无法隔离热点和故障。</p>
+<h3 id="25331-所有功能都塞在单个world进程">253.31 所有功能都塞在单个World进程</h3><p>后期完全无法隔离热点和故障。</p>
 <hr />
-<h2 id="25332-live配置直接影响进行中的raid">253.32 Live配置直接影响进行中的Raid</h2><p>Boss打到一半技能规则变化。</p>
+<h3 id="25332-live配置直接影响进行中的raid">253.32 Live配置直接影响进行中的Raid</h3><p>Boss打到一半技能规则变化。</p>
 <hr />
-<h2 id="25333-高价值reward先表现后尝试写数据库">253.33 高价值Reward先表现，后尝试写数据库</h2><p>持久化失败导致玩家看见装备却拿不到。</p>
+<h3 id="25333-高价值reward先表现后尝试写数据库">253.33 高价值Reward先表现，后尝试写数据库</h3><p>持久化失败导致玩家看见装备却拿不到。</p>
 <hr />
-<h2 id="25334-重复消息可以重复发奖励">253.34 重复消息可以重复发奖励</h2><p>幂等性缺失。</p>
+<h3 id="25334-重复消息可以重复发奖励">253.34 重复消息可以重复发奖励</h3><p>幂等性缺失。</p>
 <hr />
-<h2 id="25335-玩家下线立即销毁角色">253.35 玩家下线立即销毁角色</h2><p>网络闪断直接退出副本。</p>
+<h3 id="25335-玩家下线立即销毁角色">253.35 玩家下线立即销毁角色</h3><p>网络闪断直接退出副本。</p>
 <hr />
-<h2 id="25336-无限reconnect-grace">253.36 无限Reconnect Grace</h2><p>断线角色长期占位。</p>
+<h3 id="25336-无限reconnect-grace">253.36 无限Reconnect Grace</h3><p>断线角色长期占位。</p>
 <hr />
-<h2 id="25337-经济指标完全没有telemetry">253.37 经济指标完全没有Telemetry</h2><p>通胀已经发生才发现。</p>
+<h3 id="25337-经济指标完全没有telemetry">253.37 经济指标完全没有Telemetry</h3><p>通胀已经发生才发现。</p>
 <hr />
-<h2 id="25338-新版本只增加item-level">253.38 新版本只增加Item Level</h2><p>所有旧内容快速完全失效。</p>
+<h3 id="25338-新版本只增加item-level">253.38 新版本只增加Item Level</h3><p>所有旧内容快速完全失效。</p>
 <hr />
-<h1 id="254-最小可行原型">254. 最小可行原型</h1><p>验证 MMORPG 核心范式时，不应该第一天目标就是：</p>
+<h3 id="254-最小可行原型">254. 最小可行原型</h3><p>验证 MMORPG 核心范式时，不应该第一天目标就是：</p>
 <p>“10000人同服。”</p>
 <p>更合理的 MVP：</p>
 <p><strong>100～200并发玩家 + 2个公共Zone + 1座主城 + 1个5人Dungeon + 1个Guild系统。</strong></p>
 <hr />
-<h2 id="2541-account">254.1 Account</h2><p>支持：</p>
+<h3 id="2541-account">254.1 Account</h3><p>支持：</p>
 <ul>
 <li><p>Login；</p>
 </li>
@@ -3702,7 +3702,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2542-character">254.2 Character</h2><p>包含：</p>
+<h3 id="2542-character">254.2 Character</h3><p>包含：</p>
 <ul>
 <li><p>Level；</p>
 </li>
@@ -3716,21 +3716,21 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2543-world">254.3 World</h2><p>两个公共Zone。</p>
+<h3 id="2543-world">254.3 World</h3><p>两个公共Zone。</p>
 <p>每Zone：</p>
 <p>目标并发50～100人。</p>
 <hr />
-<h2 id="2544-shard">254.4 Shard</h2><p>至少支持：</p>
+<h3 id="2544-shard">254.4 Shard</h3><p>至少支持：</p>
 <p>同Zone两个Shard。</p>
 <p>验证：</p>
 <p>Party Cohesion。</p>
 <hr />
-<h2 id="2545-dungeon">254.5 Dungeon</h2><p>5人：</p>
+<h3 id="2545-dungeon">254.5 Dungeon</h3><p>5人：</p>
 <p>1 Tank<br />
 1 Healer<br />
 3 DPS。</p>
 <hr />
-<h2 id="2546-boss">254.6 Boss</h2><p>至少：</p>
+<h3 id="2546-boss">254.6 Boss</h3><p>至少：</p>
 <p>3个多人机制：</p>
 <ul>
 <li><p>Spread；</p>
@@ -3741,7 +3741,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2547-social">254.7 Social</h2><ul>
+<h3 id="2547-social">254.7 Social</h3><ul>
 <li><p>Party；</p>
 </li>
 <li><p>Friend；</p>
@@ -3754,7 +3754,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2548-economy">254.8 Economy</h2><ul>
+<h3 id="2548-economy">254.8 Economy</h3><ul>
 <li><p>Gold；</p>
 </li>
 <li><p>Vendor；</p>
@@ -3764,7 +3764,7 @@ Expire。</p>
 </ul>
 <p>拍卖行可以稍后。</p>
 <hr />
-<h2 id="2549-persistence">254.9 Persistence</h2><p>必须支持：</p>
+<h3 id="2549-persistence">254.9 Persistence</h3><p>必须支持：</p>
 <ul>
 <li><p>Logout；</p>
 </li>
@@ -3776,7 +3776,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25410-必要基础设施">254.10 必要基础设施</h2><ul>
+<h3 id="25410-必要基础设施">254.10 必要基础设施</h3><ul>
 <li><p>AccountState；</p>
 </li>
 <li><p>SessionState；</p>
@@ -3823,7 +3823,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25411-必要调试工具">254.11 必要调试工具</h2><ul>
+<h3 id="25411-必要调试工具">254.11 必要调试工具</h3><ul>
 <li><p>CharacterStateInspector；</p>
 </li>
 <li><p>SessionInspector；</p>
@@ -3854,7 +3854,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="255-mvp核心验收问题">255. MVP核心验收问题</h1><p>原型必须至少回答：</p>
+<h3 id="255-mvp核心验收问题">255. MVP核心验收问题</h3><p>原型必须至少回答：</p>
 <ul>
 <li><p>玩家退出游戏再登录后角色是否准确恢复；</p>
 </li>
@@ -3921,7 +3921,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="256-推荐实施顺序">256. 推荐实施顺序</h1><p>第一阶段：</p>
+<h3 id="256-推荐实施顺序">256. 推荐实施顺序</h3><p>第一阶段：</p>
 <ul>
 <li><p>Account；</p>
 </li>
@@ -4028,7 +4028,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="257-架构验收标准">257. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<h3 id="257-架构验收标准">257. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
 <ul>
 <li><p>Account、Character、Session严格分离；</p>
 </li>
@@ -4162,8 +4162,8 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h1 id="258-可迁移到其他游戏的设计思想">258. 可迁移到其他游戏的设计思想</h1><hr />
-<h2 id="2581-长期身份当前runtime与连接session应分离">258.1 长期身份、当前Runtime与连接Session应分离</h2><p>可迁移到：</p>
+<h3 id="258-可迁移到其他游戏的设计思想">258. 可迁移到其他游戏的设计思想</h3><hr />
+<h3 id="2581-长期身份当前runtime与连接session应分离">258.1 长期身份、当前Runtime与连接Session应分离</h3><p>可迁移到：</p>
 <ul>
 <li><p>在线合作游戏；</p>
 </li>
@@ -4181,7 +4181,7 @@ Expire。</p>
 <p>谁现在连接它，</p>
 <p>是三个不同问题。</p>
 <hr />
-<h2 id="2582-跨服务器迁移应该按照资产事务设计而不是场景加载设计">258.2 跨服务器迁移应该按照资产事务设计，而不是场景加载设计</h2><p>可迁移到：</p>
+<h3 id="2582-跨服务器迁移应该按照资产事务设计而不是场景加载设计">258.2 跨服务器迁移应该按照资产事务设计，而不是场景加载设计</h3><p>可迁移到：</p>
 <ul>
 <li><p>分布式模拟；</p>
 </li>
@@ -4195,14 +4195,14 @@ Expire。</p>
 <p>Source和Target必须最终保证：</p>
 <p>唯一权威。</p>
 <hr />
-<h2 id="2583-不同状态需要不同一致性等级">258.3 不同状态需要不同一致性等级</h2><p>可迁移到：</p>
+<h3 id="2583-不同状态需要不同一致性等级">258.3 不同状态需要不同一致性等级</h3><p>可迁移到：</p>
 <p>任何分布式游戏后端。</p>
 <p>聊天：</p>
 <p>可以晚一秒。</p>
 <p>装备所有权：</p>
 <p>绝不能“最终可能一致”。</p>
 <hr />
-<h2 id="2584-客户端预测适合高频体验服务器权威适合高价值事实">258.4 客户端预测适合高频体验，服务器权威适合高价值事实</h2><p>两者不是矛盾关系。</p>
+<h3 id="2584-客户端预测适合高频体验服务器权威适合高价值事实">258.4 客户端预测适合高频体验，服务器权威适合高价值事实</h3><p>两者不是矛盾关系。</p>
 <p>可以迁移到：</p>
 <ul>
 <li><p>射击；</p>
@@ -4215,7 +4215,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2585-interest-management是大量对象存在与每个人都需要知道一切之间的解耦层">258.5 Interest Management是“大量对象存在”与“每个人都需要知道一切”之间的解耦层</h2><p>可迁移到：</p>
+<h3 id="2585-interest-management是大量对象存在与每个人都需要知道一切之间的解耦层">258.5 Interest Management是“大量对象存在”与“每个人都需要知道一切”之间的解耦层</h3><p>可迁移到：</p>
 <ul>
 <li><p>RTS；</p>
 </li>
@@ -4227,7 +4227,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2586-公共空间和私有实例可以共同组成同一个世界">258.6 公共空间和私有实例可以共同组成同一个世界</h2><p>可迁移到：</p>
+<h3 id="2586-公共空间和私有实例可以共同组成同一个世界">258.6 公共空间和私有实例可以共同组成同一个世界</h3><p>可迁移到：</p>
 <ul>
 <li><p>在线RPG；</p>
 </li>
@@ -4241,7 +4241,7 @@ Expire。</p>
 <p>Instance承担：</p>
 <p>高精度设计。</p>
 <hr />
-<h2 id="2587-多人协作的核心应是互相改变彼此约束而不是简单并排输出">258.7 多人协作的核心应是“互相改变彼此约束”，而不是简单并排输出</h2><p>Raid的Spread、Stack、Soak等设计思想可以迁移到：</p>
+<h3 id="2587-多人协作的核心应是互相改变彼此约束而不是简单并排输出">258.7 多人协作的核心应是“互相改变彼此约束”，而不是简单并排输出</h3><p>Raid的Spread、Stack、Soak等设计思想可以迁移到：</p>
 <ul>
 <li><p>合作Boss；</p>
 </li>
@@ -4253,7 +4253,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2588-高频runtime数据与durable资产事务应分层">258.8 高频Runtime数据与Durable资产事务应分层</h2><p>可迁移到：</p>
+<h3 id="2588-高频runtime数据与durable资产事务应分层">258.8 高频Runtime数据与Durable资产事务应分层</h3><p>可迁移到：</p>
 <ul>
 <li><p>在线战斗；</p>
 </li>
@@ -4267,7 +4267,7 @@ Expire。</p>
 <p>Legendary Item重复：</p>
 <p>不可接受。</p>
 <hr />
-<h2 id="2589-所有奖励系统都应该先问请求重复会怎样">258.9 所有奖励系统都应该先问“请求重复会怎样”</h2><p>这是：</p>
+<h3 id="2589-所有奖励系统都应该先问请求重复会怎样">258.9 所有奖励系统都应该先问“请求重复会怎样”</h3><p>这是：</p>
 <p>幂等设计。</p>
 <p>可以迁移到：</p>
 <ul>
@@ -4282,7 +4282,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25810-社交组织本身可以成为持久游戏资产">258.10 社交组织本身可以成为持久游戏资产</h2><p>Guild不只是聊天Channel。</p>
+<h3 id="25810-社交组织本身可以成为持久游戏资产">258.10 社交组织本身可以成为持久游戏资产</h3><p>Guild不只是聊天Channel。</p>
 <p>它拥有：</p>
 <ul>
 <li><p>Membership；</p>
@@ -4308,7 +4308,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25811-世界热点应该被视为容量问题而不是平均在线人数问题">258.11 世界热点应该被视为容量问题，而不是平均在线人数问题</h2><p>服务器平均：</p>
+<h3 id="25811-世界热点应该被视为容量问题而不是平均在线人数问题">258.11 世界热点应该被视为容量问题，而不是平均在线人数问题</h3><p>服务器平均：</p>
 <p>30%负载。</p>
 <p>但：</p>
 <p>世界Boss</p>
@@ -4325,13 +4325,13 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25812-逻辑服务边界与物理微服务边界应该分离考虑">258.12 逻辑服务边界与物理微服务边界应该分离考虑</h2><p>架构首先要回答：</p>
+<h3 id="25812-逻辑服务边界与物理微服务边界应该分离考虑">258.12 逻辑服务边界与物理微服务边界应该分离考虑</h3><p>架构首先要回答：</p>
 <p>谁拥有状态。</p>
 <p>而不是：</p>
 <p>这个状态是不是独立Docker容器。</p>
 <p>这对任何大型框架或服务系统都具有很强迁移价值。</p>
 <hr />
-<h1 id="259-本次防重记录">259. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>MMORPG / 持久共享世界在线角色扮演游戏。</strong></p>
+<h3 id="259-本次防重记录">259. 本次防重记录</h3><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>MMORPG / 持久共享世界在线角色扮演游戏。</strong></p>
 <p>常见名称：</p>
 <ul>
 <li><p>MMORPG；</p>
@@ -4348,7 +4348,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="核心范式">核心范式</h2><p>服务器长期维护一个独立于任何单个玩家会话存在的持久共享世界；玩家通过 Account、Character 和 Session 三层身份进入世界，角色的装备、等级、任务、经济、社交与组织状态跨会话保存。公共世界按照 Realm、Zone、Shard/Layer 和 Instance 等层级被拆分为有限规模的权威模拟单元，玩家跨区域移动时通过正式 Zone Transfer 事务迁移唯一 Runtime；客户端预测移动和即时表现，但技能、伤害、Loot、Inventory、Currency 和社会资产始终由服务器权威。</p>
+<h3 id="核心范式">核心范式</h3><p>服务器长期维护一个独立于任何单个玩家会话存在的持久共享世界；玩家通过 Account、Character 和 Session 三层身份进入世界，角色的装备、等级、任务、经济、社交与组织状态跨会话保存。公共世界按照 Realm、Zone、Shard/Layer 和 Instance 等层级被拆分为有限规模的权威模拟单元，玩家跨区域移动时通过正式 Zone Transfer 事务迁移唯一 Runtime；客户端预测移动和即时表现，但技能、伤害、Loot、Inventory、Currency 和社会资产始终由服务器权威。</p>
 <p>公共 Zone 提供偶遇、采集、公共事件、世界 Boss 和社会存在感；Dungeon 与 Raid Instance 则提供精确人数、角色职责、Threat、团队机制、进度和 Reward Lockout。Party、Guild、Trade、Auction、Chat 和 Presence 把单次战斗之外的玩家关系沉淀成长期社会网络，经济通过持续 Source / Sink 和资产事务保持稳定。最终玩家成长不仅是 Character Power，更是角色身份、装备资产、Guild关系、市场资本和世界经历的长期积累。</p>
 <p>核心循环可以压缩为：</p>
 <p><strong>登录持久角色<br />
@@ -4366,7 +4366,7 @@ Expire。</p>
 → 更高层内容解锁<br />
 → 下次登录继续同一个长期角色与社会世界。</strong></p>
 <hr />
-<h2 id="核心识别特征">核心识别特征</h2><ul>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
 <li><p>世界和角色跨登录会话长期存在；</p>
 </li>
 <li><p>世界不依附任意单个玩家生命周期；</p>
@@ -4445,7 +4445,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="与仓库现有-jrpg-的防重边界">与仓库现有 JRPG 的防重边界</h2><p>当前仓库已经存在独立 JRPG 范式。索引中将其作为单独宏观类型维护。</p>
+<h3 id="与仓库现有-jrpg-的防重边界">与仓库现有 JRPG 的防重边界</h3><p>当前仓库已经存在独立 JRPG 范式。索引中将其作为单独宏观类型维护。</p>
 <p>JRPG的典型核心是：</p>
 <ul>
 <li><p>稳定主角队伍；</p>
@@ -4492,7 +4492,7 @@ Expire。</p>
 <p>大量长期身份如何安全地共同生活在一个持续在线、可扩展并不断更新的世界中。</p>
 </blockquote>
 <hr />
-<h2 id="与仓库现有刷宝型-arpg-的防重边界">与仓库现有刷宝型 ARPG 的防重边界</h2><p>当前仓库已经记录刷宝型 ARPG，核心围绕高频掉落、随机装备实例、Build 搜索空间和更高阶内容驱动下一轮装备优化。</p>
+<h3 id="与仓库现有刷宝型-arpg-的防重边界">与仓库现有刷宝型 ARPG 的防重边界</h3><p>当前仓库已经记录刷宝型 ARPG，核心围绕高频掉落、随机装备实例、Build 搜索空间和更高阶内容驱动下一轮装备优化。</p>
 <p>MMORPG可以拥有刷宝和装备等级，但其核心并不依赖：</p>
 <p>大量随机战利品。</p>
 <p>一个MMORPG完全可以主要依靠：</p>
@@ -4533,7 +4533,7 @@ Expire。</p>
 <p>Persistent Shared World与多人社会基础设施是核心。</p>
 </blockquote>
 <hr />
-<h2 id="与仓库现有多人共斗狩猎的防重边界">与仓库现有多人共斗狩猎的防重边界</h2><p>多人共斗狩猎已经以大型目标、部位破坏、团队职责和阶段窗口作为独立范式。</p>
+<h3 id="与仓库现有多人共斗狩猎的防重边界">与仓库现有多人共斗狩猎的防重边界</h3><p>多人共斗狩猎已经以大型目标、部位破坏、团队职责和阶段窗口作为独立范式。</p>
 <p>MMORPG中的Dungeon和Raid同样具有团队Boss，但其区别在于：</p>
 <p>共斗狩猎：</p>
 <blockquote>
@@ -4562,7 +4562,7 @@ Expire。</p>
 </ul>
 <p>因此Boss协作只是本范式的一部分，而不是全部。</p>
 <hr />
-<h2 id="与仓库现有俱乐部经营的防重边界">与仓库现有俱乐部经营的防重边界</h2><p>仓库已有俱乐部经营模拟，重点在成员招募、训练、阵容、赛事、财务和声望。</p>
+<h3 id="与仓库现有俱乐部经营的防重边界">与仓库现有俱乐部经营的防重边界</h3><p>仓库已有俱乐部经营模拟，重点在成员招募、训练、阵容、赛事、财务和声望。</p>
 <p>MMORPG中的Guild虽然也是长期组织，但其成员是真实玩家；其主要职责是：</p>
 <ul>
 <li><p>社交身份；</p>
@@ -4582,7 +4582,7 @@ Expire。</p>
 <p>持久在线社会基础设施，</p>
 <p>而非玩家经营的一组NPC成员。</p>
 <hr />
-<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
 <li><p>MMORPG；</p>
 </li>
 <li><p>Persistent Shared World；</p>
@@ -4719,7 +4719,7 @@ Expire。</p>
 </li>
 </ul>
 <hr />
-<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次 MMORPG / 持久共享世界范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次 MMORPG / 持久共享世界范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
 <ul>
 <li><p>MMORPG服务器架构；</p>
 </li>

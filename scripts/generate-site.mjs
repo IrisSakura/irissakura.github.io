@@ -2465,7 +2465,7 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
 }
 
 function renderGameDesignDetailSource({ design, markdown, note }) {
-  const body = renderPublicMarkdown(markdown);
+  const body = renderPublicMarkdown(markdown, 3);
   const curatedSummary = note ? `<section class="journal-research-summary" aria-labelledby="curated-summary-title">
             <p class="journal-kicker">SELECTED RESEARCH SUMMARY</p>
             <h2 id="curated-summary-title">精选研究结构摘要</h2>
@@ -2515,15 +2515,19 @@ function renderGameDesignDetailSource({ design, markdown, note }) {
 `;
 }
 
-function renderPublicMarkdown(markdown) {
+function renderPublicMarkdown(markdown, headingFloor = 2) {
   const headingCounts = new Map();
+  let previousHeadingDepth = headingFloor - 1;
   const renderer = new marked.Renderer();
   renderer.heading = ({ depth, text }) => {
     const base = markdownHeadingId(text) || 'section';
     const count = headingCounts.get(base) ?? 0;
     headingCounts.set(base, count + 1);
     const id = count === 0 ? base : `${base}-${count}`;
-    return `<h${depth} id="${escapeAttribute(id)}">${marked.parseInline(text)}</h${depth}>`;
+    const requestedDepth = Math.min(6, Math.max(headingFloor, depth + headingFloor - 2));
+    const normalizedDepth = Math.min(requestedDepth, previousHeadingDepth + 1);
+    previousHeadingDepth = normalizedDepth;
+    return `<h${normalizedDepth} id="${escapeAttribute(id)}">${marked.parseInline(text)}</h${normalizedDepth}>`;
   };
   return sanitizeHtml(marked.parse(markdown, { renderer }), {
     allowedTags: [

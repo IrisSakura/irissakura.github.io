@@ -12,6 +12,22 @@ function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+
+test('GitHub Pages deployment credentials are scoped to the deploy job', async () => {
+  const workflow = await readText('.github/workflows/site-quality-and-pages.yml');
+  const jobsStart = workflow.indexOf('\njobs:\n');
+  const deployStart = workflow.indexOf('\n  deploy:\n');
+  assert.ok(jobsStart > 0 && deployStart > jobsStart, 'workflow jobs are not structurally readable');
+
+  const workflowPermissions = workflow.slice(0, jobsStart);
+  const verifyJob = workflow.slice(jobsStart, deployStart);
+  const deployJob = workflow.slice(deployStart);
+  assert.match(workflowPermissions, /^permissions:\n  contents: read$/mu);
+  assert.doesNotMatch(workflowPermissions, /pages: write|id-token: write/u);
+  assert.doesNotMatch(verifyJob, /pages: write|id-token: write/u);
+  assert.match(deployJob, /permissions:\n      pages: write\n      id-token: write/u);
+});
+
 test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '独立游戏开发者与游戏系统设计者');
@@ -420,6 +436,12 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       `${page} has an invalid page brand mode`
     );
     assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);
+    const headingLevels = [...html.matchAll(/<h([1-6])\b/gu)].map((match) => Number(match[1]));
+    assert.equal(headingLevels.filter((level) => level === 1).length, 1, `${page} must expose exactly one H1`);
+    assert.ok(
+      headingLevels.every((level, index) => index === 0 || level <= headingLevels[index - 1] + 1),
+      `${page} contains a skipped heading level`
+    );
 
     for (const marker of [
       'theme-picker',

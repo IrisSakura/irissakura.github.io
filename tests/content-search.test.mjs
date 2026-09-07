@@ -71,4 +71,7 @@ test('Journal exposes an accessible progressively enhanced content search shell'
   assert.match(journal, /<label[^>]*for="content-search-query"/u);
   assert.match(journal, /id="content-search-status"[^>]*aria-live="polite"/u);
   assert.match(journal, /id="content-search-results"[^>]*aria-label="检索结果"/u);
+  assert.match(journal, /<form class="content-search-controls"[^>]*data-content-search-form/u);
+  const runtime = await readText('src/site.ts');
+  assert.match(runtime, /form\.addEventListener\('submit',[\s\S]*?event\.preventDefault\(\);[\s\S]*?render\(\);/u);
 });

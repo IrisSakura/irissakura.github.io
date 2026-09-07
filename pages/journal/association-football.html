@@ -107,8 +107,8 @@
             <div class="blog-prose research-prose"><blockquote>
 <p>Agent 标签：<code>association</code> <code>football</code> <code>soccer</code></p>
 </blockquote>
-<h2 id="共享球权无球空间与组织推进失球转换压迫再组织的连续团队博弈循环">共享球权、无球空间与“组织—推进—失球—转换—压迫—再组织”的连续团队博弈循环</h2><hr />
-<h2 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h2><p>已实际核对当前 Journal 的 <code>game-designs</code> 权威目录。当前生成的 <code>README.md</code> 标记 <strong>Entries: 60</strong>，仓库已经覆盖赛车、俱乐部经营、实时战略、回合制战术、战术射击、格斗、MMORPG、城市建设等大量相邻类型。</p>
+<h3 id="共享球权无球空间与组织推进失球转换压迫再组织的连续团队博弈循环">共享球权、无球空间与“组织—推进—失球—转换—压迫—再组织”的连续团队博弈循环</h3><hr />
+<h3 id="0-本期选型与仓库防重核对">0. 本期选型与仓库防重核对</h3><p>已实际核对当前 Journal 的 <code>game-designs</code> 权威目录。当前生成的 <code>README.md</code> 标记 <strong>Entries: 60</strong>，仓库已经覆盖赛车、俱乐部经营、实时战略、回合制战术、战术射击、格斗、MMORPG、城市建设等大量相邻类型。</p>
 <p>当前路由中已经存在 <code>club-management</code>，其核心摘要是成员招募、训练、阵容、赛事、财务和声望组成的长期经营循环；但当前 <code>route-metadata.v1.json</code> 中没有独立的 <code>football</code>、<code>soccer</code> 或体育比赛实时模拟范式。</p>
 <p>因此本期新增：</p>
 <p><strong>足球比赛模拟 / Association Football Simulation / Soccer Game。</strong></p>
@@ -160,7 +160,7 @@
 <p><strong>在一个持续变化的共享空间里，让一支由多个自治球员组成的团队始终对同一个球权状态形成协调反应。</strong></p>
 </blockquote>
 <hr />
-<h1 id="1-类型定位">1. 类型定位</h1><p>足球比赛模拟通常包含：</p>
+<h3 id="1-类型定位">1. 类型定位</h3><p>足球比赛模拟通常包含：</p>
 <ul>
 <li><p>一个持续运行的比赛时钟；</p>
 </li>
@@ -269,12 +269,12 @@
 → 比赛结束<br />
 → 生成MatchResult与Statistics。</p>
 <hr />
-<h1 id="2-最核心的系统抽象">2. 最核心的系统抽象</h1><p>足球可以抽象成五个持续耦合的运行时状态域：</p>
-<h2 id="ball-state">Ball State</h2><p>球在哪里、怎么运动、最后由谁触碰。</p>
-<h2 id="player-state">Player State</h2><p>每个球员在哪里、能做什么、正在执行什么。</p>
-<h2 id="team-tactical-state">Team Tactical State</h2><p>球队当前整体处于怎样的攻守结构。</p>
-<h2 id="spatial-state">Spatial State</h2><p>哪些区域被谁控制，哪些传球路线开放。</p>
-<h2 id="rule-state">Rule State</h2><p>当前比赛是否合法继续，以及下一次重新开始方式。</p>
+<h3 id="2-最核心的系统抽象">2. 最核心的系统抽象</h3><p>足球可以抽象成五个持续耦合的运行时状态域：</p>
+<h3 id="ball-state">Ball State</h3><p>球在哪里、怎么运动、最后由谁触碰。</p>
+<h3 id="player-state">Player State</h3><p>每个球员在哪里、能做什么、正在执行什么。</p>
+<h3 id="team-tactical-state">Team Tactical State</h3><p>球队当前整体处于怎样的攻守结构。</p>
+<h3 id="spatial-state">Spatial State</h3><p>哪些区域被谁控制，哪些传球路线开放。</p>
+<h3 id="rule-state">Rule State</h3><p>当前比赛是否合法继续，以及下一次重新开始方式。</p>
 <p>它们之间形成：</p>
 <p><strong>Ball Movement<br />
 → 改变空间关系<br />
@@ -289,7 +289,7 @@
 <p>而不是：</p>
 <p>22个角色各自独立执行AI。</p>
 <hr />
-<h1 id="3-核心范式一足球必须是独立权威实体而不是球权状态附着在角色身上">3. 核心范式一：足球必须是独立权威实体，而不是“球权状态附着在角色身上”</h1><p>低质量实现经常使用：</p>
+<h3 id="3-核心范式一足球必须是独立权威实体而不是球权状态附着在角色身上">3. 核心范式一：足球必须是独立权威实体，而不是“球权状态附着在角色身上”</h3><p>低质量实现经常使用：</p>
 <p><code>currentBallOwner = player</code></p>
 <p>然后足球模型直接吸附在球员脚边。</p>
 <p>传球时：</p>
@@ -314,7 +314,7 @@
 <p><strong>足球始终是独立实体。所谓“控球”只是球与某球员之间暂时具有高控制关系，而不是所有权。</strong></p>
 </blockquote>
 <hr />
-<h1 id="4-ballruntimestate">4. BallRuntimeState</h1><p>建议包含：</p>
+<h3 id="4-ballruntimestate">4. BallRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>BallEntityId；</p>
 </li>
@@ -346,7 +346,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="5-ballphase">5. BallPhase</h1><p>推荐：</p>
+<h3 id="5-ballphase">5. BallPhase</h3><p>推荐：</p>
 <ul>
 <li><p>Free；</p>
 </li>
@@ -380,7 +380,7 @@
 </ul>
 <p>但Ball的位置和速度仍应是权威事实。</p>
 <hr />
-<h1 id="6-为什么球权应是派生概念">6. 为什么“球权”应是派生概念</h1><p>足球在球员脚边滚动：</p>
+<h3 id="6-为什么球权应是派生概念">6. 为什么“球权”应是派生概念</h3><p>足球在球员脚边滚动：</p>
 <p>Player A可能最有控制权。</p>
 <p>但如果：</p>
 <p>距离脚部过远，</p>
@@ -392,7 +392,7 @@
 <p>只有门将真正抱住球等特殊状态：</p>
 <p>才可以出现强约束的Held状态。</p>
 <hr />
-<h1 id="7-contested-ball">7. Contested Ball</h1><p>两名球员同时接近Loose Ball。</p>
+<h3 id="7-contested-ball">7. Contested Ball</h3><p>两名球员同时接近Loose Ball。</p>
 <p>系统不需要：</p>
 <p>立即决定“球属于谁”。</p>
 <p>应该允许：</p>
@@ -403,7 +403,7 @@
 <p>最早合法触球的人改变球轨迹。</p>
 <p>这是足球模拟成立的关键。</p>
 <hr />
-<h1 id="8-核心范式二所有足球动作最终都应该转换成-ball-contact">8. 核心范式二：所有足球动作最终都应该转换成 Ball Contact</h1><p>传球、射门、解围、头球、抢断，看起来不同。</p>
+<h3 id="8-核心范式二所有足球动作最终都应该转换成-ball-contact">8. 核心范式二：所有足球动作最终都应该转换成 Ball Contact</h3><p>传球、射门、解围、头球、抢断，看起来不同。</p>
 <p>底层共同点：</p>
 <blockquote>
 <p>某个身体部位在某个时刻对Ball施加冲量或约束。</p>
@@ -411,7 +411,7 @@
 <p>因此可以建立：</p>
 <p><strong>BallContactResolver。</strong></p>
 <hr />
-<h1 id="9-ballcontactintent">9. BallContactIntent</h1><p>建议字段：</p>
+<h3 id="9-ballcontactintent">9. BallContactIntent</h3><p>建议字段：</p>
 <ul>
 <li><p>ContactIntentId；</p>
 </li>
@@ -441,7 +441,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="10-ballcontactcandidate">10. BallContactCandidate</h1><p>运行时需要检查：</p>
+<h3 id="10-ballcontactcandidate">10. BallContactCandidate</h3><p>运行时需要检查：</p>
 <ul>
 <li><p>球是否在触球范围；</p>
 </li>
@@ -465,7 +465,7 @@
 <p>然后才能形成：</p>
 <p>BallContactResult。</p>
 <hr />
-<h1 id="11-ballcontactresult">11. BallContactResult</h1><p>建议包含：</p>
+<h3 id="11-ballcontactresult">11. BallContactResult</h3><p>建议包含：</p>
 <ul>
 <li><p>ActorId；</p>
 </li>
@@ -493,7 +493,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="12-为什么传球不能直接设置ball目标">12. 为什么传球不能直接设置Ball目标</h1><p>错误：</p>
+<h3 id="12-为什么传球不能直接设置ball目标">12. 为什么传球不能直接设置Ball目标</h3><p>错误：</p>
 <p><code>ball.Target = receiver</code></p>
 <p>正确：</p>
 <p>玩家表达：</p>
@@ -519,7 +519,7 @@
 <p><strong>Intent ≠ Outcome。</strong></p>
 <p>这是足球手感和足球真实性的核心来源。</p>
 <hr />
-<h1 id="13-核心范式三传球目标应该是未来接球空间而不是当前receiver坐标">13. 核心范式三：传球目标应该是“未来接球空间”，而不是当前Receiver坐标</h1><p>队友正在向前跑。</p>
+<h3 id="13-核心范式三传球目标应该是未来接球空间而不是当前receiver坐标">13. 核心范式三：传球目标应该是“未来接球空间”，而不是当前Receiver坐标</h3><p>队友正在向前跑。</p>
 <p>如果直接踢向：</p>
 <p>当前坐标，</p>
 <p>球到达时：</p>
@@ -527,7 +527,7 @@
 <p>因此传球系统需要：</p>
 <p><strong>Lead Target。</strong></p>
 <hr />
-<h1 id="14-passintent">14. PassIntent</h1><p>建议包含：</p>
+<h3 id="14-passintent">14. PassIntent</h3><p>建议包含：</p>
 <ul>
 <li><p>PasserId；</p>
 </li>
@@ -547,7 +547,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="15-passtype">15. PassType</h1><p>例如：</p>
+<h3 id="15-passtype">15. PassType</h3><p>例如：</p>
 <ul>
 <li><p>ShortGround；</p>
 </li>
@@ -576,7 +576,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="16-receiverprediction">16. ReceiverPrediction</h1><p>根据：</p>
+<h3 id="16-receiverprediction">16. ReceiverPrediction</h3><p>根据：</p>
 <ul>
 <li><p>ReceiverVelocity；</p>
 </li>
@@ -592,7 +592,7 @@
 <p>和：</p>
 <p>接球位置 <code>P(t)</code>。</p>
 <hr />
-<h1 id="17-through-ball">17. Through Ball</h1><p>直塞的真正语义不是：</p>
+<h3 id="17-through-ball">17. Through Ball</h3><p>直塞的真正语义不是：</p>
 <p>“传球精度降低、速度提高”。</p>
 <p>而是：</p>
 <blockquote>
@@ -600,16 +600,16 @@
 </blockquote>
 <p>这是非常重要的设计区别。</p>
 <hr />
-<h1 id="18-pass-assistance">18. Pass Assistance</h1><p>不同操作模式可以：</p>
-<h3 id="full-assist">Full Assist</h3><p>系统帮助选择Receiver和Lead Point。</p>
-<h3 id="semi-assist">Semi Assist</h3><p>玩家方向决定Receiver，系统修正落点。</p>
-<h3 id="manual">Manual</h3><p>玩家输入几乎直接决定目标空间。</p>
+<h3 id="18-pass-assistance">18. Pass Assistance</h3><p>不同操作模式可以：</p>
+<h4 id="full-assist">Full Assist</h4><p>系统帮助选择Receiver和Lead Point。</p>
+<h4 id="semi-assist">Semi Assist</h4><p>玩家方向决定Receiver，系统修正落点。</p>
+<h4 id="manual">Manual</h4><p>玩家输入几乎直接决定目标空间。</p>
 <p>但最终都应转换：</p>
 <p>PassIntent<br />
 → BallContact。</p>
 <p>不要维护三套完全不同传球系统。</p>
 <hr />
-<h1 id="19-核心范式四接球不是球碰到角色自动吸附而是新的主动技能检查">19. 核心范式四：接球不是“球碰到角色自动吸附”，而是新的主动技能检查</h1><p>球到达Receiver附近：</p>
+<h3 id="19-核心范式四接球不是球碰到角色自动吸附而是新的主动技能检查">19. 核心范式四：接球不是“球碰到角色自动吸附”，而是新的主动技能检查</h3><p>球到达Receiver附近：</p>
 <p>球员需要：</p>
 <p>First Touch。</p>
 <p>结果可能：</p>
@@ -626,7 +626,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="20-receivecontext">20. ReceiveContext</h1><p>建议包含：</p>
+<h3 id="20-receivecontext">20. ReceiveContext</h3><p>建议包含：</p>
 <ul>
 <li><p>ReceiverId；</p>
 </li>
@@ -648,12 +648,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="21-first-touch">21. First Touch</h1><p>可以计算：</p>
+<h3 id="21-first-touch">21. First Touch</h3><p>可以计算：</p>
 <p><code>ControlError = IncomingDifficulty × Pressure × TechniqueModifier</code></p>
 <p>形成：</p>
 <p>实际Touch。</p>
 <hr />
-<h1 id="22-接球应该服务下一动作">22. 接球应该服务下一动作</h1><p>优秀球员面对传球时：</p>
+<h3 id="22-接球应该服务下一动作">22. 接球应该服务下一动作</h3><p>优秀球员面对传球时：</p>
 <p>并不一定把球停在脚下。</p>
 <p>可能：</p>
 <p>直接把球带向下一空间。</p>
@@ -662,17 +662,17 @@
 <p>所以ReceiveIntent可以包含：</p>
 <p><strong>DesiredExitDirection。</strong></p>
 <hr />
-<h1 id="23-one-touch-pass">23. One-Touch Pass</h1><p>球员甚至不进入完整Controlled Ball状态。</p>
+<h3 id="23-one-touch-pass">23. One-Touch Pass</h3><p>球员甚至不进入完整Controlled Ball状态。</p>
 <p>Incoming Ball<br />
 → Contact Window<br />
 → 新PassContact</p>
 <p>直接改变Ball。</p>
 <p>这是高速配合的关键。</p>
 <hr />
-<h1 id="24-核心范式五控球球队和无球队伍必须使用不同的团队阶段">24. 核心范式五：控球球队和无球队伍必须使用不同的团队阶段</h1><p>推荐定义：</p>
+<h3 id="24-核心范式五控球球队和无球队伍必须使用不同的团队阶段">24. 核心范式五：控球球队和无球队伍必须使用不同的团队阶段</h3><p>推荐定义：</p>
 <p><strong>TeamPhase。</strong></p>
 <hr />
-<h1 id="25-teamphase">25. TeamPhase</h1><p>至少：</p>
+<h3 id="25-teamphase">25. TeamPhase</h3><p>至少：</p>
 <ul>
 <li><p>InPossession；</p>
 </li>
@@ -703,7 +703,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="26-为什么需要teamphase">26. 为什么需要TeamPhase</h1><p>球员同样是：</p>
+<h3 id="26-为什么需要teamphase">26. 为什么需要TeamPhase</h3><p>球员同样是：</p>
 <p>Left Back。</p>
 <p>控球时：</p>
 <p>可能向前。</p>
@@ -715,7 +715,7 @@
 <p>TeamPhase负责提供：</p>
 <p>当前团队上下文。</p>
 <hr />
-<h1 id="27-teamtacticalstate">27. TeamTacticalState</h1><p>建议包含：</p>
+<h3 id="27-teamtacticalstate">27. TeamTacticalState</h3><p>建议包含：</p>
 <ul>
 <li><p>TeamId；</p>
 </li>
@@ -743,7 +743,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="28-ball-possession-change">28. Ball Possession Change</h1><p>Ball控制关系发生明显改变：</p>
+<h3 id="28-ball-possession-change">28. Ball Possession Change</h3><p>Ball控制关系发生明显改变：</p>
 <p>TeamCoordinator判断：</p>
 <p>PossessionTransition。</p>
 <p>A：</p>
@@ -755,7 +755,7 @@
 <p>不是：</p>
 <p>等待所有球员自己发现。</p>
 <hr />
-<h1 id="29-核心范式六攻守转换是足球中最重要的短周期状态变化之一">29. 核心范式六：攻守转换是足球中最重要的短周期状态变化之一</h1><p>稳定进攻阶段：</p>
+<h3 id="29-核心范式六攻守转换是足球中最重要的短周期状态变化之一">29. 核心范式六：攻守转换是足球中最重要的短周期状态变化之一</h3><p>稳定进攻阶段：</p>
 <p>球员已经展开。</p>
 <p>失球瞬间：</p>
 <p>原来站位较高。</p>
@@ -768,7 +768,7 @@
 <p>是：</p>
 <p>最好的反击窗口。</p>
 <hr />
-<h1 id="30-transitionstate">30. TransitionState</h1><p>建议包含：</p>
+<h3 id="30-transitionstate">30. TransitionState</h3><p>建议包含：</p>
 <ul>
 <li><p>TransitionStartTick；</p>
 </li>
@@ -786,7 +786,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="31-counter-press">31. Counter Press</h1><p>原进攻方失球后：</p>
+<h3 id="31-counter-press">31. Counter Press</h3><p>原进攻方失球后：</p>
 <p>附近球员立即：</p>
 <p>压迫球。</p>
 <p>目的：</p>
@@ -806,7 +806,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="32-counter-attack">32. Counter Attack</h1><p>夺球方判断：</p>
+<h3 id="32-counter-attack">32. Counter Attack</h3><p>夺球方判断：</p>
 <p>前方空间很大。</p>
 <p>可能暂时忽略：</p>
 <p>稳定Formation。</p>
@@ -815,7 +815,7 @@
 <p>Transition Phase</p>
 <p>允许球员短暂偏离常规Formation。</p>
 <hr />
-<h1 id="33-核心范式七formation-应该定义空间职责而不是锁死坐标">33. 核心范式七：Formation 应该定义“空间职责”，而不是锁死坐标</h1><p>4-3-3不是：</p>
+<h3 id="33-核心范式七formation-应该定义空间职责而不是锁死坐标">33. 核心范式七：Formation 应该定义“空间职责”，而不是锁死坐标</h3><p>4-3-3不是：</p>
 <p>22个固定Waypoint。</p>
 <p>Left Wing不应该：</p>
 <p>无论Ball在哪里</p>
@@ -823,7 +823,7 @@
 <p>Formation应提供：</p>
 <p><strong>Role Anchor Function。</strong></p>
 <hr />
-<h1 id="34-formationdefinition">34. FormationDefinition</h1><p>建议字段：</p>
+<h3 id="34-formationdefinition">34. FormationDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>FormationId；</p>
 </li>
@@ -845,7 +845,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="35-roleanchor">35. RoleAnchor</h1><p>角色目标位置可以是：</p>
+<h3 id="35-roleanchor">35. RoleAnchor</h3><p>角色目标位置可以是：</p>
 <p><code>Anchor = FormationBase + BallShift + TeamPhaseShift + LocalContextShift</code></p>
 <p>例如：</p>
 <p>Ball在左路。</p>
@@ -853,13 +853,13 @@
 <p>向左侧整体平移。</p>
 <p>但右侧Wing仍保持一定宽度。</p>
 <hr />
-<h1 id="36-这形成">36. 这形成：</h1><p><strong>Elastic Formation。</strong></p>
+<h3 id="36-这形成">36. 这形成：</h3><p><strong>Elastic Formation。</strong></p>
 <p>球队像：</p>
 <p>一个有弹性的整体结构</p>
 <p>而不是：</p>
 <p>11个互不相关的移动点。</p>
 <hr />
-<h1 id="37-compactness">37. Compactness</h1><p>防守时：</p>
+<h3 id="37-compactness">37. Compactness</h3><p>防守时：</p>
 <p>球队横向和纵向距离收缩。</p>
 <p>目的是：</p>
 <p>减少对手可以利用的中间空间。</p>
@@ -871,14 +871,14 @@
 </li>
 </ul>
 <hr />
-<h1 id="38-核心范式八球员ai需要-team-role-task-action-四层结构">38. 核心范式八：球员AI需要 Team → Role → Task → Action 四层结构</h1><p>如果22名球员各自：</p>
+<h3 id="38-核心范式八球员ai需要-team-role-task-action-四层结构">38. 核心范式八：球员AI需要 Team → Role → Task → Action 四层结构</h3><p>如果22名球员各自：</p>
 <p>Utility最高就去抢球，</p>
 <p>比赛立刻变成：</p>
 <p>儿童足球：</p>
 <p>所有人围着球跑。</p>
 <p>因此AI必须分层。</p>
 <hr />
-<h1 id="39-team-layer">39. Team Layer</h1><p>决定：</p>
+<h3 id="39-team-layer">39. Team Layer</h3><p>决定：</p>
 <ul>
 <li><p>当前Phase；</p>
 </li>
@@ -894,7 +894,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="40-role-layer">40. Role Layer</h1><p>例如：</p>
+<h3 id="40-role-layer">40. Role Layer</h3><p>例如：</p>
 <ul>
 <li><p>Goalkeeper；</p>
 </li>
@@ -914,7 +914,7 @@
 <p>Role决定：</p>
 <p>责任空间。</p>
 <hr />
-<h1 id="41-task-layer">41. Task Layer</h1><p>根据当前局面：</p>
+<h3 id="41-task-layer">41. Task Layer</h3><p>根据当前局面：</p>
 <p>角色可能获得：</p>
 <ul>
 <li><p>SupportCarrier；</p>
@@ -939,7 +939,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="42-action-layer">42. Action Layer</h1><p>真正具体动作：</p>
+<h3 id="42-action-layer">42. Action Layer</h3><p>真正具体动作：</p>
 <ul>
 <li><p>Move；</p>
 </li>
@@ -959,17 +959,17 @@
 </li>
 </ul>
 <hr />
-<h1 id="43-这四层必须尽量分离">43. 这四层必须尽量分离</h1><p>否则：</p>
+<h3 id="43-这四层必须尽量分离">43. 这四层必须尽量分离</h3><p>否则：</p>
 <p>StrikerAI</p>
 <p>内部会同时拥有：</p>
 <p>阵型、战术、寻路、射门、传球</p>
 <p>全部逻辑。</p>
 <p>非常难维护。</p>
 <hr />
-<h1 id="44-核心范式九必须明确谁负责压迫球否则防守ai会全部追球">44. 核心范式九：必须明确“谁负责压迫球”，否则防守AI会全部追球</h1><p>防守可以建立：</p>
+<h3 id="44-核心范式九必须明确谁负责压迫球否则防守ai会全部追球">44. 核心范式九：必须明确“谁负责压迫球”，否则防守AI会全部追球</h3><p>防守可以建立：</p>
 <p><strong>Defensive Responsibility Assignment。</strong></p>
 <hr />
-<h1 id="45-defensivetask">45. DefensiveTask</h1><p>例如：</p>
+<h3 id="45-defensivetask">45. DefensiveTask</h3><p>例如：</p>
 <p>Player A：</p>
 <p>Press Carrier。</p>
 <p>Player B：</p>
@@ -979,7 +979,7 @@
 <p>Player D：</p>
 <p>Protect Depth。</p>
 <hr />
-<h1 id="46-press-assignment">46. Press Assignment</h1><p>TeamCoordinator或局部Coordinator根据：</p>
+<h3 id="46-press-assignment">46. Press Assignment</h3><p>TeamCoordinator或局部Coordinator根据：</p>
 <ul>
 <li><p>BallPosition；</p>
 </li>
@@ -997,14 +997,14 @@
 <p>选：</p>
 <p>PrimaryPresser。</p>
 <hr />
-<h1 id="47-secondary-defender">47. Secondary Defender</h1><p>不是也去抢球。</p>
+<h3 id="47-secondary-defender">47. Secondary Defender</h3><p>不是也去抢球。</p>
 <p>而是：</p>
 <p>封堵：</p>
 <p>最危险传球线路。</p>
 <p>这会形成：</p>
 <p>团队防守。</p>
 <hr />
-<h1 id="48-cover-shadow">48. Cover Shadow</h1><p>一个防守者站在：</p>
+<h3 id="48-cover-shadow">48. Cover Shadow</h3><p>一个防守者站在：</p>
 <p>Ball Carrier</p>
 <p>与Receiver之间。</p>
 <p>即使没有抢球，</p>
@@ -1012,7 +1012,7 @@
 <p>高风险。</p>
 <p>这类空间行为应该成为AI正式评估因素。</p>
 <hr />
-<h1 id="49-核心范式十传球线路必须是正式空间概念">49. 核心范式十：传球线路必须是正式空间概念</h1><p>Pass Feasibility不能只检查：</p>
+<h3 id="49-核心范式十传球线路必须是正式空间概念">49. 核心范式十：传球线路必须是正式空间概念</h3><p>Pass Feasibility不能只检查：</p>
 <p>目标距离。</p>
 <p>至少考虑：</p>
 <ul>
@@ -1030,7 +1030,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="50-passlaneevaluation">50. PassLaneEvaluation</h1><p>建议包含：</p>
+<h3 id="50-passlaneevaluation">50. PassLaneEvaluation</h3><p>建议包含：</p>
 <ul>
 <li><p>PasserId；</p>
 </li>
@@ -1058,7 +1058,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="51-interception-margin">51. Interception Margin</h1><p>如果：</p>
+<h3 id="51-interception-margin">51. Interception Margin</h3><p>如果：</p>
 <p>Ball到达：</p>
 <p>1.2秒。</p>
 <p>Defender到线路：</p>
@@ -1072,7 +1072,7 @@
 <p><strong>时间竞争</strong></p>
 <p>评估传球。</p>
 <hr />
-<h1 id="52-pass-value">52. Pass Value</h1><p>不应只追求：</p>
+<h3 id="52-pass-value">52. Pass Value</h3><p>不应只追求：</p>
 <p>完成率最高。</p>
 <p>横传后卫：</p>
 <p>99%成功。</p>
@@ -1081,7 +1081,7 @@
 <p>因此AI需要权衡：</p>
 <p><code>PassUtility = CompletionProbability × ProgressionValue × TacticalValue - TurnoverRisk</code></p>
 <hr />
-<h1 id="53-核心范式十一进攻跑位的核心是创造接球空间而不是随机向前跑">53. 核心范式十一：进攻跑位的核心是“创造接球空间”，而不是随机向前跑</h1><p>Off-ball Attack Task可以包括：</p>
+<h3 id="53-核心范式十一进攻跑位的核心是创造接球空间而不是随机向前跑">53. 核心范式十一：进攻跑位的核心是“创造接球空间”，而不是随机向前跑</h3><p>Off-ball Attack Task可以包括：</p>
 <ul>
 <li><p>OfferShort；</p>
 </li>
@@ -1101,7 +1101,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="54-support-triangle">54. Support Triangle</h1><p>Ball Carrier附近最好存在：</p>
+<h3 id="54-support-triangle">54. Support Triangle</h3><p>Ball Carrier附近最好存在：</p>
 <p>多个不同角度的传球选项。</p>
 <p>AI可通过：</p>
 <p>Angle Separation</p>
@@ -1109,13 +1109,13 @@
 <p>Distance</p>
 <p>维持三角关系。</p>
 <hr />
-<h1 id="55-不要让所有队友都向ball靠近">55. 不要让所有队友都向Ball靠近</h1><p>否则：</p>
+<h3 id="55-不要让所有队友都向ball靠近">55. 不要让所有队友都向Ball靠近</h3><p>否则：</p>
 <p>宽度和纵深消失。</p>
 <p>至少部分球员职责是：</p>
 <p><strong>Stay Away from Ball。</strong></p>
 <p>这是足球AI区别于大量普通Follower AI的重要点。</p>
 <hr />
-<h1 id="56-核心范式十二空间占领应比路径寻路更高一层">56. 核心范式十二：空间占领应比路径寻路更高一层</h1><p>Player Navigation解决：</p>
+<h3 id="56-核心范式十二空间占领应比路径寻路更高一层">56. 核心范式十二：空间占领应比路径寻路更高一层</h3><p>Player Navigation解决：</p>
 <p>从A到B怎么走。</p>
 <p>Football Positioning解决：</p>
 <blockquote>
@@ -1123,7 +1123,7 @@
 </blockquote>
 <p>这两个问题不同。</p>
 <hr />
-<h1 id="57-tacticalspacemap">57. TacticalSpaceMap</h1><p>可以将球场划为：</p>
+<h3 id="57-tacticalspacemap">57. TacticalSpaceMap</h3><p>可以将球场划为：</p>
 <p>动态Zones / Cells。</p>
 <p>每个Cell估算：</p>
 <ul>
@@ -1143,7 +1143,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="58-spacecontrol">58. SpaceControl</h1><p>可以由：</p>
+<h3 id="58-spacecontrol">58. SpaceControl</h3><p>可以由：</p>
 <p>球员到该位置的预计到达时间</p>
 <p>估算。</p>
 <p>不是只看：</p>
@@ -1151,7 +1151,7 @@
 <p>速度、朝向、体能</p>
 <p>都影响。</p>
 <hr />
-<h1 id="59-dominant-region">59. Dominant Region</h1><p>某位置：</p>
+<h3 id="59-dominant-region">59. Dominant Region</h3><p>某位置：</p>
 <p>Team A</p>
 <p>能比B更早到达。</p>
 <p>则：</p>
@@ -1159,7 +1159,7 @@
 <p>这是：</p>
 <p><strong>Reachability Field。</strong></p>
 <hr />
-<h1 id="60-space-map可以用于">60. Space Map可以用于</h1><ul>
+<h3 id="60-space-map可以用于">60. Space Map可以用于</h3><ul>
 <li><p>AI接应；</p>
 </li>
 <li><p>直塞；</p>
@@ -1174,13 +1174,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="61-不需要每帧计算超高分辨率场地">61. 不需要每帧计算超高分辨率场地</h1><p>可以：</p>
+<h3 id="61-不需要每帧计算超高分辨率场地">61. 不需要每帧计算超高分辨率场地</h3><p>可以：</p>
 <p>低频更新。</p>
 <p>或：</p>
 <p>局部更新。</p>
 <p>正式Player Movement仍然连续。</p>
 <hr />
-<h1 id="62-核心范式十三射门应该综合目标意图和实际触球质量">62. 核心范式十三：射门应该综合目标意图和实际触球质量</h1><p>ShotIntent：</p>
+<h3 id="62-核心范式十三射门应该综合目标意图和实际触球质量">62. 核心范式十三：射门应该综合目标意图和实际触球质量</h3><p>ShotIntent：</p>
 <p>玩家希望：</p>
 <p>射近角。</p>
 <p>但最终球路受到：</p>
@@ -1202,7 +1202,7 @@
 </ul>
 <p>影响。</p>
 <hr />
-<h1 id="63-shotintent">63. ShotIntent</h1><p>建议包含：</p>
+<h3 id="63-shotintent">63. ShotIntent</h3><p>建议包含：</p>
 <ul>
 <li><p>ShooterId；</p>
 </li>
@@ -1220,7 +1220,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="64-shottype">64. ShotType</h1><p>例如：</p>
+<h3 id="64-shottype">64. ShotType</h3><p>例如：</p>
 <ul>
 <li><p>Driven；</p>
 </li>
@@ -1238,7 +1238,7 @@
 <p>最终仍转换：</p>
 <p>BallContactResult。</p>
 <hr />
-<h1 id="65-shotaccuracy">65. ShotAccuracy</h1><p>不应简单：</p>
+<h3 id="65-shotaccuracy">65. ShotAccuracy</h3><p>不应简单：</p>
 <p>球员Shooting = 90</p>
 <p>→ 误差10%。</p>
 <p>更适合组合：</p>
@@ -1257,13 +1257,13 @@
 </li>
 </ul>
 <hr />
-<h1 id="66-high-quality-chance">66. High Quality Chance</h1><p>真正优秀的进攻AI</p>
+<h3 id="66-high-quality-chance">66. High Quality Chance</h3><p>真正优秀的进攻AI</p>
 <p>不只是：</p>
 <p>“进入射门距离就Shoot。”</p>
 <p>需要判断：</p>
 <p><strong>Shot Quality。</strong></p>
 <hr />
-<h1 id="67-expected-goal-xg">67. Expected Goal / xG</h1><p>开发与AI分析可以估算：</p>
+<h3 id="67-expected-goal-xg">67. Expected Goal / xG</h3><p>开发与AI分析可以估算：</p>
 <ul>
 <li><p>Distance；</p>
 </li>
@@ -1280,14 +1280,14 @@
 <p>ShotQuality。</p>
 <p>不一定作为正式玩家数值直接展示。</p>
 <hr />
-<h1 id="68-ai可以比较">68. AI可以比较：</h1><p>ShootValue</p>
+<h3 id="68-ai可以比较">68. AI可以比较：</h3><p>ShootValue</p>
 <p>vs</p>
 <p>PassValue。</p>
 <p>这样：</p>
 <p>2v1</p>
 <p>时更可能横传空门。</p>
 <hr />
-<h1 id="69-核心范式十四门将必须是独立角色范式">69. 核心范式十四：门将必须是独立角色范式</h1><p>Goalkeeper不应该只是：</p>
+<h3 id="69-核心范式十四门将必须是独立角色范式">69. 核心范式十四：门将必须是独立角色范式</h3><p>Goalkeeper不应该只是：</p>
 <p>“普通Player + 能用手”。</p>
 <p>其核心状态完全不同：</p>
 <ul>
@@ -1309,7 +1309,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="70-goalkeeperstate">70. GoalkeeperState</h1><p>建议包含：</p>
+<h3 id="70-goalkeeperstate">70. GoalkeeperState</h3><p>建议包含：</p>
 <ul>
 <li><p>GoalkeeperId；</p>
 </li>
@@ -1329,7 +1329,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="71-keeper-positioning">71. Keeper Positioning</h1><p>根据：</p>
+<h3 id="71-keeper-positioning">71. Keeper Positioning</h3><p>根据：</p>
 <p>Ball Position</p>
 <p>与：</p>
 <p>Goal Geometry</p>
@@ -1338,7 +1338,7 @@
 <p>球越靠侧面：</p>
 <p>门将相应移动。</p>
 <hr />
-<h1 id="72-shot-prediction">72. Shot Prediction</h1><p>球离脚以后：</p>
+<h3 id="72-shot-prediction">72. Shot Prediction</h3><p>球离脚以后：</p>
 <p>Keeper可以估算：</p>
 <p>Trajectory。</p>
 <p>然后：</p>
@@ -1354,7 +1354,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="73-门将不应在shot-intent阶段提前知道最终方向">73. 门将不应在Shot Intent阶段提前知道最终方向</h1><p>否则AI读取：</p>
+<h3 id="73-门将不应在shot-intent阶段提前知道最终方向">73. 门将不应在Shot Intent阶段提前知道最终方向</h3><p>否则AI读取：</p>
 <p>玩家意图</p>
 <p>而不是：</p>
 <p>实际Ball。</p>
@@ -1362,7 +1362,7 @@
 <p>Ball Contact Result</p>
 <p>产生真实轨迹。</p>
 <hr />
-<h1 id="74-cross-claim">74. Cross Claim</h1><p>高空球进入禁区：</p>
+<h3 id="74-cross-claim">74. Cross Claim</h3><p>高空球进入禁区：</p>
 <p>门将需要判断：</p>
 <p>到达落点时间</p>
 <p>vs</p>
@@ -1370,7 +1370,7 @@
 <p>这和传球截断一样：</p>
 <p>属于时间竞争问题。</p>
 <hr />
-<h1 id="75-核心范式十五身体对抗需要明确球和人的不同目标">75. 核心范式十五：身体对抗需要明确“球”和“人”的不同目标</h1><p>Tackle目的：</p>
+<h3 id="75-核心范式十五身体对抗需要明确球和人的不同目标">75. 核心范式十五：身体对抗需要明确“球”和“人”的不同目标</h3><p>Tackle目的：</p>
 <p>抢Ball。</p>
 <p>不是：</p>
 <p>攻击Player。</p>
@@ -1381,7 +1381,7 @@
 <p>这会直接影响：</p>
 <p>Foul。</p>
 <hr />
-<h1 id="76-challengeintent">76. ChallengeIntent</h1><p>建议包含：</p>
+<h3 id="76-challengeintent">76. ChallengeIntent</h3><p>建议包含：</p>
 <ul>
 <li><p>ChallengerId；</p>
 </li>
@@ -1397,7 +1397,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="77-challengeresolution">77. ChallengeResolution</h1><p>根据：</p>
+<h3 id="77-challengeresolution">77. ChallengeResolution</h3><p>根据：</p>
 <ul>
 <li><p>Ball Contact Time；</p>
 </li>
@@ -1426,7 +1426,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="78-sliding-tackle">78. Sliding Tackle</h1><p>属于：</p>
+<h3 id="78-sliding-tackle">78. Sliding Tackle</h3><p>属于：</p>
 <p>高Commitment Action。</p>
 <p>成功：</p>
 <p>覆盖范围大。</p>
@@ -1437,7 +1437,7 @@
 <p>因此形成：</p>
 <p>风险收益。</p>
 <hr />
-<h1 id="79-shoulder-challenge">79. Shoulder Challenge</h1><p>规则又不同：</p>
+<h3 id="79-shoulder-challenge">79. Shoulder Challenge</h3><p>规则又不同：</p>
 <p>更适合：</p>
 <p>站立对抗。</p>
 <p>所以Collision系统</p>
@@ -1445,7 +1445,7 @@
 <p>Rule系统</p>
 <p>需要合作。</p>
 <hr />
-<h1 id="80-核心范式十六犯规判断应基于-contact-event而不是动作名字">80. 核心范式十六：犯规判断应基于 Contact Event，而不是动作名字</h1><p>错误：</p>
+<h3 id="80-核心范式十六犯规判断应基于-contact-event而不是动作名字">80. 核心范式十六：犯规判断应基于 Contact Event，而不是动作名字</h3><p>错误：</p>
 <p>SlidingTackle</p>
 <p>→ 30% Foul。</p>
 <p>正确：</p>
@@ -1469,7 +1469,7 @@
 <p>判断：</p>
 <p>是否Foul。</p>
 <hr />
-<h1 id="81-contactevent">81. ContactEvent</h1><p>建议包含：</p>
+<h3 id="81-contactevent">81. ContactEvent</h3><p>建议包含：</p>
 <ul>
 <li><p>ContactId；</p>
 </li>
@@ -1495,12 +1495,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="82-refereesystem">82. RefereeSystem</h1><p>消费：</p>
+<h3 id="82-refereesystem">82. RefereeSystem</h3><p>消费：</p>
 <p>ContactEvent。</p>
 <p>输出：</p>
 <p>RuleDecision。</p>
 <hr />
-<h1 id="83-ruledecision">83. RuleDecision</h1><p>例如：</p>
+<h3 id="83-ruledecision">83. RuleDecision</h3><p>例如：</p>
 <ul>
 <li><p>PlayOn；</p>
 </li>
@@ -1518,7 +1518,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="84-核心范式十七裁判应是规则状态机而不是独立ai角色">84. 核心范式十七：裁判应是规则状态机，而不是独立AI角色</h1><p>场上的裁判模型可以：</p>
+<h3 id="84-核心范式十七裁判应是规则状态机而不是独立ai角色">84. 核心范式十七：裁判应是规则状态机，而不是独立AI角色</h3><p>场上的裁判模型可以：</p>
 <p>移动、动画。</p>
 <p>但真正比赛裁决应来自：</p>
 <p><strong>Rule Engine。</strong></p>
@@ -1526,7 +1526,7 @@
 <p>不能决定：</p>
 <p>是否判犯规。</p>
 <hr />
-<h1 id="85-refereeruntimestate">85. RefereeRuntimeState</h1><p>建议包含：</p>
+<h3 id="85-refereeruntimestate">85. RefereeRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>CurrentAdvantageState；</p>
 </li>
@@ -1542,7 +1542,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="86-advantage">86. Advantage</h1><p>防守者犯规。</p>
+<h3 id="86-advantage">86. Advantage</h3><p>防守者犯规。</p>
 <p>但进攻方仍然获得：</p>
 <p>明显有利局面。</p>
 <p>裁判可以：</p>
@@ -1553,7 +1553,7 @@
 <p>Play Stop</p>
 <p>分离。</p>
 <hr />
-<h1 id="87-advantagestate">87. AdvantageState</h1><p>建议记录：</p>
+<h3 id="87-advantagestate">87. AdvantageState</h3><p>建议记录：</p>
 <ul>
 <li><p>FoulEventId；</p>
 </li>
@@ -1571,12 +1571,12 @@
 </li>
 </ul>
 <hr />
-<h1 id="88-如果优势没有实现">88. 如果优势没有实现</h1><p>回溯：</p>
+<h3 id="88-如果优势没有实现">88. 如果优势没有实现</h3><p>回溯：</p>
 <p>吹罚原Foul。</p>
 <p>如果进攻继续形成好机会：</p>
 <p>PlayOn。</p>
 <hr />
-<h1 id="89-核心范式十八越位必须在传球触球时刻建立快照">89. 核心范式十八：越位必须在“传球触球时刻”建立快照</h1><p>这是足球规则实现中非常典型的时间语义问题。</p>
+<h3 id="89-核心范式十八越位必须在传球触球时刻建立快照">89. 核心范式十八：越位必须在“传球触球时刻”建立快照</h3><p>这是足球规则实现中非常典型的时间语义问题。</p>
 <p>不能在：</p>
 <p>球到达Receiver时</p>
 <p>才看：</p>
@@ -1584,7 +1584,7 @@
 <p>真正需要：</p>
 <p><strong>Pass Contact Moment。</strong></p>
 <hr />
-<h1 id="90-offsidesnapshot">90. OffsideSnapshot</h1><p>当进攻球员触球并可能传给队友时：</p>
+<h3 id="90-offsidesnapshot">90. OffsideSnapshot</h3><p>当进攻球员触球并可能传给队友时：</p>
 <p>记录：</p>
 <ul>
 <li><p>BallPosition；</p>
@@ -1603,7 +1603,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="91-potential-offside">91. Potential Offside</h1><p>位于越位位置：</p>
+<h3 id="91-potential-offside">91. Potential Offside</h3><p>位于越位位置：</p>
 <p>不代表：</p>
 <p>立即吹罚。</p>
 <p>只有：</p>
@@ -1616,7 +1616,7 @@
 <p>OffsideOffense</p>
 <p>分离。</p>
 <hr />
-<h1 id="92-offsidecandidatestate">92. OffsideCandidateState</h1><p>包含：</p>
+<h3 id="92-offsidecandidatestate">92. OffsideCandidateState</h3><p>包含：</p>
 <ul>
 <li><p>AttackerId；</p>
 </li>
@@ -1630,7 +1630,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="93-active-participation">93. Active Participation</h1><p>可以包括：</p>
+<h3 id="93-active-participation">93. Active Participation</h3><p>可以包括：</p>
 <ul>
 <li><p>Touch Ball；</p>
 </li>
@@ -1643,7 +1643,7 @@
 </ul>
 <p>具体规则按产品规则集定义。</p>
 <hr />
-<h1 id="94-越位调试">94. 越位调试</h1><p>开发模式必须能够显示：</p>
+<h3 id="94-越位调试">94. 越位调试</h3><p>开发模式必须能够显示：</p>
 <p>传球瞬间：</p>
 <ul>
 <li><p>Ball；</p>
@@ -1655,7 +1655,7 @@
 </ul>
 <p>否则极难调试。</p>
 <hr />
-<h1 id="95-核心范式十九球出界是-ball-trajectory-产生的规则事件而不是碰到边缘collider直接重置">95. 核心范式十九：球出界是 Ball Trajectory 产生的规则事件，而不是碰到边缘Collider直接重置</h1><p>当Ball完整跨过：</p>
+<h3 id="95-核心范式十九球出界是-ball-trajectory-产生的规则事件而不是碰到边缘collider直接重置">95. 核心范式十九：球出界是 Ball Trajectory 产生的规则事件，而不是碰到边缘Collider直接重置</h3><p>当Ball完整跨过：</p>
 <p>Touchline / GoalLine。</p>
 <p>RuleSystem决定：</p>
 <ul>
@@ -1671,7 +1671,7 @@
 <p>依据：</p>
 <p>LastTouch。</p>
 <hr />
-<h1 id="96-boundarycrossevent">96. BoundaryCrossEvent</h1><p>建议包含：</p>
+<h3 id="96-boundarycrossevent">96. BoundaryCrossEvent</h3><p>建议包含：</p>
 <ul>
 <li><p>BallId；</p>
 </li>
@@ -1691,7 +1691,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="97-goal-detection">97. Goal Detection</h1><p>球完全跨过：</p>
+<h3 id="97-goal-detection">97. Goal Detection</h3><p>球完全跨过：</p>
 <p>GoalLine</p>
 <p>且位于：</p>
 <p>GoalFrame内部。</p>
@@ -1700,13 +1700,13 @@
 <p>球中心碰到Trigger</p>
 <p>就算进。</p>
 <hr />
-<h1 id="98-goalstate">98. GoalState</h1><p>Goal成立：</p>
+<h3 id="98-goalstate">98. GoalState</h3><p>Goal成立：</p>
 <p>→ Score Update<br />
 → Ball Dead<br />
 → Celebration Phase<br />
 → Kickoff Restart。</p>
 <hr />
-<h1 id="99-核心范式二十比赛重启必须拥有统一-restart-system">99. 核心范式二十：比赛重启必须拥有统一 Restart System</h1><p>足球有大量：</p>
+<h3 id="99-核心范式二十比赛重启必须拥有统一-restart-system">99. 核心范式二十：比赛重启必须拥有统一 Restart System</h3><p>足球有大量：</p>
 <p>Dead Ball Restart：</p>
 <ul>
 <li><p>Kickoff；</p>
@@ -1727,7 +1727,7 @@
 <p>如果每种完全独立实现：</p>
 <p>比赛状态极易失控。</p>
 <hr />
-<h1 id="100-restartdefinition">100. RestartDefinition</h1><p>建议字段：</p>
+<h3 id="100-restartdefinition">100. RestartDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>RestartType；</p>
 </li>
@@ -1747,7 +1747,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="101-restartruntimestate">101. RestartRuntimeState</h1><p>建议包含：</p>
+<h3 id="101-restartruntimestate">101. RestartRuntimeState</h3><p>建议包含：</p>
 <ul>
 <li><p>RestartId；</p>
 </li>
@@ -1771,7 +1771,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="102-restart流程">102. Restart流程</h1><p>Rule Decision<br />
+<h3 id="102-restart流程">102. Restart流程</h3><p>Rule Decision<br />
 → Ball Dead<br />
 → 确定RestartType<br />
 → 确定Ball位置<br />
@@ -1782,16 +1782,16 @@
 → 首次合法Touch<br />
 → Live Play恢复。</p>
 <hr />
-<h1 id="103-这使比赛规则具有稳定生命周期">103. 这使比赛规则具有稳定生命周期</h1><p>不会出现：</p>
+<h3 id="103-这使比赛规则具有稳定生命周期">103. 这使比赛规则具有稳定生命周期</h3><p>不会出现：</p>
 <p>角球动画还在摆位，</p>
 <p>某AI已经开始正常抢球。</p>
 <hr />
-<h1 id="104-核心范式二十一set-piece-应视为受约束的战术模板">104. 核心范式二十一：Set Piece 应视为受约束的战术模板</h1><p>角球、任意球：</p>
+<h3 id="104-核心范式二十一set-piece-应视为受约束的战术模板">104. 核心范式二十一：Set Piece 应视为受约束的战术模板</h3><p>角球、任意球：</p>
 <p>球员站位并非普通Open Play。</p>
 <p>可以使用：</p>
 <p><strong>SetPieceTemplate。</strong></p>
 <hr />
-<h1 id="105-setpiecedefinition">105. SetPieceDefinition</h1><p>建议字段：</p>
+<h3 id="105-setpiecedefinition">105. SetPieceDefinition</h3><p>建议字段：</p>
 <ul>
 <li><p>SetPieceId；</p>
 </li>
@@ -1813,20 +1813,20 @@
 </li>
 </ul>
 <hr />
-<h1 id="106-set-piece不是播放固定动画">106. Set Piece不是播放固定动画</h1><p>Kick发生以后：</p>
+<h3 id="106-set-piece不是播放固定动画">106. Set Piece不是播放固定动画</h3><p>Kick发生以后：</p>
 <p>Ball仍然进入正常物理系统。</p>
 <p>球员：</p>
 <p>进入正常AI。</p>
 <p>只是起点和初始任务：</p>
 <p>由Template决定。</p>
 <hr />
-<h1 id="107-核心范式二十二玩家控制对象切换是足球游戏独有的重要交互层">107. 核心范式二十二：玩家控制对象切换是足球游戏独有的重要交互层</h1><p>用户一次只能直接操控：</p>
+<h3 id="107-核心范式二十二玩家控制对象切换是足球游戏独有的重要交互层">107. 核心范式二十二：玩家控制对象切换是足球游戏独有的重要交互层</h3><p>用户一次只能直接操控：</p>
 <p>一个Player。</p>
 <p>但球队有11人。</p>
 <p>因此需要：</p>
 <p><strong>Player Selection System。</strong></p>
 <hr />
-<h1 id="108-controlledplayerstate">108. ControlledPlayerState</h1><p>建议包含：</p>
+<h3 id="108-controlledplayerstate">108. ControlledPlayerState</h3><p>建议包含：</p>
 <ul>
 <li><p>HumanControllerId；</p>
 </li>
@@ -1844,7 +1844,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="109-自动选人">109. 自动选人</h1><p>在防守时：</p>
+<h3 id="109-自动选人">109. 自动选人</h3><p>在防守时：</p>
 <p>系统可以根据：</p>
 <ul>
 <li><p>Ball；</p>
@@ -1860,14 +1860,14 @@
 </ul>
 <p>选择最合理角色。</p>
 <hr />
-<h1 id="110-但自动选人不能频繁乱跳">110. 但自动选人不能频繁乱跳</h1><p>需要：</p>
+<h3 id="110-但自动选人不能频繁乱跳">110. 但自动选人不能频繁乱跳</h3><p>需要：</p>
 <p>Hysteresis。</p>
 <p>当前Player仍然合理：</p>
 <p>不要：</p>
 <p>因为另一人距离短0.1米</p>
 <p>突然切换。</p>
 <hr />
-<h1 id="111-manual-switch">111. Manual Switch</h1><p>玩家按Switch：</p>
+<h3 id="111-manual-switch">111. Manual Switch</h3><p>玩家按Switch：</p>
 <p>可以：</p>
 <p>最近Threat。</p>
 <p>也可以：</p>
@@ -1875,12 +1875,12 @@
 <p>底层都只是：</p>
 <p>改变ControlledPlayerId。</p>
 <hr />
-<h1 id="112-被切走的球员立即回到ai控制">112. 被切走的球员立即回到AI控制</h1><p>其当前动作不能突然：</p>
+<h3 id="112-被切走的球员立即回到ai控制">112. 被切走的球员立即回到AI控制</h3><p>其当前动作不能突然：</p>
 <p>清零。</p>
 <p>需要：</p>
 <p><strong>Control Handoff。</strong></p>
 <hr />
-<h1 id="113-ai-human">113. AI → Human</h1><p>保留：</p>
+<h3 id="113-ai-human">113. AI → Human</h3><p>保留：</p>
 <ul>
 <li><p>Velocity；</p>
 </li>
@@ -1891,13 +1891,13 @@
 </ul>
 <p>玩家接管。</p>
 <hr />
-<h1 id="114-human-ai">114. Human → AI</h1><p>AI读取：</p>
+<h3 id="114-human-ai">114. Human → AI</h3><p>AI读取：</p>
 <p>当前Motion和TeamTask。</p>
 <p>不要：</p>
 <p>立即转身跑回Formation Anchor</p>
 <p>导致行为不自然。</p>
 <hr />
-<h1 id="115-核心范式二十三human-intent-和-ai-tactical-intent需要共享同一player-motor">115. 核心范式二十三：Human Intent 和 AI Tactical Intent需要共享同一Player Motor</h1><p>玩家控制：</p>
+<h3 id="115-核心范式二十三human-intent-和-ai-tactical-intent需要共享同一player-motor">115. 核心范式二十三：Human Intent 和 AI Tactical Intent需要共享同一Player Motor</h3><p>玩家控制：</p>
 <p>输入Move。</p>
 <p>AI控制：</p>
 <p>生成DesiredMove。</p>
@@ -1907,7 +1907,7 @@
 <p>避免：</p>
 <p>AI球员和Human球员拥有不同物理能力。</p>
 <hr />
-<h1 id="116-playermoveintent">116. PlayerMoveIntent</h1><p>可以统一：</p>
+<h3 id="116-playermoveintent">116. PlayerMoveIntent</h3><p>可以统一：</p>
 <ul>
 <li><p>DesiredDirection；</p>
 </li>
@@ -1925,7 +1925,7 @@
 <p>或：</p>
 <p>AI Planner。</p>
 <hr />
-<h1 id="117-核心范式二十四体能应该改变可持续行为能力而不是只在90分钟后统一减速">117. 核心范式二十四：体能应该改变可持续行为能力，而不是只在90分钟后统一减速</h1><p>Stamina可以影响：</p>
+<h3 id="117-核心范式二十四体能应该改变可持续行为能力而不是只在90分钟后统一减速">117. 核心范式二十四：体能应该改变可持续行为能力，而不是只在90分钟后统一减速</h3><p>Stamina可以影响：</p>
 <ul>
 <li><p>Sprint Duration；</p>
 </li>
@@ -1943,7 +1943,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="118-playerphysicalstate">118. PlayerPhysicalState</h1><p>建议包含：</p>
+<h3 id="118-playerphysicalstate">118. PlayerPhysicalState</h3><p>建议包含：</p>
 <ul>
 <li><p>Stamina；</p>
 </li>
@@ -1961,21 +1961,21 @@
 </li>
 </ul>
 <hr />
-<h1 id="119-tactical-press的成本">119. Tactical Press的成本</h1><p>高位压迫：</p>
+<h3 id="119-tactical-press的成本">119. Tactical Press的成本</h3><p>高位压迫：</p>
 <p>短期：</p>
 <p>更容易夺球。</p>
 <p>长期：</p>
 <p>体能消耗高。</p>
 <p>因此球队战术和Player Physical State真实耦合。</p>
 <hr />
-<h1 id="120-最后20分钟">120. 最后20分钟</h1><p>高压球队可能：</p>
+<h3 id="120-最后20分钟">120. 最后20分钟</h3><p>高压球队可能：</p>
 <p>防线距离拉大。</p>
 <p>这不需要：</p>
 <p>“75分钟以后TeamDefence -10”。</p>
 <p>而可以自然来自：</p>
 <p>球员无法持续执行原来Sprint需求。</p>
 <hr />
-<h1 id="121-核心范式二十五换人是比赛资源管理不只是替换低体力角色">121. 核心范式二十五：换人是比赛资源管理，不只是替换低体力角色</h1><p>Substitution可以：</p>
+<h3 id="121-核心范式二十五换人是比赛资源管理不只是替换低体力角色">121. 核心范式二十五：换人是比赛资源管理，不只是替换低体力角色</h3><p>Substitution可以：</p>
 <ul>
 <li><p>补体能；</p>
 </li>
@@ -1991,7 +1991,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="122-substitutionstate">122. SubstitutionState</h1><p>建议包含：</p>
+<h3 id="122-substitutionstate">122. SubstitutionState</h3><p>建议包含：</p>
 <ul>
 <li><p>TeamId；</p>
 </li>
@@ -2005,7 +2005,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="123-substitute-transaction">123. Substitute Transaction</h1><p>比赛处于合法Dead Ball<br />
+<h3 id="123-substitute-transaction">123. Substitute Transaction</h3><p>比赛处于合法Dead Ball<br />
 → 验证换人额度<br />
 → OutPlayer离场<br />
 → InPlayer加入<br />
@@ -2013,11 +2013,11 @@
 → ControlledPlayer修正<br />
 → Resume Match。</p>
 <hr />
-<h1 id="124-玩家不能在live-ball瞬间teleport换人">124. 玩家不能在Live Ball瞬间Teleport换人</h1><p>除非产品规则简化。</p>
+<h3 id="124-玩家不能在live-ball瞬间teleport换人">124. 玩家不能在Live Ball瞬间Teleport换人</h3><p>除非产品规则简化。</p>
 <p>使用：</p>
 <p>Restart / Stoppage Window。</p>
 <hr />
-<h1 id="125-核心范式二十六战术调整应修改团队目标函数而不是给球员直接buff">125. 核心范式二十六：战术调整应修改团队目标函数，而不是给球员直接Buff</h1><p>例如：</p>
+<h3 id="125-核心范式二十六战术调整应修改团队目标函数而不是给球员直接buff">125. 核心范式二十六：战术调整应修改团队目标函数，而不是给球员直接Buff</h3><p>例如：</p>
 <p>High Press。</p>
 <p>不是：</p>
 <p>所有球员Speed +10%。</p>
@@ -2035,7 +2035,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="126-tacticalinstructiondefinition">126. TacticalInstructionDefinition</h1><p>可以包括：</p>
+<h3 id="126-tacticalinstructiondefinition">126. TacticalInstructionDefinition</h3><p>可以包括：</p>
 <ul>
 <li><p>Width；</p>
 </li>
@@ -2059,21 +2059,21 @@
 </li>
 </ul>
 <hr />
-<h1 id="127-teamai读取这些参数">127. TeamAI读取这些参数</h1><p>最终：</p>
+<h3 id="127-teamai读取这些参数">127. TeamAI读取这些参数</h3><p>最终：</p>
 <p>产生不同空间结构。</p>
 <p>这比：</p>
 <p>Tactic A = Passing +5%</p>
 <p>更像真正足球系统。</p>
 <hr />
-<h1 id="128-核心范式二十七ai需要多个更新频率">128. 核心范式二十七：AI需要多个更新频率</h1><p>22名球员如果：</p>
+<h3 id="128-核心范式二十七ai需要多个更新频率">128. 核心范式二十七：AI需要多个更新频率</h3><p>22名球员如果：</p>
 <p>每Frame重新做完整战术规划：</p>
 <p>没有必要。</p>
 <p>推荐：</p>
-<h3 id="高频">高频</h3><p>Movement / Ball Contact。</p>
-<h3 id="中频">中频</h3><p>Local Task。</p>
-<h3 id="低频">低频</h3><p>Team Tactical Reassessment。</p>
+<h4 id="高频">高频</h4><p>Movement / Ball Contact。</p>
+<h4 id="中频">中频</h4><p>Local Task。</p>
+<h4 id="低频">低频</h4><p>Team Tactical Reassessment。</p>
 <hr />
-<h1 id="129-例如">129. 例如</h1><p>Motor：</p>
+<h3 id="129-例如">129. 例如</h3><p>Motor：</p>
 <p>60Hz。</p>
 <p>Local Positioning：</p>
 <p>10～20Hz。</p>
@@ -2084,13 +2084,13 @@
 <p>Strategic Tactic：</p>
 <p>事件驱动。</p>
 <hr />
-<h1 id="130-team-ai的低频决定">130. Team AI的低频决定</h1><p>例如：</p>
+<h3 id="130-team-ai的低频决定">130. Team AI的低频决定</h3><p>例如：</p>
 <p>我们现在：</p>
 <p>高位压迫。</p>
 <p>不需要：</p>
 <p>每Frame重新决定一次。</p>
 <hr />
-<h1 id="131-核心范式二十八比赛时钟和gameplay-time需要明确分离">131. 核心范式二十八：比赛时钟和Gameplay Time需要明确分离</h1><p>可以有：</p>
+<h3 id="131-核心范式二十八比赛时钟和gameplay-time需要明确分离">131. 核心范式二十八：比赛时钟和Gameplay Time需要明确分离</h3><p>可以有：</p>
 <p>真实比赛90分钟。</p>
 <p>游戏实际：</p>
 <p>12分钟。</p>
@@ -2099,7 +2099,7 @@
 <p>使用：</p>
 <p>加速比例。</p>
 <hr />
-<h1 id="132-matchclockstate">132. MatchClockState</h1><p>建议包含：</p>
+<h3 id="132-matchclockstate">132. MatchClockState</h3><p>建议包含：</p>
 <ul>
 <li><p>Half；</p>
 </li>
@@ -2117,7 +2117,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="133-dead-ball期间是否停钟">133. Dead Ball期间是否停钟</h1><p>足球通常：</p>
+<h3 id="133-dead-ball期间是否停钟">133. Dead Ball期间是否停钟</h3><p>足球通常：</p>
 <p>不完全停。</p>
 <p>但游戏可以：</p>
 <p>根据规则模拟：</p>
@@ -2125,7 +2125,7 @@
 <p>因此需要：</p>
 <p>LostTimeAccumulator。</p>
 <hr />
-<h1 id="134-added-time">134. Added Time</h1><p>可以由：</p>
+<h3 id="134-added-time">134. Added Time</h3><p>可以由：</p>
 <ul>
 <li><p>Injury；</p>
 </li>
@@ -2141,7 +2141,7 @@
 <p>RefereeRule</p>
 <p>决定补时。</p>
 <hr />
-<h1 id="135-核心范式二十九比赛结束条件必须属于-rule-engine">135. 核心范式二十九：比赛结束条件必须属于 Rule Engine</h1><p>90:00到达：</p>
+<h3 id="135-核心范式二十九比赛结束条件必须属于-rule-engine">135. 核心范式二十九：比赛结束条件必须属于 Rule Engine</h3><p>90:00到达：</p>
 <p>不一定立刻结束。</p>
 <p>可能：</p>
 <ul>
@@ -2156,7 +2156,7 @@
 </ul>
 <p>RuleSystem统一决定。</p>
 <hr />
-<h1 id="136-matchphase">136. MatchPhase</h1><p>推荐：</p>
+<h3 id="136-matchphase">136. MatchPhase</h3><p>推荐：</p>
 <ul>
 <li><p>PreMatch；</p>
 </li>
@@ -2178,7 +2178,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="137-核心范式三十penalty-shootout应是比赛子模式而不是普通penalty循环">137. 核心范式三十：Penalty Shootout应是比赛子模式，而不是普通Penalty循环</h1><p>需要：</p>
+<h3 id="137-核心范式三十penalty-shootout应是比赛子模式而不是普通penalty循环">137. 核心范式三十：Penalty Shootout应是比赛子模式，而不是普通Penalty循环</h3><p>需要：</p>
 <ul>
 <li><p>KickOrder；</p>
 </li>
@@ -2190,7 +2190,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="138-penaltyshootoutstate">138. PenaltyShootoutState</h1><p>建议包含：</p>
+<h3 id="138-penaltyshootoutstate">138. PenaltyShootoutState</h3><p>建议包含：</p>
 <ul>
 <li><p>KickingTeam；</p>
 </li>
@@ -2208,7 +2208,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="139-核心范式三十一replay必须基于权威比赛状态而不是只录camera">139. 核心范式三十一：Replay必须基于权威比赛状态，而不是只录Camera</h1><p>Replay价值包括：</p>
+<h3 id="139-核心范式三十一replay必须基于权威比赛状态而不是只录camera">139. 核心范式三十一：Replay必须基于权威比赛状态，而不是只录Camera</h3><p>Replay价值包括：</p>
 <ul>
 <li><p>进球回放；</p>
 </li>
@@ -2222,7 +2222,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="140-matcheventstream">140. MatchEventStream</h1><p>可以记录：</p>
+<h3 id="140-matcheventstream">140. MatchEventStream</h3><p>可以记录：</p>
 <ul>
 <li><p>BallContact；</p>
 </li>
@@ -2248,32 +2248,32 @@
 <p>并结合：</p>
 <p>Periodic State Snapshot。</p>
 <hr />
-<h1 id="141-为什么只记录事件不一定足够">141. 为什么只记录事件不一定足够</h1><p>足球运动是连续的。</p>
+<h3 id="141-为什么只记录事件不一定足够">141. 为什么只记录事件不一定足够</h3><p>足球运动是连续的。</p>
 <p>需要：</p>
 <p>周期：</p>
 <p>Transform / Ball State Snapshot</p>
 <p>或：</p>
 <p>确定性Input Replay。</p>
 <hr />
-<h1 id="142-replaymode">142. ReplayMode</h1><p>可以：</p>
-<h3 id="state-replay">State Replay</h3><p>记录Transform。</p>
+<h3 id="142-replaymode">142. ReplayMode</h3><p>可以：</p>
+<h4 id="state-replay">State Replay</h4><p>记录Transform。</p>
 <p>更稳定。</p>
-<h3 id="deterministic-simulation-replay">Deterministic Simulation Replay</h3><p>记录Input + Seed。</p>
+<h4 id="deterministic-simulation-replay">Deterministic Simulation Replay</h4><p>记录Input + Seed。</p>
 <p>数据更小，</p>
 <p>但要求高确定性。</p>
 <p>足球物理和网络实现通常更适合：</p>
 <p>State + Event Hybrid。</p>
 <hr />
-<h1 id="143-核心范式三十二online-multiplayer必须让ball保持单一权威">143. 核心范式三十二：Online Multiplayer必须让Ball保持单一权威</h1><p>多人最危险的问题：</p>
+<h3 id="143-核心范式三十二online-multiplayer必须让ball保持单一权威">143. 核心范式三十二：Online Multiplayer必须让Ball保持单一权威</h3><p>多人最危险的问题：</p>
 <p>两个客户端都认为：</p>
 <p>自己先碰到Ball。</p>
 <p>服务器必须决定：</p>
 <p>Contact Order。</p>
 <hr />
-<h1 id="144-server-tick">144. Server Tick</h1><p>Ball、Player Contact、Rule：</p>
+<h3 id="144-server-tick">144. Server Tick</h3><p>Ball、Player Contact、Rule：</p>
 <p>使用统一权威Tick。</p>
 <hr />
-<h1 id="145-client-prediction">145. Client Prediction</h1><p>Human Player移动：</p>
+<h3 id="145-client-prediction">145. Client Prediction</h3><p>Human Player移动：</p>
 <p>可以预测。</p>
 <p>但：</p>
 <p>Ball Contact Result</p>
@@ -2283,7 +2283,7 @@
 <p>然后：</p>
 <p>Reconcile。</p>
 <hr />
-<h1 id="146-shot-pass-prediction">146. Shot / Pass Prediction</h1><p>玩家按Pass：</p>
+<h3 id="146-shot-pass-prediction">146. Shot / Pass Prediction</h3><p>玩家按Pass：</p>
 <p>客户端立即播放：</p>
 <p>Kick准备。</p>
 <p>可以预测Ball初始运动。</p>
@@ -2292,25 +2292,25 @@
 <p>偏差小：</p>
 <p>平滑修正。</p>
 <hr />
-<h1 id="147-ball-reconciliation">147. Ball Reconciliation</h1><p>Ball属于：</p>
+<h3 id="147-ball-reconciliation">147. Ball Reconciliation</h3><p>Ball属于：</p>
 <p>所有玩家共同关注的高价值Entity。</p>
 <p>需要比普通远处Player：</p>
 <p>更高Replication Priority。</p>
 <hr />
-<h1 id="148-server-history">148. Server History</h1><p>对于Tackle、Touch：</p>
+<h3 id="148-server-history">148. Server History</h3><p>对于Tackle、Touch：</p>
 <p>可能需要保存：</p>
 <p>短期Player / Ball历史。</p>
 <p>处理：</p>
 <p>网络延迟。</p>
 <hr />
-<h1 id="149-但不要让lag-compensation无限回溯ball">149. 但不要让Lag Compensation无限回溯Ball</h1><p>否则：</p>
+<h3 id="149-但不要让lag-compensation无限回溯ball">149. 但不要让Lag Compensation无限回溯Ball</h3><p>否则：</p>
 <p>玩家已经看到球被踢走，</p>
 <p>另一客户端却还能：</p>
 <p>从过去触球。</p>
 <p>需要：</p>
 <p>严格补偿窗口。</p>
 <hr />
-<h1 id="150-核心范式三十三统计数据应该来自match-event不应反向驱动比赛">150. 核心范式三十三：统计数据应该来自Match Event，不应反向驱动比赛</h1><p>常见：</p>
+<h3 id="150-核心范式三十三统计数据应该来自match-event不应反向驱动比赛">150. 核心范式三十三：统计数据应该来自Match Event，不应反向驱动比赛</h3><p>常见：</p>
 <ul>
 <li><p>Possession；</p>
 </li>
@@ -2336,7 +2336,7 @@
 <p>这些都是：</p>
 <p><strong>Derived Analytics。</strong></p>
 <hr />
-<h1 id="151-statisticssystem">151. StatisticsSystem</h1><p>消费：</p>
+<h3 id="151-statisticssystem">151. StatisticsSystem</h3><p>消费：</p>
 <p>MatchEvent。</p>
 <p>维护：</p>
 <p>统计。</p>
@@ -2344,7 +2344,7 @@
 <p>为了把Possession调成50%</p>
 <p>修改AI。</p>
 <hr />
-<h1 id="152-possession统计">152. Possession统计</h1><p>可以定义：</p>
+<h3 id="152-possession统计">152. Possession统计</h3><p>可以定义：</p>
 <p>Team Controlled Ball Time。</p>
 <p>而不是：</p>
 <p>谁最后Touch</p>
@@ -2352,47 +2352,47 @@
 <p>Loose Ball期间：</p>
 <p>可以不归任何队。</p>
 <hr />
-<h1 id="153-pass-completion">153. Pass Completion</h1><p>PassIntent产生。</p>
+<h3 id="153-pass-completion">153. Pass Completion</h3><p>PassIntent产生。</p>
 <p>如果：</p>
 <p>目标队伍下一次稳定控制Ball：</p>
 <p>可以视为成功。</p>
 <p>但Deflection等情况需要：</p>
 <p>明确定义。</p>
 <hr />
-<h1 id="154-统计规则也需要版本">154. 统计规则也需要版本</h1><p>否则：</p>
+<h3 id="154-统计规则也需要版本">154. 统计规则也需要版本</h3><p>否则：</p>
 <p>更新统计算法以后</p>
 <p>历史数据无法比较。</p>
 <hr />
-<h1 id="155-完整事件与执行流程示例">155. 完整事件与执行流程示例</h1><p>以下以：</p>
+<h3 id="155-完整事件与执行流程示例">155. 完整事件与执行流程示例</h3><p>以下以：</p>
 <p><strong>防守方中场抢断后发动快速反击，通过第三人跑位完成直塞并形成单刀，最后因防守球员越位线控制导致进球被判无效</strong></p>
 <p>为例。</p>
 <hr />
-<h2 id="1551-初始状态">155.1 初始状态</h2><p>Team A：</p>
+<h3 id="1551-初始状态">155.1 初始状态</h3><p>Team A：</p>
 <p>稳定控球。</p>
 <p>TeamPhase：</p>
 <p>InPossession。</p>
 <p>Team B：</p>
 <p>MidBlock。</p>
 <hr />
-<h2 id="1552-a的中场尝试向前传球">155.2 A的中场尝试向前传球</h2><p>PassIntent：</p>
+<h3 id="1552-a的中场尝试向前传球">155.2 A的中场尝试向前传球</h3><p>PassIntent：</p>
 <p>传给前腰。</p>
 <hr />
-<h2 id="1553-pass-evaluation">155.3 Pass Evaluation</h2><p>线路经过：</p>
+<h3 id="1553-pass-evaluation">155.3 Pass Evaluation</h3><p>线路经过：</p>
 <p>B防守中场附近。</p>
 <p>实际Ball Contact略微偏弱。</p>
 <hr />
-<h2 id="1554-b的中场判断">155.4 B的中场判断</h2><p>Interception ArrivalTime：</p>
+<h3 id="1554-b的中场判断">155.4 B的中场判断</h3><p>Interception ArrivalTime：</p>
 <p>0.72秒。</p>
 <p>Ball Arrival：</p>
 <p>0.84秒。</p>
 <p>存在：</p>
 <p>0.12秒优势。</p>
 <hr />
-<h2 id="1555-b移动拦截">155.5 B移动拦截</h2><p>Touch Ball。</p>
+<h3 id="1555-b移动拦截">155.5 B移动拦截</h3><p>Touch Ball。</p>
 <p>BallContactResult：</p>
 <p>向前卸球。</p>
 <hr />
-<h2 id="1556-possession-transition">155.6 Possession Transition</h2><p>B获得高ControlConfidence。</p>
+<h3 id="1556-possession-transition">155.6 Possession Transition</h3><p>B获得高ControlConfidence。</p>
 <p>TeamCoordinator触发：</p>
 <p>B：</p>
 <p>OutOfPossession<br />
@@ -2401,54 +2401,54 @@
 <p>InPossession<br />
 → DefensiveTransition。</p>
 <hr />
-<h2 id="1557-b的前锋立即纵向跑动">155.7 B的前锋立即纵向跑动</h2><p>Task：</p>
+<h3 id="1557-b的前锋立即纵向跑动">155.7 B的前锋立即纵向跑动</h3><p>Task：</p>
 <p>AttackDepth。</p>
 <hr />
-<h2 id="1558-左边锋向宽度区域冲刺">155.8 左边锋向宽度区域冲刺</h2><p>Task：</p>
+<h3 id="1558-左边锋向宽度区域冲刺">155.8 左边锋向宽度区域冲刺</h3><p>Task：</p>
 <p>ProvideWideOutlet。</p>
 <hr />
-<h2 id="1559-a的边后卫原本位置较高">155.9 A的边后卫原本位置较高</h2><p>正在快速回防。</p>
+<h3 id="1559-a的边后卫原本位置较高">155.9 A的边后卫原本位置较高</h3><p>正在快速回防。</p>
 <hr />
-<h2 id="15510-b持球队员没有立即直塞">155.10 B持球队员没有立即直塞</h2><p>因为：</p>
+<h3 id="15510-b持球队员没有立即直塞">155.10 B持球队员没有立即直塞</h3><p>因为：</p>
 <p>当前前锋处于两个中卫控制范围。</p>
 <p>选择：</p>
 <p>短传给前方中场。</p>
 <hr />
-<h2 id="15511-第三人跑位形成">155.11 第三人跑位形成</h2><p>原持球队员：</p>
+<h3 id="15511-第三人跑位形成">155.11 第三人跑位形成</h3><p>原持球队员：</p>
 <p>Pass以后继续向前。</p>
 <p>防守者注意力跟随新持球者。</p>
 <hr />
-<h2 id="15512-新持球者获得ball">155.12 新持球者获得Ball</h2><p>First Touch向内。</p>
+<h3 id="15512-新持球者获得ball">155.12 新持球者获得Ball</h3><p>First Touch向内。</p>
 <hr />
-<h2 id="15513-team-b前锋开始弧线跑位">155.13 Team B前锋开始弧线跑位</h2><p>避免：</p>
+<h3 id="15513-team-b前锋开始弧线跑位">155.13 Team B前锋开始弧线跑位</h3><p>避免：</p>
 <p>过早进入越位位置。</p>
 <hr />
-<h2 id="15514-新持球者准备through-ball">155.14 新持球者准备Through Ball</h2><p>PassIntent Target：</p>
+<h3 id="15514-新持球者准备through-ball">155.14 新持球者准备Through Ball</h3><p>PassIntent Target：</p>
 <p>前锋未来空间。</p>
 <hr />
-<h2 id="15515-contact-moment">155.15 Contact Moment</h2><p>OffsideSystem在：</p>
+<h3 id="15515-contact-moment">155.15 Contact Moment</h3><p>OffsideSystem在：</p>
 <p>真正触球Tick</p>
 <p>创建：</p>
 <p>OffsideSnapshot。</p>
 <hr />
-<h2 id="15516-snapshot显示">155.16 Snapshot显示</h2><p>前锋身体最靠前有效部位：</p>
+<h3 id="15516-snapshot显示">155.16 Snapshot显示</h3><p>前锋身体最靠前有效部位：</p>
 <p>略微超过：</p>
 <p>Second Last Defender。</p>
 <p>PotentialOffside = true。</p>
 <hr />
-<h2 id="15517-ball开始前进">155.17 Ball开始前进</h2><p>防线同步向上移动。</p>
+<h3 id="15517-ball开始前进">155.17 Ball开始前进</h3><p>防线同步向上移动。</p>
 <hr />
-<h2 id="15518-前锋获得球">155.18 前锋获得球</h2><p>因此：</p>
+<h3 id="15518-前锋获得球">155.18 前锋获得球</h3><p>因此：</p>
 <p>BecameActiveParticipant = true。</p>
 <hr />
-<h2 id="15519-offside-rule成立">155.19 Offside Rule成立</h2><p>但Assistant Rule可以：</p>
+<h3 id="15519-offside-rule成立">155.19 Offside Rule成立</h3><p>但Assistant Rule可以：</p>
 <p>等待该进攻阶段完成</p>
 <p>再停止，</p>
 <p>避免错误中断潜在合法进攻。</p>
 <hr />
-<h2 id="15520-前锋继续推进">155.20 前锋继续推进</h2><p>进入禁区。</p>
+<h3 id="15520-前锋继续推进">155.20 前锋继续推进</h3><p>进入禁区。</p>
 <hr />
-<h2 id="15521-门将rush-out">155.21 门将Rush Out</h2><p>Keeper判断：</p>
+<h3 id="15521-门将rush-out">155.21 门将Rush Out</h3><p>Keeper判断：</p>
 <p>前锋到Ball：</p>
 <p>0.5秒。</p>
 <p>自己：</p>
@@ -2457,37 +2457,37 @@
 <p>选择：</p>
 <p>缩小角度。</p>
 <hr />
-<h2 id="15522-前锋射门">155.22 前锋射门</h2><p>ShotIntent：</p>
+<h3 id="15522-前锋射门">155.22 前锋射门</h3><p>ShotIntent：</p>
 <p>远角。</p>
 <hr />
-<h2 id="15523-contact-result">155.23 Contact Result</h2><p>Ball：</p>
+<h3 id="15523-contact-result">155.23 Contact Result</h3><p>Ball：</p>
 <p>低平球。</p>
 <hr />
-<h2 id="15524-goal成立">155.24 Goal成立</h2><p>Ball越过Goal Line。</p>
+<h3 id="15524-goal成立">155.24 Goal成立</h3><p>Ball越过Goal Line。</p>
 <hr />
-<h2 id="15525-但存在pending-offside">155.25 但存在Pending Offside</h2><p>RuleEngine检查：</p>
+<h3 id="15525-但存在pending-offside">155.25 但存在Pending Offside</h3><p>RuleEngine检查：</p>
 <p>之前有效OffsideSnapshot。</p>
 <p>前锋参与进攻。</p>
 <hr />
-<h2 id="15526-goal被取消">155.26 Goal被取消</h2><p>Match Score不变。</p>
+<h3 id="15526-goal被取消">155.26 Goal被取消</h3><p>Match Score不变。</p>
 <hr />
-<h2 id="15527-restart">155.27 Restart</h2><p>Defending Team获得：</p>
+<h3 id="15527-restart">155.27 Restart</h3><p>Defending Team获得：</p>
 <p>Indirect / Offside Restart，</p>
 <p>按目标规则集执行。</p>
 <hr />
-<h2 id="15528-replay生成">155.28 Replay生成</h2><p>回放可以显示：</p>
+<h3 id="15528-replay生成">155.28 Replay生成</h3><p>回放可以显示：</p>
 <p>传球触球瞬间：</p>
 <p>Defensive Line。</p>
 <p>Attacker。</p>
 <p>Ball。</p>
 <hr />
-<h2 id="15529-ai-debug显示真正失败原因">155.29 AI Debug显示真正失败原因</h2><p>前锋：</p>
+<h3 id="15529-ai-debug显示真正失败原因">155.29 AI Debug显示真正失败原因</h3><p>前锋：</p>
 <p>Depth Run Utility很高。</p>
 <p>但：</p>
 <p>RunTiming</p>
 <p>提前约0.15秒。</p>
 <hr />
-<h2 id="15530-这整个过程涉及">155.30 这整个过程涉及：</h2><p>Interception<br />
+<h3 id="15530-这整个过程涉及">155.30 这整个过程涉及：</h3><p>Interception<br />
 → Possession Transition<br />
 → Team Phase Change<br />
 → Third-Man Run<br />
@@ -2503,7 +2503,7 @@
 <p>而是一套：</p>
 <p><strong>连续运动世界与离散比赛规则相互嵌套的系统。</strong></p>
 <hr />
-<h1 id="156-模块通信设计">156. 模块通信设计</h1><h2 id="1561-高频input">156.1 高频Input</h2><p>Human Player：</p>
+<h3 id="156-模块通信设计">156. 模块通信设计</h3><h3 id="1561-高频input">156.1 高频Input</h3><p>Human Player：</p>
 <ul>
 <li><p>Move；</p>
 </li>
@@ -2527,7 +2527,7 @@
 <p>进入：</p>
 <p>实时Input Pipeline。</p>
 <hr />
-<h1 id="157-commands">157. Commands</h1><p>低频：</p>
+<h3 id="157-commands">157. Commands</h3><p>低频：</p>
 <ul>
 <li><p>ChangeFormation；</p>
 </li>
@@ -2543,7 +2543,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="158-queries">158. Queries</h1><p>适用于：</p>
+<h3 id="158-queries">158. Queries</h3><p>适用于：</p>
 <ul>
 <li><p>谁当前Control Ball概率最高；</p>
 </li>
@@ -2573,7 +2573,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="159-domain-events">159. Domain Events</h1><p>包括：</p>
+<h3 id="159-domain-events">159. Domain Events</h3><p>包括：</p>
 <ul>
 <li><p>BallTouched；</p>
 </li>
@@ -2617,7 +2617,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="160-presentation-events">160. Presentation Events</h1><p>包括：</p>
+<h3 id="160-presentation-events">160. Presentation Events</h3><p>包括：</p>
 <ul>
 <li><p>PlayKickAnimation；</p>
 </li>
@@ -2650,7 +2650,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="161-状态所有权">161. 状态所有权</h1><p>推荐：</p>
+<h3 id="161-状态所有权">161. 状态所有权</h3><p>推荐：</p>
 <p><strong>MatchSystem</strong></p>
 <p>拥有Match Lifecycle、Score和Clock。</p>
 <p><strong>BallSystem</strong></p>
@@ -2676,16 +2676,16 @@
 <p><strong>StatisticsSystem</strong></p>
 <p>只消费事件。</p>
 <hr />
-<h1 id="162-rulesystem绝不能修改ai目标来修正比赛">162. RuleSystem绝不能修改AI目标来“修正比赛”</h1><p>AI根据规则行动。</p>
+<h3 id="162-rulesystem绝不能修改ai目标来修正比赛">162. RuleSystem绝不能修改AI目标来“修正比赛”</h3><p>AI根据规则行动。</p>
 <p>Rule根据实际行为裁决。</p>
 <p>两者不能形成作弊式闭环。</p>
 <hr />
-<h1 id="163-statistics不能成为权威球权">163. Statistics不能成为权威球权</h1><p>Possession是统计结果。</p>
+<h3 id="163-statistics不能成为权威球权">163. Statistics不能成为权威球权</h3><p>Possession是统计结果。</p>
 <p>真正比赛状态仍是：</p>
 <p>Ball。</p>
 <hr />
-<h1 id="164-失败隔离">164. 失败隔离</h1><hr />
-<h2 id="1641-ball进入非法位置">164.1 Ball进入非法位置</h2><p>例如：</p>
+<h3 id="164-失败隔离">164. 失败隔离</h3><hr />
+<h3 id="1641-ball进入非法位置">164.1 Ball进入非法位置</h3><p>例如：</p>
 <p>数值异常导致：</p>
 <p>Ball NaN。</p>
 <p>立即：</p>
@@ -2698,45 +2698,45 @@
 <p>BallIntegrityError。</p>
 <p>不能让整场比赛继续传播NaN。</p>
 <hr />
-<h1 id="165-player陷入几何">165. Player陷入几何</h1><p>Player Motor进行：</p>
+<h3 id="165-player陷入几何">165. Player陷入几何</h3><p>Player Motor进行：</p>
 <p>Depenetration。</p>
 <p>失败：</p>
 <p>移动到最近合法FieldPosition。</p>
 <p>记录：</p>
 <p>PlayerRecovery。</p>
 <hr />
-<h1 id="166-ai没有合法task">166. AI没有合法Task</h1><p>Fallback：</p>
+<h3 id="166-ai没有合法task">166. AI没有合法Task</h3><p>Fallback：</p>
 <p>MaintainFormationAnchor。</p>
 <p>不能：</p>
 <p>站住不动</p>
 <p>或：</p>
 <p>所有人去抢球。</p>
 <hr />
-<h1 id="167-formation-role缺失">167. Formation Role缺失</h1><p>首发阵容与Formation不匹配：</p>
+<h3 id="167-formation-role缺失">167. Formation Role缺失</h3><p>首发阵容与Formation不匹配：</p>
 <p>使用：</p>
 <p>FallbackRoleAssignment。</p>
 <p>并输出Content Error。</p>
 <hr />
-<h1 id="168-pass-target突然失效">168. Pass Target突然失效</h1><p>Receiver受伤 / 被换下。</p>
+<h3 id="168-pass-target突然失效">168. Pass Target突然失效</h3><p>Receiver受伤 / 被换下。</p>
 <p>Ball已经踢出：</p>
 <p>Ball继续正常运动。</p>
 <p>不能：</p>
 <p>把球重新导向其他角色。</p>
 <hr />
-<h1 id="169-contact-animation失败">169. Contact Animation失败</h1><p>Ball Contact Result仍然权威。</p>
+<h3 id="169-contact-animation失败">169. Contact Animation失败</h3><p>Ball Contact Result仍然权威。</p>
 <p>Presentation重新同步。</p>
 <p>不能：</p>
 <p>动画没播出来</p>
 <p>就取消Pass。</p>
 <hr />
-<h1 id="170-goalkeeper-catch状态异常">170. Goalkeeper Catch状态异常</h1><p>如果Keeper视觉没有抓住，</p>
+<h3 id="170-goalkeeper-catch状态异常">170. Goalkeeper Catch状态异常</h3><p>如果Keeper视觉没有抓住，</p>
 <p>但RuleState是：</p>
 <p>GoalkeeperHeld，</p>
 <p>表现层应：</p>
 <p>恢复Ball绑定。</p>
 <p>逻辑不因为视觉偏差丢球。</p>
 <hr />
-<h1 id="171-offside-snapshot缺失">171. Offside Snapshot缺失</h1><p>如果规则需要但Snapshot异常：</p>
+<h3 id="171-offside-snapshot缺失">171. Offside Snapshot缺失</h3><p>如果规则需要但Snapshot异常：</p>
 <p>不应猜测。</p>
 <p>开发Build：</p>
 <p>报警。</p>
@@ -2745,13 +2745,13 @@
 <p>或安全策略。</p>
 <p>同时记录完整比赛Tick用于修复。</p>
 <hr />
-<h1 id="172-restart重复创建">172. Restart重复创建</h1><p>GoalLine事件和OutOfPlay事件</p>
+<h3 id="172-restart重复创建">172. Restart重复创建</h3><p>GoalLine事件和OutOfPlay事件</p>
 <p>可能重复到达。</p>
 <p>BoundaryEventId</p>
 <p>保证：</p>
 <p>一个BallExit只生成一个Restart。</p>
 <hr />
-<h1 id="173-goal和offside竞争">173. Goal和Offside竞争</h1><p>Goal可以先检测。</p>
+<h3 id="173-goal和offside竞争">173. Goal和Offside竞争</h3><p>Goal可以先检测。</p>
 <p>但最终Score Commit必须等待：</p>
 <p>Pending Rule Decision。</p>
 <p>使用：</p>
@@ -2759,14 +2759,14 @@
 <p>而不是：</p>
 <p>立即写Score。</p>
 <hr />
-<h1 id="174-goalcandidate">174. GoalCandidate</h1><p>流程：</p>
+<h3 id="174-goalcandidate">174. GoalCandidate</h3><p>流程：</p>
 <p>Ball Cross Goal<br />
 → GoalCandidate<br />
 → 检查Offside / Foul / Rule State<br />
 → GoalConfirmed<br />
 → Score Commit。</p>
 <hr />
-<h1 id="175-foul与advantage重复">175. Foul与Advantage重复</h1><p>FoulEvent只能：</p>
+<h3 id="175-foul与advantage重复">175. Foul与Advantage重复</h3><p>FoulEvent只能：</p>
 <ul>
 <li><p>被即时吹罚；</p>
 </li>
@@ -2778,11 +2778,11 @@
 <p>先继续比赛</p>
 <p>后又重复产生两次FreeKick。</p>
 <hr />
-<h1 id="176-matchclock重复结算">176. MatchClock重复结算</h1><p>HalfEnd使用：</p>
+<h3 id="176-matchclock重复结算">176. MatchClock重复结算</h3><p>HalfEnd使用：</p>
 <p>PhaseTransitionId。</p>
 <p>只能发生一次。</p>
 <hr />
-<h1 id="177-substitute-player重复存在">177. Substitute Player重复存在</h1><p>换人完成：</p>
+<h3 id="177-substitute-player重复存在">177. Substitute Player重复存在</h3><p>换人完成：</p>
 <p>Out Player：</p>
 <p>不再是OnField。</p>
 <p>In Player：</p>
@@ -2790,29 +2790,29 @@
 <p>RosterIntegrityAudit：</p>
 <p>场上人数必须符合规则。</p>
 <hr />
-<h1 id="178-control-handoff异常">178. Control Handoff异常</h1><p>ControlledPlayer被红牌罚下：</p>
+<h3 id="178-control-handoff异常">178. Control Handoff异常</h3><p>ControlledPlayer被红牌罚下：</p>
 <p>SelectionSystem立即：</p>
 <p>选择下一个合法Player。</p>
 <p>不能：</p>
 <p>Human Input指向已离场Actor。</p>
 <hr />
-<h1 id="179-online-contact重复">179. Online Contact重复</h1><p>BallContactIntent拥有：</p>
+<h3 id="179-online-contact重复">179. Online Contact重复</h3><p>BallContactIntent拥有：</p>
 <p>SequenceId。</p>
 <p>服务器只能提交一次。</p>
 <hr />
-<h1 id="180-replay记录失败">180. Replay记录失败</h1><p>Replay是派生系统。</p>
+<h3 id="180-replay记录失败">180. Replay记录失败</h3><p>Replay是派生系统。</p>
 <p>不能影响：</p>
 <p>正式Match结果。</p>
 <p>只记录：</p>
 <p>ReplayIntegrityWarning。</p>
 <hr />
-<h1 id="181-debug-与可观测性">181. Debug 与可观测性</h1><p>足球模拟如果没有强调试工具，非常容易出现：</p>
+<h3 id="181-debug-与可观测性">181. Debug 与可观测性</h3><p>足球模拟如果没有强调试工具，非常容易出现：</p>
 <p>“前锋为什么不跑？”</p>
 <p>“后卫为什么突然冲出去？”</p>
 <p>“这球为什么越位？”</p>
 <p>这种几乎无法靠日志字符串解决的问题。</p>
 <hr />
-<h1 id="182-ball-state-inspector">182. Ball State Inspector</h1><p>显示：</p>
+<h3 id="182-ball-state-inspector">182. Ball State Inspector</h3><p>显示：</p>
 <ul>
 <li><p>Position；</p>
 </li>
@@ -2828,7 +2828,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="183-contact-timeline">183. Contact Timeline</h1><p>显示：</p>
+<h3 id="183-contact-timeline">183. Contact Timeline</h3><p>显示：</p>
 <p>每一次Ball Touch：</p>
 <p>Player<br />
 Type<br />
@@ -2836,19 +2836,19 @@ Velocity In<br />
 Velocity Out<br />
 Tick。</p>
 <hr />
-<h1 id="184-possession-timeline">184. Possession Timeline</h1><p>显示：</p>
+<h3 id="184-possession-timeline">184. Possession Timeline</h3><p>显示：</p>
 <p>Team A Controlled。</p>
 <p>Loose。</p>
 <p>Team B Controlled。</p>
 <p>而不是：</p>
 <p>只显示最终控球率。</p>
 <hr />
-<h1 id="185-team-phase-debugger">185. Team Phase Debugger</h1><p>每队显示：</p>
+<h3 id="185-team-phase-debugger">185. Team Phase Debugger</h3><p>每队显示：</p>
 <p>当前：</p>
 <p>InPossession / Transition / Block。</p>
 <p>为什么发生Phase Change。</p>
 <hr />
-<h1 id="186-formation-overlay">186. Formation Overlay</h1><p>显示：</p>
+<h3 id="186-formation-overlay">186. Formation Overlay</h3><p>显示：</p>
 <ul>
 <li><p>Base Anchor；</p>
 </li>
@@ -2860,7 +2860,7 @@ Tick。</p>
 <p>可以发现：</p>
 <p>球员是否严重偏离职责。</p>
 <hr />
-<h1 id="187-role-task-inspector">187. Role / Task Inspector</h1><p>点击球员：</p>
+<h3 id="187-role-task-inspector">187. Role / Task Inspector</h3><p>点击球员：</p>
 <p>Role：</p>
 <p>LeftBack。</p>
 <p>CurrentTask：</p>
@@ -2869,14 +2869,14 @@ Tick。</p>
 <p>Overlap。</p>
 <p>为什么选择当前Task。</p>
 <hr />
-<h1 id="188-ai-utility-inspector">188. AI Utility Inspector</h1><p>例如：</p>
+<h3 id="188-ai-utility-inspector">188. AI Utility Inspector</h3><p>例如：</p>
 <p>Press Ball：82<br />
 Hold Shape：55<br />
 Mark Winger：74。</p>
 <p>最终：</p>
 <p>Press。</p>
 <hr />
-<h1 id="189-pass-lane-viewer">189. Pass Lane Viewer</h1><p>显示：</p>
+<h3 id="189-pass-lane-viewer">189. Pass Lane Viewer</h3><p>显示：</p>
 <p>Passer到各Receiver：</p>
 <ul>
 <li><p>TargetPoint；</p>
@@ -2891,12 +2891,12 @@ Mark Winger：74。</p>
 </li>
 </ul>
 <hr />
-<h1 id="190-space-control-heatmap">190. Space Control Heatmap</h1><p>显示：</p>
+<h3 id="190-space-control-heatmap">190. Space Control Heatmap</h3><p>显示：</p>
 <p>两队Reachability。</p>
 <p>非常适合：</p>
 <p>调试站位。</p>
 <hr />
-<h1 id="191-offside-debug-overlay">191. Offside Debug Overlay</h1><p>冻结到Pass Contact Tick。</p>
+<h3 id="191-offside-debug-overlay">191. Offside Debug Overlay</h3><p>冻结到Pass Contact Tick。</p>
 <p>显示：</p>
 <ul>
 <li><p>Ball；</p>
@@ -2909,7 +2909,7 @@ Mark Winger：74。</p>
 </li>
 </ul>
 <hr />
-<h1 id="192-referee-decision-trace">192. Referee Decision Trace</h1><p>某Contact：</p>
+<h3 id="192-referee-decision-trace">192. Referee Decision Trace</h3><p>某Contact：</p>
 <p>Ball First：</p>
 <p>Yes。</p>
 <p>Player Contact：</p>
@@ -2919,24 +2919,24 @@ Mark Winger：74。</p>
 <p>Decision：</p>
 <p>PlayOn。</p>
 <hr />
-<h1 id="193-advantage-trace">193. Advantage Trace</h1><p>显示：</p>
+<h3 id="193-advantage-trace">193. Advantage Trace</h3><p>显示：</p>
 <p>Foul发生。</p>
 <p>为什么继续。</p>
 <p>什么时候优势结束。</p>
 <hr />
-<h1 id="194-goalkeeper-decision-trace">194. Goalkeeper Decision Trace</h1><p>Shot：</p>
+<h3 id="194-goalkeeper-decision-trace">194. Goalkeeper Decision Trace</h3><p>Shot：</p>
 <p>目标远角。</p>
 <p>Keeper：</p>
 <p>预计到达。</p>
 <p>选择：</p>
 <p>Dive Right。</p>
 <hr />
-<h1 id="195-stamina-heatmap">195. Stamina Heatmap</h1><p>按球员：</p>
+<h3 id="195-stamina-heatmap">195. Stamina Heatmap</h3><p>按球员：</p>
 <p>当前Stamina。</p>
 <p>帮助判断：</p>
 <p>Press战术为什么后期崩溃。</p>
 <hr />
-<h1 id="196-tactical-shape-metrics">196. Tactical Shape Metrics</h1><p>可以显示：</p>
+<h3 id="196-tactical-shape-metrics">196. Tactical Shape Metrics</h3><p>可以显示：</p>
 <ul>
 <li><p>Team Width；</p>
 </li>
@@ -2950,17 +2950,17 @@ Mark Winger：74。</p>
 </li>
 </ul>
 <hr />
-<h1 id="197-player-selection-debug">197. Player Selection Debug</h1><p>为什么系统自动切到Player 4</p>
+<h3 id="197-player-selection-debug">197. Player Selection Debug</h3><p>为什么系统自动切到Player 4</p>
 <p>而不是Player 6。</p>
 <hr />
-<h1 id="198-match-event-timeline">198. Match Event Timeline</h1><p>按时间：</p>
+<h3 id="198-match-event-timeline">198. Match Event Timeline</h3><p>按时间：</p>
 <p>Pass<br />
 Shot<br />
 Foul<br />
 Goal<br />
 Substitution。</p>
 <hr />
-<h1 id="199-performance-dashboard">199. Performance Dashboard</h1><p>显示：</p>
+<h3 id="199-performance-dashboard">199. Performance Dashboard</h3><p>显示：</p>
 <ul>
 <li><p>Motor Time；</p>
 </li>
@@ -2978,8 +2978,8 @@ Substitution。</p>
 </li>
 </ul>
 <hr />
-<h1 id="200-内容验证工具">200. 内容验证工具</h1><hr />
-<h2 id="2001-pitch-geometry-validation">200.1 Pitch Geometry Validation</h2><p>检查：</p>
+<h3 id="200-内容验证工具">200. 内容验证工具</h3><hr />
+<h3 id="2001-pitch-geometry-validation">200.1 Pitch Geometry Validation</h3><p>检查：</p>
 <ul>
 <li><p>Touchline；</p>
 </li>
@@ -2995,36 +2995,36 @@ Substitution。</p>
 </li>
 </ul>
 <hr />
-<h1 id="201-goal-detection-test">201. Goal Detection Test</h1><p>自动生成：</p>
+<h3 id="201-goal-detection-test">201. Goal Detection Test</h3><p>自动生成：</p>
 <p>数千Ball Trajectory。</p>
 <p>检测：</p>
 <p>是否完全越线。</p>
 <hr />
-<h1 id="202-offside-boundary-test">202. Offside Boundary Test</h1><p>构造：</p>
+<h3 id="202-offside-boundary-test">202. Offside Boundary Test</h3><p>构造：</p>
 <p>完全平线。</p>
 <p>领先1cm。</p>
 <p>落后1cm。</p>
 <p>确保：</p>
 <p>结果稳定。</p>
 <hr />
-<h1 id="203-formation-validation">203. Formation Validation</h1><p>所有Formation：</p>
+<h3 id="203-formation-validation">203. Formation Validation</h3><p>所有Formation：</p>
 <p>必须：</p>
 <p>11个合法Role。</p>
 <hr />
-<h1 id="204-role-compatibility-test">204. Role Compatibility Test</h1><p>Roster缺少某位置专属Player</p>
+<h3 id="204-role-compatibility-test">204. Role Compatibility Test</h3><p>Roster缺少某位置专属Player</p>
 <p>也应：</p>
 <p>Fallback成立。</p>
 <hr />
-<h1 id="205-ai-no-ball-test">205. AI No-Ball Test</h1><p>球放在中场。</p>
+<h3 id="205-ai-no-ball-test">205. AI No-Ball Test</h3><p>球放在中场。</p>
 <p>让AI运行：</p>
 <p>所有人不能：</p>
 <p>同时围球。</p>
 <hr />
-<h1 id="206-possession-transition-test">206. Possession Transition Test</h1><p>随机改变Ball控制。</p>
+<h3 id="206-possession-transition-test">206. Possession Transition Test</h3><p>随机改变Ball控制。</p>
 <p>检查：</p>
 <p>TeamPhase快速切换。</p>
 <hr />
-<h1 id="207-pass-interception-simulation">207. Pass Interception Simulation</h1><p>生成：</p>
+<h3 id="207-pass-interception-simulation">207. Pass Interception Simulation</h3><p>生成：</p>
 <p>大量：</p>
 <p>Passer<br />
 Receiver<br />
@@ -3032,11 +3032,11 @@ Defender。</p>
 <p>验证：</p>
 <p>Arrival Time逻辑。</p>
 <hr />
-<h1 id="208-keeper-reachability-test">208. Keeper Reachability Test</h1><p>对不同Shot轨迹：</p>
+<h3 id="208-keeper-reachability-test">208. Keeper Reachability Test</h3><p>对不同Shot轨迹：</p>
 <p>确认：</p>
 <p>Dive能力与Keeper物理一致。</p>
 <hr />
-<h1 id="209-restart-test-matrix">209. Restart Test Matrix</h1><p>测试：</p>
+<h3 id="209-restart-test-matrix">209. Restart Test Matrix</h3><p>测试：</p>
 <ul>
 <li><p>ThrowIn；</p>
 </li>
@@ -3054,7 +3054,7 @@ Defender。</p>
 <p>保证：</p>
 <p>Ball、Player和Clock状态最终回到Live。</p>
 <hr />
-<h1 id="210-foul-regression">210. Foul Regression</h1><p>建立标准Challenge案例：</p>
+<h3 id="210-foul-regression">210. Foul Regression</h3><p>建立标准Challenge案例：</p>
 <ul>
 <li><p>Ball First；</p>
 </li>
@@ -3068,7 +3068,7 @@ Defender。</p>
 <p>更新RuleSystem后：</p>
 <p>自动比较。</p>
 <hr />
-<h1 id="211-tactical-ai-long-match-test">211. Tactical AI Long Match Test</h1><p>AI vs AI：</p>
+<h3 id="211-tactical-ai-long-match-test">211. Tactical AI Long Match Test</h3><p>AI vs AI：</p>
 <p>运行：</p>
 <p>1000场。</p>
 <p>检查：</p>
@@ -3087,31 +3087,31 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="212-ai-collapsing-test">212. AI Collapsing Test</h1><p>检查：</p>
+<h3 id="212-ai-collapsing-test">212. AI Collapsing Test</h3><p>检查：</p>
 <p>是否出现：</p>
 <p>所有球员长期挤在Ball附近。</p>
 <hr />
-<h1 id="213-no-progress-test">213. No-Progress Test</h1><p>如果：</p>
+<h3 id="213-no-progress-test">213. No-Progress Test</h3><p>如果：</p>
 <p>比赛10分钟无任何向前推进，</p>
 <p>AI可能陷入：</p>
 <p>安全传球循环。</p>
 <hr />
-<h1 id="214-shot-selection-test">214. Shot Selection Test</h1><p>AI不能：</p>
+<h3 id="214-shot-selection-test">214. Shot Selection Test</h3><p>AI不能：</p>
 <p>中场每次拿球都射门。</p>
 <p>也不能：</p>
 <p>空门仍然一直传。</p>
 <hr />
-<h1 id="215-red-card-test">215. Red Card Test</h1><p>11v10。</p>
+<h3 id="215-red-card-test">215. Red Card Test</h3><p>11v10。</p>
 <p>Formation必须：</p>
 <p>重新分配空间职责。</p>
 <p>不能：</p>
 <p>只删除一个球员后原位置永久没人管。</p>
 <hr />
-<h1 id="216-substitution-stress-test">216. Substitution Stress Test</h1><p>多次换人。</p>
+<h3 id="216-substitution-stress-test">216. Substitution Stress Test</h3><p>多次换人。</p>
 <p>检查：</p>
 <p>Roster、Role、ControlledPlayer。</p>
 <hr />
-<h1 id="217-full-match-determinism-stability">217. Full Match Determinism / Stability</h1><p>同一：</p>
+<h3 id="217-full-match-determinism-stability">217. Full Match Determinism / Stability</h3><p>同一：</p>
 <p>AI Seed</p>
 <ul>
 <li>Initial State</li>
@@ -3122,14 +3122,14 @@ Defender。</p>
 <p>或：</p>
 <p>随机性受控。</p>
 <hr />
-<h1 id="218-online-latency-test">218. Online Latency Test</h1><p>模拟：</p>
+<h3 id="218-online-latency-test">218. Online Latency Test</h3><p>模拟：</p>
 <p>20ms<br />
 80ms<br />
 150ms。</p>
 <p>检查：</p>
 <p>Ball Contact与Tackle体验。</p>
 <hr />
-<h1 id="219-性能设计">219. 性能设计</h1><p>足球看似只有：</p>
+<h3 id="219-性能设计">219. 性能设计</h3><p>足球看似只有：</p>
 <p>22名球员。</p>
 <p>数量不多。</p>
 <p>但每个球员同时需要：</p>
@@ -3151,71 +3151,71 @@ Defender。</p>
 <p>而是：</p>
 <p><strong>每个Agent的决策复杂度。</strong></p>
 <hr />
-<h1 id="220-player-motor">220. Player Motor</h1><p>高频。</p>
+<h3 id="220-player-motor">220. Player Motor</h3><p>高频。</p>
 <p>但保持：</p>
 <p>轻量。</p>
 <hr />
-<h1 id="221-team-tactical-coordinator">221. Team Tactical Coordinator</h1><p>只需要：</p>
+<h3 id="221-team-tactical-coordinator">221. Team Tactical Coordinator</h3><p>只需要：</p>
 <p>较低频率更新。</p>
 <hr />
-<h1 id="222-space-control">222. Space Control</h1><p>可以：</p>
+<h3 id="222-space-control">222. Space Control</h3><p>可以：</p>
 <p>低分辨率Grid。</p>
 <p>或：</p>
 <p>局部动态分析。</p>
 <p>无需每帧对球场每个点精确求解。</p>
 <hr />
-<h1 id="223-pass-candidate数量">223. Pass Candidate数量</h1><p>球员不需要：</p>
+<h3 id="223-pass-candidate数量">223. Pass Candidate数量</h3><p>球员不需要：</p>
 <p>评估所有10名队友 × 所有可能目标位置。</p>
 <p>先：</p>
 <p>Role / Visibility / Distance</p>
 <p>过滤。</p>
 <hr />
-<h1 id="224-top-k-candidate">224. Top-K Candidate</h1><p>例如：</p>
+<h3 id="224-top-k-candidate">224. Top-K Candidate</h3><p>例如：</p>
 <p>只完整评估：</p>
 <p>最合理的5个传球候选。</p>
 <hr />
-<h1 id="225-navigation">225. Navigation</h1><p>球场几乎没有静态障碍物。</p>
+<h3 id="225-navigation">225. Navigation</h3><p>球场几乎没有静态障碍物。</p>
 <p>因此无需：</p>
 <p>复杂NavMesh A*。</p>
 <p>玩家运动主要：</p>
 <p>Steering + Local Avoidance。</p>
 <hr />
-<h1 id="226-local-avoidance">226. Local Avoidance</h1><p>避免：</p>
+<h3 id="226-local-avoidance">226. Local Avoidance</h3><p>避免：</p>
 <p>队友完全重叠。</p>
 <p>但不能：</p>
 <p>像人群模拟一样强制保持大距离。</p>
 <p>身体接触本来就是足球的一部分。</p>
 <hr />
-<h1 id="227-collision-layer">227. Collision Layer</h1><p>Ball vs Player：</p>
+<h3 id="227-collision-layer">227. Collision Layer</h3><p>Ball vs Player：</p>
 <p>高精度。</p>
 <p>Player vs Player：</p>
 <p>有限物理 / Capsule。</p>
 <p>Player vs Pitch：</p>
 <p>稳定Motor。</p>
 <hr />
-<h1 id="228-animation成本">228. Animation成本</h1><p>足球大量需要：</p>
+<h3 id="228-animation成本">228. Animation成本</h3><p>足球大量需要：</p>
 <p>Motion Matching / Blend / IK。</p>
 <p>但必须保证：</p>
 <p>Animation不成为Ball Truth。</p>
 <hr />
-<h1 id="229-contact-ik">229. Contact IK</h1><p>可以让脚：</p>
+<h3 id="229-contact-ik">229. Contact IK</h3><p>可以让脚：</p>
 <p>贴近真实BallContactPoint。</p>
 <p>但Contact结果已经由逻辑决定。</p>
 <p>IK负责：</p>
 <p>让视觉匹配。</p>
 <hr />
-<h1 id="230-motion-matching">230. Motion Matching</h1><p>非常适合：</p>
+<h3 id="230-motion-matching">230. Motion Matching</h3><p>非常适合：</p>
 <p>转向、启动、急停。</p>
 <p>但必须接受：</p>
 <p>PlayerMotor的目标运动约束。</p>
 <p>不能：</p>
 <p>动画数据库自行决定角色走哪。</p>
 <hr />
-<h1 id="231-可扩展点">231. 可扩展点</h1><hr />
-<h2 id="2311-新formation">231.1 新Formation</h2><p>只需：</p>
+<h3 id="231-可扩展点">231. 可扩展点</h3><hr />
+<h3 id="2311-新formation">231.1 新Formation</h3><p>只需：</p>
 <p>FormationDefinition。</p>
 <hr />
-<h2 id="2312-新tactical-style">231.2 新Tactical Style</h2><p>通过：</p>
+<h3 id="2312-新tactical-style">231.2 新Tactical Style</h3><p>通过：</p>
 <p>TacticalInstruction。</p>
 <p>例如：</p>
 <ul>
@@ -3229,7 +3229,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2313-新player-role">231.3 新Player Role</h2><p>例如：</p>
+<h3 id="2313-新player-role">231.3 新Player Role</h3><p>例如：</p>
 <ul>
 <li><p>False Nine；</p>
 </li>
@@ -3241,12 +3241,12 @@ Defender。</p>
 <p>主要扩展：</p>
 <p>Role Task Weights。</p>
 <hr />
-<h2 id="2314-新ball-action">231.4 新Ball Action</h2><p>例如：</p>
+<h3 id="2314-新ball-action">231.4 新Ball Action</h3><p>例如：</p>
 <p>Trivela。</p>
 <p>仍通过：</p>
 <p>BallContactIntent。</p>
 <hr />
-<h2 id="2315-新规则集">231.5 新规则集</h2><p>不同赛事：</p>
+<h3 id="2315-新规则集">231.5 新规则集</h3><p>不同赛事：</p>
 <ul>
 <li><p>Extra Time；</p>
 </li>
@@ -3260,7 +3260,7 @@ Defender。</p>
 <p>可通过：</p>
 <p>CompetitionRuleSet。</p>
 <hr />
-<h2 id="2316-futsal">231.6 Futsal</h2><p>可以复用：</p>
+<h3 id="2316-futsal">231.6 Futsal</h3><p>可以复用：</p>
 <p>大量Ball和Team系统。</p>
 <p>替换：</p>
 <ul>
@@ -3274,17 +3274,17 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2317-街头足球">231.7 街头足球</h2><p>同样可以：</p>
+<h3 id="2317-街头足球">231.7 街头足球</h3><p>同样可以：</p>
 <p>减少人数和规则。</p>
 <p>核心Ball Contact与空间仍复用。</p>
 <hr />
-<h1 id="232-玩家体验设计">232. 玩家体验设计</h1><hr />
-<h2 id="2321-玩家必须始终理解我现在控制谁">232.1 玩家必须始终理解“我现在控制谁”</h2><p>球员头顶：</p>
+<h3 id="232-玩家体验设计">232. 玩家体验设计</h3><hr />
+<h3 id="2321-玩家必须始终理解我现在控制谁">232.1 玩家必须始终理解“我现在控制谁”</h3><p>球员头顶：</p>
 <p>Indicator。</p>
 <p>切换以后：</p>
 <p>即时反馈。</p>
 <hr />
-<h1 id="233-自动选人错误会严重破坏体验">233. 自动选人错误会严重破坏体验</h1><p>玩家明明想控制：</p>
+<h3 id="233-自动选人错误会严重破坏体验">233. 自动选人错误会严重破坏体验</h3><p>玩家明明想控制：</p>
 <p>中后卫。</p>
 <p>系统选了：</p>
 <p>边后卫。</p>
@@ -3292,7 +3292,7 @@ Defender。</p>
 <p>因此Player Selection应作为：</p>
 <p>核心手感系统单独调试。</p>
 <hr />
-<h1 id="234-pass-assist应帮助表达意图而不是自动完成最佳传球">234. Pass Assist应帮助表达意图，而不是自动完成最佳传球</h1><p>玩家输入：</p>
+<h3 id="234-pass-assist应帮助表达意图而不是自动完成最佳传球">234. Pass Assist应帮助表达意图，而不是自动完成最佳传球</h3><p>玩家输入：</p>
 <p>向右前方。</p>
 <p>系统可以：</p>
 <p>选择两个合理队友中更符合方向的。</p>
@@ -3300,7 +3300,7 @@ Defender。</p>
 <p>自动发现屏幕另一侧最优空位</p>
 <p>替玩家决策。</p>
 <hr />
-<h1 id="235-skill-gap-应来自">235. Skill Gap 应来自：</h1><ul>
+<h3 id="235-skill-gap-应来自">235. Skill Gap 应来自：</h3><ul>
 <li><p>Timing；</p>
 </li>
 <li><p>Direction；</p>
@@ -3315,18 +3315,18 @@ Defender。</p>
 <p>而不是：</p>
 <p>UI难用。</p>
 <hr />
-<h1 id="236-足球手感最重要的反馈之一是第一脚触球">236. 足球手感最重要的反馈之一是“第一脚触球”</h1><p>好球员：</p>
+<h3 id="236-足球手感最重要的反馈之一是第一脚触球">236. 足球手感最重要的反馈之一是“第一脚触球”</h3><p>好球员：</p>
 <p>停球顺滑。</p>
 <p>压力下：</p>
 <p>球弹远。</p>
 <p>玩家会直接感受到：</p>
 <p>比赛节奏差异。</p>
 <hr />
-<h1 id="237-传球应该让玩家看到真实线路风险">237. 传球应该让玩家看到真实线路风险</h1><p>如果Defender站在线路上：</p>
+<h3 id="237-传球应该让玩家看到真实线路风险">237. 传球应该让玩家看到真实线路风险</h3><p>如果Defender站在线路上：</p>
 <p>却总是自动穿过，</p>
 <p>空间防守失去意义。</p>
 <hr />
-<h1 id="238-ai队友必须像在帮我">238. AI队友必须“像在帮我”</h1><p>这是足球游戏最核心体验标准之一。</p>
+<h3 id="238-ai队友必须像在帮我">238. AI队友必须“像在帮我”</h3><p>这是足球游戏最核心体验标准之一。</p>
 <p>玩家持球时：</p>
 <p>应该看到：</p>
 <ul>
@@ -3340,18 +3340,18 @@ Defender。</p>
 <p>而不是：</p>
 <p>10个人站着看。</p>
 <hr />
-<h1 id="239-同样ai队友不能帮得过头">239. 同样，AI队友不能帮得过头</h1><p>如果玩家只需要：</p>
+<h3 id="239-同样ai队友不能帮得过头">239. 同样，AI队友不能帮得过头</h3><p>如果玩家只需要：</p>
 <p>按Pass</p>
 <p>AI就自动完成所有进攻路线，</p>
 <p>玩家失去决策。</p>
 <hr />
-<h1 id="240-防守时ai要有结构">240. 防守时AI要有结构</h1><p>即使玩家只控制一人：</p>
+<h3 id="240-防守时ai要有结构">240. 防守时AI要有结构</h3><p>即使玩家只控制一人：</p>
 <p>其他后卫仍然应该：</p>
 <p>保持线。</p>
 <p>这才让玩家感觉：</p>
 <p>自己控制的是球队的一部分。</p>
 <hr />
-<h1 id="241-球必须比角色更加可信">241. 球必须比角色更加可信</h1><p>玩家可以容忍：</p>
+<h3 id="241-球必须比角色更加可信">241. 球必须比角色更加可信</h3><p>玩家可以容忍：</p>
 <p>某个AI跑位略笨。</p>
 <p>很难容忍：</p>
 <p>Ball突然吸附、</p>
@@ -3360,99 +3360,99 @@ Defender。</p>
 <p>因此技术优先级通常：</p>
 <p><strong>Ball Trust &gt; Animation Spectacle。</strong></p>
 <hr />
-<h1 id="242-replay能够帮助玩家理解空间失误">242. Replay能够帮助玩家理解空间失误</h1><p>例如：</p>
+<h3 id="242-replay能够帮助玩家理解空间失误">242. Replay能够帮助玩家理解空间失误</h3><p>例如：</p>
 <p>不是后卫跑得慢。</p>
 <p>而是：</p>
 <p>中场压迫失败</p>
 <p>迫使防线面对2v2。</p>
 <hr />
-<h1 id="243-战术设置必须能够在场上真正看见">243. 战术设置必须能够在场上真正看见</h1><p>设置：</p>
+<h3 id="243-战术设置必须能够在场上真正看见">243. 战术设置必须能够在场上真正看见</h3><p>设置：</p>
 <p>High Press。</p>
 <p>应该能观察：</p>
 <p>前锋开始主动封锁出球。</p>
 <p>而不是：</p>
 <p>只看到一个属性条变化。</p>
 <hr />
-<h1 id="244-体能也应该有可见后果">244. 体能也应该有可见后果</h1><p>球员：</p>
+<h3 id="244-体能也应该有可见后果">244. 体能也应该有可见后果</h3><p>球员：</p>
 <p>冲刺减少。</p>
 <p>恢复慢。</p>
 <p>防线无法持续上抢。</p>
 <p>玩家能够理解：</p>
 <p>为什么战术后期失效。</p>
 <hr />
-<h1 id="245-常见设计失败">245. 常见设计失败</h1><hr />
-<h2 id="2451-足球直接parent到持球队员脚上">245.1 足球直接Parent到持球队员脚上</h2><p>截球和自由球状态失去真实性。</p>
+<h3 id="245-常见设计失败">245. 常见设计失败</h3><hr />
+<h3 id="2451-足球直接parent到持球队员脚上">245.1 足球直接Parent到持球队员脚上</h3><p>截球和自由球状态失去真实性。</p>
 <hr />
-<h2 id="2452-pass直接把球插值给receiver">245.2 Pass直接把球插值给Receiver</h2><p>防守者无法真正封堵线路。</p>
+<h3 id="2452-pass直接把球插值给receiver">245.2 Pass直接把球插值给Receiver</h3><p>防守者无法真正封堵线路。</p>
 <hr />
-<h2 id="2453-ai直接知道传球目标并提前作弊">245.3 AI直接知道传球目标并提前作弊</h2><p>防守行为不可信。</p>
+<h3 id="2453-ai直接知道传球目标并提前作弊">245.3 AI直接知道传球目标并提前作弊</h3><p>防守行为不可信。</p>
 <hr />
-<h2 id="2454-所有ai都独立追求距离ball最近">245.4 所有AI都独立追求距离Ball最近</h2><p>球队变成一团。</p>
+<h3 id="2454-所有ai都独立追求距离ball最近">245.4 所有AI都独立追求距离Ball最近</h3><p>球队变成一团。</p>
 <hr />
-<h2 id="2455-formation使用固定世界坐标">245.5 Formation使用固定世界坐标</h2><p>Ball移动后球队不整体偏移。</p>
+<h3 id="2455-formation使用固定世界坐标">245.5 Formation使用固定世界坐标</h3><p>Ball移动后球队不整体偏移。</p>
 <hr />
-<h2 id="2456-formation完全决定位置">245.6 Formation完全决定位置</h2><p>球员不会根据局部比赛情况调整。</p>
+<h3 id="2456-formation完全决定位置">245.6 Formation完全决定位置</h3><p>球员不会根据局部比赛情况调整。</p>
 <hr />
-<h2 id="2457-所有人都向ball靠近接应">245.7 所有人都向Ball靠近接应</h2><p>没有宽度和纵深。</p>
+<h3 id="2457-所有人都向ball靠近接应">245.7 所有人都向Ball靠近接应</h3><p>没有宽度和纵深。</p>
 <hr />
-<h2 id="2458-失去球权以后球员等几秒才切换职责">245.8 失去球权以后球员等几秒才切换职责</h2><p>Transition体验迟钝。</p>
+<h3 id="2458-失去球权以后球员等几秒才切换职责">245.8 失去球权以后球员等几秒才切换职责</h3><p>Transition体验迟钝。</p>
 <hr />
-<h2 id="2459-pass-ai只按成功率选择">245.9 Pass AI只按成功率选择</h2><p>永远安全横传。</p>
+<h3 id="2459-pass-ai只按成功率选择">245.9 Pass AI只按成功率选择</h3><p>永远安全横传。</p>
 <hr />
-<h2 id="24510-ai只按推进距离选择">245.10 AI只按推进距离选择</h2><p>不断高风险直塞。</p>
+<h3 id="24510-ai只按推进距离选择">245.10 AI只按推进距离选择</h3><p>不断高风险直塞。</p>
 <hr />
-<h2 id="24511-receive自动吸球">245.11 Receive自动吸球</h2><p>First Touch和压力失去意义。</p>
+<h3 id="24511-receive自动吸球">245.11 Receive自动吸球</h3><p>First Touch和压力失去意义。</p>
 <hr />
-<h2 id="24512-shot在input阶段就决定goal方向">245.12 Shot在Input阶段就决定Goal方向</h2><p>门将AI读取未来。</p>
+<h3 id="24512-shot在input阶段就决定goal方向">245.12 Shot在Input阶段就决定Goal方向</h3><p>门将AI读取未来。</p>
 <hr />
-<h2 id="24513-门将只是普通球员特殊动画">245.13 门将只是普通球员特殊动画</h2><p>站位和封角质量低。</p>
+<h3 id="24513-门将只是普通球员特殊动画">245.13 门将只是普通球员特殊动画</h3><p>站位和封角质量低。</p>
 <hr />
-<h2 id="24514-tackle动作类型直接决定foul概率">245.14 Tackle动作类型直接决定Foul概率</h2><p>不考虑真实Contact。</p>
+<h3 id="24514-tackle动作类型直接决定foul概率">245.14 Tackle动作类型直接决定Foul概率</h3><p>不考虑真实Contact。</p>
 <hr />
-<h2 id="24515-裁判逻辑写进动画">245.15 裁判逻辑写进动画</h2><p>Rule结果不稳定。</p>
+<h3 id="24515-裁判逻辑写进动画">245.15 裁判逻辑写进动画</h3><p>Rule结果不稳定。</p>
 <hr />
-<h2 id="24516-越位在接球时判断">245.16 越位在接球时判断</h2><p>时间语义错误。</p>
+<h3 id="24516-越位在接球时判断">245.16 越位在接球时判断</h3><p>时间语义错误。</p>
 <hr />
-<h2 id="24517-位于越位位置立即吹哨">245.17 位于越位位置立即吹哨</h2><p>没有主动参与语义。</p>
+<h3 id="24517-位于越位位置立即吹哨">245.17 位于越位位置立即吹哨</h3><p>没有主动参与语义。</p>
 <hr />
-<h2 id="24518-ball碰边界trigger中心就判出界">245.18 Ball碰边界Trigger中心就判出界</h2><p>没有完整越线规则。</p>
+<h3 id="24518-ball碰边界trigger中心就判出界">245.18 Ball碰边界Trigger中心就判出界</h3><p>没有完整越线规则。</p>
 <hr />
-<h2 id="24519-每种restart写一套特殊比赛状态">245.19 每种Restart写一套特殊比赛状态</h2><p>长期大量Bug。</p>
+<h3 id="24519-每种restart写一套特殊比赛状态">245.19 每种Restart写一套特殊比赛状态</h3><p>长期大量Bug。</p>
 <hr />
-<h2 id="24520-set-piece播放固定动画序列">245.20 Set Piece播放固定动画序列</h2><p>真实Ball物理和对抗无法介入。</p>
+<h3 id="24520-set-piece播放固定动画序列">245.20 Set Piece播放固定动画序列</h3><p>真实Ball物理和对抗无法介入。</p>
 <hr />
-<h2 id="24521-player-switching纯按最近ball">245.21 Player Switching纯按最近Ball</h2><p>经常选错责任人。</p>
+<h3 id="24521-player-switching纯按最近ball">245.21 Player Switching纯按最近Ball</h3><p>经常选错责任人。</p>
 <hr />
-<h2 id="24522-human球员和ai球员使用不同movement能力">245.22 Human球员和AI球员使用不同Movement能力</h2><p>比赛公平和手感不一致。</p>
+<h3 id="24522-human球员和ai球员使用不同movement能力">245.22 Human球员和AI球员使用不同Movement能力</h3><p>比赛公平和手感不一致。</p>
 <hr />
-<h2 id="24523-high-press只是速度buff">245.23 High Press只是速度Buff</h2><p>没有真实空间结构。</p>
+<h3 id="24523-high-press只是速度buff">245.23 High Press只是速度Buff</h3><p>没有真实空间结构。</p>
 <hr />
-<h2 id="24524-stamina在80分钟之前完全无影响">245.24 Stamina在80分钟之前完全无影响</h2><p>没有持续成本。</p>
+<h3 id="24524-stamina在80分钟之前完全无影响">245.24 Stamina在80分钟之前完全无影响</h3><p>没有持续成本。</p>
 <hr />
-<h2 id="24525-ai每frame完整重算全队策略">245.25 AI每Frame完整重算全队策略</h2><p>CPU浪费并产生行为抖动。</p>
+<h3 id="24525-ai每frame完整重算全队策略">245.25 AI每Frame完整重算全队策略</h3><p>CPU浪费并产生行为抖动。</p>
 <hr />
-<h2 id="24526-space-map每frame超高精度更新">245.26 Space Map每Frame超高精度更新</h2><p>性能成本远大于收益。</p>
+<h3 id="24526-space-map每frame超高精度更新">245.26 Space Map每Frame超高精度更新</h3><p>性能成本远大于收益。</p>
 <hr />
-<h2 id="24527-stats反过来修正gameplay">245.27 Stats反过来修正Gameplay</h2><p>为了50%控球率强制让Ball给另一队。</p>
+<h3 id="24527-stats反过来修正gameplay">245.27 Stats反过来修正Gameplay</h3><p>为了50%控球率强制让Ball给另一队。</p>
 <hr />
-<h2 id="24528-goal立即写score再检查offside">245.28 Goal立即写Score，再检查Offside</h2><p>产生回滚复杂度。</p>
+<h3 id="24528-goal立即写score再检查offside">245.28 Goal立即写Score，再检查Offside</h3><p>产生回滚复杂度。</p>
 <hr />
-<h2 id="24529-online让客户端决定ball-touch">245.29 Online让客户端决定Ball Touch</h2><p>共享球状态分叉。</p>
+<h3 id="24529-online让客户端决定ball-touch">245.29 Online让客户端决定Ball Touch</h3><p>共享球状态分叉。</p>
 <hr />
-<h2 id="24530-ball网络修正频繁瞬移">245.30 Ball网络修正频繁瞬移</h2><p>玩家失去对球的信任。</p>
+<h3 id="24530-ball网络修正频繁瞬移">245.30 Ball网络修正频繁瞬移</h3><p>玩家失去对球的信任。</p>
 <hr />
-<h2 id="24531-动画拥有真实ball位置">245.31 动画拥有真实Ball位置</h2><p>动画失败就改变比赛结果。</p>
+<h3 id="24531-动画拥有真实ball位置">245.31 动画拥有真实Ball位置</h3><p>动画失败就改变比赛结果。</p>
 <hr />
-<h2 id="24532-ai看起来聪明但无法debug解释">245.32 AI看起来“聪明”但无法Debug解释</h2><p>无法持续迭代。</p>
+<h3 id="24532-ai看起来聪明但无法debug解释">245.32 AI看起来“聪明”但无法Debug解释</h3><p>无法持续迭代。</p>
 <hr />
-<h1 id="246-最小可行原型">246. 最小可行原型</h1><p>验证足球比赛模拟核心范式，不需要第一版就做：</p>
+<h3 id="246-最小可行原型">246. 最小可行原型</h3><p>验证足球比赛模拟核心范式，不需要第一版就做：</p>
 <p>完整11v11职业足球产品。</p>
 <p>推荐先做：</p>
 <p><strong>5v5或7v7小场比赛模拟</strong></p>
 <p>验证核心。</p>
 <p>稳定后再扩展11v11。</p>
 <hr />
-<h1 id="247-第一阶段球场">247. 第一阶段球场</h1><p>实现：</p>
+<h3 id="247-第一阶段球场">247. 第一阶段球场</h3><p>实现：</p>
 <ul>
 <li><p>Pitch；</p>
 </li>
@@ -3466,7 +3466,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="248-球员">248. 球员</h1><p>先支持：</p>
+<h3 id="248-球员">248. 球员</h3><p>先支持：</p>
 <ul>
 <li><p>Move；</p>
 </li>
@@ -3482,7 +3482,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="249-ball">249. Ball</h1><p>必须第一版就实现：</p>
+<h3 id="249-ball">249. Ball</h3><p>必须第一版就实现：</p>
 <ul>
 <li><p>Independent Physics；</p>
 </li>
@@ -3498,7 +3498,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="250-ai">250. AI</h1><p>至少：</p>
+<h3 id="250-ai">250. AI</h3><p>至少：</p>
 <p>控球方：</p>
 <ul>
 <li><p>Support；</p>
@@ -3518,7 +3518,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="251-teamphase">251. TeamPhase</h1><p>实现：</p>
+<h3 id="251-teamphase">251. TeamPhase</h3><p>实现：</p>
 <ul>
 <li><p>InPossession；</p>
 </li>
@@ -3530,7 +3530,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="252-rule">252. Rule</h1><p>第一版：</p>
+<h3 id="252-rule">252. Rule</h3><p>第一版：</p>
 <ul>
 <li><p>Goal；</p>
 </li>
@@ -3544,7 +3544,7 @@ Defender。</p>
 <p>然后再加：</p>
 <p>Foul和Offside。</p>
 <hr />
-<h1 id="253-之后扩展完整11v11">253. 之后扩展完整11v11</h1><p>加入：</p>
+<h3 id="253-之后扩展完整11v11">253. 之后扩展完整11v11</h3><p>加入：</p>
 <ul>
 <li><p>Formation；</p>
 </li>
@@ -3560,7 +3560,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="254-mvp必要基础设施">254. MVP必要基础设施</h1><ul>
+<h3 id="254-mvp必要基础设施">254. MVP必要基础设施</h3><ul>
 <li><p>MatchState；</p>
 </li>
 <li><p>MatchClock；</p>
@@ -3607,7 +3607,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="255-mvp必要调试工具">255. MVP必要调试工具</h1><ul>
+<h3 id="255-mvp必要调试工具">255. MVP必要调试工具</h3><ul>
 <li><p>BallStateInspector；</p>
 </li>
 <li><p>BallContactTimeline；</p>
@@ -3638,7 +3638,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="256-mvp核心验收问题">256. MVP核心验收问题</h1><p>原型至少必须回答：</p>
+<h3 id="256-mvp核心验收问题">256. MVP核心验收问题</h3><p>原型至少必须回答：</p>
 <ul>
 <li><p>Ball在任何时候是否都是独立权威实体；</p>
 </li>
@@ -3703,7 +3703,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="257-推荐实施顺序">257. 推荐实施顺序</h1><p>第一阶段：</p>
+<h3 id="257-推荐实施顺序">257. 推荐实施顺序</h3><p>第一阶段：</p>
 <ul>
 <li><p>Pitch；</p>
 </li>
@@ -3811,7 +3811,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="258-架构验收标准">258. 架构验收标准</h1><p>系统初步成立时，应满足：</p>
+<h3 id="258-架构验收标准">258. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
 <ul>
 <li><p>足球始终拥有独立BallEntity；</p>
 </li>
@@ -3925,8 +3925,8 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h1 id="259-可迁移到其他游戏的设计思想">259. 可迁移到其他游戏的设计思想</h1><hr />
-<h2 id="2591-一个共享动态对象可以成为整个多人系统的注意力中心">259.1 一个共享动态对象可以成为整个多人系统的“注意力中心”</h2><p>足球场上22个Agent</p>
+<h3 id="259-可迁移到其他游戏的设计思想">259. 可迁移到其他游戏的设计思想</h3><hr />
+<h3 id="2591-一个共享动态对象可以成为整个多人系统的注意力中心">259.1 一个共享动态对象可以成为整个多人系统的“注意力中心”</h3><p>足球场上22个Agent</p>
 <p>围绕一个Ball重组职责。</p>
 <p>这一思想可迁移到：</p>
 <ul>
@@ -3942,7 +3942,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2592-控制权不一定需要硬所有权">259.2 “控制权”不一定需要硬所有权</h2><p>Ball可以：</p>
+<h3 id="2592-控制权不一定需要硬所有权">259.2 “控制权”不一定需要硬所有权</h3><p>Ball可以：</p>
 <p>处于Loose和Contested状态。</p>
 <p>可迁移到：</p>
 <ul>
@@ -3959,7 +3959,7 @@ Defender。</p>
 <p>概率和能力关系，</p>
 <p>不是Boolean Owner。</p>
 <hr />
-<h2 id="2593-intent-和-outcome-应严格分离">259.3 Intent 和 Outcome 应严格分离</h2><p>玩家说：</p>
+<h3 id="2593-intent-和-outcome-应严格分离">259.3 Intent 和 Outcome 应严格分离</h3><p>玩家说：</p>
 <p>“传给那里。”</p>
 <p>系统再根据：</p>
 <p>能力、压力和环境</p>
@@ -3978,7 +3978,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2594-团队ai不应该只是多个独立agent-ai同时运行">259.4 团队AI不应该只是多个独立Agent AI同时运行</h2><p>需要：</p>
+<h3 id="2594-团队ai不应该只是多个独立agent-ai同时运行">259.4 团队AI不应该只是多个独立Agent AI同时运行</h3><p>需要：</p>
 <p><strong>Team Goal<br />
 → Role Responsibility<br />
 → Local Task<br />
@@ -3996,7 +3996,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2595-有时正确行为是主动远离核心目标">259.5 有时正确行为是主动远离核心目标</h2><p>足球队员并不是离Ball越近越有价值。</p>
+<h3 id="2595-有时正确行为是主动远离核心目标">259.5 有时正确行为是主动远离核心目标</h3><p>足球队员并不是离Ball越近越有价值。</p>
 <p>部分球员需要：</p>
 <p>维持Width和Depth。</p>
 <p>可迁移到：</p>
@@ -4013,7 +4013,7 @@ Defender。</p>
 <p>目标函数不能只有：</p>
 <p>“靠近目标。”</p>
 <hr />
-<h2 id="2596-空间价值可以用到达时间而不是欧氏距离表示">259.6 空间价值可以用到达时间而不是欧氏距离表示</h2><p>防守者距离Ball：</p>
+<h3 id="2596-空间价值可以用到达时间而不是欧氏距离表示">259.6 空间价值可以用到达时间而不是欧氏距离表示</h3><p>防守者距离Ball：</p>
 <p>5m。</p>
 <p>但朝向相反。</p>
 <p>另一人：</p>
@@ -4036,7 +4036,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2597-攻守转换是一种可复用的角色职责重映射">259.7 攻守转换是一种可复用的“角色职责重映射”</h2><p>同一个对象在状态改变后：</p>
+<h3 id="2597-攻守转换是一种可复用的角色职责重映射">259.7 攻守转换是一种可复用的“角色职责重映射”</h3><p>同一个对象在状态改变后：</p>
 <p>需要立即得到新的职责。</p>
 <p>可迁移到：</p>
 <ul>
@@ -4052,7 +4052,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="2598-连续世界和离散规则可以共同运行">259.8 连续世界和离散规则可以共同运行</h2><p>Ball与Players：</p>
+<h3 id="2598-连续世界和离散规则可以共同运行">259.8 连续世界和离散规则可以共同运行</h3><p>Ball与Players：</p>
 <p>连续实时模拟。</p>
 <p>Offside、Foul、Goal：</p>
 <p>离散Rule Event。</p>
@@ -4069,7 +4069,7 @@ Defender。</p>
 </ul>
 <p>不要强迫整个系统只采用连续或离散一种模型。</p>
 <hr />
-<h2 id="2599-snapshot-是处理规则依据过去某一时刻状态的通用工具">259.9 Snapshot 是处理“规则依据过去某一时刻状态”的通用工具</h2><p>越位判断：</p>
+<h3 id="2599-snapshot-是处理规则依据过去某一时刻状态的通用工具">259.9 Snapshot 是处理“规则依据过去某一时刻状态”的通用工具</h3><p>越位判断：</p>
 <p>取决于Pass Touch时刻。</p>
 <p>可迁移到：</p>
 <ul>
@@ -4085,7 +4085,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25910-restart-system-是复杂规则游戏恢复稳定状态的重要模式">259.10 Restart System 是复杂规则游戏恢复稳定状态的重要模式</h2><p>比赛被中断后：</p>
+<h3 id="25910-restart-system-是复杂规则游戏恢复稳定状态的重要模式">259.10 Restart System 是复杂规则游戏恢复稳定状态的重要模式</h3><p>比赛被中断后：</p>
 <p>不是直接：</p>
 <p><code>play = true</code></p>
 <p>而要：</p>
@@ -4102,13 +4102,13 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25911-ai的为什么不做某事与为什么做了某事同样重要">259.11 AI的“为什么不做某事”与“为什么做了某事”同样重要</h2><p>足球AI最常见的问题：</p>
+<h3 id="25911-ai的为什么不做某事与为什么做了某事同样重要">259.11 AI的“为什么不做某事”与“为什么做了某事”同样重要</h3><p>足球AI最常见的问题：</p>
 <p>“为什么前锋不前插？”</p>
 <p>因此系统需要：</p>
 <p>Candidate和Rejected Reason。</p>
 <p>这对任何Utility AI系统都非常重要。</p>
 <hr />
-<h2 id="25912-游戏统计最好从真实事件派生而不是成为权威业务状态">259.12 游戏统计最好从真实事件派生，而不是成为权威业务状态</h2><p>Possession、Pass Accuracy、xG</p>
+<h3 id="25912-游戏统计最好从真实事件派生而不是成为权威业务状态">259.12 游戏统计最好从真实事件派生，而不是成为权威业务状态</h3><p>Possession、Pass Accuracy、xG</p>
 <p>全部应该：</p>
 <p>观察比赛。</p>
 <p>而不是：</p>
@@ -4125,12 +4125,12 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="25913-真实的战术往往可以从稳定基础规则中涌现而不需要编码成特殊技能">259.13 真实的战术往往可以从稳定基础规则中涌现，而不需要编码成“特殊技能”</h2><p>第三人跑位、假跑、反抢、拉边，</p>
+<h3 id="25913-真实的战术往往可以从稳定基础规则中涌现而不需要编码成特殊技能">259.13 真实的战术往往可以从稳定基础规则中涌现，而不需要编码成“特殊技能”</h3><p>第三人跑位、假跑、反抢、拉边，</p>
 <p>很多行为可以来自：</p>
 <p>空间、角色和Ball规则。</p>
 <p>这是系统型游戏设计非常重要的目标。</p>
 <hr />
-<h1 id="260-本次防重记录">260. 本次防重记录</h1><h2 id="新增宏观游戏类型">新增宏观游戏类型</h2><p><strong>足球比赛模拟 / Association Football Simulation / Soccer Game。</strong></p>
+<h3 id="260-本次防重记录">260. 本次防重记录</h3><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>足球比赛模拟 / Association Football Simulation / Soccer Game。</strong></p>
 <p>常见名称：</p>
 <ul>
 <li><p>Association Football Game；</p>
@@ -4149,7 +4149,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="核心范式">核心范式</h2><p>足球比赛模拟围绕一个始终独立存在的共享Ball实体组织22名球员。所谓控球不是简单的Ball Owner，而是球员对Ball暂时拥有较高可控制关系；所有传球、射门、停球、头球和抢断最终都通过统一Ball Contact改变足球真实速度与轨迹，因此Ball可以被拦截、偏转、争抢和重新获得控制。</p>
+<h3 id="核心范式">核心范式</h3><p>足球比赛模拟围绕一个始终独立存在的共享Ball实体组织22名球员。所谓控球不是简单的Ball Owner，而是球员对Ball暂时拥有较高可控制关系；所有传球、射门、停球、头球和抢断最终都通过统一Ball Contact改变足球真实速度与轨迹，因此Ball可以被拦截、偏转、争抢和重新获得控制。</p>
 <p>球队则通过Team Phase、Formation、Role和Task形成分层控制结构。控球队伍需要提供宽度、纵深、接应和前插；无球队伍需要分配压迫、补位、盯人和保护纵深职责；球权变化以后双方立即进入Attack / Defensive Transition，而不是等待每个Agent自行重新判断。传球和跑位围绕球员到不同空间的预计到达时间计算，球队因此争夺的并不仅是足球本身，而是未来几秒中谁能够更早占据哪些空间。</p>
 <p>连续的Ball / Player模拟又与离散的足球规则系统叠加：犯规根据真实Contact Event裁决，越位根据传球触球时刻Snapshot判断，球完整越过边界后由统一Restart System生成边线球、角球、球门球或进球；Goal也必须经过Offside/Foul等规则确认以后才正式修改比分。</p>
 <p>最终形成：</p>
@@ -4184,7 +4184,7 @@ Defender。</p>
 <p><strong>足球游戏的真正主角不是某一个被玩家控制的球员，而是“足球、空间和整支球队之间不断重建的关系”。</strong></p>
 </blockquote>
 <hr />
-<h2 id="核心识别特征">核心识别特征</h2><ul>
+<h3 id="核心识别特征">核心识别特征</h3><ul>
 <li><p>比赛围绕唯一共享足球持续运行；</p>
 </li>
 <li><p>Ball拥有独立权威位置、速度和旋转；</p>
@@ -4261,7 +4261,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="与仓库现有俱乐部经营模拟的防重边界">与仓库现有俱乐部经营模拟的防重边界</h2><p>当前仓库已经存在 <code>club-management</code>，其核心摘要是成员招募、训练、阵容、赛事、财务和声望构成长期经营循环。</p>
+<h3 id="与仓库现有俱乐部经营模拟的防重边界">与仓库现有俱乐部经营模拟的防重边界</h3><p>当前仓库已经存在 <code>club-management</code>，其核心摘要是成员招募、训练、阵容、赛事、财务和声望构成长期经营循环。</p>
 <p>足球比赛模拟与俱乐部经营最明确的边界是：</p>
 <p><strong>Club Management：</strong></p>
 <p>主要决策发生在比赛之外：</p>
@@ -4309,7 +4309,7 @@ Defender。</p>
 <p>本范式依然完整成立。</p>
 <p>因此本期不属于已有俱乐部经营范式的子模块。</p>
 <hr />
-<h2 id="与仓库现有战术射击的防重边界">与仓库现有战术射击的防重边界</h2><p>战术射击与足球都具有：</p>
+<h3 id="与仓库现有战术射击的防重边界">与仓库现有战术射击的防重边界</h3><p>战术射击与足球都具有：</p>
 <ul>
 <li><p>团队；</p>
 </li>
@@ -4335,7 +4335,7 @@ Defender。</p>
 </blockquote>
 <p>两者拥有不同的核心动态对象和规则系统。</p>
 <hr />
-<h2 id="与仓库现有实时战略的防重边界">与仓库现有实时战略的防重边界</h2><p>RTS玩家通常：</p>
+<h3 id="与仓库现有实时战略的防重边界">与仓库现有实时战略的防重边界</h3><p>RTS玩家通常：</p>
 <p>直接选择和下达多个单位命令。</p>
 <p>足球游戏中：</p>
 <p>玩家通常一次控制一个球员，</p>
@@ -4346,7 +4346,7 @@ Defender。</p>
 <p>因此不是：</p>
 <p>11单位小型RTS。</p>
 <hr />
-<h2 id="与仓库现有驾驶竞速的防重边界">与仓库现有驾驶竞速的防重边界</h2><p>赛车同样依赖：</p>
+<h3 id="与仓库现有驾驶竞速的防重边界">与仓库现有驾驶竞速的防重边界</h3><p>赛车同样依赖：</p>
 <p>连续物理、规则裁定和比赛时钟。</p>
 <p>但赛车核心对象是：</p>
 <p>车辆沿赛道Progress前进。</p>
@@ -4357,7 +4357,7 @@ Defender。</p>
 <p>持续重构。</p>
 <p>因此运行时拓扑根本不同。</p>
 <hr />
-<h2 id="后续保留边界其他体育类型仍可独立记录">后续保留边界：其他体育类型仍可独立记录</h2><p>本次防重只覆盖：</p>
+<h3 id="后续保留边界其他体育类型仍可独立记录">后续保留边界：其他体育类型仍可独立记录</h3><p>本次防重只覆盖：</p>
 <p><strong>Association Football / Soccer 的比赛运行范式。</strong></p>
 <p>不将所有体育游戏一并吸收。</p>
 <p>未来仍可以独立研究：</p>
@@ -4377,7 +4377,7 @@ Defender。</p>
 </ul>
 <p>这些运动具有完全不同的比赛状态机，仍足以作为独立宏观范式。</p>
 <hr />
-<h2 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h2><ul>
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
 <li><p>Association Football；</p>
 </li>
 <li><p>Soccer Simulation；</p>
@@ -4494,7 +4494,7 @@ Defender。</p>
 </li>
 </ul>
 <hr />
-<h2 id="后续防重复范围">后续防重复范围</h2><p>以下主题属于本次足球比赛模拟范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次足球比赛模拟范式内部系统，不应再次作为新的完整宏观游戏类型计入 <code>game-designs</code> 日报防重集合：</p>
 <ul>
 <li><p>足球Ball Physics；</p>
 </li>
