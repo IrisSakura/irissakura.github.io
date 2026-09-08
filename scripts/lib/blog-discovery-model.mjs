@@ -17,7 +17,7 @@ export function reconcileBlogTaxonomy(taxonomy, articles) {
     }
   }
 
-  const series = taxonomy.series.filter((entry) => usedSeries.has(entry.name));
+  const series = [...taxonomy.series];
   const tags = taxonomy.tags.filter((entry) => usedTags.has(entry.name));
   for (const name of usedTags) {
     if (tagsByName.has(name)) continue;
@@ -75,13 +75,12 @@ export function resolveBlogDiscovery(taxonomy, articles) {
       usedTags.add(tag);
     }
   }
-  assertNoUnusedEntries(seriesByName, usedSeries, 'series');
   assertNoUnusedEntries(tagsByName, usedTags, 'tag');
 
   const byNewest = (left, right) => (
     right.publishedAt.localeCompare(left.publishedAt) || left.slug.localeCompare(right.slug)
   );
-  const series = taxonomy.series.map((entry) => ({
+  const series = taxonomy.series.filter((entry) => usedSeries.has(entry.name)).map((entry) => ({
     ...entry,
     articles: articles.filter((article) => article.series === entry.name).sort(byNewest)
   }));

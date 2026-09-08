@@ -77,6 +77,31 @@ test('taxonomy reconciliation preserves curated entries and derives the active t
   );
 });
 
+test('pre-registered empty series remain curated but stay out of public discovery', () => {
+  const taxonomy = {
+    schemaVersion: 1,
+    series: [
+      { name: 'Active series', slug: 'active-series', description: 'A useful active series description.' },
+      { name: 'Future series', slug: 'future-series', description: 'A useful future series description.' }
+    ],
+    tags: [{ name: 'kept-tag', slug: 'kept-tag', description: 'A useful tag description.' }]
+  };
+  const articles = [{
+    id: 'article',
+    slug: 'article',
+    series: 'Active series',
+    tags: ['kept-tag'],
+    publishedAt: '2026-08-21'
+  }];
+
+  const reconciled = reconcileBlogTaxonomy(taxonomy, articles);
+  assert.deepEqual(reconciled.series, taxonomy.series);
+
+  const discovery = resolveBlogDiscovery(reconciled, articles);
+  assert.deepEqual(discovery.series.map((entry) => entry.name), ['Active series']);
+  assert.equal(discovery.seriesByName.has('Future series'), false);
+});
+
 test('series and multi-article tags form indexable discovery routes', async () => {
   const [taxonomy, articles, index, sitemap] = await Promise.all([
     readJson('data/blog-taxonomy.json'),
