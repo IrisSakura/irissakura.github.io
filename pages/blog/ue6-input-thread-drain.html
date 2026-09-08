@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="为了降低输入采样延迟，把设备轮询移到独立线程以后，怎样避免主线程阻塞、输入映射错位、旧输入回放，以及 Slate 重入 Drain 破坏正在消费的事件批次？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/ue6-input-thread-drain.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权 | IrisSakura">
+    <meta property="og:description" content="为了降低输入采样延迟，把设备轮询移到独立线程以后，怎样避免主线程阻塞、输入映射错位、旧输入回放，以及 Slate 重入 Drain 破坏正在消费的事件批次？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/ue6-input-thread-drain.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-ue6-input-thread-drain.png">
+    <meta property="og:image:alt" content="输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权 | IrisSakura">
+    <meta name="twitter:description" content="为了降低输入采样延迟，把设备轮询移到独立线程以后，怎样避免主线程阻塞、输入映射错位、旧输入回放，以及 Slate 重入 Drain 破坏正在消费的事件批次？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-ue6-input-thread-drain.png">
+    <meta name="twitter:image:alt" content="输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权 | IrisSakura","description":"为了降低输入采样延迟，把设备轮询移到独立线程以后，怎样避免主线程阻塞、输入映射错位、旧输入回放，以及 Slate 重入 Drain 破坏正在消费的事件批次？","url":"https://irissakura.github.io/pages/blog/ue6-input-thread-drain.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权","image":"https://irissakura.github.io/assets/social/pages-blog-ue6-input-thread-drain.png","datePublished":"2026-09-08","dateModified":"2026-09-08","about":["input","thread","ue6"]}</script>
+    <!-- site-meta:end -->
+    <title>输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/development.html" class="nav-link">研发体系</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>独立游戏开发者与游戏系统设计者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html" data-profile-quick-link><span>02</span><strong>全部作品</strong><small>游戏与工具</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>设计研究</strong><small>玩法与系统</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/blog.html" data-profile-quick-link><span>04</span><strong>开发文章</strong><small>完整文章</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/development.html" data-profile-quick-link><span>05</span><strong>研发体系</strong><small>Iris Engineering 与 Sakura Framework</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系</strong><small>邮箱、QQ 与公开主页</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-09-08 · 更新于 2026-09-08</p>
+            <h1>输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权</h1>
+            <p class="blog-deck">为了降低输入采样延迟，把设备轮询移到独立线程以后，怎样避免主线程阻塞、输入映射错位、旧输入回放，以及 Slate 重入 Drain 破坏正在消费的事件批次？</p>
+            <div class="note-tags"><span>input</span><span>thread</span><a href="tag/ue6.html">ue6</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>假设游戏运行在：</p>
+<pre><code class="language-text">60 FPS。
+</code></pre>
+<p>主线程每：</p>
+<pre><code class="language-text">16.67ms
+</code></pre>
+<p>推进一次。</p>
+<p>如果输入设备也只在 Game Thread 的固定位置轮询一次，</p>
+<p>玩家在这一轮 Poll 刚结束以后按下按钮，</p>
+<p>这个输入可能要等到下一帧才被看到。</p>
+<p>于是一个很自然的优化是：</p>
+<pre><code class="language-text">独立 Input Thread
+以更高频率轮询设备。
+</code></pre>
+<p>例如：</p>
+<pre><code class="language-text">120Hz。
+</code></pre>
+<p>输入确实可能更新鲜。</p>
+<p>但问题也随之出现。</p>
+<p>现在同一套输入系统同时面对：</p>
+<ul>
+<li><p>后台 Poll；</p>
+</li>
+<li><p>Game Thread Poll；</p>
+</li>
+<li><p>平台键鼠；</p>
+</li>
+<li><p>Controller；</p>
+</li>
+<li><p>Modal Window；</p>
+</li>
+<li><p>Focus；</p>
+</li>
+<li><p>User Mapping；</p>
+</li>
+<li><p>多个生产者；</p>
+</li>
+<li><p>单消费者；</p>
+</li>
+<li><p>Slate Callback 重入；</p>
+</li>
+<li><p>Runtime Start / Stop。</p>
+</li>
+</ul>
+<p>如果只是：</p>
+<pre><code class="language-text">开一个线程
+不断把 Event push 到队列，
+</code></pre>
+<p>很快就会遇到另一组问题：</p>
+<pre><code class="language-text">按键被分配给错误的用户
+
+Modal 结束后突然回放一大批旧手柄输入
+
+Game Thread 为了追求“最新输入”反而阻塞等待 Input Thread
+
+一个 Slate Handler 在 Drain 过程中又泵了一次 Slate
+把外层正在遍历的数组重置掉。
+</code></pre>
+<p>所以 UE6 当前 Input Thread 最值得研究的地方并不是：</p>
+<blockquote>
+<p>“Unreal 把输入放进后台线程了。”</p>
+</blockquote>
+<p>而是一整套围绕<strong>新鲜度、线程所有权和重入</strong>建立的消费协议。</p>
+<h2 id="先说结论后台线程负责尽快采集game-thread-仍然拥有最终输入提交权">先说结论：后台线程负责尽快采集，Game Thread 仍然拥有最终输入提交权</h2><p><strong>输入新鲜度协议（后文简称“后台尽量早点拿到输入，主线程仍然决定什么时候正式消费”）</strong>：设备可以根据线程能力在 Input Thread 或 Game Thread 上轮询，事件进入并发队列，但最终由 Game Thread 按明确通道和顺序 Drain，再交给 Slate / PlayerInput。</p>
+<p>当前主链可以压缩成：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A["Input Device"] --&gt; B["Input Thread Poll"]
+    A --&gt; C["Game Thread Poll / Top-up"]
+
+    B --&gt; D["Platform Channel"]
+    B --&gt; E["Game Channel"]
+    C --&gt; D
+    C --&gt; E
+
+    D --&gt; F["MPSC Queue"]
+    E --&gt; G["MPSC Queue"]
+
+    F --&gt; H["Game Thread Platform Drain"]
+    G --&gt; I["Game Thread Game Drain"]
+
+    H --&gt; J["Slate / Platform Input"]
+    I --&gt; K["Controller / PlayerInput"]
+</code></pre>
+<p>这里最重要的边界是：</p>
+<pre><code class="language-text">Input Thread
+不是第二个 Gameplay Thread。
+</code></pre>
+<p>它负责：</p>
+<pre><code class="language-text">更早地观察设备。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">直接在后台调用任意 Slate / Gameplay Handler。
+</code></pre>
+<h2 id="配置想开和线程真的在跑是两个不同状态">“配置想开”和“线程真的在跑”是两个不同状态</h2><p>Input Thread 是否运行，不只是：</p>
+<pre><code class="language-text">input.UseInputThread = 1。
+</code></pre>
+<p>还取决于：</p>
+<ul>
+<li><p>平台是否支持；</p>
+</li>
+<li><p>进程类型；</p>
+</li>
+<li><p>是否允许交互输入；</p>
+</li>
+<li><p>commandlet / unattended 规则；</p>
+</li>
+<li><p>Startup 是否真的完成。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p><strong>运行意图（后文简称“配置希望它开着”）</strong></p>
+<p>和：</p>
+<p><strong>实际运行状态（后文简称“线程此刻真的存在并正在生产”）</strong></p>
+<p>必须分开。</p>
+<p>这类区分非常普遍：</p>
+<pre><code class="language-text">Requested
+≠
+Started。
+</code></pre>
+<p>如果系统只保存一个：</p>
+<pre><code class="language-text">Enabled
+</code></pre>
+<p>Boolean，</p>
+<p>Shutdown、Restart、动态配置都会变得难以解释。</p>
+<h2 id="生命周期顺序必须先建立转发目标再启动生产者">生命周期顺序必须先建立转发目标，再启动生产者</h2><p>Input Thread 启动大致需要：</p>
+<pre><code class="language-text">Game Thread
+→
+安装 Message Handler Proxy
+→
+创建 Runnable
+→
+启动 Input Thread。
+</code></pre>
+<p>退出则需要反方向：</p>
+<pre><code class="language-text">Stop Signal
+→
+Join Thread
+→
+确认生产者已经停止
+→
+再移除 Proxy。
+</code></pre>
+<p>为什么不能：</p>
+<pre><code class="language-text">先 Remove Proxy
+→
+再 Stop Thread？
+</code></pre>
+<p>因为线程仍可能正在生产事件。</p>
+<p>它会继续向：</p>
+<pre><code class="language-text">已经撤销的转发目标
+</code></pre>
+<p>写数据。</p>
+<p>所以：</p>
+<blockquote>
+<p><strong>先停生产者，再拆消费者依赖。</strong></p>
+</blockquote>
+<p>这是一条非常通用的并发 Shutdown 原则。</p>
+<h2 id="runtime-cvar-变化也不能假装整个生命周期线程安全">Runtime CVar 变化也不能假装整个生命周期线程安全</h2><p>一个整数 CVar 可以从多个线程安全修改。</p>
+<p>但：</p>
+<pre><code class="language-text">创建 Runnable
+安装 Proxy
+Stop
+Join
+重新接管 Device Handler
+</code></pre>
+<p>这一整套生命周期不因此自动成为：</p>
+<pre><code class="language-text">任意线程安全。
+</code></pre>
+<p>所以 Input Thread 的完整 start/stop reconcile 仍然属于 Game Thread。</p>
+<p>这里体现了一条值得迁移的工程判断：</p>
+<blockquote>
+<p><strong>“配置字段是原子的”不能推出“配置控制的整个对象图也是跨线程可重构的”。</strong></p>
+</blockquote>
+<h2 id="修改-message-handler-前需要先暂停生产者">修改 Message Handler 前，需要先暂停生产者</h2><p>如果 Slate 准备替换某些底层 Message Handler，</p>
+<p>正在运行的 Input Thread 可能恰好：</p>
+<pre><code class="language-text">Poll
+→
+准备向旧 Handler 写入。
+</code></pre>
+<p>因此系统会先建立一个短暂：</p>
+<p><strong>结构变更窗口（后文简称“改线路以前先把正在送数据的人停下来”）</strong>。</p>
+<p>进入窗口时：</p>
+<pre><code class="language-text">记录线程是否真的 Running
+→
+Stop / Join。
+</code></pre>
+<p>退出以后：</p>
+<pre><code class="language-text">只有进入前确实在运行
+→
+才恢复。
+</code></pre>
+<p>注意这里保存的是：</p>
+<pre><code class="language-text">Actual State。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">Configuration Intent。
+</code></pre>
+<p>否则可能出现：</p>
+<pre><code class="language-text">配置想开
+但因为平台 gate 实际没运行
+
+ScopedSuspend 结束
+却错误启动了一条此前不存在的线程。
+</code></pre>
+<h2 id="设备需要明确自己的线程亲和性">设备需要明确自己的线程亲和性</h2><p>不是所有输入设备都适合在后台线程 Poll。</p>
+<p>因此设备可以表达：</p>
+<pre><code class="language-text">GameThreadOnly
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-text">InputThreadSafe。
+</code></pre>
+<p>这意味着：</p>
+<pre><code class="language-text">Input Thread 开启
+</code></pre>
+<p>以后，</p>
+<p>Game Thread 仍然不能完全停止 Poll。</p>
+<p>某些平台设备仍然只能：</p>
+<pre><code class="language-text">在 Game Thread 访问。
+</code></pre>
+<p>**设备线程亲和（后文简称“这个设备究竟允许谁来问它”）**应该成为设备接口的一部分。</p>
+<p>否则底层平台 API 的线程限制会被隐藏在实现细节里。</p>
+<h2 id="标记-inputthreadsafe-不是改一个-enum-就结束">标记 InputThreadSafe 不是改一个 Enum 就结束</h2><p>如果一个设备声明：</p>
+<pre><code class="language-text">InputThreadSafe，
+</code></pre>
+<p>意味着它内部所有会被 Input Thread 观察的共享状态也必须满足并发条件。</p>
+<p>例如：</p>
+<pre><code class="language-text">高精度鼠标状态
+</code></pre>
+<p>如果此前默认只由主线程读写，</p>
+<p>现在后台线程也会访问，</p>
+<p>就需要重新检查：</p>
+<ul>
+<li><p>Atomic；</p>
+</li>
+<li><p>Lock；</p>
+</li>
+<li><p>Message Ordering；</p>
+</li>
+<li><p>Lifetime。</p>
+</li>
+</ul>
+<p>这是并发系统很典型的“传染性”：</p>
+<blockquote>
+<p><strong>线程安全不是某个接口的标签，而是整条被访问状态链的合同。</strong></p>
+</blockquote>
+<h2 id="120hz-poll-仍然可能留下-8ms-左右的窗口">120Hz Poll 仍然可能留下 8ms 左右的窗口</h2><p>假设 Input Thread：</p>
+<pre><code class="language-text">120Hz
+→
+约 8.33ms 一次 Poll。
+</code></pre>
+<p>Game Thread 准备 Drain 时，</p>
+<p>最近一次后台 Poll 可能刚刚发生在：</p>
+<pre><code class="language-text">8ms 以前。
+</code></pre>
+<p>于是系统还提供：</p>
+<p><strong>Game Thread Top-up（后文简称“主线程提交前再试着问一次设备有没有新东西”）</strong>。</p>
+<p>它不是替代后台 Poll。</p>
+<p>而是在最终消费前尽量缩短：</p>
+<pre><code class="language-text">Last Device Sample
+→
+Game Thread Drain
+</code></pre>
+<p>的距离。</p>
+<h2 id="top-up-最关键的设计是-trylock而不是保证拿到最新输入">Top-up 最关键的设计是 TryLock，而不是“保证拿到最新输入”</h2><p>Input Thread 正在进行完整 Poll Pass 时，</p>
+<p>Game Thread Top-up 如果：</p>
+<pre><code class="language-text">等待锁
+</code></pre>
+<p>就可能为了：</p>
+<pre><code class="language-text">少几毫秒输入延迟
+</code></pre>
+<p>反过来：</p>
+<pre><code class="language-text">卡住整帧。
+</code></pre>
+<p>所以 Game Thread 使用：</p>
+<pre><code class="language-text">TryLock。
+</code></pre>
+<p>抢不到：</p>
+<pre><code class="language-text">直接跳过这次 Top-up。
+</code></pre>
+<p>这表达了非常清楚的优先级：</p>
+<pre><code class="language-text">更更新鲜的输入
+是优化。
+
+Frame 不被后台输入线程阻塞
+是硬约束。
+</code></pre>
+<p><strong>非阻塞新鲜度优化（后文简称“有机会就拿更新的数据，没机会不能卡住主线程”）</strong></p>
+<p>是这条路径最值得迁移的思想之一。</p>
+<h2 id="输入不只一条队列因为不同输入拥有不同消费语义">输入不只一条队列，因为不同输入拥有不同消费语义</h2><p>当前系统把输入大体拆成两条 channel。</p>
+<h3 id="platform-channel">Platform Channel</h3><p>主要承担：</p>
+<ul>
+<li><p>Keyboard；</p>
+</li>
+<li><p>Mouse；</p>
+</li>
+<li><p>Platform Input；</p>
+</li>
+<li><p>Text / Character 相关前置事件。</p>
+</li>
+</ul>
+<p>它需要：</p>
+<pre><code class="language-text">无条件 Drain。
+</code></pre>
+<h3 id="game-channel">Game Channel</h3><p>主要承担：</p>
+<ul>
+<li><p>Controller；</p>
+</li>
+<li><p>Gamepad。</p>
+</li>
+</ul>
+<p>它仍然受：</p>
+<ul>
+<li><p>Modal；</p>
+</li>
+<li><p>Focus；</p>
+</li>
+<li><p>Debug Guard；</p>
+</li>
+</ul>
+<p>等条件影响。</p>
+<p>两条通道存在的原因不是：</p>
+<pre><code class="language-text">为了分类好看。
+</code></pre>
+<p>而是：</p>
+<blockquote>
+<p><strong>它们在某些状态下拥有不同的“是否应该继续消费”规则。</strong></p>
+</blockquote>
+<h2 id="platform-input-为什么不能套用-gamepad-guard">Platform Input 为什么不能套用 Gamepad Guard</h2><p>想象一个 Modal Window：</p>
+<pre><code class="language-text">正在等待用户键盘输入。
+</code></pre>
+<p>如果 Platform Channel 也因为：</p>
+<pre><code class="language-text">Modal Window Active
+</code></pre>
+<p>被禁止 Drain，</p>
+<p>就会出现：</p>
+<pre><code class="language-text">窗口因为 Modal
+禁止键盘输入
+
+但窗口本身
+正在等待键盘输入。
+</code></pre>
+<p>形成逻辑闭环。</p>
+<p>所以 Keyboard / Character 等平台输入必须仍能进入 Slate。</p>
+<p>这说明输入分类不能只看：</p>
+<pre><code class="language-text">设备类型。
+</code></pre>
+<p>还要看：</p>
+<pre><code class="language-text">消费语义。
+</code></pre>
+<h2 id="game-channel-在被抑制时应该丢弃旧-backlog">Game Channel 在被抑制时应该丢弃旧 Backlog</h2><p>假设 Controller Input 因为窗口失焦：</p>
+<pre><code class="language-text">5 秒没有被 Gameplay 消费。
+</code></pre>
+<p>如果这 5 秒事件继续积压，</p>
+<p>窗口恢复以后：</p>
+<pre><code class="language-text">一次性回放
+5 秒前按下的攻击、移动和菜单操作。
+</code></pre>
+<p>这对实时交互显然非常危险。</p>
+<p>所以被 Guard 抑制期间，</p>
+<p>更合理的是：</p>
+<pre><code class="language-text">Drain
+但不 Dispatch。
+</code></pre>
+<p>也就是：</p>
+<pre><code class="language-text">Discard old backlog。
+</code></pre>
+<p>这表达了一条很重要的输入原则：</p>
+<blockquote>
+<p><strong>实时输入的价值会过期。</strong></p>
+</blockquote>
+<p>旧输入不是日志。</p>
+<p>不能因为“可靠”就无限回放。</p>
+<h2 id="多生产者并不意味着多消费者">多生产者并不意味着多消费者</h2><p>后台输入线程、Game Thread Top-up 和不同设备都可能生产事件。</p>
+<p>所以事件队列可以是：</p>
+<pre><code class="language-text">MPSC
+→
+Multi Producer
+Single Consumer。
+</code></pre>
+<p>关键在：</p>
+<pre><code class="language-text">Single Consumer。
+</code></pre>
+<p>最终只有 Game Thread 负责：</p>
+<pre><code class="language-text">ProcessQueuedEvents
+DiscardQueuedEvents。
+</code></pre>
+<p>这样可以大幅降低：</p>
+<ul>
+<li><p>Dispatch 顺序；</p>
+</li>
+<li><p>Handler 线程安全；</p>
+</li>
+<li><p>Slate State；</p>
+</li>
+</ul>
+<p>的复杂度。</p>
+<p><strong>单消费者提交（后文简称“很多人可以上报，只有一个线程正式把它变成 UI / Gameplay 输入”）</strong></p>
+<p>是一个非常适合 Engine Input 的所有权模型。</p>
+<h2 id="同一个消费者线程仍然可能发生重入">同一个消费者线程仍然可能发生重入</h2><p>“Single Consumer”</p>
+<p>并不等于：</p>
+<pre><code class="language-text">永远不会同时存在两次 Drain 调用。
+</code></pre>
+<p>同一个 Game Thread 可以：</p>
+<pre><code class="language-text">外层 Slate Drain
+→
+执行某个 Handler
+→
+Handler 打开 Modal Window
+→
+内部再次 Pump Slate
+→
+再次调用 Drain。
+</code></pre>
+<p>线程没变。</p>
+<p>调用栈却重入了。</p>
+<p>这就是：</p>
+<p><strong>Nested Drain（后文简称“同一个消费者在还没吃完上一批事件时，又进来吃下一批”）</strong>。</p>
+<p>很多所谓“单线程系统”真正危险的问题恰恰来自这里。</p>
+<h2 id="旧实现的问题是外层和内层共享同一份-scratch-array">旧实现的问题是外层和内层共享同一份 Scratch Array</h2><p>假设外层正在：</p>
+<pre><code class="language-text">for event in MemberEvents
+</code></pre>
+<p>遍历。</p>
+<p>中间某个 Handler：</p>
+<pre><code class="language-text">触发 nested drain。
+</code></pre>
+<p>内层为了取新输入：</p>
+<pre><code class="language-text">Reset / Reuse MemberEvents。
+</code></pre>
+<p>外层 Iterator 立刻失效。</p>
+<p>于是得到：</p>
+<pre><code class="language-text">Array changed during ranged-for。
+</code></pre>
+<p>这里没有：</p>
+<pre><code class="language-text">两个线程同时访问 Vector。
+</code></pre>
+<p>问题仍然是：</p>
+<pre><code class="language-text">Ownership。
+</code></pre>
+<p>外层并没有真正拥有自己正在遍历的快照。</p>
+<h2 id="修复方式是每次-drain-拿走自己的局部-snapshot">修复方式是每次 Drain 拿走自己的局部 Snapshot</h2><p>更稳健的结构是：</p>
+<pre><code class="language-text">Outer Drain
+→
+把 Member Scratch move 到 Local Snapshot
+→
+Member Scratch 立即变空
+
+Handler Reenter
+→
+Nested Drain
+→
+只处理后来进入的新事件
+→
+拿自己的 Local Snapshot
+
+Nested 完成
+→
+Outer 继续遍历原来那份 Local Snapshot。
+</code></pre>
+<p>于是：</p>
+<pre><code class="language-text">每一次 Drain
+拥有自己独立的 Event Batch。
+</code></pre>
+<p><strong>快照所有权（后文简称“我开始消费以后，这一批就是我的，后面的重入不能再改它”）</strong></p>
+<p>解决的不只是 Array Iterator。</p>
+<p>它建立了：</p>
+<pre><code class="language-text">消费批次
+</code></pre>
+<p>的正式生命周期。</p>
+<h2 id="snapshot-的真正价值是冻结当前调用的事实">Snapshot 的真正价值是冻结当前调用的事实</h2><p>这条原则可以迁移到很多系统：</p>
+<pre><code class="language-text">Event Dispatch
+Observer Notification
+UI Callback
+Command Execution
+Plugin Iteration。
+</code></pre>
+<p>只要 Callback 可能：</p>
+<pre><code class="language-text">重新进入同一 Dispatcher，
+</code></pre>
+<p>就要小心：</p>
+<pre><code class="language-text">外层正在读的集合
+</code></pre>
+<p>是否还会被内层复用或修改。</p>
+<p>一个可靠模式就是：</p>
+<pre><code class="language-text">入口
+→
+取得本轮 Snapshot Ownership
+
+重入
+→
+只能看到之后产生的新状态。
+</code></pre>
+<h2 id="timestamp-sort-解决多生产者调度不等于真实输入顺序">Timestamp Sort 解决多生产者调度不等于真实输入顺序</h2><p>多个 Producer 入队时，</p>
+<p>实际：</p>
+<pre><code class="language-text">Push Queue 顺序
+</code></pre>
+<p>可能受到线程调度影响。</p>
+<p>所以一次 Drain 会按照：</p>
+<pre><code class="language-text">Capture Timestamp
+</code></pre>
+<p>进行 Stable Sort。</p>
+<p>Stable 的意义在于：</p>
+<pre><code class="language-text">Timestamp 相同
+→
+保留原相对顺序。
+</code></pre>
+<p>这可以减少：</p>
+<pre><code class="language-text">线程调度差异
+</code></pre>
+<p>对用户可见输入顺序的影响。</p>
+<p>当然：</p>
+<pre><code class="language-text">Timestamp
+</code></pre>
+<p>仍然需要来自可靠统一时间基准。</p>
+<p>排序本身不能修复错误时钟。</p>
+<h2 id="mapping-change-必须作为-event-stream-中的-marker">Mapping Change 必须作为 Event Stream 中的 Marker</h2><p>假设 Controller 当前属于：</p>
+<pre><code class="language-text">User A。
+</code></pre>
+<p>队列里已经有：</p>
+<pre><code class="language-text">Button1
+Button2。
+</code></pre>
+<p>随后设备重新映射到：</p>
+<pre><code class="language-text">User B。
+</code></pre>
+<p>然后产生：</p>
+<pre><code class="language-text">Button3。
+</code></pre>
+<p>如果 Drain 时只是读取：</p>
+<pre><code class="language-text">当前 Device → User Mapping
+</code></pre>
+<p>就可能把：</p>
+<pre><code class="language-text">Button1
+Button2
+</code></pre>
+<p>错误归给：</p>
+<pre><code class="language-text">User B。
+</code></pre>
+<p>但它们捕获时明明属于 A。</p>
+<p>所以 Mapping Change 自己也必须进入事件流：</p>
+<pre><code class="language-text">Button1
+Button2
+Mapping A→B
+Button3。
+</code></pre>
+<p>Drain 遇到 Marker 时：</p>
+<pre><code class="language-text">从这里开始更新 Mapping。
+</code></pre>
+<p>于是历史事件和映射变化拥有明确顺序。</p>
+<p><strong>流内元数据（后文简称“会影响事件解释方式的配置变化，也必须和事件一起排队”）</strong></p>
+<p>是一种非常重要的事件系统设计。</p>
+<h2 id="配置状态不能总用最新值解释历史事件">配置状态不能总用“最新值”解释历史事件</h2><p>这个问题远不只输入系统。</p>
+<p>例如：</p>
+<pre><code class="language-text">Locale Changed
+Control Scheme Changed
+User Mapping Changed
+Rule Version Changed
+Camera Mode Changed。
+</code></pre>
+<p>如果过去事件在真正消费时使用：</p>
+<pre><code class="language-text">当前最新配置
+</code></pre>
+<p>历史含义可能被重新解释。</p>
+<p>因此有两种常见策略：</p>
+<pre><code class="language-text">事件捕获时
+直接记录需要的解释上下文。
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-text">把上下文变化本身放进同一有序事件流。
+</code></pre>
+<p>UE6 当前 mapping marker 属于后者。</p>
+<h2 id="analog-input-可以合并但-digital-event-通常不应该">Analog Input 可以合并，但 Digital Event 通常不应该</h2><p>模拟摇杆在一次 Drain 批次里可能产生：</p>
+<pre><code class="language-text">0.11
+0.14
+0.18
+0.20
+0.23。
+</code></pre>
+<p>对于当前实时控制，</p>
+<p>通常真正有价值的是：</p>
+<pre><code class="language-text">本批次最后一个状态。
+</code></pre>
+<p>于是可以按照：</p>
+<pre><code class="language-text">(axis/key, device)
+</code></pre>
+<p>合并，只保留最后 sample。</p>
+<p>这就是：</p>
+<p><strong>Analog Coalescing（后文简称“连续值只保留本轮最新状态”）</strong>。</p>
+<p>它降低消费侧工作量。</p>
+<p>但：</p>
+<pre><code class="language-text">Button Down
+Button Up
+</code></pre>
+<p>不能随便合并。</p>
+<p>否则一个极短点击可能彻底消失。</p>
+<p>所以 Coalescing 必须理解：</p>
+<pre><code class="language-text">State Sample
+</code></pre>
+<p>和：</p>
+<pre><code class="language-text">Discrete Event
+</code></pre>
+<p>的差别。</p>
+<h2 id="coalescing-是消费预算不是生产去重">Coalescing 是消费预算，不是生产去重</h2><p>后台仍然可以完整生产：</p>
+<pre><code class="language-text">所有 Analog Sample。
+</code></pre>
+<p>合并发生在：</p>
+<pre><code class="language-text">当前消费批次。
+</code></pre>
+<p>这意味着：</p>
+<ul>
+<li><p>Debug 可以关闭 Coalescing；</p>
+</li>
+<li><p>其他消费者策略可以变化；</p>
+</li>
+<li><p>Producer 不需要猜未来谁会需要哪些样本。</p>
+</li>
+</ul>
+<p>这是一种相对干净的职责分层：</p>
+<pre><code class="language-text">Producer
+忠实记录
+
+Consumer
+决定当前需要多少精度。
+</code></pre>
+<h2 id="input-thread-没有改变最终规则时间">Input Thread 没有改变最终规则时间</h2><p>即使设备在：</p>
+<pre><code class="language-text">120Hz
+</code></pre>
+<p>捕获输入，</p>
+<p>Gameplay 仍然可能在：</p>
+<pre><code class="language-text">60Hz Fixed Simulation
+</code></pre>
+<p>上推进。</p>
+<p>输入线程只是让：</p>
+<pre><code class="language-text">这一 Tick 到来时
+能拿到更接近当前时刻的设备事实。
+</code></pre>
+<p>它不会自动让 Gameplay：</p>
+<pre><code class="language-text">变成 120Hz。
+</code></pre>
+<p>也不会自动改变：</p>
+<pre><code class="language-text">哪个 Tick
+正式消费这次输入。
+</code></pre>
+<p>所以 Input Sampling 和 Simulation Authority 仍然是两个层次。</p>
+<h2 id="诊断不能只显示-cvar">诊断不能只显示 CVar</h2><p>如果开发者看到：</p>
+<pre><code class="language-text">input.UseInputThread = 1
+</code></pre>
+<p>却发现：</p>
+<pre><code class="language-text">输入线程不存在，
+</code></pre>
+<p>这不一定是 Bug。</p>
+<p>还需要检查：</p>
+<ul>
+<li><p>平台 gate；</p>
+</li>
+<li><p>Process mode；</p>
+</li>
+<li><p>Startup；</p>
+</li>
+<li><p>IsRunning；</p>
+</li>
+<li><p>off-thread CVar warning。</p>
+</li>
+</ul>
+<p>更有价值的 Debugger 应该显示：</p>
+<pre><code class="language-text">Intent:
+Enabled
+
+PlatformAllowed:
+true
+
+ProcessAllowed:
+true
+
+ActualState:
+Running
+
+PollHz:
+120
+
+TopUp:
+enabled
+
+LastTopUp:
+skipped due lock contention。
+</code></pre>
+<p>这样才能区分：</p>
+<pre><code class="language-text">配置
+</code></pre>
+<p>与：</p>
+<pre><code class="language-text">运行事实。
+</code></pre>
+<h2 id="这套设计最值得迁移到哪里">这套设计最值得迁移到哪里</h2><p>它不仅适用于 Game Input。</p>
+<h3 id="网络消息">网络消息</h3><pre><code class="language-text">多个 Socket Producer
+→
+Single Gameplay Consumer
+
+Protocol Mapping Change
+→
+Stream Marker
+
+Nested Dispatch
+→
+Local Snapshot。
+</code></pre>
+<h3 id="ui-event-bus">UI Event Bus</h3><pre><code class="language-text">多个事件源
+→
+UI Thread Drain
+
+Modal Callback 重入
+→
+Snapshot Ownership。
+</code></pre>
+<h3 id="编辑器文件监视">编辑器文件监视</h3><pre><code class="language-text">多个 OS Watcher
+→
+Background Queue
+→
+Main Thread Apply
+
+大量重复 Change
+→
+Coalesce。
+</code></pre>
+<h3 id="telemetry">Telemetry</h3><pre><code class="language-text">高频 Sample
+→
+Consumer Batch
+→
+按语义压缩。
+</code></pre>
+<p>真正值得迁移的不是：</p>
+<pre><code class="language-text">再开一个线程。
+</code></pre>
+<p>而是：</p>
+<blockquote>
+<p><strong>后台生产、主线程提交、流内上下文、有限合并和重入快照共同组成完整协议。</strong></p>
+</blockquote>
+<h2 id="常见设计失败">常见设计失败</h2><h3 id="开启-input-thread-后彻底停止-game-thread-poll">开启 Input Thread 后彻底停止 Game Thread Poll</h3><p>GameThreadOnly 设备永久失去输入。</p>
+<h3 id="top-up-为了拿最新状态阻塞等待-input-thread">Top-up 为了拿最新状态阻塞等待 Input Thread</h3><p>输入优化反而制造帧延迟。</p>
+<h3 id="所有输入都使用同一个-guard">所有输入都使用同一个 Guard</h3><p>Modal / Focus 可能把文本和平台输入一起堵死。</p>
+<h3 id="gamepad-guard-解除后回放所有旧积压">Gamepad Guard 解除后回放所有旧积压</h3><p>用户收到几秒前已经失去意义的操作。</p>
+<h3 id="mpsc-queue-被多个线程同时-drain">MPSC Queue 被多个线程同时 Drain</h3><p>Handler 和 Slate 状态失去单一提交线程。</p>
+<h3 id="single-consumer被误解成不可能重入">“Single Consumer”被误解成“不可能重入”</h3><p>Modal / Nested Pump 仍然能在同线程嵌套 Drain。</p>
+<h3 id="外层和内层-drain-共用成员-scratch">外层和内层 Drain 共用成员 Scratch</h3><p>内层 Reset 导致外层 Iterator 失效。</p>
+<h3 id="device-mapping-只在消费时查询当前值">Device Mapping 只在消费时查询当前值</h3><p>旧事件被错误归给新用户。</p>
+<h3 id="analog-和-button-event-使用同一合并逻辑">Analog 和 Button Event 使用同一合并逻辑</h3><p>短按输入被吃掉。</p>
+<h3 id="cvar-是-atomic就允许任意线程-startstop-runnable">CVar 是 Atomic，就允许任意线程 start/stop Runnable</h3><p>配置安全被错误扩展成生命周期安全。</p>
+<h3 id="stop-时先-remove-proxy-再-join">Stop 时先 Remove Proxy 再 Join</h3><p>后台 Producer 仍可能写入已经失效的目标。</p>
+<h2 id="我的-input-pipeline-检查表">我的 Input Pipeline 检查表</h2><ol>
+<li><p>每个 Device 是否声明明确 Thread Affinity？</p>
+</li>
+<li><p>Background-safe 是否真的覆盖 Device 内部共享状态？</p>
+</li>
+<li><p>Input Thread Intent 与 Actual Running State 是否分离？</p>
+</li>
+<li><p>Start 是否先建立 Handler / Proxy，再启动 Producer？</p>
+</li>
+<li><p>Stop 是否先停止并 Join，再删除 Proxy？</p>
+</li>
+<li><p>Runtime reconfiguration 是否只在合法 Owner Thread 提交？</p>
+</li>
+<li><p>GameThreadOnly Device 是否仍有 Poll 路径？</p>
+</li>
+<li><p>Background Poll Rate 与 Gameplay Tick Rate 是否分离？</p>
+</li>
+<li><p>Top-up 是否是 TryLock / non-blocking？</p>
+</li>
+<li><p>Top-up 失败是否只降低输入新鲜度，而不影响正确性？</p>
+</li>
+<li><p>Platform Input 与 Game Input 是否有不同消费规则？</p>
+</li>
+<li><p>Platform Channel 是否不会被 Modal Guard 错误饿死？</p>
+</li>
+<li><p>Game Channel 被抑制时是否处理旧 Backlog？</p>
+</li>
+<li><p>Event Queue 是否明确 Multi-Producer / Single-Consumer？</p>
+</li>
+<li><p>Consumer Thread 是否唯一？</p>
+</li>
+<li><p>同一 Consumer Thread 是否可能重入？</p>
+</li>
+<li><p>每次 Drain 是否取得独立 Local Snapshot？</p>
+</li>
+<li><p>Nested Drain 是否只消费之后进入的新事件？</p>
+</li>
+<li><p>Event 是否保存可靠 Capture Timestamp？</p>
+</li>
+<li><p>多 Producer 批次是否需要 Stable Sort？</p>
+</li>
+<li><p>Mapping / Context Change 是否有流内时序？</p>
+</li>
+<li><p>历史事件是否不会使用当前最新 Mapping 重新解释？</p>
+</li>
+<li><p>Analog Coalescing 是否按 Device + Axis 隔离？</p>
+</li>
+<li><p>Digital Event 是否避免被连续值策略吞掉？</p>
+</li>
+<li><p>Coalescing 是否属于 Consumer Policy，而不是修改源输入事实？</p>
+</li>
+<li><p>Debugger 是否同时显示 Intent、Gate 与 Actual State？</p>
+</li>
+<li><p>Automation 是否覆盖 nested drain、mapping marker 和 discard？</p>
+</li>
+<li><p>是否还有真实 Device → Slate → PlayerInput 的 E2E 证据缺口？</p>
+</li>
+</ol>
+<p>Input Thread 看起来像一个很直接的性能改动：</p>
+<pre><code class="language-text">把输入 Poll
+从 Game Thread
+移到后台线程。
+</code></pre>
+<p>但真正成熟以后，它面对的并不是一个线程问题。</p>
+<p>而是三种不同的时间：</p>
+<pre><code class="language-text">设备什么时候产生事实
+
+后台什么时候观察到事实
+
+Game Thread 什么时候正式消费事实。
+</code></pre>
+<p>同时又面对三种不同的所有权：</p>
+<pre><code class="language-text">谁可以 Poll Device
+
+谁拥有 Event Queue
+
+谁有资格真正 Dispatch。
+</code></pre>
+<p>再加上一项经常被遗漏的现实：</p>
+<pre><code class="language-text">同一个 Game Thread
+也会重入自己。
+</code></pre>
+<p>最终，一个可靠输入系统需要的并不是“尽量快地把所有东西扔到队列里”。</p>
+<p>而是一份清楚的协议：</p>
+<blockquote>
+<p><strong>后台线程负责尽量早地采集；主线程负责最终提交；解释历史事件所需的上下文必须和事件拥有一致时序；消费一旦开始，本批次数据必须真正属于当前调用，后续重入不能再改变它。</strong></p>
+</blockquote>
+<p>输入越快，这些边界越重要。</p>
+<p>否则降低几毫秒延迟的优化，反而可能引入比延迟本身更难复现的状态错误。</p>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>文中通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入新鲜度协议</td>
+<td>后台尽量早点拿到输入，主线程仍然决定什么时候正式消费</td>
+</tr>
+<tr>
+<td>运行意图</td>
+<td>配置希望它开着</td>
+</tr>
+<tr>
+<td>实际运行状态</td>
+<td>线程此刻真的存在并正在生产</td>
+</tr>
+<tr>
+<td>设备线程亲和</td>
+<td>这个设备究竟允许谁来问它</td>
+</tr>
+<tr>
+<td>Game Thread Top-up</td>
+<td>主线程提交前再试着问一次设备有没有新东西</td>
+</tr>
+<tr>
+<td>非阻塞新鲜度优化</td>
+<td>有机会就拿更新的数据，没机会不能卡住主线程</td>
+</tr>
+<tr>
+<td>单消费者提交</td>
+<td>很多人可以上报，只有一个线程正式把它变成 UI / Gameplay 输入</td>
+</tr>
+<tr>
+<td>Nested Drain</td>
+<td>同一个消费者在还没吃完上一批事件时，又进来吃下一批</td>
+</tr>
+<tr>
+<td>快照所有权</td>
+<td>我开始消费以后，这一批就是我的，后面的重入不能再改它</td>
+</tr>
+<tr>
+<td>流内元数据</td>
+<td>会影响事件解释方式的配置变化，也必须和事件一起排队</td>
+</tr>
+<tr>
+<td>Analog Coalescing</td>
+<td>连续值只保留本轮最新状态</td>
+</tr>
+</tbody></table>
+<hr />
+<h2 id="内部资料依据">内部资料依据</h2><p>本文主要基于以下材料整理：</p>
+<ul>
+<li><p><code>notes/UnrealEngine源码研究/UE6/14_InputThread从设备轮询到Slate双通道Drain与重入安全.md</code></p>
+</li>
+<li><p><code>notes/UnrealEngine源码研究/UE6/README.md</code></p>
+</li>
+<li><p><code>blogs/游戏系统的共同语言/03-音游格斗与竞速的权威时间源.md</code></p>
+</li>
+<li><p><code>blogs/README.md</code></p>
+</li>
+<li><p><code>blogs/publication.v1.json</code></p>
+</li>
+</ul>
+<p>本文主要依据研究时的 Unreal Engine UE6-main 源码快照整理。</p>
+<p>当前源码研究已经静态闭合：</p>
+<ul>
+<li><p>Input Thread lifecycle；</p>
+</li>
+<li><p>Device Thread Affinity；</p>
+</li>
+<li><p>Input Thread 高频 Poll；</p>
+</li>
+<li><p>Game Thread non-blocking top-up；</p>
+</li>
+<li><p>Platform / Game 双通道；</p>
+</li>
+<li><p>MPSC consumer；</p>
+</li>
+<li><p>timestamp stable sort；</p>
+</li>
+<li><p>analog coalescing；</p>
+</li>
+<li><p>mapping marker；</p>
+</li>
+<li><p>nested drain snapshot ownership；</p>
+</li>
+<li><p>对应 AsyncInputConsumer 测试入口。</p>
+</li>
+</ul>
+<p>但本轮研究没有构建 Unreal Engine，也没有运行真实 OS/GameInput Device → 120Hz Runnable → Slate Modal/Focus → PlayerInput 的端到端 Automation。</p>
+<p>因此本文不声称：</p>
+<ul>
+<li><p>所有 UE6 平台默认实际运行 Input Thread；</p>
+</li>
+<li><p>120Hz 是所有产品最优输入采样频率；</p>
+</li>
+<li><p>Game Thread top-up 一定降低所有硬件上的实际端到端输入延迟；</p>
+</li>
+<li><p>当前单元测试已经证明所有真实设备、窗口、焦点和 PlayerInput 场景正确；</p>
+</li>
+<li><p>开启 Input Thread 会自动改变 Gameplay Simulation Tick Rate。</p>
+</li>
+</ul>
+<p>文中将 MPSC + Single Consumer、non-blocking top-up、in-stream mapping marker 和 nested snapshot ownership 等思想迁移到其他事件系统，属于工程设计归纳。</p>
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="ue6-assetregistry-activemounts-current-target.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 ue6</span><strong>索引驻留与可重试恢复：UE6 AssetRegistry ActiveMounts 的 Current/Target 状态机</strong><small>内容 MountPoint 被卸载后，如果只想释放 AssetRegistry 索引内存而不是卸载实际 Package 和 UObject，怎样建立可以接受反向请求、失败重试和安全回调的异步驻留状态机？</small></a><a href="ue6-iris-rpc-owner-batch.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 ue6</span><strong>事务化远程副作用：UE6 Iris RPC 的 Owner Batch、整批回滚与重调度</strong><small>当远程 RPC 会在服务器上触发真实 Gameplay 副作用时，UE6 Iris 怎样避免把一整个网络读取过程绑进过大的事务，又怎样保证同一对象顺序域中的多条 RPC 可以统一提交、回滚和重试？</small></a><a href="ue6-iris.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 ue6</span><strong>复制资格与交付确认：UE6 Iris 的对象协议、连接可见性与可靠状态</strong><small>一个 UObject 的状态已经发生变化以后，怎样逐步判断哪些连接有资格看到它、本次带宽是否应该发送它，以及什么时候才能真正认为这一份状态已经可靠交付？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">游戏作品、设计研究与研发实践。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/journal.html">研究</a>
+                <a href="../../pages/blog.html">文章</a>
+                <a href="../../pages/development.html">研发体系</a>
+                <a href="../../pages/engineering.html">Iris Engineering</a>
+                <a href="../../pages/framework.html">Sakura Framework</a>
+                <a href="../../pages/brand.html">品牌视觉</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

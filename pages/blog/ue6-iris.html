@@ -101,7 +101,7 @@
             <p class="journal-kicker"><a href="series/unreal-engine-source-research.html">从 Unreal Engine 源码理解引擎设计</a> · 发布于 2026-08-25 · 更新于 2026-08-25</p>
             <h1>复制资格与交付确认：UE6 Iris 的对象协议、连接可见性与可靠状态</h1>
             <p class="blog-deck">一个 UObject 的状态已经发生变化以后，怎样逐步判断哪些连接有资格看到它、本次带宽是否应该发送它，以及什么时候才能真正认为这一份状态已经可靠交付？</p>
-            <div class="note-tags"><span>iris</span><span>ue6</span></div>
+            <div class="note-tags"><a href="tag/iris.html">iris</a><a href="tag/ue6.html">ue6</a></div>
         </header>
         <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
 <p>一个角色的生命值刚刚从：</p>
@@ -1244,7 +1244,7 @@ Broadcast
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
-            <div><a href="unreal-mass.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>类型身份撤销：Unreal Mass 的模块来源账本、读者隔离与分阶段卸载</strong><small>一个动态模块准备卸载时，如果它定义的 Processor、Fragment、Tag 与其他类型已经被多个进程级 Registry、Observer 和运行时缓存引用，系统怎样在真正销毁类型以前，让所有读者、实例和派生状态安全停止使用这些身份？</small></a><a href="unreal-build-accelerator-known-inputs-cas.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>数据预热与正确性分离：Unreal Build Accelerator 的 Known Inputs、CAS 预取与执行闸门</strong><small>远程构建已经知道一个编译 Action 很可能读取哪些文件时，怎样提前把这些内容送到 Helper 附近以隐藏网络延迟，同时又不让“预测输入”变成构建正确性必须依赖的隐藏协议？</small></a><a href="unreal-engine-rdg-compilation.html"><span>同属「从 Unreal Engine 源码理解引擎设计」</span><strong>声明式渲染图编译：RDG 的依赖建图、资源生命周期与 Barrier 执行</strong><small>当一帧渲染包含大量 Pass、临时纹理、Async Compute 和跨 Pipeline 资源访问时，怎样让调用方只描述真实依赖，而由统一基础设施决定哪些工作必须执行、资源何时真正存在以及什么时候需要 GPU 状态转换？</small></a></div>
+            <div><a href="ue6-iris-rpc-owner-batch.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 iris、ue6</span><strong>事务化远程副作用：UE6 Iris RPC 的 Owner Batch、整批回滚与重调度</strong><small>当远程 RPC 会在服务器上触发真实 Gameplay 副作用时，UE6 Iris 怎样避免把一整个网络读取过程绑进过大的事务，又怎样保证同一对象顺序域中的多条 RPC 可以统一提交、回滚和重试？</small></a><a href="ue6-assetregistry-activemounts-current-target.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 ue6</span><strong>索引驻留与可重试恢复：UE6 AssetRegistry ActiveMounts 的 Current/Target 状态机</strong><small>内容 MountPoint 被卸载后，如果只想释放 AssetRegistry 索引内存而不是卸载实际 Package 和 UObject，怎样建立可以接受反向请求、失败重试和安全回调的异步驻留状态机？</small></a><a href="ue6-input-thread-drain.html"><span>同属「从 Unreal Engine 源码理解引擎设计」，共享 ue6</span><strong>输入新鲜度与重入安全：UE6 Input Thread 的设备轮询、双通道 Drain 与快照所有权</strong><small>为了降低输入采样延迟，把设备轮询移到独立线程以后，怎样避免主线程阻塞、输入映射错位、旧输入回放，以及 Slate 重入 Drain 破坏正在消费的事件批次？</small></a></div>
         </aside>
     </article>
 </main>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="足球模拟怎样让一个独立运动的球、22 名球员和两套团队战术持续形成协调关系，而不是把比赛退化成“当前持球人 + 21 个追球 AI”？">
+    <link rel="canonical" href="https://irissakura.github.io/pages/blog/shared-ball-possession-team-space.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换 | IrisSakura">
+    <meta property="og:description" content="足球模拟怎样让一个独立运动的球、22 名球员和两套团队战术持续形成协调关系，而不是把比赛退化成“当前持球人 + 21 个追球 AI”？">
+    <meta property="og:url" content="https://irissakura.github.io/pages/blog/shared-ball-possession-team-space.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-blog-shared-ball-possession-team-space.png">
+    <meta property="og:image:alt" content="共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换 | IrisSakura">
+    <meta name="twitter:description" content="足球模拟怎样让一个独立运动的球、22 名球员和两套团队战术持续形成协调关系，而不是把比赛退化成“当前持球人 + 21 个追球 AI”？">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-shared-ball-possession-team-space.png">
+    <meta name="twitter:image:alt" content="共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换 | IrisSakura","description":"足球模拟怎样让一个独立运动的球、22 名球员和两套团队战术持续形成协调关系，而不是把比赛退化成“当前持球人 + 21 个追球 AI”？","url":"https://irissakura.github.io/pages/blog/shared-ball-possession-team-space.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换","image":"https://irissakura.github.io/assets/social/pages-blog-shared-ball-possession-team-space.png","datePublished":"2026-09-08","dateModified":"2026-09-08","about":["essay"]}</script>
+    <!-- site-meta:end -->
+    <title>共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换 | IrisSakura</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/development.html" class="nav-link">研发体系</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>独立游戏开发者与游戏系统设计者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html" data-profile-quick-link><span>02</span><strong>全部作品</strong><small>游戏与工具</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>设计研究</strong><small>玩法与系统</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/blog.html" data-profile-quick-link><span>04</span><strong>开发文章</strong><small>完整文章</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/development.html" data-profile-quick-link><span>05</span><strong>研发体系</strong><small>Iris Engineering 与 Sakura Framework</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系</strong><small>邮箱、QQ 与公开主页</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="blog-detail-main">
+    <article class="container blog-article">
+        <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
+        <header>
+            <p class="journal-kicker"><a href="series/shared-language-of-game-systems.html">游戏系统的共同语言</a> · 发布于 2026-09-08 · 更新于 2026-09-08</p>
+            <h1>共享球权与团队空间：足球模拟中的未来接球点、无球跑位与攻守转换</h1>
+            <p class="blog-deck">足球模拟怎样让一个独立运动的球、22 名球员和两套团队战术持续形成协调关系，而不是把比赛退化成“当前持球人 + 21 个追球 AI”？</p>
+            <div class="note-tags"><a href="tag/essay.html">essay</a></div>
+        </header>
+        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<p>玩家控制中场球员。</p>
+<p>右侧边锋正在向前高速跑动。</p>
+<p>如果系统简单执行：</p>
+<pre><code class="language-text">Pass Target
+=
+Receiver.CurrentPosition，
+</code></pre>
+<p>等足球真正飞到那里时，</p>
+<p>边锋早已经离开。</p>
+<p>一个看起来正确的传球指令，</p>
+<p>因此会变成：</p>
+<pre><code class="language-text">把球踢到队友身后。
+</code></pre>
+<p>这暴露了足球模拟最基本的问题：</p>
+<blockquote>
+<p>足球不是把一颗球“交给某个角色”，而是把球送进未来某个时间点的共享空间。</p>
+</blockquote>
+<p>与此同时，</p>
+<p>如果其余 21 名球员都独立执行：</p>
+<pre><code class="language-text">靠近足球
+</code></pre>
+<p>整个比赛很快会变成儿童足球：</p>
+<pre><code class="language-text">所有人挤成一团。
+</code></pre>
+<p>真正的足球需要：</p>
+<ul>
+<li><p>有人持宽度；</p>
+</li>
+<li><p>有人拉深度；</p>
+</li>
+<li><p>有人保护身后；</p>
+</li>
+<li><p>有人制造传球线；</p>
+</li>
+<li><p>有人压迫；</p>
+</li>
+<li><p>有人封路线。</p>
+</li>
+</ul>
+<p>所以足球模拟真正需要组织的是：</p>
+<pre><code class="language-text">Ball
++
+Space
++
+Team Phase。
+</code></pre>
+<h2 id="先说结论球必须独立存在球队围绕球和空间持续切换职责">先说结论：球必须独立存在，球队围绕球和空间持续切换职责</h2><p><strong>共享球权（后文简称“球从来不真正属于谁，只是有人暂时更容易控制它”）</strong>：足球始终是独立权威实体，所谓 Possession 是球员与球之间的控制关系，而不是对象所有权。</p>
+<p>核心结构可以表示为：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["Ball State"] --&gt; B["Spatial State"]
+    B --&gt; C["Team Tactical State"]
+    C --&gt; D["Player Tasks"]
+    D --&gt; E["Ball Contact Intent"]
+    E --&gt; F["Ball Contact Result"]
+    F --&gt; A
+
+    A --&gt; G["Possession Transition"]
+    G --&gt; C
+</code></pre>
+<p>球的真实事实是：</p>
+<pre><code class="language-text">Position
+Velocity
+Spin
+LastTouch。
+</code></pre>
+<p>球员是否“控球”则可以是一种：</p>
+<pre><code class="language-text">Control Confidence。
+</code></pre>
+<h2 id="ball-owner-是一个危险的过度简化">Ball Owner 是一个危险的过度简化</h2><p>低成本实现可能写：</p>
+<pre><code class="language-text">currentBallOwner = PlayerA
+</code></pre>
+<p>然后：</p>
+<pre><code class="language-text">Ball Transform
+吸附 PlayerA Foot。
+</code></pre>
+<p>这种模型很容易破坏：</p>
+<ul>
+<li><p>截球；</p>
+</li>
+<li><p>偏转；</p>
+</li>
+<li><p>抢断；</p>
+</li>
+<li><p>头球；</p>
+</li>
+<li><p>争顶；</p>
+</li>
+<li><p>Loose Ball。</p>
+</li>
+</ul>
+<p>更合理的是：</p>
+<pre><code class="language-text">足球始终独立运动。
+</code></pre>
+<p>Player A 只是在当前状态下：</p>
+<pre><code class="language-text">最有可能成功进行下一次合法触球。
+</code></pre>
+<p>当球离脚稍远，</p>
+<p>Opponent B 仍然可以先触到。</p>
+<p>真正具有强 Owner 语义的特殊状态可以是：</p>
+<pre><code class="language-text">GoalkeeperHeld。
+</code></pre>
+<p>而不是所有带球状态。</p>
+<h2 id="contested-ball-不需要立刻宣布归属">Contested Ball 不需要立刻宣布归属</h2><p>两名球员同时冲向 Loose Ball。</p>
+<p>系统没必要在距离达到某个阈值时：</p>
+<pre><code class="language-text">Possession = A。
+</code></pre>
+<p>更自然的是：</p>
+<pre><code class="language-text">Ball 保持 Free
+A 有 Touch Candidate
+B 也有 Touch Candidate
+
+谁首先完成合法 Contact
+谁真正改变球。
+</code></pre>
+<p>这种结构会让：</p>
+<pre><code class="language-text">争抢
+二点球
+偏转
+</code></pre>
+<p>自然出现。</p>
+<h2 id="所有足球动作最终都可以归约到-ball-contact">所有足球动作最终都可以归约到 Ball Contact</h2><p>传球、射门、解围、头球、抢断，</p>
+<p>表现完全不同。</p>
+<p>底层却共享一个事实：</p>
+<blockquote>
+<p><strong>某个身体部位在某个时间窗口对足球施加了作用。</strong></p>
+</blockquote>
+<p>因此可以存在：</p>
+<p><strong>Ball Contact Resolver（后文简称“真正决定这一脚最终把球踢成什么样”）</strong>。</p>
+<p>玩家提交：</p>
+<pre><code class="language-text">IntendedTarget
+DesiredVelocity
+DesiredHeight
+ContactType
+Power。
+</code></pre>
+<p>Resolver 再考虑：</p>
+<ul>
+<li><p>球的位置；</p>
+</li>
+<li><p>身体姿态；</p>
+</li>
+<li><p>Contact Window；</p>
+</li>
+<li><p>压力；</p>
+</li>
+<li><p>技术；</p>
+</li>
+<li><p>平衡；</p>
+</li>
+<li><p>Ball 当前速度；</p>
+</li>
+</ul>
+<p>形成：</p>
+<pre><code class="language-text">ResultVelocity
+ResultSpin
+AccuracyError。
+</code></pre>
+<p>这使：</p>
+<pre><code class="language-text">Intent
+≠
+Outcome。
+</code></pre>
+<p>玩家想把球传到某处。</p>
+<p>角色能不能真的做到，</p>
+<p>由动作和能力共同决定。</p>
+<h2 id="传球目标应该是一块未来空间">传球目标应该是一块未来空间</h2><p><strong>Lead Target（后文简称“球到的时候队友应该在哪里”）</strong>：根据 Receiver 的运动、计划跑位、Ball Travel Time 和防守者位置预测未来接球位置。</p>
+<p>例如：</p>
+<pre><code class="language-text">Receiver Current Position = P0
+Velocity = V
+Estimated Ball Travel Time = t
+</code></pre>
+<p>真正目标更接近：</p>
+<pre><code class="language-text">P(t)
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">P0。
+</code></pre>
+<p>这尤其解释了：</p>
+<h3 id="through-ball">Through Ball</h3><p>直塞不是：</p>
+<pre><code class="language-text">普通传球
+速度更快
+精度更低。
+</code></pre>
+<p>它真正改变的是 Target Semantics：</p>
+<blockquote>
+<p><strong>不再传给队友，而是传到一块队友有机会比防守者更早到达的未来空间。</strong></p>
+</blockquote>
+<h2 id="assisted-pass-和-manual-pass-不应该拥有两套物理">Assisted Pass 和 Manual Pass 不应该拥有两套物理</h2><p>Full Assist 可以：</p>
+<pre><code class="language-text">帮玩家选 Receiver
+帮玩家算 Lead Point。
+</code></pre>
+<p>Semi Assist：</p>
+<pre><code class="language-text">玩家决定大方向
+系统微调落点。
+</code></pre>
+<p>Manual：</p>
+<pre><code class="language-text">玩家直接指定空间。
+</code></pre>
+<p>但最终都应该进入：</p>
+<pre><code class="language-text">PassIntent
+→
+BallContactResolver。
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">Assist 模式自动传送到队友
+Manual 模式才真的模拟球。
+</code></pre>
+<p>否则不同操作模式根本不是同一个比赛规则。</p>
+<h2 id="接球也不是自动吸附">接球也不是自动吸附</h2><p>足球到达 Receiver 附近，</p>
+<p>真正发生的是：</p>
+<pre><code class="language-text">First Touch。
+</code></pre>
+<p>结果可能是：</p>
+<ul>
+<li><p>完美停球；</p>
+</li>
+<li><p>顺势向前卸球；</p>
+</li>
+<li><p>向侧面停球；</p>
+</li>
+<li><p>弹远；</p>
+</li>
+<li><p>被抢。</p>
+</li>
+</ul>
+<p>所以接球同样是一项主动技能。</p>
+<p>**First Touch（后文简称“第一脚决定下一步还有没有球权”）**可以读取：</p>
+<pre><code class="language-text">IncomingVelocity
+BallHeight
+BodyOrientation
+Pressure
+Technique
+PreferredFoot
+DesiredNextAction。
+</code></pre>
+<p>优秀球员甚至不会：</p>
+<pre><code class="language-text">把球停死。
+</code></pre>
+<p>而是第一脚就：</p>
+<pre><code class="language-text">把球带离逼抢方向。
+</code></pre>
+<h2 id="one-touch-是没有完整进入控球状态的新-contact">One-Touch 是没有完整进入“控球状态”的新 Contact</h2><p>高速配合中：</p>
+<pre><code class="language-text">Incoming Pass
+→
+Contact Window
+→
+Direct Pass。
+</code></pre>
+<p>球员甚至没有必要：</p>
+<pre><code class="language-text">先成为 Ball Owner
+再执行一次 Pass。
+</code></pre>
+<p>这也是独立 Ball State 模型的优势。</p>
+<p>球只是连续经历：</p>
+<pre><code class="language-text">Contact
+→
+Contact
+→
+Contact。
+</code></pre>
+<h2 id="团队-ai-需要显式-team-phase">团队 AI 需要显式 Team Phase</h2><p>同一个左后卫：</p>
+<p>控球时可能：</p>
+<pre><code class="language-text">前插。
+</code></pre>
+<p>失球的一瞬间：</p>
+<pre><code class="language-text">立刻回撤
+或参与 Counter Press。
+</code></pre>
+<p>所以单个 Agent 只拥有：</p>
+<pre><code class="language-text">自己的位置和最近目标
+</code></pre>
+<p>是不够的。</p>
+<p>**Team Phase（后文简称“整支球队当前共同处于哪个攻守阶段”）**可以至少包括：</p>
+<pre><code class="language-text">In Possession
+Out of Possession
+Attacking Transition
+Defensive Transition
+Set Piece Attack
+Set Piece Defense。
+</code></pre>
+<p>再进一步细分：</p>
+<pre><code class="language-text">Build Up
+Final Third
+High Press
+Mid Block
+Low Block。
+</code></pre>
+<p>Team Phase 为 11 名球员提供共同上下文。</p>
+<h2 id="球权转换必须触发整支球队角色翻转">球权转换必须触发整支球队角色翻转</h2><p>当 Possession 明显改变：</p>
+<p>原进攻方：</p>
+<pre><code class="language-text">In Possession
+→
+Defensive Transition。
+</code></pre>
+<p>原防守方：</p>
+<pre><code class="language-text">Out of Possession
+→
+Attacking Transition。
+</code></pre>
+<p>这不应该等待：</p>
+<pre><code class="language-text">11 个 Agent
+各自几秒后才发现球已经丢了。
+</code></pre>
+<p>Team Coordinator 应该正式提交一次：</p>
+<pre><code class="language-text">Possession Transition。
+</code></pre>
+<h2 id="攻守转换是足球最重要的短周期状态之一">攻守转换是足球最重要的短周期状态之一</h2><p>稳定控球阶段，</p>
+<p>一支球队通常已经：</p>
+<pre><code class="language-text">展开宽度
+拉高位置。
+</code></pre>
+<p>一旦失球：</p>
+<pre><code class="language-text">防守结构还没回来。
+</code></pre>
+<p>这是最脆弱的几秒。</p>
+<p>对手同样处于：</p>
+<pre><code class="language-text">刚抢到球
+尚未完全展开。
+</code></pre>
+<p>所以双方同时面临：</p>
+<ul>
+<li><p>Counter Press；</p>
+</li>
+<li><p>Counter Attack；</p>
+</li>
+<li><p>Recovery。</p>
+</li>
+</ul>
+<p>转换阶段真正的价值在于：</p>
+<blockquote>
+<p><strong>旧阵型还没有来得及变成新阵型。</strong></p>
+</blockquote>
+<h2 id="counter-press-不是最近的人一起追球">Counter Press 不是“最近的人一起追球”</h2><p>如果所有近处球员直接：</p>
+<pre><code class="language-text">MoveTo(Ball)
+</code></pre>
+<p>会把队形撕碎。</p>
+<p>真正的 Counter Press 还要考虑：</p>
+<ul>
+<li><p>谁压 Ball Carrier；</p>
+</li>
+<li><p>谁封第一脚传球；</p>
+</li>
+<li><p>谁保护后场；</p>
+</li>
+<li><p>谁防反击出口。</p>
+</li>
+</ul>
+<p>所以无球 AI 不是：</p>
+<pre><code class="language-text">没有球时的备用逻辑。
+</code></pre>
+<p>它恰恰决定了足球的大部分时间。</p>
+<h2 id="无球价值应该能被系统看到">无球价值应该能被系统看到</h2><p>足球中，最重要的动作经常没有触球：</p>
+<pre><code class="language-text">拉开防线
+吸引后卫
+进入空当
+保护传球线
+补位。
+</code></pre>
+<p>如果 AI Utility 只奖励：</p>
+<pre><code class="language-text">谁更靠近 Ball，
+</code></pre>
+<p>球队会天然收缩。</p>
+<p>更合理的 Spatial Evaluation 需要看：</p>
+<pre><code class="language-text">Passing Lane
+Dangerous Space
+Width
+Depth
+Defensive Cover
+Numerical Advantage。
+</code></pre>
+<p>球员真正争夺的是：</p>
+<pre><code class="language-text">未来几秒哪些空间可用。
+</code></pre>
+<h2 id="与俱乐部经营模拟的边界">与俱乐部经营模拟的边界</h2><p>足球经理或俱乐部经营主要处理：</p>
+<ul>
+<li><p>招募；</p>
+</li>
+<li><p>财务；</p>
+</li>
+<li><p>训练；</p>
+</li>
+<li><p>长期阵容。</p>
+</li>
+</ul>
+<p>本文只处理：</p>
+<pre><code class="language-text">比赛真正运行起来以后
+22 名球员怎样共同反应。
+</code></pre>
+<p>一个是组织经营。</p>
+<p>一个是实时团队模拟。</p>
+<h2 id="与单角色动作游戏的边界">与单角色动作游戏的边界</h2><p>玩家虽然通常只直接控制一名球员，</p>
+<p>但比赛的真正对象始终是：</p>
+<pre><code class="language-text">Team。
+</code></pre>
+<p>如果 21 名非控制角色只是跟随脚本，</p>
+<p>球队就不会形成：</p>
+<pre><code class="language-text">真实的无球空间。
+</code></pre>
+<h2 id="常见失败">常见失败</h2><h3 id="ball-直接吸附当前-owner">Ball 直接吸附当前 Owner</h3><p>截球和二点球失真。</p>
+<h3 id="pass-目标是-receiver-当前坐标">Pass 目标是 Receiver 当前坐标</h3><p>移动接球永远落后。</p>
+<h3 id="所有无球队员靠近-ball">所有无球队员靠近 Ball</h3><p>球队失去阵型。</p>
+<h3 id="possession-change-等每个-ai-自己发现">Possession Change 等每个 AI 自己发现</h3><p>攻守转换迟钝。</p>
+<h3 id="receive-自动吸附">Receive 自动吸附</h3><p>First Touch 能力失去意义。</p>
+<h3 id="assist-模式和-manual-模式使用不同球规则">Assist 模式和 Manual 模式使用不同球规则</h3><p>竞技技能无法迁移。</p>
+<h2 id="我的足球模拟检查表">我的足球模拟检查表</h2><ol>
+<li><p>Ball 是否是独立权威实体？</p>
+</li>
+<li><p>Possession 是否是派生关系？</p>
+</li>
+<li><p>Contested Ball 是否允许真正保持 Free？</p>
+</li>
+<li><p>所有主要足球动作是否进入统一 Contact Resolver？</p>
+</li>
+<li><p>Intent 与 Result 是否分离？</p>
+</li>
+<li><p>Pass Target 是否支持未来空间？</p>
+</li>
+<li><p>Through Ball 是否真正面向 Lead Space？</p>
+</li>
+<li><p>First Touch 是否有自己的质量判定？</p>
+</li>
+<li><p>One-Touch 是否不依赖“先吸附球”？</p>
+</li>
+<li><p>TeamPhase 是否显式存在？</p>
+</li>
+<li><p>Possession Transition 是否同时改变两支球队？</p>
+</li>
+<li><p>Counter Press 是否不是所有人追球？</p>
+</li>
+<li><p>AI 是否评价无球空间？</p>
+</li>
+<li><p>Width / Depth 是否属于球队结构？</p>
+</li>
+<li><p>当前实现是否真的在模拟一支球队，而不只是 22 个 Agent？</p>
+</li>
+</ol>
+<p>足球模拟最终并不是：</p>
+<pre><code class="language-text">22 个 AI
+围着一个球。
+</code></pre>
+<p>而是：</p>
+<blockquote>
+<p><strong>一个独立球体不断重写空间价值，而两支球队持续根据这个共享事实重组自己的职责。</strong></p>
+</blockquote>
+<p>球权改变的一瞬间，</p>
+<p>变化的不是：</p>
+<pre><code class="language-text">currentOwner。
+</code></pre>
+<p>而是：</p>
+<pre><code class="language-text">整个团队的行动语言。
+</code></pre>
+<h2 id="术语对照">术语对照</h2><table>
+<thead>
+<tr>
+<th>正式术语</th>
+<th>通俗称呼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>共享球权</td>
+<td>球不真正属于谁，只是有人暂时更容易控制</td>
+</tr>
+<tr>
+<td>Ball Contact</td>
+<td>真正改变足球状态的一次触球</td>
+</tr>
+<tr>
+<td>Lead Target</td>
+<td>球到的时候队友应该在哪里</td>
+</tr>
+<tr>
+<td>First Touch</td>
+<td>第一脚决定下一步还有没有球权</td>
+</tr>
+<tr>
+<td>Team Phase</td>
+<td>整支球队当前共同处于哪个阶段</td>
+</tr>
+<tr>
+<td>Possession Transition</td>
+<td>攻守职责整体翻转</td>
+</tr>
+<tr>
+<td>Off-ball Space</td>
+<td>没有球的人正在争夺的未来空间</td>
+</tr>
+</tbody></table>
+<h2 id="内部资料依据">内部资料依据</h2><ul>
+<li><p><code>game-designs/足球比赛模拟设计范式.md</code></p>
+</li>
+<li><p><code>game-designs/俱乐部经营模拟类游戏设计范式.md</code></p>
+</li>
+<li><p><code>blogs/README.md</code></p>
+</li>
+<li><p><code>blogs/publication.v1.json</code></p>
+</li>
+</ul>
+<p>本文为足球实时比赛模拟的通用设计抽象，不代表某款商业足球游戏的内部实现。</p>
+<hr />
+</div>
+        <aside class="related-articles" aria-labelledby="related-articles-title">
+            <p class="journal-kicker">CONTINUE READING</p>
+            <h2 id="related-articles-title">相关文章</h2>
+            <div><a href="ballistic-commitment-battlefield-rewrite.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>弹道承诺与战场改写：回合制炮术中的不可逆射击、地形事务与世界稳定屏障</strong><small>一次炮击怎样同时成为伤害行为、地形编辑和未来战术状态提交，并保证连续物理世界真正稳定后才安全进入下一回合？</small></a><a href="finite-siege.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>有限围攻：横版清版动作的纵深对位、攻击权调度与敌群压力</strong><small>横版清版动作怎样在屏幕里放进足够多敌人制造“被围攻”的压力，同时避免所有敌人一起出手，把战斗变成无法阅读、只能挨打的混乱？</small></a><a href="local-power-spike-dual-scale-battlefield.html"><span>同属「游戏系统的共同语言」，共享 essay</span><strong>局部战力尖峰与双尺度战场：无双式动作的军团聚合、武将锚点与战线转换</strong><small>一个以玩家单人高强度战斗为核心的动作游戏，怎样同时表现数百名士兵持续作战的大规模战场，又避免把每一个远处士兵都做成完整 AI？</small></a></div>
+        </aside>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">游戏作品、设计研究与研发实践。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/journal.html">研究</a>
+                <a href="../../pages/blog.html">文章</a>
+                <a href="../../pages/development.html">研发体系</a>
+                <a href="../../pages/engineering.html">Iris Engineering</a>
+                <a href="../../pages/framework.html">Sakura Framework</a>
+                <a href="../../pages/brand.html">品牌视觉</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
