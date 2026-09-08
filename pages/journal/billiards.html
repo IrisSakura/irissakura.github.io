@@ -1,0 +1,4289 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="玩家并不直接决定“哪个球进入哪个袋”，而是在每次回合中只提交一次 Cue Strike：选择母球击球方向、力度、杆头击点以及必要的辅助参数。Shot Commit 以后，母球成为唯一最初获得主动冲量的物体，随后所有结果都由球—球、球—库边、球—袋口之间的连续物理交互自然传播。系统记录整杆过程中每一次 Contact、Rail、Pocket、Scratch…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/billiards.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="台球 / Billiards / Cue-Sports Simulation | IrisSakura Journal">
+    <meta property="og:description" content="玩家并不直接决定“哪个球进入哪个袋”，而是在每次回合中只提交一次 Cue Strike：选择母球击球方向、力度、杆头击点以及必要的辅助参数。Shot Commit 以后，母球成为唯一最初获得主动冲量的物体，随后所有结果都由球—球、球—库边、球—袋口之间的连续物理交互自然传播。系统记录整杆过程中每一次 Contact、Rail、Pocket、Scratch…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/billiards.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-billiards.png">
+    <meta property="og:image:alt" content="台球 / Billiards / Cue-Sports Simulation | IrisSakura Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="台球 / Billiards / Cue-Sports Simulation | IrisSakura Journal">
+    <meta name="twitter:description" content="玩家并不直接决定“哪个球进入哪个袋”，而是在每次回合中只提交一次 Cue Strike：选择母球击球方向、力度、杆头击点以及必要的辅助参数。Shot Commit 以后，母球成为唯一最初获得主动冲量的物体，随后所有结果都由球—球、球—库边、球—袋口之间的连续物理交互自然传播。系统记录整杆过程中每一次 Contact、Rail、Pocket、Scratch…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-billiards.png">
+    <meta name="twitter:image:alt" content="台球 / Billiards / Cue-Sports Simulation | IrisSakura Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"台球 / Billiards / Cue-Sports Simulation | IrisSakura Journal","description":"玩家并不直接决定“哪个球进入哪个袋”，而是在每次回合中只提交一次 Cue Strike：选择母球击球方向、力度、杆头击点以及必要的辅助参数。Shot Commit 以后，母球成为唯一最初获得主动冲量的物体，随后所有结果都由球—球、球—库边、球—袋口之间的连续物理交互自然传播。系统记录整杆过程中每一次 Contact、Rail、Pocket、Scratch…","url":"https://irissakura.github.io/pages/journal/billiards.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"台球 / Billiards / Cue-Sports Simulation","image":"https://irissakura.github.io/assets/social/pages-journal-billiards.png","dateModified":"2026-09-07","about":["billiards","cue","pool"]}</script>
+    <!-- site-meta:end -->
+    <title>台球 / Billiards / Cue-Sports Simulation | IrisSakura Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/development.html" class="nav-link">研发体系</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>独立游戏开发者与游戏系统设计者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html" data-profile-quick-link><span>02</span><strong>全部作品</strong><small>游戏与工具</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>设计研究</strong><small>玩法与系统</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/blog.html" data-profile-quick-link><span>04</span><strong>开发文章</strong><small>完整文章</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/development.html" data-profile-quick-link><span>05</span><strong>研发体系</strong><small>Iris Engineering 与 Sakura Framework</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系</strong><small>邮箱、QQ 与公开主页</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-billiards"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-09-07</p><h1>台球 / Billiards / Cue-Sports Simulation</h1><p>玩家并不直接决定“哪个球进入哪个袋”，而是在每次回合中只提交一次 Cue Strike：选择母球击球方向、力度、杆头击点以及必要的辅助参数。Shot Commit 以后，母球成为唯一最初获得主动冲量的物体，随后所有结果都由球—球、球—库边、球—袋口之间的连续物理交互自然传播。系统记录整杆过程中每一次 Contact、Rail、Pocket、Scratch…</p><div class="note-tags"><span>billiards</span><span>cue</span><span>pool</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>billiards</code> <code>cue</code> <code>pool</code></p>
+</blockquote>
+<hr />
+<h3 id="0-类型边界与相邻范式核对">0. 类型边界与相邻范式核对</h3><p>已实际核对现有游戏设计范式集合。当前 <code>README.md</code> 标记 <strong>Entries: 71</strong>；仓库已经覆盖物理弹球、回合制炮术、足球比赛模拟、驾驶竞速、格斗、战术 RPG、落块消除、三消交换、推箱子等大量与“物理、回合、球体、空间预测”相邻的宏观类型。</p>
+<p>进一步对当前索引检索：</p>
+<ul>
+<li><p><code>billiard</code></p>
+</li>
+<li><p><code>台球</code></p>
+</li>
+<li><p><code>斯诺克</code></p>
+</li>
+</ul>
+<p>均未发现对应独立宏观范式记录。</p>
+<p>因此本期新增：</p>
+<p><strong>台球 / Billiards / Cue-Sports Simulation。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Billiards；</p>
+</li>
+<li><p>Pool；</p>
+</li>
+<li><p>Cue Sports；</p>
+</li>
+<li><p>Pocket Billiards；</p>
+</li>
+<li><p>Snooker-like；</p>
+</li>
+<li><p>8-Ball-like；</p>
+</li>
+<li><p>9-Ball-like；</p>
+</li>
+<li><p>台球；</p>
+</li>
+<li><p>美式落袋；</p>
+</li>
+<li><p>斯诺克式球类模拟；</p>
+</li>
+<li><p>球杆击球物理竞技。</p>
+</li>
+</ul>
+<p>本文讨论的不是某一种具体赛事规则，而是可以支撑：</p>
+<ul>
+<li><p>8-Ball；</p>
+</li>
+<li><p>9-Ball；</p>
+</li>
+<li><p>Snooker；</p>
+</li>
+<li><p>Straight Pool；</p>
+</li>
+<li><p>Carom；</p>
+</li>
+<li><p>Fantasy Cue Sports</p>
+</li>
+</ul>
+<p>等多个变体的共同运行时范式。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>玩家并不直接决定“哪个球进入哪个袋”，而是在每次回合中只提交一次 Cue Strike：选择母球击球方向、力度、杆头击点以及必要的辅助参数。Shot Commit 以后，母球成为唯一最初获得主动冲量的物体，随后所有结果都由球—球、球—库边、球—袋口之间的连续物理交互自然传播。系统记录整杆过程中每一次 Contact、Rail、Pocket、Scratch 和 Ball Stop 事件，但在所有球真正停止运动之前不提前决定回合合法性。World Stability Barrier 达成以后，Rule Engine 才依据第一接触球、落袋球、碰库情况、犯规、目标球组与赛事模式对整杆进行一次性裁定，再决定继续击球、交换球权、Ball-in-Hand、计分或比赛结束。</strong></p>
+</blockquote>
+<p>台球真正的长期决策也并不是：</p>
+<blockquote>
+<p>“怎样把眼前这个球打进袋。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>如何在完成当前合法目标的同时，主动控制母球在碰撞传播后的最终位置，为下一杆留下合适的角度、距离、线路和安全空间。</strong></p>
+</blockquote>
+<p>因此核心循环可以压缩为：</p>
+<p><strong>读取当前球局
+→ 确定合法目标与战略意图
+→ 选择目标球 / 安全球
+→ 估计碰撞点与切球角
+→ 决定力度与杆头击点
+→ Shot Commit
+→ 母球运动
+→ 球—球碰撞传播
+→ 库边反弹 / 旋转 / 滚动
+→ 球进入袋口或继续运动
+→ 全场等待稳定
+→ Rule Engine裁定整杆
+→ 更新比分与球权
+→ 读取新的球局
+→ 规划下一杆。</strong></p>
+<p>其核心设计思想是：</p>
+<blockquote>
+<p><strong>一次击球真正操作的不是一颗目标球，而是整个球局的下一状态。</strong></p>
+</blockquote>
+<hr />
+<h3 id="1-类型定位">1. 类型定位</h3><p>典型台球游戏通常具有：</p>
+<ul>
+<li><p>一张规则化球桌；</p>
+</li>
+<li><p>库边；</p>
+</li>
+<li><p>袋口或无袋模式；</p>
+</li>
+<li><p>一颗母球；</p>
+</li>
+<li><p>多颗目标球；</p>
+</li>
+<li><p>球杆；</p>
+</li>
+<li><p>瞄准方向；</p>
+</li>
+<li><p>击球力度；</p>
+</li>
+<li><p>杆头击点；</p>
+</li>
+<li><p>上旋；</p>
+</li>
+<li><p>下旋；</p>
+</li>
+<li><p>侧旋；</p>
+</li>
+<li><p>球—球碰撞；</p>
+</li>
+<li><p>球—库边碰撞；</p>
+</li>
+<li><p>摩擦；</p>
+</li>
+<li><p>滑动；</p>
+</li>
+<li><p>滚动；</p>
+</li>
+<li><p>旋转衰减；</p>
+</li>
+<li><p>袋口捕获；</p>
+</li>
+<li><p>回合；</p>
+</li>
+<li><p>犯规；</p>
+</li>
+<li><p>Ball-in-Hand；</p>
+</li>
+<li><p>指定球 / 指定袋扩展；</p>
+</li>
+<li><p>比分；</p>
+</li>
+<li><p>Rack；</p>
+</li>
+<li><p>Frame；</p>
+</li>
+<li><p>Match；</p>
+</li>
+<li><p>AI；</p>
+</li>
+<li><p>Replay；</p>
+</li>
+<li><p>Shot Prediction；</p>
+</li>
+<li><p>Practice；</p>
+</li>
+<li><p>Trick Shot；</p>
+</li>
+<li><p>Online PvP。</p>
+</li>
+</ul>
+<p>一个典型回合流程：</p>
+<p>创建Rack
+→ 摆球
+→ 确定开球方
+→ 玩家观察球局
+→ 选择合法目标
+→ 调整击球方向
+→ 调整力度
+→ 加少量下旋
+→ Commit Shot
+→ 母球击中目标球
+→ 目标球进入袋口
+→ 母球因下旋在碰撞后回退
+→ 碰到库边
+→ 最终停在下一颗目标球适合进攻的位置
+→ 所有球停止
+→ Rule Engine确认本杆合法
+→ 玩家继续击球
+→ 下一杆失误
+→ 没有合法落袋
+→ 球权交换
+→ 对手在刚才留下的球局中继续决策。</p>
+<p>因此一整局比赛实际上是：</p>
+<p><strong>Shot State → Physical Resolution → Table State → Rule Resolution → Next Shot State</strong></p>
+<p>不断循环。</p>
+<hr />
+<h3 id="2-最核心的运行时结构shot-是唯一高价值状态提交边界">2. 最核心的运行时结构：Shot 是唯一高价值状态提交边界</h3><p>玩家瞄准期间：</p>
+<p>可以：</p>
+<ul>
+<li><p>改方向；</p>
+</li>
+<li><p>改力度；</p>
+</li>
+<li><p>改旋转；</p>
+</li>
+<li><p>更换辅助视角；</p>
+</li>
+<li><p>取消。</p>
+</li>
+</ul>
+<p>这些都属于：</p>
+<p><strong>Planning State。</strong></p>
+<p>真正按下击球：</p>
+<p>才进入：</p>
+<p><strong>Committed Shot。</strong></p>
+<p>Shot Commit以后：</p>
+<p>通常不能：</p>
+<p>在球运动途中继续控制母球。</p>
+<p>因此一次Shot天然具有：</p>
+<p><strong>Intent → Commitment → Physical Consequence</strong></p>
+<p>结构。</p>
+<p>这和实时足球、弹球等连续控制球体的类型完全不同。</p>
+<hr />
+<h3 id="3-推荐-match-phase">3. 推荐 Match Phase</h3><p>建议至少包含：</p>
+<ul>
+<li><p>MatchInitializing；</p>
+</li>
+<li><p>RackPreparing；</p>
+</li>
+<li><p>TurnPreparing；</p>
+</li>
+<li><p>PlayerPlanning；</p>
+</li>
+<li><p>ShotCommitted；</p>
+</li>
+<li><p>BallsInMotion；</p>
+</li>
+<li><p>PocketResolving；</p>
+</li>
+<li><p>BallsSettling；</p>
+</li>
+<li><p>ShotAdjudicating；</p>
+</li>
+<li><p>TurnTransition；</p>
+</li>
+<li><p>RackCompleted；</p>
+</li>
+<li><p>MatchCompleted；</p>
+</li>
+<li><p>Paused。</p>
+</li>
+</ul>
+<hr />
+<h3 id="4-为什么必须拥有-shotadjudicating">4. 为什么必须拥有 ShotAdjudicating</h3><p>母球刚击中目标球：</p>
+<p>不能立即：</p>
+<p>判断：</p>
+<p>“合法。”</p>
+<p>因为后续可能：</p>
+<ul>
+<li><p>母球落袋；</p>
+</li>
+<li><p>没有任何球碰库；</p>
+</li>
+<li><p>目标球错误落袋；</p>
+</li>
+<li><p>特殊规则目标球提前进入；</p>
+</li>
+<li><p>多球连续落袋。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p>规则必须等待：</p>
+<p><strong>整杆完整结束。</strong></p>
+<hr />
+<h3 id="5-world-stability-barrier">5. World Stability Barrier</h3><p>一杆结束的核心条件不是：</p>
+<p>“最后一次碰撞已经发生”。</p>
+<p>而是：</p>
+<p><strong>所有仍在桌面上的动态球全部进入稳定状态。</strong></p>
+<p>例如至少满足：</p>
+<ul>
+<li><p>无球处于快速移动；</p>
+</li>
+<li><p>无球持续微小滑动；</p>
+</li>
+<li><p>无球处于Pocket Capture Transit；</p>
+</li>
+<li><p>无Pending Collision；</p>
+</li>
+<li><p>无Pending Pocket Event；</p>
+</li>
+<li><p>无Pending Respotted Ball；</p>
+</li>
+<li><p>无Physics Recovery；</p>
+</li>
+<li><p>所有需要Sleep的球已稳定。</p>
+</li>
+</ul>
+<p>之后才能：</p>
+<p><code>ShotCompleted → Rule Adjudication</code>。</p>
+<hr />
+<h3 id="6-核心范式一球必须是独立权威实体">6. 核心范式一：球必须是独立权威实体</h3><p>每颗球拥有：</p>
+<p>稳定 BallId。</p>
+<p>不能使用：</p>
+<p>“红球只是场景里某个Prefab”。</p>
+<p>因为球的身份可能影响：</p>
+<ul>
+<li><p>规则；</p>
+</li>
+<li><p>分值；</p>
+</li>
+<li><p>球组；</p>
+</li>
+<li><p>指定目标；</p>
+</li>
+<li><p>落袋顺序；</p>
+</li>
+<li><p>Respotted；</p>
+</li>
+<li><p>Replay。</p>
+</li>
+</ul>
+<hr />
+<h3 id="7-balldefinition">7. BallDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>BallTypeId；</p>
+</li>
+<li><p>Radius；</p>
+</li>
+<li><p>Mass；</p>
+</li>
+<li><p>SurfaceProfile；</p>
+</li>
+<li><p>RuleTags；</p>
+</li>
+<li><p>VisualStyle；</p>
+</li>
+<li><p>PointValue；</p>
+</li>
+<li><p>GroupTags；</p>
+</li>
+<li><p>Respottable；</p>
+</li>
+<li><p>BallVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="8-ballruntimestate">8. BallRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>BallId；</p>
+</li>
+<li><p>BallTypeId；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>LinearVelocity；</p>
+</li>
+<li><p>AngularVelocity；</p>
+</li>
+<li><p>MotionPhase；</p>
+</li>
+<li><p>IsOnTable；</p>
+</li>
+<li><p>PocketState；</p>
+</li>
+<li><p>CurrentPocketId；</p>
+</li>
+<li><p>LastContactTick；</p>
+</li>
+<li><p>LastContactBallId；</p>
+</li>
+<li><p>LastRailId；</p>
+</li>
+<li><p>BallVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="9-motionphase">9. MotionPhase</h3><p>可以区分：</p>
+<ul>
+<li><p>Stationary；</p>
+</li>
+<li><p>Sliding；</p>
+</li>
+<li><p>Rolling；</p>
+</li>
+<li><p>SpinningInPlace；</p>
+</li>
+<li><p>Airborne；</p>
+</li>
+<li><p>PocketTransit；</p>
+</li>
+<li><p>Removed。</p>
+</li>
+</ul>
+<hr />
+<h3 id="10-为什么-sliding-与-rolling-值得区分">10. 为什么 Sliding 与 Rolling 值得区分</h3><p>母球刚被击出时：</p>
+<p>往往不是纯滚动。</p>
+<p>可能存在：</p>
+<p>球体表面速度</p>
+<p>和：</p>
+<p>地面接触速度</p>
+<p>不同。</p>
+<p>摩擦会逐渐让它：</p>
+<p>从 Sliding</p>
+<p>转成：</p>
+<p>Rolling。</p>
+<p>这正是：</p>
+<p>上旋、下旋、停球和回拉效果</p>
+<p>能够形成的基础。</p>
+<hr />
+<h3 id="11-核心范式二球桌必须是正式规则化空间">11. 核心范式二：球桌必须是正式规则化空间</h3><p>Table不是：</p>
+<p>普通Plane + 六个Trigger。</p>
+<p>它包含：</p>
+<ul>
+<li><p>Play Surface；</p>
+</li>
+<li><p>Cushion；</p>
+</li>
+<li><p>Pocket Mouth；</p>
+</li>
+<li><p>Pocket Funnel；</p>
+</li>
+<li><p>Rail Nose；</p>
+</li>
+<li><p>Slate Boundary；</p>
+</li>
+<li><p>Spot；</p>
+</li>
+<li><p>Rack Area；</p>
+</li>
+<li><p>Ball-in-Hand Region。</p>
+</li>
+</ul>
+<hr />
+<h3 id="12-tabledefinition">12. TableDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>TableId；</p>
+</li>
+<li><p>PlaySurfaceBounds；</p>
+</li>
+<li><p>CushionDefinitions；</p>
+</li>
+<li><p>PocketDefinitions；</p>
+</li>
+<li><p>SpotDefinitions；</p>
+</li>
+<li><p>RackDefinitions；</p>
+</li>
+<li><p>BallPlacementRegions；</p>
+</li>
+<li><p>ClothProfile；</p>
+</li>
+<li><p>GravityProfile；</p>
+</li>
+<li><p>TableVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="13-cushiondefinition">13. CushionDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>CushionId；</p>
+</li>
+<li><p>SegmentGeometry；</p>
+</li>
+<li><p>CollisionNormalRule；</p>
+</li>
+<li><p>Restitution；</p>
+</li>
+<li><p>Friction；</p>
+</li>
+<li><p>SpinTransfer；</p>
+</li>
+<li><p>CornerTransition；</p>
+</li>
+<li><p>CushionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="14-pocketdefinition">14. PocketDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>PocketId；</p>
+</li>
+<li><p>PocketMouthGeometry；</p>
+</li>
+<li><p>CaptureRegion；</p>
+</li>
+<li><p>JawGeometry；</p>
+</li>
+<li><p>FunnelGeometry；</p>
+</li>
+<li><p>BallAcceptanceRule；</p>
+</li>
+<li><p>PocketVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="15-袋口绝不能只做成一个大trigger">15. 袋口绝不能只做成一个大Trigger</h3><p>否则会出现：</p>
+<p>视觉上球擦袋而过，</p>
+<p>逻辑却被“吸进去”。</p>
+<p>或：</p>
+<p>明明已经掉进袋口，</p>
+<p>却从Trigger边缘弹出来。</p>
+<hr />
+<h3 id="16-更稳的pocket分层">16. 更稳的Pocket分层</h3><h3 id="jaw-collision">Jaw Collision</h3><p>袋口两侧仍属于真实碰撞。</p>
+<h3 id="mouth-region">Mouth Region</h3><p>球已经进入袋口几何。</p>
+<h3 id="capture-threshold">Capture Threshold</h3><p>满足：</p>
+<p>位置、速度、运动方向等条件</p>
+<p>以后正式：</p>
+<p>Pocket Captured。</p>
+<h3 id="pocket-transit">Pocket Transit</h3><p>球从桌面物理世界</p>
+<p>转入：</p>
+<p>袋道 / Removed State。</p>
+<hr />
+<h3 id="17-核心范式三cue-strike-必须是独立物理输入模型">17. 核心范式三：Cue Strike 必须是独立物理输入模型</h3><p>玩家不应该：</p>
+<p>直接给母球：</p>
+<p><code>velocity = aim * power</code></p>
+<p>然后结束。</p>
+<p>因为这样无法稳定支持：</p>
+<ul>
+<li><p>上旋；</p>
+</li>
+<li><p>下旋；</p>
+</li>
+<li><p>左右旋；</p>
+</li>
+<li><p>杆头偏击；</p>
+</li>
+<li><p>跳球扩展；</p>
+</li>
+<li><p>杆法差异。</p>
+</li>
+</ul>
+<hr />
+<h3 id="18-cuestrikeintent">18. CueStrikeIntent</h3><p>建议包含：</p>
+<ul>
+<li><p>ShotId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>CueBallId；</p>
+</li>
+<li><p>AimDirection；</p>
+</li>
+<li><p>PowerNormalized；</p>
+</li>
+<li><p>TipOffsetX；</p>
+</li>
+<li><p>TipOffsetY；</p>
+</li>
+<li><p>CueElevation；</p>
+</li>
+<li><p>CueDefinitionId；</p>
+</li>
+<li><p>SubmittedTableRevision；</p>
+</li>
+<li><p>ShotVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="19-cue-strike-resolver">19. Cue Strike Resolver</h3><p>把玩家输入转换成：</p>
+<ul>
+<li><p>Linear Impulse；</p>
+</li>
+<li><p>Angular Impulse；</p>
+</li>
+<li><p>Optional Vertical Impulse。</p>
+</li>
+</ul>
+<hr />
+<h3 id="20-tip-offset">20. Tip Offset</h3><p>击中母球正中心：</p>
+<p>主要产生：</p>
+<p>前向线速度。</p>
+<p>击球点高于中心：</p>
+<p>增加：</p>
+<p>前滚旋转。</p>
+<p>低于中心：</p>
+<p>增加：</p>
+<p>回旋趋势。</p>
+<p>左右偏：</p>
+<p>增加：</p>
+<p>侧旋。</p>
+<hr />
+<h3 id="21-这意味着杆头击点本质上是">21. 这意味着杆头击点本质上是：</h3><p><strong>将一次标量力度扩展成线动量和角动量的联合输入。</strong></p>
+<hr />
+<h3 id="22-核心范式四shot-preview-与真实-cue-strike-必须共享同一个输入模型">22. 核心范式四：Shot Preview 与真实 Cue Strike 必须共享同一个输入模型</h3><p>如果辅助线认为：</p>
+<p>中心击球。</p>
+<p>真实Shot却因为：</p>
+<p>默认加了某种Spin，</p>
+<p>预测就失去可信度。</p>
+<hr />
+<h3 id="23-preview-simulation应该读取">23. Preview Simulation应该读取：</h3><ul>
+<li><p>Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Tip Offset；</p>
+</li>
+<li><p>Table Physics；</p>
+</li>
+<li><p>当前Ball State。</p>
+</li>
+</ul>
+<hr />
+<h3 id="24-辅助程度可以成为ruleset变量">24. 辅助程度可以成为Ruleset变量</h3><p>例如：</p>
+<h4 id="beginner">Beginner</h4><p>显示母球完整初始线路</p>
+<p>和目标球短预测线。</p>
+<h4 id="intermediate">Intermediate</h4><p>只显示第一碰撞点。</p>
+<h4 id="competitive">Competitive</h4><p>只显示瞄准线</p>
+<p>或完全无预测。</p>
+<hr />
+<h3 id="25-这不是纯ui设置">25. 这不是纯UI设置</h3><p>它会显著改变：</p>
+<p>竞技技能结构。</p>
+<p>因此：</p>
+<p>需要进入：</p>
+<p>AssistProfile / Ranked Ruleset。</p>
+<hr />
+<h3 id="26-核心范式五physics-tick-必须固定">26. 核心范式五：Physics Tick 必须固定</h3><p>所有球：</p>
+<p>使用固定Simulation Tick。</p>
+<p>Rendering：</p>
+<p>任意刷新率。</p>
+<hr />
+<h3 id="27-为什么">27. 为什么</h3><p>台球对：</p>
+<ul>
+<li><p>微小角度；</p>
+</li>
+<li><p>碰撞点；</p>
+</li>
+<li><p>摩擦；</p>
+</li>
+<li><p>旋转；</p>
+</li>
+</ul>
+<p>极其敏感。</p>
+<p>如果：</p>
+<p>不同FPS</p>
+<p>产生不同结果，</p>
+<p>玩家不可能形成稳定球感。</p>
+<hr />
+<h3 id="28-physicsstate">28. PhysicsState</h3><p>建议维护：</p>
+<ul>
+<li><p>PhysicsTick；</p>
+</li>
+<li><p>FixedDelta；</p>
+</li>
+<li><p>GlobalGravity；</p>
+</li>
+<li><p>ClothFriction；</p>
+</li>
+<li><p>RollingResistance；</p>
+</li>
+<li><p>SpinDecay；</p>
+</li>
+<li><p>SleepThreshold；</p>
+</li>
+<li><p>PhysicsVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="29-核心范式六ball-ball-collision-必须使用连续或高质量sweep">29. 核心范式六：Ball-Ball Collision 必须使用连续或高质量Sweep</h3><p>高速母球可能：</p>
+<p>一个Tick跨越目标球大半个直径。</p>
+<p>纯离散Overlap容易：</p>
+<p>穿球。</p>
+<hr />
+<h3 id="30-推荐">30. 推荐：</h3><ul>
+<li><p>Swept Sphere；</p>
+</li>
+<li><p>Time of Impact；</p>
+</li>
+<li><p>Continuous Collision Detection；</p>
+</li>
+<li><p>Conservative Advancement。</p>
+</li>
+</ul>
+<hr />
+<h3 id="31-一个tick内发生多次碰撞">31. 一个Tick内发生多次碰撞</h3><p>例如：</p>
+<p>A撞B。</p>
+<p>B马上撞C。</p>
+<p>需要：</p>
+<p>处理：</p>
+<p>剩余Substep Time。</p>
+<hr />
+<h3 id="32-不能简单">32. 不能简单：</h3><p>每Tick最多碰一次。</p>
+<p>否则：</p>
+<p>组合球 / 紧贴球</p>
+<p>会明显错误。</p>
+<hr />
+<h3 id="33-核心范式七碰撞解算必须尽量遵循先发生的接触优先">33. 核心范式七：碰撞解算必须尽量遵循“先发生的接触优先”</h3><p>多个球很近。</p>
+<p>一个高速球冲入球群。</p>
+<p>如果碰撞顺序只由：</p>
+<p>数组遍历顺序</p>
+<p>决定，</p>
+<p>结果会不稳定。</p>
+<hr />
+<h3 id="34-推荐">34. 推荐：</h3><p>按：</p>
+<p>Earliest Time of Impact</p>
+<p>排序。</p>
+<p>处理最早接触。</p>
+<p>更新状态。</p>
+<p>继续剩余时间。</p>
+<hr />
+<h3 id="35-collisionevent">35. CollisionEvent</h3><p>建议包含：</p>
+<ul>
+<li><p>CollisionId；</p>
+</li>
+<li><p>Tick；</p>
+</li>
+<li><p>SubTickTime；</p>
+</li>
+<li><p>BallAId；</p>
+</li>
+<li><p>BallBIdOrRailId；</p>
+</li>
+<li><p>ContactPoint；</p>
+</li>
+<li><p>ContactNormal；</p>
+</li>
+<li><p>IncomingVelocityA；</p>
+</li>
+<li><p>IncomingVelocityB；</p>
+</li>
+<li><p>Impulse；</p>
+</li>
+<li><p>CollisionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="36-所有规则分析应该消费">36. 所有规则分析应该消费：</h3><p>CollisionEvent。</p>
+<p>不要：</p>
+<p>直接读取某个Collider回调顺序。</p>
+<hr />
+<h3 id="37-核心范式八球球碰撞与球库碰撞需要分开建模">37. 核心范式八：球—球碰撞与球—库碰撞需要分开建模</h3><p>Ball-Ball：</p>
+<p>主要进行：</p>
+<p>球体碰撞动量交换。</p>
+<p>Ball-Cushion：</p>
+<p>则需要考虑：</p>
+<ul>
+<li><p>Cushion Restitution；</p>
+</li>
+<li><p>Tangential Friction；</p>
+</li>
+<li><p>Spin Transfer；</p>
+</li>
+<li><p>Rail Geometry。</p>
+</li>
+</ul>
+<hr />
+<h3 id="38-一个带侧旋的母球撞库以后">38. 一个带侧旋的母球撞库以后：</h3><p>反射角可能：</p>
+<p>和无旋状态不同。</p>
+<p>这正是：</p>
+<p>高级走位的重要组成。</p>
+<hr />
+<h3 id="39-如果产品并不追求高拟真">39. 如果产品并不追求高拟真</h3><p>可以简化。</p>
+<p>但：</p>
+<p>简化模型也必须：</p>
+<p>稳定、统一、可学习。</p>
+<hr />
+<h3 id="40-核心范式九physics不需要绝对现实需要稳定且技能可迁移">40. 核心范式九：Physics不需要绝对现实，需要“稳定且技能可迁移”</h3><p>这是Cue Sports最重要的原则之一。</p>
+<p>玩家会重复学习：</p>
+<p>“这个力度打半台大约走多远。”</p>
+<p>“这个侧旋碰库以后会偏多少。”</p>
+<hr />
+<h3 id="41-如果physics每次">41. 如果Physics每次：</h3><p>因为随机微扰</p>
+<p>出现明显差异，</p>
+<p>整个长期学习循环会崩溃。</p>
+<hr />
+<h3 id="42-因此随机性最好">42. 因此随机性最好：</h3><p>不要进入：</p>
+<p>基础球体碰撞。</p>
+<hr />
+<h3 id="43-如果角色属性需要误差">43. 如果角色属性需要误差</h3><p>也更适合：</p>
+<p>在Cue Strike Commit时</p>
+<p>产生：</p>
+<p>可解释的小型Input Error。</p>
+<p>而不是：</p>
+<p>运动过程中偷偷修改球。</p>
+<hr />
+<h3 id="44-核心范式十spin必须作为正式状态而不是视觉旋转">44. 核心范式十：Spin必须作为正式状态，而不是视觉旋转</h3><p>Ball AngularVelocity</p>
+<p>是Gameplay State。</p>
+<hr />
+<h3 id="45-常见spin分量">45. 常见Spin分量：</h3><h3 id="follow-top-spin">Follow / Top Spin</h3><p>母球碰撞后继续向前。</p>
+<h3 id="draw-back-spin">Draw / Back Spin</h3><p>碰撞后回退。</p>
+<h3 id="side-spin">Side Spin</h3><p>影响：</p>
+<p>碰库后的角度与速度。</p>
+<hr />
+<h3 id="46-spin需要通过">46. Spin需要通过：</h3><ul>
+<li><p>Cloth Friction；</p>
+</li>
+<li><p>Ball Collision；</p>
+</li>
+<li><p>Cushion Collision；</p>
+</li>
+</ul>
+<p>逐步转换和衰减。</p>
+<hr />
+<h3 id="47-球模型视觉转动">47. 球模型视觉转动</h3><p>只是：</p>
+<p>AngularVelocity的投影。</p>
+<hr />
+<h3 id="48-不要">48. 不要：</h3><p>Animator自己转球纹理</p>
+<p>然后Gameplay不知道当前Spin。</p>
+<hr />
+<h3 id="49-核心范式十一sliding-rolling-转换是走位可信度的关键">49. 核心范式十一：Sliding → Rolling 转换是走位可信度的关键</h3><p>母球刚击出：</p>
+<p>可能有：</p>
+<p>较大滑动。</p>
+<p>随着摩擦：</p>
+<p>线速度与角速度逐渐趋近：</p>
+<p>纯滚动条件。</p>
+<hr />
+<h3 id="50-这一阶段会决定">50. 这一阶段会决定：</h3><p>母球撞目标球时：</p>
+<p>仍然带多少Follow / Draw。</p>
+<hr />
+<h3 id="51-因此杆法效果不是">51. 因此“杆法效果”不是：</h3><p>碰球瞬间临时查询玩家按了什么Spin按钮。</p>
+<p>而是：</p>
+<p>Shot Commit时已经进入母球Angular State，</p>
+<p>之后由真实物理演化。</p>
+<hr />
+<h3 id="52-核心范式十二第一碰撞球是规则系统的重要事实">52. 核心范式十二：第一碰撞球是规则系统的重要事实</h3><p>许多Cue Sports规则需要知道：</p>
+<p>母球首先接触了哪颗目标球。</p>
+<hr />
+<h3 id="53-shoteventstream">53. ShotEventStream</h3><p>应记录：</p>
+<p><code>CueBallFirstObjectContact</code>。</p>
+<hr />
+<h3 id="54-这个事件只能">54. 这个事件只能：</h3><p>设置一次。</p>
+<hr />
+<h3 id="55-后续母球再撞别的球">55. 后续母球再撞别的球：</h3><p>不能覆盖。</p>
+<hr />
+<h3 id="56-firstcontactstate">56. FirstContactState</h3><p>建议包含：</p>
+<ul>
+<li><p>ShotId；</p>
+</li>
+<li><p>FirstObjectBallId；</p>
+</li>
+<li><p>ContactTick；</p>
+</li>
+<li><p>WasLegalAtContactSnapshot；</p>
+</li>
+<li><p>FirstContactVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="57-是否合法">57. “是否合法”</h3><p>最终仍可由Rule Engine根据：</p>
+<p>Shot结束时的赛事状态判断。</p>
+<p>但First Contact Fact：</p>
+<p>必须稳定保留。</p>
+<hr />
+<h3 id="58-核心范式十三rail-contact必须作为正式事件而不是纯physics细节">58. 核心范式十三：Rail Contact必须作为正式事件，而不是纯Physics细节</h3><p>许多规则会要求：</p>
+<p>第一接触后：</p>
+<p>至少有某球碰库</p>
+<p>或：</p>
+<p>有球进袋。</p>
+<hr />
+<h3 id="59-所以需要">59. 所以需要：</h3><p>RailContactEvent。</p>
+<hr />
+<h3 id="60-建议记录">60. 建议记录：</h3><ul>
+<li><p>BallId；</p>
+</li>
+<li><p>RailId；</p>
+</li>
+<li><p>Tick；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>ContactPoint。</p>
+</li>
+</ul>
+<hr />
+<h3 id="61-同一球连续贴库震荡">61. 同一球连续贴库震荡</h3><p>需要：</p>
+<p>Debounce / Contact Session。</p>
+<p>否则：</p>
+<p>一秒内算：</p>
+<p>20次碰库。</p>
+<hr />
+<h3 id="62-规则通常只需要">62. 规则通常只需要：</h3><p>“发生过合法碰库”。</p>
+<p>而不是：</p>
+<p>Collider回调次数。</p>
+<hr />
+<h3 id="63-核心范式十四pocket-属于-ball-lifecycle不只是score-event">63. 核心范式十四：Pocket 属于 Ball Lifecycle，不只是Score Event</h3><p>球进入袋口以后：</p>
+<p>其物理身份发生：</p>
+<p>Table → Pocketed。</p>
+<hr />
+<h3 id="64-pocketevent">64. PocketEvent</h3><p>建议包含：</p>
+<ul>
+<li><p>ShotId；</p>
+</li>
+<li><p>BallId；</p>
+</li>
+<li><p>PocketId；</p>
+</li>
+<li><p>CaptureTick；</p>
+</li>
+<li><p>CapturedVelocity；</p>
+</li>
+<li><p>OwnerPlayerId；</p>
+</li>
+<li><p>PocketVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="65-pocketed-ball处理根据ruleset可能">65. Pocketed Ball处理根据Ruleset可能：</h3><ul>
+<li><p>留在袋中；</p>
+</li>
+<li><p>移出桌面；</p>
+</li>
+<li><p>计分；</p>
+</li>
+<li><p>Respotted；</p>
+</li>
+<li><p>Rack End。</p>
+</li>
+</ul>
+<hr />
+<h3 id="66-这些不是">66. 这些不是：</h3><p>PocketSystem决定。</p>
+<p>PocketSystem只发布：</p>
+<p><strong>Ball Pocketed Fact。</strong></p>
+<p>Rule Engine负责：</p>
+<p>解释。</p>
+<hr />
+<h3 id="67-核心范式十五母球落袋必须与普通目标球落袋分离">67. 核心范式十五：母球落袋必须与普通目标球落袋分离</h3><p>Cue Ball进入袋：</p>
+<p>通常称为：</p>
+<p>Scratch。</p>
+<hr />
+<h3 id="68-scratch不是">68. Scratch不是：</h3><p>Cue Ball Destroy。</p>
+<p>而是：</p>
+<p>一杆内的正式规则事实。</p>
+<hr />
+<h3 id="69-shotfactstate">69. ShotFactState</h3><p>可以包含：</p>
+<ul>
+<li><p>CueBallPocketed；</p>
+</li>
+<li><p>ObjectBallsPocketed；</p>
+</li>
+<li><p>FirstObjectContact；</p>
+</li>
+<li><p>RailContacts；</p>
+</li>
+<li><p>BallsOffTable；</p>
+</li>
+<li><p>CalledBallResult；</p>
+</li>
+<li><p>CalledPocketResult；</p>
+</li>
+<li><p>ShotFactVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="70-shot结束以后">70. Shot结束以后：</h3><p>Rule Engine统一解释这些Fact。</p>
+<hr />
+<h3 id="71-核心范式十六规则系统必须与physics彻底分离">71. 核心范式十六：规则系统必须与Physics彻底分离</h3><p>这是台球架构最重要的边界之一。</p>
+<p>Physics只回答：</p>
+<ul>
+<li><p>谁碰了谁；</p>
+</li>
+<li><p>球去了哪里；</p>
+</li>
+<li><p>哪颗球进了哪个袋；</p>
+</li>
+<li><p>哪颗球停在哪里。</p>
+</li>
+</ul>
+<p>Rule Engine回答：</p>
+<ul>
+<li><p>这杆合法吗；</p>
+</li>
+<li><p>谁得分；</p>
+</li>
+<li><p>谁继续；</p>
+</li>
+<li><p>是否犯规；</p>
+</li>
+<li><p>是否Ball-in-Hand；</p>
+</li>
+<li><p>是否重摆；</p>
+</li>
+<li><p>是否赢得Rack。</p>
+</li>
+</ul>
+<hr />
+<h3 id="72-这使一个physics-core可以复用">72. 这使一个Physics Core可以复用：</h3><p>8-Ball。</p>
+<p>9-Ball。</p>
+<p>Snooker-like。</p>
+<p>Carom。</p>
+<p>Trick Shot。</p>
+<hr />
+<h3 id="73-rulesetdefinition">73. RulesetDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>RulesetId；</p>
+</li>
+<li><p>RackDefinitionId；</p>
+</li>
+<li><p>LegalFirstContactRule；</p>
+</li>
+<li><p>PocketScoringRule；</p>
+</li>
+<li><p>FoulRules；</p>
+</li>
+<li><p>TurnContinuationRule；</p>
+</li>
+<li><p>BallInHandRule；</p>
+</li>
+<li><p>CallShotRule；</p>
+</li>
+<li><p>RespottedRule；</p>
+</li>
+<li><p>RackWinCondition；</p>
+</li>
+<li><p>MatchWinCondition；</p>
+</li>
+<li><p>RulesetVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="74-不要在ball脚本中写">74. 不要在Ball脚本中写：</h3><p><code>if ballNumber == 8 then Win()</code>。</p>
+<p>这属于：</p>
+<p>Ruleset。</p>
+<hr />
+<h3 id="75-核心范式十七shot-rule-adjudication-应基于完整事件流而不是边发生边判罚">75. 核心范式十七：Shot Rule Adjudication 应基于完整事件流，而不是边发生边判罚</h3><p>最安全的流程：</p>
+<p>Shot Commit
+→ Event Stream记录
+→ 全部球运动
+→ World Stable
+→ Freeze Shot Facts
+→ Rule Engine计算结果
+→ Commit Match State。</p>
+<hr />
+<h3 id="76-为什么">76. 为什么</h3><p>假设：</p>
+<p>第一碰撞合法。</p>
+<p>Rule Engine立刻宣布：</p>
+<p>合法。</p>
+<p>随后：</p>
+<p>母球落袋。</p>
+<p>最终其实：</p>
+<p>犯规。</p>
+<p>所以：</p>
+<p><strong>Shot Legality 是整杆属性。</strong></p>
+<hr />
+<h3 id="77-shotadjudicationresult">77. ShotAdjudicationResult</h3><p>建议包含：</p>
+<ul>
+<li><p>ShotId；</p>
+</li>
+<li><p>IsLegal；</p>
+</li>
+<li><p>FoulTypes；</p>
+</li>
+<li><p>ScoreDelta；</p>
+</li>
+<li><p>PocketedBallResults；</p>
+</li>
+<li><p>TurnContinues；</p>
+</li>
+<li><p>NextPlayerId；</p>
+</li>
+<li><p>BallInHandGranted；</p>
+</li>
+<li><p>BallsToRespot；</p>
+</li>
+<li><p>RackResult；</p>
+</li>
+<li><p>MatchResult；</p>
+</li>
+<li><p>AdjudicationVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="78-结果一次性commit">78. 结果一次性Commit。</h3><hr />
+<h3 id="79-核心范式十八foul应该允许多个原因同时存在">79. 核心范式十八：Foul应该允许多个原因同时存在</h3><p>例如一杆可能同时：</p>
+<ul>
+<li><p>First Contact错误；</p>
+</li>
+<li><p>Scratch；</p>
+</li>
+<li><p>Ball离桌；</p>
+</li>
+<li><p>No Rail；</p>
+</li>
+<li><p>Illegal Pocket。</p>
+</li>
+</ul>
+<hr />
+<h3 id="80-不要">80. 不要：</h3><p>找到第一个Foul</p>
+<p>就停止分析。</p>
+<hr />
+<h3 id="81-foulset">81. FoulSet</h3><p>保存：</p>
+<p>所有成立原因。</p>
+<hr />
+<h3 id="82-最终处罚">82. 最终处罚：</h3><p>由：</p>
+<p>Penalty Policy</p>
+<p>统一决定。</p>
+<hr />
+<h3 id="83-这样">83. 这样：</h3><p>Debug、赛事规则和Replay</p>
+<p>都更清晰。</p>
+<hr />
+<h3 id="84-核心范式十九ball-in-hand-是一个新的-placement-phase不是直接瞬移母球">84. 核心范式十九：Ball-in-Hand 是一个新的 Placement Phase，不是直接瞬移母球</h3><p>犯规以后：</p>
+<p>下一位Player可能：</p>
+<p>获得：</p>
+<p>母球自由摆放权。</p>
+<hr />
+<h3 id="85-matchphase进入">85. MatchPhase进入：</h3><p><code>CueBallPlacement</code>。</p>
+<hr />
+<h3 id="86-placementintent">86. PlacementIntent</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerId；</p>
+</li>
+<li><p>CueBallId；</p>
+</li>
+<li><p>CandidatePosition；</p>
+</li>
+<li><p>PlacementRegionId；</p>
+</li>
+<li><p>TableRevision；</p>
+</li>
+<li><p>PlacementVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="87-placement-validation">87. Placement Validation</h3><p>检查：</p>
+<ul>
+<li><p>在合法桌面区域；</p>
+</li>
+<li><p>不与目标球重叠；</p>
+</li>
+<li><p>不进入袋口；</p>
+</li>
+<li><p>满足规则规定区域；</p>
+</li>
+<li><p>不穿越障碍规则。</p>
+</li>
+</ul>
+<hr />
+<h3 id="88-玩家确认以后">88. 玩家确认以后：</h3><p>母球位置Commit。</p>
+<hr />
+<h3 id="89-不能">89. 不能：</h3><p>UI Drag直接修改Physics Ball Position</p>
+<p>并允许穿过其他球。</p>
+<hr />
+<h3 id="90-核心范式二十ball-placement-preview必须和最终collision-validation一致">90. 核心范式二十：Ball Placement Preview必须和最终Collision Validation一致</h3><p>拖动母球：</p>
+<p>显示绿色：</p>
+<p>可放。</p>
+<p>最终Commit：</p>
+<p>也必须可放。</p>
+<hr />
+<h3 id="91-如果">91. 如果：</h3><p>Preview和真实规则不一致，</p>
+<p>玩家体验极差。</p>
+<hr />
+<h3 id="92-placement可以">92. Placement可以：</h3><p>使用：</p>
+<p>Projected Candidate</p>
+<p>但最终：</p>
+<p>Rule Core验证。</p>
+<hr />
+<h3 id="93-核心范式二十一rack-是比赛的一个明确生命周期对象">93. 核心范式二十一：Rack 是比赛的一个明确生命周期对象</h3><p>一次Match可能：</p>
+<p>包含多个Rack / Frame。</p>
+<hr />
+<h3 id="94-rackstate">94. RackState</h3><p>建议包含：</p>
+<ul>
+<li><p>RackId；</p>
+</li>
+<li><p>RackIndex；</p>
+</li>
+<li><p>InitialBallLayout；</p>
+</li>
+<li><p>CurrentBallStates；</p>
+</li>
+<li><p>BreakPlayerId；</p>
+</li>
+<li><p>WinnerPlayerId；</p>
+</li>
+<li><p>RackScore；</p>
+</li>
+<li><p>RackVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="95-rack-setup">95. Rack Setup</h3><p>必须：</p>
+<p>由规则化Formation生成。</p>
+<hr />
+<h3 id="96-不建议">96. 不建议：</h3><p>手工Prefab把球摆出来</p>
+<p>然后假设：</p>
+<p>永远正确。</p>
+<hr />
+<h3 id="97-rackdefinition">97. RackDefinition</h3><p>可以描述：</p>
+<ul>
+<li><p>Formation Geometry；</p>
+</li>
+<li><p>RequiredBallSlots；</p>
+</li>
+<li><p>RandomizableSlots；</p>
+</li>
+<li><p>FixedBallRules；</p>
+</li>
+<li><p>TightPackingTolerance；</p>
+</li>
+<li><p>RackVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="98-rack-validator">98. Rack Validator</h3><p>检查：</p>
+<ul>
+<li><p>球无重叠；</p>
+</li>
+<li><p>全部位于合法区域；</p>
+</li>
+<li><p>数量正确；</p>
+</li>
+<li><p>关键球位置合法；</p>
+</li>
+<li><p>Ball Radius一致。</p>
+</li>
+</ul>
+<hr />
+<h3 id="99-核心范式二十二break-shot-是普通shot的规则特例不应另建第二套physics">99. 核心范式二十二：Break Shot 是普通Shot的规则特例，不应另建第二套Physics</h3><p>Break：</p>
+<p>仍然：</p>
+<p>CueStrike → Ball Motion → Collision。</p>
+<hr />
+<h3 id="100-特殊的是">100. 特殊的是：</h3><p>Rule Adjudication。</p>
+<p>例如可能检查：</p>
+<ul>
+<li><p>特定碰库数量；</p>
+</li>
+<li><p>特定球落袋；</p>
+</li>
+<li><p>Break Foul。</p>
+</li>
+</ul>
+<hr />
+<h3 id="101-所以">101. 所以：</h3><p>Physics Core不需要：</p>
+<p><code>isBreakShot</code>特判冲量。</p>
+<p>除非赛事物理规则真的不同。</p>
+<hr />
+<h3 id="102-核心范式二十三玩家真正的长期资源是母球位置">102. 核心范式二十三：玩家真正的长期资源是“母球位置”</h3><p>目标球进袋：</p>
+<p>是当前收益。</p>
+<p>母球停在哪里：</p>
+<p>决定下一杆质量。</p>
+<hr />
+<h3 id="103-可以把一次shot价值拆成">103. 可以把一次Shot价值拆成：</h3><p><strong>Pot Value</strong></p>
+<p>和：</p>
+<p><strong>Position Value。</strong></p>
+<hr />
+<h3 id="104-一个100能进的球">104. 一个100%能进的球：</h3><p>如果母球随后躲到其他球后面，</p>
+<p>下一杆极差。</p>
+<hr />
+<h3 id="105-另一种难度稍高的线路">105. 另一种难度稍高的线路：</h3><p>却可以让母球停到完美位置。</p>
+<p>高级玩家会选择：</p>
+<p>后者。</p>
+<hr />
+<h3 id="106-这就是台球区别于单次击球小游戏的核心深度">106. 这就是台球区别于单次击球小游戏的核心深度。</h3><hr />
+<h3 id="107-核心范式二十四position-play需要把球局理解为未来几杆的图">107. 核心范式二十四：Position Play需要把球局理解为“未来几杆的图”</h3><p>玩家可以思考：</p>
+<p>当前目标A。</p>
+<p>下一颗B。</p>
+<p>再下一颗C。</p>
+<hr />
+<h3 id="108-shot-planning-graph">108. Shot Planning Graph</h3><p>Node：</p>
+<p>当前球局。</p>
+<p>Edge：</p>
+<p>某候选Shot。</p>
+<p>结果Node：</p>
+<p>预测的下一Ball Layout。</p>
+<hr />
+<h3 id="109-人类不会">109. 人类不会：</h3><p>穷举完整图。</p>
+<p>但：</p>
+<p>玩法深度正来自：</p>
+<p>不断在脑中做简化前向搜索。</p>
+<hr />
+<h3 id="110-ai同样应该">110. AI同样应该：</h3><p>从单杆收益</p>
+<p>升级到：</p>
+<p>多杆Position Utility。</p>
+<hr />
+<h3 id="111-核心范式二十五角度是未来线路资源">111. 核心范式二十五：角度是未来线路资源</h3><p>一个目标球：</p>
+<p>距离袋很近。</p>
+<p>但：</p>
+<p>如果母球和目标球切角太薄，</p>
+<p>很难控制母球。</p>
+<hr />
+<h3 id="112-所以走位目标通常不是">112. 所以走位目标通常不是：</h3><p>“让母球离下一颗球最近”。</p>
+<p>而是：</p>
+<p>“让母球停在下一颗球拥有合适入射角的区域”。</p>
+<hr />
+<h3 id="113-可以定义">113. 可以定义：</h3><p><strong>Position Zone。</strong></p>
+<p>而不是：</p>
+<p>单一点。</p>
+<hr />
+<h3 id="114-positionzonedefinition">114. PositionZoneDefinition</h3><p>用于：</p>
+<p>AI / Training。</p>
+<p>可以描述：</p>
+<ul>
+<li><p>合理切角；</p>
+</li>
+<li><p>合理距离；</p>
+</li>
+<li><p>避免遮挡；</p>
+</li>
+<li><p>后续路线。</p>
+</li>
+</ul>
+<hr />
+<h3 id="115-这让走位容错">115. 这让走位容错：</h3><p>变成区域规划。</p>
+<hr />
+<h3 id="116-核心范式二十六safety-play-是主动让当前回合不进球但让对手状态恶化">116. 核心范式二十六：Safety Play 是“主动让当前回合不进球，但让对手状态恶化”</h3><p>这正是台球最值得独立成类的原因之一。</p>
+<hr />
+<h3 id="117-玩家并不总是">117. 玩家并不总是：</h3><p>尝试进球。</p>
+<hr />
+<h3 id="118-如果当前没有高概率进攻">118. 如果当前没有高概率进攻：</h3><p>可以：</p>
+<p>合法接触目标球，</p>
+<p>随后让母球停在：</p>
+<p>障碍球后方。</p>
+<hr />
+<h3 id="119-对手得到一个">119. 对手得到一个：</h3><p>极差球局。</p>
+<hr />
+<h3 id="120-这是">120. 这是：</h3><p><strong>Turn Denial / Information-perfect Positional Defense。</strong></p>
+<hr />
+<h3 id="121-所以ai如果只会">121. 所以AI如果只会：</h3><p>寻找最大进球概率，</p>
+<p>永远不会：</p>
+<p>真正会打台球。</p>
+<hr />
+<h3 id="122-核心范式二十七safety-value-应成为独立评估轴">122. 核心范式二十七：Safety Value 应成为独立评估轴</h3><p>可以考虑：</p>
+<ul>
+<li><p>对手合法目标可见程度；</p>
+</li>
+<li><p>对手可用Pocket数量；</p>
+</li>
+<li><p>对手最优Shot成功率；</p>
+</li>
+<li><p>Cue Ball安全区域；</p>
+</li>
+<li><p>Foul风险；</p>
+</li>
+<li><p>Snooker / Obstruction Degree。</p>
+</li>
+</ul>
+<hr />
+<h3 id="123-一个0分shot">123. 一个0分Shot：</h3><p>可能有：</p>
+<p>极高战略价值。</p>
+<hr />
+<h3 id="124-核心范式二十八object-ball-obstruction-应作为正式空间查询">124. 核心范式二十八：Object Ball Obstruction 应作为正式空间查询</h3><p>目标球和母球之间：</p>
+<p>可能存在其他球遮挡。</p>
+<hr />
+<h3 id="125-需要">125. 需要：</h3><p><strong>Ball-to-Ball Visibility Query。</strong></p>
+<hr />
+<h3 id="126-给定">126. 给定：</h3><p>CueBall。</p>
+<p>TargetBall。</p>
+<p>计算：</p>
+<p>两球中心连线附近</p>
+<p>是否存在：</p>
+<p>其他Ball的扩展半径阻挡。</p>
+<hr />
+<h3 id="127-但真正需要">127. 但真正需要：</h3><p>允许目标球切球。</p>
+<p>所以不能：</p>
+<p>只检查中心直线。</p>
+<hr />
+<h3 id="128-可以分析">128. 可以分析：</h3><p><strong>Available Contact Arc。</strong></p>
+<hr />
+<h3 id="129-目标球周围">129. 目标球周围：</h3><p>有哪些接触点</p>
+<p>可以被母球合法到达。</p>
+<hr />
+<h3 id="130-这比">130. 这比：</h3><p>简单Line of Sight</p>
+<p>更符合台球几何。</p>
+<hr />
+<h3 id="131-核心范式二十九pocketability-是球袋母球三者联合关系">131. 核心范式二十九：Pocketability 是球—袋—母球三者联合关系</h3><p>一个目标球离袋很近</p>
+<p>不代表：</p>
+<p>容易进。</p>
+<hr />
+<h3 id="132-需要考虑">132. 需要考虑：</h3><ul>
+<li><p>目标球到袋的线路；</p>
+</li>
+<li><p>其他球是否挡路；</p>
+</li>
+<li><p>母球是否能够命中正确Cut Point；</p>
+</li>
+<li><p>Cut Angle；</p>
+</li>
+<li><p>Pocket Acceptance Angle；</p>
+</li>
+<li><p>Required Speed；</p>
+</li>
+<li><p>Rail Interaction。</p>
+</li>
+</ul>
+<hr />
+<h3 id="133-shot-candidate不是">133. Shot Candidate不是：</h3><p><code>TargetBall + Pocket</code></p>
+<p>这么简单。</p>
+<p>而是：</p>
+<p><strong>Cue Ball → Contact Point → Object Ball → Pocket</strong></p>
+<p>完整几何链。</p>
+<hr />
+<h3 id="134-核心范式三十ghost-ball-contact-point-是高级瞄准系统的核心几何抽象">134. 核心范式三十：Ghost Ball / Contact Point 是高级瞄准系统的核心几何抽象</h3><p>如果目标球要沿：</p>
+<p>某方向</p>
+<p>进入袋，</p>
+<p>可以反向推导：</p>
+<p>母球碰撞瞬间</p>
+<p>中心应该位于：</p>
+<p>目标球后方一个球直径的位置。</p>
+<hr />
+<h3 id="135-这个位置">135. 这个位置：</h3><p>可以称为：</p>
+<p>Ghost Ball Position。</p>
+<hr />
+<h3 id="136-玩家不一定看到完整ghost-ball">136. 玩家不一定看到完整Ghost Ball。</h3><p>但AI、训练、辅助系统：</p>
+<p>可以使用。</p>
+<hr />
+<h3 id="137-核心范式三十一aim-assist应该辅助意图表达而不是自动pot">137. 核心范式三十一：Aim Assist应该辅助“意图表达”，而不是自动Pot</h3><p>轻量Assist可以：</p>
+<ul>
+<li><p>对接近目标球的Aim做细微Snap；</p>
+</li>
+<li><p>显示Contact Point；</p>
+</li>
+<li><p>提供短预测线。</p>
+</li>
+</ul>
+<hr />
+<h3 id="138-不应该">138. 不应该：</h3><p>玩家大概向右一推</p>
+<p>系统自动选择：</p>
+<p>全桌最佳球并完成进袋。</p>
+<hr />
+<h3 id="139-competitive-skill需要保留">139. Competitive Skill需要保留：</h3><p>角度判断。</p>
+<hr />
+<h3 id="140-核心范式三十二power-是独立的战略参数">140. 核心范式三十二：Power 是独立的战略参数</h3><p>力度不只是：</p>
+<p>决定能不能到达。</p>
+<p>还影响：</p>
+<ul>
+<li><p>Pocket Acceptance；</p>
+</li>
+<li><p>母球走位距离；</p>
+</li>
+<li><p>碰库数量；</p>
+</li>
+<li><p>碰撞后目标球速度；</p>
+</li>
+<li><p>Safety位置；</p>
+</li>
+<li><p>Scratch风险。</p>
+</li>
+</ul>
+<hr />
+<h3 id="141-一个球">141. 一个球：</h3><p>大力打进</p>
+<p>和：</p>
+<p>轻推打进</p>
+<p>后续球局完全不同。</p>
+<hr />
+<h3 id="142-所以不应">142. 所以不应：</h3><p>把每次成功进球都自动用固定最佳力度。</p>
+<hr />
+<h3 id="143-核心范式三十三physics中的能量损耗要稳定而非简单无限弹">143. 核心范式三十三：Physics中的能量损耗要稳定，而非简单无限弹</h3><p>真实游戏桌面中：</p>
+<p>球运动会逐渐停止。</p>
+<hr />
+<h3 id="144-需要">144. 需要：</h3><ul>
+<li><p>Cloth Rolling Resistance；</p>
+</li>
+<li><p>Sliding Friction；</p>
+</li>
+<li><p>Cushion Energy Loss；</p>
+</li>
+<li><p>Collision Loss；</p>
+</li>
+<li><p>Spin Decay。</p>
+</li>
+</ul>
+<hr />
+<h3 id="145-但这些不是">145. 但这些不是：</h3><p>越真实越好。</p>
+<p>重点：</p>
+<p><strong>使速度变化可预测。</strong></p>
+<hr />
+<h3 id="146-玩家最终应该">146. 玩家最终应该：</h3><p>凭经验知道：</p>
+<p>“这一力度大概走两库后停在哪”。</p>
+<hr />
+<h3 id="147-核心范式三十四sleep-system属于gameplay不只是物理引擎优化">147. 核心范式三十四：Sleep System属于Gameplay，不只是物理引擎优化</h3><p>如果速度已经：</p>
+<p>极小。</p>
+<p>仍然：</p>
+<p>0.0001地持续滚动。</p>
+<p>下一Turn永远无法开始。</p>
+<hr />
+<h3 id="148-因此需要">148. 因此需要：</h3><p>稳定的Ball Sleep规则。</p>
+<hr />
+<h3 id="149-ballsleepprofile">149. BallSleepProfile</h3><p>可以：</p>
+<ul>
+<li><p>LinearVelocityThreshold；</p>
+</li>
+<li><p>AngularVelocityThreshold；</p>
+</li>
+<li><p>StableTicksRequired；</p>
+</li>
+<li><p>PocketException；</p>
+</li>
+<li><p>RailContactException。</p>
+</li>
+</ul>
+<hr />
+<h3 id="150-只有连续若干tick满足">150. 只有连续若干Tick满足：</h3><p>才正式Sleep。</p>
+<hr />
+<h3 id="151-不能">151. 不能：</h3><p>一低于阈值就瞬间停。</p>
+<p>否则低速走位：</p>
+<p>显得不自然。</p>
+<hr />
+<h3 id="152-核心范式三十五physics-stability需要maximum-resolution-time保护">152. 核心范式三十五：Physics Stability需要Maximum Resolution Time保护</h3><p>极端情况下：</p>
+<p>两颗球在袋口边缘</p>
+<p>反复微震。</p>
+<hr />
+<h3 id="153-world永远不stable">153. World永远不Stable。</h3><hr />
+<h3 id="154-需要">154. 需要：</h3><p>Maximum Shot Resolution Time。</p>
+<hr />
+<h3 id="155-超时以后">155. 超时以后：</h3><p>执行：</p>
+<p>Deterministic Settle Recovery。</p>
+<hr />
+<h3 id="156-例如">156. 例如：</h3><p>对低速球：</p>
+<p>强制Sleep。</p>
+<hr />
+<h3 id="157-不能">157. 不能：</h3><p>随机Teleport球。</p>
+<hr />
+<h3 id="158-需要记录">158. 需要记录：</h3><p>PhysicsStabilityWarning。</p>
+<hr />
+<h3 id="159-核心范式三十六pocket-edge-是最需要专项验证的几何区域">159. 核心范式三十六：Pocket Edge 是最需要专项验证的几何区域</h3><p>大量Physics Bug集中于：</p>
+<ul>
+<li><p>Jaw；</p>
+</li>
+<li><p>Shelf；</p>
+</li>
+<li><p>Pocket Mouth；</p>
+</li>
+<li><p>Cushion Transition。</p>
+</li>
+</ul>
+<hr />
+<h3 id="160-球可能">160. 球可能：</h3><ul>
+<li><p>卡住；</p>
+</li>
+<li><p>无限抖动；</p>
+</li>
+<li><p>穿透；</p>
+</li>
+<li><p>被错误吸走；</p>
+</li>
+<li><p>从袋底弹回桌面。</p>
+</li>
+</ul>
+<hr />
+<h3 id="161-所以">161. 所以：</h3><p>Pocket Geometry必须：</p>
+<p>独立测试。</p>
+<hr />
+<h3 id="162-不能">162. 不能：</h3><p>只依赖桌面模型美术Mesh。</p>
+<p>Gameplay Collider应该：</p>
+<p>专门设计。</p>
+<hr />
+<h3 id="163-核心范式三十七called-shot-called-pocket-应属于-rule-intent">163. 核心范式三十七：Called Shot / Called Pocket 应属于 Rule Intent</h3><p>某些Ruleset需要：</p>
+<p>玩家指定：</p>
+<p>目标球。</p>
+<p>目标袋。</p>
+<hr />
+<h3 id="164-callintent">164. CallIntent</h3><p>建议包含：</p>
+<ul>
+<li><p>ShotId；</p>
+</li>
+<li><p>CalledBallId；</p>
+</li>
+<li><p>CalledPocketId；</p>
+</li>
+<li><p>CallVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="165-这属于">165. 这属于：</h3><p>玩家的规则承诺。</p>
+<hr />
+<h3 id="166-physics仍然">166. Physics仍然：</h3><p>自由运行。</p>
+<hr />
+<h3 id="167-shot结束以后">167. Shot结束以后：</h3><p>Rule Engine比较：</p>
+<p>实际结果</p>
+<p>与：</p>
+<p>Call Intent。</p>
+<hr />
+<h3 id="168-不要">168. 不要：</h3><p>因为玩家指定右上袋，</p>
+<p>目标球碰到别的袋时</p>
+<p>Physics自动不让它掉进去。</p>
+<hr />
+<h3 id="169-核心范式三十八respotted-ball必须经过placement-validator">169. 核心范式三十八：Respotted Ball必须经过Placement Validator</h3><p>某些Ruleset中：</p>
+<p>特定球被非法或正常落袋以后：</p>
+<p>重新放回Spot。</p>
+<hr />
+<h3 id="170-如果标准spot">170. 如果标准Spot：</h3><p>已经被另一球占据，</p>
+<p>需要：</p>
+<p>Ruleset指定Fallback Placement。</p>
+<hr />
+<h3 id="171-respottedballintent">171. RespottedBallIntent</h3><p>交给：</p>
+<p>BallPlacementSystem。</p>
+<hr />
+<h3 id="172-不应该">172. 不应该：</h3><p>直接Set Position</p>
+<p>造成重叠。</p>
+<hr />
+<h3 id="173-核心范式三十九matchrackturnshot-四层生命周期必须区分">173. 核心范式三十九：Match、Rack、Turn、Shot 四层生命周期必须区分</h3><p>推荐：</p>
+<p><strong>Match</strong></p>
+<p>包含若干Rack。</p>
+<p><strong>Rack</strong></p>
+<p>包含若干Turn。</p>
+<p><strong>Turn</strong></p>
+<p>可能包含若干连续合法Shot。</p>
+<p><strong>Shot</strong></p>
+<p>只有一次Cue Strike。</p>
+<hr />
+<h3 id="174-为什么turn可能包含多个shot">174. 为什么Turn可能包含多个Shot</h3><p>在很多Ruleset中：</p>
+<p>玩家合法进球以后：</p>
+<p>继续击球。</p>
+<hr />
+<h3 id="175-所以">175. 所以：</h3><p>Shot结束</p>
+<p>不等于：</p>
+<p>Turn结束。</p>
+<hr />
+<h3 id="176-这是非常容易设计错误的地方">176. 这是非常容易设计错误的地方。</h3><hr />
+<h3 id="177-lifecycle结构">177. Lifecycle结构：</h3><p>Match
+→ Rack
+→ Turn
+→ Shot
+→ Shot Adjudication
+→ Continue Turn or Turn Transition。</p>
+<hr />
+<h3 id="178-核心范式四十score与ball-ownership必须由ruleset解释">178. 核心范式四十：Score与Ball Ownership必须由Ruleset解释</h3><p>不同规则：</p>
+<p>有：</p>
+<p>球组。</p>
+<p>顺序球。</p>
+<p>分值球。</p>
+<hr />
+<h3 id="179-physics-core只保存">179. Physics Core只保存：</h3><p>Ball Tags。</p>
+<hr />
+<h3 id="180-rule-state保存">180. Rule State保存：</h3><ul>
+<li><p>AssignedGroup；</p>
+</li>
+<li><p>NextRequiredBall；</p>
+</li>
+<li><p>CurrentBreak；</p>
+</li>
+<li><p>FrameScore；</p>
+</li>
+<li><p>FoulPoints；</p>
+</li>
+<li><p>RemainingTargetSet。</p>
+</li>
+</ul>
+<hr />
+<h3 id="181-不要">181. 不要：</h3><p>让Ball颜色本身</p>
+<p>直接决定玩家所有权。</p>
+<hr />
+<h3 id="182-核心范式四十一ai不应该先问哪个球离袋最近">182. 核心范式四十一：AI不应该先问“哪个球离袋最近”</h3><p>AI需要生成：</p>
+<p>完整候选Shot。</p>
+<hr />
+<h3 id="183-candidate-generation大致分">183. Candidate Generation大致分：</h3><h4 id="offensive-shot">Offensive Shot</h4><p>Target Ball + Pocket。</p>
+<h4 id="positional-shot">Positional Shot</h4><p>进球 + Cue Ball Position Zone。</p>
+<h4 id="safety-shot">Safety Shot</h4><p>合法接触 + 对手困难度最大化。</p>
+<h4 id="escape-shot">Escape Shot</h4><p>从受限球局中解除Foul风险。</p>
+<hr />
+<h3 id="184-核心范式四十二ai候选生成可以从目标球袋对开始">184. 核心范式四十二：AI候选生成可以从目标球—袋对开始</h3><p>对于每个合法目标球：</p>
+<p>枚举：</p>
+<p>所有Pocket。</p>
+<hr />
+<h3 id="185-判断">185. 判断：</h3><p>Object Ball到Pocket路径是否清晰。</p>
+<hr />
+<h3 id="186-计算">186. 计算：</h3><p>Ghost Ball Position。</p>
+<hr />
+<h3 id="187-判断">187. 判断：</h3><p>Cue Ball能否到达Ghost位置。</p>
+<hr />
+<h3 id="188-再生成">188. 再生成：</h3><p>可能的Power / Spin。</p>
+<hr />
+<h3 id="189-这比">189. 这比：</h3><p>在360度 × 100力度 × 100Spin</p>
+<p>暴力枚举</p>
+<p>高效很多。</p>
+<hr />
+<h3 id="190-核心范式四十三ai-shot-evaluation必须使用真实前向physics">190. 核心范式四十三：AI Shot Evaluation必须使用真实前向Physics</h3><p>几何解：</p>
+<p>只能得到：</p>
+<p>近似候选。</p>
+<p>最终：</p>
+<p>要用：</p>
+<p>真正Physics Sandbox</p>
+<p>模拟。</p>
+<hr />
+<h3 id="191-得到">191. 得到：</h3><ul>
+<li><p>是否进球；</p>
+</li>
+<li><p>母球最终位置；</p>
+</li>
+<li><p>其他球最终位置；</p>
+</li>
+<li><p>Scratch；</p>
+</li>
+<li><p>Foul；</p>
+</li>
+<li><p>Future Layout。</p>
+</li>
+</ul>
+<hr />
+<h3 id="192-这使">192. 这使：</h3><p>AI和玩家使用同一世界规则。</p>
+<hr />
+<h3 id="193-核心范式四十四ai难度应主要调整候选质量和执行误差">193. 核心范式四十四：AI难度应主要调整“候选质量和执行误差”</h3><p>低难度：</p>
+<ul>
+<li><p>候选较少；</p>
+</li>
+<li><p>不深度考虑走位；</p>
+</li>
+<li><p>Tip Offset控制差；</p>
+</li>
+<li><p>Aim存在小误差；</p>
+</li>
+<li><p>Safety较弱。</p>
+</li>
+</ul>
+<hr />
+<h3 id="194-高难度">194. 高难度：</h3><ul>
+<li><p>多杆规划；</p>
+</li>
+<li><p>更高几何精度；</p>
+</li>
+<li><p>更稳定力度；</p>
+</li>
+<li><p>能主动做Safety；</p>
+</li>
+<li><p>能利用多库。</p>
+</li>
+</ul>
+<hr />
+<h3 id="195-不要">195. 不要：</h3><p>AI击球后</p>
+<p>偷偷弯曲真实Ball路径。</p>
+<hr />
+<h3 id="196-核心范式四十五ai最好显式区分-skill-error-与-decision-error">196. 核心范式四十五：AI最好显式区分 Skill Error 与 Decision Error</h3><p>例如：</p>
+<p>AI想打一个合理球。</p>
+<p>但难度低：</p>
+<p>Aim误差1度。</p>
+<p>这是：</p>
+<p>Execution Error。</p>
+<hr />
+<h3 id="197-另一种ai">197. 另一种AI：</h3><p>本身就选择了错误球。</p>
+<p>这是：</p>
+<p>Decision Error。</p>
+<hr />
+<h3 id="198-两类误差产生">198. 两类误差产生：</h3><p>不同性格。</p>
+<hr />
+<h3 id="199-这也适用于">199. 这也适用于：</h3><p>人类训练分析。</p>
+<hr />
+<h3 id="200-核心范式四十六shot-history-是玩家学习与debug的重要事实源">200. 核心范式四十六：Shot History 是玩家学习与Debug的重要事实源</h3><p>建议保存：</p>
+<ul>
+<li><p>ShotId；</p>
+</li>
+<li><p>Player；</p>
+</li>
+<li><p>Cue Position；</p>
+</li>
+<li><p>Target；</p>
+</li>
+<li><p>Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Tip Offset；</p>
+</li>
+<li><p>First Contact；</p>
+</li>
+<li><p>Pocketed Balls；</p>
+</li>
+<li><p>Final Cue Position；</p>
+</li>
+<li><p>Foul；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Table State Hash。</p>
+</li>
+</ul>
+<hr />
+<h3 id="201-training模式可以">201. Training模式可以：</h3><p>重放上一杆。</p>
+<hr />
+<h3 id="202-玩家可以看到">202. 玩家可以看到：</h3><p>自己的母球比预期多走了多远。</p>
+<hr />
+<h3 id="203-这让">203. 这让：</h3><p>“球感”</p>
+<p>从模糊感觉</p>
+<p>转化成：</p>
+<p>可复盘技能。</p>
+<hr />
+<h3 id="204-核心范式四十七practice-mode应该允许直接构造球局">204. 核心范式四十七：Practice Mode应该允许直接构造球局</h3><p>例如：</p>
+<p>放置：</p>
+<p>母球。</p>
+<p>目标球。</p>
+<p>障碍球。</p>
+<hr />
+<h3 id="205-但practice-placement">205. 但Practice Placement</h3><p>仍应该：</p>
+<p>经过：</p>
+<p>合法球体不重叠验证。</p>
+<hr />
+<h3 id="206-可以允许">206. 可以允许：</h3><p>自由场景构造模式</p>
+<p>跳过赛事Ruleset。</p>
+<hr />
+<h3 id="207-这非常适合">207. 这非常适合：</h3><ul>
+<li><p>练切球；</p>
+</li>
+<li><p>练旋转；</p>
+</li>
+<li><p>练走位；</p>
+</li>
+<li><p>练多库；</p>
+</li>
+<li><p>Trick Shot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="208-核心范式四十八trick-shot是同一physics-core上的目标约束模式">208. 核心范式四十八：Trick Shot是同一Physics Core上的“目标约束模式”</h3><p>Trick Shot可能要求：</p>
+<ul>
+<li><p>某球必须先碰三库；</p>
+</li>
+<li><p>某球进入特定袋；</p>
+</li>
+<li><p>某球不能碰某障碍；</p>
+</li>
+<li><p>一杆清除多个目标。</p>
+</li>
+</ul>
+<hr />
+<h3 id="209-不需要">209. 不需要：</h3><p>第二套玩法Core。</p>
+<hr />
+<h3 id="210-只需要">210. 只需要：</h3><p>ObjectiveSystem</p>
+<p>解释：</p>
+<p>Shot Event Stream。</p>
+<hr />
+<h3 id="211-核心范式四十九online-pvp适合使用server-authoritative-shot-commit">211. 核心范式四十九：Online PvP适合使用Server-authoritative Shot Commit</h3><p>由于每杆之间：</p>
+<p>输入频率极低，</p>
+<p>网络同步可以：</p>
+<p>非常稳健。</p>
+<hr />
+<h3 id="212-玩家瞄准">212. 玩家瞄准：</h3><p>本地。</p>
+<hr />
+<h3 id="213-shot-commit">213. Shot Commit：</h3><p>发送：</p>
+<ul>
+<li><p>Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Spin；</p>
+</li>
+<li><p>Cue；</p>
+</li>
+<li><p>Table Revision。</p>
+</li>
+</ul>
+<hr />
+<h3 id="214-server">214. Server：</h3><p>验证。</p>
+<p>模拟。</p>
+<p>发布：</p>
+<p>权威Shot结果。</p>
+<hr />
+<h3 id="215-客户端可以">215. 客户端可以：</h3><p>预测。</p>
+<p>但：</p>
+<p>最终Ball State</p>
+<p>由Server确认。</p>
+<hr />
+<h3 id="216-核心范式五十table-revision-是网络与replay的重要边界">216. 核心范式五十：Table Revision 是网络与Replay的重要边界</h3><p>每一次稳定Shot结束：</p>
+<p>TableRevision +1。</p>
+<hr />
+<h3 id="217-player的shotintent必须基于">217. Player的ShotIntent必须基于：</h3><p>当前Revision。</p>
+<hr />
+<h3 id="218-如果客户端">218. 如果客户端：</h3><p>还在Revision 17。</p>
+<p>Server已经：</p>
+<p>18。</p>
+<p>Shot拒绝。</p>
+<hr />
+<h3 id="219-这可以防止">219. 这可以防止：</h3><p>延迟 / 重复请求</p>
+<p>作用到错误球局。</p>
+<hr />
+<h3 id="220-核心范式五十一shot-command-天生适合事件溯源">220. 核心范式五十一：Shot Command 天生适合事件溯源</h3><p>一局台球的高价值状态变化很少。</p>
+<hr />
+<h3 id="221-可以记录">221. 可以记录：</h3><p>Initial Rack</p>
+<ul>
+<li><p>Shot Commands</p>
+</li>
+<li><p>Rule Results。</p>
+</li>
+</ul>
+<hr />
+<h3 id="222-便于">222. 便于：</h3><p>Replay。</p>
+<p>Spectator。</p>
+<p>Anti-cheat。</p>
+<p>Bug。</p>
+<hr />
+<h3 id="223-如果physics无法保证跨平台完全确定">223. 如果Physics无法保证跨平台完全确定：</h3><p>额外记录：</p>
+<p>Periodic Stable Ball Snapshot。</p>
+<hr />
+<h3 id="224-核心范式五十二网络同步无需持续发送每颗球60hz状态">224. 核心范式五十二：网络同步无需持续发送每颗球60Hz状态</h3><p>击球期间可以：</p>
+<p>Server权威模拟。</p>
+<hr />
+<h3 id="225-客户端预测">225. 客户端预测。</h3><hr />
+<h3 id="226-周期发送">226. 周期发送：</h3><p>Ball Snapshot</p>
+<p>用于纠正。</p>
+<hr />
+<h3 id="227-shot结束">227. Shot结束：</h3><p>发送：</p>
+<p>最终Stable Table Snapshot。</p>
+<hr />
+<h3 id="228-因为玩家在ball运动期间">228. 因为玩家在Ball运动期间：</h3><p>无法继续影响它们。</p>
+<hr />
+<h3 id="229-这是相比实时球类竞技">229. 这是相比实时球类竞技：</h3><p>非常大的网络优势。</p>
+<hr />
+<h3 id="230-核心范式五十三spectator可以以-shot-为高层时间单位">230. 核心范式五十三：Spectator可以以 Shot 为高层时间单位</h3><p>支持：</p>
+<ul>
+<li><p>实时观看；</p>
+</li>
+<li><p>快速跳到下一杆；</p>
+</li>
+<li><p>回看关键杆；</p>
+</li>
+<li><p>只看Shot Result；</p>
+</li>
+<li><p>轨迹Overlay。</p>
+</li>
+</ul>
+<hr />
+<h3 id="231-比逐帧replay更适合">231. 比逐帧Replay更适合：</h3><p>教学。</p>
+<hr />
+<h3 id="232-核心范式五十四physics-version必须和竞技记录绑定">232. 核心范式五十四：Physics Version必须和竞技记录绑定</h3><p>如果更新：</p>
+<ul>
+<li><p>Cushion Restitution；</p>
+</li>
+<li><p>Cloth Friction；</p>
+</li>
+<li><p>Pocket Size；</p>
+</li>
+<li><p>Spin Model；</p>
+</li>
+</ul>
+<p>旧Replay / 排名表现：</p>
+<p>可能不可直接比较。</p>
+<hr />
+<h3 id="233-matchrecord">233. MatchRecord</h3><p>建议包含：</p>
+<ul>
+<li><p>RulesetVersion；</p>
+</li>
+<li><p>PhysicsVersion；</p>
+</li>
+<li><p>TableVersion；</p>
+</li>
+<li><p>AssistProfile；</p>
+</li>
+<li><p>PlayerInputProfile；</p>
+</li>
+<li><p>MatchVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="234-ranked不能">234. Ranked不能：</h3><p>悄悄改变Physics</p>
+<p>而不版本化。</p>
+<hr />
+<h3 id="235-核心范式五十五cue-equipment-属性必须谨慎">235. 核心范式五十五：Cue / Equipment 属性必须谨慎</h3><p>如果产品加入：</p>
+<p>球杆成长。</p>
+<hr />
+<h3 id="236-可以影响">236. 可以影响：</h3><ul>
+<li><p>Maximum Power；</p>
+</li>
+<li><p>Input Stability；</p>
+</li>
+<li><p>Spin Range；</p>
+</li>
+<li><p>Aim Assist；</p>
+</li>
+<li><p>Cosmetic。</p>
+</li>
+</ul>
+<hr />
+<h3 id="237-但竞技模式中">237. 但竞技模式中：</h3><p>过强Equipment差异</p>
+<p>会破坏：</p>
+<p>技能公平。</p>
+<hr />
+<h3 id="238-可以">238. 可以：</h3><p>将装备能力</p>
+<p>限制在：</p>
+<p>非Ranked模式。</p>
+<hr />
+<h3 id="239-或统一">239. 或统一：</h3><p>比赛标准化。</p>
+<hr />
+<h3 id="240-核心范式五十六玩家输入误差模型必须在-shot-commit-前发生">240. 核心范式五十六：玩家输入误差模型必须在 Shot Commit 前发生</h3><p>如果角色属性决定：</p>
+<p>“准度”。</p>
+<p>应该：</p>
+<p>把玩家Aim</p>
+<p>转化成：</p>
+<p>实际Cue Strike Aim。</p>
+<hr />
+<h3 id="241-shot-commit以后">241. Shot Commit以后：</h3><p>Physics纯净。</p>
+<hr />
+<h3 id="242-不应该">242. 不应该：</h3><p>球飞到一半</p>
+<p>根据Accuracy属性</p>
+<p>偷偷偏转。</p>
+<hr />
+<h3 id="243-这样所有physics结果">243. 这样所有Physics结果：</h3><p>仍然自洽。</p>
+<hr />
+<h3 id="244-核心范式五十七完整事件与执行流程示例">244. 核心范式五十七：完整事件与执行流程示例</h3><p>以下以：</p>
+<p><strong>玩家打进当前目标球，同时利用下旋让母球回到下一颗目标球的最佳进攻角度</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="2441-当前球局稳定">244.1 当前球局稳定</h3><p>母球：</p>
+<p>Table左中。</p>
+<p>目标球A：</p>
+<p>靠近右侧中袋线路。</p>
+<p>下一目标球B：</p>
+<p>位于桌面下半区。</p>
+<hr />
+<h3 id="2442-ruleset">244.2 Ruleset</h3><p>当前必须：</p>
+<p>先合法接触A。</p>
+<hr />
+<h3 id="2443-player-planning">244.3 Player Planning</h3><p>玩家发现：</p>
+<p>直接中心球击打A：</p>
+<p>A很容易进。</p>
+<p>但母球会：</p>
+<p>继续向右走。</p>
+<p>下一杆B角度很差。</p>
+<hr />
+<h3 id="2444-玩家决定">244.4 玩家决定：</h3><p>使用下旋。</p>
+<hr />
+<h3 id="2445-aim">244.5 Aim</h3><p>确定：</p>
+<p>A到Pocket线路。</p>
+<hr />
+<h3 id="2446-ghost-ball计算">244.6 Ghost Ball计算</h3><p>得到：</p>
+<p>母球理想接触位置。</p>
+<hr />
+<h3 id="2447-玩家调整">244.7 玩家调整：</h3><p>Aim。</p>
+<hr />
+<h3 id="2448-power">244.8 Power</h3><p>中等。</p>
+<hr />
+<h3 id="2449-tip-offset">244.9 Tip Offset</h3><p>Y &lt; 0。</p>
+<p>产生：</p>
+<p>Back Spin。</p>
+<hr />
+<h3 id="24410-shotintent">244.10 ShotIntent</h3><p>提交：</p>
+<p>Shot 56。</p>
+<hr />
+<h3 id="24411-validation">244.11 Validation</h3><p>Active Player正确。</p>
+<p>母球稳定。</p>
+<p>Weapon / Cue合法。</p>
+<p>TableRevision匹配。</p>
+<hr />
+<h3 id="24412-shot-commit">244.12 Shot Commit</h3><p>进入：</p>
+<p>BallsInMotion。</p>
+<hr />
+<h3 id="24413-cuestrikeresolver">244.13 CueStrikeResolver</h3><p>产生：</p>
+<p>向右上的Linear Impulse。</p>
+<p>同时：</p>
+<p>产生负向Angular Impulse。</p>
+<hr />
+<h3 id="24414-母球开始sliding">244.14 母球开始Sliding</h3><p>线速度较高。</p>
+<hr />
+<h3 id="24415-cloth-friction持续">244.15 Cloth Friction持续：</h3><p>改变母球Angular / Linear关系。</p>
+<hr />
+<h3 id="24416-母球到达a">244.16 母球到达A</h3><p>仍保留：</p>
+<p>明显Back Spin。</p>
+<hr />
+<h3 id="24417-first-ball-collision">244.17 First Ball Collision</h3><p>ShotEvent记录：</p>
+<p>FirstObjectContact = A。</p>
+<p>合法候选。</p>
+<hr />
+<h3 id="24418-ball-ball-collision">244.18 Ball-Ball Collision</h3><p>A获得：</p>
+<p>通向Pocket的主要速度。</p>
+<p>母球线速度大幅下降。</p>
+<hr />
+<h3 id="24419-由于母球仍有back-spin">244.19 由于母球仍有Back Spin</h3><p>接触之后：</p>
+<p>布面摩擦开始让母球：</p>
+<p>向后移动。</p>
+<hr />
+<h3 id="24420-a沿线路进入pocket-mouth">244.20 A沿线路进入Pocket Mouth。</h3><hr />
+<h3 id="24421-pocket-jaw没有产生异常碰撞">244.21 Pocket Jaw没有产生异常碰撞。</h3><hr />
+<h3 id="24422-a跨过capture-threshold">244.22 A跨过Capture Threshold。</h3><hr />
+<h3 id="24423-pocketevent">244.23 PocketEvent</h3><p>Ball A Pocketed。</p>
+<hr />
+<h3 id="24424-母球持续回退">244.24 母球持续回退。</h3><hr />
+<h3 id="24425-它撞到左侧库边">244.25 它撞到左侧库边。</h3><hr />
+<h3 id="24426-cushion-collision">244.26 Cushion Collision</h3><p>改变方向。</p>
+<p>部分旋转参与：</p>
+<p>切向速度变化。</p>
+<hr />
+<h3 id="24427-母球继续低速运动">244.27 母球继续低速运动。</h3><hr />
+<h3 id="24428-最终停在">244.28 最终停在：</h3><p>B左下方。</p>
+<p>形成：</p>
+<p>合理切球角。</p>
+<hr />
+<h3 id="24429-其他所有ball">244.29 其他所有Ball：</h3><p>Stationary。</p>
+<hr />
+<h3 id="24430-world-stability-barrier达成">244.30 World Stability Barrier达成。</h3><hr />
+<h3 id="24431-shotfact冻结">244.31 ShotFact冻结</h3><p>First Contact：</p>
+<p>A。</p>
+<p>A Pocketed：</p>
+<p>true。</p>
+<p>Cue Ball Pocketed：</p>
+<p>false。</p>
+<p>Rail Contacts：</p>
+<p>存在。</p>
+<hr />
+<h3 id="24432-rule-engine裁定">244.32 Rule Engine裁定</h3><p>Shot合法。</p>
+<p>玩家继续Turn。</p>
+<hr />
+<h3 id="24433-新table-revision">244.33 新Table Revision</h3><p>52 → 53。</p>
+<hr />
+<h3 id="24434-下一杆球局">244.34 下一杆球局</h3><p>玩家现在：</p>
+<p>不仅已经打进A，</p>
+<p>而且拥有：</p>
+<p>对B的高质量进攻位置。</p>
+<hr />
+<h3 id="24435-如果刚才使用中心球">244.35 如果刚才使用中心球</h3><p>A同样会进。</p>
+<p>但母球可能：</p>
+<p>停到右侧库边附近。</p>
+<hr />
+<h3 id="24436-两种shot的即时结果相同">244.36 两种Shot的即时结果相同：</h3><p>目标球进袋。</p>
+<hr />
+<h3 id="24437-战略价值却完全不同">244.37 战略价值却完全不同。</h3><hr />
+<h3 id="24438-这就是台球核心">244.38 这就是台球核心：</h3><blockquote>
+<p><strong>击球是否成功，不只取决于当前目标球是否进袋，更取决于这一杆把母球和剩余球局变成了什么状态。</strong></p>
+</blockquote>
+<hr />
+<h3 id="245-模块通信设计">245. 模块通信设计</h3><h3 id="2451-高频-planning-input">245.1 高频 Planning Input</h3><p>包括：</p>
+<ul>
+<li><p>Aim；</p>
+</li>
+<li><p>Fine Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Tip Offset；</p>
+</li>
+<li><p>Cue Elevation；</p>
+</li>
+<li><p>Camera；</p>
+</li>
+<li><p>Call Ball / Pocket。</p>
+</li>
+</ul>
+<p>这些只改变：</p>
+<p>Planning State。</p>
+<hr />
+<h3 id="246-commands">246. Commands</h3><p>典型：</p>
+<ul>
+<li><p>SelectCue；</p>
+</li>
+<li><p>CallBall；</p>
+</li>
+<li><p>CallPocket；</p>
+</li>
+<li><p>CommitShot；</p>
+</li>
+<li><p>PlaceCueBall；</p>
+</li>
+<li><p>EndPlacement；</p>
+</li>
+<li><p>Pause；</p>
+</li>
+<li><p>RequestPracticeReset。</p>
+</li>
+</ul>
+<hr />
+<h3 id="247-queries">247. Queries</h3><p>适用于：</p>
+<ul>
+<li><p>当前合法目标；</p>
+</li>
+<li><p>当前球组；</p>
+</li>
+<li><p>Cue Ball是否可放在某处；</p>
+</li>
+<li><p>某Ball是否挡住线路；</p>
+</li>
+<li><p>某Shot Preview；</p>
+</li>
+<li><p>当前First Contact Fact；</p>
+</li>
+<li><p>当前球是否仍运动；</p>
+</li>
+<li><p>World是否Stable。</p>
+</li>
+</ul>
+<p>Query不能：</p>
+<ul>
+<li><p>修改Ball；</p>
+</li>
+<li><p>计分；</p>
+</li>
+<li><p>Pocket；</p>
+</li>
+<li><p>交换Turn。</p>
+</li>
+</ul>
+<hr />
+<h3 id="248-domain-events">248. Domain Events</h3><p>包括：</p>
+<ul>
+<li><p>TurnStarted；</p>
+</li>
+<li><p>ShotCommitted；</p>
+</li>
+<li><p>CueBallStruck；</p>
+</li>
+<li><p>BallBallContacted；</p>
+</li>
+<li><p>BallRailContacted；</p>
+</li>
+<li><p>BallPocketEntered；</p>
+</li>
+<li><p>BallPocketed；</p>
+</li>
+<li><p>BallLeftTable；</p>
+</li>
+<li><p>CueBallScratched；</p>
+</li>
+<li><p>BallStopped；</p>
+</li>
+<li><p>WorldStabilized；</p>
+</li>
+<li><p>ShotAdjudicated；</p>
+</li>
+<li><p>FoulCommitted；</p>
+</li>
+<li><p>BallInHandGranted；</p>
+</li>
+<li><p>BallRespotted；</p>
+</li>
+<li><p>TurnContinued；</p>
+</li>
+<li><p>TurnEnded；</p>
+</li>
+<li><p>RackCompleted；</p>
+</li>
+<li><p>MatchCompleted。</p>
+</li>
+</ul>
+<hr />
+<h3 id="249-presentation-events">249. Presentation Events</h3><p>包括：</p>
+<ul>
+<li><p>PlayCueAnimation；</p>
+</li>
+<li><p>ShowPowerMeter；</p>
+</li>
+<li><p>ShowAimGuide；</p>
+</li>
+<li><p>PlayBallContactSound；</p>
+</li>
+<li><p>PlayRailSound；</p>
+</li>
+<li><p>PlayPocketEffect；</p>
+</li>
+<li><p>ShowFoulBanner；</p>
+</li>
+<li><p>ShowScore；</p>
+</li>
+<li><p>CameraFollowBall。</p>
+</li>
+</ul>
+<p>表现不能：</p>
+<ul>
+<li><p>让球真正进袋；</p>
+</li>
+<li><p>判定Foul；</p>
+</li>
+<li><p>决定下一Player；</p>
+</li>
+<li><p>修改比分。</p>
+</li>
+</ul>
+<hr />
+<h3 id="250-推荐状态所有权">250. 推荐状态所有权</h3><p><strong>MatchSystem</strong></p>
+<p>拥有Match生命周期。</p>
+<p><strong>RackSystem</strong></p>
+<p>拥有Rack / Frame。</p>
+<p><strong>TurnSystem</strong></p>
+<p>拥有Player Turn。</p>
+<p><strong>ShotSystem</strong></p>
+<p>拥有一次Shot生命周期。</p>
+<p><strong>CueStrikeSystem</strong></p>
+<p>将Intent转换成初始冲量。</p>
+<p><strong>BallPhysicsSystem</strong></p>
+<p>拥有Ball运动。</p>
+<p><strong>CollisionSystem</strong></p>
+<p>拥有TOI与Contact。</p>
+<p><strong>PocketSystem</strong></p>
+<p>拥有Pocket Capture事实。</p>
+<p><strong>WorldStabilitySystem</strong></p>
+<p>决定所有球何时停止。</p>
+<p><strong>RuleSystem</strong></p>
+<p>拥有合法性、Foul、Score和Turn结果。</p>
+<p><strong>BallPlacementSystem</strong></p>
+<p>拥有Ball-in-Hand / Respot。</p>
+<p><strong>ReplaySystem</strong></p>
+<p>记录Shot和状态。</p>
+<hr />
+<h3 id="251-核心模块边界">251. 核心模块边界</h3><p>BallPhysicsSystem不能：</p>
+<p>宣布：</p>
+<p>“Player 1继续回合”。</p>
+<hr />
+<h3 id="252-pocketsystem不能">252. PocketSystem不能：</h3><p>宣布：</p>
+<p>“这颗球值7分”。</p>
+<hr />
+<h3 id="253-rulesystem不能">253. RuleSystem不能：</h3><p>为了让目标球进袋</p>
+<p>修正其运动轨迹。</p>
+<hr />
+<h3 id="254-cuestrikesystem不能">254. CueStrikeSystem不能：</h3><p>在Shot过程中再次修改母球。</p>
+<hr />
+<h3 id="255-失败隔离">255. 失败隔离</h3><hr />
+<h3 id="2551-ball产生nan">255.1 Ball产生NaN</h3><p>立即：</p>
+<p>冻结该Ball。</p>
+<p>记录：</p>
+<ul>
+<li><p>LastValidState；</p>
+</li>
+<li><p>LastCollision；</p>
+</li>
+<li><p>ShotId。</p>
+</li>
+</ul>
+<p>进入：</p>
+<p>Physics Recovery。</p>
+<hr />
+<h3 id="256-不允许">256. 不允许：</h3><p>一个NaN Ball</p>
+<p>污染全部Collision Pair。</p>
+<hr />
+<h3 id="257-ball高速穿过另一个ball">257. Ball高速穿过另一个Ball</h3><p>Debug Build：</p>
+<p>对比：</p>
+<p>Sweep Reference。</p>
+<p>发现：</p>
+<p>Tunneling Error。</p>
+<hr />
+<h3 id="258-ranked-release">258. Ranked / Release：</h3><p>使用：</p>
+<p>Continuous Collision作为主逻辑。</p>
+<hr />
+<h3 id="259-两颗ball长期重叠">259. 两颗Ball长期重叠</h3><p>执行：</p>
+<p>Deterministic Depenetration。</p>
+<hr />
+<h3 id="260-如果无法恢复">260. 如果无法恢复：</h3><p>回滚到：</p>
+<p>最近稳定Substep。</p>
+<hr />
+<h3 id="261-不能">261. 不能：</h3><p>随机把两球推开。</p>
+<hr />
+<h3 id="262-ball卡在pocket-jaw">262. Ball卡在Pocket Jaw</h3><p>检测：</p>
+<p>长期低速非稳定震荡。</p>
+<p>进入：</p>
+<p>Pocket Stability Recovery。</p>
+<hr />
+<h3 id="263-根据当前几何">263. 根据当前几何：</h3><p>决定：</p>
+<ul>
+<li><p>Settle On Table；</p>
+</li>
+<li><p>Capture Pocket。</p>
+</li>
+</ul>
+<p>必须：</p>
+<p>使用确定规则。</p>
+<hr />
+<h3 id="264-pocket事件重复">264. Pocket事件重复</h3><p><code>BallId + ShotId</code></p>
+<p>只允许：</p>
+<p>正式Pocket一次。</p>
+<hr />
+<h3 id="265-rail震荡重复产生规则事件">265. Rail震荡重复产生规则事件</h3><p>使用：</p>
+<p>Contact Session / Debounce。</p>
+<hr />
+<h3 id="266-first-contact重复">266. First Contact重复</h3><p>只接受：</p>
+<p>第一Object Ball Contact。</p>
+<hr />
+<h3 id="267-后续">267. 后续：</h3><p>不覆盖。</p>
+<hr />
+<h3 id="268-shot-resolution无限不结束">268. Shot Resolution无限不结束</h3><p>Maximum Resolve Time。</p>
+<hr />
+<h3 id="269-超时后">269. 超时后：</h3><p>对所有低速Ball：</p>
+<p>执行Deterministic Sleep。</p>
+<hr />
+<h3 id="270-仍有异常">270. 仍有异常：</h3><p>进入：</p>
+<p>Match Recovery</p>
+<p>并保存Debug Snapshot。</p>
+<hr />
+<h3 id="271-rule-adjudication抛错">271. Rule Adjudication抛错</h3><p>Physics结果已经稳定。</p>
+<p>不能：</p>
+<p>重新打一杆。</p>
+<hr />
+<h3 id="272-保留">272. 保留：</h3><p>Shot Event Stream。</p>
+<p>尝试：</p>
+<p>Fallback Adjudication</p>
+<p>或：</p>
+<p>Match Pause。</p>
+<hr />
+<h3 id="273-ball-in-hand位置非法">273. Ball-in-Hand位置非法</h3><p>不Commit。</p>
+<p>母球仍然：</p>
+<p>处于Placement Phase。</p>
+<hr />
+<h3 id="274-respotted-ball标准spot被占">274. Respotted Ball标准Spot被占</h3><p>使用：</p>
+<p>Ruleset Fallback Placement。</p>
+<hr />
+<h3 id="275-仍无合法位置">275. 仍无合法位置：</h3><p>进入：</p>
+<p>Rule Integrity Error。</p>
+<hr />
+<h3 id="276-rack出现球重叠">276. Rack出现球重叠</h3><p>Rack Validation失败。</p>
+<p>不开始Match。</p>
+<hr />
+<h3 id="277-shot重复网络包">277. Shot重复网络包</h3><p>ShotId幂等。</p>
+<p>只执行：</p>
+<p>一次Cue Strike。</p>
+<hr />
+<h3 id="278-客户端tablerevision过期">278. 客户端TableRevision过期</h3><p>拒绝：</p>
+<p>Shot。</p>
+<p>发送：</p>
+<p>最新Stable Snapshot。</p>
+<hr />
+<h3 id="279-replay-desync">279. Replay Desync</h3><p>在Stable Table Hash上：</p>
+<p>检测。</p>
+<hr />
+<h3 id="280-应用">280. 应用：</h3><p>Recorded Snapshot</p>
+<p>重新同步。</p>
+<hr />
+<h3 id="281-physics错误不能">281. Physics错误不能：</h3><p>直接修改Rule结果。</p>
+<p>需要：</p>
+<p>显式Recovery状态。</p>
+<hr />
+<h3 id="282-debug与可观测性">282. Debug与可观测性</h3><hr />
+<h3 id="2821-table-state-inspector">282.1 Table State Inspector</h3><p>显示：</p>
+<p>所有Ball：</p>
+<ul>
+<li><p>ID；</p>
+</li>
+<li><p>Type；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Velocity；</p>
+</li>
+<li><p>Spin；</p>
+</li>
+<li><p>State。</p>
+</li>
+</ul>
+<hr />
+<h3 id="283-ball-trail">283. Ball Trail</h3><p>记录：</p>
+<p>整杆轨迹。</p>
+<hr />
+<h3 id="284-cue-strike-inspector">284. Cue Strike Inspector</h3><p>显示：</p>
+<ul>
+<li><p>Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Tip Offset；</p>
+</li>
+<li><p>Linear Impulse；</p>
+</li>
+<li><p>Angular Impulse。</p>
+</li>
+</ul>
+<hr />
+<h3 id="285-spin-inspector">285. Spin Inspector</h3><p>实时显示：</p>
+<p>母球：</p>
+<ul>
+<li><p>Top / Back；</p>
+</li>
+<li><p>Side；</p>
+</li>
+<li><p>Rolling Ratio；</p>
+</li>
+<li><p>Slip Velocity。</p>
+</li>
+</ul>
+<hr />
+<h3 id="286-sliding-to-rolling-timeline">286. Sliding-to-Rolling Timeline</h3><p>显示：</p>
+<p>什么时候：</p>
+<p>进入纯Rolling。</p>
+<hr />
+<h3 id="287-collision-timeline">287. Collision Timeline</h3><p>Shot 36：</p>
+<p>Cue → Ball3。</p>
+<p>Ball3 → Ball7。</p>
+<p>Cue → Rail2。</p>
+<p>Ball7 → Pocket4。</p>
+<hr />
+<h3 id="288-collision-geometry-overlay">288. Collision Geometry Overlay</h3><p>显示：</p>
+<p>Contact Point。</p>
+<p>Normal。</p>
+<p>Impulse。</p>
+<hr />
+<h3 id="289-ghost-ball-overlay">289. Ghost Ball Overlay</h3><p>显示：</p>
+<p>目标球到袋线路。</p>
+<p>理论Ghost位置。</p>
+<hr />
+<h3 id="290-available-contact-arc">290. Available Contact Arc</h3><p>显示：</p>
+<p>目标球当前：</p>
+<p>哪些切球角可达。</p>
+<hr />
+<h3 id="291-pocketability-debug">291. Pocketability Debug</h3><p>Target Ball：</p>
+<p>Path Clear。</p>
+<p>Pocket Acceptance。</p>
+<p>Cue Contact可达性。</p>
+<hr />
+<h3 id="292-cushion-reflection-debug">292. Cushion Reflection Debug</h3><p>显示：</p>
+<p>入射方向。</p>
+<p>法线。</p>
+<p>无旋预测。</p>
+<p>实际Spin修正结果。</p>
+<hr />
+<h3 id="293-pocket-capture-inspector">293. Pocket Capture Inspector</h3><p>球进入：</p>
+<p>Mouth。</p>
+<p>Jaw Contact。</p>
+<p>Capture Threshold。</p>
+<p>Pocketed。</p>
+<hr />
+<h3 id="294-可以快速解决">294. 可以快速解决：</h3><p>“这球到底应不应该进”。</p>
+<hr />
+<h3 id="295-shot-fact-inspector">295. Shot Fact Inspector</h3><p>整杆结束显示：</p>
+<p>First Contact。</p>
+<p>Rails。</p>
+<p>Pocketed Balls。</p>
+<p>Scratch。</p>
+<p>Called Shot。</p>
+<hr />
+<h3 id="296-rule-adjudication-trace">296. Rule Adjudication Trace</h3><p>例如：</p>
+<p>FirstContact合法 ✅</p>
+<p>Pocket目标球 ✅</p>
+<p>Cue Scratch ❌</p>
+<p>Final：</p>
+<p>Foul。</p>
+<hr />
+<h3 id="297-foul-breakdown">297. Foul Breakdown</h3><p>列出：</p>
+<p>所有成立犯规。</p>
+<hr />
+<h3 id="298-world-stability-inspector">298. World Stability Inspector</h3><p>显示：</p>
+<p>为什么还没结束：</p>
+<p>Ball 5 LinearSpeed 0.02。</p>
+<p>Ball 9 PocketTransit。</p>
+<hr />
+<h3 id="299-sleep-debug">299. Sleep Debug</h3><p>Ball：</p>
+<p>连续稳定Tick：</p>
+<p>14 / 20。</p>
+<hr />
+<h3 id="300-ball-in-hand-placement-overlay">300. Ball-in-Hand Placement Overlay</h3><p>绿色：</p>
+<p>合法。</p>
+<p>红色：</p>
+<p>球体重叠。</p>
+<p>灰色：</p>
+<p>规则区域外。</p>
+<hr />
+<h3 id="301-rack-validator-overlay">301. Rack Validator Overlay</h3><p>显示：</p>
+<p>每个Ball Slot。</p>
+<p>间距。</p>
+<p>Overlap。</p>
+<hr />
+<h3 id="302-ai-candidate-viewer">302. AI Candidate Viewer</h3><p>每个候选：</p>
+<ul>
+<li><p>Target；</p>
+</li>
+<li><p>Pocket；</p>
+</li>
+<li><p>Pot Probability；</p>
+</li>
+<li><p>Cue End Position；</p>
+</li>
+<li><p>Safety；</p>
+</li>
+<li><p>Risk；</p>
+</li>
+<li><p>Utility。</p>
+</li>
+</ul>
+<hr />
+<h3 id="303-position-zone-overlay">303. Position Zone Overlay</h3><p>显示：</p>
+<p>AI希望母球停在哪一片区域。</p>
+<hr />
+<h3 id="304-safety-analysis-overlay">304. Safety Analysis Overlay</h3><p>显示：</p>
+<p>对手下一Turn：</p>
+<p>可见目标Contact Arc。</p>
+<hr />
+<h3 id="305-shot-history">305. Shot History</h3><p>快速：</p>
+<p>上一杆 / 下一杆。</p>
+<hr />
+<h3 id="306-replay-hash-timeline">306. Replay Hash Timeline</h3><p>每个Stable Shot后：</p>
+<p>Table Hash。</p>
+<hr />
+<h3 id="307-network-prediction-diff">307. Network Prediction Diff</h3><p>显示：</p>
+<p>Client Ball State</p>
+<p>和：</p>
+<p>Server Ball State。</p>
+<hr />
+<h3 id="308-content与规则验证">308. Content与规则验证</h3><hr />
+<h3 id="3081-ball-ball-collision-property-test">308.1 Ball-Ball Collision Property Test</h3><p>两颗质量相同球：</p>
+<p>标准正碰。</p>
+<p>结果：</p>
+<p>对称、稳定。</p>
+<hr />
+<h3 id="309-斜碰测试">309. 斜碰测试</h3><p>多个标准角度：</p>
+<p>回归。</p>
+<hr />
+<h3 id="310-三球连续碰撞">310. 三球连续碰撞</h3><p>测试：</p>
+<p>Collision Order。</p>
+<hr />
+<h3 id="311-high-speed-toi-test">311. High-speed TOI Test</h3><p>不能：</p>
+<p>穿球。</p>
+<hr />
+<h3 id="312-cushion-symmetry-test">312. Cushion Symmetry Test</h3><p>左右对称入射：</p>
+<p>结果对称。</p>
+<hr />
+<h3 id="313-spin-cushion-test">313. Spin Cushion Test</h3><p>固定侧旋：</p>
+<p>反射变化稳定。</p>
+<hr />
+<h3 id="314-sliding-transition-test">314. Sliding Transition Test</h3><p>相同Strike：</p>
+<p>进入Rolling时间一致。</p>
+<hr />
+<h3 id="315-slow-ball-sleep-test">315. Slow Ball Sleep Test</h3><p>低速球：</p>
+<p>不会无限移动。</p>
+<hr />
+<h3 id="316-very-slow-positioning-test">316. Very Slow Positioning Test</h3><p>又不能：</p>
+<p>过早Snap Stop。</p>
+<hr />
+<h3 id="317-pocket-entry-matrix">317. Pocket Entry Matrix</h3><p>不同：</p>
+<ul>
+<li><p>角度；</p>
+</li>
+<li><p>速度；</p>
+</li>
+<li><p>接触Jaw位置</p>
+</li>
+</ul>
+<p>批量测试：</p>
+<p>Pocket / Miss。</p>
+<hr />
+<h3 id="318-pocket-jaw-stress-test">318. Pocket Jaw Stress Test</h3><p>数万随机轨迹：</p>
+<p>不能卡死。</p>
+<hr />
+<h3 id="319-ball-conservation-test">319. Ball Conservation Test</h3><p>Rack开始N颗Ball。</p>
+<p>任意时刻：</p>
+<p>On Table</p>
+<ul>
+<li><p>Pocketed</p>
+</li>
+<li><p>Respotted Queue</p>
+</li>
+</ul>
+<p>数量守恒。</p>
+<hr />
+<h3 id="320-duplicate-pocket-test">320. Duplicate Pocket Test</h3><p>同一Ball：</p>
+<p>只计一次。</p>
+<hr />
+<h3 id="321-first-contact-test">321. First Contact Test</h3><p>多球连续碰撞：</p>
+<p>第一Object Ball不被覆盖。</p>
+<hr />
+<h3 id="322-rail-debounce-test">322. Rail Debounce Test</h3><p>贴库滚动：</p>
+<p>不会产生大量虚假独立Rail Hits。</p>
+<hr />
+<h3 id="323-rule-test-matrix">323. Rule Test Matrix</h3><p>每种Ruleset：</p>
+<p>构造：</p>
+<ul>
+<li><p>Legal Pot；</p>
+</li>
+<li><p>Miss；</p>
+</li>
+<li><p>Scratch；</p>
+</li>
+<li><p>Wrong First Ball；</p>
+</li>
+<li><p>Multiple Pocket；</p>
+</li>
+<li><p>Illegal Final Ball；</p>
+</li>
+<li><p>Ball Off Table。</p>
+</li>
+</ul>
+<hr />
+<h3 id="324-adjudication必须">324. Adjudication必须：</h3><p>完全符合Ruleset Definition。</p>
+<hr />
+<h3 id="325-ball-in-hand-placement-test">325. Ball-in-Hand Placement Test</h3><p>所有：</p>
+<p>Boundary / Overlap / Pocket</p>
+<p>边缘情况。</p>
+<hr />
+<h3 id="326-rack-setup-test">326. Rack Setup Test</h3><p>所有初始球：</p>
+<p>无Overlap。</p>
+<hr />
+<h3 id="327-preview-equality-test">327. Preview Equality Test</h3><p>相同输入：</p>
+<p>Preview与真实Shot</p>
+<p>在未受隐藏差异影响时：</p>
+<p>轨迹误差在允许范围内。</p>
+<hr />
+<h3 id="328-frame-rate-independence">328. Frame Rate Independence</h3><p>30 / 60 / 144 / 240 FPS。</p>
+<p>Stable Result一致。</p>
+<hr />
+<h3 id="329-replay-determinism">329. Replay Determinism</h3><p>相同：</p>
+<p>Shot Commands</p>
+<p>重复执行。</p>
+<p>Stable Table Hash一致</p>
+<p>或：</p>
+<p>受控Snapshot校正。</p>
+<hr />
+<h3 id="330-network-duplicate-shot">330. Network Duplicate Shot</h3><p>重复Commit：</p>
+<p>只执行一次。</p>
+<hr />
+<h3 id="331-ai-shot-legality-test">331. AI Shot Legality Test</h3><p>AI生成的Shot：</p>
+<p>必须经过：</p>
+<p>同一Rule Validation。</p>
+<hr />
+<h3 id="332-ai-foul-rate-regression">332. AI Foul Rate Regression</h3><p>不同难度：</p>
+<p>符合设计目标。</p>
+<hr />
+<h3 id="333-performance设计">333. Performance设计</h3><p>台球通常：</p>
+<p>球数非常少。</p>
+<p>因此：</p>
+<p><strong>不要优先做实体数量优化。</strong></p>
+<p>真正应该把性能预算花在：</p>
+<ul>
+<li><p>高质量Continuous Collision；</p>
+</li>
+<li><p>多Substep；</p>
+</li>
+<li><p>Spin；</p>
+</li>
+<li><p>Preview Simulation；</p>
+</li>
+<li><p>AI Search。</p>
+</li>
+</ul>
+<hr />
+<h3 id="334-ball-physics">334. Ball Physics</h3><p>即使几十颗球：</p>
+<p>规模也非常低。</p>
+<hr />
+<h3 id="335-可以承担">335. 可以承担：</h3><p>比普通游戏Projectile更高质量的每球模拟。</p>
+<hr />
+<h3 id="336-ai-search">336. AI Search</h3><p>反而可能：</p>
+<p>一次Turn前向模拟：</p>
+<p>数百～数千候选Shot。</p>
+<p>这是更可能的CPU热点。</p>
+<hr />
+<h3 id="337-推荐">337. 推荐：</h3><p>分层Candidate Generation</p>
+<p>降低搜索量。</p>
+<hr />
+<h3 id="338-preview可以">338. Preview可以：</h3><p>降低采样频率。</p>
+<hr />
+<h3 id="339-玩家调aim时">339. 玩家调Aim时：</h3><p>不需要：</p>
+<p>每Render Frame</p>
+<p>完整模拟几千步。</p>
+<hr />
+<h3 id="340-可以">340. 可以：</h3><p>只有Aim / Power变化超过阈值</p>
+<p>才重算。</p>
+<hr />
+<h3 id="341-table几何几乎静态">341. Table几何几乎静态。</h3><p>可：</p>
+<p>预计算：</p>
+<ul>
+<li><p>Cushion；</p>
+</li>
+<li><p>Pocket；</p>
+</li>
+<li><p>Spot；</p>
+</li>
+<li><p>Collision Acceleration Structure。</p>
+</li>
+</ul>
+<hr />
+<h3 id="342-physics-core非常适合">342. Physics Core非常适合：</h3><p>脱离引擎实现为：</p>
+<p>纯数据Domain Module。</p>
+<hr />
+<h3 id="343-这对于跨unity-godot尤其有价值">343. 这对于跨Unity / Godot尤其有价值：</h3><p>渲染与输入层适配不同引擎，</p>
+<p>球局规则和Shot Adjudication保持一致。</p>
+<hr />
+<h3 id="344-可扩展点">344. 可扩展点</h3><hr />
+<h3 id="3441-新ruleset">344.1 新Ruleset</h3><p>只增加：</p>
+<p>RuleDefinition。</p>
+<p>Physics Core不变。</p>
+<hr />
+<h3 id="3442-新球桌">344.2 新球桌</h3><p>更换：</p>
+<p>TableDefinition。</p>
+<hr />
+<h3 id="3443-新pocket尺寸">344.3 新Pocket尺寸</h3><p>属于：</p>
+<p>Table Geometry。</p>
+<hr />
+<h3 id="3444-无袋carom模式">344.4 无袋Carom模式</h3><p>PocketSystem：</p>
+<p>禁用或不存在。</p>
+<hr />
+<h3 id="3445-新ball-set">344.5 新Ball Set</h3><p>通过：</p>
+<p>BallDefinition。</p>
+<hr />
+<h3 id="3446-新cue">344.6 新Cue</h3><p>主要修改：</p>
+<p>Cue Strike Profile。</p>
+<hr />
+<h3 id="3447-新assist">344.7 新Assist</h3><p>只影响：</p>
+<p>Planning Presentation</p>
+<p>和：</p>
+<p>Input Interpretation。</p>
+<hr />
+<h3 id="3448-trick-shot">344.8 Trick Shot</h3><p>使用：</p>
+<p>Objective Adapter。</p>
+<hr />
+<h3 id="3449-career-rpg模式">344.9 Career / RPG模式</h3><p>属于：</p>
+<p>Meta Layer。</p>
+<p>不能：</p>
+<p>修改基础规则所有权。</p>
+<hr />
+<h3 id="34410-online-tournament">344.10 Online Tournament</h3><p>复用：</p>
+<p>Match / Rack / Turn / Shot。</p>
+<hr />
+<h3 id="34411-training-ai">344.11 Training AI</h3><p>复用：</p>
+<p>Candidate Generator</p>
+<p>和：</p>
+<p>Physics Sandbox。</p>
+<hr />
+<h3 id="34412-replay-coaching">344.12 Replay Coaching</h3><p>读取：</p>
+<p>Shot History</p>
+<p>和：</p>
+<p>Position Evaluation。</p>
+<hr />
+<h3 id="345-玩家体验设计">345. 玩家体验设计</h3><hr />
+<h3 id="3451-第一优先级永远是球感可信">345.1 第一优先级永远是“球感可信”</h3><p>玩家必须逐渐相信：</p>
+<blockquote>
+<p>同样的角度、力度和杆法会得到相似结果。</p>
+</blockquote>
+<hr />
+<h3 id="346-如果physics很真实">346. 如果Physics很“真实”</h3><p>但：</p>
+<p>偶尔随机奇怪弹开，</p>
+<p>仍然失败。</p>
+<hr />
+<h3 id="347-input-latency">347. Input Latency</h3><p>击球确认：</p>
+<p>必须及时。</p>
+<hr />
+<h3 id="348-aim-fine-control">348. Aim Fine Control</h3><p>需要：</p>
+<p>足够细。</p>
+<hr />
+<h3 id="349-大角度移动">349. 大角度移动</h3><p>和：</p>
+<p>微调</p>
+<p>最好：</p>
+<p>拥有不同输入倍率。</p>
+<hr />
+<h3 id="350-controller尤其需要">350. Controller尤其需要：</h3><p>Fine Aim模式。</p>
+<hr />
+<h3 id="351-power-meter必须">351. Power Meter必须：</h3><p>易于重复。</p>
+<p>玩家应该能够：</p>
+<p>学会：</p>
+<p>25%。</p>
+<p>50%。</p>
+<p>80%。</p>
+<hr />
+<h3 id="352-不建议">352. 不建议：</h3><p>力度UI每杆随机速度变化。</p>
+<hr />
+<h3 id="353-spin-ui需要">353. Spin UI需要：</h3><p>直观映射杆头击点。</p>
+<hr />
+<h3 id="354-玩家看到">354. 玩家看到：</h3><p>母球图。</p>
+<p>直接移动击球点。</p>
+<p>比：</p>
+<p>“Backspin +27”</p>
+<p>更自然。</p>
+<hr />
+<h3 id="355-beginner-assist应该">355. Beginner Assist应该：</h3><p>减少几何读取负担。</p>
+<hr />
+<h3 id="356-但不应该">356. 但不应该：</h3><p>自动完成走位。</p>
+<hr />
+<h3 id="357-高级玩家需要">357. 高级玩家需要：</h3><p>关闭Assist。</p>
+<hr />
+<h3 id="358-规则提示必须">358. 规则提示必须：</h3><p>解释为什么犯规。</p>
+<hr />
+<h3 id="359-不应该只显示">359. 不应该只显示：</h3><p>“Foul”。</p>
+<hr />
+<h3 id="360-应至少">360. 应至少：</h3><p>“First Contact Wrong Ball”</p>
+<p>或：</p>
+<p>“Cue Ball Pocketed”。</p>
+<hr />
+<h3 id="361-规则游戏最重要的体验之一">361. 规则游戏最重要的体验之一：</h3><p><strong>玩家必须知道系统为什么这样判。</strong></p>
+<hr />
+<h3 id="362-ball-in-hand应该">362. Ball-in-Hand应该：</h3><p>快速而精确。</p>
+<hr />
+<h3 id="363-drag">363. Drag。</h3><p>Fine Adjust。</p>
+<p>Confirm。</p>
+<hr />
+<h3 id="364-不要">364. 不要：</h3><p>把摆母球做成：</p>
+<p>笨拙三维角色移动。</p>
+<hr />
+<h3 id="365-camera需要支持">365. Camera需要支持：</h3><ul>
+<li><p>Table Overview；</p>
+</li>
+<li><p>Aim View；</p>
+</li>
+<li><p>Top-down；</p>
+</li>
+<li><p>Ball-level；</p>
+</li>
+<li><p>Pocket View。</p>
+</li>
+</ul>
+<hr />
+<h3 id="366-但相机不能">366. 但相机不能：</h3><p>改变真实Aim。</p>
+<hr />
+<h3 id="367-玩家切camera后">367. 玩家切Camera后：</h3><p>ShotIntent保持一致。</p>
+<hr />
+<h3 id="368-shot过程中">368. Shot过程中：</h3><p>适度跟随重点球。</p>
+<hr />
+<h3 id="369-但不要">369. 但不要：</h3><p>频繁Cut</p>
+<p>让玩家无法观察：</p>
+<p>母球最终位置。</p>
+<hr />
+<h3 id="370-因为">370. 因为：</h3><p>走位是核心。</p>
+<hr />
+<h3 id="371-最好">371. 最好：</h3><p>直到所有球停稳</p>
+<p>都让玩家看到：</p>
+<p>母球去向。</p>
+<hr />
+<h3 id="372-replay应该">372. Replay应该：</h3><p>突出：</p>
+<p>接触点和走位。</p>
+<hr />
+<h3 id="373-不是">373. 不是：</h3><p>只播放漂亮Camera。</p>
+<hr />
+<h3 id="374-practice-mode应该">374. Practice Mode应该：</h3><p>极低摩擦重置。</p>
+<hr />
+<h3 id="375-一键">375. 一键：</h3><p>Repeat Shot。</p>
+<hr />
+<h3 id="376-这对">376. 这对：</h3><p>学习Spin</p>
+<p>尤其重要。</p>
+<hr />
+<h3 id="377-ai回合不应太慢">377. AI回合不应太慢</h3><p>AI可能内部搜索很多候选。</p>
+<p>但Presentation可以：</p>
+<p>限制：</p>
+<p>短暂思考。</p>
+<hr />
+<h3 id="378-玩家不需要">378. 玩家不需要：</h3><p>等AI真的实时思考10秒。</p>
+<hr />
+<h3 id="379-ai计算可以">379. AI计算可以：</h3><p>提前完成。</p>
+<p>Presentation只保留：</p>
+<p>合理节奏。</p>
+<hr />
+<h3 id="380-常见设计失败">380. 常见设计失败</h3><hr />
+<h3 id="3801-使用普通引擎刚体默认参数直接作为最终台球physics">380.1 使用普通引擎刚体默认参数直接作为最终台球Physics</h3><p>结果：</p>
+<p>稳定性和可调试性不足。</p>
+<hr />
+<h3 id="3802-ball-transform是权威状态">380.2 Ball Transform是权威状态</h3><p>Replay / AI难复用。</p>
+<hr />
+<h3 id="3803-球只保存linear-velocity">380.3 球只保存Linear Velocity</h3><p>没有Angular Gameplay State。</p>
+<hr />
+<h3 id="3804-spin只是视觉动画">380.4 Spin只是视觉动画</h3><p>杆法没有真正物理语义。</p>
+<hr />
+<h3 id="3805-cue-strike直接set-velocity">380.5 Cue Strike直接Set Velocity</h3><p>无法稳定支持击点与旋转。</p>
+<hr />
+<h3 id="3806-preview和真实shot使用不同模型">380.6 Preview和真实Shot使用不同模型</h3><p>瞄准线不可信。</p>
+<hr />
+<h3 id="3807-collision使用离散overlap">380.7 Collision使用离散Overlap</h3><p>高速穿球。</p>
+<hr />
+<h3 id="3808-多球碰撞顺序依赖数组遍历">380.8 多球碰撞顺序依赖数组遍历</h3><p>结果不稳定。</p>
+<hr />
+<h3 id="3809-pocket只是大trigger">380.9 Pocket只是大Trigger</h3><p>擦袋也被吸进去。</p>
+<hr />
+<h3 id="38010-pocket视觉和collider不一致">380.10 Pocket视觉和Collider不一致</h3><p>玩家无法相信袋口。</p>
+<hr />
+<h3 id="38011-一碰合法目标球就立即宣布合法shot">380.11 一碰合法目标球就立即宣布合法Shot</h3><p>后续Scratch被忽略。</p>
+<hr />
+<h3 id="38012-pocketsystem直接加score">380.12 PocketSystem直接加Score</h3><p>Physics和Rule耦合。</p>
+<hr />
+<h3 id="38013-ball颜色脚本自己决定胜负">380.13 Ball颜色脚本自己决定胜负</h3><p>无法支持多个Ruleset。</p>
+<hr />
+<h3 id="38014-first-contact每次碰球都覆盖">380.14 First Contact每次碰球都覆盖</h3><p>规则判定错误。</p>
+<hr />
+<h3 id="38015-rail-collision每frame都算一次rule-rail">380.15 Rail Collision每Frame都算一次Rule Rail</h3><p>贴库产生几十次事件。</p>
+<hr />
+<h3 id="38016-母球进袋直接destroy">380.16 母球进袋直接Destroy</h3><p>Ball-in-Hand身份丢失。</p>
+<hr />
+<h3 id="38017-ball-in-hand直接drag-rigidbody">380.17 Ball-in-Hand直接Drag Rigidbody</h3><p>可与其他球重叠。</p>
+<hr />
+<h3 id="38018-respotted-ball直接set-position">380.18 Respotted Ball直接Set Position</h3><p>占据已有球位置。</p>
+<hr />
+<h3 id="38019-shot结束等固定3秒">380.19 Shot结束等固定3秒</h3><p>有时球还在动。</p>
+<p>有时等待过长。</p>
+<hr />
+<h3 id="38020-小速度永不sleep">380.20 小速度永不Sleep</h3><p>Turn永远不结束。</p>
+<hr />
+<h3 id="38021-sleep阈值过高">380.21 Sleep阈值过高</h3><p>精细走位被提前停止。</p>
+<hr />
+<h3 id="38022-rack使用手工prefab位置">380.22 Rack使用手工Prefab位置</h3><p>不同球半径 / Table修改后重叠。</p>
+<hr />
+<h3 id="38023-break使用另一套physics">380.23 Break使用另一套Physics</h3><p>玩家学习无法迁移。</p>
+<hr />
+<h3 id="38024-ai只选择最近pocket">380.24 AI只选择最近Pocket</h3><p>没有走位。</p>
+<hr />
+<h3 id="38025-ai只追求pot-probability">380.25 AI只追求Pot Probability</h3><p>不会Safety。</p>
+<hr />
+<h3 id="38026-ai使用作弊公式而player使用physics">380.26 AI使用作弊公式而Player使用Physics</h3><p>公平性差。</p>
+<hr />
+<h3 id="38027-ai难度通过飞行中修球">380.27 AI难度通过飞行中修球</h3><p>明显作弊。</p>
+<hr />
+<h3 id="38028-equipment在ranked中大幅改变physics能力">380.28 Equipment在Ranked中大幅改变Physics能力</h3><p>竞技变付费数值。</p>
+<hr />
+<h3 id="38029-准度属性在球运动中持续加random-noise">380.29 准度属性在球运动中持续加Random Noise</h3><p>球感崩溃。</p>
+<hr />
+<h3 id="38030-网络持续同步每球transform却不验证shot-revision">380.30 网络持续同步每球Transform却不验证Shot Revision</h3><p>Bandwidth高，状态仍可能错误。</p>
+<hr />
+<h3 id="38031-客户端直接报告球进袋">380.31 客户端直接报告“球进袋”</h3><p>容易作弊。</p>
+<hr />
+<h3 id="38032-replay只录camera">380.32 Replay只录Camera</h3><p>无法解释Foul。</p>
+<hr />
+<h3 id="38033-physics更新后旧replay没有版本">380.33 Physics更新后旧Replay没有版本</h3><p>历史不可重现。</p>
+<hr />
+<h3 id="38034-camera切换改变aim">380.34 Camera切换改变Aim</h3><p>操作不可信。</p>
+<hr />
+<h3 id="38035-shot-camera只看进球球不看母球">380.35 Shot Camera只看进球球，不看母球</h3><p>玩家无法学习走位。</p>
+<hr />
+<h3 id="38036-犯规提示只写invalid-shot">380.36 犯规提示只写“Invalid Shot”</h3><p>规则不可学习。</p>
+<hr />
+<h3 id="38037-高级assist自动选择最佳球">380.37 高级Assist自动选择最佳球</h3><p>策略被系统替代。</p>
+<hr />
+<h3 id="38038-practice不能一键重置shot">380.38 Practice不能一键重置Shot</h3><p>练习效率低。</p>
+<hr />
+<h3 id="381-最小可行原型">381. 最小可行原型</h3><p>验证 Cue-Sports 核心范式时，不需要立即实现：</p>
+<p>完整赛事生涯和多种正式规则。</p>
+<p>推荐：</p>
+<p><strong>1张标准化矩形球桌 + 6袋 + 母球 + 6～10颗目标球 + 1套简化目标球规则 + Spin + Ball-in-Hand + Replay。</strong></p>
+<hr />
+<h3 id="382-第一阶段-physics">382. 第一阶段 Physics</h3><p>实现：</p>
+<ul>
+<li><p>Ball State；</p>
+</li>
+<li><p>Fixed Tick；</p>
+</li>
+<li><p>Ball-Ball Collision；</p>
+</li>
+<li><p>Cushion；</p>
+</li>
+<li><p>Friction；</p>
+</li>
+<li><p>Sleep。</p>
+</li>
+</ul>
+<hr />
+<h3 id="383-第二阶段-table">383. 第二阶段 Table</h3><p>实现：</p>
+<ul>
+<li><p>Pocket Jaw；</p>
+</li>
+<li><p>Pocket Mouth；</p>
+</li>
+<li><p>Capture；</p>
+</li>
+<li><p>Ball Removed。</p>
+</li>
+</ul>
+<hr />
+<h3 id="384-第三阶段-input">384. 第三阶段 Input</h3><p>实现：</p>
+<ul>
+<li><p>Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Cue Strike；</p>
+</li>
+<li><p>Center Hit。</p>
+</li>
+</ul>
+<hr />
+<h3 id="385-第四阶段-spin">385. 第四阶段 Spin</h3><p>实现：</p>
+<ul>
+<li><p>Top；</p>
+</li>
+<li><p>Back；</p>
+</li>
+<li><p>Side；</p>
+</li>
+<li><p>Sliding / Rolling。</p>
+</li>
+</ul>
+<hr />
+<h3 id="386-第五阶段-shot-lifecycle">386. 第五阶段 Shot Lifecycle</h3><p>实现：</p>
+<ul>
+<li><p>Commit；</p>
+</li>
+<li><p>Event Stream；</p>
+</li>
+<li><p>Stability；</p>
+</li>
+<li><p>Adjudication。</p>
+</li>
+</ul>
+<hr />
+<h3 id="387-第六阶段-rules">387. 第六阶段 Rules</h3><p>至少：</p>
+<ul>
+<li><p>Legal First Contact；</p>
+</li>
+<li><p>Pocket；</p>
+</li>
+<li><p>Scratch；</p>
+</li>
+<li><p>Continue Turn；</p>
+</li>
+<li><p>Foul；</p>
+</li>
+<li><p>Ball-in-Hand。</p>
+</li>
+</ul>
+<hr />
+<h3 id="388-第七阶段-ai">388. 第七阶段 AI</h3><p>先：</p>
+<ul>
+<li><p>Direct Pot；</p>
+</li>
+<li><p>Basic Position；</p>
+</li>
+<li><p>Basic Safety。</p>
+</li>
+</ul>
+<hr />
+<h3 id="389-第八阶段-replay-training">389. 第八阶段 Replay / Training</h3><ul>
+<li><p>Shot History；</p>
+</li>
+<li><p>Ghost Ball；</p>
+</li>
+<li><p>Repeat Shot；</p>
+</li>
+<li><p>Stable Hash。</p>
+</li>
+</ul>
+<hr />
+<h3 id="390-mvp必要数据结构">390. MVP必要数据结构</h3><ul>
+<li><p>MatchState；</p>
+</li>
+<li><p>RackState；</p>
+</li>
+<li><p>TurnState；</p>
+</li>
+<li><p>ShotState；</p>
+</li>
+<li><p>TableDefinition；</p>
+</li>
+<li><p>CushionDefinition；</p>
+</li>
+<li><p>PocketDefinition；</p>
+</li>
+<li><p>BallDefinition；</p>
+</li>
+<li><p>BallRuntimeState；</p>
+</li>
+<li><p>CueStrikeIntent；</p>
+</li>
+<li><p>CollisionEvent；</p>
+</li>
+<li><p>PocketEvent；</p>
+</li>
+<li><p>ShotFactState；</p>
+</li>
+<li><p>ShotAdjudicationResult；</p>
+</li>
+<li><p>BallPlacementIntent；</p>
+</li>
+<li><p>PhysicsState；</p>
+</li>
+<li><p>ShotHistoryEntry；</p>
+</li>
+<li><p>ReplayRecord。</p>
+</li>
+</ul>
+<hr />
+<h3 id="391-mvp必要调试工具">391. MVP必要调试工具</h3><ul>
+<li><p>TableStateInspector；</p>
+</li>
+<li><p>BallTrail；</p>
+</li>
+<li><p>CueStrikeInspector；</p>
+</li>
+<li><p>SpinInspector；</p>
+</li>
+<li><p>CollisionTimeline；</p>
+</li>
+<li><p>GhostBallOverlay；</p>
+</li>
+<li><p>ContactArcViewer；</p>
+</li>
+<li><p>PocketCaptureInspector；</p>
+</li>
+<li><p>ShotFactInspector；</p>
+</li>
+<li><p>RuleAdjudicationTrace；</p>
+</li>
+<li><p>StabilityInspector；</p>
+</li>
+<li><p>PlacementOverlay；</p>
+</li>
+<li><p>RackValidator；</p>
+</li>
+<li><p>AIShotCandidateViewer；</p>
+</li>
+<li><p>ReplayHashTimeline。</p>
+</li>
+</ul>
+<hr />
+<h3 id="392-mvp核心验收问题">392. MVP核心验收问题</h3><p>原型至少必须回答：</p>
+<ul>
+<li><p>同样Cue Strike是否稳定得到相同球路；</p>
+</li>
+<li><p>Rendering FPS变化是否不改变最终球局；</p>
+</li>
+<li><p>高速球是否不会穿过其他球；</p>
+</li>
+<li><p>多球连续碰撞是否不依赖数组遍历顺序；</p>
+</li>
+<li><p>Cue Strike是否真正产生线速度与角速度；</p>
+</li>
+<li><p>下旋是否通过真实Spin演化产生回拉；</p>
+</li>
+<li><p>Side Spin是否稳定影响碰库结果；</p>
+</li>
+<li><p>Sliding是否会自然过渡到Rolling；</p>
+</li>
+<li><p>Pocket Jaw是否不会错误吸球；</p>
+</li>
+<li><p>Pocket Capture是否具有明确状态边界；</p>
+</li>
+<li><p>所有球停稳之前是否不会提前判杆；</p>
+</li>
+<li><p>First Object Contact是否只记录一次；</p>
+</li>
+<li><p>Rail事件是否拥有稳定Debounce；</p>
+</li>
+<li><p>Cue Ball Scratch是否不会销毁其规则身份；</p>
+</li>
+<li><p>Rule Engine是否完全独立于Physics；</p>
+</li>
+<li><p>同一Physics Core是否能切换至少两种简化Ruleset；</p>
+</li>
+<li><p>Ball-in-Hand是否无法和其他球重叠；</p>
+</li>
+<li><p>AI是否会考虑母球下一杆位置而非只求进球；</p>
+</li>
+<li><p>玩家是否能清楚理解每次Foul原因；</p>
+</li>
+<li><p>玩家是否开始从“把球打进袋”成长为“同时控制目标球与母球最终位置”。</p>
+</li>
+</ul>
+<p>这些问题没有稳定以前，不建议优先加入：</p>
+<ul>
+<li><p>Career；</p>
+</li>
+<li><p>球杆抽卡；</p>
+</li>
+<li><p>装备强化；</p>
+</li>
+<li><p>大型大厅社交；</p>
+</li>
+<li><p>Ranked；</p>
+</li>
+<li><p>复杂赛事；</p>
+</li>
+<li><p>大量桌型；</p>
+</li>
+<li><p>高级Trick Shot编辑器。</p>
+</li>
+</ul>
+<hr />
+<h3 id="393-推荐实施顺序">393. 推荐实施顺序</h3><p>第一阶段：</p>
+<ul>
+<li><p>Table Coordinate；</p>
+</li>
+<li><p>Ball State；</p>
+</li>
+<li><p>Fixed Physics。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>Ball-Ball Continuous Collision；</p>
+</li>
+<li><p>Cushion。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Cloth Friction；</p>
+</li>
+<li><p>Sleep。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Pocket Geometry；</p>
+</li>
+<li><p>Pocket Lifecycle。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Cue Strike；</p>
+</li>
+<li><p>Aim；</p>
+</li>
+<li><p>Power。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Spin；</p>
+</li>
+<li><p>Sliding / Rolling；</p>
+</li>
+<li><p>Cushion Spin。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Shot Event Stream；</p>
+</li>
+<li><p>World Stability。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li><p>Rule Engine；</p>
+</li>
+<li><p>Foul；</p>
+</li>
+<li><p>Turn。</p>
+</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Ball-in-Hand；</p>
+</li>
+<li><p>Rack；</p>
+</li>
+<li><p>Respot。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Preview；</p>
+</li>
+<li><p>Practice；</p>
+</li>
+<li><p>Shot History。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>AI；</p>
+</li>
+<li><p>Position Play；</p>
+</li>
+<li><p>Safety。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Network；</p>
+</li>
+<li><p>Multiple Rulesets。</p>
+</li>
+</ul>
+<hr />
+<h3 id="394-架构验收标准">394. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>Match、Rack、Turn和Shot拥有四层独立生命周期；</p>
+</li>
+<li><p>Shot是一次Cue Strike的唯一Commit边界；</p>
+</li>
+<li><p>Planning阶段的Aim / Power / Spin可以自由修改；</p>
+</li>
+<li><p>Shot Commit后玩家不能继续直接控制球；</p>
+</li>
+<li><p>所有Ball拥有稳定BallId；</p>
+</li>
+<li><p>BallDefinition与BallRuntimeState严格分离；</p>
+</li>
+<li><p>Ball LinearVelocity与AngularVelocity都属于Gameplay Truth；</p>
+</li>
+<li><p>Sliding、Rolling、PocketTransit等运动状态具有明确语义；</p>
+</li>
+<li><p>Table属于正式Gameplay Definition；</p>
+</li>
+<li><p>Cushion、Pocket、Spot和Placement Region拥有独立逻辑定义；</p>
+</li>
+<li><p>Pocket不只是普通Trigger；</p>
+</li>
+<li><p>Pocket Jaw、Mouth与Capture拥有明确边界；</p>
+</li>
+<li><p>Cue Strike通过杆头击点产生线动量与角动量；</p>
+</li>
+<li><p>Tip Offset属于正式Gameplay Input；</p>
+</li>
+<li><p>Fixed Physics不依赖Rendering FPS；</p>
+</li>
+<li><p>Ball-Ball高速运动使用Continuous Collision；</p>
+</li>
+<li><p>同一Physics Tick支持多次按时间顺序碰撞；</p>
+</li>
+<li><p>Collision Resolution尽量按Earliest TOI执行；</p>
+</li>
+<li><p>CollisionEvent不依赖引擎Callback遍历顺序；</p>
+</li>
+<li><p>Ball-Ball与Ball-Cushion响应可以独立配置；</p>
+</li>
+<li><p>Cloth Friction与Rolling Resistance具有稳定规则；</p>
+</li>
+<li><p>Spin通过Physics状态演化而非碰撞时读取玩家按钮；</p>
+</li>
+<li><p>Sliding可以自然转成Rolling；</p>
+</li>
+<li><p>First Object Contact只记录一次；</p>
+</li>
+<li><p>Rail Contact具有规则层可用的Debounce语义；</p>
+</li>
+<li><p>PocketEvent只描述物理事实；</p>
+</li>
+<li><p>Cue Ball Scratch与普通Object Ball Pocket分离；</p>
+</li>
+<li><p>Physics系统不直接计分或切Turn；</p>
+</li>
+<li><p>Ruleset只消费Shot Fact和Stable Table State；</p>
+</li>
+<li><p>Shot Legality只在完整Shot结束后一次性裁定；</p>
+</li>
+<li><p>同一Shot可以同时记录多个Foul原因；</p>
+</li>
+<li><p>Foul Penalty与Foul Detection分离；</p>
+</li>
+<li><p>Ball-in-Hand进入正式Placement Phase；</p>
+</li>
+<li><p>Cue Ball Placement经过完整几何验证；</p>
+</li>
+<li><p>Respot同样使用统一Placement规则；</p>
+</li>
+<li><p>Rack Setup经过Collision / Slot Validation；</p>
+</li>
+<li><p>Break Shot复用普通Physics；</p>
+</li>
+<li><p>Cue Ball最终位置属于正式战略价值；</p>
+</li>
+<li><p>AI能够评估Position Value；</p>
+</li>
+<li><p>AI能够生成Safety Shot；</p>
+</li>
+<li><p>Ball Obstruction和Available Contact Arc可以查询；</p>
+</li>
+<li><p>Pocketability由Cue、Target、Pocket三者联合计算；</p>
+</li>
+<li><p>Ghost Ball Geometry可服务AI、Hint与Training；</p>
+</li>
+<li><p>Aim Assist只辅助意图表达，不自动完成最优决策；</p>
+</li>
+<li><p>Power会影响进球与走位而非只影响速度；</p>
+</li>
+<li><p>Sleep是正式Gameplay稳定机制；</p>
+</li>
+<li><p>World Stability不依赖固定等待时间；</p>
+</li>
+<li><p>Stability拥有Maximum Resolve Time保护；</p>
+</li>
+<li><p>Pocket Geometry拥有专项Stress Test；</p>
+</li>
+<li><p>Called Shot属于Rule Intent，不修改Physics；</p>
+</li>
+<li><p>Shot Result与Call Intent在Adjudication阶段比较；</p>
+</li>
+<li><p>AI最终候选使用真实Physics Sandbox验证；</p>
+</li>
+<li><p>AI难度通过Decision / Execution Error控制而非修改球路；</p>
+</li>
+<li><p>Shot History记录完整输入与结果；</p>
+</li>
+<li><p>Practice Mode可以快速重构球局；</p>
+</li>
+<li><p>Trick Shot可以通过Objective Adapter扩展；</p>
+</li>
+<li><p>Online Shot必须绑定Table Revision；</p>
+</li>
+<li><p>Server权威处理Shot Commit和最终Stable State；</p>
+</li>
+<li><p>Replay保存Ruleset / Physics / Table版本；</p>
+</li>
+<li><p>Ranked记录与Physics版本绑定；</p>
+</li>
+<li><p>Equipment误差在Cue Strike前解释，Shot以后Physics保持纯净；</p>
+</li>
+<li><p>Presentation和Camera永远不拥有Ball Truth；</p>
+</li>
+<li><p>Debugger能够解释一杆为什么犯规；</p>
+</li>
+<li><p>Debugger能够解释一颗球为什么进袋或擦袋；</p>
+</li>
+<li><p>Debugger能够解释母球为什么最终停在这个位置；</p>
+</li>
+<li><p>新Ruleset通常不需要修改Physics Core；</p>
+</li>
+<li><p>新Table不需要修改Turn Core；</p>
+</li>
+<li><p>新Cue不需要修改Rule Engine。</p>
+</li>
+</ul>
+<hr />
+<h3 id="395-可迁移到其他游戏的设计思想">395. 可迁移到其他游戏的设计思想</h3><hr />
+<h3 id="3951-一次操作的真正价值可以由它产生的下一状态而不是即时结果决定">395.1 一次操作的真正价值可以由“它产生的下一状态”而不是即时结果决定</h3><p>进球：</p>
+<p>是即时收益。</p>
+<p>母球走位：</p>
+<p>是未来价值。</p>
+<p>这种：</p>
+<p><strong>Immediate Reward + State Quality</strong></p>
+<p>结构可迁移到：</p>
+<ul>
+<li><p>战棋；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>赛车；</p>
+</li>
+<li><p>足球；</p>
+</li>
+<li><p>Roguelike。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3952-完成当前目标与为下一步建立好条件是两个不同优化目标">395.2 “完成当前目标”与“为下一步建立好条件”是两个不同优化目标</h3><p>很多游戏设计只问：</p>
+<p>这次攻击Damage多少。</p>
+<p>台球提醒我们：</p>
+<p>还要问：</p>
+<p>攻击结束后：</p>
+<p>我站在哪里？</p>
+<p>敌人在哪里？</p>
+<p>资源在哪里？</p>
+<hr />
+<h3 id="3953-action-commitment-能在极低输入复杂度下制造很深的决策">395.3 Action Commitment 能在极低输入复杂度下制造很深的决策</h3><p>台球一杆核心输入不过：</p>
+<p>方向、力度、旋转。</p>
+<p>但一旦Commit：</p>
+<p>后果无法撤回。</p>
+<p>这可以迁移到：</p>
+<ul>
+<li><p>Golf；</p>
+</li>
+<li><p>Artillery；</p>
+</li>
+<li><p>战术指令；</p>
+</li>
+<li><p>投掷；</p>
+</li>
+<li><p>Deck Commit。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3954-连续物理结果应该先完整稳定再交给离散ruleset解释">395.4 连续物理结果应该先完整稳定，再交给离散Ruleset解释</h3><p><strong>Simulation → Stability Barrier → Adjudication</strong></p>
+<p>是非常强的通用架构。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>回合制炮术；</p>
+</li>
+<li><p>Bowling；</p>
+</li>
+<li><p>Golf；</p>
+</li>
+<li><p>物理解谜；</p>
+</li>
+<li><p>自动战斗。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3955-physics-fact和game-rule应彻底分离">395.5 Physics Fact和Game Rule应彻底分离</h3><p>“球进了袋”</p>
+<p>是事实。</p>
+<p>“因此得7分”</p>
+<p>是规则解释。</p>
+<p>同样适用于：</p>
+<ul>
+<li><p>Goal；</p>
+</li>
+<li><p>Race Finish；</p>
+</li>
+<li><p>Kill；</p>
+</li>
+<li><p>Capture；</p>
+</li>
+<li><p>Trade。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3956-规则裁定最好基于完整event-stream而不是在事件发生瞬间修改最终结论">395.6 规则裁定最好基于完整Event Stream，而不是在事件发生瞬间修改最终结论</h3><p>第一事件可能：</p>
+<p>看似成功。</p>
+<p>后续事件：</p>
+<p>会改变整次Action结果。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Combo；</p>
+</li>
+<li><p>Card Chain；</p>
+</li>
+<li><p>Transaction；</p>
+</li>
+<li><p>Workflow；</p>
+</li>
+<li><p>Turn Resolution。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3957-玩家真正需要规划的目标常常是一个区域而不是一个精确点">395.7 玩家真正需要规划的目标常常是一个“区域”，而不是一个精确点</h3><p>母球并不一定：</p>
+<p>必须停在坐标X。</p>
+<p>只要：</p>
+<p>处于一个能够获得良好切角的Position Zone即可。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>AI Positioning；</p>
+</li>
+<li><p>Cover；</p>
+</li>
+<li><p>RTS Formation；</p>
+</li>
+<li><p>Football Support；</p>
+</li>
+<li><p>Navigation。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3958-防守行为也可以通过把下一状态变差定义而不需要直接damage">395.8 防守行为也可以通过“把下一状态变差”定义，而不需要直接Damage</h3><p>Safety Shot：</p>
+<p>本身不进球。</p>
+<p>却让对手：</p>
+<p>没有好机会。</p>
+<p>这是一种：</p>
+<p><strong>Future Option Denial。</strong></p>
+<p>可迁移到：</p>
+<ul>
+<li><p>MOBA控图；</p>
+</li>
+<li><p>战棋封路；</p>
+</li>
+<li><p>RTS封锁；</p>
+</li>
+<li><p>卡牌干扰。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3959-collision-chain适合使用事件历史而不是让对象互相直接调用gameplay规则">395.9 Collision Chain适合使用事件历史，而不是让对象互相直接调用Gameplay规则</h3><p>母球撞A。</p>
+<p>A撞B。</p>
+<p>B进袋。</p>
+<p>事件流可以：</p>
+<p>完整重建因果。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Explosion；</p>
+</li>
+<li><p>Pinball；</p>
+</li>
+<li><p>Chain Reaction；</p>
+</li>
+<li><p>Physics Puzzle。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39510-sleep-stability不只是性能优化也可以是正式业务边界">395.10 Sleep / Stability不只是性能优化，也可以是正式业务边界</h3><p>只有所有球真正停止：</p>
+<p>才允许下一玩家操作。</p>
+<p>类似思想可迁移到：</p>
+<ul>
+<li><p>Physics Turn；</p>
+</li>
+<li><p>Board Resolution；</p>
+</li>
+<li><p>Particle-driven Gameplay；</p>
+</li>
+<li><p>Settlement Systems。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39511-辅助系统必须复用真实规则否则辅助越强系统越不可信">395.11 辅助系统必须复用真实规则，否则辅助越强，系统越不可信</h3><p>Aim Preview。</p>
+<p>Placement Preview。</p>
+<p>Damage Preview。</p>
+<p>Ghost。</p>
+<p>都应：</p>
+<p>使用真实Domain Query。</p>
+<hr />
+<h3 id="39512-高质量ai最好分成生成候选和真实模拟验证两个阶段">395.12 高质量AI最好分成“生成候选”和“真实模拟验证”两个阶段</h3><p>先用：</p>
+<p>几何和规则</p>
+<p>快速排除大量不可能候选。</p>
+<p>再：</p>
+<p>使用真实模拟器。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Artillery AI；</p>
+</li>
+<li><p>Racing；</p>
+</li>
+<li><p>Tactical AI；</p>
+</li>
+<li><p>Physics Planner。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39513-ai难度可以通过决策质量和执行误差调节而不需要作弊">395.13 AI难度可以通过决策质量和执行误差调节，而不需要作弊</h3><p>这种设计比：</p>
+<p>给AI额外Damage</p>
+<p>更自然。</p>
+<hr />
+<h3 id="39514-回放真正有价值的地方不是看画面而是重建为什么这个结果发生">395.14 回放真正有价值的地方不是看画面，而是重建“为什么这个结果发生”</h3><p>Shot Input。</p>
+<p>Collision。</p>
+<p>Pocket。</p>
+<p>Foul。</p>
+<p>Final Position。</p>
+<p>这类结构化Replay同样适合：</p>
+<ul>
+<li><p>战术；</p>
+</li>
+<li><p>体育；</p>
+</li>
+<li><p>卡牌；</p>
+</li>
+<li><p>竞技动作。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39515-低实体数量反而适合投入更高的单实体模拟质量">395.15 低实体数量反而适合投入更高的单实体模拟质量</h3><p>台球只有十几颗球。</p>
+<p>不需要：</p>
+<p>ECS式数量扩展。</p>
+<p>应该：</p>
+<p>把复杂度预算投入：</p>
+<p>稳定碰撞、Spin和AI前向模拟。</p>
+<p>这是一个非常值得迁移的工程原则：</p>
+<blockquote>
+<p><strong>系统架构应围绕真正的规模瓶颈设计，而不是机械套用“高性能模式”。</strong></p>
+</blockquote>
+<hr />
+<h3 id="396-本次防重记录">396. 本次防重记录</h3><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>台球 / Billiards / Cue-Sports Simulation。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Billiards；</p>
+</li>
+<li><p>Pool；</p>
+</li>
+<li><p>Cue Sports；</p>
+</li>
+<li><p>Pocket Billiards；</p>
+</li>
+<li><p>Snooker-like；</p>
+</li>
+<li><p>8-Ball-like；</p>
+</li>
+<li><p>9-Ball-like；</p>
+</li>
+<li><p>台球；</p>
+</li>
+<li><p>美式落袋；</p>
+</li>
+<li><p>斯诺克式球类模拟。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>台球将一场比赛组织为 <strong>Match → Rack / Frame → Turn → Shot</strong> 四层生命周期。玩家每次真正提交的最小高价值行动只有一次 Cue Strike：在稳定球局上决定Aim、Power、Tip Offset等参数，并在Shot Commit以后放弃对球的直接控制。</p>
+<p>Cue Strike将输入转换成母球的线动量与角动量；母球随后在统一固定步长Physics中经历Sliding、Rolling、Spin、Ball-Ball Collision和Cushion Collision，并把动量逐层传播给其他球。Pocket System只负责确认某球是否真正跨过袋口捕获边界，Collision System只记录Ball / Rail Contact；这些连续物理事实全部进入Shot Event Stream。</p>
+<p>只有所有球真正达到World Stability以后，Rule Engine才冻结本杆事实：第一目标球接触、碰库、落袋、Scratch、指定球和其他状态，再一次性计算Foul、Score、Turn Continue、Ball-in-Hand、Respot、Rack Win等赛事结果。Physics因此完全独立于8-Ball、9-Ball、Snooker等规则，可以被多种Cue Sports模式共享。</p>
+<p>玩家的高级技能逐渐从：</p>
+<p><strong>“把当前目标球打进袋”</strong></p>
+<p>升级为：</p>
+<p><strong>“让目标球按计划进袋，同时让母球停在下一颗球的高价值Position Zone。”</strong></p>
+<p>当进攻概率不足时，玩家甚至可以主动选择Safety Shot，通过合法接触重新布置母球与目标球，让对手下一Turn拥有更差的Contact Arc和Pocket机会。因此台球真正的策略资源并不是Damage、能量或角色成长，而是：</p>
+<p><strong>角度、母球位置、球路开放程度与下一杆的行动空间。</strong></p>
+<p>核心循环可以压缩为：</p>
+<p><strong>Stable Table
+→ 读取合法目标
+→ 评估进攻 / 走位 / Safety
+→ 选择Target与Pocket
+→ Aim
+→ Power
+→ Spin
+→ Shot Commit
+→ Cue Ball Motion
+→ Collision Chain
+→ Rail / Pocket
+→ Ball Settling
+→ World Stable
+→ Rule Adjudication
+→ 更新Score与Turn
+→ 在新球局上重新规划。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>台球并不是“把球打进袋”的游戏，而是一个用单次物理承诺不断塑造下一次决策质量的连续状态规划游戏。</strong></p>
+</blockquote>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>玩家无法在Shot Commit后继续直接控制球；</p>
+</li>
+<li><p>每次高价值输入集中在Aim、Power和Spin；</p>
+</li>
+<li><p>母球首先获得主动冲量；</p>
+</li>
+<li><p>后续状态通过真实Ball Collision传播；</p>
+</li>
+<li><p>Ball Linear与Angular State都属于Gameplay Truth；</p>
+</li>
+<li><p>Physics具有稳定固定步长；</p>
+</li>
+<li><p>Ball-Ball Collision需要高质量Continuous Collision；</p>
+</li>
+<li><p>多球碰撞顺序必须稳定；</p>
+</li>
+<li><p>Cushion属于正式Gameplay几何；</p>
+</li>
+<li><p>Pocket拥有Jaw、Mouth与Capture语义；</p>
+</li>
+<li><p>Pocket不是普通大Trigger；</p>
+</li>
+<li><p>Sliding与Rolling可以区分；</p>
+</li>
+<li><p>Top / Back / Side Spin属于真实状态；</p>
+</li>
+<li><p>世界必须等待所有Ball稳定以后再结束Shot；</p>
+</li>
+<li><p>First Object Contact属于正式规则事实；</p>
+</li>
+<li><p>Rail Contact属于正式规则事实；</p>
+</li>
+<li><p>PocketEvent只描述物理结果；</p>
+</li>
+<li><p>Rule Engine在整杆结束后统一裁定；</p>
+</li>
+<li><p>Physics与Ruleset严格分离；</p>
+</li>
+<li><p>同一Physics Core可支持多个Cue-Sports规则；</p>
+</li>
+<li><p>Foul可以同时存在多个原因；</p>
+</li>
+<li><p>Ball-in-Hand属于独立Placement Phase；</p>
+</li>
+<li><p>Rack属于正式比赛生命周期；</p>
+</li>
+<li><p>Break复用普通Physics；</p>
+</li>
+<li><p>母球最终位置是核心战略资源；</p>
+</li>
+<li><p>高级玩家会规划未来数杆Position；</p>
+</li>
+<li><p>Position Target通常是区域而不是一点；</p>
+</li>
+<li><p>Safety Shot允许不进球也产生高战略价值；</p>
+</li>
+<li><p>Obstruction与Available Contact Arc属于正式空间查询；</p>
+</li>
+<li><p>Pocketability由母球、目标球和Pocket共同决定；</p>
+</li>
+<li><p>Ghost Ball可以作为AI / Training几何抽象；</p>
+</li>
+<li><p>Aim Assist不应自动完成最优决策；</p>
+</li>
+<li><p>Power会同时影响进球和母球走位；</p>
+</li>
+<li><p>Sleep属于Gameplay稳定边界；</p>
+</li>
+<li><p>Stability需要超时恢复机制；</p>
+</li>
+<li><p>Pocket Edge需要专项Regression；</p>
+</li>
+<li><p>AI需要真实Physics前向模拟；</p>
+</li>
+<li><p>AI需要同时评估Pot、Position与Safety；</p>
+</li>
+<li><p>Replay以Shot为高价值结构单元；</p>
+</li>
+<li><p>Online Shot天然适合Server Authority；</p>
+</li>
+<li><p>Table Revision可作为网络事务版本；</p>
+</li>
+<li><p>Ranked记录需要绑定Physics和Ruleset版本；</p>
+</li>
+<li><p>玩家长期成长主要来自球路、Spin和未来位置规划。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与回合制炮术对抗的防重边界">与回合制炮术对抗的防重边界</h3><p>当前仓库已经存在 <code>turn-based-artillery</code>，其核心是玩家在离散回合中选择角度、力度与弹种，Projectile Commit后经过连续弹道改变Actor和可破坏Terrain。</p>
+<p>两者确实都具有：</p>
+<ul>
+<li><p>离散回合；</p>
+</li>
+<li><p>物理Commit；</p>
+</li>
+<li><p>Aim；</p>
+</li>
+<li><p>Power；</p>
+</li>
+<li><p>Shot后等待World Stable。</p>
+</li>
+</ul>
+<p>但最核心状态传播完全不同。</p>
+<p><strong>Turn-Based Artillery：</strong></p>
+<blockquote>
+<p>Projectile主要和地形、Actor发生交互；一次Shot的重要价值之一是永久修改Battlefield Topology。</p>
+</blockquote>
+<p><strong>Billiards：</strong></p>
+<blockquote>
+<p>球桌几何基本保持不变；一次Shot的主要后果通过多个移动球体之间的碰撞传播，核心战略是重新组织整个Ball Layout。</p>
+</blockquote>
+<p>可以概括为：</p>
+<p><strong>Artillery：</strong></p>
+<blockquote>
+<p>射击在重写世界。</p>
+</blockquote>
+<p><strong>Billiards：</strong></p>
+<blockquote>
+<p>射击在重写多球状态关系。</p>
+</blockquote>
+<p>因此本期不是回合制炮术的“无地形版本”。</p>
+<hr />
+<h3 id="与物理弹球的防重边界">与物理弹球的防重边界</h3><p>当前仓库已有 <code>pinball</code>；其核心是玩家不能直接操纵Ball，而通过Flipper、Plunger、Nudge等持续致动器影响高速共享球体，并通过Switch与Shot Recognition把连续物理转换成规则事件。</p>
+<p>两者都拥有：</p>
+<ul>
+<li><p>Ball Physics；</p>
+</li>
+<li><p>Cushion / Surface；</p>
+</li>
+<li><p>Spin；</p>
+</li>
+<li><p>Contact；</p>
+</li>
+<li><p>Pocket / Device-like状态；</p>
+</li>
+<li><p>Replay。</p>
+</li>
+</ul>
+<p>但玩家控制关系完全不同。</p>
+<p><strong>Pinball：</strong></p>
+<blockquote>
+<p>Ball运动期间玩家仍可以持续通过Flipper和Nudge进行干预。</p>
+</blockquote>
+<p><strong>Billiards：</strong></p>
+<blockquote>
+<p>一旦Cue Strike Commit，整杆通常不允许再修改任何Ball。</p>
+</blockquote>
+<p>Pinball的核心是：</p>
+<p><strong>持续控制Ball Flow。</strong></p>
+<p>台球的核心是：</p>
+<p><strong>一次高精度输入后观察完整碰撞状态传播。</strong></p>
+<hr />
+<h3 id="与足球比赛模拟的防重边界">与足球比赛模拟的防重边界</h3><p>足球同样拥有：</p>
+<p>独立Ball。</p>
+<p>但足球中的Ball不断在：</p>
+<p>22个运动Actor之间</p>
+<p>被持续争夺、接球、传球与控制。</p>
+<p>台球没有：</p>
+<p>自主Agent围绕球移动。</p>
+<p>所有球除了物理碰撞：</p>
+<p>都没有主动行为。</p>
+<p>因此：</p>
+<p><strong>Football：</strong></p>
+<blockquote>
+<p>Ball、Space和Team Phase共同重构团队行动。</p>
+</blockquote>
+<p><strong>Billiards：</strong></p>
+<blockquote>
+<p>Cue Strike、Collision Chain和Ball Layout共同重构下一杆规划。</p>
+</blockquote>
+<p>两者的运行时主问题完全不同。</p>
+<hr />
+<h3 id="与未来高尔夫范式的防重边界">与未来高尔夫范式的防重边界</h3><p>本次不会把所有“杆击球类”并入Cue Sports。</p>
+<p>未来仍可以独立记录：</p>
+<p><strong>Golf / Stroke Planning Simulation。</strong></p>
+<p>Golf的核心可以研究：</p>
+<ul>
+<li><p>Club Selection；</p>
+</li>
+<li><p>Terrain Lie；</p>
+</li>
+<li><p>Swing；</p>
+</li>
+<li><p>Wind；</p>
+</li>
+<li><p>Ball Flight；</p>
+</li>
+<li><p>Bounce；</p>
+</li>
+<li><p>Roll；</p>
+</li>
+<li><p>Course Risk；</p>
+</li>
+<li><p>Stroke Economy。</p>
+</li>
+</ul>
+<p>高尔夫主要是：</p>
+<p>让同一个球通过多次击球</p>
+<p>在复杂地形中逼近固定Hole。</p>
+<p>台球则：</p>
+<p>一杆同时影响多个球，</p>
+<p>并依靠Ball-Ball Collision传播状态。</p>
+<p>因此：</p>
+<p><strong>Golf：</strong></p>
+<blockquote>
+<p>管理一个球在Course上的长期推进。</p>
+</blockquote>
+<p><strong>Billiards：</strong></p>
+<blockquote>
+<p>管理多个球之间的碰撞关系和下一杆布局。</p>
+</blockquote>
+<hr />
+<h3 id="与未来保龄球范式的防重边界">与未来保龄球范式的防重边界</h3><p>保龄球同样可以具有：</p>
+<p>Ball Physics、Spin和一次投掷承诺。</p>
+<p>但其主要结构是：</p>
+<p>Ball → Pin群</p>
+<p>的一次碰撞结果，</p>
+<p>随后重新Rack并计分。</p>
+<p>台球中的对象球：</p>
+<p>不会每杆全部重置。</p>
+<p>它们会：</p>
+<p>持续留在桌面上，</p>
+<p>成为下一杆的新空间约束。</p>
+<p>因此：</p>
+<p>台球具有更强的：</p>
+<p><strong>Persistent Multi-object Layout Planning。</strong></p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>Billiards；</p>
+</li>
+<li><p>Cue Sports；</p>
+</li>
+<li><p>Pool；</p>
+</li>
+<li><p>Cue Strike；</p>
+</li>
+<li><p>Shot Commitment；</p>
+</li>
+<li><p>Cue Ball；</p>
+</li>
+<li><p>Object Ball；</p>
+</li>
+<li><p>Ball Physics；</p>
+</li>
+<li><p>Ball-Ball Collision；</p>
+</li>
+<li><p>Continuous Collision；</p>
+</li>
+<li><p>Cushion Collision；</p>
+</li>
+<li><p>Cloth Friction；</p>
+</li>
+<li><p>Sliding；</p>
+</li>
+<li><p>Rolling；</p>
+</li>
+<li><p>Spin；</p>
+</li>
+<li><p>Top Spin；</p>
+</li>
+<li><p>Back Spin；</p>
+</li>
+<li><p>Side Spin；</p>
+</li>
+<li><p>Pocket Jaw；</p>
+</li>
+<li><p>Pocket Mouth；</p>
+</li>
+<li><p>Pocket Capture；</p>
+</li>
+<li><p>First Object Contact；</p>
+</li>
+<li><p>Rail Contact；</p>
+</li>
+<li><p>Scratch；</p>
+</li>
+<li><p>Shot Event Stream；</p>
+</li>
+<li><p>Shot Adjudication；</p>
+</li>
+<li><p>Foul；</p>
+</li>
+<li><p>Ball-in-Hand；</p>
+</li>
+<li><p>Ball Placement；</p>
+</li>
+<li><p>Respot；</p>
+</li>
+<li><p>Rack；</p>
+</li>
+<li><p>Break Shot；</p>
+</li>
+<li><p>Position Play；</p>
+</li>
+<li><p>Position Zone；</p>
+</li>
+<li><p>Safety Play；</p>
+</li>
+<li><p>Ball Obstruction；</p>
+</li>
+<li><p>Contact Arc；</p>
+</li>
+<li><p>Ghost Ball；</p>
+</li>
+<li><p>Pocketability；</p>
+</li>
+<li><p>Aim Assist；</p>
+</li>
+<li><p>Power Control；</p>
+</li>
+<li><p>World Stability；</p>
+</li>
+<li><p>Ball Sleep；</p>
+</li>
+<li><p>Practice Mode；</p>
+</li>
+<li><p>Trick Shot；</p>
+</li>
+<li><p>AI Shot Search；</p>
+</li>
+<li><p>AI Position Evaluation；</p>
+</li>
+<li><p>AI Safety；</p>
+</li>
+<li><p>Shot History；</p>
+</li>
+<li><p>Table Revision；</p>
+</li>
+<li><p>Deterministic / Snapshot Replay；</p>
+</li>
+<li><p>Cue-Sports Network Authority；</p>
+</li>
+<li><p>Billiards Debug。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次台球 / Billiards / Cue-Sports Simulation范式内部系统，不应再次作为新的完整宏观游戏类型计入宏观类型集合：</p>
+<ul>
+<li><p>台球Ball Physics；</p>
+</li>
+<li><p>Billiards Cue Strike；</p>
+</li>
+<li><p>台球瞄准系统；</p>
+</li>
+<li><p>Billiards Power；</p>
+</li>
+<li><p>台球Spin；</p>
+</li>
+<li><p>Top Spin；</p>
+</li>
+<li><p>Back Spin；</p>
+</li>
+<li><p>Side Spin；</p>
+</li>
+<li><p>台球Ball Collision；</p>
+</li>
+<li><p>Cue Ball Collision；</p>
+</li>
+<li><p>Billiards Cushion；</p>
+</li>
+<li><p>台球袋口物理；</p>
+</li>
+<li><p>Pocket Capture；</p>
+</li>
+<li><p>台球First Contact；</p>
+</li>
+<li><p>Billiards Rail Contact；</p>
+</li>
+<li><p>台球Scratch；</p>
+</li>
+<li><p>台球Foul；</p>
+</li>
+<li><p>Billiards Rule Engine；</p>
+</li>
+<li><p>Ball-in-Hand；</p>
+</li>
+<li><p>台球摆球；</p>
+</li>
+<li><p>Billiards Rack；</p>
+</li>
+<li><p>台球Break；</p>
+</li>
+<li><p>Cue-Sports Position Play；</p>
+</li>
+<li><p>台球走位；</p>
+</li>
+<li><p>Position Zone；</p>
+</li>
+<li><p>台球Safety；</p>
+</li>
+<li><p>Billiards Obstruction；</p>
+</li>
+<li><p>Ghost Ball；</p>
+</li>
+<li><p>台球辅助线；</p>
+</li>
+<li><p>Billiards AI；</p>
+</li>
+<li><p>台球AI走位；</p>
+</li>
+<li><p>台球Practice；</p>
+</li>
+<li><p>Trick Shot；</p>
+</li>
+<li><p>Billiards Replay；</p>
+</li>
+<li><p>台球Network Sync；</p>
+</li>
+<li><p>Billiards Table Revision；</p>
+</li>
+<li><p>台球Physics Debug；</p>
+</li>
+<li><p>Cue-Sports Rule Debug。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入宏观类型集合。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-09-07">2026-09-07</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">游戏作品、设计研究与研发实践。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/journal.html">研究</a>
+                <a href="../../pages/blog.html">文章</a>
+                <a href="../../pages/development.html">研发体系</a>
+                <a href="../../pages/engineering.html">Iris Engineering</a>
+                <a href="../../pages/framework.html">Sakura Framework</a>
+                <a href="../../pages/brand.html">品牌视觉</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>

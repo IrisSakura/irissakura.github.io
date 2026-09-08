@@ -1,0 +1,4238 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="关卡被组织成连续推进的 Belt Stage。玩家沿主要推进轴前进，同时可以在有限纵深轴上上下移动，通过“错开纵深—切入攻击线—打出连段—重新脱离”的方式管理多个敌人。战斗不是把所有敌人同时释放为完全自由 AI，而是由 Encounter Director 在有限 Arena 中控制敌群生成、进场方向、近战攻击权、远程压力和敌人角色，使玩家始终面对“多人围…">
+    <link rel="canonical" href="https://irissakura.github.io/pages/journal/beat-em-up.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler | IrisSakura Journal">
+    <meta property="og:description" content="关卡被组织成连续推进的 Belt Stage。玩家沿主要推进轴前进，同时可以在有限纵深轴上上下移动，通过“错开纵深—切入攻击线—打出连段—重新脱离”的方式管理多个敌人。战斗不是把所有敌人同时释放为完全自由 AI，而是由 Encounter Director 在有限 Arena 中控制敌群生成、进场方向、近战攻击权、远程压力和敌人角色，使玩家始终面对“多人围…">
+    <meta property="og:url" content="https://irissakura.github.io/pages/journal/beat-em-up.html">
+    <meta property="og:image" content="https://irissakura.github.io/assets/social/pages-journal-beat-em-up.png">
+    <meta property="og:image:alt" content="横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler | IrisSakura Journal 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler | IrisSakura Journal">
+    <meta name="twitter:description" content="关卡被组织成连续推进的 Belt Stage。玩家沿主要推进轴前进，同时可以在有限纵深轴上上下移动，通过“错开纵深—切入攻击线—打出连段—重新脱离”的方式管理多个敌人。战斗不是把所有敌人同时释放为完全自由 AI，而是由 Encounter Director 在有限 Arena 中控制敌群生成、进场方向、近战攻击权、远程压力和敌人角色，使玩家始终面对“多人围…">
+    <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal-beat-em-up.png">
+    <meta name="twitter:image:alt" content="横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler | IrisSakura Journal 的 IrisSakura 分享图">
+    <!-- indexable page -->
+    <meta name="theme-color" content="#f7edf3">
+    <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler | IrisSakura Journal","description":"关卡被组织成连续推进的 Belt Stage。玩家沿主要推进轴前进，同时可以在有限纵深轴上上下移动，通过“错开纵深—切入攻击线—打出连段—重新脱离”的方式管理多个敌人。战斗不是把所有敌人同时释放为完全自由 AI，而是由 Encounter Director 在有限 Arena 中控制敌群生成、进场方向、近战攻击权、远程压力和敌人角色，使玩家始终面对“多人围…","url":"https://irissakura.github.io/pages/journal/beat-em-up.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler","image":"https://irissakura.github.io/assets/social/pages-journal-beat-em-up.png","dateModified":"2026-09-07","about":["beat","em","up"]}</script>
+    <!-- site-meta:end -->
+    <title>横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler | IrisSakura Journal</title>
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/journal.css">
+    <link rel="stylesheet" href="../../style/blog.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/tokens/primitive.css">
+    <link rel="stylesheet" href="../../style/tokens/semantic.css">
+    <link rel="stylesheet" href="../../style/tokens/modes.css">
+    <link rel="stylesheet" href="../../style/components/brand-experience.css">
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <button class="profile-drawer-trigger" type="button" aria-label="打开 IrisSakura 快速导航" aria-expanded="false" aria-controls="profile-drawer">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </button>
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/journal.html" class="nav-link active" aria-current="page">研究与文章</a>
+            <a href="../../pages/development.html" class="nav-link">研发体系</a>
+            <a href="../../pages/contact.html" class="nav-link">联系</a>
+        </div>
+        <div class="nav-actions">
+            <a class="brand-seal" href="../../pages/brand.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统">
+                <span class="brand-seal-dot brand-seal-iris" aria-hidden="true"></span>
+                <span>BUILD · ORGANIZE · BLOOM</span>
+                <span class="brand-seal-dot brand-seal-sakura" aria-hidden="true"></span>
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<button class="profile-drawer-backdrop" type="button" aria-label="关闭 IrisSakura 快速导航" data-profile-drawer-backdrop tabindex="-1"></button>
+<aside class="profile-drawer" id="profile-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="profile-drawer-title">
+    <header class="profile-drawer-header">
+        <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="IrisSakura 的黑白漫画风格头像" class="profile-drawer-avatar">
+        <div>
+            <strong id="profile-drawer-title">IrisSakura</strong>
+            <span>独立游戏开发者与游戏系统设计者</span>
+        </div>
+        <button class="profile-drawer-close" type="button" aria-label="关闭快速导航">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+    </header>
+    <nav class="profile-drawer-links" aria-label="个人快速导航">
+        <a href="../../pages/game.html" data-profile-quick-link><span>01</span><strong>《言铸之剑》</strong><small>代表作</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/portfolio.html" data-profile-quick-link><span>02</span><strong>全部作品</strong><small>游戏与工具</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/journal.html" data-profile-quick-link><span>03</span><strong>设计研究</strong><small>玩法与系统</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/blog.html" data-profile-quick-link><span>04</span><strong>开发文章</strong><small>完整文章</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/development.html" data-profile-quick-link><span>05</span><strong>研发体系</strong><small>Iris Engineering 与 Sakura Framework</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../../pages/contact.html" data-profile-quick-link><span>06</span><strong>联系</strong><small>邮箱、QQ 与公开主页</small><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+</aside>
+<!-- site-navbar:end -->
+
+<main id="main-content" class="journal-detail-main">
+    <article class="container journal-detail journal-research-detail">
+        <a class="journal-back" href="../journal.html#design-beat-em-up"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
+        <header><p class="journal-kicker">游戏设计范式 · 2026-09-07</p><h1>横版清版动作 / Beat-&#39;em-up / Belt-Scrolling Brawler</h1><p>关卡被组织成连续推进的 Belt Stage。玩家沿主要推进轴前进，同时可以在有限纵深轴上上下移动，通过“错开纵深—切入攻击线—打出连段—重新脱离”的方式管理多个敌人。战斗不是把所有敌人同时释放为完全自由 AI，而是由 Encounter Director 在有限 Arena 中控制敌群生成、进场方向、近战攻击权、远程压力和敌人角色，使玩家始终面对“多人围…</p><div class="note-tags"><span>beat</span><span>em</span><span>up</span></div></header>
+
+        <section class="journal-research-body" aria-labelledby="complete-research-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
+            <div class="blog-prose research-prose"><blockquote>
+<p>Agent 标签：<code>beat</code> <code>em</code> <code>up</code></p>
+</blockquote>
+<hr />
+<h3 id="0-类型边界与相邻范式核对">0. 类型边界与相邻范式核对</h3><p>已实际核对现有游戏设计范式集合。当前 <code>README.md</code> 标记 <strong>Entries: 70</strong>；现有目录已经覆盖无双式军团割草动作、格斗、多人共斗狩猎、幸存者类、精密平台跳跃、实时战略、战术射击、回合制战术 RPG 等大量与动作和群体战斗相邻的宏观类型。</p>
+<p>当前索引中已有 <code>musou</code>，其核心是“一骑当千、军团前线与清兵—斩将—夺点—救援—推进—决战的双尺度战场循环”；但当前生成索引中未发现独立的 <code>beat-em-up</code>、<code>belt-scroller</code>、<code>brawler</code> 或“清版动作”宏观范式记录。</p>
+<p>因此本期新增：</p>
+<p><strong>横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler。</strong></p>
+<p>常见名称包括：</p>
+<ul>
+<li><p>Beat-'em-up；</p>
+</li>
+<li><p>Beat 'em Up；</p>
+</li>
+<li><p>Belt-Scrolling Action；</p>
+</li>
+<li><p>Belt Scroller；</p>
+</li>
+<li><p>Brawler；</p>
+</li>
+<li><p>Side-Scrolling Brawler；</p>
+</li>
+<li><p>清版动作；</p>
+</li>
+<li><p>横版清版动作；</p>
+</li>
+<li><p>带状卷轴动作；</p>
+</li>
+<li><p>横版群殴动作。</p>
+</li>
+</ul>
+<p>本文讨论的不是泛指“角色一次能打一群敌人”，也不是无双类的大规模军团战争，更不是格斗游戏的 1v1 对抗，而是一种仅依靠：</p>
+<p><strong>横向舞台推进 + 有限纵深移动 + 局部封锁战斗区 + 成组敌人调度 + 拳脚连段 + 抓取 / 击倒 / 击飞 + 清场后继续前进</strong></p>
+<p>就足以独立支撑完整产品的宏观游戏类型。</p>
+<p>其最具代表性的设计范式可以概括为：</p>
+<blockquote>
+<p><strong>关卡被组织成连续推进的 Belt Stage。玩家沿主要推进轴前进，同时可以在有限纵深轴上上下移动，通过“错开纵深—切入攻击线—打出连段—重新脱离”的方式管理多个敌人。战斗不是把所有敌人同时释放为完全自由 AI，而是由 Encounter Director 在有限 Arena 中控制敌群生成、进场方向、近战攻击权、远程压力和敌人角色，使玩家始终面对“多人围攻感”，却仍然能够辨认并处理真正具有攻击权限的少量威胁。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>当玩家进入关键区段时，Stage Gate 暂时关闭推进出口，Encounter 根据 Wave / Reinforcement / Boss 条件持续运行；只有敌群被清理、关键目标被击败或特殊目标完成后，场景才重新开放。玩家因此不断经历“自由推进—遭遇锁场—空间控群—清场—解除封锁—继续推进”的循环。</strong></p>
+</blockquote>
+<p>核心循环可以压缩为：</p>
+<p><strong>沿Stage推进
+→ Camera Scroll带出新空间
+→ 进入Encounter Trigger
+→ Arena Lock
+→ Enemy Wave进场
+→ 玩家调整纵深避免被夹击
+→ 通过Combo / Grab / Knockdown建立局部优势
+→ Enemy Director重新分配攻击角色
+→ 处理精英 / 远程 / 抓取等特殊威胁
+→ 清除当前Wave
+→ Reinforcement或下一Wave进入
+→ Encounter完成
+→ Stage Gate解除
+→ 玩家继续前进
+→ 进入下一战斗段
+→ Boss / Stage End。</strong></p>
+<p>本类型真正的核心不是：</p>
+<blockquote>
+<p>“横版地图上打一群敌人。”</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>把多人近战压缩进一个可读、可控制、可持续推进的有限舞台空间，使玩家同时体验被群体包围的压力和通过站位、控群与连段逐步拆解敌群的掌控感。</strong></p>
+</blockquote>
+<hr />
+<h3 id="1-类型定位">1. 类型定位</h3><p>典型 Beat-'em-up 通常具有：</p>
+<ul>
+<li><p>一个或多个直接控制角色；</p>
+</li>
+<li><p>横向主推进轴；</p>
+</li>
+<li><p>有限纵深移动轴；</p>
+</li>
+<li><p>视觉上的 2D / 2.5D 场景；</p>
+</li>
+<li><p>普通移动；</p>
+</li>
+<li><p>奔跑；</p>
+</li>
+<li><p>普通攻击；</p>
+</li>
+<li><p>重攻击；</p>
+</li>
+<li><p>跳跃；</p>
+</li>
+<li><p>空中攻击；</p>
+</li>
+<li><p>投技；</p>
+</li>
+<li><p>抓取；</p>
+</li>
+<li><p>击倒；</p>
+</li>
+<li><p>击飞；</p>
+</li>
+<li><p>连击；</p>
+</li>
+<li><p>受击硬直；</p>
+</li>
+<li><p>无敌帧；</p>
+</li>
+<li><p>起身；</p>
+</li>
+<li><p>武器拾取；</p>
+</li>
+<li><p>投掷物；</p>
+</li>
+<li><p>场景道具；</p>
+</li>
+<li><p>食物 / 回复；</p>
+</li>
+<li><p>敌人Wave；</p>
+</li>
+<li><p>Arena Lock；</p>
+</li>
+<li><p>Camera Scroll；</p>
+</li>
+<li><p>Boss；</p>
+</li>
+<li><p>Stage；</p>
+</li>
+<li><p>Checkpoint；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Rank；</p>
+</li>
+<li><p>Local Co-op；</p>
+</li>
+<li><p>Online Co-op 扩展；</p>
+</li>
+<li><p>高难模式；</p>
+</li>
+<li><p>Survival / Arcade 扩展。</p>
+</li>
+</ul>
+<p>典型关卡流程：</p>
+<p>进入街道
+→ 向右推进
+→ 摄像机跟随
+→ 两名敌人从屏幕右侧进入
+→ 玩家调整纵深与其对齐
+→ 连段击倒第一人
+→ 第二人尝试从背后靠近
+→ 玩家脱离攻击线
+→ 将两人聚到同一侧
+→ 用范围终结技击倒
+→ 继续推进
+→ 进入广场
+→ Arena Gate关闭
+→ 第一Wave从左右两侧包夹
+→ 清理后第二Wave加入持刀敌人与远程敌人
+→ 玩家优先突破远程位置
+→ 击倒精英
+→ Encounter完成
+→ Gate打开
+→ 继续经过短暂Traversal段
+→ 获得武器 / 回复
+→ 进入Boss Arena
+→ Boss与少量援军形成最终战
+→ Stage Clear。</p>
+<p>因此这个品类的关卡结构不是：</p>
+<p>一条持续不断刷怪的无限通道。</p>
+<p>而通常是：</p>
+<p><strong>Traversal
+→ Combat Encounter
+→ Release
+→ Traversal
+→ Combat Encounter
+→ Boss</strong></p>
+<p>交替构成。</p>
+<hr />
+<h3 id="2-最核心的系统抽象belt-space">2. 最核心的系统抽象：Belt Space</h3><p>传统横版平台游戏主要使用：</p>
+<p>X + Y</p>
+<p>作为：</p>
+<p>水平和垂直。</p>
+<p>Belt Scroller 则通常拥有一种特殊空间语义：</p>
+<h3 id="xstage-progress-axis">X：Stage Progress Axis</h3><p>关卡主要推进方向。</p>
+<p>通常：</p>
+<p>左 ↔ 右。</p>
+<h3 id="y-depthbelt-depth-axis">Y / Depth：Belt Depth Axis</h3><p>角色可以：</p>
+<p>向屏幕上 / 下移动。</p>
+<p>用于：</p>
+<ul>
+<li><p>对位；</p>
+</li>
+<li><p>躲避；</p>
+</li>
+<li><p>包抄；</p>
+</li>
+<li><p>聚怪。</p>
+</li>
+</ul>
+<h3 id="z-elevationtemporary-vertical-axis">Z / Elevation：Temporary Vertical Axis</h3><p>用于：</p>
+<ul>
+<li><p>跳跃；</p>
+</li>
+<li><p>击飞；</p>
+</li>
+<li><p>空中状态；</p>
+</li>
+<li><p>台阶；</p>
+</li>
+<li><p>表现。</p>
+</li>
+</ul>
+<p>因此：</p>
+<p>视觉上看似二维。</p>
+<p>Gameplay 实际通常是：</p>
+<p><strong>2.5D Belt Plane + Temporary Elevation。</strong></p>
+<hr />
+<h3 id="3-核心范式一不要把纵深移动当作普通2d-y轴随便处理">3. 核心范式一：不要把纵深移动当作普通2D Y轴随便处理</h3><p>如果角色视觉位置：</p>
+<p><code>screenY</code></p>
+<p>同时承担：</p>
+<ul>
+<li><p>Gameplay Depth；</p>
+</li>
+<li><p>Jump Height；</p>
+</li>
+</ul>
+<p>很快会产生：</p>
+<p>角色跳起来以后：</p>
+<p>逻辑上“走到后排”。</p>
+<p>因此建议严格分离：</p>
+<p><strong>Ground Position</strong></p>
+<p>和：</p>
+<p><strong>Elevation。</strong></p>
+<hr />
+<h3 id="4-actorspatialstate">4. ActorSpatialState</h3><p>建议包含：</p>
+<ul>
+<li><p>ActorId；</p>
+</li>
+<li><p>StageX；</p>
+</li>
+<li><p>BeltDepth；</p>
+</li>
+<li><p>Elevation；</p>
+</li>
+<li><p>GroundVelocityX；</p>
+</li>
+<li><p>GroundVelocityDepth；</p>
+</li>
+<li><p>VerticalVelocity；</p>
+</li>
+<li><p>Facing；</p>
+</li>
+<li><p>Grounded；</p>
+</li>
+<li><p>CurrentLaneRegion；</p>
+</li>
+<li><p>SpatialVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="5-render-position">5. Render Position</h3><p>最终显示位置可以由：</p>
+<p><code>StageX + BeltDepth Projection + Elevation</code></p>
+<p>映射。</p>
+<p>但：</p>
+<p>Hit、Navigation、Targeting</p>
+<p>必须读取：</p>
+<p>逻辑 Belt Position。</p>
+<hr />
+<h3 id="6-为什么这很重要">6. 为什么这很重要</h3><p>敌人：</p>
+<p>屏幕上看起来：</p>
+<p>和玩家武器模型重叠。</p>
+<p>但如果：</p>
+<p>Depth距离过大，</p>
+<p>攻击不应该命中。</p>
+<p>反过来：</p>
+<p>模型略有视觉错开，</p>
+<p>只要逻辑Depth处于有效攻击带：</p>
+<p>仍然可以命中。</p>
+<hr />
+<h3 id="7-核心范式二攻击命中必须具有纵深宽度">7. 核心范式二：攻击命中必须具有“纵深宽度”</h3><p>普通2D横版攻击可能只判断：</p>
+<p>X范围。</p>
+<p>Belt Scroller需要：</p>
+<p>至少同时判断：</p>
+<ul>
+<li><p>Horizontal Reach；</p>
+</li>
+<li><p>Depth Reach；</p>
+</li>
+<li><p>Elevation Reach。</p>
+</li>
+</ul>
+<hr />
+<h3 id="8-hitvolumedefinition">8. HitVolumeDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>AttackId；</p>
+</li>
+<li><p>ForwardRange；</p>
+</li>
+<li><p>BackwardRange；</p>
+</li>
+<li><p>DepthHalfWidth；</p>
+</li>
+<li><p>ElevationMin；</p>
+</li>
+<li><p>ElevationMax；</p>
+</li>
+<li><p>ShapeProfile；</p>
+</li>
+<li><p>ActiveWindow；</p>
+</li>
+<li><p>HitPolicy；</p>
+</li>
+<li><p>HitVolumeVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="9-hit-eligibility">9. Hit Eligibility</h3><p>一个目标被命中至少需要：</p>
+<ul>
+<li><p>Faction合法；</p>
+</li>
+<li><p>Hit Volume重叠；</p>
+</li>
+<li><p>Depth重叠；</p>
+</li>
+<li><p>Elevation重叠；</p>
+</li>
+<li><p>当前未被该Attack禁止重复命中；</p>
+</li>
+<li><p>无Invulnerability；</p>
+</li>
+<li><p>Attack Phase为Active。</p>
+</li>
+</ul>
+<hr />
+<h3 id="10-纵深命中不能过窄">10. 纵深命中不能过窄</h3><p>如果视觉拳头：</p>
+<p>看起来明明擦到敌人。</p>
+<p>但Depth差：</p>
+<p>0.05</p>
+<p>就完全Miss，</p>
+<p>手感会非常差。</p>
+<p>所以需要：</p>
+<p>一定的：</p>
+<p><strong>Depth Forgiveness。</strong></p>
+<hr />
+<h3 id="11-但也不能无限宽">11. 但也不能无限宽</h3><p>否则：</p>
+<p>玩家站在最下方</p>
+<p>也能打到最上方敌人。</p>
+<p>纵深站位失去意义。</p>
+<hr />
+<h3 id="12-核心范式三纵深移动本身就是主要防御手段">12. 核心范式三：纵深移动本身就是主要防御手段</h3><p>Beat-'em-up 不一定需要：</p>
+<p>复杂Guard / Parry</p>
+<p>才能成立。</p>
+<p>玩家经常通过：</p>
+<p><strong>移出敌人攻击线</strong></p>
+<p>躲避。</p>
+<hr />
+<h3 id="13-攻击线">13. 攻击线</h3><p>敌人准备横向挥拳。</p>
+<p>其Hit Volume：</p>
+<p>宽X。</p>
+<p>窄Depth。</p>
+<p>玩家只要：</p>
+<p>向上 / 下移动少量距离，</p>
+<p>就可以：</p>
+<p>错开。</p>
+<hr />
+<h3 id="14-因此敌人的攻击telegraph需要让玩家读懂">14. 因此敌人的攻击Telegraph需要让玩家读懂：</h3><blockquote>
+<p>它会覆盖哪一条 Belt Depth。</p>
+</blockquote>
+<hr />
+<h3 id="15-这是该类型区别于传统1v1格斗的核心空间语法之一">15. 这是该类型区别于传统1v1格斗的核心空间语法之一。</h3><hr />
+<h3 id="16-核心范式四target-assist-应帮助纵深对位而不是建立硬锁定">16. 核心范式四：Target Assist 应帮助纵深对位，而不是建立硬锁定</h3><p>玩家面前：</p>
+<p>有三个敌人。</p>
+<p>普通攻击时：</p>
+<p>系统可以轻微修正：</p>
+<ul>
+<li><p>Facing；</p>
+</li>
+<li><p>Horizontal Direction；</p>
+</li>
+<li><p>Depth Drift。</p>
+</li>
+</ul>
+<p>让角色朝最近合理敌人切入。</p>
+<hr />
+<h3 id="17-softtargetstate">17. SoftTargetState</h3><p>建议包含：</p>
+<ul>
+<li><p>CurrentTargetId；</p>
+</li>
+<li><p>TargetScore；</p>
+</li>
+<li><p>DirectionCorrection；</p>
+</li>
+<li><p>DepthCorrection；</p>
+</li>
+<li><p>RetentionTimer；</p>
+</li>
+<li><p>TargetVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="18-targetscore可以考虑">18. TargetScore可以考虑：</h3><ul>
+<li><p>Input Direction；</p>
+</li>
+<li><p>Distance；</p>
+</li>
+<li><p>Depth Difference；</p>
+</li>
+<li><p>Screen Position；</p>
+</li>
+<li><p>CurrentComboTarget；</p>
+</li>
+<li><p>Threat；</p>
+</li>
+<li><p>EnemyPriority。</p>
+</li>
+</ul>
+<hr />
+<h3 id="19-不建议普通攻击采用">19. 不建议普通攻击采用：</h3><p>强硬3D Lock-on。</p>
+<p>原因：</p>
+<p>群体战中目标切换频繁。</p>
+<p>玩家更需要：</p>
+<p><strong>区域攻击控制</strong></p>
+<p>而不是：</p>
+<p>单目标镜头绑定。</p>
+<hr />
+<h3 id="20-boss-elite可以">20. Boss / Elite可以：</h3><p>提供可选Soft Lock。</p>
+<p>但仍应：</p>
+<p>兼容普通群体战。</p>
+<hr />
+<h3 id="21-核心范式五玩家真正管理的是敌群相对位置不是单个敌人血条">21. 核心范式五：玩家真正管理的是“敌群相对位置”，不是单个敌人血条</h3><p>当三个敌人分别位于：</p>
+<p>左、右、后方。</p>
+<p>玩家处于：</p>
+<p>危险包围。</p>
+<p>如果通过移动：</p>
+<p>让所有敌人集中到右侧，</p>
+<p>局面突然安全很多。</p>
+<p>因此：</p>
+<p><strong>Grouping / Side Control</strong></p>
+<p>是核心技能。</p>
+<hr />
+<h3 id="22-玩家理想状态">22. 玩家理想状态：</h3><p>Enemy A
+Enemy B
+Enemy C</p>
+<p>全部位于：</p>
+<p>同一大方向。</p>
+<p>然后：</p>
+<p>范围Combo同时处理。</p>
+<hr />
+<h3 id="23-最危险状态">23. 最危险状态：</h3><p>玩家被：</p>
+<p>左右夹击。</p>
+<hr />
+<h3 id="24-所以ai和关卡需要">24. 所以AI和关卡需要：</h3><p>不断尝试制造：</p>
+<p>包围。</p>
+<p>玩家需要：</p>
+<p>不断把包围重新压缩成单侧战线。</p>
+<hr />
+<h3 id="25-核心范式六enemy-ai-必须显式调度谁现在有资格主动攻击">25. 核心范式六：Enemy AI 必须显式调度“谁现在有资格主动攻击”</h3><p>如果场上：</p>
+<p>8名敌人</p>
+<p>全部自由AI。</p>
+<p>每人判断：</p>
+<p>“我距离玩家很近，攻击！”</p>
+<p>结果：</p>
+<p>同一时刻：</p>
+<p>8人重叠出招。</p>
+<p>玩家几乎无法反应。</p>
+<hr />
+<h3 id="26-但如果">26. 但如果：</h3><p>只有一个敌人攻击，</p>
+<p>其他人站着，</p>
+<p>又会产生：</p>
+<p>明显排队。</p>
+<p>因此需要：</p>
+<p><strong>Engagement Director。</strong></p>
+<hr />
+<h3 id="27-engagementstate">27. EngagementState</h3><p>建议包含：</p>
+<ul>
+<li><p>EncounterId；</p>
+</li>
+<li><p>PlayerId；</p>
+</li>
+<li><p>ActiveMeleeAttackers；</p>
+</li>
+<li><p>ActiveRangedAttackers；</p>
+</li>
+<li><p>FlankerIds；</p>
+</li>
+<li><p>PressureIds；</p>
+</li>
+<li><p>WaitingIds；</p>
+</li>
+<li><p>MaximumMeleePressure；</p>
+</li>
+<li><p>MaximumRangedPressure；</p>
+</li>
+<li><p>EngagementVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="28-enemy-engagement-role">28. Enemy Engagement Role</h3><p>普通敌人可以临时被分配：</p>
+<ul>
+<li><p>PrimaryAttacker；</p>
+</li>
+<li><p>SecondaryAttacker；</p>
+</li>
+<li><p>Flanker；</p>
+</li>
+<li><p>RangedPressure；</p>
+</li>
+<li><p>Approach；</p>
+</li>
+<li><p>Threaten；</p>
+</li>
+<li><p>Recover；</p>
+</li>
+<li><p>Wait；</p>
+</li>
+<li><p>Reposition。</p>
+</li>
+</ul>
+<hr />
+<h3 id="29-角色不是enemy永久职业">29. 角色不是Enemy永久职业</h3><p>同一个敌人：</p>
+<p>这一秒：</p>
+<p>Flanker。</p>
+<p>下一秒：</p>
+<p>可能成为PrimaryAttacker。</p>
+<hr />
+<h3 id="30-核心范式七围攻调度应该制造同时压力而不是同时伤害">30. 核心范式七：围攻调度应该制造“同时压力”，而不是“同时伤害”</h3><p>例如：</p>
+<p>Enemy A：</p>
+<p>正面准备Punch。</p>
+<p>Enemy B：</p>
+<p>正在绕后。</p>
+<p>Enemy C：</p>
+<p>远处准备投掷物。</p>
+<p>Enemy D：</p>
+<p>靠近但没有攻击Token。</p>
+<p>玩家感觉：</p>
+<p>四面都有压力。</p>
+<p>但真正必须立即响应的攻击：</p>
+<p>只有1～2个。</p>
+<hr />
+<h3 id="31-这是一种非常重要的群体动作设计原则">31. 这是一种非常重要的群体动作设计原则：</h3><blockquote>
+<p><strong>Threat Density 可以远大于 Attack Concurrency。</strong></p>
+</blockquote>
+<hr />
+<h3 id="32-attackconcurrency是难度参数">32. AttackConcurrency是难度参数</h3><p>Easy：</p>
+<p>1近战 + 0远程。</p>
+<p>Normal：</p>
+<p>2近战 + 1远程。</p>
+<p>Hard：</p>
+<p>3近战 + 1特殊。</p>
+<hr />
+<h3 id="33-不需要">33. 不需要：</h3><p>把所有敌人HP翻倍</p>
+<p>才能提高难度。</p>
+<hr />
+<h3 id="34-核心范式八engagement-director不能让敌人明显排队">34. 核心范式八：Engagement Director不能让敌人明显“排队”</h3><p>Waiting Enemy仍应：</p>
+<ul>
+<li><p>移动；</p>
+</li>
+<li><p>威胁；</p>
+</li>
+<li><p>调整纵深；</p>
+</li>
+<li><p>走向包围位；</p>
+</li>
+<li><p>攻击场景对象；</p>
+</li>
+<li><p>短暂Feint；</p>
+</li>
+<li><p>逼迫玩家改变位置。</p>
+</li>
+</ul>
+<hr />
+<h3 id="35-它只是">35. 它只是：</h3><p>没有获得：</p>
+<p>Full Attack Commit。</p>
+<hr />
+<h3 id="36-视觉上">36. 视觉上：</h3><p>战斗仍然活跃。</p>
+<hr />
+<h3 id="37-核心范式九enemy-role-composition-比单纯增加数量更能改变战斗">37. 核心范式九：Enemy Role Composition 比单纯增加数量更能改变战斗</h3><p>例如：</p>
+<h3 id="grunt">Grunt</h3><p>标准近战。</p>
+<h3 id="heavy">Heavy</h3><p>慢、硬、范围大。</p>
+<h3 id="grappler">Grappler</h3><p>抓取玩家。</p>
+<h3 id="ranged">Ranged</h3><p>持续形成纵深压力。</p>
+<h3 id="shield">Shield</h3><p>正面防御。</p>
+<h3 id="runner">Runner</h3><p>快速包抄。</p>
+<h3 id="support">Support</h3><p>强化其他敌人。</p>
+<hr />
+<h3 id="38-一个encounter">38. 一个Encounter：</h3><p>6个普通Grunt。</p>
+<p>和：</p>
+<p>3 Grunt + 1 Heavy + 1 Ranged</p>
+<p>敌人数更少。</p>
+<p>但空间问题：</p>
+<p>更复杂。</p>
+<hr />
+<h3 id="39-所以关卡难度最好">39. 所以关卡难度最好：</h3><p>优先通过：</p>
+<p><strong>Composition</strong></p>
+<p>和：</p>
+<p><strong>Entry Direction</strong></p>
+<p>构建。</p>
+<hr />
+<h3 id="40-核心范式十enemy-spawn-direction-是关卡战斗语法的重要组成">40. 核心范式十：Enemy Spawn Direction 是关卡战斗语法的重要组成</h3><p>敌人可以从：</p>
+<ul>
+<li><p>左边；</p>
+</li>
+<li><p>右边；</p>
+</li>
+<li><p>上方门；</p>
+</li>
+<li><p>下方门；</p>
+</li>
+<li><p>背景入口；</p>
+</li>
+<li><p>前景入口；</p>
+</li>
+<li><p>窗户；</p>
+</li>
+<li><p>电梯；</p>
+</li>
+</ul>
+<p>进入。</p>
+<hr />
+<h3 id="41-entry-direction决定">41. Entry Direction决定：</h3><p>玩家是否被夹击。</p>
+<hr />
+<h3 id="42-同样wave">42. 同样Wave：</h3><p>如果所有敌人：</p>
+<p>都从右边进，</p>
+<p>容易聚怪。</p>
+<p>如果：</p>
+<p>左右同时进，</p>
+<p>压力显著提高。</p>
+<hr />
+<h3 id="43-spawnpointdefinition">43. SpawnPointDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>SpawnPointId；</p>
+</li>
+<li><p>StageSegmentId；</p>
+</li>
+<li><p>EntrySide；</p>
+</li>
+<li><p>BeltDepthRange；</p>
+</li>
+<li><p>OffscreenMargin；</p>
+</li>
+<li><p>AllowedEnemyTags；</p>
+</li>
+<li><p>ApproachPath；</p>
+</li>
+<li><p>VisibilityPolicy；</p>
+</li>
+<li><p>SpawnVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="44-spawn原则">44. Spawn原则：</h3><p>尽量避免：</p>
+<p>敌人在玩家视线中央凭空出现。</p>
+<hr />
+<h3 id="45-常见方式">45. 常见方式：</h3><p>从：</p>
+<p>Camera外侧</p>
+<p>跑入。</p>
+<hr />
+<h3 id="46-核心范式十一stage-不是一整块大地图而是可推进的-segment-graph">46. 核心范式十一：Stage 不是一整块大地图，而是可推进的 Segment Graph</h3><p>传统Belt Scroller通常沿：</p>
+<p>主方向前进。</p>
+<p>可以将关卡拆成：</p>
+<ul>
+<li><p>Traversal Segment；</p>
+</li>
+<li><p>Encounter Segment；</p>
+</li>
+<li><p>Transition Segment；</p>
+</li>
+<li><p>Hazard Segment；</p>
+</li>
+<li><p>Branch Segment；</p>
+</li>
+<li><p>Boss Segment。</p>
+</li>
+</ul>
+<hr />
+<h3 id="47-stagesegmentdefinition">47. StageSegmentDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>SegmentId；</p>
+</li>
+<li><p>StartProgress；</p>
+</li>
+<li><p>EndProgress；</p>
+</li>
+<li><p>CameraBounds；</p>
+</li>
+<li><p>TraversalRules；</p>
+</li>
+<li><p>EncounterIds；</p>
+</li>
+<li><p>GateIds；</p>
+</li>
+<li><p>EntryTriggers；</p>
+</li>
+<li><p>ExitConditions；</p>
+</li>
+<li><p>BackgroundPhase；</p>
+</li>
+<li><p>SegmentVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="48-stage-progress">48. Stage Progress</h3><p>通常可以：</p>
+<p>沿主X轴</p>
+<p>维护：</p>
+<p><code>StageProgress</code>。</p>
+<hr />
+<h3 id="49-但角色实际位置可以">49. 但角色实际位置可以：</h3><p>来回移动。</p>
+<p>Progress只是：</p>
+<p>关卡解锁语义。</p>
+<hr />
+<h3 id="50-核心范式十二camera-scroll-是stage推进的正式规则不只是跟随玩家">50. 核心范式十二：Camera Scroll 是Stage推进的正式规则，不只是跟随玩家</h3><p>摄像机向右推进时：</p>
+<p>会：</p>
+<p>揭露新区域。</p>
+<p>同时可能：</p>
+<p>激活：</p>
+<ul>
+<li><p>Spawn；</p>
+</li>
+<li><p>Trigger；</p>
+</li>
+<li><p>Encounter；</p>
+</li>
+<li><p>Item；</p>
+</li>
+<li><p>Gate。</p>
+</li>
+</ul>
+<hr />
+<h3 id="51-camerastate">51. CameraState</h3><p>建议包含：</p>
+<ul>
+<li><p>CurrentBounds；</p>
+</li>
+<li><p>FollowTargetCenter；</p>
+</li>
+<li><p>ForwardLimit；</p>
+</li>
+<li><p>BackwardLimit；</p>
+</li>
+<li><p>ScrollLock；</p>
+</li>
+<li><p>EncounterLock；</p>
+</li>
+<li><p>CoopBounds；</p>
+</li>
+<li><p>CameraVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="52-camera通常不应该">52. Camera通常不应该：</h3><p>无限向左回退。</p>
+<hr />
+<h3 id="53-可以存在">53. 可以存在：</h3><p><strong>Camera Backstop。</strong></p>
+<p>已经推进的区域：</p>
+<p>逐步离开。</p>
+<hr />
+<h3 id="54-这让关卡保持">54. 这让关卡保持：</h3><p>向前节奏。</p>
+<hr />
+<h3 id="55-核心范式十三camera-border-与-player-movement-boundary必须协同">55. 核心范式十三：Camera Border 与 Player Movement Boundary必须协同</h3><p>如果Camera已经：</p>
+<p>锁在Arena。</p>
+<p>Player不能：</p>
+<p>继续向右走出屏幕。</p>
+<p>需要：</p>
+<p>Gameplay Boundary。</p>
+<hr />
+<h3 id="56-但不要使用">56. 但不要使用：</h3><p>完全无反馈Invisible Wall。</p>
+<p>可以：</p>
+<ul>
+<li><p>Stage Gate；</p>
+</li>
+<li><p>敌人出现；</p>
+</li>
+<li><p>摄像机停止；</p>
+</li>
+<li><p>边缘限制。</p>
+</li>
+</ul>
+<p>让玩家自然理解：</p>
+<p>这里要先打完。</p>
+<hr />
+<h3 id="57-核心范式十四arena-lock-是该类型最代表性的关卡状态之一">57. 核心范式十四：Arena Lock 是该类型最代表性的关卡状态之一</h3><p>进入某段：</p>
+<p>Camera停止推进。</p>
+<p>左右出口：</p>
+<p>暂时关闭。</p>
+<p>Enemy Wave启动。</p>
+<hr />
+<h3 id="58-arenaruntimestate">58. ArenaRuntimeState</h3><p>建议包含：</p>
+<ul>
+<li><p>ArenaId；</p>
+</li>
+<li><p>State；</p>
+</li>
+<li><p>ActiveEnemyIds；</p>
+</li>
+<li><p>PendingWaveIds；</p>
+</li>
+<li><p>SpawnedWaveIds；</p>
+</li>
+<li><p>CompletionCondition；</p>
+</li>
+<li><p>GateState；</p>
+</li>
+<li><p>EncounterVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="59-arenastate">59. ArenaState</h3><p>可以：</p>
+<ul>
+<li><p>Dormant；</p>
+</li>
+<li><p>Entering；</p>
+</li>
+<li><p>Locked；</p>
+</li>
+<li><p>Active；</p>
+</li>
+<li><p>Completing；</p>
+</li>
+<li><p>Released；</p>
+</li>
+<li><p>Completed。</p>
+</li>
+</ul>
+<hr />
+<h3 id="60-arena完成">60. Arena完成：</h3><p>不应该只检查：</p>
+<p>Scene中Enemy数量 == 0。</p>
+<p>原因：</p>
+<p>可能还有：</p>
+<ul>
+<li><p>Future Wave；</p>
+</li>
+<li><p>Offscreen Reinforcement；</p>
+</li>
+<li><p>Boss Transition；</p>
+</li>
+<li><p>Objective Enemy。</p>
+</li>
+</ul>
+<hr />
+<h3 id="61-应由">61. 应由：</h3><p>EncounterSystem</p>
+<p>拥有：</p>
+<p>权威敌群状态。</p>
+<hr />
+<h3 id="62-核心范式十五encounter-是关卡内容的主要战斗单元">62. 核心范式十五：Encounter 是关卡内容的主要战斗单元</h3><h3 id="encounterdefinition">EncounterDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>EncounterId；</p>
+</li>
+<li><p>ActivationCondition；</p>
+</li>
+<li><p>ArenaId；</p>
+</li>
+<li><p>WaveDefinitions；</p>
+</li>
+<li><p>ConcurrentEnemyBudget；</p>
+</li>
+<li><p>SpawnRules；</p>
+</li>
+<li><p>CompletionCondition；</p>
+</li>
+<li><p>RewardProfile；</p>
+</li>
+<li><p>DifficultyProfile；</p>
+</li>
+<li><p>EncounterVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="63-encounter负责">63. Encounter负责：</h3><ul>
+<li><p>何时开始；</p>
+</li>
+<li><p>生成哪些敌人；</p>
+</li>
+<li><p>每波何时进入；</p>
+</li>
+<li><p>同时最多多少敌人；</p>
+</li>
+<li><p>哪些精英必须死亡；</p>
+</li>
+<li><p>什么时候结束。</p>
+</li>
+</ul>
+<hr />
+<h3 id="64-encounter不是">64. Encounter不是：</h3><p>EnemySpawner列表。</p>
+<p>它是：</p>
+<p>完整战斗状态机。</p>
+<hr />
+<h3 id="65-核心范式十六wave-应表达压力阶段而不是简单次数">65. 核心范式十六：Wave 应表达“压力阶段”，而不是简单次数</h3><p>Wave 1：</p>
+<p>3 Grunts。</p>
+<p>Wave 2：</p>
+<p>2 Grunts + Ranged。</p>
+<p>Wave 3：</p>
+<p>Heavy + 2 Runner。</p>
+<hr />
+<h3 id="66-也可以">66. 也可以：</h3><p>Wave并不等前一批全死。</p>
+<p>例如：</p>
+<p>当场上剩2人：</p>
+<p>下一批进入。</p>
+<p>这样：</p>
+<p>维持：</p>
+<p>连续战斗流。</p>
+<hr />
+<h3 id="67-wavedefinition">67. WaveDefinition</h3><p>建议包含：</p>
+<ul>
+<li><p>WaveId；</p>
+</li>
+<li><p>SpawnGroups；</p>
+</li>
+<li><p>TriggerCondition；</p>
+</li>
+<li><p>MaximumActiveBeforeSpawn；</p>
+</li>
+<li><p>Delay；</p>
+</li>
+<li><p>EntryStyle；</p>
+</li>
+<li><p>ReinforcementPolicy；</p>
+</li>
+<li><p>WaveVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="68-核心范式十七concurrent-enemy-budget-是控制可读性的重要参数">68. 核心范式十七：Concurrent Enemy Budget 是控制可读性的重要参数</h3><p>关卡可能定义：</p>
+<p>总共20个敌人。</p>
+<p>但不意味着：</p>
+<p>20人同时Active。</p>
+<hr />
+<h3 id="69-encounter可以">69. Encounter可以：</h3><p>总敌人20。</p>
+<p>Concurrent Budget：</p>
+<p>6。</p>
+<hr />
+<h3 id="70-已经有6名active-enemy">70. 已经有6名Active Enemy。</h3><p>新Wave先：</p>
+<p>等待。</p>
+<hr />
+<h3 id="71-这既服务">71. 这既服务：</h3><ul>
+<li><p>战斗可读性；</p>
+</li>
+<li><p>性能；</p>
+</li>
+<li><p>AI压力；</p>
+</li>
+<li><p>Camera空间。</p>
+</li>
+</ul>
+<hr />
+<h3 id="72-核心范式十八spawn-budget-与-attack-budget-是两个不同概念">72. 核心范式十八：Spawn Budget 与 Attack Budget 是两个不同概念</h3><p>场上：</p>
+<p>6名敌人。</p>
+<p>只有：</p>
+<p>2名拥有近战攻击权。</p>
+<hr />
+<h3 id="73-所以">73. 所以：</h3><p><strong>Population Density</strong></p>
+<p>和：</p>
+<p><strong>Immediate Threat</strong></p>
+<p>必须分离。</p>
+<hr />
+<h3 id="74-这让设计师可以">74. 这让设计师可以：</h3><p>增加舞台混乱感</p>
+<p>而不让玩家：</p>
+<p>瞬间不可操作。</p>
+<hr />
+<h3 id="75-核心范式十九玩家动作状态应采用清晰的-action-phase">75. 核心范式十九：玩家动作状态应采用清晰的 Action Phase</h3><p>Beat-'em-up虽然比格斗宽松，</p>
+<p>仍然非常适合：</p>
+<ul>
+<li><p>Startup；</p>
+</li>
+<li><p>Active；</p>
+</li>
+<li><p>Recovery。</p>
+</li>
+</ul>
+<hr />
+<h3 id="76-playeractionstate">76. PlayerActionState</h3><p>建议包含：</p>
+<ul>
+<li><p>ActionId；</p>
+</li>
+<li><p>ActionType；</p>
+</li>
+<li><p>Phase；</p>
+</li>
+<li><p>PhaseTime；</p>
+</li>
+<li><p>ComboNode；</p>
+</li>
+<li><p>CancelFlags；</p>
+</li>
+<li><p>InvulnerabilityState；</p>
+</li>
+<li><p>MovementAuthority；</p>
+</li>
+<li><p>HitRegistry；</p>
+</li>
+<li><p>ActionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="77-不需要">77. 不需要：</h3><p>做到格斗游戏逐帧竞技标准</p>
+<p>才使用这个结构。</p>
+<hr />
+<h3 id="78-它最重要的价值">78. 它最重要的价值：</h3><p>让：</p>
+<ul>
+<li><p>Hitbox；</p>
+</li>
+<li><p>Cancel；</p>
+</li>
+<li><p>Hitstop；</p>
+</li>
+<li><p>Movement；</p>
+</li>
+<li><p>Reaction</p>
+</li>
+</ul>
+<p>拥有明确时序。</p>
+<hr />
+<h3 id="79-核心范式二十combo-应使用动作图而不是-animation-name拼接">79. 核心范式二十：Combo 应使用动作图而不是 Animation Name拼接</h3><p>推荐：</p>
+<p><strong>Combo Graph。</strong></p>
+<hr />
+<h3 id="80-combonodedefinition">80. ComboNodeDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>NodeId；</p>
+</li>
+<li><p>InputCondition；</p>
+</li>
+<li><p>ActionId；</p>
+</li>
+<li><p>NextNodeIds；</p>
+</li>
+<li><p>CancelWindows；</p>
+</li>
+<li><p>HitConfirmRules；</p>
+</li>
+<li><p>ResourceCost；</p>
+</li>
+<li><p>ComboVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="81-例如">81. 例如：</h3><p>Light1
+→ Light2
+→ Light3
+→ Heavy Finisher。</p>
+<hr />
+<h3 id="82-或">82. 或：</h3><p>Light2
+→ Direction + Heavy
+→ Launcher。</p>
+<hr />
+<h3 id="83-这样">83. 这样：</h3><p>动画可以替换。</p>
+<p>Combo语义仍然稳定。</p>
+<hr />
+<h3 id="84-核心范式二十一hit-confirm-可以让攻击命中后进入不同后续动作">84. 核心范式二十一：Hit Confirm 可以让攻击命中后进入不同后续动作</h3><p>攻击挥空：</p>
+<p>只能正常Recovery。</p>
+<p>命中：</p>
+<p>允许：</p>
+<p>快速接下一段。</p>
+<hr />
+<h3 id="85-这能提高">85. 这能提高：</h3><p>动作流畅度</p>
+<p>而不需要：</p>
+<p>所有动作都无条件Cancel。</p>
+<hr />
+<h3 id="86-hitconfirmstate">86. HitConfirmState</h3><p>可以记录：</p>
+<ul>
+<li><p>HitAny；</p>
+</li>
+<li><p>HitEnemyCount；</p>
+</li>
+<li><p>HitElite；</p>
+</li>
+<li><p>Blocked；</p>
+</li>
+<li><p>CounterHit。</p>
+</li>
+</ul>
+<hr />
+<h3 id="87-核心范式二十二multi-target-hit-必须从第一版考虑">87. 核心范式二十二：Multi-target Hit 必须从第一版考虑</h3><p>一拳：</p>
+<p>可能：</p>
+<p>同时打中3人。</p>
+<p>大招：</p>
+<p>可能：</p>
+<p>6人。</p>
+<hr />
+<h3 id="88-attackinstance维护">88. AttackInstance维护：</h3><p><code>AlreadyHitTargetIds</code></p>
+<p>防止：</p>
+<p>持续Hitbox</p>
+<p>每Tick重复Damage。</p>
+<hr />
+<h3 id="89-rehit-policy可以">89. Rehit Policy可以：</h3><ul>
+<li><p>OncePerAttack；</p>
+</li>
+<li><p>OncePerPhase；</p>
+</li>
+<li><p>TimedMultiHit；</p>
+</li>
+<li><p>InfiniteContact。</p>
+</li>
+</ul>
+<hr />
+<h3 id="90-不能">90. 不能：</h3><p>依赖OnTriggerEnter</p>
+<p>自己决定。</p>
+<hr />
+<h3 id="91-核心范式二十三hit-stop-应按-attack-event-聚合">91. 核心范式二十三：Hit Stop 应按 Attack Event 聚合</h3><p>一拳同时打3人。</p>
+<p>不应该：</p>
+<p>Hit Stop ×3。</p>
+<hr />
+<h3 id="92-推荐">92. 推荐：</h3><p>同一AttackFrame：</p>
+<p>使用：</p>
+<p>最高价值目标</p>
+<p>决定一次HitStop。</p>
+<hr />
+<h3 id="93-例如">93. 例如：</h3><p>普通敌人：</p>
+<p>3帧。</p>
+<p>Elite：</p>
+<p>5帧。</p>
+<p>Boss Critical：</p>
+<p>7帧。</p>
+<hr />
+<h3 id="94-这样保留">94. 这样保留：</h3><p>重量感</p>
+<p>而不破坏节奏。</p>
+<hr />
+<h3 id="95-核心范式二十四hit-reaction-是本类型控群成立的根基">95. 核心范式二十四：Hit Reaction 是本类型“控群”成立的根基</h3><p>玩家并不只是：</p>
+<p>削HP。</p>
+<p>更重要的是：</p>
+<p>把Enemy从：</p>
+<p>可攻击状态</p>
+<p>转换为：</p>
+<p>暂时失去威胁。</p>
+<hr />
+<h3 id="96-常见reaction">96. 常见Reaction：</h3><ul>
+<li><p>Light Hitstun；</p>
+</li>
+<li><p>Heavy Hitstun；</p>
+</li>
+<li><p>Stagger；</p>
+</li>
+<li><p>Knockback；</p>
+</li>
+<li><p>Knockdown；</p>
+</li>
+<li><p>Launch；</p>
+</li>
+<li><p>Wall Bounce；</p>
+</li>
+<li><p>Ground Bounce；</p>
+</li>
+<li><p>Grabbed；</p>
+</li>
+<li><p>Thrown；</p>
+</li>
+<li><p>Wakeup。</p>
+</li>
+</ul>
+<hr />
+<h3 id="97-reactionstate">97. ReactionState</h3><p>建议包含：</p>
+<ul>
+<li><p>ReactionType；</p>
+</li>
+<li><p>RemainingTime；</p>
+</li>
+<li><p>KnockbackVector；</p>
+</li>
+<li><p>InvulnerabilityPolicy；</p>
+</li>
+<li><p>RecoveryAction；</p>
+</li>
+<li><p>OwnerAttackId；</p>
+</li>
+<li><p>ReactionVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="98-控群价值">98. 控群价值</h3><p>如果一次Heavy攻击：</p>
+<p>把3名Enemy打倒。</p>
+<p>即使Damage一般，</p>
+<p>玩家也获得：</p>
+<p>几秒空间。</p>
+<hr />
+<h3 id="99-因此动作价值至少有">99. 因此动作价值至少有：</h3><ul>
+<li><p>Damage；</p>
+</li>
+<li><p>Control；</p>
+</li>
+<li><p>Position；</p>
+</li>
+<li><p>Safety。</p>
+</li>
+</ul>
+<hr />
+<h3 id="100-核心范式二十五普通敌人与elite应使用不同reaction-resistance">100. 核心范式二十五：普通敌人与Elite应使用不同Reaction Resistance</h3><p>普通敌人：</p>
+<p>需要：</p>
+<p>明显被打飞。</p>
+<p>这是爽感。</p>
+<hr />
+<h3 id="101-elite">101. Elite：</h3><p>不能：</p>
+<p>一直被普通Light无限压制。</p>
+<p>可以拥有：</p>
+<ul>
+<li><p>Poise；</p>
+</li>
+<li><p>Armor；</p>
+</li>
+<li><p>Escape；</p>
+</li>
+<li><p>Counter；</p>
+</li>
+<li><p>Limited Launch Resistance。</p>
+</li>
+</ul>
+<hr />
+<h3 id="102-但也不要">102. 但也不要：</h3><p>完全不吃Reaction。</p>
+<p>否则像：</p>
+<p>打木桩。</p>
+<hr />
+<h3 id="103-核心范式二十六knockdown-与-wakeup-是敌群节奏控制器">103. 核心范式二十六：Knockdown 与 Wakeup 是敌群节奏控制器</h3><p>Enemy被击倒：</p>
+<p>暂时：</p>
+<p>从Attack Budget中退出。</p>
+<hr />
+<h3 id="104-起身以后">104. 起身以后：</h3><p>重新加入：</p>
+<p>Engagement Director。</p>
+<hr />
+<h3 id="105-wakeup可以拥有">105. Wakeup可以拥有：</h3><p>短Invulnerability</p>
+<p>防止：</p>
+<p>无限倒地循环。</p>
+<hr />
+<h3 id="106-不同敌人">106. 不同敌人：</h3><p>Wakeup时间不同。</p>
+<hr />
+<h3 id="107-这直接影响">107. 这直接影响：</h3><p>玩家能否：</p>
+<p>同时控制多人。</p>
+<hr />
+<h3 id="108-核心范式二十七grab-throw-是-beat-em-up-极具代表性的空间控制动作">108. 核心范式二十七：Grab / Throw 是 Beat-'em-up 极具代表性的空间控制动作</h3><p>当玩家：</p>
+<p>靠近Stunned / Vulnerable Enemy，</p>
+<p>可以：</p>
+<p>进入Grab。</p>
+<hr />
+<h3 id="109-grabstate">109. GrabState</h3><p>建议包含：</p>
+<ul>
+<li><p>GrabberId；</p>
+</li>
+<li><p>VictimId；</p>
+</li>
+<li><p>GrabType；</p>
+</li>
+<li><p>AttachmentRule；</p>
+</li>
+<li><p>EscapeRule；</p>
+</li>
+<li><p>ThrowOptions；</p>
+</li>
+<li><p>GrabVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="110-grab的价值">110. Grab的价值：</h3><ul>
+<li><p>暂时控制一个Enemy；</p>
+</li>
+<li><p>转向另一个方向；</p>
+</li>
+<li><p>把Enemy扔进人群；</p>
+</li>
+<li><p>把Enemy当武器；</p>
+</li>
+<li><p>改变玩家Facing；</p>
+</li>
+<li><p>解除包围。</p>
+</li>
+</ul>
+<hr />
+<h3 id="111-throw-可以命中">111. Throw 可以命中：</h3><p>其他敌人。</p>
+<hr />
+<h3 id="112-这让">112. 这让：</h3><p>敌人本身</p>
+<p>成为：</p>
+<p>Crowd Control Projectile。</p>
+<hr />
+<h3 id="113-核心范式二十八grab-必须防止双向所有权冲突">113. 核心范式二十八：Grab 必须防止双向所有权冲突</h3><p>同一Enemy：</p>
+<p>不能：</p>
+<p>同时被两个Player抓。</p>
+<hr />
+<h3 id="114-使用">114. 使用：</h3><p>Grab Reservation。</p>
+<hr />
+<h3 id="115-grabtransaction">115. GrabTransaction</h3><p>验证Victim可抓
+→ Reserve Victim
+→ 双方进入Grab State
+→ 关闭普通Navigation
+→ 绑定相对位置
+→ 后续Throw / Escape / Interrupt
+→ Release Reservation。</p>
+<hr />
+<h3 id="116-任一方死亡-中断">116. 任一方死亡 / 中断：</h3><p>必须：</p>
+<p>释放。</p>
+<hr />
+<h3 id="117-否则很容易出现">117. 否则很容易出现：</h3><p>角色永久卡在Grab状态。</p>
+<hr />
+<h3 id="118-核心范式二十九投掷敌人和场景武器应复用统一-impact-hit-语义">118. 核心范式二十九：投掷敌人和场景武器应复用统一 Impact / Hit 语义</h3><p>Enemy被Throw以后：</p>
+<p>可以：</p>
+<p>撞到：</p>
+<p>另一个Enemy。</p>
+<hr />
+<h3 id="119-不需要">119. 不需要：</h3><p>另写一套“投人伤害系统”。</p>
+<hr />
+<h3 id="120-可以将thrown-actor">120. 可以将Thrown Actor</h3><p>临时作为：</p>
+<p>Impact Source。</p>
+<hr />
+<h3 id="121-同理">121. 同理：</h3><p>桶、箱、椅子、武器。</p>
+<hr />
+<h3 id="122-核心范式三十拾取武器属于短期战斗状态而不一定是长期装备系统">122. 核心范式三十：拾取武器属于短期战斗状态，而不一定是长期装备系统</h3><p>常见：</p>
+<ul>
+<li><p>Baseball Bat；</p>
+</li>
+<li><p>Pipe；</p>
+</li>
+<li><p>Knife；</p>
+</li>
+<li><p>Bottle；</p>
+</li>
+<li><p>Sword。</p>
+</li>
+</ul>
+<hr />
+<h3 id="123-pickupweaponstate">123. PickupWeaponState</h3><p>建议包含：</p>
+<ul>
+<li><p>WeaponInstanceId；</p>
+</li>
+<li><p>DefinitionId；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>Ammo；</p>
+</li>
+<li><p>OwnerId；</p>
+</li>
+<li><p>CurrentWorldPosition；</p>
+</li>
+<li><p>PickupVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="124-武器可以">124. 武器可以：</h3><p>改变：</p>
+<ul>
+<li><p>Range；</p>
+</li>
+<li><p>Attack Graph；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Crowd Control。</p>
+</li>
+</ul>
+<hr />
+<h3 id="125-使用次数耗尽">125. 使用次数耗尽：</h3><p>破坏 / 丢弃。</p>
+<hr />
+<h3 id="126-这种局部拾取">126. 这种局部拾取：</h3><p>为Stage增加：</p>
+<p>短期资源决策。</p>
+<hr />
+<h3 id="127-核心范式三十一stage-props-是战斗资源不只是装饰">127. 核心范式三十一：Stage Props 是战斗资源，不只是装饰</h3><p>场景里：</p>
+<p>垃圾桶。</p>
+<p>电话亭。</p>
+<p>桌子。</p>
+<p>箱子。</p>
+<hr />
+<h3 id="128-可以">128. 可以：</h3><ul>
+<li><p>打碎；</p>
+</li>
+<li><p>掉落食物；</p>
+</li>
+<li><p>掉落武器；</p>
+</li>
+<li><p>爆炸；</p>
+</li>
+<li><p>阻挡移动。</p>
+</li>
+</ul>
+<hr />
+<h3 id="129-propdefinition">129. PropDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>PropId；</p>
+</li>
+<li><p>Durability；</p>
+</li>
+<li><p>BreakEffects；</p>
+</li>
+<li><p>DropTable；</p>
+</li>
+<li><p>CollisionRule；</p>
+</li>
+<li><p>HazardRule；</p>
+</li>
+<li><p>PropVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="130-prop破坏不能">130. Prop破坏不能：</h3><p>影响Arena Completion Enemy Count。</p>
+<hr />
+<h3 id="131-encountersystem只关心">131. EncounterSystem只关心：</h3><p>真正Objective Enemy。</p>
+<hr />
+<h3 id="132-核心范式三十二回血物品通常承担stage内资源节奏">132. 核心范式三十二：回血物品通常承担Stage内资源节奏</h3><p>Beat-'em-up 常见：</p>
+<p>食物。</p>
+<hr />
+<h3 id="133-玩家需要判断">133. 玩家需要判断：</h3><p>现在吃。</p>
+<p>还是：</p>
+<p>留着稍后。</p>
+<hr />
+<h3 id="134-如果stage支持回头">134. 如果Stage支持回头：</h3><p>资源管理不同。</p>
+<p>如果Camera Backstop阻止回退：</p>
+<p>食物成为：</p>
+<p>立即决策。</p>
+<hr />
+<h3 id="135-核心范式三十三player-health通常跨多个encounter持续">135. 核心范式三十三：Player Health通常跨多个Encounter持续</h3><p>不同于：</p>
+<p>每Arena全恢复。</p>
+<p>这使：</p>
+<p>前面的战斗质量</p>
+<p>影响：</p>
+<p>后面的Boss。</p>
+<hr />
+<h3 id="136-因此stage本身拥有">136. 因此Stage本身拥有：</h3><p><strong>Attrition Loop。</strong></p>
+<hr />
+<h3 id="137-玩家每个encounter">137. 玩家每个Encounter：</h3><p>不仅要赢。</p>
+<p>还要：</p>
+<p>尽量少损血。</p>
+<hr />
+<h3 id="138-这使回复物和extra-life具有意义">138. 这使回复物和Extra Life具有意义。</h3><hr />
+<h3 id="139-核心范式三十四continue-life-是arcade结构的重要外层规则">139. 核心范式三十四：Continue / Life 是Arcade结构的重要外层规则</h3><p>经典模式可以：</p>
+<p>拥有：</p>
+<ul>
+<li><p>Lives；</p>
+</li>
+<li><p>Continues；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Stage Progress。</p>
+</li>
+</ul>
+<hr />
+<h3 id="140-现代模式也可以">140. 现代模式也可以：</h3><p>采用：</p>
+<p>Checkpoint。</p>
+<hr />
+<h3 id="141-这属于">141. 这属于：</h3><p>Meta Ruleset。</p>
+<p>不应该污染：</p>
+<p>Combat Core。</p>
+<hr />
+<h3 id="142-核心范式三十五stage-gate必须是正式对象">142. 核心范式三十五：Stage Gate必须是正式对象</h3><p>例如：</p>
+<p>右侧出口。</p>
+<p>Encounter Active时：</p>
+<p>Locked。</p>
+<hr />
+<h3 id="143-stagegatestate">143. StageGateState</h3><p>建议包含：</p>
+<ul>
+<li><p>GateId；</p>
+</li>
+<li><p>GateType；</p>
+</li>
+<li><p>State；</p>
+</li>
+<li><p>LockReason；</p>
+</li>
+<li><p>UnlockConditions；</p>
+</li>
+<li><p>BlockingRegion；</p>
+</li>
+<li><p>GateVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="144-gatestate">144. GateState：</h3><ul>
+<li><p>Open；</p>
+</li>
+<li><p>Closing；</p>
+</li>
+<li><p>Locked；</p>
+</li>
+<li><p>Opening；</p>
+</li>
+<li><p>Disabled。</p>
+</li>
+</ul>
+<hr />
+<h3 id="145-encounter完成">145. Encounter完成：</h3><p>Gate收到：</p>
+<p>Unlock Intent。</p>
+<hr />
+<h3 id="146-gate动画失败">146. Gate动画失败：</h3><p>逻辑仍然：</p>
+<p>Open。</p>
+<p>Collision同步更新。</p>
+<hr />
+<h3 id="147-核心范式三十六stage-progress与arena-completion必须由事实驱动">147. 核心范式三十六：Stage Progress与Arena Completion必须由事实驱动</h3><p>不要：</p>
+<p><code>enemyCount == 0</code></p>
+<p>就自动Scroll。</p>
+<hr />
+<h3 id="148-因为可能">148. 因为可能：</h3><p>Boss正在：</p>
+<p>Transition。</p>
+<hr />
+<h3 id="149-正确">149. 正确：</h3><p>Encounter Completion。</p>
+<hr />
+<h3 id="150-stagesystem消费">150. StageSystem消费：</h3><p><code>EncounterCompleted</code></p>
+<p>然后：</p>
+<p>允许Camera继续。</p>
+<hr />
+<h3 id="151-核心范式三十七offscreen-enemy-policy-是清版动作最容易出bug的部分之一">151. 核心范式三十七：Offscreen Enemy Policy 是清版动作最容易出Bug的部分之一</h3><p>敌人被：</p>
+<p>打到屏幕外。</p>
+<p>玩家又无法离开Arena。</p>
+<p>如果Enemy AI：</p>
+<p>站在屏幕外不回来。</p>
+<p>Encounter永远不能结束。</p>
+<hr />
+<h3 id="152-必须定义">152. 必须定义：</h3><p><strong>Offscreen Recovery Policy。</strong></p>
+<hr />
+<h3 id="153-enemy离开camera-combat-bounds后">153. Enemy离开Camera Combat Bounds后：</h3><p>可以：</p>
+<ul>
+<li><p>强制寻路回Arena；</p>
+</li>
+<li><p>增加Return Priority；</p>
+</li>
+<li><p>Clamp；</p>
+</li>
+<li><p>Teleport Recovery，仅作为最终安全措施。</p>
+</li>
+</ul>
+<hr />
+<h3 id="154-不应">154. 不应：</h3><p>因为离开屏幕</p>
+<p>直接算死亡。</p>
+<hr />
+<h3 id="155-否则玩家可以">155. 否则玩家可以：</h3><p>把Boss推出画面秒杀。</p>
+<hr />
+<h3 id="156-核心范式三十八enemy-leash-应绑定-arena而不是player">156. 核心范式三十八：Enemy Leash 应绑定 Arena，而不是Player</h3><p>Enemy追Player。</p>
+<p>但不能：</p>
+<p>被玩家拉回：</p>
+<p>两个Encounter以前。</p>
+<hr />
+<h3 id="157-encounter定义">157. Encounter定义：</h3><p>Combat Bounds。</p>
+<hr />
+<h3 id="158-enemy离开">158. Enemy离开：</h3><p>优先：</p>
+<p>ReturnToArena。</p>
+<hr />
+<h3 id="159-arena-release以后">159. Arena Release以后：</h3><p>可以：</p>
+<p>Despawn / Persist</p>
+<p>按规则处理。</p>
+<hr />
+<h3 id="160-核心范式三十九navigation重点不是找最短路而是找到合理攻击位置">160. 核心范式三十九：Navigation重点不是“找最短路”，而是“找到合理攻击位置”</h3><p>舞台通常：</p>
+<p>几乎没有复杂迷宫。</p>
+<p>普通Enemy真正的问题：</p>
+<p>不是：</p>
+<p>怎么从A到B。</p>
+<p>而是：</p>
+<p>应该占据Player周围哪个位置。</p>
+<hr />
+<h3 id="161-需要">161. 需要：</h3><p><strong>Combat Positioning。</strong></p>
+<hr />
+<h3 id="162-candidate-position可以考虑">162. Candidate Position可以考虑：</h3><ul>
+<li><p>Player相对方向；</p>
+</li>
+<li><p>DesiredDepth；</p>
+</li>
+<li><p>OtherEnemyDensity；</p>
+</li>
+<li><p>AttackRole；</p>
+</li>
+<li><p>Arena Bounds；</p>
+</li>
+<li><p>Facing；</p>
+</li>
+<li><p>Camera Visibility。</p>
+</li>
+</ul>
+<hr />
+<h3 id="163-普通enemy不需要">163. 普通Enemy不需要：</h3><p>每Tick全图A*。</p>
+<hr />
+<h3 id="164-simple-steering">164. Simple Steering：</h3><p>已经足够。</p>
+<hr />
+<h3 id="165-核心范式四十敌群需要避免完全重叠但不能像现实人群一样强排斥">165. 核心范式四十：敌群需要避免完全重叠，但不能像现实人群一样强排斥</h3><p>如果Separation过强：</p>
+<p>敌人永远：</p>
+<p>整齐散开。</p>
+<p>玩家无法：</p>
+<p>聚怪。</p>
+<hr />
+<h3 id="166-如果完全没有">166. 如果完全没有：</h3><p>所有Enemy堆成一个Sprite。</p>
+<hr />
+<h3 id="167-因此使用">167. 因此使用：</h3><p>Soft Separation。</p>
+<p>允许：</p>
+<p>一定重叠。</p>
+<hr />
+<h3 id="168-玩家可以">168. 玩家可以：</h3><p>通过攻击</p>
+<p>进一步聚集。</p>
+<hr />
+<h3 id="169-核心范式四十一boss-是高复杂度单体-群体舞台压力的组合">169. 核心范式四十一：Boss 是“高复杂度单体 + 群体舞台压力”的组合</h3><p>Boss不能：</p>
+<p>完全照搬格斗游戏Boss。</p>
+<hr />
+<h3 id="170-因为玩家可能">170. 因为玩家可能：</h3><p>还要应对：</p>
+<p>小兵。</p>
+<hr />
+<h3 id="171-boss-arena需要决定">171. Boss Arena需要决定：</h3><ul>
+<li><p>是否有Adds；</p>
+</li>
+<li><p>Add Budget；</p>
+</li>
+<li><p>BossAttackPriority；</p>
+</li>
+<li><p>Camera；</p>
+</li>
+<li><p>Player Space；</p>
+</li>
+<li><p>Recovery Windows。</p>
+</li>
+</ul>
+<hr />
+<h3 id="172-boss存在时">172. Boss存在时：</h3><p>Engagement Director可以：</p>
+<p>减少普通敌人Attack Concurrency。</p>
+<hr />
+<h3 id="173-让boss动作">173. 让Boss动作：</h3><p>可读。</p>
+<hr />
+<h3 id="174-但普通敌人仍然">174. 但普通敌人仍然：</h3><p>制造位置压力。</p>
+<hr />
+<h3 id="175-核心范式四十二boss的出招必须考虑belt-depth">175. 核心范式四十二：Boss的出招必须考虑Belt Depth</h3><p>Boss攻击可以：</p>
+<h3 id="horizontal-sweep">Horizontal Sweep</h3><p>覆盖宽X，窄Depth。</p>
+<h3 id="depth-charge">Depth Charge</h3><p>沿纵深冲锋。</p>
+<h3 id="area-slam">Area Slam</h3><p>同时覆盖一块2D地面区域。</p>
+<h3 id="projectile-lane">Projectile Lane</h3><p>锁定Depth。</p>
+<hr />
+<h3 id="176-这样">176. 这样：</h3><p>纵深移动在Boss战仍然有价值。</p>
+<hr />
+<h3 id="177-核心范式四十三boss战不能完全否定crowd-control动作">177. 核心范式四十三：Boss战不能完全否定Crowd Control动作</h3><p>如果所有Grab / Launch / Knockdown：</p>
+<p>Boss全免疫。</p>
+<p>玩家前一小时学的动作语言：</p>
+<p>突然一半失效。</p>
+<hr />
+<h3 id="178-更好的方式">178. 更好的方式：</h3><ul>
+<li><p>Grab转换成特殊Hit；</p>
+</li>
+<li><p>Poise Break后可Throw；</p>
+</li>
+<li><p>Launch变Stagger；</p>
+</li>
+<li><p>Crowd Control产生资源。</p>
+</li>
+</ul>
+<hr />
+<h3 id="179-保持">179. 保持：</h3><p>动作语法连续性。</p>
+<hr />
+<h3 id="180-核心范式四十四co-op-是-beat-em-up-的天然扩展但会改变敌群调度方式">180. 核心范式四十四：Co-op 是 Beat-'em-up 的天然扩展，但会改变敌群调度方式</h3><p>两名玩家：</p>
+<p>可以：</p>
+<p>一左一右</p>
+<p>控制整个Arena。</p>
+<hr />
+<h3 id="181-单人时">181. 单人时：</h3><p>被夹击</p>
+<p>是压力。</p>
+<p>双人时：</p>
+<p>两人可以：</p>
+<p>各处理一侧。</p>
+<hr />
+<h3 id="182-因此合作模式不应">182. 因此合作模式不应：</h3><p>只把Enemy HP ×2。</p>
+<hr />
+<h3 id="183-更好的变化">183. 更好的变化：</h3><ul>
+<li><p>更多同时敌人；</p>
+</li>
+<li><p>更多Spawn方向；</p>
+</li>
+<li><p>更高AttackConcurrency；</p>
+</li>
+<li><p>特殊协作敌人；</p>
+</li>
+<li><p>双人分流；</p>
+</li>
+<li><p>组合Grab / Throw。</p>
+</li>
+</ul>
+<hr />
+<h3 id="184-核心范式四十五co-op-enemy-director必须决定敌人攻击哪个player">184. 核心范式四十五：Co-op Enemy Director必须决定“敌人攻击哪个Player”</h3><p>不要：</p>
+<p>所有Enemy默认：</p>
+<p>锁Host。</p>
+<hr />
+<h3 id="185-threat-target-assignment可以考虑">185. Threat / Target Assignment可以考虑：</h3><ul>
+<li><p>Distance；</p>
+</li>
+<li><p>Recent Damage；</p>
+</li>
+<li><p>Player Isolation；</p>
+</li>
+<li><p>Role Balance；</p>
+</li>
+<li><p>CurrentAttackerCountByPlayer。</p>
+</li>
+</ul>
+<hr />
+<h3 id="186-enemydirector最好避免">186. EnemyDirector最好避免：</h3><p>8个敌人</p>
+<p>全部压一个Player。</p>
+<p>除非：</p>
+<p>特殊机制。</p>
+<hr />
+<h3 id="187-核心范式四十六shared-camera-本身就是co-op规则">187. 核心范式四十六：Shared Camera 本身就是Co-op规则</h3><p>本地合作最常见：</p>
+<p>两名Player共享Camera。</p>
+<hr />
+<h3 id="188-必须解决">188. 必须解决：</h3><p>玩家想往相反方向走。</p>
+<hr />
+<h3 id="189-coopcamerastate">189. CoopCameraState</h3><p>建议包含：</p>
+<ul>
+<li><p>PlayerBounds；</p>
+</li>
+<li><p>AllowedSpread；</p>
+</li>
+<li><p>SoftTether；</p>
+</li>
+<li><p>HardTether；</p>
+</li>
+<li><p>CameraCenter；</p>
+</li>
+<li><p>StageForwardLimit；</p>
+</li>
+<li><p>CoopCameraVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="190-玩家间距离太大">190. 玩家间距离太大：</h3><p>先：</p>
+<p>Soft Pull / Warning。</p>
+<p>最终：</p>
+<p>Hard Boundary。</p>
+<hr />
+<h3 id="191-不要">191. 不要：</h3><p>Camera无限Zoom Out</p>
+<p>直到角色变成蚂蚁。</p>
+<hr />
+<h3 id="192-核心范式四十七co-op不应因为一个player先走到trigger就把另一个锁在外面">192. 核心范式四十七：Co-op不应因为一个Player先走到Trigger就把另一个锁在外面</h3><p>进入Arena前：</p>
+<p>需要：</p>
+<p>Join Barrier。</p>
+<hr />
+<h3 id="193-encounter-activation可以等待">193. Encounter Activation可以等待：</h3><ul>
+<li><p>所有Alive Player进入；</p>
+</li>
+<li><p>或将落后玩家安全拉入。</p>
+</li>
+</ul>
+<hr />
+<h3 id="194-这属于">194. 这属于：</h3><p><strong>Co-op Stage Transition Transaction。</strong></p>
+<hr />
+<h3 id="195-否则非常容易">195. 否则非常容易：</h3><p>Player A进入Boss房。</p>
+<p>Gate关闭。</p>
+<p>Player B留在门外。</p>
+<hr />
+<h3 id="196-核心范式四十八revive系统如果存在应避免把战斗转成无限救人循环">196. 核心范式四十八：Revive系统如果存在，应避免把战斗转成无限救人循环</h3><p>Downed Player。</p>
+<p>队友可以：</p>
+<p>Revive。</p>
+<hr />
+<h3 id="197-需要">197. 需要：</h3><ul>
+<li><p>Revive Time；</p>
+</li>
+<li><p>Vulnerability；</p>
+</li>
+<li><p>Limited Revive；</p>
+</li>
+<li><p>Life Resource。</p>
+</li>
+</ul>
+<hr />
+<h3 id="198-是否使用">198. 是否使用：</h3><p>取决于产品。</p>
+<p>经典Arcade可以：</p>
+<p>直接Lose Life复活。</p>
+<hr />
+<h3 id="199-核心范式四十九网络同步重点是actionhit与enemy-authority而不是大规模世界">199. 核心范式四十九：网络同步重点是Action、Hit与Enemy Authority，而不是大规模世界</h3><p>相比Musou：</p>
+<p>Enemy数量通常：</p>
+<p>更有限。</p>
+<p>在线合作可以：</p>
+<p>更高精度同步。</p>
+<hr />
+<h3 id="200-server-host-authority最好拥有">200. Server / Host Authority最好拥有：</h3><ul>
+<li><p>Enemy AI；</p>
+</li>
+<li><p>Enemy Spawn；</p>
+</li>
+<li><p>Hit Result；</p>
+</li>
+<li><p>Grab Ownership；</p>
+</li>
+<li><p>Encounter State；</p>
+</li>
+<li><p>Stage Gate。</p>
+</li>
+</ul>
+<hr />
+<h3 id="201-player可以">201. Player可以：</h3><p>本地预测：</p>
+<ul>
+<li><p>Movement；</p>
+</li>
+<li><p>Animation；</p>
+</li>
+<li><p>Input。</p>
+</li>
+</ul>
+<hr />
+<h3 id="202-hit仍需">202. Hit仍需：</h3><p>统一权威规则。</p>
+<hr />
+<h3 id="203-核心范式五十grab是网络最需要事务化的动作之一">203. 核心范式五十：Grab是网络最需要事务化的动作之一</h3><p>两个Player同时：</p>
+<p>试图抓同一个Enemy。</p>
+<hr />
+<h3 id="204-server决定">204. Server决定：</h3><p>第一个合法Grab Reservation。</p>
+<hr />
+<h3 id="205-另一个">205. 另一个：</h3><p>收到失败。</p>
+<hr />
+<h3 id="206-不能">206. 不能：</h3><p>双方客户端都显示：</p>
+<p>自己抓到了。</p>
+<hr />
+<h3 id="207-核心范式五十一stage-encounter-replay-比纯输入replay更实用">207. 核心范式五十一：Stage / Encounter Replay 比纯输入Replay更实用</h3><p>如果游戏追求完全确定：</p>
+<p>可以Input Replay。</p>
+<hr />
+<h3 id="208-但ai动画root-motion和网络可能增加不确定">208. 但AI、动画Root Motion和网络可能增加不确定。</h3><p>更稳方案：</p>
+<ul>
+<li><p>Player Input；</p>
+</li>
+<li><p>Encounter Event；</p>
+</li>
+<li><p>Enemy Spawn；</p>
+</li>
+<li><p>Hit Event；</p>
+</li>
+<li><p>Periodic State Hash / Snapshot。</p>
+</li>
+</ul>
+<hr />
+<h3 id="209-replay用途">209. Replay用途：</h3><ul>
+<li><p>Speedrun；</p>
+</li>
+<li><p>Score Attack；</p>
+</li>
+<li><p>Bug；</p>
+</li>
+<li><p>AI调试；</p>
+</li>
+<li><p>Combo Review。</p>
+</li>
+</ul>
+<hr />
+<h3 id="210-核心范式五十二score与combat-result应保持派生关系">210. 核心范式五十二：Score与Combat Result应保持派生关系</h3><p>常见Score来源：</p>
+<ul>
+<li><p>Enemy Defeat；</p>
+</li>
+<li><p>Combo；</p>
+</li>
+<li><p>Time；</p>
+</li>
+<li><p>Health；</p>
+</li>
+<li><p>Weapon Use；</p>
+</li>
+<li><p>No Damage；</p>
+</li>
+<li><p>Secret；</p>
+</li>
+<li><p>Breakable。</p>
+</li>
+</ul>
+<hr />
+<h3 id="211-scoresystem消费">211. ScoreSystem消费：</h3><p>Combat Events。</p>
+<hr />
+<h3 id="212-enemy死亡不能">212. Enemy死亡不能：</h3><p>因为Score需求</p>
+<p>改变Death逻辑。</p>
+<hr />
+<h3 id="213-stage-rank">213. Stage Rank</h3><p>可以：</p>
+<p>综合：</p>
+<ul>
+<li><p>Clear Time；</p>
+</li>
+<li><p>Damage Taken；</p>
+</li>
+<li><p>Combo；</p>
+</li>
+<li><p>Death；</p>
+</li>
+<li><p>Score；</p>
+</li>
+<li><p>Secret。</p>
+</li>
+</ul>
+<hr />
+<h3 id="214-核心范式五十三stage-rank不应鼓励无限拖怪刷分">214. 核心范式五十三：Stage Rank不应鼓励无限拖怪刷分</h3><p>如果Enemy可以：</p>
+<p>无限召唤。</p>
+<p>Score线性增加。</p>
+<p>最优策略：</p>
+<p>不推进。</p>
+<hr />
+<h3 id="215-需要">215. 需要：</h3><ul>
+<li><p>Spawn Cap；</p>
+</li>
+<li><p>Diminishing Score；</p>
+</li>
+<li><p>Time Bonus；</p>
+</li>
+<li><p>Encounter Completion Weight。</p>
+</li>
+</ul>
+<hr />
+<h3 id="216-核心范式五十四关卡traversal段不是空白它承担战斗节奏释放">216. 核心范式五十四：关卡Traversal段不是空白，它承担战斗节奏释放</h3><p>如果：</p>
+<p>Arena接Arena</p>
+<p>没有喘息，</p>
+<p>玩家疲劳。</p>
+<hr />
+<h3 id="217-traversal段可以">217. Traversal段可以：</h3><ul>
+<li><p>回复；</p>
+</li>
+<li><p>武器；</p>
+</li>
+<li><p>道具；</p>
+</li>
+<li><p>场景叙事；</p>
+</li>
+<li><p>轻敌人；</p>
+</li>
+<li><p>破坏物；</p>
+</li>
+<li><p>路线分支。</p>
+</li>
+</ul>
+<hr />
+<h3 id="218-它承担">218. 它承担：</h3><p><strong>Combat Pacing Buffer。</strong></p>
+<hr />
+<h3 id="219-核心范式五十五stage-branch-可以通过选择不同推进路线增加重玩性">219. 核心范式五十五：Stage Branch 可以通过选择不同推进路线增加重玩性</h3><p>例如：</p>
+<p>地下通道。</p>
+<p>主街。</p>
+<p>屋顶。</p>
+<hr />
+<h3 id="220-不需要">220. 不需要：</h3><p>变成开放世界。</p>
+<hr />
+<h3 id="221-stagegraph支持">221. StageGraph支持：</h3><p>有限分支</p>
+<p>即可。</p>
+<hr />
+<h3 id="222-不同路线可以">222. 不同路线可以：</h3><ul>
+<li><p>Enemy Composition不同；</p>
+</li>
+<li><p>道具不同；</p>
+</li>
+<li><p>Boss入口不同；</p>
+</li>
+<li><p>Secret不同。</p>
+</li>
+</ul>
+<hr />
+<h3 id="223-核心范式五十六关卡危险物应该和belt空间规则一致">223. 核心范式五十六：关卡危险物应该和Belt空间规则一致</h3><p>例如：</p>
+<p>车辆冲过。</p>
+<p>火焰。</p>
+<p>地铁。</p>
+<p>陷阱。</p>
+<hr />
+<h3 id="224-hazarddefinition">224. HazardDefinition</h3><p>建议字段：</p>
+<ul>
+<li><p>HazardId；</p>
+</li>
+<li><p>ActiveRegion；</p>
+</li>
+<li><p>Telegraph；</p>
+</li>
+<li><p>TimingRule；</p>
+</li>
+<li><p>DamageRule；</p>
+</li>
+<li><p>KnockbackRule；</p>
+</li>
+<li><p>FriendlyPolicy；</p>
+</li>
+<li><p>HazardVersion。</p>
+</li>
+</ul>
+<hr />
+<h3 id="225-environment-hazard可以">225. Environment Hazard可以：</h3><p>同时打敌人。</p>
+<hr />
+<h3 id="226-这让玩家">226. 这让玩家：</h3><p>把敌人引入Hazard。</p>
+<hr />
+<h3 id="227-场景因此不只是">227. 场景因此不只是：</h3><p>背景。</p>
+<hr />
+<h3 id="228-核心范式五十七敌人出屏后必须有明确camera-space策略">228. 核心范式五十七：敌人出屏后必须有明确Camera-Space策略</h3><p>有些经典游戏：</p>
+<p>敌人只要进入Camera外一定距离，</p>
+<p>就会：</p>
+<p>快速返回。</p>
+<hr />
+<h3 id="229-原因不是">229. 原因不是：</h3><p>作弊。</p>
+<p>而是：</p>
+<p>玩家必须始终能够：</p>
+<p>完成Encounter。</p>
+<hr />
+<h3 id="230-camera-combat-bounds">230. Camera Combat Bounds</h3><p>和：</p>
+<p>Stage World Bounds</p>
+<p>是两个不同概念。</p>
+<hr />
+<h3 id="231-核心范式五十八z-order-sorting应由belt-depth派生而不是手工层级">231. 核心范式五十八：Z-order / Sorting应由Belt Depth派生，而不是手工层级</h3><p>角色越靠屏幕下方：</p>
+<p>通常视觉上：</p>
+<p>显示在前面。</p>
+<hr />
+<h3 id="232-sortingorder可以">232. SortingOrder可以：</h3><p>由：</p>
+<p>BeltDepth</p>
+<p>计算。</p>
+<hr />
+<h3 id="233-但elevation不应该">233. 但Elevation不应该：</h3><p>改变地面Depth排序语义。</p>
+<hr />
+<h3 id="234-否则">234. 否则：</h3><p>跳跃角色可能：</p>
+<p>突然被背景敌人遮挡。</p>
+<hr />
+<h3 id="235-核心范式五十九shadow-ground-marker-是25d空间定位的重要信息">235. 核心范式五十九：Shadow / Ground Marker 是2.5D空间定位的重要信息</h3><p>跳跃以后：</p>
+<p>角色视觉身体离开地面。</p>
+<hr />
+<h3 id="236-shadow仍然显示">236. Shadow仍然显示：</h3><p>Ground Position。</p>
+<p>玩家才知道：</p>
+<p>落地在哪里。</p>
+<hr />
+<h3 id="237-对">237. 对：</h3><p>敌人。</p>
+<p>投掷物。</p>
+<p>Boss跳砸。</p>
+<p>都很重要。</p>
+<hr />
+<h3 id="238-核心范式六十投射物需要depth-collision而不能只用屏幕line">238. 核心范式六十：投射物需要Depth Collision，而不能只用屏幕Line</h3><p>敌人投Knife。</p>
+<hr />
+<h3 id="239-projectile状态至少包含">239. Projectile状态至少包含：</h3><ul>
+<li><p>StageX；</p>
+</li>
+<li><p>BeltDepth；</p>
+</li>
+<li><p>Elevation。</p>
+</li>
+</ul>
+<hr />
+<h3 id="240-是否命中">240. 是否命中：</h3><p>玩家与Projectile：</p>
+<p>Depth和Elevation都需要重叠。</p>
+<hr />
+<h3 id="241-这样玩家可以">241. 这样玩家可以：</h3><p>向上 / 下移动</p>
+<p>躲飞刀。</p>
+<hr />
+<h3 id="242-核心范式六十一ranged-enemy-应主要迫使玩家重新站位而不是远处稳定消耗hp">242. 核心范式六十一：Ranged Enemy 应主要迫使玩家重新站位，而不是远处稳定消耗HP</h3><p>远程Enemy最重要的作用：</p>
+<p>让玩家不能：</p>
+<p>一直在一个安全Depth上打近战。</p>
+<hr />
+<h3 id="243-因此">243. 因此：</h3><p>其Attack Frequency</p>
+<p>需要控制。</p>
+<hr />
+<h3 id="244-如果3名远程enemy">244. 如果3名远程Enemy</h3><p>同时无限发射：</p>
+<p>Arena可能变成：</p>
+<p>弹幕游戏。</p>
+<hr />
+<h3 id="245-enemy-director应">245. Enemy Director应：</h3><p>限制远程AttackConcurrency。</p>
+<hr />
+<h3 id="246-核心范式六十二grappler-enemy-应制造被抓住的局部危机而不是高频硬控">246. 核心范式六十二：Grappler Enemy 应制造“被抓住”的局部危机，而不是高频硬控</h3><p>抓取本身：</p>
+<p>非常强。</p>
+<hr />
+<h3 id="247-需要">247. 需要：</h3><p>明显Telegraph。</p>
+<p>低频。</p>
+<p>可以：</p>
+<p>挣脱 / 队友救援。</p>
+<hr />
+<h3 id="248-否则">248. 否则：</h3><p>多人围攻中</p>
+<p>玩家容易：</p>
+<p>连续被控。</p>
+<hr />
+<h3 id="249-核心范式六十三普通enemy死亡不能全部等待长动画才释放encounter资源">249. 核心范式六十三：普通Enemy死亡不能全部等待长动画才释放Encounter资源</h3><p>Death Commit：</p>
+<p>立即发生。</p>
+<hr />
+<h3 id="250-enemy从">250. Enemy从：</h3><p>Alive</p>
+<p>→ Defeated。</p>
+<p>Encounter Active Count：</p>
+<p>立刻更新。</p>
+<hr />
+<h3 id="251-death-animation">251. Death Animation：</h3><p>继续播放。</p>
+<hr />
+<h3 id="252-但">252. 但：</h3><p>该Enemy已经：</p>
+<p>不再占Attack Budget。</p>
+<hr />
+<h3 id="253-核心范式六十四defeated-view可以延迟清除但gameplay-entity职责必须提前退出">253. 核心范式六十四：Defeated View可以延迟清除，但Gameplay Entity职责必须提前退出</h3><p>否则：</p>
+<p>敌人已经躺地10秒。</p>
+<p>Encounter仍然认为：</p>
+<p>有1人存活。</p>
+<p>Gate不开。</p>
+<hr />
+<h3 id="254-death-presentation分离">254. Death / Presentation分离：</h3><p>非常重要。</p>
+<hr />
+<h3 id="255-核心范式六十五boss-phase切换不应依赖动画播放完才改规则">255. 核心范式六十五：Boss Phase切换不应依赖动画播放完才改规则</h3><p>HP达到：</p>
+<p>70%。</p>
+<p>Boss进入Phase 2。</p>
+<hr />
+<h3 id="256-gameplay-state">256. Gameplay State：</h3><p>先Commit。</p>
+<hr />
+<h3 id="257-transition-animation">257. Transition Animation：</h3><p>展示。</p>
+<hr />
+<h3 id="258-skip-hit-interaction">258. Skip / Hit Interaction：</h3><p>按规则管理。</p>
+<hr />
+<h3 id="259-核心范式六十六完整事件与执行流程示例">259. 核心范式六十六：完整事件与执行流程示例</h3><p>以下以：</p>
+<p><strong>玩家进入地铁站大厅，被左右夹击的两波敌人锁场，通过纵深调整把敌群压到同一侧，再利用抓取投掷解决远程威胁，最终解除闸门继续前进</strong></p>
+<p>为例。</p>
+<hr />
+<h3 id="2591-stage初始">259.1 Stage初始</h3><p>当前Segment：</p>
+<p>SubwayHallTraversal。</p>
+<p>Camera可以：</p>
+<p>向右Scroll。</p>
+<hr />
+<h3 id="2592-玩家前进到">259.2 玩家前进到：</h3><p>Progress 42%。</p>
+<hr />
+<h3 id="2593-encounter-trigger">259.3 Encounter Trigger</h3><p><code>SubwayHallEncounter</code></p>
+<p>条件满足。</p>
+<hr />
+<h3 id="2594-stagesystem">259.4 StageSystem</h3><p>Camera Forward Scroll：</p>
+<p>锁定。</p>
+<p>右侧闸门：</p>
+<p>Closed。</p>
+<p>左侧Camera Backstop：</p>
+<p>上移到当前区域。</p>
+<hr />
+<h3 id="2595-encounter进入">259.5 Encounter进入：</h3><p>Entering。</p>
+<hr />
+<h3 id="2596-wave-1">259.6 Wave 1</h3><p>左侧生成：</p>
+<p>2 Grunts。</p>
+<p>右侧生成：</p>
+<p>2 Grunts。</p>
+<hr />
+<h3 id="2597-enemy先从camera边缘外进入">259.7 Enemy先从Camera边缘外进入</h3><p>没有凭空出现。</p>
+<hr />
+<h3 id="2598-encounter进入active">259.8 Encounter进入Active</h3><p>场上：</p>
+<p>4人。</p>
+<p>Concurrent Budget：</p>
+<p>6。</p>
+<hr />
+<h3 id="2599-engagement-director分配">259.9 Engagement Director分配：</h3><p>右侧Grunt A：</p>
+<p>PrimaryAttacker。</p>
+<p>左侧Grunt B：</p>
+<p>Flanker。</p>
+<p>另外两人：</p>
+<p>Pressure。</p>
+<hr />
+<h3 id="25910-玩家初始位于中间">259.10 玩家初始位于中间</h3><p>左右都有Enemy。</p>
+<p>危险。</p>
+<hr />
+<h3 id="25911-玩家向下方depth移动">259.11 玩家向下方Depth移动</h3><p>躲过：</p>
+<p>右侧Grunt的直线Punch。</p>
+<hr />
+<h3 id="25912-左侧grunt正在绕到玩家上方">259.12 左侧Grunt正在绕到玩家上方</h3><p>试图：</p>
+<p>形成新的包夹。</p>
+<hr />
+<h3 id="25913-玩家继续向左移动">259.13 玩家继续向左移动</h3><p>穿过左侧Enemy纵深外侧。</p>
+<hr />
+<h3 id="25914-现在四名enemy逐渐">259.14 现在四名Enemy逐渐：</h3><p>位于玩家右侧。</p>
+<hr />
+<h3 id="25915-玩家完成">259.15 玩家完成：</h3><p>Light1 → Light2 → Heavy Sweep。</p>
+<hr />
+<h3 id="25916-heavy-sweep">259.16 Heavy Sweep：</h3><p>Depth Width较大。</p>
+<p>同时：</p>
+<p>命中3名Enemy。</p>
+<hr />
+<h3 id="25917-hit-stop">259.17 Hit Stop</h3><p>不是：</p>
+<p>3 × 3帧。</p>
+<p>而是：</p>
+<p>一次4帧Group Hit Stop。</p>
+<hr />
+<h3 id="25918-两名普通enemy">259.18 两名普通Enemy：</h3><p>Knockdown。</p>
+<p>一名：</p>
+<p>Knockback。</p>
+<hr />
+<h3 id="25919-engagement-director">259.19 Engagement Director</h3><p>三名Enemy暂时：</p>
+<p>不可攻击。</p>
+<p>剩余一名Enemy：</p>
+<p>获得PrimaryAttacker。</p>
+<hr />
+<h3 id="25920-玩家迅速">259.20 玩家迅速：</h3><p>抓住Knockback后进入Vulnerable状态的Enemy C。</p>
+<hr />
+<h3 id="25921-grabreservation成功">259.21 GrabReservation成功。</h3><p>Enemy C：</p>
+<p>被占用。</p>
+<hr />
+<h3 id="25922-wave-1场上剩余敌人仍未清完">259.22 Wave 1场上剩余敌人仍未清完</h3><p>但Wave 2的Trigger：</p>
+<p><code>ActiveEnemyCount &lt;= 2</code></p>
+<p>尚未满足。</p>
+<hr />
+<h3 id="25923-玩家将c向右throw">259.23 玩家将C向右Throw。</h3><hr />
+<h3 id="25924-thrown-actor形成">259.24 Thrown Actor形成：</h3><p>Impact Source。</p>
+<hr />
+<h3 id="25925-c撞到另一名刚起身的enemy">259.25 C撞到另一名刚起身的Enemy。</h3><p>两人：</p>
+<p>同时Knockdown。</p>
+<hr />
+<h3 id="25926-玩家完成wave-1最后两名enemy">259.26 玩家完成Wave 1最后两名Enemy。</h3><hr />
+<h3 id="25927-defeat-commit">259.27 Defeat Commit</h3><p>Enemy立即：</p>
+<p>从Encounter Active Count中移除。</p>
+<p>动画仍播放。</p>
+<hr />
+<h3 id="25928-activeenemycount">259.28 ActiveEnemyCount：</h3><p>2。</p>
+<hr />
+<h3 id="25929-wave-2条件满足">259.29 Wave 2条件满足。</h3><hr />
+<h3 id="25930-第二wave进入">259.30 第二Wave进入</h3><p>右侧：</p>
+<p>1 Heavy。</p>
+<p>上方：</p>
+<p>1 Ranged。</p>
+<hr />
+<h3 id="25931-ranged位于">259.31 Ranged位于：</h3><p>较高Depth。</p>
+<hr />
+<h3 id="25932-heavy获得">259.32 Heavy获得：</h3><p>PrimaryMelee角色。</p>
+<p>Ranged获得：</p>
+<p>RangedPressure Token。</p>
+<hr />
+<h3 id="25933-ranged准备throwknife">259.33 Ranged准备ThrowKnife</h3><p>Telegraph显示：</p>
+<p>沿当前Depth发射。</p>
+<hr />
+<h3 id="25934-玩家不继续和heavy原地硬拼">259.34 玩家不继续和Heavy原地硬拼</h3><p>而是：</p>
+<p>向上切Depth。</p>
+<hr />
+<h3 id="25935-knife飞过">259.35 Knife飞过：</h3><p>原玩家Depth。</p>
+<p>Miss。</p>
+<hr />
+<h3 id="25936-玩家接近ranged">259.36 玩家接近Ranged</h3><p>迫使Ranged：</p>
+<p>进入Retreat行为。</p>
+<hr />
+<h3 id="25937-heavy从后方追来">259.37 Heavy从后方追来</h3><p>即将重新形成：</p>
+<p>夹击。</p>
+<hr />
+<h3 id="25938-玩家快速攻击ranged">259.38 玩家快速攻击Ranged</h3><p>让其Stagger。</p>
+<hr />
+<h3 id="25939-玩家grab-ranged">259.39 玩家Grab Ranged</h3><p>转身面向Heavy。</p>
+<hr />
+<h3 id="25940-throw">259.40 Throw。</h3><hr />
+<h3 id="25941-ranged撞到heavy">259.41 Ranged撞到Heavy。</h3><p>Heavy：</p>
+<p>Poise Damage增加。</p>
+<p>Ranged：</p>
+<p>Defeated。</p>
+<hr />
+<h3 id="25942-heavy仍存活">259.42 Heavy仍存活。</h3><p>进入：</p>
+<p>Enraged State。</p>
+<hr />
+<h3 id="25943-但现在玩家只需要">259.43 但现在玩家只需要：</h3><p>处理单个Elite。</p>
+<hr />
+<h3 id="25944-engagement-director不再">259.44 Engagement Director不再：</h3><p>管理多人包围。</p>
+<hr />
+<h3 id="25945-玩家通过">259.45 玩家通过：</h3><p>Dodge → Combo → Heavy Finisher</p>
+<p>耗尽Heavy Poise。</p>
+<hr />
+<h3 id="25946-heavy-stagger">259.46 Heavy Stagger。</h3><hr />
+<h3 id="25947-最终combo击败">259.47 最终Combo击败。</h3><hr />
+<h3 id="25948-encounter检查">259.48 Encounter检查：</h3><p>所有Wave：</p>
+<p>Spawned。</p>
+<p>所有RequiredEnemy：</p>
+<p>Defeated。</p>
+<p>Pending Reinforcement：</p>
+<p>0。</p>
+<hr />
+<h3 id="25949-encounter-completed">259.49 Encounter Completed。</h3><hr />
+<h3 id="25950-stage-gate收到">259.50 Stage Gate收到：</h3><p>Unlock Intent。</p>
+<hr />
+<h3 id="25951-闸门gameplay-state">259.51 闸门Gameplay State：</h3><p>Open。</p>
+<p>Collision解除。</p>
+<hr />
+<h3 id="25952-开门动画播放">259.52 开门动画播放。</h3><hr />
+<h3 id="25953-camera">259.53 Camera：</h3><p>ScrollLock解除。</p>
+<hr />
+<h3 id="25954-玩家继续向右">259.54 玩家继续向右。</h3><hr />
+<h3 id="25955-整条核心链">259.55 整条核心链：</h3><p>Stage Progress
+→ Encounter Trigger
+→ Arena Lock
+→ 左右夹击
+→ Engagement Role分配
+→ 玩家用Depth脱离攻击线
+→ 把Enemy重构到同一侧
+→ Multi-target Combo
+→ Knockdown减少即时威胁
+→ Grab / Throw进一步控群
+→ 第二Wave引入远程 + Heavy
+→ 玩家突破远程压力源
+→ 利用Enemy作为Projectile击中Elite
+→ 单体收尾
+→ Encounter Complete
+→ Gate Unlock
+→ Camera继续推进。</p>
+<hr />
+<h3 id="25956-这说明该类型真正的动作逻辑是">259.56 这说明该类型真正的动作逻辑是：</h3><blockquote>
+<p><strong>敌人不是一个个独立Boss；玩家的主要能力是持续把一个混乱多人空间重新整理成自己可以逐个处理的局部结构。</strong></p>
+</blockquote>
+<hr />
+<h3 id="260-失败隔离">260. 失败隔离</h3><hr />
+<h3 id="2601-arena敌人清空但gate不开">260.1 Arena敌人清空但Gate不开</h3><p>EncounterSystem必须：</p>
+<p>能够解释：</p>
+<p>Pending Wave。</p>
+<p>Required Boss。</p>
+<p>Objective。</p>
+<hr />
+<h3 id="261-如果实际不存在">261. 如果实际不存在：</h3><p>进入：</p>
+<p>EncounterIntegrityRecovery。</p>
+<hr />
+<h3 id="262-不应该">262. 不应该：</h3><p>让玩家永久锁场。</p>
+<hr />
+<h3 id="263-encounter-softlock-recovery">263. Encounter Softlock Recovery</h3><p>开发版：</p>
+<p>直接报警。</p>
+<p>正式版：</p>
+<p>如果：</p>
+<p>所有Required Enemy已不存在</p>
+<p>且无Pending Spawn，</p>
+<p>安全完成Encounter。</p>
+<hr />
+<h3 id="264-enemy卡在camera外">264. Enemy卡在Camera外</h3><p>ReturnToArena Priority提升。</p>
+<hr />
+<h3 id="265-仍无法回归">265. 仍无法回归：</h3><p>使用：</p>
+<p>Safe Reposition。</p>
+<hr />
+<h3 id="266-reposition只允许">266. Reposition只允许：</h3><p>玩家看不到时。</p>
+<hr />
+<h3 id="267-enemy掉出nav-belt-bounds">267. Enemy掉出Nav / Belt Bounds</h3><p>恢复：</p>
+<p>最近合法Arena Cell / Position。</p>
+<hr />
+<h3 id="268-grab双方状态不同步">268. Grab双方状态不同步</h3><p>任一方检测：</p>
+<p>Grab Partner失效。</p>
+<p>立即：</p>
+<p>Release Grab。</p>
+<p>进入：</p>
+<p>Safe Recovery。</p>
+<hr />
+<h3 id="269-enemy死亡时仍占attack-token">269. Enemy死亡时仍占Attack Token</h3><p>Death Commit统一：</p>
+<p>从Engagement Director注销。</p>
+<hr />
+<h3 id="270-attack-token泄漏">270. Attack Token泄漏</h3><p>Director每隔低频Audit：</p>
+<p>所有Token Owner</p>
+<p>必须：</p>
+<p>Alive + Active + Encounter Member。</p>
+<hr />
+<h3 id="271-wave重复spawn">271. Wave重复Spawn</h3><p>WaveInstanceId</p>
+<p>幂等。</p>
+<hr />
+<h3 id="272-spawn-point不可达">272. Spawn Point不可达</h3><p>尝试：</p>
+<p>Alternative Spawn Point。</p>
+<hr />
+<h3 id="273-所有spawn-point不可用">273. 所有Spawn Point不可用</h3><p>使用：</p>
+<p>Safe Offscreen Entry。</p>
+<hr />
+<h3 id="274-boss已经死亡但encounter仍等待phase-transition">274. Boss已经死亡但Encounter仍等待Phase Transition</h3><p>Boss Life State：</p>
+<p>权威。</p>
+<p>Encounter直接进入：</p>
+<p>Completion Evaluation。</p>
+<hr />
+<h3 id="275-camera锁错区域">275. Camera锁错区域</h3><p>Camera Lock绑定：</p>
+<p>ArenaId + EncounterGeneration。</p>
+<p>旧Encounter解除时：</p>
+<p>不能解开新Encounter Camera。</p>
+<hr />
+<h3 id="276-gate重复unlock">276. Gate重复Unlock</h3><p>幂等。</p>
+<hr />
+<h3 id="277-player进入gate关闭区域">277. Player进入Gate关闭区域</h3><p>关闭前：</p>
+<p>检查所有Player。</p>
+<p>必要时：</p>
+<p>把Player推到Arena合法一侧。</p>
+<hr />
+<h3 id="278-coop-player被关在arena外">278. Coop Player被关在Arena外</h3><p>StageTransition：</p>
+<p>在Lock前验证：</p>
+<p>所有Alive Player。</p>
+<hr />
+<h3 id="279-攻击命中数量异常高">279. 攻击命中数量异常高</h3><p>Hit Fan-out拥有：</p>
+<p>Sanity Threshold。</p>
+<hr />
+<h3 id="280-但不能">280. 但不能：</h3><p>为了性能</p>
+<p>随机丢Gameplay Hit。</p>
+<hr />
+<h3 id="281-gameplay-damage全部执行">281. Gameplay Damage全部执行。</h3><p>Presentation Reaction：</p>
+<p>可以降级。</p>
+<hr />
+<h3 id="282-root-motion把player推出arena">282. Root Motion把Player推出Arena</h3><p>Gameplay Motor进行：</p>
+<p>Boundary Correction。</p>
+<p>动画视觉：</p>
+<p>适配。</p>
+<hr />
+<h3 id="283-不能">283. 不能：</h3><p>让Animation拥有最终World Position权威。</p>
+<hr />
+<h3 id="284-stage结束但encounter-event还在队列">284. Stage结束但Encounter Event还在队列</h3><p>Stage Session结束：</p>
+<p>取消所有：</p>
+<p>非PostStage事件。</p>
+<hr />
+<h3 id="285-debug与可观测性">285. Debug与可观测性</h3><hr />
+<h3 id="2851-belt-space-overlay">285.1 Belt Space Overlay</h3><p>显示：</p>
+<ul>
+<li><p>Stage X；</p>
+</li>
+<li><p>Belt Depth；</p>
+</li>
+<li><p>Elevation；</p>
+</li>
+<li><p>Ground Shadow。</p>
+</li>
+</ul>
+<hr />
+<h3 id="286-hit-depth-overlay">286. Hit Depth Overlay</h3><p>显示：</p>
+<p>Attack的：</p>
+<p>Depth范围。</p>
+<hr />
+<h3 id="287-可以立即发现">287. 可以立即发现：</h3><p>视觉看似命中</p>
+<p>但逻辑Depth不重叠。</p>
+<hr />
+<h3 id="288-target-assist-debug">288. Target Assist Debug</h3><p>显示：</p>
+<p>候选Enemy。</p>
+<p>Score。</p>
+<p>最终目标。</p>
+<p>Direction Correction。</p>
+<hr />
+<h3 id="289-engagement-director-inspector">289. Engagement Director Inspector</h3><p>显示：</p>
+<p>Player周围每名Enemy当前角色：</p>
+<p>Primary。</p>
+<p>Flanker。</p>
+<p>Ranged。</p>
+<p>Pressure。</p>
+<p>Wait。</p>
+<hr />
+<h3 id="290-attack-token-overlay">290. Attack Token Overlay</h3><p>拥有攻击权：</p>
+<p>红色。</p>
+<p>等待：</p>
+<p>黄色。</p>
+<p>Recover：</p>
+<p>灰色。</p>
+<hr />
+<h3 id="291-enemy-position-intent">291. Enemy Position Intent</h3><p>显示：</p>
+<p>AI当前想走到：</p>
+<p>哪个攻击位置。</p>
+<hr />
+<h3 id="292-crowd-density-heatmap">292. Crowd Density Heatmap</h3><p>查看：</p>
+<p>Arena是否：</p>
+<p>大量Enemy全挤同一点。</p>
+<hr />
+<h3 id="293-encounter-inspector">293. Encounter Inspector</h3><p>显示：</p>
+<ul>
+<li><p>State；</p>
+</li>
+<li><p>Current Wave；</p>
+</li>
+<li><p>Active Enemy；</p>
+</li>
+<li><p>Pending Wave；</p>
+</li>
+<li><p>Completion Conditions；</p>
+</li>
+<li><p>Gate。</p>
+</li>
+</ul>
+<hr />
+<h3 id="294-wave-timeline">294. Wave Timeline</h3><p>00:00 Wave1。</p>
+<p>00:12 Active&lt;=2。</p>
+<p>00:13 Wave2。</p>
+<hr />
+<h3 id="295-spawn-trace">295. Spawn Trace</h3><p>Enemy 24：</p>
+<p>为什么从右侧门进入。</p>
+<hr />
+<h3 id="296-stage-segment-viewer">296. Stage Segment Viewer</h3><p>显示：</p>
+<p>Traversal。</p>
+<p>Encounter。</p>
+<p>Boss。</p>
+<p>Camera Bounds。</p>
+<hr />
+<h3 id="297-camera-lock-debug">297. Camera Lock Debug</h3><p>当前：</p>
+<p>被哪个Encounter锁。</p>
+<hr />
+<h3 id="298-gate-inspector">298. Gate Inspector</h3><p>右门：</p>
+<p>LockedBy = Encounter17。</p>
+<hr />
+<h3 id="299-hit-trace">299. Hit Trace</h3><p>Attack 34：</p>
+<p>Candidate 5。</p>
+<p>Depth Eligible 4。</p>
+<p>Invulnerable 1。</p>
+<p>Final Hits 3。</p>
+<hr />
+<h3 id="300-hit-registry">300. Hit Registry</h3><p>查看：</p>
+<p>某Enemy为什么：</p>
+<p>没有被MultiHit第二次打中。</p>
+<hr />
+<h3 id="301-reaction-inspector">301. Reaction Inspector</h3><p>Enemy：</p>
+<p>Knockdown。</p>
+<p>Wakeup剩：</p>
+<p>0.8秒。</p>
+<hr />
+<h3 id="302-grab-inspector">302. Grab Inspector</h3><p>Grabber。</p>
+<p>Victim。</p>
+<p>Reservation。</p>
+<p>Throw Options。</p>
+<hr />
+<h3 id="303-combo-timeline">303. Combo Timeline</h3><p>Input。</p>
+<p>Node。</p>
+<p>Hit Confirm。</p>
+<p>Cancel。</p>
+<hr />
+<h3 id="304-action-phase-overlay">304. Action Phase Overlay</h3><p>Startup。</p>
+<p>Active。</p>
+<p>Recovery。</p>
+<hr />
+<h3 id="305-root-motion-debug">305. Root Motion Debug</h3><p>Animation Requested Delta。</p>
+<p>Gameplay Accepted Delta。</p>
+<p>Boundary Correction。</p>
+<hr />
+<h3 id="306-offscreen-enemy-inspector">306. Offscreen Enemy Inspector</h3><p>显示：</p>
+<p>Camera距离。</p>
+<p>Return Priority。</p>
+<p>Recovery Timer。</p>
+<hr />
+<h3 id="307-coop-camera-debug">307. Coop Camera Debug</h3><p>Player Spread。</p>
+<p>Soft Tether。</p>
+<p>Hard Boundary。</p>
+<hr />
+<h3 id="308-performance-dashboard">308. Performance Dashboard</h3><p>按：</p>
+<ul>
+<li><p>Player Combat；</p>
+</li>
+<li><p>Enemy AI；</p>
+</li>
+<li><p>Steering；</p>
+</li>
+<li><p>Animation；</p>
+</li>
+<li><p>Hit Queries；</p>
+</li>
+<li><p>VFX；</p>
+</li>
+<li><p>Spawn；</p>
+</li>
+</ul>
+<p>统计。</p>
+<hr />
+<h3 id="309-content-与规则验证">309. Content 与规则验证</h3><hr />
+<h3 id="3091-stage-graph-validation">309.1 Stage Graph Validation</h3><p>所有Stage Segment：</p>
+<p>必须存在：</p>
+<p>从Start到End合法路径。</p>
+<hr />
+<h3 id="310-encounter-gate-validation">310. Encounter Gate Validation</h3><p>每个Lock Gate：</p>
+<p>必须有：</p>
+<p>至少一个合法Unlock条件。</p>
+<hr />
+<h3 id="311-encounter-completion-validation">311. Encounter Completion Validation</h3><p>所有Wave：</p>
+<p>有限。</p>
+<hr />
+<h3 id="312-不允许">312. 不允许：</h3><p>Wave A需要：</p>
+<p>EnemyCount 0。</p>
+<p>但Enemy Spawner持续无限补充。</p>
+<hr />
+<h3 id="313-spawn-point-validation">313. Spawn Point Validation</h3><p>每个Encounter：</p>
+<p>至少有：</p>
+<p>合法Spawn Point。</p>
+<hr />
+<h3 id="314-spawn-visibility-test">314. Spawn Visibility Test</h3><p>检查：</p>
+<p>是否会在Camera中心：</p>
+<p>直接Pop。</p>
+<hr />
+<h3 id="315-arena-bounds-test">315. Arena Bounds Test</h3><p>所有敌人：</p>
+<p>可以：</p>
+<p>回到Arena。</p>
+<hr />
+<h3 id="316-offscreen-recovery-test">316. Offscreen Recovery Test</h3><p>人工把Enemy推到：</p>
+<p>各边界。</p>
+<p>验证：</p>
+<p>能够回场。</p>
+<hr />
+<h3 id="317-attack-concurrency-test">317. Attack Concurrency Test</h3><p>不同难度：</p>
+<p>最大并发攻击者</p>
+<p>符合配置。</p>
+<hr />
+<h3 id="318-token-leak-test">318. Token Leak Test</h3><p>Enemy死、Despawn、Grab、Knockdown以后：</p>
+<p>Token正确回收。</p>
+<hr />
+<h3 id="319-depth-hit-property-test">319. Depth Hit Property Test</h3><p>不同Depth差值：</p>
+<p>验证：</p>
+<p>Hit / Miss边界。</p>
+<hr />
+<h3 id="320-elevation-hit-test">320. Elevation Hit Test</h3><p>Ground Attack：</p>
+<p>不应命中：</p>
+<p>过高空中Actor。</p>
+<hr />
+<h3 id="321-multi-target-hit-test">321. Multi-target Hit Test</h3><p>一招：</p>
+<p>1、3、6目标。</p>
+<p>Damage结果稳定。</p>
+<hr />
+<h3 id="322-rehit-test">322. Rehit Test</h3><p>持续Attack：</p>
+<p>不会非法每Tick重复Hit。</p>
+<hr />
+<h3 id="323-hitstop-aggregation-test">323. Hitstop Aggregation Test</h3><p>命中6人：</p>
+<p>不会变成：</p>
+<p>6倍Hitstop。</p>
+<hr />
+<h3 id="324-grab-ownership-test">324. Grab Ownership Test</h3><p>两个Player同时抓同一Enemy。</p>
+<p>只有：</p>
+<p>一个成功。</p>
+<hr />
+<h3 id="325-throw-collision-test">325. Throw Collision Test</h3><p>Thrown Enemy：</p>
+<p>可以：</p>
+<p>按规则命中其他Enemy。</p>
+<hr />
+<h3 id="326-death-encounter-count-test">326. Death / Encounter Count Test</h3><p>Enemy Gameplay Death Commit后：</p>
+<p>立即退出Active Count。</p>
+<hr />
+<h3 id="327-gate-animation-failure-test">327. Gate Animation Failure Test</h3><p>没有动画资源时：</p>
+<p>Stage仍然能继续。</p>
+<hr />
+<h3 id="328-camera-trigger-permutation-test">328. Camera Trigger Permutation Test</h3><p>玩家高速Dash进入Encounter。</p>
+<p>Camera、Gate、Spawn：</p>
+<p>状态正确。</p>
+<hr />
+<h3 id="329-co-op-entry-test">329. Co-op Entry Test</h3><p>P1先进入。</p>
+<p>P2落后。</p>
+<p>不能：</p>
+<p>被永久关在外面。</p>
+<hr />
+<h3 id="330-stage-restart-test">330. Stage Restart Test</h3><p>任何Checkpoint重启：</p>
+<p>Encounter和Gate恢复正确初始状态。</p>
+<hr />
+<h3 id="331-boss-adds-stress-test">331. Boss + Adds Stress Test</h3><p>Boss + 6普通Enemy。</p>
+<p>检查：</p>
+<p>攻击可读性。</p>
+<hr />
+<h3 id="332-long-stage-test">332. Long Stage Test</h3><p>完整Stage运行：</p>
+<p>所有Encounter。</p>
+<p>检查：</p>
+<p>无残留Enemy / Token / Event。</p>
+<hr />
+<h3 id="333-性能设计">333. 性能设计</h3><p>Beat-'em-up 不需要：</p>
+<p>Musou级数百AI。</p>
+<p>真正的性能目标更偏：</p>
+<p><strong>少量到中量Enemy的高质量同时动作。</strong></p>
+<hr />
+<h3 id="334-通常场上">334. 通常场上：</h3><p>4～12名Active Enemy</p>
+<p>已经足够形成：</p>
+<p>高压力。</p>
+<hr />
+<h3 id="335-所以优先">335. 所以优先：</h3><p>AI可读性</p>
+<p>而不是：</p>
+<p>极端实体数。</p>
+<hr />
+<h3 id="336-enemy-decision">336. Enemy Decision</h3><p>不需要：</p>
+<p>60Hz完整Utility计算。</p>
+<hr />
+<h3 id="337-可以">337. 可以：</h3><p>5～15Hz</p>
+<p>选择：</p>
+<p>Position / Role。</p>
+<hr />
+<h3 id="338-movement-hit">338. Movement / Hit：</h3><p>高频更新。</p>
+<hr />
+<h3 id="339-engagement-director">339. Engagement Director：</h3><p>低频 + Event-driven。</p>
+<hr />
+<h3 id="340-navigation">340. Navigation</h3><p>舞台简单。</p>
+<p>使用：</p>
+<ul>
+<li><p>Direct Steering；</p>
+</li>
+<li><p>Obstacle Avoidance；</p>
+</li>
+<li><p>Simple Path Corridor。</p>
+</li>
+</ul>
+<hr />
+<h3 id="341-无需">341. 无需：</h3><p>每名Enemy大量全图A*。</p>
+<hr />
+<h3 id="342-animation成本通常">342. Animation成本通常：</h3><p>比AI更显著。</p>
+<hr />
+<h3 id="343-中远距离enemy">343. 中远距离Enemy：</h3><p>可以：</p>
+<p>降低骨骼更新。</p>
+<hr />
+<h3 id="344-但camera内enemy数量本身不大">344. 但Camera内Enemy数量本身不大，</h3><p>无需过度LOD。</p>
+<hr />
+<h3 id="345-vfx需要控制">345. VFX需要控制：</h3><p>特别是多人Combo同时发生时。</p>
+<hr />
+<h3 id="346-hitbox-query">346. Hitbox Query</h3><p>推荐：</p>
+<p>集中Combat Query系统。</p>
+<hr />
+<h3 id="347-不要">347. 不要：</h3><p>每把拳头多个Collider</p>
+<p>永久开启。</p>
+<hr />
+<h3 id="348-action-active-window期间">348. Action Active Window期间：</h3><p>才执行Query。</p>
+<hr />
+<h3 id="349-可扩展点">349. 可扩展点</h3><hr />
+<h3 id="3491-新player-character">349.1 新Player Character</h3><p>增加：</p>
+<ul>
+<li><p>Action Set；</p>
+</li>
+<li><p>Combo Graph；</p>
+</li>
+<li><p>Stats；</p>
+</li>
+<li><p>Special。</p>
+</li>
+</ul>
+<p>Stage系统无需修改。</p>
+<hr />
+<h3 id="3492-新enemy">349.2 新Enemy</h3><p>提供：</p>
+<p>EnemyDefinition</p>
+<ul>
+<li><p>Combat Role</p>
+</li>
+<li><p>Action Set。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3493-新enemy-role">349.3 新Enemy Role</h3><p>例如：</p>
+<p>Healer。</p>
+<p>Bomber。</p>
+<p>通过：</p>
+<p>Engagement Role扩展。</p>
+<hr />
+<h3 id="3494-新encounter">349.4 新Encounter</h3><p>组合：</p>
+<p>Enemy Groups。</p>
+<p>Spawn。</p>
+<p>Wave。</p>
+<hr />
+<h3 id="3495-新stage">349.5 新Stage</h3><p>主要：</p>
+<ul>
+<li><p>Segment；</p>
+</li>
+<li><p>Encounter；</p>
+</li>
+<li><p>Gate；</p>
+</li>
+<li><p>Camera；</p>
+</li>
+<li><p>Prop。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3496-新weapon">349.6 新Weapon</h3><p>使用：</p>
+<p>Temporary Weapon Action Set。</p>
+<hr />
+<h3 id="3497-新hazard">349.7 新Hazard</h3><p>提供：</p>
+<p>Area + Timing + Impact。</p>
+<hr />
+<h3 id="3498-branching-stage">349.8 Branching Stage</h3><p>扩展：</p>
+<p>Stage Segment Graph。</p>
+<hr />
+<h3 id="3499-survival-mode">349.9 Survival Mode</h3><p>移除：</p>
+<p>Stage Progress。</p>
+<p>重复：</p>
+<p>Encounter Director。</p>
+<hr />
+<h3 id="34910-boss-rush">349.10 Boss Rush</h3><p>复用：</p>
+<p>Boss Encounter。</p>
+<hr />
+<h3 id="34911-co-op">349.11 Co-op</h3><p>增加：</p>
+<p>Player Target Assignment</p>
+<p>和：</p>
+<p>Shared Camera。</p>
+<p>Combat Core不变。</p>
+<hr />
+<h3 id="350-玩家体验设计">350. 玩家体验设计</h3><hr />
+<h3 id="3501-玩家必须很快理解纵深">350.1 玩家必须很快理解纵深</h3><p>新玩家最常见问题：</p>
+<blockquote>
+<p>“我明明站在他旁边，为什么打不到？”</p>
+</blockquote>
+<hr />
+<h3 id="351-所以">351. 所以：</h3><ul>
+<li><p>Shadow；</p>
+</li>
+<li><p>Depth对齐；</p>
+</li>
+<li><p>Soft Target Assist；</p>
+</li>
+<li><p>宽松Hit Depth</p>
+</li>
+</ul>
+<p>非常重要。</p>
+<hr />
+<h3 id="352-第一关应该">352. 第一关应该：</h3><p>用少量Enemy</p>
+<p>让玩家理解：</p>
+<p>上下移动不是装饰。</p>
+<hr />
+<h3 id="353-玩家很快应该发现">353. 玩家很快应该发现：</h3><p>错开Depth可以躲攻击。</p>
+<hr />
+<h3 id="354-这比">354. 这比：</h3><p>文字提示</p>
+<p>更重要。</p>
+<hr />
+<h3 id="355-普通enemy必须">355. 普通Enemy必须：</h3><p>容易被打出Reaction。</p>
+<hr />
+<h3 id="356-如果每个杂兵">356. 如果每个杂兵：</h3><p>都有强霸体，</p>
+<p>清版动作会立刻：</p>
+<p>失去流畅感。</p>
+<hr />
+<h3 id="357-但敌群必须">357. 但敌群必须：</h3><p>保持包围压力。</p>
+<hr />
+<h3 id="358-玩家需要">358. 玩家需要：</h3><p>通过走位</p>
+<p>主动制造：</p>
+<p>“所有敌人在一边”的安全结构。</p>
+<hr />
+<h3 id="359-combo输入不能过度复杂">359. Combo输入不能过度复杂</h3><p>品类压力已经来自：</p>
+<p>多人空间。</p>
+<hr />
+<h3 id="360-可以">360. 可以：</h3><p>少量按钮</p>
+<p>组合出：</p>
+<p>丰富路线。</p>
+<hr />
+<h3 id="361-grab需要">361. Grab需要：</h3><p>明显进入状态。</p>
+<hr />
+<h3 id="362-玩家必须知道">362. 玩家必须知道：</h3><p>现在：</p>
+<p>可以Throw。</p>
+<hr />
+<h3 id="363-knockdown后的enemy">363. Knockdown后的Enemy：</h3><p>需要明显不可攻击 / 可追击规则。</p>
+<hr />
+<h3 id="364-如果支持otg">364. 如果支持OTG：</h3><p>视觉上要清楚。</p>
+<hr />
+<h3 id="365-weapon-pickup必须">365. Weapon Pickup必须：</h3><p>快速。</p>
+<hr />
+<h3 id="366-不适合">366. 不适合：</h3><p>打开Inventory</p>
+<p>挑半分钟。</p>
+<hr />
+<h3 id="367-stage前进节奏应保持">367. Stage前进节奏应保持：</h3><p>“战斗—喘息—战斗”。</p>
+<hr />
+<h3 id="368-长时间没有enemy">368. 长时间没有Enemy：</h3><p>节奏掉。</p>
+<hr />
+<h3 id="369-一直战斗">369. 一直战斗：</h3><p>疲劳。</p>
+<hr />
+<h3 id="370-arena-lock要有">370. Arena Lock要有：</h3><p>明确反馈。</p>
+<hr />
+<h3 id="371-玩家看到">371. 玩家看到：</h3><p>Camera停下</p>
+<p>和：</p>
+<p>Enemy入场，</p>
+<p>就理解：</p>
+<p>需要清场。</p>
+<hr />
+<h3 id="372-gate解除">372. Gate解除：</h3><p>也要：</p>
+<p>立即可感知。</p>
+<hr />
+<h3 id="373-不要">373. 不要：</h3><p>敌人清完以后</p>
+<p>玩家站10秒</p>
+<p>等脚本。</p>
+<hr />
+<h3 id="374-boss战">374. Boss战：</h3><p>需要：</p>
+<p>保留纵深玩法。</p>
+<hr />
+<h3 id="375-如果boss战突然">375. 如果Boss战突然：</h3><p>变成固定X轴1v1，</p>
+<p>前面积累的空间技能：</p>
+<p>失效。</p>
+<hr />
+<h3 id="376-co-op中">376. Co-op中：</h3><p>玩家应该能够：</p>
+<p>互相救场。</p>
+<hr />
+<h3 id="377-例如">377. 例如：</h3><p>队友被Grab。</p>
+<p>另一人：</p>
+<p>击中Grabber解除。</p>
+<hr />
+<h3 id="378-这种交互比">378. 这种交互比：</h3><p>单纯DPS叠加</p>
+<p>更有合作价值。</p>
+<hr />
+<h3 id="379-常见设计失败">379. 常见设计失败</h3><hr />
+<h3 id="3791-把belt-scroller当普通2d横版动作">379.1 把Belt Scroller当普通2D横版动作</h3><p>没有真正Depth Gameplay。</p>
+<hr />
+<h3 id="3792-jump-height和belt-depth共用一个y坐标">379.2 Jump Height和Belt Depth共用一个Y坐标</h3><p>命中逻辑混乱。</p>
+<hr />
+<h3 id="3793-hit只看屏幕重叠">379.3 Hit只看屏幕重叠</h3><p>纵深站位无意义。</p>
+<hr />
+<h3 id="3794-depth判定过窄">379.4 Depth判定过窄</h3><p>视觉命中却频繁Miss。</p>
+<hr />
+<h3 id="3795-soft-target-assist过强">379.5 Soft Target Assist过强</h3><p>玩家攻击自动追踪屏幕另一侧Enemy。</p>
+<hr />
+<h3 id="3796-所有enemy完全独立ai">379.6 所有Enemy完全独立AI</h3><p>同一Frame一起攻击。</p>
+<hr />
+<h3 id="3797-attack-token过少且waiting-enemy站着不动">379.7 Attack Token过少且Waiting Enemy站着不动</h3><p>明显排队送死。</p>
+<hr />
+<h3 id="3798-所有enemy都只想靠近player最近位置">379.8 所有Enemy都只想靠近Player最近位置</h3><p>堆成一团。</p>
+<hr />
+<h3 id="3799-没有flanker等群体角色">379.9 没有Flanker等群体角色</h3><p>玩家永远只需要向前攻击。</p>
+<hr />
+<h3 id="37910-远程enemy攻击频率无限">379.10 远程Enemy攻击频率无限</h3><p>游戏变弹幕。</p>
+<hr />
+<h3 id="37911-普通enemy完全没有攻击权">379.11 普通Enemy完全没有攻击权</h3><p>只像Combo沙包。</p>
+<hr />
+<h3 id="37912-所有enemy都拥有格斗游戏级复杂ai">379.12 所有Enemy都拥有格斗游戏级复杂AI</h3><p>内容成本和CPU都过高。</p>
+<hr />
+<h3 id="37913-stage只是一条长scene没有segment">379.13 Stage只是一条长Scene，没有Segment</h3><p>触发和Camera状态难维护。</p>
+<hr />
+<h3 id="37914-enemy-count-0直接代表arena完成">379.14 Enemy Count == 0直接代表Arena完成</h3><p>Future Wave被忽略。</p>
+<hr />
+<h3 id="37915-wave完全按固定时间spawn">379.15 Wave完全按固定时间Spawn</h3><p>上一批还没处理完也继续塞人。</p>
+<hr />
+<h3 id="37916-wave必须等所有敌人完全死光才进入下一批">379.16 Wave必须等所有敌人完全死光才进入下一批</h3><p>战斗流产生空档。</p>
+<hr />
+<h3 id="37917-spawn直接出现在camera中央">379.17 Spawn直接出现在Camera中央</h3><p>廉价。</p>
+<hr />
+<h3 id="37918-enemy被击飞到camera外以后永远不回来">379.18 Enemy被击飞到Camera外以后永远不回来</h3><p>Arena Softlock。</p>
+<hr />
+<h3 id="37919-enemy离屏就直接死亡">379.19 Enemy离屏就直接死亡</h3><p>玩家可以利用边缘秒杀Boss。</p>
+<hr />
+<h3 id="37920-gate状态由animation决定">379.20 Gate状态由Animation决定</h3><p>动画丢失后关卡卡死。</p>
+<hr />
+<h3 id="37921-camera-lock和encounter没有generation">379.21 Camera Lock和Encounter没有Generation</h3><p>旧事件解锁新Arena。</p>
+<hr />
+<h3 id="37922-player走进arena后gate关上把co-op队友留外面">379.22 Player走进Arena后Gate关上，把Co-op队友留外面</h3><p>合作流程坏死。</p>
+<hr />
+<h3 id="37923-action完全由animation-event驱动">379.23 Action完全由Animation Event驱动</h3><p>Combat Truth不稳定。</p>
+<hr />
+<h3 id="37924-每个weapon-trigger自己oncollision结算hit">379.24 每个Weapon Trigger自己OnCollision结算Hit</h3><p>多目标和重击规则难统一。</p>
+<hr />
+<h3 id="37925-multi-target-hit每个目标单独叠hitstop">379.25 Multi-target Hit每个目标单独叠Hitstop</h3><p>游戏冻结。</p>
+<hr />
+<h3 id="37926-普通enemy和boss共用完全相同reaction">379.26 普通Enemy和Boss共用完全相同Reaction</h3><p>要么杂兵太硬，要么Boss无限浮空。</p>
+<hr />
+<h3 id="37927-boss完全免疫所有玩家控制动作">379.27 Boss完全免疫所有玩家控制动作</h3><p>动作语言断裂。</p>
+<hr />
+<h3 id="37928-knockdown-enemy仍占attack-token">379.28 Knockdown Enemy仍占Attack Token</h3><p>场上看似没人打，Director却认为已满。</p>
+<hr />
+<h3 id="37929-grab没有reservation">379.29 Grab没有Reservation</h3><p>多人同时抓同一目标。</p>
+<hr />
+<h3 id="37930-grab中一方死亡以后另一方永久锁定">379.30 Grab中一方死亡以后另一方永久锁定</h3><p>状态释放缺失。</p>
+<hr />
+<h3 id="37931-root-motion可以把角色穿过arena-boundary">379.31 Root Motion可以把角色穿过Arena Boundary</h3><p>动画污染Gameplay。</p>
+<hr />
+<h3 id="37932-props被当成encounter-enemy">379.32 Props被当成Encounter Enemy</h3><p>打碎垃圾桶才能开门。</p>
+<hr />
+<h3 id="37933-stage-rank只看combo">379.33 Stage Rank只看Combo</h3><p>玩家可以无限拖延刷分。</p>
+<hr />
+<h3 id="37934-高难只给杂兵加hp">379.34 高难只给杂兵加HP</h3><p>清版感消失。</p>
+<hr />
+<h3 id="37935-co-op只提高enemy-hp">379.35 Co-op只提高Enemy HP</h3><p>两名玩家把Arena完全控死。</p>
+<hr />
+<h3 id="37936-shared-camera无限zoom-out">379.36 Shared Camera无限Zoom Out</h3><p>角色不可读。</p>
+<hr />
+<h3 id="37937-所有stage都是走10米锁门打6人">379.37 所有Stage都是“走10米，锁门，打6人”</h3><p>缺乏节奏变化。</p>
+<hr />
+<h3 id="37938-traversal段没有资源环境或叙事价值">379.38 Traversal段没有资源、环境或叙事价值</h3><p>只是浪费时间。</p>
+<hr />
+<h3 id="37939-boss-arena完全变成1v1格斗">379.39 Boss Arena完全变成1v1格斗</h3><p>品类空间语法中断。</p>
+<hr />
+<h3 id="37940-enemy-composition不变只增加数量">379.40 Enemy Composition不变，只增加数量</h3><p>战斗快速重复。</p>
+<hr />
+<h3 id="380-最小可行原型">380. 最小可行原型</h3><p>验证 Beat-'em-up 核心范式时，不需要立即制作：</p>
+<p>长流程剧情和十几个角色。</p>
+<p>推荐：</p>
+<p><strong>1个Player + 1个Stage + 3个Encounter + 4种普通Enemy + 1个Boss + Local 2P预留架构。</strong></p>
+<hr />
+<h3 id="381-stage">381. Stage</h3><p>建议包含：</p>
+<ul>
+<li><p>Traversal 1；</p>
+</li>
+<li><p>Arena 1；</p>
+</li>
+<li><p>Traversal 2；</p>
+</li>
+<li><p>Arena 2；</p>
+</li>
+<li><p>Hazard / Prop区；</p>
+</li>
+<li><p>Boss Arena。</p>
+</li>
+</ul>
+<hr />
+<h3 id="382-player">382. Player</h3><p>至少：</p>
+<ul>
+<li><p>Move X / Depth；</p>
+</li>
+<li><p>Light Combo；</p>
+</li>
+<li><p>Heavy；</p>
+</li>
+<li><p>Jump；</p>
+</li>
+<li><p>Dodge / Defensive Move；</p>
+</li>
+<li><p>Grab；</p>
+</li>
+<li><p>Throw；</p>
+</li>
+<li><p>Special。</p>
+</li>
+</ul>
+<hr />
+<h3 id="383-enemy">383. Enemy</h3><p>至少：</p>
+<ul>
+<li><p>Grunt；</p>
+</li>
+<li><p>Heavy；</p>
+</li>
+<li><p>Ranged；</p>
+</li>
+<li><p>Grappler。</p>
+</li>
+</ul>
+<hr />
+<h3 id="384-crowd-system">384. Crowd System</h3><p>必须从第一版实现：</p>
+<ul>
+<li><p>Engagement Roles；</p>
+</li>
+<li><p>Attack Concurrency；</p>
+</li>
+<li><p>Flanker；</p>
+</li>
+<li><p>Position Intent；</p>
+</li>
+<li><p>Soft Separation。</p>
+</li>
+</ul>
+<hr />
+<h3 id="385-encounter">385. Encounter</h3><p>至少验证：</p>
+<ul>
+<li><p>Left Spawn；</p>
+</li>
+<li><p>Right Spawn；</p>
+</li>
+<li><p>Mixed Spawn；</p>
+</li>
+<li><p>Reinforcement；</p>
+</li>
+<li><p>Gate Lock。</p>
+</li>
+</ul>
+<hr />
+<h3 id="386-boss">386. Boss</h3><p>至少验证：</p>
+<ul>
+<li><p>Depth Attack；</p>
+</li>
+<li><p>Poise；</p>
+</li>
+<li><p>Adds；</p>
+</li>
+<li><p>Phase。</p>
+</li>
+</ul>
+<hr />
+<h3 id="387-mvp必要数据结构">387. MVP必要数据结构</h3><ul>
+<li><p>ActorSpatialState；</p>
+</li>
+<li><p>HitVolumeDefinition；</p>
+</li>
+<li><p>PlayerActionState；</p>
+</li>
+<li><p>ComboGraph；</p>
+</li>
+<li><p>HitRegistry；</p>
+</li>
+<li><p>ReactionState；</p>
+</li>
+<li><p>GrabState；</p>
+</li>
+<li><p>EnemyCombatState；</p>
+</li>
+<li><p>EngagementState；</p>
+</li>
+<li><p>EncounterDefinition；</p>
+</li>
+<li><p>EncounterRuntimeState；</p>
+</li>
+<li><p>WaveDefinition；</p>
+</li>
+<li><p>StageSegmentDefinition；</p>
+</li>
+<li><p>StageGateState；</p>
+</li>
+<li><p>CameraState；</p>
+</li>
+<li><p>SpawnPointDefinition；</p>
+</li>
+<li><p>PickupWeaponState；</p>
+</li>
+<li><p>StageResultState。</p>
+</li>
+</ul>
+<hr />
+<h3 id="388-mvp必要调试工具">388. MVP必要调试工具</h3><ul>
+<li><p>BeltSpaceOverlay；</p>
+</li>
+<li><p>HitDepthOverlay；</p>
+</li>
+<li><p>TargetAssistDebug；</p>
+</li>
+<li><p>EngagementInspector；</p>
+</li>
+<li><p>AttackTokenOverlay；</p>
+</li>
+<li><p>EnemyPositionIntent；</p>
+</li>
+<li><p>EncounterInspector；</p>
+</li>
+<li><p>WaveTimeline；</p>
+</li>
+<li><p>SpawnTrace；</p>
+</li>
+<li><p>StageSegmentViewer；</p>
+</li>
+<li><p>CameraLockDebug；</p>
+</li>
+<li><p>HitTrace；</p>
+</li>
+<li><p>ReactionInspector；</p>
+</li>
+<li><p>GrabInspector；</p>
+</li>
+<li><p>ComboTimeline；</p>
+</li>
+<li><p>OffscreenEnemyInspector。</p>
+</li>
+</ul>
+<hr />
+<h3 id="389-mvp核心验收问题">389. MVP核心验收问题</h3><p>原型至少必须回答：</p>
+<ul>
+<li><p>玩家是否能明确理解Stage X、Belt Depth和Elevation的区别；</p>
+</li>
+<li><p>纵深移动是否真正能够躲避攻击；</p>
+</li>
+<li><p>攻击Depth判定是否既可信又不过宽；</p>
+</li>
+<li><p>Soft Target Assist是否帮助对位而不会替玩家选敌人；</p>
+</li>
+<li><p>多名Enemy是否会尝试包围而不是完全重叠；</p>
+</li>
+<li><p>同一时刻真正Attack的Enemy数量是否受到稳定控制；</p>
+</li>
+<li><p>Waiting Enemy是否仍然具有威胁行为；</p>
+</li>
+<li><p>玩家是否可以主动把多个Enemy整理到同一侧；</p>
+</li>
+<li><p>Multi-target Combo是否能稳定一次命中多个目标；</p>
+</li>
+<li><p>Hitstop是否不会因为多人命中线性叠加；</p>
+</li>
+<li><p>Knockdown是否真实减少当前压力；</p>
+</li>
+<li><p>Grab / Throw是否能改变敌群空间结构；</p>
+</li>
+<li><p>普通Enemy与Elite是否具有不同Reaction Resistance；</p>
+</li>
+<li><p>Enemy被击飞到屏幕外后是否能可靠返回；</p>
+</li>
+<li><p>Arena是否不会因为丢失Enemy而Softlock；</p>
+</li>
+<li><p>Wave是否可以无明显空档地衔接；</p>
+</li>
+<li><p>Gate是否只根据Encounter权威状态解除；</p>
+</li>
+<li><p>Camera Scroll、Encounter和Stage Progress是否能够稳定协同；</p>
+</li>
+<li><p>Boss存在时普通Enemy是否不会遮蔽所有Boss Telegraphed Attack；</p>
+</li>
+<li><p>Stage是否明显形成“推进—锁场—清场—继续推进”的品类节奏；</p>
+</li>
+<li><p>玩家是否会从“对着最近Enemy连按攻击”成长到“主动整理敌群位置并控制多人行动节奏”。</p>
+</li>
+</ul>
+<p>这些问题没有稳定以前，不建议优先加入：</p>
+<ul>
+<li><p>大量可玩角色；</p>
+</li>
+<li><p>复杂装备成长；</p>
+</li>
+<li><p>Roguelike系统；</p>
+</li>
+<li><p>在线Matchmaking；</p>
+</li>
+<li><p>长篇剧情；</p>
+</li>
+<li><p>大量Stage；</p>
+</li>
+<li><p>20种普通Enemy；</p>
+</li>
+<li><p>大型Meta Economy。</p>
+</li>
+</ul>
+<hr />
+<h3 id="390-推荐实施顺序">390. 推荐实施顺序</h3><p>第一阶段：</p>
+<ul>
+<li><p>Belt Coordinate；</p>
+</li>
+<li><p>Player Movement；</p>
+</li>
+<li><p>Camera。</p>
+</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li><p>Action State；</p>
+</li>
+<li><p>Hit Volume；</p>
+</li>
+<li><p>Damage；</p>
+</li>
+<li><p>Reaction。</p>
+</li>
+</ul>
+<p>第三阶段：</p>
+<ul>
+<li><p>Combo；</p>
+</li>
+<li><p>Multi-target Hit；</p>
+</li>
+<li><p>Hitstop。</p>
+</li>
+</ul>
+<p>第四阶段：</p>
+<ul>
+<li><p>Basic Enemy；</p>
+</li>
+<li><p>Combat Positioning；</p>
+</li>
+<li><p>Engagement Tokens。</p>
+</li>
+</ul>
+<p>第五阶段：</p>
+<ul>
+<li><p>Knockdown；</p>
+</li>
+<li><p>Wakeup；</p>
+</li>
+<li><p>Grab；</p>
+</li>
+<li><p>Throw。</p>
+</li>
+</ul>
+<p>第六阶段：</p>
+<ul>
+<li><p>Stage Segment；</p>
+</li>
+<li><p>Camera Scroll；</p>
+</li>
+<li><p>Gate。</p>
+</li>
+</ul>
+<p>第七阶段：</p>
+<ul>
+<li><p>Encounter；</p>
+</li>
+<li><p>Wave；</p>
+</li>
+<li><p>Spawn Point。</p>
+</li>
+</ul>
+<p>第八阶段：</p>
+<ul>
+<li>Ranged / Heavy / Grappler Composition。</li>
+</ul>
+<p>第九阶段：</p>
+<ul>
+<li><p>Weapon Pickup；</p>
+</li>
+<li><p>Prop；</p>
+</li>
+<li><p>Hazard。</p>
+</li>
+</ul>
+<p>第十阶段：</p>
+<ul>
+<li><p>Boss；</p>
+</li>
+<li><p>Phase；</p>
+</li>
+<li><p>Adds。</p>
+</li>
+</ul>
+<p>第十一阶段：</p>
+<ul>
+<li><p>Co-op Camera；</p>
+</li>
+<li><p>Multi-player Target Assignment；</p>
+</li>
+<li><p>Grab Authority。</p>
+</li>
+</ul>
+<p>第十二阶段：</p>
+<ul>
+<li><p>Replay；</p>
+</li>
+<li><p>Stage Rank；</p>
+</li>
+<li><p>Content Validation；</p>
+</li>
+<li><p>Authoring Tools。</p>
+</li>
+</ul>
+<hr />
+<h3 id="391-架构验收标准">391. 架构验收标准</h3><p>系统初步成立时，应满足：</p>
+<ul>
+<li><p>Stage推进轴、Belt Depth和Elevation拥有独立逻辑语义；</p>
+</li>
+<li><p>Rendering Position不充当Gameplay坐标事实；</p>
+</li>
+<li><p>Shadow / Ground Point能够表示真实地面位置；</p>
+</li>
+<li><p>普通攻击判定同时考虑Forward、Depth和Elevation；</p>
+</li>
+<li><p>Hit Depth拥有稳定宽容区；</p>
+</li>
+<li><p>纵深移动能够作为正式防御手段；</p>
+</li>
+<li><p>Soft Target Assist只做有限方向与纵深修正；</p>
+</li>
+<li><p>普通群体战不依赖强硬单目标Lock-on；</p>
+</li>
+<li><p>Enemy群体由Encounter / Engagement Director统一协调；</p>
+</li>
+<li><p>Enemy拥有Primary、Flanker、Ranged、Pressure等动态群体角色；</p>
+</li>
+<li><p>Threat Density与Attack Concurrency严格分离；</p>
+</li>
+<li><p>同一时刻主动攻击Enemy数量拥有明确预算；</p>
+</li>
+<li><p>Waiting Enemy仍然持续位置调整和威胁；</p>
+</li>
+<li><p>Enemy Composition能够改变战斗解法；</p>
+</li>
+<li><p>Spawn Direction属于Encounter正式参数；</p>
+</li>
+<li><p>Enemy优先从合理Offscreen Entry进入；</p>
+</li>
+<li><p>Stage拆分为显式Segment；</p>
+</li>
+<li><p>Camera Scroll能够驱动Stage Progress但不拥有Encounter Truth；</p>
+</li>
+<li><p>Camera Bound与Player Gameplay Boundary协同；</p>
+</li>
+<li><p>Arena Lock拥有显式状态；</p>
+</li>
+<li><p>Encounter而不是Scene Enemy数量决定战斗是否结束；</p>
+</li>
+<li><p>Wave拥有正式生命周期；</p>
+</li>
+<li><p>Wave允许基于Active Enemy Count等条件提前衔接；</p>
+</li>
+<li><p>Encounter拥有Concurrent Enemy Budget；</p>
+</li>
+<li><p>Population Budget与Attack Budget分离；</p>
+</li>
+<li><p>Player Action拥有Startup、Active、Recovery或等价阶段；</p>
+</li>
+<li><p>Combo使用Action Graph而不是Animation Name硬编码；</p>
+</li>
+<li><p>Hit Confirm能够参与Cancel规则；</p>
+</li>
+<li><p>AttackInstance维护AlreadyHit目标集合；</p>
+</li>
+<li><p>Multi-target Hit属于第一等能力；</p>
+</li>
+<li><p>Hitstop按Attack / Target Importance聚合；</p>
+</li>
+<li><p>普通Enemy与Elite拥有不同Reaction Profile；</p>
+</li>
+<li><p>Knockdown / Wakeup属于正式威胁调度状态；</p>
+</li>
+<li><p>Elite / Boss拥有Poise或等价抗连系统；</p>
+</li>
+<li><p>Grab拥有唯一Reservation；</p>
+</li>
+<li><p>Grab中断能够可靠释放双方状态；</p>
+</li>
+<li><p>Throw能够通过统一Impact / Hit规则影响其他Enemy；</p>
+</li>
+<li><p>临时武器拥有独立Instance与有限资源；</p>
+</li>
+<li><p>Stage Prop与Encounter Enemy职责分离；</p>
+</li>
+<li><p>Player Health能够跨多个Encounter形成Stage Attrition；</p>
+</li>
+<li><p>Stage Gate拥有逻辑State，不依赖Animation；</p>
+</li>
+<li><p>Encounter完成只产生Unlock Intent；</p>
+</li>
+<li><p>Enemy Offscreen拥有Return / Recovery Policy；</p>
+</li>
+<li><p>Enemy Leash绑定Arena而不是无限追Player；</p>
+</li>
+<li><p>Enemy Positioning优先寻找战斗位置而不是只求最短路；</p>
+</li>
+<li><p>Crowd使用Soft Separation；</p>
+</li>
+<li><p>Boss存在时普通Enemy压力可以动态降低；</p>
+</li>
+<li><p>Boss攻击继续使用Belt Depth空间语法；</p>
+</li>
+<li><p>Boss不会完全否定Player此前学会的Crowd Control语言；</p>
+</li>
+<li><p>Co-op难度优先提高并发空间问题而非只提高HP；</p>
+</li>
+<li><p>Enemy Director能够平衡多个Player之间的目标分配；</p>
+</li>
+<li><p>Local Co-op共享Camera拥有Soft / Hard Tether；</p>
+</li>
+<li><p>Arena Lock前验证所有Alive Player已经进入；</p>
+</li>
+<li><p>Online Grab / Enemy / Encounter State拥有统一Authority；</p>
+</li>
+<li><p>Stage Score完全从Combat / Stage Event派生；</p>
+</li>
+<li><p>Stage Rank不会鼓励无限刷兵；</p>
+</li>
+<li><p>Traversal Segment承担节奏缓冲而不是纯空白；</p>
+</li>
+<li><p>Stage Branch可以通过Segment Graph扩展；</p>
+</li>
+<li><p>Hazard能够同时影响Player与Enemy；</p>
+</li>
+<li><p>Sorting Order可以从Belt Depth稳定派生；</p>
+</li>
+<li><p>Ranged Projectile同样使用Depth / Elevation判定；</p>
+</li>
+<li><p>Enemy Gameplay Death与Death Animation严格分离；</p>
+</li>
+<li><p>Defeated Enemy立即退出Attack和Encounter Budget；</p>
+</li>
+<li><p>Boss Phase逻辑Commit与表现Transition分离；</p>
+</li>
+<li><p>Stage / Encounter异常存在防Softlock恢复策略；</p>
+</li>
+<li><p>调试工具能够回答“为什么这个敌人现在没有攻击玩家”；</p>
+</li>
+<li><p>调试工具能够回答“为什么这个Enemy被视觉上打中但Gameplay Miss”；</p>
+</li>
+<li><p>调试工具能够回答“为什么Gate还没有打开”；</p>
+</li>
+<li><p>新Player、新Enemy、新Encounter与新Stage通常无需修改Brawler主运行循环。</p>
+</li>
+</ul>
+<hr />
+<h3 id="392-可迁移到其他游戏的设计思想">392. 可迁移到其他游戏的设计思想</h3><hr />
+<h3 id="3921-威胁数量和同时执行攻击的数量应当分离">392.1 “威胁数量”和“同时执行攻击的数量”应当分离</h3><p>场上可以有：</p>
+<p>10个敌人。</p>
+<p>真正同时Attack：</p>
+<p>2个。</p>
+<p>这样既有：</p>
+<p>群体压力，</p>
+<p>又有：</p>
+<p>可读性。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>无双；</p>
+</li>
+<li><p>Zombie；</p>
+</li>
+<li><p>Companion Combat；</p>
+</li>
+<li><p>电影式近战；</p>
+</li>
+<li><p>Action RPG。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3922-群体ai的目标不是让每个agent-individually-optimal而是让整体encounter可读且有压力">392.2 群体AI的目标不是让每个Agent individually optimal，而是让整体Encounter可读且有压力</h3><p>一个Enemy等待：</p>
+<p>并不意味着它AI差。</p>
+<p>它可能正在：</p>
+<p>负责包抄 / 占位。</p>
+<p>这是一条非常重要的：</p>
+<p><strong>Group-Level Intelligence &gt; Individual Greed</strong></p>
+<p>原则。</p>
+<hr />
+<h3 id="3923-玩家可以通过重排敌人空间关系获得防御优势">392.3 玩家可以通过“重排敌人空间关系”获得防御优势</h3><p>把敌人都压到一侧：</p>
+<p>往往比：</p>
+<p>多10% Damage</p>
+<p>更重要。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>群体战斗；</p>
+</li>
+<li><p>RTS小队；</p>
+</li>
+<li><p>Tactical Action；</p>
+</li>
+<li><p>Horde Combat。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3924-有限纵深轴可以在低操作复杂度下显著扩展动作空间">392.4 有限纵深轴可以在低操作复杂度下显著扩展动作空间</h3><p>玩家只需要：</p>
+<p>上下移动。</p>
+<p>就获得：</p>
+<ul>
+<li><p>对位；</p>
+</li>
+<li><p>闪避；</p>
+</li>
+<li><p>包抄；</p>
+</li>
+<li><p>聚怪；</p>
+</li>
+</ul>
+<p>多个维度。</p>
+<p>这是一种很高效的：</p>
+<p><strong>Low-Dimensional Spatial Depth。</strong></p>
+<hr />
+<h3 id="3925-gameplay空间与render空间应分离">392.5 Gameplay空间与Render空间应分离</h3><p>Belt Depth。</p>
+<p>Elevation。</p>
+<p>Screen Projection。</p>
+<p>分别处理。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>2.5D；</p>
+</li>
+<li><p>Isometric；</p>
+</li>
+<li><p>Sports；</p>
+</li>
+<li><p>Tactical Projection。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3926-encounter应成为完整状态机而不是spawn器集合">392.6 Encounter应成为完整状态机，而不是Spawn器集合</h3><p>什么时候开始。</p>
+<p>什么时候生成。</p>
+<p>什么时候结束。</p>
+<p>什么时候开门。</p>
+<p>都由：</p>
+<p>Encounter统一管理。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Dungeon Room；</p>
+</li>
+<li><p>Arena；</p>
+</li>
+<li><p>Raid；</p>
+</li>
+<li><p>Roguelike；</p>
+</li>
+<li><p>Open-world Event。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3927-清场后开门真正需要的是权威completion-fact而不是enemy-count猜测">392.7 “清场后开门”真正需要的是权威Completion Fact，而不是Enemy Count猜测</h3><p>适用于：</p>
+<p>所有：</p>
+<p>封锁式关卡。</p>
+<hr />
+<h3 id="3928-关卡推进可以由cameragate和encounter三层共同构成">392.8 关卡推进可以由Camera、Gate和Encounter三层共同构成</h3><p>Camera：</p>
+<p>信息窗口。</p>
+<p>Gate：</p>
+<p>空间权限。</p>
+<p>Encounter：</p>
+<p>战斗事实。</p>
+<p>三者分离以后：</p>
+<p>关卡脚本更稳定。</p>
+<hr />
+<h3 id="3929-multi-target-gameplay结果和presentation成本必须解耦">392.9 Multi-target Gameplay结果和Presentation成本必须解耦</h3><p>一招命中6人：</p>
+<p>6人都应正确受伤。</p>
+<p>但：</p>
+<p>Hitstop、VFX、Ragdoll</p>
+<p>不一定全部叠加。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>AoE；</p>
+</li>
+<li><p>Musou；</p>
+</li>
+<li><p>ARPG；</p>
+</li>
+<li><p>MMO。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39210-knockdown是一种暂时从威胁池移除对象的通用控制语义">392.10 Knockdown是一种“暂时从威胁池移除对象”的通用控制语义</h3><p>它不只是：</p>
+<p>动画。</p>
+<p>它改变：</p>
+<p>当前Attack Budget。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>战斗AI；</p>
+</li>
+<li><p>Crowd Control；</p>
+</li>
+<li><p>Tactical Combat。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39211-grab体现了临时排他所有权的重要性">392.11 Grab体现了“临时排他所有权”的重要性</h3><p>一个目标：</p>
+<p>某一时刻</p>
+<p>只能被一个Grabber控制。</p>
+<p>这种Reservation思想可以迁移到：</p>
+<ul>
+<li><p>Interaction；</p>
+</li>
+<li><p>Pickup；</p>
+</li>
+<li><p>Cover Slot；</p>
+</li>
+<li><p>Work Assignment；</p>
+</li>
+<li><p>Execution。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39212-机械执行可以被辅助但策略站位应该保留给玩家">392.12 机械执行可以被辅助，但策略站位应该保留给玩家</h3><p>Soft Target Assist可以：</p>
+<p>帮助对齐。</p>
+<p>但不能：</p>
+<p>自动替玩家规划：</p>
+<p>谁先打。</p>
+<p>这和：</p>
+<p>Sokoban Auto Walking</p>
+<p>具有相同设计哲学：</p>
+<blockquote>
+<p><strong>减少低价值输入摩擦，但不替玩家做核心决策。</strong></p>
+</blockquote>
+<hr />
+<h3 id="39213-关卡中的短traversal段可以作为认知与情绪缓冲器">392.13 关卡中的短Traversal段可以作为认知与情绪缓冲器</h3><p>持续高强度并不等于：</p>
+<p>持续有趣。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Shooter；</p>
+</li>
+<li><p>Dungeon；</p>
+</li>
+<li><p>Platformer；</p>
+</li>
+<li><p>Horror；</p>
+</li>
+<li><p>Raid。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39214-enemy-composition是比纯数量和hp更有效的难度杠杆">392.14 Enemy Composition是比纯数量和HP更有效的难度杠杆</h3><p>增加：</p>
+<p>远程。</p>
+<p>抓取。</p>
+<p>Heavy。</p>
+<p>会改变：</p>
+<p>问题结构。</p>
+<p>单纯：</p>
+<p>+50% HP</p>
+<p>只改变：</p>
+<p>耗时。</p>
+<hr />
+<h3 id="39215-高难度应该优先提高同时需要处理的问题数量而不是让普通敌人变成海绵">392.15 高难度应该优先提高“同时需要处理的问题数量”，而不是让普通敌人变成海绵</h3><p>这同样适用于：</p>
+<ul>
+<li><p>Horde；</p>
+</li>
+<li><p>Musou；</p>
+</li>
+<li><p>Action RPG；</p>
+</li>
+<li><p>Co-op。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39216-角色死亡事实与死亡表现必须分离">392.16 角色死亡事实与死亡表现必须分离</h3><p>Gameplay已经：</p>
+<p>Defeated。</p>
+<p>Animation可以：</p>
+<p>继续。</p>
+<p>可迁移到：</p>
+<ul>
+<li><p>Spawn Budget；</p>
+</li>
+<li><p>Objective；</p>
+</li>
+<li><p>Loot；</p>
+</li>
+<li><p>Encounter；</p>
+</li>
+<li><p>Network。</p>
+</li>
+</ul>
+<hr />
+<h3 id="39217-camera不仅是表现系统也可以定义当前有效战斗舞台">392.17 Camera不仅是表现系统，也可以定义当前“有效战斗舞台”</h3><p>Belt Scroller中：</p>
+<p>Camera Bounds直接参与：</p>
+<ul>
+<li><p>Player Boundary；</p>
+</li>
+<li><p>Spawn；</p>
+</li>
+<li><p>Enemy Return；</p>
+</li>
+<li><p>Encounter。</p>
+</li>
+</ul>
+<p>这提醒我们：</p>
+<p>在某些品类里Camera属于：</p>
+<p><strong>Gameplay Information + Spatial Constraint System。</strong></p>
+<hr />
+<h3 id="393-本次防重记录">393. 本次防重记录</h3><h3 id="新增宏观游戏类型">新增宏观游戏类型</h3><p><strong>横版清版动作 / Beat-'em-up / Belt-Scrolling Brawler。</strong></p>
+<p>常见名称：</p>
+<ul>
+<li><p>Beat-'em-up；</p>
+</li>
+<li><p>Beat 'em Up；</p>
+</li>
+<li><p>Belt-Scrolling Action；</p>
+</li>
+<li><p>Belt Scroller；</p>
+</li>
+<li><p>Brawler；</p>
+</li>
+<li><p>Side-Scrolling Brawler；</p>
+</li>
+<li><p>清版动作；</p>
+</li>
+<li><p>横版清版动作；</p>
+</li>
+<li><p>带状卷轴动作；</p>
+</li>
+<li><p>横版群殴动作。</p>
+</li>
+</ul>
+<hr />
+<h3 id="核心范式">核心范式</h3><p>Beat-'em-up 将关卡组织成一条具有有限纵深的 Belt Stage。玩家沿主要推进轴前进，却可以在纵深方向上下调整站位；纵深不是视觉装饰，而是正式Gameplay坐标，决定攻击是否对位、敌人能否命中、玩家是否能够绕过攻击线以及多人是否形成包夹。</p>
+<p>Stage通过Traversal Segment与Encounter Segment交替推进。玩家进入关键区域后，Camera和Stage Gate暂时锁定，Encounter Director按照Wave、Concurrent Enemy Budget、Spawn Direction和Enemy Composition逐渐投入敌群。场上敌人数量可以较多，但真正拥有主动攻击权的Enemy数量受到Engagement Director限制；其他Enemy通过Flank、Pressure、Ranged和Reposition等角色持续制造包围感，因此Threat Density可以远高于真正Attack Concurrency。</p>
+<p>玩家战斗的主要目标不是单纯削减每个Enemy的HP，而是持续整理敌群空间关系。通过纵深移动把敌人压到同一侧，再利用宽范围Combo、Knockback、Knockdown、Grab和Throw把多个敌人从“立即威胁”转换成“暂时失去行动权”，从而逐个拆解群体压力。普通Enemy需要明显受击与击飞以提供Power Feedback，Elite和Boss则通过Poise、Stagger和有限控制抗性保持高价值战斗。</p>
+<p>Encounter完成以后才产生正式Completion Fact，Stage Gate解除、Camera继续推进，玩家进入下一Traversal或战斗区。整个关卡因此形成：</p>
+<p><strong>Stage推进
+→ Encounter Trigger
+→ Arena Lock
+→ Enemy Wave进场
+→ 纵深对位
+→ Enemy围攻调度
+→ 玩家控群
+→ Knockdown / Grab降低即时压力
+→ 处理精英与特殊Enemy
+→ Wave衔接
+→ Encounter Complete
+→ Gate Unlock
+→ Camera继续Scroll
+→ 下一Encounter。</strong></p>
+<p>其最核心的设计思想可以概括为：</p>
+<blockquote>
+<p><strong>Beat-'em-up真正要解决的不是“如何同时攻击很多敌人”，而是“如何让很多敌人共同制造一个不断变化却始终可读的围攻空间，再让玩家通过纵深站位、击倒、抓取和连段把这个混乱空间重新整理成自己能够控制的局面”。</strong></p>
+</blockquote>
+<hr />
+<h3 id="核心识别特征">核心识别特征</h3><ul>
+<li><p>关卡具有明确横向主要推进方向；</p>
+</li>
+<li><p>玩家同时拥有有限纵深移动能力；</p>
+</li>
+<li><p>Ground Depth与Jump Elevation严格分离；</p>
+</li>
+<li><p>攻击判定同时考虑横向、纵深和高度；</p>
+</li>
+<li><p>纵深移动可以正式规避攻击；</p>
+</li>
+<li><p>普通攻击通常使用Soft Target Assist而非强硬Lock-on；</p>
+</li>
+<li><p>玩家主要通过空间整理处理多人敌群；</p>
+</li>
+<li><p>被左右夹击是典型高风险状态；</p>
+</li>
+<li><p>将敌人压到同一侧是典型高价值操作；</p>
+</li>
+<li><p>Enemy AI由群体Engagement Director协调；</p>
+</li>
+<li><p>Threat Density与Attack Concurrency分离；</p>
+</li>
+<li><p>Enemy具有Primary Attacker、Flanker、Ranged Pressure等动态角色；</p>
+</li>
+<li><p>Waiting Enemy仍然参与空间压力；</p>
+</li>
+<li><p>Enemy Composition比单纯数量更重要；</p>
+</li>
+<li><p>Spawn Direction直接改变围攻结构；</p>
+</li>
+<li><p>Stage被拆成Traversal、Encounter、Boss等Segment；</p>
+</li>
+<li><p>Camera Scroll参与Stage推进；</p>
+</li>
+<li><p>Arena Lock是核心关卡状态；</p>
+</li>
+<li><p>Encounter而不是Enemy Count直接决定开门；</p>
+</li>
+<li><p>Wave属于正式压力阶段；</p>
+</li>
+<li><p>Concurrent Enemy Budget限制同时实体密度；</p>
+</li>
+<li><p>Population Budget和Attack Budget属于不同参数；</p>
+</li>
+<li><p>Action使用Startup / Active / Recovery等明确阶段；</p>
+</li>
+<li><p>Combo使用Action Graph；</p>
+</li>
+<li><p>Multi-target Hit属于基础能力；</p>
+</li>
+<li><p>Hitstop按一次Attack聚合而不是按目标数累加；</p>
+</li>
+<li><p>普通Enemy高度响应Knockback / Knockdown；</p>
+</li>
+<li><p>Elite与Boss拥有Poise或等价抗连机制；</p>
+</li>
+<li><p>Knockdown会让Enemy暂时退出威胁池；</p>
+</li>
+<li><p>Grab属于正式排他关系；</p>
+</li>
+<li><p>Throw可以把Enemy转化成Crowd Control工具；</p>
+</li>
+<li><p>临时Weapon属于Stage内短期资源；</p>
+</li>
+<li><p>Prop和Hazard可以参与Combat；</p>
+</li>
+<li><p>Player Health通常跨多个Encounter形成Attrition；</p>
+</li>
+<li><p>Enemy离屏必须拥有Return / Recovery策略；</p>
+</li>
+<li><p>Arena具有Enemy Leash；</p>
+</li>
+<li><p>Boss战仍然保留Belt Depth语法；</p>
+</li>
+<li><p>Co-op难度主要通过并发空间问题扩展；</p>
+</li>
+<li><p>Local Co-op共享Camera属于Gameplay约束；</p>
+</li>
+<li><p>Death Gameplay State与Death Animation分离；</p>
+</li>
+<li><p>Stage Rank派生自战斗与关卡事件；</p>
+</li>
+<li><p>整个品类形成“推进—锁场—清场—解锁继续前进”的稳定节奏。</p>
+</li>
+</ul>
+<hr />
+<h3 id="与无双式军团割草动作的防重边界">与无双式军团割草动作的防重边界</h3><p>当前仓库已经存在 <code>musou</code>，其核心是近处高密度动作战斗与远处军团、据点、战线和Battle Director共同组成的双尺度战场。</p>
+<p>两者都存在：</p>
+<ul>
+<li><p>一对多动作；</p>
+</li>
+<li><p>大范围攻击；</p>
+</li>
+<li><p>普通敌人；</p>
+</li>
+<li><p>精英 / 武将；</p>
+</li>
+<li><p>群体AI。</p>
+</li>
+</ul>
+<p>但宏观玩法结构完全不同。</p>
+<p><strong>Musou：</strong></p>
+<blockquote>
+<p>玩家身处一个同时在多个区域持续运行的大型战争中，需要选择下一处值得亲自介入的战区；远端军团即使玩家不在，也继续通过Formation、Morale和Base进行战争模拟。</p>
+</blockquote>
+<p><strong>Beat-'em-up：</strong></p>
+<blockquote>
+<p>玩家沿一个受Camera和Stage Gate控制的连续舞台逐段前进；核心战斗被压缩进当前Arena，其他关卡区域不会同时独立进行一场完整战争。</p>
+</blockquote>
+<p>Musou的核心问题是：</p>
+<p><strong>我下一步应该去哪个战区改变战争？</strong></p>
+<p>Beat-'em-up的核心问题是：</p>
+<p><strong>当前这个有限战斗舞台里，我应该怎样整理多人围攻空间？</strong></p>
+<p>因此本期不是Musou的“小规模版本”。</p>
+<hr />
+<h3 id="与格斗游戏的防重边界">与格斗游戏的防重边界</h3><p>格斗游戏主要围绕：</p>
+<ul>
+<li><p>1v1；</p>
+</li>
+<li><p>帧优势；</p>
+</li>
+<li><p>Startup / Active / Recovery；</p>
+</li>
+<li><p>距离；</p>
+</li>
+<li><p>招式克制；</p>
+</li>
+<li><p>对手预测。</p>
+</li>
+</ul>
+<p>Beat-'em-up可以借用：</p>
+<p>Action Phase、Hitstun、Combo和Cancel。</p>
+<p>但其主要问题不是：</p>
+<p>如何预测一个高复杂度对手。</p>
+<p>而是：</p>
+<p>如何同时管理：</p>
+<p>多个中低复杂度Enemy。</p>
+<p>因此：</p>
+<p><strong>Fighting：</strong></p>
+<blockquote>
+<p>深度来自双方对称或近似对称的高信息对抗。</p>
+</blockquote>
+<p><strong>Beat-'em-up：</strong></p>
+<blockquote>
+<p>深度来自群体位置、围攻方向、威胁并发和控群。**</p>
+</blockquote>
+<hr />
+<h3 id="与多人共斗狩猎动作的防重边界">与多人共斗狩猎动作的防重边界</h3><p>共斗狩猎的主要对象是：</p>
+<p>一个或少量大型高复杂度Target。</p>
+<p>核心是：</p>
+<ul>
+<li><p>部位；</p>
+</li>
+<li><p>动作窗口；</p>
+</li>
+<li><p>Boss阶段；</p>
+</li>
+<li><p>团队协作。</p>
+</li>
+</ul>
+<p>Beat-'em-up则把：</p>
+<p>大量普通Enemy</p>
+<p>本身视为：</p>
+<p>正式战斗空间。</p>
+<p>Boss只是：</p>
+<p>Stage末端的一种Encounter。</p>
+<p>因此：</p>
+<p><strong>Hunting Action：</strong></p>
+<blockquote>
+<p>研究大型目标。</p>
+</blockquote>
+<p><strong>Beat-'em-up：</strong></p>
+<blockquote>
+<p>研究有限舞台内的多人围攻。**</p>
+</blockquote>
+<hr />
+<h3 id="与幸存者类的防重边界">与幸存者类的防重边界</h3><p>幸存者类的核心是：</p>
+<ul>
+<li><p>自动攻击；</p>
+</li>
+<li><p>局内构筑；</p>
+</li>
+<li><p>Enemy Density持续增长；</p>
+</li>
+<li><p>Experience回收；</p>
+</li>
+<li><p>Build吞吐率。</p>
+</li>
+</ul>
+<p>Beat-'em-up则：</p>
+<p>所有主要攻击都由玩家：</p>
+<p>实时主动执行。</p>
+<p>不存在：</p>
+<p>依靠自动攻击Build持续吞噬Enemy Density</p>
+<p>这一核心结构。</p>
+<p>因此：</p>
+<p><strong>Horde Survival：</strong></p>
+<blockquote>
+<p>Build效率对抗持续增长的Enemy Pressure。</p>
+</blockquote>
+<p><strong>Beat-'em-up：</strong></p>
+<blockquote>
+<p>玩家动作和空间控制拆解一个个作者化Encounter。**</p>
+</blockquote>
+<hr />
+<h3 id="与未来-character-action-stylish-action-的防重边界">与未来 Character Action / Stylish Action 的防重边界</h3><p>本次不会把所有第三人称 / 高连段动作游戏一并吸收。</p>
+<p>未来仍可独立记录：</p>
+<p><strong>Character Action / Stylish Action。</strong></p>
+<p>其核心可以固定研究：</p>
+<ul>
+<li><p>高自由Combo；</p>
+</li>
+<li><p>Style Rank；</p>
+</li>
+<li><p>Weapon Switching；</p>
+</li>
+<li><p>Cancel Expression；</p>
+</li>
+<li><p>Enemy Juggle；</p>
+</li>
+<li><p>高难单体战；</p>
+</li>
+<li><p>技能表达。</p>
+</li>
+</ul>
+<p>Beat-'em-up的固定识别核心则是：</p>
+<ul>
+<li><p>Belt Depth；</p>
+</li>
+<li><p>Stage Scroll；</p>
+</li>
+<li><p>Arena Lock；</p>
+</li>
+<li><p>Enemy Wave；</p>
+</li>
+<li><p>群体围攻；</p>
+</li>
+<li><p>Encounter推进。</p>
+</li>
+</ul>
+<p>因此即使某款Brawler拥有很复杂Combo，</p>
+<p>只要其核心仍然围绕：</p>
+<p><strong>清版舞台的群体空间管理</strong></p>
+<p>运行，</p>
+<p>仍属于本次范式。</p>
+<hr />
+<h3 id="已覆盖的代表性子范式">已覆盖的代表性子范式</h3><ul>
+<li><p>Beat-'em-up；</p>
+</li>
+<li><p>Belt Scroller；</p>
+</li>
+<li><p>Belt Space；</p>
+</li>
+<li><p>Stage Axis；</p>
+</li>
+<li><p>Belt Depth；</p>
+</li>
+<li><p>Elevation；</p>
+</li>
+<li><p>Depth Hitbox；</p>
+</li>
+<li><p>Depth Evasion；</p>
+</li>
+<li><p>Soft Target Assist；</p>
+</li>
+<li><p>Crowd Grouping；</p>
+</li>
+<li><p>Engagement Director；</p>
+</li>
+<li><p>Attack Token；</p>
+</li>
+<li><p>Threat Density；</p>
+</li>
+<li><p>Attack Concurrency；</p>
+</li>
+<li><p>Flanker；</p>
+</li>
+<li><p>Ranged Pressure；</p>
+</li>
+<li><p>Enemy Composition；</p>
+</li>
+<li><p>Spawn Direction；</p>
+</li>
+<li><p>Stage Segment；</p>
+</li>
+<li><p>Stage Progress；</p>
+</li>
+<li><p>Camera Scroll；</p>
+</li>
+<li><p>Camera Backstop；</p>
+</li>
+<li><p>Arena Lock；</p>
+</li>
+<li><p>Encounter；</p>
+</li>
+<li><p>Wave；</p>
+</li>
+<li><p>Concurrent Enemy Budget；</p>
+</li>
+<li><p>Action Phase；</p>
+</li>
+<li><p>Combo Graph；</p>
+</li>
+<li><p>Hit Confirm；</p>
+</li>
+<li><p>Multi-target Hit；</p>
+</li>
+<li><p>Hitstop Aggregation；</p>
+</li>
+<li><p>Hit Reaction；</p>
+</li>
+<li><p>Knockdown；</p>
+</li>
+<li><p>Wakeup；</p>
+</li>
+<li><p>Poise；</p>
+</li>
+<li><p>Grab；</p>
+</li>
+<li><p>Throw；</p>
+</li>
+<li><p>Grab Reservation；</p>
+</li>
+<li><p>Temporary Weapon；</p>
+</li>
+<li><p>Stage Prop；</p>
+</li>
+<li><p>Stage Attrition；</p>
+</li>
+<li><p>Stage Gate；</p>
+</li>
+<li><p>Offscreen Enemy Recovery；</p>
+</li>
+<li><p>Enemy Leash；</p>
+</li>
+<li><p>Combat Positioning；</p>
+</li>
+<li><p>Soft Separation；</p>
+</li>
+<li><p>Boss + Adds；</p>
+</li>
+<li><p>Co-op Camera；</p>
+</li>
+<li><p>Player Target Distribution；</p>
+</li>
+<li><p>Stage Rank；</p>
+</li>
+<li><p>Traversal Pacing；</p>
+</li>
+<li><p>Belt Scroller Debug。</p>
+</li>
+</ul>
+<hr />
+<h3 id="后续防重复范围">后续防重复范围</h3><p>以下主题属于本次横版清版动作 / Beat-'em-up 范式内部系统，不应再次作为新的完整宏观游戏类型计入宏观类型集合：</p>
+<ul>
+<li><p>Beat-'em-up Combat；</p>
+</li>
+<li><p>Belt Scroller Movement；</p>
+</li>
+<li><p>Belt Depth；</p>
+</li>
+<li><p>清版动作纵深判定；</p>
+</li>
+<li><p>Brawler Hitbox；</p>
+</li>
+<li><p>Beat-'em-up Target Assist；</p>
+</li>
+<li><p>Beat-'em-up Crowd AI；</p>
+</li>
+<li><p>Beat-'em-up Attack Token；</p>
+</li>
+<li><p>Brawler Engagement Director；</p>
+</li>
+<li><p>Beat-'em-up Flanker；</p>
+</li>
+<li><p>Beat-'em-up Enemy Wave；</p>
+</li>
+<li><p>清版动作Arena Lock；</p>
+</li>
+<li><p>Brawler Encounter；</p>
+</li>
+<li><p>Beat-'em-up Stage Segment；</p>
+</li>
+<li><p>Beat-'em-up Camera Scroll；</p>
+</li>
+<li><p>Beat-'em-up Stage Gate；</p>
+</li>
+<li><p>Beat-'em-up Combo；</p>
+</li>
+<li><p>Brawler Hitstop；</p>
+</li>
+<li><p>Beat-'em-up Knockdown；</p>
+</li>
+<li><p>Beat-'em-up Wakeup；</p>
+</li>
+<li><p>Beat-'em-up Grab；</p>
+</li>
+<li><p>Beat-'em-up Throw；</p>
+</li>
+<li><p>Beat-'em-up Poise；</p>
+</li>
+<li><p>Beat-'em-up Temporary Weapon；</p>
+</li>
+<li><p>Beat-'em-up Props；</p>
+</li>
+<li><p>Beat-'em-up Boss；</p>
+</li>
+<li><p>Beat-'em-up Offscreen Enemy Recovery；</p>
+</li>
+<li><p>Beat-'em-up Coop；</p>
+</li>
+<li><p>Beat-'em-up Shared Camera；</p>
+</li>
+<li><p>Beat-'em-up Stage Rank；</p>
+</li>
+<li><p>Beat-'em-up Debug；</p>
+</li>
+<li><p>Belt Scroller Authoring；</p>
+</li>
+<li><p>清版动作关卡验证。</p>
+</li>
+</ul>
+<p>这些方向仍然非常适合作为后续专项工程范式继续深入研究，但不再作为新的独立宏观游戏类型计入宏观类型集合。</p>
+</div>
+        </section>
+        <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="2026-09-07">2026-09-07</time></footer>
+    </article>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/logo-master.svg" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">游戏作品、设计研究与研发实践。</p>
+            </div>
+            <div class="footer-links">
+                <h2>继续浏览</h2>
+                <a href="../../pages/portfolio.html">作品</a>
+                <a href="../../pages/journal.html">研究</a>
+                <a href="../../pages/blog.html">文章</a>
+                <a href="../../pages/development.html">研发体系</a>
+                <a href="../../pages/engineering.html">Iris Engineering</a>
+                <a href="../../pages/framework.html">Sakura Framework</a>
+                <a href="../../pages/brand.html">品牌视觉</a>
+                <a href="../../pages/contact.html">联系</a>
+            </div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../../dist/site.js" type="module"></script>
+</body>
+</html>
