@@ -5,13 +5,13 @@ Sakura Design Journal 的 `main` 分支推送负责生成公开导出包，并�
 
 ## 发布边界
 
-- `game-designs/catalog.v1.json`：公开标题、摘要、标签、稳定 ID、更新时间和内容哈希；
+- `game-designs/catalog.v1.json`：公开标题、摘要、标签、稳定 ID、更新时间和目录哈希；
 - `diary/`：只公开执行摘要、总体结论或审计结论；包含私密模式时改用通用摘要；
 - `blogs/publication.v1.json`：登记允许进入站点安全导出的完整 Markdown；
 - 未提交文件、未登记博客、Godot 笔记、审计全文和设计正文不会进入导出。
 
 Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`。本站导入器随后重新
-校验 SHA、数量、正文哈希和敏感内容。因为只有 `blogs/publication.v1.json` 已登记文章才会进入
+校验目录与博客 SHA、数量、博客正文哈希和敏感内容。因为只有 `blogs/publication.v1.json` 已登记文章才会进入
 该公开包，Journal 登记同时构成个人站发布授权。
 
 站点侧的 `config/blog-publication.json` 是可重建但保留站点字段的出版投影。每次导入都会：
@@ -43,7 +43,7 @@ Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`
 同步提交只能修改：
 
 - `data/journal.json`、`data/journal-source.json`；
-- `content/blogs/`、`content/game-designs/`；
+- `content/blogs/`；设计范式只更新 `data/journal-source.json` 中的公开摘要，不生成 `content/game-designs/` 正文；
 - `config/blog-publication.json`、`data/blog-taxonomy.json`；
 - `pages/blog.html`、正文/旧址/系列/标签页、`pages/journal.html`；
 - Journal 正文页及对应博客/设计分享图；

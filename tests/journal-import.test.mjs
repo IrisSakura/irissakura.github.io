@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import test from 'node:test';
 
 import {
@@ -8,7 +7,6 @@ import {
 } from '../scripts/lib/journal-import-model.mjs';
 
 const body = Buffer.from('# Article\n\nComplete body.');
-const designBody = Buffer.from('## Runtime model\n\nComplete design body.\n');
 const source = {
   schemaVersion: 1,
   sourceCommit: 'a'.repeat(40),
@@ -22,10 +20,7 @@ const source = {
     summary: 'Safe.',
     tags: ['design'],
     updatedAt: '2026-07-29',
-    sha256: 'c'.repeat(64),
-    contentSha256: createHash('sha256').update(designBody).digest('hex'),
-    bytes: designBody.length,
-    contentPath: 'content/game-designs/design.md'
+    sha256: 'c'.repeat(64)
   }],
   blogs: [{
     id: 'article',
@@ -48,7 +43,7 @@ const curation = {
 };
 
 test('valid fixed-sha export builds the curated site snapshot', () => {
-  validateJournalSource(source, new Map([['article', body]]), new Map([['design', designBody]]));
+  validateJournalSource(source, new Map([['article', body]]));
   const snapshot = buildJournalSnapshot(curation, source);
 
   assert.deepEqual(snapshot.summary, {
@@ -70,15 +65,11 @@ test('tampered bodies and private content fail closed', () => {
   const unsafe = structuredClone(source);
   unsafe.audits[0].summary = '/Users/example/private';
   assert.throws(
-    () => validateJournalSource(unsafe, new Map([['article', body]]), new Map([['design', designBody]])),
+    () => validateJournalSource(unsafe, new Map([['article', body]])),
     /private or credential-bearing/
   );
   assert.throws(
-    () => validateJournalSource(
-      source,
-      new Map([['article', body]]),
-      new Map([['design', Buffer.from('tampered')]])
-    ),
-    /Design body digest mismatch/
+    () => validateJournalSource({ ...source, gameDesigns: [{ ...source.gameDesigns[0], sha256: 'invalid' }] }, new Map([['article', body]])),
+    /Invalid game design catalog digest/
   );
 });

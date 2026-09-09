@@ -20,7 +20,6 @@ const curation = JSON.parse(await readFile(path.join(root, 'config/journal-curat
 const currentPublication = JSON.parse(await readFile(path.join(root, 'config/blog-publication.json'), 'utf8'));
 const currentTaxonomy = JSON.parse(await readFile(path.join(root, 'data/blog-taxonomy.json'), 'utf8'));
 const sourceBlogDirectory = path.join(input, 'blogs');
-const sourceDesignDirectory = path.join(input, 'designs');
 const blogFiles = (await readdir(sourceBlogDirectory)).filter((entry) => entry.endsWith('.md')).sort();
 const expectedBlogFiles = source.blogs.map((blog) => `${blog.id}.md`).sort();
 if (JSON.stringify(blogFiles) !== JSON.stringify(expectedBlogFiles)) {
@@ -29,15 +28,7 @@ if (JSON.stringify(blogFiles) !== JSON.stringify(expectedBlogFiles)) {
 const blogBodies = new Map(await Promise.all(source.blogs.map(async (blog) => (
   [blog.id, await readFile(path.join(sourceBlogDirectory, `${blog.id}.md`))]
 ))));
-const designFiles = (await readdir(sourceDesignDirectory)).filter((entry) => entry.endsWith('.md')).sort();
-const expectedDesignFiles = source.gameDesigns.map((design) => `${design.id}.md`).sort();
-if (JSON.stringify(designFiles) !== JSON.stringify(expectedDesignFiles)) {
-  throw new Error('Journal export design files do not exactly match its metadata.');
-}
-const designBodies = new Map(await Promise.all(source.gameDesigns.map(async (design) => (
-  [design.id, await readFile(path.join(sourceDesignDirectory, `${design.id}.md`))]
-))));
-validateJournalSource(source, blogBodies, designBodies);
+validateJournalSource(source, blogBodies);
 const publication = reconcileBlogPublication(currentPublication, source);
 const publishedBlogs = selectPublishedBlogs(publication, source, blogBodies);
 const taxonomy = reconcileBlogTaxonomy(currentTaxonomy, publishedBlogs);
@@ -48,8 +39,7 @@ const expected = new Map([
   [path.join(root, 'data/blog-taxonomy.json'), Buffer.from(stringifyBlogTaxonomy(taxonomy))],
   [path.join(root, 'data/journal-source.json'), Buffer.from(stringifyJson(source))],
   [path.join(root, 'data/journal.json'), Buffer.from(stringifyJson(journal))],
-  ...[...blogBodies].map(([id, body]) => [path.join(root, 'content/blogs', `${id}.md`), body]),
-  ...[...designBodies].map(([id, body]) => [path.join(root, 'content/game-designs', `${id}.md`), body])
+  ...[...blogBodies].map(([id, body]) => [path.join(root, 'content/blogs', `${id}.md`), body])
 ]);
 
 if (options.check) {
@@ -61,11 +51,9 @@ if (options.check) {
   if (JSON.stringify(currentBlogFiles) !== JSON.stringify(expectedBlogFiles)) {
     throw new Error('Imported blog directory contains stale or missing files.');
   }
-  const currentDesignFiles = (await readdir(path.join(root, 'content/game-designs')))
-    .filter((entry) => entry.endsWith('.md')).sort();
-  if (JSON.stringify(currentDesignFiles) !== JSON.stringify(expectedDesignFiles)) {
-    throw new Error('Imported game design directory contains stale or missing files.');
-  }
+  const designDirectory = path.join(root, 'content/game-designs');
+  const currentDesignFiles = await readdir(designDirectory).catch(() => []);
+  if (currentDesignFiles.length) throw new Error('Imported game design directory must remain absent for summary-only exports.');
   console.log(`Journal import matches ${source.sourceCommit.slice(0, 8)}.`);
   process.exit(0);
 }
@@ -83,14 +71,9 @@ for (const [id, body] of blogBodies) await writeFile(path.join(temporaryBlogDire
 await rm(destinationBlogDirectory, { recursive: true, force: true });
 await rename(temporaryBlogDirectory, destinationBlogDirectory);
 const destinationDesignDirectory = path.join(root, 'content/game-designs');
-const temporaryDesignDirectory = path.join(root, `content/.designs-import-${process.pid}`);
-await rm(temporaryDesignDirectory, { recursive: true, force: true });
-await mkdir(temporaryDesignDirectory, { recursive: true });
-for (const [id, body] of designBodies) await writeFile(path.join(temporaryDesignDirectory, `${id}.md`), body);
 await rm(destinationDesignDirectory, { recursive: true, force: true });
-await rename(temporaryDesignDirectory, destinationDesignDirectory);
 console.log(
-  `Imported ${source.summary.gameDesignCount} designs, ${source.summary.auditCount} audits and `
+  `Imported ${source.summary.gameDesignCount} design summaries, ${source.summary.auditCount} audits and `
   + `${source.summary.blogCount} blogs from ${source.sourceCommit.slice(0, 8)}.`
 );
 

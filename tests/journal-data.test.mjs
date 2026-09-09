@@ -104,16 +104,16 @@ test('journal page statically renders every curated view and preserves the priva
     assert.ok(html.includes(`journal/${design.id}.html`), `missing game design detail link ${design.id}`);
     const detail = details.get(design.id);
     assert.ok(detail.includes(`<h1>${escapeHtml(design.title)}</h1>`), `missing design detail title ${design.id}`);
-    assert.ok(detail.includes('完整研究结构'), `missing complete research heading ${design.id}`);
-    assert.ok(detail.includes('class="blog-prose research-prose"'), `missing full design prose ${design.id}`);
+    assert.ok(detail.includes('公开设计摘要'), `missing public design summary heading ${design.id}`);
+    assert.ok(detail.includes('完整设计正文保留在 Journal 研究仓库中'), `missing private design boundary ${design.id}`);
+    assert.ok(detail.includes('class="blog-prose research-prose"'), `missing public design summary prose ${design.id}`);
     const headingLevels = [...detail.matchAll(/<h([1-6])\b/gu)].map((match) => Number(match[1]));
     assert.equal(headingLevels.filter((level) => level === 1).length, 1, `${design.id} must expose exactly one page H1`);
     assert.ok(
       headingLevels.every((level, index) => index === 0 || level <= headingLevels[index - 1] + 1),
       `${design.id} contains a skipped heading level`
     );
-    const researchProse = detail.match(/class="blog-prose research-prose">([\s\S]*?)<\/div>\s*<\/section>/u)?.[1] ?? '';
-    assert.doesNotMatch(researchProse, /<h[12]\b/u, `${design.id} embeds top-level headings inside its research section`);
+    assert.doesNotMatch(detail, /COMPLETE RESEARCH/u, `${design.id} must not expose a full research body`);
   }
   for (const design of source.gameDesigns) {
     const detail = details.get(design.id);

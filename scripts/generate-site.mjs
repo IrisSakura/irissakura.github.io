@@ -160,9 +160,6 @@ await assertBrandAssets(root, brandConfig);
 const blogBodies = new Map(await Promise.all(journalSource.blogs.map(async (article) => (
   [article.id, await readText(article.contentPath)]
 ))));
-const gameDesignBodies = new Map(await Promise.all(journalSource.gameDesigns.map(async (design) => (
-  [design.id, await readText(design.contentPath)]
-))));
 const publishedBlogs = selectPublishedBlogs(blogPublication, journalSource, blogBodies);
 const publicationById = new Map(blogPublication.articles.map((article) => [article.sourceId, article]));
 const publicJournal = {
@@ -189,7 +186,6 @@ const gameDesignDetailDefinitions = journalSource.gameDesigns.map((design) => ({
   canonical: `/pages/journal/${design.id}.html`,
   schemaType: 'Article',
   design,
-  markdown: gameDesignBodies.get(design.id),
   note: featuredNoteById.get(design.id)
 }));
 const curatedOnlyDetailDefinitions = journal.featuredNotes.filter((note) => !gameDesignIds.has(note.id)).map((note) => ({
@@ -1490,7 +1486,7 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex) {
                     <p>${escapeHtml(note.description)}</p>
                     <div class="note-tags">${note.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
                     <p class="note-finding"><strong>核心结论</strong>${escapeHtml(note.finding)}</p>
-                    <a class="note-link" href="journal/${encodeURIComponent(note.id)}.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <a class="note-link" href="journal/${encodeURIComponent(note.id)}.html">阅读精选研究摘要<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>`).join('');
   const recentAudits = sourceData.audits.slice(0, 6).map((audit) => `
                 <article class="journal-update-card">
@@ -1504,7 +1500,7 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex) {
                     <h3>${escapeHtml(design.title)}</h3>
                     <p>${escapeHtml(design.summary)}</p>
                     <div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
-                    <a class="note-link" href="journal/${encodeURIComponent(design.id)}.html">阅读完整研究结构<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <a class="note-link" href="journal/${encodeURIComponent(design.id)}.html">阅读公开设计摘要<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>`).join('');
 
   return `<header class="journal-hero">
@@ -1553,7 +1549,7 @@ ${renderContentSearch(searchIndex)}
     </section>
     <section class="journal-section" id="game-design-library">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式研究结构</h2></div><p>${sourceData.gameDesigns.length} 个主题均提供独立完整正文；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">GAME DESIGN LIBRARY</p><h2 id="game-design-library-title">全部游戏设计范式公开摘要</h2></div><p>${sourceData.gameDesigns.length} 个主题公开标题、摘要、标签与更新时间；精选主题额外保留问题、方法、发现与影响摘要。</p></div>
             <div class="journal-scroll-region journal-design-scroll" role="region" aria-labelledby="game-design-library-title" tabindex="0">
                 <div class="design-summary-grid">${gameDesigns}
                 </div>
@@ -2464,8 +2460,7 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
 `;
 }
 
-function renderGameDesignDetailSource({ design, markdown, note }) {
-  const body = renderPublicMarkdown(markdown, 3);
+function renderGameDesignDetailSource({ design, note }) {
   const curatedSummary = note ? `<section class="journal-research-summary" aria-labelledby="curated-summary-title">
             <p class="journal-kicker">SELECTED RESEARCH SUMMARY</p>
             <h2 id="curated-summary-title">精选研究结构摘要</h2>
@@ -2501,9 +2496,9 @@ function renderGameDesignDetailSource({ design, markdown, note }) {
         <a class="journal-back" href="../journal.html#design-${escapeAttribute(design.id)}"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回游戏设计范式</a>
         <header><p class="journal-kicker">游戏设计范式 · ${escapeHtml(design.updatedAt)}</p><h1>${escapeHtml(design.title)}</h1><p>${escapeHtml(design.summary)}</p><div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div></header>
         ${curatedSummary}
-        <section class="journal-research-body" aria-labelledby="complete-research-title">
-            <div class="journal-prose-heading"><p class="journal-kicker">COMPLETE RESEARCH</p><h2 id="complete-research-title">完整研究结构</h2></div>
-            <div class="blog-prose research-prose">${body}</div>
+        <section class="journal-research-body" aria-labelledby="public-summary-title">
+            <div class="journal-prose-heading"><p class="journal-kicker">PUBLIC SUMMARY</p><h2 id="public-summary-title">公开设计摘要</h2></div>
+            <div class="blog-prose research-prose"><p>此页面公开该设计范式的标题、摘要、标签与更新时间，供站点导航、检索和项目关联使用。</p><p>完整设计正文保留在 Journal 研究仓库中，默认不进入个人站公开导出。</p></div>
         </section>
         <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="${escapeAttribute(design.updatedAt)}">${escapeHtml(design.updatedAt)}</time></footer>
     </article>
