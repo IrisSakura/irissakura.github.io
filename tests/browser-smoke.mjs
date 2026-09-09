@@ -40,6 +40,9 @@ const publishedBlogs = blogPublication.articles
 const routableBlogTags = blogTaxonomy.tags.filter((tag) => (
   publishedBlogs.filter((article) => article.tags.includes(tag.name)).length >= 2
 ));
+const activeBlogSeriesCount = blogTaxonomy.series.filter((series) => (
+  publishedBlogs.some((article) => article.series === series.name)
+)).length;
 const [representativeBlog] = publishedBlogs;
 if (!representativeBlog) throw new Error('blog registry does not contain a representative complete article');
 const gameProject = projectData.projects.find((project) => project.id === 'sword-of-words');
@@ -52,6 +55,7 @@ const godotSearchCount = contentSearchIndex.entries.filter((entry) => (
     .toLocaleLowerCase('zh-CN')
     .includes(normalizedGodotQuery)
 )).length;
+const unitySearchCount = contentSearchIndex.entries.filter((entry) => entry.engines.includes('unity')).length;
 
 async function assertEvidenceChainPage(page, route, viewportName) {
   await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
@@ -776,7 +780,9 @@ try {
   }
   await queryInput.fill('');
   await desktop.locator('[data-content-search-engine]').selectOption('unity');
-  await desktop.waitForFunction(() => document.querySelectorAll('[data-content-search-results] .content-search-result').length === 4);
+  await desktop.waitForFunction((expectedCount) => (
+    document.querySelectorAll('[data-content-search-results] .content-search-result').length === expectedCount
+  ), Math.min(unitySearchCount, 12));
   await desktop.locator('[data-content-search-reset]').click();
   await desktop.waitForFunction(() => document.querySelectorAll('[data-content-search-results] .content-search-result').length === 12);
   const journalTitleBoundaryFailures = [];
@@ -806,8 +812,8 @@ try {
 
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('.blog-card').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
-  if (await desktop.locator('.blog-featured-card').count() !== blogTaxonomy.series.length) throw new Error('Featured Reading does not expose one entry per registered series');
-  if (await desktop.locator('.blog-series-list > a').count() !== blogTaxonomy.series.length) throw new Error('blog index series registry is incomplete');
+  if (await desktop.locator('.blog-featured-card').count() !== activeBlogSeriesCount) throw new Error('Featured Reading does not expose one entry per active series');
+  if (await desktop.locator('.blog-series-list > a').count() !== activeBlogSeriesCount) throw new Error('blog index series registry is incomplete');
   if (await desktop.locator('.blog-tag-list > a').count() !== routableBlogTags.length) throw new Error('blog index exposes the wrong tag route set');
   if (await desktop.locator('a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
   const blogIndexText = await desktop.locator('body').innerText();
