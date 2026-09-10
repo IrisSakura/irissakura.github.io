@@ -118,8 +118,9 @@ Journal 的 `blogs/publication.v1.json` 是文章进入公开导出和个人站�
 和 `publishedAt`，从固定导出刷新其余 Journal-owned 元数据；新的语义 ID 默认以该 ID 作为 slug，
 并以来源更新时间作为首次发布日期。新 ASCII 标签也会同步进入 taxonomy，既有标签和系列文案不被覆盖。
 
-来源删除、重复 ID、正文哈希不一致、危险内容、非语义 hash ID、未知系列或正文草稿标记仍会
-失败关闭。新系列需要站点维护者提供可读的语义 slug 和说明，导入器不会猜测公开栏目名称。
+重复 ID、正文哈希不一致、危险内容、非语义 hash ID、未知系列或正文草稿标记仍会失败关闭。
+当前公开导出中已移除的来源会同步移出站点出版投影；新系列需要站点维护者提供可读的语义 slug
+和说明，导入器不会猜测公开栏目名称。
 `reviewedJournalCurationHash` 只覆盖人工策展的项目文案、知识流和 featured notes，不把每次自动
 同步的 publication 数量伪装成人工复审。
 

@@ -21,8 +21,11 @@ Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`
 - 为新的语义 source ID 追加 `published` 条目，默认 `slug=sourceId`、`publishedAt=updatedAt`；
 - 保留仍被使用的 taxonomy 人工文案，并为新 ASCII tag 追加确定性标签入口。
 
-来源删除不会自动删合同；重复 ID、正文或元数据不一致、草稿标记、非语义 hash ID 和未知系列
-仍会失败关闭。新系列需要维护者显式提供 slug 与说明，避免同步器猜测公开栏目名称。项目事实的
+导出包是当前公开内容的权威集合；已经从导出包移除的出版条目会在本次同步中从站点出版投影移除，
+避免旧条目阻塞后续导入。
+
+重复 ID、正文或元数据不一致、草稿标记、非语义 hash ID 和未知系列仍会失败关闭。新系列需要维护者
+显式提供 slug 与说明，避免同步器猜测公开栏目名称。项目事实的
 人工策展 hash 只覆盖项目文案、知识流和 featured notes，不包含自动收敛的 publication 列表。
 
 ## Runner 配置

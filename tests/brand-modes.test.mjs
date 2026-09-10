@@ -102,7 +102,7 @@ test('generated routes receive the correct mode and shared token styles', async 
     ['pages/journal.html', 'journal'],
     ['pages/blog.html', 'journal'],
     ['pages/journal/crpg.html', 'journal'],
-    ['pages/blog/ai-task-capsule-semantic-graph.html', 'journal'],
+    ['pages/blog/authoritative-time-source.html', 'journal'],
     ['pages/game.html', 'game'],
     ['404.html', 'master']
   ]);

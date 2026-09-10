@@ -145,7 +145,7 @@ test('evidence chains resolve only reviewed four-part public facts', async () =>
   assert.ok(chains.every((chain) => chain.controlPlane.projectId === 'iris-engineering'));
   assert.ok(chains.every((chain) => chain.controlPlane.capabilityId === 'workflow-core'));
   assert.deepEqual(chains[0].controlPlane.workflows.map((workflow) => workflow.id), ['observe', 'authorize', 'verify']);
-  assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'blog/metroidvania-capability-gated-topology.html')));
+  assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'blog/authoritative-time-source.html')));
   assert.ok(chains.some((chain) => chain.research.some((item) => item.href === 'journal/extraction-cross-session-loop.html')));
 
   const unknownSystem = structuredClone(data);

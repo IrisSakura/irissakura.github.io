@@ -35,7 +35,7 @@ test('long collection pages expose one generated accessible section index with s
     }
   }
 
-  for (const pagePath of ['index.html', 'pages/game.html', 'pages/blog/ai-task-capsule-semantic-graph.html']) {
+  for (const pagePath of ['index.html', 'pages/game.html', 'pages/blog/authoritative-time-source.html']) {
     const html = await readText(pagePath);
     assert.ok(!html.includes('data-page-index'), `${pagePath} should not receive the collection-page index`);
   }

@@ -40,8 +40,8 @@ test('blog taxonomy is explicit, semantic and covers exactly the formal articles
   assert.ok(articles.every((article) => discovery.relatedBySlug.get(article.slug).length > 0));
 
   const missingTag = structuredClone(taxonomy);
-  missingTag.tags = missingTag.tags.filter((entry) => entry.name !== 'stealth');
-  assert.throws(() => resolveBlogDiscovery(missingTag, articles), /unregistered tag stealth/);
+  missingTag.tags = missingTag.tags.filter((entry) => entry.name !== 'unity');
+  assert.throws(() => resolveBlogDiscovery(missingTag, articles), /unregistered tag unity/);
 });
 
 test('taxonomy reconciliation preserves curated entries and derives the active tag set', () => {

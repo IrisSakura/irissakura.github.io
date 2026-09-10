@@ -29,7 +29,11 @@ const blogBodies = new Map(await Promise.all(source.blogs.map(async (blog) => (
   [blog.id, await readFile(path.join(sourceBlogDirectory, `${blog.id}.md`))]
 ))));
 validateJournalSource(source, blogBodies);
-const publication = reconcileBlogPublication(currentPublication, source);
+const sourceBlogIds = new Set(source.blogs.map((blog) => blog.id));
+const publication = reconcileBlogPublication({
+  ...currentPublication,
+  articles: currentPublication.articles.filter((entry) => sourceBlogIds.has(entry.sourceId))
+}, source);
 const publishedBlogs = selectPublishedBlogs(publication, source, blogBodies);
 const taxonomy = reconcileBlogTaxonomy(currentTaxonomy, publishedBlogs);
 const journal = buildJournalSnapshot(curation, source);

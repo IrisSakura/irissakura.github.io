@@ -809,7 +809,7 @@ test('repository metadata and publishing policy are explicit', async () => {
   assert.ok(readme.includes('dist/'));
   assert.ok(readme.includes('自动收敛'));
   assert.ok(journalSync.includes('为新的语义 source ID 追加'));
-  assert.ok(journalSync.includes('来源删除不会自动删合同'));
+  assert.ok(journalSync.includes('已经从导出包移除的出版条目会在本次同步中从站点出版投影移除'));
   assert.ok(workflow.includes('npm run check'));
   assert.ok(workflow.includes('npm run test:smoke'));
   assert.ok(workflow.includes('actions/deploy-pages@v4'));
