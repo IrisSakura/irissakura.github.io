@@ -309,26 +309,28 @@ test('research and articles share one visitor-facing primary route without chang
   for (const page of ['index.html', 'pages/journal.html', 'pages/blog.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.equal((primaryNav.match(/>研究与文章<\/a>/g) ?? []).length, 1, `${page} must expose one research and articles nav item`);
+    assert.equal((primaryNav.match(/>知识<\/a>/g) ?? []).length, 1, `${page} must expose one knowledge nav item`);
     assert.ok(!primaryNav.includes('>Journal<'), `${page} still exposes the product name instead of the visitor route`);
     assert.ok(!primaryNav.includes('>博客<'), `${page} must not expose a separate blog nav item`);
   }
 
   const journal = await readText('pages/journal.html');
   const blog = await readText('pages/blog.html');
-  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">研究与文章<\/a>/;
+  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">知识<\/a>/;
   assert.match(journal, activeJournalNav);
   assert.match(blog, activeJournalNav);
 });
 
 test('primary navigation gives Iris Engineering and Sakura Framework one equal parent context', async () => {
-  for (const page of ['index.html', 'pages/development.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/brand.html']) {
+  for (const page of ['index.html', 'pages/development.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/tools.html', 'pages/brand.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    for (const label of ['首页', '作品', '研究与文章', '研发体系', '联系']) {
+    const labels = [...primaryNav.matchAll(/class="nav-link(?: active)?"[^>]*>([^<]+)<\/a>/g)].map((match) => match[1]);
+    assert.deepEqual(labels, ['首页', '作品', '研发体系', '知识', '工具', 'Brand', '联系'], `${page} has an unexpected primary navigation order`);
+    for (const label of ['首页', '作品', '研发体系', '知识', '工具', 'Brand', '联系']) {
       assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
     }
-    for (const productLabel of ['Engineering', 'Framework', 'Journal', 'Brand']) {
+    for (const productLabel of ['Engineering', 'Framework', 'Journal']) {
       assert.ok(!primaryNav.includes(`>${productLabel}</a>`), `${page} still exposes the ${productLabel} product label as a primary route`);
     }
     assert.ok(!primaryNav.includes('>美术音乐</a>'), `${page} still exposes Brand as Art/Music`);
@@ -340,9 +342,11 @@ test('primary navigation gives Iris Engineering and Sakura Framework one equal p
   const brand = await readText('pages/brand.html');
   const artMusic = await readText('pages/art-music.html');
   assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/development\.html">/u);
-  assert.equal((development.match(/class="development-card /g) ?? []).length, 2);
+  assert.equal((development.match(/class="development-card /g) ?? []).length, 4);
   assert.match(development, /class="development-card development-card-iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="engineering\.html"/u);
   assert.match(development, /class="development-card development-card-sakura"[\s\S]*?<h2>Sakura Framework<\/h2>[\s\S]*?href="framework\.html"/u);
+  assert.match(development, /class="development-card development-card-myosotis"[\s\S]*?<h2>Myosotis<\/h2>[\s\S]*?href="journal\.html"/u);
+  assert.match(development, /class="development-card development-card-violet"[\s\S]*?<h2>Violet Shelf<\/h2>[\s\S]*?href="tools\.html"/u);
   assert.match(development, /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">研发体系<\/a>/u);
   for (const childPage of ['pages/engineering.html', 'pages/framework.html', 'pages/framework-quickstart.html']) {
     assert.match(await readText(childPage), /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">研发体系<\/a>/u);
@@ -356,7 +360,7 @@ test('primary navigation gives Iris Engineering and Sakura Framework one equal p
   assert.ok(brand.includes('id="brand-system"'));
   assert.ok(brand.includes('IrisSakura Brand System'));
   assert.match(brand, /<footer class="footer">[\s\S]*?>品牌视觉<\/a>/u);
-  assert.match(brand, /href="\.\.\/pages\/brand\.html#brand-system" aria-label="查看 IRIS × SAKURA 品牌系统"/u);
+  assert.match(brand, /href="\.\.\/pages\/brand\.html#brand-system" aria-label="查看 Iris Engineering 与 SakuraGameFramework 的 IRIS × SAKURA 合作标识"/u);
   assert.ok(sitemap.includes('/pages/development.html'));
   assert.ok(sitemap.includes('/pages/brand.html'));
 
@@ -432,7 +436,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
     }
     assert.match(
       html,
-      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|game)"/,
+      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|violet|game)"/,
       `${page} has an invalid page brand mode`
     );
     assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);

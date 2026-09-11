@@ -6,7 +6,7 @@ import { deflateSync } from 'node:zlib';
 const WIDTH = 1200;
 const HEIGHT = 630;
 const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-const BRAND_MODES = new Set(['master', 'iris', 'sakura', 'journal', 'game']);
+const BRAND_MODES = new Set(['master', 'iris', 'sakura', 'journal', 'violet', 'game']);
 const PALETTES = {
   home: ['101722', '1d3557', '2575fc', '6a11cb', 'ff4081', '8ce7dc'],
   portfolio: ['17131f', '493548', 'a56b46', 'd99a72', 'f2d4b5', '7e9da8'],
@@ -76,6 +76,12 @@ export function createSocialImage(seed, category = 'site', paletteOverride, bran
         if (Math.abs(x - (145 + hash[4] % 40)) < 3) color = 2;
         if (distance < circleRadius ** 2 && distance > (circleRadius - 14) ** 2) color = 4;
         if (Math.abs((x - circleX) - (y - circleY) * 0.78) < 5 && y > circleY) color = 5;
+      }
+      if (brandMode === 'violet') {
+        if ((x + hash[5]) % 76 < 2 || (y + hash[6]) % 76 < 2) color = 1;
+        if (distance < 64 ** 2) color = 4;
+        if (y > circleY + 94 && y < circleY + 106 && Math.abs(x - circleX) < 170) color = 3;
+        if (y > circleY + 130 && y < circleY + 140 && Math.abs(x - circleX) < 130) color = 5;
       }
       if (brandMode === 'game') {
         if (x + y > diagonal && x + y < diagonal + 290) color = 1;

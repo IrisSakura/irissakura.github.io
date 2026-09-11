@@ -2,7 +2,7 @@
 
 # IrisSakura 个人站
 
-这是 IrisSakura 的公开个人品牌站。品牌体系以两个职责清晰的支柱组织：IRIS 负责 Engineering / Project Management，SAKURA 负责 Game Framework；游戏消费项目暂不纳入这套命名家族。
+这是 IrisSakura 的公开个人品牌站。IrisSakura 是共同创作者身份；Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf 是四个独立项目品牌。`IRIS × SAKURA` 仍只用于 Iris 与 Sakura 的直接协作；稳定 URL、Journal/RSS 标识与技术身份不因展示名称变化。
 
 正式 Logo、Wordmark、产品 Lockup、核心概念 Icon 与 Social Card 模式由 [`config/brand.json`](config/brand.json) 统一登记；新增页面必须先取得一个已登记的 Brand Mode，再由 owner generator 生成公开投影。
 
@@ -17,7 +17,8 @@
 - `/`：定位、能力证据、精选项目与研究更新；
 - `/pages/development.html`：一级“研发体系”入口，并列介绍 Iris Engineering 与 Sakura Framework 两条互补路径；
 - `/pages/engineering.html`：Iris Engineering 子页，说明研发工作流、授权、执行与验证边界；
-- `/pages/journal.html`：一级 `Journal` 入口，包含策展研究、公开证据链与文章入口；
+- `/pages/journal.html`：一级 `Myosotis`（稳定内部 `Journal`）入口，包含策展研究、公开证据链与文章入口；
+- `/pages/tools.html`：一级 `Violet Shelf` 工具入口，只说明真实本地工具边界，不提供下载或发布声明；
 - `/pages/blog.html`：正式文章、系列与标签聚合的稳定独立地址；
 - `/rss.xml`：只收录正式文章语义地址的 RSS 2.0 订阅；
 - `/pages/framework.html`：Sakura Framework 子页，展示框架规模、模块浏览器与生命周期成熟度；

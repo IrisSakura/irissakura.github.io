@@ -1,7 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-export const BRAND_MODE_IDS = Object.freeze(['master', 'iris', 'sakura', 'journal', 'game']);
+export const BRAND_MODE_IDS = Object.freeze(['master', 'iris', 'sakura', 'journal', 'violet', 'game']);
 
 export function assertBrandContract(brand) {
   if (!brand || brand.schemaVersion !== 1 || brand.id !== 'iris-sakura') {
@@ -11,7 +11,7 @@ export function assertBrandContract(brand) {
     throw new Error('brand-contract violation: master identity drift');
   }
   const familyIds = Object.keys(brand.families ?? {});
-  if (JSON.stringify(familyIds) !== JSON.stringify(['master', 'iris', 'sakura', 'journal', 'consumer', 'games'])) {
+  if (JSON.stringify(familyIds) !== JSON.stringify(['master', 'iris', 'sakura', 'journal', 'violet', 'consumer', 'games'])) {
     throw new Error('brand-contract violation: product family registry drift');
   }
   if (JSON.stringify(Object.keys(brand.modes ?? {})) !== JSON.stringify(BRAND_MODE_IDS)) {
@@ -34,7 +34,7 @@ export function assertBrandContract(brand) {
       }
     }
   }
-  const requiredPages = ['home', 'portfolio', 'engineering', 'framework', 'journal', 'brand', 'game', 'contact', 'system'];
+  const requiredPages = ['home', 'portfolio', 'engineering', 'framework', 'journal', 'tools', 'brand', 'game', 'contact', 'system'];
   if (JSON.stringify(Object.keys(brand.pageModes ?? {})) !== JSON.stringify(requiredPages)) {
     throw new Error('brand-contract violation: page mode keys drift');
   }
@@ -59,7 +59,7 @@ export function resolvePageBrandMode(brand, pageKey) {
 export async function assertBrandAssets(root, brand) {
   const required = [
     'favicon', 'symbol', 'masterLogo', 'irisLogo', 'sakuraLogo', 'jointLockup',
-    'masterWordmark', 'irisWordmark', 'sakuraWordmark', 'iconSprite', 'readmeHeader',
+    'masterWordmark', 'irisWordmark', 'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark', 'iconSprite', 'readmeHeader',
     'socialLogo', 'brandBoard', 'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt'
   ];
   for (const key of required) {

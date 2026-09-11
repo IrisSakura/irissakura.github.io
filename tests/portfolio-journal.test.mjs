@@ -23,9 +23,9 @@ test('portfolio explains the path from research to finished work', async () => {
     'UDGAP · 梦境诊疗室',
     'Iris × Sakura — The Weaver',
     'Iris Core',
-    'Iris Shelf',
+    'Violet Shelf',
     'Iris Engineering',
-    'IrisSakura Journal'
+    'Myosotis'
   ]) {
     assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
   }

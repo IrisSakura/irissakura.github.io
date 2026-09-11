@@ -445,8 +445,16 @@ try {
   }
   await desktop.locator('.nav-menu').getByRole('link', { name: '研发体系', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/development.html`);
-  if (await desktop.locator('.development-card').count() !== 2) {
-    throw new Error('Development hub does not present two equal sibling routes');
+  if (await desktop.locator('.development-card').count() !== 4) {
+    throw new Error('Development hub does not present four equal project routes');
+  }
+  for (const [name, href] of [
+    ['进入 Myosotis', 'journal.html'],
+    ['进入 Violet Shelf', 'tools.html']
+  ]) {
+    if (await desktop.getByRole('link', { name, exact: true }).getAttribute('href') !== href) {
+      throw new Error(`Development hub route drifted: ${name} must target ${href}`);
+    }
   }
   await desktop.getByRole('link', { name: '进入 Sakura Framework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
@@ -823,7 +831,7 @@ try {
   await desktop.evaluate(() => {
     document.documentElement.dataset.searchSoftNav = 'persistent';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: '研究与文章', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '知识', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/journal.html`);
   await desktop.locator('[data-content-search-results] .content-search-result').first().waitFor({ state: 'visible' });
   if (await desktop.locator('[data-content-search-results] .content-search-result').count() !== 12) {
@@ -838,8 +846,8 @@ try {
   if (!await desktop.getByRole('heading', { level: 1, name: representativeSeries.name }).isVisible()) {
     throw new Error('representative series route is not visible');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '研究与文章' }).isVisible()) {
-    throw new Error('series route does not keep the 研究与文章 navigation context');
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '知识' }).isVisible()) {
+    throw new Error('series route does not keep the 知识 navigation context');
   }
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
   await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.slug)}.html"]`).click();

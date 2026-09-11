@@ -15,8 +15,8 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
   assert.equal(brand.id, 'iris-sakura');
   assert.equal(brand.masterBrand, 'IrisSakura');
   assert.equal(brand.jointLockup, 'IRIS × SAKURA');
-  assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'consumer', 'games']);
-  assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'game']);
+  assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'violet', 'consumer', 'games']);
+  assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'violet', 'game']);
   assert.deepEqual(brand.deprecated, [
     { name: 'Sakura Design Journal', replacement: 'IrisSakura Journal' }
   ]);
@@ -56,7 +56,7 @@ test('official vector identity and core iconography are complete and self-contai
     'jointLockup',
     'masterWordmark',
     'irisWordmark',
-    'sakuraWordmark',
+    'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark',
     'iconSprite',
     'readmeHeader', 'socialLogo', 'brandBoard',
     'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt'
@@ -98,7 +98,7 @@ test('brand automation drives page modes, social cards, SEO and public naming', 
 
   assert.deepEqual(brand.pageModes, {
     home: 'master', portfolio: 'master', engineering: 'iris', framework: 'sakura',
-    journal: 'journal', brand: 'master', game: 'game', contact: 'master', system: 'master'
+    journal: 'journal', tools: 'violet', brand: 'master', game: 'game', contact: 'master', system: 'master'
   });
   assert.ok(generator.includes("readJson('config/brand.json')"));
   assert.ok(generator.includes('resolvePageBrandMode'));
@@ -121,7 +121,7 @@ test('mode experience layer differentiates six visual dimensions and respects ga
   ]);
 
   assert.ok(themes.tokenStylesheets.includes('style/components/brand-experience.css'));
-  for (const mode of ['iris', 'sakura', 'journal']) {
+  for (const mode of ['iris', 'sakura', 'journal', 'violet']) {
     assert.ok(css.includes(`html[data-brand-mode="${mode}"]`), `missing ${mode} experience selector`);
   }
   for (const token of [
