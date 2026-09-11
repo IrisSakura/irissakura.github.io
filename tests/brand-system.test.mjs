@@ -42,21 +42,10 @@ test('all curated brand sources remain local while the independent Brand page us
     assert.ok(!home.includes(asset), `homepage still treats the cropped ${asset} slice as a standalone mark`);
   }
   for (const asset of ['00_full_brand_board.png', '01_iris_x_sakura_header.png']) {
-    assert.ok(page.includes(`../assets/images/brand/${asset}`), `brand page is missing curated ${asset}`);
+    assert.ok(!page.includes(`../assets/images/brand/${asset}`), `historical ${asset} must not be a current public illustration`);
   }
-  assert.match(page, /历史 V3 完整品牌总板/u);
-  for (const asset of ['b01-overview.png', 'b02-master.png']) {
-    assert.ok(page.includes(`../assets/images/brand/v1/${asset}`), `brand page is missing distinct ${asset} reference`);
-  }
-  assert.match(page, /B01 品牌参考板 · 嵌入文案为历史设计材料/u);
-  assert.match(page, /B02 品牌参考板 · 嵌入文案为历史设计材料/u);
-  for (const asset of [
-    'c01-iris.png',
-    'c02-sakura.png',
-    'c03-myosotis.png',
-    'c04-violet.png'
-  ]) {
-    assert.ok(page.includes(`../assets/images/brand/v1/${asset}`), `brand page is missing v1 persona board ${asset}`);
+  for (const name of ['iris', 'sakura', 'myosotis', 'violet']) {
+    assert.ok(page.includes(`../assets/images/brand/v1/character-${name}.png`), `missing current ${name} character`);
   }
 });
 
@@ -139,7 +128,7 @@ test('generated current product surfaces use aliases while source records and co
   const [portfolio, detail, projects, controlled] = await Promise.all([
     read('pages/portfolio.html'), read('pages/journal/alchemy-magical-crafting.html'), read('data/projects.json'), readBytes(new URL('docs/brand/master-design-v1.md', root))
   ]);
-  assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /aria-label="Violet Shelf 项目状态"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /Myosotis 保存判断/);
+  assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /aria-label="Violet Shelf"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /Myosotis 保存判断/);
   assert.match(detail, /<title>.* \| Myosotis<\/title>/); assert.match(projects, /"Iris Shelf"/); assert.match(projects, /"IrisSakura Journal"/);
   const body = controlled.toString('utf8').match(/<!-- source-body:start -->\n([\s\S]*?)\n<!-- source-body:end -->/)?.[1]; assert.ok(body); const source = Buffer.from(`${body}\n`); assert.equal(source.byteLength, 48928); assert.match(controlled.toString('utf8'), /当前授权桌面运行时为 Electron/);
   assert.equal(createHash('sha256').update(source).digest('hex'), '9e2ba53b981ac4915acd8de4c8b96bb10ef63d4c490182ae490e8836b0c8a4c0');
@@ -151,7 +140,7 @@ test('creator surfaces use IrisSakura while the joint label is scoped to the Iri
   assert.match(header, /CREATOR IDENTITY · INDEPENDENT PROJECTS/u);
   assert.doesNotMatch(header, />IRIS × SAKURA<\/text>/u);
   assert.doesNotMatch(navbar, /IRIS × SAKURA/u);
-  assert.match(brandPage, /IRIS × SAKURA 仅表达这两者的直接合作/u);
+  assert.match(brandPage, /IRIS × SAKURA 连接工程与游戏框架/u);
 });
 
 test('Violet Shelf tools explain only implemented local operations with truthful public routes and local-source boundaries', async () => {
@@ -164,8 +153,8 @@ test('Violet Shelf tools explain only implemented local operations with truthful
   for (const href of ['portfolio.html#project-iris-shelf', 'brand.html']) {
     assert.ok(tools.includes(`href="${href}"`), `tools page is missing truthful public route: ${href}`);
   }
-  assert.match(tools, /不提供在线使用、公开下载、签名或发布承诺/u);
-  assert.match(tools, /历史来源快照/u);
+  assert.match(tools, /暂未开放下载/u);
+  assert.doesNotMatch(tools, /历史来源快照|不提供在线使用、公开下载、签名或发布承诺/u);
   assert.doesNotMatch(tools, /docs\/product\//u);
   assert.doesNotMatch(tools, /github\.com\/IrisSakura\/IrisShelf/u);
   assert.doesNotMatch(tools, /href="\.\.\/README\.md"/u);
@@ -191,30 +180,13 @@ test('brand portfolio is public, indexable and generator-owned', async () => {
   assert.ok(!sitemap.includes('/pages/art-music.html'));
 });
 
-test('brand story is expressed as live dual tracks, convergence, palette and naming rules', async () => {
-  const page = await readFile(new URL('pages/brand.html', root), 'utf8');
-
-  assert.ok(page.includes('class="brand-lockup'));
-  assert.equal((page.match(/data-brand-branch=/g) ?? []).length, 2);
-  assert.ok(page.includes('data-brand-branch="iris"'));
-  assert.ok(page.includes('data-brand-branch="sakura"'));
-  assert.ok(page.includes('data-brand-convergence'));
-  assert.ok(page.includes('BUILD · ORGANIZE · BLOOM'));
-  for (const value of ['#4C3DF5', '#7B73FF', '#A06BFF', '#FF7EB6', '#FFC1D8', '#7EC6FF']) {
-    assert.ok(page.includes(value), `brand page is missing live palette value ${value}`);
-  }
-  assert.ok(page.includes('IRIS-*'));
-  assert.ok(page.includes('SAKURA-*'));
-  for (const marker of [
-    'ENGINEER · MANAGE · DELIVER',
-    'FRAME · POWER · EXTEND',
-    'Engineering &amp; Project Management',
-    'SakuraGameFramework',
-    'Game Framework / Modules / Runtime / Tooling'
-  ]) {
-    assert.ok(page.includes(marker), `brand page is missing v3 ownership marker ${marker}`);
-  }
-  assert.doesNotMatch(page, /IRIS \/ FRAMEWORK|Games &amp; Experiences|Worlds &amp; IP|CREATE · INSPIRE · CONNECT/u);
+test('brand story gives four current projects equal visibility and useful routes', async () => {
+  const page = await read('pages/brand.html');
+  assert.equal((page.match(/data-brand-project=/g) ?? []).length, 4);
+  for (const route of ['engineering', 'framework', 'journal', 'tools']) assert.ok(page.includes(`href="${route}.html"`));
+  for (const color of ['#4C3DF5', '#DB4F8A', '#286C92', '#7A4298']) assert.ok(page.includes(color));
+  assert.ok(page.includes('IRIS × SAKURA 连接工程与游戏框架'));
+  assert.doesNotMatch(page, /两套命名家族|IRIS-\*|SAKURA-\*/u);
 });
 
 test('generated public shell uses one joint brand mark without the retired gamepad identity', async () => {
@@ -244,18 +216,12 @@ test('the single brand palette preserves the three-part wordmark', async () => {
   assert.doesNotMatch(css, /\.footer\s+\.footer-logo\s+span\s*\{/u);
 });
 
-test('visitor homepage stays editorial while the dedicated Brand page owns contrast composition', async () => {
-  const [home, brandPage] = await Promise.all([
-    readFile(new URL('index.html', root), 'utf8'),
-    readFile(new URL('pages/brand.html', root), 'utf8')
-  ]);
-  const combined = `${home}\n${brandPage}`;
-  const governed = combined.match(/data-brand-layout="(?:contrast|editorial)"/g) ?? [];
-  const contrast = combined.match(/data-brand-layout="contrast"/g) ?? [];
-  assert.equal(governed.length, 9);
-  assert.equal(contrast.length, 2);
-  assert.equal((home.match(/data-brand-layout="contrast"/g) ?? []).length, 0);
-  assert.equal((brandPage.match(/data-brand-layout="contrast"/g) ?? []).length, 2);
+test('visitor homepage and brand gallery are editorial rather than a compulsory two-family diagram', async () => {
+  const [home, brandPage] = await Promise.all([read('index.html'), read('pages/brand.html')]);
+  assert.ok((home.match(/data-brand-layout="editorial"/g) ?? []).length >= 5);
+  assert.ok(brandPage.includes('class="brand-current-grid"'));
+  assert.equal((brandPage.match(/data-brand-project=/g) ?? []).length, 4);
+  assert.doesNotMatch(home, /data-brand-layout="contrast"/u);
 });
 
 test('brand architecture is frozen as a maintained repository contract', async () => {

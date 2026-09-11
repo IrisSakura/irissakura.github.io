@@ -1,3 +1,4 @@
+import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { chromium } from '@playwright/test';
 import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat } from 'node:fs/promises';
@@ -109,7 +110,6 @@ const brandContrastRoutes = [
     route: '/pages/engineering.html',
     checks: [
       ['Engineering hero description', '.engineering-hero .project-hero-summary'],
-      ['Engineering status', '.engineering-status p'],
       ['Engineering workflow descriptions', '.engineering-workflow li > span:last-child'],
       ['Engineering capability descriptions', '.engineering-capability-card > p'],
       ['Engineering evidence descriptions', '.engineering-evidence-card p'],
@@ -232,9 +232,10 @@ const coreVisualRoutes = [
   ['myosotis', '/pages/journal.html'],
   ['violet-shelf', '/pages/tools.html']
 ];
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
 
 try {
+  await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   if (themeConfig.id !== 'iris-sakura' || themeConfig.colorScheme !== 'light') {
     throw new Error('single-brand registry is not IRIS × SAKURA light');
   }
@@ -652,8 +653,8 @@ try {
   if (await desktop.locator('.engineering-capability-card').count() !== irisEngineering.capabilities.length) {
     throw new Error('Engineering page does not expose every reviewed capability group');
   }
-  if (await desktop.locator('.engineering-evidence-card').count() !== irisEngineering.evidence.length) {
-    throw new Error('Engineering page does not expose every reviewed evidence boundary');
+  if (await desktop.locator('.engineering-evidence-card').count() !== 3) {
+    throw new Error('Engineering page does not expose its three practical examples');
   }
   const engineeringDesktopState = await desktop.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,
@@ -686,7 +687,7 @@ try {
   if (await consumerLabSection.locator('.consumer-lab-highlights li').count() !== consumerLab.cases.length * 4) {
     throw new Error('Consumer Lab core-system highlights are incomplete');
   }
-  if (await consumerLabSection.locator('.consumer-lab-relation').innerText() !== '7 个案例 · 4 个 Source-push Repository · 3 个固定快照') {
+  if (await consumerLabSection.locator('.consumer-lab-relation').innerText() !== '7 个玩法案例') {
     throw new Error('Consumer Case and source repository relationship is not explicit');
   }
   if (await consumerLabSection.locator('.consumer-lab-compact-proof').count() !== 2) {
@@ -883,18 +884,22 @@ try {
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 
   await mobile.goto(`${baseUrl}/pages/brand.html`, { waitUntil: 'networkidle' });
+  for (const image of await mobile.locator('.brand-current-characters img').all()) {
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate((element) => element.decode());
+  }
   const brandMobileState = await mobile.evaluate(() => {
-    const header = document.querySelector('.brand-header-slice img');
+    const characters = [...document.querySelectorAll('.brand-current-characters img')];
     return {
       overflow: document.documentElement.scrollWidth - window.innerWidth,
-      headerReady: header instanceof HTMLImageElement && header.complete && header.naturalWidth > 0
+      headerReady: characters.length === 4 && characters.every((image) => image.complete && image.naturalWidth > 0)
     };
   });
   if (brandMobileState.overflow > 1) {
     throw new Error(`Brand portfolio overflows the mobile viewport by ${brandMobileState.overflow}px`);
   }
   if (!brandMobileState.headerReady) {
-    throw new Error('mobile brand portfolio did not load the V3 header slice');
+    throw new Error('mobile brand portfolio did not load its four current characters');
   }
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'brand-mobile.png'), fullPage: true });

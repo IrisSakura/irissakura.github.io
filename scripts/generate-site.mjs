@@ -44,7 +44,7 @@ const PAGE_COVER_TARGETS = {
 const PAGE_INDEXES = {
   'pages/portfolio.html': {
     ariaLabel: '作品页章节',
-    title: '浏览作品证据',
+    title: '浏览作品',
     insertBefore: '    <div class="container">\n        <section class="portfolio-journey"',
     items: [
       ['portfolio-journey', '作品路径'],
@@ -54,7 +54,7 @@ const PAGE_INDEXES = {
   },
   'pages/framework.html': {
     ariaLabel: 'Framework 页面章节',
-    title: '浏览框架证据',
+    title: '浏览框架',
     insertBefore: '    <!-- framework-story:start -->',
     items: [
       ['architecture-map', '架构地图'],
@@ -409,14 +409,14 @@ const pageDefinitions = [
     file: 'pages/brand.html',
     key: 'brand',
     title: 'IrisSakura Brand System | IrisSakura',
-    description: '查看 IrisSakura 主品牌、IRIS 与 SAKURA 的职责边界、联合标识、色板、角色、图标与命名规则。',
+    description: '认识 IrisSakura 的四个花卉项目，以及它们各自的品牌色彩与角色。',
     canonical: '/pages/brand.html'
   },
   {
     file: 'pages/tools.html',
     key: 'tools',
     title: 'Violet Shelf | 本地开发与创作工具台',
-    description: 'Violet Shelf 是本地优先的开发与创作工具台；展示信息不构成下载、平台支持或发布状态声明。',
+    description: 'Violet Shelf 是本地开发与创作工具台，提供卡牌编辑、素材关联、配表检查与概率实验等工具。',
     canonical: '/pages/tools.html',
     schemaType: 'SoftwareApplication'
   },
@@ -624,6 +624,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab, consumerSync, projectPresentations));
   }
   if (page.file === 'pages/journal.html') {
+    html = html.replace('class="journal-main"', 'class="main-content journal-main"');
     html = replaceGeneratedBlock(html, 'journal-content', renderJournalContent(publicJournal, publicJournalSource, evidenceChains, contentSearchIndex, projectPresentations.find(({ projectId }) => projectId === 'sakura-design-journal')));
   }
   if (page.file === 'pages/game.html') {
@@ -1044,192 +1045,57 @@ function renderHomeContent(projectData, siteData, presentations, featuredKnowled
 }
 
 function renderBrandContent(brand) {
-  const palette = [
-    ['Iris Core', '#4C3DF5'],
-    ['Iris Light', '#7B73FF'],
-    ['Shared Violet', '#A06BFF'],
-    ['Sakura Core', '#FF7EB6'],
-    ['Sakura Light', '#FFC1D8'],
-    ['Sky Link', '#7EC6FF']
-  ].map(([label, value]) => `
-                            <li><span class="brand-swatch" style="--brand-swatch: ${value}"></span><strong>${label}</strong><code>${value}</code></li>`).join('');
-
+  const characterNames = { iris: 'iris', sakura: 'sakura', journal: 'myosotis', violet: 'violet' };
+  const characterDescriptions = {
+    iris: '以鸢尾的蓝紫与利落线条，表达工程的清晰与秩序。',
+    sakura: '以樱花的色彩与轻盈姿态，表达游戏能力的组合与生长。',
+    journal: '以勿忘我的湖蓝与书卷元素，表达记录、连接与重新发现。',
+    violet: '以堇花的暖紫与工具元素，表达触手可及的创作陪伴。'
+  };
+  const colors = { iris: '#4C3DF5', sakura: '#DB4F8A', journal: '#286C92', violet: '#7A4298' };
+  const cards = projectPresentations.map((project) => `
+        <article class="brand-product-card" data-brand-project="${escapeAttribute(project.projectId)}">
+          <img class="brand-current-mark" src="../${escapeAttribute(project.logo)}" alt="" width="64" height="64" loading="lazy">
+          <h3>${escapeHtml(project.displayName)}</h3>
+          <strong>${escapeHtml(project.subtitle)}</strong>
+          <p>${escapeHtml(project.summary)}</p>
+          <a class="text-link" href="${escapeAttribute(project.route.replace('/pages/', ''))}">了解 ${escapeHtml(project.displayName)}</a>
+        </article>`).join('');
+  const characters = projectPresentations.map((project) => `
+        <figure class="brand-current-character">
+          <img src="../assets/images/brand/v1/character-${characterNames[project.brandFamily]}.png" alt="${escapeAttribute(project.displayName)} 角色立绘" loading="lazy" decoding="async">
+          <figcaption><h3>${escapeHtml(project.displayName)}</h3><p>${escapeHtml(characterDescriptions[project.brandFamily])}</p></figcaption>
+        </figure>`).join('');
+  const palette = projectPresentations.map((project) => `
+        <li><span class="brand-swatch" style="--brand-swatch: ${colors[project.brandFamily]}"></span><strong>${escapeHtml(project.displayName)}</strong></li>`).join('');
   return `<header class="portfolio-header brand-portfolio-header">
-        <div class="container">
-            <p class="section-kicker">IRISSAKURA · CREATOR IDENTITY</p>
-            <h1>IrisSakura Brand System</h1>
-            <p>IrisSakura 是共同创作者身份；Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf 是彼此独立、通过真实协作相连的四个项目品牌。</p>
-        </div>
+      <div class="container">
+        <p class="section-kicker">IRISSAKURA · FLOWERS AND CHARACTERS</p>
+        <h1>IrisSakura Brand System</h1>
+        <p>我用花卉为长期维护的项目命名，也为它们设计了各自的角色。工程、框架、知识与工具，构成了我的开发与创作实践。</p>
+      </div>
     </header>
-
     <div class="brand-portfolio" id="brand-system">
-        <section class="brand-system-intro" data-brand-layout="editorial" aria-labelledby="brand-system-title">
-            <div class="container brand-system-intro-inner">
-                <div class="brand-system-copy">
-                    <p class="section-kicker">CREATOR IDENTITY · FOUR PROJECT BRANDS</p>
-                    <img class="brand-official-lockup" src="../${escapeAttribute(brand.assets.masterWordmark)}" alt="IrisSakura creator wordmark">
-                    <p class="brand-lockup-subtitle">CREATOR IDENTITY · FOUR INDEPENDENT PROJECT BRANDS</p>
-                    <h2 id="brand-system-title">Build · Organize · Bloom</h2>
-                    <p>不把项目混成统一平台：工程、框架、资料库与本地工具各自清晰，并以实际作品和资料形成协作。</p>
-                    <figure class="brand-header-slice">
-                        <img src="../assets/images/brand/01_iris_x_sakura_header.png" alt="IRIS × SAKURA 游戏技术生态：Build、Organize、Bloom" decoding="async">
-                        <figcaption>历史 V3 设计参考头图；其中嵌入文案不是当前产品事实。</figcaption>
-                    </figure>
-                </div>
-                <ol class="brand-principles" aria-label="品牌行动原则">
-                    <li><span>01</span><strong>BUILD</strong><small>用可验证的工程系统建立创造底座</small></li>
-                    <li><span>02</span><strong>ORGANIZE</strong><small>让项目、工作流与交付保持清晰</small></li>
-                    <li><span>03</span><strong>BLOOM</strong><small>让 SakuraGameFramework 支撑游戏创作扩展</small></li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="brand-board-section" data-brand-layout="editorial" aria-labelledby="brand-board-title">
-            <div class="container">
-                <div class="brand-section-heading">
-                    <p class="section-kicker">MASTER BRAND BOARD</p>
-                    <h2 id="brand-board-title">先看完整生态，再进入每一条分支</h2>
-                    <p>这张历史 V3 完整品牌总板保留当时构图；其嵌入的平台、数量与命名文案不构成当前产品事实。当前 B01 与 B02 参考板另列如下。</p>
-                </div>
-                <figure class="brand-board">
-                    <img src="../${escapeAttribute(brand.assets.brandBoard)}" alt="IRIS × SAKURA 完整品牌系统总览，包含角色、子品牌、色板、图标与命名规则" decoding="async">
-                    <figcaption>历史 V3 完整品牌总板 · 不作为当前架构或产品状态声明</figcaption>
-                </figure>
-                <div class="brand-board-reference-grid" aria-label="B01 与 B02 品牌参考板">
-                    <figure class="brand-board brand-board-reference">
-                        <img src="../assets/images/brand/v1/b01-overview.png" alt="B01 IrisSakura Ecosystem Overview 设计参考板" loading="lazy">
-                        <figcaption>B01 品牌参考板 · 嵌入文案为历史设计材料，不作为当前架构或产品状态声明。</figcaption>
-                    </figure>
-                    <figure class="brand-board brand-board-reference">
-                        <img src="../assets/images/brand/v1/b02-master.png" alt="B02 IrisSakura Master Brand 设计参考板" loading="lazy">
-                        <figcaption>B02 品牌参考板 · 嵌入文案为历史设计材料，不作为当前架构或产品状态声明。</figcaption>
-                    </figure>
-                </div>
-            </div>
-        </section>
-
-        <section class="brand-duality-section" data-brand-layout="contrast" aria-labelledby="brand-duality-title">
-            <div class="container">
-                <div class="brand-section-heading brand-section-heading-centered">
-                    <p class="section-kicker">DIRECT COOPERATION</p>
-                    <h2 id="brand-duality-title">Iris 与 Sakura 的直接协作</h2>
-                    <p>IRIS 对工程与项目管理负责，SAKURA 对游戏框架负责。IRIS × SAKURA 仅表达这两者的直接合作，不代表四个项目的统一平台。</p>
-                </div>
-                <div class="brand-duality-grid">
-                    <article class="brand-track brand-track-iris" data-brand-branch="iris">
-                        <header><span>IRIS / 01</span><strong>ENGINEER · MANAGE · DELIVER</strong></header>
-                        <h3>Engineering &amp; Project Management</h3>
-                        <p>冷静、精确、结构化。承担 Engineering、Project Management、Workflow、Pipeline 与 Reliability。</p>
-                        <ul><li>Project Management</li><li>Workflow &amp; Pipeline</li><li>Quality &amp; Reliability</li></ul>
-                    </article>
-                    <div class="brand-convergence" data-brand-convergence>
-                        <img src="../${escapeAttribute(brand.assets.masterLogo)}" alt="" class="brand-convergence-mark">
-                        <strong>DIRECT COOPERATION</strong>
-                        <span>Shared work<br>Distinct products</span>
-                    </div>
-                    <article class="brand-track brand-track-sakura" data-brand-branch="sakura">
-                        <header><span>SAKURA / 02</span><strong>FRAME · POWER · EXTEND</strong></header>
-                        <h3>Game Framework</h3>
-                        <p>温暖、灵动、富有生命力。承担 Game Framework、Runtime Systems、Gameplay Modules 与 Tooling。</p>
-                        <ul><li>Runtime Systems</li><li>Gameplay Modules</li><li>Extensible Tooling</li></ul>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="brand-products-section" data-brand-layout="contrast" aria-labelledby="brand-products-title">
-            <div class="container">
-                <div class="brand-section-heading">
-                    <p class="section-kicker">FOUR PROJECT BRANDS</p>
-                    <h2 id="brand-products-title">四个项目，各自承担清晰职责</h2>
-                    <p>Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf 并列协作；它们不是统一产品平台。</p>
-                </div>
-                <div class="brand-product-grid">
-                    <article class="brand-product-card brand-product-engineering">
-                        <img class="brand-product-wordmark" src="../${escapeAttribute(brand.assets.irisWordmark)}" alt="">
-                        <p>IRIS / ENGINEERING &amp; PROJECT MANAGEMENT</p>
-                        <h3>Iris Engineering</h3>
-                        <strong>ENGINEER · ORGANIZE · DELIVER</strong>
-                        <span>让研发事实、验证边界与受控自动化进入同一工作流。</span>
-                        <a href="engineering.html" class="text-link">查看工程控制面<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </article>
-                    <article class="brand-product-card brand-product-framework">
-                        <img class="brand-product-wordmark" src="../${escapeAttribute(brand.assets.sakuraWordmark)}" alt="">
-                        <p>SAKURA / GAME FRAMEWORK</p>
-                        <h3>SakuraGameFramework</h3>
-                        <strong>MODULAR · EXTENSIBLE · CREATOR-READY</strong>
-                        <span>为真实游戏生产建立可复用、可组合的 Unity 系统边界。</span>
-                    </article>
-                    <article class="brand-product-card brand-product-framework">
-                        <img class="brand-product-wordmark" src="../${escapeAttribute(brand.assets.myosotisWordmark)}" alt="">
-                        <p>MYOSOTIS / RESEARCH AND CREATIVE REFERENCE</p><h3>Myosotis</h3><strong>KEEP · CONNECT · REDISCOVER</strong><span>研究、设计与创作资料库；保留稳定 Journal 路由与公开边界。</span><a href="journal.html" class="text-link">查看知识资料库<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </article>
-                    <article class="brand-product-card brand-product-engineering">
-                        <img class="brand-product-wordmark" src="../${escapeAttribute(brand.assets.violetWordmark)}" alt="">
-                        <p>VIOLET SHELF / LOCAL CREATIVE TOOLS</p><h3>Violet Shelf</h3><strong>TOOLS WITHIN REACH</strong><span>本地开发与创作工具台；不在此页宣称下载、发布或平台支持。</span><a href="tools.html" class="text-link">查看工具边界<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="brand-language-section" aria-labelledby="brand-language-title">
-            <div class="container">
-                <div class="brand-section-heading brand-section-heading-centered">
-                    <p class="section-kicker">VISUAL LANGUAGE</p>
-                    <h2 id="brand-language-title">一套能够直接进入产品的品牌工具箱</h2>
-                    <p>颜色负责区分力量，图标负责解释系统，命名负责守住产品边界。</p>
-                </div>
-                <div class="brand-language-grid">
-                    <article class="brand-language-card brand-palette-card">
-                        <span class="brand-card-index">01 / COLOR</span>
-                        <h3>从鸢尾紫到樱花粉</h3>
-                        <ul class="brand-palette" aria-label="品牌核心色">${palette}
-                        </ul>
-                    </article>
-                    <article class="brand-language-card brand-icon-card">
-                        <span class="brand-card-index">02 / ICONOGRAPHY</span>
-                        <h3>Clean · Technical · Elegant</h3>
-                        <div class="brand-icon-row brand-icon-row-official" aria-hidden="true"><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#iris-pipeline"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#iris-verification"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#sakura-framework"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#sakura-composition"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#shared-research"></use></svg><svg><use href="../${escapeAttribute(brand.assets.iconSprite)}#shared-game"></use></svg></div>
-                        <p>22 个品牌核心概念使用正式 SVG；通用操作继续使用 Font Awesome，避免图标职责混淆。</p>
-                    </article>
-                    <article class="brand-language-card brand-naming-card">
-                        <span class="brand-card-index">03 / NAMING</span>
-                        <h3>一个生态，两套命名家族</h3>
-                        <div><code>IRIS-*</code><span>Engineering / Project Management</span></div>
-                        <div><code>SAKURA-*</code><span>Game Framework / Modules / Runtime / Tooling</span></div>
-                        <p>游戏消费项目暂不纳入当前命名体系。</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="brand-persona-section" aria-labelledby="brand-personas-title">
-            <div class="container">
-                <div class="brand-section-heading">
-                    <p class="section-kicker">PERSONIFIED BRAND</p>
-                    <h2 id="brand-personas-title">让抽象价值拥有可以记住的面孔</h2>
-                    <p>肖像只服务于品牌故事与文化表达；产品界面仍优先使用功能清晰的联合标识、产品名和系统图标。</p>
-                </div>
-                <div class="brand-persona-stage">
-                    <figure class="brand-persona-portrait brand-persona-iris">
-                        <img src="../assets/images/brand/v1/c01-iris.png" alt="IRIS 品牌人格角色肖像" loading="lazy" decoding="async">
-                        <figcaption><span>IRIS</span><strong>Engineer · Manage · Deliver</strong></figcaption>
-                    </figure>
-                    <figure class="brand-persona-portrait brand-persona-sakura">
-                        <img src="../assets/images/brand/v1/c02-sakura.png" alt="SAKURA 品牌人格角色肖像" loading="lazy" decoding="async">
-                        <figcaption><span>SAKURA</span><strong>Frame · Power · Extend</strong></figcaption>
-                    </figure>
-                    <figure class="brand-persona-portrait brand-persona-iris">
-                        <img src="../assets/images/brand/v1/c03-myosotis.png" alt="Myosotis 品牌人格角色肖像" loading="lazy" decoding="async">
-                        <figcaption><span>MYOSOTIS</span><strong>Keep · Connect · Rediscover</strong></figcaption>
-                    </figure>
-                    <figure class="brand-persona-portrait brand-persona-sakura">
-                        <img src="../assets/images/brand/v1/c04-violet.png" alt="Violet Shelf 品牌人格角色肖像" loading="lazy" decoding="async">
-                        <figcaption><span>VIOLET</span><strong>Tools within reach</strong></figcaption>
-                    </figure>
-                </div>
-            </div>
-        </section>
+      <section class="brand-current-section" aria-labelledby="brand-system-title" data-brand-layout="editorial">
+        <div class="container brand-current-intro">
+          <img src="../${escapeAttribute(brand.assets.masterWordmark)}" alt="IrisSakura" width="280" height="72">
+          <div><h2 id="brand-system-title">Build · Organize · Bloom</h2><p>把想法做成作品，让经验沉淀为下一次创作的起点。</p></div>
+        </div>
+      </section>
+      <section class="brand-current-section" aria-labelledby="brand-products-title">
+        <div class="container"><div class="brand-section-heading"><p class="section-kicker">FOUR PROJECTS</p><h2 id="brand-products-title">四个项目，四种花的性格</h2></div>
+          <div class="brand-current-grid">${cards}</div>
+        </div>
+      </section>
+      <section class="brand-current-section" aria-labelledby="brand-personas-title">
+        <div class="container"><div class="brand-section-heading"><p class="section-kicker">CHARACTERS</p><h2 id="brand-personas-title">让抽象的想法拥有面孔</h2></div>
+          <div class="brand-current-characters">${characters}</div>
+        </div>
+      </section>
+      <section class="brand-current-section" aria-labelledby="brand-language-title">
+        <div class="container brand-current-language"><div><p class="section-kicker">VISUAL LANGUAGE</p><h2 id="brand-language-title">同一份创作，不同的表达</h2><p>鸢尾的蓝紫、樱花的粉、勿忘我的湖蓝与堇花的暖紫，让每个项目保有自己的辨识。</p><p>IRIS × SAKURA 连接工程与游戏框架，让组织工作与实现想法相互配合。</p></div><ul class="brand-palette">${palette}</ul></div>
+      </section>
+      <section class="brand-current-section"><div class="container hero-buttons"><a class="btn btn-primary" href="development.html">浏览全部项目</a><a class="btn btn-secondary" href="contact.html">关于与联系</a></div></section>
     </div>`;
 }
 
@@ -1249,12 +1115,11 @@ function renderEngineeringContent(engineering, chains, presentation) {
                     <p>${escapeHtml(capability.description)}</p>
                     <ul>${capability.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
                 </article>`).join('');
-  const evidence = engineering.evidence.map((entry) => `
-                <article class="engineering-evidence-card engineering-evidence-${escapeAttribute(entry.state)}">
-                    <div><span>${entry.state === 'failed-closed' ? '失败关闭' : '本地通过'}</span><strong>${escapeHtml(entry.label)}</strong></div>
-                    <p>${escapeHtml(entry.summary)}</p>
-                </article>`).join('');
-  const boundaries = engineering.boundaries.map((boundary) => `<li>${escapeHtml(boundary)}</li>`).join('');
+  const examples = [
+    ['查看项目进度', '汇总仓库状态、里程碑和待办，让分散的工作更容易掌握。'],
+    ['整理研究建议', '把研究材料整理成提案，确认目标后再安排实施。'],
+    ['接续任务执行', '记录任务目标、执行结果与恢复信息，让中断的工作可以继续。']
+  ].map(([title, description]) => `<article class="engineering-evidence-card"><h3>${title}</h3><p>${description}</p></article>`).join('');
 
   return `<header class="engineering-hero">
         <div class="container engineering-hero-inner">
@@ -1266,12 +1131,6 @@ function renderEngineeringContent(engineering, chains, presentation) {
                 <p class="project-hero-summary">${escapeHtml(presentation.summary)}</p>
                 <div class="hero-buttons"><a class="btn btn-primary" href="#workflow">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#capabilities">${escapeHtml(presentation.secondaryAction.label)}</a></div>
             </div>
-            <aside class="engineering-status" aria-label="Iris Engineering 当前状态">
-                <span>${escapeHtml(engineering.operatingMode)}</span>
-                <strong>${escapeHtml(engineering.statusLabel)}</strong>
-                <p>${escapeHtml(engineering.status)}</p>${engineering.schemaVersion === 2 ? `
-                <small>源仓更新 · ${escapeHtml(formatPublicDate(engineering.sourceUpdatedAt))}</small>` : ''}
-            </aside>
         </div>
     </header>
 
@@ -1293,7 +1152,7 @@ function renderEngineeringContent(engineering, chains, presentation) {
 
         <section class="engineering-capabilities" id="capabilities" aria-labelledby="engineering-capabilities-title">
             <div class="container">
-                <div class="engineering-section-heading"><p class="section-kicker">P1–P10 PRODUCT BASELINE</p><h2 id="engineering-capabilities-title">四个已经形成合同的能力层</h2><p>从 Workflow Core 到只读视图，再到 Research Artifact 与 Agent Execution，公开展示只描述已实现的本地产品边界。</p></div>
+                <div class="engineering-section-heading"><p class="section-kicker">CORE CAPABILITIES</p><h2 id="engineering-capabilities-title">组织研发工作的四项能力</h2><p>从 Workflow Core 到只读视图，再到 Research Artifact 与 Agent Execution，连接项目进度、研究提案与任务执行。</p></div>
                 <div class="engineering-capability-grid">${capabilities}
                 </div>
             </div>
@@ -1301,16 +1160,14 @@ function renderEngineeringContent(engineering, chains, presentation) {
 
         <section class="engineering-evidence" aria-labelledby="engineering-evidence-title">
             <div class="container engineering-evidence-grid">
-                <div class="engineering-section-heading"><p class="section-kicker">EVIDENCE BEFORE CLAIMS</p><h2 id="engineering-evidence-title">通过与失败都保留原本含义</h2><p>本地合同、只读行动视图与外部试点分别陈述；传输失败没有被重试或改写成接入成功。</p></div>
-                <div>${evidence}
-                </div>
+                <div class="engineering-section-heading"><p class="section-kicker">IN PRACTICE</p><h2 id="engineering-evidence-title">把日常研发整理清楚</h2></div>
+                <div>${examples}</div>
             </div>
         </section>
-
         <section class="engineering-boundaries" aria-labelledby="engineering-boundaries-title">
             <div class="container engineering-boundary-grid">
-                <div><p class="section-kicker">CURRENT BOUNDARIES</p><h2 id="engineering-boundaries-title">当前边界</h2><p>失败关闭不是保守文案，而是产品设计的一部分：没有新的授权与证据，就不扩大能力结论。</p></div>
-                <ul>${boundaries}</ul>
+                <div><p class="section-kicker">GETTING STARTED</p><h2 id="engineering-boundaries-title">使用说明</h2><p>先了解项目状态，再选择需要推进的工作。</p></div>
+                <ul><li>执行任务前需要确认目标与权限。</li><li>外部服务的连接与操作按项目单独配置。</li><li>工程进度在 Iris 中组织，游戏运行时与玩法由各自的项目负责。</li></ul>
             </div>
         </section>
 ${renderEvidenceChains(chains, 'engineering-evidence-chains')}
@@ -1325,7 +1182,17 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
   const cases = ordered.map((project, index) => {
     const visual = renderPortfolioVisual(project, journalData, frameworkData, irisEngineeringData);
     const presentation = presentationById.get(project.id);
-    const isHistorical = project.id === 'iris-shelf' && project.syncMode === 'source-push';
+    if (presentation) {
+      const extraLink = project.id === 'sakura-framework'
+        ? '<a href="framework-engineering.html" class="portfolio-link portfolio-link-secondary">技术架构</a><a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">开始使用框架</a>' : '';
+      const availability = project.id === 'iris-shelf' ? '<p>暂未开放下载。</p>' : '';
+      return `<article class="portfolio-case portfolio-case-${escapeAttribute(project.category)}" id="project-${escapeAttribute(project.id)}" aria-label="${escapeAttribute(presentation.displayName)}">
+        <div class="portfolio-case-visual"><img class="portfolio-product-mark" src="../${escapeAttribute(presentation.logo)}" alt="${escapeAttribute(presentation.displayName)}"></div>
+        <div class="portfolio-case-copy"><p class="project-status">0${index + 1} · ${escapeHtml(presentation.subtitle)}</p><h2>${escapeHtml(presentation.displayName)}</h2>
+          <p class="portfolio-description">${escapeHtml(presentation.summary)}</p>${availability}
+          <a href="${escapeAttribute(presentation.route.replace('/pages/', ''))}" class="portfolio-link">查看 ${escapeHtml(presentation.displayName)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>${extraLink}
+        </div></article>`;
+    }
     const detailHref = presentation?.route.replace('/pages/', '') ?? project.href;
     const detailLabel = project.id === 'iris-shelf'
       ? '查看 Violet Shelf'
@@ -1335,13 +1202,13 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                 <div class="portfolio-case-copy">
                     <p class="project-status">0${index + 1} · ${escapeHtml(project.categoryLabel)} · ${escapeHtml(project.status)}</p>
                     <h2>${escapeHtml(displayProjectName(project.id, project.title))}</h2>
-                    <p class="portfolio-update"><span>${isHistorical ? '历史来源快照' : '事实更新'} · ${escapeHtml(project.updatedAt)}</span><span>${escapeHtml(project.syncLabel)} · 复核 ${escapeHtml(project.lastReviewedAt)}</span></p>
+                    <p class="portfolio-update"><span>更新 · ${escapeHtml(project.updatedAt)}</span></p>
                     <p class="portfolio-description">${escapeHtml(project.summary)}</p>
                     <dl class="portfolio-facts portfolio-facts-primary">
                         <div><dt>职责</dt><dd>${escapeHtml(project.role)}</dd></div>
                         <div><dt>目标</dt><dd>${escapeHtml(project.goal)}</dd></div>
                     </dl>
-                    <details class="portfolio-evidence"><summary>${isHistorical ? '查看历史证据与限制' : '查看证据、限制与下一步'}</summary><dl class="portfolio-facts">
+                    <details class="portfolio-evidence"><summary>开发详情</summary><dl class="portfolio-facts">
                         <div><dt>证据</dt><dd>${escapeHtml(project.evidence.join('；'))}</dd></div>
                         <div><dt>限制</dt><dd>${escapeHtml(project.limitations.join('；'))}</dd></div>
                         <div><dt>下一步</dt><dd>${escapeHtml(project.next.join('；'))}</dd></div>
@@ -1361,7 +1228,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
         <div class="container">
             <p class="section-kicker">GAMES · MODS · CREATIVE WORK</p>
             <h1>作品与创作</h1>
-            <p>从可玩原型、Mod 与玩法实验开始，了解每件作品解决的问题、我的职责和当前可见成果；技术背景与证据边界在需要时继续展开。</p>
+            <p>从可玩原型、Mod 与玩法实验开始，了解每件作品的玩法、设计思路与开发过程。</p>
         </div>
     </div>
     <div class="container">
@@ -1370,7 +1237,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                 <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究判断 → 工程治理 → 框架沉淀 → 游戏验证</h2></div>
                 <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </div>
-            <p class="journey-intro">展示顺序从游戏与桌面产品开始，因果链仍从研究开始：Myosotis 保存判断，Iris Engineering 约束授权与执行，Violet Shelf 提供独立本地入口，SakuraGameFramework 与 Iris Core 沉淀可复用能力，UDGAP、The Weaver 与《言铸之剑》承担不同阶段的游戏验证。</p>
+            <p class="journey-intro">Myosotis 保存判断，Iris Engineering 约束授权与执行，Violet Shelf 提供独立本地入口，SakuraGameFramework 与 Iris Core 沉淀可复用能力，UDGAP、The Weaver 与《言铸之剑》承担不同阶段的游戏验证。</p>
             <ol class="journey-path">
                 <li><span class="journey-index">01</span><h3>研究判断</h3><p>理解引擎机制、游戏设计与当前约束。</p></li>
                 <li><span class="journey-index">02</span><h3>显式授权</h3><p>把研究提案、目标和执行权限变成可复查合同。</p></li>
@@ -1438,7 +1305,7 @@ function renderConsumerLab(consumerLabData, consumerSync) {
   return `<section class="consumer-lab" id="consumer-lab" aria-label="${consumerLabData.cases.length} 个独立玩法项目">
             <div class="consumer-lab-heading">
                 <p class="section-kicker">FRAMEWORK PLAYGROUNDS</p><h2>${escapeHtml(consumerLabData.title)}</h2><p class="consumer-lab-intro">${escapeHtml(consumerLabData.description)}</p>
-                <p class="consumer-lab-relation">${consumerSync.caseCount} 个案例 · ${consumerSync.sourcePushCount} 个 Source-push Repository · ${consumerSync.fixedSnapshotCount} 个固定快照</p>
+                <p class="consumer-lab-relation">${consumerSync.caseCount} 个玩法案例</p>
             </div>
             <div class="consumer-lab-grid">${cards}
             </div>
@@ -1489,7 +1356,7 @@ function renderContentSearch(searchIndex) {
 
   return `    <section class="journal-section content-search" id="content-search" data-content-search data-search-index="../data/search-index.json" data-search-limit="12">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 ${searchIndex.totalCount} 个公开内容单元中检索</h2></div><p>索引只包含已公开的标题、摘要与分类；文章正文、私有来源和未发布内容不会进入搜索数据。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">CONTENT SEARCH</p><h2 id="content-search-title">在 ${searchIndex.totalCount} 个公开内容单元中检索</h2></div><p>搜索文章与研究，或按主题、系列和引擎筛选。</p></div>
             <form class="content-search-controls" role="search" aria-labelledby="content-search-title" data-content-search-form>
                 <label class="content-search-query" for="content-search-query"><span>关键词</span><input id="content-search-query" name="query" type="search" autocomplete="off" placeholder="搜索系统、玩法、引擎或主题" data-content-search-query></label>
                 <label><span>内容类型</span><select name="type" data-content-search-type><option value="">全部类型（${searchIndex.totalCount}）</option>${typeOptions}</select></label>
@@ -1497,7 +1364,7 @@ function renderContentSearch(searchIndex) {
                 <label><span>引擎</span><select name="engine" data-content-search-engine><option value="">全部引擎</option>${engineOptions}</select></label>
                 <button class="btn btn-secondary" type="reset" data-content-search-reset>清除筛选</button>
             </form>
-            <p class="content-search-status" id="content-search-status" aria-live="polite" data-content-search-status>正在加载公开索引…</p>
+            <p class="content-search-status" id="content-search-status" aria-live="polite" data-content-search-status>正在加载内容……</p>
             <div class="content-search-results" id="content-search-results" aria-label="检索结果" aria-describedby="content-search-status" data-content-search-results></div>
             <noscript><p class="content-search-fallback">浏览器未启用 JavaScript。仍可通过<a href="blog.html">正式文章</a>、<a href="#game-design-library">游戏设计资料库</a>和<a href="#recent-audits">近期审计</a>浏览公开内容。</p></noscript>
         </div>
@@ -1522,10 +1389,9 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex, pres
                     <a class="note-link" href="journal/${encodeURIComponent(note.id)}.html">阅读精选研究摘要<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </article>`).join('');
   const recentAudits = sourceData.audits.slice(0, 6).map((audit) => `
-                <article class="journal-update-card">
+                <article class="journal-update-card" id="${escapeAttribute(audit.id)}">
                     <p class="project-status">框架审计 · ${escapeHtml(audit.updatedAt)}</p>
                     <h3>${escapeHtml(audit.title)}</h3>
-                    <p>${escapeHtml(audit.summary)}</p>
                 </article>`).join('');
   const gameDesigns = sourceData.gameDesigns.map((design) => `
                 <article class="design-summary-card" id="design-${escapeAttribute(design.id)}">
@@ -1546,15 +1412,20 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex, pres
                 <p class="journal-lead">${escapeHtml(presentation.summary)}</p>
                 <div class="journal-actions"><a class="btn btn-primary" href="#content-search">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#featured-notes">${escapeHtml(presentation.secondaryAction.label)}</a><a class="text-link" href="development.html">查看全部项目</a></div>
             </div>
+
+        </div>
+    </header>
+    <section class="journal-summary" aria-label="内容概览">
+        <div class="container">
             <div class="journal-dashboard" aria-label="学习记录概览">
-                <div class="journal-dashboard-label">CURATED SNAPSHOT</div>
+                <div class="journal-dashboard-label">内容概览</div>
                 <div class="journal-metric"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></div>
                 <div class="journal-metric"><strong>${journalData.summary.auditCount}</strong><span>框架审计摘要</span></div>
                 <div class="journal-metric journal-metric-with-note"><strong>${journalData.summary.importedBlogCount}</strong><span>完整博客</span><small>${journalData.summary.publishedBlogCount} 篇已公开</small></div>
                 <div class="journal-metric"><strong>${journalData.summary.knowledgeStreamCount}</strong><span>知识流</span></div>
             </div>
         </div>
-    </header>
+    </section>
 ${renderContentSearch(searchIndex)}
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
@@ -1617,15 +1488,15 @@ function renderEvidenceChains(chains, sectionId = '') {
                         <a href="game.html#${escapeAttribute(chain.gameAnchor)}"><span>GAME</span><strong>《言铸之剑》</strong><small>${escapeHtml(chain.gameSystem)}</small></a>
                     </div>
                     <div class="evidence-chain-relationships" aria-label="四个部分之间的关系"><p><strong>RESEARCH → CONTROL PLANE</strong>${escapeHtml(displayPublicProductNames(chain.relationships.researchToControlPlane))}</p><p><strong>CONTROL PLANE → FRAMEWORK</strong>${escapeHtml(displayPublicProductNames(chain.relationships.controlPlaneToFramework))}</p><p><strong>FRAMEWORK → GAME</strong>${escapeHtml(displayPublicProductNames(chain.relationships.frameworkToGame))}</p></div>
-                    <p class="evidence-chain-limit"><strong>证据边界</strong>${escapeHtml(chain.limitation)} ${escapeHtml(chain.authorityBoundary)}</p>
+                    <p class="evidence-chain-limit">${escapeHtml(chain.limitation)}</p>
                 </article>`;
   }).join('');
   return `<section class="evidence-chain-section"${sectionId ? ` id="${escapeAttribute(sectionId)}"` : ''} aria-labelledby="evidence-chain-title">
         <div class="container">
             <div class="section-heading">
                 <p class="section-kicker">RESEARCH → CONTROL PLANE → FRAMEWORK → GAME</p>
-                <h2 id="evidence-chain-title">从研究判断到游戏验证的四段公开证据链</h2>
-                <p>同一条链同时指向公开研究、Iris Engineering 控制面、Framework 采用映射和游戏系统；公开证据不足的部分直接写在边界里。</p>
+                <h2 id="evidence-chain-title">相关研究与游戏实现</h2>
+                <p>从一个设计问题出发，浏览相关研究、工作流、框架模块与游戏中的实现。</p>
             </div>
             <div class="evidence-chain-grid">${cards}
             </div>
@@ -1706,12 +1577,12 @@ function renderContactContent(siteData) {
   const routes = siteData.socials.map((social) => `
                 <a class="public-route-card" href="${escapeAttribute(social.url)}" target="_blank" rel="noopener noreferrer">
                     <i class="fab ${escapeAttribute(social.icon)}" aria-hidden="true"></i>
-                    <div><span>VERIFIED PUBLIC ROUTE</span><h2>${escapeHtml(social.label)}</h2><p>${escapeHtml(social.description)}</p></div>
+                    <div><h2>${escapeHtml(social.label)}</h2><p>${escapeHtml(social.description)}</p></div>
                     <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
                 </a>`).join('');
   return `<header class="contact-header">
         <div class="container">
-            <p class="section-kicker">ABOUT · CONTACT · PUBLIC ROUTES</p>
+            <p class="section-kicker">ABOUT · CONTACT</p>
             <h1>关于与联系</h1>
             <p>你好，我是 ${escapeHtml(siteData.profile.nickname)}，一名${escapeHtml(siteData.profile.role)}。我做游戏，也构建支持创作的框架、工具与知识体系。</p>
             <p>可通过工作邮箱或工作 QQ 直接联系，也可以从公开主页了解代码、开发记录与作品进展。</p>
@@ -1728,9 +1599,9 @@ function renderContactContent(siteData) {
             <div><p class="section-kicker">GOOD TOPICS</p><h2>适合交流的主题</h2></div>
             <ul>
                 <li><strong>Unity 游戏系统</strong><span>战斗、成长、存档、UI 与运行时生命周期。</span></li>
-                <li><strong>SakuraGameFramework</strong><span>模块边界、成熟度、最小采用路线和验证治理。</span></li>
-                <li><strong>设计与源码研究</strong><span>游戏设计范式、Godot 运行时与研究策展方法。</span></li>
-                <li><strong>独立开发实践</strong><span>从原型闭环到证据展示、限制披露和持续迭代。</span></li>
+                <li><strong>SakuraGameFramework</strong><span>模块设计、引擎适配与游戏项目中的使用经验。</span></li>
+                <li><strong>设计与源码研究</strong><span>玩法机制、Godot 运行原理与设计思路。</span></li>
+                <li><strong>独立开发实践</strong><span>原型制作、玩法迭代与独立开发经验。</span></li>
             </ul>
         </div>
     </section>`;
@@ -1792,7 +1663,7 @@ function renderFrameworkStory(story) {
   return `<section class="framework-positioning" id="positioning" aria-labelledby="framework-positioning-title">
         <div class="container framework-story-intro">
             <div><p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p><h2 class="section-title" id="framework-positioning-title">从模块集合到工程判断</h2></div>
-            <div><p>${escapeHtml(positioning.description)}</p><p class="framework-story-boundary"><strong>边界</strong>${escapeHtml(positioning.boundary)}</p></div>
+            <div><p>${escapeHtml(positioning.description)}</p></div>
         </div>
     </section>
     <section class="framework-architecture-map" id="architecture-map" aria-labelledby="framework-architecture-title">
@@ -2361,7 +2232,7 @@ async function writeToolsSource(presentation) {
     ['Card Studio', '创建或导入版本化卡牌文档与关联图片', '编辑与比较普通／升级面，并按现有能力导出 JSON 或 PNG。'],
     ['Asset Relations', '选择一个资源目录，为内容条目关联图片、音频或文档', '预览关联资源并维护明确的当前版本。'],
     ['Table Relations', '只读导入用户选定的 JSON／CSV', '检查声明的正反向关系，并定位缺失、歧义与循环。'],
-    ['Deck Odds', '卡组与抽取条件', '比较精确无放回抽取概率实验，保存结果并按原 Generation 重跑。'],
+    ['Deck Odds', '卡组与抽取条件', '比较精确无放回抽取概率，保存实验结果，并按原记录重新计算。'],
     ['Motion Curve Lab', '属性、命名曲线或精确资源图片', '预览、暂停、重置并拖动矩形或精确资源图片，再显式导出 JSON。'],
     ['Localization Checker', '语言映射与占位符', '报告缺失、空值、重复与不支持语法，并导出检查结果。']
   ];
@@ -2369,11 +2240,11 @@ async function writeToolsSource(presentation) {
   await writeFile(path.join(root, 'pages/tools.html'), `<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHtml(presentation.displayName)} | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><link rel="stylesheet" href="../style/iris-sakura.css"><!-- brand-styles:end --><link rel="stylesheet" href="../style/tools.css"></head>
-<body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="tools-main">
+<body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content tools-main">
 <header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#tools">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#status">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
-<section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>每项工具都围绕明确输入与输出工作，不把网站包装成在线版工作区。</p></div><div class="tools-grid">${cards}</div></section>
-<section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">CURRENT LOCAL CANDIDATE</p><h2 id="tools-status-title">当前版本与使用边界</h2><p>现行产品采用 Electron 44、React／TypeScript 与私有 Rust helper，在本地 macOS 候选中运行。此页面不提供在线使用、公开下载、签名或发布承诺。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>公开说明不包含用户路径、项目笔记或 Git 明细。</li><li>作品集中的旧 Tauri 记录保留为 2026-08-30 的历史来源快照，不再作为当前技术栈说明。</li></ul></section>
-<nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html#project-iris-shelf">查看作品集中的历史快照</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
+<section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid">${cards}</div></section>
+<section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
+<nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html#project-iris-shelf">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
 }
 

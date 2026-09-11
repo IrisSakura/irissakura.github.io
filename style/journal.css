@@ -100,7 +100,7 @@
     text-align: center;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
     .content-search-controls {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -125,7 +125,7 @@
 
 .journal-hero {
     position: relative;
-    padding: 8.5rem 0 5rem;
+    padding: clamp(3rem, 5vw, 4rem) 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--brand-mode-hero-text);
     background: var(--brand-mode-hero-background);
@@ -729,7 +729,7 @@
 
 @media (max-width: 640px) {
     .journal-hero {
-        padding: 7rem 0 3.5rem;
+        padding: 2.5rem 0 3.5rem;
     }
 
     .journal-section {
@@ -757,4 +757,14 @@
     .journal-actions .btn {
         text-align: center;
     }
+}
+
+/* Keep the knowledge overview below the artwork, never over the character. */
+.journal-summary { padding: 1.5rem 0; }
+.journal-summary .journal-dashboard { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 1.5rem; }
+.journal-summary .journal-dashboard-label { grid-column: 1 / -1; }
+.journal-summary .journal-metric { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 0.25rem; }
+.journal-summary .journal-metric span, .journal-summary .journal-metric small { text-align: left; }
+@media (max-width: 900px) {
+    .journal-summary .journal-dashboard { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

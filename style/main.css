@@ -2460,7 +2460,7 @@ a {
 }
 
 .brand-portfolio-header::after {
-    content: "IRIS × SAKURA";
+    content: "IRISSAKURA";
     position: absolute;
     right: max(var(--page-gutter), calc((100vw - var(--container-width)) / 2));
     bottom: -0.16em;
@@ -3429,6 +3429,7 @@ a {
 
 /* 2026-08-24 single-brand IRIS × SAKURA interface */
 :root {
+    --site-nav-offset: 5.25rem;
     --container-width: 1320px;
     --page-gutter: clamp(1.25rem, 5vw, 5.5rem);
     --section-space: clamp(4.75rem, 8vw, 8rem);
@@ -3443,7 +3444,7 @@ a {
 
 html[data-brand="iris-sakura"] {
     color-scheme: light;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: calc(var(--site-nav-offset) + 1rem);
 }
 
 html[data-brand="iris-sakura"] body {
@@ -3583,13 +3584,13 @@ html[data-brand="iris-sakura"] .btn-outline:hover {
 }
 
 html[data-brand="iris-sakura"] .main-content {
-    margin-top: 5.15rem;
-    min-height: calc(100svh - 5.15rem - 16rem);
+    margin-top: var(--site-nav-offset);
+    min-height: calc(100svh - var(--site-nav-offset) - 16rem);
 }
 
 .page-index {
     position: sticky;
-    top: 5.15rem;
+    top: var(--site-nav-offset);
     z-index: 840;
     border-block: 1px solid var(--ui-border-subtle);
     background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
@@ -3974,6 +3975,14 @@ html[data-brand="iris-sakura"] .footer-links a {
 }
 
 @media (max-width: 1120px) {
+    html[data-brand="iris-sakura"] .footer-content {
+        grid-template-columns: minmax(12rem, 0.8fr) minmax(0, 1.6fr);
+    }
+
+    html[data-brand="iris-sakura"] .footer-content > * {
+        min-width: 0;
+    }
+
     html[data-brand="iris-sakura"] .brand-seal {
         display: none;
     }
@@ -4052,11 +4061,11 @@ html[data-brand="iris-sakura"] .footer-links a {
     }
 
     html[data-brand="iris-sakura"] .main-content {
-        margin-top: 4.9rem;
+        margin-top: var(--site-nav-offset);
     }
 
     .page-index {
-        top: 4.9rem;
+        top: var(--site-nav-offset);
     }
 
     .page-index-inner {
@@ -4125,4 +4134,34 @@ html[data-brand="iris-sakura"] .footer-links a {
         align-items: flex-start;
         flex-direction: column;
     }
+}
+
+/* Current brand gallery: project identities and artwork, not source design boards. */
+.brand-current-section { padding-block: clamp(2.5rem, 5vw, 5rem); }
+.brand-current-intro { display: flex; align-items: center; gap: 3rem; }
+.brand-current-intro > img { width: min(40%, 17.5rem); height: auto; }
+.brand-current-intro h2, .brand-current-language h2 { text-align: left; }
+.brand-current-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.brand-current-grid .brand-product-card { min-width: 0; min-height: 0; padding: 2rem; }
+.brand-current-mark { display: block; width: 4rem; height: 4rem; object-fit: contain; margin-bottom: 1rem; }
+.brand-current-grid h3 { overflow-wrap: anywhere; }
+.brand-current-grid .text-link { margin-top: 1rem; }
+.brand-current-characters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+.brand-current-character { min-width: 0; padding: 1rem; border: 1px solid var(--line); border-radius: var(--border-radius); background: var(--surface); }
+.brand-current-character > img { display: block; width: 100%; height: clamp(18rem, 30vw, 28rem); object-fit: contain; object-position: center bottom; }
+.brand-current-character figcaption { margin-top: 1.5rem; }
+.brand-current-character h3 { font-size: 1.1rem; overflow-wrap: anywhere; }
+.brand-current-character p { color: var(--ink-soft); font-size: 0.9rem; }
+.brand-current-language { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: start; }
+.portfolio-case-visual .portfolio-product-mark { max-height: 20rem; object-fit: contain; padding: 2.5rem; }
+@media (max-width: 900px) {
+  .brand-current-characters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .brand-current-language { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+@media (max-width: 620px) {
+  .brand-current-grid { grid-template-columns: 1fr; }
+  .brand-current-intro { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .brand-current-intro > img { width: 14rem; }
+  .brand-current-characters { gap: 0.75rem; }
+  .brand-current-character { padding: 0.75rem; }
 }

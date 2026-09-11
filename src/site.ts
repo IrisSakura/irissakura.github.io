@@ -542,7 +542,7 @@ class SiteShell {
             });
             render();
         } catch {
-            status.textContent = '公开索引暂时无法加载；仍可使用下方精选主题、审计与设计资料库。';
+            status.textContent = '内容暂时无法加载，请稍后重试，或浏览下方的精选主题与资料库。';
             root.dataset.searchState = 'failed';
         }
     }
