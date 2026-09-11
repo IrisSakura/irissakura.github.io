@@ -1,29 +1,74 @@
-name: Isolated Website Repair Workspace
+name: Verify Website Presentation Repair
 on:
   push:
     branches: [repair/website-v2-1-20260911]
 permissions:
   contents: read
 jobs:
-  snapshot:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - name: Export source and installed dependencies
+      - name: Reconstruct the approved candidate
         run: |
-          mkdir -p /tmp/website-repair
-          git archive --format=tar.gz HEAD > /tmp/website-repair/source.tar.gz
-          tar -czf /tmp/website-repair/node-modules.tar.gz node_modules
+          mkdir -p /tmp/website-input /tmp/website-repair
+          cp .repair/* /tmp/website-input/
+          cp .repair/publish.py /tmp/website-repair/
+          git checkout --detach 0dca968176e4b942308aab75ea91a7cbba5dad6b
+          python /tmp/website-input/apply.py /tmp/website-input/changes.b64
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Verify source and generated pages
+        run: npm run check 2>&1 | tee /tmp/website-repair/check.log
+      - name: Verify browser layouts and navigation
+        env:
+          SITE_SCREENSHOT_DIR: /tmp/website-repair/screenshots
+        run: npm run test:smoke 2>&1 | tee /tmp/website-repair/browser.log
+      - run: npm run package:site
+      - name: Verify exact candidate and export patch
+        run: |
+          git diff --check
+          git add -A
+          test "$(git write-tree)" = '19cf4d252980497c2b14e225e5a77c16ec8b9b35'
+          git diff --cached --binary > /tmp/website-repair/final.patch
+          git diff --cached --stat > /tmp/website-repair/changes.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: website-repair-verification
+          path: /tmp/website-repair
+          retention-days: 1
+  publish-candidate:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0dca968176e4b942308aab75ea91a7cbba5dad6b
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: website-repair-verification
+          path: /tmp/website-repair
+      - name: Create verified commit without advancing main
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git apply --index /tmp/website-repair/final.patch
+          python /tmp/website-repair/publish.py
       - uses: actions/upload-artifact@v4
         with:
-          name: website-repair-workspace
-          path: /tmp/website-repair
+          name: website-verified-candidate
+          path: /tmp/verified-candidate.json
           retention-days: 1
