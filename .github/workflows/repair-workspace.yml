@@ -25,11 +25,12 @@ jobs:
           mkdir -p /tmp/website-input /tmp/website-repair
           cp .repair/* /tmp/website-input/
           cp .repair/publish.py /tmp/website-repair/
-          sed -i 's/19cf4d252980497c2b14e225e5a77c16ec8b9b35/dffe7d6d608b6c1c6459faa9f6a4d08836de9e46/g' /tmp/website-repair/publish.py
+          sed -i 's/19cf4d252980497c2b14e225e5a77c16ec8b9b35/47dbfde445d9eb61c240467e4a1b2654faff5683/g' /tmp/website-repair/publish.py
           git checkout --detach 0dca968176e4b942308aab75ea91a7cbba5dad6b
           python /tmp/website-input/apply.py /tmp/website-input/changes.b64
           python /tmp/website-input/followup.py
           python /tmp/website-input/summary-followup.py
+          python /tmp/website-input/copy-followup.py
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Verify source and generated pages
@@ -51,7 +52,7 @@ jobs:
         run: |
           git diff --check
           git add -A
-          test "$(git write-tree)" = 'dffe7d6d608b6c1c6459faa9f6a4d08836de9e46'
+          test "$(git write-tree)" = '47dbfde445d9eb61c240467e4a1b2654faff5683'
           git diff --cached --binary > /tmp/website-repair/final.patch
           git diff --cached --stat > /tmp/website-repair/changes.txt
       - uses: actions/upload-artifact@v4
