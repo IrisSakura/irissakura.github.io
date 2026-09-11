@@ -47,8 +47,8 @@ test('generated Iris Engineering page explains capability, evidence and limits w
     'Verify',
     'Research Artifact',
     'Agent Execution',
-    '失败关闭',
-    '当前边界'
+    '执行任务前需要确认目标与权限',
+    '使用说明'
   ]) {
     assert.ok(html.includes(fragment), `missing engineering fragment: ${fragment}`);
   }
@@ -57,8 +57,7 @@ test('generated Iris Engineering page explains capability, evidence and limits w
   }
   assert.ok(html.includes('RESEARCH → CONTROL PLANE → FRAMEWORK → GAME'));
   assert.match(generator, /function renderEngineeringContent\(/u);
-  assert.match(generator, /engineering\.sourceUpdatedAt/u);
-  assert.match(generator, /源仓更新/u);
+  assert.doesNotMatch(html, /当前没有自动续作|P10 · P9\.1/u);
   assert.ok(html.includes('data-brand="iris-sakura"'));
   assert.ok(html.includes('href="../style/engineering.css"'));
   for (const forbidden of ['/Users/', '154.37.215.57', 'git@', 'external-read-passed']) {

@@ -29,7 +29,7 @@ test('portfolio explains the path from research to finished work', async () => {
   ]) {
     assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
   }
-  assert.match(html, /id="project-iris-shelf"[\s\S]*?历史来源快照 · 2026-08-30[\s\S]*?href="tools\.html"[^>]*>查看 Violet Shelf/u);
+  assert.match(html, /id="project-iris-shelf"[\s\S]*?Violet Shelf[\s\S]*?href="tools\.html"[^>]*>查看 Violet Shelf/u);
   assert.match(html, /<details class="portfolio-evidence">/u);
 });
 
@@ -128,7 +128,7 @@ test('public portfolio does not expose the private journal origin', async () => 
   assert.ok(!data.includes('154.37.215.57'));
 });
 
-test('portfolio renders eight reviewed status cases with games first and source freshness visible', async () => {
+test('portfolio keeps games first and current project cards separate from internal source snapshots', async () => {
   const html = await readText('pages/portfolio.html');
   assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 8);
   assert.ok(!html.includes('portfolio-filters'));
@@ -140,19 +140,19 @@ test('portfolio renders eight reviewed status cases with games first and source 
   assert.ok(html.indexOf('project-iris-shelf') < html.indexOf('project-iris-engineering'));
   assert.ok(html.indexOf('project-iris-engineering') < html.indexOf('project-sakura-framework'));
   assert.ok(html.indexOf('project-sakura-framework') < html.indexOf('project-sakura-design-journal'));
-  assert.equal((html.match(/class="portfolio-update"/g) ?? []).length, 8);
-  assert.equal((html.match(/<dt>下一步<\/dt>/g) ?? []).length, 8);
-  assert.ok(html.includes('源仓推送公开投影'));
-  assert.ok(html.includes('源仓推送公开基线'));
-  assert.ok(html.includes('固定提交公开投影'));
-  assert.ok(html.includes('站点策展状态'));
-  assert.ok(html.includes('project-proof-visual-shelf'));
+  assert.equal((html.match(/class="portfolio-update"/g) ?? []).length, 4);
+  assert.equal((html.match(/<dt>下一步<\/dt>/g) ?? []).length, 4);
+  assert.ok(!html.includes('源仓推送公开投影'));
+  assert.ok(!html.includes('源仓推送公开基线'));
+  assert.ok(!html.includes('固定提交公开投影'));
+  assert.ok(!html.includes('站点策展状态'));
+  assert.ok(!html.includes('project-proof-visual-shelf'));
   assert.ok(html.includes('project-proof-visual-udgap'));
   assert.ok(html.includes('project-proof-visual-the-weaver'));
   assert.ok(html.includes('project-proof-visual-iris-core'));
-  assert.ok(html.includes('engineering-proof-visual'));
-  assert.ok(html.includes('framework-proof-visual'));
-  assert.ok(html.includes('journal-proof-visual'));
+  assert.ok(!html.includes('engineering-proof-visual'));
+  assert.ok(!html.includes('framework-proof-visual'));
+  assert.ok(!html.includes('journal-proof-visual'));
 });
 
 test('Iris Core and The Weaver preserve their public evidence boundaries', async () => {

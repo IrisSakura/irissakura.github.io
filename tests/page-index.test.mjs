@@ -47,11 +47,11 @@ test('shared page index is sticky, mobile-scrollable and progressively enhanced'
     readText('src/site.ts')
   ]);
 
-  assert.match(css, /\.page-index\s*\{[^}]*position:\s*sticky[^}]*top:\s*5\.15rem/s);
+  assert.match(css, /\.page-index\s*\{[^}]*position:\s*sticky[^}]*top:\s*var\(--site-nav-offset\)/s);
   assert.match(css, /\.page-index-links\s*\{[^}]*overflow-x:\s*auto[^}]*scrollbar-width:\s*none/s);
   assert.match(css, /\.page-index-progress\s*::after\s*\{[^}]*scale:\s*var\(--page-index-progress,\s*0\)\s+1/s);
   assert.match(css, /\[data-page-index-target\]\s*\{[^}]*scroll-margin-top:/s);
-  assert.match(css, /@media \(max-width:\s*620px\)[\s\S]*?\.page-index\s*\{[^}]*top:\s*4\.9rem/s);
+  assert.match(css, /@media \(max-width:\s*620px\)[\s\S]*?\.page-index\s*\{[^}]*top:\s*var\(--site-nav-offset\)/s);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.page-index-progress::after[^}]*transition-duration:\s*0\.01ms\s*!important/s);
 
   for (const contract of [

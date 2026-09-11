@@ -11,7 +11,7 @@ test('v2 presentation keeps stable IDs and exposes the reviewed four-project nam
   assert.match(brand, /"journal"/);
   assert.match(brand, /"violet"/);
   assert.match(tools, /Violet Shelf/);
-  assert.match(tools, /不提供在线使用、公开下载、签名或发布承诺/);
+  assert.match(tools, /暂未开放下载/);
   assert.match(presentation, /SakuraGameFramework/);
   assert.match(presentation, /Myosotis/);
   assert.match(architecture, /IRIS × SAKURA/);

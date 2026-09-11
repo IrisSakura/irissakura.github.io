@@ -124,7 +124,8 @@ test('journal page statically renders every curated view and preserves the priva
     }
   }
   for (const audit of source.audits.slice(0, 6)) {
-    assert.ok(html.includes(audit.summary), `missing recent audit ${audit.id}`);
+    assert.ok(html.includes(`id="${audit.id}"`), `missing recent audit ${audit.id}`);
+    assert.ok(html.includes(audit.updatedAt), `missing recent audit date ${audit.id}`);
   }
 
   assert.ok(!publicFiles.includes('154.37.215.57'));
