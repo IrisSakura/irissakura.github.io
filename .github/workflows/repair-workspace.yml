@@ -4,6 +4,9 @@ on:
     branches: [repair/website-v2-1-20260911]
 permissions:
   contents: read
+defaults:
+  run:
+    shell: bash
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -28,6 +31,14 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Verify source and generated pages
         run: npm run check 2>&1 | tee /tmp/website-repair/check.log
+      - name: Inspect responsive page geometry
+        run: |
+          cp /tmp/website-input/diagnose.mjs .website-diagnose.mjs
+          python -m http.server 4173 --bind 127.0.0.1 >/tmp/website-repair/server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"; rm -f .website-diagnose.mjs' EXIT
+          sleep 1
+          node .website-diagnose.mjs
       - name: Verify browser layouts and navigation
         env:
           SITE_SCREENSHOT_DIR: /tmp/website-repair/screenshots
