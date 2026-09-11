@@ -1,6 +1,6 @@
 # IrisSakura Visual System
 
-> Status: Phase 2 foundation with v1 presentation adoption
+> Status: Phase 2 foundation with website presentation v2 adoption
 
 ## Ownership chain
 
@@ -16,7 +16,11 @@ Components and page styles must not introduce new master-brand colors. A raw col
 
 `config/brand.json.pageModes` is the generated-page registry. `master`, `iris`, `sakura`, `journal`, `violet` and `game` are closed modes. `journal` remains the stable internal mode while presenting Myosotis; `violet` presents Violet Shelf on the local Tools page. Every page retains `data-brand="iris-sakura"`; a mode is a page responsibility, not an additional technical identity or visitor theme switch.
 
-Phase 2 established the token chain and moved representative Home, Engineering, Framework, Journal and Game surfaces onto mode tokens. The v1 presentation adoption adds the two approved local display modes without claiming a complete Phase 3 sub-brand experience. Geometry, pattern, icon, density and motion differentiation still require dedicated visual review; existing page CSS remains valid and migrates incrementally.
+Phase 2 established the token chain and moved representative Home, Engineering, Framework, Journal and Game surfaces onto mode tokens. Website presentation v2 keeps the closed modes, moves Myosotis to a quiet lake-blue editorial palette, and gives all four projects one shared hero composition with distinct project art. This does not claim a complete Phase 3 sub-brand experience; existing deep-page CSS remains valid and migrates incrementally.
+
+## Project hero ownership
+
+The four project routes resolve their hero from `config/site-presentation.json` and `config/brand.json`. The generator installs exactly one `data-brand-project-hero` with the matching optimized portrait from `assets/images/brand/site-v2/`. `data/site.json.pageCovers` continues to own general category and work imagery, but must not also own those four project heroes. Source provenance, dimensions, conversion parameters and hashes are recorded in `assets/images/brand/site-v2/manifest.json`.
 
 ## Accessibility and maintenance
 

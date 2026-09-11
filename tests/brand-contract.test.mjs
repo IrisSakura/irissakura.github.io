@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -18,7 +19,9 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
   assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'violet', 'consumer', 'games']);
   assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'violet', 'game']);
   assert.deepEqual(brand.deprecated, [
-    { name: 'Sakura Design Journal', replacement: 'IrisSakura Journal' }
+    { name: 'Sakura Design Journal', replacement: 'Myosotis' },
+    { name: 'IrisSakura Journal', replacement: 'Myosotis' },
+    { name: 'Iris Shelf', replacement: 'Violet Shelf' }
   ]);
   assert.deepEqual(brand.naming.forbidden, [
     'Iris Framework',
@@ -59,7 +62,7 @@ test('official vector identity and core iconography are complete and self-contai
     'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark',
     'iconSprite',
     'readmeHeader', 'socialLogo', 'brandBoard',
-    'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt'
+    'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt', 'violetHeroArt'
   ];
   for (const key of requiredAssetKeys) {
     const relativePath = brand.assets[key];
@@ -85,6 +88,24 @@ test('official vector identity and core iconography are complete and self-contai
     'shared-research', 'shared-game', 'shared-evidence', 'shared-experiment',
     'shared-consumer', 'shared-architecture'
   ]) assert.ok(symbols.includes(id), `icon sprite missing ${id}`);
+});
+
+test('site v2 project hero manifest preserves source and output traceability', async () => {
+  const manifest = await readJson('assets/images/brand/site-v2/manifest.json');
+  assert.equal(manifest.assetVersion, 'site-v2');
+  assert.equal(manifest.tool.name, 'cwebp');
+  assert.match(manifest.derivation, /without crop or resize/u);
+  assert.deepEqual(manifest.assets.map(({ projectId }) => projectId), [
+    'iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf'
+  ]);
+  for (const asset of manifest.assets) {
+    assert.ok(asset.preservesAlpha);
+    assert.ok(asset.width > 0 && asset.height > 0);
+    for (const [file, expected] of [[asset.sourcePath, asset.sourceSha256], [asset.outputPath, asset.outputSha256]]) {
+      const bytes = await readFile(path.join(root, file));
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), expected, `${file} hash drifted`);
+    }
+  }
 });
 
 test('brand automation drives page modes, social cards, SEO and public naming', async () => {
@@ -134,7 +155,7 @@ test('mode experience layer differentiates six visual dimensions and respects ga
   assert.ok(footer.includes('{{masterWordmark}}'));
 });
 
-test('mode hero artwork is contract-owned, decorative and limited to the three product heroes', async () => {
+test('mode hero artwork is contract-owned, decorative and limited to the four product heroes', async () => {
   const [brand, generator, css] = await Promise.all([
     readJson('config/brand.json'),
     readText('scripts/generate-site.mjs'),
@@ -143,7 +164,8 @@ test('mode hero artwork is contract-owned, decorative and limited to the three p
   const expected = {
     engineering: ['iris', 'irisHeroArt'],
     framework: ['sakura', 'sakuraHeroArt'],
-    journal: ['journal', 'journalHeroArt']
+    journal: ['journal', 'journalHeroArt'],
+    tools: ['violet', 'violetHeroArt']
   };
 
   assert.ok(generator.includes('installBrandModeHeroArt'));
@@ -151,7 +173,7 @@ test('mode hero artwork is contract-owned, decorative and limited to the three p
   for (const [pageKey, [mode, assetKey]] of Object.entries(expected)) {
     const html = await readText(`pages/${pageKey}.html`);
     const asset = brand.assets[assetKey];
-    assert.match(asset, /^assets\/images\/brand\/[a-z0-9._-]+\.webp$/);
+    assert.match(asset, /^assets\/images\/brand\/[a-z0-9/._-]+\.webp$/);
     await access(path.join(root, asset));
     assert.equal((html.match(/<!-- brand-mode-hero-art:start -->/g) ?? []).length, 1);
     assert.equal((html.match(/<!-- brand-mode-hero-art:end -->/g) ?? []).length, 1);
@@ -172,7 +194,7 @@ test('mode hero artwork is contract-owned, decorative and limited to the three p
   assert.match(css, /\.brand-mode-hero-art img\s*\{[\s\S]*?mask-image:/);
   assert.match(css, /@media \(max-width: 900px\)[\s\S]*?\.brand-mode-hero-art/);
   assert.doesNotMatch(css, /\.brand-mode-hero-art \+ \.brand-mode-signature/);
-  assert.doesNotMatch(css, /html\[data-brand="iris-sakura"\]\[data-brand-mode="journal"\] \[data-page-cover="journal"\]\.page-cover/);
+  assert.match(css, /html\[data-brand-mode="violet"\] \[data-brand-project-hero\]/);
 });
 
 test('brand operating documents cover naming, voice, modes, iconography and maintenance', async () => {

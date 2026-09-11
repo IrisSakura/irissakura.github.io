@@ -42,7 +42,11 @@ export function assertBrandContract(brand) {
     if (!BRAND_MODE_IDS.includes(mode)) throw new Error(`brand-contract violation: ${page} uses unknown mode ${mode}`);
   }
   const deprecated = brand.deprecated?.map(({ name, replacement }) => `${name}->${replacement}`);
-  if (JSON.stringify(deprecated) !== JSON.stringify(['Sakura Design Journal->IrisSakura Journal'])) {
+  if (JSON.stringify(deprecated) !== JSON.stringify([
+    'Sakura Design Journal->Myosotis',
+    'IrisSakura Journal->Myosotis',
+    'Iris Shelf->Violet Shelf'
+  ])) {
     throw new Error('brand-contract violation: deprecated naming registry drift');
   }
   return brand;
@@ -60,7 +64,7 @@ export async function assertBrandAssets(root, brand) {
   const required = [
     'favicon', 'symbol', 'masterLogo', 'irisLogo', 'sakuraLogo', 'jointLockup',
     'masterWordmark', 'irisWordmark', 'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark', 'iconSprite', 'readmeHeader',
-    'socialLogo', 'brandBoard', 'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt'
+    'socialLogo', 'brandBoard', 'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt', 'violetHeroArt'
   ];
   for (const key of required) {
     const relativePath = brand.assets?.[key];

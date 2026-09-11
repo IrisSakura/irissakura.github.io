@@ -1,7 +1,7 @@
 # IrisSakura Brand Architecture
 
-> Status: Frozen for Phase 0, with v1 presentation adoption
-> Effective date: 2026-09-10
+> Status: Frozen foundation, with website presentation v2 adoption
+> Effective date: 2026-09-11
 > Scope: `IrisSakura/irissakura.github.io`
 
 ## Master brand
@@ -15,7 +15,7 @@ IrisSakura
 ├── Iris Engineering
 ├── SakuraGameFramework (Sakura Framework in established product contexts)
 ├── Myosotis (stable internal journal identifiers)
-└── Violet Shelf (display-only Iris Shelf compatibility)
+└── Violet Shelf (public presentation over stable Iris Shelf compatibility IDs)
 ```
 
 - **Iris Engineering** owns engineering workflow, project management, pipeline, automation, reliability, verification, and delivery operations.
@@ -41,11 +41,13 @@ Forbidden new names remain `Iris Framework`, `Sakura Engineering`, `Sakura Proje
 
 ## Compatibility names
 
-**Myosotis** is the current public presentation name. **IrisSakura Journal** remains the legacy public name for compatibility. **Sakura Design Journal** is **Deprecated** as a public product name; the repository identity `sakura-design-journal`, internal `journal` key, historical URLs, RSS, synchronization and publication identities remain unchanged.
+**Myosotis** is the current public presentation name. **IrisSakura Journal** and **Sakura Design Journal** are **Deprecated** public names; the repository identity `sakura-design-journal`, internal `journal` key, historical URLs, RSS, synchronization and publication identities remain unchanged. **Violet Shelf** is the current public presentation name while `iris-shelf` and other technical identities remain stable.
 
 ## Information architecture contract
 
-The primary navigation order is `首页 → 作品 → 研发体系 → 知识 → 工具 → Brand → 联系`. Engineering and Framework remain peers inside development. Brand owns the public architecture; `/pages/tools.html` does not imply availability, download, platform support or release state.
+The primary navigation order is `首页 → 作品 → 项目 → 知识 → 关于与联系`. The four project brands remain peers and share the Projects overview; Myosotis activates Knowledge because it is also the public knowledge entry. Brand moves to the Contact page and grouped footer. `/pages/tools.html` does not imply availability, download, platform support or release state.
+
+`config/site-presentation.json` is the presentation owner for navigation grouping, four-project order, display names, routes, value copy, actions and footer groups. It does not own product versions, support matrices or release facts.
 
 ## Truthfulness and change control
 

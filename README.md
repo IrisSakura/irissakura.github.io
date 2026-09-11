@@ -6,28 +6,28 @@
 
 正式 Logo、Wordmark、产品 Lockup、核心概念 Icon 与 Social Card 模式由 [`config/brand.json`](config/brand.json) 统一登记；新增页面必须先取得一个已登记的 Brand Mode，再由 owner generator 生成公开投影。
 
-站点内容继续围绕一条可验证的项目链组织：
+部分作品会沿着一条可验证的协作链形成，但四个项目并不从属于这条流水线：
 
-> IrisSakura Journal（研究）→ Iris Engineering（工程治理）→ Sakura Framework（能力沉淀）→《言铸之剑》（游戏验证）
+> Myosotis（研究）→ Iris Engineering（工程治理）→ SakuraGameFramework（能力沉淀）→《言铸之剑》（游戏验证）
 
 站点不展示没有事实来源的技能百分比、虚构项目、模拟联系结果或私有仓库地址。
 
 ## 页面结构
 
-- `/`：定位、能力证据、精选项目与研究更新；
-- `/pages/development.html`：一级“研发体系”入口，并列介绍 Iris Engineering 与 Sakura Framework 两条互补路径；
+- `/`：个人介绍、代表作品、四项目入口、精选知识与联系入口；
+- `/pages/development.html`：一级“项目”入口，并列介绍 Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf；
 - `/pages/engineering.html`：Iris Engineering 子页，说明研发工作流、授权、执行与验证边界；
 - `/pages/journal.html`：一级 `Myosotis`（稳定内部 `Journal`）入口，包含策展研究、公开证据链与文章入口；
-- `/pages/tools.html`：一级 `Violet Shelf` 工具入口，只说明真实本地工具边界，不提供下载或发布声明；
+- `/pages/tools.html`：`Violet Shelf` 项目页，只说明真实本地工具边界，不提供下载或发布声明；
 - `/pages/blog.html`：正式文章、系列与标签聚合的稳定独立地址；
 - `/rss.xml`：只收录正式文章语义地址的 RSS 2.0 订阅；
-- `/pages/framework.html`：Sakura Framework 子页，展示框架规模、模块浏览器与生命周期成熟度；
+- `/pages/framework.html`：SakuraGameFramework 项目页，展示采用入口、架构、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 <!-- project-summary:start -->
 - `/pages/portfolio.html`：8 个正式公开项目，以及 7 个 Consumer Lab 案例的本地验证矩阵；
 <!-- project-summary:end -->
-- `/pages/brand.html`：一级 `Brand` 入口，公开展示 IrisSakura 品牌架构、IRIS × SAKURA 双人格视觉、色板、图标与命名规则；
+- `/pages/brand.html`：由“关于与联系”和页脚进入的品牌资料页，公开展示 IrisSakura 品牌架构、四项目资料、色板、图标与命名规则；
 - `/pages/art-music.html`：旧“美术音乐”地址的 `noindex` Brand 兼容跳转；
 - `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
 - `/pages/about.html`：旧 About 地址的 `noindex` 首页兼容跳转；
@@ -63,6 +63,7 @@ npm run package:site
 ## 数据来源
 
 - `config/brand.json`：名称、家族、页面 Brand Mode、正式资产、Social palette 与 Deprecated Naming 的品牌合同；
+- `config/site-presentation.json`：五项主导航、四项目稳定 ID、展示名称、顺序、职责短句、动作和页脚分组；
 - `data/site.json`：站点定位、Profile、栏目头图和真实社交入口；
 - `data/projects.json`：八个公开项目的状态、事实更新时间、复核时间、同步方式、职责、证据、限制与下一步；
 - `data/consumer-lab.json`：七个独立 Unity 消费项目的站点策展文案与 owner-only 技术快照；该文件用于生成校验，不进入 Pages artifact；
@@ -86,11 +87,11 @@ Iris Shelf 与 UDGAP 的 source-push 项目状态、共享 importer 和三路径
 
 ### 栏目视觉与项目头图
 
-主要分页视觉由 `data/site.json` 集中管理，不需要逐页修改 HTML。
+作品与通用栏目视觉由 `data/site.json` 管理；四个项目首屏由 `config/site-presentation.json` 与 `config/brand.json` 的项目题图映射共同管理，不需要逐页修改生成后的 HTML。
 
-1. `home`、`framework`、`journal`、`blog` 和 `contact` 默认使用纯 CSS 栏目视觉，`image` 保持空字符串；它们不会借用游戏截图。
+1. Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf 分别使用 `assets/images/brand/site-v2/hero-*.webp`，派生记录与源/输出哈希见同目录 `manifest.json`。这些首屏不再叠加 `data/site.json.pageCovers`。
 
-2. `portfolio` 与 `game` 可以使用已有真实项目图片，并通过 `position` 设置焦点：
+2. `home`、`blog` 和 `contact` 可继续使用纯 CSS 栏目视觉；`portfolio` 与 `game` 可以使用已有真实项目图片，并通过 `position` 设置焦点：
 
 ```json
 {
@@ -99,7 +100,7 @@ Iris Shelf 与 UDGAP 的 source-push 项目状态、共享 importer 和三路径
 }
 ```
 
-可配置键为 `home`、`portfolio`、`framework`、`journal`、`blog`、`game` 和 `contact`。`position` 的第一个百分比控制左右焦点，第二个控制上下焦点。
+`position` 的第一个百分比控制左右焦点，第二个控制上下焦点。`framework`、`journal` 和 `engineering` 的旧 cover 配置只保留兼容数据，不再拥有对应项目首屏。
 
 3. 运行 `npm run build`。构建会检查项目图片并重建页面，同时在 ignored `.generated/social/` 生成每个页面独立的 1200×630 PNG 分享图；`npm run package:site` 再将它们映射到 Pages artifact 的稳定 `/assets/social/` URL。不要手工编辑生成目录，也不要填写本机绝对路径或私有仓库地址。
 

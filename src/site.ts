@@ -13,6 +13,10 @@ const REVEAL_SELECTOR = [
     '.brand-language-grid > *',
     '.brand-persona-stage > *',
     '.focus-grid > *',
+    '.project-entry-grid > *',
+    '.knowledge-grid > *',
+    '.development-grid > *',
+    '.tools-grid > *',
     '.section-heading',
     '.section-heading-row',
     '.research-list > *',
@@ -62,6 +66,10 @@ const DEPTH_SELECTOR = [
     '.stable-route-list article',
     '.research-row',
     '.focus-card',
+    '.project-entry-card',
+    '.knowledge-card',
+    '.development-card',
+    '.tools-card',
     '.brand-branch',
     '.brand-proof-item',
     '.brand-track',
@@ -94,11 +102,6 @@ class SiteShell {
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
     private lastFocused: HTMLElement | null = null;
-    private profileDrawerTrigger: HTMLButtonElement | null = null;
-    private profileDrawer: HTMLElement | null = null;
-    private profileDrawerBackdrop: HTMLButtonElement | null = null;
-    private profileDrawerClose: HTMLButtonElement | null = null;
-    private profileDrawerLastFocused: HTMLElement | null = null;
     private motionObserver: IntersectionObserver | null = null;
     private pageIndexObserver: IntersectionObserver | null = null;
     private pageIndexAbort: AbortController | null = null;
@@ -116,20 +119,9 @@ class SiteShell {
         this.normalizePersistentUrls();
         this.toggle = document.querySelector<HTMLButtonElement>('.mobile-toggle');
         this.menu = document.querySelector<HTMLElement>('.nav-menu');
-        this.profileDrawerTrigger = document.querySelector<HTMLButtonElement>(
-            '.profile-drawer-trigger'
-        );
-        this.profileDrawer = document.querySelector<HTMLElement>('#profile-drawer');
-        this.profileDrawerBackdrop = document.querySelector<HTMLButtonElement>(
-            '[data-profile-drawer-backdrop]'
-        );
-        this.profileDrawerClose = document.querySelector<HTMLButtonElement>(
-            '.profile-drawer-close'
-        );
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
         });
-        this.setupProfileDrawer();
         this.setupNavigation();
         this.setupSoftNavigation();
         this.setupFaq();
@@ -147,7 +139,7 @@ class SiteShell {
             }
         });
         document.querySelectorAll<HTMLAnchorElement>(
-            '.skip-link[href], .navbar a[href], .profile-drawer a[href], .footer a[href]'
+            '.skip-link[href], .navbar a[href], .footer a[href]'
         ).forEach((link) => {
             link.href = link.href;
         });
@@ -157,7 +149,6 @@ class SiteShell {
         if (!this.toggle || !this.menu) return;
 
         this.toggle.addEventListener('click', () => {
-            this.setProfileDrawerOpen(false);
             this.setMenuOpen(!this.menu?.classList.contains('active'));
         });
 
@@ -171,7 +162,7 @@ class SiteShell {
             }
         });
 
-        window.matchMedia('(min-width: 769px)').addEventListener('change', (event) => {
+        window.matchMedia('(min-width: 901px)').addEventListener('change', (event) => {
             if (event.matches) this.setMenuOpen(false);
         });
     }
@@ -202,7 +193,6 @@ class SiteShell {
             const destination = new URL(link.href, location.href);
             if (!this.canSoftNavigate(destination)) return;
             event.preventDefault();
-            this.setProfileDrawerOpen(false);
             this.setMenuOpen(false);
             void this.navigate(destination, true);
         });
@@ -446,60 +436,6 @@ class SiteShell {
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
             element.textContent = new Date().getFullYear().toString();
         });
-    }
-
-    private setupProfileDrawer(): void {
-        if (
-            !this.profileDrawerTrigger
-            || !this.profileDrawer
-            || !this.profileDrawerBackdrop
-            || !this.profileDrawerClose
-        ) {
-            return;
-        }
-
-        this.profileDrawerTrigger.addEventListener('click', () => {
-            const open = this.profileDrawer?.getAttribute('aria-hidden') !== 'false';
-            this.setProfileDrawerOpen(open, !open);
-        });
-        this.profileDrawerClose.addEventListener('click', () => {
-            this.setProfileDrawerOpen(false, true);
-        });
-        this.profileDrawerBackdrop.addEventListener('click', () => {
-            this.setProfileDrawerOpen(false, true);
-        });
-        this.profileDrawer.querySelectorAll('a').forEach((link) => {
-            link.addEventListener('click', () => this.setProfileDrawerOpen(false));
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && this.profileDrawer?.getAttribute('aria-hidden') === 'false') {
-                this.setProfileDrawerOpen(false, true);
-            }
-        });
-    }
-
-    private setProfileDrawerOpen(open: boolean, restoreFocus = false): void {
-        if (!this.profileDrawerTrigger || !this.profileDrawer) return;
-        if (open) {
-            this.setMenuOpen(false);
-            this.profileDrawerLastFocused = document.activeElement as HTMLElement | null;
-        }
-
-        this.profileDrawerTrigger.setAttribute('aria-expanded', String(open));
-        this.profileDrawer.setAttribute('aria-hidden', String(!open));
-        document.body.classList.toggle('profile-drawer-open', open);
-        if (open) {
-            this.profileDrawerClose?.focus({ preventScroll: true });
-        }
-        for (const element of document.querySelectorAll<HTMLElement>(
-            '.navbar, main#main-content, footer.footer'
-        )) {
-            element.inert = open;
-        }
-
-        if (!open && restoreFocus) {
-            (this.profileDrawerLastFocused ?? this.profileDrawerTrigger).focus();
-        }
     }
 
     private setMenuOpen(open: boolean, restoreFocus = false): void {

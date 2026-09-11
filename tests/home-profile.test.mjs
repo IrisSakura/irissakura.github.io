@@ -61,41 +61,35 @@ test('generated pages load one static brand without theme controls or bootstrap 
   }
 });
 
-test('shared navigation exposes the profile avatar and six real quick routes at every depth', async () => {
+test('shared navigation exposes one five-route menu and a direct profile link at every depth', async () => {
   const site = await readJson('data/site.json');
   const pages = [
     { path: 'index.html', prefix: '' },
     { path: 'pages/framework.html', prefix: '../' }
   ];
   const routeTargets = [
-    'pages/game.html',
+    'index.html',
     'pages/portfolio.html',
-    'pages/journal.html',
-    'pages/blog.html',
     'pages/development.html',
+    'pages/journal.html',
     'pages/contact.html'
   ];
 
   for (const page of pages) {
     const html = await readFile(new URL(page.path, root), 'utf8');
     const navbar = html.match(/<nav class="navbar"[\s\S]*?<\/nav>/u)?.[0] ?? '';
-    assert.ok(navbar.includes('class="profile-drawer-trigger"'));
-    assert.ok(navbar.includes('aria-controls="profile-drawer"'));
-    assert.ok(navbar.includes('aria-expanded="false"'));
+    assert.ok(navbar.includes('class="nav-profile-link"'));
+    assert.ok(navbar.includes('aria-label="关于与联系"'));
     assert.ok(navbar.includes(`${page.prefix}${site.profile.avatar}`));
-    assert.ok(navbar.indexOf('profile-drawer-trigger') < navbar.indexOf('class="logo"'));
-
-    assert.ok(html.includes('id="profile-drawer"'));
-    assert.ok(html.includes('role="dialog"'));
-    assert.ok(html.includes('aria-modal="true"'));
-    assert.equal((html.match(/data-profile-quick-link/g) ?? []).length, routeTargets.length);
+    assert.equal((navbar.match(/class="nav-link(?: active)?"/g) ?? []).length, routeTargets.length);
+    assert.ok(!html.includes('profile-drawer'));
     for (const target of routeTargets) {
       assert.ok(html.includes(`href="${page.prefix}${target}"`), `${page.path} missing ${target}`);
     }
   }
 });
 
-test('homepage presents identity, flagship work and four visitor-interest paths in order', async () => {
+test('homepage presents identity, flagship work, four projects and selected knowledge in order', async () => {
   const [site, home] = await Promise.all([
     readJson('data/site.json'),
     readFile(new URL('index.html', root), 'utf8')
@@ -103,29 +97,26 @@ test('homepage presents identity, flagship work and four visitor-interest paths 
 
   const profileOffset = home.indexOf('id="profile"');
   const flagshipOffset = home.indexOf('class="flagship-section"');
-  const focusOffset = home.indexOf('class="focus-section"');
+  const projectsOffset = home.indexOf('class="home-projects"');
   const researchOffset = home.indexOf('class="research-section"');
   const contactOffset = home.indexOf('class="public-cta"');
   assert.ok(profileOffset >= 0, 'homepage profile must exist');
   assert.ok(flagshipOffset > profileOffset, 'flagship must immediately follow the profile hierarchy');
-  assert.ok(focusOffset > flagshipOffset, 'visitor-interest paths must follow the flagship');
-  assert.ok(researchOffset > focusOffset, 'selected research must follow focus areas');
+  assert.ok(projectsOffset > flagshipOffset, 'four project routes must follow the flagship');
+  assert.ok(researchOffset > projectsOffset, 'selected knowledge must follow projects');
   assert.ok(contactOffset > researchOffset, 'contact CTA must close the homepage');
 
   assert.ok(home.includes(site.profile.nickname));
   assert.ok(home.includes(site.profile.role));
-  assert.ok(home.includes(site.profile.introduction));
+  assert.match(home, /我做游戏，也构建支持创作的框架、工具与知识体系/);
   assert.ok(home.includes(`src="${site.profile.avatar}"`));
-  assert.equal((home.match(/data-home-focus/g) ?? []).length, 4);
-  for (const label of ['作品与原型', '游戏设计研究', '完整文章', '研发体系']) {
-    assert.ok(home.includes(label), `homepage visitor paths are missing ${label}`);
-  }
+  assert.equal((home.match(/class="project-entry-card /g) ?? []).length, 4);
+  assert.equal((home.match(/class="knowledge-card"/g) ?? []).length, 3);
   assert.ok(home.includes('href="pages/portfolio.html"'));
   assert.ok(home.includes('href="pages/journal.html"'));
-  assert.ok(home.includes('href="pages/blog.html"'));
   assert.ok(home.includes('href="pages/development.html"'));
   assert.ok(home.includes('Iris Engineering'));
-  assert.ok(home.includes('Sakura Framework'));
+  assert.ok(home.includes('SakuraGameFramework'));
   for (const obsoleteClass of ['brand-ecosystem-section', 'brand-proof', 'evidence-strip', 'case-section', 'method-section']) {
     assert.ok(!home.includes(`class="${obsoleteClass}"`), `homepage still renders ${obsoleteClass}`);
   }
@@ -135,7 +126,6 @@ test('homepage presents identity, flagship work and four visitor-interest paths 
   for (const repeatedCopy of ['这里不只有代码', '最近值得一读', '从这些研究主题开始', '尚未提供公开 Demo；内容与表现仍在持续完善']) {
     assert.ok(!home.includes(repeatedCopy), `homepage still includes verbose copy: ${repeatedCopy}`);
   }
-  const researchRows = [...home.matchAll(/<article class="research-row">([\s\S]*?)<\/article>/gu)];
-  assert.equal(researchRows.length, 3);
-  for (const [, row] of researchRows) assert.equal((row.match(/<p\b/gu) ?? []).length, 1);
+  const knowledgeCards = [...home.matchAll(/<article class="knowledge-card"[\s\S]*?<\/article>/gu)];
+  assert.equal(knowledgeCards.length, 3);
 });

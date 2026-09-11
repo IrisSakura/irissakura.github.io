@@ -40,7 +40,7 @@ test('generated Iris Engineering page explains capability, evidence and limits w
 
   for (const fragment of [
     'IRIS ENGINEERING',
-    '研发工作流控制面',
+    '让工程推进有据可依',
     'Observe',
     'Authorize',
     'Execute',

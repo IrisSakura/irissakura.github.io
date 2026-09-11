@@ -52,7 +52,7 @@ test('site configuration exposes verified direct contacts and public routes', as
   }
 });
 
-test('public navigation presents Contact as an ordinary tab without owner-only boundary copy', async () => {
+test('public navigation presents About and Contact as an ordinary tab without owner-only boundary copy', async () => {
   const pages = [
     'index.html',
     '404.html',
@@ -62,7 +62,7 @@ test('public navigation presents Contact as an ordinary tab without owner-only b
   for (const page of pages) {
     const html = await readText(page);
     const nav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.ok(nav.includes('>联系</a>'), `${page} navigation is missing the 联系 tab`);
+    assert.ok(nav.includes('>关于与联系</a>'), `${page} navigation is missing the 关于与联系 tab`);
     assert.ok(!nav.includes('>公开入口</a>'), `${page} navigation still labels Contact as 公开入口`);
     assert.ok(!nav.includes('nav-cta'), `${page} gives Contact a special navigation treatment`);
   }
@@ -283,18 +283,24 @@ test('major page visuals are generated without reused category screenshots', asy
   const home = await readText('index.html');
   const profileOffset = home.indexOf('id="profile"');
   const flagshipOffset = home.indexOf('class="flagship-section"');
-  const focusOffset = home.indexOf('class="focus-section"');
+  const projectsOffset = home.indexOf('class="home-projects"');
   assert.ok(profileOffset >= 0, 'home must expose one real identity section');
   assert.ok(flagshipOffset > profileOffset, 'flagship proof must follow the identity section');
-  assert.ok(focusOffset > flagshipOffset, 'secondary focus areas must follow the flagship proof');
+  assert.ok(projectsOffset > flagshipOffset, 'four project routes must follow the flagship proof');
 
   const cssVisualCovers = ['home', 'framework', 'journal', 'blog', 'contact'];
   for (const coverKey of cssVisualCovers) assert.equal(site.pageCovers[coverKey].image, '', `${coverKey} must use a category visual`);
   assert.notEqual(site.pageCovers.portfolio.image, site.pageCovers.game.image);
 
+  const projectHeroKeys = new Set(['engineering', 'framework', 'journal']);
   for (const [coverKey, pagePath] of Object.entries(majorPages)) {
     const html = await readText(pagePath);
     const prefix = pagePath === 'index.html' ? '' : '../';
+    if (projectHeroKeys.has(coverKey)) {
+      assert.ok(html.includes('data-brand-project-hero'), `${pagePath} missing project hero ownership`);
+      assert.ok(!html.includes(`data-page-cover="${coverKey}"`), `${pagePath} still has two hero owners`);
+      continue;
+    }
     assert.ok(html.includes('page-cover'), `${pagePath} missing shared page-cover class`);
     assert.ok(html.includes(`data-page-cover="${coverKey}"`), `${pagePath} missing ${coverKey} cover key`);
     if (site.pageCovers[coverKey].image) {
@@ -316,18 +322,18 @@ test('research and articles share one visitor-facing primary route without chang
 
   const journal = await readText('pages/journal.html');
   const blog = await readText('pages/blog.html');
-  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active" aria-current="page">知识<\/a>/;
+  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active"(?: aria-current="page"| data-nav-section-current="true")>知识<\/a>/;
   assert.match(journal, activeJournalNav);
   assert.match(blog, activeJournalNav);
 });
 
-test('primary navigation gives Iris Engineering and Sakura Framework one equal parent context', async () => {
+test('primary navigation gives the four projects one visitor-facing parent context', async () => {
   for (const page of ['index.html', 'pages/development.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/tools.html', 'pages/brand.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
     const labels = [...primaryNav.matchAll(/class="nav-link(?: active)?"[^>]*>([^<]+)<\/a>/g)].map((match) => match[1]);
-    assert.deepEqual(labels, ['首页', '作品', '研发体系', '知识', '工具', 'Brand', '联系'], `${page} has an unexpected primary navigation order`);
-    for (const label of ['首页', '作品', '研发体系', '知识', '工具', 'Brand', '联系']) {
+    assert.deepEqual(labels, ['首页', '作品', '项目', '知识', '关于与联系'], `${page} has an unexpected primary navigation order`);
+    for (const label of ['首页', '作品', '项目', '知识', '关于与联系']) {
       assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
     }
     for (const productLabel of ['Engineering', 'Framework', 'Journal']) {
@@ -344,23 +350,23 @@ test('primary navigation gives Iris Engineering and Sakura Framework one equal p
   assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/development\.html">/u);
   assert.equal((development.match(/class="development-card /g) ?? []).length, 4);
   assert.match(development, /class="development-card development-card-iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="engineering\.html"/u);
-  assert.match(development, /class="development-card development-card-sakura"[\s\S]*?<h2>Sakura Framework<\/h2>[\s\S]*?href="framework\.html"/u);
-  assert.match(development, /class="development-card development-card-myosotis"[\s\S]*?<h2>Myosotis<\/h2>[\s\S]*?href="journal\.html"/u);
+  assert.match(development, /class="development-card development-card-sakura"[\s\S]*?<h2>SakuraGameFramework<\/h2>[\s\S]*?href="framework\.html"/u);
+  assert.match(development, /class="development-card development-card-journal"[\s\S]*?<h2>Myosotis<\/h2>[\s\S]*?href="journal\.html"/u);
   assert.match(development, /class="development-card development-card-violet"[\s\S]*?<h2>Violet Shelf<\/h2>[\s\S]*?href="tools\.html"/u);
-  assert.match(development, /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">研发体系<\/a>/u);
+  assert.match(development, /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">项目<\/a>/u);
   for (const childPage of ['pages/engineering.html', 'pages/framework.html', 'pages/framework-quickstart.html']) {
-    assert.match(await readText(childPage), /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">研发体系<\/a>/u);
+    assert.match(await readText(childPage), /href="\.\.\/pages\/development\.html" class="nav-link active" data-nav-section-current="true">项目<\/a>/u);
   }
   for (const page of ['pages/development.html', 'pages/engineering.html', 'pages/framework.html']) {
     const html = await readText(page);
     assert.match(html, /<footer class="footer">[\s\S]*?>Iris Engineering<\/a>/u);
-    assert.match(html, /<footer class="footer">[\s\S]*?>Sakura Framework<\/a>/u);
+    assert.match(html, /<footer class="footer">[\s\S]*?>SakuraGameFramework<\/a>/u);
   }
   assert.ok(!brand.includes('<meta name="robots" content="noindex, follow">'));
   assert.ok(brand.includes('id="brand-system"'));
   assert.ok(brand.includes('IrisSakura Brand System'));
-  assert.match(brand, /<footer class="footer">[\s\S]*?>品牌视觉<\/a>/u);
-  assert.match(brand, /href="\.\.\/pages\/brand\.html#brand-system" aria-label="查看 Iris Engineering 与 SakuraGameFramework 的 IRIS × SAKURA 合作标识"/u);
+  assert.match(brand, /<footer class="footer">[\s\S]*?>品牌与视觉资料<\/a>/u);
+  assert.match(brand, /<footer class="footer">[\s\S]*?href="\.\.\/pages\/brand\.html">品牌与视觉资料<\/a>/u);
   assert.ok(sitemap.includes('/pages/development.html'));
   assert.ok(sitemap.includes('/pages/brand.html'));
 
@@ -379,11 +385,12 @@ test('primary navigation gives Iris Engineering and Sakura Framework one equal p
 
 test('home labels curated research honestly and README matches current routes and smoke scope', async () => {
   const [home, readme] = await Promise.all([readText('index.html'), readText('README.md')]);
-  assert.ok(home.includes('最近更新'));
-  assert.ok(home.includes('研究主题'));
+  assert.ok(home.includes('精选知识'));
+  assert.ok(home.includes('knowledge-card'));
+  assert.ok(!home.includes('最近更新'));
   assert.ok(!home.includes('LATEST RESEARCH'));
   assert.ok(readme.includes('/pages/brand.html'));
-  assert.ok(readme.includes('一级 `Brand` 入口'));
+  assert.ok(readme.includes('/pages/brand.html'));
   assert.ok(readme.includes('/pages/art-music.html'));
   assert.ok(readme.includes('兼容跳转'));
   assert.ok(readme.includes('公开展示 IrisSakura 品牌架构'));
@@ -507,7 +514,8 @@ test('single-brand shell contains no theme switching, persistence or transition 
   for (const contract of ['{{themeOptions}}', 'theme-picker', 'theme-select', '选择页面主题']) {
     assert.ok(!navbar.includes(contract), `single-brand navigation still contains ${contract}`);
   }
-  assert.ok(navbar.includes('class="brand-seal"'));
+  assert.ok(navbar.includes('class="nav-profile-link"'));
+  assert.ok(!navbar.includes('class="brand-seal"'));
 });
 
 test('obsolete layout selector, registry and runtime are fully removed', async () => {

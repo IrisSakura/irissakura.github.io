@@ -12,8 +12,8 @@ test('portfolio explains the path from research to finished work', async () => {
   const html = await readText('pages/portfolio.html');
 
   for (const fragment of [
-    '8 个项目的当前状态与证据边界',
-    '事实更新时间、人工复核时间与同步方式',
+    '作品与创作',
+    '从可玩原型、Mod 与玩法实验开始',
     '研究判断 → 工程治理 → 框架沉淀 → 游戏验证',
     '研究判断',
     '显式授权',
@@ -29,6 +29,8 @@ test('portfolio explains the path from research to finished work', async () => {
   ]) {
     assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
   }
+  assert.match(html, /id="project-iris-shelf"[\s\S]*?历史来源快照 · 2026-08-30[\s\S]*?href="tools\.html"[^>]*>查看 Violet Shelf/u);
+  assert.match(html, /<details class="portfolio-evidence">/u);
 });
 
 test('portfolio data keeps research distinct from finished work', async () => {
@@ -215,8 +217,8 @@ test('finished game page presents the real playable loop and public screenshots'
     'room-selection.png',
     'potential-tree.png',
     'blessing-request.png',
-    'IrisSakura Journal',
-    'Sakura Framework'
+    'Myosotis',
+    'SakuraGameFramework'
   ]) {
     assert.ok(html.includes(fragment), `missing finished-game fragment: ${fragment}`);
   }

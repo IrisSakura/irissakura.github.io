@@ -85,7 +85,8 @@ async function assertEvidenceChainPage(page, route, viewportName) {
     }
     for (const relationship of Object.values(evidenceChainAuthorities.relationships)) {
       const cardText = await page.locator(`#${chain.id}`).innerText();
-      if (!cardText.includes(relationship)) throw new Error(`${viewportName} ${route} is missing relationship text`);
+      const publicRelationship = relationship.replaceAll('Sakura Framework', 'SakuraGameFramework');
+      if (!cardText.includes(publicRelationship)) throw new Error(`${viewportName} ${route} is missing relationship text`);
     }
   }
   const expectedColumns = viewportName === 'desktop' ? 4 : 1;
@@ -101,13 +102,13 @@ const brandContrastRoutes = [
       ['homepage profile title', '.profile-copy .hero-title'],
       ['homepage profile role', '.profile-role'],
       ['homepage profile introduction', '.profile-copy .hero-description'],
-      ['homepage focus descriptions', '.focus-card > p:not(.focus-index)']
+      ['homepage project descriptions', '.project-entry-card > p:not(.project-entry-index)']
     ]
   },
   {
     route: '/pages/engineering.html',
     checks: [
-      ['Engineering hero description', '.engineering-hero-inner > div > p:last-child'],
+      ['Engineering hero description', '.engineering-hero .project-hero-summary'],
       ['Engineering status', '.engineering-status p'],
       ['Engineering workflow descriptions', '.engineering-workflow li > span:last-child'],
       ['Engineering capability descriptions', '.engineering-capability-card > p'],
@@ -160,7 +161,7 @@ const brandContrastRoutes = [
   {
     route: '/pages/journal.html',
     checks: [
-      ['Journal back link', '.journal-back'],
+      ['Journal breadcrumb', '.journal-hero .project-breadcrumb'],
       ['Journal dashboard label', '.journal-dashboard-label'],
       ['Journal dashboard values', '.journal-metric strong'],
       ['Journal dashboard metric labels', '.journal-metric span'],
@@ -222,6 +223,15 @@ await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 const address = server.address();
 if (!address || typeof address === 'string') throw new Error('failed to bind static test server');
 const baseUrl = `http://127.0.0.1:${address.port}`;
+const coreVisualRoutes = [
+  ['home', '/'],
+  ['portfolio', '/pages/portfolio.html'],
+  ['projects', '/pages/development.html'],
+  ['engineering', '/pages/engineering.html'],
+  ['framework', '/pages/framework.html'],
+  ['myosotis', '/pages/journal.html'],
+  ['violet-shelf', '/pages/tools.html']
+];
 const browser = await chromium.launch({ headless: true });
 
 try {
@@ -401,39 +411,19 @@ try {
   if (await desktop.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
     throw new Error('homepage still ships the retired BGM player');
   }
-  const profileDrawerTrigger = desktop.getByRole('button', {
-    name: '打开 IrisSakura 快速导航',
-    exact: true
-  });
-  await profileDrawerTrigger.click();
-  const profileDrawer = desktop.locator('#profile-drawer');
-  if (await profileDrawerTrigger.getAttribute('aria-expanded') !== 'true') {
-    throw new Error('profile drawer trigger did not expose expanded state');
+  if (await desktop.locator('.nav-menu .nav-link').count() !== 5) {
+    throw new Error('desktop navigation does not expose the reviewed five routes');
   }
-  if (await profileDrawer.getAttribute('aria-hidden') !== 'false') {
-    throw new Error('profile drawer did not expose its open state');
+  if (await desktop.locator('#profile-drawer, [data-profile-quick-link]').count() !== 0) {
+    throw new Error('retired profile navigation is still present');
   }
-  if (await desktop.locator('[data-profile-quick-link]').count() !== 6) {
-    throw new Error('profile drawer does not expose all six quick routes');
-  }
-  const profileDrawerClose = desktop.getByRole('button', {
-    name: '关闭快速导航',
-    exact: true
-  });
-  if (!await profileDrawerClose.evaluate((button) => document.activeElement === button)) {
-    throw new Error('opening the profile drawer did not move focus into the dialog');
-  }
-  await desktop.keyboard.press('Escape');
-  if (await profileDrawer.getAttribute('aria-hidden') !== 'true') {
-    throw new Error('Escape did not close the profile drawer');
-  }
-  if (!await profileDrawerTrigger.evaluate((button) => document.activeElement === button)) {
-    throw new Error('closing the profile drawer did not restore trigger focus');
+  if (!new URL(await desktop.locator('.nav-profile-link').getAttribute('href')).pathname.endsWith('/pages/contact.html')) {
+    throw new Error('profile identity does not link directly to contact');
   }
   await desktop.evaluate(() => {
     document.documentElement.dataset.smokeDocument = 'persistent-navigation';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: '联系', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '关于与联系', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/contact.html`);
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('cross-page navigation replaced the active document');
@@ -443,10 +433,16 @@ try {
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('return navigation replaced the active document');
   }
-  await desktop.locator('.nav-menu').getByRole('link', { name: '研发体系', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '项目', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/development.html`);
   if (await desktop.locator('.development-card').count() !== 4) {
     throw new Error('Development hub does not present four equal project routes');
+  }
+  const overflowingDevelopmentHeading = await desktop.locator('.development-card h2').evaluateAll((headings) => (
+    headings.some((heading) => heading.scrollWidth - heading.clientWidth > 1)
+  ));
+  if (overflowingDevelopmentHeading) {
+    throw new Error('Development hub project heading overflows its card');
   }
   for (const [name, href] of [
     ['进入 Myosotis', 'journal.html'],
@@ -456,7 +452,7 @@ try {
       throw new Error(`Development hub route drifted: ${name} must target ${href}`);
     }
   }
-  await desktop.getByRole('link', { name: '进入 Sakura Framework', exact: true }).click();
+  await desktop.getByRole('link', { name: '进入 SakuraGameFramework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
   if (await desktop.locator('.framework-story-chip').count() !== frameworkStory.positioning.claims.length) {
@@ -602,8 +598,8 @@ try {
   if (await desktop.locator('.depth-card').count() === 0) throw new Error('shared depth treatment was not applied');
   await desktop.evaluate(() => window.scrollTo(0, 240));
   await desktop.waitForFunction(() => document.querySelector('.navbar')?.classList.contains('scrolled'));
-  await desktop.locator('.research-row').first().scrollIntoViewIfNeeded();
-  await desktop.locator('.research-row.is-visible').first().waitFor();
+  await desktop.locator('.knowledge-card').first().scrollIntoViewIfNeeded();
+  await desktop.locator('.knowledge-card.is-visible').first().waitFor();
 
   const reducedMotionContext = await browser.newContext({
     viewport: { width: 1280, height: 900 },
@@ -624,14 +620,14 @@ try {
 
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mkdir(process.env.SITE_SCREENSHOT_DIR, { recursive: true });
-    await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-    await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'home-desktop.png'), fullPage: true });
-    await desktop.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
-    await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-desktop.png'), fullPage: true });
-    await desktop.goto(`${baseUrl}/pages/engineering.html`, { waitUntil: 'networkidle' });
-    await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'engineering-desktop.png'), fullPage: true });
-    await desktop.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
-    await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'framework-quickstart-desktop.png'), fullPage: true });
+    await desktop.emulateMedia({ reducedMotion: 'reduce' });
+    await desktop.setViewportSize({ width: 1440, height: 1000 });
+    for (const [slug, route] of coreVisualRoutes) {
+      await desktop.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
+      await desktop.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, `${slug}-1440.png`), fullPage: true });
+    }
+    await desktop.setViewportSize({ width: 1280, height: 900 });
+    await desktop.emulateMedia({ reducedMotion: 'no-preference' });
   }
 
   await desktop.goto(`${baseUrl}/pages/framework-quickstart.html`, { waitUntil: 'networkidle' });
@@ -641,8 +637,8 @@ try {
   if (await desktop.locator('.quickstart-code pre').count() !== frameworkQuickstart.steps.filter((step) => step.code).length) {
     throw new Error('Quickstart does not render every registered code probe');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '研发体系' }).isVisible()) {
-    throw new Error('Quickstart does not keep the 研发体系 navigation context');
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '项目' }).isVisible()) {
+    throw new Error('Quickstart does not keep the 项目 navigation context');
   }
   const quickstartDesktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   if (quickstartDesktopOverflow > 1) {
@@ -737,8 +733,8 @@ try {
   }
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
-  await desktop.locator('.brand-seal').click();
-  await desktop.waitForURL(`${baseUrl}/pages/brand.html#brand-system`);
+  await desktop.getByRole('link', { name: '品牌与视觉资料', exact: true }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/brand.html`);
   if (await desktop.locator('meta[name="robots"][content^="noindex"]').count() !== 0) {
     throw new Error('public brand portfolio must remain indexable');
   }
@@ -996,8 +992,8 @@ try {
   }
 
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
-  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '联系', exact: true });
-  if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 联系');
+  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '关于与联系', exact: true });
+  if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 关于与联系');
   if ((await contactNavLink.getAttribute('class'))?.split(/\s+/).includes('nav-cta')) {
     throw new Error('Contact navigation still has special CTA styling');
   }
@@ -1017,6 +1013,12 @@ try {
   }
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'contact-mobile.png'), fullPage: true });
+    await mobile.emulateMedia({ reducedMotion: 'reduce' });
+    for (const [slug, route] of coreVisualRoutes) {
+      await mobile.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
+      await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, `${slug}-390.png`), fullPage: true });
+    }
+    await mobile.emulateMedia({ reducedMotion: 'no-preference' });
   }
 
   console.log('Browser smoke passed: routes, persistent navigation, static content search, Featured Reading, evidence-led portfolio, mobile navigation and contact routes checked.');

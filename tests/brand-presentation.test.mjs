@@ -6,18 +6,21 @@ import { currentProductName } from '../scripts/lib/brand-presentation.mjs';
 const root = new URL('../', import.meta.url);
 const read = (file) => readFile(new URL(file, root), 'utf8');
 
-test('v1 presentation keeps stable journal identity and adds a display-only Violet route', async () => {
-  const [brand, tools, architecture] = await Promise.all([read('config/brand.json'), read('pages/tools.html'), read('docs/brand/brand-architecture.md')]);
+test('v2 presentation keeps stable IDs and exposes the reviewed four-project names', async () => {
+  const [brand, tools, architecture, presentation] = await Promise.all([read('config/brand.json'), read('pages/tools.html'), read('docs/brand/brand-architecture.md'), read('config/site-presentation.json')]);
   assert.match(brand, /"journal"/);
   assert.match(brand, /"violet"/);
   assert.match(tools, /Violet Shelf/);
-  assert.match(tools, /不提供公开发布或下载/);
+  assert.match(tools, /不提供在线使用、公开下载、签名或发布承诺/);
+  assert.match(presentation, /SakuraGameFramework/);
+  assert.match(presentation, /Myosotis/);
   assert.match(architecture, /IRIS × SAKURA/);
 });
 
-test('stable identifiers receive display-only aliases without mutating unknown historical labels', () => {
-  assert.equal(currentProductName('sakura-design-journal', 'IrisSakura Journal'), 'Myosotis');
-  assert.equal(currentProductName('iris-shelf', 'Iris Shelf'), 'Violet Shelf');
+test('stable identifiers receive presentation-owned display names without mutating unknown historical labels', async () => {
+  const presentation = JSON.parse(await read('config/site-presentation.json'));
+  assert.equal(currentProductName('sakura-design-journal', 'IrisSakura Journal', presentation.projects), 'Myosotis');
+  assert.equal(currentProductName('iris-shelf', 'Iris Shelf', presentation.projects), 'Violet Shelf');
   assert.equal(currentProductName('historical-source', 'Iris Shelf'), 'Iris Shelf');
 });
 

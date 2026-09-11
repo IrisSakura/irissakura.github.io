@@ -185,7 +185,8 @@ test('all four public pages expose the same ordered evidence chain', async () =>
       assert.ok(html.includes('engineering.html#workflow-observe'), `${page} missing control-plane workflow link`);
       assert.ok(html.includes('engineering.html#capability-workflow-core'), `${page} missing control-plane capability link`);
       for (const relationship of Object.values(authorities.relationships)) {
-        assert.ok(html.includes(relationship), `${page} missing relationship text: ${relationship}`);
+        const publicRelationship = relationship.replaceAll('Sakura Framework', 'SakuraGameFramework');
+        assert.ok(html.includes(publicRelationship), `${page} missing relationship text: ${publicRelationship}`);
       }
       const path = html.slice(html.indexOf(`id="evidence-chain-${chain.id}"`), html.indexOf(`id="evidence-chain-${chain.id}"`) + 3500);
       assert.ok(path.indexOf('RESEARCH') < path.indexOf('CONTROL PLANE'), `${page} has wrong research/control-plane order`);

@@ -146,11 +146,12 @@ test('generated current product surfaces use aliases while source records and co
 });
 
 test('creator surfaces use IrisSakura while the joint label is scoped to the Iris–Sakura cooperation mark', async () => {
-  const [header, navbar] = await Promise.all([read('assets/brand/readme-header.svg'), read('components/navbar.html')]);
+  const [header, navbar, brandPage] = await Promise.all([read('assets/brand/readme-header.svg'), read('components/navbar.html'), read('pages/brand.html')]);
   assert.match(header, />IrisSakura<\/text>/u);
   assert.match(header, /CREATOR IDENTITY · INDEPENDENT PROJECTS/u);
   assert.doesNotMatch(header, />IRIS × SAKURA<\/text>/u);
-  assert.match(navbar, /Iris Engineering 与 SakuraGameFramework 的 IRIS × SAKURA 合作标识/u);
+  assert.doesNotMatch(navbar, /IRIS × SAKURA/u);
+  assert.match(brandPage, /IRIS × SAKURA 仅表达这两者的直接合作/u);
 });
 
 test('Violet Shelf tools explain only implemented local operations with truthful public routes and local-source boundaries', async () => {
@@ -163,13 +164,13 @@ test('Violet Shelf tools explain only implemented local operations with truthful
   for (const href of ['portfolio.html#project-iris-shelf', 'brand.html']) {
     assert.ok(tools.includes(`href="${href}"`), `tools page is missing truthful public route: ${href}`);
   }
-  assert.match(tools, /仓库本地 README 与/u);
-  assert.match(tools, /docs\/product\/iris-shelf-new-tools-r1-delivery\.md/u);
-  assert.match(tools, /不是公开链接、发布或下载/u);
+  assert.match(tools, /不提供在线使用、公开下载、签名或发布承诺/u);
+  assert.match(tools, /历史来源快照/u);
+  assert.doesNotMatch(tools, /docs\/product\//u);
   assert.doesNotMatch(tools, /github\.com\/IrisSakura\/IrisShelf/u);
   assert.doesNotMatch(tools, /href="\.\.\/README\.md"/u);
-  assert.match(styles, /\.tools-brand-reference\{max-width:min\(100%,1050px\)/u);
-  assert.match(styles, /\.tools-brand-reference img\{display:block;width:100%;max-width:100%;height:auto\}/u);
+  assert.match(styles, /\.tools-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3,/u);
+  assert.match(styles, /\.tools-status\s*\{[\s\S]*?grid-template-columns:/u);
 });
 
 test('brand portfolio is public, indexable and generator-owned', async () => {
@@ -208,7 +209,7 @@ test('brand story is expressed as live dual tracks, convergence, palette and nam
     'ENGINEER · MANAGE · DELIVER',
     'FRAME · POWER · EXTEND',
     'Engineering &amp; Project Management',
-    'Sakura Framework',
+    'SakuraGameFramework',
     'Game Framework / Modules / Runtime / Tooling'
   ]) {
     assert.ok(page.includes(marker), `brand page is missing v3 ownership marker ${marker}`);
@@ -228,7 +229,7 @@ test('generated public shell uses one joint brand mark without the retired gamep
     assert.ok(page.includes('class="brand-mark"'));
     assert.ok(page.includes('BUILD · ORGANIZE · BLOOM'));
     assert.ok(page.includes('Iris Engineering'));
-    assert.ok(page.includes('Sakura Framework'));
+    assert.ok(page.includes('SakuraGameFramework'));
     assert.ok(!page.includes('BUILD · CREATE · BLOOM'));
     assert.ok(!page.includes('fa-gamepad'));
   }
@@ -251,7 +252,7 @@ test('visitor homepage stays editorial while the dedicated Brand page owns contr
   const combined = `${home}\n${brandPage}`;
   const governed = combined.match(/data-brand-layout="(?:contrast|editorial)"/g) ?? [];
   const contrast = combined.match(/data-brand-layout="contrast"/g) ?? [];
-  assert.equal(governed.length, 10);
+  assert.equal(governed.length, 9);
   assert.equal(contrast.length, 2);
   assert.equal((home.match(/data-brand-layout="contrast"/g) ?? []).length, 0);
   assert.equal((brandPage.match(/data-brand-layout="contrast"/g) ?? []).length, 2);
@@ -305,6 +306,7 @@ test('homepage leaves brand-system detail to the dedicated secondary route', asy
   assert.ok(!home.includes('BRAND PROMISE → PRODUCT PROOF'));
   assert.ok(brandPage.includes('id="brand-system"'));
   assert.ok(brandPage.includes('IrisSakura Brand System'));
-  assert.ok(home.includes('href="pages/brand.html#brand-system"'));
+  assert.ok(home.includes('href="pages/brand.html"'));
+  assert.ok(home.includes('品牌与视觉资料'));
   assert.doesNotMatch(generator, /assertBrandProof/u);
 });
