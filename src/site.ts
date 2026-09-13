@@ -191,6 +191,13 @@ class SiteShell {
             }
 
             const destination = new URL(link.href, location.href);
+            if (this.isSameDocumentFragment(destination)) {
+                event.preventDefault();
+                this.setMenuOpen(false);
+                history.pushState(null, '', destination.href);
+                this.restoreNavigationPosition(destination);
+                return;
+            }
             if (!this.canSoftNavigate(destination)) return;
             event.preventDefault();
             this.setMenuOpen(false);
@@ -205,14 +212,14 @@ class SiteShell {
     private canSoftNavigate(destination: URL): boolean {
         if (destination.origin !== location.origin) return false;
         if (!['http:', 'https:'].includes(destination.protocol)) return false;
-        if (
-            destination.pathname === location.pathname
-            && destination.search === location.search
-            && destination.hash
-        ) {
-            return false;
-        }
         return destination.pathname === '/' || destination.pathname.endsWith('.html');
+    }
+
+    private isSameDocumentFragment(destination: URL): boolean {
+        return destination.origin === location.origin
+            && destination.pathname === location.pathname
+            && destination.search === location.search
+            && Boolean(destination.hash);
     }
 
     private async navigate(destination: URL, pushHistory: boolean): Promise<void> {
