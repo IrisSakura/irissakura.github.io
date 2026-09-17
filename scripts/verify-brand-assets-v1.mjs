@@ -18,8 +18,10 @@ const OUTPUT_NAMES = Object.freeze([
 ]);
 const SVG_NAMES = Object.freeze([
   'logo-myosotis.svg', 'logo-myosotis-small.svg', 'wordmark-myosotis.svg', 'lockup-myosotis-stacked.svg',
-  'logo-violet-shelf.svg', 'logo-violet-shelf-small.svg', 'wordmark-violet-shelf.svg', 'lockup-violet-shelf-stacked.svg'
+  'logo-violet-shelf.svg', 'logo-violet-shelf-small.svg', 'wordmark-violet-shelf.svg', 'lockup-violet-shelf-stacked.svg',
+  'logo-freesia-mods.svg', 'logo-freesia-mods-small.svg', 'wordmark-freesia-mods.svg'
 ]);
+const FREESIA_OUTPUT_NAMES = Object.freeze(['character-freesia-hero.webp', 'botanical-branch.webp', 'pattern-petals.webp']);
 const ALLOWED_SOURCE_PREFIXES = Object.freeze(['01_original_cut_package/', '02_transparent_png/']);
 
 function safeRelative(value, label) {
@@ -90,6 +92,24 @@ function verifyPng(bytes, output) {
   return `${width}x${height}`;
 }
 
+function verifyWebp(bytes, output) {
+  assert.ok(bytes.length >= 30 && bytes.subarray(0, 4).toString('ascii') === 'RIFF' && bytes.subarray(8, 12).toString('ascii') === 'WEBP', `${output} has an invalid WebP signature`);
+  let offset = 12;
+  while (offset + 8 <= bytes.length) {
+    const type = bytes.subarray(offset, offset + 4).toString('ascii');
+    const length = bytes.readUInt32LE(offset + 4);
+    const data = offset + 8;
+    assert.ok(data + length <= bytes.length, `${output} has a truncated WebP chunk`);
+    if (type === 'VP8X') {
+      const width = 1 + bytes[data + 4] + (bytes[data + 5] << 8) + (bytes[data + 6] << 16);
+      const height = 1 + bytes[data + 7] + (bytes[data + 8] << 8) + (bytes[data + 9] << 16);
+      return `${width}x${height}`;
+    }
+    offset = data + length + (length % 2);
+  }
+  throw new Error(`${output} is missing a VP8X dimension chunk`);
+}
+
 function decodeCssEscapes(value) {
   return value.replace(/\\([0-9a-f]{1,6})(?:\s)?/giu, (_, code) => String.fromCodePoint(Number.parseInt(code, 16))).replace(/\\(.)/gsu, '$1');
 }
@@ -137,8 +157,26 @@ export async function verifyBrandAssets(root) {
     assert.equal(verifyPng(bytes, asset.output), asset.dimensions, `${asset.output} dimensions do not match its recorded provenance`);
   }
 
-  const derived = [...(manifest.svgDerivations?.myosotis ?? []), ...(manifest.svgDerivations?.violetShelfVariants ?? [])];
-  assert.equal(derived.length, SVG_NAMES.length, 'manifest must declare exactly eight SVG derivations');
+  assert.equal(manifest.freesiaAssets?.length, FREESIA_OUTPUT_NAMES.length, 'manifest must declare exactly three Freesia WebP outputs');
+  const freesiaOutputs = manifest.freesiaAssets.map((asset) => asset.output);
+  assert.equal(new Set(freesiaOutputs).size, freesiaOutputs.length, 'manifest contains duplicate Freesia output');
+  assert.deepEqual([...freesiaOutputs].sort(), [...FREESIA_OUTPUT_NAMES].sort(), 'manifest Freesia output set does not match the closed output set');
+  const freesiaRoot = path.resolve(root, 'assets/images/brand/freesia');
+  for (const asset of manifest.freesiaAssets) {
+    safeRelative(asset.source, 'Freesia asset source');
+    assert.ok(asset.source.startsWith('Freesia_Mods_Complete_Assets/'), 'Freesia asset source is outside the approved bundle root');
+    safeRelative(asset.output, 'Freesia asset output');
+    assert.ok(FREESIA_OUTPUT_NAMES.includes(asset.output), 'Freesia asset output is outside the closed output set');
+    assert.match(asset.sha256 ?? '', /^[a-f0-9]{64}$/u, `${asset.output} hash is invalid`);
+    assert.match(asset.dimensions ?? '', /^\d+x\d+$/u, `${asset.output} dimensions are invalid`);
+    assert.ok(asset.purpose && asset.importedAt, `${asset.output} needs provenance metadata`);
+    const bytes = await readFile(resolveInside(freesiaRoot, asset.output, 'Freesia asset output'));
+    assert.equal(hash(bytes), asset.sha256, `${asset.output} hash does not match its recorded provenance`);
+    assert.equal(verifyWebp(bytes, asset.output), asset.dimensions, `${asset.output} dimensions do not match its recorded provenance`);
+  }
+
+  const derived = [...(manifest.svgDerivations?.myosotis ?? []), ...(manifest.svgDerivations?.violetShelfVariants ?? []), ...(manifest.svgDerivations?.freesia ?? [])];
+  assert.equal(derived.length, SVG_NAMES.length, 'manifest must declare exactly eleven SVG derivations');
   const svgOutputs = derived.map((asset) => asset.output);
   assert.equal(new Set(svgOutputs).size, svgOutputs.length, 'manifest contains duplicate SVG output');
   assert.deepEqual([...svgOutputs].sort(), [...SVG_NAMES].sort(), 'manifest SVG output set is incomplete');

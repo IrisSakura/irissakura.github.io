@@ -26,8 +26,10 @@ test('the same content receives distinct deterministic geometry by Brand Mode', 
   const iris = createSocialImage('/same-page', 'site', palette, 'iris');
   const sakura = createSocialImage('/same-page', 'site', palette, 'sakura');
   const journal = createSocialImage('/same-page', 'site', palette, 'journal');
+  const freesia = createSocialImage('/same-page', 'site', palette, 'freesia');
   assert.notDeepEqual(iris, sakura);
   assert.notDeepEqual(sakura, journal);
+  assert.notDeepEqual(journal, freesia);
   assert.deepEqual(iris, createSocialImage('/same-page', 'site', palette, 'iris'));
 });
 
@@ -43,6 +45,7 @@ test('formal articles and major sections expose distinct social images while imp
     'pages/journal.html',
     'pages/blog.html',
     'pages/game.html',
+    'pages/mods.html',
     'pages/contact.html',
     ...publicArticles.map((entry) => `pages/blog/${entry.slug}.html`)
   ];

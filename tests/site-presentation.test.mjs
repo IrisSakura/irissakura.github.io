@@ -6,12 +6,12 @@ import { assertSitePresentationConfig, resolveFeaturedKnowledge, resolveNavigati
 const root = new URL('../', import.meta.url);
 const readJson = async (file) => JSON.parse(await readFile(new URL(file, root), 'utf8'));
 
-test('site presentation owns five visitor routes and four stable projects', async () => {
+test('site presentation owns six visitor routes and four stable projects', async () => {
   const [config, brand, projects, search] = await Promise.all([
     readJson('config/site-presentation.json'), readJson('config/brand.json'), readJson('data/projects.json'), readJson('data/search-index.json')
   ]);
   assertSitePresentationConfig(config, brand);
-  assert.deepEqual(config.navigation.map(({ label }) => label), ['首页', '作品', '项目', '知识', '关于与联系']);
+  assert.deepEqual(config.navigation.map(({ label }) => label), ['首页', '作品', 'Mods', '项目', '知识', '关于与联系']);
   assert.deepEqual(config.projects.map(({ projectId }) => projectId), ['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf']);
   assert.deepEqual(resolveProjectPresentations(config, brand, projects).map(({ displayName }) => displayName), ['Iris Engineering', 'SakuraGameFramework', 'Myosotis', 'Violet Shelf']);
   assert.deepEqual(resolveFeaturedKnowledge(config, search).map(({ id }) => id), config.home.featuredKnowledgeIds);
@@ -22,6 +22,8 @@ test('navigation grouping keeps deep routes stable without duplicate active item
   const expectations = {
     'index.html': 'home',
     'pages/game.html': 'portfolio',
+    'pages/mods.html': 'mods',
+    'pages/mods/the-weaver.html': 'mods',
     'pages/development.html': 'projects',
     'pages/engineering.html': 'projects',
     'pages/tools.html': 'projects',
@@ -36,10 +38,11 @@ test('navigation grouping keeps deep routes stable without duplicate active item
 });
 
 test('generated visitor surfaces reuse the presentation contract', async () => {
-  const [home, projects, portfolio, tools, navbar] = await Promise.all([
+  const [home, projects, portfolio, mods, tools, navbar] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
     readFile(new URL('pages/development.html', root), 'utf8'),
     readFile(new URL('pages/portfolio.html', root), 'utf8'),
+    readFile(new URL('pages/mods.html', root), 'utf8'),
     readFile(new URL('pages/tools.html', root), 'utf8'),
     readFile(new URL('components/navbar.html', root), 'utf8')
   ]);
@@ -50,6 +53,13 @@ test('generated visitor surfaces reuse the presentation contract', async () => {
   assert.doesNotMatch(home, /按兴趣选择|<strong>2<\/strong>|最近更新/u);
   assert.match(home, /精选知识/u);
   assert.match(portfolio, /href="tools\.html"[^>]*>查看 Violet Shelf/u);
+  assert.match(home, />Mods</u);
+  assert.match(home, /Freesia Mods/u);
+  assert.match(portfolio, /查看 Freesia Mods 系列/u);
+  assert.match(mods, /让喜欢的游戏，长出新的可能。/u);
+  assert.match(mods, /The Weaver/u);
+  assert.match(mods, /Iris Core/u);
+  assert.doesNotMatch(mods, /Download|Play Now|Workshop/u);
   assert.match(tools, /id="tools"[\s\S]*id="status"/u);
   assert.doesNotMatch(navbar, /profile-drawer/u);
 });

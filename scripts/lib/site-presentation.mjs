@@ -1,10 +1,10 @@
-const NAVIGATION_IDS = Object.freeze(['home', 'portfolio', 'projects', 'knowledge', 'contact']);
+const NAVIGATION_IDS = Object.freeze(['home', 'portfolio', 'mods', 'projects', 'knowledge', 'contact']);
 const PROJECT_IDS = Object.freeze(['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf']);
 
 export function assertSitePresentationConfig(config, brand) {
   if (!config || config.schemaVersion !== 1) throw new Error('site-presentation violation: expected schemaVersion 1');
   if (JSON.stringify(config.navigation?.map(({ id }) => id)) !== JSON.stringify(NAVIGATION_IDS)) {
-    throw new Error('site-presentation violation: navigation must expose the reviewed five-item order');
+    throw new Error('site-presentation violation: navigation must expose the reviewed six-item order');
   }
   if (JSON.stringify(config.projects?.map(({ projectId }) => projectId)) !== JSON.stringify(PROJECT_IDS)) {
     throw new Error('site-presentation violation: projects must expose the reviewed four-project order');

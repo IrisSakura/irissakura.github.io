@@ -16,8 +16,8 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
   assert.equal(brand.id, 'iris-sakura');
   assert.equal(brand.masterBrand, 'IrisSakura');
   assert.equal(brand.jointLockup, 'IRIS × SAKURA');
-  assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'violet', 'consumer', 'games']);
-  assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'violet', 'game']);
+  assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'consumer', 'games']);
+  assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'game']);
   assert.deepEqual(brand.deprecated, [
     { name: 'Sakura Design Journal', replacement: 'Myosotis' },
     { name: 'IrisSakura Journal', replacement: 'Myosotis' },
@@ -62,7 +62,8 @@ test('official vector identity and core iconography are complete and self-contai
     'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark',
     'iconSprite',
     'readmeHeader', 'socialLogo', 'brandBoard',
-    'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt', 'violetHeroArt'
+    'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt', 'violetHeroArt',
+    'freesiaLogo', 'freesiaLogoSmall', 'freesiaWordmark', 'freesiaHeroArt', 'freesiaBotanicalArt', 'freesiaPatternArt'
   ];
   for (const key of requiredAssetKeys) {
     const relativePath = brand.assets[key];
@@ -119,7 +120,7 @@ test('brand automation drives page modes, social cards, SEO and public naming', 
 
   assert.deepEqual(brand.pageModes, {
     home: 'master', portfolio: 'master', engineering: 'iris', framework: 'sakura',
-    journal: 'journal', tools: 'violet', brand: 'master', game: 'game', contact: 'master', system: 'master'
+    journal: 'journal', tools: 'violet', mods: 'freesia', brand: 'master', game: 'game', contact: 'master', system: 'master'
   });
   assert.ok(generator.includes("readJson('config/brand.json')"));
   assert.ok(generator.includes('resolvePageBrandMode'));
@@ -142,7 +143,7 @@ test('mode experience layer differentiates six visual dimensions and respects ga
   ]);
 
   assert.ok(themes.tokenStylesheets.includes('style/components/brand-experience.css'));
-  for (const mode of ['iris', 'sakura', 'journal', 'violet']) {
+  for (const mode of ['iris', 'sakura', 'journal', 'violet', 'freesia']) {
     assert.ok(css.includes(`html[data-brand-mode="${mode}"]`), `missing ${mode} experience selector`);
   }
   for (const token of [

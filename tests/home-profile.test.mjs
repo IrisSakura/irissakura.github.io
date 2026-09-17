@@ -61,7 +61,7 @@ test('generated pages load one static brand without theme controls or bootstrap 
   }
 });
 
-test('shared navigation exposes one five-route menu and a direct profile link at every depth', async () => {
+test('shared navigation exposes one six-route menu and a direct profile link at every depth', async () => {
   const site = await readJson('data/site.json');
   const pages = [
     { path: 'index.html', prefix: '' },
@@ -70,6 +70,7 @@ test('shared navigation exposes one five-route menu and a direct profile link at
   const routeTargets = [
     'index.html',
     'pages/portfolio.html',
+    'pages/mods.html',
     'pages/development.html',
     'pages/journal.html',
     'pages/contact.html'

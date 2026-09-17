@@ -327,13 +327,13 @@ test('research and articles share one visitor-facing primary route without chang
   assert.match(blog, activeJournalNav);
 });
 
-test('primary navigation gives the four projects one visitor-facing parent context', async () => {
+test('primary navigation gives the four projects one visitor-facing parent context and Mods its own route', async () => {
   for (const page of ['index.html', 'pages/development.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html', 'pages/tools.html', 'pages/brand.html']) {
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
     const labels = [...primaryNav.matchAll(/class="nav-link(?: active)?"[^>]*>([^<]+)<\/a>/g)].map((match) => match[1]);
-    assert.deepEqual(labels, ['首页', '作品', '项目', '知识', '关于与联系'], `${page} has an unexpected primary navigation order`);
-    for (const label of ['首页', '作品', '项目', '知识', '关于与联系']) {
+    assert.deepEqual(labels, ['首页', '作品', 'Mods', '项目', '知识', '关于与联系'], `${page} has an unexpected primary navigation order`);
+    for (const label of ['首页', '作品', 'Mods', '项目', '知识', '关于与联系']) {
       assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
     }
     for (const productLabel of ['Engineering', 'Framework', 'Journal']) {
@@ -443,7 +443,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
     }
     assert.match(
       html,
-      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|violet|game)"/,
+      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|violet|freesia|game)"/,
       `${page} has an invalid page brand mode`
     );
     assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);

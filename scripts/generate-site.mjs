@@ -7,6 +7,7 @@ import sanitizeHtml from 'sanitize-html';
 import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { currentProductName } from './lib/brand-presentation.mjs';
 import { assertSitePresentationConfig, resolveFeaturedKnowledge, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
+import { assertModSeriesConfig, resolveModSeries } from './lib/mod-series.mjs';
 import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
 import { assertFrameworkEngineering, resolveFrameworkEngineering } from './lib/framework-engineering-model.mjs';
@@ -42,6 +43,17 @@ const PAGE_COVER_TARGETS = {
   contact: 'contact-header'
 };
 const PAGE_INDEXES = {
+  'pages/mods.html': {
+    ariaLabel: 'Mods 页面章节',
+    title: '浏览 Freesia Mods',
+    insertBefore: '    <!-- mods-content:start -->',
+    items: [
+      ['mod-series', '系列'],
+      ['mod-principles', '创作方式'],
+      ['mod-works', '作品'],
+      ['mod-foundations', '技术基础']
+    ]
+  },
   'pages/portfolio.html': {
     ariaLabel: '作品页章节',
     title: '浏览作品',
@@ -120,7 +132,7 @@ const PAGE_INDEXES = {
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, modSeriesConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -149,6 +161,7 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, 
   readJson('data/themes.json'),
   readJson('config/brand.json'),
   readJson('config/site-presentation.json'),
+  readJson('config/mod-series.json'),
   readText('components/navbar.html'),
   readText('components/footer.html')
 ]);
@@ -173,6 +186,8 @@ assertBrandConfig(themeConfig);
 assertBrandContract(brandConfig);
 await assertBrandAssets(root, brandConfig);
 assertSitePresentationConfig(sitePresentation, brandConfig);
+assertModSeriesConfig(modSeriesConfig, brandConfig, projects);
+const modSeries = resolveModSeries(modSeriesConfig, projects);
 const projectPresentations = resolveProjectPresentations(sitePresentation, brandConfig, projects);
 const displayProjectName = (stableId, fallback) => currentProductName(stableId, fallback, projectPresentations);
 const displayPublicProductNames = (value) => String(value)
@@ -340,6 +355,7 @@ await writeFrameworkQuickstartSource(frameworkQuickstart);
 await writeFrameworkEngineeringSource(frameworkPageShellTemplate);
 await writeFrameworkDeepSources(frameworkDeepDefinitions);
 await writeDevelopmentSource(projectPresentations);
+await writeModsSource();
 await writeBrandSource();
 await writeToolsSource(projectPresentations.find(({ projectId }) => projectId === 'iris-shelf'));
 await writeCompatibilityRouteSources();
@@ -404,6 +420,14 @@ const pageDefinitions = [
     title: '作品集 | 游戏、工具与创作实践',
     description: `浏览 IrisSakura 的 ${projects.projects.length} 个公开作品，以及 ${consumerLab.cases.length} 个独立玩法实验；了解每个项目在解决什么问题、做到了哪里。`,
     canonical: '/pages/portfolio.html',
+  },
+  {
+    file: 'pages/mods.html',
+    key: 'mods',
+    title: 'Mods | Freesia Mods · IrisSakura',
+    description: '浏览 IrisSakura 的 Freesia Mods 跨游戏 Mod 创作系列，以及已公开的作品、技术基础与当前验证状态。',
+    canonical: '/pages/mods.html',
+    schemaType: 'CollectionPage'
   },
   {
     file: 'pages/brand.html',
@@ -614,14 +638,17 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(
       html,
       'home-content',
-      renderHomeContent(projects, site, projectPresentations, homeFeaturedKnowledge)
+      renderHomeContent(projects, site, projectPresentations, homeFeaturedKnowledge, modSeries, brandConfig)
     );
   }
   if (page.file === 'pages/brand.html') {
-    html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent(brandConfig));
+    html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent(brandConfig, modSeries));
   }
   if (page.file === 'pages/portfolio.html') {
-    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab, consumerSync, projectPresentations));
+    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab, consumerSync, projectPresentations, modSeries));
+  }
+  if (page.file === 'pages/mods.html') {
+    html = replaceGeneratedBlock(html, 'mods-content', renderModsContent(modSeries, brandConfig));
   }
   if (page.file === 'pages/journal.html') {
     html = html.replace('class="journal-main"', 'class="main-content journal-main"');
@@ -961,7 +988,7 @@ async function writeReadmeSummaries(projectData, sync) {
   await writeFile(file, `${readme.trim()}\n`);
 }
 
-function renderHomeContent(projectData, siteData, presentations, featuredKnowledge) {
+function renderHomeContent(projectData, siteData, presentations, featuredKnowledge, series, brand) {
   const game = projectData.projects.find((project) => project.id === sitePresentation.home.featuredWorkId);
   if (!game) throw new Error('missing sword-of-words project');
   const { profile } = siteData;
@@ -1019,6 +1046,14 @@ function renderHomeContent(projectData, siteData, presentations, featuredKnowled
             </div>
         </section>
 
+        <section class="home-mod-series" data-brand-layout="editorial" aria-labelledby="home-mod-series-title">
+            <div class="container home-mod-series-inner">
+                <img src="${escapeAttribute(brand.assets.freesiaLogoSmall)}" alt="" width="112" height="112" loading="lazy">
+                <div><p class="section-kicker">CREATIVE SERIES · CROSS-GAME MODS</p><h2 id="home-mod-series-title">${escapeHtml(series.displayName)}</h2><p>跨游戏 Mod 创作系列。让喜欢的游戏，长出新的可能。</p></div>
+                <a href="pages/mods.html" class="btn btn-secondary">浏览 Mods</a>
+            </div>
+        </section>
+
         <section class="home-projects" id="projects" data-brand-layout="editorial" aria-labelledby="home-projects-title">
             <div class="container"><div class="section-heading"><p class="section-kicker">FOUR INDEPENDENT PROJECTS</p><h2 id="home-projects-title">四个长期项目，各自解决一类问题</h2></div><div class="project-entry-grid">${projectCards}
             </div></div>
@@ -1044,7 +1079,7 @@ function renderHomeContent(projectData, siteData, presentations, featuredKnowled
     </section>`;
 }
 
-function renderBrandContent(brand) {
+function renderBrandContent(brand, series) {
   const characterNames = { iris: 'iris', sakura: 'sakura', journal: 'myosotis', violet: 'violet' };
   const characterDescriptions = {
     iris: '以鸢尾的蓝紫与利落线条，表达工程的清晰与秩序。',
@@ -1094,6 +1129,14 @@ function renderBrandContent(brand) {
       </section>
       <section class="brand-current-section" aria-labelledby="brand-language-title">
         <div class="container brand-current-language"><div><p class="section-kicker">VISUAL LANGUAGE</p><h2 id="brand-language-title">同一份创作，不同的表达</h2><p>鸢尾的蓝紫、樱花的粉、勿忘我的湖蓝与堇花的暖紫，让每个项目保有自己的辨识。</p><p>IRIS × SAKURA 连接工程与游戏框架，让组织工作与实现想法相互配合。</p></div><ul class="brand-palette">${palette}</ul></div>
+      </section>
+      <section class="brand-current-section brand-creative-series" aria-labelledby="brand-creative-series-title">
+        <div class="container brand-creative-series-grid">
+          <div><p class="section-kicker">CREATIVE SERIES</p><h2 id="brand-creative-series-title">${escapeHtml(series.displayName)}</h2><p>Cross-game Mod Creation Series</p><p>${escapeHtml(series.tagline)}</p><a class="btn btn-secondary" href="mods.html">浏览 Freesia Mods</a></div>
+          <img class="brand-freesia-lockup" src="../${escapeAttribute(brand.assets.freesiaLogo)}" alt="Freesia Mods" loading="lazy">
+          <img class="brand-freesia-persona" src="../${escapeAttribute(brand.assets.freesiaHeroArt)}" alt="Freesia Mods 角色 Freesia" loading="lazy" decoding="async">
+          <ul class="brand-freesia-palette" aria-label="Freesia Mods 五色品牌色"><li style="--swatch:#F6C445">Freesia Yellow</li><li style="--swatch:#F9A982">Apricot Bloom</li><li style="--swatch:#FFF7E6">Cream Petal</li><li style="--swatch:#A7C67A">Spring Green</li><li style="--swatch:#3E4A8F">Indigo Accent</li></ul>
+        </div>
       </section>
       <section class="brand-current-section"><div class="container hero-buttons"><a class="btn btn-primary" href="development.html">浏览全部项目</a><a class="btn btn-secondary" href="contact.html">关于与联系</a></div></section>
     </div>`;
@@ -1174,14 +1217,21 @@ ${renderEvidenceChains(chains, 'engineering-evidence-chains')}
     </div>`;
 }
 
-function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, consumerSync, presentations) {
+function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, consumerSync, presentations, series) {
   const order = ['sword-of-words', 'udgap', 'the-weaver', 'iris-core', 'iris-shelf', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
   const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
   if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
   const presentationById = new Map(presentations.map((project) => [project.projectId, project]));
+  const seriesByProjectId = new Map(series.entries.map((entry) => [entry.projectId, entry]));
   const cases = ordered.map((project, index) => {
     const visual = renderPortfolioVisual(project, journalData, frameworkData, irisEngineeringData);
     const presentation = presentationById.get(project.id);
+    const seriesEntry = seriesByProjectId.get(project.id);
+    const seriesLabel = seriesEntry?.role === 'featured-mod'
+      ? '<p class="portfolio-series-label">FREESIA MODS</p><a href="mods.html#mod-works" class="portfolio-link portfolio-link-secondary">查看 Freesia Mods 系列 →</a>'
+      : seriesEntry?.role === 'shared-foundation'
+        ? '<p class="portfolio-series-label">FREESIA SHARED FOUNDATION</p><a href="mods.html#mod-foundations" class="portfolio-link portfolio-link-secondary">查看系列关系 →</a>'
+        : '';
     if (presentation) {
       const extraLink = project.id === 'sakura-framework'
         ? '<a href="framework-engineering.html" class="portfolio-link portfolio-link-secondary">技术架构</a><a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">开始使用框架</a>' : '';
@@ -1217,6 +1267,7 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
                     ${detailHref
                       ? `<a href="${escapeAttribute(detailHref)}" class="portfolio-link">${escapeHtml(detailLabel)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>`
                       : `<span class="portfolio-link portfolio-link-static">${escapeHtml(detailLabel)}</span>`}
+                    ${seriesLabel}
                     ${project.id === 'sakura-framework'
                       ? '<a href="framework-engineering.html" class="portfolio-link portfolio-link-secondary">打开 Engineering Hub<i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">打开 15 分钟 Quickstart<i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
                       : ''}
@@ -1250,6 +1301,38 @@ function renderPortfolioContent(projectData, journalData, frameworkData, irisEng
         </section>
         ${renderConsumerLab(consumerLabData, consumerSync)}
     </div>`;
+}
+
+function renderModsContent(series, brand) {
+  const renderWork = (entry) => {
+    const project = entry.source;
+    return `<article class="mod-work-card" data-mod-project="${escapeAttribute(project.id)}">
+      <p class="project-status">${escapeHtml(project.categoryLabel)} · ${escapeHtml(project.status)}</p>
+      <h4>${escapeHtml(project.title)}</h4>
+      <p>${escapeHtml(project.summary)}</p>
+      <dl><div><dt>职责</dt><dd>${escapeHtml(project.role)}</dd></div><div><dt>目标</dt><dd>${escapeHtml(project.goal)}</dd></div><div><dt>当前边界</dt><dd>${escapeHtml(project.limitations.join('；'))}</dd></div></dl>
+      <div class="mod-tags">${project.technologies.map((technology) => `<span>${escapeHtml(technology)}</span>`).join('')}</div>
+    </article>`;
+  };
+  const groups = series.groups.map((group) => `<section class="mod-game-group" data-host-game="${escapeAttribute(group.hostGame)}">
+      <div class="mod-game-heading"><div><p class="section-kicker">HOST GAME</p><h3>${escapeHtml(group.hostGame)}</h3></div><span>${group.mods.length} 件公开作品</span></div>
+      <div class="mod-work-grid">${group.mods.map(renderWork).join('')}</div>
+    </section>`).join('');
+  const foundations = series.entries.filter(({ role }) => role === 'shared-foundation').map((entry) => `<article class="mod-foundation-card" data-mod-foundation="${escapeAttribute(entry.projectId)}">
+      <img src="../${escapeAttribute(brand.assets.freesiaLogoSmall)}" alt="" loading="lazy"><div><p class="section-kicker">SHARED FOUNDATION · ${escapeHtml(entry.hostGame)}</p><h3>${escapeHtml(entry.source.title)}</h3><p>${escapeHtml(entry.source.summary)}</p><p><strong>关系说明：</strong>它是部分 Freesia Mods 的技术基础，不代表所有 Freesia Mods 共用同一运行时。</p></div>
+    </article>`).join('');
+  const principles = [
+    ['先理解，再改变', '先读懂原作的节奏、边界与玩家期待，再决定值得加入的新可能。'],
+    ['小作品也可以完整', '用清晰范围、真实状态和可复查结果，让每件作品拥有自己的完成标准。'],
+    ['作品优先于品牌', '品牌负责连接与识别，不覆盖每个游戏和 Mod 自己的玩法性格。']
+  ].map(([title, description], index) => `<article class="mods-principle-card"><span>0${index + 1}</span><h3>${title}</h3><p>${description}</p></article>`).join('');
+  return `<header class="mods-hero" id="mod-series" style="--freesia-pattern:url('../${escapeAttribute(brand.assets.freesiaPatternArt)}')">
+      <div class="container mods-hero-grid"><div class="mods-hero-copy"><p class="section-kicker">MODS · CROSS-GAME CREATION</p><img class="mods-brand-lockup" src="../${escapeAttribute(brand.assets.freesiaLogo)}" alt="Freesia Mods"><h1>Freesia Mods</h1><p class="mods-hero-tagline">让喜欢的游戏，长出新的可能。</p><p class="mods-hero-subtitle">${escapeHtml(series.tagline)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#mod-works">浏览作品</a><a class="btn btn-secondary" href="#mod-principles">了解创作方式</a></div></div><div class="mods-hero-art"><img class="mods-hero-character" src="../${escapeAttribute(brand.assets.freesiaHeroArt)}" alt="Freesia Mods 角色 Freesia"><img class="mods-hero-botanical" src="../${escapeAttribute(brand.assets.freesiaBotanicalArt)}" alt="" aria-hidden="true"></div></div>
+    </header>
+    <section class="mods-section" id="mod-principles"><div class="container"><div class="mods-section-heading"><p class="section-kicker">CREATE · ADAPT · SHARE · GROW</p><h2>把喜欢变成可以分享的作品</h2></div><div class="mods-principle-grid">${principles}</div></div></section>
+    <section class="mods-section" id="mod-works"><div class="container"><div class="mods-section-heading"><p class="section-kicker">PUBLIC WORKS</p><h2>按游戏浏览作品</h2><p>系列归属由显式登记决定，作品状态与限制直接复用公开项目事实。</p></div>${groups}</div></section>
+    <section class="mods-section" id="mod-foundations"><div class="container"><div class="mods-section-heading"><p class="section-kicker">SHARED FOUNDATIONS</p><h2>技术基础与作品分开说明</h2></div>${foundations}</div></section>
+    <section class="mods-section mods-closing"><div class="container"><p>CREATE · ADAPT · SHARE · GROW</p><h2>不同游戏，不同作品，同一种持续创作的兴趣。</h2></div></section>`;
 }
 
 function renderConsumerLab(consumerLabData, consumerSync) {
@@ -2161,6 +2244,34 @@ async function writeDevelopmentSource(presentations) {
 </body>
 </html>
 `);
+}
+
+async function writeModsSource() {
+  await writeFile(path.join(root, 'pages/mods.html'), `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <!-- site-meta:end -->
+    <title>Mods | Freesia Mods · IrisSakura</title>
+    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/mods.css">
+    <!-- brand-styles:start -->
+    <link rel="stylesheet" href="../style/iris-sakura.css">
+    <!-- brand-styles:end -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar"></nav>
+<main id="main-content" class="main-content mods-main">
+    <!-- mods-content:start -->
+    <!-- mods-content:end -->
+</main>
+<footer class="footer"></footer>
+<script src="../dist/site.js" type="module"></script>
+</body>
+</html>\n`);
 }
 
 async function writeFrameworkDeepSources(definitions) {

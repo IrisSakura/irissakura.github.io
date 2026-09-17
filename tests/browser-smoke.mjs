@@ -187,6 +187,14 @@ const brandContrastRoutes = [
     ]
   },
   {
+    route: '/pages/mods.html',
+    checks: [
+      ['Freesia hero tagline', '.mods-hero-tagline'],
+      ['Freesia work title', '.mod-work-card h4'],
+      ['Freesia foundation title', '.mod-foundation-card h3']
+    ]
+  },
+  {
     route: '/pages/blog.html',
     checks: [
       ['Blog cover description', '.blog-hero > .container > p:not(.section-kicker)'],
@@ -412,9 +420,20 @@ try {
   if (await desktop.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
     throw new Error('homepage still ships the retired BGM player');
   }
-  if (await desktop.locator('.nav-menu .nav-link').count() !== 5) {
-    throw new Error('desktop navigation does not expose the reviewed five routes');
+  if (await desktop.locator('.nav-menu .nav-link').count() !== 6) {
+    throw new Error('desktop navigation does not expose the reviewed six routes');
   }
+  await desktop.goto(`${baseUrl}/pages/mods.html`, { waitUntil: 'networkidle' });
+  const modsDesktopState = await desktop.evaluate(() => ({
+    active: [...document.querySelectorAll('.nav-menu .nav-link.active')].map((link) => link.textContent.trim()),
+    columns: getComputedStyle(document.querySelector('.mods-hero-grid')).gridTemplateColumns.split(' ').length,
+    indexTargets: [...document.querySelectorAll('[data-page-index-link]')].every((link) => document.querySelector(link.getAttribute('href'))),
+    text: document.querySelector('main').textContent
+  }));
+  if (JSON.stringify(modsDesktopState.active) !== JSON.stringify(['Mods'])) throw new Error('Mods route does not activate only the Mods navigation item');
+  if (modsDesktopState.columns !== 2 || !modsDesktopState.indexTargets) throw new Error('Freesia desktop structure or page index is incomplete');
+  if (!modsDesktopState.text.includes('The Weaver') || !modsDesktopState.text.includes('Iris Core')) throw new Error('Freesia route is missing registered work or foundation');
+  if (/Download|Play Now|Workshop/u.test(modsDesktopState.text)) throw new Error('Freesia route exposes an unsupported release action');
   if (await desktop.locator('#profile-drawer, [data-profile-quick-link]').count() !== 0) {
     throw new Error('retired profile navigation is still present');
   }
@@ -882,6 +901,24 @@ try {
   if (await toggle.getAttribute('aria-label') !== '关闭导航菜单') throw new Error('mobile menu did not update its accessible name');
   await mobile.keyboard.press('Escape');
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
+
+  await mobile.goto(`${baseUrl}/pages/mods.html`, { waitUntil: 'networkidle' });
+  await mobile.locator('.mobile-toggle').click();
+  const mobileNavLabels = await mobile.locator('.nav-menu .nav-link').allTextContents();
+  if (JSON.stringify(mobileNavLabels.map((label) => label.trim())) !== JSON.stringify(['首页', '作品', 'Mods', '项目', '知识', '关于与联系'])) {
+    throw new Error(`mobile Freesia navigation order drifted: ${JSON.stringify(mobileNavLabels)}`);
+  }
+  await mobile.locator('.mobile-toggle').click();
+  const modsMobileState = await mobile.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - window.innerWidth,
+    heroColumns: getComputedStyle(document.querySelector('.mods-hero-grid')).gridTemplateColumns.split(' ').length,
+    copyTop: document.querySelector('.mods-hero-copy').getBoundingClientRect().top,
+    artTop: document.querySelector('.mods-hero-art').getBoundingClientRect().top,
+    targetCount: [...document.querySelectorAll('.mods-hero a[href^="#"]')].filter((link) => document.querySelector(link.getAttribute('href'))).length
+  }));
+  if (modsMobileState.overflow > 1 || modsMobileState.heroColumns !== 1 || modsMobileState.copyTop > modsMobileState.artTop || modsMobileState.targetCount !== 2) {
+    throw new Error(`Freesia mobile layout is incomplete: ${JSON.stringify(modsMobileState)}`);
+  }
 
   await mobile.goto(`${baseUrl}/pages/brand.html`, { waitUntil: 'networkidle' });
   for (const image of await mobile.locator('.brand-current-characters img').all()) {

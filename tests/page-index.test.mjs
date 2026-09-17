@@ -9,6 +9,7 @@ async function readText(path) {
 }
 
 const pageContracts = {
+  'pages/mods.html': ['mod-series', 'mod-principles', 'mod-works', 'mod-foundations'],
   'pages/portfolio.html': ['portfolio-journey', 'portfolio-cases', 'consumer-lab'],
   'pages/framework.html': ['architecture-map', 'pillars', 'reference', 'maturity', 'adoption', 'game-adoption'],
   'pages/framework-engineering.html': ['depth-model', 'reader-paths', 'architecture-domains', 'evidence-boundary', 'adoption-route'],

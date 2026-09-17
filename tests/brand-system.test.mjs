@@ -47,6 +47,14 @@ test('all curated brand sources remain local while the independent Brand page us
   for (const name of ['iris', 'sakura', 'myosotis', 'violet']) {
     assert.ok(page.includes(`../assets/images/brand/v1/character-${name}.png`), `missing current ${name} character`);
   }
+  for (const asset of [
+    'assets/brand/logo-freesia-mods.svg',
+    'assets/brand/logo-freesia-mods-small.svg',
+    'assets/brand/wordmark-freesia-mods.svg',
+    'assets/images/brand/freesia/character-freesia-hero.webp',
+    'assets/images/brand/freesia/botanical-branch.webp',
+    'assets/images/brand/freesia/pattern-petals.webp'
+  ]) await access(new URL(asset, root));
 });
 
 test('asset verifier fails closed from a fresh fixture for provenance, path, PNG and SVG attacks', async () => {
@@ -174,8 +182,8 @@ test('brand portfolio is public, indexable and generator-owned', async () => {
   assert.ok(page.includes('<title>IrisSakura Brand System | IrisSakura</title>'));
   assert.ok(!page.includes('name="robots" content="noindex'));
   assert.match(generator, /title:\s*'IrisSakura Brand System \| IrisSakura'/u);
-  assert.match(generator, /replaceGeneratedBlock\(html, 'brand-content', renderBrandContent\(brandConfig\)\)/u);
-  assert.match(generator, /function renderBrandContent\(brand\)/u);
+  assert.match(generator, /replaceGeneratedBlock\(html, 'brand-content', renderBrandContent\(brandConfig, modSeries\)\)/u);
+  assert.match(generator, /function renderBrandContent\(brand, series\)/u);
   assert.ok(sitemap.includes('/pages/brand.html'));
   assert.ok(!sitemap.includes('/pages/art-music.html'));
 });
@@ -186,6 +194,9 @@ test('brand story gives four current projects equal visibility and useful routes
   for (const route of ['engineering', 'framework', 'journal', 'tools']) assert.ok(page.includes(`href="${route}.html"`));
   for (const color of ['#4C3DF5', '#DB4F8A', '#286C92', '#7A4298']) assert.ok(page.includes(color));
   assert.ok(page.includes('IRIS × SAKURA 连接工程与游戏框架'));
+  assert.match(page, /Creative Series/i);
+  assert.match(page, /Freesia Mods/u);
+  assert.match(page, /href="mods\.html"/u);
   assert.doesNotMatch(page, /两套命名家族|IRIS-\*|SAKURA-\*/u);
 });
 

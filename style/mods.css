@@ -1,0 +1,48 @@
+.mods-main { background: #fffdf8; color: #30365f; }
+.mods-main .section-kicker { color: #3e4a8f; letter-spacing: .16em; }
+.mods-hero { position: relative; overflow: hidden; background: radial-gradient(circle at 78% 20%, rgba(246,196,69,.28), transparent 24rem), linear-gradient(145deg, #fff7e6, #fffdf8 70%); }
+.mods-hero::after { content: ""; position: absolute; inset: 0; background: var(--freesia-pattern) right 10% center / min(52rem, 62vw) auto no-repeat; opacity: .22; pointer-events: none; }
+.mods-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,.96fr) minmax(320px,1.04fr); align-items: center; min-height: 42rem; gap: clamp(2rem,5vw,5rem); }
+.mods-hero-copy { padding: 7rem 0 5rem; }
+.mods-brand-lockup { width: min(29rem, 100%); height: auto; margin-bottom: 1.5rem; }
+.mods-hero h1 { margin: 0; color: #3e4a8f; font-family: Georgia,serif; font-size: clamp(3.4rem,8vw,7rem); line-height: .92; }
+.mods-hero-tagline { margin: 1.35rem 0 .3rem; color: #30365f; font-size: clamp(1.35rem,2.6vw,2.2rem); font-weight: 700; }
+.mods-hero-subtitle { color: #59608a; font-family: Georgia,serif; font-size: 1.15rem; }
+.mods-hero-art { position: relative; align-self: end; min-height: 38rem; }
+.mods-hero-character { display: block; width: min(100%, 35rem); height: 41rem; object-fit: contain; object-position: center bottom; margin: auto; filter: drop-shadow(0 2rem 2.5rem rgba(62,74,143,.14)); }
+.mods-hero-botanical { position: absolute; right: -10%; bottom: -4%; width: min(18rem,42%); opacity: .78; transform: rotate(5deg); }
+.mods-section { padding: clamp(4rem,8vw,7rem) 0; }
+.mods-section-heading { max-width: 46rem; margin-bottom: 2.5rem; }
+.mods-section-heading h2 { color: #3e4a8f; font-family: Georgia,serif; font-size: clamp(2rem,4vw,3.5rem); }
+.mods-principle-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+.mods-principle-card,.mod-work-card,.mod-foundation-card { border: 1px solid rgba(62,74,143,.16); border-radius: 1.25rem; background: rgba(255,255,255,.85); box-shadow: 0 1rem 2rem rgba(62,74,143,.07); }
+.mods-principle-card { padding: 1.6rem; }
+.mods-principle-card span { color: #d98a00; font-weight: 800; }
+.mods-principle-card h3 { margin: .7rem 0; color: #3e4a8f; }
+.mod-game-group + .mod-game-group { margin-top: 4rem; }
+.mod-game-heading { display:flex; align-items:end; justify-content:space-between; gap:1rem; border-bottom:1px solid rgba(62,74,143,.16); padding-bottom:1rem; margin-bottom:1.5rem; }
+.mod-game-heading h3 { margin:0; color:#3e4a8f; font-family:Georgia,serif; font-size:2rem; }
+.mod-work-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; }
+.mod-work-card { padding:1.8rem; }
+.mod-work-card h4 { color:#3e4a8f; font-size:1.6rem; margin:.5rem 0; }
+.mod-work-card dl { display:grid; gap:.65rem; }
+.mod-work-card dt { color:#68709b; font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.mod-work-card dd { margin:0; }
+.mod-tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+.mod-tags span { border-radius:999px; background:#fff7e6; color:#3e4a8f; padding:.35rem .7rem; font-size:.82rem; }
+.mod-foundation-card { display:grid; grid-template-columns:auto 1fr; gap:1.25rem; padding:1.8rem; align-items:start; }
+.mod-foundation-card img { width:4.5rem; height:4.5rem; object-fit:contain; }
+.mods-closing { background:#3e4a8f; color:#fff7e6; text-align:center; }
+.mods-closing p { color:#f9dcae; letter-spacing:.16em; }
+.mods-closing h2 { margin:.5rem 0 0; color:#fff; font-family:Georgia,serif; }
+@media (max-width:760px) {
+  .mods-hero-grid,.mods-principle-grid,.mod-work-grid,.mod-foundation-card { grid-template-columns:1fr; }
+  .mods-hero-copy { padding:5rem 0 0; }
+  .mods-hero-art { min-height:30rem; }
+  .mods-hero-character { height:31rem; }
+  .mods-hero-botanical { width:11rem; right:-2rem; }
+  .mod-game-heading { align-items:start; flex-direction:column; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .mods-hero-botanical,.mods-hero-character { transform:none; transition:none; }
+}

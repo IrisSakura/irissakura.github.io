@@ -8,7 +8,7 @@ async function readText(path) {
   return readFile(new URL(path, root), 'utf8');
 }
 
-test('brand contract and generator own a closed six-mode page contract', async () => {
+test('brand contract and generator own a closed seven-mode page contract', async () => {
   const [site, brand, theme, generator] = await Promise.all([
     readText('data/site.json').then(JSON.parse),
     readText('config/brand.json').then(JSON.parse),
@@ -24,6 +24,7 @@ test('brand contract and generator own a closed six-mode page contract', async (
     framework: 'sakura',
     journal: 'journal',
     tools: 'violet',
+    mods: 'freesia',
     brand: 'master',
     game: 'game',
     contact: 'master',
@@ -68,7 +69,7 @@ test('primitive semantic and mode styles form a one-way token chain', async () =
   ]) {
     assert.ok(semantic.includes(`${token}:`), `semantic token missing ${token}`);
   }
-  for (const mode of ['master', 'iris', 'sakura', 'journal', 'violet', 'game']) {
+  for (const mode of ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'game']) {
     assert.ok(modes.includes(`html[data-brand-mode="${mode}"]`), `mode token block missing ${mode}`);
   }
   for (const token of [
@@ -102,6 +103,7 @@ test('generated routes receive the correct mode and shared token styles', async 
     ['pages/framework-quickstart.html', 'sakura'],
     ['pages/journal.html', 'journal'],
     ['pages/tools.html', 'violet'],
+    ['pages/mods.html', 'freesia'],
     ['pages/blog.html', 'journal'],
     ['pages/journal/crpg.html', 'journal'],
     ['pages/blog/authoritative-time-source.html', 'journal'],
