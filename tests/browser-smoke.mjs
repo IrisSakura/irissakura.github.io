@@ -427,13 +427,40 @@ try {
   const modsDesktopState = await desktop.evaluate(() => ({
     active: [...document.querySelectorAll('.nav-menu .nav-link.active')].map((link) => link.textContent.trim()),
     columns: getComputedStyle(document.querySelector('.mods-hero-grid')).gridTemplateColumns.split(' ').length,
+    artColumns: getComputedStyle(document.querySelector('.mods-hero-art')).gridTemplateColumns.split(' ').length,
+    artworkSeparated: (() => {
+      const character = document.querySelector('.mods-hero-character').getBoundingClientRect();
+      const botanical = document.querySelector('.mods-hero-botanical').getBoundingClientRect();
+      return character.right <= botanical.left + 1;
+    })(),
     indexTargets: [...document.querySelectorAll('[data-page-index-link]')].every((link) => document.querySelector(link.getAttribute('href'))),
     text: document.querySelector('main').textContent
   }));
   if (JSON.stringify(modsDesktopState.active) !== JSON.stringify(['Mods'])) throw new Error('Mods route does not activate only the Mods navigation item');
-  if (modsDesktopState.columns !== 2 || !modsDesktopState.indexTargets) throw new Error('Freesia desktop structure or page index is incomplete');
+  if (modsDesktopState.columns !== 2 || modsDesktopState.artColumns !== 2 || !modsDesktopState.artworkSeparated || !modsDesktopState.indexTargets) {
+    throw new Error(`Freesia desktop structure, artwork separation or page index is incomplete: ${JSON.stringify(modsDesktopState)}`);
+  }
   if (!modsDesktopState.text.includes('The Weaver') || !modsDesktopState.text.includes('Iris Core')) throw new Error('Freesia route is missing registered work or foundation');
   if (/Download|Play Now|Workshop/u.test(modsDesktopState.text)) throw new Error('Freesia route exposes an unsupported release action');
+  await desktop.setViewportSize({ width: 768, height: 900 });
+  await desktop.goto(`${baseUrl}/pages/mods.html`, { waitUntil: 'networkidle' });
+  const modsTabletState = await desktop.evaluate(() => {
+    const copy = document.querySelector('.mods-hero-copy').getBoundingClientRect();
+    const art = document.querySelector('.mods-hero-art').getBoundingClientRect();
+    const character = document.querySelector('.mods-hero-character').getBoundingClientRect();
+    const botanical = document.querySelector('.mods-hero-botanical').getBoundingClientRect();
+    return {
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+      columns: getComputedStyle(document.querySelector('.mods-hero-grid')).gridTemplateColumns.split(' ').length,
+      copyBeforeArt: copy.bottom <= art.top + 1,
+      artworkSeparated: character.right <= botanical.left + 1
+    };
+  });
+  if (modsTabletState.overflow > 1 || modsTabletState.columns !== 1 || !modsTabletState.copyBeforeArt || !modsTabletState.artworkSeparated) {
+    throw new Error(`Freesia tablet layout overlaps or overflows: ${JSON.stringify(modsTabletState)}`);
+  }
+  await desktop.setViewportSize({ width: 1280, height: 900 });
+  await desktop.goto(`${baseUrl}/pages/mods.html`, { waitUntil: 'networkidle' });
   if (await desktop.locator('#profile-drawer, [data-profile-quick-link]').count() !== 0) {
     throw new Error('retired profile navigation is still present');
   }
@@ -925,11 +952,21 @@ try {
     await image.scrollIntoViewIfNeeded();
     await image.evaluate((element) => element.decode());
   }
+  for (const image of await mobile.locator('.brand-creative-series img').all()) {
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate((element) => element.decode());
+  }
   const brandMobileState = await mobile.evaluate(() => {
     const characters = [...document.querySelectorAll('.brand-current-characters img')];
+    const creativeCopy = document.querySelector('.brand-creative-series-grid > div').getBoundingClientRect();
+    const creativeLockup = document.querySelector('.brand-freesia-lockup').getBoundingClientRect();
+    const creativePersona = document.querySelector('.brand-freesia-persona').getBoundingClientRect();
     return {
       overflow: document.documentElement.scrollWidth - window.innerWidth,
-      headerReady: characters.length === 4 && characters.every((image) => image.complete && image.naturalWidth > 0)
+      headerReady: characters.length === 4 && characters.every((image) => image.complete && image.naturalWidth > 0),
+      creativeImagesReady: [document.querySelector('.brand-freesia-lockup'), document.querySelector('.brand-freesia-persona')]
+        .every((image) => image.complete && image.naturalWidth > 0),
+      creativeFlowSeparated: creativeCopy.bottom <= creativeLockup.top + 1 && creativeLockup.bottom <= creativePersona.top + 1
     };
   });
   if (brandMobileState.overflow > 1) {
@@ -937,6 +974,9 @@ try {
   }
   if (!brandMobileState.headerReady) {
     throw new Error('mobile brand portfolio did not load its four current characters');
+  }
+  if (!brandMobileState.creativeImagesReady || !brandMobileState.creativeFlowSeparated) {
+    throw new Error(`brand mobile creative series overlaps or is not ready: ${JSON.stringify(brandMobileState)}`);
   }
   if (process.env.SITE_SCREENSHOT_DIR) {
     await mobile.screenshot({ path: path.join(process.env.SITE_SCREENSHOT_DIR, 'brand-mobile.png'), fullPage: true });

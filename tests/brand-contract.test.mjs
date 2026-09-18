@@ -91,6 +91,20 @@ test('official vector identity and core iconography are complete and self-contai
   ]) assert.ok(symbols.includes(id), `icon sprite missing ${id}`);
 });
 
+test('Freesia wordmarks keep an explicit gap between the two name segments', async () => {
+  const [logo, wordmark] = await Promise.all([
+    readText('assets/brand/logo-freesia-mods.svg'),
+    readText('assets/brand/wordmark-freesia-mods.svg')
+  ]);
+
+  assert.match(logo, /<tspan fill="#D98A00">Freesia<\/tspan><tspan dx="14" fill="#3E4A8F">Mods<\/tspan>/u);
+  assert.match(logo, /viewBox="0 0 560 180"/u);
+  assert.match(wordmark, /<tspan fill="#D98A00">Freesia<\/tspan><tspan dx="16" fill="#3E4A8F">Mods<\/tspan>/u);
+  assert.match(logo, />NEW POSSIBILITIES IN GAMES WE LOVE\.<\/text>/u);
+  assert.doesNotMatch(logo, /<text x="351"/u);
+  assert.doesNotMatch(wordmark, /<text x="225"/u);
+});
+
 test('site v2 project hero manifest preserves source and output traceability', async () => {
   const manifest = await readJson('assets/images/brand/site-v2/manifest.json');
   assert.equal(manifest.assetVersion, 'site-v2');

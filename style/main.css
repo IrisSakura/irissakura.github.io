@@ -4179,7 +4179,8 @@ html[data-brand="iris-sakura"] .footer-links a {
   padding: clamp(1.5rem, 4vw, 3rem);
   background: linear-gradient(135deg, var(--brand-freesia-cream-050), var(--neutral-000));
 }
-.brand-freesia-lockup { width: 100%; height: auto; }
+.brand-creative-series-grid > * { min-width: 0; }
+.brand-freesia-lockup { width: 100%; max-width: 24rem; height: auto; }
 .brand-freesia-persona { width: 100%; height: 22rem; object-fit: contain; object-position: center bottom; }
 .brand-freesia-palette { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .65rem; margin: 0; padding: 0; list-style: none; }
 .brand-freesia-palette li { border-top: 1.2rem solid var(--swatch); padding-top: .5rem; color: var(--brand-freesia-indigo-700); font-size: .8rem; }
@@ -4187,10 +4188,12 @@ html[data-brand="iris-sakura"] .footer-links a {
 @media (max-width: 900px) {
   .brand-current-characters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .brand-current-language { grid-template-columns: 1fr; gap: 1.5rem; }
+  .brand-creative-series-grid { grid-template-columns: 1fr; }
+  .brand-freesia-lockup { justify-self: start; }
+  .brand-freesia-persona { height: min(20rem, 54vw); }
 }
 @media (max-width: 768px) {
-  .home-mod-series-inner,
-  .brand-creative-series-grid { grid-template-columns: 1fr; }
+  .home-mod-series-inner { grid-template-columns: 1fr; }
   .home-mod-series-inner > img { width: 5rem; height: 5rem; }
   .brand-freesia-palette { grid-column: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
