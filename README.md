@@ -136,7 +136,7 @@ Gitea 到 GitHub 的密钥配置、路径所有权和冲突处理见
 ### Consumer Lab 同步
 
 <!-- consumer-summary:start -->
-Consumer Lab 当前包含 7 个 Consumer Lab 案例：4 个仓库启用 source-push，另外 3 个固定快照保留经复核的本地证据但不声明自动同步。
+Consumer Lab 当前包含 7 个 Consumer Lab 案例：4 个仓库启用 source-push。
 <!-- consumer-summary:end -->
 
 启用 source-push 的消费者仓库会在 `main` 推送时从固定提交生成脱敏技术投影，并由站点导入器更新

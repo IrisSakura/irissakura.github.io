@@ -48,7 +48,7 @@ test('generated public copy derives volatile counts from authoritative registrie
     'portfolio accessibility copy must use the project registry'
   );
   assert.ok(
-    portfolioHtml.includes(`浏览 IrisSakura 的 ${projects.projects.length} 个公开作品，以及 ${consumerLab.cases.length} 个独立玩法实验；了解每个项目在解决什么问题、做到了哪里。`),
+    portfolioHtml.includes(`浏览 IrisSakura 的 ${projects.projects.length} 个公开作品，以及 ${consumerLab.cases.length} 个独立玩法实验，了解项目现状`),
     'portfolio metadata must use the project and Consumer Lab registries'
   );
 });
