@@ -20,6 +20,7 @@
 - `/pages/journal.html`：研究资料库 `Myosotis`（稳定内部 `Journal`）入口，包含策展研究、公开证据链与文章入口；
 - `/pages/tools.html`：`Violet Shelf` 项目页，只说明真实本地工具边界，不提供下载或发布声明；
 - `/pages/blog.html`：一级“文章”入口，聚合正式文章、系列与标签；
+- `/pages/subscribe.html`：文章订阅说明、复制订阅地址与阅读入口；
 - `/rss.xml`：只收录正式文章语义地址的 RSS 2.0 订阅；
 - `/pages/framework.html`：SakuraGameFramework 项目页，展示采用入口、架构、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；

@@ -1,3 +1,4 @@
+import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { chromium } from '@playwright/test';
 import { createReadStream } from 'node:fs';
@@ -876,7 +877,7 @@ try {
   if (await desktop.locator('.blog-featured-card').count() !== activeBlogSeriesCount) throw new Error('Featured Reading does not expose one entry per active series');
   if (await desktop.locator('.blog-series-list > a').count() !== activeBlogSeriesCount) throw new Error('blog index series registry is incomplete');
   if (await desktop.locator('.blog-tag-list > a').count() !== routableBlogTags.length) throw new Error('blog index exposes the wrong tag route set');
-  if (await desktop.locator('main a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
+  if (await desktop.locator('main a[href="subscribe.html"]').count() !== 1) throw new Error('blog index RSS route is missing');
   const blogIndexText = await desktop.locator('body').innerText();
   if (blogIndexText.includes('来源提交') || blogIndexText.includes('经过登记与安全检查')) {
     throw new Error('blog index exposes the internal publication pipeline');
@@ -1112,6 +1113,8 @@ try {
     }
     await mobile.emulateMedia({ reducedMotion: 'no-preference' });
   }
+
+  await assertSubscriptionFlow(browser, baseUrl, siteData.siteUrl);
 
   console.log('Browser smoke passed: routes, persistent navigation, static content search, Featured Reading, evidence-led portfolio, mobile navigation and contact routes checked.');
 } finally {

@@ -124,11 +124,36 @@ class SiteShell {
         });
         this.setupNavigation();
         this.setupSoftNavigation();
+        this.setupSubscription();
         this.setupFaq();
         this.setupNavbarDepth();
         this.setupPageIndex();
         void this.setupContentSearch();
         this.setupMotion();
+    }
+
+    private setupSubscription(): void {
+        const container = document.querySelector<HTMLElement>('[data-subscription]');
+        const input = container?.querySelector<HTMLInputElement>('#subscription-url');
+        const button = container?.querySelector<HTMLButtonElement>('[data-copy-subscription]');
+        const status = container?.querySelector<HTMLElement>('[data-subscription-status]');
+        if (!input || !button || !status) return;
+        button.hidden = false;
+        button.addEventListener('click', async () => {
+            button.disabled = true;
+            try {
+                await navigator.clipboard.writeText(input.value);
+                status.textContent = '订阅地址已复制。粘贴到你的 RSS 阅读器即可。';
+            } catch {
+                if (!input.isConnected) return;
+                input.focus();
+                input.select();
+                input.setSelectionRange(0, input.value.length);
+                status.textContent = '无法自动复制，已选中地址，请手动复制后粘贴到阅读器。';
+            } finally {
+                button.disabled = false;
+            }
+        });
     }
 
     private normalizePersistentUrls(): void {
@@ -253,6 +278,7 @@ class SiteShell {
             this.syncNavigationState(nextDocument, destination);
             currentMain?.replaceWith(document.importNode(nextMain, true));
             this.updateCurrentYear();
+            this.setupSubscription();
             this.setupFaq();
             this.setupPageIndex();
             void this.setupContentSearch();

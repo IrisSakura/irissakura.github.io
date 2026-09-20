@@ -61,7 +61,7 @@ for (const relativeFile of htmlFiles) {
   }
 }
 
-for (const required of ['data/now.json', 'data/updates.json', 'pages/now.html', 'robots.txt', 'rss.xml', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json', 'data/framework-quickstart.json', 'data/blog-taxonomy.json', 'data/evidence-chains.json', 'data/search-index.json', '.generated/social/index.png']) {
+for (const required of ['data/now.json', 'data/updates.json', 'pages/now.html', 'pages/subscribe.html', 'robots.txt', 'rss.xml', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json', 'data/framework-quickstart.json', 'data/blog-taxonomy.json', 'data/evidence-chains.json', 'data/search-index.json', '.generated/social/index.png']) {
   try {
     await access(path.join(root, required));
   } catch {

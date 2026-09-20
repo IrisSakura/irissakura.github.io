@@ -367,8 +367,10 @@ await writeBrandSource();
 await writeToolsSource(projectPresentations.find(({ projectId }) => projectId === 'iris-shelf'));
 await writeCompatibilityRouteSources();
 await writeNowSource();
+await writeSubscribeSource();
 
 const pageDefinitions = [
+  { file: 'pages/subscribe.html', key: 'journal', brandModeKey: 'home', title: '订阅文章 | IrisSakura', description: '通过 RSS 订阅 IrisSakura 的游戏系统、创作与开发文章，在阅读器中接收更新。', canonical: '/pages/subscribe.html', schemaType: 'WebPage' },
   { file: 'pages/now.html', key: 'contact', brandModeKey: 'home', title: 'Now | IrisSakura', description: 'IrisSakura 最近正在做、思考与完成的事情。', canonical: '/pages/now.html', schemaType: 'WebPage' },
   {
     file: 'index.html',
@@ -1415,7 +1417,7 @@ function renderBlogIndex(sourceData, discovery, featuredReading) {
             <p class="section-kicker">WRITING</p>
             <h1>文章</h1>
             <p>关于游戏系统、开发实践，以及做游戏过程中值得写下来的问题。</p>
-            <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a><a class="btn btn-secondary" href="../rss.xml"><i class="fas fa-rss" aria-hidden="true"></i>订阅 RSS</a></div>
+            <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a><a class="btn btn-secondary" href="subscribe.html"><i class="fas fa-rss" aria-hidden="true"></i>订阅文章</a></div>
         </div>
     </header>
     <section class="blog-featured-reading" id="featured-reading" aria-labelledby="featured-reading-title">
@@ -2148,6 +2150,20 @@ async function writeToolsSource(presentation) {
 <section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
 <nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
+}
+
+async function writeSubscribeSource() {
+  const feedUrl = escapeHtml(`${site.siteUrl}/rss.xml`);
+  await writeFile(path.join(root, 'pages/subscribe.html'), `<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>订阅文章 | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+<body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content"><div class="container subscribe-page living-prose">
+<header><p class="section-kicker">SUBSCRIBE</p><h1>订阅文章</h1><p>在你习惯的阅读器里，接收我的新文章。</p></header>
+<section class="living-section" aria-labelledby="subscribe-how"><h2 id="subscribe-how">怎样订阅</h2><p>RSS 是一种文章订阅方式。把下面的地址添加到支持 RSS 的阅读器中，新文章发布后，阅读器会自动获取更新，不需要反复来网站查看。</p>
+<ol class="subscribe-steps"><li>复制下面的订阅地址。</li><li>在你的阅读器中选择“添加订阅”或“关注网站”。</li><li>粘贴地址，确认订阅。</li></ol>
+<div class="subscribe-feed" data-subscription><label for="subscription-url">文章订阅地址</label><div class="subscribe-controls"><input id="subscription-url" type="url" value="${feedUrl}" readonly spellcheck="false" aria-describedby="subscription-help"><button type="button" class="btn btn-secondary" data-copy-subscription hidden>复制订阅地址</button></div><p id="subscription-help">也可以选中地址手动复制。</p><p class="subscribe-status" role="status" aria-live="polite" data-subscription-status></p></div>
+<p>订阅内容包括正式发布文章的标题、摘要和原文链接。最近动态与研究资料库不在这个订阅中。</p><p class="subscribe-raw"><a href="../rss.xml">查看原始 RSS 文件（XML）</a> · 这是供阅读器使用的数据文件，浏览器可能会直接显示代码。</p></section>
+<section class="living-section"><h2>直接来这里阅读</h2><p>没有使用阅读器也没关系，所有文章都可以在网站上浏览。</p><a class="btn btn-primary" href="blog.html">浏览全部文章</a></section>
+</div></main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>`);
 }
 
 async function writeNowSource() {
