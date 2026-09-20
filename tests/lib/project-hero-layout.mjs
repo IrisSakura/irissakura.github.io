@@ -32,7 +32,7 @@ export async function assertProjectHeroLayouts(browser, baseUrl, screenshotDirec
         assert.ok(geometry.overflow <= 1, `Horizontal overflow: ${label}`);
         if (name === 'journal') {
           const overviewIsBelowHero = await page.evaluate(() =>
-            document.querySelector('.journal-dashboard').getBoundingClientRect().top >=
+            document.querySelector('.content-search').getBoundingClientRect().top >=
             document.querySelector('[data-brand-project-hero]').getBoundingClientRect().bottom - 1);
           assert.ok(overviewIsBelowHero, `Knowledge overview covers the hero at ${width}px`);
           const controlsFit = await page.evaluate(() => {

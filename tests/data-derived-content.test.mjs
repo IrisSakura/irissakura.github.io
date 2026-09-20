@@ -39,20 +39,9 @@ test('generated public copy derives volatile counts from authoritative registrie
     frameworkHtml.includes(`${adoption.supportedPackages.length} 个 Supported 包与最小采用路线`),
     'Framework adoption heading must use the reviewed package registry'
   );
-  assert.ok(
-    journalHtml.includes(`${journal.streams.length} 条相互验证的知识流`),
-    'Journal stream heading must use the curated stream registry'
-  );
-  assert.ok(
-    portfolioHtml.includes(`aria-label="${projects.projects.length} 个真实项目"`),
-    'portfolio accessibility copy must use the project registry'
-  );
-  assert.ok(
-    portfolioHtml.includes(`浏览 IrisSakura 的 ${projects.projects.length} 个公开作品，以及 ${consumerLab.cases.length} 个独立玩法实验，了解项目现状`),
-    'portfolio metadata must use the project and Consumer Lab registries'
-  );
+  assert.equal((journalHtml.match(/class="stream-card"/g) ?? []).length, journal.streams.length);
+  assert.ok(frameworkHtml.includes(`${consumerLab.cases.length} 个玩法案例`));
+  assert.doesNotMatch(portfolioHtml, /个真实项目|个独立玩法实验/u);
 });
 
-async function readJson(path) {
-  return JSON.parse(await readText(path));
-}
+async function readJson(path) { return JSON.parse(await readText(path)); }

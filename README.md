@@ -2,7 +2,7 @@
 
 # IrisSakura 个人站
 
-这是 IrisSakura 的公开个人品牌站。IrisSakura 是共同创作者身份；Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf 是四个独立项目品牌。`IRIS × SAKURA` 仍只用于 Iris 与 Sakura 的直接协作；稳定 URL、Journal/RSS 标识与技术身份不因展示名称变化。
+这是 IrisSakura 的长期个人创作网站。公开展示游戏、Mod、文章与长期项目；内部仍通过事实源、Publication Contract 和生成器保证公开信息可靠。
 
 正式 Logo、Wordmark、产品 Lockup、核心概念 Icon 与 Social Card 模式由 [`config/brand.json`](config/brand.json) 统一登记；新增页面必须先取得一个已登记的 Brand Mode，再由 owner generator 生成公开投影。
 
@@ -14,25 +14,37 @@
 
 ## 页面结构
 
-- `/`：个人介绍、代表作品、四项目入口、精选知识与联系入口；
+- `/`：个人介绍、Now、代表作品、近期动态、最新文章、Mods、长期项目与关于入口；
 - `/pages/development.html`：一级“项目”入口，并列介绍 Iris Engineering、SakuraGameFramework、Myosotis 与 Violet Shelf；
 - `/pages/engineering.html`：Iris Engineering 子页，说明研发工作流、授权、执行与验证边界；
-- `/pages/journal.html`：一级 `Myosotis`（稳定内部 `Journal`）入口，包含策展研究、公开证据链与文章入口；
+- `/pages/journal.html`：研究资料库 `Myosotis`（稳定内部 `Journal`）入口，包含策展研究、公开证据链与文章入口；
 - `/pages/tools.html`：`Violet Shelf` 项目页，只说明真实本地工具边界，不提供下载或发布声明；
-- `/pages/blog.html`：正式文章、系列与标签聚合的稳定独立地址；
+- `/pages/blog.html`：一级“文章”入口，聚合正式文章、系列与标签；
 - `/rss.xml`：只收录正式文章语义地址的 RSS 2.0 订阅；
 - `/pages/framework.html`：SakuraGameFramework 项目页，展示采用入口、架构、模块浏览器与生命周期成熟度；
 - `/pages/framework-quickstart.html`：从 Core Only 到 Bootstrap Lite 的 15 分钟安装、事件、对象池、验证与清理教程；
 - `/pages/game.html`：《言铸之剑》可玩原型案例；
 - `/pages/mods.html`：Freesia Mods 跨游戏 Mod 创作系列入口；按宿主游戏组织显式登记的 Mod 作品与共享技术基础；
 <!-- project-summary:start -->
-- `/pages/portfolio.html`：8 个正式公开项目，以及 7 个 Consumer Lab 案例的本地验证矩阵；
+- `/pages/portfolio.html`：游戏、Mod 与实验原型；7 个 Consumer Lab 案例可在 Framework 技术区域继续浏览；
 <!-- project-summary:end -->
 - `/pages/brand.html`：由“关于与联系”和页脚进入的品牌资料页，公开展示 IrisSakura 品牌架构、四项目资料、色板、图标与命名规则；
 - `/pages/art-music.html`：旧“美术音乐”地址的 `noindex` Brand 兼容跳转；
-- `/pages/contact.html`：工作邮箱、工作 QQ 与已验证的公开联系入口；
+- `/pages/contact.html`：个人介绍、创作兴趣、Now、工作邮箱、工作 QQ 与公开主页；
 - `/pages/about.html`：旧 About 地址的 `noindex` 首页兼容跳转；
 - `/404.html`：GitHub Pages 自定义错误页。
+
+## Living 内容维护
+
+- `/pages/now.html`：当前投入、思考、阶段成果与近期动态；从首页、关于和页脚进入，不增加一级导航。
+- 更新当前活动只改 `data/now.json`。`current` 建议 3～5 项，`thinking` 为 0～4 项，`recentlyCompleted` 为 0～5 项。空的可选栏目不显示；长期未更新不会阻止构建。
+- 编辑动态只改 `data/updates.json`，按日期降序排列。同日保留编辑顺序；未来日期按 Asia/Shanghai 判断。动态不自动读取 Git，不进入 RSS。
+- 首批内容采用 2026-09-20 确认的三个方向，仅记录当天启动网站整理这项动态，没有补写历史日期或完成结果。
+- 首页文章只选正式发布内容，按 `publishedAt` 降序、slug 升序取前三篇；修改旧文不改变首页新文章排序。
+- `config/site-presentation.json` 控制首页区块顺序和作品分组。作品只能引用登记 ID；空分组不显示。Consumer Lab 已移至 `/pages/framework.html#consumer-lab`，作品页旧锚点保留导引。
+- 真实视觉目前复用《言铸之剑》游戏截图。Iris / Violet 暂无站内产品截图，保留文字介绍；后续只添加审阅过的真实素材，不制作虚假界面。
+- 新截图可放入 `assets/images/showcase/`，公开前检查私有地址、路径、密钥和聊天等敏感内容。
+- 更新后运行 `npm run check`、`npm run test:smoke`、`npm run package:site`，生成的 HTML 不手工维护。提交与发布另行授权。
 
 ## 本地运行
 

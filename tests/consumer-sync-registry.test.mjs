@@ -42,10 +42,10 @@ test('Consumer Case and source repository identities are explicit and complete',
 test('README and Portfolio use generated project and Consumer summaries', async () => {
   const [readme, portfolio] = await Promise.all([
     readText('README.md'),
-    readText('pages/portfolio.html')
+    readText('pages/framework.html')
   ]);
 
-  assert.match(readme, /<!-- project-summary:start -->[\s\S]*8 个正式公开项目[\s\S]*<!-- project-summary:end -->/u);
+  assert.match(readme, /<!-- project-summary:start -->[\s\S]*游戏、Mod 与实验原型[\s\S]*<!-- project-summary:end -->/u);
   assert.match(readme, /<!-- consumer-summary:start -->[\s\S]*7 个 Consumer Lab 案例[\s\S]*4 个仓库启用 source-push[\s\S]*<!-- consumer-summary:end -->/u);
   assert.ok(!readme.includes('四条真实项目主线'));
   assert.match(portfolio, /7 个玩法案例/u);

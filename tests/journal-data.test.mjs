@@ -70,14 +70,8 @@ test('journal page statically renders every curated view and preserves the priva
 
   assert.ok(html.includes('id="featured-notes"'));
   assert.ok(!html.includes('正在读取'));
-  assert.ok(
-    html.includes(`<strong>${data.summary.importedBlogCount}</strong><span>完整博客</span>`),
-    'complete-blog metric must use the imported complete-body count'
-  );
-  assert.ok(
-    html.includes(`<small>${publishedBlogCount} 篇已公开</small>`),
-    'complete-blog metric must distinguish public articles from imported bodies'
-  );
+  assert.doesNotMatch(html, /class="journal-dashboard"|class="journal-metric/u);
+  assert.match(html, /href="blog.html">阅读文章/u);
   for (const [className, titleId] of [
     ['journal-featured-scroll', 'featured-notes-title'],
     ['journal-audit-scroll', 'recent-audits-title'],

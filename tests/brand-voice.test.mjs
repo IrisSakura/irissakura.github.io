@@ -10,7 +10,7 @@ const readText = (relativePath) => readFile(path.join(root, relativePath), 'utf8
 test('core routes expose value-first narrative stages', async () => {
   for (const page of ['index.html', 'pages/portfolio.html', 'pages/engineering.html', 'pages/framework.html', 'pages/journal.html']) {
     const html = await readText(page);
-    for (const stage of ['value', 'system', 'result', 'evidence', 'boundary', 'next']) {
+    for (const stage of (['index.html', 'pages/portfolio.html'].includes(page) ? ['value', 'result', 'next'] : ['value', 'system', 'result', 'evidence', 'boundary', 'next'])) {
       assert.ok(html.includes(`data-content-stage="${stage}"`), `${page} missing ${stage} stage`);
     }
     const hero = html.match(/<(section|header|div)\b[^>]*(?:hero|page-cover)[\s\S]*?<\/\1>/)?.[0] ?? '';

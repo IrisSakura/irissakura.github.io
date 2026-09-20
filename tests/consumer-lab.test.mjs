@@ -103,7 +103,7 @@ test('Consumer Lab registry requires concise visitor-facing project copy', async
 test('generated portfolio presents projects without owner-only Consumer Lab metadata', async () => {
   const [registry, html] = await Promise.all([
     readJson('data/consumer-lab.json'),
-    readFile(new URL('pages/portfolio.html', root), 'utf8')
+    readFile(new URL('pages/framework.html', root), 'utf8')
   ]);
   assert.ok(html.includes(`aria-label="${registry.cases.length} 个独立玩法项目"`));
   assert.ok(html.includes('七个独立玩法项目'));

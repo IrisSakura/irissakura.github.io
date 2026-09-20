@@ -121,14 +121,13 @@ const brandContrastRoutes = [
     readySelector: '#framework-module-list[data-framework-loaded="true"]',
     checks: [
       ['Framework positioning summary', '#positioning .framework-story-intro p'],
-      ['Framework story chip', '.framework-story-chip'],
       ['Framework architecture map title', '#architecture-map h2'],
+      ['Framework architecture chips', '#architecture-map .framework-story-chip'],
       ['Framework architecture status', '.framework-map-branch-unity .framework-map-status'],
       ['Framework architecture boundary', '.framework-map-boundaries article h3'],
       ['Framework pillar title', '.framework-pillar h3'],
       ['Framework reference card', '.framework-reference-card strong'],
       ['Framework module result count', '#framework-module-result-count'],
-      ['Framework stack highlight', '.stack-layer.highlight-layer'],
       ['Framework active module filter', '.module-filter.is-active'],
       ['Framework layer metric labels', '.layer-metrics span'],
       ['Framework lifecycle package count', '#framework-lifecycle-detail-count'],
@@ -162,10 +161,6 @@ const brandContrastRoutes = [
     route: '/pages/journal.html',
     checks: [
       ['Journal breadcrumb', '.journal-hero .project-breadcrumb'],
-      ['Journal dashboard label', '.journal-dashboard-label'],
-      ['Journal dashboard values', '.journal-metric strong'],
-      ['Journal dashboard metric labels', '.journal-metric span'],
-      ['Journal dashboard publication note', '.journal-metric small'],
       ['Evidence chain heading', '.evidence-chain-card h3'],
       ['Evidence chain question', '.evidence-chain-question'],
       ['Evidence chain path', '.evidence-chain-path strong'],
@@ -233,6 +228,9 @@ if (!address || typeof address === 'string') throw new Error('failed to bind sta
 const baseUrl = `http://127.0.0.1:${address.port}`;
 const coreVisualRoutes = [
   ['home', '/'],
+  ['now', '/pages/now.html'],
+  ['writing', '/pages/blog.html'],
+  ['about', '/pages/contact.html'],
   ['portfolio', '/pages/portfolio.html'],
   ['projects', '/pages/development.html'],
   ['engineering', '/pages/engineering.html'],
@@ -423,6 +421,31 @@ try {
   if (await desktop.locator('.nav-menu .nav-link').count() !== 6) {
     throw new Error('desktop navigation does not expose the reviewed six routes');
   }
+  const livingConfig = await readJson('config/site-presentation.json');
+  const livingNow = await readJson('data/now.json');
+  const expectedArticles = [...publishedBlogs].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.slug.localeCompare(b.slug)).slice(0, livingConfig.home.recentArticleLimit);
+  const sections = await desktop.locator('#home-page > section').evaluateAll((elements) => elements.map(({ id }) => id));
+  if (JSON.stringify(sections) !== JSON.stringify(livingConfig.home.sectionOrder)) throw new Error('home section order differs from presentation');
+  const articleIds = await desktop.locator('.writing-entry').evaluateAll((elements) => elements.map((element) => element.dataset.articleId));
+  if (JSON.stringify(articleIds) !== JSON.stringify(expectedArticles.map(({ id }) => id))) throw new Error('home latest writing is not the latest published articles');
+  await desktop.locator('.profile-hero a[href="pages/now.html"]').click();
+  await desktop.waitForURL(`${baseUrl}/pages/now.html`);
+  if (await desktop.locator('h1').innerText() !== '最近在做什么') throw new Error('Now H1 is missing');
+  if (await desktop.locator('#current .now-list li').count() !== livingNow.current.length) throw new Error('Now current entries are missing');
+  if (await desktop.locator('.now-hero time').getAttribute('datetime') !== livingNow.updatedAt) throw new Error('Now date drifted');
+  await keepSmokeTestLocal(desktop);
+  for (const width of [1600, 1280, 992, 900, 769, 390]) {
+    await desktop.setViewportSize({ width, height: 900 });
+    for (const route of ['/', '/pages/now.html', '/pages/portfolio.html', '/pages/blog.html', '/pages/contact.html']) {
+      await desktop.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
+      if (await desktop.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`${route} overflows at ${width}px`);
+    }
+  }
+  await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const nowTop = await desktop.locator('#now h2').evaluate((element) => element.getBoundingClientRect().top);
+  if (nowTop > 844) throw new Error(`mobile homepage delays Now beyond first screen: ${nowTop}`);
+  await desktop.unroute('**/*');
+  await desktop.setViewportSize({ width: 1280, height: 900 });
   await desktop.goto(`${baseUrl}/pages/mods.html`, { waitUntil: 'networkidle' });
   const modsDesktopState = await desktop.evaluate(() => ({
     active: [...document.querySelectorAll('.nav-menu .nav-link.active')].map((link) => link.textContent.trim()),
@@ -470,7 +493,7 @@ try {
   await desktop.evaluate(() => {
     document.documentElement.dataset.smokeDocument = 'persistent-navigation';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: '关于与联系', exact: true }).click();
+  await desktop.locator('.nav-menu').getByRole('link', { name: '关于', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/contact.html`);
   if (await desktop.getAttribute('html', 'data-smoke-document') !== 'persistent-navigation') {
     throw new Error('cross-page navigation replaced the active document');
@@ -582,7 +605,7 @@ try {
   if (JSON.stringify(frameworkEngineeringState.pageIndex) !== JSON.stringify(['#depth-model', '#reader-paths', '#architecture-domains', '#evidence-boundary', '#adoption-route'])) {
     throw new Error('Framework Engineering page index order drifted');
   }
-  for (const href of [frameworkEngineering.links.framework, frameworkEngineering.links.quickstart, `${frameworkEngineering.links.portfolio}#consumer-lab`, frameworkEngineering.links.cases, frameworkEngineering.links.knowledge, frameworkEngineering.links.reference, frameworkEngineering.links.home]) {
+  for (const href of [frameworkEngineering.links.framework, frameworkEngineering.links.quickstart, 'framework.html#consumer-lab', frameworkEngineering.links.cases, frameworkEngineering.links.knowledge, frameworkEngineering.links.reference, frameworkEngineering.links.home]) {
     if (!frameworkEngineeringState.routeLinks.includes(href)) throw new Error(`Framework Engineering Hub is missing route ${href}`);
   }
   if (frameworkEngineeringState.text.includes('href="pages/')) {
@@ -645,8 +668,8 @@ try {
   if (await desktop.locator('.depth-card').count() === 0) throw new Error('shared depth treatment was not applied');
   await desktop.evaluate(() => window.scrollTo(0, 240));
   await desktop.waitForFunction(() => document.querySelector('.navbar')?.classList.contains('scrolled'));
-  await desktop.locator('.knowledge-card').first().scrollIntoViewIfNeeded();
-  await desktop.locator('.knowledge-card.is-visible').first().waitFor();
+  await desktop.locator('.writing-entry').first().scrollIntoViewIfNeeded();
+  await desktop.locator('.writing-entry.is-visible').first().waitFor();
 
   const reducedMotionContext = await browser.newContext({
     viewport: { width: 1280, height: 900 },
@@ -719,10 +742,11 @@ try {
   }
 
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
-  if (await desktop.locator('.portfolio-case').count() !== projectData.projects.length) throw new Error('portfolio does not expose every registered project');
-  if (!await desktop.locator('.portfolio-case').first().filter({ hasText: gameProject.title }).isVisible()) throw new Error('registered game project is not the first portfolio case');
-  if (!await desktop.locator('#project-udgap').isVisible()) throw new Error('UDGAP status case is not visible');
-  if (!await desktop.locator('#project-iris-shelf').isVisible()) throw new Error('Iris Shelf status case is not visible');
+  if (!await desktop.locator('#project-sword-of-words').isVisible()) throw new Error('flagship work is missing');
+  if (!await desktop.locator('#project-udgap').isVisible()) throw new Error('registered experiment is missing');
+  if (await desktop.locator('.consumer-lab-card').count() !== 0) throw new Error('technical matrix still dominates portfolio');
+  await desktop.locator('#consumer-lab a[href="../pages/framework.html#game-adoption"]').click();
+  await desktop.waitForURL(`${baseUrl}/pages/framework.html#game-adoption`);
   if (await desktop.locator('.consumer-lab-card').count() !== consumerLab.cases.length) {
     throw new Error('portfolio does not expose every Consumer Lab project');
   }
@@ -739,7 +763,7 @@ try {
   if (await consumerLabSection.locator('.consumer-lab-compact-proof').count() !== 2) {
     throw new Error('Consumer Lab does not expose the selected compact local evidence');
   }
-  if (!await desktop.locator('a[href="framework-quickstart.html"]').isVisible()) {
+  if (!await desktop.locator('a[href="framework-quickstart.html"]').first().isVisible()) {
     throw new Error('portfolio does not expose the 15-minute Framework Quickstart');
   }
   if (await consumerLabSection.locator([
@@ -755,28 +779,14 @@ try {
     throw new Error('Consumer Lab exposes owner-only evidence metadata');
   }
 
-  const portfolioInsetFailures = [];
-  for (const viewport of [
-    { width: 2048, height: 1200 },
-    { width: 390, height: 844 }
-  ]) {
-    await desktop.setViewportSize(viewport);
-    const caseInsets = await desktop.locator('.portfolio-case').evaluateAll((cases) => cases.map((portfolioCase) => {
-      const caseRect = portfolioCase.getBoundingClientRect();
-      const contentRects = [...portfolioCase.children].map((child) => child.getBoundingClientRect());
-      return {
-        left: Math.min(...contentRects.map((rect) => rect.left)) - caseRect.left,
-        right: caseRect.right - Math.max(...contentRects.map((rect) => rect.right))
-      };
-    }));
-    for (const [index, inset] of caseInsets.entries()) {
-      if (inset.left < 19 || inset.right < 19) {
-        portfolioInsetFailures.push(`${viewport.width}px case ${index + 1} inset ${JSON.stringify(inset)} below 19px`);
-      }
-    }
-  }
-  if (portfolioInsetFailures.length > 0) {
-    throw new Error(`portfolio case content touches its section edge:\n${portfolioInsetFailures.join('\n')}`);
+  await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
+  for (const width of [2048, 390]) {
+    await desktop.setViewportSize({ width, height: 900 });
+    const bounds = await desktop.locator('.living-featured .container').evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: innerWidth - rect.right, overflow: document.documentElement.scrollWidth - innerWidth };
+    });
+    if (bounds.left < 19 || bounds.right < 19 || bounds.overflow > 1) throw new Error(`portfolio breathing room failed: ${JSON.stringify(bounds)}`);
   }
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
@@ -866,7 +876,7 @@ try {
   if (await desktop.locator('.blog-featured-card').count() !== activeBlogSeriesCount) throw new Error('Featured Reading does not expose one entry per active series');
   if (await desktop.locator('.blog-series-list > a').count() !== activeBlogSeriesCount) throw new Error('blog index series registry is incomplete');
   if (await desktop.locator('.blog-tag-list > a').count() !== routableBlogTags.length) throw new Error('blog index exposes the wrong tag route set');
-  if (await desktop.locator('a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
+  if (await desktop.locator('main a[href="../rss.xml"]').count() !== 1) throw new Error('blog index RSS route is missing');
   const blogIndexText = await desktop.locator('body').innerText();
   if (blogIndexText.includes('来源提交') || blogIndexText.includes('经过登记与安全检查')) {
     throw new Error('blog index exposes the internal publication pipeline');
@@ -874,7 +884,7 @@ try {
   await desktop.evaluate(() => {
     document.documentElement.dataset.searchSoftNav = 'persistent';
   });
-  await desktop.locator('.nav-menu').getByRole('link', { name: '知识', exact: true }).click();
+  await desktop.locator('main').getByRole('link', { name: '查看研究索引', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/journal.html`);
   await desktop.locator('[data-content-search-results] .content-search-result').first().waitFor({ state: 'visible' });
   if (await desktop.locator('[data-content-search-results] .content-search-result').count() !== 12) {
@@ -889,7 +899,7 @@ try {
   if (!await desktop.getByRole('heading', { level: 1, name: representativeSeries.name }).isVisible()) {
     throw new Error('representative series route is not visible');
   }
-  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '知识' }).isVisible()) {
+  if (!await desktop.locator('.nav-menu .nav-link.active', { hasText: '文章' }).isVisible()) {
     throw new Error('series route does not keep the 知识 navigation context');
   }
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
@@ -932,7 +942,7 @@ try {
   await mobile.goto(`${baseUrl}/pages/mods.html`, { waitUntil: 'networkidle' });
   await mobile.locator('.mobile-toggle').click();
   const mobileNavLabels = await mobile.locator('.nav-menu .nav-link').allTextContents();
-  if (JSON.stringify(mobileNavLabels.map((label) => label.trim())) !== JSON.stringify(['首页', '作品', 'Mods', '项目', '知识', '关于与联系'])) {
+  if (JSON.stringify(mobileNavLabels.map((label) => label.trim())) !== JSON.stringify(['首页', '作品', '文章', '项目', 'Mods', '关于'])) {
     throw new Error(`mobile Freesia navigation order drifted: ${JSON.stringify(mobileNavLabels)}`);
   }
   await mobile.locator('.mobile-toggle').click();
@@ -1074,7 +1084,7 @@ try {
   }
 
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
-  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '关于与联系', exact: true });
+  const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '关于', exact: true });
   if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 关于与联系');
   if ((await contactNavLink.getAttribute('class'))?.split(/\s+/).includes('nav-cta')) {
     throw new Error('Contact navigation still has special CTA styling');

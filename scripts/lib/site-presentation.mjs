@@ -1,7 +1,7 @@
-const NAVIGATION_IDS = Object.freeze(['home', 'portfolio', 'mods', 'projects', 'knowledge', 'contact']);
+const NAVIGATION_IDS = Object.freeze(['home', 'portfolio', 'writing', 'projects', 'mods', 'about']);
 const PROJECT_IDS = Object.freeze(['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf']);
 
-export function assertSitePresentationConfig(config, brand) {
+export function assertSitePresentationConfig(config, brand, registry) {
   if (!config || config.schemaVersion !== 1) throw new Error('site-presentation violation: expected schemaVersion 1');
   if (JSON.stringify(config.navigation?.map(({ id }) => id)) !== JSON.stringify(NAVIGATION_IDS)) {
     throw new Error('site-presentation violation: navigation must expose the reviewed six-item order');
@@ -26,11 +26,23 @@ export function assertSitePresentationConfig(config, brand) {
     assertAction(project.primaryAction, project.projectId, 'primary');
     assertAction(project.secondaryAction, project.projectId, 'secondary');
   }
-  if (JSON.stringify(config.home?.sectionOrder) !== JSON.stringify(['profile', 'featured-work', 'projects', 'knowledge', 'contact'])) {
-    throw new Error('site-presentation violation: home section order drift');
+  const sections = ['profile', 'now', 'featured-work', 'recent-updates', 'writing', 'mods', 'projects', 'contact'];
+  if (!Array.isArray(config.home?.sectionOrder) || config.home.sectionOrder.length !== sections.length || new Set(config.home.sectionOrder).size !== sections.length || sections.some((id) => !config.home.sectionOrder.includes(id))) throw new Error('site-presentation violation: invalid home sections');
+  for (const field of ['recentUpdateLimit', 'recentArticleLimit']) {
+    if (!Number.isInteger(config.home[field]) || config.home[field] < 1) throw new Error(`site-presentation violation: invalid ${field}`);
   }
-  if (!Array.isArray(config.home.featuredKnowledgeIds) || config.home.featuredKnowledgeIds.length !== 3) {
-    throw new Error('site-presentation violation: home needs three featured knowledge entries');
+  if (!Array.isArray(config.portfolio?.groups)) throw new Error('site-presentation violation: missing portfolio groups');
+  assertUnique(config.portfolio.groups.map(({ id }) => id), 'portfolio groups');
+  assertUnique(config.portfolio.groups.flatMap(({ projectIds }) => projectIds), 'portfolio projects');
+  for (const group of config.portfolio.groups) {
+    if (!/^[a-z][a-z0-9-]*$/u.test(group.id)) throw new Error('site-presentation violation: invalid portfolio group');
+    assertText(group.label, 'portfolio label');
+    if (!Array.isArray(group.projectIds)) throw new Error('site-presentation violation: missing portfolio project IDs');
+  }
+  if (registry) {
+    for (const id of [config.home.featuredWorkId, config.portfolio.featuredProjectId, ...config.portfolio.groups.flatMap(({ projectIds }) => projectIds)]) {
+      if (!registry.projects.some((project) => project.id === id)) throw new Error(`site-presentation violation: unknown project ${id}`);
+    }
   }
   return config;
 }
@@ -54,22 +66,20 @@ export function resolveProjectPresentations(config, brand, registry) {
   });
 }
 
-export function resolveFeaturedKnowledge(config, searchIndex) {
-  return config.home.featuredKnowledgeIds.map((id) => {
-    const entry = searchIndex.entries.find((candidate) => candidate.id === id);
-    if (!entry) throw new Error(`site-presentation violation: missing featured knowledge ${id}`);
-    return entry;
-  });
-}
-
 export function resolveFooterGroups(config, projects) {
   const navigationById = new Map(config.navigation.map((item) => [item.id, item]));
   const projectById = new Map(projects.map((item) => [item.projectId, item]));
   return config.footer.map((group) => ({
     label: group.label,
-    links: group.navigationIds?.map((id) => ({ label: navigationById.get(id)?.label, route: navigationById.get(id)?.route }))
-      ?? group.projectIds?.map((id) => ({ label: projectById.get(id)?.displayName, route: projectById.get(id)?.route }))
-      ?? group.links
+    links: [
+      ...(group.navigationIds?.map((id) => navigationById.get(id)) ?? []),
+      ...(group.projectIds?.map((id) => ({ label: projectById.get(id)?.displayName, route: projectById.get(id)?.route })) ?? []),
+      ...(group.links ?? [])
+    ].map((link) => {
+      assertText(link?.label, 'footer label');
+      assertRoute(link?.route, 'footer route');
+      return { label: link.label, route: link.route };
+    })
   }));
 }
 

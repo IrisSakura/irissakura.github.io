@@ -25,7 +25,7 @@ test('only manifest-approved Journal blogs are published as complete indexable a
 
   assert.ok(index.includes('<!-- indexable page -->'));
   assert.ok(!index.includes('noindex'));
-  assert.ok(index.includes(`${published.length} 篇正式文章`));
+  assert.equal((index.match(/class="blog-card"/gu) ?? []).length, published.length);
   for (const article of published) {
     const contract = publicationById.get(article.id);
     const markdown = await readText(article.contentPath);

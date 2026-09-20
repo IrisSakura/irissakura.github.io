@@ -48,8 +48,6 @@ test('Violet presents useful capabilities without the retired technology snapsho
   assert.match(tools, /暂未开放下载/u);
   assert.doesNotMatch(tools, /Tauri|Generation|CURRENT LOCAL CANDIDATE/u);
   const portfolio = await read('pages/portfolio.html');
-  const shelf = portfolio.match(/<article\b[^>]*id="project-iris-shelf"[\s\S]*?<\/article>/u)?.[0];
-  assert.ok(shelf);
-  assert.match(shelf, /href="tools\.html"/u);
-  assert.doesNotMatch(shelf, /Tauri|Companion interop|UNSIGNED UNIVERSAL/u);
+  assert.match(portfolio, /id="project-iris-shelf"/u);
+  assert.match(portfolio, /pages\/development\.html/u);
 });

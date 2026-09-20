@@ -134,9 +134,9 @@ test('asset verifier fails closed from a fresh fixture for provenance, path, PNG
 
 test('generated current product surfaces use aliases while source records and controlled body remain stable', async () => {
   const [portfolio, detail, projects, controlled] = await Promise.all([
-    read('pages/portfolio.html'), read('pages/journal/alchemy-magical-crafting.html'), read('data/projects.json'), readBytes(new URL('docs/brand/master-design-v1.md', root))
+    read('pages/development.html'), read('pages/journal/alchemy-magical-crafting.html'), read('data/projects.json'), readBytes(new URL('docs/brand/master-design-v1.md', root))
   ]);
-  assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /aria-label="Violet Shelf"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /Myosotis 保存判断/);
+  assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /href="tools\.html"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /href="journal\.html"/);
   assert.match(detail, /<title>.* \| Myosotis<\/title>/); assert.match(projects, /"Iris Shelf"/); assert.match(projects, /"IrisSakura Journal"/);
   const body = controlled.toString('utf8').match(/<!-- source-body:start -->\n([\s\S]*?)\n<!-- source-body:end -->/)?.[1]; assert.ok(body); const source = Buffer.from(`${body}\n`); assert.equal(source.byteLength, 48928); assert.match(controlled.toString('utf8'), /当前授权桌面运行时为 Electron/);
   assert.equal(createHash('sha256').update(source).digest('hex'), '9e2ba53b981ac4915acd8de4c8b96bb10ef63d4c490182ae490e8836b0c8a4c0');
@@ -158,7 +158,7 @@ test('Violet Shelf tools explain only implemented local operations with truthful
     '只读导入用户选定的 JSON／CSV', '精确无放回抽取概率',
     '预览、暂停、重置并拖动矩形或精确资源图片', '报告缺失、空值、重复与不支持语法'
   ]) assert.ok(tools.includes(operation), `tools page is missing implemented operation: ${operation}`);
-  for (const href of ['portfolio.html#project-iris-shelf', 'brand.html']) {
+  for (const href of ['portfolio.html', 'brand.html']) {
     assert.ok(tools.includes(`href="${href}"`), `tools page is missing truthful public route: ${href}`);
   }
   assert.match(tools, /暂未开放下载/u);
@@ -229,7 +229,8 @@ test('the single brand palette preserves the three-part wordmark', async () => {
 
 test('visitor homepage and brand gallery are editorial rather than a compulsory two-family diagram', async () => {
   const [home, brandPage] = await Promise.all([read('index.html'), read('pages/brand.html')]);
-  assert.ok((home.match(/data-brand-layout="editorial"/g) ?? []).length >= 5);
+  assert.match(home, /id="profile"[^>]*data-brand-layout="editorial"/u);
+  assert.match(home, /id="featured-work"[^>]*data-brand-layout="editorial"/u);
   assert.ok(brandPage.includes('class="brand-current-grid"'));
   assert.equal((brandPage.match(/data-brand-project=/g) ?? []).length, 4);
   assert.doesNotMatch(home, /data-brand-layout="contrast"/u);

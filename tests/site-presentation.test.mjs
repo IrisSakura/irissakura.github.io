@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { assertSitePresentationConfig, resolveFeaturedKnowledge, resolveNavigationId, resolveProjectPresentations } from '../scripts/lib/site-presentation.mjs';
+import { assertSitePresentationConfig, resolveNavigationId, resolveProjectPresentations } from '../scripts/lib/site-presentation.mjs';
 
 const root = new URL('../', import.meta.url);
 const readJson = async (file) => JSON.parse(await readFile(new URL(file, root), 'utf8'));
@@ -11,10 +11,12 @@ test('site presentation owns six visitor routes and four stable projects', async
     readJson('config/site-presentation.json'), readJson('config/brand.json'), readJson('data/projects.json'), readJson('data/search-index.json')
   ]);
   assertSitePresentationConfig(config, brand);
-  assert.deepEqual(config.navigation.map(({ label }) => label), ['首页', '作品', 'Mods', '项目', '知识', '关于与联系']);
+  assert.deepEqual(config.navigation.map(({ label }) => label), ['首页', '作品', '文章', '项目', 'Mods', '关于']);
   assert.deepEqual(config.projects.map(({ projectId }) => projectId), ['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf']);
   assert.deepEqual(resolveProjectPresentations(config, brand, projects).map(({ displayName }) => displayName), ['Iris Engineering', 'SakuraGameFramework', 'Myosotis', 'Violet Shelf']);
-  assert.deepEqual(resolveFeaturedKnowledge(config, search).map(({ id }) => id), config.home.featuredKnowledgeIds);
+  assertSitePresentationConfig(config, brand, projects);
+  const invalid = structuredClone(config); invalid.portfolio.groups[0].projectIds.push('missing-work');
+  assert.throws(() => assertSitePresentationConfig(invalid, brand, projects), /unknown project/);
 });
 
 test('navigation grouping keeps deep routes stable without duplicate active items', async () => {
@@ -28,11 +30,11 @@ test('navigation grouping keeps deep routes stable without duplicate active item
     'pages/engineering.html': 'projects',
     'pages/tools.html': 'projects',
     'pages/framework/cases.html': 'projects',
-    'pages/journal.html': 'knowledge',
-    'pages/journal/bowling.html': 'knowledge',
-    'pages/blog/authoritative-time-source.html': 'knowledge',
-    'pages/contact.html': 'contact',
-    'pages/brand.html': 'contact'
+    'pages/journal.html': 'projects',
+    'pages/journal/bowling.html': 'projects',
+    'pages/blog/authoritative-time-source.html': 'writing',
+    'pages/contact.html': 'about',
+    'pages/brand.html': 'about'
   };
   for (const [file, expected] of Object.entries(expectations)) assert.equal(resolveNavigationId(config, file), expected, file);
 });
@@ -50,9 +52,9 @@ test('generated visitor surfaces reuse the presentation contract', async () => {
     assert.match(home, new RegExp(name));
     assert.match(projects, new RegExp(name));
   }
-  assert.doesNotMatch(home, /按兴趣选择|<strong>2<\/strong>|最近更新/u);
-  assert.match(home, /精选知识/u);
-  assert.match(portfolio, /href="tools\.html"[^>]*>查看 Violet Shelf/u);
+  assert.doesNotMatch(home, /精选知识/u);
+  assert.match(home, /最近写的/u);
+  assert.match(portfolio, /href="\.\.\/pages\/development\.html"/u);
   assert.match(home, />Mods</u);
   assert.match(home, /Freesia Mods/u);
   assert.match(portfolio, /查看 Freesia Mods 系列/u);

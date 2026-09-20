@@ -179,7 +179,7 @@ test('Framework page is generated from the story blocks before the technical ref
   const pageIndex = html.match(/<!-- page-index:start -->[\s\S]*?<!-- page-index:end -->/u)?.[0] ?? '';
   assert.deepEqual(
     [...pageIndex.matchAll(/<a href="#([^"]+)"[^>]*data-page-index-link/gu)].map((match) => match[1]),
-    ['architecture-map', 'pillars', 'reference', 'maturity', 'adoption', 'game-adoption']
+    ['architecture-map', 'pillars', 'reference', 'maturity', 'adoption', 'game-adoption', 'consumer-lab']
   );
   assert.match(generator, /insertBefore: '    <!-- framework-story:start -->'/u);
   assert.doesNotMatch(html, /framework-map-layer-gameplay-semantics[^>]*data-story-status/gu);

@@ -6,7 +6,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { currentProductName } from './lib/brand-presentation.mjs';
-import { assertSitePresentationConfig, resolveFeaturedKnowledge, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
+import { assertSitePresentationConfig, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
 import { assertModSeriesConfig, resolveModSeries } from './lib/mod-series.mjs';
 import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
@@ -29,6 +29,9 @@ import { resolveEvidenceChains } from './lib/evidence-chain-model.mjs';
 import { updateFrameworkFallback } from './lib/framework-fallback.mjs';
 import { assertProjectFactsCurrent } from './lib/project-facts.mjs';
 import { writeSocialImages } from './lib/social-image.mjs';
+
+import { assertNowData, assertUpdatesData } from './lib/living-site-model.mjs';
+import { renderLivingHome, renderLivingNow, renderLivingPortfolio } from './lib/living-site-render.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BRAND_MODES = new Set(BRAND_MODE_IDS);
@@ -57,11 +60,11 @@ const PAGE_INDEXES = {
   'pages/portfolio.html': {
     ariaLabel: '作品页章节',
     title: '浏览作品',
-    insertBefore: '    <div class="container">\n        <section class="portfolio-journey"',
+    insertBefore: '    <div id="portfolio-journey"',
     items: [
-      ['portfolio-journey', '作品路径'],
-      ['portfolio-cases', '真实项目'],
-      ['consumer-lab', '玩法实验室']
+      ['portfolio-cases', '代表作'],
+      ['work-mods', 'Mods'],
+      ['consumer-lab', '技术实验']
     ]
   },
   'pages/framework.html': {
@@ -74,7 +77,8 @@ const PAGE_INDEXES = {
       ['reference', '技术参考'],
       ['maturity', '成熟度'],
       ['adoption', '采用路线'],
-      ['game-adoption', '消费证据']
+      ['game-adoption', '采用案例'],
+      ['consumer-lab', '玩法实验']
     ]
   },
   'pages/framework-engineering.html': {
@@ -121,8 +125,8 @@ const PAGE_INDEXES = {
     ]
   },
   'pages/blog.html': {
-    ariaLabel: '博客页章节',
-    title: '浏览正式文章',
+    ariaLabel: '文章页章节',
+    title: '浏览文章',
     insertBefore: '    <section class="blog-taxonomy"',
     items: [
       ['featured-reading', '精选阅读'],
@@ -132,7 +136,7 @@ const PAGE_INDEXES = {
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, modSeriesConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, nowData, updatesData, modSeriesConfig, navbarTemplate, footerTemplate] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -161,6 +165,8 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, 
   readJson('data/themes.json'),
   readJson('config/brand.json'),
   readJson('config/site-presentation.json'),
+  readJson('data/now.json'),
+  readJson('data/updates.json'),
   readJson('config/mod-series.json'),
   readText('components/navbar.html'),
   readText('components/footer.html')
@@ -185,7 +191,9 @@ const consumerSync = resolveConsumerSyncRegistry(consumerSyncRegistry, consumerL
 assertBrandConfig(themeConfig);
 assertBrandContract(brandConfig);
 await assertBrandAssets(root, brandConfig);
-assertSitePresentationConfig(sitePresentation, brandConfig);
+assertSitePresentationConfig(sitePresentation, brandConfig, projects);
+assertNowData(nowData);
+assertUpdatesData(updatesData);
 assertModSeriesConfig(modSeriesConfig, brandConfig, projects);
 const modSeries = resolveModSeries(modSeriesConfig, projects);
 const projectPresentations = resolveProjectPresentations(sitePresentation, brandConfig, projects);
@@ -216,7 +224,6 @@ const publicJournalSource = {
 };
 const blogDiscovery = resolveBlogDiscovery(blogTaxonomy, publishedBlogs);
 const contentSearchIndex = buildContentSearchIndex(journalSource, publishedBlogs, blogDiscovery);
-const homeFeaturedKnowledge = resolveFeaturedKnowledge(sitePresentation, contentSearchIndex);
 const footerGroups = resolveFooterGroups(sitePresentation, projectPresentations);
 const featuredReading = resolveFeaturedReading(blogDiscovery);
 const evidenceChains = resolveEvidenceChains(evidenceChainData, frameworkAdoption, journalSource, blogPublication, irisEngineering, evidenceChainAuthorities);
@@ -359,15 +366,18 @@ await writeModsSource();
 await writeBrandSource();
 await writeToolsSource(projectPresentations.find(({ projectId }) => projectId === 'iris-shelf'));
 await writeCompatibilityRouteSources();
+await writeNowSource();
 
 const pageDefinitions = [
+  { file: 'pages/now.html', key: 'contact', brandModeKey: 'home', title: 'Now | IrisSakura', description: 'IrisSakura 最近正在做、思考与完成的事情。', canonical: '/pages/now.html', schemaType: 'WebPage' },
   {
     file: 'index.html',
     key: 'home',
     coverKey: 'home',
-    title: 'IrisSakura | 游戏作品、设计研究与研发体系',
+    title: 'IrisSakura | 游戏、创作与文章',
     description: site.description,
     canonical: '/',
+    schemaType: 'ProfilePage'
   },
   {
     file: 'pages/development.html',
@@ -417,8 +427,8 @@ const pageDefinitions = [
     file: 'pages/portfolio.html',
     key: 'portfolio',
     coverKey: 'portfolio',
-    title: '作品集 | 游戏、工具与创作实践',
-    description: `浏览 IrisSakura 的 ${projects.projects.length} 个公开作品，以及 ${consumerLab.cases.length} 个独立玩法实验，了解项目现状`,
+    title: '作品 | IrisSakura',
+    description: 'IrisSakura 做的游戏、Mod 与原型：从《言铸之剑》开始，了解玩法、设计与创作过程。',
     canonical: '/pages/portfolio.html',
   },
   {
@@ -481,16 +491,17 @@ const pageDefinitions = [
     file: 'pages/contact.html',
     key: 'contact',
     coverKey: 'contact',
-    title: '联系 IrisSakura | 游戏开发、系统设计与合作',
+    title: '关于 | IrisSakura',
     description: '通过工作邮箱、工作 QQ、GitHub 与哔哩哔哩联系 IrisSakura，交流游戏开发、系统设计、内容创作或合作。',
     canonical: '/pages/contact.html',
+    schemaType: 'AboutPage'
   },
   {
     file: 'pages/blog.html',
     key: 'journal',
     coverKey: 'blog',
-    title: '博客 | 游戏系统与工程设计',
-    description: '围绕游戏系统、框架实践与工程决策的完整文章。',
+    title: '文章 | IrisSakura',
+    description: '关于游戏系统、开发实践，以及做游戏过程中值得写下来的问题。',
     canonical: '/pages/blog.html',
   },
   {
@@ -592,7 +603,7 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'framework-story', renderFrameworkStory(story));
     html = replaceGeneratedBlock(html, 'framework-reference', renderFrameworkReference(story));
     html = updateFrameworkFallback(html, framework, frameworkAdoption);
-    html = replaceGeneratedBlock(html, 'framework-adoption', renderFrameworkAdoption(frameworkAdoption));
+    html = replaceGeneratedBlock(html, 'framework-adoption', renderFrameworkAdoption(frameworkAdoption) + '<div class="container">' + renderConsumerLab(consumerLab, consumerSync) + '</div>');
     html = replaceGeneratedBlock(html, 'framework-evidence', renderEvidenceChains(evidenceChains));
   }
   if (page.file === 'pages/framework-quickstart.html') {
@@ -638,14 +649,14 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(
       html,
       'home-content',
-      renderHomeContent(projects, site, projectPresentations, homeFeaturedKnowledge, modSeries, brandConfig)
+      renderLivingHome({ projects, site, presentations: projectPresentations, presentation: sitePresentation, now: nowData, updates: updatesData, articles: publishedBlogs, series: modSeries, brand: brandConfig })
     );
   }
   if (page.file === 'pages/brand.html') {
     html = replaceGeneratedBlock(html, 'brand-content', renderBrandContent(brandConfig, modSeries));
   }
   if (page.file === 'pages/portfolio.html') {
-    html = replaceGeneratedBlock(html, 'portfolio-content', renderPortfolioContent(projects, journal, framework, irisEngineering, consumerLab, consumerSync, projectPresentations, modSeries));
+    html = replaceGeneratedBlock(html, 'portfolio-content', renderLivingPortfolio(projects, sitePresentation, consumerLab));
   }
   if (page.file === 'pages/mods.html') {
     html = replaceGeneratedBlock(html, 'mods-content', renderModsContent(modSeries, brandConfig));
@@ -664,6 +675,9 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
   }
 
+  html = html.replace(/\s*<link rel="stylesheet" href="[^"]*style\/components\/living-site.css">/g, '');
+  html = html.replace('</head>', `<link rel="stylesheet" href="${prefix}style/components/living-site.css">\n</head>`);
+  if (page.file === 'pages/framework.html' && !html.includes('href="../style/portfolio.css"')) html = html.replace('</head>', '<link rel="stylesheet" href="../style/portfolio.css">\n</head>');
   html = installPageIndex(html, page);
   html = installPageCover(html, page, site, prefix);
   html = installBrandExperience(html, page, prefix, brandConfig);
@@ -703,6 +717,9 @@ function buildMeta(page, siteData, brand) {
     description: page.description,
     url: canonical
   };
+  if (page.schemaType === 'ProfilePage' || page.schemaType === 'AboutPage') {
+    structured.mainEntity = { '@type': 'Person', name: siteData.profile.nickname, url: siteData.siteUrl, sameAs: siteData.socials.map(({ url }) => url) };
+  }
   if (page.schemaType === 'VideoGame') {
     structured.author = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
     structured.gamePlatform = 'Unity 2022.3 LTS';
@@ -921,11 +938,11 @@ function installContentVoiceStages(html, page) {
   const stagesByFile = {
     'index.html': [
       ['hero-section', 'value'], ['home-projects', 'system'], ['flagship-section', 'result'],
-      ['research-section', 'evidence'], ['flagship-facts', 'boundary']
+      ['home-writing', 'evidence'], ['work-availability', 'boundary']
     ],
     'pages/portfolio.html': [
-      ['portfolio-header', 'value'], ['portfolio-journey', 'system'], ['portfolio-cases', 'result'],
-      ['consumer-lab', 'evidence'], ['portfolio-facts', 'boundary']
+      ['portfolio-header', 'value'], ['work-mods', 'system'], ['flagship-section', 'result'],
+      ['technical-work', 'evidence'], ['work-availability', 'boundary']
     ],
     'pages/engineering.html': [
       ['engineering-hero', 'value'], ['engineering-workflow', 'system'], ['engineering-capabilities', 'result'],
@@ -978,7 +995,7 @@ async function writeReadmeSummaries(projectData, sync) {
   readme = replaceGeneratedBlock(
     readme,
     'project-summary',
-    `- \`/pages/portfolio.html\`：${projectData.projects.length} 个正式公开项目，以及 ${sync.caseCount} 个 Consumer Lab 案例的本地验证矩阵；`
+    `- \`/pages/portfolio.html\`：游戏、Mod 与实验原型；${sync.caseCount} 个 Consumer Lab 案例可在 Framework 技术区域继续浏览；`
   );
   readme = replaceGeneratedBlock(
     readme,
@@ -986,97 +1003,6 @@ async function writeReadmeSummaries(projectData, sync) {
     `Consumer Lab 当前包含 ${sync.caseCount} 个 Consumer Lab 案例：${sync.sourcePushCount} 个仓库启用 source-push。`
   );
   await writeFile(file, `${readme.trim()}\n`);
-}
-
-function renderHomeContent(projectData, siteData, presentations, featuredKnowledge, series, brand) {
-  const game = projectData.projects.find((project) => project.id === sitePresentation.home.featuredWorkId);
-  if (!game) throw new Error('missing sword-of-words project');
-  const { profile } = siteData;
-  const projectCards = presentations.map((project) => `
-                <article class="project-entry-card project-entry-card-${escapeAttribute(project.brandFamily)}" data-project-id="${escapeAttribute(project.projectId)}">
-                    <img src="${escapeAttribute(project.logo)}" alt="" loading="lazy" decoding="async">
-                    <p class="project-entry-index">0${project.order}</p>
-                    <h3>${escapeHtml(project.displayName)}</h3>
-                    <strong>${escapeHtml(project.subtitle)}</strong>
-                    <p>${escapeHtml(project.summary)}</p>
-                    <a href="${escapeAttribute(project.route.replace(/^\//u, ''))}" class="text-link">进入项目<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                </article>`).join('');
-  const knowledgeCards = featuredKnowledge.map((entry) => `
-                <article class="knowledge-card" data-knowledge-id="${escapeAttribute(entry.id)}">
-                    <p class="project-status">${escapeHtml(entry.typeLabel)} · ${escapeHtml(entry.updatedAt)}</p>
-                    <h3>${escapeHtml(entry.title)}</h3>
-                    <p>${escapeHtml(entry.summary)}</p>
-                    <a href="${escapeAttribute(entry.url.replace(/^\//u, ''))}" class="project-detail-link">阅读内容<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                </article>`).join('');
-
-  return `    <section id="home-page" class="page active">
-        <section id="profile" class="hero-section profile-hero" data-brand-layout="editorial">
-            <div class="container profile-hero-inner">
-                <div class="profile-identity">
-                    <img class="profile-avatar-large" src="${escapeAttribute(profile.avatar)}" alt="${escapeAttribute(profile.avatarAlt)}">
-                    <div class="profile-copy">
-                        <p class="section-kicker">GAMES · DESIGN · MAKING</p>
-                        <h1 class="hero-title">你好，我是 <span class="highlight">${escapeHtml(profile.nickname)}</span></h1>
-                        <p class="profile-role">${escapeHtml(profile.role)}</p>
-                        <p class="hero-description">我做游戏，也构建支持创作的框架、工具与知识体系。这里收录作品、项目，以及持续积累的研究与实践。</p>
-                    </div>
-                    <div class="hero-buttons">
-                        <a href="pages/portfolio.html" class="btn btn-primary">查看作品</a>
-                        <a href="pages/development.html" class="btn btn-secondary">浏览项目</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="flagship-section" data-brand-layout="editorial">
-            <div class="container flagship-grid">
-                <div class="flagship-media">
-                    <img src="${escapeAttribute(game.homeImage)}" alt="${escapeAttribute(game.imageAlt)}">
-                </div>
-                <div class="flagship-copy">
-                    <p class="section-kicker">代表作 · ${escapeHtml(game.status)}</p>
-                    <h2>《${escapeHtml(game.title)}》：战斗、选择与构筑</h2>
-                    <dl class="flagship-facts">
-                        <div><dt>职责</dt><dd>${escapeHtml(game.role)}</dd></div>
-                        <div><dt>玩法</dt><dd>房间选择 → 实时战斗 → 构筑成长</dd></div>
-                        <div><dt>状态</dt><dd>${escapeHtml(game.status)} · 暂无公开 Demo</dd></div>
-                    </dl>
-                    <a href="pages/game.html" class="btn btn-primary">查看作品</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="home-mod-series" data-brand-layout="editorial" aria-labelledby="home-mod-series-title">
-            <div class="container home-mod-series-inner">
-                <img src="${escapeAttribute(brand.assets.freesiaLogoSmall)}" alt="" width="112" height="112" loading="lazy">
-                <div><p class="section-kicker">CREATIVE SERIES · CROSS-GAME MODS</p><h2 id="home-mod-series-title">${escapeHtml(series.displayName)}</h2><p>跨游戏 Mod 创作系列。让喜欢的游戏，长出新的可能。</p></div>
-                <a href="pages/mods.html" class="btn btn-secondary">浏览 Mods</a>
-            </div>
-        </section>
-
-        <section class="home-projects" id="projects" data-brand-layout="editorial" aria-labelledby="home-projects-title">
-            <div class="container"><div class="section-heading"><p class="section-kicker">FOUR INDEPENDENT PROJECTS</p><h2 id="home-projects-title">四个长期项目，各自解决一类问题</h2></div><div class="project-entry-grid">${projectCards}
-            </div></div>
-        </section>
-
-        <section class="research-section" id="knowledge" data-brand-layout="editorial">
-            <div class="container">
-                <div class="section-heading section-heading-row">
-                    <div><p class="section-kicker">CURATED KNOWLEDGE</p><h2>精选知识</h2></div>
-                    <a href="pages/journal.html" class="text-link">进入 Myosotis</a>
-                </div>
-                <div class="knowledge-grid">${knowledgeCards}
-                </div>
-            </div>
-        </section>
-
-        <section class="public-cta" data-brand-layout="editorial">
-            <div class="container public-cta-inner">
-                <div><p class="section-kicker">联系</p><h2>交流或合作</h2></div>
-                <a href="pages/contact.html" class="btn btn-secondary">联系方式</a>
-            </div>
-        </section>
-    </section>`;
 }
 
 function renderBrandContent(brand, series) {
@@ -1181,7 +1107,14 @@ function renderEngineeringContent(engineering, chains, presentation) {
         <section class="engineering-intro" aria-labelledby="engineering-intro-title">
             <div class="container engineering-intro-grid">
                 <div><p class="section-kicker">WHY IRIS ENGINEERING</p><h2 id="engineering-intro-title">${escapeHtml(engineering.headline)}</h2></div>
-                <p>Iris Engineering 不替代 Git、Gitea、SakuraGameFramework 或人的判断。它负责把分散事实变成只读视图，把研究建议变成待审批提案，再让获得授权的任务拥有明确目标、权限和恢复边界。</p>
+                <p>同时推进多个项目时，最容易丢失的往往是上下文：之前为什么这样决定，工作停在哪里，下一步该做什么。我做 Iris Engineering，是希望把这些信息放在一起，让下一次继续工作时少一点重新寻找。</p>
+            </div>
+        </section>
+
+        <section class="engineering-evidence" aria-labelledby="engineering-evidence-title">
+            <div class="container engineering-evidence-grid">
+                <div class="engineering-section-heading"><p class="section-kicker">IN PRACTICE</p><h2 id="engineering-evidence-title">把日常研发整理清楚</h2></div>
+                <div>${examples}</div>
             </div>
         </section>
 
@@ -1201,12 +1134,6 @@ function renderEngineeringContent(engineering, chains, presentation) {
             </div>
         </section>
 
-        <section class="engineering-evidence" aria-labelledby="engineering-evidence-title">
-            <div class="container engineering-evidence-grid">
-                <div class="engineering-section-heading"><p class="section-kicker">IN PRACTICE</p><h2 id="engineering-evidence-title">把日常研发整理清楚</h2></div>
-                <div>${examples}</div>
-            </div>
-        </section>
         <section class="engineering-boundaries" aria-labelledby="engineering-boundaries-title">
             <div class="container engineering-boundary-grid">
                 <div><p class="section-kicker">GETTING STARTED</p><h2 id="engineering-boundaries-title">使用说明</h2><p>先了解项目状态，再选择需要推进的工作。</p></div>
@@ -1214,92 +1141,6 @@ function renderEngineeringContent(engineering, chains, presentation) {
             </div>
         </section>
 ${renderEvidenceChains(chains, 'engineering-evidence-chains')}
-    </div>`;
-}
-
-function renderPortfolioContent(projectData, journalData, frameworkData, irisEngineeringData, consumerLabData, consumerSync, presentations, series) {
-  const order = ['sword-of-words', 'udgap', 'the-weaver', 'iris-core', 'iris-shelf', 'iris-engineering', 'sakura-framework', 'sakura-design-journal'];
-  const ordered = order.map((id) => projectData.projects.find((project) => project.id === id));
-  if (ordered.some((project) => !project)) throw new Error('portfolio project set is incomplete');
-  const presentationById = new Map(presentations.map((project) => [project.projectId, project]));
-  const seriesByProjectId = new Map(series.entries.map((entry) => [entry.projectId, entry]));
-  const cases = ordered.map((project, index) => {
-    const visual = renderPortfolioVisual(project, journalData, frameworkData, irisEngineeringData);
-    const presentation = presentationById.get(project.id);
-    const seriesEntry = seriesByProjectId.get(project.id);
-    const seriesLabel = seriesEntry?.role === 'featured-mod'
-      ? '<p class="portfolio-series-label">FREESIA MODS</p><a href="mods.html#mod-works" class="portfolio-link portfolio-link-secondary">查看 Freesia Mods 系列 →</a>'
-      : seriesEntry?.role === 'shared-foundation'
-        ? '<p class="portfolio-series-label">FREESIA SHARED FOUNDATION</p><a href="mods.html#mod-foundations" class="portfolio-link portfolio-link-secondary">查看系列关系 →</a>'
-        : '';
-    if (presentation) {
-      const extraLink = project.id === 'sakura-framework'
-        ? '<a href="framework-engineering.html" class="portfolio-link portfolio-link-secondary">技术架构</a><a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">开始使用框架</a>' : '';
-      const availability = project.id === 'iris-shelf' ? '<p>暂未开放下载。</p>' : '';
-      return `<article class="portfolio-case portfolio-case-${escapeAttribute(project.category)}" id="project-${escapeAttribute(project.id)}" aria-label="${escapeAttribute(presentation.displayName)}">
-        <div class="portfolio-case-visual"><img class="portfolio-product-mark" src="../${escapeAttribute(presentation.logo)}" alt="${escapeAttribute(presentation.displayName)}"></div>
-        <div class="portfolio-case-copy"><p class="project-status">0${index + 1} · ${escapeHtml(presentation.subtitle)}</p><h2>${escapeHtml(presentation.displayName)}</h2>
-          <p class="portfolio-description">${escapeHtml(presentation.summary)}</p>${availability}
-          <a href="${escapeAttribute(presentation.route.replace('/pages/', ''))}" class="portfolio-link">查看 ${escapeHtml(presentation.displayName)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>${extraLink}
-        </div></article>`;
-    }
-    const detailHref = presentation?.route.replace('/pages/', '') ?? project.href;
-    const detailLabel = project.id === 'iris-shelf'
-      ? '查看 Violet Shelf'
-      : (presentation ? `查看 ${presentation.displayName}` : project.linkLabel);
-    return `<article class="portfolio-case portfolio-case-${escapeAttribute(project.category)}" id="project-${escapeAttribute(project.id)}" aria-label="${escapeAttribute(displayProjectName(project.id, project.title))}">
-                <div class="portfolio-case-visual">${visual}</div>
-                <div class="portfolio-case-copy">
-                    <p class="project-status">0${index + 1} · ${escapeHtml(project.categoryLabel)} · ${escapeHtml(project.status)}</p>
-                    <h2>${escapeHtml(displayProjectName(project.id, project.title))}</h2>
-                    <p class="portfolio-update"><span>更新 · ${escapeHtml(project.updatedAt)}</span></p>
-                    <p class="portfolio-description">${escapeHtml(project.summary)}</p>
-                    <dl class="portfolio-facts portfolio-facts-primary">
-                        <div><dt>职责</dt><dd>${escapeHtml(project.role)}</dd></div>
-                        <div><dt>目标</dt><dd>${escapeHtml(project.goal)}</dd></div>
-                    </dl>
-                    <details class="portfolio-evidence"><summary>开发详情</summary><dl class="portfolio-facts">
-                        <div><dt>证据</dt><dd>${escapeHtml(project.evidence.join('；'))}</dd></div>
-                        <div><dt>限制</dt><dd>${escapeHtml(project.limitations.join('；'))}</dd></div>
-                        <div><dt>下一步</dt><dd>${escapeHtml(project.next.join('；'))}</dd></div>
-                    </dl></details>
-                    <div class="portfolio-tags">${project.technologies.slice(0, 5).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
-                    ${detailHref
-        ? `<a href="${escapeAttribute(detailHref)}" class="portfolio-link">${escapeHtml(detailLabel)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>`
-        : `<span class="portfolio-link portfolio-link-static">${escapeHtml(detailLabel)}</span>`}
-                    ${seriesLabel}
-                    ${project.id === 'sakura-framework'
-        ? '<a href="framework-engineering.html" class="portfolio-link portfolio-link-secondary">打开 Engineering Hub<i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="framework-quickstart.html" class="portfolio-link portfolio-link-secondary">打开 15 分钟 Quickstart<i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
-        : ''}
-                </div>
-            </article>`;
-  }).join('\n            ');
-
-  return `<div class="portfolio-header">
-        <div class="container">
-            <p class="section-kicker">GAMES · MODS · CREATIVE WORK</p>
-            <h1>作品与创作</h1>
-            <p>从可玩原型、Mod 与玩法实验开始，了解每件作品的玩法、设计思路与开发过程。</p>
-        </div>
-    </div>
-    <div class="container">
-        <section class="portfolio-journey" id="portfolio-journey" aria-labelledby="portfolio-journey-title">
-            <div class="journey-heading">
-                <div><p class="journey-kicker">HOW THE WORK IS MADE</p><h2 id="portfolio-journey-title">研究判断 → 工程治理 → 框架沉淀 → 游戏验证</h2></div>
-                <a class="journal-link" href="journal.html">查看研究记录<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-            </div>
-            <p class="journey-intro">Myosotis 保存判断，Iris Engineering 约束授权与执行，Violet Shelf 提供独立本地入口，SakuraGameFramework 与 Iris Core 沉淀可复用能力，UDGAP、The Weaver 与《言铸之剑》承担不同阶段的游戏验证。</p>
-            <ol class="journey-path">
-                <li><span class="journey-index">01</span><h3>研究判断</h3><p>理解引擎机制、游戏设计与当前约束。</p></li>
-                <li><span class="journey-index">02</span><h3>显式授权</h3><p>把研究提案、目标和执行权限变成可复查合同。</p></li>
-                <li><span class="journey-index">03</span><h3>框架沉淀</h3><p>只把跨项目复用的结论沉淀为稳定边界。</p></li>
-                <li><span class="journey-index">04</span><h3>游戏验证</h3><p>用可玩循环、截图和限制校验实际价值。</p></li>
-            </ol>
-        </section>
-        <section class="portfolio-cases" id="portfolio-cases" aria-label="${ordered.length} 个真实项目">
-            ${cases}
-        </section>
-        ${renderConsumerLab(consumerLabData, consumerSync)}
     </div>`;
 }
 
@@ -1395,37 +1236,6 @@ function renderConsumerLab(consumerLabData, consumerSync) {
         </section>`;
 }
 
-function renderPortfolioVisual(project, journalData, frameworkData, irisEngineeringData) {
-  if (project.image) {
-    return `<img src="${escapeAttribute(project.image)}" alt="${escapeAttribute(project.imageAlt)}"><span class="visual-label">PLAYABLE PROTOTYPE</span>`;
-  }
-  if (project.id === 'sakura-framework') {
-    return `<div class="framework-proof-visual" aria-label="Framework 生命周期快照">
-        <div><strong>${frameworkData.lifecycleCounts.Supported}</strong><span>Supported</span></div>
-        <div><strong>${frameworkData.lifecycleCounts.Preview}</strong><span>Preview</span></div>
-        <div><strong>${frameworkData.lifecycleCounts.Experimental}</strong><span>Experimental</span></div>
-        <p>${frameworkData.lifecycleCounts.DocsOnly} DocsOnly · ${frameworkData.lifecycleCounts.Frozen} Frozen</p>
-    </div><span class="visual-label">PUBLIC SNAPSHOT</span>`;
-  }
-  if (project.id === 'iris-engineering') {
-    return `<div class="engineering-proof-visual" aria-label="Iris Engineering 受控工作流">
-      ${irisEngineeringData.workflow.map((step, index) => `<div><span>0${index + 1}</span><strong>${escapeHtml(step.label)}</strong><small>${escapeHtml(step.title)}</small></div>`).join('')}
-      <p>EXPLICIT AUTHORIZATION · FAIL CLOSED</p>
-    </div><span class="visual-label">CONTROL PLANE</span>`;
-  }
-  if (Array.isArray(project.proof)) {
-    const visualVariant = project.id === 'iris-shelf' ? 'shelf' : project.id;
-    return `<div class="project-proof-visual project-proof-visual-${escapeAttribute(visualVariant)}" aria-label="${escapeAttribute(displayProjectName(project.id, project.title))} 项目状态">
-      ${project.proof.map((item) => `<div><strong>${escapeHtml(item.value)}</strong><span>${escapeHtml(item.label)}</span></div>`).join('')}
-      <p>${escapeHtml(project.proofFooter)}</p>
-    </div><span class="visual-label">${escapeHtml(project.visualLabel)}</span>`;
-  }
-  return `<div class="journal-proof-visual" aria-label="Journal 精选研究主题">
-      <p>${journalData.summary.gameDesignCount} 个设计主题 · ${journalData.summary.knowledgeStreamCount} 条知识流</p>
-      ${journalData.featuredNotes.slice(0, 3).map((note) => `<div><span>${escapeHtml(note.track)}</span><strong>${escapeHtml(note.title)}</strong></div>`).join('')}
-    </div><span class="visual-label">CURATED RESEARCH</span>`;
-}
-
 function renderContentSearch(searchIndex) {
   const typeOptions = searchIndex.facets.types
     .map((entry) => `<option value="${escapeAttribute(entry.id)}">${escapeHtml(entry.label)}（${entry.count}）</option>`)
@@ -1488,31 +1298,20 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex, pres
   return `<header class="journal-hero">
         <div class="container journal-hero-grid">
             <div>
-                <p class="project-breadcrumb"><a href="../index.html">首页</a> / 知识</p>
-                <p class="journal-kicker">RESEARCH · DESIGN · CREATIVE KNOWLEDGE</p>
+                <p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Myosotis</p>
+                <p class="journal-kicker">RESEARCH ARCHIVE</p>
                 <h1>${escapeHtml(presentation.displayName)}</h1>
                 <h2 class="project-hero-subtitle">${escapeHtml(presentation.subtitle)}</h2>
                 <p class="journal-lead">${escapeHtml(presentation.summary)}</p>
-                <div class="journal-actions"><a class="btn btn-primary" href="#content-search">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#featured-notes">${escapeHtml(presentation.secondaryAction.label)}</a><a class="text-link" href="development.html">查看全部项目</a></div>
+                <div class="journal-actions"><a class="btn btn-primary" href="#content-search">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="blog.html">阅读文章</a><a class="text-link" href="development.html">查看全部项目</a></div>
             </div>
 
         </div>
     </header>
-    <section class="journal-summary" aria-label="内容概览">
-        <div class="container">
-            <div class="journal-dashboard" aria-label="学习记录概览">
-                <div class="journal-dashboard-label">内容概览</div>
-                <div class="journal-metric"><strong>${journalData.summary.gameDesignCount}</strong><span>游戏设计主题</span></div>
-                <div class="journal-metric"><strong>${journalData.summary.auditCount}</strong><span>框架审计摘要</span></div>
-                <div class="journal-metric journal-metric-with-note"><strong>${journalData.summary.importedBlogCount}</strong><span>完整博客</span><small>${journalData.summary.publishedBlogCount} 篇已公开</small></div>
-                <div class="journal-metric"><strong>${journalData.summary.knowledgeStreamCount}</strong><span>知识流</span></div>
-            </div>
-        </div>
-    </section>
 ${renderContentSearch(searchIndex)}
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">可独立分享的精选研究主题</h2></div></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">值得继续追问的问题</h2></div></div>
             <div class="journal-scroll-region journal-featured-scroll" role="region" aria-labelledby="featured-notes-title" tabindex="0">
                 <div class="note-grid">${notes}
                 </div>
@@ -1521,7 +1320,7 @@ ${renderContentSearch(searchIndex)}
     </section>
     <section class="journal-section" id="knowledge-streams">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">KNOWLEDGE STREAMS</p><h2>${journalData.streams.length} 条相互验证的知识流</h2></div><p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">KNOWLEDGE STREAMS</p><h2>沿着问题继续研究</h2></div><p>研究引擎如何工作，提炼游戏为何成立，再用工程记录约束判断是否可靠。</p></div>
             <div class="stream-grid">${streams}
             </div>
         </div>
@@ -1613,28 +1412,28 @@ function renderBlogIndex(sourceData, discovery, featuredReading) {
             </article>`).join('');
   return `<header class="blog-hero">
         <div class="container">
-            <p class="section-kicker">GAME SYSTEMS · ENGINEERING PRACTICE</p>
-            <h1>游戏系统与工程设计博客</h1>
-            <p>围绕游戏系统、框架实践与工程决策，整理可以独立阅读的完整文章。</p>
+            <p class="section-kicker">WRITING</p>
+            <h1>文章</h1>
+            <p>关于游戏系统、开发实践，以及做游戏过程中值得写下来的问题。</p>
             <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a><a class="btn btn-secondary" href="../rss.xml"><i class="fas fa-rss" aria-hidden="true"></i>订阅 RSS</a></div>
         </div>
     </header>
     <section class="blog-featured-reading" id="featured-reading" aria-labelledby="featured-reading-title">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">FEATURED READING</p><h2 id="featured-reading-title">从每个系列开始的一篇文章</h2></div><p>每个正式系列选择最新文章作为入口；完整历史仍由系列、标签与 RSS 承载。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">FEATURED READING</p><h2 id="featured-reading-title">从每个系列开始的一篇文章</h2></div><p>从感兴趣的主题开始，沿着一个问题继续读下去。</p></div>
             <div class="blog-featured-grid">${featured}</div>
         </div>
     </section>
     <section class="blog-taxonomy" id="blog-taxonomy" aria-labelledby="blog-taxonomy-title">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">SERIES & TAGS</p><h2 id="blog-taxonomy-title">按系列与主题继续阅读</h2></div><p>分类只覆盖已经正式发布的文章；草稿不会进入聚合页或订阅。</p></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">SERIES & TAGS</p><h2 id="blog-taxonomy-title">按系列与主题继续阅读</h2></div><p>游戏系统、框架实践与开发中的思考。</p></div>
             <div class="blog-series-list">${series}</div>
             <div class="blog-tag-list" aria-label="文章标签">${tags}</div>
         </div>
     </section>
     <section class="blog-list-section" id="articles">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>${sourceData.blogs.length} 篇正式文章</h2></div></div>
+            <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>全部文章</h2></div></div>
             <div class="blog-card-grid">${articles}
             </div>
         </div>
@@ -1645,7 +1444,7 @@ function renderContactContent(siteData) {
   const contacts = siteData.contacts.map((contact) => {
     const content = `
                     <i class="${escapeAttribute(contact.iconFamily)} ${escapeAttribute(contact.icon)}" aria-hidden="true"></i>
-                    <div><span>DIRECT CONTACT</span><h2>${escapeHtml(contact.label)}</h2><p class="public-route-value">${escapeHtml(contact.value)}</p><p>${escapeHtml(contact.description)}</p></div>`;
+                    <div><h2>${escapeHtml(contact.label)}</h2><p class="public-route-value">${escapeHtml(contact.value)}</p><p>${escapeHtml(contact.description)}</p></div>`;
     if (contact.href) {
       return `
                 <a class="public-route-card direct-contact-card" href="${escapeAttribute(contact.href)}">${content}
@@ -1664,15 +1463,16 @@ function renderContactContent(siteData) {
                 </a>`).join('');
   return `<header class="contact-header">
         <div class="container">
-            <p class="section-kicker">ABOUT · CONTACT</p>
-            <h1>关于与联系</h1>
-            <p>你好，我是 ${escapeHtml(siteData.profile.nickname)}，一名${escapeHtml(siteData.profile.role)}。我做游戏，也构建支持创作的框架、工具与知识体系。</p>
-            <p>可通过工作邮箱或工作 QQ 直接联系，也可以从公开主页了解代码、开发记录与作品进展。</p>
+            <p class="section-kicker">ABOUT</p>
+            <h1>你好，我是 IrisSakura。</h1>
+            <p>你好，我是 ${escapeHtml(siteData.profile.nickname)}。我主要做游戏，也会把开发中反复遇到的问题做成框架、工具和文章。</p>
+            <p>这个网站记录我做出来的东西，也记录那些值得继续想下去的问题。</p>
             <div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">品牌与视觉资料</a></div>
             <p class="contact-independence">${escapeHtml(siteData.independenceNotice)}</p>
         </div>
     </header>
-    <section class="public-routes">
+    <section class="about-story living-section"><div class="container living-prose"><h2>我做什么</h2><p>从一个游戏原型开始，尝试战斗、成长和选择怎样构成有趣的体验。我也为喜欢的游戏做 Mod，把开发中的经验整理成框架、工具和文章。</p><div class="hero-buttons"><a class="text-link" href="portfolio.html">看看作品</a><a class="text-link" href="blog.html">读读文章</a><a class="text-link" href="journal.html">研究资料库</a></div><h2>我关心什么</h2><p>游戏系统为什么这样设计？工具怎样帮助人把想法做出来？哪些经验值得留下来，供下一次创作使用？这些问题会一直伴随我的开发。</p><h2>最近在做</h2><p>${escapeHtml(nowData.intro)}</p><a class="text-link" href="now.html">查看 Now →</a></div></section>
+    <section class="public-routes" id="contact"><div class="container"><h2>联系</h2><p>欢迎交流游戏系统、开发工具、Mod 与独立开发。</p></div>
         <div class="container public-route-list">${contacts}${routes}
         </div>
     </section>
@@ -1690,17 +1490,7 @@ function renderContactContent(siteData) {
 }
 
 function renderFrameworkStoryHero(story, presentation) {
-  const { positioning, architectureMap } = story;
-  const claims = positioning.claims.map((claim) => `<span class="framework-story-chip">${escapeHtml(claim)}</span>`).join('');
-  const stack = [
-    architectureMap.layers[0],
-    architectureMap.layers[1],
-    architectureMap.layers[2],
-    architectureMap.layers[3]
-  ].map((layer, index) => {
-    const statusAttribute = layer.status ? ` data-story-status="${escapeAttribute(layer.status)}"` : '';
-    return `<div class="stack-layer${index === architectureMap.layers.length - 1 ? ' highlight-layer' : ''}"${statusAttribute}>${escapeHtml(layer.label)}</div>`;
-  }).join('');
+  const { positioning } = story;
   return `<div class="container framework-hero-grid">
             <div class="framework-hero-copy">
                 <p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p>
@@ -1708,14 +1498,14 @@ function renderFrameworkStoryHero(story, presentation) {
                 <h1>${escapeHtml(presentation.displayName)}</h1>
                 <h2 class="project-hero-subtitle">${escapeHtml(presentation.subtitle)}</h2>
                 <p class="framework-subtitle">${escapeHtml(presentation.summary)}</p>
-                <div class="framework-story-chips" aria-label="Framework 公开定位">${claims}</div>
+
                 <div class="framework-actions">
                     <a href="framework-quickstart.html" class="btn btn-primary">${escapeHtml(presentation.primaryAction.label)}</a>
                     <a href="#architecture-map" class="btn btn-secondary">${escapeHtml(presentation.secondaryAction.label)}</a>
                     <a href="framework-engineering.html" class="btn btn-secondary">打开 Engineering Hub</a>
                 </div>
             </div>
-            <div class="framework-stack" aria-label="Portable Core 到 Games / Consumers 的架构路径">${stack}</div>
+
         </div>`;
 }
 
@@ -1744,16 +1534,18 @@ function renderFrameworkStory(story) {
                 </article>`).join('');
   return `<section class="framework-positioning" id="positioning" aria-labelledby="framework-positioning-title">
         <div class="container framework-story-intro">
-            <div><p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p><h2 class="section-title" id="framework-positioning-title">从模块集合到工程判断</h2></div>
-            <div><p>${escapeHtml(positioning.description)}</p></div>
+            <div><p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p><h2 class="section-title" id="framework-positioning-title">为什么持续做这个框架</h2></div>
+            <div><p>把在游戏中反复使用的运行时服务与玩法能力整理好，让下一次实验和创作可以从已经解决的问题出发。</p></div>
         </div>
     </section>
+    <section class="living-section framework-real-use" id="real-use"><div class="container living-story-grid"><div><p class="section-kicker">WHY I BUILT IT</p><h2>让下一次创作有一个更好的起点</h2><p>存档、事件、资源、时间、战斗和 UI，是做游戏时会反复遇到的问题。我把其中能复用的部分整理成模块，希望把更多注意力留给具体的游戏。</p><p>在《言铸之剑》中，这些模块参与了房间推进、战斗与构筑。独立玩法实验则帮助我观察它们在不同规则下怎样协作。</p><a class="text-link" href="game.html">看看《言铸之剑》</a> · <a class="text-link" href="#game-adoption">查看实际采用</a></div><figure><img src="../assets/images/sword-of-words/combat-room.png" alt="言铸之剑中的战斗房间与角色技能栏" loading="lazy" decoding="async"><figcaption>《言铸之剑》中的实时战斗。</figcaption></figure></div></section>
     <section class="framework-architecture-map" id="architecture-map" aria-labelledby="framework-architecture-title">
         <div class="container">
             <div class="section-heading-row">
                 <div><p class="section-kicker">${escapeHtml(architectureMap.eyebrow)}</p><h2 class="section-title" id="framework-architecture-title">${escapeHtml(architectureMap.title)}</h2></div>
                 <p class="section-intro">${escapeHtml(architectureMap.summary)}</p>
             </div>
+            <div class="framework-story-chips" aria-label="Framework 公开定位">${positioning.claims.map((claim) => `<span class="framework-story-chip">${escapeHtml(claim)}</span>`).join('')}</div>
             <div class="framework-map-flow" aria-label="Cross-Engine Architecture Map">
                 <div class="framework-map-layer-list">${layerCards}</div>
                 <div class="framework-map-branches">${branches}</div>
@@ -1823,7 +1615,7 @@ function renderFrameworkEngineering(hub, authorities) {
   const adoptionLinks = [
     [hub.links.framework, 'Framework Reference', '回到成熟度、架构地图与采用路线。'],
     [hub.links.quickstart, '15-minute Quickstart', '沿着安装、首次事件、对象池与清理完成最小验证。'],
-    [`${hub.links.portfolio}#consumer-lab`, 'Consumer Evidence', '查看独立 Consumer 的真实引用与验证范围。'],
+    ['framework.html#consumer-lab', 'Consumer Evidence', '查看独立 Consumer 的真实引用与验证范围。'],
     [hub.links.cases, 'Five Flagship Cases', '用统一十二段模板查看完整工程闭环。'],
     [hub.links.knowledge, 'Knowledge Graph', '从 Framework 判断反向进入已发布研究。'],
     [hub.links.reference, 'Selected Reference', '查看精选模块的角色、层级、依赖与证据。'],
@@ -2221,9 +2013,9 @@ async function writeDevelopmentSource(presentations) {
 <main id="main-content" class="main-content development-main">
     <header class="development-hero">
         <div class="container development-hero-inner">
-            <p class="section-kicker">PROJECTS · FOUR INDEPENDENT PATHS</p>
-            <h1>项目</h1>
-            <p class="development-lead">四个独立项目，分别服务工程推进、游戏开发、知识积累与本地创作。它们由 IrisSakura 持续维护，也可以在具体工作中按需协作。</p>
+            <p class="section-kicker">PROJECTS</p>
+            <h1>长期项目</h1>
+            <p class="development-lead">这些是我为了长期做游戏、研究和创作而持续维护的几个项目。</p>
             <a class="btn btn-primary" href="#development-paths">查看四个项目</a>
         </div>
     </header>
@@ -2231,7 +2023,7 @@ async function writeDevelopmentSource(presentations) {
         <div class="container">
             <div class="section-heading development-heading">
                 <p class="section-kicker">CHOOSE BY PURPOSE</p>
-                <h2 id="development-paths-title">从你现在要做的事开始</h2>
+                <h2 id="development-paths-title">创作背后的工具与积累</h2>
             </div>
             <div class="development-grid">${cards}
             </div>
@@ -2352,10 +2144,15 @@ async function writeToolsSource(presentation) {
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHtml(presentation.displayName)} | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><link rel="stylesheet" href="../style/iris-sakura.css"><!-- brand-styles:end --><link rel="stylesheet" href="../style/tools.css"></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content tools-main">
 <header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#tools">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#status">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
-<section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid">${cards}</div></section>
+<section class="living-section"><div class="container living-prose"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div></section><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid">${cards}</div></section>
 <section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
-<nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html#project-iris-shelf">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
+<nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
+}
+
+async function writeNowSource() {
+  await writeFile(path.join(root, 'pages/now.html'), `<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Now | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head><body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content"><div class="container now-page">${renderLivingNow(nowData, updatesData)}</div></main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>`);
 }
 
 async function writeCompatibilityRouteSources() {

@@ -8,29 +8,10 @@ async function readText(path) {
   return readFile(new URL(path, root), 'utf8');
 }
 
-test('portfolio explains the path from research to finished work', async () => {
+test('portfolio leads with real work and retains routes to research and experiments', async () => {
   const html = await readText('pages/portfolio.html');
-
-  for (const fragment of [
-    '作品与创作',
-    '从可玩原型、Mod 与玩法实验开始',
-    '研究判断 → 工程治理 → 框架沉淀 → 游戏验证',
-    '研究判断',
-    '显式授权',
-    '框架沉淀',
-    '游戏验证',
-    'portfolio-case-game',
-    'UDGAP · 梦境诊疗室',
-    'Iris × Sakura — The Weaver',
-    'Iris Core',
-    'Violet Shelf',
-    'Iris Engineering',
-    'Myosotis'
-  ]) {
-    assert.ok(html.includes(fragment), `missing portfolio journey fragment: ${fragment}`);
-  }
-  assert.match(html, /id="project-iris-shelf"[\s\S]*?Violet Shelf[\s\S]*?href="tools\.html"[^>]*>查看 Violet Shelf/u);
-  assert.match(html, /<details class="portfolio-evidence">/u);
+  for (const fragment of ['游戏与作品', '言铸之剑', 'The Weaver', 'Freesia Mods', 'project-udgap', '暂无公开 Demo', 'framework.html#game-adoption']) assert.ok(html.includes(fragment), fragment);
+  assert.doesNotMatch(html, /显式授权|工程治理|class="consumer-lab-card/u);
 });
 
 test('portfolio data keeps research distinct from finished work', async () => {
@@ -128,31 +109,17 @@ test('public portfolio does not expose the private journal origin', async () => 
   assert.ok(!data.includes('154.37.215.57'));
 });
 
-test('portfolio keeps games first and current project cards separate from internal source snapshots', async () => {
+test('portfolio separates finished work from long-term projects without losing old consumer anchors', async () => {
   const html = await readText('pages/portfolio.html');
-  assert.equal((html.match(/class="portfolio-case /g) ?? []).length, 8);
-  assert.ok(!html.includes('portfolio-filters'));
-  assert.ok(!html.includes('data-filter='));
+  const config = JSON.parse(await readText('config/site-presentation.json'));
+  const consumers = JSON.parse(await readText('data/consumer-lab.json'));
   assert.ok(html.indexOf('project-sword-of-words') < html.indexOf('project-udgap'));
-  assert.ok(html.indexOf('project-udgap') < html.indexOf('project-the-weaver'));
-  assert.ok(html.indexOf('project-the-weaver') < html.indexOf('project-iris-core'));
-  assert.ok(html.indexOf('project-iris-core') < html.indexOf('project-iris-shelf'));
-  assert.ok(html.indexOf('project-iris-shelf') < html.indexOf('project-iris-engineering'));
-  assert.ok(html.indexOf('project-iris-engineering') < html.indexOf('project-sakura-framework'));
-  assert.ok(html.indexOf('project-sakura-framework') < html.indexOf('project-sakura-design-journal'));
-  assert.equal((html.match(/class="portfolio-update"/g) ?? []).length, 4);
-  assert.equal((html.match(/<dt>下一步<\/dt>/g) ?? []).length, 4);
-  assert.ok(!html.includes('源仓推送公开投影'));
-  assert.ok(!html.includes('源仓推送公开基线'));
-  assert.ok(!html.includes('固定提交公开投影'));
-  assert.ok(!html.includes('站点策展状态'));
-  assert.ok(!html.includes('project-proof-visual-shelf'));
-  assert.ok(html.includes('project-proof-visual-udgap'));
-  assert.ok(html.includes('project-proof-visual-the-weaver'));
-  assert.ok(html.includes('project-proof-visual-iris-core'));
-  assert.ok(!html.includes('engineering-proof-visual'));
-  assert.ok(!html.includes('framework-proof-visual'));
-  assert.ok(!html.includes('journal-proof-visual'));
+  for (const project of config.projects) assert.ok(html.includes(`id="project-${project.projectId}"`));
+  for (const consumer of consumers.cases) {
+    assert.ok(html.includes(`id="consumer-${consumer.id}"`));
+    assert.ok(html.includes(`framework.html#consumer-${consumer.id}`));
+  }
+  assert.doesNotMatch(html, /源仓推送公开投影|UNSIGNED UNIVERSAL|portfolio-filters/u);
 });
 
 test('Iris Core and The Weaver preserve their public evidence boundaries', async () => {

@@ -31,7 +31,7 @@ test('GitHub Pages deployment credentials are scoped to the deploy job', async (
 test('site configuration exposes verified direct contacts and public routes', async () => {
   const site = JSON.parse(await readText('data/site.json'));
   assert.equal(site.positioning, '独立游戏开发者与游戏系统设计者');
-  assert.equal(site.tagline, '游戏作品 · 设计研究 · 研发体系');
+  assert.equal(site.tagline, '游戏 · 创作 · 文章');
   assert.ok(site.independenceNotice.includes('仅代表本人'));
   assert.deepEqual(site.contacts.map((contact) => contact.id), ['work-email', 'work-qq']);
   const workEmail = site.contacts.find((contact) => contact.id === 'work-email');
@@ -62,7 +62,7 @@ test('public navigation presents About and Contact as an ordinary tab without ow
   for (const page of pages) {
     const html = await readText(page);
     const nav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.ok(nav.includes('>关于与联系</a>'), `${page} navigation is missing the 关于与联系 tab`);
+    assert.ok(nav.includes('>关于</a>'), `${page} navigation is missing the 关于与联系 tab`);
     assert.ok(!nav.includes('>公开入口</a>'), `${page} navigation still labels Contact as 公开入口`);
     assert.ok(!nav.includes('nav-cta'), `${page} gives Contact a special navigation treatment`);
   }
@@ -106,7 +106,7 @@ test('Framework Engineering Hub is generated from its contract with honest SEO a
   for (const phrase of ['D0 · Signal', 'D1 · System', 'D2 · Architecture', 'D3 · Evidence', 'Understand Sakura', 'Explore Engineering', 'Start Using', 'local-passed / runner-pending', 'Production: unknown']) {
     assert.ok(page.includes(phrase), `Framework Engineering Hub missing ${phrase}`);
   }
-  for (const href of [hub.links.home, hub.links.framework, hub.links.quickstart, `${hub.links.portfolio}#consumer-lab`, hub.links.cases, hub.links.knowledge, hub.links.reference]) {
+  for (const href of [hub.links.home, hub.links.framework, hub.links.quickstart, 'framework.html#consumer-lab', hub.links.cases, hub.links.knowledge, hub.links.reference]) {
     assert.match(page, new RegExp(`href="${escapeRegExp(href)}"`, 'u'), `Framework Engineering Hub missing ${href}`);
     await access(new URL(href.split('#')[0], new URL('../pages/', import.meta.url)));
   }
@@ -282,8 +282,8 @@ test('major page visuals are generated without reused category screenshots', asy
 
   const home = await readText('index.html');
   const profileOffset = home.indexOf('id="profile"');
-  const flagshipOffset = home.indexOf('class="flagship-section"');
-  const projectsOffset = home.indexOf('class="home-projects"');
+  const flagshipOffset = home.indexOf('id="featured-work"');
+  const projectsOffset = home.indexOf('id="projects"');
   assert.ok(profileOffset >= 0, 'home must expose one real identity section');
   assert.ok(flagshipOffset > profileOffset, 'flagship proof must follow the identity section');
   assert.ok(projectsOffset > flagshipOffset, 'four project routes must follow the flagship proof');
@@ -311,20 +311,12 @@ test('major page visuals are generated without reused category screenshots', asy
   }
 });
 
-test('research and articles share one visitor-facing primary route without changing stable URLs', async () => {
-  for (const page of ['index.html', 'pages/journal.html', 'pages/blog.html']) {
-    const html = await readText(page);
-    const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    assert.equal((primaryNav.match(/>知识<\/a>/g) ?? []).length, 1, `${page} must expose one knowledge nav item`);
-    assert.ok(!primaryNav.includes('>Journal<'), `${page} still exposes the product name instead of the visitor route`);
-    assert.ok(!primaryNav.includes('>博客<'), `${page} must not expose a separate blog nav item`);
-  }
-
+test('articles and research keep separate navigation contexts and stable routes', async () => {
   const journal = await readText('pages/journal.html');
   const blog = await readText('pages/blog.html');
-  const activeJournalNav = /href="\.\.\/pages\/journal\.html" class="nav-link active"(?: aria-current="page"| data-nav-section-current="true")>知识<\/a>/;
-  assert.match(journal, activeJournalNav);
-  assert.match(blog, activeJournalNav);
+  assert.match(journal, /class="nav-link active" data-nav-section-current="true">项目<\/a>/u);
+  assert.match(blog, /class="nav-link active" aria-current="page">文章<\/a>/u);
+  for (const html of [journal, blog]) assert.doesNotMatch(html, />知识<\/a>/u);
 });
 
 test('primary navigation gives the four projects one visitor-facing parent context and Mods its own route', async () => {
@@ -332,15 +324,15 @@ test('primary navigation gives the four projects one visitor-facing parent conte
     const html = await readText(page);
     const primaryNav = html.match(/<div class="nav-menu"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
     const labels = [...primaryNav.matchAll(/class="nav-link(?: active)?"[^>]*>([^<]+)<\/a>/g)].map((match) => match[1]);
-    assert.deepEqual(labels, ['首页', '作品', 'Mods', '项目', '知识', '关于与联系'], `${page} has an unexpected primary navigation order`);
-    for (const label of ['首页', '作品', 'Mods', '项目', '知识', '关于与联系']) {
+    assert.deepEqual(labels, ['首页', '作品', '文章', '项目', 'Mods', '关于'], `${page} has an unexpected primary navigation order`);
+    for (const label of ['首页', '作品', '文章', '项目', 'Mods', '关于']) {
       assert.ok(primaryNav.includes(`>${label}</a>`), `${page} is missing the ${label} navigation entry`);
     }
     for (const productLabel of ['Engineering', 'Framework', 'Journal']) {
       assert.ok(!primaryNav.includes(`>${productLabel}</a>`), `${page} still exposes the ${productLabel} product label as a primary route`);
     }
     assert.ok(!primaryNav.includes('>美术音乐</a>'), `${page} still exposes Brand as Art/Music`);
-    assert.ok(!primaryNav.includes('>关于</a>'), `${page} still exposes the retired About navigation entry`);
+    assert.ok(primaryNav.includes('>关于</a>'), `${page} lacks About`);
   }
 
   const sitemap = await readText('sitemap.xml');
@@ -385,9 +377,9 @@ test('primary navigation gives the four projects one visitor-facing parent conte
 
 test('home labels curated research honestly and README matches current routes and smoke scope', async () => {
   const [home, readme] = await Promise.all([readText('index.html'), readText('README.md')]);
-  assert.ok(home.includes('精选知识'));
-  assert.ok(home.includes('knowledge-card'));
-  assert.ok(!home.includes('最近更新'));
+  assert.ok(home.includes('最近写的'));
+  assert.ok(home.includes('writing-entry'));
+  assert.ok(home.includes('最近更新'));
   assert.ok(!home.includes('LATEST RESEARCH'));
   assert.ok(readme.includes('/pages/brand.html'));
   assert.ok(readme.includes('/pages/brand.html'));
@@ -405,7 +397,7 @@ test('home flagship uses registered game evidence without treating theme art as 
   assert.equal((home.match(new RegExp(game.homeImage, 'g')) ?? []).length, 1);
   assert.equal((home.match(new RegExp(game.featureImage, 'g')) ?? []).length, 0);
   assert.ok(home.includes(game.imageAlt));
-  assert.ok(home.includes('代表作'));
+  assert.ok(home.includes('FEATURED WORK'));
 });
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
