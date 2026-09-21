@@ -1,3 +1,4 @@
+import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { chromium } from '@playwright/test';
@@ -1115,6 +1116,7 @@ try {
   }
 
   await assertSubscriptionFlow(browser, baseUrl, siteData.siteUrl);
+  await assertAmbientMotion(browser, baseUrl);
 
   console.log('Browser smoke passed: routes, persistent navigation, static content search, Featured Reading, evidence-led portfolio, mobile navigation and contact routes checked.');
 } finally {

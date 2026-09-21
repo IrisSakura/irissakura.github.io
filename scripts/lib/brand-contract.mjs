@@ -65,6 +65,7 @@ export async function assertBrandAssets(root, brand) {
     'favicon', 'symbol', 'masterLogo', 'irisLogo', 'sakuraLogo', 'jointLockup',
     'masterWordmark', 'irisWordmark', 'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark', 'iconSprite', 'readmeHeader',
     'socialLogo', 'brandBoard', 'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt', 'violetHeroArt',
+    'creatorIllustration', 'blossomDecoration', 'orbitDecoration', 'petalDecoration',
     'freesiaLogo', 'freesiaLogoSmall', 'freesiaWordmark', 'freesiaHeroArt', 'freesiaBotanicalArt', 'freesiaPatternArt'
   ];
   for (const key of required) {

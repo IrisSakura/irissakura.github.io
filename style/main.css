@@ -1169,6 +1169,39 @@ a {
     margin-bottom: 0.5rem;
 }
 
+.footer-motion-settings {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.footer-motion-settings[hidden] { display: none; }
+
+.footer-motion-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.footer-motion-toggle:hover { background: rgba(255, 255, 255, 0.08); }
+.footer-motion-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.footer-motion-track { display: inline-flex; align-items: center; width: 2rem; height: 1.15rem; padding: 2px; border: 1px solid currentColor; border-radius: 999px; }
+.footer-motion-track > span { width: 0.75rem; height: 0.75rem; border-radius: 50%; background: currentColor; transform: translateX(0); }
+.footer-motion-toggle[aria-checked="true"] .footer-motion-track { background: rgba(255, 255, 255, 0.16); }
+.footer-motion-toggle[aria-checked="true"] .footer-motion-track > span { transform: translateX(0.8rem); }
+.footer-motion-state { min-width: 2em; }
+
 /* 响应式设计 */
 @media (max-width: 992px) {
     .nav-menu {

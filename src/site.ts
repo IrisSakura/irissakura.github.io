@@ -1,3 +1,5 @@
+import { AmbientMotion } from './ambient-motion.js';
+
 export {};
 
 const REVEAL_SELECTOR = [
@@ -99,6 +101,7 @@ interface ContentSearchIndex {
 }
 
 class SiteShell {
+    private readonly ambientMotion = new AmbientMotion();
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
     private lastFocused: HTMLElement | null = null;
@@ -130,6 +133,7 @@ class SiteShell {
         this.setupPageIndex();
         void this.setupContentSearch();
         this.setupMotion();
+        this.ambientMotion.setup();
     }
 
     private setupSubscription(): void {
@@ -283,6 +287,7 @@ class SiteShell {
             this.setupPageIndex();
             void this.setupContentSearch();
             this.setupMotion();
+            this.ambientMotion.setup();
             await this.loadPageModules(nextDocument, destination);
             document.dispatchEvent(new CustomEvent('site:navigation-complete', {
                 detail: { url: destination.href }

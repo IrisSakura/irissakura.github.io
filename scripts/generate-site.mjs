@@ -6,6 +6,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { currentProductName } from './lib/brand-presentation.mjs';
+import { installVisualDecorations } from './lib/visual-decorations.mjs';
 import { assertSitePresentationConfig, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
 import { assertModSeriesConfig, resolveModSeries } from './lib/mod-series.mjs';
 import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
@@ -684,6 +685,7 @@ for (const page of pageDefinitions) {
   html = installPageCover(html, page, site, prefix);
   html = installBrandExperience(html, page, prefix, brandConfig);
   html = installContentVoiceStages(html, page);
+  html = installVisualDecorations(html, page, prefix, brandConfig);
   html = html
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n');
