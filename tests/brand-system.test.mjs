@@ -44,8 +44,8 @@ test('all curated brand sources remain local while the independent Brand page us
   for (const asset of ['00_full_brand_board.png', '01_iris_x_sakura_header.png']) {
     assert.ok(!page.includes(`../assets/images/brand/${asset}`), `historical ${asset} must not be a current public illustration`);
   }
-  for (const name of ['iris', 'sakura', 'myosotis', 'violet']) {
-    assert.ok(page.includes(`../assets/images/brand/v1/character-${name}.png`), `missing current ${name} character`);
+  for (const name of ['iris', 'sakura', 'myosotis', 'violet', 'freesia', 'wisteria']) {
+    assert.ok(page.includes(`../assets/personas/v2/${name}/web/character-720.webp`), `missing current ${name} character`);
   }
   for (const asset of [
     'assets/brand/logo-freesia-mods.svg',
@@ -188,11 +188,11 @@ test('brand portfolio is public, indexable and generator-owned', async () => {
   assert.ok(!sitemap.includes('/pages/art-music.html'));
 });
 
-test('brand story gives four current projects equal visibility and useful routes', async () => {
+test('brand story gives six current projects equal visibility and useful routes', async () => {
   const page = await read('pages/brand.html');
-  assert.equal((page.match(/data-brand-project=/g) ?? []).length, 4);
+  assert.equal((page.match(/data-brand-project=/g) ?? []).length, 6);
   for (const route of ['engineering', 'framework', 'journal', 'tools']) assert.ok(page.includes(`href="${route}.html"`));
-  for (const color of ['#4C3DF5', '#DB4F8A', '#286C92', '#7A4298']) assert.ok(page.includes(color));
+  for (const color of ['#1F3B8F', '#C42F6B', '#455EA8', '#7C3AED']) assert.ok(page.includes(color));
   assert.ok(page.includes('IRIS × SAKURA 连接工程与游戏框架'));
   assert.match(page, /Creative Series/i);
   assert.match(page, /Freesia Mods/u);
@@ -232,7 +232,7 @@ test('visitor homepage and brand gallery are editorial rather than a compulsory 
   assert.match(home, /id="profile"[^>]*data-brand-layout="editorial"/u);
   assert.match(home, /id="featured-work"[^>]*data-brand-layout="editorial"/u);
   assert.ok(brandPage.includes('class="brand-current-grid"'));
-  assert.equal((brandPage.match(/data-brand-project=/g) ?? []).length, 4);
+  assert.equal((brandPage.match(/data-brand-project=/g) ?? []).length, 6);
   assert.doesNotMatch(home, /data-brand-layout="contrast"/u);
 });
 

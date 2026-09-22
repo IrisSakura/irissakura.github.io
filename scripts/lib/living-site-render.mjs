@@ -1,3 +1,4 @@
+import { personaCards } from './personas-v2.mjs';
 import { resolveCurrentNow, resolveRecentUpdates, resolveHomeWriting, UPDATE_TYPES } from './living-site-model.mjs';
 
 const escape = (value) => String(value).replace(/[&<>"']/gu, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -13,7 +14,7 @@ export function renderUpdateFeed(items, prefix = '') {
 function featuredWork(game, prefix, id, headingLevel = 2) {
   return `<section class="flagship-section living-featured" id="${id}" data-brand-layout="editorial"><div class="container flagship-grid"><div class="flagship-media"><img src="${escape(prefix + game.homeImage)}" alt="${escape(game.imageAlt)}" loading="lazy" decoding="async" width="1920" height="1080"></div><div class="flagship-copy"><p class="section-kicker">FEATURED WORK</p><h${headingLevel}>《${escape(game.title)}》</h${headingLevel}><p class="living-lead">在战斗、选择与构筑之间，走出自己的冒险。</p><p>选择下一个房间，在实时战斗中应对敌人，再用潜能、技能与祝福塑造这一局的玩法。</p><p>我想探索动作操作与局内构筑如何相互影响，让每次选择都能改变下一场战斗。</p>${link('/pages/game.html', '查看作品', prefix, 'btn btn-primary')}<p class="work-availability">可玩原型 · 暂无公开 Demo</p></div></div></section>`;
 }
-export function renderLivingHome({ projects, site, presentations, presentation, now, updates, articles, series, brand }) {
+export function renderLivingHome({ projects, site, presentations, presentation, now, updates, articles, series, brand, personas }) {
   const current = resolveCurrentNow(now);
   const game = projects.projects.find(({ id }) => id === presentation.home.featuredWorkId);
   const writing = resolveHomeWriting(articles, presentation.home.recentArticleLimit);
@@ -24,7 +25,7 @@ export function renderLivingHome({ projects, site, presentations, presentation, 
     'recent-updates': `<section id="recent-updates" class="home-updates living-section"><div class="container">${heading('UPDATES', '最近更新')}${renderUpdateFeed(resolveRecentUpdates(updates, presentation.home.recentUpdateLimit))}</div></section>`,
     writing: `<section id="writing" class="home-writing living-section"><div class="container">${heading('WRITING', '最近写的', link('/pages/blog.html', '全部文章 →', ''))}<div class="writing-list">${writing.map((article) => `<article class="writing-entry" data-article-id="${escape(article.id)}"><time datetime="${article.publishedAt}">${article.publishedAt}</time><h3>${link(`/pages/blog/${article.slug}.html`, article.title, '')}</h3><p>${escape(article.summary)}</p></article>`).join('')}</div></div></section>`,
     mods: `<section id="mods" class="home-mod-series" data-brand-layout="editorial" aria-labelledby="home-mod-series-title"><div class="container home-mod-series-inner"><img src="${escape(brand.assets.freesiaLogoSmall)}" alt="" width="112" height="112" loading="lazy" decoding="async"><div><p class="section-kicker">MODS</p><h2 id="home-mod-series-title">${escape(series.displayName)}</h2><p>我为喜欢的游戏做的一些 Mod。</p></div>${link('/pages/mods.html', '浏览 Mods', '', 'btn btn-secondary')}</div></section>`,
-    projects: `<section id="projects" class="home-projects home-projects-compact living-section" data-brand-layout="editorial"><div class="container">${heading('PROJECTS', '支持这些创作的长期项目')}<div class="project-entry-grid">${presentations.map((project) => `<article class="project-entry-card project-entry-card-${project.brandFamily}" data-project-id="${project.projectId}"><img src="${escape(project.logo)}" alt="" width="48" height="48" loading="lazy" decoding="async"><h3>${escape(project.displayName)}</h3><p>${escape(project.summary)}</p>${link(project.route, '了解项目 →', '')}</article>`).join('')}</div></div></section>`,
+    projects: `<section id="projects" class="home-projects home-projects-compact living-section" data-brand-layout="editorial"><div class="container">${heading('PROJECTS', '支持这些创作的长期项目')}<div class="project-entry-grid">${personaCards(personas, brand)}</div></div></section>`,
     contact: `<section id="contact" class="public-cta living-section"><div class="container about-home"><p class="section-kicker">ABOUT</p><h2>关于我</h2><p>我主要做游戏。程序是目前最主要的工具，但我的兴趣也延伸到游戏系统、创作工具，以及这些东西为什么应该这样工作。</p><div class="hero-buttons">${link('/pages/contact.html', '关于我', '', 'btn btn-secondary')}${link('/pages/contact.html#contact', '联系', '', 'btn btn-secondary')}</div></div></section>`
   };
   return `<section id="home-page" class="page active living-home">${presentation.home.sectionOrder.map((id) => sections[id]).join('\n')}</section>`;

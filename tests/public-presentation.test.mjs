@@ -32,10 +32,10 @@ test('visitor surfaces and metadata do not repeat rejected maintenance explanati
   }
 });
 
-test('brand page presents four current project identities and their characters', async () => {
+test('brand page presents six current project identities and their characters', async () => {
   const html = await read('pages/brand.html');
-  for (const name of ['iris', 'sakura', 'myosotis', 'violet']) {
-    assert.ok(html.includes(`assets/images/brand/v1/character-${name}.png`), `missing current ${name} character`);
+  for (const name of ['iris', 'sakura', 'myosotis', 'violet', 'freesia', 'wisteria']) {
+    assert.ok(html.includes(`assets/personas/v2/${name}/web/character-720.webp`), `missing current ${name} character`);
   }
   for (const route of ['engineering', 'framework', 'journal', 'tools']) {
     assert.ok(html.includes(`href="${route}.html"`), `missing project route ${route}`);

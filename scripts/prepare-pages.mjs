@@ -30,6 +30,11 @@ for (const entry of entries) {
     filter: (source) => (
       path.basename(source) !== '.DS_Store'
       && !ownerOnlySources.has(path.resolve(source))
+      && !(source.includes(`${path.sep}personas${path.sep}v2${path.sep}`) && path.basename(source) === 'master')
+      && !source.startsWith(path.join(root, 'assets/images/brand/v1'))
+      && !source.startsWith(path.join(root, 'assets/images/brand/site-v2'))
+      && !(path.dirname(source) === path.join(root, 'assets/images/brand') && /\.(png|webp)$/u.test(source))
+      && path.basename(source) !== 'character-freesia-hero.webp'
     )
   });
 }

@@ -1,5 +1,7 @@
 # IrisSakura Brand Maintenance
 
+> 2026-09-22 更新：当前人物视觉基线为 Six Flower Personas V2。首页、项目总览与品牌页展示六个花卉项目，新增 Freesia Mods 与 Wisteria 入口；四个技术项目的稳定 ID 和事实来源保持原契约。当前导航与页面顺序以 `config/site-presentation.json` 为准，人物、配色与主视觉以 `config/personas-v2.json` 为准。以下早期采用记录保留历史背景；最新实施见 [Persona V2 迁移映射](personas-v2/PERSONA_V2_MIGRATION_MAP.md)。
+
 ## 新页面
 
 先在 `config/brand.json.pageModes` 为页面职责选择 `master`、`iris`、`sakura`、`journal` 或 `game`。在 generator 的页面定义中使用稳定 key，让 `<html data-brand-mode>`、theme-color、Social Card palette 和体验层自动继承。未知 mode、缺失 mode、丢失资产或公开命名漂移必须失败关闭，不允许静默回退。

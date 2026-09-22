@@ -1,12 +1,12 @@
 import { createHash } from 'node:crypto';
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { deflateSync } from 'node:zlib';
 
 const WIDTH = 1200;
 const HEIGHT = 630;
 const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-const BRAND_MODES = new Set(['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'game']);
+const BRAND_MODES = new Set(['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'game', 'wisteria']);
 const PALETTES = {
   home: ['101722', '1d3557', '2575fc', '6a11cb', 'ff4081', '8ce7dc'],
   portfolio: ['17131f', '493548', 'a56b46', 'd99a72', 'f2d4b5', '7e9da8'],
@@ -94,6 +94,10 @@ export function createSocialImage(seed, category = 'site', paletteOverride, bran
         if (y > circleY + 150 && Math.abs((x - circleX) - (y - circleY - 150) * .55) < 5) color = 4;
         if ((x + y + hash[5]) % 211 < 2) color = 5;
       }
+      if (brandMode === 'wisteria') {
+        if (y > 160 && Math.abs(Math.sqrt((x - 850) ** 2 + (y - 370) ** 2) - 200) < 9) color = 3;
+        if (x % 180 < 4 && y < 250 + hash[x % 32]) color = 1;
+      }
       if (brandMode === 'game') {
         if (x + y > diagonal && x + y < diagonal + 290) color = 1;
         const inFrameX = x > 118 && x < 1082;
@@ -127,6 +131,7 @@ export async function writeSocialImages(root, pages, brand) {
   await rm(directory, { recursive: true, force: true });
   await mkdir(directory, { recursive: true });
   const seen = new Set();
+  const personas = JSON.parse(await readFile(path.join(root, 'config/personas-v2.json'), 'utf8')).personas;
   await Promise.all(pages.map(async (page) => {
     if (!/^\/assets\/social\/[a-z0-9-]+\.png$/.test(page.image ?? '')) {
       throw new Error(`Page ${page.file} must use a generated social image path.`);
@@ -134,7 +139,9 @@ export async function writeSocialImages(root, pages, brand) {
     if (seen.has(page.image)) throw new Error(`Generated social image path is not unique: ${page.image}.`);
     seen.add(page.image);
     const palette = brand.modes[page.brandMode].socialPalette;
-    await writeFile(path.join(directory, path.basename(page.image)), createSocialImage(page.canonical, page.socialCategory, palette, page.brandMode));
+    const persona = personas.find(({ route }) => route === page.canonical);
+    const image = persona ? await readFile(path.join(root, persona.assetRoot, 'social/card.png')) : createSocialImage(page.canonical, page.socialCategory, palette, page.brandMode);
+    await writeFile(path.join(directory, path.basename(page.image)), image);
   }));
 }
 

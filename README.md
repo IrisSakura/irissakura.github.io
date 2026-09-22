@@ -199,3 +199,9 @@ npm run engineering:check -- \
 ## 许可证与素材
 
 代码以 [ISC License](LICENSE) 发布。项目截图和站点视觉素材的版权归 IrisSakura 所有，除非文件旁另有说明；许可证不自动授予这些素材的再发布权。
+
+## 六个花卉项目
+
+Iris Engineering、SakuraGameFramework、Myosotis、Violet Shelf、Freesia Mods 与 Wisteria 使用统一登记的 Six Flower Personas V2 人物素材。公开入口由站点生成器维护；创作者身份与各游戏作品保留各自视觉。
+
+维护说明：[Persona V2 调查](docs/brand/personas-v2/PERSONA_V2_USAGE_INVENTORY.md)、[迁移映射](docs/brand/personas-v2/PERSONA_V2_MIGRATION_MAP.md)。

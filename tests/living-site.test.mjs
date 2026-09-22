@@ -63,7 +63,8 @@ test('home rendering obeys reordered configuration and escapes editorial input',
   const altered = structuredClone(presentation);
   altered.home.sectionOrder = [...altered.home.sectionOrder].reverse();
   const malicious = structuredClone(now); malicious.current[0].title = '<script>alert(1)</script>';
-  const html = renderLivingHome({ projects, site, presentations: [], presentation: altered, now: malicious, updates, articles: publication.articles.filter(({ status }) => status === 'published'), series, brand });
+  const { personas } = await json('config/personas-v2.json');
+  const html = renderLivingHome({ projects, site, presentations: [], presentation: altered, now: malicious, updates, articles: publication.articles.filter(({ status }) => status === 'published'), series, brand, personas });
   assert.ok(html.indexOf('id="contact"') < html.indexOf('id="profile"'));
   assert.ok(html.includes('&lt;script&gt;'));
   assert.ok(!html.includes('<script>alert(1)</script>'));

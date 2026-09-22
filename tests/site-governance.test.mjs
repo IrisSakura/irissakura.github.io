@@ -340,7 +340,7 @@ test('primary navigation gives the four projects one visitor-facing parent conte
   const brand = await readText('pages/brand.html');
   const artMusic = await readText('pages/art-music.html');
   assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/development\.html">/u);
-  assert.equal((development.match(/class="development-card /g) ?? []).length, 4);
+  assert.equal((development.match(/class="development-card /g) ?? []).length, 6);
   assert.match(development, /class="development-card development-card-iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="engineering\.html"/u);
   assert.match(development, /class="development-card development-card-sakura"[\s\S]*?<h2>SakuraGameFramework<\/h2>[\s\S]*?href="framework\.html"/u);
   assert.match(development, /class="development-card development-card-journal"[\s\S]*?<h2>Myosotis<\/h2>[\s\S]*?href="journal\.html"/u);
@@ -435,7 +435,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
     }
     assert.match(
       html,
-      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|violet|freesia|game)"/,
+      /<html\b[^>]*\bdata-brand="iris-sakura"[^>]*\bdata-brand-mode="(?:master|iris|sakura|journal|violet|freesia|game|wisteria)"/,
       `${page} has an invalid page brand mode`
     );
     assert.ok(!html.includes('fa-gamepad'), `${page} still renders the retired gamepad identity`);

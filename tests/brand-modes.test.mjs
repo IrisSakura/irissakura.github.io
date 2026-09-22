@@ -8,7 +8,7 @@ async function readText(path) {
   return readFile(new URL(path, root), 'utf8');
 }
 
-test('brand contract and generator own a closed seven-mode page contract', async () => {
+test('brand contract and generator own a closed eight-mode page contract', async () => {
   const [site, brand, theme, generator] = await Promise.all([
     readText('data/site.json').then(JSON.parse),
     readText('config/brand.json').then(JSON.parse),
@@ -28,7 +28,8 @@ test('brand contract and generator own a closed seven-mode page contract', async
     brand: 'master',
     game: 'game',
     contact: 'master',
-    system: 'master'
+    system: 'master',
+    wisteria: 'wisteria'
   });
   assert.deepEqual(theme.tokenStylesheets, [
     'style/tokens/primitive.css',

@@ -101,7 +101,7 @@ test('homepage follows the approved living sections and exposes real articles', 
   assert.ok(home.includes(site.profile.nickname));
   assert.ok(home.includes(site.profile.introduction));
   assert.ok(home.includes(`src="${site.profile.avatar}"`));
-  assert.equal((home.match(/class="project-entry-card /g) ?? []).length, 4);
+  assert.equal((home.match(/class="project-entry-card /g) ?? []).length, 6);
   assert.equal((home.match(/class="writing-entry"/g) ?? []).length, 3);
   assert.match(home, /href="pages\/now.html"/u);
   assert.doesNotMatch(home, /精选知识|工程控制面|显式授权|LATEST CONSUMER/u);

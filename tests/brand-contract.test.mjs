@@ -16,8 +16,8 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
   assert.equal(brand.id, 'iris-sakura');
   assert.equal(brand.masterBrand, 'IrisSakura');
   assert.equal(brand.jointLockup, 'IRIS × SAKURA');
-  assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'consumer', 'games']);
-  assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'game']);
+  assert.deepEqual(Object.keys(brand.families), ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'consumer', 'games', 'wisteria']);
+  assert.deepEqual(Object.keys(brand.modes), ['master', 'iris', 'sakura', 'journal', 'violet', 'freesia', 'game', 'wisteria']);
   assert.deepEqual(brand.deprecated, [
     { name: 'Sakura Design Journal', replacement: 'Myosotis' },
     { name: 'IrisSakura Journal', replacement: 'Myosotis' },
@@ -42,11 +42,11 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
     }
   }
 
-  assert.equal(brand.modes.sakura.themeColor, '#fff0f7');
+  assert.equal(brand.modes.sakura.themeColor, '#fff7fa');
   assert.deepEqual(brand.modes.sakura.socialPalette, [
-    '0d1026', '312aa8', '4c3df5', 'c9c4ff', 'db4f8a', 'ffe1ee'
+    'c42f6b', 'f4629c', 'fff7fa', 'fad1dc', 'c42f6b', 'f4629c'
   ]);
-  assert.equal(brand.modes.sakura.experience.color, 'ink indigo, structural violet and blossom pink');
+  assert.match(brand.modes.sakura.experience.color, /#C42F6B/u);
 });
 
 test('official vector identity and core iconography are complete and self-contained', async () => {
@@ -134,7 +134,7 @@ test('brand automation drives page modes, social cards, SEO and public naming', 
 
   assert.deepEqual(brand.pageModes, {
     home: 'master', portfolio: 'master', engineering: 'iris', framework: 'sakura',
-    journal: 'journal', tools: 'violet', mods: 'freesia', brand: 'master', game: 'game', contact: 'master', system: 'master'
+    journal: 'journal', tools: 'violet', mods: 'freesia', brand: 'master', game: 'game', contact: 'master', system: 'master', wisteria: 'wisteria'
   });
   assert.ok(generator.includes("readJson('config/brand.json')"));
   assert.ok(generator.includes('resolvePageBrandMode'));
@@ -188,12 +188,14 @@ test('mode hero artwork is contract-owned, decorative and limited to the four pr
   for (const [pageKey, [mode, assetKey]] of Object.entries(expected)) {
     const html = await readText(`pages/${pageKey}.html`);
     const asset = brand.assets[assetKey];
-    assert.match(asset, /^assets\/images\/brand\/[a-z0-9/._-]+\.webp$/);
+    assert.match(asset, /^assets\/personas\/v2\/[a-z0-9/._-]+\.webp$/);
     await access(path.join(root, asset));
     assert.equal((html.match(/<!-- brand-mode-hero-art:start -->/g) ?? []).length, 1);
     assert.equal((html.match(/<!-- brand-mode-hero-art:end -->/g) ?? []).length, 1);
     assert.match(html, new RegExp(`<figure class="brand-mode-hero-art brand-mode-hero-art-${mode}" aria-hidden="true">`));
-    assert.ok(html.includes(`<img src="../${asset}" alt="" decoding="async" fetchpriority="high">`));
+    assert.ok(html.includes(`src="../${asset}"`));
+    assert.match(html, /<source type="image\/avif"/u);
+    assert.match(html, /width="1086" height="1448" loading="eager" decoding="async" fetchpriority="high"/u);
     assert.doesNotMatch(html, /brand-mode-signature/);
   }
 

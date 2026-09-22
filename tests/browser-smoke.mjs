@@ -1,6 +1,7 @@
 import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
+import { assertPersonaLayouts } from './lib/personas-v2-layout.mjs';
 import { chromium } from '@playwright/test';
 import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat } from 'node:fs/promises';
@@ -244,6 +245,7 @@ const browser = await chromium.launch({ headless: true, executablePath: process.
 
 try {
   await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
+  await assertPersonaLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   if (themeConfig.id !== 'iris-sakura' || themeConfig.colorScheme !== 'light') {
     throw new Error('single-brand registry is not IRIS × SAKURA light');
   }
@@ -507,8 +509,8 @@ try {
   }
   await desktop.locator('.nav-menu').getByRole('link', { name: '项目', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/development.html`);
-  if (await desktop.locator('.development-card').count() !== 4) {
-    throw new Error('Development hub does not present four equal project routes');
+  if (await desktop.locator('.development-card').count() !== 6) {
+    throw new Error('Development hub does not present six project routes');
   }
   const overflowingDevelopmentHeading = await desktop.locator('.development-card h2').evaluateAll((headings) => (
     headings.some((heading) => heading.scrollWidth - heading.clientWidth > 1)
@@ -559,7 +561,7 @@ try {
   if (await desktop.getAttribute('html', 'data-brand-mode') !== 'sakura') {
     throw new Error('soft navigation retained a stale Engineering brand mode');
   }
-  if (await desktop.locator('meta[name="theme-color"]').getAttribute('content') !== '#fff0f7') {
+  if (await desktop.locator('meta[name="theme-color"]').getAttribute('content') !== '#fff7fa') {
     throw new Error('soft navigation retained a stale Engineering theme color');
   }
   if (await desktop.locator('.skip-link').getAttribute('href') !== `${baseUrl}/pages/framework.html#main-content`) {
@@ -595,9 +597,9 @@ try {
   if (frameworkEngineeringState.title !== frameworkEngineering.positioning.seoTitle) {
     throw new Error('Framework Engineering page title drifted from the closed SEO contract');
   }
-  if (frameworkEngineeringState.themeColor !== '#fff0f7'
+  if (frameworkEngineeringState.themeColor !== '#fff7fa'
     || frameworkEngineeringState.statusValueColor !== 'rgb(255, 250, 255)'
-    || frameworkEngineeringState.secondaryActionColor !== 'rgb(184, 47, 108)') {
+    || frameworkEngineeringState.secondaryActionColor !== 'rgb(196, 47, 107)') {
     throw new Error('Framework Engineering page drifted from the IRIS × SAKURA palette or lost dark-surface contrast');
   }
   const normalizedEngineeringText = frameworkEngineeringState.text.toLocaleUpperCase('en-US');
@@ -975,7 +977,7 @@ try {
     const creativePersona = document.querySelector('.brand-freesia-persona').getBoundingClientRect();
     return {
       overflow: document.documentElement.scrollWidth - window.innerWidth,
-      headerReady: characters.length === 4 && characters.every((image) => image.complete && image.naturalWidth > 0),
+      headerReady: characters.length === 6 && characters.every((image) => image.complete && image.naturalWidth > 0),
       creativeImagesReady: [document.querySelector('.brand-freesia-lockup'), document.querySelector('.brand-freesia-persona')]
         .every((image) => image.complete && image.naturalWidth > 0),
       creativeFlowSeparated: creativeCopy.bottom <= creativeLockup.top + 1 && creativeLockup.bottom <= creativePersona.top + 1
@@ -985,7 +987,7 @@ try {
     throw new Error(`Brand portfolio overflows the mobile viewport by ${brandMobileState.overflow}px`);
   }
   if (!brandMobileState.headerReady) {
-    throw new Error('mobile brand portfolio did not load its four current characters');
+    throw new Error('mobile brand portfolio did not load its six current characters');
   }
   if (!brandMobileState.creativeImagesReady || !brandMobileState.creativeFlowSeparated) {
     throw new Error(`brand mobile creative series overlaps or is not ready: ${JSON.stringify(brandMobileState)}`);

@@ -1,5 +1,7 @@
 # Website Presentation v2
 
+> 2026-09-22 更新：当前人物视觉基线为 Six Flower Personas V2。首页、项目总览与品牌页展示六个花卉项目，新增 Freesia Mods 与 Wisteria 入口；四个技术项目的稳定 ID 和事实来源保持原契约。当前导航与页面顺序以 `config/site-presentation.json` 为准，人物、配色与主视觉以 `config/personas-v2.json` 为准。以下早期采用记录保留历史背景；最新实施见 [Persona V2 迁移映射](personas-v2/PERSONA_V2_MIGRATION_MAP.md)。
+
 > Status: implemented locally, pending commit and publication authorization
 > Adopted: 2026-09-11
 
