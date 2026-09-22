@@ -1,3 +1,4 @@
+import { styleSource } from './lib/style-source.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
@@ -5,6 +6,7 @@ import test from 'node:test';
 const root = new URL('../', import.meta.url);
 
 async function readText(path) {
+  if (path.startsWith('style/')) return styleSource(path);
   return readFile(new URL(path, root), 'utf8');
 }
 

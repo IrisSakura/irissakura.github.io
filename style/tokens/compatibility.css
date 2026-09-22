@@ -1,0 +1,173 @@
+/* Website V2 owner: tokens/compatibility. */
+
+:root {
+    --brand-iris: var(--brand-iris-500);
+    --brand-iris-light: var(--brand-iris-300);
+    --brand-shared: var(--brand-shared-500);
+    --brand-sakura: var(--brand-sakura-300);
+    --brand-sakura-light: var(--brand-sakura-100);
+    --brand-sky: var(--support-sky-300);
+
+    --font-display: 'Orbitron', sans-serif;
+    --font-heading: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+    --font-body: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', 'Roboto', sans-serif;
+    --hero-block-size: clamp(32rem, calc(100svh - 5rem), 48rem);
+
+    /* Shared component contract: themes set tokens, component classes own behavior. */
+    --ui-surface-card: var(--surface);
+    --ui-border-subtle: var(--line);
+    --ui-border-strong: var(--line-strong);
+    --ui-focus-width: 3px;
+    --ui-focus-offset: 4px;
+    --ui-focus-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+    --ui-control-height: 44px;
+    --ui-pill-radius: 999px;
+    --ui-control-shadow: none;
+    --ui-action-font: var(--font-heading);
+    --ui-action-transform: uppercase;
+    --ui-action-letter-spacing: 1px;
+    --ui-action-primary-shadow: none;
+    --ui-action-primary-hover-shadow: var(--box-shadow-hover);
+    --ui-chip-radius: 999px;
+
+    /* 动画相关变量 */
+    --animation-duration: 0.3s;
+    --animation-timing: ease;
+    --animation-stagger: 0.1s;
+    --motion-enter-duration: 0.72s;
+    --motion-enter-distance: 26px;
+    --motion-stagger: 70ms;
+    --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+:root {
+    --site-nav-offset: 5.25rem;
+    --container-width: 1320px;
+    --page-gutter: clamp(1.25rem, 5vw, 5.5rem);
+    --section-space: clamp(4.75rem, 8vw, 8rem);
+    --story-grid-gap: clamp(1rem, 2.2vw, 2rem);
+    --border-radius: 20px;
+    --ui-action-radius: 999px;
+    --ui-control-radius: 999px;
+    --transition: all 0.24s var(--motion-ease-out);
+    --box-shadow: 0 18px 55px rgba(47, 37, 86, 0.08);
+    --box-shadow-hover: 0 26px 72px rgba(76, 61, 245, 0.14);
+}
+
+:root {
+    color-scheme: light;
+    scroll-padding-top: calc(var(--site-nav-offset) + 1rem);
+}
+
+@media (max-width: 620px) {
+    :root {
+        --page-gutter: 1.25rem;
+        --border-radius: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+:root {
+    --primary-color: var(--color-action-primary);
+    --secondary-color: var(--brand-iris-300);
+    --secondary-text-color: var(--color-text-secondary);
+    --accent-color: var(--color-brand-highlight);
+    --dark-color: var(--neutral-025);
+    --light-color: var(--color-text-primary);
+    --gray-color: var(--neutral-700);
+    --muted-text-color: var(--color-text-secondary);
+    --success-color: var(--color-success);
+    --warning-color: var(--color-warning);
+    --danger-color: var(--color-danger);
+    --paper: var(--color-background);
+    --paper-deep: var(--color-background-deep);
+    --mist-blue: var(--brand-shared-100);
+    --water-blue: var(--neutral-200);
+    --hill-blue: color-mix(in srgb, var(--brand-iris-300) 72%, var(--neutral-000));
+    --petal-pink: var(--brand-sakura-100);
+    --petal-strong: var(--brand-sakura-700);
+    --ink: var(--color-text-primary);
+    --ink-soft: var(--color-text-secondary);
+    --leaf: color-mix(in srgb, var(--neutral-700) 74%, var(--brand-shared-500));
+    --line: var(--color-border);
+    --line-strong: var(--color-border-strong);
+    --surface: var(--color-surface);
+    --surface-strong: var(--color-surface-strong);
+    --ui-surface-hover: var(--mist-blue);
+    --ui-focus-color: var(--petal-strong);
+    --ui-control-border: var(--line-strong);
+    --ui-control-border-hover: var(--hill-blue);
+    --ui-control-text: var(--ink);
+    --ui-control-surface: rgba(255, 250, 255, 0.72);
+    --ui-control-surface-hover: var(--mist-blue);
+    --ui-control-icon: var(--petal-strong);
+    --ui-control-option-text: var(--ink);
+    --ui-control-option-surface: var(--surface-strong);
+    --ui-action-primary-text: #fffaff;
+    --ui-action-primary-bg: var(--color-action-primary);
+    --ui-action-primary-hover-bg: var(--color-action-primary-hover);
+    --ui-action-secondary-text: #b82f6c;
+    --ui-action-secondary-border: rgba(255, 126, 182, 0.62);
+    --ui-action-secondary-bg: rgba(255, 250, 255, 0.48);
+    --ui-action-secondary-hover-text: #8f2453;
+    --ui-action-secondary-hover-bg: var(--petal-pink);
+    --ui-action-outline-text: var(--ink);
+    --ui-action-outline-border: rgba(47, 37, 86, 0.44);
+    --ui-action-outline-bg: rgba(255, 250, 255, 0.4);
+    --ui-action-outline-hover-text: var(--ink);
+    --ui-action-outline-hover-bg: var(--surface-strong);
+    --ui-chip-border: rgba(76, 61, 245, 0.24);
+    --ui-chip-surface: rgba(232, 229, 255, 0.58);
+    --ui-chip-text: var(--brand-iris-500);
+    --ui-home-cover-heading: var(--ink);
+    --ui-home-cover-text: var(--ink);
+    --ui-home-cover-kicker: var(--petal-strong);
+    --ui-home-cover-secondary-text: var(--ui-action-secondary-text);
+    --ui-home-cover-secondary-border: var(--ui-action-secondary-border);
+    --ui-home-cover-secondary-bg: var(--ui-action-secondary-bg);
+    --ui-home-cover-secondary-hover-text: var(--ui-action-secondary-hover-text);
+    --ui-home-cover-secondary-hover-bg: var(--ui-action-secondary-hover-bg);
+}
+
+html {
+    background: var(--paper);
+}
+
+:root {
+    --brand-experience-opacity: 1;
+}
+
+html[data-brand-mode="iris"] {
+    --brand-mode-signature-hover: translateX(4px);
+}
+
+html[data-brand-mode="sakura"] {
+    --brand-mode-signature-hover: translateY(-4px) scale(1.015);
+}
+
+html[data-brand-mode="journal"] {
+    --brand-mode-signature-hover: translateY(-2px);
+}
+
+html[data-brand-mode="freesia"] {
+    --brand-mode-signature-hover: translateY(-3px) rotate(-1deg);
+}
+
+html[data-brand-mode="game"] {
+    --brand-experience-opacity: 0;
+}
+
+html[data-brand-mode="iris"] { --brand-mode-hero-background: linear-gradient(135deg, #101D42, var(--persona-primary)); --brand-mode-hero-base: #101D42; --brand-mode-accent: var(--persona-primary); }
+html[data-brand-mode="sakura"] { --brand-mode-hero-background: linear-gradient(135deg, var(--persona-surface), var(--persona-motif)); --brand-mode-accent: var(--persona-primary); }
+html[data-brand-mode="journal"] { --brand-mode-hero-background: linear-gradient(135deg, var(--persona-surface), var(--persona-motif)); --brand-mode-accent: var(--persona-primary); }
+html[data-brand-mode="violet"] { --brand-mode-hero-background: linear-gradient(145deg, var(--persona-motif), var(--persona-surface)); --brand-mode-accent: var(--persona-primary); }
+html[data-brand-mode="wisteria"] { --brand-mode-hero-background: linear-gradient(145deg, var(--persona-surface), #F6F2EB); --brand-mode-hero-base: var(--persona-surface); --brand-mode-hero-text: #393C32; --brand-mode-hero-muted: #535749; --brand-mode-accent: var(--persona-primary); --brand-mode-card-radius: 1.5rem; --brand-mode-radius: 1.5rem; --brand-mode-pattern: #696C5420; --brand-mode-density: 1.1; --brand-mode-motion-duration: 300ms; --brand-mode-motion-easing: ease-out; }

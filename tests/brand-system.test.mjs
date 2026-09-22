@@ -1,3 +1,4 @@
+import { styleSource } from './lib/style-source.mjs';
 import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import { cp, mkdtemp, readFile as readBytes, rm, unlink, writeFile } from 'node:fs/promises';
@@ -8,7 +9,7 @@ import { verifyBrandAssets } from '../scripts/verify-brand-assets-v1.mjs';
 import test from 'node:test';
 
 const root = new URL('../', import.meta.url);
-const read = (file) => readFile(new URL(file, root), 'utf8');
+const read = (file) => file.startsWith('style/') ? styleSource(file) : readFile(new URL(file, root), 'utf8');
 
 const brandAssets = [
   '00_full_brand_board.png',
@@ -136,7 +137,7 @@ test('generated current product surfaces use aliases while source records and co
   const [portfolio, detail, projects, controlled] = await Promise.all([
     read('pages/development.html'), read('pages/journal/alchemy-magical-crafting.html'), read('data/projects.json'), readBytes(new URL('docs/brand/master-design-v1.md', root))
   ]);
-  assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /href="tools\.html"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /href="journal\.html"/);
+  assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /href="\.\.\/pages\/tools\.html"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /href="\.\.\/pages\/journal\.html"/);
   assert.match(detail, /<title>.* \| Myosotis<\/title>/); assert.match(projects, /"Iris Shelf"/); assert.match(projects, /"IrisSakura Journal"/);
   const body = controlled.toString('utf8').match(/<!-- source-body:start -->\n([\s\S]*?)\n<!-- source-body:end -->/)?.[1]; assert.ok(body); const source = Buffer.from(`${body}\n`); assert.equal(source.byteLength, 48928); assert.match(controlled.toString('utf8'), /当前授权桌面运行时为 Electron/);
   assert.equal(createHash('sha256').update(source).digest('hex'), '9e2ba53b981ac4915acd8de4c8b96bb10ef63d4c490182ae490e8836b0c8a4c0');
@@ -192,7 +193,7 @@ test('brand story gives six current projects equal visibility and useful routes'
   const page = await read('pages/brand.html');
   assert.equal((page.match(/data-brand-project=/g) ?? []).length, 6);
   for (const route of ['engineering', 'framework', 'journal', 'tools']) assert.ok(page.includes(`href="${route}.html"`));
-  for (const color of ['#1F3B8F', '#C42F6B', '#455EA8', '#7C3AED']) assert.ok(page.includes(color));
+  for (const id of ['iris','sakura','myosotis','violet','freesia','wisteria']) assert.ok(page.includes(`var(--persona-${id}-primary)`));
   assert.ok(page.includes('IRIS × SAKURA 连接工程与游戏框架'));
   assert.match(page, /Creative Series/i);
   assert.match(page, /Freesia Mods/u);
@@ -253,22 +254,21 @@ test('brand architecture is frozen as a maintained repository contract', async (
   }
 });
 
-test('shared cards carry one restrained IRIS-to-SAKURA signature across page types', async () => {
-  const css = await readFile(new URL('style/main.css', root), 'utf8');
+test('shared content primitives coexist with the six page compositions', async () => {
+  const css = await styleSource('style/main.css');
 
   for (const selector of [
     '.project-card',
-    '.blog-card',
+    '.publication-list',
     '.stream-card',
     '.design-summary-card',
-    '.game-system-card',
     '.research-row',
     '.evidence-chain-card'
   ]) {
     assert.ok(css.includes(selector), `shared brand signature is missing ${selector}`);
   }
-  assert.ok(css.includes('Cross-page IRIS × SAKURA signature'));
-  assert.ok(css.includes('linear-gradient(90deg, var(--brand-iris), var(--brand-shared), var(--brand-sakura))'));
+  assert.ok(css.includes('var(--persona-primary)'));
+  for (const selector of ['.system-axis','.module-branch','.archive-index','.workbench-tray','.discovery-route','.world-scene']) assert.ok(css.includes(selector));
 });
 
 test('homepage leaves brand-system detail to the dedicated secondary route', async () => {

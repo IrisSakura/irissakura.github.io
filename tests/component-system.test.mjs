@@ -1,3 +1,4 @@
+import { styleSource } from './lib/style-source.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
@@ -5,6 +6,7 @@ import test from 'node:test';
 const root = new URL('../', import.meta.url);
 
 async function readText(path) {
+  if (path.startsWith('style/')) return styleSource(path);
   return readFile(new URL(path, root), 'utf8');
 }
 
@@ -36,14 +38,14 @@ test('shared component tokens own common actions, controls, chips, surfaces and 
   assert.match(main, /\.tag,[\s\S]*?\.portfolio-tags span\s*\{[^}]*var\(--ui-chip-surface\)/s);
   assert.match(main, /:focus-visible\s*\{[^}]*var\(--ui-focus-color\)/s);
   assert.match(framework, /\.module-search input\s*\{[^}]*var\(--ui-control-border\)/s);
-  assert.match(framework, /\.module-filter\s*\{[^}]*var\(--ui-control-surface\)/s);
+  assert.match(framework, /\.module-filter\s*\{[^}]*min-height:\s*var\(--ui-control-height\)/s);
   assert.match(journal, /\.note-tags span\s*\{[^}]*var\(--ui-chip-border\)/s);
-  assert.match(blog, /\.blog-card,[\s\S]*?\.design-summary-card\s*\{[^}]*var\(--ui-surface-card\)/s);
+  assert.match(blog, /\.publication-list li,[\s\S]*?border-bottom: 1px solid var\(--line\)/s);
   assert.match(game, /\.system-tags span\s*\{[^}]*var\(--ui-chip-surface\)/s);
 });
 
 test('the single brand palette configures tokens without re-declaring shared components', async () => {
-  const css = await readText('style/iris-sakura.css');
+  const css = await readText('style/tokens/compatibility.css');
   for (const token of [
     '--ui-action-primary-bg',
     '--ui-action-secondary-text',

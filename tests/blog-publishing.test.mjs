@@ -25,14 +25,14 @@ test('only manifest-approved Journal blogs are published as complete indexable a
 
   assert.ok(index.includes('<!-- indexable page -->'));
   assert.ok(!index.includes('noindex'));
-  assert.equal((index.match(/class="blog-card"/gu) ?? []).length, published.length);
+  assert.equal((index.match(/class="publication-index"/gu) ?? []).length, published.length);
   for (const article of published) {
     const contract = publicationById.get(article.id);
     const markdown = await readText(article.contentPath);
     const html = await readText(`pages/blog/${contract.slug}.html`);
     assert.ok(index.includes(`blog/${contract.slug}.html`), `missing blog index link ${contract.slug}`);
     assert.ok(html.includes(`<h1>${article.title}</h1>`), `missing title ${article.id}`);
-    assert.ok(html.includes('<div class="blog-prose">'), `missing rendered body ${article.id}`);
+    assert.ok(html.includes('class="article-prose-section blog-prose"'), `missing rendered body ${article.id}`);
     assert.ok(html.length > markdown.length / 2, `blog detail is unexpectedly short for ${article.id}`);
     assert.ok(html.includes('"@type":"Article"'), `missing Article schema ${article.id}`);
     assert.ok(html.includes(`"datePublished":"${contract.publishedAt}"`), `missing published date ${article.id}`);

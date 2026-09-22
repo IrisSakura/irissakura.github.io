@@ -1,3 +1,4 @@
+import { pageFamily, projectComposition, ecosystemMap, publicationList, readingBody } from './lib/website-v2.mjs';
 import { assertPersonas, personaPicture, personaCards } from './lib/personas-v2.mjs';
 import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -206,7 +207,7 @@ const displayPublicProductNames = (value) => String(value)
   .replaceAll('Sakura Design Journal', displayProjectName('sakura-design-journal', 'Myosotis'))
   .replaceAll('Iris Shelf', displayProjectName('iris-shelf', 'Violet Shelf'))
   .replaceAll('Sakura Framework', displayProjectName('sakura-framework', 'SakuraGameFramework'));
-const BRAND_MODE_HERO_ARTWORK = Object.freeze(Object.fromEntries(projectPresentations.map((project) => [
+const BRAND_MODE_HERO_ARTWORK = Object.freeze(Object.fromEntries(projectPresentations.filter(p => p.heroStrategy === 'composition').map((project) => [
   project.route.replace(/^\//u, ''),
   Object.freeze({ mode: project.brandFamily, assetKey: project.heroAssetKey, targetClass: project.heroClass })
 ])));
@@ -375,7 +376,7 @@ await writeSubscribeSource();
 
 const pageDefinitions = [
   { file: 'pages/wisteria.html', key: 'wisteria', title: 'Wisteria | 桌面上的持续小世界', description: '在桌面的一隅，为生活、停留与缓慢生长留下一片空间。了解 Wisteria 的持续世界与陪伴理念。', canonical: '/pages/wisteria.html', schemaType: 'WebPage' },
-  { file: 'pages/subscribe.html', key: 'journal', brandModeKey: 'home', title: '订阅文章 | IrisSakura', description: '通过 RSS 订阅 IrisSakura 的游戏系统、创作与开发文章，在阅读器中接收更新。', canonical: '/pages/subscribe.html', schemaType: 'WebPage' },
+  { file: 'pages/subscribe.html', key: 'journal', title: '订阅文章 | IrisSakura', description: '通过 RSS 订阅 IrisSakura 的游戏系统、创作与开发文章，在阅读器中接收更新。', canonical: '/pages/subscribe.html', schemaType: 'WebPage' },
   { file: 'pages/now.html', key: 'contact', brandModeKey: 'home', title: 'Now | IrisSakura', description: 'IrisSakura 最近正在做、思考与完成的事情。', canonical: '/pages/now.html', schemaType: 'WebPage' },
   {
     file: 'index.html',
@@ -526,7 +527,9 @@ const pageDefinitions = [
   ...frameworkDeepDefinitions
 ];
 
+const pageFamilies = await readJson('config/page-families.json');
 for (const page of pageDefinitions) {
+  page.family = pageFamily(page.file, pageFamilies);
   const brandModeKey = (page.brandModeKey ?? page.key) || 'system';
   const brandMode = resolvePageBrandMode(brandConfig, brandModeKey);
   page.brandMode = brandMode;
@@ -690,6 +693,8 @@ for (const page of pageDefinitions) {
   html = installBrandExperience(html, page, prefix, brandConfig);
   html = installContentVoiceStages(html, page);
   html = installVisualDecorations(html, page, prefix, brandConfig);
+  html = html.replace(/\sdata-(?:page-family|page-grammar|page-persona)="[^"]*"/g, '');
+  html = html.replace('<html ', `<html data-page-family="${page.family.family}" data-page-grammar="${page.family.grammar}" data-page-persona="${page.family.persona}" `);
   html = html
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n');
@@ -853,18 +858,15 @@ function assertEngineeringSnapshot(snapshot) {
 
 function installBrandIdentity(html, prefix, config, brandMode) {
   if (!BRAND_MODES.has(brandMode)) throw new Error(`invalid page brand mode: ${brandMode}`);
-  const tokenStyles = config.tokenStylesheets
-    .map((stylesheet) => `<link rel="stylesheet" href="${prefix}${stylesheet}">`)
-    .join('\n    ');
+  // site.css imports the token chain once, before its component and page layers.
   const brandStyles = `<!-- brand-styles:start -->
-    ${tokenStyles}
     <link rel="stylesheet" href="${prefix}${config.stylesheet}">
     <!-- brand-styles:end -->`;
   const stylePattern = /<!-- (?:theme|brand)-styles:start -->[\s\S]*?<!-- (?:theme|brand)-styles:end -->/;
   if (!stylePattern.test(html)) throw new Error('missing generated brand styles block');
   html = html.replace(stylePattern, brandStyles);
   html = html.replace(/\s*<link rel="stylesheet" href="[^"]*style\/(?:tokens\/personas-v2|components\/personas-v2)\.css">/g, '');
-  html = html.replace('</head>', `<link rel="stylesheet" href="${prefix}style/tokens/personas-v2.css">\n<link rel="stylesheet" href="${prefix}style/components/personas-v2.css">\n</head>`);
+
   html = html.replace(/<!-- theme-bootstrap:start -->[\s\S]*?<!-- theme-bootstrap:end -->/, '');
 
   const rootStyle = [
@@ -882,24 +884,6 @@ function installBrandExperience(html, page, prefix, brand) {
   html = html
     .replace(/\s*<!-- brand-mode-signature:start -->[\s\S]*?<!-- brand-mode-signature:end -->/g, '')
     .replace(/\s*<!-- game-brand-attribution:start -->[\s\S]*?<!-- game-brand-attribution:end -->/g, '');
-
-  const signatureByMode = {
-    iris: { icon: 'iris-pipeline', label: 'IRIS MODE', title: 'Engineering Control Plane', productAsset: brand.assets.irisWordmark },
-    sakura: { icon: 'sakura-composition', label: 'SAKURA MODE', title: 'Composable Game Framework', productAsset: brand.assets.sakuraWordmark },
-    journal: { icon: 'shared-research', label: 'JOURNAL MODE', title: 'Questions · Reasoning · Application' }
-  };
-  const signature = signatureByMode[page.brandMode];
-  if (signature && page.coverKey && !BRAND_MODE_HERO_ARTWORK[page.file]) {
-    const coverPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bdata-page-cover="${escapeRegExp(page.coverKey)}"[^>]*>)`);
-    if (!coverPattern.test(html)) throw new Error(`brand-contract violation: ${page.file} has no cover for ${page.brandMode} signature`);
-    const markup = `<!-- brand-mode-signature:start -->
-        <aside class="brand-mode-signature" aria-label="${escapeAttribute(signature.label)}">
-            <svg aria-hidden="true"><use href="${prefix}${brand.assets.iconSprite}#${signature.icon}"></use></svg>
-            <div><span>${escapeHtml(signature.label)}</span>${signature.productAsset ? `<img class="brand-mode-product-lockup" src="${prefix}${signature.productAsset}" alt="">` : `<strong>${escapeHtml(signature.title)}</strong>`}</div>
-        </aside>
-        <!-- brand-mode-signature:end -->`;
-    html = html.replace(coverPattern, `$1\n        ${markup}`);
-  }
 
   html = installBrandModeHeroArt(html, page, prefix, brand);
 
@@ -926,11 +910,8 @@ function installBrandModeHeroArt(html, page, prefix, brand) {
 
   const heroPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bclass="[^"]*\\b${escapeRegExp(artwork.targetClass)}\\b[^"]*"[^>]*)(>)`);
   let installed = false;
-  const markup = `<!-- brand-mode-hero-art:start -->
-        <figure class="brand-mode-hero-art brand-mode-hero-art-${artwork.mode}" aria-hidden="true">
-            ${personaPicture(personas.find((persona) => persona.mode === artwork.mode), { prefix, eager: true, decorative: true })}
-        </figure>
-        <!-- brand-mode-hero-art:end -->`;
+  const persona = personas.find((persona) => persona.mode === artwork.mode);
+  const markup = `<!-- brand-mode-hero-art:start -->${projectComposition(persona, { prefix, engineering: irisEngineering, framework: frameworkStory, projectStatus: projects.projects.find(p => p.id === 'iris-engineering').status })}<!-- brand-mode-hero-art:end -->`;
   const result = html.replace(heroPattern, (fullMatch, opening, close) => {
     installed = true;
     let normalized = opening
@@ -947,7 +928,7 @@ function installBrandModeHeroArt(html, page, prefix, brand) {
 function installContentVoiceStages(html, page) {
   const stagesByFile = {
     'index.html': [
-      ['hero-section', 'value'], ['home-projects', 'system'], ['flagship-section', 'result'],
+      ['hero-section', 'value'], ['home-build', 'system'], ['flagship-section', 'result'],
       ['home-writing', 'evidence'], ['work-availability', 'boundary']
     ],
     'pages/portfolio.html': [
@@ -1018,7 +999,7 @@ async function writeReadmeSummaries(projectData, sync) {
 function renderBrandContent(brand, series) {
   const cards = personas.map((persona) => `<article class="brand-product-card" data-brand-project="${persona.projectId}" data-persona="${persona.id}"><img class="brand-current-mark" src="../${brand.assets[persona.logoAssetKey]}" alt="" width="64" height="64" loading="lazy"><h3>${escapeHtml(persona.project)}</h3><strong>${escapeHtml(persona.subtitle)}</strong><p>${escapeHtml(persona.summary)}</p><a class="text-link" href="${persona.route.replace('/pages/', '')}">了解 ${escapeHtml(persona.project)}</a></article>`).join('');
   const characters = personas.map((persona) => `<figure class="brand-current-character" data-persona="${persona.id}"><div class="persona-gallery-stage">${personaPicture(persona, { prefix: '../' })}<span class="persona-motif" aria-hidden="true"></span></div><figcaption><h3>${escapeHtml(persona.project)}</h3><p>${escapeHtml(persona.summary)}</p></figcaption></figure>`).join('');
-  const palette = personas.map((persona) => `<li><span class="brand-swatch" style="--brand-swatch: ${persona.colors.primary}"></span><strong>${escapeHtml(persona.project)}</strong></li>`).join('');
+  const palette = personas.map((persona) => `<li><span class="brand-swatch" style="--brand-swatch: var(--persona-${persona.id}-primary)"></span><strong>${escapeHtml(persona.project)}</strong></li>`).join('');
   return `<header class="portfolio-header brand-portfolio-header">
       <div class="container">
         <p class="section-kicker">IRISSAKURA · FLOWERS AND CHARACTERS</p>
@@ -1051,10 +1032,10 @@ function renderBrandContent(brand, series) {
           <div><p class="section-kicker">CREATIVE SERIES</p><h2 id="brand-creative-series-title">${escapeHtml(series.displayName)}</h2><p>Cross-game Mod Creation Series</p><p>${escapeHtml(series.tagline)}</p><a class="btn btn-secondary" href="mods.html">浏览 Freesia Mods</a></div>
           <img class="brand-freesia-lockup" src="../${escapeAttribute(brand.assets.freesiaLogo)}" alt="Freesia Mods" loading="lazy">
           ${personaPicture(personas.find(({ id }) => id === 'freesia'), { prefix: '../', className: 'brand-freesia-persona' })}
-          <ul class="brand-freesia-palette" aria-label="Freesia Mods 五色品牌色"><li style="--swatch:#F6C445">Freesia Yellow</li><li style="--swatch:#F9A982">Apricot Bloom</li><li style="--swatch:#FFF7E6">Cream Petal</li><li style="--swatch:#A7C67A">Spring Green</li><li style="--swatch:#3E4A8F">Indigo Accent</li></ul>
+          <ul class="brand-freesia-palette" aria-label="Freesia Mods 五色品牌色"><li style="--swatch:var(--persona-freesia-accent)">Freesia Yellow</li><li style="--swatch:var(--brand-freesia-apricot)">Apricot Bloom</li><li style="--swatch:var(--persona-freesia-surface)">Cream Petal</li><li style="--swatch:var(--persona-freesia-motif)">Spring Green</li><li style="--swatch:var(--persona-freesia-primary)">Indigo Accent</li></ul>
         </div>
       </section>
-      <section class="brand-current-section"><div class="container hero-buttons"><a class="btn btn-primary" href="development.html">浏览全部项目</a><a class="btn btn-secondary" href="contact.html">关于与联系</a></div></section>
+      <section class="brand-current-section"><div class="container hero-buttons"><a class="btn btn-primary" href="development.html">浏览全部项目</a><a class="btn btn-secondary" href="contact.html">关于与联系</a></div></section><section class="living-section"><div class="container"><p class="section-kicker">ONE SITE / SIX VISUAL LANGUAGES</p><h2>形象之外，六种空间</h2><div class="grammar-comparison">${personas.map((p,i)=>`<article data-persona="${p.id}"><h3>${escapeHtml(p.project)}</h3><p>${['网格、轴线与可追踪的工程流程。','从根到分支，展开可组合的模块。','从档案索引到长期阅读的书页。','工具架、抽屉与能继续工作的桌面。','沿着游戏与作品探索新的可能。','前景、窗与远处，保留世界的空间。'][i]}</p><a href="${p.route.replace('/pages/','')}">进入项目 →</a></article>`).join('')}</div></div></section>
     </div>`;
 }
 
@@ -1147,7 +1128,7 @@ function renderModsContent(series, brand) {
   };
   const groups = series.groups.map((group) => `<section class="mod-game-group" data-host-game="${escapeAttribute(group.hostGame)}">
       <div class="mod-game-heading"><div><p class="section-kicker">HOST GAME</p><h3>${escapeHtml(group.hostGame)}</h3></div><span>${group.mods.length} 件公开作品</span></div>
-      <div class="mod-work-grid">${group.mods.map(renderWork).join('')}</div>
+      <div class="mod-work-grid discovery-route">${group.mods.map(renderWork).join('')}</div>
     </section>`).join('');
   const foundations = series.entries.filter(({ role }) => role === 'shared-foundation').map((entry) => `<article class="mod-foundation-card" data-mod-foundation="${escapeAttribute(entry.projectId)}">
       <img src="../${escapeAttribute(brand.assets.freesiaLogoSmall)}" alt="" loading="lazy"><div><p class="section-kicker">SHARED FOUNDATION · ${escapeHtml(entry.hostGame)}</p><h3>${escapeHtml(entry.source.title)}</h3><p>${escapeHtml(entry.source.summary)}</p><p><strong>关系说明：</strong>它是部分 Freesia Mods 的技术基础，不代表所有 Freesia Mods 共用同一运行时。</p></div>
@@ -1161,7 +1142,7 @@ function renderModsContent(series, brand) {
       <div class="container mods-hero-grid"><div class="mods-hero-copy"><p class="section-kicker">MODS · CROSS-GAME CREATION</p><img class="mods-brand-lockup" src="../${escapeAttribute(brand.assets.freesiaLogo)}" alt="Freesia Mods"><h1>Freesia Mods</h1><p class="mods-hero-tagline">让喜欢的游戏，长出新的可能。</p><p class="mods-hero-subtitle">${escapeHtml(series.tagline)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#mod-works">浏览作品</a><a class="btn btn-secondary" href="#mod-principles">了解创作方式</a></div></div><div class="mods-hero-art">${personaPicture(personas.find(({ id }) => id === 'freesia'), { prefix: '../', eager: true, className: 'mods-hero-character' })}<img class="mods-hero-botanical" src="../${escapeAttribute(brand.assets.freesiaBotanicalArt)}" alt="" aria-hidden="true"></div></div>
     </header>
     <section class="mods-section" id="mod-principles"><div class="container"><div class="mods-section-heading"><p class="section-kicker">CREATE · ADAPT · SHARE · GROW</p><h2>把喜欢变成可以分享的作品</h2></div><div class="mods-principle-grid">${principles}</div></div></section>
-    <section class="mods-section" id="mod-works"><div class="container"><div class="mods-section-heading"><p class="section-kicker">PUBLIC WORKS</p><h2>按游戏浏览作品</h2><p>系列归属由显式登记决定，作品状态与限制直接复用公开项目事实。</p></div>${groups}</div></section>
+    <section class="mods-section" id="mod-works"><div class="container"><div class="mods-section-heading"><p class="section-kicker">PUBLIC WORKS</p><h2>按游戏浏览作品</h2><p>从一款喜欢的游戏出发，探索角色、卡牌与新的玩法。</p></div>${groups}</div></section>
     <section class="mods-section" id="mod-foundations"><div class="container"><div class="mods-section-heading"><p class="section-kicker">SHARED FOUNDATIONS</p><h2>技术基础与作品分开说明</h2></div>${foundations}</div></section>
     <section class="mods-section mods-closing"><div class="container"><p>CREATE · ADAPT · SHARE · GROW</p><h2>不同游戏，不同作品，同一种持续创作的兴趣。</h2></div></section>`;
 }
@@ -1424,7 +1405,7 @@ function renderBlogIndex(sourceData, discovery, featuredReading) {
     <section class="blog-list-section" id="articles">
         <div class="container">
             <div class="journal-section-heading"><div><p class="journal-kicker">ARTICLES</p><h2>全部文章</h2></div></div>
-            <div class="blog-card-grid">${articles}
+            <div class="publication-timeline">${publicationList(sourceData.blogs)}
             </div>
         </div>
     </section>`;
@@ -1977,7 +1958,7 @@ async function writeFrameworkEngineeringSource(shellTemplate) {
 }
 
 async function writeDevelopmentSource(presentations) {
-  const cards = personaCards(personas, brandConfig, { prefix: '../', kind: 'development' });
+  const cards = ecosystemMap(presentations, brandConfig);
   await writeFile(path.join(root, 'pages/development.html'), `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1998,7 +1979,7 @@ async function writeDevelopmentSource(presentations) {
     <header class="development-hero">
         <div class="container development-hero-inner">
             <p class="section-kicker">PROJECTS</p>
-            <h1>长期项目</h1>
+            <h1>从想法到作品，再回到生活</h1>
             <p class="development-lead">这些是我为了长期做游戏、研究和创作而持续维护的几个项目。</p>
             <a class="btn btn-primary" href="#development-paths">查看六个项目</a>
         </div>
@@ -2006,10 +1987,10 @@ async function writeDevelopmentSource(presentations) {
     <section class="development-siblings" id="development-paths" aria-labelledby="development-paths-title">
         <div class="container">
             <div class="section-heading development-heading">
-                <p class="section-kicker">CHOOSE BY PURPOSE</p>
+                <p class="section-kicker">A CONNECTED ECOSYSTEM</p>
                 <h2 id="development-paths-title">六种花，六个持续生长的项目</h2>
             </div>
-            <div class="development-grid">${cards}
+            <div class="ecosystem-content">${cards}
             </div>
         </div>
     </section>
@@ -2122,13 +2103,13 @@ async function writeToolsSource(presentation) {
     ['Motion Curve Lab', '属性、命名曲线或精确资源图片', '预览、暂停、重置并拖动矩形或精确资源图片，再显式导出 JSON。'],
     ['Localization Checker', '语言映射与占位符', '报告缺失、空值、重复与不支持语法，并导出检查结果。']
   ];
-  const cards = tools.map(([name, input, output], index) => `<article class="tools-card"><span>0${index + 1}</span><h3>${escapeHtml(name)}</h3><p><strong>输入</strong>${escapeHtml(input)}</p><p><strong>结果</strong>${escapeHtml(output)}</p></article>`).join('');
+  const cards = tools.map(([name, input, output], index) => `<details class="tools-card tool-drawer"><summary><span>0${index + 1}</span><h3>${escapeHtml(name)}</h3><span class="drawer-hint">查看工作流 ＋</span></summary><div class="drawer-content"><p><strong>输入</strong>${escapeHtml(input)}</p><p><strong>结果</strong>${escapeHtml(output)}</p></div></details>`).join('');
   await writeFile(path.join(root, 'pages/tools.html'), `<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHtml(presentation.displayName)} | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><link rel="stylesheet" href="../style/iris-sakura.css"><!-- brand-styles:end --><link rel="stylesheet" href="../style/tools.css"></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content tools-main">
 <header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#tools">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#status">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
-<section class="living-section"><div class="container living-prose"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div></section><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid">${cards}</div></section>
+<section class="living-section"><div class="container living-prose"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div></section><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
 <section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
 <nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
@@ -2276,7 +2257,7 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
       : `<span>${escapeHtml(tag.name)}</span>`
   )).join('')}</div>
         </header>
-        <div class="blog-prose">${body}</div>
+        ${readingBody(body, `<p class="section-kicker">IN THIS SERIES</p><h2>${escapeHtml(series.name)}</h2><a href="series/${escapeAttribute(series.slug)}.html">查看系列阅读顺序 →</a><div class="context-tags">${tags.map(tag=>tag.articles.length>=2?`<a href="tag/${escapeAttribute(tag.slug)}.html">${escapeHtml(tag.name)}</a>`:`<span>${escapeHtml(tag.name)}</span>`).join('')}</div>`)}
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
@@ -2420,11 +2401,11 @@ function renderBlogCollectionSource({ collection }) {
             <a class="journal-back" href="../../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回全部文章</a>
             <p class="section-kicker">${escapeHtml(collection.kindLabel)} · ${collection.articles.length} 篇正式文章</p>
             <h1>${escapeHtml(collection.name)}</h1>
-            <p>${escapeHtml(collection.description)}</p>
+            <p>${escapeHtml(collection.description)}</p><p class="collection-purpose">${collection.kind === 'series' ? '按发布顺序，从第一篇开始阅读。' : '按发布时间查找这个主题的文章。'}</p>
         </div>
     </header>
     <section class="blog-list-section">
-        <div class="container blog-card-grid">${articles}
+        <div class="container collection-index">${publicationList(collection.articles, '../', collection.kind === 'series')}<nav class="collection-next" aria-label="继续查找"><a href="../../blog.html#blog-taxonomy">${collection.kind === 'series' ? '查找其他系列与相关主题 →' : '查看其他主题 →'}</a><a href="../../journal.html">研究档案 →</a></nav>
         </div>
     </section>
 </main>
@@ -2489,12 +2470,12 @@ function renderJournalDetailSource(note) {
     <article class="container journal-detail">
         <a class="journal-back" href="../journal.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回研究记录</a>
         <header><p class="journal-kicker">${escapeHtml(note.track)} · ${escapeHtml(note.updatedAt)}</p><h1>${escapeHtml(note.title)}</h1><p>${escapeHtml(note.description)}</p><div class="note-tags">${note.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div></header>
-        <div class="journal-detail-grid">
-            <section><span>01 · QUESTION</span><h2>问题背景</h2><p>${escapeHtml(note.question)}</p></section>
-            <section><span>02 · METHOD</span><h2>研究方法</h2><p>${escapeHtml(note.method)}</p></section>
-            <section><span>03 · FINDING</span><h2>核心发现</h2><p>${escapeHtml(note.finding)}</p></section>
-            <section><span>04 · IMPACT</span><h2>对框架或游戏的影响</h2><p>${escapeHtml(note.impact)}</p></section>
-        </div>
+        ${readingBody(`<div class="journal-detail-grid">
+            <section><span>01 · QUESTION</span><h2 id="question">问题背景</h2><p>${escapeHtml(note.question)}</p></section>
+            <section><span>02 · METHOD</span><h2 id="method">研究方法</h2><p>${escapeHtml(note.method)}</p></section>
+            <section><span>03 · FINDING</span><h2 id="finding">核心发现</h2><p>${escapeHtml(note.finding)}</p></section>
+            <section><span>04 · IMPACT</span><h2 id="impact">对框架或游戏的影响</h2><p>${escapeHtml(note.impact)}</p></section>
+        </div>`)}
         <footer class="journal-detail-update"><strong>更新时间</strong><time datetime="${escapeAttribute(note.updatedAt)}">${escapeHtml(note.updatedAt)}</time></footer>
     </article>
 </main>
@@ -2763,7 +2744,7 @@ async function writeWisteriaSource() {
   await writeFile(path.join(root, 'pages/wisteria.html'), `<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wisteria | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content">
-<header class="wisteria-hero"><div class="container wisteria-hero-grid"><div><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">DESKTOP LIVING WORLD</p><h1>Wisteria</h1><h2>桌面上的持续小世界</h2><p>${escapeHtml(persona.summary)}</p><p>我想让桌面不只有窗口和任务，也能容纳一个值得停留、再次回来探望的小世界。</p><div class="hero-buttons"><a class="btn btn-primary" href="#world">了解这个世界</a><a class="btn btn-secondary" href="#status">查看近况</a></div></div><div class="persona-gallery-stage" data-persona="wisteria">${personaPicture(persona, { prefix: '../', eager: true })}<span class="persona-motif" aria-hidden="true"></span></div></div></header>
-<div class="container"><section class="wisteria-story" id="world"><p class="section-kicker">A PLACE TO RETURN TO</p><h2>世界会继续生长</h2><p>Wisteria 的方向是一个持续存在的桌面生活世界。空间、时间与日常陪伴，比一次性完成的任务更接近它想表达的体验。</p><h2>安静地守望</h2><p>紫藤、拱门、桥与提灯构成这个世界的视觉线索。灰棕、米白和橄榄绿承接生活的温度，淡紫藤作为点缀，让视线慢下来。</p><h2>留在桌面的一隅</h2><p>角色是世界的人格化入口；真正想探索的，是生活与工作之间那片可以停留、观察和重新发现的空间。</p></section><section class="wisteria-story" id="status"><p class="section-kicker">IN PROGRESS</p><h2>正在制作中</h2><p>这个桌面世界仍在持续探索和制作，暂未开放下载。后续会在这里分享进展与可体验的版本。</p><div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">认识六个花卉角色</a><a class="text-link" href="development.html">浏览其他项目</a></div></section></div>
+<header class="wisteria-hero"><div class="container wisteria-hero-grid"><div><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">DESKTOP LIVING WORLD</p><h1>Wisteria</h1><h2>桌面上的持续小世界</h2><p>${escapeHtml(persona.summary)}</p><p>我想让桌面不只有窗口和任务，也能容纳一个值得停留、再次回来探望的小世界。</p><div class="hero-buttons"><a class="btn btn-primary" href="#world">了解这个世界</a><a class="btn btn-secondary" href="#status">查看近况</a></div></div><div class="world-scene" data-grammar="layered-world"><span class="world-horizon" aria-hidden="true"></span><span class="world-window" aria-hidden="true"></span><span class="world-ground" aria-hidden="true"></span><div class="persona-gallery-stage" data-persona="wisteria">${personaPicture(persona, { prefix: '../', eager: true })}<span class="persona-motif" aria-hidden="true"></span></div><p class="world-caption">世界仍然在这里。</p></div></div></header>
+<div class="container"><section class="wisteria-story continuity-section" id="world"><p class="section-kicker">A PLACE TO RETURN TO</p><h2>世界会继续生长</h2><p>Wisteria 的方向是一个持续存在的桌面生活世界。空间、时间与日常陪伴，比一次性完成的任务更接近它想表达的体验。</p><h2>安静地守望</h2><p>紫藤、拱门、桥与提灯构成这个世界的视觉线索。灰棕、米白和橄榄绿承接生活的温度，淡紫藤作为点缀，让视线慢下来。</p><h2>留在桌面的一隅</h2><p>角色是世界的人格化入口；真正想探索的，是生活与工作之间那片可以停留、观察和重新发现的空间。</p></section><section class="wisteria-story" id="status"><p class="section-kicker">IN PROGRESS</p><h2>正在制作中</h2><p>这个桌面世界仍在持续探索和制作，暂未开放下载。后续会在这里分享进展与可体验的版本。</p><div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">认识六个花卉角色</a><a class="text-link" href="development.html">浏览其他项目</a></div></section></div>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>`);
 }

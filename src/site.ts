@@ -128,12 +128,18 @@ class SiteShell {
         this.setupNavigation();
         this.setupSoftNavigation();
         this.setupSubscription();
+        this.setupArticleReader();
         this.setupFaq();
         this.setupNavbarDepth();
         this.setupPageIndex();
         void this.setupContentSearch();
         this.setupMotion();
         this.ambientMotion.setup();
+    }
+
+    private setupArticleReader(): void {
+        const toc = document.querySelector<HTMLDetailsElement>('.article-toc');
+        if (toc) toc.open = !window.matchMedia('(max-width: 900px)').matches;
     }
 
     private setupSubscription(): void {
@@ -283,6 +289,7 @@ class SiteShell {
             currentMain?.replaceWith(document.importNode(nextMain, true));
             this.updateCurrentYear();
             this.setupSubscription();
+        this.setupArticleReader();
             this.setupFaq();
             this.setupPageIndex();
             void this.setupContentSearch();
@@ -321,6 +328,11 @@ class SiteShell {
         document.documentElement.lang = nextRoot.lang || 'zh-CN';
         document.documentElement.dataset.brand = brand;
         document.documentElement.dataset.brandMode = brandMode;
+        for (const key of ['pageFamily', 'pageGrammar', 'pagePersona']) {
+            const value = nextRoot.dataset[key];
+            if (value) document.documentElement.dataset[key] = value;
+            else delete document.documentElement.dataset[key];
+        }
         document.documentElement.style.cssText = nextRoot.style.cssText;
     }
 

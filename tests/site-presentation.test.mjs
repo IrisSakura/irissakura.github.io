@@ -6,14 +6,14 @@ import { assertSitePresentationConfig, resolveNavigationId, resolveProjectPresen
 const root = new URL('../', import.meta.url);
 const readJson = async (file) => JSON.parse(await readFile(new URL(file, root), 'utf8'));
 
-test('site presentation owns six visitor routes and four stable projects', async () => {
+test('site presentation owns six visitor routes and six stable brand entries', async () => {
   const [config, brand, projects, search] = await Promise.all([
     readJson('config/site-presentation.json'), readJson('config/brand.json'), readJson('data/projects.json'), readJson('data/search-index.json')
   ]);
   assertSitePresentationConfig(config, brand);
   assert.deepEqual(config.navigation.map(({ label }) => label), ['首页', '作品', '文章', '项目', 'Mods', '关于']);
-  assert.deepEqual(config.projects.map(({ projectId }) => projectId), ['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf']);
-  assert.deepEqual(resolveProjectPresentations(config, brand, projects).map(({ displayName }) => displayName), ['Iris Engineering', 'SakuraGameFramework', 'Myosotis', 'Violet Shelf']);
+  assert.deepEqual(config.projects.map(({ projectId }) => projectId), ['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf', 'freesia-mods', 'wisteria']);
+  assert.deepEqual(resolveProjectPresentations(config, brand, projects).map(({ displayName }) => displayName), ['Iris Engineering', 'SakuraGameFramework', 'Myosotis', 'Violet Shelf', 'Freesia Mods', 'Wisteria']);
   assertSitePresentationConfig(config, brand, projects);
   const invalid = structuredClone(config); invalid.portfolio.groups[0].projectIds.push('missing-work');
   assert.throws(() => assertSitePresentationConfig(invalid, brand, projects), /unknown project/);

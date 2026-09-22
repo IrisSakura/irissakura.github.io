@@ -1,3 +1,4 @@
+import { styleSource } from './lib/style-source.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
@@ -5,6 +6,7 @@ import test from 'node:test';
 const root = new URL('../', import.meta.url);
 
 async function readText(path) {
+  if (path.startsWith('style/')) return styleSource(path);
   return readFile(new URL(path, root), 'utf8');
 }
 
@@ -87,7 +89,7 @@ test('primitive semantic and mode styles form a one-way token chain', async () =
   }
   assert.match(
     main,
-    /html\[data-brand="iris-sakura"\] \[data-page-cover\]\.page-cover\s*\{[^}]*background-image:\s*var\(--brand-mode-hero-background\)/s
+    /\[data-page-cover\]\.page-cover\s*\{[^}]*background-image:\s*var\(--brand-mode-hero-background\)/s
   );
   assert.ok(brand.includes('--primary-color: var(--color-action-primary)'));
   assert.ok(brand.includes('--accent-color: var(--color-brand-highlight)'));
@@ -115,9 +117,8 @@ test('generated routes receive the correct mode and shared token styles', async 
   for (const [path, mode] of expectations) {
     const html = await readText(path);
     assert.ok(html.includes(`data-brand-mode="${mode}"`), `${path} missing ${mode} mode`);
-    for (const stylesheet of ['tokens/primitive.css', 'tokens/semantic.css', 'tokens/modes.css', 'components/brand-experience.css']) {
-      assert.ok(html.includes(`style/${stylesheet}`), `${path} missing ${stylesheet}`);
-    }
+    assert.ok(html.includes('style/main.css'), `${path} missing shared CSS entry`);
+    assert.ok(!html.includes('style/tokens/'), `${path} duplicates layered token imports`);
   }
 });
 
@@ -138,11 +139,10 @@ test('representative page heroes consume mode tokens instead of new page literal
 
 test('long-form detail routes share one patternless editorial canvas', async () => {
   const css = await readText('style/iris-sakura.css');
-  const detailCanvas = css.match(/\.journal-detail-main,\s*\n\.blog-detail-main\s*\{(?<rules>[^}]*)\}/u);
+  const detailCanvas = css.match(/\.journal-detail-main,\s*\.blog-detail-main\s*\{(?<rules>[^}]*)\}/u);
 
   assert.ok(detailCanvas?.groups?.rules, 'Blog and Journal details must share one reading canvas');
-  assert.ok(detailCanvas.groups.rules.includes('radial-gradient'), 'detail canvas must retain soft brand atmosphere');
-  assert.ok(detailCanvas.groups.rules.includes('linear-gradient'), 'detail canvas must include a stable paper base');
+  assert.ok(detailCanvas.groups.rules.includes('var(--paper)'), 'detail canvas must use a stable paper base');
   assert.ok(!detailCanvas.groups.rules.includes('repeating-'), 'detail canvas must not repeat stripes or grids');
   assert.doesNotMatch(
     css,

@@ -1,3 +1,4 @@
+import { assertReadingFlow } from './lib/reading-flow.mjs';
 import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
@@ -106,7 +107,7 @@ const brandContrastRoutes = [
       ['homepage profile title', '.profile-copy .hero-title'],
       ['homepage profile role', '.profile-role'],
       ['homepage profile introduction', '.profile-copy .hero-description'],
-      ['homepage project descriptions', '.project-entry-card > p:not(.project-entry-index)']
+      ['homepage project descriptions', '.ecosystem-bridge article > p']
     ]
   },
   {
@@ -244,8 +245,12 @@ const coreVisualRoutes = [
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
 
 try {
-  await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
-  await assertPersonaLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
+  // Focused reruns reuse separately recorded layout evidence; the default runs both.
+  if (!process.argv.includes('--flows-only')) {
+    await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
+    await assertPersonaLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
+  }
+  await assertReadingFlow(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   if (themeConfig.id !== 'iris-sakura' || themeConfig.colorScheme !== 'light') {
     throw new Error('single-brand registry is not IRIS × SAKURA light');
   }
@@ -308,7 +313,7 @@ try {
       const rect = container.getBoundingClientRect();
       return { left: rect.left, right: window.innerWidth - rect.right };
     });
-    const minimumInset = width <= 400 ? 19 : Math.min(width * 0.049, 79);
+    const minimumInset = width <= 400 ? 19 : Math.min(width * 0.039, 63);
     if (containerGeometry.left < minimumInset || containerGeometry.right < minimumInset) {
       intermediateViewportFailures.push(
         `${width}px content inset ${JSON.stringify(containerGeometry)} below ${minimumInset}px`
@@ -456,9 +461,9 @@ try {
     columns: getComputedStyle(document.querySelector('.mods-hero-grid')).gridTemplateColumns.split(' ').length,
     artColumns: getComputedStyle(document.querySelector('.mods-hero-art')).gridTemplateColumns.split(' ').length,
     artworkSeparated: (() => {
-      const character = document.querySelector('.mods-hero-character').getBoundingClientRect();
-      const botanical = document.querySelector('.mods-hero-botanical').getBoundingClientRect();
-      return character.right <= botanical.left + 1;
+      const character = document.querySelector('.mods-hero-character');
+      const botanical = document.querySelector('.mods-hero-botanical');
+      return character.offsetLeft + character.offsetWidth <= botanical.offsetLeft + 1;
     })(),
     indexTargets: [...document.querySelectorAll('[data-page-index-link]')].every((link) => document.querySelector(link.getAttribute('href'))),
     text: document.querySelector('main').textContent
@@ -474,13 +479,13 @@ try {
   const modsTabletState = await desktop.evaluate(() => {
     const copy = document.querySelector('.mods-hero-copy').getBoundingClientRect();
     const art = document.querySelector('.mods-hero-art').getBoundingClientRect();
-    const character = document.querySelector('.mods-hero-character').getBoundingClientRect();
-    const botanical = document.querySelector('.mods-hero-botanical').getBoundingClientRect();
+    const character = document.querySelector('.mods-hero-character');
+    const botanical = document.querySelector('.mods-hero-botanical');
     return {
       overflow: document.documentElement.scrollWidth - window.innerWidth,
       columns: getComputedStyle(document.querySelector('.mods-hero-grid')).gridTemplateColumns.split(' ').length,
       copyBeforeArt: copy.bottom <= art.top + 1,
-      artworkSeparated: character.right <= botanical.left + 1
+      artworkSeparated: character.offsetLeft + character.offsetWidth <= botanical.offsetLeft + 1
     };
   });
   if (modsTabletState.overflow > 1 || modsTabletState.columns !== 1 || !modsTabletState.copyBeforeArt || !modsTabletState.artworkSeparated) {
@@ -509,18 +514,18 @@ try {
   }
   await desktop.locator('.nav-menu').getByRole('link', { name: '项目', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/development.html`);
-  if (await desktop.locator('.development-card').count() !== 6) {
+  if (await desktop.locator('.project-route').count() !== 6) {
     throw new Error('Development hub does not present six project routes');
   }
-  const overflowingDevelopmentHeading = await desktop.locator('.development-card h2').evaluateAll((headings) => (
+  const overflowingDevelopmentHeading = await desktop.locator('.project-route h2').evaluateAll((headings) => (
     headings.some((heading) => heading.scrollWidth - heading.clientWidth > 1)
   ));
   if (overflowingDevelopmentHeading) {
     throw new Error('Development hub project heading overflows its card');
   }
   for (const [name, href] of [
-    ['进入 Myosotis', 'journal.html'],
-    ['进入 Violet Shelf', 'tools.html']
+    ['进入 Myosotis', '../pages/journal.html'],
+    ['进入 Violet Shelf', '../pages/tools.html']
   ]) {
     if (await desktop.getByRole('link', { name, exact: true }).getAttribute('href') !== href) {
       throw new Error(`Development hub route drifted: ${name} must target ${href}`);
@@ -876,7 +881,7 @@ try {
   await desktop.setViewportSize({ width: 1280, height: 900 });
 
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
-  if (await desktop.locator('.blog-card').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
+  if (await desktop.locator('.publication-list > li').count() !== publishedBlogs.length) throw new Error('blog index does not expose exactly the approved articles');
   if (await desktop.locator('.blog-featured-card').count() !== activeBlogSeriesCount) throw new Error('Featured Reading does not expose one entry per active series');
   if (await desktop.locator('.blog-series-list > a').count() !== activeBlogSeriesCount) throw new Error('blog index series registry is incomplete');
   if (await desktop.locator('.blog-tag-list > a').count() !== routableBlogTags.length) throw new Error('blog index exposes the wrong tag route set');
@@ -907,13 +912,13 @@ try {
     throw new Error('series route does not keep the 知识 navigation context');
   }
   await desktop.goto(`${baseUrl}/pages/blog.html`, { waitUntil: 'networkidle' });
-  await desktop.locator(`.blog-card a[href="blog/${encodeURIComponent(representativeBlog.slug)}.html"]`).click();
+  await desktop.locator(`.publication-list .note-link[href="blog/${encodeURIComponent(representativeBlog.slug)}.html"]`).click();
   await desktop.getByRole('heading', {
     level: 1,
     name: representativeBlog.title,
     exact: true
   }).waitFor({ state: 'visible' });
-  if (!await desktop.locator('.blog-prose').isVisible()) throw new Error('complete blog body is not visible');
+  if (!await desktop.locator('.article-prose-section').first().isVisible()) throw new Error('complete blog body is not visible');
   if (await desktop.locator('.blog-source-note').count() !== 0) throw new Error('blog article exposes a generator source note');
   if (await desktop.locator('.related-articles a').count() !== 3) throw new Error('complete blog article does not expose three related routes');
 

@@ -1,3 +1,4 @@
+import { styleSource } from './lib/style-source.mjs';
 import assert from 'node:assert/strict';
 import { access, readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
@@ -5,6 +6,7 @@ import test from 'node:test';
 const root = new URL('../', import.meta.url);
 
 async function readText(path) {
+  if (path.startsWith('style/')) return styleSource(path);
   return readFile(new URL(path, root), 'utf8');
 }
 
@@ -340,11 +342,11 @@ test('primary navigation gives the four projects one visitor-facing parent conte
   const brand = await readText('pages/brand.html');
   const artMusic = await readText('pages/art-music.html');
   assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/development\.html">/u);
-  assert.equal((development.match(/class="development-card /g) ?? []).length, 6);
-  assert.match(development, /class="development-card development-card-iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="engineering\.html"/u);
-  assert.match(development, /class="development-card development-card-sakura"[\s\S]*?<h2>SakuraGameFramework<\/h2>[\s\S]*?href="framework\.html"/u);
-  assert.match(development, /class="development-card development-card-journal"[\s\S]*?<h2>Myosotis<\/h2>[\s\S]*?href="journal\.html"/u);
-  assert.match(development, /class="development-card development-card-violet"[\s\S]*?<h2>Violet Shelf<\/h2>[\s\S]*?href="tools\.html"/u);
+  assert.equal((development.match(/class="project-route"/g) ?? []).length, 6);
+  assert.match(development, /class="project-route"[^>]*data-persona="iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="\.\.\/pages\/engineering\.html"/u);
+  assert.match(development, /class="project-route"[^>]*data-persona="sakura"[\s\S]*?<h2>SakuraGameFramework<\/h2>[\s\S]*?href="\.\.\/pages\/framework\.html"/u);
+  assert.match(development, /class="project-route"[^>]*data-persona="myosotis"[\s\S]*?<h2>Myosotis<\/h2>[\s\S]*?href="\.\.\/pages\/journal\.html"/u);
+  assert.match(development, /class="project-route"[^>]*data-persona="violet"[\s\S]*?<h2>Violet Shelf<\/h2>[\s\S]*?href="\.\.\/pages\/tools\.html"/u);
   assert.match(development, /href="\.\.\/pages\/development\.html" class="nav-link active" aria-current="page">项目<\/a>/u);
   for (const childPage of ['pages/engineering.html', 'pages/framework.html', 'pages/framework-quickstart.html']) {
     assert.match(await readText(childPage), /href="\.\.\/pages\/development\.html" class="nav-link active" data-nav-section-current="true">项目<\/a>/u);
@@ -425,9 +427,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'data-brand="iris-sakura"',
       'data-brand-mode="',
       'brand-styles:start',
-      'tokens/primitive.css',
-      'tokens/semantic.css',
-      'tokens/modes.css',
+      'style/main.css',
       brand.stylesheet,
       'dist/site.js'
     ]) {
@@ -614,122 +614,13 @@ test('brand registry exposes only IRIS × SAKURA and legacy theme styles are rem
   }
 });
 
-test('the single brand stylesheet only changes palette colors', async () => {
-  const config = JSON.parse(await readText('data/themes.json'));
-  const stylesheets = new Set([config.stylesheet]);
-  const paletteProperties = new Set([
-    'background',
-    'background-color',
-    'background-image',
-    'border-bottom-color',
-    'border-color',
-    'border-left-color',
-    'border-right-color',
-    'border-top-color',
-    'color',
-    'fill',
-    'outline-color',
-    'scrollbar-color',
-    'stroke',
-    'text-decoration-color',
-  ]);
-  const paletteVariables = new Set([
-    '--primary-color',
-    '--secondary-color',
-    '--secondary-text-color',
-    '--accent-color',
-    '--dark-color',
-    '--light-color',
-    '--gray-color',
-    '--muted-text-color',
-    '--success-color',
-    '--warning-color',
-    '--danger-color',
-    '--paper',
-    '--paper-deep',
-    '--mist-blue',
-    '--water-blue',
-    '--hill-blue',
-    '--petal-pink',
-    '--petal-strong',
-    '--ink',
-    '--ink-soft',
-    '--leaf',
-    '--line',
-    '--line-strong',
-    '--surface',
-    '--surface-strong',
-    '--torii',
-    '--torii-deep',
-    '--indigo',
-    '--wood',
-    '--sakura',
-    '--sakura-soft',
-    '--ui-surface-card',
-    '--ui-surface-hover',
-    '--ui-border-subtle',
-    '--ui-border-strong',
-    '--ui-focus-color',
-    '--ui-control-border',
-    '--ui-control-border-hover',
-    '--ui-control-text',
-    '--ui-control-surface',
-    '--ui-control-surface-hover',
-    '--ui-control-icon',
-    '--ui-control-option-text',
-    '--ui-control-option-surface',
-    '--ui-action-primary-text',
-    '--ui-action-primary-bg',
-    '--ui-action-primary-hover-bg',
-    '--ui-action-secondary-text',
-    '--ui-action-secondary-border',
-    '--ui-action-secondary-bg',
-    '--ui-action-secondary-hover-text',
-    '--ui-action-secondary-hover-bg',
-    '--ui-action-outline-text',
-    '--ui-action-outline-border',
-    '--ui-action-outline-bg',
-    '--ui-action-outline-hover-text',
-    '--ui-action-outline-hover-bg',
-    '--ui-chip-border',
-    '--ui-chip-surface',
-    '--ui-chip-text',
-    '--ui-home-cover-heading',
-    '--ui-home-cover-text',
-    '--ui-home-cover-kicker',
-    '--ui-home-cover-secondary-text',
-    '--ui-home-cover-secondary-border',
-    '--ui-home-cover-secondary-bg',
-    '--ui-home-cover-secondary-hover-text',
-    '--ui-home-cover-secondary-hover-bg'
-  ]);
-  const violations = [];
-
-  for (const stylesheet of stylesheets) {
-    const css = (await readText(stylesheet)).replace(/\/\*[\s\S]*?\*\//g, '');
-    for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const selector = match[1].trim();
-      const selectors = selector.split(',').map((part) => part.trim());
-      if (selectors.some((part) => /::(?:before|after)\b/.test(part))) {
-        violations.push(`${stylesheet}: ${selector} changes shared pseudo-element design`);
-      }
-
-      for (const declaration of match[2].matchAll(/(?:^|;)\s*([\w-]+)\s*:/gm)) {
-        const property = declaration[1];
-        if (property.startsWith('--') && !paletteVariables.has(property)) {
-          violations.push(`${stylesheet}: ${selector} uses non-palette variable ${property}`);
-        } else if (!property.startsWith('--') && !paletteProperties.has(property)) {
-          violations.push(`${stylesheet}: ${selector} uses non-color property ${property}`);
-        }
-      }
-    }
-  }
-
-  assert.deepEqual(
-    violations,
-    [],
-    `brand stylesheet must only change palette colors:\n${violations.join('\n')}`
-  );
+test('persona styling contains variables and decoration, while page owners choose composition', async () => {
+ const tokens=await readText('style/tokens/personas-v2.css');
+ assert.doesNotMatch(tokens, /(?:^|;)\s*(?:display|grid-template-columns|position|padding|margin)\s*:/m);
+ const entry=await readText('style/site.css');
+ assert.match(entry,/personas\/identity.css/);assert.match(entry,/pages\/grammar.css/);
+ const compatibility=await readFile(new URL('style/iris-sakura.css',root),'utf8');
+ assert.doesNotMatch(compatibility,/[^\s]\s*\{/);
 });
 
 test('Framework surfaces use the shared IRIS and SAKURA visual system', async () => {
@@ -757,9 +648,9 @@ test('Framework surfaces use the shared IRIS and SAKURA visual system', async ()
     assert.ok(frameworkCss.includes(`var(${token})`), `Framework CSS missing shared theme token ${token}`);
   }
 
-  assert.match(experienceCss, /html\[data-brand-mode="sakura"\][\s\S]*?\.framework-detail-hero::before/u);
-  assert.match(experienceCss, /\.framework-depth-card[\s\S]*?\.framework-decision-card/u);
-  assert.match(frameworkCss, /html\[data-brand="iris-sakura"\]\[data-brand-mode="sakura"\][\s\S]*?\.framework-detail-hero\.page-cover \.framework-detail-hero-actions \.btn-secondary/u);
+  assert.match(experienceCss, /\.module-branch/u);
+  assert.match(frameworkCss, /\.framework-depth-card[\s\S]*?\.framework-decision-card/u);
+  assert.match(frameworkCss, /:root\[data-brand-mode="sakura"\][\s\S]*?\.framework-detail-hero\.page-cover \.framework-detail-hero-actions \.btn-secondary/u);
 });
 
 test('placeholder blog, simulated form and unsupported template claims are absent', async () => {
@@ -819,32 +710,12 @@ test('repository metadata and publishing policy are explicit', async () => {
   assert.ok(workflow.includes('actions/deploy-pages@v4'));
 });
 
-test('shared text colors meet WCAG AA contrast on dark surfaces', async () => {
-  const [css, semantic, primitive] = await Promise.all([
-    readText('style/main.css'),
-    readText('style/tokens/semantic.css'),
-    readText('style/tokens/primitive.css')
-  ]);
-  const tokenSources = [css, semantic, primitive];
-  const secondaryText = readCssHexVariable(tokenSources, 'secondary-text-color');
-  const mutedText = readCssHexVariable(tokenSources, 'muted-text-color');
-  const grayText = readCssHexVariable(tokenSources, 'gray-color');
-
-  for (const background of ['#29173d', '#2d1b41', '#1e1e1e']) {
-    assert.ok(
-      contrastRatio(secondaryText, background) >= 4.5,
-      `${secondaryText} must reach 4.5:1 on ${background}`
-    );
-  }
-  assert.ok(contrastRatio(mutedText, '#040404') >= 4.5);
-  assert.ok(contrastRatio(grayText, '#121212') >= 4.5);
-
-  assert.match(css, /--ui-chip-text:\s*var\(--secondary-text-color\)/);
-  assert.match(css, /\.tag,[\s\S]*?\.portfolio-tags span\s*\{[^}]*color:\s*var\(--ui-chip-text\)/s);
-  assert.match(css, /\.project-status\s*\{[^}]*color:\s*var\(--secondary-text-color\)/s);
-  assert.match(css, /\.footer-description\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
-  assert.match(css, /\.footer-links a\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
-  assert.match(css, /\.footer-bottom\s*\{[^}]*color:\s*var\(--muted-text-color\)/s);
+test('shared muted text reaches WCAG AA on the current paper surfaces', async () => {
+ const tokens=await Promise.all(['style/tokens/compatibility.css','style/tokens/semantic.css','style/tokens/primitive.css'].map(readText));
+ for(const name of ['secondary-text-color','muted-text-color','gray-color']) {
+  const text=readCssHexVariable(tokens,name);
+  for(const background of ['#fffaff','#f7f4ff']) assert.ok(contrastRatio(text,background)>=4.5,`${name} contrast on ${background}`);
+ }
 });
 
 test('IRIS × SAKURA text and actions meet WCAG AA contrast', async () => {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html data-page-family="editorial" data-page-grammar="article-reader" data-page-persona="myosotis" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,16 +29,10 @@
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
     <!-- brand-styles:start -->
-    <link rel="stylesheet" href="../../style/tokens/primitive.css">
-    <link rel="stylesheet" href="../../style/tokens/semantic.css">
-    <link rel="stylesheet" href="../../style/tokens/modes.css">
-    <link rel="stylesheet" href="../../style/components/brand-experience.css">
     <link rel="stylesheet" href="../../style/iris-sakura.css">
     <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style/tokens/personas-v2.css">
-<link rel="stylesheet" href="../../style/components/personas-v2.css">
 <link rel="stylesheet" href="../../style/components/living-site.css">
 </head>
 <body>
@@ -81,7 +75,7 @@
             <p class="blog-deck">从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。</p>
             <div class="note-tags"><span>hot-update</span><span>modding</span><span>transactions</span><a href="tag/unity.html">unity</a></div>
         </header>
-        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论更新完成需要磁盘与-runtime-对同一版本达成一致">先说结论：更新完成，需要磁盘与 Runtime 对同一版本达成一致</a></li><li class="toc-level-2"><a href="#三个基础结构候选仓指路牌与进度单">三个基础结构：候选仓、指路牌与进度单</a></li><li class="toc-level-2"><a href="#一次严格更新实际经过了什么">一次严格更新，实际经过了什么</a></li><li class="toc-level-2"><a href="#为什么进程中途退出后下一次启动仍能知道该做什么">为什么进程中途退出后，下一次启动仍能知道该做什么</a></li><li class="toc-level-2"><a href="#信任校验不能只回答文件有没有被改过">信任校验不能只回答“文件有没有被改过”</a></li><li class="toc-level-2"><a href="#数据资源脚本与-hybridclr不应该假装拥有相同的热更语义">数据、资源、脚本与 HybridCLR，不应该假装拥有相同的热更语义</a></li><li class="toc-level-2"><a href="#工具化的意义是让第一次接入就看到真实边界">工具化的意义，是让第一次接入就看到真实边界</a></li><li class="toc-level-2"><a href="#截至-2026-07-30这套实现能证明到哪里">截至 2026-07-30，这套实现能证明到哪里</a></li><li class="toc-level-2"><a href="#我的检查清单什么时候才可以说这次更新完成了">我的检查清单：什么时候才可以说“这次更新完成了”</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>hot-update</span><span>modding</span><span>transactions</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
 <p>开发热更新功能时，人很容易把注意力集中在最后一步：</p>
 <ul>
 <li>新配置能不能读出来；</li>
@@ -110,7 +104,7 @@
 <p><strong>活动版本指针（即“指路牌”）</strong>：一个很小的持久化记录，指出下一次启动应采用哪个版本及其包指纹。</p>
 <p><strong>更新 Journal（即“进度单”）</strong>：记录一次更新的操作身份、旧指针、候选指针与最近完成阶段。</p>
 <p>它们分别回答三个问题：</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>结构</th>
@@ -129,10 +123,10 @@
 <td>进度单</td>
 <td>上一次更新进行到了哪里，是否需要恢复？</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>这比“把新文件覆盖到 current 目录”多了一层间接性，却换来了一个非常重要的能力：版本切换可以通过改指针完成，旧版本也仍有机会被恢复。</p>
 <h2 id="一次严格更新实际经过了什么">一次严格更新，实际经过了什么</h2><p>当前流程可以压缩成下面这张图：</p>
-<pre><code class="language-mermaid">flowchart TD
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-mermaid">flowchart TD
     A["启动恢复：读取进度单与指路牌"] --&gt; B["获取更新租约并检查磁盘预算"]
     B --&gt; C["下载到临时候选"]
     C --&gt; D["校验大小、Hash、身份、API、签名与能力"]
@@ -147,7 +141,7 @@
     P --&gt; Q{"恢复是否完整"}
     Q --&gt;|"是"| S["旧版本继续工作"]
     Q --&gt;|"否"| T["Degraded 或 RecoveryRequired：停止继续变更"]
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>这里最关键的一步是 <code>Prepare</code>。</p>
 <p><strong>Shadow Runtime（即“后台试运行”）</strong>：候选内容已经被解析、编译或组装，但尚未发布为全局可见状态的运行时。</p>
 <p>后台试运行阶段允许系统发现问题，却不能提前让一半新状态泄漏给业务层。只有它准备成功，流程才切换指路牌，再提交新的 Runtime。</p>
@@ -184,7 +178,7 @@
 </blockquote>
 <p>托管代码加载也因此默认拒绝。项目必须显式选择 Loader、Artifact Provider、入口和信任策略；仅仅在包里放入 DLL，不会自动得到执行权限。</p>
 <h2 id="数据资源脚本与-hybridclr不应该假装拥有相同的热更语义">数据、资源、脚本与 HybridCLR，不应该假装拥有相同的热更语义</h2><p>Hot Update Solution 当前把能力拆为四种 experimental Preset。它们可以组合，但各自有不同的直接 Owner 和失败边界。</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>能力档位</th>
@@ -212,7 +206,7 @@
 <td>IL2CPP 下的 AOT metadata、热更程序集与入口 Lease</td>
 <td>当前不支持可靠卸载，更新后需要进程重启</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>资源切换并不只是“加载一个新 Catalog”。如果场景里已有存活对象，合理顺序通常是暂停消费、捕获必要状态、加载并注册新资源、恢复状态，最后恢复运行。</p>
 <p>脚本切换也不是“重新执行一段代码”。Sandbox 需要限制 host function、fuel、内存页数与超时；若希望保留脚本状态，还需要显式的 Schema 版本和迁移协议。</p>
 <p>HybridCLR 的边界更加明显。当前适配器只在 IL2CPP 与 HybridCLR 运行时真实可用时开放；它会检查目标平台、Game/Framework API、AOT metadata 顺序、程序集依赖顺序、Hash、主程序集和唯一入口。加载后的入口可以停止，但已经进入进程的 metadata 与程序集不能被假装成可靠卸载，所以能力合同明确标记为“更新后需要重启”。</p>
@@ -265,7 +259,7 @@
 <blockquote>
 <p>现在生效的究竟是哪一版，为什么可以相信它？</p>
 </blockquote>
-<h2 id="术语对照">术语对照</h2><table>
+<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -296,10 +290,10 @@
 <td>失败封闭</td>
 <td>看不懂就别继续动</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <hr />
 <p>本文是基于 Sakura Framework 在 2026-07-30 的当前源码、规格、测试与本地证据做出的工程复盘，不是版本发布公告，也不把未执行的远程或跨平台验证写成已完成事实。</p>
-</div>
+</div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
@@ -317,7 +311,7 @@
                 </a>
                 <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
             </div>
-            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
             <div class="footer-social">
                 <h2>公开入口</h2>
                 <div class="social-icons">

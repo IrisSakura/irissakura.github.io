@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html data-page-family="editorial" data-page-grammar="article-reader" data-page-persona="myosotis" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,16 +29,10 @@
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
     <!-- brand-styles:start -->
-    <link rel="stylesheet" href="../../style/tokens/primitive.css">
-    <link rel="stylesheet" href="../../style/tokens/semantic.css">
-    <link rel="stylesheet" href="../../style/tokens/modes.css">
-    <link rel="stylesheet" href="../../style/components/brand-experience.css">
     <link rel="stylesheet" href="../../style/iris-sakura.css">
     <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style/tokens/personas-v2.css">
-<link rel="stylesheet" href="../../style/components/personas-v2.css">
 <link rel="stylesheet" href="../../style/components/living-site.css">
 </head>
 <body>
@@ -81,7 +75,7 @@
             <p class="blog-deck">一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？</p>
             <div class="note-tags"><span>sample</span><a href="tag/unity.html">unity</a></div>
         </header>
-        <div class="blog-prose"><p><a href="../blog.html">系列目录</a>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论综合展示应该向上组合而不是向下污染核心">先说结论：综合展示应该向上组合，而不是向下污染核心</a></li><li class="toc-level-2"><a href="#sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</a></li><li class="toc-level-2"><a href="#为什么不能有几个包就开几个功能">为什么不能“有几个包就开几个功能”</a></li><li class="toc-level-2"><a href="#运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</a></li><li class="toc-level-2"><a href="#dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</a></li><li class="toc-level-2"><a href="#这套方式的代价">这套方式的代价</a></li><li class="toc-level-2"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>sample</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a>
 开发框架 Sample 时，很容易出现一种扩张路径。</p>
 <p>最初，示例只需要展示战斗主循环：</p>
 <ul>
@@ -125,7 +119,7 @@
 </li>
 </ol>
 <p>近期的 Semantic Battle Final Showcase 采用了四档结构。</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>档位</th>
@@ -158,14 +152,14 @@
 <td>语言、检查点、未读状态与双语操作面板</td>
 <td>条件不足时保持 P2</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>这里最重要的不是“总共接了十六个包”。</p>
 <p>真正重要的是：</p>
 <blockquote>
 <p>十六个包只存在于 Sample 的最高展示档位，没有被写进战斗编排父包的产品合同。</p>
 </blockquote>
 <h2 id="sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</h2><p>综合 Sample 的价值，在于把已经存在的模块放进同一条真实链路。</p>
-<pre><code class="language-mermaid">flowchart LR
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-mermaid">flowchart LR
     A["Hitbox 命中事实"] --&gt; B["Semantic Combat 语义处理"]
     B --&gt; C["GAS 动作执行"]
     C --&gt; D["Command 历史与 Replay"]
@@ -176,7 +170,7 @@
     G --&gt; H["Pooling / Asset / Audio"]
     D --&gt; I["Save Replay Payload"]
     I --&gt; J["Preferences / RedDot / Localization"]
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>这条链路应该尽量复用各模块的公开合同。</p>
 <p>例如：</p>
 <ul>
@@ -222,11 +216,11 @@
 <p><strong>能力闭包（后文简称“整套才成立”）</strong>：一组模块只有在其依赖、所有者、数据来源和清理责任全部存在时，才构成可以对外启用的能力。</p>
 <p>因此，P1、P2、P3 都不应被理解为若干独立开关。</p>
 <p>它们更像逐层建立的合同：</p>
-<pre><code class="language-text">Baseline
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">Baseline
   └─ P1：交互与可视化合同完整
        └─ P2：表现反馈合同完整
             └─ P3：跨会话连续性合同完整
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>任何一层不完整，都保持上一层，而不是进入无法解释的部分启用状态。</p>
 <h2 id="运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</h2><p>综合 Sample 常见的另一个问题，是把演示资源偷偷变成项目依赖。</p>
 <p>例如，示例要求项目预先存在：</p>
@@ -250,7 +244,7 @@
 </ul>
 <p>这种示例在维护者工程里可以运行，导入干净项目后却会立即失效。</p>
 <p>因此，近期展示层采用了更克制的所有权策略：</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>内容</th>
@@ -285,7 +279,7 @@
 <td>清理</td>
 <td>只删除自己拥有的对象、监听器、槽位和临时目录</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>这不是生产方案。</p>
 <p>它是一种 Sample 边界声明：</p>
 <blockquote>
@@ -293,16 +287,16 @@
 </blockquote>
 <h2 id="dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</h2><p>模块组合越多，清理顺序越重要。</p>
 <p>创建路径通常很显眼：</p>
-<pre><code class="language-text">创建 Command
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">创建 Command
 → 订阅 Event
 → 创建 View
 → 注册按钮
 → 创建反馈池
 → 持有资源
 → 打开存档与偏好
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>真正容易被忽略的是反向路径：</p>
-<pre><code class="language-text">停止观察
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">停止观察
 → 注销监听
 → 清空未读树
 → 释放扩展层
@@ -311,7 +305,7 @@
 → 销毁 View
 → 关闭 UI 状态机
 → 从 Controller 脱离
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p><strong>对称生命周期（后文简称“怎么装上就怎么拆下”）</strong>：每一项注册、持有、订阅和创建，都存在唯一且可重复执行的反向动作。</p>
 <p>综合 Sample 必须验证：</p>
 <ul>
@@ -376,7 +370,7 @@
 <li><p>Sample 通过是否被错误描述为正式产品成熟度提升。</p>
 </li>
 </ul>
-<h2 id="术语对照">术语对照</h2><table>
+<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -404,11 +398,11 @@
 <td>保住上一档</td>
 <td>高阶条件不足时稳定回到已成立档位</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <blockquote>
 <p>资料说明：本文依据 2026-08-04 至 2026-08-05 的仓库实现与测试记录整理。文中档位描述是该时间点的工程快照，不等同于相关包已升级为 Supported 或已完成正式发布。</p>
 </blockquote>
-</div>
+</div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
@@ -426,7 +420,7 @@
                 </a>
                 <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
             </div>
-            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
             <div class="footer-social">
                 <h2>公开入口</h2>
                 <div class="social-icons">

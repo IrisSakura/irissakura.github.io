@@ -48,6 +48,6 @@ for persona in config['personas']:
     for role in persona['colors']:
         css.append(f"  --persona-{role}: var(--persona-{persona['id']}-{role});")
     css.append('}')
-(ROOT / 'style/tokens/personas-v2.css').write_text('\n'.join(css) + '\n')
+(ROOT / 'style/tokens/personas-v2.css').write_text('@layer tokens {\n' + '\n'.join(css) + '\n}\n')
 (ROOT / 'assets/personas/v2/manifest.json').write_text(json.dumps({'visualBaseline': config['visualBaseline'], 'derivation': 'PNG masters to proportionally resized AVIF/WebP; alpha retained; no generative changes or crops.', 'assets': records}, indent=2) + '\n')
 print(f'Derived {len(records)} responsive images and six social cards.')

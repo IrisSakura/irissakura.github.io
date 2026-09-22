@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html data-page-family="editorial" data-page-grammar="article-reader" data-page-persona="myosotis" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,16 +29,10 @@
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
     <!-- brand-styles:start -->
-    <link rel="stylesheet" href="../../style/tokens/primitive.css">
-    <link rel="stylesheet" href="../../style/tokens/semantic.css">
-    <link rel="stylesheet" href="../../style/tokens/modes.css">
-    <link rel="stylesheet" href="../../style/components/brand-experience.css">
     <link rel="stylesheet" href="../../style/iris-sakura.css">
     <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style/tokens/personas-v2.css">
-<link rel="stylesheet" href="../../style/components/personas-v2.css">
 <link rel="stylesheet" href="../../style/components/living-site.css">
 </head>
 <body>
@@ -81,7 +75,7 @@
             <p class="blog-deck">一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？</p>
             <div class="note-tags"><span>quickstart</span><a href="tag/unity.html">unity</a></div>
         </header>
-        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论接入成功需要一条端到端证据链">先说结论：接入成功需要一条端到端证据链</a></li><li class="toc-level-2"><a href="#runtime-starter-和-quickstart-不是同一种证明">Runtime Starter 和 Quickstart 不是同一种证明</a></li><li class="toc-level-2"><a href="#第一层固定提交不是附加信息而是证据主键">第一层：固定提交不是附加信息，而是证据主键</a></li><li class="toc-level-2"><a href="#第二层必须创建真正的新消费项目">第二层：必须创建真正的新消费项目</a></li><li class="toc-level-2"><a href="#第三层不能只检查进程退出码">第三层：不能只检查进程退出码</a></li><li class="toc-level-2"><a href="#第四层只终止自己拥有的-unity-子进程">第四层：只终止自己拥有的 Unity 子进程</a></li><li class="toc-level-2"><a href="#第五层清理也需要所有权证明">第五层：清理也需要所有权证明</a></li><li class="toc-level-2"><a href="#第六层artifact-上传成功仍不算闭环">第六层：Artifact 上传成功仍不算闭环</a></li><li class="toc-level-2"><a href="#传输策略也属于接入合同">传输策略也属于接入合同</a></li><li class="toc-level-2"><a href="#quickstart-通过不等于发布完成">Quickstart 通过不等于发布完成</a></li><li class="toc-level-2"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>quickstart</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
 <p>框架维护者在自己的开发工程中验证 Quickstart，通常很顺利：</p>
 <ul>
 <li><p>菜单可以打开；</p>
@@ -120,7 +114,7 @@
 <p>它们说明 Quickstart 还没有成为一条可证明、可复现、可回收的用户路径。</p>
 <h2 id="先说结论接入成功需要一条端到端证据链">先说结论：接入成功需要一条端到端证据链</h2><p><strong>可执行接入证据（后文简称“新电脑第一次也能走完”）</strong>：从确定代码身份出发，在全新消费项目中执行真实接入流程，验证关键行为、保存结果、回收环境，并证明 Artifact 仍可被重新读取的完整证据链。</p>
 <p>“新电脑第一次也能走完”至少包含六层。</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>层级</th>
@@ -151,11 +145,11 @@
 <td>Artifact 闭包</td>
 <td>上传后的证据下载回来仍完整且身份一致</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>少任何一层，结论都应该收窄。</p>
 <h2 id="runtime-starter-和-quickstart-不是同一种证明">Runtime Starter 和 Quickstart 不是同一种证明</h2><p>近期仓库同时加强了 Runtime Starter 与 Editor Tools Quickstart。</p>
 <p>二者容易被混为一谈，但回答的问题不同。</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>路径</th>
@@ -173,14 +167,14 @@
 <td>一个全新项目能否从固定提交进入安装器、完成确认、导入 Beginner Sample 并运行目标 PlayMode</td>
 <td>不能证明所有生产业务配置已经完成</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>Runtime Starter 更像环境体检。</p>
 <p>Quickstart 更像第一次真实办理入场手续。</p>
 <p>前者验证能力点，后者验证用户路径。</p>
 <p>大型框架需要同时保留这两种证据，而不是用一个综合 Demo 代替全部接入证明。</p>
 <h2 id="第一层固定提交不是附加信息而是证据主键">第一层：固定提交不是附加信息，而是证据主键</h2><p><strong>同提交接入（后文简称“测的就是这一版”）</strong>：Workflow 输入、实际检出、Receipt、测试结果和 Artifact 全部绑定到同一个不可变 Commit SHA。</p>
 <p>合理流程是：</p>
-<pre><code class="language-mermaid">flowchart LR
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-mermaid">flowchart LR
     A["输入 target SHA"] --&gt; B["校验 40 位完整 SHA"]
     B --&gt; C["干净检出指定提交"]
     C --&gt; D["写入 Evidence Identity"]
@@ -189,14 +183,14 @@
     F --&gt; G["运行 PlayMode"]
     G --&gt; H["验证与清理"]
     H --&gt; I["上传并回收 Artifact"]
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>这里需要防止的不是普通测试失败，而是身份漂移。</p>
 <p>例如：</p>
-<pre><code class="language-text">Workflow 从 main 启动
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">Workflow 从 main 启动
 → 执行期间 main 又前进
 → 测试使用了新的 HEAD
 → 工作记录却把结果登记给旧的目标提交
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>因此，证据目录中的每个关键 Receipt 都应携带：</p>
 <ul>
 <li><p><code>targetSha</code>；</p>
@@ -259,12 +253,12 @@
 <p>因此，单独依赖进程退出码不够。</p>
 <p><strong>终态凭据（后文简称“事情真的办完了”）</strong>：由被测流程写出的结构化结果，明确说明阶段、身份和通过或失败状态。</p>
 <p>Quickstart 可以使用终态 JSON：</p>
-<pre><code class="language-text">status = passed | failed
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">status = passed | failed
 phase = Completed
 runId = 当前 Run
 targetSha = 当前目标提交
 sampleId = 预期 Sample
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>PlayMode 则可以使用非空测试结果 XML 作为完成文件。</p>
 <p>监控器需要同时观察：</p>
 <ul>
@@ -280,20 +274,20 @@ sampleId = 预期 Sample
 </li>
 </ul>
 <h2 id="第四层只终止自己拥有的-unity-子进程">第四层：只终止自己拥有的 Unity 子进程</h2><p>当 Unity 写出成功 Receipt 后仍然悬挂，最危险的修复是：</p>
-<pre><code class="language-text">pkill Unity
-</code></pre>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">pkill Unity
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>自托管 Runner 可能同时承担其他工作。</p>
 <p>广泛杀进程会把当前 Job 的问题扩散成其他项目的随机失败。</p>
 <p><strong>Owned Process Watchdog（后文简称“只管自己开的进程”）</strong>：由父进程直接保存子进程 PID，只对该子进程执行超时、TERM 和 KILL。</p>
 <p>合理策略是：</p>
-<pre><code class="language-text">启动指定 Unity 子进程
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">启动指定 Unity 子进程
 → 每隔短周期检查终态凭据或完成文件
 → 观察到终态后等待短暂退出宽限期
 → 仍未退出则只向该 PID 发送 SIGTERM
 → 再等待终止宽限期
 → 仍未退出才向同一 PID 发送 SIGKILL
 → 超过总时限则明确失败
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>它解决了三个问题：</p>
 <ol>
 <li><p>流程已完成但 Unity 退出悬挂，不再无限占用 Runner。</p>
@@ -306,8 +300,8 @@ sampleId = 预期 Sample
 <p>如果终态 JSON 报告 <code>failed</code>，Watchdog 即使成功结束进程，也必须返回失败。</p>
 <p>如果进程正常退出却没有写出预期终态，同样必须失败。</p>
 <h2 id="第五层清理也需要所有权证明">第五层：清理也需要所有权证明</h2><p>自动化经常把清理写成：</p>
-<pre><code class="language-bash">rm -rf "$PROJECT_PATH"
-</code></pre>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-bash">rm -rf "$PROJECT_PATH"
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>但如果路径变量错误、目录已被复用，或者多个 Run 指向同一根目录，这条命令可能删除不属于自己的内容。</p>
 <p><strong>所有者安全清理（后文简称“只拆自己搭的棚”）</strong>：创建阶段写入 Owner 与 Run 标识，清理阶段核对标识后，只删除精确拥有的项目、临时目录和生成文件。</p>
 <p>清理结果也应形成结构化摘要，例如：</p>
@@ -452,7 +446,7 @@ sampleId = 预期 Sample
 <li><p>Evidence 通过后是否仍保持产品生命周期和发布结论克制。</p>
 </li>
 </ul>
-<h2 id="术语对照">术语对照</h2><table>
+<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -495,11 +489,11 @@ sampleId = 预期 Sample
 <td>证据拿回来还能用</td>
 <td>下载后验证证据闭包与身份仍完整</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <blockquote>
 <p>资料说明：本文依据 2026-08-03 至 2026-08-05 的 Runtime Starter、Editor Tools Quickstart 与 Runner Evidence 更新整理。该时间点部分 Quickstart Runner 复验仍在推进中，不能据此声明正式发布门禁已经完成。</p>
 </blockquote>
-</div>
+</div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
@@ -517,7 +511,7 @@ sampleId = 预期 Sample
                 </a>
                 <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
             </div>
-            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
             <div class="footer-social">
                 <h2>公开入口</h2>
                 <div class="social-icons">

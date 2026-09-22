@@ -1,3 +1,4 @@
+import { styleSource } from './lib/style-source.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { access, readFile } from 'node:fs/promises';
@@ -6,7 +7,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const readText = (relativePath) => readFile(path.join(root, relativePath), 'utf8');
+const readText = (relativePath) => relativePath.startsWith('style/') ? styleSource(relativePath) : readFile(path.join(root, relativePath), 'utf8');
 const readJson = async (relativePath) => JSON.parse(await readText(relativePath));
 
 test('brand contract owns names, modes, assets and deprecated naming', async () => {
@@ -158,13 +159,13 @@ test('mode experience layer differentiates six visual dimensions and respects ga
 
   assert.ok(themes.tokenStylesheets.includes('style/components/brand-experience.css'));
   for (const mode of ['iris', 'sakura', 'journal', 'violet', 'freesia']) {
-    assert.ok(css.includes(`html[data-brand-mode="${mode}"]`), `missing ${mode} experience selector`);
+    assert.ok(modes.includes(`html[data-brand-mode="${mode}"]`), `missing ${mode} experience selector`);
   }
   for (const token of [
     '--brand-mode-card-radius', '--brand-mode-pattern-image', '--brand-mode-icon',
     '--brand-mode-density', '--brand-mode-motion-duration', '--brand-mode-motion-easing'
   ]) assert.ok(modes.includes(`${token}:`), `mode token missing ${token}`);
-  assert.match(css, /html\[data-brand-mode="game"\][\s\S]*?--brand-experience-opacity:\s*0/);
+  assert.doesNotMatch(await readText('pages/game.html'), /class="persona-picture"/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.ok(navbar.includes('{{masterWordmark}}'));
   assert.ok(footer.includes('{{masterWordmark}}'));
@@ -205,13 +206,13 @@ test('mode hero artwork is contract-owned, decorative and limited to the four pr
   ]) {
     assert.doesNotMatch(await readText(file), /brand-mode-hero-art/);
   }
-  assert.match(await readText('pages/framework-quickstart.html'), /class="brand-mode-signature" aria-label="SAKURA MODE"/);
-  assert.match(await readText('pages/blog.html'), /class="brand-mode-signature" aria-label="JOURNAL MODE"/);
+  assert.match(await readText('pages/framework-quickstart.html'), /data-page-persona="sakura"/);
+  assert.match(await readText('pages/blog.html'), /data-page-persona="myosotis"/);
   assert.match(css, /\.brand-mode-hero-art\s*\{[\s\S]*?pointer-events:\s*none/);
   assert.match(css, /\.brand-mode-hero-art img\s*\{[\s\S]*?mask-image:/);
-  assert.match(css, /@media \(max-width: 900px\)[\s\S]*?\.brand-mode-hero-art/);
+  assert.match(css, /@media\s*\(max-width:\s*900px\)[\s\S]*?\.brand-mode-hero-art/);
   assert.doesNotMatch(css, /\.brand-mode-hero-art \+ \.brand-mode-signature/);
-  assert.match(css, /html\[data-brand-mode="violet"\] \[data-brand-project-hero\]/);
+  assert.match(css, /\.composition-violet/);
 });
 
 test('brand operating documents cover naming, voice, modes, iconography and maintenance', async () => {

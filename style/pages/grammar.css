@@ -1,0 +1,162 @@
+/* Page composition owners. Persona tokens never choose a page layout. */
+[data-page-family] h1 { font-size: var(--type-h1); line-height: 1.2; }
+[data-page-family] h2 { font-size: var(--type-h2); line-height: 1.45; }
+[data-page-family] h3 { font-size: var(--type-h3); }
+[data-page-family] p { line-height: 1.85; }
+[data-page-family] :is(main,header,section,article,nav,div) { min-width: 0; }
+[data-page-family] :is(.container,.tools-catalog,.tools-status,.tools-next) { max-width: var(--container-standard); }
+.persona-picture { display: block; min-width: 0; }
+.persona-picture img { width: 100%; height: 100%; object-fit: contain; display: block; }
+[data-brand-project-hero] { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 2.5rem; padding: var(--section-space) max(var(--page-gutter),calc((100vw - 1200px)/2)); margin: 0; min-height: 0; overflow: visible; position: relative; background: var(--brand-mode-hero-background); background-color: var(--brand-mode-hero-base); color: var(--brand-mode-hero-text); }
+[data-brand-project-hero] > .container, [data-brand-project-hero] > .tools-hero-copy { grid-column: 1; grid-row: 1; padding: 0; width: 100%; margin: 0; max-width: none; display: block; }
+[data-brand-project-hero] .project-composition { grid-column: 2; grid-row: 1; width: 100%; isolation: isolate; }
+[data-brand-project-hero] :is(h1,h2) { color: inherit; overflow-wrap: anywhere; }
+[data-brand-project-hero] h1 { font-size: var(--type-h1); }
+[data-brand-project-hero] h2 { font-size: var(--type-h2); }
+[data-brand-project-hero] :is(.hero-buttons,.framework-actions) { justify-content: flex-start; flex-wrap: wrap; }
+.brand-mode-hero-art { margin: 0; height: 29rem; pointer-events: none; }
+.brand-mode-hero-art .persona-picture { height: 100%; }
+.brand-mode-hero-art img { opacity: 1; object-fit: contain; mask-image: none; filter: none; }
+.project-composition a { color: inherit; text-underline-offset: .3em; }
+/* Iris: a real workflow axis and a compact state panel alongside the figure. */
+.composition-iris { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; border-block: 1px solid currentColor; padding-block: 1rem; }
+.composition-iris .brand-mode-hero-art { grid-column: 2; grid-row: 1; height: 27rem; }
+.system-axis { grid-column: 1; grid-row: 1; }
+.system-axis .section-kicker { color: inherit; }
+.system-state { font-size: var(--type-small); opacity: .9; margin-block: 1rem; }
+.system-axis ol { list-style: none; padding: 0; border-left: 1px solid currentColor; }
+.system-axis li a { display: flex; gap: .75rem; padding: .8rem; font-size: var(--type-small); }
+.system-axis li span { font-variant-numeric: tabular-nums; }
+.engineering-capability-grid { display: block; border-top: 1px solid var(--line); }
+.engineering-capability-card { display: grid; grid-template-columns: 6rem minmax(0,1fr) minmax(0,1.2fr); gap: 1.5rem; padding: 2rem 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; background: none; }
+.engineering-capability-card h3 { grid-column: 2; }
+.engineering-capability-card > p:not(:first-child) { grid-column: 2; }
+.engineering-capability-card ul { grid-column: 3; grid-row: 1 / span 3; }
+/* Sakura: central root, alternating branches, then concrete adoption. */
+[data-page-grammar="module-branch"] [data-brand-project-hero] { grid-template-columns: minmax(0,1fr); }
+[data-page-grammar="module-branch"] [data-brand-project-hero] > .container { grid-column: 1; grid-row: 1; max-width: 54rem; }
+[data-page-grammar="module-branch"] .project-composition { grid-column: 1; grid-row: 2; }
+.composition-sakura { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); align-items: center; }
+.composition-sakura .brand-mode-hero-art { grid-column: 2; grid-row: 1; height: 25rem; }
+.module-branch { grid-column: 1; grid-row: 1; padding-right: 2rem; }
+.branch-root { display: block; padding: 1rem 2rem; border: 2px solid var(--persona-primary); border-radius: 1rem; width: max-content; max-width: 100%; }
+.module-branch ol { list-style: none; margin: 0 0 1rem 2rem; padding: 1rem 0 1rem 2rem; border-left: 2px solid var(--persona-primary); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.module-branch li { border-bottom: 1px solid var(--persona-primary); padding: .75rem; }
+.framework-map-layers { border-left: 2px solid var(--persona-primary); padding-left: 2rem; }
+.framework-map-layer { border-radius: 0 1.5rem 1.5rem 0; }
+.framework-map-layer:nth-child(even) { margin-left: 2rem; }
+/* Myosotis: archive tab strip and a paper-like index, then content. */
+[data-page-grammar="archive-index"] [data-brand-project-hero] { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); border-bottom: 5px double var(--persona-primary); }
+.composition-myosotis { display: grid; grid-template-columns: 1fr; }
+.composition-myosotis .brand-mode-hero-art { height: 22rem; }
+.archive-index { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; padding: 1.5rem; border: 1px solid var(--line); background: var(--surface-strong); transform: rotate(-1deg); }
+.archive-index p { grid-column: 1 / -1; margin: 0; }
+.archive-index a { border-bottom: 1px solid var(--line); font-size: var(--type-small); padding-block: .5rem; }
+.stream-grid { display: block; }
+.stream-card { display: grid; grid-template-columns: 5rem 1fr 1fr; gap: 1rem; border-radius: 0; border: 0; border-bottom: 1px solid var(--line); box-shadow: none; }
+.stream-card h3 { grid-column: 2; }
+.stream-card > p:last-child { grid-column: 3; grid-row: 1 / span 3; }
+/* Violet: lower work surface and useful native drawers. */
+.composition-violet { border-radius: 3rem 3rem 0 0; background: var(--persona-surface); padding: 1.5rem 1rem 0; }
+.composition-violet .brand-mode-hero-art { height: 24rem; }
+.workbench-tray { border-top: 10px solid var(--persona-primary); border-bottom: 1px solid var(--persona-primary); display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; padding: 1.5rem .5rem; color: var(--ink); }
+.workbench-tray span { flex-basis: 100%; font-size: var(--type-meta); letter-spacing: .15em; }
+.tool-shelf { display: block; border-top: 4px solid var(--persona-primary); }
+.tool-drawer { padding: 0; border: 0; border-bottom: 6px solid var(--persona-motif); border-radius: .5rem .5rem 0 0; background: var(--surface-strong); box-shadow: none; margin-bottom: 1.25rem; }
+.tool-drawer summary { cursor: pointer; display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; align-items: center; padding: 1.5rem; }
+.tool-drawer summary h3 { margin: 0; font-size: var(--type-h3); }
+.drawer-hint { font-size: var(--type-small); }
+.drawer-content { padding: 0 1.5rem 1.5rem 5.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.tool-drawer[open] { border-bottom-color: var(--persona-primary); }
+/* Freesia: routes connect game groups with an invitation, not a store. */
+.mods-hero-grid { grid-template-columns: minmax(0,1fr) minmax(0,.85fr); align-items: center; }
+.mods-hero-art { transform: rotate(3deg); border-radius: 45% 45% 5% 30%; background: var(--persona-surface); }
+.mods-hero-art .mods-hero-character { height: 32rem; }
+.mod-game-group { border-left: 3px dashed var(--persona-accent); padding-left: 2rem; margin-left: 1rem; }
+.discovery-route { display: block; }
+.mod-work-card { border-radius: 1rem 1rem 3rem 1rem; border-top: 4px solid var(--persona-accent); max-width: 54rem; transform: rotate(-.5deg); }
+.mods-principle-grid { display: flex; flex-wrap: wrap; gap: 2rem; }
+.mods-principle-card { flex: 1 1 15rem; border: 0; border-radius: 0; box-shadow: none; background: none; border-top: 1px solid var(--line); }
+/* Wisteria: foreground, an open window, a distant horizon and room to stay. */
+.wisteria-hero { padding: var(--section-space) 0 0; background: var(--persona-surface); }
+.wisteria-hero-grid { display: flex; flex-direction: column; gap: 2rem; align-items: stretch; }
+.wisteria-hero-grid > div:first-child { max-width: 48rem; margin-inline: auto; text-align: center; }
+.wisteria-hero h1 { font-size: var(--type-display); color: var(--persona-primary); }
+.world-scene { position: relative; isolation: isolate; height: 36rem; overflow: hidden; border-radius: 14rem 14rem 0 0; background: linear-gradient(180deg,var(--surface-strong),var(--persona-surface)); }
+.world-horizon { position: absolute; inset: 50% -5% 0; border-radius: 50% 30% 0 0; background: color-mix(in srgb,var(--persona-primary) 18%,var(--persona-surface)); }
+.world-window { position: absolute; inset: 8% 46% 8% 13%; border: 7px double var(--persona-primary); border-radius: 50% 50% 0 0; opacity: .45; }
+.world-ground { position: absolute; inset: 85% -5% -10%; border-radius: 50% 50% 0 0; background: var(--persona-motif); z-index: 2; opacity: .5; }
+.world-scene .persona-gallery-stage { position: absolute; inset: 0 8% 0 auto; width: 44%; height: 100%; background: none; }
+.world-caption { position: absolute; z-index: 3; left: 12%; bottom: 15%; max-width: 35%; font-size: var(--type-h2); color: var(--persona-primary); }
+.continuity-section { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 4rem; padding-block: var(--section-space); }
+.continuity-section .section-kicker { grid-column: 1 / -1; }
+.continuity-section h2 { align-self: center; font-size: var(--type-h2); }
+.continuity-section h2:nth-of-type(2) { padding-left: 3rem; }
+.wisteria-story { max-width: 1000px; margin-inline: auto; }
+/* Home narrative and ecosystem have different jobs from the character gallery. */
+.ecosystem-bridge { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 2rem; border-top: 1px solid var(--line); }
+.ecosystem-bridge article { padding-top: 2rem; border-right: 1px solid var(--line); padding-right: 1.5rem; }
+.ecosystem-bridge article > span { font-size: var(--type-meta); display: block; margin-bottom: 1rem; }
+.ecosystem-bridge img { float: right; }
+.ecosystem-bridge h3 { font-size: var(--type-h3); margin-block: 1rem; overflow-wrap: anywhere; }
+.home-live { padding-block: 5rem; background: var(--persona-wisteria-surface); border-radius: 8rem 0 0; }
+.home-live .container { max-width: 50rem; }
+.home-live p { margin-block: 1.5rem; }
+.ecosystem-map { padding-block: 2rem 4rem; }
+.ecosystem-origin { text-align: center; border-bottom: 1px solid var(--line); padding: 2rem; }
+.ecosystem-origin > * { display: block; margin-bottom: 1rem; }
+.ecosystem-map ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0 3rem; }
+.ecosystem-map li { border-left: 2px solid var(--persona-primary); padding: 1.5rem; }
+.ecosystem-map a { display: grid; grid-template-columns: 3rem 1fr; gap: .5rem; }
+.ecosystem-map img { grid-row: 1 / span 2; }
+.ecosystem-map strong { overflow-wrap: anywhere; }
+.ecosystem-map span { font-size: var(--type-small); }
+.project-route { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.2fr); gap: 1rem 3rem; border-top: 3px solid var(--persona-primary); padding: 2rem 0 3rem; }
+.project-route > .section-kicker { grid-column: 1 / -1; }
+.project-route h2 { font-size: var(--type-h2); overflow-wrap: anywhere; }
+.project-route dl { grid-column: 2; grid-row: 2 / span 3; }
+.project-route dl > div { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; border-bottom: 1px solid var(--line); padding-block: .75rem; }
+.project-route nav { display: flex; flex-wrap: wrap; gap: 1rem; font-size: var(--type-small); }
+.project-route > .btn { justify-self: start; grid-column: 1; }
+.grammar-comparison { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 2rem; }
+.grammar-comparison article { border-top: 2px solid var(--persona-primary); padding-top: 1rem; }
+@media(max-width:1000px) {
+ .ecosystem-map ol { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .engineering-capability-card { grid-template-columns: 4rem 1fr; }
+ .engineering-capability-card ul { grid-column: 2; grid-row: auto; }
+}
+@media(max-width:900px) {
+ [data-brand-project-hero] { display: flex; flex-direction: column; align-items: stretch; padding: 2.5rem var(--page-gutter); }
+ [data-brand-project-hero] > .project-composition { order: 1; }
+ .project-composition { max-width: 40rem; align-self: center; }
+ .brand-mode-hero-art { height: 24rem; }
+ .composition-sakura { grid-template-columns: minmax(0,1fr) minmax(0,.8fr); }
+ .mods-hero-grid { grid-template-columns: 1fr; }
+ .mods-hero-art { max-width: 30rem; justify-self: center; width: 100%; }
+ .world-scene { height: 29rem; }
+ .world-scene .persona-gallery-stage { width: 60%; right: 2%; }
+ .world-caption { left: 7%; max-width: 32%; font-size: var(--type-h3); }
+ .continuity-section { gap: 1.5rem; }
+ .ecosystem-bridge { grid-template-columns: 1fr; }
+ .ecosystem-bridge article { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; }
+ .grammar-comparison { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:600px) {
+ .project-route, .ecosystem-map ol { display: block; }
+ .project-route > * { margin-bottom: 1.5rem; }
+ .composition-sakura { grid-template-columns: 1fr; }
+ .composition-sakura .brand-mode-hero-art { grid-column: 1; grid-row: 2; height: 20rem; }
+ .module-branch { padding: 0; }
+ .module-branch ol { grid-template-columns: 1fr; }
+ .composition-iris { grid-template-columns: minmax(0,1fr) minmax(0,.8fr); }
+ .composition-iris .brand-mode-hero-art { height: 24rem; }
+ .tool-drawer summary { grid-template-columns: 2rem 1fr; padding: 1rem; }
+ .drawer-hint { grid-column: 2; }
+ .drawer-content { display: block; padding: 0 1rem 1rem; }
+ .stream-card { display: block; }
+ .continuity-section { display: block; }
+ .continuity-section h2:nth-of-type(2) { padding-left: 0; }
+ .continuity-section h2 { margin-top: 2.5rem; }
+ .world-window { left: 5%; right: 40%; }
+ .grammar-comparison { grid-template-columns: 1fr; }
+}

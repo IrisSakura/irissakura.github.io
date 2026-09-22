@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html data-page-family="editorial" data-page-grammar="article-reader" data-page-persona="myosotis" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,16 +29,10 @@
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
     <!-- brand-styles:start -->
-    <link rel="stylesheet" href="../../style/tokens/primitive.css">
-    <link rel="stylesheet" href="../../style/tokens/semantic.css">
-    <link rel="stylesheet" href="../../style/tokens/modes.css">
-    <link rel="stylesheet" href="../../style/components/brand-experience.css">
     <link rel="stylesheet" href="../../style/iris-sakura.css">
     <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style/tokens/personas-v2.css">
-<link rel="stylesheet" href="../../style/components/personas-v2.css">
 <link rel="stylesheet" href="../../style/components/living-site.css">
 </head>
 <body>
@@ -81,7 +75,7 @@
             <p class="blog-deck">比较音游、格斗与竞速如何选择规则时间，区分输入、模拟、音频和表现层的时间职责。</p>
             <div class="note-tags"><span>determinism</span><span>simulation</span><span>timing</span></div>
         </header>
-        <div class="blog-prose"><p><a href="../blog.html">系列目录</a></p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论权威时间源就是最后听谁的钟">先说结论：权威时间源，就是“最后听谁的钟”</a></li><li class="toc-level-2"><a href="#音频主时钟歌曲说现在到哪了">音频主时钟：歌曲说现在到哪了</a></li><li class="toc-level-2"><a href="#时间域映射把不同的钟对到一起">时间域映射：把不同的钟对到一起</a></li><li class="toc-level-2"><a href="#输入时间戳按下时就记时间">输入时间戳：按下时就记时间</a></li><li class="toc-level-2"><a href="#固定步长模拟每次按同样大小往前走">固定步长模拟：每次按同样大小往前走</a></li><li class="toc-level-2"><a href="#判定窗口早一点晚一点还算不算">判定窗口：早一点晚一点还算不算</a></li><li class="toc-level-2"><a href="#确定性裁定同样输入必须得到同样结果">确定性裁定：同样输入必须得到同样结果</a></li><li class="toc-level-2"><a href="#表现层投影画面展示结果不决定结果">表现层投影：画面展示结果，不决定结果</a></li><li class="toc-level-3"><a href="#在音游里">在音游里</a></li><li class="toc-level-3"><a href="#在格斗里">在格斗里</a></li><li class="toc-level-3"><a href="#在竞速里">在竞速里</a></li><li class="toc-level-2"><a href="#回滚重演回到旧状态再算一遍">回滚重演：回到旧状态再算一遍</a></li><li class="toc-level-2"><a href="#连续竞赛进度不只看过了几个检查点">连续竞赛进度：不只看过了几个检查点</a></li><li class="toc-level-2"><a href="#三类玩法为什么不能听同一只钟">三类玩法为什么不能听同一只钟</a></li><li class="toc-level-2"><a href="#一份强时序系统检查表">一份强时序系统检查表</a></li><li class="toc-level-3"><a href="#权威与映射">权威与映射</a></li><li class="toc-level-3"><a href="#输入与裁定">输入与裁定</a></li><li class="toc-level-3"><a href="#模拟与相位">模拟与相位</a></li><li class="toc-level-3"><a href="#表现与恢复">表现与恢复</a></li><li class="toc-level-2"><a href="#结语公平感来自时间事实能够被解释">结语：公平感来自时间事实能够被解释</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li><li class="toc-level-2"><a href="#内部资料依据">内部资料依据</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>游戏系统的共同语言</h2><a href="series/shared-language-of-game-systems.html">查看系列阅读顺序 →</a><div class="context-tags"><span>determinism</span><span>simulation</span><span>timing</span></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
 <p>玩家按下按键，画面可能要到下一帧才显示动作。</p>
 <p>车辆越过终点线，计时 UI 可能稍后才刷新。</p>
 <p>格斗游戏收到远端输入后，可能发现刚才几帧预测错了。</p>
@@ -136,9 +130,9 @@
 <p>输入设备并不知道歌曲播放到了第几个采样。它通常只知道：“某个按键在主机单调时钟的这个时刻被按下。”</p>
 <p>音频系统则知道：“这个主机时刻附近，歌曲播放游标位于这个采样。”</p>
 <p>把不同的钟对到一起，可以想成定期拍下一张双时钟快照：</p>
-<pre><code class="language-text">主机时间 H0  ↔  音频采样 A0
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">主机时间 H0  ↔  音频采样 A0
 主机时间 H1  ↔  音频采样 A1
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>当输入发生在 <code>H0</code> 与 <code>H1</code> 之间时，系统便可把它换算到对应歌曲位置，再应用已经明确含义的设备与玩家校准。</p>
 <p>这里尤其要避免把所有延迟塞进一个含义不明的总偏移：</p>
 <ul>
@@ -245,7 +239,7 @@
 </ul>
 <p>这也是为什么“车头看起来领先”与“规则上已经领先”不能永远画等号。</p>
 <h2 id="三类玩法为什么不能听同一只钟">三类玩法为什么不能听同一只钟</h2><p>三类游戏共享架构原则，却不能共用同一个直接权威。</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>类型</th>
@@ -276,7 +270,7 @@
 <td>插值车辆姿态、显示计时与排名</td>
 <td>用本地时钟计圈，暂停或性能影响成绩</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>音游不能简单改用固定战斗帧，因为玩家要跟随实际听见的连续音频。</p>
 <p>格斗不能改用动画播放时间，因为动作契约、回滚与碰撞必须可重算。</p>
 <p>竞速不能只记录音频或渲染时间，因为车辆动力学、赛道进度和处罚需要共同推进。</p>
@@ -321,7 +315,7 @@
 <p>权威时间源并不是一只万能时钟，而是一份清楚的责任划分。歌曲进度、战斗帧和比赛 Tick 各自回答不同问题；输入、网络、回放与画面则通过映射、预测和投影围绕它们工作。</p>
 <p>当规则事实稳定时，表现可以大胆地插值、慢放、停顿和修正。</p>
 <p>当规则事实含糊时，再流畅的动画也掩盖不了一次“不知道为什么算我失败”的判定。</p>
-<h2 id="术语对照">术语对照</h2><table>
+<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -379,7 +373,7 @@
 <td>不只看过了几个检查点</td>
 <td>综合合法路线、圈数和路段投影的进度</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <h2 id="内部资料依据">内部资料依据</h2><p>以下链接用于仓库内部审稿与追溯，不是公开版最终引用：</p>
 <ul>
 <li><a href="../journal/rhythm-audio-clock.html">节奏游戏：音频主时钟、谱面编译与确定性判定</a></li>
@@ -388,7 +382,7 @@
 <li>Godot 主循环物理步进与查询回传时间线（内部研究材料）</li>
 </ul>
 <p>公开发布前应补充公开案例或公开设计资料，并把内部路径替换为稳定公开链接。</p>
-</div>
+</div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
@@ -406,7 +400,7 @@
                 </a>
                 <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
             </div>
-            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
             <div class="footer-social">
                 <h2>公开入口</h2>
                 <div class="social-icons">

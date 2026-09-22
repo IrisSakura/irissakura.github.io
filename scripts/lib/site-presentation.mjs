@@ -1,5 +1,5 @@
 const NAVIGATION_IDS = Object.freeze(['home', 'portfolio', 'writing', 'projects', 'mods', 'about']);
-const PROJECT_IDS = Object.freeze(['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf']);
+const PROJECT_IDS = Object.freeze(['iris-engineering', 'sakura-framework', 'sakura-design-journal', 'iris-shelf', 'freesia-mods', 'wisteria']);
 
 export function assertSitePresentationConfig(config, brand, registry) {
   if (!config || config.schemaVersion !== 1) throw new Error('site-presentation violation: expected schemaVersion 1');
@@ -7,7 +7,7 @@ export function assertSitePresentationConfig(config, brand, registry) {
     throw new Error('site-presentation violation: navigation must expose the reviewed six-item order');
   }
   if (JSON.stringify(config.projects?.map(({ projectId }) => projectId)) !== JSON.stringify(PROJECT_IDS)) {
-    throw new Error('site-presentation violation: projects must expose the reviewed four-project order');
+    throw new Error('site-presentation violation: projects must expose the reviewed six-project order');
   }
   assertUnique(config.navigation.map(({ route }) => route), 'navigation routes');
   assertUnique(config.projects.map(({ route }) => route), 'project routes');
@@ -26,7 +26,13 @@ export function assertSitePresentationConfig(config, brand, registry) {
     assertAction(project.primaryAction, project.projectId, 'primary');
     assertAction(project.secondaryAction, project.projectId, 'secondary');
   }
-  const sections = ['profile', 'now', 'featured-work', 'recent-updates', 'writing', 'mods', 'projects', 'contact'];
+  const ids = new Set(config.projects.map(p => p.projectId));
+  for (const project of config.projects) {
+    for (const key of ['personaId', 'role', 'owns', 'produces', 'status']) assertText(project[key], `${project.projectId} ${key}`);
+    if (!['composition', 'page'].includes(project.heroStrategy)) throw new Error('site-presentation violation: invalid hero strategy');
+    if (!Array.isArray(project.relationships) || project.relationships.some(id => !ids.has(id) || id === project.projectId)) throw new Error('site-presentation violation: invalid project relationship');
+  }
+  const sections = ['profile', 'now', 'featured-work', 'recent-updates', 'writing', 'mods', 'projects', 'live', 'contact'];
   if (!Array.isArray(config.home?.sectionOrder) || config.home.sectionOrder.length !== sections.length || new Set(config.home.sectionOrder).size !== sections.length || sections.some((id) => !config.home.sectionOrder.includes(id))) throw new Error('site-presentation violation: invalid home sections');
   for (const field of ['recentUpdateLimit', 'recentArticleLimit']) {
     if (!Number.isInteger(config.home[field]) || config.home[field] < 1) throw new Error(`site-presentation violation: invalid ${field}`);
@@ -56,7 +62,7 @@ export function resolveNavigationId(config, pageFile) {
 export function resolveProjectPresentations(config, brand, registry) {
   return config.projects.map((project) => {
     const source = registry.projects.find(({ id }) => id === project.projectId);
-    if (!source) throw new Error(`site-presentation violation: missing public project ${project.projectId}`);
+    if (!source && !['freesia-mods','wisteria'].includes(project.projectId)) throw new Error(`site-presentation violation: missing public project ${project.projectId}`);
     return Object.freeze({
       ...project,
       logo: brand.assets[project.logoAssetKey],

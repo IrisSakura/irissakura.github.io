@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
+<html data-page-family="editorial" data-page-grammar="article-reader" data-page-persona="myosotis" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="journal" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,16 +29,10 @@
     <link rel="stylesheet" href="../../style/main.css">
     <link rel="stylesheet" href="../../style/blog.css">
     <!-- brand-styles:start -->
-    <link rel="stylesheet" href="../../style/tokens/primitive.css">
-    <link rel="stylesheet" href="../../style/tokens/semantic.css">
-    <link rel="stylesheet" href="../../style/tokens/modes.css">
-    <link rel="stylesheet" href="../../style/components/brand-experience.css">
     <link rel="stylesheet" href="../../style/iris-sakura.css">
     <!-- brand-styles:end -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style/tokens/personas-v2.css">
-<link rel="stylesheet" href="../../style/components/personas-v2.css">
 <link rel="stylesheet" href="../../style/components/living-site.css">
 </head>
 <body>
@@ -81,7 +75,7 @@
             <p class="blog-deck">一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？</p>
             <div class="note-tags"><span>local</span><span>passed</span><span>runner</span></div>
         </header>
-        <div class="blog-prose"><p>开发者完成一个功能后，通常会运行一组测试。</p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论测试通过不是布尔值而是一条带上下文的证据声明">先说结论：测试通过不是布尔值，而是一条带上下文的证据声明</a></li><li class="toc-level-2"><a href="#一条测试证据需要自己的身份证">一条测试证据需要自己的“身份证”</a></li><li class="toc-level-2"><a href="#local-passed-究竟证明了什么">local-passed 究竟证明了什么</a></li><li class="toc-level-2"><a href="#runner-的价值不是换一台电脑再跑一次">Runner 的价值不是“换一台电脑再跑一次”</a></li><li class="toc-level-2"><a href="#为什么同一个提交-sha-如此重要">为什么同一个提交 SHA 如此重要</a></li><li class="toc-level-2"><a href="#ci-全绿也可能只证明了很小的范围">“CI 全绿”也可能只证明了很小的范围</a></li><li class="toc-level-2"><a href="#没有结果不等于失败">“没有结果”不等于失败</a></li><li class="toc-level-2"><a href="#证据不是一条简单直线">证据不是一条简单直线</a></li><li class="toc-level-2"><a href="#能力正确性重构安全和发布资格不是同一类证据">能力正确性、重构安全和发布资格不是同一类证据</a></li><li class="toc-level-3"><a href="#能力正确性证据">能力正确性证据</a></li><li class="toc-level-3"><a href="#重构安全证据">重构安全证据</a></li><li class="toc-level-3"><a href="#发布资格证据">发布资格证据</a></li><li class="toc-level-2"><a href="#evidence-backlog-为什么会失控">Evidence Backlog 为什么会失控</a></li><li class="toc-level-2"><a href="#状态记录不应该靠自由文本猜测">状态记录不应该靠自由文本猜测</a></li><li class="toc-level-2"><a href="#证据升级必须由新事实触发">证据升级必须由新事实触发</a></li><li class="toc-level-2"><a href="#三个常见误判">三个常见误判</a></li><li class="toc-level-3"><a href="#误判一本地全部通过所以-ci-失败一定是-runner-问题">误判一：本地全部通过，所以 CI 失败一定是 Runner 问题</a></li><li class="toc-level-3"><a href="#误判二ci-全绿所以准备发布">误判二：CI 全绿，所以准备发布</a></li><li class="toc-level-3"><a href="#误判三没有远端结果所以功能没有完成">误判三：没有远端结果，所以功能没有完成</a></li><li class="toc-level-2"><a href="#我的证据检查清单">我的证据检查清单</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>大型 Unity 框架的治理复盘</h2><a href="series/large-unity-framework-governance.html">查看系列阅读顺序 →</a><div class="context-tags"><span>local</span><span>passed</span><span>runner</span></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p>开发者完成一个功能后，通常会运行一组测试。</p>
 <p>控制台显示全部通过，Unity 没有报错，示例场景也能运行。于是工作记录里出现了一句话：</p>
 <blockquote>
 <p>测试通过。</p>
@@ -117,7 +111,7 @@
 </blockquote>
 <h2 id="一条测试证据需要自己的身份证">一条测试证据需要自己的“身份证”</h2><p><strong>证据身份（即“证据身份证”）</strong>：能够唯一说明一次验证测试了什么、在哪里测试、如何测试以及得到什么结果的最小信息集合。</p>
 <p>一条可审计的证据至少应包含：</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>信息</th>
@@ -164,14 +158,14 @@
 <td>Evidence Class</td>
 <td>该结果允许支持哪一级结论</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>缺少证据身份证时，同一句“通过”可能指向完全不同的事实：</p>
-<pre><code>开发者修改了五个文件
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>开发者修改了五个文件
 → 只提交了其中三个
 → 本地测试使用完整工作区通过
 → CI 只检出提交中的三个文件
 → CI 失败
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>本地结果和 CI 结果并不矛盾。</p>
 <p>它们测试的根本不是同一份代码。</p>
 <h2 id="local-passed-究竟证明了什么"><code>local-passed</code> 究竟证明了什么</h2><p><strong>本地验证（即“手边能跑”）</strong>：在开发者当前机器和工作区中完成的构建、测试或运行检查。</p>
@@ -239,7 +233,7 @@
 </ul>
 <h2 id="为什么同一个提交-sha-如此重要">为什么同一个提交 SHA 如此重要</h2><p><strong>同提交验证（即“同一份代码复验”）</strong>：测试结果、候选版本和发布流程明确绑定到同一个不可变提交身份。</p>
 <p>考虑下面的流程：</p>
-<pre><code>提交 A
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>提交 A
 → CI 通过
 
 继续开发
@@ -250,17 +244,17 @@
 
 发布说明写：
 → CI 已通过
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>这里的“CI 已通过”只对提交 A 成立。</p>
 <p>候选版本来自提交 B，因此提交 A 的结果不能直接为 B 背书。</p>
 <p>正确关系应该是：</p>
-<pre><code>确定候选提交 B
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>确定候选提交 B
 → 对 B 执行所需测试
 → 证据绑定 B
 → 从 B 组装候选产物
 → 验证产物仍对应 B
 → 才能进入后续发布判断
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>同一份代码复验防止的不是普通测试失败，而是证据和交付对象之间发生身份漂移。</p>
 <h2 id="ci-全绿也可能只证明了很小的范围">“CI 全绿”也可能只证明了很小的范围</h2><p><strong>证据覆盖范围（即“证明范围”）</strong>：一次测试结果实际覆盖的包、平台、场景、配置和行为边界。</p>
 <p>假设一个大型 Unity 框架修改了 UI、Networking 和 ECS，但 Player Smoke 始终只构建 <code>core-only</code> Profile。</p>
@@ -279,7 +273,7 @@
 <p>问题不在于 Core Only Smoke 没有价值。</p>
 <p>问题在于不能把窄范围结果描述成全框架验证。</p>
 <p>更可靠的证据记录应明确写出：</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>证据</th>
@@ -322,11 +316,11 @@
 <td>候选提交和候选产物通过门禁</td>
 <td>用户环境中的所有组合</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>证明范围越窄，结果反馈越快。</p>
 <p>快速验证不是问题；模糊地扩大结论才是问题。</p>
 <h2 id="没有结果不等于失败">“没有结果”不等于失败</h2><p>工程状态里必须区分至少四种结论：</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>状态</th>
@@ -349,7 +343,7 @@
 <td>Not Requested</td>
 <td>当前阶段没有要求执行该验证</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>此外还可能存在：</p>
 <ul>
 <li>Skipped：流程执行，但该检查因条件不匹配而跳过；</li>
@@ -363,14 +357,14 @@
 <p>本地测试通过，也不能把 <code>runner-pending</code> 改成 <code>runner-passed</code>。</p>
 <p>当前没有进入候选发布阶段，则 Release Evidence 可以是 <code>not-requested</code>，而不是制造一条虚假的发布阻塞。</p>
 <h2 id="证据不是一条简单直线">证据不是一条简单直线</h2><p>可信台阶经常被画成：</p>
-<pre><code>local
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>local
 → runner
 → candidate
 → release
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>这个方向有帮助，但并不完整。</p>
 <p>证据实际包含多个相互独立的维度：</p>
-<table>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>维度</th>
@@ -405,7 +399,7 @@
 <td>生命周期</td>
 <td>开发验证、合并门禁、候选资格化、发布验证</td>
 </tr>
-</tbody></table>
+</tbody></table></div><div class="article-prose-section blog-prose">
 <p>因此，证据更像一个矩阵，而不是单个数字。</p>
 <p>一个测试可以：</p>
 <ul>
@@ -470,7 +464,7 @@
 <p>没有明确候选提交时，不应机械启动完整发布资格化，也不应因此声称项目发布失败。</p>
 <h2 id="evidence-backlog-为什么会失控">Evidence Backlog 为什么会失控</h2><p>如果每个小计划完成后都永久产生一条独立 Runner 债务，证据列表会迅速膨胀。</p>
 <p>例如：</p>
-<pre><code>Timer 控件
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>Timer 控件
 Choice Group
 State View
 Hold Progress
@@ -478,10 +472,10 @@ Typed Item Select
 MVVM Sample
 Quickstart
 Newcomer Entry
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>如果每项都维护一套长期独立验证，团队最终管理的是计划历史，而不是产品能力。</p>
 <p>更合理的组织方式是围绕消费边界建立资格化套件：</p>
-<pre><code>UI Runtime Qualification
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>UI Runtime Qualification
 → UI 模型
 → Unity Adapter
 → Typed UI Sample
@@ -498,21 +492,21 @@ Runtime Foundation Qualification
 → Event
 → Pooling
 → Bootstrap Lite
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>小切片首先进入对应能力套件。</p>
 <p>套件在适当时机统一执行远端或平台验证。</p>
 <p>这样，Evidence Backlog 表达的是哪些产品能力尚未获得资格，而不是仓库曾经完成过多少微型计划。</p>
 <h2 id="状态记录不应该靠自由文本猜测">状态记录不应该靠自由文本猜测</h2><p>工作记录中常见这样的描述：</p>
-<pre><code>实现完成，尚未提交、推送和触发 Runner。
-</code></pre>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>实现完成，尚未提交、推送和触发 Runner。
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>几天后代码已经进入默认分支，但这段文本没有更新。</p>
 <p>机器生成状态继续复制它，于是出现：</p>
-<pre><code>Git 事实：文件已经进入默认分支
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>Git 事实：文件已经进入默认分支
 状态文本：仍然声称尚未提交
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>解决方式不是要求维护者永远记得修改一句话，而是将关键事实结构化。</p>
 <p>例如：</p>
-<pre><code>implementationCommit
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>implementationCommit
 mergedToDefaultBranch
 testedCommit
 localEvidence
@@ -520,7 +514,7 @@ runnerEvidence
 runnerEvidenceRun
 candidateCommit
 releaseArtifact
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>其中：</p>
 <ul>
 <li>Git 负责证明代码是否进入某个提交；</li>
@@ -533,7 +527,7 @@ releaseArtifact
 <h2 id="证据升级必须由新事实触发">证据升级必须由新事实触发</h2><p><strong>证据晋级（即“升级盖章”）</strong>：只有当更高层级要求的执行和身份条件真实满足后，才能提升状态。</p>
 <p>正确的晋级流程类似：</p>
 <p>不能使用以下替代逻辑：</p>
-<pre><code>开发者说本地通过
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>开发者说本地通过
 → 自动写 runner-passed
 
 旧提交的 CI 通过
@@ -544,7 +538,7 @@ releaseArtifact
 
 候选之前的构建通过
 → 自动写正式产物已验证
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>每次升级都需要新的事实，而不是更乐观的措辞。</p>
 <h2 id="三个常见误判">三个常见误判</h2><h3 id="误判一本地全部通过所以-ci-失败一定是-runner-问题">误判一：本地全部通过，所以 CI 失败一定是 Runner 问题</h3><p>也可能是：</p>
 <ul>
@@ -567,11 +561,11 @@ releaseArtifact
 <p>是否可以发布，还取决于候选身份、目标平台、产物和发布门禁。</p>
 <h3 id="误判三没有远端结果所以功能没有完成">误判三：没有远端结果，所以功能没有完成</h3><p>功能实现和远端交付证明是两个状态。</p>
 <p>更准确的记录可以是：</p>
-<pre><code>implementation: completed
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>implementation: completed
 localEvidence: passed
 runnerEvidence: pending
 releaseEvidence: not-requested
-</code></pre>
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>这既不夸大，也不抹杀已经完成的工作。</p>
 <h2 id="我的证据检查清单">我的证据检查清单</h2><p>在把某项能力登记为“已验证”之前，我会检查：</p>
 <ol>
@@ -599,7 +593,7 @@ releaseEvidence: not-requested
 <blockquote>
 <p>哪一份代码，在什么环境中，以什么范围，获得了什么级别的证明？</p>
 </blockquote>
-</div>
+</div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
@@ -617,7 +611,7 @@ releaseEvidence: not-requested
                 </a>
                 <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
             </div>
-            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
             <div class="footer-social">
                 <h2>公开入口</h2>
                 <div class="social-icons">
