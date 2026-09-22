@@ -1,18 +1,25 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "bf45c9206f40f001e45d9a578e118de6bb7188a6",
-  "generatedAt": "2026-09-20T11:21:48+08:00",
+  "sourceCommit": "f6be06146d2e8199a1a76d31cb73dd99ec7cc3f9",
+  "generatedAt": "2026-09-23T01:18:15+08:00",
   "summary": {
-    "auditCount": 71,
+    "auditCount": 72,
     "blogCount": 6,
-    "gameDesignCount": 85
+    "gameDesignCount": 87
   },
-  "gameDesignCatalogDigest": "96a4a9be701fb1866c72b783dc4123033eeb1980ba41b67bc06338fdd123a4e0",
+  "gameDesignCatalogDigest": "c62e48fff903e8d7f210b0f64d1c300d35f12b509db6416c940354b018d0bd06",
   "audits": [
     {
+      "id": "audit-2026-09-21",
+      "title": "《2026-09-21｜工作与思考日记》",
+      "summary": "本日记录以 GitHub 可见镜像为观察范围：Wisteria 推进世界身份、品牌与长期架构，Violet Shelf 完善工具工作流，Iris Engineering 修正恢复可靠性，个人站更新环境视觉层。Wisteria 长期 Dogfood、跨设备同步及若干 Runner 证据仍未闭环；记录不把设计、候选和正式发布合并为同一状态。",
+      "updatedAt": "2026-09-21",
+      "redacted": false
+    },
+    {
       "id": "audit-2026-09-20",
-      "title": "2026-09-20 审计报告",
-      "summary": "本日审计记录尚未提供正文和核查证据，当前仅保留日期占位。不能据此判断当天没有更新、审计已经执行或任何项目已经通过验证。",
+      "title": "《2026-09-20｜工作与思考日记》",
+      "summary": "本日记录以 GitHub 可见镜像为观察范围：Framework 的双客户端与 Replay 工作形成新的本地证据，DesktopPet 推进桌面世界基础层，Myosotis 更新设计范式和源码研究，个人站完成当日公开投影。各项仍需分别区分实现、本地验证、Runner 与发布；未同步的源仓状态不在本次结论内。",
       "updatedAt": "2026-09-20",
       "redacted": false
     },
@@ -509,6 +516,59 @@
   ],
   "gameDesigns": [
     {
+      "id": "build-demand",
+      "title": "Build Demand & Encounter Capability Coverage / 构筑需求与遭遇能力覆盖",
+      "summary": "通过有限、可测试的 Capability Axis 让遭遇持续提出不同能力需求，并以多条 Counterplay 路径表达构筑强项、短板、替代成本与长期适应空间，避免内容退化为单一战力或唯一答案。",
+      "tags": [
+        "balance",
+        "build",
+        "counterplay",
+        "coverage",
+        "encounter",
+        "paradigm"
+      ],
+      "updatedAt": "2026-09-23",
+      "sha256": "bfab402e379990e1d119e18570e70b002660a68500a24dfb16706de826106ff5"
+    },
+    {
+      "id": "difficulty-band-success-envelope",
+      "title": "Difficulty Band & Success Envelope / 难度带与成功包络",
+      "summary": "以 Target Cohort、Difficulty Vector、Success Envelope 与 Retry Cost 定义遭遇的目标成功分布，并将学习曲线、方差、断点、多人条件和生产验证纳入同一 Difficulty Contract，避免把难度压缩为单一数值或战力门槛。",
+      "tags": [
+        "balance",
+        "difficulty",
+        "encounter",
+        "paradigm",
+        "success-envelope"
+      ],
+      "updatedAt": "2026-09-23",
+      "sha256": "36d20fa9f84c9d5d75e80e1530482d48162c42f3f7350f16b75add81e43f3a0c"
+    },
+    {
+      "id": "fishing",
+      "title": "钓鱼模拟 / Fishing Simulation / Angling Game",
+      "summary": "完整垂钓类型与捕获运行时：从读取水域、饵料呈现、鱼类感知到咬口、刺鱼、张力控制、疲劳与起鱼；生态长期后果由水域生态专题维护。",
+      "tags": [
+        "angling",
+        "fishing",
+        "sport"
+      ],
+      "updatedAt": "2026-09-23",
+      "sha256": "b3ec552c65c6621c39ee94746fae46442bce940dc8e615b4397f5beeaa3050af"
+    },
+    {
+      "id": "fishing-aquatic-ecology",
+      "title": "水域生态钓鱼模拟（Fishing & Aquatic Ecology Simulation）",
+      "summary": "钓鱼类型的生态专题：环境驱动鱼群分布，捕获、放流、保护规则与生态经济改变长期水域状态；通用捕获运行时回到钓鱼主文。",
+      "tags": [
+        "ecology",
+        "fishing",
+        "simulation"
+      ],
+      "updatedAt": "2026-09-23",
+      "sha256": "a90a0184b5320230b9c0f496a6593602094950bbf5027a7c798e229a2ab41a9e"
+    },
+    {
       "id": "failure-recovery",
       "title": "Failure Recovery / 故障恢复与合法状态回归",
       "summary": "当 Gameplay Runtime 无法沿正常流程推进时，通过检测、隔离、保留合法事实、重试、重规划、重建、补偿、降级或终止局部 Scope，恢复到可验证、可继续决策的合法状态。",
@@ -682,18 +742,6 @@
       ],
       "updatedAt": "2026-09-09",
       "sha256": "2204834306c1cd5f371cb9846a7dc832c901808ecc35d45d431809acac9443eb"
-    },
-    {
-      "id": "fishing",
-      "title": "Water → Fish → Bait → Bite → Hook → Fight → Land",
-      "summary": "类型边界：本文讨论一种能够仅依靠水域选择、抛投落点、饵料呈现、鱼类感知、咬口判断、刺鱼时机、线组张力、鱼体疲劳与起鱼结算独立支撑完整游戏的宏观类型，而不是 RPG 中的资源小游戏或单一 QTE。",
-      "tags": [
-        "angling",
-        "fishing",
-        "sport"
-      ],
-      "updatedAt": "2026-09-08",
-      "sha256": "72f5f5f1b30fa44f9a5c0ddfbcf1f3af7e6fbaf4178cfb2d3d7ef115d33cb11a"
     },
     {
       "id": "beat-em-up",
@@ -1374,18 +1422,6 @@
       ],
       "updatedAt": "2026-08-17",
       "sha256": "9b237942c8ee3c4d3d6d36e13aa220e78ef64ee27f6e0976e8f279111bf7bff6"
-    },
-    {
-      "id": "fishing-aquatic-ecology",
-      "title": "水域生态钓鱼模拟（Fishing & Aquatic Ecology Simulation）",
-      "summary": "将鱼类行为、水域生态、装备选择、捕获过程与资源恢复连接为钓鱼模拟。",
-      "tags": [
-        "ecology",
-        "fishing",
-        "simulation"
-      ],
-      "updatedAt": "2026-08-17",
-      "sha256": "4acb7f4157ed91a935cfd594d6893af4aa1646897b0a6db9b7ab4180b94df1a0"
     },
     {
       "id": "heist-planning",
