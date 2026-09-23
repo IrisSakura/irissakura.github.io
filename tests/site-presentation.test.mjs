@@ -54,6 +54,8 @@ test('generated visitor surfaces reuse the presentation contract', async () => {
   }
   assert.doesNotMatch(home, /精选知识/u);
   assert.match(home, /最近写的/u);
+  assert.match(projects, /Violet Shelf[\s\S]*?本地开发与使用 · 暂未开放下载/u);
+  assert.doesNotMatch(projects, /完整本地产品/u);
   assert.match(portfolio, /href="\.\.\/pages\/development\.html"/u);
   assert.match(home, />Mods</u);
   assert.match(home, /Freesia Mods/u);
