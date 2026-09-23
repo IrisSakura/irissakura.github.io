@@ -12,6 +12,8 @@ export async function assertReadingFlow(browser,baseUrl,output) {
    if(width<=900) {assert.equal(await toc.getAttribute('open'),null);await toc.locator('summary').focus();await page.keyboard.press('Enter');}
    const link=toc.locator('a').first();const href=await link.getAttribute('href');await link.click();
    await page.waitForFunction(h=>decodeURIComponent(location.hash)===decodeURIComponent(h),href);
+   // Same-page navigation updates the hash before its next-frame scrollIntoView runs.
+   await page.waitForFunction(h=>{const target=document.getElementById(decodeURIComponent(h.slice(1))),nav=document.querySelector('.navbar');if(!target||!nav)return false;const top=target.getBoundingClientRect().top;return top>=nav.getBoundingClientRect().bottom-1&&top<innerHeight;},href);
    const anchor=await page.evaluate(h=>{const id=decodeURIComponent(h.slice(1)),target=document.getElementById(id),nav=document.querySelector('.navbar');return{top:target.getBoundingClientRect().top,bottom:nav.getBoundingClientRect().bottom};},href);
    assert.ok(anchor.top>=anchor.bottom-1&&anchor.top<1000,`reading anchor obscured at ${width}`);
    const blocks=await page.locator('.article-breakout').evaluateAll(es=>es.map(e=>({width:e.getBoundingClientRect().width,scroll:e.scrollWidth,tabindex:e.tabIndex,overflow:getComputedStyle(e).overflowX})));
