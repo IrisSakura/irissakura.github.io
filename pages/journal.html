@@ -19,12 +19,13 @@
     <meta name="twitter:description" content="Myosotis 汇集从玩法机制、系统设计到引擎原理的公开研究主题。">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-journal.png">
     <meta name="twitter:image:alt" content="Myosotis | 游戏设计与技术研究 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#edeff7">
     <link rel="icon" href="../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Myosotis | 游戏设计与技术研究","description":"Myosotis 汇集从玩法机制、系统设计到引擎原理的公开研究主题。","url":"https://irissakura.github.io/pages/journal.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://irissakura.github.io/pages/journal.html#webpage","name":"Myosotis | 游戏设计与技术研究","description":"Myosotis 汇集从玩法机制、系统设计到引擎原理的公开研究主题。","url":"https://irissakura.github.io/pages/journal.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/journal.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Myosotis","item":"https://irissakura.github.io/pages/journal.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Myosotis | 游戏设计与技术研究</title>
     <link rel="stylesheet" href="../style/main.css">
@@ -61,6 +62,7 @@
             <a href="../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../pages/contact.html" aria-label="关于与联系">
                 <img src="../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -71,6 +73,19 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
     <main id="main-content" class="main-content journal-main" data-ambient-page="journal"><!-- visual-decoration:start --><div class="ambient-field" data-ambient-layer aria-hidden="true"><i class="ambient-particle ambient-star" style="--x:2%;--y:8%;--delay:-0s;--duration:18s;--drift:24px;--size:7px"></i><i class="ambient-particle" style="--x:87%;--y:15%;--delay:-3s;--duration:21s;--drift:-24px;--size:16px"></i><i class="ambient-particle" style="--x:8%;--y:22%;--delay:-6s;--duration:24s;--drift:24px;--size:19px"></i><i class="ambient-particle ambient-star" style="--x:82%;--y:29%;--delay:-9s;--duration:27s;--drift:-24px;--size:7px"></i><i class="ambient-particle" style="--x:14%;--y:36%;--delay:-12s;--duration:30s;--drift:24px;--size:13px"></i><i class="ambient-particle" style="--x:96%;--y:43%;--delay:-15s;--duration:18s;--drift:-24px;--size:16px"></i><i class="ambient-particle ambient-star" style="--x:20%;--y:50%;--delay:-18s;--duration:21s;--drift:24px;--size:7px"></i><i class="ambient-particle" style="--x:91%;--y:57%;--delay:-21s;--duration:24s;--drift:-24px;--size:22px"></i><i class="ambient-particle" style="--x:7%;--y:64%;--delay:-24s;--duration:27s;--drift:24px;--size:13px"></i><i class="ambient-particle ambient-star" style="--x:86%;--y:71%;--delay:-27s;--duration:30s;--drift:-24px;--size:7px"></i><i class="ambient-particle" style="--x:13%;--y:78%;--delay:-30s;--duration:18s;--drift:24px;--size:19px"></i><i class="ambient-particle" style="--x:81%;--y:85%;--delay:-33s;--duration:21s;--drift:-24px;--size:22px"></i></div><!-- visual-decoration:end -->
         <!-- journal-content:start -->
@@ -928,7 +943,10 @@
         </div>
     </section>
 <!-- journal-content:end -->
-    </main>
+    <!-- site-related:start -->
+<section class="site-related container" aria-labelledby="site-related-title"><p class="section-kicker">CONTINUE EXPLORING</p><h2 id="site-related-title">相关内容</h2><div class="site-related-grid"><a data-related-link href="../pages/blog/authoritative-time-source.html"><small>文章</small><strong>音游、格斗与竞速的权威时间源：输入、模拟、音频与表现层的时钟分工</strong></a><a data-related-link href="../pages/mods.html"><small>项目</small><strong>Freesia Mods</strong></a><a data-related-link href="../pages/engineering.html"><small>项目</small><strong>Iris Engineering</strong></a><a data-related-link href="../pages/framework.html"><small>项目</small><strong>SakuraGameFramework</strong></a><a data-related-link href="../pages/wisteria.html"><small>项目</small><strong>Wisteria</strong></a><a data-related-link href="../pages/journal/resource-source-sink-economic-flow.html"><small>研究</small><strong>资源源汇、流速与经济稳态 / Resource Sources, Sinks &amp; Economic Flow</strong></a></div></section>
+<!-- site-related:end -->
+</main>
 
     <footer class="footer">
     <div class="container">
@@ -963,7 +981,8 @@
     </div>
 </footer>
 
-    <script src="../dist/site.js" type="module"></script>
+    <script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
+<script src="../dist/site.js" type="module"></script>
 </body>
 
 </html>

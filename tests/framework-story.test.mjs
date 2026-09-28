@@ -173,9 +173,10 @@ test('Framework page is generated from the story blocks before the technical ref
   assert.match(html, new RegExp(`<title>${escapeRegExp(story.positioning.seoTitle)}</title>`));
   assert.match(html, new RegExp(`<meta name="description" content="${escapeRegExp(story.positioning.description)}">`));
   const structuredData = JSON.parse(html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/u)?.[1] ?? '{}');
-  assert.equal(structuredData.name, story.positioning.seoTitle);
-  assert.equal(structuredData.description, story.positioning.description);
-  assert.equal(structuredData.runtimePlatform, 'Portable .NET; Unity; Godot Parallel Preview');
+  const frameworkEntity = structuredData['@graph'].find((entry) => entry['@type'] === 'SoftwareSourceCode');
+  assert.equal(frameworkEntity.name, story.positioning.seoTitle);
+  assert.equal(frameworkEntity.description, story.positioning.description);
+  assert.equal(frameworkEntity.runtimePlatform, 'Portable .NET; Unity; Godot Parallel Preview');
   const pageIndex = html.match(/<!-- page-index:start -->[\s\S]*?<!-- page-index:end -->/u)?.[0] ?? '';
   assert.deepEqual(
     [...pageIndex.matchAll(/<a href="#([^"]+)"[^>]*data-page-index-link/gu)].map((match) => match[1]),

@@ -3,6 +3,7 @@ import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { assertPersonaLayouts } from './lib/personas-v2-layout.mjs';
+import { assertProductizationFlow } from './lib/productization-flow.mjs';
 import { chromium } from '@playwright/test';
 import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat } from 'node:fs/promises';
@@ -245,6 +246,10 @@ const coreVisualRoutes = [
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
 
 try {
+  if (process.argv.includes('--productization-only')) {
+    await assertProductizationFlow(browser, baseUrl, root);
+    console.log('Productization browser flows passed.');
+  } else {
   // Focused reruns reuse separately recorded layout evidence; the default runs both.
   if (!process.argv.includes('--flows-only')) {
     await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
@@ -920,7 +925,7 @@ try {
   }).waitFor({ state: 'visible' });
   if (!await desktop.locator('.article-prose-section').first().isVisible()) throw new Error('complete blog body is not visible');
   if (await desktop.locator('.blog-source-note').count() !== 0) throw new Error('blog article exposes a generator source note');
-  if (await desktop.locator('.related-articles a').count() !== 3) throw new Error('complete blog article does not expose three related routes');
+  if (await desktop.locator('[data-related-link]').count() === 0) throw new Error('complete blog article lacks evidence-backed related routes');
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await keepSmokeTestLocal(mobile);
@@ -1124,8 +1129,10 @@ try {
 
   await assertSubscriptionFlow(browser, baseUrl, siteData.siteUrl);
   await assertAmbientMotion(browser, baseUrl);
+  await assertProductizationFlow(browser, baseUrl, root);
 
-  console.log('Browser smoke passed: routes, persistent navigation, static content search, Featured Reading, evidence-led portfolio, mobile navigation and contact routes checked.');
+  console.log('Browser smoke passed: routes, global search, related graph, accessibility, performance, mobile navigation and contact routes checked.');
+  }
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

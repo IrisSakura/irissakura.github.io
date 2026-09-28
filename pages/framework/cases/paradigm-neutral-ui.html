@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="Direct、Binding、MVVM 与 Structured UI 的渐进成本模型">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-cases-paradigm-neutral-ui.png">
     <meta name="twitter:image:alt" content="Paradigm-Neutral UI | Sakura Framework Case Study 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Paradigm-Neutral UI | Sakura Framework Case Study","description":"Direct、Binding、MVVM 与 Structured UI 的渐进成本模型","url":"https://irissakura.github.io/pages/framework/cases/paradigm-neutral-ui.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/cases/paradigm-neutral-ui.html#webpage","name":"Paradigm-Neutral UI | Sakura Framework Case Study","description":"Direct、Binding、MVVM 与 Structured UI 的渐进成本模型","url":"https://irissakura.github.io/pages/framework/cases/paradigm-neutral-ui.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/cases/paradigm-neutral-ui.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Paradigm-Neutral UI","item":"https://irissakura.github.io/pages/framework/cases/paradigm-neutral-ui.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Paradigm-Neutral UI | Sakura Framework Case Study</title>
     <link rel="stylesheet" href="../../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -85,6 +99,7 @@
         </div>
     </header><section class="framework-detail-overview" data-content-stage="system" id="overview" data-page-index-target><div class="container"><p class="framework-case-summary"><strong>local-passed / runner-pending</strong><span>Direct、Binding、MVVM 与 Structured UI 的渐进成本模型</span></p></div></section><section class="framework-detail-body framework-case-sections" data-content-stage="result" id="case-sections" data-page-index-target><div class="container"><section><header><span>01</span><h2>Problem</h2></header><p>统一 UI 范式会让简单页面过度工程，也会让复杂页面缺少状态边界。</p></section><section><header><span>02</span><h2>Constraints</h2></header><p>View 生命周期由 Unity 承担，状态与绑定应可测试；不同 Consumer 的复杂度与团队规模不同。</p></section><section><header><span>03</span><h2>Naive Approach</h2></header><p>把 MVVM 设为默认，或让每个 View 直接查找场景和服务。</p></section><section><header><span>04</span><h2>Architecture Decision</h2></header><p>共享 UI Core 与状态契约，Direct、Binding、MVVM、Structured 作为递增选择，Unity Presentation 保留平台职责。</p></section><section><header><span>05</span><h2>System Model</h2></header><p>State / Intent 位于可测试层；Binding 可选；View 只持有显式依赖并在隐藏或销毁时释放。</p></section><section><header><span>06</span><h2>Failure Model</h2></header><p>View 关闭后回调、双向绑定循环、隐藏依赖、异步结果写入失效页面与范式间行为不一致。</p></section><section><header><span>07</span><h2>Trade-offs</h2></header><p>多路径扩大测试矩阵，但避免把所有页面强制进同一成本模型。</p></section><section><header><span>08</span><h2>Implementation</h2></header><p>UI Production Architecture V2 覆盖 Direct、Binding、MVVM 与 Structured 多种消费路径。</p></section><section><header><span>09</span><h2>Evidence</h2></header><p>本地 EditMode 与多 Consumer 回归已闭合；远端 Runner 仍 pending。</p></section><section><header><span>10</span><h2>Consumer</h2></header><p>不同示例与玩法项目按页面复杂度选择路径，Framework 不拥有具体视觉、文案和业务流程。</p></section><section><header><span>11</span><h2>Known Limitations</h2></header><p>没有真实运行截图作为公开素材；本页使用结构与验证边界，不用品牌图冒充运行证据。</p></section><section><header><span>12</span><h2>What Changed After Validation</h2></header><p>验证后把“MVVM 最佳实践”改成 Progressive Architecture Cost，并强化关闭、取消和跨范式一致性测试。</p></section></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="../cases.html">Flagship Cases <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../evidence.html">Evidence Model <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../../framework-engineering.html">Engineering Hub <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -119,6 +134,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../../dist/site.js" type="module"></script>
 </body>
 </html>

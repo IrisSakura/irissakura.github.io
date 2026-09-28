@@ -21,7 +21,7 @@
     "consumer:export": "node scripts/export-consumer-projection.mjs",
     "consumer:import": "node scripts/import-consumer-projection.mjs",
     "consumer:check": "node scripts/import-consumer-projection.mjs --check",
-    "package:site": "node scripts/prepare-pages.mjs",
+    "package:site": "node scripts/prepare-pages.mjs && node scripts/verify-public-artifact.mjs",
     "clean": "node scripts/clean-generated.mjs",
     "check": "npm run test:json && npm run test:evidence-authorities && npm run build && npm run test:brand && npm test"
   },
@@ -47,6 +47,7 @@
   },
   "homepage": "https://irissakura.github.io/",
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.54.1",
     "typescript": "^5.9.3"
   }

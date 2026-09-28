@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-blog-unity-quickstart-executable-evidence.png">
     <meta name="twitter:image:alt" content="Unity Quickstart 的可执行接入证据与有界进程治理 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#edeff7">
     <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"Unity Quickstart 的可执行接入证据与有界进程治理 | IrisSakura","description":"一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？","url":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html","author":{"@type":"Person","name":"IrisSakura","url":"https://irissakura.github.io"},"headline":"Unity Quickstart 的可执行接入证据与有界进程治理","image":"https://irissakura.github.io/assets/social/pages-blog-unity-quickstart-executable-evidence.png","datePublished":"2026-08-05","dateModified":"2026-08-24","about":["quickstart","unity"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html#webpage","name":"Unity Quickstart 的可执行接入证据与有界进程治理 | IrisSakura","description":"一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？","url":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html","headline":"Unity Quickstart 的可执行接入证据与有界进程治理","datePublished":"2026-08-05","dateModified":"2026-08-24","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-unity-quickstart-executable-evidence.png","keywords":["quickstart","unity"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"Unity Quickstart 的可执行接入证据与有界进程治理","item":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Unity Quickstart 的可执行接入证据与有界进程治理 | IrisSakura</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -55,6 +56,7 @@
             <a href="../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -65,6 +67,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="blog-detail-main">
     <article class="container blog-article">
@@ -500,6 +514,9 @@ sampleId = 预期 Sample
             <div><a href="unity-sample-dependency-closure.html"><span>同属「Sakura Framework 工程实践」，共享 unity</span><strong>Unity Sample 的条件组合层与渐进式依赖闭包</strong><small>一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？</small></a><a href="unity-hot-update-transaction-boundary.html"><span>同属「Sakura Framework 工程实践」，共享 unity</span><strong>Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复</strong><small>从不可变版本目录、活动指针、持久化 Journal 与 Runtime Prepare/Commit/Rollback 解释一次可恢复热更新真正完成的边界。</small></a><a href="runtime-consumption-facade-scope.html"><span>同属「Sakura Framework 工程实践」</span><strong>运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯</strong><small>不同规模的 Unity 项目怎样在不更换服务合同的前提下，从快速接入逐步迁移到确定性组合根、显式生命周期和严格依赖边界？</small></a></div>
         </aside>
     </article>
+<!-- site-related:start -->
+<section class="site-related container" aria-labelledby="site-related-title"><p class="section-kicker">CONTINUE EXPLORING</p><h2 id="site-related-title">相关内容</h2><div class="site-related-grid"><a data-related-link href="../../pages/blog/runtime-consumption-facade-scope.html"><small>文章</small><strong>运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯</strong></a><a data-related-link href="../../pages/blog/unity-hot-update-transaction-boundary.html"><small>文章</small><strong>Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复</strong></a><a data-related-link href="../../pages/blog/unity-sample-dependency-closure.html"><small>文章</small><strong>Unity Sample 的条件组合层与渐进式依赖闭包</strong></a><a data-related-link href="../../pages/framework.html"><small>项目</small><strong>SakuraGameFramework</strong></a></div></section>
+<!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -534,6 +551,7 @@ sampleId = 预期 Sample
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../dist/site.js" type="module"></script>
 </body>
 </html>

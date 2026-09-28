@@ -25,10 +25,12 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run check
-      - run: npm run test:smoke
+      - name: Browser flows, accessibility and performance budget
+        run: npm run test:smoke
       - name: Verify generated source files are synchronized
         run: git diff --exit-code
-      - run: npm run package:site
+      - name: Package and audit public artifact
+        run: npm run package:site
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request'
         with:

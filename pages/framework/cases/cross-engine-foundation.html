@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="从 Unity 默认实现走向被证明的 Portable Core 与专项 Adapter">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-cases-cross-engine-foundation.png">
     <meta name="twitter:image:alt" content="Cross-Engine Runtime Foundation | Sakura Framework Case Study 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Cross-Engine Runtime Foundation | Sakura Framework Case Study","description":"从 Unity 默认实现走向被证明的 Portable Core 与专项 Adapter","url":"https://irissakura.github.io/pages/framework/cases/cross-engine-foundation.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/cases/cross-engine-foundation.html#webpage","name":"Cross-Engine Runtime Foundation | Sakura Framework Case Study","description":"从 Unity 默认实现走向被证明的 Portable Core 与专项 Adapter","url":"https://irissakura.github.io/pages/framework/cases/cross-engine-foundation.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/cases/cross-engine-foundation.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Cross-Engine Runtime Foundation","item":"https://irissakura.github.io/pages/framework/cases/cross-engine-foundation.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Cross-Engine Runtime Foundation | Sakura Framework Case Study</title>
     <link rel="stylesheet" href="../../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -85,6 +99,7 @@
         </div>
     </header><section class="framework-detail-overview" data-content-stage="system" id="overview" data-page-index-target><div class="container"><p class="framework-case-summary"><strong>local-passed / runner-pending</strong><span>从 Unity 默认实现走向被证明的 Portable Core 与专项 Adapter</span></p></div></section><section class="framework-detail-body framework-case-sections" data-content-stage="result" id="case-sections" data-page-index-target><div class="container"><section><header><span>01</span><h2>Problem</h2></header><p>Runtime、配置、并行、存档与输入语义若直接依赖 Unity 类型，就无法在 Godot 或纯 .NET 环境复用。</p></section><section><header><span>02</span><h2>Constraints</h2></header><p>Core 必须保持 no-engine；平台生命周期、资源和 Editor 能力必须留在 Adapter；成熟度不能因文件存在自动晋级。</p></section><section><header><span>03</span><h2>Naive Approach</h2></header><p>复制 Unity API 外形到 Godot，或在 Core 中加入条件编译。</p></section><section><header><span>04</span><h2>Architecture Decision</h2></header><p>以 BCL-only / no-engine Core 表达稳定语义，为 Unity 与 Godot 提供独立宿主和 Adapter，并用 Capability Matrix 分别记录状态。</p></section><section><header><span>05</span><h2>System Model</h2></header><p>Portable Core 定义契约与状态机；Engine Adapter 负责对象、时间和生命周期；Consumer composition root 选择实现。</p></section><section><header><span>06</span><h2>Failure Model</h2></header><p>Adapter 缺失、生命周期未清理、平台能力不等价或证据级别不足时失败关闭，不回退到隐式全局实现。</p></section><section><header><span>07</span><h2>Trade-offs</h2></header><p>接口与装配面增加，且部分引擎特性不会进入公共 Core；换来的是语义边界和可独立测试性。</p></section><section><header><span>08</span><h2>Implementation</h2></header><p>Core、Config Core 与 Parallel 形成可迁移基础；Runtime、Input、Pooling、Save、Localization 和 Card Balance 已有 Godot 专项本地实现。</p></section><section><header><span>09</span><h2>Evidence</h2></header><p>专项 Adapter 具备本地测试与审查记录；整体 Foundation 的 Runner、Release 与 Production 不由这些本地结果替代。</p></section><section><header><span>10</span><h2>Consumer</h2></header><p>Godot tooling 与 STS2/Card Balance 路线证明同一 Core 可被非 Unity 宿主消费，但仅限已列出的能力。</p></section><section><header><span>11</span><h2>Known Limitations</h2></header><p>Unity 是成熟主路线；Godot 仍按能力单元展示 Preview / local-only 状态，不声明完整运行时对等。</p></section><section><header><span>12</span><h2>What Changed After Validation</h2></header><p>验证后把“一套跨引擎 API”收敛为“共享语义 + 平台 Adapter”，并把每个能力的晋级条件拆开。</p></section></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="../cases.html">Flagship Cases <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../evidence.html">Evidence Model <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../../framework-engineering.html">Engineering Hub <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -119,6 +134,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../../dist/site.js" type="module"></script>
 </body>
 </html>

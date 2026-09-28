@@ -72,6 +72,15 @@ npm run package:site
 - `npm run test:smoke`：用无头 Chromium 检查主要路由、响应式留白、页面 Brand Mode、文章出版、证据链与移动导航；
 - `npm run package:site`：把发布所需文件复制到 `_site/`。
 
+## Productization Phase I
+
+- 全站 Search / Cmd/Ctrl+K 读取构建时生成的 `data/site-search-index.json`；原 `data/search-index.json` 继续服务 Journal 专题搜索。来源、排序与失败回退见 [`docs/architecture/search.md`](docs/architecture/search.md)。
+- 文章、研究、项目与 Framework 的相关导航由 `data/content-relations.json` 和已登记的系列、项目关系及 Evidence Chain 派生；规则见 [`docs/architecture/content-graph.md`](docs/architecture/content-graph.md)。
+- 隐私优先的分析适配器默认关闭。账户激活、公开站点标识及事件参数合同见 [`docs/operations/analytics.md`](docs/operations/analytics.md)。
+- 生成器为正式页面输出与 canonical 对应的 JSON-LD；搜索引擎验证值默认未配置，后续步骤见 [`docs/operations/search-engine-registration.md`](docs/operations/search-engine-registration.md)。
+- Playwright Smoke 包含主要页面可访问性扫描和性能预算检查。测试范围、人工复核边界与实验室报告分别见 [`docs/quality/accessibility.md`](docs/quality/accessibility.md) 和 [`docs/quality/performance.md`](docs/quality/performance.md)。
+- 发布包只含显式准入的运行时 JSON；`npm run package:site` 会扫描 `_site/` 中的来源提交、私有路径与维护字段。
+
 `dist/` 和 `_site/` 都是 CI 产物，不进入主分支。不要直接修改生成文件。
 
 ## 数据来源

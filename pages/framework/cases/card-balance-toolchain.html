@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="同一数值语义穿过 Unity Editor、Godot Dock、CLI 与 STS2 Consumer">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-cases-card-balance-toolchain.png">
     <meta name="twitter:image:alt" content="Card Balance Toolchain | Sakura Framework Case Study 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Card Balance Toolchain | Sakura Framework Case Study","description":"同一数值语义穿过 Unity Editor、Godot Dock、CLI 与 STS2 Consumer","url":"https://irissakura.github.io/pages/framework/cases/card-balance-toolchain.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/cases/card-balance-toolchain.html#webpage","name":"Card Balance Toolchain | Sakura Framework Case Study","description":"同一数值语义穿过 Unity Editor、Godot Dock、CLI 与 STS2 Consumer","url":"https://irissakura.github.io/pages/framework/cases/card-balance-toolchain.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/cases/card-balance-toolchain.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Card Balance Toolchain","item":"https://irissakura.github.io/pages/framework/cases/card-balance-toolchain.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Card Balance Toolchain | Sakura Framework Case Study</title>
     <link rel="stylesheet" href="../../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -85,6 +99,7 @@
         </div>
     </header><section class="framework-detail-overview" data-content-stage="system" id="overview" data-page-index-target><div class="container"><p class="framework-case-summary"><strong>local-passed / runner-pending</strong><span>同一数值语义穿过 Unity Editor、Godot Dock、CLI 与 STS2 Consumer</span></p></div></section><section class="framework-detail-body framework-case-sections" data-content-stage="result" id="case-sections" data-page-index-target><div class="container"><section><header><span>01</span><h2>Problem</h2></header><p>卡牌数值审查若绑定单一 Editor 或表格格式，设计判断无法跨工具复用。</p></section><section><header><span>02</span><h2>Constraints</h2></header><p>核心必须 BCL-only；Excel/CSV、Unity、Godot 与 CLI 是不同 Adapter；诊断需要稳定代码和可重复输出。</p></section><section><header><span>03</span><h2>Naive Approach</h2></header><p>把规则写进 Unity EditorWindow，或让每个 Consumer 自己解析表格。</p></section><section><header><span>04</span><h2>Architecture Decision</h2></header><p>建立 Editor-only 但引擎无关的 Card Balance Core，由 Unity/Godot/CLI Adapter 负责输入、展示和导出。</p></section><section><header><span>05</span><h2>System Model</h2></header><p>Importer 产生标准记录；Analyzer 执行规则；Diagnostic Report 保留身份；Adapter 决定交互与文件系统。</p></section><section><header><span>06</span><h2>Failure Model</h2></header><p>列缺失、值域错误、重复身份、Adapter 输出漂移和 Consumer 卡牌集合变化都必须给出可定位诊断。</p></section><section><header><span>07</span><h2>Trade-offs</h2></header><p>维护多个 Adapter 和兼容层，但规则与诊断只存在一份。</p></section><section><header><span>08</span><h2>Implementation</h2></header><p>Core、Excel/CSV Unity Adapter、Godot Editor Dock、headless CLI 与 STS2 集成已经本地闭合。</p></section><section><header><span>09</span><h2>Evidence</h2></header><p>Unity Adapter、Editor profile、The Weaver 106 cards、Godot managed tests 与跨阶段 Node contracts 均有本地记录。</p></section><section><header><span>10</span><h2>Consumer</h2></header><p>The Weaver / STS2 提供真实卡牌集合与工作流反馈，证明工具不只服务示例数据。</p></section><section><header><span>11</span><h2>Known Limitations</h2></header><p>本轮没有同 SHA Runner、正式 Release、签名或公开生产使用证明。</p></section><section><header><span>12</span><h2>What Changed After Validation</h2></header><p>验证后把规则从 Unity Editor 中抽离，并补充稳定 Diagnostic identity、Godot Dock 和 headless 路线。</p></section></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="../cases.html">Flagship Cases <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../evidence.html">Evidence Model <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../../framework-engineering.html">Engineering Hub <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -119,6 +134,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../../dist/site.js" type="module"></script>
 </body>
 </html>

@@ -26,6 +26,9 @@ import { assertFrameworkModuleReference, resolveFrameworkModuleReference } from 
 import { resolveBlogDiscovery } from './lib/blog-discovery-model.mjs';
 import { selectPublishedBlogs, stripBlogPublicationPreamble } from './lib/blog-publication-model.mjs';
 import { buildContentSearchIndex, resolveFeaturedReading } from './lib/content-search-model.mjs';
+import { buildSiteSearchIndex } from './lib/site-search-index.mjs';
+import { buildContentGraph, relatedForPage } from './lib/content-relations.mjs';
+import { buildStructuredData } from './lib/structured-data.mjs';
 import { assertConsumerLabCurrent } from './lib/consumer-lab-model.mjs';
 import { resolveConsumerSyncRegistry } from './lib/consumer-sync-registry.mjs';
 import { resolveEvidenceChains } from './lib/evidence-chain-model.mjs';
@@ -139,7 +142,7 @@ const PAGE_INDEXES = {
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, nowData, updatesData, modSeriesConfig, navbarTemplate, footerTemplate] = await Promise.all([
+const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, nowData, updatesData, modSeriesConfig, navbarTemplate, footerTemplate, contentRelations, analyticsConfig, verificationConfig] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -172,8 +175,22 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, 
   readJson('data/updates.json'),
   readJson('config/mod-series.json'),
   readText('components/navbar.html'),
-  readText('components/footer.html')
+  readText('components/footer.html'),
+  readJson('data/content-relations.json'),
+  readJson('config/analytics.json'),
+  readJson('config/search-engine-verification.json')
 ]);
+
+if (analyticsConfig?.provider !== 'plausible' || analyticsConfig.privacyMode !== true
+  || analyticsConfig.endpoint !== 'https://plausible.io/api/event'
+  || typeof analyticsConfig.enabled !== 'boolean'
+  || (analyticsConfig.enabled && analyticsConfig.siteDomain !== new URL(site.siteUrl).hostname)
+  || (!analyticsConfig.enabled && analyticsConfig.siteDomain !== null)) {
+  throw new Error('Analytics configuration must be privacy-safe and use the reviewed public site domain.');
+}
+if (Object.keys(verificationConfig).sort().join(',') !== 'bing,google') {
+  throw new Error('Search engine verification supports only google and bing.');
+}
 
 assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
@@ -527,6 +544,12 @@ const pageDefinitions = [
   ...frameworkDeepDefinitions
 ];
 
+const siteSearchIndex = buildSiteSearchIndex({
+  pages: pageDefinitions, journalIndex: contentSearchIndex, presentations: projectPresentations,
+  projects, framework
+});
+const contentGraph = buildContentGraph(siteSearchIndex, contentRelations, projectPresentations, evidenceChainData);
+
 const pageFamilies = await readJson('config/page-families.json');
 for (const page of pageDefinitions) {
   page.family = pageFamily(page.file, pageFamilies);
@@ -540,6 +563,15 @@ for (const page of pageDefinitions) {
 await Promise.all([
   writeSocialImages(root, pageDefinitions, brandConfig),
   writeFile(path.join(root, 'data/search-index.json'), `${JSON.stringify(contentSearchIndex, null, 2)}\n`),
+  writeFile(path.join(root, 'data/site-search-index.json'), `${JSON.stringify(siteSearchIndex, null, 2)}\n`),
+  writeFile(path.join(root, 'data/content-graph.json'), `${JSON.stringify(contentGraph, null, 2)}\n`),
+  writeFile(path.join(root, 'data/framework-public.json'), `${JSON.stringify({
+    schemaVersion: framework.schemaVersion,
+    summary: framework.summary,
+    lifecycleCounts: framework.lifecycleCounts,
+    layers: framework.layers,
+    featuredModules: framework.featuredModules
+  }, null, 2)}\n`),
   writeReadmeSummaries(projects, consumerSync)
 ]);
 await assertSitePresentation(site, pageDefinitions);
@@ -594,6 +626,24 @@ for (const page of pageDefinitions) {
     .replace(/<main(?![^>]*\bid="main-content")/, '<main id="main-content"')
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${page.title}</title>`);
 
+  const searchShell = `<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="${pageHref('pages/journal.html')}#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->`;
+  if (/<!-- site-search:start -->[\s\S]*?<!-- site-search:end -->/u.test(html)) {
+    html = html.replace(/<!-- site-search:start -->[\s\S]*?<!-- site-search:end -->/u, searchShell);
+  } else {
+    html = html.replace('<!-- site-navbar:end -->', `<!-- site-navbar:end -->\n${searchShell}`);
+  }
+
   const meta = buildMeta(page, site, brandConfig);
   if (/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/.test(html)) {
     html = html.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, meta);
@@ -605,6 +655,13 @@ for (const page of pageDefinitions) {
   const siteScript = `<script src="${prefix}dist/site.js" type="module"></script>`;
   if (!html.includes('dist/site.js')) {
     html = html.replace('</body>', `${siteScript}\n</body>`);
+  }
+  const analyticsData = JSON.stringify(analyticsConfig).replaceAll('<', '\\u003c');
+  const analyticsMarkup = `<script type="application/json" id="site-analytics-config">${analyticsData}</script>`;
+  if (/<script type="application\/json" id="site-analytics-config">[\s\S]*?<\/script>/u.test(html)) {
+    html = html.replace(/<script type="application\/json" id="site-analytics-config">[\s\S]*?<\/script>/u, analyticsMarkup);
+  } else {
+    html = html.replace(/(<script src="[^"]*dist\/site\.js" type="module"><\/script>)/u, `${analyticsMarkup}\n$1`);
   }
 
   if (page.file === 'pages/framework.html') {
@@ -685,6 +742,16 @@ for (const page of pageDefinitions) {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
   }
 
+  const related = relatedForPage(contentGraph, page.canonical);
+  const relatedMarkup = related.length ? `<!-- site-related:start -->
+<section class="site-related container" aria-labelledby="site-related-title"><p class="section-kicker">CONTINUE EXPLORING</p><h2 id="site-related-title">相关内容</h2><div class="site-related-grid">${related.map((item) => `<a data-related-link href="${routeHref(item.url)}"><small>${escapeHtml(relatedTypeLabel(item.type))}</small><strong>${escapeHtml(item.title)}</strong></a>`).join('')}</div></section>
+<!-- site-related:end -->` : '<!-- site-related:start --><!-- site-related:end -->';
+  if (/<!-- site-related:start -->[\s\S]*?<!-- site-related:end -->/u.test(html)) {
+    html = html.replace(/<!-- site-related:start -->[\s\S]*?<!-- site-related:end -->/u, relatedMarkup);
+  } else {
+    html = html.replace('</main>', `${relatedMarkup}\n</main>`);
+  }
+
   html = html.replace(/\s*<link rel="stylesheet" href="[^"]*style\/components\/living-site.css">/g, '');
   html = html.replace('</head>', `<link rel="stylesheet" href="${prefix}style/components/living-site.css">\n</head>`);
   if (page.file === 'pages/framework.html' && !html.includes('href="../style/portfolio.css"')) html = html.replace('</head>', '<link rel="stylesheet" href="../style/portfolio.css">\n</head>');
@@ -723,45 +790,14 @@ function buildMeta(page, siteData, brand) {
   const canonical = `${siteData.siteUrl}${page.canonical}`;
   const image = `${siteData.siteUrl}${page.image}`;
   const prefix = '../'.repeat(page.file.split('/').length - 1);
-  const structured = {
-    '@context': 'https://schema.org',
-    '@type': page.schemaType ?? 'WebPage',
-    name: page.title,
-    description: page.description,
-    url: canonical
-  };
-  if (page.schemaType === 'ProfilePage' || page.schemaType === 'AboutPage') {
-    structured.mainEntity = { '@type': 'Person', name: siteData.profile.nickname, url: siteData.siteUrl, sameAs: siteData.socials.map(({ url }) => url) };
-  }
-  if (page.schemaType === 'VideoGame') {
-    structured.author = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
-    structured.gamePlatform = 'Unity 2022.3 LTS';
-    structured.applicationCategory = 'Game';
-  }
-  if (page.schemaType === 'SoftwareSourceCode') {
-    structured.creator = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
-    structured.programmingLanguage = 'C#';
-    structured.runtimePlatform = page.runtimePlatform ?? 'Unity';
-  }
-  if (page.schemaType === 'HowTo' && page.quickstart) {
-    structured.totalTime = `PT${page.quickstart.durationMinutes}M`;
-    structured.step = page.quickstart.steps.map((step, index) => ({
-      '@type': 'HowToStep',
-      position: index + 1,
-      name: step.title,
-      text: `${step.summary} 完成标准：${step.completion}`,
-      url: `${canonical}#${step.id}`
-    }));
-  }
-  if (page.schemaType === 'Article' && (page.note || page.article || page.design)) {
-    const article = page.article ?? page.design ?? page.note;
-    structured.author = { '@type': 'Person', name: 'IrisSakura', url: siteData.siteUrl };
-    structured.headline = article.title;
-    structured.image = image;
-    if (page.article) structured.datePublished = article.publishedAt;
-    structured.dateModified = article.updatedAt;
-    structured.about = article.tags;
-  }
+  const structured = buildStructuredData(page, siteData, image);
+  const verification = Object.entries(verificationConfig).map(([engine, token]) => {
+    if (token === null) return '';
+    if (typeof token !== 'string' || !/^[A-Za-z0-9_-]+$/u.test(token)) throw new Error(`Invalid ${engine} verification token`);
+    const name = { google: 'google-site-verification', bing: 'msvalidate.01' }[engine];
+    if (!name) throw new Error(`Unsupported search engine verification: ${engine}`);
+    return `<meta name="${name}" content="${escapeAttribute(token)}">`;
+  }).filter(Boolean).join('\n    ');
 
   return `<!-- site-meta:start -->
     <meta name="description" content="${escapeAttribute(page.description)}">
@@ -778,12 +814,13 @@ function buildMeta(page, siteData, brand) {
     <meta name="twitter:description" content="${escapeAttribute(page.description)}">
     <meta name="twitter:image" content="${image}">
     <meta name="twitter:image:alt" content="${escapeAttribute(page.imageAlt)}">
+    ${verification}
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
     <meta name="theme-color" content="${brandConfig.modes[page.brandMode].themeColor}">
     <link rel="icon" href="${prefix}${brandConfig.assets.favicon}?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="${prefix}rss.xml">
-    <script type="application/ld+json">${JSON.stringify(structured)}</script>
+    <script type="application/ld+json">${JSON.stringify(structured).replaceAll('<', '\\u003c')}</script>
     <!-- site-meta:end -->`;
 }
 
@@ -2258,11 +2295,11 @@ function renderBlogDetailSource({ article, markdown, series, tags, related }) {
   )).join('')}</div>
         </header>
         ${readingBody(body, `<p class="section-kicker">IN THIS SERIES</p><h2>${escapeHtml(series.name)}</h2><a href="series/${escapeAttribute(series.slug)}.html">查看系列阅读顺序 →</a><div class="context-tags">${tags.map(tag=>tag.articles.length>=2?`<a href="tag/${escapeAttribute(tag.slug)}.html">${escapeHtml(tag.name)}</a>`:`<span>${escapeHtml(tag.name)}</span>`).join('')}</div>`)}
-        <aside class="related-articles" aria-labelledby="related-articles-title">
+        ${related.length ? `<aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
             <h2 id="related-articles-title">相关文章</h2>
             <div>${related.map(({ article: item, relation }) => `<a href="${escapeAttribute(item.slug)}.html"><span>${escapeHtml(relation)}</span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.summary)}</small></a>`).join('')}</div>
-        </aside>
+        </aside>` : ''}
     </article>
 </main>
 <footer class="footer"></footer>
@@ -2661,6 +2698,10 @@ function installPageCover(html, page, siteData, prefix) {
 
 function formatPublicDate(value) {
   return value.slice(0, 10);
+}
+
+function relatedTypeLabel(type) {
+  return ({ article: '文章', research: '研究', project: '项目', framework: 'Framework', page: '页面' })[type] ?? '内容';
 }
 
 function escapeHtml(value) {

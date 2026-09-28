@@ -34,7 +34,7 @@ test('only manifest-approved Journal blogs are published as complete indexable a
     assert.ok(html.includes(`<h1>${article.title}</h1>`), `missing title ${article.id}`);
     assert.ok(html.includes('class="article-prose-section blog-prose"'), `missing rendered body ${article.id}`);
     assert.ok(html.length > markdown.length / 2, `blog detail is unexpectedly short for ${article.id}`);
-    assert.ok(html.includes('"@type":"Article"'), `missing Article schema ${article.id}`);
+    assert.ok(html.includes('"@type":"BlogPosting"'), `missing BlogPosting schema ${article.id}`);
     assert.ok(html.includes(`"datePublished":"${contract.publishedAt}"`), `missing published date ${article.id}`);
     assert.ok(html.includes(`"dateModified":"${contract.updatedAt}"`), `missing modified date ${article.id}`);
     assert.ok(sitemap.includes(`/pages/blog/${contract.slug}.html`), `sitemap missing ${contract.slug}`);

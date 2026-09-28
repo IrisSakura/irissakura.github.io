@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="八级 Evidence Ladder 让每个结论停在真实证据能够支持的位置。">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-evidence.png">
     <meta name="twitter:image:alt" content="Evidence Engineering | Sakura Framework 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Evidence Engineering | Sakura Framework","description":"八级 Evidence Ladder 让每个结论停在真实证据能够支持的位置。","url":"https://irissakura.github.io/pages/framework/evidence.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/evidence.html#webpage","name":"Evidence Engineering | Sakura Framework","description":"八级 Evidence Ladder 让每个结论停在真实证据能够支持的位置。","url":"https://irissakura.github.io/pages/framework/evidence.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/evidence.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Evidence Engineering","item":"https://irissakura.github.io/pages/framework/evidence.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Evidence Engineering | Sakura Framework</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -91,6 +105,7 @@
         </div></div>
     </section><section class="framework-detail-body" data-content-stage="result" id="evidence-ladder" data-page-index-target><div class="container"><div class="section-heading-row"><div><p class="section-kicker">DESIGNED → UNKNOWN</p><h2 class="section-title">八级 Evidence Ladder</h2></div><p class="section-intro">顺序表示证据类型，不表示可以自动逐级推断。</p></div><ol class="framework-evidence-ladder"><li><span>01</span><div><strong>Designed</strong><p>由已审阅的 Work Status、spec 或 plan 记录设计意图与边界。</p></div></li><li><span>02</span><div><strong>Implemented</strong><p>由 Framework snapshot 或已提交代码确认能力已经存在。</p></div></li><li><span>03</span><div><strong>Local Verification</strong><p>由本地测试或本地验证记录确认当前工作树范围内的结果。</p></div></li><li><span>04</span><div><strong>CI / Runner</strong><p>由绑定同一提交 SHA 的 CI 或 Runner 产物确认远程验证结果。</p></div></li><li><span>05</span><div><strong>Consumer Validation</strong><p>由独立 Consumer registry 与其固定验证记录确认消费范围。</p></div></li><li><span>06</span><div><strong>Release</strong><p>由同一提交绑定的 Release metadata 与附件校验确认发布事实。</p></div></li><li><span>07</span><div><strong>Production</strong><p>由明确范围的真实 production record 与运行证据确认生产事实。</p></div></li><li><span>08</span><div><strong>Unknown / Deferred</strong><p>对应证据尚未闭合时保持 Unknown 或 Deferred，不用相邻等级替代。</p></div></li></ol></div></section><section class="framework-detail-body" id="evidence-topics" data-page-index-target><div class="container"><div class="section-heading-row"><div><p class="section-kicker">EVIDENCE BY TOPIC</p><h2 class="section-title">按主题保留真实上限</h2></div></div><div class="framework-topic-grid"><article><span class="framework-status-badge">local-passed</span><h2>Godot Adapter Evidence</h2><p>Runtime、Config、Input、Pooling、Save、Localization 与 Card Balance 的专项 Adapter 有本地证据；整体 Godot Foundation 未被提升为 Supported。</p></article><article><span class="framework-status-badge">runner-passed</span><h2>Runtime Lifecycle Evidence</h2><p>生命周期收敛具备同 SHA Runner 记录；Release 与 Production 仍是独立边界。</p></article><article><span class="framework-status-badge">local-passed / runner-pending</span><h2>UI Architecture Evidence</h2><p>Direct、Binding、MVVM、Structured 多路径回归在本地闭合，远端 Runner 尚未闭合。</p></article><article><span class="framework-status-badge">local-passed / runner-pending</span><h2>Independent Consumer Evidence</h2><p>七个 Consumer 的固定快照记录本地 EditMode、PlayMode 或 Player 范围，不外推生产采用。</p></article></div></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="decisions.html">Architecture Decisions <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="evolution.html">Evolution <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="reference.html">Module Reference <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -125,6 +140,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../dist/site.js" type="module"></script>
 </body>
 </html>

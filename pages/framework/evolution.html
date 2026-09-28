@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="演进不是模块数量曲线，而是边界、证据和恢复能力逐步收敛。">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-evolution.png">
     <meta name="twitter:image:alt" content="Framework Evolution | Sakura Framework 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Framework Evolution | Sakura Framework","description":"演进不是模块数量曲线，而是边界、证据和恢复能力逐步收敛。","url":"https://irissakura.github.io/pages/framework/evolution.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/evolution.html#webpage","name":"Framework Evolution | Sakura Framework","description":"演进不是模块数量曲线，而是边界、证据和恢复能力逐步收敛。","url":"https://irissakura.github.io/pages/framework/evolution.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/evolution.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Framework Evolution","item":"https://irissakura.github.io/pages/framework/evolution.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Framework Evolution | Sakura Framework</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -85,6 +99,7 @@
         </div>
     </header><section class="framework-detail-overview" data-content-stage="system" id="overview" data-page-index-target><div class="container"><p class="section-intro">演进不是模块数量曲线，而是边界、证据和恢复能力逐步收敛。 时间线只展示公开工程变化，不投影内部 PLAN/TODO。</p></div></section><section class="framework-detail-body" data-content-stage="result" id="timeline" data-page-index-target><div class="container"><ol class="framework-evolution-timeline"><li><span>01</span><article><h2>从工具集合到 Package Identity</h2><dl><div><dt>Trigger</dt><dd>模块数量增长后，目录和 README 无法稳定表达依赖。</dd></div><div><dt>Change</dt><dd>统一 package、asmdef、Catalog 与 layer 身份。</dd></div><div><dt>Evidence</dt><dd>Inventory 与 architecture verifier 提供机器可读结构事实。</dd></div><div><dt>Limitation</dt><dd>结构存在不等于生命周期成熟。</dd></div></dl></article></li><li><span>02</span><article><h2>从默认全局生命周期到显式 Scope</h2><dl><div><dt>Trigger</dt><dd>重复初始化、场景切换和异步退出暴露隐式 Owner。</dd></div><div><dt>Change</dt><dd>引入 composition root、Scope ownership、startup rollback 与 async exit。</dd></div><div><dt>Evidence</dt><dd>Runtime Foundation local 与 same-SHA Runner 证据。</dd></div><div><dt>Limitation</dt><dd>Runner 不替代 Release 或 Production。</dd></div></dl></article></li><li><span>03</span><article><h2>从 Unity-only 到 Portable Core</h2><dl><div><dt>Trigger</dt><dd>配置、存档、输入和工具语义需要进入不同宿主。</dd></div><div><dt>Change</dt><dd>Core 保持 no-engine，平台能力进入 Unity / Godot Adapter。</dd></div><div><dt>Evidence</dt><dd>Core identity、capability matrix 与专项 Adapter 本地验证。</dd></div><div><dt>Limitation</dt><dd>Godot 只按已证明能力展示，不声明整体对等。</dd></div></dl></article></li><li><span>04</span><article><h2>从单一范式到 Progressive Cost</h2><dl><div><dt>Trigger</dt><dd>统一 UI 架构在简单和复杂页面上都产生不匹配成本。</dd></div><div><dt>Change</dt><dd>Direct、Binding、MVVM、Structured 形成渐进选择。</dd></div><div><dt>Evidence</dt><dd>多路径本地回归和 Consumer 映射。</dd></div><div><dt>Limitation</dt><dd>UI Runner 仍 pending，真实视觉素材有限。</dd></div></dl></article></li><li><span>05</span><article><h2>从自证到 Independent Consumer</h2><dl><div><dt>Trigger</dt><dd>Framework 自测无法证明真实项目采用和清理路径。</dd></div><div><dt>Change</dt><dd>固定 Consumer / Framework 双方提交、包哈希与验证范围。</dd></div><div><dt>Evidence</dt><dd>七个 reviewed consumer snapshots。</dd></div><div><dt>Limitation</dt><dd>固定快照不会自动证明当前 main 或 Production。</dd></div></dl></article></li><li><span>06</span><article><h2>从项目页到 Engineering Evidence</h2><dl><div><dt>Trigger</dt><dd>模块目录无法解释 Ownership、Trade-off 与证据边界。</dd></div><div><dt>Change</dt><dd>建立首页 3 分钟路径、Engineering Hub、领域深页、案例和 Evidence Ladder。</dd></div><div><dt>Evidence</dt><dd>生成式站点合同、测试、幂等与浏览器验证。</dd></div><div><dt>Limitation</dt><dd>本地网站完成不等于远端 Runner 或 Pages publication。</dd></div></dl></article></li></ol></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="knowledge.html">Knowledge Graph <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="reference.html">Module Reference <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../framework-engineering.html">Engineering Hub <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -119,6 +134,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../dist/site.js" type="module"></script>
 </body>
 </html>

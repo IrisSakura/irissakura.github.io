@@ -104,6 +104,7 @@ export function resolveBlogDiscovery(taxonomy, articles) {
               : '近期正式文章'
         };
       })
+      .filter((entry) => entry.score > 0)
       .sort((left, right) => right.score - left.score || byNewest(left.article, right.article))
       .slice(0, 3);
     return [article.slug, related];

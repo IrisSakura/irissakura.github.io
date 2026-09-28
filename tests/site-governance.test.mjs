@@ -97,10 +97,10 @@ test('Framework Engineering Hub is generated from its contract with honest SEO a
   assert.match(page, new RegExp(`<meta name="description" content="${escapeRegExp(hub.positioning.description)}">`, 'u'));
   assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/framework-engineering\.html">/u);
   const structuredData = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)?.[1] ?? '{}');
-  assert.equal(structuredData['@type'], 'WebPage');
-  assert.equal(structuredData.name, hub.positioning.seoTitle);
-  assert.equal(structuredData.description, hub.positioning.description);
-  assert.equal(structuredData.url, 'https://irissakura.github.io/pages/framework-engineering.html');
+  const pageEntity = structuredData['@graph'].find((entry) => entry['@type'] === 'WebPage');
+  assert.equal(pageEntity.name, hub.positioning.seoTitle);
+  assert.equal(pageEntity.description, hub.positioning.description);
+  assert.equal(pageEntity.url, 'https://irissakura.github.io/pages/framework-engineering.html');
   assert.deepEqual(
     [...page.matchAll(/<a href="(#[a-z0-9-]+)" data-page-index-link/gu)].map((match) => match[1]),
     ['#depth-model', '#reader-paths', '#architecture-domains', '#evidence-boundary', '#adoption-route']

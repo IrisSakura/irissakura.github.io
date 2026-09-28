@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="安装、配置、诊断、分析和生成工具共同降低正确采用成本。">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-tooling.png">
     <meta name="twitter:image:alt" content="Tooling / Developer Experience | Sakura Framework 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Tooling / Developer Experience | Sakura Framework","description":"安装、配置、诊断、分析和生成工具共同降低正确采用成本。","url":"https://irissakura.github.io/pages/framework/tooling.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/tooling.html#webpage","name":"Tooling / Developer Experience | Sakura Framework","description":"安装、配置、诊断、分析和生成工具共同降低正确采用成本。","url":"https://irissakura.github.io/pages/framework/tooling.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/tooling.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Tooling / Developer Experience","item":"https://irissakura.github.io/pages/framework/tooling.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Tooling / Developer Experience | Sakura Framework</title>
     <link rel="stylesheet" href="../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -91,6 +105,7 @@
         </div></div>
     </section><section class="framework-detail-body" data-content-stage="result" id="toolchains" data-page-index-target><div class="container"><div class="section-heading-row"><div><p class="section-kicker">WORKFLOW, NOT SCREENSHOTS</p><h2 class="section-title">三条可复跑工具链</h2></div></div><div class="framework-toolchain-grid"><article><span class="framework-status-badge">local-passed</span><h2>Card Balance Toolchain</h2><ol><li>BCL-only balance core</li><li>Excel / CSV Editor Adapter</li><li>Godot Dock / headless CLI</li><li>STS2 consumer validation</li></ol><p class="framework-boundary-note">Unity、Godot、CLI 与 STS2 证据均为本地闭环；本页不声明 Runner、Release 或 Production。</p></article><article><span class="framework-status-badge">local-passed / runner-pending</span><h2>Runtime Developer Console</h2><ol><li>read-only contributor facade</li><li>typed command contribution</li><li>diagnostics surface</li><li>lifecycle cleanup</li></ol><p class="framework-boundary-note">本地实现与验证完成；Runner 仍待同 SHA 证据。</p></article><article><span class="framework-status-badge">local-passed</span><h2>Public Projection Pipeline</h2><ol><li>Framework source truth</li><li>closed public JSON</li><li>site generator</li><li>tests + Pages package</li></ol><p class="framework-boundary-note">网站投影链已本地验证；公开部署不属于本轮。</p></article></div></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="decisions.html">Architecture Decisions <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="evolution.html">Evolution <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="reference.html">Module Reference <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -125,6 +140,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../dist/site.js" type="module"></script>
 </body>
 </html>

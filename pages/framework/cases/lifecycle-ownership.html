@@ -18,12 +18,13 @@
     <meta name="twitter:description" content="把启动、Scope、取消、清理与失败回退变成同一运行时协议">
     <meta name="twitter:image" content="https://irissakura.github.io/assets/social/pages-framework-cases-lifecycle-ownership.png">
     <meta name="twitter:image:alt" content="Lifecycle &amp; Ownership | Sakura Framework Case Study 的 IrisSakura 分享图">
+
     <!-- indexable page -->
     <meta name="theme-color" content="#fff7fa">
     <link rel="icon" href="../../../assets/favicon.svg?v=20260824" type="image/svg+xml">
     <link rel="manifest" href="../../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"Lifecycle & Ownership | Sakura Framework Case Study","description":"把启动、Scope、取消、清理与失败回退变成同一运行时协议","url":"https://irissakura.github.io/pages/framework/cases/lifecycle-ownership.html"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://irissakura.github.io/pages/framework/cases/lifecycle-ownership.html#webpage","name":"Lifecycle & Ownership | Sakura Framework Case Study","description":"把启动、Scope、取消、清理与失败回退变成同一运行时协议","url":"https://irissakura.github.io/pages/framework/cases/lifecycle-ownership.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/framework/cases/lifecycle-ownership.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"Framework","item":"https://irissakura.github.io/pages/framework.html"},{"@type":"ListItem","position":3,"name":"Lifecycle & Ownership","item":"https://irissakura.github.io/pages/framework/cases/lifecycle-ownership.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Lifecycle & Ownership | Sakura Framework Case Study</title>
     <link rel="stylesheet" href="../../../style/main.css">
@@ -56,6 +57,7 @@
             <a href="../../../pages/contact.html" class="nav-link">关于</a>
         </div>
         <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
             <a class="nav-profile-link" href="../../../pages/contact.html" aria-label="关于与联系">
                 <img src="../../../assets/images/profile/irissakura-avatar.jpg" alt="">
             </a>
@@ -66,6 +68,18 @@
     </div>
 </nav>
 <!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
 
 <main id="main-content" class="main-content framework-detail-main">
 <!-- page-index:start -->
@@ -85,6 +99,7 @@
         </div>
     </header><section class="framework-detail-overview" data-content-stage="system" id="overview" data-page-index-target><div class="container"><p class="framework-case-summary"><strong>runner-passed / production-unknown</strong><span>把启动、Scope、取消、清理与失败回退变成同一运行时协议</span></p></div></section><section class="framework-detail-body framework-case-sections" data-content-stage="result" id="case-sections" data-page-index-target><div class="container"><section><header><span>01</span><h2>Problem</h2></header><p>模块能正常启动并不代表它能在重复初始化、取消、退出或启动失败时保持一致。</p></section><section><header><span>02</span><h2>Constraints</h2></header><p>App、Gameplay、Scene 与纯 C# Scope 的 Owner 不同；异步退出必须等待或取消；诊断不能改变产品行为。</p></section><section><header><span>03</span><h2>Naive Approach</h2></header><p>用静态单例承接全部服务，并只测试正常启动路径。</p></section><section><header><span>04</span><h2>Architecture Decision</h2></header><p>显式 composition root、immutable registry、Scope Owner、startup rollback 与 async exit，清理责任由创建者持有。</p></section><section><header><span>05</span><h2>System Model</h2></header><p>注册阶段冻结依赖；启动建立 Scope；运行期间由明确 Tick Owner 驱动；退出按逆序取消、释放并发布诊断。</p></section><section><header><span>06</span><h2>Failure Model</h2></header><p>重复初始化、注册后变更、启动中途异常、退出超时和残留订阅都有独立失败路径。</p></section><section><header><span>07</span><h2>Trade-offs</h2></header><p>协议更严格，模块作者需要实现完整生命周期；换来可重入、可诊断和可测试的运行时。</p></section><section><header><span>08</span><h2>Implementation</h2></header><p>Runtime Foundation 已覆盖 startup failure、diagnostics、scope ownership、async exit、immutable registry 与 gameplay session。</p></section><section><header><span>09</span><h2>Evidence</h2></header><p>该生命周期收敛在 exact Framework commit 具备 local-passed 与 same-SHA runner-passed 记录。</p></section><section><header><span>10</span><h2>Consumer</h2></header><p>Bootstrap 与多个 Gameplay Consumer 通过显式 Scope 使用基础服务；Consumer 仍拥有玩法和场景生命周期。</p></section><section><header><span>11</span><h2>Known Limitations</h2></header><p>Runner 证明测试工作流，不等于 Release 或真实 Production 长时运行。</p></section><section><header><span>12</span><h2>What Changed After Validation</h2></header><p>验证把退出从同步清理扩展为可等待、可取消的协议，并增加启动失败回滚和只读诊断。</p></section></div></section><section class="framework-detail-next" data-content-stage="next" id="next-route" data-page-index-target><div class="container"><p class="section-kicker">CONTINUE THE SYSTEM</p><div><a href="../cases.html">Flagship Cases <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../evidence.html">Evidence Model <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a href="../../framework-engineering.html">Engineering Hub <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></section>
 <!-- framework-detail-content:end -->
+<!-- site-related:start --><!-- site-related:end -->
 </main>
 <footer class="footer">
     <div class="container">
@@ -119,6 +134,7 @@
     </div>
 </footer>
 
+<script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
 <script src="../../../dist/site.js" type="module"></script>
 </body>
 </html>

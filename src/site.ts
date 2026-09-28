@@ -1,4 +1,6 @@
 import { AmbientMotion } from './ambient-motion.js';
+import { SiteSearch } from './search.js';
+import { analytics } from './analytics.js';
 
 export {};
 
@@ -102,6 +104,7 @@ interface ContentSearchIndex {
 
 class SiteShell {
     private readonly ambientMotion = new AmbientMotion();
+    private readonly siteSearch = new SiteSearch();
     private toggle: HTMLButtonElement | null = null;
     private menu: HTMLElement | null = null;
     private lastFocused: HTMLElement | null = null;
@@ -126,6 +129,8 @@ class SiteShell {
             element.textContent = new Date().getFullYear().toString();
         });
         this.setupNavigation();
+        this.siteSearch.setup();
+        this.setupTracking();
         this.setupSoftNavigation();
         this.setupSubscription();
         this.setupArticleReader();
@@ -174,9 +179,39 @@ class SiteShell {
             }
         });
         document.querySelectorAll<HTMLAnchorElement>(
-            '.skip-link[href], .navbar a[href], .footer a[href]'
+            '.skip-link[href], .navbar a[href], .footer a[href], .site-search-fallback a[href]'
         ).forEach((link) => {
             link.href = link.href;
+        });
+    }
+
+    private setupTracking(): void {
+        analytics.trackPageView();
+        document.addEventListener('site:navigation-complete', () => analytics.trackPageView());
+        document.addEventListener('click', (event) => {
+            const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
+            if (!link || link.hasAttribute('data-search-result')) return;
+            if (link.hasAttribute('data-related-link')) {
+                analytics.trackEvent('content.related_open', { destination: new URL(link.href).pathname });
+                return;
+            }
+            const href = link.getAttribute('href') ?? '';
+            if (href.startsWith('mailto:')) { analytics.trackOutbound('contact'); return; }
+            if (href.startsWith('tel:')) return;
+            const destination = new URL(link.href, location.href);
+            if (destination.pathname === '/rss.xml' && destination.origin === location.origin) {
+                analytics.trackEvent('navigation.rss_open');
+            } else if (destination.origin !== location.origin) {
+                analytics.trackOutbound(destination.hostname === 'github.com' ? 'repository' : 'link');
+            } else if (destination.pathname === '/pages/contact.html') {
+                analytics.trackEvent('external.contact_open');
+            } else if (destination.pathname === '/pages/framework-quickstart.html') {
+                analytics.trackEvent('framework.quickstart_open');
+            } else if (/^\/pages\/blog\/[^/]+\.html$/u.test(destination.pathname)) {
+                analytics.trackEvent('content.article_open');
+            } else if (/^\/pages\/(development|engineering|framework|journal|tools|mods|wisteria|game|portfolio)\.html$/u.test(destination.pathname)) {
+                analytics.trackEvent('content.project_open');
+            }
         });
     }
 

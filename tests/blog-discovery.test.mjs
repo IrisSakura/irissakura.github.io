@@ -37,7 +37,8 @@ test('blog taxonomy is explicit, semantic and covers exactly the formal articles
   assert.ok(discovery.tags.filter((entry) => entry.articles.length >= 2).every((entry) => discovery.routableTags.includes(entry)));
   assert.ok(discovery.series.every((entry) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.slug)));
   assert.ok(discovery.tags.every((entry) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.slug)));
-  assert.ok(articles.every((article) => discovery.relatedBySlug.get(article.slug).length > 0));
+  assert.ok(articles.every((article) => discovery.relatedBySlug.get(article.slug).every((entry) =>
+    entry.article.series === article.series || entry.article.tags.some((tag) => article.tags.includes(tag)))));
 
   const missingTag = structuredClone(taxonomy);
   missingTag.tags = missingTag.tags.filter((entry) => entry.name !== 'unity');
@@ -131,7 +132,8 @@ test('series and multi-article tags form indexable discovery routes', async () =
 
   for (const article of articles) {
     const html = await readText(`pages/blog/${article.slug}.html`);
-    assert.ok(html.includes('class="related-articles"'), `${article.slug} missing related articles`);
+    assert.equal(html.includes('class="related-articles"'), discovery.relatedBySlug.get(article.slug).length > 0,
+      `${article.slug} related articles must have a shared series or tag`);
     assert.ok(html.includes(`series/${discovery.seriesByName.get(article.series).slug}.html`));
     for (const tag of article.tags) {
       const collection = discovery.tagsByName.get(tag);

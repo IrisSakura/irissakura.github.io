@@ -5,9 +5,13 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '_site');
 const generatedSocial = path.join(root, '.generated', 'social');
-const ownerOnlySources = new Set([
-  path.join(root, 'data', 'consumer-lab.json')
+const publicData = new Set([
+  'framework-public.json',
+  'search-index.json',
+  'site-search-index.json',
+  'content-graph.json'
 ]);
+const dataDirectory = path.join(root, 'data');
 const entries = [
   '404.html',
   'index.html',
@@ -29,7 +33,7 @@ for (const entry of entries) {
     recursive: true,
     filter: (source) => (
       path.basename(source) !== '.DS_Store'
-      && !ownerOnlySources.has(path.resolve(source))
+      && (!source.startsWith(`${dataDirectory}${path.sep}`) || publicData.has(path.relative(dataDirectory, source)))
       && !(source.includes(`${path.sep}personas${path.sep}v2${path.sep}`) && path.basename(source) === 'master')
       && !source.startsWith(path.join(root, 'assets/images/brand/v1'))
       && !source.startsWith(path.join(root, 'assets/images/brand/site-v2'))
