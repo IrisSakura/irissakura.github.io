@@ -409,7 +409,13 @@
 .subscribe-raw, #subscription-help { font-size: .9rem; color: var(--muted-text-color); }
 
 .hero-section.living-profile { background-image: radial-gradient(ellipse at 88% 44%, color-mix(in srgb, var(--brand-sakura-100) 40%, transparent), transparent 60%); }
-.profile-illustration { grid-column: span 5; min-width: 0; margin: 0; pointer-events: none; }
+.living-profile .profile-identity { grid-template-columns: 88px minmax(0, 1fr); gap: 1.25rem; border-radius: 1.5rem; box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--brand-iris) 8%, transparent); }
+.living-profile .profile-avatar-large { width: 88px; height: 88px; }
+.living-profile .profile-copy .hero-title { font-size: clamp(2rem, 3.8vw, 3.5rem); text-wrap: balance; }
+.living-profile .hero-title .highlight { display: block; }
+.profile-illustration { position: relative; isolation: isolate; grid-column: span 5; min-width: 0; margin: 0; pointer-events: none; }
+.profile-illustration::before { content: ""; position: absolute; z-index: -1; inset: 7% 1% 0; border: 1px solid color-mix(in srgb, var(--brand-shared) 15%, transparent); border-radius: 50% 50% 38% 38%; background: radial-gradient(ellipse at 50% 45%, var(--surface-strong), transparent 70%); transform: rotate(-8deg); }
+.home-now .now-list li { padding-top: 1.25rem; border-top: 2px solid color-mix(in srgb, var(--brand-shared) 20%, transparent); }
 .profile-illustration-mobile { display: none; }
 .profile-illustration img, .profile-illustration-mobile img { display: block; width: 100%; height: auto; object-fit: contain; }
 .home-writing, .home-updates, .about-home { position: relative; isolation: isolate; }
@@ -420,7 +426,16 @@
   .profile-illustration { display: none; }
 }
 @media (max-width: 900px) {
-  .living-profile .profile-identity { grid-template-columns: minmax(0, 1fr) auto; }
+  .living-profile .profile-hero-inner { grid-template-columns: minmax(0, 1fr); }
+  .living-profile .profile-identity { grid-column: 1; grid-template-columns: minmax(0, 1fr) auto; }
+}
+@media (max-width: 900px) {
+  .living-profile .profile-avatar-large { width: 72px; height: 72px; }
+  .living-profile .profile-copy .hero-title { font-size: clamp(1.85rem, 6vw, 2.5rem); }
+}
+@media (max-width: 600px) {
+  .living-profile .profile-avatar-large { width: 48px; height: 48px; }
+  .living-profile .profile-copy .hero-title { font-size: 1.85rem; }
 }
 @media (max-width: 900px) {
   .living-profile .profile-avatar-large { grid-column: 1; grid-row: 1; }

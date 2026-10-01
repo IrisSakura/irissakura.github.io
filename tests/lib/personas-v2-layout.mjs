@@ -22,7 +22,9 @@ export async function assertPersonaLayouts(browser, baseUrl, output) {
    prose:[...document.querySelectorAll('.article-prose-section')].map(el=>({width:el.getBoundingClientRect().width,lineHeight:getComputedStyle(el).lineHeight})),
    toc:document.querySelector('.article-toc')?.open,
    overlaps:[...document.querySelectorAll('.article-breakout')].some(b=>[...document.querySelectorAll('.article-toc,.series-context')].some(a=>{const x=b.getBoundingClientRect(),y=a.getBoundingClientRect();return x.left<y.right&&x.right>y.left&&x.top<y.bottom&&x.bottom>y.top;})),
-   missingAnchors:[...document.querySelectorAll('.article-toc a')].filter(a=>!document.getElementById(decodeURIComponent(a.hash.slice(1)))).map(a=>a.hash)
+   missingAnchors:[...document.querySelectorAll('.article-toc a')].filter(a=>!document.getElementById(decodeURIComponent(a.hash.slice(1)))).map(a=>a.hash),
+   clippedWorldArtwork:[...document.querySelectorAll('.world-scene .persona-picture')].some(el=>{const image=el.getBoundingClientRect(),scene=el.closest('.world-scene').getBoundingClientRect();return image.top<scene.top-1||image.bottom>scene.bottom+1||image.left<scene.left-1||image.right>scene.right+1;}),
+   narrowMobileProfile:innerWidth<=900&&[...document.querySelectorAll('.living-profile .profile-identity')].some(el=>el.getBoundingClientRect().width<el.parentElement.clientWidth-1)
   }));
   if(geometry.overflow>1) failures.push(`${file} ${width}: page overflow ${geometry.overflow}`);
   for(const image of geometry.images) if(!image.loaded||!image.width||!image.height||image.fit!=='contain') failures.push(`${file} ${width}: missing/cropped persona`);
@@ -30,6 +32,8 @@ export async function assertPersonaLayouts(browser, baseUrl, output) {
   if(['index','development'].includes(file)&&geometry.images.length) failures.push(`${file} ${width}: character gallery restored`);
   if(geometry.toc!==undefined&&geometry.toc!==(width>900)) failures.push(`${file} ${width}: TOC disclosure state`);
   if(geometry.overlaps||geometry.missingAnchors.length) failures.push(`${file} ${width}: reader overlap/anchor`);
+  if(geometry.clippedWorldArtwork) failures.push(`${file} ${width}: world scene clips the character`);
+  if(geometry.narrowMobileProfile) failures.push(`${file} ${width}: profile leaves unused mobile columns`);
   if(width>=1440&&geometry.prose.some(p=>p.width<680||p.width>760)) failures.push(`${file} ${width}: prose width outside 680–760`);
   evidence.push({file,width,...geometry});
   if(output&&folder) {await mkdir(path.join(output,folder),{recursive:true});await page.screenshot({path:path.join(output,folder,`${file.replaceAll('/','--')}-${width}.png`),fullPage:folder==='routes'});}

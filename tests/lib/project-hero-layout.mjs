@@ -23,13 +23,16 @@ export async function assertProjectHeroLayouts(browser, baseUrl, screenshotDirec
           const hero = document.querySelector('[data-brand-project-hero]').getBoundingClientRect();
           const art = document.querySelector('.brand-mode-hero-art').getBoundingClientRect();
           const title = document.querySelector('[data-brand-project-hero] h1').getBoundingClientRect();
-          return { navBottom: nav.bottom, heroTop: hero.top, artTop: art.top, titleTop: title.top, overflow: document.documentElement.scrollWidth - window.innerWidth };
+          const copy = document.querySelector('[data-brand-project-hero] > .container, [data-brand-project-hero] > .tools-hero-copy').getBoundingClientRect();
+          const artworkOverlapsCopy = art.left < copy.right - 1 && art.right > copy.left + 1 && art.top < copy.bottom - 1 && art.bottom > copy.top + 1;
+          return { navBottom: nav.bottom, heroTop: hero.top, artTop: art.top, titleTop: title.top, artworkOverlapsCopy, overflow: document.documentElement.scrollWidth - window.innerWidth };
         });
         const label = `${width}px ${name}: ${JSON.stringify(geometry)}`;
         assert.ok(geometry.heroTop >= geometry.navBottom - 1, `Hero is under fixed navigation: ${label}`);
         assert.ok(geometry.artTop >= geometry.navBottom - 1, `Artwork is under fixed navigation: ${label}`);
         assert.ok(geometry.titleTop >= geometry.navBottom - 1, `Title is under fixed navigation: ${label}`);
         assert.ok(geometry.overflow <= 1, `Horizontal overflow: ${label}`);
+        assert.ok(!geometry.artworkOverlapsCopy, `Artwork overlaps introductory copy: ${label}`);
         if (name === 'journal') {
           const overviewIsBelowHero = await page.evaluate(() =>
             document.querySelector('.content-search').getBoundingClientRect().top >=
