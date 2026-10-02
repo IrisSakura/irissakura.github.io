@@ -75,14 +75,16 @@ test('framework adoption snapshot names the supported packages and pins reviewed
     ['core', 'event', 'gamehelper', 'pooling', 'bootstrap', 'preferences',
       ...(adoption.supportedPackages.some(entry => entry.id === 'config-core') ? ['config-core'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'pathfinding') ? ['pathfinding'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'ledger') ? ['ledger'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'ledger') ? ['ledger'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'economy') ? ['economy'] : [])]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
     ['core-only', 'bootstrap-lite', 'runtime-foundation', 'preferences-only',
       ...(adoption.supportedPackages.some(entry => entry.id === 'config-core') ? ['config-core-only'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'pathfinding') ? ['pathfinding-foundation'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'ledger') ? ['ledger-only'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'ledger') ? ['ledger-only'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'economy') ? ['economy-foundation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
