@@ -63,6 +63,24 @@ const godotSearchCount = contentSearchIndex.entries.filter((entry) => (
 )).length;
 const unitySearchCount = contentSearchIndex.entries.filter((entry) => entry.engines.includes('unity')).length;
 
+async function assertSupportedAdoption(page) {
+  const packages = page.locator('#adoption .supported-package-list > li');
+  const routes = page.locator('#adoption .stable-route-list > article');
+  if (await packages.count() !== 7 || await routes.count() !== 5) {
+    throw new Error('Framework adoption must expose seven Supported packages and five stable routes');
+  }
+  const configPackage = packages.filter({ hasText: 'com.unitygame.framework.config-core' });
+  const configRoute = routes.filter({ hasText: 'config-core-only' });
+  if (await configPackage.count() !== 1 || await configRoute.count() !== 1
+    || await configRoute.locator('code').count() !== 1
+    || await configRoute.locator('code').innerText() !== 'config-core') {
+    throw new Error('Config Core adoption must expose exactly its single-package closure');
+  }
+  if (!(await configRoute.innerText()).includes('最终 Runner 验证仍待补齐')) {
+    throw new Error('Config Core adoption overstates its pending Runner evidence');
+  }
+}
+
 async function assertEvidenceChainPage(page, route, viewportName) {
   await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
   if (await page.locator('.evidence-chain-card').count() !== evidenceChains.chains.length) {
@@ -539,6 +557,7 @@ try {
   await desktop.getByRole('link', { name: '进入 SakuraGameFramework', exact: true }).click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html`);
   await desktop.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
+  await assertSupportedAdoption(desktop);
   if (await desktop.locator('.framework-story-chip').count() !== frameworkStory.positioning.claims.length) {
     throw new Error('Framework positioning claims are incomplete');
   }
@@ -1023,6 +1042,7 @@ try {
   }
   await mobile.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
   await mobile.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
+  await assertSupportedAdoption(mobile);
   const frameworkMobileState = await mobile.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,
     layers: document.querySelectorAll('.framework-map-layer').length,

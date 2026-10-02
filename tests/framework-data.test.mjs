@@ -27,27 +27,27 @@ test('framework.json exposes only the public contract', async () => {
 
   assert.deepEqual(Object.keys(data).sort(), allowed.sort());
   assert.equal(data.schemaVersion, 1);
-  assert.equal(data.sourceCommit, '9d436c62f5cfbe78c84c9ef44fe8b5f8214d5cd1');
+  assert.equal(data.sourceCommit, 'eda13712615de167aee10610ec300fcc609b7ba0');
   assert.match(data.sourceCommit, /^[0-9a-f]{7,40}$/);
   assert.equal(data.adoptionReviewContract, 'supported-stable-v1');
-  assert.equal(data.adoptionReviewHash, 'sha256:26df9f4c1b99a54f4f11e0e9289493a528fb2d941328bb7c7c47bb3063e08e56');
+  assert.equal(data.adoptionReviewHash, 'sha256:e68421042e00f6456204e04e39e31403b9bf311e775d945269b5e25f0dabfd9f');
   assert.ok(!Number.isNaN(Date.parse(data.generatedAt)));
 
   assert.deepEqual(data.summary, {
-    packageCount: 147,
-    catalogModuleCount: 147,
+    packageCount: 149,
+    catalogModuleCount: 149,
     presetCount: 69,
-    profileCount: 11,
-    asmdefCount: 884
+    profileCount: 12,
+    asmdefCount: 910
   });
   assert.deepEqual(data.lifecycleCounts, {
     Deprecated: 0,
     DocsOnly: 9,
     Experimental: 23,
     Frozen: 3,
-    Preview: 106,
+    Preview: 107,
     Research: 0,
-    Supported: 6
+    Supported: 7
   });
   assert.equal(Object.hasOwn(data.summary, 'noEnginePackageCount'), false, 'snapshot does not publish a no-engine count');
 
@@ -80,11 +80,11 @@ test('framework adoption snapshot names the supported packages and pins reviewed
   ));
   assert.deepEqual(
     adoption.supportedPackages.map((entry) => entry.id),
-    ['core', 'event', 'gamehelper', 'pooling', 'bootstrap', 'preferences']
+    ['core', 'event', 'gamehelper', 'pooling', 'bootstrap', 'preferences', 'config-core']
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
-    ['core-only', 'bootstrap-lite', 'runtime-foundation', 'preferences-only']
+    ['core-only', 'bootstrap-lite', 'runtime-foundation', 'preferences-only', 'config-core-only']
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
