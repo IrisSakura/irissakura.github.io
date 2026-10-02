@@ -31,21 +31,23 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.quickstart.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length);
-  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'work-orchestration'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'work-orchestration'), true);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'rules'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'rules-only'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'response-rules'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'response-rules-only').packages, ['response-rules']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'pathfinding'), true);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'ledger'), true);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'economy'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'ledger-only').packages, ['ledger']);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'work-orchestration-only'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'work-orchestration-only'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'pathfinding-foundation').packages, ['core', 'pathfinding']);
   assert.deepEqual(current.projects.projects.find(project => project.id === 'sakura-framework'), input.previousReview.project);
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Work Orchestration prerequisite must remain available');
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Rules prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -67,6 +69,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'work-orchestration-only').packages, ['work-orchestration']);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'economy-foundation').packages, ['economy', 'ledger']);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'ledger-only').packages, ['ledger']);
+  assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'rules').length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'rules-only').packages, ['rules']);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));

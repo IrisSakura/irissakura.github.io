@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "ebed2bbe61f9c11af782631c5a794b29c6444726",
+  "sourceCommit": "a005b3764ed2fad280e371b1ccaef940e0daa428",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:eb4655b45c84f2223419b49bbf679a1d9e1df89c1a5cf531008a030d068885df",
+  "adoptionReviewHash": "sha256:19c71627b98ae9fbed83b05ab56996a4e890ff069f72fcdd71b1bb4ebabdf8e4",
   "updatedAt": "2026-10-03",
   "supportedPackages": [
     {
@@ -76,6 +76,12 @@
       "displayName": "Work Orchestration",
       "packageName": "com.unitygame.framework.work-orchestration",
       "role": "确定性工作分配、资源预留、租约状态与终态清理"
+    },
+    {
+      "id": "rules",
+      "displayName": "Rules",
+      "packageName": "com.unitygame.framework.rules",
+      "role": "有界条件树、事实快照与有序动作路由"
     }
   ],
   "stableRoutes": [
@@ -167,6 +173,14 @@
         "work-orchestration"
       ],
       "purpose": "独立采用工作编排内核；单Owner单线程，有限幂等回放，由Owner维护逻辑Tick和资源过期清理。库存结算、存档恢复与网络Authority由项目负责；安装版本以Framework已发布入口为准。"
+    },
+    {
+      "id": "rules-only",
+      "label": "Rules Only",
+      "packages": [
+        "rules"
+      ],
+      "purpose": "独立采用条件与动作内核：存在性按键判断，事实由调用方冻结；默认首错停止，已发生副作用的补偿由项目负责。安装版本以 Framework 已发布入口为准。"
     }
   ],
   "gameAdoption": [
