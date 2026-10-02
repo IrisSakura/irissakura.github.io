@@ -4,6 +4,7 @@ import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { assertPersonaLayouts } from './lib/personas-v2-layout.mjs';
 import { assertProductizationFlow } from './lib/productization-flow.mjs';
+import { readFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
 import { chromium } from '@playwright/test';
 import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat } from 'node:fs/promises';
@@ -19,10 +20,10 @@ const [journalSource, blogPublication, blogTaxonomy, contentSearchIndex, evidenc
   readJson('data/search-index.json'),
   readJson('data/evidence-chains.json'),
   readJson('config/evidence-chain-authorities.json'),
-  readJson('data/projects.json'),
+  readFrameworkReviewedContent().then(review => review.projects),
   readJson('data/iris-engineering.json'),
   readJson('data/consumer-lab.json'),
-  readJson('data/framework-quickstart.json'),
+  readFrameworkReviewedContent().then(review => review.quickstart),
   readJson('data/framework-story.json'),
   readJson('data/framework-engineering.json'),
   readJson('data/framework-architecture.json'),
@@ -63,11 +64,29 @@ const godotSearchCount = contentSearchIndex.entries.filter((entry) => (
 )).length;
 const unitySearchCount = contentSearchIndex.entries.filter((entry) => entry.engines.includes('unity')).length;
 
+const { adoption: reviewedFrameworkAdoption } = await readFrameworkReviewedContent();
+
 async function assertSupportedAdoption(page) {
   const packages = page.locator('#adoption .supported-package-list > li');
   const routes = page.locator('#adoption .stable-route-list > article');
-  if (await packages.count() !== 7 || await routes.count() !== 5) {
-    throw new Error('Framework adoption must expose seven Supported packages and five stable routes');
+  if (await packages.count() !== reviewedFrameworkAdoption.supportedPackages.length || await routes.count() !== reviewedFrameworkAdoption.stableRoutes.length) {
+    throw new Error('Framework adoption must match the complete snapshot-bound Supported packages and stable routes');
+  }
+  for (const entry of reviewedFrameworkAdoption.supportedPackages) {
+    if (await packages.filter({ hasText: entry.packageName }).count() !== 1) {
+      throw new Error(`Supported package ${entry.packageName} is missing or duplicated`);
+    }
+  }
+  for (const route of reviewedFrameworkAdoption.stableRoutes) {
+    const card = routes.filter({ has: page.getByText(route.id, { exact: true }) });
+    if (await card.count() !== 1
+      || (await card.locator('code').allTextContents()).join(',') !== route.packages.join(',')) {
+      throw new Error(`Stable route ${route.id} does not expose its complete package closure`);
+    }
+  }
+  if (!reviewedFrameworkAdoption.supportedPackages.some(entry => entry.id === 'pathfinding')
+    && await packages.filter({ hasText: 'com.unitygame.framework.pathfinding' }).count() !== 0) {
+    throw new Error('An uncommitted Pathfinding review must not appear as the current snapshot');
   }
   const configPackage = packages.filter({ hasText: 'com.unitygame.framework.config-core' });
   const configRoute = routes.filter({ hasText: 'config-core-only' });

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { readFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
 
 const root = new URL('../', import.meta.url);
 
@@ -20,7 +21,7 @@ test('generated public copy derives volatile counts from authoritative registrie
     portfolioHtml
   ] = await Promise.all([
     readJson('data/framework.json'),
-    readJson('data/framework-adoption.json'),
+    readFrameworkReviewedContent().then(review => review.adoption),
     readJson('data/journal.json'),
     readJson('data/projects.json'),
     readJson('data/consumer-lab.json'),

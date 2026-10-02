@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { readFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
 
 import {
   assertFrameworkQuickstart,
@@ -18,10 +19,7 @@ async function readJson(path) {
 }
 
 test('quickstart is a 15-minute fail-closed projection of reviewed stable routes', async () => {
-  const [quickstart, adoption] = await Promise.all([
-    readJson('data/framework-quickstart.json'),
-    readJson('data/framework-adoption.json')
-  ]);
+  const { quickstart, adoption } = await readFrameworkReviewedContent();
 
   assert.doesNotThrow(() => assertFrameworkQuickstart(quickstart, adoption));
   assert.equal(quickstart.schemaVersion, 1);
@@ -83,10 +81,7 @@ test('quickstart is a 15-minute fail-closed projection of reviewed stable routes
 });
 
 test('quickstart contract rejects route drift and a promoted Runtime Starter claim', async () => {
-  const [quickstart, adoption] = await Promise.all([
-    readJson('data/framework-quickstart.json'),
-    readJson('data/framework-adoption.json')
-  ]);
+  const { quickstart, adoption } = await readFrameworkReviewedContent();
 
   const unknownRoute = structuredClone(quickstart);
   unknownRoute.routeSequence[1] = 'preview-everything';
@@ -112,12 +107,12 @@ test('quickstart contract rejects route drift and a promoted Runtime Starter cla
 
 test('generated quickstart is indexable, self-contained and linked from Framework', async () => {
   const [quickstart, adoption, quickstartHtml, frameworkHtml, sitemap, projects, maintenance] = await Promise.all([
-    readJson('data/framework-quickstart.json'),
-    readJson('data/framework-adoption.json'),
+    readFrameworkReviewedContent().then(review => review.quickstart),
+    readFrameworkReviewedContent().then(review => review.adoption),
     readText('pages/framework-quickstart.html'),
     readText('pages/framework.html'),
     readText('sitemap.xml'),
-    readJson('data/projects.json'),
+    readFrameworkReviewedContent().then(review => review.projects),
     readText('docs/maintenance/framework-sync.md')
   ]);
 

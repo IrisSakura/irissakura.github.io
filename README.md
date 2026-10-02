@@ -99,6 +99,7 @@ npm run package:site
 - `data/evidence-chains.json`：研究、Framework 采用映射和游戏系统之间的公开证据链与边界；
 - `data/framework.json`：由 Sakura Framework 权威清单生成的白名单公开快照；
 - `data/framework-adoption.json`：经人工复核的 Supported 包、稳定路线和真实项目采用映射；
+- `data/framework-previous-review.json`：跨仓预审过渡期间保留的前一套采用、教程与 Framework 项目事实；生成器按权威快照 hash 选择整套内容；
 - `data/framework-quickstart.json`：只登记路线 ID 与教程步骤，包名从 adoption 注册表派生，不自行绑定版本。
 - `data/iris-engineering.json`：Iris Engineering 的公开快照；首次 fixed-commit import 会把当前 legacy v1 迁移为 schema v2，只公开审阅语义和 `sourceUpdatedAt`，source SHA 留在不发布的 owner provenance。
 

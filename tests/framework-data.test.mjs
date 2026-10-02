@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { assertFrameworkAdoptionReviewed } from '../scripts/lib/framework-adoption-review.mjs';
+import { readFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
 import { updateFrameworkFallback } from '../scripts/lib/framework-fallback.mjs';
 
 const root = new URL('../', import.meta.url);
@@ -27,28 +28,20 @@ test('framework.json exposes only the public contract', async () => {
 
   assert.deepEqual(Object.keys(data).sort(), allowed.sort());
   assert.equal(data.schemaVersion, 1);
-  assert.equal(data.sourceCommit, 'eda13712615de167aee10610ec300fcc609b7ba0');
-  assert.match(data.sourceCommit, /^[0-9a-f]{7,40}$/);
+  assert.match(data.sourceCommit, /^[0-9a-f]{40}$/);
   assert.equal(data.adoptionReviewContract, 'supported-stable-v1');
-  assert.equal(data.adoptionReviewHash, 'sha256:e68421042e00f6456204e04e39e31403b9bf311e775d945269b5e25f0dabfd9f');
+  assert.match(data.adoptionReviewHash, /^sha256:[0-9a-f]{64}$/u);
   assert.ok(!Number.isNaN(Date.parse(data.generatedAt)));
 
-  assert.deepEqual(data.summary, {
-    packageCount: 149,
-    catalogModuleCount: 149,
-    presetCount: 69,
-    profileCount: 12,
-    asmdefCount: 910
-  });
-  assert.deepEqual(data.lifecycleCounts, {
-    Deprecated: 0,
-    DocsOnly: 9,
-    Experimental: 23,
-    Frozen: 3,
-    Preview: 107,
-    Research: 0,
-    Supported: 7
-  });
+  assert.deepEqual(Object.keys(data.summary).sort(), ['asmdefCount', 'catalogModuleCount', 'packageCount', 'presetCount', 'profileCount']);
+  for (const value of [...Object.values(data.summary), ...Object.values(data.lifecycleCounts)]) {
+    assert.ok(Number.isInteger(value) && value >= 0, 'snapshot counts must be non-negative integers');
+  }
+  assert.equal(Object.values(data.lifecycleCounts).reduce((total, count) => total + count, 0), data.summary.packageCount);
+  assert.equal(data.layers.reduce((total, layer) => total + layer.packageCount, 0), data.summary.packageCount);
+  const { adoption } = await readFrameworkReviewedContent();
+  assert.equal(data.lifecycleCounts.Supported, adoption.supportedPackages.length);
+  assert.ok(data.summary.profileCount >= adoption.stableRoutes.length);
   assert.equal(Object.hasOwn(data.summary, 'noEnginePackageCount'), false, 'snapshot does not publish a no-engine count');
 
   assert.ok(Array.isArray(data.layers));
@@ -67,8 +60,7 @@ test('framework.json exposes only the public contract', async () => {
 });
 
 test('framework adoption snapshot names the supported packages and pins reviewed facts', async () => {
-  const framework = JSON.parse(await readText('data/framework.json'));
-  const adoption = JSON.parse(await readText('data/framework-adoption.json'));
+  const { framework, adoption } = await readFrameworkReviewedContent();
 
   assert.equal(adoption.schemaVersion, 1);
   assert.match(adoption.sourceCommit, /^[0-9a-f]{7,40}$/);
@@ -80,11 +72,15 @@ test('framework adoption snapshot names the supported packages and pins reviewed
   ));
   assert.deepEqual(
     adoption.supportedPackages.map((entry) => entry.id),
-    ['core', 'event', 'gamehelper', 'pooling', 'bootstrap', 'preferences', 'config-core']
+    ['core', 'event', 'gamehelper', 'pooling', 'bootstrap', 'preferences',
+      ...(adoption.supportedPackages.some(entry => entry.id === 'config-core') ? ['config-core'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'pathfinding') ? ['pathfinding'] : [])]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
-    ['core-only', 'bootstrap-lite', 'runtime-foundation', 'preferences-only', 'config-core-only']
+    ['core-only', 'bootstrap-lite', 'runtime-foundation', 'preferences-only',
+      ...(adoption.supportedPackages.some(entry => entry.id === 'config-core') ? ['config-core-only'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'pathfinding') ? ['pathfinding-foundation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));

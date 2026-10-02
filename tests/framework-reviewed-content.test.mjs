@@ -1,0 +1,113 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import test from 'node:test';
+
+import { assertProjectFactsCurrent } from '../scripts/lib/project-facts.mjs';
+import { resolveFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
+
+const root = new URL('../', import.meta.url);
+const readJson = async file => JSON.parse(await readFile(new URL(file, root), 'utf8'));
+
+async function inputs() {
+  const [framework, adoption, quickstart, projects, previousReview, journal] = await Promise.all([
+    'data/framework.json', 'data/framework-adoption.json', 'data/framework-quickstart.json',
+    'data/projects.json', 'data/framework-previous-review.json', 'data/journal.json'
+  ].map(readJson));
+  // Model the cross-repository transition even after a new snapshot arrives.
+  framework.adoptionReviewHash = previousReview.adoption.adoptionReviewHash;
+  framework.lifecycleCounts.Supported = previousReview.adoption.supportedPackages.length;
+  return { framework, adoption, quickstart, projects, previousReview, journal };
+}
+
+function resolve(input) {
+  return resolveFrameworkReviewedContent(
+    input.framework, input.adoption, input.quickstart, input.projects, input.previousReview
+  );
+}
+
+test('a prerequisite review keeps the complete current snapshot publishable without promoting its packages', async () => {
+  const input = await inputs();
+  const current = resolve(input);
+  assert.equal(current.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
+  assert.equal(current.quickstart.adoptionReviewHash, input.framework.adoptionReviewHash);
+  assert.equal(current.adoption.supportedPackages.length, 7);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'pathfinding'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'pathfinding-foundation'), false);
+  assert.deepEqual(current.projects.projects.find(project => project.id === 'sakura-framework'), input.previousReview.project);
+  assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
+  for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
+    assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
+  }
+  assert.equal(input.adoption.supportedPackages.length, 8, 'the reviewed prerequisite must remain available');
+  assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
+});
+
+test('arrival of the reviewed Framework snapshot switches adoption, quickstart and project facts together', async () => {
+  const input = await inputs();
+  // A future synchronized snapshot, not a claim that this snapshot has arrived.
+  input.framework = {
+    ...input.framework,
+    adoptionReviewHash: input.adoption.adoptionReviewHash,
+    lifecycleCounts: { ...input.framework.lifecycleCounts, Supported: 8 }
+  };
+  const current = resolve(input);
+  assert.equal(current.adoption, input.adoption);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'pathfinding-foundation').packages, ['core', 'pathfinding']);
+  assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'pathfinding').length, 1);
+  assert.equal(current.quickstart, input.quickstart);
+  assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
+  assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
+});
+
+test('a single matching review remains supported', async () => {
+  const input = await inputs();
+  input.adoption = input.previousReview.adoption;
+  input.quickstart = input.previousReview.quickstart;
+  input.projects.projects = input.projects.projects.map(project => (
+    project.id === 'sakura-framework' ? input.previousReview.project : project
+  ));
+  input.previousReview = undefined;
+  assert.equal(resolve(input).adoption, input.adoption);
+});
+
+test('an unknown Framework hash or contract remains blocked', async () => {
+  const input = await inputs();
+  input.framework.adoptionReviewHash = `sha256:${'f'.repeat(64)}`;
+  assert.throws(() => resolve(input), /adoption review required.*Supported package identities.*stable route closures/u);
+  input.framework.adoptionReviewContract = 'supported-stable-v2';
+  assert.throws(() => resolve(input), /adoption review required.*supported-stable-v2/u);
+});
+
+test('retained reviews cannot silently change identities, route closures, quickstart or project facts', async () => {
+  const input = await inputs();
+  for (const mutate of [
+    review => { review.adoption.supportedPackages[0].packageName += '-changed'; },
+    review => { review.adoption.stableRoutes[0].packages.push('event'); },
+    review => { review.quickstart.adoptionReviewHash = input.adoption.adoptionReviewHash; },
+    review => { review.project.reviewedFrameworkAdoptionHash = input.adoption.adoptionReviewHash; }
+  ]) {
+    const changed = structuredClone(input);
+    mutate(changed.previousReview);
+    assert.throws(() => resolve(changed), /review hash does not match|quickstart adoption review hash is stale|matching Sakura Framework project facts/u);
+  }
+  const duplicated = { ...input, previousReview: { schemaVersion: 1, adoption: input.adoption, quickstart: input.quickstart, project: input.projects.projects.find(project => project.id === 'sakura-framework') } };
+  assert.throws(() => resolve(duplicated), /distinct adoptionReviewHash/u);
+  input.framework.lifecycleCounts.Supported = 8;
+  assert.throws(() => resolve(input), /Supported count does not match/u);
+});
+
+test('generated adoption uses the same reviewed package set as the actual Framework snapshot', async () => {
+  const [framework, adoption, quickstart, projects, previousReview] = await Promise.all([
+    'data/framework.json', 'data/framework-adoption.json', 'data/framework-quickstart.json',
+    'data/projects.json', 'data/framework-previous-review.json'
+  ].map(readJson));
+  const current = resolveFrameworkReviewedContent(framework, adoption, quickstart, projects, previousReview);
+  const html = await readFile(new URL('pages/framework.html', root), 'utf8');
+  const adoptionBlock = html.match(/<!-- framework-adoption:start -->([\s\S]*?)<!-- framework-adoption:end -->/u)?.[1];
+  assert.ok(adoptionBlock, 'generated Framework adoption block must exist');
+  assert.ok(adoptionBlock.includes(`${current.adoption.supportedPackages.length} 个 Supported 包`));
+  for (const entry of current.adoption.supportedPackages) assert.ok(adoptionBlock.includes(entry.packageName));
+  if (!current.adoption.supportedPackages.some(entry => entry.id === 'config-core')) {
+    assert.doesNotMatch(adoptionBlock, /Config Snapshot Core|Config Core Only|com\.unitygame\.framework\.config-core/u);
+  }
+});

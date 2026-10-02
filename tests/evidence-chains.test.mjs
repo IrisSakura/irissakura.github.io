@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
@@ -131,7 +132,7 @@ test('authority free text rejects normalized private and transport details witho
 test('evidence chains resolve only reviewed four-part public facts', async () => {
   const [data, adoption, journalSource, publication, irisEngineering, authorities] = await Promise.all([
     readJson('data/evidence-chains.json'),
-    readJson('data/framework-adoption.json'),
+    readFrameworkReviewedContent().then(review => review.adoption),
     readJson('data/journal-source.json'),
     readJson('config/blog-publication.json'),
     readJson('data/iris-engineering.json'),

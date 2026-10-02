@@ -2,7 +2,9 @@
 
 `data/framework.json` 是网站消费的白名单公开快照，不是 Framework 仓库的完整清单，也不是网站侧手工维护的事实源。
 
-`data/framework-adoption.json` 是站点侧的人工策展采用快照，负责公开经人工复核的 Supported 包、最小稳定 Profile 路线与《言铸之剑》的已验证依赖映射。它的 `adoptionReviewHash` 必须与 `data/framework.json` 完全一致；采用相关事实变化但说明尚未复核时，网站构建应失败而不是继续发布旧口径。`sourceCommit` 记录最近一次人工复核所依据的 Framework 提交，可以落后于自动同步的公开快照提交。
+`data/framework-adoption.json` 是站点侧最新的人工策展采用快照，负责经人工复核的 Supported 包、最小稳定 Profile 路线与《言铸之剑》的已验证依赖映射。Framework 的跨仓 prerequisite 仍读取这份最新审核；生成公开页面时，使用的整套审核内容必须与 `data/framework.json` 的 `adoptionReviewContract` 和 `adoptionReviewHash` 完全一致。采用相关事实变化但说明尚未复核时，网站构建仍应失败。`sourceCommit` 记录最近一次人工复核所依据的 Framework 提交，可以落后于自动同步的公开快照提交；它不表示该提交已包含后来预审的晋升元数据。
+
+`data/framework-previous-review.json` 保留前一份已审核的 adoption、Quickstart 和 Sakura Framework 项目事实。它用于「网站先完成审核、Framework 再提交并同步」的过渡期：旧权威快照继续使用完整旧审核，收到新权威快照后自动切换到最新审核。生成器不修改权威快照，也不把暂存区里的候选事实发布为已提交状态。只允许匹配这两份显式审核的 hash；未知 hash、契约升级、Supported 数量不符或审核包名/路线闭包与指纹不符仍失败关闭。此文件不进入 Pages artifact。
 
 `data/framework-quickstart.json` 是站点侧的 15 分钟教程清单。它只保存经编辑复核的路线 ID、步骤、完成标准和故障边界，不复制 Supported 包清单或版本号；生成器通过路线 ID 从 `data/framework-adoption.json` 派生实际包名。Quickstart 同样绑定 `adoptionReviewContract` 与 `adoptionReviewHash`，当稳定路线或 Supported 身份变化时失败关闭，必须先重新核对 Framework 的 15 分钟指南、Supported Profiles 和 stable manifest snippet。
 
@@ -30,6 +32,13 @@ Story 合同中的状态是公开证据边界：Portable .NET Core / Config Core
 和 `data/framework-adoption.json`，再提交或推送 Framework 变更。
 
 ## 同步方式
+
+Supported 身份或 stable 闭包变更时按以下顺序维护：
+
+1. 在改写最新审核前，把现有 adoption、Quickstart 和对应项目事实原样保留到 `data/framework-previous-review.json`；不保留整个项目注册表，也不改动其他项目。
+2. 完成人工核对，再同步最新 adoption、Quickstart 和项目审核 hash。网站可以继续生成旧权威快照对应的完整内容，Framework prerequisite 则能读取最新审核。
+3. Framework 正式提交后，由源仓同步新的 `data/framework.json`。生成器切换整套审核内容；不可只改快照 hash 或把未提交 inventory 绑定到旧 SHA。
+4. 下一次预审前用当时正在公开展示的整套审核替换保留内容；无需累积历史审核列表。
 
 Framework 仓库的发布工作流生成快照后，只更新网站仓库中的 `data/framework.json`。若内容无变化，不创建空提交。跨仓库写入使用仅面向网站仓库的独立 Deploy Key，不能复用服务器登录密钥。
 
@@ -79,6 +88,7 @@ git diff --check
 - Story 合同仍绑定 exact Framework commit，并保留 Unity/Godot 的保守状态；
 - 页面先呈现 Positioning、Architecture Map 与三大工程支柱，Module/Layer/Lifecycle 仍可由 Reference 入口访问；
 - 页面静态回退与 JSON 摘要一致；
+- 预审过渡期展示当前权威快照的包、路线、教程和项目事实；新快照到达时一起切换，未知 hash 继续阻塞；
 - 生命周期计数和数据来源时间可见；
 - JSON 加载失败时静态内容仍可阅读；
 - 公开文件不含私有仓库 URL、本机路径或部署 Secret。

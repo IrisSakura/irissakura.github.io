@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "70236b364267c853d75beb04a975f2419b16d748",
+  "sourceCommit": "5383ad7d72fa625e09e8720102066afbd2f70429",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:e68421042e00f6456204e04e39e31403b9bf311e775d945269b5e25f0dabfd9f",
+  "adoptionReviewHash": "sha256:267a3931a3607a9fcc5716a8e4f1e55106a406660640e1dfbdb79a071a59fa2f",
   "updatedAt": "2026-10-02",
   "supportedPackages": [
     {
@@ -46,6 +46,12 @@
       "displayName": "Config Snapshot Core",
       "packageName": "com.unitygame.framework.config-core",
       "role": "引擎无关配置快照、版本迁移、校验与原子提交"
+    },
+    {
+      "id": "pathfinding",
+      "displayName": "Pathfinding",
+      "packageName": "com.unitygame.framework.pathfinding",
+      "role": "图与网格路径查询、显式算法选择与可复用工作区"
     }
   ],
   "stableRoutes": [
@@ -80,6 +86,15 @@
         "config-core"
       ],
       "purpose": "独立采用配置快照事务，不包含文件读取、Luban、持久化或引擎适配器；固定安装入口以 Framework 实际发布的版本为准，最终 Runner 验证仍待补齐。"
+    },
+    {
+      "id": "pathfinding-foundation",
+      "label": "Pathfinding Foundation",
+      "packages": [
+        "core",
+        "pathfinding"
+      ],
+      "purpose": "采用 Core 与 Pathfinding 的完整依赖组合，提供引擎无关图与网格路径查询；NavMesh 适配器仍需独立评估，固定安装版本以 Framework 已发布入口为准。"
     }
   ],
   "gameAdoption": [

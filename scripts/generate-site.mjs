@@ -11,7 +11,7 @@ import { currentProductName } from './lib/brand-presentation.mjs';
 import { installVisualDecorations } from './lib/visual-decorations.mjs';
 import { assertSitePresentationConfig, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
 import { assertModSeriesConfig, resolveModSeries } from './lib/mod-series.mjs';
-import { assertFrameworkAdoptionReviewed } from './lib/framework-adoption-review.mjs';
+import { resolveFrameworkReviewedContent } from './lib/framework-reviewed-content.mjs';
 import { assertFrameworkQuickstart, resolveQuickstartRoutes } from './lib/framework-quickstart.mjs';
 import { assertFrameworkEngineering, resolveFrameworkEngineering } from './lib/framework-engineering-model.mjs';
 import { assertFrameworkRequirementCoverage } from './lib/framework-requirement-coverage.mjs';
@@ -142,7 +142,7 @@ const PAGE_INDEXES = {
   }
 };
 
-const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, projects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, nowData, updatesData, modSeriesConfig, navbarTemplate, footerTemplate, contentRelations, analyticsConfig, verificationConfig] = await Promise.all([
+const [site, framework, latestFrameworkAdoption, latestFrameworkQuickstart, frameworkStory, frameworkEngineering, frameworkArchitecture, frameworkEvidence, frameworkCaseStudies, frameworkEvolution, frameworkKnowledgeGraph, frameworkModuleReference, frameworkPlanCoverage, frameworkEvidenceAuthorities, frameworkPageShellTemplate, latestProjects, irisEngineering, consumerLab, consumerSyncRegistry, journal, journalSource, blogPublication, blogTaxonomy, evidenceChainData, evidenceChainAuthorities, themeConfig, brandConfig, sitePresentation, nowData, updatesData, modSeriesConfig, navbarTemplate, footerTemplate, contentRelations, analyticsConfig, verificationConfig, previousFrameworkReview] = await Promise.all([
   readJson('data/site.json'),
   readJson('data/framework.json'),
   readJson('data/framework-adoption.json'),
@@ -178,8 +178,13 @@ const [site, framework, frameworkAdoption, frameworkQuickstart, frameworkStory, 
   readText('components/footer.html'),
   readJson('data/content-relations.json'),
   readJson('config/analytics.json'),
-  readJson('config/search-engine-verification.json')
+  readJson('config/search-engine-verification.json'),
+  readJson('data/framework-previous-review.json')
 ]);
+
+const { adoption: frameworkAdoption, quickstart: frameworkQuickstart, projects } = resolveFrameworkReviewedContent(
+  framework, latestFrameworkAdoption, latestFrameworkQuickstart, latestProjects, previousFrameworkReview
+);
 
 if (analyticsConfig?.provider !== 'plausible' || analyticsConfig.privacyMode !== true
   || analyticsConfig.endpoint !== 'https://plausible.io/api/event'
@@ -192,7 +197,6 @@ if (Object.keys(verificationConfig).sort().join(',') !== 'bing,google') {
   throw new Error('Search engine verification supports only google and bing.');
 }
 
-assertFrameworkAdoptionReviewed(framework, frameworkAdoption);
 assertFrameworkQuickstart(frameworkQuickstart, frameworkAdoption);
 assertFrameworkStory(frameworkStory);
 assertFrameworkEngineering(frameworkEngineering);

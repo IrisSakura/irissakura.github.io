@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { readFrameworkReviewedContent } from '../scripts/lib/framework-reviewed-content.mjs';
 
 import {
   assertProjectFactsCurrent,
@@ -11,7 +12,7 @@ const root = new URL('../', import.meta.url);
 
 test('synchronized source dates may advance without rewriting reviewed project facts', async () => {
   const [projects, framework, journal] = await Promise.all([
-    readJson('data/projects.json'),
+    readFrameworkReviewedContent().then(review => review.projects),
     readJson('data/framework.json'),
     readJson('data/journal.json')
   ]);
@@ -28,7 +29,7 @@ test('synchronized source dates may advance without rewriting reviewed project f
 
 test('project facts still reject updates newer than their review date', async () => {
   const [projects, framework, journal] = await Promise.all([
-    readJson('data/projects.json'),
+    readFrameworkReviewedContent().then(review => review.projects),
     readJson('data/framework.json'),
     readJson('data/journal.json')
   ]);
@@ -42,7 +43,7 @@ test('project facts still reject updates newer than their review date', async ()
 
 test('semantic Framework and Journal contracts require project copy review', async () => {
   const [projects, framework, journal] = await Promise.all([
-    readJson('data/projects.json'),
+    readFrameworkReviewedContent().then(review => review.projects),
     readJson('data/framework.json'),
     readJson('data/journal.json')
   ]);
