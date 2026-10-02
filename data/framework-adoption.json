@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "80476d755388e2cd0ecb2078d7d5596466d64790",
+  "sourceCommit": "83a98b8199688b2cb3b6c1fb3bc828c1574e0188",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:d2a4178297177992ce843dd3f3691296d76199be7b65a473dc7603169e073f9f",
+  "adoptionReviewHash": "sha256:eb4655b45c84f2223419b49bbf679a1d9e1df89c1a5cf531008a030d068885df",
   "updatedAt": "2026-10-03",
   "supportedPackages": [
     {
@@ -70,6 +70,12 @@
       "displayName": "Response Rules",
       "packageName": "com.unitygame.framework.response-rules",
       "role": "冻结事实、确定性响应选优、显式确认历史与对话/叙事key提案"
+    },
+    {
+      "id": "work-orchestration",
+      "displayName": "Work Orchestration",
+      "packageName": "com.unitygame.framework.work-orchestration",
+      "role": "确定性工作分配、资源预留、租约状态与终态清理"
     }
   ],
   "stableRoutes": [
@@ -153,6 +159,14 @@
         "response-rules"
       ],
       "purpose": "采用单包事实响应内核：由Owner接受提案后记录OnceOnly与冷却，保存恢复及Scope清理由调用者拥有。逻辑时间单调，单Owner单线程。安装版本以Framework已发布入口为准。"
+    },
+    {
+      "id": "work-orchestration-only",
+      "label": "Work Orchestration Only",
+      "packages": [
+        "work-orchestration"
+      ],
+      "purpose": "独立采用工作编排内核；单Owner单线程，有限幂等回放，由Owner维护逻辑Tick和资源过期清理。库存结算、存档恢复与网络Authority由项目负责；安装版本以Framework已发布入口为准。"
     }
   ],
   "gameAdoption": [
