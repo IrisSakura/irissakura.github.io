@@ -427,7 +427,7 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'data-brand="iris-sakura"',
       'data-brand-mode="',
       'brand-styles:start',
-      'style/main.css',
+      'dist/styles/site.css',
       brand.stylesheet,
       'dist/site.js'
     ]) {

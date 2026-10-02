@@ -10,6 +10,7 @@ export async function assertAmbientMotion(browser, baseUrl) {
     await page.goto(`${baseUrl}/index.html`);
     const layer = page.locator('[data-ambient-layer]');
     await page.waitForFunction(() => document.querySelector('[data-ambient-layer]')?.dataset.motion === 'running');
+    assert.equal(await page.locator('.hero-section').evaluate(el => getComputedStyle(el, '::after').animationPlayState), 'running');
     assert.equal(await page.locator('.profile-illustration img').evaluate((img) => img.complete && img.naturalWidth > 0), true);
     assert.equal(await page.locator('.ambient-particle:visible').count(), 12);
     assert.equal(await layer.evaluate((el) => getComputedStyle(el).pointerEvents), 'none');
@@ -18,6 +19,7 @@ export async function assertAmbientMotion(browser, baseUrl) {
     assert.equal(await page.locator('.footer [data-ambient-toggle]').count(), 1);
     await toggle.click();
     assert.equal(await layer.getAttribute('data-motion'), 'paused');
+    assert.equal(await page.locator('.hero-section').evaluate(el => getComputedStyle(el, '::after').animationPlayState), 'paused');
     await page.locator('.footer').getByRole('link', { name: '订阅文章', exact: true }).click();
     await page.waitForURL(`${baseUrl}/pages/subscribe.html`);
     assert.equal(await toggle.getAttribute('aria-checked'), 'false');
@@ -27,6 +29,7 @@ export async function assertAmbientMotion(browser, baseUrl) {
     await page.waitForFunction(() => document.querySelector('[data-ambient-layer]')?.dataset.motion === 'running');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => document.querySelector('[data-ambient-layer]')?.dataset.motion === 'paused');
+    assert.equal(await page.locator('main').getAttribute('data-ambient-motion'), 'paused');
     assert.equal(await page.locator('[data-ambient-toggle]').isVisible(), false);
     assert.equal(await page.locator('.ambient-particle').first().evaluate((el) => getComputedStyle(el).animationName), 'none');
     await page.emulateMedia({ reducedMotion: 'no-preference' });

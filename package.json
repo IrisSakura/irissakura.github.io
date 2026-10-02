@@ -4,7 +4,7 @@
   "description": "IrisSakura 的工程与项目管理、Unity 游戏框架及作品个人站。",
   "scripts": {
     "generate": "node scripts/generate-site.mjs",
-    "build": "npm run generate && npm run clean && tsc",
+    "build": "npm run generate && npm run clean && tsc && node scripts/build-css.mjs",
     "test": "npm run test:unit && npm run test:site",
     "test:unit": "node --test tests/*.test.mjs",
     "test:json": "node scripts/verify-json.mjs",
@@ -49,6 +49,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.54.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "postcss": "8.5.24"
   }
 }

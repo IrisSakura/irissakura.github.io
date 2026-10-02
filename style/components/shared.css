@@ -1865,6 +1865,7 @@
     opacity: 0.32;
     background: radial-gradient(circle, rgba(37, 117, 252, 0.26), transparent 68%);
     animation: ambient-drift 16s ease-in-out infinite;
+    animation-play-state: paused;
 }
 
 .hero-proof {
@@ -1887,6 +1888,12 @@
     );
     translate: -145% 0;
     animation: proof-sheen 9s var(--motion-ease-out) infinite;
+    animation-play-state: paused;
+}
+
+[data-ambient-motion="running"] .hero-section::after,
+[data-ambient-motion="running"] .hero-proof::after {
+    animation-play-state: running;
 }
 
 .motion-ready [data-reveal] {

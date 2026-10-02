@@ -275,8 +275,10 @@ const LIFECYCLE_PRESENTATIONS: Record<string, LifecyclePresentation> = {
 };
 
 const LIFECYCLE_ORDER = ['Supported', 'Preview', 'Experimental', 'Research', 'DocsOnly', 'Frozen', 'Deprecated'];
+let frameworkDataCache: FrameworkPublicData | null = null;
 
 class FrameworkPage {
+    private readonly root = document.getElementById('framework-module-list');
     private modules: FrameworkModule[] = FALLBACK_MODULES;
     private layers: FrameworkLayer[] = [];
     private lifecycleCounts: Record<string, number> = {};
@@ -287,7 +289,9 @@ class FrameworkPage {
     private selectedLayerId = 'foundation';
     private selectedLifecycle = 'Supported';
     private readonly lifetime = new AbortController();
+    private highlightTimeout = 0;
     private readonly handleHashChange = (): void => {
+        if (!this.root?.isConnected) return;
         this.applyModuleHash();
         this.selectModule(this.selectedModuleId, false);
     };
@@ -309,6 +313,7 @@ class FrameworkPage {
 
     dispose(): void {
         this.lifetime.abort();
+        window.clearTimeout(this.highlightTimeout);
     }
 
     private isNonNegativeInteger(value: unknown): value is number {
@@ -335,13 +340,20 @@ class FrameworkPage {
 
     private async loadFrameworkData(): Promise<void> {
         try {
+            if (frameworkDataCache) {
+                this.renderFrameworkData(frameworkDataCache);
+                document.getElementById('framework-module-list')?.setAttribute('data-framework-loaded', 'true');
+                return;
+            }
             const response = await fetch('../data/framework-public.json', {
                 cache: 'no-cache',
                 signal: this.lifetime.signal
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const payload: unknown = await response.json();
+            if (this.lifetime.signal.aborted || !this.root?.isConnected) return;
             if (!this.validateFrameworkData(payload)) throw new Error('invalid public data contract');
+            frameworkDataCache = payload;
             this.renderFrameworkData(payload);
             document.getElementById('framework-module-list')
                 ?.setAttribute('data-framework-loaded', 'true');
@@ -349,7 +361,7 @@ class FrameworkPage {
             if (this.lifetime.signal.aborted) return;
             console.error('[framework-data] failed to load public framework snapshot', error);
         } finally {
-            this.restoreSectionHash();
+            if (!this.lifetime.signal.aborted && this.root?.isConnected) this.restoreSectionHash();
         }
     }
 
@@ -538,8 +550,10 @@ class FrameworkPage {
         this.setText('framework-layer-detail-decision', presentation.decision);
 
         if (focusDetail) {
-            document.getElementById('framework-layer-detail')?.classList.add('is-emphasized');
-            window.setTimeout(() => document.getElementById('framework-layer-detail')?.classList.remove('is-emphasized'), 500);
+            const detail = document.getElementById('framework-layer-detail');
+            detail?.classList.add('is-emphasized');
+            window.clearTimeout(this.highlightTimeout);
+            this.highlightTimeout = window.setTimeout(() => detail?.classList.remove('is-emphasized'), 500);
             this.revealDetailOnNarrowLayout('framework-layer-detail');
         }
     }
@@ -655,6 +669,7 @@ class FrameworkPage {
         if (!['modules', 'architecture', 'lifecycle'].includes(targetId)) return;
 
         window.requestAnimationFrame(() => {
+            if (this.lifetime.signal.aborted || !this.root?.isConnected) return;
             document.getElementById(targetId)?.scrollIntoView({ block: 'start' });
         });
     }
@@ -664,6 +679,7 @@ class FrameworkPage {
         const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
         window.requestAnimationFrame(() => {
+            if (this.lifetime.signal.aborted || !this.root?.isConnected) return;
             document.getElementById(detailId)?.scrollIntoView({ behavior, block: 'start' });
         });
     }

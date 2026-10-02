@@ -117,7 +117,7 @@ test('generated routes receive the correct mode and shared token styles', async 
   for (const [path, mode] of expectations) {
     const html = await readText(path);
     assert.ok(html.includes(`data-brand-mode="${mode}"`), `${path} missing ${mode} mode`);
-    assert.ok(html.includes('style/main.css'), `${path} missing shared CSS entry`);
+    assert.ok(html.includes('dist/styles/site.css'), `${path} missing shared CSS entry`);
     assert.ok(!html.includes('style/tokens/'), `${path} duplicates layered token imports`);
   }
 });

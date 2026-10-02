@@ -112,6 +112,10 @@ class SiteShell {
     private pageIndexObserver: IntersectionObserver | null = null;
     private pageIndexAbort: AbortController | null = null;
     private navigationAbort: AbortController | null = null;
+    private readonly stylesheetLoads = new Map<string, Promise<void>>();
+    private stylesheetTargets = new Set<string>();
+    private contentSearchAbort: AbortController | null = null;
+    private contentSearchCache: { url: string; index: ContentSearchIndex } | null = null;
 
     constructor() {
         if (document.readyState === 'loading') {
@@ -123,6 +127,7 @@ class SiteShell {
 
     private init(): void {
         this.normalizePersistentUrls();
+        this.setupDeferredStyles();
         this.toggle = document.querySelector<HTMLButtonElement>('.mobile-toggle');
         this.menu = document.querySelector<HTMLElement>('.nav-menu');
         document.querySelectorAll<HTMLElement>('[data-current-year]').forEach((element) => {
@@ -145,6 +150,18 @@ class SiteShell {
     private setupArticleReader(): void {
         const toc = document.querySelector<HTMLDetailsElement>('.article-toc');
         if (toc) toc.open = !window.matchMedia('(max-width: 900px)').matches;
+    }
+
+    private setupDeferredStyles(): void {
+        document.querySelectorAll<HTMLLinkElement>('link[data-site-deferred-style]').forEach((preload) => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = preload.href;
+            link.media = 'print';
+            // Install before insertion so cached responses cannot race setup.
+            link.addEventListener('load', () => { link.media = 'all'; }, { once: true });
+            document.head.append(link);
+        });
     }
 
     private setupSubscription(): void {
@@ -322,19 +339,20 @@ class SiteShell {
             this.syncMetadata(nextDocument, destination);
             this.syncNavigationState(nextDocument, destination);
             currentMain?.replaceWith(document.importNode(nextMain, true));
+            this.restoreNavigationPosition(destination);
             this.updateCurrentYear();
             this.setupSubscription();
-        this.setupArticleReader();
+            this.setupArticleReader();
             this.setupFaq();
             this.setupPageIndex();
             void this.setupContentSearch();
             this.setupMotion();
             this.ambientMotion.setup();
             await this.loadPageModules(nextDocument, destination);
+            if (controller.signal.aborted) return;
             document.dispatchEvent(new CustomEvent('site:navigation-complete', {
                 detail: { url: destination.href }
             }));
-            this.restoreNavigationPosition(destination);
         } catch (error) {
             if (controller.signal.aborted) return;
             console.error('[site-navigation] soft navigation failed; using a full page load', error);
@@ -383,6 +401,7 @@ class SiteShell {
             href: new URL(source.getAttribute('href') ?? '', destination).href
         })).filter(({ href }) => new URL(href).origin === location.origin);
         const desiredUrls = new Set(desired.map(({ href }) => href));
+        this.stylesheetTargets = desiredUrls;
         const current = new Map(
             Array.from(
                 document.querySelectorAll<HTMLLinkElement>(
@@ -391,21 +410,25 @@ class SiteShell {
             ).map((link) => [link.href, link])
         );
 
-        const additions = desired
-            .filter(({ href }) => !current.has(href))
-            .map(({ source, href }) => this.addStylesheet(source, href, current));
+        const additions = desired.map(({ source, href }) => (
+            this.stylesheetLoads.get(href)
+            ?? (current.has(href) ? Promise.resolve() : this.addStylesheet(source, href, current))
+        ));
         await Promise.all(additions);
         if (signal.aborted) return;
 
         for (const [href, link] of current) {
-            if (!desiredUrls.has(href)) link.remove();
+            if (!desiredUrls.has(href) && !this.stylesheetLoads.has(href)) link.remove();
         }
         const firstExternalStylesheet = Array.from(
             document.querySelectorAll<HTMLLinkElement>('link[rel~="stylesheet"]')
         ).find((link) => new URL(link.href).origin !== location.origin) ?? null;
-        for (const { href } of desired) {
+        for (const { href, source } of desired) {
             const link = current.get(href);
-            if (link) document.head.insertBefore(link, firstExternalStylesheet);
+            if (link) {
+                link.media = source.media;
+                document.head.insertBefore(link, firstExternalStylesheet);
+            }
         }
     }
 
@@ -423,9 +446,11 @@ class SiteShell {
         link.href = href;
         link.dataset.siteLocalStylesheet = '';
         link.disabled = source.disabled;
+        // Download without applying destination styles to the current page.
+        link.media = 'not all';
         current.set(href, link);
 
-        return new Promise((resolve, reject) => {
+        const loading = new Promise<void>((resolve, reject) => {
             link.addEventListener('load', () => resolve(), { once: true });
             link.addEventListener('error', () => {
                 current.delete(href);
@@ -433,7 +458,12 @@ class SiteShell {
                 reject(new Error(`failed to load stylesheet: ${href}`));
             }, { once: true });
             document.head.append(link);
+        }).finally(() => {
+            this.stylesheetLoads.delete(href);
+            if (!this.stylesheetTargets.has(href)) link.remove();
         });
+        this.stylesheetLoads.set(href, loading);
+        return loading;
     }
 
     private syncMetadata(nextDocument: Document, destination: URL): void {
@@ -508,10 +538,10 @@ class SiteShell {
     private restoreNavigationPosition(destination: URL): void {
         if (destination.hash) {
             const id = this.decodeFragment(destination.hash);
-            if (id) window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
+            if (id) document.getElementById(id)?.scrollIntoView({ behavior: 'instant' });
             return;
         }
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         const main = document.querySelector<HTMLElement>('main#main-content');
         main?.setAttribute('tabindex', '-1');
         main?.focus({ preventScroll: true });
@@ -554,6 +584,8 @@ class SiteShell {
     }
 
     private async setupContentSearch(): Promise<void> {
+        this.contentSearchAbort?.abort();
+        this.contentSearchAbort = null;
         const root = document.querySelector<HTMLElement>('[data-content-search]');
         if (!root || root.dataset.searchReady === 'true') return;
 
@@ -569,11 +601,19 @@ class SiteShell {
             return;
         }
         root.dataset.searchReady = 'true';
+        const controller = new AbortController();
+        this.contentSearchAbort = controller;
+        const { signal } = controller;
+        const url = new URL(indexPath, location.href).href;
 
         try {
-            const response = await fetch(new URL(indexPath, location.href));
-            if (!response.ok) throw new Error(`content search returned HTTP ${response.status}`);
-            const index = await response.json() as ContentSearchIndex;
+            let index = this.contentSearchCache?.url === url ? this.contentSearchCache.index : null;
+            if (!index) {
+                const response = await fetch(url, { signal });
+                if (!response.ok) throw new Error(`content search returned HTTP ${response.status}`);
+                index = await response.json() as ContentSearchIndex;
+            }
+            if (signal.aborted || !root.isConnected) return;
             if (
                 index.schemaVersion !== 1
                 || !Number.isSafeInteger(index.totalCount)
@@ -582,27 +622,24 @@ class SiteShell {
             ) {
                 throw new Error('content search index contract is invalid');
             }
+            this.contentSearchCache = { url, index };
 
             const limit = Math.max(1, Number.parseInt(root.dataset.searchLimit ?? '12', 10) || 12);
             const normalize = (value: string): string => value.normalize('NFKC').toLocaleLowerCase('zh-CN').trim();
+            const searchable = index.entries.map((entry) => ({ entry, haystack: normalize([
+                entry.title, entry.summary, entry.typeLabel, entry.series, ...entry.tags, ...entry.engines
+            ].join(' ')) }));
             const render = (): void => {
+                if (signal.aborted) return;
                 const terms = normalize(query.value).split(/\s+/u).filter(Boolean);
-                const filtered = index.entries.filter((entry) => {
+                const filtered = searchable.filter(({ entry, haystack }) => {
                     if (type.value && entry.type !== type.value) return false;
                     if (series.value && entry.series !== series.value) return false;
                     if (engine.value && !entry.engines.includes(engine.value)) return false;
-                    const haystack = normalize([
-                        entry.title,
-                        entry.summary,
-                        entry.typeLabel,
-                        entry.series,
-                        ...entry.tags,
-                        ...entry.engines
-                    ].join(' '));
                     return terms.every((term) => haystack.includes(term));
                 });
 
-                results.replaceChildren(...filtered.slice(0, limit).map((entry) => (
+                results.replaceChildren(...filtered.slice(0, limit).map(({ entry }) => (
                     this.createContentSearchResult(entry)
                 )));
                 if (filtered.length === 0) {
@@ -619,14 +656,15 @@ class SiteShell {
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
                 render();
-            });
-            form.addEventListener('input', render);
-            form.addEventListener('change', render);
+            }, { signal });
+            form.addEventListener('input', render, { signal });
+            form.addEventListener('change', render, { signal });
             form.addEventListener('reset', () => {
                 window.setTimeout(render, 0);
-            });
+            }, { signal });
             render();
         } catch {
+            if (signal.aborted) return;
             status.textContent = '内容暂时无法加载，请稍后重试，或浏览下方的精选主题与资料库。';
             root.dataset.searchState = 'failed';
         }
@@ -679,7 +717,8 @@ class SiteShell {
             window.requestAnimationFrame(update);
         };
 
-        update();
+        // Allow the initial content to paint before reading scroll geometry.
+        window.requestAnimationFrame(scheduleUpdate);
         window.addEventListener('scroll', scheduleUpdate, { passive: true });
     }
 
@@ -705,16 +744,23 @@ class SiteShell {
 
         const linksContainer = pageIndex.querySelector<HTMLElement>('.page-index-links');
         let activeId = '';
+        let activeLinkFrame = 0;
         const setActive = (id: string): void => {
             if (id === activeId) return;
+            const hadActiveLink = Boolean(activeId);
             activeId = id;
             for (const entry of targets) {
                 if (entry.id === id) {
                     entry.link.setAttribute('aria-current', 'location');
-                    if (linksContainer) {
-                        const targetLeft = entry.link.offsetLeft
-                            - (linksContainer.clientWidth - entry.link.clientWidth) / 2;
-                        linksContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: 'auto' });
+                    if (linksContainer && (hadActiveLink || id !== targets[0].id)) {
+                        if (activeLinkFrame) window.cancelAnimationFrame(activeLinkFrame);
+                        activeLinkFrame = window.requestAnimationFrame(() => {
+                            if (!pageIndex.isConnected) return;
+                            const targetLeft = entry.link.offsetLeft
+                                - (linksContainer.clientWidth - entry.link.clientWidth) / 2;
+                            linksContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: 'auto' });
+                            activeLinkFrame = 0;
+                        });
                     }
                 } else {
                     entry.link.removeAttribute('aria-current');
@@ -724,24 +770,39 @@ class SiteShell {
 
         const controller = new AbortController();
         this.pageIndexAbort = controller;
-        let progressScheduled = false;
+        let progressFrame = 0;
+        let maximum = 0;
+        let lastProgress = '';
         const updateProgress = (): void => {
-            const maximum = document.documentElement.scrollHeight - window.innerHeight;
             const progress = maximum > 0 ? Math.min(1, Math.max(0, window.scrollY / maximum)) : 0;
-            pageIndex.style.setProperty('--page-index-progress', progress.toFixed(4));
-            progressScheduled = false;
+            const value = progress.toFixed(4);
+            if (value !== lastProgress) pageIndex.style.setProperty('--page-index-progress', value);
+            lastProgress = value;
+            progressFrame = 0;
         };
         const scheduleProgress = (): void => {
-            if (progressScheduled) return;
-            progressScheduled = true;
-            window.requestAnimationFrame(updateProgress);
+            if (progressFrame) return;
+            progressFrame = window.requestAnimationFrame(updateProgress);
+        };
+        const refreshExtent = (): void => {
+            maximum = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            scheduleProgress();
         };
         window.addEventListener('scroll', scheduleProgress, {
             passive: true,
             signal: controller.signal
         });
-        window.addEventListener('resize', scheduleProgress, { signal: controller.signal });
-        updateProgress();
+        window.addEventListener('resize', refreshExtent, { signal: controller.signal });
+        const resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(refreshExtent) : null;
+        resizeObserver?.observe(document.body);
+        if (!resizeObserver) window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+            if (!controller.signal.aborted) refreshExtent();
+        }));
+        controller.signal.addEventListener('abort', () => {
+            if (progressFrame) window.cancelAnimationFrame(progressFrame);
+            if (activeLinkFrame) window.cancelAnimationFrame(activeLinkFrame);
+            resizeObserver?.disconnect();
+        }, { once: true });
 
         const initialId = this.decodeFragment(location.hash);
         setActive(targets.some((entry) => entry.id === initialId) ? initialId : targets[0].id);
@@ -786,7 +847,6 @@ class SiteShell {
 
         const orderByParent = new Map<Element, number>();
         for (const element of revealables) {
-            element.dataset.reveal = '';
             const parent = element.parentElement;
             const order = parent ? orderByParent.get(parent) ?? 0 : 0;
             element.style.setProperty('--reveal-order', String(Math.min(order, 4)));
@@ -795,16 +855,31 @@ class SiteShell {
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         if (reducedMotion.matches || !('IntersectionObserver' in window)) {
-            revealables.forEach((element) => element.classList.add('is-visible'));
+            revealables.forEach((element) => {
+                element.classList.add('is-visible');
+                element.dataset.reveal = '';
+            });
             return;
         }
 
+        // Start with painted content. Use the observer's geometry to prepare
+        // only offscreen reveals, avoiding a synchronous layout during startup.
         document.documentElement.classList.add('motion-ready');
         const observer = new IntersectionObserver((entries) => {
             for (const entry of entries) {
+                const element = entry.target as HTMLElement;
+                if (!element.hasAttribute('data-reveal')) {
+                    const initiallyVisible = entry.boundingClientRect.top < window.innerHeight;
+                    if (initiallyVisible) element.classList.add('is-visible');
+                    element.dataset.reveal = '';
+                    if (initiallyVisible) {
+                        observer.unobserve(element);
+                        continue;
+                    }
+                }
                 if (!entry.isIntersecting) continue;
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
+                element.classList.add('is-visible');
+                observer.unobserve(element);
             }
         }, {
             rootMargin: '0px 0px -8%',

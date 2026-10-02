@@ -29,6 +29,8 @@ export class AmbientMotion {
         const refresh = (): void => {
             const running = visible && !document.hidden && !reduced.matches && !this.paused;
             layer.dataset.motion = running ? 'running' : 'paused';
+            const main = layer.closest<HTMLElement>('main');
+            if (main) main.dataset.ambientMotion = layer.dataset.motion;
             settings.hidden = reduced.matches || !this.observer;
             toggle.setAttribute('aria-checked', String(!this.paused));
             label.textContent = this.paused ? '关闭' : '开启';
@@ -47,7 +49,11 @@ export class AmbientMotion {
         }, { signal });
         reduced.addEventListener('change', refresh, { signal });
         document.addEventListener('visibilitychange', refresh, { signal });
-        window.addEventListener('pagehide', () => { layer.dataset.motion = 'paused'; }, { signal });
+        window.addEventListener('pagehide', () => {
+            layer.dataset.motion = 'paused';
+            const main = layer.closest<HTMLElement>('main');
+            if (main) main.dataset.ambientMotion = 'paused';
+        }, { signal });
         window.addEventListener('pageshow', refresh, { signal });
         refresh();
     }

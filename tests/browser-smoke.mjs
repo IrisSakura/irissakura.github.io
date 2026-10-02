@@ -1,5 +1,6 @@
 import { assertReadingFlow } from './lib/reading-flow.mjs';
 import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
+import { assertRuntimePerformance } from './lib/runtime-performance-flow.mjs';
 import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { assertPersonaLayouts } from './lib/personas-v2-layout.mjs';
@@ -283,7 +284,11 @@ const coreVisualRoutes = [
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
 
 try {
-  if (process.argv.includes('--productization-only')) {
+  if (process.argv.includes('--runtime-only')) {
+    await assertAmbientMotion(browser, baseUrl);
+    await assertRuntimePerformance(browser, baseUrl);
+    console.log('Runtime performance browser flows passed.');
+  } else if (process.argv.includes('--productization-only')) {
     await assertProductizationFlow(browser, baseUrl, root);
     console.log('Productization browser flows passed.');
   } else {
@@ -1168,6 +1173,7 @@ try {
 
   await assertSubscriptionFlow(browser, baseUrl, siteData.siteUrl);
   await assertAmbientMotion(browser, baseUrl);
+  await assertRuntimePerformance(browser, baseUrl);
   await assertProductizationFlow(browser, baseUrl, root);
 
   console.log('Browser smoke passed: routes, global search, related graph, accessibility, performance, mobile navigation and contact routes checked.');

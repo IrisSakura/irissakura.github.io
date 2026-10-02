@@ -12,6 +12,7 @@ interface SearchDocument {
     projectId: string | null;
 }
 interface SearchIndex { schemaVersion: number; totalCount: number; documents: SearchDocument[]; }
+interface SearchableDocument { doc: SearchDocument; fields: string[]; }
 const LABELS: Record<SearchDocument['type'], string> = {
     project: '项目', article: '文章', framework: 'Framework', research: '研究', page: '页面'
 };
@@ -23,6 +24,7 @@ export class SiteSearch {
     private results = this.dialog?.querySelector<HTMLElement>('[data-search-results]');
     private status = this.dialog?.querySelector<HTMLElement>('[data-search-status]');
     private index: SearchIndex | null = null;
+    private searchable: SearchableDocument[] = [];
     private loading: Promise<void> | null = null;
     private trigger: HTMLElement | null = null;
     private debounce: number | null = null;
@@ -69,6 +71,7 @@ export class SiteSearch {
         this.dialog.showModal();
         this.input.focus();
         analytics.trackEvent('navigation.search_open');
+        this.render();
         void this.load();
     }
 
@@ -89,6 +92,11 @@ export class SiteSearch {
                 if (data.schemaVersion !== 1 || !Array.isArray(data.documents) || data.documents.length !== data.totalCount) {
                     throw new Error('Invalid site search index');
                 }
+                this.searchable = data.documents.map((doc) => ({
+                    doc,
+                    fields: [doc.title, doc.keywords.join(' '), doc.tags.join(' '), doc.series, doc.summary]
+                        .map((value) => value.normalize('NFKC').toLocaleLowerCase('zh-CN'))
+                }));
                 this.index = data;
                 this.render();
             } catch {
@@ -102,9 +110,7 @@ export class SiteSearch {
         if (!this.index) return [];
         const terms = query.normalize('NFKC').toLocaleLowerCase('zh-CN').trim().split(/\s+/u).filter(Boolean);
         if (!terms.length) return this.index.documents.filter((entry) => entry.type === 'project').slice(0, 8);
-        const scored = this.index.documents.map((doc) => {
-            const fields = [doc.title, doc.keywords.join(' '), doc.tags.join(' '), doc.series, doc.summary]
-                .map((value) => value.normalize('NFKC').toLocaleLowerCase('zh-CN'));
+        const scored = this.searchable.map(({ doc, fields }) => {
             if (!terms.every((term) => fields.some((value) => value.includes(term)))) return { doc, score: 0 };
             const score = terms.reduce((sum, term) => sum + Math.max(
                 fields[0] === term ? 120 : 0, fields[0].startsWith(term) ? 90 : 0,
@@ -131,6 +137,7 @@ export class SiteSearch {
             return;
         }
         const shown = matches.slice(0, 16);
+        const fragment = document.createDocumentFragment();
         for (const type of ORDER) {
             const group = shown.filter((entry) => entry.type === type);
             if (!group.length) continue;
@@ -150,8 +157,9 @@ export class SiteSearch {
                 link.append(title, summary);
                 section.append(link);
             }
-            this.results.append(section);
+            fragment.append(section);
         }
+        this.results.replaceChildren(fragment);
         this.status.textContent = this.input.value.trim()
             ? `找到 ${matches.length} 项，显示前 ${shown.length} 项。`
             : '热门项目与内容入口。输入关键词可检索全站。';
@@ -159,6 +167,11 @@ export class SiteSearch {
 
     private onKeyDown(event: KeyboardEvent): void {
         if (!this.dialog?.open || !this.results) return;
+        if (event.key === 'Escape' && !event.isComposing) {
+            event.preventDefault();
+            this.close();
+            return;
+        }
         const links = [...this.results.querySelectorAll<HTMLAnchorElement>('a[data-search-result]')];
         const current = links.indexOf(document.activeElement as HTMLAnchorElement);
         if (event.key === 'ArrowDown' && links.length) {

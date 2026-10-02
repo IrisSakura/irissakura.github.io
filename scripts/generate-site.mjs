@@ -766,6 +766,9 @@ for (const page of pageDefinitions) {
   html = installVisualDecorations(html, page, prefix, brandConfig);
   html = html.replace(/\sdata-(?:page-family|page-grammar|page-persona)="[^"]*"/g, '');
   html = html.replace('<html ', `<html data-page-family="${page.family.family}" data-page-grammar="${page.family.grammar}" data-page-persona="${page.family.persona}" `);
+  // The build resolves the authored CSS layers into a single request.
+  html = html.replace(/href="[^"]*(?:style\/main|dist\/styles\/site)\.css"/g, `href="${prefix}dist/styles/site.css"`);
+  html = installDeferredFonts(html);
   html = html
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n');
@@ -895,6 +898,23 @@ function assertEngineeringSnapshot(snapshot) {
       throw new Error(`Iris Engineering public snapshot leaks ${forbidden}`);
     }
   }
+}
+
+function installDeferredFonts(html) {
+  html = html.replace(/<!-- deferred-fonts:start -->[\s\S]*?<!-- deferred-fonts:end -->/g, '')
+    .replace(/\s*<link\b[^>]*href="https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com|cdnjs\.cloudflare\.com)[^"]*"[^>]*>/g, '');
+  const urls = [
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+    'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap'
+  ];
+  const styles = urls.map(href => `<link rel="preload" as="style" href="${href}" data-site-deferred-style>`).join('\n');
+  const fallback = urls.map(href => `<link rel="stylesheet" href="${href}">`).join('');
+  return html.replace('</head>', `<!-- deferred-fonts:start -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+${styles}<noscript>${fallback}</noscript>
+<!-- deferred-fonts:end -->\n</head>`);
 }
 
 function installBrandIdentity(html, prefix, config, brandMode) {
