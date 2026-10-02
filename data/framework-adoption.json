@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "c0ba970aa9c3ea1c09fcbe741e2a02803f2194b9",
+  "sourceCommit": "70236b364267c853d75beb04a975f2419b16d748",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:26df9f4c1b99a54f4f11e0e9289493a528fb2d941328bb7c7c47bb3063e08e56",
-  "updatedAt": "2026-08-09",
+  "adoptionReviewHash": "sha256:e68421042e00f6456204e04e39e31403b9bf311e775d945269b5e25f0dabfd9f",
+  "updatedAt": "2026-10-02",
   "supportedPackages": [
     {
       "id": "core",
@@ -40,6 +40,12 @@
       "displayName": "Preferences",
       "packageName": "com.unitygame.framework.preferences",
       "role": "命名空间化强类型本地设置、显式刷新与旧键迁移"
+    },
+    {
+      "id": "config-core",
+      "displayName": "Config Snapshot Core",
+      "packageName": "com.unitygame.framework.config-core",
+      "role": "引擎无关配置快照、版本迁移、校验与原子提交"
     }
   ],
   "stableRoutes": [
@@ -66,6 +72,14 @@
       "label": "Preferences Only",
       "packages": ["preferences"],
       "purpose": "独立采用强类型本地偏好设置；不并入 Runtime Foundation，也不隐式注册常驻服务。"
+    },
+    {
+      "id": "config-core-only",
+      "label": "Config Core Only",
+      "packages": [
+        "config-core"
+      ],
+      "purpose": "独立采用配置快照事务，不包含文件读取、Luban、持久化或引擎适配器；固定安装入口以 Framework 实际发布的版本为准，最终 Runner 验证仍待补齐。"
     }
   ],
   "gameAdoption": [
