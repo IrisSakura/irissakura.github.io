@@ -30,15 +30,17 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   const current = resolve(input);
   assert.equal(current.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.quickstart.adoptionReviewHash, input.framework.adoptionReviewHash);
-  assert.equal(current.adoption.supportedPackages.length, 7);
-  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'pathfinding'), false);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'pathfinding-foundation'), false);
+  assert.equal(current.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'ledger'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'pathfinding'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'ledger-only'), false);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'pathfinding-foundation').packages, ['core', 'pathfinding']);
   assert.deepEqual(current.projects.projects.find(project => project.id === 'sakura-framework'), input.previousReview.project);
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, 8, 'the reviewed prerequisite must remain available');
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Ledger prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -48,12 +50,14 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   input.framework = {
     ...input.framework,
     adoptionReviewHash: input.adoption.adoptionReviewHash,
-    lifecycleCounts: { ...input.framework.lifecycleCounts, Supported: 8 }
+    lifecycleCounts: { ...input.framework.lifecycleCounts, Supported: input.adoption.supportedPackages.length }
   };
   const current = resolve(input);
   assert.equal(current.adoption, input.adoption);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'pathfinding-foundation').packages, ['core', 'pathfinding']);
   assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'pathfinding').length, 1);
+  assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'ledger').length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'ledger-only').packages, ['ledger']);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
@@ -92,7 +96,7 @@ test('retained reviews cannot silently change identities, route closures, quicks
   }
   const duplicated = { ...input, previousReview: { schemaVersion: 1, adoption: input.adoption, quickstart: input.quickstart, project: input.projects.projects.find(project => project.id === 'sakura-framework') } };
   assert.throws(() => resolve(duplicated), /distinct adoptionReviewHash/u);
-  input.framework.lifecycleCounts.Supported = 8;
+  input.framework.lifecycleCounts.Supported = input.previousReview.adoption.supportedPackages.length + 1;
   assert.throws(() => resolve(input), /Supported count does not match/u);
 });
 

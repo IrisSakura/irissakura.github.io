@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "5383ad7d72fa625e09e8720102066afbd2f70429",
+  "sourceCommit": "77db3705e59f73717c2cb1e7f66bbf00685be9eb",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:267a3931a3607a9fcc5716a8e4f1e55106a406660640e1dfbdb79a071a59fa2f",
+  "adoptionReviewHash": "sha256:688a2a1dc743b99dae53077782c28f5595c8368cbacdb101435e3cbde0cd4525",
   "updatedAt": "2026-10-02",
   "supportedPackages": [
     {
@@ -52,31 +52,52 @@
       "displayName": "Pathfinding",
       "packageName": "com.unitygame.framework.pathfinding",
       "role": "图与网格路径查询、显式算法选择与可复用工作区"
+    },
+    {
+      "id": "ledger",
+      "displayName": "Ledger",
+      "packageName": "com.unitygame.framework.ledger",
+      "role": "守恒过账、幂等重放、深快照恢复与唯一冲销"
     }
   ],
   "stableRoutes": [
     {
       "id": "core-only",
       "label": "Core Only",
-      "packages": ["core"],
+      "packages": [
+        "core"
+      ],
       "purpose": "先验证 UPM 解析、基础契约和脚本编译。"
     },
     {
       "id": "bootstrap-lite",
       "label": "Bootstrap Lite",
-      "packages": ["core", "event", "gamehelper", "pooling"],
+      "packages": [
+        "core",
+        "event",
+        "gamehelper",
+        "pooling"
+      ],
       "purpose": "在 Core 上增加事件、对象池与游戏运行辅助，形成最小稳定组合。"
     },
     {
       "id": "runtime-foundation",
       "label": "Runtime Foundation",
-      "packages": ["core", "event", "gamehelper", "pooling", "bootstrap"],
+      "packages": [
+        "core",
+        "event",
+        "gamehelper",
+        "pooling",
+        "bootstrap"
+      ],
       "purpose": "在 Bootstrap Lite 上增加基础 Scope、可观察启动与任务监管，形成完整稳定运行时基建。"
     },
     {
       "id": "preferences-only",
       "label": "Preferences Only",
-      "packages": ["preferences"],
+      "packages": [
+        "preferences"
+      ],
       "purpose": "独立采用强类型本地偏好设置；不并入 Runtime Foundation，也不隐式注册常驻服务。"
     },
     {
@@ -95,27 +116,48 @@
         "pathfinding"
       ],
       "purpose": "采用 Core 与 Pathfinding 的完整依赖组合，提供引擎无关图与网格路径查询；NavMesh 适配器仍需独立评估，固定安装版本以 Framework 已发布入口为准。"
+    },
+    {
+      "id": "ledger-only",
+      "label": "Ledger Only",
+      "packages": [
+        "ledger"
+      ],
+      "purpose": "独立采用引擎无关的内存账本，提供守恒、重放、快照与冲销；持久化、透支和跨账本事务由业务层负责。安装版本以Framework已发布入口为准。"
     }
   ],
   "gameAdoption": [
     {
       "gameSystem": "技能、潜能与祝福",
-      "frameworkPackages": ["GAS", "Event"],
+      "frameworkPackages": [
+        "GAS",
+        "Event"
+      ],
       "evidence": "游戏项目依赖清单与战斗、潜能、祝福源码引用"
     },
     {
       "gameSystem": "HUD、房间与成长界面",
-      "frameworkPackages": ["UI", "Event", "Asset"],
+      "frameworkPackages": [
+        "UI",
+        "Event",
+        "Asset"
+      ],
       "evidence": "界面控制器、房间选择和资源展示源码引用"
     },
     {
       "gameSystem": "Run 存档",
-      "frameworkPackages": ["Save"],
+      "frameworkPackages": [
+        "Save"
+      ],
       "evidence": "项目存档测试与 Framework.Save 类型引用"
     },
     {
       "gameSystem": "生成式祝福",
-      "frameworkPackages": ["LLM", "Dialogue", "GAS"],
+      "frameworkPackages": [
+        "LLM",
+        "Dialogue",
+        "GAS"
+      ],
       "evidence": "本地模型适配、结构化效果映射与能力执行引用"
     }
   ],

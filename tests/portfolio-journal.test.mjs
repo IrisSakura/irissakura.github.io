@@ -66,7 +66,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').syncMode, 'source-push');
   assert.equal(data.projects.find((entry) => entry.id === 'udgap').status, 'Unity 6 集成基线');
   assert.equal(data.projects.find((entry) => entry.id === 'udgap').syncMode, 'source-push');
-  assert.equal(data.projects.find((entry) => entry.id === 'sakura-framework').status, '开发收敛 · 无 Active');
+  assert.equal(data.projects.find((entry) => entry.id === 'sakura-framework').status, '开发收敛');
   assert.equal(data.projects.find((project) => project.id === 'sword-of-words').categoryLabel, '独立游戏项目');
   assert.match(
     data.projects.find((project) => project.id === 'sakura-design-journal').reviewedJournalCurationHash,
