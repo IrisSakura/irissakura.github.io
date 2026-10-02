@@ -232,7 +232,7 @@
                     <span>Catalog 模块</span>
                 </div>
                 <div class="stat-item">
-                    <strong id="framework-profile-count">15</strong>
+                    <strong id="framework-profile-count">16</strong>
                     <span>支持 Profile</span>
                 </div>
             </div>
@@ -246,11 +246,11 @@
                     <p class="section-kicker">REFERENCE · MATURITY BEFORE SCALE</p>
                     <h2 class="section-title" id="maturity-title">Reference / 先看成熟度，再看规模</h2>
                 </div>
-                <p class="section-intro" id="framework-maturity-summary">149 个 Package 中只有 10 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
+                <p class="section-intro" id="framework-maturity-summary">149 个 Package 中只有 11 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
             </div>
             <div class="maturity-summary" aria-label="框架完整生命周期摘要">
-                <article><strong id="framework-supported-count">10</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
-                <article><strong id="framework-preview-count">104</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
+                <article><strong id="framework-supported-count">11</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
+                <article><strong id="framework-preview-count">103</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
                 <article><strong id="framework-experimental-count">23</strong><span>Experimental</span><p>用于验证设计假设，不应默认进入生产依赖。</p></article>
                 <article><strong id="framework-docsonly-count">9</strong><span>DocsOnly</span><p>只提供设计、文档或使用指导，不计入运行时能力。</p></article>
                 <article><strong id="framework-frozen-count">3</strong><span>Frozen</span><p>保留兼容与历史用途，不再主动扩展。</p></article>
@@ -280,7 +280,7 @@
 <section class="adoption-section" id="adoption" data-page-index-target>
         <div class="container">
             <div class="section-heading-row">
-                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">10 个 Supported 包与最小采用路线</h2></div>
+                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">11 个 Supported 包与最小采用路线</h2></div>
                 <p class="section-intro">Supported 统计按包计算，不把 Preview 模块包装成稳定能力。新项目应先验证最小闭包，再按需求扩展。</p>
             </div>
             <div class="supported-adoption-grid">
@@ -295,6 +295,7 @@
                     <li><span>Pathfinding</span><code>com.unitygame.framework.pathfinding</code><p>图与网格路径查询、显式算法选择与可复用工作区</p></li>
                     <li><span>Ledger</span><code>com.unitygame.framework.ledger</code><p>守恒过账、幂等重放、深快照恢复与唯一冲销</p></li>
                     <li><span>Economy</span><code>com.unitygame.framework.economy</code><p>有界库存、权威 tick、幂等回执与显式账本结算</p></li>
+                    <li><span>Response Rules</span><code>com.unitygame.framework.response-rules</code><p>冻结事实、确定性响应选优、显式确认历史与对话/叙事key提案</p></li>
                 </ul>
                 <div class="stable-route-list">
                     <article>
@@ -344,6 +345,12 @@
                         <h3>Economy Foundation</h3>
                         <p>采用库存模拟与账本的完整组合，提供权威 tick、快照恢复和显式守恒过账；持久化与跨对象事务由业务层负责。安装版本以 Framework 已发布入口为准。</p>
                         <div><code>economy</code><span>→</span><code>ledger</code></div>
+                    </article>
+                    <article>
+                        <p class="section-kicker">response-rules-only</p>
+                        <h3>Response Rules Only</h3>
+                        <p>采用单包事实响应内核：由Owner接受提案后记录OnceOnly与冷却，保存恢复及Scope清理由调用者拥有。逻辑时间单调，单Owner单线程。安装版本以Framework已发布入口为准。</p>
+                        <div><code>response-rules</code></div>
                     </article>
                 </div>
             </div>
@@ -601,7 +608,7 @@
             <div class="lifecycle-explorer">
                 <div class="lifecycle-list" id="framework-lifecycle-list" aria-label="框架支持生命周期">
                     <button class="stat-item is-active" type="button" data-lifecycle-name="Supported" aria-pressed="true">
-                        <strong>10</strong><span>Supported</span>
+                        <strong>11</strong><span>Supported</span>
                     </button>
                 </div>
                 <div class="lifecycle-detail" id="framework-lifecycle-detail" aria-live="polite">
@@ -611,7 +618,7 @@
                         <h3 id="framework-lifecycle-detail-title">Supported</h3>
                     </div>
                     <p id="framework-lifecycle-detail-description">已有稳定使用边界、验证证据和维护承诺的框架能力。</p>
-                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">10</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">7%</strong></p>
+                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">11</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">7%</strong></p>
                 </div>
             </div>
         </div>
