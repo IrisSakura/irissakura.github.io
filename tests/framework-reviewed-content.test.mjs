@@ -31,16 +31,18 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.quickstart.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length);
-  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'ledger'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'economy'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'pathfinding'), true);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'ledger-only'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'ledger'), true);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'ledger-only').packages, ['ledger']);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'economy-foundation'), false);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'pathfinding-foundation').packages, ['core', 'pathfinding']);
   assert.deepEqual(current.projects.projects.find(project => project.id === 'sakura-framework'), input.previousReview.project);
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Ledger prerequisite must remain available');
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Economy prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -57,6 +59,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'pathfinding-foundation').packages, ['core', 'pathfinding']);
   assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'pathfinding').length, 1);
   assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'ledger').length, 1);
+  assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'economy').length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'economy-foundation').packages, ['economy', 'ledger']);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'ledger-only').packages, ['ledger']);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');

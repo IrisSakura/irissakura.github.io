@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "77db3705e59f73717c2cb1e7f66bbf00685be9eb",
+  "sourceCommit": "f95b717020a653c82293275458a160f1a778f523",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:688a2a1dc743b99dae53077782c28f5595c8368cbacdb101435e3cbde0cd4525",
+  "adoptionReviewHash": "sha256:dce0c8189213ccd587affea52fd6d678839e7026cfe6ba2eb198951b7d567445",
   "updatedAt": "2026-10-02",
   "supportedPackages": [
     {
@@ -58,6 +58,12 @@
       "displayName": "Ledger",
       "packageName": "com.unitygame.framework.ledger",
       "role": "守恒过账、幂等重放、深快照恢复与唯一冲销"
+    },
+    {
+      "id": "economy",
+      "displayName": "Economy",
+      "packageName": "com.unitygame.framework.economy",
+      "role": "有界库存、权威 tick、幂等回执与显式账本结算"
     }
   ],
   "stableRoutes": [
@@ -124,6 +130,15 @@
         "ledger"
       ],
       "purpose": "独立采用引擎无关的内存账本，提供守恒、重放、快照与冲销；持久化、透支和跨账本事务由业务层负责。安装版本以Framework已发布入口为准。"
+    },
+    {
+      "id": "economy-foundation",
+      "label": "Economy Foundation",
+      "packages": [
+        "economy",
+        "ledger"
+      ],
+      "purpose": "采用库存模拟与账本的完整组合，提供权威 tick、快照恢复和显式守恒过账；持久化与跨对象事务由业务层负责。安装版本以 Framework 已发布入口为准。"
     }
   ],
   "gameAdoption": [
