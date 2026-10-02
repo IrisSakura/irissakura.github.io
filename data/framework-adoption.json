@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "e5e02d5ca02cdf977592271de6c34694110d4e58",
+  "sourceCommit": "625246fd28a781bf142285d7ed71809a30c13234",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:dce0c8189213ccd587affea52fd6d678839e7026cfe6ba2eb198951b7d567445",
+  "adoptionReviewHash": "sha256:d2a4178297177992ce843dd3f3691296d76199be7b65a473dc7603169e073f9f",
   "updatedAt": "2026-10-02",
   "supportedPackages": [
     {
@@ -64,6 +64,12 @@
       "displayName": "Economy",
       "packageName": "com.unitygame.framework.economy",
       "role": "有界库存、权威 tick、幂等回执与显式账本结算"
+    },
+    {
+      "id": "response-rules",
+      "displayName": "Response Rules",
+      "packageName": "com.unitygame.framework.response-rules",
+      "role": "冻结事实、确定性响应选优、显式确认历史与对话/叙事key提案"
     }
   ],
   "stableRoutes": [
@@ -139,6 +145,14 @@
         "ledger"
       ],
       "purpose": "采用库存模拟与账本的完整组合，提供权威 tick、快照恢复和显式守恒过账；持久化与跨对象事务由业务层负责。安装版本以 Framework 已发布入口为准。"
+    },
+    {
+      "id": "response-rules-only",
+      "label": "Response Rules Only",
+      "packages": [
+        "response-rules"
+      ],
+      "purpose": "采用单包事实响应内核：由Owner接受提案后记录OnceOnly与冷却，保存恢复及Scope清理由调用者拥有。逻辑时间单调，单Owner单线程。安装版本以Framework已发布入口为准。"
     }
   ],
   "gameAdoption": [
