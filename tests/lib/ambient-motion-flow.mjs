@@ -38,7 +38,8 @@ export async function assertAmbientMotion(browser, baseUrl) {
     await page.goto(`${baseUrl}/index.html`);
     await page.setViewportSize({ width: 390, height: 844 });
     assert.equal(await page.locator('.ambient-particle:visible').count(), 6);
-    assert.ok(await page.evaluate(() => document.querySelector('.profile-illustration-mobile').getBoundingClientRect().bottom <= document.querySelector('.living-profile .section-kicker').getBoundingClientRect().top + 1), 'mobile art must stay in its own row above the introduction text');
+    assert.equal(await page.locator('.profile-illustration').isVisible(), true);
+    assert.ok(await page.evaluate(() => document.querySelector('.profile-illustration').getBoundingClientRect().top >= document.querySelector('.profile-identity').getBoundingClientRect().bottom - 1), 'mobile art must stay in its own row below the introduction text');
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     for (const width of [1440, 992, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });

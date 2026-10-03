@@ -8,7 +8,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { currentProductName } from './lib/brand-presentation.mjs';
-import { installVisualDecorations } from './lib/visual-decorations.mjs';
+import { installVisualDecorations, renderCreatorVignette, renderProjectChibi } from './lib/visual-decorations.mjs';
 import { assertSitePresentationConfig, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
 import { assertModSeriesConfig, resolveModSeries } from './lib/mod-series.mjs';
 import { resolveFrameworkReviewedContent } from './lib/framework-reviewed-content.mjs';
@@ -1137,9 +1137,10 @@ function renderEngineeringContent(engineering, chains, presentation) {
 
     <div class="engineering-page">
         <section class="engineering-intro" aria-labelledby="engineering-intro-title">
-            <div class="container engineering-intro-grid">
-                <div><p class="section-kicker">WHY IRIS ENGINEERING</p><h2 id="engineering-intro-title">${escapeHtml(engineering.headline)}</h2></div>
-                <p>同时推进多个项目时，最容易丢失的往往是上下文：之前为什么这样决定，工作停在哪里，下一步该做什么。我做 Iris Engineering，是希望把这些信息放在一起，让下一次继续工作时少一点重新寻找。</p>
+            <div class="container engineering-intro-grid project-chibi-panel">
+                <div class="project-chibi-copy"><p class="section-kicker">WHY IRIS ENGINEERING</p><h2 id="engineering-intro-title">${escapeHtml(engineering.headline)}</h2>
+                <p>同时推进多个项目时，最容易丢失的往往是上下文：之前为什么这样决定，工作停在哪里，下一步该做什么。我做 Iris Engineering，是希望把这些信息放在一起，让下一次继续工作时少一点重新寻找。</p></div>
+                ${renderProjectChibi('iris')}
             </div>
         </section>
 
@@ -1199,10 +1200,10 @@ function renderModsContent(series, brand) {
     ['小作品也可以完整', '用清晰范围、真实状态和可复查结果，让每件作品拥有自己的完成标准。'],
     ['作品优先于品牌', '品牌负责连接与识别，不覆盖每个游戏和 Mod 自己的玩法性格。']
   ].map(([title, description], index) => `<article class="mods-principle-card"><span>0${index + 1}</span><h3>${title}</h3><p>${description}</p></article>`).join('');
-  return `<header class="mods-hero" id="mod-series" style="--freesia-pattern:url('../${escapeAttribute(brand.assets.freesiaPatternArt)}')">
+  return `<header class="mods-hero" id="mod-series" style="--freesia-pattern:url('/${escapeAttribute(brand.assets.freesiaPatternArt)}')">
       <div class="container mods-hero-grid"><div class="mods-hero-copy"><p class="section-kicker">MODS · CROSS-GAME CREATION</p><img class="mods-brand-lockup" src="../${escapeAttribute(brand.assets.freesiaLogo)}" alt="Freesia Mods"><h1>Freesia Mods</h1><p class="mods-hero-tagline">让喜欢的游戏，长出新的可能。</p><p class="mods-hero-subtitle">${escapeHtml(series.tagline)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#mod-works">浏览作品</a><a class="btn btn-secondary" href="#mod-principles">了解创作方式</a></div></div><div class="mods-hero-art">${personaPicture(personas.find(({ id }) => id === 'freesia'), { prefix: '../', eager: true, className: 'mods-hero-character' })}<img class="mods-hero-botanical" src="../${escapeAttribute(brand.assets.freesiaBotanicalArt)}" alt="" aria-hidden="true"></div></div>
     </header>
-    <section class="mods-section" id="mod-principles"><div class="container"><div class="mods-section-heading"><p class="section-kicker">CREATE · ADAPT · SHARE · GROW</p><h2>把喜欢变成可以分享的作品</h2></div><div class="mods-principle-grid">${principles}</div></div></section>
+    <section class="mods-section" id="mod-principles"><div class="container"><div class="project-chibi-panel project-chibi-compact"><div class="mods-section-heading project-chibi-copy"><p class="section-kicker">CREATE · ADAPT · SHARE · GROW</p><h2>把喜欢变成可以分享的作品</h2></div>${renderProjectChibi('freesia', { compact: true })}</div><div class="mods-principle-grid">${principles}</div></div></section>
     <section class="mods-section" id="mod-works"><div class="container"><div class="mods-section-heading"><p class="section-kicker">PUBLIC WORKS</p><h2>按游戏浏览作品</h2><p>从一款喜欢的游戏出发，探索角色、卡牌与新的玩法。</p></div>${groups}</div></section>
     <section class="mods-section" id="mod-foundations"><div class="container"><div class="mods-section-heading"><p class="section-kicker">SHARED FOUNDATIONS</p><h2>技术基础与作品分开说明</h2></div>${foundations}</div></section>
     <section class="mods-section mods-closing"><div class="container"><p>CREATE · ADAPT · SHARE · GROW</p><h2>不同游戏，不同作品，同一种持续创作的兴趣。</h2></div></section>`;
@@ -1343,7 +1344,7 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex, pres
 ${renderContentSearch(searchIndex)}
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
-            <div class="journal-section-heading"><div><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">值得继续追问的问题</h2></div></div>
+            <div class="journal-section-heading project-chibi-panel project-chibi-compact"><div class="project-chibi-copy"><p class="journal-kicker">SELECTED NOTES</p><h2 id="featured-notes-title">值得继续追问的问题</h2></div>${renderProjectChibi('myosotis', { compact: true })}</div>
             <div class="journal-scroll-region journal-featured-scroll" role="region" aria-labelledby="featured-notes-title" tabindex="0">
                 <div class="note-grid">${notes}
                 </div>
@@ -1442,12 +1443,13 @@ function renderBlogIndex(sourceData, discovery, featuredReading) {
                 <p>${escapeHtml(article.summary)}</p>
                 <a class="note-link" href="blog/${escapeAttribute(article.slug)}.html">开始阅读<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </article>`).join('');
-  return `<header class="blog-hero">
-        <div class="container">
+  return `<header class="blog-hero illustrated-cover">
+        <div class="container illustrated-cover-grid"><div class="illustrated-cover-copy">
             <p class="section-kicker">WRITING</p>
             <h1>文章</h1>
             <p>关于游戏系统、开发实践，以及做游戏过程中值得写下来的问题。</p>
             <div class="hero-buttons"><a class="btn btn-primary" href="#articles">阅读文章</a><a class="btn btn-secondary" href="journal.html">查看研究索引</a><a class="btn btn-secondary" href="subscribe.html"><i class="fas fa-rss" aria-hidden="true"></i>订阅文章</a></div>
+        </div>${renderCreatorVignette('reading')}
         </div>
     </header>
     <section class="blog-featured-reading" id="featured-reading" aria-labelledby="featured-reading-title">
@@ -1493,14 +1495,15 @@ function renderContactContent(siteData) {
                     <div><h2>${escapeHtml(social.label)}</h2><p>${escapeHtml(social.description)}</p></div>
                     <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
                 </a>`).join('');
-  return `<header class="contact-header">
-        <div class="container">
+  return `<header class="contact-header illustrated-cover">
+        <div class="container illustrated-cover-grid"><div class="illustrated-cover-copy">
             <p class="section-kicker">ABOUT</p>
-            <h1>你好，我是 IrisSakura。</h1>
+            <h1><span>你好，我是</span> <span>IrisSakura。</span></h1>
             <p>你好，我是 ${escapeHtml(siteData.profile.nickname)}。我主要做游戏，也会把开发中反复遇到的问题做成框架、工具和文章。</p>
             <p>这个网站记录我做出来的东西，也记录那些值得继续想下去的问题。</p>
             <div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">品牌与视觉资料</a></div>
             <p class="contact-independence">${escapeHtml(siteData.independenceNotice)}</p>
+        </div>${renderCreatorVignette('letters')}
         </div>
     </header>
     <section class="about-story living-section"><div class="container living-prose"><h2>我做什么</h2><p>从一个游戏原型开始，尝试战斗、成长和选择怎样构成有趣的体验。我也为喜欢的游戏做 Mod，把开发中的经验整理成框架、工具和文章。</p><div class="hero-buttons"><a class="text-link" href="portfolio.html">看看作品</a><a class="text-link" href="blog.html">读读文章</a><a class="text-link" href="journal.html">研究资料库</a></div><h2>六个长期项目</h2><p>我用不同的花卉为它们命名，让每个项目保留自己的性格。</p><nav class="persona-text-links" aria-label="六个花卉项目">${personas.map((persona) => `<a href="${persona.route.replace('/pages/', '')}">${escapeHtml(persona.project)}</a>`).join('')}</nav><h2>我关心什么</h2><p>游戏系统为什么这样设计？工具怎样帮助人把想法做出来？哪些经验值得留下来，供下一次创作使用？这些问题会一直伴随我的开发。</p><h2>最近在做</h2><p>${escapeHtml(nowData.intro)}</p><a class="text-link" href="now.html">查看 Now →</a></div></section>
@@ -1565,9 +1568,10 @@ function renderFrameworkStory(story) {
                     <ul>${pillar.signals.map((signal) => `<li>${escapeHtml(signal)}</li>`).join('')}</ul>
                 </article>`).join('');
   return `<section class="framework-positioning" id="positioning" aria-labelledby="framework-positioning-title">
-        <div class="container framework-story-intro">
-            <div><p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p><h2 class="section-title" id="framework-positioning-title">为什么持续做这个框架</h2></div>
-            <div><p>把在游戏中反复使用的运行时服务与玩法能力整理好，让下一次实验和创作可以从已经解决的问题出发。</p></div>
+        <div class="container framework-story-intro project-chibi-panel">
+            <div class="project-chibi-copy"><p class="section-kicker">${escapeHtml(positioning.eyebrow)}</p><h2 class="section-title" id="framework-positioning-title">为什么持续做这个框架</h2>
+            <p>把在游戏中反复使用的运行时服务与玩法能力整理好，让下一次实验和创作可以从已经解决的问题出发。</p></div>
+            ${renderProjectChibi('sakura')}
         </div>
     </section>
     <section class="living-section framework-real-use" id="real-use"><div class="container living-story-grid"><div><p class="section-kicker">WHY I BUILT IT</p><h2>让下一次创作有一个更好的起点</h2><p>存档、事件、资源、时间、战斗和 UI，是做游戏时会反复遇到的问题。我把其中能复用的部分整理成模块，希望把更多注意力留给具体的游戏。</p><p>在《言铸之剑》中，这些模块参与了房间推进、战斗与构筑。独立玩法实验则帮助我观察它们在不同规则下怎样协作。</p><a class="text-link" href="game.html">看看《言铸之剑》</a> · <a class="text-link" href="#game-adoption">查看实际采用</a></div><figure><img src="../assets/images/sword-of-words/combat-room.png" alt="言铸之剑中的战斗房间与角色技能栏" loading="lazy" decoding="async"><figcaption>《言铸之剑》中的实时战斗。</figcaption></figure></div></section>
@@ -2170,7 +2174,7 @@ async function writeToolsSource(presentation) {
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHtml(presentation.displayName)} | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><link rel="stylesheet" href="../style/iris-sakura.css"><!-- brand-styles:end --><link rel="stylesheet" href="../style/tools.css"></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content tools-main">
 <header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#tools">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#status">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
-<section class="living-section"><div class="container living-prose"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div></section><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
+<section class="living-section"><div class="container project-chibi-panel"><div class="living-prose project-chibi-copy"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div>${renderProjectChibi('violet')}</div></section><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
 <section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
 <nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
@@ -2810,6 +2814,6 @@ async function writeWisteriaSource() {
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wisteria | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content">
 <header class="wisteria-hero"><div class="container wisteria-hero-grid"><div><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">DESKTOP LIVING WORLD</p><h1>Wisteria</h1><h2>桌面上的持续小世界</h2><p>${escapeHtml(persona.summary)}</p><p>我想让桌面不只有窗口和任务，也能容纳一个值得停留、再次回来探望的小世界。</p><div class="hero-buttons"><a class="btn btn-primary" href="#world">了解这个世界</a><a class="btn btn-secondary" href="#status">查看近况</a></div></div><div class="world-scene" data-grammar="layered-world"><span class="world-horizon" aria-hidden="true"></span><span class="world-window" aria-hidden="true"></span><span class="world-ground" aria-hidden="true"></span><div class="persona-gallery-stage" data-persona="wisteria">${personaPicture(persona, { prefix: '../', eager: true })}<span class="persona-motif" aria-hidden="true"></span></div><p class="world-caption">世界仍然在这里。</p></div></div></header>
-<div class="container"><section class="wisteria-story continuity-section" id="world"><p class="section-kicker">A PLACE TO RETURN TO</p><h2>世界会继续生长</h2><p>Wisteria 的方向是一个持续存在的桌面生活世界。空间、时间与日常陪伴，比一次性完成的任务更接近它想表达的体验。</p><h2>安静地守望</h2><p>紫藤、拱门、桥与提灯构成这个世界的视觉线索。灰棕、米白和橄榄绿承接生活的温度，淡紫藤作为点缀，让视线慢下来。</p><h2>留在桌面的一隅</h2><p>角色是世界的人格化入口；真正想探索的，是生活与工作之间那片可以停留、观察和重新发现的空间。</p></section><section class="wisteria-story" id="status"><p class="section-kicker">IN PROGRESS</p><h2>正在制作中</h2><p>这个桌面世界仍在持续探索和制作，暂未开放下载。后续会在这里分享进展与可体验的版本。</p><div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">认识六个花卉角色</a><a class="text-link" href="development.html">浏览其他项目</a></div></section></div>
+<div class="container"><section class="wisteria-story continuity-section project-chibi-panel" id="world"><div class="project-chibi-copy"><p class="section-kicker">A PLACE TO RETURN TO</p><h2>世界会继续生长</h2><p>Wisteria 的方向是一个持续存在的桌面生活世界。空间、时间与日常陪伴，比一次性完成的任务更接近它想表达的体验。</p><h2>安静地守望</h2><p>紫藤、拱门、桥与提灯构成这个世界的视觉线索。灰棕、米白和橄榄绿承接生活的温度，淡紫藤作为点缀，让视线慢下来。</p><h2>留在桌面的一隅</h2><p>角色是世界的人格化入口；真正想探索的，是生活与工作之间那片可以停留、观察和重新发现的空间。</p></div>${renderProjectChibi('wisteria')}</section><section class="wisteria-story" id="status"><p class="section-kicker">IN PROGRESS</p><h2>正在制作中</h2><p>这个桌面世界仍在持续探索和制作，暂未开放下载。后续会在这里分享进展与可体验的版本。</p><div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">认识六个花卉角色</a><a class="text-link" href="development.html">浏览其他项目</a></div></section></div>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>`);
 }

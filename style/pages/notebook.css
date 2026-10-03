@@ -1,0 +1,279 @@
+/* The shared notebook treatment for secondary pages. Layout and data owners stay local. */
+:root {
+  --notebook-accent: var(--persona-primary, var(--ink));
+  --notebook-tint: var(--persona-surface, var(--brand-shared-100));
+  --notebook-rule: color-mix(in srgb, var(--notebook-accent) 35%, var(--line));
+  --notebook-shadow: var(--persona-motif, var(--brand-shared-300));
+}
+
+/* Paper tabs and inked controls connect the covers to the rest of the site. */
+[data-page-family]:not([data-page-grammar="creator-journey"]) main .btn {
+  border-radius: .55rem;
+  border-width: 1.5px;
+  box-shadow: 3px 3px 0 var(--notebook-accent);
+}
+[data-page-family]:not([data-page-grammar="creator-journey"]) main .btn:hover {
+  transform: translateY(-2px);
+}
+.page-index { border-bottom: 1px solid var(--notebook-rule); box-shadow: none; }
+.page-index-links a { border-radius: .35rem .35rem 0 0; }
+.page-index-links a[aria-current="location"] { box-shadow: inset 0 -3px 0 var(--notebook-accent); }
+.site-search-dialog { border: 2px solid var(--ink); border-radius: .75rem .75rem 1.75rem .75rem; box-shadow: 6px 6px 0 var(--brand-shared-300); }
+.site-search-panel > header { border-bottom: 1px dashed var(--line); margin-bottom: 1.25rem; }
+.site-search-results a, .site-related-grid a { border-color: var(--notebook-rule); border-radius: .35rem .35rem 1rem .35rem; }
+.site-related { border-top: 2px solid var(--notebook-accent); }
+.footer { border-top: 2px solid var(--ink); background: var(--surface-strong); }
+.footer-link-group h2 { width: fit-content; padding-bottom: .4rem; border-bottom: 3px solid var(--brand-sakura-100); }
+
+/* Collection covers: large ink titles, a dotted margin and a folded-paper corner. */
+[data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 0;
+  padding-block: clamp(3rem, 6vw, 5rem);
+  border-bottom: 2px solid var(--notebook-accent);
+  color: var(--ink);
+  background: linear-gradient(115deg, var(--paper) 65%, var(--notebook-tint) 65%);
+  text-align: left;
+}
+[data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 0 55%;
+  background: radial-gradient(circle, var(--notebook-rule) 1px, transparent 1.5px) 0 0 / 12px 12px;
+  opacity: .5;
+  pointer-events: none;
+}
+[data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header)::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 6%; bottom: 18%; width: clamp(5rem, 13vw, 12rem); aspect-ratio: 1;
+  background: var(--notebook-shadow);
+  clip-path: polygon(50% 0, 62% 36%, 100% 50%, 62% 64%, 50% 100%, 38% 64%, 0 50%, 38% 36%);
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+[data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header) h1 {
+  max-width: 21ch;
+  margin-block: 1rem 1.5rem;
+  color: var(--ink);
+  font-size: var(--type-display);
+  line-height: 1.2;
+  text-shadow: 2px 2px 0 var(--surface-strong), 4px 4px 0 var(--notebook-shadow);
+}
+[data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header) p {
+  margin-inline: 0;
+  color: var(--ink-soft);
+}
+.development-hero-inner { justify-items: start; text-align: left; max-width: var(--container-standard); }
+.development-hero h1 { max-width: 18ch; }
+.development-hero .hero-buttons, .contact-header .hero-buttons { justify-content: flex-start; }
+[data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header) .section-kicker {
+  display: inline-block;
+  padding: .35rem .75rem;
+  border: 1px solid var(--notebook-accent);
+  border-radius: .2rem;
+  background: var(--surface-strong);
+  color: var(--notebook-accent);
+  box-shadow: 3px 3px 0 var(--notebook-shadow);
+  transform: rotate(-2deg);
+}
+[data-page-family] :is(.portfolio-header, .blog-hero, .blog-collection-hero, .contact-header, .game-hero) :is(.btn-secondary, .btn-outline) {
+  border-color: var(--notebook-accent);
+  color: var(--notebook-accent);
+  background: var(--surface-strong);
+  backdrop-filter: none;
+}
+[data-page-family] :is(.portfolio-header, .blog-hero, .blog-collection-hero, .contact-header, .game-hero) :is(.btn-secondary, .btn-outline):hover {
+  background: var(--notebook-tint);
+}
+
+/* Creator vignettes occupy a real grid column; they never sit over copy or controls. */
+[data-page-family] .illustrated-cover { padding-block: clamp(2.5rem, 5vw, 4rem); }
+.illustrated-cover-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: center; gap: clamp(1.5rem, 4vw, 4rem); }
+.illustrated-cover-copy { min-width: 0; }
+.contact-header .illustrated-cover-copy h1 span { display: block; }
+.illustrated-cover-copy .hero-buttons { justify-content: flex-start; }
+.cover-illustration { position: relative; isolation: isolate; width: 100%; max-width: 24rem; margin: 0; justify-self: center; }
+.cover-illustration::before { content: ""; position: absolute; z-index: -1; inset: 12% 7% 5%; border: 1.5px solid var(--notebook-rule); border-radius: 45% 45% 1.5rem 1.5rem; background: var(--surface-strong); box-shadow: 6px 6px 0 var(--notebook-shadow); transform: rotate(-4deg); }
+.cover-illustration img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.cover-illustration figcaption { position: relative; width: fit-content; margin: -.2rem auto 0; padding: .35rem .85rem; border: 1px solid var(--notebook-accent); border-radius: .3rem; background: var(--surface-strong); color: var(--notebook-accent); font-size: .8rem; font-weight: 700; letter-spacing: .1em; box-shadow: 3px 3px 0 var(--notebook-shadow); transform: rotate(-3deg); }
+@media (max-width: 700px) {
+  .illustrated-cover-grid { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .cover-illustration { max-width: 13rem; }
+  [data-page-family] .illustrated-cover::before { inset-inline-start: 30%; }
+}
+
+/* Smaller flower-persona scenes accompany existing introductions below project covers. */
+.project-chibi-panel { display: grid; grid-template-columns: minmax(0, 1fr) 16.5rem; align-items: center; gap: clamp(1.5rem, 4vw, 4rem); }
+.project-chibi-copy { min-width: 0; }
+.project-chibi-copy > p { line-height: 1.9; }
+.project-chibi-copy > h2 + p { margin-top: 1.25rem; }
+.project-chibi-copy.mods-section-heading { margin-bottom: 0; }
+.project-chibi { position: relative; isolation: isolate; width: 100%; max-width: 16.5rem; margin: 0; justify-self: center; align-self: center; }
+.project-chibi::before { content: ""; position: absolute; z-index: -1; inset: 15% 4% 12%; border: 1px dashed var(--persona-primary); border-radius: 48% 48% 1.25rem 1.25rem; background: var(--persona-surface); transform: rotate(4deg); }
+.project-chibi img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.project-chibi figcaption { display: flex; flex-wrap: wrap; justify-content: center; gap: .15rem .4rem; width: fit-content; max-width: 100%; margin: .4rem auto 0; padding: .3rem .55rem; border-bottom: 2px solid var(--persona-motif); border-radius: .25rem; background: var(--persona-surface); color: var(--persona-primary); font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-align: center; }
+.project-chibi figcaption span { white-space: nowrap; }
+.project-chibi-compact { grid-template-columns: minmax(0, 1fr) 12rem; margin-bottom: 2rem; }
+.project-chibi-compact .project-chibi { max-width: 12rem; }
+.mods-principle-card > span { color: var(--persona-primary); }
+@media (max-width: 900px) {
+  .project-chibi-panel:not(.project-chibi-compact) { grid-template-columns: minmax(0, 1fr) 14rem; }
+}
+@media (max-width: 600px) {
+  .project-chibi-panel:not(.project-chibi-compact) { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .project-chibi { max-width: 11rem; }
+  .project-chibi-compact { grid-template-columns: minmax(0, 1fr) 8rem; gap: 1rem; }
+  .project-chibi-compact .project-chibi { max-width: 8rem; }
+  .project-chibi-compact h2 { font-size: clamp(1.35rem, 4.5vw, 1.8rem); }
+  .project-chibi-compact :is(.section-kicker, .journal-kicker) { overflow-wrap: anywhere; }
+}
+
+/* Work pages frame actual game captures as panels, preserving their full image. */
+.portfolio-header + .page-index { margin-top: 0; }
+.living-featured .flagship-media img, .game-hero-visual, .gallery-card {
+  border: 1.5px solid var(--ink);
+  border-radius: .6rem .6rem 1.75rem .6rem;
+  box-shadow: 6px 6px 0 var(--notebook-shadow);
+}
+.game-hero { border-bottom: 2px solid var(--ink); }
+.game-hero h1 { text-shadow: 3px 3px 0 var(--surface-strong), 5px 5px 0 var(--brand-shared-300); }
+.game-hero-visual figcaption { border-top: 1px solid var(--ink); background: var(--surface-strong); }
+.game-section-heading h2, .work-group h2, .work-mods h2, .technical-work h2 {
+  padding-left: 1rem;
+  border-left: 5px solid var(--brand-sakura-700);
+}
+.work-entry { padding: 1.5rem; border: 1px solid var(--notebook-accent); border-radius: .4rem 1.5rem .4rem .4rem; background: var(--surface-strong); box-shadow: 5px 5px 0 var(--notebook-shadow); }
+.work-mods { background: linear-gradient(120deg, var(--brand-freesia-cream-050), var(--paper)); }
+.game-main :is(.loop-grid article, .system-notes article, .case-brief-grid article, .game-bridge-links a) {
+  border: 1px solid var(--notebook-rule);
+  border-radius: .4rem .4rem 1.25rem .4rem;
+  background: var(--surface-strong);
+  box-shadow: 3px 3px 0 var(--notebook-tint);
+}
+
+/* Project directory: a six-color index and generous, labeled project sheets. */
+.ecosystem-origin { border-bottom: 2px solid var(--ink); }
+.ecosystem-map ol { gap: 1.25rem; padding-top: 2rem; }
+.ecosystem-map li { border: 1.5px solid var(--persona-primary); border-radius: .35rem .35rem 1.25rem .35rem; background: var(--persona-surface); box-shadow: 4px 4px 0 var(--persona-motif); }
+.project-route { margin-bottom: 2rem; padding: 2rem; border: 1.5px solid var(--persona-primary); border-radius: .5rem 2rem .5rem .5rem; background: var(--surface-strong); box-shadow: 5px 5px 0 var(--persona-motif); }
+.project-route > .section-kicker { width: fit-content; padding: .25rem .6rem; background: var(--persona-surface); color: var(--persona-primary); border-left: 3px solid currentColor; }
+.project-route h2 { font-size: clamp(1.55rem, 2.5vw, 2rem); }
+.project-route dl > div { border-bottom-style: dashed; }
+
+/* Publications use index cards and chapter labels rather than a character gallery. */
+.blog-featured-grid { gap: 1.5rem; }
+.blog-featured-card { position: relative; border: 1.5px solid var(--notebook-accent); border-radius: .4rem .4rem 1.4rem .4rem; padding: 1.5rem; background: var(--surface-strong); box-shadow: 5px 5px 0 var(--notebook-shadow); }
+.blog-featured-card::before { content: ""; position: absolute; right: 1.25rem; top: -.5rem; width: 3.25rem; height: .9rem; background: repeating-linear-gradient(45deg, var(--notebook-shadow) 0 5px, var(--notebook-tint) 5px 10px); transform: rotate(5deg); }
+.blog-series-list > a { border: 1px solid var(--notebook-rule); border-left: 4px solid var(--notebook-accent); border-radius: .3rem .8rem .8rem .3rem; background: var(--surface-strong); }
+.blog-tag-list a { border-color: var(--notebook-rule); border-radius: .3rem; background: var(--notebook-tint); }
+.publication-month { width: fit-content; padding: .4rem .8rem; margin-block: 2rem 1rem; border: 1px solid var(--notebook-accent); background: var(--notebook-tint); font-size: var(--type-h3); box-shadow: 3px 3px 0 var(--notebook-shadow); }
+.publication-index { align-self: start; padding: .4rem; border: 1px solid var(--notebook-accent); border-radius: .25rem; background: var(--surface-strong); font-style: italic; text-align: center; }
+.publication-list li, .reading-order li { border-bottom-style: dashed; }
+.reading-order { border-left-width: 2px; }
+.blog-taxonomy h2, .blog-list-section > .container > h2 { padding-left: 1rem; border-left: 4px solid var(--notebook-accent); }
+
+/* Reading surfaces: decorated headings and rails; uninterrupted prose width and rhythm. */
+.blog-article > header, .journal-detail > header {
+  position: relative;
+  padding: 1.75rem clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--notebook-rule);
+  border-top: 4px solid var(--notebook-accent);
+  border-radius: .35rem .35rem 1.5rem .35rem;
+  background: var(--surface-strong);
+  box-shadow: 5px 5px 0 var(--notebook-tint);
+}
+.blog-article > header::before, .journal-detail > header::before {
+  content: ""; position: absolute; right: 1.5rem; top: -.75rem; width: 4rem; height: 1.1rem;
+  background: repeating-linear-gradient(45deg, var(--notebook-shadow) 0 6px, var(--notebook-tint) 6px 12px);
+  transform: rotate(4deg);
+}
+.blog-article h1, .journal-detail h1 { font-size: clamp(1.75rem, 3.4vw, 2.75rem); line-height: 1.4; letter-spacing: -.025em; }
+.article-toc { padding: 1rem; border: 1px solid var(--notebook-rule); border-top: 4px solid var(--notebook-accent); border-radius: .25rem .25rem 1rem .25rem; background: var(--surface-strong); }
+.article-toc summary { color: var(--notebook-accent); }
+.series-context { padding: 1rem; border: 1px dashed var(--notebook-rule); border-radius: .35rem; background: var(--notebook-tint); }
+:is(.blog-prose, .journal-research-body) h2 { padding-bottom: .5rem; border-bottom: 2px solid var(--notebook-tint); }
+.blog-prose blockquote { border: 1px solid var(--notebook-rule); border-left: 4px solid var(--notebook-accent); border-radius: .2rem .8rem .8rem .2rem; }
+.blog-prose pre, .quickstart-code pre { border: 1px solid var(--notebook-rule); border-top-width: 3px; border-radius: .4rem; }
+.related-articles { border-top: 2px solid var(--notebook-accent); }
+.related-articles a { padding: 1rem; border: 1px solid var(--notebook-rule); border-radius: .3rem; background: var(--surface-strong); }
+
+/* Personal pages: a journal cover, dated entries and useful contact cards. */
+[data-page-grammar] :is(.now-page, .subscribe-page) { max-width: 58rem; }
+.now-hero, .subscribe-page > header { position: relative; padding: clamp(1.5rem, 4vw, 2.5rem); border: 1.5px solid var(--ink); border-radius: .5rem 2rem .5rem .5rem; background: linear-gradient(135deg, var(--surface-strong) 72%, var(--notebook-tint) 72%); box-shadow: 6px 6px 0 var(--notebook-shadow); }
+.now-hero h1, .subscribe-page h1 { margin-block: .75rem 1rem; text-shadow: 2px 2px 0 var(--surface-strong), 4px 4px 0 var(--notebook-shadow); }
+.now-page .now-list { counter-reset: current-notes; }
+.now-page .now-list li { position: relative; padding: 1.5rem 1.5rem 1.5rem 4rem; border: 1px solid var(--notebook-rule); border-radius: .35rem .35rem 1.25rem .35rem; background: var(--surface-strong); }
+.now-page .now-list li::before { counter-increment: current-notes; content: counter(current-notes, decimal-leading-zero); position: absolute; left: 1rem; top: 1.5rem; padding: .2rem .4rem; border: 1px solid var(--notebook-accent); color: var(--notebook-accent); background: var(--notebook-tint); font-size: .8rem; font-weight: 700; transform: rotate(-6deg); }
+.now-page .update-entry time { width: fit-content; align-self: start; padding: .35rem .65rem; border: 1px solid var(--notebook-rule); border-radius: .2rem; background: var(--notebook-tint); }
+.now-page .update-entry { border-top-style: dashed; }
+.living-next, .collection-next { padding-top: 1.5rem; border-top: 2px solid var(--notebook-accent); }
+.about-story .living-prose > h2 { padding-left: 1rem; border-left: 4px solid var(--brand-sakura-700); }
+.persona-text-links a { border-radius: .3rem; box-shadow: 2px 2px 0 var(--notebook-shadow); }
+.public-route-list .public-route-card { border: 1.5px solid var(--ink); border-radius: .5rem .5rem 1.5rem .5rem; box-shadow: 4px 4px 0 var(--brand-shared-100); background: var(--surface-strong); }
+.discussion-grid li { border-bottom-style: dashed; }
+.subscribe-steps { list-style-position: inside; padding-left: 0; }
+.subscribe-steps li { padding: 1rem; margin-block: .75rem; border: 1px solid var(--notebook-rule); border-left: 4px solid var(--notebook-accent); background: var(--surface-strong); border-radius: .25rem; }
+.subscribe-feed { padding: 1.25rem; border: 1px solid var(--notebook-accent); background: var(--notebook-tint); border-radius: .5rem; }
+.subscribe-controls input { border-color: var(--notebook-accent); border-radius: .3rem; }
+
+/* Reference and project interiors use the same paper system, keeping technical states semantic. */
+html[data-brand-mode="sakura"] :is(.framework-engineering-hero, .framework-detail-hero, .quickstart-hero) {
+  border-bottom: 2px solid var(--persona-primary);
+  background: linear-gradient(115deg, var(--paper) 68%, var(--persona-surface) 68%);
+}
+html[data-brand-mode="sakura"] .framework-detail-hero::before { background: radial-gradient(circle, var(--persona-motif) 1px, transparent 1.5px) 0 0 / 12px 12px; opacity: .45; }
+html[data-brand-mode="sakura"] .framework-detail-hero::after { height: 0; }
+html[data-brand-mode="sakura"] :is(.framework-engineering-hero, .framework-detail-hero, .quickstart-hero) h1 { line-height: 1.2; text-shadow: 2px 2px 0 var(--surface-strong), 4px 4px 0 var(--persona-motif); }
+html[data-brand-mode="sakura"] :is(.framework-engineering-status, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-evidence-authority-card, .framework-adoption-route-card, .framework-boundary-grid article, .framework-focus-grid article, .framework-toolchain-grid article, .framework-topic-grid article, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a, .framework-module-reference-card, .framework-consumer-card, .framework-decision-card, .framework-case-sections > section, .module-detail, .bridge-card, .supported-adoption-grid > *) {
+  border: 1px solid var(--notebook-rule);
+  border-radius: .4rem .4rem 1.25rem .4rem;
+  background: var(--surface-strong);
+  box-shadow: 4px 4px 0 var(--persona-surface);
+}
+html[data-brand-mode="sakura"] :is(.framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a):hover { transform: translateY(-2px); }
+/* These two panels own light foreground tokens; retain an ink-dark chapter surface. */
+html[data-brand-mode="sakura"] .framework-engineering-main :is(.framework-engineering-status, .framework-domain-card) { background: var(--ink); }
+.framework-card-index, .quickstart-route-index { border: 1px solid var(--notebook-accent); border-radius: .2rem; background: var(--notebook-tint); }
+.framework-domain-card-heading .framework-card-index { color: var(--ink); background: var(--notebook-tint); }
+.quickstart-route-grid article, .quickstart-step > article, .quickstart-verification aside, .quickstart-troubleshooting article { border: 1px solid var(--notebook-rule); border-radius: .4rem .4rem 1.25rem .4rem; box-shadow: 3px 3px 0 var(--notebook-tint); }
+.content-search { border-block: 2px solid var(--notebook-accent); }
+.content-search-result, .journal-panel, .journal-design-card, .journal-note, .journal-research-card { border-color: var(--notebook-rule); border-radius: .4rem .4rem 1.25rem .4rem; box-shadow: 3px 3px 0 var(--notebook-tint); }
+.content-search-controls :is(input, select) { border-color: var(--notebook-rule); border-radius: .35rem; background: var(--surface-strong); }
+.engineering-capability-card { border-bottom-style: dashed; }
+.tool-drawer { border: 1px solid var(--notebook-rule); border-bottom: 4px solid var(--persona-primary); border-radius: .4rem .4rem 1.25rem .4rem; box-shadow: 4px 4px 0 var(--persona-surface); }
+.mod-work-card { border: 1.5px solid var(--persona-primary); border-top: 4px solid var(--persona-accent); box-shadow: 5px 5px 0 var(--persona-surface); }
+.wisteria-story { border-top: 2px solid var(--persona-primary); }
+.brand-current-grid .brand-product-card, .brand-current-character { border: 1px solid var(--persona-primary, var(--ink)); border-radius: .5rem .5rem 1.75rem .5rem; box-shadow: 4px 4px 0 var(--persona-motif, var(--brand-shared-100)); }
+.brand-current-character figcaption { border-top: 1px dashed var(--line); padding-top: 1rem; }
+.brand-current-intro { padding: 2rem; border: 1px solid var(--ink); border-radius: .5rem 2rem .5rem .5rem; background: var(--surface-strong); box-shadow: 5px 5px 0 var(--brand-shared-100); }
+
+/* Recovery pages remain useful, with the same cover language as the main routes. */
+.route-notice .container { position: relative; width: min(calc(100% - 2 * var(--page-gutter)), 48rem); padding: clamp(1.5rem, 5vw, 3rem); border: 1.5px solid var(--ink); border-radius: .5rem 2rem .5rem .5rem; background: linear-gradient(135deg, var(--surface-strong) 70%, var(--brand-shared-100) 70%); box-shadow: 7px 7px 0 var(--brand-shared-300); }
+.route-notice h1 { line-height: 1.3; text-shadow: 2px 2px 0 var(--surface-strong), 4px 4px 0 var(--brand-shared-300); }
+.route-notice .section-kicker { width: fit-content; padding: .35rem .65rem; margin-inline: auto; border: 1px solid var(--ink); border-radius: .25rem; background: var(--brand-sakura-100); color: var(--ink); transform: rotate(-3deg); }
+
+@media (max-width: 900px) {
+  .project-route { padding: 1.5rem; gap: 1rem 1.5rem; }
+  .project-route dl { grid-column: auto; grid-row: auto; }
+  .article-toc { padding: 1rem; }
+}
+@media (max-width: 600px) {
+  [data-page-family] :is(.portfolio-header, .development-hero, .blog-hero, .blog-collection-hero, .contact-header)::after { opacity: .45; right: 3%; bottom: 8%; }
+  .project-route { padding: 1.25rem; }
+  .ecosystem-map li { margin-bottom: 1rem; }
+  .publication-index { padding: .25rem; font-size: .9rem; }
+  .reading-order { padding-left: 1rem; }
+  .now-page .now-list li { padding: 1.25rem 1rem 1.25rem 3.5rem; }
+  .now-page .now-list li::before { left: .7rem; top: 1.25rem; }
+  .subscribe-feed { padding: 1rem; }
+  .brand-current-intro { padding: 1.25rem; gap: 1.5rem; }
+}
+@media print {
+  .blog-article > header, .journal-detail > header, .article-toc, .series-context { box-shadow: none; }
+  .blog-article > header::before, .journal-detail > header::before { display: none; }
+}

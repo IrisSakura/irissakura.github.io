@@ -235,7 +235,7 @@ const brandContrastRoutes = [
   {
     route: '/pages/blog.html',
     checks: [
-      ['Blog cover description', '.blog-hero > .container > p:not(.section-kicker)'],
+      ['Blog cover description', '.blog-hero .illustrated-cover-copy > p:not(.section-kicker)'],
       ['Blog series card', '.blog-series-list > a'],
       ['Blog tag chip', '.blog-tag-list > a']
     ]
@@ -415,6 +415,14 @@ try {
 
   const resiliencePage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await keepSmokeTestLocal(resiliencePage);
+  const portfolioLayout = () => resiliencePage.locator('.portfolio-header').evaluate((element) => {
+    const cover = getComputedStyle(element);
+    const title = getComputedStyle(element.querySelector('h1'));
+    return { paddingTop: cover.paddingTop, minHeight: cover.minHeight,
+      borderBottomWidth: cover.borderBottomWidth, titleSize: title.fontSize, titleColor: title.color };
+  });
+  await resiliencePage.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
+  const expectedPortfolioLayout = await portfolioLayout();
   await resiliencePage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
   await resiliencePage.evaluate(() => {
     document.documentElement.dataset.smokeDocument = 'stylesheet-fallback';
@@ -433,10 +441,8 @@ try {
   if (await resiliencePage.getAttribute('html', 'data-smoke-document') === 'stylesheet-fallback') {
     throw new Error('stylesheet failure committed a partially styled soft-navigation response');
   }
-  const recoveredPortfolioPadding = await resiliencePage.locator('.portfolio-header').evaluate((element) => (
-    Number.parseFloat(getComputedStyle(element).paddingTop)
-  ));
-  if (recoveredPortfolioPadding < 80) {
+  if (!failedPortfolioStylesheet) throw new Error('Portfolio stylesheet failure was not exercised');
+  if (JSON.stringify(await portfolioLayout()) !== JSON.stringify(expectedPortfolioLayout)) {
     throw new Error('full-navigation stylesheet fallback did not recover the Portfolio layout');
   }
 

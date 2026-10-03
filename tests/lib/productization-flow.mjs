@@ -4,7 +4,8 @@ import path from 'node:path';
 
 const ROUTES = [
   '/', '/pages/development.html', '/pages/framework.html', '/pages/journal.html',
-  '/pages/blog.html', '/pages/blog/authoritative-time-source.html', '/pages/contact.html'
+  '/pages/blog.html', '/pages/blog/authoritative-time-source.html', '/pages/contact.html', '/pages/portfolio.html',
+  '/pages/engineering.html', '/pages/tools.html', '/pages/mods.html', '/pages/wisteria.html'
 ];
 
 export async function assertProductizationFlow(browser, baseUrl, root) {
