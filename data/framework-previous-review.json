@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "1bb60d22c9aa079a4778482ca30129c662c5541f",
+    "sourceCommit": "f92e8aeb58c7c5ade7d950f49506b5fa2ec9458a",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:19c71627b98ae9fbed83b05ab56996a4e890ff069f72fcdd71b1bb4ebabdf8e4",
+    "adoptionReviewHash": "sha256:6c3c7696389a7cd07ccacf82b8f50e499cffa9cf8783a45eddde877072d02540",
     "updatedAt": "2026-10-03",
     "supportedPackages": [
       {
@@ -84,6 +84,12 @@
         "displayName": "Rules",
         "packageName": "com.unitygame.framework.rules",
         "role": "有界条件树、事实快照与有序动作路由"
+      },
+      {
+        "id": "welfare",
+        "displayName": "Welfare",
+        "packageName": "com.unitygame.framework.welfare",
+        "role": "签到、免费补签、周期与本地领奖编排"
       }
     ],
     "stableRoutes": [
@@ -183,6 +189,15 @@
           "rules"
         ],
         "purpose": "独立采用条件与动作内核：存在性按键判断，事实由调用方冻结；默认首错停止，已发生副作用的补偿由项目负责。安装版本以 Framework 已发布入口为准。"
+      },
+      {
+        "id": "welfare-foundation",
+        "label": "Welfare Foundation",
+        "packages": [
+          "rules",
+          "welfare"
+        ],
+        "purpose": "采用Rules+Welfare纯C#闭包：权威时钟与发奖持久幂等由项目负责；免费补签有预算，后置动作不回滚已提交领奖。UI/Save/time Bridge与付费补签暂缓。安装以Framework已发布入口为准。"
       }
     ],
     "gameAdoption": [
@@ -225,7 +240,7 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:19c71627b98ae9fbed83b05ab56996a4e890ff069f72fcdd71b1bb4ebabdf8e4",
+    "adoptionReviewHash": "sha256:6c3c7696389a7cd07ccacf82b8f50e499cffa9cf8783a45eddde877072d02540",
     "updatedAt": "2026-10-03",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
@@ -392,7 +407,7 @@
     "syncLabel": "源仓推送公开快照",
     "updatedAt": "2026-10-03",
     "lastReviewedAt": "2026-10-03",
-    "reviewedFrameworkAdoptionHash": "sha256:19c71627b98ae9fbed83b05ab56996a4e890ff069f72fcdd71b1bb4ebabdf8e4",
+    "reviewedFrameworkAdoptionHash": "sha256:6c3c7696389a7cd07ccacf82b8f50e499cffa9cf8783a45eddde877072d02540",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -429,7 +444,8 @@
       "补充 Economy 与 Ledger 的稳定采用组合",
       "补充Response Rules单包稳定采用路线",
       "补充Work Orchestration单包稳定采用路线",
-      "补充 Rules 单包稳定采用路线"
+      "补充 Rules 单包稳定采用路线",
+      "补充 Welfare Foundation 稳定采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",

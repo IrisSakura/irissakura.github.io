@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "f92e8aeb58c7c5ade7d950f49506b5fa2ec9458a",
+  "sourceCommit": "e92fa99c12aa34b83b378e725b44f7ecc232632a",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:6c3c7696389a7cd07ccacf82b8f50e499cffa9cf8783a45eddde877072d02540",
+  "adoptionReviewHash": "sha256:ffb573b4d7cc64ecff46b714d1ac4fb7f5e992274f06f7ad78984586f342c4c4",
   "updatedAt": "2026-10-03",
   "supportedPackages": [
     {
@@ -88,6 +88,12 @@
       "displayName": "Welfare",
       "packageName": "com.unitygame.framework.welfare",
       "role": "签到、免费补签、周期与本地领奖编排"
+    },
+    {
+      "id": "mail",
+      "displayName": "Mail",
+      "packageName": "com.unitygame.framework.mail",
+      "role": "全服邮件同步、附件领取对账与安全清理候选"
     }
   ],
   "stableRoutes": [
@@ -196,6 +202,14 @@
         "welfare"
       ],
       "purpose": "采用Rules+Welfare纯C#闭包：权威时钟与发奖持久幂等由项目负责；免费补签有预算，后置动作不回滚已提交领奖。UI/Save/time Bridge与付费补签暂缓。安装以Framework已发布入口为准。"
+    },
+    {
+      "id": "mail-only",
+      "label": "Mail Only",
+      "packages": [
+        "mail"
+      ],
+      "purpose": "采用纯C#邮件内核：同步有限邮件批次，以稳定操作ID领取和对账，评估安全清理候选。玩家持久化、奖励事务和到期后对账由项目负责；UI/HTTP适配另行接入。"
     }
   ],
   "gameAdoption": [

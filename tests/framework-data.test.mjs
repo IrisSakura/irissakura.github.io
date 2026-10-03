@@ -80,7 +80,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'response-rules') ? ['response-rules'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'work-orchestration') ? ['work-orchestration'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'rules') ? ['rules'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'welfare') ? ['welfare'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'welfare') ? ['welfare'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'mail') ? ['mail'] : [])]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
@@ -92,7 +93,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'response-rules') ? ['response-rules-only'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'work-orchestration') ? ['work-orchestration-only'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'rules') ? ['rules-only'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'welfare') ? ['welfare-foundation'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'welfare') ? ['welfare-foundation'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'mail') ? ['mail-only'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
