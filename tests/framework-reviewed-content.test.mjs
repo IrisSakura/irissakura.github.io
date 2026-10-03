@@ -32,8 +32,10 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.quickstart.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'work-orchestration'), true);
-  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'mail'), false);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'mail-only'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'leaderboard-only'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'mail'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'mail-only'), true);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'welfare'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'welfare-foundation'), true);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'rules'), true);
@@ -51,7 +53,7 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Mail prerequisite must remain available');
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Leaderboard prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -79,6 +81,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'welfare-foundation').packages, ['rules','welfare']);
   assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'mail').length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'mail-only').packages, ['mail']);
+  assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'leaderboard').length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'leaderboard-only').packages, ['leaderboard']);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
