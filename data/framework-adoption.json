@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "fc3ca42b8732ff3e674ac38149bf736a44117139",
+  "sourceCommit": "9e9cfad1d2a6e2faa58971275c50ec4b7424e42c",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:88b63f132c889530b4fc4bc652071f8a689bbac8a7337633fb0e811c68f1a196",
+  "adoptionReviewHash": "sha256:0d4d7ed7f4762527b80e2b730a9e49f100d177e2fa031aebd96ed9f734b1c407",
   "updatedAt": "2026-10-03",
   "supportedPackages": [
     {
@@ -100,6 +100,12 @@
       "displayName": "Leaderboard",
       "packageName": "com.unitygame.framework.leaderboard",
       "role": "进程内榜单排序、分页与快照，以及UGUI当前页条目复用"
+    },
+    {
+      "id": "quest",
+      "displayName": "Quest",
+      "packageName": "com.unitygame.framework.quest",
+      "role": "任务与成就状态迁移、短窗口重试去重、快照，以及场景提议和冻结 UI 投影"
     }
   ],
   "stableRoutes": [
@@ -224,6 +230,15 @@
         "leaderboard"
       ],
       "purpose": "提交有界榜单，按同分策略排序并查询分页、玩家邻域和修订快照；UGUI显示当前页并复用条目。服务端权威、持久化和赛季奖励由项目负责。"
+    },
+    {
+      "id": "quest-foundation",
+      "label": "Quest Foundation",
+      "packages": [
+        "rules",
+        "quest"
+      ],
+      "purpose": "按前置关系与 Rules 条件接取和推进任务，处理版本校验、短窗口重试、成就解锁及快照恢复；持久化事务、长期收据和奖励发放由项目负责。"
     }
   ],
   "gameAdoption": [

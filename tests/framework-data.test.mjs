@@ -82,7 +82,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'rules') ? ['rules'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'welfare') ? ['welfare'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'mail') ? ['mail'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'leaderboard') ? ['leaderboard'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'leaderboard') ? ['leaderboard'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest'] : [])]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
@@ -96,7 +97,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'rules') ? ['rules-only'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'welfare') ? ['welfare-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'mail') ? ['mail-only'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'leaderboard') ? ['leaderboard-only'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'leaderboard') ? ['leaderboard-only'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest-foundation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
