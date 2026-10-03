@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "e64837d1f6aece3692674ca4d7b28914fb562a99",
+    "sourceCommit": "dbab740b03605d5c6cf9e156b07fdf36ce8b5fca",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:0d4d7ed7f4762527b80e2b730a9e49f100d177e2fa031aebd96ed9f734b1c407",
+    "adoptionReviewHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
     "updatedAt": "2026-10-03",
     "supportedPackages": [
       {
@@ -108,6 +108,12 @@
         "displayName": "Quest",
         "packageName": "com.unitygame.framework.quest",
         "role": "任务与成就状态迁移、短窗口重试去重、快照，以及场景提议和冻结 UI 投影"
+      },
+      {
+        "id": "reddot",
+        "displayName": "RedDot",
+        "packageName": "com.unitygame.framework.reddot",
+        "role": "有界红点树、批量更新与 UGUI/TMP 显示绑定"
       }
     ],
     "stableRoutes": [
@@ -241,6 +247,15 @@
           "quest"
         ],
         "purpose": "按前置关系与 Rules 条件接取和推进任务，处理版本校验、短窗口重试、成就解锁及快照恢复；持久化事务、长期收据和奖励发放由项目负责。"
+      },
+      {
+        "id": "reddot-foundation",
+        "label": "RedDot Foundation",
+        "packages": [
+          "core",
+          "reddot"
+        ],
+        "purpose": "采用 Core 与 RedDot 完整组合，将邮件、任务等展示计数汇总到红点树并在明确提交点刷新 UI；UGUI/TMP Binder 随界面退出解除订阅。持久化和权威计数由项目负责，TMP 字体资源由项目配置。"
       }
     ],
     "gameAdoption": [
@@ -283,7 +298,7 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:0d4d7ed7f4762527b80e2b730a9e49f100d177e2fa031aebd96ed9f734b1c407",
+    "adoptionReviewHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
     "updatedAt": "2026-10-03",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
@@ -450,7 +465,7 @@
     "syncLabel": "源仓推送公开快照",
     "updatedAt": "2026-10-03",
     "lastReviewedAt": "2026-10-03",
-    "reviewedFrameworkAdoptionHash": "sha256:0d4d7ed7f4762527b80e2b730a9e49f100d177e2fa031aebd96ed9f734b1c407",
+    "reviewedFrameworkAdoptionHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -491,7 +506,8 @@
       "补充 Welfare Foundation 稳定采用路线",
       "补充 Mail Only 稳定采用路线",
       "补充 Leaderboard Only 稳定采用路线",
-      "补充 Quest Foundation 稳定采用路线"
+      "补充 Quest Foundation 稳定采用路线",
+      "补充 RedDot Foundation 红点树与 UI 绑定采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",

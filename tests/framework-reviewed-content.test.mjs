@@ -32,8 +32,10 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.quickstart.adoptionReviewHash, input.framework.adoptionReviewHash);
   assert.equal(current.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'work-orchestration'), true);
-  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'reddot'), false);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'reddot-foundation'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'reddot'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'reddot-foundation'), true);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'save'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'save-foundation'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'quest'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules', 'quest']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), true);
@@ -57,7 +59,7 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed RedDot prerequisite must remain available');
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed Save prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -91,6 +93,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules','quest']);
   assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'reddot').length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'reddot-foundation').packages, ['core', 'reddot']);
+  assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'save').length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'save-foundation').packages, ['core', 'save']);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
