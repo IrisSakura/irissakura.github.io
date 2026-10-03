@@ -139,6 +139,14 @@ export async function assertNavigationLifecycle(browser, baseUrl) {
     await recordDepartures(page);
     await page.evaluate(() => {
       const entries = window.__historyDiagnostic = [];
+      const stylesheet = document.querySelector('link[href$="/dist/styles/site.css"]');
+      if (!stylesheet) throw new Error('shared stylesheet is missing');
+      window.__sharedStylesheetRemovals = 0;
+      new MutationObserver(records => {
+        for (const record of records) {
+          if ([...record.removedNodes].includes(stylesheet)) window.__sharedStylesheetRemovals++;
+        }
+      }).observe(document.head, { childList: true });
       const scroll = window.scrollTo.bind(window);
       window.scrollTo = (...args) => {
         const before = scrollY;
@@ -149,7 +157,7 @@ export async function assertNavigationLifecycle(browser, baseUrl) {
         for (const entry of list.getEntries()) entries.push({
           type: 'layout-shift', value: entry.value, scrollY,
           sources: entry.sources.map(source => ({
-            element: source.node?.outerHTML.slice(0, 200),
+            element: source.node?.outerHTML?.slice(0, 200),
             before: source.previousRect, after: source.currentRect
           }))
         });
@@ -178,6 +186,8 @@ export async function assertNavigationLifecycle(browser, baseUrl) {
     await traverse(page, -1);
     await page.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    assert.equal(await page.evaluate(() => window.__sharedStylesheetRemovals), 0,
+      'shared stylesheets must remain connected across navigation and history restoration');
     await assertReadingPosition(page, frameworkPosition, 'cached module initialization must not override history restoration');
     assert.equal(await page.locator('[data-module-id="pooling"]').getAttribute('aria-pressed'), 'true');
     assert.deepEqual(errors, []);

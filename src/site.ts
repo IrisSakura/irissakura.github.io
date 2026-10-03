@@ -498,11 +498,20 @@ class SiteShell {
         const firstExternalStylesheet = Array.from(
             document.querySelectorAll<HTMLLinkElement>('link[rel~="stylesheet"]')
         ).find((link) => new URL(link.href).origin !== location.origin) ?? null;
-        for (const { href, source } of desired) {
+        let nextStylesheet = firstExternalStylesheet;
+        for (const { href, source } of [...desired].reverse()) {
             const link = current.get(href);
             if (link) {
-                link.media = source.media;
-                document.head.insertBefore(link, firstExternalStylesheet);
+                if (link.media !== source.media) link.media = source.media;
+                let following = link.nextElementSibling;
+                while (following && !following.matches('link[rel~="stylesheet"]')) {
+                    following = following.nextElementSibling;
+                }
+                // Reinserting even the same connected link can unload its CSS
+                // until another load completes. Preserve shared styles in place
+                // when the cascade order already matches the destination.
+                if (following !== nextStylesheet) document.head.insertBefore(link, nextStylesheet);
+                nextStylesheet = link;
             }
         }
     }
