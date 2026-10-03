@@ -163,7 +163,11 @@ async function blockExternal(page, baseUrl) {
 }
 
 async function assertAccessibility(browser, baseUrl) {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  // Audit fully rendered content, including offscreen reveals. Motion behavior
+  // is covered separately; transient opacity is not a stable contrast sample.
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce'
+  });
   const page = await context.newPage();
   await blockExternal(page, baseUrl);
   const violations = [];
