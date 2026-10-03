@@ -55,6 +55,12 @@ Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`
 `data/evidence-chains.json`、`config/journal-curation.json`、项目文案、生成器和样式仍是站点维护者
 事实源，不属于自动同步可写范围。
 
+导入先在 `content/.journal-import-*` 临时目录写好全部元数据与博客正文，再备份并替换当前快照。
+安装期间发生文件系统错误时，会恢复已替换的文件和目录；旧设计正文的移除也纳入同一次回滚。
+如果回滚本身失败，命令以失败退出并打印保留的恢复目录，维护者应先用其中的 `previous-*`
+备份恢复对应路径，再重试导入。不要把残留恢复目录提交或发布。这一机制处理可捕获的写入与
+重命名错误，不提供进程被强制终止、断电或多个导入同时运行时的事务保证。
+
 `scripts/verify-journal-sync-scope.mjs` 会拒绝其他路径。工作流在提交前运行完整站点检查和
 `git diff --cached --check`，只做普通 fast-forward push，绝不 force push。
 

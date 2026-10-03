@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -63,31 +63,68 @@ if (options.check) {
 }
 
 await mkdir(path.join(root, 'data'), { recursive: true });
-await writeAtomic(path.join(root, 'config/blog-publication.json'), stringifyJson(publication));
-await writeAtomic(path.join(root, 'data/blog-taxonomy.json'), stringifyBlogTaxonomy(taxonomy));
-await writeAtomic(path.join(root, 'data/journal-source.json'), stringifyJson(source));
-await writeAtomic(path.join(root, 'data/journal.json'), stringifyJson(journal));
-const destinationBlogDirectory = path.join(root, 'content/blogs');
-const temporaryBlogDirectory = path.join(root, `content/.blogs-import-${process.pid}`);
-await rm(temporaryBlogDirectory, { recursive: true, force: true });
-await mkdir(temporaryBlogDirectory, { recursive: true });
-for (const [id, body] of blogBodies) await writeFile(path.join(temporaryBlogDirectory, `${id}.md`), body);
-await rm(destinationBlogDirectory, { recursive: true, force: true });
-await rename(temporaryBlogDirectory, destinationBlogDirectory);
-const destinationDesignDirectory = path.join(root, 'content/game-designs');
-await rm(destinationDesignDirectory, { recursive: true, force: true });
+await installSnapshot();
 console.log(
   `Imported ${source.summary.gameDesignCount} design summaries, ${source.summary.auditCount} audits and `
   + `${source.summary.blogCount} blogs from ${source.sourceCommit.slice(0, 8)}.`
 );
 
-async function writeAtomic(destination, content) {
-  const temporary = `${destination}.tmp-${process.pid}`;
+async function installSnapshot() {
+  const contentDirectory = path.join(root, 'content');
+  const blogDirectory = path.join(contentDirectory, 'blogs');
+  await mkdir(contentDirectory, { recursive: true });
+  const transaction = await mkdtemp(path.join(contentDirectory, '.journal-import-'));
+  const records = [];
+  let keepRecovery = false;
   try {
-    await writeFile(temporary, content);
-    await rename(temporary, destination);
+    // Finish all writes before touching the installed metadata or article tree.
+    for (const [destination, body] of expected) {
+      if (path.dirname(destination) === blogDirectory) continue;
+      const staged = path.join(transaction, `incoming-${records.length}`);
+      await writeFile(staged, body);
+      records.push({ destination, staged });
+    }
+    const stagedBlogs = path.join(transaction, 'incoming-blogs');
+    await mkdir(stagedBlogs);
+    for (const [id, body] of blogBodies) await writeFile(path.join(stagedBlogs, `${id}.md`), body);
+    records.push({ destination: blogDirectory, staged: stagedBlogs });
+    // Summary-only imports remove old design bodies as part of the same rollback.
+    records.push({ destination: path.join(contentDirectory, 'game-designs'), staged: null });
+
+    for (const [index, record] of records.entries()) {
+      record.backup = path.join(transaction, `previous-${index}`);
+      try {
+        await rename(record.destination, record.backup);
+        record.backedUp = true;
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+      }
+      if (record.staged) {
+        await rename(record.staged, record.destination);
+        record.installed = true;
+      }
+    }
+  } catch (error) {
+    const recoveryErrors = [];
+    for (const record of records.toReversed()) {
+      try {
+        if (record.installed) await rm(record.destination, { recursive: true, force: true });
+        if (record.backedUp) await rename(record.backup, record.destination);
+      } catch (recoveryError) {
+        recoveryErrors.push(recoveryError);
+      }
+    }
+    if (recoveryErrors.length) {
+      keepRecovery = true;
+      throw new AggregateError([error, ...recoveryErrors], `Journal import rollback incomplete; retained recovery files: ${transaction}`);
+    }
+    throw error;
   } finally {
-    await rm(temporary, { force: true });
+    if (!keepRecovery) {
+      await rm(transaction, { recursive: true, force: true }).catch(error => {
+        console.warn(`Journal import temporary directory cleanup failed: ${transaction}: ${error.message}`);
+      });
+    }
   }
 }
 
