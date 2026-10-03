@@ -127,6 +127,7 @@
     font-weight: 600;
     position: relative;
     white-space: nowrap;
+    transition-property: color, background-color, border-color, box-shadow;
 }
 
 .nav-link::after {
@@ -292,6 +293,7 @@
 @media (max-width: 900px) {
     .nav-menu {
         position: fixed;
+        visibility: hidden;
         top: 80px;
         left: -100%;
         width: 100%;
@@ -299,6 +301,7 @@
         border: 1px solid transparent;
         background-color: var(--dark-color);
         transition: var(--transition);
+        transition-property: left;
         box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         gap: 1.2rem;
     }
@@ -307,6 +310,7 @@
 
     .nav-menu.active {
         left: 0;
+        visibility: visible;
     }
 }
 @media (max-width: 900px) {

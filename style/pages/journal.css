@@ -589,6 +589,27 @@
     --journal-scroll-height: min(72vh, 760px);
 }
 
+/* Keep the full archive searchable and render nearby cards as they are needed.
+   Remember their actual sizes after rendering; reserve space before that. */
+@supports (content-visibility: auto) and (contain-intrinsic-block-size: auto 1px) {
+    .journal-design-scroll .design-summary-card {
+        content-visibility: auto;
+        contain-intrinsic-block-size: auto 380px;
+    }
+}
+
+.motion-ready .journal-scroll-region:focus-within {
+    opacity: 1;
+    translate: 0 0;
+    transition: none;
+}
+
+@media print {
+    .journal-design-scroll .design-summary-card {
+        content-visibility: visible;
+    }
+}
+
 .journal-audit-scroll {
     --journal-scroll-height: min(62vh, 620px);
 }

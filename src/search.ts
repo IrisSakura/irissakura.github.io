@@ -38,14 +38,15 @@ export class SiteSearch {
             if (target?.closest('[data-search-close]')) this.close();
         });
         document.addEventListener('keydown', (event) => {
+            if (event.isComposing) return;
             if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
                 event.preventDefault();
                 if (!this.dialog?.open) this.open(document.activeElement as HTMLElement);
                 else this.input?.focus();
             }
         });
-        this.dialog.addEventListener('cancel', () => { this.trigger?.focus(); });
-        this.dialog.addEventListener('close', () => { this.trigger?.focus(); });
+        // close() restores focus synchronously. An asynchronous close listener
+        // would steal focus back after a link has focused its destination.
         this.dialog.addEventListener('keydown', (event) => this.onKeyDown(event));
         this.input.addEventListener('input', () => {
             this.render();
@@ -57,10 +58,12 @@ export class SiteSearch {
                 });
             }, 350);
         });
-        this.results.addEventListener('click', (event) => {
-            const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-search-result]');
+        this.dialog.addEventListener('click', (event) => {
+            const link = (event.target as Element).closest<HTMLAnchorElement>('a[href]');
             if (!link) return;
-            analytics.trackEvent('navigation.search_result_open', { contentType: link.dataset.type ?? 'page' });
+            if (link.hasAttribute('data-search-result')) {
+                analytics.trackEvent('navigation.search_result_open', { contentType: link.dataset.type ?? 'page' });
+            }
             this.close();
         });
     }
@@ -166,8 +169,8 @@ export class SiteSearch {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
-        if (!this.dialog?.open || !this.results) return;
-        if (event.key === 'Escape' && !event.isComposing) {
+        if (event.isComposing || !this.dialog?.open || !this.results) return;
+        if (event.key === 'Escape') {
             event.preventDefault();
             this.close();
             return;

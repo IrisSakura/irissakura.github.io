@@ -38,6 +38,7 @@ const REVEAL_SELECTOR = [
     '.stream-grid > *',
     '.note-grid > *',
     '.journal-update-grid > *',
+    '.journal-scroll-region',
     '.design-summary-grid > *',
     '.blog-hero .container > *',
     '.blog-card-grid > *',
@@ -102,6 +103,8 @@ interface ContentSearchIndex {
     entries: ContentSearchEntry[];
 }
 
+interface ScrollPosition { left: number; top: number; }
+
 class SiteShell {
     private readonly ambientMotion = new AmbientMotion();
     private readonly siteSearch = new SiteSearch();
@@ -112,6 +115,11 @@ class SiteShell {
     private pageIndexObserver: IntersectionObserver | null = null;
     private pageIndexAbort: AbortController | null = null;
     private navigationAbort: AbortController | null = null;
+    private renderedUrl = new URL(location.href);
+    private navigationBase: HTMLBaseElement | null = null;
+    private historySequence = 0;
+    private historyKey = '';
+    private readonly scrollPositions = new Map<string, ScrollPosition>();
     private readonly stylesheetLoads = new Map<string, Promise<void>>();
     private stylesheetTargets = new Set<string>();
     private contentSearchAbort: AbortController | null = null;
@@ -200,6 +208,9 @@ class SiteShell {
         ).forEach((link) => {
             link.href = link.href;
         });
+        document.querySelectorAll<HTMLImageElement>('.navbar img[src], .footer img[src]').forEach(image => {
+            image.src = image.src;
+        });
     }
 
     private setupTracking(): void {
@@ -257,6 +268,12 @@ class SiteShell {
     private setupSoftNavigation(): void {
         if (!('fetch' in window) || !('DOMParser' in window) || !history.pushState) return;
         history.scrollRestoration = 'manual';
+        this.historyKey = this.ensureHistoryKey();
+        // History traversal changes location before the destination has loaded.
+        // Keep links and resources relative to the document actually on screen.
+        this.navigationBase = document.createElement('base');
+        this.navigationBase.href = this.renderedUrl.href;
+        document.head.prepend(this.navigationBase);
 
         document.addEventListener('click', (event) => {
             if (
@@ -280,8 +297,10 @@ class SiteShell {
             const destination = new URL(link.href, location.href);
             if (this.isSameDocumentFragment(destination)) {
                 event.preventDefault();
+                this.cancelNavigation();
                 this.setMenuOpen(false);
-                history.pushState(null, '', destination.href);
+                if (destination.href !== location.href) this.pushNavigationHistory(destination);
+                this.notifyFragmentChange(destination, false);
                 this.restoreNavigationPosition(destination);
                 return;
             }
@@ -292,8 +311,56 @@ class SiteShell {
         });
 
         window.addEventListener('popstate', () => {
-            void this.navigate(new URL(location.href), false);
+            this.saveNavigationPosition();
+            const historyKey = this.ensureHistoryKey();
+            const destination = new URL(location.href);
+            const position = this.scrollPositions.get(historyKey);
+            this.cancelNavigation();
+            if (this.isSameDocument(destination)) {
+                this.historyKey = historyKey;
+                this.notifyFragmentChange(destination, Boolean(position));
+                this.restoreNavigationPosition(destination, position);
+            } else {
+                void this.navigate(destination, false, position, historyKey);
+            }
         });
+    }
+
+    private ensureHistoryKey(): string {
+        const existing = history.state?.siteNavigationKey;
+        if (typeof existing === 'string') return existing;
+        const key = `${performance.timeOrigin}:${++this.historySequence}`;
+        history.replaceState({ ...history.state, siteNavigationKey: key }, '', location.href);
+        return key;
+    }
+
+    private saveNavigationPosition(): void {
+        this.scrollPositions.set(this.historyKey, { left: window.scrollX, top: window.scrollY });
+    }
+
+    private pushNavigationHistory(destination: URL): void {
+        this.saveNavigationPosition();
+        history.pushState(null, '', destination.href);
+        this.historyKey = this.ensureHistoryKey();
+    }
+
+    private cancelNavigation(): void {
+        this.navigationAbort?.abort();
+        this.navigationAbort = null;
+        const styles = document.querySelectorAll<HTMLLinkElement>('link[data-site-local-stylesheet]');
+        this.stylesheetTargets = new Set(Array.from(styles).filter(link => link.media !== 'not all').map(link => link.href));
+        for (const link of styles) {
+            if (link.media === 'not all' && !this.stylesheetLoads.has(link.href)) link.remove();
+        }
+        delete document.documentElement.dataset.siteNavigating;
+        document.querySelector('main#main-content')?.removeAttribute('aria-busy');
+    }
+
+    private notifyFragmentChange(destination: URL, restorePosition: boolean): void {
+        this.renderedUrl = destination;
+        document.dispatchEvent(new CustomEvent('site:fragment-change', {
+            detail: { url: destination.href, restorePosition }
+        }));
     }
 
     private canSoftNavigate(destination: URL): boolean {
@@ -303,14 +370,17 @@ class SiteShell {
     }
 
     private isSameDocumentFragment(destination: URL): boolean {
-        return destination.origin === location.origin
-            && destination.pathname === location.pathname
-            && destination.search === location.search
-            && Boolean(destination.hash);
+        return this.isSameDocument(destination) && Boolean(destination.hash);
     }
 
-    private async navigate(destination: URL, pushHistory: boolean): Promise<void> {
-        this.navigationAbort?.abort();
+    private isSameDocument(destination: URL): boolean {
+        return destination.origin === this.renderedUrl.origin
+            && destination.pathname === this.renderedUrl.pathname
+            && destination.search === this.renderedUrl.search;
+    }
+
+    private async navigate(destination: URL, pushHistory: boolean, position?: ScrollPosition, historyKey?: string): Promise<void> {
+        this.cancelNavigation();
         const controller = new AbortController();
         this.navigationAbort = controller;
         const currentMain = document.querySelector<HTMLElement>('main#main-content');
@@ -334,12 +404,15 @@ class SiteShell {
             await this.syncLocalStylesheets(nextDocument, destination, controller.signal);
             if (controller.signal.aborted) return;
 
-            if (pushHistory) history.pushState(null, '', destination.href);
+            if (pushHistory) this.pushNavigationHistory(destination);
+            else if (historyKey) this.historyKey = historyKey;
             this.syncDocumentIdentity(nextDocument);
             this.syncMetadata(nextDocument, destination);
             this.syncNavigationState(nextDocument, destination);
+            if (this.navigationBase) this.navigationBase.href = destination.href;
             currentMain?.replaceWith(document.importNode(nextMain, true));
-            this.restoreNavigationPosition(destination);
+            this.renderedUrl = destination;
+            this.restoreNavigationPosition(destination, position);
             this.updateCurrentYear();
             this.setupSubscription();
             this.setupArticleReader();
@@ -351,8 +424,10 @@ class SiteShell {
             await this.loadPageModules(nextDocument, destination);
             if (controller.signal.aborted) return;
             document.dispatchEvent(new CustomEvent('site:navigation-complete', {
-                detail: { url: destination.href }
+                detail: { url: destination.href, restorePosition: Boolean(position) }
             }));
+            // Page modules can change the document extent during connection.
+            if (position) this.restoreNavigationPosition(destination, position);
         } catch (error) {
             if (controller.signal.aborted) return;
             console.error('[site-navigation] soft navigation failed; using a full page load', error);
@@ -535,10 +610,23 @@ class SiteShell {
         }
     }
 
-    private restoreNavigationPosition(destination: URL): void {
+    private restoreNavigationPosition(destination: URL, position?: ScrollPosition): void {
+        if (position) {
+            window.scrollTo({ ...position, behavior: 'instant' });
+            return;
+        }
         if (destination.hash) {
             const id = this.decodeFragment(destination.hash);
-            if (id) document.getElementById(id)?.scrollIntoView({ behavior: 'instant' });
+            const target = id ? document.getElementById(id) : null;
+            if (target) {
+                target.scrollIntoView({ behavior: 'instant' });
+                const temporaryTabIndex = !target.hasAttribute('tabindex') && target.tabIndex < 0;
+                if (temporaryTabIndex) {
+                    target.tabIndex = -1;
+                    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+                }
+                target.focus({ preventScroll: true });
+            }
             return;
         }
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
@@ -605,6 +693,12 @@ class SiteShell {
         this.contentSearchAbort = controller;
         const { signal } = controller;
         const url = new URL(indexPath, location.href).href;
+        let render = (): void => {};
+        // Keep Enter local while the index is pending or unavailable as well.
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            render();
+        }, { signal });
 
         try {
             let index = this.contentSearchCache?.url === url ? this.contentSearchCache.index : null;
@@ -629,7 +723,7 @@ class SiteShell {
             const searchable = index.entries.map((entry) => ({ entry, haystack: normalize([
                 entry.title, entry.summary, entry.typeLabel, entry.series, ...entry.tags, ...entry.engines
             ].join(' ')) }));
-            const render = (): void => {
+            render = (): void => {
                 if (signal.aborted) return;
                 const terms = normalize(query.value).split(/\s+/u).filter(Boolean);
                 const filtered = searchable.filter(({ entry, haystack }) => {
@@ -653,10 +747,6 @@ class SiteShell {
                     : `找到 ${filtered.length} 项。`;
             };
 
-            form.addEventListener('submit', (event) => {
-                event.preventDefault();
-                render();
-            }, { signal });
             form.addEventListener('input', render, { signal });
             form.addEventListener('change', render, { signal });
             form.addEventListener('reset', () => {
@@ -840,7 +930,7 @@ class SiteShell {
         this.motionObserver = null;
         const revealables = Array.from(
             document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR)
-        );
+        ).filter((element) => !element.parentElement?.closest('.journal-scroll-region'));
         document.querySelectorAll<HTMLElement>(DEPTH_SELECTOR).forEach((element) => {
             element.classList.add('depth-card');
         });
@@ -866,10 +956,11 @@ class SiteShell {
         // only offscreen reveals, avoiding a synchronous layout during startup.
         document.documentElement.classList.add('motion-ready');
         const observer = new IntersectionObserver((entries) => {
+            const viewportHeight = window.innerHeight;
             for (const entry of entries) {
                 const element = entry.target as HTMLElement;
                 if (!element.hasAttribute('data-reveal')) {
-                    const initiallyVisible = entry.boundingClientRect.top < window.innerHeight;
+                    const initiallyVisible = entry.boundingClientRect.top < viewportHeight;
                     if (initiallyVisible) element.classList.add('is-visible');
                     element.dataset.reveal = '';
                     if (initiallyVisible) {

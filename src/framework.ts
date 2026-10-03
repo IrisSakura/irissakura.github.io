@@ -292,11 +292,21 @@ class FrameworkPage {
     private highlightTimeout = 0;
     private readonly handleHashChange = (): void => {
         if (!this.root?.isConnected) return;
-        this.applyModuleHash();
-        this.selectModule(this.selectedModuleId, false);
+        if (!this.applyModuleHash()) return;
+        // An explicit module deep link must also work after a narrowing filter.
+        this.moduleFilter = 'all';
+        this.moduleQuery = '';
+        const input = document.querySelector<HTMLInputElement>('#framework-module-search');
+        if (input) input.value = '';
+        document.querySelectorAll<HTMLButtonElement>('[data-module-filter]').forEach(button => {
+            const selected = button.dataset.moduleFilter === 'all';
+            button.classList.toggle('is-active', selected);
+            button.setAttribute('aria-pressed', String(selected));
+        });
+        this.renderFeaturedModules();
     };
 
-    constructor() {
+    constructor(private readonly restoreInitialScroll = true) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
         } else {
@@ -308,6 +318,7 @@ class FrameworkPage {
         this.setupEventListeners();
         this.applyModuleHash();
         this.renderFeaturedModules();
+        if (this.restoreInitialScroll) this.restoreSectionHash();
         void this.loadFrameworkData();
     }
 
@@ -360,8 +371,6 @@ class FrameworkPage {
         } catch (error) {
             if (this.lifetime.signal.aborted) return;
             console.error('[framework-data] failed to load public framework snapshot', error);
-        } finally {
-            if (!this.lifetime.signal.aborted && this.root?.isConnected) this.restoreSectionHash();
         }
     }
 
@@ -385,6 +394,8 @@ class FrameworkPage {
     private renderFeaturedModules(): void {
         const moduleList = document.getElementById('framework-module-list');
         if (!moduleList) return;
+        const focusedModule = moduleList.contains(document.activeElement)
+            ? (document.activeElement as HTMLElement).dataset.moduleId : undefined;
 
         const visibleModules = this.modules.filter(module => {
             const presentation = MODULE_PRESENTATIONS[module.id];
@@ -427,6 +438,9 @@ class FrameworkPage {
 
         moduleList.append(...visibleModules.map(module => this.createModuleCard(module)));
         this.selectModule(this.selectedModuleId, false);
+        if (focusedModule) {
+            moduleList.querySelector<HTMLButtonElement>(`[data-module-id="${focusedModule}"]`)?.focus({ preventScroll: true });
+        }
     }
 
     private createModuleCard(module: FrameworkModule): HTMLButtonElement {
@@ -489,7 +503,7 @@ class FrameworkPage {
         if (layerLink) layerLink.dataset.layerId = presentation.layerId;
 
         if (updateHash) {
-            history.replaceState(null, '', `${location.pathname}${location.search}#module-${moduleId}`);
+            history.replaceState(history.state, '', `${location.pathname}${location.search}#module-${moduleId}`);
             this.revealDetailOnNarrowLayout('framework-module-detail');
         }
     }
@@ -656,22 +670,27 @@ class FrameworkPage {
         }));
     }
 
-    private applyModuleHash(): void {
+    private applyModuleHash(): boolean {
         const match = location.hash.match(/^#module-([a-z0-9-]+)$/iu);
         if (match && MODULE_PRESENTATIONS[match[1]]) {
             this.selectedModuleId = match[1];
+            return true;
         }
+        return false;
     }
 
     private restoreSectionHash(): void {
-        const moduleHash = /^#module-[a-z0-9-]+$/iu.test(location.hash);
-        const targetId = moduleHash ? 'modules' : location.hash.slice(1);
-        if (!['modules', 'architecture', 'lifecycle'].includes(targetId)) return;
-
-        window.requestAnimationFrame(() => {
-            if (this.lifetime.signal.aborted || !this.root?.isConnected) return;
-            document.getElementById(targetId)?.scrollIntoView({ block: 'start' });
-        });
+        // Ordinary section anchors are handled by the browser/site shell. Resolve
+        // virtual module anchors once, before waiting on data or further input.
+        if (!/^#module-[a-z0-9-]+$/iu.test(location.hash) || !this.root?.isConnected) return;
+        const section = document.getElementById('modules');
+        if (!section) return;
+        section.scrollIntoView({ behavior: 'instant', block: 'start' });
+        if (!section.hasAttribute('tabindex')) {
+            section.tabIndex = -1;
+            section.addEventListener('blur', () => section.removeAttribute('tabindex'), { once: true });
+        }
+        section.focus({ preventScroll: true });
     }
 
     private revealDetailOnNarrowLayout(detailId: string): void {
@@ -734,12 +753,17 @@ class FrameworkPage {
             const layerId = button.dataset.layerId;
             if (!layerId) return;
             this.selectLayer(layerId);
-            document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+            document.getElementById('architecture')?.scrollIntoView({ behavior, block: 'start' });
         });
 
         window.addEventListener('hashchange', this.handleHashChange, {
             signal: this.lifetime.signal
         });
+        document.addEventListener('site:fragment-change', (event) => {
+            this.handleHashChange();
+            if (!(event as CustomEvent).detail.restorePosition) this.restoreSectionHash();
+        }, { signal: this.lifetime.signal });
 
     }
 }
@@ -747,14 +771,15 @@ class FrameworkPage {
 let activeFrameworkPage: FrameworkPage | null = null;
 let activeFrameworkRoot: HTMLElement | null = null;
 
-function connectFrameworkPage(): void {
+function connectFrameworkPage(event?: Event): void {
     const root = document.getElementById('framework-module-list');
     if (root === activeFrameworkRoot) return;
     activeFrameworkPage?.dispose();
     activeFrameworkPage = null;
     activeFrameworkRoot = root;
-    if (root) activeFrameworkPage = new FrameworkPage();
+    if (root) activeFrameworkPage = new FrameworkPage(!(event as CustomEvent | undefined)?.detail?.restorePosition);
 }
 
 document.addEventListener('site:navigation-complete', connectFrameworkPage);
-connectFrameworkPage();
+// Dynamic imports connect on the completed navigation, including its scroll intent.
+if (!document.documentElement.hasAttribute('data-site-navigating')) connectFrameworkPage();

@@ -1,6 +1,8 @@
 import { assertReadingFlow } from './lib/reading-flow.mjs';
 import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertRuntimePerformance } from './lib/runtime-performance-flow.mjs';
+import { assertNavigationLifecycle } from './lib/navigation-lifecycle-flow.mjs';
+import { assertJournalPerformance } from './lib/journal-performance-flow.mjs';
 import { assertSubscriptionFlow } from './lib/subscription-flow.mjs';
 import { assertProjectHeroLayouts } from './lib/project-hero-layout.mjs';
 import { assertPersonaLayouts } from './lib/personas-v2-layout.mjs';
@@ -287,11 +289,14 @@ try {
   if (process.argv.includes('--runtime-only')) {
     await assertAmbientMotion(browser, baseUrl);
     await assertRuntimePerformance(browser, baseUrl);
+    await assertNavigationLifecycle(browser, baseUrl);
+    await assertJournalPerformance(browser, baseUrl, contentSearchIndex);
     console.log('Runtime performance browser flows passed.');
   } else if (process.argv.includes('--productization-only')) {
     await assertProductizationFlow(browser, baseUrl, root);
     console.log('Productization browser flows passed.');
   } else {
+  await assertNavigationLifecycle(browser, baseUrl);
   // Focused reruns reuse separately recorded layout evidence; the default runs both.
   if (!process.argv.includes('--flows-only')) {
     await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
@@ -1148,11 +1153,13 @@ try {
   }
 
   await mobile.goto(`${baseUrl}/pages/contact.html`, { waitUntil: 'networkidle' });
+  await mobile.locator('.mobile-toggle').click();
   const contactNavLink = mobile.locator('.nav-menu').getByRole('link', { name: '关于', exact: true });
-  if (await contactNavLink.count() !== 1) throw new Error('Contact navigation is not labeled 关于与联系');
+  if (await contactNavLink.count() !== 1) throw new Error('Open contact navigation is not labeled 关于');
   if ((await contactNavLink.getAttribute('class'))?.split(/\s+/).includes('nav-cta')) {
     throw new Error('Contact navigation still has special CTA styling');
   }
+  await mobile.keyboard.press('Escape');
   const expectedContactCards = siteData.contacts.length + siteData.socials.length;
   if (await mobile.locator('.public-route-card').count() !== expectedContactCards) throw new Error('direct contacts or verified public routes are missing');
   for (const contact of siteData.contacts) {
@@ -1180,6 +1187,7 @@ try {
   await assertSubscriptionFlow(browser, baseUrl, siteData.siteUrl);
   await assertAmbientMotion(browser, baseUrl);
   await assertRuntimePerformance(browser, baseUrl);
+  await assertJournalPerformance(browser, baseUrl, contentSearchIndex);
   await assertProductizationFlow(browser, baseUrl, root);
 
   console.log('Browser smoke passed: routes, global search, related graph, accessibility, performance, mobile navigation and contact routes checked.');
