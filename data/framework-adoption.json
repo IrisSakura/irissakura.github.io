@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "e64837d1f6aece3692674ca4d7b28914fb562a99",
+  "sourceCommit": "1cdcc5810b8a7b7597e2e239b02579dc3e038d18",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:0d4d7ed7f4762527b80e2b730a9e49f100d177e2fa031aebd96ed9f734b1c407",
+  "adoptionReviewHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
   "updatedAt": "2026-10-03",
   "supportedPackages": [
     {
@@ -106,6 +106,12 @@
       "displayName": "Quest",
       "packageName": "com.unitygame.framework.quest",
       "role": "任务与成就状态迁移、短窗口重试去重、快照，以及场景提议和冻结 UI 投影"
+    },
+    {
+      "id": "reddot",
+      "displayName": "RedDot",
+      "packageName": "com.unitygame.framework.reddot",
+      "role": "有界红点树、批量更新与 UGUI/TMP 显示绑定"
     }
   ],
   "stableRoutes": [
@@ -239,6 +245,15 @@
         "quest"
       ],
       "purpose": "按前置关系与 Rules 条件接取和推进任务，处理版本校验、短窗口重试、成就解锁及快照恢复；持久化事务、长期收据和奖励发放由项目负责。"
+    },
+    {
+      "id": "reddot-foundation",
+      "label": "RedDot Foundation",
+      "packages": [
+        "core",
+        "reddot"
+      ],
+      "purpose": "采用 Core 与 RedDot 完整组合，将邮件、任务等展示计数汇总到红点树并在明确提交点刷新 UI；UGUI/TMP Binder 随界面退出解除订阅。持久化和权威计数由项目负责，TMP 字体资源由项目配置。"
     }
   ],
   "gameAdoption": [
