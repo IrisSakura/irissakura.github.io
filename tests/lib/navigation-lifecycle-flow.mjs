@@ -13,11 +13,32 @@ async function settleNavigation(page) {
   await page.waitForFunction(() => !document.documentElement.hasAttribute('data-site-navigating'));
 }
 
+async function recordDepartures(page) {
+  // Observe the viewport immediately before an entry is replaced. Locator
+  // actionability, scroll anchoring and reading during a pending fetch can all
+  // move it after a test's earlier scrollTo call.
+  await page.evaluate(() => {
+    window.__historyDepartures = {};
+    const push = history.pushState.bind(history);
+    history.pushState = (...args) => {
+      window.__historyDepartures[location.pathname] = scrollY;
+      return push(...args);
+    };
+  });
+}
+
+async function assertReadingPosition(page, expected, message) {
+  const actual = await page.evaluate(() => scrollY);
+  assert.ok(Number.isFinite(expected) && Math.abs(actual - expected) <= 2,
+    `${message}: expected ${expected}px, actual ${actual}px, delta ${actual - expected}px`);
+}
+
 export async function assertNavigationLifecycle(browser, baseUrl) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   await context.route('**/*', route => route.request().url().startsWith(baseUrl) ? route.continue() : route.abort());
   const page = await context.newPage();
   const errors = [];
+  let releaseNavigation = () => {};
   page.on('pageerror', error => errors.push(error.message));
   try {
     await page.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
@@ -113,18 +134,38 @@ export async function assertNavigationLifecycle(browser, baseUrl) {
     const key = await page.evaluate(() => history.state.siteNavigationKey);
     await page.locator('[data-module-id="pooling"]').click();
     assert.equal(await page.evaluate(() => history.state.siteNavigationKey), key);
+    await recordDepartures(page);
     await page.evaluate(() => scrollTo({ top: 1200, behavior: 'instant' }));
-    const frameworkPosition = await page.evaluate(() => scrollY);
+    let requested;
+    const held = new Promise(resolve => { releaseNavigation = resolve; });
+    const started = new Promise(resolve => { requested = resolve; });
+    await page.route('**/pages/blog.html', async route => {
+      requested();
+      await held;
+      await route.continue();
+    });
     await page.locator('.nav-menu').getByRole('link', { name: '文章', exact: true }).click();
+    await started;
+    // Continue reading while the destination is loading. Restoring the earlier
+    // 1200px sample would lose this user input even if the module cache is sound.
+    await page.evaluate(() => scrollTo({ top: 1370, behavior: 'instant' }));
+    releaseNavigation();
+    await page.unrouteAll({ behavior: 'wait' });
     await page.waitForURL('**/pages/blog.html');
     await settleNavigation(page);
+    const frameworkPosition = await page.evaluate(() => window.__historyDepartures['/pages/framework.html']);
+    assert.ok(frameworkPosition > 1300, `pending navigation must retain the later reading position: ${frameworkPosition}px`);
     await traverse(page, -1);
     await page.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    assert.ok(Math.abs(await page.evaluate(() => scrollY) - frameworkPosition) <= 2, 'cached module initialization must not override history restoration');
+    await assertReadingPosition(page, frameworkPosition, 'cached module initialization must not override history restoration');
     assert.equal(await page.locator('[data-module-id="pooling"]').getAttribute('aria-pressed'), 'true');
     assert.deepEqual(errors, []);
-  } finally { await context.close(); }
+  } finally {
+    releaseNavigation();
+    await page.unrouteAll({ behavior: 'wait' });
+    await context.close();
+  }
 
   await assertSlowNavigation(browser, baseUrl);
   await assertPendingSearch(browser, baseUrl);
@@ -141,16 +182,7 @@ async function assertRapidHistory(browser, baseUrl) {
   let release = () => {};
   try {
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
-    // Sample at the actual document departure: entrance motion/scroll anchoring
-    // can still adjust the viewport between a scripted scroll and a link click.
-    await page.evaluate(() => {
-      window.__historyDepartures = {};
-      const push = history.pushState.bind(history);
-      history.pushState = (...args) => {
-        window.__historyDepartures[location.pathname] = scrollY;
-        return push(...args);
-      };
-    });
+    await recordDepartures(page);
     await page.evaluate(() => scrollTo({ top: 600, behavior: 'instant' }));
     await page.locator('.nav-menu').getByRole('link', { name: '文章', exact: true }).click();
     await page.waitForURL('**/pages/blog.html');

@@ -286,7 +286,9 @@ const coreVisualRoutes = [
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
 
 try {
-  if (process.argv.includes('--runtime-only')) {
+  if (process.argv.includes('--navigation-only')) {
+    await assertNavigationLifecycle(browser, baseUrl);
+  } else if (process.argv.includes('--runtime-only')) {
     await assertAmbientMotion(browser, baseUrl);
     await assertRuntimePerformance(browser, baseUrl);
     await assertNavigationLifecycle(browser, baseUrl);
