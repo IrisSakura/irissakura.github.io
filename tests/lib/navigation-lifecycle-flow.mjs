@@ -29,8 +29,10 @@ async function recordDepartures(page) {
 
 async function assertReadingPosition(page, expected, message) {
   const actual = await page.evaluate(() => scrollY);
+  const diagnostic = Number.isFinite(expected) && Math.abs(actual - expected) <= 2 ? ''
+    : await page.evaluate(() => JSON.stringify(window.__historyDiagnostic));
   assert.ok(Number.isFinite(expected) && Math.abs(actual - expected) <= 2,
-    `${message}: expected ${expected}px, actual ${actual}px, delta ${actual - expected}px`);
+    `${message}: expected ${expected}px, actual ${actual}px, delta ${actual - expected}px; ${diagnostic}`);
 }
 
 export async function assertNavigationLifecycle(browser, baseUrl) {
@@ -135,6 +137,24 @@ export async function assertNavigationLifecycle(browser, baseUrl) {
     await page.locator('[data-module-id="pooling"]').click();
     assert.equal(await page.evaluate(() => history.state.siteNavigationKey), key);
     await recordDepartures(page);
+    await page.evaluate(() => {
+      const entries = window.__historyDiagnostic = [];
+      const scroll = window.scrollTo.bind(window);
+      window.scrollTo = (...args) => {
+        const before = scrollY;
+        scroll(...args);
+        entries.push({ type: 'scrollTo', args, before, after: scrollY });
+      };
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) entries.push({
+          type: 'layout-shift', value: entry.value, scrollY,
+          sources: entry.sources.map(source => ({
+            element: source.node?.outerHTML.slice(0, 200),
+            before: source.previousRect, after: source.currentRect
+          }))
+        });
+      }).observe({ type: 'layout-shift' });
+    });
     await page.evaluate(() => scrollTo({ top: 1200, behavior: 'instant' }));
     let requested;
     const held = new Promise(resolve => { releaseNavigation = resolve; });
