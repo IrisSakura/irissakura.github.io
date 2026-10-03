@@ -238,7 +238,7 @@
                     <span>Catalog 模块</span>
                 </div>
                 <div class="stat-item">
-                    <strong id="framework-profile-count">23</strong>
+                    <strong id="framework-profile-count">24</strong>
                     <span>支持 Profile</span>
                 </div>
             </div>
@@ -252,11 +252,11 @@
                     <p class="section-kicker">REFERENCE · MATURITY BEFORE SCALE</p>
                     <h2 class="section-title" id="maturity-title">Reference / 先看成熟度，再看规模</h2>
                 </div>
-                <p class="section-intro" id="framework-maturity-summary">149 个 Package 中只有 18 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
+                <p class="section-intro" id="framework-maturity-summary">149 个 Package 中只有 19 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
             </div>
             <div class="maturity-summary" aria-label="框架完整生命周期摘要">
-                <article><strong id="framework-supported-count">18</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
-                <article><strong id="framework-preview-count">96</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
+                <article><strong id="framework-supported-count">19</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
+                <article><strong id="framework-preview-count">95</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
                 <article><strong id="framework-experimental-count">23</strong><span>Experimental</span><p>用于验证设计假设，不应默认进入生产依赖。</p></article>
                 <article><strong id="framework-docsonly-count">9</strong><span>DocsOnly</span><p>只提供设计、文档或使用指导，不计入运行时能力。</p></article>
                 <article><strong id="framework-frozen-count">3</strong><span>Frozen</span><p>保留兼容与历史用途，不再主动扩展。</p></article>
@@ -286,7 +286,7 @@
 <section class="adoption-section" id="adoption" data-page-index-target>
         <div class="container">
             <div class="section-heading-row">
-                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">18 个 Supported 包与最小采用路线</h2></div>
+                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">19 个 Supported 包与最小采用路线</h2></div>
                 <p class="section-intro">Supported 统计按包计算，不把 Preview 模块包装成稳定能力。新项目应先验证最小闭包，再按需求扩展。</p>
             </div>
             <div class="supported-adoption-grid">
@@ -309,6 +309,7 @@
                     <li><span>Leaderboard</span><code>com.unitygame.framework.leaderboard</code><p>进程内榜单排序、分页与快照，以及UGUI当前页条目复用</p></li>
                     <li><span>Quest</span><code>com.unitygame.framework.quest</code><p>任务与成就状态迁移、短窗口重试去重、快照，以及场景提议和冻结 UI 投影</p></li>
                     <li><span>RedDot</span><code>com.unitygame.framework.reddot</code><p>有界红点树、批量更新与 UGUI/TMP 显示绑定</p></li>
+                    <li><span>Save</span><code>com.unitygame.framework.save</code><p>本地存档、主备恢复、只读元数据与 Snapshot/自动保存</p></li>
                 </ul>
                 <div class="stable-route-list">
                     <article>
@@ -406,6 +407,12 @@
                         <h3>RedDot Foundation</h3>
                         <p>采用 Core 与 RedDot 完整组合，将邮件、任务等展示计数汇总到红点树并在明确提交点刷新 UI；UGUI/TMP Binder 随界面退出解除订阅。持久化和权威计数由项目负责，TMP 字体资源由项目配置。</p>
                         <div><code>core</code><span>→</span><code>reddot</code></div>
+                    </article>
+                    <article>
+                        <p class="section-kicker">save-foundation</p>
+                        <h3>Save Foundation</h3>
+                        <p>采用 Core 与 Save 完整组合，通过当前 Root 的存档服务保存和加载；支持旧格式兼容、主备恢复、只读存档卡片及 Snapshot 自动保存。项目负责存档目录、密钥管理和退出前等待保存结束；不承诺断电持久性或跨进程一致性。</p>
+                        <div><code>core</code><span>→</span><code>save</code></div>
                     </article>
                 </div>
             </div>
@@ -663,7 +670,7 @@
             <div class="lifecycle-explorer">
                 <div class="lifecycle-list" id="framework-lifecycle-list" aria-label="框架支持生命周期">
                     <button class="stat-item is-active" type="button" data-lifecycle-name="Supported" aria-pressed="true">
-                        <strong>18</strong><span>Supported</span>
+                        <strong>19</strong><span>Supported</span>
                     </button>
                 </div>
                 <div class="lifecycle-detail" id="framework-lifecycle-detail" aria-live="polite">
@@ -673,7 +680,7 @@
                         <h3 id="framework-lifecycle-detail-title">Supported</h3>
                     </div>
                     <p id="framework-lifecycle-detail-description">已有稳定使用边界、验证证据和维护承诺的框架能力。</p>
-                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">18</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">12%</strong></p>
+                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">19</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">13%</strong></p>
                 </div>
             </div>
         </div>
