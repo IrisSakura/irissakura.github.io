@@ -1,0 +1,30 @@
+/* Compact project identities reuse the six approved chibi scenes. */
+.project-icon {
+  position: relative;
+  display: inline-block;
+  width: var(--project-icon-size, 80px);
+  height: var(--project-icon-size, 80px);
+  flex: none;
+  overflow: hidden;
+  isolation: isolate;
+  vertical-align: middle;
+  border: 1px solid color-mix(in srgb, var(--persona-primary) 25%, transparent);
+  border-radius: 24%;
+  background: linear-gradient(145deg, var(--surface-strong), var(--persona-surface));
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--persona-primary) 10%, transparent);
+}
+.project-icon > img {
+  position: absolute;
+  inset: 0 auto auto -33%;
+  display: block;
+  width: 166%;
+  height: 166%;
+  max-width: none;
+  object-fit: contain;
+}
+.ecosystem-map .project-icon { grid-row: 1 / span 2; }
+.ecosystem-bridge .project-icon { float: right; margin: 0 0 1rem 1rem; }
+.home-mod-series-inner > .project-icon { justify-self: start; }
+@media (max-width: 620px) {
+  .home-mod-series-inner > .project-icon { --project-icon-size: 80px !important; }
+}

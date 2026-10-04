@@ -27,6 +27,14 @@ const PROJECT_CHIBIS = {
   wisteria: 'WISTERIA · 提灯守望'
 };
 
+// Reuse the approved chibi artwork for compact project identities.
+// CSS crops the portrait; the source images and full-scene illustrations stay intact.
+export function renderProjectIcon(persona, { prefix = '', className = '', size = 80 } = {}) {
+  if (!Object.hasOwn(PROJECT_CHIBIS, persona)) throw new Error(`Unknown project icon: ${persona}`);
+  const source = `${prefix}assets/personas/chibi-v1/${persona}`;
+  return `<span class="project-icon${className ? ` ${className}` : ''}" data-project-icon="${persona}" data-persona="${persona}" style="--project-icon-size:${size}px" aria-hidden="true"><img src="${source}-320.webp" srcset="${source}-320.webp 320w, ${source}-640.webp 640w" sizes="${Math.ceil(size * 1.66)}px" alt="" width="320" height="320" loading="lazy" decoding="async"></span>`;
+}
+
 export function renderProjectChibi(persona, { compact = false } = {}) {
   if (!Object.hasOwn(PROJECT_CHIBIS, persona)) throw new Error(`Unknown project chibi: ${persona}`);
   const source = `../assets/personas/chibi-v1/${persona}`;

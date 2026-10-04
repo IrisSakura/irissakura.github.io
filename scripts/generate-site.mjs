@@ -8,7 +8,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import { assertBrandAssets, assertBrandContract, BRAND_MODE_IDS, resolvePageBrandMode } from './lib/brand-contract.mjs';
 import { currentProductName } from './lib/brand-presentation.mjs';
-import { installVisualDecorations, renderCreatorVignette, renderProjectChibi } from './lib/visual-decorations.mjs';
+import { installVisualDecorations, renderCreatorVignette, renderProjectChibi, renderProjectIcon } from './lib/visual-decorations.mjs';
 import { assertSitePresentationConfig, resolveFooterGroups, resolveNavigationId, resolveProjectPresentations } from './lib/site-presentation.mjs';
 import { assertModSeriesConfig, resolveModSeries } from './lib/mod-series.mjs';
 import { resolveFrameworkReviewedContent } from './lib/framework-reviewed-content.mjs';
@@ -1082,7 +1082,7 @@ async function writeReadmeSummaries(projectData, sync) {
 }
 
 function renderBrandContent(brand, series) {
-  const cards = personas.map((persona) => `<article class="brand-product-card" data-brand-project="${persona.projectId}" data-persona="${persona.id}"><img class="brand-current-mark" src="../${brand.assets[persona.logoAssetKey]}" alt="" width="64" height="64" loading="lazy"><h3>${escapeHtml(persona.project)}</h3><strong>${escapeHtml(persona.subtitle)}</strong><p>${escapeHtml(persona.summary)}</p><a class="text-link" href="${persona.route.replace('/pages/', '')}">了解 ${escapeHtml(persona.project)}</a></article>`).join('');
+  const cards = personas.map((persona) => `<article class="brand-product-card" data-brand-project="${persona.projectId}" data-persona="${persona.id}">${renderProjectIcon(persona.id, { prefix: '../', className: 'brand-current-mark' })}<h3>${escapeHtml(persona.project)}</h3><strong>${escapeHtml(persona.subtitle)}</strong><p>${escapeHtml(persona.summary)}</p><a class="text-link" href="${persona.route.replace('/pages/', '')}">了解 ${escapeHtml(persona.project)}</a></article>`).join('');
   const characters = personas.map((persona) => `<figure class="brand-current-character" data-persona="${persona.id}"><div class="persona-gallery-stage">${personaPicture(persona, { prefix: '../' })}<span class="persona-motif" aria-hidden="true"></span></div><figcaption><h3>${escapeHtml(persona.project)}</h3><p>${escapeHtml(persona.summary)}</p></figcaption></figure>`).join('');
   const palette = personas.map((persona) => `<li><span class="brand-swatch" style="--brand-swatch: var(--persona-${persona.id}-primary)"></span><strong>${escapeHtml(persona.project)}</strong></li>`).join('');
   return `<header class="portfolio-header brand-portfolio-header">

@@ -9,9 +9,9 @@ Six companion illustrations for the dedicated project pages. These are derivativ
 | Myosotis | Reading an archive book | Selected research notes heading, after search |
 | Violet | Arranging illustrated cards | Tools introduction |
 | Freesia | Adapting a game token | Mod creation principles |
-| Wisteria | Lantern and growing sprig | Living-world story |
+| Wisteria | Lantern and growing sprig | Project entry icon; technical page stays text-only |
 
-The original hero portraits remain the lead illustrations. Each project has one smaller chibi below its hero, in a separate grid area beside existing copy. The compact Myosotis and Freesia scenes share the heading row on phones; longer introductions stack their art after the text. No characters are added to article bodies or technical subpages.
+The original hero portraits remain the lead illustrations. The five illustrated project pages have one smaller chibi below their hero, in a separate grid area beside existing copy. The compact Myosotis and Freesia scenes share the heading row on phones; longer introductions stack their art after the text. No characters are added to article bodies or technical subpages.
 
 ## Assets and prompts
 
@@ -51,3 +51,13 @@ All six masters are 1254 × 1254 RGBA PNGs; WebP alpha is retained. No existing 
 - `npm run package:site` passed after the final URL fix. PNG masters remain outside the public artifact. The final CSS bundle is 301,415 B, +1,923 B over this round's baseline; no new JavaScript or continuous animation is introduced.
 
 Failed intermediate commands are not counted as complete passes. Final screenshots, logs, metrics and scope hashes are in ignored `tests/output/project-chibis-review-2026-10-03/`. This is local browser evidence, not live deployment or a new CPU/FPS benchmark. Existing unrelated and prior visual/performance work is preserved. No commit or push was made in this round.
+
+## Project icons — October 5, 2026
+
+The six project identities now reuse these chibi scenes as compact portrait icons. `renderProjectIcon` in `scripts/lib/visual-decorations.mjs` owns the decorative markup; `style/components/project-icons.css` provides a static rounded frame and 166% portrait crop. The original 320px/640px WebP sources, full-scene placements and approved portraits are unchanged.
+
+The project map, home project/Mods entries, brand project cards and reusable persona-card renderer share this icon treatment. Icons remain paired with visible project names; their images are hidden from assistive technology to avoid repeated names. Wisteria receives its project identity icon on collection pages only; its technical page remains text-only.
+
+Local acceptance passed: `npm run check` (228 tests and 152-page reference verification), `npm run test:smoke -- --productization-only`, and `npm run package:site`. The project map, homepage and brand page were also inspected at 1440, 768, 390 and 320px: all icons loaded, retained square frames and stayed within the page, with no horizontal overflow.
+
+Screenshots and logs are retained in ignored `tests/output/project-icons-20261005/`. This is local website evidence; no commit, push or deployment was performed.

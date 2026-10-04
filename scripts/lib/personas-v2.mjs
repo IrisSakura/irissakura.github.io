@@ -1,3 +1,4 @@
+import { renderProjectIcon } from './visual-decorations.mjs';
 const escape = (value) => String(value).replace(/[&<>"']/gu, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 export function assertPersonas(config) {
   const expected = ['iris', 'sakura', 'myosotis', 'violet', 'freesia', 'wisteria'];
@@ -23,6 +24,6 @@ export function personaCards(personas, brand, { prefix = '', kind = 'home' } = {
     const development = kind === 'development';
     const classes = development ? `development-card development-card-${persona.mode}` : `project-entry-card project-entry-card-${persona.mode}`;
     const title = development ? 'h2' : 'h3';
-    return `<article class="${classes}" data-persona="${persona.id}" data-project-id="${persona.projectId}"><div class="persona-card-stage" aria-hidden="true">${personaPicture(persona, { prefix, decorative: true, sizes: '(max-width: 600px) 88vw, (max-width: 1000px) 42vw, 360px' })}<span class="persona-motif" aria-hidden="true"></span></div><img class="${development ? 'development-card-logo' : 'persona-card-logo'}" src="${prefix}${brand.assets[persona.logoAssetKey]}" alt="" width="48" height="48" loading="lazy"><p class="${development ? 'development-card-index' : 'project-entry-index'}">0${index + 1} · ${escape(persona.subtitle)}</p><${title}>${escape(persona.project)}</${title}><p>${escape(persona.summary)}</p><a class="${development ? 'btn btn-secondary' : 'text-link'}" href="${prefix === '../' ? persona.route.replace('/pages/', '') : prefix + persona.route.slice(1)}">${development ? '进入 ' + escape(persona.project) : '了解项目 →'}</a></article>`;
+    return `<article class="${classes}" data-persona="${persona.id}" data-project-id="${persona.projectId}"><div class="persona-card-stage" aria-hidden="true">${personaPicture(persona, { prefix, decorative: true, sizes: '(max-width: 600px) 88vw, (max-width: 1000px) 42vw, 360px' })}<span class="persona-motif" aria-hidden="true"></span></div>${renderProjectIcon(persona.id, { prefix, className: development ? 'development-card-logo' : 'persona-card-logo', size: 64 })}<p class="${development ? 'development-card-index' : 'project-entry-index'}">0${index + 1} · ${escape(persona.subtitle)}</p><${title}>${escape(persona.project)}</${title}><p>${escape(persona.summary)}</p><a class="${development ? 'btn btn-secondary' : 'text-link'}" href="${prefix === '../' ? persona.route.replace('/pages/', '') : prefix + persona.route.slice(1)}">${development ? '进入 ' + escape(persona.project) : '了解项目 →'}</a></article>`;
   }).join('');
 }
