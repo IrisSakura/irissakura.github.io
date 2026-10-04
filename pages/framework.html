@@ -238,7 +238,7 @@
                     <span>Catalog 模块</span>
                 </div>
                 <div class="stat-item">
-                    <strong id="framework-profile-count">25</strong>
+                    <strong id="framework-profile-count">26</strong>
                     <span>支持 Profile</span>
                 </div>
             </div>
@@ -252,11 +252,11 @@
                     <p class="section-kicker">REFERENCE · MATURITY BEFORE SCALE</p>
                     <h2 class="section-title" id="maturity-title">Reference / 先看成熟度，再看规模</h2>
                 </div>
-                <p class="section-intro" id="framework-maturity-summary">149 个 Package 中只有 22 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
+                <p class="section-intro" id="framework-maturity-summary">149 个 Package 中只有 25 个处于 Supported；Preview 和 Experimental 不应被解释为同等稳定的生产能力。</p>
             </div>
             <div class="maturity-summary" aria-label="框架完整生命周期摘要">
-                <article><strong id="framework-supported-count">22</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
-                <article><strong id="framework-preview-count">92</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
+                <article><strong id="framework-supported-count">25</strong><span>Supported</span><p>具备稳定使用边界、验证证据与维护承诺。</p></article>
+                <article><strong id="framework-preview-count">89</strong><span>Preview</span><p>方向已建立，但 API、集成路线或证据仍可能变化。</p></article>
                 <article><strong id="framework-experimental-count">23</strong><span>Experimental</span><p>用于验证设计假设，不应默认进入生产依赖。</p></article>
                 <article><strong id="framework-docsonly-count">9</strong><span>DocsOnly</span><p>只提供设计、文档或使用指导，不计入运行时能力。</p></article>
                 <article><strong id="framework-frozen-count">3</strong><span>Frozen</span><p>保留兼容与历史用途，不再主动扩展。</p></article>
@@ -286,7 +286,7 @@
 <section class="adoption-section" id="adoption" data-page-index-target>
         <div class="container">
             <div class="section-heading-row">
-                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">22 个 Supported 包与最小采用路线</h2></div>
+                <div><p class="section-kicker">START SMALL, VERIFY FIRST</p><h2 class="section-title">25 个 Supported 包与最小采用路线</h2></div>
                 <p class="section-intro">Supported 统计按包计算，不把 Preview 模块包装成稳定能力。新项目应先验证最小闭包，再按需求扩展。</p>
             </div>
             <div class="supported-adoption-grid">
@@ -313,6 +313,9 @@
                     <li><span>Parallel</span><code>com.unitygame.framework.parallel</code><p>分片任务调度、等待完成与协作式执行</p></li>
                     <li><span>Hitbox</span><code>com.unitygame.framework.hitbox</code><p>二维碰撞查询、层与 Owner 过滤及命中冷却</p></li>
                     <li><span>Swarm</span><code>com.unitygame.framework.swarm</code><p>群体位置更新、空间邻域与 Native 感知工具</p></li>
+                    <li><span>Command</span><code>com.unitygame.framework.command</code><p>命令执行、撤销重做与显式工厂回放</p></li>
+                    <li><span>Ticker</span><code>com.unitygame.framework.ticker</code><p>公告队列、播放时间与 UGUI 展示</p></li>
+                    <li><span>Shield</span><code>com.unitygame.framework.shield</code><p>项目词库过滤、原文遮罩与输入校验</p></li>
                 </ul>
                 <div class="stable-route-list">
                     <article>
@@ -422,6 +425,12 @@
                         <h3>Simulation Foundation</h3>
                         <p>采用 Core、Parallel、Hitbox 与 Swarm 完整组合，将纯数据任务、群体位置更新和二维碰撞查询串联。项目负责主线程提交、实体注册与 Scope 清理；伤害和网络权威由玩法层拥有。</p>
                         <div><code>core</code><span>→</span><code>parallel</code><span>→</span><code>hitbox</code><span>→</span><code>swarm</code></div>
+                    </article>
+                    <article>
+                        <p class="section-kicker">command-presentation</p>
+                        <h3>Command Presentation</h3>
+                        <p>采用 Core、Command、Ticker 与 Shield 完整组合，把项目词库校验、可撤销命令和公告展示串联。项目负责词库来源、命令工厂、时间注入与界面清理；客户端文本过滤需配合服务端审核。</p>
+                        <div><code>core</code><span>→</span><code>command</code><span>→</span><code>ticker</code><span>→</span><code>shield</code></div>
                     </article>
                 </div>
             </div>
@@ -679,7 +688,7 @@
             <div class="lifecycle-explorer">
                 <div class="lifecycle-list" id="framework-lifecycle-list" aria-label="框架支持生命周期">
                     <button class="stat-item is-active" type="button" data-lifecycle-name="Supported" aria-pressed="true">
-                        <strong>22</strong><span>Supported</span>
+                        <strong>25</strong><span>Supported</span>
                     </button>
                 </div>
                 <div class="lifecycle-detail" id="framework-lifecycle-detail" aria-live="polite">
@@ -689,7 +698,7 @@
                         <h3 id="framework-lifecycle-detail-title">Supported</h3>
                     </div>
                     <p id="framework-lifecycle-detail-description">已有稳定使用边界、验证证据和维护承诺的框架能力。</p>
-                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">22</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">15%</strong></p>
+                    <p class="lifecycle-share"><strong id="framework-lifecycle-detail-count">25</strong> 个包，占全部包的 <strong id="framework-lifecycle-detail-share">17%</strong></p>
                 </div>
             </div>
         </div>
