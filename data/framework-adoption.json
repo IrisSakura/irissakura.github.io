@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceCommit": "5c3f4d33bde86566b3ab7030aa5265ea64fad7c8",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:2bbd5bbe9df54314ae9e2d1796f21704546f2e5be5f109a2d40ef49ef774158e",
+  "adoptionReviewHash": "sha256:9df8a984c7025078502f3404dbf75e67ef768a88943722058571613832c0a9f9",
   "updatedAt": "2026-10-04",
   "supportedPackages": [
     {
@@ -136,6 +136,24 @@
       "displayName": "Swarm",
       "packageName": "com.unitygame.framework.swarm",
       "role": "群体位置更新、空间邻域与 Native 感知工具"
+    },
+    {
+      "id": "command",
+      "displayName": "Command",
+      "packageName": "com.unitygame.framework.command",
+      "role": "命令执行、撤销重做与显式工厂回放"
+    },
+    {
+      "id": "ticker",
+      "displayName": "Ticker",
+      "packageName": "com.unitygame.framework.ticker",
+      "role": "公告队列、播放时间与 UGUI 展示"
+    },
+    {
+      "id": "shield",
+      "displayName": "Shield",
+      "packageName": "com.unitygame.framework.shield",
+      "role": "项目词库过滤、原文遮罩与输入校验"
     }
   ],
   "stableRoutes": [
@@ -298,6 +316,17 @@
         "swarm"
       ],
       "purpose": "采用 Core、Parallel、Hitbox 与 Swarm 完整组合，将纯数据任务、群体位置更新和二维碰撞查询串联。项目负责主线程提交、实体注册与 Scope 清理；伤害和网络权威由玩法层拥有。"
+    },
+    {
+      "id": "command-presentation",
+      "label": "Command Presentation",
+      "packages": [
+        "core",
+        "command",
+        "ticker",
+        "shield"
+      ],
+      "purpose": "采用 Core、Command、Ticker 与 Shield 完整组合，把项目词库校验、可撤销命令和公告展示串联。项目负责词库来源、命令工厂、时间注入与界面清理；客户端文本过滤需配合服务端审核。"
     }
   ],
   "gameAdoption": [

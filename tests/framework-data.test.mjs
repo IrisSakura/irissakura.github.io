@@ -86,7 +86,7 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'reddot') ? ['reddot'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'save') ? ['save'] : []),
-      ...(['parallel', 'hitbox', 'swarm'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
+      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
@@ -104,7 +104,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'reddot') ? ['reddot-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'save') ? ['save-foundation'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'parallel') ? ['simulation-foundation'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'parallel') ? ['simulation-foundation'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'command') ? ['command-presentation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
