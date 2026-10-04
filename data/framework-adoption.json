@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "sourceCommit": "2dcef6a2cfb15adaff81bb88cdc8297659170917",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:edcfe70bc523870f5c7f0455f34bc32c4a51b990fd3df593a8526d25423967ee",
-  "updatedAt": "2026-10-04",
+  "adoptionReviewHash": "sha256:27ee609dd42276e285cda2a13a968c03a6e369901513e8e6e0222488ab06356f",
+  "updatedAt": "2026-10-05",
   "supportedPackages": [
     {
       "id": "core",
@@ -190,6 +190,24 @@
       "displayName": "Rendering",
       "packageName": "com.unitygame.framework.rendering",
       "role": "特效调度、池化表现与语义反馈"
+    },
+    {
+      "id": "gas",
+      "displayName": "GAS",
+      "packageName": "com.unitygame.framework.gas",
+      "role": "技能、效果与统一伤害提交"
+    },
+    {
+      "id": "semantic-combat",
+      "displayName": "Semantic Combat",
+      "packageName": "com.unitygame.framework.semantic-combat",
+      "role": "事实快照、战斗规则与动作提案"
+    },
+    {
+      "id": "combat-director",
+      "displayName": "Combat Director",
+      "packageName": "com.unitygame.framework.combat-director",
+      "role": "攻击名额、排队与技能租约"
     }
   ],
   "stableRoutes": [
@@ -393,6 +411,26 @@
         "rendering"
       ],
       "purpose": "组合资源加载、音频播放与池化特效，让反馈请求由明确的宿主接管。项目负责 Addressables 内容、音频配置、特效定义和视图，并在退出时释放资源租约、音源与池实例。"
+    },
+    {
+      "id": "combat-foundation",
+      "label": "Combat Foundation",
+      "packages": [
+        "core",
+        "pooling",
+        "gamehelper",
+        "event",
+        "preferences",
+        "input",
+        "asset",
+        "audio",
+        "rendering",
+        "hitbox",
+        "gas",
+        "semantic-combat",
+        "combat-director"
+      ],
+      "purpose": "将命中检测、战斗规则、技能伤害和表现反馈串成完整调用链，并用攻击令牌控制战斗节奏。项目提供实体映射、规则内容与表现资源，技能结束和战斗退出时释放令牌与资源。"
     }
   ],
   "gameAdoption": [

@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "a210e5d45b54aee26552388b7e2bf046b6b223b5",
+    "sourceCommit": "2dcef6a2cfb15adaff81bb88cdc8297659170917",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:b8f14ca27026f4e12748a1e3539106fb131fbf01a12bc3750d4f54b25b848e4d",
+    "adoptionReviewHash": "sha256:edcfe70bc523870f5c7f0455f34bc32c4a51b990fd3df593a8526d25423967ee",
     "updatedAt": "2026-10-04",
     "supportedPackages": [
       {
@@ -174,6 +174,24 @@
         "displayName": "Secondary Animation",
         "packageName": "com.unitygame.framework.secondary-animation",
         "role": "骨链次级视觉动画与生命周期清理"
+      },
+      {
+        "id": "asset",
+        "displayName": "Asset",
+        "packageName": "com.unitygame.framework.asset",
+        "role": "类型化资源加载、实例与场景租约"
+      },
+      {
+        "id": "audio",
+        "displayName": "Audio",
+        "packageName": "com.unitygame.framework.audio",
+        "role": "音效播放、总线音量与背景音乐避让"
+      },
+      {
+        "id": "rendering",
+        "displayName": "Rendering",
+        "packageName": "com.unitygame.framework.rendering",
+        "role": "特效调度、池化表现与语义反馈"
       }
     ],
     "stableRoutes": [
@@ -361,6 +379,22 @@
           "secondary-animation"
         ],
         "purpose": "组合输入采集与回放、2D物理移动和次级视觉动画。项目负责输入映射、物理碰撞层和表现链生命周期；视觉动画不作为战斗或网络权威状态。"
+      },
+      {
+        "id": "asset-presentation",
+        "label": "Asset Presentation",
+        "packages": [
+          "core",
+          "pooling",
+          "gamehelper",
+          "event",
+          "preferences",
+          "input",
+          "asset",
+          "audio",
+          "rendering"
+        ],
+        "purpose": "组合资源加载、音频播放与池化特效，让反馈请求由明确的宿主接管。项目负责 Addressables 内容、音频配置、特效定义和视图，并在退出时释放资源租约、音源与池实例。"
       }
     ],
     "gameAdoption": [
@@ -403,7 +437,7 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:b8f14ca27026f4e12748a1e3539106fb131fbf01a12bc3750d4f54b25b848e4d",
+    "adoptionReviewHash": "sha256:edcfe70bc523870f5c7f0455f34bc32c4a51b990fd3df593a8526d25423967ee",
     "updatedAt": "2026-10-04",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
@@ -570,7 +604,7 @@
     "syncLabel": "源仓推送公开快照",
     "updatedAt": "2026-10-04",
     "lastReviewedAt": "2026-10-04",
-    "reviewedFrameworkAdoptionHash": "sha256:b8f14ca27026f4e12748a1e3539106fb131fbf01a12bc3750d4f54b25b848e4d",
+    "reviewedFrameworkAdoptionHash": "sha256:edcfe70bc523870f5c7f0455f34bc32c4a51b990fd3df593a8526d25423967ee",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -616,7 +650,8 @@
       "补充 Save Foundation 本地存档与自动保存采用路线",
       "补充 Simulation Foundation 并行、二维碰撞与群体更新采用路线",
       "补充 Command Presentation 命令、公告与文本过滤采用路线",
-      "补充 Motion Foundation 输入、移动与次级动画采用路线"
+      "补充 Motion Foundation 输入、移动与次级动画采用路线",
+      "补充 Asset Presentation 资源、音频与特效采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",

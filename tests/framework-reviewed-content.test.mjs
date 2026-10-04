@@ -38,12 +38,14 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const id of ['parallel', 'hitbox', 'swarm']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['command', 'ticker', 'shield']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['input', 'movement', 'secondary-animation']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
-  for (const id of ['asset', 'audio', 'rendering']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
+  for (const id of ['asset', 'audio', 'rendering']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
+  for (const id of ['gas', 'semantic-combat', 'combat-director']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'save-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'simulation-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'command-presentation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'motion-foundation'), true);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'asset-presentation'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'asset-presentation'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'combat-foundation'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'quest'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules', 'quest']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), true);
@@ -111,6 +113,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'motion-foundation').packages, ['core', 'pooling', 'gamehelper', 'event', 'input', 'movement', 'secondary-animation']);
   for (const id of ['asset', 'audio', 'rendering']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'asset-presentation').packages, ["core","pooling","gamehelper","event","preferences","input","asset","audio","rendering"]);
+  for (const id of ['gas', 'semantic-combat', 'combat-director']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'combat-foundation').packages, ["core","pooling","gamehelper","event","preferences","input","asset","audio","rendering","hitbox","gas","semantic-combat","combat-director"]);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
