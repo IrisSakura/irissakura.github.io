@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "dbab740b03605d5c6cf9e156b07fdf36ce8b5fca",
+    "sourceCommit": "1b4b4b3df50abf1184d40e2014f3b520bf198224",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
-    "updatedAt": "2026-10-03",
+    "adoptionReviewHash": "sha256:b10a6cabc3e6c675d9afa80e64531f50039a547dfd752e76f80872e039d29c77",
+    "updatedAt": "2026-10-04",
     "supportedPackages": [
       {
         "id": "core",
@@ -114,6 +114,12 @@
         "displayName": "RedDot",
         "packageName": "com.unitygame.framework.reddot",
         "role": "有界红点树、批量更新与 UGUI/TMP 显示绑定"
+      },
+      {
+        "id": "save",
+        "displayName": "Save",
+        "packageName": "com.unitygame.framework.save",
+        "role": "本地存档、主备恢复、只读元数据与 Snapshot/自动保存"
       }
     ],
     "stableRoutes": [
@@ -256,6 +262,15 @@
           "reddot"
         ],
         "purpose": "采用 Core 与 RedDot 完整组合，将邮件、任务等展示计数汇总到红点树并在明确提交点刷新 UI；UGUI/TMP Binder 随界面退出解除订阅。持久化和权威计数由项目负责，TMP 字体资源由项目配置。"
+      },
+      {
+        "id": "save-foundation",
+        "label": "Save Foundation",
+        "packages": [
+          "core",
+          "save"
+        ],
+        "purpose": "采用 Core 与 Save 完整组合，通过当前 Root 的存档服务保存和加载；支持旧格式兼容、主备恢复、只读存档卡片及 Snapshot 自动保存。项目负责存档目录、密钥管理和退出前等待保存结束；不承诺断电持久性或跨进程一致性。"
       }
     ],
     "gameAdoption": [
@@ -298,8 +313,8 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
-    "updatedAt": "2026-10-03",
+    "adoptionReviewHash": "sha256:b10a6cabc3e6c675d9afa80e64531f50039a547dfd752e76f80872e039d29c77",
+    "updatedAt": "2026-10-04",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
     "routeSequence": [
@@ -463,9 +478,9 @@
     "status": "开发收敛",
     "syncMode": "source-push",
     "syncLabel": "源仓推送公开快照",
-    "updatedAt": "2026-10-03",
-    "lastReviewedAt": "2026-10-03",
-    "reviewedFrameworkAdoptionHash": "sha256:9400ee07a1e545ed06ca5abb2eefaa6e2d6d8e5f7412933aafe2c201f76b0e4b",
+    "updatedAt": "2026-10-04",
+    "lastReviewedAt": "2026-10-04",
+    "reviewedFrameworkAdoptionHash": "sha256:b10a6cabc3e6c675d9afa80e64531f50039a547dfd752e76f80872e039d29c77",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -507,7 +522,8 @@
       "补充 Mail Only 稳定采用路线",
       "补充 Leaderboard Only 稳定采用路线",
       "补充 Quest Foundation 稳定采用路线",
-      "补充 RedDot Foundation 红点树与 UI 绑定采用路线"
+      "补充 RedDot Foundation 红点树与 UI 绑定采用路线",
+      "补充 Save Foundation 本地存档与自动保存采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",

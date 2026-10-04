@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceCommit": "1b4b4b3df50abf1184d40e2014f3b520bf198224",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:b10a6cabc3e6c675d9afa80e64531f50039a547dfd752e76f80872e039d29c77",
+  "adoptionReviewHash": "sha256:2bbd5bbe9df54314ae9e2d1796f21704546f2e5be5f109a2d40ef49ef774158e",
   "updatedAt": "2026-10-04",
   "supportedPackages": [
     {
@@ -118,6 +118,24 @@
       "displayName": "Save",
       "packageName": "com.unitygame.framework.save",
       "role": "本地存档、主备恢复、只读元数据与 Snapshot/自动保存"
+    },
+    {
+      "id": "parallel",
+      "displayName": "Parallel",
+      "packageName": "com.unitygame.framework.parallel",
+      "role": "分片任务调度、等待完成与协作式执行"
+    },
+    {
+      "id": "hitbox",
+      "displayName": "Hitbox",
+      "packageName": "com.unitygame.framework.hitbox",
+      "role": "二维碰撞查询、层与 Owner 过滤及命中冷却"
+    },
+    {
+      "id": "swarm",
+      "displayName": "Swarm",
+      "packageName": "com.unitygame.framework.swarm",
+      "role": "群体位置更新、空间邻域与 Native 感知工具"
     }
   ],
   "stableRoutes": [
@@ -269,6 +287,17 @@
         "save"
       ],
       "purpose": "采用 Core 与 Save 完整组合，通过当前 Root 的存档服务保存和加载；支持旧格式兼容、主备恢复、只读存档卡片及 Snapshot 自动保存。项目负责存档目录、密钥管理和退出前等待保存结束；不承诺断电持久性或跨进程一致性。"
+    },
+    {
+      "id": "simulation-foundation",
+      "label": "Simulation Foundation",
+      "packages": [
+        "core",
+        "parallel",
+        "hitbox",
+        "swarm"
+      ],
+      "purpose": "采用 Core、Parallel、Hitbox 与 Swarm 完整组合，将纯数据任务、群体位置更新和二维碰撞查询串联。项目负责主线程提交、实体注册与 Scope 清理；伤害和网络权威由玩法层拥有。"
     }
   ],
   "gameAdoption": [
