@@ -13,9 +13,13 @@ async function readText(path) {
 const pageContracts = {
   'pages/mods.html': ['mod-series', 'mod-principles', 'mod-works', 'mod-foundations'],
   'pages/portfolio.html': ['portfolio-cases', 'work-mods', 'consumer-lab'],
-  'pages/framework.html': ['architecture-map', 'pillars', 'reference', 'maturity', 'adoption', 'game-adoption', 'consumer-lab'],
+  'pages/framework.html': ['use-cases', 'architecture-map', 'pillars', 'reference', 'maturity', 'adoption', 'game-adoption', 'consumer-lab'],
   'pages/framework-engineering.html': ['depth-model', 'reader-paths', 'architecture-domains', 'evidence-boundary', 'adoption-route'],
-  'pages/journal.html': ['content-search', 'featured-notes', 'knowledge-streams', 'recent-audits', 'game-design-library', 'evidence-chains'],
+  'pages/journal.html': ['reading-routes', 'engine-research', 'content-search', 'featured-notes', 'knowledge-streams', 'recent-audits', 'game-design-library', 'evidence-chains'],
+  'pages/engineering.html': ['build-workflow', 'continuity', 'workflow', 'capabilities'],
+  'pages/tools.html': ['creative-workflow', 'tools', 'workbench', 'local-intelligence', 'status'],
+  'pages/wisteria.html': ['world', 'skeletal-runtime', 'lifecycle', 'persistence', 'status'],
+  'pages/mods/the-weaver.html': ['weaver-loop', 'weaver-builds', 'weaver-making', 'weaver-status'],
   'pages/blog.html': ['featured-reading', 'blog-taxonomy', 'articles']
 };
 

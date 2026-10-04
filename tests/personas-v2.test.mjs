@@ -27,9 +27,14 @@ test('six current personas preserve approved PNG masters and every optimized der
       assert.equal(asset.width * 4, asset.height * 3);
     }
     const page = await read(persona.route.slice(1));
-    assert.ok(page.includes(`${persona.assetRoot}/web/character-720.webp`));
-    assert.ok(page.includes('type="image/avif"'));
-    assert.ok(page.includes('fetchpriority="high"'));
+    if (persona.id === 'wisteria') {
+      assert.match(page, /data-presentation="text-only"/u);
+      assert.ok(!page.includes(`${persona.assetRoot}/web/character-720.webp`));
+    } else {
+      assert.ok(page.includes(`${persona.assetRoot}/web/character-720.webp`));
+      assert.ok(page.includes('type="image/avif"'));
+      assert.ok(page.includes('fetchpriority="high"'));
+    }
     assert.ok(page.includes(`data-brand-mode="${persona.mode}"`));
   }
   const broken = structuredClone(config); broken.personas[5].route = broken.personas[0].route;

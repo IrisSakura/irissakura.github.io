@@ -3,11 +3,11 @@ const MODULE_TERMS = { pooling: ['object pool', '对象池'], bootstrap: ['quick
 const EXTRA_PROJECT_ROUTES = {
   'sword-of-words': '/pages/game.html',
   'iris-core': '/pages/mods.html#mod-foundations',
-  'the-weaver': '/pages/mods.html#mod-works',
+  'the-weaver': '/pages/mods/the-weaver.html',
   udgap: '/pages/portfolio.html#portfolio-cases'
 };
 
-export function buildSiteSearchIndex({ pages, journalIndex, presentations, projects, framework }) {
+export function buildSiteSearchIndex({ pages, journalIndex, presentations, projects, framework, showcases }) {
   const presentationById = new Map(presentations.map((entry) => [entry.projectId, entry]));
   const documents = [];
   const add = (entry) => {
@@ -47,17 +47,27 @@ export function buildSiteSearchIndex({ pages, journalIndex, presentations, proje
       id: `project:${project.id}`,
       type: 'project',
       title: presentation?.displayName ?? project.title,
-      summary: project.summary,
+      summary: presentation?.summary ?? project.summary,
       url,
-      keywords: project.technologies ?? [],
-      tags: [project.category, project.status],
+      keywords: presentation?.keywords ?? project.technologies ?? [],
+      tags: [project.category, presentation?.status && presentation.status !== '以公开项目近况为准' ? presentation.status : project.status],
       projectId: project.id
     });
   }
   for (const presentation of presentations) {
     if (documents.some((entry) => entry.id === `project:${presentation.projectId}`)) continue;
     add({ id: `project:${presentation.projectId}`, type: 'project', title: presentation.displayName,
-      summary: presentation.summary, url: presentation.route, keywords: [presentation.role], projectId: presentation.projectId });
+      summary: presentation.summary, url: presentation.route, keywords: presentation.keywords ?? [presentation.role], projectId: presentation.projectId });
+  }
+  for (const [projectId, chapters] of Object.entries(showcases?.chapters ?? {})) {
+    const presentation = presentationById.get(projectId);
+    const route = presentation?.route ?? EXTRA_PROJECT_ROUTES[projectId];
+    if (!route) throw new Error(`Project chapter has no public route: ${projectId}`);
+    for (const chapter of chapters) {
+      add({ id: `chapter:${projectId}:${chapter.id}`, type: 'project', title: chapter.title,
+        summary: chapter.intro, url: `${route}#${chapter.id}`, projectId,
+        keywords: [presentation?.displayName ?? projectId, ...(chapter.cards ?? []).map((item) => item.title), ...(chapter.steps ?? []).map((item) => item.title)] });
+    }
   }
   for (const module of framework.featuredModules) {
     add({ id: `framework:${module.id}`, type: 'framework', title: module.displayName,

@@ -1,14 +1,49 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "aedea8cbe6771a13015515756686b3a353f9030c",
-  "generatedAt": "2026-09-28T10:31:29+08:00",
+  "sourceCommit": "33050ea4957558932c45e8bbe6b02df7dce69e5c",
+  "generatedAt": "2026-10-04T14:47:53+08:00",
   "summary": {
-    "auditCount": 78,
+    "auditCount": 83,
     "blogCount": 6,
-    "gameDesignCount": 91
+    "gameDesignCount": 97
   },
-  "gameDesignCatalogDigest": "1cfc76f92348362a6bef75cf20ccc135331206d16b2a6653275f38b7ad95cceb",
+  "gameDesignCatalogDigest": "6967acd59e6c9045bc9cb4fefc6825e47fd472d85744511c4964c084ba863eeb",
   "audits": [
+    {
+      "id": "audit-2026-10-03",
+      "title": "《2026-10-03｜工作与思考日记》",
+      "summary": "2026 年 10 月 3 日，GitHub 可见更新集中在 Framework、Wisteria、Violet Shelf、Myosotis 与个人站。Framework 推进多项 Supported 资格化，RedDot 在观察截止时仍待 Runner 与站点闭环；Wisteria 更新内容与输入边界，Violet Shelf 修复持久化和文件操作路径，知识库补充设计与审计归档。本记录仅依据可访问镜像和项目留存回执，未直接遍历全部源仓，未运行构建、测试或发布；各项目当前状态仍须回查权威记录。",
+      "updatedAt": "2026-10-03",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-10-02",
+      "title": "《2026-10-02｜工作与思考日记》",
+      "summary": "本日镜像记录显示 Framework 推进 Config Core、Pathfinding 与 Ledger 的 Supported/Stable 资格化，并分别记录包级证据、Runner 与通用性能边界；Config 专属 Runner 仍未闭环。昨日晚间记录 Wisteria Hardening 的用户验收、安装和源码交付；未完成的主动长测与启动等待仍保留。个人站继续同步采用状态与六花视觉。以上是当日项目记录的观察，不代替本轮重新验收。",
+      "updatedAt": "2026-10-02",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-10-01",
+      "title": "《2026-10-01｜工作与思考日记》",
+      "summary": "本日 GitHub 可见更新集中于 Wisteria：统一活动读模型、Daily Profile、安装与回退形成 Daily R1 Baseline，项目记录保留授权迁移及源码交付。CoreAudio 首次启动等待仍未修复，长期实际使用、实体鼠标与焦点验收仍未完成，也未形成公开 Release。结论只覆盖当日镜像和所引项目证据。",
+      "updatedAt": "2026-10-01",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-09-29",
+      "title": "《2026-09-29｜工作与思考日记》",
+      "summary": "本日 GitHub 镜像可见更新覆盖六个项目：Violet Shelf 形成 Semantic/Decision 基础闭环并部署 Daily Focus，Wisteria 推进统一持久世界，Myosotis 补充设计范式与博客审计。间歇 503、Daily Focus 性能验收失败、Decision 质量与 Wisteria 产品验收仍保留为未闭环范围。结论来自当日镜像与项目留存记录，不替代源仓、Runner 或真实使用验收。",
+      "updatedAt": "2026-09-29",
+      "redacted": false
+    },
+    {
+      "id": "audit-2026-09-28",
+      "title": "《2026-09-28｜工作与思考日记》",
+      "summary": "本日 GitHub 可见更新涉及 SakuraGameFramework、DesktopPet、Myosotis、VioletShelf、个人站与 engineering-control。Stable Foundation R1 形成兼容性基线及 macOS/Unity 本地 Consumer 验收，Wisteria 程序地形进入运行候选；Windows Player、同提交 Runner、产品 Cutover 与若干外部服务仍未闭环。结论只覆盖文中列明的 GitHub 镜像和仓库自身保存的证据，不能代替 Gitea 源仓或本地工作树的独立核验。 数据覆盖说明 本次重新枚举了当前实际可访问的仓库范围，没有沿用固定项目名单。当前 GitHub 连接可读取 10 个仓库：…",
+      "updatedAt": "2026-09-28",
+      "redacted": false
+    },
     {
       "id": "audit-2026-09-27",
       "title": "《2026-09-27｜工作与思考日记》",
@@ -558,6 +593,82 @@
   ],
   "gameDesigns": [
     {
+      "id": "gameplay-failure-recovery-retry-cost",
+      "title": "玩家失误恢复、失败梯度与重试成本 / Gameplay Failure Recovery, Failure Gradient & Retry Cost",
+      "summary": "按挑战目标与 Scope 设计受损、恢复和终局路径，分开衡量控制、挑战与学习点重入成本，并以状态保留、概率口径、多人传播和重置合同验证失败后的有效选择。",
+      "tags": [
+        "balance",
+        "encounter",
+        "failure",
+        "paradigm",
+        "recovery",
+        "retry"
+      ],
+      "updatedAt": "2026-10-04",
+      "sha256": "ea4fdc02588e0cd761a42c28cd52e16779699946e13c3628e11e74d3f8b5127c"
+    },
+    {
+      "id": "long-term-economy-failure-recovery",
+      "title": "长期经济失效、市场退化与恢复 / Long-Term Economy Failure & Recovery",
+      "summary": "按参与、交易、用途与成长功能诊断长期经济失效，以完整成本、分群指标和传播链选择干预，并用资产迁移合同、正式恢复状态及行为观察确认恢复。",
+      "tags": [
+        "economy",
+        "liveops",
+        "market",
+        "migration",
+        "paradigm",
+        "recovery"
+      ],
+      "updatedAt": "2026-10-04",
+      "sha256": "3903f0b769ec3b882aa61861aaf7dec466b7adea4fa0a1f08fce00c1cefde391"
+    },
+    {
+      "id": "inflation-purchasing-power-asset-dilution",
+      "title": "通胀、购买力与资产稀释 / Inflation, Purchasing Power & Asset Dilution",
+      "summary": "区分价格通胀、资产饱和、奖励升级与战力膨胀，以分群购买力、可负担时间和明确账本观察跨版本价值变化，并按生命周期选择干预与验证。",
+      "tags": [
+        "asset",
+        "economy",
+        "inflation",
+        "liveops",
+        "paradigm",
+        "purchasing-power"
+      ],
+      "updatedAt": "2026-10-03",
+      "sha256": "e4985e98339da4e5b2f0c0b76cef45a16b4fd8b19e07aed0cbd82ab97f1b43d9"
+    },
+    {
+      "id": "resource-scarcity-decision-margin",
+      "title": "资源稀缺、决策余量与安全储备 / Resource Scarcity, Decision Margin & Reserve Design",
+      "summary": "按决策窗口区分可用库存、可靠补给、已承诺需求与安全储备，以可行计划的质量、断供风险和恢复路径验证资源稀缺是否形成有效取舍。",
+      "tags": [
+        "economy",
+        "paradigm",
+        "reserve",
+        "resource",
+        "risk",
+        "scarcity"
+      ],
+      "updatedAt": "2026-10-03",
+      "sha256": "7a4a6435662722cc09267b4bb2a6a6286920c40f63924f8155ce6bcd334f9fb0"
+    },
+    {
+      "id": "breakpoint-threshold-sensitivity",
+      "title": "临界点与阈值敏感性 / Breakpoint & Threshold Sensitivity",
+      "summary": "识别连续参数跨越离散边界后对行动、结果和人群分布造成的跃迁，并以边界扫描、组合分析和语义回归验证高敏感阈值。",
+      "tags": [
+        "balance",
+        "economy",
+        "encounter",
+        "multiplayer",
+        "paradigm",
+        "progression",
+        "threshold"
+      ],
+      "updatedAt": "2026-09-29",
+      "sha256": "0ceda0e02e5d1e3875901430c77a21b404d8ca63eb576215f6a52993e6e384f5"
+    },
+    {
       "id": "build-demand",
       "title": "Build Demand & Encounter Capability Coverage / 构筑需求与遭遇能力覆盖",
       "summary": "通过有限、可测试的 Capability Axis 让遭遇持续提出不同能力需求，并以多条 Counterplay 路径表达构筑强项、短板、替代成本与长期适应空间，避免内容退化为单一战力或唯一答案。",
@@ -569,8 +680,37 @@
         "encounter",
         "paradigm"
       ],
-      "updatedAt": "2026-09-28",
-      "sha256": "49ea3b5da91e335aa708d6fb5569b57f44e11af0cb029605ef23cec135d66940"
+      "updatedAt": "2026-09-29",
+      "sha256": "3450d2cfa7da279e4b2a64f6493f5ebe44b8dff9ab7e02260e2086868411eeee"
+    },
+    {
+      "id": "content-difficulty-budget-pressure-orchestration",
+      "title": "内容难度预算与压力编排 / Content Difficulty Budget & Pressure Orchestration",
+      "summary": "按时间窗口、遭遇与内容序列编排主次压力、机制耦合、教学、资源消耗和恢复，并以目标玩家、队伍及网络条件验证实际压力与生产成本。",
+      "tags": [
+        "balance",
+        "coordination",
+        "difficulty",
+        "encounter",
+        "paradigm",
+        "production"
+      ],
+      "updatedAt": "2026-09-29",
+      "sha256": "290339d48d513e53a9304e851a663bd0d59daa96e50020e50780ca5e1c84f8d5"
+    },
+    {
+      "id": "difficulty-band-success-envelope",
+      "title": "Difficulty Band & Success Envelope / 难度带与成功包络",
+      "summary": "以 Target Cohort、Difficulty Vector、Success Envelope 与 Retry Cost 定义遭遇的目标成功分布，并将学习曲线、方差、断点、多人条件和生产验证纳入同一 Difficulty Contract，避免把难度压缩为单一数值或战力门槛。",
+      "tags": [
+        "balance",
+        "difficulty",
+        "encounter",
+        "paradigm",
+        "success-envelope"
+      ],
+      "updatedAt": "2026-09-29",
+      "sha256": "be65f041814de72fdf14a4edd0d77a7ba84323abd88d18fbaa64849bd6a3887d"
     },
     {
       "id": "catch-up-progression-compression",
@@ -600,20 +740,6 @@
       ],
       "updatedAt": "2026-09-28",
       "sha256": "a9d352aee270d763f7dec3cf60b697607d7c168e35e7ac91c578766e65be5912"
-    },
-    {
-      "id": "difficulty-band-success-envelope",
-      "title": "Difficulty Band & Success Envelope / 难度带与成功包络",
-      "summary": "以 Target Cohort、Difficulty Vector、Success Envelope 与 Retry Cost 定义遭遇的目标成功分布，并将学习曲线、方差、断点、多人条件和生产验证纳入同一 Difficulty Contract，避免把难度压缩为单一数值或战力门槛。",
-      "tags": [
-        "balance",
-        "difficulty",
-        "encounter",
-        "paradigm",
-        "success-envelope"
-      ],
-      "updatedAt": "2026-09-28",
-      "sha256": "ffe0c0cd602a6522a8c01b9f11c22cf580d0ad8b835c47df20dd48a1a7c0e29f"
     },
     {
       "id": "resource-source-sink-economic-flow",

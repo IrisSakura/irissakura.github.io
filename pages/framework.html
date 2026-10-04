@@ -97,7 +97,7 @@
                 <p class="section-kicker">SAKURA FRAMEWORK · ENGINEERING PORTFOLIO</p>
                 <h1>SakuraGameFramework</h1>
                 <h2 class="project-hero-subtitle">让我可以反复使用已经解决过的游戏开发问题。</h2>
-                <p class="framework-subtitle">把可复用的运行时服务、玩法能力和工具组织成可组合的游戏开发框架，并在明确边界内处理引擎差异。</p>
+                <p class="framework-subtitle">把运行时、存档、模拟与表现能力组织成可组合的框架，按项目需要选择采用路线并明确生命周期。</p>
 
                 <div class="framework-actions">
                     <a href="framework-quickstart.html" class="btn btn-primary">查看采用路线</a>
@@ -114,13 +114,13 @@
     <nav class="page-index" aria-label="Framework 页面章节" data-page-index>
         <div class="container page-index-inner">
             <span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>浏览框架</strong></span>
-            <div class="page-index-links"><a href="#architecture-map" data-page-index-link aria-current="location"><span>01</span>架构地图</a><a href="#pillars" data-page-index-link><span>02</span>工程支柱</a><a href="#reference" data-page-index-link><span>03</span>技术参考</a><a href="#maturity" data-page-index-link><span>04</span>成熟度</a><a href="#adoption" data-page-index-link><span>05</span>采用路线</a><a href="#game-adoption" data-page-index-link><span>06</span>采用案例</a><a href="#consumer-lab" data-page-index-link><span>07</span>玩法实验</a></div>
+            <div class="page-index-links"><a href="#use-cases" data-page-index-link aria-current="location"><span>01</span>按问题选用</a><a href="#architecture-map" data-page-index-link><span>02</span>架构地图</a><a href="#pillars" data-page-index-link><span>03</span>工程支柱</a><a href="#reference" data-page-index-link><span>04</span>技术参考</a><a href="#maturity" data-page-index-link><span>05</span>成熟度</a><a href="#adoption" data-page-index-link><span>06</span>采用路线</a><a href="#game-adoption" data-page-index-link><span>07</span>采用案例</a><a href="#consumer-lab" data-page-index-link><span>08</span>玩法实验</a></div>
             <span class="page-index-progress" aria-hidden="true"></span>
         </div>
     </nav>
     <!-- page-index:end -->
     <!-- framework-story:start -->
-<section class="framework-positioning" data-content-stage="system" id="positioning" aria-labelledby="framework-positioning-title">
+<section class="project-chapter" id="use-cases" aria-labelledby="use-cases-title" data-page-index-target><div class="container"><header class="chapter-heading"><p class="section-kicker">CHOOSE BY THE PROBLEM</p><h2 id="use-cases-title">从要解决的问题，找到采用路线</h2><p>先确定项目需要的行为，再选择对应组合。每条路线都说明项目仍需提供的内容和生命周期管理。</p></header><div class="chapter-grid"><article><p class="chapter-eyebrow">Save Foundation</p><h3>让进度能够保存与恢复</h3><p>存档、快照捕获与自动保存一起考虑，明确成功提交、损坏恢复和退出等待的边界。</p><ul class="chapter-links"><li><a href="#adoption-save-foundation">查看组合与使用边界 <span aria-hidden="true">↓</span></a></li></ul></article><article><p class="chapter-eyebrow">Simulation Foundation</p><h3>让多个实体协同更新</h3><p>将并行数据处理、群体位置更新和二维碰撞查询组合起来，再把结果交回项目的玩法逻辑。</p><ul class="chapter-links"><li><a href="#adoption-simulation-foundation">查看组合与使用边界 <span aria-hidden="true">↓</span></a></li></ul></article><article><p class="chapter-eyebrow">Work Orchestration Only</p><h3>分配工作，也收回资源</h3><p>从工作声明、资源预留走到租约执行与终态清理，让取消和失败也有明确的结束路径。</p><ul class="chapter-links"><li><a href="#adoption-work-orchestration-only">查看组合与使用边界 <span aria-hidden="true">↓</span></a></li></ul></article><article><p class="chapter-eyebrow">Command Presentation</p><h3>把输入变成可追踪的反馈</h3><p>组合项目词库过滤、可撤销命令和公告展示，让提交后的事实进入界面反馈。</p><ul class="chapter-links"><li><a href="#adoption-command-presentation">查看组合与使用边界 <span aria-hidden="true">↓</span></a></li></ul></article><article><p class="chapter-eyebrow">Motion Foundation</p><h3>连接操作、移动与视觉响应</h3><p>围绕输入采集、二维移动和次级动画建立调用链，同时保留物理状态与视觉效果的区别。</p><ul class="chapter-links"><li><a href="#adoption-motion-foundation">查看组合与使用边界 <span aria-hidden="true">↓</span></a></li></ul></article><article><p class="chapter-eyebrow">Asset Presentation</p><h3>让声音与特效有明确归属</h3><p>为资源加载、音频播放与池化特效指定宿主，场景或效果结束后释放对应资源。</p><ul class="chapter-links"><li><a href="#adoption-asset-presentation">查看组合与使用边界 <span aria-hidden="true">↓</span></a></li></ul></article></div></div></section><section class="framework-positioning" data-content-stage="system" id="positioning" aria-labelledby="framework-positioning-title">
         <div class="container framework-story-intro project-chibi-panel">
             <div class="project-chibi-copy"><p class="section-kicker">SAKURA FRAMEWORK · ENGINEERING PORTFOLIO</p><h2 class="section-title" id="framework-positioning-title">为什么持续做这个框架</h2>
             <p>把在游戏中反复使用的运行时服务与玩法能力整理好，让下一次实验和创作可以从已经解决的问题出发。</p></div>
@@ -324,127 +324,127 @@
                     <li><span>Rendering</span><code>com.unitygame.framework.rendering</code><p>特效调度、池化表现与语义反馈</p></li>
                 </ul>
                 <div class="stable-route-list">
-                    <article>
+                    <article id="adoption-core-only">
                         <p class="section-kicker">core-only</p>
                         <h3>Core Only</h3>
                         <p>先验证 UPM 解析、基础契约和脚本编译。</p>
                         <div><code>core</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-bootstrap-lite">
                         <p class="section-kicker">bootstrap-lite</p>
                         <h3>Bootstrap Lite</h3>
                         <p>在 Core 上增加事件、对象池与游戏运行辅助，形成最小稳定组合。</p>
                         <div><code>core</code><span>→</span><code>event</code><span>→</span><code>gamehelper</code><span>→</span><code>pooling</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-runtime-foundation">
                         <p class="section-kicker">runtime-foundation</p>
                         <h3>Runtime Foundation</h3>
                         <p>在 Bootstrap Lite 上增加基础 Scope、可观察启动与任务监管，形成完整稳定运行时基建。</p>
                         <div><code>core</code><span>→</span><code>event</code><span>→</span><code>gamehelper</code><span>→</span><code>pooling</code><span>→</span><code>bootstrap</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-preferences-only">
                         <p class="section-kicker">preferences-only</p>
                         <h3>Preferences Only</h3>
                         <p>独立采用强类型本地偏好设置；不并入 Runtime Foundation，也不隐式注册常驻服务。</p>
                         <div><code>preferences</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-config-core-only">
                         <p class="section-kicker">config-core-only</p>
                         <h3>Config Core Only</h3>
                         <p>独立采用配置快照事务，不包含文件读取、Luban、持久化或引擎适配器；固定安装入口以 Framework 实际发布的版本为准，最终 Runner 验证仍待补齐。</p>
                         <div><code>config-core</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-pathfinding-foundation">
                         <p class="section-kicker">pathfinding-foundation</p>
                         <h3>Pathfinding Foundation</h3>
                         <p>采用 Core 与 Pathfinding 的完整依赖组合，提供引擎无关图与网格路径查询；NavMesh 适配器仍需独立评估，固定安装版本以 Framework 已发布入口为准。</p>
                         <div><code>core</code><span>→</span><code>pathfinding</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-ledger-only">
                         <p class="section-kicker">ledger-only</p>
                         <h3>Ledger Only</h3>
                         <p>独立采用引擎无关的内存账本，提供守恒、重放、快照与冲销；持久化、透支和跨账本事务由业务层负责。安装版本以Framework已发布入口为准。</p>
                         <div><code>ledger</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-economy-foundation">
                         <p class="section-kicker">economy-foundation</p>
                         <h3>Economy Foundation</h3>
                         <p>采用库存模拟与账本的完整组合，提供权威 tick、快照恢复和显式守恒过账；持久化与跨对象事务由业务层负责。安装版本以 Framework 已发布入口为准。</p>
                         <div><code>economy</code><span>→</span><code>ledger</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-response-rules-only">
                         <p class="section-kicker">response-rules-only</p>
                         <h3>Response Rules Only</h3>
                         <p>采用单包事实响应内核：由Owner接受提案后记录OnceOnly与冷却，保存恢复及Scope清理由调用者拥有。逻辑时间单调，单Owner单线程。安装版本以Framework已发布入口为准。</p>
                         <div><code>response-rules</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-work-orchestration-only">
                         <p class="section-kicker">work-orchestration-only</p>
                         <h3>Work Orchestration Only</h3>
                         <p>独立采用工作编排内核；单Owner单线程，有限幂等回放，由Owner维护逻辑Tick和资源过期清理。库存结算、存档恢复与网络Authority由项目负责；安装版本以Framework已发布入口为准。</p>
                         <div><code>work-orchestration</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-rules-only">
                         <p class="section-kicker">rules-only</p>
                         <h3>Rules Only</h3>
                         <p>独立采用条件与动作内核：存在性按键判断，事实由调用方冻结；默认首错停止，已发生副作用的补偿由项目负责。安装版本以 Framework 已发布入口为准。</p>
                         <div><code>rules</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-welfare-foundation">
                         <p class="section-kicker">welfare-foundation</p>
                         <h3>Welfare Foundation</h3>
                         <p>采用Rules+Welfare纯C#闭包：权威时钟与发奖持久幂等由项目负责；免费补签有预算，后置动作不回滚已提交领奖。UI/Save/time Bridge与付费补签暂缓。安装以Framework已发布入口为准。</p>
                         <div><code>rules</code><span>→</span><code>welfare</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-mail-only">
                         <p class="section-kicker">mail-only</p>
                         <h3>Mail Only</h3>
                         <p>采用纯C#邮件内核：同步有限邮件批次，以稳定操作ID领取和对账，评估安全清理候选。玩家持久化、奖励事务和到期后对账由项目负责；UI/HTTP适配另行接入。</p>
                         <div><code>mail</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-leaderboard-only">
                         <p class="section-kicker">leaderboard-only</p>
                         <h3>Leaderboard Only</h3>
                         <p>提交有界榜单，按同分策略排序并查询分页、玩家邻域和修订快照；UGUI显示当前页并复用条目。服务端权威、持久化和赛季奖励由项目负责。</p>
                         <div><code>leaderboard</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-quest-foundation">
                         <p class="section-kicker">quest-foundation</p>
                         <h3>Quest Foundation</h3>
                         <p>按前置关系与 Rules 条件接取和推进任务，处理版本校验、短窗口重试、成就解锁及快照恢复；持久化事务、长期收据和奖励发放由项目负责。</p>
                         <div><code>rules</code><span>→</span><code>quest</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-reddot-foundation">
                         <p class="section-kicker">reddot-foundation</p>
                         <h3>RedDot Foundation</h3>
                         <p>采用 Core 与 RedDot 完整组合，将邮件、任务等展示计数汇总到红点树并在明确提交点刷新 UI；UGUI/TMP Binder 随界面退出解除订阅。持久化和权威计数由项目负责，TMP 字体资源由项目配置。</p>
                         <div><code>core</code><span>→</span><code>reddot</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-save-foundation">
                         <p class="section-kicker">save-foundation</p>
                         <h3>Save Foundation</h3>
                         <p>采用 Core 与 Save 完整组合，通过当前 Root 的存档服务保存和加载；支持旧格式兼容、主备恢复、只读存档卡片及 Snapshot 自动保存。项目负责存档目录、密钥管理和退出前等待保存结束；不承诺断电持久性或跨进程一致性。</p>
                         <div><code>core</code><span>→</span><code>save</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-simulation-foundation">
                         <p class="section-kicker">simulation-foundation</p>
                         <h3>Simulation Foundation</h3>
                         <p>采用 Core、Parallel、Hitbox 与 Swarm 完整组合，将纯数据任务、群体位置更新和二维碰撞查询串联。项目负责主线程提交、实体注册与 Scope 清理；伤害和网络权威由玩法层拥有。</p>
                         <div><code>core</code><span>→</span><code>parallel</code><span>→</span><code>hitbox</code><span>→</span><code>swarm</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-command-presentation">
                         <p class="section-kicker">command-presentation</p>
                         <h3>Command Presentation</h3>
                         <p>采用 Core、Command、Ticker 与 Shield 完整组合，把项目词库校验、可撤销命令和公告展示串联。项目负责词库来源、命令工厂、时间注入与界面清理；客户端文本过滤需配合服务端审核。</p>
                         <div><code>core</code><span>→</span><code>command</code><span>→</span><code>ticker</code><span>→</span><code>shield</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-motion-foundation">
                         <p class="section-kicker">motion-foundation</p>
                         <h3>Motion Foundation</h3>
                         <p>组合输入采集与回放、2D物理移动和次级视觉动画。项目负责输入映射、物理碰撞层和表现链生命周期；视觉动画不作为战斗或网络权威状态。</p>
                         <div><code>core</code><span>→</span><code>pooling</code><span>→</span><code>gamehelper</code><span>→</span><code>event</code><span>→</span><code>input</code><span>→</span><code>movement</code><span>→</span><code>secondary-animation</code></div>
                     </article>
-                    <article>
+                    <article id="adoption-asset-presentation">
                         <p class="section-kicker">asset-presentation</p>
                         <h3>Asset Presentation</h3>
                         <p>组合资源加载、音频播放与池化特效，让反馈请求由明确的宿主接管。项目负责 Addressables 内容、音频配置、特效定义和视图，并在退出时释放资源租约、音源与池实例。</p>

@@ -157,7 +157,7 @@ const brandContrastRoutes = [
       ['Engineering hero description', '.engineering-hero .project-hero-summary'],
       ['Engineering workflow descriptions', '.engineering-workflow li > span:last-child'],
       ['Engineering capability descriptions', '.engineering-capability-card > p'],
-      ['Engineering evidence descriptions', '.engineering-evidence-card p'],
+      ['Engineering build and recovery descriptions', '.project-chapter .chapter-steps p'],
       ['Engineering boundary descriptions', '.engineering-boundaries li']
     ]
   },
@@ -792,8 +792,9 @@ try {
   if (await desktop.locator('.engineering-capability-card').count() !== irisEngineering.capabilities.length) {
     throw new Error('Engineering page does not expose every reviewed capability group');
   }
-  if (await desktop.locator('.engineering-evidence-card').count() !== 3) {
-    throw new Error('Engineering page does not expose its three practical examples');
+  if (await desktop.locator('#build-workflow .chapter-steps > li').count() !== 4
+    || await desktop.locator('#continuity .chapter-grid > article').count() !== 3) {
+    throw new Error('Engineering page must expose the build-to-playtest workflow and continuity boundaries');
   }
   const engineeringDesktopState = await desktop.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,

@@ -1,0 +1,534 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-05",
+  "chapters": {
+    "wisteria": [
+      {
+        "id": "world",
+        "kicker": "WORLD STATE",
+        "title": "让持续世界有自己的状态",
+        "intro": "Wisteria 是一个以 Godot 为宿主的本地桌面世界。技术上的核心问题，是让世界进度、活动和角色表现分别拥有清楚的生命周期。",
+        "cards": [
+          {
+            "title": "世界事实与窗口分离",
+            "body": "地形、世界对象、活动进度和奖励保存在世界状态中。桌宠、家园与面板读取这些状态；关闭一个面板，不应清空世界，也不应重复发放一次奖励。"
+          },
+          {
+            "title": "活动共用进度入口",
+            "body": "钓鱼、远行、手动旅程与桌面防线汇入统一活动摘要。导航只负责进入对应活动，状态推进和结算仍由各自的运行时负责。"
+          },
+          {
+            "title": "连续模拟与暂停",
+            "body": "桌面防线使用同一份运行状态、时钟和随机序列。隐藏表现后仍可推进，显式暂停则停止；离线补算有八小时上限，避免无界追赶。"
+          },
+          {
+            "title": "程序地形与持久化",
+            "body": "程序地形、世界对象和变更记录共同描述一个世界。调整显示尺度或重建可见区域时，既有世界身份与进度继续保留。"
+          }
+        ]
+      },
+      {
+        "id": "skeletal-runtime",
+        "kicker": "ANIMATION RUNTIME",
+        "title": "从动画数据到可见姿态",
+        "intro": "独立骨骼动画运行时把数据解析、时间轴求值、骨骼与约束计算、网格绘制分开，让播放行为可以独立检查，也能复用于不同表现入口。",
+        "steps": [
+          {
+            "title": "读取与校验",
+            "body": "解析骨骼、皮肤、附件和动画数据，确认所选素材具备需要的播放能力。"
+          },
+          {
+            "title": "计算姿态",
+            "body": "按时间轴计算变换与形变，处理骨骼继承、IK、Transform 与 Path 等已支持约束。"
+          },
+          {
+            "title": "提交绘制",
+            "body": "将姿态交给渲染层，保持裁剪、网格和透明窗口中的绘制边界。"
+          },
+          {
+            "title": "释放与替换",
+            "body": "结束播放时清理旧实例和回调，让新的角色或皮肤取得表现资源。"
+          }
+        ],
+        "note": "兼容范围围绕已接入素材持续验证；暂未提供面向任意骨骼素材的通用插件下载。"
+      },
+      {
+        "id": "lifecycle",
+        "kicker": "CHARACTER LIFECYCLE",
+        "title": "切换角色，也是一次有边界的状态交接",
+        "intro": "角色与皮肤切换先校验素材并保存选择，再依次处理旧角色离场、实例替换和新角色入场。每一侧只播放素材实际提供的动画。",
+        "cards": [
+          {
+            "title": "连续选择保留最终意图",
+            "body": "切换期间再次选择时，保留最后一次成功保存的目标。素材加载或偏好保存失败，仍保留当前有效角色。"
+          },
+          {
+            "title": "表现范围与交互范围分开",
+            "body": "变身与特效可以超出角色常态轮廓，但不会因此扩大桌面点击区域。角色锚点、大小与交互命中分别处理。"
+          },
+          {
+            "title": "可中断的过渡",
+            "body": "隐藏、进入家园或退出时收束过渡并清理回调。完成后恢复待机或睡眠状态，避免动画结束后遗留输入锁定。"
+          }
+        ]
+      },
+      {
+        "id": "persistence",
+        "kicker": "SAVE AND RECOVERY",
+        "title": "恢复已有世界，保持已发生的事实",
+        "intro": "存档需要同时保存世界身份、角色偏好与活动进度。恢复关注的不只是文件能否读回，还包括旧运行是否沿原有规则继续、同一结果是否只结算一次。",
+        "cards": [
+          {
+            "title": "旧进度延续",
+            "body": "旧版本正在运行的战斗保留原有刷怪、掉落与随机顺序，在明确的结算边界进入新内容。世界升级时保留可恢复的原始状态。"
+          },
+          {
+            "title": "候选与日常档案隔离",
+            "body": "开发与候选版本使用独立档案；检查迁移和恢复时使用存档副本，让试验不会推进日常世界的时间或奖励。"
+          },
+          {
+            "title": "跨引擎行为研究",
+            "body": "与 SakuraGameFramework 的本地对照围绕共享输入、状态摘要和确定性结果展开。当前用于比较行为契约，尚未替换正式世界的运行时。",
+            "links": [
+              {
+                "label": "了解框架的跨引擎设计",
+                "href": "/pages/framework/cross-engine.html"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "status",
+        "kicker": "CURRENT DEVELOPMENT",
+        "title": "当前进展",
+        "intro": "近期完成了角色与皮肤过渡、界面资源整合，以及旧世界恢复与表现范围的修正。这里持续记录系统设计与实现思路。",
+        "paragraphs": [
+          "当前验证集中在 macOS 本地版本，暂未开放公开下载。macOS 音频输入初始化仍有启动受阻情况，启动体验需要继续处理。",
+          "后续关注世界状态与表现的边界、活动退出清理，以及已有存档在版本变化中的连续性。"
+        ],
+        "links": [
+          {
+            "label": "阅读状态作用域研究",
+            "href": "/pages/journal/state-scope.html"
+          },
+          {
+            "label": "浏览项目近况",
+            "href": "/pages/now.html"
+          }
+        ]
+      }
+    ],
+    "iris-shelf": [
+      {
+        "id": "creative-workflow",
+        "kicker": "FROM IDEA TO EXPORT",
+        "title": "把一张卡牌的想法，整理成可以比较的设计",
+        "intro": "Violet Shelf 把创作材料、卡牌文档和数值试验放进同一个本地工作台。工具之间通过明确的素材关联、输入和文件导出来配合。",
+        "steps": [
+          {
+            "title": "收集素材",
+            "body": "在 Creative Library 中整理文本、图片与参考，记录材料来源和采用状态。"
+          },
+          {
+            "title": "制作卡牌",
+            "body": "在 Card Studio 中填写效果文字、绑定图片，对照普通与升级两面，并检查整组卡牌。"
+          },
+          {
+            "title": "比较数值",
+            "body": "把要比较的参数显式输入 Numeric Workbench，观察伤害、DPS 与行动时间线，保留实验基线。"
+          },
+          {
+            "title": "带回项目",
+            "body": "按需要导出卡牌 JSON、PNG 或实验结果，在实际游戏中继续接入与调整。"
+          }
+        ],
+        "note": "工作台负责组织与试验；不同工具的文档仍各自保存。卡牌不会自动转换成游戏逻辑或数值模型。"
+      },
+      {
+        "id": "workbench",
+        "kicker": "A WORKBENCH THAT CAN GROW",
+        "title": "工具可以扩展，实验可以重看",
+        "intro": "独立工具包通过 Workbench 接入桌面入口。工具声明自己的输入、命令与结果视图，宿主统一处理启停、运行状态和历史。",
+        "cards": [
+          {
+            "title": "数值模型与行动时间线",
+            "body": "内置数值工作台提供不同模型模板、受限公式、伤害与 DPS 计算，以及确定性行动时间线。调整输入后，可以把新的结果与原基线对照。"
+          },
+          {
+            "title": "历史实验可重跑",
+            "body": "保存实验所用的输入与工具身份。再次打开历史记录时使用对应版本，避免拿新公式解释旧结果。"
+          },
+          {
+            "title": "备份与恢复分清对象",
+            "body": "工作台偏好、工具包和创作资料分别保存与恢复。恢复计划先说明缺少什么、需要重建什么，再由用户决定下一步。"
+          }
+        ],
+        "links": [
+          {
+            "label": "了解工程侧的恢复流程",
+            "href": "/pages/engineering.html#continuity"
+          },
+          {
+            "label": "看看 Mod 创作",
+            "href": "/pages/mods/the-weaver.html"
+          }
+        ]
+      },
+      {
+        "id": "local-intelligence",
+        "kicker": "LOCAL RESEARCH TOOLS",
+        "title": "从本地资料到今日重点",
+        "intro": "Violet 的本地研究工具还包括独立的 Semantic、Decision 与 Cognitive 服务。这些能力通过 CLI 或 MCP 使用，与桌面工具界面分开运行。",
+        "cards": [
+          {
+            "title": "找到能追溯的项目资料",
+            "body": "Semantic 在本地项目资料中检索，返回内容片段及来源，供后续判断与阅读使用。"
+          },
+          {
+            "title": "整理 Agent 所需的上下文",
+            "body": "Cognitive 提供上下文入口与观察记录；Decision 辅助比较候选，判断质量仍在实验中。"
+          },
+          {
+            "title": "生成并回顾每日重点",
+            "body": "Daily Focus 从候选池中形成今日重点、次要事项和待复核项，支持手动反馈与结果记录。建议由人确认，不会自动执行任务。"
+          }
+        ],
+        "note": "目前面向本地使用与研究，生成耗时和建议质量仍需持续观察；这些服务尚未作为桌面应用中的一键功能提供。"
+      }
+    ],
+    "iris-engineering": [
+      {
+        "id": "build-workflow",
+        "kicker": "FROM SOURCE TO PLAYTEST",
+        "title": "知道这份构建从哪里来，也知道它运行过什么",
+        "intro": "Iris Engineering 把源代码、依赖、工具配置、构建产物和试玩结果连起来。为一个问题寻找上下文时，可以沿着同一次构建继续查下去。",
+        "steps": [
+          {
+            "title": "确定构建输入",
+            "body": "固定源码与依赖，检查工具、场景和所需资源，提前指出不能物化的输入。"
+          },
+          {
+            "title": "记录构建身份",
+            "body": "用 BuildID 关联本次构建及其执行记录，保留实际使用的配置与产物信息。"
+          },
+          {
+            "title": "封存并检查产物",
+            "body": "将产物整理成可核验的集合，再从封存副本进行有界试玩。"
+          },
+          {
+            "title": "带着上下文诊断",
+            "body": "把试玩会话与原构建关联；需要转交问题时，导出经过选择的诊断材料。"
+          }
+        ],
+        "note": "当前实际构建与试玩链路以 macOS 本地 Unity 项目为主。签名、跨平台交付与公开分发分别处理。"
+      },
+      {
+        "id": "continuity",
+        "kicker": "PICK UP WHERE YOU LEFT OFF",
+        "title": "恢复工作环境之前，先知道要恢复什么",
+        "intro": "Continuity 整理项目档案、工具偏好和恢复材料，让环境迁移与工作接续有明确的输入、计划和检查步骤。",
+        "cards": [
+          {
+            "title": "可检查的恢复包",
+            "body": "把选定材料形成恢复包，独立检查完整性与可信来源。恢复前就能识别缺项，凭据仍需重新授权。"
+          },
+          {
+            "title": "期望配置与实际环境对照",
+            "body": "比较工具的期望状态和观察到的环境，列出需要采取的动作；已有目标不会被静默覆盖。"
+          },
+          {
+            "title": "与 Violet 接续",
+            "body": "恢复计划包含 Violet 偏好与 Workbench 的精确工具身份。项目资料与桌面创作资料各自保留恢复边界。",
+            "links": [
+              {
+                "label": "查看 Violet 的工作台",
+                "href": "/pages/tools.html#workbench"
+              }
+            ]
+          }
+        ],
+        "note": "目前已形成本地环境中的恢复工具与测试路径；远端备份和全新 Mac 的完整恢复仍待实测。"
+      }
+    ],
+    "sakura-design-journal": [
+      {
+        "id": "reading-routes",
+        "kicker": "START WITH A QUESTION",
+        "title": "沿着一个问题，读到下一次设计",
+        "intro": "研究资料已经积累了许多条目。可以从下面三个问题进入，把机制研究、运行时设计与实际项目连起来。",
+        "cards": [
+          {
+            "title": "一次行动何时真正生效？",
+            "body": "先区分意图、提交和结果传播，再看状态如何跨越作用域。适合思考存档、取消、重复请求与跨系统协作。",
+            "links": [
+              {
+                "label": "游戏行为事务",
+                "href": "/pages/journal/gameplay-action-transaction.html"
+              },
+              {
+                "label": "状态作用域",
+                "href": "/pages/journal/state-scope.html"
+              },
+              {
+                "label": "热更新的事务边界",
+                "href": "/pages/blog/unity-hot-update-transaction-boundary.html"
+              }
+            ]
+          },
+          {
+            "title": "怎样让持续世界可恢复？",
+            "body": "把局部故障、世界因果与模拟精度放在一起看。恢复不仅要重新运行，还要保住已经成立的世界事实。",
+            "links": [
+              {
+                "label": "故障恢复",
+                "href": "/pages/journal/failure-recovery.html"
+              },
+              {
+                "label": "模拟精度分层",
+                "href": "/pages/journal/simulation-lod.html"
+              },
+              {
+                "label": "Wisteria 的状态设计",
+                "href": "/pages/wisteria.html#persistence"
+              }
+            ]
+          },
+          {
+            "title": "经济与失败怎样保持决策价值？",
+            "body": "从资源流动进入长期经济，再比较玩家失败后的恢复路径与重试成本。关注下一次选择还剩下什么空间。",
+            "links": [
+              {
+                "label": "资源源汇与经济稳态",
+                "href": "/pages/journal/resource-source-sink-economic-flow.html"
+              },
+              {
+                "label": "长期经济失效与恢复",
+                "href": "/pages/journal/long-term-economy-failure-recovery.html"
+              },
+              {
+                "label": "失败梯度与重试成本",
+                "href": "/pages/journal/gameplay-failure-recovery-retry-cost.html"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "engine-research",
+        "kicker": "QUESTIONS ACROSS ENGINES",
+        "title": "从不同引擎，观察相似的边界",
+        "intro": "近期源码研究扩展到 Unreal、Godot、Blender 与 Cocos。比较时关注主循环、资源完成、数据所有权和表现更新怎样协作。",
+        "cards": [
+          {
+            "title": "生命周期与调度",
+            "body": "追踪主循环、场景和编辑器阶段，区分立即执行、延迟队列与清理时机。不同工具中的同名回调，并不一定承担相同责任。"
+          },
+          {
+            "title": "资源与共享数据",
+            "body": "观察异步加载完成、缓存复用和实例修改的边界，理解一处改动何时会影响其他使用者。"
+          },
+          {
+            "title": "从研究返回实现",
+            "body": "将有用的结论整理为公开文章、设计摘要与框架案例，保留具体问题和取舍，让研究能够服务下一次创作。"
+          }
+        ],
+        "links": [
+          {
+            "label": "Godot 主循环摘要",
+            "href": "/pages/journal/godot-runtime.html"
+          },
+          {
+            "label": "权威时间源文章",
+            "href": "/pages/blog/authoritative-time-source.html"
+          },
+          {
+            "label": "Framework 架构案例",
+            "href": "/pages/framework/cases.html"
+          }
+        ]
+      }
+    ],
+    "the-weaver": [
+      {
+        "id": "weaver-loop",
+        "kicker": "COMPILE · BLOOM · HANDOFF",
+        "title": "先编织结构，再选择释放的时机",
+        "intro": "编织者的两条决策线同时存在：一条是 Node 的积累与消耗，另一条是当前形态决定的卡牌效果。",
+        "steps": [
+          {
+            "title": "Compile：储存结构",
+            "body": "通过 Compile 获得 Node，最多保留五个。储存空间有限，需要在继续积累和使用资源之间做选择。"
+          },
+          {
+            "title": "Bloom：兑现结构",
+            "body": "卡牌基础效果始终执行；Node 足够时，消耗要求的数量，触发对应的附加效果。"
+          },
+          {
+            "title": "Handoff：交接形态",
+            "body": "在 Iris 与 Sakura 之间切换，为后续 Dual 卡选择另一侧效果，也能与交接相关能力配合。"
+          },
+          {
+            "title": "Dual：读取当前形态",
+            "body": "同一张卡根据形态使用不同文本。Dual 本身不切换形态；Adapter 可以让下一张 Dual 使用另一侧。"
+          }
+        ]
+      },
+      {
+        "id": "weaver-builds",
+        "kicker": "BUILD AROUND YOUR CHOICES",
+        "title": "围绕不同的选择，形成自己的构筑",
+        "intro": "下面是理解卡牌配合的三个入口。它们描述机制之间的关系，具体强度仍需要在完整游戏中调整。",
+        "cards": [
+          {
+            "title": "积累与绽放",
+            "body": "围绕 Compile 和 Bloom 安排资源：什么时候存满，什么时候消耗到零，怎样把溢出或连续绽放转化为下一步收益。"
+          },
+          {
+            "title": "交接与双侧效果",
+            "body": "围绕 Handoff 改变出牌顺序，让 Dual 在合适的形态执行；交接触发的抽牌、减费与双侧解析进一步影响节奏。"
+          },
+          {
+            "title": "保留形态，临时转接",
+            "body": "Adapter 允许在不切换形态的情况下使用另一侧效果，让眼前需要的能力与之后的形态计划可以分别安排。"
+          }
+        ]
+      },
+      {
+        "id": "weaver-making",
+        "kicker": "FROM RULES TO A CHARACTER",
+        "title": "把机制、视觉与工具接成一件作品",
+        "intro": "角色制作既包括卡牌效果，也包括玩家如何看懂当前状态。内容池、存档与调试则为持续迭代提供基础。",
+        "cards": [
+          {
+            "title": "角色的状态语言",
+            "body": "角色状态立绘、Node 槽位与形态标识一起表达当前状态。卡牌保留中英文文本与关键词说明，让效果与资源关系能够被读懂。"
+          },
+          {
+            "title": "内容边界与存档",
+            "body": "奖励牌、起始牌与派生牌分开管理，局中记录当前内容选择，避免一次存档重载悄悄改变这局使用的卡牌集合。"
+          },
+          {
+            "title": "Iris Core 的职责",
+            "body": "共享运行时提供配置、存储、内容选择与调试入口。具体卡牌、形态和战斗规则仍由编织者拥有。",
+            "links": [
+              {
+                "label": "查看 Iris Core 简介",
+                "href": "/pages/mods.html#mod-foundations"
+              }
+            ]
+          }
+        ],
+        "links": [
+          {
+            "label": "Violet 的卡牌与数值工具",
+            "href": "/pages/tools.html#creative-workflow"
+          },
+          {
+            "label": "研究构筑中的能力覆盖",
+            "href": "/pages/journal/build-demand.html"
+          }
+        ]
+      },
+      {
+        "id": "weaver-status",
+        "kicker": "CURRENT VERSION",
+        "title": "当前可了解的内容",
+        "intro": "已形成 106 张卡、13 件遗物与 3 瓶药水的程序内容，支持中英文；不同内容组合已有自动完整局验证。",
+        "paragraphs": [
+          "逐卡前台交互、真实多人同步、最终平衡和完整美术仍在完善，暂未提供公开下载。",
+          "当前展示的角色立绘来自已接入项目的视觉素材。角色与核心运行时配套使用，具体安装版本仍需随后续可体验版本整理。"
+        ],
+        "links": [
+          {
+            "label": "返回 Freesia Mods",
+            "href": "/pages/mods.html"
+          },
+          {
+            "label": "查看创作近况",
+            "href": "/pages/now.html"
+          }
+        ]
+      }
+    ]
+  },
+  "tools": [
+    {
+      "name": "Creative Library",
+      "input": "文本、图片和创作参考",
+      "output": "整理来源、标签和采用状态，保存内容与关联，并使用独立快照恢复资料库。"
+    },
+    {
+      "name": "Card Studio",
+      "input": "版本化卡牌文档与明确关联的图片",
+      "output": "编辑普通与升级两面、检查整组卡牌，并导出 JSON 或 PNG。"
+    },
+    {
+      "name": "Numeric Workbench",
+      "input": "模型模板、数值参数与受限公式",
+      "output": "计算伤害、DPS 和行动时间线，比较基线，并重跑历史实验。"
+    },
+    {
+      "name": "Asset Relations",
+      "input": "选定的资源目录与内容条目",
+      "output": "关联图片、音频或文档，预览资源，并维护明确的当前版本。"
+    },
+    {
+      "name": "Table Relations",
+      "input": "只读导入的 JSON 或 CSV",
+      "output": "检查声明的正反向关系，定位缺失、歧义与循环。"
+    },
+    {
+      "name": "Deck Odds",
+      "input": "卡组与抽取条件",
+      "output": "比较精确无放回抽取概率，保存实验结果并按原记录重新计算。"
+    },
+    {
+      "name": "Motion Curve Lab",
+      "input": "属性、命名曲线与明确选定的图片",
+      "output": "预览、暂停、重置并拖动矩形或图片，再显式导出 JSON。"
+    },
+    {
+      "name": "Localization Checker",
+      "input": "语言映射与占位符",
+      "output": "检查缺失、空值、重复和不支持的语法，再导出结果。"
+    },
+    {
+      "name": "Engineering Evidence Inspector",
+      "input": "选定的本地工程证据包",
+      "output": "只读查看构建、产物与会话之间的关联，辅助定位交付问题。"
+    }
+  ],
+  "frameworkUseCases": [
+    {
+      "routeId": "save-foundation",
+      "title": "让进度能够保存与恢复",
+      "body": "存档、快照捕获与自动保存一起考虑，明确成功提交、损坏恢复和退出等待的边界。"
+    },
+    {
+      "routeId": "simulation-foundation",
+      "title": "让多个实体协同更新",
+      "body": "将并行数据处理、群体位置更新和二维碰撞查询组合起来，再把结果交回项目的玩法逻辑。"
+    },
+    {
+      "routeId": "work-orchestration-only",
+      "title": "分配工作，也收回资源",
+      "body": "从工作声明、资源预留走到租约执行与终态清理，让取消和失败也有明确的结束路径。"
+    },
+    {
+      "routeId": "command-presentation",
+      "title": "把输入变成可追踪的反馈",
+      "body": "组合项目词库过滤、可撤销命令和公告展示，让提交后的事实进入界面反馈。"
+    },
+    {
+      "routeId": "motion-foundation",
+      "title": "连接操作、移动与视觉响应",
+      "body": "围绕输入采集、二维移动和次级动画建立调用链，同时保留物理状态与视觉效果的区别。"
+    },
+    {
+      "routeId": "asset-presentation",
+      "title": "让声音与特效有明确归属",
+      "body": "为资源加载、音频播放与池化特效指定宿主，场景或效果结束后释放对应资源。"
+    }
+  ]
+}

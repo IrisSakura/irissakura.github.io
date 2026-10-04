@@ -8,9 +8,10 @@ const json = async (file) => JSON.parse(await read(file));
 const now = await json('data/now.json');
 const updates = await json('data/updates.json');
 const today = '2026-09-20';
+const fixtureUpdates = { schemaVersion: 1, items: [{ id: 'fixture', date: today, type: 'project', title: 'Fixture', summary: 'A dated update', href: null }] };
 test('living content validates calendar dates, duplicates, nonempty copy and safe optional links', () => {
   assertNowData(now);
-  assertUpdatesData(updates, { today });
+  assertUpdatesData(updates);
   for (const mutate of [
     (d) => { d.updatedAt = '2026-02-30'; },
     (d) => { d.current.push(d.current[0]); },
@@ -34,8 +35,8 @@ test('updates enforce editorial order and Shanghai dates while preserving same-d
     (d) => { d.items[0].summary = ''; },
     (d) => { d.items.push(d.items[0]); },
     (d) => { d.items = [{ ...d.items[0], id: 'older', date: '2026-09-19' }, d.items[0]]; }
-  ]) { const invalid = structuredClone(updates); mutate(invalid); assert.throws(() => assertUpdatesData(invalid, { today })); }
-  const data = { schemaVersion: 1, items: ['z', 'a', 'c'].map((id) => ({ ...updates.items[0], id, href: null })) };
+  ]) { const invalid = structuredClone(fixtureUpdates); mutate(invalid); assert.throws(() => assertUpdatesData(invalid, { today })); }
+  const data = { schemaVersion: 1, items: ['z', 'a', 'c'].map((id) => ({ ...fixtureUpdates.items[0], id, href: null })) };
   assert.deepEqual(resolveRecentUpdates(data, 2, { today }).map(({ id }) => id), ['z', 'a']);
 });
 test('latest writing is based on publication rather than modifications and does not mutate its input', () => {

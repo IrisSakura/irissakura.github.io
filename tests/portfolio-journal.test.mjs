@@ -43,8 +43,8 @@ test('portfolio data keeps research distinct from finished work', async () => {
 
   assert.equal(data.updatedAt, data.projects.map((project) => project.updatedAt).sort().at(-1));
   const journal = data.projects.find((entry) => entry.id === 'sakura-design-journal');
-  assert.equal(journal.updatedAt, '2026-08-29');
-  assert.equal(journal.lastReviewedAt, '2026-08-29');
+  assert.equal(journal.updatedAt, '2026-10-04');
+  assert.equal(journal.lastReviewedAt, '2026-10-05');
   for (const [projectId, updatedAt, lastReviewedAt] of [
     ['iris-engineering', '2026-08-30', '2026-08-31'],
     ['sakura-framework', '2026-10-05', '2026-10-05']

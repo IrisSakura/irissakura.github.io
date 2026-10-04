@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 const widths=[2048,1600,1440,1280,992,900,769,600,390];
-const references=['engineering','framework','journal','tools','mods','wisteria'];
-const routes=['index','development','brand',...references,'portfolio','game','now','contact','subscribe','blog','blog/authoritative-time-source','blog/series/sakura-framework-engineering','blog/tag/unity','journal/action-commitment','framework/runtime','framework-engineering','framework-quickstart','framework/cases/lifecycle-ownership','404'];
+const references=['engineering','framework','journal','tools','mods'];
+const routes=['index','development','brand',...references,'wisteria','mods/the-weaver','portfolio','game','now','contact','subscribe','blog','blog/authoritative-time-source','blog/series/sakura-framework-engineering','blog/tag/unity','journal/action-commitment','framework/runtime','framework-engineering','framework-quickstart','framework/cases/lifecycle-ownership','404'];
 export async function assertPersonaLayouts(browser, baseUrl, output) {
  const page=await browser.newPage(); const evidence=[],failures=[];
  await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(baseUrl).origin?route.continue():route.abort());
@@ -17,6 +17,7 @@ export async function assertPersonaLayouts(browser, baseUrl, output) {
   await page.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.querySelectorAll('img')].map(img=>{img.loading='eager';return img.decode().catch(()=>{});}));});
   const geometry=await page.evaluate(()=>({
    overflow:document.documentElement.scrollWidth-innerWidth,
+   mainMedia:document.querySelectorAll('main img,main picture,main video,main audio,main iframe,main canvas').length,
    grammar:document.documentElement.dataset.pageGrammar,
    images:[...document.querySelectorAll('.persona-picture img')].map(img=>({loaded:img.complete&&img.naturalWidth>0,fit:getComputedStyle(img).objectFit,current:img.currentSrc,width:img.getBoundingClientRect().width,height:img.getBoundingClientRect().height})),
    prose:[...document.querySelectorAll('.article-prose-section')].map(el=>({width:el.getBoundingClientRect().width,lineHeight:getComputedStyle(el).lineHeight})),
@@ -30,6 +31,7 @@ export async function assertPersonaLayouts(browser, baseUrl, output) {
    projectChibis:[...document.querySelectorAll('[data-project-chibi] img')].map(img=>{const panel=img.closest('.project-chibi-panel'),a=img.getBoundingClientRect(),b=panel.querySelector('.project-chibi-copy').getBoundingClientRect(),c=panel.getBoundingClientRect();return {persona:img.parentElement.dataset.projectChibi,loaded:img.complete&&img.naturalWidth>0,fit:getComputedStyle(img).objectFit,current:img.currentSrc,width:a.width,height:a.height,insideHero:!!img.closest('header'),overlap:a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top,clipped:a.left<c.left-1||a.right>c.right+1||a.top<c.top-1||a.bottom>c.bottom+1};}),
    narrowMobileProfile:innerWidth<=900&&[...document.querySelectorAll('.living-profile .profile-identity')].some(el=>el.getBoundingClientRect().width<el.parentElement.clientWidth-1)
   }));
+  if(file==='wisteria'&&(geometry.mainMedia||geometry.grammar!=='technical-notes')) failures.push(`${file} ${width}: technical introduction must remain text-only`);
   if(geometry.overflow>1) failures.push(`${file} ${width}: page overflow ${geometry.overflow}`);
   for(const image of geometry.images) if(!image.loaded||!image.width||!image.height||image.fit!=='contain') failures.push(`${file} ${width}: missing/cropped persona`);
   if(references.includes(file)&&geometry.images.length!==1) failures.push(`${file} ${width}: requires exactly one persona`);
@@ -41,7 +43,7 @@ export async function assertPersonaLayouts(browser, baseUrl, output) {
   if(file==='index'&&(geometry.homeArtwork.length!==1||geometry.homeArtwork.some(img=>!img.loaded||!img.width||!img.height||img.fit!=='contain'||img.overlap))) failures.push(`${file} ${width}: creator illustration is missing, cropped or overlaps the introduction`);
   if(geometry.narrowMobileProfile) failures.push(`${file} ${width}: profile leaves unused mobile columns`);
   if(['portfolio','blog','contact'].includes(file)&&(geometry.coverArtwork.length!==1||geometry.coverArtwork.some(img=>!img.loaded||!img.width||!img.height||img.fit!=='contain'||img.overlap||img.clipped||!img.mobileOrder))) failures.push(`${file} ${width}: cover illustration missing, cropped or overlaps copy`);
-  const expectedChibi={engineering:'iris',framework:'sakura',journal:'myosotis',tools:'violet',mods:'freesia',wisteria:'wisteria'}[file];
+  const expectedChibi={engineering:'iris',framework:'sakura',journal:'myosotis',tools:'violet',mods:'freesia'}[file];
   if(expectedChibi&&(geometry.projectChibis.length!==1||geometry.projectChibis.some(img=>img.persona!==expectedChibi||!img.loaded||!img.width||!img.height||img.fit!=='contain'||img.overlap||img.clipped||img.insideHero))) failures.push(`${file} ${width}: project chibi identity, loading or content placement is incorrect`);
   if(!expectedChibi&&geometry.projectChibis.length) failures.push(`${file} ${width}: project chibi outside its dedicated route`);
   if(width>=1440&&geometry.prose.some(p=>p.width<680||p.width>760)) failures.push(`${file} ${width}: prose width outside 680–760`);

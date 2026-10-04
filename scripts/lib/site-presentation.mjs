@@ -22,6 +22,10 @@ export function assertSitePresentationConfig(config, brand, registry) {
     if (!brand.assets?.[project.logoAssetKey] || !brand.assets?.[project.heroAssetKey]) throw new Error(`site-presentation violation: project ${project.projectId} has missing assets`);
     if (!NAVIGATION_IDS.includes(project.navigationGroup)) throw new Error(`site-presentation violation: project ${project.projectId} has invalid navigation group`);
     for (const key of ['displayName', 'subtitle', 'summary', 'heroClass']) assertText(project[key], `project ${project.projectId} ${key}`);
+    if (project.keywords !== undefined) {
+      if (!Array.isArray(project.keywords)) throw new Error('site-presentation violation: keywords must be a list');
+      for (const keyword of project.keywords) assertText(keyword, 'project search keyword');
+    }
     assertRoute(project.route, `project ${project.projectId} route`);
     assertAction(project.primaryAction, project.projectId, 'primary');
     assertAction(project.secondaryAction, project.projectId, 'secondary');

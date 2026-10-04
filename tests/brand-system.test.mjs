@@ -155,9 +155,10 @@ test('creator surfaces use IrisSakura while the joint label is scoped to the Iri
 test('Violet Shelf tools explain only implemented local operations with truthful public routes and local-source boundaries', async () => {
   const [tools, styles] = await Promise.all([read('pages/tools.html'), read('style/tools.css')]);
   for (const operation of [
-    '创建或导入版本化卡牌文档', '选择一个资源目录，为内容条目关联图片、音频或文档',
-    '只读导入用户选定的 JSON／CSV', '精确无放回抽取概率',
-    '预览、暂停、重置并拖动矩形或精确资源图片', '报告缺失、空值、重复与不支持语法'
+    '版本化卡牌文档与明确关联的图片', '关联图片、音频或文档',
+    '只读导入的 JSON 或 CSV', '精确无放回抽取概率',
+    '预览、暂停、重置并拖动矩形或图片', '检查缺失、空值、重复和不支持的语法',
+    'Numeric Workbench', 'Creative Library', 'CLI 或 MCP', '不会自动执行任务'
   ]) assert.ok(tools.includes(operation), `tools page is missing implemented operation: ${operation}`);
   for (const href of ['portfolio.html', 'brand.html']) {
     assert.ok(tools.includes(`href="${href}"`), `tools page is missing truthful public route: ${href}`);

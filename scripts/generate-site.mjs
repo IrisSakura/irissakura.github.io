@@ -38,6 +38,7 @@ import { writeSocialImages } from './lib/social-image.mjs';
 
 import { assertNowData, assertUpdatesData } from './lib/living-site-model.mjs';
 import { renderLivingHome, renderLivingNow, renderLivingPortfolio } from './lib/living-site-render.mjs';
+import { assertProjectShowcases, renderProjectChapters, renderFrameworkUseCases } from './lib/project-showcases.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BRAND_MODES = new Set(BRAND_MODE_IDS);
@@ -78,6 +79,7 @@ const PAGE_INDEXES = {
     title: '浏览框架',
     insertBefore: '    <!-- framework-story:start -->',
     items: [
+      ['use-cases', '按问题选用'],
       ['architecture-map', '架构地图'],
       ['pillars', '工程支柱'],
       ['reference', '技术参考'],
@@ -104,6 +106,8 @@ const PAGE_INDEXES = {
     title: '浏览工程能力',
     insertBefore: '    <div class="engineering-page">',
     items: [
+      ['build-workflow', '构建与试玩'],
+      ['continuity', '环境恢复'],
       ['workflow', '工作流'],
       ['capabilities', '能力与边界']
     ]
@@ -111,17 +115,22 @@ const PAGE_INDEXES = {
   'pages/tools.html': {
     ariaLabel: 'Violet Shelf 页面章节',
     title: '浏览本地工具',
-    insertBefore: '<section class="tools-catalog"',
+    insertBefore: '<section class="project-chapter" id="creative-workflow"',
     items: [
+      ['creative-workflow', '创作流程'],
       ['tools', '工具目录'],
+      ['workbench', '扩展与实验'],
+      ['local-intelligence', '本地研究工具'],
       ['status', '当前版本']
     ]
   },
   'pages/journal.html': {
     ariaLabel: '研究页章节',
     title: '浏览研究脉络',
-    insertBefore: '    <section class="journal-section"',
+    insertBefore: '<section class="project-chapter" id="reading-routes"',
     items: [
+      ['reading-routes', '按问题阅读'],
+      ['engine-research', '跨引擎研究'],
       ['content-search', '内容检索'],
       ['featured-notes', '精选主题'],
       ['knowledge-streams', '知识流'],
@@ -129,6 +138,18 @@ const PAGE_INDEXES = {
       ['game-design-library', '设计资料库'],
       ['evidence-chains', '公开证据链']
     ]
+  },
+  'pages/wisteria.html': {
+    ariaLabel: 'Wisteria 技术章节',
+    title: '阅读系统设计',
+    insertBefore: '<section class="project-chapter" id="world"',
+    items: [['world', '世界状态'], ['skeletal-runtime', '动画运行时'], ['lifecycle', '角色生命周期'], ['persistence', '存档与恢复'], ['status', '当前进展']]
+  },
+  'pages/mods/the-weaver.html': {
+    ariaLabel: 'The Weaver 作品章节',
+    title: '了解编织者',
+    insertBefore: '<section class="project-chapter" id="weaver-loop"',
+    items: [['weaver-loop', '核心循环'], ['weaver-builds', '构筑思路'], ['weaver-making', '制作过程'], ['weaver-status', '当前版本']]
   },
   'pages/blog.html': {
     ariaLabel: '文章页章节',
@@ -221,6 +242,7 @@ assertUpdatesData(updatesData);
 assertModSeriesConfig(modSeriesConfig, brandConfig, projects);
 const modSeries = resolveModSeries(modSeriesConfig, projects);
 const personas = assertPersonas(await readJson('config/personas-v2.json'));
+const projectShowcases = assertProjectShowcases(await readJson('data/project-showcases.json'));
 const projectPresentations = resolveProjectPresentations(sitePresentation, brandConfig, projects);
 const displayProjectName = (stableId, fallback) => currentProductName(stableId, fallback, projectPresentations);
 const displayPublicProductNames = (value) => String(value)
@@ -393,10 +415,12 @@ await writeToolsSource(projectPresentations.find(({ projectId }) => projectId ==
 await writeCompatibilityRouteSources();
 await writeNowSource();
 await writeWisteriaSource();
+await writeWeaverSource();
 await writeSubscribeSource();
 
 const pageDefinitions = [
-  { file: 'pages/wisteria.html', key: 'wisteria', title: 'Wisteria | 桌面上的持续小世界', description: '在桌面的一隅，为生活、停留与缓慢生长留下一片空间。了解 Wisteria 的持续世界与陪伴理念。', canonical: '/pages/wisteria.html', schemaType: 'WebPage' },
+  { file: 'pages/wisteria.html', key: 'wisteria', title: 'Wisteria | 持续世界的系统设计', description: 'Wisteria 的技术介绍：世界状态、独立骨骼动画运行时、角色与皮肤生命周期，以及本地存档和恢复。', canonical: '/pages/wisteria.html', schemaType: 'WebPage' },
+  { file: 'pages/mods/the-weaver.html', key: 'mods', title: 'The Weaver | 双形态卡牌角色 · Freesia Mods', description: '了解编织者的 Iris／Sakura 双形态、Node 与 Compile／Bloom 循环、构筑思路和角色制作过程。', canonical: '/pages/mods/the-weaver.html', schemaType: 'SoftwareApplication' },
   { file: 'pages/subscribe.html', key: 'journal', title: '订阅文章 | IrisSakura', description: '通过 RSS 订阅 IrisSakura 的游戏系统、创作与开发文章，在阅读器中接收更新。', canonical: '/pages/subscribe.html', schemaType: 'WebPage' },
   { file: 'pages/now.html', key: 'contact', brandModeKey: 'home', title: 'Now | IrisSakura', description: 'IrisSakura 最近正在做、思考与完成的事情。', canonical: '/pages/now.html', schemaType: 'WebPage' },
   {
@@ -479,7 +503,7 @@ const pageDefinitions = [
     file: 'pages/tools.html',
     key: 'tools',
     title: 'Violet Shelf | 本地开发与创作工具台',
-    description: 'Violet Shelf 是本地开发与创作工具台，提供卡牌编辑、素材关联、配表检查与概率实验等工具。',
+    description: 'Violet Shelf 连接创作资料、卡牌编辑与数值实验，提供可扩展工作台、历史实验和独立的本地研究工具。',
     canonical: '/pages/tools.html',
     schemaType: 'SoftwareApplication'
   },
@@ -550,7 +574,7 @@ const pageDefinitions = [
 
 const siteSearchIndex = buildSiteSearchIndex({
   pages: pageDefinitions, journalIndex: contentSearchIndex, presentations: projectPresentations,
-  projects, framework
+  projects, framework, showcases: projectShowcases
 });
 const contentGraph = buildContentGraph(siteSearchIndex, contentRelations, projectPresentations, evidenceChainData);
 
@@ -671,7 +695,7 @@ for (const page of pageDefinitions) {
   if (page.file === 'pages/framework.html') {
     const story = resolveFrameworkStory(frameworkStory);
     html = replaceGeneratedBlock(html, 'framework-story-hero', renderFrameworkStoryHero(story, projectPresentations.find(({ projectId }) => projectId === 'sakura-framework')));
-    html = replaceGeneratedBlock(html, 'framework-story', renderFrameworkStory(story));
+    html = replaceGeneratedBlock(html, 'framework-story', renderFrameworkUseCases(projectShowcases.frameworkUseCases, frameworkAdoption) + renderFrameworkStory(story));
     html = replaceGeneratedBlock(html, 'framework-reference', renderFrameworkReference(story));
     html = updateFrameworkFallback(html, framework, frameworkAdoption);
     html = replaceGeneratedBlock(html, 'framework-adoption', renderFrameworkAdoption(frameworkAdoption) + '<div class="container">' + renderConsumerLab(consumerLab, consumerSync) + '</div>');
@@ -972,7 +996,7 @@ function installBrandModeHeroArt(html, page, prefix, brand) {
   const heroPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bclass="[^"]*\\b${escapeRegExp(artwork.targetClass)}\\b[^"]*"[^>]*)(>)`);
   let installed = false;
   const persona = personas.find((persona) => persona.mode === artwork.mode);
-  const markup = `<!-- brand-mode-hero-art:start -->${projectComposition(persona, { prefix, engineering: irisEngineering, framework: frameworkStory, projectStatus: projects.projects.find(p => p.id === 'iris-engineering').status })}<!-- brand-mode-hero-art:end -->`;
+  const markup = `<!-- brand-mode-hero-art:start -->${projectComposition(persona, { prefix, engineering: irisEngineering, framework: frameworkStory, projectStatus: projectPresentations.find(p => p.projectId === 'iris-engineering').status })}<!-- brand-mode-hero-art:end -->`;
   const result = html.replace(heroPattern, (fullMatch, opening, close) => {
     installed = true;
     let normalized = opening
@@ -998,7 +1022,7 @@ function installContentVoiceStages(html, page) {
     ],
     'pages/engineering.html': [
       ['engineering-hero', 'value'], ['engineering-workflow', 'system'], ['engineering-capabilities', 'result'],
-      ['engineering-evidence', 'evidence'], ['engineering-boundaries', 'boundary']
+      ['evidence-chain-section', 'evidence'], ['engineering-boundaries', 'boundary']
     ],
     'pages/framework.html': [
       ['framework-hero', 'value'], ['framework-positioning', 'system'], ['framework-architecture-map', 'result'],
@@ -1096,7 +1120,7 @@ function renderBrandContent(brand, series) {
           <ul class="brand-freesia-palette" aria-label="Freesia Mods 五色品牌色"><li style="--swatch:var(--persona-freesia-accent)">Freesia Yellow</li><li style="--swatch:var(--brand-freesia-apricot)">Apricot Bloom</li><li style="--swatch:var(--persona-freesia-surface)">Cream Petal</li><li style="--swatch:var(--persona-freesia-motif)">Spring Green</li><li style="--swatch:var(--persona-freesia-primary)">Indigo Accent</li></ul>
         </div>
       </section>
-      <section class="brand-current-section"><div class="container hero-buttons"><a class="btn btn-primary" href="development.html">浏览全部项目</a><a class="btn btn-secondary" href="contact.html">关于与联系</a></div></section><section class="living-section"><div class="container"><p class="section-kicker">ONE SITE / SIX VISUAL LANGUAGES</p><h2>形象之外，六种空间</h2><div class="grammar-comparison">${personas.map((p,i)=>`<article data-persona="${p.id}"><h3>${escapeHtml(p.project)}</h3><p>${['网格、轴线与可追踪的工程流程。','从根到分支，展开可组合的模块。','从档案索引到长期阅读的书页。','工具架、抽屉与能继续工作的桌面。','沿着游戏与作品探索新的可能。','前景、窗与远处，保留世界的空间。'][i]}</p><a href="${p.route.replace('/pages/','')}">进入项目 →</a></article>`).join('')}</div></div></section>
+      <section class="brand-current-section"><div class="container hero-buttons"><a class="btn btn-primary" href="development.html">浏览全部项目</a><a class="btn btn-secondary" href="contact.html">关于与联系</a></div></section><section class="living-section"><div class="container"><p class="section-kicker">ONE SITE / SIX VISUAL LANGUAGES</p><h2>形象之外，六种空间</h2><div class="grammar-comparison">${personas.map((p,i)=>`<article data-persona="${p.id}"><h3>${escapeHtml(p.project)}</h3><p>${['网格、轴线与可追踪的工程流程。','从根到分支，展开可组合的模块。','从档案索引到长期阅读的书页。','工具架、抽屉与能继续工作的桌面。','沿着游戏与作品探索新的可能。','世界状态、角色生命周期与存档恢复。'][i]}</p><a href="${p.route.replace('/pages/','')}">进入项目 →</a></article>`).join('')}</div></div></section>
     </div>`;
 }
 
@@ -1116,12 +1140,6 @@ function renderEngineeringContent(engineering, chains, presentation) {
                     <p>${escapeHtml(capability.description)}</p>
                     <ul>${capability.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
                 </article>`).join('');
-  const examples = [
-    ['查看项目进度', '汇总仓库状态、里程碑和待办，让分散的工作更容易掌握。'],
-    ['整理研究建议', '把研究材料整理成提案，确认目标后再安排实施。'],
-    ['接续任务执行', '记录任务目标、执行结果与恢复信息，让中断的工作可以继续。']
-  ].map(([title, description]) => `<article class="engineering-evidence-card"><h3>${title}</h3><p>${description}</p></article>`).join('');
-
   return `<header class="engineering-hero">
         <div class="container engineering-hero-inner">
             <div>
@@ -1144,12 +1162,7 @@ function renderEngineeringContent(engineering, chains, presentation) {
             </div>
         </section>
 
-        <section class="engineering-evidence" aria-labelledby="engineering-evidence-title">
-            <div class="container engineering-evidence-grid">
-                <div class="engineering-section-heading"><p class="section-kicker">IN PRACTICE</p><h2 id="engineering-evidence-title">把日常研发整理清楚</h2></div>
-                <div>${examples}</div>
-            </div>
-        </section>
+        ${renderProjectChapters(projectShowcases.chapters['iris-engineering'])}
 
         <section class="engineering-workflow" id="workflow" aria-labelledby="engineering-workflow-title">
             <div class="container">
@@ -1186,6 +1199,7 @@ function renderModsContent(series, brand) {
       <p>${escapeHtml(project.summary)}</p>
       <dl><div><dt>职责</dt><dd>${escapeHtml(project.role)}</dd></div><div><dt>目标</dt><dd>${escapeHtml(project.goal)}</dd></div><div><dt>当前边界</dt><dd>${escapeHtml(project.limitations.join('；'))}</dd></div></dl>
       <div class="mod-tags">${project.technologies.map((technology) => `<span>${escapeHtml(technology)}</span>`).join('')}</div>
+      ${project.id === 'the-weaver' ? '<a class="btn btn-secondary" href="mods/the-weaver.html">了解角色与构筑循环</a>' : ''}
     </article>`;
   };
   const groups = series.groups.map((group) => `<section class="mod-game-group" data-host-game="${escapeAttribute(group.hostGame)}">
@@ -1341,6 +1355,7 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex, pres
 
         </div>
     </header>
+${renderProjectChapters(projectShowcases.chapters['sakura-design-journal'])}
 ${renderContentSearch(searchIndex)}
     <section class="journal-section journal-featured" id="featured-notes">
         <div class="container">
@@ -1831,7 +1846,7 @@ function renderFrameworkAdoption(adoption) {
   const supported = adoption.supportedPackages.map((entry) => `
                     <li><span>${escapeHtml(entry.displayName)}</span><code>${escapeHtml(entry.packageName)}</code><p>${escapeHtml(entry.role)}</p></li>`).join('');
   const routes = adoption.stableRoutes.map((route) => `
-                    <article>
+                    <article id="adoption-${escapeAttribute(route.id)}">
                         <p class="section-kicker">${escapeHtml(route.id)}</p>
                         <h3>${escapeHtml(route.label)}</h3>
                         <p>${escapeHtml(route.purpose)}</p>
@@ -2160,22 +2175,15 @@ async function writeBrandSource() {
 
 async function writeToolsSource(presentation) {
   if (!presentation) throw new Error('site-presentation violation: Violet Shelf presentation is missing');
-  const tools = [
-    ['Card Studio', '创建或导入版本化卡牌文档与关联图片', '编辑与比较普通／升级面，并按现有能力导出 JSON 或 PNG。'],
-    ['Asset Relations', '选择一个资源目录，为内容条目关联图片、音频或文档', '预览关联资源并维护明确的当前版本。'],
-    ['Table Relations', '只读导入用户选定的 JSON／CSV', '检查声明的正反向关系，并定位缺失、歧义与循环。'],
-    ['Deck Odds', '卡组与抽取条件', '比较精确无放回抽取概率，保存实验结果，并按原记录重新计算。'],
-    ['Motion Curve Lab', '属性、命名曲线或精确资源图片', '预览、暂停、重置并拖动矩形或精确资源图片，再显式导出 JSON。'],
-    ['Localization Checker', '语言映射与占位符', '报告缺失、空值、重复与不支持语法，并导出检查结果。']
-  ];
-  const cards = tools.map(([name, input, output], index) => `<details class="tools-card tool-drawer"><summary><span>0${index + 1}</span><h3>${escapeHtml(name)}</h3><span class="drawer-hint">查看工作流 ＋</span></summary><div class="drawer-content"><p><strong>输入</strong>${escapeHtml(input)}</p><p><strong>结果</strong>${escapeHtml(output)}</p></div></details>`).join('');
+  const cards = projectShowcases.tools.map(({name, input, output}, index) => `<details class="tools-card tool-drawer"><summary><span>${String(index + 1).padStart(2, '0')}</span><h3>${escapeHtml(name)}</h3><span class="drawer-hint">查看工作流 ＋</span></summary><div class="drawer-content"><p><strong>输入</strong>${escapeHtml(input)}</p><p><strong>结果</strong>${escapeHtml(output)}</p></div></details>`).join('');
+  const [creativeWorkflow, ...workbenchChapters] = projectShowcases.chapters['iris-shelf'];
   await writeFile(path.join(root, 'pages/tools.html'), `<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHtml(presentation.displayName)} | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><link rel="stylesheet" href="../style/iris-sakura.css"><!-- brand-styles:end --><link rel="stylesheet" href="../style/tools.css"></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content tools-main">
 <header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#tools">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#status">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
-<section class="living-section"><div class="container project-chibi-panel"><div class="living-prose project-chibi-copy"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div>${renderProjectChibi('violet')}</div></section><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">SIX LOCAL WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>浏览卡牌编辑、素材关联、配表检查与概率实验等工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
-<section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
+<section class="living-section"><div class="container project-chibi-panel"><div class="living-prose project-chibi-copy"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div>${renderProjectChibi('violet')}</div></section>${renderProjectChapters([creativeWorkflow])}<figure class="container product-preview"><a href="../assets/images/violet-shelf/card-studio-demo.png" aria-label="查看卡牌创作示例原图"><img src="../assets/images/violet-shelf/card-studio-demo.png" alt="Card Studio 示例：编辑花间小憩卡牌的名称、费用和规则，右侧实时显示普通版预览" width="1440" height="1120" loading="lazy" decoding="async"></a><figcaption>Card Studio · 浏览器演示：填写卡牌文字，实时查看普通版预览。点击查看原图。</figcaption></figure><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">LOCAL CREATIVE WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>从创作资料、卡牌和数值，到配表、概率与工程检查，按当前问题选择工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
+${renderProjectChapters(workbenchChapters)}<section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
 <nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
 }
@@ -2809,11 +2817,21 @@ async function readJson(relativePath) {
 }
 
 async function writeWisteriaSource() {
-  const persona = personas.find(({ id }) => id === 'wisteria');
   await writeFile(path.join(root, 'pages/wisteria.html'), `<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wisteria | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --></head>
-<body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content">
-<header class="wisteria-hero"><div class="container wisteria-hero-grid"><div><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">DESKTOP LIVING WORLD</p><h1>Wisteria</h1><h2>桌面上的持续小世界</h2><p>${escapeHtml(persona.summary)}</p><p>我想让桌面不只有窗口和任务，也能容纳一个值得停留、再次回来探望的小世界。</p><div class="hero-buttons"><a class="btn btn-primary" href="#world">了解这个世界</a><a class="btn btn-secondary" href="#status">查看近况</a></div></div><div class="world-scene" data-grammar="layered-world"><span class="world-horizon" aria-hidden="true"></span><span class="world-window" aria-hidden="true"></span><span class="world-ground" aria-hidden="true"></span><div class="persona-gallery-stage" data-persona="wisteria">${personaPicture(persona, { prefix: '../', eager: true })}<span class="persona-motif" aria-hidden="true"></span></div><p class="world-caption">世界仍然在这里。</p></div></div></header>
-<div class="container"><section class="wisteria-story continuity-section project-chibi-panel" id="world"><div class="project-chibi-copy"><p class="section-kicker">A PLACE TO RETURN TO</p><h2>世界会继续生长</h2><p>Wisteria 的方向是一个持续存在的桌面生活世界。空间、时间与日常陪伴，比一次性完成的任务更接近它想表达的体验。</p><h2>安静地守望</h2><p>紫藤、拱门、桥与提灯构成这个世界的视觉线索。灰棕、米白和橄榄绿承接生活的温度，淡紫藤作为点缀，让视线慢下来。</p><h2>留在桌面的一隅</h2><p>角色是世界的人格化入口；真正想探索的，是生活与工作之间那片可以停留、观察和重新发现的空间。</p></div>${renderProjectChibi('wisteria')}</section><section class="wisteria-story" id="status"><p class="section-kicker">IN PROGRESS</p><h2>正在制作中</h2><p>这个桌面世界仍在持续探索和制作，暂未开放下载。后续会在这里分享进展与可体验的版本。</p><div class="hero-buttons"><a class="btn btn-secondary" href="brand.html">认识六个花卉角色</a><a class="text-link" href="development.html">浏览其他项目</a></div></section></div>
+<body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content wisteria-technical" data-presentation="text-only">
+<header class="wisteria-hero"><div class="container"><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">PERSISTENT WORLD · SYSTEM DESIGN</p><h1>Wisteria</h1><h2>持续世界的系统设计</h2><p class="project-status">正在制作中 · macOS 本地技术研究</p><p>围绕世界状态、角色生命周期与本地恢复，探索一个桌面世界怎样持续运行、更新和接续。</p><div class="hero-buttons"><a class="btn btn-primary" href="#world">阅读技术介绍</a><a class="btn btn-secondary" href="#status">查看近期进展</a></div></div></header>
+${renderProjectChapters(projectShowcases.chapters.wisteria)}
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>`);
+}
+
+async function writeWeaverSource() {
+  const project = projects.projects.find(({ id }) => id === 'the-weaver');
+  await mkdir(path.join(root, 'pages/mods'), { recursive: true });
+  await writeFile(path.join(root, 'pages/mods/the-weaver.html'), `<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>The Weaver | IrisSakura</title><link rel="stylesheet" href="../../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --></head>
+<body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content weaver-main">
+<header class="container weaver-hero"><div><p class="project-breadcrumb"><a href="../../index.html">首页</a> / <a href="../mods.html">Freesia Mods</a> / The Weaver</p><p class="section-kicker">SLAY THE SPIRE 2 · CHARACTER MOD</p><h1>The Weaver</h1><h2>Iris × Sakura · 编织者</h2><p>在构建与释放之间切换节奏。Iris 与 Sakura 共享一套卡牌循环，用 Node 储存结构，通过 Compile、Bloom 与形态交接改变这一回合的选择。</p><p>${escapeHtml(project.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#weaver-loop">了解核心机制</a><a class="btn btn-secondary" href="#weaver-status">查看当前版本</a></div></div><figure><img src="../../assets/images/the-weaver/character-select.png" alt="编织者角色立绘：紫色与樱色衣装、花瓣和发光的结构线条" width="1086" height="1448" decoding="async"><figcaption>编织者 · 角色选择立绘</figcaption></figure></header>
+${renderProjectChapters(projectShowcases.chapters['the-weaver'], '../../')}
+</main><footer class="footer"></footer><script src="../../dist/site.js" type="module"></script></body></html>`);
 }
