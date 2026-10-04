@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "5df92688bd1e6cb9c5b85ac8e72e872392414b02",
+    "sourceCommit": "a210e5d45b54aee26552388b7e2bf046b6b223b5",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:9df8a984c7025078502f3404dbf75e67ef768a88943722058571613832c0a9f9",
+    "adoptionReviewHash": "sha256:b8f14ca27026f4e12748a1e3539106fb131fbf01a12bc3750d4f54b25b848e4d",
     "updatedAt": "2026-10-04",
     "supportedPackages": [
       {
@@ -156,6 +156,24 @@
         "displayName": "Shield",
         "packageName": "com.unitygame.framework.shield",
         "role": "项目词库过滤、原文遮罩与输入校验"
+      },
+      {
+        "id": "input",
+        "displayName": "Input",
+        "packageName": "com.unitygame.framework.input",
+        "role": "输入映射、不可变快照与录制回放"
+      },
+      {
+        "id": "movement",
+        "displayName": "Movement",
+        "packageName": "com.unitygame.framework.movement",
+        "role": "2D移动、跳跃重力与单向平台辅助"
+      },
+      {
+        "id": "secondary-animation",
+        "displayName": "Secondary Animation",
+        "packageName": "com.unitygame.framework.secondary-animation",
+        "role": "骨链次级视觉动画与生命周期清理"
       }
     ],
     "stableRoutes": [
@@ -329,6 +347,20 @@
           "shield"
         ],
         "purpose": "采用 Core、Command、Ticker 与 Shield 完整组合，把项目词库校验、可撤销命令和公告展示串联。项目负责词库来源、命令工厂、时间注入与界面清理；客户端文本过滤需配合服务端审核。"
+      },
+      {
+        "id": "motion-foundation",
+        "label": "Motion Foundation",
+        "packages": [
+          "core",
+          "pooling",
+          "gamehelper",
+          "event",
+          "input",
+          "movement",
+          "secondary-animation"
+        ],
+        "purpose": "组合输入采集与回放、2D物理移动和次级视觉动画。项目负责输入映射、物理碰撞层和表现链生命周期；视觉动画不作为战斗或网络权威状态。"
       }
     ],
     "gameAdoption": [
@@ -371,7 +403,7 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:9df8a984c7025078502f3404dbf75e67ef768a88943722058571613832c0a9f9",
+    "adoptionReviewHash": "sha256:b8f14ca27026f4e12748a1e3539106fb131fbf01a12bc3750d4f54b25b848e4d",
     "updatedAt": "2026-10-04",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
@@ -538,7 +570,7 @@
     "syncLabel": "源仓推送公开快照",
     "updatedAt": "2026-10-04",
     "lastReviewedAt": "2026-10-04",
-    "reviewedFrameworkAdoptionHash": "sha256:9df8a984c7025078502f3404dbf75e67ef768a88943722058571613832c0a9f9",
+    "reviewedFrameworkAdoptionHash": "sha256:b8f14ca27026f4e12748a1e3539106fb131fbf01a12bc3750d4f54b25b848e4d",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -583,7 +615,8 @@
       "补充 RedDot Foundation 红点树与 UI 绑定采用路线",
       "补充 Save Foundation 本地存档与自动保存采用路线",
       "补充 Simulation Foundation 并行、二维碰撞与群体更新采用路线",
-      "补充 Command Presentation 命令、公告与文本过滤采用路线"
+      "补充 Command Presentation 命令、公告与文本过滤采用路线",
+      "补充 Motion Foundation 输入、移动与次级动画采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",
