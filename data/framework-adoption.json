@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceCommit": "2e1b46e06f7cc94e470413c3ee4642a0b7d1d022",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:a6b54a003d5d9c190c6c3971dd8497cad2894c84700265e83aab03434bb51fd8",
+  "adoptionReviewHash": "sha256:63d62c0d0b9c3fa087f034f6ed672044b6bf02d0c88677a138a89887e08e9658",
   "updatedAt": "2026-10-05",
   "supportedPackages": [
     {
@@ -238,6 +238,24 @@
       "displayName": "UI",
       "packageName": "com.unitygame.framework.ui",
       "role": "窗口加载、显示、结果与资源清理"
+    },
+    {
+      "id": "networking",
+      "displayName": "Networking",
+      "packageName": "com.unitygame.framework.networking",
+      "role": "连接传输、协议、权威快照与预测缓冲"
+    },
+    {
+      "id": "simulation",
+      "displayName": "Simulation",
+      "packageName": "com.unitygame.framework.simulation",
+      "role": "确定性步进、对账、Replay 与时间线桥接"
+    },
+    {
+      "id": "online",
+      "displayName": "Online",
+      "packageName": "com.unitygame.framework.online",
+      "role": "有界本地 Mock Backend、Session、Party 与结果幂等"
     }
   ],
   "stableRoutes": [
@@ -481,6 +499,18 @@
         "ui"
       ],
       "purpose": "通过强类型窗口串联加载、显示、用户结果与关闭清理，支持直接更新、属性绑定和可选 MVVM；文本从 Unity String Tables 解析并随语言切换更新。项目提供窗口资源、注册表与翻译表，窗口和应用各自释放所拥有的资源。"
+    },
+    {
+      "id": "online-foundation",
+      "label": "Online Foundation",
+      "packages": [
+        "core",
+        "command",
+        "networking",
+        "simulation",
+        "online"
+      ],
+      "purpose": "从有界本地 Mock Backend 获取 Session、Party 和匹配 Assignment，连接真实 TCP 并校验权威快照，以确定性模拟完成预测对账、Replay 与结果幂等提交。项目拥有连接、模拟和退出清理；生产 Backend、账户数据库与第三方 SDK 需由项目另行集成。"
     }
   ],
   "gameAdoption": [
