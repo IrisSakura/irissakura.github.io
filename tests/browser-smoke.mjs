@@ -76,7 +76,7 @@ async function assertSupportedAdoption(page) {
     throw new Error('Framework adoption must match the complete snapshot-bound Supported packages and stable routes');
   }
   for (const entry of reviewedFrameworkAdoption.supportedPackages) {
-    if (await packages.filter({ hasText: entry.packageName }).count() !== 1) {
+    if (await packages.filter({ has: page.getByText(entry.packageName, { exact: true }) }).count() !== 1) {
       throw new Error(`Supported package ${entry.packageName} is missing or duplicated`);
     }
   }
