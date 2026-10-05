@@ -86,7 +86,7 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'reddot') ? ['reddot'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'save') ? ['save'] : []),
-      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield', 'input', 'movement', 'secondary-animation', 'asset', 'audio', 'rendering', 'gas', 'semantic-combat', 'combat-director', 'ui-core', 'ui-binding', 'localization', 'mvvm', 'ui', 'networking', 'simulation', 'online', 'interaction', 'dialogue', 'codex'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
+      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield', 'input', 'movement', 'secondary-animation', 'asset', 'audio', 'rendering', 'gas', 'semantic-combat', 'combat-director', 'ui-core', 'ui-binding', 'localization', 'mvvm', 'ui', 'networking', 'simulation', 'online', 'interaction', 'dialogue', 'codex', 'survival', 'calendar', 'tech-tree'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
