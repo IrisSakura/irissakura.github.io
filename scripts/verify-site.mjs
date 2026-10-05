@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const brandAssets = JSON.parse(await readFile(path.join(root, 'config/brand.json'), 'utf8')).assets;
 const htmlFiles = [
   'index.html',
   '404.html',
@@ -61,7 +62,7 @@ for (const relativeFile of htmlFiles) {
   }
 }
 
-for (const required of ['data/now.json', 'data/updates.json', 'pages/now.html', 'pages/subscribe.html', 'robots.txt', 'rss.xml', 'sitemap.xml', 'site.webmanifest', 'assets/favicon.svg', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json', 'data/framework-quickstart.json', 'data/blog-taxonomy.json', 'data/evidence-chains.json', 'data/search-index.json', 'data/site-search-index.json', 'data/content-graph.json', 'data/framework-public.json', '.generated/social/index.png']) {
+for (const required of [brandAssets.favicon, brandAssets.faviconSmall, brandAssets.appleTouchIcon, brandAssets.applicationIcon192, brandAssets.applicationIcon512, 'data/now.json', 'data/updates.json', 'pages/now.html', 'pages/subscribe.html', 'robots.txt', 'rss.xml', 'sitemap.xml', 'site.webmanifest', 'assets/images/home-preview.png', 'data/site.json', 'data/projects.json', 'data/framework-adoption.json', 'data/framework-quickstart.json', 'data/blog-taxonomy.json', 'data/evidence-chains.json', 'data/search-index.json', 'data/site-search-index.json', 'data/content-graph.json', 'data/framework-public.json', '.generated/social/index.png']) {
   try {
     await access(path.join(root, required));
   } catch {

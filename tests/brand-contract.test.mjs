@@ -50,10 +50,10 @@ test('brand contract owns names, modes, assets and deprecated naming', async () 
   assert.match(brand.modes.sakura.experience.color, /#C42F6B/u);
 });
 
-test('official vector identity and core iconography are complete and self-contained', async () => {
+test('official identity and core iconography are complete and self-contained', async () => {
   const brand = await readJson('config/brand.json');
   const requiredAssetKeys = [
-    'favicon', 'symbol',
+    'favicon', 'faviconSmall', 'appleTouchIcon', 'applicationIcon192', 'applicationIcon512', 'symbol',
     'masterLogo',
     'irisLogo',
     'sakuraLogo',

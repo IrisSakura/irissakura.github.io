@@ -202,11 +202,12 @@ test('brand story gives six current projects equal visibility and useful routes'
   assert.doesNotMatch(page, /两套命名家族|IRIS-\*|SAKURA-\*/u);
 });
 
-test('generated public shell uses one joint brand mark without the retired gamepad identity', async () => {
-  const [home, brandPage, favicon] = await Promise.all([
+test('generated public shell uses the current ACG creator icon at every icon size', async () => {
+  const [home, brandPage, brand, manifest] = await Promise.all([
     readFile(new URL('index.html', root), 'utf8'),
     readFile(new URL('pages/brand.html', root), 'utf8'),
-    readFile(new URL('assets/favicon.svg', root), 'utf8')
+    read('config/brand.json').then(JSON.parse),
+    read('site.webmanifest').then(JSON.parse)
   ]);
 
   for (const page of [home, brandPage]) {
@@ -217,10 +218,22 @@ test('generated public shell uses one joint brand mark without the retired gamep
     assert.ok(page.includes('SakuraGameFramework'));
     assert.ok(!page.includes('BUILD · CREATE · BLOOM'));
     assert.ok(!page.includes('fa-gamepad'));
+    assert.ok(page.includes(brand.assets.symbol));
+    assert.ok(page.includes(brand.assets.favicon));
+    assert.ok(page.includes(brand.assets.faviconSmall));
+    assert.ok(page.includes(brand.assets.appleTouchIcon));
+    assert.ok(!page.includes('assets/favicon.svg'));
   }
-  assert.ok(favicon.includes('IRIS × SAKURA 联合标识'));
-  assert.ok(favicon.includes('#4C3DF5'));
-  assert.ok(favicon.includes('#FF7EB6'));
+  for (const [key, size] of [['faviconSmall', 16], ['favicon', 32], ['symbol', 128], ['appleTouchIcon', 180], ['applicationIcon192', 192], ['applicationIcon512', 512]]) {
+    const bytes = await readBytes(new URL(brand.assets[key], root));
+    assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', `${key} is a PNG`);
+    assert.equal(bytes.readUInt32BE(16), size, `${key} width`);
+    assert.equal(bytes.readUInt32BE(20), size, `${key} height`);
+  }
+  assert.deepEqual(manifest.icons, [
+    { src: `/${brand.assets.applicationIcon192}`, sizes: '192x192', type: 'image/png', purpose: 'any' },
+    { src: `/${brand.assets.applicationIcon512}`, sizes: '512x512', type: 'image/png', purpose: 'any' }
+  ]);
 });
 
 test('the single brand palette preserves the three-part wordmark', async () => {

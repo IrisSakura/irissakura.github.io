@@ -499,6 +499,35 @@ try {
     }
   }
   await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const identity = await readJson('config/brand.json');
+  const expectedIcons = [
+    ['icon', '16x16', identity.assets.faviconSmall, 16],
+    ['icon', '32x32', identity.assets.favicon, 32],
+    ['apple-touch-icon', '180x180', identity.assets.appleTouchIcon, 180]
+  ];
+  for (const [rel, sizes, asset, size] of expectedIcons) {
+    const href = await desktop.locator(`head link[rel="${rel}"][sizes="${sizes}"]`).getAttribute('href');
+    if (!href || new URL(href, baseUrl).href !== `${baseUrl}/${asset}`) throw new Error(`${rel} ${sizes} does not use the current site icon`);
+    const dimensions = await desktop.evaluate(async (url) => {
+      const image = new Image();
+      image.src = url;
+      await image.decode();
+      return [image.naturalWidth, image.naturalHeight];
+    }, `${baseUrl}/${asset}`);
+    if (dimensions[0] !== size || dimensions[1] !== size) throw new Error(`${rel} ${sizes} failed browser decoding`);
+  }
+  if (process.env.SITE_ICON_SCREENSHOT_DIR) {
+    const output = process.env.SITE_ICON_SCREENSHOT_DIR;
+    await mkdir(output, { recursive: true });
+    await desktop.emulateMedia({ reducedMotion: 'reduce' });
+    for (const [name, width] of [['desktop', 1280], ['mobile', 390]]) {
+      await desktop.setViewportSize({ width, height: 900 });
+      await desktop.locator('.navbar').screenshot({ path: path.join(output, `${name}-navbar.png`) });
+      await desktop.locator('.footer').screenshot({ path: path.join(output, `${name}-footer.png`) });
+    }
+    await desktop.setViewportSize({ width: 1280, height: 900 });
+    await desktop.emulateMedia({ reducedMotion: 'no-preference' });
+  }
   if (await desktop.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
     throw new Error('homepage still ships the retired BGM player');
   }

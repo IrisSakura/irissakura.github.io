@@ -10,7 +10,9 @@
 
 ## 更新资产
 
-官方 SVG 位于 `assets/brand/`。Logo、Wordmark、Product Lockup、Icon Sprite 和 README Header 的路径由 `config/brand.json.assets` 管理。替换文件时保持 viewBox、`title`、`desc`、无远程依赖，并在桌面、移动与深浅背景上检查。favicon 继续使用 symbol only；导航使用 symbol + wordmark；Engineering 与 Framework 可使用各自 Product Lockup；Brand 页面只展示必要样例，不变成素材仓库。
+当前网站主图标采用银发淡紫 ACG Q 版创作者头像，源图、生成提示和导出记录见 [Site Icon V2](site-icon-v2/README.md)。导航、页脚、favicon、Apple Touch 和 Web App Manifest 统一使用其适配尺寸；导航保留 symbol + wordmark 组合。
+
+官方资产位于 `assets/brand/`。Logo、Wordmark、Product Lockup、Icon Sprite 和 README Header 的路径由 `config/brand.json.assets` 管理。替换 SVG 时保持 viewBox、`title`、`desc`、无远程依赖；位图保留透明度并提供实际消费尺寸。在桌面、移动与深浅背景上检查。Engineering 与 Framework 可使用各自 Product Lockup；Brand 页面只展示必要样例，不变成素材仓库。
 
 ## 验证与交付
 

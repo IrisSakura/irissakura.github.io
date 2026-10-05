@@ -404,6 +404,7 @@ test('home flagship uses registered game evidence without treating theme art as 
 
 test('all public pages use generated metadata and shared accessible shell', async () => {
   const brand = JSON.parse(await readText('data/themes.json'));
+  const identity = JSON.parse(await readText('config/brand.json'));
   const pages = [
     'index.html',
     '404.html',
@@ -420,7 +421,9 @@ test('all public pages use generated metadata and shared accessible shell', asyn
       'class="skip-link"',
       'class="brand-mark"',
       'class="brand-wordmark"',
-      'assets/favicon.svg?v=20260824',
+      identity.assets.favicon,
+      identity.assets.faviconSmall,
+      identity.assets.appleTouchIcon,
       'id="main-navigation"',
       'aria-controls="main-navigation"',
       'aria-expanded="false"',

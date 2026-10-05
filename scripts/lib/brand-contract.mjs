@@ -62,7 +62,8 @@ export function resolvePageBrandMode(brand, pageKey) {
 
 export async function assertBrandAssets(root, brand) {
   const required = [
-    'favicon', 'symbol', 'masterLogo', 'irisLogo', 'sakuraLogo', 'jointLockup',
+    'favicon', 'faviconSmall', 'appleTouchIcon', 'applicationIcon192', 'applicationIcon512',
+    'symbol', 'masterLogo', 'irisLogo', 'sakuraLogo', 'jointLockup',
     'masterWordmark', 'irisWordmark', 'sakuraWordmark', 'myosotisLogo', 'violetLogo', 'myosotisWordmark', 'violetWordmark', 'iconSprite', 'readmeHeader',
     'wisteriaLogo', 'wisteriaHeroArt', 'socialLogo', 'brandBoard', 'irisHeroArt', 'sakuraHeroArt', 'journalHeroArt', 'violetHeroArt',
     'creatorIllustration', 'blossomDecoration', 'orbitDecoration', 'petalDecoration',

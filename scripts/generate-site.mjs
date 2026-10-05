@@ -812,7 +812,8 @@ await Promise.all([
     background_color: themeConfig.backgroundColor,
     theme_color: brandConfig.modes.master.themeColor,
     icons: [
-      { src: `/${brandConfig.assets.favicon}?v=20260824`, sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
+      { src: `/${brandConfig.assets.applicationIcon192}`, sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: `/${brandConfig.assets.applicationIcon512}`, sizes: '512x512', type: 'image/png', purpose: 'any' }
     ]
   }, null, 2) + '\n')
 ]);
@@ -848,7 +849,9 @@ function buildMeta(page, siteData, brand) {
     ${verification}
     ${page.noIndex ? '<meta name="robots" content="noindex, follow">' : '<!-- indexable page -->'}
     <meta name="theme-color" content="${brandConfig.modes[page.brandMode].themeColor}">
-    <link rel="icon" href="${prefix}${brandConfig.assets.favicon}?v=20260824" type="image/svg+xml">
+    <link rel="icon" href="${prefix}${brandConfig.assets.faviconSmall}" type="image/png" sizes="16x16">
+    <link rel="icon" href="${prefix}${brandConfig.assets.favicon}" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="${prefix}${brandConfig.assets.appleTouchIcon}" sizes="180x180">
     <link rel="manifest" href="${prefix}site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="${prefix}rss.xml">
     <script type="application/ld+json">${JSON.stringify(structured).replaceAll('<', '\\u003c')}</script>
