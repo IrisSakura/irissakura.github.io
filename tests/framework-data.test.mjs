@@ -111,7 +111,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'gas') ? ['combat-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'ui') ? ['ui-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'online') ? ['online-foundation'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'dialogue') ? ['content-interaction-foundation'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'dialogue') ? ['content-interaction-foundation'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'survival') ? ['world-progression-foundation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));

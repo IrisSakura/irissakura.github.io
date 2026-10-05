@@ -76,11 +76,11 @@ function assertAdoptionFactsHash(adoption) {
     schemaVersion: 1,
     supportedPackages: adoption.supportedPackages.map(entry => ({
       name: entry.packageName,
-      moduleIds: [entry.id]
+      moduleIds: [...(entry.moduleIds ?? [entry.id])].sort(compare)
     })).sort((left, right) => compare(left.name, right.name)),
     stableRoutes: adoption.stableRoutes.map(route => ({
       id: route.id,
-      moduleIds: [...route.packages].sort(compare),
+      moduleIds: [...(route.moduleIds ?? route.packages)].sort(compare),
       packageNames: route.packages.map(id => packagesById.get(id)?.packageName).sort(compare)
     })).sort((left, right) => compare(left.id, right.id))
   };

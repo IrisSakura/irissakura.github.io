@@ -42,7 +42,8 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const id of ['gas', 'semantic-combat', 'combat-director']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['ui-core', 'ui-binding', 'localization', 'mvvm', 'ui']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['networking', 'simulation', 'online']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
-  for (const id of ['interaction', 'dialogue', 'codex']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
+  for (const id of ['interaction', 'dialogue', 'codex']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
+  for (const id of ['survival', 'calendar', 'tech-tree']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'save-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'simulation-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'command-presentation'), true);
@@ -51,7 +52,8 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'combat-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'ui-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'online-foundation'), true);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'content-interaction-foundation'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'content-interaction-foundation'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'world-progression-foundation'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'quest'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules', 'quest']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), true);
@@ -127,6 +129,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'online-foundation').packages, ["core","command","networking","simulation","online"]);
   for (const id of ['interaction', 'dialogue', 'codex']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'content-interaction-foundation').packages, ["core","pooling","gamehelper","event","preferences","asset","localization","interaction","dialogue","codex"]);
+  for (const id of ['survival', 'calendar', 'tech-tree']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'world-progression-foundation').packages, ["core", "pooling", "gamehelper", "event", "asset", "parallel", "save", "ledger", "economy", "survival", "calendar", "tech-tree"]);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
@@ -182,5 +186,33 @@ test('generated adoption uses the same reviewed package set as the actual Framew
   for (const entry of current.adoption.supportedPackages) assert.ok(adoptionBlock.includes(entry.packageName));
   if (!current.adoption.supportedPackages.some(entry => entry.id === 'config-core')) {
     assert.doesNotMatch(adoptionBlock, /Config Snapshot Core|Config Core Only|com\.unitygame\.framework\.config-core/u);
+  }
+});
+
+
+test('a complete package can retain multiple logical module identities in the existing review contract', async () => {
+  const input = await inputs();
+  input.framework.adoptionReviewHash = input.adoption.adoptionReviewHash;
+  input.framework.lifecycleCounts.Supported = input.adoption.supportedPackages.length;
+  const current = resolve(input);
+  const survival = current.adoption.supportedPackages.find(entry => entry.id === 'survival');
+  const route = current.adoption.stableRoutes.find(entry => entry.id === 'world-progression-foundation');
+  assert.deepEqual(survival.moduleIds, ['survival', 'survival-world']);
+  assert.equal(route.packages.length, 12);
+  assert.equal(new Set(route.packages).size, 12);
+  assert.equal(route.moduleIds.length, 13);
+  assert.ok(route.moduleIds.includes('survival-world'));
+  const reordered = structuredClone(input);
+  reordered.adoption.supportedPackages.find(entry => entry.id === 'survival').moduleIds.reverse();
+  reordered.adoption.stableRoutes.find(entry => entry.id === 'world-progression-foundation').moduleIds.reverse();
+  assert.doesNotThrow(() => resolve(reordered));
+  for (const mutate of [
+    adoption => { adoption.supportedPackages.find(entry => entry.id === 'survival').moduleIds.pop(); },
+    adoption => { adoption.stableRoutes.find(entry => entry.id === 'world-progression-foundation').moduleIds.pop(); },
+    adoption => { adoption.stableRoutes.find(entry => entry.id === 'world-progression-foundation').moduleIds.push('unreviewed'); }
+  ]) {
+    const changed = structuredClone(input);
+    mutate(changed.adoption);
+    assert.throws(() => resolve(changed), /review hash does not match/u);
   }
 });
