@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceCommit": "5419c66596366b82cf1652902dd9d734c2413bde",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:27ee609dd42276e285cda2a13a968c03a6e369901513e8e6e0222488ab06356f",
+  "adoptionReviewHash": "sha256:a6b54a003d5d9c190c6c3971dd8497cad2894c84700265e83aab03434bb51fd8",
   "updatedAt": "2026-10-05",
   "supportedPackages": [
     {
@@ -208,6 +208,36 @@
       "displayName": "Combat Director",
       "packageName": "com.unitygame.framework.combat-director",
       "role": "攻击名额、排队与技能租约"
+    },
+    {
+      "id": "ui-core",
+      "displayName": "UI Core",
+      "packageName": "com.unitygame.framework.ui-core",
+      "role": "窗口会话、导航与视图作用域"
+    },
+    {
+      "id": "ui-binding",
+      "displayName": "UI Binding",
+      "packageName": "com.unitygame.framework.ui-binding",
+      "role": "属性绑定与单一写入者管理"
+    },
+    {
+      "id": "localization",
+      "displayName": "Localization",
+      "packageName": "com.unitygame.framework.localization",
+      "role": "文本本地化、语言切换与偏好恢复"
+    },
+    {
+      "id": "mvvm",
+      "displayName": "MVVM",
+      "packageName": "com.unitygame.framework.mvvm",
+      "role": "可选视图模型与 UGUI 绑定桥接"
+    },
+    {
+      "id": "ui",
+      "displayName": "UI",
+      "packageName": "com.unitygame.framework.ui",
+      "role": "窗口加载、显示、结果与资源清理"
     }
   ],
   "stableRoutes": [
@@ -431,6 +461,26 @@
         "combat-director"
       ],
       "purpose": "将命中检测、战斗规则、技能伤害和表现反馈串成完整调用链，并用攻击令牌控制战斗节奏。项目提供实体映射、规则内容与表现资源，技能结束和战斗退出时释放令牌与资源。"
+    },
+    {
+      "id": "ui-foundation",
+      "label": "UI Foundation",
+      "packages": [
+        "core",
+        "pooling",
+        "gamehelper",
+        "event",
+        "preferences",
+        "input",
+        "asset",
+        "save",
+        "ui-core",
+        "ui-binding",
+        "localization",
+        "mvvm",
+        "ui"
+      ],
+      "purpose": "通过强类型窗口串联加载、显示、用户结果与关闭清理，支持直接更新、属性绑定和可选 MVVM；文本从 Unity String Tables 解析并随语言切换更新。项目提供窗口资源、注册表与翻译表，窗口和应用各自释放所拥有的资源。"
     }
   ],
   "gameAdoption": [
