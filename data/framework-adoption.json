@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceCommit": "b5f8c292801c004620724afc7bd675565e52c0e7",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:63d62c0d0b9c3fa087f034f6ed672044b6bf02d0c88677a138a89887e08e9658",
+  "adoptionReviewHash": "sha256:3c3ca82787a3c70c41ddd26c92fb21a6eac9ddbd2cf97527033b907cfc9b288a",
   "updatedAt": "2026-10-05",
   "supportedPackages": [
     {
@@ -256,6 +256,24 @@
       "displayName": "Online",
       "packageName": "com.unitygame.framework.online",
       "role": "有界本地 Mock Backend、Session、Party 与结果幂等"
+    },
+    {
+      "id": "interaction",
+      "displayName": "Interaction",
+      "packageName": "com.unitygame.framework.interaction",
+      "role": "项目拥有的交互契约与提示入口"
+    },
+    {
+      "id": "dialogue",
+      "displayName": "Dialogue",
+      "packageName": "com.unitygame.framework.dialogue",
+      "role": "本地化对话、分支剧情、Timeline 与 VisualNovel 演出"
+    },
+    {
+      "id": "codex",
+      "displayName": "Codex",
+      "packageName": "com.unitygame.framework.codex",
+      "role": "图鉴解锁、防剧透查询、领奖存档与图标资源所有权"
     }
   ],
   "stableRoutes": [
@@ -511,6 +529,23 @@
         "online"
       ],
       "purpose": "从有界本地 Mock Backend 获取 Session、Party 和匹配 Assignment，连接真实 TCP 并校验权威快照，以确定性模拟完成预测对账、Replay 与结果幂等提交。项目拥有连接、模拟和退出清理；生产 Backend、账户数据库与第三方 SDK 需由项目另行集成。"
+    },
+    {
+      "id": "content-interaction-foundation",
+      "label": "Content Interaction Foundation",
+      "packages": [
+        "core",
+        "pooling",
+        "gamehelper",
+        "event",
+        "preferences",
+        "asset",
+        "localization",
+        "interaction",
+        "dialogue",
+        "codex"
+      ],
+      "purpose": "通过可交互对象启动剧情对话与分支演出，依据已确认的剧情事件解锁图鉴，支持字幕本地化、存档恢复和图标资源清理。项目提供具体 UI、剧情内容与演出。"
     }
   ],
   "gameAdoption": [
