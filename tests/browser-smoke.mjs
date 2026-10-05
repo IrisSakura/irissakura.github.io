@@ -141,6 +141,13 @@ async function assertEvidenceChainPage(page, route, viewportName) {
   if (state.relationshipColumns !== expectedRelationshipColumns) throw new Error(`${viewportName} ${route} relationship section uses ${state.relationshipColumns} columns, expected ${expectedRelationshipColumns}`);
 }
 
+const footerContrastChecks = [
+  ['Footer description', '.footer-description'],
+  ['Footer headings', '.footer h2'],
+  ['Footer navigation links', '.footer-links a'],
+  ['Footer social icons', '.footer .social-icon'],
+  ['Footer copyright, motto and motion control', '.footer-bottom > p, .footer-motion-toggle > span:not([aria-hidden])']
+];
 const brandContrastRoutes = [
   {
     route: '/',
@@ -330,7 +337,7 @@ try {
       if (routeContract.readySelector) {
         await brandPage.locator(routeContract.readySelector).waitFor();
       }
-      for (const [label, selector] of routeContract.checks) {
+      for (const [label, selector] of [...routeContract.checks, ...footerContrastChecks]) {
         const measurements = await measureTextContrast(brandPage, selector);
         if (measurements.length === 0) {
           contrastFailures.push(
@@ -478,10 +485,18 @@ try {
 
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await keepSmokeTestLocal(desktop);
-  for (const route of indexedRoutes) {
+  for (const route of [...new Set([...indexedRoutes, '/404.html', '/pages/wisteria.html'])]) {
     const response = await desktop.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
     if (!response?.ok()) throw new Error(`${route} returned ${response?.status()}`);
     if (await desktop.locator('main#main-content').count() !== 1) throw new Error(`${route} lacks one main landmark`);
+    for (const [label, selector] of footerContrastChecks) {
+      const measurements = await measureTextContrast(desktop, selector);
+      if (measurements.length === 0) throw new Error(`${route} ${label} is missing or hidden`);
+      for (const measurement of measurements) {
+        const ratio = contrastRatio(compositeColor(measurement.foreground, measurement.background), measurement.background);
+        if (ratio < 4.5) throw new Error(`${route} ${label} "${measurement.text}" has contrast ${ratio.toFixed(2)}:1`);
+      }
+    }
   }
   await desktop.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
   if (await desktop.locator('[data-bgm-player], [data-bgm-audio], [data-bgm-toggle]').count() !== 0) {
