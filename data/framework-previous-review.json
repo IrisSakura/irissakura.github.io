@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "a5bfa86972c5cf067ee76d4fc989f9b5e37429b1",
+    "sourceCommit": "801e87c5e913a4787c658af7813e4929c9306159",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:3c3ca82787a3c70c41ddd26c92fb21a6eac9ddbd2cf97527033b907cfc9b288a",
+    "adoptionReviewHash": "sha256:5d0ea749a968eaa5c32c11edef4365caa02ef460c73c1dc4ee74f9ffa59efdf3",
     "updatedAt": "2026-10-05",
     "supportedPackages": [
       {
@@ -276,6 +276,28 @@
         "displayName": "Codex",
         "packageName": "com.unitygame.framework.codex",
         "role": "图鉴解锁、防剧透查询、领奖存档与图标资源所有权"
+      },
+      {
+        "id": "survival",
+        "displayName": "Survival",
+        "packageName": "com.unitygame.framework.survival",
+        "role": "区块流式加载、配方与背包、结构建造、权威容器、休眠结算及两套 Delta 存档",
+        "moduleIds": [
+          "survival",
+          "survival-world"
+        ]
+      },
+      {
+        "id": "calendar",
+        "displayName": "Calendar",
+        "packageName": "com.unitygame.framework.calendar",
+        "role": "预算内追赶离散世界日期，以稳定到期事实驱动经济、账本和休眠结算"
+      },
+      {
+        "id": "tech-tree",
+        "displayName": "Tech Tree",
+        "packageName": "com.unitygame.framework.tech-tree",
+        "role": "从已提交事实查询科技提案，验证图指纹存档并确认本地成本、奖励与补偿结果"
       }
     ],
     "stableRoutes": [
@@ -548,6 +570,40 @@
           "codex"
         ],
         "purpose": "通过可交互对象启动剧情对话与分支演出，依据已确认的剧情事件解锁图鉴，支持字幕本地化、存档恢复和图标资源清理。项目提供具体 UI、剧情内容与演出。"
+      },
+      {
+        "id": "world-progression-foundation",
+        "label": "World Progression Foundation",
+        "packages": [
+          "core",
+          "pooling",
+          "gamehelper",
+          "event",
+          "asset",
+          "parallel",
+          "save",
+          "ledger",
+          "economy",
+          "survival",
+          "calendar",
+          "tech-tree"
+        ],
+        "purpose": "从玩家位置加载区块，保存建造与库存变化，以离散日历结算已提交的世界事实，再查询科技条件并确认本地成长操作。项目提供地图、资源、科技内容与状态 Owner；多人服务和数据库事务由项目另行集成。",
+        "moduleIds": [
+          "core",
+          "pooling",
+          "gamehelper",
+          "event",
+          "asset",
+          "parallel",
+          "save",
+          "ledger",
+          "economy",
+          "survival",
+          "calendar",
+          "tech-tree",
+          "survival-world"
+        ]
       }
     ],
     "gameAdoption": [
@@ -590,7 +646,7 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:3c3ca82787a3c70c41ddd26c92fb21a6eac9ddbd2cf97527033b907cfc9b288a",
+    "adoptionReviewHash": "sha256:5d0ea749a968eaa5c32c11edef4365caa02ef460c73c1dc4ee74f9ffa59efdf3",
     "updatedAt": "2026-10-05",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
@@ -757,7 +813,7 @@
     "syncLabel": "源仓推送公开快照",
     "updatedAt": "2026-10-05",
     "lastReviewedAt": "2026-10-05",
-    "reviewedFrameworkAdoptionHash": "sha256:3c3ca82787a3c70c41ddd26c92fb21a6eac9ddbd2cf97527033b907cfc9b288a",
+    "reviewedFrameworkAdoptionHash": "sha256:5d0ea749a968eaa5c32c11edef4365caa02ef460c73c1dc4ee74f9ffa59efdf3",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -808,7 +864,8 @@
       "补充 Combat Foundation 技能、语义战斗与攻击调度采用路线",
       "补充 UI Foundation 强类型窗口、绑定与本地化采用路线",
       "补充 Online Foundation 连接、权威对账、Replay 与有界 Mock Backend 采用路线",
-      "补充 Content Interaction Foundation 交互、剧情演出与图鉴采用路线"
+      "补充 Content Interaction Foundation 交互、剧情演出与图鉴采用路线",
+      "补充 World Progression Foundation 区块、日历结算与科技成长采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",

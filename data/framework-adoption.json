@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "sourceCommit": "801e87c5e913a4787c658af7813e4929c9306159",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:5d0ea749a968eaa5c32c11edef4365caa02ef460c73c1dc4ee74f9ffa59efdf3",
-  "updatedAt": "2026-10-05",
+  "adoptionReviewHash": "sha256:5e1b31fefc1e204168c039f4e1268cd1f0a0af5028af6f3a0b43e41da377d1ed",
+  "updatedAt": "2026-10-06",
   "supportedPackages": [
     {
       "id": "core",
@@ -296,6 +296,18 @@
       "displayName": "Tech Tree",
       "packageName": "com.unitygame.framework.tech-tree",
       "role": "从已提交事实查询科技提案，验证图指纹存档并确认本地成本、奖励与补偿结果"
+    },
+    {
+      "id": "config",
+      "displayName": "Config",
+      "packageName": "com.unitygame.framework.config",
+      "role": "通过 JSON、Luban 文本和资源租约加载配置，验证并提交版本快照"
+    },
+    {
+      "id": "service-flow",
+      "displayName": "Service Flow",
+      "packageName": "com.unitygame.framework.service-flow",
+      "role": "按配置创建独立服务队列，处理容量、优先级、放弃与重复操作"
     }
   ],
   "stableRoutes": [
@@ -602,6 +614,21 @@
         "tech-tree",
         "survival-world"
       ]
+    },
+    {
+      "id": "configured-service-foundation",
+      "label": "Configured Service Foundation",
+      "packages": [
+        "core",
+        "pooling",
+        "gamehelper",
+        "event",
+        "asset",
+        "config-core",
+        "config",
+        "service-flow"
+      ],
+      "purpose": "把经过迁移和校验的配置快照用于创建服务队列，观察排队、完成、拒绝与清理结果。项目提供配置内容、队列规则和 Session Owner；新快照用于下一次装配，运行中的队列由项目决定迁移方式。"
     }
   ],
   "gameAdoption": [

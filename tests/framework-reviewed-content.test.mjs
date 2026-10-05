@@ -43,7 +43,8 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const id of ['ui-core', 'ui-binding', 'localization', 'mvvm', 'ui']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['networking', 'simulation', 'online']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['interaction', 'dialogue', 'codex']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
-  for (const id of ['survival', 'calendar', 'tech-tree']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
+  for (const id of ['survival', 'calendar', 'tech-tree']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
+  for (const id of ['config', 'service-flow']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'save-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'simulation-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'command-presentation'), true);
@@ -53,7 +54,8 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'ui-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'online-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'content-interaction-foundation'), true);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'world-progression-foundation'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'world-progression-foundation'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'configured-service-foundation'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'quest'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules', 'quest']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), true);
@@ -77,7 +79,7 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 3, 'the reviewed three-package prerequisite must remain available');
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 2, 'the reviewed two-package prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -131,6 +133,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'content-interaction-foundation').packages, ["core","pooling","gamehelper","event","preferences","asset","localization","interaction","dialogue","codex"]);
   for (const id of ['survival', 'calendar', 'tech-tree']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'world-progression-foundation').packages, ["core", "pooling", "gamehelper", "event", "asset", "parallel", "save", "ledger", "economy", "survival", "calendar", "tech-tree"]);
+  for (const id of ['config', 'service-flow']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'configured-service-foundation').packages, ["core", "pooling", "gamehelper", "event", "asset", "config-core", "config", "service-flow"]);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
