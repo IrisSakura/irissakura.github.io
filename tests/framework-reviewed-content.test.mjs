@@ -46,7 +46,8 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const id of ['survival', 'calendar', 'tech-tree']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['config', 'service-flow']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['evolutionary-computation', 'homeostasis', 'lotka-volterra']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
-  for (const id of ['physarum', 'stigmergy', 'mycorrhizal-network']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
+  for (const id of ['physarum', 'stigmergy', 'mycorrhizal-network']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
+  for (const id of ['neuroplasticity', 'epigenetics', 'allometric-scaling']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'save-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'simulation-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'command-presentation'), true);
@@ -59,7 +60,8 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'world-progression-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'configured-service-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'adaptive-balance-foundation'), true);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'group-coordination-foundation'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'group-coordination-foundation'), true);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'adaptive-traits-foundation'), false);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'quest'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules', 'quest']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), true);
@@ -143,6 +145,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'adaptive-balance-foundation').packages, ['core', 'evolutionary-computation', 'homeostasis', 'lotka-volterra']);
   for (const id of ['physarum', 'stigmergy', 'mycorrhizal-network']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'group-coordination-foundation').packages, ['core', 'physarum', 'stigmergy', 'mycorrhizal-network']);
+  for (const id of ['neuroplasticity', 'epigenetics', 'allometric-scaling']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'adaptive-traits-foundation').packages, ['core', 'neuroplasticity', 'epigenetics', 'allometric-scaling']);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));
