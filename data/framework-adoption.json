@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "9a72cfbefe49a0af17e204e3c487fe8fd9a2c19a",
+  "sourceCommit": "b4cc39c9374c7c0d2ec194def9dd9f668aef3c30",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:5e1b31fefc1e204168c039f4e1268cd1f0a0af5028af6f3a0b43e41da377d1ed",
+  "adoptionReviewHash": "sha256:8e272fc9b3e26d281676831a703b3cfba5ab4bb6a620728071bcb5756353beed",
   "updatedAt": "2026-10-06",
   "supportedPackages": [
     {
@@ -308,6 +308,24 @@
       "displayName": "Service Flow",
       "packageName": "com.unitygame.framework.service-flow",
       "role": "按配置创建独立服务队列，处理容量、优先级、放弃与重复操作"
+    },
+    {
+      "id": "evolutionary-computation",
+      "displayName": "Evolutionary Computation",
+      "packageName": "com.unitygame.framework.evolutionary-computation",
+      "role": "用有限反馈演化候选策略，按固定随机种子复现策略池更新"
+    },
+    {
+      "id": "homeostasis",
+      "displayName": "Homeostasis",
+      "packageName": "com.unitygame.framework.homeostasis",
+      "role": "从压力与恢复反馈生成有界调节提案，由状态 Owner 确认并保存快照"
+    },
+    {
+      "id": "lotka-volterra",
+      "displayName": "LotkaVolterra",
+      "packageName": "com.unitygame.framework.lotka-volterra",
+      "role": "计算种群动力学与策略反制关系，以有界权重调整后续生成"
     }
   ],
   "stableRoutes": [
@@ -629,6 +647,17 @@
         "service-flow"
       ],
       "purpose": "把经过迁移和校验的配置快照用于创建服务队列，观察排队、完成、拒绝与清理结果。项目提供配置内容、队列规则和 Session Owner；新快照用于下一次装配，运行中的队列由项目决定迁移方式。"
+    },
+    {
+      "id": "adaptive-balance-foundation",
+      "label": "Adaptive Balance Foundation",
+      "packages": [
+        "core",
+        "evolutionary-computation",
+        "homeostasis",
+        "lotka-volterra"
+      ],
+      "purpose": "从有界对局反馈更新策略池，以短期压力调节和长期策略反制计算下一次生成权重；支持固定种子复现、预览确认与快照恢复。项目提供策略内容、反馈采样和状态 Owner，并决定调节何时生效。"
     }
   ],
   "gameAdoption": [

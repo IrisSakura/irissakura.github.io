@@ -86,7 +86,7 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'reddot') ? ['reddot'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'save') ? ['save'] : []),
-      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield', 'input', 'movement', 'secondary-animation', 'asset', 'audio', 'rendering', 'gas', 'semantic-combat', 'combat-director', 'ui-core', 'ui-binding', 'localization', 'mvvm', 'ui', 'networking', 'simulation', 'online', 'interaction', 'dialogue', 'codex', 'survival', 'calendar', 'tech-tree', 'config', 'service-flow'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
+      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield', 'input', 'movement', 'secondary-animation', 'asset', 'audio', 'rendering', 'gas', 'semantic-combat', 'combat-director', 'ui-core', 'ui-binding', 'localization', 'mvvm', 'ui', 'networking', 'simulation', 'online', 'interaction', 'dialogue', 'codex', 'survival', 'calendar', 'tech-tree', 'config', 'service-flow', 'evolutionary-computation', 'homeostasis', 'lotka-volterra'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
@@ -113,7 +113,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'online') ? ['online-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'dialogue') ? ['content-interaction-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'survival') ? ['world-progression-foundation'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'config') ? ['configured-service-foundation'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'config') ? ['configured-service-foundation'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'homeostasis') ? ['adaptive-balance-foundation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
