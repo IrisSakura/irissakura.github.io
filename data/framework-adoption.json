@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "cdcc8418dae4231f5e1b7f79fc043f6ba6e2bf93",
+  "sourceCommit": "8289a7fbe6a5f9ce649de0b7d87432f8d7ede684",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:0c1703718231b45469009de68bbe08171a31fe36f0f3a740ac2dd323470aca69",
+  "adoptionReviewHash": "sha256:f687fb5c67c2b4f124486754af46a43c10c648a26851a9faad5eb2178b132d89",
   "updatedAt": "2026-10-07",
   "supportedPackages": [
     {
@@ -398,6 +398,12 @@
       "displayName": "Ecosystem Simulation",
       "packageName": "com.unitygame.framework.ecosystem-simulation",
       "role": "以版本绑定生态提案执行多物种步进、干预与迁移，输出数量和健康诊断"
+    },
+    {
+      "id": "network-dispatch",
+      "displayName": "Network Dispatch",
+      "packageName": "com.unitygame.framework.network-dispatch",
+      "role": "按半开时间窗原子预留多资源容量，解释冲突并提交版本绑定的依赖延误恢复方案"
     }
   ],
   "stableRoutes": [
@@ -774,6 +780,15 @@
         "ecosystem-simulation"
       ],
       "purpose": "生态报告、场景可供性查询预约和LOD伤害路由，由串行Gameplay Owner检查tick、当前性、取消并释放预约。包含现有Unity场景组件、AI数据Key与两个生态消费Bridge回归；不提供生产动作权限或耐久跨包事务。"
+    },
+    {
+      "id": "network-dispatch-foundation",
+      "label": "Network Dispatch Foundation",
+      "packages": [
+        "core",
+        "network-dispatch"
+      ],
+      "purpose": "给定路径与时间窗后，串行Gameplay Owner完成原子容量预留、冲突解释、依赖延误恢复与有限历史清理。包含Core与Facade两Runtime及现有Factory/Courier Bridge回归；路径、执行、订单和持久化权威由项目持有。"
     }
   ],
   "gameAdoption": [

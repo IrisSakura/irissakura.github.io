@@ -86,7 +86,7 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'quest') ? ['quest'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'reddot') ? ['reddot'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'save') ? ['save'] : []),
-      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield', 'input', 'movement', 'secondary-animation', 'asset', 'audio', 'rendering', 'gas', 'semantic-combat', 'combat-director', 'ui-core', 'ui-binding', 'localization', 'mvvm', 'ui', 'networking', 'simulation', 'online', 'interaction', 'dialogue', 'codex', 'survival', 'calendar', 'tech-tree', 'config', 'service-flow', 'evolutionary-computation', 'homeostasis', 'lotka-volterra', 'physarum', 'stigmergy', 'mycorrhizal-network', 'neuroplasticity', 'epigenetics', 'allometric-scaling', 'l-systems', 'reaction-diffusion', 'cytoskeleton', 'affordance', 'sensory-gating', 'ecosystem-simulation'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
+      ...(['parallel', 'hitbox', 'swarm', 'command', 'ticker', 'shield', 'input', 'movement', 'secondary-animation', 'asset', 'audio', 'rendering', 'gas', 'semantic-combat', 'combat-director', 'ui-core', 'ui-binding', 'localization', 'mvvm', 'ui', 'networking', 'simulation', 'online', 'interaction', 'dialogue', 'codex', 'survival', 'calendar', 'tech-tree', 'config', 'service-flow', 'evolutionary-computation', 'homeostasis', 'lotka-volterra', 'physarum', 'stigmergy', 'mycorrhizal-network', 'neuroplasticity', 'epigenetics', 'allometric-scaling', 'l-systems', 'reaction-diffusion', 'cytoskeleton', 'affordance', 'sensory-gating', 'ecosystem-simulation', 'network-dispatch'].filter(id => adoption.supportedPackages.some(entry => entry.id === id)))]
   );
   assert.deepEqual(
     adoption.stableRoutes.map((entry) => entry.id),
@@ -118,7 +118,8 @@ test('framework adoption snapshot names the supported packages and pins reviewed
       ...(adoption.supportedPackages.some(entry => entry.id === 'physarum') ? ['group-coordination-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'neuroplasticity') ? ['adaptive-traits-foundation'] : []),
       ...(adoption.supportedPackages.some(entry => entry.id === 'l-systems') ? ['procedural-encounter-foundation'] : []),
-      ...(adoption.supportedPackages.some(entry => entry.id === 'affordance') ? ['ecological-interaction-foundation'] : [])]
+      ...(adoption.supportedPackages.some(entry => entry.id === 'affordance') ? ['ecological-interaction-foundation'] : []),
+      ...(adoption.supportedPackages.some(entry => entry.id === 'network-dispatch') ? ['network-dispatch-foundation'] : [])]
   );
   assert.equal(adoption.gameAdoption.length, 4);
   assert.ok(adoption.gameAdoption.some((entry) => entry.gameSystem === 'Run 存档'));
