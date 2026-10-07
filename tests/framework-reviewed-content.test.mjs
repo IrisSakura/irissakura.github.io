@@ -50,7 +50,7 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const id of ['neuroplasticity', 'epigenetics', 'allometric-scaling']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['l-systems', 'reaction-diffusion', 'cytoskeleton']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
   for (const id of ['affordance', 'sensory-gating', 'ecosystem-simulation']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), true);
-  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'network-dispatch'), false);
+  assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'network-dispatch'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'save-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'simulation-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'command-presentation'), true);
@@ -67,7 +67,7 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'adaptive-traits-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'procedural-encounter-foundation'), true);
   assert.equal(current.adoption.stableRoutes.some(route => route.id === 'ecological-interaction-foundation'), true);
-  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'network-dispatch-foundation'), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'network-dispatch-foundation'), true);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'quest'), true);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'quest-foundation').packages, ['rules', 'quest']);
   assert.equal(current.adoption.supportedPackages.some(entry => entry.id === 'leaderboard'), true);
@@ -91,7 +91,9 @@ test('a prerequisite review keeps the complete current snapshot publishable with
   for (const project of input.projects.projects.filter(project => project.id !== 'sakura-framework')) {
     assert.deepEqual(current.projects.projects.find(entry => entry.id === project.id), project);
   }
-  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 1, 'the reviewed single-package prerequisite must remain available');
+  for (const id of ['factory-logistics', 'merchant-caravan', 'cooking-time-management']) assert.equal(current.adoption.supportedPackages.some(entry => entry.id === id), false);
+  assert.equal(current.adoption.stableRoutes.some(route => route.id === 'production-trade-service-foundation'), false);
+  assert.equal(input.adoption.supportedPackages.length, input.previousReview.adoption.supportedPackages.length + 3, 'the reviewed complete three-package prerequisite must remain available');
   assert.notEqual(input.adoption.adoptionReviewHash, input.framework.adoptionReviewHash);
 });
 
@@ -159,6 +161,8 @@ test('arrival of the reviewed Framework snapshot switches adoption, quickstart a
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'ecological-interaction-foundation').packages, ['core', 'affordance', 'sensory-gating', 'ecosystem-simulation']);
   assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === 'network-dispatch').length, 1);
   assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'network-dispatch-foundation').packages, ['core', 'network-dispatch']);
+  for (const id of ['factory-logistics', 'merchant-caravan', 'cooking-time-management']) assert.equal(current.adoption.supportedPackages.filter(entry => entry.id === id).length, 1);
+  assert.deepEqual(current.adoption.stableRoutes.find(route => route.id === 'production-trade-service-foundation').packages, ["core", "command", "networking", "simulation", "network-dispatch", "economy", "ledger", "work-orchestration", "service-flow", "factory-logistics", "merchant-caravan", "cooking-time-management"]);
   assert.equal(current.quickstart, input.quickstart);
   assert.equal(current.adoption.stableRoutes.find(route => route.id === 'config-core-only').packages.join(','), 'config-core');
   assert.doesNotThrow(() => assertProjectFactsCurrent(current.projects, input.framework, input.journal));

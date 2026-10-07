@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "7a82a24f85abef49f301bb33a8ced2861ed60e22",
+  "sourceCommit": "a3e1a4f3b47d755ca01bc54daab9be2657ce5c27",
   "adoptionReviewContract": "supported-stable-v1",
-  "adoptionReviewHash": "sha256:f687fb5c67c2b4f124486754af46a43c10c648a26851a9faad5eb2178b132d89",
-  "updatedAt": "2026-10-07",
+  "adoptionReviewHash": "sha256:39f7a5c16a99eb9d2936159a6c10f397249b4187fa64d09bd26c736da4073849",
+  "updatedAt": "2026-10-08",
   "supportedPackages": [
     {
       "id": "core",
@@ -404,6 +404,24 @@
       "displayName": "Network Dispatch",
       "packageName": "com.unitygame.framework.network-dispatch",
       "role": "按半开时间窗原子预留多资源容量，解释冲突并提交版本绑定的依赖延误恢复方案"
+    },
+    {
+      "id": "factory-logistics",
+      "displayName": "Factory Logistics",
+      "packageName": "com.unitygame.framework.factory-logistics",
+      "role": "固定 Tick 传送带与机械臂仿真、电力流体网络，以及回放与时间窗容量桥接"
+    },
+    {
+      "id": "merchant-caravan",
+      "displayName": "Merchant Caravan",
+      "packageName": "com.unitygame.framework.merchant-caravan",
+      "role": "区域贸易、商队运输、合同与风险情报，以及复式账本结算"
+    },
+    {
+      "id": "cooking-time-management",
+      "displayName": "Cooking Time Management",
+      "packageName": "com.unitygame.framework.cooking-time-management",
+      "role": "容器食材变异、配方任务与交互参考系，以及厨房租约和前厅排队"
     }
   ],
   "stableRoutes": [
@@ -789,6 +807,25 @@
         "network-dispatch"
       ],
       "purpose": "给定路径与时间窗后，串行Gameplay Owner完成原子容量预留、冲突解释、依赖延误恢复与有限历史清理。包含Core与Facade两Runtime及现有Factory/Courier Bridge回归；路径、执行、订单和持久化权威由项目持有。"
+    },
+    {
+      "id": "production-trade-service-foundation",
+      "label": "Production Trade Service Foundation",
+      "packages": [
+        "core",
+        "command",
+        "networking",
+        "simulation",
+        "network-dispatch",
+        "economy",
+        "ledger",
+        "work-orchestration",
+        "service-flow",
+        "factory-logistics",
+        "merchant-caravan",
+        "cooking-time-management"
+      ],
+      "purpose": "组合工厂物流、商队贸易与烹饪服务的完整能力及现有桥接；由项目拥有仿真状态、账本、工作租约与服务队列的生命周期。Cooking 门面依赖 Unity。"
     }
   ],
   "gameAdoption": [

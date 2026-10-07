@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "adoption": {
     "schemaVersion": 1,
-    "sourceCommit": "cdcc8418dae4231f5e1b7f79fc043f6ba6e2bf93",
+    "sourceCommit": "7a82a24f85abef49f301bb33a8ced2861ed60e22",
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:0c1703718231b45469009de68bbe08171a31fe36f0f3a740ac2dd323470aca69",
+    "adoptionReviewHash": "sha256:f687fb5c67c2b4f124486754af46a43c10c648a26851a9faad5eb2178b132d89",
     "updatedAt": "2026-10-07",
     "supportedPackages": [
       {
@@ -400,6 +400,12 @@
         "displayName": "Ecosystem Simulation",
         "packageName": "com.unitygame.framework.ecosystem-simulation",
         "role": "以版本绑定生态提案执行多物种步进、干预与迁移，输出数量和健康诊断"
+      },
+      {
+        "id": "network-dispatch",
+        "displayName": "Network Dispatch",
+        "packageName": "com.unitygame.framework.network-dispatch",
+        "role": "按半开时间窗原子预留多资源容量，解释冲突并提交版本绑定的依赖延误恢复方案"
       }
     ],
     "stableRoutes": [
@@ -776,6 +782,15 @@
           "ecosystem-simulation"
         ],
         "purpose": "生态报告、场景可供性查询预约和LOD伤害路由，由串行Gameplay Owner检查tick、当前性、取消并释放预约。包含现有Unity场景组件、AI数据Key与两个生态消费Bridge回归；不提供生产动作权限或耐久跨包事务。"
+      },
+      {
+        "id": "network-dispatch-foundation",
+        "label": "Network Dispatch Foundation",
+        "packages": [
+          "core",
+          "network-dispatch"
+        ],
+        "purpose": "给定路径与时间窗后，串行Gameplay Owner完成原子容量预留、冲突解释、依赖延误恢复与有限历史清理。包含Core与Facade两Runtime及现有Factory/Courier Bridge回归；路径、执行、订单和持久化权威由项目持有。"
       }
     ],
     "gameAdoption": [
@@ -818,7 +833,7 @@
   "quickstart": {
     "schemaVersion": 1,
     "adoptionReviewContract": "supported-stable-v1",
-    "adoptionReviewHash": "sha256:0c1703718231b45469009de68bbe08171a31fe36f0f3a740ac2dd323470aca69",
+    "adoptionReviewHash": "sha256:f687fb5c67c2b4f124486754af46a43c10c648a26851a9faad5eb2178b132d89",
     "updatedAt": "2026-10-07",
     "title": "Sakura Framework 15 分钟快速开始",
     "durationMinutes": 15,
@@ -985,7 +1000,7 @@
     "syncLabel": "源仓推送公开快照",
     "updatedAt": "2026-10-07",
     "lastReviewedAt": "2026-10-07",
-    "reviewedFrameworkAdoptionHash": "sha256:0c1703718231b45469009de68bbe08171a31fe36f0f3a740ac2dd323470aca69",
+    "reviewedFrameworkAdoptionHash": "sha256:f687fb5c67c2b4f124486754af46a43c10c648a26851a9faad5eb2178b132d89",
     "year": 2026,
     "role": "架构与框架开发",
     "summary": "面向 Unity 游戏项目的模块化开发框架，将研究中可复用的生命周期、运行时服务与玩法规则沉淀为可组合能力。",
@@ -1043,7 +1058,8 @@
       "补充 Group Coordination Foundation 路线、信息素与同族群传播采用路线",
       "补充 Adaptive Traits Foundation 学习提示、环境装饰与属性缩放采用路线",
       "补充 Procedural Encounter Foundation 布局、危险场和Boss结构采用路线",
-      "补充 Ecological Interaction Foundation 生态、场景可供性和LOD采用路线"
+      "补充 Ecological Interaction Foundation 生态、场景可供性和LOD采用路线",
+      "补充 Network Dispatch Foundation 时间窗容量与物流调度采用路线"
     ],
     "limitations": [
       "多数能力仍处于 Preview 或 Experimental",
