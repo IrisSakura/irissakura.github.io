@@ -10,6 +10,8 @@ const allowed = [
   /^data\/blog-taxonomy\.json$/,
   /^data\/journal(?:-source)?\.json$/,
   /^data\/search-index\.json$/,
+  /^data\/site-search-index\.json$/,
+  /^data\/content-graph\.json$/,
   /^index\.html$/,
   /^pages\/(?:framework|game)\.html$/,
   /^pages\/blog\.html$/,

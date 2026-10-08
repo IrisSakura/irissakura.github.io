@@ -48,6 +48,7 @@ Journal 端先固定触发提交并生成 `journal-source.json` 与 `blogs/*.md`
 - `data/journal.json`、`data/journal-source.json`；
 - `content/blogs/`；设计范式只更新 `data/journal-source.json` 中的公开摘要，不生成 `content/game-designs/` 正文；
 - `config/blog-publication.json`、`data/blog-taxonomy.json`；
+- 生成的 `data/search-index.json`、`data/site-search-index.json`、`data/content-graph.json`；
 - `pages/blog.html`、正文/旧址/系列/标签页、`pages/journal.html`；
 - Journal 正文页及对应博客/设计分享图；
 - 因计数或链接变化而生成的 `index.html`、`pages/portfolio.html`、`rss.xml`、`sitemap.xml`。
