@@ -591,7 +591,7 @@ for (const page of pageDefinitions) {
 await Promise.all([
   writeSocialImages(root, pageDefinitions, brandConfig),
   writeFile(path.join(root, 'data/search-index.json'), `${JSON.stringify(contentSearchIndex, null, 2)}\n`),
-  writeFile(path.join(root, 'data/site-search-index.json'), `${JSON.stringify(siteSearchIndex, null, 2)}\n`),
+  writeFile(path.join(root, 'data/site-search-index.json'), `${JSON.stringify(siteSearchIndex)}\n`),
   writeFile(path.join(root, 'data/content-graph.json'), `${JSON.stringify(contentGraph, null, 2)}\n`),
   writeFile(path.join(root, 'data/framework-public.json'), `${JSON.stringify({
     schemaVersion: framework.schemaVersion,
