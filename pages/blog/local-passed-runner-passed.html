@@ -26,7 +26,7 @@
     <link rel="apple-touch-icon" href="../../assets/brand/site-icon-v2/apple-touch-180.png" sizes="180x180">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html#webpage","name":"证据等级：本地验证、Runner 复验与交付结论边界 | IrisSakura","description":"一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？","url":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html","headline":"证据等级：本地验证、Runner 复验与交付结论边界","datePublished":"2026-07-31","dateModified":"2026-08-24","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-local-passed-runner-passed.png","keywords":["local","passed","runner"],"articleSection":"大型 Unity 框架的治理复盘","mainEntityOfPage":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"证据等级：本地验证、Runner 复验与交付结论边界","item":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html"}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html#webpage","name":"证据等级：本地验证、Runner 复验与交付结论边界 | IrisSakura","description":"一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？","url":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html","headline":"证据等级：本地验证、Runner 复验与交付结论边界","datePublished":"2026-07-31","dateModified":"2026-10-26","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-local-passed-runner-passed.png","keywords":["local","passed","runner"],"articleSection":"大型 Unity 框架的治理复盘","mainEntityOfPage":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"证据等级：本地验证、Runner 复验与交付结论边界","item":"https://irissakura.github.io/pages/blog/local-passed-runner-passed.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>证据等级：本地验证、Runner 复验与交付结论边界 | IrisSakura</title>
     <link rel="stylesheet" href="../../dist/styles/site.css">
@@ -89,12 +89,13 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/large-unity-framework-governance.html">大型 Unity 框架的治理复盘</a> · 发布于 2026-07-31 · 更新于 2026-08-24</p>
+            <p class="journal-kicker"><a href="series/large-unity-framework-governance.html">大型 Unity 框架的治理复盘</a> · 发布于 2026-07-31 · 更新于 2026-10-26</p>
             <h1>证据等级：本地验证、Runner 复验与交付结论边界</h1>
             <p class="blog-deck">一项功能已经在开发者电脑上通过测试，为什么项目仍不能把它登记为 CI 已验证、候选版本可交付或正式发布？</p>
             <div class="note-tags"><span>local</span><span>passed</span><span>runner</span></div>
         </header>
-        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论测试通过不是布尔值而是一条带上下文的证据声明">先说结论：测试通过不是布尔值，而是一条带上下文的证据声明</a></li><li class="toc-level-2"><a href="#一条测试证据需要自己的身份证">一条测试证据需要自己的“身份证”</a></li><li class="toc-level-2"><a href="#local-passed-究竟证明了什么">local-passed 究竟证明了什么</a></li><li class="toc-level-2"><a href="#runner-的价值不是换一台电脑再跑一次">Runner 的价值不是“换一台电脑再跑一次”</a></li><li class="toc-level-2"><a href="#为什么同一个提交-sha-如此重要">为什么同一个提交 SHA 如此重要</a></li><li class="toc-level-2"><a href="#ci-全绿也可能只证明了很小的范围">“CI 全绿”也可能只证明了很小的范围</a></li><li class="toc-level-2"><a href="#没有结果不等于失败">“没有结果”不等于失败</a></li><li class="toc-level-2"><a href="#证据不是一条简单直线">证据不是一条简单直线</a></li><li class="toc-level-2"><a href="#能力正确性重构安全和发布资格不是同一类证据">能力正确性、重构安全和发布资格不是同一类证据</a></li><li class="toc-level-3"><a href="#能力正确性证据">能力正确性证据</a></li><li class="toc-level-3"><a href="#重构安全证据">重构安全证据</a></li><li class="toc-level-3"><a href="#发布资格证据">发布资格证据</a></li><li class="toc-level-2"><a href="#evidence-backlog-为什么会失控">Evidence Backlog 为什么会失控</a></li><li class="toc-level-2"><a href="#状态记录不应该靠自由文本猜测">状态记录不应该靠自由文本猜测</a></li><li class="toc-level-2"><a href="#证据升级必须由新事实触发">证据升级必须由新事实触发</a></li><li class="toc-level-2"><a href="#三个常见误判">三个常见误判</a></li><li class="toc-level-3"><a href="#误判一本地全部通过所以-ci-失败一定是-runner-问题">误判一：本地全部通过，所以 CI 失败一定是 Runner 问题</a></li><li class="toc-level-3"><a href="#误判二ci-全绿所以准备发布">误判二：CI 全绿，所以准备发布</a></li><li class="toc-level-3"><a href="#误判三没有远端结果所以功能没有完成">误判三：没有远端结果，所以功能没有完成</a></li><li class="toc-level-2"><a href="#我的证据检查清单">我的证据检查清单</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>大型 Unity 框架的治理复盘</h2><a href="series/large-unity-framework-governance.html">查看系列阅读顺序 →</a><div class="context-tags"><span>local</span><span>passed</span><span>runner</span></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p>开发者完成一个功能后，通常会运行一组测试。</p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#问题与结论">问题与结论</a></li><li class="toc-level-3"><a href="#先说结论测试通过不是布尔值而是一条带上下文的证据声明">先说结论：测试通过不是布尔值，而是一条带上下文的证据声明</a></li><li class="toc-level-2"><a href="#证据与分析">证据与分析</a></li><li class="toc-level-3"><a href="#一条测试证据需要自己的身份证">一条测试证据需要自己的“身份证”</a></li><li class="toc-level-3"><a href="#local-passed-究竟证明了什么">local-passed 究竟证明了什么</a></li><li class="toc-level-3"><a href="#runner-的价值不是换一台电脑再跑一次">Runner 的价值不是“换一台电脑再跑一次”</a></li><li class="toc-level-3"><a href="#为什么同一个提交-sha-如此重要">为什么同一个提交 SHA 如此重要</a></li><li class="toc-level-3"><a href="#ci-全绿也可能只证明了很小的范围">“CI 全绿”也可能只证明了很小的范围</a></li><li class="toc-level-3"><a href="#没有结果不等于失败">“没有结果”不等于失败</a></li><li class="toc-level-3"><a href="#证据不是一条简单直线">证据不是一条简单直线</a></li><li class="toc-level-3"><a href="#能力正确性重构安全和发布资格不是同一类证据">能力正确性、重构安全和发布资格不是同一类证据</a></li><li class="toc-level-3"><a href="#evidence-backlog-为什么会失控">Evidence Backlog 为什么会失控</a></li><li class="toc-level-3"><a href="#状态记录不应该靠自由文本猜测">状态记录不应该靠自由文本猜测</a></li><li class="toc-level-2"><a href="#适用边界与实践">适用边界与实践</a></li><li class="toc-level-3"><a href="#证据升级必须由新事实触发">证据升级必须由新事实触发</a></li><li class="toc-level-3"><a href="#三个常见误判">三个常见误判</a></li><li class="toc-level-3"><a href="#我的证据检查清单">我的证据检查清单</a></li><li class="toc-level-2"><a href="#来源与验证状态">来源与验证状态</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>大型 Unity 框架的治理复盘</h2><a href="series/large-unity-framework-governance.html">查看系列阅读顺序 →</a><div class="context-tags"><span>local</span><span>passed</span><span>runner</span></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<h2 id="问题与结论">问题与结论</h2><p>开发者完成一个功能后，通常会运行一组测试。</p>
 <p>控制台显示全部通过，Unity 没有报错，示例场景也能运行。于是工作记录里出现了一句话：</p>
 <blockquote>
 <p>测试通过。</p>
@@ -111,7 +112,7 @@
 <li>测试结果和日志是否还能被复查？</li>
 </ul>
 <p>只要这些问题没有答案，“测试通过”就不是完整事实，而是一条缺少边界的结论。</p>
-<h2 id="先说结论测试通过不是布尔值而是一条带上下文的证据声明">先说结论：测试通过不是布尔值，而是一条带上下文的证据声明</h2><p><strong>测试证据等级（即“可信台阶”）</strong>：根据被验证代码的身份、执行环境、覆盖范围、独立性和可复现程度，对测试结论划分的可信层级。</p>
+<h3 id="先说结论测试通过不是布尔值而是一条带上下文的证据声明">先说结论：测试通过不是布尔值，而是一条带上下文的证据声明</h3><p><strong>测试证据等级（即“可信台阶”）</strong>：根据被验证代码的身份、执行环境、覆盖范围、独立性和可复现程度，对测试结论划分的可信层级。</p>
 <p><code>local-passed</code> 和 <code>runner-passed</code> 都可以是真实结果。</p>
 <p>问题不在于本地测试没有价值，而在于二者证明的事情不同。</p>
 <ul>
@@ -128,7 +129,7 @@
 <blockquote>
 <p>这份代码在什么环境中、以什么范围、通过了哪一级验证。</p>
 </blockquote>
-<h2 id="一条测试证据需要自己的身份证">一条测试证据需要自己的“身份证”</h2><p><strong>证据身份（即“证据身份证”）</strong>：能够唯一说明一次验证测试了什么、在哪里测试、如何测试以及得到什么结果的最小信息集合。</p>
+<h2 id="证据与分析">证据与分析</h2><h3 id="一条测试证据需要自己的身份证">一条测试证据需要自己的“身份证”</h3><p><strong>证据身份（即“证据身份证”）</strong>：能够唯一说明一次验证测试了什么、在哪里测试、如何测试以及得到什么结果的最小信息集合。</p>
 <p>一条可审计的证据至少应包含：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
@@ -187,7 +188,7 @@
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>本地结果和 CI 结果并不矛盾。</p>
 <p>它们测试的根本不是同一份代码。</p>
-<h2 id="local-passed-究竟证明了什么"><code>local-passed</code> 究竟证明了什么</h2><p><strong>本地验证（即“手边能跑”）</strong>：在开发者当前机器和工作区中完成的构建、测试或运行检查。</p>
+<h3 id="local-passed-究竟证明了什么"><code>local-passed</code> 究竟证明了什么</h3><p><strong>本地验证（即“手边能跑”）</strong>：在开发者当前机器和工作区中完成的构建、测试或运行检查。</p>
 <p>手边能跑非常重要。</p>
 <p>它适合：</p>
 <ul>
@@ -224,9 +225,11 @@
 <li>发布候选已经通过；</li>
 <li>正式产物与本地测试对象一致。</li>
 </ul>
-<h2 id="runner-的价值不是换一台电脑再跑一次">Runner 的价值不是“换一台电脑再跑一次”</h2><p><strong>独立 Runner 验证（即“异地复验”）</strong>：由自动化执行环境从明确代码身份出发，按照版本化流程重新构建和测试，并保留可追溯结果。</p>
+<h3 id="runner-的价值不是换一台电脑再跑一次">Runner 的价值不是“换一台电脑再跑一次”</h3><p><strong>独立 Runner 验证（即“异地复验”）</strong>：由自动化执行环境从明确代码身份出发，按照版本化流程重新构建和测试，并保留可追溯结果。</p>
 <p>异地复验的主要价值不是机器位于远端，而是它切断了部分本地隐式依赖。</p>
 <p>典型流程是：</p>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">固定代码与工具版本 → 准备可识别环境 → 执行版本化命令 → 解析实际结果 → 保存带身份的 Artifact
+</code></pre></div><div class="article-prose-section blog-prose">
 <p>它可以暴露本地环境长期掩盖的问题：</p>
 <ul>
 <li>文件没有提交；</li>
@@ -250,7 +253,7 @@
 <li>Job 是否因为超时或取消而没有结论？</li>
 <li>构建产物是否就是后续发布产物？</li>
 </ul>
-<h2 id="为什么同一个提交-sha-如此重要">为什么同一个提交 SHA 如此重要</h2><p><strong>同提交验证（即“同一份代码复验”）</strong>：测试结果、候选版本和发布流程明确绑定到同一个不可变提交身份。</p>
+<h3 id="为什么同一个提交-sha-如此重要">为什么同一个提交 SHA 如此重要</h3><p><strong>同提交验证（即“同一份代码复验”）</strong>：测试结果、候选版本和发布流程明确绑定到同一个不可变提交身份。</p>
 <p>考虑下面的流程：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>提交 A
 → CI 通过
@@ -274,8 +277,8 @@
 → 验证产物仍对应 B
 → 才能进入后续发布判断
 </code></pre></div><div class="article-prose-section blog-prose">
-<p>同一份代码复验防止的不是普通测试失败，而是证据和交付对象之间发生身份漂移。</p>
-<h2 id="ci-全绿也可能只证明了很小的范围">“CI 全绿”也可能只证明了很小的范围</h2><p><strong>证据覆盖范围（即“证明范围”）</strong>：一次测试结果实际覆盖的包、平台、场景、配置和行为边界。</p>
+<p>同一份代码复验防止的是证据和交付对象之间发生身份漂移。SHA 相同仍不保证实际输入相同：未提交文件、外部依赖、生成内容、工具链与测试选择也必须按被验证合同记录；不能用同 SHA 掩盖这些变化。</p>
+<h3 id="ci-全绿也可能只证明了很小的范围">“CI 全绿”也可能只证明了很小的范围</h3><p><strong>证据覆盖范围（即“证明范围”）</strong>：一次测试结果实际覆盖的包、平台、场景、配置和行为边界。</p>
 <p>假设一个大型 Unity 框架修改了 UI、Networking 和 ECS，但 Player Smoke 始终只构建 <code>core-only</code> Profile。</p>
 <p>即使 Player Smoke 通过，它也只能证明：</p>
 <blockquote>
@@ -338,7 +341,7 @@
 </tbody></table></div><div class="article-prose-section blog-prose">
 <p>证明范围越窄，结果反馈越快。</p>
 <p>快速验证不是问题；模糊地扩大结论才是问题。</p>
-<h2 id="没有结果不等于失败">“没有结果”不等于失败</h2><p>工程状态里必须区分至少四种结论：</p>
+<h3 id="没有结果不等于失败">“没有结果”不等于失败</h3><p>工程状态里必须区分至少四种结论：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
@@ -375,7 +378,7 @@
 <p>没有 Workflow Run，不能写成 <code>runner-failed</code>。</p>
 <p>本地测试通过，也不能把 <code>runner-pending</code> 改成 <code>runner-passed</code>。</p>
 <p>当前没有进入候选发布阶段，则 Release Evidence 可以是 <code>not-requested</code>，而不是制造一条虚假的发布阻塞。</p>
-<h2 id="证据不是一条简单直线">证据不是一条简单直线</h2><p>可信台阶经常被画成：</p>
+<h3 id="证据不是一条简单直线">证据不是一条简单直线</h3><p>可信台阶经常被画成：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>local
 → runner
 → candidate
@@ -433,7 +436,7 @@
 <li>但没有可复现脚本和固定产物。</li>
 </ul>
 <p>二者各自有价值，不能简单地只比较谁“级别更高”。</p>
-<h2 id="能力正确性重构安全和发布资格不是同一类证据">能力正确性、重构安全和发布资格不是同一类证据</h2><p>大型仓库容易把所有未完成验证都放进一个 Evidence Backlog。</p>
+<h3 id="能力正确性重构安全和发布资格不是同一类证据">能力正确性、重构安全和发布资格不是同一类证据</h3><p>大型仓库容易把所有未完成验证都放进一个 Evidence Backlog。</p>
 <p>结果是：</p>
 <ul>
 <li>一个小 UI 控件测试；</li>
@@ -443,7 +446,7 @@
 </ul>
 <p>全部被当成同类债务。</p>
 <p>更合理的分类是：</p>
-<h3 id="能力正确性证据">能力正确性证据</h3><p>回答：</p>
+<h4 id="能力正确性证据">能力正确性证据</h4><p>回答：</p>
 <blockquote>
 <p>新增或修改的功能本身是否符合预期？</p>
 </blockquote>
@@ -455,7 +458,7 @@
 <li>关键 PlayMode 生命周期；</li>
 <li>网络协议编解码。</li>
 </ul>
-<h3 id="重构安全证据">重构安全证据</h3><p>回答：</p>
+<h4 id="重构安全证据">重构安全证据</h4><p>回答：</p>
 <blockquote>
 <p>后续继续修改时，哪些边界受到自动保护？</p>
 </blockquote>
@@ -467,7 +470,7 @@
 <li>重复类型审计；</li>
 <li>Installer 幂等性测试。</li>
 </ul>
-<h3 id="发布资格证据">发布资格证据</h3><p>回答：</p>
+<h4 id="发布资格证据">发布资格证据</h4><p>回答：</p>
 <blockquote>
 <p>某个不可变候选是否满足交付要求？</p>
 </blockquote>
@@ -481,7 +484,7 @@
 </ul>
 <p>当前处于能力开发阶段时，应优先补能力正确性和重构安全证据。</p>
 <p>没有明确候选提交时，不应机械启动完整发布资格化，也不应因此声称项目发布失败。</p>
-<h2 id="evidence-backlog-为什么会失控">Evidence Backlog 为什么会失控</h2><p>如果每个小计划完成后都永久产生一条独立 Runner 债务，证据列表会迅速膨胀。</p>
+<h3 id="evidence-backlog-为什么会失控">Evidence Backlog 为什么会失控</h3><p>如果每个小计划完成后都永久产生一条独立 Runner 债务，证据列表会迅速膨胀。</p>
 <p>例如：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>Timer 控件
 Choice Group
@@ -515,7 +518,7 @@ Runtime Foundation Qualification
 <p>小切片首先进入对应能力套件。</p>
 <p>套件在适当时机统一执行远端或平台验证。</p>
 <p>这样，Evidence Backlog 表达的是哪些产品能力尚未获得资格，而不是仓库曾经完成过多少微型计划。</p>
-<h2 id="状态记录不应该靠自由文本猜测">状态记录不应该靠自由文本猜测</h2><p>工作记录中常见这样的描述：</p>
+<h3 id="状态记录不应该靠自由文本猜测">状态记录不应该靠自由文本猜测</h3><p>工作记录中常见这样的描述：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>实现完成，尚未提交、推送和触发 Runner。
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>几天后代码已经进入默认分支，但这段文本没有更新。</p>
@@ -543,8 +546,11 @@ releaseArtifact
 <li>自由文本只负责解释下一步和异常情况。</li>
 </ul>
 <p>可机器判断的事实，不应长期藏在自然语言里。</p>
-<h2 id="证据升级必须由新事实触发">证据升级必须由新事实触发</h2><p><strong>证据晋级（即“升级盖章”）</strong>：只有当更高层级要求的执行和身份条件真实满足后，才能提升状态。</p>
+<h2 id="适用边界与实践">适用边界与实践</h2><h3 id="证据升级必须由新事实触发">证据升级必须由新事实触发</h3><p><strong>证据晋级（即“升级盖章”）</strong>：只有当更高层级要求的执行和身份条件真实满足后，才能提升状态。</p>
 <p>正确的晋级流程类似：</p>
+</div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">列出目标结论所需证据 → 核对已有证据的输入与范围 → 补齐缺失执行或身份核验 → 按实际结果更新状态
+</code></pre></div><div class="article-prose-section blog-prose">
+<p>证据复用也可以成立：相关源码、依赖、配置、测试选择和环境未变时，不必仅因交接或角色切换重跑。跨提交复用需要目标项目允许的等价性证明及清楚的来源记录，不能把“旧结果仍适用”改写成“新 SHA 已在 Runner 执行”。</p>
 <p>不能使用以下替代逻辑：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>开发者说本地通过
 → 自动写 runner-passed
@@ -558,8 +564,8 @@ releaseArtifact
 候选之前的构建通过
 → 自动写正式产物已验证
 </code></pre></div><div class="article-prose-section blog-prose">
-<p>每次升级都需要新的事实，而不是更乐观的措辞。</p>
-<h2 id="三个常见误判">三个常见误判</h2><h3 id="误判一本地全部通过所以-ci-失败一定是-runner-问题">误判一：本地全部通过，所以 CI 失败一定是 Runner 问题</h3><p>也可能是：</p>
+<p>每次升级都需要满足目标结论的事实依据；可以是新增执行，也可以是原本已存在但刚完成身份与范围核验的有效证据，不能只换成更乐观的措辞。</p>
+<h3 id="三个常见误判">三个常见误判</h3><h4 id="误判一本地全部通过所以-ci-失败一定是-runner-问题">误判一：本地全部通过，所以 CI 失败一定是 Runner 问题</h4><p>也可能是：</p>
 <ul>
 <li>未提交文件；</li>
 <li>本机缓存；</li>
@@ -569,7 +575,7 @@ releaseArtifact
 <li>不可重复的手工步骤。</li>
 </ul>
 <p>CI 失败首先说明环境之间存在差异，不应先假定远端错误。</p>
-<h3 id="误判二ci-全绿所以准备发布">误判二：CI 全绿，所以准备发布</h3><p>CI 可能只运行：</p>
+<h4 id="误判二ci-全绿所以准备发布">误判二：CI 全绿，所以准备发布</h4><p>CI 可能只运行：</p>
 <ul>
 <li>静态检查；</li>
 <li>单元测试；</li>
@@ -578,7 +584,7 @@ releaseArtifact
 <li>非候选提交。</li>
 </ul>
 <p>是否可以发布，还取决于候选身份、目标平台、产物和发布门禁。</p>
-<h3 id="误判三没有远端结果所以功能没有完成">误判三：没有远端结果，所以功能没有完成</h3><p>功能实现和远端交付证明是两个状态。</p>
+<h4 id="误判三没有远端结果所以功能没有完成">误判三：没有远端结果，所以功能没有完成</h4><p>功能实现和远端交付证明是两个状态。</p>
 <p>更准确的记录可以是：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code>implementation: completed
 localEvidence: passed
@@ -586,7 +592,7 @@ runnerEvidence: pending
 releaseEvidence: not-requested
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>这既不夸大，也不抹杀已经完成的工作。</p>
-<h2 id="我的证据检查清单">我的证据检查清单</h2><p>在把某项能力登记为“已验证”之前，我会检查：</p>
+<h3 id="我的证据检查清单">我的证据检查清单</h3><p>在把某项能力登记为“已验证”之前，我会检查：</p>
 <ol>
 <li>结果绑定的是工作区、Commit、Tag 还是 Candidate？</li>
 <li>工作区是否包含未提交或未跟踪内容？</li>
@@ -612,6 +618,7 @@ releaseEvidence: not-requested
 <blockquote>
 <p>哪一份代码，在什么环境中，以什么范围，获得了什么级别的证明？</p>
 </blockquote>
+<h2 id="来源与验证状态">来源与验证状态</h2><p>本文是证据判定方法，不新增任何测试通过声明。可结合<a href="./unity-quickstart.html">Quickstart 的实际失败与完成边界</a>阅读，并核对候选身份是否绑定同一份输入；本轮仅修复缺失流程、输入身份与证据复用的表述，未运行 Runner 或发布流程。</p>
 </div></div></div>
 
     </article>

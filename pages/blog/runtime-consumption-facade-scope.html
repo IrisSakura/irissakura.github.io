@@ -26,7 +26,7 @@
     <link rel="apple-touch-icon" href="../../assets/brand/site-icon-v2/apple-touch-180.png" sizes="180x180">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html#webpage","name":"运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯 | IrisSakura","description":"不同规模的 Unity 项目怎样在不更换服务合同的前提下，从快速接入逐步迁移到确定性组合根、显式生命周期和严格依赖边界？","url":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html","headline":"运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯","datePublished":"2026-08-05","dateModified":"2026-09-09","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-runtime-consumption-facade-scope.png","keywords":["composition-root","facade","scope"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯","item":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html"}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html#webpage","name":"运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯 | IrisSakura","description":"不同规模的 Unity 项目怎样在不更换服务合同的前提下，从快速接入逐步迁移到确定性组合根、显式生命周期和严格依赖边界？","url":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html","headline":"运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯","datePublished":"2026-08-05","dateModified":"2026-10-26","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-runtime-consumption-facade-scope.png","keywords":["composition-root","facade","scope"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯","item":"https://irissakura.github.io/pages/blog/runtime-consumption-facade-scope.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯 | IrisSakura</title>
     <link rel="stylesheet" href="../../dist/styles/site.css">
@@ -89,15 +89,15 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-09-09</p>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-10-26</p>
             <h1>运行时消费模式与组合根：从 Facade 到显式 Scope 的迁移阶梯</h1>
             <p class="blog-deck">不同规模的 Unity 项目怎样在不更换服务合同的前提下，从快速接入逐步迁移到确定性组合根、显式生命周期和严格依赖边界？</p>
             <div class="note-tags"><span>composition-root</span><span>facade</span><span>scope</span></div>
         </header>
-        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论消费复杂度应随所有权问题升级">先说结论：消费复杂度应随所有权问题升级</a></li><li class="toc-level-2"><a href="#facade-是接入入口不是隐藏的全局所有权">Facade 是接入入口，不是隐藏的全局所有权</a></li><li class="toc-level-2"><a href="#组合根负责装配不负责吞并模块">组合根负责装配，不负责吞并模块</a></li><li class="toc-level-2"><a href="#modular-把服务来源交给-installer">Modular 把服务来源交给 Installer</a></li><li class="toc-level-2"><a href="#自动-root-与项目覆盖可以共存">自动 Root 与项目覆盖可以共存</a></li><li class="toc-level-2"><a href="#scope-把服务任务与资源归给同一个-owner">Scope 把服务、任务与资源归给同一个 Owner</a></li><li class="toc-level-2"><a href="#strict-把隐式回退变成组合错误">Strict 把隐式回退变成组合错误</a></li><li class="toc-level-2"><a href="#legacy-只能是迁移通道">Legacy 只能是迁移通道</a></li><li class="toc-level-2"><a href="#迁移阶梯由边界信号触发">迁移阶梯由边界信号触发</a></li><li class="toc-level-2"><a href="#我的判断组合根是治理边界消费模式是治理强度">我的判断：组合根是治理边界，消费模式是治理强度</a></li><li class="toc-level-2"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li><li class="toc-level-2"><a href="#内部资料依据">内部资料依据</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>composition-root</span><span>facade</span><span>scope</span></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
-<p>Unity 框架常见的两种极端，一种是所有系统都通过全局单例访问，另一种是在项目开始时就要求完整构造注入、显式 Scope 和组合根。前者接入快但所有权模糊，后者边界清楚却可能把尚未出现的复杂度提前压给小项目。</p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#问题与结论">问题与结论</a></li><li class="toc-level-3"><a href="#先说结论消费复杂度应随所有权问题升级">先说结论：消费复杂度应随所有权问题升级</a></li><li class="toc-level-2"><a href="#证据与分析">证据与分析</a></li><li class="toc-level-3"><a href="#facade-是接入入口不是隐藏的全局所有权">Facade 是接入入口，不是隐藏的全局所有权</a></li><li class="toc-level-3"><a href="#组合根负责装配不负责吞并模块">组合根负责装配，不负责吞并模块</a></li><li class="toc-level-3"><a href="#modular-把服务来源交给-installer">Modular 把服务来源交给 Installer</a></li><li class="toc-level-3"><a href="#自动-root-与项目覆盖可以共存">自动 Root 与项目覆盖可以共存</a></li><li class="toc-level-3"><a href="#scope-把服务任务与资源归给同一个-owner">Scope 把服务、任务与资源归给同一个 Owner</a></li><li class="toc-level-3"><a href="#strict-把隐式回退变成组合错误">Strict 把隐式回退变成组合错误</a></li><li class="toc-level-3"><a href="#legacy-只能是迁移通道">Legacy 只能是迁移通道</a></li><li class="toc-level-2"><a href="#适用边界与实践">适用边界与实践</a></li><li class="toc-level-3"><a href="#迁移阶梯由边界信号触发">迁移阶梯由边界信号触发</a></li><li class="toc-level-3"><a href="#我的判断组合根是治理边界消费模式是治理强度">我的判断：组合根是治理边界，消费模式是治理强度</a></li><li class="toc-level-3"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-3"><a href="#术语对照">术语对照</a></li><li class="toc-level-2"><a href="#来源与验证状态">来源与验证状态</a></li><li class="toc-level-3"><a href="#内部资料依据">内部资料依据</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>composition-root</span><span>facade</span><span>scope</span></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<h2 id="问题与结论">问题与结论</h2><p>Unity 框架常见的两种极端，一种是所有系统都通过全局单例访问，另一种是在项目开始时就要求完整构造注入、显式 Scope 和组合根。前者接入快但所有权模糊，后者边界清楚却可能把尚未出现的复杂度提前压给小项目。</p>
 <p>Sakura 的关键判断是：访问方式、组合根和生命周期不应被当成互相竞争的架构信仰，而应成为同一组服务合同上的迁移阶梯。</p>
-<h2 id="先说结论消费复杂度应随所有权问题升级">先说结论：消费复杂度应随所有权问题升级</h2><p><strong>运行时消费模式（后文简称“框架使用档位”）</strong>：项目访问服务、登记模块、建立组合根并管理生命周期时采用的一组统一规则。</p>
+<h3 id="先说结论消费复杂度应随所有权问题升级">先说结论：消费复杂度应随所有权问题升级</h3><p><strong>运行时消费模式（后文简称“框架使用档位”）</strong>：项目访问服务、登记模块、建立组合根并管理生命周期时采用的一组统一规则。</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
@@ -127,14 +127,14 @@
 </tr>
 </tbody></table></div><div class="article-prose-section blog-prose">
 <p>三种模式共享服务合同。迁移改变的是注册、解析和所有权规则，而不是把 Audio、Event、UI、Save 等能力换成完全不同的实现。</p>
-<h2 id="facade-是接入入口不是隐藏的全局所有权">Facade 是接入入口，不是隐藏的全局所有权</h2><p>Simple 模式允许业务通过 <code>SakuraEvent</code>、<code>SakuraPooling</code>、<code>SakuraAudio</code>、<code>SakuraUi</code>、<code>SakuraSave</code> 和 <code>SakuraCommand</code> 等门面进入当前 Runtime Service Context。</p>
+<h2 id="证据与分析">证据与分析</h2><h3 id="facade-是接入入口不是隐藏的全局所有权">Facade 是接入入口，不是隐藏的全局所有权</h3><p>Simple 模式允许业务通过 <code>SakuraEvent</code>、<code>SakuraPooling</code>、<code>SakuraAudio</code>、<code>SakuraUi</code>、<code>SakuraSave</code> 和 <code>SakuraCommand</code> 等门面进入当前 Runtime Service Context。</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">业务代码
 → Sakura.* Facade
 → Runtime Service Context
 → 容器服务或受控兼容实例
 </code></pre></div><div class="article-prose-section blog-prose">
 <p><code>TryGet*</code> 必须保持观察语义：它只查询已有服务，不创建 Manager、<code>GameObject</code> 或新的隐藏状态。Simple 允许的是一条明确、可诊断的兼容通道，而不是任何地方都能随意创建单例。</p>
-<h2 id="组合根负责装配不负责吞并模块">组合根负责装配，不负责吞并模块</h2><p><strong>组合根（后文简称“服务总装入口”）</strong>：集中决定服务注册、依赖关系和生命周期的启动边界。</p>
+<h3 id="组合根负责装配不负责吞并模块">组合根负责装配，不负责吞并模块</h3><p><strong>组合根（后文简称“服务总装入口”）</strong>：集中决定服务注册、依赖关系和生命周期的启动边界。</p>
 <p>组合根应该知道哪些模块属于 App Scope、哪些可选包已安装、项目有哪些覆盖实现、启动任务按什么顺序执行，以及 Root 销毁时怎样释放所有权；它不应该知道具体战斗技能、页面导航、音频表或场景敌人的业务细节。</p>
 <p>默认 Bootstrap 的基础闭包应保持最小，通常只直接装配 Event 与 Pooling。Input、UI、Audio、Timeline 等能力在自身包存在并满足版本条件时，通过 <strong>条件 Contribution（后文简称“装了才贡献”）</strong> 加入既有 Root。</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-mermaid">flowchart TD
@@ -145,7 +145,7 @@
     F["Project Installer"] --&gt; A
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>这样可以避免核心依赖膨胀，也避免让服务器工具、编辑器工具、纯模拟测试或无 UI 场景被迫安装完整客户端闭包。</p>
-<h2 id="modular-把服务来源交给-installer">Modular 把服务来源交给 Installer</h2><p>当多个场景共享服务、测试需要替换实现、团队需要明确模块 Owner，或项目出现默认实现与覆盖实现时，应迁移到 Modular。</p>
+<h3 id="modular-把服务来源交给-installer">Modular 把服务来源交给 Installer</h3><p>当多个场景共享服务、测试需要替换实现、团队需要明确模块 Owner，或项目出现默认实现与覆盖实现时，应迁移到 Modular。</p>
 <p>项目通过 <code>IProjectInstaller</code> 或等效入口把服务登记到组合根。业务仍可使用 Facade，但服务身份来自当前 Resolver，而不是场景搜索或隐式创建。</p>
 <p>Installer 必须按稳定的 Phase、Priority、程序集全名和类型全名排序。多实现注册应明确 <code>Default</code>、<code>Override</code>、<code>Multi</code> 或普通独占意图；不能依赖“后注册覆盖前注册”的容器细节。</p>
 <p>**组合提交边界（后文简称“整套注册一起生效”）**要求先发现 Installer、稳定排序、隔离执行、收集 Descriptor、验证冲突，全部成功后才转换并构建最终容器。</p>
@@ -157,11 +157,11 @@
 → 一次构建容器
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>如果中途类型加载、构造、DI 转换或注册意图检查失败，不能留下半套注册。</p>
-<h2 id="自动-root-与项目覆盖可以共存">自动 Root 与项目覆盖可以共存</h2><p>小项目可以在首场景前检测不到 Root 时创建默认组合根；项目已经提供自定义 <code>GameRootLifetimeScope</code> 时，自动启动器必须跳过，不得创建第二个 Bootstrap Host。</p>
+<h3 id="自动-root-与项目覆盖可以共存">自动 Root 与项目覆盖可以共存</h3><p>小项目可以在首场景前检测不到 Root 时创建默认组合根；项目已经提供自定义 <code>GameRootLifetimeScope</code> 时，自动启动器必须跳过，不得创建第二个 Bootstrap Host。</p>
 <p>自定义 Root 仍然复用既有服务上下文和生命周期合同，项目覆盖通过正式 Installer 或派生 Root 表达。**唯一 Host 所有权（后文简称“一个模块只归一个启动器”）**要求同一模块在同一生命周期中只能被一个容器、Manager 或项目 Host 接管。</p>
 <p>重复接管不能用“最后创建的覆盖前一个”掩盖。无法证明唯一所有权时，应跳过或拒绝启动，并产生结构化诊断。</p>
 <p>Root 身份还需要 <strong>代际绑定（后文简称“旧根不能清新根”）</strong>：每次 Resolver 绑定记录 Owner 与 generation，释放时只有当前绑定仍属于自己才允许清理。否则 Root A 延迟销毁可能清空 Root B 已建立的全局 Resolver。</p>
-<h2 id="scope-把服务任务与资源归给同一个-owner">Scope 把服务、任务与资源归给同一个 Owner</h2><p>App、Scene、Battle 和 UI 是常见的四类生命周期：</p>
+<h3 id="scope-把服务任务与资源归给同一个-owner">Scope 把服务、任务与资源归给同一个 Owner</h3><p>App、Scene、Battle 和 UI 是常见的四类生命周期：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
@@ -189,7 +189,7 @@
 <p>当 Battle Scope 结束时，释放它应同时取消战斗任务、注销事件、归还对象池、释放资源句柄、清理命令历史、关闭战斗 UI，并阻止旧回调继续写入下一局。</p>
 <p>Bootstrap FSM、异步启动任务和主线程 Dispatcher 也应绑定到共同的 App Owner，并且只保留一个 Pump。Root 销毁时，任务监管器能够统一取消启动任务、观察失败并防止旧回调进入新一轮运行。</p>
 <p>App Scope 不应默认持有当前战斗实体、关卡导航、房间状态、页面 ViewModel 或临时输入拦截。把所有对象都放入 <code>DontDestroyOnLoad</code> Root，只会让场景切换更换画面而不真正结束旧玩法生命周期。</p>
-<h2 id="strict-把隐式回退变成组合错误">Strict 把隐式回退变成组合错误</h2><p>Strict 模式适合服务注册完整、Scope 边界已经建立、项目准备禁止隐式创建的阶段。它要求：</p>
+<h3 id="strict-把隐式回退变成组合错误">Strict 把隐式回退变成组合错误</h3><p>Strict 模式适合服务注册完整、Scope 边界已经建立、项目准备禁止隐式创建的阶段。它要求：</p>
 <ul>
 <li>Root 中未注册的服务不会回退到场景单例；</li>
 <li>无 Root 时不查询 Legacy Manager；</li>
@@ -215,8 +215,8 @@
 </tr>
 <tr>
 <td>无 Root + Simple</td>
-<td>读取或受限创建兼容实例</td>
-<td>可返回已有或兼容实例</td>
+<td>只读取已有兼容实例</td>
+<td>可按明确策略受限创建兼容实例</td>
 </tr>
 <tr>
 <td>无 Root + Modular</td>
@@ -230,11 +230,11 @@
 </tr>
 </tbody></table></div><div class="article-prose-section blog-prose">
 <p>Root ready 后的 Resolver miss 是组合缺口，不是继续寻找另一个对象的信号。</p>
-<h2 id="legacy-只能是迁移通道">Legacy 只能是迁移通道</h2><p>旧 <code>XxxManager.Instance</code>、<code>MonoSingleton</code> 和兼容包装器可以暂时存在，但必须被标记为 Compatibility，并拥有适用范围、观测方式和退出条件。它不能被描述成第四种正式架构模式，否则 Modular 和 Strict 永远没有完成迁移的终点。</p>
+<h3 id="legacy-只能是迁移通道">Legacy 只能是迁移通道</h3><p>旧 <code>XxxManager.Instance</code>、<code>MonoSingleton</code> 和兼容包装器可以暂时存在，但必须被标记为 Compatibility，并拥有适用范围、观测方式和退出条件。它不能被描述成第四种正式架构模式，否则 Modular 和 Strict 永远没有完成迁移的终点。</p>
 <p>Runtime Monitor 应记录当前 Profile、Resolver 是否绑定、解析成功与失败次数、Facade 回退次数、访问来源、活动 Scope 和模块生命周期摘要。**回退预算（后文简称“还剩多少旧路”）**让项目可以从 Simple 逐步减少兼容访问，并在进入 Strict 前把关键路径回退归零。</p>
-<h2 id="迁移阶梯由边界信号触发">迁移阶梯由边界信号触发</h2><p>从 Simple 到 Modular 的信号包括：多个场景共享服务、团队需要明确 Owner、服务需要替换、场景开始出现重复 Manager。从 Modular 到 Strict 的信号包括：关键服务已正式登记、App/Scene/Battle/UI Scope 已有明确创建与释放点、非预期 Facade 回退接近零，以及发布前需要禁止隐式创建。</p>
+<h2 id="适用边界与实践">适用边界与实践</h2><h3 id="迁移阶梯由边界信号触发">迁移阶梯由边界信号触发</h3><p>从 Simple 到 Modular 的信号包括：多个场景共享服务、团队需要明确 Owner、服务需要替换、场景开始出现重复 Manager。从 Modular 到 Strict 的信号包括：关键服务已正式登记、App/Scene/Battle/UI Scope 已有明确创建与释放点、非预期 Facade 回退接近零，以及发布前需要禁止隐式创建。</p>
 <p>没有这些信号时提前升级，只会增加注册、Scope 和测试样板；但当边界问题真实出现时，继续停留在 Simple 又会让所有权和失败状态不可证明。</p>
-<h2 id="我的判断组合根是治理边界消费模式是治理强度">我的判断：组合根是治理边界，消费模式是治理强度</h2><p>一套可长期使用的 Unity 框架，不应强迫所有项目从同一个复杂度起点出发。更重要的是在同一服务合同上提供：</p>
+<h3 id="我的判断组合根是治理边界消费模式是治理强度">我的判断：组合根是治理边界，消费模式是治理强度</h3><p>一套可长期使用的 Unity 框架，不应强迫所有项目从同一个复杂度起点出发。更重要的是在同一服务合同上提供：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">方便接入
 → 明确注册
 → 唯一 Host
@@ -242,7 +242,7 @@
 → 禁止隐式回退
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>Facade、Installer、组合根和严格 DI 只有在连接到同一套所有权、注册和失败合同后才构成真正的迁移路径。组合根越成熟，知道的业务细节应越少；它只负责把模块按确定性规则装配起来，并把生命周期交给正确的 Scope。</p>
-<h2 id="设计检查表">设计检查表</h2><ul>
+<h3 id="设计检查表">设计检查表</h3><ul>
 <li><code>TryGet*</code> 是否保持无创建副作用；</li>
 <li>默认 Root 的硬依赖是否最小；</li>
 <li>可选模块是否通过条件 Contribution 加入；</li>
@@ -257,7 +257,7 @@
 <li>Strict 启用前关键路径回退是否归零；</li>
 <li>项目自定义 Root 是否会触发默认 Root 重复创建。</li>
 </ul>
-<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<h3 id="术语对照">术语对照</h3></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -306,7 +306,8 @@
 <td>项目仍允许存在的兼容访问范围</td>
 </tr>
 </tbody></table></div><div class="article-prose-section blog-prose">
-<h2 id="内部资料依据">内部资料依据</h2><p>本文重新组织原 <code>05-运行时消费模式与架构升级阈值</code> 与原 <code>06-Bootstrap组合根与生命周期所有权</code>。新增结构把 Facade、Installer、组合根、Host 唯一性和 Scope 所有权放进同一条迁移链；它不是把两篇文章按章节简单拼接。</p>
+<h2 id="来源与验证状态">来源与验证状态</h2><h3 id="内部资料依据">内部资料依据</h3><p>本文重新组织原 <code>05-运行时消费模式与架构升级阈值</code> 与原 <code>06-Bootstrap组合根与生命周期所有权</code>。新增结构把 Facade、Installer、组合根、Host 唯一性和 Scope 所有权放进同一条迁移链；它不是把两篇文章按章节简单拼接。</p>
+<p>2026-10-26 只读核对 Framework checkout <code>07f712c04236488879ec44d281695ff0705710c2</code> 的 <code>docs/reference/runtime-consumption-modes.json</code>，确认三个模式、Legacy 非正式模式与迁移触发条件。本文的具体 Installer / Scope 机制仍按原历史研究说明；本轮未执行目标项目生命周期验收。</p>
 </div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>

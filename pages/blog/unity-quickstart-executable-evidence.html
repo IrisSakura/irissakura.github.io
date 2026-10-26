@@ -26,7 +26,7 @@
     <link rel="apple-touch-icon" href="../../assets/brand/site-icon-v2/apple-touch-180.png" sizes="180x180">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html#webpage","name":"Unity Quickstart 的可执行接入证据与有界进程治理 | IrisSakura","description":"一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？","url":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html","headline":"Unity Quickstart 的可执行接入证据与有界进程治理","datePublished":"2026-08-05","dateModified":"2026-08-24","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-unity-quickstart-executable-evidence.png","keywords":["quickstart","unity"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"Unity Quickstart 的可执行接入证据与有界进程治理","item":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html"}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html#webpage","name":"Unity Quickstart 的可执行接入证据与有界进程治理 | IrisSakura","description":"一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？","url":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html","headline":"Unity Quickstart 的可执行接入证据与有界进程治理","datePublished":"2026-08-05","dateModified":"2026-10-26","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-unity-quickstart-executable-evidence.png","keywords":["quickstart","unity"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"Unity Quickstart 的可执行接入证据与有界进程治理","item":"https://irissakura.github.io/pages/blog/unity-quickstart-executable-evidence.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Unity Quickstart 的可执行接入证据与有界进程治理 | IrisSakura</title>
     <link rel="stylesheet" href="../../dist/styles/site.css">
@@ -89,13 +89,13 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-24</p>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-10-26</p>
             <h1>Unity Quickstart 的可执行接入证据与有界进程治理</h1>
             <p class="blog-deck">一个 Unity 框架已经拥有安装器、Sample 和快速接入文档后，怎样证明新项目真的能够从固定提交开始，走完整条接入路径，并在失败或进程悬挂时留下可审计结果？</p>
             <div class="note-tags"><span>quickstart</span><a href="tag/unity.html">unity</a></div>
         </header>
-        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论接入成功需要一条端到端证据链">先说结论：接入成功需要一条端到端证据链</a></li><li class="toc-level-2"><a href="#runtime-starter-和-quickstart-不是同一种证明">Runtime Starter 和 Quickstart 不是同一种证明</a></li><li class="toc-level-2"><a href="#第一层固定提交不是附加信息而是证据主键">第一层：固定提交不是附加信息，而是证据主键</a></li><li class="toc-level-2"><a href="#第二层必须创建真正的新消费项目">第二层：必须创建真正的新消费项目</a></li><li class="toc-level-2"><a href="#第三层不能只检查进程退出码">第三层：不能只检查进程退出码</a></li><li class="toc-level-2"><a href="#第四层只终止自己拥有的-unity-子进程">第四层：只终止自己拥有的 Unity 子进程</a></li><li class="toc-level-2"><a href="#第五层清理也需要所有权证明">第五层：清理也需要所有权证明</a></li><li class="toc-level-2"><a href="#第六层artifact-上传成功仍不算闭环">第六层：Artifact 上传成功仍不算闭环</a></li><li class="toc-level-2"><a href="#传输策略也属于接入合同">传输策略也属于接入合同</a></li><li class="toc-level-2"><a href="#quickstart-通过不等于发布完成">Quickstart 通过不等于发布完成</a></li><li class="toc-level-2"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>quickstart</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
-<p>框架维护者在自己的开发工程中验证 Quickstart，通常很顺利：</p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#问题与结论">问题与结论</a></li><li class="toc-level-3"><a href="#先说结论接入成功需要一条端到端证据链">先说结论：接入成功需要一条端到端证据链</a></li><li class="toc-level-2"><a href="#证据与分析">证据与分析</a></li><li class="toc-level-3"><a href="#runtime-starter-和-quickstart-不是同一种证明">Runtime Starter 和 Quickstart 不是同一种证明</a></li><li class="toc-level-3"><a href="#第一层固定提交不是附加信息而是证据主键">第一层：固定提交不是附加信息，而是证据主键</a></li><li class="toc-level-3"><a href="#第二层必须创建真正的新消费项目">第二层：必须创建真正的新消费项目</a></li><li class="toc-level-3"><a href="#第三层不能只检查进程退出码">第三层：不能只检查进程退出码</a></li><li class="toc-level-3"><a href="#第四层只终止自己拥有的-unity-子进程">第四层：只终止自己拥有的 Unity 子进程</a></li><li class="toc-level-3"><a href="#第五层清理也需要所有权证明">第五层：清理也需要所有权证明</a></li><li class="toc-level-3"><a href="#第六层artifact-上传成功仍不算闭环">第六层：Artifact 上传成功仍不算闭环</a></li><li class="toc-level-3"><a href="#传输策略也属于接入合同">传输策略也属于接入合同</a></li><li class="toc-level-2"><a href="#适用边界与实践">适用边界与实践</a></li><li class="toc-level-3"><a href="#quickstart-通过不等于发布完成">Quickstart 通过不等于发布完成</a></li><li class="toc-level-3"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-3"><a href="#术语对照">术语对照</a></li><li class="toc-level-2"><a href="#来源与验证状态">来源与验证状态</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>quickstart</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<h2 id="问题与结论">问题与结论</h2><p>框架维护者在自己的开发工程中验证 Quickstart，通常很顺利：</p>
 <ul>
 <li><p>菜单可以打开；</p>
 </li>
@@ -131,7 +131,7 @@
 </ul>
 <p>这些问题不是功能按钮本身的 Bug。</p>
 <p>它们说明 Quickstart 还没有成为一条可证明、可复现、可回收的用户路径。</p>
-<h2 id="先说结论接入成功需要一条端到端证据链">先说结论：接入成功需要一条端到端证据链</h2><p><strong>可执行接入证据（后文简称“新电脑第一次也能走完”）</strong>：从确定代码身份出发，在全新消费项目中执行真实接入流程，验证关键行为、保存结果、回收环境，并证明 Artifact 仍可被重新读取的完整证据链。</p>
+<h3 id="先说结论接入成功需要一条端到端证据链">先说结论：接入成功需要一条端到端证据链</h3><p><strong>可执行接入证据（后文简称“新电脑第一次也能走完”）</strong>：从确定代码身份出发，在全新消费项目中执行真实接入流程，验证关键行为、保存结果、回收环境，并证明 Artifact 仍可被重新读取的完整证据链。</p>
 <p>“新电脑第一次也能走完”至少包含六层。</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
@@ -166,7 +166,7 @@
 </tr>
 </tbody></table></div><div class="article-prose-section blog-prose">
 <p>少任何一层，结论都应该收窄。</p>
-<h2 id="runtime-starter-和-quickstart-不是同一种证明">Runtime Starter 和 Quickstart 不是同一种证明</h2><p>近期仓库同时加强了 Runtime Starter 与 Editor Tools Quickstart。</p>
+<h2 id="证据与分析">证据与分析</h2><h3 id="runtime-starter-和-quickstart-不是同一种证明">Runtime Starter 和 Quickstart 不是同一种证明</h3><p>近期仓库同时加强了 Runtime Starter 与 Editor Tools Quickstart。</p>
 <p>二者容易被混为一谈，但回答的问题不同。</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
@@ -191,7 +191,7 @@
 <p>Quickstart 更像第一次真实办理入场手续。</p>
 <p>前者验证能力点，后者验证用户路径。</p>
 <p>大型框架需要同时保留这两种证据，而不是用一个综合 Demo 代替全部接入证明。</p>
-<h2 id="第一层固定提交不是附加信息而是证据主键">第一层：固定提交不是附加信息，而是证据主键</h2><p><strong>同提交接入（后文简称“测的就是这一版”）</strong>：Workflow 输入、实际检出、Receipt、测试结果和 Artifact 全部绑定到同一个不可变 Commit SHA。</p>
+<h3 id="第一层固定提交不是附加信息而是证据主键">第一层：固定提交不是附加信息，而是证据主键</h3><p><strong>同提交接入（后文简称“测的就是这一版”）</strong>：Workflow 输入、实际检出、Receipt、测试结果和 Artifact 全部绑定到同一个不可变 Commit SHA。</p>
 <p>合理流程是：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-mermaid">flowchart LR
     A["输入 target SHA"] --&gt; B["校验 40 位完整 SHA"]
@@ -226,7 +226,7 @@
 </li>
 </ul>
 <p>如果 Receipt 身份对不上，即使界面曾经运行成功，也不能为目标提交背书。</p>
-<h2 id="第二层必须创建真正的新消费项目">第二层：必须创建真正的新消费项目</h2><p>长期维护的 Testbed 很有价值。</p>
+<h3 id="第二层必须创建真正的新消费项目">第二层：必须创建真正的新消费项目</h3><p>长期维护的 Testbed 很有价值。</p>
 <p>它能快速运行大量回归，也能保存昂贵的 Unity Library 缓存。</p>
 <p>但它可能长期掩盖：</p>
 <ul>
@@ -264,7 +264,7 @@
 </li>
 </ol>
 <p>这一步最容易暴露“维护者工程能跑，消费者工程不能编译”的问题。</p>
-<h2 id="第三层不能只检查进程退出码">第三层：不能只检查进程退出码</h2><p>Unity 自动化有一个不舒服但必须正视的现实：</p>
+<h3 id="第三层不能只检查进程退出码">第三层：不能只检查进程退出码</h3><p>Unity 自动化有一个不舒服但必须正视的现实：</p>
 <blockquote>
 <p>业务流程可能已经写出最终结果，Unity 进程却仍然没有退出。</p>
 </blockquote>
@@ -278,7 +278,7 @@ runId = 当前 Run
 targetSha = 当前目标提交
 sampleId = 预期 Sample
 </code></pre></div><div class="article-prose-section blog-prose">
-<p>PlayMode 则可以使用非空测试结果 XML 作为完成文件。</p>
+<p>PlayMode 可以把结果 XML 的出现作为待解析的完成信号；非空文件本身不证明测试通过。还要校验 XML 完整、测试选择匹配、实际执行数非零、失败与错误为零，并绑定本次运行身份。</p>
 <p>监控器需要同时观察：</p>
 <ul>
 <li><p>子进程是否退出；</p>
@@ -292,7 +292,7 @@ sampleId = 预期 Sample
 <li><p>Receipt 身份是否与当前 Run 一致。</p>
 </li>
 </ul>
-<h2 id="第四层只终止自己拥有的-unity-子进程">第四层：只终止自己拥有的 Unity 子进程</h2><p>当 Unity 写出成功 Receipt 后仍然悬挂，最危险的修复是：</p>
+<h3 id="第四层只终止自己拥有的-unity-子进程">第四层：只终止自己拥有的 Unity 子进程</h3><p>当 Unity 写出成功 Receipt 后仍然悬挂，最危险的修复是：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">pkill Unity
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>自托管 Runner 可能同时承担其他工作。</p>
@@ -318,7 +318,7 @@ sampleId = 预期 Sample
 </ol>
 <p>如果终态 JSON 报告 <code>failed</code>，Watchdog 即使成功结束进程，也必须返回失败。</p>
 <p>如果进程正常退出却没有写出预期终态，同样必须失败。</p>
-<h2 id="第五层清理也需要所有权证明">第五层：清理也需要所有权证明</h2><p>自动化经常把清理写成：</p>
+<h3 id="第五层清理也需要所有权证明">第五层：清理也需要所有权证明</h3><p>自动化经常把清理写成：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-bash">rm -rf "$PROJECT_PATH"
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>但如果路径变量错误、目录已被复用，或者多个 Run 指向同一根目录，这条命令可能删除不属于自己的内容。</p>
@@ -340,7 +340,7 @@ sampleId = 预期 Sample
 </ul>
 <p>更重要的是，清理应通过 <code>trap</code> 或等价机制绑定到流程退出。</p>
 <p>这样即使 Quickstart、PlayMode 或验证失败，清理仍然有机会执行。</p>
-<h2 id="第六层artifact-上传成功仍不算闭环">第六层：Artifact 上传成功仍不算闭环</h2><p>很多 CI 流程最后一步是上传 Artifact。</p>
+<h3 id="第六层artifact-上传成功仍不算闭环">第六层：Artifact 上传成功仍不算闭环</h3><p>很多 CI 流程最后一步是上传 Artifact。</p>
 <p>Job 页面出现下载按钮后，维护者就认为证据已经保存。</p>
 <p>但还可能存在：</p>
 <ul>
@@ -389,7 +389,7 @@ sampleId = 预期 Sample
 </ul>
 <p>这些文件不是越多越好。</p>
 <p>每一项都应该回答一个明确问题。</p>
-<h2 id="传输策略也属于接入合同">传输策略也属于接入合同</h2><p>私有仓库 Quickstart 还必须面对认证与 Clone URL。</p>
+<h3 id="传输策略也属于接入合同">传输策略也属于接入合同</h3><p>私有仓库 Quickstart 还必须面对认证与 Clone URL。</p>
 <p>有些环境使用 HTTPS，有些自托管 Gitea 在受控网络中使用 HTTP。</p>
 <p>如果 Workflow、C# 校验器和文档对 URL 策略理解不一致，就会出现：</p>
 <ul>
@@ -404,13 +404,13 @@ sampleId = 预期 Sample
 </ul>
 <p>因此，传输策略应只有一个规范化判断。</p>
 <p>同时，凭据不应直接拼进 URL。</p>
-<p>更安全的做法是使用临时 AskPass 或 Runner 提供的凭据通道，并在流程退出时删除临时脚本。</p>
+<p>临时 AskPass 或 Runner 凭据通道能减少凭据进入 URL、日志和命令参数的机会，并应在退出时删除临时脚本；它们不提供传输加密，不能把 HTTP 变成 HTTPS 等价的安全通道。</p>
 <p>这里需要明确：</p>
 <blockquote>
 <p>支持 HTTP 不等于推荐在不可信网络中明文传输凭据。</p>
 </blockquote>
 <p>它只表示自动化合同应如实匹配当前部署；是否允许 HTTP，应由网络边界和风险策略单独决定。</p>
-<h2 id="quickstart-通过不等于发布完成">Quickstart 通过不等于发布完成</h2><p>即使一条干净项目 Quickstart Evidence 完整通过，它仍然只能证明：</p>
+<h2 id="适用边界与实践">适用边界与实践</h2><h3 id="quickstart-通过不等于发布完成">Quickstart 通过不等于发布完成</h3><p>即使一条干净项目 Quickstart Evidence 完整通过，它仍然只能证明：</p>
 <ul>
 <li><p>指定提交可以完成该接入路径；</p>
 </li>
@@ -438,7 +438,7 @@ sampleId = 预期 Sample
 <blockquote>
 <p>Quickstart 的成熟标志不是“按钮更少”，而是第一次使用者走过的每一步，都能被自动执行、明确失败、留下证据并安全收尾。</p>
 </blockquote>
-<h2 id="设计检查表">设计检查表</h2><p>为 Unity 框架建设 Quickstart Evidence 时，可以检查：</p>
+<h3 id="设计检查表">设计检查表</h3><p>为 Unity 框架建设 Quickstart Evidence 时，可以检查：</p>
 <ul>
 <li><p>Workflow 是否要求完整目标 SHA；</p>
 </li>
@@ -465,7 +465,7 @@ sampleId = 预期 Sample
 <li><p>Evidence 通过后是否仍保持产品生命周期和发布结论克制。</p>
 </li>
 </ul>
-<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<h3 id="术语对照">术语对照</h3></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -512,6 +512,7 @@ sampleId = 预期 Sample
 <blockquote>
 <p>资料说明：本文依据 2026-08-03 至 2026-08-05 的 Runtime Starter、Editor Tools Quickstart 与 Runner Evidence 更新整理。该时间点部分 Quickstart Runner 复验仍在推进中，不能据此声明正式发布门禁已经完成。</p>
 </blockquote>
+<h2 id="来源与验证状态">来源与验证状态</h2><p>2026-10-26 只读复核 Framework checkout <code>07f712c04236488879ec44d281695ff0705710c2</code> 的 <code>docs/architecture/audits/framework-convergence-editor-tools-quickstart-evidence-readiness-2026-08-05.md</code>：该记录后来补入 run 623 / job 839 的同提交 Quickstart 与 Artifact 回下载结果。本篇保留早期失败案例，文末旧“复验推进中”不应被用作当前状态。本轮仅核对该历史报告，没有重新下载 Artifact、核验远程 Run 或运行 Unity。</p>
 </div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>

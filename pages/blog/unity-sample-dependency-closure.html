@@ -26,7 +26,7 @@
     <link rel="apple-touch-icon" href="../../assets/brand/site-icon-v2/apple-touch-180.png" sizes="180x180">
     <link rel="manifest" href="../../site.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html#webpage","name":"Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura","description":"一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？","url":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html","headline":"Unity Sample 的条件组合层与渐进式依赖闭包","datePublished":"2026-08-05","dateModified":"2026-08-24","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-unity-sample-dependency-closure.png","keywords":["sample","unity"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"Unity Sample 的条件组合层与渐进式依赖闭包","item":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html"}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html#webpage","name":"Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura","description":"一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？","url":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html","headline":"Unity Sample 的条件组合层与渐进式依赖闭包","datePublished":"2026-08-05","dateModified":"2026-10-26","author":{"@id":"https://irissakura.github.io/#person"},"image":"https://irissakura.github.io/assets/social/pages-blog-unity-sample-dependency-closure.png","keywords":["sample","unity"],"articleSection":"Sakura Framework 工程实践","mainEntityOfPage":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.github.io/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://irissakura.github.io/pages/blog.html"},{"@type":"ListItem","position":3,"name":"Unity Sample 的条件组合层与渐进式依赖闭包","item":"https://irissakura.github.io/pages/blog/unity-sample-dependency-closure.html"}]}]}</script>
     <!-- site-meta:end -->
     <title>Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura</title>
     <link rel="stylesheet" href="../../dist/styles/site.css">
@@ -89,13 +89,13 @@
     <article class="container blog-article">
         <a class="journal-back" href="../blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>返回博客</a>
         <header>
-            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-08-24</p>
+            <p class="journal-kicker"><a href="series/sakura-framework-engineering.html">Sakura Framework 工程实践</a> · 发布于 2026-08-05 · 更新于 2026-10-26</p>
             <h1>Unity Sample 的条件组合层与渐进式依赖闭包</h1>
             <p class="blog-deck">一个综合 Sample 想展示十多个框架模块时，怎样避免为了“效果完整”而扩大父包依赖、污染消费项目，并让缺少可选包的项目仍能安全运行？</p>
             <div class="note-tags"><span>sample</span><a href="tag/unity.html">unity</a></div>
         </header>
-        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#先说结论综合展示应该向上组合而不是向下污染核心">先说结论：综合展示应该向上组合，而不是向下污染核心</a></li><li class="toc-level-2"><a href="#sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</a></li><li class="toc-level-2"><a href="#为什么不能有几个包就开几个功能">为什么不能“有几个包就开几个功能”</a></li><li class="toc-level-2"><a href="#运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</a></li><li class="toc-level-2"><a href="#dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</a></li><li class="toc-level-2"><a href="#这套方式的代价">这套方式的代价</a></li><li class="toc-level-2"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-2"><a href="#术语对照">术语对照</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>sample</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a>
-开发框架 Sample 时，很容易出现一种扩张路径。</p>
+        <div class="article-shell"><details class="article-toc" open><summary>本文目录</summary><nav aria-label="本文目录"><ol><li class="toc-level-2"><a href="#问题与结论">问题与结论</a></li><li class="toc-level-3"><a href="#先说结论综合展示应该向上组合而不是向下污染核心">先说结论：综合展示应该向上组合，而不是向下污染核心</a></li><li class="toc-level-2"><a href="#证据与分析">证据与分析</a></li><li class="toc-level-3"><a href="#sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</a></li><li class="toc-level-3"><a href="#为什么不能有几个包就开几个功能">为什么不能“有几个包就开几个功能”</a></li><li class="toc-level-3"><a href="#运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</a></li><li class="toc-level-3"><a href="#dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</a></li><li class="toc-level-2"><a href="#适用边界与实践">适用边界与实践</a></li><li class="toc-level-3"><a href="#这套方式的代价">这套方式的代价</a></li><li class="toc-level-3"><a href="#设计检查表">设计检查表</a></li><li class="toc-level-3"><a href="#术语对照">术语对照</a></li><li class="toc-level-2"><a href="#来源与验证状态">来源与验证状态</a></li></ol></nav></details><aside class="series-context"><p class="section-kicker">IN THIS SERIES</p><h2>Sakura Framework 工程实践</h2><a href="series/sakura-framework-engineering.html">查看系列阅读顺序 →</a><div class="context-tags"><span>sample</span><a href="tag/unity.html">unity</a></div></aside><div class="article-body"><div class="article-prose-section blog-prose"><p><a href="../blog.html">系列目录</a></p>
+<h2 id="问题与结论">问题与结论</h2><p>开发框架 Sample 时，很容易出现一种扩张路径。</p>
 <p>最初，示例只需要展示战斗主循环：</p>
 <ul>
 <li><p>接收一次命中；</p>
@@ -126,7 +126,7 @@
 </ul>
 <p>最后，示例确实更完整了，但父包也可能被迫依赖十几个模块。任何只想使用战斗编排内核的项目，都要承担整套 UI、音频、存档和本地化依赖。</p>
 <p>这时，Sample 不再只是展示能力，而开始反向改变产品边界。</p>
-<h2 id="先说结论综合展示应该向上组合而不是向下污染核心">先说结论：综合展示应该向上组合，而不是向下污染核心</h2><p><strong>条件组合层（后文简称“够包才升级”）</strong>：只有当一组可选依赖形成完整闭包时，才装配对应展示能力；否则保持较低档位，而不扩大核心包的硬依赖。</p>
+<h3 id="先说结论综合展示应该向上组合而不是向下污染核心">先说结论：综合展示应该向上组合，而不是向下污染核心</h3><p><strong>条件组合层（后文简称“够包才升级”）</strong>：只有当一组可选依赖形成完整闭包时，才装配对应展示能力；否则保持较低档位，而不扩大核心包的硬依赖。</p>
 <p>“够包才升级”解决的不是某一个 <code>#if</code>。</p>
 <p>它解决的是三个同时存在的问题：</p>
 <ol>
@@ -172,12 +172,12 @@
 <td>条件不足时保持 P2</td>
 </tr>
 </tbody></table></div><div class="article-prose-section blog-prose">
-<p>这里最重要的不是“总共接了十六个包”。</p>
+<p>这里的十六项指 P1—P3 在基础档位之上的条件能力条目，不是父包加上传递依赖后的安装包总数。</p>
 <p>真正重要的是：</p>
 <blockquote>
-<p>十六个包只存在于 Sample 的最高展示档位，没有被写进战斗编排父包的产品合同。</p>
+<p>这组条件能力由 Sample 的展示档位负责，没有因此成为战斗编排父包的硬依赖合同。</p>
 </blockquote>
-<h2 id="sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</h2><p>综合 Sample 的价值，在于把已经存在的模块放进同一条真实链路。</p>
+<h2 id="证据与分析">证据与分析</h2><h3 id="sample-应该展示组合关系而不是制造第二套框架">Sample 应该展示组合关系，而不是制造第二套框架</h3><p>综合 Sample 的价值，在于把已经存在的模块放进同一条真实链路。</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-mermaid">flowchart LR
     A["Hitbox 命中事实"] --&gt; B["Semantic Combat 语义处理"]
     B --&gt; C["GAS 动作执行"]
@@ -205,7 +205,7 @@
 </li>
 </ul>
 <p>一旦 Sample 为了方便而绕过正式合同，它展示的就不再是框架用法，而是维护者知道内部细节时才能成立的特殊路径。</p>
-<h2 id="为什么不能有几个包就开几个功能">为什么不能“有几个包就开几个功能”</h2><p>看起来最灵活的方案，是逐项检测：</p>
+<h3 id="为什么不能有几个包就开几个功能">为什么不能“有几个包就开几个功能”</h3><p>看起来最灵活的方案，是逐项检测：</p>
 <ul>
 <li><p>有 Command 就开撤销；</p>
 </li>
@@ -218,7 +218,7 @@
 <li><p>有 Localization 就切语言。</p>
 </li>
 </ul>
-<p>但这种逐项启用会制造大量半成品状态。</p>
+<p>在本 Sample 已选定的组合合同下，独立开关可能制造半成品状态。下列依赖是该示例的设计，不是 Save 必须依赖 Command、UI 必须依赖 MVVM 等普遍规律；其他实现可通过不同的完整闭包成立。</p>
 <p>例如：</p>
 <ul>
 <li><p>有 Save，没有 Command Replay，存档到底保存什么；</p>
@@ -241,7 +241,7 @@
             └─ P3：跨会话连续性合同完整
 </code></pre></div><div class="article-prose-section blog-prose">
 <p>任何一层不完整，都保持上一层，而不是进入无法解释的部分启用状态。</p>
-<h2 id="运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</h2><p>综合 Sample 常见的另一个问题，是把演示资源偷偷变成项目依赖。</p>
+<h3 id="运行时生成资源是一种边界保护">运行时生成资源，是一种边界保护</h3><p>综合 Sample 常见的另一个问题，是把演示资源偷偷变成项目依赖。</p>
 <p>例如，示例要求项目预先存在：</p>
 <ul>
 <li><p>指定 Canvas；</p>
@@ -304,7 +304,7 @@
 <blockquote>
 <p>我可以证明模块如何协作，但不会擅自替消费项目决定资源、输入、持久化和发布策略。</p>
 </blockquote>
-<h2 id="dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</h2><p>模块组合越多，清理顺序越重要。</p>
+<h3 id="dispose-不是收尾细节而是组合层的反向证明">Dispose 不是收尾细节，而是组合层的反向证明</h3><p>模块组合越多，清理顺序越重要。</p>
 <p>创建路径通常很显眼：</p>
 </div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="代码，可横向滚动"><pre><code class="language-text">创建 Command
 → 订阅 Event
@@ -344,7 +344,7 @@
 </li>
 </ul>
 <p>如果一个组合层只能启动，不能完整退出，它证明的只是“Demo 曾经亮起来”，不是模块能够安全协作。</p>
-<h2 id="这套方式的代价">这套方式的代价</h2><p>条件组合层并不是免费方案。</p>
+<h2 id="适用边界与实践">适用边界与实践</h2><h3 id="这套方式的代价">这套方式的代价</h3><p>条件组合层并不是免费方案。</p>
 <p>它会增加：</p>
 <ul>
 <li><p>条件程序集；</p>
@@ -368,7 +368,7 @@
 <blockquote>
 <p>对大型框架而言，Sample 的职责不是展示最多功能，而是展示最小核心如何在不改变产品边界的前提下，被逐层组合成完整体验。</p>
 </blockquote>
-<h2 id="设计检查表">设计检查表</h2><p>准备为一个 Sample 继续增加模块前，可以检查：</p>
+<h3 id="设计检查表">设计检查表</h3><p>准备为一个 Sample 继续增加模块前，可以检查：</p>
 <ul>
 <li><p>新能力属于核心合同，还是只属于展示；</p>
 </li>
@@ -389,7 +389,7 @@
 <li><p>Sample 通过是否被错误描述为正式产品成熟度提升。</p>
 </li>
 </ul>
-<h2 id="术语对照">术语对照</h2></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<h3 id="术语对照">术语对照</h3></div><div class="article-breakout blog-prose" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
 <thead>
 <tr>
 <th>正式术语</th>
@@ -421,6 +421,7 @@
 <blockquote>
 <p>资料说明：本文依据 2026-08-04 至 2026-08-05 的仓库实现与测试记录整理。文中档位描述是该时间点的工程快照，不等同于相关包已升级为 Supported 或已完成正式发布。</p>
 </blockquote>
+<h2 id="来源与验证状态">来源与验证状态</h2><p>本文保留 2026-08-04 至 08-05 的 P1—P3 历史分层。2026-10-26 在 Framework checkout <code>07f712c04236488879ec44d281695ff0705710c2</code> 读取 <code>Packages/com.unitygame.framework.semantic-combat/Samples~/SemanticBattle/semantic-battle-{showcase,presentation-feedback,persistent-ux}-requirements.json</code>，确认条件闭包与 extends 关系仍可定位；当前条目已含拆包后的 config-core / ui-binding，不能把旧包名当成今天的安装清单。本轮未导入或运行 Sample。历史背景见8 月 5 日审计（内部研究材料）。</p>
 </div></div></div>
         <aside class="related-articles" aria-labelledby="related-articles-title">
             <p class="journal-kicker">CONTINUE READING</p>
