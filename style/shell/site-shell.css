@@ -122,30 +122,6 @@
     box-shadow: var(--box-shadow-hover);
 }
 
-.nav-link {
-    font-family: var(--font-body);
-    font-weight: 600;
-    position: relative;
-    white-space: nowrap;
-    transition-property: color, background-color, border-color, box-shadow;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    transition: var(--transition);
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-    width: 100%;
-}
-
-.nav-link.active {
-    color: var(--secondary-color);
-}
-
 [data-page-cover].page-cover > .container {
     position: relative;
     z-index: 1;
@@ -417,26 +393,47 @@
 }
 
 .nav-link {
-    padding: 0.55rem 0.72rem;
-    border-radius: 999px;
+    --nav-item-inset: 0.85rem;
+    --ui-focus-offset: var(--ui-focus-inset-offset);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--ui-control-height);
+    padding: 0.65rem var(--nav-item-inset);
+    border-radius: var(--ui-pill-radius);
+    color: #625a78;
+    font-family: var(--font-body);
+    font-weight: 600;
     font-size: 0.82rem;
+    white-space: nowrap;
+    transition-property: color, background-color;
 }
 
 .nav-link:hover,
+.nav-link:focus-visible {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ui-surface-hover) 50%, transparent);
+}
+
 .nav-link.active {
+    color: var(--ink);
     background: var(--ui-surface-hover);
 }
 
 .nav-link::after {
-    right: 0.72rem;
-    bottom: 0.28rem;
-    left: 0.72rem;
-    width: auto;
-    height: 1px;
+    content: '';
+    position: absolute;
+    inset-inline: var(--nav-item-inset);
+    bottom: 0.35rem;
+    height: 2px;
+    border-radius: var(--ui-pill-radius);
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
     opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
 }
 
-.nav-link:hover::after,
 .nav-link.active::after {
     opacity: 1;
 }
@@ -687,15 +684,6 @@
 .logo .brand-wordmark,
 .footer-logo .brand-wordmark {
     color: #5d55c7;
-}
-
-.nav-link {
-    color: #625a78;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--ink);
 }
 
 .journal-link:hover,

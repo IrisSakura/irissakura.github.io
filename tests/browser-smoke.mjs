@@ -1,3 +1,4 @@
+import { assertComponentLayouts } from './lib/component-layout-flow.mjs';
 import { assertReadingFlow } from './lib/reading-flow.mjs';
 import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertRuntimePerformance } from './lib/runtime-performance-flow.mjs';
@@ -256,6 +257,47 @@ const brandContrastRoutes = [
     ]
   }
 ];
+async function assertComponentBoundaries(page) {
+  const otherLink = page.locator('.nav-menu .nav-link:not(.active)').first();
+  await otherLink.hover();
+  await page.waitForFunction(() => [...document.querySelectorAll('.nav-menu .nav-link')].every(link =>
+    Number(getComputedStyle(link, '::after').opacity) === (link.classList.contains('active') ? 1 : 0)));
+  const failures = await page.evaluate(() => {
+    const failures = [];
+    const links = [...document.querySelectorAll('.nav-menu .nav-link')];
+    if (links.filter(link => link.classList.contains('active')).length !== 1) failures.push('navigation has multiple current items');
+    for (const link of links) {
+      const box = link.getBoundingClientRect();
+      const indicator = getComputedStyle(link, '::after');
+      const start = parseFloat(indicator.left);
+      const end = start + parseFloat(indicator.width);
+      if (!(start > 0 && end < box.width && box.height >= 44)) {
+        failures.push(`${link.textContent}: indicator ${start}..${end} outside ${box.width}px or target below 44px`);
+      }
+    }
+    for (const card of document.querySelectorAll('.writing-entry')) {
+      const box = card.getBoundingClientRect();
+      const css = getComputedStyle(card);
+      if (parseFloat(css.paddingLeft) < 20 || parseFloat(css.paddingRight) < 20 || parseFloat(css.borderRadius) < 8) {
+        failures.push(`${card.dataset.articleId}: missing card inset or rounded boundary`);
+      }
+      // Check rendered text lines as well as the box: a long word can overflow
+      // a correctly sized heading even when the card itself has valid padding.
+      const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        if (!walker.currentNode.textContent.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(walker.currentNode);
+        for (const line of range.getClientRects()) {
+          if (line.left < box.left + 19 || line.right > box.right - 19) failures.push(`${card.dataset.articleId}: text escapes its safe inset`);
+        }
+      }
+    }
+    return failures;
+  });
+  if (failures.length) throw new Error(`Component boundary failures: ${failures.join('; ')}`);
+}
+
 const server = createServer(async (request, response) => {
   const requestPath = decodeURIComponent(new URL(request.url ?? '/', 'http://127.0.0.1').pathname);
   let filePath = path.resolve(root, `.${requestPath === '/' ? '/index.html' : requestPath}`);
@@ -311,6 +353,7 @@ try {
     await assertProjectHeroLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
     await assertPersonaLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   }
+  await assertComponentLayouts(browser, baseUrl);
   await assertReadingFlow(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   if (themeConfig.id !== 'iris-sakura' || themeConfig.colorScheme !== 'light') {
     throw new Error('single-brand registry is not IRIS × SAKURA light');
@@ -534,6 +577,7 @@ try {
   if (await desktop.locator('.nav-menu .nav-link').count() !== 6) {
     throw new Error('desktop navigation does not expose the reviewed six routes');
   }
+  await assertComponentBoundaries(desktop);
   const livingConfig = await readJson('config/site-presentation.json');
   const livingNow = await readJson('data/now.json');
   const expectedArticles = [...publishedBlogs].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.slug.localeCompare(b.slug)).slice(0, livingConfig.home.recentArticleLimit);
@@ -1051,6 +1095,7 @@ try {
   await toggle.click();
   if (await toggle.getAttribute('aria-expanded') !== 'true') throw new Error('mobile menu did not expose expanded state');
   if (await toggle.getAttribute('aria-label') !== '关闭导航菜单') throw new Error('mobile menu did not update its accessible name');
+  await assertComponentBoundaries(mobile);
   await mobile.keyboard.press('Escape');
   if (await toggle.getAttribute('aria-expanded') !== 'false') throw new Error('Escape did not close mobile menu');
 

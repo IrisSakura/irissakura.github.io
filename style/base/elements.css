@@ -27,6 +27,11 @@ a {
     transition: var(--transition);
 }
 
+:where(a, button, input, select, textarea, [tabindex]) {
+    /* Keep the ring position stable when a control animates on focus. */
+    outline-offset: var(--ui-focus-offset);
+}
+
 :focus-visible {
     outline: var(--ui-focus-width) solid var(--ui-focus-color);
     outline-offset: var(--ui-focus-offset);
@@ -126,3 +131,9 @@ h5,
 h6 {
     color: var(--ink);
 }
+
+/* Page typography is a default. Component headings and density own their sizes. */
+:where([data-page-family]) h1 { font-size: var(--type-h1); line-height: 1.2; }
+:where([data-page-family]) h2 { font-size: var(--type-h2); line-height: 1.45; }
+:where([data-page-family]) h3 { font-size: var(--type-h3); }
+:where([data-page-family]) p { line-height: 1.85; }

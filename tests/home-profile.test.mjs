@@ -104,7 +104,7 @@ test('homepage follows the approved living sections and exposes real articles', 
   assert.equal((home.match(/class="project-entry-card /g) ?? []).length, 0);
   assert.match(home, /class="ecosystem-bridge"/u);
   assert.match(home, /id="live"/u);
-  assert.equal((home.match(/class="writing-entry"/g) ?? []).length, 3);
+  assert.equal((home.match(/class="content-card writing-entry"/g) ?? []).length, 3);
   assert.match(home, /href="pages\/now.html"/u);
   assert.doesNotMatch(home, /精选知识|工程控制面|显式授权|LATEST CONSUMER/u);
 });
