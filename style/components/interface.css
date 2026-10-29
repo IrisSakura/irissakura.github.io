@@ -1,0 +1,325 @@
+/* Final shared UI owner. Pages own composition and illustration, never control geometry.
+ * The interface layer follows pages so a component keeps its contract in every route. */
+
+/* Actions: one shape and feedback model, with primary / secondary / outline emphasis. */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-height: var(--ui-control-height);
+    padding: var(--ui-control-inset);
+    border: 1px solid var(--ui-accent);
+    border-radius: var(--ui-action-radius);
+    font: 650 .875rem/1.5 var(--font-heading);
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: none;
+    backdrop-filter: none;
+    transform: none;
+    translate: none;
+    transition: background-color var(--ui-duration) var(--ui-easing),
+        border-color var(--ui-duration) var(--ui-easing),
+        color var(--ui-duration) var(--ui-easing),
+        box-shadow var(--ui-duration) var(--ui-easing);
+}
+.btn-primary {
+    color: var(--neutral-000);
+    background: var(--ui-accent);
+    box-shadow: var(--ui-action-shadow);
+}
+.btn-secondary, .btn-outline {
+    color: var(--ui-accent);
+    background: var(--surface-strong);
+}
+.btn-outline { border-color: var(--ui-line); }
+.btn-primary:hover { background: var(--ui-accent-hover); border-color: var(--ui-accent-hover); }
+.btn-secondary:hover, .btn-outline:hover { color: var(--ui-accent-hover); background: var(--ui-tint); border-color: var(--ui-accent); }
+.btn:hover, .btn:focus-within, .btn:active { transform: none; translate: none; }
+.btn-primary:hover { box-shadow: var(--ui-action-shadow); }
+.btn-secondary:hover, .btn-outline:hover { box-shadow: none; }
+.btn:active { box-shadow: inset 0 2px 3px color-mix(in srgb, var(--neutral-900) 12%, transparent); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; box-shadow: none; }
+.btn[hidden] { display: none; }
+.engineering-hero { --ui-accent: var(--persona-accent); }
+
+/* Navigation shares the control silhouette; portraits remain circular identity assets. */
+.nav-menu { border-radius: var(--ui-card-radius); box-shadow: none; }
+.nav-link, .page-index-links a { border-radius: var(--ui-chip-radius); }
+.nav-link::after { background: var(--ui-accent); }
+.page-index-links a[aria-current="location"] { box-shadow: inset 0 -2px 0 var(--ui-accent); }
+.nav-search-button, .mobile-toggle, .footer-motion-toggle,
+.site-search-panel [data-search-close] {
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-control-radius);
+    min-height: var(--ui-control-height);
+    background: var(--surface-strong);
+    color: var(--ink);
+    box-shadow: none;
+    transition: border-color var(--ui-duration) var(--ui-easing), background-color var(--ui-duration) var(--ui-easing);
+}
+.nav-search-button:hover, .mobile-toggle:hover, .footer-motion-toggle:hover,
+.site-search-panel [data-search-close]:hover { border-color: var(--ui-accent); background: var(--ui-tint); }
+.site-search-panel [data-search-close], .mobile-toggle { min-width: var(--ui-control-height); }
+
+/* Search and form fields retain their labels, native selectors, and mobile keyboard. */
+.module-search input, .content-search-controls input, .content-search-controls select,
+.site-search-panel input, .subscribe-controls input, .form-group input,
+.form-group select, .form-group textarea {
+    min-height: var(--ui-control-height);
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-control-radius);
+    padding: var(--ui-control-inset);
+    color: var(--ink);
+    background: var(--surface-strong);
+    font: 400 1rem/1.5 var(--font-body);
+    box-shadow: none;
+    transition: border-color var(--ui-duration) var(--ui-easing), background-color var(--ui-duration) var(--ui-easing);
+}
+.module-search { border-radius: var(--ui-control-radius); background: none; }
+.module-search input { padding-left: 2.75rem; }
+.content-search-controls .btn { min-height: var(--ui-control-height); }
+:is(.module-search, .content-search-controls, .site-search-panel, .subscribe-controls, .form-group) :is(input, select, textarea):focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-offset);
+    border-color: var(--ui-accent);
+    box-shadow: none;
+}
+.module-filters { --segment-radius: var(--ui-control-radius); background: var(--surface-strong); }
+.module-filter { font-size: .875rem; }
+.module-filter:hover { color: var(--ui-accent); background: var(--ui-tint); }
+.module-filter.is-active { color: var(--neutral-000); background: var(--ui-accent); }
+.module-result-count { border-radius: var(--ui-chip-radius); font-size: .875rem; }
+
+/* Topic chips have one appearance in collections, articles, sidebars, and projects.
+ * Status badges share geometry but keep their own semantic colors and wording. */
+.tag, .note-tags > :is(a, span), .blog-tag-list a, .context-tags > *,
+.system-tags span, .portfolio-tags span, .mod-tags span, .framework-story-chip,
+.module-card-category, .capability-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 1.875rem;
+    padding: .25rem .625rem;
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-chip-radius);
+    color: var(--ui-accent);
+    background: var(--ui-tint);
+    font: 500 .75rem/1.5 var(--font-body);
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    box-shadow: none;
+}
+:is(.note-tags, .blog-tag-list, .context-tags, .system-tags, .portfolio-tags, .mod-tags) { gap: .5rem; }
+:is(.note-tags, .blog-tag-list, .context-tags) a:hover { border-color: var(--ui-accent); text-decoration: underline; text-underline-offset: .2em; }
+.framework-status-badge, .preview-badge, .consumer-lab-relation { border-radius: var(--ui-chip-radius); font-size: .75rem; line-height: 1.5; letter-spacing: 0; }
+
+/* Text surfaces: one border, radius and inset. No styling depends on JS depth classes. */
+:is(.content-card, .module-detail, .layer-detail, .lifecycle-detail, .module-card,
+    .blog-featured-card, .note-card, .journal-update-card, .design-summary-card,
+    .content-search-result, .journal-panel, .journal-design-card, .journal-note, .journal-research-card,
+    .evidence-chain-card, .bridge-card, .public-route-card,
+    .framework-reference-card, .framework-depth-card, .framework-reader-card, .framework-domain-card,
+    .framework-evidence-authority-card, .framework-adoption-route-card, .framework-module-reference-card,
+    .framework-consumer-card, .framework-decision-card, .mod-work-card, .mod-foundation-card,
+    .brand-product-card, .not-found-card, .chapter-steps > li,
+    .framework-boundary-grid > article, .framework-focus-grid > article,
+    .framework-toolchain-grid > article, .framework-topic-grid > article,
+    .framework-case-grid > a, .framework-knowledge-grid > a, .framework-knowledge-clusters > a,
+    .framework-case-sections > section, .stable-route-list > article,
+    .quickstart-route-grid > article, .quickstart-step > article,
+    .quickstart-verification > aside, .quickstart-troubleshooting > article) {
+    min-width: 0;
+    padding: var(--ui-card-inset);
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-card-radius);
+    color: var(--ink);
+    background: var(--surface-strong);
+    box-shadow: none;
+    transform: none;
+    overflow-wrap: anywhere;
+}
+.blog-featured-card::before, .blog-article > header::before, .journal-detail > header::before { content: none; }
+.blog-featured-card, .content-search-result { border-top: 2px solid var(--ui-accent); }
+.framework-domain-card :is(h3, h4, strong) { color: var(--ink); }
+.framework-domain-card p, .framework-domain-card .framework-card-link { color: var(--ink-soft); }
+.framework-domain-card .framework-evidence-summary span { color: var(--ink-soft); }
+.framework-reference-card strong { color: var(--ink); }
+.framework-reference-card p { color: var(--ink-soft); }
+.framework-reference-card > :is(span, i) { color: var(--ui-accent); }
+.framework-reference .section-intro { color: var(--brand-shared-100); }
+.layer-metrics strong { color: var(--ui-accent); }
+.engineering-capability-card, .stream-card, .consumer-lab-card, .mods-principle-card {
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+    transform: none;
+}
+.module-card.is-active { border-color: var(--ui-accent); background: var(--ui-tint); box-shadow: inset 3px 0 0 var(--ui-accent); }
+.module-card-top > i, .module-card-action { color: var(--ui-accent); }
+.depth-card, .depth-card:focus-within { translate: none; transform: none; box-shadow: none; }
+.depth-card, .module-card { transition: border-color var(--ui-duration) var(--ui-easing), background-color var(--ui-duration) var(--ui-easing); }
+@media (hover: hover) and (pointer: fine) {
+    .depth-card:hover, .module-card:hover,
+    :is(.framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .mod-work-card):hover {
+        translate: none;
+        transform: none;
+        box-shadow: none;
+        border-color: var(--ui-accent);
+    }
+}
+
+/* Directory sheets, related links and reading furniture share the same surface family. */
+.project-route, .ecosystem-map li, .site-related-grid a, .site-search-results a,
+.blog-series-list > a, .related-articles a, .article-toc, .series-context,
+.now-page .now-list li, .subscribe-feed, .brand-current-intro {
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-card-radius);
+    background: var(--surface-strong);
+    box-shadow: none;
+    transform: none;
+}
+.project-route, .brand-current-intro { padding: var(--ui-card-inset); }
+.project-route { border-left: 3px solid var(--ui-accent); }
+.now-page .now-list li { padding: var(--ui-card-inset); }
+.now-page .now-list li::before { content: none; }
+.publication-month, .publication-index, .framework-card-index, .quickstart-route-index,
+.now-page .update-entry time { border-radius: var(--ui-chip-radius); box-shadow: none; transform: none; }
+.publication-month { border: 0; padding: 0; background: none; }
+.publication-list li, .reading-order li, .now-page .update-entry, .project-route dl > div { border-bottom-style: solid; }
+.site-related-grid a:hover, .site-search-results a:hover, .blog-series-list > a:hover { border-color: var(--ui-accent); }
+.site-search-dialog { border: 1px solid var(--ui-line); border-radius: var(--ui-media-radius); box-shadow: 0 16px 48px color-mix(in srgb, var(--neutral-900) 20%, transparent); background: var(--surface-strong); }
+.site-search-panel > header { border-bottom-style: solid; }
+.site-search-dialog::backdrop { background: color-mix(in srgb, var(--neutral-900) 45%, transparent); backdrop-filter: blur(4px); }
+
+/* Disclosures remain native details/summary. The same chevron serves every variant. */
+.tool-drawer, :is(.portfolio-evidence, .legacy-consumer-links) {
+    padding: 0;
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-card-radius);
+    background: var(--surface-strong);
+    box-shadow: none;
+    transform: none;
+}
+.tool-drawer[open], :is(.portfolio-evidence, .legacy-consumer-links)[open], .article-toc[open] { border-color: var(--ui-accent); }
+.tool-drawer > summary, :is(.portfolio-evidence, .legacy-consumer-links) > summary, .article-toc > summary {
+    position: relative;
+    min-height: var(--ui-control-height);
+    padding: 1rem 3rem 1rem 1.25rem;
+    margin: 0;
+    list-style: none;
+    border-radius: var(--ui-card-radius);
+    color: var(--ink);
+    cursor: pointer;
+    --ui-focus-offset: var(--ui-focus-inset-offset);
+}
+:is(.tool-drawer, :is(.portfolio-evidence, .legacy-consumer-links), .article-toc) > summary::-webkit-details-marker { display: none; }
+:is(.tool-drawer, :is(.portfolio-evidence, .legacy-consumer-links), .article-toc) > summary::after {
+    content: "";
+    position: absolute;
+    right: 1.25rem;
+    top: calc(50% - .35rem);
+    width: .45rem;
+    height: .45rem;
+    border: solid var(--ui-accent);
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+    transition: transform var(--ui-duration) var(--ui-easing);
+}
+:is(.tool-drawer, :is(.portfolio-evidence, .legacy-consumer-links), .article-toc)[open] > summary::after { transform: rotate(225deg); top: calc(50% - .1rem); }
+:is(.tool-drawer, :is(.portfolio-evidence, .legacy-consumer-links), .article-toc) > summary:hover { background: var(--ui-tint); }
+.drawer-indicator::after { content: none; }
+.drawer-content { padding: .5rem var(--ui-card-inset) var(--ui-card-inset); }
+.article-toc { padding: 0; }
+.article-toc nav { padding: 0 1.25rem 1rem; }
+:is(.portfolio-evidence, .legacy-consumer-links) > :not(summary) { margin-inline: var(--ui-card-inset); }
+
+/* Reading headers and media have an explicit, quieter large-surface variant. */
+.blog-article > header, .journal-detail > header, .now-hero, .subscribe-page > header {
+    padding: var(--ui-card-inset);
+    border: 1px solid var(--ui-line);
+    border-top: 3px solid var(--ui-accent);
+    border-radius: var(--ui-card-radius);
+    background: var(--surface-strong);
+    box-shadow: none;
+}
+.living-featured .flagship-media img, .game-hero-visual, .gallery-card, .product-preview img,
+.brand-current-character {
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-media-radius);
+    box-shadow: var(--ui-raised-shadow);
+}
+.blog-prose blockquote { border-radius: var(--ui-control-radius); border-color: var(--ui-line); border-left-color: var(--ui-accent); }
+.blog-prose pre, .quickstart-code pre, .adoption-table-wrap { border-radius: var(--ui-control-radius); border-width: 1px; }
+.framework-engineering-status { border: 1px solid var(--ui-line); border-radius: var(--ui-card-radius); box-shadow: none; }
+
+/* Typography: fixed roles, regardless of the page's project color or illustration. */
+main h1 {
+    font-family: var(--font-heading);
+    font-size: var(--type-h1);
+    line-height: 1.25;
+    letter-spacing: -.035em;
+    text-shadow: none;
+}
+.living-profile .profile-copy .hero-title { font-size: clamp(2.4rem, 4.5vw, 4rem); line-height: 1.15; }
+.living-profile .hero-title .highlight { text-shadow: none; }
+.blog-article h1, .journal-detail h1 { font-size: clamp(1.75rem, 3.4vw, 2.75rem); line-height: 1.4; }
+:is(.section-heading, .living-heading, .chapter-heading, .tools-section-heading,
+    .mods-section-heading, .game-section-heading, .development-heading,
+    .journal-section-heading, .framework-section-heading, .brand-section-heading) h2,
+.section-title, .journal-section-title,
+main section > .container > h2,
+:is(.work-group, .work-mods, .technical-work, .blog-taxonomy, .blog-list-section, .about-story .living-prose) > h2 {
+    font-family: var(--font-heading);
+    font-size: var(--type-h2);
+    line-height: 1.4;
+    letter-spacing: -.025em;
+    text-shadow: none;
+}
+.mods-hero-subtitle { font-family: var(--font-body); }
+.mod-game-heading h3, .mods-closing h2 { font-family: var(--font-heading); }
+.mod-game-heading h3, .mod-work-card h4 { font-size: var(--type-h3); }
+.mods-closing h2 { font-size: var(--type-h2); }
+.section-title::after { content: none; }
+.section-title { padding-bottom: 0; }
+.section-kicker, .journey-kicker, .journal-kicker, .game-kicker {
+    display: block;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    transform: none;
+    font: 650 .75rem/1.5 var(--font-heading);
+    letter-spacing: .1em;
+}
+.profile-signature .section-kicker { margin: 0; }
+:is(.section-heading, .chapter-heading, .tools-section-heading, .mods-section-heading,
+    .game-section-heading, .development-heading, .brand-section-heading) { margin-bottom: var(--ui-section-heading-space); }
+.living-section, .project-chapter, .mods-section, .blog-featured-reading, .blog-taxonomy,
+.blog-list-section { padding-block: var(--section-space); }
+.mods-hero-grid { min-height: 0; }
+.mods-hero-copy { padding-block: var(--section-space); }
+.tools-hero h2, [data-brand-project-hero] h2, .wisteria-hero h2 { font-size: var(--type-h2); line-height: 1.4; }
+.text-link, .note-link, .portfolio-link, .chapter-links a, .framework-card-link {
+    color: var(--ui-accent-hover);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 36%, transparent);
+    text-underline-offset: .25em;
+}
+:is(.text-link, .note-link, .portfolio-link, .chapter-links a, .framework-card-link):hover { text-decoration-color: currentColor; }
+
+@media (max-width: 600px) {
+    .tool-drawer > summary { grid-template-columns: 2rem minmax(0, 1fr); gap: .5rem .75rem; }
+    .drawer-hint { grid-column: 2; font-size: .75rem; }
+    .site-search-panel { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root { --ui-duration: 0s; }
+}

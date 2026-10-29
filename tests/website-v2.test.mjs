@@ -30,7 +30,7 @@ test('publication archive and series express opposite chronological orders',()=>
  assert.ok(series.indexOf('old.html')<series.indexOf('new.html'));
 });
 test('CSS entry has one layer order and all imported owners exist',async()=>{
- const css=await read('style/site.css');assert.match(css,/@layer reset, tokens, base, shell, components, personas, pages, utilities;/);
+ const css=await read('style/site.css');assert.match(css,/@layer reset, tokens, base, shell, components, personas, pages, interface, utilities;/);
  const imports=[...css.matchAll(/@import url\("([^"]+)"\)/g)].map(m=>m[1]);assert.equal(new Set(imports).size,imports.length);
  for(const file of imports) await access(new URL('style/'+file,root));
  for(const file of ['index.html','pages/engineering.html','pages/blog/authoritative-time-source.html']) assert.doesNotMatch(await read(file),/href="[^\"]*style\/tokens\//);

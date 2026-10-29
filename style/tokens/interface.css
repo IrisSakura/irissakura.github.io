@@ -1,0 +1,29 @@
+/* Shared geometry and interaction roles. Project palettes never change these sizes. */
+:root {
+    --ui-action-radius: .5rem;
+    --ui-control-radius: .5rem;
+    --ui-chip-radius: .375rem;
+    --ui-card-radius: .75rem;
+    --ui-media-radius: 1rem;
+    --ui-control-height: 44px;
+    --ui-card-inset: clamp(1.25rem, 2vw, 1.75rem);
+    --ui-control-inset: .625rem 1rem;
+    --ui-duration: 180ms;
+    --ui-easing: ease-out;
+    --type-display: clamp(2.25rem, 4vw, 3.5rem);
+    --type-h1: var(--type-display);
+    --type-h2: clamp(1.5rem, 2.5vw, 2rem);
+    --type-h3: 1.2rem;
+    --section-space: clamp(3rem, 5vw, 5rem);
+    --ui-section-heading-space: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* Recompute palette roles at each persona boundary, including cards in the directory. */
+:where(html, [data-persona]) {
+    --ui-accent: var(--persona-primary, var(--color-action-primary));
+    --ui-accent-hover: color-mix(in srgb, var(--ui-accent) 85%, var(--neutral-900));
+    --ui-tint: color-mix(in srgb, var(--ui-accent) 6%, var(--surface-strong));
+    --ui-line: color-mix(in srgb, var(--ui-accent) 24%, var(--neutral-000));
+    --ui-raised-shadow: 0 2px 8px color-mix(in srgb, var(--neutral-900) 6%, transparent);
+    --ui-action-shadow: 0 2px 0 color-mix(in srgb, var(--ui-accent) 72%, var(--neutral-900));
+}

@@ -1,4 +1,5 @@
 import { assertComponentLayouts } from './lib/component-layout-flow.mjs';
+import { assertInterfaceConsistency } from './lib/interface-consistency-flow.mjs';
 import { assertReadingFlow } from './lib/reading-flow.mjs';
 import { assertAmbientMotion } from './lib/ambient-motion-flow.mjs';
 import { assertRuntimePerformance } from './lib/runtime-performance-flow.mjs';
@@ -180,9 +181,12 @@ const brandContrastRoutes = [
       ['Framework architecture boundary', '.framework-map-boundaries article h3'],
       ['Framework pillar title', '.framework-pillar h3'],
       ['Framework reference card', '.framework-reference-card strong'],
+      ['Framework reference introduction', '.framework-reference .section-intro'],
+      ['Framework reference descriptions', '.framework-reference-card p'],
       ['Framework module result count', '#framework-module-result-count'],
       ['Framework active module filter', '.module-filter.is-active'],
       ['Framework layer metric labels', '.layer-metrics span'],
+      ['Framework layer metric values', '.layer-metrics strong'],
       ['Framework lifecycle package count', '#framework-lifecycle-detail-count'],
       ['Framework lifecycle package share', '#framework-lifecycle-detail-share'],
       ['Framework adoption column headings', '.adoption-table thead th'],
@@ -346,6 +350,9 @@ try {
   } else if (process.argv.includes('--productization-only')) {
     await assertProductizationFlow(browser, baseUrl, root);
     console.log('Productization browser flows passed.');
+  } else if (process.argv.includes('--interface-only')) {
+    await assertInterfaceConsistency(browser, baseUrl, process.env.SITE_INTERFACE_EVIDENCE_DIR);
+    console.log('Shared interface browser flows passed.');
   } else {
   await assertNavigationLifecycle(browser, baseUrl);
   // Focused reruns reuse separately recorded layout evidence; the default runs both.
@@ -354,6 +361,7 @@ try {
     await assertPersonaLayouts(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   }
   await assertComponentLayouts(browser, baseUrl);
+  await assertInterfaceConsistency(browser, baseUrl, process.env.SITE_INTERFACE_EVIDENCE_DIR);
   await assertReadingFlow(browser, baseUrl, process.env.SITE_SCREENSHOT_DIR);
   if (themeConfig.id !== 'iris-sakura' || themeConfig.colorScheme !== 'light') {
     throw new Error('single-brand registry is not IRIS × SAKURA light');
