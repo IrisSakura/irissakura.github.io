@@ -1,3 +1,4 @@
+import { labPages, renderLabDocument, renderLabEntrances } from './lib/interactive-labs-render.mjs';
 import { pageFamily, projectComposition, ecosystemMap, publicationList, readingBody } from './lib/website-v2.mjs';
 import { assertPersonas, personaPicture, personaCards } from './lib/personas-v2.mjs';
 import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -419,6 +420,7 @@ await writeWeaverSource();
 await writeSubscribeSource();
 
 const pageDefinitions = [
+  ...labPages,
   { file: 'pages/wisteria.html', key: 'wisteria', title: 'Wisteria | 持续世界的系统设计', description: 'Wisteria 的技术介绍：世界状态、独立骨骼动画运行时、角色与皮肤生命周期，以及本地存档和恢复。', canonical: '/pages/wisteria.html', schemaType: 'WebPage' },
   { file: 'pages/mods/the-weaver.html', key: 'mods', title: 'The Weaver | 双形态卡牌角色 · Freesia Mods', description: '了解编织者的 Iris／Sakura 双形态、Node 与 Compile／Bloom 循环、构筑思路和角色制作过程。', canonical: '/pages/mods/the-weaver.html', schemaType: 'SoftwareApplication' },
   { file: 'pages/subscribe.html', key: 'journal', title: '订阅文章 | IrisSakura', description: '通过 RSS 订阅 IrisSakura 的游戏系统、创作与开发文章，在阅读器中接收更新。', canonical: '/pages/subscribe.html', schemaType: 'WebPage' },
@@ -607,7 +609,10 @@ await assertSitePresentation(site, pageDefinitions);
 for (const page of pageDefinitions) {
   const absolutePath = path.join(root, page.file);
   let html;
-  try {
+  if (page.lab) {
+    await mkdir(path.dirname(absolutePath), { recursive: true });
+    html = renderLabDocument(page);
+  } else try {
     html = await readFile(absolutePath, 'utf8');
   } catch (error) {
     if (error?.code === 'ENOENT') continue;
@@ -768,6 +773,20 @@ for (const page of pageDefinitions) {
   }
   if (page.file === 'pages/contact.html') {
     html = replaceGeneratedBlock(html, 'contact-content', renderContactContent(site));
+  }
+
+  if (['index.html', 'pages/tools.html', 'pages/framework.html'].includes(page.file)) {
+    html = html.replace(/<!-- interactive-labs:start -->[\s\S]*?<!-- interactive-labs:end -->\s*/gu, '');
+    const kind = page.file === 'index.html' ? 'home' : page.key;
+    const entrances = `<!-- interactive-labs:start -->${renderLabEntrances(kind)}<!-- interactive-labs:end -->\n`;
+    if (kind === 'home') {
+      // Keep the approved primary home sections; the experiments belong to Projects.
+      html = html.replace(/(<section id="projects"[\s\S]*?)(<\/div><\/section>)/u, (_match, content, ending) => `${content}${entrances}${ending}`);
+    } else {
+      const hero = /<(header|section)\b[^>]*class="[^"]*\b(?:tools-hero|framework-hero)\b[^"]*"[^>]*>[\s\S]*?<\/\1>/u;
+      if (!hero.test(html)) throw new Error(`Missing project introduction for interactive entrance: ${page.file}`);
+      html = html.replace(hero, match => `${match}\n${entrances}`);
+    }
   }
 
   const related = relatedForPage(contentGraph, page.canonical);

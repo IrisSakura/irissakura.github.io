@@ -74,6 +74,8 @@ export async function assertInterfaceConsistency(browser, baseUrl, output) {
     await archiveCard.scrollIntoViewIfNeeded();
     // Render the chip itself before measuring a content-visibility:auto subtree.
     await archiveCard.locator('.note-tags > span').first().scrollIntoViewIfNeeded();
+    // Scrolling a content-visibility:auto subtree needs a painted frame before CSS measurement.
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const archiveTags = await archiveCard.locator('.note-tags span').evaluateAll(elements => elements.map(el => {
       const css = getComputedStyle(el);
       return { borderRadius: css.borderRadius, borderWidth: css.borderWidth, fontSize: css.fontSize, lineHeight: css.lineHeight };

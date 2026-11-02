@@ -1,0 +1,116 @@
+<!DOCTYPE html><html data-page-family="project" data-page-grammar="tool-shelf" data-page-persona="violet" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="violet" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="修改攻击、暴击与命中参数，比较两组伤害和 DPS，并导出或恢复实验。">
+    <link rel="canonical" href="https://irissakura.com/pages/labs/numeric-workbench.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Numeric Workbench · 数值实验 | IrisSakura">
+    <meta property="og:description" content="修改攻击、暴击与命中参数，比较两组伤害和 DPS，并导出或恢复实验。">
+    <meta property="og:url" content="https://irissakura.com/pages/labs/numeric-workbench.html">
+    <meta property="og:image" content="https://irissakura.com/assets/social/pages-labs-numeric-workbench.png">
+    <meta property="og:image:alt" content="Numeric Workbench · 数值实验 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Numeric Workbench · 数值实验 | IrisSakura">
+    <meta name="twitter:description" content="修改攻击、暴击与命中参数，比较两组伤害和 DPS，并导出或恢复实验。">
+    <meta name="twitter:image" content="https://irissakura.com/assets/social/pages-labs-numeric-workbench.png">
+    <meta name="twitter:image:alt" content="Numeric Workbench · 数值实验 的 IrisSakura 分享图">
+
+    <!-- indexable page -->
+    <meta name="theme-color" content="#ede9fe">
+    <link rel="icon" href="../../assets/brand/site-icon-v2/favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="../../assets/brand/site-icon-v2/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/site-icon-v2/apple-touch-180.png" sizes="180x180">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://irissakura.com/pages/labs/numeric-workbench.html#webpage","name":"Numeric Workbench · 数值实验 | IrisSakura","description":"修改攻击、暴击与命中参数，比较两组伤害和 DPS，并导出或恢复实验。","url":"https://irissakura.com/pages/labs/numeric-workbench.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.com/pages/labs/numeric-workbench.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.com/"},{"@type":"ListItem","position":2,"name":"Numeric Workbench · 数值实验","item":"https://irissakura.com/pages/labs/numeric-workbench.html"}]}]}</script>
+    <!-- site-meta:end --><title>Numeric Workbench · 数值实验 | IrisSakura</title><link rel="stylesheet" href="../../dist/styles/site.css"><!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end --><link rel="stylesheet" href="../../style/components/living-site.css">
+<!-- deferred-fonts:start -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-site-deferred-style>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" data-site-deferred-style><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap"></noscript>
+<!-- deferred-fonts:end -->
+</head><body><!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/site-icon-v2/mark-128.png" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/blog.html" class="nav-link">文章</a>
+            <a href="../../pages/development.html" class="nav-link active" data-nav-section-current="true">项目</a>
+            <a href="../../pages/mods.html" class="nav-link">Mods</a>
+            <a href="../../pages/contact.html" class="nav-link">关于</a>
+        </div>
+        <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
+            <a class="nav-profile-link" href="../../pages/contact.html" aria-label="关于与联系">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation"></button>
+        </div>
+    </div>
+</nav>
+<!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
+<main id="main-content" class="main-content lab-page"><div class="container"><header class="lab-heading"><a href="../tools.html">← 返回 Violet Shelf</a><p class="section-kicker">VIOLET SHELF / INTERACTIVE LAB</p><h1>Numeric Workbench</h1><p class="lab-lead">把一个参数的变化，变成可比较的结果。</p><nav class="lab-switcher" aria-label="在线实验"><a href="numeric-workbench.html" aria-current="page">Numeric Workbench</a><a href="deck-odds.html">Deck Odds</a><a href="pathfinding.html">Pathfinding Playground</a></nav></header><noscript><p class="content-card">交互计算需要启用 JavaScript。下方保留模型规则与输入说明。</p></noscript><div data-interactive-lab="numeric"><div class="lab-layout"><section class="content-card lab-input" aria-labelledby="parameters-title"><p class="section-kicker">01 / PARAMETERS</p><h2 id="parameters-title">攻击与独立暴击</h2><p>比例用小数表示，例如 0.5 = 50%。每次命中独立，计算期望值。</p><form data-numeric-form novalidate><div class="lab-fields"><div class="form-group"><label for="attack">攻击力</label><input id="attack" name="attack" type="number" inputmode="decimal" min="0" step="100" value="1000" required></div><div class="form-group"><label for="skillMultiplier">技能倍率</label><input id="skillMultiplier" name="skillMultiplier" type="number" inputmode="decimal" min="0" step="0.1" value="2" required></div><div class="form-group"><label for="bonusRatio">增伤比例</label><input id="bonusRatio" name="bonusRatio" type="number" inputmode="decimal" min="0" step="0.05" value="0.2" required></div><div class="form-group"><label for="damageRetention">伤害保留比例</label><input id="damageRetention" name="damageRetention" type="number" inputmode="decimal" min="0" max="1" step="0.05" value="0.8" required></div><div class="form-group"><label for="critRate">暴击率</label><input id="critRate" name="critRate" type="number" inputmode="decimal" min="0" max="1" step="0.05" value="0.5" required></div><div class="form-group"><label for="critMultiplier">暴击倍率</label><input id="critMultiplier" name="critMultiplier" type="number" inputmode="decimal" min="1" step="0.1" value="2" required></div><div class="form-group"><label for="hitCount">命中次数</label><input id="hitCount" name="hitCount" type="number" inputmode="decimal" min="1" max="1000000" step="1" value="5" required></div><div class="form-group"><label for="windowSeconds">时间窗口（秒）</label><input id="windowSeconds" name="windowSeconds" type="number" inputmode="decimal" min="0" step="1" value="10" required></div></div><div class="lab-actions"><button class="btn btn-primary" type="submit">重新计算</button><button type="button" class="btn btn-secondary" data-action="numeric-reset">恢复默认</button></div></form></section>
+  <div class="lab-results"><section class="content-card" aria-labelledby="results-title"><p class="section-kicker">02 / RESULT</p><h2 id="results-title">本次计算</h2><p class="lab-message" data-status role="status" aria-live="polite"></p><div data-numeric-results></div><div class="lab-actions"><button type="button" class="btn btn-secondary" data-action="save-a">保存为方案 A</button><button type="button" class="btn btn-secondary" data-action="save-b">保存为方案 B</button></div></section><section class="content-card" aria-labelledby="compare-title"><p class="section-kicker">03 / COMPARE</p><h2 id="compare-title">并排看见差异</h2><p>先保存 A，再调整参数并保存 B。快照保留在当前页面会话内。</p><div data-numeric-comparison></div></section></div></div>
+  <section class="content-card lab-config" aria-labelledby="config-title"><h2 id="config-title">带走实验，随时复现</h2><p>JSON 包含当前参数、模型版本及 A/B 快照。导入成功后恢复整组实验。</p><div class="lab-actions"><button type="button" class="btn btn-secondary" data-action="numeric-export">下载实验 JSON</button><button type="button" class="btn btn-secondary" data-action="numeric-copy">复制实验 JSON</button></div><div class="form-group"><label for="numeric-import-text">粘贴实验 JSON（最大 32 KiB）</label><textarea id="numeric-import-text" rows="4" spellcheck="false" data-import-text></textarea></div><div class="lab-actions"><button type="button" class="btn btn-secondary" data-action="numeric-import">导入粘贴的配置</button><div class="form-group"><label for="numeric-import-file">或选择配置文件</label><input id="numeric-import-file" type="file" accept=".json,application/json" data-import-file></div></div><p role="status" data-config-status></p></section>
+  <details class="lab-notes"><summary>公式与计算假设</summary><p>基础伤害 = 攻击力 × 技能倍率 × (1 + 增伤比例) × 伤害保留比例。</p><p>单次期望伤害 = 基础伤害 × [(1 − 暴击率) + 暴击倍率 × 暴击率]。总伤害 = 单次期望伤害 × 命中次数；DPS = 总伤害 ÷ 时间窗口。</p><p>本模型不隐式取整。DPS 是固定次数解析估计，不包含冷却、能量或行动时间线。</p></details></div></div><!-- site-related:start -->
+<section class="site-related container" aria-labelledby="site-related-title"><p class="section-kicker">CONTINUE EXPLORING</p><h2 id="site-related-title">相关内容</h2><div class="site-related-grid"><a data-related-link href="../../pages/tools.html"><small>项目</small><strong>Violet Shelf</strong></a></div></section>
+<!-- site-related:end -->
+</main><footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/site-icon-v2/mark-128.png" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
+            </div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+            <div class="footer-motion-settings" data-ambient-settings hidden>
+                <button type="button" class="footer-motion-toggle" role="switch" aria-label="背景动效" aria-checked="true" data-ambient-toggle>
+                    <span>背景动效</span>
+                    <span class="footer-motion-track" aria-hidden="true"><span></span></span>
+                    <span class="footer-motion-state" data-ambient-label aria-hidden="true">开启</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</footer>
+<script type="module" src="../../dist/interactive-labs.js"></script><script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
+<script src="../../dist/site.js" type="module"></script>
+</body></html>

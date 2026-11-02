@@ -1,3 +1,4 @@
+import { assertInteractiveLabs } from './lib/interactive-labs-flow.mjs';
 import { assertComponentLayouts } from './lib/component-layout-flow.mjs';
 import { assertInterfaceConsistency } from './lib/interface-consistency-flow.mjs';
 import { assertReadingFlow } from './lib/reading-flow.mjs';
@@ -339,7 +340,9 @@ const coreVisualRoutes = [
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
 
 try {
-  if (process.argv.includes('--navigation-only')) {
+  if (process.argv.includes('--labs-only')) {
+    await assertInteractiveLabs(browser, baseUrl, root);
+  } else if (process.argv.includes('--navigation-only')) {
     await assertNavigationLifecycle(browser, baseUrl);
   } else if (process.argv.includes('--runtime-only')) {
     await assertAmbientMotion(browser, baseUrl);
@@ -1289,6 +1292,8 @@ try {
   await assertRuntimePerformance(browser, baseUrl);
   await assertJournalPerformance(browser, baseUrl, contentSearchIndex);
   await assertProductizationFlow(browser, baseUrl, root);
+
+  await assertInteractiveLabs(browser, baseUrl, root);
 
   console.log('Browser smoke passed: routes, global search, related graph, accessibility, performance, mobile navigation and contact routes checked.');
   }

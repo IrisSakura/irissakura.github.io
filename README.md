@@ -215,3 +215,11 @@ npm run engineering:check -- \
 Iris Engineering、SakuraGameFramework、Myosotis、Violet Shelf、Freesia Mods 与 Wisteria 使用统一登记的 Six Flower Personas V2 人物素材。公开入口由站点生成器维护；创作者身份与各游戏作品保留各自视觉。
 
 维护说明：[Persona V2 调查](docs/brand/personas-v2/PERSONA_V2_USAGE_INVENTORY.md)、[迁移映射](docs/brand/personas-v2/PERSONA_V2_MIGRATION_MAP.md)。
+
+## 在线交互实验
+
+- [Numeric Workbench](pages/labs/numeric-workbench.html)：伤害/DPS、A/B 比较与实验配置往返。
+- [Deck Odds](pages/labs/deck-odds.html)：无放回抽牌、两类目标与双方案概率比较。
+- [Pathfinding Playground](pages/labs/pathfinding.html)：网格编辑、真实 A* 单步与路径结果。
+
+页面由 `scripts/lib/interactive-labs-render.mjs` 接入既有生成器，计算与搜索位于 `src/labs/`。来源和行为边界见[来源契约](docs/interactive-labs/source-contracts.md)，本地/浏览器/发布证据见[验收记录](docs/interactive-labs/acceptance.md)。`npm run test:smoke` 包含三项实验；`npm run test:labs` 可单独定位相关浏览器问题。

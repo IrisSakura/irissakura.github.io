@@ -1,0 +1,114 @@
+<!DOCTYPE html><html data-page-family="project" data-page-grammar="branch-reference" data-page-persona="sakura" lang="zh-CN" data-brand="iris-sakura" data-brand-mode="sakura" style="color-scheme: light; --home-hero-image: url('/assets/images/profile/home-hero-iris-sakura.png'); --home-hero-position: 74% 50%;"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site-meta:start -->
+    <meta name="description" content="编辑障碍与地形权重，逐步观察四方向 A* 的探索、路径、代价和预算。">
+    <link rel="canonical" href="https://irissakura.com/pages/labs/pathfinding.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IrisSakura">
+    <meta property="og:title" content="Pathfinding Playground · 寻路实验 | IrisSakura">
+    <meta property="og:description" content="编辑障碍与地形权重，逐步观察四方向 A* 的探索、路径、代价和预算。">
+    <meta property="og:url" content="https://irissakura.com/pages/labs/pathfinding.html">
+    <meta property="og:image" content="https://irissakura.com/assets/social/pages-labs-pathfinding.png">
+    <meta property="og:image:alt" content="Pathfinding Playground · 寻路实验 的 IrisSakura 分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pathfinding Playground · 寻路实验 | IrisSakura">
+    <meta name="twitter:description" content="编辑障碍与地形权重，逐步观察四方向 A* 的探索、路径、代价和预算。">
+    <meta name="twitter:image" content="https://irissakura.com/assets/social/pages-labs-pathfinding.png">
+    <meta name="twitter:image:alt" content="Pathfinding Playground · 寻路实验 的 IrisSakura 分享图">
+
+    <!-- indexable page -->
+    <meta name="theme-color" content="#fff7fa">
+    <link rel="icon" href="../../assets/brand/site-icon-v2/favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="../../assets/brand/site-icon-v2/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/site-icon-v2/apple-touch-180.png" sizes="180x180">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="alternate" type="application/rss+xml" title="IrisSakura 正式文章" href="../../rss.xml">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://irissakura.com/pages/labs/pathfinding.html#webpage","name":"Pathfinding Playground · 寻路实验 | IrisSakura","description":"编辑障碍与地形权重，逐步观察四方向 A* 的探索、路径、代价和预算。","url":"https://irissakura.com/pages/labs/pathfinding.html"},{"@type":"BreadcrumbList","@id":"https://irissakura.com/pages/labs/pathfinding.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://irissakura.com/"},{"@type":"ListItem","position":2,"name":"Pathfinding Playground · 寻路实验","item":"https://irissakura.com/pages/labs/pathfinding.html"}]}]}</script>
+    <!-- site-meta:end --><title>Pathfinding Playground · 寻路实验 | IrisSakura</title><link rel="stylesheet" href="../../dist/styles/site.css"><!-- brand-styles:start -->
+    <link rel="stylesheet" href="../../style/iris-sakura.css">
+    <!-- brand-styles:end --><link rel="stylesheet" href="../../style/components/living-site.css">
+<!-- deferred-fonts:start -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-site-deferred-style>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" data-site-deferred-style><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap"></noscript>
+<!-- deferred-fonts:end -->
+</head><body><!-- site-navbar:start -->
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+    <div class="container nav-container">
+        <div class="nav-identity">
+            <a href="../../index.html" class="logo" aria-label="IrisSakura 首页">
+                <img src="../../assets/brand/site-icon-v2/mark-128.png" alt="" class="brand-mark">
+                <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+            </a>
+        </div>
+        <div class="nav-menu" id="main-navigation">
+            <a href="../../index.html" class="nav-link">首页</a>
+            <a href="../../pages/portfolio.html" class="nav-link">作品</a>
+            <a href="../../pages/blog.html" class="nav-link">文章</a>
+            <a href="../../pages/development.html" class="nav-link active" data-nav-section-current="true">项目</a>
+            <a href="../../pages/mods.html" class="nav-link">Mods</a>
+            <a href="../../pages/contact.html" class="nav-link">关于</a>
+        </div>
+        <div class="nav-actions">
+            <button class="nav-search-button" type="button" data-search-open aria-haspopup="dialog" aria-controls="site-search-dialog" aria-label="搜索全站内容"><span aria-hidden="true">⌕</span><span class="nav-search-label">搜索</span><kbd>⌘ K</kbd></button>
+            <a class="nav-profile-link" href="../../pages/contact.html" aria-label="关于与联系">
+                <img src="../../assets/images/profile/irissakura-avatar.jpg" alt="">
+            </a>
+            <button class="mobile-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-navigation"></button>
+        </div>
+    </div>
+</nav>
+<!-- site-navbar:end -->
+<!-- site-search:start -->
+<dialog id="site-search-dialog" class="site-search-dialog" data-site-search data-search-index="/data/site-search-index.json" aria-labelledby="site-search-title">
+  <div class="site-search-panel">
+    <header><div><p class="section-kicker">DISCOVER</p><h2 id="site-search-title">搜索 IrisSakura</h2></div><button type="button" data-search-close aria-label="关闭搜索">×</button></header>
+    <label for="site-search-input">搜索项目、文章、研究与 Framework</label>
+    <input id="site-search-input" type="search" autocomplete="off" data-search-input placeholder="试试 Sakura、object pool、对象池…">
+    <p class="site-search-status" data-search-status role="status" aria-live="polite">输入关键词，发现站内内容。</p>
+    <div class="site-search-results" data-search-results role="region" aria-label="搜索结果"></div>
+    <p class="site-search-fallback">也可以<a href="../../pages/journal.html#content-search">浏览研究资料库</a>。</p>
+  </div>
+</dialog>
+<!-- site-search:end -->
+<main id="main-content" class="main-content lab-page"><div class="container"><header class="lab-heading"><a href="../framework.html">← 返回 SakuraGameFramework</a><p class="section-kicker">SAKURA / PATHFINDING</p><h1>Pathfinding Playground</h1><p class="lab-lead">画一道障碍，看路径如何改变。</p><nav class="lab-switcher" aria-label="在线实验"><a href="numeric-workbench.html">Numeric Workbench</a><a href="deck-odds.html">Deck Odds</a><a href="pathfinding.html" aria-current="page">Pathfinding Playground</a></nav></header><noscript><p class="content-card">交互计算需要启用 JavaScript。下方保留模型规则与输入说明。</p></noscript><div data-interactive-lab="path"><div class="lab-layout lab-path-layout"><section class="content-card lab-input" aria-labelledby="map-tools-title"><p class="section-kicker">01 / EDIT & RUN</p><h2 id="map-tools-title">先画地图，再探索</h2><div class="form-group"><label for="map-tool">编辑工具</label><select id="map-tool" data-map-tool><option value="wall">画障碍 #</option><option value="erase">擦除 ·</option><option value="start">设置起点 S</option><option value="goal">设置终点 G</option><option value="weight">加权地形 6</option></select></div><p>点击或拖动格子。键盘用方向键移动，空格或 Enter 应用工具。</p><div class="form-group"><label for="map-preset">预设场景</label><select id="map-preset" data-map-preset><option value="passage">一道墙，一个缺口</option><option value="weighted">绕过高代价地形</option><option value="unreachable">封闭的终点</option><option value="empty">空白网格</option></select></div><div class="lab-fields"><div class="form-group"><label for="search-budget">扩展预算（节点）</label><input id="search-budget" name="search-budget" type="number" inputmode="decimal" min="1" max="1024" step="1" value="1024" required></div><div class="form-group"><label for="search-speed">播放速度</label><select id="search-speed" data-speed><option value="150">慢速</option><option value="45" selected>标准</option><option value="5">快速</option></select></div></div><div class="lab-actions"><button type="button" class="btn btn-primary" data-action="run">开始 / 继续</button><button type="button" class="btn btn-secondary" data-action="step">单步</button><button type="button" class="btn btn-secondary" data-action="pause">暂停</button><button type="button" class="btn btn-secondary" data-action="path-reset">重置搜索</button><button type="button" class="btn btn-secondary" data-action="path-clear">清空地图</button><button type="button" class="btn btn-secondary" data-action="path-export">下载地图 JSON</button></div></section><section class="content-card lab-results" aria-labelledby="grid-title"><p class="section-kicker">02 / EXPLORE</p><h2 id="grid-title">探索的每一步都有来由</h2><p class="lab-message" role="status" aria-live="polite" data-status></p><div class="lab-grid" role="group" aria-label="可编辑的八乘八寻路网格" data-grid></div><p class="lab-legend"><span>S 起点</span><span>G 终点</span><span># 障碍</span><span>6 地形代价</span><span>○ 待探索</span><span>× 已探索</span><span>◆ 最终路径</span></p><dl class="lab-metrics" data-path-metrics></dl><p data-path-text></p></section></div>
+  <details class="lab-notes"><summary>四方向 A* 浏览器演示的规则</summary><p>每步只走上下左右，进入格子的权重就是这一步的代价。默认权重为 1，加权地形为 6；启发式为曼哈顿距离乘地图最小可通行权重。</p><p>按下、上、右、左的顺序检查邻居，同优先级按稳定顺序处理。正常搜索的终点计入扩展数；起终点相同则代价和扩展数均为 0。预算耗尽意味着尚未得到结论，不代表没有路径。</p><p>这是 Sakura 路径行为的浏览器算法演示。播放记录来自实际搜索；重置或编辑会取消旧搜索。公开演示版本 1.0.0。</p></details></div></div><!-- site-related:start -->
+<section class="site-related container" aria-labelledby="site-related-title"><p class="section-kicker">CONTINUE EXPLORING</p><h2 id="site-related-title">相关内容</h2><div class="site-related-grid"><a data-related-link href="../../pages/framework.html"><small>项目</small><strong>SakuraGameFramework</strong></a></div></section>
+<!-- site-related:end -->
+</main><footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <a href="../../index.html" class="footer-logo" aria-label="IrisSakura 首页">
+                    <img src="../../assets/brand/site-icon-v2/mark-128.png" alt="" class="brand-mark">
+                    <span class="brand-wordmark" aria-hidden="true"><img src="../../assets/brand/wordmark-irissakura.svg" alt="" class="brand-wordmark-image"></span>
+                </a>
+                <p class="footer-description">做游戏，也写下创作中的问题与发现。</p>
+            </div>
+            <div class="footer-links"><section class="footer-link-group"><h2>浏览</h2><a href="../../pages/portfolio.html">作品</a><a href="../../pages/blog.html">文章</a><a href="../../pages/development.html">项目</a><a href="../../pages/mods.html">Mods</a><a href="../../pages/now.html">Now</a></section><section class="footer-link-group"><h2>项目</h2><a href="../../pages/engineering.html">Iris Engineering</a><a href="../../pages/framework.html">SakuraGameFramework</a><a href="../../pages/journal.html">Myosotis</a><a href="../../pages/tools.html">Violet Shelf</a><a href="../../pages/mods.html">Freesia Mods</a><a href="../../pages/wisteria.html">Wisteria</a></section><section class="footer-link-group"><h2>关于</h2><a href="../../pages/contact.html">关于</a><a href="../../pages/brand.html">品牌与视觉资料</a><a href="../../pages/subscribe.html">订阅文章</a></section></div>
+            <div class="footer-social">
+                <h2>公开入口</h2>
+                <div class="social-icons">
+                    <a href="https://github.com/IrisSakura" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub（在新窗口打开）"><i class="fab fa-github" aria-hidden="true"></i></a>
+                    <a href="https://space.bilibili.com/289615178" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩（在新窗口打开）"><i class="fab fa-bilibili" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span data-current-year>2026</span> IrisSakura. 保留所有权利。</p>
+            <p>BUILD · ORGANIZE · BLOOM</p>
+            <div class="footer-motion-settings" data-ambient-settings hidden>
+                <button type="button" class="footer-motion-toggle" role="switch" aria-label="背景动效" aria-checked="true" data-ambient-toggle>
+                    <span>背景动效</span>
+                    <span class="footer-motion-track" aria-hidden="true"><span></span></span>
+                    <span class="footer-motion-state" data-ambient-label aria-hidden="true">开启</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</footer>
+<script type="module" src="../../dist/interactive-labs.js"></script><script type="application/json" id="site-analytics-config">{"enabled":false,"provider":"plausible","siteDomain":null,"endpoint":"https://plausible.io/api/event","privacyMode":true,"trackPageViews":true,"trackOutboundLinks":true}</script>
+<script src="../../dist/site.js" type="module"></script>
+</body></html>
