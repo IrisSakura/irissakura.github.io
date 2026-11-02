@@ -53,7 +53,7 @@ test('frontstage copy hides maintenance metadata; technical articles remain unre
 test('Now ships canonical metadata, safe links, sitemap inclusion and no extra RSS items', async () => {
   const [html, sitemap, rss, publication] = await Promise.all([read('pages/now.html'), read('sitemap.xml'), read('rss.xml'), json('config/blog-publication.json')]);
   assert.match(html, /<h1>最近在做什么<\/h1>/u);
-  assert.match(html, /rel="canonical" href="https:\/\/irissakura.github.io\/pages\/now.html"/u);
+  assert.match(html, /rel="canonical" href="https:\/\/irissakura.com\/pages\/now.html"/u);
   assert.ok(html.includes(`datetime="${now.updatedAt}"`));
   assert.ok(sitemap.includes('/pages/now.html'));
   assert.equal((rss.match(/<item>/gu) ?? []).length, publication.articles.filter(({ status }) => status === 'published').length);

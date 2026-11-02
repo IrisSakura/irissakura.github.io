@@ -72,6 +72,8 @@ export async function assertInterfaceConsistency(browser, baseUrl, output) {
     await page.goto(baseUrl + '/pages/journal.html', { waitUntil: 'networkidle' });
     const archiveCard = page.locator('.journal-design-scroll .design-summary-card').nth(1);
     await archiveCard.scrollIntoViewIfNeeded();
+    // Render the chip itself before measuring a content-visibility:auto subtree.
+    await archiveCard.locator('.note-tags > span').first().scrollIntoViewIfNeeded();
     const archiveTags = await archiveCard.locator('.note-tags span').evaluateAll(elements => elements.map(el => {
       const css = getComputedStyle(el);
       return { borderRadius: css.borderRadius, borderWidth: css.borderWidth, fontSize: css.fontSize, lineHeight: css.lineHeight };

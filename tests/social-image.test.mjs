@@ -52,7 +52,7 @@ test('formal articles and major sections expose distinct social images while imp
   const images = [];
   for (const page of pages) {
     const html = await readText(page);
-    const image = html.match(/<meta property="og:image" content="https:\/\/irissakura\.github\.io(\/assets\/social\/[a-z0-9-]+\.png)">/)?.[1];
+    const image = html.match(/<meta property="og:image" content="https:\/\/irissakura\.com(\/assets\/social\/[a-z0-9-]+\.png)">/)?.[1];
     assert.ok(image, `${page} must use a generated social image`);
     assert.ok(html.includes('meta property="og:image:alt"'), `${page} missing social image alt text`);
     await access(new URL(`.generated/social/${image.split('/').at(-1)}`, root));

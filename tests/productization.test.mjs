@@ -87,8 +87,8 @@ test('indexing and disabled analytics match generated page contracts', async () 
     readText('sitemap.xml'), readText('robots.txt'), readJson('config/analytics.json'),
     readText('index.html'), readText('pages/about.html')
   ]);
-  assert.match(robots, /Sitemap: https:\/\/irissakura\.github\.io\/sitemap\.xml/u);
-  assert.ok(sitemap.includes('https://irissakura.github.io/'));
+  assert.match(robots, /Sitemap: https:\/\/irissakura\.com\/sitemap\.xml/u);
+  assert.ok(sitemap.includes('https://irissakura.com/'));
   assert.ok(!sitemap.includes('/pages/about.html'));
   assert.match(legacy, /name="robots" content="noindex, follow"/u);
   assert.ok(config.enabled === false && config.siteDomain === null);
@@ -103,7 +103,7 @@ test('indexing and disabled analytics match generated page contracts', async () 
     const canonical = html.match(/<link rel="canonical" href="([^"]+)"/u)?.[1];
     assert.ok(canonical, `${file} lacks canonical`);
     if (/<meta name="robots" content="noindex, follow">/u.test(html)) {
-      assert.ok(!sitemapSet.has(`https://irissakura.github.io/${file === 'index.html' ? '' : file}`), `${file} is noindex but appears in sitemap`);
+      assert.ok(!sitemapSet.has(`https://irissakura.com/${file === 'index.html' ? '' : file}`), `${file} is noindex but appears in sitemap`);
     } else {
       assert.ok(sitemapSet.has(canonical), `${file} is indexable but absent from sitemap`);
     }

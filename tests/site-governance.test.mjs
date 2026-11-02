@@ -95,12 +95,12 @@ test('Framework Engineering Hub is generated from its contract with honest SEO a
 
   assert.match(page, new RegExp(`<title>${escapeRegExp(hub.positioning.seoTitle)}</title>`, 'u'));
   assert.match(page, new RegExp(`<meta name="description" content="${escapeRegExp(hub.positioning.description)}">`, 'u'));
-  assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/framework-engineering\.html">/u);
+  assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.com\/pages\/framework-engineering\.html">/u);
   const structuredData = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)?.[1] ?? '{}');
   const pageEntity = structuredData['@graph'].find((entry) => entry['@type'] === 'WebPage');
   assert.equal(pageEntity.name, hub.positioning.seoTitle);
   assert.equal(pageEntity.description, hub.positioning.description);
-  assert.equal(pageEntity.url, 'https://irissakura.github.io/pages/framework-engineering.html');
+  assert.equal(pageEntity.url, 'https://irissakura.com/pages/framework-engineering.html');
   assert.deepEqual(
     [...page.matchAll(/<a href="(#[a-z0-9-]+)" data-page-index-link/gu)].map((match) => match[1]),
     ['#depth-model', '#reader-paths', '#architecture-domains', '#evidence-boundary', '#adoption-route']
@@ -131,7 +131,7 @@ test('Framework deep routes are generated, indexable and structurally complete',
   for (const route of routes) {
     const page = await readText(route);
     assert.match(page, /<h1>[\s\S]+<\/h1>/u, `${route} missing H1`);
-    assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/framework\//u, `${route} missing canonical`);
+    assert.match(page, /<link rel="canonical" href="https:\/\/irissakura\.com\/pages\/framework\//u, `${route} missing canonical`);
     assert.match(page, /data-page-index-link/u, `${route} missing page index`);
     assert.match(page, /id="next-route"/u, `${route} missing continuation route`);
     assert.ok(!page.includes('/Users/'), `${route} exposes a private path`);
@@ -341,7 +341,7 @@ test('primary navigation gives the four projects one visitor-facing parent conte
   const development = await readText('pages/development.html');
   const brand = await readText('pages/brand.html');
   const artMusic = await readText('pages/art-music.html');
-  assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.github\.io\/pages\/development\.html">/u);
+  assert.match(development, /<link rel="canonical" href="https:\/\/irissakura\.com\/pages\/development\.html">/u);
   assert.equal((development.match(/class="project-route"/g) ?? []).length, 6);
   assert.match(development, /class="project-route"[^>]*data-persona="iris"[\s\S]*?<h2>Iris Engineering<\/h2>[\s\S]*?href="\.\.\/pages\/engineering\.html"/u);
   assert.match(development, /class="project-route"[^>]*data-persona="sakura"[\s\S]*?<h2>SakuraGameFramework<\/h2>[\s\S]*?href="\.\.\/pages\/framework\.html"/u);
@@ -365,14 +365,14 @@ test('primary navigation gives the four projects one visitor-facing parent conte
   assert.ok(sitemap.includes('/pages/brand.html'));
 
   assert.ok(artMusic.includes('<meta name="robots" content="noindex, follow">'));
-  assert.ok(artMusic.includes('<link rel="canonical" href="https:\/\/irissakura.github.io/pages/brand.html">'));
+  assert.ok(artMusic.includes('<link rel="canonical" href="https:\/\/irissakura.com/pages/brand.html">'));
   assert.ok(artMusic.includes('<meta http-equiv="refresh" content="0; url=brand.html">'));
   assert.ok(!artMusic.includes('id="brand-system"'));
   assert.ok(!sitemap.includes('/pages/art-music.html'));
 
   const about = await readText('pages/about.html');
   assert.ok(about.includes('<meta name="robots" content="noindex, follow">'));
-  assert.ok(about.includes('<link rel="canonical" href="https://irissakura.github.io/">'));
+  assert.ok(about.includes('<link rel="canonical" href="https://irissakura.com/">'));
   assert.ok(about.includes('<meta http-equiv="refresh" content="0; url=../index.html">'));
   assert.ok(!sitemap.includes('/pages/about.html'));
 });
@@ -701,7 +701,7 @@ test('repository metadata and publishing policy are explicit', async () => {
 
   assert.equal(packageJson.author, 'IrisSakura');
   assert.equal(packageJson.license, 'ISC');
-  assert.equal(packageJson.homepage, 'https://irissakura.github.io/');
+  assert.equal(packageJson.homepage, 'https://irissakura.com/');
   assert.ok(!packageJson.dependencies?.gsap);
   assert.ok(readme.includes('内容真实性原则'));
   assert.ok(readme.includes('dist/'));

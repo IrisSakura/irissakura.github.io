@@ -1,28 +1,27 @@
-const PERSON_ID = 'https://irissakura.github.io/#person';
-const WEBSITE_ID = 'https://irissakura.github.io/#website';
-
 export function buildStructuredData(page, site, image) {
+  const personId = `${site.siteUrl}/#person`;
+  const websiteId = `${site.siteUrl}/#website`;
   const url = `${site.siteUrl}${page.canonical}`;
-  const person = { '@type': 'Person', '@id': PERSON_ID, name: site.profile.nickname,
+  const person = { '@type': 'Person', '@id': personId, name: site.profile.nickname,
     url: site.siteUrl, sameAs: site.socials.map(({ url: socialUrl }) => socialUrl) };
   const pageEntity = { '@type': page.schemaType ?? 'WebPage', '@id': `${url}#webpage`,
     name: page.title, description: page.description, url };
   if (page.file === 'index.html') {
     return { '@context': 'https://schema.org', '@graph': [
-      { '@type': 'WebSite', '@id': WEBSITE_ID, name: site.siteName, url: site.siteUrl,
-        description: site.description, publisher: { '@id': PERSON_ID } },
+      { '@type': 'WebSite', '@id': websiteId, name: site.siteName, url: site.siteUrl,
+        description: site.description, publisher: { '@id': personId } },
       person,
-      { ...pageEntity, mainEntity: { '@id': PERSON_ID }, isPartOf: { '@id': WEBSITE_ID } }
+      { ...pageEntity, mainEntity: { '@id': personId }, isPartOf: { '@id': websiteId } }
     ] };
   }
   if (page.file === 'pages/contact.html') pageEntity.mainEntity = person;
   if (page.schemaType === 'SoftwareSourceCode') {
-    pageEntity.creator = { '@id': PERSON_ID };
+    pageEntity.creator = { '@id': personId };
     pageEntity.programmingLanguage = 'C#';
     pageEntity.runtimePlatform = page.runtimePlatform ?? 'Unity';
   }
   if (page.schemaType === 'VideoGame') {
-    pageEntity.author = { '@id': PERSON_ID };
+    pageEntity.author = { '@id': personId };
     pageEntity.gamePlatform = 'Unity 2022.3 LTS';
   }
   if (page.schemaType === 'HowTo' && page.quickstart) {
@@ -35,7 +34,7 @@ export function buildStructuredData(page, site, image) {
     pageEntity.headline = page.article.title;
     pageEntity.datePublished = page.article.publishedAt;
     pageEntity.dateModified = page.article.updatedAt;
-    pageEntity.author = { '@id': PERSON_ID };
+    pageEntity.author = { '@id': personId };
     pageEntity.image = image;
     pageEntity.keywords = page.article.tags;
     pageEntity.articleSection = page.article.series;
@@ -44,7 +43,7 @@ export function buildStructuredData(page, site, image) {
     const content = page.design ?? page.note;
     pageEntity.headline = content.title;
     if (content.updatedAt) pageEntity.dateModified = content.updatedAt;
-    pageEntity.author = { '@id': PERSON_ID };
+    pageEntity.author = { '@id': personId };
     pageEntity.image = image;
   }
   const breadcrumb = { '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`,

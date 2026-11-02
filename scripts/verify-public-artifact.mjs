@@ -1,9 +1,11 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertPublishedSiteUrls } from './lib/published-site-urls.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '_site');
+const { siteUrl } = JSON.parse(await readFile(path.join(root, 'data/site.json'), 'utf8'));
 const publicData = new Set(['framework-public.json', 'search-index.json', 'site-search-index.json', 'content-graph.json']);
 const dataFiles = await readdir(path.join(output, 'data'));
 if (dataFiles.some((file) => !publicData.has(file)) || dataFiles.length !== publicData.size) {
@@ -26,11 +28,12 @@ for (const file of await walk(output)) {
   if (!/\.(?:html|json|js|css|xml|txt|svg|webmanifest|md)$/iu.test(file)) continue;
   const text = await readFile(file, 'utf8');
   const relative = path.relative(output, file);
+  assertPublishedSiteUrls(relative, text, siteUrl);
   for (const pattern of forbidden) if (pattern.test(text)) errors.push(`${relative}: ${pattern}`);
   for (const commit of sourceCommits) if (text.includes(commit)) errors.push(`${relative}: source commit ${commit.slice(0, 8)}`);
 }
 if (errors.length) throw new Error(`Public artifact contains owner-only material:\n${errors.slice(0, 30).join('\n')}`);
-console.log(`Public artifact verified: ${publicData.size} runtime data files, no source provenance or private paths.`);
+console.log(`Public artifact verified: ${publicData.size} runtime data files, consistent site URLs, no source provenance or private paths.`);
 
 async function walk(directory) {
   const files = [];

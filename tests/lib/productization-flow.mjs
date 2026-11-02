@@ -127,7 +127,7 @@ async function assertAnalyticsFixture(browser, baseUrl) {
     const response = await route.fetch();
     const html = await response.text();
     const config = {
-      enabled: true, provider: 'plausible', siteDomain: 'irissakura.github.io',
+      enabled: true, provider: 'plausible', siteDomain: 'irissakura.com',
       endpoint: 'https://plausible.io/api/event', privacyMode: true,
       trackPageViews: true, trackOutboundLinks: true
     };
@@ -153,7 +153,7 @@ async function assertAnalyticsFixture(browser, baseUrl) {
     const raw = JSON.stringify(payload);
     if (/[?@#]|Sakura|queryText|email|qq/i.test(payload.url)) throw new Error('Analytics URL contains unsafe data');
     if (/queryText|@|\/Users\//iu.test(JSON.stringify(payload.props ?? {}))) throw new Error('Analytics sent private properties');
-    if (payload.domain !== 'irissakura.github.io' || !payload.url.startsWith(baseUrl)) throw new Error(`Invalid analytics payload ${raw}`);
+    if (payload.domain !== 'irissakura.com' || !payload.url.startsWith(baseUrl)) throw new Error(`Invalid analytics payload ${raw}`);
   }
   await page.close();
 }
