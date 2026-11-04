@@ -70,6 +70,8 @@
 .tool-drawer summary { cursor: pointer; display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; align-items: center; padding: 1.5rem; }
 .tool-drawer summary h3 { margin: 0; font-size: var(--type-h3); }
 .drawer-hint { font-size: var(--type-small); }
+.drawer-indicator::after { content: '＋'; display: inline-block; margin-left: .5rem; }
+.tool-drawer[open] .drawer-indicator::after { content: '−'; }
 .drawer-content { padding: 0 1.5rem 1.5rem 5.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .tool-drawer[open] { border-bottom-color: var(--persona-primary); }
 /* Freesia: routes connect game groups with an invitation, not a store. */
@@ -119,9 +121,11 @@
 .ecosystem-origin { text-align: center; border-bottom: 1px solid var(--line); padding: 2rem; }
 .ecosystem-origin > * { display: block; margin-bottom: 1rem; }
 .ecosystem-map ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0 3rem; }
-.ecosystem-map li { border-left: 2px solid var(--persona-primary); padding: 1.5rem; }
-.ecosystem-map a { display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; row-gap: .5rem; align-items: center; }
+.ecosystem-map li { display: flex; flex-direction: column; gap: .75rem; min-width: 0; border-left: 2px solid var(--persona-primary); padding: 1.5rem; }
+.ecosystem-project-link { display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; row-gap: .5rem; align-items: center; }
 .ecosystem-map strong { overflow-wrap: anywhere; }
+.ecosystem-start-link { display: inline-flex; align-items: center; gap: .5rem; align-self: start; min-height: 44px; margin-top: auto; margin-left: 6rem; color: var(--ink); font-size: .85rem; text-decoration: underline; text-underline-offset: .25em; }
+.ecosystem-start-link:hover { color: var(--persona-primary); }
 .ecosystem-map span { font-size: var(--type-small); }
 .project-route { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.2fr); gap: 1rem 3rem; border-top: 3px solid var(--persona-primary); padding: 2rem 0 3rem; }
 .project-route > .section-kicker { grid-column: 1 / -1; }
@@ -174,7 +178,16 @@
  .grammar-comparison { grid-template-columns: 1fr 1fr; }
 }
 @media(max-width:600px) {
- .project-route, .ecosystem-map ol { display: block; }
+ .project-route { display: block; }
+ .ecosystem-map { padding-block: 1rem 2rem; }
+ .ecosystem-origin { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: 1rem 0; text-align: left; }
+ .ecosystem-origin > * { margin: 0; }
+ .ecosystem-map ol { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; }
+ .ecosystem-map li { padding: 1rem; }
+ .ecosystem-project-link { grid-template-columns: 1fr; gap: .5rem; }
+ .ecosystem-project-link strong { font-size: .85rem; line-height: 1.5; }
+ .ecosystem-project-link > span:not(.project-icon) { font-size: .75rem; }
+ .ecosystem-start-link { margin-left: 0; font-size: .8rem; }
  .project-route > * { margin-bottom: 1.5rem; }
  .composition-sakura { grid-template-columns: 1fr; }
  .composition-sakura .brand-mode-hero-art { grid-column: 1; grid-row: 1; height: 20rem; }

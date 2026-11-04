@@ -37,6 +37,8 @@
 
 ## Living 内容维护
 
+维护者从[仓库规范](AGENTS.md)、[日常实施流程](docs/maintenance/development-workflow.md)和[开发问题备忘录](docs/maintenance/development-memo.md)进入；下面说明站点内容来源与操作方式。
+
 - `/pages/now.html`：当前投入、思考、阶段成果与近期动态；从首页、关于和页脚进入，不增加一级导航。
 - 更新当前活动只改 `data/now.json`。`current` 建议 3～5 项，`thinking` 为 0～4 项，`recentlyCompleted` 为 0～5 项。空的可选栏目不显示；长期未更新不会阻止构建。
 - 编辑动态只改 `data/updates.json`，按日期降序排列。同日保留编辑顺序；未来日期按 Asia/Shanghai 判断。动态不自动读取 Git，不进入 RSS。
@@ -103,9 +105,11 @@ npm run package:site
 - `data/framework-quickstart.json`：只登记路线 ID 与教程步骤，包名从 adoption 注册表派生，不自行绑定版本。
 - `data/iris-engineering.json`：Iris Engineering 的公开快照；首次 fixed-commit import 会把当前 legacy v1 迁移为 schema v2，只公开审阅语义和 `sourceUpdatedAt`，source SHA 留在不发布的 owner provenance。
 
+四项目的站点身份、源仓入口与维护位置从[共用项目维护导航](docs/maintenance/project-navigation.md)进入。
 框架同步和维护边界见 [`docs/maintenance/framework-sync.md`](docs/maintenance/framework-sync.md)。
 Iris Engineering 同步、provenance 与五路径 owner scope 见 [`docs/maintenance/iris-engineering-sync.md`](docs/maintenance/iris-engineering-sync.md)。
 Iris Shelf 与 UDGAP 的 source-push 项目状态、共享 importer 和三路径 owner scope 见 [`docs/maintenance/project-status-sync.md`](docs/maintenance/project-status-sync.md)。
+资产母版、派生文件、生成工具与公开使用位置见 [`docs/brand/asset-sources.md`](docs/brand/asset-sources.md)。
 品牌职责与 Design System 所有权分别见 [`docs/brand/brand-architecture.md`](docs/brand/brand-architecture.md) 和 [`docs/brand/visual-system.md`](docs/brand/visual-system.md)。
 
 项目状态中的 `source-push` 表示已有源仓推送驱动的公开投影，`fixed-snapshot` 表示固定提交导入，`versioned-review` 表示只复核已版本化产品事实，`site-curated` 表示站点策展。Iris Shelf 与 UDGAP 使用同一 closed-schema importer，但分别拥有源仓 profile、provenance 和 Actions scope；言铸之剑仍是 Plastic/site-curated，不能把本地工作区或未验证输出伪装成自动同步。

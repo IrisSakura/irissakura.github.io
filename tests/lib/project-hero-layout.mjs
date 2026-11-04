@@ -64,6 +64,24 @@ export async function assertProjectHeroLayouts(browser, baseUrl, screenshotDirec
           const rect = heading.getBoundingClientRect();
           return rect.top >= obstruction - 1 && rect.top < window.innerHeight;
         }, href, { timeout: 5000 });
+        if (name === 'tools') {
+          // A sticky child silently stops sticking when an ancestor uses overflow:hidden.
+          // Exercise the real page after a long scroll, then use the visible index to return.
+          await page.evaluate(() => window.scrollTo({ top: 5000, behavior: 'instant' }));
+          await page.waitForFunction(() => {
+            const nav = document.querySelector('.navbar').getBoundingClientRect();
+            const index = document.querySelector('[data-page-index]');
+            const bounds = index.getBoundingClientRect();
+            const stickyTop = parseFloat(getComputedStyle(index).top);
+            return bounds.top >= nav.bottom - 1 && Math.abs(bounds.top - stickyTop) < 2;
+          }, undefined, { timeout: 5000 });
+          await page.locator('[data-page-index-link][href="#visual-study"]').click();
+          await page.waitForFunction(() => {
+            const index = document.querySelector('[data-page-index]').getBoundingClientRect();
+            const heading = document.querySelector('#visual-study h2').getBoundingClientRect();
+            return heading.top >= index.bottom - 1 && heading.top < innerHeight;
+          }, undefined, { timeout: 5000 });
+        }
       }
     }
   } finally {

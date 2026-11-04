@@ -4,6 +4,8 @@
 
 ## 统一视觉契约（2026-10-29）
 
+长期方向与变更边界以 [已批准的界面美学契约](brand/interface-aesthetic-contract.md) 为准；批准的机器可读值在 `config/interface-contract.json`。更新该基线代表设计决定，不能只因当前实现不通过测试而改写。
+
 正式入口是首页、作品、文章与六个项目页。目标是让同一用途的按钮、输入、标签、卡片、折叠和标题在这些入口保持同一套视觉规则；项目配色、人物与内容图示继续表达各自身份。
 
 - 操作按钮和输入控件：8px 圆角、1px 边框、至少 44px 高。主按钮使用项目色和轻微底部投影，次按钮使用浅色表面；悬停不移动点击目标。
@@ -15,7 +17,7 @@
 
 `style/tokens/interface.css` 定义共享几何及与项目颜色的映射。`style/components/interface.css` 是最终组件所有者，使用位于 `pages` 之后的 `interface` 层，防止页面装饰再次覆盖基础控件。页面样式负责内容布局和人物构图，不在其他位置新增控件圆角、投影或字号特例。
 
-`tests/lib/interface-consistency-flow.mjs` 比较不同路由里相同角色的实际计算样式，并覆盖搜索与原生折叠交互。默认浏览器验收包含该流程；`--interface-only` 用于定位已观察到的一致性失败。设置 `SITE_INTERFACE_EVIDENCE_DIR` 可保存实际截图和测量数据。
+`tests/interface-contract.test.mjs` 检查批准的 token 与最终样式所有权；`tests/lib/interface-consistency-flow.mjs` 将实际计算样式与批准值比较，并覆盖搜索与原生折叠交互。全站同时漂移也不能通过，普通卡片禁止新增投影，选中模块的内部色条单独判断。默认浏览器验收包含该流程；`--interface-only` 用于定位已观察到的一致性失败。设置 `SITE_INTERFACE_EVIDENCE_DIR` 可保存实际截图和测量数据。
 
 ## 层级与所有权
 
@@ -57,4 +59,4 @@
 - **Tailwind**：可建立严格 token，但需要扫描生成 HTML/模板并增加 CSS 构建链，也会把当前语义类迁成大量工具类。
 - **Web Awesome**：命名隔离的 Web Components 与无框架架构最匹配，适合作为未来 dialog、menu、tooltip 等复杂交互的候选；现阶段按钮、卡片、标签和原生 select 不值得为此增加组件运行时与 Shadow DOM 主题映射。
 
-当前不安装整套 UI 库。未来需要复杂交互时，优先对 Web Awesome 做按需单组件试点：固定版本、本地打包、映射三主题 token、验证键盘与 reduced-motion，并保持可独立撤回。
+当前不安装整套 UI 库。未来需要复杂交互时，可评估 Web Awesome 等方案的按需单组件试点：固定版本、本地打包、映射现有共享 token 与项目 palette、验证键盘与 reduced-motion，并保持可独立撤回。库的默认皮肤不是改变本站美学的授权。

@@ -1,16 +1,19 @@
 # IrisSakura Visual System
 
-> Current baseline: Six Flower Personas V2 and six page compositions
+> Current baseline: Six Flower Personas V2, project-specific composition, and the 2026-10-29 [approved interface aesthetic contract](interface-aesthetic-contract.md). The shared interface contract supersedes earlier control/card styling experiments in this document.
 
 ## Ownership chain
 
 ```text
-Primitive → Semantic → Component → Page Brand Mode
+Primitive / project palette → Semantic → Shared component
+Page composition → Final shared interface geometry
 ```
 
 `style/tokens/primitive.css` owns raw Iris, Sakura, shared, neutral, support and state values. `config/personas-v2.json` owns the six approved character palettes, generated into `style/tokens/personas-v2.css`. `style/tokens/semantic.css` assigns UI meaning such as background, text, border, action and status. Shared components consume those semantic values, while `style/tokens/modes.css` tunes declared page emphasis. `style/tokens/compatibility.css` maps existing brand and UI tokens; `style/iris-sakura.css` preserves the old stylesheet URL.
 
 Components and page styles must not introduce new master-brand colors. A raw color starts in Primitive, receives a Semantic role, and is consumed through a component or mode token. Brand colors must not replace success, warning, failure, verification or product-state semantics.
+
+`style/tokens/interface.css` owns approved geometry and `style/components/interface.css` is the final component owner after page layers. Page modes may vary composition and semantic project colors, but may not redefine the shape, type scale or feedback of the same control role. Approved values are recorded in `config/interface-contract.json`; ordinary text cards use light surfaces, symmetric corners and no external shadow.
 
 ## Page modes
 
@@ -20,11 +23,13 @@ Components and page styles must not introduce new master-brand colors. A raw col
 
 ## Project hero ownership
 
-The six project routes resolve their identities from `config/site-presentation.json`, `config/brand.json` and `config/personas-v2.json`. Engineering, Framework, Journal and Tools use `data-brand-project-hero`; Mods and Wisteria retain dedicated hero markup. Each displays one complete optimized character from `assets/personas/v2/`. `data/site.json.pageCovers` continues to own general category and work imagery. Source dimensions, conversion parameters and hashes are recorded in `assets/personas/v2/manifest.json`.
+The six project routes resolve their identities from `config/site-presentation.json`, `config/brand.json` and `config/personas-v2.json`. Engineering, Framework, Journal and Tools use `data-brand-project-hero`; Mods and Wisteria retain dedicated hero markup. Illustrated covers consume one complete optimized character from `assets/personas/v2/`. A route explicitly configured for technical or text-only presentation keeps that choice; the six-brand model does not authorize restoring a removed portrait. `data/site.json.pageCovers` continues to own general category and work imagery. Source dimensions, conversion parameters and hashes are recorded in `assets/personas/v2/manifest.json`.
 
-Character images use `object-fit: contain`. Decorative frames and shadows must not crop or cover them. The Wisteria character stage fits within the world scene; on small screens Iris uses a full-width character above the workflow links. At desktop widths Sakura places its character beside the introduction and module branches. Workflow and archive decorations remain local to their compositions so reading surfaces stay quiet.
+Character images use `object-fit: contain`. Decorative frames and shadows must not crop or cover them. Responsive placement follows the current page-composition owner and keeps artwork separate from text and controls. Workflow and archive decorations remain local to their compositions so reading surfaces stay quiet; historical placement examples do not override current presentation choices.
 
-## Accessibility and maintenance
+## Historical art refinements and acceptance
+
+The dated records below describe earlier experiments and their evidence, not current instructions to restore hard shadows, tape, tilted cards or dark text-card surfaces. Preserve their historical test counts and results. Current control, card, typography and maintenance decisions follow the aesthetic contract above and `docs/ui-components.md`; current route/asset choices follow the presentation configuration.
 
 The October 3 art refinement gives the home introduction an open cover composition: a compact portrait signature, left-aligned copy and one complete creator illustration at both desktop and mobile widths. The same image is reused without a second mobile-only element. Project bridges use their existing persona palettes; static frames distinguish the technical grid, module branches, archive paper and workbench. Wisteria places its layered world beside the introduction on desktop and below it on mobile, with the character and caption in separate regions. These details use existing color tokens and assets, without additional continuous animation or image requests. Owners are `scripts/lib/living-site-render.mjs`, `scripts/lib/visual-decorations.mjs`, `style/pages/personal.css` and `style/pages/grammar.css`.
 

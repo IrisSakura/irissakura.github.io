@@ -22,8 +22,8 @@ test('public profile data owns the homepage identity and a local avatar', async 
   assert.equal(site.profile.nickname, 'IrisSakura');
   assert.equal(site.profile.role, '独立游戏开发者与游戏系统设计者');
   assert.ok(site.profile.introduction.length >= 30);
-  assert.match(site.profile.introduction, /做游戏/u);
-  assert.match(site.profile.introduction, /文章/u);
+  assert.match(site.profile.introduction, /游戏/u);
+  assert.match(site.profile.introduction, /研究|文章/u);
   assert.match(site.profile.avatar, /^assets\/images\/profile\/.+\.jpe?g$/iu);
   assert.ok(site.profile.avatarAlt.includes('IrisSakura'));
   await access(new URL(site.profile.avatar, root));

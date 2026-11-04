@@ -37,7 +37,15 @@ Website baseline: `a6aaae5b357d25a23ba42218a053d8071df953ad`.
 - The Card Studio source subtree had no local modifications at capture. The screenshot depicts browser-mode document editing and preview, not native export or Workbench acceptance.
 - SHA-256: `ecafe84f0d617403c96db00e0dfa15776544059a2ff5d197d0b48202c150fb79`.
 
-## Acceptance
+## Current refresh and review ownership
+
+The [2026-10-16 content refresh](content-refresh-2026-10-16.md) records the current source refs, claim/owner/license matrix, manual review steps, local candidate checks and the explicitly approved Violet source migration. It supplements the historical review above; it does not rewrite the 2026-10-05 receipts. The historical Violet provenance and project entry are retained in the linked migration archive; its new payload is produced from the approved local source commit.
+
+Website-owned current summaries and chapters may describe newly reviewed capabilities while the historical export remains unchanged. In particular, Violet Visual Study has a Creative Library reading workspace as well as its independent supply CLI; Game Diagnostics is a separate command utility. A newer editorial chapter must not fabricate a source-push receipt.
+
+Framework's new gameplay Preview chapter is separate from the snapshot-matched Supported adoption routes and the fixed-baseline Engineering Hub references. Changing an automatic inventory snapshot must not silently change the maturity or evidence of either.
+
+## Candidate acceptance
 
 Run `npm run check`, `npm run test:smoke`, `npm run package:site`, and `npm run journal:check -- --input <public-export-directory>`. Review the new detail route, mobile chapter layout, Wisteria text-only contract, search results and cross-project links in a browser. No source-product runtime acceptance or deployment is implied by website checks.
 

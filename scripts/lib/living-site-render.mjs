@@ -17,6 +17,8 @@ function featuredWork(game, prefix, id, headingLevel = 2) {
 }
 export function renderLivingHome({ projects, site, presentations, presentation, now, updates, articles, series, brand, personas }) {
   const current = resolveCurrentNow(now);
+  const wisteria = presentations.find(({ projectId }) => projectId === 'wisteria')
+    ?? presentation.projects.find(({ projectId }) => projectId === 'wisteria');
   const game = projects.projects.find(({ id }) => id === presentation.home.featuredWorkId);
   const writing = resolveHomeWriting(articles, presentation.home.recentArticleLimit);
   const sections = {
@@ -27,7 +29,7 @@ export function renderLivingHome({ projects, site, presentations, presentation, 
     writing: `<section id="writing" class="home-writing living-section"><div class="container">${heading('THINK / MYOSOTIS', '最近写的', link('/pages/blog.html', '全部文章 →', ''))}<div class="writing-list">${writing.map((article) => `<article class="content-card writing-entry" data-article-id="${escape(article.id)}"><time datetime="${article.publishedAt}">${article.publishedAt}</time><h3>${link(`/pages/blog/${article.slug}.html`, article.title, '')}</h3><p>${escape(article.summary)}</p></article>`).join('')}</div></div></section>`,
     mods: `<section id="mods" class="home-mod-series" data-brand-layout="editorial" aria-labelledby="home-mod-series-title"><div class="container home-mod-series-inner">${renderProjectIcon('freesia', { size: 112 })}<div><p class="section-kicker">EXPLORE</p><h2 id="home-mod-series-title">${escape(series.displayName)}</h2><p>我为喜欢的游戏做的一些 Mod。</p></div>${link('/pages/mods.html', '浏览 Mods', '', 'btn btn-secondary')}</div></section>`,
     projects: `<section id="projects" class="home-build living-section"><div class="container">${heading('BUILD', '把创作需要的东西，一起做出来', link('/pages/development.html','查看项目关系 →',''))}<div class="ecosystem-bridge">${presentations.filter(p=>['iris-engineering','sakura-framework','iris-shelf'].includes(p.projectId)).map((p,i)=>`<article data-project-id="${p.projectId}" data-persona="${p.personaId}"><span class="ecosystem-index">0${i+1}</span>${renderProjectIcon(p.personaId)}<h3>${link(p.route,p.displayName,'')}</h3><p>${esc(p.summary)}</p></article>`).join('')}</div></div></section>`,
-    live: `<section class="home-live living-section" id="live"><div class="container"><p class="section-kicker">LIVE / WISTERIA</p><h2>一个持续世界，怎样保存自己的状态？</h2><p>阅读 Wisteria 的世界状态、动画生命周期与存档恢复设计，了解本地持续世界的实现思路。</p>${link('/pages/wisteria.html','阅读 Wisteria 技术介绍 →','')}</div></section>`,
+    live: `<section class="home-live living-section" id="live"><div class="container"><p class="section-kicker">LIVE / WISTERIA</p><h2>桌面上的相伴，也有自己的日常</h2><p>${escape(wisteria.summary)}</p>${link('/pages/wisteria.html#desktop','了解 Wisteria 的桌面体验 →','')}</div></section>`,
     contact: `<section id="contact" class="public-cta living-section"><div class="container about-home"><p class="section-kicker">ABOUT</p><h2>关于我</h2><p>我主要做游戏。程序是目前最主要的工具，但我的兴趣也延伸到游戏系统、创作工具，以及这些东西为什么应该这样工作。</p><div class="hero-buttons">${link('/pages/contact.html', '关于我', '', 'btn btn-secondary')}${link('/pages/contact.html#contact', '联系', '', 'btn btn-secondary')}</div></div></section>`
   };
   return `<section id="home-page" class="page active living-home">${presentation.home.sectionOrder.map((id) => sections[id]).join('\n')}</section>`;
@@ -39,13 +41,15 @@ export function renderLivingNow(now, updates) {
 }
 export function renderLivingPortfolio(projectData, presentation, consumers) {
   const featured = projectData.projects.find(({ id }) => id === presentation.portfolio.featuredProjectId);
+  const localApps = presentation.projects.filter(({projectId}) => ['wisteria', 'iris-shelf'].includes(projectId));
   const groups = presentation.portfolio.groups.map((group) => {
     const entries = group.projectIds.filter((id) => id !== featured.id).map((id) => projectData.projects.find((project) => project.id === id));
     if (!entries.length) return '';
     return `<section class="living-section work-group" id="${group.id}"><div class="container"><h2>${escape(group.label)}</h2>${entries.map((project) => `<article class="work-entry" id="project-${project.id}"><h3>${escape(project.title)}</h3><p>${escape(presentation.portfolio.descriptions?.[project.id] ?? project.summary)}</p><p class="work-availability">开发中 · 暂无公开试玩</p>${project.href ? link(project.href, '了解作品', '../') : ''}</article>`).join('')}</div></section>`;
   }).join('');
-  return `<header class="portfolio-header illustrated-cover"><div class="container illustrated-cover-grid"><div class="illustrated-cover-copy"><p class="section-kicker">WORKS</p><h1>游戏与作品</h1><p>做出来的游戏、Mod，以及仍在生长的原型。</p></div>${renderCreatorVignette('playing')}</div></header>
+  return `<header class="portfolio-header illustrated-cover"><div class="container illustrated-cover-grid"><div class="illustrated-cover-copy"><p class="section-kicker">WORKS</p><h1>游戏与作品</h1><p>游戏、Mod、本地应用，以及仍在生长的原型。</p></div>${renderCreatorVignette('playing')}</div></header>
     <div id="portfolio-journey" class="legacy-anchor"></div><div id="portfolio-cases">${featuredWork(featured, '../', `project-${featured.id}`)}</div>
     <section class="living-section work-mods" id="work-mods"><div class="container">${heading('MODS', 'Freesia Mods')}<p>为喜欢的游戏添加角色、卡牌与新的玩法想法。</p>${link('/pages/mods.html', '查看 Freesia Mods 系列 →', '../')}<p id="project-the-weaver">${link('/pages/mods.html#mod-works', 'The Weaver · 杀戮尖塔 2 角色 Mod', '../')}</p><p id="project-iris-core">${link('/pages/mods.html#mod-foundations', 'Mod 制作的技术基础', '../')}</p></div></section>${groups}
+    <section class="living-section" id="local-apps"><div class="container"><h2>在本地使用的应用与工具</h2><div class="chapter-grid local-app-grid">${localApps.map(project => `<article data-persona="${escape(project.personaId)}"><p class="chapter-eyebrow">${escape(project.role)}</p><h3>${escape(project.displayName)}</h3><p>${escape(project.summary)}</p><p class="work-availability">本地使用 · 暂未开放下载</p><ul class="chapter-links"><li>${link(project.primaryAction.href, project.primaryAction.label, '../')}</li><li>${link(project.secondaryAction.href, project.secondaryAction.label, '../')}</li></ul></article>`).join('')}</div></div></section>
     <section class="living-section technical-work" id="consumer-lab"><div class="container"><h2>技术实验与采用案例</h2><p>我也做了一些用于玩法和框架验证的实验项目。</p>${link('/pages/framework.html#game-adoption', '查看技术实验与采用案例 →', '../')}<p>${link('/pages/development.html', '了解长期项目', '../')}</p><details class="legacy-consumer-links"><summary>查找项目与实验</summary>${presentation.projects.map((project) => `<p id="project-${project.projectId}">${link(project.route, project.displayName, '../')}</p>`).join('')}${consumers.cases.map((entry) => `<p id="consumer-${entry.id}">${link(`/pages/framework.html#consumer-${entry.id}`, entry.title, '../')}</p>`).join('')}</details></div></section>`;
 }

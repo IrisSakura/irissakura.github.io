@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir, access } from 'node:fs/promises';
-import { pageFamily, readingBody, splitReadingBlocks, publicationList } from '../scripts/lib/website-v2.mjs';
+import { pageFamily, readingBody, splitReadingBlocks, publicationList, ecosystemMap } from '../scripts/lib/website-v2.mjs';
 const root=new URL('../',import.meta.url);
 const read=p=>readFile(new URL(p,root),'utf8');
 async function htmlFiles(dir='pages') {const entries=await readdir(new URL(dir+'/',root),{withFileTypes:true});return (await Promise.all(entries.map(e=>e.isDirectory()?htmlFiles(dir+'/'+e.name):e.name.endsWith('.html')?[dir+'/'+e.name]:[]))).flat();}
@@ -28,6 +28,17 @@ test('publication archive and series express opposite chronological orders',()=>
  const archive=publicationList(entries),series=publicationList(entries,'',true);
  assert.ok(archive.indexOf('new.html')<archive.indexOf('old.html'));
  assert.ok(series.indexOf('old.html')<series.indexOf('new.html'));
+});
+test('project overview keeps local introductions and offers the configured direct entry', async()=>{
+ const {projects}=JSON.parse(await read('config/site-presentation.json'));
+ const html=ecosystemMap(projects, {}, '../../');
+ for(const project of projects){
+  assert.ok(html.includes(`href="#ecosystem-${project.projectId}"`));
+  assert.ok(html.includes(`href="../../${project.primaryAction.href.slice(1)}"`));
+  assert.ok(html.includes(project.primaryAction.label));
+ }
+ const copy=structuredClone(projects);copy[0].primaryAction.label='<Read & start>';
+ assert.ok(ecosystemMap(copy, {}).includes('&lt;Read &amp; start&gt;'));
 });
 test('CSS entry has one layer order and all imported owners exist',async()=>{
  const css=await read('style/site.css');assert.match(css,/@layer reset, tokens, base, shell, components, personas, pages, interface, utilities;/);

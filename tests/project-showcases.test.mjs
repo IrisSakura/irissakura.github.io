@@ -10,7 +10,7 @@ test('project chapters reject media fields and unsafe reading links', () => {
   assertProjectShowcases(data);
   for (const mutate of [
     (copy) => { copy.chapters.wisteria[0].image = 'assets/runtime.png'; },
-    (copy) => { copy.chapters.wisteria[0].cards[0].video = 'recording.mp4'; },
+    (copy) => { copy.chapters.wisteria.find((chapter) => chapter.cards?.length).cards[0].video = 'recording.mp4'; },
     (copy) => { copy.chapters.wisteria[0].links = [{ label: 'Private', href: 'file:///private/source' }]; },
     (copy) => { copy.chapters.wisteria.push(copy.chapters.wisteria[0]); }
   ]) {

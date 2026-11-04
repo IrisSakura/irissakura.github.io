@@ -38,6 +38,14 @@ Shelf 与 UDGAP 复用 `IrisSakura` owner-level `consumer-site-sync` Runner。�
 
 UDGAP checkout 设置 `GIT_LFS_SKIP_SMUDGE=1`，同步只验证 committed project metadata；它不构成 Unity、Player、玩法或 Runner 测试证据。
 
-## Plastic boundary
+## Violet source migration on 2026-10-16
+
+The maintainer explicitly approved rebuilding Violet's source export and migrating its baseline, including a local source commit. The current source restores `config/public-site-project.json`, a deterministic exact-commit exporter and the source-push workflow. Its local source commit is `281a0af5123df8620f23cda6576f6cc29b6bec5f`; it has not been pushed.
+
+The [migration archive](source-migrations/iris-shelf-2026-10-16.json) retains the previous provenance and full project entry. The [refresh record](content-refresh-2026-10-16.md) records authorization and checks. This approved one-time baseline change is outside the ordinary Bot scope; normal importer ancestry, same-commit drift and three-path guards remain unchanged. CI must never delete provenance or auto-rebaseline.
+
+The new workflow expects the documented runner label and repository-specific secrets; no runner/credential configuration or remote execution was performed. Local export/import acceptance does not establish that remote source-push is active. Source push, website delivery and the first actual workflow require their corresponding authorization and verification.
+
+## Plastic source boundary
 
 言铸之剑没有 Git ancestry，当前保持 `site-curated`。在 Plastic workspace 可提供 live changeset/head、固定 blob 读取和可审计 after-checkin trigger 之前，不得把 Git importer 或 source-push 标签套用到该项目。

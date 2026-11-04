@@ -138,7 +138,7 @@ test('generated current product surfaces use aliases while source records and co
     read('pages/development.html'), read('pages/journal/alchemy-magical-crafting.html'), read('data/projects.json'), readBytes(new URL('docs/brand/master-design-v1.md', root))
   ]);
   assert.match(portfolio, /<h2>Violet Shelf<\/h2>/); assert.match(portfolio, /<h2>Myosotis<\/h2>/); assert.match(portfolio, /href="\.\.\/pages\/tools\.html"/); assert.doesNotMatch(portfolio, /Iris Shelf 项目状态/); assert.match(portfolio, /href="\.\.\/pages\/journal\.html"/);
-  assert.match(detail, /<title>.* \| Myosotis<\/title>/); assert.match(projects, /"Iris Shelf"/); assert.match(projects, /"IrisSakura Journal"/);
+  assert.match(detail, /<title>.* \| Myosotis<\/title>/); assert.ok(JSON.parse(projects).projects.some(({ id }) => id === 'iris-shelf')); assert.match(projects, /"IrisSakura Journal"/);
   const body = controlled.toString('utf8').match(/<!-- source-body:start -->\n([\s\S]*?)\n<!-- source-body:end -->/)?.[1]; assert.ok(body); const source = Buffer.from(`${body}\n`); assert.equal(source.byteLength, 48928); assert.match(controlled.toString('utf8'), /当前授权桌面运行时为 Electron/);
   assert.equal(createHash('sha256').update(source).digest('hex'), '9e2ba53b981ac4915acd8de4c8b96bb10ef63d4c490182ae490e8836b0c8a4c0');
 });

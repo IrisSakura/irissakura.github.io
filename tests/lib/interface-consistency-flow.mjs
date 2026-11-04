@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { interfaceContract, assertInterfaceRole, assertProjectHeading } from './interface-contract.mjs';
 
 const routes = [
   ['home', '/'], ['portfolio', '/pages/portfolio.html'], ['blog', '/pages/blog.html'],
@@ -15,7 +16,7 @@ const fields = '.module-search input, .content-search-controls input, .content-s
 const chips = '.note-tags > a, .note-tags > span, .blog-tag-list a, .context-tags > *, .mod-tags span, .system-tags span, .capability-list li';
 const cards = '.content-card, .module-card, .blog-featured-card, .framework-domain-card, .framework-depth-card, .content-search-result, .mod-work-card, .public-route-card';
 
-/** Compare the same roles across real routes so page-specific overrides cannot split them again. */
+/** Check real routes against the approved contract, not against whichever page renders first. */
 export async function assertInterfaceConsistency(browser, baseUrl, output) {
   if (output) await mkdir(output, { recursive: true });
   const context = await browser.newContext({ reducedMotion: 'reduce' });
@@ -38,6 +39,7 @@ export async function assertInterfaceConsistency(browser, baseUrl, output) {
             .map(el => {
               const css = getComputedStyle(el);
               return { label: el.textContent.trim().slice(0, 45) || el.getAttribute('aria-label') || el.tagName,
+                variant: el.matches('.module-card.is-active') ? 'selected-module' : 'default',
                 values: Object.fromEntries(properties.map(property => [property, css[property]])) };
             });
           return {
@@ -52,15 +54,12 @@ export async function assertInterfaceConsistency(browser, baseUrl, output) {
         assert.ok(state.overflow <= 1, `${width}px ${name}: horizontal overflow`);
         for (const role of ['buttons', 'fields', 'chips', 'cards']) {
           for (const item of state[role]) {
-            // The selected module card deliberately carries an inset selection stripe.
-            const values = { ...item.values };
-            if (role === 'cards') delete values.boxShadow;
-            if (!baseline.has(role)) baseline.set(role, values);
-            assert.deepEqual(values, baseline.get(role), `${width}px ${name}: ${role} drift for ${item.label}`);
+            assertInterfaceRole(role, item, `${width}px ${name}: ${item.label}`);
           }
         }
         if (['engineering', 'framework', 'journal', 'tools', 'mods', 'wisteria'].includes(name)) {
           const heading = state.heading[0].values;
+          assertProjectHeading(width, heading, `${width}px ${name}`);
           if (!baseline.has('project-title')) baseline.set('project-title', heading);
           assert.deepEqual(heading, baseline.get('project-title'), `${width}px ${name}: project heading scale differs`);
         }
@@ -81,7 +80,7 @@ export async function assertInterfaceConsistency(browser, baseUrl, output) {
       return { borderRadius: css.borderRadius, borderWidth: css.borderWidth, fontSize: css.fontSize, lineHeight: css.lineHeight };
     }));
     assert.ok(archiveTags.length > 0, 'Scrolled archive card exposes its topic chips');
-    const chipSample = evidence.find(row => row.chips.length).chips[0].values;
+    const chipSample = interfaceContract.roles.chips;
     for (const tag of archiveTags) assert.deepEqual(tag, chipSample, 'Rendered archive chip retains shared geometry');
 
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -94,7 +93,7 @@ export async function assertInterfaceConsistency(browser, baseUrl, output) {
       const css = getComputedStyle(el);
       return { radius: css.borderRadius, height: css.minHeight, border: css.borderWidth };
     });
-    const fieldSample = evidence.find(row => row.fields.length).fields[0].values;
+    const fieldSample = interfaceContract.roles.fields;
     assert.deepEqual(searchField, { radius: fieldSample.borderRadius, height: fieldSample.minHeight, border: fieldSample.borderWidth });
     if (output) await page.locator('[data-site-search]').screenshot({ path: path.join(output, 'search-dialog.png') });
     await page.keyboard.press('Escape');

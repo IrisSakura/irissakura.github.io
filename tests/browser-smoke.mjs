@@ -682,6 +682,10 @@ try {
   if (overflowingDevelopmentHeading) {
     throw new Error('Development hub project heading overflows its card');
   }
+  await desktop.locator('.ecosystem-map').getByRole('link', { name: '查看采用路线', exact: false }).click();
+  await desktop.waitForURL(`${baseUrl}/pages/framework-quickstart.html`);
+  await desktop.goBack();
+  await desktop.waitForURL(`${baseUrl}/pages/development.html`);
   for (const [name, href] of [
     ['进入 Myosotis', '../pages/journal.html'],
     ['进入 Violet Shelf', '../pages/tools.html']

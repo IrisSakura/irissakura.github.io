@@ -1,13 +1,34 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-10-16",
   "chapters": {
     "wisteria": [
+      {
+        "id": "desktop",
+        "kicker": "A COMPANION ON YOUR DESKTOP",
+        "title": "先从一次日常相伴开始",
+        "intro": "Wisteria 是在 macOS 本地运行的透明桌面陪伴应用，也是一个保留日常进度的小世界。从常驻角色进入相伴、家园与活动，让窗口之外的日常也有连续性。",
+        "steps": [
+          {
+            "title": "从桌面进入",
+            "body": "通过常驻菜单与角色入口打开需要的功能，在日常桌面和相伴场景之间切换。"
+          },
+          {
+            "title": "选择角色与相伴方式",
+            "body": "浏览角色、造型和动作，调整播放进度、速度与镜头；角色选择和世界状态各自保存。"
+          },
+          {
+            "title": "回到自己的世界",
+            "body": "家园、活动与照护延续本地进度。关闭面板或退出应用后，再次启动仍回到原来的档案。"
+          }
+        ],
+        "note": "目前在 macOS 本地使用，尚未开放公开下载。部分实体输入、视觉质量与性能验证仍在继续。"
+      },
       {
         "id": "world",
         "kicker": "WORLD STATE",
         "title": "让持续世界有自己的状态",
-        "intro": "Wisteria 是一个以 Godot 为宿主的本地桌面世界。技术上的核心问题，是让世界进度、活动和角色表现分别拥有清楚的生命周期。",
+        "intro": "桌面角色、家园和活动读取同一个本地世界，但各自有不同的生命周期。窗口可以关闭，已发生的世界事实需要留下来。",
         "cards": [
           {
             "title": "世界事实与窗口分离",
@@ -31,26 +52,26 @@
         "id": "skeletal-runtime",
         "kicker": "ANIMATION RUNTIME",
         "title": "从动画数据到可见姿态",
-        "intro": "独立骨骼动画运行时把数据解析、时间轴求值、骨骼与约束计算、网格绘制分开，让播放行为可以独立检查，也能复用于不同表现入口。",
+        "intro": "2D 骨骼与 3D 模型通过各自的表现入口播放。共享动作在不同模型之间处理姿态重定向，头发和衣物的次级运动另行求解；播放、渲染与世界进度不混在一起。",
         "steps": [
           {
-            "title": "读取与校验",
-            "body": "解析骨骼、皮肤、附件和动画数据，确认所选素材具备需要的播放能力。"
+            "title": "检查素材与适配范围",
+            "body": "分别校验骨骼、皮肤和模型所具备的能力。动作可共享到已适配的造型，不把有限兼容范围扩展为任意模型支持。"
           },
           {
-            "title": "计算姿态",
-            "body": "按时间轴计算变换与形变，处理骨骼继承、IK、Transform 与 Path 等已支持约束。"
+            "title": "求出动作与姿态",
+            "body": "2D 时间轴与约束独立求值；3D 动作经过骨架映射、足部校准与姿态计算，再叠加已支持的次级运动。"
           },
           {
-            "title": "提交绘制",
-            "body": "将姿态交给渲染层，保持裁剪、网格和透明窗口中的绘制边界。"
+            "title": "安排场景与播放",
+            "body": "在相伴场景中选择动作、调整播放和镜头，材质与灯光留在表现层处理。"
           },
           {
-            "title": "释放与替换",
-            "body": "结束播放时清理旧实例和回调，让新的角色或皮肤取得表现资源。"
+            "title": "切换与释放",
+            "body": "替换角色、结束播放或关闭入口时清理旧实例和回调，避免残留动作继续驱动新角色。"
           }
         ],
-        "note": "兼容范围围绕已接入素材持续验证；暂未提供面向任意骨骼素材的通用插件下载。"
+        "note": "共享动作、衣物接触和长发效果仍按具体模型优化；人工视觉评价和性能验证继续进行。"
       },
       {
         "id": "lifecycle",
@@ -102,10 +123,10 @@
         "id": "status",
         "kicker": "CURRENT DEVELOPMENT",
         "title": "当前进展",
-        "intro": "近期完成了角色与皮肤过渡、界面资源整合，以及旧世界恢复与表现范围的修正。这里持续记录系统设计与实现思路。",
+        "intro": "本地安装版已经整合相伴界面、动作浏览与镜头操作，正常重启保留原档案。新的动作质量候选继续单独验证。",
         "paragraphs": [
-          "当前验证集中在 macOS 本地版本，暂未开放公开下载。macOS 音频输入初始化仍有启动受阻情况，启动体验需要继续处理。",
-          "后续关注世界状态与表现的边界、活动退出清理，以及已有存档在版本变化中的连续性。"
+          "当前已安装版本完成了指定界面、同包运行与正常生命周期检查。后续动作质量候选仍在单独试用，尚未替换日常版本。",
+          "部分角色的衣物与长发视觉、性能专项和实体 OS 输入仍待确认；尚未提供公开构建。实际使用围绕本地资料与用户选择的资源展开。"
         ],
         "links": [
           {
@@ -146,6 +167,33 @@
         "note": "工作台负责组织与试验；不同工具的文档仍各自保存。卡牌不会自动转换成游戏逻辑或数值模型。"
       },
       {
+        "id": "visual-study",
+        "kicker": "READ · OBSERVE · REVISIT",
+        "title": "让一份视觉参考，留下自己的观察",
+        "intro": "Visual Study 在 Creative Library 中提供独立的阅读与观察子工作区。日常参考可以回看，也可以写下构图、色彩和表达上的观察，再决定是否带回创作资料库。",
+        "steps": [
+          {
+            "title": "阅读有来源的参考",
+            "body": "按条目查看来源、归属与允许的预览；候选不足时保留实际数量，不用无关图片补齐。"
+          },
+          {
+            "title": "记下自己的观察",
+            "body": "围绕作品写下关注点、反馈和书签，之后回到同一份参考继续阅读。"
+          },
+          {
+            "title": "明确选择是否采用",
+            "body": "需要带回资料库时，通过既有入口显式采纳。阅读、观察、采纳与对外发送分别处理。"
+          }
+        ],
+        "note": "参考供给使用独立的本地 CLI，阅读与观察有桌面入口。外部作品的预览与再次使用遵循各自许可，归属与来源随条目保留。",
+        "links": [
+          {
+            "label": "沿着问题继续研究",
+            "href": "/pages/journal.html#reading-routes"
+          }
+        ]
+      },
+      {
         "id": "workbench",
         "kicker": "A WORKBENCH THAT CAN GROW",
         "title": "工具可以扩展，实验可以重看",
@@ -176,6 +224,32 @@
         ]
       },
       {
+        "id": "engineering-tools",
+        "kicker": "FROM A BUILD TO A DIAGNOSIS",
+        "title": "为工程问题保留足够的上下文",
+        "intro": "桌面工作台提供项目与证据入口；需要进一步观察运行中的游戏时，使用独立 Game Diagnostics CLI，选择具体目标和采集范围。",
+        "cards": [
+          {
+            "title": "在 Shelf 查看证据",
+            "body": "Engineering Evidence Inspector 只读检查选定的工程包，连接构建、产物与会话。"
+          },
+          {
+            "title": "在独立工具中观察",
+            "body": "Game Diagnostics 提供显式进程观察、探针数据导入、受控比较与可离线验真的 Bundle；采集由操作者选择目标并启动。"
+          },
+          {
+            "title": "按平台保留实际范围",
+            "body": "当前已有部分 macOS Unity 本地链路证据，Windows 和 Cocos 实机仍待验证。Game Diagnostics 通过独立 CLI 使用。"
+          }
+        ],
+        "links": [
+          {
+            "label": "了解构建与试玩的关联",
+            "href": "/pages/engineering.html#build-workflow"
+          }
+        ]
+      },
+      {
         "id": "local-intelligence",
         "kicker": "LOCAL RESEARCH TOOLS",
         "title": "从本地资料到今日重点",
@@ -202,7 +276,7 @@
         "id": "build-workflow",
         "kicker": "FROM SOURCE TO PLAYTEST",
         "title": "知道这份构建从哪里来，也知道它运行过什么",
-        "intro": "Iris Engineering 把源代码、依赖、工具配置、构建产物和试玩结果连起来。为一个问题寻找上下文时，可以沿着同一次构建继续查下去。",
+        "intro": "先读取项目事实，再在明确授权范围内执行。BuildID 把源代码、依赖、工具配置、构建产物和试玩结果连起来，让一个问题能沿着同一次构建继续查下去。",
         "steps": [
           {
             "title": "确定构建输入",
@@ -227,7 +301,7 @@
         "id": "continuity",
         "kicker": "PICK UP WHERE YOU LEFT OFF",
         "title": "恢复工作环境之前，先知道要恢复什么",
-        "intro": "Continuity 整理项目档案、工具偏好和恢复材料，让环境迁移与工作接续有明确的输入、计划和检查步骤。",
+        "intro": "本地工作台连接受管理的项目入口；Continuity 整理项目档案、工具偏好与恢复材料。接续工作先看已有输入和恢复计划，再决定哪些操作需要重新授权。",
         "cards": [
           {
             "title": "可检查的恢复包",
@@ -239,7 +313,7 @@
           },
           {
             "title": "与 Violet 接续",
-            "body": "恢复计划包含 Violet 偏好与 Workbench 的精确工具身份。项目资料与桌面创作资料各自保留恢复边界。",
+            "body": "本地工作台登记 Violet Shelf 与 Wisteria 等项目，恢复计划仍区分项目资料、Violet 偏好与 Workbench 的精确工具身份；资料和执行权限各有边界。",
             "links": [
               {
                 "label": "查看 Violet 的工作台",
@@ -256,7 +330,7 @@
         "id": "reading-routes",
         "kicker": "START WITH A QUESTION",
         "title": "沿着一个问题，读到下一次设计",
-        "intro": "研究资料已经积累了许多条目。可以从下面三个问题进入，把机制研究、运行时设计与实际项目连起来。",
+        "intro": "从一个实际问题进入已公开的文章与研究摘要，再回到作品、工具和框架中的设计取舍。下面三条路线可以分别阅读，不必先遍历整份资料库。",
         "cards": [
           {
             "title": "一次行动何时真正生效？",
@@ -330,7 +404,7 @@
           },
           {
             "title": "从研究返回实现",
-            "body": "将有用的结论整理为公开文章、设计摘要与框架案例，保留具体问题和取舍，让研究能够服务下一次创作。"
+            "body": "把可复用的结论带回实现：在 Wisteria 中检验状态与恢复，在创作工具中整理输入和结果，在框架里明确语义与引擎的边界。公开阅读以已发表文章和允许公开的摘要为入口。"
           }
         ],
         "links": [
@@ -345,6 +419,10 @@
           {
             "label": "Framework 架构案例",
             "href": "/pages/framework/cases.html"
+          },
+          {
+            "label": "Violet 的视觉阅读与观察",
+            "href": "/pages/tools.html#visual-study"
           }
         ]
       }
@@ -450,6 +528,43 @@
           }
         ]
       }
+    ],
+    "sakura-framework": [
+      {
+        "id": "development-preview",
+        "kicker": "GAMEPLAY PREVIEW",
+        "title": "让规则走完一条玩法循环",
+        "intro": "近期的 Fishing、Bowling 与 Falling Block Preview，把独立规则、输入与时钟、存档和实际原型接到一起。它们提供开发实例，继续与已复核的 Unity 采用路线分开呈现。",
+        "cards": [
+          {
+            "title": "Fishing · 一次完整的垂钓",
+            "body": "从抛投、咬口与搏鱼到起鱼和处置，组织单竿循环、预设与可恢复的状态。"
+          },
+          {
+            "title": "Bowling · 一局可延续的比赛",
+            "body": "连接真实球瓶物理、残瓶状态、十局与奖励球计分，再把结果保存在稳定状态中。"
+          },
+          {
+            "title": "Falling Block · 固定时钟的落块",
+            "body": "将七袋、输入、固定 Tick 与规则门面组合成可消费的落块场景，保持规则和表现的职责分开。"
+          }
+        ],
+        "note": "这些实例已有本地规则、组件与原型链路验证。原生样例导入、实体输入与画面，以及 Player/Runner 等仍有待验范围；Preview 不等于 Supported 或可下载成品。",
+        "links": [
+          {
+            "label": "从已有采用路线开始",
+            "href": "/pages/framework-quickstart.html"
+          },
+          {
+            "label": "阅读真实消费者与边界",
+            "href": "/pages/framework/consumers.html"
+          },
+          {
+            "label": "了解 Wisteria 的状态与恢复研究",
+            "href": "/pages/wisteria.html#persistence"
+          }
+        ]
+      }
     ]
   },
   "tools": [
@@ -457,6 +572,11 @@
       "name": "Creative Library",
       "input": "文本、图片和创作参考",
       "output": "整理来源、标签和采用状态，保存内容与关联，并使用独立快照恢复资料库。"
+    },
+    {
+      "name": "Visual Study",
+      "input": "有来源的视觉参考与自己的观察",
+      "output": "在 Creative Library 阅读、记录反馈和书签，按选择采纳到资料库；供给使用独立本地 CLI。"
     },
     {
       "name": "Card Studio",

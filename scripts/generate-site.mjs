@@ -72,6 +72,7 @@ const PAGE_INDEXES = {
     items: [
       ['portfolio-cases', '代表作'],
       ['work-mods', 'Mods'],
+      ['local-apps', '本地应用'],
       ['consumer-lab', '技术实验']
     ]
   },
@@ -81,6 +82,7 @@ const PAGE_INDEXES = {
     insertBefore: '    <!-- framework-story:start -->',
     items: [
       ['use-cases', '按问题选用'],
+      ['development-preview', '玩法 Preview'],
       ['architecture-map', '架构地图'],
       ['pillars', '工程支柱'],
       ['reference', '技术参考'],
@@ -119,8 +121,10 @@ const PAGE_INDEXES = {
     insertBefore: '<section class="project-chapter" id="creative-workflow"',
     items: [
       ['creative-workflow', '创作流程'],
+      ['visual-study', '视觉阅读'],
       ['tools', '工具目录'],
       ['workbench', '扩展与实验'],
+      ['engineering-tools', '工程诊断'],
       ['local-intelligence', '本地研究工具'],
       ['status', '当前版本']
     ]
@@ -141,10 +145,10 @@ const PAGE_INDEXES = {
     ]
   },
   'pages/wisteria.html': {
-    ariaLabel: 'Wisteria 技术章节',
-    title: '阅读系统设计',
-    insertBefore: '<section class="project-chapter" id="world"',
-    items: [['world', '世界状态'], ['skeletal-runtime', '动画运行时'], ['lifecycle', '角色生命周期'], ['persistence', '存档与恢复'], ['status', '当前进展']]
+    ariaLabel: 'Wisteria 页面章节',
+    title: '从桌面体验到系统设计',
+    insertBefore: '<section class="project-chapter" id="desktop"',
+    items: [['desktop', '桌面体验'], ['world', '世界状态'], ['skeletal-runtime', '动画运行时'], ['lifecycle', '角色生命周期'], ['persistence', '存档与恢复'], ['status', '当前进展']]
   },
   'pages/mods/the-weaver.html': {
     ariaLabel: 'The Weaver 作品章节',
@@ -415,13 +419,13 @@ await writeBrandSource();
 await writeToolsSource(projectPresentations.find(({ projectId }) => projectId === 'iris-shelf'));
 await writeCompatibilityRouteSources();
 await writeNowSource();
-await writeWisteriaSource();
+await writeWisteriaSource(projectPresentations.find(({ projectId }) => projectId === 'wisteria'));
 await writeWeaverSource();
 await writeSubscribeSource();
 
 const pageDefinitions = [
   ...labPages,
-  { file: 'pages/wisteria.html', key: 'wisteria', title: 'Wisteria | 持续世界的系统设计', description: 'Wisteria 的技术介绍：世界状态、独立骨骼动画运行时、角色与皮肤生命周期，以及本地存档和恢复。', canonical: '/pages/wisteria.html', schemaType: 'WebPage' },
+  { file: 'pages/wisteria.html', key: 'wisteria', title: 'Wisteria | macOS 桌面陪伴与本地世界', description: projectPresentations.find(({ projectId }) => projectId === 'wisteria').summary, canonical: '/pages/wisteria.html', schemaType: 'WebPage' },
   { file: 'pages/mods/the-weaver.html', key: 'mods', title: 'The Weaver | 双形态卡牌角色 · Freesia Mods', description: '了解编织者的 Iris／Sakura 双形态、Node 与 Compile／Bloom 循环、构筑思路和角色制作过程。', canonical: '/pages/mods/the-weaver.html', schemaType: 'SoftwareApplication' },
   { file: 'pages/subscribe.html', key: 'journal', title: '订阅文章 | IrisSakura', description: '通过 RSS 订阅 IrisSakura 的游戏系统、创作与开发文章，在阅读器中接收更新。', canonical: '/pages/subscribe.html', schemaType: 'WebPage' },
   { file: 'pages/now.html', key: 'contact', brandModeKey: 'home', title: 'Now | IrisSakura', description: 'IrisSakura 最近正在做、思考与完成的事情。', canonical: '/pages/now.html', schemaType: 'WebPage' },
@@ -700,7 +704,7 @@ for (const page of pageDefinitions) {
   if (page.file === 'pages/framework.html') {
     const story = resolveFrameworkStory(frameworkStory);
     html = replaceGeneratedBlock(html, 'framework-story-hero', renderFrameworkStoryHero(story, projectPresentations.find(({ projectId }) => projectId === 'sakura-framework')));
-    html = replaceGeneratedBlock(html, 'framework-story', renderFrameworkUseCases(projectShowcases.frameworkUseCases, frameworkAdoption) + renderFrameworkStory(story));
+    html = replaceGeneratedBlock(html, 'framework-story', renderFrameworkUseCases(projectShowcases.frameworkUseCases, frameworkAdoption) + renderProjectChapters(projectShowcases.chapters['sakura-framework']) + renderFrameworkStory(story));
     html = replaceGeneratedBlock(html, 'framework-reference', renderFrameworkReference(story));
     html = updateFrameworkFallback(html, framework, frameworkAdoption);
     html = replaceGeneratedBlock(html, 'framework-adoption', renderFrameworkAdoption(frameworkAdoption) + '<div class="container">' + renderConsumerLab(consumerLab, consumerSync) + '</div>');
@@ -2197,14 +2201,16 @@ async function writeBrandSource() {
 
 async function writeToolsSource(presentation) {
   if (!presentation) throw new Error('site-presentation violation: Violet Shelf presentation is missing');
-  const cards = projectShowcases.tools.map(({name, input, output}, index) => `<details class="tools-card tool-drawer"><summary><span>${String(index + 1).padStart(2, '0')}</span><h3>${escapeHtml(name)}</h3><span class="drawer-hint">查看工作流 ＋</span></summary><div class="drawer-content"><p><strong>输入</strong>${escapeHtml(input)}</p><p><strong>结果</strong>${escapeHtml(output)}</p></div></details>`).join('');
-  const [creativeWorkflow, ...workbenchChapters] = projectShowcases.chapters['iris-shelf'];
+  const cards = projectShowcases.tools.map(({name, input, output}, index) => `<details class="tools-card tool-drawer"><summary><span>${String(index + 1).padStart(2, '0')}</span><h3>${escapeHtml(name)}</h3><span class="drawer-hint">输入与结果<span class="drawer-indicator" aria-hidden="true"></span></span></summary><div class="drawer-content"><p><strong>输入</strong>${escapeHtml(input)}</p><p><strong>结果</strong>${escapeHtml(output)}</p></div></details>`).join('');
+  const shelfChapters = projectShowcases.chapters['iris-shelf'];
+  const creativeChapters = shelfChapters.filter(({ id }) => ['creative-workflow', 'visual-study'].includes(id));
+  const workbenchChapters = shelfChapters.filter(({ id }) => !['creative-workflow', 'visual-study'].includes(id));
   await writeFile(path.join(root, 'pages/tools.html'), `<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHtml(presentation.displayName)} | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><link rel="stylesheet" href="../style/iris-sakura.css"><!-- brand-styles:end --><link rel="stylesheet" href="../style/tools.css"></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content tools-main">
-<header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="#tools">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#status">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
-<section class="living-section"><div class="container project-chibi-panel"><div class="living-prose project-chibi-copy"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div>${renderProjectChibi('violet')}</div></section>${renderProjectChapters([creativeWorkflow])}<figure class="container product-preview"><a href="../assets/images/violet-shelf/card-studio-demo.png" aria-label="查看卡牌创作示例原图"><img src="../assets/images/violet-shelf/card-studio-demo.png" alt="Card Studio 示例：编辑花间小憩卡牌的名称、费用和规则，右侧实时显示普通版预览" width="1440" height="1120" loading="lazy" decoding="async"></a><figcaption>Card Studio · 浏览器演示：填写卡牌文字，实时查看普通版预览。点击查看原图。</figcaption></figure><section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">LOCAL CREATIVE WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>从创作资料、卡牌和数值，到配表、概率与工程检查，按当前问题选择工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
+<header class="tools-hero"><div class="tools-hero-copy"><p class="tools-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p><p class="section-kicker">LOCAL DEVELOPMENT AND CREATIVE TOOLS</p><h1>${escapeHtml(presentation.displayName)}</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="${escapeAttribute('../' + presentation.primaryAction.href.slice(1))}">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="${escapeAttribute('../' + presentation.secondaryAction.href.slice(1))}">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
+<section class="living-section"><div class="container project-chibi-panel"><div class="living-prose project-chibi-copy"><h2>把创作里的小事做顺手</h2><p>做游戏时，卡牌、图片、表格和概率问题常常散落在不同地方。我为自己做这个工具台，希望从一个具体素材或一组数据出发，很快看到可以继续使用的结果。</p><h2>我怎样使用它</h2><p>为卡牌整理普通与升级两面的文字和图片；检查表格之间的引用；在设计抽牌规则时比较不同条件的概率。完成后再把结果导出，带回正在制作的作品。</p></div>${renderProjectChibi('violet')}</div></section>${renderProjectChapters(creativeChapters.filter(({ id }) => id === 'creative-workflow'))}<figure class="container product-preview"><a href="../assets/images/violet-shelf/card-studio-demo.png" aria-label="查看卡牌创作示例原图"><img src="../assets/images/violet-shelf/card-studio-demo.png" alt="Card Studio 示例：编辑花间小憩卡牌的名称、费用和规则，右侧实时显示普通版预览" width="1440" height="1120" loading="lazy" decoding="async"></a><figcaption>Card Studio · 浏览器演示：填写卡牌文字，实时查看普通版预览。点击查看原图。</figcaption></figure>${renderProjectChapters(creativeChapters.filter(({ id }) => id === 'visual-study'))}<section class="tools-catalog" id="tools" aria-labelledby="tools-title"><div class="tools-section-heading"><p class="section-kicker">LOCAL CREATIVE WORKFLOWS</p><h2 id="tools-title">从素材和数据，到可以继续使用的结果</h2><p>从创作资料、卡牌和数值，到配表、概率与工程检查，按当前问题选择工具。</p></div><div class="tools-grid tool-shelf">${cards}</div></section>
 ${renderProjectChapters(workbenchChapters)}<section class="tools-status" id="status" aria-labelledby="tools-status-title"><div><p class="section-kicker">GETTING STARTED</p><h2 id="tools-status-title">使用说明</h2><p>正在本地开发和使用，暂未开放下载。</p></div><ul><li>工具操作与项目资料留在本机。</li><li>使用文件导入与导出，在工具之间继续整理和创作。</li><li>基于 Electron、React／TypeScript 与 Rust 构建。</li></ul></section>
 <nav class="tools-next" aria-label="继续浏览"><a href="portfolio.html">浏览相关作品</a><a href="brand.html">查看品牌与视觉资料</a><a href="development.html">返回全部项目</a></nav>
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>\n`);
@@ -2838,11 +2844,12 @@ async function readJson(relativePath) {
   return JSON.parse(await readText(relativePath));
 }
 
-async function writeWisteriaSource() {
+async function writeWisteriaSource(presentation) {
+  if (!presentation) throw new Error('site-presentation violation: Wisteria presentation is missing');
   await writeFile(path.join(root, 'pages/wisteria.html'), `<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wisteria | IrisSakura</title><link rel="stylesheet" href="../style/main.css"><!-- brand-styles:start --><!-- brand-styles:end --></head>
 <body><a class="skip-link" href="#main-content">跳到主要内容</a><nav class="navbar"></nav><main id="main-content" class="main-content wisteria-technical" data-presentation="text-only">
-<header class="wisteria-hero"><div class="container"><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">PERSISTENT WORLD · SYSTEM DESIGN</p><h1>Wisteria</h1><h2>持续世界的系统设计</h2><p class="project-status">正在制作中 · macOS 本地技术研究</p><p>围绕世界状态、角色生命周期与本地恢复，探索一个桌面世界怎样持续运行、更新和接续。</p><div class="hero-buttons"><a class="btn btn-primary" href="#world">阅读技术介绍</a><a class="btn btn-secondary" href="#status">查看近期进展</a></div></div></header>
+<header class="wisteria-hero"><div class="container"><p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / Wisteria</p><p class="section-kicker">MACOS DESKTOP COMPANION · LOCAL WORLD</p><h1>Wisteria</h1><h2>${escapeHtml(presentation.subtitle)}</h2><p class="project-status">${escapeHtml(presentation.status)}</p><p>${escapeHtml(presentation.summary)}</p><div class="hero-buttons"><a class="btn btn-primary" href="${escapeAttribute('../' + presentation.primaryAction.href.slice(1))}">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="${escapeAttribute('../' + presentation.secondaryAction.href.slice(1))}">${escapeHtml(presentation.secondaryAction.label)}</a></div></div></header>
 ${renderProjectChapters(projectShowcases.chapters.wisteria)}
 </main><footer class="footer"></footer><script src="../dist/site.js" type="module"></script></body></html>`);
 }

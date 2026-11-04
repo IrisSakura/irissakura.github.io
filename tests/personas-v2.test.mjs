@@ -61,6 +61,8 @@ test('six visitor entry points resolve locally and rendered pages do not referen
   await walk('pages');
   assert.doesNotMatch(await read('index.html'), /brand\/(?:v1|site-v2)\//u);
   const wisteria = await read('pages/wisteria.html');
-  assert.match(wisteria, /正在制作中/u);
+  const presentation = await json('config/site-presentation.json');
+  const status = presentation.projects.find(({ projectId }) => projectId === 'wisteria').status;
+  assert.ok(wisteria.includes(`<p class="project-status">${status}</p>`));
   assert.doesNotMatch(wisteria, /<a[^>]+download/u);
 });
