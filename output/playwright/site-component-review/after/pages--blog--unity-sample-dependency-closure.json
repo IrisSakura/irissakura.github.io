@@ -1,0 +1,527 @@
+[
+  {
+    "title": "Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura",
+    "route": "/pages/blog/unity-sample-dependency-closure.html",
+    "viewport": 1440,
+    "scrollWidth": 1425,
+    "height": 12110,
+    "family": "editorial",
+    "grammar": "article-reader",
+    "nav": [
+      {
+        "label": "首页",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "作品",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "文章",
+        "current": true,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "1"
+      },
+      {
+        "label": "项目",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "Mods",
+        "current": false,
+        "width": 62.015625,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 34.8281,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "关于",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      }
+    ],
+    "surfaces": [
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > details.article-toc",
+        "classes": "article-toc",
+        "rect": {
+          "x": 113,
+          "y": 692,
+          "width": 216,
+          "height": 352
+        },
+        "padding": "16px",
+        "radius": "4px 4px 16px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          17,
+          36.5,
+          22,
+          -152.7
+        ],
+        "tight": false,
+        "verticalScroll": true
+      },
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > aside.series-context",
+        "classes": "series-context",
+        "rect": {
+          "x": 1097,
+          "y": 692,
+          "width": 216,
+          "height": 208
+        },
+        "padding": "16px",
+        "radius": "5.6px",
+        "background": "rgb(237, 239, 247)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          17,
+          41.6,
+          19.5,
+          20.1
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(1)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 361,
+          "y": 10823,
+          "width": 224,
+          "height": 322
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          18.5,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(2)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 601,
+          "y": 10823,
+          "width": 224,
+          "height": 322
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          18.5,
+          19.5,
+          27.1
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(3)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 841,
+          "y": 10823,
+          "width": 224,
+          "height": 322
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          18.3,
+          19.5,
+          34.7
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(1)",
+        "classes": "",
+        "rect": {
+          "x": 113,
+          "y": 11405,
+          "width": 290,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          26.3,
+          17.4,
+          27
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(2)",
+        "classes": "",
+        "rect": {
+          "x": 416,
+          "y": 11405,
+          "width": 290,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          20.5,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(3)",
+        "classes": "",
+        "rect": {
+          "x": 719,
+          "y": 11405,
+          "width": 290,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          15.6,
+          17.4,
+          27
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(4)",
+        "classes": "",
+        "rect": {
+          "x": 1022,
+          "y": 11405,
+          "width": 290,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          91.6,
+          17.4,
+          38.2
+        ]
+      }
+    ],
+    "overflow": [],
+    "controls": [],
+    "images": [],
+    "requested": "pages/blog/unity-sample-dependency-closure.html",
+    "redirect": false,
+    "screens": [
+      {
+        "label": "top",
+        "image": "pages--blog--unity-sample-dependency-closure-1440-top.png",
+        "scrollY": 0
+      },
+      {
+        "label": "body",
+        "image": "pages--blog--unity-sample-dependency-closure-1440-body.png",
+        "scrollY": 593.5
+      },
+      {
+        "label": "middle",
+        "image": "pages--blog--unity-sample-dependency-closure-1440-middle.png",
+        "scrollY": 5810.5
+      },
+      {
+        "label": "end",
+        "image": "pages--blog--unity-sample-dependency-closure-1440-end.png",
+        "scrollY": 10629
+      },
+      {
+        "label": "footer",
+        "image": "pages--blog--unity-sample-dependency-closure-1440-footer.png",
+        "scrollY": 11110
+      }
+    ]
+  },
+  {
+    "title": "Unity Sample 的条件组合层与渐进式依赖闭包 | IrisSakura",
+    "route": "/pages/blog/unity-sample-dependency-closure.html",
+    "viewport": 390,
+    "scrollWidth": 375,
+    "height": 14825,
+    "family": "editorial",
+    "grammar": "article-reader",
+    "nav": [],
+    "surfaces": [
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > details.article-toc",
+        "classes": "article-toc",
+        "rect": {
+          "x": 20,
+          "y": 699,
+          "width": 335,
+          "height": 73
+        },
+        "padding": "16px",
+        "radius": "4px 4px 16px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          29,
+          249.6,
+          22,
+          31.1
+        ],
+        "verticalScroll": true,
+        "tight": false
+      },
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > aside.series-context",
+        "classes": "series-context",
+        "rect": {
+          "x": 20,
+          "y": 11921,
+          "width": 335,
+          "height": 180
+        },
+        "padding": "16px",
+        "radius": "5.6px",
+        "background": "rgb(237, 239, 247)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          17,
+          81.7,
+          19.5,
+          20.1
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(1)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 20,
+          "y": 12289,
+          "width": 335,
+          "height": 249
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          19.6,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(2)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 20,
+          "y": 12554,
+          "width": 335,
+          "height": 226
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          19.6,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(3)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 20,
+          "y": 12795,
+          "width": 335,
+          "height": 198
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          22,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(1)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 13204,
+          "width": 335,
+          "height": 102
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          27.9,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(2)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 13318,
+          "width": 335,
+          "height": 102
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          16.9,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(3)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 13432,
+          "width": 335,
+          "height": 102
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          28.1,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(4)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 13547,
+          "width": 335,
+          "height": 90
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          136.2,
+          17.4,
+          21.2
+        ]
+      }
+    ],
+    "overflow": [],
+    "controls": [],
+    "images": [],
+    "requested": "pages/blog/unity-sample-dependency-closure.html",
+    "redirect": false,
+    "screens": [
+      {
+        "label": "top",
+        "image": "pages--blog--unity-sample-dependency-closure-390-top.png",
+        "scrollY": 0
+      },
+      {
+        "label": "body",
+        "image": "pages--blog--unity-sample-dependency-closure-390-body.png",
+        "scrollY": 698
+      },
+      {
+        "label": "middle",
+        "image": "pages--blog--unity-sample-dependency-closure-390-middle.png",
+        "scrollY": 6916.5
+      },
+      {
+        "label": "end",
+        "image": "pages--blog--unity-sample-dependency-closure-390-end.png",
+        "scrollY": 12736.5
+      },
+      {
+        "label": "footer",
+        "image": "pages--blog--unity-sample-dependency-closure-390-footer.png",
+        "scrollY": 13825
+      }
+    ]
+  }
+]

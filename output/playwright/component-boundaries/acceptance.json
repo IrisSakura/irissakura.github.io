@@ -1,0 +1,86 @@
+{
+  "scope": "Shared navigation state geometry and homepage writing cards",
+  "environment": {
+    "entry": "http://127.0.0.1:4318/",
+    "browser": "Headed Chromium through Playwright CLI",
+    "viewports": [
+      320,
+      390,
+      901,
+      1440
+    ],
+    "date": "2026-10-27",
+    "delivery": "Local working tree; no commit, push or publish"
+  },
+  "reference": [
+    "/var/folders/md/w6xxbh8x15l6vn3cqr135tm40000gn/T/codex-clipboard-1b953774-df6b-4292-8c7e-43e770414ef0.png",
+    "/var/folders/md/w6xxbh8x15l6vn3cqr135tm40000gn/T/codex-clipboard-0f096311-7fca-4429-b5fa-30332c38e8b7.png"
+  ],
+  "technical": {
+    "result": "PASS",
+    "checks": [
+      "npm run check: 231 tests and 160 HTML pages passed",
+      "npm run test:smoke: complete browser suite passed",
+      "git diff --check passed",
+      "Unrelated tracked diffs exactly match initial snapshot"
+    ]
+  },
+  "functional": {
+    "result": "PASS",
+    "actions": [
+      "Click homepage writing title to full article",
+      "Open mobile menu, select Projects, verify menu closes and Projects is current",
+      "Tab to Portfolio: visible inset focus ring",
+      "Resize between mobile and desktop, verify navigation visibility after layout settles"
+    ],
+    "trace": "interactions.zip",
+    "noJavaScript": {
+      "cardClass": "content-card writing-entry",
+      "padding": "20px",
+      "radius": "16px",
+      "horizontalOverflow": false
+    }
+  },
+  "outcome": {
+    "result": "PASS",
+    "before": {
+      "cardPadding": "16px 0px",
+      "cardRadius": "0px",
+      "activeNavWidth": 49.4375,
+      "indicatorStart": 11.52,
+      "indicatorWidth": 49.4375,
+      "screenshots": [
+        "before-nav.png",
+        "before-writing.png"
+      ]
+    },
+    "after": {
+      "desktopCardPadding": "28px",
+      "mobileCardPadding": "20px",
+      "cardRadius": "16px",
+      "activeNavWidth": 53.59375,
+      "indicatorStart": 13.6,
+      "indicatorWidth": 26.4062,
+      "screenshots": [
+        "after-project-nav.png",
+        "after-writing.png",
+        "after-card-mobile.png",
+        "after-mobile-viewport.png",
+        "after-menu-mobile.png",
+        "after-keyboard-focus.png"
+      ]
+    },
+    "conclusion": "Text has consistent inset and rounded card boundaries; only the current navigation item has an underline, bounded inside its pill. Hover and keyboard focus remain distinguishable. No horizontal overflow at sampled widths."
+  },
+  "files": [
+    "docs/ui-components.md",
+    "index.html",
+    "scripts/lib/living-site-render.mjs",
+    "style/components/shared.css",
+    "style/pages/personal.css",
+    "style/shell/site-shell.css",
+    "style/tokens/layout.css",
+    "tests/browser-smoke.mjs",
+    "tests/home-profile.test.mjs"
+  ]
+}

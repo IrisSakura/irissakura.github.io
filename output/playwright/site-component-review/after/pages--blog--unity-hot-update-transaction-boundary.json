@@ -1,0 +1,611 @@
+[
+  {
+    "title": "Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复 | IrisSakura",
+    "route": "/pages/blog/unity-hot-update-transaction-boundary.html",
+    "viewport": 1440,
+    "scrollWidth": 1425,
+    "height": 11329,
+    "family": "editorial",
+    "grammar": "article-reader",
+    "nav": [
+      {
+        "label": "首页",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "作品",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "文章",
+        "current": true,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "1"
+      },
+      {
+        "label": "项目",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "Mods",
+        "current": false,
+        "width": 62.015625,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 34.8281,
+        "markerOpacity": "0"
+      },
+      {
+        "label": "关于",
+        "current": false,
+        "width": 53.59375,
+        "height": 44,
+        "markerLeft": 13.6,
+        "markerWidth": 26.4062,
+        "markerOpacity": "0"
+      }
+    ],
+    "surfaces": [
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > details.article-toc",
+        "classes": "article-toc",
+        "rect": {
+          "x": 113,
+          "y": 754,
+          "width": 216,
+          "height": 352
+        },
+        "padding": "16px",
+        "radius": "4px 4px 16px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          17,
+          36.5,
+          22,
+          -367.7
+        ],
+        "tight": false,
+        "verticalScroll": true
+      },
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > aside.series-context",
+        "classes": "series-context",
+        "rect": {
+          "x": 1097,
+          "y": 754,
+          "width": 216,
+          "height": 241
+        },
+        "padding": "16px",
+        "radius": "5.6px",
+        "background": "rgb(237, 239, 247)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          17,
+          41.6,
+          19.5,
+          20.1
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(1)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 361,
+          "y": 9939,
+          "width": 224,
+          "height": 322
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          18.5,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(2)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 601,
+          "y": 9939,
+          "width": 224,
+          "height": 322
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          17.8,
+          19.5,
+          36.3
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(3)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 841,
+          "y": 9939,
+          "width": 224,
+          "height": 322
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          18.3,
+          19.5,
+          34.7
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(1)",
+        "classes": "",
+        "rect": {
+          "x": 113,
+          "y": 10521,
+          "width": 230,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          21.4,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(2)",
+        "classes": "",
+        "rect": {
+          "x": 355,
+          "y": 10521,
+          "width": 230,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          19.3,
+          17.4,
+          27
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(3)",
+        "classes": "",
+        "rect": {
+          "x": 598,
+          "y": 10521,
+          "width": 230,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          26.1,
+          17.4,
+          27
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(4)",
+        "classes": "",
+        "rect": {
+          "x": 840,
+          "y": 10521,
+          "width": 230,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          139.7,
+          17.4,
+          38.2
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(5)",
+        "classes": "",
+        "rect": {
+          "x": 1083,
+          "y": 10521,
+          "width": 230,
+          "height": 124
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          150,
+          17.4,
+          38.2
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(6)",
+        "classes": "",
+        "rect": {
+          "x": 113,
+          "y": 10658,
+          "width": 230,
+          "height": 90
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          31,
+          17.4,
+          21.2
+        ]
+      }
+    ],
+    "overflow": [],
+    "controls": [],
+    "images": [],
+    "requested": "pages/blog/unity-hot-update-transaction-boundary.html",
+    "redirect": false,
+    "screens": [
+      {
+        "label": "top",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-1440-top.png",
+        "scrollY": 0
+      },
+      {
+        "label": "body",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-1440-body.png",
+        "scrollY": 655
+      },
+      {
+        "label": "middle",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-1440-middle.png",
+        "scrollY": 5451
+      },
+      {
+        "label": "end",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-1440-end.png",
+        "scrollY": 9848
+      },
+      {
+        "label": "footer",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-1440-footer.png",
+        "scrollY": 10329
+      }
+    ]
+  },
+  {
+    "title": "Unity 热更新的事务提交边界：磁盘版本切换、Runtime 提交与失败恢复 | IrisSakura",
+    "route": "/pages/blog/unity-hot-update-transaction-boundary.html",
+    "viewport": 390,
+    "scrollWidth": 375,
+    "height": 16020,
+    "family": "editorial",
+    "grammar": "article-reader",
+    "nav": [],
+    "surfaces": [
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > details.article-toc",
+        "classes": "article-toc",
+        "rect": {
+          "x": 20,
+          "y": 820,
+          "width": 335,
+          "height": 73
+        },
+        "padding": "16px",
+        "radius": "4px 4px 16px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          29,
+          249.6,
+          22,
+          31.1
+        ],
+        "verticalScroll": true,
+        "tight": false
+      },
+      {
+        "selector": "#main-content > article.container.blog-article > div.article-shell > aside.series-context",
+        "classes": "series-context",
+        "rect": {
+          "x": 20,
+          "y": 12911,
+          "width": 335,
+          "height": 180
+        },
+        "padding": "16px",
+        "radius": "5.6px",
+        "background": "rgb(237, 239, 247)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          17,
+          49.6,
+          19.5,
+          20.1
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(1)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 20,
+          "y": 13279,
+          "width": 335,
+          "height": 249
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          19.6,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(2)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 20,
+          "y": 13544,
+          "width": 335,
+          "height": 226
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          17.2,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "article.container.blog-article > aside.related-articles > div > a:nth-of-type(3)",
+        "classes": "depth-card is-visible",
+        "rect": {
+          "x": 20,
+          "y": 13785,
+          "width": 335,
+          "height": 198
+        },
+        "padding": "16px",
+        "radius": "4.8px",
+        "background": "rgb(255, 250, 255)",
+        "shadow": "none",
+        "depth": true,
+        "insets": [
+          17,
+          22,
+          19.5,
+          19.4
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(1)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 14194,
+          "width": 335,
+          "height": 102
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          27.9,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(2)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 14308,
+          "width": 335,
+          "height": 102
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          28.1,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(3)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 14422,
+          "width": 335,
+          "height": 102
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          18.8,
+          17.4,
+          15.8
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(4)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 14537,
+          "width": 335,
+          "height": 90
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          245,
+          17.4,
+          21.2
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(5)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 14640,
+          "width": 335,
+          "height": 90
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          255.3,
+          17.4,
+          21.2
+        ]
+      },
+      {
+        "selector": "#main-content > section.site-related.container > div.site-related-grid > a:nth-of-type(6)",
+        "classes": "",
+        "rect": {
+          "x": 20,
+          "y": 14742,
+          "width": 335,
+          "height": 90
+        },
+        "padding": "14.4px",
+        "radius": "5.6px 5.6px 16px",
+        "background": "color(srgb 1 0.980392 1 / 0.84)",
+        "shadow": "none",
+        "depth": false,
+        "insets": [
+          15.4,
+          136.2,
+          17.4,
+          21.2
+        ]
+      }
+    ],
+    "overflow": [],
+    "controls": [],
+    "images": [],
+    "requested": "pages/blog/unity-hot-update-transaction-boundary.html",
+    "redirect": false,
+    "screens": [
+      {
+        "label": "top",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-390-top.png",
+        "scrollY": 0
+      },
+      {
+        "label": "body",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-390-body.png",
+        "scrollY": 818.5
+      },
+      {
+        "label": "middle",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-390-middle.png",
+        "scrollY": 7575
+      },
+      {
+        "label": "end",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-390-end.png",
+        "scrollY": 13932.5
+      },
+      {
+        "label": "footer",
+        "image": "pages--blog--unity-hot-update-transaction-boundary-390-footer.png",
+        "scrollY": 15020
+      }
+    ]
+  }
+]

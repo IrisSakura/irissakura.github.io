@@ -1,0 +1,67 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UI 统一改造 · 前后对照</title>
+<style>*{box-sizing:border-box}body{margin:0;color:#2f2556;background:#f7f5fc;font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}main{max-width:1320px;margin:auto;padding:48px 28px 80px}h1{font-size:36px;line-height:1.25}h2{margin:56px 0 16px;font-size:26px}h3{margin:0;font-size:20px}p{max-width:80ch}a{color:#4c3df5;text-underline-offset:3px}nav{display:flex;flex-wrap:wrap;gap:20px;padding:16px 0;border-block:1px solid #ddd5ee}.lead{font-size:18px}.meta{color:#675e7d;font-size:14px}.pair{background:#fffafd;border:1px solid #ddd5ee;border-radius:12px;padding:24px;margin:24px 0}.pair p{margin:8px 0 20px;color:#655c78}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:24px}figure{margin:0;min-width:0}figcaption{font-size:13px;font-weight:700;margin-bottom:10px;color:#655c78}img{display:block;max-width:100%;height:auto;border:1px solid #e6e0f0;border-radius:6px}.screen img{width:100%}.mobile .comparison{max-width:820px;margin:auto}.mobile img{width:100%;max-width:390px}.acceptance{padding:24px;background:#eeeafa;border:1px solid #d4cce7;border-radius:12px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #ddd5ee;padding:12px}code{background:#eeeafa;padding:2px 4px;border-radius:3px}@media(max-width:700px){main{padding:24px 14px}h1{font-size:28px}.comparison{grid-template-columns:1fr}.pair{padding:16px}table{font-size:12px}th,td{padding:8px}}</style>
+<main><p class="meta">IrisSakura · 2026-10-29 · 本地工作树 / Chromium</p><h1>同一种组件，遵循同一套规则</h1>
+<p class="lead">统一按钮、输入框、标签、卡片和折叠控件，再统一标题与留白层级；保留六个项目的颜色、人物和内容图示。</p>
+<p>这就是本次已认可的目标。正式使用入口是首页、作品、文章和六项目页。下方均为实际浏览器截图，左侧来自实施前盘点，右侧来自本次构建。未提交、推送或发布。</p>
+<nav><a href="#components">组件对照</a><a href="#pages">页面对照</a><a href="#mobile">移动端</a><a href="#acceptance">验收与证据</a><a href="../ui-inventory-20261029/audit.html">原始 24 类盘点</a></nav>
+<h2>本次统一的规则</h2><table><thead><tr><th>角色</th><th>共享规格</th><th>保留的用途差异</th></tr></thead><tbody>
+<tr><td>按钮 / 输入</td><td>8px 圆角、1px 边框、至少 44px 高</td><td>主操作填色，次操作浅色；项目色不同</td></tr>
+<tr><td>主题标签</td><td>6px 圆角、12px 字号</td><td>状态徽章保留状态语义</td></tr>
+<tr><td>文字卡片</td><td>12px 圆角、20–28px 内边距、无硬投影</td><td>媒体表面 16px；列表与流程图保留自身结构</td></tr>
+<tr><td>折叠控件</td><td>一致的箭头、焦点区域与键盘操作</td><td>保留原生 details / summary</td></tr>
+<tr><td>项目标题</td><td>一致的无衬线字体；桌面上限 56px</td><td>首页姓名与长文章标题采用各自明确的角色档位</td></tr>
+</tbody></table><h2 id="components">组件前后对照</h2><section class="pair component"><h3>首页首屏按钮</h3><p>9.6px 圆角与 4px 硬投影 → 8px 圆角、细边框；主次操作用填色区分。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-home-buttons.png"><img src="../ui-inventory-20261029/component-home-buttons.png" alt="首页首屏按钮：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-home-buttons.png"><img src="after/component-home-buttons.png" alt="首页首屏按钮：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair component"><h3>同一首页底部按钮</h3><p>999px 胶囊 → 8px 圆角；与首屏共享尺寸、字体和反馈。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-contact-buttons.png"><img src="../ui-inventory-20261029/component-contact-buttons.png" alt="同一首页底部按钮：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-contact-buttons.png"><img src="after/component-contact-buttons.png" alt="同一首页底部按钮：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair component"><h3>文章列表标签</h3><p>约 4.8px 圆角 → 6px 圆角、12px 字号。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-blog-tags.png"><img src="../ui-inventory-20261029/component-blog-tags.png" alt="文章列表标签：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-blog-tags.png"><img src="after/component-blog-tags.png" alt="文章列表标签：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair component"><h3>文章正文标签</h3><p>999px 胶囊 → 与列表相同的 6px 圆角、12px 字号。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-article-tags.png"><img src="../ui-inventory-20261029/component-article-tags.png" alt="文章正文标签：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-article-tags.png"><img src="after/component-article-tags.png" alt="文章正文标签：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair component"><h3>文章卡片</h3><p>放大单角、胶带与硬投影 → 对称 12px 圆角、浅色表面与细边框。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-blog-card.png"><img src="../ui-inventory-20261029/component-blog-card.png" alt="文章卡片：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-blog-card.png"><img src="after/component-blog-card.png" alt="文章卡片：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair component"><h3>研究库筛选控件</h3><p>不同控件规格 → 8px 圆角、至少 44px 高，与全站搜索及模块搜索一致。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-journal-controls.png"><img src="../ui-inventory-20261029/component-journal-controls.png" alt="研究库筛选控件：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-journal-controls.png"><img src="after/component-journal-controls.png" alt="研究库筛选控件：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair component"><h3>Framework 信息卡片</h3><p>不对称纸张边角和硬投影 → 同一基础卡片；状态徽章保留语义。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/component-dark-card.png"><img src="../ui-inventory-20261029/component-dark-card.png" alt="Framework 信息卡片：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/component-dark-card.png"><img src="after/component-dark-card.png" alt="Framework 信息卡片：改造后" loading="lazy"></a></figure>
+      </div></section><h2 id="pages">页面前后对照</h2><section class="pair screen"><h3>首页</h3><p>1440 × 1000 浏览器视口；保留原项目身份，收敛组件与标题层级。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/home.png"><img src="../ui-inventory-20261029/home.png" alt="首页：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/home-1440.png"><img src="after/home-1440.png" alt="首页：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair screen"><h3>Framework</h3><p>1440 × 1000 浏览器视口；保留原项目身份，收敛组件与标题层级。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/framework.png"><img src="../ui-inventory-20261029/framework.png" alt="Framework：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/framework-1440.png"><img src="after/framework-1440.png" alt="Framework：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair screen"><h3>Myosotis</h3><p>1440 × 1000 浏览器视口；保留原项目身份，收敛组件与标题层级。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/journal.png"><img src="../ui-inventory-20261029/journal.png" alt="Myosotis：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/journal-1440.png"><img src="after/journal-1440.png" alt="Myosotis：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair screen"><h3>Violet Shelf</h3><p>1440 × 1000 浏览器视口；保留原项目身份，收敛组件与标题层级。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/tools.png"><img src="../ui-inventory-20261029/tools.png" alt="Violet Shelf：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/tools-1440.png"><img src="after/tools-1440.png" alt="Violet Shelf：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair screen"><h3>Freesia Mods</h3><p>1440 × 1000 浏览器视口；保留原项目身份，收敛组件与标题层级。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/mods.png"><img src="../ui-inventory-20261029/mods.png" alt="Freesia Mods：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/mods-1440.png"><img src="after/mods-1440.png" alt="Freesia Mods：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair screen"><h3>Wisteria</h3><p>1440 × 1000 浏览器视口；保留原项目身份，收敛组件与标题层级。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/wisteria.png"><img src="../ui-inventory-20261029/wisteria.png" alt="Wisteria：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/wisteria-1440.png"><img src="after/wisteria-1440.png" alt="Wisteria：改造后" loading="lazy"></a></figure>
+      </div></section><h2 id="mobile">移动端前后对照</h2><section class="pair mobile"><h3>首页 · 390px</h3><p>390 × 844 浏览器视口；当前样本无横向溢出。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/mobile-home.png"><img src="../ui-inventory-20261029/mobile-home.png" alt="首页 · 390px：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/home-390.png"><img src="after/home-390.png" alt="首页 · 390px：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair mobile"><h3>文章 · 390px</h3><p>390 × 844 浏览器视口；当前样本无横向溢出。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/mobile-blog.png"><img src="../ui-inventory-20261029/mobile-blog.png" alt="文章 · 390px：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/blog-390.png"><img src="after/blog-390.png" alt="文章 · 390px：改造后" loading="lazy"></a></figure>
+      </div></section><section class="pair mobile"><h3>Framework · 390px</h3><p>390 × 844 浏览器视口；当前样本无横向溢出。</p><div class="comparison">
+      <figure><figcaption>改造前</figcaption><a href="../ui-inventory-20261029/mobile-framework.png"><img src="../ui-inventory-20261029/mobile-framework.png" alt="Framework · 390px：改造前" loading="lazy"></a></figure>
+      <figure><figcaption>改造后</figcaption><a href="after/framework-390.png"><img src="after/framework-390.png" alt="Framework · 390px：改造后" loading="lazy"></a></figure>
+      </div></section><h2 id="acceptance">验收与证据</h2><div class="acceptance"><p><strong>Technical：</strong>生成、构建与 231 项单测通过，171 个 HTML 及本地引用检查通过。最终样式补修已重新构建，32 项受影响单测复核通过。</p>
+<p><strong>Functional：</strong>通过：浏览器流程合并验收及独立路径审计（复用已通过前段，重跑失败范围和剩余流程）。 覆盖搜索、筛选、文章目录、工具抽屉、键盘焦点、手机导航、历史返回和订阅入口。</p>
+<p><strong>Outcome：</strong>独立审计通过。原先同页按钮、列表/正文标签与卡片边角的差异已消除；Mods 标题收敛到项目共有档位。项目配色、人物与流程图继续保留。</p>
+<p><strong>范围：</strong>15 个代表路由 × 2 个视口的一致性测量，合计按钮 76、输入 12、标签 138、卡片 98 个样本；Framework 详细页另覆盖 320 / 390 / 768 / 1440px。未验证 Safari、实体手机或线上部署。</p></div>
+<p>集中验收修复：采用列表容器误套卡片留白；减少动态效果时立即更新折叠箭头；Framework 能力标签遗漏；参考卡片旧白字、层级数字和暖底链接的低对比度；无 JS 时复制按钮的 hidden 状态。旧浏览器预览缓存已清除，最终截图来自禁用缓存后的构建。</p>
+<p><a href="after/interface-consistency.json">实际计算样式</a> · <a href="after/search-dialog.png">搜索弹窗</a> · <a href="after/tool-drawer.png">工具抽屉</a> · <a href="../independent-ui-review-framework-capability-fixed.png">独立复核：能力标签</a> · <a href="../independent-ui-review-search-mobile.png">独立复核：移动搜索</a> · <a href="../independent-ui-review-tools-drawer-mobile.png">独立复核：移动抽屉</a></p>
+<p class="meta">原始数据和完整截图存于本目录。维护记录留在仓库文档中，本对照页不进入正式发布内容。</p></main></html>
