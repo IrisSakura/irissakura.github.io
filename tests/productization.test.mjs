@@ -10,6 +10,14 @@ const root = path.resolve(import.meta.dirname, '..');
 const readText = (name) => readFile(path.join(root, name), 'utf8');
 const readJson = async (name) => JSON.parse(await readText(name));
 
+test('generated Journal HTML stays within its UTF-8 payload budget', async () => {
+  const [payload, budget] = await Promise.all([
+    readFile(path.join(root, 'pages/journal.html')), readJson('config/performance-budget.json')
+  ]);
+  assert.ok(payload.byteLength <= budget.htmlBytes,
+    `Journal HTML exceeds performance budget: ${payload.byteLength} > ${budget.htmlBytes} bytes`);
+});
+
 test('generated global search index stays within its UTF-8 payload budget', async () => {
   const [payload, budget] = await Promise.all([
     readFile(path.join(root, 'data/site-search-index.json')), readJson('config/performance-budget.json')

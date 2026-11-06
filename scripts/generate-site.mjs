@@ -1355,14 +1355,16 @@ function renderJournalContent(journalData, sourceData, chains, searchIndex, pres
                     <p class="project-status">框架审计 · ${escapeHtml(audit.updatedAt)}</p>
                     <h3>${escapeHtml(audit.title)}</h3>
                 </article>`).join('');
-  const gameDesigns = sourceData.gameDesigns.map((design) => `
-                <article class="design-summary-card" id="design-${escapeAttribute(design.id)}">
-                    <p class="project-status">游戏设计范式 · ${escapeHtml(design.updatedAt)}</p>
-                    <h3>${escapeHtml(design.title)}</h3>
-                    <p>${escapeHtml(design.summary)}</p>
-                    <div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
-                    <a class="note-link" href="journal/${encodeURIComponent(design.id)}.html">阅读公开设计摘要<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                </article>`).join('');
+  // Keep the full static archive without repeating template indentation for every card.
+  const gameDesigns = sourceData.gameDesigns.map((design) => [
+    `<article class="design-summary-card" id="design-${escapeAttribute(design.id)}">`,
+    `<p class="project-status">游戏设计范式 · ${escapeHtml(design.updatedAt)}</p>`,
+    `<h3>${escapeHtml(design.title)}</h3>`,
+    `<p>${escapeHtml(design.summary)}</p>`,
+    `<div class="note-tags">${design.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>`,
+    `<a class="note-link" href="journal/${encodeURIComponent(design.id)}.html">阅读公开设计摘要<i class="fas fa-arrow-right" aria-hidden="true"></i></a>`,
+    '</article>'
+  ].join('\n')).join('\n');
 
   return `<header class="journal-hero">
         <div class="container journal-hero-grid">
