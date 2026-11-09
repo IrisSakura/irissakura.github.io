@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 const allowed = new Set([
   'data/consumer-lab.json',
+  'pages/framework.html',
+  'pages/framework/consumers.html',
   'pages/portfolio.html'
 ]);
 

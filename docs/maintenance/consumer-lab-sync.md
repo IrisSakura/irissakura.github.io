@@ -57,7 +57,8 @@ Case、Repository 与代表性公开证据的关系由 owner-only `config/consum
 消费者同步只能修改：
 
 - `data/consumer-lab.json`；
-- 由同一次生成产生的 `pages/portfolio.html`。
+- 由同一次生成产生的 `pages/portfolio.html`、`pages/framework.html` 和
+  `pages/framework/consumers.html`。后两页也渲染 Consumer 的包集合与验证结果。
 
 `scripts/verify-consumer-sync-scope.mjs` 会拒绝其他路径。每次尝试都从网站最新 `main` 新克隆，
 运行导出、导入幂等检查、完整 `npm run check` 与缓存空白检查，然后普通 push。若多个消费者或

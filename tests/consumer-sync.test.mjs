@@ -167,14 +167,15 @@ test('consumer evidence freshness allows governance files but rejects later prod
   );
 });
 
-test('consumer sync owns only its internal registry and generated portfolio page', () => {
-  for (const owned of ['data/consumer-lab.json', 'pages/portfolio.html']) {
+test('consumer sync owns its registry and all three generated consumer views', () => {
+  for (const owned of ['data/consumer-lab.json', 'pages/portfolio.html', 'pages/framework.html', 'pages/framework/consumers.html']) {
     assert.equal(isConsumerSyncOwnedPath(owned), true, `missing owned sync path ${owned}`);
   }
   for (const forbidden of [
     'package.json',
     'scripts/import-consumer-projection.mjs',
-    'pages/framework.html',
+    'pages/framework/evidence.html',
+    'data/framework.json',
     'style/portfolio.css',
     '.github/workflows/site-quality-and-pages.yml',
     'data/../README.md'
