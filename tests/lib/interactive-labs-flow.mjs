@@ -31,8 +31,17 @@ export async function assertInteractiveLabs(browser, baseUrl, root) {
     const config = JSON.parse(await readFile(path.join(evidence, 'numeric-experiment.json'), 'utf8'));
     assert.equal(config.snapshots.A.attack, 1000); assert.equal(config.snapshots.B.attack, 1200);
     await action('numeric-reset').click();
+    // Keep file reading pending long enough to expose stale reset-status matches.
+    await page.evaluate(() => {
+      const readText = File.prototype.text;
+      File.prototype.text = async function () {
+        const text = await readText.call(this);
+        await new Promise(resolve => setTimeout(resolve, 250));
+        return text;
+      };
+    });
     await page.locator('[data-import-file]').setInputFiles(path.join(evidence, 'numeric-experiment.json'));
-    await waitText('[data-config-status]', '已恢复');
+    await waitText('[data-config-status]', '已恢复当前参数与 A/B 快照。');
     assert.equal(await page.locator('#attack').inputValue(), '1200');
     const unchanged = await page.locator('[data-numeric-comparison]').innerText();
     await page.locator('[data-import-text]').fill(JSON.stringify({ ...config, modelVersion: 99 })); await action('numeric-import').click();
