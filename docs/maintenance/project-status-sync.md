@@ -41,3 +41,9 @@ UDGAP checkout 设置 `GIT_LFS_SKIP_SMUDGE=1`，同步只验证 committed projec
 ## Plastic boundary
 
 言铸之剑没有 Git ancestry，当前保持 `site-curated`。在 Plastic workspace 可提供 live changeset/head、固定 blob 读取和可审计 after-checkin trigger 之前，不得把 Git importer 或 source-push 标签套用到该项目。
+
+## Violet 来源迁移恢复记录
+
+2026-11-09，维护者要求修复并分别提交推送四项已定位工作流问题。Violet 临时目录修复后，远端运行 1744 继续被旧来源 ancestry 拦截。网站仍记录不可解析的旧提交 `2d18a7de`，此前获批的新基线 `281a0af5` 保存在本站本地提交 `a40329a6`，尚未交付到网站 main。
+
+本次核对当前源仓完整历史，确认 `281a0af5` 是修复提交 `8f5fad28` 的祖先。正式 exporter 的 profile commit、payload SHA-256 与字节数均与此前获批迁移一致。按本次修复及推送授权补交一次性基线迁移，再由原 importer 正常推进到 `8f5fad28`。旧来源和原项目条目保存在[迁移归档](source-migrations/iris-shelf-2026-11-09.json)，普通同步继续校验 ancestry、same-commit drift 和三路径范围。

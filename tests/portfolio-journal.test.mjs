@@ -18,10 +18,10 @@ test('portfolio leads with real work and retains routes to research and experime
 
 test('portfolio data keeps research distinct from finished work', async () => {
   const data = JSON.parse(await readText('data/projects.json'));
-  const titles = data.projects.map((project) => project.title);
+  const projectIds = data.projects.map((project) => project.id);
 
   assert.equal(data.schemaVersion, 3);
-  assert.deepEqual(titles, ['IrisSakura Journal', 'Iris Engineering', 'Iris Shelf', 'Iris Core', 'Iris × Sakura — The Weaver', 'Sakura Framework', 'UDGAP · 梦境诊疗室', '言铸之剑']);
+  assert.deepEqual(projectIds, ['sakura-design-journal', 'iris-engineering', 'iris-shelf', 'iris-core', 'the-weaver', 'sakura-framework', 'udgap', 'sword-of-words']);
   assert.deepEqual(new Set(data.projects.map((project) => project.category)), new Set(['research', 'tool', 'game']));
   for (const project of data.projects) {
     assert.match(project.updatedAt, /^\d{4}-\d{2}-\d{2}$/u, `${project.title} needs an update date`);
@@ -55,14 +55,16 @@ test('portfolio data keeps research distinct from finished work', async () => {
   }
   for (const projectId of ['iris-shelf', 'udgap']) {
     const project = data.projects.find((entry) => entry.id === projectId);
-    assert.equal(project.updatedAt, '2026-08-30');
-    assert.equal(project.lastReviewedAt, '2026-08-30');
+    const provenance = JSON.parse(await readText(`config/project-sync/${projectId}.json`));
+    const profileDate = provenance.profileCommittedAt.slice(0, 10);
+    assert.equal(project.updatedAt, profileDate);
+    assert.equal(project.lastReviewedAt, profileDate);
   }
   assert.ok(
     data.projects.find((entry) => entry.id === 'iris-engineering').evidence
       .some((entry) => entry.includes('P9.1 QQ proposal-only ingress'))
   );
-  assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').status, '完整本地产品');
+  assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').sourceFacts.kind, 'desktop-app');
   assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').syncMode, 'source-push');
   assert.equal(data.projects.find((entry) => entry.id === 'udgap').status, 'Unity 6 集成基线');
   assert.equal(data.projects.find((entry) => entry.id === 'udgap').syncMode, 'source-push');
