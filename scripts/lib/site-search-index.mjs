@@ -21,7 +21,7 @@ export function buildSiteSearchIndex({ pages, journalIndex, presentations, proje
       keywords: (entry.keywords ?? []).map(redact),
       tags: (entry.tags ?? []).map(redact),
       series: redact(entry.series ?? ''),
-      projectId: entry.projectId ?? null
+      projectId: entry.projectId
     };
     if (FORBIDDEN.test(JSON.stringify(clean))) throw new Error(`Private search content: ${entry.id}`);
     documents.push(clean);

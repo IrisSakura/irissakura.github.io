@@ -9,7 +9,7 @@ interface SearchDocument {
     keywords: string[];
     tags: string[];
     series: string;
-    projectId: string | null;
+    projectId?: string | null;
 }
 interface SearchIndex { schemaVersion: number; totalCount: number; documents: SearchDocument[]; }
 interface SearchableDocument { doc: SearchDocument; fields: string[]; }

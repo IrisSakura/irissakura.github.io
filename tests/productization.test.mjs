@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
 import path from 'node:path';
 
-import { rankSiteSearch } from '../scripts/lib/site-search-index.mjs';
+import { buildSiteSearchIndex, rankSiteSearch } from '../scripts/lib/site-search-index.mjs';
 import { buildContentGraph, relatedForPage } from '../scripts/lib/content-relations.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
@@ -24,6 +24,29 @@ test('generated global search index stays within its UTF-8 payload budget', asyn
   ]);
   assert.ok(payload.byteLength <= budget.searchIndexBytes,
     `Search index exceeds performance budget: ${payload.byteLength} > ${budget.searchIndexBytes} bytes`);
+});
+
+test('search serialization omits absent project associations and preserves search results', () => {
+  const index = buildSiteSearchIndex({
+    pages: [{ file: 'help.html', title: '使用帮助', description: '搜索与导航', canonical: '/help.html' }],
+    journalIndex: { entries: [] },
+    presentations: [],
+    projects: { projects: [] },
+    framework: { featuredModules: [{ id: 'pooling', displayName: '对象池' }] }
+  });
+  const serialized = JSON.parse(JSON.stringify(index));
+  const page = serialized.documents.find((entry) => entry.id === 'page:help.html');
+  const module = serialized.documents.find((entry) => entry.id === 'framework:pooling');
+  assert.ok(!Object.hasOwn(page, 'projectId'));
+  assert.equal(module.projectId, 'sakura-framework');
+
+  const legacy = serialized.documents.map((entry) => ({ ...entry, projectId: entry.projectId ?? null }));
+  for (const query of ['', '使用帮助', '搜索', '对象池', 'object pool', 'unmatched-query']) {
+    assert.deepEqual(
+      rankSiteSearch(serialized.documents, query).map((entry) => entry.id),
+      rankSiteSearch(legacy, query).map((entry) => entry.id)
+    );
+  }
 });
 
 test('global discovery covers public pages and finds Chinese, English and CamelCase terms deterministically', async () => {
