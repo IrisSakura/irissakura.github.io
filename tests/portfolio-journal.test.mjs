@@ -46,7 +46,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   assert.equal(journal.updatedAt, '2026-10-04');
   assert.equal(journal.lastReviewedAt, '2026-10-05');
   for (const [projectId, updatedAt, lastReviewedAt] of [
-    ['iris-engineering', '2026-08-30', '2026-08-31'],
+    ['iris-engineering', '2026-11-16', '2026-11-18'],
     ['sakura-framework', '2026-10-08', '2026-10-08']
   ]) {
     const project = data.projects.find((entry) => entry.id === projectId);
@@ -62,7 +62,7 @@ test('portfolio data keeps research distinct from finished work', async () => {
   }
   assert.ok(
     data.projects.find((entry) => entry.id === 'iris-engineering').evidence
-      .some((entry) => entry.includes('P9.1 QQ proposal-only ingress'))
+      .some((entry) => entry.includes('每个交付版本可独立审阅与验收'))
   );
   assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').sourceFacts.kind, 'desktop-app');
   assert.equal(data.projects.find((entry) => entry.id === 'iris-shelf').syncMode, 'source-push');

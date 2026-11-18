@@ -72,6 +72,7 @@ const PAGE_INDEXES = {
     items: [
       ['portfolio-cases', '代表作'],
       ['work-mods', 'Mods'],
+      ['engineering-tools', '研发工具'],
       ['consumer-lab', '技术实验']
     ]
   },
@@ -104,13 +105,12 @@ const PAGE_INDEXES = {
   },
   'pages/engineering.html': {
     ariaLabel: 'Iris Engineering 页面章节',
-    title: '浏览工程能力',
     insertBefore: '    <div class="engineering-page">',
     items: [
-      ['build-workflow', '构建与试玩'],
-      ['continuity', '环境恢复'],
-      ['workflow', '工作流'],
-      ['capabilities', '能力与边界']
+      ['build-workflow', '工作事项'],
+      ['execution', '执行请求'],
+      ['continuity', '交付验收'],
+      ['capabilities', '接入']
     ]
   },
   'pages/tools.html': {
@@ -446,8 +446,8 @@ const pageDefinitions = [
   {
     file: 'pages/engineering.html',
     key: 'engineering',
-    title: 'Iris Engineering | 研发工作流与工程实践',
-    description: '了解 IrisSakura 如何整理项目事实、明确工作范围，并让开发过程中的决策、执行与验证更容易被理解和复查。',
+    title: 'Iris Engineering | 工作事项、执行与交付',
+    description: '在云端工作台整理项目事项，通过 MCP 准备草稿，由 Desktop Worker 执行已授权的工作，最后按固定版本审阅交付。',
     canonical: '/pages/engineering.html',
     schemaType: 'SoftwareApplication'
   },
@@ -645,7 +645,11 @@ for (const page of pageDefinitions) {
     .replaceAll('{{profileAvatar}}', escapeAttribute(pageHref(site.profile.avatar)))
     .replace('{{contactHref}}', escapeAttribute(pageHref('pages/contact.html')))
     .replace('{{navLinks}}', navLinks);
-  const footer = footerTemplate
+  const footerSource = page.file === 'pages/engineering.html'
+    ? footerTemplate.replace(/^[ \t]*<p class="footer-description">[^<]*<\/p>\n/mu, '')
+      .replace(/^[ \t]*<p>BUILD · ORGANIZE · BLOOM<\/p>\n/mu, '')
+    : footerTemplate;
+  const footer = footerSource
     .replaceAll('{{homeHref}}', pageHref('index.html'))
     .replaceAll('{{brandMark}}', escapeAttribute(pageHref(brandConfig.assets.symbol)))
     .replaceAll('{{masterWordmark}}', escapeAttribute(pageHref(brandConfig.assets.masterWordmark)))
@@ -743,7 +747,7 @@ for (const page of pageDefinitions) {
     );
   }
   if (page.file === 'pages/engineering.html') {
-    html = replaceGeneratedBlock(html, 'engineering-content', renderEngineeringContent(irisEngineering, evidenceChains, projectPresentations.find(({ projectId }) => projectId === 'iris-engineering')));
+    html = replaceGeneratedBlock(html, 'engineering-content', renderEngineeringContent(irisEngineering, projectPresentations.find(({ projectId }) => projectId === 'iris-engineering')));
   }
   if (page.file === 'index.html') {
     html = replaceGeneratedBlock(
@@ -791,7 +795,7 @@ for (const page of pageDefinitions) {
 
   const related = relatedForPage(contentGraph, page.canonical);
   const relatedMarkup = related.length ? `<!-- site-related:start -->
-<section class="site-related container" aria-labelledby="site-related-title"><p class="section-kicker">CONTINUE EXPLORING</p><h2 id="site-related-title">相关内容</h2><div class="site-related-grid">${related.map((item) => `<a data-related-link href="${routeHref(item.url)}"><small>${escapeHtml(relatedTypeLabel(item.type))}</small><strong>${escapeHtml(item.title)}</strong></a>`).join('')}</div></section>
+<section class="site-related container" aria-labelledby="site-related-title">${page.file === 'pages/engineering.html' ? '' : '<p class="section-kicker">CONTINUE EXPLORING</p>'}<h2 id="site-related-title">相关内容</h2><div class="site-related-grid">${related.map((item) => `<a data-related-link href="${routeHref(item.url)}"><small>${escapeHtml(relatedTypeLabel(item.type))}</small><strong>${escapeHtml(item.title)}</strong></a>`).join('')}</div></section>
 <!-- site-related:end -->` : '<!-- site-related:start --><!-- site-related:end -->';
   if (/<!-- site-related:start -->[\s\S]*?<!-- site-related:end -->/u.test(html)) {
     html = html.replace(/<!-- site-related:start -->[\s\S]*?<!-- site-related:end -->/u, relatedMarkup);
@@ -935,8 +939,8 @@ function assertEngineeringSnapshot(snapshot) {
   ])) {
     throw new Error('Iris Engineering public capability set is incomplete');
   }
-  if (!snapshot.evidence?.some((entry) => entry.state === 'failed-closed')) {
-    throw new Error('Iris Engineering evidence must retain the failed-closed external read result');
+  if (!Array.isArray(snapshot.evidence) || snapshot.evidence.length === 0 || !Array.isArray(snapshot.boundaries) || snapshot.boundaries.length === 0) {
+    throw new Error('Iris Engineering public snapshot must include reviewed evidence and product boundaries');
   }
   const publicJson = JSON.stringify(snapshot);
   for (const forbidden of ['/Users/', '154.37.215.57', 'git@', 'credential-revoked', 'remote-matched']) {
@@ -1018,7 +1022,7 @@ function installBrandModeHeroArt(html, page, prefix, brand) {
   const heroPattern = new RegExp(`(<(?:header|section|div)\\b[^>]*\\bclass="[^"]*\\b${escapeRegExp(artwork.targetClass)}\\b[^"]*"[^>]*)(>)`);
   let installed = false;
   const persona = personas.find((persona) => persona.mode === artwork.mode);
-  const markup = `<!-- brand-mode-hero-art:start -->${projectComposition(persona, { prefix, engineering: irisEngineering, framework: frameworkStory, projectStatus: projectPresentations.find(p => p.projectId === 'iris-engineering').status })}<!-- brand-mode-hero-art:end -->`;
+  const markup = `<!-- brand-mode-hero-art:start -->${projectComposition(persona, { prefix, framework: frameworkStory })}<!-- brand-mode-hero-art:end -->`;
   const result = html.replace(heroPattern, (fullMatch, opening, close) => {
     installed = true;
     let normalized = opening
@@ -1043,8 +1047,8 @@ function installContentVoiceStages(html, page) {
       ['technical-work', 'evidence'], ['work-availability', 'boundary']
     ],
     'pages/engineering.html': [
-      ['engineering-hero', 'value'], ['engineering-workflow', 'system'], ['engineering-capabilities', 'result'],
-      ['evidence-chain-section', 'evidence'], ['engineering-boundaries', 'boundary']
+      ['engineering-hero', 'value'], ['engineering-workflow', 'system'], ['engineering-delivery', 'result'],
+      ['engineering-evidence', 'evidence'], ['engineering-capabilities', 'boundary']
     ],
     'pages/framework.html': [
       ['framework-hero', 'value'], ['framework-positioning', 'system'], ['framework-architecture-map', 'result'],
@@ -1146,69 +1150,74 @@ function renderBrandContent(brand, series) {
     </div>`;
 }
 
-function renderEngineeringContent(engineering, chains, presentation) {
-  if (!presentation) throw new Error('site-presentation violation: Iris Engineering presentation is missing');
-  const workflow = engineering.workflow.map((step, index) => `
-                <li id="workflow-${escapeAttribute(step.id)}">
-                    <span class="engineering-step-index">0${index + 1}</span>
-                    <p>${escapeHtml(step.label)}</p>
-                    <h3>${escapeHtml(step.title)}</h3>
-                    <span>${escapeHtml(step.description)}</span>
-                </li>`).join('');
-  const capabilities = engineering.capabilities.map((capability, index) => `
-                <article class="engineering-capability-card" id="capability-${escapeAttribute(capability.id)}">
-                    <p class="engineering-card-index">0${index + 1} / ${escapeHtml(capability.id.toUpperCase())}</p>
-                    <h3>${escapeHtml(capability.title)}</h3>
-                    <p>${escapeHtml(capability.description)}</p>
-                    <ul>${capability.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
-                </article>`).join('');
+function renderEngineeringContent(engineering, presentation) {
+  const [items, delivery] = projectShowcases.chapters['iris-engineering'];
+  const screen = (file, label, alt, lazy = true) => {
+    const path = `../assets/images/iris-engineering/${file}.png`;
+    return `<figure class="engineering-screen"><a href="${path}" aria-label="查看${label}原图"><img src="${path}" alt="${alt}" width="1440" height="900"${lazy ? ' loading="lazy"' : ''} decoding="async"></a></figure>`;
+  };
+  const capabilities = engineering.capabilities.map(({ id, title, description }) =>
+    `<div${id === 'workflow-core' ? '' : ` id="capability-${escapeAttribute(id)}"`}><dt>${escapeHtml(title)}</dt><dd>${escapeHtml(description)}</dd></div>`).join('');
+  const rules = engineering.workflow.map(({ title, description }) =>
+    `<div><dt>${escapeHtml(title)}</dt><dd>${escapeHtml(description)}</dd></div>`).join('');
   return `<header class="engineering-hero">
-        <div class="container engineering-hero-inner">
-            <div>
-                <p class="project-breadcrumb"><a href="../index.html">首页</a> / <a href="development.html">项目</a> / ${escapeHtml(presentation.displayName)}</p>
-                <p class="section-kicker">${escapeHtml(engineering.eyebrow)}</p>
-                <h1>${escapeHtml(presentation.displayName)}</h1>
-                <h2 class="project-hero-subtitle">${escapeHtml(presentation.subtitle)}</h2>
-                <p class="project-hero-summary">${escapeHtml(presentation.summary)}</p>
-                <div class="hero-buttons"><a class="btn btn-primary" href="#workflow">${escapeHtml(presentation.primaryAction.label)}</a><a class="btn btn-secondary" href="#capabilities">${escapeHtml(presentation.secondaryAction.label)}</a></div>
-            </div>
+        <div class="container">
+            <h1>${escapeHtml(presentation.displayName)}</h1>
+            <p class="project-hero-summary">在 Web 查看工作事项、执行请求和交付。</p>
+            <div class="hero-buttons"><a class="btn btn-primary" href="https://iris.irissakura.com/">打开工作台</a></div>
         </div>
     </header>
 
     <div class="engineering-page">
-        <section class="engineering-intro" aria-labelledby="engineering-intro-title">
-            <div class="container engineering-intro-grid project-chibi-panel">
-                <div class="project-chibi-copy"><p class="section-kicker">WHY IRIS ENGINEERING</p><h2 id="engineering-intro-title">${escapeHtml(engineering.headline)}</h2>
-                <p>同时推进多个项目时，最容易丢失的往往是上下文：之前为什么这样决定，工作停在哪里，下一步该做什么。我做 Iris Engineering，是希望把这些信息放在一起，让下一次继续工作时少一点重新寻找。</p></div>
-                ${renderProjectChibi('iris')}
+        <section class="engineering-workflow" id="build-workflow" aria-labelledby="workflow-observe">
+            <div class="container" id="workflow">
+                <h2 id="workflow-observe">${escapeHtml(items.title)}</h2>
+                <p>${escapeHtml(items.intro)}</p>
+                ${screen('workbench', '事项表格', 'Iris 演示项目的工作事项表格，显示标题、优先级、类型与状态。', false)}
+                <p class="engineering-caption">截图使用演示项目数据。点击可查看原图。</p>
             </div>
         </section>
 
-        ${renderProjectChapters(projectShowcases.chapters['iris-engineering'])}
-
-        <section class="engineering-workflow" id="workflow" aria-labelledby="engineering-workflow-title">
+        <section id="execution" aria-labelledby="workflow-authorize">
             <div class="container">
-                <div class="engineering-section-heading"><p class="section-kicker">OBSERVE · AUTHORIZE · EXECUTE · VERIFY</p><h2 id="engineering-workflow-title">从事实到验证，四段互不越权</h2></div>
-                <ol>${workflow}
-                </ol>
+                <h2 id="workflow-authorize">执行请求</h2>
+                <p>在事项里新建执行请求，选择仓库并填写目标。截图中的请求正在等待授权。</p>
+                ${screen('execution', '执行请求', 'Iris 事项的执行页，显示一条待授权请求及其目标。')}
+                <p id="workflow-execute">请求获准后，配置的 Desktop Worker 领取任务并回报进度。</p>
+            </div>
+        </section>
+
+        <section class="engineering-delivery" id="continuity" aria-labelledby="workflow-verify">
+            <div class="container" id="capability-workflow-core">
+                <h2 id="workflow-verify">${escapeHtml(delivery.title)}</h2>
+                <p>${escapeHtml(delivery.intro)}</p>
+                ${screen('delivery', '交付版本', 'Iris 交付页，显示当前交付版本、待验收状态和关联证据。')}
             </div>
         </section>
 
         <section class="engineering-capabilities" id="capabilities" aria-labelledby="engineering-capabilities-title">
             <div class="container">
-                <div class="engineering-section-heading"><p class="section-kicker">CORE CAPABILITIES</p><h2 id="engineering-capabilities-title">组织研发工作的四项能力</h2><p>从 Workflow Core 到只读视图，再到 Research Artifact 与 Agent Execution，连接项目进度、研究提案与任务执行。</p></div>
-                <div class="engineering-capability-grid">${capabilities}
-                </div>
+                <h2 id="engineering-capabilities-title">接入与权限</h2>
+                <ul class="engineering-access">
+                    <li><strong>Web</strong> 使用账户登录，打开有权限的项目。</li>
+                    <li><strong>MCP</strong> 按项目授权后查询事项和证据，或创建事项草稿。</li>
+                    <li><strong>Desktop Worker</strong> 配置桌面节点，审核并授权后才能启动执行。</li>
+                </ul>
+                <details class="engineering-rules">
+                    <summary>能力与执行规则</summary>
+                    <dl>${capabilities}</dl>
+                    <dl>${rules}</dl>
+                </details>
             </div>
         </section>
 
-        <section class="engineering-boundaries" aria-labelledby="engineering-boundaries-title">
-            <div class="container engineering-boundary-grid">
-                <div><p class="section-kicker">GETTING STARTED</p><h2 id="engineering-boundaries-title">使用说明</h2><p>先了解项目状态，再选择需要推进的工作。</p></div>
-                <ul><li>执行任务前需要确认目标与权限。</li><li>外部服务的连接与操作按项目单独配置。</li><li>工程进度在 Iris 中组织，游戏运行时与玩法由各自的项目负责。</li></ul>
-            </div>
-        </section>
-${renderEvidenceChains(chains, 'engineering-evidence-chains')}
+        <div class="container engineering-evidence" id="engineering-evidence-chains">
+            <a href="journal.html#evidence-chains">相关研究和游戏实现</a>
+            <details class="engineering-history" id="early-tools">
+                <summary>早期本地工具实验</summary>
+                <p>早期的 Iris 曾用于记录构建、诊断试玩和接续本地工作环境。</p>
+            </details>
+        </div>
     </div>`;
 }
 
@@ -1429,15 +1438,16 @@ ${renderEvidenceChains(chains, 'evidence-chains')}
 function renderEvidenceChains(chains, sectionId = '') {
   const cards = chains.map((chain, index) => {
     const researchLinks = chain.research.map((reference) => `<a href="${escapeAttribute(reference.href)}"><span>${reference.type === 'article' ? '正式文章' : '设计索引'}</span><strong>${escapeHtml(reference.title)}</strong><small>${escapeHtml(reference.relation)}</small></a>`).join('');
-    const workflowLinks = chain.controlPlane.workflows.map((workflow) => `<a href="engineering.html#workflow-${escapeAttribute(workflow.id)}"><strong>${escapeHtml(workflow.label)}</strong><small>${escapeHtml(workflow.title)}</small></a>`).join('');
-    const capabilityLinks = chain.controlPlane.capabilities.map((capability) => `<a href="engineering.html#capability-${escapeAttribute(capability.id)}"><strong>${escapeHtml(capability.title)}</strong><small>${escapeHtml(capability.id)}</small></a>`).join('');
+    const workflowLabels = { observe: '事项与目标', authorize: '执行授权', verify: '交付验收' };
+    const workflowLinks = chain.controlPlane.workflows.map(({ id }) => `<a href="engineering.html#workflow-${escapeAttribute(id)}"><strong>${escapeHtml(workflowLabels[id])}</strong></a>`).join('');
+    const capabilityLinks = chain.controlPlane.capabilities.map(({ id }) => `<a href="engineering.html#capability-${escapeAttribute(id)}"><strong>交付与证据</strong></a>`).join('');
     return `<article class="evidence-chain-card" id="evidence-chain-${escapeAttribute(chain.id)}">
                     <p class="evidence-chain-index">0${index + 1} · ${escapeHtml(chain.gameSystem)}</p>
                     <h3>${escapeHtml(chain.title)}</h3>
                     <p class="evidence-chain-question">${escapeHtml(chain.question)}</p>
                     <div class="evidence-chain-path" aria-label="研究、控制面、框架与游戏证据">
                         <div class="evidence-chain-research"><span>RESEARCH</span>${researchLinks}</div>
-                        <div class="evidence-chain-control-plane"><span>CONTROL PLANE</span><p>${escapeHtml(chain.controlPlane.projectId)}</p>${workflowLinks}${capabilityLinks}</div>
+                        <div class="evidence-chain-control-plane"><span>CONTROL PLANE</span><p>Iris Engineering</p>${workflowLinks}${capabilityLinks}</div>
                         <a href="framework.html#game-adoption"><span>FRAMEWORK</span><strong>${chain.frameworkPackages.map((name) => `<code>${escapeHtml(name)}</code>`).join(' ')}</strong><small>${escapeHtml(chain.adoptionEvidence)}</small></a>
                         <a href="game.html#${escapeAttribute(chain.gameAnchor)}"><span>GAME</span><strong>《言铸之剑》</strong><small>${escapeHtml(chain.gameSystem)}</small></a>
                     </div>
@@ -2681,12 +2691,12 @@ function socialCategory(page) {
 
 function renderPageIndex(config) {
   const links = config.items.map(([id, label], index) => (
-    `<a href="#${escapeAttribute(id)}" data-page-index-link${index === 0 ? ' aria-current="location"' : ''}><span>${String(index + 1).padStart(2, '0')}</span>${escapeHtml(label)}</a>`
+    `<a href="#${escapeAttribute(id)}" data-page-index-link${index === 0 ? ' aria-current="location"' : ''}>${config.title ? `<span>${String(index + 1).padStart(2, '0')}</span>` : ''}${escapeHtml(label)}</a>`
   )).join('');
   return `<!-- page-index:start -->
     <nav class="page-index" aria-label="${escapeAttribute(config.ariaLabel)}" data-page-index>
         <div class="container page-index-inner">
-            <span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>${escapeHtml(config.title)}</strong></span>
+            ${config.title ? `<span class="page-index-heading" aria-hidden="true"><small>ON THIS PAGE</small><strong>${escapeHtml(config.title)}</strong></span>` : ''}
             <div class="page-index-links">${links}</div>
             <span class="page-index-progress" aria-hidden="true"></span>
         </div>

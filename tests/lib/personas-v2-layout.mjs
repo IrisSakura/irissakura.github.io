@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 const widths=[2048,1600,1440,1280,992,900,769,600,390];
-const references=['engineering','framework','journal','tools','mods'];
-const routes=['index','development','brand',...references,'wisteria','mods/the-weaver','portfolio','game','now','contact','subscribe','blog','blog/authoritative-time-source','blog/series/sakura-framework-engineering','blog/tag/unity','journal/action-commitment','framework/runtime','framework-engineering','framework-quickstart','framework/cases/lifecycle-ownership','404'];
+const references=['framework','journal','tools','mods'];
+const routes=['index','development','brand','engineering',...references,'wisteria','mods/the-weaver','portfolio','game','now','contact','subscribe','blog','blog/authoritative-time-source','blog/series/sakura-framework-engineering','blog/tag/unity','journal/action-commitment','framework/runtime','framework-engineering','framework-quickstart','framework/cases/lifecycle-ownership','404'];
 export async function assertPersonaLayouts(browser, baseUrl, output) {
  const page=await browser.newPage(); const evidence=[],failures=[];
  await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(baseUrl).origin?route.continue():route.abort());
@@ -43,7 +43,7 @@ export async function assertPersonaLayouts(browser, baseUrl, output) {
   if(file==='index'&&(geometry.homeArtwork.length!==1||geometry.homeArtwork.some(img=>!img.loaded||!img.width||!img.height||img.fit!=='contain'||img.overlap))) failures.push(`${file} ${width}: creator illustration is missing, cropped or overlaps the introduction`);
   if(geometry.narrowMobileProfile) failures.push(`${file} ${width}: profile leaves unused mobile columns`);
   if(['portfolio','blog','contact'].includes(file)&&(geometry.coverArtwork.length!==1||geometry.coverArtwork.some(img=>!img.loaded||!img.width||!img.height||img.fit!=='contain'||img.overlap||img.clipped||!img.mobileOrder))) failures.push(`${file} ${width}: cover illustration missing, cropped or overlaps copy`);
-  const expectedChibi={engineering:'iris',framework:'sakura',journal:'myosotis',tools:'violet',mods:'freesia'}[file];
+  const expectedChibi={framework:'sakura',journal:'myosotis',tools:'violet',mods:'freesia'}[file];
   if(expectedChibi&&(geometry.projectChibis.length!==1||geometry.projectChibis.some(img=>img.persona!==expectedChibi||!img.loaded||!img.width||!img.height||img.fit!=='contain'||img.overlap||img.clipped||img.insideHero))) failures.push(`${file} ${width}: project chibi identity, loading or content placement is incorrect`);
   if(!expectedChibi&&geometry.projectChibis.length) failures.push(`${file} ${width}: project chibi outside its dedicated route`);
   if(width>=1440&&geometry.prose.some(p=>p.width<680||p.width>760)) failures.push(`${file} ${width}: prose width outside 680–760`);

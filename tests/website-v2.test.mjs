@@ -36,10 +36,11 @@ test('CSS entry has one layer order and all imported owners exist',async()=>{
  for(const file of ['index.html','pages/engineering.html','pages/blog/authoritative-time-source.html']) assert.doesNotMatch(await read(file),/href="[^\"]*style\/tokens\//);
 });
 test('illustrated project structures do not rely on duplicate character integration or card grids',async()=>{
- for(const [file,structure] of [['engineering','system-axis'],['framework','module-branch'],['journal','archive-index'],['tools','workbench-tray'],['mods','discovery-route']]) {
+ for(const [file,structure] of [['framework','module-branch'],['journal','archive-index'],['tools','workbench-tray'],['mods','discovery-route']]) {
  const html=await read(`pages/${file}.html`);assert.ok(html.includes(structure),file);
  assert.equal((html.match(/class="persona-picture"/g)||[]).length,1,`${file} duplicates the persona`);
  }
+ const engineering=await read('pages/engineering.html');assert.doesNotMatch(engineering,/class="persona-picture"|class="system-axis"/);
  const development=await read('pages/development.html');assert.equal((development.match(/class="project-route"/g)||[]).length,6);assert.doesNotMatch(development,/class="persona-picture"/);
  for(const file of await htmlFiles('pages/blog')) assert.doesNotMatch(await read(file),/class="persona-picture"/);
 });

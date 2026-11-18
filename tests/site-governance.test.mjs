@@ -294,10 +294,15 @@ test('major page visuals are generated without reused category screenshots', asy
   for (const coverKey of cssVisualCovers) assert.equal(site.pageCovers[coverKey].image, '', `${coverKey} must use a category visual`);
   assert.notEqual(site.pageCovers.portfolio.image, site.pageCovers.game.image);
 
-  const projectHeroKeys = new Set(['engineering', 'framework', 'journal']);
+  const projectHeroKeys = new Set(['framework', 'journal']);
   for (const [coverKey, pagePath] of Object.entries(majorPages)) {
     const html = await readText(pagePath);
     const prefix = pagePath === 'index.html' ? '' : '../';
+    if (coverKey === 'engineering') {
+      assert.match(html, /class="engineering-screen"/u);
+      assert.doesNotMatch(html, /data-brand-project-hero|data-page-cover="engineering"/u);
+      continue;
+    }
     if (projectHeroKeys.has(coverKey)) {
       assert.ok(html.includes('data-brand-project-hero'), `${pagePath} missing project hero ownership`);
       assert.ok(!html.includes(`data-page-cover="${coverKey}"`), `${pagePath} still has two hero owners`);

@@ -168,7 +168,7 @@ test('evidence chains resolve only reviewed four-part public facts', async () =>
   );
 });
 
-test('all four public pages expose the same ordered evidence chain', async () => {
+test('product reference links to the ordered evidence chains on the three research and project pages', async () => {
   const [data, authorities, engineering, game, framework, journal] = await Promise.all([
     readJson('data/evidence-chains.json'),
     readJson('config/evidence-chain-authorities.json'),
@@ -178,8 +178,9 @@ test('all four public pages expose the same ordered evidence chain', async () =>
     readText('pages/journal.html')
   ]);
 
+  assert.match(engineering, /href="journal\.html#evidence-chains"/u);
   for (const chain of data.chains) {
-    for (const [page, html] of Object.entries({ engineering, game, framework, journal })) {
+    for (const [page, html] of Object.entries({ game, framework, journal })) {
       assert.ok(html.includes(`id="evidence-chain-${chain.id}"`), `${page} missing ${chain.id}`);
       assert.ok(html.includes(`game.html#${chain.gameAnchor}`), `${page} missing game link for ${chain.id}`);
       assert.ok(html.includes('framework.html#game-adoption'), `${page} missing Framework adoption link`);

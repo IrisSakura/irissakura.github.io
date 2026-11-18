@@ -171,14 +171,13 @@ test('mode experience layer differentiates six visual dimensions and respects ga
   assert.ok(footer.includes('{{masterWordmark}}'));
 });
 
-test('mode hero artwork is contract-owned, decorative and limited to the four product heroes', async () => {
+test('mode hero artwork is contract-owned, decorative and limited to the illustrated product heroes', async () => {
   const [brand, generator, css] = await Promise.all([
     readJson('config/brand.json'),
     readText('scripts/generate-site.mjs'),
     readText('style/components/brand-experience.css')
   ]);
   const expected = {
-    engineering: ['iris', 'irisHeroArt'],
     framework: ['sakura', 'sakuraHeroArt'],
     journal: ['journal', 'journalHeroArt'],
     tools: ['violet', 'violetHeroArt']
@@ -202,7 +201,7 @@ test('mode hero artwork is contract-owned, decorative and limited to the four pr
 
   for (const file of [
     'index.html', 'pages/portfolio.html', 'pages/brand.html', 'pages/game.html', 'pages/contact.html',
-    'pages/blog.html', 'pages/framework-quickstart.html'
+    'pages/blog.html', 'pages/framework-quickstart.html', 'pages/engineering.html'
   ]) {
     assert.doesNotMatch(await readText(file), /brand-mode-hero-art/);
   }

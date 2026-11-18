@@ -30,6 +30,9 @@ test('six current personas preserve approved PNG masters and every optimized der
     if (persona.id === 'wisteria') {
       assert.match(page, /data-presentation="text-only"/u);
       assert.ok(!page.includes(`${persona.assetRoot}/web/character-720.webp`));
+    } else if (persona.id === 'iris') {
+      assert.match(page, /assets\/images\/iris-engineering\/workbench\.png/u);
+      assert.ok(!page.includes(`${persona.assetRoot}/web/character-720.webp`));
     } else {
       assert.ok(page.includes(`${persona.assetRoot}/web/character-720.webp`));
       assert.ok(page.includes('type="image/avif"'));

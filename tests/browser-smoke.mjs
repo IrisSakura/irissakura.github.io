@@ -151,6 +151,10 @@ const footerContrastChecks = [
   ['Footer social icons', '.footer .social-icon'],
   ['Footer copyright, motto and motion control', '.footer-bottom > p, .footer-motion-toggle > span:not([aria-hidden])']
 ];
+const footerChecksFor = (route) => route === '/pages/engineering.html'
+  ? footerContrastChecks.filter(([, selector]) => selector !== '.footer-description')
+  : footerContrastChecks;
+
 const brandContrastRoutes = [
   {
     route: '/',
@@ -165,10 +169,10 @@ const brandContrastRoutes = [
     route: '/pages/engineering.html',
     checks: [
       ['Engineering hero description', '.engineering-hero .project-hero-summary'],
-      ['Engineering workflow descriptions', '.engineering-workflow li > span:last-child'],
-      ['Engineering capability descriptions', '.engineering-capability-card > p'],
-      ['Engineering build and recovery descriptions', '.project-chapter .chapter-steps p'],
-      ['Engineering boundary descriptions', '.engineering-boundaries li']
+      ['Engineering work item descriptions', '#build-workflow p'],
+      ['Engineering execution descriptions', '#execution p'],
+      ['Engineering delivery descriptions', '#continuity p'],
+      ['Engineering access and permissions', '.engineering-access li']
     ]
   },
   {
@@ -391,7 +395,10 @@ try {
       if (routeContract.readySelector) {
         await brandPage.locator(routeContract.readySelector).waitFor();
       }
-      for (const [label, selector] of [...routeContract.checks, ...footerContrastChecks]) {
+      if (routeContract.route === '/pages/engineering.html' && await brandPage.locator('.footer-description').count()) {
+        throw new Error(`${routeContract.route} restored promotional footer copy`);
+      }
+      for (const [label, selector] of [...routeContract.checks, ...footerChecksFor(routeContract.route)]) {
         const measurements = await measureTextContrast(brandPage, selector);
         if (measurements.length === 0) {
           contrastFailures.push(
@@ -543,7 +550,7 @@ try {
     const response = await desktop.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
     if (!response?.ok()) throw new Error(`${route} returned ${response?.status()}`);
     if (await desktop.locator('main#main-content').count() !== 1) throw new Error(`${route} lacks one main landmark`);
-    for (const [label, selector] of footerContrastChecks) {
+    for (const [label, selector] of footerChecksFor(route)) {
       const measurements = await measureTextContrast(desktop, selector);
       if (measurements.length === 0) throw new Error(`${route} ${label} is missing or hidden`);
       for (const measurement of measurements) {
@@ -885,16 +892,26 @@ try {
   }
 
   await desktop.goto(`${baseUrl}/pages/engineering.html`, { waitUntil: 'networkidle' });
-  if (await desktop.locator('.engineering-workflow li').count() !== irisEngineering.workflow.length) {
-    throw new Error('Engineering page does not expose every reviewed workflow step');
+  const irisWorkbenchUrl = await desktop.getByRole('link', { name: '打开工作台', exact: true }).getAttribute('href');
+  if (irisWorkbenchUrl !== 'https://iris.irissakura.com/') throw new Error('Iris workbench entry must use its production URL');
+  const irisScreens = desktop.locator('.engineering-screen img');
+  if (await irisScreens.count() !== 3) throw new Error('Iris page is missing actual product screenshots');
+  for (const image of await irisScreens.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate((img) => img.decode());
   }
-  if (await desktop.locator('.engineering-capability-card').count() !== irisEngineering.capabilities.length) {
-    throw new Error('Engineering page does not expose every reviewed capability group');
+  await desktop.locator('[data-page-index] a[href="#execution"]').click();
+  if (!desktop.url().endsWith('#execution')) throw new Error('Iris section link did not reach the execution request');
+  const irisRules = desktop.locator('.engineering-rules');
+  await irisRules.locator('summary').focus();
+  await desktop.keyboard.press('Enter');
+  if (await irisRules.locator('dl').first().locator('dt:visible').count() !== irisEngineering.capabilities.length) {
+    throw new Error('Iris product rules did not open by keyboard or render every source capability');
   }
-  if (await desktop.locator('#build-workflow .chapter-steps > li').count() !== 4
-    || await desktop.locator('#continuity .chapter-grid > article').count() !== 3) {
-    throw new Error('Engineering page must expose the build-to-playtest workflow and continuity boundaries');
-  }
+  const irisHistory = desktop.locator('#early-tools');
+  await irisHistory.locator('summary').focus();
+  await desktop.keyboard.press('Enter');
+  if (!await irisHistory.locator('p').isVisible()) throw new Error('Iris history could not be opened with the keyboard');
   const engineeringDesktopState = await desktop.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,
     text: document.body.innerText
@@ -907,13 +924,14 @@ try {
       throw new Error(`Engineering page exposes private or overstated text: ${forbidden}`);
     }
   }
-  for (const route of ['/pages/engineering.html', '/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
+  for (const route of ['/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
     await assertEvidenceChainPage(desktop, route, 'desktop');
   }
 
   await desktop.goto(`${baseUrl}/pages/portfolio.html`, { waitUntil: 'networkidle' });
   if (!await desktop.locator('#project-sword-of-words').isVisible()) throw new Error('flagship work is missing');
   if (!await desktop.locator('#project-udgap').isVisible()) throw new Error('registered experiment is missing');
+  if (!await desktop.locator('#engineering-tools #project-iris-engineering').isVisible()) throw new Error('Iris Engineering portfolio project is missing');
   if (await desktop.locator('.consumer-lab-card').count() !== 0) throw new Error('technical matrix still dominates portfolio');
   await desktop.locator('#consumer-lab a[href="../pages/framework.html#game-adoption"]').click();
   await desktop.waitForURL(`${baseUrl}/pages/framework.html#game-adoption`);
@@ -1166,17 +1184,17 @@ try {
   await mobile.goto(`${baseUrl}/pages/engineering.html`, { waitUntil: 'networkidle' });
   const engineeringMobileState = await mobile.evaluate(() => ({
     overflow: document.documentElement.scrollWidth - window.innerWidth,
-    workflowSteps: document.querySelectorAll('.engineering-workflow li').length,
-    capabilityCards: document.querySelectorAll('.engineering-capability-card').length
+    screens: [...document.querySelectorAll('.engineering-screen img')].map((img) => ({
+      width: img.getBoundingClientRect().width,
+      viewport: window.innerWidth,
+      alt: img.alt
+    }))
   }));
   if (engineeringMobileState.overflow > 1) {
     throw new Error(`Engineering page overflows the mobile viewport by ${engineeringMobileState.overflow}px`);
   }
-  if (engineeringMobileState.workflowSteps !== irisEngineering.workflow.length) {
-    throw new Error('mobile Engineering page does not expose every workflow step');
-  }
-  if (engineeringMobileState.capabilityCards !== irisEngineering.capabilities.length) {
-    throw new Error('mobile Engineering page does not expose every capability group');
+  if (engineeringMobileState.screens.length !== 3 || engineeringMobileState.screens.some(({ width, viewport, alt }) => width > viewport || width <= 0 || !alt)) {
+    throw new Error('Iris product screenshots do not fit the mobile page or lack text alternatives');
   }
   await mobile.goto(`${baseUrl}/pages/framework.html`, { waitUntil: 'networkidle' });
   await mobile.locator('#framework-module-list[data-framework-loaded="true"]').waitFor();
@@ -1229,7 +1247,7 @@ try {
     if (deepMobileState.overflow > 1) throw new Error(`${route} overflows the mobile viewport by ${deepMobileState.overflow}px`);
     if (deepMobileState.h1 !== 1 || deepMobileState.index < 3) throw new Error(`${route} is incomplete on mobile`);
   }
-  for (const route of ['/pages/engineering.html', '/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
+  for (const route of ['/pages/framework.html', '/pages/journal.html', '/pages/game.html']) {
     await assertEvidenceChainPage(mobile, route, 'mobile');
   }
   if (process.env.SITE_SCREENSHOT_DIR) {

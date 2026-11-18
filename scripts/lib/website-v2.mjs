@@ -7,14 +7,13 @@ export function pageFamily(file, registry) {
   if (!rule) throw new Error(`Page family missing: ${file}`);
   return rule;
 }
-export function projectComposition(persona, { prefix, engineering, framework, projectStatus }) {
+export function projectComposition(persona, { prefix, framework }) {
   const art = `<figure class="brand-mode-hero-art brand-mode-hero-art-${persona.mode}" aria-hidden="true">${personaPicture(persona,{prefix,eager:true,decorative:true})}</figure>`;
   let structure='';
-  if(persona.id==='iris') structure=`<div class="system-axis"><p class="section-kicker">ENGINEERING SYSTEM</p><p class="system-state">${esc(projectStatus)}</p><ol>${engineering.workflow.map((s,i)=>`<li><a href="#workflow-${esc(s.id)}"><span>0${i+1}</span>${esc(s.label)}</a></li>`).join('')}</ol></div>`;
   if(persona.id==='sakura') structure=`<nav class="module-branch" aria-label="框架结构"><p class="section-kicker">COMPOSE YOUR GAME</p><a class="branch-root" href="#architecture-map">${esc(framework.architectureMap.layers[0].label)}</a><ol>${framework.architectureMap.layers.slice(1).map(l=>`<li><a href="#architecture-map">${esc(l.label)}</a></li>`).join('')}</ol><a href="framework-quickstart.html">从采用路线开始 →</a></nav>`;
   if(persona.id==='myosotis') structure=`<nav class="archive-index" aria-label="Myosotis 档案入口"><p class="section-kicker">ARCHIVE / INDEX</p><a href="#content-search">01 / 查找研究</a><a href="blog.html">02 / 阅读文章</a><a href="blog.html#blog-taxonomy">03 / 沿系列阅读</a><a href="subscribe.html">04 / 订阅更新</a></nav>`;
   if(persona.id==='violet') structure='<nav class="workbench-tray" aria-label="工具台入口"><span>YOUR WORKBENCH</span><a href="#tools">卡牌 · 素材 · 数值 · 实验</a><a href="#status">本地制作与使用 →</a></nav>';
-  return `<div class="project-composition composition-${persona.id}" data-grammar="${({iris:'system-axis',sakura:'module-branch',myosotis:'archive-index',violet:'tool-shelf'})[persona.id]}">${art}${structure}</div>`;
+  return `<div class="project-composition composition-${persona.id}" data-grammar="${({sakura:'module-branch',myosotis:'archive-index',violet:'tool-shelf'})[persona.id]}">${art}${structure}</div>`;
 }
 export function ecosystemMap(projects, brand, prefix='../') {
   const names=new Map(projects.map(p=>[p.projectId,p]));

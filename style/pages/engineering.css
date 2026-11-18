@@ -1,370 +1,98 @@
-/* Website V2 owner: pages/engineering. */
+/* Website owner: the Iris Engineering product reference. */
 .engineering-hero {
-    position: relative;
-    overflow: hidden;
-    padding: clamp(7.5rem, 13vw, 11rem) 0 clamp(4.5rem, 8vw, 7rem);
-    color: var(--brand-mode-hero-text);
-    background: var(--brand-mode-hero-background);
-}
-
-[data-page-cover="engineering"].engineering-hero {
-    color: var(--brand-mode-hero-text);
-    background: var(--brand-mode-hero-background);
-    background-color: var(--brand-mode-hero-base);
-}
-
-[data-page-cover="engineering"].engineering-hero h1,
-[data-page-cover="engineering"].engineering-hero strong {
-    color: var(--brand-mode-hero-text);
-}
-
-[data-page-cover="engineering"].engineering-hero .section-kicker {
-    color: var(--brand-mode-hero-muted);
-}
-
-[data-page-cover="engineering"].engineering-hero .engineering-status p {
-    color: var(--brand-mode-hero-muted);
-}
-
-[data-page-cover="engineering"].engineering-hero .engineering-status > span {
-    color: var(--brand-mode-hero-muted);
-}
-
-.engineering-hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.24;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-    background-size: 4.5rem 4.5rem;
-    mask-image: linear-gradient(to bottom, #000, transparent 84%);
+    padding-block: clamp(2rem, 5vw, 4rem) 1.5rem;
 }
 
 .engineering-hero h1 {
-    max-width: 12ch;
-    margin: 0.45rem 0 1.2rem;
-    color: #fff;
-    font-size: clamp(3rem, 7vw, 6.8rem);
-    line-height: 0.96;
-    letter-spacing: -0.055em;
+    margin: 0 0 0.65rem;
 }
 
 .engineering-hero .project-hero-summary {
-    position: relative;
-    z-index: 1;
-    max-width: 760px;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: clamp(1.02rem, 1.8vw, 1.28rem);
-    line-height: 1.85;
-}
-
-.engineering-status {
-    display: grid;
-    gap: 0.8rem;
-    padding: 1.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 1.5rem;
-    background: rgba(8, 8, 30, 0.62);
-    backdrop-filter: blur(16px);
-}
-
-.engineering-status > span,
-.engineering-card-index,
-.engineering-evidence-card span {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-
-.engineering-status > strong {
-    color: #c9c4ff;
-    font-family: var(--font-display);
-    font-size: clamp(2.8rem, 7vw, 5rem);
-    line-height: 1;
-}
-
-.engineering-status p {
+    max-width: 45rem;
     margin: 0;
-    color: rgba(255, 255, 255, 0.72);
-    line-height: 1.7;
-}
-
-.engineering-page {
-    padding-bottom: clamp(4rem, 8vw, 7rem);
+    color: var(--ink-soft);
 }
 
 .engineering-page section {
-    padding: clamp(4.5rem, 9vw, 8rem) 0;
+    padding-block: clamp(1.5rem, 4vw, 3rem);
 }
 
 .engineering-page section + section {
-    border-top: 1px solid var(--ui-border-subtle);
+    border-top: 1px solid var(--ui-line);
 }
 
-.engineering-intro-grid,
-.engineering-evidence-grid,
-.engineering-boundary-grid {
+.engineering-page h2 {
+    margin: 0 0 0.55rem;
+}
+
+.engineering-page p {
+    max-width: 48rem;
+    color: var(--ink-soft);
+}
+
+.engineering-page h2[id],
+.engineering-page p[id],
+.engineering-page details,
+.engineering-rules [id] {
+    scroll-margin-top: calc(var(--site-nav-offset) + 5.5rem);
+}
+
+.engineering-screen {
+    margin: 1rem 0 0;
+}
+
+.engineering-screen a {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.engineering-screen img {
+    display: block;
+    width: 100%;
+    max-width: 68rem;
+    height: auto;
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-media-radius);
+    box-shadow: var(--ui-raised-shadow);
+}
+
+.engineering-caption {
+    margin: 0.5rem 0 0;
+    font-size: var(--type-small);
+}
+
+.engineering-access {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(2.5rem, 8vw, 8rem);
+    gap: 0.5rem;
+    padding-inline-start: 1.25rem;
+    max-width: 48rem;
 }
 
-.engineering-intro h2,
-.engineering-section-heading h2,
-.engineering-boundaries h2 {
-    margin: 0.55rem 0 0;
-    font-size: clamp(2rem, 4.5vw, 4rem);
-    line-height: 1.08;
+.engineering-rules {
+    margin-top: 1.25rem;
 }
 
-.engineering-intro-grid > p,
-.engineering-section-heading > p:last-child,
-.engineering-boundary-grid > div > p:last-child {
-    margin: 0;
-    color: var(--muted-text-color);
-    font-size: 1.04rem;
-    line-height: 1.9;
+.engineering-rules dl {
+    max-width: 48rem;
+    margin-block: 0.8rem 1.25rem;
 }
 
-.engineering-section-heading {
-    max-width: 900px;
-    margin-bottom: clamp(2rem, 5vw, 4rem);
-}
-
-.engineering-workflow ol {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.engineering-workflow li,
-.engineering-capability-card,
-.engineering-evidence-card,
-.engineering-boundaries ul {
-    border: 1px solid var(--ui-border-subtle);
-    border-radius: 1.35rem;
-    background: var(--ui-surface);
-    box-shadow: var(--ui-shadow-soft);
-}
-
-.engineering-workflow li {
-    position: relative;
-    min-height: 290px;
-    padding: 1.5rem;
-}
-
-.engineering-workflow li:not(:last-child)::after {
-    content: "→";
-    position: absolute;
-    top: 2rem;
-    right: -0.85rem;
-    z-index: 2;
-    color: var(--brand-shared);
-    font-family: var(--font-display);
-}
-
-.engineering-step-index {
-    color: color-mix(in srgb, var(--brand-iris) 58%, transparent);
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 900;
-}
-
-.engineering-workflow li > p {
-    margin: 2.4rem 0 0.5rem;
-    color: var(--brand-iris);
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.engineering-workflow h3 {
-    margin: 0 0 0.8rem;
-    font-size: 1.35rem;
-}
-
-.engineering-workflow li > span:last-child,
-.engineering-capability-card > p,
-.engineering-evidence-card p {
-    color: var(--muted-text-color);
-    line-height: 1.75;
-}
-
-.engineering-capabilities {
-    background: color-mix(in srgb, var(--brand-iris-soft) 28%, var(--body-bg));
-}
-
-.engineering-capability-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
-}
-
-.engineering-card-index {
-    color: var(--brand-iris);
-}
-
-.engineering-capability-card h3 {
-    margin: 0.75rem 0;
-    font-size: clamp(1.5rem, 3vw, 2.2rem);
-}
-
-.engineering-capability-card ul,
-.engineering-boundaries ul {
-    list-style: none;
-}
-
-.engineering-capability-card ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.55rem;
-    margin: 1.4rem 0 0;
-    padding: 0;
-}
-
-.engineering-capability-card li {
-    padding: 0.45rem 0.7rem;
-    border-radius: 999px;
-    background: var(--ui-chip-bg);
-    color: var(--ui-chip-text);
-    font-size: 0.82rem;
+.engineering-rules dt {
     font-weight: 700;
 }
 
-.engineering-evidence-grid > div:last-child {
-    display: grid;
-    gap: 1rem;
+.engineering-rules dd {
+    margin: 0 0 0.65rem;
+    color: var(--ink-soft);
 }
 
-.engineering-evidence-card {
-    padding: 1.35rem 1.5rem;
+.engineering-evidence {
+    padding-block: 0.25rem 2rem;
 }
 
-.engineering-evidence-card > div {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.engineering-evidence-card span {
-    padding: 0.35rem 0.6rem;
-    border-radius: 999px;
-    color: var(--brand-iris);
-    background: var(--brand-iris-soft);
-}
-
-.engineering-evidence-failed-closed span {
-    color: #7a2146;
-    background: var(--brand-sakura-soft);
-}
-
-.engineering-evidence-card p {
-    margin: 0.8rem 0 0;
-}
-
-.engineering-boundaries {
-    background: #111126;
-    color: #fff;
-}
-
-.engineering-boundaries .section-kicker {
-    color: #b9b3ff;
-}
-
-.engineering-boundaries h2 {
-    color: #fff;
-}
-
-.engineering-boundary-grid > div > p:last-child {
-    color: rgba(255, 255, 255, 0.68);
-}
-
-.engineering-boundaries ul {
-    margin: 0;
-    padding: 0.5rem 1.5rem;
-    border-color: rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: none;
-}
-
-.engineering-boundaries li {
-    padding: 1rem 0;
-    color: rgba(255, 255, 255, 0.78);
-    line-height: 1.7;
-}
-
-.engineering-boundaries li + li {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-@media (max-width: 980px) {
-    .engineering-intro-grid,
-    .engineering-evidence-grid,
-    .engineering-boundary-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 980px) {
-
-    .engineering-workflow ol {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 980px) {
-
-    .engineering-workflow li:nth-child(2)::after {
-        display: none;
-    }
-}
-
-@media (max-width: 640px) {
-    .engineering-hero {
-        padding-top: 7rem;
-    }
-}
-
-@media (max-width: 640px) {
-
-    .engineering-workflow ol,
-    .engineering-capability-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 640px) {
-
-    .engineering-workflow li {
-        min-height: auto;
-    }
-}
-
-@media (max-width: 640px) {
-
-    .engineering-workflow li:not(:last-child)::after {
-        content: "↓";
-        top: auto;
-        right: 50%;
-        bottom: -0.9rem;
-        transform: translateX(50%);
-    }
-}
-
-@media (max-width: 640px) {
-
-    .engineering-workflow li:nth-child(2)::after {
-        display: block;
-    }
+.engineering-history {
+    margin-top: 1rem;
 }
 
 .engineering-proof-visual {
@@ -445,28 +173,15 @@
     }
 }
 
-html[data-brand-mode="iris"] :is(.engineering-capability-grid, .engineering-evidence-grid, .engineering-boundary-grid) {
-    gap: 0.8rem;
-}
-
-html[data-brand-mode="iris"] :is(.engineering-capability-card, .engineering-evidence-card, .engineering-boundary-grid > *) {
-    border-radius: var(--brand-mode-card-radius);
-    transition: transform var(--brand-mode-motion-duration) var(--brand-mode-motion-easing), border-color var(--brand-mode-motion-duration) var(--brand-mode-motion-easing);
-}
-
-html[data-brand-mode="iris"] :is(.engineering-capability-card, .engineering-evidence-card):hover {
-    transform: translateX(4px);
-}
-
 @media (prefers-reduced-motion: reduce) {
-    html[data-brand-mode] :is(.engineering-capability-card, .engineering-evidence-card, .module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a) {
+    html[data-brand-mode] :is(.module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a) {
         transition: none;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-    html[data-brand-mode] :is(.engineering-capability-card, .engineering-evidence-card, .module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a):hover {
+    html[data-brand-mode] :is(.module-detail, .bridge-card, .stream-card, .note-card, .journal-update-card, .framework-depth-card, .framework-reader-card, .framework-domain-card, .framework-adoption-route-card, .framework-case-grid a, .framework-knowledge-grid a, .framework-knowledge-clusters a):hover {
         transform: none;
     }
 }

@@ -13,20 +13,22 @@ export async function assertProjectHeroLayouts(browser, baseUrl, screenshotDirec
       await page.setViewportSize({ width, height: width < 700 ? 844 : 1000 });
       for (const name of ['engineering', 'framework', 'journal', 'tools']) {
         await page.goto(`${baseUrl}/pages/${name}.html`, { waitUntil: 'networkidle' });
-        await page.evaluate(async () => {
+        const hero = name === 'engineering' ? '.engineering-hero' : '[data-brand-project-hero]';
+        const media = name === 'engineering' ? '#build-workflow .engineering-screen' : '.brand-mode-hero-art';
+        await page.evaluate(async (artwork) => {
           await document.fonts.ready;
-          await document.querySelector('[data-brand-project-hero] img').decode();
+          await document.querySelector(`${artwork} img`).decode();
           window.scrollTo({ top: 0, behavior: 'instant' });
-        });
-        const geometry = await page.evaluate(() => {
+        }, media);
+        const geometry = await page.evaluate(({ heroSelector, mediaSelector }) => {
           const nav = document.querySelector('.navbar').getBoundingClientRect();
-          const hero = document.querySelector('[data-brand-project-hero]').getBoundingClientRect();
-          const art = document.querySelector('.brand-mode-hero-art').getBoundingClientRect();
-          const title = document.querySelector('[data-brand-project-hero] h1').getBoundingClientRect();
-          const copy = document.querySelector('[data-brand-project-hero] > .container, [data-brand-project-hero] > .tools-hero-copy').getBoundingClientRect();
+          const hero = document.querySelector(heroSelector).getBoundingClientRect();
+          const art = document.querySelector(mediaSelector).getBoundingClientRect();
+          const title = document.querySelector(`${heroSelector} h1`).getBoundingClientRect();
+          const copy = document.querySelector(`${heroSelector} > .container, ${heroSelector} > .tools-hero-copy`).getBoundingClientRect();
           const artworkOverlapsCopy = art.left < copy.right - 1 && art.right > copy.left + 1 && art.top < copy.bottom - 1 && art.bottom > copy.top + 1;
           return { navBottom: nav.bottom, heroTop: hero.top, artTop: art.top, titleTop: title.top, artworkOverlapsCopy, overflow: document.documentElement.scrollWidth - window.innerWidth };
-        });
+        }, { heroSelector: hero, mediaSelector: media });
         const label = `${width}px ${name}: ${JSON.stringify(geometry)}`;
         assert.ok(geometry.heroTop >= geometry.navBottom - 1, `Hero is under fixed navigation: ${label}`);
         assert.ok(geometry.artTop >= geometry.navBottom - 1, `Artwork is under fixed navigation: ${label}`);
@@ -51,7 +53,7 @@ export async function assertProjectHeroLayouts(browser, baseUrl, screenshotDirec
         if (screenshotDirectory && [390, 1440].includes(width)) {
           await page.screenshot({ path: path.join(screenshotDirectory, `${name}-hero-${width}.png`) });
         }
-        const jump = page.locator('[data-brand-project-hero] a[href^="#"]').first();
+        const jump = page.locator(name === 'engineering' ? '[data-page-index] a[href="#build-workflow"]' : `${hero} a[href^="#"]`).first();
         const href = await jump.getAttribute('href');
         await jump.click();
         await page.waitForFunction((selector) => {
