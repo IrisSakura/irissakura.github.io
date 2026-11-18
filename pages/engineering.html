@@ -144,8 +144,8 @@
                 </ul>
                 <details class="engineering-rules">
                     <summary>能力与执行规则</summary>
-                    <dl><div><dt>Collaboration Domain</dt><dd>Work、Attempt、Delivery、附件与审计的统一领域合同。</dd></div><div id="capability-read-models"><dt>Web Workbench</dt><dd>项目、事项、待处理、执行与交付的统一工作台。</dd></div><div id="capability-research-intake"><dt>Research Artifact &amp; Proposal Ingress</dt><dd>把研究材料或受限 QQ 提案信封固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。</dd></div><div id="capability-agent-execution"><dt>Agent Execution Contract</dt><dd>连接授权、上下文、Runner 权限与 AgentRun 状态，保留 claim、lease、恢复和只读检查。</dd></div></dl>
-                    <dl><div><dt>读取事实</dt><dd>从显式登记的 Git 与 Gitea 来源核对事实，来源身份与业务状态分别记录。</dd></div><div><dt>显式授权</dt><dd>Research Artifact 只生成 pending-approval 提案；WorkAuthorization 明确限定目标、权限与执行边界。</dd></div><div><dt>受限执行</dt><dd>TaskEnvelope 与 Runner 权限求交集，AgentRun 通过 claim、lease、heartbeat 与 recovery 管理生命周期。</dd></div><div><dt>验证与审计</dt><dd>把结果、失败、边界与后续入口分开记录；未知终态不盲目重试，未取得证据就不升级结论。</dd></div></dl>
+                    <dl><div><dt>事项、执行与交付</dt><dd>Work 记录目标和验收条件，Attempt 记录一次具体执行，Delivery 固定交付版本。重试和新交付都保有自己的历史。</dd></div><div id="capability-read-models"><dt>云端 Web 工作台</dt><dd>项目概览、列表、表格、看板和待处理队列共用一组事项。可从关注队列回到相应执行、附件或当前交付。</dd></div><div id="capability-research-intake"><dt>MCP 协作</dt><dd>授权后的客户端可以读取可访问的项目、事项与证据，也可以整理事项草稿。草稿回到 Web 由人确认。</dd></div><div id="capability-agent-execution"><dt>Desktop Worker</dt><dd>登记节点承接显式授权的执行，核对仓库与本机环境，保存进度、取消、清理和待对账记录。</dd></div></dl>
+                    <dl><div><dt>明确目标和验收条件</dt><dd>在项目中记录事项、目标、验收标准及参考附件。通过 MCP 创建的草稿同样回到工作台处理。</dd></div><div><dt>审核并授权一次执行</dt><dd>在 Web 审核本次执行的仓库、节点、模型、范围和预算，确认后才可启动。</dd></div><div><dt>在登记的桌面节点执行</dt><dd>Desktop Worker 领取获准的请求并复核本机上下文，回报进度、结果与收据。取消和待对账状态保留在本次执行中。</dd></div><div><dt>核对并验收当前交付</dt><dd>以固定版本审阅提交、交付文件和证据。由具备权限的人按事项规则完成本人验收或独立审查。</dd></div></dl>
                 </details>
             </div>
         </section>

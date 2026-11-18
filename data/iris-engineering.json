@@ -2,91 +2,97 @@
   "schemaVersion": 2,
   "id": "iris-engineering",
   "title": "Iris Engineering",
-  "eyebrow": "IRIS ENGINEERING · CONTROL PLANE",
-  "headline": "把研发事实、显式授权与验证边界组织成可复查的工作流",
-  "description": "一个引擎无关的研发工作流控制面：读取 Git 与平台事实，形成只读视图和研究提案，在明确授权后组装受限任务，并以可恢复、失败关闭的执行状态保留证据。",
+  "eyebrow": "IRIS ENGINEERING",
+  "headline": "工作事项、执行请求与交付验收",
+  "description": "Iris Engineering 是个人研发协作工作台。集中整理项目事项和验收条件，通过 MCP 准备工作，在 Web 审核并授权 Desktop Worker 执行，最后查看固定版本的交付、文件与测试证据。",
   "operatingMode": "development-convergence",
   "statusLabel": "Cloud Web · MCP · Desktop Worker",
-  "status": "云端协作与受控执行为现行产品基线，架构收敛正在本地验收。",
-  "sourceUpdatedAt": "2026-11-17T07:47:46.000Z",
+  "status": "云端工作台已投入使用。项目事项、执行和交付各自保留状态与历史。",
+  "sourceUpdatedAt": "2026-11-18T02:53:12.000Z",
   "workflow": [
     {
       "id": "observe",
       "label": "Observe",
-      "title": "读取事实",
-      "description": "从显式登记的 Git 与 Gitea 来源核对事实，来源身份与业务状态分别记录。"
+      "title": "明确目标和验收条件",
+      "description": "在项目中记录事项、目标、验收标准及参考附件。通过 MCP 创建的草稿同样回到工作台处理。"
     },
     {
       "id": "authorize",
       "label": "Authorize",
-      "title": "显式授权",
-      "description": "Research Artifact 只生成 pending-approval 提案；WorkAuthorization 明确限定目标、权限与执行边界。"
+      "title": "审核并授权一次执行",
+      "description": "在 Web 审核本次执行的仓库、节点、模型、范围和预算，确认后才可启动。"
     },
     {
       "id": "execute",
       "label": "Execute",
-      "title": "受限执行",
-      "description": "TaskEnvelope 与 Runner 权限求交集，AgentRun 通过 claim、lease、heartbeat 与 recovery 管理生命周期。"
+      "title": "在登记的桌面节点执行",
+      "description": "Desktop Worker 领取获准的请求并复核本机上下文，回报进度、结果与收据。取消和待对账状态保留在本次执行中。"
     },
     {
       "id": "verify",
       "label": "Verify",
-      "title": "验证与审计",
-      "description": "把结果、失败、边界与后续入口分开记录；未知终态不盲目重试，未取得证据就不升级结论。"
+      "title": "核对并验收当前交付",
+      "description": "以固定版本审阅提交、交付文件和证据。由具备权限的人按事项规则完成本人验收或独立审查。"
     }
   ],
   "capabilities": [
     {
       "id": "workflow-core",
-      "title": "Collaboration Domain",
-      "description": "Work、Attempt、Delivery、附件与审计的统一领域合同。",
+      "title": "事项、执行与交付",
+      "description": "Work 记录目标和验收条件，Attempt 记录一次具体执行，Delivery 固定交付版本。重试和新交付都保有自己的历史。",
       "items": [
-        "Work / Attempt / Delivery",
-        "Attachments",
-        "Audit"
+        "工作事项",
+        "执行请求",
+        "版本化交付"
       ]
     },
     {
       "id": "read-models",
-      "title": "Web Workbench",
-      "description": "项目、事项、待处理、执行与交付的统一工作台。",
+      "title": "云端 Web 工作台",
+      "description": "项目概览、列表、表格、看板和待处理队列共用一组事项。可从关注队列回到相应执行、附件或当前交付。",
       "items": [
-        "Project workbench",
-        "Inbox",
-        "Delivery review"
+        "项目与事项",
+        "待处理",
+        "工程资产"
       ]
     },
     {
       "id": "research-intake",
-      "title": "Research Artifact & Proposal Ingress",
-      "description": "把研究材料或受限 QQ 提案信封固化为不可变 Artifact 和待审批 Proposal，不自动批准、不自动改写目标仓库。",
+      "title": "MCP 协作",
+      "description": "授权后的客户端可以读取可访问的项目、事项与证据，也可以整理事项草稿。草稿回到 Web 由人确认。",
       "items": [
-        "Immutable artifact",
-        "QQ Research Proposal Ingress",
-        "Pending proposal"
+        "项目上下文",
+        "事项草稿",
+        "证据读取"
       ]
     },
     {
       "id": "agent-execution",
-      "title": "Agent Execution Contract",
-      "description": "连接授权、上下文、Runner 权限与 AgentRun 状态，保留 claim、lease、恢复和只读检查。",
+      "title": "Desktop Worker",
+      "description": "登记节点承接显式授权的执行，核对仓库与本机环境，保存进度、取消、清理和待对账记录。",
       "items": [
-        "Task envelope",
-        "Permission intersection",
-        "Claim / lease / recovery"
+        "授权预览",
+        "桌面执行",
+        "执行收据"
       ]
     }
   ],
   "evidence": [
     {
-      "label": "QQ 研究提案入口",
+      "label": "工作台与交付复查",
       "state": "local-passed",
-      "summary": "P9.1 只把受限提案映射为不可变 Artifact 与 pending-approval Proposal；本地合同已交付，真实 ingress 尚未执行。"
+      "summary": "工作事项、执行记录、文件预览和交付验收已完成本地验证。"
+    },
+    {
+      "label": "Canonical external read（历史试点）",
+      "state": "failed-closed",
+      "summary": "早期独立试点在首个读取请求遇到传输错误后停止，未重试，也未取得远端事实。"
     }
   ],
   "boundaries": [
-    "Iris Engineering 不拥有 Unity Runtime、玩法逻辑或 Sakura Framework 的包与发布状态。",
-    "真实平台读取、写入、Runner、工作树与外部 Agent 接入都必须单独授权。",
-    "P9.1 QQ 提案入口只能创建 pending-approval Proposal，不能批准任务、创建执行合同或改写目标仓库。"
+    "项目与事项按账户权限访问。MCP 客户端通过独立 OAuth 授权。",
+    "外部写入、仓库操作与桌面执行受本次授权的范围约束。",
+    "AI 可补充草稿和辅助审阅。执行授权与最终验收由具备权限的人确认。",
+    "Issue、PR、提交及 CI 状态以其来源平台为准。"
   ]
 }
