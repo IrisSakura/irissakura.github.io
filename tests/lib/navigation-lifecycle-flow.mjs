@@ -302,7 +302,7 @@ async function assertKeyboardRecovery(browser, baseUrl) {
         await page.setViewportSize({ width, height: 844 });
       }
 
-      await page.route('**/data/site-search-index.json', route => route.abort());
+      await page.route('**/dist/site-search/index.json', route => route.abort());
       await page.locator('[data-search-open]').click();
       await page.getByText('搜索暂时不可用', { exact: false }).waitFor();
       await page.locator('.site-search-fallback a').click();

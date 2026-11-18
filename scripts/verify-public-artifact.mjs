@@ -2,6 +2,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertPublishedSiteUrls } from './lib/published-site-urls.mjs';
+import { buildSiteSearchAssets } from './lib/site-search-assets.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '_site');
@@ -10,6 +11,22 @@ const publicData = new Set(['framework-public.json', 'search-index.json', 'site-
 const dataFiles = await readdir(path.join(output, 'data'));
 if (dataFiles.some((file) => !publicData.has(file)) || dataFiles.length !== publicData.size) {
   throw new Error(`Public data projection differs from allowlist: ${dataFiles.join(', ')}`);
+}
+
+const searchDirectory = path.join(output, 'dist/site-search');
+const [searchIndex, searchBudget, searchFiles] = await Promise.all([
+  readFile(path.join(root, 'data/site-search-index.json'), 'utf8').then(JSON.parse),
+  readFile(path.join(root, 'config/performance-budget.json'), 'utf8').then(JSON.parse),
+  readdir(searchDirectory)
+]);
+const searchAssets = buildSiteSearchAssets(searchIndex, searchBudget.searchIndexBytes);
+if (searchFiles.length !== searchAssets.size || searchFiles.some((file) => !searchAssets.has(file))) {
+  throw new Error('Published search files differ from the generated search manifest');
+}
+for (const [file, expected] of searchAssets) {
+  if (await readFile(path.join(searchDirectory, file), 'utf8') !== expected) {
+    throw new Error(`Published search file does not match the index: ${file}`);
+  }
 }
 
 const sourceCommits = new Set();

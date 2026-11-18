@@ -4,6 +4,7 @@ import test from 'node:test';
 import path from 'node:path';
 
 import { buildSiteSearchIndex, rankSiteSearch } from '../scripts/lib/site-search-index.mjs';
+import { buildSiteSearchAssets } from '../scripts/lib/site-search-assets.mjs';
 import { buildContentGraph, relatedForPage } from '../scripts/lib/content-relations.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
@@ -18,12 +19,37 @@ test('generated Journal HTML stays within its UTF-8 payload budget', async () =>
     `Journal HTML exceeds performance budget: ${payload.byteLength} > ${budget.htmlBytes} bytes`);
 });
 
-test('generated global search index stays within its UTF-8 payload budget', async () => {
-  const [payload, budget] = await Promise.all([
-    readFile(path.join(root, 'data/site-search-index.json')), readJson('config/performance-budget.json')
+test('search assets stay within budget and reproduce the complete generated index', async () => {
+  const [canonical, budget] = await Promise.all([
+    readJson('data/site-search-index.json'), readJson('config/performance-budget.json')
   ]);
-  assert.ok(payload.byteLength <= budget.searchIndexBytes,
-    `Search index exceeds performance budget: ${payload.byteLength} > ${budget.searchIndexBytes} bytes`);
+  const files = buildSiteSearchAssets(canonical, budget.searchIndexBytes);
+  const manifest = JSON.parse(files.get('index.json'));
+  assert.deepEqual([...files.keys()].sort(), ['index.json', ...manifest.parts].sort());
+  for (const [file, payload] of files) {
+    const bytes = Buffer.byteLength(payload);
+    assert.ok(bytes <= budget.searchIndexBytes, `${file} exceeds search asset budget: ${bytes} > ${budget.searchIndexBytes} bytes`);
+  }
+  assert.equal(manifest.totalCount, canonical.totalCount);
+  assert.deepEqual(manifest.suggestions, canonical.documents.filter(({ type }) => type === 'project').slice(0, 8));
+  const documents = manifest.parts.flatMap((file) => JSON.parse(files.get(file)));
+  assert.deepEqual(documents, canonical.documents);
+});
+
+test('search assets split a growing multilingual corpus without dropping any fields or entries', async () => {
+  const [index, budget] = await Promise.all([readJson('data/site-search-index.json'), readJson('config/performance-budget.json')]);
+  const documents = Array.from({ length: 8 }, (_, batch) => index.documents.map((document) => ({
+    ...document, id: `${document.id}-fixture-${batch}`
+  }))).flat();
+  const maxBytes = budget.searchIndexBytes;
+  const input = { documents };
+  const files = buildSiteSearchAssets(input, maxBytes);
+  const manifest = JSON.parse(files.get('index.json'));
+  assert.ok(Buffer.byteLength(JSON.stringify(input)) > 4 * maxBytes);
+  assert.ok(manifest.parts.length > 4);
+  assert.ok([...files.values()].every((file) => Buffer.byteLength(file) <= maxBytes));
+  assert.deepEqual(manifest.parts.flatMap((name) => JSON.parse(files.get(name))), documents);
+  assert.deepEqual(buildSiteSearchAssets(input, maxBytes), files);
 });
 
 test('search serialization omits absent project associations and preserves search results', () => {

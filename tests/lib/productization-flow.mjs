@@ -11,12 +11,21 @@ const ROUTES = [
 export async function assertProductizationFlow(browser, baseUrl, root) {
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   await blockExternal(desktop, baseUrl);
+  const searchRequests = [];
+  desktop.on('request', (request) => {
+    if (/\/(?:dist\/site-search\/|data\/site-search-index\.json)/u.test(request.url())) searchRequests.push(request.url());
+  });
   await desktop.goto(baseUrl, { waitUntil: 'networkidle' });
+  if (searchRequests.length) throw new Error('Search data loaded before the dialog opened');
   const opener = desktop.locator('[data-search-open]');
   await opener.focus();
   await desktop.keyboard.press('Control+k');
   const dialog = desktop.locator('[data-site-search]');
   if (!await dialog.isVisible()) throw new Error('Ctrl+K did not open global search');
+  await desktop.locator('[data-search-results] a').first().waitFor();
+  if (searchRequests.length !== 1 || !searchRequests[0].endsWith('/dist/site-search/index.json')) {
+    throw new Error('Opening search must load only the suggestions manifest');
+  }
   await desktop.locator('[data-search-input]').fill('Sakura');
   await desktop.locator('[data-search-results] a').first().waitFor();
   await desktop.keyboard.press('ArrowDown');
@@ -56,11 +65,16 @@ export async function assertProductizationFlow(browser, baseUrl, root) {
 
   const missing = await browser.newPage();
   await blockExternal(missing, baseUrl);
-  await missing.route('**/data/site-search-index.json', (route) => route.abort());
+  await missing.route('**/dist/site-search/part-*.json', (route) => route.abort());
   await missing.goto(baseUrl, { waitUntil: 'networkidle' });
   await missing.locator('[data-search-open]').click();
+  await missing.locator('[data-search-input]').fill('对象池');
   await missing.getByText('搜索暂时不可用', { exact: false }).waitFor();
   if (!await missing.locator('main h1').count()) throw new Error('Search failure removed page content');
+  await missing.unroute('**/dist/site-search/part-*.json');
+  await missing.keyboard.press('Escape');
+  await missing.locator('[data-search-open]').click();
+  await missing.locator('[data-search-result="framework:pooling"]').waitFor();
 
   const noJs = await browser.newPage({ javaScriptEnabled: false });
   await blockExternal(noJs, baseUrl);
@@ -193,7 +207,6 @@ async function scanAxe(page, label) {
 async function assertPerformance(browser, baseUrl, root) {
   const budget = JSON.parse(await readFile(path.join(root, 'config/performance-budget.json'), 'utf8'));
   const report = [];
-  const indexBytes = (await stat(path.join(root, 'data/site-search-index.json'))).size;
   const exceeded = [];
   for (const route of ROUTES) {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
@@ -220,7 +233,7 @@ async function assertPerformance(browser, baseUrl, root) {
       searchInteractionMs = Math.round(performance.now() - started);
     }
     const metrics = { route, htmlBytes: 0, cssBytes: 0, jsBytes: 0, imageBytes: 0,
-      requestCount: requested.length, searchIndexBytes: indexBytes, largestAssetBytes: 0,
+      requestCount: requested.length, searchIndexBytes: 0, searchTotalBytes: 0, largestAssetBytes: 0,
       ...(searchInteractionMs !== undefined ? { searchInteractionMs } : {}),
       ...await page.evaluate(() => ({ cls: window.__siteQuality?.cls ?? 0, lcpLabMs: window.__siteQuality?.lcp ?? 0,
         navigationMs: performance.getEntriesByType('navigation')[0]?.duration ?? 0 })) };
@@ -232,6 +245,10 @@ async function assertPerformance(browser, baseUrl, root) {
       const bucket = extension === '.html' ? 'htmlBytes' : extension === '.css' ? 'cssBytes'
         : extension === '.js' ? 'jsBytes' : ['.svg', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif'].includes(extension) ? 'imageBytes' : null;
       if (bucket) metrics[bucket] += size;
+      if (pathname.startsWith('/dist/site-search/') || pathname === '/data/site-search-index.json') {
+        metrics.searchIndexBytes = Math.max(metrics.searchIndexBytes, size);
+        metrics.searchTotalBytes += size;
+      }
       metrics.largestAssetBytes = Math.max(metrics.largestAssetBytes, size);
     }
     report.push(metrics);

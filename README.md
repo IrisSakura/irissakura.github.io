@@ -74,7 +74,7 @@ npm run package:site
 
 ## Productization Phase I
 
-- 全站 Search / Cmd/Ctrl+K 读取构建时生成的 `data/site-search-index.json`；原 `data/search-index.json` 继续服务 Journal 专题搜索。来源、排序与失败回退见 [`docs/architecture/search.md`](docs/architecture/search.md)。
+- 全站 Search / Cmd/Ctrl+K 按需读取 `dist/site-search/` 下的构建产物。`data/search-index.json` 服务 Journal 专题搜索。来源、排序与失败回退见 [`docs/architecture/search.md`](docs/architecture/search.md)。
 - 文章、研究、项目与 Framework 的相关导航由 `data/content-relations.json` 和已登记的系列、项目关系及 Evidence Chain 派生；规则见 [`docs/architecture/content-graph.md`](docs/architecture/content-graph.md)。
 - 隐私优先的分析适配器默认关闭。账户激活、公开站点标识及事件参数合同见 [`docs/operations/analytics.md`](docs/operations/analytics.md)。
 - 生成器为正式页面输出与 canonical 对应的 JSON-LD；搜索引擎验证值默认未配置，后续步骤见 [`docs/operations/search-engine-registration.md`](docs/operations/search-engine-registration.md)。
